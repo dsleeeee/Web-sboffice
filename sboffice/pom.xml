@@ -327,9 +327,11 @@
       <properties>
         <env>local</env>
       </properties>
+      <!-- 
       <activation>
         <activeByDefault>true</activeByDefault>
       </activation>
+       -->
     </profile>
     
     <!-- 개발 -->
