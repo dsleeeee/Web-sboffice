@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.application.persistance.sample.SampleMapper">
+
+  <select id="selectSample" resultType="DefaultMap" parameterType="java.lang.String">
+    SELECT * 
+      FROM CCD_CODEM_T
+  </select>
+
+  <select id="selectDdSum" resultType="DefaultMap">
+    SELECT *
+      FROM SSL_DDSUM_T
+  </select>
+  
+  <select id="selectCommonCodeList" resultType="DefaultMap" parameterType="java.lang.String">
+    SELECT COM_CD_FG,
+           COM_CD,
+           COM_CD_NM
+      FROM CCD_CODEM_T
+     WHERE COM_CD_FG = #{comCdFg}
+  </select>
+  
+  <select id="selectColumns" resultType="DefaultMap" parameterType="java.lang.String">
+  <![CDATA[
+    SELECT COLUMN_NAME 
+      FROM COLS 
+     WHERE TABLE_NAME = #{table}
+  ]]>
+  </select>
+  
+  <select id="selectDdlTrdtlT" resultType="DefaultMap" parameterType="java.lang.Integer">
+  <![CDATA[
+    SELECT *
+      FROM ( 
+              SELECT SHOP_CD,
+                     SALE_DATE,
+                     POS_NO,
+                     BILL_NO,
+                     DTL_NO,
+                     REGI_SEQ,
+                     SALE_YN,
+                     SALE_FG,
+                     PROD_CD,
+                     PROD_TYPE_FG,
+                     CORNER_CD,
+                     CHG_BILL_NO,
+                     TAX_YN,
+                     DLV_PACK_FG,
+                     ORG_SALE_MG_CD,
+                     ORG_SALE_UPRC,
+                     NORMAL_UPRC,
+                     SALE_MG_CD,
+                     SALE_QTY,
+                     SALE_UPRC,
+                     SALE_AMT,
+                     DC_AMT,
+                     ETC_AMT,
+                     SVC_TIP_AMT,
+                     DCM_SALE_AMT,
+                     VAT_AMT,
+                     SVC_CD,
+                     TK_CPN_CD,
+                     DC_AMT_GEN,
+                     DC_AMT_SVC,
+                     DC_AMT_JCD,
+                     DC_AMT_CPN,
+                     DC_AMT_CST,
+                     DC_AMT_FOD,
+                     DC_AMT_PRM,
+                     DC_AMT_CRD,
+                     DC_AMT_PACK,
+                     CST_SALE_POINT,
+                     CST_USE_POINT,
+                     PRM_PROC_YN,
+                     PRM_CD,
+                     PRM_SEQ,
+                     SDA_CD,
+                     SDS_ORG_DTL_NO,
+                     POS_INS_DT,
+                     EMP_NO,
+                     INS_DT,
+                     UPD_DT,
+                     UPD_ID,
+                     COST_AMT,
+                     SET_PROD_FG,
+                     LOCAL_POINT_YN,
+                     ROWNUM AS RNUM
+                FROM SSL_TRDTL_T
+           )
+     WHERE RNUM <= #{rnum}
+  ]]>
+  </select>
+  
+  <select id="selectDdlTrdtlTest" resultType="DefaultMap" parameterType="kr.co.solbipos.application.domain.sample.SslTrdtlT">
+  <![CDATA[
+    SELECT *
+      FROM ( 
+              SELECT 
+                     COUNT(1) OVER (PARTITION BY 1 ORDER BY 1) TOT_CNT,
+                     ROWNUM AS RNUM,
+                     SHOP_CD,
+                     SALE_DATE,
+                     POS_NO,
+                     BILL_NO,
+                     DTL_NO,
+                     REGI_SEQ,
+                     SALE_YN,
+                     SALE_FG,
+                     PROD_CD,
+                     PROD_TYPE_FG,
+                     CORNER_CD,
+                     CHG_BILL_NO,
+                     TAX_YN,
+                     DLV_PACK_FG,
+                     ORG_SALE_MG_CD,
+                     ORG_SALE_UPRC,
+                     NORMAL_UPRC,
+                     SALE_MG_CD,
+                     SALE_QTY,
+                     SALE_UPRC,
+                     SALE_AMT,
+                     DC_AMT,
+                     ETC_AMT,
+                     SVC_TIP_AMT,
+                     DCM_SALE_AMT,
+                     VAT_AMT,
+                     SVC_CD,
+                     TK_CPN_CD,
+                     DC_AMT_GEN,
+                     DC_AMT_SVC,
+                     DC_AMT_JCD,
+                     DC_AMT_CPN,
+                     DC_AMT_CST,
+                     DC_AMT_FOD,
+                     DC_AMT_PRM,
+                     DC_AMT_CRD,
+                     DC_AMT_PACK,
+                     CST_SALE_POINT,
+                     CST_USE_POINT,
+                     PRM_PROC_YN,
+                     PRM_CD,
+                     PRM_SEQ,
+                     SDA_CD,
+                     SDS_ORG_DTL_NO,
+                     POS_INS_DT,
+                     EMP_NO,
+                     INS_DT,
+                     UPD_DT,
+                     UPD_ID,
+                     COST_AMT,
+                     SET_PROD_FG,
+                     LOCAL_POINT_YN
+                FROM SSL_TRDTL_T
+               WHERE SHOP_CD = #{shopCd}
+           )
+     WHERE RNUM > #{prev}
+       AND RNUM <= #{next}
+  ]]>
+  </select>
+  
+  <select id="selectTestTable" resultType="DefaultMap" parameterType="kr.co.solbipos.application.domain.sample.TestTable">
+  <![CDATA[
+    SELECT * 
+      FROM (
+        SELECT COUNT(1) OVER (PARTITION BY 1 ORDER BY 1) TOT_CNT,
+               ROWNUM AS RNUM,
+               KEY_NO,
+               KEY_VALUE
+          FROM TEST_TABLE
+                ORDER BY KEY_NO ASC
+    )
+    WHERE RNUM > #{prev}
+    AND RNUM <= #{next}
+  ]]>
+  </select>
+
+</mapper>

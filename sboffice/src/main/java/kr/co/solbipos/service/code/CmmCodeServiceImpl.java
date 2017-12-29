@@ -1,0 +1,119 @@
+package kr.co.solbipos.service.code;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import kr.co.solbipos.application.domain.sample.CommonCode;
+import kr.co.solbipos.service.redis.RedisConnService;
+import kr.co.solbipos.system.Prop;
+import kr.co.solbipos.system.RedisCustomTemplate;
+import lombok.extern.slf4j.Slf4j;
+
+/**
+ * 공통 코드 관련 서비스
+ * 
+ * @author 정용길
+ *
+ */
+@Slf4j
+@Service
+public class CmmCodeServiceImpl implements CmmCodeService {
+
+    @Autowired
+    Prop prop;
+
+    @Autowired
+    RedisConnService redisConnService;
+
+    @Autowired
+    private RedisCustomTemplate<String, CommonCode> redisCustomTemplate;
+
+    @Override
+    public void setCodeList(CommonCode code) throws Exception {
+        if (redisConnService.isAvailable()) {
+            try {
+                redisCustomTemplate.set(redisCustomTemplate.makeKeyCode(code.getComCdFg()), code);
+            } catch (Exception e) {
+                /**
+                 * 레디스에서 공통코드를 조회 할때는 아래 코드로 처리 하지 않고 예외 처리함. redisConnService.disable() 레디스가 죽었다고
+                 * 공통 코드가 조회 안되면 안되기 때문에 디비에서 조회해서 사용 가능
+                 */
+                log.error("Redis server not available!! setSessionInfo {}", e);
+            }
+        } else {
+            throw new Exception();
+        }
+    }
+
+    @Override
+    public CommonCode getCodeList(String comCdFg) throws Exception {
+        CommonCode code = null;
+        if (redisConnService.isAvailable()) {
+            try {
+                code = redisCustomTemplate.get(redisCustomTemplate.makeKeyCode(comCdFg));
+            } catch (Exception e) {
+                log.error("Redis server not available!! getSessionInfo {}", e);
+            }
+        } else {
+            throw new Exception();
+        }
+        return code;
+    }
+
+    @Override
+    public boolean hasCode(String comCdFg) {
+        if (redisConnService.isAvailable()) {
+            try {
+                return redisCustomTemplate.hasKey(redisCustomTemplate.makeKeyCode(comCdFg));
+            } catch (Exception e) {
+                // 레디스에 접속 못할 경우에는 디비에서 접속해야 되기 때문에 false 처리함
+                return false;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean updateCodeList(CommonCode code) {
+        String makeKeyComCdFg = redisCustomTemplate.makeKeyCode(code.getComCdFg());
+        if (redisConnService.isAvailable()) {
+            try {
+                if (redisCustomTemplate.hasKey(makeKeyComCdFg)) {
+                    redisCustomTemplate.delete(makeKeyComCdFg);
+                }
+                redisCustomTemplate.set(makeKeyComCdFg, code);
+                return true;
+            } catch (Exception e) {
+                log.error("Redis server not available!! CommonCode update fail...");
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

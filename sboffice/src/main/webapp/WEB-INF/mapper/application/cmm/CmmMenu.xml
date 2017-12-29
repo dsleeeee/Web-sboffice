@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.application.persistance.cmm.CmmMenuMapper">
+  
+  <insert id="insertMenuUseHist" parameterType="menuUseHist">
+  <![CDATA[
+    /* CmmMenuMapper.insertMenuHist */
+    INSERT INTO TB_WB_MENU_USE_HIST
+    (
+      SEQ,
+      USER_ID,
+      RESRCE_CD,
+      USE_DATE,
+      USE_DT
+    )
+    VALUES
+    (
+      SQ_MENU_HIST.NEXTVAL,
+      #{userId},
+      #{resrceCd},
+      #{useDate},
+      #{useDt}
+    )
+  ]]>
+  </insert>
+  
+  <!-- 즐겨찾기 가져오기 -->
+  <select id="selectBkmkMenu" parameterType="sessionInfo" resultType="resrceInfoBase">
+  <![CDATA[
+    /* CmmMenuMapper.selectBkmkMenu */
+    SELECT B.RESRCE_CD,
+           B.P_RESRCE,
+           B.RESRCE_NM,
+           B.URL
+      FROM TB_WB_BKMK A
+      LEFT OUTER JOIN 
+           TB_WB_RESRCE_INFO B
+        ON A.RESRCE_CD = B.RESRCE_CD
+     WHERE A.USER_ID = #{userId}
+       AND A.USE_YN = 'Y'
+  ]]>
+  </select>
+  
+  <!-- 고정 메뉴 가져오기 -->
+  <select id="selectFixingMenu" parameterType="sessionInfo" resultType="resrceInfoBase">
+  <![CDATA[
+    /* CmmMenuMapper.selectFixingMenu */
+    SELECT B.RESRCE_CD,
+           B.P_RESRCE,
+           B.RESRCE_NM,
+           B.URL
+      FROM TB_WB_FIXING A
+      LEFT OUTER JOIN 
+           TB_WB_RESRCE_INFO B
+        ON A.RESRCE_CD = B.RESRCE_CD
+     WHERE A.USER_ID = #{userId}
+       AND A.USE_YN = 'Y'
+  ]]>
+  </select>
+  
+</mapper>
+
+
+
+
+

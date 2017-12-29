@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd" >
+<properties>
+
+  <comment>Solbipos Office Local Config Properties</comment>
+
+  <!-- =====================================--> 
+  <!--  MAIN Properties--> 
+  <!-- =====================================-->
+  <entry key="profile">dev</entry>
+  <entry key="domain">http://office.solbipos.co.kr</entry>
+  <entry key="encoding">UTF-8</entry>
+  <entry key="welcome.url">/sample.sb</entry>
+  
+  <!-- =====================================--> 
+  <!--  JDBC Properties--> 
+  <!-- =====================================-->
+  <entry key="jndi.main.jdbc.name">jdbc/oracle/sb</entry>
+
+
+  <!-- =====================================--> 
+  <!--  tiles Properties--> 
+  <!-- =====================================-->
+  <entry key="tiles.path">/WEB-INF/config/tiles-layout.xml</entry>
+  
+  
+  <!-- ====================================--> 
+  <!--  Redis Properties--> 
+  <!-- ====================================-->
+  <entry key="redis.hostName">192.168.0.85</entry>
+  <entry key="redis.port">6379</entry>
+  <entry key="redis.password"></entry>
+  <entry key="redis.usePool">true</entry>
+<!--   web session  -->
+  <entry key="redis.web.prefix">sbp:web:local:</entry>
+<!--   web 공통 코드  -->
+  <entry key="redis.code.prefix">sbp:cmm:local:</entry>  
+  
+  
+  <!-- ====================================--> 
+  <!--  session Properties--> 
+  <!-- ====================================-->
+<!--   세션 타임 타웃 분단위 -->
+  <entry key="session.timeout.min">30</entry>
+  <entry key="session.hist.menu.size">20</entry>
+  
+  
+  <!-- 아래는 기존에 treepay 에서 쓰던것 -->
+  <entry key="excel.font">돋움</entry>
+  <entry key="excel.tempDir">/temp_excel</entry>
+  <entry key="email.host">192.168.0.1</entry>
+  <entry key="email.port">31901</entry>
+  
+</properties>

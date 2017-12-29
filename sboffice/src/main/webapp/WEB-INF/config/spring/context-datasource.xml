@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 
+  xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:jee="http://www.springframework.org/schema/jee" 
+  xmlns:tx="http://www.springframework.org/schema/tx"
+  
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+                           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+                           ">
+
+  <jee:jndi-lookup id="dataSource" jndi-name="#{config['jndi.main.jdbc.name']}" />
+  
+  <!-- Spring Transaction Manager -->
+  <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="dataSource" />
+  </bean>
+  
+  <!-- @Transactional Advice 적용 -->
+  <!-- @Transactional 을 사용할 때 checked Exception 은 rollback 이 안되니 주의 -->
+  <tx:annotation-driven />
+  
+  <!-- Mybatis Config -->
+  <!-- Reference URL : http://mybatis.github.io/spring -->
+  <!-- 한글 레퍼런스 URL : http://mybatis.github.io/spring/ko -->
+  <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+    <property name="configLocation" value="/WEB-INF/config/mybatis-setting.xml" />
+    <property name="mapperLocations" value="/WEB-INF/mapper/**/*.xml" />
+    <property name="dataSource" ref="dataSource" />
+    <!-- Domain Class Name 자동 등록 -->
+    <property name="typeAliasesPackage" value=" kr.co.solbipos.application.domain, 
+                                                kr.co.solbipos.structure" />
+  </bean>
+  
+  <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+    <constructor-arg index="0" ref="sqlSessionFactory" />
+  </bean>
+  
+  <!-- Mybatis IoC Mapper Class from SqlSessionTemplate -->
+  <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+    <property name="basePackage" value="kr.co.solbipos.application.persistance" />
+    <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+  </bean>
+  
+</beans>
+
+
+
+
+
+
+
+
+
+

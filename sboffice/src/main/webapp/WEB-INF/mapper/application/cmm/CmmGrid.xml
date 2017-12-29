@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.application.persistance.cmm.CmmGridMapper">
+  
+  <insert id="insertGridItem" parameterType="gridDispItem">
+  /* CmmGridMapper.insertGridItem */
+  INSERT INTO TB_WB_GRID_DISP_ITEM
+  (
+    USER_ID,
+    RESRCE_CD,
+    GRID_IDX,
+    COLUMN_ITEM,
+    REG_DT,
+    REG_ID,
+    MOD_DT,
+    MOD_ID
+  )
+  VALUES
+  (
+    #{userId},
+    #{resrceCd},
+    #{gridIdx},
+    #{columnItem},
+    #{regDt},
+    #{regId},
+    #{modDt},
+    #{modId}
+  )
+  </insert>
+  
+  <update id="updateGridItem" parameterType="gridDispItem">
+  <![CDATA[
+  /* CmmGridMapper.updateGridItem */
+    UPDATE TB_WB_GRID_DISP_ITEM
+       SET COLUMN_ITEM = #{columnItem},
+           MOD_DT = #{modDt},
+           MOD_ID = #{modId}
+     WHERE USER_ID = #{userId}
+       AND RESRCE_CD = #{resrceCd}
+       AND GRID_IDX = #{gridIdx}
+  ]]>
+  </update>
+  
+  <select id="selectGridItem" parameterType="gridDispItem" resultType="gridDispItem">
+  <![CDATA[
+  /* CmmGridMapper.selectGridItem */
+    SELECT USER_ID,
+  		   RESRCE_CD,
+  		   GRID_IDX,
+  		   COLUMN_ITEM,
+  		   REG_DT,
+  		   REG_ID,
+  		   MOD_DT,
+  		   MOD_ID
+      FROM TB_WB_GRID_DISP_ITEM
+     WHERE USER_ID = #{userId}
+       AND RESRCE_CD = #{resrceCd}
+       AND GRID_IDX = #{gridIdx}
+  ]]>
+  </select>
+
+</mapper>
+
+
+
+
+

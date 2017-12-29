@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib version="2.0" xmlns="http://java.sun.com/xml/j2ee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd">
+
+  <description>Util's function Library</description>
+  <display-name>Util's function</display-name>
+  <tlib-version>1.0</tlib-version>
+  <short-name>ufn</short-name>
+  <function>
+    <description>newline replace br tag</description>
+    <example>${ufn:nl2br(String)}</example>
+    <name>nl2br</name>
+    <function-class>kr.co.solbipos.utils.tag.HtmlTag</function-class>
+    <function-signature>java.lang.String nl2br( java.lang.String )</function-signature>
+  </function>
+  <function>
+    <description>getDate (yyyyMMdd)</description>
+    <example>${ufn:getDate(String)}</example>
+    <name>getDate</name>
+    <function-class>kr.co.solbipos.utils.DateUtil</function-class>
+    <function-signature>java.util.Date getDate( java.lang.String )</function-signature>
+  </function>
+  <function>
+    <description>getDatetime (yyyyMMddHHmmss)</description>
+    <example>${ufn:getDatetime(String)}</example>
+    <name>getDatetime</name>
+    <function-class>kr.co.solbipos.utils.DateUtil</function-class>
+    <function-signature>java.util.Date getDatetime( java.lang.String )</function-signature>
+  </function>
+  <function>
+    <description>getTime (HHmmss)</description>
+    <example>${ufn:getTime(String)}</example>
+    <name>getTime</name>
+    <function-class>kr.co.solbipos.utils.DateUtil</function-class>
+    <function-signature>java.util.Date getTime( java.lang.String )</function-signature>
+  </function>
+  <function>
+    <description>current date (yyyyMMdd)</description>
+    <example>${ufn:currentDateString()}</example>
+    <name>currentDateString</name>
+    <function-class>kr.co.solbipos.utils.DateUtil</function-class>
+    <function-signature>java.lang.String currentDateString()</function-signature>
+  </function>
+  <function>
+    <description>current datetime (yyyyMMddHHmmss)</description>
+    <example>${ufn:currentDateTimeString()}</example>
+    <name>currentDateTimeString</name>
+    <function-class>kr.co.solbipos.utils.DateUtil</function-class>
+    <function-signature>java.lang.String currentDateTimeString()</function-signature>
+  </function>
+  <function>
+    <description>Add or Sub Day</description>
+    <example>${ufn:addDaysString(String, int)}</example>
+    <name>addDaysString</name>
+    <function-class>kr.co.solbipos.utils.DateUtil</function-class>
+    <function-signature>java.lang.String addDaysString( java.lang.String, int )</function-signature>
+  </function>
+  <function>
+    <description>get last day of month</description>
+    <example>${ufn:getLastDayOfMonth(String)}</example>
+    <name>getLastDayOfMonth</name>
+    <function-class>kr.co.solbipos.utils.DateUtil</function-class>
+    <function-signature>int getLastDayOfMonth( java.lang.String )</function-signature>
+  </function>
+  <function>
+    <description>date2string (yyyyMMdd, 'dd/MM/yyyy')</description>
+    <example>${ufn:date2string(Date, String)}</example>
+    <name>date2string</name>
+    <function-class>kr.co.solbipos.utils.DateUtil</function-class>
+    <function-signature>java.lang.String date2string( java.util.Date, java.lang.String )</function-signature>
+  </function>
+  <function>
+    <description>get masked data</description>
+    <example>${ufn:getMaskedData(String)}</example>
+    <name>getMaskedData</name>
+    <function-class>kr.co.solbipos.utils.CryptoUtil</function-class>
+    <function-signature>java.lang.String getMaskedData(java.lang.String)</function-signature>
+  </function>
+  <function>
+    <description>get value or default value</description>
+    <example>${ufn:getOrDefault(Object, String)}</example>
+    <name>getOrDefault</name>
+    <function-class>kr.co.solbipos.utils.StringUtil</function-class>
+    <function-signature>java.lang.String getOrDefault(java.lang.Object, java.lang.String)</function-signature>
+  </function>
+  <function>
+    <description>get dcb data</description>
+    <example>${ufn:getMaskedDataDCB(String)}</example>
+    <name>getMaskedDataDCB</name>
+    <function-class>kr.co.solbipos.utils.CryptoUtil</function-class>
+    <function-signature>java.lang.String getMaskedDataDCB(java.lang.String)</function-signature>
+  </function>
+</taglib>
+
+
+
+
+
+
+
+
+
+
+
+
+

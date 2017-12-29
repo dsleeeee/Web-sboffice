@@ -1,0 +1,72 @@
+package kr.co.solbipos.application.domain.login;
+
+import java.util.List;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.stereotype.Component;
+import kr.co.solbipos.application.domain.BaseDomain;
+import kr.co.solbipos.application.domain.resource.ResrceInfo;
+import kr.co.solbipos.application.domain.resource.ResrceInfoBase;
+import kr.co.solbipos.application.enums.login.LoginResult;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+@Data
+@EqualsAndHashCode(callSuper = false)
+public class SessionInfo extends BaseDomain {
+    private static final long serialVersionUID = 1L;
+
+    /** sessionId */
+    private String sessionId;
+    
+    /** 사용자 아이디 */
+    private String userId;
+
+    /** 사용자 비밀번호 */
+    private String userPwd;
+    
+    /** 사용자 이름 */
+    private String userName;
+
+    /** 그룹 코드 */
+    private String grpCd;
+
+    /** 최종 로그인 일자 */
+    private String lastLoginDate;
+
+    /** 최종 비밀번호 변경 일자 */
+    private String lastPwdChgDate;
+
+    /** 로그인 실패 건수 */
+    private Long loginFailCnt;
+
+    /** 잠금 코드 */
+    private String lockCd;
+    
+    /** 로그인 IP */
+    private String loginIp;
+
+    /** 브라우저 정보 */
+    private String brwsrInfo;
+    
+    /** 로그인 시도 결과 */
+    private LoginResult loginResult;
+    
+    /** 그리드 메뉴 데이터 */
+    private String menuData;
+    
+    /** 현재 선택한 메뉴 정보 */
+    private ResrceInfoBase currentMenu;
+
+    /** 권한 있는 메뉴 */
+    private List<ResrceInfo> authMenu;
+    
+    /** 즐겨찾기 메뉴 */
+    private List<ResrceInfoBase> bkmkMenu;
+    
+    /** 사용한 히스토리 메뉴 */
+    private List<ResrceInfoBase> histMenu;
+    
+    /** 고정 메뉴 */
+    private List<ResrceInfoBase> fixMenu;
+}
