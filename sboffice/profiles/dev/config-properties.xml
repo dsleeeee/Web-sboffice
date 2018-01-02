@@ -32,9 +32,9 @@
   <entry key="redis.password"></entry>
   <entry key="redis.usePool">true</entry>
 <!--   web session  -->
-  <entry key="redis.web.prefix">sbp:web:local:</entry>
+  <entry key="redis.web.prefix">sbp:web:dev:</entry>
 <!--   web 공통 코드  -->
-  <entry key="redis.code.prefix">sbp:cmm:devv:</entry>  
+  <entry key="redis.code.prefix">sbp:cmm:dev:</entry>  
   
   
   <!-- ====================================--> 
