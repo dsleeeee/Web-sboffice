@@ -10,7 +10,7 @@
   <entry key="profile">dev</entry>
   <entry key="domain">http://office.solbipos.co.kr</entry>
   <entry key="encoding">UTF-8</entry>
-  <entry key="welcome.url">/sample.sb</entry>
+  <entry key="welcome.url">/auth/login.sb</entry>
   
   <!-- =====================================--> 
   <!--  JDBC Properties--> 
