@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @ControllerAdvice
-public class ExceptionController { 
+public class ExceptionController {
     
     /** 기록자 */
     private static final Logger logger = LoggerFactory.getLogger(ExceptionController.class);
