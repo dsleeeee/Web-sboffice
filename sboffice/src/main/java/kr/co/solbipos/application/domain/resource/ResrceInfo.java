@@ -33,8 +33,11 @@ public class ResrceInfo extends BaseDomain {
     /** 특수 권한 */
     private String spclAuthor;
 
-    /** 표기 순서 */
-    private Long dispSeq;
+    /** 표기 레벨 */
+    private Long dispLevel;
+
+    /** 표기 인덱스 */
+    private Long dispIdx;
 
     /** 사용 여부 */
     private String useYn;

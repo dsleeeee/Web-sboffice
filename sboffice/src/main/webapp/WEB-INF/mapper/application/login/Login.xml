@@ -55,7 +55,7 @@
     )
     VALUES
     (
-      SQ_LOGIN_HIST.NEXTVAL,
+      SQ_WB_LOGIN_HIST.NEXTVAL,
       #{userId},
       #{statCd.value},
       #{loginOrgn.value},
@@ -78,7 +78,8 @@
   		   RESRCE_NM,
   		   URL,
   		   SPCL_AUTHOR,
-  		   DISP_SEQ,
+  		   DISP_LEVEL,
+           DISP_IDX,
   		   USE_YN,
   		   REG_DT,
   		   REG_ID,

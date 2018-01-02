@@ -16,7 +16,7 @@
     )
     VALUES
     (
-      SQ_MENU_HIST.NEXTVAL,
+      SQ_WB_MENU_HIST.NEXTVAL,
       #{userId},
       #{resrceCd},
       #{useDate},
