@@ -22,7 +22,6 @@
     <jedis.version>1.8.8.RELEASE</jedis.version>
   </properties>
   
-  <!-- 
   <repositories>
     <repository>
       <id>solbipos-nexus</id>
@@ -35,7 +34,6 @@
       <url>http://192.168.0.85:30015/nexus/content/groups/public/</url>
     </pluginRepository>
   </pluginRepositories>
-   -->
    
   <dependencies>
     <dependency>
