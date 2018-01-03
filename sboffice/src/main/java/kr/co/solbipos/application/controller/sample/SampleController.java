@@ -47,13 +47,13 @@ public class SampleController {
     public String sample(HttpSession session, Model model) {
 
         String encoding = prop.getEncoding();
-        log.error("sample...... : {}", encoding);
+//        log.error("sample...... : {}", encoding);
 
         String param = "test";
 
         List<DefaultMap<Object>> temp = sampleService.selectSample(param);
 
-        log.error("result : {}", temp);
+//        log.error("result : {}", temp);
 
         model.addAttribute("data", temp);
 

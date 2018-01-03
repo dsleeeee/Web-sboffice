@@ -7,7 +7,7 @@
   
     <div class="login_box">
       <div class="login_tit">
-        <h1>solbipos</h1>
+        <h1>solbipos 1</h1>
       </div>
       <div class="login_cont">
       
