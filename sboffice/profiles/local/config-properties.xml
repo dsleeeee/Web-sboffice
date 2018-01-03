@@ -15,7 +15,7 @@
   <!-- =====================================--> 
   <!--  JDBC Properties--> 
   <!-- =====================================-->
-  <entry key="jndi.main.jdbc.name">jdbc/oracle/sb</entry>
+  <entry key="jndi.main.jdbc.name">jdbc/oracle/sb</entry> 
 
 
   <!-- =====================================--> 
