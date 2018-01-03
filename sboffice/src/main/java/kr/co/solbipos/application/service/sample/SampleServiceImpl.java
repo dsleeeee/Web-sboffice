@@ -3,8 +3,12 @@ package kr.co.solbipos.application.service.sample;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import kr.co.solbipos.application.domain.sample.CcdCodemT;
+import kr.co.solbipos.application.domain.sample.ScdShopmT;
 import kr.co.solbipos.application.domain.sample.SslTrdtlT;
 import kr.co.solbipos.application.domain.sample.TestTable;
+import kr.co.solbipos.application.domain.sample.TmpBoardT;
+import kr.co.solbipos.application.domain.sample.TmpDragtT;
 import kr.co.solbipos.application.persistance.sample.SampleMapper;
 
 @Service
@@ -48,4 +52,51 @@ public class SampleServiceImpl implements SampleService {
         return sampleMapper.selectTestTable(testTable);
     }
 
+    @Override
+    public <E> List<E> selectCode(CcdCodemT param) {
+        return sampleMapper.selectCode(param);
+    }
+
+    @Override
+    public <E> List<E> selectTreeMenu() {
+      return sampleMapper.selectTreeMenu();
+    }
+
+    @Override
+    public <E> List<E> getgroupGridSample() {
+      return sampleMapper.getgroupGridSample();
+    }
+
+    @Override
+    public <E> List<E> getDragNDropSample(TmpDragtT tmpDragt) {
+      return sampleMapper.getDragNDropSample(tmpDragt);
+    }
+
+    @Override
+    public void insertUpdateDragSample(TmpDragtT tmpDragt) {
+      sampleMapper.insertUpdateDragSample(tmpDragt);
+    }
+
+    @Override
+    public void insertBoardSample(TmpBoardT tmpBoardT) {
+      sampleMapper.insertBoardSample(tmpBoardT);
+    }
+
+    @Override
+    public void updateBoardSample(TmpBoardT tmpBoardT) {
+      sampleMapper.updateBoardSample(tmpBoardT);
+    }
+    
+    @Override
+    public TmpBoardT getRecentBoardData() {
+      return sampleMapper.getRecentBoardData();
+    }
+
+    @Override
+    public <E> List<E> selectStore(ScdShopmT scdShopmT) {
+      return sampleMapper.selectStore(scdShopmT);
+    }
+
+    
+    
 }

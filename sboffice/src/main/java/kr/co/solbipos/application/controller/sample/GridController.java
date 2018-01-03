@@ -1,5 +1,6 @@
 package kr.co.solbipos.application.controller.sample;
 
+import static kr.co.solbipos.utils.spring.StringUtil.convertToJson;
 import static kr.co.solbipos.utils.DateUtil.*;
 import static kr.co.solbipos.utils.grid.ReturnUtil.*;
 import static org.springframework.util.ObjectUtils.*;
@@ -132,6 +133,31 @@ public class GridController {
         return returnJson(Status.OK, null);
     }
 
+    /**
+     * 그리드 본사 매장 그룹핑 샘플
+     * @param rnum
+     * @param model
+     * @return
+     */
+   @RequestMapping(value="groupGridSample.sb")
+   public String groupGridSample(Model model) {
+     List<DefaultMap<Object>> data = sampleService.getgroupGridSample();
+     model.addAttribute("shopList", convertToJson(data));
+     return "sampleWijmo/groupGridSample";
+   }
+   
+   /**
+    * 그리드 본사 매장 그룹핑 샘플
+    * @param rnum
+    * @param model
+    * @return
+    */
+  @RequestMapping(value="groupGridSample2.sb")
+  public String groupGridSample2(Model model) {
+     List<DefaultMap<Object>> data = sampleService.getgroupGridSample();
+     model.addAttribute("shopList", convertToJson(data));
+     return "sampleWijmo/groupGridSample2";
+   }
 }
 
 

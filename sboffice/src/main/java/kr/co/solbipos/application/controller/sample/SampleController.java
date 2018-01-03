@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import kr.co.solbipos.application.domain.sample.ScdShopmT;
 import kr.co.solbipos.application.service.sample.SampleService;
 import kr.co.solbipos.service.message.MessageService;
 import kr.co.solbipos.structure.DefaultMap;
@@ -117,4 +118,45 @@ public class SampleController {
     public String samplepop(HttpSession session, Model model) {
         return "sample/pop:samplePop";
     }
+    
+
+    /**
+      * input 샘플
+      * @param session
+      * @param model
+      * @return
+      */
+    @RequestMapping(value = "sampleInput.sb")
+    public String sampleInput(HttpSession session, Model model) {
+        return "sample/sampleInput";
+    }
+    
+
+    /**
+      * input 샘플2
+      * @param session
+      * @param model
+      * @return
+      */
+    @RequestMapping(value = "sampleInput2.sb")
+    public String sampleInput2(HttpSession session, Model model) {
+        return "sample/sampleInput2";
+    }
+    
+
+    /**
+     * json sample
+     * @param session
+     * @param model
+     * @return
+     */
+   @RequestMapping(value = "sampleInput2Res.sb")
+   @ResponseBody
+   public JsonResult sampleInput2Res(ScdShopmT scdShopmT, Model model) {
+     
+       // 추후 TB_MS_STORE로 변경
+       List<DefaultMap<Object>> temp = sampleService.selectStore(scdShopmT);
+       Result result = new Result(Status.OK, temp);
+       return new JsonResult(result);
+   }
 }

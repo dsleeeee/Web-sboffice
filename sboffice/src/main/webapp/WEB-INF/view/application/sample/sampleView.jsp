@@ -37,6 +37,14 @@ ${sessionScope.sessionInfo.fixMenu[0].activation}
 <button id="registBtn" type="button" class="btn btn_dark btn_md w_lg" onclick="ajaxTest();">
   Ajax
 </button>
+<br>
+<br>
+<a href="sampleInput.sb">Input 샘플</a>
+<br>
+<br>
+<br>
+<a href="sampleInput2.sb">Input 샘플2</a>
+<br>
 
 <script>
 

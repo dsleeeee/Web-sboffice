@@ -1,8 +1,12 @@
 package kr.co.solbipos.application.persistance.sample;
 
 import java.util.List;
+import kr.co.solbipos.application.domain.sample.CcdCodemT;
+import kr.co.solbipos.application.domain.sample.ScdShopmT;
 import kr.co.solbipos.application.domain.sample.SslTrdtlT;
 import kr.co.solbipos.application.domain.sample.TestTable;
+import kr.co.solbipos.application.domain.sample.TmpBoardT;
+import kr.co.solbipos.application.domain.sample.TmpDragtT;
 
 /**
  * 샘플
@@ -25,4 +29,22 @@ public interface SampleMapper {
     <E> List<E> selectColumns(String table);
 
     <E> List<E> selectTestTable(TestTable testTable);
+
+    <E> List<E> selectCode(CcdCodemT param);
+    
+    <E> List<E> selectTreeMenu();
+
+    <E> List<E> getgroupGridSample();
+
+    <E> List<E> getDragNDropSample(TmpDragtT tmpDragt);
+    
+    void insertUpdateDragSample(TmpDragtT tmpDragt);
+    
+    void insertBoardSample(TmpBoardT tmpBoardT);
+    
+    void updateBoardSample(TmpBoardT tmpBoardT);
+    
+    TmpBoardT getRecentBoardData();
+    
+    <E> List<E> selectStore(ScdShopmT scdShopmT);
 }
