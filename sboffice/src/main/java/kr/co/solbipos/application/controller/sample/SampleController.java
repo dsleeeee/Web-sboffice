@@ -46,16 +46,24 @@ public class SampleController {
     @RequestMapping(value = "sample.sb")
     public String sample(HttpSession session, Model model) {
 
+        System.out.println("111111111111111111111111");
+        
         String encoding = prop.getEncoding();
-//        log.error("sample...... : {}", encoding);
+        log.error("sample...... : {}", encoding);
 
+        System.out.println("2222222222222222222222222");
+        
         String param = "test";
 
         List<DefaultMap<Object>> temp = sampleService.selectSample(param);
+        
+        System.out.println("3333333333333333333333");
 
-//        log.error("result : {}", temp);
+        log.error("result : {}", temp);
 
         model.addAttribute("data", temp);
+        
+        System.out.println("44444444444444444444");
 
         return "sample/sampleView";
     }
