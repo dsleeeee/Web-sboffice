@@ -34,7 +34,7 @@
 <!--   web session  -->
   <entry key="redis.web.prefix">sbp:web:dev:</entry> 
 <!--   web 공통 코드  -->
-  <entry key="redis.code.prefix">sbp:cmm:dev:</entry>
+  <entry key="redis.code.prefix">sbp:cmm:dev:</entry> 
   
   
   <!-- ====================================--> 
