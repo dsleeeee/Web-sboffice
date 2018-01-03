@@ -3,13 +3,8 @@
 
 <configuration scan="true" scanPeriod="30 seconds"><!-- scanPeriod 마다 설정 파일의 변경을 확인하여 로딩 -->
   
-<<<<<<< HEAD
   <property name="ROOT_LEVEL" value="DEBUG"/>
   <property name="LOG_LEVEL" value="DEBUG"/>
-=======
-  <property name="ROOT_LEVEL" value="DEV"/>
-  <property name="LOG_LEVEL" value="DEV"/>
->>>>>>> branch 'master' of http://192.168.0.85:30119/ygjeong/solbipos-office.git
   <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"/>
   <property name="FILE_EXT" value="log"/>
   
