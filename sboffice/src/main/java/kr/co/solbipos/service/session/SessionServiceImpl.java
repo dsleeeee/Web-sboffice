@@ -213,11 +213,11 @@ public class SessionServiceImpl implements SessionService {
         if (cookie != null) {
             cookie.setMaxAge(0);
             cookie.setPath("/");
-
+            /*
             if (prop.profile.indexOf("local") == -1) {
                 cookie.setDomain(prop.domain);
             }
-
+            */
             response.addCookie(cookie);
         }
     }
@@ -231,9 +231,11 @@ public class SessionServiceImpl implements SessionService {
     private void makeCookie(String sessionId, HttpServletResponse response) {
         Cookie cookie = new Cookie(SESSION_KEY, sessionId);
         cookie.setPath("/");
+        /*
         if (prop.profile.indexOf("local") == -1) {
             cookie.setDomain(prop.domain);
         }
+        */
         cookie.setMaxAge(-1);
         response.addCookie(cookie);
     }
