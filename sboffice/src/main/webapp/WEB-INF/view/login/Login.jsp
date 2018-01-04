@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <body class="login">
   <div class="login_wrap">
-  
+   
     <div class="login_box">
       <div class="login_tit">
         <h1>solbipos 2</h1>
