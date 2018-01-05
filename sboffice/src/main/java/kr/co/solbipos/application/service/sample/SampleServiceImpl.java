@@ -3,6 +3,7 @@ package kr.co.solbipos.application.service.sample;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import kr.co.solbipos.application.domain.resource.ResrceInfo;
 import kr.co.solbipos.application.domain.sample.CcdCodemT;
 import kr.co.solbipos.application.domain.sample.ScdShopmT;
 import kr.co.solbipos.application.domain.sample.SslTrdtlT;
@@ -97,6 +98,19 @@ public class SampleServiceImpl implements SampleService {
       return sampleMapper.selectStore(scdShopmT);
     }
 
-    
+    @Override
+    public List<ResrceInfo> selectMenu1() {
+        return sampleMapper.selectMenu1();
+    }
+
+    @Override
+    public List<ResrceInfo> selectMenu2() {
+        return sampleMapper.selectMenu2();
+    }
+
+    @Override
+    public List<ResrceInfo> selectMenu3() {
+        return sampleMapper.selectMenu3();
+    }
     
 }
