@@ -35,7 +35,7 @@
         <form class="loginF">
           
           <div class="writeInfo">
-            <input type="text" id="id" placeholder="아이디" class="id" /><label for="id"></label> 
+            <input type="text" id="id" placeholder="아이디" class="id" /><label for="id"></label>
             <input type="password" id="pw" placeholder="비밀번호" class="pw" /><label for="pw"></label>
           </div>
           
