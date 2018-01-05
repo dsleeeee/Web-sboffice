@@ -32,11 +32,12 @@
       
       <div class="loginArea">
         <h2>Welcome Login</h2>
-        <form class="loginF">
+        
+        <f:form class="loginF" modelAttribute="auth" method="post" action="/auth/login.sb">
           
           <div class="writeInfo">
-            <input type="text" id="id" placeholder="아이디" class="id" /><label for="id"></label>
-            <input type="password" id="pw" placeholder="비밀번호" class="pw" /><label for="pw"></label>
+            <input type="text" id="userId" name="userId" placeholder="아이디" class="id" /><label for="userId"></label>
+            <input type="password" id="userPwd" name="userPwd" placeholder="비밀번호" class="pw" /><label for="userPwd"></label>
           </div>
           
           <div class="idsave">
@@ -44,7 +45,7 @@
             <button class="btn_login">로그인</button>
           </div>
           
-        </form>
+        </f:form>
       
       
         <div class="linkArea">

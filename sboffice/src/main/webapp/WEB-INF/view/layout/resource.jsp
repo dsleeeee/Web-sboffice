@@ -1,11 +1,16 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/style.css"/>
-
-<!-- <link rel="stylesheet" type="text/css" href="/resource/solbipos/css/core.css"/> -->
-<!-- <link rel="stylesheet" type="text/css" href="/resource/solbipos/css/menu.css"/> -->
-<!-- <link rel="stylesheet" type="text/css" href="/resource/solbipos/css/component.css"/> -->
+<c:choose>
+  <c:when test="${isLogin == true}">
+  <link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/style.css"/>
+  </c:when>
+  <c:otherwise>
+  <link rel="stylesheet" type="text/css" href="/resource/solbipos/css/core.css"/>
+  <link rel="stylesheet" type="text/css" href="/resource/solbipos/css/menu.css"/>
+  <link rel="stylesheet" type="text/css" href="/resource/solbipos/css/component.css"/>
+  </c:otherwise>
+</c:choose>
 
 <link rel="stylesheet" type="text/css" href="/resource/vender/wijmo/css/wijmo.min.css" />
 <link rel="stylesheet" type="text/css" href="/resource/vender/awesome-font/css/font-awesome.min.css" />
