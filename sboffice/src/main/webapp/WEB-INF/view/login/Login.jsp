@@ -36,24 +36,25 @@
         <f:form class="loginF" modelAttribute="auth" method="post" action="/auth/login.sb">
           
           <div class="writeInfo">
-            <input type="text" id="userId" name="userId" placeholder="아이디" class="id" /><label for="userId"></label>
-            <input type="password" id="userPwd" name="userPwd" placeholder="비밀번호" class="pw" /><label for="userPwd"></label>
+            <input type="text" id="userId" name="userId" placeholder="<s:message code="label.login.userId"/>" class="id" /><label for="userId"></label>
+            <input type="password" id="userPwd" name="userPwd" placeholder="<s:message code="label.login.userPasswd"/>" class="pw" /><label for="userPwd"></label>
           </div>
           
           <div class="idsave">
-            <span><input type="checkbox" id="chk" /><label for="chk">아이디 저장</label></span>
-            <button class="btn_login">로그인</button>
+            <span><input type="checkbox" id="chk" checked="true" /><label for="chk"><s:message code="label.login.rememberId"/></label></span>
+            <button class="btn_login"><s:message code="label.login.submit"/></button>
           </div>
           
         </f:form>
       
       
         <div class="linkArea">
-          <span class="find"><a href="#" class="fdId">아이디 찾기</a>
-            <a href="#" class="fdPw">비밀번호 찾기</a>
+          <span class="find">
+            <a href="#" class="fdId"><s:message code="label.login.find.id"/></a>
+            <a href="#" class="fdPw"><s:message code="label.login.find.pw"/></a>
           </span>
-          <a href="#" class="distributor">총판 등록</a>
-          <a href="#" class="agency">대리점 등록</a>
+          <a href="#" class="distributor"><s:message code="label.login.add.dist"/></a>
+          <a href="#" class="agency"><s:message code="label.login.add.agency"/></a>
         </div>
         
       </div>
