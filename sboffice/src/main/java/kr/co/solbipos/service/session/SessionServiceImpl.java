@@ -48,7 +48,6 @@ public class SessionServiceImpl implements SessionService {
     public String setSessionInfo(HttpServletRequest request, HttpServletResponse response,
             SessionInfo sessionInfo) {
         String sessionId = generateUUID();
-        String clientIp = HttpUtils.getClientIp(request);
 
         // sessionId 세팅
         sessionInfo.setSessionId(sessionId);
@@ -58,15 +57,8 @@ public class SessionServiceImpl implements SessionService {
         sessionInfo.setFixMenu(cmmMenuService.selectFixingMenu(sessionInfo));
         // 즐겨찾기 메뉴 리스트 저장
         sessionInfo.setBkmkMenu(cmmMenuService.selectBkmkMenu(sessionInfo));
-        sessionInfo.setLoginIp(clientIp);
-        
-        
-        
         // 메뉴 데이터 만들기
         sessionInfo.setMenuData(cmmMenuService.makeMenu(sessionInfo.getAuthMenu()));
-        
-        
-        
 
         // redis에 세션 세팅
         setSessionInfo(sessionId, sessionInfo);

@@ -15,7 +15,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <tiles:insertAttribute name="resource"/>
-<title>솔비포스 관리자</title>
+<title><s:message code="title.web"/></title>
 
 </head>
 <tiles:insertAttribute name="body"/>

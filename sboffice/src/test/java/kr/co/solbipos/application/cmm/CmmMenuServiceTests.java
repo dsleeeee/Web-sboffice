@@ -1,4 +1,4 @@
-package kr.co.solbipos.application.service.cmm;
+package kr.co.solbipos.application.cmm;
 
 import static org.junit.Assert.*;
 import java.util.ArrayList;

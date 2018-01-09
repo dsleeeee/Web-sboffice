@@ -11,7 +11,7 @@
       <a href="#">
         <img src="/resource/solbipos/img/login/logo_login.png" alt="솔비포스" />
       </a>
-      <h1>솔비포스 관리자</h1>
+      <h1><s:message code="title.web"/></h1>
     </header>
     <div class="content">
       
@@ -33,16 +33,25 @@
       <div class="loginArea">
         <h2>Welcome Login</h2>
         
-        <f:form class="loginF" modelAttribute="auth" method="post" action="/auth/login.sb">
+        <f:form class="loginF" modelAttribute="sessionInfo" method="post" action="/auth/login.sb">
           
           <div class="writeInfo">
-            <input type="text" id="userId" name="userId" placeholder="<s:message code="label.login.userId"/>" class="id" /><label for="userId"></label>
-            <input type="password" id="userPwd" name="userPwd" placeholder="<s:message code="label.login.userPasswd"/>" class="pw" /><label for="userPwd"></label>
+            <input class="id" type="text" id="userId" name="userId" placeholder="<s:message code="label.login.userId"/>"/><label for="userId"></label>
+<%--             <f:errors path="userId"/> --%>
+            <input class="pw" type="password" id="userPwd" name="userPwd" placeholder="<s:message code="label.login.userPasswd"/>"/><label for="userPwd"></label>
+<%--             <f:errors path="userPwd"/> --%>
           </div>
           
           <div class="idsave">
-            <span><input type="checkbox" id="chk" checked="true" /><label for="chk"><s:message code="label.login.rememberId"/></label></span>
-            <button class="btn_login"><s:message code="label.login.submit"/></button>
+            <span>
+              <input type="checkbox" id="chk" checked="true" />
+              <label for="chk">
+                <s:message code="label.login.rememberId"/>
+              </label>
+            </span>
+            <button class="btn_login">
+              <s:message code="label.login.submit"/>
+            </button>
           </div>
           
         </f:form>

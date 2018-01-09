@@ -12,7 +12,9 @@ public enum LoginResult implements EnumValue<String> {
     , FAIL("FAIL")
     , LOCK("LOCK")
     , NOT_EXISTS_ID("NID")
-    , PASSWORD_ERROR("ERR");
+    , PASSWORD_ERROR("ERR")
+    , PASSWORD_CHANGE("CHG")
+    ;
     
     private final String result;
     

@@ -41,19 +41,37 @@ public class LoginController {
 
 
     @RequestMapping(value = "login.sb", method = RequestMethod.POST)
-    public String loginProcess(HttpServletRequest request, HttpServletResponse response,
-            SessionInfo sessionInfo, Model model) {
+    public String loginProcess(
+//            @Valid SessionInfo sessionInfo, BindingResult bindingResult,
+            SessionInfo sessionInfo,
+            HttpServletRequest request, HttpServletResponse response, Model model) {
 
         log.info("login start : {} ", sessionInfo.getUserId());
-
-        String returnUrl = "";
+        
+        /*
+        if (bindingResult.hasErrors()) {
+            return "Login";
+        }
+        */
 
         sessionInfo.setLoginIp(getClientIp(request));
         sessionInfo.setBrwsrInfo(request.getHeader("User-Agent"));
+        
+        String returnUrl = "sample.sb";
 
+        // 로그인 시도
         SessionInfo si = loginService.login(sessionInfo);
 
         LoginResult code = si.getLoginResult();
+        
+        
+        /** 
+         * TODO 로그인 시도 결과로 이동 경로
+         * 1. 성공 : 메인 페이지로 이동
+         * 2. 실패
+         *  2-1. 메세지와 함께 로그인 페이지로 이동
+         *  2-2. 패스워드 변경 페이지로 이동
+         * */
         
         // 로그인 성공
         if (code == LoginResult.SUCCESS) {
@@ -64,11 +82,28 @@ public class LoginController {
             // 세션 생성
             sessionService.setSessionInfo(request, response, si);
         }
+        else if(code == LoginResult.NOT_EXISTS_ID) {
+            
+        }
+        else if(code == LoginResult.PASSWORD_CHANGE) {
+            
+        }
         // 로그인 실패
         else {
+            returnUrl = "/auth/login.sb";
             // 실패 처리
-            throw new AuthenticationException("로그인에 실패했습니다.", "/auth/login.sb");
+            throw new AuthenticationException("로그인에 실패했습니다.", returnUrl);
         }
+        
+        
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        
 
         return "redirect:/" + returnUrl;
     }
@@ -79,7 +114,7 @@ public class LoginController {
         loginService.logout(request, response);
         return "redirect:/auth/login.sb";
     }
-    
+
     @RequestMapping(value = "logdenied.sb", method = RequestMethod.GET)
     public String denied(HttpServletRequest request, HttpServletResponse response, Model model) {
         return "denied";

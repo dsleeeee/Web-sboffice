@@ -1,6 +1,8 @@
 package kr.co.solbipos.application.domain.login;
 
 import java.util.List;
+import javax.validation.constraints.Size;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
@@ -20,9 +22,13 @@ public class SessionInfo extends BaseDomain {
     private String sessionId;
     
     /** 사용자 아이디 */
+    @NotBlank( message = "{label.login.userId}{msg.cmm.require.text}" )
+    @Size( max = 20, message = "{msg.cmm.size.max}" )
     private String userId;
 
     /** 사용자 비밀번호 */
+    @NotBlank( message = "{label.login.userPasswd}{msg.cmm.require.text}" )
+    @Size( min = 8, max = 25, message = "{msg.cmm.size.max}" )
     private String userPwd;
     
     /** 사용자 이름 */
