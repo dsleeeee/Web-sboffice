@@ -25,6 +25,7 @@
       <mvc:exclude-mapping path="/resource/**" />
       <mvc:exclude-mapping path="/error/*.sb" />
       <mvc:exclude-mapping path="/auth/log*.sb" />
+      <mvc:exclude-mapping path="/user/*.sb" />
       
       <mvc:exclude-mapping path="/menu/*.sb" />
       

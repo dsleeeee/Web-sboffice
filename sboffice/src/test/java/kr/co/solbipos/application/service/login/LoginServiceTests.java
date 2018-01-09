@@ -1,5 +1,6 @@
 package kr.co.solbipos.application.service.login;
 
+import static kr.co.solbipos.utils.DateUtil.*;
 import static org.junit.Assert.*;
 import static org.mockito.BDDMockito.*;
 import org.junit.Before;
@@ -15,6 +16,7 @@ import kr.co.solbipos.application.domain.login.SessionInfo;
 import kr.co.solbipos.application.enums.login.LoginResult;
 import kr.co.solbipos.application.persistance.login.LoginMapper;
 import kr.co.solbipos.service.session.SessionService;
+import kr.co.solbipos.system.Prop;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -28,6 +30,9 @@ public class LoginServiceTests {
     @Mock
     SessionService sessionService;
 
+    @Mock
+    Prop prop;
+    
     @InjectMocks
     LoginServiceImpl loginService;
 
@@ -36,6 +41,7 @@ public class LoginServiceTests {
     @Before
     public void init() {
         sessionInfo = new SessionInfo();
+        prop.loginPwdChgDays = 90;
     }
 
     /**
@@ -68,7 +74,8 @@ public class LoginServiceTests {
         s.setUserId("ygjeong");
         s.setUserPwd("qwer");
         s.setLockCd("N");
-
+        s.setLastPwdChg("20180101");
+        
         sessionInfo.setUserId("ygjeong");
         given(loginService.selectWebUser(sessionInfo)).willReturn(s);
 
@@ -88,6 +95,7 @@ public class LoginServiceTests {
         s.setUserId("ygjeong");
         s.setUserPwd("qwer"); // 동일한 패스워드
         s.setLockCd("N");
+        s.setLastPwdChg("20180101");
 
         sessionInfo.setUserId("ygjeong");
         sessionInfo.setUserPwd("qwer");
@@ -109,6 +117,7 @@ public class LoginServiceTests {
         s.setUserId("ygjeong");
         s.setUserPwd("qwera"); // 다른 패스워드
         s.setLockCd("N");
+        s.setLastPwdChg("20180101");
 
         sessionInfo.setUserId("ygjeong");
         sessionInfo.setUserPwd("qwer");
@@ -130,6 +139,7 @@ public class LoginServiceTests {
         s.setUserId("ygjeong");
         s.setUserPwd("qwer");
         s.setLockCd("Y"); // 사용자 잠금 처리 됨
+        s.setLastPwdChg("20180101");
 
         sessionInfo.setUserId("ygjeong");
         sessionInfo.setUserPwd("qwer");
@@ -140,6 +150,62 @@ public class LoginServiceTests {
         assertTrue("".equals(si.getUserPwd()));
         assertTrue(si.getLoginResult() == LoginResult.LOCK);
     }
+    
+    /**
+      * 패스워드 변경 날짜 체크
+      */
+    @Test
+    // @Ignore
+    public void pwdChgExpire() {
+        SessionInfo s = new SessionInfo();
+        s.setUserId("ygjeong");
+        s.setUserPwd("qwer");
+        s.setLockCd("N");
+        s.setLastPwdChg("20170603"); // 마지막 패스워드 변경 날짜
+        
+        sessionInfo.setUserId("ygjeong");
+        sessionInfo.setUserPwd("qwer");
+        given(loginService.selectWebUser(sessionInfo)).willReturn(s);
+
+        SessionInfo si = loginService.login(sessionInfo);
+
+        assertTrue("".equals(si.getUserPwd()));
+        assertTrue(si.getLoginResult() == LoginResult.PASSWORD_EXPIRE);
+    }
+    
+    /**
+      * 패스워드 변경 한번도 없을때
+      */
+    @Test
+    // @Ignore
+    public void pwdChg() {
+        SessionInfo s = new SessionInfo();
+        s.setUserId("ygjeong");
+        s.setUserPwd("qwer");
+        s.setLockCd("N");
+        s.setLastPwdChg("0"); // 패스워드 변경 한적 없음
+        
+        sessionInfo.setUserId("ygjeong");
+        sessionInfo.setUserPwd("qwer");
+        given(loginService.selectWebUser(sessionInfo)).willReturn(s);
+
+        SessionInfo si = loginService.login(sessionInfo);
+
+        assertTrue("".equals(si.getUserPwd()));
+        assertTrue(si.getLoginResult() == LoginResult.PASSWORD_CHANGE);
+    }
+    
 }
+
+
+
+
+
+
+
+
+
+
+
 
 

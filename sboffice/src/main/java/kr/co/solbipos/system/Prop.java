@@ -33,6 +33,9 @@ public class Prop {
     
     @Value("#{config['session.hist.menu.size']}")
     public int sessionHistMenuSize;
+    
+    @Value("#{config['login.pwd.chg.days']}")
+    public int loginPwdChgDays;
 
     /*
      * 아래는 기존에 treepay 에서 쓰던것

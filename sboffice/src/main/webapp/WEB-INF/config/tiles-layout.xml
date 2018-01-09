@@ -1,18 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 <tiles-definitions>
-
+  
+<!--   로그인 페이지 전용 레이아웃 -->
+  <definition name="loginLayout" template="/WEB-INF/view/layout/loginLayout.jsp">
+    <put-attribute name="view" value="loginLayout"/>
+    <put-attribute name="resource" value="/WEB-INF/view/layout/resource.jsp"/>
+    <put-attribute name="body" value="/WEB-INF/view/layout/basic/body.jsp"/>
+  </definition>
+  
+<!--   로그인 페이지 레이아웃 사용 -->
+  <definition name="*/login:*" extends="loginLayout">
+    <put-attribute name="view" value="loginLayout"/>
+    <put-attribute name="body" value="/WEB-INF/view/application/{1}/{2}.jsp"/>
+  </definition>
+  
   <definition name="layout" template="/WEB-INF/view/layout/layout.jsp">
     <put-attribute name="view" value="layout"/>
     <put-attribute name="resource" value="/WEB-INF/view/layout/resource.jsp"/>
     <put-attribute name="body" value="/WEB-INF/view/layout/basic/body.jsp"/>
   </definition>
-  
-  <definition name="Login" extends="layout">
-    <put-attribute name="view" value="Login"/>
-    <put-attribute name="body" value="/WEB-INF/view/login/Login.jsp"/>
-  </definition>
-  
+
   <definition name="error/*" extends="layout">
     <put-attribute name="view" value="Error"/>
     <put-attribute name="body" value="/WEB-INF/view/error/{1}.jsp"/>

@@ -2,6 +2,7 @@ package kr.co.solbipos.application.service.login;
 
 import static kr.co.solbipos.utils.DateUtil.*;
 import static org.springframework.util.ObjectUtils.*;
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,6 +15,7 @@ import kr.co.solbipos.application.enums.login.LoginOrigin;
 import kr.co.solbipos.application.enums.login.LoginResult;
 import kr.co.solbipos.application.persistance.login.LoginMapper;
 import kr.co.solbipos.service.session.SessionService;
+import kr.co.solbipos.system.Prop;
 import kr.co.solbipos.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,6 +23,9 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class LoginServiceImpl implements LoginService {
 
+    @Autowired
+    Prop prop;
+    
     @Autowired
     LoginMapper loginMapper;
 
@@ -63,9 +68,22 @@ public class LoginServiceImpl implements LoginService {
         }
         
         /** 
+         * 패스워드 초기 변경 인지 체크 
+         * */
+        if( webUser.getLastPwdChg().equals("0") ) {
+            return LoginResult.PASSWORD_CHANGE;
+        }
+        
+        
+        int pwdChgDays = Integer.parseInt(addDaysString(webUser.getLastPwdChg(), prop.loginPwdChgDays));
+        int currentDay = Integer.parseInt(currentDateString());
+        
+        /** 
          * 패스워드 변경 날짜 체크
          * */
-        
+        if( currentDay >= pwdChgDays ) {
+            return LoginResult.PASSWORD_EXPIRE;
+        }
 
         return LoginResult.SUCCESS;
     }

@@ -40,9 +40,9 @@ public class SessionInfo extends BaseDomain {
     /** 최종 로그인 일자 */
     private String lastLoginDate;
 
-    /** 최종 비밀번호 변경 일자 */
-    private String lastPwdChgDate;
-
+    /** 마지막으로 패스워드 변경 날짜 */
+    private String lastPwdChg;
+    
     /** 로그인 실패 건수 */
     private Long loginFailCnt;
 
