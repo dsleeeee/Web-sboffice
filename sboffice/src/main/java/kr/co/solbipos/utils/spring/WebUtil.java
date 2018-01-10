@@ -121,10 +121,33 @@ public class WebUtil extends WebUtils {
      */
     public static void setCookieValue(String name, String value, int expireDay) {
         Cookie cookie = new Cookie(name, value);
-
         cookie.setMaxAge(60 * 60 * 24 * (expireDay < 1 ? 1 : expireDay));
-
         getResponse().addCookie(cookie);
+    }
+    
+    /**
+      * Cookie 값 삽입 : setPath("/")
+      * @param name
+      * @param value
+      * @param maxAge
+      */
+    public static void setCookie(String name, String value, int maxAge) {
+        Cookie cookie = new Cookie(name, value);
+        cookie.setPath("/");
+        cookie.setMaxAge(maxAge);
+        getResponse().addCookie(cookie);
+    }
+    
+    /**
+      * 쿠키 지우기
+      * @param cookie
+      */
+    public static void removeCookie(Cookie cookie) {
+        if (cookie != null) {
+            cookie.setMaxAge(0);
+            cookie.setPath("/");
+            getResponse().addCookie(cookie);
+        }
     }
 
     /**

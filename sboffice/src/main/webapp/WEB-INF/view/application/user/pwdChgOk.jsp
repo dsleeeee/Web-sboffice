@@ -6,21 +6,9 @@
 
 
 <div class="loginArea">
-  <h2>Password Find</h2>
+  <h2>Password Change Ok</h2>
   
-  <a onClick="">인증번호 받기</a>
-  
-  <f:form method="post" action="/user/pwdFind.sb">
-    <input type="submit" value="확인" />
-  </f:form>
-  
+  <a href="/auth/login.sb">로그인</a>
 </div>
 
 
-<script>
-function authNum() {
-  
-  
-  
-}
-</script>

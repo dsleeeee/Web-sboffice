@@ -7,9 +7,12 @@
 
 <div class="loginArea">
   <h2>Id Find</h2>
-  
+
   <f:form method="post" action="/user/idFind.sb">
+    <input type="submit" value="확인" />
   </f:form>
+  
+  <a href="/auth/login.sb">로그인 화면</a>
 </div>
 
 

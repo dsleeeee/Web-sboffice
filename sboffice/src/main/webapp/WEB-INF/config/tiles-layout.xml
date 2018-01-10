@@ -15,6 +15,8 @@
     <put-attribute name="body" value="/WEB-INF/view/application/{1}/{2}.jsp"/>
   </definition>
   
+  
+  
   <definition name="layout" template="/WEB-INF/view/layout/layout.jsp">
     <put-attribute name="view" value="layout"/>
     <put-attribute name="resource" value="/WEB-INF/view/layout/resource.jsp"/>

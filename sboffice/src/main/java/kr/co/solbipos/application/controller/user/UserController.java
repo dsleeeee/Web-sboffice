@@ -82,6 +82,18 @@ public class UserController {
     }
     
     /**
+      * 패스워드 찾기 > 비밀번호 변경 페이지로 이동
+      * @param request
+      * @param response
+      * @param model
+      * @return
+      */
+    @RequestMapping(value = "pwdFind.sb", method = RequestMethod.POST)
+    public String passwordFindProcess(HttpServletRequest request, HttpServletResponse response, Model model) {
+        return "redirect:/user/pwdChg.sb";
+    }
+    
+    /**
       * 패스워드 변경 페이지 이동
       * @param request
       * @param response
@@ -102,7 +114,19 @@ public class UserController {
       */
     @RequestMapping(value = "pwdChg.sb", method = RequestMethod.POST)
     public String passwordChangeProcess(HttpServletRequest request, HttpServletResponse response, Model model) {
-        return "";
+        return "redirect:/user/pwdChgOk.sb";
+    }
+    
+    /**
+      * 패스워드 변경 완료 페이지 이동
+      * @param request
+      * @param response
+      * @param model
+      * @return
+      */
+    @RequestMapping(value = "pwdChgOk.sb", method = RequestMethod.GET)
+    public String pwdChgOk(HttpServletRequest request, HttpServletResponse response, Model model) {
+        return "user/login:pwdChgOk";
     }
 }
 

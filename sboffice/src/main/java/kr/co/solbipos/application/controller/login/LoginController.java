@@ -1,6 +1,7 @@
 package kr.co.solbipos.application.controller.login;
 
 import static kr.co.solbipos.utils.HttpUtils.*;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import kr.co.solbipos.application.enums.login.LoginResult;
 import kr.co.solbipos.application.service.login.LoginService;
 import kr.co.solbipos.exception.AuthenticationException;
 import kr.co.solbipos.service.session.SessionService;
+import kr.co.solbipos.system.Prop;
+import kr.co.solbipos.utils.spring.WebUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -31,6 +34,9 @@ public class LoginController {
 
     @Autowired
     SessionService sessionService;
+    
+    @Autowired
+    Prop prop;
 
     @RequestMapping(value = "login.sb", method = RequestMethod.GET)
     public String login(HttpServletRequest request, HttpServletResponse response, Model model) {
@@ -51,27 +57,34 @@ public class LoginController {
         sw.start();
         
         log.info("login start : {} ", sessionInfo.getUserId());
-
+        
         /*
-         * if (bindingResult.hasErrors()) { return "Login"; }
+         * if (bindingResult.hasErrors()) { 
+         *      return "Login"; 
+         * }
          */
-
+        
+        // 아이디 저장 쿠키 처리
+        WebUtil.setCookie(prop.loginSaveId, sessionInfo.getUserId(), sessionInfo.isChk() ? -1 : 0);
+        
         sessionInfo.setLoginIp(getClientIp(request));
         sessionInfo.setBrwsrInfo(request.getHeader("User-Agent"));
-
-        String returnUrl = "sample.sb";
 
         // 로그인 시도
         SessionInfo si = loginService.login(sessionInfo);
 
         LoginResult code = si.getLoginResult();
 
-
         /**
-         * TODO 로그인 시도 결과로 이동 경로 1. 성공 : 메인 페이지로 이동 2. 실패 2-1. 메세지와 함께 로그인 페이지로 이동 2-2. 패스워드 변경 페이지로
+         * TODO 로그인 시도 결과로 이동 경로 
+         * 1. 성공 : 메인 페이지로 이동 
+         * 2. 실패 
+         * 2-1. 메세지와 함께 로그인 페이지로 이동 
+         * 2-2. 패스워드 변경 페이지로
          * 이동
          */
-
+        
+        String returnUrl = "sample.sb";
         // 로그인 성공
         if (code == LoginResult.SUCCESS) {
 
@@ -82,19 +95,27 @@ public class LoginController {
             sessionService.setSessionInfo(request, response, si);
         } else if (code == LoginResult.NOT_EXISTS_ID || code == LoginResult.PASSWORD_ERROR
                 || code == LoginResult.LOCK) {
+            
+            
             // 다시 로그인 페이지로 이동
             returnUrl = "login.sb";
+            
+            
         } else if (code == LoginResult.PASSWORD_CHANGE || code == LoginResult.PASSWORD_EXPIRE) {
+            
+            
             // 패스워드 변경 페이지로 이동
             returnUrl = "/user/pwdChg.sb";
+            
+            
         }
         // 로그인 실패
         else {
-            
             sw.stop();
             log.error("로그인 실패 처리 시간 : {}", sw.getTotalTimeSeconds());
             
             returnUrl = "/auth/login.sb";
+            
             // 실패 처리
             throw new AuthenticationException("로그인에 실패했습니다.", returnUrl);
         }

@@ -3,9 +3,6 @@ package kr.co.solbipos.application.domain.login;
 import java.util.List;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.stereotype.Component;
 import kr.co.solbipos.application.domain.BaseDomain;
 import kr.co.solbipos.application.domain.resource.ResrceInfo;
 import kr.co.solbipos.application.domain.resource.ResrceInfoBase;
@@ -57,6 +54,14 @@ public class SessionInfo extends BaseDomain {
     
     /** 로그인 시도 결과 */
     private LoginResult loginResult;
+
+    /** 로그인 화면 : 아이디 저장 여부 */
+    private boolean chk;
+    
+    
+    /** 
+     * 메뉴 관련 데이터 
+     * */
     
     /** 그리드 메뉴 데이터 */
     private String menuData;

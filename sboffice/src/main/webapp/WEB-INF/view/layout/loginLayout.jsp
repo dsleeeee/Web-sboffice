@@ -18,7 +18,7 @@
 <body>
   <div class="login">
     <header>
-      <a href="#">
+      <a href="/">
         <img src="/resource/solbipos/img/login/logo_login.png" alt="솔비포스" />
       </a>
       <h1><s:message code="title.web"/></h1>
