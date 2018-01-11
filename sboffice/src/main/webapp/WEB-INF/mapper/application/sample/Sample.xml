@@ -3,6 +3,46 @@
 
 <mapper namespace="kr.co.solbipos.application.persistance.sample.SampleMapper">
 
+
+
+  <select id="selectMenu1" resultType="resrceInfo">
+  <![CDATA[
+    SELECT * 
+      FROM TB_WB_RESRCE_INFO
+     WHERE DISP_LEVEL = '0'
+       AND RESRCE_FG = 'M' 
+       AND USE_YN = 'Y'
+     ORDER BY DISP_LEVEL ASC, DISP_IDX ASC
+  ]]>
+  </select>
+  
+  
+  <select id="selectMenu2" resultType="resrceInfo">
+  <![CDATA[
+    SELECT * 
+      FROM TB_WB_RESRCE_INFO
+     WHERE DISP_LEVEL = '1'
+       AND RESRCE_FG = 'M'
+       AND USE_YN = 'Y'
+     ORDER BY RESRCE_CD ASC, MOD_DT DESC
+  ]]>
+  </select>
+
+  <select id="selectMenu3" resultType="resrceInfo">
+  <![CDATA[
+    SELECT * 
+      FROM TB_WB_RESRCE_INFO
+     WHERE DISP_LEVEL = '2'
+       AND RESRCE_FG = 'M'
+       AND USE_YN = 'Y'
+     ORDER BY RESRCE_CD ASC, DISP_IDX ASC
+  ]]>
+  </select>
+
+
+
+
+
   <select id="selectSample" resultType="DefaultMap" parameterType="java.lang.String">
     SELECT * 
       FROM CCD_CODEM_T
@@ -267,12 +307,13 @@
     WHERE   ROWNUM = 1
   </select>
   
-  <select id="selectStore" resultType="DefaultMap" parameterType="kr.co.solbipos.application.domain.sample.ScdShopmT">
-    SELECT  *
-    FROM    SCD_SHOPM_T
-    WHERE   DELETE_YN = 'N'
-    <if test="shopNm != null and shopNm != ''">
-    AND     SHOP_NM LIKE '%'||#{shopNm}||'%'
+  <select id="selectStore" resultType="DefaultMap" parameterType="kr.co.solbipos.application.domain.sample.TbMsStore">
+    SELECT  A.*, B.HQ_NM
+    FROM    TB_MS_STORE A
+    ,       TB_MS_HEADQUARTERS B
+    WHERE   B.HQ_CD = A.HQ_CD
+    <if test="storeNm != null and storeNm != ''">
+    AND     STORE_NM LIKE '%'||#{storeNm}||'%'
     </if>
   </select>
   
