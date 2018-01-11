@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import kr.co.solbipos.application.domain.sample.ScdShopmT;
+import kr.co.solbipos.application.domain.sample.TbMsStore;
 import kr.co.solbipos.application.service.sample.SampleService;
 import kr.co.solbipos.service.message.MessageService;
 import kr.co.solbipos.structure.DefaultMap;
@@ -152,10 +153,8 @@ public class SampleController {
      */
    @RequestMapping(value = "sampleInput2Res.sb")
    @ResponseBody
-   public JsonResult sampleInput2Res(ScdShopmT scdShopmT, Model model) {
-     
-       // 추후 TB_MS_STORE로 변경
-       List<DefaultMap<Object>> temp = sampleService.selectStore(scdShopmT);
+   public JsonResult sampleInput2Res(TbMsStore tbMsStore, Model model) {
+       List<DefaultMap<Object>> temp = sampleService.selectStore(tbMsStore);
        Result result = new Result(Status.OK, temp);
        return new JsonResult(result);
    }
