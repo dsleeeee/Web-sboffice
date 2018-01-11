@@ -3,6 +3,46 @@
 
 <mapper namespace="kr.co.solbipos.application.persistance.sample.SampleMapper">
 
+
+
+  <select id="selectMenu1" resultType="resrceInfo">
+  <![CDATA[
+    SELECT * 
+      FROM TB_WB_RESRCE_INFO
+     WHERE DISP_LEVEL = '0'
+       AND RESRCE_FG = 'M' 
+       AND USE_YN = 'Y'
+     ORDER BY DISP_LEVEL ASC, DISP_IDX ASC
+  ]]>
+  </select>
+  
+  
+  <select id="selectMenu2" resultType="resrceInfo">
+  <![CDATA[
+    SELECT * 
+      FROM TB_WB_RESRCE_INFO
+     WHERE DISP_LEVEL = '1'
+       AND RESRCE_FG = 'M'
+       AND USE_YN = 'Y'
+     ORDER BY RESRCE_CD ASC, MOD_DT DESC
+  ]]>
+  </select>
+
+  <select id="selectMenu3" resultType="resrceInfo">
+  <![CDATA[
+    SELECT * 
+      FROM TB_WB_RESRCE_INFO
+     WHERE DISP_LEVEL = '2'
+       AND RESRCE_FG = 'M'
+       AND USE_YN = 'Y'
+     ORDER BY RESRCE_CD ASC, DISP_IDX ASC
+  ]]>
+  </select>
+
+
+
+
+
   <select id="selectSample" resultType="DefaultMap" parameterType="java.lang.String">
     SELECT * 
       FROM CCD_CODEM_T
