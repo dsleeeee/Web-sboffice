@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import kr.co.solbipos.application.domain.sample.ScdShopmT;
 import kr.co.solbipos.application.domain.sample.TbMsStore;
 import kr.co.solbipos.application.service.sample.SampleService;
 import kr.co.solbipos.service.message.MessageService;

@@ -129,12 +129,8 @@ onload = function(){
     popDiv1.appendChild(popDiv2);
 
     $("#pop").append(popDiv1); 
+
     $("#storelayer").show();
-    
-    if(srchFg == "M") {
-      $("#saveStoreBtn").show();
-    }
-    
     $(".btn-layerClose").click(function(){
       srchStroeClose();
     });
@@ -161,6 +157,9 @@ onload = function(){
   
   /* 매장 조회 */
   srchStore = function(){
+    
+    $("#saveStoreBtn").hide();
+
     /* hqCd, brandCd, storeCd도 들어가야 함 */
     var paramStr = "storeNm="+document.getElementById("searchStore").value;
     
@@ -189,6 +188,8 @@ onload = function(){
                 } 
               }
             });
+            $("#saveStoreBtn").hide();
+
           } else {          // 멀티
             storeTree = new wijmo.nav.TreeView('#storeTree', {
               itemsSource: makeShopTree(result.data),
@@ -204,6 +205,8 @@ onload = function(){
                 } 
               }
             });
+
+              $("#saveStoreBtn").show();
           }
         }
       }
@@ -215,7 +218,6 @@ onload = function(){
   }
   
   saveStore = function(){
-    console.log('chk : '+ storeTree.checkedItems);
     var returnVal = "";
     for(var i=0; i< storeTree.checkedItems.length; i++) {
       console.log(storeTree.checkedItems[i])
