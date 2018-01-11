@@ -1,8 +1,6 @@
 package kr.co.solbipos.application.controller.sample;
 
 import static kr.co.solbipos.utils.spring.StringUtil.*;
-import static org.springframework.util.StringUtils.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -10,12 +8,12 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StopWatch;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import kr.co.solbipos.application.domain.resource.ResrceInfo;
+import kr.co.solbipos.application.domain.sample.CommonCode;
+import kr.co.solbipos.application.domain.sample.SslTrdtlT;
 import kr.co.solbipos.application.domain.sample.CcdCodemT;
 import kr.co.solbipos.application.domain.sample.TmpDragtT;
 import kr.co.solbipos.application.service.sample.SampleService;
@@ -128,20 +126,6 @@ public class SampleWijimoController {
         return "sampleWijmo/exInput";
     }
 
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     /**
      * 위즈모 트리 샘플
      * 
@@ -150,108 +134,8 @@ public class SampleWijimoController {
      */
     @RequestMapping(value = "exTree.sb")
     public String exTree(Model model) {
-        
-        StopWatch sw = new StopWatch();
-        sw.start();
-        
-        List<ResrceInfo> m1 = sampleService.selectMenu1();
-        List<ResrceInfo> m2 = sampleService.selectMenu2();
-        List<ResrceInfo> m3 = sampleService.selectMenu3();
-        
-        
-        List<HashMap<String, Object>> rList = new ArrayList<HashMap<String, Object>>();
-        
-        
-        for(int i=0; i < m1.size(); i++) {
-            
-            ResrceInfo r1 = m1.get(i);
-            String m1ResrceCd = r1.getResrceCd();
-            
-            HashMap<String, Object> header = new HashMap<>();
-            if(isEmpty(r1.getUrl())) {
-                header.put("header", r1.getResrceNm());
-            }
-            else {
-                String url = "<a href='" + r1.getUrl() + "'>" + r1.getResrceNm() + "</a>";
-                header.put("header", url);
-            }
-            
-            
-            List<HashMap<String, Object>> items = new ArrayList<HashMap<String, Object>>();
-            for (int j = 0; j < m2.size(); j++) {
-                
-                ResrceInfo r2 = m2.get(j);
-                String m2ResrceCd = r2.getResrceCd();
-                
-                HashMap<String, Object> m2Header = new HashMap<>();
-                
-                // 상위 메뉴를 찾음
-                if(r2.getPResrce().equals(m1ResrceCd)) {
-                    if(isEmpty(r2.getUrl())) {
-                        m2Header.put("header", r2.getResrceNm());
-                    }
-                    else {
-                        String url = "<a href='" + r2.getUrl() + "'>" + r2.getResrceNm() + "</a>";
-                        m2Header.put("header", url);
-                    }
-                    
-                    
-                    List<HashMap<String, Object>> m2items = new ArrayList<HashMap<String, Object>>();
-                    for (int k = 0; k < m3.size(); k++) {
-                        ResrceInfo r3 = m3.get(k);
-                        
-                        if(r3.getPResrce().equals(m2ResrceCd)) {
-                            HashMap<String, Object> m3Header = new HashMap<>();
-                            
-                            if(isEmpty(r3.getUrl())) {
-                                m3Header.put("header", r3.getResrceNm());
-                            }
-                            else {
-                                String url = "<a href='" + r3.getUrl() + "'>" + r3.getResrceNm() + "</a>";
-                                m3Header.put("header", url);
-                            }
-                            m2items.add(m3Header);
-                        }
-                    }
-                    m2Header.put("items", m2items);
-                    items.add(m2Header);
-                }
-            }
-            header.put("items", items);
-            rList.add(header);
-        }
-        
-        sw.stop();
-        
-        String test = convertToJson(rList);
-        log.error(test);
-        
-        model.addAttribute("treeData", test);
-        model.addAttribute("task", sw.getTotalTimeSeconds());
-        
         return "sampleWijmo/exTree";
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     /**
      * 위즈모 트리 데이터 로드 테스트 (메뉴 테스트)
      * @param model

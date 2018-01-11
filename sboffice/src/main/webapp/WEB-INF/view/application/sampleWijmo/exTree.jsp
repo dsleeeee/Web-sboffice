@@ -26,7 +26,7 @@ exTree
 
 <div class="container">
   <div class="page-header">
-    <h3>Create Wijmo Controls : ${task}</h3>
+    <h3>Create Wijmo Controls</h3>
   </div>
 
   <br>
@@ -41,11 +41,9 @@ onload = function() {
   
     function getDataTest() {
       	
-//       	var test = "[{\"header\":\"샘플\", \"items\":[ { \"header\": \"테스트1\" }, { \"header\": \"테스트2\" } ] }]";
+      	var test = "[{\"header\":\"샘플\", \"items\":[ { \"header\": \"테스트1\" }, { \"header\": \"테스트2\" } ] }]";
       
-      	var test = ${treeData};
-      
-		return test;
+		return JSON.parse(test);
     }
 	/* 
 	function getData() {

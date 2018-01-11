@@ -112,7 +112,6 @@
                AND USE_YN = 'Y')
       AND RESRCE_FG = 'W002')
   CONNECT BY PRIOR P_RESRCE = RESRCE_CD
-      AND LEVEL < 3
     ORDER BY RESRCE_CD ASC
   ]]>
   </select>

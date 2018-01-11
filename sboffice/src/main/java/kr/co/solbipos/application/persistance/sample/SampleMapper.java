@@ -1,10 +1,9 @@
 package kr.co.solbipos.application.persistance.sample;
 
 import java.util.List;
-import kr.co.solbipos.application.domain.resource.ResrceInfo;
 import kr.co.solbipos.application.domain.sample.CcdCodemT;
+import kr.co.solbipos.application.domain.sample.ScdShopmT;
 import kr.co.solbipos.application.domain.sample.SslTrdtlT;
-import kr.co.solbipos.application.domain.sample.TbMsStore;
 import kr.co.solbipos.application.domain.sample.TestTable;
 import kr.co.solbipos.application.domain.sample.TmpBoardT;
 import kr.co.solbipos.application.domain.sample.TmpDragtT;
@@ -47,9 +46,5 @@ public interface SampleMapper {
     
     TmpBoardT getRecentBoardData();
     
-    <E> List<E> selectStore(TbMsStore tbMsStore);
-    
-    List<ResrceInfo> selectMenu1();
-    List<ResrceInfo> selectMenu2();
-    List<ResrceInfo> selectMenu3();
+    <E> List<E> selectStore(ScdShopmT scdShopmT);
 }
