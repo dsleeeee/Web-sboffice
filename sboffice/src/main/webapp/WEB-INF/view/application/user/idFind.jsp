@@ -7,6 +7,10 @@
 
 <div class="loginArea">
   <h2>Id Find</h2>
+  
+  <c:if test="${!empty msg}">
+    <h2>${msg}</h2>
+  </c:if>
 
   <f:form method="post" modelAttribute="user" action="/user/idFind.sb">
     <div class="writeInfo">

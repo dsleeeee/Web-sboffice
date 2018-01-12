@@ -1,6 +1,6 @@
 package kr.co.solbipos.application.persistance.user;
 
-import java.util.HashMap;
+import kr.co.solbipos.application.domain.user.User;
 
 /**
  * 
@@ -10,8 +10,8 @@ import java.util.HashMap;
 public interface UserMapper {
     /**
       * 담당자 이름, 핸드폰 번호로 userId 조회
-      * @param param
+      * @param user
       * @return
       */
-    String selectUserCheck(HashMap<String, String> param);
+    String selectUserCheck(User user);
 }
