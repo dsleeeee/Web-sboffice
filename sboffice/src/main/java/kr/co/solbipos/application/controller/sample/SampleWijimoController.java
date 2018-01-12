@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,7 @@ import kr.co.solbipos.application.domain.sample.TmpDragtT;
 import kr.co.solbipos.application.service.sample.SampleService;
 import kr.co.solbipos.service.grid.GridSupportService;
 import kr.co.solbipos.service.message.MessageService;
+import kr.co.solbipos.service.session.SessionService;
 import kr.co.solbipos.structure.DefaultMap;
 import kr.co.solbipos.structure.JsonResult;
 import kr.co.solbipos.structure.Result;
@@ -45,6 +47,9 @@ public class SampleWijimoController {
 
     @Autowired
     GridSupportService gsService;
+    
+    @Autowired
+    SessionService sessionService;
 
     @RequestMapping(value = "sampleGridMain.sb")
     public String sampleGridMain(HttpSession session, Model model) {
@@ -149,15 +154,27 @@ public class SampleWijimoController {
      * @return
      */
     @RequestMapping(value = "exTree.sb")
-    public String exTree(Model model) {
+    public String exTree(HttpServletRequest request, Model model) {
         
         StopWatch sw = new StopWatch();
         sw.start();
+        
+        HashMap<String, String> param = new HashMap<>();
+        param.put("level", "0");
+//        param.put("userId", sessionService.getSessionInfo(request).getUserId());
+        param.put("userId", "m");
         
         List<ResrceInfo> m1 = sampleService.selectMenu1();
         List<ResrceInfo> m2 = sampleService.selectMenu2();
         List<ResrceInfo> m3 = sampleService.selectMenu3();
         
+        /*
+        List<ResrceInfo> m1 = sampleService.selectAuthMainMenu(param);
+        param.put("level", "1");
+        List<ResrceInfo> m2 = sampleService.selectAuthMainMenu(param);
+        param.put("level", "2");
+        List<ResrceInfo> m3 = sampleService.selectAuthMainMenu(param);
+        */
         
         List<HashMap<String, Object>> rList = new ArrayList<HashMap<String, Object>>();
         

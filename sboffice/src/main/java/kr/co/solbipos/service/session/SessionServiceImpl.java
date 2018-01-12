@@ -17,6 +17,7 @@ import kr.co.solbipos.service.redis.RedisConnService;
 import kr.co.solbipos.system.Prop;
 import kr.co.solbipos.system.RedisCustomTemplate;
 import kr.co.solbipos.utils.HttpUtils;
+import kr.co.solbipos.utils.spring.WebUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -48,7 +49,6 @@ public class SessionServiceImpl implements SessionService {
     public String setSessionInfo(HttpServletRequest request, HttpServletResponse response,
             SessionInfo sessionInfo) {
         String sessionId = generateUUID();
-        String clientIp = HttpUtils.getClientIp(request);
 
         // sessionId 세팅
         sessionInfo.setSessionId(sessionId);
@@ -58,15 +58,8 @@ public class SessionServiceImpl implements SessionService {
         sessionInfo.setFixMenu(cmmMenuService.selectFixingMenu(sessionInfo));
         // 즐겨찾기 메뉴 리스트 저장
         sessionInfo.setBkmkMenu(cmmMenuService.selectBkmkMenu(sessionInfo));
-        sessionInfo.setLoginIp(clientIp);
-        
-        
-        
         // 메뉴 데이터 만들기
         sessionInfo.setMenuData(cmmMenuService.makeMenu(sessionInfo.getAuthMenu()));
-        
-        
-        
 
         // redis에 세션 세팅
         setSessionInfo(sessionId, sessionInfo);
@@ -210,16 +203,7 @@ public class SessionServiceImpl implements SessionService {
      */
     private void deleteCookie(HttpServletRequest request, HttpServletResponse response) {
         Cookie cookie = WebUtils.getCookie(request, SESSION_KEY);
-        if (cookie != null) {
-            cookie.setMaxAge(0);
-            cookie.setPath("/");
-            /*
-            if (prop.profile.indexOf("local") == -1) {
-                cookie.setDomain(prop.domain);
-            }
-            */
-            response.addCookie(cookie);
-        }
+        WebUtil.removeCookie(cookie);
     }
 
     /**
@@ -229,15 +213,7 @@ public class SessionServiceImpl implements SessionService {
      * @param response
      */
     private void makeCookie(String sessionId, HttpServletResponse response) {
-        Cookie cookie = new Cookie(SESSION_KEY, sessionId);
-        cookie.setPath("/");
-        /*
-        if (prop.profile.indexOf("local") == -1) {
-            cookie.setDomain(prop.domain);
-        }
-        */
-        cookie.setMaxAge(-1);
-        response.addCookie(cookie);
+        WebUtil.setCookie(SESSION_KEY, sessionId, -1);
     }
 
 }

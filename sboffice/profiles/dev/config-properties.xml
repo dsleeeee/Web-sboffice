@@ -36,6 +36,13 @@
 <!--   web 공통 코드  -->
   <entry key="redis.code.prefix">sbp:cmm:dev:</entry>
   
+
+  <!-- ====================================--> 
+  <!--  login Properties--> 
+  <!-- ====================================-->
+<!--   패스워드 변경 유효기간 -->
+  <entry key="login.pwd.chg.days">90</entry>
+  <entry key="login.check.id.save">saveid</entry>
   
   <!-- ====================================--> 
   <!--  session Properties--> 

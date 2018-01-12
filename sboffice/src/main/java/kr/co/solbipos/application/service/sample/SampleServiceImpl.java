@@ -1,5 +1,6 @@
 package kr.co.solbipos.application.service.sample;
 
+import java.util.HashMap;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -114,4 +115,8 @@ public class SampleServiceImpl implements SampleService {
         return sampleMapper.selectMenu3();
     }
     
+    @Override
+    public List<ResrceInfo> selectAuthMainMenu(HashMap<String, String> param) {
+        return sampleMapper.selectAuthMainMenu(param);
+    }
 }
