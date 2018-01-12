@@ -3,7 +3,26 @@
 
 <mapper namespace="kr.co.solbipos.application.persistance.sample.SampleMapper">
 
-
+  <select id="selectAuthMainMenu" parameterType="hashmap" resultType="resrceInfo">
+  <![CDATA[
+    SELECT * 
+    FROM TB_WB_RESRCE_INFO
+   WHERE DISP_LEVEL = #{level}
+     AND RESRCE_FG = 'M'
+     AND USE_YN = 'Y'
+   START WITH RESRCE_CD IN (
+      SELECT P_RESRCE 
+        FROM TB_WB_RESRCE_INFO
+       WHERE RESRCE_CD IN (
+        SELECT RESRCE_CD
+          FROM TB_WB_AUTHOR_GRP_RESRCE 
+         WHERE GRP_CD = (SELECT GRP_CD FROM TB_WB_USER_INFO WHERE USER_ID = #{userId})
+       )
+     )
+   CONNECT BY PRIOR P_RESRCE = RESRCE_CD
+   ORDER BY RESRCE_CD ASC, DISP_IDX ASC
+  ]]>
+  </select>
 
   <select id="selectMenu1" resultType="resrceInfo">
   <![CDATA[

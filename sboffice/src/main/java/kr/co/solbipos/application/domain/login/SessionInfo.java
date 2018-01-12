@@ -58,7 +58,6 @@ public class SessionInfo extends BaseDomain {
     /** 로그인 화면 : 아이디 저장 여부 */
     private boolean chk;
     
-    
     /** 
      * 메뉴 관련 데이터 
      * */

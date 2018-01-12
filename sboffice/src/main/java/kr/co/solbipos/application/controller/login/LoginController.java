@@ -105,7 +105,7 @@ public class LoginController {
             
             
             // 패스워드 변경 페이지로 이동
-            returnUrl = "/user/pwdChg.sb";
+            returnUrl = "user/pwdChg.sb";
             
             
         }
@@ -114,7 +114,7 @@ public class LoginController {
             sw.stop();
             log.error("로그인 실패 처리 시간 : {}", sw.getTotalTimeSeconds());
             
-            returnUrl = "/auth/login.sb";
+            returnUrl = "auth/login.sb";
             
             // 실패 처리
             throw new AuthenticationException("로그인에 실패했습니다.", returnUrl);

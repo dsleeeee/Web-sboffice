@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.application.persistance.user.UserMapper">
+  
+  <select id="selectUserCheck" parameterType="hashmap" resultType="String" >
+  <![CDATA[
+  /* UserMapper.selectUserCheck */
+    SELECT USER_ID 
+      FROM TB_MS_EMPLOYEE
+     WHERE EMP_NM = #{empNm}
+       AND MP_NO = #{mpNo}
+  ]]>
+  </select>
+  
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

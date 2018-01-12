@@ -1,5 +1,6 @@
 package kr.co.solbipos.utils.spring;
 
+import static org.springframework.util.ObjectUtils.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -113,6 +114,18 @@ public class WebUtil extends WebUtils {
 
         return cookie == null ? "" : cookie.getValue();
     }
+    
+    /**
+      * http 응답분할 공격 방지
+      * @param name
+      * @param value
+      * @return
+      */
+    private static Cookie newCookie(String name, String value) {
+        value = StringUtil.isEmpty(value) ? "" : value.replaceAll("[\\r\\n]", "");
+        return new Cookie(name, value);
+    }
+    
 
     /**
      * Cookie 값 삽입
@@ -120,7 +133,7 @@ public class WebUtil extends WebUtils {
      * @param name String
      */
     public static void setCookieValue(String name, String value, int expireDay) {
-        Cookie cookie = new Cookie(name, value);
+        Cookie cookie = newCookie(name, value);
         cookie.setMaxAge(60 * 60 * 24 * (expireDay < 1 ? 1 : expireDay));
         getResponse().addCookie(cookie);
     }
@@ -132,7 +145,7 @@ public class WebUtil extends WebUtils {
       * @param maxAge
       */
     public static void setCookie(String name, String value, int maxAge) {
-        Cookie cookie = new Cookie(name, value);
+        Cookie cookie = newCookie(name, value);
         cookie.setPath("/");
         cookie.setMaxAge(maxAge);
         getResponse().addCookie(cookie);

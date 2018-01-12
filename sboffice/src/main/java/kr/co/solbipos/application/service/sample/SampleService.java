@@ -1,5 +1,6 @@
 package kr.co.solbipos.application.service.sample;
 
+import java.util.HashMap;
 import java.util.List;
 import kr.co.solbipos.application.domain.resource.ResrceInfo;
 import kr.co.solbipos.application.domain.sample.CcdCodemT;
@@ -52,4 +53,6 @@ public interface SampleService {
     List<ResrceInfo> selectMenu1();
     List<ResrceInfo> selectMenu2();
     List<ResrceInfo> selectMenu3();
+    
+    List<ResrceInfo> selectAuthMainMenu(HashMap<String, String> param);
 }
