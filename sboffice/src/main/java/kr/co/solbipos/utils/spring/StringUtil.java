@@ -345,6 +345,20 @@ public class StringUtil extends StringUtils {
         }
         return jsonStr;
     }
+
+    /**
+     * string 타입의 절반을 * 로 표시
+     * @param s
+     * @return
+     */
+    public static String strMaskingHalf(String s) {
+        String t = s.substring((s.length() / 2) + 1, s.length());
+        String m = "";
+        for (int i = 0; i < t.length(); i++) {
+            m += "*";
+        }
+        return s.replaceAll(t, m);
+    }
 }
 
 

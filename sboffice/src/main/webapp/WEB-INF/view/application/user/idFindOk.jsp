@@ -8,6 +8,7 @@
 <div class="loginArea">
   <h2>Id Find Ok</h2>
   
+  <h2>${findUserNm}</h2>  
   
   <a href="/auth/login.sb">로그인 하기</a>
   

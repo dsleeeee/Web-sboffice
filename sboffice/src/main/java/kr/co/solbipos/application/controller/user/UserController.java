@@ -1,5 +1,6 @@
 package kr.co.solbipos.application.controller.user;
 
+import static kr.co.solbipos.utils.spring.StringUtil.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import kr.co.solbipos.application.domain.user.User;
 import kr.co.solbipos.application.service.user.UserService;
 import kr.co.solbipos.application.validate.user.Find;
 import kr.co.solbipos.structure.JsonResult;
+import kr.co.solbipos.utils.spring.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -53,10 +55,12 @@ public class UserController {
      * @param model
      * @return
      */
+    /*
     @RequestMapping(value = "idFindOk.sb", method = RequestMethod.GET)
     public String idFindOk(HttpServletRequest request, HttpServletResponse response, Model model) {
         return "user/login:idFindOk";
     }
+    */
 
     /**
      * 아이디 찾기 페이지 이동
@@ -86,8 +90,17 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return "user/login:idFind";
         }
+        
+        String findUserNm = userService.selectUserCheck(user);
 
-        return "redirect:/user/idFindOk.sb";
+        if(StringUtil.isEmpty(findUserNm)) {
+            model.addAttribute("msg", "아이디를 찾을 수 없습니다.");
+            return "user/login:idFind";
+        }
+        
+        model.addAttribute("findUserNm", strMaskingHalf(findUserNm));
+        
+        return "user/login:idFindOk";
     }
 
     /**
