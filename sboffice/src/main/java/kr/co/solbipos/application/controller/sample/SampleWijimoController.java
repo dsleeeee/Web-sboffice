@@ -168,16 +168,7 @@ public class SampleWijimoController {
         List<ResrceInfo> m2 = sampleService.selectMenu2();
         List<ResrceInfo> m3 = sampleService.selectMenu3();
         
-        /*
-        List<ResrceInfo> m1 = sampleService.selectAuthMainMenu(param);
-        param.put("level", "1");
-        List<ResrceInfo> m2 = sampleService.selectAuthMainMenu(param);
-        param.put("level", "2");
-        List<ResrceInfo> m3 = sampleService.selectAuthMainMenu(param);
-        */
-        
         List<HashMap<String, Object>> rList = new ArrayList<HashMap<String, Object>>();
-        
         
         for(int i=0; i < m1.size(); i++) {
             
@@ -192,7 +183,6 @@ public class SampleWijimoController {
                 String url = "<a href='" + r1.getUrl() + "'>" + r1.getResrceNm() + "</a>";
                 header.put("header", url);
             }
-            
             
             List<HashMap<String, Object>> items = new ArrayList<HashMap<String, Object>>();
             for (int j = 0; j < m2.size(); j++) {
@@ -211,7 +201,6 @@ public class SampleWijimoController {
                         String url = "<a href='" + r2.getUrl() + "'>" + r2.getResrceNm() + "</a>";
                         m2Header.put("header", url);
                     }
-                    
                     
                     List<HashMap<String, Object>> m2items = new ArrayList<HashMap<String, Object>>();
                     for (int k = 0; k < m3.size(); k++) {
@@ -233,6 +222,41 @@ public class SampleWijimoController {
                     m2Header.put("items", m2items);
                     items.add(m2Header);
                 }
+            }
+            
+            // 마지막레벨이 2레벨인 경우
+            for (int m = 0; m < m3.size(); m++) {
+              
+              ResrceInfo r3 = m3.get(m);
+              String m3ResrceCd = r3.getResrceCd();
+              
+              HashMap<String, Object> m3Header = new HashMap<>();
+              
+              if(r3.getPResrce().equals(m1ResrceCd)) {
+                  
+                  if(isEmpty(r3.getUrl())) {
+                      m3Header.put("header", r3.getResrceNm());
+                  }
+                  else {
+                      String url = "<a href='" + r3.getUrl() + "'>" + r3.getResrceNm() + "</a>";
+                      m3Header.put("header", url);
+                  }
+                  List<HashMap<String, Object>> mitems = new ArrayList<HashMap<String, Object>>();
+                  
+                  if(r3.getPResrce().equals(m3ResrceCd)) {
+                      
+                      if(isEmpty(r3.getUrl())) {
+                          m3Header.put("header", r3.getResrceNm());
+                      }
+                      else {
+                          String url = "<a href='" + r3.getUrl() + "'>" + r3.getResrceNm() + "</a>";
+                          m3Header.put("header", url);
+                      }
+                      mitems.add(m3Header);
+                  }
+                  m3Header.put("items", mitems);
+                  items.add(m3Header);
+              }
             }
             header.put("items", items);
             rList.add(header);
