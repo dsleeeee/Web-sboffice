@@ -64,7 +64,7 @@ public class LoginController {
          * }
          */
         
-        // 아이디 저장 쿠키 처리
+        // 아이디 저장 쿠키 처리 
         WebUtil.setCookie(prop.loginSaveId, sessionInfo.getUserId(), sessionInfo.isChk() ? -1 : 0);
         
         sessionInfo.setLoginIp(getClientIp(request));
