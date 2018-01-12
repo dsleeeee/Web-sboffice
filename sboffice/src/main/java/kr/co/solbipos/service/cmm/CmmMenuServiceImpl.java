@@ -214,7 +214,6 @@ public class CmmMenuServiceImpl implements CmmMenuService {
      * 메인 메뉴 관련
      * 
      */
-    
 
     @Override
     public String makeMenu(List<ResrceInfo> resrceInfoList) {

@@ -16,7 +16,12 @@
     	   A.LAST_LOGIN_DATE,
     	   A.LAST_PWD_CHG_DATE,
     	   A.LOGIN_FAIL_CNT,
-    	   A.LOCK_CD
+    	   A.LOCK_CD,
+           ( 
+              SELECT NVL(MAX(B.REG_DT) KEEP(DENSE_RANK FIRST ORDER BY B.IDX DESC), 0) AS LAST_PWD_CHG
+                FROM TB_WB_PWD_CHG_HIST B
+               WHERE B.USER_ID = A.USER_ID
+           ) AS LAST_PWD_CHG
       FROM TB_WB_USER_INFO A
      WHERE A.USER_ID = #{userId}
        AND A.LOCK_CD = 'N'

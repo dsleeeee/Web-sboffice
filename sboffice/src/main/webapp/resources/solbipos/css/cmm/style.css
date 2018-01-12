@@ -1,0 +1,128 @@
+@charset "utf-8";
+
+/* **************************************** *
+ * WEBFONT
+ * **************************************** */
+@font-face {
+     font-family: 'NotoR';
+     src: url('https://cdn.kcp.co.kr/font_web/NotoSansCJKkr-Regular.woff') format('woff');
+}
+
+
+/* **************************************** *
+ * RESET
+ * **************************************** */
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,time,figure,article,nav,header,footer,hgroup,video,audio,aside,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,dl,dt,dd,ol,ul,li,fieldset,form,input,label,legend,table,caption,tbody,tfoot,thead,tr,th,td, select {
+    margin:0; 
+    padding:0;
+    border:0;
+    outline:0;
+    box-sizing:border-box;
+    font-family:'Roboto', 'NotoR', Malgun Gothic, '맑은 고딕', Dotum, '돋움', AppleGotihc, sans-serif;
+    font-weight:normal;
+    font-size:16px; /*em : px기준에서 16으로 나누기*/
+    color:#888;
+    line-height:1em;
+} 
+ol,ul, li {list-style: none;}
+fieldset, legend, caption {display:none;}
+table {border-collapse:collapse; border-spacing:0;}
+em, address, code {font-style:normal;}
+article, aside, details, figcaption, figure, footer, header, hgroup, main, nav, section, summary {
+    display: block;
+}
+a {text-decoration:none;}
+button {outline:none; border:0; font-family:'Roboto', 'NotoR', Malgun Gothic, '맑은 고딕', Dotum, '돋움', AppleGotihc, sans-serif;} /*파이어폭스를 위해 : font-family 재정의*/
+.hidden {position:absolute; left:-9999em;}
+
+/*placeholder color*/
+::-webkit-input-placeholder {color:#bbb;} /* webkit */
+:-moz-placeholder {color:#bbb;} /* mozilla, firefox 4~18 */
+::-moz-placeholder {color:#bbb;} /* firefox 19+ */
+:-ms-input-placeholder {color:#bbb;} /* ie 10+ */
+
+
+/* **************************************** *
+ * COMMON
+ * **************************************** */
+
+
+/* **************************************** *
+ * LAYOUT
+ * **************************************** */
+
+
+/* **************************************** *
+ * Login
+ * **************************************** */
+.login {width:840px; position:absolute; left:50%; top:50%; margin-left:-420px; margin-top:-320px;} /*화면 중앙정렬*/
+.login header {position:relative; height:50px; overflow:hidden; margin-bottom:30px;}
+.login header img {float:left;}
+.login header h1 {float:right; color:#444; position:absolute; right:0px; bottom:0px;}
+
+.login .content {width:840px; height:560px;}
+.bannerArea {float:left; width:420px; height:560px;}
+.slider {position:relative; width:420px; text-align:center; padding-top:520px; margin:0 auto;}
+.slider>img {position:absolute; left:0; top:0; transition: all 0.7s; z-index:-10;}
+.slider label {width:10px; height:10px; background:#888b8e; margin:0 5px 0 5px; display:inline-block; cursor:pointer; border-radius:100%; padding:0; transition:all 0.5s;}
+.slider input[name='slide_switch'] {display:none;}
+.slider input[name='slide_switch']:checked+label {background:#fff;}
+.slider input[name='slide_switch'] ~ img {opacity:0; transform:scale(1);}
+.slider input[name='slide_switch']:checked+label+img {opacity:1; transform:scale(1);}
+
+.loginArea {float:right; width:420px; height:560px; background:#f6f6f6; padding-top:60px; border-top:1px solid #dbdbdb; border-right:1px solid #dbdbdb; border-bottom:1px solid #dbdbdb;}
+.loginArea h2 {text-align:center; color:#1e88e5; font-weight:bold; font-size:1.875em; margin-bottom:40px;}
+
+.loginF {margin:0 50px; border-bottom:1px solid #fff; padding-bottom:40px;}
+.writeInfo {position:relative; margin-bottom:10px;}
+.writeInfo input {width:100%; height:50px; border-radius:4px; border:1px solid #e0e1e2; margin-bottom:10px; padding:0 20px; background:#fff; transition:border-width 0.2s ease;}
+.writeInfo input:focus {border-left-width:50px; border-color:#1e88e5; outline:none; color:#222;}
+.writeInfo input+label {position:absolute; left:0px; width:0px; height:50px; transition:all 0.1s ease-in;}
+.writeInfo input:focus+label {width:50px; transition:all 0.25s ease-out;}
+.writeInfo input.id+label {background:url(../../img/login/ic_id.png) no-repeat 0px center; background-size:22px 50px;}
+.writeInfo input.id:focus+label {background:url(../../img/login/ic_id.png) no-repeat 14px center;}
+.writeInfo input.pw+label {background:url(../../img/login/ic_pw.png) no-repeat 5px center; background-size:13px 50px;}
+.writeInfo input.pw:focus+label {background:url(../../img/login/ic_pw.png) no-repeat 19px center;}
+
+.idsave {position:relative; height:50px;}
+.idsave span {position:absolute; top:15px;}
+.idsave label {font-size:16px; color:#888; cursor:pointer; padding-left:33px; line-height:23px;}
+.idsave label:before {content:''; width:25px; height:25px; background:#fff; border-radius:4px; border:1px solid #e0e1e2; display:inline-block; position:absolute; left:0px; top:-3px;}
+.idsave label:after {content:''; width:0px; height:0px; background:#000; border-radius:100%;  display:inline-block; position:absolute; left:12px; top:8px;}
+.idsave input[type="checkbox"] {position:absolute; left:-9999em;}
+.idsave input[type="checkbox"]:checked+label:before {background:url(../../img/login/ic_chk.png) #1e88e5 no-repeat; border:1px solid #1e88e5; transition:all 0.5s ease-out;}
+.idsave input[type="checkbox"]:focus+label:after {transition:all 0.5s ease-out; animation:chkAni 0.3s ease-out;}
+
+@keyframes chkAni {
+  0% {
+    width:0px;
+    height:0px; 
+    opacity:0;
+    left:12px; top:8px;
+  }
+  20% {
+    width:25px;
+    height:25px; 
+    opacity: 0.3;
+    left:0px; top:-3px;
+  }
+  100% {
+    width:50px;
+    height:50px;
+    opacity: 0;
+    left:-12px; top:-15px;
+  }
+}
+
+.btn_login {background:#1e88e5; font-size:18px; color:#fff; border:0; width:170px; height:50px; border-radius:4px; cursor:pointer; float:right;}
+.btn_login:hover {background:#174291; transition:all 0.3s;}
+
+.linkArea {margin:0 50px; border-top:1px solid #e0e1e2; padding-top:30px; text-align:right;}
+.linkArea .find {display:block; overflow:hidden; margin-bottom:60px;}
+.fdId, .fdPw {height:40px; line-height:40px; border:1px solid #dbdbdb; display:inline-block; text-align:center; border-radius:4px; transition:all 0.3s;}
+.fdId {width:150px; float:left;} 
+.fdPw {width:150px;}
+.fdId:hover, .fdPw:hover {background:#dbdbdb; transition:all 0.3s;}
+.distributor, .agency {font-size:14px; text-decoration:underline;}
+.agency {margin-left:20px;}
+

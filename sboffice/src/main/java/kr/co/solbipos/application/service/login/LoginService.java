@@ -43,6 +43,14 @@ public interface LoginService {
     boolean logout(HttpServletRequest request, HttpServletResponse response);
 
     /**
+     * 로그인 시도 결과를 히스토리 저장
+     * 
+     * @param sessionInfo
+     * @return
+     */
+    public int loginHist(SessionInfo sessionInfo);
+    
+    /**
       * 로그인 히스토리 저장
       * 
       * @param loginHist
