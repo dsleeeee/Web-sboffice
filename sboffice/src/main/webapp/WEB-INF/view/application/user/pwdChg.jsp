@@ -9,6 +9,7 @@
   <h2>Password Change</h2>
   
   <f:form method="post" action="/user/pwdChg.sb">
+    
     <input type="submit" value="확인" />
   </f:form>
   

@@ -3,7 +3,9 @@ package kr.co.solbipos.application.domain.user;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
 import kr.co.solbipos.application.domain.BaseDomain;
-import kr.co.solbipos.application.validate.user.Find;
+import kr.co.solbipos.application.validate.user.AuthNumber;
+import kr.co.solbipos.application.validate.user.IdFind;
+import kr.co.solbipos.application.validate.user.PwFind;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -12,7 +14,7 @@ import lombok.EqualsAndHashCode;
 public class User extends BaseDomain {
 
     private static final long serialVersionUID = 1L;
-    
+
     /** 소속코드 */
     private String orgnCd;
 
@@ -20,8 +22,9 @@ public class User extends BaseDomain {
     private String empNo;
 
     /** 사원명 */
-    @NotBlank( groups={ Find.class }, message = "{msg.cmm.mpno}{msg.cmm.require.text}" )
-    @Size( groups={ Find.class }, max = 10, message = "{msg.cmm.size.max}" )
+    @NotBlank(groups = {IdFind.class, AuthNumber.class, PwFind.class},
+            message = "{label.cmm.name}{msg.cmm.require.text}")
+    @Size(groups = {IdFind.class, AuthNumber.class, PwFind.class}, max = 10, message = "{msg.cmm.size.max}")
     private String empNm;
 
     /** 사원비밀번호 */
@@ -34,11 +37,13 @@ public class User extends BaseDomain {
     private String webUseYn;
 
     /** 사용자아이디 */
+    @NotBlank(groups = {AuthNumber.class, PwFind.class}, message = "{label.login.userId}{msg.cmm.require.text}")
+    @Size(groups = {AuthNumber.class, PwFind.class}, max = 20, message = "{msg.cmm.size.max}")
     private String userId;
 
     /** 휴대폰번호 */
-    @NotBlank( groups={ Find.class }, message = "{label.login.userId}{msg.cmm.require.text}" )
-    @Size( groups={ Find.class }, max = 15, message = "{msg.cmm.size.max}" )
+    @NotBlank(groups = {IdFind.class}, message = "{label.login.userId}{msg.cmm.require.text}")
+    @Size(groups = {IdFind.class}, max = 15, message = "{msg.cmm.size.max}")
     private String mpNo;
 
     /** 이메일주소 */
@@ -74,4 +79,15 @@ public class User extends BaseDomain {
     /** 수정아이디 */
     private String modId;
 
+    /** 인증번호 */
+    @NotBlank(groups = {PwFind.class}, message = "{label.pw.find.auth.number}{msg.cmm.require.text}")
+    @Size(groups = {PwFind.class}, max = 4, message = "{msg.cmm.size.max}")
+    private String authNumber;
 }
+
+
+
+
+
+
+

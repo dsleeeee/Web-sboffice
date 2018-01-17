@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StopWatch;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import kr.co.solbipos.application.domain.login.SessionInfo;
 import kr.co.solbipos.application.enums.login.LoginResult;
 import kr.co.solbipos.application.service.login.LoginService;
+import kr.co.solbipos.application.validate.user.IdFind;
 import kr.co.solbipos.exception.AuthenticationException;
 import kr.co.solbipos.service.session.SessionService;
 import kr.co.solbipos.system.Prop;
@@ -49,7 +51,7 @@ public class LoginController {
 
     @RequestMapping(value = "login.sb", method = RequestMethod.POST)
     public String loginProcess(
-            // @Valid SessionInfo sessionInfo, BindingResult bindingResult,
+            // @Validated(Login.class) SessionInfo sessionInfo, BindingResult bindingResult,
             SessionInfo sessionInfo, HttpServletRequest request, HttpServletResponse response,
             Model model) {
         

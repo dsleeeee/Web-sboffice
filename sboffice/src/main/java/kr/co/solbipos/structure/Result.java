@@ -49,6 +49,7 @@ public class Result
     public enum Status
     {
         OK( "OK" )
+        , FAIL( "FAIL" )
         , LOGIN_BLOCK( "error.loginBlock.default" )
         , LOGIN_EXFIRE( "error.sessionExpire.default" )
         , LOGIN_FAIL( "error.loginFail.default" )

@@ -95,6 +95,9 @@
           if(data.status === "OK") {
             return func(data);
           }
+          else if(data.status === "FAIL") {
+            return func(data);
+          }
           else {
             var msg = data.status + " : " + data.message;
             alert(msg);

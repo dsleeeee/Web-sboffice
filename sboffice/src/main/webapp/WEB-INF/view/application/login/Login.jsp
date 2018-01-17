@@ -12,10 +12,11 @@
     <c:set var="cid" value="${cookie.saveid.value}" />
 
     <div class="writeInfo">
-      <input class="id" type="text" id="userId" name="userId" placeholder="<s:message code="label.login.userId"/>" value="${cid}" required="required" /><label for="userId"></label>
+      <input class="id" type="text" id="userId" name="userId" placeholder="<s:message code="label.login.userId"/>" value="${cid}" required="required" maxlength="20" /><label for="userId"></label>
 <%-- <f:errors path="userId"/> --%>
-      <input class="pw" type="password" id="userPwd" name="userPwd" placeholder="<s:message code="label.login.userPasswd"/>" required="required" /><label for="userPwd"></label>
+      <input class="pw" type="password" id="userPwd" name="userPwd" placeholder="<s:message code="label.login.userPasswd"/>" required="required" maxlength="25" /><label for="userPwd"></label>
 <%-- <f:errors path="userPwd"/> --%>
+    <f:errors path="userPwd"/>
     </div>
 
     <div class="idsave">

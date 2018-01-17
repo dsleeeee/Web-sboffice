@@ -7,6 +7,7 @@ import kr.co.solbipos.application.domain.BaseDomain;
 import kr.co.solbipos.application.domain.resource.ResrceInfo;
 import kr.co.solbipos.application.domain.resource.ResrceInfoBase;
 import kr.co.solbipos.application.enums.login.LoginResult;
+import kr.co.solbipos.application.validate.login.Login;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -19,13 +20,13 @@ public class SessionInfo extends BaseDomain {
     private String sessionId;
     
     /** 사용자 아이디 */
-    @NotBlank( message = "{label.login.userId}{msg.cmm.require.text}" )
-    @Size( max = 20, message = "{msg.cmm.size.max}" )
+    @NotBlank( groups={ Login.class }, message = "{label.login.userId}{msg.cmm.require.text}" )
+    @Size( groups={ Login.class }, max = 20, message = "{msg.cmm.size.max}" )
     private String userId;
 
     /** 사용자 비밀번호 */
-    @NotBlank( message = "{label.login.userPasswd}{msg.cmm.require.text}" )
-    @Size( min = 8, max = 25, message = "{msg.cmm.size.max}" )
+    @NotBlank( groups={ Login.class }, message = "{label.login.userPasswd}{msg.cmm.require.text}" )
+    @Size( groups={ Login.class }, min = 8, max = 25, message = "{msg.cmm.size.max}" )
     private String userPwd;
     
     /** 사용자 이름 */

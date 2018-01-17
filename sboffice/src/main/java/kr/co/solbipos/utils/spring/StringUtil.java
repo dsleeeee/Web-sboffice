@@ -3,6 +3,7 @@ package kr.co.solbipos.utils.spring;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
+import java.util.Random;
 import java.util.UUID;
 import javax.swing.text.MaskFormatter;
 import org.springframework.util.StringUtils;
@@ -358,6 +359,20 @@ public class StringUtil extends StringUtils {
             m += "*";
         }
         return s.replaceAll(t, m);
+    }
+    
+    /**
+      * size 에 맞는 랜덤 숫자를 리턴
+      * @param size
+      * @return
+      */
+    public static String getRandomNumber(int size) {
+        Random rnd =new Random();
+        StringBuffer buf =new StringBuffer();
+        for(int i=0;i<size;i++){
+            buf.append((rnd.nextInt(9))); 
+        }
+        return buf.toString();
     }
 }
 

@@ -40,6 +40,9 @@ public class Prop {
     @Value("#{config['login.check.id.save']}")
     public String loginSaveId;
 
+    @Value("#{config['login.otp.limit']}")
+    public int otpLimit;
+    
     /*
      * 아래는 기존에 treepay 에서 쓰던것
      */

@@ -14,9 +14,9 @@
 
   <f:form method="post" modelAttribute="user" action="/user/idFind.sb">
     <div class="writeInfo">
-      <input type="text" name="empNm" placeholder="담당자 이름" value="${user.empNm}" />
+      <input type="text" name="empNm" placeholder="담당자 이름" value="${user.empNm}" maxlength="10" />
       <f:errors path="empNm"/>
-      <input type="text" name="mpNo" placeholder="전화번호 또는 휴대폰 번호(숫자만 입력)" value="${user.mpNo}" />
+      <input type="text" name="mpNo" placeholder="전화번호 또는 휴대폰 번호(숫자만 입력)" value="${user.mpNo}" maxlength="15" />
       <f:errors path="mpNo"/>
     </div>
     <input class="btn_login" type="submit" value="확인" />
