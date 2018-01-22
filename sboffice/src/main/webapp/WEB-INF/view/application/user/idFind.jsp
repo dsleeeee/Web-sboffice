@@ -6,23 +6,47 @@
 
 
 <div class="loginArea">
-  <h2>Id Find</h2>
-  
+  <h2 class="sTit">
+    <s:message code="label.login.userId" />
+    &nbsp;
+    <s:message code="label.cmm.find" />
+  </h2>
+  <p class="h2_txt">
+    <s:message code="label.id.find.info" />
+  </p>
+
   <c:if test="${!empty msg}">
-    <h2>${msg}</h2>
+    <h2 class="sTit">${msg}</h2>
   </c:if>
 
-  <f:form method="post" modelAttribute="user" action="/user/idFind.sb">
+  <f:form method="post" modelAttribute="user" action="/user/idFind.sb" class="loginF">
     <div class="writeInfo">
-      <input type="text" name="empNm" placeholder="담당자 이름" value="${user.empNm}" maxlength="10" />
-      <f:errors path="empNm"/>
-      <input type="text" name="mpNo" placeholder="전화번호 또는 휴대폰 번호(숫자만 입력)" value="${user.mpNo}" maxlength="15" />
-      <f:errors path="mpNo"/>
-    </div>
-    <input class="btn_login" type="submit" value="확인" />
-  </f:form>
-  
-  <a href="/auth/login.sb">로그인 화면</a>
-</div>
 
+      <div>
+        <input type="text" id="empNm" name="empNm" placeholder="<s:message code="label.cmm.emp"/>&nbsp;<s:message code="label.cmm.name"/>" value="${user.empNm}" maxlength="10" class="name" /><label
+          for="empNm"></label>
+        <f:errors path="empNm" id="empNmError" class="errorMsg" />
+      </div>
+
+      <div>
+        <input type="tel" id="mpNo" name="mpNo" placeholder="<s:message code="label.id.find.mp.holder"/>" value="${user.mpNo}" maxlength="15" class="tel" /><label for="pw"></label>
+        <f:errors path="mpNo" id="mpNoError" class="errorMsg" />
+      </div>
+
+    </div>
+    <button class="btn_bluew100">
+      <s:message code="label.cmm.confirm" />
+    </button>
+  </f:form>
+
+  <div class="linkArea">
+    <span class="find"><a href="/auth/login.sb" class="login_gray">
+        <s:message code="label.login.go" />
+      </a></span>
+  </div>
+</div>
+<script>
+  genEvent($("#empNm"), $("#empNmError"));
+  genEvent($("#mpNo"), $("#mpNoError"));
+</script>
 

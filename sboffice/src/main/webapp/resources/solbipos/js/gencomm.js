@@ -1,0 +1,10 @@
+function genEvent(error, errorLabel) {
+  error.focus(function(){
+    errorLabel.hide();
+  });
+  error.blur(function(){
+    if(error.val().length == 0) {
+      errorLabel.show();    
+    }
+  });
+}

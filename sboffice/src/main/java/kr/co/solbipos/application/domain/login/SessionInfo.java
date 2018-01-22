@@ -26,7 +26,7 @@ public class SessionInfo extends BaseDomain {
 
     /** 사용자 비밀번호 */
     @NotBlank( groups={ Login.class }, message = "{label.login.userPasswd}{msg.cmm.require.text}" )
-    @Size( groups={ Login.class }, min = 8, max = 25, message = "{msg.cmm.size.max}" )
+    @Size( groups={ Login.class }, min = 4, max = 25, message = "{msg.cmm.size.max}" )
     private String userPwd;
     
     /** 사용자 이름 */

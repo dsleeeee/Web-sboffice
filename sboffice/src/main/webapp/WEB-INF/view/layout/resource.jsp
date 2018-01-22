@@ -29,6 +29,8 @@
 <script src="/resource/solbipos/js/common.js"></script>
 <script src="/resource/solbipos/js/gridcomm.js"></script>
 
+<script src="/resource/solbipos/js/gencomm.js"></script>
+
 <script src="/resource/solbipos/js/prefixfree/prefixfree.js"></script>
 
 <script src="http://cdn.wijmo.com/5.latest/controls/wijmo.min.js"></script>
