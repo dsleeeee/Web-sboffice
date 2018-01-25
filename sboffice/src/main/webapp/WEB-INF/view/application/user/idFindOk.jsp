@@ -25,7 +25,7 @@
     <span class="find"> <a href="/auth/login.sb" class="login_blue">
         <s:message code="label.login.go" />
       </a> <a href="/user/pwdFind.sb" class="fdPw">
-        <s:message code="label.pw.find.go" />
+        <s:message code="label.login.find.pw" />
       </a>
     </span>
   </div>

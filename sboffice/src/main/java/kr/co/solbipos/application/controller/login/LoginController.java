@@ -93,16 +93,16 @@ public class LoginController {
 
 
             // 다시 로그인 페이지로 이동
-            returnUrl = "login.sb";
-
-
+            returnUrl = "/auth/login.sb";
+            throw new AuthenticationException("아이디 또는 비밀번호를 다시 확인하세요.", returnUrl);
+            
         } else if (code == LoginResult.PASSWORD_CHANGE || code == LoginResult.PASSWORD_EXPIRE) {
 
 
             // 패스워드 변경 페이지로 이동
             returnUrl = "user/pwdChg.sb";
 
-
+            
         }
         // 로그인 실패
         else {
