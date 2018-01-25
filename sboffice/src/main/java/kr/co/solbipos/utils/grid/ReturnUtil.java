@@ -19,16 +19,16 @@ public class ReturnUtil {
     private static final String PAGE = "page"; // page 객체가 담겨있는 key
 
     /**
-      * 
-      * @param status
-      * @return
-      */
+     * 
+     * @param status
+     * @return
+     */
     public static JsonResult returnJson(Status status) {
         Result result = new Result(status);
         JsonResult json = new JsonResult(result);
         return json;
     }
-    
+
     /**
      * 
      * @param status
@@ -37,6 +37,19 @@ public class ReturnUtil {
      */
     public static JsonResult returnJson(Status status, Object data) {
         return genJsonResult(status, data);
+    }
+
+    /**
+     * 
+     * @param status
+     * @param key
+     * @param value
+     * @return
+     */
+    public static JsonResult returnJson(Status status, String key, Object value) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put(key, value);
+        return genJsonResult(status, map);
     }
 
     /**

@@ -34,9 +34,6 @@ public class OtpAuth extends BaseDomain {
     /** 요청 일시 */
     private String reqDt;
 
-    /** 요청 일시 + 분 : 결과 */
-    private String plusReqDt;
-    
     /** 요청 일시 + 분 */
     private int otpLimit;
 }

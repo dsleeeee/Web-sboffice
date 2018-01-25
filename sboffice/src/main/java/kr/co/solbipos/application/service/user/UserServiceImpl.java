@@ -4,7 +4,10 @@ import static kr.co.solbipos.utils.DateUtil.*;
 import static kr.co.solbipos.utils.spring.StringUtil.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import kr.co.solbipos.application.domain.login.SessionInfo;
 import kr.co.solbipos.application.domain.user.OtpAuth;
+import kr.co.solbipos.application.domain.user.PwdChg;
+import kr.co.solbipos.application.domain.user.PwdChgHist;
 import kr.co.solbipos.application.domain.user.User;
 import kr.co.solbipos.application.persistance.user.UserMapper;
 import kr.co.solbipos.service.session.SessionService;
@@ -51,6 +54,20 @@ public class UserServiceImpl implements UserService {
         return userMapper.selectOtpTopOne(otp);
     }
 
+    @Override
+    public String selectOtpCheck(PwdChg pwdChg) {
+        return userMapper.selectOtpCheck(pwdChg);
+    }
+
+    @Override
+    public int insertPwdChgHist(PwdChgHist pwdChgHist) {
+        return userMapper.insertPwdChgHist(pwdChgHist);
+    }
+
+    @Override
+    public int updateUserPwd(SessionInfo sessionInfo) {
+        return userMapper.updateUserPwd(sessionInfo);
+    }
 }
 
 

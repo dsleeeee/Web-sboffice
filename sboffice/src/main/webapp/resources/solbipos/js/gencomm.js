@@ -3,8 +3,8 @@ function genEvent(error, errorLabel) {
     errorLabel.hide();
   });
   error.blur(function(){
-    if(error.val().length == 0) {
-      errorLabel.show();    
+    if(error.val().length == 0 && errorLabel.text().length > 0) {
+      errorLabel.show();
     }
   });
 }
