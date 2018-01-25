@@ -6,6 +6,7 @@ import kr.co.solbipos.application.domain.resource.ResrceInfo;
 import kr.co.solbipos.application.domain.sample.CcdCodemT;
 import kr.co.solbipos.application.domain.sample.ScdShopmT;
 import kr.co.solbipos.application.domain.sample.SslTrdtlT;
+import kr.co.solbipos.application.domain.sample.SslTrhdrT;
 import kr.co.solbipos.application.domain.sample.TbMsStore;
 import kr.co.solbipos.application.domain.sample.TestTable;
 import kr.co.solbipos.application.domain.sample.TmpBoardT;
@@ -56,4 +57,7 @@ public interface SampleMapper {
     List<ResrceInfo> selectMenu3();
     
     List<ResrceInfo> selectAuthMainMenu(HashMap<String, String> param);
+    
+    <E> List<E> selectDdlTrhdrTest(SslTrhdrT sslTrhdrT);
+    <E> List<E> selectDdlTrdtl2Test(SslTrhdrT sslTrhdrT);
 }
