@@ -336,6 +336,41 @@
     </if>
   </select>
   
+
+  <select id="selectDdlTrhdrTest" resultType="DefaultMap" parameterType="kr.co.solbipos.application.domain.sample.SslTrhdrT">
+  <![CDATA[
+    SELECT *
+      FROM ( 
+              SELECT 
+                     COUNT(1) OVER (PARTITION BY 1 ORDER BY 1) TOT_CNT,
+                     ROWNUM AS RNUM
+              ,      A.*
+                FROM SSL_TRHDR_T A
+               WHERE SHOP_CD = 'C06401'
+           )
+     WHERE RNUM >= #{prev}
+       AND RNUM <= #{next}
+  ]]>
+  </select>
+  
+  <select id="selectDdlTrdtl2Test" resultType="DefaultMap" parameterType="kr.co.solbipos.application.domain.sample.SslTrhdrT">
+  <![CDATA[
+    SELECT *
+      FROM ( 
+              SELECT 
+                     COUNT(1) OVER (PARTITION BY 1 ORDER BY 1) TOT_CNT,
+                     ROWNUM AS RNUM
+              ,      A.*
+                FROM SSL_TRDTL_T A
+               WHERE SHOP_CD    = #{shopCd}
+                 AND SALE_DATE  = #{saleDate}
+                 AND POS_NO     = #{posNo}
+                 AND BILL_NO    = #{billNo}
+           )
+     WHERE RNUM >= #{prev}
+       AND RNUM <= #{next}
+  ]]>
+  </select>
 </mapper>
 
 
