@@ -392,7 +392,7 @@ public class UserController {
             throw new AuthenticationException(messageService.get("msg.cmm.invalid.access"), "");
         }
 
-        // 조회를 위해 세팅292513
+        // 조회를 위해 세팅
         SessionInfo sessionInfo = new SessionInfo();
         sessionInfo.setUserId(userId);
 
