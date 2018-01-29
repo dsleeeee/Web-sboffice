@@ -22,4 +22,8 @@ public class PwdChg extends BaseDomain {
     private String newPwConf;
     
     private String uuid;
+    
+    private String userId;
+    private String orginPwd;
+    private String halfId;
 }

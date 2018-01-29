@@ -3,6 +3,10 @@ package kr.co.solbipos.utils.grid;
 
 import static org.springframework.util.ObjectUtils.*;
 import java.util.HashMap;
+import java.util.List;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import kr.co.solbipos.structure.JsonResult;
 import kr.co.solbipos.structure.Result;
 import kr.co.solbipos.structure.Result.Status;
@@ -89,6 +93,24 @@ public class ReturnUtil {
         return genJsonResult(status, map);
     }
 
+    /**
+      * controller 에서 BindingResult 에러 처리시에 에러 내역을 json 형태로 리턴 
+      * 
+      * @param bindingResult
+      * @return
+      */
+    public static JsonResult returnJsonBindingFieldError(BindingResult bindingResult) {
+        List<ObjectError> errros = bindingResult.getAllErrors();
+        HashMap<String, String> map = new HashMap<>();
+        for (Object object : errros) {
+            if (object instanceof FieldError) {
+                FieldError fieldError = (FieldError) object;
+                map.put(fieldError.getField(), fieldError.getDefaultMessage());
+            }
+        }
+        return ReturnUtil.returnJson(Status.FAIL, map);
+    }
+    
     /**
      * 
      * @param status

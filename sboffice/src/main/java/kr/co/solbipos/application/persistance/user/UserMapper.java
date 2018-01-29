@@ -50,7 +50,7 @@ public interface UserMapper {
      * @param pwdChg
      * @return
      */
-    String selectOtpCheck(PwdChg pwdChg);
+    OtpAuth selectOtpBySeq(PwdChg pwdChg);
 
     /**
      * 패스워드 변경 히스토리 저장
