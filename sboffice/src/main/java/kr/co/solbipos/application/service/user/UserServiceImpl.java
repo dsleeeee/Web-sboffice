@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
          */
         if (!checkOtpLimit(findOtp, 10)) {
             return PwChgResult.UUID_LIMIT_ERROR;
-        }
+        } 
 
 
         // 조회를 위해 세팅
