@@ -43,7 +43,8 @@
 <!--   패스워드 변경 유효기간 -->
   <entry key="login.pwd.chg.days">90</entry>
   <entry key="login.check.id.save">saveid</entry>
-  <entry key="login.otp.limit">3</entry>
+  <entry key="login.otp.limit.minute">3</entry>
+  <entry key="login.otp.size">4</entry>
   
   <!-- ====================================--> 
   <!--  session Properties--> 

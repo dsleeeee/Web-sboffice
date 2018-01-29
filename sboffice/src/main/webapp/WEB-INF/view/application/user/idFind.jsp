@@ -15,10 +15,6 @@
     <s:message code="label.id.find.info" />
   </p>
 
-  <c:if test="${!empty msg}">
-    <h2 class="sTit">${msg}</h2>
-  </c:if>
-
   <f:form method="post" modelAttribute="user" action="/user/idFind.sb" class="loginF">
     <div class="writeInfo">
 
@@ -46,7 +42,11 @@
   </div>
 </div>
 <script>
-  genEvent($("#empNm"), $("#empNmError"));
-  genEvent($("#mpNo"), $("#mpNoError"));
+var msg = "${msg}";
+if(msg.length > 0) {
+  alert(msg);  
+}
+genEvent($("#empNm"), $("#empNmError"));
+genEvent($("#mpNo"), $("#mpNoError"));
 </script>
 

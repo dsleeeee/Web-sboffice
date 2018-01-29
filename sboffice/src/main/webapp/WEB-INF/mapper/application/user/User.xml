@@ -64,10 +64,17 @@
   ]]>
   </select>
   
-  <select id="selectOtpCheck" parameterType="pwdChg" resultType="String">
+  <select id="selectOtpBySeq" parameterType="pwdChg" resultType="otpAuth">
   <![CDATA[
   /* UserMapper.selectOtpCheck */
-    SELECT USER_ID
+    SELECT SEQ,
+           USER_ID,
+           AUTH_FG,
+           AUTH_NO,
+           RECV_MP_NO,
+           REQ_IP,
+           REQ_DATE,
+           REQ_DT
       FROM TB_WB_OTP_AUTH_HIST
      WHERE SEQ = #{uuid}
   ]]>

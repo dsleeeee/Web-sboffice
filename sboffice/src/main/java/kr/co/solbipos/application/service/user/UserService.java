@@ -5,6 +5,8 @@ import kr.co.solbipos.application.domain.user.OtpAuth;
 import kr.co.solbipos.application.domain.user.PwdChg;
 import kr.co.solbipos.application.domain.user.PwdChgHist;
 import kr.co.solbipos.application.domain.user.User;
+import kr.co.solbipos.application.enums.user.PwChgResult;
+import kr.co.solbipos.application.enums.user.PwFindResult;
 
 /**
  * 
@@ -12,6 +14,26 @@ import kr.co.solbipos.application.domain.user.User;
  *
  */
 public interface UserService {
+
+    /**
+     * 패스워드 + 인증 번호
+     * 
+     * @param user
+     * @return
+     */
+    PwFindResult processPwFind(User user);
+
+
+    /**
+     * 패스워드 변경
+     * 
+     * @param pwdChg
+     * @return
+     */
+    PwChgResult processPwdChg(PwdChg pwdChg);
+
+
+
     /**
      * 담당자 이름, 핸드폰 번호로 userId 조회
      * 
@@ -50,7 +72,7 @@ public interface UserService {
      * @param pwdChg
      * @return
      */
-    String selectOtpCheck(PwdChg pwdChg);
+    OtpAuth selectOtpBySeq(PwdChg pwdChg);
 
     /**
      * 패스워드 변경 히스토리 저장
