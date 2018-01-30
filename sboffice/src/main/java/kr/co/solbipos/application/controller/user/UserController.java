@@ -185,7 +185,7 @@ public class UserController {
         String findUserNm = userService.selectUserCheck(user);
 
         // 아이디가 없으면 에러 메시지 리턴
-        if (StringUtil.isEmpty(findUserNm)) {
+        if (StringUtil.isEmpty(findUserNm)) { 
             // id 를 찾을 수 없습니다.
             String msg = messageService.get("label.login.userId")
                     + messageService.get("msg.cmm.not.find");
