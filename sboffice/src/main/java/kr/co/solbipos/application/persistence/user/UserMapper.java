@@ -1,4 +1,4 @@
-package kr.co.solbipos.application.persistance.user;
+package kr.co.solbipos.application.persistence.user;
 
 import kr.co.solbipos.application.domain.login.SessionInfo;
 import kr.co.solbipos.application.domain.user.OtpAuth;

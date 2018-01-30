@@ -12,7 +12,7 @@ import kr.co.solbipos.application.domain.sample.TbMsStore;
 import kr.co.solbipos.application.domain.sample.TestTable;
 import kr.co.solbipos.application.domain.sample.TmpBoardT;
 import kr.co.solbipos.application.domain.sample.TmpDragtT;
-import kr.co.solbipos.application.persistance.sample.SampleMapper;
+import kr.co.solbipos.application.persistence.sample.SampleMapper;
 
 @Service
 public class SampleServiceImpl implements SampleService {

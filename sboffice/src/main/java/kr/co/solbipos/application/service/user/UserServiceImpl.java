@@ -13,7 +13,7 @@ import kr.co.solbipos.application.domain.user.PwdChgHist;
 import kr.co.solbipos.application.domain.user.User;
 import kr.co.solbipos.application.enums.user.PwChgResult;
 import kr.co.solbipos.application.enums.user.PwFindResult;
-import kr.co.solbipos.application.persistance.user.UserMapper;
+import kr.co.solbipos.application.persistence.user.UserMapper;
 import kr.co.solbipos.application.service.login.LoginService;
 import kr.co.solbipos.exception.AuthenticationException;
 import kr.co.solbipos.service.session.SessionService;

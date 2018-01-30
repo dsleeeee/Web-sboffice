@@ -1,0 +1,85 @@
+#container {
+  width: 1024px;
+  margin: 0px auto;
+  padding: 0px;
+  /*border: 1px solid #bcbcbc;*/
+  position: relative;
+}
+#grid {
+  width: 274px;
+  height: 640px;
+  padding: 0px;
+  margin-bottom: 0px;
+  float: left;
+  border: 1px solid #bcbcbc;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+#content {
+  width: 750px;
+  height: 640px;
+  padding: 1px;
+  margin-bottom: 0px;
+  float: left;
+  border: 1px solid #bcbcbc;
+  position: absolute;
+  top: 0px;
+  left: 274px;
+}
+#format {
+  width: 250px;
+  height: 640px;
+  padding: 0px;
+  margin-bottom: 0px;
+  float: left;
+  border: 1px solid #bcbcbc;
+  position: absolute;
+  top: 0px;
+  left: 676px;
+}
+
+
+.geEditor {
+  font-family:Helvetica Neue,Helvetica,Arial Unicode MS,Arial;
+  font-size:10pt;
+  border:none;
+  margin:0px;
+}
+.geEditor input[type=text]::-ms-clear {
+  display: none;
+}
+
+.geGroupContainer, .geProdContainer {
+  overflow-x:scroll;
+  overflow-y:hidden;
+  position:absolute;
+  cursor:default;
+  background-color:#ffffff;
+  outline:none;
+  /*border: 1px solid #bcbcbc;*/
+}
+.geGroupContainer {
+  left:0px;
+  top:0px;
+  width:400px;
+  height:140px;
+}
+.geProdContainer {
+  left:0px;
+  top:120px;
+  width:400px;
+  height:380px;
+}
+.hidden {
+  position:absolute;
+  background-color:#ffffff;
+  outline:none;
+  left:0px;
+  top:482px;
+  bottom:0px;
+  width:400px;
+  height:20px;
+}
+
+

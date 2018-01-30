@@ -1,0 +1,13 @@
+# Resources from graph.properties
+groupName=그룹명
+labelFunction=설정
+fillCellColor=채우기
+cancel=취소
+apply=적용
+font=폰트
+errorOpeningFile=기존설정 조회 중 오류가 발생하였습니다.
+initBtn=초기화
+saveBtn=저장
+saved=저장 되었습니다.
+errorSavingFile=저장 중 오류가 발생하였습니다.
+opened=초기 설정으로 초기화 되었습니다.

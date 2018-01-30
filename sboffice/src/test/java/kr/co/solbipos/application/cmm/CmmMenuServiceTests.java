@@ -14,7 +14,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 import kr.co.solbipos.application.domain.login.SessionInfo;
 import kr.co.solbipos.application.domain.resource.ResrceInfoBase;
-import kr.co.solbipos.application.persistance.cmm.CmmMenuMapper;
+import kr.co.solbipos.application.persistence.cmm.CmmMenuMapper;
 import kr.co.solbipos.service.cmm.CmmMenuServiceImpl;
 import kr.co.solbipos.service.session.SessionService;
 import lombok.extern.slf4j.Slf4j;

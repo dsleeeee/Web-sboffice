@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import kr.co.solbipos.application.domain.cmm.GridDispItem;
-import kr.co.solbipos.application.persistance.cmm.CmmGridMapper;
+import kr.co.solbipos.application.persistence.cmm.CmmGridMapper;
 import kr.co.solbipos.application.service.sample.SampleService;
 import kr.co.solbipos.service.message.MessageService;
 import kr.co.solbipos.structure.DefaultMap;

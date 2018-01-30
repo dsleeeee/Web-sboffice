@@ -13,7 +13,7 @@ import kr.co.solbipos.application.domain.login.SessionInfo;
 import kr.co.solbipos.application.domain.resource.ResrceInfo;
 import kr.co.solbipos.application.enums.login.LoginOrigin;
 import kr.co.solbipos.application.enums.login.LoginResult;
-import kr.co.solbipos.application.persistance.login.LoginMapper;
+import kr.co.solbipos.application.persistence.login.LoginMapper;
 import kr.co.solbipos.service.session.SessionService;
 import kr.co.solbipos.system.Prop;
 import kr.co.solbipos.utils.DateUtil;
