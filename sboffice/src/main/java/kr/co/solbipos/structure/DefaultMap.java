@@ -16,7 +16,7 @@ public class DefaultMap<Value> extends HashMap<String, Value> {
     }
 
     @Override
-    public Value get(Object k) {
+    public Value get(Object k) { 
         return super.get(k);
     }
 
