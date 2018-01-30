@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import kr.co.solbipos.application.service.sample.SampleService;
 import kr.co.solbipos.service.message.MessageService;
@@ -46,7 +47,7 @@ public class TouchkeyController {
      * @param model Model
      * @return
      */
-    @RequestMapping(value = "/list.sb")
+    @RequestMapping(value = "/list.sb", method = RequestMethod.GET)
     public String view(HttpServletRequest request, HttpSession session, Model model) {
       return RESULT_URI + "touchkey";
     }
@@ -59,7 +60,7 @@ public class TouchkeyController {
      * @param model Model
      * @return
      */
-    @RequestMapping(value = "/list.sb")
+    @RequestMapping(value = "/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult openTouchkey(HttpServletRequest request, HttpSession session, Model model) {
 
@@ -80,7 +81,7 @@ public class TouchkeyController {
      * @param model Model
      * @return
      */
-    @RequestMapping(value = "/save.sb")
+    @RequestMapping(value = "/save.sb", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult saveTouchKey(HttpServletRequest request, HttpSession session, Model model) {
 
