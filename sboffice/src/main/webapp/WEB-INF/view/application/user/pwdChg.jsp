@@ -9,7 +9,7 @@
   <h2 class="sTit">
     <s:message code="label.login.userPasswd" />
     &nbsp;
-    <s:message code="label.cmm.find" />
+    <s:message code="label.cmm.find" /> 
   </h2>
   <p class="h2_txt">
     <s:message code="label.pw.find.new.h2" />
