@@ -35,29 +35,33 @@
     <put-attribute name="footer" cascade="true" value="/WEB-INF/view/layout/basic/footer.jsp" />
   </definition>
   
-  <definition name="*/pop:*" extends="layout">
+  <!-- 팝업 start -->
+  <definition name="*/*/pop:*" extends="layout">
     <put-attribute name="view" value="pop"/>
-    <put-attribute name="content" cascade="true" value="/WEB-INF/view/application/{1}/{2}.jsp" />
+    <put-attribute name="content" cascade="true" value="/WEB-INF/view/{1}/{2}/{3}.jsp" />
   </definition>
 
-  <definition name="*/*/pop:*" extends="*/pop:*">
-    <put-attribute name="content" cascade="true" value="/WEB-INF/view/application/{1}/{2}/{3}.jsp" />
+  <definition name="*/*/*/pop:*" extends="*/pop:*">
+    <put-attribute name="content" cascade="true" value="/WEB-INF/view/{1}/{2}/{3}/{4}.jsp" />
   </definition>   
   
-   <definition name="*/*/*/pop:*" extends="layout">
+   <definition name="*/*/*/*/pop:*" extends="layout">
     <put-attribute name="view" value="pop"/>
-    <put-attribute name="content" cascade="true" value="/WEB-INF/view/application/{1}/{2}/{3}/{4}.jsp" />
-  </definition>  
+    <put-attribute name="content" cascade="true" value="/WEB-INF/view/{1}/{2}/{3}/{4}/{5}.jsp" />
+  </definition>
+  <!-- 팝업 end -->
   
-  <definition name="*/*" extends="Main">
-    <put-attribute name="view" value="{2}"/>
-    <put-attribute name="content" cascade="true" value="/WEB-INF/view/application/{1}/{2}.jsp" />
+  <!-- 화면 start -->
+  <definition name="*/*/*" extends="Main">
+    <put-attribute name="view" value="{4}"/>
+    <put-attribute name="content" cascade="true" value="/WEB-INF/view/{1}/{2}/{3}.jsp" />
   </definition>
   
-  <definition name="*/*/*" extends="*/*">
-    <put-attribute name="view" value="{3}"/>
-    <put-attribute name="content" cascade="true" value="/WEB-INF/view/application/{1}/{2}/{3}.jsp" />
+  <definition name="*/*/*/*" extends="*/*">
+    <put-attribute name="view" value="{4}"/>
+    <put-attribute name="content" cascade="true" value="/WEB-INF/view/{1}/{2}/{3}/{4}.jsp" />
   </definition>
+  <!-- 화면 end -->
 
   <definition name="*/*/*/*" extends="layout">
     <put-attribute name="body" value="/WEB-INF/view/layout/basic/body.jsp"/>

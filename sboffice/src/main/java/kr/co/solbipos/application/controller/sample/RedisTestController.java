@@ -1,5 +1,6 @@
 package kr.co.solbipos.application.controller.sample;
 
+import static kr.co.solbipos.utils.grid.ReturnUtil.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class RedisTestController {
      */
     @RequestMapping(value = "exRedis.sb", method = RequestMethod.GET)
     public String exGridPage(Model model) {
-        return "sample/exRedis";
+        return "application/sample/exRedis";
     }
 
     /**
@@ -50,7 +51,7 @@ public class RedisTestController {
 
         String key = sessionService.setSessionInfo(request, response, tempDomain);
 
-        return ReturnUtil.returnJson(Status.OK, key);
+        return returnJson(Status.OK, key);
     }
 
     /**
@@ -65,7 +66,7 @@ public class RedisTestController {
 
         SessionInfo result = sessionService.getSessionInfo(sessionInfo.getSessionId());
 
-        return ReturnUtil.returnJson(Status.OK, result);
+        return returnJson(Status.OK, result);
     }
 }
 
