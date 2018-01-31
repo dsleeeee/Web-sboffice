@@ -48,6 +48,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
 @RequestMapping(value = "/user")
+//커밋테스트
 public class UserController {
 
     @Autowired
