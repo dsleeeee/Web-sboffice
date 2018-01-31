@@ -93,9 +93,7 @@
       <li><a href="/exGridInsert.sb">데이터 Insert 테스트</a></li>
        -->
        
-       
     </ul>
-    
   </ul>
   
   <ul class="menu_depth_2">

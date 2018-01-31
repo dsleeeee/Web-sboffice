@@ -106,8 +106,7 @@ public interface CmmMenuService {
      * 메인 메뉴 관련
      * 
      */
-    
-    String makeMenu(List<ResrceInfo> resrceInfoList);
+    String makeMenu();
 }
 
 

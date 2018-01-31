@@ -59,6 +59,100 @@
   ]]>
   </select>
   
+  <!-- 메뉴 조회 -->
+  <select id="selectMenu1" parameterType="sessionInfo" resultType="resrceInfo">
+  <![CDATA[
+    SELECT A.*
+      FROM TB_WB_RESRCE_INFO A
+      ,    (
+              SELECT A.RESRCE_CD
+              FROM TB_WB_AUTHOR_GRP_RESRCE A
+              ,    TB_WB_USER_INFO B
+             WHERE A.USE_YN   = 'Y'
+               AND B.GRP_CD   = A.GRP_CD
+               AND B.USER_ID  = #{userId}
+            UNION
+            SELECT A.RESRCE_CD
+              FROM TB_WB_AUTHOR_EXCEPT A
+             WHERE A.INCLD_EXCLD_FG = 'I'
+               AND A.USER_ID = #{userId}
+            MINUS
+            SELECT A.RESRCE_CD
+              FROM TB_WB_AUTHOR_EXCEPT A
+             WHERE A.INCLD_EXCLD_FG = 'E'
+               AND A.USER_ID = #{userId}
+          ) B
+   WHERE B.RESRCE_CD = A.RESRCE_CD
+     AND A.DISP_LEVEL = '0'
+     AND RESRCE_FG = 'M' 
+     AND USE_YN = 'Y'
+   ORDER BY DISP_LEVEL ASC, DISP_IDX ASC
+  ]]>
+  </select>
+  
+  
+  <select id="selectMenu2" parameterType="sessionInfo" resultType="resrceInfo">
+  <![CDATA[
+    SELECT A.*
+      FROM TB_WB_RESRCE_INFO A
+      ,    (
+              SELECT A.RESRCE_CD
+              FROM TB_WB_AUTHOR_GRP_RESRCE A
+              ,    TB_WB_USER_INFO B
+             WHERE A.USE_YN   = 'Y'
+               AND B.GRP_CD   = A.GRP_CD
+               AND B.USER_ID  = #{userId}
+            UNION
+            SELECT A.RESRCE_CD
+              FROM TB_WB_AUTHOR_EXCEPT A
+             WHERE A.INCLD_EXCLD_FG = 'I'
+               AND A.USER_ID = #{userId}
+            MINUS
+            SELECT A.RESRCE_CD
+              FROM TB_WB_AUTHOR_EXCEPT A
+             WHERE A.INCLD_EXCLD_FG = 'E'
+               AND A.USER_ID = #{userId}
+          ) B
+   WHERE B.RESRCE_CD = A.RESRCE_CD
+     AND A.DISP_LEVEL = '1'
+     AND RESRCE_FG = 'M' 
+     AND USE_YN = 'Y'
+   ORDER BY DISP_LEVEL ASC, DISP_IDX ASC
+  ]]>
+  </select>
+
+  <select id="selectMenu3" parameterType="sessionInfo" resultType="resrceInfo">
+  <![CDATA[
+    SELECT A.*
+      FROM TB_WB_RESRCE_INFO A
+      ,    (
+              SELECT A.RESRCE_CD
+              FROM TB_WB_AUTHOR_GRP_RESRCE A
+              ,    TB_WB_USER_INFO B
+             WHERE A.USE_YN   = 'Y'
+               AND B.GRP_CD   = A.GRP_CD
+               AND B.USER_ID  = #{userId}
+            UNION
+            SELECT A.RESRCE_CD
+              FROM TB_WB_AUTHOR_EXCEPT A
+             WHERE A.INCLD_EXCLD_FG = 'I'
+               AND A.USER_ID = #{userId}
+            MINUS
+            SELECT A.RESRCE_CD
+              FROM TB_WB_AUTHOR_EXCEPT A
+             WHERE A.INCLD_EXCLD_FG = 'E'
+               AND A.USER_ID = #{userId}
+          ) B
+   WHERE B.RESRCE_CD = A.RESRCE_CD
+     AND A.DISP_LEVEL = '2'
+     AND RESRCE_FG = 'M' 
+     AND USE_YN = 'Y'
+   ORDER BY DISP_LEVEL ASC, DISP_IDX ASC
+  ]]>
+  </select>
+  
+  
+  
 </mapper>
 
 
