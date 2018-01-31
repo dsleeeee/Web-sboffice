@@ -21,8 +21,14 @@ ${sessionScope.sessionInfo.fixMenu[0].activation}
 <br>
 
 
-<button id="registBtn" type="button" class="btn btn_dark btn_md w_lg" onclick="popOpen();">
-  팝업
+<button id="registBtn" type="button" class="btn btn_dark btn_md w_lg" onclick="popOpen2();">
+  팝업2
+</button>
+<button id="registBtn" type="button" class="btn btn_dark btn_md w_lg" onclick="popOpen3();">
+  팝업3
+</button>
+<button id="registBtn" type="button" class="btn btn_dark btn_md w_lg" onclick="popOpen4();">
+  팝업4
 </button>
 
 <br>
@@ -48,8 +54,16 @@ ${sessionScope.sessionInfo.fixMenu[0].activation}
 
 <script>
 
-function popOpen() {
-	$.open("samplepop.sb", { method:'get', width:'800px', height:'390px' } );	
+function popOpen2() {
+	$.open("samplepop2.sb", { method:'get', width:'800px', height:'390px' } );	
+}
+
+function popOpen3() {
+	$.open("samplepop3.sb", { method:'get', width:'800px', height:'390px' } );	
+}
+
+function popOpen4() {
+	$.open("samplepop4.sb", { method:'get', width:'800px', height:'390px' } );	
 }
 
 

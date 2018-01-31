@@ -107,6 +107,9 @@ public class SampleController {
                 String.format("alert('%s'); location.href=\"sample2.sb\"", msg));
     }
 
+    
+    
+    
     /**
      * 팝업 샘플
      * 
@@ -114,10 +117,20 @@ public class SampleController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "samplepop.sb")
-    public String samplepop(HttpSession session, Model model) {
-        return "application/sample/pop:samplePop";
+    @RequestMapping(value = "samplepop2.sb")
+    public String samplepop2(HttpSession session, Model model) {
+        return "application/pop:samplePop2";
     }
+    @RequestMapping(value = "samplepop3.sb")
+    public String samplepop3(HttpSession session, Model model) {
+        return "application/sample/pop:samplePop3";
+    }
+    @RequestMapping(value = "samplepop4.sb")
+    public String samplepop4(HttpSession session, Model model) {
+        return "application/sample/sample/pop:samplePop4";
+    }
+    
+    
     
 
     /**
