@@ -59,7 +59,10 @@ public class SessionServiceImpl implements SessionService {
         // 즐겨찾기 메뉴 리스트 저장
         sessionInfo.setBkmkMenu(cmmMenuService.selectBkmkMenu(sessionInfo));
         // 메뉴 데이터 만들기
-        sessionInfo.setMenuData(cmmMenuService.makeMenu(sessionInfo.getAuthMenu()));
+        sessionInfo.setMenuData(cmmMenuService.makeMenu(sessionInfo));
+        
+        log.error(".................. made complete session data ");
+        
 
         // redis에 세션 세팅
         setSessionInfo(sessionId, sessionInfo);

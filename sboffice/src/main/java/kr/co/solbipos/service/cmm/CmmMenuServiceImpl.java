@@ -218,11 +218,13 @@ public class CmmMenuServiceImpl implements CmmMenuService {
      */
 
     @Override
-    public String makeMenu() {
+    public String makeMenu(SessionInfo sessionInfo) {
         
-        List<ResrceInfo> m1 = cmmMenuMapper.selectMenu1();
-        List<ResrceInfo> m2 = cmmMenuMapper.selectMenu2();
-        List<ResrceInfo> m3 = cmmMenuMapper.selectMenu3();
+        log.error("...........make menu");
+        
+        List<ResrceInfo> m1 = cmmMenuMapper.selectMenu1(sessionInfo);
+        List<ResrceInfo> m2 = cmmMenuMapper.selectMenu2(sessionInfo);
+        List<ResrceInfo> m3 = cmmMenuMapper.selectMenu3(sessionInfo);
 
         List<HashMap<String, Object>> rList = new ArrayList<HashMap<String, Object>>();
         

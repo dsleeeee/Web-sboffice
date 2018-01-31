@@ -3,8 +3,9 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-sampleView-View 
+<script src="http://cdn.wijmo.com/5.latest/controls/wijmo.nav.min.js"></script>
 
+sampleView-View 
 
 <br>
 <br>
@@ -74,19 +75,21 @@ onload = function() {
   
   function getDataTest() {
       var test = ${sessionScope.sessionInfo.menuData};
-  return test;
-}
+      return test;
+  }
+  
   var tree = new wijmo.nav.TreeView('#theTree', {
-      itemsSource: getDataTest(),
-      displayMemberPath: 'header',
-      childItemsPath: 'items',
-      expandOnClick : true,
-      isContentHtml: true,
-      loadedItems: function(s, e) {
-      console.log("loadedItems...");
-      s.collapseToLevel(10);
-      }
+    itemsSource: getDataTest(),
+    displayMemberPath: 'header',
+    childItemsPath: 'items',
+    expandOnClick : true,
+    isContentHtml: true,
+    loadedItems: function(s, e) {
+    console.log("loadedItems...");
+    s.collapseToLevel(10);
+    }
   });
+}
   
 </script>
 

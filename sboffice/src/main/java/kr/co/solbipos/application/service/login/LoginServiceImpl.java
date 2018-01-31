@@ -129,8 +129,8 @@ public class LoginServiceImpl implements LoginService {
         // 로그인 결과
         si.setLoginResult(result);
         // 조회된 패스워드 초기화
-        si.setUserPwd("");
         
+        si.setUserPwd("");
         si.setLoginIp(sessionInfo.getLoginIp());
         si.setBrwsrInfo(sessionInfo.getBrwsrInfo());
 
