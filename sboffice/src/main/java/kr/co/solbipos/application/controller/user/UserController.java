@@ -271,7 +271,7 @@ public class UserController {
         throw new AuthenticationException(messageService.get("msg.cmm.invalid.access"), "");
     }
 
-    /** 
+    /**
      * 패스워드 변경
      * 
      * @param request
