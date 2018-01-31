@@ -17,10 +17,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import kr.co.solbipos.application.domain.login.SessionInfo;
 import kr.co.solbipos.application.domain.user.OtpAuth;
 import kr.co.solbipos.application.domain.user.PwdChg;
-import kr.co.solbipos.application.domain.user.PwdChgHist;
 import kr.co.solbipos.application.domain.user.User;
 import kr.co.solbipos.application.enums.user.PwChgResult;
 import kr.co.solbipos.application.enums.user.PwFindResult;
@@ -36,6 +34,7 @@ import kr.co.solbipos.structure.JsonResult;
 import kr.co.solbipos.structure.Result.Status;
 import kr.co.solbipos.system.Prop;
 import kr.co.solbipos.utils.DateUtil;
+import kr.co.solbipos.utils.security.EncUtil;
 import kr.co.solbipos.utils.spring.ObjectUtil;
 import kr.co.solbipos.utils.spring.StringUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -48,7 +47,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
 @RequestMapping(value = "/user")
-//커밋테스트
 public class UserController {
 
     @Autowired
@@ -186,7 +184,7 @@ public class UserController {
         String findUserNm = userService.selectUserCheck(user);
 
         // 아이디가 없으면 에러 메시지 리턴
-        if (StringUtil.isEmpty(findUserNm)) { 
+        if (StringUtil.isEmpty(findUserNm)) {
             // id 를 찾을 수 없습니다.
             String msg = messageService.get("label.login.userId")
                     + messageService.get("msg.cmm.not.find");
@@ -202,7 +200,7 @@ public class UserController {
 
     /**
      * 패스워드 찾기 페이지 이동
-     *  
+     * 
      * @param request
      * @param response
      * @param model
@@ -338,44 +336,37 @@ public class UserController {
             return "user/login:pwdChg";
         }
 
-        PwChgResult result = userService.processPwdChg(pwdChg);
+        /**
+         * 패스워드 정책 체크
+         */
+        if (!EncUtil.passwordPolicyCheck(pwdChg.getNewPw())
+                || !EncUtil.passwordPolicyCheck(pwdChg.getNewPwConf())) {
+            throw new AuthenticationException(messageService.get("msg.pw.chg.regexp"), "");
+        }
 
-        log.info("패스워드 변경 결과 : halfId : {}, result : {}, uuid : {}", pwdChg.getHalfId(), result,
+        PwChgResult pcr = userService.processPwdChg(pwdChg);
+
+        log.info("패스워드 변경 결과 : halfId : {}, result : {}, uuid : {}", pwdChg.getHalfId(), pcr,
                 pwdChg.getUuid());
 
-        if (result == PwChgResult.PASSWORD_NOT_MATCH) {
+        if (pcr == PwChgResult.PASSWORD_NOT_MATCH) {
             // 새 비밀번호와 비밀번호 확인이 일치하지 않습니다.
             throw new AuthenticationException(messageService.get("msg.pw.find.not.match"), "");
-        } else if (result == PwChgResult.UUID_NOT_MATCH || result == PwChgResult.EMPTY_USER
-                || result == PwChgResult.ID_NOT_MATCH) {
+        } else if (pcr == PwChgResult.UUID_NOT_MATCH || pcr == PwChgResult.EMPTY_USER
+                || pcr == PwChgResult.ID_NOT_MATCH) {
             /**
              * uuid가 없는 경우 uuid로 조회한 user가 있는지 확인 halfId 와 uuid 로 조회된 id 매칭 여부 리턴 메세지 : 잘못된 접근입니다.
              */
             throw new AuthenticationException(messageService.get("msg.cmm.invalid.access"), "");
-        } else if (result == PwChgResult.LOCK_USER) {
+        } else if (pcr == PwChgResult.LOCK_USER) {
             // 잠금 유져는 패스워드 변경 불가능 > 잠겨있는 유저 입니다. 고객센터로 연락 주세요.
             throw new AuthenticationException(messageService.get("msg.pw.find.lock.user"), "");
-        } else if (result == PwChgResult.UUID_LIMIT_ERROR) {
+        } else if (pcr == PwChgResult.UUID_LIMIT_ERROR) {
             // 인증유효 시간이 지났습니다. 다시 인증 해주세요.
             throw new AuthenticationException(messageService.get("msg.pw.find.limit"),
                     "/user/pwdFind.sb");
-        } else if (result == PwChgResult.CHECK_OK) {
-            String userId = pwdChg.getUserId();
-
-            // 패스워드 세팅 및 변경
-            SessionInfo sessionInfo = new SessionInfo();
-            sessionInfo.setUserId(userId);
-            sessionInfo.setUserPwd(pwdChg.getNewPw());
-            int r1 = userService.updateUserPwd(sessionInfo);
-
-            // 패스워드 변경 내역 저장
-            PwdChgHist pch = new PwdChgHist();
-            pch.setUserId(userId);
-            pch.setPriorPwd(pwdChg.getOrginPwd());
-            pch.setRegDt(currentDateTimeString());
-            pch.setRegIp(getClientIp(request));
-            int r2 = userService.insertPwdChgHist(pch);
-
+        } else if (pcr == PwChgResult.CHECK_OK) {
+            // 패스워드 변경 성공
             return "user/login:pwdChgOk";
         } else {
             throw new AuthenticationException(messageService.get("msg.cmm.invalid.access"), "");
