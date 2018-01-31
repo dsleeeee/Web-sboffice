@@ -82,4 +82,34 @@
   height:20px;
 }
 
+.geBtn {
+  background-color: #f5f5f5;
+  border-radius: 2px;
+  border: 1px solid #d8d8d8;
+  color: #333;
+  cursor: default;
+  font-size: 11px;
+  font-weight: bold;
+  height: 29px;
+  line-height: 27px;
+  margin: 0 0 0 8px;
+  min-width: 72px;
+  outline: 0;
+  padding: 0 8px;
+  cursor: pointer;
+}
+.geBtn:hover, .geBtn:focus {
+  -webkit-box-shadow: 0px 1px 1px rgba(0,0,0,0.1);
+  -moz-box-shadow: 0px 1px 1px rgba(0,0,0,0.1);
+  box-shadow: 0px 1px 1px rgba(0,0,0,0.1);
+  border: 1px solid #c6c6c6;
+  background-color: #f8f8f8;
+  background-image: linear-gradient(#f8f8f8 0px,#f1f1f1 100%);
+  color: #111;
+}
+.geBtn:disabled {
+  opacity: .5;
+}
+
+
 

@@ -142,7 +142,7 @@ function loadStylesheet(graph)
   //console.log('call');
   var node = (graph.themes != null) ? graph.themes[graph.defaultThemeName] :
     (!mxStyleRegistry.dynamicLoading) ? null :
-    mxUtils.load(STYLE_PATH + '/default.xml').getDocumentElement();
+    mxUtils.load(STYLE_PATH + '/touchkey.xml').getDocumentElement();
   //console.log(node);
   if (node != null) {
     var dec = new mxCodec(node.ownerDocument);
@@ -175,7 +175,7 @@ Touchkey.prototype.createPagingShape = function(type, target, themes) {
   
   graph.setEnabled(false);
   graph.themes = themes;
-  graph.defaultThemeName = 'default';
+  graph.defaultThemeName = 'touchkey';
   loadStylesheet(graph);
 
   //페이지 이동 위치 셀의크기 * 페이지에 컬럼 수
@@ -319,23 +319,9 @@ Graph.prototype.init = function(container) {
       return;
     }
     
-    var w = this.graph.keySize.width;
-    var h = this.graph.keySize.height;
-    
-    var mw = dx % w;
-    var mh = dy % h;
-    var dw = Math.round(dx / w);
-    var dh = Math.round(dy / h);
-    
-    //console.log(dx);
-    //console.log(dy);
-    //실제 이동 거리 계산
-    //터치키 크기(가로/세로) 절반을 넘으면 터치키(가로/세로) 만큼으로 거리 보정하여 이동
-    dx = Math.abs(mw) <= (w/2) ? (w*dw) : (w*dw);
-    dy = Math.abs(mh) <= (h/2) ? (h*dh) : (h*dh);
-    //console.log(dx);
-    //console.log(dy);
-    
+    var newSize = this.graph.adjstCellSize(dx, dy);
+    dx = newSize.x;
+    dy = newSize.y;
     mxGraphHandlerMoveCells.apply(this, arguments);
   };
 
@@ -397,7 +383,34 @@ Graph.prototype.init = function(container) {
       return cell.getAttribute('label');
     }
   };
+  
+  //셀의 사이즈가 변경되었을 때 배경 크기에 맞게 보정
+  this.resizeCell = function(cell, bounds) {
+    //console.log(this.adjstCellSize(bounds.width, bounds.height))
+    var newPoint = this.adjstCellSize(bounds.x, bounds.y);
+    var newSize = this.adjstCellSize(bounds.width, bounds.height);
+    bounds = new mxRectangle(newPoint.x, newPoint.y, newSize.x, newSize.y);
+    mxGraph.prototype.resizeCell.apply(this, arguments);
+  };
 
+};
+
+/**
+ * 터치키의 사이즈에 따라 위치이동, 셀크기 변경 시 사이즈 보정
+ */
+Graph.prototype.adjstCellSize = function(w, h) {
+  var kw = this.keySize.width;
+  var kh = this.keySize.height;
+
+  var mw = w % kw;
+  var mh = h % kh;
+  var dw = Math.round(w / kw);
+  var dh = Math.round(h / kh);
+  //터치키 크기(가로/세로) 절반을 넘으면 터치키(가로/세로) 만큼으로 크기 보정
+  var dx = Math.abs(mw) <= (kw/2) ? (kw*dw) : (kw*dw);
+  var dy = Math.abs(mh) <= (kh/2) ? (kh*dh) : (kh*dh);
+  
+  return new mxPoint(dx, dy);
 };
 
 
@@ -891,22 +904,22 @@ Format.prototype.addSaveBtn = function()
   var div = this.createPanel();
   
   var btn = mxUtils.button(mxResources.get('initBtn'), mxUtils.bind(this, function(evt) {
-    //this.editorUi.actions.get('open').funct();
     this.open(false);
   }));
   
   btn.setAttribute('title', mxResources.get('initBtn'));
+  btn.className = 'geBtn';
   btn.style.width = '98px';
   btn.style.marginRight = '5px';
   btn.style.marginBottom = '2px';
   div.appendChild(btn);
 
   btn = mxUtils.button(mxResources.get('saveBtn'), mxUtils.bind(this, function(evt) {
-    //this.editorUi.actions.get('save').funct();
     this.save(this.touchkey.group, this.touchkey.prod);
   }));
       
   btn.setAttribute('title', mxResources.get('saveBtn'));
+  btn.className = 'geBtn';
   btn.style.width = '98px';
   btn.style.marginRight = '0px';
   btn.style.marginBottom = '2px';

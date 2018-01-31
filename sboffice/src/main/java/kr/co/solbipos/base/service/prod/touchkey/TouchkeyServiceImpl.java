@@ -10,7 +10,7 @@ import kr.co.solbipos.structure.DefaultMap;
 public class TouchkeyServiceImpl implements TouchkeyService {
 
     @Autowired
-    TouchkeyMapper mapper;
+    private TouchkeyMapper mapper;
 
     @Override
     public <E> List<E> selectTouchkey(DefaultMap<String> param) {

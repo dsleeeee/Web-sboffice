@@ -49,7 +49,7 @@ public class TouchkeyController {
      */
     @RequestMapping(value = "/list.sb", method = RequestMethod.GET)
     public String view(HttpServletRequest request, HttpSession session, Model model) {
-      return RESULT_URI + "touchkey";
+      return RESULT_URI + "/touchkey";
     }
 
     /**
