@@ -83,7 +83,7 @@ public class LoginController {
 
         log.info("login start : {} ", sessionInfo.getUserId());
 
-        if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) { 
             return "login/login:Login";
         }
 

@@ -343,7 +343,7 @@ public class UserController {
                 || !EncUtil.passwordPolicyCheck(pwdChg.getNewPwConf())) {
             throw new AuthenticationException(messageService.get("msg.pw.chg.regexp"), "");
         }
-
+ 
         PwChgResult pcr = userService.processPwdChg(pwdChg);
 
         log.info("패스워드 변경 결과 : halfId : {}, result : {}, uuid : {}", pwdChg.getHalfId(), pcr,
