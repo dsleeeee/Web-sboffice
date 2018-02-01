@@ -135,7 +135,7 @@ public class LoginController {
             returnUrl = "auth/login.sb";
             // 실패 처리
             throw new AuthenticationException(messageService.get("msg.login.fail"), returnUrl);
-        }
+        } 
 
         /*
          * try { Thread.sleep(3000); } catch (InterruptedException e) { // TODO Auto-generated catch

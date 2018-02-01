@@ -323,7 +323,7 @@ public class UserController {
      * 
      * @param request
      * @param response
-     * @param model
+     * @param model 
      * @return
      */
     @RequestMapping(value = "pwdChgOk.sb", method = RequestMethod.POST)
