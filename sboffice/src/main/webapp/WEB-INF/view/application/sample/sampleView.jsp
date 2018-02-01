@@ -59,6 +59,17 @@ function popOpen() {
   $.open("samplepop.sb", { method:'get', width:'800px', height:'390px' } );  
 }
 
+function popOpen2() {
+	$.open("samplepop2.sb", { method:'get', width:'800px', height:'390px' } );	
+}
+
+function popOpen3() {
+	$.open("samplepop3.sb", { method:'get', width:'800px', height:'390px' } );	
+}
+
+function popOpen4() {
+	$.open("samplepop4.sb", { method:'get', width:'800px', height:'390px' } );	
+}
 
 function ajaxTest() {
   var paramStr = "";
