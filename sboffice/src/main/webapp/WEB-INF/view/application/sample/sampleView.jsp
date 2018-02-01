@@ -48,6 +48,8 @@ ${sessionScope.sessionInfo.fixMenu[0].activation}
 <br>
 <div id="theTree"></div>
 <br>
+<br>
+<br>
 <script>
 
 function popOpen() {
@@ -75,6 +77,7 @@ onload = function() {
   
   function getDataTest() {
       var test = ${sessionScope.sessionInfo.menuData};
+      var currentMenu = "${sessionScope.sessionInfo.currentMenu.resrceCd}";
       return test;
   }
   

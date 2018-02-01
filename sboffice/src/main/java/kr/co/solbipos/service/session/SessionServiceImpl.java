@@ -61,9 +61,6 @@ public class SessionServiceImpl implements SessionService {
         // 메뉴 데이터 만들기
         sessionInfo.setMenuData(cmmMenuService.makeMenu(sessionInfo));
         
-        log.error(".................. made complete session data ");
-        
-
         // redis에 세션 세팅
         setSessionInfo(sessionId, sessionInfo);
 
