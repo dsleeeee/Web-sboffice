@@ -1,6 +1,7 @@
 package kr.co.solbipos.application.service.user;
 
 import static kr.co.solbipos.utils.DateUtil.*;
+import static kr.co.solbipos.utils.HttpUtils.*;
 import static kr.co.solbipos.utils.spring.StringUtil.*;
 import java.util.Date;
 import org.apache.commons.lang3.time.DateUtils;
@@ -13,14 +14,13 @@ import kr.co.solbipos.application.domain.user.PwdChgHist;
 import kr.co.solbipos.application.domain.user.User;
 import kr.co.solbipos.application.enums.user.PwChgResult;
 import kr.co.solbipos.application.enums.user.PwFindResult;
-import kr.co.solbipos.application.persistance.user.UserMapper;
+import kr.co.solbipos.application.persistence.user.UserMapper;
 import kr.co.solbipos.application.service.login.LoginService;
-import kr.co.solbipos.exception.AuthenticationException;
 import kr.co.solbipos.service.session.SessionService;
 import kr.co.solbipos.system.Prop;
 import kr.co.solbipos.utils.DateUtil;
 import kr.co.solbipos.utils.spring.ObjectUtil;
-import kr.co.solbipos.utils.spring.StringUtil;
+import kr.co.solbipos.utils.spring.WebUtil;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -72,7 +72,6 @@ public class UserServiceImpl implements UserService {
             return PwChgResult.UUID_LIMIT_ERROR;
         }
 
-
         // 조회를 위해 세팅
         SessionInfo sessionInfo = new SessionInfo();
         sessionInfo.setUserId(findOtp.getUserId());
@@ -105,8 +104,25 @@ public class UserServiceImpl implements UserService {
             return PwChgResult.LOCK_USER;
         }
 
-        pwdChg.setUserId(si.getUserId());
-        pwdChg.setOrginPwd(si.getUserPwd());
+        /**
+         * 
+         * 패스워드 변경 성공
+         * 
+         */
+        String userId = si.getUserId();
+
+        // 패스워드 세팅 및 변경
+        sessionInfo.setUserId(userId);
+        sessionInfo.setUserPwd(pwdChg.getNewPw());
+        int r1 = updateUserPwd(sessionInfo);
+
+        // 패스워드 변경 내역 저장
+        PwdChgHist pch = new PwdChgHist();
+        pch.setUserId(userId);
+        pch.setPriorPwd(pwdChg.getOrginPwd());
+        pch.setRegDt(currentDateTimeString());
+        pch.setRegIp(getClientIp(WebUtil.getRequest()));
+        int r2 = insertPwdChgHist(pch);
 
         return PwChgResult.CHECK_OK;
     }

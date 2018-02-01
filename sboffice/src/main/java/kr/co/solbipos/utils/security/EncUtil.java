@@ -1,11 +1,18 @@
 package kr.co.solbipos.utils.security;
 
+import static org.springframework.util.StringUtils.*;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import kr.co.solbipos.utils.spring.StringUtil;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class EncUtil {
+    private static String PASSWORD_REGEX =
+            "^(?=.*[a-z]+)(?=.*[A-Z]+)(?=.*\\d+)(?=.*[^\\w\\sㄱ-ㅎㅏ-ㅣ가-힣]).{8,}$";
     public static final String SHA2_ALGORITHM_NAME = "SHA-256";
 
     public static String encrypt(String str) {
@@ -72,5 +79,32 @@ public class EncUtil {
         } catch (Exception e) {
             throw e;
         }
+    }
+
+    /**
+     * <pre>
+     * 패스워드 정책 체크
+     * </pre>
+     * 
+     * @param password
+     * @return
+     */
+    public static boolean passwordPolicyCheck(String password) {
+        if (isEmpty(password)) {
+            log.warn("password-policy check password null. password:{}", password);
+            return false;
+        }
+
+        // 비밀번호 8자리 이상, 비밀번호는 영문 대문자, 영문 소문자, 숫자, 특수기호 모두가 포함되어야 합니다.
+        Pattern pattern = Pattern.compile(PASSWORD_REGEX);
+
+        Matcher m = pattern.matcher(password);
+
+        if (m.find()) {
+            return true;
+        }
+
+        log.info("password policy check false");
+        return false;
     }
 }

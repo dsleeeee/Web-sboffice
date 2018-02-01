@@ -38,13 +38,13 @@ public class TuiEditorSampleController {
 
     @RequestMapping(value = "editorSampleMain.sb")
     public String editorSampleMain(HttpSession session, Model model) {
-        return "tuiEditor/editorSampleMain";
+        return "application/tuiEditor/editorSampleMain";
     }
     
     
     @RequestMapping(value = "editorSample.sb")
     public String eidtorSample(HttpSession session, Model model) {
-        return "tuiEditor/editorSample";
+        return "application/tuiEditor/editorSample";
     }
     
     
@@ -87,7 +87,7 @@ public class TuiEditorSampleController {
       
       model.addAttribute("boardData", tmpBoardT);
       
-      return "tuiEditor/editorSample2";
+      return "application/tuiEditor/editorSample2";
     }
     
     @RequestMapping(value = "editorSample3.sb")
@@ -105,7 +105,7 @@ public class TuiEditorSampleController {
       
       model.addAttribute("boardData", tmpBoardT);
       
-      return "tuiEditor/editorSample3";
+      return "application/tuiEditor/editorSample3";
     }
 }
 

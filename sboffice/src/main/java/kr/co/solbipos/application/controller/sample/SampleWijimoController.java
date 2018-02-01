@@ -53,7 +53,7 @@ public class SampleWijimoController {
 
     @RequestMapping(value = "sampleGridMain.sb")
     public String sampleGridMain(HttpSession session, Model model) {
-        return "sampleWijmo/sampleGridMain";
+        return "application/sampleWijmo/sampleGridMain";
     }
 
     /**
@@ -67,7 +67,7 @@ public class SampleWijimoController {
     public String sample4(HttpSession session, Model model) {
         List<DefaultMap<Object>> temp = sampleService.selectDdSum();
         model.addAttribute("data", temp);
-        return "sampleWijmo/sampleGrid";
+        return "application/sampleWijmo/sampleGrid";
     }
 
     /**
@@ -80,7 +80,7 @@ public class SampleWijimoController {
     @RequestMapping(value = "sampleGrid2.sb")
     public String sample5(Integer rnum, Model model) {
         model.addAttribute("data", getDdlTrdtlT(rnum).toString());
-        return "sampleWijmo/sampleGrid2";
+        return "application/sampleWijmo/sampleGrid2";
     }
 
     /**
@@ -100,7 +100,7 @@ public class SampleWijimoController {
         model.addAttribute("columnList", convertToJson(gsService.getGridColumns(data.get(0))));
         model.addAttribute("data", convertToJson(data));
 
-        return "sampleWijmo/exGridHeader";
+        return "application/sampleWijmo/exGridHeader";
     }
 
     public String getDdlTrdtlT(Integer rnum) {
@@ -130,7 +130,7 @@ public class SampleWijimoController {
      */
     @RequestMapping(value = "exInput.sb")
     public String exInput(Model model) {
-        return "sampleWijmo/exInput";
+        return "application/sampleWijmo/exInput";
     }
 
 
@@ -270,7 +270,7 @@ public class SampleWijimoController {
         model.addAttribute("treeData", test);
         model.addAttribute("task", sw.getTotalTimeSeconds());
         
-        return "sampleWijmo/exTree";
+        return "application/sampleWijmo/exTree";
     }
     
     
@@ -302,7 +302,7 @@ public class SampleWijimoController {
    public String exTreeLoadTest(Model model) {
      List<DefaultMap<Object>> data = sampleService.selectTreeMenu();
      model.addAttribute("menuList", convertToJson(data));
-     return "sampleWijmo/exTreeMenu";
+     return "application/sampleWijmo/exTreeMenu";
    }
 
    /**
@@ -314,7 +314,7 @@ public class SampleWijimoController {
    public String exTreeStore(Model model) {
      List<DefaultMap<Object>> data = sampleService.getgroupGridSample();
      model.addAttribute("shopList", convertToJson(data));
-     return "sampleWijmo/exTreeStore";
+     return "application/sampleWijmo/exTreeStore";
    }
    
    /**
@@ -326,7 +326,7 @@ public class SampleWijimoController {
     public String exTreeStore2(Model model) {
       List<DefaultMap<Object>> data = sampleService.getgroupGridSample();
       model.addAttribute("shopList", convertToJson(data));
-      return "sampleWijmo/exTreeStore2";
+      return "application/sampleWijmo/exTreeStore2";
     }
   
   /**
@@ -349,7 +349,7 @@ public class SampleWijimoController {
      List<DefaultMap<Object>> data2 = sampleService.getDragNDropSample(tmpDragt);
      model.addAttribute("rightData", convertToJson(data2));
      
-     return "sampleWijmo/exDragNDrop";
+     return "application/sampleWijmo/exDragNDrop";
    }
  
    /**
@@ -385,7 +385,7 @@ public class SampleWijimoController {
     */
    @RequestMapping(value="exDragNDrop2.sb")
    public String exDragNDrop2(Model model) {
-     return "sampleWijmo/exDragNDrop2";
+     return "application/sampleWijmo/exDragNDrop2";
    }
  
   /**
@@ -408,7 +408,7 @@ public class SampleWijimoController {
    
      model.addAttribute("list", convertToJson(list));
      model.addAttribute("commList", convertToJson(commList));
-     return "sampleWijmo/exGridInsert";
+     return "application/sampleWijmo/exGridInsert";
    }
  
    /**

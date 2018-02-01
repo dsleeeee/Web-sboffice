@@ -1,4 +1,4 @@
-package kr.co.solbipos.application.persistance.cmm;
+package kr.co.solbipos.application.persistence.cmm;
 
 import java.util.List;
 import kr.co.solbipos.application.domain.cmm.MenuUseHist;
