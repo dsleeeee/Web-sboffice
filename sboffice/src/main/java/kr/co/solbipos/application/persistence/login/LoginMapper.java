@@ -1,4 +1,4 @@
-package kr.co.solbipos.application.persistance.login;
+package kr.co.solbipos.application.persistence.login;
 
 import java.util.List;
 import kr.co.solbipos.application.domain.login.LoginHist;

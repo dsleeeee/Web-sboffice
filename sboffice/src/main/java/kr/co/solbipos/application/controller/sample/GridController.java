@@ -99,7 +99,7 @@ public class GridController {
         
         model.addAttribute("columnLayout", test);
         */
-        return "sampleWijmo/exGridPage";
+        return "application/sampleWijmo/exGridPage";
     }
     
     /**
@@ -196,7 +196,7 @@ public class GridController {
    public String groupGridSample(Model model) {
      List<DefaultMap<Object>> data = sampleService.getgroupGridSample();
      model.addAttribute("shopList", convertToJson(data));
-     return "sampleWijmo/groupGridSample";
+     return "application/sampleWijmo/groupGridSample";
    }
    
    /**
@@ -209,7 +209,7 @@ public class GridController {
   public String groupGridSample2(Model model) {
      List<DefaultMap<Object>> data = sampleService.getgroupGridSample();
      model.addAttribute("shopList", convertToJson(data));
-     return "sampleWijmo/groupGridSample2";
+     return "application/sampleWijmo/groupGridSample2";
    }
 }
 

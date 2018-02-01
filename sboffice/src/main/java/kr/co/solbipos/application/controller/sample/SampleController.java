@@ -58,7 +58,7 @@ public class SampleController {
 
         model.addAttribute("data", temp);
 
-        return "sample/sampleView";
+        return "application/sample/sampleView";
     }
 
     /**
@@ -88,7 +88,7 @@ public class SampleController {
      */
     @RequestMapping(value = "sample2.sb")
     public String sample2(HttpSession session, Model model) {
-        return "sample/sampleView2";
+        return "application/sample/sampleView2";
     }
 
     /**
@@ -107,6 +107,9 @@ public class SampleController {
                 String.format("alert('%s'); location.href=\"sample2.sb\"", msg));
     }
 
+    
+    
+    
     /**
      * 팝업 샘플
      * 
@@ -114,10 +117,20 @@ public class SampleController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "samplepop.sb")
-    public String samplepop(HttpSession session, Model model) {
-        return "sample/pop:samplePop";
+    @RequestMapping(value = "samplepop2.sb")
+    public String samplepop2(HttpSession session, Model model) {
+        return "application/pop:samplePop2";
     }
+    @RequestMapping(value = "samplepop3.sb")
+    public String samplepop3(HttpSession session, Model model) {
+        return "application/sample/pop:samplePop3";
+    }
+    @RequestMapping(value = "samplepop4.sb")
+    public String samplepop4(HttpSession session, Model model) {
+        return "application/sample/sample/pop:samplePop4";
+    }
+    
+    
     
 
     /**
@@ -128,7 +141,7 @@ public class SampleController {
       */
     @RequestMapping(value = "sampleInput.sb")
     public String sampleInput(HttpSession session, Model model) {
-        return "sample/sampleInput";
+        return "application/sample/sampleInput";
     }
     
 
@@ -140,7 +153,7 @@ public class SampleController {
       */
     @RequestMapping(value = "sampleInput2.sb")
     public String sampleInput2(HttpSession session, Model model) {
-        return "sample/sampleInput2";
+        return "application/sample/sampleInput2";
     }
     
 

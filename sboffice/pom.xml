@@ -324,7 +324,7 @@
       <id>local</id>
       <properties>
         <env>local</env>
-      </properties>
+      </properties> 
       
       <activation>
         <activeByDefault>true</activeByDefault>

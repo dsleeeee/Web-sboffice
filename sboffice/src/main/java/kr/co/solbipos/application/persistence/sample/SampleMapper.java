@@ -1,4 +1,4 @@
-package kr.co.solbipos.application.persistance.sample;
+package kr.co.solbipos.application.persistence.sample;
 
 import java.util.HashMap;
 import java.util.List;

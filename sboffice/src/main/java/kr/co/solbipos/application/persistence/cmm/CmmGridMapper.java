@@ -1,4 +1,4 @@
-package kr.co.solbipos.application.persistance.cmm;
+package kr.co.solbipos.application.persistence.cmm;
 
 import kr.co.solbipos.application.domain.cmm.GridDispItem;
 

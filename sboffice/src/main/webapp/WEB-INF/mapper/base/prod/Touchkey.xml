@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.base.persistence.prod.touchkey.TouchkeyMapper">
+
+  <select id="selectTouchkey" parameterType="DefaultMap" resultType="DefaultMap">
+    /* 기초관리 - 상품관리 - 판매터치키등록 - 매장 터치키 정보 조회 */
+    SELECT '' TUKEY_XML
+      FROM TB_MS_TOUCH A,
+           TB_MS_PRODUCT B
+     WHERE A.ORGN_CD = B.ORGN_CD
+    <if test="storeNm != null and storeNm != ''">
+       AND A.ORGN_CD = #{orgn_cd}
+    </if>
+  </select>
+  
+</mapper>
+
+
+
