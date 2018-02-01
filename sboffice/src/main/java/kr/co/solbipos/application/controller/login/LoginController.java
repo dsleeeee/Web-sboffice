@@ -128,7 +128,7 @@ public class LoginController {
             // returnUrl = "user/pwdChg.sb";
             throw new AuthenticationException("비밀번호 변경 및 연장이 필요합니다. 개발중", returnUrl);
         }
-        // 로그인 실패
+        // 로그인 실패 
         else {
             sw.stop();
             log.error("로그인 실패 처리 시간 : {}", sw.getTotalTimeSeconds());
