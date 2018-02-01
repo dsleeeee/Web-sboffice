@@ -83,7 +83,7 @@ public class LoginController {
 
         log.info("login start : {} ", sessionInfo.getUserId());
 
-        if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) { 
             return "login/login:Login";
         }
 
@@ -145,7 +145,7 @@ public class LoginController {
         sw.stop();
         log.error("로그인 성공 처리 시간 : {}", sw.getTotalTimeSeconds());
 
-        return "redirect:/" + returnUrl; 
+        return "redirect:/" + returnUrl;
     }
 
     /**
