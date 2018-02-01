@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import kr.co.solbipos.application.domain.cmm.GridDispItem;
 import kr.co.solbipos.application.domain.login.SessionInfo;
 import kr.co.solbipos.application.domain.sample.SslTrdtlT;
+import kr.co.solbipos.application.domain.sample.SslTrhdrT;
 import kr.co.solbipos.application.service.sample.SampleService;
 import kr.co.solbipos.service.grid.GridSupportService;
 import kr.co.solbipos.service.session.SessionService;
@@ -100,6 +101,18 @@ public class GridController {
         */
         return "application/sampleWijmo/exGridPage";
     }
+    
+    /**
+     * 그리드 페이징 샘플
+     * 
+     * @param rnum
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "exGridPage2.sb", method = RequestMethod.GET)
+    public String exGridPage2(HttpServletRequest request, Model model) {
+        return "sampleWijmo/exGridPage2";
+    }
 
     /**
      * 
@@ -118,6 +131,46 @@ public class GridController {
 
         return returnListJson(Status.OK, data, sslTrdtlT);
     }
+    
+    
+    /**
+     * 
+     * @param sslTrhdrT
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "exGridPageJson2.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public JsonResult exGridPage2(SslTrhdrT sslTrhdrT, Model model) {
+
+        // 데이터 조회
+        List<DefaultMap<Object>> data = sampleService.selectDdlTrhdrTest(sslTrhdrT);
+
+        sslTrhdrT.setTotalCount(data.get(0).getInt("totCnt"));
+
+        return returnListJson(Status.OK, data, sslTrhdrT);
+    }
+    
+
+    
+    /**
+     * 
+     * @param sslTrhdrT
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "exGridPageDtlJson.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public JsonResult exGridPageDtl(SslTrhdrT sslTrhdrT, Model model) {
+
+        // 데이터 조회
+        List<DefaultMap<Object>> data = sampleService.selectDdlTrdtl2Test(sslTrhdrT);
+        
+        sslTrhdrT.setTotalCount(data.get(0).getInt("totCnt"));
+
+        return returnListJson(Status.OK, data, sslTrhdrT);
+    }
+    
     
     @RequestMapping(value = "exGridSave.sb", method = RequestMethod.POST)
     @ResponseBody

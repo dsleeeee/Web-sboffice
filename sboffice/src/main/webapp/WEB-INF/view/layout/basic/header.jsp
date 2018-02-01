@@ -76,6 +76,7 @@
       <li><a href="/sampleGrid.sb">그리드 샘플 이동(json)</a></li>
       <li><a href="/sampleGrid2.sb">그리드 샘플 이동(test)</a></li>
       <li><a href="/exGridPage.sb">그리드 페이징 샘플 이동</a></li>
+      <li><a href="/exGridPage2.sb">그리드 페이징 샘플 이동2</a></li>
       
       <li><a href="/exGridHeader.sb?rnum=1000">그리드 헤더 번역 샘플 이동</a></li>
       <li><a href="/exInput.sb">INPUT 테스트</a></li>
@@ -92,9 +93,7 @@
       <li><a href="/exGridInsert.sb">데이터 Insert 테스트</a></li>
        -->
        
-       
     </ul>
-    
   </ul>
   
   <ul class="menu_depth_2">

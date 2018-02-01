@@ -98,6 +98,9 @@ public class GridSupportServiceImpl implements GridSupportService {
         }
 
         boolean isSelectColumn = !ObjectUtils.isEmpty(columnFilter);
+        
+        log.error("■■■■■■■■ columnFilter : " + columnFilter + " , isSelectColumn : "+ isSelectColumn);
+        
         List<HashMap<String, String>> rList = new ArrayList<HashMap<String, String>>();
 
         rList.add(makeHeader("rnum")); // 로우 no 추가
@@ -132,11 +135,12 @@ public class GridSupportServiceImpl implements GridSupportService {
 
     @Override
     public HashMap<String, String> makeHeader(String keyName) {
-
         String msg = Optional.ofNullable(messageService.get(keyName)) // 키 이름으로 다국어 메세지를 가져옴
                 .filter(x -> x.trim().length() != 0) // 다국어 메세지가 없으면 키 이름을 돌려줌
                 .orElse(keyName);
 
+        log.error("■■■■■■■■■■■■■■■■■■■■■■■■  makeHeader keyName: " + keyName + ", msg : "+ msg);
+        
         HashMap<String, String> rMap = new HashMap<>();
         rMap.put(COLUMN_BINDING, keyName);
         rMap.put(COLUMN_NAME, msg);

@@ -8,6 +8,7 @@ import kr.co.solbipos.application.domain.resource.ResrceInfo;
 import kr.co.solbipos.application.domain.sample.CcdCodemT;
 import kr.co.solbipos.application.domain.sample.ScdShopmT;
 import kr.co.solbipos.application.domain.sample.SslTrdtlT;
+import kr.co.solbipos.application.domain.sample.SslTrhdrT;
 import kr.co.solbipos.application.domain.sample.TbMsStore;
 import kr.co.solbipos.application.domain.sample.TestTable;
 import kr.co.solbipos.application.domain.sample.TmpBoardT;
@@ -118,5 +119,15 @@ public class SampleServiceImpl implements SampleService {
     @Override
     public List<ResrceInfo> selectAuthMainMenu(HashMap<String, String> param) {
         return sampleMapper.selectAuthMainMenu(param);
+    }
+
+    @Override
+    public <E> List<E> selectDdlTrhdrTest(SslTrhdrT sslTrhdrT) {
+        return sampleMapper.selectDdlTrhdrTest(sslTrhdrT);
+    }
+
+    @Override
+    public <E> List<E> selectDdlTrdtl2Test(SslTrhdrT sslTrhdrT) {
+        return sampleMapper.selectDdlTrdtl2Test(sslTrhdrT);
     }
 }
