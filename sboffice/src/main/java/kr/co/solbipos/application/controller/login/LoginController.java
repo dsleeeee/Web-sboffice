@@ -145,7 +145,7 @@ public class LoginController {
         sw.stop();
         log.error("로그인 성공 처리 시간 : {}", sw.getTotalTimeSeconds());
 
-        return "redirect:/" + returnUrl; 
+        return "redirect:/" + returnUrl;
     }
 
     /**
