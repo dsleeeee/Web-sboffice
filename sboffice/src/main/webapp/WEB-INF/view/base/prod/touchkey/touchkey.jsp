@@ -34,14 +34,14 @@ window.urlParams = window.urlParams || {};
 window.MAX_REQUEST_SIZE = window.MAX_REQUEST_SIZE  || 10485760;
 
 window.RESOURCES_PATH = window.RESOURCES_PATH || '/resource/graph/resources';
-window.RESOURCE_BASE = window.RESOURCE_BASE || window.RESOURCES_PATH + '/touchkey';
+window.RESOURCE_BASE = window.RESOURCE_BASE || window.RESOURCES_PATH + '/message';
 window.STYLE_PATH = window.STYLE_PATH || '/resource/graph/styles';
 window.CSS_PATH = window.CSS_PATH || '/resource/graph/styles';
 window.IMAGE_PATH = window.IMAGE_PATH || '/resource/graph/images';
 //window.CONFIG_PATH = window.CONFIG_PATH || '/resource/graph/config';
 
-window.TOUCHKEY_OPEN_URL = window.OPEN_URL || '/base/prod/touchkey/list.sb';
-window.TOUCHKEY_SAVE_URL = window.OPEN_URL || '/base/prod/touchkey/save.sb';
+window.TOUCHKEY_OPEN_URL = window.TOUCHKEY_OPEN_URL || '/base/prod/touchkey/list.sb';
+window.TOUCHKEY_SAVE_URL = window.TOUCHKEY_SAVE_URL || '/base/prod/touchkey/save.sb';
 
 window.mxBasePath = window.mxBasePath || '/resource/vender/mxgraph/src';
 window.mxLanguage = window.mxLanguage || urlParams['lang'];
@@ -100,3 +100,4 @@ window.mxLanguages = window.mxLanguages || ['ko'];
   }
 })();
 </script>
+</body>
