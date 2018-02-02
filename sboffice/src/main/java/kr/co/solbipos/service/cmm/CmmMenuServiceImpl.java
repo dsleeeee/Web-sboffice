@@ -14,7 +14,7 @@ import kr.co.solbipos.application.domain.login.SessionInfo;
 import kr.co.solbipos.application.domain.resource.ResrceInfo;
 import kr.co.solbipos.application.domain.resource.ResrceInfoBase;
 import kr.co.solbipos.application.enums.resrce.ResrceFg;
-import kr.co.solbipos.application.persistence.cmm.CmmMenuMapper;
+import kr.co.solbipos.application.persistance.cmm.CmmMenuMapper;
 import kr.co.solbipos.service.session.SessionService;
 import kr.co.solbipos.system.Prop;
 import lombok.extern.slf4j.Slf4j;
@@ -321,18 +321,18 @@ public class CmmMenuServiceImpl implements CmmMenuService {
                       }
                       mitems.add(m3Header);
                   }
-                  m3Header.put("items", mitems);
+                  m3Header.put("items", mitems); 
                   items.add(m3Header);
               }
             }
             header.put("items", items);
             rList.add(header);
         }
-
+ 
         String menuStr = convertToJson(rList);
         log.error(menuStr);
         
-        return menuStr;
+        return menuStr; 
     }
 }
 
