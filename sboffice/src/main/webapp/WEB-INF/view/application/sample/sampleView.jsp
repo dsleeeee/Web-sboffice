@@ -3,8 +3,9 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-sampleView-View 
+<script src="http://cdn.wijmo.com/5.latest/controls/wijmo.nav.min.js"></script>
 
+sampleView-View 
 
 <br>
 <br>
@@ -53,23 +54,14 @@ ${sessionScope.sessionInfo.fixMenu[0].activation}
 <br>
 <div id="theTree"></div>
 <br>
+<br>
+<br>
 <script>
 
 function popOpen() {
   $.open("samplepop.sb", { method:'get', width:'800px', height:'390px' } );  
 }
 
-function popOpen2() {
-	$.open("samplepop2.sb", { method:'get', width:'800px', height:'390px' } );	
-}
-
-function popOpen3() {
-	$.open("samplepop3.sb", { method:'get', width:'800px', height:'390px' } );	
-}
-
-function popOpen4() {
-	$.open("samplepop4.sb", { method:'get', width:'800px', height:'390px' } );	
-}
 
 function ajaxTest() {
   var paramStr = "";
@@ -91,19 +83,22 @@ onload = function() {
   
   function getDataTest() {
       var test = ${sessionScope.sessionInfo.menuData};
-  return test;
-}
+      var currentMenu = "${sessionScope.sessionInfo.currentMenu.resrceCd}";
+      return test;
+  }
+  
   var tree = new wijmo.nav.TreeView('#theTree', {
-      itemsSource: getDataTest(),
-      displayMemberPath: 'header',
-      childItemsPath: 'items',
-      expandOnClick : true,
-      isContentHtml: true,
-      loadedItems: function(s, e) {
-      console.log("loadedItems...");
-      s.collapseToLevel(10);
-      }
+    itemsSource: getDataTest(),
+    displayMemberPath: 'header',
+    childItemsPath: 'items',
+    expandOnClick : true,
+    isContentHtml: true,
+    loadedItems: function(s, e) {
+    console.log("loadedItems...");
+    s.collapseToLevel(10);
+    }
   });
+}
   
 </script>
 

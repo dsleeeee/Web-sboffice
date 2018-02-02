@@ -38,70 +38,55 @@ exTree
 
 <script>
 onload = function() {
-  
-    function getDataTest() {
-      	
-//       	var test = "[{\"header\":\"샘플\", \"items\":[ { \"header\": \"테스트1\" }, { \"header\": \"테스트2\" } ] }]";
+  function getData() {
+    var allMenu = ${sessionScope.sessionInfo.menuData};
+    //var currentMenu = "${sessionScope.sessionInfo.currentMenu.resrceCd}";
+    var currentMenu = "000087"; // 임시로
+    findCurrItem(allMenu, currentMenu);
+    return allMenu;
+  }
+  function findCurrItem(items, c) {
+    var keyItem = Object.keys(items);
+    console.log("......keyItem : "+ keyItem);
+    keyItem.forEach(function(o){
+      var subMenuItems = Object.keys(items[o]);
+      console.log("........ subMenuItems : "+subMenuItems);
+      subMenuItems.forEach(function(i){
+        var value = items[o].resrceCd;
+        console.log("........ value : "+value);
+      });
+    });
+  }
+   
+   /*
+  function findCurrItem(items, c){
+    for(var o in items) {
       
-      	var test = ${treeData};
+      console.log(">>> "+items[o])
       
-		return test;
+      if(typeof items[o] == "object" ) {
+        findCurrItem(items[o], c)
+      } else {
+        if(items[o] == c) { 
+          console.log('찾음 ========>  '+ items[o]);
+          items[o].selectedMenu = true;
+        }
+      }
     }
-	/* 
-	function getData() {
-		return [
-			{ header: "샘플",
-				items: [
-					{ header: "<a href='/exRedis.sb'>레디스이동</a>" },
-					{ header: "<a href='/sample3.sb'>이동</a>" },
-					{ header: "<a href='/sample2.sb'>샘플2 이동</a>"}
-					{ header: "샘플2",
-					  items:[
-					    { header: "<a href='http://www.daum.net'>샘플1</a>" },
-					    { header: "<a href='http://www.naver.com'>샘플2</a>" }
-					  ]
-					}
-					}
-					}
-					]
-			},
-			{ header: "그리드", 
-				items: [
-					{ header: "<a href='/sampleGrid.sb'>그리드 샘플 이동(json)</a>" },
-					{ header: "<a href='/sampleGrid2.sb'>그리드 샘플 이동(test)</a>" },
-					{ header: "<a href='/exGridPage.sb'>그리드 페이징 샘플 이동</a>" },
-					{ header: "<a href='/exGridHeader.sb?rnum=1000'>그리드 헤더 번역 샘플 이동</a>" },
-					{ header: "<a href='/exInput.sb'>INPUT 테스트</a>" },
-					{ header: "<a href='/exTree.sb'>Tree 테스트</a>" }
-					]
-			}
-			];
-	}
- */
-	
-	var tree = new wijmo.nav.TreeView('#theTree', {
-	  	itemsSource: getDataTest(),	  
-		displayMemberPath: 'header',
-	    childItemsPath: 'items',
-// 	    showCheckboxes : true,
-	    expandOnClick : true,
-	    isContentHtml: true,
-	    loadedItems: function(s, e) {
-			console.log("loadedItems...");
-			s.collapseToLevel(10);
-	    }
-	    /*
-	    selectedItemChanged: function(s, e) {
-	    	var msg = wijmo.format('You selected item <b>{header}</b>.', s.selectedItem);
-	    	document.getElementById('selection').innerHTML = msg;
-	    },
-	    itemClicked: function(s, e) {
-	    	var msg = wijmo.format('You clicked item <b>{header}</b>.', s.selectedItem);
-	    	document.getElementById('click').innerHTML = msg;
-	    } */
-	});
-
-	
+    //console.log("resultItems : "+ JSON.stringify(items));
+  }
+   */
+  var tree = new wijmo.nav.TreeView('#theTree', {
+    itemsSource: getData(),
+    displayMemberPath: 'header',
+    childItemsPath: 'items',
+    expandOnClick : true,
+    isContentHtml: true,
+    loadedItems: function(s, e) {
+      console.log("loadedItems...");
+      s.collapseToLevel(10);
+    }
+  });
 }
 </script>
 

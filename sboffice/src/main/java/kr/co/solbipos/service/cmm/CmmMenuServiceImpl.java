@@ -218,11 +218,11 @@ public class CmmMenuServiceImpl implements CmmMenuService {
      */
 
     @Override
-    public String makeMenu() {
+    public String makeMenu(SessionInfo sessionInfo) {
         
-        List<ResrceInfo> m1 = cmmMenuMapper.selectMenu1();
-        List<ResrceInfo> m2 = cmmMenuMapper.selectMenu2();
-        List<ResrceInfo> m3 = cmmMenuMapper.selectMenu3();
+        List<ResrceInfo> m1 = cmmMenuMapper.selectMenu1(sessionInfo);
+        List<ResrceInfo> m2 = cmmMenuMapper.selectMenu2(sessionInfo);
+        List<ResrceInfo> m3 = cmmMenuMapper.selectMenu3(sessionInfo);
 
         List<HashMap<String, Object>> rList = new ArrayList<HashMap<String, Object>>();
         
@@ -234,10 +234,12 @@ public class CmmMenuServiceImpl implements CmmMenuService {
             HashMap<String, Object> header = new HashMap<>();
             if(isEmpty(r1.getUrl())) {
                 header.put("header", r1.getResrceNm());
+                header.put("resrceCd", r1.getResrceCd());
             }
             else {
                 String url = "<a href='" + r1.getUrl() + "'>" + r1.getResrceNm() + "</a>";
                 header.put("header", url);
+                header.put("resrceCd", r1.getResrceCd());
             }
             
             List<HashMap<String, Object>> items = new ArrayList<HashMap<String, Object>>();
@@ -253,10 +255,12 @@ public class CmmMenuServiceImpl implements CmmMenuService {
                 if(r2.getPResrce().equals(m1ResrceCd)) {
                     if(isEmpty(r2.getUrl())) {
                         m2Header.put("header", r2.getResrceNm());
+                        m2Header.put("resrceCd", r2.getResrceCd());
                     }
                     else {
                         String url = "<a href='" + r2.getUrl() + "'>" + r2.getResrceNm() + "</a>";
                         m2Header.put("header", url);
+                        m2Header.put("resrceCd", r2.getResrceCd());
                     }
                     
                     List<HashMap<String, Object>> m2items = new ArrayList<HashMap<String, Object>>();
@@ -268,13 +272,15 @@ public class CmmMenuServiceImpl implements CmmMenuService {
                             
                             if(isEmpty(r3.getUrl())) {
                                 m3Header.put("header", r3.getResrceNm());
+                                m3Header.put("resrceCd", r3.getResrceCd());
                             }
                             else {
                                 String url = "<a href='" + r3.getUrl() + "'>" + r3.getResrceNm() + "</a>";
                                 m3Header.put("header", url);
+                                m3Header.put("resrceCd", r3.getResrceCd());
                             }
                             m2items.add(m3Header);
-                        }
+                        } 
                     }
                     m2Header.put("items", m2items);
                     items.add(m2Header);
@@ -293,10 +299,12 @@ public class CmmMenuServiceImpl implements CmmMenuService {
                   
                   if(isEmpty(r3.getUrl())) {
                       m3Header.put("header", r3.getResrceNm());
+                      m3Header.put("resrceCd", r3.getResrceCd());
                   }
                   else {
                       String url = "<a href='" + r3.getUrl() + "'>" + r3.getResrceNm() + "</a>";
                       m3Header.put("header", url);
+                      m3Header.put("resrceCd", r3.getResrceCd());
                   }
                   List<HashMap<String, Object>> mitems = new ArrayList<HashMap<String, Object>>();
                   
@@ -304,10 +312,12 @@ public class CmmMenuServiceImpl implements CmmMenuService {
                       
                       if(isEmpty(r3.getUrl())) {
                           m3Header.put("header", r3.getResrceNm());
+                          m3Header.put("resrceCd", r3.getResrceCd());
                       }
                       else {
                           String url = "<a href='" + r3.getUrl() + "'>" + r3.getResrceNm() + "</a>";
                           m3Header.put("header", url);
+                          m3Header.put("resrceCd", r3.getResrceCd());
                       }
                       mitems.add(m3Header);
                   }
