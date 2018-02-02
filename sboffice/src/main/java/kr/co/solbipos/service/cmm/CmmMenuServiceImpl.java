@@ -321,7 +321,7 @@ public class CmmMenuServiceImpl implements CmmMenuService {
                       }
                       mitems.add(m3Header);
                   }
-                  m3Header.put("items", mitems);
+                  m3Header.put("items", mitems); 
                   items.add(m3Header);
               }
             }
