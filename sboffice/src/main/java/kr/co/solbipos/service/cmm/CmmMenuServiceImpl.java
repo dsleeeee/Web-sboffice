@@ -328,7 +328,7 @@ public class CmmMenuServiceImpl implements CmmMenuService {
             header.put("items", items);
             rList.add(header);
         }
-
+ 
         String menuStr = convertToJson(rList);
         log.error(menuStr);
         
