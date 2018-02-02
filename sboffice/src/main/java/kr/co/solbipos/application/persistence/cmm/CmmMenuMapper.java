@@ -36,14 +36,14 @@ public interface CmmMenuMapper {
       * @return
       */
     List<ResrceInfoBase> selectFixingMenu(SessionInfo sessionInfo);
-    
+
     /**
      * 메뉴 조회
      * 
      * @return ResrceInfo
      */
-    List<ResrceInfo> selectMenu1();
-    List<ResrceInfo> selectMenu2();
-    List<ResrceInfo> selectMenu3();
+    List<ResrceInfo> selectMenu1(SessionInfo sessionInfo);
+    List<ResrceInfo> selectMenu2(SessionInfo sessionInfo);
+    List<ResrceInfo> selectMenu3(SessionInfo sessionInfo);
     
 }
