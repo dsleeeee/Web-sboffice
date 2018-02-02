@@ -332,7 +332,7 @@ public class CmmMenuServiceImpl implements CmmMenuService {
         String menuStr = convertToJson(rList);
         log.error(menuStr);
         
-        return menuStr;
+        return menuStr; 
     }
 }
 
