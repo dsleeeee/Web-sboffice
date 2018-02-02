@@ -106,7 +106,7 @@ public interface CmmMenuService {
      * 메인 메뉴 관련
      * 
      */
-    String makeMenu(SessionInfo sessionInfo);
+    String makeMenu(SessionInfo sessionInfo); 
 }
 
 

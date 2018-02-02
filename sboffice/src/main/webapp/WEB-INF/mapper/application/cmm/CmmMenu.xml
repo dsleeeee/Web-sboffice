@@ -150,7 +150,7 @@
      AND A.DISP_LEVEL = '2'
      AND RESRCE_FG = 'M' 
      AND USE_YN = 'Y'
-   ORDER BY DISP_LEVEL ASC, DISP_IDX ASC
+   ORDER BY DISP_LEVEL ASC, DISP_IDX ASC 
   ]]>
   </select>
   

@@ -280,7 +280,7 @@ public class CmmMenuServiceImpl implements CmmMenuService {
                                 m3Header.put("resrceCd", r3.getResrceCd());
                             }
                             m2items.add(m3Header);
-                        }
+                        } 
                     }
                     m2Header.put("items", m2items);
                     items.add(m2Header);

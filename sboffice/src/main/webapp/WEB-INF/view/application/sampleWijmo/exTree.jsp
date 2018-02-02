@@ -67,7 +67,7 @@ onload = function() {
       if(typeof items[o] == "object" ) {
         findCurrItem(items[o], c)
       } else {
-        if(items[o] == c) {
+        if(items[o] == c) { 
           console.log('찾음 ========>  '+ items[o]);
           items[o].selectedMenu = true;
         }
