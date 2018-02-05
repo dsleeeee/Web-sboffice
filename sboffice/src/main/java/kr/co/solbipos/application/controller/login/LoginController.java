@@ -35,7 +35,7 @@ public class LoginController {
     @Autowired
     LoginService loginService;
 
-    @Autowired
+    @Autowired 
     SessionService sessionService;
 
     @Autowired
