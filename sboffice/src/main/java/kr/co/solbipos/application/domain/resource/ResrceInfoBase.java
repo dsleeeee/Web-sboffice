@@ -1,12 +1,12 @@
 package kr.co.solbipos.application.domain.resource;
 
-import kr.co.solbipos.application.domain.BaseDomain;
+import kr.co.solbipos.application.domain.cmm.Cmm;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class ResrceInfoBase extends BaseDomain {
+public class ResrceInfoBase extends Cmm {
 
     private static final long serialVersionUID = 1L;
     

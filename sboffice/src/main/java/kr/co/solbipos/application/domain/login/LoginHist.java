@@ -1,6 +1,6 @@
 package kr.co.solbipos.application.domain.login;
 
-import kr.co.solbipos.application.domain.BaseDomain;
+import kr.co.solbipos.application.domain.cmm.Cmm;
 import kr.co.solbipos.application.enums.login.LoginOrigin;
 import kr.co.solbipos.application.enums.login.LoginResult;
 import lombok.Data;
@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class LoginHist extends BaseDomain {
+public class LoginHist extends Cmm {
     
     private static final long serialVersionUID = 1L;
 

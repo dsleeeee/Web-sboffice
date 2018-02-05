@@ -1,12 +1,12 @@
 package kr.co.solbipos.application.domain.user;
 
-import kr.co.solbipos.application.domain.BaseDomain;
+import kr.co.solbipos.application.domain.cmm.Cmm;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class OtpAuth extends BaseDomain {
+public class OtpAuth extends Cmm {
 
     private static final long serialVersionUID = 1L;
 

@@ -2,7 +2,7 @@ package kr.co.solbipos.application.domain.user;
 
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
-import kr.co.solbipos.application.domain.BaseDomain;
+import kr.co.solbipos.application.domain.cmm.Cmm;
 import kr.co.solbipos.application.validate.user.AuthNumber;
 import kr.co.solbipos.application.validate.user.IdFind;
 import kr.co.solbipos.application.validate.user.PwFind;
@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class User extends BaseDomain {
+public class User extends Cmm {
 
     private static final long serialVersionUID = 1L;
 

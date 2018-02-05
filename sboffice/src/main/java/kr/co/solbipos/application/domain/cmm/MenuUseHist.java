@@ -1,12 +1,11 @@
 package kr.co.solbipos.application.domain.cmm;
 
-import kr.co.solbipos.application.domain.BaseDomain;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class MenuUseHist extends BaseDomain {
+public class MenuUseHist extends Cmm {
 
     private static final long serialVersionUID = 1L;
     

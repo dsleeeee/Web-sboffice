@@ -3,7 +3,7 @@ package kr.co.solbipos.application.domain.login;
 import java.util.List;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
-import kr.co.solbipos.application.domain.BaseDomain;
+import kr.co.solbipos.application.domain.cmm.Cmm;
 import kr.co.solbipos.application.domain.resource.ResrceInfo;
 import kr.co.solbipos.application.domain.resource.ResrceInfoBase;
 import kr.co.solbipos.application.enums.login.LoginResult;
@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class SessionInfo extends BaseDomain {
+public class SessionInfo extends Cmm {
     private static final long serialVersionUID = 1L;
 
     /** sessionId */

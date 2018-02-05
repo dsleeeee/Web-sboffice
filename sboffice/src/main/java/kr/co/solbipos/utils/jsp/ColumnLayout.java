@@ -50,8 +50,6 @@ public class ColumnLayout {
         GridDispItem result = gsService.selectGridItem(gridDispItem);
         
         // 저장된 레이아웃이 없으면 기본 레이아웃 조회
-        
-        
         return Optional.ofNullable(result)
                 .map(GridDispItem::getColumnItem)
                 .orElse("");

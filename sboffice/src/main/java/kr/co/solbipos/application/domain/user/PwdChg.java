@@ -2,14 +2,14 @@ package kr.co.solbipos.application.domain.user;
 
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
-import kr.co.solbipos.application.domain.BaseDomain;
+import kr.co.solbipos.application.domain.cmm.Cmm;
 import kr.co.solbipos.application.validate.user.PwChange;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class PwdChg extends BaseDomain {
+public class PwdChg extends Cmm {
 
     private static final long serialVersionUID = 1L;
 

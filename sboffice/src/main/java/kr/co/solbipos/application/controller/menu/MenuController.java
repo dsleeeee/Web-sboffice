@@ -16,21 +16,29 @@ import kr.co.solbipos.utils.grid.ReturnUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * 화면 상단에 고정 메뉴 및 히스토리 메뉴 관리 관련 컨트롤러
  * 
  * @author 정용길
  */
-
 @Slf4j
 @Controller
 @RequestMapping(value = "/menu")
 public class MenuController {
- 
+
     @Autowired
     SessionService sessionService;
 
-    @Autowired 
+    @Autowired
     CmmMenuService cmmMenuService;
 
+    /**
+     * 히스토리 메뉴 삭제
+     * 
+     * @param menuId
+     * @param request
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "/delHistMenu.sb", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult delHistMenu(String menuId, HttpServletRequest request, Model model) {
@@ -39,6 +47,14 @@ public class MenuController {
         return ReturnUtil.returnJson(Status.OK);
     }
 
+    /**
+     * 고정 메뉴 삭제
+     * 
+     * @param menuId
+     * @param request
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "/delFixMenu.sb", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult delFixMenu(String menuId, HttpServletRequest request, Model model) {
