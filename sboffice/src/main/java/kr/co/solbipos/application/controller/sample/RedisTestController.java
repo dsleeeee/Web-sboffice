@@ -13,7 +13,6 @@ import kr.co.solbipos.application.domain.login.SessionInfo;
 import kr.co.solbipos.service.session.SessionService;
 import kr.co.solbipos.structure.JsonResult;
 import kr.co.solbipos.structure.Result.Status;
-import kr.co.solbipos.utils.grid.ReturnUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -23,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
 public class RedisTestController {
- 
+
     @Autowired 
     SessionService sessionService;
 
