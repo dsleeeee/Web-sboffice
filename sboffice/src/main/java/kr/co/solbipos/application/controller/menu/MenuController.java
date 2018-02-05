@@ -28,7 +28,7 @@ public class MenuController {
     @Autowired
     SessionService sessionService;
 
-    @Autowired
+    @Autowired 
     CmmMenuService cmmMenuService;
 
     @RequestMapping(value = "/delHistMenu.sb", method = RequestMethod.POST)
