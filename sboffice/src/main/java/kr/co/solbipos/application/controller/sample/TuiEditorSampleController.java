@@ -1,6 +1,5 @@
 package kr.co.solbipos.application.controller.sample;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,15 +8,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonArrayFormatVisitor;
-import ch.qos.logback.classic.Logger;
 import kr.co.solbipos.application.domain.sample.TmpBoardT;
 import kr.co.solbipos.application.service.sample.SampleService;
 import kr.co.solbipos.service.message.MessageService;
 import kr.co.solbipos.structure.JsonResult;
 import kr.co.solbipos.structure.Result;
 import kr.co.solbipos.structure.Result.Status;
-import kr.co.solbipos.utils.spring.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
