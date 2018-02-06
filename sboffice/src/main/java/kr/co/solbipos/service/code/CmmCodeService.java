@@ -1,5 +1,6 @@
 package kr.co.solbipos.service.code;
 
+import java.util.List;
 import kr.co.solbipos.application.domain.sample.CommonCode;
 
 /**
@@ -42,4 +43,12 @@ public interface CmmCodeService {
      * @return true : 해당 코드 있음, false : 해당 코드 없음
      */
     boolean hasCode(String comCdFg);
+    
+    /**
+      * 공통 코드 조회
+      * 
+      * @param comCdFg
+      * @return
+      */
+    <E> List<E> selectCmmCodeList(String nmcodeGrpCd);
 }

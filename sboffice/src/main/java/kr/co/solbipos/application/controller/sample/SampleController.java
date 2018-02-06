@@ -222,7 +222,7 @@ public class SampleController {
      */
     @RequestMapping(value = "exGridPage2.sb", method = RequestMethod.GET)
     public String exGridPage2(HttpServletRequest request, Model model) {
-        return "sampleWijmo/exGridPage2";
+        return "application/sampleWijmo/exGridPage2";
     }
 
     /**

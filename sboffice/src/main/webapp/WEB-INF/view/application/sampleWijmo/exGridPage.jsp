@@ -143,7 +143,7 @@ function rowClick(row, col) {
 
 /***** combo start *****/
 // 공통코드
-var cdata = ${ccu.getCommCode("004")};
+var cdata = ${ccu.getCommCode("061")};
 var comboBox = wcombo.genCommonBox("#theComboBox", cdata);
 comboBox.selectedIndexChanged.addHandler(function(s, e){
   console.log(s["selectedItem"]["name"] + s["selectedItem"]["value"]);

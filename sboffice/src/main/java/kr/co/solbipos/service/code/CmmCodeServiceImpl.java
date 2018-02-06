@@ -1,8 +1,10 @@
 package kr.co.solbipos.service.code;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import kr.co.solbipos.application.domain.sample.CommonCode;
+import kr.co.solbipos.application.persistence.cmm.CmmCodeMapper;
 import kr.co.solbipos.service.redis.RedisConnService;
 import kr.co.solbipos.system.Prop;
 import kr.co.solbipos.system.RedisCustomTemplate;
@@ -18,6 +20,9 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class CmmCodeServiceImpl implements CmmCodeService {
 
+    @Autowired
+    CmmCodeMapper cmmCodeMapper;
+    
     @Autowired
     Prop prop;
 
@@ -89,6 +94,12 @@ public class CmmCodeServiceImpl implements CmmCodeService {
         } else {
             return false;
         }
+    }
+
+    
+    @Override
+    public <E> List<E> selectCmmCodeList(String nmcodeGrpCd) {
+        return cmmCodeMapper.selectCmmCodeList(nmcodeGrpCd);
     }
 }
 
