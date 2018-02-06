@@ -9,6 +9,12 @@ import kr.co.solbipos.application.validate.user.PwFind;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * 유저 정보 조회
+ * table : TB_MS_EMPLOYEE
+ * 
+ * @author 정용길
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class User extends Cmm {

@@ -4,6 +4,13 @@ import kr.co.solbipos.application.domain.cmm.Cmm;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * 리소스 도메인<br>
+ * {@link kr.co.solbipos.application.domain.resource.ResrceInfo}<br>
+ * 의 경량화 버전
+ * 
+ * @author 정용길
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class ResrceInfoBase extends Cmm {

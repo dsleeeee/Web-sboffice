@@ -4,6 +4,12 @@ import kr.co.solbipos.application.domain.cmm.Cmm;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * 패스워드 변경 내역 저장
+ * table : TB_WB_PWD_CHG_HIST
+ * 
+ * @author 정용길
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class PwdChgHist extends Cmm {

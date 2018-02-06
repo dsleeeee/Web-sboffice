@@ -1,6 +1,7 @@
 package kr.co.solbipos.utils.jsp;
 
 import static kr.co.solbipos.utils.spring.StringUtil.*;
+import static org.springframework.util.StringUtils.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import kr.co.solbipos.application.domain.sample.CommonCode;
-import kr.co.solbipos.application.service.sample.SampleService;
 import kr.co.solbipos.service.code.CmmCodeService;
 import kr.co.solbipos.structure.DefaultMap;
 import kr.co.solbipos.system.Prop;

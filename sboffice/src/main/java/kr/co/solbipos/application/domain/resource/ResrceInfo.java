@@ -4,6 +4,12 @@ import kr.co.solbipos.application.domain.cmm.Cmm;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * 리소스<br>
+ * table : TB_WB_RESRCE_INFO
+ * 
+ * @author 정용길
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class ResrceInfo extends Cmm {

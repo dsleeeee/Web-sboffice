@@ -28,20 +28,17 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
     CmmMenuService cmmMenuService;
-    
+
     @Autowired
     MessageService messageService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
             Object handler) throws Exception {
-        
+
         String requestURL = request.getRequestURI().toString();
-        log.info(
-                        "url : {}, accept : {}, ",
-                        requestURL ,request.getHeader("accept")
-                );
-        
+        log.info("url : {}, accept : {}, ", requestURL, request.getHeader("accept"));
+
         // 세션 없음
         if (!sessionService.isValidSession(request)) {
             log.info("session null...");
@@ -62,9 +59,9 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                             + "not auth : id : {},  url : {}, accept : {}",
                     sessionInfo.getUserId(), requestURL, request.getHeader("accept")
                             + "\n■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
-            
+
             String exceptionMsg = messageService.get("error.access.denied");
-            
+
             // 권한 없음 처리
             throw new AuthenticationException(exceptionMsg, "/error/403.sb");
         }
@@ -75,7 +72,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
         return true;
     }
-    
+
     /**
      * 유효 URL 체크!!
      * 
@@ -99,7 +96,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                 if (authUrl.equals(url)) {
                     // 메뉴 일때만 사용 등록과 메뉴 히스토리에 추가함
                     if (resrceInfo.getResrceFg().equals("W001")) {
-                        // 권한이 맞는 메뉴 사용 등록
+                        // 메뉴 사용 등록
                         cmmMenuService.insertMenuUseHist(resrceInfo, sessionInfo);
                         // 세션에 사용 메뉴 넣기
                         cmmMenuService.addHistMenu(resrceInfo, sessionInfo);

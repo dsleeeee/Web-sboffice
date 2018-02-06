@@ -7,6 +7,11 @@ import kr.co.solbipos.application.validate.user.PwChange;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * 패스워드 변경
+ * 
+ * @author 정용길
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class PwdChg extends Cmm {

@@ -6,10 +6,16 @@ import kr.co.solbipos.application.enums.login.LoginResult;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * 로그인 사용 기록 저장<br>
+ * table : TB_WB_LOGIN_HIST
+ * 
+ * @author 정용길
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class LoginHist extends Cmm {
-    
+
     private static final long serialVersionUID = 1L;
 
     /** 순서 */
@@ -35,6 +41,4 @@ public class LoginHist extends Cmm {
 
     /** 로그인 일시 */
     private String loginDt;
-
-
 }

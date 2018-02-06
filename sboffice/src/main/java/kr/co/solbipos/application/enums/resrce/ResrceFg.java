@@ -3,6 +3,7 @@ package kr.co.solbipos.application.enums.resrce;
 import kr.co.solbipos.enums.EnumValue;
 
 /**
+ * 리소스 구분<br>
  * TB_WB_RESRCE_INFO > ResrceFg
  * 
  * @author 정용길
@@ -10,8 +11,10 @@ import kr.co.solbipos.enums.EnumValue;
  */
 public enum ResrceFg implements EnumValue<String> {
     
-    MENU("W001")      /** 리소스 : 메뉴 */
-    , FUNC("W002"); /** 리소스 : 기능 */     
+    /** 리소스 : 메뉴 */
+    MENU("W001")
+    /** 리소스 : 기능 */
+    , FUNC("W002");     
     
     private final String value;
     
@@ -23,5 +26,4 @@ public enum ResrceFg implements EnumValue<String> {
     public String getValue() {
         return value;
     }
-    
 }

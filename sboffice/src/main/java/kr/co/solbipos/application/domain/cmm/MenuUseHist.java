@@ -3,6 +3,12 @@ package kr.co.solbipos.application.domain.cmm;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * 메뉴 사용 기록 저장<br>
+ * table : TB_WB_MENU_USE_HIST
+ * 
+ * @author 정용길
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class MenuUseHist extends Cmm {

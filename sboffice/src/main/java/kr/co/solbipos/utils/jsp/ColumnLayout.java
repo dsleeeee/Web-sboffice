@@ -28,16 +28,17 @@ public class ColumnLayout {
     SessionService sessionService;
 
     /**
-      * 그리드의 컬럼 레이아웃을 가져온다.
-      * 
-      * @param gridIdx
-      * @return
-      */
+     * 그리드의 컬럼 레이아웃을 가져온다.
+     * 
+     * @param gridIdx
+     * @return
+     */
     public String getColumnLayout(Long gridIdx) {
 
         HttpServletRequest request =
                 ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
                         .getRequest();
+        // 유져의 세션 정보를 가져옴
         SessionInfo sessionInfo = sessionService.getSessionInfo(request);
 
         GridDispItem gridDispItem = new GridDispItem();
@@ -48,11 +49,9 @@ public class ColumnLayout {
 
         // 저장한 그리드 레이아웃을 조회한다.
         GridDispItem result = gsService.selectGridItem(gridDispItem);
-        
+
         // 저장된 레이아웃이 없으면 기본 레이아웃 조회
-        return Optional.ofNullable(result)
-                .map(GridDispItem::getColumnItem)
-                .orElse("");
+        return Optional.ofNullable(result).map(GridDispItem::getColumnItem).orElse("");
     }
 
 

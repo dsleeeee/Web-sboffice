@@ -1,9 +1,7 @@
 package kr.co.solbipos.service.cmm;
 
 import static kr.co.solbipos.utils.DateUtil.*;
-import static kr.co.solbipos.utils.spring.StringUtil.convertToJson;
-import static org.springframework.util.ObjectUtils.*;
-import static org.springframework.util.StringUtils.isEmpty;
+import static kr.co.solbipos.utils.spring.StringUtil.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +11,6 @@ import kr.co.solbipos.application.domain.cmm.MenuUseHist;
 import kr.co.solbipos.application.domain.login.SessionInfo;
 import kr.co.solbipos.application.domain.resource.ResrceInfo;
 import kr.co.solbipos.application.domain.resource.ResrceInfoBase;
-import kr.co.solbipos.application.enums.resrce.ResrceFg;
 import kr.co.solbipos.application.persistence.cmm.CmmMenuMapper;
 import kr.co.solbipos.service.session.SessionService;
 import kr.co.solbipos.system.Prop;
@@ -75,6 +72,7 @@ public class CmmMenuServiceImpl implements CmmMenuService {
 
     @Override
     public void addHistMenu(ResrceInfo resrceInfo, SessionInfo sessionInfo) {
+        // 추가 할 리소스 생성 및 세팅
         ResrceInfoBase resrceInfoBase = new ResrceInfoBase();
         resrceInfoBase.setResrceCd(resrceInfo.getResrceCd());
         resrceInfoBase.setPResrce(resrceInfo.getPResrce());
@@ -219,145 +217,119 @@ public class CmmMenuServiceImpl implements CmmMenuService {
 
     @Override
     public String makeMenu(SessionInfo sessionInfo) {
-        
+
         List<ResrceInfo> m1 = cmmMenuMapper.selectMenu1(sessionInfo);
         List<ResrceInfo> m2 = cmmMenuMapper.selectMenu2(sessionInfo);
         List<ResrceInfo> m3 = cmmMenuMapper.selectMenu3(sessionInfo);
 
         List<HashMap<String, Object>> rList = new ArrayList<HashMap<String, Object>>();
-        
-        for(int i=0; i < m1.size(); i++) {
-            
+
+        for (int i = 0; i < m1.size(); i++) {
+
             ResrceInfo r1 = m1.get(i);
             String m1ResrceCd = r1.getResrceCd();
-            
+
             HashMap<String, Object> header = new HashMap<>();
-            if(isEmpty(r1.getUrl())) {
+            if (isEmpty(r1.getUrl())) {
                 header.put("header", r1.getResrceNm());
                 header.put("resrceCd", r1.getResrceCd());
-            }
-            else {
+            } else {
                 String url = "<a href='" + r1.getUrl() + "'>" + r1.getResrceNm() + "</a>";
                 header.put("header", url);
                 header.put("resrceCd", r1.getResrceCd());
             }
-            
+
             List<HashMap<String, Object>> items = new ArrayList<HashMap<String, Object>>();
-            
+
             for (int j = 0; j < m2.size(); j++) {
-                
+
                 ResrceInfo r2 = m2.get(j);
                 String m2ResrceCd = r2.getResrceCd();
-                
+
                 HashMap<String, Object> m2Header = new HashMap<>();
-                
+
                 // 상위 메뉴를 찾음
-                if(r2.getPResrce().equals(m1ResrceCd)) {
-                    if(isEmpty(r2.getUrl())) {
+                if (r2.getPResrce().equals(m1ResrceCd)) {
+                    if (isEmpty(r2.getUrl())) {
                         m2Header.put("header", r2.getResrceNm());
                         m2Header.put("resrceCd", r2.getResrceCd());
-                    }
-                    else {
+                    } else {
                         String url = "<a href='" + r2.getUrl() + "'>" + r2.getResrceNm() + "</a>";
                         m2Header.put("header", url);
                         m2Header.put("resrceCd", r2.getResrceCd());
                     }
-                    
-                    List<HashMap<String, Object>> m2items = new ArrayList<HashMap<String, Object>>();
+
+                    List<HashMap<String, Object>> m2items =
+                            new ArrayList<HashMap<String, Object>>();
                     for (int k = 0; k < m3.size(); k++) {
                         ResrceInfo r3 = m3.get(k);
-                        
-                        if(r3.getPResrce().equals(m2ResrceCd)) {
+
+                        if (r3.getPResrce().equals(m2ResrceCd)) {
                             HashMap<String, Object> m3Header = new HashMap<>();
-                            
-                            if(isEmpty(r3.getUrl())) {
+
+                            if (isEmpty(r3.getUrl())) {
                                 m3Header.put("header", r3.getResrceNm());
                                 m3Header.put("resrceCd", r3.getResrceCd());
-                            }
-                            else {
-                                String url = "<a href='" + r3.getUrl() + "'>" + r3.getResrceNm() + "</a>";
+                            } else {
+                                String url = "<a href='" + r3.getUrl() + "'>" + r3.getResrceNm()
+                                        + "</a>";
                                 m3Header.put("header", url);
                                 m3Header.put("resrceCd", r3.getResrceCd());
                             }
                             m2items.add(m3Header);
-                        } 
+                        }
                     }
                     m2Header.put("items", m2items);
                     items.add(m2Header);
                 }
             }
-            
+
             // 마지막레벨이 2레벨인 경우
             for (int m = 0; m < m3.size(); m++) {
-              
-              ResrceInfo r3 = m3.get(m);
-              String m3ResrceCd = r3.getResrceCd();
-              
-              HashMap<String, Object> m3Header = new HashMap<>();
-              
-              if(r3.getPResrce().equals(m1ResrceCd)) {
-                  
-                  if(isEmpty(r3.getUrl())) {
-                      m3Header.put("header", r3.getResrceNm());
-                      m3Header.put("resrceCd", r3.getResrceCd());
-                  }
-                  else {
-                      String url = "<a href='" + r3.getUrl() + "'>" + r3.getResrceNm() + "</a>";
-                      m3Header.put("header", url);
-                      m3Header.put("resrceCd", r3.getResrceCd());
-                  }
-                  List<HashMap<String, Object>> mitems = new ArrayList<HashMap<String, Object>>();
-                  
-                  if(r3.getPResrce().equals(m3ResrceCd)) {
-                      
-                      if(isEmpty(r3.getUrl())) {
-                          m3Header.put("header", r3.getResrceNm());
-                          m3Header.put("resrceCd", r3.getResrceCd());
-                      }
-                      else {
-                          String url = "<a href='" + r3.getUrl() + "'>" + r3.getResrceNm() + "</a>";
-                          m3Header.put("header", url);
-                          m3Header.put("resrceCd", r3.getResrceCd());
-                      }
-                      mitems.add(m3Header);
-                  }
-                  m3Header.put("items", mitems); 
-                  items.add(m3Header);
-              }
+
+                ResrceInfo r3 = m3.get(m);
+                String m3ResrceCd = r3.getResrceCd();
+
+                HashMap<String, Object> m3Header = new HashMap<>();
+
+                if (r3.getPResrce().equals(m1ResrceCd)) {
+
+                    if (isEmpty(r3.getUrl())) {
+                        m3Header.put("header", r3.getResrceNm());
+                        m3Header.put("resrceCd", r3.getResrceCd());
+                    } else {
+                        String url = "<a href='" + r3.getUrl() + "'>" + r3.getResrceNm() + "</a>";
+                        m3Header.put("header", url);
+                        m3Header.put("resrceCd", r3.getResrceCd());
+                    }
+                    List<HashMap<String, Object>> mitems = new ArrayList<HashMap<String, Object>>();
+
+                    if (r3.getPResrce().equals(m3ResrceCd)) {
+
+                        if (isEmpty(r3.getUrl())) {
+                            m3Header.put("header", r3.getResrceNm());
+                            m3Header.put("resrceCd", r3.getResrceCd());
+                        } else {
+                            String url =
+                                    "<a href='" + r3.getUrl() + "'>" + r3.getResrceNm() + "</a>";
+                            m3Header.put("header", url);
+                            m3Header.put("resrceCd", r3.getResrceCd());
+                        }
+                        mitems.add(m3Header);
+                    }
+                    m3Header.put("items", mitems);
+                    items.add(m3Header);
+                }
             }
             header.put("items", items);
             rList.add(header);
         }
- 
+
         String menuStr = convertToJson(rList);
         log.error(menuStr);
-        
-        return menuStr; 
+
+        return menuStr;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

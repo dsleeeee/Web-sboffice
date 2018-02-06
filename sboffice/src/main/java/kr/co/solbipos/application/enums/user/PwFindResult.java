@@ -3,8 +3,9 @@ package kr.co.solbipos.application.enums.user;
 import kr.co.solbipos.enums.EnumValue;
 
 /**
+ * 패스워드 otp 결과
+ * 
  * @author 정용길
- *
  */
 public enum PwFindResult implements EnumValue<String> {
     

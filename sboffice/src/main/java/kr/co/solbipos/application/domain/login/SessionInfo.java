@@ -11,6 +11,11 @@ import kr.co.solbipos.application.validate.login.Login;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * 레디스 세션에 저장 되는 객체
+ * 
+ * @author 정용길
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class SessionInfo extends Cmm {
@@ -63,7 +68,7 @@ public class SessionInfo extends Cmm {
      * 메뉴 관련 데이터 
      * */
     
-    /** 그리드 메뉴 데이터 */
+    /** 메인 메뉴 데이터 : 위즈모 그리드용 데이터 */
     private String menuData;
     
     /** 현재 선택한 메뉴 정보 */
