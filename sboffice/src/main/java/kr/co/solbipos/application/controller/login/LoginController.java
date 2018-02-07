@@ -32,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping(value = "/auth")
 public class LoginController {
 // jyg 수정
+// 브렌치 3 수정
     
     @Autowired
     LoginService loginService;
