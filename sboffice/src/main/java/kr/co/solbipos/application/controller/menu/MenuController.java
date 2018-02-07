@@ -24,8 +24,6 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequestMapping(value = "/menu")
 public class MenuController {
-// 브렌치 3 수정
-    
     @Autowired
     SessionService sessionService;
 
