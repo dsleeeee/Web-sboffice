@@ -34,7 +34,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
 public class SampleController {
-
+// 브렌치 3 수정
+    
     @Autowired
     Prop prop;
 
