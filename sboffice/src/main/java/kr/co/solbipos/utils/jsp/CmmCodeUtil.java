@@ -1,7 +1,6 @@
 package kr.co.solbipos.utils.jsp;
 
 import static kr.co.solbipos.utils.spring.StringUtil.*;
-import static org.springframework.util.StringUtils.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
