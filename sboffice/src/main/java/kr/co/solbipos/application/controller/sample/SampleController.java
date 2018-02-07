@@ -34,6 +34,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
 public class SampleController {
+    
+    // 주석 2
+    
     @Autowired
     Prop prop;
 
