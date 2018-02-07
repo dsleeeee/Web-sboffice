@@ -22,9 +22,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
 public class RedisTestController {
-    
-    // all 3
-    
     @Autowired 
     SessionService sessionService;
 

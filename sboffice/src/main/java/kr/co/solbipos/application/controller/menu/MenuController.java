@@ -24,9 +24,6 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequestMapping(value = "/menu")
 public class MenuController {
-    
-    // all 2
-    
     @Autowired
     SessionService sessionService;
 
