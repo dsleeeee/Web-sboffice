@@ -31,6 +31,9 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequestMapping(value = "/auth")
 public class LoginController {
+    
+    // 주석 1
+    
     @Autowired
     LoginService loginService;
 
