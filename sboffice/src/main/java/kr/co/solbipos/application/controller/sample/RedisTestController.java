@@ -22,7 +22,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
 public class RedisTestController {
-
+// 브렌치 3 수정
+    
     @Autowired 
     SessionService sessionService;
 
