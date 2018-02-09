@@ -3,8 +3,6 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<script src="http://cdn.wijmo.com/5.latest/controls/wijmo.nav.min.js"></script>
-
 sampleView-View 
 
 <br>

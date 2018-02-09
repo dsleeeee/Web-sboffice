@@ -2,13 +2,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
-<s:eval var="ext" expression="@config['url.ext']" />
-<c:set var="uri" value="${fn:replace(requestScope['javax.servlet.forward.request_uri'], ext,'')}" />
-<c:set var="ssMenuOffice" scope="request" value="${sessionScope[sessionUrlField][uri]}" />
-<c:set var="ssMnuCd" scope="request" value="${ssMenuOffice.mnuCd}" />
-<c:set var="minimalClssNm" scope="request" value="${empty ssMnuCd ? ' minimal' : ''}" />
-<c:set var="firstMenu" value="<%=new java.util.LinkedHashMap<String, String>()%>" />
-<c:set var="icons" value="<%=new java.util.LinkedHashMap<String, String>()%>" />
+<%-- <s:eval var="ext" expression="@config['url.ext']" /> --%>
+<%-- <c:set var="uri" value="${fn:replace(requestScope['javax.servlet.forward.request_uri'], ext,'')}" /> --%>
+<%-- <c:set var="ssMenuOffice" scope="request" value="${sessionScope[sessionUrlField][uri]}" /> --%>
+<%-- <c:set var="ssMnuCd" scope="request" value="${ssMenuOffice.mnuCd}" /> --%>
+<%-- <c:set var="minimalClssNm" scope="request" value="${empty ssMnuCd ? ' minimal' : ''}" /> --%>
+<%-- <c:set var="firstMenu" value="<%=new java.util.LinkedHashMap<String, String>()%>" /> --%>
+<%-- <c:set var="icons" value="<%=new java.util.LinkedHashMap<String, String>()%>" /> --%>
 
 
 <%--Top bar--%>

@@ -3,108 +3,284 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
-<style>
-.activation {
-	font-weight: bold;
-	color: red;
-}
-</style>
-
 <body>
-  <c:choose>
 
-    <c:when test="${isPopPage}">
-      <div class="pop_wrap">
-        <tiles:insertAttribute name="content" />
+<%--   <tiles:insertAttribute name="header" /> --%>
+
+  <div class="wrap type_Blue">
+    
+    <%-- 왼쪽 메뉴 --%>
+    <nav id="_nav" class="menuOpen">
+    
+      <!--로고영역-->
+      <h1><a href="#" class="on"><span><img src="/resource/solbipos/img/main/logo_main.png" alt="" /></span></a></h1><!-- 활성화 : class="on" -->
+      <!--//로고영역-->
+      
+      
+      <!--전체,즐겨찾기-->
+      <div class="menuTab">
+          <p class="all"><a href="#" id="_all" class="on"><span>전체</span></a></p><!-- 활성화 : class="on" -->
+          <p class="favorite"><a href="#" id="_favorite"><span>즐겨찾기</span></a></p>
+          
       </div>
-    </c:when>
-
-    <c:otherwise>
-      <div id="wrapper">
-        <tiles:insertAttribute name="header" />
-        <%--Content page--%>
-        <div class="content_page">
-          <div class="content">
-
-            <c:set var="hist" value="${sessionScope.sessionInfo.histMenu}" />
-            <c:set var="fix" value="${sessionScope.sessionInfo.fixMenu}" />
-            <c:set var="histSize" value="${fn:length(hist)}" />
-
-
-            <c:if test="${view != 'Main'}">
-              <%--Location--%>
-
-              <%-- 고정 메뉴 --%>
-              <div class="location">
-                <i class="fa fa-home i_home_s"></i>
-                <c:forEach var="item" items="${fix}" varStatus="status">
-                  <span class="${status.last ? 'angle last' : 'angle'}" id="${item.resrceCd}">
-                    <a class="${item.activation == true ? 'activation' : ''}" href="${item.url}">${item.resrceNm}</a>&nbsp;
-                    <c:if test="${item.activation == false}">
-                      <a onclick="deleteFixMenu('${item.resrceCd}');">X</a>
-                    </c:if>
-                  </span>
-                </c:forEach>
+      <!--//전체,즐겨찾기-->
+      
+      
+      
+      
+      <div class="menuTree">
+               
+          <!--위즈모 메뉴-->
+          <div>
+              <div id="theTree">
               </div>
-
-              <%-- 히스토리 메뉴 --%>
-              <div class="location" id="histMenuList">
-                <i class="fa fa-home i_home_s"></i>
-                <c:forEach var="item" items="${hist}" varStatus="status">
-                  <span class="${status.last ? 'angle last' : 'angle'}" id="${item.resrceCd}">
-                    <a class="${item.activation == true ? 'activation' : ''}" href="${item.url}">${item.resrceNm}</a>&nbsp;
-                    <c:if test="${item.activation == false}">
-                      <a onclick="deleteHistMenu('${item.resrceCd}');">X</a>
-                    </c:if>
-                  </span>
-                </c:forEach>
-
-              </div>
-
-              <%--//Location--%>
-              <div class="page_title">
-                <%-- addMenuName : 메뉴명에 추가할 내용이 있을경우 사용 --%>
-
-                <h2>${sessionScope.sessionInfo.currentMenu.resrceNm}</h2>
-              </div>
-
-              <div id="loading" style="display: none;">
-                <img alt="loading" style="height: 10%; width: 10%; overflow: visible;" src="/resource/solbipos/img/loading.gif">
-              </div>
-
-              <tiles:insertAttribute name="content" />
-              <tiles:insertAttribute name="footer" />
-            </c:if>
-
           </div>
-
-        </div>
-        <%--Content page--%>
+          <!--//위즈모 메뉴-->
+          
+      </div>    
+      
+    </nav>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <%-- 오른쪽 메인 부분 --%>
+    <div class="contents">
+    
+      <!--사용자정보영역-->   
+      <div class="topBar">
+          <div class="menuControl">
+              <a href="#" id="_arrow" class="arrowOpen"><span></span></a>
+          </div>
+          <div class="userInfo">
+              <a href="#" class="userNotice"><span>2</span></a><!--새로운 공지 있는경우 span추가-->
+              <a href="#" class="userId"><span>kcpmaster</span></a>
+          </div>
       </div>
-    </c:otherwise>
-  </c:choose>
+      <!--//사용자정보영역-->
+    
+      
+      <!--고정메뉴-->
+      <div class="fixedMenu">
+          <!--고정메뉴 없는경우-->
+          <p class="empty" style="display:none;">즐겨찾기에서 고정메뉴를 등록하여 편리하게 사용하세요!</p>
+          <!--//고정메뉴 없는경우-->
+          
+          <!--고정메뉴 있는경우-->
+          <nav>                
+              <ul>
+                  <li><a href="#" class="on">POS 로그인현황</a><a href="#" class="btn_close"></a></li>
+                  <li><a href="#">설치업체관리</a><a href="#" class="btn_close"></a></li>
+                  <li><a href="#">미사용 라이센스 조회</a><a href="#" class="btn_close"></a></li>
+              </ul>
+              <div class="moveBtn">
+                  <a href="#" class="mL" title="왼쪽으로 메뉴 이동"></a>
+                  <a href="#" class="mR" title="오른쪽으로 메뉴 이동"></a>
+              </div>
+          </nav>
+          <!--고정메뉴 있는경우-->    
+      </div>
+      <!--//고정메뉴-->
+    
+    
+    </div>
+  
+  </div>
+  
+<%--     <tiles:insertAttribute name="content" /> --%>
+
 </body>
 
-<script>
-function deleteHistMenu(menuId) {
-  var url = "/menu/delHistMenu.sb";
-  callPostJson(url, menuId);
-}
+<script type="text/javascript">
 
-function deleteFixMenu(menuId) {
-  var url = "/menu/delFixMenu.sb";
-  callPostJson(url, menuId);
-}
+onload = function() {
 
-function callPostJson(url, menuId) {
-  var param = {};
-  param.menuId = menuId;
-  $.postJSON( url, param, function( result ){
-    $("#"+menuId).remove();
-  })
-  .fail(function(){
-    alert("Ajax Fail");
-  });
+	// create the tree
+  var tree = new wijmo.nav.TreeView('#theTree', {
+  	itemsSource: getData(),
+		displayMemberPath: 'header',
+    childItemsPath: 'items',
+    loadedItems: function(s, e) {
+    	s.collapseToLevel(0);
+    }  
+	});
+
+  
+  // get the tree data
+  function getData() { 
+		return [
+    	{ header: '포스관리', items: [
+        { header: 'POS 버전관리', items: [
+				 { header: '버전관리' },
+          { header: '수신현황', newItem: true },
+          { header: '버전제한' }]
+				},
+        { header: '프로그램 메뉴 프로그램 메뉴', items: [
+				 { header: '프로그램 메뉴관리' },
+          { header: '저장메뉴 템플릿', newItem: true },
+          { header: '모바일 메뉴관리' }]
+				},  
+        { header: '본사/매장 마스터', items: [
+				 { header: '본사정보관리' },
+          { header: '본사정보조회', newItem: true },
+          { header: '매장현황' },
+          { header: '패스워드 임의변경 패스워드 임의변경' }]
+				}]
+			},
+      { header: '가맹점관리', items: [
+        { header: 'POS 버전관리', items: [
+				 { header: '버전관리' },
+          { header: '수신현황', newItem: true },
+          { header: '버전제한' }]
+				},
+        { header: '프로그램 메뉴', items: [
+				 { header: '프로그램 메뉴관리' },
+          { header: '저장메뉴 템플릿', newItem: true },
+          { header: '모바일 메뉴관리' }]
+				},  
+        { header: '본사/매장 마스터', items: [
+				 { header: '본사정보관리' },
+          { header: '본사정보조회', newItem: true },
+          { header: '매장현황' },
+          { header: '패스워드 임의변경 패스워드 임의변경' }]
+				}]
+			},
+			{ header: '시스템관리', items: [
+        { header: 'POS 버전관리', items: [
+				 { header: '버전관리' },
+          { header: '수신현황', newItem: true },
+          { header: '버전제한' }]
+				},
+        { header: '프로그램 메뉴', items: [
+				 { header: '프로그램 메뉴관리' },
+          { header: '저장메뉴 템플릿', newItem: true },
+          { header: '모바일 메뉴관리' }]
+				},  
+        { header: '본사/매장 마스터', items: [
+				 { header: '본사정보관리' },
+          { header: '본사정보조회', newItem: true },
+          { header: '매장현황' },
+          { header: '패스워드 임의변경 패스워드 임의변경' }]
+				}]
+			},
+			{ header: '기초관리', items: [
+        { header: 'POS 버전관리', items: [
+				 { header: '버전관리' },
+          { header: '수신현황', newItem: true },
+          { header: '버전제한' }]
+				},
+        { header: '프로그램 메뉴', items: [
+				 { header: '프로그램 메뉴관리' },
+          { header: '저장메뉴 템플릿', newItem: true },
+          { header: '모바일 메뉴관리' }]
+				},  
+        { header: '본사/매장 마스터', items: [
+				 { header: '본사정보관리' },
+          { header: '본사정보조회', newItem: true },
+          { header: '매장현황' },
+          { header: '패스워드 임의변경 패스워드 임의변경' }]
+				}]
+			},
+			{ header: '매출관리', items: [
+        { header: 'POS 버전관리', items: [
+				 { header: '버전관리' },
+          { header: '수신현황', newItem: true },
+          { header: '버전제한' }]
+				},
+        { header: '프로그램 메뉴', items: [
+				 { header: '프로그램 메뉴관리' },
+          { header: '저장메뉴 템플릿', newItem: true },
+          { header: '모바일 메뉴관리' }]
+				},  
+        { header: '본사/매장 마스터', items: [
+				 { header: '본사정보관리' },
+          { header: '본사정보조회', newItem: true },
+          { header: '매장현황' },
+          { header: '패스워드 임의변경 패스워드 임의변경' }]
+				}]
+			},
+			{ header: '회원관리', items: [
+        { header: 'POS 버전관리', items: [
+				 { header: '버전관리' },
+          { header: '수신현황', newItem: true },
+          { header: '버전제한' }]
+				},
+        { header: '프로그램 메뉴', items: [
+				 { header: '프로그램 메뉴관리' },
+          { header: '저장메뉴 템플릿', newItem: true },
+          { header: '모바일 메뉴관리' }]
+				},  
+        { header: '본사/매장 마스터', items: [
+				 { header: '본사정보관리' },
+          { header: '본사정보조회', newItem: true },
+          { header: '매장현황' },
+          { header: '패스워드 임의변경 패스워드 임의변경' }]
+				}]
+			}, 
+			{ header: '수불관리', items: [
+        { header: 'POS 버전관리', items: [
+				 { header: '버전관리' },
+          { header: '수신현황', newItem: true },
+          { header: '버전제한' }]
+				},
+        { header: '프로그램 메뉴', items: [
+				 { header: '프로그램 메뉴관리' },
+          { header: '저장메뉴 템플릿', newItem: true },
+          { header: '모바일 메뉴관리' }]
+				},  
+        { header: '본사/매장 마스터', items: [
+				 { header: '본사정보관리' },
+          { header: '본사정보조회', newItem: true },
+          { header: '매장현황' },
+          { header: '패스워드 임의변경 패스워드 임의변경' }]
+				}]
+			},
+			{ header: '정산관리', items: [
+        { header: 'POS 버전관리', items: [
+				 { header: '버전관리' },
+          { header: '수신현황', newItem: true },
+          { header: '버전제한' }]
+				},
+        { header: '프로그램 메뉴', items: [
+				 { header: '프로그램 메뉴관리' },
+          { header: '저장메뉴 템플릿', newItem: true },
+          { header: '모바일 메뉴관리' }]
+				},  
+        { header: '본사/매장 마스터', items: [
+				 { header: '본사정보관리' },
+          { header: '본사정보조회', newItem: true },
+          { header: '매장현황' },
+          { header: '패스워드 임의변경 패스워드' }]
+				}]
+			},
+			{ header: '부가서비스', items: [
+        { header: 'POS 버전관리', items: [
+				 { header: '버전관리' },
+          { header: '수신현황', newItem: true },
+          { header: '버전제한' }]
+				},
+        { header: '프로그램 메뉴', items: [
+				 { header: '프로그램 메뉴관리' },
+          { header: '저장메뉴 템플릿', newItem: true },
+          { header: '모바일 메뉴관리' }]
+				},  
+        { header: '본사/매장 마스터', items: [
+				 { header: '본사정보관리' },
+          { header: '본사정보조회', newItem: true },
+          { header: '매장현황' },
+          { header: '패스워드 임의변경 패스워드 임의변경 패스워드' }]
+				}]
+			},
+		];
+	}
 }
 </script>
 
