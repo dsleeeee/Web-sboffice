@@ -32,14 +32,12 @@
     <put-attribute name="view" value="layout"/>
     <put-attribute name="resource" value="/WEB-INF/view/layout/resource.jsp"/>
     <put-attribute name="body" value="/WEB-INF/view/layout/basic/body.jsp"/>
-    <put-attribute name="content" value="" />
   </definition>
 
   <definition name="Main" extends="layout">
-    <put-attribute name="view" value="layout"/>
-<!--     <put-attribute name="header" cascade="true" value="/WEB-INF/view/layout/basic/header.jsp"/> -->
+    <put-attribute name="view" value="Main"/>
+    <put-attribute name="menu" cascade="true" value="/WEB-INF/view/layout/basic/menu.jsp"/>
     <put-attribute name="content" cascade="true" value="" />
-<!--     <put-attribute name="footer" cascade="true" value="/WEB-INF/view/layout/basic/footer.jsp" /> -->
   </definition>
   <!-- 레이아웃 -->
   
@@ -63,15 +61,15 @@
   <!-- 팝업 end -->
   
   <!-- 화면 start -->
-  <definition name="*/*" extends="layout">
+  <definition name="*/*" extends="Main">
     <put-attribute name="view" value="{2}"/>
     <put-attribute name="content" value="/WEB-INF/view/{1}/{2}.jsp" />
   </definition>
-  <definition name="*/*/*" extends="layout">
+  <definition name="*/*/*" extends="Main">
     <put-attribute name="view" value="{3}"/>
     <put-attribute name="content" value="/WEB-INF/view/{1}/{2}/{3}.jsp" />
   </definition>
-  <definition name="*/*/*/*" extends="layout">
+  <definition name="*/*/*/*" extends="Main">
     <put-attribute name="view" value="{4}"/>
     <put-attribute name="content" value="/WEB-INF/view/{1}/{2}/{3}/{4}.jsp" />
   </definition>

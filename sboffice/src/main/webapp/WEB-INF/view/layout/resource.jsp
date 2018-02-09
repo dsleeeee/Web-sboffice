@@ -1,7 +1,6 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-
 <link href="/resource/solbipos/css/cmm/style.css" rel="stylesheet" type="text/css" media="all"/>
 <link href="/resource/solbipos/css/cmm/wijmo.css" rel="stylesheet" type="text/css"/>
 
