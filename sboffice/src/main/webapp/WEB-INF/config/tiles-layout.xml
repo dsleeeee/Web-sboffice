@@ -37,6 +37,7 @@
   <definition name="Main" extends="layout">
     <put-attribute name="view" value="Main"/>
     <put-attribute name="menu" cascade="true" value="/WEB-INF/view/layout/basic/menu.jsp"/>
+    <put-attribute name="header" cascade="true" value="/WEB-INF/view/layout/basic/header.jsp"/>
     <put-attribute name="content" cascade="true" value="" />
   </definition>
   <!-- 레이아웃 -->
@@ -63,15 +64,15 @@
   <!-- 화면 start -->
   <definition name="*/*" extends="Main">
     <put-attribute name="view" value="{2}"/>
-    <put-attribute name="content" value="/WEB-INF/view/{1}/{2}.jsp" />
+    <put-attribute name="content" cascade="true" value="/WEB-INF/view/{1}/{2}.jsp" />
   </definition>
   <definition name="*/*/*" extends="Main">
     <put-attribute name="view" value="{3}"/>
-    <put-attribute name="content" value="/WEB-INF/view/{1}/{2}/{3}.jsp" />
+    <put-attribute name="content" cascade="true" value="/WEB-INF/view/{1}/{2}/{3}.jsp" />
   </definition>
   <definition name="*/*/*/*" extends="Main">
     <put-attribute name="view" value="{4}"/>
-    <put-attribute name="content" value="/WEB-INF/view/{1}/{2}/{3}/{4}.jsp" />
+    <put-attribute name="content" cascade="true" value="/WEB-INF/view/{1}/{2}/{3}/{4}.jsp" />
   </definition>
   <!-- 화면 end -->
 </tiles-definitions>

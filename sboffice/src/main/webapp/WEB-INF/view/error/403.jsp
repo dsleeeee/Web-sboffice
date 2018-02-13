@@ -6,9 +6,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimal-ui">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title><s:message code="title"/></title>
-  <link rel="stylesheet" type="text/css" href="/resource/solbipos/css/core.css"/>
-  <link rel="stylesheet" type="text/css" href="/resource/solbipos/css/pages.css"/>
+  <title><s:message code="title.web"/></title>
 </head>
 <body>
   <div class="Error_wrap">

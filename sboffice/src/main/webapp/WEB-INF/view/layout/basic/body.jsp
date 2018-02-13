@@ -5,56 +5,59 @@
 
 <body>
 
-  <div class="wrap type_Blue">
+  <c:set var="userAuthType" value="${sessionScope.sessionInfo.userAuthType}" />
+  
+  <%-- 유져 타입에 따라 css를 변경 메인 화면 색상을 변경해 준다. --%>
+  <c:choose>
+    <c:when test="${userAuthType == 'SYSTEM'}">
+      <c:set var="userCss" value="type_Orange" />
+    </c:when>
+    <c:when test="${userAuthType == 'HEDOFC'}">
+      <c:set var="userCss" value="type_Purple" />
+    </c:when>
+    <c:when test="${userAuthType == 'AGENCY'}">
+      <c:set var="userCss" value="type_Blue" />    
+    </c:when>
+    <c:when test="${userAuthType == 'MRHST'}">
+      <c:set var="userCss" value="type_Green" />
+    </c:when>
+    <c:otherwise>
+      <c:set var="userCss" value="type_Green" />
+    </c:otherwise>
+  </c:choose>
+
+  <div class="wrap ${userCss}">
     
+    <%-- 왼쪽 메뉴 --%>
     <tiles:insertAttribute name="menu" />
     
     <%-- 오른쪽 메인 부분 --%>
     <div class="contents">
-    
-      <!--사용자정보영역-->   
-      <div class="topBar">
-          <div class="menuControl">
-              <a href="#" id="_arrow" class="arrowOpen"><span></span></a>
-          </div>
-          <div class="userInfo">
-              <a href="#" class="userNotice"><span>2</span></a><!--새로운 공지 있는경우 span추가-->
-              <a href="#" class="userId"><span>kcpmaster</span></a>
-          </div>
-      </div>
-      <!--//사용자정보영역-->
-    
       
-      <!--고정메뉴-->
-      <div class="fixedMenu">
-          <!--고정메뉴 없는경우-->
-          <p class="empty" style="display:none;">즐겨찾기에서 고정메뉴를 등록하여 편리하게 사용하세요!</p>
-          <!--//고정메뉴 없는경우-->
-          
-          <!--고정메뉴 있는경우-->
-          <nav>                
-              <ul>
-                  <li><a href="#" class="on">POS 로그인현황</a><a href="#" class="btn_close"></a></li>
-                  <li><a href="#">설치업체관리</a><a href="#" class="btn_close"></a></li>
-                  <li><a href="#">미사용 라이센스 조회</a><a href="#" class="btn_close"></a></li>
-              </ul>
-              <div class="moveBtn">
-                  <a href="#" class="mL" title="왼쪽으로 메뉴 이동"></a>
-                  <a href="#" class="mR" title="오른쪽으로 메뉴 이동"></a>
-              </div>
-          </nav>
-          <!--고정메뉴 있는경우-->    
+      <%-- 헤더 즐겨찾기 부분 --%>
+      <tiles:insertAttribute name="header" />  
+            
+      <%-- 메인 영역 --%>
+      <div>
+      <tiles:insertAttribute name="content" />
       </div>
-      <!--//고정메뉴-->
-    
     
     </div>
-  
+    <%-- 오른쪽 메인 부분 --%>
+    
   </div>
-  
 </body>
 
 <script type="text/javascript">
+$(".menuControl").click(function() {
+  $("#_nav").toggleClass("menuOpen menuClose");
+  $("#_arrow").toggleClass("arrowOpen arrowClose");
+});
+ 
+$(".menuTab").click(function() {
+  $("#_all").toggleClass("on");
+  $("#_favorite").toggleClass("on");
+});
 </script>
 
 

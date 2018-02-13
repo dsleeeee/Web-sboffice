@@ -148,7 +148,7 @@ public class CmmMenuServiceImpl implements CmmMenuService {
         List<ResrceInfoBase> histMenu = sessionInfo.getHistMenu(); // 히스토리 메뉴
         List<ResrceInfoBase> fixMenu = sessionInfo.getFixMenu(); // 고정 메뉴
 
-        if (!isEmpty(fixMenu)) {
+        if (!isEmpty(fixMenu) && fixMenu.size() > 0) {
             for (ResrceInfoBase resrceInfoBase : fixMenu) {
                 if (resrceInfoBase.getResrceCd().equals(resrceCd)) {
                     resrceInfoBase.setActivation(true);
@@ -159,7 +159,7 @@ public class CmmMenuServiceImpl implements CmmMenuService {
             }
         }
 
-        if (!isEmpty(histMenu)) {
+        if (!isEmpty(histMenu) && histMenu.size() > 0) {
             for (ResrceInfoBase resrceInfoBase : histMenu) {
                 if (resrceInfoBase.getResrceCd().equals(resrceCd)) {
                     resrceInfoBase.setActivation(true);

@@ -8,8 +8,8 @@
 
   <!--로고영역-->
   <h1>
-    <a href="#" class="on">
-      <span><img src="/resource/solbipos/img/main/logo_main.png" alt="" /></span>
+    <a href="/" class="on">
+      <span><img src="/resource/solbipos/css/img/logo_main.png" alt="" /></span>
     </a>
   </h1>
   <!-- 활성화 : class="on" -->
@@ -55,13 +55,12 @@
 <a href="/auth/logout.sb">    로그아웃</a>
 </nav>
 
-
 <script>
 onload = function() {
   
   function getData() {
       var menu = ${sessionScope.sessionInfo.menuData};
-      //var currentMenu = "${sessionScope.sessionInfo.currentMenu.resrceCd}";
+      //var currentMenu = "${sessionScope.sessionInfo.currentMenu.resrceCd}"; 
       return menu;
   }
   
@@ -89,13 +88,14 @@ onload = function() {
 //          sel2DepthChild.eq(sel1Depth).(".wj-nodelist > .wj-node").children().eq(sel2Depth).addClass("on");
 //            $("div[wj-part=root] > .wj-nodelist").eq(sel1Depth).eq(sel2Depth).addClass("on");
 //            console.log($("div[wj-part=root] > .wj-nodelist").eq(sel1Depth).eq(sel2Depth))
+/* 
           var nodeLst = $("div[wj-part=root] > .wj-nodelist").eq(sel1Depth);
           console.log('nodeLst : '+ JSON.stringify(nodeLst ));
           var nodeLst2 = nodeLst.children('.wj-node').eq(sel2Depth);
           console.log('nodeLst2 : '+ JSON.stringify(nodeLst2 ));
           $("div[wj-part=root] > .wj-nodelist").eq(sel1Depth).children(".wj-node").eq(sel2Depth).addClass("on")
             
-            
+             */
         }
         
         // 1. 1depth면 이전에 선택시 추가한 on class 삭제
@@ -126,7 +126,6 @@ onload = function() {
     });
   }
 }
-
 
 </script>
 

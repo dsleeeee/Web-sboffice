@@ -127,16 +127,16 @@ body {display:flex;}
 .writeInfo input:focus {border-left-width:50px; border-color:#1e88e5; outline:none; color:#222;}
 .writeInfo input+label {position:absolute; left:0px; width:0px; height:50px; transition:all 0.1s ease-in;}
 .writeInfo input:focus+label {width:50px; transition:all 0.25s ease-out;}
-.writeInfo input.id+label {background:url(../../img/login/ic_id.png) no-repeat 0px center; background-size:22px 50px;}
-.writeInfo input.id:focus+label {background:url(../../img/login/ic_id.png) no-repeat 14px center;}
-.writeInfo input.pw+label {background:url(../../img/login/ic_pw.png) no-repeat 0px center; background-size:13px 50px;}
-.writeInfo input.pw:focus+label {background:url(../../img/login/ic_pw.png) no-repeat 19px center;}
-.writeInfo input.name+label {background:url(../../img/login/ic_name.png) no-repeat 0px center; background-size:23px 50px;}
-.writeInfo input.name:focus+label {background:url(../../img/login/ic_name.png) no-repeat 14px center;}
-.writeInfo input.tel+label {background:url(../../img/login/ic_tel.png) no-repeat 0px center; background-size:20px 50px;}
-.writeInfo input.tel:focus+label {background:url(../../img/login/ic_tel.png) no-repeat 15px center;}
-.writeInfo input.crtNum+label {background:url(../../img/login/ic_crtNum.png) no-repeat 0px center; background-size:20px 50px;}
-.writeInfo input.crtNum:focus+label {background:url(../../img/login/ic_crtNum.png) no-repeat 15px center;}
+.writeInfo input.id+label {background:url(../img/login/ic_id.png) no-repeat 0px center; background-size:22px 50px;}
+.writeInfo input.id:focus+label {background:url(../img/login/ic_id.png) no-repeat 14px center;}
+.writeInfo input.pw+label {background:url(../img/login/ic_pw.png) no-repeat 0px center; background-size:13px 50px;}
+.writeInfo input.pw:focus+label {background:url(../img/login/ic_pw.png) no-repeat 19px center;}
+.writeInfo input.name+label {background:url(../img/login/ic_name.png) no-repeat 0px center; background-size:23px 50px;}
+.writeInfo input.name:focus+label {background:url(../img/login/ic_name.png) no-repeat 14px center;}
+.writeInfo input.tel+label {background:url(../img/login/ic_tel.png) no-repeat 0px center; background-size:20px 50px;}
+.writeInfo input.tel:focus+label {background:url(../img/login/ic_tel.png) no-repeat 15px center;}
+.writeInfo input.crtNum+label {background:url(../img/login/ic_crtNum.png) no-repeat 0px center; background-size:20px 50px;}
+.writeInfo input.crtNum:focus+label {background:url(../img/login/ic_crtNum.png) no-repeat 15px center;}
 
 .idsave {position:relative; height:50px;}
 .idsave span {position:absolute; top:15px;}
@@ -144,7 +144,7 @@ body {display:flex;}
 .idsave label:before {content:''; width:25px; height:25px; background:#fff; border-radius:4px; border:1px solid #e0e1e2; display:inline-block; position:absolute; left:0px; top:-3px;}
 .idsave label:after {content:''; width:0px; height:0px; background:#000; border-radius:100%;  display:inline-block; position:absolute; left:12px; top:8px;}
 .idsave input[type="checkbox"] {position:absolute; left:-9999em;}
-.idsave input[type="checkbox"]:checked+label:before {background:url(../../img/login/ic_chk.png) #1e88e5 no-repeat; border:1px solid #1e88e5; transition:all 0.5s ease-out;}
+.idsave input[type="checkbox"]:checked+label:before {background:url(../img/login/ic_chk.png) #1e88e5 no-repeat; border:1px solid #1e88e5; transition:all 0.5s ease-out;}
 .idsave input[type="checkbox"]:focus+label:after {transition:all 0.5s ease-out; animation:chkAni 0.3s ease-out;}
 
 /*에러메세지*/
@@ -433,8 +433,8 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .moveBtn {position:relative; position:absolute; right:0px; top:-1px; height:50px; width:98px; overflow:hidden;}
 .type_Blue .moveBtn:before {content:''; position:absolute; left:10px; top:0px; width:88px; height:50px; background:#127bd8; box-shadow:-2px 0 4px 0 RGBA(0,0,0,0.3);}
 .moveBtn a {display:inline-block; width:19px; height:18px; border:1px solid #fff;}
-.moveBtn a.mL {background:url(../img/menu_bullet.png) center no-repeat; transform: rotate(180deg); position:absolute; left:30px; top:15px;}
-.moveBtn a.mR {background:url(../img/menu_bullet.png) center no-repeat; position:absolute; left:59px; top:15px;}
+.moveBtn a.mL {background:url(../img/menu/menu_bullet.png) center no-repeat; transform: rotate(180deg); position:absolute; left:30px; top:15px;}
+.moveBtn a.mR {background:url(../img/menu/menu_bullet.png) center no-repeat; position:absolute; left:59px; top:15px;}
 .type_Blue .moveBtn a.mL:hover {background:url(../img/menu_bullet_blue.png) #fff center no-repeat; transition:all 0.3s;}
 .type_Blue .moveBtn a.mR:hover {background:url(../img/menu_bullet_blue.png) #fff center no-repeat; transition:all 0.3s;}
 
