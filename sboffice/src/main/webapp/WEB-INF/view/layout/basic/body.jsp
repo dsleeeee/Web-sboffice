@@ -4,7 +4,29 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <body>
-  <div class="wrap type_Blue">
+
+  <c:set var="userAuthType" value="${sessionScope.sessionInfo.userAuthType}" />
+  
+  <%-- 유져 타입에 따라 css를 변경 메인 화면 색상을 변경해 준다. --%>
+  <c:choose>
+    <c:when test="${userAuthType == 'SYSTEM'}">
+      <c:set var="userCss" value="type_Orange" />
+    </c:when>
+    <c:when test="${userAuthType == 'HEDOFC'}">
+      <c:set var="userCss" value="type_Purple" />
+    </c:when>
+    <c:when test="${userAuthType == 'AGENCY'}">
+      <c:set var="userCss" value="type_Blue" />    
+    </c:when>
+    <c:when test="${userAuthType == 'MRHST'}">
+      <c:set var="userCss" value="type_Green" />
+    </c:when>
+    <c:otherwise>
+      <c:set var="userCss" value="type_Green" />
+    </c:otherwise>
+  </c:choose>
+
+  <div class="wrap ${userCss}">
     
     <%-- 왼쪽 메뉴 --%>
     <tiles:insertAttribute name="menu" />

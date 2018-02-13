@@ -8,8 +8,8 @@
 
   <!--로고영역-->
   <h1>
-    <a href="#" class="on">
-      <span><img src="/resource/solbipos/img/main/logo_main.png" alt="" /></span>
+    <a href="/" class="on">
+      <span><img src="/resource/solbipos/css/img/logo_main.png" alt="" /></span>
     </a>
   </h1>
   <!-- 활성화 : class="on" -->
@@ -49,7 +49,42 @@
 </nav>
 
 <script>
-  
+  var tree = new wijmo.nav.TreeView('#theTree', {
+    itemsSource : getData(),
+    displayMemberPath : 'header',
+    childItemsPath : 'items',
+    isContentHtml : true,
+    loadedItems : function(s, e) {
+      s.collapseToLevel(0);
+    }
+  });
+
+  // get the tree data
+  function getData() {
+    return [ {
+      header : '테스트 메뉴',
+      items : [ {
+        header : '그리드',
+        items : [ {
+          header : '<a href="/sampleGrid.sb">그리드 샘플 이동(json)</a>'
+        }, {
+          header : '<a href="/sampleGrid2.sb">그리드 샘플 이동(test)</a>'
+        }, {
+          header : '<a href="/exGridPage.sb">그리드 페이징 샘플 이동</a>'
+        }, {
+          header : '<a href="/exGridPage2.sb">그리드 페이징 샘플 이동2</a>'
+        }, {
+          header : '<a href="/exGridHeader.sb?rnum=1000">그리드 헤더 번역 샘플 이동</a>'
+        }, {
+          header : '<a href="/exInput.sb">INPUT 테스트</a>'
+        }, {
+          header : '<a href="/exTree.sb">Tree 테스트</a>'
+        }, {
+          header : '<a href="/sampleGridMain.sb">그리드 샘플</a>'
+        } ]
+      } ]
+    } ];
+  }
 </script>
 
 

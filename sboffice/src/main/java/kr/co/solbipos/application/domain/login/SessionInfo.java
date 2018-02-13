@@ -65,6 +65,18 @@ public class SessionInfo extends Cmm {
     private boolean chk;
     
     /** 
+     * 
+     * 유져 권한 타입<br> 
+     * 시스템 : SYSTEM<br>
+     * 본사 : HEDOFC(HEAD OFFICE)<br>
+     * 대리점 : AGENCY<br>
+     * 가맹점 : MRHST(MEMBER BRANCH STORE)
+     * 
+     * */
+    private String userAuthType;
+    
+    
+    /** 
      * 메뉴 관련 데이터 
      * */
     

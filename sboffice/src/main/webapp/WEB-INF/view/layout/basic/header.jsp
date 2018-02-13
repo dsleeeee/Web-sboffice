@@ -55,10 +55,12 @@
               
               
           </ul>
+          
           <div class="moveBtn">
               <a href="#" class="mL" title="왼쪽으로 메뉴 이동"></a>
               <a href="#" class="mR" title="오른쪽으로 메뉴 이동"></a>
           </div>
+          
       </nav>
       <!--고정메뉴 있는경우-->
       

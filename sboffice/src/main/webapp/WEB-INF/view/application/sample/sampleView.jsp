@@ -50,7 +50,7 @@ ${sessionScope.sessionInfo.fixMenu[0].activation}
 <br>
 <a href="sampleInput2.sb">Input 샘플2</a>
 <br>
-<div id="theTree"></div>
+<div id="theTree2"></div>
 <br>
 <br>
 <br>
@@ -85,7 +85,7 @@ onload = function() {
       return test;
   }
   
-  var tree = new wijmo.nav.TreeView('#theTree', {
+  var tree = new wijmo.nav.TreeView('#theTree2', {
     itemsSource: getDataTest(),
     displayMemberPath: 'header',
     childItemsPath: 'items',
