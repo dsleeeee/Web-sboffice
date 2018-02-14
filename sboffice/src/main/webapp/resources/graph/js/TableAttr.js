@@ -243,10 +243,12 @@ Sidebar.prototype.makeGrid = function() {
   
   //판매금액 포맷팅
   var numberWithCommas = function(x) {
-    x = x.toString();
-    var pattern = /(-?\d+)(\d{3})/;
-    while (pattern.test(x))
-        x = x.replace(pattern, "$1,$2");
+    if(Number.isInteger(x)) {
+      x = x.toString();
+      var pattern = /(-?\d+)(\d{3})/;
+      while (pattern.test(x))
+          x = x.replace(pattern, "$1,$2");
+    }
     return x;
   }
 
@@ -286,8 +288,7 @@ Sidebar.prototype.makeGrid = function() {
   //Row에 DnD이벤트 생성
   var cells = theGrid.cells.hostElement.childNodes;
   for(var i = 1; i < cells.length; i++) {
-    //console.log(cells[i]);
-    var ds = mxUtils.makeDraggable(cells[i], graph, dropEvent);
+    var ds = mxUtils.makeDraggable(cells[i], graph, dropEvent, cells[i], -10, -(theGrid.rows.defaultSize * (i-1)));
     ds.highlightDropTargets = true;
   }
   

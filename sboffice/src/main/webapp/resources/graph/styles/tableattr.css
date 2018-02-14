@@ -37,10 +37,11 @@
 #content {
   width: 400px;
   height: 400px;
-  padding: 1px;
+  padding: 0px;
   margin-bottom: 0px;
   float: left;
-  border: 1px solid #bcbcbc;
+  border: none;
+  /*border: 1px solid #bcbcbc;*/
   position: absolute;
   top: 0px;
   left: 250px;
