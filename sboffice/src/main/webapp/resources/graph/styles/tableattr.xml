@@ -1,0 +1,73 @@
+<mxStylesheet>
+  <add as="defaultVertex">
+    <add as="shape" value="label"/>
+    <add as="perimeter" value="rectanglePerimeter"/>
+    <add as="fontSize" value="11"/>
+    <add as="fontFamily" value="Helvetica"/>
+    <add as="align" value="center"/>
+    <add as="verticalAlign" value="middle"/>
+    <add as="fillColor" value="#ffffff"/>
+    <add as="strokeColor" value="#808080"/>
+    <add as="fontColor" value="#000000"/>
+    <add as="rounded" value="1"/>
+  </add>
+  
+  <!-- 테이블 속성 시작 -->
+  <add as="tableAttr">
+    <add as="shape" value="label"/>
+    <add as="perimeter" value="rectanglePerimeter"/>
+    <add as="fontSize" value="11"/>
+    <add as="fontFamily" value="Helvetica"/>
+    <add as="align" value="center"/>
+    <add as="verticalAlign" value="middle"/>
+    <add as="fillColor" value="none"/>
+    <add as="strokeColor" value="#808080"/>
+    <add as="fontColor" value="#000000"/>
+    <add as="rounded" value="0"/>
+    <add as="whiteSpace" value="wrap"/>
+  </add>
+  <add as="image">
+    <add as="shape" value="image"/>
+    <add as="labelBackgroundColor" value="white"/>
+    <add as="verticalAlign" value="top"/>
+    <add as="verticalLabelPosition" value="bottom"/>
+  </add> 
+  <add as="text">
+    <add as="fillColor" value="none"/>
+    <add as="gradientColor" value="none"/>
+    <add as="strokeColor" value="none"/>
+    <add as="align" value="left"/>
+    <add as="verticalAlign" value="top"/>
+  </add>
+  <!-- 테이블 속성 끝 -->
+
+  <!-- 테이블 구성 시작 -->
+  <add as="label">
+    <add as="fillColor" value="none"/>
+    <add as="gradientColor" value="none"/>
+    <add as="strokeColor" value="none"/>
+    <add as="align" value="left"/>
+    <add as="verticalAlign" value="top"/>
+  </add>
+
+
+  <add as="ts2">
+    <add as="shape" value="label"/>
+    <add as="perimeter" value="rectanglePerimeter"/>
+    <add as="align" value="left"/>
+    <add as="verticalAlign" value="top"/>
+    <add as="verticalLabelPosition" value="top"/>
+    <add as="fillColor" value="#ffffff"/>
+    <add as="strokeColor" value="#808080"/>
+    <add as="fontColor" value="#000000"/>
+    <add as="fontSize" value="11"/>
+    <add as="fontFamily" value="Helvetica"/>
+    <add as="image" value="/resource/graph/stencils/tableSquare2.jpg"/>
+    <add as="imageWidth" value="30"/>
+    <add as="imageHeight" value="30"/>
+    <add as="imageAlign" value="center"/>
+    <add as="imageVerticalAlign" value="middle"/>
+  </add>
+  <!-- 테이블 구성 끝 -->
+
+</mxStylesheet>

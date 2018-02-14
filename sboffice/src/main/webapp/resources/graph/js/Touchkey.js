@@ -423,17 +423,13 @@ Graph.prototype.sanitizeHtml = function(value, editing) {
   // NOTE: Original minimized sanitizer was modified to support
   // data URIs for images, and mailto and special data:-links.
   // LATER: Add MathML to whitelisted tags
-  function urlX(link)
-  {
-    if (link != null && link.toString().toLowerCase().substring(0, 11) !== 'javascript:')
-    {
+  function urlX(link) {
+    if (link != null && link.toString().toLowerCase().substring(0, 11) !== 'javascript:') {
       return link;
     }
-    
     return null;
   };
-    function idX(id) { return id };
-  
+  function idX(id) { return id };
   return html_sanitize(value, urlX, idX);
 };
 
@@ -1005,10 +1001,13 @@ Format.prototype.fontStyle = function() {
   this.container.appendChild(div);
 
   var cells = graph.getSelectionCells();
-  var state = graph.view.getState(cells);
-  var init = 10;
-  if (state != null) {
-    init = mxUtils.getValue(state.style, mxConstants.STYLE_FONTSIZE, null);
+  var initValue = 10;
+  for(var i=0; i < cells.length; i++) {
+    var cell = cells[i];
+    var state = graph.view.getState(cell);
+    if (state != null) {
+      initValue = Math.max(0, parseInt(mxUtils.getValue(state.style, mxConstants.STYLE_FONTSIZE, null)));
+    }
   }
   
   var theInputNumber = new wijmo.input.InputNumber('#fontSize', {
@@ -1016,7 +1015,7 @@ Format.prototype.fontStyle = function() {
     step: 1,
     min: 8,
     max: 15,
-    value: init,
+    value: initValue,
     valueChanged: function(s, e) {
       graph.setCellStyles(mxConstants.STYLE_FONTSIZE, s.value, cells);
     }

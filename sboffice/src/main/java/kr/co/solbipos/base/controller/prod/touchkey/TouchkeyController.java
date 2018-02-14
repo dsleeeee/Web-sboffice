@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller
-@RequestMapping(value = "/base/prod/touchkey")
+@RequestMapping(value = "/base/prod/touchkey/touchkey")
 public class TouchkeyController {
 
     private final String RESULT_URI = "base/prod/touchkey";

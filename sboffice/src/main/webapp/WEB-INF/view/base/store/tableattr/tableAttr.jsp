@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<link rel="stylesheet" type="text/css" href="/resource/graph/styles/touchkey.css">
+<link rel="stylesheet" type="text/css" href="/resource/graph/styles/tableattr.css">
 
 <script>
 var urlParams = (function(url) {
@@ -38,10 +38,11 @@ window.RESOURCE_BASE = window.RESOURCE_BASE || window.RESOURCES_PATH + '/message
 window.STYLE_PATH = window.STYLE_PATH || '/resource/graph/styles';
 window.CSS_PATH = window.CSS_PATH || '/resource/graph/styles';
 window.IMAGE_PATH = window.IMAGE_PATH || '/resource/graph/images';
+window.STENCIL_PATH = window.STENCIL_PATH || '/resource/graph/stencils';
 //window.CONFIG_PATH = window.CONFIG_PATH || '/resource/graph/config';
 
-window.TOUCHKEY_OPEN_URL = window.TOUCHKEY_OPEN_URL || '/base/prod/touchkey/touchkey/list.sb';
-window.TOUCHKEY_SAVE_URL = window.TOUCHKEY_SAVE_URL || '/base/prod/touchkey/touchkey/save.sb';
+window.TABLEATTR_OPEN_URL = window.TABLEATTR_OPEN_URL || '/base/store/tableattr/tableattr/view.sb';
+window.TABLEATTR_SAVE_URL = window.TABLEATTR_SAVE_URL || '/base/store/tableattr/tableattr/save.sb';
 
 window.mxBasePath = window.mxBasePath || '/resource/vender/mxgraph/src';
 window.mxLanguage = window.mxLanguage || urlParams['lang'];
@@ -51,22 +52,24 @@ window.mxLanguages = window.mxLanguages || ['ko'];
 <script type="text/javascript" src="/resource/vender/mxgraph/mxClient.js"></script>
 <!--script type="text/javascript" src="/resource/vender/mxgraph/mxClient.min.js"></script-->
 <script type="text/javascript" src="/resource/graph/sanitizer/sanitizer.min.js"></script>
-<script type="text/javascript" src="/resource/graph/js/Touchkey.js"></script>
-<body class="geEditor">
+<script type="text/javascript" src="/resource/graph/js/TableAttr.js"></script>
 
+<body class="geEditor">
 <div id="container">
-  <div id="grid">상품조회, Grid
+  <div id="component">
     <div id="theGrid"></div>
   </div>
-  <div id="content"></div>
+  <div id="content">
+    <div id="splash"><img src="/resource/graph/images/loading.gif"></div>
+  </div>
   <div id="format"></div>
 </div>
 
 <script>
 (function() {
-  var touchkeyInit = Touchkey.prototype.init;
-  Touchkey.prototype.init = function() {
-    touchkeyInit.apply(this, arguments);
+  var tableAttrInit = TableAttr.prototype.init;
+  TableAttr.prototype.init = function() {
+    tableAttrInit.apply(this, arguments);
   };
   
   if (!mxClient.isBrowserSupported()) {
@@ -82,7 +85,7 @@ window.mxLanguages = window.mxLanguages || ['ko'];
 
     // Fixes possible asynchronous requests
     mxUtils.getAll(
-      [ bundle, STYLE_PATH + '/touchkey.xml' ],
+      [ bundle, STYLE_PATH + '/tableattr.xml' ],
       function(xhr) {
         // Adds bundle text to resources
         mxResources.parse(xhr[0].getText());
@@ -92,7 +95,7 @@ window.mxLanguages = window.mxLanguages || ['ko'];
         themes[Graph.prototype.defaultThemeName] = xhr[1].getDocumentElement();
 
         // Main
-        var touchkey = new Touchkey(document.getElementById('content'), themes);
+        var tableattr = new TableAttr(document.getElementById('content'), themes);
       },
       function() {
         document.body.innerHTML = '<center style="margin-top:10%;">Error loading resource files. Please check browser console.</center>';
