@@ -45,5 +45,6 @@ public interface CmmMenuMapper {
     List<ResrceInfo> selectMenu1(SessionInfo sessionInfo);
     List<ResrceInfo> selectMenu2(SessionInfo sessionInfo);
     List<ResrceInfo> selectMenu3(SessionInfo sessionInfo);
+    List<ResrceInfo> selectMenu1Icon(SessionInfo sessionInfo);
     
 }

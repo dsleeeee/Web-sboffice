@@ -11,8 +11,10 @@ import kr.co.solbipos.application.domain.cmm.MenuUseHist;
 import kr.co.solbipos.application.domain.login.SessionInfo;
 import kr.co.solbipos.application.domain.resource.ResrceInfo;
 import kr.co.solbipos.application.domain.resource.ResrceInfoBase;
+import kr.co.solbipos.application.persistence.cmm.CmmCodeMapper;
 import kr.co.solbipos.application.persistence.cmm.CmmMenuMapper;
 import kr.co.solbipos.service.session.SessionService;
+import kr.co.solbipos.structure.DefaultMap;
 import kr.co.solbipos.system.Prop;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,6 +28,9 @@ public class CmmMenuServiceImpl implements CmmMenuService {
     @Autowired
     CmmMenuMapper cmmMenuMapper;
 
+    @Autowired
+    CmmCodeMapper cmmCodeMapper;
+    
     @Autowired
     Prop prop;
 
@@ -218,6 +223,8 @@ public class CmmMenuServiceImpl implements CmmMenuService {
     @Override
     public String makeMenu(SessionInfo sessionInfo) {
 
+        List<DefaultMap<Object>> m1IconList = cmmCodeMapper.selectCmmCodeList("013"); // 대메뉴 아이콘 로드
+
         List<ResrceInfo> m1 = cmmMenuMapper.selectMenu1(sessionInfo);
         List<ResrceInfo> m2 = cmmMenuMapper.selectMenu2(sessionInfo);
         List<ResrceInfo> m3 = cmmMenuMapper.selectMenu3(sessionInfo);
@@ -228,15 +235,30 @@ public class CmmMenuServiceImpl implements CmmMenuService {
 
             ResrceInfo r1 = m1.get(i);
             String m1ResrceCd = r1.getResrceCd();
-
+            
+            String iconNm = "";
+            
+            for(int n =0; n<m1IconList.size(); n++) {
+                log.error("m1IconList : "+ m1IconList.get(n));
+                if(r1.getResrceCd().equals(m1IconList.get(n).get("nmcodeItem1"))) {
+                    iconNm = (String) m1IconList.get(n).get("nmcodeItem2");
+                }
+            }
+            
             HashMap<String, Object> header = new HashMap<>();
             if (isEmpty(r1.getUrl())) {
+                header.put("1depthNo", i);
                 header.put("header", r1.getResrceNm());
                 header.put("resrceCd", r1.getResrceCd());
+                header.put("url", "");
+                header.put("iconNm", iconNm);
             } else {
-                String url = "<a href='" + r1.getUrl() + "'>" + r1.getResrceNm() + "</a>";
+                String url = r1.getResrceNm();
+                header.put("1depthNo", i);
                 header.put("header", url);
                 header.put("resrceCd", r1.getResrceCd());
+                header.put("url", r1.getUrl());
+                header.put("iconNm", iconNm);
             }
 
             List<HashMap<String, Object>> items = new ArrayList<HashMap<String, Object>>();
@@ -248,19 +270,27 @@ public class CmmMenuServiceImpl implements CmmMenuService {
 
                 HashMap<String, Object> m2Header = new HashMap<>();
 
+                int depthCnt = 0;
+                
                 // 상위 메뉴를 찾음
                 if (r2.getPResrce().equals(m1ResrceCd)) {
+                    
+                    depthCnt ++;
+                    
                     if (isEmpty(r2.getUrl())) {
+                        m2Header.put("2depthNo", depthCnt);
                         m2Header.put("header", r2.getResrceNm());
                         m2Header.put("resrceCd", r2.getResrceCd());
+                        m2Header.put("url", "");
                     } else {
-                        String url = "<a href='" + r2.getUrl() + "'>" + r2.getResrceNm() + "</a>";
+                        String url = r2.getResrceNm();
+                        m2Header.put("2depthNo", depthCnt);
                         m2Header.put("header", url);
                         m2Header.put("resrceCd", r2.getResrceCd());
+                        m2Header.put("url", r2.getUrl());
                     }
 
-                    List<HashMap<String, Object>> m2items =
-                            new ArrayList<HashMap<String, Object>>();
+                    List<HashMap<String, Object>> m2items = new ArrayList<HashMap<String, Object>>();
                     for (int k = 0; k < m3.size(); k++) {
                         ResrceInfo r3 = m3.get(k);
 
@@ -270,11 +300,12 @@ public class CmmMenuServiceImpl implements CmmMenuService {
                             if (isEmpty(r3.getUrl())) {
                                 m3Header.put("header", r3.getResrceNm());
                                 m3Header.put("resrceCd", r3.getResrceCd());
+                                m3Header.put("url", "");
                             } else {
-                                String url = "<a href='" + r3.getUrl() + "'>" + r3.getResrceNm()
-                                        + "</a>";
+                                String url = r3.getResrceNm();
                                 m3Header.put("header", url);
                                 m3Header.put("resrceCd", r3.getResrceCd());
+                                m3Header.put("url", r3.getUrl());
                             }
                             m2items.add(m3Header);
                         }
@@ -297,10 +328,12 @@ public class CmmMenuServiceImpl implements CmmMenuService {
                     if (isEmpty(r3.getUrl())) {
                         m3Header.put("header", r3.getResrceNm());
                         m3Header.put("resrceCd", r3.getResrceCd());
+                        m3Header.put("url", "");
                     } else {
-                        String url = "<a href='" + r3.getUrl() + "'>" + r3.getResrceNm() + "</a>";
+                        String url = r3.getResrceNm();
                         m3Header.put("header", url);
                         m3Header.put("resrceCd", r3.getResrceCd());
+                        m3Header.put("url", r3.getUrl());
                     }
                     List<HashMap<String, Object>> mitems = new ArrayList<HashMap<String, Object>>();
 
@@ -309,11 +342,12 @@ public class CmmMenuServiceImpl implements CmmMenuService {
                         if (isEmpty(r3.getUrl())) {
                             m3Header.put("header", r3.getResrceNm());
                             m3Header.put("resrceCd", r3.getResrceCd());
+                            m3Header.put("url", "");
                         } else {
-                            String url =
-                                    "<a href='" + r3.getUrl() + "'>" + r3.getResrceNm() + "</a>";
+                            String url = r3.getResrceNm(); 
                             m3Header.put("header", url);
                             m3Header.put("resrceCd", r3.getResrceCd());
+                            m3Header.put("url", r3.getUrl());
                         }
                         mitems.add(m3Header);
                     }
