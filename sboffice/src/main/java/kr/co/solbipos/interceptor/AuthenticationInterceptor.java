@@ -95,7 +95,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
                 if (authUrl.equals(url)) {
                     // 메뉴 일때만 사용 등록과 메뉴 히스토리에 추가함
-                    if (resrceInfo.getResrceFg().equals("W001")) {
+                    if (resrceInfo.getResrceFg().equals("M")) {
                         // 메뉴 사용 등록
                         cmmMenuService.insertMenuUseHist(resrceInfo, sessionInfo);
                         // 세션에 사용 메뉴 넣기
