@@ -10,14 +10,27 @@
   <!--사용자정보영역-->   
   <div class="topBar">
       <div class="menuControl">
-          <a href="#" id="_arrow" class="arrowOpen"><span></span></a>
+        <a href="#" id="_arrow" class="arrowOpen"><span></span></a>
       </div>
       <div class="userInfo">
-          <!--새로운 공지 있는경우 span추가-->
-          <a href="#" class="userNotice"><span>777</span></a>
-          
-          <a href="#" class="userId"><span>${sessionScope.sessionInfo.userId}</span></a>
-      </div>
+        <!--새로운 공지 있는경우 span추가-->
+        <a href="#" class="userNotice"><span>777</span></a>
+        
+        <a href="#" class="userId"><span>${sessionScope.sessionInfo.userId}</span></a>
+  
+        <div class="userLayer" style="display:none;">
+          <p>
+            <span>${sessionScope.sessionInfo.userId}</span>
+            <span> <em>[A01]</em> <em>운영시스템</em></span> 
+            <span>${sessionScope.sessionInfo.userName}</span>
+          </p>
+          <ul>
+            <li><a href="#">내 정보 변경</a></li>
+            <li><a href="#">비밀번호 변경</a></li>
+            <li><a href="/auth/logout.sb">로그아웃</a></li>
+          </ul>
+        </div>
+  </div>
   </div>
   <!--//사용자정보영역-->
 
@@ -71,6 +84,10 @@
       
 
 <script type="text/javascript">
+$(".userInfo").click(function() {
+  $(".userLayer").toggle();
+});
+
   function deleteHistMenu(menuId) {
     var url = "/menu/delHistMenu.sb";
     callPostJson(url, menuId);

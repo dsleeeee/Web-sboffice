@@ -73,7 +73,7 @@ public class SessionInfo extends Cmm {
      * 가맹점 : MRHST(MEMBER BRANCH STORE)
      * 
      * */
-    private String userAuthType;
+    private String userAuthType = "HEDOFC";
     
     
     /** 
