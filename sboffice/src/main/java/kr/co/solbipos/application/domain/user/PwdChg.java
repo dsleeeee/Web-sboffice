@@ -4,6 +4,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
 import kr.co.solbipos.application.domain.cmm.Cmm;
 import kr.co.solbipos.application.validate.user.PwChange;
+import kr.co.solbipos.application.validate.user.UserPwChange;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -18,12 +19,22 @@ public class PwdChg extends Cmm {
 
     private static final long serialVersionUID = 1L;
 
-    @NotBlank(groups = {PwChange.class}, message = "{label.login.userPasswd}{msg.cmm.require.text}")
+    /** 기존 비밀번호 */
+    @NotBlank(groups = {UserPwChange.class},
+            message = "{label.login.userPasswd}{msg.cmm.require.text}")
     @Size(groups = {PwChange.class}, min = 8, max = 25, message = "{msg.cmm.size.max}")
+    private String currentPw;
+
+    @NotBlank(groups = {PwChange.class, UserPwChange.class},
+            message = "{label.pw.chg.new}{msg.cmm.require.text}")
+    @Size(groups = {PwChange.class}, min = 8, max = 25, message = "{msg.cmm.size.max}")
+    /** 새 비밀번호 */
     private String newPw;
 
-    @NotBlank(groups = {PwChange.class}, message = "{label.login.userPasswd}{msg.cmm.require.text}")
+    @NotBlank(groups = {PwChange.class, UserPwChange.class},
+            message = "{label.pw.chg.new}{msg.cmm.require.text}")
     @Size(groups = {PwChange.class}, min = 8, max = 25, message = "{msg.cmm.size.max}")
+    /** 새 비밀번호 확인 */
     private String newPwConf;
 
     private String uuid;

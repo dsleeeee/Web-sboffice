@@ -58,7 +58,7 @@ public class LoginController {
     @RequestMapping(value = "login.sb", method = RequestMethod.GET)
     public String login(HttpServletRequest request, HttpServletResponse response, Model model) {
         if (sessionService.isValidSession(request)) {
-            return "redirect:" + MAIN_PAGE_URL;
+            return "redirect:/" + MAIN_PAGE_URL;
         }
         return "login/login:Login";
     }

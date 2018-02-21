@@ -26,7 +26,7 @@
           </p>
           <ul>
             <li><a href="#">내 정보 변경</a></li>
-            <li><a href="#">비밀번호 변경</a></li>
+            <li><a id="pwchg" >비밀번호 변경</a></li>
             <li><a href="/auth/logout.sb">로그아웃</a></li>
           </ul>
         </div>
@@ -66,7 +66,6 @@
                 </li>
               </c:forEach>
               
-              
           </ul>
           
           <div class="moveBtn">
@@ -77,34 +76,40 @@
       </nav>
       <!--고정메뉴 있는경우-->
       
-      
+      <%-- 비밀번호 변경 레이어 팝업 가져오기 --%>
+      <c:import url="/WEB-INF/view/application/layer/pwChgPop.jsp">
+        <c:param name="type" value="user" />
+      </c:import>
       
   </div>
   <!--//고정메뉴-->
-      
 
 <script type="text/javascript">
-$(".userInfo").click(function() {
-  $(".userLayer").toggle();
-});
+  $("#pwchg").click(function() {
+    $(".fullDimmed").toggle();
+    $("#layerpw").toggle();
+  });
+
+  $(".userInfo").click(function() {
+    $(".userLayer").toggle();
+  });
 
   function deleteHistMenu(menuId) {
     var url = "/menu/delHistMenu.sb";
     callPostJson(url, menuId);
   }
-  
+
   function deleteFixMenu(menuId) {
     var url = "/menu/delFixMenu.sb";
     callPostJson(url, menuId);
   }
-  
+
   function callPostJson(url, menuId) {
     var param = {};
     param.menuId = menuId;
-    $.postJSON( url, param, function( result ){
-      $("#"+menuId).remove();
-    })
-    .fail(function(){
+    $.postJSON(url, param, function(result) {
+      $("#" + menuId).remove();
+    }).fail(function() {
       alert("Ajax Fail");
     });
   }

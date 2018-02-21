@@ -35,7 +35,7 @@
     <div class="contents">
       
       <%-- 헤더 즐겨찾기 부분 --%>
-      <tiles:insertAttribute name="header" />  
+      <tiles:insertAttribute name="header" />
             
       <%-- 메인 영역 --%>
       <div>
@@ -49,23 +49,30 @@
   
   
   <div class="fullDimmed" style="display:none;"></div>
-  <div class="layer" style="display:none;">
+  <div id="layerpop" class="layer" style="display:none;">
     <div class="layer_inner">
       <!--layerContent-->
       <div class="noTitle w500">
-        <p class="bk">해당버전을 삭제하시겠습니까?</p>
+        
+        <p id="lbk" class="bk"></p>
+        
         <div class="btnSet">
-          <span><a href="#" class="btn_blue">확인</a></span> <span><a href="#" class="btn_gray">취소</a></span>
+          <span><a href="#" class="btn_blue">확인</a></span></span>
         </div>
       </div>
       <!--//layerContent-->
     </div>
   </div>
-  
-  
+
 </body>
 
 <script type="text/javascript">
+
+$(".btn_blue").click(function() {
+  $(".fullDimmed").toggle();
+  $("#layerpop").toggle();
+});
+
 $(".menuControl").click(function() {
   $("#_nav").toggleClass("menuOpen menuClose");
   $("#_arrow").toggleClass("arrowOpen arrowClose");

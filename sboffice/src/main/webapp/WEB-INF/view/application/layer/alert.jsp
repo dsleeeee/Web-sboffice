@@ -10,7 +10,7 @@
     <div class="noTitle w500">
       <p class="bk">해당버전을 삭제하시겠습니까?</p>
       <div class="btnSet">
-        <span><a href="#" class="btn_blue">확인</a></span> <span><a href="#" class="btn_gray">취소</a></span>
+        <span><a href="#" class="btn_blue">확인</a></span>
       </div>
     </div>
     <!--//layerContent-->

@@ -17,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import kr.co.solbipos.application.domain.login.SessionInfo;
 import kr.co.solbipos.application.domain.user.OtpAuth;
 import kr.co.solbipos.application.domain.user.PwdChg;
 import kr.co.solbipos.application.domain.user.User;
@@ -28,8 +29,10 @@ import kr.co.solbipos.application.validate.user.AuthNumber;
 import kr.co.solbipos.application.validate.user.IdFind;
 import kr.co.solbipos.application.validate.user.PwChange;
 import kr.co.solbipos.application.validate.user.PwFind;
+import kr.co.solbipos.application.validate.user.UserPwChange;
 import kr.co.solbipos.exception.AuthenticationException;
 import kr.co.solbipos.service.message.MessageService;
+import kr.co.solbipos.service.session.SessionService;
 import kr.co.solbipos.structure.JsonResult;
 import kr.co.solbipos.structure.Result.Status;
 import kr.co.solbipos.system.Prop;
@@ -60,6 +63,9 @@ public class UserController {
 
     @Autowired
     MessageService messageService;
+
+    @Autowired
+    SessionService sessionService;
 
     /**
      * 인증번호 발사!!
@@ -323,7 +329,7 @@ public class UserController {
      * 
      * @param request
      * @param response
-     * @param model 
+     * @param model
      * @return
      */
     @RequestMapping(value = "pwdChgOk.sb", method = RequestMethod.POST)
@@ -343,7 +349,7 @@ public class UserController {
                 || !EncUtil.passwordPolicyCheck(pwdChg.getNewPwConf())) {
             throw new AuthenticationException(messageService.get("msg.pw.chg.regexp"), "");
         }
- 
+
         PwChgResult pcr = userService.processPwdChg(pwdChg);
 
         log.info("패스워드 변경 결과 : halfId : {}, result : {}, uuid : {}", pwdChg.getHalfId(), pcr,
@@ -371,6 +377,62 @@ public class UserController {
         } else {
             throw new AuthenticationException(messageService.get("msg.cmm.invalid.access"), "");
         }
+    }
+
+    /**
+     * 
+     * @param pwdChg
+     * @param bindingResult
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "userPwdChg.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public JsonResult userPwdChg(@Validated(UserPwChange.class) PwdChg pwdChg,
+            BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response,
+            Model model) {
+
+        if (bindingResult.hasErrors()) {
+            return returnJsonBindingFieldError(bindingResult);
+        }
+        
+        SessionInfo sessionInfo = sessionService.getSessionInfo(request);
+        
+        SessionInfo si = loginService.selectWebUser(sessionInfo);
+
+        /**
+         * 기존 패스워드 비교
+         */
+        if (!si.getUserPwd().equals(pwdChg.getCurrentPw())) {
+            return returnJson(Status.FAIL, "msg", messageService.get("msg.layer.pwchg.pwfail"));
+        }
+        
+        /** 
+         * 새 비밀번호와 새 비밀번호 확인이 일치하는지 확인 
+         * */
+        if(!pwdChg.getNewPw().equals(pwdChg.getNewPwConf())) {
+            return returnJson(Status.FAIL, "msg", messageService.get("msg.pw.find.not.match"));
+        }
+        
+        /** 
+         * 변경 패스워드가 기존 비밀번호가 같은지 체크 
+         * */
+        if(si.getUserPwd().equals(pwdChg.getNewPw())) {
+            return returnJson(Status.FAIL, "msg", messageService.get("msg.layer.pwchg.match"));
+        }
+
+        /**
+         * 패스워드 정책 체크
+         */
+        if (!EncUtil.passwordPolicyCheck(pwdChg.getNewPw())
+                || !EncUtil.passwordPolicyCheck(pwdChg.getNewPwConf())) {
+            return returnJson(Status.FAIL, "msg", messageService.get("msg.pw.chg.regexp"));
+        }
+
+
+        return returnJson(Status.OK, "msg", messageService.get("label.pw.find.h2.1") + messageService.get("label.pw.find.h2.2"));
     }
 }
 

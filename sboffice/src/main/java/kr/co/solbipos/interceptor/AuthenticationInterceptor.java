@@ -87,7 +87,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         if(url.equals("/main.sb")) {
             return true;
         }
-        
+
         int n = auth.size();
         for (int i = 0; i < n; i++) {
             ResrceInfo resrceInfo = auth.get(i);
