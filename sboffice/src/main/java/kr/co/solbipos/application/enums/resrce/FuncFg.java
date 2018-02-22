@@ -1,15 +1,18 @@
 package kr.co.solbipos.application.enums.resrce;
 
-import kr.co.solbipos.enums.EnumValue;
+import org.apache.ibatis.type.MappedTypes;
+import com.fasterxml.jackson.annotation.JsonValue;
+import kr.co.solbipos.enums.CodeEnum;
+import kr.co.solbipos.system.CodeEnumTypeHandler;
 
 /**
  * 리소스 기능 구분 enum type<br>
  * TB_WB_RESRCE_INFO > ResrceFg
  * 
- * @author 정용길
+ * @author bjcho
  *
  */
-public enum FuncFg implements EnumValue<String> {
+public enum FuncFg implements CodeEnum  {
     
     /** 기능 : 조회 */
     SELECT("F001")
@@ -20,14 +23,28 @@ public enum FuncFg implements EnumValue<String> {
     /** 기능 : 삭제 */
     , DELETE("F004");
     
-    private final String value;
-    
-    FuncFg(String value) {
-        this.value = value;
+    private String code;
+    private FuncFg[] value;
+  
+    FuncFg(String code, FuncFg... values) {
+        this.code = code;
+        this.value = values;
     }
-
-    @Override
-    public String getValue() {
+  
+    public FuncFg[] getValues() {
         return value;
+    }
+   
+    @MappedTypes(FuncFg.class)
+    public static class TypeHandler extends CodeEnumTypeHandler<FuncFg> {
+        public TypeHandler() {
+        super(FuncFg.class);
+        }
+    }
+     
+    @Override
+    @JsonValue
+    public String getCode() {
+        return code;
     }
 }

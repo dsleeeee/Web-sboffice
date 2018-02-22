@@ -6,11 +6,18 @@
   xsi:schemaLocation="
   http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
   
+  <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig"
+    p:maxTotal="#{config['redis.pool.maxTotal']}"
+    p:minIdle="#{config['redis.pool.minIdle']}"
+    p:maxIdle="#{config['redis.pool.maxIdle']}"
+    />
+
   <bean id="jedisConnFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" 
     p:hostName="#{config['redis.hostName']}"
-	p:port="#{config['redis.port']}"
-	p:password="#{config['redis.password']}"
-	p:usePool="#{config['redis.usePool']}"
+    p:port="#{config['redis.port']}"
+    p:password="#{config['redis.password']}"
+    p:usePool="#{config['redis.usePool']}"
+    p:poolConfig-ref="jedisPoolConfig"
     />
 
   <!-- redis template definition -->
@@ -24,13 +31,3 @@
   <bean id="stringRedisSerializer" class="org.springframework.data.redis.serializer.StringRedisSerializer" />
   
 </beans>
-
-
-
-
-
-
-
-
-
-

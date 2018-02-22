@@ -1,13 +1,16 @@
 package kr.co.solbipos.application.enums.login;
 
-import kr.co.solbipos.enums.EnumValue;
+import org.apache.ibatis.type.MappedTypes;
+import com.fasterxml.jackson.annotation.JsonValue;
+import kr.co.solbipos.enums.CodeEnum;
+import kr.co.solbipos.system.CodeEnumTypeHandler;
 
 /**
  * 로그인 결과 enum type
  * 
- * @author 정용길
+ * @author bjcho
  */
-public enum LoginResult implements EnumValue<String> {
+public enum LoginResult implements CodeEnum {
     
     /** 로그인 성공 */
     SUCCESS("SUCC")
@@ -25,14 +28,27 @@ public enum LoginResult implements EnumValue<String> {
     , PASSWORD_EXPIRE("EXP")
     ;
     
-    private final String result;
-    
-    LoginResult(String result) {
-        this.result = result;
-    }
+  private String code;
+  private LoginResult[] value;
 
-    @Override
-    public String getValue() {
-        return result;
-    }
-}
+  LoginResult(String code, LoginResult... values) {
+      this.code = code;
+      this.value = values;
+  }
+
+  public LoginResult[] getValues() {
+      return value;
+  }
+ 
+  @MappedTypes(LoginResult.class)
+  public static class TypeHandler extends CodeEnumTypeHandler<LoginResult> {
+      public TypeHandler() {
+          super(LoginResult.class);
+      }
+  }
+   
+  @Override
+  @JsonValue
+  public String getCode() {
+      return code;
+  }}

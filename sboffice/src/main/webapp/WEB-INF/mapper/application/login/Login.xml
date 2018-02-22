@@ -7,16 +7,16 @@
   <![CDATA[
   /* LoginMapper.selectWebUser */
     SELECT A.USER_ID,
-    	   A.USER_PWD,
+         A.USER_PWD,
            ( SELECT EMP_NM 
                FROM TB_MS_EMPLOYEE 
               WHERE USER_ID = A.USER_ID
            ) AS USER_NAME,
-    	   A.GRP_CD,
-    	   A.LAST_LOGIN_DATE,
-    	   A.LAST_PWD_CHG_DATE,
-    	   A.LOGIN_FAIL_CNT,
-    	   A.LOCK_CD,
+         A.GRP_CD,
+         A.LAST_LOGIN_DATE,
+         A.LAST_PWD_CHG_DATE,
+         A.LOGIN_FAIL_CNT,
+         A.LOCK_CD,
            ( 
               SELECT NVL(MAX(B.REG_DT) KEEP(DENSE_RANK FIRST ORDER BY B.IDX DESC), 0) AS LAST_PWD_CHG
                 FROM TB_WB_PWD_CHG_HIST B
@@ -28,19 +28,19 @@
   ]]>
   </select>
   
-  <select id="selectLoginHist" resultType="DefaultMap" parameterType="loginHist">
+  <select id="selectLoginHist" resultType="loginHist" parameterType="loginHist">
   <![CDATA[
   /* LoginMapper.selectLoginHist */
     SELECT SEQ,
-    	   USER_ID,
-    	   STAT_CD,
-    	   LOGIN_ORGN,
-    	   LOGIN_IP,
-    	   BRWSR_INFO,
-           LOGIN_DATE,
-    	   LOGIN_DT
+         USER_ID,
+         STAT_CD,
+         LOGIN_ORGN,
+         LOGIN_IP,
+         BRWSR_INFO,
+         LOGIN_DATE,
+         LOGIN_DT
       FROM TB_WB_LOGIN_HIST
-     WHERE WEB_USER_ID = #{webUserId}
+     WHERE USER_ID = #{userId}
   ]]>
   </select>
   
@@ -62,8 +62,8 @@
     (
       SQ_WB_LOGIN_HIST.NEXTVAL,
       #{userId},
-      #{statCd.value},
-      #{loginOrgn.value},
+      #{statCd},
+      #{loginOrgn},
       #{loginIp},
       #{brwsrInfo},
       #{loginDate},
@@ -77,22 +77,22 @@
   <![CDATA[
   /* LoginMapper.selectAuthMenu */
     SELECT DISTINCT RESRCE_CD,
-  		   P_RESRCE,
-  		   RESRCE_FG,
+         P_RESRCE,
+         RESRCE_FG,
            FUNC_FG,
-  		   RESRCE_NM,
-  		   URL,
-  		   SPCL_AUTHOR,
-  		   DISP_LEVEL,
+         RESRCE_NM,
+         URL,
+         SPCL_AUTHOR,
+         DISP_LEVEL,
            DISP_IDX,
-  		   USE_YN,
-  		   REG_DT,
-  		   REG_ID,
-  		   MOD_DT,
-  		   MOD_ID
+         USE_YN,
+         REG_DT,
+         REG_ID,
+         MOD_DT,
+         MOD_ID
       FROM TB_WB_RESRCE_INFO
      START WITH RESRCE_CD IN (
-            SELECT RESRCE_CD  		   
+            SELECT RESRCE_CD         
               FROM TB_WB_RESRCE_INFO
              WHERE RESRCE_CD IN (
               SELECT RESRCE_CD 
@@ -123,22 +123,3 @@
   </select>
   
 </mapper>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

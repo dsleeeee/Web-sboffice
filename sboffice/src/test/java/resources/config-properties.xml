@@ -34,11 +34,7 @@
 <!--   web session  -->
   <entry key="redis.web.prefix">sbp:web:local:</entry>
 <!--   web 공통 코드  -->
-  <entry key="redis.code.prefix">sbp:cmm:local:</entry>
-<!-- pool config -->
-  <entry key="redis.pool.maxTotal">30</entry>
-  <entry key="redis.pool.minIdle">30</entry>
-  <entry key="redis.pool.maxIdle">30</entry>
+  <entry key="redis.code.prefix">sbp:cmm:local:</entry>  
   
   
   <!-- ====================================--> 

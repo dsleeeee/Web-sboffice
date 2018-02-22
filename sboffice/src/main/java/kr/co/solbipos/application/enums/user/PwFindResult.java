@@ -1,13 +1,16 @@
 package kr.co.solbipos.application.enums.user;
 
-import kr.co.solbipos.enums.EnumValue;
+import org.apache.ibatis.type.MappedTypes;
+import com.fasterxml.jackson.annotation.JsonValue;
+import kr.co.solbipos.enums.CodeEnum;
+import kr.co.solbipos.system.CodeEnumTypeHandler;
 
 /**
  * 패스워드 otp 결과
  * 
- * @author 정용길
+ * @author bjcho
  */
-public enum PwFindResult implements EnumValue<String> {
+public enum PwFindResult implements CodeEnum  {
     
     /** 유져 정보 없음 */
     EMPTY_USER("EMPTY_USER"),
@@ -18,14 +21,28 @@ public enum PwFindResult implements EnumValue<String> {
     /** 인증번호 일치 */
     OTP_OK("OTP_OK");
     
-    private final String result;
-    
-    PwFindResult(String result) {
-        this.result = result;
+    private String code;
+    private PwFindResult[] value;
+  
+    PwFindResult(String code, PwFindResult... values) {
+        this.code = code;
+        this.value = values;
     }
-
+  
+    public PwFindResult[] getValues() {
+        return value;
+    }
+   
+    @MappedTypes(PwFindResult.class)
+    public static class TypeHandler extends CodeEnumTypeHandler<PwFindResult> {
+        public TypeHandler() {
+        super(PwFindResult.class);
+        }
+    }
+     
     @Override
-    public String getValue() {
-        return result;
+    @JsonValue
+    public String getCode() {
+        return code;
     }
 }

@@ -20,11 +20,10 @@
     
   </settings>
   
-  <!-- 
   <typeHandlers>
-    <typeHandler handler="kr.co.solbipos.system.EnumTypeHandler"/>
+    <package name="kr.co.solbipos" />
   </typeHandlers>
-   -->
+
 
   <plugins>
     

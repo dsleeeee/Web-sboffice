@@ -2,7 +2,6 @@ package kr.co.solbipos.application.service.login;
 
 import static kr.co.solbipos.utils.DateUtil.*;
 import static org.springframework.util.ObjectUtils.*;
-import java.time.LocalDateTime;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,7 +15,6 @@ import kr.co.solbipos.application.enums.login.LoginResult;
 import kr.co.solbipos.application.persistence.login.LoginMapper;
 import kr.co.solbipos.service.session.SessionService;
 import kr.co.solbipos.system.Prop;
-import kr.co.solbipos.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -165,13 +163,14 @@ public class LoginServiceImpl implements LoginService {
         loginHist.setBrwsrInfo(sessionInfo.getBrwsrInfo());
         loginHist.setLoginIp(sessionInfo.getLoginIp());
         loginHist.setLoginDate(currentDateString());
-        loginHist.setLoginDt(currentTimeString());
+        loginHist.setLoginDt(currentDateTimeString());
 
         return loginHist(loginHist);
     }
 
     @Override
     public int loginHist(LoginHist loginHist) {
+        log.debug(loginHist.toString());
         return loginMapper.insertLoginHist(loginHist);
     }
 

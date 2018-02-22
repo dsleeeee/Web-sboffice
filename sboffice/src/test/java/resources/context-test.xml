@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:jee="http://www.springframework.org/schema/jee"
+  xmlns:mvc="http://www.springframework.org/schema/mvc"
+  xmlns:tx="http://www.springframework.org/schema/tx"
+  xmlns:util="http://www.springframework.org/schema/util"
+  xmlns:p="http://www.springframework.org/schema/p"
+  xsi:schemaLocation="http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+  
+  <!-- config properties 변수 세팅 -->
+  <util:properties id="config" location="file:src/test/java/resources/config-properties.xml"/>
+
+  <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver" />
+
+  <!-- File Upload & Download -->
+  <bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver" />
+
+  <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+    <property name="basenames">
+      <list>
+        <value>classpath:/language/lang</value>
+        <value>classpath:/language/lang_column</value>
+      </list>
+    </property>
+    <property name="defaultEncoding" value="#{config['encoding']}" />
+  </bean>
+
+  <!-- LocalValidatorFactoryBean : JSR-303 -->
+  <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+    <property name="validationMessageSource" ref="messageSource" />
+  </bean>
+
+  <!-- Component IoC -->
+  <context:component-scan base-package="kr.co.solbipos" />
+  
+  <!-- Enables the Spring MVC @Controller programming model -->
+  <!-- reference : http://hnsnmn.blogspot.kr/2014/02/annotation-driven.html, 
+    http://sbcoba.tistory.com/14. http://blog.naver.com/PostView.nhn?blogId=junsu60&logNo=80168806230 -->
+  <mvc:annotation-driven validator="validator">
+    <mvc:message-converters>
+    
+      <!-- @ResponseBody 한글 깨짐 방지 -->
+      <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+        <property name="supportedMediaTypes">
+          <list>
+            <value>text/html;charset=#{config['encoding']}</value>
+          </list>
+        </property>
+      </bean>
+      
+    </mvc:message-converters>
+  </mvc:annotation-driven>
+
+  <!-- 정적 리소스 -->
+  <mvc:resources mapping="/resource/**" location="/resources/" cache-period="31556926">
+  </mvc:resources>
+  
+  <mvc:interceptors>
+    <!-- Request 로 들어오는 locale 을 변경하기 위한 Interceptor -->
+    <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+      <property name="paramName" value="ln"/>
+    </bean>
+  </mvc:interceptors>
+
+
+  <mvc:redirect-view-controller path="/"
+    redirect-url="#{config['welcome.url']}" />
+
+  <mvc:view-resolvers>
+    <mvc:bean-name />
+    <mvc:tiles view-class="org.springframework.web.servlet.view.tiles3.TilesView" />
+    <mvc:jsp prefix="/WEB-INF/view/" suffix=".jsp" />
+  </mvc:view-resolvers>
+
+  <mvc:tiles-configurer>
+    <mvc:definitions location="#{config['tiles.path']}" />
+  </mvc:tiles-configurer>
+
+  <bean id="dataSource" class="oracle.jdbc.pool.OracleDataSource">
+      <property name="dataSourceName" value="jdbc/oracle/sb"/>
+      <property name="URL" value="jdbc:oracle:thin:@192.168.0.160:1521:SBP"/>
+      <property name="user" value="sbpora"/>
+      <property name="password" value="sbpora1234"/>
+  </bean>
+
+<!--   <jee:jndi-lookup id="dataSource" jndi-name="#{env['dataSourceName']}"/>
+  <bean id="dataSource_treepay" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <property name="driverClassName" value="core.log.jdbc.driver.OracleDriver" />
+    <property name="url" value="jdbc:oracle:thin:@10.0.14.62:1522:TREEPAYDEV" />
+    <property name="username" value="treepay" />
+    <property name="password" value="treepay913"/>
+  </bean>
+ -->
+ 
+  <!-- Spring Transaction Manager -->
+  <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="dataSource" />
+  </bean>
+
+  <!-- @Transactional Advice 적용 -->
+  <!-- @Transactional 을 사용할 때 checked Exception 은 rollback 이 안되니 주의 -->
+  <tx:annotation-driven />
+  
+  <!-- Mybatis Config -->
+  <!-- Reference URL : http://mybatis.github.io/spring -->
+  <!-- 한글 레퍼런스 URL : http://mybatis.github.io/spring/ko -->
+  <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+    <property name="configLocation" value="file:src/main/webapp/WEB-INF/config/mybatis-setting.xml" />
+    <property name="mapperLocations" value="file:src/main/webapp/WEB-INF/mapper/**/*.xml" />
+    <property name="dataSource" ref="dataSource" />
+    <!-- Domain Class Name 자동 등록 -->
+    <property name="typeAliasesPackage" value=" kr.co.solbipos.application.domain, 
+                                                kr.co.solbipos.structure" />
+  </bean>
+  
+  <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
+    <constructor-arg index="0" ref="sqlSessionFactory" />
+  </bean>
+  
+  <!-- Mybatis IoC Mapper Class from SqlSessionTemplate -->
+  <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+    <property name="basePackage" value="kr.co.solbipos.**.persistence" />
+    <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+  </bean>
+
+  <bean id="jedisConnFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" 
+    p:hostName="#{config['redis.hostName']}"
+  p:port="#{config['redis.port']}"
+  p:password="#{config['redis.password']}"
+  p:usePool="#{config['redis.usePool']}"
+    />
+
+  <!-- redis template definition -->
+  <bean id="redisTemplate" class="kr.co.solbipos.system.RedisCustomTemplate" 
+    p:connection-factory-ref="jedisConnFactory"
+    p:keySerializer-ref="stringRedisSerializer"
+    p:keyPrefix="#{config['redis.web.prefix']}"
+    p:keyPrefixCode="#{config['redis.code.prefix']}"
+    />
+  
+  <bean id="stringRedisSerializer" class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+
+  
+</beans>

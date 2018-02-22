@@ -1,13 +1,16 @@
 package kr.co.solbipos.application.enums.user;
 
-import kr.co.solbipos.enums.EnumValue;
+import org.apache.ibatis.type.MappedTypes;
+import com.fasterxml.jackson.annotation.JsonValue;
+import kr.co.solbipos.enums.CodeEnum;
+import kr.co.solbipos.system.CodeEnumTypeHandler;
 
 /**
  * 패스워드 변경 시도 결과
  * 
- * @author 정용길
+ * @author bjcho
  */
-public enum PwChgResult implements EnumValue<String> {
+public enum PwChgResult implements CodeEnum  {
     
     /** 비밀번호 일치 하지 않음 */
     PASSWORD_NOT_MATCH("PASSWORD_NOT_MATCH"),
@@ -24,14 +27,28 @@ public enum PwChgResult implements EnumValue<String> {
     /** 체크 완료 */
     CHECK_OK("CHECK_OK");
     
-    private final String result;
-    
-    PwChgResult(String result) {
-        this.result = result;
+    private String code;
+    private PwChgResult[] value;
+  
+    PwChgResult(String code, PwChgResult... values) {
+        this.code = code;
+        this.value = values;
     }
-
+  
+    public PwChgResult[] getValues() {
+        return value;
+    }
+   
+    @MappedTypes(PwChgResult.class)
+    public static class TypeHandler extends CodeEnumTypeHandler<PwChgResult> {
+        public TypeHandler() {
+        super(PwChgResult.class);
+        }
+    }
+     
     @Override
-    public String getValue() {
-        return result;
+    @JsonValue
+    public String getCode() {
+        return code;
     }
 }
