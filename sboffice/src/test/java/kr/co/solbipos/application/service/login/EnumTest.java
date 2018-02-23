@@ -33,6 +33,10 @@ public class EnumTest extends AbstractApplicationContextTest {
         loginHist = new LoginHist();
     }
 
+    @Test
+    public void test() {
+      assertTrue(true);
+    }
     /**
      * 로그인 이력 Insert
      * 

@@ -4,6 +4,7 @@ encoding//profiles/local=UTF-8
 encoding//src/main/java=UTF-8
 encoding//src/main/resources=UTF-8
 encoding//src/main/resources/language/lang_column_ko.properties=UTF-8
+encoding//src/main/resources/language/lang_ko.properties=UTF-8
 encoding//src/test/java=UTF-8
 encoding//src/test/resources=UTF-8
 encoding/<project>=UTF-8

@@ -1,5 +1,6 @@
 package kr.co.solbipos.application.service.user;
 
+import java.util.List;
 import kr.co.solbipos.application.domain.login.SessionInfo;
 import kr.co.solbipos.application.domain.user.OtpAuth;
 import kr.co.solbipos.application.domain.user.PwdChg;
@@ -35,20 +36,13 @@ public interface UserService {
 
 
     /**
-     * 담당자 이름, 핸드폰 번호로 userId 조회
+     * userId 조회
      * 
-     * @param user
+     * @param param User
+     * @param maskId boolean
      * @return
      */
-    String selectUserCheck(User user);
-
-    /**
-     * 담당자 이름, id 로 유져 조회
-     * 
-     * @param user
-     * @return
-     */
-    User selectUserByNmAndId(User user);
+    List<User> selectUserList(User param, boolean maskId);
 
     /**
      * 인증번호 저장

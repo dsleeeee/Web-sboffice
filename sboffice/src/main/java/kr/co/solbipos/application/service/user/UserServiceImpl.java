@@ -3,7 +3,9 @@ package kr.co.solbipos.application.service.user;
 import static kr.co.solbipos.utils.DateUtil.*;
 import static kr.co.solbipos.utils.HttpUtils.*;
 import static kr.co.solbipos.utils.spring.StringUtil.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -117,28 +119,36 @@ public class UserServiceImpl implements UserService {
         int r1 = updateUserPwd(sessionInfo);
 
         // 패스워드 변경 내역 저장
-        PwdChgHist pch = new PwdChgHist();
-        pch.setUserId(userId);
-        pch.setPriorPwd(pwdChg.getOrginPwd());
-        pch.setRegDt(currentDateTimeString());
-        pch.setRegIp(getClientIp(WebUtil.getRequest()));
-        int r2 = insertPwdChgHist(pch);
-
-        return PwChgResult.CHECK_OK;
+        int r2 = 0;
+        if(r1 == 1) {
+            PwdChgHist pch = new PwdChgHist();
+            pch.setUserId(userId);
+            pch.setPriorPwd(pwdChg.getOrginPwd());
+            pch.setRegDt(currentDateTimeString());
+            pch.setRegIp(getClientIp(WebUtil.getRequest()));
+            r2 = insertPwdChgHist(pch);
+        }
+        if(r2 == 1) {
+            return PwChgResult.CHECK_OK;
+        }
+        return PwChgResult.CHECK_NOK;
     }
 
     @Override
     public PwFindResult processPwFind(User user) {
 
-        User findUser = selectUserByNmAndId(user);
+        List<User> findUsers = selectUserList(user, false);
 
         /**
          * 
-         * 사용자 정보가 없음
+         * 사용자 정보가 없음, 2개 이상 조회될 경우 오류
          * 
          */
-        if (ObjectUtil.isEmpty(findUser)) {
+        if (ObjectUtil.isEmpty(findUsers)) {
             return PwFindResult.EMPTY_USER;
+        }
+        if (findUsers.size() > 1) {
+          return PwFindResult.TO_MANY_USER;
         }
 
         OtpAuth otp = new OtpAuth();
@@ -208,13 +218,19 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public String selectUserCheck(User user) {
-        return userMapper.selectUserCheck(user);
-    }
-
-    @Override
-    public User selectUserByNmAndId(User user) {
-        return userMapper.selectUserByNmAndId(user);
+    public List<User> selectUserList(User param, boolean maskId) {
+      
+        List<User> users = userMapper.selectUserList(param);
+        //아이디 마스킹 처리
+        if(maskId) {
+          List<User> result = new ArrayList<User>();
+          for(User user : users) {
+            user.setUserId(strMaskingHalf(user.getUserId()));
+            result.add(user);
+          }
+          return result;
+        }
+        return users;
     }
 
     @Override
@@ -223,7 +239,9 @@ public class UserServiceImpl implements UserService {
         otp.setSeq(generateUUID());
         otp.setAuthNo(getRandomNumber(prop.otpSize));
         otp.setReqDt(currentTimeString());
-
+        
+        //TODO OTP 이력 테이블에 암호화된 휴대폰번호로 저장
+        
         return userMapper.insertOtpAuth(otp);
     }
 
@@ -239,11 +257,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int insertPwdChgHist(PwdChgHist pwdChgHist) {
+        //TODO 비밀번호 암호화 적용 필요
         return userMapper.insertPwdChgHist(pwdChgHist);
     }
 
     @Override
     public int updateUserPwd(SessionInfo sessionInfo) {
+        
+        //TODO 비밀번호 암호화 적용 필요
+        
         return userMapper.updateUserPwd(sessionInfo);
     }
 

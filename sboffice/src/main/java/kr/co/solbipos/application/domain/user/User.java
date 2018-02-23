@@ -3,6 +3,7 @@ package kr.co.solbipos.application.domain.user;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
 import kr.co.solbipos.application.domain.cmm.Cmm;
+import kr.co.solbipos.application.enums.user.OrgnFg;
 import kr.co.solbipos.application.validate.user.AuthNumber;
 import kr.co.solbipos.application.validate.user.IdFind;
 import kr.co.solbipos.application.validate.user.PwFind;
@@ -11,7 +12,7 @@ import lombok.EqualsAndHashCode;
 
 /**
  * 유저 정보 조회
- * table : TB_MS_EMPLOYEE
+ * table : TB_MS_EMPLOYEE, TB_CM_AGENCY, TB_HQ_EMPLOYEE
  * 
  * @author 정용길
  */
@@ -36,8 +37,8 @@ public class User extends Cmm {
     /** 사원비밀번호 */
     private String empPwd;
 
-    /** 소속구분_A:시스템,C:대리점,H:본사,S:매장 */
-    private String orgnFg;
+    /** 소속구분_M:시스템,A:대리점,H:본사,S:매장 */
+    private OrgnFg orgnFg;
 
     /** 웹사용여부 */
     private String webUseYn;
@@ -89,6 +90,9 @@ public class User extends Cmm {
     @NotBlank(groups = {PwFind.class}, message = "{label.pw.find.auth.number}{msg.cmm.require.text}")
     @Size(groups = {PwFind.class}, max = 4, message = "{msg.cmm.size.max}")
     private String authNumber;
+
+    /** 소속명 */
+    private String orgnNm;
 }
 
 

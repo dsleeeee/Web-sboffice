@@ -14,6 +14,8 @@ public enum PwFindResult implements CodeEnum  {
     
     /** 유져 정보 없음 */
     EMPTY_USER("EMPTY_USER"),
+    /** 데이터 오류 */
+    TO_MANY_USER("TO_MANY_USER"),
     /** 인증번호 틀림 */
     OTP_ERROR("OTP_ERROR"),
     /** 인증번호 입력시간 지남 */

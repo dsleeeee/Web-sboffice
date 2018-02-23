@@ -1,5 +1,6 @@
 package kr.co.solbipos.application.persistence.user;
 
+import java.util.List;
 import kr.co.solbipos.application.domain.login.SessionInfo;
 import kr.co.solbipos.application.domain.user.OtpAuth;
 import kr.co.solbipos.application.domain.user.PwdChg;
@@ -18,15 +19,7 @@ public interface UserMapper {
      * @param user
      * @return
      */
-    String selectUserCheck(User user);
-
-    /**
-     * 담당자 이름, id 로 유져 조회
-     * 
-     * @param user
-     * @return
-     */
-    User selectUserByNmAndId(User user);
+    List<User> selectUserList(User user);
 
     /**
      * 인증번호 저장

@@ -3,42 +3,52 @@
 
 <mapper namespace="kr.co.solbipos.application.persistence.user.UserMapper">
   
-  <select id="selectUserCheck" parameterType="user" resultType="String" >
-  <![CDATA[
-  /* UserMapper.selectUserCheck */
-    SELECT USER_ID 
-      FROM TB_MS_EMPLOYEE
-     WHERE EMP_NM = #{empNm}
-       AND MP_NO = #{mpNo}
-  ]]>
-  </select>
-  
-  <select id="selectUserByNmAndId" parameterType="user" resultType="user" >
-  <![CDATA[
-  /* UserMapper.selectUserByNmAndId */
-    SELECT ORGN_CD,
-    	   EMP_NO,
-    	   EMP_NM,
-    	   EMP_PWD,
-    	   ORGN_FG,
-    	   WEB_USE_YN,
-    	   USER_ID,
-    	   MP_NO,
-    	   EMAIL_ADDR,
-    	   POST_NO,
-    	   ADDR,
-    	   ADDR_DTL,
-    	   HIRE_FG,
-    	   SMS_RECV_YN,
-    	   USE_YN,
-    	   REG_DT,
-    	   REG_ID,
-    	   MOD_DT,
-    	   MOD_ID
-      FROM TB_MS_EMPLOYEE
-     WHERE EMP_NM = #{empNm}
-       AND USER_ID = #{userId}
-  ]]>
+  <select id="selectUserList" parameterType="user" resultType="user" >
+  /* UserMapper.selectUserList */
+     SELECT A.USER_ID,
+            A.MP_NO,
+            B.STORE_NM ORGN_NM
+       FROM TB_MS_EMPLOYEE A,
+            TB_MS_STORE B
+      WHERE A.STORE_CD = B.STORE_CD
+        AND A.WEB_USE_YN = 'Y'
+        AND A.EMP_NM = #{empNm}
+    <if test="mpNo != null and mpNo != ''">
+        AND A.MP_NO = #{mpNo}
+    </if>
+    <if test="userId != null and userId != ''">
+        AND A.USER_ID = #{userId}
+    </if>
+     UNION ALL
+     SELECT A.USER_ID,
+            A.MP_NO,
+            B.HQ_OFFICE_NM ORGN_NM
+       FROM TB_HQ_EMPLOYEE A,
+            TB_HQ_OFFICE B
+      WHERE A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+        AND A.WEB_USE_YN = 'Y'
+        AND A.EMP_NM = #{empNm}
+    <if test="mpNo != null and mpNo != ''">
+        AND A.MP_NO = #{mpNo}
+    </if>
+    <if test="userId != null and userId != ''">
+        AND A.USER_ID = #{userId}
+    </if>
+     UNION ALL
+     SELECT A.USER_ID,
+            A.MP_NO,
+            B.AGENCY_NM ORGN_NM
+       FROM TB_CM_EMPLOYEE A,
+            TB_CM_AGENCY B
+      WHERE A.AGENCY_CD = B.AGENCY_CD
+        AND A.WEB_USE_YN = 'Y'
+        AND A.EMP_NM = #{empNm}
+    <if test="mpNo != null and mpNo != ''">
+        AND A.MP_NO = #{mpNo}
+    </if>
+    <if test="userId != null and userId != ''">
+        AND A.USER_ID = #{userId}
+    </if>
   </select>
   
   <select id="selectOtpTopOne" parameterType="otpAuth" resultType="otpAuth">
@@ -46,19 +56,19 @@
   /* UserMapper.selectOtpTopOne */
     SELECT *
       FROM (
-    SELECT SEQ,
-           USER_ID,
-           AUTH_FG,
-           AUTH_NO,
-           RECV_MP_NO,
-           REQ_IP,
-           REQ_DATE,
-           REQ_DT
-      FROM TB_WB_OTP_AUTH_HIST
-     WHERE USER_ID = #{userId}
-       AND AUTH_FG = #{authFg}
-       AND REQ_DATE = #{reqDate}
-     ORDER BY REQ_DT DESC
+         SELECT SEQ,
+                USER_ID,
+                AUTH_FG,
+                AUTH_NO,
+                RECV_MP_NO,
+                REQ_IP,
+                REQ_DATE,
+                REQ_DT
+           FROM TB_WB_OTP_AUTH_HIST
+          WHERE USER_ID = #{userId}
+            AND AUTH_FG = #{authFg}
+            --AND REQ_DATE = #{reqDate}
+          ORDER BY REQ_DT DESC
      )
      WHERE ROWNUM = 1
   ]]>
@@ -67,43 +77,43 @@
   <select id="selectOtpBySeq" parameterType="pwdChg" resultType="otpAuth">
   <![CDATA[
   /* UserMapper.selectOtpCheck */
-    SELECT SEQ,
-           USER_ID,
-           AUTH_FG,
-           AUTH_NO,
-           RECV_MP_NO,
-           REQ_IP,
-           REQ_DATE,
-           REQ_DT
-      FROM TB_WB_OTP_AUTH_HIST
-     WHERE SEQ = #{uuid}
+     SELECT SEQ,
+            USER_ID,
+            AUTH_FG,
+            AUTH_NO,
+            RECV_MP_NO,
+            REQ_IP,
+            REQ_DATE,
+            REQ_DT
+       FROM TB_WB_OTP_AUTH_HIST
+      WHERE SEQ = #{uuid}
   ]]>
   </select>
   
   <insert id="insertOtpAuth" parameterType="otpAuth">
   <![CDATA[
-  /* UserMapper.insertAuthOtp */
+  /* UserMapper.insertOtpAuth */
     INSERT INTO TB_WB_OTP_AUTH_HIST
     (
-      SEQ,
-      USER_ID,
-      AUTH_FG,
-      AUTH_NO,
-      RECV_MP_NO,
-      REQ_IP,
-      REQ_DATE,
-      REQ_DT
+        SEQ,
+        USER_ID,
+        AUTH_FG,
+        AUTH_NO,
+        RECV_MP_NO,
+        REQ_IP,
+        REQ_DATE,
+        REQ_DT
     )
     VALUES
     (
-      #{seq},
-      #{userId},
-      #{authFg},
-      #{authNo},
-      #{recvMpNo},
-      #{reqIp},
-      #{reqDate},
-      #{reqDt}
+        #{seq},
+        #{userId},
+        #{authFg},
+        #{authNo},
+        #{recvMpNo},
+        #{reqIp},
+        #{reqDate},
+        #{reqDt}
     )
   ]]>
   </insert>
@@ -113,21 +123,21 @@
   /* UserMapper.insertPwdChgHist */
     INSERT INTO TB_WB_PWD_CHG_HIST
     (
-      USER_ID,
-      IDX,
-      PRIOR_PWD,
-      REG_IP,
-      REG_DT,
-      REG_ID
+        USER_ID,
+        IDX,
+        PRIOR_PWD,
+        REG_IP,
+        REG_DT,
+        REG_ID
     )
     VALUES
     (
-      #{userId},
-      (SELECT NVL(MAX(IDX),0) + 1 AS MAX FROM TB_WB_PWD_CHG_HIST WHERE USER_ID = #{userId}),
-      #{priorPwd},
-      #{regIp},
-      #{regDt},
-      #{regId}
+        #{userId},
+        (SELECT NVL(MAX(IDX),0) + 1 AS MAX FROM TB_WB_PWD_CHG_HIST WHERE USER_ID = #{userId}),
+        #{priorPwd},
+        #{regIp},
+        #{regDt},
+        #{regId}
     )
   ]]>
   </insert>
@@ -135,29 +145,10 @@
   <update id="updateUserPwd" parameterType="sessionInfo">
   <![CDATA[
   /* LoginMapper.updateUserPwd */
-  UPDATE TB_WB_USER_INFO 
-     SET USER_PWD = #{userPwd}
-   WHERE USER_ID = #{userId}
+    UPDATE TB_WB_USER_INFO 
+       SET USER_PWD = #{userPwd}
+     WHERE USER_ID = #{userId}
   ]]>
   </update>
   
 </mapper>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

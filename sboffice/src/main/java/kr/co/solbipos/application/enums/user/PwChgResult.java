@@ -24,6 +24,8 @@ public enum PwChgResult implements CodeEnum  {
     ID_NOT_MATCH("ID_NOT_MATCH"),
     /** 잠긴 상태 유져 */
     LOCK_USER("LOCK_USER"),
+    /** 체크 오류 */
+    CHECK_NOK("CHECK_NOK"),
     /** 체크 완료 */
     CHECK_OK("CHECK_OK");
     

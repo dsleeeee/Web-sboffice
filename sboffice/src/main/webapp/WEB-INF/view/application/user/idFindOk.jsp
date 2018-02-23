@@ -17,7 +17,7 @@
 
   <div class="idInfo">
     <p>
-      <span><s:message code="label.login.userId" /></span> <span>${findUserNm}</span>
+      <span><s:message code="label.login.userId" /></span> <span>${list}</span>
     </p>
   </div>
 

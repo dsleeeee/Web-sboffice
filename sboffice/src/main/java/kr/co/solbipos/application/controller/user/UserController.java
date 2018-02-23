@@ -4,8 +4,8 @@ import static kr.co.solbipos.utils.DateUtil.*;
 import static kr.co.solbipos.utils.HttpUtils.*;
 import static kr.co.solbipos.utils.grid.ReturnUtil.*;
 import static kr.co.solbipos.utils.spring.StringUtil.*;
-import static org.springframework.util.StringUtils.*;
 import java.util.Date;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.time.DateUtils;
@@ -80,45 +80,53 @@ public class UserController {
         }
 
         // 유져 정보 조회
-        User findUser = userService.selectUserByNmAndId(user);
+        List<User> findUsers = userService.selectUserList(user, false);
 
         // 조회된 유져가 없으면 에러 메세지 전송
-        if (ObjectUtil.isEmpty(findUser)) {
+        if (ObjectUtil.isEmpty(findUsers)) {
             log.warn("문자 발송 유져 조회 실패 : id : {}, nm : {}", user.getUserId(), user.getEmpNm());
             String msg = messageService.get("msg.pw.find.error1")
                     + messageService.get("msg.pw.find.error2");
             return returnJson(Status.FAIL, "msg", msg);
-        } else {
-
-            OtpAuth otp = new OtpAuth();
-            otp.setUserId(findUser.getUserId());
-            otp.setAuthFg("001");
-            otp.setRecvMpNo(findUser.getMpNo());
-            otp.setReqIp(getClientIp(request));
-            otp.setReqDate(currentDateString());
-            otp.setOtpLimit(prop.otpLimit);
-
-            // limit 에 걸렸는지 확인
-            if (checkOtpLimit(otp)) {
-                log.warn("인증문자 제한 시간 걸림, 제한 시간 : {}, id : {}, name : {}", prop.otpLimit,
-                        findUser.getUserId(), findUser.getEmpNm());
-                String msg = String.valueOf(otp.getOtpLimit())
-                        + messageService.get("msg.pw.find.otp.limit");
-                return returnJson(Status.FAIL, "authNumber", msg);
-            }
-
-            // 인증 번호 생성 후 전송
-            // 신규 OTP 생성 리턴
-            userService.insertOtpAuth(otp);
-
-            /**
-             * 
-             * TODO : OTP 문자 발송 로직 들어가야됨
-             * 
-             */
-
-            return returnJson(Status.OK, "msg", messageService.get("msg.pw.find.send.ok"));
         }
+        // 조회된 사용자 정보가 2개 이상일 때 오류 처리
+        if (findUsers.size() > 1) {
+            log.warn("문자 발송 유져 여러명 조회됨 : id : {}, nm : {}", user.getUserId(), user.getEmpNm());
+            String msg = messageService.get("msg.pw.find.error1")
+                    + messageService.get("msg.pw.find.error2");
+            return returnJson(Status.FAIL, "msg", msg);
+        }
+        
+        User findUser = findUsers.get(0);
+        
+        OtpAuth otp = new OtpAuth();
+        otp.setUserId(findUser.getUserId());
+        otp.setAuthFg("001");
+        otp.setRecvMpNo(findUser.getMpNo());
+        otp.setReqIp(getClientIp(request));
+        otp.setReqDate(currentDateString());
+        otp.setOtpLimit(prop.otpLimit);
+
+        // limit 에 걸렸는지 확인
+        if (checkOtpLimit(otp)) {
+            log.warn("인증문자 제한 시간 걸림, 제한 시간 : {}, id : {}, name : {}", prop.otpLimit,
+                    findUser.getUserId(), findUser.getEmpNm());
+            String msg = String.valueOf(otp.getOtpLimit())
+                    + messageService.get("msg.pw.find.otp.limit");
+            return returnJson(Status.FAIL, "authNumber", msg);
+        }
+
+        // 인증 번호 생성 후 전송
+        // 신규 OTP 생성 리턴
+        userService.insertOtpAuth(otp);
+
+        /**
+         * 
+         * TODO : OTP 문자 발송 로직 들어가야됨
+         * 
+         */
+
+        return returnJson(Status.OK, "msg", messageService.get("msg.pw.find.send.ok"));
     }
 
 
@@ -180,11 +188,11 @@ public class UserController {
             return "user/login:idFind";
         }
 
-        // id, 이름으로 유져 조회
-        String findUserNm = userService.selectUserCheck(user);
+        // id, 이름으로 유져 조회 - 아이디 마스킹
+        List<User> findUsers = userService.selectUserList(user, true);
 
         // 아이디가 없으면 에러 메시지 리턴
-        if (StringUtil.isEmpty(findUserNm)) {
+        if (findUsers.size() < 1) {
             // id 를 찾을 수 없습니다.
             String msg = messageService.get("label.login.userId")
                     + messageService.get("msg.cmm.not.find");
@@ -193,7 +201,7 @@ public class UserController {
         }
 
         // 찾은 아이디를 마스킹해서 보여줌
-        model.addAttribute("findUserNm", strMaskingHalf(findUserNm));
+        model.addAttribute("list", findUsers);
 
         return "user/login:idFindOk";
     }
@@ -291,13 +299,17 @@ public class UserController {
         }
 
         // id, 이름 체크
-        User findUser = userService.selectUserByNmAndId(user);
+        List<User> findUsers = userService.selectUserList(user, false);
 
-        if (ObjectUtil.isEmpty(findUser)) {
+        if (ObjectUtil.isEmpty(findUsers)) {
             // 실패 처리 > 잘못된 접근입니다.
             throw new AuthenticationException(messageService.get("msg.cmm.invalid.access"), "");
         }
-
+        // 조회된 사용자 정보가 2개 이상일 때 오류 처리
+        if (findUsers.size() > 1) {
+            throw new AuthenticationException(messageService.get("msg.cmm.invalid.access"), "");
+        }
+        
         OtpAuth otp = new OtpAuth();
         otp.setUserId(user.getUserId());
         otp.setReqDate(currentDateString());

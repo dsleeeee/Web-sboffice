@@ -4,43 +4,50 @@
 <mapper namespace="kr.co.solbipos.application.persistence.login.LoginMapper">
   
   <select id="selectWebUser" parameterType="sessionInfo" resultType="sessionInfo" >
-  <![CDATA[
   /* LoginMapper.selectWebUser */
-    SELECT A.USER_ID,
-         A.USER_PWD,
-           ( SELECT EMP_NM 
-               FROM TB_MS_EMPLOYEE 
-              WHERE USER_ID = A.USER_ID
-           ) AS USER_NAME,
-         A.GRP_CD,
-         A.LAST_LOGIN_DATE,
-         A.LAST_PWD_CHG_DATE,
-         A.LOGIN_FAIL_CNT,
-         A.LOCK_CD,
-           ( 
-              SELECT NVL(MAX(B.REG_DT) KEEP(DENSE_RANK FIRST ORDER BY B.IDX DESC), 0) AS LAST_PWD_CHG
-                FROM TB_WB_PWD_CHG_HIST B
-               WHERE B.USER_ID = A.USER_ID
-           ) AS LAST_PWD_CHG
-      FROM TB_WB_USER_INFO A
-     WHERE A.USER_ID = #{userId}
-       AND A.LOCK_CD = 'N'
-  ]]>
+     SELECT A.USER_ID,
+            A.USER_PWD,
+            (SELECT MAX(EMP_NM)
+               FROM (SELECT EMP_NM
+                       FROM TB_MS_EMPLOYEE 
+                      WHERE USER_ID = A.USER_ID
+                     UNION ALL
+                     SELECT EMP_NM
+                       FROM TB_HQ_EMPLOYEE 
+                      WHERE USER_ID = A.USER_ID
+                     UNION ALL
+                     SELECT EMP_NM
+                       FROM TB_CM_EMPLOYEE 
+                      WHERE USER_ID = A.USER_ID
+               )
+            ) USER_NAME,
+            A.GRP_CD,
+            A.LAST_LOGIN_DATE,
+            A.LAST_PWD_CHG_DATE,
+            A.LOGIN_FAIL_CNT,
+            A.LOCK_CD,
+            (SELECT NVL(MAX(B.REG_DT) KEEP(DENSE_RANK FIRST ORDER BY B.IDX DESC), 0) LAST_PWD_CHG
+               FROM TB_WB_PWD_CHG_HIST B
+              WHERE B.USER_ID = A.USER_ID
+            ) LAST_PWD_CHG
+       FROM TB_WB_USER_INFO A
+      WHERE A.USER_ID = #{userId}
+        AND A.LOCK_CD = 'N'
   </select>
   
   <select id="selectLoginHist" resultType="loginHist" parameterType="loginHist">
   <![CDATA[
   /* LoginMapper.selectLoginHist */
-    SELECT SEQ,
-         USER_ID,
-         STAT_CD,
-         LOGIN_ORGN,
-         LOGIN_IP,
-         BRWSR_INFO,
-         LOGIN_DATE,
-         LOGIN_DT
-      FROM TB_WB_LOGIN_HIST
-     WHERE USER_ID = #{userId}
+     SELECT SEQ,
+            USER_ID,
+            STAT_CD,
+            LOGIN_ORGN,
+            LOGIN_IP,
+            BRWSR_INFO,
+            LOGIN_DATE,
+            LOGIN_DT
+       FROM TB_WB_LOGIN_HIST
+      WHERE USER_ID = #{userId}
   ]]>
   </select>
   
@@ -76,23 +83,23 @@
   <select id="selectAuthMenu" parameterType="sessionInfo" resultType="resrceInfo">
   <![CDATA[
   /* LoginMapper.selectAuthMenu */
-    SELECT DISTINCT RESRCE_CD,
-         P_RESRCE,
-         RESRCE_FG,
-           FUNC_FG,
-         RESRCE_NM,
-         URL,
-         SPCL_AUTHOR,
-         DISP_LEVEL,
-           DISP_IDX,
-         USE_YN,
-         REG_DT,
-         REG_ID,
-         MOD_DT,
-         MOD_ID
-      FROM TB_WB_RESRCE_INFO
-     START WITH RESRCE_CD IN (
-            SELECT RESRCE_CD         
+     SELECT DISTINCT RESRCE_CD,
+            P_RESRCE,
+            RESRCE_FG,
+            FUNC_FG,
+            RESRCE_NM,
+            URL,
+            SPCL_AUTHOR,
+            DISP_LEVEL,
+            DISP_IDX,
+            USE_YN,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+       FROM TB_WB_RESRCE_INFO
+      START WITH RESRCE_CD IN (
+            SELECT RESRCE_CD
               FROM TB_WB_RESRCE_INFO
              WHERE RESRCE_CD IN (
               SELECT RESRCE_CD 
