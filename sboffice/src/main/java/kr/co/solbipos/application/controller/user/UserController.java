@@ -6,6 +6,7 @@ import static kr.co.solbipos.utils.grid.ReturnUtil.*;
 import static kr.co.solbipos.utils.spring.StringUtil.*;
 import static org.springframework.util.StringUtils.*;
 import java.util.Date;
+import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.time.DateUtils;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import kr.co.solbipos.application.domain.login.SessionInfo;
 import kr.co.solbipos.application.domain.user.OtpAuth;
 import kr.co.solbipos.application.domain.user.PwdChg;
+import kr.co.solbipos.application.domain.user.PwdChgHist;
 import kr.co.solbipos.application.domain.user.User;
 import kr.co.solbipos.application.enums.user.PwChgResult;
 import kr.co.solbipos.application.enums.user.PwFindResult;
@@ -40,6 +42,7 @@ import kr.co.solbipos.utils.DateUtil;
 import kr.co.solbipos.utils.security.EncUtil;
 import kr.co.solbipos.utils.spring.ObjectUtil;
 import kr.co.solbipos.utils.spring.StringUtil;
+import kr.co.solbipos.utils.spring.WebUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -431,8 +434,27 @@ public class UserController {
             return returnJson(Status.FAIL, "msg", messageService.get("msg.pw.chg.regexp"));
         }
 
+        
+        String userId = si.getUserId();
 
-        return returnJson(Status.OK, "msg", messageService.get("label.pw.find.h2.1") + messageService.get("label.pw.find.h2.2"));
+        // 패스워드 세팅 및 변경
+        sessionInfo.setUserId(userId);
+        sessionInfo.setUserPwd(pwdChg.getNewPw());
+        int r1 = userService.updateUserPwd(sessionInfo);
+
+        // 패스워드 변경 내역 저장
+        PwdChgHist pch = new PwdChgHist();
+        pch.setUserId(userId);
+        pch.setPriorPwd(pwdChg.getCurrentPw());
+        pch.setRegDt(currentDateTimeString());
+        pch.setRegIp(getClientIp(WebUtil.getRequest()));
+        int r2 = userService.insertPwdChgHist(pch);
+        
+        HashMap<String, String> result = new HashMap<>();
+        result.put("msg", messageService.get("label.pw.find.h2.1") + messageService.get("label.pw.find.h2.2"));
+        result.put("url", "/auth/logout.sb");
+
+        return returnJson(Status.OK, result);
     }
 }
 

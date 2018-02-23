@@ -1,5 +1,6 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles"%>
+<%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
@@ -47,32 +48,12 @@
     
   </div>
   
-  
-  <div class="fullDimmed" style="display:none;"></div>
-  <div id="layerpop" class="layer" style="display:none;">
-    <div class="layer_inner">
-      <!--layerContent-->
-      <div class="noTitle w500">
-        
-        <p id="lbk" class="bk"></p>
-        
-        <div class="btnSet">
-          <span><a href="#" class="btn_blue">확인</a></span></span>
-        </div>
-      </div>
-      <!--//layerContent-->
-    </div>
-  </div>
+  <c:import url="/WEB-INF/view/application/layer/alert.jsp">
+  </c:import>
 
 </body>
 
 <script type="text/javascript">
-
-$(".btn_blue").click(function() {
-  $(".fullDimmed").toggle();
-  $("#layerpop").toggle();
-});
-
 $(".menuControl").click(function() {
   $("#_nav").toggleClass("menuOpen menuClose");
   $("#_arrow").toggleClass("arrowOpen arrowClose");

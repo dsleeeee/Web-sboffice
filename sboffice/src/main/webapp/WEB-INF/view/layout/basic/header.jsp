@@ -86,11 +86,11 @@
 
 <script type="text/javascript">
   $("#pwchg").click(function() {
-    $(".fullDimmed").toggle();
-    $("#layerpw").toggle();
+    $("#fullDimmedPw").show();
+    $("#layerpw").show();
   });
 
-  $(".userInfo").click(function() {
+  $(".userId").click(function() {
     $(".userLayer").toggle();
   });
 

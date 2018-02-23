@@ -3,6 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+<div id="fullDimmedPw" class="fullDimmed" style="display:none;"></div>
 <div id="layerpw" class="layer" style="display: none;">
   <div class="layer_inner">
     <!--layerContent-->
@@ -101,21 +102,16 @@
     param.newPwConf = $("#newPwConf").val();
 
     $.postJSON("/user/userPwdChg.sb", param, function(result) {
-
-      console.log(result.status);
-      console.log(result.data);
-
       if (result.status === "OK") {
         if(result.data.msg != undefined) {
-      		alert(result.data.msg);
+          	s_alert.popOk(result.data.msg, function(){
+          	  console.log("ffffffffffffffffff");
+          	  location.href = result.data.url;
+          	});
           }
       } else if (result.status === "FAIL") {
         processError(result.data);
       }
-      
-//       $(".fullDimmed").show();
-//       $("#layerpop").toggle();
-      
     }).fail(function() {
       alert("Ajax Fail");
     });
@@ -126,8 +122,8 @@
   });
 
   $(".btn_close").click(function() {
-    $(".fullDimmed").toggle();
-    $("#layerpw").toggle();
+    $("#fullDimmedPw").hide();
+    $("#layerpw").hide();
   });
   
   function processError(data) {
@@ -156,7 +152,7 @@
     }
     
     if(data.msg != undefined) {
-		alert(data.msg);
+      s_alert.pop(data.msg);
     }
     
   }
