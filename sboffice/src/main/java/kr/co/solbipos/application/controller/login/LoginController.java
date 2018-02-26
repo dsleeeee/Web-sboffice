@@ -42,7 +42,9 @@ public class LoginController {
  
     @Autowired
     Prop prop;
-
+    
+    final String MAIN_PAGE_URL = "main.sb";
+    
     /**
      * <pre>
      * 로그인 페이지로 이동
@@ -56,7 +58,7 @@ public class LoginController {
     @RequestMapping(value = "login.sb", method = RequestMethod.GET)
     public String login(HttpServletRequest request, HttpServletResponse response, Model model) {
         if (sessionService.isValidSession(request)) {
-            return "redirect:/sample.sb";
+            return "redirect:/" + MAIN_PAGE_URL;
         }
         return "login/login:Login";
     }
@@ -105,11 +107,12 @@ public class LoginController {
          * 2-2. 패스워드 변경 페이지로 이동<br>
          */
 
-        String returnUrl = "sample.sb";
+        String returnUrl = MAIN_PAGE_URL;
+        
         // 로그인 성공
         if (code == LoginResult.SUCCESS) {
             // 메인 페이지
-            returnUrl = "sample.sb";
+            returnUrl = MAIN_PAGE_URL;
             // 세션 생성
             sessionService.setSessionInfo(request, response, si);
         } else if (code == LoginResult.NOT_EXISTS_ID || code == LoginResult.PASSWORD_ERROR) {

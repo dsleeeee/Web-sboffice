@@ -17,3 +17,4 @@
 <script src="/resource/solbipos/js/common.js"></script>
 <script src="/resource/solbipos/js/gridcomm.js"></script>
 <script src="/resource/solbipos/js/gencomm.js"></script>
+<script src="/resource/solbipos/js/alert.js"></script>

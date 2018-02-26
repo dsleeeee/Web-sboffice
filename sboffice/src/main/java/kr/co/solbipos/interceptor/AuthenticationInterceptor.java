@@ -83,6 +83,11 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
      */
     private boolean checkUrl(HttpServletRequest request, List<ResrceInfo> auth, String url,
             String userId, SessionInfo sessionInfo) {
+        
+        if(url.equals("/main.sb")) {
+            return true;
+        }
+
         int n = auth.size();
         for (int i = 0; i < n; i++) {
             ResrceInfo resrceInfo = auth.get(i);

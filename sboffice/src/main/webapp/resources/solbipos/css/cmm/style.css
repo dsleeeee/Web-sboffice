@@ -83,7 +83,27 @@ button {outline:none; border:0; font-family:'NotoR', Malgun Gothic, '맑은 고�
 /* **************************************** *
  * COMMON
  * **************************************** */
-.w100 {width:100%;}
+.w100 {width:100%;} 
+.w500 {width:500px;} .w600 {width:600px;}
+
+.s12 {font-size:12px;} .s14 {font-size:14px;} .s16 {font-size:16px;} .s18 {font-size:18px;}
+
+.lh20 {line-height:20px;} .lh25 {line-height:25px;} .lh30 {line-height:30px;}
+
+.bk {color:#222;}
+
+.bgGray {background:#f6f6f6;}
+
+.sc {overflow:auto; border:1px solid #e8e8e8;}
+.sc .tblType01 {border-top:0px;}
+.sc .tblType01 tbody tr:last-child {border-bottom:0px;}
+
+.tl {text-align:left;} .tc {text-align:center;} .tr {text-align:right;}
+
+.mt10 {margin-top:10px;} .mt20 {margin-top:20px;} .mt30 {margin-top:30px;} .mt40 {margin-top:40px;}
+.mb10 {margin-bottom:10px;} .mb20 {margin-bottom:20px;}
+
+.pd10 {padding:10px;} .pd20 {padding:20px;} .pd30 {padding:30px;}
 
 
 /* **************************************** *
@@ -234,12 +254,12 @@ body {display:flex;}
 .menuClose {width:60px;}
 .menuClose h1 a {position:absolute; left:0px; top:0px; width:59px; height:49px;}
 .menuClose h1 a img {display:none;}
-.menuClose h1 a span:before {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu.png) no-repeat; opacity:1; transition:all 0.8s;}
+.menuClose h1 a span:before {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu/menu.png) no-repeat; opacity:1; transition:all 0.8s;}
 
-.type_Blue .menuClose h1 a span:after {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu.png) 0 -22px no-repeat; opacity:0; transition:all 0.8s;}
-.type_Purple .menuClose h1 a span:after {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu.png) 0 -44px no-repeat; opacity:0; transition:all 0.8s;}
-.type_Green .menuClose h1 a span:after {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu.png) 0 -66px no-repeat; opacity:0; transition:all 0.8s;}
-.type_Orange .menuClose h1 a span:after {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu.png) 0 -88px no-repeat; opacity:0; transition:all 0.8s;}
+.type_Blue .menuClose h1 a span:after {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu/menu.png) 0 -22px no-repeat; opacity:0; transition:all 0.8s;}
+.type_Purple .menuClose h1 a span:after {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu/menu.png) 0 -44px no-repeat; opacity:0; transition:all 0.8s;}
+.type_Green .menuClose h1 a span:after {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu/menu.png) 0 -66px no-repeat; opacity:0; transition:all 0.8s;}
+.type_Orange .menuClose h1 a span:after {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu/menu.png) 0 -88px no-repeat; opacity:0; transition:all 0.8s;}
 
 .menuClose h1 a:hover span:before, .menuClose h1 a.on span:before {opacity:0; transition:all 0.8s;}
 .menuClose h1 a:hover span:after, .menuClose h1 a.on span:after {opacity:1; transition:all 0.8s;}
@@ -250,10 +270,10 @@ body {display:flex;}
 .menuClose .menuTab p.favorite span, .menuClose .menuTab p.all span {text-indent:-70px; font-size:0.875em; display:inline-block; line-height:49px;}
 .menuClose .menuTab p.favorite a span:before {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu.png) -20px 0 no-repeat; opacity:1;}
 
-.type_Blue .menuClose .menuTab p.favorite a span:after {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu.png) -20px -22px no-repeat; opacity:0;}
-.type_Purple .menuClose .menuTab p.favorite a span:after {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu.png) -20px -44px no-repeat; opacity:0;}
-.type_Green .menuClose .menuTab p.favorite a span:after {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu.png) -20px -66px no-repeat; opacity:0;}
-.type_Orange .menuClose .menuTab p.favorite a span:after {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu.png) -20px -88px no-repeat; opacity:0;}
+.type_Blue .menuClose .menuTab p.favorite a span:after {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu/menu.png) -20px -22px no-repeat; opacity:0;}
+.type_Purple .menuClose .menuTab p.favorite a span:after {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu/menu.png) -20px -44px no-repeat; opacity:0;}
+.type_Green .menuClose .menuTab p.favorite a span:after {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu/menu.png) -20px -66px no-repeat; opacity:0;}
+.type_Orange .menuClose .menuTab p.favorite a span:after {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu/menu.png) -20px -88px no-repeat; opacity:0;}
 
 .menuClose .menuTab p.favorite a:hover span:before, .menuClose .menuTab p.favorite a.on span:before {opacity:0;}
 .menuClose .menuTab p.favorite a:hover span:after, .menuClose .menuTab p.favorite a.on span:after {opacity:1;}
@@ -268,9 +288,9 @@ body {display:flex;}
 .fahoMenu li.depth1 a span {font-size:1em; color:#888fa4;}
 .fahoMenu li.depth1 a {display:inline-block; width:200px; padding:7px 25px 7px 15px; transition:all 0.3s; line-height:1.2em;}
 .type_Blue .fahoMenu li.depth1 a.depth1:hover span, .type_Blue .fahoMenu li.depth1.on a.depth1 span {color:#1e88e5;}
-.type_Blue .fahoMenu li.depth1 a.depth1:hover:before, .type_Blue .fahoMenu li.depth1.on a.depth1:before {content:''; position:absolute; left:180px; top:middle; margin-top:2px; background:url(../img/menu_bullet_blue.png) no-repeat; width:6px; height:10px; transition:all 0.3s;}
+.type_Blue .fahoMenu li.depth1 a.depth1:hover:before, .type_Blue .fahoMenu li.depth1.on a.depth1:before {content:''; position:absolute; left:180px; top:middle; margin-top:2px; background:url(../img/menu/menu_bullet_blue.png) no-repeat; width:6px; height:10px; transition:all 0.3s;}
 .fahoMenu li.depth1.on a.depth1:before {transform:rotate(90deg); transition:all 0.3s;}
-.fahoMenu li.depth1 a.depth2:hover:before, .fahoMenu li.depth1 a.depth2.on:before {content:''; position:absolute; left:180px; top:middle; margin-top:2px; background:url(../img/menu_bullet2.png) no-repeat; width:6px; height:10px; transition:all 0.3s;}
+.fahoMenu li.depth1 a.depth2:hover:before, .fahoMenu li.depth1 a.depth2.on:before {content:''; position:absolute; left:180px; top:middle; margin-top:2px; background:url(../img/menu/menu_bullet2.png) no-repeat; width:6px; height:10px; transition:all 0.3s;}
 .fahoMenu li.depth1 a.depth2.on:before {transform:rotate(90deg); transition:all 0.3s;}
 .fahoMenu li.depth1 a.depth2 {padding:7px 25px 7px 30px;}
 .fahoMenu li.depth1 a.depth2:hover, .fahoMenu li.depth1 a.depth2.on {color:#222;}
@@ -296,7 +316,7 @@ body {display:flex;}
 .type_Blue .smallMenu li.depth1:hover a.depth1 {background:#ebf5ff;}
 .type_Blue .smallMenu li.depth1:hover a.depth1 > span {position:absolute; width:220px; left:40px; font-size:0.875em;  color:#1e88e5; line-height:50px; height:50px; display:inline-block; padding:0 10px 0 10px; transition:color 0.5s; z-index:999;}
 .smallMenu li.depth1 span {font-size:0px;}
-.smallMenu li.depth1:before {content:''; position:absolute; top:14px; left:20px; background:url(../img/menu.png) no-repeat; width:20px; height:22px; cursor:pointer;}
+.smallMenu li.depth1:before {content:''; position:absolute; top:14px; left:20px; background:url(../img/menu/menu.png) no-repeat; width:20px; height:22px; cursor:pointer;}
 
 .smallMenu li.depth1.menu_pos:before {background-position:-40px 0;}
 .type_Blue .smallMenu li.depth1.menu_pos:hover:before {background-position:-40px -22px;}
@@ -339,8 +359,8 @@ body {display:flex;}
 .smallMenu li ul.depth2 a:before {background:none;}
 .smallMenu li ul.depth2 a.depth2 {position:relative;}
 .smallMenu li ul.depth2 a.depth2:hover, .smallMenu li ul.depth2 a.depth2.on {color:#222;}
-.smallMenu li ul.depth2 a.depth2:hover:before {content:''; position:absolute; left:175px; top:50%; margin-top:-5px; background:url(../img/menu_bullet2.png) no-repeat; width:6px; height:10px; transition:all 0.3s;}
-.smallMenu li ul.depth2 a.depth2.on:before {content:''; position:absolute; left:175px; top:50%; margin-top:-5px; background:url(../img/menu_bullet2.png) no-repeat; width:6px; height:10px; transform: rotate(90deg); transition:all 0.3s;}
+.smallMenu li ul.depth2 a.depth2:hover:before {content:''; position:absolute; left:175px; top:50%; margin-top:-5px; background:url(../img/menu/menu_bullet2.png) no-repeat; width:6px; height:10px; transition:all 0.3s;}
+.smallMenu li ul.depth2 a.depth2.on:before {content:''; position:absolute; left:175px; top:50%; margin-top:-5px; background:url(../img/menu/menu_bullet2.png) no-repeat; width:6px; height:10px; transform: rotate(90deg); transition:all 0.3s;}
 
 .smallMenu .menu_pos:hover .depth2 {opacity:1; width:200px; transition:all 0.3s;}
 .smallMenu .menu_franchise:hover .depth2 {opacity:1; width:200px; transition:all 0.3s;}
@@ -374,6 +394,53 @@ body {display:flex;}
 
 .userInfo {position:absolute; right:0px; top:0px;}
 .userInfo a {display:inline-block; height:49px; line-height:49px; overflow:hidden; position:relative;}
+
+.userLayer {background:#fff; border-radius:5px; box-shadow:0 0 5px 0 RGBA(0,0,0,0.7); position:absolute; right:10px; width:200px; display:block;
+    backface-visibility: visible!important;
+    animation-name: flip;
+    animation-duration: 1s;
+    animation-fill-mode: both;
+}
+.userLayer p {background:#f3f3f3; padding:15px 30px; border-radius:5px 5px 0 0;}
+.userLayer p span {display:block; font-size:0.875em; line-height:2em; color:#222;} 
+.userLayer p span em {font-size:1em; color:#222;}
+.userLayer li a {font-size:0.875em;}
+.userLayer li {border-bottom:1px solid #f3f3f3;}
+.userLayer li:last-child {border-bottom:0px;}
+.userLayer li a {display:block; padding:0 30px 0 60px; transition:all 0.3s;}
+.userLayer li a:hover {color:#222; transition:all 0.3s; background:RGBA(0,0,0,0.02);}
+.userLayer li:nth-child(1) {background:url(../img/ic_userlayer_my.png) 30px center no-repeat;}
+.userLayer li:nth-child(2) {background:url(../img/ic_userlayer_pw.png) 30px center no-repeat;}
+.userLayer li:nth-child(3) {background:url(../img/ic_userlayer_logout.png) 30px center no-repeat;}
+
+@keyframes flip {
+    from {
+        -webkit-transform: perspective(400px) rotate3d(0,1,0,90deg);
+        transform: perspective(400px) rotate3d(0,1,0,90deg);
+        -webkit-animation-timing-function: ease-in;
+        animation-timing-function: ease-in;
+        opacity: 0;
+    }
+    40% {
+        -webkit-transform: perspective(400px) rotate3d(0,1,0,-20deg);
+        transform: perspective(400px) rotate3d(0,1,0,-20deg);
+        -webkit-animation-timing-function: ease-in;
+        animation-timing-function: ease-in;
+    }
+    60% {
+        -webkit-transform: perspective(400px) rotate3d(0,1,0,10deg);
+        transform: perspective(400px) rotate3d(0,1,0,10deg);
+        opacity: 1;
+    }
+    80% {
+        -webkit-transform: perspective(400px) rotate3d(0,1,0,-5deg);
+        transform: perspective(400px) rotate3d(0,1,0,-5deg);
+    }
+    to {
+        -webkit-transform: perspective(400px);
+        transform: perspective(400px);
+    }
+}
 
 .type_Blue .userNotice {border-right:1px solid #2b94f0; background:url(../img/ic_notice.png) center no-repeat; width:60px;}
 .type_Blue .userNotice:after {content:''; position:absolute; left:-120px; top:-125px; width:300px; height:300px; background:#174291; z-index:-1; opacity:0; transition:all 1.5s;}
@@ -418,6 +485,8 @@ body {display:flex;}
  * **************************************** */
 .type_Blue .fixedMenu {background:#1e88e5; height:50px; border-top:1px solid #2b94f0; border-bottom:1px solid #127bd8; box-shadow:0 0 5px 0 #000; position:relative; z-index:800;}
 p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
+/*.fixedMenu ul {height:49px; position:relative; background:red;}
+.fixedMenu ul li {margin-bottom:10px;}*/
 .fixedMenu ul {display:table;}
 .type_Blue .fixedMenu ul li {float:left; height:48px; position:relative; border-right:1px solid #127bd8; position:relative; transition:all 0.3s;}
 .type_Blue .fixedMenu ul li:after {content:''; position:absolute; top:-1px; right:-1px; background:#127bd8; width:1px; height:1px;}
@@ -435,8 +504,85 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .moveBtn a {display:inline-block; width:19px; height:18px; border:1px solid #fff;}
 .moveBtn a.mL {background:url(../img/menu/menu_bullet.png) center no-repeat; transform: rotate(180deg); position:absolute; left:30px; top:15px;}
 .moveBtn a.mR {background:url(../img/menu/menu_bullet.png) center no-repeat; position:absolute; left:59px; top:15px;}
-.type_Blue .moveBtn a.mL:hover {background:url(../img/menu_bullet_blue.png) #fff center no-repeat; transition:all 0.3s;}
-.type_Blue .moveBtn a.mR:hover {background:url(../img/menu_bullet_blue.png) #fff center no-repeat; transition:all 0.3s;}
+.type_Blue .moveBtn a.mL:hover {background:url(../img/menu/menu_bullet_blue.png) #fff center no-repeat; transition:all 0.3s;}
+.type_Blue .moveBtn a.mR:hover {background:url(../img/menu/menu_bullet_blue.png) #fff center no-repeat; transition:all 0.3s;}
+
+
+/* **************************************** *
+ * layer
+ * **************************************** */
+.fullDimmed {width:100%; height:100%; background:#000; opacity:0.5; position:fixed; top:0; left:0; right:0; bottom:0; z-index:500;}
+/*For Center screen*/
+.layer {position:fixed; display:table; top:0; left:0; width:100%; height:100%; z-index:9999;}
+.layer .layer_inner {display:table-cell; text-align:center; vertical-align:middle;}
+.layer .noTitle {display:inline-block; text-align:center;}
+.layer .title {display:inline-block; text-align:left;}
+
+.noTitle {border-radius:4px; background:#fff; padding:40px 30px; z-index:500; position:relative; box-shadow: 0 0 20px 0px #222;}
+.noTitle p {line-height:1.5em; letter-spacing:-0.05em;}
+
+.title {border-radius:4px; background:#fff; padding:0 0 40px 0; z-index:500; position:relative; box-shadow: 0 0 20px 0px #222;}
+
+.tit {height:50px; border-bottom:1px solid #dbdbdb; line-height:50px; padding:0 30px; color:#222;}
+
+.title .btn_close {position:absolute; right:10px; top:5px;}
+.title .btn_close {display:inline-block; width:45px; height:40px; border-radius:5px; transition:all 0.3s;}
+.title .btn_close:hover {background:#e8e8e8; transition:all 0.3s;}
+.title .btn_close:hover:before {transform:rotate(225deg);}
+.title .btn_close:hover:after {transform:rotate(135deg);}
+.title .btn_close:before {content:''; position:absolute; top:18px; right:10px; width:24px; height:3px; background:#aeaeae; border-radius:20%; transform:rotate(45deg); transition:all 0.3s;}
+.title .btn_close:after {content:''; position:absolute; top:18px; right:10px; width:24px; height:3px; background:#aeaeae; border-radius:20%; transform:rotate(-45deg); transition:all 0.3s;}
+
+.con {padding:20px 30px 0;}
+
+.noTitle .btnSet {padding-top:60px; display:table; margin:0 auto;}
+.title .btnSet {padding-top:40px; display:table; margin:0 auto;}
+.btnSet a {color:#fff; display:inline-block; padding:10px 30px; border-radius:4px; margin:0 5px; transition:all 0.3s;} 
+.btnSet a:hover {transition:all 0.3s;}
+.btn_blue {background:#1e88e5;} .btn_blue:hover {background:#174291;}
+.btn_gray {background:#aeaeae;} .btn_gray:hover {background:#777;}
+
+.title .btnSet2 {}
+.title .btnSet2 a {color:#fff; display:inline-block; padding:7px 20px; border-radius:4px; font-size:0.75em; transition:all 0.3s;} 
+.title .btnSet2 a:hover {transition:all 0.3s;}
+.title .btnSet2 .btn_gray {background:#666;} .title .btnSet2 .btn_gray:hover {background:#444;}
+
+
+.tblType01.moreDark thead th {background:#e8e8e8;}
+
+.tblType01 {width:100%; border-top:1px solid #e8e8e8;}
+.tblType01 thead th {background:#f6f6f6; color:#222; font-size:0.75em; text-align:center;}
+.tblType01 thead tr.moreDark th {background:#e8e8e8;}
+.tblType01 thead tr.moreDark {border-bottom:1px solid #ccc;}
+.tblType01 tbody th {background:#f6f6f6; color:#222; font-size:0.75em; text-align:left;}
+.tblType01 tbody tr {border-bottom:1px solid #e8e8e8;}
+.tblType01 th {padding:15px;}
+.tblType01 td {padding:7px 10px; font-size:0.75em; color:#888; background:#fff;}
+.tblType01 td input {border:1px solid #e8e8e8; width:100%; height:30px; font-size:1em; padding:0 10px; color:#888;} 
+.tblType01 .impWrap {position:relative; font-size:1em; color:#222;}
+.tblType01 em.imp {color:red; position:absolute; margin:2px 0 0 2px;}
+.tblType01 input[type="checkbox"] {width:18px; height:18px;}
+.tblType01 select {border:1px solid #e8e8e8;  width:100%; height:30px; font-size:1em; color:#888; padding:0 0 0 10px;}
+.tblType01 .msgWrap {position:relative; font-size:1em;}
+.tblType01 span.errorMsg {position:absolute; left:15px; top:25px; background:#888; color:#fff; padding:5px 20px; font-size:1em; line-height:16px; border-radius:4px; z-index:999;} 
+.tblType01 span.errorMsg:before {content:''; position:absolute; left:20px; top:-4px; display:inline-block; background:url(../img/bg_errorMsg.png) no-repeat; width:7px; height:5px;}
+
+.tabType1 ul {overflow:hidden; border-bottom:1px solid #2e333f; height:31px;}
+.tabType1 ul li {float:left; margin-right:1px;}
+.tabType1 ul li:last-chid {margin-right:0x;}
+.tabType1 ul li a {font-size:0.875em; display:inline-block; background:#e8e8e8; height:30px; line-height:30px; padding:0 20px; transition:all 0.3s;}
+.tabType1 ul li a.on {background:#2e333f; color:#fff;}
+.tabType1 ul li a:hover {background:RGBA(0,0,0,0.2); color:#fff; transition:all 0.3s;}
+.tabType1 ul li a.on:hover {background:#2e333f; color:#fff;}
+
+.tabType2 ul {overflow:hidden; height:25px;}
+.tabType2 ul li {float:left;}
+.tabType2 ul li a {font-size:0.875em; display:inline-block; background:#e8e8e8; height:25px; line-height:25px; padding:0 20px; transition:all 0.3s;}
+.tabType2 ul li a.on, .tabType2 ul li a.on:hover {background:#fff; color:#2e333f; border:1px solid #2e333f;}
+.tabType2 ul li a:hover {background:RGBA(0,0,0,0.2); color:#fff; transition:all 0.3s;}
+
+.ic_notice span {background:#444; color:#fff; border-radius:100%; display:inline-block; width:40px; height:40px; line-height:40px; text-align:center; font-size:1.5em;}
+
 
 
 /* **************************************** *
@@ -448,7 +594,7 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .type_Purple .menuClose .fahoMenu {display:block; position:relative; left:60px; background:#f2e6ff; width:0; overflow:hidden; opacity:0; padding:10px 0;}
 .type_Purple .menuControl a:after {content:''; position:absolute; left:-120px; top:-125px; width:300px; height:300px; background:#6b1ce0; opacity:0; transition:all 1.5s;}
 .type_Purple .menuControl a:active:after {left:50%; top:50%; width:0px; height:0px; border-radius:50px; opacity:0.5; transition:0s;}
-.type_Purple .fahoMenu li.depth1 a.depth1:hover:before, .type_Purple .fahoMenu li.depth1.on a.depth1:before {content:''; position:absolute; left:180px; top:middle; margin-top:2px; background:url(../img/menu_bullet_purple.png) no-repeat; width:6px; height:10px; transition:all 0.3s;}
+.type_Purple .fahoMenu li.depth1 a.depth1:hover:before, .type_Purple .fahoMenu li.depth1.on a.depth1:before {content:''; position:absolute; left:180px; top:middle; margin-top:2px; background:url(../img/menu/menu_bullet_purple.png) no-repeat; width:6px; height:10px; transition:all 0.3s;}
 .type_Purple .fahoMenu li.depth1 a.depth1:hover span, .type_Purple .fahoMenu li.depth1.on a.depth1 span {color:#ae63ff;}
 .type_Purple .fahoMenu li.depth1 a.depth3:hover, .type_Purple .fahoMenu li.depth1 a.depth3.on {color:#ae63ff;}
 .type_Purple .smallMenu li.depth1:hover a.depth1 {background:#f2e6ff;}
@@ -471,8 +617,8 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .type_Purple .fixedMenu ul li a:first-child.on:before {content:''; position:absolute; width:100%; height:100%; background:none; left:-1px; top:-1px; border:1px solid #270089; box-sizing:content-box;}
 .type_Purple .fixedMenu ul li:hover {background:#bf84fe; transition:all 0.3s;}
 .type_Purple .moveBtn:before {content:''; position:absolute; left:10px; top:0px; width:88px; height:50px; background:#8c38e6; box-shadow:-2px 0 4px 0 RGBA(0,0,0,0.3);}
-.type_Purple .moveBtn a.mL:hover {background:url(../img/menu_bullet_purple.png) #fff center no-repeat; transition:all 0.3s;}
-.type_Purple .moveBtn a.mR:hover {background:url(../img/menu_bullet_purple.png) #fff center no-repeat; transition:all 0.3s;}
+.type_Purple .moveBtn a.mL:hover {background:url(../img/menu/menu_bullet_purple.png) #fff center no-repeat; transition:all 0.3s;}
+.type_Purple .moveBtn a.mR:hover {background:url(../img/menu/menu_bullet_purple.png) #fff center no-repeat; transition:all 0.3s;}
 
 .type_Purple .smallMenu li.depth1.menu_pos:hover:before {background-position:-40px -44px;}
 .type_Purple .smallMenu li.depth1.menu_pos.on:before {background-position:-40px -44px;}
@@ -506,7 +652,7 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .type_Green .menuClose .fahoMenu {display:block; position:relative; left:60px; background:#e1fff7; width:0; overflow:hidden; opacity:0; padding:10px 0;}
 .type_Green .menuControl a:after {content:''; position:absolute; left:-120px; top:-125px; width:300px; height:300px; background:#008866; opacity:0; transition:all 1.5s;}
 .type_Green .menuControl a:active:after {left:50%; top:50%; width:0px; height:0px; border-radius:50px; opacity:0.5; transition:0s;}
-.type_Green .fahoMenu li.depth1 a.depth1:hover:before, .type_Green .fahoMenu li.depth1.on a.depth1:before {content:''; position:absolute; left:180px; top:middle; margin-top:2px; background:url(../img/menu_bullet_green.png) no-repeat; width:6px; height:10px; transition:all 0.3s;}
+.type_Green .fahoMenu li.depth1 a.depth1:hover:before, .type_Green .fahoMenu li.depth1.on a.depth1:before {content:''; position:absolute; left:180px; top:middle; margin-top:2px; background:url(../img/menu/menu_bullet_green.png) no-repeat; width:6px; height:10px; transition:all 0.3s;}
 .type_Green .fahoMenu li.depth1 a.depth1:hover span, .type_Green .fahoMenu li.depth1.on a.depth1 span {color:#00ba8b;}
 .type_Green .fahoMenu li.depth1 a.depth3:hover, .type_Green .fahoMenu li.depth1 a.depth3.on {color:#00ba8b;}
 .type_Green .smallMenu li.depth1:hover a.depth1 {background:#e1fff7;}
@@ -529,8 +675,8 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .type_Green .fixedMenu ul li a:first-child.on:before {content:''; position:absolute; width:100%; height:100%; background:none; left:-1px; top:-1px; border:1px solid #006f52; box-sizing:content-box;}
 .type_Green .fixedMenu ul li:hover {background:#0ed3a1; transition:all 0.3s;}
 .type_Green .moveBtn:before {content:''; position:absolute; left:10px; top:0px; width:88px; height:50px; background:#00a279; box-shadow:-2px 0 4px 0 RGBA(0,0,0,0.3);}
-.type_Green .moveBtn a.mL:hover {background:url(../img/menu_bullet_green.png) #fff center no-repeat; transition:all 0.3s;}
-.type_Green .moveBtn a.mR:hover {background:url(../img/menu_bullet_green.png) #fff center no-repeat; transition:all 0.3s;}
+.type_Green .moveBtn a.mL:hover {background:url(../img/menu/menu_bullet_green.png) #fff center no-repeat; transition:all 0.3s;}
+.type_Green .moveBtn a.mR:hover {background:url(../img/menu/menu_bullet_green.png) #fff center no-repeat; transition:all 0.3s;}
 
 .type_Green .smallMenu li.depth1.menu_pos:hover:before {background-position:-40px -66px;}
 .type_Green .smallMenu li.depth1.menu_pos.on:before {background-position:-40px -66px;}
@@ -564,7 +710,7 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .type_Orange .menuClose .fahoMenu {display:block; position:relative; left:60px; background:#fff3e7; width:0; overflow:hidden; opacity:0; padding:10px 0;}
 .type_Orange .menuControl a:after {content:''; position:absolute; left:-120px; top:-125px; width:300px; height:300px; background:#b96209; opacity:0; transition:all 1.5s;}
 .type_Orange .menuControl a:active:after {left:50%; top:50%; width:0px; height:0px; border-radius:50px; opacity:0.5; transition:0s;}
-.type_Orange .fahoMenu li.depth1 a.depth1:hover:before, .type_Orange .fahoMenu li.depth1.on a.depth1:before {content:''; position:absolute; left:180px; top:middle; margin-top:2px; background:url(../img/menu_bullet_orange.png) no-repeat; width:6px; height:10px; transition:all 0.3s;}
+.type_Orange .fahoMenu li.depth1 a.depth1:hover:before, .type_Orange .fahoMenu li.depth1.on a.depth1:before {content:''; position:absolute; left:180px; top:middle; margin-top:2px; background:url(../img/menu/menu_bullet_orange.png) no-repeat; width:6px; height:10px; transition:all 0.3s;}
 .type_Orange .fahoMenu li.depth1 a.depth1:hover span, .type_Orange .fahoMenu li.depth1.on a.depth1 span {color:#ff9d39;}
 .type_Orange .fahoMenu li.depth1 a.depth3:hover, .type_Orange .fahoMenu li.depth1 a.depth3.on {color:#ff9d39;}
 .type_Orange .smallMenu li.depth1:hover a.depth1 {background:#fff3e7;}
@@ -587,8 +733,8 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .type_Orange .fixedMenu ul li a:first-child.on:before {content:''; position:absolute; width:100%; height:100%; background:none; left:-1px; top:-1px; border:1px solid #83470a; box-sizing:content-box;}
 .type_Orange .fixedMenu ul li:hover {background:#ffae39; transition:all 0.3s;}
 .type_Orange .moveBtn:before {content:''; position:absolute; left:10px; top:0px; width:88px; height:50px; background:#ee8418; box-shadow:-2px 0 4px 0 RGBA(0,0,0,0.3);}
-.type_Orange .moveBtn a.mL:hover {background:url(../img/menu_bullet_orange.png) #fff center no-repeat; transition:all 0.3s;}
-.type_Orange .moveBtn a.mR:hover {background:url(../img/menu_bullet_orange.png) #fff center no-repeat; transition:all 0.3s;}
+.type_Orange .moveBtn a.mL:hover {background:url(../img/menu/menu_bullet_orange.png) #fff center no-repeat; transition:all 0.3s;}
+.type_Orange .moveBtn a.mR:hover {background:url(../img/menu/menu_bullet_orange.png) #fff center no-repeat; transition:all 0.3s;}
 
 .type_Orange .smallMenu li.depth1.menu_pos:hover:before {background-position:-40px -88px;}
 .type_Orange .smallMenu li.depth1.menu_pos.on:before {background-position:-40px -88px;}
