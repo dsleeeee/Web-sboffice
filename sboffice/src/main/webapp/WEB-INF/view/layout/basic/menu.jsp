@@ -112,8 +112,11 @@ onload = function() {
   });
   
   // 선택된 메뉴의 메뉴코드와 부모메뉴의 메뉴코드
-  var cResrce = "";
-  var pResrce = "";
+  //var cResrce = "";
+  //var pResrce = "";
+  
+  var cResrce = "000217";
+  var pResrce = "000037";
   
   // 현재 선택된 메뉴 depth 저장
   var sel1Depth = 0;
@@ -244,15 +247,30 @@ onload = function() {
   function initMenu(tree){
     if(pResrce != "" && cResrce !=""){
       console.log("tree : "+ tree);
+
       var items = (tree == "theTreeAll"? getAllMenu():getbmkMenu());
+      
+      console.log(tree + "items : " + JSON.stringify(items));
+      
       var pCnt = 0; // 1depth의 index 알아내기 위한 변수
       for(var i=0; i<items.length; i++){
         var item = items[i];
         pCnt = item.level1Seq;
+
+        console.log("pCnt : "+ pCnt);
+        console.log("pCnt item.items : "+JSON.stringify(item.items));
+        
         if(item.items){
+          
+          console.log(pCnt + " item.items.length : "+ item.items.length);
+          
           for(var j=0; j<item.items.length; j++){
             var item2 = item.items[j];
+            console.log("item2.resrceCd : "+ item2.resrceCd);
+            
             if(item2.resrceCd == cResrce){ // 2depth가 마지막 depth일때
+              
+              
               sel1Depth = pCnt;
               sel2Depth = j;
               sel3Depth = j;
@@ -272,11 +290,18 @@ onload = function() {
         }
       }
 
+      console.log("sel1Depth : "+ sel1Depth);
+      console.log("sel2Depth : "+ sel2Depth);
+      console.log("sel3Depth : "+ sel3Depth);
+      
       $("#"+ tree +" div[wj-part=root] > .wj-node").eq(sel1Depth).click();
       $("#"+ tree +" div[wj-part=root] > .wj-node").eq(sel1Depth).addClass("on");
       $("#"+ tree +" div[wj-part=root] > .wj-nodelist").eq(sel1Depth).children('.wj-node').eq(sel2Depth).click();
       $("#"+ tree +" div[wj-part=root] > .wj-nodelist").eq(sel1Depth).children('.wj-node').eq(sel2Depth).addClass("on");
       $("#"+ tree +" div[wj-part=root] > .wj-nodelist").eq(sel1Depth).children('.wj-nodelist').eq(sel2Depth).children('.wj-node').eq(sel3Depth).addClass("wj-state-selected");
+      
+      console.log("짠 : " +tree);
+      
     }
   }
 }

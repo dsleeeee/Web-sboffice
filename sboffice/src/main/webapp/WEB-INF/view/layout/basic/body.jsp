@@ -46,14 +46,15 @@
     <%-- 오른쪽 메인 부분 --%>
     
   </div>
+  
+  <c:import url="/WEB-INF/view/application/layer/alert.jsp">
+  </c:import>
+
 </body>
 
 <script type="text/javascript">
-$(".menuControl").click(function() {
-  $("#_nav").toggleClass("menuOpen menuClose");
-  $("#_arrow").toggleClass("arrowOpen arrowClose");
-});
- /* 
+
+/*
 $(".menuTab .all").click(function() {
   $("#_all").addClass("on");
   $("#_favorite").removeClass();
@@ -74,7 +75,7 @@ $(".menuTab .favorite").click(function() {
   
   showBmkMenu();
 });
- */
+*/
 </script>
 
 
