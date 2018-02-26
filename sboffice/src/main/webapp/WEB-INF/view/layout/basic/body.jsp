@@ -55,6 +55,11 @@
 
 <script type="text/javascript">
 
+$(".menuControl").click(function() {
+  $("#_nav").toggleClass("menuOpen menuClose");
+  $("#_arrow").toggleClass("arrowOpen arrowClose");
+});
+
 /*
 $(".menuTab .all").click(function() {
   $("#_all").addClass("on");

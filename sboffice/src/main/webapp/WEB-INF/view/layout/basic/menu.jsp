@@ -77,6 +77,14 @@
 <script>
 onload = function() {
   
+
+  // 선택된 메뉴의 메뉴코드와 부모메뉴의 메뉴코드
+  //var cResrce = "";
+  //var pResrce = "";
+  
+  var cResrce = "000173";
+  var pResrce = "000030";
+  
   var allMenuTree;
   var bmkMenuTree;
   
@@ -86,7 +94,6 @@ onload = function() {
     $("#_all").addClass("on");
     $("#_favorite").removeClass();
     
-    //$("#faMenu").css("display","none");
     $("#faMenu").hide();
     
     if(!allMenuTree) showAllMenu();
@@ -100,7 +107,6 @@ onload = function() {
     $("#_all").removeClass();
     $("#_favorite").addClass("on");
 
-    //$("#faMenu").css("display","block");
     $("#faMenu").show();
     
     if(!bmkMenuTree)  showBmkMenu();
@@ -109,12 +115,6 @@ onload = function() {
     $("#theTreeBkmk").show();
   });
   
-  // 선택된 메뉴의 메뉴코드와 부모메뉴의 메뉴코드
-  //var cResrce = "";
-  //var pResrce = "";
-  
-  var cResrce = "000217";
-  var pResrce = "000037";
   
   // 현재 선택된 메뉴 depth 저장
   var sel1Depth = 0;
@@ -244,71 +244,49 @@ onload = function() {
   // 메뉴 초기화 : 선택된 메뉴가 있을 경우, 해당 메뉴 보여줌.
   function initMenu(tree){
     if(pResrce != "" && cResrce !=""){
-      console.log("tree : "+ tree);
-
+      var stat = false;
       var items = (tree == "theTreeAll"? getAllMenu():getbmkMenu());
-      
-      console.log(tree + "items : " + JSON.stringify(items));
       
       var pCnt = 0; // 1depth의 index 알아내기 위한 변수
       for(var i=0; i<items.length; i++){
         var item = items[i];
         pCnt = item.level1Seq;
-
-        console.log("pCnt : "+ pCnt);
-        console.log("pCnt item.items : "+JSON.stringify(item.items));
-        
         if(item.items){
-          
-          console.log(pCnt + " item.items.length : "+ item.items.length);
-          
           for(var j=0; j<item.items.length; j++){
             var item2 = item.items[j];
-            console.log("item2.resrceCd : "+ item2.resrceCd);
-            
             if(item2.resrceCd == cResrce){ // 2depth가 마지막 depth일때
-              
-              
               sel1Depth = pCnt;
               sel2Depth = j;
               sel3Depth = j;
+              stat = true;
             }
             if(item2.resrceCd == pResrce){ // 3depth가 마지막 depth일때
               sel1Depth = pCnt;
               sel2Depth = item2.level2Seq;
-              
               for(var k=0; k<item2.items.length; k++){
                 var item3 = item2.items[k];
                 if(item3.resrceCd == cResrce){
                  sel3Depth = item3.level3Seq;
+                 stat = true;
                 }
               }
             }
           }
         }
       }
-
-      console.log("sel1Depth : "+ sel1Depth);
-      console.log("sel2Depth : "+ sel2Depth);
-      console.log("sel3Depth : "+ sel3Depth);
-      
-      $("#"+ tree +" div[wj-part=root] > .wj-node").eq(sel1Depth).click();
-      $("#"+ tree +" div[wj-part=root] > .wj-node").eq(sel1Depth).addClass("on");
-      $("#"+ tree +" div[wj-part=root] > .wj-nodelist").eq(sel1Depth).children('.wj-node').eq(sel2Depth).click();
-      $("#"+ tree +" div[wj-part=root] > .wj-nodelist").eq(sel1Depth).children('.wj-node').eq(sel2Depth).addClass("on");
-      $("#"+ tree +" div[wj-part=root] > .wj-nodelist").eq(sel1Depth).children('.wj-nodelist').eq(sel2Depth).children('.wj-node').eq(sel3Depth).addClass("wj-state-selected");
-      
-      console.log("짠 : " +tree);
-      
+      if(stat){
+        $("#"+ tree +" div[wj-part=root] > .wj-node").eq(sel1Depth).click();
+        $("#"+ tree +" div[wj-part=root] > .wj-node").eq(sel1Depth).addClass("on");
+        $("#"+ tree +" div[wj-part=root] > .wj-nodelist").eq(sel1Depth).children('.wj-node').eq(sel2Depth).click();
+        $("#"+ tree +" div[wj-part=root] > .wj-nodelist").eq(sel1Depth).children('.wj-node').eq(sel2Depth).addClass("on");
+        $("#"+ tree +" div[wj-part=root] > .wj-nodelist").eq(sel1Depth).children('.wj-nodelist').eq(sel2Depth).children('.wj-node').eq(sel3Depth).addClass("wj-state-selected");
+      }
     }
   }
 }
 
 
-
 ////////////////////////////////////////// String util //////////////////////////////////////////
-
-
 
 // check if the character or object is empty 
 var isEmpty = function(value){

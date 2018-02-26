@@ -280,7 +280,7 @@ public class CmmMenuServiceImpl implements CmmMenuService {
                 
                 if (resrceInfo2.getPResrce().equals(resrceCd1)) {
                     
-                    m2Header.put("level2Seq", j);
+                    m2Header.put("level2Seq", level2Seq);
                     m2Header.put("header", resrceInfo2.getResrceNm());
                     m2Header.put("resrceCd", resrceInfo2.getResrceCd());
                     m2Header.put("url", "");
@@ -288,19 +288,20 @@ public class CmmMenuServiceImpl implements CmmMenuService {
                     
                     List<HashMap<String, Object>> m2items = new ArrayList<HashMap<String, Object>>();
                     
+                    int level3Seq = 0;
                     // 하위 레벨 'TB_WB_RESRCE_INFO.DISP_LEVLE = 2'
                     for (int k = 0; k < menu3.size(); k++) {
                         ResrceInfo resrceInfo3 = menu3.get(k);
-                        
                         if (resrceInfo3.getPResrce().equals(m2ResrceCd)) {
                             
                             HashMap<String, Object> m3Header = new HashMap<>();
                             
-                            m3Header.put("level3Seq", k);
+                            m3Header.put("level3Seq", level3Seq);
                             m3Header.put("header", resrceInfo3.getResrceNm());
                             m3Header.put("resrceCd", resrceInfo3.getResrceCd());
                             m3Header.put("url", isEmpty(resrceInfo3.getUrl()) ? "" : resrceInfo3.getUrl());
-
+                            level3Seq ++;
+                            
                             m2items.add(m3Header);
                         }
                     }
