@@ -3,8 +3,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
-<%-- 왼쪽 메뉴 --%>
-<nav id="_nav" class="menuOpen">
+  <%-- 왼쪽 메뉴 --%>
 
   <!--로고영역-->
   <h1>
@@ -74,7 +73,6 @@
     </div>
     <!--//위즈모 메뉴-->
   </div>
-</nav>
 
 <script>
 onload = function() {

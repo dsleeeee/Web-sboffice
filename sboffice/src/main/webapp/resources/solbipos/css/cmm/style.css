@@ -83,8 +83,12 @@ button {outline:none; border:0; font-family:'NotoR', Malgun Gothic, '맑은 고�
 /* **************************************** *
  * COMMON
  * **************************************** */
-.w100 {width:100%;} 
+.w7 {width:7%;} .w10 {width:10%;} .w15 {width:15%;} .w20 {width:20%;} .w28 {width:28%;} .w30 {width:30%;} .w33 {width:33.333333%;} .w40 {width:40%;} .w50 {width:50%;} .w60 {width:60%;} .w70 {width:70%;} .w80 {width:80%;} .w90 {width:90%;} .w100 {width:100%;} 
 .w500 {width:500px;} .w600 {width:600px;}
+
+.br {border-right:1px solid #dbdbdb;} .bl {border-left:1px solid #dbdbdb;} .bb {border-bottom:1px solid #dbdbdb;} .bt {border-top:1px solid #dbdbdb;}
+
+.fl {float:left;} .fr {float:right;}
 
 .s12 {font-size:12px;} .s14 {font-size:14px;} .s16 {font-size:16px;} .s18 {font-size:18px;}
 
@@ -106,14 +110,43 @@ button {outline:none; border:0; font-family:'NotoR', Malgun Gothic, '맑은 고�
 .pd10 {padding:10px;} .pd20 {padding:20px;} .pd30 {padding:30px;}
 
 
+
 /* **************************************** *
  * LAYOUT
  * **************************************** */
-html, body {height:100%;}
-body {display:flex;}
-.wrap {display:flex; flex:auto;}
-.wrap > nav.menuOpen {width:220px; position:relative;}
-.contents {flex:auto; min-width:804px;}
+.wrap {width:100%; overflow:hidden;}
+.wrap > nav.menuOpen {width:220px; height:100%; position:fixed; z-index:60;}
+.wrap > nav.menuClose {width:60px; height:100%; position:fixed; z-index:60;}
+
+nav.menuOpen .menuTree {height:100%; width:219px; overflow:hidden;}
+nav.menuOpen .menuTree .wj-treeview {height:100%; width:240px; overflow-y:scroll;}
+
+/*ie용 스크롤 숨기기*/
+nav.menuOpen .menuTree .wj-treeview {
+    scrollbar-arrow-color: #2e333f;
+    scrollbar-Track-Color: #2e333f; 
+    scrollbar-base-color: #2e333f;
+    scrollbar-Face-Color: #2e333f;
+    scrollbar-3dLight-Color: #2e333f;         
+    scrollbar-DarkShadow-Color: #2e333f;
+    scrollbar-Highlight-Color: #2e333f;
+    scrollbar-Shadow-Color: #2e333f;
+}
+
+/*크롬용 스크롤 숨기기*/
+nav.menuOpen .menuTree .wj-treeview::-webkit-scrollbar {width:12px; height:12px; }
+nav.menuOpen .menuTree .wj-treeview::-webkit-scrollbar-button:start:decrement, 
+nav.menuOpen .menuTree .wj-treeview::-webkit-scrollbar-button:end:increment {display:block; width: 12px;height: 12px; background:#2e333f;}
+nav.menuOpen .menuTree .wj-treeview::-webkit-scrollbar-track {background: #2e333f;}
+nav.menuOpen .menuTree .wj-treeview::-webkit-scrollbar-thumb {background: #2e333f;}
+
+
+
+
+nav.menuOpen + .topWrap + .contents {position:relative; min-width:804px; height:100%; margin-left:220px; padding-top:100px; transition:all 0.2s cubic-bezier(.13, 1.09, .78, 1)}
+nav.menuOpen + .topWrap {position:fixed; width:100%; min-width:804px; padding-left:220px; z-index:50; transition:all 0.2s cubic-bezier(.13, 1.09, .78, 1)}
+nav.menuClose + .topWrap + .contents {position:relative; min-width:964px; height:100%; margin-left:60px; padding-top:100px; transition:all 0.2s cubic-bezier(.13, 1.09, .78, 1)}
+nav.menuClose + .topWrap {position:fixed; width:100%; min-width:964px; padding-left:60px; z-index:50; transition:all 0.2s cubic-bezier(.13, 1.09, .78, 1)}
 
 
 /* **************************************** *
@@ -218,9 +251,15 @@ body {display:flex;}
 .Area_crtNum .btn_crtNum:hover {background:#dbdbdb; transition:all 0.3s;}
 
 .idInfo {position:relative; margin:0 50px; margin-bottom:40px; background:#f0f0f0; border:1px solid #e0e1e2; border-radius:4px; padding:20px 0;}
-.idInfo span {display:block; text-align:center;}
-.idInfo span:first-child {font-size:0.875em;}
-.idInfo span:last-child {color:#222; font-size:1.25em; text-decoration:underline; padding-top:10px;}
+.idInfo p span {display:block; text-align:center;}
+.idInfo p span:first-child {font-size:0.875em;}
+.idInfo p span:last-child {color:#222; font-size:1.25em; text-decoration:underline; padding-top:10px;}
+
+.idInfo > span {display:block; text-align:center; font-size:0.875em; text-decoration:underline;}
+.idInfo ul {width:280px; margin:20px 0 0 20px; padding:10px 10px 10px 0; max-height:90px; overflow-y:auto;}
+.idInfo ul li {text-align:center; font-size:0.875em; color:#222; line-height:20px;}
+.idInfo ul li span {font-size:1em; color:#222;}
+
 
 .lineArea {position:relative; margin:0 50px; border-top:1px solid #e0e1e2; padding-top:30px;}
 .lineArea:before {content:''; width:319px; height:1px; background:#fff; position:absolute; left:0px; margin-top:-32px;}
@@ -354,6 +393,10 @@ body {display:flex;}
 .type_Blue .smallMenu li.depth1.menu_addservice:hover:before {background-position:-200px -22px;}
 .type_Blue .smallMenu li.depth1.menu_addservice.on:before {background-position:-200px -22px;}
 
+.smallMenu li.depth1.menu_stock:before {background-position:-220px 0;}
+.type_Blue .smallMenu li.depth1.menu_stock:hover:before {background-position:-220px -22px;}
+.type_Blue .smallMenu li.depth1.menu_stock.on:before {background-position:-220px -22px;}
+
 .type_Blue .smallMenu li ul.depth2 {position:absolute; left:60px; top:0px; background:#ebf5ff; width:0px; overflow:hidden; padding:50px 0 10px 0; opacity:1;  transition:all 0.3s;}
 .smallMenu li ul.depth2 a {font-size:0.875em; color:#888fa4; display:inline-block; width:200px; padding:7px 30px 7px 15px;  transition:color 0.3s;}
 .smallMenu li ul.depth2 a:before {background:none;}
@@ -371,6 +414,7 @@ body {display:flex;}
 .smallMenu .menu_receivepay:hover .depth2 {opacity:1; width:200px; transition:all 0.3s;}
 .smallMenu .menu_calculate:hover .depth2 {opacity:1; width:200px; transition:all 0.3s;}
 .smallMenu .menu_addservice:hover .depth2 {opacity:1; width:200px; transition:all 0.3s;}
+.smallMenu .menu_stock:hover .depth2 {opacity:1; width:200px; transition:all 0.3s;}
 
 .smallMenu a.depth3 {padding:7px 10px 7px 35px!important;}
 .type_Blue .smallMenu a.depth3:hover, .type_Blue .smallMenu a.depth3.on {color:#1e88e5!important; transition:all 0.3s;}
@@ -485,10 +529,8 @@ body {display:flex;}
  * **************************************** */
 .type_Blue .fixedMenu {background:#1e88e5; height:50px; border-top:1px solid #2b94f0; border-bottom:1px solid #127bd8; box-shadow:0 0 5px 0 #000; position:relative; z-index:800;}
 p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
-/*.fixedMenu ul {height:49px; position:relative; background:red;}
-.fixedMenu ul li {margin-bottom:10px;}*/
-.fixedMenu ul {display:table;}
-.type_Blue .fixedMenu ul li {float:left; height:48px; position:relative; border-right:1px solid #127bd8; position:relative; transition:all 0.3s;}
+.fixedMenu ul {height:50px; overflow:hidden; margin-top:-1px; padding-top:1px;}
+.type_Blue .fixedMenu ul li {float:left; height:48px; border-right:1px solid #127bd8; position:relative; transition:all 0.3s; margin-bottom:2px;}
 .type_Blue .fixedMenu ul li:after {content:''; position:absolute; top:-1px; right:-1px; background:#127bd8; width:1px; height:1px;}
 .type_Blue .fixedMenu ul li a:first-child {position:relative; color:#fff; display:inline-block; height:48px; line-height:48px; padding:0 50px 0 20px; font-size:14px; text-decoration:none; border-right:1px solid #2b94f0;}
 .type_Blue .fixedMenu ul li:hover {background:#2b94f0; transition:all 0.3s;}
@@ -507,6 +549,160 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .type_Blue .moveBtn a.mL:hover {background:url(../img/menu/menu_bullet_blue.png) #fff center no-repeat; transition:all 0.3s;}
 .type_Blue .moveBtn a.mR:hover {background:url(../img/menu/menu_bullet_blue.png) #fff center no-repeat; transition:all 0.3s;}
 
+
+/* **************************************** *
+ * mainContents
+ * **************************************** */
+.wizWrap {height:240px; width:100%;}
+
+/*통계_보라색 : 매장수*/
+.stat_purple1 {padding:20px;}
+.stat_purple1 h2 {font-size:1.25em; color:#222; border-bottom:1px solid #e3e3e3; padding-bottom:10px; overflow:hidden;}
+.stat_purple1 h2 span {font-size:1em; color:#7460ee; font-weight:bold; float:right;}
+.stat_purple1 div {overflow:hidden;}
+.stat_purple1 div p span:first-child {color:#222; background:#f3f3f3; padding:5px 20px 6px; border-radius:13px; display:inline-block; margin-top:20px;}
+.stat_purple1 div p span:last-child {color:#7460ee; display:block; padding-top:15px;}
+
+.stat_purple2 {padding:20px;}
+.stat_purple2 h2 {font-size:1.25em; color:#222; border-bottom:1px solid #e3e3e3; padding-bottom:10px; overflow:hidden;}
+.stat_purple2 h2 span {font-size:1em; color:#7460ee; font-weight:bold; float:right;}
+.stat_purple2 div {overflow:hidden; margin-top:20px;}
+.stat_purple2 div p {margin-bottom:10px;}
+.stat_purple2 div p:last-child {margin-bottom:0px;}
+.stat_purple2 div p span:first-child {color:#222; background:#f3f3f3; height:26px; line-height:26px; padding:0 20px 0; border-radius:13px; display:inline-block;}
+.stat_purple2 div p span:last-child {color:#7460ee; line-height:26px; float:right;}
+
+.stat_purple3 {padding:20px;}
+.stat_purple3 h2 {font-size:1.25em; color:#222; overflow:hidden; text-align:center;}
+.stat_purple3 h2 span {font-size:1em; color:#7460ee; font-weight:bold; margin-top:20px; display:block; text-align:center;}
+
+/*통계_하늘색 : 포스수*/
+.stat_sky1 {padding:20px;}
+.stat_sky1 h2 {font-size:1.25em; color:#222; border-bottom:1px solid #e3e3e3; padding-bottom:10px; overflow:hidden;}
+.stat_sky1 h2 span {font-size:1em; color:#26c6da; font-weight:bold; float:right;}
+.stat_sky1 div {overflow:hidden;}
+.stat_sky1 div p span:first-child {color:#222; background:#f3f3f3; padding:5px 20px 6px; border-radius:13px; display:inline-block; margin-top:20px;}
+.stat_sky1 div p span:last-child {color:#26c6da; display:block; padding-top:15px;}
+
+.stat_sky2 {padding:20px;}
+.stat_sky2 h2 {font-size:1.25em; color:#222; border-bottom:1px solid #e3e3e3; padding-bottom:10px; overflow:hidden;}
+.stat_sky2 h2 span {font-size:1em; color:#26c6da; font-weight:bold; float:right;}
+.stat_sky2 div {overflow:hidden; margin-top:20px;}
+.stat_sky2 div p {margin-bottom:10px;}
+.stat_sky2 div p:last-child {margin-bottom:0px;}
+.stat_sky2 div p span:first-child {color:#222; background:#f3f3f3; height:26px; line-height:26px; padding:0 20px 0; border-radius:13px; display:inline-block;}
+.stat_sky2 div p span:last-child {color:#26c6da; line-height:26px; float:right;}
+
+.stat_sky3 {padding:20px;}
+.stat_sky3 h2 {font-size:1.25em; color:#222; overflow:hidden; text-align:center;}
+.stat_sky3 h2 span {font-size:1em; color:#26c6da; font-weight:bold; margin-top:20px; display:block; text-align:center;}
+
+/*통계_파란색 : 폐점매장*/
+.stat_blue3 {padding:20px;}
+.stat_blue3 h2 {font-size:1.25em; color:#222; overflow:hidden; text-align:center;}
+.stat_blue3 h2 span {font-size:1em; color:#1e88e5; font-weight:bold; margin-top:20px; display:block; text-align:center;}
+
+
+/*위즈모 그래프 들어가는 컨텐츠*/
+.graph {height:310px; padding:20px;}
+.graph h2 {font-size:1.25em; color:#222; padding-bottom:10px; position:relative;}
+.graph div {position:relative;}
+
+/*날씨*/
+.weather {padding:0; height:310px; position:relative;}
+.weather .today {padding:10px 0 15px 0;}
+.weather .today a {font-size:0px; width:23px; height:23px; background:url(../img/ic_weather_more.png) #bfd4e9 center no-repeat; background-size:12px 9px; position:absolute; right:20px; top:20px; border-radius:100%; transition:all 0.3s;}
+.weather .today a:hover {background:url(../img/ic_weather_more.png) #9abbdc center no-repeat; transition:all 0.3s;}
+.weather .today .date span {display:block; text-align:center; font-size:1.25em; margin-top:10px;}
+.weather .today .date span, .weather .today .date em {color:#222;}
+.weather .today .date em {font-size:1em;}
+.weather .today {background:#ebf5ff;}
+.weather .today .temperatures {display:table; margin:20px auto 0;}
+.weather .today .temperatures p {display:table-cell; overflow:hidden; font-size:0.875em;}
+.weather .today .temperatures p > em {background:url(../img/weather.png) no-repeat; width:62px; height:62px; float:left; display:inline-block; margin-right:20px}
+.weather .today .temperatures p > em.weIc01 {background-position:0 0;} /*파란색 날씨아이콘 위치*/
+.weather .today .temperatures p > em.weIc02 {background-position:-62px 0;}
+.weather .today .temperatures p > em.weIc03 {background-position:-124px 0;}
+.weather .today .temperatures p > em.weIc04 {background-position:-186px 0;}
+.weather .today .temperatures p > em.weIc05 {background-position:-248px 0;}
+.weather .today .temperatures p > em.weIc06 {background-position:-310px 0;}
+.weather .today .temperatures p > em.weIc07 {background-position:-372px 0;}
+.weather .today .temperatures p > em.weIc08 {background-position:-434px 0;}
+.weather .today .temperatures p > em.weIc09 {background-position:-496px 0;}
+.weather .today .temperatures p > em.weIc10 {background-position:-558px 0;}
+.weather .today .temperatures p > em.weIc11 {background-position:-620px 0;}
+.weather .today .temperatures p > em.weIc12 {background-position:-682px 0;}
+.weather .today .temperatures p > em.weIc13 {background-position:-744px 0;}
+.weather .today .temperatures p > em.weIc14 {background-position:-806px 0;}
+.weather .today .temperatures span {font-size:1em; line-height:20px; display:inline-block; margin-top:10px;}
+.weather .today .temperatures span em {font-size:1em;}
+.weather ul {padding:0 20px; text-align:center;}
+.weather ul li {text-align:center;}
+.weather ul li span {font-size:0.875em;}
+.weather ul li span em {font-size:1em;}
+.weather ul li span:first-child {background:url(../img/weather_s.png) no-repeat; width:30px; height:30px; display:inline-block}
+.weather ul li span.weIc01 {background-position:0 0;} /*검은색 날씨아이콘 위치*/
+.weather ul li span.weIc02 {background-position:-30px 0;}
+.weather ul li span.weIc03 {background-position:-60px 0;}
+.weather ul li span.weIc04 {background-position:-90px 0;}
+.weather ul li span.weIc05 {background-position:-120px 0;}
+.weather ul li span.weIc06 {background-position:-150px 0;}
+.weather ul li span.weIc07 {background-position:-180px 0;}
+.weather ul li span.weIc08 {background-position:-210px 0;}
+.weather ul li span.weIc09 {background-position:-240px 0;}
+.weather ul li span.weIc10 {background-position:-270px 0;}
+.weather ul li span.weIc11 {background-position:-300px 0;}
+.weather ul li span.weIc12 {background-position:-330px 0;}
+.weather ul li span.weIc13 {background-position:-360px 0;}
+.weather ul li span.weIc14 {background-position:-390px 0;}
+.weather ul li span.day {background:#f3f3f3; border-radius:100%; height:30px; line-height:30px; padding:0 8px; display:inline-block; margin:0 8px;}
+.weather ul li span:nth-child(2), .weather ul li span:nth-child(3) {position:relative; top:-9px;}
+.weather ul li {padding:20px 0 10px 0;}
+.weather ul li:first-child {border-bottom:1px solid #f2f2f2;}
+
+/*공지사항*/
+.notice {padding:20px; height:310px;}
+.notice h2 {font-size:1.25em; color:#222; border-bottom:1px solid #e3e3e3; padding-bottom:10px;}
+.notice ul {}
+.notice ul li {border-bottom:1px solid #f2f2f2; padding:14px 0 13px;}
+.notice ul li:last-child {border-bottom:0px; padding:14px 0 0;}
+.notice ul li a {font-size:0.875em; line-height:1.4em;}
+.notice ul li a:hover {color:#444; transition:all 0.3s;}
+.notice ul li span {font-size:0.75em; color:#bbb; display:block; text-align:right; margin-top:5px;}
+
+/*메인테이블*/
+.mainTbl {padding:20px;}
+.mainTbl h2 {font-size:1.25em; color:#222; padding-bottom:10px;}
+.mainTbl table {width:100%;}
+.mainTbl table th, .mainTbl table td {height:45px; font-size:0.875em;}
+.mainTbl table thead th {background:#ebf5ff; color:#337dde; position:relative;}
+.mainTbl table thead th:after {content:''; width:1px; height:15px; position:absolute; right:0px; top:15px; background:#93cbfc;}
+.mainTbl table thead th:last-child:after {background:none;}
+.mainTbl table tbody th {background:#f6f6f6; color:#222; border-bottom:1px solid #e8e8e8;}
+.mainTbl table tbody td {text-align:center; border-bottom:1px solid #e8e8e8;}
+
+/*그래프 아이콘안내, 검색조건*/
+.circle, .square, .searchBox {float:right;}
+
+.circle span {font-size:0.75em; padding-left:15px; position:relative; margin-left:15px;}
+.circle span.blue:before {content:''; width:10px; height:10px; border-radius:100%; background:#93cbfc; border:1px solid #248be6; position:absolute; left:0px; top:4px;}
+.circle span.sky:before {content:''; width:10px; height:10px; border-radius:100%; background:#90f0fc; border:1px solid #2cc8db; position:absolute; left:0px; top:4px;}
+
+.square span {font-size:0.75em; padding-left:15px; position:relative; margin-left:15px;}
+.square span.blue:before {content:''; width:10px; height:11px; background:#93cbfc; border:1px solid #248be6; position:absolute; left:0px; top:4px;}
+.square span.sky:before {content:''; width:10px; height:11px; background:#90f0fc; border:1px solid #2cc8db; position:absolute; left:0px; top:4px;}
+
+.searchBox span:first-child {font-size:0.75em; line-height:30px;}
+.searchBox span select {height:30px; font-size:0.875em; color:#222; width:150px; bordeR:1px solid #ccc; border-radius:5px; padding-left:10px; margin-left:15px;}
+
+/*수발주정보, 회원현황*/
+.bgTxt {padding:20px;}
+.bgTxt h2 {font-size:1.25em; color:#222; padding-bottom:10px;}
+.bgTxt ul {background:#f6f6f6; overflow:hidden;}
+.bgTxt ul li {width:50%; float:left; font-size:0.875em; text-align:center; padding:20px 0; position:relative;}
+.bgTxt ul li span {display:block; color:#1e88e5; font-size:1em; margin-top:13px;}
+.bgTxt ul li:after {content:''; width:1px; height:49px; background:#e8e8e8; position:absolute; right:0px; top:15px;}
+.bgTxt ul li:last-child:after {width:0;}
 
 /* **************************************** *
  * layer
@@ -602,7 +798,6 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .type_Purple .smallMenu li ul.depth2 {position:absolute; left:60px; top:0px; background:#f2e6ff; width:0px; overflow:hidden; padding:50px 0 10px 0; opacity:1;  transition:all 0.3s;}
 .type_Purple .smallMenu a.depth3:hover, .type_Purple .smallMenu a.depth3.on {color:#ae63ff!important; transition:all 0.3s;}
 .type_Purple .topBar {background:#ae63ff; height:50px; border-bottom:1px solid #8c38e6; z-index:900; position:relative;}
-.type_Purple .fixedMenu {background:#ae63ff; height:50px; border-top:1px solid #bf84fe; border-bottom:1px solid #8c38e6; box-shadow:0 0 5px 0 #000; position:relative; z-index:800;}
 .type_Purple .userId {padding:0 40px 0 20px; border-left:1px solid #8c38e6; float:right;}
 .type_Purple .userId:after {content:''; position:absolute; left:-120%; top:-240px; width:500px; height:500px; background:#6b1ce0; border-radius:100%; opacity:0; transition:all 1.3s;}
 .type_Purple .userId:active:after {left:50%; top:50%; width:0px; height:0px; border-radius:100%; opacity:0.5; transition:0s;}
@@ -610,7 +805,7 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .type_Purple .userNotice:after {content:''; position:absolute; left:-120px; top:-125px; width:300px; height:300px; background:#6b1ce0; z-index:-1; opacity:0; transition:all 1.5s;}
 .type_Purple .userNotice:active:after {left:50%; top:50%; width:0px; height:0px; border-radius:50px; opacity:0.5; transition:0s;}
 .type_Purple .fixedMenu {background:#ae63ff; height:50px; border-top:1px solid #bf84fe; border-bottom:1px solid #8c38e6; box-shadow:0 0 5px 0 #000; position:relative; z-index:800;}
-.type_Purple .fixedMenu ul li {float:left; height:48px; position:relative; border-right:1px solid #8c38e6; position:relative; transition:all 0.3s;}
+.type_Purple .fixedMenu ul li {float:left; height:48px; border-right:1px solid #8c38e6; position:relative; transition:all 0.3s; margin-bottom:2px;}
 .type_Purple .fixedMenu ul li:after {content:''; position:absolute; top:-1px; right:-1px; background:#8c38e6; width:1px; height:1px;}
 .type_Purple .fixedMenu ul li a:first-child {position:relative; color:#fff; display:inline-block; height:48px; line-height:48px; padding:0 50px 0 20px; font-size:14px; text-decoration:none; border-right:1px solid #bf84fe;}
 .type_Purple .fixedMenu ul li a:first-child.on {background:#6b1ce0;}
@@ -647,6 +842,9 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .type_Purple .smallMenu li.depth1.menu_addservice:hover:before {background-position:-200px -44px;}
 .type_Purple .smallMenu li.depth1.menu_addservice.on:before {background-position:-200px -44px;}
 
+.type_Purple .smallMenu li.depth1.menu_stock:hover:before {background-position:-220px -44px;}
+.type_Purple .smallMenu li.depth1.menu_stock.on:before {background-position:-220px -44px;}
+
 /* 가맹점 .type_Green */
 .type_Green .menuClose .menuTab:hover p.favorite a {background:#e1fff7;}
 .type_Green .menuClose .fahoMenu {display:block; position:relative; left:60px; background:#e1fff7; width:0; overflow:hidden; opacity:0; padding:10px 0;}
@@ -660,7 +858,6 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .type_Green .smallMenu li ul.depth2 {position:absolute; left:60px; top:0px; background:#e1fff7; width:0px; overflow:hidden; padding:50px 0 10px 0; opacity:1;  transition:all 0.3s;}
 .type_Green .smallMenu a.depth3:hover, .type_Green .smallMenu a.depth3.on {color:#00ba8b!important; transition:all 0.3s;}
 .type_Green .topBar {background:#00ba8b; height:50px; border-bottom:1px solid #00a279; z-index:900; position:relative;}
-.type_Green .fixedMenu {background:#00ba8b; height:50px; border-top:1px solid #0ed3a1; border-bottom:1px solid #00a279; box-shadow:0 0 5px 0 #000; position:relative; z-index:800;}
 .type_Green .userId {padding:0 40px 0 20px; border-left:1px solid #00a279; float:right;}
 .type_Green .userId:after {content:''; position:absolute; left:-120%; top:-240px; width:500px; height:500px; background:#008866; border-radius:100%; opacity:0; transition:all 1.3s;}
 .type_Green .userId:active:after {left:50%; top:50%; width:0px; height:0px; border-radius:100%; opacity:0.5; transition:0s;}
@@ -668,7 +865,7 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .type_Green .userNotice:after {content:''; position:absolute; left:-120px; top:-125px; width:300px; height:300px; background:#008866; z-index:-1; opacity:0; transition:all 1.5s;}
 .type_Green .userNotice:active:after {left:50%; top:50%; width:0px; height:0px; border-radius:50px; opacity:0.5; transition:0s;}
 .type_Green .fixedMenu {background:#00ba8b; height:50px; border-top:1px solid #0ed3a1; border-bottom:1px solid #00a279; box-shadow:0 0 5px 0 #000; position:relative; z-index:800;}
-.type_Green .fixedMenu ul li {float:left; height:48px; position:relative; border-right:1px solid #00a279; position:relative; transition:all 0.3s;}
+.type_Green .fixedMenu ul li {float:left; height:48px; border-right:1px solid #00a279; transition:all 0.3s; position:relative; margin-bottom:2px;}
 .type_Green .fixedMenu ul li:after {content:''; position:absolute; top:-1px; right:-1px; background:#00a279; width:1px; height:1px;}
 .type_Green .fixedMenu ul li a:first-child {position:relative; color:#fff; display:inline-block; height:48px; line-height:48px; padding:0 50px 0 20px; font-size:14px; text-decoration:none; border-right:1px solid #0ed3a1;}
 .type_Green .fixedMenu ul li a:first-child.on {background:#008866;}
@@ -705,6 +902,9 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .type_Green .smallMenu li.depth1.menu_addservice:hover:before {background-position:-200px -66px;}
 .type_Green .smallMenu li.depth1.menu_addservice.on:before {background-position:-200px -66px;}
 
+.type_Green .smallMenu li.depth1.menu_stock:hover:before {background-position:-220px -66px;}
+.type_Green .smallMenu li.depth1.menu_stock.on:before {background-position:-220px -66px;}
+
 /* 시스템 .type_Orange */
 .type_Orange .menuClose .menuTab:hover p.favorite a {background:#fff3e7;}
 .type_Orange .menuClose .fahoMenu {display:block; position:relative; left:60px; background:#fff3e7; width:0; overflow:hidden; opacity:0; padding:10px 0;}
@@ -718,7 +918,6 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .type_Orange .smallMenu li ul.depth2 {position:absolute; left:60px; top:0px; background:#fff3e7; width:0px; overflow:hidden; padding:50px 0 10px 0; opacity:1;  transition:all 0.3s;}
 .type_Orange .smallMenu a.depth3:hover, .type_Orange .smallMenu a.depth3.on {color:#ff9d39!important; transition:all 0.3s;}
 .type_Orange .topBar {background:#ff9d39; height:50px; border-bottom:1px solid #ee8418; z-index:900; position:relative;}
-.type_Orange .fixedMenu {background:#ff9d39; height:50px; border-top:1px solid #ffae39; border-bottom:1px solid #ee8418; box-shadow:0 0 5px 0 #000; position:relative; z-index:800;}
 .type_Orange .userId {padding:0 40px 0 20px; border-left:1px solid #ee8418; float:right;}
 .type_Orange .userId:after {content:''; position:absolute; left:-120%; top:-240px; width:500px; height:500px; background:#b96209; border-radius:100%; opacity:0; transition:all 1.3s;}
 .type_Orange .userId:active:after {left:50%; top:50%; width:0px; height:0px; border-radius:100%; opacity:0.5; transition:0s;}
@@ -726,7 +925,7 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .type_Orange .userNotice:after {content:''; position:absolute; left:-120px; top:-125px; width:300px; height:300px; background:#b96209; z-index:-1; opacity:0; transition:all 1.5s;}
 .type_Orange .userNotice:active:after {left:50%; top:50%; width:0px; height:0px; border-radius:50px; opacity:0.5; transition:0s;}
 .type_Orange .fixedMenu {background:#ff9d39; height:50px; border-top:1px solid #ffae39; border-bottom:1px solid #ee8418; box-shadow:0 0 5px 0 #000; position:relative; z-index:800;}
-.type_Orange .fixedMenu ul li {float:left; height:48px; position:relative; border-right:1px solid #ee8418; position:relative; transition:all 0.3s;}
+.type_Orange .fixedMenu ul li {float:left; height:48px; border-right:1px solid #ee8418; transition:all 0.3s; position:relative; margin-bottom:2px;}
 .type_Orange .fixedMenu ul li:after {content:''; position:absolute; top:-1px; right:-1px; background:#ee8418; width:1px; height:1px;}
 .type_Orange .fixedMenu ul li a:first-child {position:relative; color:#fff; display:inline-block; height:48px; line-height:48px; padding:0 50px 0 20px; font-size:14px; text-decoration:none; border-right:1px solid #ffae39;}
 .type_Orange .fixedMenu ul li a:first-child.on {background:#b96209;}
@@ -762,6 +961,9 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 
 .type_Orange .smallMenu li.depth1.menu_addservice:hover:before {background-position:-200px -88px;}
 .type_Orange .smallMenu li.depth1.menu_addservice.on:before {background-position:-200px -88px;}
+
+.type_Orange .smallMenu li.depth1.menu_stock:hover:before {background-position:-220px -88px;}
+.type_Orange .smallMenu li.depth1.menu_stock.on:before {background-position:-220px -88px;}
 
 
 
