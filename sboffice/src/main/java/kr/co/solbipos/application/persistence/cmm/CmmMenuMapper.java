@@ -47,4 +47,13 @@ public interface CmmMenuMapper {
     List<ResrceInfo> selectMenu3(SessionInfo sessionInfo);
     List<ResrceInfo> selectMenu1Icon(SessionInfo sessionInfo);
     
+    /**
+     * 즐겨찾기 조회
+     * 
+     * @return ResrceInfo
+     */
+    List<ResrceInfo> selectBkmkMenu1(SessionInfo sessionInfo);
+    List<ResrceInfo> selectBkmkMenu2(SessionInfo sessionInfo);
+    List<ResrceInfo> selectBkmkMenu3(SessionInfo sessionInfo);
+    
 }

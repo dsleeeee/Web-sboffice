@@ -35,7 +35,7 @@ public interface CmmMenuService {
      * @return
      */
     List<ResrceInfoBase> selectBkmkMenu(SessionInfo sessionInfo);
-
+    
     /**
      * 고정 메뉴 조회
      * 
@@ -106,8 +106,10 @@ public interface CmmMenuService {
      * 
      * 메인 메뉴 관련
      * 
+     * @param sessionInfo
+     * @param menuType 메뉴 타입 (A : 전체메뉴, F : 즐겨찾기)
      */
-    String makeMenu(SessionInfo sessionInfo);
+    String makeMenu(SessionInfo sessionInfo, String menuType);
 }
 
 

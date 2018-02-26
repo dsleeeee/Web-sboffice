@@ -83,6 +83,9 @@ public class SessionInfo extends Cmm {
     /** 메인 메뉴 데이터 : 위즈모 그리드용 데이터 */
     private String menuData;
     
+    /** 즐겨찾기 메뉴 데이터 : 위즈모 그리드용 데이터 */
+    private String bkmkMenuData;
+    
     /** 현재 선택한 메뉴 정보 */
     private ResrceInfoBase currentMenu;
 

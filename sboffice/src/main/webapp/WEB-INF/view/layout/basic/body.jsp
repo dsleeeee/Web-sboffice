@@ -53,11 +53,28 @@ $(".menuControl").click(function() {
   $("#_nav").toggleClass("menuOpen menuClose");
   $("#_arrow").toggleClass("arrowOpen arrowClose");
 });
- 
-$(".menuTab").click(function() {
-  $("#_all").toggleClass("on");
-  $("#_favorite").toggleClass("on");
+ /* 
+$(".menuTab .all").click(function() {
+  $("#_all").addClass("on");
+  $("#_favorite").removeClass();
+  
+  //$("#faMenu").css("display","none");
+  $("#faMenu").hide();
+  
+  showAllMenu();
+
 });
+
+$(".menuTab .favorite").click(function() {
+  $("#_all").removeClass();
+  $("#_favorite").addClass("on");
+
+  //$("#faMenu").css("display","block");
+  $("#faMenu").show();
+  
+  showBmkMenu();
+});
+ */
 </script>
 
 
