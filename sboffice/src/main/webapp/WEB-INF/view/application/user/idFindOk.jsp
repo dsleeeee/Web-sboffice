@@ -16,9 +16,13 @@
   </p>
 
   <div class="idInfo">
-    <p>
-      <span><s:message code="label.login.userId" /></span> <span>${list}</span>
-    </p>
+    <span><s:message code="label.login.userId" /></span>
+    <ul>
+      <c:forEach var="item" items="${list}" varStatus="status">
+        <li><span>${item.userId}</span> (<span>${item.orgnNm}</span>)</li>
+      </c:forEach>
+    </ul>
+
   </div>
 
   <div class="linkArea">
