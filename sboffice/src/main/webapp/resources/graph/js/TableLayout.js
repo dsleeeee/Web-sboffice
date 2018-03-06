@@ -1081,11 +1081,13 @@ Format.prototype.save = function() {
   node = enc.encode(graph.getModel());
   
   //배경색, 배경이미지를 포스에서 그릴 수 있도록 저장
+  /*
   var bgImg = graph.getBackgroundImage();
   if(bgImg){
     node.setAttribute('bgImage', graph.getBackgroundImage().src);
   }
   node.setAttribute('bgColor', graph.container.style.backgroundColor);
+  */
   
   var xmlPretty = mxUtils.getPrettyXml(node);
   mxLog.show();
@@ -1104,7 +1106,19 @@ Format.prototype.save = function() {
       var onerror = function(req) {
         mxUtils.alert('Error');
       }
-      new mxXmlRequest(TABLELAYOUT_SAVE_URL, 'xml=' + xml).send(onload, onerror);
+      
+      //배경색, 배경이미지를 포스에서 그릴 수 있도록 저장
+      /*
+      var param = '';
+      var bgImg = graph.getBackgroundImage();
+      if(var param) {
+        param += '&bgImage=' +  graph.getBackgroundImage().src;
+      }
+      param += '&bgColor=' +  graph.container.style.backgroundColor;
+      param += '&xml=' + xml;
+      */
+      
+      new mxXmlRequest(TABLELAYOUT_SAVE_URL, 'param=' + param).send(onload, onerror);
     }
     else {
       mxUtils.alert(mxResources.get('drawingTooLarge'));

@@ -139,9 +139,9 @@ Sidebar.prototype.init = function() {
   graph.cellsRemoved = function(cells) {
     for(var i=0; i < cells.length; i++) {
       var cell = cells[i];
-      //그래픽 영역의 0, 1은 root, 기본레이어 이므로 -2한 값의 인덱스 사용
-      //그리드의 데이터 생성 시 +2하였기 때문에.. 
-      theGrid.setCellData((cell.getId()-2), 'used', false);
+      //그래픽 영역의 0, 1은 root, 기본레이어 이므로 +100+1한 값의 인덱스 사용
+      //그리드의 데이터 생성 시 +100 +1하였기 때문에.. 
+      theGrid.setCellData((parseInt(cell.getId())-101), 'used', false);
     }
     cellsRemoved.apply(this, arguments);
   }
@@ -160,7 +160,7 @@ Sidebar.prototype.initValue = function() {
   
   for(var i = 0; i < childCount; i++) {
     var cell = model.getChildAt(parent, i);
-    theGrid.setCellData((cell.getId()-2), 'used', true);
+    theGrid.setCellData((parseInt(cell.getId())-101), 'used', true);
   }
 };
 
@@ -294,35 +294,32 @@ Sidebar.prototype.makeGrid = function() {
   }
   
   // create some random data
-  //TODO 서버에서 받은 데이터로 대체
+  //서버에서 받은 데이터로 대체
   function getData() {
-    var attrs = '테이블명,주문금액,손님수,담당자,경과시간,메뉴리스트,배달주소,배달연락처'.split(',');
-    var tags = '1번,12000,2명,직원,10분,아메리카노<br>카페라떼,구로동,010-1234-5678'.split(',');
-    var rect = [];
-    rect.push(new mxRectangle(0, 0, 400, 50)); //테이블명
-    rect.push(new mxRectangle(0, 320, 400, 80)); //주문금액
-    rect.push(new mxRectangle(50, 200, 150, 50)); //손님수
-    rect.push(new mxRectangle(250, 200, 150, 50)); //담당자
-    rect.push(new mxRectangle(150, 300, 250, 100)); //경과시간
-    rect.push(new mxRectangle(50, 50, 300, 300)); //메뉴리스트
-    rect.push(new mxRectangle(100, 320, 300, 80)); //배달주소
-    rect.push(new mxRectangle(200, 0, 200, 50)); //배달연락처
     
-    var data = [];
-    var createDiv = function(label, align, valign) {
-      var div = document.createElement('div');
-      div.innerHTML = label;
-      //div.style.fontFamily = 'Comic Sans MS';
-      return div
+    var findPos = function(cd) {
+      var obj;
+      for(x = 0; x < TABLE_ATTR_DEFAULTS.length; x++) {
+        obj = TABLE_ATTR_DEFAULTS[x];
+        if( cd.toString().substring(1) == obj.attrCd) {
+          return new mxRectangle(obj.x, obj.y, obj.width, obj.height);
+        }
+      }
+      return new mxRectangle(10, 10, 50, 50);
     };
     
-    for (var i = 0; i < attrs.length; i++) {
+    //그래프의 child node는 2부터 시작할 수 밖에 없어 코드 맞추기 위해 +100 하였음
+    //등록/수정 전체 적으로 +100 체크 필요
+    var data = [];
+    for(i = 0; i < TABLE_ATTR_ITEMS.length; i++) {
+      console.log(TABLE_ATTR_ITEMS[i]);
+      var cd = (100+i+1);
       data.push({
-        name: attrs[i],
-        tag: tags[i],
+        name: TABLE_ATTR_ITEMS[i].nmcodeNm,
+        tag: TABLE_ATTR_ITEMS[i].nmcodeItem1,
         used: false,
-        rect: rect[i],
-        idx: (i+2) //idx는 그리드의 index + 2 입니다. 삭제 시 -2 해줘야 합니다.
+        rect: findPos(cd),
+        idx: cd //idx는 그리드의 100 + index + 1 입니다. 삭제 시 번호 확인 필요. 
       });
     }
     return data;

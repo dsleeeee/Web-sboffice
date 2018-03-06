@@ -1,4 +1,4 @@
-package kr.co.solbipos.application.domain;
+package kr.co.solbipos.application.domain.cmm;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -7,8 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 public @Data class Page {
 
     private static final int DEFAULT_PAGE_SCALE = 10;
-    private static final int DEFAULT_LIST_SCALE = 20;
-    private static final int DEFAULT_CURR = 1;
+    //private static final int DEFAULT_LIST_SCALE = 20;
+    //private static final int DEFAULT_CURR = 1;
 
     Integer totalCount; // 레코드의 총 갯수
     Integer totalPage; // 총 페이지 갯수

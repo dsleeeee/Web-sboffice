@@ -48,6 +48,10 @@ window.mxBasePath = window.mxBasePath || '/resource/vender/mxgraph/src';
 window.mxLanguage = window.mxLanguage || urlParams['lang'];
 window.mxLanguages = window.mxLanguages || ['ko'];
 
+//Custom varible
+window.TABLE_ATTR_ITEMS = ${tableAttrs};
+window.TABLE_ATTR_DEFAULTS = ${defaults};
+
 </script>
 <script type="text/javascript" src="/resource/vender/mxgraph/mxClient.js"></script>
 <!--script type="text/javascript" src="/resource/vender/mxgraph/mxClient.min.js"></script-->

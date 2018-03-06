@@ -122,6 +122,8 @@ public class LoginServiceImpl implements LoginService {
 
         SessionInfo si = selectWebUser(sessionInfo);
 
+        log.debug(si.toString());
+        
         LoginResult result = loginProcess(sessionInfo, si);
 
         // 로그인 결과

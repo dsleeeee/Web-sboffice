@@ -7,21 +7,12 @@
   /* LoginMapper.selectWebUser */
      SELECT A.USER_ID,
             A.USER_PWD,
-            (SELECT MAX(EMP_NM)
-               FROM (SELECT EMP_NM
-                       FROM TB_MS_EMPLOYEE 
-                      WHERE USER_ID = A.USER_ID
-                     UNION ALL
-                     SELECT EMP_NM
-                       FROM TB_HQ_EMPLOYEE 
-                      WHERE USER_ID = A.USER_ID
-                     UNION ALL
-                     SELECT EMP_NM
-                       FROM TB_CM_EMPLOYEE 
-                      WHERE USER_ID = A.USER_ID
-               )
-            ) USER_NAME,
+            B.USER_NM,
+            B.USER_NM USER_NAME,
             A.GRP_CD,
+            B.ORGN_FG,
+            B.ORGN_CD,
+            B.ORGN_NM,
             A.LAST_LOGIN_DATE,
             A.LAST_PWD_CHG_DATE,
             A.LOGIN_FAIL_CNT,
@@ -30,13 +21,54 @@
                FROM TB_WB_PWD_CHG_HIST B
               WHERE B.USER_ID = A.USER_ID
             ) LAST_PWD_CHG
-       FROM TB_WB_USER_INFO A
-      WHERE A.USER_ID = #{userId}
+       FROM TB_WB_USER_INFO A,
+            (SELECT USER_ID,
+                    ORGN_FG,
+                    ORGN_CD,
+                    ORGN_NM,
+                    USER_NM
+               FROM (SELECT A.USER_ID,
+                            'S' ORGN_FG,
+                            A.STORE_CD ORGN_CD,
+                            B.STORE_NM ORGN_NM,
+                            A.EMP_NM USER_NM
+                       FROM TB_MS_EMPLOYEE A,
+                            TB_MS_STORE B
+                      WHERE A.STORE_CD = B.STORE_CD
+                        AND A.WEB_USE_YN = 'Y'
+                        AND A.USER_ID = #{userId}
+                     UNION ALL
+                     SELECT A.USER_ID,
+                            'H' ORGN_FG,
+                            A.HQ_OFFICE_CD ORGN_CD,
+                            B.HQ_OFFICE_NM ORGN_NM,
+                            A.EMP_NM USER_NM
+                       FROM TB_HQ_EMPLOYEE A,
+                            TB_HQ_OFFICE B
+                      WHERE A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+                        AND A.WEB_USE_YN = 'Y'
+                        AND A.USER_ID = #{userId}
+                     UNION ALL
+                     SELECT A.USER_ID,
+                            DECODE(A.ADMIN_YN, 'Y', 'M', 'A') ORGN_FG,
+                            A.AGENCY_CD ORGN_CD,
+                            B.AGENCY_NM ORGN_NM,
+                            A.EMP_NM USER_NM
+                       FROM TB_CM_EMPLOYEE A,
+                            TB_CM_AGENCY B
+                      WHERE A.AGENCY_CD = B.AGENCY_CD
+                        AND A.WEB_USE_YN = 'Y'
+                        AND A.USER_ID = #{userId}
+                    )
+              WHERE ROWNUM = 1
+            ) B
+      WHERE A.USER_ID = B.USER_ID 
+        AND A.USER_ID = #{userId}
         AND A.LOCK_CD = 'N'
+
   </select>
   
   <select id="selectLoginHist" resultType="loginHist" parameterType="loginHist">
-  <![CDATA[
   /* LoginMapper.selectLoginHist */
      SELECT SEQ,
             USER_ID,
@@ -48,11 +80,9 @@
             LOGIN_DT
        FROM TB_WB_LOGIN_HIST
       WHERE USER_ID = #{userId}
-  ]]>
   </select>
   
   <insert id="insertLoginHist" parameterType="loginHist">
-  <![CDATA[
   /* LoginMapper.insertLoginHist */
     INSERT INTO TB_WB_LOGIN_HIST
     (
@@ -76,7 +106,6 @@
       #{loginDate},
       #{loginDt}
     )
-  ]]>
   </insert>
   
 <!--    권한 있는 리소스 가져오기 -->

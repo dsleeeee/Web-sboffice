@@ -20,21 +20,15 @@ public enum ResrceFg implements CodeEnum  {
     , FUNC("W002");
     
   private String code;
-  private ResrceFg[] value;
 
-  ResrceFg(String code, ResrceFg... values) {
+  ResrceFg(String code) {
       this.code = code;
-      this.value = values;
-  }
-
-  public ResrceFg[] getValues() {
-      return value;
   }
  
   @MappedTypes(ResrceFg.class)
   public static class TypeHandler extends CodeEnumTypeHandler<ResrceFg> {
       public TypeHandler() {
-      super(ResrceFg.class);
+          super(ResrceFg.class);
       }
   }
    

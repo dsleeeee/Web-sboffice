@@ -84,6 +84,8 @@ public class TableLayoutController {
 
         String xml = "";
         try {
+            log.debug(request.getParameter("bgImage"));
+            log.debug(request.getParameter("bgColor"));
           log.debug(request.getParameter("xml"));
           xml = URLDecoder.decode(request.getParameter("xml"), "UTF-8").replace("\n", "&#xa;");
           //TODO 저장 Service 구현 필요

@@ -29,15 +29,9 @@ public enum LoginResult implements CodeEnum {
     ;
     
   private String code;
-  private LoginResult[] value;
 
-  LoginResult(String code, LoginResult... values) {
+  LoginResult(String code) {
       this.code = code;
-      this.value = values;
-  }
-
-  public LoginResult[] getValues() {
-      return value;
   }
  
   @MappedTypes(LoginResult.class)

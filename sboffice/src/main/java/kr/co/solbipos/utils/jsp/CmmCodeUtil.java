@@ -49,17 +49,47 @@ public class CmmCodeUtil {
     }
 
     /**
-     * 공통 코드 조회
+     * 공통 코드 조회(JSON, 명칭/코드)
      * 
      * @param nmcodeGrpCd
      * @return
      */
     public String getCommCode(String nmcodeGrpCd) {
+        
+        CommonCode commonCode = getCommCodeData(nmcodeGrpCd);
+        if(commonCode == null) {
+            return assmblEmptyCombo();
+        }
+        // 결과 형태를 만들어서 json 으로 리턴
+        return assmblObj(commonCode.getCodeList(), "nmcodeNm", "nmcodeCd");
+    }
+    /**
+     * 공통 코드 조회(JSON, 항목전체)
+     * 
+     * @param nmcodeGrpCd
+     * @return
+     */
+    public String getCommCodeAll(String nmcodeGrpCd) {
+        
+        CommonCode commonCode = getCommCodeData(nmcodeGrpCd);
+        if(commonCode == null) {
+            return assmblEmptyCombo();
+        }
+        // 결과 형태를 만들어서 json 으로 리턴
+        return convertToJson(commonCode.getCodeList());
+    }
+    /**
+     * 공통 코드 조회, Redis 처리
+     * 
+     * @param nmcodeGrpCd
+     * @return
+     */
+    private CommonCode getCommCodeData(String nmcodeGrpCd) {
 
         CommonCode commonCode = new CommonCode();
         commonCode.setComCdFg(nmcodeGrpCd);
 
-        List<DefaultMap<CommonCode>> codeList = null;
+        List<DefaultMap<String>> codeList = null;
 
         try {
             // 요청한 코드가 레디스에 있는지 확인
@@ -72,7 +102,7 @@ public class CmmCodeUtil {
                 codeList = cmmCodeService.selectCmmCodeList(nmcodeGrpCd);
 
                 if (isEmpty(codeList)) { // 조회 결과 없으면 데이터 없음 리턴
-                    return assmblEmptyCombo();
+                    return null;
                 }
 
                 commonCode.setCodeList(codeList);
@@ -87,14 +117,12 @@ public class CmmCodeUtil {
             }
 
             if (isEmpty(codeList)) { // 조회 결과 없으면 데이터 없음 리턴
-                return assmblEmptyCombo();
+                return null;
             }
 
             commonCode.setCodeList(codeList);
         }
-
-        // 결과 형태를 만들어서 json 으로 리턴
-        return assmblObj(commonCode.getCodeList(), "nmcodeNm", "nmcomCd");
+        return commonCode;
     }
 
     /**

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.base.persistence.store.tableattr.TableAttrMapper">
+
+  <select id="selectXmlByStore" parameterType="DefaultMap" resultType="String">
+    /* TableAttrMapper.selectXmlByStore */
+     SELECT XML
+       FROM TB_WB_STORE_CONFG_XML A
+      WHERE A.STORE_CD = #{storeCd}
+        AND A.CONFG_FG = #{confgFg}
+        AND A.USE_YN = 'Y'
+  </select>
+
+  <select id="selectDefaultXml" resultType="tableAttr">
+    /* TableAttrMapper.selectDefaultXml */
+     SELECT TBL_TYPE_FG,
+            ATTR_CD,
+            ATTR_NM,
+            X_POSI X,
+            Y_POSI Y,
+            WIDTH,
+            HEIGHT,
+            TEXTALIGN_FG,
+            '' TEXTVALIGN_FG,
+            IMG_NM,
+            FONT_NM,
+            FONT_SZ FONT_SIZE,
+            FONT_STYLE_FG,
+            FONT_COLOR
+       FROM TB_CM_TABLE_ATTR A
+      WHERE A.USE_YN = 'Y'
+  </select>
+
+  <update id="mergeStoreConfgXml" parameterType="DefaultMap">
+    /* TableAttrMapper.mergeStoreConfgXml */
+    MERGE INTO TB_WB_STORE_CONFG_XML A
+    USING (SELECT #{storeCd} STORE_CD,
+                  #{confgFg} CONFG_FG
+             FROM DUAL
+          ) ORG
+    ON (  A.STORE_CD = ORG.STORE_CD
+      AND A.CONFG_FG = ORG.CONFG_FG)
+
+    WHEN MATCHED THEN
+    UPDATE
+       SET A.XML = #{xml:CLOB},
+           A.USE_YN = #{useYn},
+           A.MOD_DT = #{regDt},
+           A.MOD_ID = #{regId}
+
+    WHEN NOT MATCHED THEN
+    INSERT (
+        A.STORE_CD,
+        A.CONFG_FG,
+        A.XML,
+        A.USE_YN,
+        A.REG_DT,
+        A.REG_ID
+    )
+    VALUES (
+        #{storeCd},
+        #{confgFg},
+        #{xml:CLOB},
+        #{useYn},
+        #{regDt},
+        #{regId}
+    ) 
+  </update>
+
+  <update id="mergeStoreTableAttr" parameterType="tableAttr">
+    /* TableAttrMapper.mergeStoreTableAttr */
+    MERGE INTO TB_MS_TABLE_ATTR A
+    USING (SELECT #{storeCd} STORE_CD,
+                  #{tblTypeFg} TBL_TYPE_FG,
+                  #{attrCd} ATTR_CD
+             FROM DUAL
+          ) ORG
+    ON (  A.STORE_CD = ORG.STORE_CD
+      AND A.TBL_TYPE_FG = ORG.TBL_TYPE_FG
+      AND A.ATTR_CD = ORG.ATTR_CD)
+
+     WHEN MATCHED THEN
+    UPDATE
+       SET A.ATTR_NM = #{attrNm},
+           A.X = #{x},
+           A.Y = #{y},
+           A.WIDTH = #{width},
+           A.HEIGHT = #{height},
+           A.TEXTALIGN_FG = #{textalignFg},
+           A.IMG_NM = #{imgNm},
+           A.FONT_NM = #{fontNm},
+           A.FONT_SIZE = #{fontSize},
+           A.FONT_STYLE_FG = #{fontStyleFg},
+           A.FONT_COLOR = #{fontColor},
+           A.USE_YN = #{useYn},
+
+           A.MOD_DT = #{regDt},
+           A.MOD_ID = #{regId}
+
+    WHEN NOT MATCHED THEN
+    INSERT (
+        A.STORE_CD,
+        A.TBL_TYPE_FG,
+        A.ATTR_CD,
+        A.ATTR_NM,
+        A.X,
+        A.Y,
+        A.WIDTH,
+        A.HEIGHT,
+        A.TEXTALIGN_FG,
+        A.IMG_NM,
+        A.FONT_NM,
+        A.FONT_SIZE,
+        A.FONT_STYLE_FG,
+        A.FONT_COLOR,
+        A.USE_YN,
+        A.REG_DT,
+        A.REG_ID,
+        A.MOD_DT,
+        A.MOD_ID
+    )
+    VALUES (
+        #{storeCd},
+        #{tblTypeFg},
+        #{attrCd},
+        #{attrNm},
+        #{x},
+        #{y},
+        #{width},
+        #{height},
+        #{textalignFg},
+        #{imgNm},
+        #{fontNm},
+        #{fontSize},
+        #{fontStyleFg},
+        #{fontColor},
+        #{useYn},
+        #{regDt},
+        #{regId},
+        #{regDt},
+        #{regId}
+    ) 
+  </update>
+</mapper>
+
+
+

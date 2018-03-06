@@ -16,5 +16,5 @@ public class CommonCode extends Cmm {
     private String comCd;
     private String comCdNm;
 
-    List<DefaultMap<CommonCode>> codeList;
+    List<DefaultMap<String>> codeList;
 }

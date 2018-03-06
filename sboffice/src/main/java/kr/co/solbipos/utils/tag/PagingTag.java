@@ -6,7 +6,7 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import org.apache.taglibs.standard.resources.Resources;
 import org.springframework.util.StringUtils;
-import kr.co.solbipos.application.domain.Page;
+import kr.co.solbipos.application.domain.cmm.Page;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

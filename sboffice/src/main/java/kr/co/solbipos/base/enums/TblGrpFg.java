@@ -1,4 +1,4 @@
-package kr.co.solbipos.application.enums.user;
+package kr.co.solbipos.base.enums;
 
 import org.apache.ibatis.type.MappedTypes;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -6,31 +6,30 @@ import kr.co.solbipos.enums.CodeEnum;
 import kr.co.solbipos.system.CodeEnumTypeHandler;
 
 /**
- * 소속 구분
+ * 테이블 그룹 구분 enum type<br>
+ * TB_MS_TABLE_GROUP > TBL_GRP_FG
  * 
  * @author bjcho
+ *
  */
-public enum OrgnFg implements CodeEnum  {
+public enum TblGrpFg implements CodeEnum {
     
-    /** 시스템 */
-    MASTER("M"),
-    /** 대리점 */
-    AGENCY("A"),
-    /** 본사 */
-    HQ("H"),
-    /** 매장 */
-    STORE("S");
+    /** 일반 */
+    NORMAL("1"),
+    /** 포장 */
+    TOGO("2"),
+    /** 배달 */
+    DELIVERY("3");
     
     private String code;
   
-    OrgnFg(String code) {
+    TblGrpFg(String code) {
         this.code = code;
     }
-   
-    @MappedTypes(OrgnFg.class)
-    public static class TypeHandler extends CodeEnumTypeHandler<OrgnFg> {
+    @MappedTypes(TblGrpFg.class)
+    public static class TypeHandler extends CodeEnumTypeHandler<TblGrpFg> {
         public TypeHandler() {
-        super(OrgnFg.class);
+            super(TblGrpFg.class);
         }
     }
      

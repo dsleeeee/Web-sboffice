@@ -1,8 +1,7 @@
 package kr.co.solbipos.application.domain.cmm;
 
-import kr.co.solbipos.application.domain.BaseDomain;
+import java.io.Serializable;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * 테이블 공통 도메인 클래스<br>
@@ -12,11 +11,10 @@ import lombok.EqualsAndHashCode;
  * @author 정용길
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
-public class Cmm extends BaseDomain {
+public abstract class Cmm implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    
     /** 등록 일시 */
     private String regDt;
 

@@ -29,7 +29,17 @@
     <property name="mapperLocations" value="/WEB-INF/mapper/**/*.xml" />
     <property name="dataSource" ref="dataSource" />
     <!-- Domain Class Name 자동 등록 -->
-    <property name="typeAliasesPackage" value=" kr.co.solbipos.application.domain, 
+    <property name="typeAliasesPackage" value=" kr.co.solbipos.application.domain,
+                                                kr.co.solbipos.base.domain,
+                                                kr.co.solbipos.pos.domain,
+                                                kr.co.solbipos.store.domain,
+                                                kr.co.solbipos.sys.domain,
+                                                kr.co.solbipos.sale.domain,
+                                                kr.co.solbipos.member.domain,
+                                                kr.co.solbipos.iostock.domain,
+                                                kr.co.solbipos.stock.domain,
+                                                kr.co.solbipos.excclc.domain,
+                                                kr.co.solbipos.adi.domain,
                                                 kr.co.solbipos.structure" />
   </bean>
   

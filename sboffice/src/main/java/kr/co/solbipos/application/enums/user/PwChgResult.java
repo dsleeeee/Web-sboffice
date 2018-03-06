@@ -30,15 +30,9 @@ public enum PwChgResult implements CodeEnum  {
     CHECK_OK("CHECK_OK");
     
     private String code;
-    private PwChgResult[] value;
   
-    PwChgResult(String code, PwChgResult... values) {
+    PwChgResult(String code) {
         this.code = code;
-        this.value = values;
-    }
-  
-    public PwChgResult[] getValues() {
-        return value;
     }
    
     @MappedTypes(PwChgResult.class)

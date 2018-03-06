@@ -24,15 +24,9 @@ public enum PwFindResult implements CodeEnum  {
     OTP_OK("OTP_OK");
     
     private String code;
-    private PwFindResult[] value;
   
-    PwFindResult(String code, PwFindResult... values) {
+    PwFindResult(String code) {
         this.code = code;
-        this.value = values;
-    }
-  
-    public PwFindResult[] getValues() {
-        return value;
     }
    
     @MappedTypes(PwFindResult.class)

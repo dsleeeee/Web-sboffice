@@ -24,21 +24,15 @@ public enum FuncFg implements CodeEnum  {
     , DELETE("F004");
     
     private String code;
-    private FuncFg[] value;
   
-    FuncFg(String code, FuncFg... values) {
+    FuncFg(String code) {
         this.code = code;
-        this.value = values;
-    }
-  
-    public FuncFg[] getValues() {
-        return value;
     }
    
     @MappedTypes(FuncFg.class)
     public static class TypeHandler extends CodeEnumTypeHandler<FuncFg> {
         public TypeHandler() {
-        super(FuncFg.class);
+            super(FuncFg.class);
         }
     }
      

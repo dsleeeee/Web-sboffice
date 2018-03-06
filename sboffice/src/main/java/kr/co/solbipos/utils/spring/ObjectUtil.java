@@ -29,7 +29,7 @@ import org.springframework.beans.propertyeditors.FileEditor;
 import org.springframework.beans.propertyeditors.StringArrayPropertyEditor;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.util.ObjectUtils;
-import kr.co.solbipos.application.domain.BaseDomain;
+import kr.co.solbipos.application.domain.cmm.Cmm;
 import kr.co.solbipos.structure.DefaultMap;
 import lombok.extern.slf4j.Slf4j;
 
@@ -135,7 +135,7 @@ public class ObjectUtil extends ObjectUtils {
     public static DefaultMap<Object> convertDefultMap(Object o) {
         DefaultMap<Object> m = new DefaultMap<Object>();
 
-        if (o instanceof BaseDomain) {
+        if (o instanceof Cmm) {
             Field[] fields = o.getClass().getDeclaredFields();
 
             for (Field field : fields) {
@@ -167,7 +167,7 @@ public class ObjectUtil extends ObjectUtils {
      * @param target BaseDomain
      * @param value BaseDomain
      */
-    public static void copyValue(BaseDomain target, BaseDomain value) {
+    public static void copyValue(Cmm target, Cmm value) {
         if (target == null || target == value)
             return;
 
@@ -192,7 +192,7 @@ public class ObjectUtil extends ObjectUtils {
      * @param value BaseDomain
      * @return clazz type instance T
      */
-    public static <T extends BaseDomain> T copyValue(Class<T> clazz, BaseDomain value) {
+    public static <T extends Cmm> T copyValue(Class<T> clazz, Cmm value) {
         if (value.getClass().equals(clazz))
             return null;
 

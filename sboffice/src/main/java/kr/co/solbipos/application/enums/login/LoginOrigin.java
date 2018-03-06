@@ -23,15 +23,9 @@ public enum LoginOrigin implements CodeEnum  {
     ;
 
   private String code;
-  private LoginOrigin[] value;
 
-  LoginOrigin(String code, LoginOrigin... values) {
+  LoginOrigin(String code) {
       this.code = code;
-      this.value = values;
-  }
-
-  public LoginOrigin[] getValues() {
-      return value;
   }
  
   @MappedTypes(LoginOrigin.class)

@@ -40,6 +40,13 @@ public class SessionInfo extends Cmm {
     /** 그룹 코드 */
     private String grpCd;
 
+    /** 소속구분_M:시스템,A:대리점,H:본사,S:매장 */
+    private String orgnFg;
+    /** 소속 코드 */
+    private String orgnCd;
+    /** 소속 명 */
+    private String orgnNm;
+    
     /** 최종 로그인 일자 */
     private String lastLoginDate;
 
