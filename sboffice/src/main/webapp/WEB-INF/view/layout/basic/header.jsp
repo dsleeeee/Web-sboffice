@@ -1,128 +1,124 @@
 <%@ page pageEncoding="UTF-8"%>
+<%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
-<s:eval var="ext" expression="@config['url.ext']" />
-<c:set var="uri" value="${fn:replace(requestScope['javax.servlet.forward.request_uri'], ext,'')}" />
-<c:set var="ssMenuOffice" scope="request" value="${sessionScope[sessionUrlField][uri]}" />
-<c:set var="ssMnuCd" scope="request" value="${ssMenuOffice.mnuCd}" />
-<c:set var="minimalClssNm" scope="request" value="${empty ssMnuCd ? ' minimal' : ''}" />
-<c:set var="firstMenu" value="<%=new java.util.LinkedHashMap<String, String>()%>" />
-<c:set var="icons" value="<%=new java.util.LinkedHashMap<String, String>()%>" />
 
+<c:set var="hist" value="${sessionScope.sessionInfo.histMenu}" />
+<c:set var="fix" value="${sessionScope.sessionInfo.fixMenu}" />
+<c:set var="histSize" value="${fn:length(hist)}" />
 
-<%--Top bar--%>
-<div class="topbar">
-
-  <div class="topbar_logo">
-    <%--[D] 메뉴 축소 minimal 추가--%>
-    <h1 class="logo">
-      <a href="/">
-        <span class="hidden"></span>SolbiPos
-      </a>
-    </h1>
+<!--사용자정보영역-->
+<div class="topBar">
+  <div class="menuControl">
+    <a href="#" id="_arrow" class="arrowOpen">
+      <span></span>
+    </a>
   </div>
+  <div class="userInfo">
+    <!--새로운 공지 있는경우 span추가-->
+    <a href="#" class="userNotice">
+      <span>777</span>
+    </a>
 
+    <a href="#" class="userId">
+      <span>${sessionScope.sessionInfo.userId}</span>
+    </a>
 
-  <div class="topbar_right clear">
-    <ul>
-      <li><i class="fa fa-user top_icon"></i> <span>${sessionScope.sessionInfo.userName} (${sessionScope.sessionInfo.userId})</span></li>
-      <li><a id="modifyPasswd" href="/system/user/info/modifyPasswd.sb?userId=${sessionScope.sessionInfo.userId}">
-          <i class="fa fa-unlock-alt top_icon"></i>
-          <s:message code="label.layout.changePasswd" />
-        </a></li>
-      <li><a href="/auth/logout.sb">
-          <i class="fa fa-sign-in top_icon"></i>
-          <s:message code="label.layout.logout" />
-        </a></li>
-    </ul>
-  </div>
-
-
-  <div class="topbar_menu">
-
-    <%--[D] 메뉴 축소 minimal 추가--%>
-    <div class="menu_pullbar">
-      <button>
-        <i class="fa fa-bars f_s_21 i_menu_pullbar"></i>
-      </button>
+    <div class="userLayer" style="display: none;">
+      <p>
+        <span>${sessionScope.sessionInfo.userId}</span>
+        <span> 
+          <em>[A01]</em> 
+          <em>운영시스템</em>
+        </span> 
+        <span>${sessionScope.sessionInfo.userNm}</span>
+      </p>
+      <ul>
+        <li><a href="#">내 정보 변경</a></li>
+        <li><a id="pwchg">비밀번호 변경</a></li>
+        <li><a href="/auth/logout.sb">로그아웃</a></li>
+      </ul>
     </div>
   </div>
-
-
 </div>
-<%--//Top bar--%>
+<!--//사용자정보영역-->
 
 
+<!--고정메뉴-->
+<div class="fixedMenu">
 
+  <!--고정메뉴 없는경우-->
+  <p class="empty" style="display: none;">즐겨찾기에서 고정메뉴를 등록하여 편리하게 사용하세요!</p>
+  <!--//고정메뉴 없는경우-->
 
-<%--Side menu--%>
-<div class="side_menu">
-  <ul class="menu_depth_2">
-    <li><a href="#">샘플</a></li>
+  <!--고정메뉴 있는경우-->
+  <nav>
+    <ul>
 
-    <ul class="menu_depth_3">
-      <li><a href="/exRedis.sb">레디스 이동</a></li>
-      <li><a href="/sample3.sb">이동</a></li>
-      <li><a href="/sample2.sb">샘플 2 이동</a></li>
+      <%-- 즐겨찾기 메뉴 --%>
+      <c:forEach var="item" items="${fix}" varStatus="status">
+        <li id="${item.resrceCd}">
+          <a href="${item.url}" class="${item.activation == true ? 'on' : ''}">${item.resrceNm}</a> 
+          <a onclick="deleteFixMenu('${item.resrceCd}');" class="btn_close"></a>
+        </li>
+      </c:forEach>
+
+      <%-- 히스토리 메뉴 --%>
+      <c:forEach var="item" items="${hist}" varStatus="status">
+        <li id="${item.resrceCd}">
+          <a href="${item.url}" class="${item.activation == true ? 'on' : ''}">${item.resrceNm}</a>
+          <a onclick="deleteHistMenu('${item.resrceCd}');" class="btn_close"></a>
+        </li>
+      </c:forEach>
+
     </ul>
 
-  </ul>
+    <div class="moveBtn">
+      <a href="#" class="mL" title="왼쪽으로 메뉴 이동"></a>
+      <a href="#" class="mR" title="오른쪽으로 메뉴 이동"></a>
+    </div>
 
-  <ul class="menu_depth_2">
-    <li><a href="#">그리드</a></li>
-    
-    <ul class="menu_depth_3">
-      <li><a href="/sampleGrid.sb">그리드 샘플 이동(json)</a></li>
-      <li><a href="/sampleGrid2.sb">그리드 샘플 이동(test)</a></li>
-      <li><a href="/exGridPage.sb">그리드 페이징 샘플 이동</a></li>
-      <li><a href="/exGridPage2.sb">그리드 페이징 샘플 이동2</a></li>
-      
-      <li><a href="/exGridHeader.sb?rnum=1000">그리드 헤더 번역 샘플 이동</a></li>
-      <li><a href="/exInput.sb">INPUT 테스트</a></li>
-      <li><a href="/exTree.sb">Tree 테스트</a></li>
-      <li><a href="/sampleGridMain.sb">그리드 샘플</a></li>
-      <!-- 
-      <li><a href="/exTreeMenu.sb">메뉴 - 트리구조 샘플</a></li>
-      <li><a href="/exTreeStore.sb">본사/매장 - 트리구조  샘플</a></li>
-      <li><a href="/exTreeStore2.sb">본사/매장 - 트리구조  샘플 (매장다중선택)</a></li>
-      <li><a href="/groupGridSample.sb">본사/매장 - 단순 그리드 구조  Grouping 샘플</a></li>
-      <li><a href="/groupGridSample2.sb">본사/매장 - 단순 그리드 구조 Grouping (+ 매장정보) 샘플</a></li>
-      <li><a href="/exDragNDrop.sb">drag & drop 샘플</a></li>
-      <li><a href="/exDragNDrop2.sb">drag & drop 샘플2 (테스트용)</a></li>
-      <li><a href="/exGridInsert.sb">데이터 Insert 테스트</a></li>
-       -->
-       
-    </ul>
-  </ul>
-  
-  <ul class="menu_depth_2">
-    <li><a href="#">에디터</a></li>
-    
-    <ul class="menu_depth_3">
-      <li><a href="/editorSample.sb">에디터 샘플</a></li>
-      <li><a href="/editorSample2.sb">에디터 조회저장 샘플</a></li>
-      <li><a href="/editorSample3.sb">에디터 데이터 조회</a></li>
-    </ul>
-    
-  </ul>
+  </nav>
+  <!--고정메뉴 있는경우-->
+
+  <%-- 비밀번호 변경 레이어 팝업 가져오기 --%>
+  <c:import url="/WEB-INF/view/application/layer/pwChgPop.jsp">
+    <c:param name="type" value="user" />
+  </c:import>
   
 </div>
+<!--//고정메뉴-->
 
-
-<%--//Side menu--%>
-<script>
-  $(document).ready(function() {
+<script type="text/javascript">
+  $("#pwchg").bind("click", function() {
+    $("#fullDimmedPw").show();
+    $("#layerpw").show();
   });
+
+  $(".userId").click(function() {
+    $(".userLayer").toggle();
+  });
+
+  function deleteHistMenu(menuId) {
+    var url = "/menu/delHistMenu.sb";
+    callPostJson(url, menuId);
+  }
+
+  function deleteFixMenu(menuId) {
+    var url = "/menu/delFixMenu.sb";
+    callPostJson(url, menuId);
+  }
+
+  function callPostJson(url, menuId) {
+    var param = {};
+    param.menuId = menuId;
+    $.postJSON(url, param, function(result) {
+      $("#" + menuId).remove();
+    }).fail(function() {
+      alert("Ajax Fail");
+    });
+  }
 </script>
-
-
-
-
-
-
-
-
 
 
 

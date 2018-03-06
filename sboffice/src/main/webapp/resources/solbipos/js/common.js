@@ -98,6 +98,11 @@
           else if(data.status === "FAIL") {
             return func(data);
           }
+          else if(data.status === "LOGIN_EXFIRE") {
+            s_alert.popOk(data.message, function() {
+              location.href = data.url;
+             });
+          }
           else {
             var msg = data.status + " : " + data.message;
             alert(msg);

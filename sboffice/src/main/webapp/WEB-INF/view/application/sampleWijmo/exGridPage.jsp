@@ -12,23 +12,23 @@
 .wj-flexgrid {
 	height: 430px;
 }
-.column-picker {
-  columns: 3;
-  padding: 12px;
-  margin-left: 12px;
-  margin-top: 26px;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
-}
-.column-picker-icon {
-  cursor: pointer;
-  color: #FF8754;
-  margin: 3px;
-}
-a, a:active, a:hover {
-    color: #725ed6;
-    text-decoration: underline;
-    cursor: pointer;
-}
+/* .column-picker { */
+/*   columns: 3; */
+/*   padding: 12px; */
+/*   margin-left: 12px; */
+/*   margin-top: 26px; */
+/*   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23); */
+/* } */
+/* .column-picker-icon { */
+/*   cursor: pointer; */
+/*   color: #FF8754; */
+/*   margin: 3px; */
+/* } */
+/* a, a:active, a:hover { */
+/*     color: #725ed6; */
+/*     text-decoration: underline; */
+/*     cursor: pointer; */
+/* } */
 </style>
 
 <div class="container">
@@ -88,8 +88,8 @@ a, a:active, a:hover {
 <script>
 $(document).ready(function() { 
 	updateCurrentPage(0, 0);
-	shopCd.text = "C06419";
-	listScaleBox.selectedValue = "100";
+// 	shopCd.text = "C06419";
+// 	listScaleBox.selectedValue = "100";
 });
 var totpage = 0;
 var now = 0;

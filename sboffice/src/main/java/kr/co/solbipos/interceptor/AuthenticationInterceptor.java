@@ -1,10 +1,7 @@
 package kr.co.solbipos.interceptor;
 
 import static org.springframework.util.ObjectUtils.*;
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -15,9 +12,12 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import kr.co.solbipos.application.domain.login.SessionInfo;
 import kr.co.solbipos.application.domain.resource.ResrceInfo;
 import kr.co.solbipos.exception.AuthenticationException;
+import kr.co.solbipos.exception.JsonCallException;
 import kr.co.solbipos.service.cmm.CmmMenuService;
 import kr.co.solbipos.service.message.MessageService;
 import kr.co.solbipos.service.session.SessionService;
+import kr.co.solbipos.structure.Result.Status;
+import kr.co.solbipos.utils.spring.WebUtil;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -41,10 +41,17 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
         // 세션 없음
         if (!sessionService.isValidSession(request)) {
-            log.info("session null...");
-            sessionService.deleteSessionInfo(request, response);
-            response.sendRedirect("/");
-            return false;
+            
+            if(WebUtil.isJsonRequest(request)) {
+                String msg = messageService.get("msg.cmm.session.expire");
+                String msg1 = messageService.get("msg.cmm.move.login");
+                throw new JsonCallException(Status.LOGIN_EXFIRE, msg + msg1, "/");                
+            }
+            else {
+                sessionService.deleteSessionInfo(request, response);
+                response.sendRedirect("/");
+                return false;
+            }
         }
 
         // 세션 가져오기
@@ -72,7 +79,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
         return true;
     }
-
+    
     /**
      * 유효 URL 체크!!
      * 
@@ -83,6 +90,11 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
      */
     private boolean checkUrl(HttpServletRequest request, List<ResrceInfo> auth, String url,
             String userId, SessionInfo sessionInfo) {
+        
+        if(url.equals("/main.sb")) {
+            return true;
+        }
+
         int n = auth.size();
         for (int i = 0; i < n; i++) {
             ResrceInfo resrceInfo = auth.get(i);

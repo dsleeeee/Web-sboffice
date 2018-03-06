@@ -2,6 +2,7 @@ package kr.co.solbipos.application.service.user;
 
 import static kr.co.solbipos.utils.DateUtil.*;
 import static kr.co.solbipos.utils.HttpUtils.*;
+import static kr.co.solbipos.utils.grid.ReturnUtil.*;
 import static kr.co.solbipos.utils.spring.StringUtil.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,8 +20,10 @@ import kr.co.solbipos.application.enums.user.PwFindResult;
 import kr.co.solbipos.application.persistence.user.UserMapper;
 import kr.co.solbipos.application.service.login.LoginService;
 import kr.co.solbipos.service.session.SessionService;
+import kr.co.solbipos.structure.Result.Status;
 import kr.co.solbipos.system.Prop;
 import kr.co.solbipos.utils.DateUtil;
+import kr.co.solbipos.utils.security.EncUtil;
 import kr.co.solbipos.utils.spring.ObjectUtil;
 import kr.co.solbipos.utils.spring.WebUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +43,58 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserMapper userMapper;
+
+    @Override
+    public PwChgResult processLayerPwdChg(SessionInfo sessionInfo, PwdChg pwdChg) {
+
+        SessionInfo si = loginService.selectWebUser(sessionInfo);
+
+        /**
+         * 기존 패스워드 비교
+         */
+        if (!si.getUserPwd().equals(pwdChg.getCurrentPw())) {
+            return PwChgResult.PASSWORD_NOT_MATCH;
+        }
+
+        /**
+         * 새 비밀번호와 새 비밀번호 확인이 일치하는지 확인
+         */
+        if (!pwdChg.getNewPw().equals(pwdChg.getNewPwConf())) {
+            return PwChgResult.NEW_PASSWORD_NOT_MATCH;
+        }
+
+        /**
+         * 변경 패스워드가 기존 비밀번호가 같은지 체크
+         */
+        if (si.getUserPwd().equals(pwdChg.getNewPw())) {
+            return PwChgResult.PASSWORD_NEW_OLD_MATH;
+        }
+
+        /**
+         * 패스워드 정책 체크
+         */
+        if (!EncUtil.passwordPolicyCheck(pwdChg.getNewPw())
+                || !EncUtil.passwordPolicyCheck(pwdChg.getNewPwConf())) {
+            return PwChgResult.PASSWORD_REGEXP;
+        }
+        
+        String userId = si.getUserId();
+
+        // 패스워드 세팅 및 변경
+        si.setUserId(userId);
+        si.setUserPwd(pwdChg.getNewPw());
+        int r1 = updateUserPwd(si);
+
+        // 패스워드 변경 내역 저장
+        PwdChgHist pch = new PwdChgHist();
+        pch.setUserId(userId);
+        pch.setPriorPwd(pwdChg.getCurrentPw());
+        pch.setRegDt(currentDateTimeString());
+        pch.setRegIp(getClientIp(WebUtil.getRequest()));
+        int r2 = insertPwdChgHist(pch);
+
+        return PwChgResult.CHECK_OK;
+    }
 
     @Override
     public PwChgResult processPwdChg(PwdChg pwdChg) {

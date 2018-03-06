@@ -59,15 +59,17 @@ public class ExceptionController {
      */
     @ExceptionHandler(BizException.class)
     public Object bizExceptionHandle(BizException e) {
-        String errorMessage = e.getMessage(), responseURL = e.getResponseURL();
-
+        String errorMessage = e.getMessage();
+        String responseURL = e.getResponseURL();
+        Status status = e.getStatus();
+        
         if (logger.isDebugEnabled())
             logger.debug("Response URL : {}", responseURL);
 
         if (WebUtil.isJsonRequest()) {
             JsonResult jsonResult = new JsonResult(errorMessage, responseURL);
             // common.js 에서 아래 타입으로 처리
-            jsonResult.setStatus(Status.NOT_AUTHENTICATION);
+            jsonResult.setStatus(status);
             return new ResponseEntity<JsonResult>(jsonResult, HttpStatus.OK);
         }
 

@@ -47,7 +47,7 @@
           item.id = grid._e.id + "picker";
           item.cl = "column-picker";
           var html = wijmo.format("<div style=\"{style}\"><div id=\"{id}\" class=\"{cl}\"></div></div>", item);
-          $(".content_page").append(html);
+          $(document.body).append(html); // main div class
           
           // column picker gen
           wgridPic.genGridPicker("#" + item.id, grid, resrceCd, gridIdx);

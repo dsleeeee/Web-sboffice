@@ -1,6 +1,7 @@
 package kr.co.solbipos.application.controller.login;
 
 import static kr.co.solbipos.utils.HttpUtils.*;
+import static org.springframework.util.ObjectUtils.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,9 @@ public class LoginController {
  
     @Autowired
     Prop prop;
-
+    
+    final String MAIN_PAGE_URL = "main.sb";
+    
     /**
      * <pre>
      * 로그인 페이지로 이동
@@ -54,10 +57,12 @@ public class LoginController {
      * @return
      */
     @RequestMapping(value = "login.sb", method = RequestMethod.GET)
-    public String login(HttpServletRequest request, HttpServletResponse response, Model model) {
+    public String login(String userId, String type, HttpServletRequest request, HttpServletResponse response, Model model) {
         if (sessionService.isValidSession(request)) {
-            return "redirect:/sample.sb";
+            return "redirect:/" + MAIN_PAGE_URL;
         }
+        model.addAttribute("userId", userId);
+        model.addAttribute("type", isEmpty(type) ? "" : type);
         return "login/login:Login";
     }
 
@@ -105,33 +110,39 @@ public class LoginController {
          * 2-2. 패스워드 변경 페이지로 이동<br>
          */
 
-        String returnUrl = "sample.sb";
+        String returnUrl = MAIN_PAGE_URL;
+        
         // 로그인 성공
         if (code == LoginResult.SUCCESS) {
             // 메인 페이지
-            returnUrl = "sample.sb";
+            returnUrl = MAIN_PAGE_URL;
             // 세션 생성
             sessionService.setSessionInfo(request, response, si);
         } else if (code == LoginResult.NOT_EXISTS_ID || code == LoginResult.PASSWORD_ERROR) {
             // 다시 로그인 페이지로 이동
-            returnUrl = "/auth/login.sb";
+            returnUrl = "/auth/login.sb?userId=" + si.getUserId();
             throw new AuthenticationException(messageService.get("msg.login.idpw.fail"), returnUrl);
         } else if (code == LoginResult.LOCK) {
             // 잠금상태의 유져
-            returnUrl = "/auth/login.sb";
+            returnUrl = "/auth/login.sb?userId=" + si.getUserId();
             throw new AuthenticationException(messageService.get("msg.login.lock.user"), returnUrl);
-        } else if (code == LoginResult.PASSWORD_CHANGE || code == LoginResult.PASSWORD_EXPIRE) {
+        } else if (code == LoginResult.PASSWORD_CHANGE) {
 
-            // 패스워드 변경 페이지로 이동
-            // 메인 화면에서 패스워드 변경 화면과 같이 사용한다.
-            // returnUrl = "user/pwdChg.sb";
-            throw new AuthenticationException("비밀번호 변경 및 연장이 필요합니다. 개발중", returnUrl);
+            // 패스워드 변경 레이어 팝업
+            // 초기 비밀번호 입니다. 비밀번호 변경이 필요합니다.
+             returnUrl = "/auth/login.sb?userId=" + si.getUserId() + "&type=pwChg";
+            throw new AuthenticationException(messageService.get("msg.login.pwd.chg"), returnUrl);
+        }
+        else if(code == LoginResult.PASSWORD_EXPIRE) {
+            // 비밀번호 변경 및 연장이 필요합니다.
+            returnUrl = "/auth/login.sb?userId=" + si.getUserId() + "&type=pwExpire";
+            throw new AuthenticationException(messageService.get("msg.login.pwd.expire"), returnUrl);
         }
         // 로그인 실패 
         else {
             sw.stop();
             log.error("로그인 실패 처리 시간 : {}", sw.getTotalTimeSeconds());
-            returnUrl = "auth/login.sb";
+            returnUrl = "auth/login.sb?userId=" + si.getUserId();
             // 실패 처리
             throw new AuthenticationException(messageService.get("msg.login.fail"), returnUrl);
         } 

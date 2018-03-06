@@ -3,8 +3,6 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<script src="http://cdn.wijmo.com/5.latest/controls/wijmo.nav.min.js"></script>
-
 sampleView-View 
 
 <br>
@@ -52,7 +50,7 @@ ${sessionScope.sessionInfo.fixMenu[0].activation}
 <br>
 <a href="sampleInput2.sb">Input 샘플2</a>
 <br>
-<div id="theTree"></div>
+<!-- <div id="theTree2"></div> -->
 <br>
 <br>
 <br>
@@ -79,27 +77,28 @@ function ajaxTest() {
 </script>
 
 <script>
+/* 
 onload = function() {
-  
+  alert('sampleView');
   function getDataTest() {
       var test = ${sessionScope.sessionInfo.menuData};
       var currentMenu = "${sessionScope.sessionInfo.currentMenu.resrceCd}";
       return test;
   }
   
-  var tree = new wijmo.nav.TreeView('#theTree', {
-    itemsSource: getDataTest(),
-    displayMemberPath: 'header',
-    childItemsPath: 'items',
-    expandOnClick : true,
-    isContentHtml: true,
-    loadedItems: function(s, e) {
-    console.log("loadedItems...");
-    s.collapseToLevel(10);
-    }
-  });
+   var tree = new wijmo.nav.TreeView('#theTree2', {
+     itemsSource: getDataTest(),
+     displayMemberPath: 'header',
+     childItemsPath: 'items',
+     expandOnClick : true,
+     isContentHtml: true,
+     loadedItems: function(s, e) {
+     console.log("loadedItems...");
+     s.collapseToLevel(10);
+     }
+   });
 }
-  
+*/
 </script>
 
 

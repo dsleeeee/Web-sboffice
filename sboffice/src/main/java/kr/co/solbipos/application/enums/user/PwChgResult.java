@@ -14,6 +14,12 @@ public enum PwChgResult implements CodeEnum  {
     
     /** 비밀번호 일치 하지 않음 */
     PASSWORD_NOT_MATCH("PASSWORD_NOT_MATCH"),
+    /** 변경 패스워드가 기존 패스워드와 동일함. */
+    PASSWORD_NEW_OLD_MATH("PASSWORD_NEW_OLD_MATH"),
+    /** 패스워드 정책이 맞지 않음 */
+    PASSWORD_REGEXP("PASSWORD_REGEXP"),
+    /** 변경 패스워드가 2개가 서로 맞지 않음 */
+    NEW_PASSWORD_NOT_MATCH("NEW_PASSWORD_NOT_MATCH"),
     /** 비정상적인 접근 */
     UUID_NOT_MATCH("UUID_NOT_MATCH"),
     /** UUID 유효지간 지남 */

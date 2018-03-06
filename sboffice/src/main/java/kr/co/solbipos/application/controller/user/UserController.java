@@ -4,8 +4,9 @@ import static kr.co.solbipos.utils.DateUtil.*;
 import static kr.co.solbipos.utils.HttpUtils.*;
 import static kr.co.solbipos.utils.grid.ReturnUtil.*;
 import static kr.co.solbipos.utils.spring.StringUtil.*;
+import static org.springframework.util.StringUtils.*;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.time.DateUtils;
@@ -17,19 +18,24 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import kr.co.solbipos.application.domain.login.SessionInfo;
 import kr.co.solbipos.application.domain.user.OtpAuth;
 import kr.co.solbipos.application.domain.user.PwdChg;
+import kr.co.solbipos.application.domain.user.PwdChgHist;
 import kr.co.solbipos.application.domain.user.User;
 import kr.co.solbipos.application.enums.user.PwChgResult;
 import kr.co.solbipos.application.enums.user.PwFindResult;
 import kr.co.solbipos.application.service.login.LoginService;
 import kr.co.solbipos.application.service.user.UserService;
+import kr.co.solbipos.application.validate.login.Login;
 import kr.co.solbipos.application.validate.user.AuthNumber;
 import kr.co.solbipos.application.validate.user.IdFind;
 import kr.co.solbipos.application.validate.user.PwChange;
 import kr.co.solbipos.application.validate.user.PwFind;
+import kr.co.solbipos.application.validate.user.UserPwChange;
 import kr.co.solbipos.exception.AuthenticationException;
 import kr.co.solbipos.service.message.MessageService;
+import kr.co.solbipos.service.session.SessionService;
 import kr.co.solbipos.structure.JsonResult;
 import kr.co.solbipos.structure.Result.Status;
 import kr.co.solbipos.system.Prop;
@@ -37,6 +43,7 @@ import kr.co.solbipos.utils.DateUtil;
 import kr.co.solbipos.utils.security.EncUtil;
 import kr.co.solbipos.utils.spring.ObjectUtil;
 import kr.co.solbipos.utils.spring.StringUtil;
+import kr.co.solbipos.utils.spring.WebUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -61,6 +68,9 @@ public class UserController {
     @Autowired
     MessageService messageService;
 
+    @Autowired
+    SessionService sessionService;
+
     /**
      * 인증번호 발사!!
      * 
@@ -80,53 +90,45 @@ public class UserController {
         }
 
         // 유져 정보 조회
-        List<User> findUsers = userService.selectUserList(user, false);
+        User findUser = userService.selectUserByNmAndId(user);
 
         // 조회된 유져가 없으면 에러 메세지 전송
-        if (ObjectUtil.isEmpty(findUsers)) {
+        if (ObjectUtil.isEmpty(findUser)) {
             log.warn("문자 발송 유져 조회 실패 : id : {}, nm : {}", user.getUserId(), user.getEmpNm());
             String msg = messageService.get("msg.pw.find.error1")
                     + messageService.get("msg.pw.find.error2");
             return returnJson(Status.FAIL, "msg", msg);
+        } else {
+
+            OtpAuth otp = new OtpAuth();
+            otp.setUserId(findUser.getUserId());
+            otp.setAuthFg("001");
+            otp.setRecvMpNo(findUser.getMpNo());
+            otp.setReqIp(getClientIp(request));
+            otp.setReqDate(currentDateString());
+            otp.setOtpLimit(prop.otpLimit);
+
+            // limit 에 걸렸는지 확인
+            if (checkOtpLimit(otp)) {
+                log.warn("인증문자 제한 시간 걸림, 제한 시간 : {}, id : {}, name : {}", prop.otpLimit,
+                        findUser.getUserId(), findUser.getEmpNm());
+                String msg = String.valueOf(otp.getOtpLimit())
+                        + messageService.get("msg.pw.find.otp.limit");
+                return returnJson(Status.FAIL, "authNumber", msg);
+            }
+
+            // 인증 번호 생성 후 전송
+            // 신규 OTP 생성 리턴
+            userService.insertOtpAuth(otp);
+
+            /**
+             * 
+             * TODO : OTP 문자 발송 로직 들어가야됨
+             * 
+             */
+
+            return returnJson(Status.OK, "msg", messageService.get("msg.pw.find.send.ok"));
         }
-        // 조회된 사용자 정보가 2개 이상일 때 오류 처리
-        if (findUsers.size() > 1) {
-            log.warn("문자 발송 유져 여러명 조회됨 : id : {}, nm : {}", user.getUserId(), user.getEmpNm());
-            String msg = messageService.get("msg.pw.find.error1")
-                    + messageService.get("msg.pw.find.error2");
-            return returnJson(Status.FAIL, "msg", msg);
-        }
-        
-        User findUser = findUsers.get(0);
-        
-        OtpAuth otp = new OtpAuth();
-        otp.setUserId(findUser.getUserId());
-        otp.setAuthFg("001");
-        otp.setRecvMpNo(findUser.getMpNo());
-        otp.setReqIp(getClientIp(request));
-        otp.setReqDate(currentDateString());
-        otp.setOtpLimit(prop.otpLimit);
-
-        // limit 에 걸렸는지 확인
-        if (checkOtpLimit(otp)) {
-            log.warn("인증문자 제한 시간 걸림, 제한 시간 : {}, id : {}, name : {}", prop.otpLimit,
-                    findUser.getUserId(), findUser.getEmpNm());
-            String msg = String.valueOf(otp.getOtpLimit())
-                    + messageService.get("msg.pw.find.otp.limit");
-            return returnJson(Status.FAIL, "authNumber", msg);
-        }
-
-        // 인증 번호 생성 후 전송
-        // 신규 OTP 생성 리턴
-        userService.insertOtpAuth(otp);
-
-        /**
-         * 
-         * TODO : OTP 문자 발송 로직 들어가야됨
-         * 
-         */
-
-        return returnJson(Status.OK, "msg", messageService.get("msg.pw.find.send.ok"));
     }
 
 
@@ -188,11 +190,11 @@ public class UserController {
             return "user/login:idFind";
         }
 
-        // id, 이름으로 유져 조회 - 아이디 마스킹
-        List<User> findUsers = userService.selectUserList(user, true);
+        // id, 이름으로 유져 조회
+        String findUserNm = userService.selectUserCheck(user);
 
         // 아이디가 없으면 에러 메시지 리턴
-        if (findUsers.size() < 1) {
+        if (StringUtil.isEmpty(findUserNm)) {
             // id 를 찾을 수 없습니다.
             String msg = messageService.get("label.login.userId")
                     + messageService.get("msg.cmm.not.find");
@@ -201,7 +203,7 @@ public class UserController {
         }
 
         // 찾은 아이디를 마스킹해서 보여줌
-        model.addAttribute("list", findUsers);
+        model.addAttribute("findUserNm", strMaskingHalf(findUserNm));
 
         return "user/login:idFindOk";
     }
@@ -299,17 +301,13 @@ public class UserController {
         }
 
         // id, 이름 체크
-        List<User> findUsers = userService.selectUserList(user, false);
+        User findUser = userService.selectUserByNmAndId(user);
 
-        if (ObjectUtil.isEmpty(findUsers)) {
+        if (ObjectUtil.isEmpty(findUser)) {
             // 실패 처리 > 잘못된 접근입니다.
             throw new AuthenticationException(messageService.get("msg.cmm.invalid.access"), "");
         }
-        // 조회된 사용자 정보가 2개 이상일 때 오류 처리
-        if (findUsers.size() > 1) {
-            throw new AuthenticationException(messageService.get("msg.cmm.invalid.access"), "");
-        }
-        
+
         OtpAuth otp = new OtpAuth();
         otp.setUserId(user.getUserId());
         otp.setReqDate(currentDateString());
@@ -335,7 +333,7 @@ public class UserController {
      * 
      * @param request
      * @param response
-     * @param model 
+     * @param model
      * @return
      */
     @RequestMapping(value = "pwdChgOk.sb", method = RequestMethod.POST)
@@ -355,7 +353,7 @@ public class UserController {
                 || !EncUtil.passwordPolicyCheck(pwdChg.getNewPwConf())) {
             throw new AuthenticationException(messageService.get("msg.pw.chg.regexp"), "");
         }
- 
+
         PwChgResult pcr = userService.processPwdChg(pwdChg);
 
         log.info("패스워드 변경 결과 : halfId : {}, result : {}, uuid : {}", pwdChg.getHalfId(), pcr,
@@ -383,6 +381,118 @@ public class UserController {
         } else {
             throw new AuthenticationException(messageService.get("msg.cmm.invalid.access"), "");
         }
+    }
+
+    /**
+     * 메인 화면에서 비밀번호 변경
+     * 
+     * @param pwdChg
+     * @param bindingResult
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "userPwdChg.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public JsonResult userPwdChg(@Validated(UserPwChange.class) PwdChg pwdChg,
+            BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response,
+            Model model) {
+
+        if (bindingResult.hasErrors()) {
+            return returnJsonBindingFieldError(bindingResult);
+        }
+
+        SessionInfo sessionInfo = sessionService.getSessionInfo(request);
+
+        SessionInfo si = new SessionInfo();
+
+        // 메인 화면에서 패스워드를 변경 할때는 세션이 없음
+        si.setUserId(
+                ObjectUtil.isEmpty(sessionInfo) ? pwdChg.getUserId() : sessionInfo.getUserId());
+
+        // 패스워드 결과 조회
+        PwChgResult result = userService.processLayerPwdChg(si, pwdChg);
+
+        if (result == PwChgResult.PASSWORD_NOT_MATCH) {
+            /**
+             * 기존 패스워드 비교
+             */
+            return returnJson(Status.FAIL, "msg", messageService.get("msg.layer.pwchg.pwfail"));
+        } else if (result == PwChgResult.NEW_PASSWORD_NOT_MATCH) {
+            /**
+             * 새 비밀번호와 새 비밀번호 확인이 일치하는지 확인
+             */
+            return returnJson(Status.FAIL, "msg", messageService.get("msg.pw.find.not.match"));
+        } else if (result == PwChgResult.PASSWORD_NEW_OLD_MATH) {
+            /**
+             * 변경 패스워드가 기존 비밀번호가 같은지 체크
+             */
+            return returnJson(Status.FAIL, "msg", messageService.get("msg.layer.pwchg.match"));
+        } else if (result == PwChgResult.PASSWORD_REGEXP) {
+            /**
+             * 패스워드 정책 체크
+             */
+            return returnJson(Status.FAIL, "msg", messageService.get("msg.pw.chg.regexp"));
+        }
+
+        HashMap<String, String> returnData = new HashMap<>();
+        returnData.put("msg", messageService.get("label.pw.find.h2.1")
+                + messageService.get("label.pw.find.h2.2"));
+        returnData.put("url", "/auth/logout.sb");
+
+        return returnJson(Status.OK, returnData);
+    }
+
+    /**
+     * 비밀번호 연장
+     * 
+     * @param pwdChg
+     * @param bindingResult
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "pwdExtension.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public JsonResult pwdExtension(@Validated(Login.class) PwdChg pwdChg,
+            BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response,
+            Model model) {
+
+        if (bindingResult.hasErrors()) {
+            return returnJsonBindingFieldError(bindingResult);
+        }
+
+        SessionInfo sessionInfo = new SessionInfo();
+        sessionInfo.setUserId(pwdChg.getUserId());
+
+        SessionInfo si = loginService.selectWebUser(sessionInfo);
+
+        /**
+         * 기존 패스워드 비교
+         */
+        if (!si.getUserPwd().equals(pwdChg.getCurrentPw())) {
+            return returnJson(Status.FAIL, "msg", messageService.get("msg.layer.pwchg.pwfail"));
+        }
+
+        /**
+         * 패스워드 변경 내역 저장 하면서 패스워드 유효기간을 연장한다.
+         * 
+         */
+        PwdChgHist pch = new PwdChgHist();
+        pch.setUserId(si.getUserId());
+        pch.setPriorPwd(pwdChg.getCurrentPw());
+        pch.setRegDt(currentDateTimeString());
+        pch.setRegIp(getClientIp(WebUtil.getRequest()));
+        int r2 = userService.insertPwdChgHist(pch);
+
+        HashMap<String, String> result = new HashMap<>();
+        result.put("msg", messageService.get("label.pw.find.h2.1")
+                + messageService.get("label.pw.find.h2.2"));
+        result.put("url", "/auth/logout.sb");
+
+        return returnJson(Status.OK, result);
     }
 }
 

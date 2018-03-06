@@ -35,7 +35,7 @@ public class SessionInfo extends Cmm {
     private String userPwd;
     
     /** 사용자 이름 */
-    private String userName;
+    private String userNm;
 
     /** 그룹 코드 */
     private String grpCd;
@@ -72,11 +72,26 @@ public class SessionInfo extends Cmm {
     private boolean chk;
     
     /** 
+     * 
+     * 유져 권한 타입<br> 
+     * 시스템 : SYSTEM<br>
+     * 본사 : HEDOFC(HEAD OFFICE)<br>
+     * 대리점 : AGENCY<br>
+     * 가맹점 : MRHST(MEMBER BRANCH STORE)
+     * 
+     * */
+    private String userAuthType = "HEDOFC";
+    
+    
+    /** 
      * 메뉴 관련 데이터 
      * */
     
     /** 메인 메뉴 데이터 : 위즈모 그리드용 데이터 */
     private String menuData;
+    
+    /** 즐겨찾기 메뉴 데이터 : 위즈모 그리드용 데이터 */
+    private String bkmkMenuData;
     
     /** 현재 선택한 메뉴 정보 */
     private ResrceInfoBase currentMenu;

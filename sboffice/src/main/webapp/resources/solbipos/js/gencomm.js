@@ -1,3 +1,7 @@
+function genEventSingle(error) {
+  genEvent(error, $(error.selector + "Error"));
+}
+
 function genEvent(error, errorLabel) {
   error.focus(function(){
     errorLabel.hide();

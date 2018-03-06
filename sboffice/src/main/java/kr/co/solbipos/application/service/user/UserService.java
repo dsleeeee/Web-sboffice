@@ -17,7 +17,7 @@ import kr.co.solbipos.application.enums.user.PwFindResult;
 public interface UserService {
 
     /**
-     * 패스워드 + 인증 번호
+     * 인증 번호 확인
      * 
      * @param user
      * @return
@@ -26,7 +26,7 @@ public interface UserService {
 
 
     /**
-     * 패스워드 변경
+     * 패스워드 변경 : uuid + pw 체크
      * 
      * @param pwdChg
      * @return
@@ -34,6 +34,14 @@ public interface UserService {
     PwChgResult processPwdChg(PwdChg pwdChg);
 
 
+    /**
+      * 레이어 팝업에서 패스워드 변경
+      * 
+      * @param pwdChg
+      * @return
+      */
+    PwChgResult processLayerPwdChg(SessionInfo sessionInfo, PwdChg pwdChg);
+    
 
     /**
      * userId 조회
