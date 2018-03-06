@@ -1,6 +1,8 @@
 package kr.co.solbipos.utils;
 
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
@@ -61,6 +63,57 @@ public class DateUtil extends DateUtils {
         return date2string(currentDate(), DEFAULT_TIME_MS_FORMAT);
     }
 
+    /**
+     * 년 변경 (날짜 포맷 필요)
+     * 
+     * @param amount int
+     * @param pattern String
+     * @return Date
+     */
+    public static String addYear(int amount,String pattern) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(currentDate());
+        cal.add(Calendar.YEAR, amount);
+        
+        DateFormat df = new SimpleDateFormat(pattern);
+        
+        return df.format(cal.getTime());
+    }
+    
+    /**
+     * 월 변경 (날짜 포맷 필요)
+     * 
+     * @param amount int
+     * @param pattern String
+     * @return Date
+     */
+    public static String addMonth(int amount,String pattern) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(currentDate());
+        cal.add(Calendar.MONTH, amount);
+        
+        DateFormat df = new SimpleDateFormat(pattern);
+        
+        return df.format(cal.getTime());
+    }
+    
+    /**
+     * 일 변경 (날짜 포맷 필요)
+     * 
+     * @param amount int
+     * @param pattern String
+     * @return Date
+     */
+    public static String addDays(int amount,String pattern) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(currentDate());
+        cal.add(Calendar.DATE, amount);
+        
+        DateFormat df = new SimpleDateFormat(pattern);
+        
+        return df.format(cal.getTime());
+    }
+    
     /**
      * 일 변경
      * 

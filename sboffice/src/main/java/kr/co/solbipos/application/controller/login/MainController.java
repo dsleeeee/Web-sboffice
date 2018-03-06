@@ -53,22 +53,17 @@ public class MainController {
          * enum type 으로 변경 해야됨
          * 
          * */
-        
-        
-        if(userAuthType.equals("HEDOFC")) {
-            return "application/main/hedofcMain";
-        }
-        else if(userAuthType.equals("AGENCY")) {
-            return "application/main/agencyMain";
-        }
-        else if(userAuthType.equals("SYSTEM")) {
-            return "application/main/systemMain";
-        }
-        else if(userAuthType.equals("MRHST")) {
-            return "application/main/mrhstMain";
+        if(userAuthType.equals("SYSTEM")) {
+            return "redirect:"+"/application/main/content/sys.sb";
+        }else if(userAuthType.equals("AGENCY")) {    //TODO URL 추가 필요
+            return "redirect:"+"/application/main/content/agency.sb";
+        }else if(userAuthType.equals("HEDOFC")) {
+            return "redirect:"+"/application/main/content/hq.sb";
+        }else if(userAuthType.equals("MRHST")) {
+            return "redirect:"+"/application/main/content/store.sb";
         }
         
-        return "application/main/mrhstMain";
+        return "application/main/mrhstMain";    //TODO 로그인페이지로 이동?
     }
 }
 

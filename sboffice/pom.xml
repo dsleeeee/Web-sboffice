@@ -175,20 +175,21 @@
 
 
 <!--     DB oracle -->
-<!--
+
     <dependency>
       <groupId>oracle</groupId>
       <artifactId>ojdbc6</artifactId>
       <version>11.2.0.3</version>
     </dependency>
--->
+
+<!-- 
     <dependency>
       <groupId>oracle</groupId>
       <artifactId>ojdbc8</artifactId>
       <version>12.2.0.1</version>
     </dependency>
     
-    
+ -->    
     
 <!--     jackson lib -->
     <dependency>

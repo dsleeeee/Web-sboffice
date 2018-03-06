@@ -503,6 +503,7 @@ public class UserController {
         HashMap<String, String> result = new HashMap<>();
         result.put("msg", messageService.get("label.pw.find.h2.1")
                 + messageService.get("label.pw.find.h2.2"));
+
         result.put("url", "/auth/logout.sb");
 
         return returnJson(Status.OK, result);

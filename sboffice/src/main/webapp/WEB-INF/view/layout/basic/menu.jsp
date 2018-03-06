@@ -29,6 +29,7 @@
     </p>
 
     <!--접혔을때 : 즐겨찾기 hover 메뉴 (1차 depth만 노출하고 클릭하면 2차, 3차 각각 노출한다.)-->
+    <%-- 
     <div class="fahoMenu">
         <ul>
             <li class="depth1 menu_pos on"><!--메뉴별 class 추가 (하단 주석에서 class name 참고), focus중일때 on 추가-->
@@ -53,6 +54,9 @@
             </li>
         </ul>    
     </div>
+     --%>
+    
+    
     <!--//접혔을때 : 즐겨찾기 hover 메뉴-->
 
   </div>
@@ -77,6 +81,14 @@
 <script>
 onload = function() {
   
+
+  // 선택된 메뉴의 메뉴코드와 부모메뉴의 메뉴코드
+  var cResrce = "";
+  var pResrce = "";
+  
+  //var cResrce = "000173";
+  //var pResrce = "000030";
+  
   var allMenuTree;
   var bmkMenuTree;
   
@@ -86,7 +98,6 @@ onload = function() {
     $("#_all").addClass("on");
     $("#_favorite").removeClass();
     
-    //$("#faMenu").css("display","none");
     $("#faMenu").hide();
     
     if(!allMenuTree) showAllMenu();
@@ -100,7 +111,6 @@ onload = function() {
     $("#_all").removeClass();
     $("#_favorite").addClass("on");
 
-    //$("#faMenu").css("display","block");
     $("#faMenu").show();
     
     if(!bmkMenuTree)  showBmkMenu();
@@ -109,12 +119,6 @@ onload = function() {
     $("#theTreeBkmk").show();
   });
   
-  // 선택된 메뉴의 메뉴코드와 부모메뉴의 메뉴코드
-  //var cResrce = "";
-  //var pResrce = "";
-  
-  var cResrce = "000217";
-  var pResrce = "000037";
   
   // 현재 선택된 메뉴 depth 저장
   var sel1Depth = 0;
@@ -187,7 +191,9 @@ onload = function() {
   
   function showBmkMenu(){
     
-    if(isEmpty(getbmkMenu())){
+    console.log('isempty : '+ stringUtilObj.isEmpty(getbmkMenu()))
+    
+    if(stringUtilObj.isEmpty(getbmkMenu())){
       $(".faMenu .txt").css("display","block");
     } else {
       $(".faMenu .txt").css("display","none");
@@ -244,80 +250,119 @@ onload = function() {
   // 메뉴 초기화 : 선택된 메뉴가 있을 경우, 해당 메뉴 보여줌.
   function initMenu(tree){
     if(pResrce != "" && cResrce !=""){
-      console.log("tree : "+ tree);
-
+      var stat = false;
       var items = (tree == "theTreeAll"? getAllMenu():getbmkMenu());
-      
-      console.log(tree + "items : " + JSON.stringify(items));
       
       var pCnt = 0; // 1depth의 index 알아내기 위한 변수
       for(var i=0; i<items.length; i++){
         var item = items[i];
         pCnt = item.level1Seq;
-
-        console.log("pCnt : "+ pCnt);
-        console.log("pCnt item.items : "+JSON.stringify(item.items));
-        
         if(item.items){
-          
-          console.log(pCnt + " item.items.length : "+ item.items.length);
-          
           for(var j=0; j<item.items.length; j++){
             var item2 = item.items[j];
-            console.log("item2.resrceCd : "+ item2.resrceCd);
-            
             if(item2.resrceCd == cResrce){ // 2depth가 마지막 depth일때
-              
-              
               sel1Depth = pCnt;
               sel2Depth = j;
               sel3Depth = j;
+              stat = true;
             }
             if(item2.resrceCd == pResrce){ // 3depth가 마지막 depth일때
               sel1Depth = pCnt;
               sel2Depth = item2.level2Seq;
-              
               for(var k=0; k<item2.items.length; k++){
                 var item3 = item2.items[k];
                 if(item3.resrceCd == cResrce){
                  sel3Depth = item3.level3Seq;
+                 stat = true;
                 }
               }
             }
           }
         }
       }
-
-      console.log("sel1Depth : "+ sel1Depth);
-      console.log("sel2Depth : "+ sel2Depth);
-      console.log("sel3Depth : "+ sel3Depth);
-      
-      $("#"+ tree +" div[wj-part=root] > .wj-node").eq(sel1Depth).click();
-      $("#"+ tree +" div[wj-part=root] > .wj-node").eq(sel1Depth).addClass("on");
-      $("#"+ tree +" div[wj-part=root] > .wj-nodelist").eq(sel1Depth).children('.wj-node').eq(sel2Depth).click();
-      $("#"+ tree +" div[wj-part=root] > .wj-nodelist").eq(sel1Depth).children('.wj-node').eq(sel2Depth).addClass("on");
-      $("#"+ tree +" div[wj-part=root] > .wj-nodelist").eq(sel1Depth).children('.wj-nodelist').eq(sel2Depth).children('.wj-node').eq(sel3Depth).addClass("wj-state-selected");
-      
-      console.log("짠 : " +tree);
-      
+      if(stat){
+        $("#"+ tree +" div[wj-part=root] > .wj-node").eq(sel1Depth).click();
+        $("#"+ tree +" div[wj-part=root] > .wj-node").eq(sel1Depth).addClass("on");
+        $("#"+ tree +" div[wj-part=root] > .wj-nodelist").eq(sel1Depth).children('.wj-node').eq(sel2Depth).click();
+        $("#"+ tree +" div[wj-part=root] > .wj-nodelist").eq(sel1Depth).children('.wj-node').eq(sel2Depth).addClass("on");
+        $("#"+ tree +" div[wj-part=root] > .wj-nodelist").eq(sel1Depth).children('.wj-nodelist').eq(sel2Depth).children('.wj-node').eq(sel3Depth).addClass("wj-state-selected");
+      }
     }
   }
 }
 
 
-
-////////////////////////////////////////// String util //////////////////////////////////////////
-
-
+////////////////////////////////////////// StringUtil //////////////////////////////////////////
 
 // check if the character or object is empty 
-var isEmpty = function(value){
+
+var stringUtil = function(){
+  this.startObject = null;
+  this.endObject = null;
+  this.args = null;
+}
+
+
+stringUtil.prototype.isEmpty = function(value){
   if( value == "" || value == null || value == undefined || ( value != null && typeof value == "object" && !Object.keys(value).length ) ){
     return true;
   } else {
     return false;
   }
 }
+
+/* 
+var isEmpty = function(value){
+}
+ */
+String.prototype.string = function(len){var s = '', i = 0; while (i++ < len) { s += this; } return s;};
+String.prototype.zf = function(len){return "0".string(len - this.length) + this;};
+
+var stringUtilObj = new stringUtil();
+
+
+////////////////////////////////////////// NumberUtil //////////////////////////////////////////
+Number.prototype.zf = function(len){return this.toString().zf(len);};
+
+////////////////////////////////////////// DateUtil //////////////////////////////////////////
+
+var dateUtil = function(){
+  this.startObject = null;
+  this.endObject = null;
+  this.args = null;
+}
+
+dateUtil.prototype.formatLen = function(str){
+  return str = (""+str).length<2 ? "0"+str : str;
+}
+
+dateUtil.prototype.formatDate = function(dateStr, f) {
+  if(!this.valueOf()) return " ";
+  
+  var weekName = ["일요일","월요일","화요일","수요일","목요일","금요일","토요일"]
+  var y = parseInt(dateStr.substr(0,4));
+  var m = parseInt(dateStr.substr(4,2));
+  var d = parseInt(dateStr.substr(6,2));
+
+  var date = new Date(y, m, d);
+  return f.replace(/(yyyy|yy|MM|dd|E|hh|mm|ss|a\/p)/gi, function($1){
+    switch($1) {
+      case "yyyy" : return date.getFullYear();
+      case "yy" : return (date.getFullYear()%1000).zf(2);
+      case "MM" : return (date.getMonth()+1).zf(2);
+      case "dd" : return date.getDate().zf(2);
+      case "E" : return weekName[date.getDay()];
+      case "HH" : return date.getHours().zf(2);
+      case "hh" : return ((h=date.getHours()%12)? h : 12).zf(2);
+      case "mm" : return date.getMinutes().zf(2);
+      case "ss" : return date.getSeconds().zf(2);
+      case "a/p" : return d.getHours() < 12? "오전" : "오후";
+      default : return $1;
+    }
+  }); 
+} 
+
+var dateUtilObj = new dateUtil();
 
 </script>
 

@@ -44,34 +44,47 @@
   
   <!-- 즐겨찾기 조회 -->
   
+  <!-- 즐겨찾기 조회 -->
+  
   <select id="selectBkmkMenu1" parameterType="sessionInfo" resultType="resrceInfo">
   <![CDATA[
     /* CmmMenuMapper.selectBkmkMenu1 */
     WITH CHILD_TAB AS (
-      SELECT B.RESRCE_CD,
-             B.P_RESRCE,
-             B.RESRCE_NM,
-             B.URL
-        FROM TB_WB_BKMK A
-        LEFT OUTER JOIN 
-             TB_WB_RESRCE_INFO B
-          ON A.RESRCE_CD = B.RESRCE_CD
-       WHERE A.USER_ID = #{userId}
+      SELECT B.RESRCE_CD, B.P_RESRCE, D.RESRCE_CD P_RESRCE_CD , D.P_RESRCE PP_RESRCE_CD
+        FROM TB_WB_BKMK A,
+             TB_WB_RESRCE_INFO B,
+              (SELECT A.RESRCE_CD
+                FROM TB_WB_AUTHOR_GRP_RESRCE A,
+                     TB_WB_USER_INFO B
+               WHERE A.USE_YN   = 'Y'
+                 AND B.GRP_CD   = A.GRP_CD
+                 AND B.USER_ID  = #{userId}
+               UNION
+              SELECT A.RESRCE_CD
+                FROM TB_WB_AUTHOR_EXCEPT A
+               WHERE A.INCLD_EXCLD_FG = 'I'
+                 AND A.USER_ID = #{userId}
+               MINUS
+              SELECT A.RESRCE_CD
+                FROM TB_WB_AUTHOR_EXCEPT A
+               WHERE A.INCLD_EXCLD_FG = 'E'
+                 AND A.USER_ID = #{userId}
+              ) C,
+              TB_WB_RESRCE_INFO D
+       WHERE B.RESRCE_CD = A.RESRCE_CD
+         AND C.RESRCE_CD = B.RESRCE_CD
+         AND D.RESRCE_CD = B.P_RESRCE
+         AND A.USER_ID = #{userId}
          AND A.USE_YN = 'Y'
+         AND B.USE_YN = 'Y'
          AND B.DISP_LEVEL = 2
+         AND D.USE_YN = 'Y'
     )
-    SELECT DISTINCT B.RESRCE_CD, B.P_RESRCE, B.RESRCE_FG, B.FUNC_FG, B.RESRCE_NM, B.URL,
-           B.SPCL_AUTHOR, B.DISP_LEVEL, B.DISP_IDX, B.USE_YN
-      FROM (SELECT DISTINCT B.P_RESRCE
-              FROM CHILD_TAB A,
-                   TB_WB_RESRCE_INFO B
-             WHERE B.RESRCE_CD = A.P_RESRCE
-               AND B.DISP_LEVEL = '1'
-            )A,
-            TB_WB_RESRCE_INFO B
-     WHERE B.RESRCE_CD = A.P_RESRCE
-     ORDER
-        BY B.P_RESRCE ASC, B.DISP_IDX ASC
+    SELECT B.*
+      FROM CHILD_TAB A,
+           TB_WB_RESRCE_INFO B
+     WHERE B.RESRCE_CD = A.PP_RESRCE_CD
+       AND B.USE_YN = 'Y'
   ]]>
   </select>
   
@@ -79,24 +92,37 @@
   <![CDATA[
     /* CmmMenuMapper.selectBkmkMenu2 */
     WITH CHILD_TAB AS (
-      SELECT B.RESRCE_CD,
-             B.P_RESRCE,
-             B.RESRCE_NM,
-             B.URL
-        FROM TB_WB_BKMK A
-        LEFT OUTER JOIN 
-             TB_WB_RESRCE_INFO B
-          ON A.RESRCE_CD = B.RESRCE_CD
-       WHERE A.USER_ID = #{userId}
+      SELECT A.RESRCE_CD, B.P_RESRCE 
+        FROM TB_WB_BKMK A,
+             TB_WB_RESRCE_INFO B,
+              (SELECT A.RESRCE_CD
+                FROM TB_WB_AUTHOR_GRP_RESRCE A,
+                     TB_WB_USER_INFO B
+               WHERE A.USE_YN   = 'Y'
+                 AND B.GRP_CD   = A.GRP_CD
+                 AND B.USER_ID  = #{userId}
+               UNION
+              SELECT A.RESRCE_CD
+                FROM TB_WB_AUTHOR_EXCEPT A
+               WHERE A.INCLD_EXCLD_FG = 'I'
+                 AND A.USER_ID = #{userId}
+               MINUS
+              SELECT A.RESRCE_CD
+                FROM TB_WB_AUTHOR_EXCEPT A
+               WHERE A.INCLD_EXCLD_FG = 'E'
+                 AND A.USER_ID = #{userId}
+              ) C
+       WHERE B.RESRCE_CD = A.RESRCE_CD
+         AND C.RESRCE_CD = B.RESRCE_CD
+         AND A.USER_ID = #{userId}
          AND A.USE_YN = 'Y'
          AND B.DISP_LEVEL = 2
     )
-    SELECT DISTINCT B.RESRCE_CD, B.P_RESRCE, B.RESRCE_FG, B.FUNC_FG, B.RESRCE_NM, B.URL,
-           B.SPCL_AUTHOR, B.DISP_LEVEL, B.DISP_IDX, B.USE_YN
+    SELECT B.*
       FROM CHILD_TAB A,
            TB_WB_RESRCE_INFO B
      WHERE B.RESRCE_CD = A.P_RESRCE
-       AND B.DISP_LEVEL = '1'
+       AND B.DISP_LEVEL = 1
      ORDER
         BY B.P_RESRCE ASC, B.DISP_IDX ASC
   ]]>
@@ -105,15 +131,29 @@
   <select id="selectBkmkMenu3" parameterType="sessionInfo" resultType="resrceInfo">
   <![CDATA[
     /* CmmMenuMapper.selectBkmkMenu3 */
-    SELECT B.RESRCE_CD,
-           B.P_RESRCE,
-           B.RESRCE_NM,
-           B.URL
-      FROM TB_WB_BKMK A
-      LEFT OUTER JOIN 
-           TB_WB_RESRCE_INFO B
-        ON A.RESRCE_CD = B.RESRCE_CD
-     WHERE A.USER_ID = #{userId}
+    SELECT B.*
+      FROM TB_WB_BKMK A,
+           TB_WB_RESRCE_INFO B,
+            (SELECT A.RESRCE_CD
+              FROM TB_WB_AUTHOR_GRP_RESRCE A,
+                   TB_WB_USER_INFO B
+             WHERE A.USE_YN   = 'Y'
+               AND B.GRP_CD   = A.GRP_CD
+               AND B.USER_ID  = #{userId}
+             UNION
+            SELECT A.RESRCE_CD
+              FROM TB_WB_AUTHOR_EXCEPT A
+             WHERE A.INCLD_EXCLD_FG = 'I'
+               AND A.USER_ID = #{userId}
+             MINUS
+            SELECT A.RESRCE_CD
+              FROM TB_WB_AUTHOR_EXCEPT A
+             WHERE A.INCLD_EXCLD_FG = 'E'
+               AND A.USER_ID = #{userId}
+            ) C
+     WHERE B.RESRCE_CD = A.RESRCE_CD
+       AND C.RESRCE_CD = B.RESRCE_CD
+       AND A.USER_ID = #{userId}
        AND A.USE_YN = 'Y'
        AND B.DISP_LEVEL = 2
   ]]>
