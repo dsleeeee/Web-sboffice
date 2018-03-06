@@ -29,6 +29,8 @@
     </p>
 
     <!--접혔을때 : 즐겨찾기 hover 메뉴 (1차 depth만 노출하고 클릭하면 2차, 3차 각각 노출한다.)-->
+    
+    <%-- 
     <div class="fahoMenu">
         <ul>
             <li class="depth1 menu_pos on"><!--메뉴별 class 추가 (하단 주석에서 class name 참고), focus중일때 on 추가-->
@@ -53,6 +55,9 @@
             </li>
         </ul>    
     </div>
+     --%>
+    
+    
     <!--//접혔을때 : 즐겨찾기 hover 메뉴-->
 
   </div>
@@ -79,11 +84,11 @@ onload = function() {
   
 
   // 선택된 메뉴의 메뉴코드와 부모메뉴의 메뉴코드
-  //var cResrce = "";
-  //var pResrce = "";
+  var cResrce = "";
+  var pResrce = "";
   
-  var cResrce = "000173";
-  var pResrce = "000030";
+  //var cResrce = "000173";
+  //var pResrce = "000030";
   
   var allMenuTree;
   var bmkMenuTree;
@@ -187,7 +192,9 @@ onload = function() {
   
   function showBmkMenu(){
     
-    if(isEmpty(getbmkMenu())){
+    console.log('isempty : '+ stringUtilObj.isEmpty(getbmkMenu()))
+    
+    if(stringUtilObj.isEmpty(getbmkMenu())){
       $(".faMenu .txt").css("display","block");
     } else {
       $(".faMenu .txt").css("display","none");
@@ -286,16 +293,77 @@ onload = function() {
 }
 
 
-////////////////////////////////////////// String util //////////////////////////////////////////
+////////////////////////////////////////// StringUtil //////////////////////////////////////////
 
 // check if the character or object is empty 
-var isEmpty = function(value){
+
+var stringUtil = function(){
+  this.startObject = null;
+  this.endObject = null;
+  this.args = null;
+}
+
+
+stringUtil.prototype.isEmpty = function(value){
   if( value == "" || value == null || value == undefined || ( value != null && typeof value == "object" && !Object.keys(value).length ) ){
     return true;
   } else {
     return false;
   }
 }
+
+/* 
+var isEmpty = function(value){
+}
+ */
+String.prototype.string = function(len){var s = '', i = 0; while (i++ < len) { s += this; } return s;};
+String.prototype.zf = function(len){return "0".string(len - this.length) + this;};
+
+var stringUtilObj = new stringUtil();
+
+
+////////////////////////////////////////// NumberUtil //////////////////////////////////////////
+Number.prototype.zf = function(len){return this.toString().zf(len);};
+
+////////////////////////////////////////// DateUtil //////////////////////////////////////////
+
+var dateUtil = function(){
+  this.startObject = null;
+  this.endObject = null;
+  this.args = null;
+}
+
+dateUtil.prototype.formatLen = function(str){
+  return str = (""+str).length<2 ? "0"+str : str;
+}
+
+dateUtil.prototype.formatDate = function(dateStr, f) {
+  if(!this.valueOf()) return " ";
+  
+  var weekName = ["일요일","월요일","화요일","수요일","목요일","금요일","토요일"]
+  var y = parseInt(dateStr.substr(0,4));
+  var m = parseInt(dateStr.substr(4,2));
+  var d = parseInt(dateStr.substr(6,2));
+
+  var date = new Date(y, m, d);
+  return f.replace(/(yyyy|yy|MM|dd|E|hh|mm|ss|a\/p)/gi, function($1){
+    switch($1) {
+      case "yyyy" : return date.getFullYear();
+      case "yy" : return (date.getFullYear()%1000).zf(2);
+      case "MM" : return (date.getMonth()+1).zf(2);
+      case "dd" : return date.getDate().zf(2);
+      case "E" : return weekName[date.getDay()];
+      case "HH" : return date.getHours().zf(2);
+      case "hh" : return ((h=date.getHours()%12)? h : 12).zf(2);
+      case "mm" : return date.getMinutes().zf(2);
+      case "ss" : return date.getSeconds().zf(2);
+      case "a/p" : return d.getHours() < 12? "오전" : "오후";
+      default : return $1;
+    }
+  }); 
+} 
+
+var dateUtilObj = new dateUtil();
 
 </script>
 

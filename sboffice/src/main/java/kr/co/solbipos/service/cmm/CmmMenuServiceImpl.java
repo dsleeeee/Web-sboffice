@@ -224,9 +224,6 @@ public class CmmMenuServiceImpl implements CmmMenuService {
     @Override
     public String makeMenu(SessionInfo sessionInfo, String menuType) {
 
-
-        log.error("menuType : "+ menuType);
-        
         List<DefaultMap<Object>> iconList = cmmCodeMapper.selectCmmCodeList("013"); // 메뉴 아이콘
 
         List<ResrceInfo> menu1;
