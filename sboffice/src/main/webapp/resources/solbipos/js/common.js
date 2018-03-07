@@ -112,13 +112,16 @@
         async:true,
         dataType: "json",
         beforeSend: function() {
-          $("#loading").show();
+          $("#loadingback").show();
+          $("#loadingfront").show();
         },
         complete: function() {
-          $("#loading").hide();
+          $("#loadingback").hide();
+          $("#loadingfront").hide();
         },
         error : function(){
-          $("#loading").hide();
+          $("#loadingback").hide();
+          $("#loadingfront").hide();
         }
       });
 //      return $.post( url, data, func, "json" );
