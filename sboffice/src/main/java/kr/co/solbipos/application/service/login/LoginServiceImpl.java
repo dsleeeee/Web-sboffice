@@ -32,7 +32,8 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public SessionInfo selectWebUser(SessionInfo sessionInfo) {
-        return loginMapper.selectWebUser(sessionInfo);
+        SessionInfo si = loginMapper.selectWebUser(sessionInfo);
+        return isEmpty(si) ? new SessionInfo() : si;
     }
 
     /**
@@ -120,16 +121,21 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public SessionInfo login(SessionInfo sessionInfo) {
 
+        // userId 로 사용자 조회
         SessionInfo si = selectWebUser(sessionInfo);
-
-        log.debug(si.toString());
         
+        // 로그인 과정
         LoginResult result = loginProcess(sessionInfo, si);
-
+        
+        // 없는 id 일 경우에
+        if(result == LoginResult.NOT_EXISTS_ID) {
+            si.setUserId(sessionInfo.getUserId());
+        }
+        
         // 로그인 결과
         si.setLoginResult(result);
+
         // 조회된 패스워드 초기화
-        
         si.setUserPwd("");
         si.setLoginIp(sessionInfo.getLoginIp());
         si.setBrwsrInfo(sessionInfo.getBrwsrInfo());

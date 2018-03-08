@@ -138,6 +138,11 @@ public class SessionServiceImpl implements SessionService {
             return getSessionInfo(sessionId);
         }
     }
+    
+    @Override
+    public SessionInfo getSessionInfo() {
+        return getSessionInfo(WebUtil.getRequest());
+    }
 
     @Override
     public boolean isValidSession(HttpServletRequest request) {

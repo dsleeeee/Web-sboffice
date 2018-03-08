@@ -25,11 +25,11 @@ import kr.co.solbipos.base.enums.TblTypeFg;
 import kr.co.solbipos.base.enums.TextalignFg;
 import kr.co.solbipos.base.enums.TextvalignFg;
 import kr.co.solbipos.base.persistence.store.tableattr.TableAttrMapper;
+import kr.co.solbipos.enums.Status;
 import kr.co.solbipos.exception.BizException;
 import kr.co.solbipos.service.message.MessageService;
 import kr.co.solbipos.structure.DefaultMap;
 import kr.co.solbipos.structure.Result;
-import kr.co.solbipos.structure.Result.Status;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

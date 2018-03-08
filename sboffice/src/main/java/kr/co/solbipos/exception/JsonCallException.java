@@ -1,6 +1,6 @@
 package kr.co.solbipos.exception;
 
-import kr.co.solbipos.structure.Result.Status;
+import kr.co.solbipos.enums.Status;
 
 /**
  * 

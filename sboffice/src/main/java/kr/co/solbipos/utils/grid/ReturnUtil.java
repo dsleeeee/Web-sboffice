@@ -7,16 +7,13 @@ import java.util.List;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
-import kr.co.solbipos.structure.JsonResult;
+import kr.co.solbipos.enums.Status;
 import kr.co.solbipos.structure.Result;
-import kr.co.solbipos.structure.Result.Status;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author 정용길
  *
  */
-@Slf4j
 public class ReturnUtil {
 
     private static final String LIST = "list"; // 리스트 데이터의 key
@@ -27,10 +24,8 @@ public class ReturnUtil {
      * @param status
      * @return
      */
-    public static JsonResult returnJson(Status status) {
-        Result result = new Result(status);
-        JsonResult json = new JsonResult(result);
-        return json;
+    public static Result returnJson(Status status) {
+        return new Result(status);
     }
 
     /**
@@ -39,7 +34,7 @@ public class ReturnUtil {
      * @param data
      * @return
      */
-    public static JsonResult returnJson(Status status, Object data) {
+    public static Result returnJson(Status status, Object data) {
         return genJsonResult(status, data);
     }
 
@@ -50,7 +45,7 @@ public class ReturnUtil {
      * @param value
      * @return
      */
-    public static JsonResult returnJson(Status status, String key, Object value) {
+    public static Result returnJson(Status status, String key, Object value) {
         HashMap<String, Object> map = new HashMap<>();
         map.put(key, value);
         return genJsonResult(status, map);
@@ -63,7 +58,7 @@ public class ReturnUtil {
      * @param page
      * @return
      */
-    public static JsonResult returnListJson(Status status, Object data, Object page) {
+    public static Result returnListJson(Status status, Object data, Object page) {
         return genListJsonResult(status, data, page);
     }
 
@@ -73,7 +68,7 @@ public class ReturnUtil {
      * @param data
      * @return
      */
-    public static JsonResult returnListJson(Status status, Object data) {
+    public static Result returnListJson(Status status, Object data) {
         return genListJsonResult(status, data, null);
     }
 
@@ -84,7 +79,7 @@ public class ReturnUtil {
      * @param page
      * @return
      */
-    private static JsonResult genListJsonResult(Status status, Object data, Object page) {
+    private static Result genListJsonResult(Status status, Object data, Object page) {
         HashMap<String, Object> map = new HashMap<>();
         map.put(LIST, data);
         if (!isEmpty(page)) {
@@ -99,7 +94,7 @@ public class ReturnUtil {
       * @param bindingResult
       * @return
       */
-    public static JsonResult returnJsonBindingFieldError(BindingResult bindingResult) {
+    public static Result returnJsonBindingFieldError(BindingResult bindingResult) {
         List<ObjectError> errros = bindingResult.getAllErrors();
         HashMap<String, String> map = new HashMap<>();
         for (Object object : errros) {
@@ -108,7 +103,7 @@ public class ReturnUtil {
                 map.put(fieldError.getField(), fieldError.getDefaultMessage());
             }
         }
-        return ReturnUtil.returnJson(Status.FAIL, map);
+        return returnJson(Status.FAIL, map);
     }
     
     /**
@@ -117,10 +112,8 @@ public class ReturnUtil {
      * @param map
      * @return
      */
-    private static JsonResult genJsonResult(Status status, Object obj) {
-        Result result = new Result(status, obj);
-        JsonResult json = new JsonResult(result);
-        return json;
+    private static Result genJsonResult(Status status, Object obj) {
+        return new Result(status, obj);
     }
 }
 

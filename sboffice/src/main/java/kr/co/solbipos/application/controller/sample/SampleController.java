@@ -2,6 +2,7 @@ package kr.co.solbipos.application.controller.sample;
 
 import static kr.co.solbipos.utils.grid.ReturnUtil.*;
 import static kr.co.solbipos.utils.spring.StringUtil.*;
+import java.util.HashMap;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -16,13 +17,13 @@ import kr.co.solbipos.application.domain.sample.SslTrdtlT;
 import kr.co.solbipos.application.domain.sample.SslTrhdrT;
 import kr.co.solbipos.application.domain.sample.TbMsStore;
 import kr.co.solbipos.application.service.sample.SampleService;
+import kr.co.solbipos.enums.Status;
 import kr.co.solbipos.service.message.MessageService;
 import kr.co.solbipos.structure.DefaultMap;
 import kr.co.solbipos.structure.JavaScriptResult;
-import kr.co.solbipos.structure.JsonResult;
 import kr.co.solbipos.structure.Result;
-import kr.co.solbipos.structure.Result.Status;
 import kr.co.solbipos.system.Prop;
+import kr.co.solbipos.utils.spring.ObjectUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -76,13 +77,11 @@ public class SampleController {
      */
     @RequestMapping(value = "samplejson.sb")
     @ResponseBody
-    public JsonResult json(HttpSession session, Model model) {
+    public Result json(HttpSession session, Model model) {
 
         List<DefaultMap<Object>> temp = sampleService.selectDdSum();
 
-        Result result = new Result(Status.OK, temp);
-
-        return new JsonResult(result);
+        return new Result(Status.OK, temp);
     }
 
     /**
@@ -174,10 +173,9 @@ public class SampleController {
      */
     @RequestMapping(value = "sampleInput2Res.sb")
     @ResponseBody
-    public JsonResult sampleInput2Res(TbMsStore tbMsStore, Model model) {
+    public Result sampleInput2Res(TbMsStore tbMsStore, Model model) {
         List<DefaultMap<Object>> temp = sampleService.selectStore(tbMsStore);
-        Result result = new Result(Status.OK, temp);
-        return new JsonResult(result);
+        return new Result(Status.OK, temp);
     }
 
 
@@ -232,13 +230,19 @@ public class SampleController {
      */
     @RequestMapping(value = "exGridPageJson.sb", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult exGridPage(SslTrdtlT sslTrdtlT, Model model) {
+    public Result exGridPage(SslTrdtlT sslTrdtlT, Model model) {
 
         // 데이터 조회
         List<DefaultMap<Object>> data = sampleService.selectDdlTrdtlTest(sslTrdtlT);
 
         sslTrdtlT.setTotalCount(data.get(0).getInt("totCnt"));
-
+        
+        
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("list", data);
+        if (!ObjectUtil.isEmpty(sslTrdtlT)) {
+            map.put("page", sslTrdtlT);
+        }
         return returnListJson(Status.OK, data, sslTrdtlT);
     }
 
@@ -250,7 +254,7 @@ public class SampleController {
      */
     @RequestMapping(value = "exGridPageJson2.sb", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult exGridPage2(SslTrhdrT sslTrhdrT, Model model) {
+    public Result exGridPage2(SslTrhdrT sslTrhdrT, Model model) {
 
         // 데이터 조회
         List<DefaultMap<Object>> data = sampleService.selectDdlTrhdrTest(sslTrhdrT);
@@ -268,7 +272,7 @@ public class SampleController {
      */
     @RequestMapping(value = "exGridPageDtlJson.sb", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult exGridPageDtl(SslTrhdrT sslTrhdrT, Model model) {
+    public Result exGridPageDtl(SslTrhdrT sslTrhdrT, Model model) {
 
         // 데이터 조회
         List<DefaultMap<Object>> data = sampleService.selectDdlTrdtl2Test(sslTrhdrT);
@@ -308,7 +312,7 @@ public class SampleController {
     
     @RequestMapping(value = "exGridSave.sb", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult exGridSave(@RequestBody SslTrdtlT[] sslTrdtlT , Model model) {
+    public Result exGridSave(@RequestBody SslTrdtlT[] sslTrdtlT , Model model) {
         
         int size = sslTrdtlT.length;
         

@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import kr.co.solbipos.application.domain.login.SessionInfo;
+import kr.co.solbipos.enums.Status;
 import kr.co.solbipos.service.session.SessionService;
-import kr.co.solbipos.structure.JsonResult;
-import kr.co.solbipos.structure.Result.Status;
+import kr.co.solbipos.structure.Result;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -44,7 +44,7 @@ public class RedisTestController {
      */
     @RequestMapping(value = "exRedisSet.sb", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult exRedis(HttpServletRequest request, HttpServletResponse response,
+    public Result exRedis(HttpServletRequest request, HttpServletResponse response,
             SessionInfo tempDomain, Model model) {
 
         String key = sessionService.setSessionInfo(request, response, tempDomain);
@@ -60,7 +60,7 @@ public class RedisTestController {
      */
     @RequestMapping(value = "exRedisGet.sb", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult exRedisGet(SessionInfo sessionInfo, Model model) {
+    public Result exRedisGet(SessionInfo sessionInfo, Model model) {
 
         SessionInfo result = sessionService.getSessionInfo(sessionInfo.getSessionId());
 

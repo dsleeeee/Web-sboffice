@@ -10,10 +10,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import kr.co.solbipos.application.domain.sample.TmpBoardT;
 import kr.co.solbipos.application.service.sample.SampleService;
+import kr.co.solbipos.enums.Status;
 import kr.co.solbipos.service.message.MessageService;
-import kr.co.solbipos.structure.JsonResult;
 import kr.co.solbipos.structure.Result;
-import kr.co.solbipos.structure.Result.Status;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -46,7 +45,7 @@ public class TuiEditorSampleController {
     
     @RequestMapping(value = "editorSampleSave.sb", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult editorSampleSave(HttpSession sessions, Model model, @RequestBody TmpBoardT tmpBoardT) {
+    public Result editorSampleSave(HttpSession sessions, Model model, @RequestBody TmpBoardT tmpBoardT) {
 
       log.error("seq : "+ tmpBoardT.getBoardSeqNo());
       log.error("title : "+ tmpBoardT.getBoardTitle());
@@ -63,9 +62,7 @@ public class TuiEditorSampleController {
         sampleService.updateBoardSample(tmpBoardT);
       }
       
-      Result result = new Result(Status.OK, tmpBoardT);
-      
-      return new JsonResult(result);
+      return new Result(Status.OK, tmpBoardT);
     }
     
     @RequestMapping(value = "editorSample2.sb")

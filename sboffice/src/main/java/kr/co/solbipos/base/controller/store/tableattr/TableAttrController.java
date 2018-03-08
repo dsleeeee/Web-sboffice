@@ -14,11 +14,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.nhncorp.lucy.security.xss.XssPreventer;
 import kr.co.solbipos.application.domain.login.SessionInfo;
 import kr.co.solbipos.base.service.store.tableattr.TableAttrService;
+import kr.co.solbipos.enums.Status;
 import kr.co.solbipos.service.message.MessageService;
 import kr.co.solbipos.service.session.SessionService;
-import kr.co.solbipos.structure.JsonResult;
 import kr.co.solbipos.structure.Result;
-import kr.co.solbipos.structure.Result.Status;
 import kr.co.solbipos.system.Prop;
 import kr.co.solbipos.utils.jsp.CmmCodeUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -77,15 +76,14 @@ public class TableAttrController {
      */
     @RequestMapping(value = "/view.sb", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult open(HttpServletRequest request, HttpSession session, Model model) {
+    public Result open(HttpServletRequest request, HttpSession session, Model model) {
 
         SessionInfo sessionInfo = sessionService.getSessionInfo(request);
         
         log.debug(sessionInfo.toString());
         String xml = tableAttrService.selectTableAttrByStore(sessionInfo);
         log.debug(xml);
-        Result result = new Result(Status.OK, xml);
-        return new JsonResult(result);
+        return new Result(Status.OK, xml);
     }
 
     /**
@@ -98,7 +96,7 @@ public class TableAttrController {
      */
     @RequestMapping(value = "/save.sb", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult save(HttpServletRequest request, HttpSession session, Model model) {
+    public Result save(HttpServletRequest request, HttpSession session, Model model) {
 
         String xml = "";
         Result result = new Result(Status.FAIL);
@@ -116,7 +114,7 @@ public class TableAttrController {
           e.printStackTrace();
         }
 
-        return new JsonResult(result);
+        return result;
     }
 
 }

@@ -53,6 +53,12 @@ public interface SessionService {
      * @return
      */
     SessionInfo getSessionInfo(HttpServletRequest request);
+    
+    /**
+      * 
+      * @return
+      */
+    SessionInfo getSessionInfo();
 
     /**
      * 
