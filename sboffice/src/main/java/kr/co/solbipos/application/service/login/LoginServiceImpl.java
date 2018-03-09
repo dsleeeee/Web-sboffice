@@ -148,7 +148,7 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public boolean logout(HttpServletRequest request, HttpServletResponse response) {
-        sessionService.deleteSessionInfo(request, response);
+        sessionService.deleteSessionInfo(request);
         return true;
     }
 

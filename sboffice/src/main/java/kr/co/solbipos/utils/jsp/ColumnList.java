@@ -4,16 +4,13 @@ package kr.co.solbipos.utils.jsp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import kr.co.solbipos.service.grid.GridSupportService;
-import lombok.extern.slf4j.Slf4j;
 
 /**
- * 
- * grid
+ * {@code JSP} 에서 호출 하는 그리드 컬럼 관련 Util
  * 
  * @author 정용길
  *
  */
-@Slf4j
 @Component("columnList")
 public class ColumnList {
 
@@ -21,11 +18,11 @@ public class ColumnList {
     GridSupportService gsService;
 
     /**
-      * 테이블 명으로 그리드의 header 를 string 형태로 돌려줌
-      * jsp 에서 호출 예) ${cl.getColumnList('SSL_TRDTL_T')};
+      * 그리드의 header 정보를 다국어 처리한 string 형태로 돌려줌 <br>
+      * {@code JSP} 에서 호출 예) ${{@code cl.getColumnList('SSL_TRDTL_T')}}; 
       * 
-      * @param table 해당하는 테이블 명
-      * @return
+      * @param table {@code String} 타입의 테이블 명
+      * @return {@code String} 형태의 그리드에 바로 사용 가능한 컬럼 데이터
       */
     public String getColumnList(String table) {
         return gsService.getGridColumsTable(table);

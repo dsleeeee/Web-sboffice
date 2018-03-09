@@ -5,6 +5,10 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
+/**
+ * @author 정용길
+ *
+ */
 @Service
 public class MessageServiceImpl implements MessageService {
     /**

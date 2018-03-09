@@ -65,7 +65,6 @@
       WHERE A.USER_ID = B.USER_ID 
         AND A.USER_ID = #{userId}
         AND A.LOCK_CD = 'N'
-
   </select>
   
   <select id="selectLoginHist" resultType="loginHist" parameterType="loginHist">

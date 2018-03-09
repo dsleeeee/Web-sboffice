@@ -4,7 +4,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 화면 내에 그리드 컬럼 레이아웃 조회에 사용
+ * 화면 내에 그리드 컬럼 레이아웃 조회에 사용 <br>
+ * 컬럼 순서 및 표시 유무 포함
  * 
  * @author 정용길
  */

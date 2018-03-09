@@ -18,10 +18,17 @@ public class BizException extends RuntimeException {
     /** 리턴 URL */
     private String responseURL = "";
 
+    /**
+     * @param message
+     */
     public BizException(String message) {
         super(message);
     }
 
+    /**
+     * @param message
+     * @param responseURL
+     */
     public BizException(String message, String responseURL) {
         super(message);
         this.responseURL = responseURL;

@@ -39,7 +39,7 @@ public class ExceptionController {
      * {@link BizException} 를 상속 받은 모든 {@code Exception} 을 처리
      * 
      * @param e {@code BizException}
-     * @return JSON 요청일 때 {@code JsonResult} 아닐 때 script {@code String}
+     * @return JSON 요청일 때 아닐 때 script {@code String}
      */
     @ExceptionHandler(BizException.class)
     public Object bizExceptionHandle(BizException e) {
@@ -72,7 +72,7 @@ public class ExceptionController {
      * 인증 예외 처리
      * 
      * @param e {@code AuthenticationException}
-     * @return JSON 요청일 때 {@code JsonResult} 아닐 때 script {@code String}
+     * @return JSON 요청이 아닐 때 script {@code String}
      * @see ExceptionController#bizExceptionHandle( BizException e )
      */
     @ExceptionHandler(AuthenticationException.class)
@@ -84,7 +84,7 @@ public class ExceptionController {
      * {@code BizException}, {@code AuthenticationException} 제외한 {@code Exception} 처리
      * 
      * @param e {@code Exception}
-     * @return JSON 요청일 때 {@code JsonResult} 아닐 때 view name {@code String}
+     * @return JSON 요청이 아닐 때 view name {@code String}
      */
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

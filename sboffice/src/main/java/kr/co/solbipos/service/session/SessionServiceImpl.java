@@ -1,7 +1,6 @@
 package kr.co.solbipos.service.session;
 
 import static kr.co.solbipos.utils.spring.StringUtil.*;
-import static org.springframework.util.StringUtils.*;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +15,6 @@ import kr.co.solbipos.service.cmm.CmmMenuService;
 import kr.co.solbipos.service.redis.RedisConnService;
 import kr.co.solbipos.system.Prop;
 import kr.co.solbipos.system.RedisCustomTemplate;
-import kr.co.solbipos.utils.HttpUtils;
 import kr.co.solbipos.utils.spring.WebUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -67,15 +65,23 @@ public class SessionServiceImpl implements SessionService {
         setSessionInfo(sessionId, sessionInfo);
 
         // 쿠키 생성
-        makeCookie(sessionId, response);
+        makeCookie(sessionId);
+        return sessionId;
+    }
+    
+    @Override
+    public String setSessionInfo(SessionInfo sessionInfo) {
+        String sessionId = sessionInfo.getSessionId();
+        // redis에 세션 세팅
+        setSessionInfo(sessionId, sessionInfo);
         return sessionId;
     }
 
     /**
-     * 레디스에 sessionInfo 객체 세팅
+     * 레디스에 sessionInfo 객체 저장
      * 
-     * @param sessionId
-     * @param sessionInfo
+     * @param sessionId {@link String} 세션 ID
+     * @param sessionInfo {@link SessionInfo}
      */
     private void setSessionInfo(String sessionId, SessionInfo sessionInfo) {
         if (redisConnService.isAvailable()) {
@@ -87,14 +93,6 @@ public class SessionServiceImpl implements SessionService {
                 redisConnService.disable();
             }
         }
-    }
-
-    @Override
-    public String setSessionInfo(SessionInfo sessionInfo) {
-        String sessionId = sessionInfo.getSessionId();
-        // redis에 세션 세팅
-        setSessionInfo(sessionId, sessionInfo);
-        return sessionId;
     }
 
     @Override
@@ -129,16 +127,6 @@ public class SessionServiceImpl implements SessionService {
         return sessionInfo;
     }
 
-    @Override
-    public SessionInfo getSessionInfo(SessionInfo sessionInfo) {
-        String sessionId = sessionInfo.getSessionId();
-        if (ObjectUtils.isEmpty(sessionId)) {
-            return null;
-        } else {
-            return getSessionInfo(sessionId);
-        }
-    }
-    
     @Override
     public SessionInfo getSessionInfo() {
         return getSessionInfo(WebUtil.getRequest());
@@ -180,7 +168,7 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public void deleteSessionInfo(HttpServletRequest request, HttpServletResponse response) {
+    public void deleteSessionInfo(HttpServletRequest request) {
         if (!ObjectUtils.isEmpty(request)) {
             SessionInfo sessionInfo = getSessionInfo(request);
             if (!ObjectUtils.isEmpty(sessionInfo)) {
@@ -190,7 +178,7 @@ public class SessionServiceImpl implements SessionService {
                 deleteSessionInfo(sessionId);
 
                 // cookie
-                deleteCookie(request, response);
+                deleteCookie(request);
             }
         }
     }
@@ -199,16 +187,16 @@ public class SessionServiceImpl implements SessionService {
     public void deleteSessionInfo(SessionInfo sessionInfo) {
         if (!ObjectUtils.isEmpty(sessionInfo)) {
             deleteSessionInfo(sessionInfo.getSessionId());
+            deleteCookie(WebUtil.getRequest());
         }
     }
 
     /**
      * 쿠키에 session id 삭제
      * 
-     * @param request
-     * @param response
+     * @param request {@link HttpServletRequest}
      */
-    private void deleteCookie(HttpServletRequest request, HttpServletResponse response) {
+    private void deleteCookie(HttpServletRequest request) {
         Cookie cookie = WebUtils.getCookie(request, SESSION_KEY);
         WebUtil.removeCookie(cookie);
     }
@@ -216,10 +204,9 @@ public class SessionServiceImpl implements SessionService {
     /**
      * 쿠키 session id 생성
      * 
-     * @param sessionId
-     * @param response
+     * @param sessionId {@link String} 세션 ID
      */
-    private void makeCookie(String sessionId, HttpServletResponse response) {
+    private void makeCookie(String sessionId) {
         WebUtil.setCookie(SESSION_KEY, sessionId, -1);
     }
 

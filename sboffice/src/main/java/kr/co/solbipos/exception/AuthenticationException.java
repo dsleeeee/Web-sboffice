@@ -1,9 +1,10 @@
 package kr.co.solbipos.exception;
 
 /**
- * 인증 예외
+ * 로그인, 패스워드 관련, url 인증 실패
  * 
- * @author I_hwlee
+ * @author 정용길
+ *
  */
 public class AuthenticationException extends BizException {
     private static final long serialVersionUID = 8780373647723701193L;
