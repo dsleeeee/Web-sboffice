@@ -26,7 +26,11 @@ public enum Style implements CodeEnum {
     /** 폰트스타일구분 */
     FONT_STYLE_FG("fontStyle"),
     /** 폰트색 */
-    FONT_COLOR("fontColor");
+    FONT_COLOR("fontColor"),
+    /** 채움색 */
+    FILL_COLOR("fillColor"),
+    /** 상품코드-custom */
+    PROD_CD("prodCd");
     
     private String code;
   

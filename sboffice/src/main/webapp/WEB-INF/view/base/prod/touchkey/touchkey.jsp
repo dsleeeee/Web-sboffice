@@ -47,18 +47,26 @@ window.mxBasePath = window.mxBasePath || '/resource/vender/mxgraph/src';
 window.mxLanguage = window.mxLanguage || urlParams['lang'];
 window.mxLanguages = window.mxLanguages || ['ko'];
 
+window.PRODS = ${prods};
+
 </script>
 <script type="text/javascript" src="/resource/vender/mxgraph/mxClient.js"></script>
 <!--script type="text/javascript" src="/resource/vender/mxgraph/mxClient.min.js"></script-->
 <script type="text/javascript" src="/resource/graph/sanitizer/sanitizer.min.js"></script>
 <script type="text/javascript" src="/resource/graph/js/Touchkey.js"></script>
-<body class="geEditor">
 
-<div id="container">
+<div class="container">
   <div id="grid">상품조회, Grid
     <div id="theGrid"></div>
   </div>
-  <div id="content"></div>
+  <div id="content">
+    <div id="geGroupContainer">
+      <div id="pagingShapeGroup"></div>
+    </div>
+    <div id="geProdContainer">
+      <div id="pagingShapeProd"></div>
+    </div>
+  </div>
   <div id="format"></div>
 </div>
 
@@ -100,4 +108,3 @@ window.mxLanguages = window.mxLanguages || ['ko'];
   }
 })();
 </script>
-</body>

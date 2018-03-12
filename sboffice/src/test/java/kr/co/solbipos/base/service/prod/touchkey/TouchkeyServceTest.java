@@ -1,10 +1,14 @@
 package kr.co.solbipos.base.service.prod.touchkey;
 
 import static kr.co.solbipos.utils.DateUtil.currentDateTimeString;
+import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.junit.Before;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runners.MethodSorters;
+import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import com.mxgraph.io.mxCodec;
@@ -15,113 +19,78 @@ import com.mxgraph.model.mxIGraphModel;
 import com.mxgraph.util.mxXmlUtils;
 import com.mxgraph.view.mxGraph;
 import com.nhncorp.lucy.security.xss.XssPreventer;
-import kr.co.solbipos.application.domain.login.SessionInfo;
 import kr.co.solbipos.base.domain.prod.touchkey.Touch;
 import kr.co.solbipos.base.domain.prod.touchkey.TouchClass;
-import kr.co.solbipos.base.enums.ConfgFg;
 import kr.co.solbipos.base.enums.InFg;
 import kr.co.solbipos.base.enums.Style;
-import kr.co.solbipos.base.persistence.prod.touchkey.TouchkeyMapper;
-import kr.co.solbipos.base.persistence.store.tableattr.TableAttrMapper;
-import kr.co.solbipos.enums.Status;
-import kr.co.solbipos.exception.BizException;
-import kr.co.solbipos.service.message.MessageService;
-import kr.co.solbipos.structure.DefaultMap;
-import kr.co.solbipos.structure.Result;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Service
-public class TouchkeyServiceImpl implements TouchkeyService {
+@Transactional
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class TouchkeyServceTest {
 
-    @Autowired
-    MessageService messageService;
-
-    @Autowired
-    private TouchkeyMapper mapper;
-
-    @Autowired
-    private TableAttrMapper attrMapper;
-
-    @Override
-    public List<DefaultMap<String>> selectProdByStore(SessionInfo sessionInfo) {
-        return mapper.selectProdByStore(sessionInfo.getOrgnCd());
-    }
-
-    @Override
-    public String selectTouchkeyByStore(SessionInfo sessionInfo) {
-        DefaultMap<String> param = new DefaultMap<String>();
-        param.put("storeCd", sessionInfo.getOrgnCd());
-        param.put("confgFg", ConfgFg.TOUCH_KEY.getCode());
-        String returnStr = attrMapper.selectXmlByStore(param);
-        return returnStr;
-    }
-
-    @Override
-    public Result setTouchkey(SessionInfo sessionInfo, String xml) {
-        
-        //XML 저장
-        DefaultMap<String> param = new DefaultMap<String>();
-        param.put("storeCd", sessionInfo.getOrgnCd());
-        param.put("confgFg", ConfgFg.TOUCH_KEY.getCode());
-        param.put("xml", xml);
-        param.put("useYn", "Y");
-        param.put("regDt", currentDateTimeString());
-        param.put("regId", sessionInfo.getUserId());
-        
-        if( attrMapper.mergeStoreConfgXml(param) != 1 ) {
-            throw new BizException( messageService.get("label.modifyFail") );
-        }
-
-        //XML 분석, TouchClass, Touch Domain 생성
-        //터치키 분류 TABLE(TB_MS_TOUCH_CLASS)
-        List<TouchClass> touchClasss = parseXML(xml);
-        
-        //매장의 현재 설정정보 삭제
-        mapper.deleteTouchClassByStore(sessionInfo.getOrgnCd());
-        
-        mapper.deleteTouchByStore(sessionInfo.getOrgnCd());
-        
-        //리스트의 아이템을 DB에 Merge
-        for(TouchClass touchClass : touchClasss) {
-            //터치 분류 저장
-            touchClass.setStoreCd(sessionInfo.getOrgnCd());
-            touchClass.setRegId(sessionInfo.getUserId());
-            
-            if( mapper.insertTouchClassByStore(touchClass) != 1 ) {
-                throw new BizException( messageService.get("label.modifyFail") );
-            }
-            //테이블 저장
-            for(Touch touch : touchClass.getTouchs()) {
-                touch.setStoreCd(sessionInfo.getOrgnCd());
-                touch.setRegId(sessionInfo.getUserId());
-                if( mapper.insertTouchByStore(touch) != 1 ) {
-                    throw new BizException( messageService.get("label.modifyFail") );
-                }
-            }
-        }
-
-        return new Result(Status.OK);
-    }
+    String xml = "";
     
-    /**
-     * XML 파싱하여 판매터치키 항목 추출
-     * @param xml 파싱대상XML
-     * @return 테이블그룹객체
-     */
-    private List<TouchClass> parseXML(String xml) {
+    @Before
+    public void init() {
+        //test_100();
+        xml = "<mxGraphModel>\r\n" + 
+                "  <root>\r\n" + 
+                "    <mxCell id=\"0\"/>\r\n" + 
+                "    <mxCell id=\"1\" parent=\"0\"/>\r\n" + 
+                "    <mxCell id=\"g1\" value=\"그룹명\" vertex=\"1\" parent=\"1\">\r\n" + 
+                "      <mxGeometry width=\"80\" height=\"60\" as=\"geometry\"/>\r\n" + 
+                "    </mxCell>\r\n" + 
+                "    <mxCell id=\"g2\" value=\"그룹명\" vertex=\"1\" parent=\"1\">\r\n" + 
+                "      <mxGeometry x=\"80\" width=\"80\" height=\"60\" as=\"geometry\"/>\r\n" + 
+                "    </mxCell>\r\n" + 
+                "  </root>\r\n" + 
+                "</mxGraphModel>\r\n" +
+                
+                "|" +
+                
+                "<mxGraphModel>\r\n" + 
+                "  <root>\r\n" + 
+                "    <mxCell id=\"0\"/>\r\n" + 
+                "    <mxCell id=\"1\" value=\"g1\" parent=\"0\" visible=\"0\"/>\r\n" + 
+                "    <mxCell id=\"p1\" value=\"아메리카노\" style=\"prodCd=A000000000001;\" vertex=\"1\" parent=\"1\">\r\n" + 
+                "      <mxGeometry width=\"80\" height=\"60\" as=\"geometry\"/>\r\n" + 
+                "    </mxCell>\r\n" + 
+                "    <mxCell id=\"p2\" value=\"카페모카\" style=\"prodCd=A000000000002;\" vertex=\"1\" parent=\"1\">\r\n" + 
+                "      <mxGeometry x=\"80\" width=\"80\" height=\"60\" as=\"geometry\"/>\r\n" + 
+                "    </mxCell>\r\n" + 
+                "    <mxCell id=\"2\" value=\"g2\" parent=\"0\"/>\r\n" + 
+                "    <mxCell id=\"p3\" value=\"카페라떼\" style=\"prodCd=A000000000003;\" vertex=\"1\" parent=\"2\">\r\n" + 
+                "      <mxGeometry width=\"80\" height=\"120\" as=\"geometry\"/>\r\n" + 
+                "    </mxCell>\r\n" + 
+                "    <mxCell id=\"p4\" value=\"에스프레소\" style=\"prodCd=A000000000004;\" vertex=\"1\" parent=\"2\">\r\n" + 
+                "      <mxGeometry x=\"80\" width=\"160\" height=\"120\" as=\"geometry\"/>\r\n" + 
+                "    </mxCell>\r\n" + 
+                "  </root>\r\n" + 
+                "</mxGraphModel>\r\n" + 
+                "";
         
-        String[] xmls = xml.split("\\|");
-        log.info(XssPreventer.unescape(xmls[0]));
-        log.info(XssPreventer.unescape(xmls[1]));
-        
-        
-        List<TouchClass> touchClasss = new ArrayList<TouchClass>();
-        TouchClass touchClass = TouchClass.builder().build();
+    }
 
-        List<Touch> touchs = new ArrayList<Touch>();
-        
+    /**
+     * mxGraph XML 파싱 테스트
+     * 
+     */
+    @Test
+    //@Ignore
+    //@Rollback(false)
+    public void test_100() {
         try {
+            String[] xmls = xml.split("\\|");
+            log.info(XssPreventer.unescape(xmls[0]));
+            log.info(XssPreventer.unescape(xmls[1]));
+            
+            
+            List<TouchClass> touchClasss = new ArrayList<TouchClass>();
+            TouchClass touchClass = TouchClass.builder().build();
+
+            List<Touch> touchs = new ArrayList<Touch>();
             
             //터치키분류 파싱
             mxGraph graphClass = new mxGraph();
@@ -151,17 +120,17 @@ public class TouchkeyServiceImpl implements TouchkeyService {
                 touchClass.setTukeyClassCd(cell.getId());
                 touchClass.setTukeyClassNm(String.valueOf(cell.getValue()));
                 
-                //페이지 번호 계산 - 80*5
-               long pageNo = (long)(touchClass.getX() / 400) + 1L;
-               touchClass.setPageNo(pageNo);
-                
                 //좌표, 크기
                 mxGeometry geo = cell.getGeometry();
                 touchClass.setX((long)geo.getX());
                 touchClass.setY((long)geo.getY());
                 touchClass.setWidth((long)geo.getWidth());
                 touchClass.setHeight((long)geo.getHeight());
-
+                
+                 //페이지 번호 계산 - 80*5
+                long pageNo = (long)(touchClass.getX() / 400) + 1L;
+                touchClass.setPageNo(pageNo);
+                
                 touchClass.setInFg(InFg.STORE);
 
                 //스타일
@@ -198,17 +167,12 @@ public class TouchkeyServiceImpl implements TouchkeyService {
                 
                 log.debug(touchClasss.toString());
             }
+            assertTrue(true);
         }
         catch (Exception ex) {
             ex.printStackTrace();
         }
-        return touchClasss;
     }
-    /**
-     * 레이어 id로 해당 레이어에 있는 테이블 List 추출
-     * @param id
-     * @return
-     */
     private List<Touch> getTouchs(mxGraph graph, String layerId, TouchClass tableClass) {
 
         mxGraphModel model = (mxGraphModel) graph.getModel();
@@ -257,17 +221,17 @@ public class TouchkeyServiceImpl implements TouchkeyService {
                     }
                 }
             }
+
             //페이지 번호 계산 - 80*5
             long pageNo = (long)(touch.getX() / 400) + 1L;
             touch.setPageNo(pageNo);
-            
-            //TODO 본사/매장 구분값을 매장의 환경에 따르 설정-대리점,본사 값 애매..
-            touch.setInFg(InFg.STORE);
 
+            touch.setInFg(InFg.STORE);
             touch.setRegDt(tableClass.getRegDt());
             
             touchs.add(touch);
         }
         return touchs;
     }
+
 }

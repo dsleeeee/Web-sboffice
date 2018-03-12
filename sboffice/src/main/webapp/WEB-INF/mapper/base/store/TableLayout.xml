@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.base.persistence.store.tablelayout.TableLayoutMapper">
+
+    <update id="deleteTableGroupByStore" parameterType="String">
+    /* TableLayoutMapper.deleteTableGroupByStore */
+    UPDATE TB_MS_TABLE_GROUP
+       SET USE_YN = 'N'
+     WHERE STORE_CD = #{storeCd}
+    </update>
+
+  <update id="mergeTableGroupByStore" parameterType="tableGroup">
+    /* TableLayoutMapper.mergeTableGroupByStore */
+    MERGE INTO TB_MS_TABLE_GROUP A
+    USING (SELECT #{storeCd} STORE_CD,
+                  #{tblGrpCd} TBL_GRP_CD
+             FROM DUAL
+          ) ORG
+       ON (A.STORE_CD = ORG.STORE_CD
+       AND A.TBL_GRP_CD = ORG.TBL_GRP_CD
+          )
+
+     WHEN MATCHED THEN
+    UPDATE
+       SET A.TBL_GRP_NM = #{tblGrpNm},
+           A.TBL_GRP_FG = #{tblGrpFg},
+           A.BG_IMG_NM = #{bgImgNm},
+           A.DISP_SEQ = #{dispSeq},
+           A.USE_YN = #{useYn},
+           A.MOD_DT = #{regDt},
+           A.MOD_ID = #{regId}
+
+    WHEN NOT MATCHED THEN
+    INSERT (
+        A.STORE_CD,
+        A.TBL_GRP_CD,
+        A.TBL_GRP_NM,
+        A.TBL_GRP_FG,
+        A.BG_IMG_NM,
+        A.DISP_SEQ,
+        A.USE_YN,
+        A.REG_DT,
+        A.REG_ID,
+        A.MOD_DT,
+        A.MOD_ID
+    )
+    VALUES (
+        #{storeCd},
+        #{tblGrpCd},
+        #{tblGrpNm},
+        #{tblGrpFg},
+        #{bgImgNm},
+        #{dispSeq},
+        #{useYn},
+        #{regDt},
+        #{regId},
+        #{regDt},
+        #{regId}
+    )
+  </update>
+
+    <update id="deleteTableByStore" parameterType="String">
+    /* TableLayoutMapper.deleteTableByStore */
+    UPDATE TB_MS_TABLE
+       SET USE_YN = 'N'
+     WHERE STORE_CD = #{storeCd}
+    </update>
+
+  <update id="mergeTableByStore" parameterType="table">
+    /* TableLayoutMapper.mergeTableByStore */
+    MERGE INTO TB_MS_TABLE A
+    USING (SELECT #{storeCd} STORE_CD,
+                  #{tblCd} TBL_CD
+             FROM DUAL
+          ) ORG
+       ON (A.STORE_CD = ORG.STORE_CD
+       AND A.TBL_CD = ORG.TBL_CD
+          )
+
+     WHEN MATCHED THEN
+    UPDATE
+       SET A.TBL_NM = #{tblNm},
+           A.TBL_GRP_CD = #{tblGrpCd},
+           A.TBL_SEAT_CNT = #{tblSeatCnt},
+           A.X = #{x},
+           A.Y = #{y},
+           A.WIDTH = #{width},
+           A.HEIGHT = #{height},
+           A.TBL_TYPE_FG = #{tblTypeFg},
+           A.USE_YN = #{useYn},
+           A.MOD_DT = #{regDt},
+           A.MOD_ID = #{regId}
+
+    WHEN NOT MATCHED THEN
+    INSERT (
+        A.STORE_CD,
+        A.TBL_CD,
+        A.TBL_NM,
+        A.TBL_GRP_CD,
+        A.TBL_SEAT_CNT,
+        A.X,
+        A.Y,
+        A.WIDTH,
+        A.HEIGHT,
+        A.TBL_TYPE_FG,
+        A.USE_YN,
+        A.REG_DT,
+        A.REG_ID,
+        A.MOD_DT,
+        A.MOD_ID
+    )
+    VALUES (
+        #{storeCd},
+        #{tblCd},
+        #{tblNm},
+        #{tblGrpCd},
+        #{tblSeatCnt},
+        #{x},
+        #{y},
+        #{width},
+        #{height},
+        #{tblTypeFg},
+        #{useYn},
+        #{regDt},
+        #{regId},
+        #{regDt},
+        #{regId}
+    )
+  </update>
+
+</mapper>
+
+
+

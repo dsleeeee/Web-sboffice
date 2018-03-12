@@ -3,17 +3,102 @@
 
 <mapper namespace="kr.co.solbipos.base.persistence.prod.touchkey.TouchkeyMapper">
 
-  <select id="selectTouchkey" parameterType="DefaultMap" resultType="DefaultMap">
-    /* 기초관리 - 상품관리 - 판매터치키등록 - 매장 터치키 정보 조회 */
-    SELECT '' TUKEY_XML
-      FROM TB_MS_TOUCH A,
-           TB_MS_PRODUCT B
-     WHERE A.ORGN_CD = B.ORGN_CD
-    <if test="storeNm != null and storeNm != ''">
-       AND A.ORGN_CD = #{orgn_cd}
-    </if>
+  <select id="selectProdByStore" parameterType="String" resultType="DefaultMap">
+    /* TouchkeyMapper.selectProdByStore */
+     SELECT A.PROD_CD,
+            A.PROD_NM
+       FROM TB_MS_PRODUCT A
+      WHERE A.STORE_CD = #{storeCd}
   </select>
   
+    <delete id="deleteTouchClassByStore" parameterType="String">
+    /* TouchkeyMapper.deleteTouchClassByStore */
+    DELETE
+      FROM TB_MS_TOUCH_CLASS
+     WHERE STORE_CD = #{storeCd}
+    </delete>
+
+  <insert id="insertTouchClassByStore" parameterType="touchClass">
+    /* TouchkeyMapper.mergeTableGroupByStore */
+    INSERT INTO TB_MS_TOUCH_CLASS A
+    (
+        A.STORE_CD,
+        A.TUKEY_CLASS_CD,
+        A.TUKEY_CLASS_NM,
+        A.PAGE_NO,
+        A.X,
+        A.Y,
+        A.WIDTH,
+        A.HEIGHT,
+        A.IN_FG,
+        A.REG_DT,
+        A.REG_ID,
+        A.MOD_DT,
+        A.MOD_ID
+    )
+    VALUES
+    (
+        #{storeCd},
+        #{tukeyClassCd},
+        #{tukeyClassNm},
+        #{pageNo},
+        #{x},
+        #{y},
+        #{width},
+        #{height},
+        #{inFg},
+        #{regDt},
+        #{regId},
+        #{regDt},
+        #{regId}
+    )
+  </insert>
+
+    <update id="deleteTouchByStore" parameterType="String">
+    /* TouchkeyMapper.deleteTouchByStore */
+    DELETE
+      FROM TB_MS_TOUCH
+     WHERE STORE_CD = #{storeCd}
+    </update>
+
+  <insert id="insertTouchByStore" parameterType="touch">
+    /* TouchkeyMapper.insertTouchByStore */
+    INSERT INTO TB_MS_TOUCH A
+    (
+        A.STORE_CD,
+        A.TUKEY_CLASS_CD,
+        A.TUKEY_CD,
+        A.PROD_CD,
+        A.PAGE_NO,
+        A.X,
+        A.Y,
+        A.WIDTH,
+        A.HEIGHT,
+        A.IN_FG,
+        A.REG_DT,
+        A.REG_ID,
+        A.MOD_DT,
+        A.MOD_ID
+    )
+    VALUES
+    (
+        #{storeCd},
+        #{tukeyClassCd},
+        #{tukeyCd},
+        #{prodCd},
+        #{pageNo},
+        #{x},
+        #{y},
+        #{width},
+        #{height},
+        #{inFg},
+        #{regDt},
+        #{regId},
+        #{regDt},
+        #{regId}
+    )
+  </insert>
+
 </mapper>
 
 

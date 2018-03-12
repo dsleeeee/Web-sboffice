@@ -6,31 +6,29 @@ import kr.co.solbipos.enums.CodeEnum;
 import kr.co.solbipos.system.CodeEnumTypeHandler;
 
 /**
- * 설정 구분 enum type<br>
- * TB_WB_STORE_CONFG_XML > ConfFg
+ * 입력구분 H:본사, S:매장 enum type<br>
+ * TB_MS_TOUCH_CLASS, TB_MS_TOUCH > InFg
  * 
  * @author bjcho
  *
  */
-public enum ConfgFg implements CodeEnum {
+public enum InFg implements CodeEnum {
     
-    /** 터치키 */
-    TOUCH_KEY("1"),
-    /** 테이블 구성 */
-    TABLE_LAYOUT("2"),
-    /** 테이블 속성 */
-    TABLE_ATTR("3");
+    /** 본사 */
+    HQ("H"),
+    /** 매장 */
+    STORE("S");
     
     private String code;
   
-    ConfgFg(String code) {
+    InFg(String code) {
         this.code = code;
     }
     
-    @MappedTypes(ConfgFg.class)
-    public static class TypeHandler extends CodeEnumTypeHandler<ConfgFg> {
+    @MappedTypes(InFg.class)
+    public static class TypeHandler extends CodeEnumTypeHandler<InFg> {
         public TypeHandler() {
-            super(ConfgFg.class);
+            super(InFg.class);
         }
     }
      

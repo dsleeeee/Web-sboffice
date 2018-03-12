@@ -1,5 +1,7 @@
 # Resources from graph.properties
 groupName=그룹명
+prodNm=상품명
+prodCd=상품코드
 labelFunction=설정
 fillCellColor=채우기
 cancel=취소

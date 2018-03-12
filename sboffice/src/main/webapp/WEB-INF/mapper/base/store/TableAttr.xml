@@ -17,15 +17,15 @@
      SELECT TBL_TYPE_FG,
             ATTR_CD,
             ATTR_NM,
-            X_POSI X,
-            Y_POSI Y,
+            X,
+            Y,
             WIDTH,
             HEIGHT,
             TEXTALIGN_FG,
             '' TEXTVALIGN_FG,
             IMG_NM,
             FONT_NM,
-            FONT_SZ FONT_SIZE,
+            FONT_SIZE,
             FONT_STYLE_FG,
             FONT_COLOR
        FROM TB_CM_TABLE_ATTR A

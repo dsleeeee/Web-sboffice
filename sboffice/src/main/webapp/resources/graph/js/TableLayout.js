@@ -1,6 +1,6 @@
 
 //그리드의 크기
-mxGraph.prototype.gridSize = 40;
+mxGraph.prototype.gridSize = 10;
 mxGraph.prototype.foldingEnabled = false;
 mxGraphView.prototype.gridColor = '#e0e0e0';
 
@@ -171,7 +171,8 @@ Sidebar.prototype.addToolbarIcon = function(style, icon, w, h) {
     
     //라벨 추가
     //TODO 테이블속성 기능에서 테이블명 위치를 가져와 동일 위치로 지정할 때 사용(relative, 0~1, 0~1)
-    var label = graph.insertVertex(v1, null, graph.getModel().getChildCount(parent) + 1, 0.1, 0.1, 30, 10, 'label', true); 
+    var label = graph.insertVertex(v1, null, graph.getModel().getChildCount(parent) + 1, 0.1, 0.1, 30, 10, 'label', true);
+    
     graph.setSelectionCells(graph.importCells([v1], 0, 0));
     
   }
@@ -248,7 +249,7 @@ Floor.prototype.clear = function() {
       //newRowAtTop: true,
       selectionMode: 'Row',
       columns: [
-        {binding: 'id', header: 'ID', isReadOnly: true},
+        {binding: 'id', header: 'ID', isReadOnly: true, visible: false},
         {binding: 'name', header: mxResources.get('floorName'), isRequired: true},
         {binding: 'layer', visible: false}
       ],
@@ -259,9 +260,9 @@ Floor.prototype.clear = function() {
         if (graph.isEnabled()) {
           graph.model.beginUpdate();
           try {
-            var cell = graph.addCell(new mxCell(), graph.model.root);
-            graph.setDefaultParent(cell);
-            s.rows[e.row].dataItem.layer = cell;
+            var layer = graph.addCell(new mxCell(), graph.model.root);
+            //graph.setDefaultParent(layer);
+            s.rows[e.row].dataItem.layer = layer;
           }
           finally {
             graph.model.endUpdate();
@@ -526,11 +527,23 @@ Graph.prototype.init = function() {
   };
   
   /* 이하 라벨 텍스트 선택 및 변경에 사용 */
-  //라벨 삭제 금지
+  //graph.vertexLabelsMovable = false;
+  //graph.setCellsMovable(false);
+  //console.log(graph);
+  
+  //라벨 삭제 금지 - Del 키는 이벤트 핸들러 때문에 삭제가 됨.
   graph.graphHandler.removeCellsFromParent = false;
   //Autosize labels on insert where autosize=1
   graph.autoSizeCellsOnAdd = true;
   
+  //라벨일 때만 이동 금지
+  graph.isCellMovable = function(cell) {
+    if(cell.style == 'label') {
+      return false;
+    }
+    return this.isCellsMovable();
+  };
+
   //Allows moving of relative cells
   graph.isCellLocked = function(cell) {
     return this.isCellsLocked();
@@ -540,7 +553,7 @@ Graph.prototype.init = function() {
     var geo = this.model.getGeometry(cell);
     return geo == null || !geo.relative;
   };
-  
+
   //Truncates the label to the size of the vertex
   graph.getLabel = function(cell) {
     var label = (this.labelsVisible) ? this.convertValueToString(cell) : '';
@@ -570,7 +583,8 @@ Graph.prototype.init = function() {
   };
   /* 이상 라벨 텍스트 선택 및 변경에 사용 */
 
-
+  //그래프가 생성될 때 첫번째 child의 이름 초기값 지정
+  graph.getModel().getChildAt(graph.getModel().root, 0).setValue(mxResources.get('background'));
 };
 
 /**
@@ -631,6 +645,7 @@ Graph.prototype.createUndoManager = function(graph) {
  */
 Graph.prototype.createKeyHandler = function(graph) {
   var keyHandler = new mxKeyHandler(graph);
+  
   keyHandler.bindKey(46, function(evt) {
     graph.escape();
     var cells = graph.getDeletableCells(graph.getSelectionCells());
@@ -651,7 +666,7 @@ Graph.prototype.createKeyHandler = function(graph) {
       }
     }
   });
-
+  
   //Ctrl + z
   keyHandler.bindControlKey(90, function(evt) { graph.undoManager.undo() });
   //Ctrl + Shift + z
@@ -1108,17 +1123,15 @@ Format.prototype.save = function() {
       }
       
       //배경색, 배경이미지를 포스에서 그릴 수 있도록 저장
-      /*
       var param = '';
+      param += 'xml=' + xml;
       var bgImg = graph.getBackgroundImage();
-      if(var param) {
+      if(bgImg) {
         param += '&bgImage=' +  graph.getBackgroundImage().src;
       }
       param += '&bgColor=' +  graph.container.style.backgroundColor;
-      param += '&xml=' + xml;
-      */
       
-      new mxXmlRequest(TABLELAYOUT_SAVE_URL, 'param=' + param).send(onload, onerror);
+      new mxXmlRequest(TABLELAYOUT_SAVE_URL, param).send(onload, onerror);
     }
     else {
       mxUtils.alert(mxResources.get('drawingTooLarge'));
