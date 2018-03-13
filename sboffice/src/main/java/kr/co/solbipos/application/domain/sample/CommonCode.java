@@ -6,6 +6,12 @@ import kr.co.solbipos.structure.DefaultMap;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * 공통 코드 리스트
+ * 
+ * @author 정용길
+ *
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class CommonCode extends Cmm {
