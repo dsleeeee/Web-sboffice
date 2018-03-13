@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 import kr.co.solbipos.service.message.MessageService;
 import kr.co.solbipos.structure.JavaScriptResult;
-import kr.co.solbipos.structure.JsonResult;
 
 /**
  * Return 되는 객체를 받아 Handling 해주는 Class
@@ -18,6 +17,7 @@ import kr.co.solbipos.structure.JsonResult;
 @Aspect
 @Component
 public class ResultHandlerAspect {
+    
     /** 메세지 서비스 */
     @Autowired
     MessageService messageService;
@@ -36,15 +36,11 @@ public class ResultHandlerAspect {
 
         Object result = pjp.proceed();
 
+        // 자바 스크립트 리턴 결과
         if (result instanceof JavaScriptResult) {
             return new ModelAndView("script").addObject("result", result);
-        } else if (result instanceof JsonResult) {
-            JsonResult jsonResult = (JsonResult) result;
-
-            if (jsonResult.getStatus() != null) {
-                jsonResult.setMessage(messageService.get(jsonResult.getStatus().getReason()));
-            }
         }
+        
         return result;
     }
 }

@@ -43,19 +43,15 @@ Touchkey.prototype.grid = null;
  * 메인 - 초기화
  */
 Touchkey.prototype.init = function(themes) {
-  
-  //div 태그 생성, 백그라운드 터치키 이미지 사용
-  var createDiv = function(classname) {
-    var elt = document.createElement('div');
-    elt.className = classname;
-    return elt;
-  };
 
-  //상품 그룹 생성
-  this.groupContainer = createDiv("geGroupContainer");
+  //상품 그룹
+  this.groupContainer = document.getElementById("geGroupContainer");
   
-  //그룹별 상품 생성
-  this.prodContainer = createDiv("geProdContainer");
+  //그룹별 상품
+  this.prodContainer = document.getElementById("geProdContainer");
+  
+  this.createPagingShape('Group', this.group, themes);
+  this.createPagingShape('Prod', this.prod, themes);
   
   //상품 영역 추가
   this.prod.init(this.prodContainer);
@@ -70,24 +66,6 @@ Touchkey.prototype.init = function(themes) {
 
   //마우스 오른쪽 클릭 - 컨텍스트 메뉴
   //mxEvent.disableContextMenu(this.container);
-  
-  this.groupContainer.appendChild(this.createPagingShape('Group', this.group, themes));
-  this.prodContainer.appendChild(this.createPagingShape('Prod', this.prod, themes));
-  
-  /*
-  var groupWrap = createDiv("wrapGroup");
-  groupWrap.appendChild(this.groupContainer)
-  var prodWrap = createDiv("wrapProd");
-  prodWrap.appendChild(this.prodContainer)
-  this.container.appendChild(groupWrap);
-  this.container.appendChild(prodWrap);
-  */
-  this.container.appendChild(this.groupContainer);
-  this.container.appendChild(this.prodContainer);
-  
-  //스크롤바..(테스트)
-  //this.container.appendChild(createDiv("hidden"));
-  //console.log(this);
   
   //그룹, 상품 영역 변경 시 설정 패널 이벤트 처리
   //this.format.init(this.group);
@@ -156,8 +134,7 @@ function loadStylesheet(graph)
  */
 Touchkey.prototype.createPagingShape = function(type, target, themes) {
 
-  var div = document.createElement('div');
-  div.id = 'pagingShape' + type;
+  var div = document.getElementById('pagingShape' + type);
   div.style.borderStyle = 'none';
   div.style.borderWidth = '0px';
   div.style.overflow = 'hidden';
@@ -325,64 +302,7 @@ Graph.prototype.init = function(container) {
     mxGraphHandlerMoveCells.apply(this, arguments);
   };
 
-  
-  // Overrides method to provide a cell label in the display
-  this.convertValueToString = function(cell) {
 
-    if (this.labelCached && cell.div != null)
-    {
-      // Uses cached label
-      return cell.div;
-    }
-    else if (mxUtils.isNode(cell.value) &&cell.value.nodeName.toLowerCase() == 'userobject')
-    {
-      // Returns a DOM for the label
-      var div = document.createElement('div');
-      div.innerHTML = cell.getAttribute('label');
-      if(cell.getAttribute('price') != null ) {
-        mxUtils.br(div, 3);
-        var numberWithCommas = function(x) {
-          x = x.toString();
-          var pattern = /(-?\d+)(\d{3})/;
-          while (pattern.test(x))
-              x = x.replace(pattern, "$1,$2");
-          return x;
-        }
-        mxUtils.write(div, numberWithCommas(cell.getAttribute('price')));
-      }
-      
-      if (this.labelCached)
-      {
-        // Caches label
-        cell.div = div;
-      }
-      
-      return div;
-    }
-    return mxGraph.prototype.convertValueToString.apply(this, arguments); 
-};
-
-  // Overrides method to store a cell label in the model
-  var cellLabelChanged = this.cellLabelChanged;
-  this.cellLabelChanged = function(cell, newValue, autoSize) {
-    if (mxUtils.isNode(cell.value) && cell.value.nodeName.toLowerCase() == 'userobject') {
-      // Clones the value for correct undo/redo
-      var elt = cell.value.cloneNode(true);
-      elt.setAttribute('label', newValue);
-      newValue = elt;
-    }
-    
-    cellLabelChanged.apply(this, arguments);
-  };
-  
-  // Overrides method to create the editing value
-  var getEditingValue = this.getEditingValue;
-  this.getEditingValue = function(cell) {
-    if (mxUtils.isNode(cell.value) && cell.value.nodeName.toLowerCase() == 'userobject')
-    {
-      return cell.getAttribute('label');
-    }
-  };
   
   //셀의 사이즈가 변경되었을 때 배경 크기에 맞게 보정
   this.resizeCell = function(cell, bounds) {
@@ -435,6 +355,17 @@ Graph.prototype.sanitizeHtml = function(value, editing) {
 
 
 /**
+ * 그룹 변경 시 상품영역 스크롤 초기화
+ */
+Graph.prototype.initProdPaging = function() {
+  var graph = this;
+  //좌우 이동 버튼 위치 초기화
+  graph.container.scrollLeft = 0;
+  graph.pageNo = 1;
+  var elt = document.getElementById('pagingShapeProd');
+  elt.style.left = '320px';
+};
+/**
  * 초기 데이터 조회 시 변수 초기화
  */
 Graph.prototype.initValue = function(rowPerPage) {
@@ -447,7 +378,7 @@ Graph.prototype.initValue = function(rowPerPage) {
   for (var key in graph.model.cells) {
     var cell = graph.model.cells[key]; 
     //console.log(cell);
-    if (mxUtils.isNode(cell.value) && cell.value.nodeName.toLowerCase() == 'userobject') {
+    if (cell.isVertex()){
       objCnt++;
       if(objCnt == 1) {
         firstCell = cell;
@@ -477,6 +408,8 @@ Graph.prototype.initValue = function(rowPerPage) {
   
   //좌우 이동 버튼 위치 초기화
   graph.container.scrollLeft = 0;
+  graph.pageNo = 1;
+  
   var elt = null;
   if(graph.isGroup) {
     elt = document.getElementById('pagingShapeGroup');
@@ -489,6 +422,7 @@ Graph.prototype.initValue = function(rowPerPage) {
     elt.style.top = (graph.keySize.height * (graph.ROW_PER_PAGE-1)) + 'px';
   }
   //console.log(graph);
+  graph.refresh();
 };
 
 //상품 영역 레이어 활성화 처리
@@ -507,7 +441,7 @@ Graph.prototype.switchLayer = function(layer) {
   }
   
   prod.setDefaultParent(layer);
-  //console.log(prod);
+
   //클릭이벤트 - 선택된 레이어 visible true
   model.setVisible(layer, true);
 
@@ -535,7 +469,7 @@ Graph.prototype.initGroupArea = function(prod) {
       try {
         graph.insertVertex(parent,
             (graph.groupPrefix + graph.nextId),
-            graph.createKeyObject(mxResources.get('groupName')),
+            mxResources.get('groupName'),
             x, y,
             graph.keySize.width, graph.keySize.height); 
       }
@@ -616,12 +550,12 @@ Graph.prototype.initGroupArea = function(prod) {
         var cell = me.state.cell;
         //console.log(cell);
         //상품그룹 터치키 클릭 시 처리
-        if (mxUtils.isNode(cell.value) && cell.value.nodeName.toLowerCase() == 'userobject') {
-          var currId = cell.id.substr(1);
-          var model = prod.getModel();
-          var layer = model.getCell(currId);
-          prod.switchLayer(layer);
-        }
+        var currId = cell.id.substr(1);
+        var model = prod.getModel();
+        var layer = model.getCell(currId);
+        prod.switchLayer(layer);
+        //상품영역 스크롤했던 것 초기화
+        prod.initProdPaging();
       }
     },
     mouseMove: function() { },
@@ -710,10 +644,11 @@ Graph.prototype.initProdArea = function(group) {
   var graph = this;
   this.group = group;
 
+  graph.isGroup = false;
+
   //console.log(graph);
   //상품영역은 6줄로 초기화
   graph.initValue(6);
-  graph.isGroup = false;
   
   //상품 영역에만 UNDO, 키 핸들러 추가
   this.undoManager = this.createUndoManager(graph);
@@ -721,22 +656,6 @@ Graph.prototype.initProdArea = function(group) {
   this.keyHandler = this.createKeyHandler(graph);
   //console.log(graph);
 
-};
-/**
- * 터치키 박스 및 내용 생성
- */
-Graph.prototype.createKeyObject = function(label, price) {
-
-  var graph = this;
-
-  // Creates a user object that stores the state
-  var doc = mxUtils.createXmlDocument();
-  var obj = doc.createElement('UserObject');
-  obj.setAttribute('label', label);
-  if(price != null ) {
-    obj.setAttribute('price', price);
-  }
-  return obj;
 };
 
 
@@ -747,8 +666,10 @@ Graph.prototype.findPosition = function(pt) {
   var graph = this;
   var cntFind = 0;
 
-  var cx = (graph.container.clientWidth) * graph.MAX_PAGE;
-  var cy = graph.container.clientHeight;
+  //var cx = (graph.container.clientWidth) * graph.MAX_PAGE;
+  //var cy = graph.container.clientHeight;
+  var cx = (graph.keySize.width * graph.COL_PER_PAGE * graph.pageNo); 
+  var cy = (graph.keySize.height * graph.ROW_PER_PAGE); 
   var px = parseInt(pt.x/graph.keySize.width) * graph.keySize.width;
   var py = parseInt(pt.y/graph.keySize.height) * graph.keySize.height;
   var lastX = (graph.keySize.width * graph.COL_PER_PAGE * graph.pageNo) - graph.keySize.width; 
@@ -758,7 +679,8 @@ Graph.prototype.findPosition = function(pt) {
     for(var posX = px; posX < cx; posX += graph.keySize.width) {
       //마지막 셀은 페이지 이동을 위해 미사용 처리 필요
       if(posX >= lastX && posY >= lastY) {
-        return null
+        //TODO 다음 페이지 이동하여 첫번째 셀에 위치하도록 수정
+        return null;
       }
       if (graph.getCellAt((posX+1), (posY+1)) == null) {
         return new mxPoint(posX, posY);
@@ -935,21 +857,25 @@ Format.prototype.fillCellColor = function() {
   var div = this.createPanel();
   div.appendChild(this.createTitle(mxResources.get('fillCellColor')));
   
+  //선택된 셀에서 스타일 정보 읽기
+  var cells = graph.getSelectionCells();
+  var initFillColor;
+  for(var i=0; i < cells.length; i++) {
+    var cell = cells[i];
+    var state = graph.view.getState(cell);
+    if (state != null) {
+      initFillColor = mxUtils.getValue(state.style, mxConstants.STYLE_FILLCOLOR, null);
+    }
+  }
+
   //wijmo 컴포넌트 추가
   div.appendChild(this.createWijmoContainer('fillColor'));
   //format 컨테이너에 추가
   this.container.appendChild(div);
 
-  //console.log(graph);
-  var cells = graph.getSelectionCells();
-  var state = graph.view.getState(cells);
-  var init;
-  if (state != null) {
-    init = mxUtils.getValue(state.style, mxConstants.STYLE_FILLCOLOR, null);
-  }
   var theInputColor = new wijmo.input.InputColor('#fillColor', {
     placeholder: 'Select the color',
-    value: init,
+    value: initFillColor,
     valueChanged: function(s, e) {
       graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, s.value, graph.getSelectionCells());
     }
@@ -968,6 +894,19 @@ Format.prototype.fontStyle = function() {
   
   div.appendChild(this.createTitle(mxResources.get('font')));
   mxUtils.br(div);
+  
+  //선택된 셀에서 스타일 정보 읽기
+  var cells = graph.getSelectionCells();
+  var initFontSize = 10;
+  var initFontColor;
+  for(var i=0; i < cells.length; i++) {
+    var cell = cells[i];
+    var state = graph.view.getState(cell);
+    if (state != null) {
+      initFontSize = Math.max(0, parseInt(mxUtils.getValue(state.style, mxConstants.STYLE_FONTSIZE, null)));
+      initFontColor = mxUtils.getValue(state.style, mxConstants.STYLE_FONTCOLOR, null);
+    }
+  }
 
   /**
    * 폰트 색상 설정 시작
@@ -977,15 +916,13 @@ Format.prototype.fontStyle = function() {
   //format 컨테이너에 추가
   this.container.appendChild(div);
 
-  var cells = graph.getSelectionCells();
-  var state = graph.view.getState(cells);
-  var init;
+
   if (state != null) {
     init = mxUtils.getValue(state.style, mxConstants.STYLE_FONTCOLOR, null);
   }
   var theInputColor = new wijmo.input.InputColor('#fontColor', {
     placeholder: 'Select the color',
-    value: init,
+    value: initFontColor,
     valueChanged: function(s, e) {
       graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, s.value, cells);
     }
@@ -1000,22 +937,12 @@ Format.prototype.fontStyle = function() {
   //format 컨테이너에 추가
   this.container.appendChild(div);
 
-  var cells = graph.getSelectionCells();
-  var initValue = 10;
-  for(var i=0; i < cells.length; i++) {
-    var cell = cells[i];
-    var state = graph.view.getState(cell);
-    if (state != null) {
-      initValue = Math.max(0, parseInt(mxUtils.getValue(state.style, mxConstants.STYLE_FONTSIZE, null)));
-    }
-  }
-  
   var theInputNumber = new wijmo.input.InputNumber('#fontSize', {
     format: 'n0',
     step: 1,
     min: 8,
     max: 15,
-    value: initValue,
+    value: initFontSize,
     valueChanged: function(s, e) {
       graph.setCellStyles(mxConstants.STYLE_FONTSIZE, s.value, cells);
     }
@@ -1083,7 +1010,7 @@ Format.prototype.setGraphXml = function(graph, node) {
         
         //console.log(node);
         //로드 후 변수 셋팅
-        graph.initValue(parseInt(node.getAttribute('rowPerPage')));
+        //graph.initValue(parseInt(node.getAttribute('rowPerPage')));
         //console.log(graph);
       }
     }
@@ -1133,7 +1060,7 @@ Format.prototype.save = function()
   var enc = new mxCodec(mxUtils.createXmlDocument());
   node = enc.encode(group.getModel());
   //페이지당 줄 수를 XML에 셋팅해 두었다가 로딩 시 사용
-  node.setAttribute('rowPerPage', group.ROW_PER_PAGE);
+  //node.setAttribute('rowPerPage', group.ROW_PER_PAGE);
   var xmlGroup = mxUtils.getXml(node);
   //console.log(xmlGroup);
   
@@ -1141,7 +1068,7 @@ Format.prototype.save = function()
   var enc = new mxCodec(mxUtils.createXmlDocument());
   node = enc.encode(prod.getModel());
   //페이지당 줄 수를 XML에 셋팅해 두었다가 로딩 시 사용
-  node.setAttribute('rowPerPage', prod.ROW_PER_PAGE);
+  //node.setAttribute('rowPerPage', prod.ROW_PER_PAGE);
   var xmlProd = mxUtils.getXml(node);
   //console.log(xmlProd);
 
@@ -1200,16 +1127,16 @@ Grid.prototype.init = function() {
  * 그리드 생성
  */
 Grid.prototype.makeGrid = function() {
-  // create some random data
+
   function getData() {
-    var goods = '상품1,상품2,상품3'.split(','),
-        data = [];
-    for (var i = 0; i < goods.length; i++) {
-        data.push({
-            //'chk':false,
-            'prodNm': goods[i],
-            'saleUprc': Math.round(Math.random() * 20000)
-        });
+    var data = [];
+    for(i = 0; i < PRODS.length; i++) {
+      //console.log(PRODS[i]);
+      data.push({
+        prodCd: PRODS[i].prodCd,
+        prodNm: PRODS[i].prodNm,
+        used: false 
+      });
     }
     return data;
   }
@@ -1224,6 +1151,11 @@ Grid.prototype.makeGrid = function() {
   //그리드 생성
   var flex = new wijmo.grid.FlexGrid('#theGrid', {
     itemsSource: getData(),
+    columns: [
+      { binding: 'prodCd', header: mxResources.get('prodCd'), width: 80, isReadOnly: true, visible:false },
+      { binding: 'prodNm', header: mxResources.get('prodNm'), width: 120, isReadOnly: true },
+      { binding: 'used', header: mxResources.get('alreadyUsed'), width: 80, isReadOnly: true }
+    ],
     selectionMode: 'ListBox',
     allowDragging: 'None',
     isReadOnly: true
@@ -1278,7 +1210,7 @@ Grid.prototype.makeGrid = function() {
         e.cell.innerHTML = '<span class="wj-glyph-check" style="opacity:' + (sel ? 1 : .25) + '"></span>';
       }
   });
-  
+
   return flex;
 };
 /**
@@ -1311,22 +1243,27 @@ Grid.prototype.makeDragSource = function() {
         }
         
         //Drop 된 포지션과 다음 포지션에 터치키 생성
-        var item = grid.selectedItems[selected];
-        model.beginUpdate();
-        try
-        {
-          graph.insertVertex(parent,
-              graph.prodPrefix + graph.nextId,
-              graph.createKeyObject(item.prodNm, item.saleUprc),
-              pos.x, pos.y,
-              graph.keySize.width, graph.keySize.height);
+        var rows = grid.selectedRows[selected];
+        var item = rows.dataItem;
+        //console.log(item.tag);
+        //사용중이 아닌 항목만 넣기
+        if(!item.used) {
+          model.beginUpdate();
+          try {
+            graph.insertVertex(parent,
+                graph.prodPrefix + graph.nextId,
+                item.prodNm,
+                pos.x, pos.y,
+                graph.keySize.width, graph.keySize.height,
+                'prodCd='  + item.prodCd + ';');
+          }
+          finally {
+            model.endUpdate();
+            grid.setCellData(rows.index, 'used', true);
+          }
+          //console.log(graph);
+          graph.nextId++;
         }
-        finally
-        {
-          model.endUpdate();
-        }
-        //console.log(graph);
-        graph.nextId++;
       }
     }
 

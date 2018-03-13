@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import kr.co.solbipos.application.domain.cmm.GridDispItem;
 import kr.co.solbipos.application.domain.login.SessionInfo;
+import kr.co.solbipos.enums.Status;
 import kr.co.solbipos.service.grid.GridSupportService;
 import kr.co.solbipos.service.session.SessionService;
-import kr.co.solbipos.structure.JsonResult;
-import kr.co.solbipos.structure.Result.Status;
+import kr.co.solbipos.structure.Result;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -43,7 +43,7 @@ public class GridController {
      */
     @RequestMapping(value = "setGridItem.sb", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult setGridItem(HttpServletRequest request, GridDispItem gridDispItem,
+    public Result setGridItem(HttpServletRequest request, GridDispItem gridDispItem,
             Model model) {
         // 유져 정보 조회
         SessionInfo sessionInfo = sessionService.getSessionInfo(request);

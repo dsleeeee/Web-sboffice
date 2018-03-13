@@ -41,7 +41,7 @@ public class EnumTest extends AbstractApplicationContextTest {
      * 로그인 이력 Insert
      * 
      */
-    //@Test
+    @Test
     //@Ignore
     //@Rollback(false)
     public void setLoginHist() {
@@ -61,7 +61,7 @@ public class EnumTest extends AbstractApplicationContextTest {
      * 로그인 이력 select
      * 
      */
-    //@Test
+    @Test
     //@Ignore
     public void getLoginHist() {
         loginHist.setUserId("bjcho");

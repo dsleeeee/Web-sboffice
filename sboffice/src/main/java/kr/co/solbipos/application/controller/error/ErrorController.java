@@ -1,4 +1,4 @@
-package kr.co.solbipos.controller;
+package kr.co.solbipos.application.controller.error;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

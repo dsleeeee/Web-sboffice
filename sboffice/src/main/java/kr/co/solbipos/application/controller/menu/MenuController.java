@@ -1,5 +1,6 @@
 package kr.co.solbipos.application.controller.menu;
 
+import static kr.co.solbipos.utils.grid.ReturnUtil.*;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,10 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import kr.co.solbipos.application.domain.login.SessionInfo;
+import kr.co.solbipos.enums.Status;
 import kr.co.solbipos.service.cmm.CmmMenuService;
 import kr.co.solbipos.service.session.SessionService;
-import kr.co.solbipos.structure.JsonResult;
-import kr.co.solbipos.structure.Result.Status;
+import kr.co.solbipos.structure.Result;
 import kr.co.solbipos.utils.grid.ReturnUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,10 +41,10 @@ public class MenuController {
      */
     @RequestMapping(value = "/delHistMenu.sb", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult delHistMenu(String menuId, HttpServletRequest request, Model model) {
+    public Result delHistMenu(String menuId, HttpServletRequest request, Model model) {
         SessionInfo sessionInfo = sessionService.getSessionInfo(request);
         cmmMenuService.deleteHistMenu(menuId, sessionInfo);
-        return ReturnUtil.returnJson(Status.OK);
+        return returnJson(Status.OK);
     }
 
     /**
@@ -56,10 +57,10 @@ public class MenuController {
      */
     @RequestMapping(value = "/delFixMenu.sb", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult delFixMenu(String menuId, HttpServletRequest request, Model model) {
+    public Result delFixMenu(String menuId, HttpServletRequest request, Model model) {
         SessionInfo sessionInfo = sessionService.getSessionInfo(request);
         cmmMenuService.deleteFixMenu(menuId, sessionInfo);
-        return ReturnUtil.returnJson(Status.OK);
+        return returnJson(Status.OK);
     }
 }
 

@@ -34,11 +34,11 @@ import kr.co.solbipos.application.validate.user.IdFind;
 import kr.co.solbipos.application.validate.user.PwChange;
 import kr.co.solbipos.application.validate.user.PwFind;
 import kr.co.solbipos.application.validate.user.UserPwChange;
+import kr.co.solbipos.enums.Status;
 import kr.co.solbipos.exception.AuthenticationException;
 import kr.co.solbipos.service.message.MessageService;
 import kr.co.solbipos.service.session.SessionService;
-import kr.co.solbipos.structure.JsonResult;
-import kr.co.solbipos.structure.Result.Status;
+import kr.co.solbipos.structure.Result;
 import kr.co.solbipos.system.Prop;
 import kr.co.solbipos.utils.DateUtil;
 import kr.co.solbipos.utils.security.EncUtil;
@@ -82,7 +82,7 @@ public class UserController {
      */
     @RequestMapping(value = "sendNum.sb", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult sendNum(@Validated(AuthNumber.class) User user, BindingResult bindingResult,
+    public Result sendNum(@Validated(AuthNumber.class) User user, BindingResult bindingResult,
             HttpServletRequest request, HttpServletResponse response, Model model) {
 
         // 입력값 에러 처리
@@ -242,7 +242,7 @@ public class UserController {
      */
     @RequestMapping(value = "pwdFind.sb", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult passwordFindProcess(@Validated(PwFind.class) User user,
+    public Result passwordFindProcess(@Validated(PwFind.class) User user,
             BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response,
             Model model) {
 
@@ -270,7 +270,7 @@ public class UserController {
             return returnJson(Status.FAIL, "authNumber",
                     prop.otpLimit + messageService.get("msg.pw.find.limit.otp.minute"));
         } else {
-            return returnJson(Status.VALID_FAIL);
+            return returnJson(Status.FAIL);
         }
     }
 
@@ -408,7 +408,7 @@ public class UserController {
      */
     @RequestMapping(value = "userPwdChg.sb", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult userPwdChg(@Validated(UserPwChange.class) PwdChg pwdChg,
+    public Result userPwdChg(@Validated(UserPwChange.class) PwdChg pwdChg,
             BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response,
             Model model) {
 
@@ -469,7 +469,7 @@ public class UserController {
      */
     @RequestMapping(value = "pwdExtension.sb", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult pwdExtension(@Validated(Login.class) PwdChg pwdChg,
+    public Result pwdExtension(@Validated(Login.class) PwdChg pwdChg,
             BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response,
             Model model) {
 

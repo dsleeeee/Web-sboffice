@@ -10,7 +10,7 @@ import kr.co.solbipos.utils.jsp.ColumnLayout;
 import kr.co.solbipos.utils.jsp.ColumnList;
 
 /**
- * jsp 에서 사용 bean 등록
+ * {@code JSP} 에서 사용 {@code bean} 등록
  * 
  * @author 정용길
  */
@@ -36,8 +36,8 @@ public class BeanLoader implements ServletContextAware {
     @PostConstruct
     public void init() {
         // ccu : jsp 에서 호출하는 변수가 됨
-        servletContext.setAttribute("ccu", cmmCodeUtil); // 공통코드
+        servletContext.setAttribute("ccu", cmmCodeUtil); // 공통코드 호출 관련 
         servletContext.setAttribute("cl", columnList); // 그리드 헤더 리스트
-        servletContext.setAttribute("clo", columnLayout);  // 저장된 컬럼 layout
+        servletContext.setAttribute("clo", columnLayout); // 저장된 컬럼 layout
     }
 }

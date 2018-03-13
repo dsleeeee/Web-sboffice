@@ -3,7 +3,6 @@ package kr.co.solbipos.base.domain.store.tablelayout;
 import java.util.List;
 import kr.co.solbipos.application.domain.cmm.Cmm;
 import kr.co.solbipos.base.enums.TblGrpFg;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

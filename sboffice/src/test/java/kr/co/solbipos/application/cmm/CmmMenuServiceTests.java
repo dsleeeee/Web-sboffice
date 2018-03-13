@@ -1,29 +1,16 @@
 package kr.co.solbipos.application.cmm;
 
-import static org.junit.Assert.*;
-import java.util.ArrayList;
-import java.util.List;
-import org.junit.Before;
 import org.junit.FixMethodOrder;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
-import kr.co.solbipos.application.domain.login.SessionInfo;
-import kr.co.solbipos.application.domain.resource.ResrceInfoBase;
-import kr.co.solbipos.application.persistence.cmm.CmmMenuMapper;
-import kr.co.solbipos.service.cmm.CmmMenuServiceImpl;
-import kr.co.solbipos.service.session.SessionService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RunWith(MockitoJUnitRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CmmMenuServiceTests {
-
+/*
     @Mock
     SessionService sessionService;
 
@@ -111,7 +98,7 @@ public class CmmMenuServiceTests {
         
         log.info("cd : {}, type : {}", resultCd, type);
     }
-
+*/
 }
 
 

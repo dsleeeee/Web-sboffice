@@ -20,13 +20,12 @@ import kr.co.solbipos.application.domain.resource.ResrceInfo;
 import kr.co.solbipos.application.domain.sample.CcdCodemT;
 import kr.co.solbipos.application.domain.sample.TmpDragtT;
 import kr.co.solbipos.application.service.sample.SampleService;
+import kr.co.solbipos.enums.Status;
 import kr.co.solbipos.service.grid.GridSupportService;
 import kr.co.solbipos.service.message.MessageService;
 import kr.co.solbipos.service.session.SessionService;
 import kr.co.solbipos.structure.DefaultMap;
-import kr.co.solbipos.structure.JsonResult;
 import kr.co.solbipos.structure.Result;
-import kr.co.solbipos.structure.Result.Status;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -112,13 +111,10 @@ public class SampleWijimoController {
 
 
     @RequestMapping(value = "cmmcode.sb")
-    public JsonResult cmmcode(Model model) {
+    public Result cmmcode(Model model) {
 
         List<DefaultMap<Object>> temp = sampleService.selectCommonCodeList("001");
-
-        Result result = new Result(Status.OK, temp);
-
-        return new JsonResult(result);
+        return new Result(Status.OK, temp);
     }
 
 
@@ -359,7 +355,7 @@ public class SampleWijimoController {
     */
    @RequestMapping(value = "saveDragNDrop.sb", method = RequestMethod.POST)
    @ResponseBody
-   public JsonResult saveDragNDrop(HttpSession sessions, Model model, @RequestBody TmpDragtT[] tmpDragtT) {
+   public Result saveDragNDrop(HttpSession sessions, Model model, @RequestBody TmpDragtT[] tmpDragtT) {
 
      log.error("tmpDragtT.length  : " + tmpDragtT.length);
   
@@ -374,8 +370,7 @@ public class SampleWijimoController {
      }
    
      List<DefaultMap<Object>> temp = sampleService.selectDdSum();
-     Result result = new Result(Status.OK, temp);
-     return new JsonResult(result);
+     return new Result(Status.OK, temp);
    }
  
    /**
@@ -418,13 +413,12 @@ public class SampleWijimoController {
     */
    @RequestMapping(value="exGridInsertJson.sb")
    @ResponseBody
-   public JsonResult exGridInsertJson(HttpSession session, Model model) {
+   public Result exGridInsertJson(HttpSession session, Model model) {
      // 테스트 리스트
      TmpDragtT tmpDragt = new TmpDragtT();
      tmpDragt.setComFg("");
      List<DefaultMap<Object>> list = sampleService.getDragNDropSample(tmpDragt);
-     Result result = new Result(Status.OK, list);
-     return new JsonResult(result);
+     return new Result(Status.OK, list);
    }
    
 }

@@ -32,7 +32,7 @@ public class Table extends Cmm {
     private String tblGrpCd;
 
     /** 테이블좌석수 */
-    private Long tblSeatCnt;
+    @Builder.Default private Long tblSeatCnt = 0L;;
 
     /** X */
     @Builder.Default private Long x = 0L;

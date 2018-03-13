@@ -14,16 +14,12 @@ import kr.co.solbipos.system.CodeEnumTypeHandler;
  */
 public enum ConfgFg implements CodeEnum {
     
-    /** 터치키_분류 */
-    TOUCH_CLASS("1"),
     /** 터치키 */
-    TOUCH("2"),
-    /** 테이블 그룹 */
-    TABLE_GROUP("3"),
-    /** 테이블 */
-    TABLE("4"),
+    TOUCH_KEY("1"),
+    /** 테이블 구성 */
+    TABLE_LAYOUT("2"),
     /** 테이블 속성 */
-    TABLE_ATTR("5");
+    TABLE_ATTR("3");
     
     private String code;
   

@@ -46,7 +46,7 @@ public class TableAttrServceTest extends AbstractApplicationContextTest {
      * 
      */
     @Test
-    @Ignore
+    //@Ignore
     //@Rollback(false)
     public void test_100() {
         
@@ -54,7 +54,58 @@ public class TableAttrServceTest extends AbstractApplicationContextTest {
         mxGraph graph;
         
         try {
-            xml = "<mxGraphModel>  <root>    <mxCell id=\"0\"/>    <mxCell id=\"1\" parent=\"0\"/>    <mxCell id=\"5\" value=\"담당자\" style=\"tableAttr;fontStyle=2;\" vertex=\"1\" parent=\"1\">      <mxGeometry x=\"250\" y=\"200\" width=\"150\" height=\"50\" as=\"geometry\"/>    </mxCell>    <mxCell id=\"2\" value=\"테이블명\" style=\"tableAttr;align=left;verticalAlign=top;fontSize=17;\" vertex=\"1\" parent=\"1\">      <mxGeometry width=\"400\" height=\"50\" as=\"geometry\"/>    </mxCell>    <mxCell id=\"6\" value=\"경과시간\" style=\"tableAttr;verticalAlign=bottom;align=right;fontColor=#ff0000;fontSize=17;\" vertex=\"1\" parent=\"1\">      <mxGeometry x=\"150\" y=\"300\" width=\"250\" height=\"100\" as=\"geometry\"/>    </mxCell>    <mxCell id=\"4\" value=\"손님수\" style=\"tableAttr;fontStyle=1;\" vertex=\"1\" parent=\"1\">      <mxGeometry x=\"50\" y=\"200\" width=\"150\" height=\"50\" as=\"geometry\"/>    </mxCell>    <mxCell id=\"7\" value=\"메뉴리스트\" style=\"tableAttr;align=left;verticalAlign=top;\" vertex=\"1\" parent=\"1\">      <mxGeometry x=\"10\" y=\"50\" width=\"300\" height=\"260\" as=\"geometry\"/>    </mxCell>    <mxCell id=\"3\" value=\"주문금액\" style=\"tableAttr\" vertex=\"1\" parent=\"1\">      <mxGeometry y=\"320\" width=\"400\" height=\"80\" as=\"geometry\"/>    </mxCell>    <mxCell id=\"9\" value=\"배달연락처\" style=\"tableAttr;fontStyle=4;\" vertex=\"1\" parent=\"1\">      <mxGeometry x=\"200\" width=\"200\" height=\"50\" as=\"geometry\"/>    </mxCell>    <mxCell id=\"8\" value=\"배달주소\" style=\"tableAttr;fontFamily=Hanna;\" vertex=\"1\" parent=\"1\">      <mxGeometry x=\"100\" y=\"320\" width=\"300\" height=\"80\" as=\"geometry\"/>    </mxCell>  </root></mxGraphModel>";
+            xml =   "<mxGraphModel>\r\n" + 
+                    "  <root>\r\n" + 
+                    "    <mxCell id=\"0\"/>\r\n" + 
+                    "    <mxCell id=\"1\" parent=\"0\"/>\r\n" + 
+                    "    <mxCell id=\"01\" value=\"1번\" style=\"tableAttr;fontFamily=NotoR;fontStyle=1;fontSize=16;fontColor=#000000;align=left\" parent=\"1\" vertex=\"1\">\r\n" + 
+                    "      <mxGeometry width=\"400\" height=\"50\" as=\"geometry\"/>\r\n" + 
+                    "    </mxCell>\r\n" + 
+                    "    <mxCell id=\"02\" value=\"12000\" style=\"tableAttr;fontFamily=NotoR;fontStyle=0;fontSize=10;fontColor=#000000;align=center\" parent=\"1\" vertex=\"1\">\r\n" + 
+                    "      <mxGeometry y=\"320\" width=\"400\" height=\"80\" as=\"geometry\"/>\r\n" + 
+                    "    </mxCell>\r\n" + 
+                    "    <mxCell id=\"03\" value=\"2명\" style=\"tableAttr;fontFamily=NotoR;fontStyle=0;fontSize=10;fontColor=#000000;align=center\" parent=\"1\" vertex=\"1\">\r\n" + 
+                    "      <mxGeometry x=\"50\" y=\"200\" width=\"150\" height=\"50\" as=\"geometry\"/>\r\n" + 
+                    "    </mxCell>\r\n" + 
+                    "    <mxCell id=\"04\" value=\"직원\" style=\"tableAttr;fontFamily=NotoR;fontStyle=0;fontSize=10;fontColor=#000000;align=center\" parent=\"1\" vertex=\"1\">\r\n" + 
+                    "      <mxGeometry x=\"250\" y=\"200\" width=\"150\" height=\"50\" as=\"geometry\"/>\r\n" + 
+                    "    </mxCell>\r\n" + 
+                    "    <mxCell id=\"05\" value=\"10분\" style=\"tableAttr;fontFamily=NotoR;fontStyle=0;fontSize=10;fontColor=#000000;align=center\" parent=\"1\" vertex=\"1\">\r\n" + 
+                    "      <mxGeometry x=\"150\" y=\"300\" width=\"250\" height=\"100\" as=\"geometry\"/>\r\n" + 
+                    "    </mxCell>\r\n" + 
+                    "    <mxCell id=\"07\" value=\"메뉴리스트\" style=\"tableAttr;fontFamily=NotoR;fontStyle=0;fontSize=10;fontColor=#000000;align=center\" parent=\"1\" vertex=\"1\">\r\n" + 
+                    "      <mxGeometry x=\"100\" y=\"320\" width=\"300\" height=\"80\" as=\"geometry\"/>\r\n" + 
+                    "    </mxCell>\r\n" + 
+                    "    <mxCell id=\"08\" value=\"테이블상태-사용\" style=\"tableAttr;fontFamily=NotoR;fontStyle=0;fontSize=10;fontColor=#000000;align=center\" parent=\"1\" vertex=\"1\">\r\n" + 
+                    "      <mxGeometry x=\"200\" width=\"200\" height=\"50\" as=\"geometry\"/>\r\n" + 
+                    "    </mxCell>\r\n" + 
+                    "    <mxCell id=\"09\" value=\"테이블상태-분할\" style=\"tableAttr;fontFamily=NotoR;fontStyle=0;fontSize=10;fontColor=#000000;align=center\" parent=\"1\" vertex=\"1\">\r\n" + 
+                    "      <mxGeometry x=\"200\" width=\"200\" height=\"50\" as=\"geometry\"/>\r\n" + 
+                    "    </mxCell>\r\n" + 
+                    "    <mxCell id=\"10\" value=\"태아블상태-예약\" style=\"tableAttr;fontFamily=NotoR;fontStyle=0;fontSize=10;fontColor=#000000;align=center\" parent=\"1\" vertex=\"1\">\r\n" + 
+                    "      <mxGeometry x=\"200\" width=\"200\" height=\"50\" as=\"geometry\"/>\r\n" + 
+                    "    </mxCell>\r\n" + 
+                    "    <mxCell id=\"11\" value=\"배달상태\" style=\"tableAttr;fontFamily=NotoR;fontStyle=0;fontSize=10;fontColor=#000000;align=center\" parent=\"1\" vertex=\"1\">\r\n" + 
+                    "      <mxGeometry x=\"200\" width=\"200\" height=\"50\" as=\"geometry\"/>\r\n" + 
+                    "    </mxCell>\r\n" + 
+                    "    <mxCell id=\"12\" value=\"배달주소\" style=\"tableAttr;fontFamily=NotoR;fontStyle=0;fontSize=10;fontColor=#000000;align=center\" parent=\"1\" vertex=\"1\">\r\n" + 
+                    "      <mxGeometry x=\"200\" width=\"200\" height=\"50\" as=\"geometry\"/>\r\n" + 
+                    "    </mxCell>\r\n" + 
+                    "    <mxCell id=\"13\" value=\"배달연락처\" style=\"tableAttr;fontFamily=NotoR;fontStyle=0;fontSize=10;fontColor=#000000;align=center\" parent=\"1\" vertex=\"1\">\r\n" + 
+                    "      <mxGeometry x=\"200\" width=\"200\" height=\"50\" as=\"geometry\"/>\r\n" + 
+                    "    </mxCell>\r\n" + 
+                    "    <mxCell id=\"14\" value=\"배달원명\" style=\"tableAttr;fontFamily=NotoR;fontStyle=0;fontSize=10;fontColor=#000000;align=center\" parent=\"1\" vertex=\"1\">\r\n" + 
+                    "      <mxGeometry x=\"200\" width=\"200\" height=\"50\" as=\"geometry\"/>\r\n" + 
+                    "    </mxCell>\r\n" + 
+                    "    <mxCell id=\"15\" value=\"교환번호\" style=\"tableAttr;fontFamily=NotoR;fontStyle=0;fontSize=10;fontColor=#000000;align=center\" parent=\"1\" vertex=\"1\">\r\n" + 
+                    "      <mxGeometry x=\"200\" width=\"200\" height=\"50\" as=\"geometry\"/>\r\n" + 
+                    "    </mxCell>\r\n" + 
+                    "    <mxCell id=\"06\" value=\"솔비포스\" style=\"tableAttr\" vertex=\"1\" parent=\"1\">\r\n" + 
+                    "      <mxGeometry x=\"50\" y=\"50\" width=\"300\" height=\"300\" as=\"geometry\"/>\r\n" + 
+                    "    </mxCell>\r\n" + 
+                    "  </root>\r\n" + 
+                    "</mxGraphModel>\r\n" + 
+                    "";
             graph = new mxGraph();
             Document doc = mxXmlUtils.parseXml(xml);
             mxCodec codec = new mxCodec(doc);
@@ -87,37 +138,40 @@ public class TableAttrServceTest extends AbstractApplicationContextTest {
                 
                 //스타일
                 String styleStr = cell.getStyle();
-                String[] styles = styleStr.split(";");
-                for(String style : styles) {
-                    
-                    String[] styleKeyValue = style.split("=");
-                    if(styleKeyValue.length < 2) {
-                        continue;
-                    }
-                    //log.debug(styleKeyValue[0]);
-                    switch(Style.getEnum(styleKeyValue[0])) {
-                        case FONT_COLOR: tableAttr.setFontColor(styleKeyValue[1]);
-                            break;
-                        case FONT_NM: tableAttr.setFontNm(styleKeyValue[1]);
-                            break;
-                        case FONT_SIZE: tableAttr.setFontSize(Long.parseLong(styleKeyValue[1]));
-                            break;
-                        case FONT_STYLE_FG: {
-                            tableAttr.setFontStyleFg(styleKeyValue[1]);
-                            break;
+                if(styleStr != null) {
+                    String[] styles = styleStr.split(";");
+                    for(String style : styles) {
+                        
+                        String[] styleKeyValue = style.split("=");
+                        if(styleKeyValue.length < 2) {
+                            continue;
                         }
-                        case TEXTALIGN_FG: {
-                            tableAttr.setTextalignFg(TextalignFg.getEnum(styleKeyValue[1]));
-                            break;
+                        //log.debug(styleKeyValue[0]);
+                        switch(Style.getEnum(styleKeyValue[0])) {
+                            case FONT_COLOR: tableAttr.setFontColor(styleKeyValue[1]);
+                                break;
+                            case FONT_NM: tableAttr.setFontNm(styleKeyValue[1]);
+                                break;
+                            case FONT_SIZE: tableAttr.setFontSize(Long.parseLong(styleKeyValue[1]));
+                                break;
+                            case FONT_STYLE_FG: {
+                                tableAttr.setFontStyleFg(styleKeyValue[1]);
+                                break;
+                            }
+                            case TEXTALIGN_FG: {
+                                tableAttr.setTextalignFg(TextalignFg.getEnum(styleKeyValue[1]));
+                                break;
+                            }
+                            case TEXTVALIGN_FG: {
+                                tableAttr.setTextvalignFg(TextvalignFg.getEnum(styleKeyValue[1]));
+                                break;
+                            }
+                            default:
+                                break;
                         }
-                        case TEXTVALIGN_FG: {
-                            tableAttr.setTextvalignFg(TextvalignFg.getEnum(styleKeyValue[1]));
-                            break;
-                        }
-                        default:
-                            break;
                     }
                 }
+
                 tableAttr.setUseYn("Y");
                 tableAttr.setRegDt(currentDateTimeString());
                 tableAttr.setRegId("bjcho");
@@ -135,7 +189,7 @@ public class TableAttrServceTest extends AbstractApplicationContextTest {
      * mxGraph XML 파싱 테스트
      * 
      */
-    @Test
+    //@Test
     @Ignore
     //@Rollback(false)
     public void test_200() {

@@ -10,11 +10,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import kr.co.solbipos.application.service.sample.SampleService;
+import com.nhncorp.lucy.security.xss.XssPreventer;
+import kr.co.solbipos.application.domain.login.SessionInfo;
+import kr.co.solbipos.base.service.store.tablelayout.TableLayoutService;
+import kr.co.solbipos.enums.Status;
 import kr.co.solbipos.service.message.MessageService;
-import kr.co.solbipos.structure.JsonResult;
+import kr.co.solbipos.service.session.SessionService;
 import kr.co.solbipos.structure.Result;
-import kr.co.solbipos.structure.Result.Status;
 import kr.co.solbipos.system.Prop;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,12 +34,13 @@ public class TableLayoutController {
     
     @Autowired
     Prop prop;
-
     @Autowired
-    SampleService sampleService;
-
+    SessionService sessionService;
     @Autowired
     MessageService messageService;
+    
+    @Autowired
+    TableLayoutService tableLayoutService;
 
     /**
      * 테이블 구성 화면 오픈
@@ -49,7 +52,7 @@ public class TableLayoutController {
      */
     @RequestMapping(value = "/view.sb", method = RequestMethod.GET)
     public String view(HttpServletRequest request, HttpSession session, Model model) {
-      return RESULT_URI + "/tableLayout";
+        return RESULT_URI + "/tableLayout";
     }
 
     /**
@@ -62,12 +65,15 @@ public class TableLayoutController {
      */
     @RequestMapping(value = "/view.sb", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult openTouchkey(HttpServletRequest request, HttpSession session, Model model) {
+    public Result openTouchkey(HttpServletRequest request, HttpSession session, Model model) {
 
-      String xml = "<mxGraphModel>  <root>    <mxCell id=\"0\"/>    <mxCell id=\"1\" parent=\"0\"/>    <mxCell id=\"4\" value=\"1\" style=\"ts2\" vertex=\"1\" parent=\"1\">      <mxGeometry x=\"130\" y=\"40\" width=\"80\" height=\"80\" as=\"geometry\"/>    </mxCell>    <mxCell id=\"5\" value=\"2\" style=\"ts2\" vertex=\"1\" parent=\"1\">      <mxGeometry x=\"130\" y=\"150\" width=\"80\" height=\"80\" as=\"geometry\"/>    </mxCell>    <mxCell id=\"2\" value=\"2층\" parent=\"0\" visible=\"0\"/>    <mxCell id=\"6\" value=\"3\" style=\"ts2\" vertex=\"1\" parent=\"2\">      <mxGeometry x=\"20\" y=\"20\" width=\"80\" height=\"80\" as=\"geometry\"/>    </mxCell>    <mxCell id=\"7\" value=\"4\" style=\"ts2\" vertex=\"1\" parent=\"2\">      <mxGeometry x=\"150\" y=\"20\" width=\"80\" height=\"80\" as=\"geometry\"/>    </mxCell>    <mxCell id=\"3\" value=\"3층\" parent=\"0\" visible=\"0\"/>    <mxCell id=\"8\" value=\"5\" style=\"ts2\" vertex=\"1\" parent=\"3\">      <mxGeometry x=\"30\" y=\"330\" width=\"80\" height=\"80\" as=\"geometry\"/>    </mxCell>    <mxCell id=\"9\" value=\"6\" style=\"ts2\" vertex=\"1\" parent=\"3\">      <mxGeometry x=\"270\" y=\"200\" width=\"80\" height=\"80\" as=\"geometry\"/>    </mxCell>  </root></mxGraphModel>";
-      log.info(xml);
-      Result result = new Result(Status.OK, xml);
-      return new JsonResult(result);
+      //String xml = "<mxGraphModel>  <root>    <mxCell id=\"0\"/>    <mxCell id=\"1\" parent=\"0\"/>    <mxCell id=\"4\" value=\"1\" style=\"ts2\" vertex=\"1\" parent=\"1\">      <mxGeometry x=\"130\" y=\"40\" width=\"80\" height=\"80\" as=\"geometry\"/>    </mxCell>    <mxCell id=\"5\" value=\"2\" style=\"ts2\" vertex=\"1\" parent=\"1\">      <mxGeometry x=\"130\" y=\"150\" width=\"80\" height=\"80\" as=\"geometry\"/>    </mxCell>    <mxCell id=\"2\" value=\"2층\" parent=\"0\" visible=\"0\"/>    <mxCell id=\"6\" value=\"3\" style=\"ts2\" vertex=\"1\" parent=\"2\">      <mxGeometry x=\"20\" y=\"20\" width=\"80\" height=\"80\" as=\"geometry\"/>    </mxCell>    <mxCell id=\"7\" value=\"4\" style=\"ts2\" vertex=\"1\" parent=\"2\">      <mxGeometry x=\"150\" y=\"20\" width=\"80\" height=\"80\" as=\"geometry\"/>    </mxCell>    <mxCell id=\"3\" value=\"3층\" parent=\"0\" visible=\"0\"/>    <mxCell id=\"8\" value=\"5\" style=\"ts2\" vertex=\"1\" parent=\"3\">      <mxGeometry x=\"30\" y=\"330\" width=\"80\" height=\"80\" as=\"geometry\"/>    </mxCell>    <mxCell id=\"9\" value=\"6\" style=\"ts2\" vertex=\"1\" parent=\"3\">      <mxGeometry x=\"270\" y=\"200\" width=\"80\" height=\"80\" as=\"geometry\"/>    </mxCell>  </root></mxGraphModel>";
+        SessionInfo sessionInfo = sessionService.getSessionInfo(request);
+        
+        log.debug(sessionInfo.toString());
+        String xml = tableLayoutService.selectTableLayoutByStore(sessionInfo);
+        log.debug(xml);
+        return new Result(Status.OK, xml);
     }
 
     /**
@@ -80,21 +86,25 @@ public class TableLayoutController {
      */
     @RequestMapping(value = "/save.sb", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult saveTouchKey(HttpServletRequest request, HttpSession session, Model model) {
+    public Result saveTouchKey(HttpServletRequest request, HttpSession session, Model model) {
 
         String xml = "";
+        Result result = new Result(Status.FAIL);
         try {
             log.debug(request.getParameter("bgImage"));
             log.debug(request.getParameter("bgColor"));
-          log.debug(request.getParameter("xml"));
-          xml = URLDecoder.decode(request.getParameter("xml"), "UTF-8").replace("\n", "&#xa;");
-          //TODO 저장 Service 구현 필요
+            log.debug(request.getParameter("xml"));
+            xml = URLDecoder.decode(request.getParameter("xml"), "UTF-8").replace("\n", "&#xa;");
+            log.debug(XssPreventer.unescape(xml));
+            SessionInfo sessionInfo = sessionService.getSessionInfo(request);
+            log.debug(sessionInfo.toString());
+            
+            result = tableLayoutService.setTableLayout(sessionInfo, XssPreventer.unescape(xml));
+            log.debug(result.toString());
         } catch (UnsupportedEncodingException e) {
           e.printStackTrace();
         }
-        Result result = new Result(Status.OK);
-
-        return new JsonResult(result);
+        return result;
     }
 
 }

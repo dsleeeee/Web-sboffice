@@ -6,17 +6,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.ModelAndViewDefiningException;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import kr.co.solbipos.application.domain.login.SessionInfo;
 import kr.co.solbipos.application.domain.resource.ResrceInfo;
+import kr.co.solbipos.enums.Status;
 import kr.co.solbipos.exception.AuthenticationException;
-import kr.co.solbipos.exception.JsonCallException;
+import kr.co.solbipos.exception.JsonException;
 import kr.co.solbipos.service.cmm.CmmMenuService;
 import kr.co.solbipos.service.message.MessageService;
 import kr.co.solbipos.service.session.SessionService;
-import kr.co.solbipos.structure.Result.Status;
 import kr.co.solbipos.utils.spring.WebUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,16 +37,18 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         String requestURL = request.getRequestURI().toString();
         log.info("url : {}, accept : {}, ", requestURL, request.getHeader("accept"));
 
-        // 세션 없음
+        /** 
+         * 세션 종료 처리
+         * */
         if (!sessionService.isValidSession(request)) {
+            sessionService.deleteSessionInfo(request);
             
             if(WebUtil.isJsonRequest(request)) {
                 String msg = messageService.get("msg.cmm.session.expire");
                 String msg1 = messageService.get("msg.cmm.move.login");
-                throw new JsonCallException(Status.LOGIN_EXFIRE, msg + msg1, "/");                
+                throw new JsonException(Status.SESSION_EXFIRE, msg + msg1, "/");                
             }
             else {
-                sessionService.deleteSessionInfo(request, response);
                 response.sendRedirect("/");
                 return false;
             }

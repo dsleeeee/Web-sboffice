@@ -1,6 +1,5 @@
 package kr.co.solbipos.utils.spring;
 
-import static org.springframework.util.ObjectUtils.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

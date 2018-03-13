@@ -42,7 +42,7 @@ window.STENCIL_PATH = window.STENCIL_PATH || '/resource/graph/stencils';
 //window.CONFIG_PATH = window.CONFIG_PATH || '/resource/graph/config';
 
 window.TABLELAYOUT_OPEN_URL = window.TABLELAYOUT_OPEN_URL || '/base/store/tablelayout/tablelayout/view.sb';
-window.TABLELAYOUT_SAVE_URL = window.TABLELAYOUT_SAVE_URL || '/base/store/tablelayout/tablelayoutsave.sb';
+window.TABLELAYOUT_SAVE_URL = window.TABLELAYOUT_SAVE_URL || '/base/store/tablelayout/tablelayout/save.sb';
 
 window.mxBasePath = window.mxBasePath || '/resource/vender/mxgraph/src';
 window.mxLanguage = window.mxLanguage || urlParams['lang'];
@@ -54,7 +54,6 @@ window.mxLanguages = window.mxLanguages || ['ko'];
 <script type="text/javascript" src="/resource/graph/sanitizer/sanitizer.min.js"></script>
 <script type="text/javascript" src="/resource/graph/js/TableLayout.js"></script>
 
-<body class="geEditor">
 <div id="container">
   <div id="component"></div>
   <div id="floor"></div>
@@ -102,4 +101,3 @@ window.mxLanguages = window.mxLanguages || ['ko'];
   }
 })();
 </script>
-</body>

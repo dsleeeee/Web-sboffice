@@ -30,7 +30,7 @@ public @Data class Page {
 
     public void prevNext() {
         if (listScale != null && curr != null) {
-            prev = (curr - 1) * listScale;
+            prev = ((curr - 1) * listScale) + 1;
             next = curr * listScale;
         }
     }

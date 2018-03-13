@@ -3,8 +3,9 @@
      src: url('https://cdn.kcp.co.kr/font_web/NotoSansCJKkr-Regular.woff') format('woff');
 }
 
-#container {
+.container {
   width: 1024px;
+  height: 768px;
   margin: 0px auto;
   padding: 0px;
   /*border: 1px solid #bcbcbc;*/
@@ -44,18 +45,7 @@
   left: 676px;
 }
 
-
-.geEditor {
-  font-family:NotoR;
-  font-size:10pt;
-  border:none;
-  margin:0px;
-}
-.geEditor input[type=text]::-ms-clear {
-  display: none;
-}
-
-.geGroupContainer, .geProdContainer {
+#geGroupContainer, #geProdContainer {
   overflow-x:scroll;
   overflow-y:hidden;
   position:absolute;
@@ -64,13 +54,13 @@
   outline:none;
   /*border: 1px solid #bcbcbc;*/
 }
-.geGroupContainer {
+#geGroupContainer {
   left:0px;
   top:0px;
   width:400px;
   height:140px;
 }
-.geProdContainer {
+#geProdContainer {
   left:0px;
   top:120px;
   width:400px;

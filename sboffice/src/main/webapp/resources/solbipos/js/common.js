@@ -98,10 +98,13 @@
           else if(data.status === "FAIL") {
             return func(data);
           }
-          else if(data.status === "LOGIN_EXFIRE") {
+          else if(data.status === "SESSION_EXFIRE") {
             s_alert.popOk(data.message, function() {
               location.href = data.url;
              });
+          }
+          else if(data.status === "SERVER_ERROR") {
+            s_alert.pop(data.message);
           }
           else {
             var msg = data.status + " : " + data.message;
@@ -112,13 +115,16 @@
         async:true,
         dataType: "json",
         beforeSend: function() {
-          $("#loading").show();
+          $("#loadingback").show();
+          $("#loadingfront").show();
         },
         complete: function() {
-          $("#loading").hide();
+          $("#loadingback").hide();
+          $("#loadingfront").hide();
         },
         error : function(){
-          $("#loading").hide();
+          $("#loadingback").hide();
+          $("#loadingfront").hide();
         }
       });
 //      return $.post( url, data, func, "json" );

@@ -25,11 +25,11 @@ import kr.co.solbipos.base.enums.TblTypeFg;
 import kr.co.solbipos.base.enums.TextalignFg;
 import kr.co.solbipos.base.enums.TextvalignFg;
 import kr.co.solbipos.base.persistence.store.tableattr.TableAttrMapper;
+import kr.co.solbipos.enums.Status;
 import kr.co.solbipos.exception.BizException;
 import kr.co.solbipos.service.message.MessageService;
 import kr.co.solbipos.structure.DefaultMap;
 import kr.co.solbipos.structure.Result;
-import kr.co.solbipos.structure.Result.Status;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -53,7 +53,7 @@ public class TableAttrServiceImpl implements TableAttrService {
     public String selectTableAttrByStore(SessionInfo sessionInfo) {
         DefaultMap<String> param = new DefaultMap<String>();
         param.put("storeCd", sessionInfo.getOrgnCd());
-        param.put("confgFg", String.valueOf(ConfgFg.TABLE_ATTR));
+        param.put("confgFg", ConfgFg.TABLE_ATTR.getCode());
         
         String returnStr = mapper.selectXmlByStore(param);
         if( returnStr == null) {
@@ -68,7 +68,7 @@ public class TableAttrServiceImpl implements TableAttrService {
         //XML 저장
         DefaultMap<String> param = new DefaultMap<String>();
         param.put("storeCd", sessionInfo.getOrgnCd());
-        param.put("confgFg", String.valueOf(ConfgFg.TABLE_ATTR));
+        param.put("confgFg", ConfgFg.TABLE_ATTR.getCode());
         param.put("xml", xml);
         param.put("useYn", "Y");
         param.put("regDt", currentDateTimeString());
@@ -118,7 +118,7 @@ public class TableAttrServiceImpl implements TableAttrService {
                 mxCell cell = (mxCell) c;
                 
                 tableAttr = TableAttr.builder().build();
-                tableAttr.setAttrCd(AttrCd.getEnum(cell.getId().substring(1)));
+                tableAttr.setAttrCd(AttrCd.getEnum(cell.getId()));
                 tableAttr.setAttrNm(String.valueOf(cell.getValue()));
                 
                 //TEST
@@ -134,35 +134,37 @@ public class TableAttrServiceImpl implements TableAttrService {
                 
                 //스타일
                 String styleStr = cell.getStyle();
-                String[] styles = styleStr.split(";");
-                for(String style : styles) {
-                    
-                    String[] styleKeyValue = style.split("=");
-                    if(styleKeyValue.length < 2) {
-                        continue;
-                    }
-                    //log.debug(styleKeyValue[0]);
-                    switch(Style.getEnum(styleKeyValue[0])) {
-                        case FONT_COLOR: tableAttr.setFontColor(styleKeyValue[1]);
-                            break;
-                        case FONT_NM: tableAttr.setFontNm(styleKeyValue[1]);
-                            break;
-                        case FONT_SIZE: tableAttr.setFontSize(Long.parseLong(styleKeyValue[1]));
-                            break;
-                        case FONT_STYLE_FG: {
-                            tableAttr.setFontStyleFg(styleKeyValue[1]);
-                            break;
+                if(styleStr != null) {
+                    String[] styles = styleStr.split(";");
+                    for(String style : styles) {
+                        
+                        String[] styleKeyValue = style.split("=");
+                        if(styleKeyValue.length < 2) {
+                            continue;
                         }
-                        case TEXTALIGN_FG: {
-                            tableAttr.setTextalignFg(TextalignFg.getEnum(styleKeyValue[1]));
-                            break;
+                        //log.debug(styleKeyValue[0]);
+                        switch(Style.getEnum(styleKeyValue[0])) {
+                            case FONT_COLOR: tableAttr.setFontColor(styleKeyValue[1]);
+                                break;
+                            case FONT_NM: tableAttr.setFontNm(styleKeyValue[1]);
+                                break;
+                            case FONT_SIZE: tableAttr.setFontSize(Long.parseLong(styleKeyValue[1]));
+                                break;
+                            case FONT_STYLE_FG: {
+                                tableAttr.setFontStyleFg(styleKeyValue[1]);
+                                break;
+                            }
+                            case TEXTALIGN_FG: {
+                                tableAttr.setTextalignFg(TextalignFg.getEnum(styleKeyValue[1]));
+                                break;
+                            }
+                            case TEXTVALIGN_FG: {
+                                tableAttr.setTextvalignFg(TextvalignFg.getEnum(styleKeyValue[1]));
+                                break;
+                            }
+                            default:
+                                break;
                         }
-                        case TEXTVALIGN_FG: {
-                            tableAttr.setTextvalignFg(TextvalignFg.getEnum(styleKeyValue[1]));
-                            break;
-                        }
-                        default:
-                            break;
                     }
                 }
                 tableAttr.setUseYn("Y");

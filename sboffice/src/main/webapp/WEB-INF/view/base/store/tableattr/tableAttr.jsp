@@ -58,7 +58,6 @@ window.TABLE_ATTR_DEFAULTS = ${defaults};
 <script type="text/javascript" src="/resource/graph/sanitizer/sanitizer.min.js"></script>
 <script type="text/javascript" src="/resource/graph/js/TableAttr.js"></script>
 
-<body class="geEditor">
 <div id="container">
   <div id="component">
     <div id="theGrid"></div>
@@ -107,4 +106,3 @@ window.TABLE_ATTR_DEFAULTS = ${defaults};
   }
 })();
 </script>
-</body>

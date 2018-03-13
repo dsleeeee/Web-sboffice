@@ -61,6 +61,11 @@ public class GridSupportServiceImpl implements GridSupportService {
      * */
 
     @Override
+    public List<HashMap<String, String>> getGridColumns(DefaultMap<Object> map) {
+        return getGridColumns(map, null);
+    }
+    
+    @Override
     public List<HashMap<String, String>> getGridColumns(DefaultMap<Object> map,
             List<String> columnFilter) {
         if (ObjectUtils.isEmpty(map)) {
@@ -87,7 +92,12 @@ public class GridSupportServiceImpl implements GridSupportService {
         }
         return rList;
     }
-
+    
+    @Override
+    public String getGridColumsTable(String table) {
+        return getGridColumsTable(table, null);
+    }
+    
     @Override
     public String getGridColumsTable(String table, List<String> columnFilter) {
         // 테이블 컬럼 조회
@@ -99,11 +109,11 @@ public class GridSupportServiceImpl implements GridSupportService {
 
         boolean isSelectColumn = !ObjectUtils.isEmpty(columnFilter);
         
-        log.error("■■■■■■■■ columnFilter : " + columnFilter + " , isSelectColumn : "+ isSelectColumn);
+        log.debug("■■■■■■■■ columnFilter : " + columnFilter + " , isSelectColumn : "+ isSelectColumn);
         
-        List<HashMap<String, String>> rList = new ArrayList<HashMap<String, String>>();
+        List<HashMap<String, String>> gridHeaderNames = new ArrayList<HashMap<String, String>>();
 
-        rList.add(makeHeader("rnum")); // 로우 no 추가
+        gridHeaderNames.add(makeHeader("rnum")); // 로우 no 추가
 
         int size = columns.size();
         for (int i = 0; i < size; i++) {
@@ -113,24 +123,14 @@ public class GridSupportServiceImpl implements GridSupportService {
 
             if (isSelectColumn) {
                 if (columnFilter.indexOf(column) > -1) {
-                    rList.add(makeHeader(column));
+                    gridHeaderNames.add(makeHeader(column));
                 }
             } else {
-                rList.add(makeHeader(column));
+                gridHeaderNames.add(makeHeader(column));
             }
         }
-
-        return convertToJson(rList);
-    }
-
-    @Override
-    public String getGridColumsTable(String table) {
-        return getGridColumsTable(table, null);
-    }
-
-    @Override
-    public List<HashMap<String, String>> getGridColumns(DefaultMap<Object> map) {
-        return getGridColumns(map, null);
+        // json 포맷의 string 타입으로 변경
+        return convertToJson(gridHeaderNames);
     }
 
     @Override
@@ -139,7 +139,7 @@ public class GridSupportServiceImpl implements GridSupportService {
                 .filter(x -> x.trim().length() != 0) // 다국어 메세지가 없으면 키 이름을 돌려줌
                 .orElse(keyName);
 
-        log.error("■■■■■■■■■■■■■■■■■■■■■■■■  makeHeader keyName: " + keyName + ", msg : "+ msg);
+        log.debug("■■■■■■■■■■■■■■■■■■■■■■■■  makeHeader keyName: " + keyName + ", msg : "+ msg);
         
         HashMap<String, String> rMap = new HashMap<>();
         rMap.put(COLUMN_BINDING, keyName);

@@ -17,14 +17,14 @@ public interface RedisConnService {
     /**
      * Redis 서버를 사용할 수 있는지 여부
      * 
-     * @return
+     * @return {@code boolean} <br> {@code true} 사용가능 <br> {@code false} 사용불가
      */
     boolean isAvailable();
 
     /**
      * Redis 서버를 사용할 수 없는지 여부
      * 
-     * @return
+     * @return {@code boolean} <br> {@code true} 사용불가 <br> {@code false} 사용가능
      */
     boolean isNotAvailable();
 
@@ -37,7 +37,8 @@ public interface RedisConnService {
     /**
      * Redis server 로 ping 명령어를 보내 상태를 확인한다.
      * 
-     * @return
+     * @return {@code String} "pong"
+     * @see JedisConnectionFactory#getConnection()#ping()
      */
     String ping();
 }

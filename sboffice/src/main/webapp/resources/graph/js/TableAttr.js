@@ -141,7 +141,7 @@ Sidebar.prototype.init = function() {
       var cell = cells[i];
       //그래픽 영역의 0, 1은 root, 기본레이어 이므로 +100+1한 값의 인덱스 사용
       //그리드의 데이터 생성 시 +100 +1하였기 때문에.. 
-      theGrid.setCellData((parseInt(cell.getId())-101), 'used', false);
+      theGrid.setCellData((parseInt(cell.getId())-1), 'used', false);
     }
     cellsRemoved.apply(this, arguments);
   }
@@ -160,7 +160,7 @@ Sidebar.prototype.initValue = function() {
   
   for(var i = 0; i < childCount; i++) {
     var cell = model.getChildAt(parent, i);
-    theGrid.setCellData((parseInt(cell.getId())-101), 'used', true);
+    theGrid.setCellData((parseInt(cell.getId())-1), 'used', true);
   }
 };
 
@@ -270,6 +270,7 @@ Sidebar.prototype.makeGrid = function() {
         var lastCell;
         model.beginUpdate();
         try {
+          console.log(item.idx);
           lastCell = graph.insertVertex(parent,
               item.idx,
               numberWithCommas(item.tag),
@@ -301,25 +302,30 @@ Sidebar.prototype.makeGrid = function() {
       var obj;
       for(x = 0; x < TABLE_ATTR_DEFAULTS.length; x++) {
         obj = TABLE_ATTR_DEFAULTS[x];
-        if( cd.toString().substring(1) == obj.attrCd) {
+        if( cd == obj.attrCd) {
           return new mxRectangle(obj.x, obj.y, obj.width, obj.height);
         }
       }
       return new mxRectangle(10, 10, 50, 50);
     };
     
-    //그래프의 child node는 2부터 시작할 수 밖에 없어 코드 맞추기 위해 +100 하였음
-    //등록/수정 전체 적으로 +100 체크 필요
+    //그래프의 child node는 2부터 시작할 수 밖에 없어 코드 맞추기 위해 lpad 하였음
+    function lpad(s, padLength, padString){
+      while(s.length < padLength)
+          s = padString + s;
+      return s;
+    }
+    
     var data = [];
     for(i = 0; i < TABLE_ATTR_ITEMS.length; i++) {
-      console.log(TABLE_ATTR_ITEMS[i]);
-      var cd = (100+i+1);
+      //console.log(TABLE_ATTR_ITEMS[i]);
+      var cd = lpad((i+1).toString(), 2, '0');
       data.push({
         name: TABLE_ATTR_ITEMS[i].nmcodeNm,
         tag: TABLE_ATTR_ITEMS[i].nmcodeItem1,
         used: false,
         rect: findPos(cd),
-        idx: cd //idx는 그리드의 100 + index + 1 입니다. 삭제 시 번호 확인 필요. 
+        idx: cd 
       });
     }
     return data;

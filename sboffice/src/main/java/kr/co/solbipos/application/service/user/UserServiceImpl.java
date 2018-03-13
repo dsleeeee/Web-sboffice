@@ -2,7 +2,6 @@ package kr.co.solbipos.application.service.user;
 
 import static kr.co.solbipos.utils.DateUtil.*;
 import static kr.co.solbipos.utils.HttpUtils.*;
-import static kr.co.solbipos.utils.grid.ReturnUtil.*;
 import static kr.co.solbipos.utils.spring.StringUtil.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,7 +19,6 @@ import kr.co.solbipos.application.enums.user.PwFindResult;
 import kr.co.solbipos.application.persistence.user.UserMapper;
 import kr.co.solbipos.application.service.login.LoginService;
 import kr.co.solbipos.service.session.SessionService;
-import kr.co.solbipos.structure.Result.Status;
 import kr.co.solbipos.system.Prop;
 import kr.co.solbipos.utils.DateUtil;
 import kr.co.solbipos.utils.security.EncUtil;
