@@ -209,7 +209,7 @@ onload = function() {
           $("#theTreeBkmk div[wj-part=root] > .wj-nodelist").eq(sel1Depth).children('.wj-nodelist').eq(sel2Depth).children('.wj-node').eq(sel3Depth).addClass("wj-state-selected");
           location.href = wijmo.format('{url}', s.selectedItem);
         }
-      }
+      } 
     });
     setIcon(getbmkMenu(), "theTreeBkmk");
     initMenu("theTreeBkmk");
