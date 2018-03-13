@@ -59,11 +59,11 @@
 <script>
 
 // 선택된 메뉴의 메뉴코드와 부모메뉴의 메뉴코드
-//var cResrce = "";
-//var pResrce = "";
+var cResrce = "";
+var pResrce = "";
 
-var cResrce = "000173";
-var pResrce = "000030";
+//var cResrce = "000173";
+//var pResrce = "000030";
 
 // 메뉴 트리 생성
 var allMenuTree;
