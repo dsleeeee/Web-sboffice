@@ -54,33 +54,31 @@
 </body>
 
 <script type="text/javascript">
-$(".menuControl").click(function() {
+$(".menuControl").click(function(){
+  
+  if($("#_nav").attr("class") == "menuOpen"){
+    
+    $("#faMenu").hide();
+    $("#theTreeAll").hide();
+    $("#theTreeBkmk").hide();
+    $("#smallMenu").show();
+    
+    showSmallMenu();
+    
+  }else{
+    
+    $("#theTreeAll").show();
+    $("#theTreeBkmk").show();
+    $("#smallMenu").hide();
+    
+    $(".menuTab .all").click(); // 메뉴 펼칠때 전체메뉴를 기본으로 보여줌
+  }
+  
   $("#_nav").toggleClass("menuOpen menuClose");
   $("#_arrow").toggleClass("arrowOpen arrowClose");
+  
 });
 
-/*
-$(".menuTab .all").click(function() {
-  $("#_all").addClass("on");
-  $("#_favorite").removeClass();
-  
-  //$("#faMenu").css("display","none");
-  $("#faMenu").hide();
-  
-  showAllMenu();
-
-});
-
-$(".menuTab .favorite").click(function() {
-  $("#_all").removeClass();
-  $("#_favorite").addClass("on");
-
-  //$("#faMenu").css("display","block");
-  $("#faMenu").show();
-  
-  showBmkMenu();
-});
-*/
 </script>
 
 

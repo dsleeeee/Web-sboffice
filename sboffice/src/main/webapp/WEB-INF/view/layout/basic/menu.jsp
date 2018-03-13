@@ -14,7 +14,6 @@
   <!-- 활성화 : class="on" -->
   <!--//로고영역-->
 
-
   <!--전체,즐겨찾기-->
   <div class="menuTab">
     <p class="all">
@@ -28,37 +27,12 @@
       </a>
     </p>
 
-    <!--접혔을때 : 즐겨찾기 hover 메뉴 (1차 depth만 노출하고 클릭하면 2차, 3차 각각 노출한다.)-->
-    <%-- 
+    <!--close : 즐겨찾기 메뉴 (1차 depth만 노출하고 클릭하면 2차, 3차 각각 노출한다.)-->
     <div class="fahoMenu">
-        <ul>
-            <li class="depth1 menu_pos on"><!--메뉴별 class 추가 (하단 주석에서 class name 참고), focus중일때 on 추가-->
-                <a href="#" class="depth1"><span>포스관리</span></a>
-                <ul class="depth2">
-                    <li class="depth2">
-                        <a href="#" class="depth2 on">POS 운영관리</a><!--focus중일때 on 추가-->
-                        <ul class="depth3">
-                            <li class="depth3"><a href="#" class="depth3 on">미사용 라이센스 조회</a></li><!--focus중일때 on 추가 (1차, 2차, 3차 depth 모두 함께 on 처리되야함) -->
-                            <li class="depth3"><a href="#" class="depth3">패스워드 임의변경</a></li>
-                        </ul>
-                    </li>
-                    <li class="depth2"><a href="#" class="depth2">본사 / 매장마스터</a></li>
-                    <li class="depth2"><a href="#" class="depth2">포스출력물관리</a></li>
-                </ul>
-            </li>
-            <li class="depth1 menu_franchise">
-                <a href="#" class="depth1"><span>가맹점괌리</span></a>
-            </li>
-            <li class="depth1 menu_system">
-                <a href="#" class="depth1"><span>시스템관리</span></a>
-            </li>
-        </ul>    
+        <ul id="fahoMenuList"></ul>
     </div>
-     --%>
-    
-    
-    <!--//접혔을때 : 즐겨찾기 hover 메뉴-->
-
+    <!--//close : 즐겨찾기 메뉴-->
+   
   </div>
   <!--//전체,즐겨찾기-->
 
@@ -71,28 +45,53 @@
     <!--//즐겨찾기한 메뉴가 없을때-->
     
     <!--위즈모 메뉴-->
-    <div>
-      <div id="theTreeAll"  style="display:block;"></div>
-      <div id="theTreeBkmk" style="display:none;"></div>
-    </div>
+    <div id="theTreeAll" style="display:block;"></div>
+    <div id="theTreeBkmk" style="display:none;"></div>
     <!--//위즈모 메뉴-->
+    
+    <!--닫혔을때의 메뉴 : hover하면 기본 2depth까지 보이고 2depth클릭하면 3depth펼쳐지게 해주세요-->
+    <div class="smallMenu" id="smallMenu">
+        <ul id="smallMenuList"></ul>
+    </div>
+    <!--//닫혔을때의 메뉴-->
   </div>
 
 <script>
+
+// 선택된 메뉴의 메뉴코드와 부모메뉴의 메뉴코드
+//var cResrce = "";
+//var pResrce = "";
+
+var cResrce = "000173";
+var pResrce = "000030";
+
+// 메뉴 트리 생성
+var allMenuTree;
+var bmkMenuTree;
+var smallMenu = "N";
+var smallFaho = "N";
+
+// 현재 선택된 메뉴 depth 저장
+var sel1Depth = 0;
+var sel2Depth = 0;
+var sel3Depth = 0;
+
+
+// 전체 메뉴 데이터 조회
+function getAllMenu(){
+  var data = ${sessionScope.sessionInfo.menuData};
+  return data;
+}
+
+// 즐겨찾기 데이터 조회
+function getbmkMenu(){
+  var data = ${sessionScope.sessionInfo.bkmkMenuData};
+  return data;
+}
+
 onload = function() {
   
-
-  // 선택된 메뉴의 메뉴코드와 부모메뉴의 메뉴코드
-  var cResrce = "";
-  var pResrce = "";
-  
-  //var cResrce = "000173";
-  //var pResrce = "000030";
-  
-  var allMenuTree;
-  var bmkMenuTree;
-  
-  showAllMenu();
+  createAllMenu();
 
   $(".menuTab .all").click(function() {
     $("#_all").addClass("on");
@@ -100,7 +99,7 @@ onload = function() {
     
     $("#faMenu").hide();
     
-    if(!allMenuTree) showAllMenu();
+    if(!allMenuTree) createAllMenu();
     
     $("#theTreeAll").show();
     $("#theTreeBkmk").hide();
@@ -111,50 +110,22 @@ onload = function() {
     $("#_all").removeClass();
     $("#_favorite").addClass("on");
 
-    $("#faMenu").show();
+    console.log("즐겨찾기 on : "+ bmkMenuTree)
     
-    if(!bmkMenuTree)  showBmkMenu();
-
-    $("#theTreeAll").hide();
-    $("#theTreeBkmk").show();
+    // 메뉴가 열려있을때만 보여줘야 함.
+    // 메뉴 닫혔을때는 보여주는 즐겨찾기 아이콘 hover하면 작은 메뉴로 보임.
+    if($("#_nav").attr("class") == "menuOpen"){
+      $("#faMenu").show();
+      if(!bmkMenuTree)  createBmkMenu();
+      $("#theTreeAll").hide();
+      $("#theTreeBkmk").show();
+    }
   });
   
-  
-  // 현재 선택된 메뉴 depth 저장
-  var sel1Depth = 0;
-  var sel2Depth = 0;
-  var sel3Depth = 0;
+ 
+  // 전체 메뉴 생성
+  function createAllMenu(){
 
-  // 전체 메뉴 
-  function getAllMenu(){
-    var data = ${sessionScope.sessionInfo.menuData};
-    return data;
-  }
-  
-  // 즐겨찾기
-  function getbmkMenu(){
-    var data = ${sessionScope.sessionInfo.bkmkMenuData};
-    return data;
-  }
-  
-  function showAllMenu(){
-
-    //메뉴 (정리 필요)
-    
-    //var cResrce = ${sessionScope.sessionInfo.currentMenu.resrceCd};
-    //var pResrce = "";
-    
-    // test case 1 : 선택된 메뉴가 없을 경우
-    
-    // test case 2 : 마지막 depth가 2 level
-    //var cResrce = "000314"; // 선택된 메뉴
-    //var pResrce = "000010"; // 선택된 메뉴의 상위 메뉴
-    
-    //test case 3 : 마지막 depth가 3 level
-    //var cResrce = "000113"; // 선택된 메뉴
-    //var pResrce = "000022"; // 선택된 메뉴의 상위 메뉴
-    
-    
     allMenuTree = new wijmo.nav.TreeView('#theTreeAll', {
       itemsSource: getAllMenu(),
       displayMemberPath: 'header',
@@ -163,36 +134,40 @@ onload = function() {
         s.collapseToLevel(0);
       },
       itemClicked: function(s, e){
+        
         if(wijmo.format('{items}', s.selectedItem)) { 
+          
+          // 1depth 초기화 후 class on
           if(wijmo.format('{level1Seq}', s.selectedItem)){
-            $("div[wj-part=root] > .wj-node").eq(sel1Depth).removeClass("on");
-
             sel1Depth = wijmo.format('{level1Seq}', s.selectedItem);
-            $("div[wj-part=root] > .wj-node").eq(sel1Depth).addClass("on");
+            $("#theTreeAll div[wj-part=root] > .wj-node").each(function(i,e){ $(this).removeClass("on");  });
+            $("#theTreeAll div[wj-part=root] > .wj-node").eq(sel1Depth).addClass("on");
           }
+          
+          // 2depth 초기화 후 class on 
           if(wijmo.format('{level2Seq}', s.selectedItem)){
-            $("div[wj-part=root] > .wj-nodelist").children('.wj-node').each(function(i, element){
-              $(this).removeClass("on");
-            });
             sel2Depth = wijmo.format('{level2Seq}', s.selectedItem);
-            $("div[wj-part=root] > .wj-nodelist").eq(sel1Depth).children('.wj-node').eq(sel2Depth).addClass("on")
+            $("#theTreeAll div[wj-part=root] > .wj-nodelist").children('.wj-node').each(function(i, element){ $(this).removeClass("on");  });
+            $("#theTreeAll div[wj-part=root] > .wj-nodelist").eq(sel1Depth).children('.wj-node').eq(sel2Depth).addClass("on");
           }
         }
-        if(wijmo.format('{url}', s.selectedItem) != "") { // 3depth : url 클릭
-          console.log("clicked!!!  " + wijmo.format('{url}', s.selectedItem));
-          //location.href = wijmo.format('{url}', s.selectedItem);
+        // 3depth 초기화 후 class on
+        if(wijmo.format('{url}', s.selectedItem) != "") {
+          sel3Depth = wijmo.format('{level3Seq}', s.selectedItem);
+          // 초기화하면서 접혀야하는데?
+          $("#theTreeAll div[wj-part=root] > .wj-nodelist .wj-nodelist").children('.wj-node').each(function(i, e){  $(this).removeClass("wj-state-selected"); });
+          $("#theTreeAll div[wj-part=root] > .wj-nodelist").eq(sel1Depth).children('.wj-nodelist').eq(sel2Depth).children('.wj-node').eq(sel3Depth).addClass("wj-state-selected");
+          location.href = wijmo.format('{url}', s.selectedItem);
         }
       }
     });
     setIcon(getAllMenu(), "theTreeAll");
     initMenu("theTreeAll");
   }
-  
-  
-  function showBmkMenu(){
-    
-    console.log('isempty : '+ stringUtilObj.isEmpty(getbmkMenu()))
-    
+
+  // 즐겨찾기 메뉴 생성
+  function createBmkMenu(){
+
     if(stringUtilObj.isEmpty(getbmkMenu())){
       $(".faMenu .txt").css("display","block");
     } else {
@@ -207,24 +182,32 @@ onload = function() {
         s.collapseToLevel(0);
       },
       itemClicked: function(s, e){
+        
         if(wijmo.format('{items}', s.selectedItem)) { 
+          
+          // 1depth 초기화 후 class on
           if(wijmo.format('{level1Seq}', s.selectedItem)){
-            $("div[wj-part=root] > .wj-node").eq(sel1Depth).removeClass("on");  //class 초기화
-
             sel1Depth = wijmo.format('{level1Seq}', s.selectedItem);
-            $("div[wj-part=root] > .wj-node").eq(sel1Depth).addClass("on");
+            $("#theTreeBkmk div[wj-part=root] > .wj-node").each(function(i,e){  $(this).removeClass("on");  });
+            $("#theTreeBkmk div[wj-part=root] > .wj-node").eq(sel1Depth).addClass("on");
           }
+          
+          // 2depth 초기화 후 class on 
           if(wijmo.format('{level2Seq}', s.selectedItem)){
-            $("div[wj-part=root] > .wj-nodelist").children('.wj-node').each(function(i, element){ //class 초기화
-              $(this).removeClass("on");
-            });
             sel2Depth = wijmo.format('{level2Seq}', s.selectedItem);
-            $("div[wj-part=root] > .wj-nodelist").eq(sel1Depth).children('.wj-node').eq(sel2Depth).addClass("on")
+            
+            $("#theTreeBkmk div[wj-part=root] > .wj-nodelist").children('.wj-node').each(function(i, element){ $(this).removeClass("on"); });
+            $("#theTreeBkmk div[wj-part=root] > .wj-nodelist").eq(sel1Depth).children('.wj-node').eq(sel2Depth).addClass("on")
           }
         }
-        if(wijmo.format('{url}', s.selectedItem) != "") { // 3depth : url 클릭
-          console.log("clicked!!!  " + wijmo.format('{url}', s.selectedItem));
-          //location.href = wijmo.format('{url}', s.selectedItem);
+        
+        // 3depth 초기화 후 class on
+        if(wijmo.format('{url}', s.selectedItem) != "") {
+          sel3Depth = wijmo.format('{level3Seq}', s.selectedItem);
+          // 초기화하면서 접혀야하는데?
+          $("#theTreeBkmk div[wj-part=root] > .wj-nodelist .wj-nodelist").children('.wj-node').each(function(i, e){ $(this).removeClass("wj-state-selected"); });
+          $("#theTreeBkmk div[wj-part=root] > .wj-nodelist").eq(sel1Depth).children('.wj-nodelist').eq(sel2Depth).children('.wj-node').eq(sel3Depth).addClass("wj-state-selected");
+          location.href = wijmo.format('{url}', s.selectedItem);
         }
       }
     });
@@ -261,19 +244,25 @@ onload = function() {
           for(var j=0; j<item.items.length; j++){
             var item2 = item.items[j];
             if(item2.resrceCd == cResrce){ // 2depth가 마지막 depth일때
-              sel1Depth = pCnt;
+              //sel1Depth = pCnt;
+              sel1Depth = i;
               sel2Depth = j;
               sel3Depth = j;
               stat = true;
             }
             if(item2.resrceCd == pResrce){ // 3depth가 마지막 depth일때
-              sel1Depth = pCnt;
-              sel2Depth = item2.level2Seq;
+              
+              //sel1Depth = pCnt;
+              sel1Depth = i;
+              //sel2Depth = item2.level2Seq;
+              sel2Depth = j;
+
               for(var k=0; k<item2.items.length; k++){
                 var item3 = item2.items[k];
                 if(item3.resrceCd == cResrce){
-                 sel3Depth = item3.level3Seq;
-                 stat = true;
+                  //sel3Depth = item3.level3Seq;
+                  sel3Depth = k;
+                  stat = true;
                 }
               }
             }
@@ -289,8 +278,166 @@ onload = function() {
       }
     }
   }
+
+  ////// 확장형 전체 메뉴와 즐겨찾기 메뉴 클릭 이벤트관련 //////
+  
+  // smallMenu에서 2depth 선택시 기존에 선택되었던 3depth 풀어주기
+  $("#smallMenuList").on("click", "a.depth2", function(){
+    $("#smallMenuList ul.depth3").each(function (i, e){
+        $(this).hide();
+    });
+    
+    if($("[pLevelId="+$(this).attr("levelId")+"]").css("display") == "block"){
+      $("[pLevelId="+$(this).attr("levelId")+"]").hide();
+    }else{
+      $("[pLevelId="+$(this).attr("levelId")+"]").show(); 
+    }
+  });
+  
+  //확장형 즐겨찾기에서 1depth 선택
+  $("#fahoMenuList").on("click", "a.depth1", function(){
+    var clickId = $(this).attr("id");
+    
+    // 1depth 초기화
+    $("#fahoMenuList li.depth1").each(function(i, e){
+      if($(this).attr("cId") == clickId){
+        $(this).addClass("on");
+      }else{
+        $(this).removeClass("on");
+      }
+    });
+
+    // 2depth 초기화
+    $("#fahoMenuList ul.depth2").each(function(i,e){
+      if($(this).attr("pId") == clickId){
+        $(this).show();
+      }else{
+        $(this).hide();
+      }
+    });
+
+  });
+
+  //확장형 즐겨찾기에서 2depth 선택
+  $("#fahoMenuList").on("click", "a.depth2", function(){
+    var clickId = $(this).attr("id");
+    $("#fahoMenuList a.depth2").each(function(i,e){
+      $(this).removeClass("on");
+      if($(this).attr("id") == clickId){
+        $(this).addClass("on"); 
+      }else{
+        $(this).removeClass("on");
+      }
+    });
+    $("#fahoMenuList ul.depth3").each(function (i, e){
+      if($(this).attr("pId") == clickId){
+        $(this).show();
+      }else{
+        $(this).hide();
+      }
+    });
+  });
 }
 
+// 확장형 메뉴 생성여부 체크
+function showSmallMenu(){
+  console.log("showSmallMenu");
+  if(smallMenu == "N") createSmallMenu();
+  if(smallFaho == "N") createSmallFaho();
+  
+  //initSmallMenu('A');
+  initSmallMenu('F');
+}
+
+//확장형 전체 메뉴 생성
+function createSmallMenu(){
+  var menuData = getAllMenu();
+  try{
+    if(menuData.length > 0){
+      $.each(menuData, function(i){
+        var mData1 = menuData[i];
+        var iconClass = (mData1.iconNm)? "depth1 "+mData1.iconNm : "depth1";
+        var $li = $("<li/>").addClass(iconClass).appendTo("#smallMenuList");
+        var $a = $("<a/>").addClass("depth1").attr("href","#").appendTo($li);
+        var $span = $("<span/>").text(mData1.header).appendTo($a);
+        
+        if(mData1.items){
+          var $ul2 = $("<ul/>").addClass("depth2").appendTo($li);
+          $.each(mData1.items, function(j){
+            var mData2 = mData1.items[j];
+            var $li2 = $("<li/>").addClass("depth2").appendTo($ul2);
+            var $a2 = $("<a/>").addClass("depth2").attr("levelId", mData2.level2Seq).attr("href","#").text(mData2.header).appendTo($li2);
+            if(mData2.items){
+              var $ul3 = $("<ul/>").addClass("depth3").attr("pLevelId",mData2.level2Seq).attr("style","display:none;").appendTo($li2);
+              $.each(mData2.items, function(k){
+                var mData3 = mData2.items[k];
+                var $li3 = $("<li/>").addClass("depth3").appendTo($ul3);
+                var $a3 = $("<a/>").addClass("depth3").attr("href","#").text(mData3.header).appendTo($li3);
+              });
+            }
+          });
+        }
+      });
+    }
+    smallMenu = "Y";
+  }catch(e){
+    smallMenu = "N";
+  }
+}
+
+//확장형 즐겨찾기 메뉴 생성
+function createSmallFaho(){
+  var fahoData = getbmkMenu();
+  
+  try{
+    if(fahoData.length > 0){
+      $.each(fahoData, function(i){
+        var fData1 = fahoData[i];
+        var iconClass = (fData1.iconNm)? "depth1 "+fData1.iconNm : "depth1";
+        var $li = $("<li/>").addClass(iconClass).attr("cId",fData1.resrceCd).appendTo("#fahoMenuList");
+        var $a = $("<a/>").addClass("depth1").attr("href","#").attr("id",fData1.resrceCd).appendTo($li);
+        var $span = $("<span/>").text(fData1.header).appendTo($a);
+
+        if(fData1.items){
+          var $ul2 = $("<ul/>").addClass("depth2").attr("pId",fData1.resrceCd).attr("style","display:none;").appendTo($li);
+          $.each(fData1.items, function(j){
+            var fData2 = fData1.items[j];
+            var $li2 = $("<li/>").addClass("depth2").appendTo($ul2);
+            var $a2 = $("<a/>").addClass("depth2").attr("href","#").attr("id",fData2.resrceCd).text(fData2.header).appendTo($li2);
+            if(fData2.items){
+              var $ul3 = $("<ul/>").addClass("depth3").attr("pId",fData2.resrceCd).attr("style","display:none;").appendTo($li2);
+              $.each(fData2.items, function(k){
+                var fData3 = fData2.items[k];
+                var $li3 = $("<li/>").addClass("depth3").appendTo($ul3);
+                var $a3 = $("<a/>").addClass("depth3").attr("href","#").attr("id",fData3.resrceCd).text(fData3.header).appendTo($li3);
+              });
+            }
+          });
+        }
+      });
+    }
+    smallFaho = "Y";
+  }catch(e){
+    smallFaho = "N";
+  }
+}
+
+// 확장형 메뉴 선택된 메뉴가 있을 경우 선택 초기화
+function initSmallMenu(menuType){
+  console.log("initSmallMenu");
+  
+  if(pResrce != "" && cResrce !=""){
+    if(menuType == "A"){  // 전체메뉴
+    } else { // 즐겨찾기 메뉴
+  
+      console.log("pResrce : "+ pResrce + ", cResrce : "+ cResrce);
+      $("#fahoMenuList li.depth1").each(function(i,e){
+//        if()
+  
+      });
+    }
+  }
+}
 
 ////////////////////////////////////////// StringUtil //////////////////////////////////////////
 
@@ -365,17 +512,6 @@ dateUtil.prototype.formatDate = function(dateStr, f) {
 var dateUtilObj = new dateUtil();
 
 </script>
-
-
-
-
-
-
-
-
-
-
-
 
 
 

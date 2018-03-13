@@ -80,11 +80,13 @@
          AND B.DISP_LEVEL = 2
          AND D.USE_YN = 'Y'
     )
-    SELECT B.*
+    SELECT DISTINCT B.*
       FROM CHILD_TAB A,
            TB_WB_RESRCE_INFO B
      WHERE B.RESRCE_CD = A.PP_RESRCE_CD
        AND B.USE_YN = 'Y'
+     ORDER
+        BY B.P_RESRCE, B.RESRCE_CD
   ]]>
   </select>
   
