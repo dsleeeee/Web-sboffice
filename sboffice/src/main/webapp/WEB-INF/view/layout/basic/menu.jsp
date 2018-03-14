@@ -59,11 +59,17 @@
 <script>
 
 // 선택된 메뉴의 메뉴코드와 부모메뉴의 메뉴코드
-var cResrce = "";
-var pResrce = "";
+//var cResrce = "";
+//var pResrce = "";
 
-//var cResrce = "000173";
-//var pResrce = "000030";
+// 테스트용 
+var cResrce = "000173";
+var pResrce = "000030";
+
+// TODO 선택된 메뉴 조회 - 추후
+//var cResrce = ${sessionScope.sessionInfo.currentMenu.resrceCd};
+//var pResrce = ${sessionScope.sessionInfo.currentMenu.pResrce};
+
 
 // 메뉴 트리 생성
 var allMenuTree;
@@ -91,6 +97,7 @@ function getbmkMenu(){
 
 onload = function() {
   
+  // 처음 페이지 로딩시 전체 메뉴 만들고 시작
   createAllMenu();
 
   $(".menuTab .all").click(function() {
@@ -98,22 +105,15 @@ onload = function() {
     $("#_favorite").removeClass();
     
     $("#faMenu").hide();
-    
     if(!allMenuTree) createAllMenu();
     
     $("#theTreeAll").show();
     $("#theTreeBkmk").hide();
-
   });
 
   $(".menuTab .favorite").click(function() {
     $("#_all").removeClass();
     $("#_favorite").addClass("on");
-
-    console.log("즐겨찾기 on : "+ bmkMenuTree)
-    
-    // 메뉴가 열려있을때만 보여줘야 함.
-    // 메뉴 닫혔을때는 보여주는 즐겨찾기 아이콘 hover하면 작은 메뉴로 보임.
     if($("#_nav").attr("class") == "menuOpen"){
       $("#faMenu").show();
       if(!bmkMenuTree)  createBmkMenu();
@@ -123,7 +123,7 @@ onload = function() {
   });
   
  
-  // 전체 메뉴 생성
+  // 전체 메뉴 생성 및 클릭 이벤트
   function createAllMenu(){
 
     allMenuTree = new wijmo.nav.TreeView('#theTreeAll', {
@@ -147,14 +147,13 @@ onload = function() {
           // 2depth 초기화 후 class on 
           if(wijmo.format('{level2Seq}', s.selectedItem)){
             sel2Depth = wijmo.format('{level2Seq}', s.selectedItem);
-            $("#theTreeAll div[wj-part=root] > .wj-nodelist").children('.wj-node').each(function(i, element){ $(this).removeClass("on");  });
-            $("#theTreeAll div[wj-part=root] > .wj-nodelist").eq(sel1Depth).children('.wj-node').eq(sel2Depth).addClass("on");
+            $("#theTreeAll div[wj-part=root] > .wj-nodelist").children('.wj-node').each(function(i, element){ $(this).removeClass("on").addClass("wj-state-collapsed"); });
+            $("#theTreeAll div[wj-part=root] > .wj-nodelist").eq(sel1Depth).children('.wj-node').eq(sel2Depth).removeClass("wj-state-collapsed").addClass("on");
           }
         }
         // 3depth 초기화 후 class on
         if(wijmo.format('{url}', s.selectedItem) != "") {
           sel3Depth = wijmo.format('{level3Seq}', s.selectedItem);
-          // 초기화하면서 접혀야하는데?
           $("#theTreeAll div[wj-part=root] > .wj-nodelist .wj-nodelist").children('.wj-node').each(function(i, e){  $(this).removeClass("wj-state-selected"); });
           $("#theTreeAll div[wj-part=root] > .wj-nodelist").eq(sel1Depth).children('.wj-nodelist').eq(sel2Depth).children('.wj-node').eq(sel3Depth).addClass("wj-state-selected");
           location.href = wijmo.format('{url}', s.selectedItem);
@@ -165,7 +164,7 @@ onload = function() {
     initMenu("theTreeAll");
   }
 
-  // 즐겨찾기 메뉴 생성
+  // 즐겨찾기 메뉴 생성 및 클릭 이벤트
   function createBmkMenu(){
 
     if(stringUtilObj.isEmpty(getbmkMenu())){
@@ -195,16 +194,14 @@ onload = function() {
           // 2depth 초기화 후 class on 
           if(wijmo.format('{level2Seq}', s.selectedItem)){
             sel2Depth = wijmo.format('{level2Seq}', s.selectedItem);
-            
-            $("#theTreeBkmk div[wj-part=root] > .wj-nodelist").children('.wj-node').each(function(i, element){ $(this).removeClass("on"); });
-            $("#theTreeBkmk div[wj-part=root] > .wj-nodelist").eq(sel1Depth).children('.wj-node').eq(sel2Depth).addClass("on")
+            $("#theTreeBkmk div[wj-part=root] > .wj-nodelist").children('.wj-node').each(function(i, element){ $(this).removeClass("on").addClass("wj-state-collapsed");  });
+            $("#theTreeBkmk div[wj-part=root] > .wj-nodelist").eq(sel1Depth).children('.wj-node').eq(sel2Depth).removeClass("wj-state-collapsed").addClass("on");
           }
         }
         
         // 3depth 초기화 후 class on
         if(wijmo.format('{url}', s.selectedItem) != "") {
           sel3Depth = wijmo.format('{level3Seq}', s.selectedItem);
-          // 초기화하면서 접혀야하는데?
           $("#theTreeBkmk div[wj-part=root] > .wj-nodelist .wj-nodelist").children('.wj-node').each(function(i, e){ $(this).removeClass("wj-state-selected"); });
           $("#theTreeBkmk div[wj-part=root] > .wj-nodelist").eq(sel1Depth).children('.wj-nodelist').eq(sel2Depth).children('.wj-node').eq(sel3Depth).addClass("wj-state-selected");
           location.href = wijmo.format('{url}', s.selectedItem);
@@ -217,7 +214,6 @@ onload = function() {
   
   // 메뉴 생성 후, 메뉴 아이콘 셋팅
   function setIcon(data, tree) {
-    
     var iconArr = new Array(Object.keys(data).length);
     $.each(data, function(key, entry){
       if(data[key].iconNm != "" && data[key].iconNm != "null") {
@@ -244,23 +240,17 @@ onload = function() {
           for(var j=0; j<item.items.length; j++){
             var item2 = item.items[j];
             if(item2.resrceCd == cResrce){ // 2depth가 마지막 depth일때
-              //sel1Depth = pCnt;
               sel1Depth = i;
               sel2Depth = j;
               sel3Depth = j;
               stat = true;
             }
             if(item2.resrceCd == pResrce){ // 3depth가 마지막 depth일때
-              
-              //sel1Depth = pCnt;
               sel1Depth = i;
-              //sel2Depth = item2.level2Seq;
               sel2Depth = j;
-
               for(var k=0; k<item2.items.length; k++){
                 var item3 = item2.items[k];
                 if(item3.resrceCd == cResrce){
-                  //sel3Depth = item3.level3Seq;
                   sel3Depth = k;
                   stat = true;
                 }
@@ -281,23 +271,32 @@ onload = function() {
 
   ////// 확장형 전체 메뉴와 즐겨찾기 메뉴 클릭 이벤트관련 //////
   
-  // smallMenu에서 2depth 선택시 기존에 선택되었던 3depth 풀어주기
+  // 확장형 전체메뉴에서 2depth 선택시 
   $("#smallMenuList").on("click", "a.depth2", function(){
-    $("#smallMenuList ul.depth3").each(function (i, e){
-        $(this).hide();
+    var clickId = $(this).attr("levelId");
+    
+    // 2depth 초기화 
+    $("#smallMenuList a.depth2").each(function (i, e){
+      if($(this).attr("levelId") == clickId){
+        $(this).addClass("on");
+      }else{
+        $(this).removeClass("on");
+      }
     });
     
-    if($("[pLevelId="+$(this).attr("levelId")+"]").css("display") == "block"){
-      $("[pLevelId="+$(this).attr("levelId")+"]").hide();
-    }else{
-      $("[pLevelId="+$(this).attr("levelId")+"]").show(); 
-    }
+    // 3depth 초기화
+    $("#smallMenuList ul.depth3").each(function (i, e){
+      if($(this).attr("pLevelId") == clickId){
+        $(this).show();
+      }else{
+        $(this).hide();
+      }
+    });
   });
   
-  //확장형 즐겨찾기에서 1depth 선택
+  // 확장형 즐겨찾기에서 1depth 선택시
   $("#fahoMenuList").on("click", "a.depth1", function(){
     var clickId = $(this).attr("id");
-    
     // 1depth 초기화
     $("#fahoMenuList li.depth1").each(function(i, e){
       if($(this).attr("cId") == clickId){
@@ -306,7 +305,6 @@ onload = function() {
         $(this).removeClass("on");
       }
     });
-
     // 2depth 초기화
     $("#fahoMenuList ul.depth2").each(function(i,e){
       if($(this).attr("pId") == clickId){
@@ -315,12 +313,23 @@ onload = function() {
         $(this).hide();
       }
     });
+    $("#fahoMenuList li.depth2").each(function(i,e){
+        $(this).removeClass("on");
+    });
 
+    // 3depth 초기화
+    $("#fahoMenuList ul.depth3").each(function(i,e){
+      $(this).hide();
+    });
+    $("#fahoMenuList a.depth3").each(function(i,e){
+      $(this).removeClass("on");
+    });
   });
 
-  //확장형 즐겨찾기에서 2depth 선택
+  //확장형 즐겨찾기에서 2depth 선택시
   $("#fahoMenuList").on("click", "a.depth2", function(){
     var clickId = $(this).attr("id");
+    // 2depth 초기화
     $("#fahoMenuList a.depth2").each(function(i,e){
       $(this).removeClass("on");
       if($(this).attr("id") == clickId){
@@ -329,6 +338,7 @@ onload = function() {
         $(this).removeClass("on");
       }
     });
+    // 3depth 초기화
     $("#fahoMenuList ul.depth3").each(function (i, e){
       if($(this).attr("pId") == clickId){
         $(this).show();
@@ -341,11 +351,10 @@ onload = function() {
 
 // 확장형 메뉴 생성여부 체크
 function showSmallMenu(){
-  console.log("showSmallMenu");
   if(smallMenu == "N") createSmallMenu();
   if(smallFaho == "N") createSmallFaho();
   
-  //initSmallMenu('A');
+  initSmallMenu('A');
   initSmallMenu('F');
 }
 
@@ -356,7 +365,9 @@ function createSmallMenu(){
     if(menuData.length > 0){
       $.each(menuData, function(i){
         var mData1 = menuData[i];
-        var iconClass = (mData1.iconNm)? "depth1 "+mData1.iconNm : "depth1";
+        //var iconClass = (mData1.iconNm)? "depth1 "+mData1.iconNm : "depth1";
+        var iconClass = (mData1.iconNm)? "depth1 "+mData1.iconNm : "depth1 menu_pos"; //TODO 아이콘이 없으면 메뉴가 나오지 않아서 일단 포스관리 아이콘으로 대체 
+    
         var $li = $("<li/>").addClass(iconClass).appendTo("#smallMenuList");
         var $a = $("<a/>").addClass("depth1").attr("href","#").appendTo($li);
         var $span = $("<span/>").text(mData1.header).appendTo($a);
@@ -366,14 +377,16 @@ function createSmallMenu(){
           $.each(mData1.items, function(j){
             var mData2 = mData1.items[j];
             var $li2 = $("<li/>").addClass("depth2").appendTo($ul2);
-            var $a2 = $("<a/>").addClass("depth2").attr("levelId", mData2.level2Seq).attr("href","#").text(mData2.header).appendTo($li2);
+            var $a2 = $("<a/>").addClass("depth2").attr("levelId", mData2.resrceCd).attr("href","#").text(mData2.header).appendTo($li2);
             if(mData2.items){
-              var $ul3 = $("<ul/>").addClass("depth3").attr("pLevelId",mData2.level2Seq).attr("style","display:none;").appendTo($li2);
+              var $ul3 = $("<ul/>").addClass("depth3").attr("pLevelId",mData2.resrceCd).attr("style","display:none;").appendTo($li2);
               $.each(mData2.items, function(k){
                 var mData3 = mData2.items[k];
                 var $li3 = $("<li/>").addClass("depth3").appendTo($ul3);
-                var $a3 = $("<a/>").addClass("depth3").attr("href","#").text(mData3.header).appendTo($li3);
+                var $a3 = $("<a/>").addClass("depth3").attr("levelId", mData3.resrceCd).attr("href", mData3.url).text(mData3.header).appendTo($li3);
               });
+            }else{
+              $a2.attr("href", mData2.url);
             }
           });
         }
@@ -409,8 +422,10 @@ function createSmallFaho(){
               $.each(fData2.items, function(k){
                 var fData3 = fData2.items[k];
                 var $li3 = $("<li/>").addClass("depth3").appendTo($ul3);
-                var $a3 = $("<a/>").addClass("depth3").attr("href","#").attr("id",fData3.resrceCd).text(fData3.header).appendTo($li3);
+                var $a3 = $("<a/>").addClass("depth3").attr("href", fData3.url).attr("id",fData3.resrceCd).text(fData3.header).appendTo($li3);
               });
+            }else{
+              $a2.attr("url", fData2.url);
             }
           });
         }
@@ -422,18 +437,49 @@ function createSmallFaho(){
   }
 }
 
+
 // 확장형 메뉴 선택된 메뉴가 있을 경우 선택 초기화
 function initSmallMenu(menuType){
-  console.log("initSmallMenu");
+  console.log('pResrce : '+pResrce);
+  console.log('cResrce : '+cResrce);
   
   if(pResrce != "" && cResrce !=""){
     if(menuType == "A"){  // 전체메뉴
+      
+      $("#smallMenuList a.depth2").each(function(i,e){
+        if($(this).attr("levelId") == pResrce){
+          $(this).addClass("on");
+        }
+      });
+      $("#smallMenuList ul.depth3").each(function(i,e){
+        if($(this).attr("pLevelId") == pResrce){
+          $(this).show();
+        }
+      });
+      
+      $("#smallMenuList a.depth3").each(function(i,e){
+        if($(this).attr("levelId") == cResrce){
+          $(this).addClass("on");
+        }
+      });
+      
     } else { // 즐겨찾기 메뉴
-  
-      console.log("pResrce : "+ pResrce + ", cResrce : "+ cResrce);
-      $("#fahoMenuList li.depth1").each(function(i,e){
-//        if()
-  
+      $("#fahoMenuList a.depth2").each(function(i,e){
+        if($(this).attr("id") == pResrce){
+          $(this).addClass("on");
+          $(this).parents("li").addClass("on");
+          $(this).closest("ul").show();
+        }
+      });
+      $("#fahoMenuList ul.depth3").each(function(i,e){
+        if($(this).attr("pId") == pResrce){
+          $(this).show();
+        }
+      });
+      $("#fahoMenuList a.depth3").each(function(i,e){
+        if($(this).attr("id") == cResrce){
+          $(this).addClass("on");
+        }
       });
     }
   }
