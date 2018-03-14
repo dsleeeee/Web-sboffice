@@ -85,15 +85,3 @@ $(".menuControl").click(function(){
 });
 
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
