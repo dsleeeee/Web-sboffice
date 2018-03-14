@@ -69,12 +69,6 @@
           <a href="javascript:;" class="btn_close histClose" data-value="${item.resrceCd}"></a>
         </li>
       </c:forEach>
-      <c:forEach var="item" items="${hist}" varStatus="status">
-        <li id="${item.resrceCd}">
-          <a href="${item.url}" class="${item.activation == true ? 'on' : ''}">${item.resrceNm}</a>
-          <a href="javascript:;" class="btn_close histClose" data-value="${item.resrceCd}"></a>
-        </li>
-      </c:forEach>
     </ul>
 
     <div class="moveBtn">
