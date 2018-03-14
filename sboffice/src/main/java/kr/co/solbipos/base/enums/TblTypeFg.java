@@ -1,5 +1,7 @@
 package kr.co.solbipos.base.enums;
 
+import java.util.Arrays;
+import java.util.List;
 import org.apache.ibatis.type.MappedTypes;
 import com.fasterxml.jackson.annotation.JsonValue;
 import kr.co.solbipos.enums.CodeEnum;
@@ -42,4 +44,10 @@ public enum TblTypeFg implements CodeEnum {
     public String getCode() {
         return code;
     }
+
+    public static TblTypeFg getEnum(String code) {
+        List<TblTypeFg> list = Arrays.asList(TblTypeFg.values());
+        return list.stream().filter(m -> m.code.equals(code)).findAny().orElse(null);
+    }
+
 }

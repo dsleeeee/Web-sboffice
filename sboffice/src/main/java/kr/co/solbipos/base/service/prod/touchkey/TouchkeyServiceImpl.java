@@ -176,11 +176,14 @@ public class TouchkeyServiceImpl implements TouchkeyService {
                         }
                         //log.debug(styleKeyValue[0]);
                         switch(Style.getEnum(styleKeyValue[0])) {
-                            case FONT_COLOR: touchClass.setFontColor(styleKeyValue[1]);
+                            case FONT_COLOR:
+                                touchClass.setFontColor(styleKeyValue[1]);
                                 break;
-                            case FILL_COLOR: touchClass.setFillColor(styleKeyValue[1]);
+                            case FILL_COLOR:
+                                touchClass.setFillColor(styleKeyValue[1]);
                                 break;
-                            case FONT_SIZE: touchClass.setFontSize(Long.parseLong(styleKeyValue[1]));
+                            case FONT_SIZE:
+                                touchClass.setFontSize(Long.parseLong(styleKeyValue[1]));
                                 break;
                             default:
                                 break;
@@ -244,13 +247,17 @@ public class TouchkeyServiceImpl implements TouchkeyService {
                     }
                     //log.debug(styleKeyValue[0]);
                     switch(Style.getEnum(styleKeyValue[0])) {
-                        case PROD_CD: touch.setProdCd(styleKeyValue[1]);
+                        case PROD_CD:
+                            touch.setProdCd(styleKeyValue[1]);
                             break;
-                        case FONT_COLOR: touch.setFontColor(styleKeyValue[1]);
+                        case FONT_COLOR:
+                            touch.setFontColor(styleKeyValue[1]);
                             break;
-                        case FILL_COLOR: touch.setFillColor(styleKeyValue[1]);
+                        case FILL_COLOR:
+                            touch.setFillColor(styleKeyValue[1]);
                             break;
-                        case FONT_SIZE: touch.setFontSize(Long.parseLong(styleKeyValue[1]));
+                        case FONT_SIZE:
+                            touch.setFontSize(Long.parseLong(styleKeyValue[1]));
                             break;
                         default:
                             break;

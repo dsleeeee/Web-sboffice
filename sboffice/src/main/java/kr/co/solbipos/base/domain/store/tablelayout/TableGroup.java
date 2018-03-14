@@ -33,6 +33,9 @@ public class TableGroup extends Cmm {
     /** 배경이미지명 */
     private String bgImgNm;
 
+    /** 배경색 */
+    private String bgColor;
+
     /** 표기순서 */
     private Long dispSeq;
 
