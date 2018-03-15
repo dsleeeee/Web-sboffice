@@ -45,6 +45,13 @@
   left: 676px;
 }
 
+#content div {
+    font-family:inherit;
+    font-weight:inherit;
+    font-size:inherit;
+    color:inherit;
+}
+
 #geGroupContainer, #geProdContainer {
   overflow-x:scroll;
   overflow-y:hidden;

@@ -193,7 +193,7 @@ Sidebar.prototype.makeGrid = function() {
       }
     }
   });
-  
+
   //RowHeader 없애기
   theGrid.rowHeaders.columns.splice(0, 1);
 
@@ -270,7 +270,6 @@ Sidebar.prototype.makeGrid = function() {
         var lastCell;
         model.beginUpdate();
         try {
-          console.log(item.idx);
           lastCell = graph.insertVertex(parent,
               item.idx,
               numberWithCommas(item.tag),
@@ -1000,7 +999,13 @@ Format.prototype.save = function() {
   mxConstants.GUIDE_COLOR = '#0088cf';
   mxConstants.HIGHLIGHT_OPACITY = 30;
   mxConstants.HIGHLIGHT_SIZE = 8;
-  
-
+  /*
+  var mxSvgCanvas2DCreateDiv = mxSvgCanvas2D.prototype.createDiv
+  mxSvgCanvas2D.prototype.createDiv = function(str, align, valign, style, overflow) {
+    
+    var div = mxSvgCanvas2DCreateDiv.apply(this, arguments);
+    console.log(div);
+  };
+  */
 })();
 

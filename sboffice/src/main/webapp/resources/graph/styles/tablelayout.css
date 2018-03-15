@@ -67,27 +67,11 @@
   padding: 100px;
 }
 
-.geEditor {
-  font-family:NotoR;
-  font-size:10pt;
-  border:none;
-  margin:0px;
-}
-.geEditor input[type=text]::-ms-clear {
-  display: none;
-}
-
-.geGraphContainer {
-  overflow:hidden;
-  position:absolute;
-  cursor:default;
-  background-color:#ffffff;
-  outline:none;
-  /*border: 1px solid #bcbcbc;*/
-  left:0px;
-  top:0px;
-  width:600px;
-  height:600px;
+#content div {
+    font-family:inherit;
+    font-weight:inherit;
+    font-size:inherit;
+    color:inherit;
 }
 
 .geBtn {
