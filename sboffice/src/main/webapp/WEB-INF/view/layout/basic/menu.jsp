@@ -425,7 +425,32 @@ function createSmallFaho(){
 // 확장형 메뉴 선택된 메뉴가 있을 경우 선택 초기화
 function initSmallMenu(menuType){
   console.log("initSmallMenu");
-  
+
+  <%-- 접힌 메뉴 마우스 오버 시 하위 레이어 위치 변경 --%>
+  $(".smallMenu li.depth1").mouseover(function(){
+    var ch = parseInt($(window).height());
+    var $depth2 = $(this).find('ul.depth2');
+    var lh = parseInt($depth2.outerHeight());
+    var bt = parseInt($(this).offset().top);
+    
+    if((bt + lh) > ch) {
+      var pos = ch-(lh+bt+20);
+      $depth2.css("top", pos);
+      $(this).find("a.depth1 span").css("top", pos);
+    }
+    else {
+      $depth2.css("top",0);
+      $(this).find("a.depth1 span").css("top",0);
+    }
+    <%--
+    $depth2.animate({
+      opacity: 1,
+      width:200
+    }, 0.3);
+    --%>
+  });
+
+
   if(pResrce != "" && cResrce !=""){
     if(menuType == "A"){  // 전체메뉴
     } else { // 즐겨찾기 메뉴
@@ -512,12 +537,3 @@ dateUtil.prototype.formatDate = function(dateStr, f) {
 var dateUtilObj = new dateUtil();
 
 </script>
-
-
-
-
-
-
-
-
-
