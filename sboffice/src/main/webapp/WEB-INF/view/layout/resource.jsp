@@ -16,8 +16,12 @@
 
 <script src="/resource/vender/wijmo/js/wijmo.min.js"></script>
 <script src="/resource/vender/wijmo/js/grid/wijmo.grid.min.js"></script>
+<script src="/resource/vender/wijmo/js/grid/wijmo.grid.xlsx.min.js"></script>
+<script src="/resource/vender/wijmo/js/output/wijmo.xlsx.min.js"></script>
 <script src="/resource/vender/wijmo/js/input/wijmo.input.min.js"></script>
 <script src="/resource/vender/wijmo/js/nav/wijmo.nav.min.js"></script>
+<%-- wijmo xlsx 와 관련됨 --%>
+<script src="/resource/vender/jszip/js/jszip.js"></script>
 
 <!-- 추가 20180302 -->
 <script src="/resource/vender/wijmo/js/chart/wijmo.chart.js"></script>
@@ -32,6 +36,7 @@
 <script src="/resource/solbipos/js/gridcomm.js"></script>
 <script src="/resource/solbipos/js/gencomm.js"></script>
 <script src="/resource/solbipos/js/alert.js"></script>
+<script src="/resource/solbipos/js/paging.js"></script>
 
 
 <!-- 추가 20180302 -->

@@ -71,6 +71,13 @@ public class SessionInfo extends Cmm {
     /** 로그인 화면 : 아이디 저장 여부 */
     private boolean chk;
     
+    
+    /**  */
+    private String startDt;
+    /**  */
+    private String endDt;
+    
+    
     /** 
      * 
      * 유져 권한 타입<br> 

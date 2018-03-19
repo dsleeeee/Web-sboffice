@@ -150,7 +150,8 @@
              WHERE USER_ID = #{userId}
                AND INCLD_EXCLD_FG = 'E'
                AND USE_YN = 'Y')
-      AND RESRCE_FG = 'F')
+      /*AND RESRCE_FG = 'F'*/
+      )
   CONNECT BY PRIOR P_RESRCE = RESRCE_CD
       AND LEVEL < 3
     ORDER BY RESRCE_CD ASC
