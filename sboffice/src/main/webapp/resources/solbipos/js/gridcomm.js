@@ -149,6 +149,9 @@
         return new wijmo.input.InputDate(div); 
       },
       genDateVal: function(div, date) {
+        if(date == "") {
+          return wcombo.genDate(div);
+        }
         var dt = new wijmo.input.InputDate(div);
         date = date.substr(0,4) + "-" + date.substr(4,2) + "-" + date.substr(6,2);
         dt.value = new Date(date);
