@@ -129,23 +129,20 @@ $(document).ready(function(){
       {"binding":"loginIp","header":"<s:message code='loginIp' />"},
       {"binding":"loginDt","header":"<s:message code='loginDt' />"},
       {"binding":"posVerNo","header":"<s:message code='posVerNo' />"},
-      {"binding":"sysStatFgNm","header":"<s:message code='sysStatFgNm' />"},
-      {"binding":"loginSeq","header":"loginSeq"}
+      {"binding":"sysStatFgNm","header":"<s:message code='sysStatFgNm' />"}
     ];
   
-  var cl1 = JSON.stringify(${clo.getColumnLayout(1)});
-  var viewName = "${sessionScope.sessionInfo.currentMenu.resrceCd}";
-  var grid = wgrid.genGrid("#theGrid", rdata, viewName, 1, cl1);
-  var hqOfficeCd = wcombo.genInput("#hqOfficeCd");
-  var hqOfficeNm = wcombo.genInput("#hqOfficeNm");
-  var storeCd = wcombo.genInput("#storeCd");
-  var storeNm = wcombo.genInput("#storeNm");
-  var startDt = wcombo.genDateVal("#startDt", "${sessionScope.sessionInfo.startDt}");
-  var endDt = wcombo.genDateVal("#endDt", "${sessionScope.sessionInfo.endDt}");
-  var ldata = ${ccu.getListScale()};
+  var grid         = wgrid.genGrid("#theGrid", rdata, "${menuCd}", 1, ${clo.getColumnLayout(1)});
+  var hqOfficeCd   = wcombo.genInput("#hqOfficeCd");
+  var hqOfficeNm   = wcombo.genInput("#hqOfficeNm");
+  var storeCd      = wcombo.genInput("#storeCd");
+  var storeNm      = wcombo.genInput("#storeNm");
+  var startDt      = wcombo.genDateVal("#startDt", "${sessionScope.sessionInfo.startDt}");
+  var endDt        = wcombo.genDateVal("#endDt", "${sessionScope.sessionInfo.endDt}");
+  var ldata        = ${ccu.getListScale()};
   var listScaleBox = wcombo.genCommonBox("#listScaleBox", ldata);
-  var cdata	= ${ccu.getCommCode("009")};
-  var sysStatFg	= wcombo.genCommonBox("#sysStatFg", cdata);
+  var cdata        = ${ccu.getCommCode("009")};
+  var sysStatFg    = wcombo.genCommonBox("#sysStatFg", cdata);
   
   function search(index) {
     var param = {};
@@ -153,27 +150,27 @@ $(document).ready(function(){
     param.startDt = getDate(startDt);
     param.endDt = getDate(endDt);
     param.chkDt = $('#chkDt').is(":checked");
-  	param.hqOfficeCd = hqOfficeCd.text;
-  	param.hqOfficeNm = hqOfficeNm.text;
-  	param.storeCd = storeCd.text;
-  	param.storeNm = storeNm.text;
-  	param.sysStatFg = sysStatFg.selectedValue;
-  	param.listScale = listScaleBox.selectedValue;
-  	param.curr = index;
-  	
-  	$.postJSON("/pos/confg/loginstatus/loginstatus/list.sb", param, function(result) {
-		var list = result.data.list;
-		
-		if(list.length == 0) {
-		  s_alert.pop(result.message);
-		}
-		
-		grid.itemsSource = list;
-		page.make(result.data.page.curr, result.data.page.totalPage);
-  	})
-  	.fail(function(){
-  		s_alert.pop("Ajax Fail");
-  	});
+    param.hqOfficeCd = hqOfficeCd.text;
+    param.hqOfficeNm = hqOfficeNm.text;
+    param.storeCd = storeCd.text;
+    param.storeNm = storeNm.text;
+    param.sysStatFg = sysStatFg.selectedValue;
+    param.listScale = listScaleBox.selectedValue;
+    param.curr = index;
+    
+    $.postJSON("/pos/confg/loginstatus/loginstatus/list.sb", param, function(result) {
+      var list = result.data.list;
+      
+      if(list.length == 0) {
+        s_alert.pop(result.message);
+      }
+    
+      grid.itemsSource = list;
+      page.make(result.data.page.curr, result.data.page.totalPage);
+      })
+      .fail(function(){
+        s_alert.pop("Ajax Fail");
+    });
   }
   
   <%-- 리스트 조회 --%>
@@ -193,13 +190,10 @@ $(document).ready(function(){
   
   $(document).on("click", "#chkDt", function() {
     var chkDt = $('#chkDt').is(":checked");
-	startDt.isDisabled = chkDt;
-	endDt.isDisabled = chkDt;      
+    startDt.isDisabled = chkDt;
+    endDt.isDisabled = chkDt;
   });
   
 });
   
 </script>
-
-
-
