@@ -120,8 +120,28 @@ onload = function() {
       $("#theTreeAll").hide();
       $("#theTreeBkmk").show();
     }
+    else {
+      <%-- 접힌 메뉴 클릭 시 열린 메뉴 오픈, 즐겨찾기 클릭 처리--%>
+      $(".menuControl").trigger("click");
+      $(".menuTab .favorite").trigger("click");
+    }
   });
   
+  <%-- 접힌 메뉴 클릭 시 열린 메뉴 오픈--%>
+  $(document).on("click", ".smallMenu li.depth1", function(){
+    $(".menuControl").trigger("click");
+    
+    var findClass = $(this).data("value");
+    if(findClass != null) {
+      $("#theTreeAll div.wj-node." + findClass).trigger("click");
+      $.each(allMenuTree.nodes, function(idx){
+        var item = allMenuTree.nodes[idx].dataItem;
+        if(findClass.indexOf(item.iconNm) >= 0) {
+          allMenuTree.selectedItem = item;
+        }
+      });
+    }
+  });
  
   // 전체 메뉴 생성
   function createAllMenu(){
@@ -133,7 +153,7 @@ onload = function() {
       loadedItems: function(s, e) {
         s.collapseToLevel(0);
       },
-      itemClicked: function(s, e){
+      selectedItemChanged: function(s, e){
         
         if(wijmo.format('{items}', s.selectedItem)) { 
           
@@ -357,7 +377,8 @@ function createSmallMenu(){
       $.each(menuData, function(i){
         var mData1 = menuData[i];
         var iconClass = (mData1.iconNm)? "depth1 "+mData1.iconNm : "depth1";
-        var $li = $("<li/>").addClass(iconClass).appendTo("#smallMenuList");
+        <%-- -data-value : 닫힌 메뉴에서 클래스를 이용해 열린메뉴를 열기 위해 사용, 조병준 --%>
+        var $li = $("<li/>").addClass(iconClass).attr("data-value", mData1.iconNm).appendTo("#smallMenuList");
         var $a = $("<a/>").addClass("depth1").attr("href","#").appendTo($li);
         var $span = $("<span/>").text(mData1.header).appendTo($a);
         
