@@ -2,14 +2,17 @@ package kr.co.solbipos.aspect;
 
 import static org.springframework.util.ObjectUtils.*;
 import java.util.HashMap;
+import java.util.List;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
+import kr.co.solbipos.application.domain.cmm.Page;
 import kr.co.solbipos.service.message.MessageService;
 import kr.co.solbipos.service.session.SessionService;
+import kr.co.solbipos.structure.DefaultMap;
 import kr.co.solbipos.structure.JavaScriptResult;
 import kr.co.solbipos.structure.Result;
 
@@ -21,11 +24,11 @@ import kr.co.solbipos.structure.Result;
 @Aspect
 @Component
 public class ResultHandlerAspect {
-    
+
     /** 메세지 서비스 */
     @Autowired
     MessageService messageService;
-    
+
     @Autowired
     SessionService sessionService;
 
@@ -36,8 +39,8 @@ public class ResultHandlerAspect {
      * @return 이전 Method 의 전달받은 객체 {@code Object}
      * @throws Throwable
      */
-    @Around("execution(public kr..Result kr..*Controller.*(..))"                    // json
-            + " || execution(public kr..JavaScriptResult kr..*Controller.*(..))")   // javascript
+    @Around("execution(public kr..Result kr..*Controller.*(..))" // json
+            + " || execution(public kr..JavaScriptResult kr..*Controller.*(..))") // javascript
     public Object ResultHandling(ProceedingJoinPoint pjp) throws Throwable {
 
         Object result = pjp.proceed();
@@ -46,13 +49,19 @@ public class ResultHandlerAspect {
         if (result instanceof JavaScriptResult) {
             return new ModelAndView("script").addObject("result", result);
         }
-        /** Result 결과에서 json 조회 결과가 없을 경우 조회 데이터 없음 메세지를 입력해줌 */
-        else if(result instanceof Result) {
+        /**
+         * Result 결과에서 json 조회 결과가 없을 경우 
+         * 1. 조회 데이터 없음 메세지를 입력해줌 
+         * */
+        else if (result instanceof Result) {
             Result r = (Result) result;
-            if(r.getData() instanceof HashMap) {
+            if (r.getData() instanceof HashMap) {
                 @SuppressWarnings("unchecked")
                 HashMap<String, Object> map = (HashMap<String, Object>) r.getData();
-                if(isEmpty(map.get("list"))) {
+                /** 
+                 * 조회 결과 리스트가 없을 경우 
+                 * */
+                if (isEmpty(map.get("list"))) {
                     // 조회 결과가 없습니다. 메시지를 세팅
                     r.setMessage(messageService.get("msg.cmm.empty.data"));
                 }
@@ -61,32 +70,5 @@ public class ResultHandlerAspect {
         return result;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

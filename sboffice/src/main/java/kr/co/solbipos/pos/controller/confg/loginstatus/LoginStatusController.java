@@ -57,10 +57,6 @@ public class LoginStatusController {
 
         List<DefaultMap<Object>> result = loginStatusService.selectLoginStatus(loginStatus);
 
-        if (result.size() > 0) {
-            loginStatus.setTotalCount(result.get(0).getInt("totCnt"));
-        }
-
         return returnListJson(Status.OK, result, loginStatus);
     }
 }

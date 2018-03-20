@@ -7,8 +7,11 @@ import java.util.List;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
+import kr.co.solbipos.application.domain.cmm.Page;
 import kr.co.solbipos.enums.Status;
+import kr.co.solbipos.structure.DefaultMap;
 import kr.co.solbipos.structure.Result;
+import kr.co.solbipos.utils.spring.ObjectUtil;
 
 /**
  * @author 정용길
@@ -82,6 +85,23 @@ public class ReturnUtil {
     private static Result genListJsonResult(Status status, Object data, Object page) {
         HashMap<String, Object> map = new HashMap<>();
         map.put(LIST, data);
+        
+        /** 
+         * {@author 정용길}
+         * 전체 갯수를 세팅해준다 컨트롤러에서 따로 set 할 필요가 없어짐<br>
+         * page 객체가 kr.co.solbipos.application.domain.cmm.Page 객체를 상속 받고
+         * 조회 쿼리에 전체 갯수 조회 컬럼을 TOT_CNT가 있어야됨
+         * */
+        if(!isEmpty(data)) {
+            @SuppressWarnings("unchecked")
+            List<DefaultMap<Object>> a = (List<DefaultMap<Object>>) data;
+            
+            if(Page.class.isAssignableFrom(page.getClass().getSuperclass())) {
+                Page p = Page.class.cast(page);
+                p.setTotalCount(a.get(0).getInt("totCnt"));
+            }
+        }
+        
         if (!isEmpty(page)) {
             map.put(PAGE, page);
         }

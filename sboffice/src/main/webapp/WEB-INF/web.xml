@@ -91,20 +91,10 @@
   <jsp-config>
     <!-- tag tld start -->
     <taglib>
-      <taglib-uri>solbipos/htmlTag</taglib-uri>
-      <taglib-location>/WEB-INF/tld/htmlTag.tld</taglib-location>
-    </taglib>
-    <taglib>
       <taglib-uri>solbipos/function</taglib-uri>
       <taglib-location>/WEB-INF/tld/function.tld</taglib-location>
     </taglib>
     <!-- tag tld end -->
-    <!-- 
-    <taglib>
-      <taglib-uri>solbipos/cmmCode</taglib-uri>
-      <taglib-location>/WEB-INF/tld/cmmCode.tld</taglib-location>
-    </taglib>
-     -->
     
     <jsp-property-group>
       <url-pattern>*.jsp</url-pattern>
