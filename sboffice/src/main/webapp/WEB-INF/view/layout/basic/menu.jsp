@@ -59,12 +59,12 @@
 <script>
 
 // 선택된 메뉴의 메뉴코드와 부모메뉴의 메뉴코드
-//var cResrce = "";
-//var pResrce = "";
+var cResrce = "";
+var pResrce = "";
 
 // 테스트용 
-var cResrce = "000173";
-var pResrce = "000030";
+//var cResrce = "000173";
+//var pResrce = "000030";
 
 // TODO 선택된 메뉴 조회 - 추후
 //var cResrce = ${sessionScope.sessionInfo.currentMenu.resrceCd};
@@ -360,37 +360,38 @@ function showSmallMenu(){
 
 //확장형 전체 메뉴 생성
 function createSmallMenu(){
+  
   var menuData = getAllMenu();
   try{
     if(menuData.length > 0){
-      $.each(menuData, function(i){
+      var mData = "<ul>";
+      $.each(menuData, function(i){ // 1depth
         var mData1 = menuData[i];
-        //var iconClass = (mData1.iconNm)? "depth1 "+mData1.iconNm : "depth1";
         var iconClass = (mData1.iconNm)? "depth1 "+mData1.iconNm : "depth1 menu_pos"; //TODO 아이콘이 없으면 메뉴가 나오지 않아서 일단 포스관리 아이콘으로 대체 
-    
-        var $li = $("<li/>").addClass(iconClass).appendTo("#smallMenuList");
-        var $a = $("<a/>").addClass("depth1").attr("href","#").appendTo($li);
-        var $span = $("<span/>").text(mData1.header).appendTo($a);
-        
+        mData += "<li class=\""+iconClass+"\">";
+        mData += "<a href=\"javascript:;\" class=\"depth1\"><span>"+mData1.header+"</span></a>";
         if(mData1.items){
-          var $ul2 = $("<ul/>").addClass("depth2").appendTo($li);
-          $.each(mData1.items, function(j){
+          mData += "<ul class=\"depth2\">";
+          $.each(mData1.items, function(j){ // 2depth
             var mData2 = mData1.items[j];
-            var $li2 = $("<li/>").addClass("depth2").appendTo($ul2);
-            var $a2 = $("<a/>").addClass("depth2").attr("levelId", mData2.resrceCd).attr("href","#").text(mData2.header).appendTo($li2);
+            mData += "<li class=\"depth2\">";
             if(mData2.items){
-              var $ul3 = $("<ul/>").addClass("depth3").attr("pLevelId",mData2.resrceCd).attr("style","display:none;").appendTo($li2);
-              $.each(mData2.items, function(k){
+              mData += "<a href=\"javascript:;\" class=\"depth2\" levelId=\""+mData2.resrceCd+"\">"+mData2.header+"</a>";
+              mData += "<ul class=\"depth3\" pLevelId=\""+mData2.resrceCd+"\" style=\"display:none;\">";
+              $.each(mData2.items, function(k){ // 3depth
                 var mData3 = mData2.items[k];
-                var $li3 = $("<li/>").addClass("depth3").appendTo($ul3);
-                var $a3 = $("<a/>").addClass("depth3").attr("levelId", mData3.resrceCd).attr("href", mData3.url).text(mData3.header).appendTo($li3);
+                mData += "<li class=\"depth3\"><a href=\""+mData3.url+"\" class=\"depth3\" levelId=\""+mData3.resrceCd+"\">"+mData3.header+"</a></li>";
               });
+              mData += "</ul>";
             }else{
-              $a2.attr("href", mData2.url);
+              mData += "<a href=\""+mData2.url+"\" class=\"depth2\">"+mData2.header+"</a>";
             }
           });
+          mData += "</ul>";
         }
       });
+      mData += "</ul>";
+      $("#smallMenuList").html(mData);
     }
     smallMenu = "Y";
   }catch(e){
@@ -401,37 +402,38 @@ function createSmallMenu(){
 //확장형 즐겨찾기 메뉴 생성
 function createSmallFaho(){
   var fahoData = getbmkMenu();
-  
   try{
     if(fahoData.length > 0){
+      var fData = "<ul>";
+      
       $.each(fahoData, function(i){
         var fData1 = fahoData[i];
         var iconClass = (fData1.iconNm)? "depth1 "+fData1.iconNm : "depth1";
-        var $li = $("<li/>").addClass(iconClass).attr("cId",fData1.resrceCd).appendTo("#fahoMenuList");
-        var $a = $("<a/>").addClass("depth1").attr("href","#").attr("id",fData1.resrceCd).appendTo($li);
-        var $span = $("<span/>").text(fData1.header).appendTo($a);
-
+        fData += "<li class=\""+iconClass+"\" cId=\""+fData1.resrceCd+"\">";
+        fData += "<a href=\"javascript:;\" class=\"depth1\" id=\""+fData1.resrceCd+"\"><span>"+fData1.header+"</span></a>";
         if(fData1.items){
-          var $ul2 = $("<ul/>").addClass("depth2").attr("pId",fData1.resrceCd).attr("style","display:none;").appendTo($li);
+          fData += "<ul class=\"depth2\" pId=\""+fData1.resrceCd+"\" style=\"display:none;\">";
           $.each(fData1.items, function(j){
             var fData2 = fData1.items[j];
-            var $li2 = $("<li/>").addClass("depth2").appendTo($ul2);
-            var $a2 = $("<a/>").addClass("depth2").attr("href","#").attr("id",fData2.resrceCd).text(fData2.header).appendTo($li2);
+            fData += "<li class=\"depth2\">";
+            fData += "<a href=\"javascript:;\" class=\"depth2\" id=\""+fData2.resrceCd+"\">"+fData2.header+"</a>";
             if(fData2.items){
-              var $ul3 = $("<ul/>").addClass("depth3").attr("pId",fData2.resrceCd).attr("style","display:none;").appendTo($li2);
+              fData += "<ul class=\"depth3\" pId=\""+fData2.resrceCd+"\" style=\"display:none;\">";
               $.each(fData2.items, function(k){
                 var fData3 = fData2.items[k];
-                var $li3 = $("<li/>").addClass("depth3").appendTo($ul3);
-                var $a3 = $("<a/>").addClass("depth3").attr("href", fData3.url).attr("id",fData3.resrceCd).text(fData3.header).appendTo($li3);
+                fData += "<li class=\"depth3\"><a href=\""+fData3.url+"\" class=\"depth3\" id=\""+fData3.resrceCd+"\" >"+fData3.header+"</a></li>";
               });
-            }else{
-              $a2.attr("url", fData2.url);
+              fData += "</ul>";
             }
+            fData += "</li>";
           });
+          fData += "  </ul>";
         }
       });
+      fData += "<ul>";
+      $("#fahoMenuList").html(fData);
+      smallFaho = "Y";
     }
-    smallFaho = "Y";
   }catch(e){
     smallFaho = "N";
   }
@@ -440,8 +442,6 @@ function createSmallFaho(){
 
 // 확장형 메뉴 선택된 메뉴가 있을 경우 선택 초기화
 function initSmallMenu(menuType){
-  console.log('pResrce : '+pResrce);
-  console.log('cResrce : '+cResrce);
   
   if(pResrce != "" && cResrce !=""){
     if(menuType == "A"){  // 전체메뉴
