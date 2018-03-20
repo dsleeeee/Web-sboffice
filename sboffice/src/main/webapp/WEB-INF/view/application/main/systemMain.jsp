@@ -159,11 +159,10 @@
 function getData(numCount) {
     var data = new wijmo.collections.ObservableArray();
     //var data = [];
-
     for (var i = 0; i < numCount; i++) {
-        data.push(getRandomData('M' + getRandomValue(200)));
+      //data.push(getRandomData('M' + getRandomValue(200)));
+      data.push(getRandomData('11월 28일'));
     }
-    
 //    console.log(JSON.stringify(data));
     return data;
 }
@@ -185,7 +184,7 @@ function updateMenuHeader(menu, prefix, text) {
     menu.header = prefix + text;
 }
 
-var flexChartPoints = 10;
+var flexChartPoints = 7;
 
 $(document).ready(function(){
   // 위 차트
@@ -194,6 +193,7 @@ $(document).ready(function(){
   chart1.chartType = wijmo.chart.ChartType.Line;
   chart1.itemsSource = getData(flexChartPoints); // 여기에 받아온 데이터 넣기
   chart1.bindingX = 'x';
+  chart1.palette = ['#93cbfc', '#90f0fc'];
   
   for (var i = 0; i < 2; i++) {
       var series = new wijmo.chart.Series();
@@ -213,10 +213,12 @@ $(document).ready(function(){
   chart2.beginUpdate();
   chart2.chartType = wijmo.chart.ChartType.Column;
   chart2.itemsSource = getData(flexChartPoints); // 여기에 받아온 데이터 넣기
-
+  chart2.bindingX = 'x';
+  
   chart2.chartType = parseInt(0);
   chart2.stacking = parseInt(1);
   chart2.rotated = false;
+  chart2.palette = ['#93cbfc', '#90f0fc'];
 
   for (var i = 0; i < 2; i++) {
       var series = new wijmo.chart.Series();

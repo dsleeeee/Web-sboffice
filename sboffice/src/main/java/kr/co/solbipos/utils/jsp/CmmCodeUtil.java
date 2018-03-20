@@ -140,6 +140,11 @@ public class CmmCodeUtil {
         }
         List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 
+        HashMap<String, String> m = new HashMap<>();
+        m.put(COMBO_NAME, "전체");
+        m.put(COMBO_VALUE, "all");
+        list.add(m);
+        
         source.stream().forEach(x -> {
             list.add(assmbl(x, name, value)); // 콤보박스의 내용을 리스트에 추가
         });

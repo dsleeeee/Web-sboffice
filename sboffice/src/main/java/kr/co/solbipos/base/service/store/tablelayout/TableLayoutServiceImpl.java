@@ -18,6 +18,7 @@ import kr.co.solbipos.application.domain.login.SessionInfo;
 import kr.co.solbipos.base.domain.store.tablelayout.Table;
 import kr.co.solbipos.base.domain.store.tablelayout.TableGroup;
 import kr.co.solbipos.base.enums.ConfgFg;
+import kr.co.solbipos.base.enums.Style;
 import kr.co.solbipos.base.enums.TblGrpFg;
 import kr.co.solbipos.base.enums.TblTypeFg;
 import kr.co.solbipos.base.persistence.store.tableattr.TableAttrMapper;
@@ -130,11 +131,36 @@ public class TableLayoutServiceImpl implements TableLayoutService {
                 
                 tableGroup.setTblGrpCd(layer.getId());
                 tableGroup.setTblGrpNm(String.valueOf(layer.getValue()));
-                //TODO 테이블그룹구분, JS부터 개발할 것
-                tableGroup.setTblGrpFg(TblGrpFg.NORMAL);
                 //TODO 배경이미지 그룹별로 넣을 수 있게 JS부터 개발할 것
                 //tableGroup.setBgImgNm("")
                 
+                //스타일
+                String styleStr = layer.getStyle();
+                if(styleStr != null) {
+                    String[] styles = styleStr.split(";");
+                    for(String style : styles) {
+                        
+                        String[] styleKeyValue = style.split("=");
+                        if(styleKeyValue.length < 2) {
+                            continue;
+                        }
+                        //log.debug(styleKeyValue[0]);
+                        switch(Style.getEnum(styleKeyValue[0])) {
+                            case TBL_GRP_FG:
+                                tableGroup.setTblGrpFg(TblGrpFg.getEnum(styleKeyValue[1]));
+                                break;
+                            case BG_COLOR:
+                                tableGroup.setBgColor(styleKeyValue[1]);
+                                break;
+                            case BG_IMG:
+                                tableGroup.setBgImgNm(styleKeyValue[1]);
+                            break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+
                 tableGroup.setDispSeq(Long.parseLong((String.valueOf(i+1))));
                 tableGroup.setUseYn("Y");
                 tableGroup.setRegDt(regDt);

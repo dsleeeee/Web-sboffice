@@ -144,24 +144,24 @@ public class TableAttrServiceImpl implements TableAttrService {
                         }
                         //log.debug(styleKeyValue[0]);
                         switch(Style.getEnum(styleKeyValue[0])) {
-                            case FONT_COLOR: tableAttr.setFontColor(styleKeyValue[1]);
+                            case FONT_COLOR:
+                                tableAttr.setFontColor(styleKeyValue[1]);
                                 break;
-                            case FONT_NM: tableAttr.setFontNm(styleKeyValue[1]);
+                            case FONT_NM:
+                                tableAttr.setFontNm(styleKeyValue[1]);
                                 break;
-                            case FONT_SIZE: tableAttr.setFontSize(Long.parseLong(styleKeyValue[1]));
+                            case FONT_SIZE:
+                                tableAttr.setFontSize(Long.parseLong(styleKeyValue[1]));
                                 break;
-                            case FONT_STYLE_FG: {
+                            case FONT_STYLE_FG:
                                 tableAttr.setFontStyleFg(styleKeyValue[1]);
                                 break;
-                            }
-                            case TEXTALIGN_FG: {
+                            case TEXTALIGN_FG:
                                 tableAttr.setTextalignFg(TextalignFg.getEnum(styleKeyValue[1]));
                                 break;
-                            }
-                            case TEXTVALIGN_FG: {
+                            case TEXTVALIGN_FG:
                                 tableAttr.setTextvalignFg(TextvalignFg.getEnum(styleKeyValue[1]));
                                 break;
-                            }
                             default:
                                 break;
                         }

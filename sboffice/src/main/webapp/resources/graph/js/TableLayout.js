@@ -141,7 +141,8 @@ Sidebar.prototype.init = function() {
   var tableSize = this.graph.defaultTableSize;
   
   //ts2는 xml과 message 파일에 정의되어야 함
-  this.addToolbarIcon('ts2', STENCIL_PATH + '/ts2.png', tableSize.width, tableSize.height);
+  //tblTypeFg:1:사각,2:원탁,3:포장,4:배달,5:최소
+  this.addToolbarIcon('ts2','tblTypeFg=1;tblSeatCnt=2;', STENCIL_PATH + '/ts2.png', tableSize.width, tableSize.height);
   toolbar.addLine();
   //this.addSidebarIcon('ts2', '/tableSquare2.jpg');
 };
@@ -149,11 +150,11 @@ Sidebar.prototype.init = function() {
 /**
  * 왼쪽 매장구성요소 아이콘 추가
  */
-Sidebar.prototype.addToolbarIcon = function(style, icon, w, h) {
+Sidebar.prototype.addToolbarIcon = function(type, style, icon, w, h) {
   var graph = this.graph;
   var toolbar = this.toolbar;
 
-  var vertex = new mxCell(null, new mxGeometry(0, 0, w, h), style);
+  var vertex = new mxCell(null, new mxGeometry(0, 0, w, h), type + ';' + style);
   vertex.setVertex(true);
 
   //Drop 이벤트 처리
@@ -179,7 +180,7 @@ Sidebar.prototype.addToolbarIcon = function(style, icon, w, h) {
 
   // Creates the image which is used as the drag icon (preview)
   var img = toolbar.addMode(null, icon, funct);
-  img.title = mxResources.get(style);
+  img.title = mxResources.get(type);
   
   //DnD 활성화
   var ds = mxUtils.makeDraggable(img, graph, funct, img, -(w/2), -(h/2));
@@ -224,6 +225,14 @@ Floor.prototype.clear = function() {
     return ((count+3)*30)+50;
   };
   
+  //TODO 그룹구분 설정
+  //그룹 등록 시 선택한 값을 레이어에 등록해 두었다가 팝업 재 생성 시 사용
+  var tblGrpFg = [
+    {id:'1', name:mxResources.get('tblGrpFgNormal')},
+    {id:'2', name:mxResources.get('tblGrpFgTogo')},
+    {id:'3', name:mxResources.get('tblGrpFgDelivery')}
+  ];
+  var tblGrpFgMap = new wijmo.grid.DataMap(tblGrpFg, 'id', 'name');
   
   //층설정 레이어 생성 - Wijmo 그리드 포함
   var makePopup = function(btn) {
@@ -233,6 +242,7 @@ Floor.prototype.clear = function() {
         data.push({
             id: layer.id,
             name: layer.value||mxResources.get('background'),
+            tblGrpFg: graph.getCellStyle(layer)['tblGrpFg'] || '1',
             layer: layer //graph Cell 정보 추가, add/remove/rename에 사용!
           });
       }))(model.getChildAt(model.root, i));
@@ -249,8 +259,9 @@ Floor.prototype.clear = function() {
       //newRowAtTop: true,
       selectionMode: 'Row',
       columns: [
-        {binding: 'id', header: 'ID', isReadOnly: true, visible: false},
+        {binding: 'id', isReadOnly: true, visible: false},
         {binding: 'name', header: mxResources.get('floorName'), isRequired: true},
+        {binding: 'tblGrpFg', header: mxResources.get('tblGrpFg'), dataMap:tblGrpFgMap},
         {binding: 'layer', visible: false}
       ],
       rowAdded: function(s, e) {
@@ -262,6 +273,9 @@ Floor.prototype.clear = function() {
           try {
             var layer = graph.addCell(new mxCell(), graph.model.root);
             //graph.setDefaultParent(layer);
+            s.rows[e.row].dataItem.tblGrpFg = '1';
+            //layer.setStyle(setStyleValue(layer.getStyle(), 'tblGrpFg', s.rows[e.row].dataItem.tblGrpFg));
+            graph.setCellStyles('tblGrpFg', s.rows[e.row].dataItem.tblGrpFg, [layer]);
             s.rows[e.row].dataItem.layer = layer;
           }
           finally {
@@ -273,13 +287,17 @@ Floor.prototype.clear = function() {
         //console.log(s.rows[e.row]);
         var layer = s.rows[e.row].dataItem.layer;
         var layerName = s.rows[e.row].dataItem.name;
+        var tblGrpFg = s.rows[e.row].dataItem.tblGrpFg;
+        var model = graph.getModel();
         if (graph.isEnabled() && layerName != null) {
-          graph.model.beginUpdate();
+          model.beginUpdate();
           try {
-            graph.getModel().setValue(layer, layerName);
+            model.setValue(layer, layerName);
+            //model.setStyle(layer, setStyleValue(layer.getStyle(), 'tblGrpFg', tblGrpFg));
+            graph.setCellStyles('tblGrpFg', tblGrpFg, [layer]);
           }
           finally {
-            graph.model.endUpdate();
+            model.endUpdate();
           }
         }
       },
@@ -412,6 +430,25 @@ Floor.prototype.refresh = function() {
     else {
       graph.setDefaultParent(null);
     }
+    
+    //해당레이어의 style을 가져와서 화면 컨테이너에 적용
+    var styles = graph.getCellStyle(layer);
+    //백그라운드컬러
+    graph.container.style.backgroundColor = styles[mxConstants.STYLE_FILLCOLOR];
+    
+    //백그라운드이미지
+    if(styles[mxConstants.STYLE_IMAGE] != null) {
+      var img = new mxImage(styles[mxConstants.STYLE_IMAGE].replace('%3B',';'),
+          styles[mxConstants.STYLE_IMAGE_WIDTH],
+          styles[mxConstants.STYLE_IMAGE_HEIGHT]);
+      graph.setBackgroundImage(img);
+      graph.view.validateBackgroundImage();
+    }
+    else {
+      graph.setBackgroundImage();
+      graph.view.validateBackgroundImage();
+    }
+
     //클릭이벤트 - 선택된 레이어 visible true
     model.setVisible(layer, true);
   };
@@ -853,6 +890,8 @@ Format.prototype.backgroundColor = function() {
   var theInputColor = new wijmo.input.InputColor('#backgroundColor', {
     value: graphContainer.style.backgroundColor,
     valueChanged: function(s, e) {
+      var layer = graph.getDefaultParent();
+      graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, s.value, [layer]);
       graphContainer.style.backgroundColor = s.value; 
     }
   });
@@ -875,6 +914,9 @@ Format.prototype.backgroundImage = function() {
   var btn = mxUtils.button(mxResources.get('initBackgroundImage'), mxUtils.bind(this, function(evt) {
     graph.setBackgroundImage();
     graph.view.validateBackgroundImage();
+    //해당 레이어에 이미지 정보 저장
+    var layer = graph.getDefaultParent();
+    graph.setCellStyles(mxConstants.STYLE_IMAGE, '', [layer]);
   }));
   btn.setAttribute('title', mxResources.get('initBackgroundImage'));
   btn.className = 'geBtn';
@@ -901,6 +943,11 @@ Format.prototype.backgroundImage = function() {
             var img = new mxImage(e.target.result, graph.container.offsetWidth, graph.container.offsetHeight);
             graph.setBackgroundImage(img);
             graph.view.validateBackgroundImage();
+            //해당 레이어에 이미지 정보 저장
+            var layer = graph.getDefaultParent();
+            graph.setCellStyles(mxConstants.STYLE_IMAGE, img.src.replace(';','%3B'), [layer]);
+            graph.setCellStyles(mxConstants.STYLE_IMAGE_WIDTH, img.width, [layer]);
+            graph.setCellStyles(mxConstants.STYLE_IMAGE_HEIGHT, img.height, [layer]);
           }
           reader.readAsDataURL(input.files[0]);
       }
@@ -1145,8 +1192,44 @@ Format.prototype.save = function() {
 
 };
 
+/**
+ * 스타일 문자열에서 특정 스타일 값 추출
+ * @param style
+ * @param name
+ * @returns
+ */
+function getStyleValue(style, name) {
+  var styles = [];
+  var keyValue = [];
+  var retValue = '1';
+  //스타일값 중에서 테이블그룹구분 추출
+  if(style != null) {
+    styles = style.split(';');
+    styles.forEach( function(currentValue) {
+      if(currentValue.indexOf(name) >= 0) {
+        keyValue = currentValue.split('=');
+        retValue = keyValue[1];
+      }
+    });
+  }
+  return retValue;
+}
+/**
+ * 스타일 문자열에서 동일한 것은 대체 없으면 추가
+ * @param style
+ * @param name
+ * @returns
+ */
+function setStyleValue(style, name, value) {
+  if(style != null) {
+    if(style.indexOf(name) < 0) {
+      return style + name + '=' + value + ';'; 
+    }
+    return style.replace(/tblGrpFg=\d+/, "tblGrpFg=" + value);
+  }
+  return name + '=' + value + ';'; 
 
-
+}
 
 
 
@@ -1171,6 +1254,5 @@ Format.prototype.save = function() {
   mxConstants.HIGHLIGHT_OPACITY = 30;
   mxConstants.HIGHLIGHT_SIZE = 8;
   
-
 })();
 

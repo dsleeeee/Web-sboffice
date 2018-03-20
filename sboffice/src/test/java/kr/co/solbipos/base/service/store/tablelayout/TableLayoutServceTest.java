@@ -19,6 +19,7 @@ import com.mxgraph.util.mxXmlUtils;
 import com.mxgraph.view.mxGraph;
 import kr.co.solbipos.base.domain.store.tablelayout.Table;
 import kr.co.solbipos.base.domain.store.tablelayout.TableGroup;
+import kr.co.solbipos.base.enums.Style;
 import kr.co.solbipos.base.enums.TblGrpFg;
 import kr.co.solbipos.base.enums.TblTypeFg;
 import lombok.extern.slf4j.Slf4j;
@@ -166,14 +167,37 @@ public class TableLayoutServceTest {
                 
                 //TODO 테이블 그룹 파라미터 생성
                 tableGroup.setStoreCd("S000001");
-                //TODO selectkey 이용
                 //tableGroup.setTblGrpCd("");
                 tableGroup.setTblGrpNm(String.valueOf(layer.getValue()));
-                //TODO 테이블그룹구분, JS부터 개발할 것
-                tableGroup.setTblGrpFg(TblGrpFg.NORMAL);
                 //TODO 배경이미지 그룹별로 넣을 수 있게 JS부터 개발할 것
-                //tableGroup.setBgImgNm("")
-                ;
+                //tableGroup.setBgImgNm("");
+                
+                //스타일
+                String styleStr = layer.getStyle();
+                if(styleStr != null) {
+                    String[] styles = styleStr.split(";");
+                    for(String style : styles) {
+                        
+                        String[] styleKeyValue = style.split("=");
+                        if(styleKeyValue.length < 2) {
+                            continue;
+                        }
+                        //log.debug(styleKeyValue[0]);
+                        switch(Style.getEnum(styleKeyValue[0])) {
+                            case TBL_GRP_FG:
+                                tableGroup.setTblGrpFg(TblGrpFg.getEnum(styleKeyValue[1]));
+                                break;
+                            case BG_COLOR:
+                                tableGroup.setBgColor(styleKeyValue[1]);
+                                break;
+                            case BG_IMG:
+                                tableGroup.setBgImgNm(styleKeyValue[1]);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
                 tableGroup.setDispSeq(Long.parseLong((String.valueOf(i+1))));
                 tableGroup.setUseYn("Y");
                 tableGroup.setRegDt(currentDateTimeString());
@@ -209,8 +233,27 @@ public class TableLayoutServceTest {
             table.setStoreCd(tableGroup.getStoreCd());
             table.setTblNm(String.valueOf(cell.getValue()));
             table.setTblGrpCd(tableGroup.getTblGrpCd());
-            //TODO 테이블 좌석 수 설정
-            //table.setTblSeatCnt(tblSeatCnt);
+            
+            //스타일
+            String styleStr = cell.getStyle();
+            if(styleStr != null) {
+                String[] styles = styleStr.split(";");
+                for(String style : styles) {
+                    
+                    String[] styleKeyValue = style.split("=");
+                    if(styleKeyValue.length < 2) {
+                        continue;
+                    }
+                    switch(Style.getEnum(styleKeyValue[0])) {
+                        case TBL_SEAT_CNT: table.setTblSeatCnt(Long.parseLong(styleKeyValue[1]));
+                            break;
+                        case TBL_TYPE_FG: table.setTblTypeFg(TblTypeFg.getEnum(styleKeyValue[1]));
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
             //좌표, 크기
             mxGeometry geo = cell.getGeometry();
             table.setX((long)geo.getX());
@@ -218,7 +261,6 @@ public class TableLayoutServceTest {
             table.setWidth((long)geo.getWidth());
             table.setHeight((long)geo.getHeight());
             
-            table.setTblTypeFg(TblTypeFg.SQUARE);
             table.setUseYn(tableGroup.getUseYn());
             table.setRegDt(tableGroup.getRegDt());
             table.setRegId(tableGroup.getRegId());

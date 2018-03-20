@@ -37,18 +37,17 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         String requestURL = request.getRequestURI().toString();
         log.info("url : {}, accept : {}, ", requestURL, request.getHeader("accept"));
 
-        /** 
+        /**
          * 세션 종료 처리
-         * */
+         */
         if (!sessionService.isValidSession(request)) {
             sessionService.deleteSessionInfo(request);
-            
-            if(WebUtil.isJsonRequest(request)) {
+
+            if (WebUtil.isJsonRequest(request)) {
                 String msg = messageService.get("msg.cmm.session.expire");
                 String msg1 = messageService.get("msg.cmm.move.login");
-                throw new JsonException(Status.SESSION_EXFIRE, msg + msg1, "/");                
-            }
-            else {
+                throw new JsonException(Status.SESSION_EXFIRE, msg + msg1, "/");
+            } else {
                 response.sendRedirect("/");
                 return false;
             }
@@ -58,6 +57,8 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         SessionInfo sessionInfo = sessionService.getSessionInfo(request);
         // 권한 메뉴
         List<ResrceInfo> auth = sessionInfo.getAuthMenu();
+        // 유져 조회 날짜 저장
+        sessionInfo = setUserSelectDate(request, sessionInfo);
 
         // 권한 체크
         if (!checkUrl(request, auth, requestURL, sessionInfo.getUserId(), sessionInfo)) {
@@ -79,7 +80,26 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
         return true;
     }
-    
+
+    /**
+      * 유져가 조회한 조회 날짜를 세션에 저장
+      * 
+      * @param request
+      * @param sessionInfo
+      */
+    private SessionInfo setUserSelectDate(HttpServletRequest request, SessionInfo sessionInfo) {
+        String startDt = request.getParameter("startDt");
+        String endDt = request.getParameter("endDt");
+        if(!isEmpty(startDt)) {
+            sessionInfo.setStartDt(startDt);
+        }
+        if(!isEmpty(endDt)) {
+            sessionInfo.setEndDt(endDt);
+        }
+        sessionService.setSessionInfo(sessionInfo);
+        return sessionInfo;
+    }
+
     /**
      * 유효 URL 체크!!
      * 
@@ -90,8 +110,8 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
      */
     private boolean checkUrl(HttpServletRequest request, List<ResrceInfo> auth, String url,
             String userId, SessionInfo sessionInfo) {
-        
-        if(url.equals("/main.sb")) {
+
+        if (url.equals("/main.sb")) {
             return true;
         }
 

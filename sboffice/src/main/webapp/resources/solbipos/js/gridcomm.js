@@ -1,18 +1,6 @@
 "use strict";
 !function( win, $ ){
   
-  /*
-  $(document).ajaxStart(function() {
-    $("#loading").show();
-  });
-  $(document).ajaxComplete(function() {
-    $("#loading").hide();
-  });
-  $(document).ajaxError(function() {
-    $("#loading").hide();
-  });
-  */
-  
   // 그리드
   var wgrid = {
       genGrid: function( div, columns, resrceCd, gridIdx, columnLayout ) {
@@ -21,6 +9,7 @@
           isReadOnly : true,
           showSort : true,
           autoGenerateColumns: false,  // 이거 안하면 컬럼이 자동으로 막 생김
+          showAlternatingRows: false,
           formatItem : function(s, e) {
             // 표시 화면 입력 생성
             if (e.panel == s.topLeftCells) {
@@ -33,9 +22,29 @@
         });
         
         // 저장된 레이아웃이 있을 경우 적용
+        /*
         if(columnLayout !== undefined) {
           g.columnLayout = columnLayout;
         }
+        */
+        var userCols = columnLayout.columns;
+        if( columnLayout != null && userCols !== undefined) {
+          var isVisibleColumn = function(id) {
+            var visible = true;
+            for(var j = 0; j < userCols.length; j++) {
+              if(id == userCols[j].binding) {
+                visible = (userCols[j].visible == null ? true : userCols[j].visible);
+                break;
+              }
+            }
+            return visible;
+          };
+          for(var i = 0; i < g.columns.length; i++) {
+            g.columns[i].visible = isVisibleColumn(g.columns[i].binding);
+          }
+        }
+        
+//        g.rowHeaders.columns.splice(0, 1);  
         
         genGridPicker(g, resrceCd, gridIdx);
         
@@ -118,6 +127,7 @@
         return new wijmo.input.ComboBox(div, {
           displayMemberPath : "name",
           selectedValuePath : "value",
+          isAnimated : true,
           itemsSource : data,
           selectedIndexChanged : function(s, e) {
             f(s, e);
@@ -128,8 +138,24 @@
         return new wijmo.input.ComboBox(div, {
           displayMemberPath : "name",
           selectedValuePath : "value",
+          isAnimated : true,
           itemsSource : data
         });
+      },
+      genInput: function(div) {
+        return new wijmo.input.ComboBox(div);
+      },
+      genDate: function(div) {
+        return new wijmo.input.InputDate(div); 
+      },
+      genDateVal: function(div, date) {
+        if(date == "") {
+          return wcombo.genDate(div);
+        }
+        var dt = new wijmo.input.InputDate(div);
+        date = date.substr(0,4) + "-" + date.substr(4,2) + "-" + date.substr(6,2);
+        dt.value = new Date(date);
+        return dt;
       }
   };
   

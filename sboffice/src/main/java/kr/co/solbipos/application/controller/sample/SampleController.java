@@ -237,12 +237,6 @@ public class SampleController {
 
         sslTrdtlT.setTotalCount(data.get(0).getInt("totCnt"));
         
-        
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("list", data);
-        if (!ObjectUtil.isEmpty(sslTrdtlT)) {
-            map.put("page", sslTrdtlT);
-        }
         return returnListJson(Status.OK, data, sslTrdtlT);
     }
 

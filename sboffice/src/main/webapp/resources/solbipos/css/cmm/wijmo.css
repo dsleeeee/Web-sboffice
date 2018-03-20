@@ -4,8 +4,9 @@
 /* Primary wj control style - applies to all controls */
 .wj-content {
     display: inline-block;
-    border: 1px solid rgba(0,0,0,0.2);
-    border-radius: 4px;
+    /*위즈모 컨텐츠 라인과 radius 없애기*/
+    /*border: 1px solid rgba(0,0,0,0.2);*/
+    /*border-radius: 4px;*/
     background-color: #fff;
     outline: none;
     box-sizing: border-box;
@@ -40,15 +41,16 @@
 
 /* Define control header */
 .wj-header {
-    background-color: #EAEAEA;
-    color: #444;
-    font-weight: bold;
+    background-color: #e8e8e8;
+    color: #222!important;
+    font-size:12px;
+    text-align:center!important;
 }
 
 /* Selected state colors */
 .wj-state-selected {
-    background-color: #0085c7;
-    color: #fff;
+    background-color: #93cbfc;
+    color: #fff!important;
 }
 
 /* Selected state colors */
@@ -230,8 +232,9 @@ input[type=submit] {
 
 .wj-dropdown-panel {
     outline: none;
-    box-shadow: 0 6px 13px rgba(0,0,0,0.2);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
     z-index: 1500; /* Boostrap modals have zIndex 1050, so go higher */
+    cursor:pointer;
 }
 
 .wj-autocomplete-match {
@@ -284,9 +287,8 @@ input[type=submit] {
     overflow: hidden;
     width: 100%;
     height: 100%;
-    min-height: 2em;
+    /*min-height: 2em;*/
     border-collapse: separate;
-    border-radius: 4px;
     background: inherit;
 }
 
@@ -468,13 +470,18 @@ input[type=submit] {
 
     .wj-calendar-month td {
         width: 14.29%;
-        padding: 5px 0;
+        padding: 7px 0;
         border: none;
+        cursor:pointer;
     }
+
+    .wj-calendar-month .wj-header td, .wj-calendar-year .wj-header td {cursor:default;}
 
     /* Slightly reduce size of text in calendar header */
     .wj-calendar-month .wj-header {
         font-size: 90%;
+        padding: 5px 0;
+        cursor: none;
     }
 
 /* -- Months of the year -- */
@@ -490,6 +497,7 @@ input[type=submit] {
         width: 25%;
         padding: 8px;
         border: none;
+        cursor:pointer;
     }
 
 /* -- FlexGrid -- */
@@ -497,7 +505,8 @@ input[type=submit] {
 .wj-flexgrid {
     cursor: default;
     width: 100%;
-    overflow: hidden;
+    /*overflow: hidden;*/
+    flex:auto; overflow-y:auto; /*브라우저창 크기에 따라서 테이블 높이 변경되게 처리*/
 }
     .wj-flexgrid .wj-row {
         position: absolute; /* avoid flicker in Chrome: TFS 261344 */
@@ -510,10 +519,12 @@ input[type=submit] {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    padding: 3px;
-    border-right: 1px solid #d4d4d4;
-    border-bottom: 1px solid #d4d4d4;
+    padding:9px 5px;
+    line-height:15px;
     outline: none;
+    color:#666;
+    font-size:12px;
+    text-align:center!important;
 }
 
     /* Text color for nested controls in selected rows */
@@ -581,7 +592,7 @@ input[type=submit] {
 
 /* Alternate grid cell color */
 .wj-alt:not(.wj-header):not(.wj-group):not(.wj-state-selected):not(.wj-state-multi-selected) {
-    background: #f9f9f9;
+    /*background: #f9f9f9;*/ /*홀수번째 배경 삭제*/
 }
 
 /* Group row background */
@@ -1783,15 +1794,19 @@ div.wj-sheet > div {
 .wj-treeview {
     width: 220px;
     overflow: auto;
-    background: #2e333f;
+    background: transparent;
     border: none;
     display:block;
+    padding-top:20px;
     overflow-y:hidden;
-    margin-top:20px;
     border-radius:0;
     padding-bottom:40px;
-    border-right:1px solid #1b202b;
 }
+
+.menuOpen .wj-content {width:220px; overflow:hidden; transition:width 0.2s cubic-bezier(.13, 1.09, .78, 1);} 
+.menuClose .wj-content {display:inline-block; position:absolute; border:0; padding:0; width:0px; height:0px; opacity:0; transition:width 0s;}
+
+
     .wj-treeview *:focus {
         outline: none;
     }
@@ -1924,6 +1939,9 @@ div.wj-sheet > div {
         .wj-treeview > .wj-nodelist > .wj-node.menu_addservice > span:before {content:''; position:absolute;left:20px; background:url(../img/menu/menu.png) no-repeat; background-position:-200px 0; width:20px; height:22px;}
         .wj-treeview > .wj-nodelist > .wj-node.menu_addservice.on > span:before {background-position: -200px -110px;}
 
+        .wj-treeview > .wj-nodelist > .wj-node.menu_stock > span:before {content:''; position:absolute;left:20px; background:url(../img/menu.png) no-repeat; background-position:-220px 0; width:20px; height:22px;}
+        .wj-treeview > .wj-nodelist > .wj-node.menu_stock.on > span:before {background-position: -220px -110px;}
+
 
 
         .wj-treeview .wj-node .wj-node-check {
@@ -1988,9 +2006,6 @@ div.wj-sheet > div {
         .wj-treeview .wj-nodelist .wj-node.wj-state-empty:before {
                 visibility: hidden;
         }
-
-
-
 
 .wj-treeview .wj-nodelist {
     display: block;

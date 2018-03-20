@@ -29,8 +29,22 @@ public enum Style implements CodeEnum {
     FONT_COLOR("fontColor"),
     /** 채움색 */
     FILL_COLOR("fillColor"),
+
+
     /** 상품코드-custom */
-    PROD_CD("prodCd");
+    PROD_CD("prodCd"),
+    /** 테이블좌석수-custom */
+    TBL_SEAT_CNT("tblSeatCnt"),
+    /** 테이블좌석수-custom */
+    TBL_TYPE_FG("tblTypeFg"),
+    /** 테이블그룹구분-custom */
+    TBL_GRP_FG("tblGrpFg"),
+    /** 백그라운드컬러-custom */
+    BG_COLOR("bgColor"),
+    /** 백그라운드이미지-custom */
+    BG_IMG("bgImg")
+    ;
+    
     
     private String code;
   
