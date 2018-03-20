@@ -122,7 +122,11 @@ onload = function() {
     }
   });
   
- 
+  <%-- 접힌 메뉴 클릭 시 열린 메뉴 오픈--%>
+  $(document).on("click", ".smallMenu li.depth1", function(){
+    $(".menuControl").trigger("click");
+  });
+
   // 전체 메뉴 생성 및 클릭 이벤트
   function createAllMenu(){
 
