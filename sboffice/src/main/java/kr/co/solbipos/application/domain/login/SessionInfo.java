@@ -71,6 +71,13 @@ public class SessionInfo extends Cmm {
     /** 로그인 화면 : 아이디 저장 여부 */
     private boolean chk;
     
+    
+    /**  */
+    private String startDt;
+    /**  */
+    private String endDt;
+    
+    
     /** 
      * 
      * 유져 권한 타입<br> 
@@ -82,7 +89,7 @@ public class SessionInfo extends Cmm {
      * */
 //    private String userAuthType = "SYSTEM"; // 시스템 테스트용
 //    private String userAuthType = "AGENCY"; // 대리점 테스트용
-    private String userAuthType = "HEDOFC"; // 본사 테스트용
+    private String userAuthType = "HEDOFC"; //본사 테스트용
 //    private String userAuthType = "MRHST"; // 매장 테스트용
     
     
