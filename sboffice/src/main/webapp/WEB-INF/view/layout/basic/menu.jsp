@@ -509,7 +509,7 @@ dateUtil.prototype.formatDate = function(dateStr, f) {
   }); 
 } 
 
-var dateUtilObj = new dateUtil(); 
+var dateUtilObj = new dateUtil();
 
 </script>
 
