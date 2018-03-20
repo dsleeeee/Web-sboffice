@@ -106,7 +106,8 @@
 
   <%-- 페이지 리스트 --%>
   <div class="pageNum mt20">
-    <ul id="pagenav">
+    <%-- id --%>
+    <ul id="pagenav" data-size="10">
     </ul>
   </div>
   <%--//페이지 리스트--%>
@@ -184,10 +185,12 @@ $(document).ready(function(){
     wexcel.down(grid, name, name + ".xlsx");
   });
   
+  <%-- 페이징 --%>
   $(document).on("click", ".pagenav", function() {
     search($(this).data("value"));
   });
   
+  <%-- 전체기간 체크박스 --%>
   $(document).on("click", "#chkDt", function() {
     var chkDt = $('#chkDt').is(":checked");
     startDt.isDisabled = chkDt;

@@ -1,61 +1,65 @@
 "use strict";
 !function( win, $ ){
-  
   $(document).on("click", ".btn_previous", function() {
-    var curr = $(".btn_next").data("value");
-    if((curr - 10) < 0) {
+    var curr = $(".btn_next").data("curr");
+    var page_scale = $("#pagenav").data("size");
+    if((curr - page_scale) < 0) {
       return;
     }
-    page.makePage(curr - 10, $(".btn_previous").data("value"));
+    page.makePage(curr - page_scale, $(".btn_previous").data("tot"));
   });
   
   $(document).on("click", ".btn_next", function() {
-    var curr = $(".btn_next").data("value");
-    var tot = $(".btn_previous").data("value");
-    var r = curr.toString().length > 1 ? (parseInt(curr.toString()[0])+1) * 10 : curr;
+    var curr = $(".btn_next").data("curr");
+    var tot = $(".btn_previous").data("tot");
+    var page_scale = $("#pagenav").data("size");
+    var r = curr.toString().length > 1 ? (parseInt(curr.toString()[0])+1) * page_scale : curr;
     if(r > tot) {
       return;
     }
-    page.makePage(curr + 10, tot);
+    page.makePage(curr + page_scale, tot);
   });
   
   // 페이징
   var page = {
       
       makePage: function(curr, tot) {
-        var realCurr = $(".btn_next").data("value");
+        var realCurr = $(".btn_next").data("curr");
         page.make(curr, tot);
       },
       
       make: function(curr, tot) {
+        var page_scale = $("#pagenav").data("size");
+        var page_end = page_scale == 10 ? 9 : 4;
+        // HTML
+        var pre = "<li class=\"btn_previous\" data-tot={tot}><a href=\"javascript:;\"></a></li>";
+        var nav = "<li><a href=\"javascript:;\" class=\"{cnm}\" data-value={i}>{i}</a></li>";
+        var nex = "<li class=\"btn_next\" data-curr={curr}><a href=\"javascript:;\"></a></li>";
+
         $("#pagenav").children().remove();
         var item = {};
-        if(tot > 10) {
-          item.curr=curr, item.tot=tot, item.start=0, item.end=0;
-          var t = curr / 10;
-          if(t.toString().indexOf(".") == -1) {
-            item.end = curr, item.start = item.end - 9;
-          }
-          else {
-            item.start = (parseInt(t) * 10) + 1, item.end = item.start + 9;
-          }
-          if(item.end > tot) {
-            item.end = tot;
-          }
-          
-          $("#pagenav").append(wijmo.format("<li class=\"btn_previous\" data-value={tot}><a href=\"javascript:;\"></a></li>", item));
-          for(var i=item.start; i<=item.end; i++) {
-            item.i = i, item.cnm = i==curr ? "on pagenav" : "pagenav";
-            $("#pagenav").append(wijmo.format("<li><a href=\"javascript:;\" class=\"{cnm}\" data-value={i}>{i}</a></li>", item));
-          }
-          $("#pagenav").append(wijmo.format("<li class=\"btn_next\" data-value={curr}><a href=\"javascript:;\"></a></li>", item));
+        item.curr=curr, item.tot=tot, item.start=0, item.end=0;
+        // 페이징 계산
+        var t = curr / page_scale;
+        if(t.toString().indexOf(".") == -1) {
+          item.end = curr, item.start = item.end - page_end;
         }
         else {
-          for(var i=1; i<=tot; i++) {
-            item.i = i;
-            item.classnm = i==curr ? "on pagenav" : "\"pagenav\"";
-            $("#pagenav").append(wijmo.format("<li><a href=\"javascript:;\" class=\"{classnm}\" data-value={i}>{i}</a></li>", item));
-          }
+          item.start = (parseInt(t) * page_scale) + 1, item.end = item.start + page_end;
+        }
+        if(item.end > tot) {
+          item.end = tot;
+        }
+        // 페이징 제작
+        if(tot > page_scale) {
+          $("#pagenav").append(wijmo.format(pre, item));
+        }
+        for(var i=item.start; i<=item.end; i++) {
+          item.i = i, item.cnm = i==curr ? "on pagenav" : "pagenav";
+          $("#pagenav").append(wijmo.format(nav, item));
+        }
+        if(tot > page_scale) {
+          $("#pagenav").append(wijmo.format(nex, item));
         }
       }
   };

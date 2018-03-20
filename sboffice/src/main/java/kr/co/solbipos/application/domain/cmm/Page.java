@@ -27,10 +27,6 @@ public class Page {
     private String endDt;
     /**   */
     private Boolean chkDt;
-    
-    public void setStartDt(String startDt) {
-        this.startDt = startDt;
-    }
 
     public void setCurr(Integer curr) {
         this.curr = curr;

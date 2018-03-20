@@ -22,11 +22,6 @@
         });
         
         // 저장된 레이아웃이 있을 경우 적용
-        /*
-        if(columnLayout !== undefined) {
-          g.columnLayout = columnLayout;
-        }
-        */
         var userCols = columnLayout.columns;
         if( columnLayout != null && userCols !== undefined) {
           var isVisibleColumn = function(id) {
@@ -43,8 +38,6 @@
             g.columns[i].visible = isVisibleColumn(g.columns[i].binding);
           }
         }
-        
-//        g.rowHeaders.columns.splice(0, 1);  
         
         genGridPicker(g, resrceCd, gridIdx);
         
@@ -149,7 +142,7 @@
         return new wijmo.input.InputDate(div); 
       },
       genDateVal: function(div, date) {
-        if(date == "") {
+        if(date == "" || date.length != 8) {
           return wcombo.genDate(div);
         }
         var dt = new wijmo.input.InputDate(div);
