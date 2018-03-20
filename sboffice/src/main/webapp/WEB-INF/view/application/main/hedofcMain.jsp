@@ -35,16 +35,21 @@
               </span>
              </div>
           </h2>
+          
           <!-- wijmo 차트 -->
-          <!-- 
-          <div class="wizWrap" ng-app="app" ng-controller="appCtrl">
-            this is the chart
-            <wj-flex-chart items-source="data" binding-x="country" control="gradientBasicChart"
-                           style="width:100%; height:240px;">
-              <wj-flex-chart-series binding="sales" ng-attr-style="chartProps.gradientPredefinedColor"></wj-flex-chart-series>
-            </wj-flex-chart>
-          </div>
-           -->
+          <!-- binding 컬럼 변경 필요 -->
+          <!-- 차트 색상 변경 필요 -->
+          <div class="wizWrap" id="chart1" style="width:100%; height:240px;"></div>
+          <!--// wijmo 차트 -->
+          
+          <!-- chart 에 필요한 요소 -->
+          <select id="chartType" style="display:none;"></select>
+          <select id="chartAnimationMode" style="display:none;"></select>
+          <select id="chartEasing" style="display:none;"></select>
+          <input id="chartDuration" value="0" style="display:none"/>
+          <select id="chartAddMenu" style="display:none;"></select>
+          <select id="chartRemoveMenu" style="display:none;"></select>
+          <!--// chart 에 필요한 요소 -->
           
         </div>
         <!--//매출현황-->
@@ -60,15 +65,13 @@
                 </div>
             </h2>
             <!-- wijmo 차트 -->
-            <!-- 
-            <div ng-app="app" ng-controller="appCtrl">
-              this is the chart
-              <wj-flex-chart items-source="data2" binding-x="country" control="gradientBasicChart"
-                           style="width:100%; height:200px;">
+            <div class="wizWrap" id="chart2" style="width:100%; height:240px;">
+              <!-- 
+              <wj-flex-chart items-source="data2" binding-x="country" control="gradientBasicChart" style="width:100%; height:200px;">
                 <wj-flex-chart-series binding="sales" ng-attr-style="chartProps.gradientPredefinedColor"></wj-flex-chart-series>
               </wj-flex-chart>
+               -->
             </div>
-             -->
         </div>
         <!--//매출 상위 상품-->
         
@@ -274,79 +277,99 @@ if(noticeList.length > 0){
   $("#notice").append(noticeHtml);
 }
 
-// chart
-
-// 차트1
-// 앱 모듈 선언
-/* 
-var app = angular.module('app', ['wj']);
-console.log('app : '+ JSON.stringify(app));
-
-// 앱 컨트롤러
-app.controller('appCtrl', function appCtrl($scope) {
-  
- // 랜덤 데이터 생성
- var countries = 'US,Germany,UK,Japan,Italy,Greece'.split(','),
-     data = [], data2 = [];
- for (var i = 0; i < countries.length; i++) {
-     data.push({
-         country: countries[i],
-         downloads: Math.round(Math.random() * 20000),
-         sales: Math.random() * 10000,
-         expenses: Math.random() * 5000
-     });
-     data2.push({
-       country: countries[i],
-       downloads: Math.round(Math.random() * 20000),
-       sales: Math.random() * 10000,
-       expenses: Math.random() * 5000
-   });
- }
-
- // scope.data 에 데이터 추가
- $scope.data = data;
- $scope.data2 = data;
- 
- console.log('$scope.data : '+ JSON.stringify( $scope.data));
- console.log('$scope.data2 : '+ JSON.stringify( $scope.data));
- 
- //add chart properties to scope
- $scope.chartProps = {
-     gradientPredefinedColor: {fill:'l(0,0,1,1)#abd800-#5c7e00'}
- };
-});
- */
-/* 
-//차트2
-var app2 = angular.module('app', ['wj']);
-
-console.log('app2 : '+ JSON.stringify(app2));
-
-//앱 컨트롤러
-app2.controller('appCtrl', function appCtrl($scope) {
-
 //랜덤 데이터 생성
-var countries2 = 'US2,Germany2,UK2,Japan2,Ital2y,Greece2'.split(','),
-   data2 = [];
-for (var i = 0; i < countries2.length; i++) {
- data2.push({
-     country: countries2[i],
-     downloads: Math.round(Math.random() * 20000),
-     sales: Math.random() * 10000,
-     expenses: Math.random() * 5000
- });
+function getData(numCount) {
+  var data = new wijmo.collections.ObservableArray();
+  //var data = [];
+
+  for (var i = 0; i < numCount; i++) {
+      data.push(getRandomData('M' + getRandomValue(1000)));
+  }
+//  console.log('data : '+JSON.stringify(data));
+  return data;
 }
- // scope.data 에 데이터 추가
- $scope.data = data2;
- 
- console.log('$scope.data 2 : '+ JSON.stringify( $scope.data));
- 
- //add chart properties to scope
- $scope.chartProps = {
-   gradientPredefinedColor: {fill:'l(0,0,1,1)#abd800-#5c7e00'}
- };
+
+function getRandomData(idx) {
+  return {
+      //x: getRandomValue(100),
+      x: idx,
+      y0: getRandomValue(200)
+  };
+}
+
+function getRandomValue(max) {
+  return Math.round(Math.random() * max);
+}
+
+function updateMenuHeader(menu, prefix, text) {
+  menu.header = prefix + text;
+}
+
+//flexChart
+var flexChartPoints = 10;
+
+$(document).ready(function(){
+  var chart1 = new wijmo.chart.FlexChart('#chart1');
+  var chart2 = new wijmo.chart.FlexChart('#chart2');
+  
+  // 위 차트
+  chart1.beginUpdate();
+  chart1.chartType = wijmo.chart.ChartType.Column;
+  chart1.itemsSource = getData(flexChartPoints); // 여기에 받아온 데이터 넣기
+  chart1.bindingX = 'x';
+  chart1.palette = wijmo.chart.Palettes['midnight'];
+
+  //create data series
+  for (var i = 0; i < 1; i++) {
+      var series = new wijmo.chart.Series();
+      series.binding = 'y' + i;
+      chart1.series.push(series);
+  }
+  chart1.endUpdate();
+
+  var chartAnimation1 = new wijmo.chart.animation.ChartAnimation(chart1, {
+      animationMode: wijmo.chart.animation.AnimationMode.All,
+      easing: wijmo.chart.animation.Easing.Swing,
+      duration: 400
+  });
+  
+  // 아래 차트
+  chart2.beginUpdate();
+  chart2.chartType = wijmo.chart.ChartType.Column;
+  chart2.itemsSource = getData(flexChartPoints); // 여기에 받아온 데이터 넣기
+  chart2.bindingX = 'x';
+  
+  //create data series
+  for (var i = 0; i < 1; i++) {
+      var series = new wijmo.chart.Series();
+      series.binding = 'y' + i;
+      chart2.series.push(series);
+  }
+  chart2.endUpdate();
+  
+  var chartAnimation2 = new wijmo.chart.animation.ChartAnimation(chart2, {
+    animationMode: wijmo.chart.animation.AnimationMode.All,
+    easing: wijmo.chart.animation.Easing.Swing,
+    duration: 400
 });
-   */
+
+  chartType.selectedValue = 'Column';
+  chartAnimationMode.selectedValue = 'All';
+  chartEasing.selectedValue = 'Swing';
+  chartDuration.value = 400;
+  chartDuration.min = 200;
+  chartDuration.max = 5000;
+  chartDuration.step = 200;
+  chartDuration.format = 'n0';
+  
+  
+  
+  
+});
+
+
+
+
 </script>
 
 

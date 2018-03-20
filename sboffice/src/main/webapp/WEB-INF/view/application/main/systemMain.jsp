@@ -3,13 +3,14 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+
 <!--right-->
 <div class="contents">
     <!--메인컨텐츠-->
     <div class="mainCon">
-        <!--총 매장수-->
+        <!--총 매장수--> 
         <div class="w50 fl br bb stat_purple1">
-            <h2>총 매장수 <span>16,325</span></h2>
+           <h2>총 매장수 <span>16,325</span></h2>
             <div>
                 <p class="w33 fl tc"><span>오픈</span><span>8,126</span></p>
                 <p class="w33 fl tc"><span>폐점</span><span>7,978</span></p>
@@ -32,9 +33,7 @@
         <!--주간 매출-->
         <div class="w70 fl br bb graph">
             <h2>주간 매출 (매장수/포스수)<div class="circle"><span class="blue">매장수</span><span class="sky">포스수</span></div></h2>
-            <div class="wizWrap" style="background:gray; color:#fff;">
-                WIZMO GRAPH가 들어갑니다.
-            </div>   
+            <div class="wizWrap" id="chart1" style="width:100%; height:255px;"></div>
         </div>
         <!--//주간 매출-->
         
@@ -51,9 +50,7 @@
                    <p>
                        <!--파란색 날씨아이콘 : weIc01~14까지-->
                        <em class="weIc02"></em>
-                       <span>
-                           최고 <em>13°C</em><br />
-                           최저 <em>5°C</em>
+                       <span>최고 <em>13°C</em><br />최저 <em>5°C</em>
                        </span>
                    </p> 
                </div>
@@ -78,9 +75,7 @@
         <!--주간 POS 설치현황-->
         <div class="w70 fl br bb graph">
             <h2>주간 POS 설치현황<div class="square"><span class="blue">신규</span><span class="sky">재설치</span></div></h2>
-            <div class="wizWrap" style="background:gray; color:#fff;">
-                WIZMO GRAPH가 들어갑니다.
-            </div>   
+            <div id="chart2" class="wizWrap"  style="width:100%; height:255px;"></div>
         </div>
         <!--//주간 POS 설치현황-->
         
@@ -155,10 +150,85 @@
             </table> 
         </div>
         <!--//순위테이블-->
-    </div>
-    <!--//메인컨텐츠-->
 </div>
 <!--//right-->
+
+<script>
+
+// 랜덤 데이터 생성
+function getData(numCount) {
+    var data = new wijmo.collections.ObservableArray();
+    //var data = [];
+
+    for (var i = 0; i < numCount; i++) {
+        data.push(getRandomData('M' + getRandomValue(200)));
+    }
+    
+//    console.log(JSON.stringify(data));
+    return data;
+}
+
+function getRandomData(idx) {
+    return {
+        //x: getRandomValue(100),
+        x: idx,
+        y0: getRandomValue(200),
+        y1: getRandomValue(400)
+    };
+}
+
+function getRandomValue(max) {
+    return Math.round(Math.random() * max);
+}
+
+function updateMenuHeader(menu, prefix, text) {
+    menu.header = prefix + text;
+}
+
+var flexChartPoints = 10;
+
+$(document).ready(function(){
+  // 위 차트
+  var chart1 = new wijmo.chart.FlexChart('#chart1');
+  chart1.beginUpdate();
+  chart1.chartType = wijmo.chart.ChartType.Line;
+  chart1.itemsSource = getData(flexChartPoints); // 여기에 받아온 데이터 넣기
+  chart1.bindingX = 'x';
+  
+  for (var i = 0; i < 2; i++) {
+      var series = new wijmo.chart.Series();
+      series.binding = 'y' + i;
+      chart1.series.push(series);
+  }
+  chart1.endUpdate();
+
+  var chartAnimation1 = new wijmo.chart.animation.ChartAnimation(chart1, {  // animation 관련
+      animationMode: wijmo.chart.animation.AnimationMode.All,
+      easing: wijmo.chart.animation.Easing.Swing,
+      duration: 400
+  });
+
+  // 아래 차트
+  var chart2 = new wijmo.chart.FlexChart('#chart2');
+  chart2.beginUpdate();
+  chart2.chartType = wijmo.chart.ChartType.Column;
+  chart2.itemsSource = getData(flexChartPoints); // 여기에 받아온 데이터 넣기
+
+  chart2.chartType = parseInt(0);
+  chart2.stacking = parseInt(1);
+  chart2.rotated = false;
+
+  for (var i = 0; i < 2; i++) {
+      var series = new wijmo.chart.Series();
+      series.binding = 'y' + i;
+      chart2.series.push(series);
+  }
+  chart2.endUpdate();
+  
+});
+
+
+</script>
 
 
 

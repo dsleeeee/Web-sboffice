@@ -80,9 +80,9 @@ public class SessionInfo extends Cmm {
      * 가맹점 : MRHST(MEMBER BRANCH STORE)
      * 
      * */
-//    private String userAuthType = "SYSTEM"; // 시스템 테스트용
+    private String userAuthType = "SYSTEM"; // 시스템 테스트용
 //    private String userAuthType = "AGENCY"; // 대리점 테스트용
-    private String userAuthType = "HEDOFC"; //본사 테스트용
+//    private String userAuthType = "HEDOFC"; // 본사 테스트용
 //    private String userAuthType = "MRHST"; // 매장 테스트용
     
     

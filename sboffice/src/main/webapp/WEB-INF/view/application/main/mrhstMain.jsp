@@ -33,8 +33,7 @@
         
         <!--매출현황-->
         <div class="w70 fl br bb graph">
-            <h2>
-                매출현황
+            <h2>매출현황
                 <div class="searchBox">
                     <span id="dateText1"></span>
                     <span>
@@ -42,9 +41,20 @@
                     </span>
                 </div>
             </h2>
-            <div class="wizWrap" style="background:gray; color:#fff;">
-                WIZMO GRAPH가 들어갑니다.
-            </div>   
+            
+            <!-- wijmo 차트 -->
+            <div class="wizWrap" id="chart1" style="width:100%; height:240px;"></div>
+            <!--// wijmo 차트 -->
+            
+            <!-- chart 에 필요한 요소 -->
+            <select id="chartType" style="display:none;"></select>
+            <select id="chartAnimationMode" style="display:none;"></select>
+            <select id="chartEasing" style="display:none;"></select>
+            <input id="chartDuration" value="0" style="display:none"/>
+            <select id="chartAddMenu" style="display:none;"></select>
+            <select id="chartRemoveMenu" style="display:none;"></select>
+            <!--// chart 에 필요한 요소 -->
+            
         </div>
         <!--//매출현황-->
         
@@ -61,9 +71,7 @@
                    <p>
                        <!--파란색 날씨아이콘 : weIc01~14까지-->
                        <em class="weIc02"></em>
-                       <span>
-                           최고 <em>13°C</em><br />
-                           최저 <em>5°C</em>
+                       <span>최고 <em>13°C</em><br />최저 <em>5°C</em>
                        </span>
                    </p> 
                </div>
@@ -87,8 +95,7 @@
         
         <!--상품매출 TOP 10-->
         <div class="w70 fl br bb graph">
-            <h2>
-                상품매출 TOP 10
+            <h2>상품매출 TOP 10
                 <div class="searchBox">
                     <span id="dateText2"></span>
                     <span>
@@ -96,9 +103,10 @@
                     </span>
                 </div>
             </h2>
-            <div class="wizWrap" style="background:gray; color:#fff;">
-                WIZMO GRAPH가 들어갑니다.
-            </div>   
+            
+            <!-- wijmo 차트 -->
+            <div class="wizWrap" id="chart2" style="width:100%; height:240px;"></div>
+            <!-- // wijmo 차트 -->
         </div>
         <!--//상품매출 TOP 10-->
         
@@ -161,5 +169,95 @@ if(noticeList.length > 0){
   }
   $("#notice").append(noticeHtml);
 }
+
+//랜덤 데이터 생성
+function getData(numCount) {
+ var data = new wijmo.collections.ObservableArray();
+ //var data = [];
+
+ for (var i = 0; i < numCount; i++) {
+     data.push(getRandomData('M' + getRandomValue(1000)));
+ }
+// console.log('data : '+JSON.stringify(data));
+ return data;
+}
+
+function getRandomData(idx) {
+ return {
+     //x: getRandomValue(100),
+     x: idx,
+     y0: getRandomValue(200)
+ };
+}
+
+function getRandomValue(max) {
+ return Math.round(Math.random() * max);
+}
+
+function updateMenuHeader(menu, prefix, text) {
+ menu.header = prefix + text;
+}
+
+//flexChart
+var flexChartPoints = 10;
+
+$(document).ready(function(){
+  var chart1 = new wijmo.chart.FlexChart('#chart1');
+  var chart2 = new wijmo.chart.FlexChart('#chart2');
+  
+  // 위 차트
+  chart1.beginUpdate();
+  chart1.chartType = wijmo.chart.ChartType.Column;
+  chart1.itemsSource = getData(flexChartPoints); // 여기에 받아온 데이터 넣기
+  chart1.bindingX = 'x';
+  chart1.palette = wijmo.chart.Palettes['organic'];
+
+  for (var i = 0; i < 1; i++) {
+      var series = new wijmo.chart.Series();
+      series.binding = 'y' + i;
+      chart1.series.push(series);
+  }
+  chart1.endUpdate();
+
+  var chartAnimation1 = new wijmo.chart.animation.ChartAnimation(chart1, {
+      animationMode: wijmo.chart.animation.AnimationMode.All,
+      easing: wijmo.chart.animation.Easing.Swing,
+      duration: 400
+  });
+  
+  // 아래 차트
+  chart2.beginUpdate();
+  chart2.chartType = wijmo.chart.ChartType.Column;
+  chart2.itemsSource = getData(flexChartPoints); // 여기에 받아온 데이터 넣기
+  chart2.bindingX = 'x';
+  chart2.palette = wijmo.chart.Palettes['superhero'];
+  
+  //create data series
+  for (var i = 0; i < 1; i++) {
+      var series = new wijmo.chart.Series();
+      series.binding = 'y' + i;
+      chart2.series.push(series);
+  }
+  chart2.endUpdate();
+  
+  var chartAnimation2 = new wijmo.chart.animation.ChartAnimation(chart2, {
+    animationMode: wijmo.chart.animation.AnimationMode.All,
+    easing: wijmo.chart.animation.Easing.Swing,
+    duration: 400
+  });
+
+  chartType.selectedValue = 'Column';
+  chartAnimationMode.selectedValue = 'All';
+  chartEasing.selectedValue = 'Swing';
+  chartDuration.value = 400;
+  chartDuration.min = 200;
+  chartDuration.max = 5000;
+  chartDuration.step = 200;
+  chartDuration.format = 'n0';
+  
+  
+});
+
+
 
 </script>
