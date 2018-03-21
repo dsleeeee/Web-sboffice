@@ -107,7 +107,7 @@
   <%-- 페이지 리스트 --%>
   <div class="pageNum mt20">
     <%-- id --%>
-    <ul id="pagenav" data-size="10">
+    <ul id="page1" data-size="10">
     </ul>
   </div>
   <%--//페이지 리스트--%>
@@ -167,7 +167,7 @@ $(document).ready(function(){
       }
     
       grid.itemsSource = list;
-      page.make("#pagenav", result.data.page.curr, result.data.page.totalPage);
+      page.make("#page1", result.data.page.curr, result.data.page.totalPage);
       })
       .fail(function(){
         s_alert.pop("Ajax Fail");
@@ -186,7 +186,7 @@ $(document).ready(function(){
   });
   
   <%-- 페이징 --%>
-  $(document).on("click", ".pagenav", function() {
+  $(document).on("click", ".page1", function() {
     search($(this).data("value"));
   });
   

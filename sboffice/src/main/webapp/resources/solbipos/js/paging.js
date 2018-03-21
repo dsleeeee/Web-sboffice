@@ -55,7 +55,8 @@
           $(div).append(wijmo.format(pre, item));
         }
         for(var i=item.start; i<=item.end; i++) {
-          item.i = i, item.cnm = i==curr ? "on pagenav" : "pagenav";
+          var cl = div.substr(1, div.length);
+          item.i = i, item.cnm = i==curr ? "on pagenav " + cl : "pagenav " + cl;
           $(div).append(wijmo.format(nav, item));
         }
         if(tot > page_scale) {
