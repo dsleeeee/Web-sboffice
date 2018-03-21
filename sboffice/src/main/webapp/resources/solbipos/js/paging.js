@@ -2,41 +2,41 @@
 !function( win, $ ){
   $(document).on("click", ".btn_previous", function() {
     var curr = $(".btn_next").data("curr");
-    var page_scale = $("#pagenav").data("size");
+    var page_scale = $(this).parent().data("size");
     if((curr - page_scale) < 0) {
       return;
     }
-    page.makePage(curr - page_scale, $(".btn_previous").data("tot"));
+    page.makePage($(this), curr - page_scale, $(".btn_previous").data("tot"));
   });
   
   $(document).on("click", ".btn_next", function() {
     var curr = $(".btn_next").data("curr");
     var tot = $(".btn_previous").data("tot");
-    var page_scale = $("#pagenav").data("size");
+    var page_scale = $(this).parent().data("size");
     var r = curr.toString().length > 1 ? (parseInt(curr.toString()[0])+1) * page_scale : curr;
     if(r > tot) {
       return;
     }
-    page.makePage(curr + page_scale, tot);
+    page.makePage($(this), curr + page_scale, tot);
   });
   
   // 페이징
   var page = {
       
-      makePage: function(curr, tot) {
+      makePage: function(nav, curr, tot) {
         var realCurr = $(".btn_next").data("curr");
-        page.make(curr, tot);
+        page.make("#"+nav.parent()[0].id, curr, tot);
       },
       
-      make: function(curr, tot) {
-        var page_scale = $("#pagenav").data("size");
+      make: function(div, curr, tot) {
+        var page_scale = $(div).data("size");
         var page_end = page_scale == 10 ? 9 : 4;
         // HTML
         var pre = "<li class=\"btn_previous\" data-tot={tot}><a href=\"javascript:;\"></a></li>";
         var nav = "<li><a href=\"javascript:;\" class=\"{cnm}\" data-value={i}>{i}</a></li>";
         var nex = "<li class=\"btn_next\" data-curr={curr}><a href=\"javascript:;\"></a></li>";
 
-        $("#pagenav").children().remove();
+        $(div).children().remove();
         var item = {};
         item.curr=curr, item.tot=tot, item.start=0, item.end=0;
         // 페이징 계산
@@ -52,14 +52,14 @@
         }
         // 페이징 제작
         if(tot > page_scale) {
-          $("#pagenav").append(wijmo.format(pre, item));
+          $(div).append(wijmo.format(pre, item));
         }
         for(var i=item.start; i<=item.end; i++) {
           item.i = i, item.cnm = i==curr ? "on pagenav" : "pagenav";
-          $("#pagenav").append(wijmo.format(nav, item));
+          $(div).append(wijmo.format(nav, item));
         }
         if(tot > page_scale) {
-          $("#pagenav").append(wijmo.format(nex, item));
+          $(div).append(wijmo.format(nex, item));
         }
       }
   };

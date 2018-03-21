@@ -22,8 +22,8 @@
         });
         
         // 저장된 레이아웃이 있을 경우 적용
-        var userCols = columnLayout.columns;
-        if( columnLayout != null && userCols !== undefined) {
+        if( columnLayout != null ) {
+          var userCols = columnLayout.columns;
           var isVisibleColumn = function(id) {
             var visible = true;
             for(var j = 0; j < userCols.length; j++) {
@@ -60,13 +60,10 @@
       
       // columnsLayout 서버에 저장
       setGridItem: function(resrceCd, idx, columnLayout) {
-        
         var param = {};
-        
         param.resrceCd = resrceCd;
         param.gridIdx = idx;
         param.columnItem = columnLayout;
-        
         $.postJSONAsync("/setGridItem.sb", param, function(result) {
           console.log("resource : " + resrceCd + ", idx : " + idx + ", setGridItem success..");
         })

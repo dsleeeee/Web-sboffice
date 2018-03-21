@@ -167,7 +167,7 @@ $(document).ready(function(){
       }
     
       grid.itemsSource = list;
-      page.make(result.data.page.curr, result.data.page.totalPage);
+      page.make("#pagenav", result.data.page.curr, result.data.page.totalPage);
       })
       .fail(function(){
         s_alert.pop("Ajax Fail");
