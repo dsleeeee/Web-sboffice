@@ -40,7 +40,8 @@ public class ResultHandlerAspect {
      * @throws Throwable
      */
     @Around("execution(public kr..Result kr..*Controller.*(..))" // json
-            + " || execution(public kr..JavaScriptResult kr..*Controller.*(..))") // javascript
+            + " || execution(public kr..JavaScriptResult kr..*Controller.*(..))" // javascript
+            + " || execution(public Object kr..*Controller.*(..))") // ExceptionController
     public Object ResultHandling(ProceedingJoinPoint pjp) throws Throwable {
 
         Object result = pjp.proceed();
