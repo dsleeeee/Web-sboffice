@@ -19,7 +19,7 @@
   <div class="login">
     <header>
       <a href="/">
-        <img src="/resource/solbipos/css/img/login/logo_login.png" alt="솔비포스" />
+        <img src="/resource/solbipos/css/img/logo_login.png" alt="솔비포스" />
       </a>
       <h1><s:message code="title.web"/></h1>
     </header>
@@ -28,9 +28,9 @@
       <div class="bannerArea">
         <div class="slider">
           <input type="radio" name="slide_switch" id="id1" checked="checked" /> 
-          <label for="id1"></label> <img src="/resource/solbipos/css/img/login/banner01.png" alt="" /> 
+          <label for="id1"></label> <img src="/resource/solbipos/css/img/banner01.png" alt="" /> 
           <input type="radio" name="slide_switch" id="id2" /> 
-          <label for="id2"></label> <img src="/resource/solbipos/css/img/login/banner02.png" alt="" />
+          <label for="id2"></label> <img src="/resource/solbipos/css/img/banner02.png" alt="" />
         </div>
       </div>
       <!--//광고배너영역-->

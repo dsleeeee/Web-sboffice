@@ -1,5 +1,4 @@
 /* Wijmo Control */
-/* kcp 디자이너가 수정한 부분이 있음 그래서 위치도 solbipos 로 이동함 vender/wijmo/css/wijmo.css 는 원본 */
 
 /* Primary wj control style - applies to all controls */
 .wj-content {
@@ -55,7 +54,7 @@
 
 /* Selected state colors */
 .wj-state-multi-selected {
-    background-color: #80ADBF;
+    background-color: #ebf5ff;
     color: #fff;
 }
 
@@ -1912,31 +1911,31 @@ div.wj-sheet > div {
         /* 순서 
            포스관리, 가맹점괌리, 시스템관리, 기초관리, 매출관리, 회원관리, 수불관리, 정산관리, 부가서비스 
         */
-        .wj-treeview > .wj-nodelist > .wj-node.menu_pos > span:before {content:''; position:absolute;left:20px; background:url(../img/menu/menu.png) no-repeat; background-position:-40px 0; width:20px; height:22px;}
+        .wj-treeview > .wj-nodelist > .wj-node.menu_pos > span:before {content:''; position:absolute;left:20px; background:url(../img/menu.png) no-repeat; background-position:-40px 0; width:20px; height:22px;}
         .wj-treeview > .wj-nodelist > .wj-node.menu_pos.on > span:before {background-position: -40px -110px;}
 
-        .wj-treeview > .wj-nodelist > .wj-node.menu_franchise > span:before {content:''; position:absolute;left:20px; background:url(../img/menu/menu.png) no-repeat; background-position:-60px 0; width:20px; height:22px;}
+        .wj-treeview > .wj-nodelist > .wj-node.menu_franchise > span:before {content:''; position:absolute;left:20px; background:url(../img/menu.png) no-repeat; background-position:-60px 0; width:20px; height:22px;}
         .wj-treeview > .wj-nodelist > .wj-node.menu_franchise.on > span:before {background-position: -60px -110px;}
 
-        .wj-treeview > .wj-nodelist > .wj-node.menu_system > span:before {content:''; position:absolute;left:20px; background:url(../img/menu/menu.png) no-repeat; background-position:-80px 0; width:20px; height:22px;}
+        .wj-treeview > .wj-nodelist > .wj-node.menu_system > span:before {content:''; position:absolute;left:20px; background:url(../img/menu.png) no-repeat; background-position:-80px 0; width:20px; height:22px;}
         .wj-treeview > .wj-nodelist > .wj-node.menu_system.on > span:before {background-position: -80px -110px;}
 
-        .wj-treeview > .wj-nodelist > .wj-node.menu_base > span:before {content:''; position:absolute;left:20px; background:url(../img/menu/menu.png) no-repeat; background-position:-100px 0; width:20px; height:22px;}
+        .wj-treeview > .wj-nodelist > .wj-node.menu_base > span:before {content:''; position:absolute;left:20px; background:url(../img/menu.png) no-repeat; background-position:-100px 0; width:20px; height:22px;}
         .wj-treeview > .wj-nodelist > .wj-node.menu_base.on > span:before {background-position: -100px -110px;}
 
-        .wj-treeview > .wj-nodelist > .wj-node.menu_sales > span:before {content:''; position:absolute;left:20px; background:url(../img/menu/menu.png) no-repeat; background-position:-120px 0; width:20px; height:22px;}
+        .wj-treeview > .wj-nodelist > .wj-node.menu_sales > span:before {content:''; position:absolute;left:20px; background:url(../img/menu.png) no-repeat; background-position:-120px 0; width:20px; height:22px;}
         .wj-treeview > .wj-nodelist > .wj-node.menu_sales.on > span:before {background-position: -120px -110px;}
 
-        .wj-treeview > .wj-nodelist > .wj-node.menu_member > span:before {content:''; position:absolute;left:20px; background:url(../img/menu/menu.png) no-repeat; background-position:-140px 0; width:20px; height:22px;}
+        .wj-treeview > .wj-nodelist > .wj-node.menu_member > span:before {content:''; position:absolute;left:20px; background:url(../img/menu.png) no-repeat; background-position:-140px 0; width:20px; height:22px;}
         .wj-treeview > .wj-nodelist > .wj-node.menu_member.on > span:before {background-position: -140px -110px;}
 
-        .wj-treeview > .wj-nodelist > .wj-node.menu_receivepay > span:before {content:''; position:absolute;left:20px; background:url(../img/menu/menu.png) no-repeat; background-position:-160px 0; width:20px; height:22px;}
+        .wj-treeview > .wj-nodelist > .wj-node.menu_receivepay > span:before {content:''; position:absolute;left:20px; background:url(../img/menu.png) no-repeat; background-position:-160px 0; width:20px; height:22px;}
         .wj-treeview > .wj-nodelist > .wj-node.menu_receivepay.on > span:before {background-position: -160px -110px;}
 
-        .wj-treeview > .wj-nodelist > .wj-node.menu_calculate > span:before {content:''; position:absolute;left:20px; background:url(../img/menu/menu.png) no-repeat; background-position:-180px 0; width:20px; height:22px;}
+        .wj-treeview > .wj-nodelist > .wj-node.menu_calculate > span:before {content:''; position:absolute;left:20px; background:url(../img/menu.png) no-repeat; background-position:-180px 0; width:20px; height:22px;}
         .wj-treeview > .wj-nodelist > .wj-node.menu_calculate.on > span:before {background-position: -180px -110px;}
 
-        .wj-treeview > .wj-nodelist > .wj-node.menu_addservice > span:before {content:''; position:absolute;left:20px; background:url(../img/menu/menu.png) no-repeat; background-position:-200px 0; width:20px; height:22px;}
+        .wj-treeview > .wj-nodelist > .wj-node.menu_addservice > span:before {content:''; position:absolute;left:20px; background:url(../img/menu.png) no-repeat; background-position:-200px 0; width:20px; height:22px;}
         .wj-treeview > .wj-nodelist > .wj-node.menu_addservice.on > span:before {background-position: -200px -110px;}
 
         .wj-treeview > .wj-nodelist > .wj-node.menu_stock > span:before {content:''; position:absolute;left:20px; background:url(../img/menu.png) no-repeat; background-position:-220px 0; width:20px; height:22px;}
@@ -1979,7 +1978,7 @@ div.wj-sheet > div {
             display: inline-block;
             position:absolute; right:20px; top:50%;
             margin-top:-5px;
-            background:url(../img/menu/menu_bullet.png) no-repeat;
+            background:url(../img/menu_bullet.png) no-repeat;
             width:6px; height:10px;
             opacity:0;
             transform: rotate(90deg);
@@ -1990,7 +1989,7 @@ div.wj-sheet > div {
             display: inline-block;
             position:absolute; right:20px; top:50%;
             margin-top:-5px;
-            background:url(../img/menu/menu_bullet.png) no-repeat;
+            background:url(../img/menu_bullet.png) no-repeat;
             width:6px; height:10px;
             opacity:1;
             transform: rotate(90deg);

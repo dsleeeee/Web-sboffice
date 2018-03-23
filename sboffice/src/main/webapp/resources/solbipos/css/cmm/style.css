@@ -83,7 +83,7 @@ button {outline:none; border:0; font-family:'NotoR', Malgun Gothic, '맑은 고�
 /* **************************************** *
  * COMMON
  * **************************************** */
-.w4 {width:4%;} .w7 {width:7%;} .w8 {width:8%;} .w10 {width:10%;} .w15 {width:15%;} .w20 {width:20%;} .w25 {width:25%;} .w28 {width:28%;} .w30 {width:30%;} .w33 {width:33.333333%;} .w35 {width:35%;} .w40 {width:40%;} .w45 {width:45%;} .w50 {width:50%;} .w60 {width:60%;} .w70 {width:70%;} .w75 {width:75%;} .w80 {width:80%;} .w85 {width:85%;} .w90 {width:90%;} .w100 {width:100%;} 
+.w4 {width:4%;} .w7 {width:7%;} .w8 {width:8%;} .w10 {width:10%;} .w11 {width:11.111111%;} .w15 {width:15%;} .w20 {width:20%;} .w25 {width:25%;} .w28 {width:28%;} .w30 {width:30%;} .w33 {width:33.333333%;} .w35 {width:35%;} .w40 {width:40%;} .w45 {width:45%;} .w50 {width:50%;} .w60 {width:60%;} .w70 {width:70%;} .w75 {width:75%;} .w80 {width:80%;} .w85 {width:85%;} .w90 {width:90%;} .w100 {width:100%;} 
 .w110 {width:110px;} .w130 {width:130px;} .w150 {width:150px;} .w200 {width:200px;} .w500 {width:500px;} .w600 {width:600px;} .w700 {width:700px;}
 
 .br {border-right:1px solid #dbdbdb;} .bl {border-left:1px solid #dbdbdb;} .bb {border-bottom:1px solid #dbdbdb;} .bt {border-top:1px solid #dbdbdb;}
@@ -94,7 +94,7 @@ button {outline:none; border:0; font-family:'NotoR', Malgun Gothic, '맑은 고�
 
 .lh15 {line-height:15px;} .lh20 {line-height:20px;} .lh25 {line-height:25px;} .lh30 {line-height:30px;} 
 
-.bk {color:#222;} .gr {color:#888!important;}
+.bk {color:#222!important;} .gr {color:#888!important;} .red {color:#f11f09!important;} .blue {color:#2c59ff!important;}
 
 .bgGray {background:#f6f6f6;}
 
@@ -141,13 +141,13 @@ a.btn_grayS2:hover {background:#444; transition:all 0.2s;}
 
 button.btn_up {position:relative; top:-5px; background:#fff; border:1px solid #93cbfc; color:#337dde; border-radius:4px; line-height:28px; height:30px; padding:0 10px; font-size:0px; transition:all 0.2s; display:inline;}
 button.btn_up:hover {background:#93cbfc; color:#fff; transition:all 0.2s;}
-button.btn_up:before {content:''; position:absolute; left:7px; top:9px; background:url(../img/menu/menu_bullet_blue.png) no-repeat; width:6px; height:10px; transform:rotate(-90deg);}
-button.btn_up:hover:before {content:''; position:absolute; left:7px; top:9px; background:url(../img/menu/menu_bullet.png) no-repeat; width:6px; height:10px; transform:rotate(-90deg);}
+button.btn_up:before {content:''; position:absolute; left:7px; top:9px; background:url(../img/menu_bullet_blue.png) no-repeat; width:6px; height:10px; transform:rotate(-90deg);}
+button.btn_up:hover:before {content:''; position:absolute; left:7px; top:9px; background:url(../img/menu_bullet.png) no-repeat; width:6px; height:10px; transform:rotate(-90deg);}
 
 button.btn_down {position:relative; top:-5px; background:#fff; border:1px solid #93cbfc; color:#337dde; border-radius:4px; line-height:28px; height:30px; padding:0 10px; font-size:0px; transition:all 0.2s; display:inline;}
 button.btn_down:hover {background:#93cbfc; color:#fff; transition:all 0.2s;}
-button.btn_down:before {content:''; position:absolute; left:7px; top:9px; background:url(../img/menu/menu_bullet_blue.png) no-repeat; width:6px; height:10px; transform:rotate(90deg);}
-button.btn_down:hover:before {content:''; position:absolute; left:7px; top:9px; background:url(../img/menu/menu_bullet.png) no-repeat; width:6px; height:10px; transform:rotate(90deg);}
+button.btn_down:before {content:''; position:absolute; left:7px; top:9px; background:url(../img/menu_bullet_blue.png) no-repeat; width:6px; height:10px; transform:rotate(90deg);}
+button.btn_down:hover:before {content:''; position:absolute; left:7px; top:9px; background:url(../img/menu_bullet.png) no-repeat; width:6px; height:10px; transform:rotate(90deg);}
 
 
 /* **************************************** *
@@ -219,16 +219,16 @@ nav.menuClose + .topWrap {position:fixed; width:100%; min-width:964px; padding-l
 .writeInfo input:focus {border-left-width:50px; border-color:#1e88e5; outline:none; color:#222;}
 .writeInfo input+label {position:absolute; left:0px; width:0px; height:50px; transition:all 0.1s ease-in;}
 .writeInfo input:focus+label {width:50px; transition:all 0.25s ease-out;}
-.writeInfo input.id+label {background:url(../img/login/ic_id.png) no-repeat 0px center; background-size:22px 50px;}
-.writeInfo input.id:focus+label {background:url(../img/login/ic_id.png) no-repeat 14px center;}
-.writeInfo input.pw+label {background:url(../img/login/ic_pw.png) no-repeat 0px center; background-size:13px 50px;}
-.writeInfo input.pw:focus+label {background:url(../img/login/ic_pw.png) no-repeat 19px center;}
-.writeInfo input.name+label {background:url(../img/login/ic_name.png) no-repeat 0px center; background-size:23px 50px;}
-.writeInfo input.name:focus+label {background:url(../img/login/ic_name.png) no-repeat 14px center;}
-.writeInfo input.tel+label {background:url(../img/login/ic_tel.png) no-repeat 0px center; background-size:20px 50px;}
-.writeInfo input.tel:focus+label {background:url(../img/login/ic_tel.png) no-repeat 15px center;}
-.writeInfo input.crtNum+label {background:url(../img/login/ic_crtNum.png) no-repeat 0px center; background-size:20px 50px;}
-.writeInfo input.crtNum:focus+label {background:url(../img/login/ic_crtNum.png) no-repeat 15px center;}
+.writeInfo input.id+label {background:url(../img/ic_id.png) no-repeat 0px center; background-size:22px 50px;}
+.writeInfo input.id:focus+label {background:url(../img/ic_id.png) no-repeat 14px center;}
+.writeInfo input.pw+label {background:url(../img/ic_pw.png) no-repeat 0px center; background-size:13px 50px;}
+.writeInfo input.pw:focus+label {background:url(../img/ic_pw.png) no-repeat 19px center;}
+.writeInfo input.name+label {background:url(../img/ic_name.png) no-repeat 0px center; background-size:23px 50px;}
+.writeInfo input.name:focus+label {background:url(../img/ic_name.png) no-repeat 14px center;}
+.writeInfo input.tel+label {background:url(../img/ic_tel.png) no-repeat 0px center; background-size:20px 50px;}
+.writeInfo input.tel:focus+label {background:url(../img/ic_tel.png) no-repeat 15px center;}
+.writeInfo input.crtNum+label {background:url(../img/ic_crtNum.png) no-repeat 0px center; background-size:20px 50px;}
+.writeInfo input.crtNum:focus+label {background:url(../img/ic_crtNum.png) no-repeat 15px center;}
 
 .idsave {position:relative; height:50px;}
 .idsave span {position:absolute; top:15px;}
@@ -236,7 +236,7 @@ nav.menuClose + .topWrap {position:fixed; width:100%; min-width:964px; padding-l
 .idsave label:before {content:''; width:25px; height:25px; background:#fff; border-radius:4px; border:1px solid #e0e1e2; display:inline-block; position:absolute; left:0px; top:-3px;}
 .idsave label:after {content:''; width:0px; height:0px; background:#000; border-radius:100%;  display:inline-block; position:absolute; left:12px; top:8px;}
 .idsave input[type="checkbox"] {position:absolute; left:-9999em;}
-.idsave input[type="checkbox"]:checked+label:before {background:url(../img/login/ic_chk.png) #1e88e5 no-repeat; border:1px solid #1e88e5; transition:all 0.5s ease-out;}
+.idsave input[type="checkbox"]:checked+label:before {background:url(../img/ic_chk.png) #1e88e5 no-repeat; border:1px solid #1e88e5; transition:all 0.5s ease-out;}
 .idsave input[type="checkbox"]:focus+label:after {transition:all 0.5s ease-out; animation:chkAni 0.3s ease-out;}
 
 /*에러메세지*/
@@ -332,12 +332,12 @@ nav.menuClose + .topWrap {position:fixed; width:100%; min-width:964px; padding-l
 .menuClose {width:60px;}
 .menuClose h1 a {position:absolute; left:0px; top:0px; width:59px; height:49px;}
 .menuClose h1 a img {display:none;}
-.menuClose h1 a span:before {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu/menu.png) no-repeat; opacity:1; transition:all 0.8s;}
+.menuClose h1 a span:before {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu.png) no-repeat; opacity:1; transition:all 0.8s;}
 
-.type_Blue .menuClose h1 a span:after {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu/menu.png) 0 -22px no-repeat; opacity:0; transition:all 0.8s;}
-.type_Purple .menuClose h1 a span:after {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu/menu.png) 0 -44px no-repeat; opacity:0; transition:all 0.8s;}
-.type_Green .menuClose h1 a span:after {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu/menu.png) 0 -66px no-repeat; opacity:0; transition:all 0.8s;}
-.type_Orange .menuClose h1 a span:after {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu/menu.png) 0 -88px no-repeat; opacity:0; transition:all 0.8s;}
+.type_Blue .menuClose h1 a span:after {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu.png) 0 -22px no-repeat; opacity:0; transition:all 0.8s;}
+.type_Purple .menuClose h1 a span:after {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu.png) 0 -44px no-repeat; opacity:0; transition:all 0.8s;}
+.type_Green .menuClose h1 a span:after {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu.png) 0 -66px no-repeat; opacity:0; transition:all 0.8s;}
+.type_Orange .menuClose h1 a span:after {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu.png) 0 -88px no-repeat; opacity:0; transition:all 0.8s;}
 
 .menuClose h1 a:hover span:before, .menuClose h1 a.on span:before {opacity:0; transition:all 0.8s;}
 .menuClose h1 a:hover span:after, .menuClose h1 a.on span:after {opacity:1; transition:all 0.8s;}
@@ -346,34 +346,20 @@ nav.menuClose + .topWrap {position:fixed; width:100%; min-width:964px; padding-l
 /*.menuClose .menuTab p.all {display:none;}*/
 .menuClose .menuTab p.favorite a, .menuClose .menuTab p.all a {position:absolute; left:0px; top:0px; width:60px; height:49px;}
 .menuClose .menuTab p.favorite span, .menuClose .menuTab p.all span {text-indent:-70px; font-size:0.875em; display:inline-block; line-height:49px;}
-.menuClose .menuTab p.favorite a span:before {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu/menu.png) -20px 0 no-repeat; opacity:1;}
+.menuClose .menuTab p.favorite a span:before {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu.png) -20px 0 no-repeat; opacity:1;}
+.menuClose .menuTab p.favorite a span:after {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu.png) #1b202b no-repeat; opacity:0;}
+.menuClose .menuTab p.favorite a:hover span:before {transition:all 0.3s;}
+.menuClose .menuTab p.favorite a:hover span:after {opacity:1; transition:all 0.3s;}
+.menuClose .menuTab p.favorite a {transition:all 0.3s;}
+.menuClose .menuTab p.favorite a:hover {background:#1b202b; transition:all 0.3s;}
+.menuClose .menuTab p.favorite a.on span:after {background:url(../img/menu.png) #2e333f no-repeat; opacity:1; transition:all 0.3s;}
+.menuClose .menuTab p.favorite a.on:hover span:after {background:url(../img/menu.png) #1b202b no-repeat; transition:all 0.3s;}
 
-.type_Blue .menuClose .menuTab p.favorite a span:after {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu/menu.png) -20px -22px no-repeat; opacity:0;}
-.type_Purple .menuClose .menuTab p.favorite a span:after {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu/menu.png) -20px -44px no-repeat; opacity:0;}
-.type_Green .menuClose .menuTab p.favorite a span:after {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu/menu.png) -20px -66px no-repeat; opacity:0;}
-.type_Orange .menuClose .menuTab p.favorite a span:after {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu/menu.png) -20px -88px no-repeat; opacity:0;}
 
-.menuClose .menuTab p.favorite a:hover span:before, .menuClose .menuTab p.favorite a.on span:before {opacity:0;}
-.menuClose .menuTab p.favorite a:hover span:after, .menuClose .menuTab p.favorite a.on span:after {opacity:1;}
-.type_Blue .menuClose .menuTab:hover p.favorite a {background:#ebf5ff;}
-.menuClose .menuTab:hover p.favorite a span:before {opacity:0;}
-.menuClose .menuTab:hover p.favorite a span:after {opacity:1;}
-.menuClose .menuTab:hover .fahoMenu {width:200px; transition:all 0.3s; opacity:1;}
-
-.menuOpen .fahoMenu {display:none;}
-.type_Blue .menuClose .fahoMenu {display:block; position:relative; left:60px; background:#ebf5ff; width:0; overflow:hidden; opacity:0; padding:10px 0;}
-.fahoMenu li.depth1 a {font-size:0.875em; color:#888fa4;}
-.fahoMenu li.depth1 a span {font-size:1em; color:#888fa4;}
-.fahoMenu li.depth1 a {display:inline-block; width:200px; padding:7px 25px 7px 15px; transition:all 0.3s; line-height:1.2em;}
-.type_Blue .fahoMenu li.depth1 a.depth1:hover span, .type_Blue .fahoMenu li.depth1.on a.depth1 span {color:#1e88e5;}
-.type_Blue .fahoMenu li.depth1 a.depth1:hover:before, .type_Blue .fahoMenu li.depth1.on a.depth1:before {content:''; position:absolute; left:180px; top:middle; margin-top:2px; background:url(../img/menu/menu_bullet_blue.png) no-repeat; width:6px; height:10px; transition:all 0.3s;}
-.fahoMenu li.depth1.on a.depth1:before {transform:rotate(90deg); transition:all 0.3s;}
-.fahoMenu li.depth1 a.depth2:hover:before, .fahoMenu li.depth1 a.depth2.on:before {content:''; position:absolute; left:180px; top:middle; margin-top:2px; background:url(../img/menu/menu_bullet2.png) no-repeat; width:6px; height:10px; transition:all 0.3s;}
-.fahoMenu li.depth1 a.depth2.on:before {transform:rotate(90deg); transition:all 0.3s;}
-.fahoMenu li.depth1 a.depth2 {padding:7px 25px 7px 30px;}
-.fahoMenu li.depth1 a.depth2:hover, .fahoMenu li.depth1 a.depth2.on {color:#222;}
-.fahoMenu li.depth1 a.depth3 {padding:7px 10px 7px 45px;}
-.type_Blue .fahoMenu li.depth1 a.depth3:hover, .type_Blue .fahoMenu li.depth1 a.depth3.on {color:#1e88e5;}
+.type_Blue .menuClose .menuTab p.favorite a span:after, .type_Blue .menuClose .menuTab p.favorite a.on:hover span:after {background-position:-20px -22px;}
+.type_Purple .menuClose .menuTab p.favorite a span:after, .type_Purple .menuClose .menuTab p.favorite a.on:hover span:after {background-position:-20px -44px;}
+.type_Green .menuClose .menuTab p.favorite a span:after, .type_Green .menuClose .menuTab p.favorite a.on:hover span:after {background-position:-20px -66px;}
+.type_Orange .menuClose .menuTab p.favorite a span:after, .type_Orange .menuClose .menuTab p.favorite a.on:hover span:after {background-position:-20px -88px;}
 
 .faMenu {margin-top:20px;}
 .faMenu .btn_faManage {text-align:right; margin-right:15px;}
@@ -381,82 +367,74 @@ nav.menuClose + .topWrap {position:fixed; width:100%; min-width:964px; padding-l
 .faMenu .btn_faManage a:hover {background:#3e4452; color:#fff; border:1px solid #fff; transition:all 0.3s;}
 .faMenu .txt {text-align:center; font-size:0.75em; line-height:1.5em; color:#fff; margin-top:40px;}
 
+
 /*Related wizmo*/
 .menuTree span {font-size:0.875em; line-height:1.3em;}
 
 .menuOpen .smallMenu {display:none;}
 .menuClose .wj-treeview {display:none;}
 
-.smallMenu {margin-top:20px;}
-.smallMenu li.depth1 {height:50px; position:relative;}
-.smallMenu li.depth1 a {line-height:1.2em;}
-.smallMenu li.depth1 a.depth1 {height:50px; width:60px; display:block;}
-.type_Blue .smallMenu li.depth1:hover a.depth1 {background:#ebf5ff;}
-.type_Blue .smallMenu li.depth1:hover a.depth1 > span {position:absolute; width:220px; left:40px; font-size:0.875em;  color:#1e88e5; line-height:50px; height:50px; display:inline-block; padding:0 10px 0 10px; transition:color 0.5s; z-index:999;}
-.smallMenu li.depth1 span {font-size:0px;}
-.smallMenu li.depth1:before {content:''; position:absolute; top:14px; left:20px; background:url(../img/menu/menu.png) no-repeat; width:20px; height:22px; cursor:pointer;}
+.smallMenu {margin-top:20px; height:100%;}
+.smallMenu li {height:50px; position:relative;}
+.smallMenu li a {display:inline-block; width:100%; height:100%; transition:all 0.3s;}
+.smallMenu li a:hover {background:#1b202b; transition:all 0.3s;}
+.smallMenu li a:before {content:''; position:absolute; top:14px; left:20px; background:url(../img/menu.png) no-repeat; width:20px; height:22px; opacity:1;}
+.smallMenu li a:hover:before {transition:all 0.3s;}
+.smallMenu li a:after {content:''; position:absolute; top:14px; left:20px; background:url(../img/menu.png) #1b202b no-repeat; width:20px; height:22px; opacity:0;}
+.smallMenu li a:hover:after {opacity:1; transition:all 0.3s;}
 
-.smallMenu li.depth1.menu_pos:before {background-position:-40px 0;}
-.type_Blue .smallMenu li.depth1.menu_pos:hover:before {background-position:-40px -22px;}
-.type_Blue .smallMenu li.depth1.menu_pos.on:before {background-position:-40px -22px;}
+.smallMenu li.menu_pos a:before {background-position:-40px 0;}
+.type_Blue .smallMenu li.menu_pos a:after {background-position:-40px -22px;}
+.type_Blue .smallMenu li.menu_pos.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-40px -22px; opacity:1; transition:all 0.3s;}
+.type_Blue .smallMenu li.menu_pos.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-40px -22px; transition:all 0.3s;}
 
-.smallMenu li.depth1.menu_franchise:before {background-position:-60px 0;}
-.type_Blue .smallMenu li.depth1.menu_franchise:hover:before {background-position:-60px -22px;}
-.type_Blue .smallMenu li.depth1.menu_franchise.on:before {background-position:-60px -22px;}
+.smallMenu li.menu_franchise a:before {background-position:-60px 0;}
+.type_Blue .smallMenu li.menu_franchise a:after {background-position:-60px -22px;}
+.type_Blue .smallMenu li.menu_franchise.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-60px -22px; opacity:1; transition:all 0.3s;}
+.type_Blue .smallMenu li.menu_franchise.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-60px -22px; transition:all 0.3s;}
 
-.smallMenu li.depth1.menu_system:before {background-position:-80px 0;}
-.type_Blue .smallMenu li.depth1.menu_system:hover:before {background-position:-80px -22px;}
-.type_Blue .smallMenu li.depth1.menu_system.on:before {background-position:-80px -22px;}
+.smallMenu li.menu_system a:before {background-position:-80px 0;}
+.type_Blue .smallMenu li.menu_system a:after {background-position:-80px -22px;}
+.type_Blue .smallMenu li.menu_system.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-80px -22px; opacity:1; transition:all 0.3s;}
+.type_Blue .smallMenu li.menu_system.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-80px -22px; transition:all 0.3s;}
 
-.smallMenu li.depth1.menu_base:before {background-position:-100px 0;}
-.type_Blue .smallMenu li.depth1.menu_base:hover:before {background-position:-100px -22px;}
-.type_Blue .smallMenu li.depth1.menu_base.on:before {background-position:-100px -22px;}
+.smallMenu li.menu_base a:before {background-position:-100px 0;}
+.type_Blue .smallMenu li.menu_base a:after {background-position:-100px -22px;}
+.type_Blue .smallMenu li.menu_base.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-100px -22px; opacity:1; transition:all 0.3s;}
+.type_Blue .smallMenu li.menu_base.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-100px -22px; transition:all 0.3s;}
 
-.smallMenu li.depth1.menu_sales:before {background-position:-120px 0;}
-.type_Blue .smallMenu li.depth1.menu_sales:hover:before {background-position:-120px -22px;}
-.type_Blue .smallMenu li.depth1.menu_sales.on:before {background-position:-120px -22px;}
+.smallMenu li.menu_sales a:before {background-position:-120px 0;}
+.type_Blue .smallMenu li.menu_sales a:after {background-position:-120px -22px;}
+.type_Blue .smallMenu li.menu_sales.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-120px -22px; opacity:1; transition:all 0.3s;}
+.type_Blue .smallMenu li.menu_sales.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-120px -22px; transition:all 0.3s;}
 
-.smallMenu li.depth1.menu_member:before {background-position:-140px 0;}
-.type_Blue .smallMenu li.depth1.menu_member:hover:before {background-position:-140px -22px;}
-.type_Blue .smallMenu li.depth1.menu_member.on:before {background-position:-140px -22px;}
+.smallMenu li.menu_member a:before {background-position:-140px 0;}
+.type_Blue .smallMenu li.menu_member a:after {background-position:-140px -22px;}
+.type_Blue .smallMenu li.menu_member.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-140px -22px; opacity:1; transition:all 0.3s;}
+.type_Blue .smallMenu li.menu_member.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-140px -22px; transition:all 0.3s;}
 
-.smallMenu li.depth1.menu_receivepay:before {background-position:-160px 0;}
-.type_Blue .smallMenu li.depth1.menu_receivepay:hover:before {background-position:-160px -22px;}
-.type_Blue .smallMenu li.depth1.menu_receivepay.on:before {background-position:-160px -22px;}
+.smallMenu li.menu_receivepay a:before {background-position:-160px 0;}
+.type_Blue .smallMenu li.menu_receivepay a:after {background-position:-160px -22px;}
+.type_Blue .smallMenu li.menu_receivepay.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-160px -22px; opacity:1; transition:all 0.3s;}
+.type_Blue .smallMenu li.menu_receivepay.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-160px -22px; transition:all 0.3s;}
 
-.smallMenu li.depth1.menu_calculate:before {background-position:-180px 0;}
-.type_Blue .smallMenu li.depth1.menu_calculate:hover:before {background-position:-180px -22px;}
-.type_Blue .smallMenu li.depth1.menu_calculate.on:before {background-position:-180px -22px;}
+.smallMenu li.menu_calculate a:before {background-position:-180px 0;}
+.type_Blue .smallMenu li.menu_calculate a:after {background-position:-180px -22px;}
+.type_Blue .smallMenu li.menu_calculate.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-180px -22px; opacity:1; transition:all 0.3s;}
+.type_Blue .smallMenu li.menu_calculate.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-180px -22px; transition:all 0.3s;}
 
-.smallMenu li.depth1.menu_addservice:before {background-position:-200px 0;}
-.type_Blue .smallMenu li.depth1.menu_addservice:hover:before {background-position:-200px -22px;}
-.type_Blue .smallMenu li.depth1.menu_addservice.on:before {background-position:-200px -22px;}
+.smallMenu li.menu_addservice a:before {background-position:-200px 0;}
+.type_Blue .smallMenu li.menu_addservice a:after {background-position:-200px -22px;}
+.type_Blue .smallMenu li.menu_addservice.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-200px -22px; opacity:1; transition:all 0.3s;}
+.type_Blue .smallMenu li.menu_addservice.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-200px -22px; transition:all 0.3s;}
 
-.smallMenu li.depth1.menu_stock:before {background-position:-220px 0;}
-.type_Blue .smallMenu li.depth1.menu_stock:hover:before {background-position:-220px -22px;}
-.type_Blue .smallMenu li.depth1.menu_stock.on:before {background-position:-220px -22px;}
+.smallMenu li.menu_stock a:before {background-position:-220px 0;}
+.type_Blue .smallMenu li.menu_stock a:after {background-position:-220px -22px;}
+.type_Blue .smallMenu li.menu_stock.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-220px -22px; opacity:1; transition:all 0.3s;}
+.type_Blue .smallMenu li.menu_stock.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-220px -22px; transition:all 0.3s;}
 
-.type_Blue .smallMenu li ul.depth2 {position:absolute; left:60px; top:0px; background:#ebf5ff; width:0px; overflow:hidden; padding:50px 0 10px 0; opacity:1;  transition:all 0.3s;}
-.smallMenu li ul.depth2 a {font-size:0.875em; color:#888fa4; display:inline-block; width:200px; padding:7px 30px 7px 15px;  transition:color 0.3s;}
-.smallMenu li ul.depth2 a:before {background:none;}
-.smallMenu li ul.depth2 a.depth2 {position:relative;}
-.smallMenu li ul.depth2 a.depth2:hover, .smallMenu li ul.depth2 a.depth2.on {color:#222;}
-.smallMenu li ul.depth2 a.depth2:hover:before {content:''; position:absolute; left:175px; top:50%; margin-top:-5px; background:url(../img/menu/menu_bullet2.png) no-repeat; width:6px; height:10px; transition:all 0.3s;}
-.smallMenu li ul.depth2 a.depth2.on:before {content:''; position:absolute; left:175px; top:50%; margin-top:-5px; background:url(../img/menu/menu_bullet2.png) no-repeat; width:6px; height:10px; transform: rotate(90deg); transition:all 0.3s;}
 
-.smallMenu .menu_pos:hover .depth2 {opacity:1; width:200px; transition:all 0.3s;}
-.smallMenu .menu_franchise:hover .depth2 {opacity:1; width:200px; transition:all 0.3s;}
-.smallMenu .menu_system:hover .depth2 {opacity:1; width:200px; transition:all 0.3s;}
-.smallMenu .menu_base:hover .depth2 {opacity:1; width:200px; transition:all 0.3s;}
-.smallMenu .menu_sales:hover .depth2 {opacity:1; width:200px; transition:all 0.3s;}
-.smallMenu .menu_member:hover .depth2 {opacity:1; width:200px; transition:all 0.3s;}
-.smallMenu .menu_receivepay:hover .depth2 {opacity:1; width:200px; transition:all 0.3s;}
-.smallMenu .menu_calculate:hover .depth2 {opacity:1; width:200px; transition:all 0.3s;}
-.smallMenu .menu_addservice:hover .depth2 {opacity:1; width:200px; transition:all 0.3s;}
-.smallMenu .menu_stock:hover .depth2 {opacity:1; width:200px; transition:all 0.3s;}
-
-.smallMenu a.depth3 {padding:7px 10px 7px 35px!important;}
-.type_Blue .smallMenu a.depth3:hover, .type_Blue .smallMenu a.depth3.on {color:#1e88e5!important; transition:all 0.3s;}
+/* 포스관리(menu_pos), 가맹점괌리(menu_franchise), 시스템관리(menu_system), 기초관리(menu_base), 매출관리(menu_sales), 회원관리(menu_member), 수불관리(menu_receivepay), 정산관리(menu_calculate), 부가서비스(menu_addservice), 재고관리(menu_stock) */
 
 
 /* **************************************** *
@@ -580,10 +558,10 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .moveBtn {position:relative; position:absolute; right:0px; top:-1px; height:50px; width:98px; overflow:hidden;}
 .type_Blue .moveBtn:before {content:''; position:absolute; left:10px; top:0px; width:88px; height:50px; background:#127bd8; box-shadow:-2px 0 4px 0 RGBA(0,0,0,0.3);}
 .moveBtn a {display:inline-block; width:19px; height:18px; border:1px solid #fff;}
-.moveBtn a.mL {background:url(../img/menu/menu_bullet.png) center no-repeat; transform: rotate(180deg); position:absolute; left:30px; top:15px;}
-.moveBtn a.mR {background:url(../img/menu/menu_bullet.png) center no-repeat; position:absolute; left:59px; top:15px;}
-.type_Blue .moveBtn a.mL:hover {background:url(../img/menu/menu_bullet_blue.png) #fff center no-repeat; transition:all 0.3s;}
-.type_Blue .moveBtn a.mR:hover {background:url(../img/menu/menu_bullet_blue.png) #fff center no-repeat; transition:all 0.3s;}
+.moveBtn a.mL {background:url(../img/menu_bullet.png) center no-repeat; transform: rotate(180deg); position:absolute; left:30px; top:15px;}
+.moveBtn a.mR {background:url(../img/menu_bullet.png) center no-repeat; position:absolute; left:59px; top:15px;}
+.type_Blue .moveBtn a.mL:hover {background:url(../img/menu_bullet_blue.png) #fff center no-repeat; transition:all 0.3s;}
+.type_Blue .moveBtn a.mR:hover {background:url(../img/menu_bullet_blue.png) #fff center no-repeat; transition:all 0.3s;}
 
 
 /* **************************************** *
@@ -747,7 +725,7 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 
 .searchBar {position:relative; border:1px solid #93cbfc; height:45px; background:#ebf5ff;}
 .searchBar a {display:block; width:100%; height:100%; line-height:45px; color:#337dde;  padding:0 15px; font-size:0.875em; position:relative;}
-.searchBar a:before {content:''; position:absolute; right:15px; top:17px; background:url(../img/menu/menu_bullet_blue.png) no-repeat; width:6px; height:10px;}
+.searchBar a:before {content:''; position:absolute; right:15px; top:17px; background:url(../img/menu_bullet_blue.png) no-repeat; width:6px; height:10px;}
 .searchBar a.open:before {transform:rotate(-90deg);}
 .searchBar a.close:before {transform:rotate(90deg);}
 
@@ -811,8 +789,8 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .subTab li a:hover {background:RGBA(0,0,0,0.2); color:#fff; transition:all 0.3s;}
 .subTab li a.on:hover {background:#2e333f; color:#fff;}
 
-.subTab2 ul {overflow:hidden; height:25px;}
-.subTab2 ul li {float:left; margin-right:1px;}
+.subTab2 ul {overflow:hidden;}
+.subTab2 ul li {float:left; margin-right:1px; height:25px; margin-bottom:10px;}
 .subTab2 ul li:last-child {margin-right:0px;}
 .subTab2 ul li a {font-size:0.875em; display:inline-block; background:#e8e8e8; height:25px; line-height:25px; padding:0 20px; transition:all 0.3s;}
 .subTab2 ul li a.on, .subTab2 ul li a.on:hover {background:#fff; color:#2e333f; border:1px solid #2e333f;}
@@ -824,11 +802,20 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 
 .wj-cell .wj-cell-check {width:18px; height:18px;}
 .wj-cells .wj-cell {border-bottom: 1px solid #e8e8e8; border-right: 1px solid #e8e8e8;}
+.wj-topleft .wj-cell {border-bottom: 1px solid #ccc; border-top: 1px solid #ccc; border-right: 1px solid #ccc;}
 .wj-cells .wj-cell:last-child {border-right:0;}
 .wj-colheaders .wj-cell {border-right: 1px solid #ccc; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc;}
-.wj-colheaders .wj-cell:last-child {border-right:0;}
+.wj-colheaders div.wj-row:first-child .wj-cell:last-child {border-right:0px;}
+.wj-colheaders div.wj-row:nth-child(2) .wj-cell {border-top:0px;}
+.wj-colheaders div.wj-row:nth-child(3) .wj-cell {border-top:0px;}
+.wj-rowheaders .wj-header {background:#f6f6f6; border-bottom: 1px solid #e8e8e8; border-right: 1px solid #e8e8e8;}
+.wj-topleft div.wj-row:first-child .wj-cell {background:url(../img/ic_tbl_setting.png)#e8e8e8 center center no-repeat; background-size:21px 20px;}
+.wj-topleft div.wj-row:nth-child(2) .wj-cell {border-top:0px;}
+.wj-topleft div.wj-row:nth-child(3) .wj-cell {border-top:0px;}
 .wj-TblWrap .bdBg {color:#222; background:#f6f6f6!important;}
 .wj-TblWrapBr .bdBg {color:#222; background:#f6f6f6!important;}
+.wj-cell .v-center {position: relative; top: 50%; transform: translateY(-50%); white-space: pre-wrap; color:#222; font-size:12px;}
+.wj-cells .wj-row .wj-cell.wj-group {text-align:left!important;}
 
 .pageNum {position:relative; width:100%; text-align:center;}
 .pageNum ul {height:30px; text-align:center; display:inline-block; overflow:hidden;}
@@ -863,9 +850,9 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .h3_tbl2 {font-size:0.75em; border:1px solid #ccc; background:#e8e8e8; padding:5px 15px; color:#222; min-width:550px; position:relative;}
 .h3_tbl2 span {font-size:1em;}
 .h3_tbl2 button.open, .h3_tbl2 button.close {background:#aeaeae; width:20px; height:20px; display:inline-block; margin-left:5px; position:absolute; top:10px;}
-.h3_tbl2 button.open:before {content:''; position:absolute; top:5px; left:7px; background:url(../img/menu/menu_bullet.png) no-repeat; display:inline-block; width:6px; height:10px; transform:rotate(-90deg);}
+.h3_tbl2 button.open:before {content:''; position:absolute; top:5px; left:7px; background:url(../img/menu_bullet.png) no-repeat; display:inline-block; width:6px; height:10px; transform:rotate(-90deg);}
 .h3_tbl2 button.open:hover {background:#777;}
-.h3_tbl2 button.close:before {content:''; position:absolute; top:5px; left:7px; background:url(../img/menu/menu_bullet.png) no-repeat; display:inline-block; width:6px; height:10px; transform:rotate(90deg);}
+.h3_tbl2 button.close:before {content:''; position:absolute; top:5px; left:7px; background:url(../img/menu_bullet.png) no-repeat; display:inline-block; width:6px; height:10px; transform:rotate(90deg);}
 .h3_tbl2 button.close:hover {background:#777;}
 
 
@@ -879,6 +866,9 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .chk {position:relative; top:-7px;}
 .chk label {font-size:12px;}
 .chk input {width:18px; height:18px; position:relative; top:4px;}
+.chk2 {position:relative; top:0px;}
+.chk2 label {font-size:12px;}
+.chk2 input {width:18px; height:18px; position:relative; top:4px;}
 
 .tArea1 {background:#f6f6f6; width:100%; height:100%; font-size:0.75em; padding:10px; resize:none; line-height:17px;}
 .shopimg {font-size:1em; line-height:17px;}
@@ -897,6 +887,20 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 
 .inSty {border:1px solid #ccc; font-size:0.75em; padding:4px 10px;}
 .inSty2 {border:1px solid #e8e8e8; font-size:0.75em; padding:5px 10px;}
+
+/*캘린더*/
+.cldTbl {position:relative; border-collapse:collapse; width:100%;}
+.cldTbl thead th {border:1px solid #d5dee5; background:#ebf5ff; padding:10px 0; color:#444;}
+.cldTbl thead th {font-size:0.875em;}
+.cldTbl tbody th, tfoot th, .cldTbl td {font-size:0.75em;}
+.cldTbl tbody th {border:1px solid #e8e8e8; background:#f6f6f6; padding:3px 0; color:#444;}
+.cldTbl td {border:1px solid #e8e8e8; padding:0 5px; text-align:right; height:50px; word-break: break-all; line-height:1.2em;}
+.cldTbl thead th:nth-child(1), .cldTbl tbody th:nth-child(1), .cldTbl tfoot tr:first-child th:nth-child(1) {color:#f11f09;}
+.cldTbl thead th:nth-child(7), .cldTbl tbody th:nth-child(7), .cldTbl tfoot tr:first-child th:nth-child(7) {color:#2c59ff;}
+.cldTbl tbody th:nth-child(8), .cldTbl tbody th:nth-child(9) {background:rgba(241,31,9,0.05);}
+.cldTbl tfoot th {border:1px solid #e8e8e8; background:rgba(241,31,9,0.05); padding:5px 0; color:#444;}
+.cldTbl tfoot .total {font-size:1.5em; color:#f11f09; padding-right:10px;}
+
 
 /* **************************************** *
  * layer
@@ -990,17 +994,8 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
  * **************************************** */
 
 /* 프랜차이즈본사 .type_Purple */
-.type_Purple .menuClose .menuTab:hover p.favorite a {background:#f2e6ff;}
-.type_Purple .menuClose .fahoMenu {display:block; position:relative; left:60px; background:#f2e6ff; width:0; overflow:hidden; opacity:0; padding:10px 0;}
 .type_Purple .menuControl a:after {content:''; position:absolute; left:-120px; top:-125px; width:300px; height:300px; background:#6b1ce0; opacity:0; transition:all 1.5s;}
 .type_Purple .menuControl a:active:after {left:50%; top:50%; width:0px; height:0px; border-radius:50px; opacity:0.5; transition:0s;}
-.type_Purple .fahoMenu li.depth1 a.depth1:hover:before, .type_Purple .fahoMenu li.depth1.on a.depth1:before {content:''; position:absolute; left:180px; top:middle; margin-top:2px; background:url(../img/menu/menu_bullet_purple.png) no-repeat; width:6px; height:10px; transition:all 0.3s;}
-.type_Purple .fahoMenu li.depth1 a.depth1:hover span, .type_Purple .fahoMenu li.depth1.on a.depth1 span {color:#ae63ff;}
-.type_Purple .fahoMenu li.depth1 a.depth3:hover, .type_Purple .fahoMenu li.depth1 a.depth3.on {color:#ae63ff;}
-.type_Purple .smallMenu li.depth1:hover a.depth1 {background:#f2e6ff;}
-.type_Purple .smallMenu li.depth1:hover a.depth1 > span {position:absolute; width:220px; left:40px; font-size:0.875em;  color:#ae63ff; line-height:50px; height:50px; display:inline-block; padding:0 10px 0 10px; transition:color 0.5s; z-index:999;}
-.type_Purple .smallMenu li ul.depth2 {position:absolute; left:60px; top:0px; background:#f2e6ff; width:0px; overflow:hidden; padding:50px 0 10px 0; opacity:1;  transition:all 0.3s;}
-.type_Purple .smallMenu a.depth3:hover, .type_Purple .smallMenu a.depth3.on {color:#ae63ff!important; transition:all 0.3s;}
 .type_Purple .topBar {background:#ae63ff; height:50px; border-bottom:1px solid #8c38e6; z-index:900; position:relative;}
 .type_Purple .userId {padding:0 40px 0 20px; border-left:1px solid #8c38e6; float:right;}
 .type_Purple .userId:after {content:''; position:absolute; left:-120%; top:-240px; width:500px; height:500px; background:#6b1ce0; border-radius:100%; opacity:0; transition:all 1.3s;}
@@ -1016,51 +1011,53 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .type_Purple .fixedMenu ul li a:first-child.on:before {content:''; position:absolute; width:100%; height:100%; background:none; left:-1px; top:-1px; border:1px solid #270089; box-sizing:content-box;}
 .type_Purple .fixedMenu ul li:hover {background:#bf84fe; transition:all 0.3s;}
 .type_Purple .moveBtn:before {content:''; position:absolute; left:10px; top:0px; width:88px; height:50px; background:#8c38e6; box-shadow:-2px 0 4px 0 RGBA(0,0,0,0.3);}
-.type_Purple .moveBtn a.mL:hover {background:url(../img/menu/menu_bullet_purple.png) #fff center no-repeat; transition:all 0.3s;}
-.type_Purple .moveBtn a.mR:hover {background:url(../img/menu/menu_bullet_purple.png) #fff center no-repeat; transition:all 0.3s;}
+.type_Purple .moveBtn a.mL:hover {background:url(../img/menu_bullet_purple.png) #fff center no-repeat; transition:all 0.3s;}
+.type_Purple .moveBtn a.mR:hover {background:url(../img/menu_bullet_purple.png) #fff center no-repeat; transition:all 0.3s;}
 
-.type_Purple .smallMenu li.depth1.menu_pos:hover:before {background-position:-40px -44px;}
-.type_Purple .smallMenu li.depth1.menu_pos.on:before {background-position:-40px -44px;}
+.type_Purple .smallMenu li.menu_pos a:after {background-position:-40px -44px;}
+.type_Purple .smallMenu li.menu_pos.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-40px -44px; opacity:1; transition:all 0.3s;}
+.type_Purple .smallMenu li.menu_pos.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-40px -44px; transition:all 0.3s;}
 
-.type_Purple .smallMenu li.depth1.menu_franchise:hover:before {background-position:-60px -44px;}
-.type_Purple .smallMenu li.depth1.menu_franchise.on:before {background-position:-60px -44px;}
+.type_Purple .smallMenu li.menu_franchise a:after {background-position:-60px -44px;}
+.type_Purple .smallMenu li.menu_franchise.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-60px -44px; opacity:1; transition:all 0.3s;}
+.type_Purple .smallMenu li.menu_franchise.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-60px -44px; transition:all 0.3s;}
 
-.type_Purple .smallMenu li.depth1.menu_system:hover:before {background-position:-80px -44px;}
-.type_Purple .smallMenu li.depth1.menu_system.on:before {background-position:-80px -44px;}
+.type_Purple .smallMenu li.menu_system a:after {background-position:-80px -44px;}
+.type_Purple .smallMenu li.menu_system.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-80px -44px; opacity:1; transition:all 0.3s;}
+.type_Purple .smallMenu li.menu_system.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-80px -44px; transition:all 0.3s;}
 
-.type_Purple .smallMenu li.depth1.menu_base:hover:before {background-position:-100px -44px;}
-.type_Purple .smallMenu li.depth1.menu_base.on:before {background-position:-100px -44px;}
+.type_Purple .smallMenu li.menu_base a:after {background-position:-100px -44px;}
+.type_Purple .smallMenu li.menu_base.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-100px -44px; opacity:1; transition:all 0.3s;}
+.type_Purple .smallMenu li.menu_base.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-100px -44px; transition:all 0.3s;}
 
-.type_Purple .smallMenu li.depth1.menu_sales:hover:before {background-position:-120px -44px;}
-.type_Purple .smallMenu li.depth1.menu_sales.on:before {background-position:-120px -44px;}
+.type_Purple .smallMenu li.menu_sales a:after {background-position:-120px -44px;}
+.type_Purple .smallMenu li.menu_sales.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-120px -44px; opacity:1; transition:all 0.3s;}
+.type_Purple .smallMenu li.menu_sales.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-120px -44px; transition:all 0.3s;}
 
-.type_Purple .smallMenu li.depth1.menu_member:hover:before {background-position:-140px -44px;}
-.type_Purple .smallMenu li.depth1.menu_member.on:before {background-position:-140px -44px;}
+.type_Purple .smallMenu li.menu_member a:after {background-position:-140px -44px;}
+.type_Purple .smallMenu li.menu_member.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-140px -44px; opacity:1; transition:all 0.3s;}
+.type_Purple .smallMenu li.menu_member.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-140px -44px; transition:all 0.3s;}
 
-.type_Purple .smallMenu li.depth1.menu_receivepay:hover:before {background-position:-160px -44px;}
-.type_Purple .smallMenu li.depth1.menu_receivepay.on:before {background-position:-160px -44px;}
+.type_Purple .smallMenu li.menu_receivepay a:after {background-position:-160px -44px;}
+.type_Purple .smallMenu li.menu_receivepay.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-160px -44px; opacity:1; transition:all 0.3s;}
+.type_Purple .smallMenu li.menu_receivepay.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-160px -44px; transition:all 0.3s;}
 
-.type_Purple .smallMenu li.depth1.menu_calculate:hover:before {background-position:-180px -44px;}
-.type_Purple .smallMenu li.depth1.menu_calculate.on:before {background-position:-180px -44px;}
+.type_Purple .smallMenu li.menu_calculate a:after {background-position:-180px -44px;}
+.type_Purple .smallMenu li.menu_calculate.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-180px -44px; opacity:1; transition:all 0.3s;}
+.type_Purple .smallMenu li.menu_calculate.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-180px -44px; transition:all 0.3s;}
 
-.type_Purple .smallMenu li.depth1.menu_addservice:hover:before {background-position:-200px -44px;}
-.type_Purple .smallMenu li.depth1.menu_addservice.on:before {background-position:-200px -44px;}
+.type_Purple .smallMenu li.menu_addservice a:after {background-position:-200px -44px;}
+.type_Purple .smallMenu li.menu_addservice.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-200px -44px; opacity:1; transition:all 0.3s;}
+.type_Purple .smallMenu li.menu_addservice.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-200px -44px; transition:all 0.3s;}
 
-.type_Purple .smallMenu li.depth1.menu_stock:hover:before {background-position:-220px -44px;}
-.type_Purple .smallMenu li.depth1.menu_stock.on:before {background-position:-220px -44px;}
+.type_Purple .smallMenu li.menu_stock a:after {background-position:-220px -44px;}
+.type_Purple .smallMenu li.menu_stock.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-220px -44px; opacity:1; transition:all 0.3s;}
+.type_Purple .smallMenu li.menu_stock.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-220px -44px; transition:all 0.3s;}
+
 
 /* 가맹점 .type_Green */
-.type_Green .menuClose .menuTab:hover p.favorite a {background:#e1fff7;}
-.type_Green .menuClose .fahoMenu {display:block; position:relative; left:60px; background:#e1fff7; width:0; overflow:hidden; opacity:0; padding:10px 0;}
 .type_Green .menuControl a:after {content:''; position:absolute; left:-120px; top:-125px; width:300px; height:300px; background:#008866; opacity:0; transition:all 1.5s;}
 .type_Green .menuControl a:active:after {left:50%; top:50%; width:0px; height:0px; border-radius:50px; opacity:0.5; transition:0s;}
-.type_Green .fahoMenu li.depth1 a.depth1:hover:before, .type_Green .fahoMenu li.depth1.on a.depth1:before {content:''; position:absolute; left:180px; top:middle; margin-top:2px; background:url(../img/menu/menu_bullet_green.png) no-repeat; width:6px; height:10px; transition:all 0.3s;}
-.type_Green .fahoMenu li.depth1 a.depth1:hover span, .type_Green .fahoMenu li.depth1.on a.depth1 span {color:#00ba8b;}
-.type_Green .fahoMenu li.depth1 a.depth3:hover, .type_Green .fahoMenu li.depth1 a.depth3.on {color:#00ba8b;}
-.type_Green .smallMenu li.depth1:hover a.depth1 {background:#e1fff7;}
-.type_Green .smallMenu li.depth1:hover a.depth1 > span {position:absolute; width:220px; left:40px; font-size:0.875em;  color:#00ba8b; line-height:50px; height:50px; display:inline-block; padding:0 10px 0 10px; transition:color 0.5s; z-index:999;}
-.type_Green .smallMenu li ul.depth2 {position:absolute; left:60px; top:0px; background:#e1fff7; width:0px; overflow:hidden; padding:50px 0 10px 0; opacity:1;  transition:all 0.3s;}
-.type_Green .smallMenu a.depth3:hover, .type_Green .smallMenu a.depth3.on {color:#00ba8b!important; transition:all 0.3s;}
 .type_Green .topBar {background:#00ba8b; height:50px; border-bottom:1px solid #00a279; z-index:900; position:relative;}
 .type_Green .userId {padding:0 40px 0 20px; border-left:1px solid #00a279; float:right;}
 .type_Green .userId:after {content:''; position:absolute; left:-120%; top:-240px; width:500px; height:500px; background:#008866; border-radius:100%; opacity:0; transition:all 1.3s;}
@@ -1076,51 +1073,53 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .type_Green .fixedMenu ul li a:first-child.on:before {content:''; position:absolute; width:100%; height:100%; background:none; left:-1px; top:-1px; border:1px solid #006f52; box-sizing:content-box;}
 .type_Green .fixedMenu ul li:hover {background:#0ed3a1; transition:all 0.3s;}
 .type_Green .moveBtn:before {content:''; position:absolute; left:10px; top:0px; width:88px; height:50px; background:#00a279; box-shadow:-2px 0 4px 0 RGBA(0,0,0,0.3);}
-.type_Green .moveBtn a.mL:hover {background:url(../img/menu/menu_bullet_green.png) #fff center no-repeat; transition:all 0.3s;}
-.type_Green .moveBtn a.mR:hover {background:url(../img/menu/menu_bullet_green.png) #fff center no-repeat; transition:all 0.3s;}
+.type_Green .moveBtn a.mL:hover {background:url(../img/menu_bullet_green.png) #fff center no-repeat; transition:all 0.3s;}
+.type_Green .moveBtn a.mR:hover {background:url(../img/menu_bullet_green.png) #fff center no-repeat; transition:all 0.3s;}
 
-.type_Green .smallMenu li.depth1.menu_pos:hover:before {background-position:-40px -66px;}
-.type_Green .smallMenu li.depth1.menu_pos.on:before {background-position:-40px -66px;}
+.type_Green .smallMenu li.menu_pos a:after {background-position:-40px -66px;}
+.type_Green .smallMenu li.menu_pos.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-40px -66px; opacity:1; transition:all 0.3s;}
+.type_Green .smallMenu li.menu_pos.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-40px -66px; transition:all 0.3s;}
 
-.type_Green .smallMenu li.depth1.menu_franchise:hover:before {background-position:-60px -66px;}
-.type_Green .smallMenu li.depth1.menu_franchise.on:before {background-position:-60px -66px;}
+.type_Green .smallMenu li.menu_franchise a:after {background-position:-60px -66px;}
+.type_Green .smallMenu li.menu_franchise.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-60px -66px; opacity:1; transition:all 0.3s;}
+.type_Green .smallMenu li.menu_franchise.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-60px -66px; transition:all 0.3s;}
 
-.type_Green .smallMenu li.depth1.menu_system:hover:before {background-position:-80px -66px;}
-.type_Green .smallMenu li.depth1.menu_system.on:before {background-position:-80px -66px;}
+.type_Green .smallMenu li.menu_system a:after {background-position:-80px -66px;}
+.type_Green .smallMenu li.menu_system.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-80px -66px; opacity:1; transition:all 0.3s;}
+.type_Green .smallMenu li.menu_system.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-80px -66px; transition:all 0.3s;}
 
-.type_Green .smallMenu li.depth1.menu_base:hover:before {background-position:-100px -66px;}
-.type_Green .smallMenu li.depth1.menu_base.on:before {background-position:-100px -66px;}
+.type_Green .smallMenu li.menu_base a:after {background-position:-100px -66px;}
+.type_Green .smallMenu li.menu_base.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-100px -66px-100px -66px; opacity:1; transition:all 0.3s;}
+.type_Green .smallMenu li.menu_base.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-100px -66px; transition:all 0.3s;}
 
-.type_Green .smallMenu li.depth1.menu_sales:hover:before {background-position:-120px -66px;}
-.type_Green .smallMenu li.depth1.menu_sales.on:before {background-position:-120px -66px;}
+.type_Green .smallMenu li.menu_sales a:after {background-position:-120px -66px;}
+.type_Green .smallMenu li.menu_sales.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-120px -66px; opacity:1; transition:all 0.3s;}
+.type_Green .smallMenu li.menu_sales.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-120px -66px; transition:all 0.3s;}
 
-.type_Green .smallMenu li.depth1.menu_member:hover:before {background-position:-140px -66px;}
-.type_Green .smallMenu li.depth1.menu_member.on:before {background-position:-140px -66px;}
+.type_Green .smallMenu li.menu_member a:after {background-position:-140px -66px;}
+.type_Green .smallMenu li.menu_member.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-140px -66px; opacity:1; transition:all 0.3s;}
+.type_Green .smallMenu li.menu_member.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-140px -66px; transition:all 0.3s;}
 
-.type_Green .smallMenu li.depth1.menu_receivepay:hover:before {background-position:-160px -66px;}
-.type_Green .smallMenu li.depth1.menu_receivepay.on:before {background-position:-160px -66px;}
+.type_Green .smallMenu li.menu_receivepay a:after {background-position:-160px -66px;}
+.type_Green .smallMenu li.menu_receivepay.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-160px -66px; opacity:1; transition:all 0.3s;}
+.type_Green .smallMenu li.menu_receivepay.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-160px -66px; transition:all 0.3s;}
 
-.type_Green .smallMenu li.depth1.menu_calculate:hover:before {background-position:-180px -66px;}
-.type_Green .smallMenu li.depth1.menu_calculate.on:before {background-position:-180px -66px;}
+.type_Green .smallMenu li.menu_calculate a:after {background-position:-180px -66px;}
+.type_Green .smallMenu li.menu_calculate.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-180px -66px; opacity:1; transition:all 0.3s;}
+.type_Green .smallMenu li.menu_calculate.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-180px -66px; transition:all 0.3s;}
 
-.type_Green .smallMenu li.depth1.menu_addservice:hover:before {background-position:-200px -66px;}
-.type_Green .smallMenu li.depth1.menu_addservice.on:before {background-position:-200px -66px;}
+.type_Green .smallMenu li.menu_addservice a:after {background-position:-200px -66px;}
+.type_Green .smallMenu li.menu_addservice.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-200px -66px; opacity:1; transition:all 0.3s;}
+.type_Green .smallMenu li.menu_addservice.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-200px -66px; transition:all 0.3s;}
 
-.type_Green .smallMenu li.depth1.menu_stock:hover:before {background-position:-220px -66px;}
-.type_Green .smallMenu li.depth1.menu_stock.on:before {background-position:-220px -66px;}
+.type_Green .smallMenu li.menu_stock a:after {background-position:-220px -66px;}
+.type_Green .smallMenu li.menu_stock.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-220px -66px; opacity:1; transition:all 0.3s;}
+.type_Green .smallMenu li.menu_stock.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-220px -66px; transition:all 0.3s;}
+
 
 /* 시스템 .type_Orange */
-.type_Orange .menuClose .menuTab:hover p.favorite a {background:#fff3e7;}
-.type_Orange .menuClose .fahoMenu {display:block; position:relative; left:60px; background:#fff3e7; width:0; overflow:hidden; opacity:0; padding:10px 0;}
 .type_Orange .menuControl a:after {content:''; position:absolute; left:-120px; top:-125px; width:300px; height:300px; background:#b96209; opacity:0; transition:all 1.5s;}
 .type_Orange .menuControl a:active:after {left:50%; top:50%; width:0px; height:0px; border-radius:50px; opacity:0.5; transition:0s;}
-.type_Orange .fahoMenu li.depth1 a.depth1:hover:before, .type_Orange .fahoMenu li.depth1.on a.depth1:before {content:''; position:absolute; left:180px; top:middle; margin-top:2px; background:url(../img/menu/menu_bullet_orange.png) no-repeat; width:6px; height:10px; transition:all 0.3s;}
-.type_Orange .fahoMenu li.depth1 a.depth1:hover span, .type_Orange .fahoMenu li.depth1.on a.depth1 span {color:#ff9d39;}
-.type_Orange .fahoMenu li.depth1 a.depth3:hover, .type_Orange .fahoMenu li.depth1 a.depth3.on {color:#ff9d39;}
-.type_Orange .smallMenu li.depth1:hover a.depth1 {background:#fff3e7;}
-.type_Orange .smallMenu li.depth1:hover a.depth1 > span {position:absolute; width:220px; left:40px; font-size:0.875em;  color:#ff9d39; line-height:50px; height:50px; display:inline-block; padding:0 10px 0 10px; transition:color 0.5s; z-index:999;}
-.type_Orange .smallMenu li ul.depth2 {position:absolute; left:60px; top:0px; background:#fff3e7; width:0px; overflow:hidden; padding:50px 0 10px 0; opacity:1;  transition:all 0.3s;}
-.type_Orange .smallMenu a.depth3:hover, .type_Orange .smallMenu a.depth3.on {color:#ff9d39!important; transition:all 0.3s;}
 .type_Orange .topBar {background:#ff9d39; height:50px; border-bottom:1px solid #ee8418; z-index:900; position:relative;}
 .type_Orange .userId {padding:0 40px 0 20px; border-left:1px solid #ee8418; float:right;}
 .type_Orange .userId:after {content:''; position:absolute; left:-120%; top:-240px; width:500px; height:500px; background:#b96209; border-radius:100%; opacity:0; transition:all 1.3s;}
@@ -1136,38 +1135,49 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .type_Orange .fixedMenu ul li a:first-child.on:before {content:''; position:absolute; width:100%; height:100%; background:none; left:-1px; top:-1px; border:1px solid #83470a; box-sizing:content-box;}
 .type_Orange .fixedMenu ul li:hover {background:#ffae39; transition:all 0.3s;}
 .type_Orange .moveBtn:before {content:''; position:absolute; left:10px; top:0px; width:88px; height:50px; background:#ee8418; box-shadow:-2px 0 4px 0 RGBA(0,0,0,0.3);}
-.type_Orange .moveBtn a.mL:hover {background:url(../img/menu/menu_bullet_orange.png) #fff center no-repeat; transition:all 0.3s;}
-.type_Orange .moveBtn a.mR:hover {background:url(../img/menu/menu_bullet_orange.png) #fff center no-repeat; transition:all 0.3s;}
+.type_Orange .moveBtn a.mL:hover {background:url(../img/menu_bullet_orange.png) #fff center no-repeat; transition:all 0.3s;}
+.type_Orange .moveBtn a.mR:hover {background:url(../img/menu_bullet_orange.png) #fff center no-repeat; transition:all 0.3s;}
 
-.type_Orange .smallMenu li.depth1.menu_pos:hover:before {background-position:-40px -88px;}
-.type_Orange .smallMenu li.depth1.menu_pos.on:before {background-position:-40px -88px;}
+.type_Orange .smallMenu li.menu_pos a:after {background-position:-40px -88px;}
+.type_Orange .smallMenu li.menu_pos.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-40px -88px; opacity:1; transition:all 0.3s;}
+.type_Orange .smallMenu li.menu_pos.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-40px -88px; transition:all 0.3s;}
 
-.type_Orange .smallMenu li.depth1.menu_franchise:hover:before {background-position:-60px -88px;}
-.type_Orange .smallMenu li.depth1.menu_franchise.on:before {background-position:-60px -88px;}
+.type_Orange .smallMenu li.menu_franchise a:after {background-position:-60px -88px;}
+.type_Orange .smallMenu li.menu_franchise.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-60px -88px; opacity:1; transition:all 0.3s;}
+.type_Orange .smallMenu li.menu_franchise.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-60px -88px; transition:all 0.3s;}
 
-.type_Orange .smallMenu li.depth1.menu_system:hover:before {background-position:-80px -88px;}
-.type_Orange .smallMenu li.depth1.menu_system.on:before {background-position:-80px -88px;}
+.type_Orange .smallMenu li.menu_system a:after {background-position:-80px -88px;}
+.type_Orange .smallMenu li.menu_system.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-80px -88px; opacity:1; transition:all 0.3s;}
+.type_Orange .smallMenu li.menu_system.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-80px -88px; transition:all 0.3s;}
 
-.type_Orange .smallMenu li.depth1.menu_base:hover:before {background-position:-100px -88px;}
-.type_Orange .smallMenu li.depth1.menu_base.on:before {background-position:-100px -88px;}
+.type_Orange .smallMenu li.menu_base a:after {background-position:-100px -88px;}
+.type_Orange .smallMenu li.menu_base.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-100px -88px; opacity:1; transition:all 0.3s;}
+.type_Orange .smallMenu li.menu_base.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-100px -88px; transition:all 0.3s;}
 
-.type_Orange .smallMenu li.depth1.menu_sales:hover:before {background-position:-120px -88px;}
-.type_Orange .smallMenu li.depth1.menu_sales.on:before {background-position:-120px -88px;}
+.type_Orange .smallMenu li.menu_sales a:after {background-position:-120px -88px;}
+.type_Orange .smallMenu li.menu_sales.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-120px -88px; opacity:1; transition:all 0.3s;}
+.type_Orange .smallMenu li.menu_sales.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-120px -88px; transition:all 0.3s;}
 
-.type_Orange .smallMenu li.depth1.menu_member:hover:before {background-position:-140px -88px;}
-.type_Orange .smallMenu li.depth1.menu_member.on:before {background-position:-140px -88px;}
+.type_Orange .smallMenu li.menu_member a:after {background-position:-140px -88px;}
+.type_Orange .smallMenu li.menu_member.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-140px -88px; opacity:1; transition:all 0.3s;}
+.type_Orange .smallMenu li.menu_member.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-140px -88px; transition:all 0.3s;}
 
-.type_Orange .smallMenu li.depth1.menu_receivepay:hover:before {background-position:-160px -88px;}
-.type_Orange .smallMenu li.depth1.menu_receivepay.on:before {background-position:-160px -88px;}
+.type_Orange .smallMenu li.menu_receivepay a:after {background-position:-160px -88px;}
+.type_Orange .smallMenu li.menu_receivepay.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-160px -88px; opacity:1; transition:all 0.3s;}
+.type_Orange .smallMenu li.menu_receivepay.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-160px -88px; transition:all 0.3s;}
 
-.type_Orange .smallMenu li.depth1.menu_calculate:hover:before {background-position:-180px -88px;}
-.type_Orange .smallMenu li.depth1.menu_calculate.on:before {background-position:-180px -88px;}
+.type_Orange .smallMenu li.menu_calculate a:after {background-position:-180px -88px;}
+.type_Orange .smallMenu li.menu_calculate.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-180px -88px; opacity:1; transition:all 0.3s;}
+.type_Orange .smallMenu li.menu_calculate.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-180px -88px; transition:all 0.3s;}
 
-.type_Orange .smallMenu li.depth1.menu_addservice:hover:before {background-position:-200px -88px;}
-.type_Orange .smallMenu li.depth1.menu_addservice.on:before {background-position:-200px -88px;}
+.type_Orange .smallMenu li.menu_addservice a:after {background-position:-200px -88px;}
+.type_Orange .smallMenu li.menu_addservice.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-200px -88px; opacity:1; transition:all 0.3s;}
+.type_Orange .smallMenu li.menu_addservice.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-200px -88px; transition:all 0.3s;}
 
-.type_Orange .smallMenu li.depth1.menu_stock:hover:before {background-position:-220px -88px;}
-.type_Orange .smallMenu li.depth1.menu_stock.on:before {background-position:-220px -88px;}
+.type_Orange .smallMenu li.menu_stock a:after {background-position:-220px -88px;}
+.type_Orange .smallMenu li.menu_stock.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-220px -88px; opacity:1; transition:all 0.3s;}
+.type_Orange .smallMenu li.menu_stock.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-220px -88px; transition:all 0.3s;}
+
 
 
 
