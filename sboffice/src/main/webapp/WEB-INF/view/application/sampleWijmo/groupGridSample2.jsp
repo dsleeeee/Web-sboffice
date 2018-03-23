@@ -83,6 +83,7 @@ onload = function () {
     ]
   });
   theGrid.autoSizeColumns();  // 열 넓이 auto resize
+  theGrid.collapseGroupsToLevel(0); //0:전체접기, 1:(아니지만)전제펼치기 로 사용
 }
 </script>
 
