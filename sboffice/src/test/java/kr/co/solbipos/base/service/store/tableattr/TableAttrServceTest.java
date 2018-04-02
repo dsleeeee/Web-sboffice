@@ -4,6 +4,7 @@ import static kr.co.solbipos.utils.DateUtil.currentDateTimeString;
 import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Ignore;
@@ -158,7 +159,7 @@ public class TableAttrServceTest extends AbstractApplicationContextTest {
                                 tableAttr.setFontSize(Long.parseLong(styleKeyValue[1]));
                                 break;
                             case FONT_STYLE_FG:
-                                tableAttr.setFontStyleFg(styleKeyValue[1]);
+                                tableAttr.setFontStyleFg(StringUtils.leftPad(Integer.toBinaryString(Integer.parseInt(styleKeyValue[1])), 3, "0"));
                                 break;
                             case TEXTALIGN_FG:
                                 tableAttr.setTextalignFg(TextalignFg.getEnum(styleKeyValue[1]));

@@ -32,7 +32,39 @@
       WHERE A.USE_YN = 'Y'
   </select>
 
-  <update id="mergeStoreConfgXml" parameterType="DefaultMap">
+  <update id="insertStoreConfgXml" parameterType="DefaultMap">
+    /* TableAttrMapper.insertStoreConfgXml */
+    INSERT INTO TB_WB_STORE_CONFG_XML
+    (
+        A.STORE_CD,
+        A.CONFG_FG,
+        A.XML,
+        A.USE_YN,
+        A.REG_DT,
+        A.REG_ID
+    )
+    VALUES (
+        #{storeCd},
+        #{confgFg},
+        #{xml:CLOB},
+        #{useYn},
+        #{regDt},
+        #{regId}
+    )
+  </update>
+
+  <update id="updateStoreConfgXml" parameterType="DefaultMap">
+    /* TableAttrMapper.updateStoreConfgXml */
+    UPDATE TB_WB_STORE_CONFG_XML A
+       SET A.XML = #{xml:CLOB},
+           A.USE_YN = #{useYn},
+           A.MOD_DT = #{regDt},
+           A.MOD_ID = #{regId}
+     WHERE STORE_CD = #{storeCd}
+       AND CONFG_FG = #{confgFg}
+  </update>
+  
+  <update id="_mergeStoreConfgXml" parameterType="DefaultMap">
     /* TableAttrMapper.mergeStoreConfgXml */
     MERGE INTO TB_WB_STORE_CONFG_XML A
     USING (SELECT #{storeCd} STORE_CD,

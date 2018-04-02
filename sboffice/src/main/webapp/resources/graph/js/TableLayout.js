@@ -74,22 +74,9 @@ TableLayout.prototype.init = function() {
   this.container.style.backgroundImage = this.containerBackgroundImage;
   this.container.style.backgroundColor = this.defaultBackgroundColor; 
 
-//div 태그 생성
-  var createDiv = function(classname) {
-    var elt = document.createElement('div');
-    elt.className = classname;
-    return elt;
-  };
-
-  //매장 영역 생성
-  //this.graphContainer = createDiv("geGraphContainer");
-  //this.graph.init(this.graphContainer);
-
   //마우스 오른쪽 클릭 - 컨텍스트 메뉴
   //mxEvent.disableContextMenu(this.container);
 
-  //this.container.appendChild(this.graphContainer);
-  
   //매장영역에서 이벤트 발생 시 설정영역을 새로 그려주기 위한 이벤트 핸들러
   this.graph.getSelectionModel().addListener(mxEvent.CHANGE, this.format.update);
   this.graph.addListener(mxEvent.EDITING_STARTED, this.format.update);
@@ -98,7 +85,7 @@ TableLayout.prototype.init = function() {
   this.graph.addListener(mxEvent.ROOT, this.format.update);
 
   //서버의 초기 설정 로드
-  //var openResult = this.format.open(true);
+  var openResult = this.format.open(true);
   
   //TODO 오픈 실패 or 기존 설정 정보가 없을 경우 기본 구성 로딩
   //if(!openResult) {
@@ -114,7 +101,7 @@ TableLayout.prototype.initValue = function() {
   this.floor.refresh();
   
   //그래프 변수값 초기화
-  //this.graph.initValue();
+  this.graph.initValue();
   
 };
 
@@ -274,7 +261,6 @@ Floor.prototype.clear = function() {
             var layer = graph.addCell(new mxCell(), graph.model.root);
             //graph.setDefaultParent(layer);
             s.rows[e.row].dataItem.tblGrpFg = '1';
-            //layer.setStyle(setStyleValue(layer.getStyle(), 'tblGrpFg', s.rows[e.row].dataItem.tblGrpFg));
             graph.setCellStyles('tblGrpFg', s.rows[e.row].dataItem.tblGrpFg, [layer]);
             s.rows[e.row].dataItem.layer = layer;
           }
@@ -293,7 +279,6 @@ Floor.prototype.clear = function() {
           model.beginUpdate();
           try {
             model.setValue(layer, layerName);
-            //model.setStyle(layer, setStyleValue(layer.getStyle(), 'tblGrpFg', tblGrpFg));
             graph.setCellStyles('tblGrpFg', tblGrpFg, [layer]);
           }
           finally {
@@ -410,15 +395,13 @@ Floor.prototype.refresh = function() {
   var model = graph.getModel();
   var layerCount = model.getChildCount(model.root);
   
-  var visibleLayer = function(graph, layer) {
-    var model = graph.getModel();
-    var layerCount = model.getChildCount(model.root);
-
+  //모든 층을 visible = false로 하고 선택한 층만 true로 변경
+  var visibleLayer = function(layer) {
     //클릭이벤트 - 모든 레이어 visible false
     for(var layerIdx = 0; layerIdx < layerCount; layerIdx++) {
-      (mxUtils.bind(this, function(visibleLayer) {
-        //console.log(visibleLayer);
-        model.setVisible(visibleLayer, false);
+      (mxUtils.bind(this, function(layerCell) {
+        //console.log(layerCell);
+        model.setVisible(layerCell, false);
       }))(model.getChildAt(model.root, layerIdx));
     }
 
@@ -430,7 +413,7 @@ Floor.prototype.refresh = function() {
     else {
       graph.setDefaultParent(null);
     }
-    
+
     //해당레이어의 style을 가져와서 화면 컨테이너에 적용
     var styles = graph.getCellStyle(layer);
     //백그라운드컬러
@@ -438,7 +421,7 @@ Floor.prototype.refresh = function() {
     
     //백그라운드이미지
     if(styles[mxConstants.STYLE_IMAGE] != null) {
-      var img = new mxImage(styles[mxConstants.STYLE_IMAGE].replace('%3B',';'),
+      var img = new mxImage(decodeURIComponent(styles[mxConstants.STYLE_IMAGE]),
           styles[mxConstants.STYLE_IMAGE_WIDTH],
           styles[mxConstants.STYLE_IMAGE_HEIGHT]);
       graph.setBackgroundImage(img);
@@ -461,14 +444,15 @@ Floor.prototype.refresh = function() {
       var layerBtn = mxUtils.button(layer.value||mxResources.get('background'), function() {
 
         //클릭된 레이어 view 처리
-        visibleLayer(graph, layer);
+        visibleLayer(layer);
         
         //툴바 초기화로 refresh
         floor.refresh();
       });
       //선택된 레이어 버튼 색상 적용
       if( layer == graph.getDefaultParent() ) {
-        layerBtn.className = 'geBtn gePrimaryBtn'; 
+        layerBtn.className = 'geBtn gePrimaryBtn';
+        visibleLayer(layer);
       }
       else {
         layerBtn.className = 'geBtn'; 
@@ -477,6 +461,7 @@ Floor.prototype.refresh = function() {
       this.container.appendChild(layerBtn);
     }))(model.getChildAt(model.root, i));
   }
+  
 };
 
 
@@ -622,8 +607,21 @@ Graph.prototype.init = function() {
 
   //그래프가 생성될 때 첫번째 child의 이름 초기값 지정
   graph.getModel().getChildAt(graph.getModel().root, 0).setValue(mxResources.get('background'));
+
 };
 
+/**
+ * 초기 데이터 조회 시 변수 초기화
+ */
+Graph.prototype.initValue = function() {
+  var graph = this;
+
+  var model = graph.getModel();
+  var parent = graph.getDefaultParent();
+
+
+};
+  
 /**
  * Sanitizes the given HTML markup.
  */
@@ -710,6 +708,11 @@ Graph.prototype.createKeyHandler = function(graph) {
   keyHandler.bindControlShiftKey(90, function(evt) { graph.undoManager.redo() });
   
   return keyHandler;
+};
+/**
+ * 키보드 이벤트 생성
+ */
+Graph.prototype.removeStyle = function(key) {
 };
 
 
@@ -943,9 +946,10 @@ Format.prototype.backgroundImage = function() {
             var img = new mxImage(e.target.result, graph.container.offsetWidth, graph.container.offsetHeight);
             graph.setBackgroundImage(img);
             graph.view.validateBackgroundImage();
+            
             //해당 레이어에 이미지 정보 저장
             var layer = graph.getDefaultParent();
-            graph.setCellStyles(mxConstants.STYLE_IMAGE, img.src.replace(';','%3B'), [layer]);
+            graph.setCellStyles(mxConstants.STYLE_IMAGE, encodeURIComponent(img.src), [layer]);
             graph.setCellStyles(mxConstants.STYLE_IMAGE_WIDTH, img.width, [layer]);
             graph.setCellStyles(mxConstants.STYLE_IMAGE_HEIGHT, img.height, [layer]);
           }
@@ -1136,30 +1140,15 @@ Format.prototype.save = function() {
     graph.stopEditing();
   }
   
-  
-  
   var node = null;
   var enc = new mxCodec(mxUtils.createXmlDocument());
   node = enc.encode(graph.getModel());
-  
-  //배경색, 배경이미지를 포스에서 그릴 수 있도록 저장
-  /*
-  var bgImg = graph.getBackgroundImage();
-  if(bgImg){
-    node.setAttribute('bgImage', graph.getBackgroundImage().src);
-  }
-  node.setAttribute('bgColor', graph.container.style.backgroundColor);
-  */
   
   var xmlPretty = mxUtils.getPrettyXml(node);
   mxLog.show();
   mxLog.write(xmlPretty);
   
-  var xml = mxUtils.getXml(node);
-  //console.log(xml);
-
-  var xml = encodeURIComponent(xml);
-  
+  var xml = encodeURIComponent(mxUtils.getXml(node));
   try {
     if (xml.length < MAX_REQUEST_SIZE) {
       var onload = function(req) {
@@ -1168,17 +1157,7 @@ Format.prototype.save = function() {
       var onerror = function(req) {
         mxUtils.alert('Error');
       }
-      
-      //배경색, 배경이미지를 포스에서 그릴 수 있도록 저장
-      var param = '';
-      param += 'xml=' + xml;
-      var bgImg = graph.getBackgroundImage();
-      if(bgImg) {
-        param += '&bgImage=' +  graph.getBackgroundImage().src;
-      }
-      param += '&bgColor=' +  graph.container.style.backgroundColor;
-      
-      new mxXmlRequest(TABLELAYOUT_SAVE_URL, param).send(onload, onerror);
+      new mxXmlRequest(TABLELAYOUT_SAVE_URL, 'xml=' + xml).send(onload, onerror);
     }
     else {
       mxUtils.alert(mxResources.get('drawingTooLarge'));
@@ -1191,45 +1170,6 @@ Format.prototype.save = function() {
   }
 
 };
-
-/**
- * 스타일 문자열에서 특정 스타일 값 추출
- * @param style
- * @param name
- * @returns
- */
-function getStyleValue(style, name) {
-  var styles = [];
-  var keyValue = [];
-  var retValue = '1';
-  //스타일값 중에서 테이블그룹구분 추출
-  if(style != null) {
-    styles = style.split(';');
-    styles.forEach( function(currentValue) {
-      if(currentValue.indexOf(name) >= 0) {
-        keyValue = currentValue.split('=');
-        retValue = keyValue[1];
-      }
-    });
-  }
-  return retValue;
-}
-/**
- * 스타일 문자열에서 동일한 것은 대체 없으면 추가
- * @param style
- * @param name
- * @returns
- */
-function setStyleValue(style, name, value) {
-  if(style != null) {
-    if(style.indexOf(name) < 0) {
-      return style + name + '=' + value + ';'; 
-    }
-    return style.replace(/tblGrpFg=\d+/, "tblGrpFg=" + value);
-  }
-  return name + '=' + value + ';'; 
-
-}
 
 
 

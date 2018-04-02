@@ -27,12 +27,19 @@ public interface TableAttrMapper {
     List<TableAttr> selectDefaultXml();
     
     /**
-     * 매장 환경설정 XML 값을 저장(Merge)
+     * 매장 환경설정 XML 값을 insert
      * @param param
      * @return
      */
-    int mergeStoreConfgXml(DefaultMap<String> param);
+    int insertStoreConfgXml(DefaultMap<String> param);
     
+    /**
+     * 매장 환경설정 XML 값을 update
+     * @param param
+     * @return
+     */
+    int updateStoreConfgXml(DefaultMap<String> param);
+
     /** 
      * 매장 테이블 속성 저장(Merge)
      * @param tableAttr

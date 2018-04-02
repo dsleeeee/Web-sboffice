@@ -45,27 +45,55 @@ public class TouchkeyServceTest {
                 "    <mxCell id=\"g2\" value=\"그룹명\" vertex=\"1\" parent=\"1\">\r\n" + 
                 "      <mxGeometry x=\"80\" width=\"80\" height=\"60\" as=\"geometry\"/>\r\n" + 
                 "    </mxCell>\r\n" + 
+                "    <mxCell id=\"g3\" value=\"그룹명\" vertex=\"1\" parent=\"1\">\r\n" + 
+                "      <mxGeometry x=\"160\" width=\"80\" height=\"60\" as=\"geometry\"/>\r\n" + 
+                "    </mxCell>\r\n" + 
                 "  </root>\r\n" + 
-                "</mxGraphModel>\r\n" +
+                "</mxGraphModel>\r\n" + 
                 
                 "|" +
                 
                 "<mxGraphModel>\r\n" + 
                 "  <root>\r\n" + 
                 "    <mxCell id=\"0\"/>\r\n" + 
-                "    <mxCell id=\"1\" value=\"g1\" parent=\"0\" visible=\"0\"/>\r\n" + 
-                "    <mxCell id=\"p1\" value=\"아메리카노\" style=\"prodCd=A000000000001;\" vertex=\"1\" parent=\"1\">\r\n" + 
+                "    <mxCell id=\"g3\" value=\"g3\" parent=\"0\"/>\r\n" + 
+                "    <mxCell id=\"6\" value=\"아메리카노\" style=\"prodCd=A000000000001;fillColor=#fff9e5;fontSize=12;\" vertex=\"1\" parent=\"g3\">\r\n" + 
                 "      <mxGeometry width=\"80\" height=\"60\" as=\"geometry\"/>\r\n" + 
                 "    </mxCell>\r\n" + 
-                "    <mxCell id=\"p2\" value=\"카페모카\" style=\"prodCd=A000000000002;\" vertex=\"1\" parent=\"1\">\r\n" + 
+                "    <mxCell id=\"7\" value=\"카페모카\" style=\"prodCd=A000000000002;fontSize=14;\" vertex=\"1\" parent=\"g3\">\r\n" + 
                 "      <mxGeometry x=\"80\" width=\"80\" height=\"60\" as=\"geometry\"/>\r\n" + 
                 "    </mxCell>\r\n" + 
-                "    <mxCell id=\"2\" value=\"g2\" parent=\"0\"/>\r\n" + 
-                "    <mxCell id=\"p3\" value=\"카페라떼\" style=\"prodCd=A000000000003;\" vertex=\"1\" parent=\"2\">\r\n" + 
+                "    <mxCell id=\"8\" value=\"카페라떼\" style=\"prodCd=A000000000003;fontColor=#ff0000;\" vertex=\"1\" parent=\"g3\">\r\n" + 
+                "      <mxGeometry x=\"160\" width=\"80\" height=\"60\" as=\"geometry\"/>\r\n" + 
+                "    </mxCell>\r\n" + 
+                "    <mxCell id=\"9\" value=\"에스프레소\" style=\"prodCd=A000000000004;fillColor=#ffff00;\" vertex=\"1\" parent=\"g3\">\r\n" + 
+                "      <mxGeometry x=\"240\" width=\"80\" height=\"60\" as=\"geometry\"/>\r\n" + 
+                "    </mxCell>\r\n" + 
+                "    <mxCell id=\"10\" value=\"아메리카노\" style=\"prodCd=A000000000001;fillColor=#ffffe5;fontColor=#00b050;\" vertex=\"1\" parent=\"g3\">\r\n" + 
+                "      <mxGeometry y=\"60\" width=\"80\" height=\"60\" as=\"geometry\"/>\r\n" + 
+                "    </mxCell>\r\n" + 
+                "    <mxCell id=\"11\" value=\"카페모카\" style=\"prodCd=A000000000002;fontSize=13;fontColor=#7030a0;fillColor=#f3ffe5;\" vertex=\"1\" parent=\"g3\">\r\n" + 
+                "      <mxGeometry x=\"80\" y=\"60\" width=\"80\" height=\"60\" as=\"geometry\"/>\r\n" + 
+                "    </mxCell>\r\n" + 
+                "    <mxCell id=\"12\" value=\"카페라떼\" style=\"prodCd=A000000000003;\" vertex=\"1\" parent=\"g3\">\r\n" + 
+                "      <mxGeometry x=\"160\" y=\"60\" width=\"80\" height=\"60\" as=\"geometry\"/>\r\n" + 
+                "    </mxCell>\r\n" + 
+                "    <mxCell id=\"13\" value=\"에스프레소\" style=\"prodCd=A000000000004;\" vertex=\"1\" parent=\"g3\">\r\n" + 
+                "      <mxGeometry x=\"240\" y=\"60\" width=\"80\" height=\"60\" as=\"geometry\"/>\r\n" + 
+                "    </mxCell>\r\n" + 
+                "    <mxCell id=\"g2\" value=\"g2\" parent=\"0\" visible=\"0\"/>\r\n" + 
+                "    <mxCell id=\"4\" value=\"카페라떼\" style=\"prodCd=A000000000003;\" vertex=\"1\" parent=\"g2\">\r\n" + 
                 "      <mxGeometry width=\"80\" height=\"120\" as=\"geometry\"/>\r\n" + 
                 "    </mxCell>\r\n" + 
-                "    <mxCell id=\"p4\" value=\"에스프레소\" style=\"prodCd=A000000000004;\" vertex=\"1\" parent=\"2\">\r\n" + 
+                "    <mxCell id=\"5\" value=\"에스프레소\" style=\"prodCd=A000000000004;\" vertex=\"1\" parent=\"g2\">\r\n" + 
                 "      <mxGeometry x=\"80\" width=\"160\" height=\"120\" as=\"geometry\"/>\r\n" + 
+                "    </mxCell>\r\n" + 
+                "    <mxCell id=\"g1\" value=\"g1\" parent=\"0\" visible=\"0\"/>\r\n" + 
+                "    <mxCell id=\"2\" value=\"아메리카노\" style=\"prodCd=A000000000001;\" vertex=\"1\" parent=\"g1\">\r\n" + 
+                "      <mxGeometry width=\"80\" height=\"60\" as=\"geometry\"/>\r\n" + 
+                "    </mxCell>\r\n" + 
+                "    <mxCell id=\"3\" value=\"카페모카\" style=\"prodCd=A000000000002;\" vertex=\"1\" parent=\"g1\">\r\n" + 
+                "      <mxGeometry x=\"80\" width=\"80\" height=\"60\" as=\"geometry\"/>\r\n" + 
                 "    </mxCell>\r\n" + 
                 "  </root>\r\n" + 
                 "</mxGraphModel>\r\n" + 
@@ -182,7 +210,7 @@ public class TouchkeyServceTest {
 
         List<Touch> touchs = new ArrayList<Touch>();
         Touch touch = null;
-        mxCell layer = (mxCell)model.getCell(layerId.substring(1));
+        mxCell layer = (mxCell)model.getCell(layerId);
 
         Object[] cells = graph.getChildVertices(layer);
         for(Object c : cells) {

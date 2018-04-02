@@ -1,7 +1,5 @@
 package kr.co.solbipos.base.controller.store.tablelayout;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,20 +88,18 @@ public class TableLayoutController {
 
         String xml = "";
         Result result = new Result(Status.FAIL);
-        try {
-            log.debug(request.getParameter("bgImage"));
-            log.debug(request.getParameter("bgColor"));
-            log.debug(request.getParameter("xml"));
-            xml = URLDecoder.decode(request.getParameter("xml"), "UTF-8").replace("\n", "&#xa;");
-            log.debug(XssPreventer.unescape(xml));
-            SessionInfo sessionInfo = sessionService.getSessionInfo(request);
-            log.debug(sessionInfo.toString());
-            
-            result = tableLayoutService.setTableLayout(sessionInfo, XssPreventer.unescape(xml));
-            log.debug(result.toString());
-        } catch (UnsupportedEncodingException e) {
-          e.printStackTrace();
-        }
+        
+        //log.debug( XssPreventer.unescape(request.getParameter("xml")) );
+        xml = XssPreventer.unescape(request.getParameter("xml"));
+
+        log.debug(xml);
+        //log.debug(XssPreventer.unescape(xml));
+
+        SessionInfo sessionInfo = sessionService.getSessionInfo(request);
+        //log.debug(sessionInfo.toString());
+        
+        result = tableLayoutService.setTableLayout(sessionInfo, xml);
+        log.debug(result.toString());
         return result;
     }
 
