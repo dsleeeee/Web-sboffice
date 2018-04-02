@@ -48,6 +48,7 @@ window.mxLanguage = window.mxLanguage || urlParams['lang'];
 window.mxLanguages = window.mxLanguages || ['ko'];
 
 window.PRODS = ${prods};
+window.MAX_GROUP_ROW = '${maxGroupRow}' || '2';
 
 </script>
 <script type="text/javascript" src="/resource/vender/mxgraph/mxClient.js"></script>
@@ -60,10 +61,10 @@ window.PRODS = ${prods};
     <div id="theGrid"></div>
   </div>
   <div id="content">
-    <div id="geGroupContainer">
+    <div id="geGroupContainer" tabindex="-1">
       <div id="pagingShapeGroup"></div>
     </div>
-    <div id="geProdContainer">
+    <div id="geProdContainer" tabindex="-1">
       <div id="pagingShapeProd"></div>
     </div>
   </div>

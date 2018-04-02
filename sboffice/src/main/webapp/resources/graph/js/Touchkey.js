@@ -14,14 +14,14 @@ Touchkey = function(container, themes) {
   mxEventSource.call(this);
   this.container = container || document.body;
   
-  //상품그룹 생성, 영역 추가는 나중에
+  //상품그룹 생성
   this.group = new Graph(null, null, null, null, themes);
   
   //상품그룹 생성
   this.prod = new Graph(null, null, null, null, themes);
   
   //왼쪽 Wijmo 그리드 생성
-  this.grid = new Grid(this.prod);
+  this.sidebar = new Sidebar(this.prod);
 
   //오른쪽 설정 영역 생성
   this.format = new Format(this);
@@ -37,7 +37,7 @@ mxUtils.extend(Touchkey, mxEventSource);
 Touchkey.prototype.actions = null;
 Touchkey.prototype.group = null;
 Touchkey.prototype.prod = null;
-Touchkey.prototype.grid = null;
+Touchkey.prototype.sidebar = null;
 
 /**
  * 메인 - 초기화
@@ -54,36 +54,22 @@ Touchkey.prototype.init = function(themes) {
   this.createPagingShape('Prod', this.prod, themes);
   
   //상품 영역 추가
-  this.prod.init(this.prodContainer);
+  this.prod.init(this.prodContainer, this.format);
 
   //상품그룹 영역 추가
-  this.group.init(this.groupContainer);
+  this.group.init(this.groupContainer, this.format);
   //상품 그룹 영역 고유 특성 정의
   this.group.initGroupArea(this.prod);
 
   //상품 영역 고유 특성 정의
-  this.prod.initProdArea(this.group);
+  this.prod.initProdArea(this.group, this.sidebar);
 
   //마우스 오른쪽 클릭 - 컨텍스트 메뉴
   //mxEvent.disableContextMenu(this.container);
   
-  //그룹, 상품 영역 변경 시 설정 패널 이벤트 처리
-  //this.format.init(this.group);
-  //this.format.init(this.prod);
-  
-  //console.log(this.format);
-  this.group.getSelectionModel().addListener(mxEvent.CHANGE, this.format.update);
-  //this.group.addListener(mxEvent.EDITING_STARTED, this.format.update);
-  //this.group.addListener(mxEvent.EDITING_STOPPED, this.format.update);
-  //group.getModel().addListener(mxEvent.CHANGE, this.update);
-  //group.addListener(mxEvent.ROOT, this.update);
-  
-  this.prod.getSelectionModel().addListener(mxEvent.CHANGE, this.format.update);
-  //this.prod.addListener(mxEvent.EDITING_STARTED, this.format.update);
-  //this.prod.addListener(mxEvent.EDITING_STOPPED, this.format.update);
-
   //서버의 초기 설정 로드
   this.format.open(true);
+  
 };
 
 
@@ -247,8 +233,9 @@ Graph.prototype.prodPrefix = 'p';
 // Adds optional caching for the HTML label
 Graph.prototype.labelCached = false;
 
-//상품그룹/상품 영역에 index 변수
-Graph.prototype.nextId = 1;
+//상품그룹 영역에 index 변수
+//그룹, 상품영역의 셀과 레이어의 아이디를 맞추기 위해 사용
+Graph.prototype.nextGrpId = 1;
 
 //현재 페이지 번호
 Graph.prototype.pageNo = 1;
@@ -256,62 +243,151 @@ Graph.prototype.pageNo = 1;
 /**
  * 그룹/상품 영역 초기화
  */
-Graph.prototype.init = function(container) {
+Graph.prototype.init = function(container, format) {
 
   mxGraph.prototype.init.apply(this, arguments);
+  
+  var graph = this;
   
   //그래프 영역의 배경 이미지 설정
   container.style.backgroundImage = 'url(' + IMAGE_PATH + '/key.png' + ')';
 
   //마우스를 영역 밖으로 드래그 했을 때 패닝이 되지 않도록 처리
-  this.setPanning(false);
+  graph.setPanning(false);
   
   //Enables HTML labels
-  this.setHtmlLabels(true);
+  graph.setHtmlLabels(true);
   
   //셀을 이동했을 때 스크롤 금지
-  this.graphHandler.scrollOnMove = false;
-  this.autoScroll = false;
+  graph.graphHandler.scrollOnMove = false;
+  graph.autoScroll = false;
 
-  //console.log(this);
-  
   //그룹/상품 이동 시 처리
   var mxGraphHandlerMoveCells = mxGraphHandler.prototype.moveCells;
-  this.graphHandler.moveCells = function(cells, dx, dy, clone, target, evt){
+  graph.graphHandler.moveCells = function(cells, dx, dy, clone, target, evt){
+
     //대상 셀에 이미 상품이 있을 경우 이동 금지
+    
     var pt = this.graph.getPointForEvent(evt);
-    if (this.graph.getCellAt(pt.x+1, pt.y+1) != null) {
-      mxEvent.consume(evt);
-      return;
-    }
-    //console.log(this.graph);
-    //console.log(this.graph.pageNo);
-    //console.log(this.graph.getMaximumGraphBounds());
-    //페이지 범위를 넘는 경우 이동 금지
-    var bounds = this.graph.getMaximumGraphBounds();
-    var startWidthX = (bounds.width / this.graph.MAX_PAGE) * (this.graph.pageNo-1);
-    var endWidthX = (bounds.width / this.graph.MAX_PAGE) * this.graph.pageNo;
-    if(pt.y > bounds.height || (pt.x < startWidthX || pt.x > endWidthX) ) {
+
+    var newSize = this.graph.adjstCellSize(dx, dy);
+    dx = newSize.x;
+    dy = newSize.y;
+
+    //vertex 이동 시 이동될 위치에 vertex가 있는 경우 이동 금지
+    //vertex 이동 시 이동될 위치에 vertex가 있는지 체크
+    var checkCollision = function(bounds, dx, dy, selectedCells) {
+      var startX = bounds.x + dx + 1;
+      var startY = bounds.y + dy + 1;
+
+      var isMyself = function(cell) {
+        var isMy = false;
+        for(var i = 0; i <  selectedCells.length; i++ ) {
+          if(selectedCells[i] == cell) {
+            isMy = true;
+            break;
+          }
+        }
+        return isMy;
+      };
+      var isColl = false;
+      for(var x = 0; x < bounds.width; (x += graph.keySize.width)) {
+        for(var y = 0; y < bounds.height; (y += graph.keySize.height)) {
+          var cell = graph.getCellAt(startX + x, startY + y);
+          if ( cell != null && !isMyself(cell) ) {
+            isColl = true;
+            break;
+          }
+        }
+        if(isColl) {
+          break;
+        }
+      }
+      return isColl;
+    };
+    if(checkCollision(this.bounds, dx, dy, cells)) {
       mxEvent.consume(evt);
       return;
     }
     
-    var newSize = this.graph.adjstCellSize(dx, dy);
-    dx = newSize.x;
-    dy = newSize.y;
+    var dstX1 = this.bounds.x + dx;
+    var dstY1 = this.bounds.y + dy;
+    var dstX2 = dstX1 + this.bounds.width;
+    var dstY2 = dstY1 + this.bounds.height;
+    
+    //페이지 범위를 넘는 경우 이동 금지
+    var maxBounds = this.graph.getMaximumGraphBounds();
+    var startX = (maxBounds.width / this.graph.MAX_PAGE) * (this.graph.pageNo-1);
+    var endX = (maxBounds.width / this.graph.MAX_PAGE) * this.graph.pageNo;
+    if(dstX1 < startX || dstX2 > endX) {
+      mxEvent.consume(evt);
+      return;
+    } 
+    
+    //left-bottom은 페이지 이동 객체 위치이므로 vertex를 넣을 수 없다.
+    var lastX = graph.keySize.width * graph.COL_PER_PAGE * this.graph.pageNo - graph.keySize.width;
+    var lastY = graph.keySize.height * graph.ROW_PER_PAGE - graph.keySize.height;
+    if(dstX2 > lastX && dstY2 > lastY) {
+      mxEvent.consume(evt);
+      return;
+    } 
+    //console.log(lastX + ', ' + lastY);
+    
+
     mxGraphHandlerMoveCells.apply(this, arguments);
   };
 
 
   
   //셀의 사이즈가 변경되었을 때 배경 크기에 맞게 보정
-  this.resizeCell = function(cell, bounds) {
+  graph.resizeCell = function(cell, bounds, recurse) {
     //console.log(this.adjstCellSize(bounds.width, bounds.height))
     var newPoint = this.adjstCellSize(bounds.x, bounds.y);
     var newSize = this.adjstCellSize(bounds.width, bounds.height);
     bounds = new mxRectangle(newPoint.x, newPoint.y, newSize.x, newSize.y);
+    
+    //vertex 리사이즈 시 다른 vertex를 덮는 경우 리턴
+    var checkCollision = function() {
+      var isColl = false;
+      for(var x = 0; x < bounds.width; (x += graph.keySize.width)) {
+        for(var y = 0; y < bounds.height; (y += graph.keySize.height)) {
+          var cellAt = graph.getCellAt(bounds.x + x, bounds.y + y);
+          if (cellAt != null && cell != cellAt) {
+            isColl = true;
+            break;
+          }
+        }
+        if(isColl) {
+          break;
+        }
+      }
+      return isColl;
+    };
+    if(checkCollision()) {
+      return;
+    }
+
     mxGraph.prototype.resizeCell.apply(this, arguments);
   };
+
+  //마우스 클릭 할 때 focus 처리
+  //https://jgraph.github.io/mxgraph/docs/known-issues.html
+  if (mxClient.IS_NS) {
+    mxEvent.addListener(graph.container, 'mousedown', function() {
+      if (!graph.isEditing()) {
+        graph.container.setAttribute('tabindex', '-1');
+        graph.container.focus();
+      }
+    });
+  }
+
+  //그룹, 상품 영역에서 셀 클릭 시 설정 패널 초기화
+  graph.addListener(mxEvent.CLICK, function(sender, evt) {
+    var cell = evt.getProperty('cell');
+    if (cell != null) {
+      format.update(graph);
+    }
+  }); 
 
 };
 
@@ -373,28 +449,15 @@ Graph.prototype.initValue = function(rowPerPage) {
   
   //새로운 셀 생성을 위한 다음 index 값 초기값 계산
   //첫번째 상품 선택을 위한 
-  var objCnt = 0;
-  var firstCell = null;
-  for (var key in graph.model.cells) {
-    var cell = graph.model.cells[key]; 
-    //console.log(cell);
-    if (cell.isVertex()){
-      objCnt++;
-      if(objCnt == 1) {
-        firstCell = cell;
-      }
-    }
-  }
-  graph.nextId = (objCnt + 1); 
-  
-  //영역의 첫번째 셀 선택
-  if(firstCell != null) {
-    graph.switchLayer(firstCell.getParent());
-    graph.selectCellForEvent(firstCell);
-  }
+  var model = graph.getModel();
+  var parent = graph.getDefaultParent();
+
+  //로드 후 생성되는 셀의 인덱스 초기화
+  var childCount = model.getChildCount(parent);
+  graph.nextGrpId = (childCount + 1); 
   
   //xml에 설정했던 페이지당 줄 수 적용
-  graph.ROW_PER_PAGE = rowPerPage;
+  graph.ROW_PER_PAGE = parseInt(rowPerPage) || graph.ROW_PER_PAGE;
 
   graph.minimumGraphSize = new mxRectangle(0, 0, graph.keySize.width * graph.COL_PER_PAGE * graph.MAX_PAGE, graph.keySize.height * graph.ROW_PER_PAGE);
   graph.maximumGraphBounds = new mxRectangle(0, 0, graph.keySize.width * graph.COL_PER_PAGE * graph.MAX_PAGE, graph.keySize.height * graph.ROW_PER_PAGE);
@@ -425,7 +488,9 @@ Graph.prototype.initValue = function(rowPerPage) {
   graph.refresh();
 };
 
-//상품 영역 레이어 활성화 처리
+/**
+ * 상품 영역 레이어 활성화 처리
+ */
 Graph.prototype.switchLayer = function(layer) {
   var prod = this;
 //var switchLayer = function(layer) {
@@ -434,9 +499,9 @@ Graph.prototype.switchLayer = function(layer) {
   var layerCount = model.getChildCount(model.root);
   //모든 레이어 visible false
   for(var layerIdx = 0; layerIdx < layerCount; layerIdx++) {
-    (mxUtils.bind(this, function(visibleLayer) {
-      //console.log(visibleLayer);
-      model.setVisible(visibleLayer, false);
+    (mxUtils.bind(this, function(layerCell) {
+      //console.log(layerCell);
+      model.setVisible(layerCell, false);
     }))(model.getChildAt(model.root, layerIdx));
   }
   
@@ -445,6 +510,33 @@ Graph.prototype.switchLayer = function(layer) {
   //클릭이벤트 - 선택된 레이어 visible true
   model.setVisible(layer, true);
 
+};
+
+/**
+ * 상품 그룹 영역에 Overlay 삭제버튼 생성
+ */
+Graph.prototype.createOverlay = function(prod, cell) {
+
+  var graph = this;
+
+  // Creates a new overlay with an image and a tooltip
+  var overlay = new mxCellOverlay(
+      new mxImage(IMAGE_PATH + '/delete.gif', 16, 16),
+      'Overlay tooltip',
+      mxConstants.ALIGN_RIGHT,
+      mxConstants.ALIGN_TOP,
+      new mxPoint(-10, 10)
+      );
+  
+  // Installs a handler for clicks on the overlay
+  overlay.addListener(mxEvent.CLICK, function(sender, evt2) {
+    // 상품영역 레이어 삭제
+    var model = prod.getModel();
+    prod.removeCells([model.getCell(cell.id)]);
+    // 그룹영역 셀 삭제
+    graph.removeCells([cell]);
+  });
+  return overlay;
 };
 
 
@@ -456,19 +548,21 @@ Graph.prototype.initGroupArea = function(prod) {
   var graph = this;
 
   //그룹영역은 2줄로 초기화
-  graph.initValue(2);
+  graph.initValue(MAX_GROUP_ROW);
   graph.isGroup = true;
   
   //상품 그룹 영역에 새로운 그룹 생성
   var createGroup = function(x, y) {
     var parent = graph.getDefaultParent();
-    var nextId = graph.nextId;
-    //console.log(nextId);
+    var grpId = graph.groupPrefix + graph.nextGrpId;
+    //console.log(grpId);
     if (graph.isEnabled()) {
+      
+      var cell;
       graph.model.beginUpdate();
       try {
-        graph.insertVertex(parent,
-            (graph.groupPrefix + graph.nextId),
+        cell = graph.insertVertex(parent,
+            grpId,
             mxResources.get('groupName'),
             x, y,
             graph.keySize.width, graph.keySize.height); 
@@ -476,60 +570,24 @@ Graph.prototype.initGroupArea = function(prod) {
       finally {
         graph.model.endUpdate();
       }
+      // Sets the overlay for the cell in the graph
+      graph.addCellOverlay(cell, graph.createOverlay(prod, cell));
     }
     
-    graph.nextId++;
+    graph.nextGrpId++;
     //console.log(graph);
-    return nextId;
+    return grpId;
   };
   
   //상품 영역에 새로운 레이어 생성
-  var createLayer = function(index) {
+  var createLayer = function(grpId) {
     var layer = null;
-    var layerIndex = graph.groupPrefix + index;
-    //console.log(layerIndex);
-    layer = prod.addCell(new mxCell(layerIndex), prod.model.root, index);
+    var cell = new mxCell(grpId);
+    cell.id = grpId;
+    layer = prod.addCell(cell, prod.model.root, grpId);
     return layer;
   };
-  
-  
-  //선택된 그룹을 삭제할 수 있도록 overlay 생성
-  graph.addListener(mxEvent.CLICK, function(sender, evt) {
-    //console.log(graph);
-    var cell = evt.getProperty('cell'); 
-    if (cell != null) {
-      var overlays = graph.getCellOverlays(cell);
-      if (overlays == null) {
-        // Creates a new overlay with an image and a tooltip
-        var overlay = new mxCellOverlay(
-            new mxImage(IMAGE_PATH + '/delete.gif', 16, 16),
-            'Overlay tooltip',
-            mxConstants.ALIGN_RIGHT,
-            mxConstants.ALIGN_TOP,
-            new mxPoint(-10, 10)
-            );
 
-        // Installs a handler for clicks on the overlay
-        overlay.addListener(mxEvent.CLICK, function(sender, evt2)
-        {
-          //상품영역 레이어 삭제
-          var nextId = cell.id.substr(1);
-          var model = prod.getModel();
-          var layer = model.getCell(nextId);
-          prod.removeCells([layer]);
-          //그룹영역 셀 삭제
-          graph.removeCells([cell]);
-        });
-        
-        // Sets the overlay for the cell in the graph
-        graph.addCellOverlay(cell, overlay);
-      }
-      else
-      {
-        graph.removeCellOverlays(cell);
-      }
-    }
-  });
   //override 마우스 이벤트 - 그룹, 상품 영역
   graph.addMouseListener({
     //상품 그룹 영역 마우스 클릭 시 해당 상품 레이어 보이기
@@ -550,9 +608,8 @@ Graph.prototype.initGroupArea = function(prod) {
         var cell = me.state.cell;
         //console.log(cell);
         //상품그룹 터치키 클릭 시 처리
-        var currId = cell.id.substr(1);
         var model = prod.getModel();
-        var layer = model.getCell(currId);
+        var layer = model.getCell(cell.id);
         prod.switchLayer(layer);
         //상품영역 스크롤했던 것 초기화
         prod.initProdPaging();
@@ -569,8 +626,10 @@ Graph.prototype.initGroupArea = function(prod) {
     try {
       var currId = createGroup(0, 0);
       var model = prod.getModel();
-      var layer = model.getCell(currId);
-      layer.value = prod.groupPrefix + '1';
+      //그래프가 생성될 때 id=1은 이미 생성되어 있으므로 해당 레이어 삭제 후 재 생성
+      prod.removeCells([model.getCell(1)]);
+      layer = createLayer(currId);
+
       prod.switchLayer(layer);
     }
     finally {
@@ -639,11 +698,14 @@ Graph.prototype.createKeyHandler = function(graph) {
 /**
  * 상품 영역 고유 특성 처리
  */
-Graph.prototype.initProdArea = function(group) {
+Graph.prototype.initProdArea = function(group, sidebar) {
   
   var graph = this;
   this.group = group;
+  this.sidebar = sidebar;
 
+  var theGrid = this.sidebar.grid;
+  
   graph.isGroup = false;
 
   //console.log(graph);
@@ -651,10 +713,44 @@ Graph.prototype.initProdArea = function(group) {
   graph.initValue(6);
   
   //상품 영역에만 UNDO, 키 핸들러 추가
-  this.undoManager = this.createUndoManager(graph);
+  graph.undoManager = graph.createUndoManager(graph);
   var rubberband = new mxRubberband(graph);
-  this.keyHandler = this.createKeyHandler(graph);
+  graph.keyHandler = graph.createKeyHandler(graph);
   //console.log(graph);
+
+  //셀 삭제 시 그리드에 반영
+  var cellsRemoved = graph.cellsRemoved;
+  graph.cellsRemoved = function(cells) {
+    cellsRemoved.apply(this, arguments);
+    sidebar.initUsed();
+  }
+  //셀 추가 시 그리드에 반영
+  var cellsAdded = graph.cellsAdded;
+  graph.cellsAdded = function(cells) {
+    cellsAdded.apply(this, arguments);
+    sidebar.initUsed();
+  }
+  
+  //UNDO 를 했을 때 그리드의 사용여부 업데이트
+  var undoHandler = function(sender, evt) {
+    var model = graph.getModel();
+    var cells = [];
+    
+    //추가된 경우 사용여부 true & 선택
+    var cand = graph.getSelectionCellsForChanges(evt.getProperty('edit').changes);
+    for (var i = 0; i < cand.length; i++) {
+      if ((model.isVertex(cand[i]) || model.isEdge(cand[i])) && graph.view.getState(cand[i]) != null) {
+        cells.push(cand[i]);
+      }
+    }
+    graph.setSelectionCells(cells);
+    
+    //삭제된 경우 사용여부 false
+
+    sidebar.initUsed();
+  }
+  graph.undoManager.addListener(mxEvent.UNDO, undoHandler);
+  graph.undoManager.addListener(mxEvent.REDO, undoHandler);
 
 };
 
@@ -672,8 +768,8 @@ Graph.prototype.findPosition = function(pt) {
   var cy = (graph.keySize.height * graph.ROW_PER_PAGE); 
   var px = parseInt(pt.x/graph.keySize.width) * graph.keySize.width;
   var py = parseInt(pt.y/graph.keySize.height) * graph.keySize.height;
-  var lastX = (graph.keySize.width * graph.COL_PER_PAGE * graph.pageNo) - graph.keySize.width; 
-  var lastY = (graph.keySize.height * graph.ROW_PER_PAGE) - graph.keySize.height; 
+  var lastX = cx - graph.keySize.width; 
+  var lastY = cy - graph.keySize.height; 
   
   for(var posY = py; posY < cy; posY += graph.keySize.height) {
     for(var posX = px; posX < cx; posX += graph.keySize.width) {
@@ -705,17 +801,15 @@ function Format(touchkey) {
   
   this.init();
 }
+
 /**
  * 기능 패널 초기화
  */
 Format.prototype.init = function() {
 
-  this.update = mxUtils.bind(this, function(sender, evt) {
-    //console.log(sender);
-    this.graph = sender.graph;
-    if(sender.container != null) {
-      this.graph = sender;
-    }
+  //그룹, 상품 선택 변경 시 설정 패널 초기화
+  this.update = mxUtils.bind(this, function(graph) {
+    this.graph = graph;
     this.refresh();
   });
   
@@ -963,20 +1057,39 @@ Format.prototype.open = function(isLoad)
       mxUtils.bind(this, function(req) {
         //var enabled = req.getStatus() != 404;
         if( req.getStatus() == 200 ) {
-          var jsonStr = JSON.parse(req.getText());
-          var xmlStr = jsonStr.data;
           try {
+            var jsonStr = JSON.parse(req.getText());
+            var xmlStr = jsonStr.data;
             var xmlArr = xmlStr.split("|");
+            
+            //그룹 영역 추가
             var groupXml = mxUtils.parseXml(xmlArr[0]); 
             //console.log(groupXml);
             this.setGraphXml(group, groupXml.documentElement);
             
+            //상품 영역 추가
             var prodXml = mxUtils.parseXml(xmlArr[1]); 
             //console.log(prodXml);
             this.setGraphXml(prod, prodXml.documentElement);
+            
+            //로드된 그룹에 오버레이 삭제 버튼 추가
+            var model = group.getModel();
+            var parent = group.getDefaultParent();
+            var childCount = model.getChildCount(parent);
+            for(var i = 0; i < childCount; i++) {
+              cell = model.getChildAt(parent, i);
+              group.addCellOverlay(cell, group.createOverlay(prod, cell));
+            }
+            
+            //그룹 영역에서 첫번째(무엇이될지는모름) 셀을 선택하고 상품영역에서도 해당 레이어 활성화
+            var firstCell = model.getChildAt(parent, 0);
+            group.selectCellForEvent(firstCell);
+            var layer = prod.model.getCell(firstCell.getId());
+            prod.switchLayer(layer);
+            
           }
           catch (e) {
-            //mxUtils.alert(mxResources.get('invalidOrMissingFile') + ': ' + e.message);
+            mxUtils.alert(mxResources.get('errorOpeningFile'));
           }
           if(!isLoad) {
             mxUtils.alert(mxResources.get('opened'));
@@ -1009,8 +1122,8 @@ Format.prototype.setGraphXml = function(graph, node) {
         graph.model.endUpdate();
         
         //console.log(node);
-        //로드 후 변수 셋팅
-        //graph.initValue(parseInt(node.getAttribute('rowPerPage')));
+        //로드 후 변수 초기화
+        graph.initValue();
         //console.log(graph);
       }
     }
@@ -1108,7 +1221,7 @@ Format.prototype.save = function()
 /**
 * 상품 조회 그리드 처리
 */
-function Grid(prod) {
+function Sidebar(prod) {
   
   this.graph = prod;
   
@@ -1117,16 +1230,82 @@ function Grid(prod) {
 /**
  * 그리드 영역 초기화
  */
-Grid.prototype.init = function() {
+Sidebar.prototype.init = function() {
 
   this.grid = this.makeGrid();
   this.makeDragSource();
+
+  var sidebar = this;
+  //레이어가 보일 때(switchLayer..) 이벤트 추가 처리
+  var mxGraphModelSetVisible = mxGraphModel.prototype.setVisible;
+  this.graph.model.setVisible = function(cell, visible) {
+    //visible = true 인 레이어의 상품을 그리드에서 체크
+    if(sidebar != null && visible) {
+      sidebar.initUsed(cell);
+    }
+    mxGraphModelSetVisible.apply(this, arguments);
+  }
+
+};
+
+
+/**
+ * 사용여부 초기화
+ */
+Sidebar.prototype.initUsed = function(layer) {
+  var graph = this.graph;
+  var theGrid = this.grid;
+
+  var layer = layer || graph.getDefaultParent();
+  
+  //그리드의 모든 항목 사용여부 false로 셋팅
+  for(i = 0; i < theGrid.rows.length; i++) {
+    theGrid.setCellData(theGrid.rows[i].index, 'used', false);
+  }
+
+  //상품영역 셀의 스타일에서 상품코드 추출
+  var getProdCd = function(style) {
+    var prodCd = "";
+    var styles = style.split(";");
+    styles.forEach(function(style, index){
+      var keyValues = style.split("=");
+      if(keyValues.length > 1 && keyValues[0] == 'prodCd') {
+        prodCd = keyValues[1];
+      }
+    });
+    return prodCd;
+  };
+  
+  //상품코드로 위즈뫃 그리드에서 해당 인덱스 추출
+  var getIdByProdCd = function(prodCd) {
+    var id = -1;
+    for(g = 0; g < theGrid.rows.length; g++) {
+      if(theGrid.rows[g].dataItem.prodCd == prodCd) {
+        id = theGrid.rows[g].index;
+        break;
+      }
+    }
+    return id;
+  };
+  
+  //각 상품의 상품코드로 그리드에서 체크 표시
+  var model = graph.getModel();
+  var childCount = model.getChildCount(layer);
+  var cell, prodCd;
+  for(var i = 0; i < childCount; i++) {
+    cell = model.getChildAt(layer, i);
+    prodCd = getProdCd(cell.getStyle());
+    var id = getIdByProdCd(prodCd);
+    if(id >= 0 ) {
+      theGrid.setCellData(id, 'used', true);
+    }
+  }
 
 };
 /**
  * 그리드 생성
  */
-Grid.prototype.makeGrid = function() {
+Sidebar.prototype.makeGrid = function() {
 
   function getData() {
     var data = [];
@@ -1216,69 +1395,63 @@ Grid.prototype.makeGrid = function() {
 /**
  * Cell을 드래그 할수 있도록 처리
  */
-Grid.prototype.makeDragSource = function() {
+Sidebar.prototype.makeDragSource = function() {
 
   var graph = this.graph;
+  var sidebar = this;
   var grid = this.grid;
   
   //드래그 이벤트 생성
-  //function makeDragEvent(graph, grid, cell, r) {
-  var makeDragEvent = mxUtils.bind(this, function(graph, grid) {
+  var dropEvent = function(graph, evt, cell, x, y) {
 
-    var dropEvent = function(graph, evt, cell, x, y) {
-
-      var parent = graph.getDefaultParent();
-      var model = graph.getModel();
+    var parent = graph.getDefaultParent();
+    var model = graph.getModel();
+    
+    //Drop 할 때 오브젝트 생성
+    var pt = graph.getPointForEvent(evt);
+    
+    
+    for(var selected = 0; selected < grid.selectedItems.length; selected++ ) {
       
-      //Drop 할 때 오브젝트 생성
-      var pt = graph.getPointForEvent(evt);
-      
-      
-      for(var selected = 0; selected < grid.selectedItems.length; selected++ ) {
-        
-        var pos = graph.findPosition(pt);
-        if( pos == null) {
-          mxEvent.consume(evt);
-          return;
-        }
-        
-        //Drop 된 포지션과 다음 포지션에 터치키 생성
-        var rows = grid.selectedRows[selected];
-        var item = rows.dataItem;
-        //console.log(item.tag);
-        //사용중이 아닌 항목만 넣기
-        if(!item.used) {
-          model.beginUpdate();
-          try {
-            graph.insertVertex(parent,
-                graph.prodPrefix + graph.nextId,
-                item.prodNm,
-                pos.x, pos.y,
-                graph.keySize.width, graph.keySize.height,
-                'prodCd='  + item.prodCd + ';');
-          }
-          finally {
-            model.endUpdate();
-            grid.setCellData(rows.index, 'used', true);
-          }
-          //console.log(graph);
-          graph.nextId++;
-        }
+      var pos = graph.findPosition(pt);
+      if( pos == null) {
+        mxEvent.consume(evt);
+        return;
       }
+      
+      //Drop 된 포지션과 다음 포지션에 터치키 생성
+      var rows = grid.selectedRows[selected];
+      var item = rows.dataItem;
+      //console.log(item.tag);
+      //사용중이 아닌 항목만 넣기
+      //if(!item.used) {
+        model.beginUpdate();
+        try {
+          graph.insertVertex(parent,
+              null,
+              item.prodNm,
+              pos.x, pos.y,
+              graph.keySize.width, graph.keySize.height,
+              'prodCd='  + item.prodCd + ';');
+        }
+        finally {
+          model.endUpdate();
+          sidebar.initUsed();
+        }
+        //console.log(graph);
+      //}
     }
-
-    //드래그할 항목 생성
-    var previewElt = document.createElement('div');
-    previewElt.style.border = 'dashed black 1px';
-    previewElt.style.width = graph.keySize.width + 'px';
-    previewElt.style.height = graph.keySize.height + 'px';
-    //console.log(grid);
-    var ds = mxUtils.makeDraggable(grid.cells.hostElement, graph, dropEvent, previewElt, -(graph.keySize.width/2), -(graph.keySize.height/2));
-    ds.highlightDropTargets = true;
-  })(graph, grid);
-  //==makeDragEvent
-  //}
+  }
+  //--dropEvent
   
+  //드래그할 항목 생성
+  var previewElt = document.createElement('div');
+  previewElt.style.border = 'dashed black 1px';
+  previewElt.style.width = graph.keySize.width + 'px';
+  previewElt.style.height = graph.keySize.height + 'px';
+  //console.log(grid);
+  var ds = mxUtils.makeDraggable(grid.cells.hostElement, graph, dropEvent, previewElt, -(graph.keySize.width/2), -(graph.keySize.height/2));
+  ds.highlightDropTargets = true;
 
 };
 /**

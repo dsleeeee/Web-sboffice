@@ -40,9 +40,13 @@ public enum Style implements CodeEnum {
     /** 테이블그룹구분-custom */
     TBL_GRP_FG("tblGrpFg"),
     /** 백그라운드컬러-custom */
-    BG_COLOR("bgColor"),
+    BG_COLOR("fillColor"),
     /** 백그라운드이미지-custom */
-    BG_IMG("bgImg")
+    BG_IMG("image"),
+    /** 백그라운드이미지-custom */
+    IMG_WIDTH("imageWidth"),
+    /** 백그라운드이미지-custom */
+    IMG_HEIGHT("imageHeight")
     ;
     
     

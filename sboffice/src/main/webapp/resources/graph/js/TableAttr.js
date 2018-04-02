@@ -72,17 +72,6 @@ TableAttr.prototype.init = function() {
   this.container.style.backgroundImage = this.containerBackgroundImage;
   this.container.style.backgroundColor = this.defaultBackgroundColor; 
 
-//div 태그 생성
-  var createDiv = function(classname) {
-    var elt = document.createElement('div');
-    elt.className = classname;
-    return elt;
-  };
-
-  //매장 영역 생성
-  //this.graphContainer = createDiv("geGraphContainer");
-  //this.graph.init(this.graphContainer);
-
   //마우스 오른쪽 클릭 - 컨텍스트 메뉴
   //mxEvent.disableContextMenu(this.container);
 
@@ -96,7 +85,7 @@ TableAttr.prototype.init = function() {
   this.graph.addListener(mxEvent.ROOT, this.format.update);
 
   //서버의 초기 설정 로드
-  //var openResult = this.format.open(true);
+  var openResult = this.format.open(true);
   
   //TODO 오픈 실패 or 기존 설정 정보가 없을 경우 기본 구성 로딩
   //if(!openResult) {
@@ -139,12 +128,46 @@ Sidebar.prototype.init = function() {
   graph.cellsRemoved = function(cells) {
     for(var i=0; i < cells.length; i++) {
       var cell = cells[i];
-      //그래픽 영역의 0, 1은 root, 기본레이어 이므로 +100+1한 값의 인덱스 사용
-      //그리드의 데이터 생성 시 +100 +1하였기 때문에.. 
       theGrid.setCellData((parseInt(cell.getId())-1), 'used', false);
     }
     cellsRemoved.apply(this, arguments);
   }
+  //셀 추가 시 그리드에서 사용여부 체크 처리
+  var cellsAdded = graph.cellsAdded;
+  graph.cellsAdded = function(cells) {
+    for(var i=0; i < cells.length; i++) {
+      var cell = cells[i];
+      theGrid.setCellData((parseInt(cell.getId())-1), 'used', true);
+    }
+    cellsAdded.apply(this, arguments);
+  }
+  
+  //UNDO 를 했을 때 그리드의 사용여부 업데이트
+  var undoHandler = function(sender, evt) {
+    var model = graph.getModel();
+    var cells = [];
+    
+    //추가된 경우 사용여부 true
+    var cand = graph.getSelectionCellsForChanges(evt.getProperty('edit').changes);
+    for (var i = 0; i < cand.length; i++) {
+      if ((model.isVertex(cand[i]) || model.isEdge(cand[i])) && graph.view.getState(cand[i]) != null) {
+        cells.push(cand[i]);
+        theGrid.setCellData(parseInt(cand[i].id)-1, 'used', true);
+      }
+    }
+    graph.setSelectionCells(cells);
+    
+    //삭제된 경우 사용여부 false
+    var removes = graph.getRemovedCellsForChanges(evt.getProperty('edit').changes);
+    for (var i = 0; i < removes.length; i++) {
+      if ((model.isVertex(removes[i]) || model.isEdge(removes[i]))) {
+        theGrid.setCellData(parseInt(removes[i].id)-1, 'used', false);
+      }
+    }
+  }
+  graph.undoManager.addListener(mxEvent.UNDO, undoHandler);
+  graph.undoManager.addListener(mxEvent.REDO, undoHandler);
+
 };
 /**
  * 속성명 영역 값 초기화
@@ -153,15 +176,29 @@ Sidebar.prototype.initValue = function() {
   var graph = this.graph;
   var theGrid = this.grid;
   
+  //그리드에서 사용여부 초기화
+  this.initUsed();
+  
+};
+/**
+ * 사용여부 초기화
+ */
+Sidebar.prototype.initUsed = function() {
+  var graph = this.graph;
+  var theGrid = this.grid;
+
+  for(i = 0; i < theGrid.rows.length; i++) {
+    theGrid.setCellData(theGrid.rows[i].index, 'used', false);
+  }
+
   var parent = graph.getDefaultParent();
   var model = graph.getModel();
-  
   var childCount = model.getChildCount(parent);
-  
   for(var i = 0; i < childCount; i++) {
     var cell = model.getChildAt(parent, i);
     theGrid.setCellData((parseInt(cell.getId())-1), 'used', true);
   }
+
 };
 
 /**
@@ -202,6 +239,7 @@ Sidebar.prototype.makeGrid = function() {
   theGrid.select(-1, -1);
   theGrid.select(0, 1);
   
+  
   //마우스 text selection 이벤트를 방지하기 위해 사용
   //TODO 기본 이벤트가 문제가 될 경우 아래 소스 고려
   /*
@@ -227,6 +265,7 @@ Sidebar.prototype.makeGrid = function() {
   */
   
   //TODO 선택한 ROW가 바뀌었을 때 그래픽 영역에서 활성화
+  /*
   theGrid.selectionChanged.addHandler(function (s, e) {
     //idx가져오기(0번째 항목)
     var idx = theGrid.getCellData(e.row, 0, true);
@@ -235,15 +274,18 @@ Sidebar.prototype.makeGrid = function() {
     if(used) {
       var cell = graph.getModel().getCell(idx);
       graph.setSelectionCell(cell);
+      //console.log(cell);
     }
     //맨앞으로 가져오기
     graph.orderCells(false);
-    //console.log(cell);
   });
-  
+  */
   //판매금액 포맷팅
   var numberWithCommas = function(x) {
-    if(Number.isInteger(x)) {
+    var isInteger = function(num) {
+      return (num ^ 0) === num;
+    };
+    if(isInteger(x)) {
       x = x.toString();
       var pattern = /(-?\d+)(\d{3})/;
       while (pattern.test(x)) {
@@ -280,9 +322,7 @@ Sidebar.prototype.makeGrid = function() {
         finally {
           model.endUpdate();
         }
-        //그리드에 사용여부 업데이트
-        theGrid.setCellData(rows.index, 'used', true);
-        graph.setSelectionCell(lastCell); 
+        graph.setSelectionCell(lastCell);
       }
     }
   };
@@ -405,8 +445,17 @@ Graph.prototype.init = function() {
   var rubberband = new mxRubberband(graph);
   graph.keyHandler = graph.createKeyHandler(graph);
   //console.log(this);
-
   
+  //마우스 클릭 할 때 focus 처리
+  //https://jgraph.github.io/mxgraph/docs/known-issues.html
+  if (mxClient.IS_NS) {
+    mxEvent.addListener(graph.container, 'mousedown', function() {
+      if (!graph.isEditing()) {
+        graph.container.setAttribute('tabindex', '-1');
+        graph.container.focus();
+      }
+    });
+  }
 };
 
 /**
@@ -742,12 +791,15 @@ Format.prototype.fontStyle = function() {
    * 폰트 스타일(굵게, 기울임, 밑줄)
    */
   var stylePanel = this.stylePanel();
-  var bold = this.addButton('geSprite-bold', mxResources.get('bold'),
-      function() { graph.setCellStyles(mxConstants.STYLE_FONTSTYLE, mxConstants.FONT_BOLD); }, stylePanel);
-  var italic = this.addButton('geSprite-italic', mxResources.get('italic'),
-    function() { graph.setCellStyles(mxConstants.STYLE_FONTSTYLE, mxConstants. FONT_ITALIC); }, stylePanel);
-  var underline = this.addButton('geSprite-underline', mxResources.get('underline'),
-    function() { graph.setCellStyles(mxConstants.STYLE_FONTSTYLE, mxConstants.FONT_UNDERLINE); }, stylePanel);
+  var bold = this.addButton('geSprite-bold', mxResources.get('bold'), function() {
+      graph.toggleCellStyleFlags(mxConstants.STYLE_FONTSTYLE, mxConstants.FONT_BOLD);
+    }, stylePanel);
+  var italic = this.addButton('geSprite-italic', mxResources.get('italic'), function() {
+      graph.toggleCellStyleFlags(mxConstants.STYLE_FONTSTYLE, mxConstants.FONT_ITALIC);
+    }, stylePanel);
+  var underline = this.addButton('geSprite-underline', mxResources.get('underline'), function() {
+    graph.toggleCellStyleFlags(mxConstants.STYLE_FONTSTYLE, mxConstants.FONT_UNDERLINE);
+    }, stylePanel);
   
   this.styleButtons([bold, italic, underline]);
   underline.style.marginRight = '6px';
@@ -999,13 +1051,6 @@ Format.prototype.save = function() {
   mxConstants.GUIDE_COLOR = '#0088cf';
   mxConstants.HIGHLIGHT_OPACITY = 30;
   mxConstants.HIGHLIGHT_SIZE = 8;
-  /*
-  var mxSvgCanvas2DCreateDiv = mxSvgCanvas2D.prototype.createDiv
-  mxSvgCanvas2D.prototype.createDiv = function(str, align, valign, style, overflow) {
-    
-    var div = mxSvgCanvas2DCreateDiv.apply(this, arguments);
-    console.log(div);
-  };
-  */
+
 })();
 

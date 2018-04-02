@@ -65,8 +65,15 @@ public class TableLayoutServiceImpl implements TableLayoutService {
         param.put("regDt", currentDateTimeString());
         param.put("regId", sessionInfo.getUserId());
         
-        if( attrMapper.mergeStoreConfgXml(param) != 1 ) {
-            throw new BizException( messageService.get("label.modifyFail") );
+        if( attrMapper.selectXmlByStore(param) != null ) {
+            if( attrMapper.updateStoreConfgXml(param) != 1 ) {
+                throw new BizException( messageService.get("label.modifyFail") );
+            }
+        }
+        else {
+            if( attrMapper.insertStoreConfgXml(param) != 1 ) {
+                throw new BizException( messageService.get("label.insertFail") );
+            }
         }
 
         //XML 분석, TableGroup, Table Domain 생성

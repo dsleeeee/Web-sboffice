@@ -58,6 +58,10 @@ public class TouchkeyController {
         //화면에 표시할 상점의 상품 정보 조회
         model.addAttribute("prods", convertToJson(touchkeyService.selectProdByStore(sessionInfo)));
 
+        //TODO 매장의 터치키 환경 설정 값을 조회해서 셋팅 
+        model.addAttribute("maxGroupRow", "2");
+        
+        
         return RESULT_URI + "/touchkey";
     }
 

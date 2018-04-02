@@ -61,7 +61,7 @@ window.TABLE_ATTR_DEFAULTS = ${defaults};
   <div id="component">
     <div id="theGrid"></div>
   </div>
-  <div id="content">
+  <div id="content" tabindex="-1">
     <div id="splash"><img src="/resource/graph/images/loading.gif"></div>
   </div>
   <div id="format"></div>

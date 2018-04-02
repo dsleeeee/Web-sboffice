@@ -3,6 +3,7 @@ package kr.co.solbipos.base.service.store.tableattr;
 import static kr.co.solbipos.utils.DateUtil.*;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -74,8 +75,15 @@ public class TableAttrServiceImpl implements TableAttrService {
         param.put("regDt", currentDateTimeString());
         param.put("regId", sessionInfo.getUserId());
         
-        if( mapper.mergeStoreConfgXml(param) != 1 ) {
-            throw new BizException( messageService.get("label.modifyFail") );
+        if( mapper.selectXmlByStore(param) != null ) {
+            if( mapper.updateStoreConfgXml(param) != 1 ) {
+                throw new BizException( messageService.get("label.modifyFail") );
+            }
+        }
+        else {
+            if( mapper.insertStoreConfgXml(param) != 1 ) {
+                throw new BizException( messageService.get("label.insertFail") );
+            }
         }
         
         //XML 분석, 속성 코드별 TableAttr Domain 생성
@@ -154,7 +162,7 @@ public class TableAttrServiceImpl implements TableAttrService {
                                 tableAttr.setFontSize(Long.parseLong(styleKeyValue[1]));
                                 break;
                             case FONT_STYLE_FG:
-                                tableAttr.setFontStyleFg(styleKeyValue[1]);
+                                tableAttr.setFontStyleFg(StringUtils.leftPad(Integer.toBinaryString(Integer.parseInt(styleKeyValue[1])), 3, "0"));
                                 break;
                             case TEXTALIGN_FG:
                                 tableAttr.setTextalignFg(TextalignFg.getEnum(styleKeyValue[1]));

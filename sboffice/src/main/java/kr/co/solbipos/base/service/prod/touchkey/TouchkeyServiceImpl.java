@@ -69,8 +69,15 @@ public class TouchkeyServiceImpl implements TouchkeyService {
         param.put("regDt", currentDateTimeString());
         param.put("regId", sessionInfo.getUserId());
         
-        if( attrMapper.mergeStoreConfgXml(param) != 1 ) {
-            throw new BizException( messageService.get("label.modifyFail") );
+        if( attrMapper.selectXmlByStore(param) != null ) {
+            if( attrMapper.updateStoreConfgXml(param) != 1 ) {
+                throw new BizException( messageService.get("label.modifyFail") );
+            }
+        }
+        else {
+            if( attrMapper.insertStoreConfgXml(param) != 1 ) {
+                throw new BizException( messageService.get("label.insertFail") );
+            }
         }
 
         //XML 분석, TouchClass, Touch Domain 생성
@@ -218,7 +225,7 @@ public class TouchkeyServiceImpl implements TouchkeyService {
 
         List<Touch> touchs = new ArrayList<Touch>();
         Touch touch = null;
-        mxCell layer = (mxCell)model.getCell(layerId.substring(1));
+        mxCell layer = (mxCell)model.getCell(layerId);
 
         Object[] cells = graph.getChildVertices(layer);
         for(Object c : cells) {
