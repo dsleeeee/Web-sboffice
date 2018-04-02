@@ -102,9 +102,11 @@ $(document).ready(function(){
         s_alert.pop(col.header+"는(은) 최대 "+col.maxLength+ "자리 입력 가능합니다.");
       }
       // 숫자만
-      if(val.match(/[^0-9]/)){
-        s_alert.pop(col.header+"<s:message code='requireNumber'/>");
-        s.setCellData(e.row, e.col, val.replace(/[^0-9]/g,""));
+      if(col.binding == "kitchnMemoCd") {
+        if(val.match(/[^0-9]/)){
+          s_alert.pop(col.header+"<s:message code='requireNumber'/>");
+          s.setCellData(e.row, e.col, val.replace(/[^0-9]/g,""));
+        }
       }
     }
   });

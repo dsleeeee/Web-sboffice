@@ -225,7 +225,7 @@ public class CmmMenuServiceImpl implements CmmMenuService {
 
         log.error("menuType : "+ menuType);
         
-        List<DefaultMap<Object>> iconList = cmmCodeMapper.selectCmmCodeList("013"); // 메뉴 아이콘
+        List<DefaultMap<Object>> iconList = cmmCodeMapper.selectCmmCodeList("086"); // 메뉴 아이콘
 
         List<ResrceInfo> menu1;
         List<ResrceInfo> menu2;
@@ -330,6 +330,21 @@ public class CmmMenuServiceImpl implements CmmMenuService {
             m1Header.put("items", m1items);
             rList.add(m1Header);
         }
+        
+        // 확장형 메뉴
+        if(rList.size() > 0) {
+            log.error("rList.size() > 0") ;
+            
+            for(int i=0; i<rList.size(); i++){
+                HashMap<String, Object> mData1 = new HashMap<>();
+                mData1 = rList.get(i);
+                log.error("header " + mData1.get("header"));
+                //String iconClass = mData1.get("iconNm") ? ""
+
+            }
+        }
+        
+        
         log.error("rList.size() : " + rList.size());
 
         String menuStr = convertToJson(rList);
