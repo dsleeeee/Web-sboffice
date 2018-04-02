@@ -1386,6 +1386,10 @@ Sidebar.prototype.makeGrid = function() {
   
       // show checkboxes on row header and top-left cells
       if (sel != null && e.col == 0) {
+        //css에 정의된 기어 아이콘 삭제
+        if(e.row == 0) {
+          e.cell.style.backgroundImage = 'none';
+        }
         e.cell.innerHTML = '<span class="wj-glyph-check" style="opacity:' + (sel ? 1 : .25) + '"></span>';
       }
   });
