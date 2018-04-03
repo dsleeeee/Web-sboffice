@@ -81,7 +81,7 @@ a.btn-layerClose:hover {
 
 <div>
   <h1>매장조회</h1>
-  <br>
+  <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
   <div>
     <input type="text" id="storeNm1" readonly="readonly">
     <button id="storeSearchPop1" class="sStoreSrch">매장단일 조회</button>

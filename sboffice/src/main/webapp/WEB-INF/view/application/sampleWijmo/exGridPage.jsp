@@ -166,6 +166,7 @@ $("#xlsxBtn").click(function() {
 });
 
 $("#saveBtn").click(function() {
+  console.log(JSON.stringify(grid.itemsSource));
   var param = {};
   var url = "/exGridSave.sb";
   $.ajax({

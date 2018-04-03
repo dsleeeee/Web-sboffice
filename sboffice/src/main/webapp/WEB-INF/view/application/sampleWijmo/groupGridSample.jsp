@@ -56,7 +56,10 @@ onload = function () {
     ,columns: [
       /* { binding: 'idx', header: 'idx'  , width: '*' }, */
       { binding: 'shopCd', header: 'shopCd'  , width: '*' },
-      { binding: 'shopNm', header: 'shopNm'  , width: '*' },
+      { binding: 'shopNm', header: 'shopN
+        
+        m'  , width: '*' },
+      }
       { binding: 'shopCdNm', header: 'shopCdNm'  , visible: false },
       { binding: 'shopPgmTypeFg', header: 'shopPgmTypeFg' , visible: false },
       { binding: 'shopStatFg', header: 'shopStatFg' , visible: false  },
