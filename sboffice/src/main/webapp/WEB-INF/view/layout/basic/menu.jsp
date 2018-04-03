@@ -4,8 +4,8 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
 <!-- 선택된 메뉴와 부모 메뉴 -->
-<c:set var="cResrce" value="${sessionScope.sessionInfo.currentMenu.resrceCd}" />
-<c:set var="pResrce" value="${sessionScope.sessionInfo.currentMenu.pResrce}" />
+<%-- <c:set var="cResrce" value="${sessionScope.sessionInfo.currentMenu.resrceCd}" /> --%>
+<%-- <c:set var="pResrce" value="${sessionScope.sessionInfo.currentMenu.pResrce}" /> --%>
 <!--// 선택된 메뉴와 부모 메뉴 -->
 
 <!-- 접힌 메뉴용 -->
@@ -61,8 +61,10 @@
 
 onload = function() {
   // 선택된 메뉴의 메뉴코드와 부모메뉴의 메뉴코드
-  var cResrce = "${cResrce}";
-  var pResrce = "${pResrce}";
+  //var cResrce = "${cResrce}";
+  //var pResrce = "${pResrce}";
+  var cResrce = "";
+  var pResrce = "";
   
   // 테스트용
   //var cResrce = "000173";
