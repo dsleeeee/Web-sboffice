@@ -1,5 +1,6 @@
 package kr.co.solbipos.service.cmm;
 
+import java.util.HashMap;
 import java.util.List;
 import kr.co.solbipos.application.domain.cmm.MenuUseHist;
 import kr.co.solbipos.application.domain.login.SessionInfo;
@@ -101,7 +102,6 @@ public interface CmmMenuService {
      */
     void deleteFixMenu(String resrceCd, SessionInfo sessionInfo);
 
-
     /**
      * 
      * 메인 메뉴 관련
@@ -109,7 +109,7 @@ public interface CmmMenuService {
      * @param sessionInfo
      * @param menuType 메뉴 타입 (A : 전체메뉴, F : 즐겨찾기)
      */
-    String makeMenu(SessionInfo sessionInfo, String menuType);
+    List<HashMap<String, Object>> makeMenu(SessionInfo sessionInfo, String menuType);
 }
 
 

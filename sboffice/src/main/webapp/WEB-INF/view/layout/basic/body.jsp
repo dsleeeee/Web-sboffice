@@ -59,29 +59,23 @@
 </body>
 
 <script type="text/javascript">
+<%-- 메뉴 열고 닫기 --%>
 $(".menuControl").click(function(){
-  
   if($("#_nav").attr("class") == "menuOpen"){
-    
     $("#faMenu").hide();
     $("#theTreeAll").hide();
     $("#theTreeBkmk").hide();
     $("#smallMenu").show();
-    
-    showSmallMenu();
-    
+    $("#_favorite").removeClass("on");
+    $("#_nav").removeClass("menuOpen").addClass("menuClose");
+    $("#_arrow").removeClass("arrowOpen").addClass("arrowClose");
   }else{
-    
     $("#theTreeAll").show();
     $("#theTreeBkmk").show();
     $("#smallMenu").hide();
-    
-    $(".menuTab .all").click(); // 메뉴 펼칠때 전체메뉴를 기본으로 보여줌
+    $("#_nav").removeClass("menuClose").addClass("menuOpen");
+    $("#_arrow").removeClass("arrowClose").addClass("arrowOpen");
   }
-  
-  $("#_nav").toggleClass("menuOpen menuClose");
-  $("#_arrow").toggleClass("arrowOpen arrowClose");
-  
 });
 
 <%-- 검색 조건 닫고 열기 --%>

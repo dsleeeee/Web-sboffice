@@ -3,8 +3,10 @@ package kr.co.solbipos.service.cmm;
 import static kr.co.solbipos.utils.DateUtil.*;
 import static kr.co.solbipos.utils.spring.StringUtil.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import kr.co.solbipos.application.domain.cmm.MenuUseHist;
@@ -212,18 +214,13 @@ public class CmmMenuServiceImpl implements CmmMenuService {
             checkActivation(resrceCd, sessionInfo);
         }
     }
-
-
+    
     /**
-     * 
      * 메인 메뉴 관련
-     * 
      */
-
+    
     @Override
-    public String makeMenu(SessionInfo sessionInfo, String menuType) {
-
-        log.error("menuType : "+ menuType);
+    public List<HashMap<String, Object>> makeMenu(SessionInfo sessionInfo, String menuType) {
         
         List<DefaultMap<Object>> iconList = cmmCodeMapper.selectCmmCodeList("086"); // 메뉴 아이콘
 
@@ -240,7 +237,7 @@ public class CmmMenuServiceImpl implements CmmMenuService {
             menu2 = cmmMenuMapper.selectBkmkMenu2(sessionInfo);
             menu3 = cmmMenuMapper.selectBkmkMenu3(sessionInfo);
         }
-
+        
         // 리턴 결과
         List<HashMap<String, Object>> rList = new ArrayList<HashMap<String, Object>>();
 
@@ -331,28 +328,10 @@ public class CmmMenuServiceImpl implements CmmMenuService {
             rList.add(m1Header);
         }
         
-        // 확장형 메뉴
-        if(rList.size() > 0) {
-            log.error("rList.size() > 0") ;
-            
-            for(int i=0; i<rList.size(); i++){
-                HashMap<String, Object> mData1 = new HashMap<>();
-                mData1 = rList.get(i);
-                log.error("header " + mData1.get("header"));
-                //String iconClass = mData1.get("iconNm") ? ""
-
-            }
-        }
-        
-        
-        log.error("rList.size() : " + rList.size());
-
-        String menuStr = convertToJson(rList);
-        log.error("menuStr : "+menuStr);
-
-        return menuStr;
+        //String menuStr = convertToJson(rList);
+        //return menuStr;
+        return rList;
     }
-    
 }
 
 

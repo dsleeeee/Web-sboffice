@@ -56,10 +56,14 @@ public class SessionServiceImpl implements SessionService {
         sessionInfo.setFixMenu(cmmMenuService.selectFixingMenu(sessionInfo));
         // 즐겨찾기 메뉴 리스트 저장
         sessionInfo.setBkmkMenu(cmmMenuService.selectBkmkMenu(sessionInfo));
-        // 메뉴 데이터 만들기
+        // 전체메뉴 조회(리스트)
         sessionInfo.setMenuData(cmmMenuService.makeMenu(sessionInfo, "A"));
-        // 즐겨찾기 데이터 만들기
-        sessionInfo.setBkmkMenuData(cmmMenuService.makeMenu(sessionInfo, "F"));
+        // 즐겨찾기메뉴 조회 (리스트)
+        sessionInfo.setBkmkData(cmmMenuService.makeMenu(sessionInfo, "F"));
+        // 위즈모 그리드용 전체 메뉴 데이터 만들기
+        sessionInfo.setMadeMenuData(convertToJson(cmmMenuService.makeMenu(sessionInfo, "A")));
+        // 위즈모 그리드용 즐겨찾기 데이터 만들기
+        sessionInfo.setMadeBkmkData(convertToJson(cmmMenuService.makeMenu(sessionInfo, "F")));
 
         // redis에 세션 세팅
         setSessionInfo(sessionId, sessionInfo);

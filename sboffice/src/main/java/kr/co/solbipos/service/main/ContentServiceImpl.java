@@ -82,7 +82,6 @@ public class ContentServiceImpl implements ContentService{
         // 회원 현황
         // 공지사항
         List<Total> noticeList = contentMapper.getNotice(sessionInfo);
-        log.error(">>>>> noticeList : "+ noticeList.size());
         resultMap.put("noticeList", noticeList);
         // 날씨
         return resultMap;

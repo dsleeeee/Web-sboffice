@@ -43,6 +43,9 @@ public class ResrceInfo extends Cmm {
 
     /** 표기 인덱스 */
     private Long dispIdx;
+    
+    /** 메뉴 아이콘명 */
+    private String iconNm;
 
     /** 사용 여부 */
     private String useYn;
