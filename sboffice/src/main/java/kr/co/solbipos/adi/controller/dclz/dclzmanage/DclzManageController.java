@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,6 +19,7 @@ import kr.co.solbipos.adi.enums.DclzInFg;
 import kr.co.solbipos.adi.service.dclz.dclzmanage.DclzManageService;
 import kr.co.solbipos.application.domain.login.SessionInfo;
 import kr.co.solbipos.enums.Status;
+import kr.co.solbipos.exception.JsonException;
 import kr.co.solbipos.service.message.MessageService;
 import kr.co.solbipos.service.session.SessionService;
 import kr.co.solbipos.structure.DefaultMap;
@@ -70,6 +70,7 @@ public class DclzManageController {
     @ResponseBody
     public Result dclzManageList(DclzManage dclzManage, HttpServletRequest request,
             HttpServletResponse response, Model model) {
+
         // 선택한 매장을 arr 로 세팅한다. 쿼리에서 쓰임
         dclzManage.setArrStoreCd(dclzManage.getStoreCd().split(","));
 
@@ -113,19 +114,7 @@ public class DclzManageController {
         dclzManage.setModDt(currentDateTimeString());
         dclzManage.setRegId(si.getUserId());
         dclzManage.setModId(si.getUserId());
-
-        long workMinute = calWorkMinute(dclzManage.getEmpInDt(), dclzManage.getEmpOutDt());
-
-        if (workMinute == -1) {
-            return genJsonResultMsg(Status.FAIL, "실패");
-        } else if (workMinute == -2) {
-            // 퇴근일시 또는 출근일시가 잘못 선택 되었습니다.
-            String msg = messageService.get("msg.dclz.wrong.date");
-            return genJsonResultMsg(Status.FAIL, msg);
-        }
-
-        dclzManage.setWorkTime(workMinute);
-
+        dclzManage.setWorkTime(calWorkMinute(dclzManage.getEmpInDt(), dclzManage.getEmpOutDt()));
 
         int result = dclzManageService.insertDclzManage(dclzManage);
         return returnJson(Status.OK, result);
@@ -144,9 +133,7 @@ public class DclzManageController {
     @ResponseBody
     public Result dclzManageRemove(DclzManage dclzManage, HttpServletRequest request,
             HttpServletResponse response, Model model) {
-
         int result = dclzManageService.deleteDclzManage(dclzManage);
-
         return returnJson(Status.OK, result);
     }
 
@@ -181,20 +168,9 @@ public class DclzManageController {
             return genJsonResultMsg(Status.FAIL, msg);
         }
 
-        long workMinute = calWorkMinute(dclzManage.getEmpInDt(), dclzManage.getEmpOutDt());
-
-        if (workMinute == -1) {
-            return genJsonResultMsg(Status.FAIL, "실패");
-        } else if (workMinute == -2) {
-            // 퇴근일시 또는 출근일시가 잘못 선택 되었습니다.
-            String msg = messageService.get("msg.dclz.wrong.date");
-            return genJsonResultMsg(Status.FAIL, msg);
-        }
-
-        dclzManage.setWorkTime(workMinute);
+        dclzManage.setWorkTime(calWorkMinute(dclzManage.getEmpInDt(), dclzManage.getEmpOutDt()));
 
         int result = dclzManageService.updateDclzManage(dclzManage);
-
         return returnJson(Status.OK, result);
     }
 
@@ -223,24 +199,30 @@ public class DclzManageController {
      * @param endDt YYYYMMDDHHmm 형태의 퇴근일시
      * @return 분단위의 근무시간<br>
      *         0 아래의 값은 잘못된값임<br>
-     *         -1 : 계산중 exception<br>
-     *         -2 : 날짜가 잘못 입력됨
      */
     public long calWorkMinute(String startDt, String endDt) {
+
+        long workMinute = 0;
+
         try {
             SimpleDateFormat f = new SimpleDateFormat("yyyyMMddHHmm", Locale.KOREA);
+
             Date d1 = f.parse(endDt);
             Date d2 = f.parse(startDt);
-            long diff = d1.getTime() - d2.getTime();
-            long workMinute = diff / 60000;
 
-            if (workMinute < 0) {
-                return -2;
-            }
-            return workMinute;
+            long diff = d1.getTime() - d2.getTime();
+            workMinute = diff / 60000;
+
         } catch (Exception e) {
-            return -1;
+            String msg = messageService.get("label.registFail");
+            throw new JsonException(Status.FAIL, msg, "");
         }
+        // 퇴근일시 또는 출근일시가 잘못 선택 되었습니다.
+        if (workMinute < 0) {
+            String msg = messageService.get("msg.dclz.wrong.date");
+            throw new JsonException(Status.FAIL, msg, "");
+        }
+        return workMinute;
     }
 }
 

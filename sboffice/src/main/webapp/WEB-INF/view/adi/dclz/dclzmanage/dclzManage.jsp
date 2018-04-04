@@ -277,12 +277,7 @@
       param.startDt = getDate(startDt);
       param.endDt = getDate(endDt);
       param.storeCd = storeCd.text;
-      
-      param.inFg = inFg.selectedValue === "ALL" ? inFg.selectedValue : inFg.selectedItem.name;
-		
-// 	  param.inFg = inFg.selectedValue;
-	  
-	  
+	  param.inFg = inFg.selectedValue;
       param.listScale = listScaleBox.selectedValue;
       param.curr = index;
       
