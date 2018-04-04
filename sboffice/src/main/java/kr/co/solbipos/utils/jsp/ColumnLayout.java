@@ -11,7 +11,6 @@ import kr.co.solbipos.application.domain.cmm.GridDispItem;
 import kr.co.solbipos.application.domain.login.SessionInfo;
 import kr.co.solbipos.service.grid.GridSupportService;
 import kr.co.solbipos.service.session.SessionService;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author 정용길

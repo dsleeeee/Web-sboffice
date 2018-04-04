@@ -54,7 +54,7 @@
   <!--  session Properties--> 
   <!-- ====================================-->
 <!--   세션 타임 타웃 분단위 -->
-  <entry key="session.timeout.min">30</entry>
+  <entry key="session.timeout.min">300</entry>
   <entry key="session.hist.menu.size">10</entry>
   
   

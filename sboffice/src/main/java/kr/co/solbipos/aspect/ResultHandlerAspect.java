@@ -60,9 +60,9 @@ public class ResultHandlerAspect {
                 @SuppressWarnings("unchecked")
                 HashMap<String, Object> map = (HashMap<String, Object>) r.getData();
                 /** 
-                 * 조회 결과 리스트가 없을 경우 
+                 * 조회 결과 리스트가 없을 경우 없고 메시지 세팅을 따로 안한 경우
                  * */
-                if (isEmpty(map.get("list"))) {
+                if (isEmpty(map.get("list")) && isEmpty(r.getMessage())) {
                     // 조회 결과가 없습니다. 메시지를 세팅
                     r.setMessage(messageService.get("msg.cmm.empty.data"));
                 }

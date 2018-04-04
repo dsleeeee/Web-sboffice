@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import kr.co.solbipos.application.domain.cmm.MenuUseHist;
+import kr.co.solbipos.application.domain.cmm.Store;
 import kr.co.solbipos.application.domain.login.SessionInfo;
 import kr.co.solbipos.application.domain.resource.ResrceInfo;
 import kr.co.solbipos.application.domain.resource.ResrceInfoBase;
@@ -35,8 +35,18 @@ public class CmmMenuServiceImpl implements CmmMenuService {
     
     @Autowired
     Prop prop;
-
-
+    
+    /** 
+     * 
+     * 레이어 팝업 매장 조회
+     * 
+     * */
+    
+    @Override
+    public List<Store> selectStore(Store store) {
+        return cmmMenuMapper.selectStore(store);
+    }
+    
     /**
      * 
      * 메뉴 디비 작업 관련
@@ -214,11 +224,14 @@ public class CmmMenuServiceImpl implements CmmMenuService {
             checkActivation(resrceCd, sessionInfo);
         }
     }
-    
+
+
     /**
+     * 
      * 메인 메뉴 관련
+     * 
      */
-    
+
     @Override
     public List<HashMap<String, Object>> makeMenu(SessionInfo sessionInfo, String menuType) {
         

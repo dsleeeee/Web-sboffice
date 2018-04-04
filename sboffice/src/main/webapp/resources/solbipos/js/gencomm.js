@@ -19,6 +19,11 @@ function getDate(obj) {
       + setZero(obj.value.getDate().toString(), 2);
 }
 
+function getTime(obj) {
+  return setZero(obj.value.getHours().toString(), 2)
+      + setZero(obj.value.getMinutes().toString(), 2);
+}
+
 function setZero(s, l) {
   var t = l - s.length;
   var r = "";

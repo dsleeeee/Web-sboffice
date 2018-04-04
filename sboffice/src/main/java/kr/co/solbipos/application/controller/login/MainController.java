@@ -8,15 +8,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import kr.co.solbipos.application.domain.login.SessionInfo;
+import kr.co.solbipos.application.enums.user.OrgnFg;
 import kr.co.solbipos.service.session.SessionService;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * 
  * @author 정용길
  */
-
-@Slf4j
 @Controller
 public class MainController {
 
@@ -39,27 +37,25 @@ public class MainController {
         }
         
         SessionInfo sessionInfo = sessionService.getSessionInfo(request);
-        
-        String userAuthType = sessionInfo.getUserAuthType();
-        
+        OrgnFg orgnFg = sessionInfo.getOrgnFg();
         
         /** 
-         * 
          * 유져 권한 타입<br> 
-         * 시스템 : SYSTEM<br>
-         * 본사 : HEDOFC(HEAD OFFICE)<br>
-         * 대리점 : AGENCY<br>
-         * 가맹점 : MRHST(MEMBER BRANCH STORE)
-         * enum type 으로 변경 해야됨
-         * 
          * */
-        if(userAuthType.equals("SYSTEM")) {
+        // 시스템 : SYSTEM
+        if(orgnFg == OrgnFg.MASTER) {
             return "redirect:"+"/application/main/content/sys.sb";
-        }else if(userAuthType.equals("AGENCY")) {    //TODO URL 추가 필요
+        }
+        // 대리점 : AGENCY
+        else if(orgnFg == OrgnFg.AGENCY) {    //TODO URL 추가 필요
             return "redirect:"+"/application/main/content/agency.sb";
-        }else if(userAuthType.equals("HEDOFC")) {
+        }
+        // 본사 : HEDOFC(HEAD OFFICE)
+        else if(orgnFg == OrgnFg.HQ) {
             return "redirect:"+"/application/main/content/hq.sb";
-        }else if(userAuthType.equals("MRHST")) {
+        }
+        // 가맹점 : MRHST(MEMBER BRANCH STORE)
+        else if(orgnFg == OrgnFg.STORE) {
             return "redirect:"+"/application/main/content/store.sb";
         }
         

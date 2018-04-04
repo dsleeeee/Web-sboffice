@@ -6,43 +6,40 @@
       s_alert.popOk(msg, null);
     },
 
-    popOk : function(msg, fun1) {
+    popOk : function(msg, callback) {
       var id = s_alert.randomString(5);
-      var pop = $("#layerOk").clone(true).attr("id", id).appendTo(document.body);
+      var pop = $("#_layerOk").clone(true).attr("id", id).appendTo(document.body);
       pop.find("p").text(msg);
       pop.find("a").bind("click", function() {
-        $("#fullDimmedId").hide();
+        $("#_alertTent").hide();
         pop.remove();
-        if (fun1 != null) {
-          return fun1();
+        if (typeof callback == 'function') {
+          callback();
         }
       });
-      $("#fullDimmedId").show();
+      $("#_alertTent").show();
       pop.show();
     },
 
-    popConf : function(msg, fun1, fun2) {
+    popConf : function(msg, callback) {
       var id = s_alert.randomString(5);
-      var pop = $("#layerConf").clone(true).attr("id", id).appendTo(document.body);
+      var pop = $("#_layerConf").clone(true).attr("id", id).appendTo(document.body);
       pop.find("p").text(msg);
       
-      pop.find(".btn_blue").bind("click", function() {
-        $("#fullDimmedId").hide();
+      pop.find("a.btn_blue.conf").bind("click", function() {
+        $("#_alertTent").hide();
         pop.remove();
-        if (fun1 != null) {
-          return fun1();
+        if (typeof callback == 'function') {
+          callback();
         }
       });
       
-      pop.find(".btn_gray").bind("click", function() {
-        $("#fullDimmedId").hide();
+      pop.find("a.btn_gray.conf").bind("click", function() {
+        $("#_alertTent").hide();
         pop.remove();
-        if (fun2 != null) {
-          return fun2();
-        }
       });
       
-      $("#fullDimmedId").show();
+      $("#_alertTent").show();
       pop.show();
     },
     randomString : function(length) {

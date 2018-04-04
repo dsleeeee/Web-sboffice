@@ -2,6 +2,7 @@ package kr.co.solbipos.application.persistence.cmm;
 
 import java.util.List;
 import kr.co.solbipos.application.domain.cmm.MenuUseHist;
+import kr.co.solbipos.application.domain.cmm.Store;
 import kr.co.solbipos.application.domain.login.SessionInfo;
 import kr.co.solbipos.application.domain.resource.ResrceInfo;
 import kr.co.solbipos.application.domain.resource.ResrceInfoBase;
@@ -12,6 +13,14 @@ import kr.co.solbipos.application.domain.resource.ResrceInfoBase;
  *
  */
 public interface CmmMenuMapper {
+    
+    /**
+      * 레이어 팝업 매장 조회
+      * 
+      * @param store
+      * @return
+      */
+    List<Store> selectStore(Store store);
     
     /**
       * 메뉴 사용 내역 저장

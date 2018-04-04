@@ -6,20 +6,20 @@
 
 <body>
 
-  <c:set var="userAuthType" value="${sessionScope.sessionInfo.userAuthType}" />
+  <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 
   <%-- 유져 타입에 따라 css를 변경 메인 화면 색상을 변경해 준다. --%>
   <c:choose>
-    <c:when test="${userAuthType == 'SYSTEM'}">
+    <c:when test="${orgnFg == 'MASTER'}">
       <c:set var="userCss" value="type_Orange" />
     </c:when>
-    <c:when test="${userAuthType == 'HEDOFC'}">
+    <c:when test="${orgnFg == 'HQ'}">
       <c:set var="userCss" value="type_Purple" />
     </c:when>
-    <c:when test="${userAuthType == 'AGENCY'}">
+    <c:when test="${orgnFg == 'AGENCY'}">
       <c:set var="userCss" value="type_Blue" />
     </c:when>
-    <c:when test="${userAuthType == 'MRHST'}">
+    <c:when test="${orgnFg == 'STORE'}">
       <c:set var="userCss" value="type_Green" />
     </c:when>
     <c:otherwise>
