@@ -345,6 +345,11 @@ public class CmmMenuServiceImpl implements CmmMenuService {
         //return menuStr;
         return rList;
     }
+
+    @Override
+    public List<String> selectStoreCdList(String hqOfficeCd) {
+        return cmmMenuMapper.selectStoreCdList(hqOfficeCd);
+    }
 }
 
 

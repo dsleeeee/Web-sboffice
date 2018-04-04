@@ -2,7 +2,6 @@ package kr.co.solbipos.application.domain.login;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
 import kr.co.solbipos.application.domain.cmm.Cmm;
@@ -11,7 +10,6 @@ import kr.co.solbipos.application.domain.resource.ResrceInfoBase;
 import kr.co.solbipos.application.enums.login.LoginResult;
 import kr.co.solbipos.application.enums.user.OrgnFg;
 import kr.co.solbipos.application.validate.login.Login;
-import kr.co.solbipos.interceptor.AuthenticationInterceptor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -43,6 +41,12 @@ public class SessionInfo extends Cmm {
 
     /** 그룹 코드 */
     private String grpCd;
+    
+    /** 
+     * 본사는 소속된 가맹점<br>
+     * {@link OrgnFg} {@code HQ} 타입만 저장
+     * */
+    private List<String> arrStoreCdList;
 
     /**
      * 소속구분<br>
@@ -110,21 +114,6 @@ public class SessionInfo extends Cmm {
     /** 로그인 화면 : 아이디 저장 여부 */
     private boolean chk;
 
-    /** 
-     * 
-     * 유져 권한 타입<br> 
-     * 시스템 : SYSTEM<br>
-     * 본사 : HEDOFC(HEAD OFFICE)<br>
-     * 대리점 : AGENCY<br>
-     * 가맹점 : MRHST(MEMBER BRANCH STORE)
-     * 
-     * */
-//    private String userAuthType = "SYSTEM"; // 시스템 테스트용
-//    private String userAuthType = "AGENCY"; // 대리점 테스트용
-    private String userAuthType = "HEDOFC"; //본사 테스트용
-//    private String userAuthType = "MRHST"; // 매장 테스트용
-    
-    
     /** 
      * 메뉴 관련 데이터 
      * */

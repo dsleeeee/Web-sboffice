@@ -15,6 +15,14 @@ import kr.co.solbipos.application.domain.resource.ResrceInfoBase;
 public interface CmmMenuMapper {
     
     /**
+      * 소속된 매장 코드만 조회
+      * 
+      * @param hqOfficeCd
+      * @return
+      */
+    List<String> selectStoreCdList(String hqOfficeCd);
+    
+    /**
       * 레이어 팝업 매장 조회
       * 
       * @param store

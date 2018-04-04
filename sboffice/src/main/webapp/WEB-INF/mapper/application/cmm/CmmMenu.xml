@@ -3,6 +3,13 @@
 
 <mapper namespace="kr.co.solbipos.application.persistence.cmm.CmmMenuMapper">
   
+  <select id="selectStoreCdList" parameterType="string" resultType="string">
+    /* CmmMenuMapper.selectStore */
+    SELECT STORE_CD 
+      FROM TB_MS_STORE 
+     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+  </select>
+  
   <select id="selectStore" parameterType="store" resultType="store">
   <![CDATA[
     /* CmmMenuMapper.selectStore */
