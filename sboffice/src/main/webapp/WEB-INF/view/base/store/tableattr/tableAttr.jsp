@@ -74,6 +74,12 @@ window.TABLE_ATTR_DEFAULTS = ${defaults};
     tableAttrInit.apply(this, arguments);
   };
   
+  <%-- 그래픽 영역에 삭제(del키) 이벤트를 활성화 화기 위해 blur에 focus 처리--%>
+  $("#content").blur(function(){
+    //console.log("blur");
+    $(this).focus();
+  });
+  
   if (!mxClient.isBrowserSupported()) {
     // Displays an error message if the browser is not supported.
     mxUtils.error('Browser is not supported!', 200, false);

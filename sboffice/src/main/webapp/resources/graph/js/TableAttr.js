@@ -265,7 +265,6 @@ Sidebar.prototype.makeGrid = function() {
   */
   
   //TODO 선택한 ROW가 바뀌었을 때 그래픽 영역에서 활성화
-  /*
   theGrid.selectionChanged.addHandler(function (s, e) {
     //idx가져오기(0번째 항목)
     var idx = theGrid.getCellData(e.row, 0, true);
@@ -275,11 +274,12 @@ Sidebar.prototype.makeGrid = function() {
       var cell = graph.getModel().getCell(idx);
       graph.setSelectionCell(cell);
       //console.log(cell);
+      //맨앞으로 가져오기
+      graph.orderCells(false);
+      graph.container.focus();
     }
-    //맨앞으로 가져오기
-    graph.orderCells(false);
   });
-  */
+
   //판매금액 포맷팅
   var numberWithCommas = function(x) {
     var isInteger = function(num) {
@@ -446,7 +446,7 @@ Graph.prototype.init = function() {
   graph.keyHandler = graph.createKeyHandler(graph);
   //console.log(this);
   
-  //마우스 클릭 할 때 focus 처리
+  //마우스 클릭 할 때 focus 처리, jsp에서 content에 tabindex -1 로 처리 했으나 추가
   //https://jgraph.github.io/mxgraph/docs/known-issues.html
   if (mxClient.IS_NS) {
     mxEvent.addListener(graph.container, 'mousedown', function() {
@@ -456,6 +456,7 @@ Graph.prototype.init = function() {
       }
     });
   }
+
 };
 
 /**
@@ -928,16 +929,18 @@ Format.prototype.open = function(isLoad) {
         if( req.getStatus() == 200 ) {
           var jsonStr = JSON.parse(req.getText());
           var xmlStr = jsonStr.data;
-          try {
-            var xml = mxUtils.parseXml(xmlStr);
-            this.setGraphXml(graph, xml.documentElement);
-            main.initValue();
-            if(!isLoad) {
-              mxUtils.alert(mxResources.get('opened'));
+          if(xmlStr != null) {
+            try {
+              var xml = mxUtils.parseXml(xmlStr);
+              this.setGraphXml(graph, xml.documentElement);
+              main.initValue();
+              if(!isLoad) {
+                mxUtils.alert(mxResources.get('opened'));
+              }
             }
-          }
-          catch (e) {
-            mxUtils.alert(mxResources.get('invalidOrMissingFile') + ': ' + e.message);
+            catch (e) {
+              mxUtils.alert(mxResources.get('invalidOrMissingFile') + ': ' + e.message);
+            }
           }
         }
         else {

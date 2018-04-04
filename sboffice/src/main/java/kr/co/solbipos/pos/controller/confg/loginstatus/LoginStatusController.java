@@ -15,12 +15,13 @@ import kr.co.solbipos.pos.domain.confg.loginstatus.LoginStatus;
 import kr.co.solbipos.pos.service.confg.loginstatus.LoginStatusService;
 import kr.co.solbipos.structure.DefaultMap;
 import kr.co.solbipos.structure.Result;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 
  * @author 정용길
  */
-
+@Slf4j
 @Controller
 @RequestMapping(value = "/pos/confg/loginstatus/loginstatus/")
 public class LoginStatusController {
@@ -55,6 +56,7 @@ public class LoginStatusController {
     public Result loginstatusListPost(LoginStatus loginStatus, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
+        log.debug(loginStatus.toString());
         List<DefaultMap<Object>> result = loginStatusService.selectLoginStatus(loginStatus);
 
         return returnListJson(Status.OK, result, loginStatus);

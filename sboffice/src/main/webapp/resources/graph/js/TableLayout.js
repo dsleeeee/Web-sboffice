@@ -1079,16 +1079,18 @@ Format.prototype.open = function(isLoad) {
         if( req.getStatus() == 200 ) {
           var jsonStr = JSON.parse(req.getText());
           var xmlStr = jsonStr.data;
-          try {
-            var xml = mxUtils.parseXml(xmlStr); 
-            this.setGraphXml(graph, xml.documentElement);
-            main.initValue();
-            if(!isLoad) {
-              mxUtils.alert(mxResources.get('opened'));
+          if(xmlStr != null) {
+            try {
+              var xml = mxUtils.parseXml(xmlStr); 
+              this.setGraphXml(graph, xml.documentElement);
+              main.initValue();
+              if(!isLoad) {
+                mxUtils.alert(mxResources.get('opened'));
+              }
             }
-          }
-          catch (e) {
-            mxUtils.alert(mxResources.get('invalidOrMissingFile') + ': ' + e.message);
+            catch (e) {
+              mxUtils.alert(mxResources.get('invalidOrMissingFile') + ': ' + e.message);
+            }
           }
         }
         else {

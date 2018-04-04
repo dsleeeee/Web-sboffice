@@ -1,6 +1,7 @@
 package kr.co.solbipos.pos.domain.confg.loginstatus;
 
 import kr.co.solbipos.application.domain.cmm.Page;
+import kr.co.solbipos.pos.enums.SysStatFg;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -43,7 +44,7 @@ public class LoginStatus extends Page {
     private String posVerNo;
 
     /** 매장 상태 */
-    private String sysStatFg;
+    private SysStatFg sysStatFg;
 
     /** 매장 상태 이름 */
     private String sysStatFgNm;

@@ -45,7 +45,7 @@
         <if test="storeNm != null and storeNm != ''">
           AND B.STORE_NM = #{storeNm}
         </if>
-        <if test="sysStatFg != null and sysStatFg != '' and sysStatFg != 'ALL'">
+        <if test="sysStatFg != null and sysStatFg.name() != 'ALL'">
           AND B.SYS_STAT_FG = #{sysStatFg} --매장상태
         </if>
         ORDER BY RNUM ASC
