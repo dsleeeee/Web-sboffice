@@ -1,5 +1,7 @@
 package kr.co.solbipos.interceptor;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
@@ -85,6 +87,13 @@ public class MybatisInterceptor implements Interceptor {
             DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.DEFAULT,
                     DateFormat.DEFAULT, Locale.KOREA);
             value = "'" + formatter.format(new Date()) + "'";
+        } else if (obj instanceof Enum) {
+            try {
+                Method m = obj.getClass().getDeclaredMethod("getCode", null);
+                value = "'" + (String) m.invoke(obj, null) + "'";
+            } catch (Exception e) {
+                value = Matcher.quoteReplacement(obj.toString());
+            }
         } else {
             if (obj != null) {
                 value = Matcher.quoteReplacement(obj.toString());
