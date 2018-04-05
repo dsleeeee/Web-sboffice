@@ -84,7 +84,7 @@ button {outline:none; border:0; font-family:'NotoR', Malgun Gothic, '맑은 고�
  * COMMON
  * **************************************** */
 .w4 {width:4%;} .w7 {width:7%;} .w8 {width:8%;} .w10 {width:10%;} .w11 {width:11.111111%;} .w15 {width:15%;} .w20 {width:20%;} .w25 {width:25%;} .w28 {width:28%;} .w30 {width:30%;} .w33 {width:33.333333%;} .w35 {width:35%;} .w40 {width:40%;} .w45 {width:45%;} .w50 {width:50%;} .w60 {width:60%;} .w70 {width:70%;} .w75 {width:75%;} .w80 {width:80%;} .w85 {width:85%;} .w90 {width:90%;} .w100 {width:100%;} 
-.w110 {width:110px;} .w130 {width:130px;} .w150 {width:150px;} .w200 {width:200px;} .w500 {width:500px;} .w600 {width:600px;} .w700 {width:700px;}
+.w110 {width:110px;} .w130 {width:130px;} .w150 {width:150px;} .w200 {width:200px;} .w500 {width:500px;} .w600 {width:600px;} .w700 {width:700px;} .w800 {width:800px;}
 
 .br {border-right:1px solid #dbdbdb;} .bl {border-left:1px solid #dbdbdb;} .bb {border-bottom:1px solid #dbdbdb;} .bt {border-top:1px solid #dbdbdb;}
 
@@ -744,8 +744,9 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .searchTbl td a.link {font-size:1em; text-decoration:underline;}
 .searchTbl th em.imp {color:red; position:absolute; margin:2px 0 0 2px;}
 .searchTbl td input:disabled {background:#f6f6f6; border:1px solid #e8e8e8;}
+.searchTbl th.empty {background:none;}
 
-.searchTbl2 {position:relative; border-collapse:collapse; width:100%;}
+.searchTbl2 {position:relative; border-collapse:collapse; width:100%;} /*thead가 있는거*/
 .searchTbl2 tr > th:first-child {border-left:1px solid #ccc;}
 .searchTbl2 tr {border-bottom:1px solid #e8e8e8; border-right:1px solid #ccc;}
 .searchTbl2 tr.brt {border-top:1px solid #ccc;}
@@ -884,6 +885,16 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .txtSty1 li em {font-size:1em; color:#444;}
 .txtSty1 li.bul {position:relative; padding-left:10px; width:100%;}
 .txtSty1 li.bul:before {content:''; position:absolute; width:4px; height:4px; background:#888; border-radius:50%; left:0px; top:15px;}
+
+.txtSty2 {}
+.txtSty2 li {font-size:0.875em; position:relative; padding-left:20px; line-height:1.5em;}
+.txtSty2 li:before {content:'※'; position:absolute; left:0px; top:2px; color:#f11f09; }
+.txtSty2 li p {font-size:1em; line-height:1.5em;}
+.txtSty2 li span {color:#222; font-size:1em;}
+
+.txtSty3 {}
+.txtSty3 li {font-size:0.75em; position:relative; padding-left:15px; line-height:1.5em;}
+.txtSty3 li:before {content:'※'; position:absolute; left:0px; top:3px; color:#f11f09; font-size:1em; }
 
 .inSty {border:1px solid #ccc; font-size:0.75em; padding:4px 10px;}
 .inSty2 {border:1px solid #e8e8e8; font-size:0.75em; padding:5px 10px;}
