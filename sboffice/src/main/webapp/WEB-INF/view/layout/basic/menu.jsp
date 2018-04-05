@@ -3,74 +3,58 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
-<!-- 선택된 메뉴와 부모 메뉴 -->
-<%-- <c:set var="cResrce" value="${sessionScope.sessionInfo.currentMenu.resrceCd}" /> --%>
-<%-- <c:set var="pResrce" value="${sessionScope.sessionInfo.currentMenu.pResrce}" /> --%>
-<!--// 선택된 메뉴와 부모 메뉴 -->
+<%-- 선택된 메뉴와 부모 메뉴 --%>
+<c:set var="cMenu" value="${sessionScope.sessionInfo.currentMenu}" />
 
-<!-- 접힌 메뉴용 -->
+<%-- 접힌 메뉴용 --%>
 <c:set var="menuData" value="${sessionScope.sessionInfo.menuData}" />
 <c:set var="bkmkData" value="${sessionScope.sessionInfo.bkmkData}" />
-<!--// 접힌 메뉴용 -->
 
-<!-- wijmo 용 -->
+<%-- wijmo용 --%>
 <c:set var="madeMenuData" value="${sessionScope.sessionInfo.madeMenuData}" />
 <c:set var="madeBkmkData" value="${sessionScope.sessionInfo.madeBkmkData}" />
-<!--// wijmo 용 -->
 
-<!--left-->
-      <!--로고영역-->
-      <h1><a href="/main.sb"><span><img src="/resource/solbipos/css/img/logo_main.png" alt="" /></span></a></h1><!-- 활성화 : class="on" -->
-      <!--//로고영역-->
-      
-      <!--전체,즐겨찾기-->
-      <div class="menuTab">
-          <p class="all"><a href="#" id="_all" class="on"><span>전체</span></a></p><!-- 활성화 : class="on" -->
-          <p class="favorite"><a href="#" id="_favorite"><span>즐겨찾기</span></a></p>
-      </div>
-      <!--//전체,즐겨찾기-->
-                  
-      <div class="menuTree">
-          <!--open : 즐겨찾기 메뉴 -->
-          <div class="faMenu" id="faMenu" style="display:none;">
-              <p class="btn_faManage"><a href="#">즐겨찾기 관리</a></p>
-              <p class="txt">즐겨찾기한 메뉴가 없습니다.<br /><br />‘즐겨찾기 관리’ 버튼을 클릭하시면<br />즐겨찾기 메뉴와 고정메뉴를<br />설정할 수 있습니다.</p>
-          </div>
-          <!--open : 즐겨찾기 메뉴-->
-          
-          <!--위즈모 메뉴-->
-          <!-- <div> -->  <!-- 해당 div 태그 없애면 왼쪽 메뉴 스크롤 가능 -->
-              <div id="theTreeAll" style="display:block;"></div>  <!-- 전체메뉴 -->
-              <div id="theTreeBkmk" style="display:none;"></div>  <!-- 즐겨찾기 메뉴 -->
-          <!-- </div> -->
-          <!--//위즈모 메뉴-->
-          
-          <!--접혔을때 : 클릭시 열린메뉴로 변경-->
-          <div class="smallMenu" id="smallMenu">
-              <ul>
-                <c:forEach var="item" items="${menuData}">
-                  <li class="${item.iconNm}"><a href="#"></a></li>
-                </c:forEach>
-              </ul>    
-          </div>
-          <!--//접혔을때-->
-      </div>    
-  <!--//left-->
+<%-- 로고영역 --%>
+<h1><a href="/main.sb"><span><img src="/resource/solbipos/css/img/logo_main.png" alt="" /></span></a></h1>
+
+<%-- 전체,즐겨찾기 --%>
+<div class="menuTab">
+    <p class="all"><a href="#" id="_all" class="on"><span>전체</span></a></p>
+    <p class="favorite"><a href="#" id="_favorite"><span>즐겨찾기</span></a></p>
+</div>
+
+<div class="menuTree">
+    <div class="faMenu" id="faMenu" style="display:none;">
+        <p class="btn_faManage"><a href="#">즐겨찾기 관리</a></p>
+        <p class="txt">즐겨찾기한 메뉴가 없습니다.<br /><br />‘즐겨찾기 관리’ 버튼을 클릭하시면<br />즐겨찾기 메뉴와 고정메뉴를<br />설정할 수 있습니다.</p>
+    </div>
+    
+    <%-- <div> --%> <%-- 해당 div 태그 없애면 왼쪽 메뉴 스크롤 가능 --%>
+        <div id="theTreeAll" style="display:block;"></div>
+        <div id="theTreeBkmk" style="display:none;"></div>
+    <%-- </div> --%>
+    
+    <div class="smallMenu" id="smallMenu">
+        <ul>
+          <c:forEach var="item" items="${menuData}">
+            <li class="${item.iconNm}"><a href="#"></a></li>
+          </c:forEach>
+        </ul>    
+    </div>
+</div>    
   
-<script type="text/javascript">//<![CDATA[
+<script type="text/javascript">
 
 onload = function() {
-  // 선택된 메뉴의 메뉴코드와 부모메뉴의 메뉴코드
-  //var cResrce = "${cResrce}";
-  //var pResrce = "${pResrce}";
-  var cResrce = "";
-  var pResrce = "";
-  
+  <%-- 선택된 메뉴의 메뉴코드와 부모메뉴의 메뉴코드 --%>
+  var cResrce = "${cMenu.getResrceCd()}";
+  var pResrce = "${cMenu.getPResrce()}";
+
   // 테스트용
   //var cResrce = "000173";
   //var pResrce = "000030";
 
-  // 현재 선택된 메뉴 depth 저장
+  <%-- 현재 선택된 메뉴 depth 저장 --%>
   var sel1Depth = 0;
   var sel2Depth = 0;
   var sel3Depth = 0;
@@ -84,22 +68,24 @@ onload = function() {
       s.collapseToLevel(0);
     },
     selectedItemChanged: function(s, e){
-      if(wijmo.format('{items}', s.selectedItem)) { 
-        // 1depth 초기화 후 class on
+      if(wijmo.format('{items}', s.selectedItem)) {
+        <%-- 1depth 초기화 후 class on --%>
         if(wijmo.format('{level1Seq}', s.selectedItem)){
+          if(wijmo.format('{level1Seq}', s.selectedItem) == sel1Depth){
+            tree.collapseToLevel(0);
+          }
           sel1Depth = wijmo.format('{level1Seq}', s.selectedItem);
           $("#theTreeAll div[wj-part=root] > .wj-node").each(function(i,e){ $(this).removeClass("on");  });
           $("#theTreeAll div[wj-part=root] > .wj-node").eq(sel1Depth).addClass("on");
         }
-        
-        // 2depth 초기화 후 class on 
+        <%-- 2depth 초기화 후 class on  --%>
         if(wijmo.format('{level2Seq}', s.selectedItem)){
           sel2Depth = wijmo.format('{level2Seq}', s.selectedItem);
           $("#theTreeAll div[wj-part=root] > .wj-nodelist").children('.wj-node').each(function(i, element){ $(this).removeClass("on");  });
           $("#theTreeAll div[wj-part=root] > .wj-nodelist").eq(sel1Depth).children('.wj-node').eq(sel2Depth).addClass("on");
         }
       }
-      // 3depth 초기화 후 class on
+      <%-- 3depth 초기화 후 class on  --%>
       if(wijmo.format('{url}', s.selectedItem) != "") {
         sel3Depth = wijmo.format('{level3Seq}', s.selectedItem);
         $("#theTreeAll div[wj-part=root] > .wj-nodelist .wj-nodelist").children('.wj-node').each(function(i, e){  $(this).removeClass("wj-state-selected"); });
@@ -119,14 +105,12 @@ onload = function() {
     },
     itemClicked: function(s, e){
       if(wijmo.format('{items}', s.selectedItem)) { 
-        // 1depth 초기화 후 class on
         if(wijmo.format('{level1Seq}', s.selectedItem)){
           sel1Depth = wijmo.format('{level1Seq}', s.selectedItem);
           $("#theTreeBkmk div[wj-part=root] > .wj-node").each(function(i,e){  $(this).removeClass("on");  });
           $("#theTreeBkmk div[wj-part=root] > .wj-node").eq(sel1Depth).addClass("on");
         }
         
-        // 2depth 초기화 후 class on 
         if(wijmo.format('{level2Seq}', s.selectedItem)){
           sel2Depth = wijmo.format('{level2Seq}', s.selectedItem);
           $("#theTreeBkmk div[wj-part=root] > .wj-nodelist").children('.wj-node').each(function(i, element){ $(this).removeClass("on"); });
@@ -134,7 +118,6 @@ onload = function() {
         }
       }
       
-      // 3depth 초기화 후 class on
       if(wijmo.format('{url}', s.selectedItem) != "") {
         sel3Depth = wijmo.format('{level3Seq}', s.selectedItem);
         $("#theTreeBkmk div[wj-part=root] > .wj-nodelist .wj-nodelist").children('.wj-node').each(function(i, e){ $(this).removeClass("wj-state-selected"); });
@@ -179,7 +162,6 @@ onload = function() {
     });
   }
   
-  <%-- //TODO 현재 선택된 메뉴 표시--%>
   initMenu("theTreeAll");
   initMenu("theTreeBkmk");
   
@@ -188,20 +170,20 @@ onload = function() {
       var stat = false;
       var items = (tree == "theTreeAll"? getAllMenu():getbmkMenu());
       
-      var pCnt = 0; // 1depth의 index 알아내기 위한 변수
+      var pCnt = 0; <%-- 1depth의 index 알아내기 위한 변수 --%>
       for(var i=0; i<items.length; i++){
         var item = items[i];
         pCnt = item.level1Seq;
         if(item.items){
           for(var j=0; j<item.items.length; j++){
             var item2 = item.items[j];
-            if(item2.resrceCd == cResrce){ // 2depth가 마지막 depth일때
+            if(item2.resrceCd == cResrce){ <%-- 2depth가 마지막 depth일때 --%>
               sel1Depth = i;
               sel2Depth = j;
               sel3Depth = j;
               stat = true;
             }
-            if(item2.resrceCd == pResrce){ // 3depth가 마지막 depth일때
+            if(item2.resrceCd == pResrce){ <%-- 3depth가 마지막 depth일때 --%>
               sel1Depth = i;
               sel2Depth = j;
               for(var k=0; k<item2.items.length; k++){
@@ -265,9 +247,6 @@ onload = function() {
       $("#_favorite").trigger("click");
     }
   });
-  
-  
 }
 //]]> 
 </script>
-<!--//Related wizmo-->
