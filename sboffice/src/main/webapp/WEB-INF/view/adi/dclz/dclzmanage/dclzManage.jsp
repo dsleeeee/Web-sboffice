@@ -38,7 +38,7 @@
       <tr>
         
         <%-- 매장 --%>
-        <c:if test="${orgnFg == 'HQ' || orgnFg == 'STORE'}">
+        <c:if test="${orgnFg == 'HQ' || orgnFg == 'AGENCY'}">
           <th><s:message code="label.cmm.store" /></th>
           <td>
             <div class="sb-select fl w70">
@@ -96,7 +96,12 @@
   
 </div>
 
-<%-- 신규 등록 --%>
+<%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
+<%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
+<%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
+<%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
+
+<%-- 신규 등록 레이어 --%>
 <div id="dclzRegTent" class="fullDimmed" style="display: none;"></div>
 <div id="dclzRegLayer" class="layer" style="display: none;">
   <div class="layer_inner">
@@ -192,15 +197,15 @@
     <%-- 근태관리 부분 --%>
     var rdata = 
       [
-        {"binding":"storeNm","header":"<s:message code='storeNm' />"},
-        {"binding":"saleDate","header":"<s:message code='saleDate' />"},
-        {"binding":"empNo","header":"<s:message code='empNo' />"},
-        {"binding":"empNm","header":"<s:message code='empNm' />"},
-        {"binding":"empInDt","header":"<s:message code='empInDt' />"},
-        {"binding":"empOutDt","header":"<s:message code='empOutDt' />"},
-        {"binding":"workTime","header":"<s:message code='workTime' />"},
-        {"binding":"inFgNm","header":"<s:message code='inFg' />"},
-        {"binding":"remark","header":"<s:message code='remark' />"}
+        {binding:"storeNm", header:"<s:message code='storeNm' />"},
+        {binding:"saleDate", header:"<s:message code='saleDate' />"},
+        {binding:"empNo", header:"<s:message code='empNo' />"},
+        {binding:"empNm", header:"<s:message code='empNm' />"},
+        {binding:"empInDt", header:"<s:message code='empInDt' />"},
+        {binding:"empOutDt", header:"<s:message code='empOutDt' />"},
+        {binding:"workTime", header:"<s:message code='workTime' />"},
+        {binding:"inFgNm", header:"<s:message code='inFg' />"},
+        {binding:"remark", header:"<s:message code='remark' />"}
       ];
     
     var grid         = wgrid.genGrid("#theGrid", rdata, "${menuCd}", 1, ${clo.getColumnLayout(1)});
@@ -213,15 +218,6 @@
     var storeCd      = wcombo.genInput("#storeCd");
     var storeCdText  = wcombo.genInput("#storeCdText");
     storeCdText.isDisabled = true;
-    
-    <%-- 신규등록 레이어 팝업 --%>
-    var saleDate     = wcombo.genDate("#saleDate");
-    var empInDtDate  = wcombo.genDate("#empInDtDate");
-    var empOutDtDate = wcombo.genDate("#empOutDtDate");
-    var remark       = wcombo.genInput("#remark");
-    var empInDtTime  = wcombo.genTime("#empInDtTime", 15);
-    var empOutDtTime = wcombo.genTime("#empOutDtTime", 15);
-    var empNo        = wcombo.genCommonBoxSimple("#empNo");
     
     <%-- 그리드 링크 --%>
     grid.formatItem.addHandler(function(s, e) {
@@ -242,15 +238,40 @@
       var row = $(this).data("value");
       var rowData = grid.rows[row].dataItem;
       showDclzLayer("view", rowData);
-	});
+    });
 
     <%-- 매장선택 --%>
     $("#store").click(function(e){
-      c_store.init();
+      c_store.init(function(arr){
+        storeCdText.text = "";
+        storeCd.text = "";
+        
+        if(arr[0].cd === "ALL") {
+          storeCdText.text = "전체";
+          arr.splice(0, 1);
+        }
+        
+        if(arr.length > 1) {
+          var a = arr.length -1;
+          storeCdText.text = arr[0].nm + "외 " + a.toString() + " 선택";
+        }
+        else if(arr.length == 1){
+          storeCdText.text = arr[0].nm;
+        }
+        
+        for(var i=0; i<arr.length; i++) {
+          if(i == arr.length - 1) {
+            storeCd.text += arr[i].cd.toString();
+          }
+          else {
+            storeCd.text += arr[i].cd.toString() + ",";
+          }
+        }
+      });
     });
     
     <%-- 리스트 조회 --%>
-    $("#searchBtn").click(function( e ){
+    $("#searchBtn").click(function(e){
       search(1);
     });
     
@@ -265,7 +286,7 @@
       wexcel.down(grid, name, name + ".xlsx");
     });
     
-	<%-- 근태관리 리스트 조회 --%>    
+    <%-- 근태관리 리스트 조회 --%>    
     function search(index) {
       if(storeCd.text == "") {
         <%-- 조회 매장을 선택해주세요. --%>
@@ -282,6 +303,10 @@
       param.curr = index;
       
       $.postJSON("/adi/dclz/dclzmanage/dclzmanage/list.sb", param, function(result) {
+        if(result.status === "FAIL") {
+          s_alert.pop(result.message);
+          return;
+        }
         var list = result.data.list;
         if(list.length === undefined || list.length == 0) {
           s_alert.pop(result.message);
@@ -295,35 +320,19 @@
       });
     }
     
-	<%-- 매장선택 : 선택 버튼 이벤트 --%>    
-    $("#_storeok").click(function(e){
-      var arr = c_store.check_value();
-      c_store.close();
-      storeCdText.text = "";
-      storeCd.text = "";
-      
-      if(arr[0].cd === "ALL") {
-        storeCdText.text = "전체";
-        arr.splice(0, 1);
-      }
-      
-      if(arr.length > 1) {
-        var a = arr.length -1;
-        storeCdText.text = arr[0].nm + "외 " + a.toString() + " 선택";
-      }
-      else if(arr.length == 1){
-        storeCdText.text = arr[0].nm;
-      }
-      
-      for(var i=0; i<arr.length; i++) {
-        if(i == arr.length - 1) {
-          storeCd.text += arr[i].cd.toString();
-        }
-        else {
-          storeCd.text += arr[i].cd.toString() + ",";
-        }
-      }
-    });
+<%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
+<%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
+<%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
+<%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
+
+    <%-- 신규등록 레이어 팝업 --%>
+    var saleDate     = wcombo.genDate("#saleDate");
+    var empInDtDate  = wcombo.genDate("#empInDtDate");
+    var empOutDtDate = wcombo.genDate("#empOutDtDate");
+    var remark       = wcombo.genInput("#remark");
+    var empInDtTime  = wcombo.genTime("#empInDtTime", 15);
+    var empOutDtTime = wcombo.genTime("#empOutDtTime", 15);
+    var empNo        = wcombo.genCommonBoxSimple("#empNo");
     
     <%-- 근태 등록 --%>
     $("#dclzReg").click(function(e) {
@@ -362,15 +371,19 @@
       param.storeCd = arr[0];
       
       $.postJSON("/adi/dclz/dclzmanage/dclzmanage/employee.sb", param, function(result) {
-      	var list = result.data;
-      	var comboData = [];
-      	for(var i=0; i<list.length; i++) {
-      	  var data = {};
-      	  data.name = list[i].empNm;
-      	  data.value = list[i].empNo;
-      	  comboData.push(data);
-      	}
-      	empNo.itemsSource = comboData;
+        if(result.status === "FAIL") {
+          s_alert.pop(result.message);
+          return;
+        }
+        var list = result.data;
+        var comboData = [];
+        for(var i=0; i<list.length; i++) {
+          var data = {};
+          data.name = list[i].empNm;
+          data.value = list[i].empNo;
+          comboData.push(data);
+        }
+        empNo.itemsSource = comboData;
       })
       .fail(function(){
         s_alert.pop("Ajax Fail");

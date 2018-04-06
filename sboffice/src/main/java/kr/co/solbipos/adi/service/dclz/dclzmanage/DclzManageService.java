@@ -2,6 +2,7 @@ package kr.co.solbipos.adi.service.dclz.dclzmanage;
 
 import java.util.List;
 import kr.co.solbipos.adi.domain.dclz.dclzmanage.DclzManage;
+import kr.co.solbipos.structure.DefaultMap;
 
 /**
  * 부가서비스 > 근태관리 > 근태관리
@@ -17,23 +18,25 @@ public interface DclzManageService {
      * @param dclzManage
      * @return
      */
-    <E> List<E> selectDclzManage(DclzManage dclzManage);
+    List<DefaultMap<String>> selectDclzManage(DclzManage dclzManage);
 
     /**
      * 근태 등록
      * 
      * @param dclzManage
+     * @param userId
      * @return
      */
-    int insertDclzManage(DclzManage dclzManage);
+    int insertDclzManage(DclzManage dclzManage, String userId);
 
     /**
      * 근태 수정
      * 
      * @param dclzManage
+     * @param userId
      * @return
      */
-    int updateDclzManage(DclzManage dclzManage);
+    int updateDclzManage(DclzManage dclzManage, String userId);
 
     /**
      * 근태 삭제
@@ -49,7 +52,7 @@ public interface DclzManageService {
      * @param dclzManage
      * @return
      */
-    <E> List<E> selectStoreEmployee(DclzManage dclzManage);
+    List<DefaultMap<String>> selectStoreEmployee(DclzManage dclzManage);
 
     /**
      * 해당 근무일에 근태가 있는지 확인

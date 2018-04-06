@@ -51,12 +51,10 @@ public class ExceptionController {
         String responseURL = e.getResponseURL();
         Status status = e.getStatus();
         
-        /*
-        log.error("BizException : id: {}, status : {}, msg : {}, url : {}", userId, status,
-                errorMessage, responseURL, e);
-        */
-        
         if (WebUtil.isJsonRequest()) {
+            if(isEmpty(status)) {
+                status = Status.FAIL;
+            }
             Result result = new Result(status);
             result.setUrl(responseURL);
             result.setMessage(errorMessage);

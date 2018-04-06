@@ -3,9 +3,17 @@
 
   var c_store = {
 
-    init : function() {
+    init : function(callback) {
       $("#_storeall").prop("checked", false);
       c_store.search({});
+      
+      $("#_storeok").bind("click", function() {
+        if (typeof callback == 'function') {
+          callback(c_store.check_value());
+          c_store.close();
+          $(this).unbind();
+        }
+      });
     },
     
     close : function() {

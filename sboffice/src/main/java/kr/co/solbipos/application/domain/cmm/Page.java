@@ -21,11 +21,12 @@ public class Page {
     Integer next;
     /** 이전 보여질 페이지그룹의 마지막 페이지 */
     Integer prev;
-    /**  */
+    
+    /** 검색 시작 날짜 */
     private String startDt;
-    /**  */
+    /** 검색 종료 날짜 */
     private String endDt;
-    /**   */
+    /** 검색 날짜 전체 체크 여부 */
     private Boolean chkDt;
 
     public void setCurr(Integer curr) {

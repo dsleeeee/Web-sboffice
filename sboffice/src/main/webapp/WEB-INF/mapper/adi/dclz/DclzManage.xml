@@ -10,7 +10,7 @@
       FROM (
       SELECT 
             COUNT(1) OVER (PARTITION BY 1 ORDER BY 1) TOT_CNT,
-            ROWNUM AS RNUM,
+            ROW_NUMBER() OVER(PARTITION BY 1 ORDER BY 1) RNUM,
             A.STORE_CD,
             (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = A.STORE_CD) STORE_NM,
             A.EMP_NO,
@@ -29,8 +29,8 @@
             A.MOD_DT,
             A.MOD_ID
        FROM TB_PS_EMPLOYEE_COMMTE A
-      WHERE 1=1
       ]]>
+      <where>
         <if test='inFg != null and inFg.toString() != "ALL"'>
           AND A.IN_FG = #{inFg}
         </if>
@@ -43,7 +43,8 @@
         <if test="startDt != null and startDt != '' and endDt != null and endDt != ''">
           AND A.SALE_DATE BETWEEN #{startDt} AND #{endDt}
         </if>
-        ORDER BY A.EMP_IN_DATE DESC
+      </where>
+        ORDER BY A.SALE_DATE DESC
         )
     <![CDATA[
      WHERE RNUM >= #{prev}
