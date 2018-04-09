@@ -40,6 +40,9 @@
   
   <logger name="kr.co.solbipos" level="${LOG_LEVEL}"/>
   
+  <!-- context-root.xml 에서 conversionService 왜 resource 동시 사용한 경우 Tomcat DEBUG 로그 제거-->
+  <logger name="org.springframework.beans.TypeConverterDelegate" level="INFO"/>
+
   <root level="${ROOT_LEVEL}">
     <appender-ref ref="console"/>
     <appender-ref ref="file"/>

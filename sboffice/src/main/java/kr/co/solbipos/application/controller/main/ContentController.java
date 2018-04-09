@@ -1,8 +1,6 @@
 package kr.co.solbipos.application.controller.main;
 
-import static kr.co.solbipos.utils.spring.StringUtil.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import static kr.co.solbipos.utils.spring.StringUtil.convertToJson;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -16,8 +14,6 @@ import kr.co.solbipos.application.domain.board.total.Total;
 import kr.co.solbipos.application.domain.login.SessionInfo;
 import kr.co.solbipos.service.main.ContentService;
 import kr.co.solbipos.service.session.SessionService;
-import kr.co.solbipos.structure.DefaultMap;
-import kr.co.solbipos.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
