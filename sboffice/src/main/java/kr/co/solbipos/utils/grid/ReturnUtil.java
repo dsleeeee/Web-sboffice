@@ -11,7 +11,6 @@ import kr.co.solbipos.application.domain.cmm.Page;
 import kr.co.solbipos.enums.Status;
 import kr.co.solbipos.structure.DefaultMap;
 import kr.co.solbipos.structure.Result;
-import kr.co.solbipos.utils.spring.ObjectUtil;
 
 /**
  * @author 정용길
@@ -134,6 +133,18 @@ public class ReturnUtil {
      */
     private static Result genJsonResult(Status status, Object obj) {
         return new Result(status, obj);
+    }
+    
+    /**
+      * 
+      * @param status
+      * @param message
+      * @return
+      */
+    public static Result genJsonResultMsg(Status status, String message) {
+        Result result = new Result(status);
+        result.setMessage(message);
+        return result;
     }
 }
 

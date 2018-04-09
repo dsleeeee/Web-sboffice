@@ -310,6 +310,7 @@ Graph.prototype.init = function(container, format) {
       return;
     }
     
+    //이동될 위치의 좌표 계산
     var dstX1 = this.bounds.x + dx;
     var dstY1 = this.bounds.y + dy;
     var dstX2 = dstX1 + this.bounds.width;
@@ -324,20 +325,27 @@ Graph.prototype.init = function(container, format) {
       return;
     } 
     
-    //left-bottom은 페이지 이동 객체 위치이므로 vertex를 넣을 수 없다.
-    var lastX = graph.keySize.width * graph.COL_PER_PAGE * this.graph.pageNo - graph.keySize.width;
-    var lastY = graph.keySize.height * graph.ROW_PER_PAGE - graph.keySize.height;
-    if(dstX2 > lastX && dstY2 > lastY) {
+    //right-bottom은 페이지 이동 객체 위치이므로 vertex를 넣을 수 없다.
+    if(checkPagingArea(dstX2, dstY2)) {
       mxEvent.consume(evt);
       return;
-    } 
+    }
     //console.log(lastX + ', ' + lastY);
     
 
     mxGraphHandlerMoveCells.apply(this, arguments);
   };
 
-
+  //페이징 객체가 있는 영역인지 체크
+  var checkPagingArea = function(x, y) {
+    var isPagingArea = false;
+    var lastX = graph.keySize.width * graph.COL_PER_PAGE * graph.pageNo - graph.keySize.width;
+    var lastY = graph.keySize.height * graph.ROW_PER_PAGE - graph.keySize.height;
+    if(x > lastX && y > lastY) {
+      isPagingArea = true;
+    } 
+    return isPagingArea;
+  };
   
   //셀의 사이즈가 변경되었을 때 배경 크기에 맞게 보정
   graph.resizeCell = function(cell, bounds, recurse) {
@@ -367,6 +375,14 @@ Graph.prototype.init = function(container, format) {
       return;
     }
 
+    //right-bottom은 페이지 이동 객체 위치이므로 vertex를 넣을 수 없다.
+    var dstX2 = bounds.x + bounds.width;
+    var dstY2 = bounds.y + bounds.height;
+    if(checkPagingArea(dstX2, dstY2)) {
+      return;
+    }
+
+    
     mxGraph.prototype.resizeCell.apply(this, arguments);
   };
 
@@ -1060,33 +1076,35 @@ Format.prototype.open = function(isLoad)
           try {
             var jsonStr = JSON.parse(req.getText());
             var xmlStr = jsonStr.data;
-            var xmlArr = xmlStr.split("|");
             
-            //그룹 영역 추가
-            var groupXml = mxUtils.parseXml(xmlArr[0]); 
-            //console.log(groupXml);
-            this.setGraphXml(group, groupXml.documentElement);
-            
-            //상품 영역 추가
-            var prodXml = mxUtils.parseXml(xmlArr[1]); 
-            //console.log(prodXml);
-            this.setGraphXml(prod, prodXml.documentElement);
-            
-            //로드된 그룹에 오버레이 삭제 버튼 추가
-            var model = group.getModel();
-            var parent = group.getDefaultParent();
-            var childCount = model.getChildCount(parent);
-            for(var i = 0; i < childCount; i++) {
-              cell = model.getChildAt(parent, i);
-              group.addCellOverlay(cell, group.createOverlay(prod, cell));
+            if(xmlStr != null) {
+              var xmlArr = xmlStr.split("|");
+              
+              //그룹 영역 추가
+              var groupXml = mxUtils.parseXml(xmlArr[0]); 
+              //console.log(groupXml);
+              this.setGraphXml(group, groupXml.documentElement);
+              
+              //상품 영역 추가
+              var prodXml = mxUtils.parseXml(xmlArr[1]); 
+              //console.log(prodXml);
+              this.setGraphXml(prod, prodXml.documentElement);
+              
+              //로드된 그룹에 오버레이 삭제 버튼 추가
+              var model = group.getModel();
+              var parent = group.getDefaultParent();
+              var childCount = model.getChildCount(parent);
+              for(var i = 0; i < childCount; i++) {
+                cell = model.getChildAt(parent, i);
+                group.addCellOverlay(cell, group.createOverlay(prod, cell));
+              }
+              
+              //그룹 영역에서 첫번째(무엇이될지는모름) 셀을 선택하고 상품영역에서도 해당 레이어 활성화
+              var firstCell = model.getChildAt(parent, 0);
+              group.selectCellForEvent(firstCell);
+              var layer = prod.model.getCell(firstCell.getId());
+              prod.switchLayer(layer);
             }
-            
-            //그룹 영역에서 첫번째(무엇이될지는모름) 셀을 선택하고 상품영역에서도 해당 레이어 활성화
-            var firstCell = model.getChildAt(parent, 0);
-            group.selectCellForEvent(firstCell);
-            var layer = prod.model.getCell(firstCell.getId());
-            prod.switchLayer(layer);
-            
           }
           catch (e) {
             mxUtils.alert(mxResources.get('errorOpeningFile'));

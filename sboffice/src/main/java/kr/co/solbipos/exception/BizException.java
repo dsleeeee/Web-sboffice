@@ -33,7 +33,16 @@ public class BizException extends RuntimeException {
         super(message);
         this.responseURL = responseURL;
     }
-
+    
+    /**
+     * @param status
+     * @param message
+     */
+    public BizException(Status status, String message) {
+        super(message);
+        this.status = status;
+    }
+    
     /**
      * @param status
      * @param message

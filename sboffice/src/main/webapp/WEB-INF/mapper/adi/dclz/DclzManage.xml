@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.adi.persistence.dclz.dclzmanage.DclzManageMapper">
+
+  <select id="selectDclzManage" parameterType="dclzManage" resultType="DefaultMap">
+    /* DclzManageMapper.selectDclzManage */
+    <![CDATA[
+    SELECT *
+      FROM (
+      SELECT 
+            COUNT(1) OVER (PARTITION BY 1 ORDER BY 1) TOT_CNT,
+            ROW_NUMBER() OVER(PARTITION BY 1 ORDER BY 1) RNUM,
+            A.STORE_CD,
+            (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = A.STORE_CD) STORE_NM,
+            A.EMP_NO,
+            (SELECT EMP_NM FROM TB_MS_EMPLOYEE WHERE EMP_NO = A.EMP_NO AND STORE_CD = A.STORE_CD) EMP_NM,
+            A.EMP_IN_DATE,
+            A.POS_NO,
+            TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') SALE_DATE,
+            TO_CHAR(TO_DATE(A.EMP_IN_DT, 'yyyymmddhh24mi'), 'yyyy-mm-dd hh:mi') EMP_IN_DT,
+            TO_CHAR(TO_DATE(A.EMP_OUT_DT, 'yyyymmddhh24mi'), 'yyyy-mm-dd hh:mi') EMP_OUT_DT,
+            A.WORK_TIME,
+            A.IN_FG,
+            (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD='087' AND NMCODE_CD = A.IN_FG) IN_FG_NM,
+            A.REMARK,
+            A.REG_DT,
+            A.REG_ID,
+            A.MOD_DT,
+            A.MOD_ID
+       FROM TB_PS_EMPLOYEE_COMMTE A
+      ]]>
+      <where>
+        <if test='inFg != null and inFg.toString() != "ALL"'>
+          AND A.IN_FG = #{inFg}
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+          AND A.STORE_CD IN 
+          <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
+            #{item}
+          </foreach>
+        </if>
+        <if test="startDt != null and startDt != '' and endDt != null and endDt != ''">
+          AND A.SALE_DATE BETWEEN #{startDt} AND #{endDt}
+        </if>
+      </where>
+        ORDER BY A.SALE_DATE DESC
+        )
+    <![CDATA[
+     WHERE RNUM >= #{prev}
+       AND RNUM <= #{next}
+    ]]>
+  </select>
+  
+  <insert id="insertDclzManage" parameterType="dclzManage">
+    /* DclzManageMapper.insertDclzManage */
+    <![CDATA[
+    INSERT INTO TB_PS_EMPLOYEE_COMMTE
+    (
+      STORE_CD,
+      EMP_NO,
+      EMP_IN_DATE,
+      POS_NO,
+      SALE_DATE,
+      EMP_IN_DT,
+      EMP_OUT_DT,
+      WORK_TIME,
+      IN_FG,
+      REMARK,
+      REG_DT,
+      REG_ID,
+      MOD_DT,
+      MOD_ID
+    )
+    VALUES
+    (
+      #{storeCd},
+      #{empNo},
+      #{empInDate},
+      #{posNo},
+      #{saleDate},
+      #{empInDt},
+      #{empOutDt},
+      #{workTime},
+      #{inFg},
+      #{remark},
+      #{regDt},
+      #{regId},
+      #{modDt},
+      #{modId}
+    )
+    ]]>
+  </insert>
+
+  <update id="updateDclzManage" parameterType="dclzManage">
+  <![CDATA[
+    /* DclzManageMapper.updateDclzManage */
+    UPDATE TB_PS_EMPLOYEE_COMMTE A
+       SET A.EMP_IN_DATE = #{empInDate},
+           A.SALE_DATE = #{saleDate},
+           A.EMP_IN_DT = #{empInDt},
+           A.EMP_OUT_DT = #{empOutDt},
+           A.WORK_TIME = #{workTime},
+           A.REMARK = #{remark},
+           A.MOD_DT = #{modDt},
+           A.MOD_ID = #{modId}
+     WHERE A.STORE_CD = #{storeCd}
+       AND A.EMP_NO = #{empNo}
+       AND A.EMP_IN_DATE = #{empInDate}
+  ]]>
+  </update>
+  
+  <delete id="deleteDclzManage" parameterType="dclzManage">
+  <![CDATA[
+    /* DclzManageMapper.deleteDclzManage */
+    DELETE 
+      FROM TB_PS_EMPLOYEE_COMMTE A
+     WHERE A.STORE_CD = #{storeCd}
+       AND A.EMP_NO = #{empNo}
+       AND A.EMP_IN_DATE = #{empInDate}
+  ]]>
+  </delete>
+
+  <select id="selectStoreEmployee" parameterType="dclzManage" resultType="DefaultMap">
+  <![CDATA[
+    /* DclzManageMapper.selectStoreEmployee */
+    SELECT A.STORE_CD,
+           A.EMP_NO,
+           A.EMP_NM
+      FROM TB_MS_EMPLOYEE A
+     WHERE A.STORE_CD = #{storeCd}
+  ]]>
+  </select>
+  
+  <select id="selectWorkCheck" parameterType="dclzManage" resultType="integer">
+    /* DclzManageMapper.selectWorkCheck */
+    SELECT COUNT(*)
+      FROM TB_PS_EMPLOYEE_COMMTE A
+     WHERE A.STORE_CD = #{storeCd}
+       AND A.EMP_NO = #{empNo}
+       AND A.EMP_IN_DATE = #{empInDate}
+  </select>
+  
+</mapper>
+
+
+

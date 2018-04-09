@@ -9,7 +9,7 @@
       FROM (
        SELECT
               COUNT(1) OVER (PARTITION BY 1 ORDER BY 1) TOT_CNT,
-              ROWNUM AS RNUM, 
+              ROW_NUMBER() OVER(PARTITION BY 1 ORDER BY 1) RNUM, 
               B.HQ_OFFICE_CD,
               C.HQ_OFFICE_NM,
               A.STORE_CD,
@@ -45,7 +45,7 @@
         <if test="storeNm != null and storeNm != ''">
           AND B.STORE_NM = #{storeNm}
         </if>
-        <if test="sysStatFg != null and sysStatFg != '' and sysStatFg != 'all'">
+        <if test="sysStatFg != null and sysStatFg.name() != 'ALL'">
           AND B.SYS_STAT_FG = #{sysStatFg} --매장상태
         </if>
         ORDER BY RNUM ASC

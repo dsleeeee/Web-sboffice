@@ -2,30 +2,37 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
-<div id="fullDimmedId" class="fullDimmed" style="display: none;"></div>
-<div id="layerOk" class="layer" style="display: none;">
+<div id="_alertTent" class="fullDimmed" style="display: none;"></div>
+<div id="_layerOk" class="layer" style="display: none;">
   <div class="layer_inner">
     <div class="noTitle w500">
       <p class="bk"></p>
       <div class="btnSet">
-        <span><a href="#" class="btn_blue">
+        <span>
+          <a href="javascript:;" class="btn_blue alert">
             <s:message code="label.cmm.confirm" />
-          </a></span></span>
+          </a>
+        </span>
       </div>
     </div>
   </div>
 </div>
 
-<div id="layerConf" class="layer" style="display: none;">
+<div id="_layerConf" class="layer" style="display: none;">
   <div class="layer_inner">
     <div class="noTitle w500">
       <p class="bk"></p>
       <div class="btnSet">
-        <span><a href="#" class="btn_blue">
+        <span>
+          <a href="javascript:;" class="btn_blue conf">
             <s:message code="label.cmm.confirm" />
-          </a></span></span> <span><a href="#" class="btn_gray">
+          </a>
+        </span>
+        <span>
+          <a href="javascript:;" class="btn_gray conf">
             <s:message code="label.cmm.cancel" />
-          </a></span>
+          </a>
+        </span>
       </div>
     </div>
   </div>

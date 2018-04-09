@@ -13,7 +13,7 @@
           formatItem : function(s, e) {
             // 표시 화면 입력 생성
             if (e.panel == s.topLeftCells) {
-              e.cell.innerHTML = "<i class=\"fa fa-bars\" aria-hidden=\"true\"></i>";
+              e.cell.innerHTML = "<div class=\"v-center\"></div>";
             }
           },
           draggedColumn : function(s, e){
@@ -93,11 +93,11 @@
         // 표시 항목 그리드에 적용
         function genGridPickerView(columnPicker, g) {
           
-          var tlClass = "fa fa-bars";
+          var tlClass = "v-center";
           var ref = g.hostElement.querySelector('.wj-topleft');
           
           ref.addEventListener('mousedown', function (e) {
-            if (wijmo.hasClass(e.target, tlClass)) {
+            if (wijmo.hasClass(e.target.children[0], tlClass)) {
               wijmo.showPopup(columnPicker.hostElement, ref, false, true, false);
               columnPicker.focus();
               e.preventDefault();
@@ -113,7 +113,7 @@
   // 공통 콤보박스
   var wcombo = {
       // combo : 콤보박스 ID '#combo' data : json 형태 데이터 f : 콤보박스 선택 이벤트
-      genCommonBox: function( div, data, f) {
+      genCommonBoxFun: function( div, data, f) {
         return new wijmo.input.ComboBox(div, {
           displayMemberPath : "name",
           selectedValuePath : "value",
@@ -122,6 +122,13 @@
           selectedIndexChanged : function(s, e) {
             f(s, e);
           }
+        });
+      },
+      genCommonBoxSimple: function( div ) {
+        return new wijmo.input.ComboBox(div, {
+          displayMemberPath : "name",
+          selectedValuePath : "value",
+          isAnimated : true
         });
       },
       genCommonBox: function( div, data ) {
@@ -134,6 +141,15 @@
       },
       genInput: function(div) {
         return new wijmo.input.ComboBox(div);
+      },
+      genTime: function(div, step){
+        return new wijmo.input.InputTime(div, {
+          format: "h:mm tt", // default format, with AM/PM
+          min: "1:00", // list starts at 9am
+          max: "23:59", // until 5pm
+          step: step, // every 30 minutes
+          isEditable: true // user can enter values not on the list
+        });
       },
       genDate: function(div) {
         return new wijmo.input.InputDate(div); 

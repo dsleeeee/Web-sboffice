@@ -1,6 +1,7 @@
 package kr.co.solbipos.service.session;
 
 import static kr.co.solbipos.utils.spring.StringUtil.*;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.util.WebUtils;
 import kr.co.solbipos.application.domain.login.SessionInfo;
+import kr.co.solbipos.application.enums.user.OrgnFg;
 import kr.co.solbipos.application.service.login.LoginService;
 import kr.co.solbipos.service.cmm.CmmMenuService;
 import kr.co.solbipos.service.redis.RedisConnService;
@@ -64,6 +66,12 @@ public class SessionServiceImpl implements SessionService {
         sessionInfo.setMadeMenuData(convertToJson(cmmMenuService.makeMenu(sessionInfo, "A")));
         // 위즈모 그리드용 즐겨찾기 데이터 만들기
         sessionInfo.setMadeBkmkData(convertToJson(cmmMenuService.makeMenu(sessionInfo, "F")));
+        
+        // 본사는 소속된 가맹점을 세션에 저장
+        if(sessionInfo.getOrgnFg() == OrgnFg.HQ) {
+            List<String> storeCdList = cmmMenuService.selectStoreCdList(sessionInfo.getOrgnCd());
+            sessionInfo.setArrStoreCdList(storeCdList);
+        }
 
         // redis에 세션 세팅
         setSessionInfo(sessionId, sessionInfo);

@@ -40,7 +40,7 @@ userId : <input id="userId" />
 
 var comboData = ${ccu.getCommCode("011")};
 
-var theComboBox = wcombo.genCommonBox("#comboBox", comboData, f);
+var theComboBox = wcombo.genCommonBoxFun("#comboBox", comboData, f);
 
 function f(s, e) {
 	var r = s["selectedItem"]["name"] + " : " + s["selectedItem"]["value"];

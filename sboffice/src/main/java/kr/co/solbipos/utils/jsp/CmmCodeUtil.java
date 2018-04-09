@@ -142,7 +142,7 @@ public class CmmCodeUtil {
 
         HashMap<String, String> m = new HashMap<>();
         m.put(COMBO_NAME, "전체");
-        m.put(COMBO_VALUE, "all");
+        m.put(COMBO_VALUE, "ALL");
         list.add(m);
         
         source.stream().forEach(x -> {

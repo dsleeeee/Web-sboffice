@@ -44,17 +44,17 @@ public class ExceptionController {
     @ExceptionHandler(BizException.class)
     public Object bizExceptionHandle(BizException e) {
 
-        SessionInfo sessionInfo = sessionService.getSessionInfo();
-        String userId = isEmpty(sessionInfo) ? "" : sessionInfo.getUserId();
+        //SessionInfo sessionInfo = sessionService.getSessionInfo();
+        //String userId = isEmpty(sessionInfo) ? "" : sessionInfo.getUserId();
 
         String errorMessage = e.getMessage();
         String responseURL = e.getResponseURL();
         Status status = e.getStatus();
-
-        log.error("BizException : id: {}, status : {}, msg : {}, url : {}", userId, status,
-                errorMessage, responseURL, e);
-
+        
         if (WebUtil.isJsonRequest()) {
+            if(isEmpty(status)) {
+                status = Status.FAIL;
+            }
             Result result = new Result(status);
             result.setUrl(responseURL);
             result.setMessage(errorMessage);

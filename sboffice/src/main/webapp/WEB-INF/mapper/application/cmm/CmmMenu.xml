@@ -3,6 +3,29 @@
 
 <mapper namespace="kr.co.solbipos.application.persistence.cmm.CmmMenuMapper">
   
+  <select id="selectStoreCdList" parameterType="string" resultType="string">
+    /* CmmMenuMapper.selectStore */
+    SELECT STORE_CD 
+      FROM TB_MS_STORE 
+     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+  </select>
+  
+  <select id="selectStore" parameterType="store" resultType="store">
+  <![CDATA[
+    /* CmmMenuMapper.selectStore */
+    SELECT STORE_CD,
+           STORE_NM,
+           OWNER_NM,
+           HQ_OFFICE_CD
+      FROM TB_MS_STORE
+     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+  ]]>
+     <if test="storeNm != null and storeNm != ''">
+       AND STORE_NM LIKE '%'||#{storeNm}||'%' 
+     </if>
+     ORDER BY REG_DT, MOD_DT DESC
+  </select>
+  
   <insert id="insertMenuUseHist" parameterType="menuUseHist">
   <![CDATA[
     /* CmmMenuMapper.insertMenuHist */
