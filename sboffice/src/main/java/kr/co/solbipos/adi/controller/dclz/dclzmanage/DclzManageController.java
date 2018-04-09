@@ -64,9 +64,9 @@ public class DclzManageController {
         
         SessionInfo si = sessionService.getSessionInfo(request);
         
-        // 가맹점일 경우에는 
+        // 가맹점일 경우에 세션에 저장된 세팅
         if(si.getOrgnFg() == OrgnFg.STORE) {
-            dclzManage.setStoreCd(si.getStoreCd());
+            dclzManage.setStoreCd(si.getOrgnCd());
         }
         
         // 선택한 매장을 arr 로 세팅한다. 쿼리에서 쓰임

@@ -39,11 +39,11 @@ public class DclzManageServiceImpl implements DclzManageService {
     public int insertDclzManage(DclzManage dclzManage, String userId) {
 
         // 기본값 세팅
-        dclzManage.setPosNo("01"); // 기본 포스 번호 01 세팅 서효원 과장 컨펌
+        dclzManage.setPosNo("01"); // 기본 포스 번호 01 세팅 서효원 과장
         dclzManage.setInFg(DclzInFg.WEB);
-        String insertDt = currentDateTimeString();
-        dclzManage.setRegDt(insertDt);
-        dclzManage.setModDt(insertDt);
+        String dt = currentDateTimeString();
+        dclzManage.setRegDt(dt);
+        dclzManage.setModDt(dt);
         dclzManage.setRegId(userId);
         dclzManage.setModId(userId);
 
@@ -126,6 +126,7 @@ public class DclzManageServiceImpl implements DclzManageService {
             workMinute = diff / 60000;
 
         } catch (Exception e) {
+            // 등록에 실패 했습니다.
             String msg = messageService.get("label.registFail");
             throw new JsonException(Status.FAIL, msg, "");
         }

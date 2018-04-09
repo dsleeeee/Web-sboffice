@@ -53,25 +53,25 @@ public class SessionInfo extends Cmm {
      * M : 시스템<br>
      * A : 대리점<br>
      * H : 본사<br>
-     * S : 매장
+     * S : 매장, 가맹점
      */
     private OrgnFg orgnFg;
 
     /**
      * 소속 코드<br>
      * 테이블 마다 쓰이는 컬럼이 다르다<br>
-     * {@code TB_HQ_EMPLOYEE}(본사) : {@code HQ_OFFICE_CD} > 본사사업장코드<br>
-     * {@code TB_MS_EMPLOYEE}(가맹점) : {@code HQ_OFFICE_CD} > 본사사업장코드<br>
-     * {@code TB_CM_EMPLOYEE}(시스템/대리점) : {@code AGENCY_CD} > 대리점코드<br>
+     * {@link OrgnFg} type:{@code H}, table:{@code TB_HQ_EMPLOYEE}(본사), column:{@code HQ_OFFICE_CD}(본사사업장코드)<br>
+     * {@link OrgnFg} type:{@code S}, table:{@code TB_MS_EMPLOYEE}(가맹점), column:{@code STORE_CD}(본사사업장코드)<br>
+     * {@link OrgnFg} type:{@code M,A}, table:{@code TB_CM_EMPLOYEE}(시스템/대리점), column:{@code AGENCY_CD}(대리점코드)<br>
      */
     private String orgnCd;
 
     /**
      * 소속 명<br>
      * 테이블 마다 쓰이는 컬럼이 다르다<br>
-     * {@code TB_HQ_EMPLOYEE}(본사) : {@code TB_HQ_OFFICE} > {@code HQ_OFFICE_NM} > 본사명<br>
-     * {@code TB_MS_EMPLOYEE}(가맹점) : {@code TB_MS_STORE} > {@code STORE_NM} > 본사명<br>
-     * {@code TB_CM_EMPLOYEE}(시스템/대리점) : {@code TB_CM_AGENCY} > {@code AGENCY_NM} > 대리점명<br>
+     * {@link OrgnFg} type:{@code H}, table:{@code TB_HQ_EMPLOYEE}(본사), column:{@code HQ_OFFICE_NM}(본사명)<br>
+     * {@link OrgnFg} type:{@code S}, table:{@code TB_MS_EMPLOYEE}(가맹점), column:{@code STORE_NM}(본사명)<br>
+     * {@link OrgnFg} type:{@code M,A}, table:{@code TB_CM_EMPLOYEE}(시스템/대리점), column:{@code AGENCY_NM}(대리점명)<br>
      */
     private String orgnNm;
 

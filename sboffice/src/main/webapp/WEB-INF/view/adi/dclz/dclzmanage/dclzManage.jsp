@@ -3,8 +3,6 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<script src="/resource/vender/wijmo/js/input/wijmo.input.min.js"></script>
-
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
@@ -37,23 +35,26 @@
       </tr>
       <tr>
         
+        <div id="storeCd" style="display: none;"></div>
         <%-- 매장 --%>
-        <c:if test="${orgnFg == 'HQ' || orgnFg == 'AGENCY'}">
+        <c:if test="${orgnFg == 'HQ'}">
           <th><s:message code="label.cmm.store" /></th>
           <td>
             <div class="sb-select fl w70">
               <div id="storeCdText" class="sb-input w80"></div>
             </div>
-            <div id="storeCd" style="display: none;"></div>
             <a href="javascript:;" id="store" class="btn_grayS ml5"><s:message code="label.cmm.store.select" /></a>
-            
           </td>
         </c:if>
         
         <%-- 입력구분 --%>
         <th><s:message code="label.cmm.input.type" /></th>
-<!--         <td colspan="3"> -->
-        <td>
+        <c:if test="${orgnFg == 'HQ'}">
+          <td>
+        </c:if>
+        <c:if test="${orgnFg != 'HQ'}">
+          <td colspan="3">
+        </c:if>
           <div class="sb-select">
             <div id="inFg"></div>
           </div>
@@ -214,20 +215,29 @@
     var ldata        = ${ccu.getListScale()};
     var listScaleBox = wcombo.genCommonBox("#listScaleBox", ldata);
     var cdata        = ${ccu.getCommCode("087")};
-    var inFg         = wcombo.genCommonBox("#inFg", cdata);
-    var storeCd      = wcombo.genInput("#storeCd");
+	var inFg         = wcombo.genCommonBox("#inFg", cdata);
+	var storeCd      = wcombo.genInput("#storeCd");
+	
+	<c:if test="${orgnFg == 'HQ'}">
     var storeCdText  = wcombo.genInput("#storeCdText");
+    </c:if>
+    <c:if test="${orgnFg != 'HQ'}">
+	storeCd.text = "${sessionScope.sessionInfo.orgnCd}";
+    var storeCdText  = "";
+    </c:if>
+    
+    
     storeCdText.isDisabled = true;
     
     <%-- 그리드 링크 --%>
     grid.formatItem.addHandler(function(s, e) {
       if (e.panel == s.cells) {
         var col = s.columns[e.col];
-        if( col.binding == "storeNm" ) {
+        if( col.binding == "empNm" ) {
           var item = s.rows[e.row].dataItem;
           item.row = e.row;
           item.cl = "dclz_row";
-          var html = wijmo.format("<a href=\"javascript:;\" class=\"{cl}\" data-value=\"{row}\">{storeNm}</a>", item);
+          var html = wijmo.format("<a href=\"javascript:;\" class=\"{cl}\" data-value=\"{row}\">{empNm}</a>", item);
           e.cell.innerHTML = html;
         }
       }
