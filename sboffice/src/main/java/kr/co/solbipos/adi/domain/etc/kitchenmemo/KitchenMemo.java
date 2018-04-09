@@ -3,12 +3,14 @@ package kr.co.solbipos.adi.domain.etc.kitchenmemo;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
 import kr.co.solbipos.application.domain.cmm.Cmm;
+import kr.co.solbipos.application.enums.grid.GridDataFg;
 import kr.co.solbipos.application.validate.login.Login;
 import kr.co.solbipos.application.validate.user.PwChange;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
+ * 부가서비스 > 주방메모관리
  * 
  * @author 김지은
  */
@@ -37,21 +39,4 @@ public class KitchenMemo extends Cmm{
     /** 사용여부  */    
     @NotBlank
     private String useYn;
-    
-    /** 등록일시 */
-    private String regDt;
-    
-    /** 등록아이디 */
-    private String regId;
-    
-    /** 수정일시 */
-    private String modDt;
-    
-    /** 수정아이디 */
-    private String modId;
-    
-    /** 상태 */
-    private String status;
-    
-
 }

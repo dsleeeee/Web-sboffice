@@ -1,6 +1,7 @@
 package kr.co.solbipos.application.domain.cmm;
 
 import java.io.Serializable;
+import kr.co.solbipos.application.enums.grid.GridDataFg;
 import lombok.Data;
 
 /**
@@ -26,4 +27,7 @@ public abstract class Cmm implements Serializable {
 
     /** 수정 아이디 */
     private String modId;
+    
+    /** 상태 (IUD) */
+    private GridDataFg status;
 }
