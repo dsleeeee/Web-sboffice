@@ -43,4 +43,5 @@ public enum SysStatFg implements CodeEnum {
     public String getCode() {
         return code;
     }
+    
 }
