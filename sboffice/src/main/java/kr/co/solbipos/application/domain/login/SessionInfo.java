@@ -2,6 +2,7 @@ package kr.co.solbipos.application.domain.login;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
 import kr.co.solbipos.application.domain.cmm.Cmm;
@@ -113,7 +114,7 @@ public class SessionInfo extends Cmm {
 
     /** 로그인 화면 : 아이디 저장 여부 */
     private boolean chk;
-
+    
     /** 
      * 메뉴 관련 데이터 
      * */

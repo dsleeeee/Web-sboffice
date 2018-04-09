@@ -24,6 +24,21 @@
   <div class="wj-TblWrapBr mt10" style="height: 400px;">
     <div id="theGrid" class="mt10"></div>
   </div>
+<<<<<<< HEAD
+=======
+  <!-- 수정된 데이터 저장을 위한 tracking 그리드 필요 -->
+  <!-- 
+  <div class="wj-TblWrapBr mt10" style="height: 400px;display:none;">
+    <div id="editedGrid" style="display:none;"></div>수정된 데이터
+  </div>
+  <div class="wj-TblWrapBr mt10" style="height: 400px;display:none;">
+    <div id="addedGrid" style="display:none;"></div>추가 데이터
+  </div>
+  <div class="wj-TblWrapBr mt10" style="height: 400px;display:none;">
+    <div id="removedGrid" style="display:none;"></div>삭제된 데이터
+  </div>
+   -->
+>>>>>>> refs/heads/menu
 </div>
 
 <script>
@@ -40,24 +55,56 @@ $(document).ready(function(){
     ];
   
   var kitchenMemoList = ${kitchenMemoList};
+<<<<<<< HEAD
   
   <%-- 체크박스 초기화 --%>
+=======
+
+  <%-- 데이터 초기화 (체크박스 초기화) --%>
+>>>>>>> refs/heads/menu
   kitchenMemoList.forEach(function(item){
     item.chk = false;
   });
   
+<<<<<<< HEAD
   <%-- 그리드 div, column data, 화면명, 화면 그리드 순서 --%>
   var grid             = wgrid.genGrid("#theGrid", rdata, "${menuCd}", 1, ${clo.getColumnLayout(1)});
   var kitchenMemo      = new wijmo.collections.CollectionView(kitchenMemoList);
+=======
+  <%-- 그리드 생성 : 그리드 div, column data, 화면명, 화면 그리드 순서 --%>
+  var grid            = wgrid.genGrid("#theGrid", rdata, "${menuCd}", 1, ${clo.getColumnLayout(1)});
+  
+  /* 
+  var editGrid        = wgrid.genGrid("#editedGrid", rdata, "${menuCd}", 1, ${clo.getColumnLayout(1)});
+  var addGrid         = wgrid.genGrid("#addedGrid", rdata, "${menuCd}", 1, ${clo.getColumnLayout(1)});
+  var delGrid         = wgrid.genGrid("#removedGrid", rdata, "${menuCd}", 1, ${clo.getColumnLayout(1)});
+  */
+  
+  var kitchenMemo = new wijmo.collections.CollectionView(kitchenMemoList);
+>>>>>>> refs/heads/menu
   kitchenMemo.trackChanges = true;
   
   grid.itemsSource     = kitchenMemo;
   grid.isReadOnly      = false;
   
+<<<<<<< HEAD
   <%-- 데이터 수정시 코드는 수정 불가 --%>
+=======
+  /* 
+  editGrid.itemsSource = kitchenMemo.itemsEdited;\
+  addGrid.itemsSource  = kitchenMemo.itemsAdded;
+  delGrid.itemsSource  = kitchenMemo.itemsRemoved;
+  */
+  
+  <%-- 데이터 수정시 kitchnMemoCd 컬럼은 수정 불가 --%>
+>>>>>>> refs/heads/menu
   grid.beginningEdit.addHandler(function (s, e) {
+<<<<<<< HEAD
     <%-- 조회된 데이터는 kitchnMemoCd 수정 불가능 --%>
     if(grid.rows[e.row].dataItem.regId == undefined || grid.rows[e.row].dataItem.regId == ""){
+=======
+    if(grid.rows[e.row].dataItem.regId == undefined || grid.rows[e.row].dataItem.regId == ""){  // insert
+>>>>>>> refs/heads/menu
       e.cancel = false;
     }else{
       if(e.col != 1){
@@ -111,14 +158,33 @@ $(document).ready(function(){
       grid.collectionView.itemsEdited[i].status = "U";
       paramArr.push(grid.collectionView.itemsEdited[i]);
     }
+<<<<<<< HEAD
+=======
+    
+>>>>>>> refs/heads/menu
     for(var i=0; i<grid.collectionView.itemsAdded.length; i++){
       grid.collectionView.itemsAdded[i].status = "I";
       paramArr.push(grid.collectionView.itemsAdded[i]);
     }
+<<<<<<< HEAD
+    for(var i=0; i<grid.collectionView.itemsRemoved.length; i++){
+      grid.collectionView.itemsRemoved[i].status = "D";
+      paramArr.push(grid.collectionView.itemsRemoved[i]);
+=======
+
     for(var i=0; i<grid.collectionView.itemsRemoved.length; i++){
       grid.collectionView.itemsRemoved[i].status = "D";
       paramArr.push(grid.collectionView.itemsRemoved[i]);
     }
+    
+    /* 
+    for(var i=0; i<delGrid.itemsSource.length; i++){
+      var delObj = delGrid.itemsSource[i];
+      delObj.status = "D";
+      paramArr.push(delObj);
+>>>>>>> refs/heads/menu
+    }
+    */
     
     var url = "/adi/etc/kitchenmemo/kitchenmemo/save.sb";
     $.ajax({
@@ -128,7 +194,30 @@ $(document).ready(function(){
       success: function(result){
         if (result.status === "OK") {
           s_alert.pop("<s:message code='msg.save.succ' />");
+<<<<<<< HEAD
           grid.collectionView.clearChanges();
+=======
+          
+          grid.collectionView.refresh();
+          
+          console.log(grid.collectionView.itemsEdited)
+          
+          /* 
+          var cvEdit = new wijmo.collections.CollectionView(editGrid.itemsSource);
+          var cvAdd = new wijmo.collections.CollectionView(addGrid.itemsSource);
+          var cvDel = new wijmo.collections.CollectionView(delGrid.itemsSource);
+          
+          for(var i = cvEdit.items.length-1; i >= 0; i-- ){
+            cvEdit.removeAt(i);
+          }
+          for(var i = cvAdd.items.length-1; i >= 0; i-- ){
+            cvAdd.removeAt(i);
+          }
+          for(var i = cvDel.items.length-1; i >= 0; i-- ){
+            cvDel.removeAt(i);
+          }
+           */
+>>>>>>> refs/heads/menu
         } else if (result.status === "FAIL"){
           s_alert.pop(result.data.msg);
         }
