@@ -5,7 +5,9 @@
 
   <select id="selectKitchenMemo" parameterType="sessionInfo" resultType="DefaultMap">
     /* KitchenMemoMapper.selectKitchenMemo */
-    SELECT *
+    SELECT STORE_CD, KITCHN_MEMO_CD, KITCHN_MEMO_NM,
+           MEMO_FG, USE_YN,
+           REG_DT, REG_ID, MOD_DT, MOD_ID
       FROM TB_MS_KITCHEN_MEMO
      WHERE STORE_CD = #{orgnCd}
      ORDER
