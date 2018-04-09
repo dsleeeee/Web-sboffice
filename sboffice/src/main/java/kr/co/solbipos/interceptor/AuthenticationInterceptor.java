@@ -9,12 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import kr.co.solbipos.application.domain.login.SessionInfo;
 import kr.co.solbipos.application.domain.resource.ResrceInfo;
+import kr.co.solbipos.application.enums.user.OrgnFg;
 import kr.co.solbipos.enums.Status;
 import kr.co.solbipos.exception.AuthenticationException;
 import kr.co.solbipos.exception.JsonException;
 import kr.co.solbipos.service.cmm.CmmMenuService;
 import kr.co.solbipos.service.message.MessageService;
 import kr.co.solbipos.service.session.SessionService;
+import kr.co.solbipos.utils.AppUtil;
 import kr.co.solbipos.utils.spring.WebUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -60,6 +62,21 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         // 유져 조회 날짜 저장
         sessionInfo = setUserSelectDate(request, sessionInfo);
 
+        // 본사, 가맹점 만 storeCd 에 대해서 체크한다.
+        if(sessionInfo.getOrgnFg() == OrgnFg.HQ) {
+            checkStoreCd(request, sessionInfo);
+        }
+        else if(sessionInfo.getOrgnFg() == OrgnFg.STORE) {
+            String storeCd = request.getParameter("storeCd");
+            if(!isEmpty(storeCd)) {
+                if(!storeCd.equals(sessionInfo.getOrgnCd())) {
+                    // 유효하지 않는 매장코드 입니다.
+                    String msg = messageService.get("msg.cmm.not.storecd");
+                    throw new AuthenticationException(msg, "/error/403.sb");
+                }
+            }
+        }
+        
         // 권한 체크
         if (!checkUrl(request, auth, requestURL, sessionInfo.getUserId(), sessionInfo)) {
             log.error(
@@ -68,7 +85,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                     sessionInfo.getUserId(), requestURL, request.getHeader("accept")
                             + "\n■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
 
-            String exceptionMsg = messageService.get("error.access.denied");
+            String exceptionMsg = messageService.get("msg.err.access.denied");
 
             // 권한 없음 처리
             throw new AuthenticationException(exceptionMsg, "/error/403.sb");
@@ -79,6 +96,34 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         session.setAttribute("sessionInfo", sessionInfo);
 
         return true;
+    }
+    
+    /**
+      * storecd 의 유효성을 검증한다.<br>
+      * 
+      * 
+      * @param request
+      * @param sessionInfo
+      */
+    private void checkStoreCd(HttpServletRequest request, SessionInfo sessionInfo) {
+        String storeCd = request.getParameter("storeCd");
+        if(!isEmpty(storeCd)) {
+            if(storeCd.indexOf(",") > -1) {
+                if(!AppUtil.listIndexOf(sessionInfo.getArrStoreCdList(), storeCd.split(","))) {
+                    // 유효하지 않는 매장코드 입니다.
+                    String msg = messageService.get("msg.cmm.not.storecd");
+                    throw new AuthenticationException(msg, "/error/403.sb");
+                }
+                
+            }
+            else {
+                if(!AppUtil.listIndexOf(sessionInfo.getArrStoreCdList(), storeCd)) {
+                    // 유효하지 않는 매장코드 입니다.
+                    String msg = messageService.get("msg.cmm.not.storecd");
+                    throw new AuthenticationException(msg, "/error/403.sb");
+                }
+            }
+        }
     }
 
     /**

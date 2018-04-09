@@ -713,6 +713,7 @@ Format.prototype.fontStyle = function() {
   var initFontSize = 10;
   var initFontFamily;
   var initFontColor;
+  var initFontStyle;
   for(var i=0; i < cells.length; i++) {
     var cell = cells[i];
     var state = graph.view.getState(cell);
@@ -720,6 +721,7 @@ Format.prototype.fontStyle = function() {
       initFontSize = Math.max(0, parseInt(mxUtils.getValue(state.style, mxConstants.STYLE_FONTSIZE, null)));
       initFontFamily = mxUtils.getValue(state.style, mxConstants.STYLE_FONTFAMILY, null);
       initFontColor = mxUtils.getValue(state.style, mxConstants.STYLE_FONTCOLOR, null);
+      initFontStyle = mxUtils.getValue(state.style, mxConstants.STYLE_FONTSTYLE, 0); 
     }
   }
 
@@ -804,6 +806,11 @@ Format.prototype.fontStyle = function() {
   
   this.styleButtons([bold, italic, underline]);
   underline.style.marginRight = '6px';
+  
+  this.setSelected(bold, (initFontStyle & mxConstants.FONT_BOLD) == mxConstants.FONT_BOLD);
+  this.setSelected(italic, (initFontStyle & mxConstants.FONT_ITALIC) == mxConstants.FONT_ITALIC);
+  this.setSelected(underline, (initFontStyle & mxConstants.FONT_UNDERLINE) == mxConstants.FONT_UNDERLINE);
+  
   div.appendChild(stylePanel);
 
   this.container.appendChild(div);
@@ -829,19 +836,40 @@ Format.prototype.align = function() {
   var left = this.addButton('geSprite-left', mxResources.get('left'),
       function() { graph.setCellStyles(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_LEFT); }, stylePanel);
   var center = this.addButton('geSprite-center', mxResources.get('center'),
-    function() { graph.setCellStyles(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER); }, stylePanel);
+      function() { graph.setCellStyles(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER); }, stylePanel);
   var right = this.addButton('geSprite-right', mxResources.get('right'),
-    function() { graph.setCellStyles(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_RIGHT); }, stylePanel);
+      function() { graph.setCellStyles(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_RIGHT); }, stylePanel);
 
   var top = this.addButton('geSprite-top', mxResources.get('top'),
       function() { graph.setCellStyles(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_TOP); }, stylePanel);
   var middle = this.addButton('geSprite-middle', mxResources.get('middle'),
-    function() { graph.setCellStyles(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);}, stylePanel);
+      function() { graph.setCellStyles(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);}, stylePanel);
   var bottom = this.addButton('geSprite-bottom', mxResources.get('bottom'),
-    function() { graph.setCellStyles(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_BOTTOM);}, stylePanel);
+      function() { graph.setCellStyles(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_BOTTOM);}, stylePanel);
   
   this.styleButtons([left, center, right, top, middle, bottom]);
   right.style.marginRight = '6px';
+  
+  //선택된 셀에서 스타일 정보 읽기
+  var cells = graph.getSelectionCells();
+  var initAlign;
+  var initVAlign;
+  for(var i=0; i < cells.length; i++) {
+    var cell = cells[i];
+    var state = graph.view.getState(cell);
+    if (state != null) {
+      initAlign = mxUtils.getValue(state.style, mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER); 
+      initVAlign = mxUtils.getValue(state.style, mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE); 
+    }
+  }
+  this.setSelected(left, initAlign == mxConstants.ALIGN_LEFT);
+  this.setSelected(center, initAlign == mxConstants.ALIGN_CENTER);
+  this.setSelected(right, initAlign == mxConstants.ALIGN_RIGHT);
+  
+  this.setSelected(top, initVAlign == mxConstants.ALIGN_TOP);
+  this.setSelected(middle, initVAlign == mxConstants.ALIGN_MIDDLE);
+  this.setSelected(bottom, initVAlign == mxConstants.ALIGN_BOTTOM);
+  
   div.appendChild(stylePanel);
   
   //format 컨테이너에 추가
@@ -849,6 +877,7 @@ Format.prototype.align = function() {
 
 
 };
+
 /**
  * 포맷 패널에 들어갈 sprite 아이콘 holder
  */
@@ -861,22 +890,39 @@ Format.prototype.stylePanel = function() {
   
   return stylePanel;
 };
+
+
 /**
  * 포맷 패널에 들어갈 sprite 아이콘 버튼 스타일 지정
  */
 Format.prototype.styleButtons = function(elts) {
-//var styleButtons = function(elts) {
   for (var i = 0; i < elts.length; i++) {
     mxUtils.setPrefixedStyle(elts[i].style, 'borderRadius', '3px');
     mxUtils.setOpacity(elts[i], 100);
     elts[i].className += ' geColorBtn';
   }
 };
+
+/**
+ * 엘리먼트 선택 표시
+ */
+Format.prototype.setSelected = function(elt, selected) {
+  if (mxClient.IS_IE && (mxClient.IS_QUIRKS || document.documentMode < 10)) {
+    elt.style.filter = (selected) ? 'progid:DXImageTransform.Microsoft.Gradient('
+        + 'StartColorStr=\'#c5ecff\', EndColorStr=\'#87d4fb\', GradientType=0)'
+        : '';
+  } else {
+    elt.style.backgroundImage = (selected) ? 'linear-gradient(#c5ecff 0px,#87d4fb 100%)'
+        : '';
+  }
+};
+
 /**
  * 포맷 패널에 들어갈 sprite 아이콘 버튼 생성
  */
 Format.prototype.addButton = function(classname, tooltip, funct, c) {
-//var addButton = function(classname, tooltip, funct, c) {
+  
+  var format = this;
   
   var createButton = function(classname) {
     var elt = document.createElement('a');
