@@ -83,10 +83,10 @@ button {outline:none; border:0; font-family:'NotoR', Malgun Gothic, '맑은 고�
 /* **************************************** *
  * COMMON
  * **************************************** */
-.w4 {width:4%;} .w7 {width:7%;} .w8 {width:8%;} .w10 {width:10%;} .w11 {width:11.111111%;} .w15 {width:15%;} .w20 {width:20%;} .w25 {width:25%;} .w28 {width:28%;} .w30 {width:30%;} .w33 {width:33.333333%;} .w35 {width:35%;} .w40 {width:40%;} .w45 {width:45%;} .w50 {width:50%;} .w60 {width:60%;} .w70 {width:70%;} .w75 {width:75%;} .w80 {width:80%;} .w85 {width:85%;} .w90 {width:90%;} .w100 {width:100%;} 
-.w110 {width:110px;} .w130 {width:130px;} .w150 {width:150px;} .w200 {width:200px;} .w500 {width:500px;} .w600 {width:600px;} .w700 {width:700px;} .w800 {width:800px;}
+.w4 {width:4%;} .w5 {width:5%;} .w7 {width:7%;} .w8 {width:8%;} .w10 {width:10%;} .w11 {width:11.111111%;} .w15 {width:15%;} .w20 {width:20%;} .w25 {width:25%;} .w28 {width:28%;} .w30 {width:30%;} .w33 {width:33.333333%;} .w35 {width:35%;} .w40 {width:40%;} .w45 {width:45%;} .w50 {width:50%;} .w60 {width:60%;} .w70 {width:70%;} .w75 {width:75%;} .w80 {width:80%;} .w85 {width:85%;} .w90 {width:90%;} .w100 {width:100%;} 
+.w110 {width:110px;} .w130 {width:130px;} .w150 {width:150px;} .w200 {width:200px;} .w210 {width:210px;} .w500 {width:500px;} .w600 {width:600px;} .w700 {width:700px;} .w800 {width:800px;}
 
-.br {border-right:1px solid #dbdbdb;} .bl {border-left:1px solid #dbdbdb;} .bb {border-bottom:1px solid #dbdbdb;} .bt {border-top:1px solid #dbdbdb;}
+.b4 {border:1px solid #dbdbdb;} .br {border-right:1px solid #dbdbdb;} .bl {border-left:1px solid #dbdbdb;} .bb {border-bottom:1px solid #dbdbdb;} .bt {border-top:1px solid #dbdbdb;}
 
 .fl {float:left;} .fr {float:right;} .oh {overflow:hidden;}
 
@@ -745,6 +745,8 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .searchTbl th em.imp {color:red; position:absolute; margin:2px 0 0 2px;}
 .searchTbl td input:disabled {background:#f6f6f6; border:1px solid #e8e8e8;}
 .searchTbl th.empty {background:none;}
+.searchTbl th.editor {background:none; padding:0;}
+.searchTbl th.editor .detail {margin:10px 20px; white-space:pre; line-height:20px; font-size:14px; color:#444; }
 
 .searchTbl2 {position:relative; border-collapse:collapse; width:100%;} /*thead가 있는거*/
 .searchTbl2 tr > th:first-child {border-left:1px solid #ccc;}
@@ -770,6 +772,23 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .searchTbl, .searchTbl2, .subTab {min-width:550px;}
 .searchTbl2 td.empty {border-left:1px solid #ccc; padding:40px 0;}
 .searchTbl2 td.empty p {font-size:1em;}
+.searchTbl2 td a.noTit {color:#222; font-size:1em; text-decoration:none; line-height:15px;}
+.searchTbl2 td a.noTit:hover {text-decoration:underline;}
+.searchTbl2 .commt {margin-left:5px;}
+.searchTbl2 td.writer {position:relative; padding-right:90px; color:#444; line-height:15px;}
+.searchTbl2 td.writer div {position:absolute; right:5px; top:5px;}
+.searchTbl2 td.writer div a {font-size:12px; padding:5px 10px; position:relative; color:#5588df;}
+.searchTbl2 td.writer div a:hover {color:#1e56b5;}
+.searchTbl2 td.writer div a:first-child:after {content:''; position:absolute; right:0px; top:9px; width:1px; height:10px; background:#ccc;}
+.searchTbl2 td.writerCh {position:relative;}
+.searchTbl2 td.writerCh span {margin-right:139px; display:block;}
+.searchTbl2 td.writerCh span textarea {width:100%; border:1px solid #ccc; resize:none; height:45px; border-radius:5px; padding:5px 10px; font-size:12px; line-height:15px;}
+.searchTbl2 td.writerCh .btn_skyblue {width:129px; position:absolute; top:7px; right:10px; height:45px; line-height:45px; margin-left:10px; font-size:12px;}
+
+div.commtWrap {position:relative;}
+div.commtWrap span {margin-right:150px; display:block;}
+div.commtWrap textarea {width:100%; border:1px solid #ccc; resize:none; height:50px; border-radius:5px; padding:5px 10px; font-size:12px; line-height:20px;}
+div.commtWrap .btn_skyblue {width:140px; position:absolute; top:0px; right:0px; height:50px; line-height:50px; margin-left:10px;}
 
 .sb-select.dkbr .wj-content {border:1px solid #ccc;}
 .sb-select.dkbr .wj-content .wj-input-group-btn > .wj-btn {padding-top:5px; border-left:1px solid #ccc;}
@@ -911,6 +930,72 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .cldTbl tbody th:nth-child(8), .cldTbl tbody th:nth-child(9) {background:rgba(241,31,9,0.05);}
 .cldTbl tfoot th {border:1px solid #e8e8e8; background:rgba(241,31,9,0.05); padding:5px 0; color:#444;}
 .cldTbl tfoot .total {font-size:1.5em; color:#f11f09; padding-right:10px;}
+
+.cldTbl .temperatures {display:table; margin:0 auto;}
+.cldTbl .temperatures p {display:table-cell; font-size:0.875em; text-align:center;}
+.cldTbl .temperatures p > em {background:url(../img/weather_s.png) no-repeat; width:30px; height:30px; display:inline-block; margin-right:10px; margin-top:10px;}
+.cldTbl .temperatures p > em.weIc01 {background-position:0 0;} /*검은색 날씨아이콘 위치*/
+.cldTbl .temperatures p > em.weIc02 {background-position:-30px 0;}
+.cldTbl .temperatures p > em.weIc03 {background-position:-60px 0;}
+.cldTbl .temperatures p > em.weIc04 {background-position:-90px 0;}
+.cldTbl .temperatures p > em.weIc05 {background-position:-120px 0;}
+.cldTbl .temperatures p > em.weIc06 {background-position:-150px 0;}
+.cldTbl .temperatures p > em.weIc07 {background-position:-180px 0;}
+.cldTbl .temperatures p > em.weIc08 {background-position:-210px 0;}
+.cldTbl .temperatures p > em.weIc09 {background-position:-240px 0;}
+.cldTbl .temperatures p > em.weIc10 {background-position:-270px 0;}
+.cldTbl .temperatures p > em.weIc11 {background-position:-300px 0;}
+.cldTbl .temperatures p > em.weIc12 {background-position:-330px 0;}
+.cldTbl .temperatures p > em.weIc13 {background-position:-360px 0;}
+.cldTbl .temperatures p > em.weIc14 {background-position:-390px 0;}
+.cldTbl .temperatures span.txt {font-size:0.875em; display:inline-block; text-align:center; width:100%; margin:5px 0 10px;}
+.cldTbl .temperatures span.txt > em {font-size:1em; letter-spacing:-0.1em;}
+.cldTbl .temperatures span.txt span {font-size:1em;}
+.cldTbl .temperatures span.txt span.min, .cldTbl .temperatures span.txt span.min em {color:#2c59ff; line-height:20px;}
+.cldTbl .temperatures span.txt span.max, .cldTbl .temperatures span.txt span.max em {color:#f11f09;}
+.cldTbl .temperatures span.txt span em {font-size:1em;}
+
+/*SMS*/
+.smsWrap {position:relative;}
+.smsWrap2 {position:relative;} /*레이어에서만 쓰는거*/
+.smsWrap2 .sms {left:50%; margin-left:-105px;}
+.smsWrap2 .byte {text-align:center; width:100%;}
+.sms {position:absolute; top:0px; border:1px solid #93cbfc; margin-top:10px; border-radius:20px; padding:20px 10px 30px 10px; line-height:15px; resize:none;}
+.sms .cir1 {width:8px; height:8px; border-radius:100%; background:#93cbfc; display:inline-block; margin-left:57px;}
+.sms .cir2 {width:60px; height:8px; border-radius:10px; background:#93cbfc; display:inline-block;}
+.sms textarea {background:#ebf5ff; height:150px; border-radius:5px; margin-top:20px; padding:10px; width:100%; font-size:0.875em; line-height:1.5em; color:#222; resize:none;}
+.sms input {width:100%; margin-top:10px; border:1px solid #93cbfc; border-radius:5px; color:#222; padding:0 10px; line-height:25px; font-size:0.875em;}
+.byte {position:absolute; top:258px;}
+.byte p {font-size:0.75em; color:#222; display:inline-block; width:210px; text-align:center; margin-bottom:20px;} 
+.byte p span {font-size:1em; color:#222;}
+.byte .btn {text-align:center;}
+.byte .sb-select {width:210px;}
+.emWrap {margin-left:230px; min-height:370px;}
+.emWrap01 {border:1px solid #e8e8e8; padding:5px;}
+.emWrap01 a {color:#222; line-height:25px; padding:0 5px;}
+.emWrap02 {border:1px solid #e8e8e8;}
+.emWrap02 .tab {background:#f6f6f6; padding:5px 0 8px;}
+.emWrap02 .tab a {font-size:14px; padding:0 5px;}
+.emWrap02 .face {padding:5px 0;}
+.emWrap02 .tab a.on {color:#337dde; text-decoration:underline;}
+.emWrap02 .face span {display:inline-block; padding:0 5px;}
+.emWrap02 .face a {font-size:12px; padding:0 5px; line-height:25px;}
+
+.smsList {}
+.smsGray {}
+.smsGray {border:1px solid #ccc; margin-top:10px; border-radius:20px; padding:10px 10px 15px 10px; line-height:15px; resize:none;}
+.smsGray .cir1 {width:8px; height:8px; border-radius:100%; background:#ccc; display:inline-block; margin-left:57px;}
+.smsGray .cir2 {width:60px; height:8px; border-radius:10px; background:#ccc; display:inline-block;}
+.smsGray textarea {background:#f6f6f6; height:120px; border-radius:5px; margin-top:10px; padding:10px; width:100%; font-size:0.875em; line-height:1.5em; color:#222; resize:none;}
+.smsGray input {width:100%; margin-top:10px; border:1px solid #ccc; border-radius:5px; color:#222; padding:0 10px; line-height:25px; font-size:0.875em;}
+
+.smsPay li {}
+.smsPay li span {float:left;}
+.smsPay li span a {width:100%; display:block; text-align:center; padding:20px 0; border-radius:15px; border:5px solid #f1f1f1;}
+.smsPay li span a em {color:#222; line-height:30px;}
+.smsPay li:nth-child(2) span {padding:0 10px;}
+.smsPay li span a:hover {background:#bbb; color:#fff;}
+.smsPay li span a:hover em {color:#fff;}
 
 
 /* **************************************** *
