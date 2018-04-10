@@ -1,8 +1,9 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<link href="/resource/solbipos/css/cmm/style.css" rel="stylesheet" type="text/css" media="all"/>
+<%-- 왼쪽  메뉴(Tree) 의 별도 id로 셋팅을 위해 wijmo.css -> style.css 순서로 소스 순서 고정 - with Designer --%>
 <link href="/resource/solbipos/css/cmm/wijmo.css" rel="stylesheet" type="text/css"/>
+<link href="/resource/solbipos/css/cmm/style.css" rel="stylesheet" type="text/css" media="all"/>
 
 <link rel="stylesheet" type="text/css" href="/resource/vender/awesome-font/css/font-awesome.min.css" />
 
