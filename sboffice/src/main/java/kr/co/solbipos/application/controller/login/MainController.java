@@ -40,14 +40,14 @@ public class MainController {
         OrgnFg orgnFg = sessionInfo.getOrgnFg();
         
         /** 
-         * 유져 권한 타입<br> 
+         * 유져 권한 타입<br>
          * */
         // 시스템 : SYSTEM
         if(orgnFg == OrgnFg.MASTER) {
             return "redirect:"+"/application/main/content/sys.sb";
         }
         // 대리점 : AGENCY
-        else if(orgnFg == OrgnFg.AGENCY) {    //TODO URL 추가 필요
+        else if(orgnFg == OrgnFg.AGENCY) {
             return "redirect:"+"/application/main/content/agency.sb";
         }
         // 본사 : HEDOFC(HEAD OFFICE)
@@ -59,7 +59,7 @@ public class MainController {
             return "redirect:"+"/application/main/content/store.sb";
         }
         
-        return "application/main/mrhstMain";    //TODO 로그인페이지로 이동?
+        return "application/main/mrhstMain";
     }
 }
 

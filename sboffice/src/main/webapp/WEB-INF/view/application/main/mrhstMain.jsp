@@ -33,28 +33,28 @@
         
         <!--매출현황-->
         <div class="w70 fl br bb graph">
-            <h2>매출현황
+            <h2>
+                매출현황
                 <div class="searchBox">
                     <span id="dateText1"></span>
                     <span>
-                        <select id="dateSelect1"></select>
+                        <select id="dateSelect1">
+                          <c:forEach var="item" items="${dateSelList1}">
+                            <option value="${item.dateStr}">${item.name}</option>
+                          </c:forEach>
+                        </select>
                     </span>
                 </div>
             </h2>
-            
-            <!-- wijmo 차트 -->
             <div class="wizWrap" id="chart1" style="width:100%; height:240px;"></div>
-            <!--// wijmo 차트 -->
             
-            <!-- chart 에 필요한 요소 -->
+            <%-- chart 에 필요한 요소 --%>
             <select id="chartType" style="display:none;"></select>
             <select id="chartAnimationMode" style="display:none;"></select>
             <select id="chartEasing" style="display:none;"></select>
             <input id="chartDuration" value="0" style="display:none"/>
             <select id="chartAddMenu" style="display:none;"></select>
             <select id="chartRemoveMenu" style="display:none;"></select>
-            <!--// chart 에 필요한 요소 -->
-            
         </div>
         <!--//매출현황-->
         
@@ -71,7 +71,9 @@
                    <p>
                        <!--파란색 날씨아이콘 : weIc01~14까지-->
                        <em class="weIc02"></em>
-                       <span>최고 <em>13°C</em><br />최저 <em>5°C</em>
+                       <span>
+                           최고 <em>13°C</em><br />
+                           최저 <em>5°C</em>
                        </span>
                    </p> 
                </div>
@@ -95,61 +97,47 @@
         
         <!--상품매출 TOP 10-->
         <div class="w70 fl br bb graph">
-            <h2>상품매출 TOP 10
+            <h2>
+                상품매출 TOP 10
                 <div class="searchBox">
                     <span id="dateText2"></span>
                     <span>
-                        <select id="dateSelect2"></select>
+                        <select id="dateSelect2">
+                          <c:forEach var="item" items="${dateSelList2}">
+                            <option value="${item.dateStr}">${item.name}</option>
+                          </c:forEach>
+                        </select>
                     </span>
                 </div>
             </h2>
-            
-            <!-- wijmo 차트 -->
             <div class="wizWrap" id="chart2" style="width:100%; height:240px;"></div>
-            <!-- // wijmo 차트 -->
         </div>
         <!--//상품매출 TOP 10-->
         
         <!--공지사항-->
         <div class="w30 fl bb notice">
             <h2>공지사항</h2>  
-            <ul id="notice"></ul> 
+            <ul>
+              <c:forEach var="item" items="${noticeList}">
+                <li><a href="#">${item.content}</a><span>${item.regDt}</span></li>
+              </c:forEach>
+            </ul> 
         </div>
         <!--//공지사항-->
     </div>
     <!--//메인컨텐츠-->
 </div>
 <!--//right-->
-
+        
+        
 <script>
 
-//그래프 날짜 select box
-var dateSelList1 = ${dateSelList1};
-var dateSelList2 = ${dateSelList2};
+$(document).ready(function(){
+  $("#dateText1").text("기간 : " + $("#dateSelect1").val());
+  $("#dateText2").text("기간 : " + $("#dateSelect2").val());
+});
 
-var selOptionHtml1 = "";
-var selOptionHtml2 = "";
-
-if(dateSelList1.length > 0){
-  for(i in dateSelList1){
-    if(i==0){
-      $("#dateText1").text("기간 : " + dateSelList1[i].date);
-    }
-    selOptionHtml1 += "<option value=\""+dateSelList1[i].date+"\">"+dateSelList1[i].name+"</option>";
-  }
-  $("#dateSelect1").html(selOptionHtml1);
-}
-
-if(dateSelList2.length > 0){
-  for(j in dateSelList2){
-    if(j==0){
-      $("#dateText2").text("기간 : " + dateSelList2[j].date);
-    }
-    selOptionHtml2 += "<option value=\""+dateSelList2[j].date+"\">"+dateSelList2[j].name+"</option>";
-  }
-  $("#dateSelect2").html(selOptionHtml2);
-}
-
+<%-- 날짜 선택 --%>
 $("#dateSelect1").change(function(){
   $("#dateText1").text("기간 : " + $(this).val());
 });
@@ -157,56 +145,38 @@ $("#dateSelect2").change(function(){
   $("#dateText2").text("기간 : " + $(this).val());
 });
 
-//공지사항
-var noticeList = ${noticeList};
-var noticeHtml = "";
-if(noticeList.length > 0){
-  for(i in noticeList){
-    noticeHtml += "<li>";
-    noticeHtml += "<a href=\"#\">"+ noticeList[i].content + "</a>";
-    noticeHtml += "<span>" + dateUtilObj.formatDate(noticeList[i].regDt, "yyyy.MM.dd")+ "</span>";
-    noticeHtml += "</li>";    
-  }
-  $("#notice").append(noticeHtml);
-}
-
-//랜덤 데이터 생성
+<%-- 랜덤 데이터 생성 (추후 데이터 받아오면서 변경)--%>
 function getData(numCount) {
- var data = new wijmo.collections.ObservableArray();
- //var data = [];
-
- for (var i = 0; i < numCount; i++) {
-   //data.push(getRandomData('11월 28일 화요일' + getRandomValue(1000)));
-   data.push(getRandomData('11월 28일'));
- }
-// console.log('data : '+JSON.stringify(data));
- return data;
+  var data = new wijmo.collections.ObservableArray();
+  //var data = [];
+  for (var i = 0; i < numCount; i++) {
+    //data.push(getRandomData('11월 28일 화요일' + getRandomValue(1000)));
+    data.push(getRandomData('11월 28일'));
+  }
+  return data;
 }
-
 function getRandomData(idx) {
- return {
-     //x: getRandomValue(100),
-     x: idx,
-     y0: getRandomValue(200)
- };
+  return {
+    //x: getRandomValue(100),
+    x: idx,
+    y0: getRandomValue(200)
+  };
 }
-
 function getRandomValue(max) {
- return Math.round(Math.random() * max);
+  return Math.round(Math.random() * max);
 }
-
 function updateMenuHeader(menu, prefix, text) {
- menu.header = prefix + text;
+  menu.header = prefix + text;
 }
 
-//flexChart
+<%-- wijmo flexChart --%>
 var flexChartPoints = 7;
 
 $(document).ready(function(){
   var chart1 = new wijmo.chart.FlexChart('#chart1');
   var chart2 = new wijmo.chart.FlexChart('#chart2');
   
-  // 위 차트
+  <%-- 매출현황 --%>
   chart1.beginUpdate();
   chart1.chartType = wijmo.chart.ChartType.Column;
   chart1.itemsSource = getData(flexChartPoints); // 여기에 받아온 데이터 넣기
@@ -226,14 +196,13 @@ $(document).ready(function(){
       duration: 400
   });
   
-  // 아래 차트
+  <%-- 상품매출 TOP 10 --%>
   chart2.beginUpdate();
   chart2.chartType = wijmo.chart.ChartType.Column;
   chart2.itemsSource = getData(flexChartPoints); // 여기에 받아온 데이터 넣기
   chart2.bindingX = 'x';
   chart2.palette = ['#90f0fc'];
   
-  //create data series
   for (var i = 0; i < 1; i++) {
       var series = new wijmo.chart.Series();
       series.binding = 'y' + i;
@@ -255,10 +224,6 @@ $(document).ready(function(){
   chartDuration.max = 5000;
   chartDuration.step = 200;
   chartDuration.format = 'n0';
-  
-  
 });
-
-
 
 </script>

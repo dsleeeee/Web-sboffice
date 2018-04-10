@@ -1,8 +1,8 @@
 package kr.co.solbipos.application.persistence.main;
 
 import java.util.List;
-import kr.co.solbipos.application.domain.board.total.Total;
 import kr.co.solbipos.application.domain.login.SessionInfo;
+import kr.co.solbipos.structure.DefaultMap;
 
 /**
  * 메인 컨텐츠 조회 매퍼
@@ -17,6 +17,6 @@ public interface ContentMapper {
      * @param sessionInfo
      * @return
      */
-    List<Total> getNotice(SessionInfo sessionInfo);
+    List<DefaultMap<String>> getNotice(SessionInfo sessionInfo);
 
 }
