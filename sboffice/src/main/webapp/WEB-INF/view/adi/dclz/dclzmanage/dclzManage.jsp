@@ -198,15 +198,15 @@
     <%-- 근태관리 부분 --%>
     var rdata = 
       [
-        {binding:"storeNm", header:"<s:message code='storeNm' />"},
-        {binding:"saleDate", header:"<s:message code='saleDate' />"},
-        {binding:"empNo", header:"<s:message code='empNo' />"},
-        {binding:"empNm", header:"<s:message code='empNm' />"},
-        {binding:"empInDt", header:"<s:message code='empInDt' />"},
-        {binding:"empOutDt", header:"<s:message code='empOutDt' />"},
-        {binding:"workTime", header:"<s:message code='workTime' />"},
-        {binding:"inFgNm", header:"<s:message code='inFg' />"},
-        {binding:"remark", header:"<s:message code='remark' />"}
+        {binding:"storeNm", header:"<s:message code='loginStatus.storeNm' />"},
+        {binding:"saleDate", header:"<s:message code='dclzManage.sale.date' />"},
+        {binding:"empNo", header:"<s:message code='dclzManage.empNo' />"},
+        {binding:"empNm", header:"<s:message code='dclzManage.empNm' />"},
+        {binding:"empInDt", header:"<s:message code='dclzManage.empInDt' />"},
+        {binding:"empOutDt", header:"<s:message code='dclzManage.empOutDt' />"},
+        {binding:"workTime", header:"<s:message code='dclzManage.workTime' />"},
+        {binding:"inFgNm", header:"<s:message code='dclzManage.inFg' />"},
+        {binding:"remark", header:"<s:message code='dclzManage.remark' />"}
       ];
     
     var grid         = wgrid.genGrid("#theGrid", rdata, "${menuCd}", 1, ${clo.getColumnLayout(1)});
@@ -300,7 +300,7 @@
     function search(index) {
       if(storeCd.text == "") {
         <%-- 조회 매장을 선택해주세요. --%>
-        var msg = "<s:message code='msg.dclz.select.store'/>";
+        var msg = "<s:message code='dclzManage.select.store'/>";
         s_alert.pop(msg);
         return;
       }
@@ -372,7 +372,7 @@
       var arr = storeCd.text.split(",");
       if(arr.length > 1 || arr.length == 0 || arr[0] === "") {
         <%-- 하나의 매장만 선택해 주세요. --%>
-        var msg = "<s:message code='msg.dclz.store.one'/>";
+        var msg = "<s:message code='dclzManage.store.one'/>";
         s_alert.pop(msg);
         return;
       }

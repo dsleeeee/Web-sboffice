@@ -120,17 +120,17 @@ $(document).ready(function(){
   var rdata = 
     [
       {"binding":"rnum","header":"No"},
-      {"binding":"hqOfficeCd","header":"<s:message code='hqOfficeCd' />"},
-      {"binding":"hqOfficeNm","header":"<s:message code='hqOfficeNm' />"},
-      {"binding":"storeCd","header":"<s:message code='storeCd' />"},
-      {"binding":"storeNm","header":"<s:message code='storeNm' />"},
-      {"binding":"posNo","header":"<s:message code='posNo' />"},
-      {"binding":"loginDate","header":"<s:message code='loginDate' />"},
-      {"binding":"hwAuthKey","header":"<s:message code='hwAuthKey' />"},
-      {"binding":"loginIp","header":"<s:message code='loginIp' />"},
-      {"binding":"loginDt","header":"<s:message code='loginDt' />"},
-      {"binding":"posVerNo","header":"<s:message code='posVerNo' />"},
-      {"binding":"sysStatFgNm","header":"<s:message code='sysStatFgNm' />"}
+      {"binding":"hqOfficeCd","header":"<s:message code='loginStatus.hqOfficeCd' />"},
+      {"binding":"hqOfficeNm","header":"<s:message code='loginStatus.hqOfficeNm' />"},
+      {"binding":"storeCd","header":"<s:message code='loginStatus.storeCd' />"},
+      {"binding":"storeNm","header":"<s:message code='loginStatus.storeNm' />"},
+      {"binding":"posNo","header":"<s:message code='loginStatus.posNo' />"},
+      {"binding":"loginDate","header":"<s:message code='loginStatus.loginDate' />"},
+      {"binding":"hwAuthKey","header":"<s:message code='loginStatus.hwAuthKey' />"},
+      {"binding":"loginIp","header":"<s:message code='loginStatus.loginIp' />"},
+      {"binding":"loginDt","header":"<s:message code='loginStatus.loginDt' />"},
+      {"binding":"posVerNo","header":"<s:message code='loginStatus.posVerNo' />"},
+      {"binding":"sysStatFgNm","header":"<s:message code='loginStatus.sysStatFgNm' />"}
     ];
   
   var grid         = wgrid.genGrid("#theGrid", rdata, "${menuCd}", 1, ${clo.getColumnLayout(1)});

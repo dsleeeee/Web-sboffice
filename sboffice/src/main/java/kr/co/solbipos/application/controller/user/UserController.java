@@ -96,15 +96,15 @@ public class UserController {
         // 조회된 유져가 없으면 에러 메세지 전송
         if (ObjectUtil.isEmpty(findUsers)) {
             log.warn("문자 발송 유져 조회 실패 : id : {}, nm : {}", user.getUserId(), user.getEmpNm());
-            String msg = messageService.get("msg.pw.find.error1")
-                    + messageService.get("msg.pw.find.error2");
+            String msg = messageService.get("login.pw.find.error1")
+                    + messageService.get("login.pw.find.error2");
             return returnJson(Status.FAIL, "msg", msg);
         }
         // 조회된 사용자 정보가 2개 이상일 때 오류 처리
         if (findUsers.size() > 1) {
             log.warn("문자 발송 유져 여러명 조회됨 : id : {}, nm : {}", user.getUserId(), user.getEmpNm());
-            String msg = messageService.get("msg.pw.find.error1")
-                    + messageService.get("msg.pw.find.error2");
+            String msg = messageService.get("login.pw.find.error1")
+                    + messageService.get("login.pw.find.error2");
             return returnJson(Status.FAIL, "msg", msg);
         }
         
@@ -123,7 +123,7 @@ public class UserController {
             log.warn("인증문자 제한 시간 걸림, 제한 시간 : {}, id : {}, name : {}", prop.otpLimit,
                     findUser.getUserId(), findUser.getEmpNm());
             String msg = String.valueOf(otp.getOtpLimit())
-                    + messageService.get("msg.pw.find.otp.limit");
+                    + messageService.get("login.pw.find.otp.limit");
             return returnJson(Status.FAIL, "authNumber", msg);
         }
 
@@ -137,7 +137,7 @@ public class UserController {
          * 
          */
 
-        return returnJson(Status.OK, "msg", messageService.get("msg.pw.find.send.ok"));
+        return returnJson(Status.OK, "msg", messageService.get("login.pw.find.send.ok"));
     }
 
 
@@ -263,12 +263,12 @@ public class UserController {
         }
         // 인증번호가 틀렸습니다.
         else if (pfr == PwFindResult.OTP_ERROR) {
-            return returnJson(Status.FAIL, "authNumber", messageService.get("msg.pw.find.pw.fail"));
+            return returnJson(Status.FAIL, "authNumber", messageService.get("login.pw.find.pw.fail"));
         }
         // otp 입력시간 지남
         else if (pfr == PwFindResult.OTP_LIMIT_ERROR) {
             return returnJson(Status.FAIL, "authNumber",
-                    prop.otpLimit + messageService.get("msg.pw.find.limit.otp.minute"));
+                    prop.otpLimit + messageService.get("login.pw.find.limit.otp.minute"));
         } else {
             return returnJson(Status.FAIL);
         }
@@ -364,7 +364,7 @@ public class UserController {
          */
         if (!EncUtil.passwordPolicyCheck(pwdChg.getNewPw())
                 || !EncUtil.passwordPolicyCheck(pwdChg.getNewPwConf())) {
-            throw new AuthenticationException(messageService.get("msg.pw.chg.regexp"), "");
+            throw new AuthenticationException(messageService.get("login.pw.chg.regexp"), "");
         }
 
         PwChgResult pcr = userService.processPwdChg(pwdChg);
@@ -374,7 +374,7 @@ public class UserController {
 
         if (pcr == PwChgResult.PASSWORD_NOT_MATCH) {
             // 새 비밀번호와 비밀번호 확인이 일치하지 않습니다.
-            throw new AuthenticationException(messageService.get("msg.pw.find.not.match"), "");
+            throw new AuthenticationException(messageService.get("login.pw.find.not.match"), "");
         } else if (pcr == PwChgResult.UUID_NOT_MATCH || pcr == PwChgResult.EMPTY_USER
                 || pcr == PwChgResult.ID_NOT_MATCH) {
             /**
@@ -383,10 +383,10 @@ public class UserController {
             throw new AuthenticationException(messageService.get("cmm.invalid.access"), "");
         } else if (pcr == PwChgResult.LOCK_USER) {
             // 잠금 유져는 패스워드 변경 불가능 > 잠겨있는 유저 입니다. 고객센터로 연락 주세요.
-            throw new AuthenticationException(messageService.get("msg.pw.find.lock.user"), "");
+            throw new AuthenticationException(messageService.get("login.pw.find.lock.user"), "");
         } else if (pcr == PwChgResult.UUID_LIMIT_ERROR) {
             // 인증유효 시간이 지났습니다. 다시 인증 해주세요.
-            throw new AuthenticationException(messageService.get("msg.pw.find.limit"),
+            throw new AuthenticationException(messageService.get("login.pw.find.limit"),
                     "/user/pwdFind.sb");
         } else if (pcr == PwChgResult.CHECK_OK) {
             // 패스워드 변경 성공
@@ -431,22 +431,22 @@ public class UserController {
             /**
              * 기존 패스워드 비교
              */
-            return returnJson(Status.FAIL, "msg", messageService.get("msg.layer.pwchg.pwfail"));
+            return returnJson(Status.FAIL, "msg", messageService.get("login.layer.pwchg.pwfail"));
         } else if (result == PwChgResult.NEW_PASSWORD_NOT_MATCH) {
             /**
              * 새 비밀번호와 새 비밀번호 확인이 일치하는지 확인
              */
-            return returnJson(Status.FAIL, "msg", messageService.get("msg.pw.find.not.match"));
+            return returnJson(Status.FAIL, "msg", messageService.get("login.pw.find.not.match"));
         } else if (result == PwChgResult.PASSWORD_NEW_OLD_MATH) {
             /**
              * 변경 패스워드가 기존 비밀번호가 같은지 체크
              */
-            return returnJson(Status.FAIL, "msg", messageService.get("msg.layer.pwchg.match"));
+            return returnJson(Status.FAIL, "msg", messageService.get("login.layer.pwchg."));
         } else if (result == PwChgResult.PASSWORD_REGEXP) {
             /**
              * 패스워드 정책 체크
              */
-            return returnJson(Status.FAIL, "msg", messageService.get("msg.pw.chg.regexp"));
+            return returnJson(Status.FAIL, "msg", messageService.get("login.pw.chg.regexp"));
         }
 
         HashMap<String, String> returnData = new HashMap<>();
@@ -486,7 +486,7 @@ public class UserController {
          * 기존 패스워드 비교
          */
         if (!si.getUserPwd().equals(pwdChg.getCurrentPw())) {
-            return returnJson(Status.FAIL, "msg", messageService.get("msg.layer.pwchg.pwfail"));
+            return returnJson(Status.FAIL, "msg", messageService.get("login.layer.pwchg.pwfail"));
         }
 
         /**
