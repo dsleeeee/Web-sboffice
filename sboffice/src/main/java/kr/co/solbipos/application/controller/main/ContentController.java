@@ -1,5 +1,9 @@
 package kr.co.solbipos.application.controller.main;
 
+<<<<<<< HEAD
+=======
+import static kr.co.solbipos.utils.spring.StringUtil.convertToJson;
+>>>>>>> refs/heads/kitchenmemo
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +17,11 @@ import kr.co.solbipos.application.domain.login.SessionInfo;
 import kr.co.solbipos.application.enums.main.MainSrchFg;
 import kr.co.solbipos.service.main.ContentService;
 import kr.co.solbipos.service.session.SessionService;
+<<<<<<< HEAD
 import kr.co.solbipos.structure.DefaultMap;
+=======
+import lombok.extern.slf4j.Slf4j;
+>>>>>>> refs/heads/kitchenmemo
 
 @Controller
 @RequestMapping(value = "/application/main/content")

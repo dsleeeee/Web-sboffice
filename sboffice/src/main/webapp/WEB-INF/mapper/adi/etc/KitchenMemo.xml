@@ -45,6 +45,7 @@
       #{memoFg},
       #{useYn},
       #{regId},
+<<<<<<< HEAD
       #{regDt},
       #{modId},
       #{modDt},
@@ -60,6 +61,23 @@
            USE_YN = #{useYn},
            MOD_DT = #{modDt},
            MOD_ID = #{modId}
+=======
+      TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS'),
+      #{regId},
+      TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS')
+    )
+  </insert>
+  
+  <!-- updateKitchenMemo -->
+  <update id="updateKitchenMemo" parameterType="kitchenMemo">
+    /* KitchenMemoMapper.updateKitchenMemo */
+    UPDATE TB_MS_KITCHEN_MEMO
+       SET KITCHN_MEMO_NM = #{kitchnMemoNm},
+           MEMO_FG = #{memoFg},
+           USE_YN = #{useYn},
+           MOD_DT = TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS'),
+           MOD_ID = #{regId}
+>>>>>>> refs/heads/kitchenmemo
      WHERE STORE_CD = #{storeCd}
        AND KITCHN_MEMO_CD = #{kitchnMemoCd}
   </update>
