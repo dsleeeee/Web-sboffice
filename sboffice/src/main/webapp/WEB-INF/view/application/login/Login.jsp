@@ -20,13 +20,13 @@
     <div class="writeInfo">
       <div>
         <input class="id" type="text" id="userId" name="userId"
-          placeholder="<s:message code="label.login.userId"/>" value="${cid}" maxlength="20" /><label
+          placeholder="<s:message code="login.userId"/>" value="${cid}" maxlength="20" /><label
           for="userId"></label>
         <f:errors path="userId" id="userIdError" class="errorMsg" />
       </div>
       <div>
         <input class="pw" type="password" id="userPwd" name="userPwd"
-          placeholder="<s:message code="label.login.userPasswd"/>" maxlength="25" /><label
+          placeholder="<s:message code="login.userPasswd"/>" maxlength="25" /><label
           for="userPwd"></label>
         <f:errors path="userPwd" id="userPwdError" class="errorMsg" />
       </div>
@@ -34,12 +34,13 @@
 
     <div class="idsave">
       <span> <input type="checkbox" id="chk" name="chk"
-        ${empty cid ? '' : 'checked="checked"' } /> <label for="chk"> <s:message
-            code="label.login.rememberId" />
-      </label>
+        ${empty cid ? '' : 'checked="checked"' } /> 
+        <label for="chk"> 
+          <s:message code="login.rememberId" />
+        </label>
       </span>
       <button class="btn_login">
-        <s:message code="label.login.submit" />
+        <s:message code="login.submit" />
       </button>
     </div>
 
@@ -47,16 +48,16 @@
 
   <div class="linkArea">
     <span class="find"> <a href="/user/idFind.sb" class="fdId">
-        <s:message code="label.login.find.id" />
+        <s:message code="login.find.id" />
       </a> <a href="/user/pwdFind.sb" class="fdPw">
-        <s:message code="label.login.find.pw" />
+        <s:message code="login.find.pw" />
       </a>
     </span>
     <a href="http://www.solbipos.com" target="_blank" class="distributor">
-      <s:message code="label.login.add.dist" />
+      <s:message code="login.add.dist" />
     </a>
     <a href="http://www.solbipos.com" target="_blank" class="agency">
-      <s:message code="label.login.add.agency" />
+      <s:message code="login.add.agency" />
     </a>
   </div>
 

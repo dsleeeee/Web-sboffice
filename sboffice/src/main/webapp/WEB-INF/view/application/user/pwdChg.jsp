@@ -7,17 +7,17 @@
 
 <div class="loginArea">
   <h2 class="sTit">
-    <s:message code="label.login.userPasswd" />
+    <s:message code="login.userPasswd" />
     &nbsp;
-    <s:message code="label.cmm.find" /> 
+    <s:message code="cmm.find" /> 
   </h2>
   <p class="h2_txt">
-    <s:message code="label.pw.find.new.h2" />
+    <s:message code="login.pw.find.new.h2" />
   </p>
 
   <div class="idInfo">
     <p>
-      <span><s:message code="label.login.userId" /></span> <span>${userId}</span>
+      <span><s:message code="login.userId" /></span> <span>${userId}</span>
     </p>
   </div>
 
@@ -25,11 +25,11 @@
   <f:form class="loginF" method="post" modelAttribute="pwdChg" action="/user/pwdChgOk.sb" >
     <div class="writeInfo">
       <div>
-        <input type="password" id="newPw" name="newPw" placeholder="<s:message code="label.pw.chg.new" />" class="pw" /><label for="pw"></label>
+        <input type="password" id="newPw" name="newPw" placeholder="<s:message code="login.pw.chg.new" />" class="pw" /><label for="pw"></label>
         <f:errors path="newPw" id="newPwError" class="errorMsg" />
       </div>
       <div>
-        <input type="password" id="newPwConf" name="newPwConf" placeholder="<s:message code="label.pw.chg.new" />&nbsp;<s:message code="label.cmm.confirm" />" class="pw" /><label for="pw"></label>
+        <input type="password" id="newPwConf" name="newPwConf" placeholder="<s:message code="login.pw.chg.new" />&nbsp;<s:message code="cmm.confirm" />" class="pw" /><label for="pw"></label>
         <f:errors path="newPwConf" id="newPwConfError" class="errorMsg" />
       </div>
     </div>
@@ -38,7 +38,7 @@
     <input id="halfId" name="halfId" style="display: none" value="${userId}" />
 
     <button class="btn_bluew100">
-      <s:message code="label.cmm.confirm" />
+      <s:message code="cmm.confirm" />
     </button>
   </f:form>
 

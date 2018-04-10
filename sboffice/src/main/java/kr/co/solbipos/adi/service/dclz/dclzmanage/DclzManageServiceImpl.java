@@ -58,7 +58,7 @@ public class DclzManageServiceImpl implements DclzManageService {
         }
 
         // 출근일시 퇴근일시로 근무시간을 계산
-        dclzManage.setWorkTime(calWorkMinute(dclzManage.getEmpInDt(), dclzManage.getEmpOutDt()));
+        dclzManage.setWorkTime(calShift(dclzManage.getEmpInDt(), dclzManage.getEmpOutDt()));
 
         return dclzManageMapper.insertDclzManage(dclzManage);
     }
@@ -84,7 +84,7 @@ public class DclzManageServiceImpl implements DclzManageService {
             throw new JsonException(Status.FAIL, msg);
         }
 
-        dclzManage.setWorkTime(calWorkMinute(dclzManage.getEmpInDt(), dclzManage.getEmpOutDt()));
+        dclzManage.setWorkTime(calShift(dclzManage.getEmpInDt(), dclzManage.getEmpOutDt()));
 
         return dclzManageMapper.updateDclzManage(dclzManage);
     }
@@ -112,7 +112,7 @@ public class DclzManageServiceImpl implements DclzManageService {
      * @return 분단위의 근무시간<br>
      *         0 아래의 값은 잘못된값임<br>
      */
-    public long calWorkMinute(String startDt, String endDt) {
+    public long calShift(String startDt, String endDt) {
 
         long workMinute = 0;
 

@@ -46,8 +46,8 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             sessionService.deleteSessionInfo(request);
 
             if (WebUtil.isJsonRequest(request)) {
-                String msg = messageService.get("msg.cmm.session.expire");
-                String msg1 = messageService.get("msg.cmm.move.login");
+                String msg = messageService.get("cmm.session.expire");
+                String msg1 = messageService.get("cmm.move.login");
                 throw new JsonException(Status.SESSION_EXFIRE, msg + msg1, "/");
             } else {
                 response.sendRedirect("/");
@@ -71,7 +71,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             if(!isEmpty(storeCd)) {
                 if(!storeCd.equals(sessionInfo.getOrgnCd())) {
                     // 유효하지 않는 매장코드 입니다.
-                    String msg = messageService.get("msg.cmm.not.storecd");
+                    String msg = messageService.get("cmm.not.storecd");
                     throw new AuthenticationException(msg, "/error/403.sb");
                 }
             }
@@ -85,7 +85,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                     sessionInfo.getUserId(), requestURL, request.getHeader("accept")
                             + "\n■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
 
-            String exceptionMsg = messageService.get("msg.err.access.denied");
+            String exceptionMsg = messageService.get("cmm.access.denied");
 
             // 권한 없음 처리
             throw new AuthenticationException(exceptionMsg, "/error/403.sb");
@@ -111,7 +111,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             if(storeCd.indexOf(",") > -1) {
                 if(!AppUtil.listIndexOf(sessionInfo.getArrStoreCdList(), storeCd.split(","))) {
                     // 유효하지 않는 매장코드 입니다.
-                    String msg = messageService.get("msg.cmm.not.storecd");
+                    String msg = messageService.get("cmm.not.storecd");
                     throw new AuthenticationException(msg, "/error/403.sb");
                 }
                 
@@ -119,7 +119,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             else {
                 if(!AppUtil.listIndexOf(sessionInfo.getArrStoreCdList(), storeCd)) {
                     // 유효하지 않는 매장코드 입니다.
-                    String msg = messageService.get("msg.cmm.not.storecd");
+                    String msg = messageService.get("cmm.not.storecd");
                     throw new AuthenticationException(msg, "/error/403.sb");
                 }
             }

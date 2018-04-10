@@ -64,7 +64,7 @@ public class ResultHandlerAspect {
                  * */
                 if (isEmpty(map.get("list")) && isEmpty(r.getMessage())) {
                     // 조회 결과가 없습니다. 메시지를 세팅
-                    r.setMessage(messageService.get("msg.cmm.empty.data"));
+                    r.setMessage(messageService.get("cmm.empty.data"));
                 }
             }
         }

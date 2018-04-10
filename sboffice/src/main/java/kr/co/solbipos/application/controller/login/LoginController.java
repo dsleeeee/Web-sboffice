@@ -121,22 +121,22 @@ public class LoginController {
         } else if (code == LoginResult.NOT_EXISTS_ID || code == LoginResult.PASSWORD_ERROR) {
             // 다시 로그인 페이지로 이동
             returnUrl = "/auth/login.sb?userId=" + si.getUserId();
-            throw new AuthenticationException(messageService.get("msg.login.idpw.fail"), returnUrl);
+            throw new AuthenticationException(messageService.get("login.idpw.fail"), returnUrl);
         } else if (code == LoginResult.LOCK) {
             // 잠금상태의 유져
             returnUrl = "/auth/login.sb?userId=" + si.getUserId();
-            throw new AuthenticationException(messageService.get("msg.login.lock.user"), returnUrl);
+            throw new AuthenticationException(messageService.get("login.pw.find.lock.user"), returnUrl);
         } else if (code == LoginResult.PASSWORD_CHANGE) {
 
             // 패스워드 변경 레이어 팝업
             // 초기 비밀번호 입니다. 비밀번호 변경이 필요합니다.
              returnUrl = "/auth/login.sb?userId=" + si.getUserId() + "&type=pwChg";
-            throw new AuthenticationException(messageService.get("msg.login.pwd.chg"), returnUrl);
+            throw new AuthenticationException(messageService.get("login.pwd.chg"), returnUrl);
         }
         else if(code == LoginResult.PASSWORD_EXPIRE) {
             // 비밀번호 변경 및 연장이 필요합니다.
             returnUrl = "/auth/login.sb?userId=" + si.getUserId() + "&type=pwExpire";
-            throw new AuthenticationException(messageService.get("msg.login.pwd.expire"), returnUrl);
+            throw new AuthenticationException(messageService.get("login.pwd.expire"), returnUrl);
         }
         // 로그인 실패 
         else {
@@ -144,7 +144,7 @@ public class LoginController {
             log.error("로그인 실패 처리 시간 : {}", sw.getTotalTimeSeconds());
             returnUrl = "auth/login.sb?userId=" + si.getUserId();
             // 실패 처리
-            throw new AuthenticationException(messageService.get("msg.login.fail"), returnUrl);
+            throw new AuthenticationException(messageService.get("login.fail"), returnUrl);
         } 
 
         /*

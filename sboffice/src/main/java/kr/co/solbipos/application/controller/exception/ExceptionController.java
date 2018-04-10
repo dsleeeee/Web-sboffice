@@ -96,7 +96,7 @@ public class ExceptionController {
         log.error("Exception : id: {}", userId, e);
 
         if (WebUtil.isJsonRequest()) {
-            String msg = messageService.get("msg.error");
+            String msg = messageService.get("cmm.error");
             Result result = new Result(Status.SERVER_ERROR);
             result.setMessage(msg);
             return new ResponseEntity<Result>(result, HttpStatus.OK);

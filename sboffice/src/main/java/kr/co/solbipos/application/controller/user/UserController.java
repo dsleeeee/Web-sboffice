@@ -205,8 +205,8 @@ public class UserController {
         // 아이디가 없으면 에러 메시지 리턴
         if (findUsers.size() < 1) {
             // id 를 찾을 수 없습니다.
-            String msg = messageService.get("label.login.userId")
-                    + messageService.get("msg.cmm.not.find");
+            String msg = messageService.get("login.userId")
+                    + messageService.get("cmm.not.find");
             model.addAttribute("msg", msg);
             return "user/login:idFind";
         }
@@ -259,7 +259,7 @@ public class UserController {
         }
         // 입력한 정보가 올바르지 않습니다.
         else if (pfr == PwFindResult.EMPTY_USER) {
-            return returnJson(Status.FAIL, "msg", messageService.get("msg.cmm.input.fail"));
+            return returnJson(Status.FAIL, "msg", messageService.get("cmm.input.fail"));
         }
         // 인증번호가 틀렸습니다.
         else if (pfr == PwFindResult.OTP_ERROR) {
@@ -286,7 +286,7 @@ public class UserController {
     public String passwordChange(HttpServletRequest request, HttpServletResponse response,
             Model model) {
         // 잘못된 접근입니다.
-        throw new AuthenticationException(messageService.get("msg.cmm.invalid.access"), "");
+        throw new AuthenticationException(messageService.get("cmm.invalid.access"), "");
     }
 
     /**
@@ -306,7 +306,7 @@ public class UserController {
                 || isEmpty(uuid)) {
 
             // 실패 처리 > 잘못된 접근입니다.
-            throw new AuthenticationException(messageService.get("msg.cmm.invalid.access"), "");
+            throw new AuthenticationException(messageService.get("cmm.invalid.access"), "");
         }
 
         // id, 이름 체크
@@ -314,11 +314,11 @@ public class UserController {
 
         if (ObjectUtil.isEmpty(findUsers)) {
             // 실패 처리 > 잘못된 접근입니다.
-            throw new AuthenticationException(messageService.get("msg.cmm.invalid.access"), "");
+            throw new AuthenticationException(messageService.get("cmm.invalid.access"), "");
         }
         // 조회된 사용자 정보가 2개 이상일 때 오류 처리
         if (findUsers.size() > 1) {
-            throw new AuthenticationException(messageService.get("msg.cmm.invalid.access"), "");
+            throw new AuthenticationException(messageService.get("cmm.invalid.access"), "");
         }
         
         OtpAuth otp = new OtpAuth();
@@ -337,7 +337,7 @@ public class UserController {
             return "user/login:pwdChg";
         } else {
             // 실패 처리 > 잘못된 접근입니다.
-            throw new AuthenticationException(messageService.get("msg.cmm.invalid.access"), "");
+            throw new AuthenticationException(messageService.get("cmm.invalid.access"), "");
         }
     }
 
@@ -380,7 +380,7 @@ public class UserController {
             /**
              * uuid가 없는 경우 uuid로 조회한 user가 있는지 확인 halfId 와 uuid 로 조회된 id 매칭 여부 리턴 메세지 : 잘못된 접근입니다.
              */
-            throw new AuthenticationException(messageService.get("msg.cmm.invalid.access"), "");
+            throw new AuthenticationException(messageService.get("cmm.invalid.access"), "");
         } else if (pcr == PwChgResult.LOCK_USER) {
             // 잠금 유져는 패스워드 변경 불가능 > 잠겨있는 유저 입니다. 고객센터로 연락 주세요.
             throw new AuthenticationException(messageService.get("msg.pw.find.lock.user"), "");
@@ -392,7 +392,7 @@ public class UserController {
             // 패스워드 변경 성공
             return "user/login:pwdChgOk";
         } else {
-            throw new AuthenticationException(messageService.get("msg.cmm.invalid.access"), "");
+            throw new AuthenticationException(messageService.get("cmm.invalid.access"), "");
         }
     }
 
@@ -450,8 +450,8 @@ public class UserController {
         }
 
         HashMap<String, String> returnData = new HashMap<>();
-        returnData.put("msg", messageService.get("label.pw.find.h2.1")
-                + messageService.get("label.pw.find.h2.2"));
+        returnData.put("msg", messageService.get("login.pw.find.h2.1")
+                + messageService.get("login.pw.find.h2.2"));
         returnData.put("url", "/auth/logout.sb");
 
         return returnJson(Status.OK, returnData);
@@ -501,8 +501,8 @@ public class UserController {
         int r2 = userService.insertPwdChgHist(pch);
 
         HashMap<String, String> result = new HashMap<>();
-        result.put("msg", messageService.get("label.pw.find.h2.1")
-                + messageService.get("label.pw.find.h2.2"));
+        result.put("msg", messageService.get("login.pw.find.h2.1")
+                + messageService.get("login.pw.find.h2.2"));
 
         result.put("url", "/auth/logout.sb");
 
