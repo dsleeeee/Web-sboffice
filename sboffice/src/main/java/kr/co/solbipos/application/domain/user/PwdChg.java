@@ -22,27 +22,27 @@ public class PwdChg extends Cmm {
 
     /** 기존 비밀번호 */
     @NotBlank(groups = {UserPwChange.class, Login.class},
-            message = "{label.login.userPasswd}{msg.cmm.require.text}")
-    @Size(groups = {PwChange.class}, min = 8, max = 25, message = "{msg.cmm.size.max}")
+            message = "{login.userPasswd}{cmm.require.text}")
+    @Size(groups = {PwChange.class}, min = 8, max = 25, message = "{cmm.size.max}")
     private String currentPw;
 
     @NotBlank(groups = {PwChange.class, UserPwChange.class},
-            message = "{label.pw.chg.new}{msg.cmm.require.text}")
-    @Size(groups = {PwChange.class}, min = 8, max = 25, message = "{msg.cmm.size.max}")
+            message = "{login.pw.chg.new}{cmm.require.text}")
+    @Size(groups = {PwChange.class}, min = 8, max = 25, message = "{cmm.size.max}")
     /** 새 비밀번호 */
     private String newPw;
 
     @NotBlank(groups = {PwChange.class, UserPwChange.class},
-            message = "{label.pw.chg.new}{msg.cmm.require.text}")
-    @Size(groups = {PwChange.class}, min = 8, max = 25, message = "{msg.cmm.size.max}")
+            message = "{login.pw.chg.new}{cmm.require.text}")
+    @Size(groups = {PwChange.class}, min = 8, max = 25, message = "{cmm.size.max}")
     /** 새 비밀번호 확인 */
     private String newPwConf;
 
     private String uuid;
 
     /** 사용자 아이디 */
-    @NotBlank( groups={ Login.class }, message = "{label.login.userId}{msg.cmm.require.text}" )
-    @Size( groups={ Login.class }, max = 20, message = "{msg.cmm.size.max}" )
+    @NotBlank( groups={ Login.class }, message = "{login.userId}{cmm.require.text}" )
+    @Size( groups={ Login.class }, max = 20, message = "{cmm.size.max}" )
     private String userId;
     
     private String orginPwd;

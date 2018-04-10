@@ -2,7 +2,6 @@ package kr.co.solbipos.application.domain.login;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
 import kr.co.solbipos.application.domain.cmm.Cmm;
@@ -28,13 +27,13 @@ public class SessionInfo extends Cmm {
     private String sessionId;
 
     /** 사용자 아이디 */
-    @NotBlank(groups = {Login.class}, message = "{label.login.userId}{msg.cmm.require.text}")
-    @Size(groups = {Login.class}, max = 20, message = "{msg.cmm.size.max}")
+    @NotBlank(groups = {Login.class}, message = "{login.userId}{cmm.require.text}")
+    @Size(groups = {Login.class}, max = 20, message = "{cmm.size.max}")
     private String userId;
 
     /** 사용자 비밀번호 */
-    @NotBlank(groups = {Login.class}, message = "{label.login.userPasswd}{msg.cmm.require.text}")
-    @Size(groups = {Login.class}, min = 4, max = 25, message = "{msg.cmm.size.max}")
+    @NotBlank(groups = {Login.class}, message = "{login.userPasswd}{cmm.require.text}")
+    @Size(groups = {Login.class}, min = 4, max = 25, message = "{cmm.size.max}")
     private String userPwd;
 
     /** 사용자 이름 */

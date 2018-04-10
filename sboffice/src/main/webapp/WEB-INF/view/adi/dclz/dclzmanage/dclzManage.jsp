@@ -22,7 +22,7 @@
     <tbody>
       <tr>
         <th>
-          <s:message code="label.cmm.search.date" />
+          <s:message code="cmm.search.date" />
         </th>
         <td colspan="3">
           <%-- 조회 일자 --%>
@@ -38,17 +38,17 @@
         <div id="storeCd" style="display: none;"></div>
         <%-- 매장 --%>
         <c:if test="${orgnFg == 'HQ'}">
-          <th><s:message code="label.cmm.store" /></th>
+          <th><s:message code="cmm.store" /></th>
           <td>
             <div class="sb-select fl w70">
               <div id="storeCdText" class="sb-input w80"></div>
             </div>
-            <a href="javascript:;" id="store" class="btn_grayS ml5"><s:message code="label.cmm.store.select" /></a>
+            <a href="javascript:;" id="store" class="btn_grayS ml5"><s:message code="cmm.store.select" /></a>
           </td>
         </c:if>
         
         <%-- 입력구분 --%>
-        <th><s:message code="label.cmm.input.type" /></th>
+        <th><s:message code="cmm.input.type" /></th>
         <c:if test="${orgnFg == 'HQ'}">
           <td>
         </c:if>
@@ -65,10 +65,10 @@
 
   <div class="mt10 pdb20 oh bb">
     <button id="searchBtn" class="btn_blue fr" >
-      <s:message code="label.cmm.search" />
+      <s:message code="cmm.search" />
     </button>
     <button id="regBtn" class="btn_blue fl" >
-    <s:message code="label.cmm.new.add" />
+    <s:message code="cmm.new.add" />
     </button>
   </div>
   
@@ -77,7 +77,7 @@
     <div id="listScaleBox" class="w150 fl"></div>
     <%-- 엑셀 다운로드 --%>
     <button class="btn_skyblue fr" id="excelBtn">
-      <s:message code="label.cmm.excel.down" />
+      <s:message code="cmm.excel.down" />
     </button>
   </div>
   
@@ -108,7 +108,7 @@
   <div class="layer_inner">
     <div class="title w600">
       <%-- 근태등록 --%>
-      <p class="tit"><s:message code="label.dclz.reg.nm" /></p>
+      <p class="tit"><s:message code="dclzManage.reg.nm" /></p>
       <a href="javascript:;" class="btn_close dclzRegClose"></a>
       <input id="dclzStoreCd" style="display: none;" />
       <div class="con">
@@ -121,7 +121,7 @@
             <tbody>
               <%-- 영업일자 --%>
               <tr>
-                <th><s:message code="label.dclz.sale.date" /></th>
+                <th><s:message code="dclzManage.sale.date" /></th>
                 <td>
                   <div class="sb-select">
                     <input id="saleDate" class="w200" />
@@ -130,7 +130,7 @@
               </tr>
               <%-- 사원 --%>
               <tr>
-                <th><s:message code="label.cmm.emp" /></th>
+                <th><s:message code="cmm.emp" /></th>
                 <td>
                   <div class="sb-select">
                     <div id="empNo"></div>
@@ -139,7 +139,7 @@
               </tr>
               <%-- 출근일시 --%>
               <tr>
-                <th><s:message code="label.dclz.empin" /></th>
+                <th><s:message code="dclzManage.empin" /></th>
                 <td>
                   <div class="sb-select">
                     <input id="empInDtDate" class="w200" />
@@ -149,7 +149,7 @@
               </tr>
               <%-- 퇴근일시 --%>
               <tr>
-                <th><s:message code="label.dclz.empout" /></th>
+                <th><s:message code="dclzManage.empout" /></th>
                 <td>
                   <div class="sb-select">
                     <input id="empOutDtDate" class="w200" />
@@ -159,7 +159,7 @@
               </tr>
               <%-- 비고 --%>
               <tr>
-                <th><s:message code="label.cmm.remark" /></th>
+                <th><s:message code="cmm.remark" /></th>
                 <td>
                   <div class="sb-select">
                     <div id="remark"></div>
@@ -173,15 +173,15 @@
       <div class="btnSet">
         <%-- 수정 --%>
         <span id="dclzLayerEdit" style="display: none;"> 
-          <a href="javascript:;" class="btn_blue"><s:message code="label.cmm.edit" /></a>
+          <a href="javascript:;" class="btn_blue"><s:message code="cmm.edit" /></a>
         </span>
         <%-- 삭제 --%>
         <span id="dclzLayerDel" style="display: none;"> 
-          <a href="javascript:;" class="btn_blue"><s:message code="label.cmm.del" /></a>
+          <a href="javascript:;" class="btn_blue"><s:message code="cmm.del" /></a>
         </span>
         <%-- 등록 --%>
         <span id="dclzLayerReg" style="display: none;">
-          <a id="dclzReg" href="javascript:;" class="btn_blue"><s:message code="label.cmm.add" /></a>
+          <a id="dclzReg" href="javascript:;" class="btn_blue"><s:message code="cmm.add" /></a>
         </span>
       </div>
     </div>
@@ -198,15 +198,15 @@
     <%-- 근태관리 부분 --%>
     var rdata = 
       [
-        {binding:"storeNm", header:"<s:message code='storeNm' />"},
-        {binding:"saleDate", header:"<s:message code='saleDate' />"},
-        {binding:"empNo", header:"<s:message code='empNo' />"},
-        {binding:"empNm", header:"<s:message code='empNm' />"},
-        {binding:"empInDt", header:"<s:message code='empInDt' />"},
-        {binding:"empOutDt", header:"<s:message code='empOutDt' />"},
-        {binding:"workTime", header:"<s:message code='workTime' />"},
-        {binding:"inFgNm", header:"<s:message code='inFg' />"},
-        {binding:"remark", header:"<s:message code='remark' />"}
+        {binding:"storeNm", header:"<s:message code='loginStatus.storeNm' />"},
+        {binding:"saleDate", header:"<s:message code='dclzManage.sale.date' />"},
+        {binding:"empNo", header:"<s:message code='dclzManage.empNo' />"},
+        {binding:"empNm", header:"<s:message code='dclzManage.empNm' />"},
+        {binding:"empInDt", header:"<s:message code='dclzManage.empInDt' />"},
+        {binding:"empOutDt", header:"<s:message code='dclzManage.empOutDt' />"},
+        {binding:"workTime", header:"<s:message code='dclzManage.workTime' />"},
+        {binding:"inFgNm", header:"<s:message code='dclzManage.inFg' />"},
+        {binding:"remark", header:"<s:message code='dclzManage.remark' />"}
       ];
     
     var grid         = wgrid.genGrid("#theGrid", rdata, "${menuCd}", 1, ${clo.getColumnLayout(1)});
@@ -300,7 +300,7 @@
     function search(index) {
       if(storeCd.text == "") {
         <%-- 조회 매장을 선택해주세요. --%>
-        var msg = "<s:message code='msg.dclz.select.store'/>";
+        var msg = "<s:message code='dclzManage.select.store'/>";
         s_alert.pop(msg);
         return;
       }
@@ -372,7 +372,7 @@
       var arr = storeCd.text.split(",");
       if(arr.length > 1 || arr.length == 0 || arr[0] === "") {
         <%-- 하나의 매장만 선택해 주세요. --%>
-        var msg = "<s:message code='msg.dclz.store.one'/>";
+        var msg = "<s:message code='dclzManage.store.one'/>";
         s_alert.pop(msg);
         return;
       }
@@ -461,7 +461,7 @@
           s_alert.pop(result.message);
           return;
         }
-        var msg = "<s:message code='msg.cmm.del'/>";
+        var msg = "<s:message code='cmm.del'/>";
         s_alert.popOk(msg, function() {
           closeDclzLayer();
         });
@@ -482,7 +482,7 @@
       param.empOutDt = getDate(empOutDtDate) + getTime(empOutDtTime);
       param.remark = remark.text;
       
-      var msg = "<s:message code='msg.cmm.choo.modify'/>";
+      var msg = "<s:message code='cmm.choo.modify'/>";
       
       s_alert.popConf(msg, function(){
         $.postJSON("/adi/dclz/dclzmanage/dclzmanage/modify.sb", param, function(result) {
@@ -490,7 +490,7 @@
             s_alert.pop(result.message);
             return;
           }
-          var msg2 = "<s:message code='msg.cmm.modify'/>";
+          var msg2 = "<s:message code='cmm.modify'/>";
           s_alert.popOk(msg2, function() {
             closeDclzLayer();
           });

@@ -21,28 +21,28 @@
     <tbody>
       <%-- 조회 일자 --%>
       <tr>
-        <th><s:message code="label.cmm.search.date" /></th>
+        <th><s:message code="cmm.search.date" /></th>
         <td colspan="3">
           <div class="sb-select">
             <span class="txtIn"> <input id="startDt" name="startDt" class="w200" /></span>
             <span class="rg">~</span>
             <span class="txtIn"> <input id="endDt" name="endDt" class="w200" /></span>
             <span class="chk ml10"> <input type="checkbox" id="chkDt" /> 
-            <label for="chk"><s:message code="label.cmm.all.day" /></label>
+            <label for="chk"><s:message code="cmm.all.day" /></label>
             </span>
           </div>
         </td>
       </tr>
       <tr>
         <%-- 본사코드 --%>
-        <th><s:message code="label.cmm.hedofc.cd" /></th>
+        <th><s:message code="cmm.hedofc.cd" /></th>
         <td>
           <div class="sb-select">
             <div id="hqOfficeCd"></div>
           </div>
         </td>
         <%-- 본사명 --%>
-        <th><s:message code="label.cmm.hedofc.nm" /></th>
+        <th><s:message code="cmm.hedofc.nm" /></th>
         <td>
           <div class="sb-select">
             <div id="hqOfficeNm"></div>
@@ -51,14 +51,14 @@
       </tr>
       <tr>
         <%-- 매장 코드 --%>
-        <th><s:message code="label.cmm.mrhst.cd" /></th>
+        <th><s:message code="cmm.mrhst.cd" /></th>
         <td>
           <div class="sb-select">
             <div id="storeCd"></div>
           </div>
         </td>
         <%-- 매장명 --%>
-        <th><s:message code="label.cmm.mrhst.nm" /></th>
+        <th><s:message code="cmm.mrhst.nm" /></th>
         <td>
           <div class="sb-select">
             <div id="storeNm"></div>
@@ -67,7 +67,7 @@
       </tr>
       <tr>
         <%-- 상태 --%>
-        <th><s:message code="label.cmm.status" /></th>
+        <th><s:message code="cmm.status" /></th>
         <td>
           <div class="sb-select">
             <div id="sysStatFg"></div>
@@ -82,7 +82,7 @@
 
   <div class="mt10 pdb20 oh bb">
     <button class="btn_blue fr" id="searchBtn">
-      <s:message code="label.cmm.search" />
+      <s:message code="cmm.search" />
     </button>
   </div>
 
@@ -92,7 +92,7 @@
 
     <%-- 엑셀 다운로드 --%>
     <button class="btn_skyblue fr" id="excelBtn">
-      <s:message code="label.cmm.excel.down" />
+      <s:message code="cmm.excel.down" />
     </button>
   </div>
 
@@ -120,17 +120,17 @@ $(document).ready(function(){
   var rdata = 
     [
       {"binding":"rnum","header":"No"},
-      {"binding":"hqOfficeCd","header":"<s:message code='hqOfficeCd' />"},
-      {"binding":"hqOfficeNm","header":"<s:message code='hqOfficeNm' />"},
-      {"binding":"storeCd","header":"<s:message code='storeCd' />"},
-      {"binding":"storeNm","header":"<s:message code='storeNm' />"},
-      {"binding":"posNo","header":"<s:message code='posNo' />"},
-      {"binding":"loginDate","header":"<s:message code='loginDate' />"},
-      {"binding":"hwAuthKey","header":"<s:message code='hwAuthKey' />"},
-      {"binding":"loginIp","header":"<s:message code='loginIp' />"},
-      {"binding":"loginDt","header":"<s:message code='loginDt' />"},
-      {"binding":"posVerNo","header":"<s:message code='posVerNo' />"},
-      {"binding":"sysStatFgNm","header":"<s:message code='sysStatFgNm' />"}
+      {"binding":"hqOfficeCd","header":"<s:message code='loginStatus.hqOfficeCd' />"},
+      {"binding":"hqOfficeNm","header":"<s:message code='loginStatus.hqOfficeNm' />"},
+      {"binding":"storeCd","header":"<s:message code='loginStatus.storeCd' />"},
+      {"binding":"storeNm","header":"<s:message code='loginStatus.storeNm' />"},
+      {"binding":"posNo","header":"<s:message code='loginStatus.posNo' />"},
+      {"binding":"loginDate","header":"<s:message code='loginStatus.loginDate' />"},
+      {"binding":"hwAuthKey","header":"<s:message code='loginStatus.hwAuthKey' />"},
+      {"binding":"loginIp","header":"<s:message code='loginStatus.loginIp' />"},
+      {"binding":"loginDt","header":"<s:message code='loginStatus.loginDt' />"},
+      {"binding":"posVerNo","header":"<s:message code='loginStatus.posVerNo' />"},
+      {"binding":"sysStatFgNm","header":"<s:message code='loginStatus.sysStatFgNm' />"}
     ];
   
   var grid         = wgrid.genGrid("#theGrid", rdata, "${menuCd}", 1, ${clo.getColumnLayout(1)});

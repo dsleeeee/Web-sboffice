@@ -7,37 +7,37 @@
 
 <div class="loginArea">
   <h2 class="sTit">
-    <s:message code="label.login.userId" />
+    <s:message code="login.userId" />
     &nbsp;
-    <s:message code="label.cmm.find" />
+    <s:message code="cmm.find" />
   </h2>
   <p class="h2_txt">
-    <s:message code="label.id.find.info" />
+    <s:message code="login.id.find.info" />
   </p>
 
   <f:form method="post" modelAttribute="user" action="/user/idFind.sb" class="loginF">
     <div class="writeInfo">
 
       <div>
-        <input type="text" id="empNm" name="empNm" placeholder="<s:message code="label.cmm.emp"/>&nbsp;<s:message code="label.cmm.name"/>" value="${user.empNm}" maxlength="10" class="name" /><label
+        <input type="text" id="empNm" name="empNm" placeholder="<s:message code="cmm.emp"/>&nbsp;<s:message code="cmm.name"/>" value="${user.empNm}" maxlength="10" class="name" /><label
           for="empNm"></label>
         <f:errors path="empNm" id="empNmError" class="errorMsg" />
       </div>
 
       <div>
-        <input type="tel" id="mpNo" name="mpNo" placeholder="<s:message code="label.id.find.mp.holder"/>" value="${user.mpNo}" maxlength="15" class="tel" /><label for="pw"></label>
+        <input type="tel" id="mpNo" name="mpNo" placeholder="<s:message code="login.id.find.mp.holder"/>" value="${user.mpNo}" maxlength="15" class="tel" /><label for="pw"></label>
         <f:errors path="mpNo" id="mpNoError" class="errorMsg" />
       </div>
 
     </div>
     <button class="btn_bluew100">
-      <s:message code="label.cmm.confirm" />
+      <s:message code="cmm.confirm" />
     </button>
   </f:form>
 
   <div class="linkArea">
     <span class="find"><a href="/auth/login.sb" class="login_gray">
-        <s:message code="label.login.go" />
+        <s:message code="login.go" />
       </a></span>
   </div>
 </div>

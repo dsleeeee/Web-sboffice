@@ -7,25 +7,25 @@
 
 <div class="loginArea">
   <h2 class="sTit">
-    <s:message code="label.login.userId" />
+    <s:message code="login.userId" />
     &nbsp;
-    <s:message code="label.cmm.find" />
+    <s:message code="cmm.find" />
   </h2>
   <p class="h2_txt">
-    <s:message code="label.id.find.ok.info" />
+    <s:message code="login.id.find.ok.info" />
   </p>
 
   <div class="idInfo">
     <p>
-      <span><s:message code="label.login.userId" /></span> <span>${findUserNm}</span>
+      <span><s:message code="login.userId" /></span> <span>${findUserNm}</span>
     </p>
   </div>
 
   <div class="linkArea">
     <span class="find"> <a href="/auth/login.sb" class="login_blue">
-        <s:message code="label.login.go" />
+        <s:message code="login.go" />
       </a> <a href="/user/pwdFind.sb" class="fdPw">
-        <s:message code="label.login.find.pw" />
+        <s:message code="login.find.pw" />
       </a>
     </span>
   </div>

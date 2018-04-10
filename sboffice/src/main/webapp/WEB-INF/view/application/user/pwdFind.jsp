@@ -6,12 +6,12 @@
 
 
 <div class="loginArea">
-  <h2 class="sTit"><s:message code="label.login.find.pw" /></h2>
+  <h2 class="sTit"><s:message code="login.find.pw" /></h2>
   <p class="h2_txt">
-      <s:message code="label.pw.find.h2.1" /><br /><s:message code="label.pw.find.h2.2" />
+      <s:message code="login.pw.find.h2.1" /><br /><s:message code="login.pw.find.h2.2" />
       <span>
-      <s:message code="label.pw.find.h2.3" /><br />
-      <s:message code="label.pw.find.h2.4" />
+      <s:message code="login.pw.find.h2.3" /><br />
+      <s:message code="login.pw.find.h2.4" />
       </span>
   </p>
   
@@ -21,23 +21,23 @@
     <div class="writeInfo">
       
       <div>
-        <input type="text" name="userId" id="userId" placeholder="<s:message code="label.login.userId" />" value="" maxlength="20" class="id" /><label for="userId"></label>
+        <input type="text" name="userId" id="userId" placeholder="<s:message code="login.userId" />" value="" maxlength="20" class="id" /><label for="userId"></label>
         <span path="userId" id="userIdError" class="errorMsg" style="display:none"></span>
       </div>
       
       <div>
-        <input type="text" name="empNm" id="empNm" placeholder="<s:message code="label.cmm.emp" />&nbsp;<s:message code="label.cmm.name" />" value="" maxlength="10" class="name" /><label for="empNm"></label>
+        <input type="text" name="empNm" id="empNm" placeholder="<s:message code="cmm.emp" />&nbsp;<s:message code="cmm.name" />" value="" maxlength="10" class="name" /><label for="empNm"></label>
         <span path="empNm" id="empNmError" class="errorMsg" style="display:none"></span>
       </div>
       
       <div class="Area_crtNum">
         
-        <input type="tel" name="authNumber" id="authNumber" placeholder="<s:message code="label.pw.find.auth.number" /><s:message code="label.cmm.input" />" value="" maxlength="4" class="crtNum"/><label for="authNumber"></label>
+        <input type="tel" name="authNumber" id="authNumber" placeholder="<s:message code="login.pw.find.auth.number" /><s:message code="cmm.input" />" value="" maxlength="4" class="crtNum"/><label for="authNumber"></label>
         <span path="authNumber" id="authNumberError" class="errorMsg" style="display:none"></span>
         
         <!--인증번호받기--> 
         <div id="otpBtn">
-            <button type="button" class="btn_crtNum" onClick="javascript:authNum();"><s:message code="label.pw.find.authnum.btn" /></button>
+            <button type="button" class="btn_crtNum" onClick="javascript:authNum();"><s:message code="login.pw.find.authnum.btn" /></button>
         </div>
         <!--//인증번호받기-->
         
@@ -51,7 +51,7 @@
         
       </div>
     </div>
-    <button type="button" onClick="javascript:sendNum();" class="btn_bluew100" ><s:message code="label.cmm.confirm" /></button>
+    <button type="button" onClick="javascript:sendNum();" class="btn_bluew100" ><s:message code="cmm.confirm" /></button>
   </f:form>
 </div>
 

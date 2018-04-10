@@ -53,12 +53,12 @@ public class DclzManageServiceImpl implements DclzManageService {
         if (check > 0) {
             String arg[] = {dclzManage.getEmpInDate()};
             // 해당 사원의 {0}일의 근태가 존재합니다.
-            String msg = messageService.get("msg.dclz.empty.emp", arg);
+            String msg = messageService.get("dclzManage.empty.emp", arg);
             throw new JsonException(Status.FAIL, msg);
         }
 
         // 출근일시 퇴근일시로 근무시간을 계산
-        dclzManage.setWorkTime(calWorkMinute(dclzManage.getEmpInDt(), dclzManage.getEmpOutDt()));
+        dclzManage.setWorkTime(calShift(dclzManage.getEmpInDt(), dclzManage.getEmpOutDt()));
 
         return dclzManageMapper.insertDclzManage(dclzManage);
     }
@@ -80,11 +80,11 @@ public class DclzManageServiceImpl implements DclzManageService {
         if (check == 0) {
             String arg[] = {dclzManage.getEmpInDate()};
             // 해당 사원의 {0}일의 근태가 존재하지 않습니다.
-            String msg = messageService.get("msg.dclz.empty.dclz", arg);
+            String msg = messageService.get("dclzManage.empty.dclz", arg);
             throw new JsonException(Status.FAIL, msg);
         }
 
-        dclzManage.setWorkTime(calWorkMinute(dclzManage.getEmpInDt(), dclzManage.getEmpOutDt()));
+        dclzManage.setWorkTime(calShift(dclzManage.getEmpInDt(), dclzManage.getEmpOutDt()));
 
         return dclzManageMapper.updateDclzManage(dclzManage);
     }
@@ -112,7 +112,7 @@ public class DclzManageServiceImpl implements DclzManageService {
      * @return 분단위의 근무시간<br>
      *         0 아래의 값은 잘못된값임<br>
      */
-    public long calWorkMinute(String startDt, String endDt) {
+    public long calShift(String startDt, String endDt) {
 
         long workMinute = 0;
 
@@ -127,12 +127,12 @@ public class DclzManageServiceImpl implements DclzManageService {
 
         } catch (Exception e) {
             // 등록에 실패 했습니다.
-            String msg = messageService.get("label.registFail");
+            String msg = messageService.get("cmm.registFail");
             throw new JsonException(Status.FAIL, msg, "");
         }
         // 퇴근일시 또는 출근일시가 잘못 선택 되었습니다.
         if (workMinute < 0) {
-            String msg = messageService.get("msg.dclz.wrong.date");
+            String msg = messageService.get("dclzManage.wrong.date");
             throw new JsonException(Status.FAIL, msg, "");
         }
         return workMinute;
