@@ -74,7 +74,7 @@ public class KitchenMemoController {
             if(memo.getStatus() == GridDataFg.INSERT){
                 int cnt = kitchenMemoService.selectKitchenMemoCnt(memo);
                 if(cnt > 0) {
-                    return returnJson(Status.FAIL, "msg", messageService.get("error.duplicate.args", new String[]{"주방메모코드("+memo.getKitchnMemoCd()+")"} ,null));
+                    return returnJson(Status.FAIL, "msg", messageService.get("kitchenMemo.duplicate.kitchnMemoCd", new String[]{"주방메모코드("+memo.getKitchnMemoCd()+")"} ,null));
                 }
                 kitchenMemoService.insertKitchenMemo(memo);
             }else if(memo.getStatus() == GridDataFg.UPDATE){

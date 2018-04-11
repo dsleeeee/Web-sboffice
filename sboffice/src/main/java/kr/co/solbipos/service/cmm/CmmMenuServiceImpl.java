@@ -339,32 +339,9 @@ public class CmmMenuServiceImpl implements CmmMenuService {
             rList.add(m1Header);
         }
         
-<<<<<<< HEAD
         //String menuStr = convertToJson(rList);
         //return menuStr;
         return rList;
-=======
-        // 확장형 메뉴
-        if(rList.size() > 0) {
-            log.error("rList.size() > 0") ;
-            
-            for(int i=0; i<rList.size(); i++){
-                HashMap<String, Object> mData1 = new HashMap<>();
-                mData1 = rList.get(i);
-                log.error("header " + mData1.get("header"));
-                //String iconClass = mData1.get("iconNm") ? ""
-
-            }
-        }
-        
-        
-        log.error("rList.size() : " + rList.size());
-
-        String menuStr = convertToJson(rList);
-        log.error("menuStr : "+menuStr);
-
-        return menuStr;
->>>>>>> refs/heads/kitchenmemo
     }
 
     @Override
