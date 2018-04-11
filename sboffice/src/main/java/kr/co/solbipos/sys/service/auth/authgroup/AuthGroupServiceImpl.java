@@ -26,7 +26,7 @@ public class AuthGroupServiceImpl implements AuthGroupService {
 
     @Override
     public List<DefaultMap<String>> list(AuthGroup authGroup) {
-        return mapper.select(authGroup);
+        return mapper.selectGroup(authGroup);
     }
 
     @Override

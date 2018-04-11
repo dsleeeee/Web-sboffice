@@ -23,17 +23,21 @@
     </colgroup>
     <tbody>
       <tr>
-        <th>
-          <%-- 그룹명 --%>
-          <s:message code="authGroup.grpNm" />
-        </th>
-        <td colspan="3">
+        <%-- 그룹명 --%>
+        <th><s:message code="authGroup.grpNm" /></th>
+        <td>
           <div class="sb-select fl w70">
             <div id="grpNm" class="sb-input w80"></div>
           </div>
         </td>
+        <%-- 사용여부 --%>
+        <th><s:message code="cmm.useYn" /></th>
+        <td>
+          <div class="sb-select">
+            <div id="theComboBox2"></div>
+          </div>
+        </td>
       </tr>
-      <tr>
     </tbody>
   </table>
 
@@ -41,11 +45,6 @@
     <button id="searchBtn" class="btn_blue fr" >
       <s:message code="label.cmm.search" />
     </button>
-  </div>
-  
-  <div class="mt20 oh sb-select dkbr">
-    <%-- 페이지 스케일  --%>
-    <div id="listScaleBox" class="w150 fl"></div>
   </div>
 
   <%--2단--%>
@@ -60,14 +59,8 @@
           <button id="saveBtn" class="btn_skyblue"><s:message code="cmm.save"/></button>
         </div>
         <%--위즈모 테이블--%>
-        <div id="theGrid"></div><%--tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요.--%>
+        <div id="theGrid"></div>
         <%--//위즈모 테이블--%>
-
-        <%--페이지 리스트--%>
-        <div class="pageNum mt20">
-          <ul id="page1" data-size="10"></ul>
-        </div>
-        <%--//페이지 리스트--%>
       </div>
     </div>
     <%--//left--%>
@@ -94,19 +87,35 @@
   $(document).ready(function() {
     
     <%-- 권한 그룹 --%>
+    var targetAllFg  = new wijmo.grid.DataMap([
+      {id:"A", name:"전체"},
+      {id:"P", name:"일부"}
+    ], 'id', 'name');
     var rdata = 
       [
-        {binding:"no", header:"<s:message code='cmm.no' />"},
-        {binding:"grpCd", header:"<s:message code='authGroup.grpCd' />"},
-        {binding:"grpNm", header:"<s:message code='authGroup.grpNm' />"},
-        {binding:"targetAllFg", header:"<s:message code='authGroup.targetAllFg' />"},
-        {binding:"targetOrgn", header:"<s:message code='authGroup.targetOrgn' />"},
-        {binding:"targetOrgnNm", header:"<s:message code='authGroup.targetOrgnNm' />"},
-        {binding:"remark", header:"<s:message code='cmm.remark' />"},
-        {binding:"useYn", header:"<s:message code='cmm.use' />"}
+        {binding:"no", header:"<s:message code='cmm.no' />", width:30},
+        {binding:"grpCd", header:"<s:message code='authGroup.grpCd' />", width:70},
+        {binding:"grpNm", header:"<s:message code='authGroup.grpNm' />", width:100},
+        {binding:"targetAllFg", header:"<s:message code='authGroup.targetAllFg' />", width:100, dataMap:targetAllFg},
+        {binding:"targetOrgn", header:"<s:message code='authGroup.targetOrgn' />", width:100},
+        {binding:"targetOrgnNm", header:"<s:message code='authGroup.targetOrgnNm' />", width:100},
+        {binding:"remark", header:"<s:message code='cmm.remark' />", width:100},
+        {binding:"useYn", header:"<s:message code='cmm.use' />", width:50, dataType:wijmo.DataType.Boolean}
       ];
     
     var grid         = wgrid.genGrid("#theGrid", rdata, "${menuCd}", 1, ${clo.getColumnLayout(1)});
+    grid.isReadOnly      = false;
+    <%-- USE_YN 변환 --%>
+    grid.itemFormatter = function (panel, r, c, cell) {
+      if (panel.cellType == wijmo.grid.CellType.Cell) {
+        var col = panel.columns[c];
+        if (col.binding == 'useYn') {
+          var item = panel.rows[r].dataItem;
+          cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.useYn == "Y" ? 'checked' : '') + '>';
+        }
+      }
+    };
+    
     var grpNm        = wcombo.genInput("#grpNm");
     
     <%-- 그리드 링크 --%>
@@ -132,12 +141,7 @@
     
     <%-- 리스트 조회 --%>
     $("#searchBtn").click(function(e){
-      search(1);
-    });
-    
-    <%-- 페이징 --%>
-    $(document).on("click", ".page1", function() {
-      search($(this).data("value"));
+      search();
     });
     
     <%-- 엑셀 다운로드 --%>
@@ -147,14 +151,11 @@
     });
     
     <%-- 리스트 조회 --%>
-    function search(index) {
+    function search() {
       var param = {};
       param.grpNm = grpNm.text;
 
-      param.listScale = listScaleBox.selectedValue;
-      param.curr = index;
-      
-      $.postJSON("sys/auth/authgroup/authgroup/list.sb", param, function(result) {
+      $.postJSON("/sys/auth/authgroup/authgroup/list.sb", param, function(result) {
         if(result.status === "FAIL") {
           s_alert.pop(result.message);
           return;
@@ -165,7 +166,6 @@
           return;
         }
         grid.itemsSource = list;
-        page.make("#page1", result.data.page.curr, result.data.page.totalPage);
         })
         .fail(function(){
           s_alert.pop("Ajax Fail");
@@ -174,10 +174,46 @@
 
     <%-- 권한 그룹 추가 --%>
     $("#addBtn").click(function(e){
+      var newItem = grid.collectionView.addNew();
+      newItem.chk = false;
+      grid.collectionView.commitNew();
     });
 
     <%-- 권한 그룹 저장 --%>
     $("#saveBtn").click(function(e){
+
+      var paramArr = new Array();
+      
+      for(var i=0; i<grid.collectionView.itemsEdited.length; i++){
+        grid.collectionView.itemsEdited[i].status = "U";
+        paramArr.push(grid.collectionView.itemsEdited[i]);
+      }
+      for(var i=0; i<grid.collectionView.itemsAdded.length; i++){
+        grid.collectionView.itemsAdded[i].status = "I";
+        paramArr.push(grid.collectionView.itemsAdded[i]);
+      }
+      for(var i=0; i<grid.collectionView.itemsRemoved.length; i++){
+        grid.collectionView.itemsRemoved[i].status = "D";
+        paramArr.push(grid.collectionView.itemsRemoved[i]);
+      }
+      
+      var url = "/sys/auth/authgroup/authgroup/save.sb";
+      $.ajax({
+        type: "POST",
+        url: url,
+        data: JSON.stringify(paramArr),
+        success: function(result){
+          if (result.status === "OK") {
+            s_alert.pop("<s:message code='msg.save.succ' />");
+            grid.collectionView.clearChanges();
+          } else if (result.status === "FAIL"){
+            s_alert.pop(result.data.msg);
+          }
+        },
+        cache: false,
+        dataType: "json",
+        contentType : 'application/json'
+      });
     });
 
     <%-- 리스스 정보 저장 --%>

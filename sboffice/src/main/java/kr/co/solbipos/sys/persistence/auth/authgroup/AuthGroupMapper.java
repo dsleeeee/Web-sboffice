@@ -17,7 +17,7 @@ public interface AuthGroupMapper {
      * @param authGroup
      * @return
      */
-    List<DefaultMap<String>> select(AuthGroup authGroup);
+    List<DefaultMap<String>> selectGroup(AuthGroup authGroup);
 
     /**
      * 저장

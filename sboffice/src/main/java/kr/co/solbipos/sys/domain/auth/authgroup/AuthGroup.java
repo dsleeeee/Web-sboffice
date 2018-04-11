@@ -1,6 +1,5 @@
 package kr.co.solbipos.sys.domain.auth.authgroup;
 
-import kr.co.solbipos.application.domain.cmm.Page;
 import kr.co.solbipos.enums.UseYn;
 import kr.co.solbipos.sys.enums.TargetAllFg;
 import lombok.Data;
@@ -12,7 +11,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class AuthGroup extends Page {
+public class AuthGroup {
 
     /** 그룹 코드 */
     private String grpCd;
