@@ -6,6 +6,7 @@
       genGrid: function( div, columns, resrceCd, gridIdx, columnLayout ) {
         var g = new wijmo.grid.FlexGrid(div, {
           columns : columns,
+          selectionMode: 'Row',
           isReadOnly : true,
           showSort : true,
           autoGenerateColumns: false,  // 이거 안하면 컬럼이 자동으로 막 생김
@@ -69,6 +70,26 @@
         })
         .fail(function(){
           alert("Ajax Fail");
+        });
+      },
+      
+      getGridData: function(url, param, target, success, fail) {
+        return $.postJSON(url, param, function(result) {
+          var list = result.data.list;
+          if(list.length === undefined || list.length == 0) {
+            s_alert.pop(result.message);
+            return;
+          }
+          target.itemsSource = list;
+          if(success != null) {
+            success(result);
+          }
+        },
+        function(result) {
+          s_alert.pop(result.message);
+          if(fail != null) {
+            fail(result);
+          }
         });
       }
   };

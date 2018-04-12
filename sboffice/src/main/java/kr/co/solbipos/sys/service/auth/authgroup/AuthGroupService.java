@@ -23,10 +23,10 @@ public interface AuthGroupService {
     /**
      * 저장
      * 
-     * @param authGroup
+     * @param authGroups[]
      * @param sessionInfo
      * @return
      */
-    int save(AuthGroup authGroup, SessionInfo sessionInfo);
+    int save(AuthGroup[] authGroups, SessionInfo sessionInfo);
 
 }

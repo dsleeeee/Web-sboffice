@@ -26,74 +26,62 @@
        FROM TB_WB_AUTHOR_GRP_INFO A
   </select>
   
+  <select id="selectGroupCnt" parameterType="authGroup" resultType="integer">
+    /* AuthGroupMapper.selectGroupCnt */
+     SELECT COUNT(1)
+       FROM TB_WB_AUTHOR_GRP_INFO A
+      WHERE A.GRP_CD = #{grpCd}
+  </select>
+
   <insert id="insertGroup" parameterType="authGroup">
     /* AuthGroupMapper.insertGroup */
     INSERT INTO TB_WB_AUTHOR_GRP_INFO
     (
-      REMARK,
-      REG_DT,
-      REG_ID,
-      MOD_DT,
-      MOD_ID
+        GRP_CD
+        GRP_NM
+        TARGET_ALL_FG
+        TARGET_ORGN
+        REMARK,
+        USE_YN,
+        REG_DT,
+        REG_ID,
+        MOD_DT,
+        MOD_ID
     )
     VALUES
     (
-      #{remark},
-      #{regDt},
-      #{regId},
-      #{modDt},
-      #{modId}
+        #{grpCd},
+        #{grpNm},
+        #{targetAllFg},
+        #{targetOrgn},
+        #{remark},
+        #{useYn},
+        #{regDt},
+        #{regId},
+        #{modDt},
+        #{modId}
     )
   </insert>
 
-  <update id="updateDclzManage" parameterType="dclzManage">
-  <![CDATA[
-    /* DclzManageMapper.updateDclzManage */
-    UPDATE TB_PS_EMPLOYEE_COMMTE A
-       SET A.EMP_IN_DATE = #{empInDate},
-           A.SALE_DATE = #{saleDate},
-           A.EMP_IN_DT = #{empInDt},
-           A.EMP_OUT_DT = #{empOutDt},
-           A.WORK_TIME = #{workTime},
-           A.REMARK = #{remark},
-           A.MOD_DT = #{modDt},
-           A.MOD_ID = #{modId}
-     WHERE A.STORE_CD = #{storeCd}
-       AND A.EMP_NO = #{empNo}
-       AND A.EMP_IN_DATE = #{empInDate}
-  ]]>
+  <update id="updateGroup" parameterType="authGroup">
+    /* AuthGroupMapper.updateGroup */
+     UPDATE TB_WB_AUTHOR_GRP_INFO A
+        SET A.GRP_NM = #{grpNm},
+            A.TARGET_ALL_FG = #{targetAllFg},
+            A.TARGET_ORGN = #{targetOrgn},
+            A.REMARK = #{remark},
+            A.USE_YN = #{useYn},
+            A.MOD_DT = #{modDt},
+            A.MOD_ID = #{modId}
+      WHERE A.GRP_CD = #{grpCd}
   </update>
   
-  <delete id="deleteDclzManage" parameterType="dclzManage">
-  <![CDATA[
-    /* DclzManageMapper.deleteDclzManage */
-    DELETE 
-      FROM TB_PS_EMPLOYEE_COMMTE A
-     WHERE A.STORE_CD = #{storeCd}
-       AND A.EMP_NO = #{empNo}
-       AND A.EMP_IN_DATE = #{empInDate}
-  ]]>
+  <delete id="deleteGroup" parameterType="authGroup">
+    /* AuthGroupMapper.deleteGroup */
+     DELETE
+       FROM TB_WB_AUTHOR_GRP_INFO A
+      WHERE A.GRP_CD = #{grpCd}
   </delete>
-
-  <select id="selectStoreEmployee" parameterType="dclzManage" resultType="DefaultMap">
-  <![CDATA[
-    /* DclzManageMapper.selectStoreEmployee */
-    SELECT A.STORE_CD,
-           A.EMP_NO,
-           A.EMP_NM
-      FROM TB_MS_EMPLOYEE A
-     WHERE A.STORE_CD = #{storeCd}
-  ]]>
-  </select>
-  
-  <select id="selectWorkCheck" parameterType="dclzManage" resultType="integer">
-    /* DclzManageMapper.selectWorkCheck */
-    SELECT COUNT(*)
-      FROM TB_PS_EMPLOYEE_COMMTE A
-     WHERE A.STORE_CD = #{storeCd}
-       AND A.EMP_NO = #{empNo}
-       AND A.EMP_IN_DATE = #{empInDate}
-  </select>
   
 </mapper>
 

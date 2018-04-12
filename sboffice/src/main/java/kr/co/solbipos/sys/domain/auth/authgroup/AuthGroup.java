@@ -1,5 +1,6 @@
 package kr.co.solbipos.sys.domain.auth.authgroup;
 
+import kr.co.solbipos.application.domain.cmm.Cmm;
 import kr.co.solbipos.enums.UseYn;
 import kr.co.solbipos.sys.enums.TargetAllFg;
 import lombok.Data;
@@ -11,7 +12,9 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class AuthGroup {
+public class AuthGroup extends Cmm {
+
+    private static final long serialVersionUID = 1L;
 
     /** 그룹 코드 */
     private String grpCd;

@@ -79,12 +79,12 @@ public class AuthGroupController {
      */
     @RequestMapping(value = "save.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result save(AuthGroup authGroup, HttpServletRequest request,
+    public Result save(AuthGroup[] authGroups, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
         SessionInfo sessionInfo = sessionService.getSessionInfo(request);
 
-        int result = service.save(authGroup, sessionInfo);
+        int result = service.save(authGroups, sessionInfo);
         
         return returnJson(Status.OK, result);
     }
@@ -120,15 +120,14 @@ public class AuthGroupController {
      */
     @RequestMapping(value = "saveResrc.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result saveResrc(AuthGroup authGroup, HttpServletRequest request,
+    public Result saveResrc(AuthGroup authGroups, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
         SessionInfo sessionInfo = sessionService.getSessionInfo(request);
         
         //TODO 리소스 정보 저장
-        int result = service.save(authGroup, sessionInfo);
         
-        return returnJson(Status.OK, result);
+        return returnJson(Status.OK, null);
     }
 
 }

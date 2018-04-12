@@ -20,11 +20,26 @@ public interface AuthGroupMapper {
     List<DefaultMap<String>> selectGroup(AuthGroup authGroup);
 
     /**
-     * 저장
+     * 등록
      * 
      * @param authGroup
      * @return
      */
-    int save(AuthGroup authGroup);
+    int insertGroup(AuthGroup authGroup);
 
+    /**
+     * 수정
+     * 
+     * @param authGroup
+     * @return
+     */
+    int updateGroup(AuthGroup authGroup);
+
+    /**
+     * 삭제
+     * 
+     * @param authGroup
+     * @return
+     */
+    int deleteGroup(AuthGroup authGroup);
 }
