@@ -5,6 +5,7 @@
   var wgrid = {
       genGrid: function( div, columns, resrceCd, gridIdx, columnLayout ) {
         var g = new wijmo.grid.FlexGrid(div, {
+          itemsSource : new wijmo.collections.CollectionView(),
           columns : columns,
           isReadOnly : true,
           showSort : true,
@@ -152,13 +153,17 @@
         });
       },
       genDate: function(div) {
-        return new wijmo.input.InputDate(div); 
+        return new wijmo.input.InputDate(div, {
+          format:"yyyy-MM-dd" 
+        }); 
       },
       genDateVal: function(div, date) {
         if(date == "" || date.length != 8) {
           return wcombo.genDate(div);
         }
-        var dt = new wijmo.input.InputDate(div);
+        var dt = new wijmo.input.InputDate(div, {
+          format:"yyyy-MM-dd" 
+        });
         date = date.substr(0,4) + "-" + date.substr(4,2) + "-" + date.substr(6,2);
         dt.value = new Date(date);
         return dt;
