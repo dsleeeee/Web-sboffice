@@ -10,7 +10,7 @@
       <div class="btnSet">
         <span>
           <a href="javascript:;" class="btn_blue alert">
-            <s:message code="label.cmm.confirm" />
+            <s:message code="cmm.confirm" />
           </a>
         </span>
       </div>
@@ -25,12 +25,12 @@
       <div class="btnSet">
         <span>
           <a href="javascript:;" class="btn_blue conf">
-            <s:message code="label.cmm.confirm" />
+            <s:message code="cmm.confirm" />
           </a>
         </span>
         <span>
           <a href="javascript:;" class="btn_gray conf">
-            <s:message code="label.cmm.cancel" />
+            <s:message code="cmm.cancel" />
           </a>
         </span>
       </div>

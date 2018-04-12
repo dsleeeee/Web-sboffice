@@ -3,6 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<!--right-->
 <div class="contents">
     <!--메인컨텐츠-->
     <div class="mainCon">
@@ -12,7 +13,7 @@
             <div>
                 <p><span>오픈</span><span>8,126</span></p>
                 <p><span>폐점</span><span>7,978</span></p>
-            </div>    
+            </div>
         </div>
         <!--//총 매장수-->
         
@@ -22,7 +23,7 @@
             <div>
                 <p><span>오픈</span><span>4,526</span></p>
                 <p><span>폐점</span><span>517</span></p>
-            </div>    
+            </div>
         </div>
         <!--//총 포스수-->
         
@@ -36,7 +37,7 @@
         <!--날씨-->
         <div class="w30 fl bb weather">
            <div class="today"> 
-               <h2 class="hidden">날씨</h2>      
+               <h2 class="hidden">날씨</h2>
                <p class="date">
                    <span>서울시</span>
                    <span><em>11월 26일</em> <em>일요일</em></span>
@@ -66,7 +67,7 @@
                    <span class="day">화</span>
                    <span><em>-3°C</em> / <em>10°C</em></span>
                </li>
-           </ul> 
+           </ul>
         </div>
         <!--//날씨-->
         
@@ -79,11 +80,11 @@
         
         <!--공지사항-->
         <div class="w30 fl bb notice">
-            <h2>공지사항</h2>  
+            <h2>공지사항</h2>
             <ul>
-                <li><a href="#">KCP NetPOS 셋업파일 설치관련 공지사항</a><span>2017.12.04</span></li>
-                <li><a href="#">여신금융협회 보안인증 거친 IC카드 단말기 설치건</a><span>2017.12.01</span></li>
-                <li><a href="#">가맹점 내 필요 보험 권유 및 유의 안내 공문</a><span>2017.11.26</span></li>
+              <c:forEach var="item" items="${noticeList}">
+                <li><a href="#">${item.content}</a><span>${item.regDt}</span></li>
+              </c:forEach>
             </ul> 
         </div>
         <!--//공지사항-->
@@ -96,7 +97,7 @@
                     <col class="w10" />
                     <col class="w30" />
                     <col class="w35" />
-                    <col class="w25" />    
+                    <col class="w25" />
                 </colgroup>
                 <thead>
                     <tr>
@@ -144,21 +145,20 @@
     </div>
     <!--//메인컨텐츠-->
 </div>
+<!--//right-->
 
 <script>
-//랜덤 데이터 생성
+
+<%-- 랜덤 데이터 생성 (추후 데이터 받아오면서 변경)--%>
 function getData(numCount) {
   var data = new wijmo.collections.ObservableArray();
   //var data = [];
-
   for (var i = 0; i < numCount; i++) {
     //data.push(getRandomData('M' + getRandomValue(200)));
     data.push(getRandomData('11월 28일'));
   }
-  //console.log(JSON.stringify(data));
   return data;
 }
-
 function getRandomData(idx) {
   return {
       //x: getRandomValue(100),
@@ -167,29 +167,26 @@ function getRandomData(idx) {
       y1: getRandomValue(400)
   };
 }
-
 function getRandomValue(max) {
   return Math.round(Math.random() * max);
 }
-
 function updateMenuHeader(menu, prefix, text) {
   menu.header = prefix + text;
 }
 
-//flexChart
+<%-- wijmo flexChart --%>
 var flexChartPoints = 7;
 
 $(document).ready(function(){
   var chart1 = new wijmo.chart.FlexChart('#chart1');
   
-  //flex chart
+  <%-- 주간매출 --%>
   chart1.beginUpdate();
   chart1.chartType = wijmo.chart.ChartType.Line;
   chart1.itemsSource = getData(flexChartPoints); // 여기에 받아온 데이터 넣기
   chart1.bindingX = 'x';
   chart1.palette = ['#93cbfc', '#90f0fc'];
   
-  //create data series
   for (var i = 0; i < 2; i++) {
       var series = new wijmo.chart.Series();
       series.binding = 'y' + i;
@@ -203,7 +200,7 @@ $(document).ready(function(){
       duration: 400
   });
 
-  // 아래 차트
+  <%--주간 설치현황--%>
   var chart2 = new wijmo.chart.FlexChart('#chart2');
   chart2.beginUpdate();
   chart2.chartType = wijmo.chart.ChartType.Column;
@@ -221,7 +218,6 @@ $(document).ready(function(){
       chart2.series.push(series);
   }
   chart2.endUpdate();
-  
 });
 
 

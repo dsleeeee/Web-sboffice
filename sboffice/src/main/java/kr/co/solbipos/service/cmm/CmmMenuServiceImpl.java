@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import kr.co.solbipos.application.domain.cmm.MenuUseHist;
@@ -224,14 +225,11 @@ public class CmmMenuServiceImpl implements CmmMenuService {
             checkActivation(resrceCd, sessionInfo);
         }
     }
-
-
+    
     /**
-     * 
      * 메인 메뉴 관련
-     * 
      */
-
+    
     @Override
     public List<HashMap<String, Object>> makeMenu(SessionInfo sessionInfo, String menuType) {
         

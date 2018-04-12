@@ -3,7 +3,6 @@ encoding//profiles/dev=UTF-8
 encoding//profiles/local=UTF-8
 encoding//src/main/java=UTF-8
 encoding//src/main/resources=UTF-8
-encoding//src/main/resources/language/lang.properties=UTF-8
 encoding//src/main/resources/language/lang_column_ko.properties=UTF-8
 encoding//src/main/resources/language/lang_en.properties=UTF-8
 encoding//src/main/resources/language/lang_ko.properties=UTF-8

@@ -11,13 +11,13 @@
     <span class="fl bk lh30">${menuNm}</span>
     <div class="txtIn">
       <button class="btn_skyblue" id="addBtn">
-        <s:message code="label.cmm.add" />
+        <s:message code="cmm.add" />
       </button>
       <button class="btn_skyblue" id="deleteBtn">
-        <s:message code="label.cmm.delete" />
+        <s:message code="cmm.delete" />
       </button>
       <button class="btn_skyblue" id="saveBtn">
-        <s:message code="label.cmm.save" />
+        <s:message code="cmm.save" />
       </button>
     </div>
   </div>
@@ -32,15 +32,14 @@ $(document).ready(function(){
   var useYnData  = new wijmo.grid.DataMap([{id:"Y", name:"Y"},{id:"N", name:"N"}], 'id', 'name');
   var rdata = 
     [
-      {binding:"chk", header:"<s:message code='chk' />"},
-      {binding:"kitchnMemoCd", header:"<s:message code='kitchnMemoCd' />", maxLength:3},
-      {binding:"kitchnMemoNm", header:"<s:message code='kitchnMemoNm' />", maxLength:30},
-      {binding:"memoFg", header:"<s:message code='memoFg' />", dataMap:memoFgData},
-      {binding:"useYn", header:"<s:message code='useYn' />", dataMap:useYnData}
+      {binding:"chk", header:"<s:message code='kitchenMemo.chk' />"},
+      {binding:"kitchnMemoCd", header:"<s:message code='kitchenMemo.kitchnMemoCd' />", maxLength:3},
+      {binding:"kitchnMemoNm", header:"<s:message code='kitchenMemo.kitchnMemoNm' />", maxLength:30},
+      {binding:"memoFg", header:"<s:message code='kitchenMemo.memoFg' />", dataMap:memoFgData},
+      {binding:"useYn", header:"<s:message code='kitchenMemo.useYn' />", dataMap:useYnData}
     ];
   
   var kitchenMemoList = ${kitchenMemoList};
-  
   <%-- 체크박스 초기화 --%>
   kitchenMemoList.forEach(function(item){
     item.chk = false;
@@ -78,7 +77,7 @@ $(document).ready(function(){
       }
       if(col.binding == "kitchnMemoCd") { <%-- 숫자만 --%>
         if(val.match(/[^0-9]/)){
-          s_alert.pop(col.header+"<s:message code='requireNumber'/>");
+          s_alert.pop(col.header+"<s:message code='msg.cmm.require.number'/>");
           s.setCellData(e.row, e.col, val.replace(/[^0-9]/g,""));
         }
       }
@@ -127,9 +126,9 @@ $(document).ready(function(){
       data: JSON.stringify(paramArr),
       success: function(result){
         if (result.status === "OK") {
-          s_alert.pop("<s:message code='msg.save.succ' />");
+          s_alert.pop("<s:message code='login.save.succ' />");
           grid.collectionView.clearChanges();
-        } else if (result.status === "FAIL"){
+     } else if (result.status === "FAIL"){
           s_alert.pop(result.data.msg);
         }
       },

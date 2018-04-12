@@ -3,14 +3,14 @@
 
 <mapper namespace="kr.co.solbipos.application.persistence.main.ContentMapper">
 
-  <select id="getNotice" parameterType="sessionInfo" resultType="total">
+  <select id="getNotice" parameterType="sessionInfo" resultType="DefaultMap">
   <![CDATA[
   /* contentMapper.getNotice */
   SELECT BOARD_CD, BOARD_FG, START_DATE, END_DATE,
          TITLE, NOTICE_YN, APPR_FG,
          TARGET_PART_FG, TARGET_SECT, TARGET_TEAM,
          VIEW_CNT, ANSWER_CNT, USE_YN, CONTENT,
-         REG_DT, REG_ID
+         TO_CHAR(TO_DATE(SUBSTR(REG_DT, 0, 8)), 'YYYY.MM.DD') REG_DT, REG_ID
     FROM TB_WB_BOARD_INFO
    WHERE START_DATE <= SYSDATE
      AND END_DATE >= SYSDATE

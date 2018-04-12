@@ -7,15 +7,15 @@
 
 <div class="loginArea">
   <h2 class="sTit">
-    <s:message code="label.pw.find.ok" />
+    <s:message code="login.pw.find.ok" />
   </h2>
   <p class="h2_txt">
-    <s:message code="label.pw.find.h2.1" />
+    <s:message code="login.pw.find.h2.1" />
     <br />
-    <s:message code="label.pw.find.h2.2" />
+    <s:message code="login.pw.find.h2.2" />
   </p>
   <div class="lineArea">
-    <a href="/auth/login.sb" class="btn_bluew100"><s:message code="label.login.submit" /></a>
+    <a href="/auth/login.sb" class="btn_bluew100"><s:message code="login.submit" /></a>
   </div>
 </div>
 

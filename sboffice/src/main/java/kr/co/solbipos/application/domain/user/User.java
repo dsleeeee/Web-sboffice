@@ -30,8 +30,8 @@ public class User extends Cmm {
 
     /** 사원명 */
     @NotBlank(groups = {IdFind.class, AuthNumber.class, PwFind.class},
-            message = "{label.cmm.name}{msg.cmm.require.text}")
-    @Size(groups = {IdFind.class, AuthNumber.class, PwFind.class}, max = 10, message = "{msg.cmm.size.max}")
+            message = "{cmm.name}{cmm.require.text}")
+    @Size(groups = {IdFind.class, AuthNumber.class, PwFind.class}, max = 10, message = "{cmm.size.max}")
     private String empNm;
 
     /** 사원비밀번호 */
@@ -44,13 +44,13 @@ public class User extends Cmm {
     private String webUseYn;
 
     /** 사용자아이디 */
-    @NotBlank(groups = {AuthNumber.class, PwFind.class}, message = "{label.login.userId}{msg.cmm.require.text}")
-    @Size(groups = {AuthNumber.class, PwFind.class}, max = 20, message = "{msg.cmm.size.max}")
+    @NotBlank(groups = {AuthNumber.class, PwFind.class}, message = "{login.userId}{cmm.require.text}")
+    @Size(groups = {AuthNumber.class, PwFind.class}, max = 20, message = "{cmm.size.max}")
     private String userId;
 
     /** 휴대폰번호 */
-    @NotBlank(groups = {IdFind.class}, message = "{label.login.userId}{msg.cmm.require.text}")
-    @Size(groups = {IdFind.class}, max = 15, message = "{msg.cmm.size.max}")
+    @NotBlank(groups = {IdFind.class}, message = "{login.userId}{cmm.require.text}")
+    @Size(groups = {IdFind.class}, max = 15, message = "{cmm.size.max}")
     private String mpNo;
 
     /** 이메일주소 */
@@ -87,8 +87,8 @@ public class User extends Cmm {
     private String modId;
 
     /** 인증번호 */
-    @NotBlank(groups = {PwFind.class}, message = "{label.pw.find.auth.number}{msg.cmm.require.text}")
-    @Size(groups = {PwFind.class}, max = 4, message = "{msg.cmm.size.max}")
+    @NotBlank(groups = {PwFind.class}, message = "{login.pw.find.auth.number}{cmm.require.text}")
+    @Size(groups = {PwFind.class}, max = 4, message = "{cmm.size.max}")
     private String authNumber;
 
     /** 소속명 */
