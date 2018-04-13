@@ -1,6 +1,5 @@
 package kr.co.solbipos.application.controller.main;
 
-import static kr.co.solbipos.utils.spring.StringUtil.convertToJson;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +14,12 @@ import kr.co.solbipos.application.enums.main.MainSrchFg;
 import kr.co.solbipos.service.main.ContentService;
 import kr.co.solbipos.service.session.SessionService;
 import kr.co.solbipos.structure.DefaultMap;
+
+/**
+ * 메인
+ * 
+ * @author 김지은
+ */
 
 @Controller
 @RequestMapping(value = "/application/main/content")

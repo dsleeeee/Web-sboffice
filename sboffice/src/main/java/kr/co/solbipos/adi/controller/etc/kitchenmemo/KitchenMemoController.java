@@ -54,6 +54,7 @@ public class KitchenMemoController {
             Model model) {
         
         SessionInfo sessionInfo = sessionService.getSessionInfo();
+
         List<DefaultMap<Object>> list = kitchenMemoService.selectKitchenMemo(sessionInfo);
         model.addAttribute("kitchenMemoList", convertToJson(list));
         

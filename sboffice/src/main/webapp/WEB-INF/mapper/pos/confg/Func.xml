@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.pos.persistence.confg.func.FuncMapper">
+
+  <select id="getFuncList" parameterType="sessionInfo" resultType="DefaultMap">
+    <![CDATA[
+    /* FuncMapper.getFuncList */
+    SELECT FNKEY_NO, FNKEY_NM, FNKEY_FG, POS_FG, 
+         IMG_FILE_NM_0, IMG_FILE_NM_1, FNKEY_USE_YN_0, FNKEY_USE_YN_1, 
+         DISP_SEQ, POSI_ADJ_YN, 
+         COL_POSI, ROW_POSI, WIDTH, HEIGHT, 
+         USE_YN, 
+         REG_DT, REG_ID, 
+         MOD_DT, MOD_ID
+    FROM TB_CM_POS_FNKEY
+    ]]>
+  
+  </select>
+
+</mapper>
+
+
+
