@@ -86,47 +86,50 @@
         popup.focus();
       }
     }
-    , postJSON: function( url, data, func ){
+    , postJSON: function( url, data, succ, fail ){
       return $.ajax({
         type: "POST",
         url: url,
         data: data,
-        success: function(data) {
-          if(data.status === "OK") {
-            return func(data);
+        success: function(result) {
+          if(result.status === "OK") {
+            return succ(result);
           }
           else if(data.status === "FAIL") {
-            return func(data);
+            return fail(result);
           }
-          else if(data.status === "SESSION_EXFIRE") {
-            s_alert.popOk(data.message, function() {
-              location.href = data.url;
+          else if(result.status === "SESSION_EXFIRE") {
+            s_alert.popOk(result.message, function() {
+              location.href = result.url;
              });
           }
-          else if(data.status === "SERVER_ERROR") {
-            s_alert.pop(data.message);
+          else if(result.status === "SERVER_ERROR") {
+            s_alert.pop(result.message);
           }
           else {
-            var msg = data.status + " : " + data.message;
+            var msg = result.status + " : " + result.message;
             alert(msg);
           }
         },
         cache: false,
         async:true,
         dataType: "json",
+        contentType : 'application/json',
+        processData: false,
         beforeSend: function() {
-          $("#_loadTent").show();
-          $("#_loading").show();
+          $("#_loadTent, #_loading").show();
         },
         complete: function() {
-          $("#_loadTent").hide();
-          $("#_loading").hide();
+          $("#_loadTent, #_loading").hide();
         },
         error : function(){
-          $("#_loadTent").hide();
-          $("#_loading").hide();
+          $("#_loadTent, #_loading").hide();
         }
+      })
+      .fail(function(){
+        s_alert.pop("Ajax Fail");
       });
+;
 //      return $.post( url, data, func, "json" );
     }
     , postJSONAsync: function( url, data, func ){

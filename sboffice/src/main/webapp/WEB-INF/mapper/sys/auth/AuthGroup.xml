@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.sys.persistence.auth.authgroup.AuthGroupMapper">
+
+  <select id="selectGroup" parameterType="authGroup" resultType="DefaultMap">
+    /* AuthGroupMapper.selectGroup */
+     SELECT ROW_NUMBER() OVER (PARTITION BY 1 ORDER BY 1) NO,
+            GRP_CD,
+            GRP_NM,
+            TARGET_ALL_FG,
+            (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '903' AND NMCODE_CD = A.TARGET_ALL_FG) TARGET_ALL_FG_NM,
+            TARGET_ORGN,
+            ( SELECT MAX(TARGET_ORGN_NM)
+                FROM ( SELECT HQ_OFFICE_NM TARGET_ORGN_NM FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = A.TARGET_ORGN
+                       UNION ALL
+                       SELECT AGENCY_NM TARGET_ORGN_NM FROM TB_CM_AGENCY WHERE AGENCY_CD = A.TARGET_ORGN
+                )
+            ) TARGET_ORGN_NM,
+            REMARK,
+            USE_YN,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+       FROM TB_WB_AUTHOR_GRP_INFO A
+  </select>
+  
+  <select id="selectGroupCnt" parameterType="authGroup" resultType="integer">
+    /* AuthGroupMapper.selectGroupCnt */
+     SELECT COUNT(1)
+       FROM TB_WB_AUTHOR_GRP_INFO A
+      WHERE A.GRP_CD = #{grpCd}
+  </select>
+
+  <insert id="insertGroup" parameterType="authGroup">
+    /* AuthGroupMapper.insertGroup */
+    INSERT INTO TB_WB_AUTHOR_GRP_INFO
+    (
+        GRP_CD
+        GRP_NM
+        TARGET_ALL_FG
+        TARGET_ORGN
+        REMARK,
+        USE_YN,
+        REG_DT,
+        REG_ID,
+        MOD_DT,
+        MOD_ID
+    )
+    VALUES
+    (
+        #{grpCd},
+        #{grpNm},
+        #{targetAllFg},
+        #{targetOrgn},
+        #{remark},
+        #{useYn},
+        #{regDt},
+        #{regId},
+        #{modDt},
+        #{modId}
+    )
+  </insert>
+
+  <update id="updateGroup" parameterType="authGroup">
+    /* AuthGroupMapper.updateGroup */
+     UPDATE TB_WB_AUTHOR_GRP_INFO A
+        SET A.GRP_NM = #{grpNm},
+            A.TARGET_ALL_FG = #{targetAllFg},
+            A.TARGET_ORGN = #{targetOrgn},
+            A.REMARK = #{remark},
+            A.USE_YN = #{useYn},
+            A.MOD_DT = #{modDt},
+            A.MOD_ID = #{modId}
+      WHERE A.GRP_CD = #{grpCd}
+  </update>
+  
+  <delete id="deleteGroup" parameterType="authGroup">
+    /* AuthGroupMapper.deleteGroup */
+     DELETE
+       FROM TB_WB_AUTHOR_GRP_INFO A
+      WHERE A.GRP_CD = #{grpCd}
+  </delete>
+  
+</mapper>
+
+
+

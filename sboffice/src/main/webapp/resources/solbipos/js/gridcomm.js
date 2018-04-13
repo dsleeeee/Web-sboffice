@@ -5,7 +5,9 @@
   var wgrid = {
       genGrid: function( div, columns, resrceCd, gridIdx, columnLayout ) {
         var g = new wijmo.grid.FlexGrid(div, {
+          itemsSource : new wijmo.collections.CollectionView(),
           columns : columns,
+          selectionMode: 'Row',
           isReadOnly : true,
           showSort : true,
           autoGenerateColumns: false,  // 이거 안하면 컬럼이 자동으로 막 생김
@@ -69,6 +71,28 @@
         })
         .fail(function(){
           alert("Ajax Fail");
+        });
+      },
+      
+      getGridData: function(url, param, target, success, fail) {
+        return $.postJSON(url, param, function(result) {
+          var list = result.data.list;
+          if(list.length === undefined || list.length == 0) {
+            s_alert.pop(result.message);
+            return;
+          }
+          target.itemsSource = new wijmo.collections.CollectionView(list, {
+            trackChanges: true
+          });
+          if(success != null) {
+            success(result);
+          }
+        },
+        function(result) {
+          s_alert.pop(result.message);
+          if(fail != null) {
+            fail(result);
+          }
         });
       }
   };
@@ -152,13 +176,17 @@
         });
       },
       genDate: function(div) {
-        return new wijmo.input.InputDate(div); 
+        return new wijmo.input.InputDate(div, {
+          format:"yyyy-MM-dd" 
+        }); 
       },
       genDateVal: function(div, date) {
         if(date == "" || date.length != 8) {
           return wcombo.genDate(div);
         }
-        var dt = new wijmo.input.InputDate(div);
+        var dt = new wijmo.input.InputDate(div, {
+          format:"yyyy-MM-dd" 
+        });
         date = date.substr(0,4) + "-" + date.substr(4,2) + "-" + date.substr(6,2);
         dt.value = new Date(date);
         return dt;
