@@ -8,10 +8,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import kr.co.solbipos.application.domain.login.SessionInfo;
+import kr.co.solbipos.application.domain.resource.ResrceInfo;
+import kr.co.solbipos.application.service.login.LoginService;
 import kr.co.solbipos.enums.Status;
 import kr.co.solbipos.service.session.SessionService;
 import kr.co.solbipos.structure.DefaultMap;
@@ -79,7 +82,7 @@ public class AuthGroupController {
      */
     @RequestMapping(value = "save.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result save(AuthGroup[] authGroups, HttpServletRequest request,
+    public Result save(@RequestBody AuthGroup[] authGroups, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
         SessionInfo sessionInfo = sessionService.getSessionInfo(request);
@@ -103,14 +106,15 @@ public class AuthGroupController {
     public Result listResrce(AuthGroup authGroup, HttpServletRequest request,
             HttpServletResponse response, Model model) {
         
-        //TODO 리소스 정보 조회 - 자신이 가진 권한
-        List<DefaultMap<String>> list = service.list(authGroup);
+        //리소스 정보 조회 - 자신이 가진 권한
+        SessionInfo sessionInfo = sessionService.getSessionInfo(request);
+        List<DefaultMap<String>> list = service.listResrce(authGroup, sessionInfo);
 
         return returnListJson(Status.OK, list, authGroup);
     }
 
     /**
-     * 저장 - 리소스 정보
+     * 리소스 정보 저장 
      * 
      * @param authGroup
      * @param request
@@ -118,7 +122,7 @@ public class AuthGroupController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "saveResrc.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "saveResrce.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result saveResrc(AuthGroup authGroups, HttpServletRequest request,
             HttpServletResponse response, Model model) {

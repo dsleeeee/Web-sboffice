@@ -73,7 +73,7 @@
           <button id="btnResrceSave" class="btn_skyblue"><s:message code="cmm.save"/></button>
         </div>
         <%--위즈모 트리--%>
-        <div id="resrceTree"></div>
+        <div id="treeResrce"></div>
         <%--//위즈모 트리--%>
       </div>
     </div>
@@ -88,11 +88,10 @@
     
     <%-- 권한 그룹 --%>
     var targetAllFg  = new wijmo.grid.DataMap([
-      {id:"A", name:"전체"},
-      {id:"P", name:"일부"}
+      {id: "A", name: "<s:message code='authGroup.all'/>"},
+      {id: "P", name: "<s:message code='authGroup.part'/>"}
     ], 'id', 'name');
     var rdata = [
-        {binding:"no", header:"<s:message code='cmm.no' />", width:30, isReadOnly:true},
         {binding:"grpCd", header:"<s:message code='authGroup.grpCd' />", width:70, isReadOnly:true},
         {binding:"grpNm", header:"<s:message code='authGroup.grpNm' />", width:100, isRequired:true},
         {binding:"targetAllFg", header:"<s:message code='authGroup.targetAllFg' />", width:100, dataMap:targetAllFg},
@@ -105,6 +104,37 @@
     grid.isReadOnly  = false;
     var grpNm        = wcombo.genInput("#grpNm");
     var useYn        = wcombo.genCommonBox("#useYn", ${ccu.getCommCode("904")});
+    
+    var test = [
+      {cd: '00001', header: '포스관리', items: [
+        {cd: '00002', header: 'POS 설정관리'},
+        {cd: '00003', header: '라이선스 관리', items: [
+          {cd: '00004', header: '등록'},
+          {cd: '00005', header: '저장'}
+          ]
+        }
+        ]
+      },
+      {cd: '00001', header: '가맹점관리', items: [
+        {cd: '00001', header: '본사정보'}
+        ]
+      }
+    ];
+    var tree = new wijmo.nav.TreeView('#treeResrce', {
+      itemsSource: test,
+      displayMemberPath: 'header',
+      childItemsPath: 'items',
+      expandOnClick : true,
+      isReadOnly: true,
+      showCheckboxes: true,
+      allowDragging: true,
+      isContentHtml: true,
+      loadedItems: function(s, e) {
+        console.log("loadedItems...");
+        s.collapseToLevel(3);
+      }
+    });
+
     
     <%-- 그리드 컬럼 특수 기능 처리 --%>
     grid.formatItem.addHandler(function(s, e) {
@@ -130,12 +160,15 @@
           var param = {};
           param.grpCd = grid.cells.getCellData(ht.row, ht.col, true);
           if(param.grpCd != '') {
+            wgrid.getGridData("${baseUrl}" + "listResrce.sb", param, tree);
+            /*
             $.postJSON("${baseUrl}" + "listResrce.sb", param, function(result) {
               //TODO
             },
             function(result) {
               s_alert.pop(result.data.msg);
             });
+            */
           }
         }
       }
@@ -191,7 +224,6 @@
         paramArr.push(grid.collectionView.itemsRemoved[i]);
       }
       
-      console.log(paramArr);
       $.postJSON("${baseUrl}" + "save.sb", JSON.stringify(paramArr), function(result) {
         s_alert.pop("<s:message code='msg.save.succ' />");
         grid.collectionView.clearChanges();
@@ -207,19 +239,3 @@
 
   });
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

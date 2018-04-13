@@ -81,7 +81,9 @@
             s_alert.pop(result.message);
             return;
           }
-          target.itemsSource = list;
+          target.itemsSource = new wijmo.collections.CollectionView(list, {
+            trackChanges: true
+          });
           if(success != null) {
             success(result);
           }

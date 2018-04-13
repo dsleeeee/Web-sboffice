@@ -114,17 +114,16 @@
         cache: false,
         async:true,
         dataType: "json",
+        contentType : 'application/json',
+        processData: false,
         beforeSend: function() {
-          $("#_loadTent").show();
-          $("#_loading").show();
+          $("#_loadTent, #_loading").show();
         },
         complete: function() {
-          $("#_loadTent").hide();
-          $("#_loading").hide();
+          $("#_loadTent, #_loading").hide();
         },
         error : function(){
-          $("#_loadTent").hide();
-          $("#_loading").hide();
+          $("#_loadTent, #_loading").hide();
         }
       })
       .fail(function(){
