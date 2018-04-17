@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import kr.co.solbipos.adi.domain.etc.kitchenmemo.KitchenMemo;
 import kr.co.solbipos.adi.service.etc.kitchenmemo.KitchenMemoService;
 import kr.co.solbipos.application.domain.login.SessionInfo;
-import kr.co.solbipos.application.enums.grid.GridDataFg;
 import kr.co.solbipos.enums.Status;
 import kr.co.solbipos.service.message.MessageService;
 import kr.co.solbipos.service.session.SessionService;
@@ -64,27 +63,21 @@ public class KitchenMemoController {
     /**
      * 저장
      * @param kitchenMemo
+     * @param request
+     * @param response
      * @param model
      * @return
      */
     @RequestMapping(value = "save.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result kitchenmemoSave(@RequestBody KitchenMemo[] kitchenMemo , Model model) {
-        for(int i=0; i<kitchenMemo.length; i++ ){
-            KitchenMemo memo = kitchenMemo[i];
-            if(memo.getStatus() == GridDataFg.INSERT){
-                int cnt = kitchenMemoService.selectKitchenMemoCnt(memo);
-                if(cnt > 0) {
-                    return returnJson(Status.FAIL, "msg", messageService.get("kitchenMemo.duplicate.kitchnMemoCd", new String[]{"주방메모코드("+memo.getKitchnMemoCd()+")"} ,null));
-                }
-                kitchenMemoService.insertKitchenMemo(memo);
-            }else if(memo.getStatus() == GridDataFg.UPDATE){
-                kitchenMemoService.updateKitchenMemo(memo);
-            }else if(memo.getStatus() == GridDataFg.DELETE){
-                kitchenMemoService.deleteKitchenMemo(memo);
-            }
-        }
-        return returnJson(Status.OK, null);
+    public Result kitchenmemoSave(@RequestBody KitchenMemo[] kitchenMemo, HttpServletRequest request,
+            HttpServletResponse response , Model model) {
+        
+        SessionInfo sessionInfo = sessionService.getSessionInfo(request);
+
+        int result = kitchenMemoService.save(kitchenMemo, sessionInfo);
+        
+        return returnJson(Status.OK, result);
     }
     
 }

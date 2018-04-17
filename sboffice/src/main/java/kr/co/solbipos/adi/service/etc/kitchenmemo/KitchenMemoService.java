@@ -13,16 +13,10 @@ public interface KitchenMemoService {
     
     /** 주방메모 조회 */
     <E> List<E> selectKitchenMemo(SessionInfo sessionInfo);
- 
+    
+    /** 저장 */
+    int save(KitchenMemo[] kitchenMemo, SessionInfo sessionInfo);
+    
     /** 주방메모 건수 조회 */
     int selectKitchenMemoCnt(KitchenMemo kitchenMemo);
-    
-    /** 주방메모 등록 */
-    void insertKitchenMemo(KitchenMemo kitchenMemo);
-    
-    /** 주방메모 수정 */
-    void updateKitchenMemo(KitchenMemo kitchenMemo);
-    
-    /** 주방메모 삭제 */
-    void deleteKitchenMemo(KitchenMemo kitchenMemo);
 }

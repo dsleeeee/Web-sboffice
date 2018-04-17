@@ -5,6 +5,7 @@
 
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
+<c:set var="baseUrl" value="/adi/etc/kitchenmemo/kitchenmemo/" />
 
 <div class="subCon">
   <div class="updownSet oh">
@@ -77,7 +78,7 @@ $(document).ready(function(){
       }
       if(col.binding == "kitchnMemoCd") { <%-- 숫자만 --%>
         if(val.match(/[^0-9]/)){
-          s_alert.pop(col.header+"<s:message code='msg.cmm.require.number'/>");
+          s_alert.pop(col.header+"<s:message code='cmm.require.number'/>");
           s.setCellData(e.row, e.col, val.replace(/[^0-9]/g,""));
         }
       }
@@ -118,24 +119,16 @@ $(document).ready(function(){
       grid.collectionView.itemsRemoved[i].status = "D";
       paramArr.push(grid.collectionView.itemsRemoved[i]);
     }
-    
-    var url = "/adi/etc/kitchenmemo/kitchenmemo/save.sb";
-    $.ajax({
-      type: "POST",
-      url: url,
-      data: JSON.stringify(paramArr),
-      success: function(result){
-        if (result.status === "OK") {
-          s_alert.pop("<s:message code='login.save.succ' />");
-          grid.collectionView.clearChanges();
-     } else if (result.status === "FAIL"){
-          s_alert.pop(result.data.msg);
-        }
-      },
-      cache: false,
-      dataType: "json",
-      contentType : 'application/json'
+
+    $.postJSON("${baseUrl}" + "save.sb", JSON.stringify(paramArr), function(result) {
+      s_alert.pop("<s:message code='msg.save.succ' />");
+      grid.collectionView.clearChanges();
+    },
+    function(result) {
+      console.log(result) // 중복된 데이터가 있을때 오류 메세지가....?
+      s_alert.pop(result.data.msg);
     });
+    
   });
 });
 </script>

@@ -18,6 +18,8 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class KitchenMemo extends Cmm{
     
+    private static final long serialVersionUID = 1L;
+
     /** 매장코드 */
     private String storeCd;
     
