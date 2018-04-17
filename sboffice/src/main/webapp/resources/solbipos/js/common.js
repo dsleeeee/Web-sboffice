@@ -90,7 +90,7 @@
       return $.ajax({
         type: "POST",
         url: url,
-        data: JSON.stringify(data),
+        data: data,
         success: function(result) {
           if(result.status === "OK") {
             return succ(result);
