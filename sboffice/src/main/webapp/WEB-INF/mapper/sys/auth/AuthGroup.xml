@@ -83,6 +83,53 @@
       WHERE A.GRP_CD = #{grpCd}
   </delete>
   
+
+  <select id="selectResrce" parameterType="authGroup" resultType="DefaultMap">
+    /* AuthGroupMapper.selectResrce */
+     SELECT A.P_RESRCE,
+            A.RESRCE_CD,
+            A.RESRCE_NM,
+            A.DISP_LEVEL,
+            A.DISP_IDX,
+            DECODE(B.RESRCE_CD, NULL, 0, 1) AUTH_FG
+       FROM (
+             SELECT LEVEL,
+                    A.P_RESRCE,
+                    A.RESRCE_CD,
+                    A.RESRCE_NM,
+                    A.DISP_LEVEL,
+                    A.DISP_IDX,
+                    A.FUNC_FG
+               FROM TB_WB_RESRCE_INFO A
+              WHERE A.USE_YN = 'Y'
+              START WITH A.P_RESRCE = '000000'
+            CONNECT BY PRIOR A.RESRCE_CD = A.P_RESRCE
+              ORDER SIBLINGS BY A.DISP_IDX ASC,
+                    FUNC_FG ASC
+            ) A,
+            (
+             SELECT B.RESRCE_CD
+               FROM TB_WB_AUTHOR_GRP_INFO A,
+                    TB_WB_AUTHOR_GRP_RESRCE B
+              WHERE A.GRP_CD = B.GRP_CD
+                AND B.GRP_CD = #{grpCd}
+                AND A.USE_YN = 'Y'
+                AND B.USE_YN = 'Y'
+              UNION ALL
+             SELECT A.RESRCE_CD
+               FROM TB_WB_AUTHOR_EXCEPT A
+              WHERE A.USER_ID = #{userId}
+                AND A.INCLD_EXCLD_FG = 'I'
+                AND A.USE_YN = 'Y'
+              MINUS
+             SELECT A.RESRCE_CD
+               FROM TB_WB_AUTHOR_EXCEPT A
+              WHERE A.USER_ID = #{userId}
+                AND A.INCLD_EXCLD_FG = 'E'
+                AND A.USE_YN = 'Y'
+            ) B
+      WHERE A.RESRCE_CD = B.RESRCE_CD(+)
+  </select>
 </mapper>
 
 

@@ -5,7 +5,7 @@
  * **************************************** */
 @font-face {
      font-family: 'NotoR';
-     src: url('https://cdn.kcp.co.kr/font_web/NotoSansCJKkr-Regular.woff') format('woff');
+     src: url('../NotoSansCJKkr-Regular.woff') format('woff');
 }
 
 

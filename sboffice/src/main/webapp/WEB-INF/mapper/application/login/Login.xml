@@ -170,8 +170,6 @@
       )
   CONNECT BY PRIOR P_RESRCE = RESRCE_CD
       AND LEVEL < 3
-    ORDER BY DISP_LEVEL ASC,
-          DISP_IDX ASC
   ]]>
   </select>
   

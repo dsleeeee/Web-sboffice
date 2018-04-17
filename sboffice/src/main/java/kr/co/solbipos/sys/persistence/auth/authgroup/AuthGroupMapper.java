@@ -42,4 +42,12 @@ public interface AuthGroupMapper {
      * @return
      */
     int deleteGroup(AuthGroup authGroup);
+
+    /**
+     * 리소스 조회
+     * 
+     * @param authGroup
+     * @return
+     */
+    List<DefaultMap<String>> selectResrce(AuthGroup authGroup);
 }

@@ -14,6 +14,8 @@ import kr.co.solbipos.system.CodeEnumTypeHandler;
  */
 public enum UseYn implements CodeEnum {
     
+    /** 전체 */
+    ALL("ALL"),
     /** 사용 */
     Y("Y"),
     /** 미사용 */

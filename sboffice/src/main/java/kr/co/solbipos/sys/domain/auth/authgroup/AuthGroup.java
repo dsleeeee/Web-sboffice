@@ -45,4 +45,8 @@ public class AuthGroup extends Cmm {
 
     /** 수정아이디 */
     private String modId;
+    
+    /** 사용자 아이디 */
+    private String userId;
+    
 }

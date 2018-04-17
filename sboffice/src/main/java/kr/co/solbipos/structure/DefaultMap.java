@@ -14,6 +14,9 @@ public class DefaultMap<Value> extends HashMap<String, Value> {
     public int getInt(Object k) {
         return ObjectUtil.cast(Integer.class, get(k), 0);
     }
+    public long getLong(Object k) {
+        return ObjectUtil.cast(Long.class, get(k), 0L);
+    }
 
     @Override
     public Value get(Object k) { 

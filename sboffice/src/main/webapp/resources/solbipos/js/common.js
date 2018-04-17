@@ -90,7 +90,50 @@
       return $.ajax({
         type: "POST",
         url: url,
-        data: data,
+        data: JSON.stringify(data),
+        success: function(result) {
+          if(result.status === "OK") {
+            return succ(result);
+          }
+          else if(data.status === "FAIL") {
+            return fail(result);
+          }
+          else if(result.status === "SESSION_EXFIRE") {
+            s_alert.popOk(result.message, function() {
+              location.href = result.url;
+             });
+          }
+          else if(result.status === "SERVER_ERROR") {
+            s_alert.pop(result.message);
+          }
+          else {
+            var msg = result.status + " : " + result.message;
+            alert(msg);
+          }
+        },
+        cache: false,
+        async:true,
+        dataType: "json",
+        beforeSend: function() {
+          $("#_loadTent, #_loading").show();
+        },
+        complete: function() {
+          $("#_loadTent, #_loading").hide();
+        },
+        error : function(){
+          $("#_loadTent, #_loading").hide();
+        }
+      })
+      .fail(function(){
+        s_alert.pop("Ajax Fail");
+      });
+//      return $.post( url, data, func, "json" );
+    }
+    , postJSONArray: function( url, data, succ, fail ){
+      return $.ajax({
+        type: "POST",
+        url: url,
+        data: JSON.stringify(data),
         success: function(result) {
           if(result.status === "OK") {
             return succ(result);
@@ -129,7 +172,6 @@
       .fail(function(){
         s_alert.pop("Ajax Fail");
       });
-;
 //      return $.post( url, data, func, "json" );
     }
     , postJSONAsync: function( url, data, func ){

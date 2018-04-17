@@ -13,8 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import kr.co.solbipos.application.domain.login.SessionInfo;
-import kr.co.solbipos.application.domain.resource.ResrceInfo;
-import kr.co.solbipos.application.service.login.LoginService;
+import kr.co.solbipos.application.domain.resource.Resrce;
 import kr.co.solbipos.enums.Status;
 import kr.co.solbipos.service.session.SessionService;
 import kr.co.solbipos.structure.DefaultMap;
@@ -108,7 +107,7 @@ public class AuthGroupController {
         
         //리소스 정보 조회 - 자신이 가진 권한
         SessionInfo sessionInfo = sessionService.getSessionInfo(request);
-        List<DefaultMap<String>> list = service.listResrce(authGroup, sessionInfo);
+        List<Resrce> list = service.listResrce(authGroup, sessionInfo);
 
         return returnListJson(Status.OK, list, authGroup);
     }

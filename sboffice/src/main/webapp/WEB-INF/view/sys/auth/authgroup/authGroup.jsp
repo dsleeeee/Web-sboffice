@@ -50,8 +50,8 @@
   <div class="wj-TblWrap mt20">
 
     <%--left--%>
-    <div class="w50 fl">
-      <div class="wj-TblWrapBr mr10 pd20" style="height:700px;">
+    <div class="w60 fl">
+      <div class="wj-TblWrapBr mr10 pd20" style="height:500px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code="authGroup.authGroup"/></span>
           <button id="btnAdd" class="btn_skyblue"><s:message code="cmm.add"/></button>
@@ -66,14 +66,14 @@
     <%--//left--%>
 
     <%--right--%>
-    <div class="w50 fr">
-      <div class="wj-TblWrapBr ml10 pd20" style="height:700px;">
+    <div class="w40 fr">
+      <div class="wj-TblWrapBr ml10 pd20" style="height:500px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code="authGroup.resrcInfo"/></span>
           <button id="btnResrceSave" class="btn_skyblue"><s:message code="cmm.save"/></button>
         </div>
         <%--위즈모 트리--%>
-        <div id="treeResrce"></div>
+        <div id="treeResrce" style="height:450px;"></div>
         <%--//위즈모 트리--%>
       </div>
     </div>
@@ -105,36 +105,31 @@
     var grpNm        = wcombo.genInput("#grpNm");
     var useYn        = wcombo.genCommonBox("#useYn", ${ccu.getCommCode("904")});
     
-    var test = [
-      {cd: '00001', header: '포스관리', items: [
-        {cd: '00002', header: 'POS 설정관리'},
-        {cd: '00003', header: '라이선스 관리', items: [
-          {cd: '00004', header: '등록'},
-          {cd: '00005', header: '저장'}
-          ]
-        }
-        ]
-      },
-      {cd: '00001', header: '가맹점관리', items: [
-        {cd: '00001', header: '본사정보'}
-        ]
-      }
-    ];
+    <%-- 메뉴 트리 생성 --%>
     var tree = new wijmo.nav.TreeView('#treeResrce', {
-      itemsSource: test,
-      displayMemberPath: 'header',
+      displayMemberPath: 'resrceNm',
       childItemsPath: 'items',
       expandOnClick : true,
       isReadOnly: true,
-      showCheckboxes: true,
-      allowDragging: true,
-      isContentHtml: true,
-      loadedItems: function(s, e) {
-        console.log("loadedItems...");
-        s.collapseToLevel(3);
+      showCheckboxes: true
+    });
+    
+    <%-- 트리 체크박스 초기화 --%>
+    tree.loadedItems.addHandler(function(s, e) {
+      s.collapseToLevel(0);
+      <%-- //TODO 느림.. --%>
+      for (var nd = tree.getFirstNode(); nd; nd = nd.next()) {
+        nd.isChecked = false;
+        if(nd.dataItem.authFg == 1) {
+          nd.isChecked = true;
+        }
       }
     });
-
+    
+    tree.checkedItemsChanged.addHandler(function(s, e) {
+      //console.log(s.checkedItems);
+      console.log(e);
+    });
     
     <%-- 그리드 컬럼 특수 기능 처리 --%>
     grid.formatItem.addHandler(function(s, e) {
@@ -160,15 +155,12 @@
           var param = {};
           param.grpCd = grid.cells.getCellData(ht.row, ht.col, true);
           if(param.grpCd != '') {
-            wgrid.getGridData("${baseUrl}" + "listResrce.sb", param, tree);
-            /*
             $.postJSON("${baseUrl}" + "listResrce.sb", param, function(result) {
-              //TODO
+              tree.itemsSource = result.data.list;
             },
             function(result) {
               s_alert.pop(result.data.msg);
             });
-            */
           }
         }
       }
@@ -224,7 +216,7 @@
         paramArr.push(grid.collectionView.itemsRemoved[i]);
       }
       
-      $.postJSON("${baseUrl}" + "save.sb", JSON.stringify(paramArr), function(result) {
+      $.postJSONArray("${baseUrl}" + "save.sb", paramArr, function(result) {
         s_alert.pop("<s:message code='msg.save.succ' />");
         grid.collectionView.clearChanges();
       },
@@ -235,6 +227,15 @@
     
     <%-- 리스스 정보 저장 --%>
     $("#btnResrceSave").click(function(e){
+      var paramArr = new Array();
+
+      $.postJSON("${baseUrl}" + "saveResrce.sb", paramArr, function(result) {
+        s_alert.pop("<s:message code='msg.save.succ' />");
+      },
+      function(result) {
+        s_alert.pop(result.data.msg);
+      });
+
     });
 
   });
