@@ -615,6 +615,7 @@ input[type=submit] {
     width: 100%;
     height: 100%;
     margin: 0px;
+    font-size:12px; /*클릭시 크기 고정*/
 }
 .wj-cell .wj-elem-dropdown {
     position: absolute;
