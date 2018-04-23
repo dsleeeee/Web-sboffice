@@ -34,18 +34,6 @@ public class AuthGroup extends Cmm {
     /** 사용여부 */
     private UseYn useYn;
 
-    /** 등록일시 */
-    private String regDt;
-
-    /** 등록아이디 */
-    private String regId;
-
-    /** 수정일시 */
-    private String modDt;
-
-    /** 수정아이디 */
-    private String modId;
-    
     /** 사용자 아이디 */
     private String userId;
     

@@ -3,6 +3,21 @@
 
 <mapper namespace="kr.co.solbipos.sys.persistence.auth.authgroup.AuthGroupMapper">
 
+  <select id="selectAvailGroup" parameterType="string" resultType="DefaultMap">
+    /* AuthGroupMapper.selectAvailGroup */
+     SELECT GRP_CD VALUE,
+            GRP_NM NAME
+       FROM TB_WB_AUTHOR_GRP_INFO A
+      WHERE TARGET_ALL_FG = 'A'
+      UNION ALL
+     SELECT GRP_CD VALUE,
+            GRP_NM NAME
+       FROM TB_WB_AUTHOR_GRP_INFO A
+      WHERE TARGET_ALL_FG = 'P'
+        AND TARGET_ORGN = #{orgnCd}
+  </select>
+
+
   <select id="selectGroup" parameterType="authGroup" resultType="DefaultMap">
     /* AuthGroupMapper.selectGroup */
      SELECT ROW_NUMBER() OVER (PARTITION BY 1 ORDER BY 1) NO,
@@ -24,6 +39,27 @@
             MOD_DT,
             MOD_ID
        FROM TB_WB_AUTHOR_GRP_INFO A
+     <where>
+     <if test='useYn != null and useYn.toString() != "ALL"'>
+        AND A.USE_YN = #{useYn}
+     </if>
+     <if test='grpNm != null and grpNm != ""'>
+        AND A.GRP_NM LIKE '%'||#{grpNm}||'%'
+     </if>
+     <if test='targetOrgn != null and targetOrgn != ""'>
+        AND A.GRP_CD IN (
+             SELECT GRP_CD
+           FROM TB_WB_AUTHOR_GRP_INFO A
+          WHERE TARGET_ALL_FG = 'A'
+          UNION ALL
+         SELECT GRP_CD
+           FROM TB_WB_AUTHOR_GRP_INFO A
+          WHERE TARGET_ALL_FG = 'P'
+            AND TARGET_ORGN = #{targetOrgn}
+            )
+     </if>
+     </where>
+      ORDER BY GRP_CD
   </select>
   
   <select id="selectGroupCnt" parameterType="authGroup" resultType="integer">
@@ -37,10 +73,10 @@
     /* AuthGroupMapper.insertGroup */
     INSERT INTO TB_WB_AUTHOR_GRP_INFO
     (
-        GRP_CD
-        GRP_NM
-        TARGET_ALL_FG
-        TARGET_ORGN
+        GRP_CD,
+        GRP_NM,
+        TARGET_ALL_FG,
+        TARGET_ORGN,
         REMARK,
         USE_YN,
         REG_DT,
@@ -50,7 +86,7 @@
     )
     VALUES
     (
-        #{grpCd},
+        LPAD(SQ_WB_AUTHOR_GRP.NEXTVAL, 6, '0'),
         #{grpNm},
         #{targetAllFg},
         #{targetOrgn},
@@ -84,16 +120,92 @@
   </delete>
   
 
-  <select id="selectResrce" parameterType="authGroup" resultType="DefaultMap">
+  <select id="selectResrceByGroup" parameterType="authGroup" resultType="DefaultMap">
     /* AuthGroupMapper.selectResrce */
      SELECT A.P_RESRCE,
             A.RESRCE_CD,
+            '[' || A.RESRCE_CD || ']' || A.RESRCE_NM RESRCE_DISP,
             A.RESRCE_NM,
             A.DISP_LEVEL,
             A.DISP_IDX,
-            DECODE(B.RESRCE_CD, NULL, 0, 1) AUTH_FG
+            NVL2(B.RESRCE_CD, 1, 0) AUTH_FG
        FROM (
-             SELECT LEVEL,
+             SELECT ROWNUM LIST_SEQ,
+                    LEVEL,
+                    A.P_RESRCE,
+                    A.RESRCE_CD,
+                    A.RESRCE_NM,
+                    A.DISP_LEVEL,
+                    A.DISP_IDX,
+                    A.FUNC_FG
+               FROM TB_WB_RESRCE_INFO A
+              WHERE A.USE_YN = 'Y'
+              START WITH A.P_RESRCE = '000000'
+            CONNECT BY PRIOR A.RESRCE_CD = A.P_RESRCE
+              ORDER SIBLINGS BY A.DISP_IDX ASC,
+                    FUNC_FG ASC
+            ) A,
+            (
+             SELECT B.RESRCE_CD
+               FROM TB_WB_AUTHOR_GRP_INFO A,
+                    TB_WB_AUTHOR_GRP_RESRCE B
+              WHERE A.GRP_CD = B.GRP_CD
+                AND B.GRP_CD = #{grpCd}
+                AND A.USE_YN = 'Y'
+                AND B.USE_YN = 'Y'
+            ) B
+      WHERE A.RESRCE_CD = B.RESRCE_CD(+)
+      ORDER BY A.LIST_SEQ
+  </select>
+
+  <select id="selectResrceById" parameterType="authGroup" resultType="DefaultMap">
+    /* AuthGroupMapper.selectResrceById */
+     SELECT A.RESRCE_CD,
+            A.RESRCE_PATH
+       FROM (
+             SELECT A.RESRCE_CD, 
+                    SYS_CONNECT_BY_PATH(RESRCE_CD, '/') RESRCE_PATH
+               FROM TB_WB_RESRCE_INFO A
+              WHERE A.USE_YN = 'Y'
+              START WITH A.P_RESRCE = '000000'
+            CONNECT BY PRIOR A.RESRCE_CD = A.P_RESRCE
+            ) A,
+            (
+             SELECT B.RESRCE_CD
+               FROM TB_WB_AUTHOR_GRP_INFO A,
+                    TB_WB_AUTHOR_GRP_RESRCE B
+              WHERE A.GRP_CD = B.GRP_CD
+                AND B.GRP_CD = #{grpCd}
+                AND A.USE_YN = 'Y'
+                AND B.USE_YN = 'Y'
+              UNION ALL
+             SELECT A.RESRCE_CD
+               FROM TB_WB_AUTHOR_EXCEPT A
+              WHERE A.USER_ID = #{userId}
+                AND A.INCLD_EXCLD_FG = 'I'
+                AND A.USE_YN = 'Y'
+              MINUS
+             SELECT A.RESRCE_CD
+               FROM TB_WB_AUTHOR_EXCEPT A
+              WHERE A.USER_ID = #{userId}
+                AND A.INCLD_EXCLD_FG = 'E'
+                AND A.USE_YN = 'Y'
+            ) B
+      WHERE A.RESRCE_CD = B.RESRCE_CD
+  </select>
+  
+  <select id="selectResrceByGroupAndId" parameterType="authGroup" resultType="DefaultMap">
+    /* AuthGroupMapper.selectResrceByGroupAndId */
+     SELECT A.P_RESRCE,
+            A.RESRCE_CD,
+            '[' || A.RESRCE_CD || ']' || A.RESRCE_NM RESRCE_DISP,
+            A.RESRCE_NM,
+            A.DISP_LEVEL,
+            A.DISP_IDX,
+            NVL2(B.RESRCE_CD, 1, 0) AUTH_FG
+       FROM (
+             SELECT ROWNUM LIST_SEQ,
+                    LEVEL,
                     A.P_RESRCE,
                     A.RESRCE_CD,
                     A.RESRCE_NM,
@@ -129,7 +241,94 @@
                 AND A.USE_YN = 'Y'
             ) B
       WHERE A.RESRCE_CD = B.RESRCE_CD(+)
+      ORDER BY A.LIST_SEQ
   </select>
+
+
+  <update id="mergeAuthorGrpResrce" parameterType="DefaultMap">
+    /* AuthGroupMapper.mergeAuthorGrpResrce */
+    MERGE INTO TB_WB_AUTHOR_GRP_RESRCE A
+    USING (SELECT #{grpCd} GRP_CD,
+                  #{resrceCd} RESRCE_CD
+             FROM DUAL
+          ) ORG
+    ON (  A.GRP_CD = ORG.GRP_CD
+      AND A.RESRCE_CD = ORG.RESRCE_CD)
+
+    WHEN MATCHED THEN
+    UPDATE
+       SET A.USE_YN = #{useYn},
+           A.MOD_DT = #{regDt},
+           A.MOD_ID = #{regId}
+
+    WHEN NOT MATCHED THEN
+    INSERT (
+        A.GRP_CD,
+        A.RESRCE_CD,
+        A.USE_YN,
+        A.REG_DT,
+        A.REG_ID
+    )
+    VALUES (
+        #{grpCd},
+        #{resrceCd},
+        #{useYn},
+        #{regDt},
+        #{regId}
+    ) 
+  </update>
+
+  <select id="selectGrpCdById" parameterType="string" resultType="string">
+    /* AuthGroupMapper.selectGrpCdById */
+     SELECT GRP_CD
+       FROM TB_WB_USER_INFO A
+      WHERE A.USER_ID = #{userId}
+  </select>
+
+  <select id="selectResrceByGrp" parameterType="string" resultType="DefaultMap">
+    /* AuthGroupMapper.selectResrceByGrp */
+     SELECT B.RESRCE_CD
+       FROM TB_WB_AUTHOR_GRP_INFO A,
+            TB_WB_AUTHOR_GRP_RESRCE B
+      WHERE A.GRP_CD = B.GRP_CD
+        AND B.GRP_CD = (SELECT GRP_CD FROM TB_WB_USER_INFO WHERE USER_ID = #{userId})
+  </select>
+
+  <update id="mergeAuthorExcept" parameterType="DefaultMap">
+    /* AuthGroupMapper.mergeAuthorExcept */
+    MERGE INTO TB_WB_AUTHOR_EXCEPT A
+    USING (SELECT #{userId} USER_ID,
+                  #{resrceCd} RESRCE_CD
+             FROM DUAL
+          ) ORG
+    ON (  A.USER_ID = ORG.USER_ID
+      AND A.RESRCE_CD = ORG.RESRCE_CD)
+
+    WHEN MATCHED THEN
+    UPDATE
+       SET A.USE_YN = #{useYn},
+           A.MOD_DT = #{modDt},
+           A.MOD_ID = #{modId}
+
+    WHEN NOT MATCHED THEN
+    INSERT (
+        A.USER_ID,
+        A.RESRCE_CD,
+        A.INCLD_EXCLD_FG,
+        A.USE_YN,
+        A.REG_DT,
+        A.REG_ID
+    )
+    VALUES (
+        #{userId},
+        #{resrceCd},
+        #{incldExcldFg},
+        #{useYn},
+        #{regDt},
+        #{regId}
+    ) 
+  </update>
+
 </mapper>
 
 

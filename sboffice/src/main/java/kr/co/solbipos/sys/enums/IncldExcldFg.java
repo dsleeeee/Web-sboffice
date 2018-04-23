@@ -6,29 +6,29 @@ import kr.co.solbipos.enums.CodeEnum;
 import kr.co.solbipos.system.CodeEnumTypeHandler;
 
 /**
- * 대상 전체 구분 A:전체, P:일부 enum type<br>
- * TB_WB_AUTHOR_GRP_INFO > TargetAllFg
+ * 포함 제외 구분 I:포함, E:제외 enum type<br>
+ * TB_WB_AUTHOR_EXCEPT > INCLD_EXCLD_FG
  * 
  * @author bjcho
  *
  */
-public enum TargetAllFg implements CodeEnum {
+public enum IncldExcldFg implements CodeEnum {
     
-    /** 전체 */
-    ALL("A"),
-    /** 일부 */
-    PART("P");
+    /** 포함 */
+    INCLUDE("I"),
+    /** 제외 */
+    EXCLUDE("E");
     
     private String code;
   
-    TargetAllFg(String code) {
+    IncldExcldFg(String code) {
         this.code = code;
     }
     
-    @MappedTypes(TargetAllFg.class)
-    public static class TypeHandler extends CodeEnumTypeHandler<TargetAllFg> {
+    @MappedTypes(IncldExcldFg.class)
+    public static class TypeHandler extends CodeEnumTypeHandler<IncldExcldFg> {
         public TypeHandler() {
-            super(TargetAllFg.class);
+            super(IncldExcldFg.class);
         }
     }
      
