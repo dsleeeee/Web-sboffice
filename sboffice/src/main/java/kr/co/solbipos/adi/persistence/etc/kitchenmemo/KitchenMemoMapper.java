@@ -17,13 +17,19 @@ public interface KitchenMemoMapper {
     /** 주방메모 건수 조회 */
     public int selectKitchenMemoCnt(KitchenMemo memo);
     
+    /** 주방메모 저장 */
+    public int save(KitchenMemo[] kitchenMemos, SessionInfo sessionInfo);
+    
     /** 주방메모 등록 */
-    void insertKitchenMemo(KitchenMemo kitchenMemo);
+//    void insertKitchenMemo(KitchenMemo kitchenMemo);
+    int insertKitchenMemo(KitchenMemo kitchenMemo);
     
     /** 주방메모 수정 */
-    void updateKitchenMemo(KitchenMemo kitchenMemo);
+//    void updateKitchenMemo(KitchenMemo kitchenMemo);
+    int updateKitchenMemo(KitchenMemo kitchenMemo);
     
     /** 주방메모 삭제 */
-    void deleteKitchenMemo(KitchenMemo kitchenMemo);
+//    void deleteKitchenMemo(KitchenMemo kitchenMemo);
+    int deleteKitchenMemo(KitchenMemo kitchenMemo);
 
 }
