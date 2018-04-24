@@ -20,7 +20,6 @@ import kr.co.solbipos.service.session.SessionService;
 import kr.co.solbipos.structure.DefaultMap;
 import kr.co.solbipos.structure.Result;
 import kr.co.solbipos.utils.jsp.CmmCodeUtil;
-import lombok.extern.slf4j.Slf4j;
 
 
 /**
@@ -28,7 +27,6 @@ import lombok.extern.slf4j.Slf4j;
  * 
  * @author 김지은
  */
-@Slf4j
 @Controller
 @RequestMapping(value = "/pos/confg/func/func")
 public class FuncController {

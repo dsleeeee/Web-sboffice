@@ -53,7 +53,7 @@
     )
     VALUES
     (
-        #{fnkeyNo},
+        (SELECT LPAD(MAX(FNKEY_NO)+1, 4, 0) FROM TB_CM_POS_FNKEY),
         #{fnkeyNm},
         #{fnkeyFg},
         #{storeFg},

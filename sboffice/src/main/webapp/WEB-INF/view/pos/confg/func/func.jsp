@@ -74,14 +74,14 @@ var funcFgCView = new wijmo.collections.CollectionView(funcFgList);
 <%-- Header --%>
 var hData1 = 
   [
-    {binding:"no", header:"<s:message code='func.No' />"},
+    {binding:"nmcodeCd", header:"<s:message code='func.funFgCd' />"},
     {binding:"nmcodeNm", header:"<s:message code='func.funFg' />"}
   ];
   
 var hData2 = 
   [
     {binding:"chk", header:"<s:message code='func.chk' />", allowMerging:true, dataType:wijmo.DataType.Boolean},
-    {binding:"fnkeyNo", header:"<s:message code='func.fnkeyNo' />", maxLength:2, allowMerging:true},
+    {binding:"fnkeyNo", header:"<s:message code='func.fnkeyNo' />", maxLength:4, allowMerging:true, isReadOnly:true},
     {binding:"fnkeyNm", header:"<s:message code='func.fnkeyNm' />", maxLength:20, allowMerging:true},
     {binding:"storeFg", header:"<s:message code='func.storeFg' />", dataMap:storeKindDataMap, allowMerging:true},
     {binding:"posFg", header:"<s:message code='func.posFg' />", dataMap:posFgDataMap, allowMerging:true},
@@ -217,14 +217,6 @@ function srchFuncData(rowData) {
       var col   = s.columns[e.col];
       var item  = s.rows[e.row].dataItem;
       
-      <%-- 조회한 데이터의 기능키 번호는 수정 불가 --%>
-      if( col.binding == "fnkeyNo") {
-        if(item.regId == undefined || item.regId == ""){
-          e.cancel = false;
-        }else{
-          e.cancel = true;
-        }
-      }
       <%-- 위치조정여부 Y시에만 열위치, 줄위치, 폭, 높이 입력 가능  --%>
       if( col.binding == "colPosi" || col.binding == "rowPosi" || col.binding == "width" || col.binding == "height") {
         if(item.posiAdjYn == "Y" || item.posiAdjYn == true){
@@ -331,6 +323,7 @@ $("#btnDown").click(function(e){
 <%-- 추가 버튼 클릭 --%>
 $("#btnAdd").click(function(e){
   var newItem = grid2.collectionView.addNew();
+  newItem.fnkeyNo = "자동채번";
   grid2.collectionView.commitNew();
 });
 
