@@ -2,6 +2,7 @@ package kr.co.solbipos.pos.service.confg.func;
 
 import java.util.List;
 import kr.co.solbipos.application.domain.login.SessionInfo;
+import kr.co.solbipos.pos.domain.confg.func.Func;
 import kr.co.solbipos.structure.DefaultMap;
 
 /**
@@ -12,9 +13,20 @@ import kr.co.solbipos.structure.DefaultMap;
 public interface FuncService {
     
     /**
-     * POS 기능정의 리스트 조회
+     * 기능구분 상세 조회
+     * 
      * @param type
      * @return
      */
-    List<DefaultMap<String>> getFuncList(SessionInfo sessionInfo);
+    List<DefaultMap<String>> list(Func func);
+    
+    /**
+     * 기능구분상세 저장
+     * 
+     * @param func
+     * @param sessionInfo
+     * @return
+     */
+    int save(Func[] func, SessionInfo sessionInfo);
+
 }
