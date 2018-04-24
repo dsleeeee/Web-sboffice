@@ -78,6 +78,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         }
         
         // 권한 체크
+
         if (!checkUrl(request, auth, requestURL, sessionInfo.getUserId(), sessionInfo)) {
             log.error(
                     "\n■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n"
@@ -88,8 +89,10 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             String exceptionMsg = messageService.get("cmm.access.denied");
 
             // 권한 없음 처리
-            throw new AuthenticationException(exceptionMsg, "/error/403.sb");
+            //TODO 개발 진행중 주석처리
+            //throw new AuthenticationException(exceptionMsg, "/error/403.sb");
         }
+
 
         // jsp > sessionscope 로 쓸수 있게 httpsession 에 세팅
         HttpSession session = request.getSession();

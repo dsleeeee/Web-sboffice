@@ -2,6 +2,7 @@ package kr.co.solbipos.sys.controller.auth.authgroup;
 
 import static kr.co.solbipos.utils.grid.ReturnUtil.returnJson;
 import static kr.co.solbipos.utils.grid.ReturnUtil.returnListJson;
+import static kr.co.solbipos.utils.spring.StringUtil.convertToJson;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,13 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import kr.co.solbipos.application.domain.login.SessionInfo;
-import kr.co.solbipos.application.domain.resource.ResrceInfo;
-import kr.co.solbipos.application.service.login.LoginService;
 import kr.co.solbipos.enums.Status;
 import kr.co.solbipos.service.session.SessionService;
 import kr.co.solbipos.structure.DefaultMap;
 import kr.co.solbipos.structure.Result;
 import kr.co.solbipos.sys.domain.auth.authgroup.AuthGroup;
+import kr.co.solbipos.sys.domain.auth.authgroup.AuthorExcept;
+import kr.co.solbipos.sys.domain.auth.authgroup.AuthorGrpResrce;
 import kr.co.solbipos.sys.service.auth.authgroup.AuthGroupService;
 
 /**
@@ -45,8 +46,11 @@ public class AuthGroupController {
      * @return
      */
     @RequestMapping(value = "list.sb", method = RequestMethod.GET)
-    public String list(HttpServletRequest request, HttpServletResponse response,
-            Model model) {
+    public String list(HttpServletRequest request, HttpServletResponse response, Model model) {
+        
+        SessionInfo sessionInfo = sessionService.getSessionInfo();
+        List<DefaultMap<String>> list = service.listAvailGroup(sessionInfo);
+        model.addAttribute("availAuthGrp", convertToJson(list));
         return "sys/auth/authgroup/authGroup";
     }
 
@@ -65,10 +69,11 @@ public class AuthGroupController {
             HttpServletResponse response, Model model) {
         
         //권한 그룹 정보 조회 - 시스템일 경우 전체, 대리점은 대상 조직이 자신인 데이터만 조회
-        List<DefaultMap<String>> list = service.list(authGroup);
+        SessionInfo sessionInfo = sessionService.getSessionInfo();
+        List<DefaultMap<String>> list = service.list(authGroup, sessionInfo);
 
         //TODO 리소스 정보 조회 - 자신이 가진 권한
-        return returnListJson(Status.OK, list, authGroup);
+        return returnListJson(Status.OK, list);
     }
 
     /**
@@ -108,9 +113,9 @@ public class AuthGroupController {
         
         //리소스 정보 조회 - 자신이 가진 권한
         SessionInfo sessionInfo = sessionService.getSessionInfo(request);
-        List<DefaultMap<String>> list = service.listResrce(authGroup, sessionInfo);
+        List<AuthorGrpResrce> list = service.listResrce(authGroup, sessionInfo);
 
-        return returnListJson(Status.OK, list, authGroup);
+        return returnListJson(Status.OK, list);
     }
 
     /**
@@ -124,14 +129,58 @@ public class AuthGroupController {
      */
     @RequestMapping(value = "saveResrce.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result saveResrc(AuthGroup authGroups, HttpServletRequest request,
+    public Result saveResrce(@RequestBody AuthorGrpResrce[] authorGrpResrces, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
         SessionInfo sessionInfo = sessionService.getSessionInfo(request);
         
-        //TODO 리소스 정보 저장
+        //리소스 정보 저장
+        int result = service.saveResrce(authorGrpResrces, sessionInfo);
         
-        return returnJson(Status.OK, null);
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 아이디 기준 리소스 정보 조회 - for 임의 권한 부여 팝업
+     * 
+     * @param userId
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "listResrceById.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result listResrceById(String userId, HttpServletRequest request,
+            HttpServletResponse response, Model model) {
+        
+        //리소스 정보 조회 - 자신이 가진 권한
+        SessionInfo sessionInfo = sessionService.getSessionInfo(request);
+        List<AuthorGrpResrce> list = service.listResrceById(userId, sessionInfo);
+
+        return returnListJson(Status.OK, list);
+    }
+    
+    /**
+     * 아이디 기준 리소스 정보 저장 - for 임의 권한 부여 팝업
+     * 
+     * @param authGroup
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "saveResrceById.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveResrceById(@RequestBody AuthorExcept[] authorExcepts, HttpServletRequest request,
+            HttpServletResponse response, Model model) {
+
+        SessionInfo sessionInfo = sessionService.getSessionInfo(request);
+        
+        //리소스 정보 저장
+        int result = service.saveResrceById(authorExcepts, sessionInfo);
+        
+        return returnJson(Status.OK, result);
     }
 
 }

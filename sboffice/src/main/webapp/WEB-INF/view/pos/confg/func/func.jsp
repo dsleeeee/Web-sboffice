@@ -66,12 +66,13 @@
 
 var funcFgList  = ${fnkeyFgList};
 var funcList    = [];
-//var storeKind   = ${ccu.getCommCode("088")};
-var posFg       = ${ccu.getCommCode("035")};
-var useYn       = ${ccu.getCommCode("904")};
+var selectData;
 
-//var storeKindDataMap   = new wijmo.grid.DataMap(storeKind, 'value', 'name');  // 전체는 어떻게 할 것인지
-var storeKindDataMap = new wijmo.grid.DataMap([{id:"01", name:"전체"},{id:"02", name:"단독"},{id:"03", name:"프랜차이즈"}], 'id', 'name');
+var storeKind   = ${ccu.getCommCodeExcpAll("088")};
+var posFg       = ${ccu.getCommCodeExcpAll("035")};
+var useYn       = ${ccu.getCommCodeExcpAll("904")};
+
+var storeKindDataMap   = new wijmo.grid.DataMap(storeKind, 'value', 'name');  // 전체는 어떻게 할 것인지
 var posFgDataMap     = new wijmo.grid.DataMap(posFg, 'value', 'name');
 
 <%-- 데이터 초기화 --%>
@@ -94,7 +95,7 @@ var hData1 =
 var hData2 = 
   [
     {binding:"chk", header:"<s:message code='func.chk' />", allowMerging:true, dataType:wijmo.DataType.Boolean},
-    {binding:"fnkeyNo", header:"<s:message code='func.fnkeyNo' />", maxLength:20, allowMerging:true},
+    {binding:"fnkeyNo", header:"<s:message code='func.fnkeyNo' />", maxLength:2, allowMerging:true},
     {binding:"fnkeyNm", header:"<s:message code='func.fnkeyNm' />", maxLength:20, allowMerging:true},
     {binding:"storeFg", header:"<s:message code='func.storeFg' />", dataMap:storeKindDataMap, allowMerging:true},
     {binding:"posFg", header:"<s:message code='func.posFg' />", dataMap:posFgDataMap, allowMerging:true},
@@ -104,9 +105,9 @@ var hData2 =
     {binding:"width", header:"<s:message code='func.width' />", allowMerging:true},
     {binding:"height", header:"<s:message code='func.height' />", allowMerging:true},
     {binding:"fnkeyFunUseYn0", header:"<s:message code='func.useYn' />", dataType:wijmo.DataType.Boolean},
-    {binding:"imgFileNm0", header:"<s:message code='func.imgFileNm' />"},
+    {binding:"imgFileNm0", header:"<s:message code='func.imgFileNm' />", maxLength:50},
     {binding:"fnkeyFunUseYn1", header:"<s:message code='func.useYn' />", dataType:wijmo.DataType.Boolean},
-    {binding:"imgFileNm1", header:"<s:message code='func.imgFileNm' />"},
+    {binding:"imgFileNm1", header:"<s:message code='func.imgFileNm' />", maxLength:50},
     {binding:"useYn", header:"<s:message code='func.useYn' />"},
     {binding:"dispSeq", header:"<s:message code='func.dispSeq' />"}
   ];
@@ -195,8 +196,8 @@ grid1.formatItem.addHandler(function(s, e) {
 <%-- 그리드 선택 이벤트 --%>
 $(document).on("click",".func_row",function() {
   var row = $(this).data("value");
-  var rowData = grid1.rows[row].dataItem;
-  srchFuncData(rowData);
+  selectData = grid1.rows[row].dataItem;
+  srchFuncData(selectData);
 });
 
 <%-- 그리드2 데이터 조회 --%>
@@ -207,6 +208,9 @@ function srchFuncData(rowData) {
   
   //$.postJSON("${baseUrl}" + "funList.sb", param, function(result) {
   $.postJSON("${baseUrl}" + "funcList.sb", JSON.stringify(param), function(result) {
+
+    $("#funcName").text(rowData.nmcodeNm);
+    $("button").show();
     
     if(result.status === "FAIL") {
       s_alert.pop(result.message);
@@ -222,9 +226,6 @@ function srchFuncData(rowData) {
       return;
     }
     
-    $("#funcName").text(rowData.nmcodeNm);
-    $("button").show();
-
     <%-- 그리드2 데이터 수정 옵션 --%>
     grid2.beginningEdit.addHandler(function (s, e) {
       
@@ -233,7 +234,6 @@ function srchFuncData(rowData) {
       
       <%-- 조회한 데이터의 기능키 번호는 수정 불가 --%>
       if( col.binding == "fnkeyNo") {
-        console.log(item.regId)
         if(item.regId == undefined || item.regId == ""){
           e.cancel = false;
         }else{
@@ -250,7 +250,6 @@ function srchFuncData(rowData) {
       }
       <%-- 일반 사용 Y일때만 일반 이미지명 입력 가능 --%>
       if( col.binding == "imgFileNm0") {
-        console.log(item.fnkeyFunUseYn0)
         if(item.fnkeyFunUseYn0 == "Y" || item.fnkeyFunUseYn0 == true){
           e.cancel = false;
         }else{
@@ -260,10 +259,8 @@ function srchFuncData(rowData) {
       <%-- 외식 사용 Y일때만 외식 이미지명 입력 가능 --%>
       if( col.binding == "imgFileNm1") {
         if(item.fnkeyFunUseYn1 == "Y" || item.fnkeyFunUseYn1 == true){
-          console.log('cancel false');
           e.cancel = false;
         }else{
-          console.log('cancel true');
           e.cancel = true;
         }
       }
@@ -297,6 +294,23 @@ grid2.formatItem.addHandler(function(s, e) {
     }
   }
 });
+
+
+<%-- validation --%>
+grid2.cellEditEnded.addHandler(function (s, e){
+  var col = s.columns[e.col];
+  if(col.maxLength){
+    var val = s.getCellData(e.row, e.col);
+    if(col.binding == "fnkeyNo" || col.binding == "colPosi" || col.binding == "rowPosi" || col.binding == "width" || col.binding == "height") {
+      if(val.match(/[^0-9]/)){
+        s_alert.pop(col.header+"<s:message code='cmm.require.number'/>");
+        s.setCellData(e.row, e.col, val.replace(/[^0-9]/g,""));
+      }
+    }
+  }
+});
+
+
 
 <%-- up 버튼 클릭 --%>
 $("#btnUp").click(function(e){
@@ -363,6 +377,7 @@ $("#btnSave").click(function(e){
   }
   for(var i=0; i<grid2.collectionView.itemsAdded.length; i++){
     grid2.collectionView.itemsAdded[i].status = "I";
+    grid2.collectionView.itemsAdded[i].fnkeyFg = selectData.nmcodeCd;
     paramArr.push(grid2.collectionView.itemsAdded[i]);
   }
   for(var i=0; i<grid2.collectionView.itemsRemoved.length; i++){
@@ -371,10 +386,10 @@ $("#btnSave").click(function(e){
   }
   
   for(var i=0; i<paramArr.length; i++){
-    paramArr[i].posiAdjYn      == true ? "Y":"N";
-    paramArr[i].fnkeyFunUseYn0 == true ? "Y":"N";
-    paramArr[i].fnkeyFunUseYn1 == true ? "Y":"N";
-    paramArr[i].useYn          == true ? "Y":"N";
+    paramArr[i].posiAdjYn       = (paramArr[i].posiAdjYn      == true ? "Y":"N");
+    paramArr[i].fnkeyFunUseYn0  = (paramArr[i].fnkeyFunUseYn0 == true ? "Y":"N");
+    paramArr[i].fnkeyFunUseYn1  = (paramArr[i].fnkeyFunUseYn1 == true ? "Y":"N");
+    paramArr[i].useYn           = (paramArr[i].useYn          == true ? "Y":"N");
   }
   
   $.postJSON("${baseUrl}" + "save.sb", JSON.stringify(paramArr), function(result) {

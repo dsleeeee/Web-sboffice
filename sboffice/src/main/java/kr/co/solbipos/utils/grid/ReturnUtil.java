@@ -91,7 +91,7 @@ public class ReturnUtil {
          * page 객체가 kr.co.solbipos.application.domain.cmm.Page 객체를 상속 받고
          * 조회 쿼리에 전체 갯수 조회 컬럼을 TOT_CNT가 있어야됨
          * */
-        if(!isEmpty(data)) {
+        if(!isEmpty(data) && !isEmpty(page)) {
             @SuppressWarnings("unchecked")
             List<DefaultMap<Object>> a = (List<DefaultMap<Object>>) data;
             

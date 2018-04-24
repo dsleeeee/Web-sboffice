@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import kr.co.solbipos.application.domain.sample.CommonCode;
+import kr.co.solbipos.enums.UseYn;
 import kr.co.solbipos.service.code.CmmCodeService;
 import kr.co.solbipos.structure.DefaultMap;
 import kr.co.solbipos.system.Prop;
@@ -61,8 +62,24 @@ public class CmmCodeUtil {
             return assmblEmptyCombo();
         }
         // 결과 형태를 만들어서 json 으로 리턴
-        return assmblObj(commonCode.getCodeList(), "nmcodeNm", "nmcodeCd");
+        return assmblObj(commonCode.getCodeList(), "nmcodeNm", "nmcodeCd", UseYn.ALL);
     }
+    /**
+     * 공통 코드 조회  "ALL" 제외 (JSON, 명칭/코드)
+     * 
+     * @param nmcodeGrpCd
+     * @return
+     */
+    public String getCommCodeExcpAll(String nmcodeGrpCd) {
+        
+        CommonCode commonCode = getCommCodeData(nmcodeGrpCd);
+        if(commonCode == null) {
+            return assmblEmptyCombo();
+        }
+        // 결과 형태를 만들어서 json 으로 리턴
+        return assmblObj(commonCode.getCodeList(), "nmcodeNm", "nmcodeCd", UseYn.N);
+    }
+    
     /**
      * 공통 코드 조회(JSON, 항목전체)
      * 
@@ -133,17 +150,19 @@ public class CmmCodeUtil {
      * @param value 콤보박스에 value로 사용될 변수명
      * @return
      */
-    public <E> String assmblObj(List<DefaultMap<E>> source, String name, String value) {
+    public <E> String assmblObj(List<DefaultMap<E>> source, String name, String value, UseYn option) {
         if (ObjectUtils.isEmpty(source)) {
             log.warn("assmble source empty...");
             return "";
         }
         List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 
-        HashMap<String, String> m = new HashMap<>();
-        m.put(COMBO_NAME, "전체");
-        m.put(COMBO_VALUE, "ALL");
-        list.add(m);
+        if(option == UseYn.ALL) {
+            HashMap<String, String> m = new HashMap<>();
+            m.put(COMBO_NAME, "전체");
+            m.put(COMBO_VALUE, "ALL");
+            list.add(m);
+        }
         
         source.stream().forEach(x -> {
             list.add(assmbl(x, name, value)); // 콤보박스의 내용을 리스트에 추가

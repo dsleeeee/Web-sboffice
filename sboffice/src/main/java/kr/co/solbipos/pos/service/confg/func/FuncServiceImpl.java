@@ -44,6 +44,9 @@ public class FuncServiceImpl implements FuncService{
             func.setModId(sessionInfo.getUserId());
             
             if(func.getStatus() == GridDataFg.INSERT) {
+                String fnKeyNo = func.getFnkeyFg() + func.getFnkeyNo();
+                
+                func.setFnkeyNo(fnKeyNo);
                 func.setUseYn("Y");
                 procCnt += mapper.insertFunc(func);
             }

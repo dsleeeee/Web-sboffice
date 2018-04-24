@@ -1,4 +1,4 @@
-package kr.co.solbipos.enums;
+package kr.co.solbipos.sys.enums;
 
 import org.apache.ibatis.type.MappedTypes;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -6,31 +6,29 @@ import kr.co.solbipos.enums.CodeEnum;
 import kr.co.solbipos.system.CodeEnumTypeHandler;
 
 /**
- * 사용 여부 Y:사용, N:미사용 enum type<br>
- * 프로젝트 전체에서 사용
+ * 포함 제외 구분 I:포함, E:제외 enum type<br>
+ * TB_WB_AUTHOR_EXCEPT > INCLD_EXCLD_FG
  * 
  * @author bjcho
  *
  */
-public enum UseYn implements CodeEnum {
+public enum IncldExcldFg implements CodeEnum {
     
-    /** 전체 */
-    ALL("ALL"),
-    /** 사용 */
-    Y("Y"),
-    /** 미사용 */
-    N("N");
+    /** 포함 */
+    INCLUDE("I"),
+    /** 제외 */
+    EXCLUDE("E");
     
     private String code;
   
-    UseYn(String code) {
+    IncldExcldFg(String code) {
         this.code = code;
     }
     
-    @MappedTypes(UseYn.class)
-    public static class TypeHandler extends CodeEnumTypeHandler<UseYn> {
+    @MappedTypes(IncldExcldFg.class)
+    public static class TypeHandler extends CodeEnumTypeHandler<IncldExcldFg> {
         public TypeHandler() {
-            super(UseYn.class);
+            super(IncldExcldFg.class);
         }
     }
      

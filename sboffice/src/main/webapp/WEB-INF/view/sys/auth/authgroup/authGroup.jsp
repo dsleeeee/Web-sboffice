@@ -37,6 +37,23 @@
           </div>
         </td>
       </tr>
+      <tr>
+        <%-- 예외 관리 --%>
+        <th><s:message code="authGroup.exceptMng" /></th>
+        <td>
+          <div class="sb-select fl">
+            <div id="availCombo"></div>
+          </div>
+        </td>
+        <%-- 예외 관리 --%>
+        <th><s:message code="authGroup.exceptMng" /></th>
+        <td>
+          <div class="sb-select fl">
+            <div id="userId" class="sb-input"></div>
+          </div>
+          <a href="javascript:;" class="btn_grayS ml5" id="btnExceptMng"><s:message code="authGroup.exceptMng"/></a>
+        </td>
+      </tr>
     </tbody>
   </table>
 
@@ -50,8 +67,8 @@
   <div class="wj-TblWrap mt20">
 
     <%--left--%>
-    <div class="w50 fl">
-      <div class="wj-TblWrapBr mr10 pd20" style="height:700px;">
+    <div class="w60 fl">
+      <div class="wj-TblWrapBr mr10 pd20" style="height:500px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code="authGroup.authGroup"/></span>
           <button id="btnAdd" class="btn_skyblue"><s:message code="cmm.add"/></button>
@@ -66,14 +83,14 @@
     <%--//left--%>
 
     <%--right--%>
-    <div class="w50 fr">
-      <div class="wj-TblWrapBr ml10 pd20" style="height:700px;">
+    <div class="w40 fr">
+      <div class="wj-TblWrapBr ml10 pd20" style="height:500px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code="authGroup.resrcInfo"/></span>
           <button id="btnResrceSave" class="btn_skyblue"><s:message code="cmm.save"/></button>
         </div>
         <%--위즈모 트리--%>
-        <div id="treeResrce"></div>
+        <div id="treeResrce" style="height:450px;"></div>
         <%--//위즈모 트리--%>
       </div>
     </div>
@@ -94,9 +111,11 @@
     var rdata = [
         {binding:"grpCd", header:"<s:message code='authGroup.grpCd' />", width:70, isReadOnly:true},
         {binding:"grpNm", header:"<s:message code='authGroup.grpNm' />", width:100, isRequired:true},
+      <c:if test="${orgnFg == 'MASTER'}">
         {binding:"targetAllFg", header:"<s:message code='authGroup.targetAllFg' />", width:100, dataMap:targetAllFg},
         {binding:"targetOrgn", header:"<s:message code='authGroup.targetOrgn' />", width:100},
         {binding:"targetOrgnNm", header:"<s:message code='authGroup.targetOrgnNm' />", width:100, isReadOnly:true},
+      </c:if>
         {binding:"remark", header:"<s:message code='cmm.remark' />", width:100},
         {binding:"useYn", header:"<s:message code='cmm.use' />", width:50, dataType:wijmo.DataType.Boolean}
     ];
@@ -104,37 +123,49 @@
     grid.isReadOnly  = false;
     var grpNm        = wcombo.genInput("#grpNm");
     var useYn        = wcombo.genCommonBox("#useYn", ${ccu.getCommCode("904")});
+    var availCombo   = wcombo.genCommonBox("#availCombo", ${availAuthGrp});
+    var userId       = wcombo.genInput("#userId");
     
-    var test = [
-      {cd: '00001', header: '포스관리', items: [
-        {cd: '00002', header: 'POS 설정관리'},
-        {cd: '00003', header: '라이선스 관리', items: [
-          {cd: '00004', header: '등록'},
-          {cd: '00005', header: '저장'}
-          ]
-        }
-        ]
-      },
-      {cd: '00001', header: '가맹점관리', items: [
-        {cd: '00001', header: '본사정보'}
-        ]
-      }
-    ];
+    <%-- 메뉴 트리 생성 --%>
     var tree = new wijmo.nav.TreeView('#treeResrce', {
-      itemsSource: test,
-      displayMemberPath: 'header',
+      displayMemberPath: 'resrceDisp',
       childItemsPath: 'items',
       expandOnClick : true,
       isReadOnly: true,
-      showCheckboxes: true,
-      allowDragging: true,
-      isContentHtml: true,
-      loadedItems: function(s, e) {
-        console.log("loadedItems...");
-        s.collapseToLevel(3);
+      showCheckboxes: true
+    });
+    
+    var view = new wijmo.collections.CollectionView();
+    <%-- 트리 체크박스 초기화 --%>
+    tree.loadedItems.addHandler(function(s, e) {
+      s.collapseToLevel(0);
+      <%-- //TODO 느림.. --%>
+      for (var nd = tree.getFirstNode(); nd; nd = nd.next()) {
+        //console.log( new Date().getTime());
+        if(!isEmpty(nd)){
+          nd.isChecked = nd.dataItem.authFg;
+        }
+      }
+      view = new wijmo.collections.CollectionView(tree.checkedItems);
+    });
+    
+    <%-- 트리에 아이템 체크 상태가 바뀌었을 때 CollectionView에 반영 --%>
+    tree.checkedItemsChanged.addHandler(function(s, e) {
+
+      view.itemsAdded.clear();
+      view.itemsRemoved.clear();
+      for(var i = 0; i < tree.checkedItems.length; i++) {
+        if(!view.contains(tree.checkedItems[i])) {
+          view.itemsAdded.push(tree.checkedItems[i]);
+        }
+      }
+      var viewNew = new wijmo.collections.CollectionView(tree.checkedItems);
+      for(var i = 0; i < view.items.length; i++) {
+        if(!viewNew.contains(view.items[i])) {
+          view.itemsRemoved.push(view.items[i]);
+        }
       }
     });
-
     
     <%-- 그리드 컬럼 특수 기능 처리 --%>
     grid.formatItem.addHandler(function(s, e) {
@@ -143,7 +174,7 @@
         var item = s.rows[e.row].dataItem;
         if( col.binding == "grpCd" ) {
           //TODO 링크 표시 + cursor-hand
-          //wijmo.addClass(e.cell, 'low', item.sales < 1000);
+          wijmo.addClass(e.cell, 'wijLink');
         }
         else if( col.binding == "useYn" ) {
           e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.useYn == true || item.useYn == "Y" ? 'checked' : '') + '>';
@@ -160,15 +191,15 @@
           var param = {};
           param.grpCd = grid.cells.getCellData(ht.row, ht.col, true);
           if(param.grpCd != '') {
-            wgrid.getGridData("${baseUrl}" + "listResrce.sb", param, tree);
-            /*
+            tree.itemsSource = [];
             $.postJSON("${baseUrl}" + "listResrce.sb", param, function(result) {
-              //TODO
+              tree.itemsSource = result.data.list;
+              <%-- 트리에서 저장 예외관리 시 키로 사용--%>
+              tree.currentGrpCd = param.grpCd;
             },
             function(result) {
               s_alert.pop(result.data.msg);
             });
-            */
           }
         }
       }
@@ -189,6 +220,11 @@
 
     <%-- 권한 그룹 추가 --%>
     $("#btnAdd").click(function(e){
+      grid.collectionView.newItemCreator = function() {
+        return {
+          useYn: 'Y'
+        }
+      };
       var newItem = grid.collectionView.addNew();
       grid.collectionView.commitNew();
     });
@@ -208,25 +244,31 @@
 
     <%-- 권한 그룹 저장 --%>
     $("#btnSave").click(function(e){
-
+      
       var paramArr = new Array();
       
-      for(var i=0; i<grid.collectionView.itemsEdited.length; i++){
-        grid.collectionView.itemsEdited[i].status = "U";
-        paramArr.push(grid.collectionView.itemsEdited[i]);
+      var gridView = grid.collectionView;
+      for(var i = 0; i < gridView.itemsAdded.length; i++) {
+        gridView.itemsAdded[i].status = 'I';
+        paramArr.push(gridView.itemsAdded[i]);
       }
-      for(var i=0; i<grid.collectionView.itemsAdded.length; i++){
-        grid.collectionView.itemsAdded[i].status = "I";
-        paramArr.push(grid.collectionView.itemsAdded[i]);
+      for(var i = 0; i < gridView.itemsEdited.length; i++) {
+        gridView.itemsEdited[i].status = 'U';
+        paramArr.push(gridView.itemsEdited[i]);
       }
-      for(var i=0; i<grid.collectionView.itemsRemoved.length; i++){
-        grid.collectionView.itemsRemoved[i].status = "D";
-        paramArr.push(grid.collectionView.itemsRemoved[i]);
+      for(var i = 0; i < gridView.itemsRemoved.length; i++) {
+        gridView.itemsRemoved[i].status = 'D';
+        paramArr.push(gridView.itemsRemoved[i]);
       }
       
-      $.postJSON("${baseUrl}" + "save.sb", JSON.stringify(paramArr), function(result) {
+      if(paramArr.length <= 0) {
+        s_alert.pop("<s:message code='cmm.not.modify'/>");
+        return;
+      }
+
+      $.postJSONArray("${baseUrl}" + "save.sb", paramArr, function(result) {
         s_alert.pop("<s:message code='msg.save.succ' />");
-        grid.collectionView.clearChanges();
+        gridView.clearChanges();
       },
       function(result) {
         s_alert.pop(result.data.msg);
@@ -235,7 +277,50 @@
     
     <%-- 리스스 정보 저장 --%>
     $("#btnResrceSave").click(function(e){
-    });
+      if(isEmpty(tree.currentGrpCd)) {
+        s_alert.pop("<s:message code='authGroup.authGroup' /><s:message code='cmm.require.select' />");
+        return;
+      }
 
+      var paramArr = new Array();
+      for(var i = 0; i < view.itemsAdded.length; i++) {
+        view.itemsAdded[i].status = 'I';
+        view.itemsAdded[i].grpCd = tree.currentGrpCd;
+        paramArr.push(view.itemsAdded[i]);
+      }
+      for(var i = 0; i < view.itemsRemoved.length; i++) {
+        view.itemsRemoved[i].status = 'D';
+        view.itemsRemoved[i].grpCd = tree.currentGrpCd;
+        paramArr.push(view.itemsRemoved[i]);
+      }
+      //console.log(paramArr);
+      if(paramArr.length <= 0) {
+        s_alert.pop("<s:message code='cmm.not.modify'/>");
+        return;
+      }
+      $.postJSONArray("${baseUrl}" + "saveResrce.sb", paramArr, function(result) {
+        s_alert.pop("<s:message code='msg.save.succ' />");
+        view.clearChanges();
+      },
+      function(result) {
+        s_alert.pop(result.data.msg);
+      });
+
+    });
+    
+    <%-- 예외관리 팝업 --%>
+    $("#btnExceptMng").click(function(e){
+      if(isEmpty(userId.text)) {
+        s_alert.pop("<s:message code='login.userId' /><s:message code='cmm.require.text' />");
+        return;
+      }
+      <%-- 예외권한 부여 레이어 호출 --%>
+      _showAuthExceptLayer(userId.text);
+    });
+    
   });
 </script>
+
+<%-- 매장 선택 --%>
+<c:import url="/WEB-INF/view/sys/auth/authgroup/authGroupExcept.jsp"/>
+

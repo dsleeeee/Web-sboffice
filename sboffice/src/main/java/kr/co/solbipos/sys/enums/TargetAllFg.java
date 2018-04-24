@@ -7,7 +7,7 @@ import kr.co.solbipos.system.CodeEnumTypeHandler;
 
 /**
  * 대상 전체 구분 A:전체, P:일부 enum type<br>
- * TB_WB_AUTHOR_GRP__FO > TargetAllFg
+ * TB_WB_AUTHOR_GRP_INFO > TargetAllFg
  * 
  * @author bjcho
  *

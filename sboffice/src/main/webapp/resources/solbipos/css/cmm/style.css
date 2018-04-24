@@ -5,7 +5,7 @@
  * **************************************** */
 @font-face {
      font-family: 'NotoR';
-     src: url('https://cdn.kcp.co.kr/font_web/NotoSansCJKkr-Regular.woff') format('woff');
+     src: url('NotoSansCJKkr-Regular.woff') format('woff');
 }
 
 
@@ -83,8 +83,9 @@ button {outline:none; border:0; font-family:'NotoR', Malgun Gothic, '맑은 고�
 /* **************************************** *
  * COMMON
  * **************************************** */
-.w4 {width:4%;} .w5 {width:5%;} .w7 {width:7%;} .w8 {width:8%;} .w10 {width:10%;} .w11 {width:11.111111%;} .w15 {width:15%;} .w20 {width:20%;} .w25 {width:25%;} .w28 {width:28%;} .w30 {width:30%;} .w33 {width:33.333333%;} .w35 {width:35%;} .w40 {width:40%;} .w45 {width:45%;} .w50 {width:50%;} .w60 {width:60%;} .w70 {width:70%;} .w75 {width:75%;} .w80 {width:80%;} .w85 {width:85%;} .w90 {width:90%;} .w100 {width:100%;} 
-.w110 {width:110px;} .w120 {width:120px;} .w130 {width:130px;} .w150 {width:150px;} .w180 {width:180px;} .w200 {width:200px;} .w210 {width:210px;} .w500 {width:500px;} .w600 {width:600px;} .w700 {width:700px;} .w800 {width:800px;}
+.w4 {width:4%;} .w5 {width:5%;} .w7 {width:7%;} .w8 {width:8%;} .w10 {width:10%;} .w11 {width:11.111111%;} .w15 {width:15%;} .w20 {width:20%;} .w25 {width:25%;} .w28 {width:28%;} .w30 {width:30%;} .w33 {width:33.333333%;} .w35 {width:35%;} .w40 {width:40%;} .w45 {width:45%;} .w50 {width:50%;} .w60 {width:60%;} .w65 {width:65%;} .w70 {width:70%;} .w75 {width:75%;} .w80 {width:80%;} .w85 {width:85%;} .w90 {width:90%;} .w100 {width:100%;} 
+
+.w98px {width:98px;} .w105 {width:105px;} .w110 {width:110px;} .w115 {width:115px;} .w120 {width:120px;} .w130 {width:130px;} .w150 {width:150px;} .w180 {width:180px;} .w200 {width:200px;} .w210 {width:210px;} .w500 {width:500px;} .w600 {width:600px;} .w700 {width:700px;} .w800 {width:800px;}
 
 .b4 {border:1px solid #dbdbdb;} .br {border-right:1px solid #dbdbdb;} .bl {border-left:1px solid #dbdbdb;} .bb {border-bottom:1px solid #dbdbdb;} .bt {border-top:1px solid #dbdbdb;}
 
@@ -722,6 +723,12 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
  * subContents
  * **************************************** */
 .subCon {padding:20px 20px 40px;}
+.subCon2 {padding:20px 20px 0;} /*테이블속성, 테이블관리,  판매터치키 페이지를 위해 하단 padding 삭제*/
+
+.elseCon {text-align:center; padding-top:280px; position:relative;}
+.elseCon:before {content:'!';font-size:6em; color:#fff; font-weight:bold; font-family:georgia, times, serif; width:100px; height:100px; background:#ddd; border-radius:100%; position:absolute; top:150px; left:50%; margin-left:-50px;}
+.elseCon .lgTxt {font-size:1.875em; line-height:1.5em; color:#222; font-weight:bold;}
+.elseCon .smTxt {font-size:1em; line-height:1.5em;}
 
 .searchBar {position:relative; border:1px solid #93cbfc; height:45px; background:#ebf5ff;}
 .searchBar a {display:block; width:100%; height:100%; line-height:45px; color:#337dde;  padding:0 15px; font-size:0.875em; position:relative;}
@@ -795,7 +802,7 @@ div.commtWrap .btn_skyblue {width:140px; position:absolute; top:0px; right:0px; 
 
 .sb-select .wj-content {display:block!important; border:1px solid #e8e8e8; height:30px; line-height:30px; border-radius:0px; }
 .sb-select .wj-content .wj-template {height:28px!important;}
-.sb-select .wj-content .wj-btn {height:28px!important; font-size:12px!important;}
+.sb-select .wj-content .wj-btn {height:28px!important; font-size:12px!important; margin-left:-1px; border-color:#e8e8e8!important;}
 .sb-select .wj-content input {font-size:0.75em; height:28px!important;}
 .sb-select .wj-content .wj-input-group-btn > .wj-btn {padding-top:5px; border-left:1px solid #e8e8e8;}
 .wj-dropdown-panel {margin-top:-1px; border-radius:0px!important; border:1px solid #e8e8e8!important;}
@@ -837,6 +844,12 @@ div.commtWrap .btn_skyblue {width:140px; position:absolute; top:0px; right:0px; 
 .wj-cell .v-center {position: relative; top: 50%; transform: translateY(-50%); white-space: pre-wrap; color:#222; font-size:12px;}
 .wj-cells .wj-row .wj-cell.wj-group {text-align:left!important;}
 
+.wijLink {
+  color: #2c59ff!important;
+  text-decoration:underline;
+  cursor:pointer;    
+}
+
 .pageNum {position:relative; width:100%; text-align:center;}
 .pageNum ul {height:30px; text-align:center; display:inline-block; overflow:hidden;}
 .pageNum ul li {display:inline-block; width:34px; height:30px; float:left; margin:0 2px;}
@@ -865,6 +878,7 @@ div.commtWrap .btn_skyblue {width:140px; position:absolute; top:0px; right:0px; 
 .pageNum2 ul li.btn_previous a span, .pageNum2 ul li.btn_next a span {font-size:0px;}
 
 .h2_tit {font-size:1em; color:#222; margin-bottom:20px;}
+.h2_tit2 {font-size:1em; color:#222; margin-bottom:10px;}
 .h3_tbl {font-size:0.75em; border:1px solid #ccc; border-top:0px; background:#e8e8e8; padding:5px 15px; color:#222; min-width:550px;}
 .h3_tbl span {font-size:1em;}
 .h3_tbl2 {font-size:0.75em; border:1px solid #ccc; background:#e8e8e8; padding:5px 15px; color:#222; min-width:550px; position:relative;}
@@ -997,6 +1011,82 @@ div.commtWrap .btn_skyblue {width:140px; position:absolute; top:0px; right:0px; 
 .smsPay li span a:hover {background:#bbb; color:#fff;}
 .smsPay li span a:hover em {color:#fff;}
 
+/*포스화면 관련된 페이지 : 1024*768안에 스크롤없이 사이즈 고정*/
+.posWrap {width:760px; height:635px; position:relative;}
+.prev1 {width:510px; height:510px; border:1px solid #dbdbdb;}
+.prev2 {width:402px; height:542px; border:1px solid #dbdbdb;}
+.patternBg {background:url(../img/bg_pattern.png) repeat;}
+.cfgWrap {overflow-y:auto; height:605px; border:1px solid #dbdbdb;}
+.cfgWrap > div.wj-flexgrid {margin-top:-1px; margin-bottom:10px;}
+.cfgWrap2 {overflow-y:auto; height:542px; border:1px solid #dbdbdb;}
+.cfgWrap2 > div.wj-flexgrid {margin-top:-1px; margin-bottom:10px;}
+.shopSetting {border:1px solid #dbdbdb; border-top:0px; width:510px; height:95px; padding:10px 0 10px 10px; position:relative;}
+.shopSetting2 {border:1px solid #dbdbdb; width:726px; height:50px; padding:10px 0 10px 10px; position:absolute; left:0px; top:581px;}
+.shopSetting .btn_int {position:absolute; top:50px; right:15px;}
+.shopSetting .btn_int button {width:70px;}
+.shopSetting2 .btn_int {position:absolute; top:10px; right:15px;}
+.shopSetting2 .btn_int button {width:70px;}
+
+    
+.align a {display:inline-block; width:30px; height:30px; background:url(../img/ic_shop_setting.png) #e8e8e8 no-repeat; border-radius:5px;}
+.align a:hover {background:url(../img/ic_shop_setting.png) #c8c8c8 no-repeat;}
+.align a.on {background:url(../img/ic_shop_setting.png) #93cbfc no-repeat;}
+
+a.btn_left, a.btn_left:hover, a.btn_left.on {background-position:0 0;}
+a.btn_center, a.btn_center:hover, a.btn_center.on {background-position:0 -30px;}
+a.btn_right, a.btn_right:hover, a.btn_right.on {background-position:0 -60px;}
+a.btn_top, a.btn_top:hover, a.btn_top.on {background-position:0 -90px;}
+a.btn_middle, a.btn_middle:hover, a.btn_middle.on {background-position:0 -120px;}
+a.btn_bottom, a.btn_bottom:hover, a.btn_bottom.on {background-position:0 -150px;}
+
+a.btn_objleft, a.btn_objleft:hover, a.btn_objleft.on {background-position:0 -180px;}
+a.btn_objcenter, a.btn_objcenter:hover, a.btn_objcenter.on {background-position:0 -210px;}
+a.btn_objright, a.btn_objright:hover, a.btn_objright.on {background-position:0 -240px;}
+a.btn_objtop, a.btn_objtop:hover, a.btn_objtop.on {background-position:0 -270px;}
+a.btn_objmiddle, a.btn_objmiddle:hover, a.btn_objmiddle.on {background-position:0 -300px;}
+a.btn_objbottom, a.btn_objbottom:hover, a.btn_objbottom.on {background-position:0 -330px;}
+
+a.btn_bold, a.btn_bold:hover, a.btn_bold.on {background-position:0 -360px;}
+a.btn_italic, a.btn_italic:hover, a.btn_italic.on {background-position:0 -390px;}
+a.btn_underline, a.btn_underline:hover, a.btn_underline.on {background-position:0 -420px;}
+
+.bgfile input {border:1px solid #e8e8e8; font-size:12px; width:188px; height:30px; padding:3px 0 0 3px; position:relative;}
+.bgfile input:before {position:absolute; content:'파일선택'; width:68px; height:22px; background:#e8e8e8; color:#888; font-size:12px; padding:5px 0 0 10px;}
+.bgfile a {font-size:12px;}
+
+.ftTit {background:url(../img/ic_tbl_setting.png) center no-repeat; position:Absolute; margin-left:34px;font-size:0px; width:31px; height:20px;}
+.frGroupWrap {overflow-y:auto; height:605px; border:1px solid #dbdbdb; background:#e8e8e8; text-align:center; padding:15px 0 0;}
+.frGroupWrap span {display:block; margin-bottom:10px;}
+.frGroupWrap a {font-size:12px; background:#fff; border:1px solid #dbdbdb; width:50px; text-align:center; padding:10px 0; display:inline-block;}
+.frGroupWrap a:hover {color:#444;}
+.frGroupWrap a.on {background:#444;  border:1px solid #444; color:#fff;}
+
+.tableImg {padding-top:15px; text-align:center;}
+.tableImg li {margin-bottom:20px;}
+.tableImg li img {width:60%;}
+
+.h120 {height:120px;} .h180 {height:180px;}
+.touchGroupWrap {width:400px; overflow:hidden; position:relative;}
+.touchGroup {width:1000%; background:url(../img/bg_touchkey.png) repeat;}
+.touchGroupWrap p.btn {width:80px; height:60px; background:#fff; position:absolute; right:0px; bottom:0px; overflow:hidden; padding:7px 0 0 8px;}
+.touchGroupWrap p.btn a {border:1px solid #93cbfc; background:#ebf5ff; display:inline-block; width:30px; height:46px; font-size:0px; border-radius:5px;}
+.touchGroupWrap p.btn a:hover {background:#93cbfc;}
+.touchGroupWrap p.btn a:last-child {margin-left:5px;}
+.touchGroupWrap p.btn a:last-child:before {content:''; position:absolute; margin:17px 0 0 11px; background:url(../img/menu_bullet_blue.png) no-repeat; width:6px; height:10px;}
+.touchGroupWrap p.btn a:last-child:hover:before {content:''; position:absolute; margin:17px 0 0 11px; background:url(../img/menu_bullet.png) no-repeat; width:6px; height:10px;}
+.touchGroupWrap p.btn a:first-child:before {content:''; position:absolute; margin:17px 0 0 11px; background:url(../img/menu_bullet_blue.png) no-repeat; width:6px; height:10px; transform:rotate(180deg);}
+.touchGroupWrap p.btn a:first-child:hover:before {content:''; position:absolute; margin:17px 0 0 11px; background:url(../img/menu_bullet.png) no-repeat; width:6px; height:10px;}
+
+.touchgoodsWrap {width:400px; height:360px; overflow:hidden; position:relative;}
+.touchgoods {width:1000%; height:360px; background:url(../img/bg_touchkey.png) repeat;}
+.touchgoodsWrap p.btn {width:80px; height:60px; background:#fff; position:absolute; right:0px; bottom:0px; overflow:hidden; padding:7px 0 0 8px;}
+.touchgoodsWrap p.btn a {border:1px solid #93cbfc; background:#ebf5ff; display:inline-block; width:30px; height:46px; font-size:0px; border-radius:5px;}
+.touchgoodsWrap p.btn a:hover {background:#93cbfc;}
+.touchgoodsWrap p.btn a:last-child {margin-left:5px;}
+.touchgoodsWrap p.btn a:last-child:before {content:''; position:absolute; margin:17px 0 0 11px; background:url(../img/menu_bullet_blue.png) no-repeat; width:6px; height:10px;}
+.touchgoodsWrap p.btn a:last-child:hover:before {content:''; position:absolute; margin:17px 0 0 11px; background:url(../img/menu_bullet.png) no-repeat; width:6px; height:10px;}
+.touchgoodsWrap p.btn a:first-child:before {content:''; position:absolute; margin:17px 0 0 11px; background:url(../img/menu_bullet_blue.png) no-repeat; width:6px; height:10px; transform:rotate(180deg);}
+.touchgoodsWrap p.btn a:first-child:hover:before {content:''; position:absolute; margin:17px 0 0 11px; background:url(../img/menu_bullet.png) no-repeat; width:6px; height:10px;}
 
 /* **************************************** *
  * layer
