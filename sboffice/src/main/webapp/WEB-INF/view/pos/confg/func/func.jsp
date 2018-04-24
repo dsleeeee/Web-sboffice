@@ -7,60 +7,46 @@
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
 <c:set var="baseUrl" value="/pos/confg/func/func/" />
 
-<!--right-->
-<div class="contents">
-  <!--서브컨텐츠-->
-  <div class="subCon">
+<div class="subCon">
 
-    <!--2단-->
-    <div class="wj-TblWrap mb40">
-      <!--left-->
-      <div class="w50 fl" style="width: 30%">
-        <div class="wj-TblWrapBr mr10 pd20" style="height: 580px;">
-          <div class="updownSet oh mb10">
-            <span class="fl bk lh30"><s:message code='func.funFg' /></span>
-          </div>
-          <!--위즈모 테이블-->
-          <div id="theGrid1"></div>
-          <!--//위즈모 테이블-->
+  <div class="wj-TblWrap mb40">
+    <!--left-->
+    <div class="w50 fl" style="width: 30%">
+      <div class="wj-TblWrapBr mr10 pd20" style="height: 580px;">
+        <div class="updownSet oh mb10">
+          <span class="fl bk lh30"><s:message code='func.funFg' /></span>
         </div>
+        <%-- 기능구분 --%>
+        <div id="theGrid1"></div>
       </div>
-      <!--//left-->
-
-      <!--right-->
-      <div class="w50 fr" style="width: 70%">
-        <div class="wj-TblWrapBr ml10 pd20" style="height: 580px;">
-          <div class="updownSet oh mb10">
-            <span class="fl bk lh30">기능 <span id="funcName"></span></span>
-            <button class="btn_up" id="btnUp" style="display: none;">
-              <s:message code="cmm.up" />
-            </button>
-            <button class="btn_down" id="btnDown" style="display: none;">
-              <s:message code="cmm.down" />
-            </button>
-            <button class="btn_skyblue" id="btnAdd" style="display: none;">
-              <s:message code="cmm.add" />
-            </button>
-            <button class="btn_skyblue" id="btnDel" style="display: none;">
-              <s:message code="cmm.delete" />
-            </button>
-            <button class="btn_skyblue" id="btnSave" style="display: none;">
-              <s:message code="cmm.save" />
-            </button>
-          </div>
-          <!--위즈모 테이블-->
-          <div id="theGrid2" style="height: 495px;"></div>
-          <!--//위즈모 테이블-->
-        </div>
-      </div>
-      <!--//right-->
     </div>
-    <!--//2단-->
-
+    <div class="w50 fr" style="width: 70%">
+      <div class="wj-TblWrapBr ml10 pd20" style="height: 580px;">
+        <div class="updownSet oh mb10">
+          <span class="fl bk lh30">기능 <span id="funcName"></span></span>
+          <%--버튼 --%>
+          <button class="btn_up" id="btnUp" style="display: none;">
+            <s:message code="cmm.up" />
+          </button>
+          <button class="btn_down" id="btnDown" style="display: none;">
+            <s:message code="cmm.down" />
+          </button>
+          <button class="btn_skyblue" id="btnAdd" style="display: none;">
+            <s:message code="cmm.add" />
+          </button>
+          <button class="btn_skyblue" id="btnDel" style="display: none;">
+            <s:message code="cmm.delete" />
+          </button>
+          <button class="btn_skyblue" id="btnSave" style="display: none;">
+            <s:message code="cmm.save" />
+          </button>
+        </div>
+        <%-- 기능구분 상세 --%>
+        <div id="theGrid2" style="height: 495px;"></div>
+      </div>
+    </div>
   </div>
-  <!--//서브컨텐츠-->
 </div>
-<!--//right-->
 
 <script>
 
@@ -206,8 +192,7 @@ function srchFuncData(rowData) {
   
   param.fnkeyFg = rowData.nmcodeCd;
   
-  //$.postJSON("${baseUrl}" + "funList.sb", param, function(result) {
-  $.postJSON("${baseUrl}" + "funcList.sb", JSON.stringify(param), function(result) {
+  $.postJSON("${baseUrl}" + "funcList.sb", param, function(result) {
 
     $("#funcName").text(rowData.nmcodeNm);
     $("button").show();
@@ -301,6 +286,7 @@ grid2.cellEditEnded.addHandler(function (s, e){
   var col = s.columns[e.col];
   if(col.maxLength){
     var val = s.getCellData(e.row, e.col);
+    <%-- 숫자만 --%>
     if(col.binding == "fnkeyNo" || col.binding == "colPosi" || col.binding == "rowPosi" || col.binding == "width" || col.binding == "height") {
       if(val.match(/[^0-9]/)){
         s_alert.pop(col.header+"<s:message code='cmm.require.number'/>");
@@ -309,8 +295,6 @@ grid2.cellEditEnded.addHandler(function (s, e){
     }
   }
 });
-
-
 
 <%-- up 버튼 클릭 --%>
 $("#btnUp").click(function(e){
@@ -363,7 +347,7 @@ $("#btnDel").click(function(e){
 <%-- 저장 버튼 클릭 --%>
 $("#btnSave").click(function(e){
  
-  for(var i = 0; i < grid2.collectionView.itemCount; i ++) {
+  for(var i = 0; i < grid2.collectionView.itemCount; i ++) {  // dispSeq 재설정
     grid2.collectionView.editItem(grid2.collectionView.items[i]);
     grid2.collectionView.items[i].dispSeq = (i+1);
     grid2.collectionView.commitEdit();
@@ -392,7 +376,7 @@ $("#btnSave").click(function(e){
     paramArr[i].useYn           = (paramArr[i].useYn          == true ? "Y":"N");
   }
   
-  $.postJSON("${baseUrl}" + "save.sb", JSON.stringify(paramArr), function(result) {
+  $.postJSONArray("${baseUrl}" + "save.sb", paramArr, function(result) {
     s_alert.pop("<s:message code='msg.save.succ' />");
     grid2.collectionView.clearChanges();
   },
@@ -400,6 +384,5 @@ $("#btnSave").click(function(e){
     s_alert.pop(result.data.msg);
   });
 });
-
 
 </script>

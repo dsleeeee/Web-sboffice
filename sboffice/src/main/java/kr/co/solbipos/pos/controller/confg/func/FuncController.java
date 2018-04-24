@@ -71,7 +71,7 @@ public class FuncController {
      */
     @RequestMapping(value = "funcList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result list(@RequestBody Func func, HttpServletRequest request,
+    public Result list(Func func, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
         log.error(":::: test - fnkeyFg : " + func.getFnkeyFg());
