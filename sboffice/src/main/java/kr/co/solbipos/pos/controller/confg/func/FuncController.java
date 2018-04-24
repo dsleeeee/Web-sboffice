@@ -74,8 +74,6 @@ public class FuncController {
     public Result list(Func func, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
-        log.error(":::: test - fnkeyFg : " + func.getFnkeyFg());
-        
         List<DefaultMap<String>> list = service.list(func);
         
         return returnListJson(Status.OK, list, func);
