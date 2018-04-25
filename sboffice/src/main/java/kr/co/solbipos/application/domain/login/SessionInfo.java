@@ -1,6 +1,5 @@
 package kr.co.solbipos.application.domain.login;
 
-import java.util.HashMap;
 import java.util.List;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
@@ -127,16 +126,17 @@ public class SessionInfo extends Cmm {
      * 메뉴 관련 데이터
      */
 
-    /** 전체메뉴 조회(리스트) */
-    private List<HashMap<String, Object>> menuData;
-    /** 즐겨찾기메뉴 조회 (리스트) */
-    private List<HashMap<String, Object>> bkmkData;
+    /** 전체메뉴 조회(JSON) */
+    private String menuData;
+
+    /** 즐겨찾기메뉴 조회 (JSON) */
+    private String bkmkData;
     
     /** 전체 메뉴 : 위즈모 그리드용 데이터 */
-    private String madeMenuData;
+    //private String madeMenuData;
 
     /** 즐겨찾기 메뉴 : 위즈모 그리드용 데이터 */
-    private String madeBkmkData;
+    //private String madeBkmkData;
 
     /** 현재 선택한 메뉴 정보 */
     private ResrceInfoBase currentMenu;

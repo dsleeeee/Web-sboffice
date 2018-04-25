@@ -130,7 +130,35 @@
   $(".moveBtn .mL").click(function() {
     $("#_fixMenu li:hidden").last().show();
   });
-  
-  
+
+  <%-- 메뉴 열고 닫기 --%>
+  $(".menuControl").click(function(){
+    if($("#_nav").attr("class") == "menuOpen"){
+      $("#_faMenu").hide();
+      $("#theTreeAll").hide();
+      $("#smallMenu").show();
+      $("#_favorite").removeClass("on");
+      $("#_nav").removeClass("menuOpen").addClass("menuClose");
+      $("#_arrow").removeClass("arrowOpen").addClass("arrowClose");
+    }
+    else{
+      $(".menuTab .all").trigger("click");
+      $("#theTreeAll").show();
+      $("#smallMenu").hide();
+      $("#_nav").removeClass("menuClose").addClass("menuOpen");
+      $("#_arrow").removeClass("arrowClose").addClass("arrowOpen");
+    }
+  });
+
+  <%-- 검색 조건 닫고 열기 --%>
+  $(".searchBar").bind("click", function() {
+    if($(".searchBar").children().attr("class") == "open") {
+      $(".searchBar").children().attr("class", "close");
+    }  
+    else {
+      $(".searchBar").children().attr("class", "open");
+    }
+    $(".searchTbl").toggle();
+  });
 </script>
 

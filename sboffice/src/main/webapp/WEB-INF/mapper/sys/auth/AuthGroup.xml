@@ -200,15 +200,21 @@
             A.RESRCE_CD,
             '[' || A.RESRCE_CD || ']' || A.RESRCE_NM RESRCE_DISP,
             A.RESRCE_NM,
+            A.URL,
             A.DISP_LEVEL,
             A.DISP_IDX,
-            NVL2(B.RESRCE_CD, 1, 0) AUTH_FG
+            NVL2(B.RESRCE_CD, 1, 0) AUTH_FG,
+            (SELECT NMCODE_ITEM_2
+               FROM TB_CM_NMCODE
+              WHERE NMCODE_GRP_CD = '086'
+                AND NMCODE_ITEM_1 = A.RESRCE_CD) ICON_NM
        FROM (
              SELECT ROWNUM LIST_SEQ,
                     LEVEL,
                     A.P_RESRCE,
                     A.RESRCE_CD,
                     A.RESRCE_NM,
+                    A.URL,
                     A.DISP_LEVEL,
                     A.DISP_IDX,
                     A.FUNC_FG
@@ -330,6 +336,3 @@
   </update>
 
 </mapper>
-
-
-

@@ -59,13 +59,9 @@ public class SessionServiceImpl implements SessionService {
         // 즐겨찾기 메뉴 리스트 저장
         sessionInfo.setBkmkMenu(cmmMenuService.selectBkmkMenu(sessionInfo));
         // 전체메뉴 조회(리스트)
-        sessionInfo.setMenuData(cmmMenuService.makeMenu(sessionInfo, "A"));
+        sessionInfo.setMenuData(convertToJson(cmmMenuService.makeMenu(sessionInfo, "A")));
         // 즐겨찾기메뉴 조회 (리스트)
-        sessionInfo.setBkmkData(cmmMenuService.makeMenu(sessionInfo, "F"));
-        // 위즈모 그리드용 전체 메뉴 데이터 만들기
-        sessionInfo.setMadeMenuData(convertToJson(cmmMenuService.makeMenu(sessionInfo, "A")));
-        // 위즈모 그리드용 즐겨찾기 데이터 만들기
-        sessionInfo.setMadeBkmkData(convertToJson(cmmMenuService.makeMenu(sessionInfo, "F")));
+        sessionInfo.setBkmkData(convertToJson(cmmMenuService.makeMenu(sessionInfo, "F")));
         
         // 본사는 소속된 가맹점을 세션에 저장
         if(sessionInfo.getOrgnFg() == OrgnFg.HQ) {

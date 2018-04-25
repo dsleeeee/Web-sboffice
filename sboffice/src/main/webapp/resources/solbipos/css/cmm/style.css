@@ -159,10 +159,10 @@ button.btn_down:hover:before {content:''; position:absolute; left:7px; top:9px; 
 .wrap > nav.menuClose {width:60px; height:100%; position:fixed; z-index:60;}
 
 nav.menuOpen .menuTree {height:100%; width:219px; overflow:hidden;}
-nav.menuOpen .menuTree #theTreeAll.wj-treeview {height:calc(100% - 120px); width:240px; overflow-y:scroll; position:relative; top:20px;}
+nav.menuOpen .menuTree .theTreeAll.wj-treeview {height:calc(100% - 120px); width:240px; overflow-y:scroll; position:relative; top:20px;}
 
 /*ie용 스크롤 숨기기*/
-nav.menuOpen .menuTree #theTreeAll.wj-treeview {
+nav.menuOpen .menuTree .theTreeAll.wj-treeview {
     scrollbar-arrow-color: #2e333f;
     scrollbar-Track-Color: #2e333f; 
     scrollbar-base-color: #2e333f;
@@ -174,11 +174,11 @@ nav.menuOpen .menuTree #theTreeAll.wj-treeview {
 }
 
 /*크롬용 스크롤 숨기기*/
-nav.menuOpen .menuTree #theTreeAll.wj-treeview::-webkit-scrollbar {width:12px; height:12px; }
-nav.menuOpen .menuTree #theTreeAll.wj-treeview::-webkit-scrollbar-button:start:decrement, 
-nav.menuOpen .menuTree #theTreeAll.wj-treeview::-webkit-scrollbar-button:end:increment {display:block; width: 12px;height: 12px; background:#2e333f;}
-nav.menuOpen .menuTree #theTreeAll.wj-treeview::-webkit-scrollbar-track {background: #2e333f;}
-nav.menuOpen .menuTree #theTreeAll.wj-treeview::-webkit-scrollbar-thumb {background: #2e333f;}
+nav.menuOpen .menuTree .theTreeAll.wj-treeview::-webkit-scrollbar {width:12px; height:12px; }
+nav.menuOpen .menuTree .theTreeAll.wj-treeview::-webkit-scrollbar-button:start:decrement, 
+nav.menuOpen .menuTree .theTreeAll.wj-treeview::-webkit-scrollbar-button:end:increment {display:block; width: 12px;height: 12px; background:#2e333f;}
+nav.menuOpen .menuTree .theTreeAll.wj-treeview::-webkit-scrollbar-track {background: #2e333f;}
+nav.menuOpen .menuTree .theTreeAll.wj-treeview::-webkit-scrollbar-thumb {background: #2e333f;}
 
 
 
@@ -373,7 +373,7 @@ nav.menuClose + .topWrap {position:fixed; width:100%; min-width:964px; padding-l
 .menuTree span {font-size:0.875em; line-height:1.3em;}
 
 .menuOpen .smallMenu {display:none;}
-.menuClose #theTreeAll.wj-treeview {display:none;}
+.menuClose .theTreeAll.wj-treeview {display:none;}
 
 .smallMenu {margin-top:20px; height:100%;}
 .smallMenu li {height:50px; position:relative;}
@@ -1366,9 +1366,9 @@ a.btn_underline, a.btn_underline:hover, a.btn_underline.on {background-position:
 
 
 /* **************************************** *
- * 왼쪽메뉴 #theTreeAll에만 적용
+ * 왼쪽메뉴 .theTreeAll에만 적용
  * **************************************** */
-#theTreeAll.wj-treeview {
+.theTreeAll.wj-treeview {
     width: 220px;
     overflow: auto;
     background: transparent;
@@ -1379,108 +1379,108 @@ a.btn_underline, a.btn_underline:hover, a.btn_underline.on {background-position:
 }
 
 
-.menuOpen #theTreeAll.wj-content {width:220px; overflow:hidden; transition:width 0.2s cubic-bezier(.13, 1.09, .78, 1);} 
-.menuClose #theTreeAll.wj-content {display:inline-block; position:absolute; border:0; padding:0; width:0px; height:0px; opacity:0; transition:width 0s;}
+.menuOpen .theTreeAll.wj-content {width:220px; overflow:hidden; transition:width 0.2s cubic-bezier(.13, 1.09, .78, 1);} 
+.menuClose .theTreeAll.wj-content {display:inline-block; position:absolute; border:0; padding:0; width:0px; height:0px; opacity:0; transition:width 0s;}
 
 
-#theTreeAll.wj-treeview *:focus {
+.theTreeAll.wj-treeview *:focus {
     outline: none;
 }
-#theTreeAll.wj-treeview.wj-state-loading * {
+.theTreeAll.wj-treeview.wj-state-loading * {
     cursor: wait !important;
 }
-#theTreeAll.wj-treeview .wj-node {
+.theTreeAll.wj-treeview .wj-node {
     white-space:inherit;
     cursor: pointer;
     box-sizing: border-box;
     padding: 16px 20px; /* 1차 depth의 높이 */
 }
-#theTreeAll.wj-treeview .wj-nodelist .wj-nodelist .wj-node { /* 2차 depth의 높이 */
+.theTreeAll.wj-treeview .wj-nodelist .wj-nodelist .wj-node { /* 2차 depth의 높이 */
     padding: 11px 20px;
 }
 
-.type_Blue #theTreeAll.wj-treeview .wj-node.wj-state-selected {color:inherit; background: #1e88e5;}
-.type_Orange #theTreeAll.wj-treeview .wj-node.wj-state-selected {color:inherit; background: #ff9d39;}
-.type_Purple #theTreeAll.wj-treeview .wj-node.wj-state-selected {color:inherit; background: #ae63ff;}
-.type_Green #theTreeAll.wj-treeview .wj-node.wj-state-selected {color:inherit; background: #00ba8b;}
+.type_Blue .theTreeAll.wj-treeview .wj-node.wj-state-selected {color:inherit; background: #1e88e5;}
+.type_Orange .theTreeAll.wj-treeview .wj-node.wj-state-selected {color:inherit; background: #ff9d39;}
+.type_Purple .theTreeAll.wj-treeview .wj-node.wj-state-selected {color:inherit; background: #ae63ff;}
+.type_Green .theTreeAll.wj-treeview .wj-node.wj-state-selected {color:inherit; background: #00ba8b;}
 
 
-.type_Blue #theTreeAll.wj-treeview .wj-nodelist .wj-node.wj-state-selected { /*1차 depth on상태의 bg 컬러*/
+.type_Blue .theTreeAll.wj-treeview .wj-nodelist .wj-node.wj-state-selected { /*1차 depth on상태의 bg 컬러*/
     color: inherit; background: #1e88e5;
 }
-.type_Orange #theTreeAll.wj-treeview .wj-nodelist .wj-node.wj-state-selected { /*1차 depth on상태의 bg 컬러*/
+.type_Orange .theTreeAll.wj-treeview .wj-nodelist .wj-node.wj-state-selected { /*1차 depth on상태의 bg 컬러*/
     color: inherit; background: #ff9d39;
 }
-.type_Purple #theTreeAll.wj-treeview .wj-nodelist .wj-node.wj-state-selected { /*1차 depth on상태의 bg 컬러*/
+.type_Purple .theTreeAll.wj-treeview .wj-nodelist .wj-node.wj-state-selected { /*1차 depth on상태의 bg 컬러*/
     color: inherit; background: #ae63ff;
 }
-.type_Green #theTreeAll.wj-treeview .wj-nodelist .wj-node.wj-state-selected { /*1차 depth on상태의 bg 컬러*/
+.type_Green .theTreeAll.wj-treeview .wj-nodelist .wj-node.wj-state-selected { /*1차 depth on상태의 bg 컬러*/
     color: inherit; background: #00ba8b;
 }
 
 
-.type_Blue #theTreeAll.wj-treeview .wj-nodelist .wj-node:hover.wj-state-selected { /*1차 depth on의 hover bg 컬러*/
+.type_Blue .theTreeAll.wj-treeview .wj-nodelist .wj-node:hover.wj-state-selected { /*1차 depth on의 hover bg 컬러*/
     background: #1e88e5;
 }
-.type_Orange #theTreeAll.wj-treeview .wj-nodelist .wj-node:hover.wj-state-selected { /*1차 depth on의 hover bg 컬러*/
+.type_Orange .theTreeAll.wj-treeview .wj-nodelist .wj-node:hover.wj-state-selected { /*1차 depth on의 hover bg 컬러*/
     background: #ff9d39;
 }
-.type_Purple #theTreeAll.wj-treeview .wj-nodelist .wj-node:hover.wj-state-selected { /*1차 depth on의 hover bg 컬러*/
+.type_Purple .theTreeAll.wj-treeview .wj-nodelist .wj-node:hover.wj-state-selected { /*1차 depth on의 hover bg 컬러*/
     background: #ae63ff;
 }
-.type_Green #theTreeAll.wj-treeview .wj-nodelist .wj-node:hover.wj-state-selected { /*1차 depth on의 hover bg 컬러*/
+.type_Green .theTreeAll.wj-treeview .wj-nodelist .wj-node:hover.wj-state-selected { /*1차 depth on의 hover bg 컬러*/
     background: #00ba8b;
 }
 
 
-#theTreeAll.wj-treeview .wj-nodelist .wj-node:hover .wj-node-text { /* hover 상태의 text 컬러*/
+.theTreeAll.wj-treeview .wj-nodelist .wj-node:hover .wj-node-text { /* hover 상태의 text 컬러*/
     color:#fff;
     transition:all 0.3s;
 }
-#theTreeAll.wj-treeview .wj-nodelist .wj-node.wj-state-selected > .wj-node-text { /*1차 depth on상태의 text 컬러*/
+.theTreeAll.wj-treeview .wj-nodelist .wj-node.wj-state-selected > .wj-node-text { /*1차 depth on상태의 text 컬러*/
     color:#fff;
 }
 
-#theTreeAll.wj-treeview .wj-nodelist .wj-nodelist .wj-node.wj-state-selected > .wj-node-text { /*2차 depth on상태의 text 컬러*/
+.theTreeAll.wj-treeview .wj-nodelist .wj-nodelist .wj-node.wj-state-selected > .wj-node-text { /*2차 depth on상태의 text 컬러*/
     color:#fff;
 }
 
 
-.type_Blue #theTreeAll.wj-treeview .wj-nodelist .wj-nodelist .wj-node.wj-state-selected { /*2차 depth on상태의 bg 컬러*/
+.type_Blue .theTreeAll.wj-treeview .wj-nodelist .wj-nodelist .wj-node.wj-state-selected { /*2차 depth on상태의 bg 컬러*/
     color: inherit;
     background: none;
 }
-.type_Orange #theTreeAll.wj-treeview .wj-nodelist .wj-nodelist .wj-node.wj-state-selected { /*2차 depth on상태의 bg 컬러*/
+.type_Orange .theTreeAll.wj-treeview .wj-nodelist .wj-nodelist .wj-node.wj-state-selected { /*2차 depth on상태의 bg 컬러*/
     color: inherit;
     background: none;
 }
-.type_Purple #theTreeAll.wj-treeview .wj-nodelist .wj-nodelist .wj-node.wj-state-selected { /*2차 depth on상태의 bg 컬러*/
+.type_Purple .theTreeAll.wj-treeview .wj-nodelist .wj-nodelist .wj-node.wj-state-selected { /*2차 depth on상태의 bg 컬러*/
     color: inherit;
     background: none;
 }
-.type_Green #theTreeAll.wj-treeview .wj-nodelist .wj-nodelist .wj-node.wj-state-selected { /*2차 depth on상태의 bg 컬러*/
+.type_Green .theTreeAll.wj-treeview .wj-nodelist .wj-nodelist .wj-node.wj-state-selected { /*2차 depth on상태의 bg 컬러*/
     color: inherit;
     background: none;
 }
 
 
-#theTreeAll.wj-treeview .wj-nodelist .wj-nodelist .wj-node span {
+.theTreeAll.wj-treeview .wj-nodelist .wj-nodelist .wj-node span {
     display:inline-block;
     width:125px;
 }
-#theTreeAll.wj-treeview .wj-nodelist .wj-nodelist .wj-nodelist .wj-node span {
+.theTreeAll.wj-treeview .wj-nodelist .wj-nodelist .wj-nodelist .wj-node span {
     display:block;
     width:140px;
     padding-left:20px;
 }    
-#theTreeAll.wj-treeview .wj-nodelist .wj-nodelist .wj-nodelist .wj-node span:before {
+.theTreeAll.wj-treeview .wj-nodelist .wj-nodelist .wj-nodelist .wj-node span:before {
     content:'';
     position:absolute; top:19px; left:70px;
     background:#888fa4;
     color:#888fa4;
     width:3px; height:3px; border-radius:100%;
 }
-#theTreeAll.wj-treeview .wj-nodelist span {
+.theTreeAll.wj-treeview .wj-nodelist span {
     margin-left:40px;
     display:inline-block;
     width:120px;
@@ -1489,47 +1489,47 @@ a.btn_underline, a.btn_underline:hover, a.btn_underline.on {background-position:
 /* 순서 
    포스관리, 가맹점괌리, 시스템관리, 기초관리, 매출관리, 회원관리, 수불관리, 정산관리, 부가서비스 
 */
-#theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_pos > span:before {content:''; position:absolute;left:20px; background:url(../img/menu.png) no-repeat; background-position:-40px 0; width:20px; height:22px;}
-#theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_pos.on > span:before {background-position: -40px -110px;}
+.theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_pos > span:before {content:''; position:absolute;left:20px; background:url(../img/menu.png) no-repeat; background-position:-40px 0; width:20px; height:22px;}
+.theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_pos.on > span:before {background-position: -40px -110px;}
 
-#theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_franchise > span:before {content:''; position:absolute;left:20px; background:url(../img/menu.png) no-repeat; background-position:-60px 0; width:20px; height:22px;}
-#theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_franchise.on > span:before {background-position: -60px -110px;}
+.theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_franchise > span:before {content:''; position:absolute;left:20px; background:url(../img/menu.png) no-repeat; background-position:-60px 0; width:20px; height:22px;}
+.theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_franchise.on > span:before {background-position: -60px -110px;}
 
-#theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_system > span:before {content:''; position:absolute;left:20px; background:url(../img/menu.png) no-repeat; background-position:-80px 0; width:20px; height:22px;}
-#theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_system.on > span:before {background-position: -80px -110px;}
+.theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_system > span:before {content:''; position:absolute;left:20px; background:url(../img/menu.png) no-repeat; background-position:-80px 0; width:20px; height:22px;}
+.theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_system.on > span:before {background-position: -80px -110px;}
 
-#theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_base > span:before {content:''; position:absolute;left:20px; background:url(../img/menu.png) no-repeat; background-position:-100px 0; width:20px; height:22px;}
-#theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_base.on > span:before {background-position: -100px -110px;}
+.theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_base > span:before {content:''; position:absolute;left:20px; background:url(../img/menu.png) no-repeat; background-position:-100px 0; width:20px; height:22px;}
+.theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_base.on > span:before {background-position: -100px -110px;}
 
-#theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_sales > span:before {content:''; position:absolute;left:20px; background:url(../img/menu.png) no-repeat; background-position:-120px 0; width:20px; height:22px;}
-#theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_sales.on > span:before {background-position: -120px -110px;}
+.theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_sales > span:before {content:''; position:absolute;left:20px; background:url(../img/menu.png) no-repeat; background-position:-120px 0; width:20px; height:22px;}
+.theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_sales.on > span:before {background-position: -120px -110px;}
 
-#theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_member > span:before {content:''; position:absolute;left:20px; background:url(../img/menu.png) no-repeat; background-position:-140px 0; width:20px; height:22px;}
-#theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_member.on > span:before {background-position: -140px -110px;}
+.theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_member > span:before {content:''; position:absolute;left:20px; background:url(../img/menu.png) no-repeat; background-position:-140px 0; width:20px; height:22px;}
+.theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_member.on > span:before {background-position: -140px -110px;}
 
-#theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_receivepay > span:before {content:''; position:absolute;left:20px; background:url(../img/menu.png) no-repeat; background-position:-160px 0; width:20px; height:22px;}
-#theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_receivepay.on > span:before {background-position: -160px -110px;}
+.theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_receivepay > span:before {content:''; position:absolute;left:20px; background:url(../img/menu.png) no-repeat; background-position:-160px 0; width:20px; height:22px;}
+.theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_receivepay.on > span:before {background-position: -160px -110px;}
 
-#theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_calculate > span:before {content:''; position:absolute;left:20px; background:url(../img/menu.png) no-repeat; background-position:-180px 0; width:20px; height:22px;}
-#theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_calculate.on > span:before {background-position: -180px -110px;}
+.theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_calculate > span:before {content:''; position:absolute;left:20px; background:url(../img/menu.png) no-repeat; background-position:-180px 0; width:20px; height:22px;}
+.theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_calculate.on > span:before {background-position: -180px -110px;}
 
-#theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_addservice > span:before {content:''; position:absolute;left:20px; background:url(../img/menu.png) no-repeat; background-position:-200px 0; width:20px; height:22px;}
-#theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_addservice.on > span:before {background-position: -200px -110px;}
+.theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_addservice > span:before {content:''; position:absolute;left:20px; background:url(../img/menu.png) no-repeat; background-position:-200px 0; width:20px; height:22px;}
+.theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_addservice.on > span:before {background-position: -200px -110px;}
 
-#theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_stock > span:before {content:''; position:absolute;left:20px; background:url(../img/menu.png) no-repeat; background-position:-220px 0; width:20px; height:22px;}
-#theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_stock.on > span:before {background-position: -220px -110px;}
+.theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_stock > span:before {content:''; position:absolute;left:20px; background:url(../img/menu.png) no-repeat; background-position:-220px 0; width:20px; height:22px;}
+.theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_stock.on > span:before {background-position: -220px -110px;}
 
 
 
-#theTreeAll.wj-treeview .wj-node .wj-node-check {
+.theTreeAll.wj-treeview .wj-node .wj-node-check {
     margin-right: 4px;
 }
 
 /*메뉴 더보기블릿 제어하기*/
- #theTreeAll.wj-treeview .wj-node {
+ .theTreeAll.wj-treeview .wj-node {
     position:relative;
  }
-#theTreeAll.wj-treeview .wj-node:before {
+.theTreeAll.wj-treeview .wj-node:before {
     content:'';
     display: inline-block;
     position:absolute; right:20px; top:50%;
@@ -1541,7 +1541,7 @@ a.btn_underline, a.btn_underline:hover, a.btn_underline.on {background-position:
     transform: rotate(90deg);
     transition: all 0.3s cubic-bezier(.4,0,.2,1);
 }
-#theTreeAll.wj-treeview .wj-node:hover:before, #theTreeAll.wj-treeview .wj-node.on:before, #theTreeAll.wj-treeview .wj-nodelist .wj-node.wj-state-selected:before { /*1차 detph의 more*/
+.theTreeAll.wj-treeview .wj-node:hover:before, .theTreeAll.wj-treeview .wj-node.on:before, .theTreeAll.wj-treeview .wj-nodelist .wj-node.wj-state-selected:before { /*1차 detph의 more*/
     content:'';
     display: inline-block;
     position:absolute; right:20px; top:50%;
@@ -1554,56 +1554,57 @@ a.btn_underline, a.btn_underline:hover, a.btn_underline.on {background-position:
     transition: all 0.3s cubic-bezier(.4,0,.2,1);
 }
 
-#theTreeAll.wj-treeview .wj-node.wj-state-collapsed:before,
-#theTreeAll.wj-treeview .wj-node.wj-state-collapsing:before {
+.theTreeAll.wj-treeview .wj-node.wj-state-collapsed:before,
+.theTreeAll.wj-treeview .wj-node.wj-state-collapsing:before {
     transform: rotate(0deg);
     transition: all 0.3s cubic-bezier(.4,0,.2,1);
 }
 
-#theTreeAll.wj-treeview .wj-nodelist .wj-node.wj-state-empty:before {
+.theTreeAll.wj-treeview .wj-nodelist .wj-node.wj-state-empty:before {
         visibility: hidden;
 }
 
-#theTreeAll.wj-treeview .wj-nodelist {
+.theTreeAll.wj-treeview .wj-nodelist {
     padding:0;
     display: block;
     position: relative;
 }
 
-#theTreeAll.wj-treeview .wj-node-text { /*전체 텍스트 컬러*/
+.theTreeAll.wj-treeview .wj-node-text { /*전체 텍스트 컬러*/
     color:#888fa4;
 }
-    #theTreeAll.wj-treeview .wj-nodelist .wj-nodelist .wj-node {
+    .theTreeAll.wj-treeview .wj-nodelist .wj-nodelist .wj-node {
         border-bottom:1px solid #2e333f;
     }
-    #theTreeAll.wj-treeview .wj-nodelist .wj-nodelist {
+    .theTreeAll.wj-treeview .wj-nodelist .wj-nodelist {
         background:#212633;
+        padding-left:0px; /*wijmo padding-left:1em; 초기화*/
     }
-        #theTreeAll.wj-treeview .wj-nodelist .wj-nodelist .wj-nodelist {
+        .theTreeAll.wj-treeview .wj-nodelist .wj-nodelist .wj-nodelist {
             background:#121621;
         }
-        #theTreeAll.wj-treeview .wj-nodelist .wj-nodelist .wj-nodelist .wj-node {
+        .theTreeAll.wj-treeview .wj-nodelist .wj-nodelist .wj-nodelist .wj-node {
             padding: 11px 20px;
             border-bottom:1px solid #212633;
             position:relative;
         }
 
-        #theTreeAll.wj-treeview .wj-nodelist .wj-nodelist .wj-nodelist .wj-node:last-child {
+        .theTreeAll.wj-treeview .wj-nodelist .wj-nodelist .wj-nodelist .wj-node:last-child {
             border-bottom:1px solid #2e333f;
         }
 
-#theTreeAll.wj-treeview .wj-node.wj-state-collapsed + .wj-nodelist {
+.theTreeAll.wj-treeview .wj-node.wj-state-collapsed + .wj-nodelist {
     display: none;
 }
 
 /*on상태 유지*/
-.type_Blue #theTreeAll.wj-treeview > .wj-nodelist > .wj-node.on {background: #1e88e5; color:#fff;}
-.type_Orange #theTreeAll.wj-treeview > .wj-nodelist > .wj-node.on {background: #ff9d39; color:#fff;}
-.type_Purple #theTreeAll.wj-treeview > .wj-nodelist > .wj-node.on {background: #ae63ff; color:#fff;}
-.type_Green #theTreeAll.wj-treeview > .wj-nodelist > .wj-node.on {background: #00ba8b; color:#fff;}
+.type_Blue .theTreeAll.wj-treeview > .wj-nodelist > .wj-node.on {background: #1e88e5; color:#fff;}
+.type_Orange .theTreeAll.wj-treeview > .wj-nodelist > .wj-node.on {background: #ff9d39; color:#fff;}
+.type_Purple .theTreeAll.wj-treeview > .wj-nodelist > .wj-node.on {background: #ae63ff; color:#fff;}
+.type_Green .theTreeAll.wj-treeview > .wj-nodelist > .wj-node.on {background: #00ba8b; color:#fff;}
 
-#theTreeAll.wj-treeview > .wj-nodelist > .wj-node.on span {color:#fff;}
-#theTreeAll.wj-treeview > .wj-nodelist > .wj-nodelist > .wj-node.on span {color:#fff;}
+.theTreeAll.wj-treeview > .wj-nodelist > .wj-node.on span {color:#fff;}
+.theTreeAll.wj-treeview > .wj-nodelist > .wj-nodelist > .wj-node.on span {color:#fff;}
 
 
 

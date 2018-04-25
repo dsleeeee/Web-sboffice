@@ -67,124 +67,8 @@
   
   <!-- 즐겨찾기 조회 -->
   
-  <!-- 즐겨찾기 조회 -->
-  
-  <select id="selectBkmkMenu1" parameterType="sessionInfo" resultType="resrceInfo">
-  <![CDATA[
-    /* CmmMenuMapper.selectBkmkMenu1 */
-    WITH CHILD_TAB AS (
-      SELECT B.RESRCE_CD, B.P_RESRCE, D.RESRCE_CD P_RESRCE_CD , D.P_RESRCE PP_RESRCE_CD
-        FROM TB_WB_BKMK A,
-             TB_WB_RESRCE_INFO B,
-              (SELECT A.RESRCE_CD
-                FROM TB_WB_AUTHOR_GRP_RESRCE A,
-                     TB_WB_USER_INFO B
-               WHERE A.USE_YN   = 'Y'
-                 AND B.GRP_CD   = A.GRP_CD
-                 AND B.USER_ID  = #{userId}
-               UNION
-              SELECT A.RESRCE_CD
-                FROM TB_WB_AUTHOR_EXCEPT A
-               WHERE A.INCLD_EXCLD_FG = 'I'
-                 AND A.USER_ID = #{userId}
-               MINUS
-              SELECT A.RESRCE_CD
-                FROM TB_WB_AUTHOR_EXCEPT A
-               WHERE A.INCLD_EXCLD_FG = 'E'
-                 AND A.USER_ID = #{userId}
-              ) C,
-              TB_WB_RESRCE_INFO D
-       WHERE B.RESRCE_CD = A.RESRCE_CD
-         AND C.RESRCE_CD = B.RESRCE_CD
-         AND D.RESRCE_CD = B.P_RESRCE
-         AND A.USER_ID = #{userId}
-         AND A.USE_YN = 'Y'
-         AND B.USE_YN = 'Y'
-         AND B.DISP_LEVEL = 2
-         AND D.USE_YN = 'Y'
-    )
-    SELECT DISTINCT B.*
-      FROM CHILD_TAB A,
-           TB_WB_RESRCE_INFO B
-     WHERE B.RESRCE_CD = A.PP_RESRCE_CD
-       AND B.USE_YN = 'Y'
-     ORDER
-        BY B.P_RESRCE, B.RESRCE_CD
-  ]]>
-  </select>
-  
-  <select id="selectBkmkMenu2" parameterType="sessionInfo" resultType="resrceInfo">
-  <![CDATA[
-    /* CmmMenuMapper.selectBkmkMenu2 */
-    WITH CHILD_TAB AS (
-      SELECT A.RESRCE_CD, B.P_RESRCE 
-        FROM TB_WB_BKMK A,
-             TB_WB_RESRCE_INFO B,
-              (SELECT A.RESRCE_CD
-                FROM TB_WB_AUTHOR_GRP_RESRCE A,
-                     TB_WB_USER_INFO B
-               WHERE A.USE_YN   = 'Y'
-                 AND B.GRP_CD   = A.GRP_CD
-                 AND B.USER_ID  = #{userId}
-               UNION
-              SELECT A.RESRCE_CD
-                FROM TB_WB_AUTHOR_EXCEPT A
-               WHERE A.INCLD_EXCLD_FG = 'I'
-                 AND A.USER_ID = #{userId}
-               MINUS
-              SELECT A.RESRCE_CD
-                FROM TB_WB_AUTHOR_EXCEPT A
-               WHERE A.INCLD_EXCLD_FG = 'E'
-                 AND A.USER_ID = #{userId}
-              ) C
-       WHERE B.RESRCE_CD = A.RESRCE_CD
-         AND C.RESRCE_CD = B.RESRCE_CD
-         AND A.USER_ID = #{userId}
-         AND A.USE_YN = 'Y'
-         AND B.DISP_LEVEL = 2
-    )
-    SELECT B.*
-      FROM CHILD_TAB A,
-           TB_WB_RESRCE_INFO B
-     WHERE B.RESRCE_CD = A.P_RESRCE
-       AND B.DISP_LEVEL = 1
-     ORDER
-        BY B.P_RESRCE ASC, B.DISP_IDX ASC
-  ]]>
-  </select>
-  
-  <select id="selectBkmkMenu3" parameterType="sessionInfo" resultType="resrceInfo">
-  <![CDATA[
-    /* CmmMenuMapper.selectBkmkMenu3 */
-    SELECT B.*
-      FROM TB_WB_BKMK A,
-           TB_WB_RESRCE_INFO B,
-            (SELECT A.RESRCE_CD
-              FROM TB_WB_AUTHOR_GRP_RESRCE A,
-                   TB_WB_USER_INFO B
-             WHERE A.USE_YN   = 'Y'
-               AND B.GRP_CD   = A.GRP_CD
-               AND B.USER_ID  = #{userId}
-             UNION
-            SELECT A.RESRCE_CD
-              FROM TB_WB_AUTHOR_EXCEPT A
-             WHERE A.INCLD_EXCLD_FG = 'I'
-               AND A.USER_ID = #{userId}
-             MINUS
-            SELECT A.RESRCE_CD
-              FROM TB_WB_AUTHOR_EXCEPT A
-             WHERE A.INCLD_EXCLD_FG = 'E'
-               AND A.USER_ID = #{userId}
-            ) C
-     WHERE B.RESRCE_CD = A.RESRCE_CD
-       AND C.RESRCE_CD = B.RESRCE_CD
-       AND A.USER_ID = #{userId}
-       AND A.USE_YN = 'Y'
-       AND B.DISP_LEVEL = 2
-  ]]>
-  </select>
-  
-  <!-- 고정 메뉴 가져오기 -->
+
+<!-- 고정 메뉴 가져오기 -->
   <select id="selectFixingMenu" parameterType="sessionInfo" resultType="resrceInfoBase">
   <![CDATA[
     /* CmmMenuMapper.selectFixingMenu */
@@ -201,123 +85,103 @@
   ]]>
   </select>
   
-  <!-- 메뉴 조회 -->
-  <select id="selectMenu1" parameterType="sessionInfo" resultType="resrceInfo">
-  <![CDATA[
-    /* CmmMenuMapper.selectMenu1 */
-    WITH CHILD_TAB AS (
-      SELECT A.*
-        FROM TB_WB_RESRCE_INFO A,
-             (SELECT A.RESRCE_CD
-                FROM TB_WB_AUTHOR_GRP_RESRCE A,
-                     TB_WB_USER_INFO B
-               WHERE A.USE_YN   = 'Y'
-                 AND B.GRP_CD   = A.GRP_CD
-                 AND B.USER_ID  = #{userId}
-               UNION
-              SELECT A.RESRCE_CD
-                FROM TB_WB_AUTHOR_EXCEPT A
-               WHERE A.INCLD_EXCLD_FG = 'I'
-                 AND A.USER_ID = #{userId}
-               MINUS
-              SELECT A.RESRCE_CD
-                FROM TB_WB_AUTHOR_EXCEPT A
-               WHERE A.INCLD_EXCLD_FG = 'E'
-                 AND A.USER_ID = #{userId}  
-              ) B
-       WHERE B.RESRCE_CD = A.RESRCE_CD
-         AND A.DISP_LEVEL = '2'
-         AND A.RESRCE_FG = 'M' 
-         AND A.USE_YN = 'Y'
-         AND (A.SPCL_AUTHOR IS NULL OR A.SPCL_AUTHOR NOT IN ('A01'))
-    )
-    SELECT DISTINCT B.RESRCE_CD, B.P_RESRCE, B.RESRCE_FG, B.FUNC_FG, B.RESRCE_NM, B.URL, B.SPCL_AUTHOR,
-           B.DISP_LEVEL, B.DISP_IDX, B.USE_YN
-      FROM (SELECT DISTINCT B.P_RESRCE
-             FROM CHILD_TAB A,
-                  TB_WB_RESRCE_INFO B
-            WHERE B.RESRCE_CD = A.P_RESRCE
-              AND B.DISP_LEVEL = '1'
-            ) A,
-           TB_WB_RESRCE_INFO B
-     WHERE B.RESRCE_CD = A.P_RESRCE
-     ORDER
-        BY B.DISP_LEVEL ASC, B.DISP_IDX ASC
-  ]]>
-  </select>
-  
-  
-  <select id="selectMenu2" parameterType="sessionInfo" resultType="resrceInfo">
-  <![CDATA[
-    /* CmmMenuMapper.selectMenu2 */
-    WITH CHILD_TAB AS (
-      SELECT A.*
-        FROM TB_WB_RESRCE_INFO A,
-             (SELECT A.RESRCE_CD
-                FROM TB_WB_AUTHOR_GRP_RESRCE A,
-                     TB_WB_USER_INFO B
-               WHERE A.USE_YN   = 'Y'
-                 AND B.GRP_CD   = A.GRP_CD
-                 AND B.USER_ID  = #{userId}
-               UNION
-              SELECT A.RESRCE_CD
-                FROM TB_WB_AUTHOR_EXCEPT A
-               WHERE A.INCLD_EXCLD_FG = 'I'
-                 AND A.USER_ID = #{userId}
-               MINUS
-              SELECT A.RESRCE_CD
-                FROM TB_WB_AUTHOR_EXCEPT A
-               WHERE A.INCLD_EXCLD_FG = 'E'
-                 AND A.USER_ID = #{userId}
-              ) B
-       WHERE B.RESRCE_CD = A.RESRCE_CD
-         AND A.DISP_LEVEL = '2'
-         AND A.RESRCE_FG = 'M' 
-         AND A.USE_YN = 'Y'
-         AND (A.SPCL_AUTHOR IS NULL OR A.SPCL_AUTHOR NOT IN ('A01'))
-    )
-    SELECT DISTINCT B.RESRCE_CD, B.P_RESRCE, B.RESRCE_FG, B.FUNC_FG, B.RESRCE_NM, B.URL, B.SPCL_AUTHOR,
-           B.DISP_LEVEL, B.DISP_IDX, B.USE_YN
-      FROM CHILD_TAB A,
-           TB_WB_RESRCE_INFO B
-     WHERE B.RESRCE_CD = A.P_RESRCE
-     ORDER
-        BY B.DISP_LEVEL ASC, B.DISP_IDX ASC
-  ]]>
+  <select id="selectAllResrce" parameterType="DefaultMap" resultType="DefaultMap">
+    /* CmmMenuMapper.selectAllResrce */
+     SELECT A.P_RESRCE PCD,
+            A.RESRCE_CD CD,
+            A.RESRCE_NM NM,
+            A.URL,
+            (SELECT NMCODE_ITEM_2
+               FROM TB_CM_NMCODE
+              WHERE NMCODE_GRP_CD = '086'
+                AND NMCODE_ITEM_1 = A.RESRCE_CD) ICON
+       FROM TB_WB_RESRCE_INFO A
+      WHERE A.USE_YN = 'Y'
+        AND A.RESRCE_FG = 'M'
+        AND (A.SPCL_AUTHOR IS NULL OR A.SPCL_AUTHOR NOT IN ('A01'))
+      START WITH A.P_RESRCE = '000000'
+    CONNECT BY PRIOR A.RESRCE_CD = A.P_RESRCE
+      ORDER SIBLINGS BY A.DISP_IDX ASC,
+            FUNC_FG ASC
   </select>
 
-  <select id="selectMenu3" parameterType="sessionInfo" resultType="resrceInfo">
-  <![CDATA[
-    /* CmmMenuMapper.selectMenu3 */
-    SELECT A.*
-      FROM TB_WB_RESRCE_INFO A
-      ,    (
-              SELECT A.RESRCE_CD
-              FROM TB_WB_AUTHOR_GRP_RESRCE A
-              ,    TB_WB_USER_INFO B
-             WHERE A.USE_YN   = 'Y'
-               AND B.GRP_CD   = A.GRP_CD
-               AND B.USER_ID  = #{userId}
-            UNION
-            SELECT A.RESRCE_CD
-              FROM TB_WB_AUTHOR_EXCEPT A
-             WHERE A.INCLD_EXCLD_FG = 'I'
-               AND A.USER_ID = #{userId}
-            MINUS
-            SELECT A.RESRCE_CD
-              FROM TB_WB_AUTHOR_EXCEPT A
-             WHERE A.INCLD_EXCLD_FG = 'E'
-               AND A.USER_ID = #{userId}
-          ) B
-     WHERE B.RESRCE_CD = A.RESRCE_CD
-       AND A.DISP_LEVEL = '2'
-       AND A.RESRCE_FG = 'M' 
-       AND A.USE_YN = 'Y'
-       AND (A.SPCL_AUTHOR IS NULL OR A.SPCL_AUTHOR NOT IN ('A01'))
-     ORDER BY A.DISP_LEVEL ASC, A.DISP_IDX ASC 
-  ]]>
+  <select id="selectAuthedResrce" parameterType="DefaultMap" resultType="DefaultMap">
+    /* CmmMenuMapper.selectAuthedResrce */
+     SELECT A.RESRCE_CD,
+            A.RESRCE_PATH
+       FROM (
+             SELECT A.RESRCE_CD, 
+                    SYS_CONNECT_BY_PATH(RESRCE_CD, '/') RESRCE_PATH
+               FROM TB_WB_RESRCE_INFO A
+              WHERE A.USE_YN = 'Y'
+              START WITH A.P_RESRCE = '000000'
+            CONNECT BY PRIOR A.RESRCE_CD = A.P_RESRCE
+            ) A,
+            (
+             SELECT B.RESRCE_CD
+               FROM TB_WB_AUTHOR_GRP_INFO A,
+                    TB_WB_AUTHOR_GRP_RESRCE B
+              WHERE A.GRP_CD = B.GRP_CD
+                AND B.GRP_CD = #{grpCd}
+                AND A.USE_YN = 'Y'
+                AND B.USE_YN = 'Y'
+              UNION ALL
+             SELECT A.RESRCE_CD
+               FROM TB_WB_AUTHOR_EXCEPT A
+              WHERE A.USER_ID = #{userId}
+                AND A.INCLD_EXCLD_FG = 'I'
+                AND A.USE_YN = 'Y'
+              MINUS
+             SELECT A.RESRCE_CD
+               FROM TB_WB_AUTHOR_EXCEPT A
+              WHERE A.USER_ID = #{userId}
+                AND A.INCLD_EXCLD_FG = 'E'
+                AND A.USE_YN = 'Y'
+            ) B
+      WHERE A.RESRCE_CD = B.RESRCE_CD
   </select>
   
+  <select id="selectAuthedBkmk" parameterType="DefaultMap" resultType="DefaultMap">
+    /* CmmMenuMapper.selectAuthedBkmk */
+     SELECT A.RESRCE_CD,
+            A.RESRCE_PATH
+       FROM (
+             SELECT A.RESRCE_CD, 
+                    SYS_CONNECT_BY_PATH(RESRCE_CD, '/') RESRCE_PATH
+               FROM TB_WB_RESRCE_INFO A
+              WHERE A.USE_YN = 'Y'
+              START WITH A.P_RESRCE = '000000'
+            CONNECT BY PRIOR A.RESRCE_CD = A.P_RESRCE
+            ) A,
+            (
+             SELECT B.RESRCE_CD
+               FROM TB_WB_AUTHOR_GRP_INFO A,
+                    TB_WB_AUTHOR_GRP_RESRCE B
+              WHERE A.GRP_CD = B.GRP_CD
+                AND B.GRP_CD = #{grpCd}
+                AND A.USE_YN = 'Y'
+                AND B.USE_YN = 'Y'
+              UNION ALL
+             SELECT A.RESRCE_CD
+               FROM TB_WB_AUTHOR_EXCEPT A
+              WHERE A.USER_ID = #{userId}
+                AND A.INCLD_EXCLD_FG = 'I'
+                AND A.USE_YN = 'Y'
+              MINUS
+             SELECT A.RESRCE_CD
+               FROM TB_WB_AUTHOR_EXCEPT A
+              WHERE A.USER_ID = #{userId}
+                AND A.INCLD_EXCLD_FG = 'E'
+                AND A.USE_YN = 'Y'
+            ) B,
+            TB_WB_BKMK C
+      WHERE A.RESRCE_CD = B.RESRCE_CD
+        AND A.RESRCE_CD = C.RESRCE_CD
+        AND C.USER_ID = #{userId}
+        AND C.USE_YN = 'Y'
+
+  </select>
+
 </mapper>
 
 

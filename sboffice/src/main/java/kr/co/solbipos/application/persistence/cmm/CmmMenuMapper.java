@@ -4,8 +4,8 @@ import java.util.List;
 import kr.co.solbipos.application.domain.cmm.MenuUseHist;
 import kr.co.solbipos.application.domain.cmm.Store;
 import kr.co.solbipos.application.domain.login.SessionInfo;
-import kr.co.solbipos.application.domain.resource.ResrceInfo;
 import kr.co.solbipos.application.domain.resource.ResrceInfoBase;
+import kr.co.solbipos.structure.DefaultMap;
 
 /**
  * 
@@ -57,20 +57,22 @@ public interface CmmMenuMapper {
     /**
      * 메뉴 조회
      * 
-     * @return ResrceInfo
+     * @return List
      */
-    List<ResrceInfo> selectMenu1(SessionInfo sessionInfo);
-    List<ResrceInfo> selectMenu2(SessionInfo sessionInfo);
-    List<ResrceInfo> selectMenu3(SessionInfo sessionInfo);
-    List<ResrceInfo> selectMenu1Icon(SessionInfo sessionInfo);
+    List<DefaultMap<String>> selectAllResrce(DefaultMap<String> map);
     
     /**
-     * 즐겨찾기 조회
+     * 권한 있는 기능 조회
      * 
-     * @return ResrceInfo
+     * @return List
      */
-    List<ResrceInfo> selectBkmkMenu1(SessionInfo sessionInfo);
-    List<ResrceInfo> selectBkmkMenu2(SessionInfo sessionInfo);
-    List<ResrceInfo> selectBkmkMenu3(SessionInfo sessionInfo);
+    List<DefaultMap<String>> selectAuthedResrce(DefaultMap<String> map);
+
+    /**
+     * 권한이 있는 즐겨찾기 조회
+     * @param map
+     * @return
+     */
+    List<DefaultMap<String>> selectAuthedBkmk(DefaultMap<String> map);
     
 }

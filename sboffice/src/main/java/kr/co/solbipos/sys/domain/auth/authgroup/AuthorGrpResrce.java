@@ -33,11 +33,17 @@ public class AuthorGrpResrce extends Cmm {
     /** 리소스 명 */
     private String resrceNm;
     
+    /** URL */
+    private String url;
+
     /** 리소스 화면 표시 내용 */
     private String resrceDisp;
     
     /** 권한 보유 여부 */
     private Boolean authFg;
+    
+    /** 최상단 메뉴 아이콘 명 */
+    private String iconNm;
     
     /** Child Items */
     private List<AuthorGrpResrce> items;

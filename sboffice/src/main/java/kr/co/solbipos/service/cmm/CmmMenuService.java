@@ -1,12 +1,13 @@
 package kr.co.solbipos.service.cmm;
 
-import java.util.HashMap;
 import java.util.List;
 import kr.co.solbipos.application.domain.cmm.MenuUseHist;
 import kr.co.solbipos.application.domain.cmm.Store;
 import kr.co.solbipos.application.domain.login.SessionInfo;
+import kr.co.solbipos.application.domain.resource.Menu;
 import kr.co.solbipos.application.domain.resource.ResrceInfo;
 import kr.co.solbipos.application.domain.resource.ResrceInfoBase;
+import kr.co.solbipos.structure.DefaultMap;
 
 /**
  * 
@@ -126,7 +127,18 @@ public interface CmmMenuService {
      * @param sessionInfo
      * @param menuType 메뉴 타입 (A : 전체메뉴, F : 즐겨찾기)
      */
-    List<HashMap<String, Object>> makeMenu(SessionInfo sessionInfo, String menuType);
+    List<Menu> makeMenu(SessionInfo sessionInfo, String menuType);
+
+
+    /**
+     * 트리 데이터 생성
+     * @param list
+     * @param authedList
+     * @return
+     */
+    List<Menu> makeTreeData(List<DefaultMap<String>> list, 
+            List<DefaultMap<String>> authedList);
+
 }
 
 

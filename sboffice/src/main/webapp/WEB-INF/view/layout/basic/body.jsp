@@ -57,35 +57,3 @@
   </c:import>
 
 </body>
-
-<script type="text/javascript">
-<%-- 메뉴 열고 닫기 --%>
-$(".menuControl").click(function(){
-  if($("#_nav").attr("class") == "menuOpen"){
-    $("#faMenu").hide();
-    $("#theTreeAll").hide();
-    $("#theTreeBkmk").hide();
-    $("#smallMenu").show();
-    $("#_favorite").removeClass("on");
-    $("#_nav").removeClass("menuOpen").addClass("menuClose");
-    $("#_arrow").removeClass("arrowOpen").addClass("arrowClose");
-  }else{
-    $("#theTreeAll").show();
-    $("#theTreeBkmk").show();
-    $("#smallMenu").hide();
-    $("#_nav").removeClass("menuClose").addClass("menuOpen");
-    $("#_arrow").removeClass("arrowClose").addClass("arrowOpen");
-  }
-});
-
-<%-- 검색 조건 닫고 열기 --%>
-$(".searchBar").bind("click", function() {
-  if($(".searchBar").children().attr("class") == "open") {
-    $(".searchBar").children().attr("class", "close");
-  }  
-  else {
-    $(".searchBar").children().attr("class", "open");
-  }
-  $(".searchTbl").toggle();
-});
-</script>

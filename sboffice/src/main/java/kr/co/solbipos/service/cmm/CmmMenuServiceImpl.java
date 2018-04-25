@@ -1,10 +1,10 @@
 package kr.co.solbipos.service.cmm;
 
-import static kr.co.solbipos.utils.DateUtil.*;
-import static kr.co.solbipos.utils.spring.StringUtil.*;
+import static kr.co.solbipos.utils.DateUtil.currentDateString;
+import static kr.co.solbipos.utils.DateUtil.currentTimeMsString;
+import static org.springframework.util.StringUtils.isEmpty;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import kr.co.solbipos.application.domain.cmm.MenuUseHist;
 import kr.co.solbipos.application.domain.cmm.Store;
 import kr.co.solbipos.application.domain.login.SessionInfo;
+import kr.co.solbipos.application.domain.resource.Menu;
 import kr.co.solbipos.application.domain.resource.ResrceInfo;
 import kr.co.solbipos.application.domain.resource.ResrceInfoBase;
 import kr.co.solbipos.application.persistence.cmm.CmmCodeMapper;
@@ -226,127 +227,108 @@ public class CmmMenuServiceImpl implements CmmMenuService {
         }
     }
     
-    /**
-     * 메인 메뉴 관련
-     */
-    
     @Override
-    public List<HashMap<String, Object>> makeMenu(SessionInfo sessionInfo, String menuType) {
-        
-        List<DefaultMap<Object>> iconList = cmmCodeMapper.selectCmmCodeList("086"); // 메뉴 아이콘
+    public List<Menu> makeMenu(SessionInfo sessionInfo, String menuType) {
 
-        List<ResrceInfo> menu1;
-        List<ResrceInfo> menu2;
-        List<ResrceInfo> menu3;
+        DefaultMap<String> map = new DefaultMap<String>();
+        map.put("grpCd", sessionInfo.getGrpCd());
+        map.put("userId", sessionInfo.getUserId());
+
+        //Tree 생성을 위한 모든 리소스(Menu 포함) 조회
+        //로그인 아이디의 그룹 기준 권한이 있는 것 체크
+        List<DefaultMap<String>> list = cmmMenuMapper.selectAllResrce(map);
         
-        if(menuType.equals("A")){   // 전체메뉴
-            menu1 = cmmMenuMapper.selectMenu1(sessionInfo);
-            menu2 = cmmMenuMapper.selectMenu2(sessionInfo);
-            menu3 = cmmMenuMapper.selectMenu3(sessionInfo);
-        } else {    // 즐겨찾기
-            menu1 = cmmMenuMapper.selectBkmkMenu1(sessionInfo); 
-            menu2 = cmmMenuMapper.selectBkmkMenu2(sessionInfo);
-            menu3 = cmmMenuMapper.selectBkmkMenu3(sessionInfo);
+        //로그인 아이디 기준 권한이 있는 기능의 탐색 경로 조회
+        //Tree의 기준 데이터에서 권한이 없는 리소스를 빼기 위해 사용
+        List<DefaultMap<String>> authedList = new ArrayList<DefaultMap<String>>();
+        if(menuType.equals("A")) {
+            authedList = cmmMenuMapper.selectAuthedResrce(map);
+        }
+        else if(menuType.equals("F")) {
+            authedList = cmmMenuMapper.selectAuthedBkmk(map);
         }
         
-        // 리턴 결과
-        List<HashMap<String, Object>> rList = new ArrayList<HashMap<String, Object>>();
+        return makeTreeData(list, authedList);
 
-        for (int i = 0; i < menu1.size(); i++) {
-
-            ResrceInfo resrceInfo1 = menu1.get(i);
-            String resrceCd1 = resrceInfo1.getResrceCd();
-
-            // 최상위 레벨에 아이콘 세팅 
-            String iconNm = "";
-            for(int n =0; n<iconList.size(); n++) {
-                if(resrceInfo1.getResrceCd().equals(iconList.get(n).get("nmcodeItem1"))) {
-                    iconNm = (String) iconList.get(n).get("nmcodeItem2");
-                }
-            }
-            
-            HashMap<String, Object> m1Header = new HashMap<>();
-
-            m1Header.put("level1Seq", i);
-            m1Header.put("header", resrceInfo1.getResrceNm());
-            m1Header.put("resrceCd", resrceInfo1.getResrceCd());
-            m1Header.put("url", "");
-            m1Header.put("iconNm", iconNm);
-            
-            List<HashMap<String, Object>> m1items = new ArrayList<HashMap<String, Object>>();
-
-            // 차상위 레벨 'TB_WB_RESRCE_INFO.DISP_LEVLE = 1'
-            int level2Seq = 0;
-            
-            for (int j = 0; j < menu2.size(); j++) {
-                ResrceInfo resrceInfo2 = menu2.get(j);
-                String m2ResrceCd = resrceInfo2.getResrceCd();
-
-                HashMap<String, Object> m2Header = new HashMap<>();
-                
-                if (resrceInfo2.getPResrce().equals(resrceCd1)) {
-                    
-                    m2Header.put("level2Seq", level2Seq);
-                    m2Header.put("header", resrceInfo2.getResrceNm());
-                    m2Header.put("resrceCd", resrceInfo2.getResrceCd());
-                    m2Header.put("url", "");
-                    level2Seq++;
-                    
-                    List<HashMap<String, Object>> m2items = new ArrayList<HashMap<String, Object>>();
-                    
-                    int level3Seq = 0;
-
-                    // 하위 레벨 'TB_WB_RESRCE_INFO.DISP_LEVLE = 2'
-                    for (int k = 0; k < menu3.size(); k++) {
-                        ResrceInfo resrceInfo3 = menu3.get(k);
-                        
-                        if (resrceInfo3.getPResrce().equals(m2ResrceCd)) {
-                            
-                            HashMap<String, Object> m3Header = new HashMap<>();
-                            
-                            m3Header.put("level3Seq", level3Seq);
-                            m3Header.put("header", resrceInfo3.getResrceNm());
-                            m3Header.put("resrceCd", resrceInfo3.getResrceCd());
-                            m3Header.put("url", isEmpty(resrceInfo3.getUrl()) ? "" : resrceInfo3.getUrl());
-                            m2items.add(m3Header);
-                            level3Seq++;
-                        }
-                    }
-                    m2Header.put("items", m2items);
-                    m1items.add(m2Header);
-                }
-            }
-            
-            // 최하위 레벨의 상위 레벨이 최상위 레벨일 경우
-            for (int m = 0; m < menu3.size(); m++) {
-
-                ResrceInfo resrceInfo3 = menu3.get(m);
-                HashMap<String, Object> m3Header = new HashMap<>();
-
-                if (resrceInfo3.getPResrce().equals(resrceCd1)) {
-                    
-                    m3Header.put("level2Seq", level2Seq);
-                    m3Header.put("header", resrceInfo3.getResrceNm());
-                    m3Header.put("resrceCd", resrceInfo3.getResrceCd());
-                    m3Header.put("url", isEmpty(resrceInfo3.getUrl()) ? "" : resrceInfo3.getUrl());
-                    level2Seq++;
-                   
-                    m1items.add(m3Header);
-                }
-            }
-            
-            m1Header.put("items", m1items);
-            rList.add(m1Header);
-        }
-        
-        //String menuStr = convertToJson(rList);
-        //return menuStr;
-        return rList;
     }
+
 
     @Override
     public List<String> selectStoreCdList(String hqOfficeCd) {
         return cmmMenuMapper.selectStoreCdList(hqOfficeCd);
+    }
+    
+    @Override
+    public List<Menu> makeTreeData(List<DefaultMap<String>> list, 
+            List<DefaultMap<String>> authedList) {
+        
+        List<Menu> input = new ArrayList<Menu>();
+        Menu m = new Menu();
+        for(DefaultMap<String> item : list) {
+            m = new Menu();
+            m.setCd(item.getStr("cd"));
+            m.setPcd(item.getStr("pcd"));
+            m.setNm(item.getStr("nm"));
+            m.setUrl(item.getStr("url"));
+            m.setIcon(item.getStr("icon"));
+            m.setItems(new ArrayList<Menu>());
+            input.add(m);
+        }
+        //권한이 있는 기능에서 상위 리소스 정보 생성
+        //상위 리소스 맵에 없는 리소스는 권한이 없는 것으로 판단.
+        DefaultMap<String> authedResrce = new DefaultMap<String>(); 
+        if(authedList != null && authedList.size() > 0) {
+            String resrcePath = "";
+            String[] arrayRes;
+            for(DefaultMap<String> item : authedList) {
+                resrcePath = item.getStr("resrcePath").substring(1);
+                arrayRes = resrcePath.split("\\/");
+                for(String res : arrayRes) {
+                    authedResrce.put(res, "");
+                }
+            }
+            log.debug(authedResrce.toString());
+        }
+
+        Map<String, Menu> hm = new LinkedHashMap<String, Menu>();
+        Menu child;
+        Menu mmdParent;
+        
+        if(authedResrce.size() > 0) {
+            for(Menu menu : input) {
+                
+                if(!hm.containsKey(menu.getCd())) {
+                    if(authedResrce.size() > 0) {
+                        if(authedResrce.containsKey(menu.getCd())) {
+                            hm.put(menu.getCd(), menu);
+                        }
+                    }
+                    else {
+                        hm.put(menu.getCd(), menu);
+                    }
+                }
+                child = hm.get(menu.getCd());
+                
+                if(!menu.getPcd().equals("") && !menu.getPcd().equals("000000")) {
+                    if(hm.containsKey(menu.getPcd())) {
+                        mmdParent = hm.get(menu.getPcd());
+                        mmdParent.getItems().add(child);
+                    }
+                }
+                
+            }
+            //log.debug( hm.toString() );
+        }
+        
+        List<Menu> retrunData = new ArrayList<Menu>();
+        for (Menu mmd : hm.values()) {
+            if (mmd.getPcd() == null || mmd.getPcd().equals("")
+                    || mmd.getPcd().equals("000000")) {
+                retrunData.add(mmd);
+            }
+        }
+        log.debug( retrunData.toString() );
+        return retrunData;
     }
 }
 
