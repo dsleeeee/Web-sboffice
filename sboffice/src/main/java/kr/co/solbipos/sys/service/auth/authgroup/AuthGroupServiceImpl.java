@@ -147,10 +147,8 @@ public class AuthGroupServiceImpl implements AuthGroupService {
             resrce.setResrceCd(rm.getStr("resrceCd"));
             resrce.setPResrce(rm.getStr("pResrce"));
             resrce.setResrceNm(rm.getStr("resrceNm"));
-            resrce.setUrl(rm.getStr("url"));
             resrce.setResrceDisp(rm.getStr("resrceDisp"));
             resrce.setAuthFg(rm.getLong("authFg") == 1 ? true : false);
-            resrce.setIconNm(rm.getStr("iconNm"));
             resrce.setItems(new ArrayList<AuthorGrpResrce>());
             input.add(resrce);
         }
@@ -174,31 +172,29 @@ public class AuthGroupServiceImpl implements AuthGroupService {
         AuthorGrpResrce child;
         AuthorGrpResrce mmdParent;
         
-        if(authedResrce.size() > 0) {
-            for(AuthorGrpResrce item : input) {
-                
-                if(!hm.containsKey(item.getResrceCd())) {
-                    if(authedResrce.size() > 0) {
-                        if(authedResrce.containsKey(item.getResrceCd())) {
-                            hm.put(item.getResrceCd(), item);
-                        }
-                    }
-                    else {
+        for(AuthorGrpResrce item : input) {
+            
+            if(!hm.containsKey(item.getResrceCd())) {
+                if(authedResrce.size() > 0) {
+                    if(authedResrce.containsKey(item.getResrceCd())) {
                         hm.put(item.getResrceCd(), item);
                     }
                 }
-                child = hm.get(item.getResrceCd());
-                
-                if(!item.getPResrce().equals("") && !item.getPResrce().equals("000000")) {
-                    if(hm.containsKey(item.getPResrce())) {
-                        mmdParent = hm.get(item.getPResrce());
-                        mmdParent.getItems().add(child);
-                    }
+                else {
+                    hm.put(item.getResrceCd(), item);
                 }
-                
             }
-            //log.debug( hm.toString() );
+            child = hm.get(item.getResrceCd());
+            
+            if(!item.getPResrce().equals("") && !item.getPResrce().equals("000000")) {
+                if(hm.containsKey(item.getPResrce())) {
+                    mmdParent = hm.get(item.getPResrce());
+                    mmdParent.getItems().add(child);
+                }
+            }
+            
         }
+        //log.debug( hm.toString() );
         
         List<AuthorGrpResrce> retrunData = new ArrayList<AuthorGrpResrce>();
         for (AuthorGrpResrce mmd : hm.values()) {

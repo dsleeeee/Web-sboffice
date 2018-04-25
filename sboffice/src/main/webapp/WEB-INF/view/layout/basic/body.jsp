@@ -56,4 +56,17 @@
   <c:import url="/WEB-INF/view/layout/basic/loading.jsp">
   </c:import>
 
+<script>
+  <%-- 검색 조건 닫고 열기 --%>
+  $(".searchBar").click(function() {
+    if($(".searchBar").children().attr("class") == "open") {
+      $(".searchBar").children().attr("class", "close");
+    }  
+    else {
+      $(".searchBar").children().attr("class", "open");
+    }
+    $(".searchTbl").toggle();
+  });
+</script>
+
 </body>

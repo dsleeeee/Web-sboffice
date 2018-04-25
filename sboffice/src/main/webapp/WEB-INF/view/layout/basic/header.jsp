@@ -87,7 +87,7 @@
 </div>
 <%--//고정메뉴--%>
 
-<script type="text/javascript">
+<script>
   $("#pwchg").bind("click", function() {
     $("#fullDimmedPw").show();
     $("#layerpw").show();
@@ -148,17 +148,6 @@
       $("#_nav").removeClass("menuClose").addClass("menuOpen");
       $("#_arrow").removeClass("arrowClose").addClass("arrowOpen");
     }
-  });
-
-  <%-- 검색 조건 닫고 열기 --%>
-  $(".searchBar").bind("click", function() {
-    if($(".searchBar").children().attr("class") == "open") {
-      $(".searchBar").children().attr("class", "close");
-    }  
-    else {
-      $(".searchBar").children().attr("class", "open");
-    }
-    $(".searchTbl").toggle();
   });
 </script>
 
