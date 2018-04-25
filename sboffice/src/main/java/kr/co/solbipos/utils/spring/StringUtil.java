@@ -12,6 +12,10 @@ import kr.co.solbipos.structure.DefaultMap;
 import kr.co.solbipos.utils.MD5Utils;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * @author 정용길
+ *
+ */
 @Slf4j
 public class StringUtil extends StringUtils {
 
@@ -373,6 +377,25 @@ public class StringUtil extends StringUtils {
             buf.append((rnd.nextInt(9))); 
         }
         return buf.toString();
+    }
+    
+    /**
+      * 
+      * @param param1
+      * @param param2
+      * @return
+      */
+    public static boolean equalsNull(String param1, String param2) {
+        if(isEmpty(param1) && isEmpty(param2)) {
+            return true;
+        }
+        else if(!isEmpty(param1) && param1.equals(param2)) {
+            return true;
+        }
+        else if(!isEmpty(param2) && param2.equals(param1)) {
+            return true;
+        }
+        return false;
     }
 }
 

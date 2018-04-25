@@ -33,6 +33,25 @@ function setZero(s, l) {
   return r += s;
 }
 
+function setGridCRUD(grid) {
+  var arr = new Array();
+  
+  for(var i=0; i<grid.collectionView.itemsEdited.length; i++){
+    grid.collectionView.itemsEdited[i].status = "U";
+    arr.push(grid.collectionView.itemsEdited[i]);
+  }
+  for(var i=0; i<grid.collectionView.itemsAdded.length; i++){
+    grid.collectionView.itemsAdded[i].status = "I";
+    arr.push(grid.collectionView.itemsAdded[i]);
+  }
+  for(var i=0; i<grid.collectionView.itemsRemoved.length; i++){
+    grid.collectionView.itemsRemoved[i].status = "D";
+    arr.push(grid.collectionView.itemsRemoved[i]);
+  }
+  
+  return arr;
+}
+
 /**
  * 문자열이 빈 문자열인지 체크하여 결과값을 리턴한다.
  * @param str       : 체크할 문자열

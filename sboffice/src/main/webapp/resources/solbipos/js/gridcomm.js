@@ -12,6 +12,8 @@
           showSort : true,
           autoGenerateColumns: false,  // 이거 안하면 컬럼이 자동으로 막 생김
           showAlternatingRows: false,
+          stickyHeaders: true,
+          selectionMode: "Row",
           formatItem : function(s, e) {
             // 표시 화면 입력 생성
             if (e.panel == s.topLeftCells) {

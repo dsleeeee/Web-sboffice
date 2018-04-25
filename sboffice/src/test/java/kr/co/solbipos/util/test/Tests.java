@@ -3,18 +3,17 @@ package kr.co.solbipos.util.test;
 import static org.junit.Assert.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
-import kr.co.solbipos.utils.DateUtil;
-import kr.co.solbipos.utils.jsp.CmmCodeUtil;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -28,6 +27,7 @@ public class Tests {
     }
 
     @Test
+    @Ignore
     public void test100() throws ParseException {
         
         String date = "20180123";
@@ -47,6 +47,47 @@ public class Tests {
         assertTrue(true);
     }
 
+    
+    @Test
+    public void test200() {
+        List<String> list = new ArrayList<String> ();
+        list.add("S000001");
+        list.add("S000002");
+        list.add("S000003");
+        
+        String[] arr = {"S000001", "S000001", "S000002", "S000002", "S000003"};
+        
+        boolean check = true;
+        
+        int i=0;
+        for(i=0; i<arr.length; i++) {
+            if(list.indexOf(arr[i]) == -1) {
+                check = false;
+                break;
+            }
+        }
+        
+        log.error("result 1, {} : {}", i, check);
+    }
+    
+    @Test
+    public void test201() {
+        String target = "S000001";
+        
+        List<String> list = new ArrayList<String> ();
+        list.add("S000001");
+        list.add("S000002");
+        list.add("S000003");
+        
+        boolean check = false;
+        
+        if(list.indexOf(target) > -1) {
+            check = true;
+        }
+
+        log.error("result 2 : {}", check);
+    }
 }
+
 
 

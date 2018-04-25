@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.sys.persistence.menu.webmenu.WebMenuMapper">
+
+  <select id="selectWebMenu" parameterType="resrceInfo"
+    resultType="defaultMap">
+    /* WebMenuMapper.selectWebMenu */
+    <![CDATA[
+    SELECT A.RESRCE_CD,
+           A.P_RESRCE,
+           A.RESRCE_FG,
+           A.FUNC_FG,
+           A.RESRCE_NM,
+           A.URL,
+           A.SPCL_AUTHOR,
+           A.DISP_LEVEL,
+           A.DISP_IDX
+      FROM TB_WB_RESRCE_INFO A
+     WHERE A.USE_YN = 'Y'
+       AND A.RESRCE_CD = #{resrceCd}
+        OR (
+                A.P_RESRCE = #{resrceCd} 
+            AND A.RESRCE_FG = 'F'
+            AND A.USE_YN = 'Y'
+            )
+     ]]>
+  </select>
+
+  <select id="selectWebMenuLevel" parameterType="integer"
+    resultType="resrceInfo">
+    /* WebMenuMapper.selectWebMenuLevel */
+    <![CDATA[
+    SELECT A.RESRCE_CD,
+           A.P_RESRCE,
+           A.RESRCE_FG,
+           A.FUNC_FG,
+           A.RESRCE_NM,
+           A.URL,
+           A.SPCL_AUTHOR,
+           A.DISP_LEVEL,
+           A.DISP_IDX,
+           A.USE_YN,
+           A.REG_DT,
+           A.REG_ID,
+           A.MOD_DT,
+           A.MOD_ID
+      FROM TB_WB_RESRCE_INFO A 
+     WHERE A.DISP_LEVEL = #{level}
+       AND A.RESRCE_FG = 'M' 
+       AND A.USE_YN = 'Y'
+  ORDER BY A.DISP_IDX ASC
+      ]]>
+  </select>
+
+  <select id="selectWebMenuByResrceCd" parameterType="resrceInfo"
+    resultType="resrceInfo">
+    /* WebMenuMapper.selectWebMenuByResrceCd */
+    <![CDATA[
+    SELECT A.RESRCE_CD,
+           A.P_RESRCE,
+           A.RESRCE_FG,
+           A.FUNC_FG,
+           A.RESRCE_NM,
+           A.URL,
+           A.SPCL_AUTHOR,
+           A.DISP_LEVEL,
+           A.DISP_IDX
+      FROM TB_WB_RESRCE_INFO A
+     WHERE A.USE_YN = 'Y'
+       AND A.RESRCE_CD = #{resrceCd}
+    ]]>
+  </select>
+
+  <insert id="insertWebMenu" parameterType="resrceInfo">
+
+    <selectKey keyProperty="resrceCd" resultType="string"
+      order="BEFORE">
+      SELECT LPAD(SQ_WB_RESRCE.NEXTVAL, 6, '0') resrceCd FROM DUAL
+    </selectKey>
+
+    /* WebMenuMapper.insertWebMenu */
+    <![CDATA[
+    INSERT INTO TB_WB_RESRCE_INFO
+    (
+      RESRCE_CD,
+      P_RESRCE,
+      RESRCE_FG,
+      FUNC_FG,
+      RESRCE_NM,
+      URL,
+      SPCL_AUTHOR,
+      DISP_LEVEL,
+      DISP_IDX,
+      USE_YN,
+      REG_DT,
+      REG_ID,
+      MOD_DT,
+      MOD_ID
+    )
+    VALUES
+    (
+      #{resrceCd},
+      #{pResrce},
+      #{resrceFg},
+      #{funcFg},
+      #{resrceNm},
+      #{url},
+      #{spclAuthor},
+      #{dispLevel},
+      #{dispIdx},
+      #{useYn},
+      #{regDt},
+      #{regId},
+      #{modDt},
+      #{modId}
+    )
+    ]]>
+  </insert>
+
+  <update id="updateWebMenu" parameterType="resrceInfo">
+    /* WebMenuMapper.deleteWebMenu */
+    <![CDATA[
+    UPDATE TB_WB_RESRCE_INFO A
+       SET A.MOD_DT = #{modDt},
+           A.MOD_ID = #{modId},
+           A.FUNC_FG = #{funcFg},
+           A.RESRCE_NM = #{resrceNm},
+           A.URL = #{url},
+           A.DISP_IDX = #{dispIdx},
+           A.SPCL_AUTHOR = #{spclAuthor}
+     WHERE A.RESRCE_CD = #{resrceCd}
+    ]]>
+  </update>
+
+  <update id="deleteWebMenu" parameterType="resrceInfo">
+    /* WebMenuMapper.deleteWebMenu */
+    <![CDATA[
+    UPDATE TB_WB_RESRCE_INFO A
+       SET A.USE_YN = 'N',
+           A.MOD_DT = #{modDt},
+           A.MOD_ID = #{modId}
+     WHERE A.RESRCE_CD = #{resrceCd}
+     ]]>
+  </update>
+
+  <update id="deleteWebMenuAll" parameterType="resrceInfo">
+    /* WebMenuMapper.deleteWebMenuAll */
+    <![CDATA[
+    UPDATE TB_WB_RESRCE_INFO A
+       SET A.USE_YN = 'N',
+           A.MOD_DT = #{modDt},
+           A.MOD_ID = #{modId}
+     WHERE A.RESRCE_CD IN (
+           SELECT B.RESRCE_CD 
+             FROM TB_WB_RESRCE_INFO B
+            WHERE B.USE_YN = 'Y'
+            START WITH B.RESRCE_CD = #{resrceCd}
+          CONNECT BY PRIOR B.RESRCE_CD = B.P_RESRCE
+     )
+    ]]>
+  </update>
+
+</mapper>
+
+
+

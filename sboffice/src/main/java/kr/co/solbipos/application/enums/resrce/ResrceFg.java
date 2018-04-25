@@ -15,9 +15,9 @@ import kr.co.solbipos.system.CodeEnumTypeHandler;
 public enum ResrceFg implements CodeEnum  {
     
     /** 리소스 : 메뉴 */
-    MENU("W001")
+    MENU("M")
     /** 리소스 : 기능 */
-    , FUNC("W002");
+    , FUNC("F");
     
   private String code;
 

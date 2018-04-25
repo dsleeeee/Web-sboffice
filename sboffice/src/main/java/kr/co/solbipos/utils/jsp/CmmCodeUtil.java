@@ -199,24 +199,4 @@ public class CmmCodeUtil {
         list.add(m);
         return convertToJson(list);
     }
-
-    /*
-     * public <E> String assmblObj(List<DefaultMap<E>> source, String name[], String value[]) { if(
-     * ObjectUtils.isEmpty(source) ) { log.warn("assmble source empty..."); return ""; }
-     * 
-     * List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-     * 
-     * source.stream().forEach( x -> { list.add( assmbl(x, name, value) ); });
-     * 
-     * return convertToJson(list); }
-     * 
-     * public <E> String addStr(DefaultMap<E> obj, String arr[]) { return addStr(obj, arr, ""); }
-     * 
-     * public <E> String addStr(DefaultMap<E> obj, String arr[], String separator) { if(
-     * ObjectUtils.isEmpty(obj) || ObjectUtils.isEmpty(arr) ) { return ""; }
-     * 
-     * String returnStr = ""; for( int i = 0; i < arr.length; i++ ) { returnStr +=
-     * obj.getStr(arr[i]); if( i == arr.length - 1 ) { } else { if( !isEmpty(separator) ) {
-     * returnStr += separator; } } } return returnStr; }
-     */
 }

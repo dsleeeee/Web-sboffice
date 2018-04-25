@@ -95,7 +95,7 @@
           if(result.status === "OK") {
             return succ(result);
           }
-          else if(data.status === "FAIL") {
+          else if(result.status === "FAIL") {
             return fail(result);
           }
           else if(result.status === "SESSION_EXFIRE") {
@@ -138,7 +138,7 @@
           if(result.status === "OK") {
             return succ(result);
           }
-          else if(data.status === "FAIL") {
+          else if(result.status === "FAIL") {
             return fail(result);
           }
           else if(result.status === "SESSION_EXFIRE") {

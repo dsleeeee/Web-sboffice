@@ -1,6 +1,7 @@
 package kr.co.solbipos.adi.controller.dclz.dclzmanage;
 
 import static kr.co.solbipos.utils.grid.ReturnUtil.*;
+import static org.springframework.util.ObjectUtils.*;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -69,8 +70,10 @@ public class DclzManageController {
             dclzManage.setStoreCd(si.getOrgnCd());
         }
         
-        // 선택한 매장을 arr 로 세팅한다. 쿼리에서 쓰임
-        dclzManage.setArrStoreCd(dclzManage.getStoreCd().split(","));
+        if(!isEmpty(dclzManage.getStoreCd())) {
+            // 선택한 매장을 arr 로 세팅한다. 쿼리에서 쓰임
+            dclzManage.setArrStoreCd(dclzManage.getStoreCd().split(","));
+        }
 
         List<DefaultMap<String>> list = dclzManageService.selectDclzManage(dclzManage);
 

@@ -313,10 +313,6 @@
       param.curr = index;
       
       $.postJSON("/adi/dclz/dclzmanage/dclzmanage/list.sb", param, function(result) {
-        if(result.status === "FAIL") {
-          s_alert.pop(result.message);
-          return;
-        }
         var list = result.data.list;
         if(list.length === undefined || list.length == 0) {
           s_alert.pop(result.message);
@@ -324,6 +320,9 @@
         }
         grid.itemsSource = list;
         page.make("#page1", result.data.page.curr, result.data.page.totalPage);
+        },
+        function(result){
+          s_alert.pop(result.data.msg);
         })
         .fail(function(){
           s_alert.pop("Ajax Fail");
@@ -356,11 +355,10 @@
       param.remark = remark.text;
       
       $.postJSON("/adi/dclz/dclzmanage/dclzmanage/regist.sb", param, function(result) {
-        if(result.status === "FAIL") {
-          s_alert.pop(result.message);
-          return;
-        }
         closeDclzLayer();
+        },
+        function(result){
+          s_alert.pop(result.data.msg);
         })
         .fail(function(){
           s_alert.pop("Ajax Fail");
@@ -381,10 +379,6 @@
       param.storeCd = arr[0];
       
       $.postJSON("/adi/dclz/dclzmanage/dclzmanage/employee.sb", param, function(result) {
-        if(result.status === "FAIL") {
-          s_alert.pop(result.message);
-          return;
-        }
         var list = result.data;
         var comboData = [];
         for(var i=0; i<list.length; i++) {
@@ -394,6 +388,9 @@
           comboData.push(data);
         }
         empNo.itemsSource = comboData;
+      },
+      function(result){
+        s_alert.pop(result.data.msg);
       })
       .fail(function(){
         s_alert.pop("Ajax Fail");
@@ -457,15 +454,13 @@
       param.empInDate = getDate(empInDtDate);
       
       $.postJSON("/adi/dclz/dclzmanage/dclzmanage/remove.sb", param, function(result) {
-        if(result.status === "FAIL") {
-          s_alert.pop(result.message);
-          return;
-        }
         var msg = "<s:message code='cmm.del'/>";
         s_alert.popOk(msg, function() {
           closeDclzLayer();
         });
-        
+        },
+        function(result){
+          s_alert.pop(result.data.msg);
         })
         .fail(function(){
           s_alert.pop("Ajax Fail");
@@ -486,15 +481,13 @@
       
       s_alert.popConf(msg, function(){
         $.postJSON("/adi/dclz/dclzmanage/dclzmanage/modify.sb", param, function(result) {
-          if(result.status === "FAIL") {
-            s_alert.pop(result.message);
-            return;
-          }
           var msg2 = "<s:message code='cmm.modify'/>";
           s_alert.popOk(msg2, function() {
             closeDclzLayer();
           });
-          
+          },
+          function(result){
+            s_alert.pop(result.data.msg);
           })
           .fail(function(){
             s_alert.pop("Ajax Fail");
