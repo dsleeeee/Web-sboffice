@@ -179,7 +179,7 @@
       }
     });
     
-    var gdata = ${ccu.getCmmCode("901")};
+    var gdata = ${ccu.getCommCodeExcpAll("901")};
     var mFuncFg = new wijmo.grid.DataMap(gdata, "value", "name");
     
     var rdata2 = 

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import kr.co.solbipos.application.domain.login.SessionInfo;
 import kr.co.solbipos.application.domain.resource.ResrceInfo;
+import kr.co.solbipos.application.enums.resrce.ResrceFg;
 import kr.co.solbipos.application.enums.user.OrgnFg;
 import kr.co.solbipos.enums.Status;
 import kr.co.solbipos.exception.AuthenticationException;
