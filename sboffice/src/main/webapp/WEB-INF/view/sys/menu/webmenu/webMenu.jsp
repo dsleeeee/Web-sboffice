@@ -103,7 +103,6 @@
                 </div>
               </td>
             </tr>
-            
             <%-- 메뉴 정렬 순서 --%>
             <tr>
               <th><s:message code="webMenu.dispIndx" /><em class="imp">*</em></th>
@@ -113,13 +112,21 @@
                 </div>
               </td>
             </tr>
-            
             <%-- URL --%>
             <tr>
               <th>URL</th>
               <td>
                 <div class="sb-select">
                   <div id="url"></div>
+                </div>
+              </td>
+            </tr>
+            <%-- 특수 권한 --%>
+            <tr>
+              <th><s:message code="webMenu.spclAuthor" /></th>
+              <td>
+                <div class="sb-select">
+                  <div id=spclAuthor></div>
                 </div>
               </td>
             </tr>
@@ -162,7 +169,9 @@
     var resrceNm            = wcombo.genInput("#resrceNm");
     var url                 = wcombo.genInput("#url");
     var dispIdx             = wcombo.genInput("#dispIdx");
-    resrceCd.isDisabled = true;
+    var sdata               = ${ccu.getCommCodeNoSelect("905")};
+	var spclAuthor          = wcombo.genCommonBox("#spclAuthor", sdata);
+	resrceCd.isDisabled = true;
   	
     var grid = new wijmo.nav.TreeView("#theGrid", {
       itemsSource: ${menuData},
@@ -205,6 +214,7 @@
             resrceCd.text = item.resrceCd;
             resrceNm.text = item.resrceNm;
             url.text = item.url;
+            spclAuthor.selectedValue = item.spclAuthor === undefined ? "N" : item.spclAuthor;
             dispIdx.text = item.dispIdx === undefined ? "" : item.dispIdx.toString();
           }
           else if(item.resrceFg === "F") {
@@ -325,6 +335,7 @@
       param.dispLevel = item === null ? 0 : item.level+1;
       param.resrceInfoArr = arr;
       param.dispIdx = parseInt(dispIdx.text);
+      param.spclAuthor = spclAuthor.selectedValue === "N" ? null : spclAuthor.selectedValue;
       
       $.postJSONArray("/sys/menu/webmenu/webmenu/save.sb", param, function(result) {
         refreshMenu();
@@ -370,6 +381,7 @@
       resrceCd.text = "";
       resrceNm.text = "";
       dispIdx.text = "";
+      spclAuthor.selectedValue = "N";
       
       grid2.itemsSource = new wijmo.collections.CollectionView();
       grid2.collectionView.trackChanges = true;

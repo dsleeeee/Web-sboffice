@@ -176,6 +176,7 @@ public class WebMenuServiceImpl implements WebMenuService {
             // 메뉴명, url 중 다른게 있으면 업데이트 한다.
             if (!temp.getResrceNm().equals(resrceInfo.getResrceNm())
                     || !equalsNull(temp.getUrl(), resrceInfo.getUrl())
+                    || !equalsNull(temp.getSpclAuthor(), resrceInfo.getSpclAuthor())
                     || temp.getDispIdx() != resrceInfo.getDispIdx()) {
                 result = webMenuMapper.updateWebMenu(resrceInfo);
             }

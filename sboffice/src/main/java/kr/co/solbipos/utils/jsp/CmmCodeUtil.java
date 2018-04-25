@@ -15,7 +15,9 @@ import kr.co.solbipos.system.Prop;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * @author 정용길 jsp 에서 직접 사용 공통 코드 comboBox 에 직접 사용하는 data 형식으로 돌려줌
+ * jsp 에서 직접 사용 공통 코드 comboBox 에 직접 사용하는 data 형식으로 돌려줌
+ * 
+ * @author 정용길 
  */
 @Slf4j
 @Component("cmmCodeUtil")
@@ -64,6 +66,7 @@ public class CmmCodeUtil {
         // 결과 형태를 만들어서 json 으로 리턴
         return assmblObj(commonCode.getCodeList(), "nmcodeNm", "nmcodeCd", UseYn.ALL);
     }
+    
     /**
      * 공통 코드 조회  "ALL" 제외 (JSON, 명칭/코드)
      * 
@@ -81,6 +84,22 @@ public class CmmCodeUtil {
     }
     
     /**
+     * 공통 코드 조회(JSON, 선택안함)
+     * 
+     * @param nmcodeGrpCd
+     * @return
+     */
+    public String getCommCodeNoSelect(String nmcodeGrpCd) {
+        
+        CommonCode commonCode = getCommCodeData(nmcodeGrpCd);
+        if(commonCode == null) {
+            return assmblEmptyCombo();
+        }
+        // 결과 형태를 만들어서 json 으로 리턴
+        return assmblObj(commonCode.getCodeList(), "nmcodeNm", "nmcodeCd", UseYn.Y);
+    }
+    
+    /**
      * 공통 코드 조회(JSON, 항목전체)
      * 
      * @param nmcodeGrpCd
@@ -95,6 +114,7 @@ public class CmmCodeUtil {
         // 결과 형태를 만들어서 json 으로 리턴
         return convertToJson(commonCode.getCodeList());
     }
+    
     /**
      * 공통 코드 조회, Redis 처리
      * 
@@ -161,6 +181,12 @@ public class CmmCodeUtil {
             HashMap<String, String> m = new HashMap<>();
             m.put(COMBO_NAME, "전체");
             m.put(COMBO_VALUE, "ALL");
+            list.add(m);
+        }
+        else if(option == UseYn.Y) {
+            HashMap<String, String> m = new HashMap<>();
+            m.put(COMBO_NAME, "선택안함");
+            m.put(COMBO_VALUE, "N");
             list.add(m);
         }
         
