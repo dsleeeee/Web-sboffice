@@ -343,7 +343,10 @@
         selectItem(grid.selectedItem);
       },
       function(result) {
-        if(result.data.resrceNm != undefined) {
+        if(!isEmpty(result.message)) {
+          s_alert.pop(result.message);
+        }
+        else if(result.data.resrceNm != undefined) {
           s_alert.pop(result.data.resrceNm);
         }
         else if(result.data.url != undefined) {

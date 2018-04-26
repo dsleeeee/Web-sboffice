@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import kr.co.solbipos.adi.domain.dclz.dclzmanage.DclzManage;
 import kr.co.solbipos.adi.enums.DclzInFg;
 import kr.co.solbipos.adi.persistence.dclz.dclzmanage.DclzManageMapper;
@@ -22,6 +23,7 @@ import kr.co.solbipos.structure.DefaultMap;
  *
  */
 @Service
+@Transactional
 public class DclzManageServiceImpl implements DclzManageService {
 
     @Autowired

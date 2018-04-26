@@ -7,11 +7,15 @@ import java.util.HashMap;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import kr.co.solbipos.application.domain.login.SessionInfo;
 import kr.co.solbipos.application.domain.resource.ResrceInfo;
 import kr.co.solbipos.application.enums.grid.GridDataFg;
 import kr.co.solbipos.application.enums.resrce.ResrceFg;
+import kr.co.solbipos.enums.Status;
 import kr.co.solbipos.enums.UseYn;
+import kr.co.solbipos.exception.JsonException;
+import kr.co.solbipos.service.message.MessageService;
 import kr.co.solbipos.service.session.SessionService;
 import kr.co.solbipos.sys.persistence.menu.webmenu.WebMenuMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Service
+@Transactional
 public class WebMenuServiceImpl implements WebMenuService {
 
     @Autowired
@@ -32,6 +37,9 @@ public class WebMenuServiceImpl implements WebMenuService {
 
     @Autowired
     SessionService sessionService;
+    
+    @Autowired
+    MessageService messageService;
 
     @Override
     public List<String> selectWebMenu(ResrceInfo resrceInfo) {
@@ -168,6 +176,9 @@ public class WebMenuServiceImpl implements WebMenuService {
         if (isEmpty(resrceInfo.getResrceCd())) {
             resrceInfo.setUseYn(UseYn.Y);
             result = webMenuMapper.insertWebMenu(resrceInfo);
+            if(result == 0) {
+                throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            }
         }
         // 리소스 코드가 있으면 업데이트
         else {
@@ -178,7 +189,12 @@ public class WebMenuServiceImpl implements WebMenuService {
                     || !equalsNull(temp.getUrl(), resrceInfo.getUrl())
                     || !equalsNull(temp.getSpclAuthor(), resrceInfo.getSpclAuthor())
                     || temp.getDispIdx() != resrceInfo.getDispIdx()) {
+                
                 result = webMenuMapper.updateWebMenu(resrceInfo);
+                
+                if(result == 0) {
+                    throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                }
             }
         }
 
@@ -190,11 +206,10 @@ public class WebMenuServiceImpl implements WebMenuService {
 
         ResrceInfo[] f = resrceInfo.getResrceInfoArr();
         String pResrce = resrceInfo.getResrceCd();
-
+        int procCnt = 0;
         // 기능이 있으면 입력
         if (!isEmpty(f)) {
-            for (int i = 0; i < f.length; i++) {
-                ResrceInfo r = f[i];
+            for (ResrceInfo r : f) {
 
                 // 기능 기본 정보 세팅
                 r.setResrceFg(ResrceFg.FUNC);
@@ -209,16 +224,24 @@ public class WebMenuServiceImpl implements WebMenuService {
 
                     r.setUseYn(UseYn.Y);
                     r.setpResrce(pResrce);
-                    int insert = webMenuMapper.insertWebMenu(r);
+                    procCnt += webMenuMapper.insertWebMenu(r);
                 } else if (r.getStatus() == GridDataFg.UPDATE) {
                     log.info("update : {}", r);
 
-                    int update = webMenuMapper.updateWebMenu(r);
+                    procCnt += webMenuMapper.updateWebMenu(r);
+                    throw new JsonException(Status.FAIL, "aaaaaaaaaaaaaaa");
                 } else if (r.getStatus() == GridDataFg.DELETE) {
                     log.info("delete : {}", r);
 
-                    int delete = webMenuMapper.deleteWebMenu(r);
+                    procCnt += webMenuMapper.deleteWebMenu(r);
                 }
+            }
+            
+            if(procCnt == f.length) {
+                return true;
+            }
+            else {
+                throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
             }
         }
         return true;

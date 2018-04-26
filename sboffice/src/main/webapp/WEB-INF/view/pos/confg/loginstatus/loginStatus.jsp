@@ -159,7 +159,7 @@ $(document).ready(function(){
     param.listScale = listScaleBox.selectedValue;
     param.curr = index;
     
-    $.postJSON("/pos/confg/loginstatus/loginstatus/list.sb", JSON.stringify(param), function(result) {
+    $.postJSON("/pos/confg/loginstatus/loginstatus/list.sb", param, function(result) {
       var list = result.data.list;
       
       if(list.length == 0) {
