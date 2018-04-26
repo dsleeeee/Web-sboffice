@@ -98,11 +98,11 @@
   });
 
   $(".favClose").click(function() {
-    callPostJson("/menu/delHistMenu.sb", $(this).data("value"));
+    callPostJson("/menu/delFixMenu.sb", $(this).data("value"));
   });
 
   $(".histClose").click(function() {
-    callPostJson("/menu/delFixMenu.sb", $(this).data("value"));
+    callPostJson("/menu/delHistMenu.sb", $(this).data("value"));
   });
 
   function callPostJson(url, menuId) {
@@ -110,8 +110,11 @@
     param.menuId = menuId;
     $.postJSON(url, param, function(result) {
       $("#" + menuId).remove();
+    },
+    function(result){
+      s_alert.pop(result.data.msg);
     }).fail(function() {
-      alert("Ajax Fail");
+      s_alert.pop("Ajax Fail");
     });
   }
   
