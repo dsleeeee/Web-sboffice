@@ -1,10 +1,10 @@
 package kr.co.solbipos.sys.persistence.auth.authgroup;
 
 import java.util.List;
-import kr.co.solbipos.structure.DefaultMap;
-import kr.co.solbipos.sys.domain.auth.authgroup.AuthGroup;
-import kr.co.solbipos.sys.domain.auth.authgroup.AuthorExcept;
-import kr.co.solbipos.sys.domain.auth.authgroup.AuthorGrpResrce;
+import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.sys.domain.auth.authgroup.AuthGroupVO;
+import kr.co.solbipos.sys.domain.auth.authgroup.AuthorExceptVO;
+import kr.co.solbipos.sys.domain.auth.authgroup.AuthorGrpResrceVO;
 
 /**
  * 시스템관리 - 권한관리 - 권한 그룹 관리
@@ -15,7 +15,7 @@ public interface AuthGroupMapper {
 
     /**
      * 로그인 아이디 기준 선택 가능 그룹 조회
-     * 
+     *
      * @param orgnCd
      * @return
      */
@@ -23,79 +23,79 @@ public interface AuthGroupMapper {
 
     /**
      * 조회
-     * 
-     * @param authGroup
+     *
+     * @param authGroupVO
      * @return
      */
-    List<DefaultMap<String>> selectGroup(AuthGroup authGroup);
+    List<DefaultMap<String>> selectGroup(AuthGroupVO authGroupVO);
 
     /**
      * 등록
-     * 
-     * @param authGroup
+     *
+     * @param authGroupVO
      * @return
      */
-    int insertGroup(AuthGroup authGroup);
+    int insertGroup(AuthGroupVO authGroupVO);
 
     /**
      * 수정
-     * 
-     * @param authGroup
+     *
+     * @param authGroupVO
      * @return
      */
-    int updateGroup(AuthGroup authGroup);
+    int updateGroup(AuthGroupVO authGroupVO);
 
     /**
      * 삭제
-     * 
-     * @param authGroup
+     *
+     * @param authGroupVO
      * @return
      */
-    int deleteGroup(AuthGroup authGroup);
+    int deleteGroup(AuthGroupVO authGroupVO);
 
     /**
      * 그룹 기준 리소스 조회
-     * 
-     * @param authGroup
+     *
+     * @param authGroupVO
      * @return
      */
-    List<DefaultMap<String>> selectResrceByGroup(AuthGroup authGroup);
+    List<DefaultMap<String>> selectResrceByGroup(AuthGroupVO authGroupVO);
 
     /**
      * 아이디 기준 리소스 Tree 정보 조회
-     * 
-     * @param authGroup
+     *
+     * @param authGroupVO
      * @return
      */
-    List<DefaultMap<String>> selectResrceById(AuthGroup authGroup);
+    List<DefaultMap<String>> selectResrceById(AuthGroupVO authGroupVO);
 
     /**
      * 그룹과 아이디 기준 리소스 조회
-     * 
-     * @param authGroup
+     *
+     * @param authGroupVO
      * @return
      */
-    List<DefaultMap<String>> selectResrceByGroupAndId(AuthGroup authGroup);
+    List<DefaultMap<String>> selectResrceByGroupAndId(AuthGroupVO authGroupVO);
 
     /**
      * 리소스 저장
-     * 
-     * @param authorGrpResrce
+     *
+     * @param authorGrpResrceVO
      * @return
      */
-    int mergeAuthorGrpResrce(AuthorGrpResrce authorGrpResrce);
+    int mergeAuthorGrpResrce(AuthorGrpResrceVO authorGrpResrceVO);
 
     /**
      * 로그인 아이디로 그룹코드 조회
-     * 
-     * @param authGroup
+     *
+     * @param userId
      * @return grpCd
      */
     String selectGrpCdById(String userId);
 
     /**
      * 아이디로 그룹의 리소스 정보 조회
-     * 
+     *
      * @param userId
      * @return
      */
@@ -103,10 +103,10 @@ public interface AuthGroupMapper {
 
     /**
      * 포함/예외 리소스 저장
-     * 
-     * @param authorGrpResrce
+     *
+     * @param authorExceptVO
      * @return
      */
-    int mergeAuthorExcept(AuthorExcept authorExcept);
+    int mergeAuthorExcept(AuthorExceptVO authorExceptVO);
 
 }

@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.solbipos.application.persistence.user.UserMapper">
-  
-  <select id="selectUserList" parameterType="user" resultType="user" >
+
+  <select id="selectUserList" parameterType="userVO" resultType="userVO" >
   /* UserMapper.selectUserList */
      SELECT A.USER_ID,
             A.MP_NO,
@@ -50,8 +50,8 @@
         AND A.USER_ID = #{userId}
     </if>
   </select>
-  
-  <select id="selectOtpTopOne" parameterType="otpAuth" resultType="otpAuth">
+
+  <select id="selectOtpTopOne" parameterType="otpAuthVO" resultType="otpAuthVO">
   <![CDATA[
   /* UserMapper.selectOtpTopOne */
     SELECT *
@@ -73,8 +73,8 @@
      WHERE ROWNUM = 1
   ]]>
   </select>
-  
-  <select id="selectOtpBySeq" parameterType="pwdChg" resultType="otpAuth">
+
+  <select id="selectOtpBySeq" parameterType="pwdChgVO" resultType="otpAuthVO">
   <![CDATA[
   /* UserMapper.selectOtpCheck */
      SELECT SEQ,
@@ -89,8 +89,8 @@
       WHERE SEQ = #{uuid}
   ]]>
   </select>
-  
-  <insert id="insertOtpAuth" parameterType="otpAuth">
+
+  <insert id="insertOtpAuth" parameterType="otpAuthVO">
   <![CDATA[
   /* UserMapper.insertOtpAuth */
     INSERT INTO TB_WB_OTP_AUTH_HIST
@@ -117,8 +117,8 @@
     )
   ]]>
   </insert>
-  
-  <insert id="insertPwdChgHist" parameterType="pwdChgHist">
+
+  <insert id="insertPwdChgHist" parameterType="pwdChgHistVO">
   <![CDATA[
   /* UserMapper.insertPwdChgHist */
     INSERT INTO TB_WB_PWD_CHG_HIST
@@ -141,14 +141,14 @@
     )
   ]]>
   </insert>
-  
-  <update id="updateUserPwd" parameterType="sessionInfo">
+
+  <update id="updateUserPwd" parameterType="sessionInfoVO">
   <![CDATA[
   /* LoginMapper.updateUserPwd */
-    UPDATE TB_WB_USER_INFO 
+    UPDATE TB_WB_USER_INFO
        SET USER_PWD = #{userPwd}
      WHERE USER_ID = #{userId}
   ]]>
   </update>
-  
+
 </mapper>

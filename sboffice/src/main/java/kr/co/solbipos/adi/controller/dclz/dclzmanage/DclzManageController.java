@@ -1,6 +1,6 @@
 package kr.co.solbipos.adi.controller.dclz.dclzmanage;
 
-import static kr.co.solbipos.utils.grid.ReturnUtil.*;
+import static kr.co.common.utils.grid.ReturnUtil.*;
 import static org.springframework.util.ObjectUtils.*;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -11,18 +11,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import kr.co.solbipos.adi.domain.dclz.dclzmanage.DclzManage;
+import kr.co.common.data.enums.Status;
+import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.data.structure.Result;
+import kr.co.common.service.session.SessionService;
+import kr.co.solbipos.adi.domain.dclz.dclzmanage.DclzManageVO;
 import kr.co.solbipos.adi.service.dclz.dclzmanage.DclzManageService;
-import kr.co.solbipos.application.domain.login.SessionInfo;
+import kr.co.solbipos.application.domain.login.SessionInfoVO;
 import kr.co.solbipos.application.enums.user.OrgnFg;
-import kr.co.solbipos.enums.Status;
-import kr.co.solbipos.service.session.SessionService;
-import kr.co.solbipos.structure.DefaultMap;
-import kr.co.solbipos.structure.Result;
 
 /**
  * 부가서비스 > 근태 관리 > 근태 관리
- * 
+ *
  * @author 정용길
  */
 @Controller
@@ -37,7 +37,7 @@ public class DclzManageController {
 
     /**
      * 근태 관리 페이지 이동
-     * 
+     *
      * @param request
      * @param response
      * @param model
@@ -51,8 +51,8 @@ public class DclzManageController {
 
     /**
      * 근태 관리 리스트 조회
-     * 
-     * @param dclzManage
+     *
+     * @param dclzManageVO
      * @param request
      * @param response
      * @param model
@@ -60,29 +60,29 @@ public class DclzManageController {
      */
     @RequestMapping(value = "list.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result dclzManageList(DclzManage dclzManage, HttpServletRequest request,
+    public Result dclzManageList(DclzManageVO dclzManageVO, HttpServletRequest request,
             HttpServletResponse response, Model model) {
-        
-        SessionInfo si = sessionService.getSessionInfo(request);
-        
+
+        SessionInfoVO si = sessionService.getSessionInfo(request);
+
         // 가맹점일 경우에 세션에 저장된 세팅
         if(si.getOrgnFg() == OrgnFg.STORE) {
-            dclzManage.setStoreCd(si.getOrgnCd());
+            dclzManageVO.setStoreCd(si.getOrgnCd());
         }
-        
-        if(!isEmpty(dclzManage.getStoreCd())) {
+
+        if(!isEmpty(dclzManageVO.getStoreCd())) {
             // 선택한 매장을 arr 로 세팅한다. 쿼리에서 쓰임
-            dclzManage.setArrStoreCd(dclzManage.getStoreCd().split(","));
+            dclzManageVO.setArrStoreCd(dclzManageVO.getStoreCd().split(","));
         }
 
-        List<DefaultMap<String>> list = dclzManageService.selectDclzManage(dclzManage);
+        List<DefaultMap<String>> list = dclzManageService.selectDclzManage(dclzManageVO);
 
-        return returnListJson(Status.OK, list, dclzManage);
+        return returnListJson(Status.OK, list, dclzManageVO);
     }
 
     /**
      * 근태 등록
-     * 
+     *
      * @param dclzManage
      * @param request
      * @param response
@@ -91,23 +91,23 @@ public class DclzManageController {
      */
     @RequestMapping(value = "regist.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result dclzManageRegist(DclzManage dclzManage, HttpServletRequest request,
+    public Result dclzManageRegist(DclzManageVO dclzManageVO, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
-        SessionInfo si = sessionService.getSessionInfo(request);
+        SessionInfoVO si = sessionService.getSessionInfo(request);
 
-        String empInDt = dclzManage.getEmpInDt();
-        dclzManage.setEmpInDate(empInDt.substring(0, 8));
+        String empInDt = dclzManageVO.getEmpInDt();
+        dclzManageVO.setEmpInDate(empInDt.substring(0, 8));
 
-        int result = dclzManageService.insertDclzManage(dclzManage, si.getUserId());
-        
+        int result = dclzManageService.insertDclzManage(dclzManageVO, si.getUserId());
+
         return returnJson(Status.OK, result);
     }
 
     /**
      * 근태 삭제
-     * 
-     * @param dclzManage
+     *
+     * @param dclzManageVO
      * @param request
      * @param response
      * @param model
@@ -115,16 +115,16 @@ public class DclzManageController {
      */
     @RequestMapping(value = "remove.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result dclzManageRemove(DclzManage dclzManage, HttpServletRequest request,
+    public Result dclzManageRemove(DclzManageVO dclzManageVO, HttpServletRequest request,
             HttpServletResponse response, Model model) {
-        int result = dclzManageService.deleteDclzManage(dclzManage);
+        int result = dclzManageService.deleteDclzManage(dclzManageVO);
         return returnJson(Status.OK, result);
     }
 
     /**
      * 근태 수정
-     * 
-     * @param dclzManage
+     *
+     * @param dclzManageVO
      * @param request
      * @param response
      * @param model
@@ -132,23 +132,23 @@ public class DclzManageController {
      */
     @RequestMapping(value = "modify.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result dclzManageModify(DclzManage dclzManage, HttpServletRequest request,
+    public Result dclzManageModify(DclzManageVO dclzManageVO, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
-        SessionInfo si = sessionService.getSessionInfo(request);
+        SessionInfoVO si = sessionService.getSessionInfo(request);
 
-        String empInDt = dclzManage.getEmpInDt();
-        dclzManage.setEmpInDate(empInDt.substring(0, 8));
+        String empInDt = dclzManageVO.getEmpInDt();
+        dclzManageVO.setEmpInDate(empInDt.substring(0, 8));
 
-        int result = dclzManageService.updateDclzManage(dclzManage, si.getUserId());
+        int result = dclzManageService.updateDclzManage(dclzManageVO, si.getUserId());
         return returnJson(Status.OK, result);
     }
 
 
     /**
      * 임직원 조회 > 근태 등록시에 해당되는 매장의 근태 등록 가능한 임직원 목록을 조회
-     * 
-     * @param dclzManage
+     *
+     * @param dclzManageVO
      * @param request
      * @param response
      * @param model
@@ -156,9 +156,9 @@ public class DclzManageController {
      */
     @RequestMapping(value = "employee.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result employee(DclzManage dclzManage, HttpServletRequest request,
+    public Result employee(DclzManageVO dclzManageVO, HttpServletRequest request,
             HttpServletResponse response, Model model) {
-        List<DefaultMap<String>> list = dclzManageService.selectStoreEmployee(dclzManage);
+        List<DefaultMap<String>> list = dclzManageService.selectStoreEmployee(dclzManageVO);
         return returnJson(Status.OK, list);
     }
 }

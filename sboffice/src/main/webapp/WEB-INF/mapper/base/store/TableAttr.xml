@@ -12,7 +12,7 @@
         AND A.USE_YN = 'Y'
   </select>
 
-  <select id="selectDefaultXml" resultType="tableAttr">
+  <select id="selectDefaultXml" resultType="tableAttrVO">
     /* TableAttrMapper.selectDefaultXml */
      SELECT TBL_TYPE_FG,
             ATTR_CD,
@@ -63,7 +63,7 @@
      WHERE STORE_CD = #{storeCd}
        AND CONFG_FG = #{confgFg}
   </update>
-  
+
   <update id="_mergeStoreConfgXml" parameterType="DefaultMap">
     /* TableAttrMapper.mergeStoreConfgXml */
     MERGE INTO TB_WB_STORE_CONFG_XML A
@@ -97,10 +97,10 @@
         #{useYn},
         #{regDt},
         #{regId}
-    ) 
+    )
   </update>
 
-  <update id="mergeStoreTableAttr" parameterType="tableAttr">
+  <update id="mergeStoreTableAttr" parameterType="tableAttrVO">
     /* TableAttrMapper.mergeStoreTableAttr */
     MERGE INTO TB_MS_TABLE_ATTR A
     USING (SELECT #{storeCd} STORE_CD,
@@ -172,7 +172,7 @@
         #{regId},
         #{regDt},
         #{regId}
-    ) 
+    )
   </update>
 </mapper>
 

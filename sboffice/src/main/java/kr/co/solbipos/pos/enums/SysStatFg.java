@@ -2,8 +2,8 @@ package kr.co.solbipos.pos.enums;
 
 import org.apache.ibatis.type.MappedTypes;
 import com.fasterxml.jackson.annotation.JsonValue;
-import kr.co.solbipos.enums.CodeEnum;
-import kr.co.solbipos.system.CodeEnumTypeHandler;
+import kr.co.common.data.enums.CodeEnum;
+import kr.co.common.data.handler.CodeEnumTypeHandler;
 
 /**
  * 매장 상태 enum type 009<br>

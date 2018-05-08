@@ -1,6 +1,6 @@
 package kr.co.solbipos.base.service.store.tableattr;
 
-import static kr.co.solbipos.utils.DateUtil.*;
+import static kr.co.common.utils.DateUtil.*;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
@@ -17,8 +17,13 @@ import com.mxgraph.model.mxIGraphModel;
 import com.mxgraph.util.mxUtils;
 import com.mxgraph.util.mxXmlUtils;
 import com.mxgraph.view.mxGraph;
-import kr.co.solbipos.application.domain.login.SessionInfo;
-import kr.co.solbipos.base.domain.store.tableattr.TableAttr;
+import kr.co.common.data.enums.Status;
+import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.data.structure.Result;
+import kr.co.common.exception.BizException;
+import kr.co.common.service.message.MessageService;
+import kr.co.solbipos.application.domain.login.SessionInfoVO;
+import kr.co.solbipos.base.domain.store.tableattr.TableAttrVO;
 import kr.co.solbipos.base.enums.AttrCd;
 import kr.co.solbipos.base.enums.ConfgFg;
 import kr.co.solbipos.base.enums.Style;
@@ -26,11 +31,6 @@ import kr.co.solbipos.base.enums.TblTypeFg;
 import kr.co.solbipos.base.enums.TextalignFg;
 import kr.co.solbipos.base.enums.TextvalignFg;
 import kr.co.solbipos.base.persistence.store.tableattr.TableAttrMapper;
-import kr.co.solbipos.enums.Status;
-import kr.co.solbipos.exception.BizException;
-import kr.co.solbipos.service.message.MessageService;
-import kr.co.solbipos.structure.DefaultMap;
-import kr.co.solbipos.structure.Result;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -46,16 +46,16 @@ public class TableAttrServiceImpl implements TableAttrService {
 
 
     @Override
-    public List<TableAttr> selectTableAttrDefault() {
+    public List<TableAttrVO> selectTableAttrDefault() {
         return mapper.selectDefaultXml();
     }
 
     @Override
-    public String selectTableAttrByStore(SessionInfo sessionInfo) {
+    public String selectTableAttrByStore(SessionInfoVO sessionInfoVO) {
         DefaultMap<String> param = new DefaultMap<String>();
-        param.put("storeCd", sessionInfo.getOrgnCd());
+        param.put("storeCd", sessionInfoVO.getOrgnCd());
         param.put("confgFg", ConfgFg.TABLE_ATTR.getCode());
-        
+
         String returnStr = mapper.selectXmlByStore(param);
         if( returnStr == null) {
             returnStr = parseDB(mapper.selectDefaultXml());
@@ -64,17 +64,17 @@ public class TableAttrServiceImpl implements TableAttrService {
     }
 
     @Override
-    public Result setTableAttr(SessionInfo sessionInfo, String xml) {
-        
+    public Result setTableAttr(SessionInfoVO sessionInfoVO, String xml) {
+
         //XML 저장
         DefaultMap<String> param = new DefaultMap<String>();
-        param.put("storeCd", sessionInfo.getOrgnCd());
+        param.put("storeCd", sessionInfoVO.getOrgnCd());
         param.put("confgFg", ConfgFg.TABLE_ATTR.getCode());
         param.put("xml", xml);
         param.put("useYn", "Y");
         param.put("regDt", currentDateTimeString());
-        param.put("regId", sessionInfo.getUserId());
-        
+        param.put("regId", sessionInfoVO.getUserId());
+
         if( mapper.selectXmlByStore(param) != null ) {
             if( mapper.updateStoreConfgXml(param) != 1 ) {
                 throw new BizException( messageService.get("label.modifyFail") );
@@ -85,67 +85,67 @@ public class TableAttrServiceImpl implements TableAttrService {
                 throw new BizException( messageService.get("label.insertFail") );
             }
         }
-        
+
         //XML 분석, 속성 코드별 TableAttr Domain 생성
         //테이블속성 TABLE(TB_MS_TABLE_ATTR)
-        List<TableAttr> tableAttrs = parseXML(xml);
-        
+        List<TableAttrVO> tableAttrVOs = parseXML(xml);
+
         //리스트의 아이템을 DB에 Merge
-        for(TableAttr tableAttr : tableAttrs) {
-            tableAttr.setStoreCd(sessionInfo.getOrgnCd());
-            tableAttr.setRegId(sessionInfo.getUserId());
-            if( mapper.mergeStoreTableAttr(tableAttr) != 1 ) {
+        for(TableAttrVO tableAttrVO : tableAttrVOs) {
+            tableAttrVO.setStoreCd(sessionInfoVO.getOrgnCd());
+            tableAttrVO.setRegId(sessionInfoVO.getUserId());
+            if( mapper.mergeStoreTableAttr(tableAttrVO) != 1 ) {
                 throw new BizException( messageService.get("label.modifyFail") );
             }
         }
         return new Result(Status.OK);
     }
-    
+
     /**
      * XML 파싱하여 테이블 속성 항목 추출
      * @param xml 파싱대상XML
      * @return 테이블속성객체
      */
-    private List<TableAttr> parseXML(String xml) {
-        
-        List<TableAttr> tableAttrs = new ArrayList<TableAttr>();
-        
+    private List<TableAttrVO> parseXML(String xml) {
+
+        List<TableAttrVO> tableAttrVOs = new ArrayList<TableAttrVO>();
+
         try {
             mxGraph graph = new mxGraph();
             Document doc = mxXmlUtils.parseXml(xml);
             mxCodec codec = new mxCodec(doc);
-    
+
             mxIGraphModel model = graph.getModel();
             Element elt = doc.getDocumentElement();
-    
+
             codec.decode(elt, model);
-            
-            TableAttr tableAttr = TableAttr.builder().build();
+
+            TableAttrVO tableAttrVO = TableAttrVO.builder().build();
             Object[] cells = graph.getChildVertices(graph.getDefaultParent());
             for(Object c : cells) {
                 mxCell cell = (mxCell) c;
-                
-                tableAttr = TableAttr.builder().build();
-                tableAttr.setAttrCd(AttrCd.getEnum(cell.getId()));
-                tableAttr.setAttrNm(String.valueOf(cell.getValue()));
-                
+
+                tableAttrVO = TableAttrVO.builder().build();
+                tableAttrVO.setAttrCd(AttrCd.getEnum(cell.getId()));
+                tableAttrVO.setAttrNm(String.valueOf(cell.getValue()));
+
                 //TEST
                 //tableAttr.setStoreCd("S000001");
-                tableAttr.setTblTypeFg(TblTypeFg.SQUARE);
-                
+                tableAttrVO.setTblTypeFg(TblTypeFg.SQUARE);
+
                 //좌표, 크기
                 mxGeometry geo = cell.getGeometry();
-                tableAttr.setX((long)geo.getX());
-                tableAttr.setY((long)geo.getY());
-                tableAttr.setWidth((long)geo.getWidth());
-                tableAttr.setHeight((long)geo.getHeight());
-                
+                tableAttrVO.setX((long)geo.getX());
+                tableAttrVO.setY((long)geo.getY());
+                tableAttrVO.setWidth((long)geo.getWidth());
+                tableAttrVO.setHeight((long)geo.getHeight());
+
                 //스타일
                 String styleStr = cell.getStyle();
                 if(styleStr != null) {
                     String[] styles = styleStr.split(";");
                     for(String style : styles) {
-                        
+
                         String[] styleKeyValue = style.split("=");
                         if(styleKeyValue.length < 2) {
                             continue;
@@ -153,38 +153,38 @@ public class TableAttrServiceImpl implements TableAttrService {
                         //log.debug(styleKeyValue[0]);
                         switch(Style.getEnum(styleKeyValue[0])) {
                             case FONT_COLOR:
-                                tableAttr.setFontColor(styleKeyValue[1]);
+                                tableAttrVO.setFontColor(styleKeyValue[1]);
                                 break;
                             case FONT_NM:
-                                tableAttr.setFontNm(styleKeyValue[1]);
+                                tableAttrVO.setFontNm(styleKeyValue[1]);
                                 break;
                             case FONT_SIZE:
-                                tableAttr.setFontSize(Long.parseLong(styleKeyValue[1]));
+                                tableAttrVO.setFontSize(Long.parseLong(styleKeyValue[1]));
                                 break;
                             case FONT_STYLE_FG:
-                                tableAttr.setFontStyleFg(StringUtils.leftPad(Integer.toBinaryString(Integer.parseInt(styleKeyValue[1])), 3, "0"));
+                                tableAttrVO.setFontStyleFg(StringUtils.leftPad(Integer.toBinaryString(Integer.parseInt(styleKeyValue[1])), 3, "0"));
                                 break;
                             case TEXTALIGN_FG:
-                                tableAttr.setTextalignFg(TextalignFg.getEnum(styleKeyValue[1]));
+                                tableAttrVO.setTextalignFg(TextalignFg.getEnum(styleKeyValue[1]));
                                 break;
                             case TEXTVALIGN_FG:
-                                tableAttr.setTextvalignFg(TextvalignFg.getEnum(styleKeyValue[1]));
+                                tableAttrVO.setTextvalignFg(TextvalignFg.getEnum(styleKeyValue[1]));
                                 break;
                             default:
                                 break;
                         }
                     }
                 }
-                tableAttr.setUseYn("Y");
-                tableAttr.setRegDt(currentDateTimeString());
-                tableAttrs.add(tableAttr);
+                tableAttrVO.setUseYn("Y");
+                tableAttrVO.setRegDt(currentDateTimeString());
+                tableAttrVOs.add(tableAttrVO);
                 //log.debug(tableAttr.toString());
             }
         }
         catch (Exception ex) {
             ex.printStackTrace();
         }
-        return tableAttrs;
+        return tableAttrVOs;
     }
 
     /**
@@ -193,33 +193,33 @@ public class TableAttrServiceImpl implements TableAttrService {
      * @return 테이블속성객체
      */
     @SuppressWarnings("deprecation")
-    private String parseDB(List<TableAttr> tableAttrs) {
+    private String parseDB(List<TableAttrVO> tableAttrVOs) {
         try {
             mxGraph graph = new mxGraph();
-            Object parent = graph.getDefaultParent(); 
-            
+            Object parent = graph.getDefaultParent();
+
             String styleStr = "tableAttr";
             final String EQ = "=";
             final String SM = ";";
             mxCell cell = new mxCell();
-            for(TableAttr tableAttr : tableAttrs) {
+            for(TableAttrVO tableAttrVO : tableAttrVOs) {
                 cell = new mxCell();
                 cell = (mxCell) graph.insertVertex(parent,
-                        tableAttr.getAttrCd().getCode(),
-                        tableAttr.getAttrNm(),
-                        Double.parseDouble(String.valueOf(tableAttr.getX())),
-                        Double.parseDouble(String.valueOf(tableAttr.getY())),
-                        Double.parseDouble(String.valueOf(tableAttr.getWidth())),
-                        Double.parseDouble(String.valueOf(tableAttr.getHeight())));
+                        tableAttrVO.getAttrCd().getCode(),
+                        tableAttrVO.getAttrNm(),
+                        Double.parseDouble(String.valueOf(tableAttrVO.getX())),
+                        Double.parseDouble(String.valueOf(tableAttrVO.getY())),
+                        Double.parseDouble(String.valueOf(tableAttrVO.getWidth())),
+                        Double.parseDouble(String.valueOf(tableAttrVO.getHeight())));
 
                 //스타일 셋팅
                 styleStr = "tableAttr";
-                styleStr += tableAttr.getFontNm() != null ? (SM + Style.FONT_NM.getCode() +EQ+ tableAttr.getFontNm()):"";
-                styleStr += tableAttr.getFontStyleFg() != null ? (SM + Style.FONT_STYLE_FG.getCode() +EQ+ tableAttr.getFontStyleFg()):"";
-                styleStr += tableAttr.getFontSize() != null ? (SM + Style.FONT_SIZE.getCode() +EQ+ tableAttr.getFontSize()):"";
-                styleStr += tableAttr.getFontColor() != null ? (SM + Style.FONT_COLOR.getCode() +EQ+ tableAttr.getFontColor()):"";
-                styleStr += tableAttr.getTextalignFg() != null ? (SM + Style.TEXTALIGN_FG.getCode() +EQ+ tableAttr.getTextalignFg().getDesc()):"";
-                styleStr += tableAttr.getTextvalignFg() != null ? (SM + Style.TEXTVALIGN_FG.getCode() +EQ+ tableAttr.getTextvalignFg().getDesc()):"";
+                styleStr += tableAttrVO.getFontNm() != null ? (SM + Style.FONT_NM.getCode() +EQ+ tableAttrVO.getFontNm()):"";
+                styleStr += tableAttrVO.getFontStyleFg() != null ? (SM + Style.FONT_STYLE_FG.getCode() +EQ+ tableAttrVO.getFontStyleFg()):"";
+                styleStr += tableAttrVO.getFontSize() != null ? (SM + Style.FONT_SIZE.getCode() +EQ+ tableAttrVO.getFontSize()):"";
+                styleStr += tableAttrVO.getFontColor() != null ? (SM + Style.FONT_COLOR.getCode() +EQ+ tableAttrVO.getFontColor()):"";
+                styleStr += tableAttrVO.getTextalignFg() != null ? (SM + Style.TEXTALIGN_FG.getCode() +EQ+ tableAttrVO.getTextalignFg().getDesc()):"";
+                styleStr += tableAttrVO.getTextvalignFg() != null ? (SM + Style.TEXTVALIGN_FG.getCode() +EQ+ tableAttrVO.getTextvalignFg().getDesc()):"";
                 cell.setStyle(styleStr);
             }
             mxCodec codec = new mxCodec();

@@ -2,15 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.solbipos.application.persistence.cmm.CmmMenuMapper">
-  
+
   <select id="selectStoreCdList" parameterType="string" resultType="string">
     /* CmmMenuMapper.selectStore */
-    SELECT STORE_CD 
-      FROM TB_MS_STORE 
+    SELECT STORE_CD
+      FROM TB_MS_STORE
      WHERE HQ_OFFICE_CD = #{hqOfficeCd}
   </select>
-  
-  <select id="selectStore" parameterType="store" resultType="store">
+
+  <select id="selectStore" parameterType="storeVO" resultType="storeVO">
   <![CDATA[
     /* CmmMenuMapper.selectStore */
     SELECT STORE_CD,
@@ -21,12 +21,12 @@
      WHERE HQ_OFFICE_CD = #{hqOfficeCd}
   ]]>
      <if test="storeNm != null and storeNm != ''">
-       AND STORE_NM LIKE '%'||#{storeNm}||'%' 
+       AND STORE_NM LIKE '%'||#{storeNm}||'%'
      </if>
      ORDER BY REG_DT, MOD_DT DESC
   </select>
-  
-  <insert id="insertMenuUseHist" parameterType="menuUseHist">
+
+  <insert id="insertMenuUseHist" parameterType="menuUseHistVO">
   <![CDATA[
     /* CmmMenuMapper.insertMenuHist */
     INSERT INTO TB_WB_MENU_USE_HIST
@@ -47,9 +47,9 @@
     )
   ]]>
   </insert>
-  
+
   <!-- 즐겨찾기 가져오기 -->
-  <select id="selectBkmkMenu" parameterType="sessionInfo" resultType="resrceInfoBase">
+  <select id="selectBkmkMenu" parameterType="sessionInfoVO" resultType="resrceInfoBaseVO">
   <![CDATA[
     /* CmmMenuMapper.selectBkmkMenu */
     SELECT B.RESRCE_CD,
@@ -57,19 +57,19 @@
            B.RESRCE_NM,
            B.URL
       FROM TB_WB_BKMK A
-      LEFT OUTER JOIN 
+      LEFT OUTER JOIN
            TB_WB_RESRCE_INFO B
         ON A.RESRCE_CD = B.RESRCE_CD
      WHERE A.USER_ID = #{userId}
        AND A.USE_YN = 'Y'
   ]]>
   </select>
-  
+
   <!-- 즐겨찾기 조회 -->
-  
+
 
 <!-- 고정 메뉴 가져오기 -->
-  <select id="selectFixingMenu" parameterType="sessionInfo" resultType="resrceInfoBase">
+  <select id="selectFixingMenu" parameterType="sessionInfoVO" resultType="resrceInfoBaseVO">
   <![CDATA[
     /* CmmMenuMapper.selectFixingMenu */
     SELECT B.RESRCE_CD,
@@ -77,14 +77,14 @@
            B.RESRCE_NM,
            B.URL
       FROM TB_WB_FIXING A
-      LEFT OUTER JOIN 
+      LEFT OUTER JOIN
            TB_WB_RESRCE_INFO B
         ON A.RESRCE_CD = B.RESRCE_CD
      WHERE A.USER_ID = #{userId}
        AND A.USE_YN = 'Y'
   ]]>
   </select>
-  
+
   <select id="selectAllResrce" parameterType="DefaultMap" resultType="DefaultMap">
     /* CmmMenuMapper.selectAllResrce */
      SELECT A.P_RESRCE PCD,
@@ -110,7 +110,7 @@
      SELECT A.RESRCE_CD,
             A.RESRCE_PATH
        FROM (
-             SELECT A.RESRCE_CD, 
+             SELECT A.RESRCE_CD,
                     SYS_CONNECT_BY_PATH(RESRCE_CD, '/') RESRCE_PATH
                FROM TB_WB_RESRCE_INFO A
               WHERE A.USE_YN = 'Y'
@@ -140,13 +140,13 @@
             ) B
       WHERE A.RESRCE_CD = B.RESRCE_CD
   </select>
-  
+
   <select id="selectAuthedBkmk" parameterType="DefaultMap" resultType="DefaultMap">
     /* CmmMenuMapper.selectAuthedBkmk */
      SELECT A.RESRCE_CD,
             A.RESRCE_PATH
        FROM (
-             SELECT A.RESRCE_CD, 
+             SELECT A.RESRCE_CD,
                     SYS_CONNECT_BY_PATH(RESRCE_CD, '/') RESRCE_PATH
                FROM TB_WB_RESRCE_INFO A
               WHERE A.USE_YN = 'Y'

@@ -1,6 +1,6 @@
 package kr.co.solbipos.application.controller.login;
 
-import static kr.co.solbipos.utils.HttpUtils.*;
+import static kr.co.common.utils.HttpUtils.*;
 import static org.springframework.util.ObjectUtils.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,19 +12,19 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import kr.co.solbipos.application.domain.login.SessionInfo;
+import kr.co.common.exception.AuthenticationException;
+import kr.co.common.service.message.MessageService;
+import kr.co.common.service.session.SessionService;
+import kr.co.common.system.Prop;
+import kr.co.common.utils.spring.WebUtil;
+import kr.co.solbipos.application.domain.login.SessionInfoVO;
 import kr.co.solbipos.application.enums.login.LoginResult;
 import kr.co.solbipos.application.service.login.LoginService;
 import kr.co.solbipos.application.validate.login.Login;
-import kr.co.solbipos.exception.AuthenticationException;
-import kr.co.solbipos.service.message.MessageService;
-import kr.co.solbipos.service.session.SessionService;
-import kr.co.solbipos.system.Prop;
-import kr.co.solbipos.utils.spring.WebUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 
+ *
  * @author 정용길
  */
 
@@ -40,17 +40,17 @@ public class LoginController {
 
     @Autowired
     MessageService messageService;
- 
+
     @Autowired
     Prop prop;
-    
+
     final String MAIN_PAGE_URL = "main.sb";
-    
+
     /**
      * <pre>
      * 로그인 페이지로 이동
      * </pre>
-     * 
+     *
      * @param request
      * @param response
      * @param model
@@ -70,7 +70,7 @@ public class LoginController {
       * <pre>
       * 사용자 웹 로그인
       * </pre>
-      * @param sessionInfo
+      * @param sessionInfoVO
       * @param bindingResult
       * @param request
       * @param response
@@ -78,27 +78,27 @@ public class LoginController {
       * @return
       */
     @RequestMapping(value = "login.sb", method = RequestMethod.POST)
-    public String loginProcess(@Validated(Login.class) SessionInfo sessionInfo,
+    public String loginProcess(@Validated(Login.class) SessionInfoVO sessionInfoVO,
             BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response,
             Model model) {
 
         StopWatch sw = new StopWatch();
         sw.start();
 
-        log.info("login start : {} ", sessionInfo.getUserId());
+        log.info("login start : {} ", sessionInfoVO.getUserId());
 
-        if (bindingResult.hasErrors()) { 
+        if (bindingResult.hasErrors()) {
             return "login/login:Login";
         }
 
         // 아이디 저장 쿠키 처리
-        WebUtil.setCookie(prop.loginSaveId, sessionInfo.getUserId(), sessionInfo.isChk() ? -1 : 0);
+        WebUtil.setCookie(prop.loginSaveId, sessionInfoVO.getUserId(), sessionInfoVO.isChk() ? -1 : 0);
 
-        sessionInfo.setLoginIp(getClientIp(request));
-        sessionInfo.setBrwsrInfo(request.getHeader("User-Agent"));
+        sessionInfoVO.setLoginIp(getClientIp(request));
+        sessionInfoVO.setBrwsrInfo(request.getHeader("User-Agent"));
 
         // 로그인 시도
-        SessionInfo si = loginService.login(sessionInfo);
+        SessionInfoVO si = loginService.login(sessionInfoVO);
 
         LoginResult code = si.getLoginResult();
 
@@ -111,7 +111,7 @@ public class LoginController {
          */
 
         String returnUrl = MAIN_PAGE_URL;
-        
+
         // 로그인 성공
         if (code == LoginResult.SUCCESS) {
             // 메인 페이지
@@ -138,14 +138,14 @@ public class LoginController {
             returnUrl = "/auth/login.sb?userId=" + si.getUserId() + "&type=pwExpire";
             throw new AuthenticationException(messageService.get("login.pwd.expire"), returnUrl);
         }
-        // 로그인 실패 
+        // 로그인 실패
         else {
             sw.stop();
             log.error("로그인 실패 처리 시간 : {}", sw.getTotalTimeSeconds());
             returnUrl = "auth/login.sb?userId=" + si.getUserId();
             // 실패 처리
             throw new AuthenticationException(messageService.get("login.fail"), returnUrl);
-        } 
+        }
 
         /*
          * try { Thread.sleep(3000); } catch (InterruptedException e) { // TODO Auto-generated catch

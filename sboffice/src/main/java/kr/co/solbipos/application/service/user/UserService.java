@@ -1,16 +1,16 @@
 package kr.co.solbipos.application.service.user;
 
 import java.util.List;
-import kr.co.solbipos.application.domain.login.SessionInfo;
-import kr.co.solbipos.application.domain.user.OtpAuth;
-import kr.co.solbipos.application.domain.user.PwdChg;
-import kr.co.solbipos.application.domain.user.PwdChgHist;
-import kr.co.solbipos.application.domain.user.User;
+import kr.co.solbipos.application.domain.login.SessionInfoVO;
+import kr.co.solbipos.application.domain.user.OtpAuthVO;
+import kr.co.solbipos.application.domain.user.PwdChgHistVO;
+import kr.co.solbipos.application.domain.user.PwdChgVO;
+import kr.co.solbipos.application.domain.user.UserVO;
 import kr.co.solbipos.application.enums.user.PwChgResult;
 import kr.co.solbipos.application.enums.user.PwFindResult;
 
 /**
- * 
+ *
  * @author 정용길
  *
  */
@@ -18,77 +18,77 @@ public interface UserService {
 
     /**
      * 인증 번호 확인
-     * 
-     * @param user
+     *
+     * @param userVO
      * @return
      */
-    PwFindResult processPwFind(User user);
+    PwFindResult processPwFind(UserVO userVO);
 
 
     /**
      * 패스워드 변경 : uuid + pw 체크
-     * 
-     * @param pwdChg
+     *
+     * @param pwdChgVO
      * @return
      */
-    PwChgResult processPwdChg(PwdChg pwdChg);
+    PwChgResult processPwdChg(PwdChgVO pwdChgVO);
 
 
     /**
       * 레이어 팝업에서 패스워드 변경
-      * 
-      * @param pwdChg
+      *
+      * @param pwdChgVO
       * @return
       */
-    PwChgResult processLayerPwdChg(SessionInfo sessionInfo, PwdChg pwdChg);
-    
+    PwChgResult processLayerPwdChg(SessionInfoVO sessionInfoVO, PwdChgVO pwdChgVO);
+
 
     /**
      * userId 조회
-     * 
-     * @param param User
+     *
+     * @param userVO
      * @param maskId boolean
      * @return
      */
-    List<User> selectUserList(User param, boolean maskId);
+    List<UserVO> selectUserList(UserVO userVO, boolean maskId);
 
     /**
      * 인증번호 저장
-     * 
-     * @param otp
+     *
+     * @param otpAuthVO
      * @return
      */
-    int insertOtpAuth(OtpAuth otp);
+    int insertOtpAuth(OtpAuthVO otpAuthVO);
 
     /**
      * 인증번호 하나 가져오기
-     * 
-     * @param otp
+     *
+     * @param otpAuthVO
      * @return
      */
-    OtpAuth selectOtpTopOne(OtpAuth otp);
+    OtpAuthVO selectOtpTopOne(OtpAuthVO otpAuthVO);
 
     /**
      * seq 로 userId 조회
-     * 
-     * @param pwdChg
+     *
+     * @param pwdChgVO
      * @return
      */
-    OtpAuth selectOtpBySeq(PwdChg pwdChg);
+    OtpAuthVO selectOtpBySeq(PwdChgVO pwdChgVO);
 
     /**
      * 패스워드 변경 히스토리 저장
-     * 
-     * @param pwdChgHist
+     *
+     * @param pwdChgHistVO
      * @return
      */
-    int insertPwdChgHist(PwdChgHist pwdChgHist);
+    int insertPwdChgHist(PwdChgHistVO pwdChgHistVO);
 
     /**
      * 유져 패스워드 설정
-     * 
-     * @param sessionInfo
+     *
+     * @param sessionInfoVO
      * @return
      */
-    int updateUserPwd(SessionInfo sessionInfo);
+    int updateUserPwd(SessionInfoVO sessionInfoVO);
 }

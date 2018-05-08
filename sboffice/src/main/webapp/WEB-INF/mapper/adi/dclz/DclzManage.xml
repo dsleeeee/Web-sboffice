@@ -3,12 +3,12 @@
 
 <mapper namespace="kr.co.solbipos.adi.persistence.dclz.dclzmanage.DclzManageMapper">
 
-  <select id="selectDclzManage" parameterType="dclzManage" resultType="DefaultMap">
+  <select id="selectDclzManage" parameterType="dclzManageVO" resultType="DefaultMap">
     /* DclzManageMapper.selectDclzManage */
     <![CDATA[
     SELECT *
       FROM (
-      SELECT 
+      SELECT
             COUNT(1) OVER (PARTITION BY 1 ORDER BY 1) TOT_CNT,
             ROW_NUMBER() OVER(PARTITION BY 1 ORDER BY 1) RNUM,
             A.STORE_CD,
@@ -35,7 +35,7 @@
           AND A.IN_FG = #{inFg}
         </if>
         <if test='storeCd != null and storeCd != ""'>
-          AND A.STORE_CD IN 
+          AND A.STORE_CD IN
           <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
             #{item}
           </foreach>
@@ -51,8 +51,8 @@
        AND RNUM <= #{next}
     ]]>
   </select>
-  
-  <insert id="insertDclzManage" parameterType="dclzManage">
+
+  <insert id="insertDclzManage" parameterType="dclzManageVO">
     /* DclzManageMapper.insertDclzManage */
     <![CDATA[
     INSERT INTO TB_PS_EMPLOYEE_COMMTE
@@ -92,7 +92,7 @@
     ]]>
   </insert>
 
-  <update id="updateDclzManage" parameterType="dclzManage">
+  <update id="updateDclzManage" parameterType="dclzManageVO">
   <![CDATA[
     /* DclzManageMapper.updateDclzManage */
     UPDATE TB_PS_EMPLOYEE_COMMTE A
@@ -109,11 +109,11 @@
        AND A.EMP_IN_DATE = #{empInDate}
   ]]>
   </update>
-  
-  <delete id="deleteDclzManage" parameterType="dclzManage">
+
+  <delete id="deleteDclzManage" parameterType="dclzManageVO">
   <![CDATA[
     /* DclzManageMapper.deleteDclzManage */
-    DELETE 
+    DELETE
       FROM TB_PS_EMPLOYEE_COMMTE A
      WHERE A.STORE_CD = #{storeCd}
        AND A.EMP_NO = #{empNo}
@@ -121,7 +121,7 @@
   ]]>
   </delete>
 
-  <select id="selectStoreEmployee" parameterType="dclzManage" resultType="DefaultMap">
+  <select id="selectStoreEmployee" parameterType="dclzManageVO" resultType="DefaultMap">
   <![CDATA[
     /* DclzManageMapper.selectStoreEmployee */
     SELECT A.STORE_CD,
@@ -131,8 +131,8 @@
      WHERE A.STORE_CD = #{storeCd}
   ]]>
   </select>
-  
-  <select id="selectWorkCheck" parameterType="dclzManage" resultType="integer">
+
+  <select id="selectWorkCheck" parameterType="dclzManageVO" resultType="integer">
     /* DclzManageMapper.selectWorkCheck */
     SELECT COUNT(*)
       FROM TB_PS_EMPLOYEE_COMMTE A
@@ -140,7 +140,7 @@
        AND A.EMP_NO = #{empNo}
        AND A.EMP_IN_DATE = #{empInDate}
   </select>
-  
+
 </mapper>
 
 

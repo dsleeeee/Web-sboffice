@@ -1,0 +1,58 @@
+package kr.co.common.utils.jsp;
+
+
+import java.util.Optional;
+import javax.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import kr.co.common.service.grid.GridSupportService;
+import kr.co.common.service.session.SessionService;
+import kr.co.solbipos.application.domain.cmm.GridDispItemVO;
+import kr.co.solbipos.application.domain.login.SessionInfoVO;
+
+/**
+ * @author 정용길
+ *
+ */
+@Component("columnLayout")
+public class ColumnLayout {
+
+    @Autowired
+    GridSupportService gsService;
+
+    @Autowired
+    SessionService sessionService;
+
+    /**
+     * 그리드의 컬럼 레이아웃을 가져온다.
+     *
+     * @param gridIdx
+     * @return
+     */
+    public String getColumnLayout(Long gridIdx) {
+
+        HttpServletRequest request =
+                ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+                        .getRequest();
+        // 유져의 세션 정보를 가져옴
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        GridDispItemVO gridDispItemVO = new GridDispItemVO();
+
+        gridDispItemVO.setUserId(sessionInfoVO.getUserId());
+        gridDispItemVO.setResrceCd(sessionInfoVO.getCurrentMenu().getResrceCd());
+        gridDispItemVO.setGridIdx(gridIdx);
+
+        // 저장한 그리드 레이아웃을 조회한다.
+        GridDispItemVO result = gsService.selectGridItem(gridDispItemVO);
+
+        // 저장된 레이아웃이 없으면 기본 레이아웃 조회
+        return Optional.ofNullable(result).map(GridDispItemVO::getColumnItem).orElse("");
+    }
+
+
+}
+
+

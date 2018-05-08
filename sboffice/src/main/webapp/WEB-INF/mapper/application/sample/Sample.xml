@@ -3,19 +3,19 @@
 
 <mapper namespace="kr.co.solbipos.application.persistence.sample.SampleMapper">
 
-  <select id="selectAuthMainMenu" parameterType="hashmap" resultType="resrceInfo">
+  <select id="selectAuthMainMenu" parameterType="hashmap" resultType="resrceInfoVO">
   <![CDATA[
-    SELECT * 
+    SELECT *
     FROM TB_WB_RESRCE_INFO
    WHERE DISP_LEVEL = #{level}
      AND RESRCE_FG = 'M'
      AND USE_YN = 'Y'
    START WITH RESRCE_CD IN (
-      SELECT P_RESRCE 
+      SELECT P_RESRCE
         FROM TB_WB_RESRCE_INFO
        WHERE RESRCE_CD IN (
         SELECT RESRCE_CD
-          FROM TB_WB_AUTHOR_GRP_RESRCE 
+          FROM TB_WB_AUTHOR_GRP_RESRCE
          WHERE GRP_CD = (SELECT GRP_CD FROM TB_WB_USER_INFO WHERE USER_ID = #{userId})
        )
      )
@@ -24,21 +24,21 @@
   ]]>
   </select>
 
-  <select id="selectMenu1" resultType="resrceInfo">
+  <select id="selectMenu1" resultType="resrceInfoVO">
   <![CDATA[
-    SELECT * 
+    SELECT *
       FROM TB_WB_RESRCE_INFO
      WHERE DISP_LEVEL = '0'
-       AND RESRCE_FG = 'M' 
+       AND RESRCE_FG = 'M'
        AND USE_YN = 'Y'
      ORDER BY DISP_LEVEL ASC, DISP_IDX ASC
   ]]>
   </select>
-  
-  
-  <select id="selectMenu2" resultType="resrceInfo">
+
+
+  <select id="selectMenu2" resultType="resrceInfoVO">
   <![CDATA[
-    SELECT * 
+    SELECT *
       FROM TB_WB_RESRCE_INFO
      WHERE DISP_LEVEL = '1'
        AND RESRCE_FG = 'M'
@@ -47,9 +47,9 @@
   ]]>
   </select>
 
-  <select id="selectMenu3" resultType="resrceInfo">
+  <select id="selectMenu3" resultType="resrceInfoVO">
   <![CDATA[
-    SELECT * 
+    SELECT *
       FROM TB_WB_RESRCE_INFO
      WHERE DISP_LEVEL = '2'
        AND RESRCE_FG = 'M'
@@ -63,7 +63,7 @@
 
 
   <select id="selectSample" resultType="DefaultMap" parameterType="java.lang.String">
-    SELECT * 
+    SELECT *
       FROM CCD_CODEM_T
   </select>
 
@@ -71,8 +71,8 @@
     SELECT *
       FROM SSL_DDSUM_T
   </select>
-  
-  <select id="selectCode" resultType="DefaultMap" parameterType="kr.co.solbipos.application.domain.sample.CcdCodemT">
+
+  <select id="selectCode" resultType="DefaultMap" parameterType="kr.co.sample.application.domain.CcdCodemTVO">
     SELECT COM_CD_FG,
            COM_CD,
            COM_CD_NM,
@@ -89,19 +89,19 @@
        AND COM_CD = #{comCd}
       </if>
   </select>
-  
+
   <select id="selectColumns" resultType="DefaultMap" parameterType="java.lang.String">
   <![CDATA[
-    SELECT COLUMN_NAME 
-      FROM COLS 
+    SELECT COLUMN_NAME
+      FROM COLS
      WHERE TABLE_NAME = #{table}
   ]]>
   </select>
-  
+
   <select id="selectDdlTrdtlT" resultType="DefaultMap" parameterType="java.lang.Integer">
   <![CDATA[
     SELECT *
-      FROM ( 
+      FROM (
               SELECT SHOP_CD,
                      SALE_DATE,
                      POS_NO,
@@ -160,12 +160,12 @@
      WHERE RNUM <= #{rnum}
   ]]>
   </select>
-  
-  <select id="selectDdlTrdtlTest" resultType="DefaultMap" parameterType="kr.co.solbipos.application.domain.sample.SslTrdtlT">
+
+  <select id="selectDdlTrdtlTest" resultType="DefaultMap" parameterType="kr.co.sample.application.domain.SslTrdtlTVO">
   <![CDATA[
     SELECT *
-      FROM ( 
-              SELECT 
+      FROM (
+              SELECT
                      COUNT(1) OVER (PARTITION BY 1 ORDER BY 1) TOT_CNT,
                      ROWNUM AS RNUM,
                      SHOP_CD,
@@ -245,62 +245,62 @@
     AND         B.PGM_MCLS_CD  IS NOT NULL
     ORDER
     BY          C.PGM_LCLS_CD, B.PGM_MCLS_CD
-    
+
   ]]>
   </select>
-  
+
   <select id="getgroupGridSample" resultType="DefaultMap" >
   <![CDATA[
     SELECT  A.HD_SHOP_CD, A.HD_SHOP_NM
-    ,       '['||A.HD_SHOP_CD||'] ' || A.HD_SHOP_NM   HD_SHOP_CD_NM 
-    ,       '' SHOP_CD, '' SHOP_NM 
-    ,       '' SHOP_CD_NM 
-    ,       '' SHOP_PGM_TYPE_FG 
-    ,       '' SHOP_STAT_FG 
+    ,       '['||A.HD_SHOP_CD||'] ' || A.HD_SHOP_NM   HD_SHOP_CD_NM
+    ,       '' SHOP_CD, '' SHOP_NM
+    ,       '' SHOP_CD_NM
+    ,       '' SHOP_PGM_TYPE_FG
+    ,       '' SHOP_STAT_FG
     ,       '' CLS_MGR_LEVEL_FG
-    ,       '' BRAND_MGR_YN 
-    ,       0 SHOP_CNT 
-    ,       '' INS_ID, '' INS_DT 
+    ,       '' BRAND_MGR_YN
+    ,       0 SHOP_CNT
+    ,       '' INS_ID, '' INS_DT
     FROM    HCD_SHOPM_T    A
-    WHERE   A.HD_SHOP_CD    <>  'A001' 
+    WHERE   A.HD_SHOP_CD    <>  'A001'
     AND     A.HD_SHOP_CD  = '0000'   -- 단독
     UNION ALL
-    SELECT  A.HD_SHOP_CD, A.HD_SHOP_NM 
-    ,       '['||A.HD_SHOP_CD||'] '||A.HD_SHOP_NM   HD_SHOP_CD_NM 
-    ,       B.SHOP_CD, B.SHOP_NM 
-    ,       DECODE(B.SHOP_CD, NULL, '', '['||B.SHOP_CD||'] '||B.SHOP_NM) SHOP_CD_NM 
-    ,       B.PGM_TYPE_FG  SHOP_PGM_TYPE_FG 
-    ,       B.SHOP_STAT_FG 
+    SELECT  A.HD_SHOP_CD, A.HD_SHOP_NM
+    ,       '['||A.HD_SHOP_CD||'] '||A.HD_SHOP_NM   HD_SHOP_CD_NM
+    ,       B.SHOP_CD, B.SHOP_NM
+    ,       DECODE(B.SHOP_CD, NULL, '', '['||B.SHOP_CD||'] '||B.SHOP_NM) SHOP_CD_NM
+    ,       B.PGM_TYPE_FG  SHOP_PGM_TYPE_FG
+    ,       B.SHOP_STAT_FG
     ,       B.CLS_MGR_LEVEL_FG
     ,       B.BRAND_MGR_YN
-    ,       COUNT(B.SHOP_CD) AS SHOP_CNT 
-    ,       MAX(B.INS_ID) INS_ID, MAX(B.INS_DT) INS_DT 
-    FROM    HCD_SHOPM_T    A 
-    ,       SCD_SHOPM_T    B 
-    WHERE   A.HD_SHOP_CD    <>  'A001' 
-    AND     B.HD_SHOP_CD (+)=   A.HD_SHOP_CD 
+    ,       COUNT(B.SHOP_CD) AS SHOP_CNT
+    ,       MAX(B.INS_ID) INS_ID, MAX(B.INS_DT) INS_DT
+    FROM    HCD_SHOPM_T    A
+    ,       SCD_SHOPM_T    B
+    WHERE   A.HD_SHOP_CD    <>  'A001'
+    AND     B.HD_SHOP_CD (+)=   A.HD_SHOP_CD
     AND B.VENDOR_FG (+)= '0'
-    GROUP 
+    GROUP
     BY      A.HD_SHOP_CD, A.HD_SHOP_NM, B.SHOP_CD, B.SHOP_NM
     ,       B.PGM_TYPE_FG, B.SHOP_STAT_FG, B.CLS_MGR_LEVEL_FG
     ,       B.BRAND_MGR_YN
     ORDER BY HD_SHOP_CD, SHOP_CD
   ]]>
   </select>
-  
-  
-  <select id="getDragNDropSample" resultType="DefaultMap" parameterType="kr.co.solbipos.application.domain.sample.TmpDragtT">
+
+
+  <select id="getDragNDropSample" resultType="DefaultMap" parameterType="kr.co.sample.application.domain.TmpDragtTVO">
     SELECT  COM_CD, COM_CD_NM, COM_FG
     FROM    TMP_DRAGT_T
     <if test="comFg != null and comFg != ''">
     WHERE   COM_FG = #{comFg}
     </if>
   </select>
-  
-  <insert id="insertUpdateDragSample" parameterType="kr.co.solbipos.application.domain.sample.TmpDragtT">
+
+  <insert id="insertUpdateDragSample" parameterType="kr.co.sample.application.domain.TmpDragtTVO">
   </insert>
-  
-  <insert id="insertBoardSample" parameterType="kr.co.solbipos.application.domain.sample.TmpBoardT">
+
+  <insert id="insertBoardSample" parameterType="kr.co.sample.application.domain.TmpBoardTVO">
     INSERT INTO TMP_BOARD_T (BOARD_SEQ_NO, BOARD_TITLE, BOARD_CONTENTS, INS_DT , INS_ID)
     VALUES
     (   ( SELECT  NVL(MAX(BOARD_SEQ_NO),0) + 1 FROM TMP_BOARD_T)
@@ -310,23 +310,23 @@
     ,   'test'
     )
   </insert>
-  
-  
-  <insert id="updateBoardSample" parameterType="kr.co.solbipos.application.domain.sample.TmpBoardT">
+
+
+  <insert id="updateBoardSample" parameterType="kr.co.sample.application.domain.TmpBoardTVO">
     UPDATE TMP_BOARD_T
     SET    BOARD_TITLE = #{boardTitle}
     ,      BOARD_CONTENTS = #{boardContents}
     WHERE  BOARD_SEQ_NO = #{boardSeqNo}
   </insert>
-  
-  
-  <select id="getRecentBoardData" resultType="kr.co.solbipos.application.domain.sample.TmpBoardT" >
+
+
+  <select id="getRecentBoardData" resultType="kr.co.sample.application.domain.TmpBoardTVO" >
     SELECT  /*+ index_desc(A TMP_BOARD_T_IDX) */ A.*
     FROM    TMP_BOARD_T A
     WHERE   ROWNUM = 1
   </select>
-  
- <select id="selectStore" resultType="DefaultMap" parameterType="kr.co.solbipos.application.domain.sample.TbMsStore">
+
+ <select id="selectStore" resultType="DefaultMap" parameterType="kr.co.sample.application.domain.TbMsStoreVO">
     SELECT  A.*, B.HQ_NM
     FROM    TB_MS_STORE A
     ,       TB_MS_HEADQUARTERS B
@@ -335,13 +335,13 @@
     AND     STORE_NM LIKE '%'||#{storeNm}||'%'
     </if>
   </select>
-  
 
-  <select id="selectDdlTrhdrTest" resultType="DefaultMap" parameterType="kr.co.solbipos.application.domain.sample.SslTrhdrT">
+
+  <select id="selectDdlTrhdrTest" resultType="DefaultMap" parameterType="kr.co.sample.application.domain.SslTrhdrTVO">
   <![CDATA[
     SELECT *
-      FROM ( 
-              SELECT 
+      FROM (
+              SELECT
                      COUNT(1) OVER (PARTITION BY 1 ORDER BY 1) TOT_CNT,
                      ROWNUM AS RNUM
               ,      A.*
@@ -352,12 +352,12 @@
        AND RNUM <= #{next}
   ]]>
   </select>
-  
-  <select id="selectDdlTrdtl2Test" resultType="DefaultMap" parameterType="kr.co.solbipos.application.domain.sample.SslTrhdrT">
+
+  <select id="selectDdlTrdtl2Test" resultType="DefaultMap" parameterType="kr.co.sample.application.domain.SslTrhdrTVO">
   <![CDATA[
     SELECT *
-      FROM ( 
-              SELECT 
+      FROM (
+              SELECT
                      COUNT(1) OVER (PARTITION BY 1 ORDER BY 1) TOT_CNT,
                      ROWNUM AS RNUM
               ,      A.*

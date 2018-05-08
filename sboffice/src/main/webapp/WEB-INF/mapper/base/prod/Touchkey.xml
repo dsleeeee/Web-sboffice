@@ -10,7 +10,7 @@
        FROM TB_MS_PRODUCT A
       WHERE A.STORE_CD = #{storeCd}
   </select>
-  
+
     <delete id="deleteTouchClassByStore" parameterType="String">
     /* TouchkeyMapper.deleteTouchClassByStore */
     DELETE
@@ -18,7 +18,7 @@
      WHERE STORE_CD = #{storeCd}
     </delete>
 
-  <insert id="insertTouchClassByStore" parameterType="touchClass">
+  <insert id="insertTouchClassByStore" parameterType="touchClassVO">
     /* TouchkeyMapper.mergeTableGroupByStore */
     INSERT INTO TB_MS_TOUCH_CLASS A
     (
@@ -61,7 +61,7 @@
      WHERE STORE_CD = #{storeCd}
     </update>
 
-  <insert id="insertTouchByStore" parameterType="touch">
+  <insert id="insertTouchByStore" parameterType="touchVO">
     /* TouchkeyMapper.insertTouchByStore */
     INSERT INTO TB_MS_TOUCH A
     (

@@ -3,7 +3,7 @@
 
 <mapper namespace="kr.co.solbipos.adi.persistence.etc.kitchenmemo.KitchenMemoMapper">
 
-  <select id="selectKitchenMemo" parameterType="sessionInfo" resultType="DefaultMap">
+  <select id="selectKitchenMemo" parameterType="sessionInfoVO" resultType="DefaultMap">
     /* KitchenMemoMapper.selectKitchenMemo */
     SELECT STORE_CD, KITCHN_MEMO_CD, KITCHN_MEMO_NM,
            MEMO_FG, USE_YN,
@@ -13,17 +13,17 @@
      ORDER
         BY KITCHN_MEMO_CD ASC
   </select>
-  
-  <select id="selectKitchenMemoCnt" parameterType="kitchenMemo" resultType="java.lang.Integer">
+
+  <select id="selectKitchenMemoCnt" parameterType="kitchenMemoVO" resultType="java.lang.Integer">
     /* KitchenMemoMapper.selectKitchenMemoCnt */
     SELECT COUNT(1)
       FROM TB_MS_KITCHEN_MEMO
      WHERE STORE_CD = #{storeCd}
        AND KITCHN_MEMO_CD = #{kitchnMemoCd}
   </select>
-  
+
   <!-- insertKitchenMemo -->
-  <insert id="insertKitchenMemo" parameterType="kitchenMemo">
+  <insert id="insertKitchenMemo" parameterType="kitchenMemoVO">
     /* KitchenMemoMapper.insertKitchenMemo */
     INSERT INTO TB_MS_KITCHEN_MEMO
     (
@@ -50,9 +50,9 @@
       #{modDt}
     )
   </insert>
-  
+
   <!-- updateKitchenMemo -->
-  <update id="updateKitchenMemo" parameterType="kitchenMemo">
+  <update id="updateKitchenMemo" parameterType="kitchenMemoVO">
     /* KitchenMemoMapper.updateKitchenMemo */
     UPDATE TB_MS_KITCHEN_MEMO
        SET KITCHN_MEMO_NM = #{kitchnMemoNm},
@@ -63,15 +63,15 @@
      WHERE STORE_CD = #{storeCd}
        AND KITCHN_MEMO_CD = #{kitchnMemoCd}
   </update>
-  
+
   <!-- deleteKitchenMemo -->
-  <delete id="deleteKitchenMemo" parameterType="kitchenMemo">
+  <delete id="deleteKitchenMemo" parameterType="kitchenMemoVO">
     /* KitchenMemoMapper.deleteKitchenMemo */
     DELETE TB_MS_KITCHEN_MEMO
      WHERE STORE_CD = #{storeCd}
        AND KITCHN_MEMO_CD = #{kitchnMemoCd}
   </delete>
-  
+
 </mapper>
 
 

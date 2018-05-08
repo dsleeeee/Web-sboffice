@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.solbipos.application.persistence.login.LoginMapper">
-  
-  <select id="selectWebUser" parameterType="sessionInfo" resultType="sessionInfo" >
+
+  <select id="selectWebUser" parameterType="sessionInfoVO" resultType="sessionInfoVO" >
   /* LoginMapper.selectWebUser */
      SELECT A.USER_ID,
             A.USER_PWD,
@@ -39,7 +39,7 @@
                             A.EMP_NM USER_NM,
                             A.EMP_NO,
                             C.HQ_OFFICE_CD STORE_CD, -- 가맹점일 경우 해당본사의 코드, 이름 필요
-                            C.HQ_OFFICE_NM STORE_NM  
+                            C.HQ_OFFICE_NM STORE_NM
                        FROM TB_MS_EMPLOYEE A,
                             TB_MS_STORE B,
                             TB_HQ_OFFICE C
@@ -78,12 +78,12 @@
                     )
               WHERE ROWNUM = 1
             ) B
-      WHERE A.USER_ID = B.USER_ID 
+      WHERE A.USER_ID = B.USER_ID
         AND A.USER_ID = #{userId}
         AND A.LOCK_CD = 'N'
   </select>
-  
-  <select id="selectLoginHist" resultType="loginHist" parameterType="loginHist">
+
+  <select id="selectLoginHist" resultType="loginHistVO" parameterType="loginHistVO">
   /* LoginMapper.selectLoginHist */
      SELECT SEQ,
             USER_ID,
@@ -96,8 +96,8 @@
        FROM TB_WB_LOGIN_HIST
       WHERE USER_ID = #{userId}
   </select>
-  
-  <insert id="insertLoginHist" parameterType="loginHist">
+
+  <insert id="insertLoginHist" parameterType="loginHistVO">
   /* LoginMapper.insertLoginHist */
     INSERT INTO TB_WB_LOGIN_HIST
     (
@@ -122,9 +122,9 @@
       #{loginDt}
     )
   </insert>
-  
+
 <!--    권한 있는 리소스 가져오기 -->
-  <select id="selectAuthMenu" parameterType="sessionInfo" resultType="resrceInfo">
+  <select id="selectAuthMenu" parameterType="sessionInfoVO" resultType="resrceInfoVO">
   <![CDATA[
   /* LoginMapper.selectAuthMenu */
      SELECT DISTINCT RESRCE_CD,
@@ -146,22 +146,22 @@
             SELECT RESRCE_CD
               FROM TB_WB_RESRCE_INFO
              WHERE RESRCE_CD IN (
-              SELECT RESRCE_CD 
-                FROM TB_WB_AUTHOR_GRP_RESRCE 
+              SELECT RESRCE_CD
+                FROM TB_WB_AUTHOR_GRP_RESRCE
                WHERE GRP_CD = (
-                SELECT GRP_CD 
-                  FROM TB_WB_USER_INFO 
+                SELECT GRP_CD
+                  FROM TB_WB_USER_INFO
                  WHERE USER_ID = #{userId}
                 ) AND USE_YN = 'Y'
              UNION ALL
-            SELECT RESRCE_CD 
+            SELECT RESRCE_CD
               FROM TB_WB_AUTHOR_EXCEPT
              WHERE USER_ID = #{userId}
                AND INCLD_EXCLD_FG = 'I'
                AND USE_YN = 'Y'
               )
       AND RESRCE_CD NOT IN (
-            SELECT RESRCE_CD 
+            SELECT RESRCE_CD
               FROM TB_WB_AUTHOR_EXCEPT
              WHERE USER_ID = #{userId}
                AND INCLD_EXCLD_FG = 'E'
@@ -172,5 +172,5 @@
       AND LEVEL < 3
   ]]>
   </select>
-  
+
 </mapper>

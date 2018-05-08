@@ -1,20 +1,20 @@
 package kr.co.solbipos.application.service.login;
 
-import static kr.co.solbipos.utils.DateUtil.*;
+import static kr.co.common.utils.DateUtil.*;
 import static org.springframework.util.ObjectUtils.*;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import kr.co.solbipos.application.domain.login.LoginHist;
-import kr.co.solbipos.application.domain.login.SessionInfo;
-import kr.co.solbipos.application.domain.resource.ResrceInfo;
+import kr.co.common.service.session.SessionService;
+import kr.co.common.system.Prop;
+import kr.co.solbipos.application.domain.login.LoginHistVO;
+import kr.co.solbipos.application.domain.login.SessionInfoVO;
+import kr.co.solbipos.application.domain.resource.ResrceInfoVO;
 import kr.co.solbipos.application.enums.login.LoginOrigin;
 import kr.co.solbipos.application.enums.login.LoginResult;
 import kr.co.solbipos.application.persistence.login.LoginMapper;
-import kr.co.solbipos.service.session.SessionService;
-import kr.co.solbipos.system.Prop;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -23,7 +23,7 @@ public class LoginServiceImpl implements LoginService {
 
     @Autowired
     Prop prop;
-    
+
     @Autowired
     LoginMapper loginMapper;
 
@@ -31,19 +31,19 @@ public class LoginServiceImpl implements LoginService {
     SessionService sessionService;
 
     @Override
-    public SessionInfo selectWebUser(SessionInfo sessionInfo) {
-        SessionInfo si = loginMapper.selectWebUser(sessionInfo);
-        return isEmpty(si) ? new SessionInfo() : si;
+    public SessionInfoVO selectWebUser(SessionInfoVO sessionInfoVO) {
+        SessionInfoVO si = loginMapper.selectWebUser(sessionInfoVO);
+        return isEmpty(si) ? new SessionInfoVO() : si;
     }
 
     /**
      * 로그인 성공 여부
-     * 
+     *
      * @param sessionInfo : 사용자가 입력 객체
      * @param webUser : 디비에서 조회한 객체
      * @return
      */
-    private LoginResult loginProcess(SessionInfo sessionInfo, SessionInfo webUser) {
+    private LoginResult loginProcess(SessionInfoVO sessionInfoVO, SessionInfoVO webUser) {
 
         /**
          * 존재하는 id 인지 체크
@@ -55,29 +55,29 @@ public class LoginServiceImpl implements LoginService {
         /**
          * 패스워드 체크
          */
-        if (!loginPasswordCheck(sessionInfo, webUser)) {
+        if (!loginPasswordCheck(sessionInfoVO, webUser)) {
             return LoginResult.PASSWORD_ERROR;
         }
-        
-        /** 
+
+        /**
          * 사용자 잠금 여부
          * */
         if(webUser.getLockCd().equals("Y")) {
             return LoginResult.LOCK;
         }
-        
-        /** 
-         * 패스워드 초기 변경 인지 체크 
+
+        /**
+         * 패스워드 초기 변경 인지 체크
          * */
         if( webUser.getLastPwdChg().equals("0") ) {
             return LoginResult.PASSWORD_CHANGE;
         }
-        
-        
+
+
         int pwdChgDays = Integer.parseInt(addDaysString(webUser.getLastPwdChg(), prop.loginPwdChgDays));
         int currentDay = Integer.parseInt(currentDateString());
-        
-        /** 
+
+        /**
          * 패스워드 변경 날짜 체크
          * */
         if( currentDay >= pwdChgDays ) {
@@ -89,19 +89,19 @@ public class LoginServiceImpl implements LoginService {
 
     /**
      * 패스워드 체크 암호화 후 비교 하는 과정은 아직 안들어감
-     * 
+     *
      * @param sessionInfo 로그인 페이지에서 입력된 로그인 유져 정보
      * @param webUser 입력된 ID로 조회된 유져 정보
      * @return
      */
-    private boolean loginPasswordCheck(SessionInfo sessionInfo, SessionInfo webUser) {
+    private boolean loginPasswordCheck(SessionInfoVO sessionInfoVO, SessionInfoVO webUser) {
 
-        if (isEmpty(sessionInfo) || isEmpty(webUser)) {
+        if (isEmpty(sessionInfoVO) || isEmpty(webUser)) {
             log.warn("password check object null...");
             return false;
         }
 
-        String loginPw = sessionInfo.getUserPwd();
+        String loginPw = sessionInfoVO.getUserPwd();
         String userPw = webUser.getUserPwd();
 
         if (isEmpty(loginPw) || isEmpty(userPw)) {
@@ -119,26 +119,26 @@ public class LoginServiceImpl implements LoginService {
 
 
     @Override
-    public SessionInfo login(SessionInfo sessionInfo) {
+    public SessionInfoVO login(SessionInfoVO sessionInfoVO) {
 
         // userId 로 사용자 조회
-        SessionInfo si = selectWebUser(sessionInfo);
-        
+        SessionInfoVO si = selectWebUser(sessionInfoVO);
+
         // 로그인 과정
-        LoginResult result = loginProcess(sessionInfo, si);
-        
+        LoginResult result = loginProcess(sessionInfoVO, si);
+
         // 없는 id 일 경우에
         if(result == LoginResult.NOT_EXISTS_ID) {
-            si.setUserId(sessionInfo.getUserId());
+            si.setUserId(sessionInfoVO.getUserId());
         }
-        
+
         // 로그인 결과
         si.setLoginResult(result);
 
         // 조회된 패스워드 초기화
         si.setUserPwd("");
-        si.setLoginIp(sessionInfo.getLoginIp());
-        si.setBrwsrInfo(sessionInfo.getBrwsrInfo());
+        si.setLoginIp(sessionInfoVO.getLoginIp());
+        si.setBrwsrInfo(sessionInfoVO.getBrwsrInfo());
 
         // 로그인 시도 기록
         loginHist(si);
@@ -154,42 +154,42 @@ public class LoginServiceImpl implements LoginService {
 
     /**
      * 로그인 시도 결과를 히스토리 저장
-     * 
+     *
      * @param sessionInfo
      * @return
      */
     @Override
-    public int loginHist(SessionInfo sessionInfo) {
+    public int loginHist(SessionInfoVO sessionInfoVO) {
 
-        LoginHist loginHist = new LoginHist();
+        LoginHistVO loginHistVO = new LoginHistVO();
 
         // 로그인 결과
-        loginHist.setStatCd(sessionInfo.getLoginResult());
+        loginHistVO.setStatCd(sessionInfoVO.getLoginResult());
 
-        loginHist.setUserId(sessionInfo.getUserId());
-        loginHist.setLoginOrgn(LoginOrigin.WEB);
-        loginHist.setBrwsrInfo(sessionInfo.getBrwsrInfo());
-        loginHist.setLoginIp(sessionInfo.getLoginIp());
-        loginHist.setLoginDate(currentDateString());
-        loginHist.setLoginDt(currentDateTimeString());
+        loginHistVO.setUserId(sessionInfoVO.getUserId());
+        loginHistVO.setLoginOrgn(LoginOrigin.WEB);
+        loginHistVO.setBrwsrInfo(sessionInfoVO.getBrwsrInfo());
+        loginHistVO.setLoginIp(sessionInfoVO.getLoginIp());
+        loginHistVO.setLoginDate(currentDateString());
+        loginHistVO.setLoginDt(currentDateTimeString());
 
-        return loginHist(loginHist);
+        return loginHist(loginHistVO);
     }
 
     @Override
-    public int loginHist(LoginHist loginHist) {
-        log.debug(loginHist.toString());
-        return loginMapper.insertLoginHist(loginHist);
+    public int loginHist(LoginHistVO loginHistVO) {
+        log.debug(loginHistVO.toString());
+        return loginMapper.insertLoginHist(loginHistVO);
     }
 
     @Override
-    public <E> List<E> selectLoginHist(LoginHist loginHist) {
-        return loginMapper.selectLoginHist(loginHist);
+    public <E> List<E> selectLoginHist(LoginHistVO loginHistVO) {
+        return loginMapper.selectLoginHist(loginHistVO);
     }
 
     @Override
-    public List<ResrceInfo> selectAuthMenu(SessionInfo sessionInfo) {
-        return loginMapper.selectAuthMenu(sessionInfo);
+    public List<ResrceInfoVO> selectAuthMenu(SessionInfoVO sessionInfoVO) {
+        return loginMapper.selectAuthMenu(sessionInfoVO);
     }
 
 }

@@ -1,6 +1,6 @@
 package kr.co.solbipos.adi.service.dclz.dclzmanage;
 
-import static kr.co.solbipos.utils.DateUtil.*;
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -8,17 +8,17 @@ import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import kr.co.solbipos.adi.domain.dclz.dclzmanage.DclzManage;
+import kr.co.common.data.enums.Status;
+import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.exception.JsonException;
+import kr.co.common.service.message.MessageService;
+import kr.co.solbipos.adi.domain.dclz.dclzmanage.DclzManageVO;
 import kr.co.solbipos.adi.enums.DclzInFg;
 import kr.co.solbipos.adi.persistence.dclz.dclzmanage.DclzManageMapper;
-import kr.co.solbipos.enums.Status;
-import kr.co.solbipos.exception.JsonException;
-import kr.co.solbipos.service.message.MessageService;
-import kr.co.solbipos.structure.DefaultMap;
 
 /**
  * 부가서비스 > 근태관리 > 근태관리
- * 
+ *
  * @author 정용길
  *
  */
@@ -33,82 +33,82 @@ public class DclzManageServiceImpl implements DclzManageService {
     MessageService messageService;
 
     @Override
-    public List<DefaultMap<String>> selectDclzManage(DclzManage dclzManage) {
-        return dclzManageMapper.selectDclzManage(dclzManage);
+    public List<DefaultMap<String>> selectDclzManage(DclzManageVO dclzManageVO) {
+        return dclzManageMapper.selectDclzManage(dclzManageVO);
     }
 
     @Override
-    public int insertDclzManage(DclzManage dclzManage, String userId) {
+    public int insertDclzManage(DclzManageVO dclzManageVO, String userId) {
 
         // 기본값 세팅
-        dclzManage.setPosNo("01"); // 기본 포스 번호 01 세팅 서효원 과장
-        dclzManage.setInFg(DclzInFg.WEB);
+        dclzManageVO.setPosNo("01"); // 기본 포스 번호 01 세팅 서효원 과장
+        dclzManageVO.setInFg(DclzInFg.WEB);
         String dt = currentDateTimeString();
-        dclzManage.setRegDt(dt);
-        dclzManage.setModDt(dt);
-        dclzManage.setRegId(userId);
-        dclzManage.setModId(userId);
+        dclzManageVO.setRegDt(dt);
+        dclzManageVO.setModDt(dt);
+        dclzManageVO.setRegId(userId);
+        dclzManageVO.setModId(userId);
 
         // 해당 근무일에 근태가 있는지 확인
-        int check = selectWorkCheck(dclzManage);
+        int check = selectWorkCheck(dclzManageVO);
 
         if (check > 0) {
-            String arg[] = {dclzManage.getEmpInDate()};
+            String arg[] = {dclzManageVO.getEmpInDate()};
             // 해당 사원의 {0}일의 근태가 존재합니다.
             String msg = messageService.get("dclzManage.empty.emp", arg);
             throw new JsonException(Status.FAIL, msg);
         }
 
         // 출근일시 퇴근일시로 근무시간을 계산
-        dclzManage.setWorkTime(calShift(dclzManage.getEmpInDt(), dclzManage.getEmpOutDt()));
+        dclzManageVO.setWorkTime(calShift(dclzManageVO.getEmpInDt(), dclzManageVO.getEmpOutDt()));
 
-        return dclzManageMapper.insertDclzManage(dclzManage);
+        return dclzManageMapper.insertDclzManage(dclzManageVO);
     }
 
     @Override
-    public int updateDclzManage(DclzManage dclzManage, String userId) {
+    public int updateDclzManage(DclzManageVO dclzManageVO, String userId) {
 
         // 기본값 세팅
-        dclzManage.setModDt(currentDateTimeString());
-        dclzManage.setModId(userId);
+        dclzManageVO.setModDt(currentDateTimeString());
+        dclzManageVO.setModId(userId);
 
         /**
-         * 
+         *
          * 해당 근무일에 근태가 있는지 확인 없는 경우에는 업데이트를 할 수 없다.
-         * 
+         *
          */
-        int check = selectWorkCheck(dclzManage);
+        int check = selectWorkCheck(dclzManageVO);
 
         if (check == 0) {
-            String arg[] = {dclzManage.getEmpInDate()};
+            String arg[] = {dclzManageVO.getEmpInDate()};
             // 해당 사원의 {0}일의 근태가 존재하지 않습니다.
             String msg = messageService.get("dclzManage.empty.dclz", arg);
             throw new JsonException(Status.FAIL, msg);
         }
 
-        dclzManage.setWorkTime(calShift(dclzManage.getEmpInDt(), dclzManage.getEmpOutDt()));
+        dclzManageVO.setWorkTime(calShift(dclzManageVO.getEmpInDt(), dclzManageVO.getEmpOutDt()));
 
-        return dclzManageMapper.updateDclzManage(dclzManage);
+        return dclzManageMapper.updateDclzManage(dclzManageVO);
     }
 
     @Override
-    public int deleteDclzManage(DclzManage dclzManage) {
-        return dclzManageMapper.deleteDclzManage(dclzManage);
+    public int deleteDclzManage(DclzManageVO dclzManageVO) {
+        return dclzManageMapper.deleteDclzManage(dclzManageVO);
     }
 
     @Override
-    public List<DefaultMap<String>> selectStoreEmployee(DclzManage dclzManage) {
-        return dclzManageMapper.selectStoreEmployee(dclzManage);
+    public List<DefaultMap<String>> selectStoreEmployee(DclzManageVO dclzManageVO) {
+        return dclzManageMapper.selectStoreEmployee(dclzManageVO);
     }
 
     @Override
-    public int selectWorkCheck(DclzManage dclzManage) {
-        return dclzManageMapper.selectWorkCheck(dclzManage);
+    public int selectWorkCheck(DclzManageVO dclzManageVO) {
+        return dclzManageMapper.selectWorkCheck(dclzManageVO);
     }
 
     /**
      * 출근일시 퇴근일시로 근무시간을 계산
-     * 
+     *
      * @param startDt YYYYMMDDHHmm 형태의 출근일시
      * @param endDt YYYYMMDDHHmm 형태의 퇴근일시
      * @return 분단위의 근무시간<br>

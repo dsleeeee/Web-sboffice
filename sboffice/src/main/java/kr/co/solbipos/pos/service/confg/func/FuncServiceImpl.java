@@ -1,64 +1,63 @@
 package kr.co.solbipos.pos.service.confg.func;
 
-import static kr.co.solbipos.utils.DateUtil.currentDateTimeString;
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import kr.co.solbipos.application.domain.login.SessionInfo;
+import kr.co.common.data.enums.Status;
+import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.exception.JsonException;
+import kr.co.common.service.message.MessageService;
+import kr.co.solbipos.application.domain.login.SessionInfoVO;
 import kr.co.solbipos.application.enums.grid.GridDataFg;
-import kr.co.solbipos.enums.Status;
-import kr.co.solbipos.enums.UseYn;
-import kr.co.solbipos.exception.JsonException;
-import kr.co.solbipos.pos.domain.confg.func.Func;
+import kr.co.solbipos.pos.domain.confg.func.FuncVO;
 import kr.co.solbipos.pos.persistence.confg.func.FuncMapper;
-import kr.co.solbipos.service.message.MessageService;
-import kr.co.solbipos.structure.DefaultMap;
 
 @Service
 public class FuncServiceImpl implements FuncService{
 
-    
+
     @Autowired
     FuncMapper mapper;
 
     @Autowired
     MessageService messageService;
-    
+
     @Override
-    public List<DefaultMap<String>> list(Func func) {
-        return mapper.getFuncList(func);
+    public List<DefaultMap<String>> list(FuncVO funcVO) {
+        return mapper.getFuncList(funcVO);
     }
 
     @Override
-    public int save(Func[] funcs, SessionInfo sessionInfo) {
+    public int save(FuncVO[] funcVOs, SessionInfoVO sessionInfoVO) {
 
         int procCnt = 0;
-        
+
         String insertDt = currentDateTimeString();
 
-        for(Func func: funcs) {
+        for(FuncVO funcVO: funcVOs) {
 
-            func.setRegDt(insertDt);
-            func.setModDt(insertDt);
-            func.setRegId(sessionInfo.getUserId());
-            func.setModId(sessionInfo.getUserId());
-            
-            if(func.getStatus() == GridDataFg.INSERT) {
-                String fnKeyNo = func.getFnkeyFg() + func.getFnkeyNo();
-                
-                func.setFnkeyNo(fnKeyNo);
-                func.setUseYn("Y");
-                procCnt += mapper.insertFunc(func);
+            funcVO.setRegDt(insertDt);
+            funcVO.setModDt(insertDt);
+            funcVO.setRegId(sessionInfoVO.getUserId());
+            funcVO.setModId(sessionInfoVO.getUserId());
+
+            if(funcVO.getStatus() == GridDataFg.INSERT) {
+                String fnKeyNo = funcVO.getFnkeyFg() + funcVO.getFnkeyNo();
+
+                funcVO.setFnkeyNo(fnKeyNo);
+                funcVO.setUseYn("Y");
+                procCnt += mapper.insertFunc(funcVO);
             }
-            else if(func.getStatus() == GridDataFg.UPDATE) {
-                procCnt += mapper.updateFunc(func);
+            else if(funcVO.getStatus() == GridDataFg.UPDATE) {
+                procCnt += mapper.updateFunc(funcVO);
             }
-            else if(func.getStatus() == GridDataFg.DELETE) {
-                procCnt += mapper.deleteFunc(func);
+            else if(funcVO.getStatus() == GridDataFg.DELETE) {
+                procCnt += mapper.deleteFunc(funcVO);
             }
         }
-        
-        if(procCnt == funcs.length) {
+
+        if(procCnt == funcVOs.length) {
             return procCnt;
         } else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));

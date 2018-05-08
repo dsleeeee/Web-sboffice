@@ -3,13 +3,13 @@
 
 <mapper namespace="kr.co.solbipos.pos.persistence.confg.loginstatus.LoginStatusMapper">
 
-  <select id="selectLoginStatus" parameterType="loginStatus" resultType="DefaultMap">
+  <select id="selectLoginStatus" parameterType="loginStatusVO" resultType="DefaultMap">
     /* LoginStatusMapper.selectLoginStatus */
     SELECT *
       FROM (
        SELECT
               COUNT(1) OVER (PARTITION BY 1 ORDER BY 1) TOT_CNT,
-              ROW_NUMBER() OVER(PARTITION BY 1 ORDER BY 1) RNUM, 
+              ROW_NUMBER() OVER(PARTITION BY 1 ORDER BY 1) RNUM,
               B.HQ_OFFICE_CD,
               C.HQ_OFFICE_NM,
               A.STORE_CD,
@@ -55,7 +55,7 @@
        AND RNUM <= #{next}
   ]]>
   </select>
-  
+
 </mapper>
 
 

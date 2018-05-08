@@ -5,24 +5,26 @@
   <!-- 에러화면 -->
   <definition name="error/*" extends="layout">
     <put-attribute name="view" value="Error"/>
-    <put-attribute name="body" value="/WEB-INF/view/error/{1}.jsp"/>
+    <put-attribute name="menu" cascade="true" value="/WEB-INF/view/layout/basic/menu.jsp"/>
+    <put-attribute name="header" cascade="true" value="/WEB-INF/view/layout/basic/header.jsp"/>
+    <put-attribute name="content" cascade="true" value="/WEB-INF/view/error/{1}.jsp"/>
   </definition>
   <!-- 에러화면 -->
 
-  
+
 <!--   로그인 페이지 전용 레이아웃 -->
   <definition name="loginLayout" template="/WEB-INF/view/layout/loginLayout.jsp">
     <put-attribute name="view" value="loginLayout"/>
     <put-attribute name="resource" value="/WEB-INF/view/layout/resource.jsp"/>
     <put-attribute name="body" value=""/>
   </definition>
-  
+
 <!--   로그인 페이지 레이아웃 사용 -->
   <definition name="*/login:*" extends="loginLayout">
     <put-attribute name="view" value="loginLayout"/>
     <put-attribute name="body" value="/WEB-INF/view/application/{1}/{2}.jsp"/>
   </definition>
-  
+
 
 
 
@@ -41,13 +43,13 @@
     <put-attribute name="content" cascade="true" value="" />
   </definition>
   <!-- 레이아웃 -->
-  
-  
-  
-  
+
+
+
+
 
   <!-- 팝업 start -->
-  
+
   <definition name="popLayout" template="/WEB-INF/view/layout/popLayout.jsp">
     <put-attribute name="view" value="pop"/>
     <put-attribute name="resource" value="/WEB-INF/view/layout/resource.jsp"/>
@@ -65,9 +67,9 @@
   <definition name="*/*/*/pop:*" extends="popLayout">
     <put-attribute name="view" value="pop"/>
     <put-attribute name="content" cascade="true" value="/WEB-INF/view/{1}/{2}/{3}/{4}.jsp" />
-  </definition>   
+  </definition>
   <!-- 팝업 end -->
-  
+
   <!-- 화면 start -->
   <definition name="*/*" extends="Main">
     <put-attribute name="view" value="{2}"/>

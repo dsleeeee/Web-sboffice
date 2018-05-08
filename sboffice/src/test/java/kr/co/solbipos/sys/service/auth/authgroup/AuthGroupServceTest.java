@@ -9,8 +9,8 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.springframework.transaction.annotation.Transactional;
-import kr.co.solbipos.structure.DefaultMap;
-import kr.co.solbipos.sys.domain.auth.authgroup.AuthorGrpResrce;
+import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.sys.domain.auth.authgroup.AuthorGrpResrceVO;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -20,7 +20,7 @@ public class AuthGroupServceTest {
 
     List<DefaultMap<String>> list;
     List<DefaultMap<String>> authed;
-    
+
     @Before
     public void init() {
         list = new ArrayList<DefaultMap<String>>();
@@ -31,7 +31,7 @@ public class AuthGroupServceTest {
         map.put("resrceNm", "포스관리");
         map.put("dispIdx", "0");
         list.add(map);
-        
+
         map = new DefaultMap<String>();
         map.put("level", "2");
         map.put("pResrce", "000001");
@@ -39,7 +39,7 @@ public class AuthGroupServceTest {
         map.put("resrceNm", "POS 설정관리");
         map.put("dispIdx", "0");
         list.add(map);
-        
+
         map = new DefaultMap<String>();
         map.put("level", "3");
         map.put("pResrce", "000012");
@@ -55,7 +55,7 @@ public class AuthGroupServceTest {
         map.put("resrceNm", "조회");
         map.put("dispIdx", "");
         list.add(map);
-        
+
         map = new DefaultMap<String>();
         map.put("level", "4");
         map.put("pResrce", "000069");
@@ -63,7 +63,7 @@ public class AuthGroupServceTest {
         map.put("resrceNm", "저장");
         map.put("dispIdx", "");
         list.add(map);
-        
+
         map = new DefaultMap<String>();
         map.put("level", "3");
         map.put("pResrce", "000012");
@@ -107,7 +107,7 @@ public class AuthGroupServceTest {
 
     /**
      * mxGraph XML 파싱 테스트
-     * 
+     *
      */
     @Test
     //@Ignore
@@ -115,22 +115,22 @@ public class AuthGroupServceTest {
     public void test_100() {
         makeTreeData(list, authed);
     }
-    
-    private static List<AuthorGrpResrce> makeTreeData(List<DefaultMap<String>> list, List<DefaultMap<String>> authedList) {
-        List<AuthorGrpResrce> input = new ArrayList<AuthorGrpResrce>();
-        AuthorGrpResrce resrce = new AuthorGrpResrce();
+
+    private static List<AuthorGrpResrceVO> makeTreeData(List<DefaultMap<String>> list, List<DefaultMap<String>> authedList) {
+        List<AuthorGrpResrceVO> input = new ArrayList<AuthorGrpResrceVO>();
+        AuthorGrpResrceVO authorGrpResrceVO = new AuthorGrpResrceVO();
         for(DefaultMap<String> rm : list) {
-            resrce = new AuthorGrpResrce();
-            resrce.setResrceCd(rm.getStr("resrceCd"));
-            resrce.setPResrce(rm.getStr("pResrce"));
-            resrce.setResrceNm(rm.getStr("resrceNm"));
-            resrce.setItems(new ArrayList<AuthorGrpResrce>());
-            input.add(resrce);
+            authorGrpResrceVO = new AuthorGrpResrceVO();
+            authorGrpResrceVO.setResrceCd(rm.getStr("resrceCd"));
+            authorGrpResrceVO.setPResrce(rm.getStr("pResrce"));
+            authorGrpResrceVO.setResrceNm(rm.getStr("resrceNm"));
+            authorGrpResrceVO.setItems(new ArrayList<AuthorGrpResrceVO>());
+            input.add(authorGrpResrceVO);
         }
-        
+
         String resrcePath = "";
         String[] arrayRes;
-        DefaultMap<String> authedResrce = new DefaultMap<String>(); 
+        DefaultMap<String> authedResrce = new DefaultMap<String>();
         for(DefaultMap<String> item : authedList) {
             resrcePath = item.getStr("resrcePath").substring(1);
             arrayRes = resrcePath.split("\\/");
@@ -139,29 +139,29 @@ public class AuthGroupServceTest {
             }
         }
         log.debug(authedResrce.toString());
-        
-        Map<String, AuthorGrpResrce> hm = new LinkedHashMap<String, AuthorGrpResrce>();
-        AuthorGrpResrce child;
-        AuthorGrpResrce mmdParent;
-        
-        for(AuthorGrpResrce item : input) {
+
+        Map<String, AuthorGrpResrceVO> hm = new LinkedHashMap<String, AuthorGrpResrceVO>();
+        AuthorGrpResrceVO child;
+        AuthorGrpResrceVO mmdParent;
+
+        for(AuthorGrpResrceVO item : input) {
             if( !hm.containsKey(item.getResrceCd()) && authedResrce.containsKey(item.getResrceCd()) ) {
                 hm.put(item.getResrceCd(), item);
             }
             child = hm.get(item.getResrceCd());
-            
+
             if(!item.getPResrce().equals("") && !item.getPResrce().equals("000000")) {
                 if(hm.containsKey(item.getPResrce())) {
                     mmdParent = hm.get(item.getPResrce());
                     mmdParent.getItems().add(child);
                 }
             }
-            
+
         }
         //System.out.println( hm.toString() );
-        
-        List<AuthorGrpResrce> retrunData = new ArrayList<AuthorGrpResrce>();
-        for (AuthorGrpResrce mmd : hm.values()) {
+
+        List<AuthorGrpResrceVO> retrunData = new ArrayList<AuthorGrpResrceVO>();
+        for (AuthorGrpResrceVO mmd : hm.values()) {
             if (mmd.getPResrce() == null || mmd.getPResrce().equals("")
                     || mmd.getPResrce().equals("000000")) {
                 System.out.println( mmd.toString() );

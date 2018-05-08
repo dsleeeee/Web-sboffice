@@ -10,7 +10,7 @@
      WHERE STORE_CD = #{storeCd}
     </update>
 
-  <update id="mergeTableGroupByStore" parameterType="tableGroup">
+  <update id="mergeTableGroupByStore" parameterType="tableGroupVO">
     /* TableLayoutMapper.mergeTableGroupByStore */
     MERGE INTO TB_MS_TABLE_GROUP A
     USING (SELECT #{storeCd} STORE_CD,
@@ -67,7 +67,7 @@
      WHERE STORE_CD = #{storeCd}
     </update>
 
-  <update id="mergeTableByStore" parameterType="table">
+  <update id="mergeTableByStore" parameterType="tableVO">
     /* TableLayoutMapper.mergeTableByStore */
     MERGE INTO TB_MS_TABLE A
     USING (SELECT #{storeCd} STORE_CD,

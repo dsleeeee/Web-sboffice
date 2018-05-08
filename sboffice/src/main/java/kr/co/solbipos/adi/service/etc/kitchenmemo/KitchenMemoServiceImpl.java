@@ -1,14 +1,14 @@
 package kr.co.solbipos.adi.service.etc.kitchenmemo;
 
-import static kr.co.solbipos.utils.DateUtil.currentDateTimeString;
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import kr.co.solbipos.adi.domain.etc.kitchenmemo.KitchenMemo;
+import kr.co.common.service.session.SessionService;
+import kr.co.solbipos.adi.domain.etc.kitchenmemo.KitchenMemoVO;
 import kr.co.solbipos.adi.persistence.etc.kitchenmemo.KitchenMemoMapper;
-import kr.co.solbipos.application.domain.login.SessionInfo;
+import kr.co.solbipos.application.domain.login.SessionInfoVO;
 import kr.co.solbipos.application.enums.grid.GridDataFg;
-import kr.co.solbipos.service.session.SessionService;
 
 @Service
 public class KitchenMemoServiceImpl implements KitchenMemoService {
@@ -18,47 +18,47 @@ public class KitchenMemoServiceImpl implements KitchenMemoService {
 
     @Autowired
     KitchenMemoMapper kichenMemoMapper;
-    
+
     @Override
-    public <E> List<E> selectKitchenMemo(SessionInfo sessionInfo) {
-        return kichenMemoMapper.selectKitchenMemo(sessionInfo);
+    public <E> List<E> selectKitchenMemo(SessionInfoVO sessionInfoVO) {
+        return kichenMemoMapper.selectKitchenMemo(sessionInfoVO);
     }
 
     @Override
-    public int save(KitchenMemo[] kitchenMemos, SessionInfo sessionInfo) {
-        
+    public int save(KitchenMemoVO[] kitchenMemoVOs, SessionInfoVO sessionInfoVO) {
+
         int procCnt = 0;
         String insertDt = currentDateTimeString();
-        
-        for(KitchenMemo kitchenMemo : kitchenMemos){
-            kitchenMemo.setStoreCd(sessionInfo.getOrgnCd());
-            kitchenMemo.setRegId(sessionInfo.getUserId());
-            kitchenMemo.setRegDt(insertDt);
-            kitchenMemo.setModId(sessionInfo.getUserId());
-            kitchenMemo.setModDt(insertDt);
 
-            if(kitchenMemo.getStatus() == GridDataFg.INSERT) {
-                procCnt += kichenMemoMapper.insertKitchenMemo(kitchenMemo);
+        for(KitchenMemoVO kitchenMemoVO : kitchenMemoVOs){
+            kitchenMemoVO.setStoreCd(sessionInfoVO.getOrgnCd());
+            kitchenMemoVO.setRegId(sessionInfoVO.getUserId());
+            kitchenMemoVO.setRegDt(insertDt);
+            kitchenMemoVO.setModId(sessionInfoVO.getUserId());
+            kitchenMemoVO.setModDt(insertDt);
+
+            if(kitchenMemoVO.getStatus() == GridDataFg.INSERT) {
+                procCnt += kichenMemoMapper.insertKitchenMemo(kitchenMemoVO);
             }
-            else if(kitchenMemo.getStatus() == GridDataFg.UPDATE) {
-                procCnt += kichenMemoMapper.updateKitchenMemo(kitchenMemo);
+            else if(kitchenMemoVO.getStatus() == GridDataFg.UPDATE) {
+                procCnt += kichenMemoMapper.updateKitchenMemo(kitchenMemoVO);
             }
-            else if(kitchenMemo.getStatus() == GridDataFg.DELETE) {
-                procCnt += kichenMemoMapper.deleteKitchenMemo(kitchenMemo);
+            else if(kitchenMemoVO.getStatus() == GridDataFg.DELETE) {
+                procCnt += kichenMemoMapper.deleteKitchenMemo(kitchenMemoVO);
             }
         }
         return procCnt;
     }
-    
-    @Override
-    public int selectKitchenMemoCnt(KitchenMemo kitchenMemo) {
-        
-        SessionInfo sessionInfo = sessionService.getSessionInfo();
 
-        kitchenMemo.setStoreCd(sessionInfo.getOrgnCd());
-        kitchenMemo.setRegId(sessionInfo.getUserId());
-        kitchenMemo.setModId(sessionInfo.getUserId());
-        
-        return kichenMemoMapper.selectKitchenMemoCnt(kitchenMemo);
+    @Override
+    public int selectKitchenMemoCnt(KitchenMemoVO kitchenMemoVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        kitchenMemoVO.setStoreCd(sessionInfoVO.getOrgnCd());
+        kitchenMemoVO.setRegId(sessionInfoVO.getUserId());
+        kitchenMemoVO.setModId(sessionInfoVO.getUserId());
+
+        return kichenMemoMapper.selectKitchenMemoCnt(kitchenMemoVO);
     }
 }

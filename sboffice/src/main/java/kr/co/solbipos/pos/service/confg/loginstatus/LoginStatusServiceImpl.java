@@ -4,7 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import kr.co.solbipos.pos.domain.confg.loginstatus.LoginStatus;
+import kr.co.solbipos.pos.domain.confg.loginstatus.LoginStatusVO;
 import kr.co.solbipos.pos.persistence.confg.loginstatus.LoginStatusMapper;
 
 @Service
@@ -15,10 +15,10 @@ public class LoginStatusServiceImpl implements LoginStatusService {
     LoginStatusMapper loginStatusMapper;
 
     @Override
-    public <E> List<E> selectLoginStatus(LoginStatus loginStatus) {
-        return loginStatusMapper.selectLoginStatus(loginStatus);
+    public <E> List<E> selectLoginStatus(LoginStatusVO loginStatusVO) {
+        return loginStatusMapper.selectLoginStatus(loginStatusVO);
     }
-    
+
 }
 
 

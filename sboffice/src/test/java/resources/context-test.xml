@@ -13,7 +13,7 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
-  
+
   <!-- config properties 변수 세팅 -->
   <util:properties id="config" location="file:src/test/java/resources/config-properties.xml"/>
 
@@ -38,14 +38,14 @@
   </bean>
 
   <!-- Component IoC -->
-  <context:component-scan base-package="kr.co.solbipos" />
-  
+  <context:component-scan base-package="kr.co" />
+
   <!-- Enables the Spring MVC @Controller programming model -->
-  <!-- reference : http://hnsnmn.blogspot.kr/2014/02/annotation-driven.html, 
+  <!-- reference : http://hnsnmn.blogspot.kr/2014/02/annotation-driven.html,
     http://sbcoba.tistory.com/14. http://blog.naver.com/PostView.nhn?blogId=junsu60&logNo=80168806230 -->
   <mvc:annotation-driven validator="validator">
     <mvc:message-converters>
-    
+
       <!-- @ResponseBody 한글 깨짐 방지 -->
       <bean class="org.springframework.http.converter.StringHttpMessageConverter">
         <property name="supportedMediaTypes">
@@ -54,14 +54,14 @@
           </list>
         </property>
       </bean>
-      
+
     </mvc:message-converters>
   </mvc:annotation-driven>
 
   <!-- 정적 리소스 -->
   <mvc:resources mapping="/resource/**" location="/resources/" cache-period="31556926">
   </mvc:resources>
-  
+
   <mvc:interceptors>
     <!-- Request 로 들어오는 locale 을 변경하기 위한 Interceptor -->
     <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
@@ -98,7 +98,7 @@
   <!-- @Transactional Advice 적용 -->
   <!-- @Transactional 을 사용할 때 checked Exception 은 rollback 이 안되니 주의 -->
   <tx:annotation-driven />
-  
+
   <!-- Mybatis Config -->
   <!-- Reference URL : http://mybatis.github.io/spring -->
   <!-- 한글 레퍼런스 URL : http://mybatis.github.io/spring/ko -->
@@ -107,7 +107,10 @@
     <property name="mapperLocations" value="file:src/main/webapp/WEB-INF/mapper/**/*.xml" />
     <property name="dataSource" ref="dataSource" />
     <!-- Domain Class Name 자동 등록 -->
-    <property name="typeAliasesPackage" value=" kr.co.solbipos.application.domain,
+    <property name="typeAliasesPackage" value=" kr.co.common.data.domain,
+                                                kr.co.common.data.structure,
+                                                kr.co.sample.application.domain,
+                                                kr.co.solbipos.application.domain,
                                                 kr.co.solbipos.base.domain,
                                                 kr.co.solbipos.pos.domain,
                                                 kr.co.solbipos.store.domain,
@@ -117,21 +120,20 @@
                                                 kr.co.solbipos.iostock.domain,
                                                 kr.co.solbipos.stock.domain,
                                                 kr.co.solbipos.excclc.domain,
-                                                kr.co.solbipos.adi.domain,
-                                                kr.co.solbipos.structure" />
+                                                kr.co.solbipos.adi.domain" />
   </bean>
-  
+
   <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
     <constructor-arg index="0" ref="sqlSessionFactory" />
   </bean>
-  
+
   <!-- Mybatis IoC Mapper Class from SqlSessionTemplate -->
   <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-    <property name="basePackage" value="kr.co.solbipos.**.persistence" />
+    <property name="basePackage" value="kr.co.**.**.persistence" />
     <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
   </bean>
 
-  <bean id="jedisConnFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" 
+  <bean id="jedisConnFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
     p:hostName="#{config['redis.hostName']}"
   p:port="#{config['redis.port']}"
   p:password="#{config['redis.password']}"
@@ -139,14 +141,14 @@
     />
 
   <!-- redis template definition -->
-  <bean id="redisTemplate" class="kr.co.solbipos.system.RedisCustomTemplate" 
+  <bean id="redisTemplate" class="kr.co.common.template.RedisCustomTemplate"
     p:connection-factory-ref="jedisConnFactory"
     p:keySerializer-ref="stringRedisSerializer"
     p:keyPrefix="#{config['redis.web.prefix']}"
     p:keyPrefixCode="#{config['redis.code.prefix']}"
     />
-  
+
   <bean id="stringRedisSerializer" class="org.springframework.data.redis.serializer.StringRedisSerializer" />
 
-  
+
 </beans>

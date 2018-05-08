@@ -2,8 +2,8 @@ package kr.co.solbipos.application.enums.user;
 
 import org.apache.ibatis.type.MappedTypes;
 import com.fasterxml.jackson.annotation.JsonValue;
-import kr.co.solbipos.enums.CodeEnum;
-import kr.co.solbipos.system.CodeEnumTypeHandler;
+import kr.co.common.data.enums.CodeEnum;
+import kr.co.common.data.handler.CodeEnumTypeHandler;
 
 /**
  * 패스워드 otp 결과

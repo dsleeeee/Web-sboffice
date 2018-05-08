@@ -2,26 +2,40 @@ package kr.co.solbipos.application.controller.error;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import lombok.extern.slf4j.Slf4j;
+import kr.co.common.service.session.SessionService;
 
 /**
- * 
+ *
  * @author 정용길
  */
 
-@Slf4j
 @Controller
 @RequestMapping(value = "/error")
 public class ErrorController {
 
-    @RequestMapping(value = "/403.sb", method = RequestMethod.GET)
+    @Autowired
+    SessionService sessionService;
+
+    @RequestMapping(value = "/403.sb")
     public String denied(HttpServletRequest request, HttpServletResponse response, Model model) {
         return "error/403";
     }
+
+    @RequestMapping(value = "/404.sb")
+    public String notFound(HttpServletRequest request, HttpServletResponse response, Model model) {
+        return "error/404";
+    }
+
+    @RequestMapping(value = "/500.sb")
+    public String serverError(HttpServletRequest request, HttpServletResponse response, Model model) {
+        return "error/500";
+    }
+
+
 }
 
 

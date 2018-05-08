@@ -7,12 +7,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import kr.co.solbipos.application.domain.login.SessionInfo;
+import kr.co.common.service.session.SessionService;
+import kr.co.solbipos.application.domain.login.SessionInfoVO;
 import kr.co.solbipos.application.enums.user.OrgnFg;
-import kr.co.solbipos.service.session.SessionService;
 
 /**
- * 
+ *
  * @author 정용길
  */
 @Controller
@@ -23,7 +23,7 @@ public class MainController {
 
     /**
       * 로그인 후 메인 페이지로 이동
-      * 
+      *
       * @param request
       * @param response
       * @param model
@@ -31,15 +31,15 @@ public class MainController {
       */
     @RequestMapping(value = "main.sb", method = RequestMethod.GET)
     public String main(HttpServletRequest request, HttpServletResponse response, Model model) {
-        
+
         if (!sessionService.isValidSession(request)) {
             return "redirect:/auth/login.sb";
         }
-        
-        SessionInfo sessionInfo = sessionService.getSessionInfo(request);
-        OrgnFg orgnFg = sessionInfo.getOrgnFg();
-        
-        /** 
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        OrgnFg orgnFg = sessionInfoVO.getOrgnFg();
+
+        /**
          * 유져 권한 타입<br>
          * */
         // 시스템 : SYSTEM
@@ -58,7 +58,7 @@ public class MainController {
         else if(orgnFg == OrgnFg.STORE) {
             return "redirect:"+"/application/main/content/store.sb";
         }
-        
+
         return "application/main/mrhstMain";
     }
 }

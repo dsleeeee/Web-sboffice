@@ -3,7 +3,7 @@
 
 <mapper namespace="kr.co.solbipos.pos.persistence.confg.func.FuncMapper">
 
-  <select id="getFuncList" parameterType="func" resultType="DefaultMap">
+  <select id="getFuncList" parameterType="funcVO" resultType="DefaultMap">
     <![CDATA[
     /* FuncMapper.getFuncList */
     SELECT FNKEY_NO, FNKEY_NM, FNKEY_FG, STORE_FG, POS_FG,
@@ -25,8 +25,8 @@
         BY DISP_SEQ
     ]]>
   </select>
-  
-  <insert id="insertFunc" parameterType="func">
+
+  <insert id="insertFunc" parameterType="funcVO">
     /* FuncMapper.insertFunc */
     INSERT INTO TB_CM_POS_FNKEY
     (
@@ -74,38 +74,38 @@
         #{modDt},
         #{modId}
     )
-  
+
   </insert>
-  
-  <update id="updateFunc" parameterType="func">
+
+  <update id="updateFunc" parameterType="funcVO">
     /* FuncMapper.updateFunc */
     UPDATE TB_CM_POS_FNKEY
-       SET FNKEY_NM     = #{fnkeyNm}, 
-           FNKEY_FG     = #{fnkeyFg}, 
-           STORE_FG     = #{storeFg}, 
-           POS_FG       = #{posFg}, 
-           IMG_FILE_NM_0    = #{imgFileNm0}, 
-           IMG_FILE_NM_1    = #{imgFileNm1}, 
-           FNKEY_USE_YN_0   = #{fnkeyUseYn0}, 
-           FNKEY_USE_YN_1   = #{fnkeyUseYn1}, 
-           DISP_SEQ     = #{dispSeq}, 
-           POSI_ADJ_YN  = #{posiAdjYn}, 
-           COL_POSI     = #{colPosi}, 
-           ROW_POSI     = #{rowPosi}, 
-           WIDTH        = #{width}, 
-           HEIGHT       = #{height}, 
-           USE_YN       = #{useYn}, 
-           MOD_DT       = #{modDt}, 
+       SET FNKEY_NM     = #{fnkeyNm},
+           FNKEY_FG     = #{fnkeyFg},
+           STORE_FG     = #{storeFg},
+           POS_FG       = #{posFg},
+           IMG_FILE_NM_0    = #{imgFileNm0},
+           IMG_FILE_NM_1    = #{imgFileNm1},
+           FNKEY_USE_YN_0   = #{fnkeyUseYn0},
+           FNKEY_USE_YN_1   = #{fnkeyUseYn1},
+           DISP_SEQ     = #{dispSeq},
+           POSI_ADJ_YN  = #{posiAdjYn},
+           COL_POSI     = #{colPosi},
+           ROW_POSI     = #{rowPosi},
+           WIDTH        = #{width},
+           HEIGHT       = #{height},
+           USE_YN       = #{useYn},
+           MOD_DT       = #{modDt},
            MOD_ID       = #{modId}
      WHERE FNKEY_NO     = #{fnkeyNo}
   </update>
-  
-  <delete id="deleteFunc" parameterType="func">
+
+  <delete id="deleteFunc" parameterType="funcVO">
     /* FuncMapper.deleteFunc */
     DELETE TB_CM_POS_FNKEY
      WHERE FNKEY_NO = #{fnkeyNo}
   </delete>
-  
+
 </mapper>
 
 

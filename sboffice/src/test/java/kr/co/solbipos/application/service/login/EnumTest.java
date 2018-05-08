@@ -9,8 +9,8 @@ import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-import kr.co.solbipos.application.domain.login.LoginHist;
-import kr.co.solbipos.application.domain.login.SessionInfo;
+import kr.co.solbipos.application.domain.login.LoginHistVO;
+import kr.co.solbipos.application.domain.login.SessionInfoVO;
 import kr.co.solbipos.application.enums.login.LoginOrigin;
 import kr.co.solbipos.application.enums.login.LoginResult;
 import kr.co.solbipos.config.AbstractApplicationContextTest;
@@ -24,13 +24,13 @@ public class EnumTest extends AbstractApplicationContextTest {
     @Autowired
     LoginServiceImpl loginService;
 
-    SessionInfo sessionInfo;
-    LoginHist loginHist;
+    SessionInfoVO sessionInfoVO;
+    LoginHistVO loginHistVO;
 
     @Before
     public void init() {
-        sessionInfo = new SessionInfo();
-        loginHist = new LoginHist();
+        sessionInfoVO = new SessionInfoVO();
+        loginHistVO = new LoginHistVO();
     }
 
     @Test
@@ -39,19 +39,19 @@ public class EnumTest extends AbstractApplicationContextTest {
     }
     /**
      * 로그인 이력 Insert
-     * 
+     *
      */
     @Test
     //@Ignore
     //@Rollback(false)
-    public void setLoginHist() {
+    public void setLoginHistVO() {
         // return 객체
-        SessionInfo s = new SessionInfo();
+        SessionInfoVO s = new SessionInfoVO();
         s.setUserId("bjcho");
         s.setBrwsrInfo("brwsinfo");
         s.setLoginIp("127.0.0.1");
         s.setLoginResult(LoginResult.SUCCESS);
-        
+
         int result = loginService.loginHist(s);
         log.debug(String.valueOf(result));
         assertTrue(result == 1);
@@ -59,19 +59,19 @@ public class EnumTest extends AbstractApplicationContextTest {
 
     /**
      * 로그인 이력 select
-     * 
+     *
      */
     @Test
     //@Ignore
-    public void getLoginHist() {
-        loginHist.setUserId("bjcho");
-        List<LoginHist> result = loginService.selectLoginHist(loginHist);
+    public void getLoginHistVO() {
+        loginHistVO.setUserId("bjcho");
+        List<LoginHistVO> result = loginService.selectLoginHist(loginHistVO);
         log.debug(result.toString());
-        for(LoginHist loginHist : result) {
-          if(loginHist.getSeq().equals("381")) {
-            log.debug(loginHist.toString());
-            assertTrue(loginHist.getLoginOrgn() == LoginOrigin.WEB);
-            assertTrue(loginHist.getStatCd() == LoginResult.PASSWORD_CHANGE);
+        for(LoginHistVO loginHistVO : result) {
+          if(loginHistVO.getSeq().equals("381")) {
+            log.debug(loginHistVO.toString());
+            assertTrue(loginHistVO.getLoginOrgn() == LoginOrigin.WEB);
+            assertTrue(loginHistVO.getStatCd() == LoginResult.PASSWORD_CHANGE);
           }
         }
     }

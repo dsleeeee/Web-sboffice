@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import org.apache.ibatis.type.MappedTypes;
 import com.fasterxml.jackson.annotation.JsonValue;
-import kr.co.solbipos.enums.CodeEnum;
-import kr.co.solbipos.system.CodeEnumTypeHandler;
+import kr.co.common.data.enums.CodeEnum;
+import kr.co.common.data.handler.CodeEnumTypeHandler;
 
 /**
  * 테이블 속성 구분 enum type<br>

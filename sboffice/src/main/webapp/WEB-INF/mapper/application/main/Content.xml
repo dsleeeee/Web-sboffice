@@ -3,7 +3,7 @@
 
 <mapper namespace="kr.co.solbipos.application.persistence.main.ContentMapper">
 
-  <select id="getNotice" parameterType="sessionInfo" resultType="DefaultMap">
+  <select id="getNotice" parameterType="sessionInfoVO" resultType="DefaultMap">
   <![CDATA[
   /* contentMapper.getNotice */
   SELECT BOARD_CD, BOARD_FG, START_DATE, END_DATE,

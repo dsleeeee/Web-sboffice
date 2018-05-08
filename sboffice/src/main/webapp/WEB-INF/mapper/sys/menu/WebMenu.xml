@@ -3,7 +3,7 @@
 
 <mapper namespace="kr.co.solbipos.sys.persistence.menu.webmenu.WebMenuMapper">
 
-  <select id="selectWebMenu" parameterType="resrceInfo"
+  <select id="selectWebMenu" parameterType="resrceInfoVO"
     resultType="defaultMap">
     /* WebMenuMapper.selectWebMenu */
     <![CDATA[
@@ -20,7 +20,7 @@
      WHERE A.USE_YN = 'Y'
        AND A.RESRCE_CD = #{resrceCd}
         OR (
-                A.P_RESRCE = #{resrceCd} 
+                A.P_RESRCE = #{resrceCd}
             AND A.RESRCE_FG = 'F'
             AND A.USE_YN = 'Y'
             )
@@ -28,7 +28,7 @@
   </select>
 
   <select id="selectWebMenuLevel" parameterType="integer"
-    resultType="resrceInfo">
+    resultType="resrceInfoVO">
     /* WebMenuMapper.selectWebMenuLevel */
     <![CDATA[
     SELECT A.RESRCE_CD,
@@ -45,16 +45,16 @@
            A.REG_ID,
            A.MOD_DT,
            A.MOD_ID
-      FROM TB_WB_RESRCE_INFO A 
+      FROM TB_WB_RESRCE_INFO A
      WHERE A.DISP_LEVEL = #{level}
-       AND A.RESRCE_FG = 'M' 
+       AND A.RESRCE_FG = 'M'
        AND A.USE_YN = 'Y'
   ORDER BY A.DISP_IDX ASC
       ]]>
   </select>
 
-  <select id="selectWebMenuByResrceCd" parameterType="resrceInfo"
-    resultType="resrceInfo">
+  <select id="selectWebMenuByResrceCd" parameterType="resrceInfoVO"
+    resultType="resrceInfoVO">
     /* WebMenuMapper.selectWebMenuByResrceCd */
     <![CDATA[
     SELECT A.RESRCE_CD,
@@ -72,7 +72,7 @@
     ]]>
   </select>
 
-  <insert id="insertWebMenu" parameterType="resrceInfo">
+  <insert id="insertWebMenu" parameterType="resrceInfoVO">
 
     <selectKey keyProperty="resrceCd" resultType="string"
       order="BEFORE">
@@ -118,7 +118,7 @@
     ]]>
   </insert>
 
-  <update id="updateWebMenu" parameterType="resrceInfo">
+  <update id="updateWebMenu" parameterType="resrceInfoVO">
     /* WebMenuMapper.deleteWebMenu */
     <![CDATA[
     UPDATE TB_WB_RESRCE_INFO A
@@ -133,7 +133,7 @@
     ]]>
   </update>
 
-  <update id="deleteWebMenu" parameterType="resrceInfo">
+  <update id="deleteWebMenu" parameterType="resrceInfoVO">
     /* WebMenuMapper.deleteWebMenu */
     <![CDATA[
     UPDATE TB_WB_RESRCE_INFO A
@@ -144,7 +144,7 @@
      ]]>
   </update>
 
-  <update id="deleteWebMenuAll" parameterType="resrceInfo">
+  <update id="deleteWebMenuAll" parameterType="resrceInfoVO">
     /* WebMenuMapper.deleteWebMenuAll */
     <![CDATA[
     UPDATE TB_WB_RESRCE_INFO A
@@ -152,7 +152,7 @@
            A.MOD_DT = #{modDt},
            A.MOD_ID = #{modId}
      WHERE A.RESRCE_CD IN (
-           SELECT B.RESRCE_CD 
+           SELECT B.RESRCE_CD
              FROM TB_WB_RESRCE_INFO B
             WHERE B.USE_YN = 'Y'
             START WITH B.RESRCE_CD = #{resrceCd}

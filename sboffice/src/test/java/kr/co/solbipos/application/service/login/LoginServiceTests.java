@@ -1,25 +1,22 @@
 package kr.co.solbipos.application.service.login;
 
-import static kr.co.solbipos.utils.DateUtil.*;
-import static org.junit.Assert.*;
-import static org.mockito.BDDMockito.*;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.BDDMockito.given;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import kr.co.solbipos.application.domain.login.SessionInfo;
+import kr.co.common.service.session.SessionService;
+import kr.co.common.system.Prop;
+import kr.co.solbipos.application.domain.login.SessionInfoVO;
 import kr.co.solbipos.application.enums.login.LoginResult;
 import kr.co.solbipos.application.persistence.login.LoginMapper;
-import kr.co.solbipos.service.session.SessionService;
-import kr.co.solbipos.system.Prop;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RunWith(MockitoJUnitRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class LoginServiceTests {
@@ -32,15 +29,15 @@ public class LoginServiceTests {
 
     @Mock
     Prop prop;
-    
+
     @InjectMocks
     LoginServiceImpl loginService;
 
-    SessionInfo sessionInfo;
+    SessionInfoVO sessionInfoVO;
 
     @Before
     public void init() {
-        sessionInfo = new SessionInfo();
+        sessionInfoVO = new SessionInfoVO();
         prop.loginPwdChgDays = 90;
     }
 
@@ -51,38 +48,38 @@ public class LoginServiceTests {
     // @Ignore
     public void userIdEmpty() {
         // 존재하지 않는 아이디
-        sessionInfo.setUserId("fff");
-        given(loginService.selectWebUser(sessionInfo)).willReturn(new SessionInfo());
+        sessionInfoVO.setUserId("fff");
+        given(loginService.selectWebUser(sessionInfoVO)).willReturn(new SessionInfoVO());
 
-        SessionInfo si = loginService.login(sessionInfo);
+        SessionInfoVO sessionInfo = loginService.login(sessionInfoVO);
 
-        assertNull(si.getUserId());
-        assertTrue("".equals(si.getUserPwd()));
+        assertNull(sessionInfo.getUserId());
+        assertTrue("".equals(sessionInfo.getUserPwd()));
         // 존재하지 않는 아이디로 결과 확인
-        assertTrue(si.getLoginResult() == LoginResult.NOT_EXISTS_ID);
+        assertTrue(sessionInfo.getLoginResult() == LoginResult.NOT_EXISTS_ID);
     }
 
     /**
      * 사용자가 패스워드 입력 안한경우
-     * 
+     *
      */
     @Test
     // @Ignore
     public void pwdCheckEmpty() {
         // return 객체
-        SessionInfo s = new SessionInfo();
+        SessionInfoVO s = new SessionInfoVO();
         s.setUserId("ygjeong");
         s.setUserPwd("qwer");
         s.setLockCd("N");
         s.setLastPwdChg("20180101");
-        
-        sessionInfo.setUserId("ygjeong");
-        given(loginService.selectWebUser(sessionInfo)).willReturn(s);
 
-        SessionInfo si = loginService.login(sessionInfo);
+        sessionInfoVO.setUserId("ygjeong");
+        given(loginService.selectWebUser(sessionInfoVO)).willReturn(s);
 
-        assertTrue("".equals(si.getUserPwd()));
-        assertTrue(si.getLoginResult() == LoginResult.PASSWORD_ERROR);
+        SessionInfoVO sessionInfo = loginService.login(sessionInfoVO);
+
+        assertTrue("".equals(sessionInfo.getUserPwd()));
+        assertTrue(sessionInfo.getLoginResult() == LoginResult.PASSWORD_ERROR);
     }
 
     /**
@@ -91,20 +88,20 @@ public class LoginServiceTests {
     @Test
     // @Ignore
     public void pwdCheckOk() {
-        SessionInfo s = new SessionInfo();
+        SessionInfoVO s = new SessionInfoVO();
         s.setUserId("ygjeong");
         s.setUserPwd("qwer"); // 동일한 패스워드
         s.setLockCd("N");
         s.setLastPwdChg("20180101");
 
-        sessionInfo.setUserId("ygjeong");
-        sessionInfo.setUserPwd("qwer");
-        given(loginService.selectWebUser(sessionInfo)).willReturn(s);
+        sessionInfoVO.setUserId("ygjeong");
+        sessionInfoVO.setUserPwd("qwer");
+        given(loginService.selectWebUser(sessionInfoVO)).willReturn(s);
 
-        SessionInfo si = loginService.login(sessionInfo);
+        SessionInfoVO sessionInfo = loginService.login(sessionInfoVO);
 
-        assertTrue("".equals(si.getUserPwd()));
-        assertTrue(si.getLoginResult() == LoginResult.SUCCESS);
+        assertTrue("".equals(sessionInfo.getUserPwd()));
+        assertTrue(sessionInfo.getLoginResult() == LoginResult.SUCCESS);
     }
 
     /**
@@ -113,20 +110,20 @@ public class LoginServiceTests {
     @Test
     // @Ignore
     public void pwdCheckFail() {
-        SessionInfo s = new SessionInfo();
+        SessionInfoVO s = new SessionInfoVO();
         s.setUserId("ygjeong");
         s.setUserPwd("qwera"); // 다른 패스워드
         s.setLockCd("N");
         s.setLastPwdChg("20180101");
 
-        sessionInfo.setUserId("ygjeong");
-        sessionInfo.setUserPwd("qwer");
-        given(loginService.selectWebUser(sessionInfo)).willReturn(s);
+        sessionInfoVO.setUserId("ygjeong");
+        sessionInfoVO.setUserPwd("qwer");
+        given(loginService.selectWebUser(sessionInfoVO)).willReturn(s);
 
-        SessionInfo si = loginService.login(sessionInfo);
+        SessionInfoVO sessionInfo = loginService.login(sessionInfoVO);
 
-        assertTrue("".equals(si.getUserPwd()));
-        assertTrue(si.getLoginResult() == LoginResult.PASSWORD_ERROR);
+        assertTrue("".equals(sessionInfo.getUserPwd()));
+        assertTrue(sessionInfo.getLoginResult() == LoginResult.PASSWORD_ERROR);
     }
 
     /**
@@ -135,77 +132,64 @@ public class LoginServiceTests {
     @Test
     // @Ignore
     public void userLock() {
-        SessionInfo s = new SessionInfo();
+        SessionInfoVO s = new SessionInfoVO();
         s.setUserId("ygjeong");
         s.setUserPwd("qwer");
         s.setLockCd("Y"); // 사용자 잠금 처리 됨
         s.setLastPwdChg("20180101");
 
-        sessionInfo.setUserId("ygjeong");
-        sessionInfo.setUserPwd("qwer");
-        given(loginService.selectWebUser(sessionInfo)).willReturn(s);
+        sessionInfoVO.setUserId("ygjeong");
+        sessionInfoVO.setUserPwd("qwer");
+        given(loginService.selectWebUser(sessionInfoVO)).willReturn(s);
 
-        SessionInfo si = loginService.login(sessionInfo);
+        SessionInfoVO sessionInfo = loginService.login(sessionInfoVO);
 
-        assertTrue("".equals(si.getUserPwd()));
-        assertTrue(si.getLoginResult() == LoginResult.LOCK);
+        assertTrue("".equals(sessionInfo.getUserPwd()));
+        assertTrue(sessionInfo.getLoginResult() == LoginResult.LOCK);
     }
-    
+
     /**
       * 패스워드 변경 날짜 체크
       */
     @Test
     // @Ignore
     public void pwdChgExpire() {
-        SessionInfo s = new SessionInfo();
+        SessionInfoVO s = new SessionInfoVO();
         s.setUserId("ygjeong");
         s.setUserPwd("qwer");
         s.setLockCd("N");
         s.setLastPwdChg("20170603"); // 마지막 패스워드 변경 날짜
-        
-        sessionInfo.setUserId("ygjeong");
-        sessionInfo.setUserPwd("qwer");
-        given(loginService.selectWebUser(sessionInfo)).willReturn(s);
 
-        SessionInfo si = loginService.login(sessionInfo);
+        sessionInfoVO.setUserId("ygjeong");
+        sessionInfoVO.setUserPwd("qwer");
+        given(loginService.selectWebUser(sessionInfoVO)).willReturn(s);
 
-        assertTrue("".equals(si.getUserPwd()));
-        assertTrue(si.getLoginResult() == LoginResult.PASSWORD_EXPIRE);
+        SessionInfoVO sessionInfo = loginService.login(sessionInfoVO);
+
+        assertTrue("".equals(sessionInfo.getUserPwd()));
+        assertTrue(sessionInfo.getLoginResult() == LoginResult.PASSWORD_EXPIRE);
     }
-    
+
     /**
       * 패스워드 변경 한번도 없을때
       */
     @Test
     // @Ignore
     public void pwdChg() {
-        SessionInfo s = new SessionInfo();
+        SessionInfoVO s = new SessionInfoVO();
         s.setUserId("ygjeong");
         s.setUserPwd("qwer");
         s.setLockCd("N");
         s.setLastPwdChg("0"); // 패스워드 변경 한적 없음
-        
-        sessionInfo.setUserId("ygjeong");
-        sessionInfo.setUserPwd("qwer");
-        given(loginService.selectWebUser(sessionInfo)).willReturn(s);
 
-        SessionInfo si = loginService.login(sessionInfo);
+        sessionInfoVO.setUserId("ygjeong");
+        sessionInfoVO.setUserPwd("qwer");
+        given(loginService.selectWebUser(sessionInfoVO)).willReturn(s);
 
-        assertTrue("".equals(si.getUserPwd()));
-        assertTrue(si.getLoginResult() == LoginResult.PASSWORD_CHANGE);
+        SessionInfoVO sessionInfo = loginService.login(sessionInfoVO);
+
+        assertTrue("".equals(sessionInfo.getUserPwd()));
+        assertTrue(sessionInfo.getLoginResult() == LoginResult.PASSWORD_CHANGE);
     }
-    
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

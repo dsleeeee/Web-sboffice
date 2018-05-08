@@ -2,8 +2,8 @@ package kr.co.solbipos.sys.enums;
 
 import org.apache.ibatis.type.MappedTypes;
 import com.fasterxml.jackson.annotation.JsonValue;
-import kr.co.solbipos.enums.CodeEnum;
-import kr.co.solbipos.system.CodeEnumTypeHandler;
+import kr.co.common.data.enums.CodeEnum;
+import kr.co.common.data.handler.CodeEnumTypeHandler;
 
 /**
  * 포함 제외 구분 I:포함, E:제외 enum type<br>

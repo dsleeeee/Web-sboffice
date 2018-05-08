@@ -2,11 +2,11 @@ package kr.co.solbipos.application.enums.login;
 
 import org.apache.ibatis.type.MappedTypes;
 import com.fasterxml.jackson.annotation.JsonValue;
-import kr.co.solbipos.enums.CodeEnum;
-import kr.co.solbipos.system.CodeEnumTypeHandler;
+import kr.co.common.data.enums.CodeEnum;
+import kr.co.common.data.handler.CodeEnumTypeHandler;
 
 /**
- * {@link kr.co.solbipos.application.domain.login.LoginHist}<br>
+ * {@link kr.co.solbipos.application.domain.login.LoginHistVO}<br>
  * {@code loginOrgn} enum type<br>
  * 로그인 시도 웹, 포스 구분
  * 

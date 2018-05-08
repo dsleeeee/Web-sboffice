@@ -18,7 +18,7 @@
   </select>
 
 
-  <select id="selectGroup" parameterType="authGroup" resultType="DefaultMap">
+  <select id="selectGroup" parameterType="authGroupVO" resultType="DefaultMap">
     /* AuthGroupMapper.selectGroup */
      SELECT ROW_NUMBER() OVER (PARTITION BY 1 ORDER BY 1) NO,
             GRP_CD,
@@ -61,15 +61,15 @@
      </where>
       ORDER BY GRP_CD
   </select>
-  
-  <select id="selectGroupCnt" parameterType="authGroup" resultType="integer">
+
+  <select id="selectGroupCnt" parameterType="authGroupVO" resultType="integer">
     /* AuthGroupMapper.selectGroupCnt */
      SELECT COUNT(1)
        FROM TB_WB_AUTHOR_GRP_INFO A
       WHERE A.GRP_CD = #{grpCd}
   </select>
 
-  <insert id="insertGroup" parameterType="authGroup">
+  <insert id="insertGroup" parameterType="authGroupVO">
     /* AuthGroupMapper.insertGroup */
     INSERT INTO TB_WB_AUTHOR_GRP_INFO
     (
@@ -99,7 +99,7 @@
     )
   </insert>
 
-  <update id="updateGroup" parameterType="authGroup">
+  <update id="updateGroup" parameterType="authGroupVO">
     /* AuthGroupMapper.updateGroup */
      UPDATE TB_WB_AUTHOR_GRP_INFO A
         SET A.GRP_NM = #{grpNm},
@@ -111,16 +111,16 @@
             A.MOD_ID = #{modId}
       WHERE A.GRP_CD = #{grpCd}
   </update>
-  
-  <delete id="deleteGroup" parameterType="authGroup">
+
+  <delete id="deleteGroup" parameterType="authGroupVO">
     /* AuthGroupMapper.deleteGroup */
      DELETE
        FROM TB_WB_AUTHOR_GRP_INFO A
       WHERE A.GRP_CD = #{grpCd}
   </delete>
-  
 
-  <select id="selectResrceByGroup" parameterType="authGroup" resultType="DefaultMap">
+
+  <select id="selectResrceByGroup" parameterType="authGroupVO" resultType="DefaultMap">
     /* AuthGroupMapper.selectResrce */
      SELECT A.P_RESRCE,
             A.RESRCE_CD,
@@ -158,12 +158,12 @@
       ORDER BY A.LIST_SEQ
   </select>
 
-  <select id="selectResrceById" parameterType="authGroup" resultType="DefaultMap">
+  <select id="selectResrceById" parameterType="authGroupVO" resultType="DefaultMap">
     /* AuthGroupMapper.selectResrceById */
      SELECT A.RESRCE_CD,
             A.RESRCE_PATH
        FROM (
-             SELECT A.RESRCE_CD, 
+             SELECT A.RESRCE_CD,
                     SYS_CONNECT_BY_PATH(RESRCE_CD, '/') RESRCE_PATH
                FROM TB_WB_RESRCE_INFO A
               WHERE A.USE_YN = 'Y'
@@ -193,8 +193,8 @@
             ) B
       WHERE A.RESRCE_CD = B.RESRCE_CD
   </select>
-  
-  <select id="selectResrceByGroupAndId" parameterType="authGroup" resultType="DefaultMap">
+
+  <select id="selectResrceByGroupAndId" parameterType="authGroupVO" resultType="DefaultMap">
     /* AuthGroupMapper.selectResrceByGroupAndId */
      SELECT A.P_RESRCE,
             A.RESRCE_CD,
@@ -281,7 +281,7 @@
         #{useYn},
         #{regDt},
         #{regId}
-    ) 
+    )
   </update>
 
   <select id="selectGrpCdById" parameterType="string" resultType="string">
@@ -332,7 +332,7 @@
         #{useYn},
         #{regDt},
         #{regId}
-    ) 
+    )
   </update>
 
 </mapper>

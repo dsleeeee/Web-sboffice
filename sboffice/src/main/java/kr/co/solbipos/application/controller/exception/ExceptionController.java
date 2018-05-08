@@ -7,16 +7,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import kr.co.solbipos.application.domain.login.SessionInfo;
-import kr.co.solbipos.enums.Status;
-import kr.co.solbipos.exception.AuthenticationException;
-import kr.co.solbipos.exception.BizException;
-import kr.co.solbipos.service.message.MessageService;
-import kr.co.solbipos.service.session.SessionService;
-import kr.co.solbipos.structure.JavaScriptResult;
-import kr.co.solbipos.structure.Result;
-import kr.co.solbipos.utils.spring.StringUtil;
-import kr.co.solbipos.utils.spring.WebUtil;
+import kr.co.common.data.enums.Status;
+import kr.co.common.data.structure.JavaScriptResult;
+import kr.co.common.data.structure.Result;
+import kr.co.common.exception.AuthenticationException;
+import kr.co.common.exception.BizException;
+import kr.co.common.service.message.MessageService;
+import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.common.utils.spring.WebUtil;
+import kr.co.solbipos.application.domain.login.SessionInfoVO;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -37,20 +37,20 @@ public class ExceptionController {
     /**
      * 업무관련 예외 처리<br>
      * {@link BizException} 를 상속 받은 모든 {@code Exception} 을 처리
-     * 
+     *
      * @param e {@code BizException}
      * @return JSON 요청일 때 아닐 때 script {@code String}
      */
     @ExceptionHandler(BizException.class)
     public Object bizExceptionHandle(BizException e) {
 
-        //SessionInfo sessionInfo = sessionService.getSessionInfo();
-        //String userId = isEmpty(sessionInfo) ? "" : sessionInfo.getUserId();
+        //SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+        //String userId = isEmpty(sessionInfoVO) ? "" : sessionInfoVO.getUserId();
 
         String errorMessage = e.getMessage();
         String responseURL = e.getResponseURL();
         Status status = e.getStatus();
-        
+
         if (WebUtil.isJsonRequest()) {
             if(isEmpty(status)) {
                 status = Status.FAIL;
@@ -70,7 +70,7 @@ public class ExceptionController {
 
     /**
      * 인증 예외 처리
-     * 
+     *
      * @param e {@code AuthenticationException}
      * @return JSON 요청이 아닐 때 script {@code String}
      * @see ExceptionController#bizExceptionHandle( BizException e )
@@ -82,7 +82,7 @@ public class ExceptionController {
 
     /**
      * {@code BizException}, {@code AuthenticationException} 제외한 {@code Exception} 처리
-     * 
+     *
      * @param e {@code Exception}
      * @return JSON 요청이 아닐 때 view name {@code String}
      */
@@ -90,8 +90,8 @@ public class ExceptionController {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Object exceptionHandle(Exception e) {
 
-        SessionInfo sessionInfo = sessionService.getSessionInfo();
-        String userId = isEmpty(sessionInfo) ? "" : sessionInfo.getUserId();
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+        String userId = isEmpty(sessionInfoVO) ? "" : sessionInfoVO.getUserId();
 
         log.error("Exception : id: {}", userId, e);
 
