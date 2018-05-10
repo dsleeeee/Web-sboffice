@@ -85,7 +85,7 @@ button {outline:none; border:0; font-family:'NotoR', Malgun Gothic, '맑은 고�
  * **************************************** */
 .w4 {width:4%;} .w5 {width:5%;} .w7 {width:7%;} .w8 {width:8%;} .w10 {width:10%;} .w11 {width:11.111111%;} .w15 {width:15%;} .w20 {width:20%;} .w25 {width:25%;} .w28 {width:28%;} .w30 {width:30%;} .w33 {width:33.333333%;} .w35 {width:35%;} .w40 {width:40%;} .w45 {width:45%;} .w50 {width:50%;} .w60 {width:60%;} .w65 {width:65%;} .w70 {width:70%;} .w75 {width:75%;} .w80 {width:80%;} .w85 {width:85%;} .w90 {width:90%;} .w100 {width:100%;} 
 
-.w98px {width:98px;} .w105 {width:105px;} .w110 {width:110px;} .w115 {width:115px;} .w120 {width:120px;} .w130 {width:130px;} .w150 {width:150px;} .w180 {width:180px;} .w200 {width:200px;} .w210 {width:210px;} .w500 {width:500px;} .w600 {width:600px;} .w700 {width:700px;} .w800 {width:800px;}
+.w98px {width:98px;} .w105 {width:105px;} .w110 {width:110px;} .w115 {width:115px;} .w120 {width:120px;} .w130 {width:130px;} .w150 {width:150px;} .w180 {width:180px;} .w200 {width:200px;} .w210 {width:210px;} .w500 {width:500px;} .w600 {width:600px;} .w700 {width:700px;} .w800 {width:800px;} .w870 {width:870px;}
 
 .b4 {border:1px solid #dbdbdb;} .br {border-right:1px solid #dbdbdb;} .bl {border-left:1px solid #dbdbdb;} .bb {border-bottom:1px solid #dbdbdb;} .bt {border-top:1px solid #dbdbdb;}
 
@@ -1173,6 +1173,28 @@ a.btn_underline, a.btn_underline:hover, a.btn_underline.on {background-position:
 .tabType2 ul li a:hover {background:RGBA(0,0,0,0.2); color:#fff; transition:all 0.3s;}
 
 .ic_notice span {background:#444; color:#fff; border-radius:100%; display:inline-block; width:40px; height:40px; line-height:40px; text-align:center; font-size:1.5em;}
+
+/*즐겨찾기 관리*/
+.txtIcFav {width:18px; height:17px; display:inline-block; background:url(../img/ic_menu_org.png) no-repeat; background-position:0 -17px; position:relative; top:2px;}
+.menuOrg {width:790px;}
+.sort {overflow:hidden; position:relative;}
+.sort div {float:left; width:190px; margin-left:10px;}
+.sort div:first-child {margin-left:0;}
+.sort .depth1 {font-size:0.75em; background:#e8e8e8; height:35px; line-height:35px; border-top:1px solid #ccc; border-bottom:1px solid #ccc; color:#222; padding:0 10px;}
+.sort .depth2 {font-size:0.75em; background:#f6f6f6; line-height:1.3em; border-top:1px solid #e8e8e8; border-bottom:1px solid #e8e8e8; color:#222; padding:4px 10px;}
+.sort .depth1+.depth2 {border-top:0px;}
+.sort ul {padding:5px 0;}
+.sort ul li {padding:6px 60px 6px 10px; position:relative;}
+.sort ul li span {font-size:0.75em;}
+.sort ul li span.txt {display:block; line-height:1.3em;}
+.sort ul li span.btn {width:46px; height:17px; position:absolute; right:5px; top:50%; margin-top:-8px;}
+.sort ul li span.btn .ic_fav {width:18px; height:17px; display:inline-block; background:url(../img/ic_menu_org.png) no-repeat; margin-right:10px;}
+.sort ul li span.btn .ic_fav.on {background-position:0 -17px;}
+.sort ul li span.btn .ic_fav.off {background-position:0 0;}
+.sort ul li span.btn .ic_fix {width:18px; height:17px; display:inline-block; background:url(../img/ic_menu_org.png) no-repeat;}
+.sort ul li span.btn .ic_fix.on {background-position:-18px -17px;}
+.sort ul li span.btn .ic_fix.off {background-position:-18px 0;}
+
 
 
 /* **************************************** *
