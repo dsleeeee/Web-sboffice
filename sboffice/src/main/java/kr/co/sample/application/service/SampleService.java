@@ -2,7 +2,6 @@ package kr.co.sample.application.service;
 
 import java.util.HashMap;
 import java.util.List;
-import kr.co.common.data.structure.DefaultMap;
 import kr.co.sample.application.domain.CcdCodemTVO;
 import kr.co.sample.application.domain.SslTrdtlTVO;
 import kr.co.sample.application.domain.SslTrhdrTVO;

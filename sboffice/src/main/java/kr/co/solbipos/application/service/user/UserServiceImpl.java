@@ -28,7 +28,6 @@ import kr.co.solbipos.application.enums.user.PwChgResult;
 import kr.co.solbipos.application.enums.user.PwFindResult;
 import kr.co.solbipos.application.persistence.user.UserMapper;
 import kr.co.solbipos.application.service.login.LoginService;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 public class UserServiceImpl implements UserService {

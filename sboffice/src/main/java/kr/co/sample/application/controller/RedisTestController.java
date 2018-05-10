@@ -13,7 +13,6 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.domain.login.SessionInfoVO;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author 정용길

@@ -2,19 +2,21 @@ package kr.co.common.exception;
 
 import kr.co.common.data.enums.Status;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 업무관련 예외
- * 
+ *
  * @author 이호원
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class BizException extends RuntimeException {
     private static final long serialVersionUID = 3209717720718123566L;
-    
+
     /** 응답 유형 */
     private Status status;
-    
+
     /** 리턴 URL */
     private String responseURL = "";
 
@@ -33,7 +35,7 @@ public class BizException extends RuntimeException {
         super(message);
         this.responseURL = responseURL;
     }
-    
+
     /**
      * @param status
      * @param message
@@ -42,7 +44,7 @@ public class BizException extends RuntimeException {
         super(message);
         this.status = status;
     }
-    
+
     /**
      * @param status
      * @param message

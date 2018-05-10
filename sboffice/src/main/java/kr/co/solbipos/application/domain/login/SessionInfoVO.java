@@ -133,6 +133,9 @@ public class SessionInfoVO extends CmmVO {
     /** 즐겨찾기메뉴 조회 (JSON) */
     private String bkmkData;
 
+    /** 고정 메뉴 (JSON) */
+    private String fixData;
+
     /** 전체 메뉴 : 위즈모 그리드용 데이터 */
     //private String madeMenuData;
 

@@ -1,7 +1,7 @@
 package kr.co.sample.application.controller;
 
-import static kr.co.common.utils.spring.StringUtil.*;
-import static org.springframework.util.StringUtils.*;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
+import static org.springframework.util.StringUtils.isEmpty;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
