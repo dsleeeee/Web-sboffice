@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="kr.co.solbipos.application.persistence.com.BkmkMapper">
+<mapper namespace="kr.co.solbipos.application.persistence.com.FixingMapper">
 
-	<!-- 즐겨찾기관리 등록 -->
-    <insert id="insertBkmk" parameterType="bkmkVO">
-        /* BkmkMapper.insertBkmk */
+	<!-- 고정메뉴 등록 -->
+    <insert id="insertFixing" parameterType="fixingVO">
+        /* FixingMapper.insertFixing */
         <foreach collection="resrceCds" item="resrceCds" open="INSERT ALL " close="SELECT * FROM DUAL" separator=" " >
-        INTO TB_WB_BKMK
+        INTO TB_WB_FIXING
         (
             USER_ID,
             RESRCE_CD,
@@ -24,12 +24,12 @@
         </foreach>
     </insert>
 
-    <!-- 즐겨찾기관리 삭제 -->
-    <delete id="deleteBkmk" parameterType="bkmkVO">
-        /* BkmkMapper.deleteBkmk */
+    <!-- 고정메뉴 삭제 -->
+    <delete id="deleteFixing" parameterType="fixingVO">
+        /* FixingMapper.deleteFixing */
         DELETE
         FROM
-            TB_WB_BKMK
+            TB_WB_FIXING
         WHERE
             USER_ID = #{userId}
     </delete>

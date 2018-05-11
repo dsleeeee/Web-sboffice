@@ -129,6 +129,49 @@
       });
 //      return $.post( url, data, func, "json" );
     }
+    , postJSONSave: function( url, data, succ, fail ){
+    	return $.ajax({
+    		type: "POST",
+    		url: url,
+    		data: data,
+    		success: function(result) {
+    			if(result.status === "OK") {
+    				return succ(result);
+    			}
+    			else if(result.status === "FAIL") {
+    				return fail(result);
+    			}
+    			else if(result.status === "SESSION_EXFIRE") {
+    				s_alert.popOk(result.message, function() {
+    					location.href = result.url;
+    				});
+    			}
+    			else if(result.status === "SERVER_ERROR") {
+    				s_alert.pop(result.message);
+    			}
+    			else {
+    				var msg = result.status + " : " + result.message;
+    				alert(msg);
+    			}
+    		},
+    		cache: false,
+    		async:true,
+    		dataType: "json",
+    		beforeSend: function() {
+    			$("#_saveTent, #_saving").show();
+    		},
+    		complete: function() {
+    			$("#_saveTent, #_saving").hide();
+    		},
+    		error : function(){
+    			$("#_saveTent, #_saving").hide();
+    		}
+    	})
+    	.fail(function(){
+    		s_alert.pop("Ajax Fail");
+    	});
+//      return $.post( url, data, func, "json" );
+    }
     , postJSONArray: function( url, data, succ, fail ){
       return $.ajax({
         type: "POST",
@@ -210,7 +253,10 @@
 
 }( "undefined" != typeof window ? window : this, jQuery );
 
+//트리 생성
 var pNode;
+var allMenu = "";
+var bkmkMenu = "";
 // 트리 생성
 function makeTree(div, data, initMenu) {
 
@@ -281,8 +327,4 @@ function makeTree(div, data, initMenu) {
 
   return tree;
 }
-
-// 트리 생성
-var allMenu = "";
-var bkmkMenu = "";
 

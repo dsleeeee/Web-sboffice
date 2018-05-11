@@ -15,12 +15,18 @@ public class BkmkServiceImpl implements BkmkService {
     @Override
     public int saveBkmk( BkmkVO bkmkVO, String userId ) {
 
+        int result = 0;
+
         bkmkVO.setUserId( userId );
-        bkmkVO.setUseYn( "Y" );
         bkmkVO.setRegDt( currentDateTimeString() );
         bkmkVO.setRegId( userId );
-
-        return bkmkMapper.saveBkmk( bkmkVO );
+        // 삭제후 재등록
+        if ( bkmkMapper.deleteBkmk( bkmkVO ) > -1 ) {
+            if ( bkmkVO.getResrceCds() != null && bkmkVO.getResrceCds().length > 0 ) {
+                result = bkmkMapper.insertBkmk( bkmkVO );
+            }
+        }
+        return result;
     }
 
 }

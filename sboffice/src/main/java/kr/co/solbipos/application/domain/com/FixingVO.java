@@ -5,15 +5,15 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 즐겨찾기 관리 <br>
+ * 고정메뉴 관리 <br>
  *
  * @author 노현수
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class BkmkVO extends CmmVO {
+public class FixingVO extends CmmVO {
 
-    private static final long serialVersionUID = -8417487189063159637L;
+    private static final long serialVersionUID = -4799786653132758521L;
 
     /** 사용자 아이디 */
     private String userId;

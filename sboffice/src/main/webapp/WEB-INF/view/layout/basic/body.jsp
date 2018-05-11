@@ -56,6 +56,10 @@
   <c:import url="/WEB-INF/view/layout/basic/loading.jsp">
   </c:import>
 
+  <%-- 저장 이미지 추가 --%>
+  <c:import url="/WEB-INF/view/layout/basic/saving.jsp">
+  </c:import>
+
   <%-- 즐겨찾기관리 팝업 추가 --%>
   <c:import url="/WEB-INF/view/application/layer/bkmk.jsp">
   </c:import>

@@ -9,7 +9,10 @@ import kr.co.solbipos.application.domain.com.BkmkVO;
  */
 public interface BkmkMapper {
 
-    /** 즐겨찾기 메뉴 관리 */
-    int saveBkmk( BkmkVO bkmkVO );
+    /** 즐겨찾기 메뉴 등록 */
+    int insertBkmk( BkmkVO bkmkVO );
+
+    /** 즐겨찾기 메뉴 삭제 */
+    int deleteBkmk( BkmkVO bkmkVO );
 
 }
