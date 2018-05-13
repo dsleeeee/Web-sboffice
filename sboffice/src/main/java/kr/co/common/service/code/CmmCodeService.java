@@ -2,6 +2,7 @@ package kr.co.common.service.code;
 
 import java.util.List;
 import kr.co.common.data.domain.CommonCodeVO;
+import kr.co.common.data.structure.DefaultMap;
 
 /**
  * 공통 코드 관련 서비스
@@ -51,4 +52,12 @@ public interface CmmCodeService {
       * @return {@code <E> List<E>} 타입의 {@code List} 로 전달
       */
     <E> List<E> selectCmmCodeList(String nmcodeGrpCd);
+
+    /**
+     * 환경변수 조회
+     * 
+     * @param envstCd
+     * @return
+     */
+    <E> List<E> selectEnvCodeList(String envstCd);
 }

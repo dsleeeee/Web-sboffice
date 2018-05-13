@@ -20,6 +20,24 @@
    WHERE NMCODE_GRP_CD = #{nmcodeGrpCd}
   ]]>
   </select>
+  
+  <select id="selectEnvCodeList" parameterType="String" resultType="DefaultMap">
+  <![CDATA[
+  /* CmmCodeMapper.selectEnvCodeList */
+  SELECT ENVST_CD,
+         ENVST_VAL_CD,
+         ENVST_VAL_NM,
+         DEFLT_YN,
+         USE_YN,
+         REG_DT,
+         REG_ID,
+         MOD_DT,
+         MOD_ID
+    FROM TB_CM_ENVST_DTL
+   WHERE ENVST_CD = #{envstCd}
+     AND USE_YN = 'Y'
+  ]]>
+  </select>
 
 </mapper>
 

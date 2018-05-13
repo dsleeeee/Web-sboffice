@@ -100,7 +100,7 @@
   <div class="wj-TblWrapBr mt10" style="height: 400px;">
     <%-- 개발시 높이 조절해서 사용--%>
     <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
-    <div id="theGrid"></div>
+    <div id="theGrid" style="height:393px;"></div>
   </div>
   <%--//위즈모 테이블--%>
 
