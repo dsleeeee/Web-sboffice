@@ -101,4 +101,9 @@ public class CmmCodeServiceImpl implements CmmCodeService {
     public <E> List<E> selectCmmCodeList(String nmcodeGrpCd) {
         return cmmCodeMapper.selectCmmCodeList(nmcodeGrpCd);
     }
+
+    @Override
+    public <E> List<E> selectEnvCodeList(String envstCd) {
+        return cmmCodeMapper.selectEnvCodeList(envstCd);
+    }
 }

@@ -61,13 +61,6 @@ var useYn       = ${ccu.getCommCodeExcpAll("904")};
 var storeKindDataMap   = new wijmo.grid.DataMap(storeKind, 'value', 'name');  // 전체는 어떻게 할 것인지
 var posFgDataMap     = new wijmo.grid.DataMap(posFg, 'value', 'name');
 
-<%-- 데이터 초기화 --%>
-if(funcFgList.length > 0 ){
-  funcFgList.forEach(function(item, i){
-    item.no = (i+1);
-  });
-}
-
 <%-- CollectionView --%>
 var funcFgCView = new wijmo.collections.CollectionView(funcFgList);
 
@@ -168,22 +161,22 @@ grid1.formatItem.addHandler(function(s, e) {
   if (e.panel == s.cells) {
     var col = s.columns[e.col];
     var item = s.rows[e.row].dataItem;
-    
-    if( col.binding == "nmcodeNm" ) {
-      item.row = e.row;
-      item.col = e.col;
-      item.cls = "func_row"
-      var html = wijmo.format("<a href=\"javascript:;\" class=\"{cls}\" data-value=\"{row}\">{nmcodeNm}</a>", item);
-      e.cell.innerHTML = html;
+    if( col.binding == "nmcodeCd" ) {
+      wijmo.addClass(e.cell, 'wijLink');
     }
   }
 });
 
 <%-- 그리드 선택 이벤트 --%>
-$(document).on("click",".func_row",function() {
-  var row = $(this).data("value");
-  selectData = grid1.rows[row].dataItem;
-  srchFuncData(selectData);
+grid1.addEventListener(grid1.hostElement, 'mousedown', function(e) {
+  var ht = grid1.hitTest(e);
+  if( ht.cellType == wijmo.grid.CellType.Cell) {
+    var col = ht.panel.columns[ht.col];
+    if( col.binding == "nmcodeCd") {
+      selectData = grid1.rows[ht.row].dataItem;
+      srchFuncData(selectData);
+    }
+  }
 });
 
 <%-- 그리드2 데이터 조회 --%>
@@ -322,6 +315,15 @@ $("#btnDown").click(function(e){
 
 <%-- 추가 버튼 클릭 --%>
 $("#btnAdd").click(function(e){
+  grid2.collectionView.newItemCreator = function() {
+    return {
+      fnkeyNo: '자동채번',
+      posiAdjYn: 'N',
+      fnkeyFunUseYn0: 'N',
+      fnkeyFunUseYn1: 'N',
+      useYn: 'Y'
+    }
+  };
   var newItem = grid2.collectionView.addNew();
   newItem.fnkeyNo = "자동채번";
   grid2.collectionView.commitNew();
@@ -362,11 +364,15 @@ $("#btnSave").click(function(e){
     paramArr.push(grid2.collectionView.itemsRemoved[i]);
   }
   
+  if(paramArr.length <= 0) {
+    s_alert.pop("<s:message code='cmm.not.modify'/>");
+    return;
+  }
+  
   for(var i=0; i<paramArr.length; i++){
-    paramArr[i].posiAdjYn       = (paramArr[i].posiAdjYn      == true ? "Y":"N");
-    paramArr[i].fnkeyFunUseYn0  = (paramArr[i].fnkeyFunUseYn0 == true ? "Y":"N");
-    paramArr[i].fnkeyFunUseYn1  = (paramArr[i].fnkeyFunUseYn1 == true ? "Y":"N");
-    paramArr[i].useYn           = (paramArr[i].useYn          == true ? "Y":"N");
+    paramArr[i].posiAdjYn   = (paramArr[i].posiAdjYn   == true ? "Y":"N");
+    paramArr[i].cmmImgUseYn = (paramArr[i].cmmImgUseYn == true ? "Y":"N");
+    paramArr[i].foodImgseYn = (paramArr[i].foodImgseYn == true ? "Y":"N");
   }
   
   $.postJSONArray("${baseUrl}" + "save.sb", paramArr, function(result) {
