@@ -106,9 +106,9 @@
            COL_POSI     = #{colPosi}, 
            ROW_POSI     = #{rowPosi}, 
            WIDTH        = #{width}, 
-           HEIGHT       = #{height}, 
-           USE_YN       = #{useYn}, 
-           MOD_DT       = #{modDt}, 
+           HEIGHT       = #{height},
+           USE_YN       = #{useYn},
+           MOD_DT       = #{modDt},
            MOD_ID       = #{modId}
      WHERE FNKEY_NO     = #{fnkeyNo}
   </update>

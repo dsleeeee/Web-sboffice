@@ -18,8 +18,8 @@
              A.REG_ID,
              TO_CHAR(TO_DATE(A.MOD_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') MOD_DT,
              A.MOD_ID,
-             B.REG_CNT,
-             B.RECV_CNT
+             NVL(B.REG_CNT, 0) REG_CNT,
+             NVL(B.RECV_CNT, 0) RECV_CNT
         FROM TB_CM_POS_VERSN A,
             (
        SELECT VER_SER_NO, 
@@ -28,7 +28,7 @@
          FROM TB_CM_POS_VERSN_STORE
         GROUP BY VER_SER_NO
              ) B
-       WHERE B.VER_SER_NO = A.VER_SER_NO
+       WHERE B.VER_SER_NO (+)= A.VER_SER_NO
       ]]>
         <if test='verSerNo != null and verSerNo != ""'>
          AND A.VER_SER_NO = #{verSerNo}
