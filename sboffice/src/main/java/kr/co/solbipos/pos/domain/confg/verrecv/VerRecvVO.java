@@ -1,6 +1,5 @@
 package kr.co.solbipos.pos.domain.confg.verrecv;
 
-import org.hibernate.validator.constraints.NotBlank;
 import kr.co.solbipos.application.domain.cmm.PageVO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -12,7 +11,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class VerRecv extends PageVO {
+public class VerRecvVO extends PageVO {
     
     /** 버전일련번호 */
     private String verSerNo;

@@ -48,6 +48,7 @@ public class GridController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         // 그리드 레이아웃 저장 정보 세팅
+        gridDispItemVO.setResrceCd(sessionInfoVO.getCurrentMenu().getResrceCd());
         gridDispItemVO.setUserId(sessionInfoVO.getUserId());
         gridDispItemVO.setRegDt(currentDateTimeString());
         gridDispItemVO.setRegId(sessionInfoVO.getUserId());

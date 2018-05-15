@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.pos.persistence.confg.vermanage.VerManageMapper">
+
+  <select id="getList" parameterType="verInfoVO" resultType="DefaultMap">
+    /* VerManageMapper.getList */
+    <![CDATA[
+    SELECT *
+      FROM (
+      SELECT COUNT(1) OVER (PARTITION BY 1 ORDER BY 1) TOT_CNT,
+             ROW_NUMBER() OVER(PARTITION BY 1 ORDER BY 1) RNUM,
+             A.VER_SER_NO,
+             A.VER_SER_NM,
+             A.FILE_DESC,
+             A.FILE_SIZE,
+             A.FILE_DIR,
+             A.PROG_FG,
+             A.PGM_YN,
+             A.DB_YN,
+             A.IMG_YN,
+             A.USE_YN,
+             A.REG_DT,
+             A.REG_ID,
+             A.MOD_DT,
+             A.MOD_ID,
+             B.REG_CNT,
+             B.RECV_CNT
+        FROM TB_CM_POS_VERSN A,
+             (
+        SELECT VER_SER_NO, 
+               SUM(DECODE(VER_RECV_FG , '1' , 1, 0)) REG_CNT,
+               SUM(DECODE(VER_RECV_FG , '2' , 1, 0)) RECV_CNT
+          FROM TB_CM_POS_VERSN_STORE
+         GROUP BY VER_SER_NO
+             ) B
+       WHERE B.VER_SER_NO (+)= A.VER_SER_NO
+      ]]>
+      <if test='verSerNo != null and verSerNo != ""'>
+        AND A.VER_SER_NO = #{verSerNo}
+      </if>
+      <if test='fileDesc != null and fileDesc != ""'>
+        AND A.FILE_DESC = #{fileDesc}
+      </if>
+      ORDER BY A.REG_DT DESC
+       )
+    <![CDATA[
+     WHERE RNUM >= #{prev}
+       AND RNUM <= #{next}
+    ]]>
+  </select>
+  
+  <select id="dtlInfo" parameterType="verInfoVO" resultType="DefaultMap">
+    /* VerManageMapper.dtlInfo */
+    SELECT VER_SER_NO,
+           VER_SER_NM,
+           FILE_NM,
+           FILE_DESC,
+           FILE_SIZE,
+           FILE_DIR,
+           PROG_FG,
+           PGM_YN,
+           DB_YN,
+           IMG_YN,
+           USE_YN,
+           REG_DT,
+           REG_ID
+      FROM TB_CM_POS_VERSN
+     WHERE VER_SER_NO = #{verSerNo}
+  </select>
+  
+  <insert id="verRegist" parameterType="verInfoVO">
+    /* VerManageMapper.verRegist */
+    <![CDATA[
+    INSERT INTO TB_CM_POS_VERSN
+    (
+      VER_SER_NO,
+      VER_SER_NM,
+      FILE_NM,
+      FILE_SIZE,
+      FILE_DIR,
+      FILE_DESC,
+      PROG_FG,
+      PGM_YN,
+      DB_YN,
+      IMG_YN,
+      USE_YN,
+      REG_DT,
+      REG_ID,
+      MOD_DT,
+      MOD_ID
+    )
+    VALUES
+    (
+      #{verSerNo},
+      #{verSerNm},
+      #{fileNm},
+      #{fileSize},
+      #{fileDir},
+      #{fileDesc},
+      #{progFg},
+      #{pgmYn},
+      #{dbYn},
+      #{imgYn},
+      #{useYn},
+      #{regDt},
+      #{regId},
+      #{modDt},
+      #{modId}
+    )
+    ]]>
+  </insert>
+
+  <update id="verModify" parameterType="verInfoVO">
+    /* VerManageMapper.verModify */
+    <![CDATA[
+    UPDATE TB_CM_POS_VERSN
+       SET VER_SER_NM = #{verSerNm},
+           FILE_NM    = #{fileNm},
+           FILE_SIZE  = #{fileSize},
+           FILE_DIR   = #{fileDir},
+           FILE_DESC  = #{fileDesc},
+           PROG_FG    = #{progFg},
+           PGM_YN     = #{pgmYn},
+           DB_YN      = #{dbYn},
+           IMG_YN     = #{imgYn},
+           USE_YN     = #{useYn},
+           MOD_DT     = #{modDt},
+           MOD_ID     = #{modId}
+     WHERE VER_SER_NO = #{verSerNo}
+     ]]>
+  </update>
+  
+  <delete id="verDelete" parameterType="verInfoVO" >
+    /* VerManageMapper.deleteVersion */
+    DELETE
+      FROM TB_CM_POS_VERSN
+     WHERE VER_SER_NO = #{verSerNo}
+  </delete>
+
+  <select id="storeList" parameterType="verInfoVO" resultType="DefaultMap">
+    /* VerManageMapper.storeList */
+    SELECT  COUNT(1) OVER (PARTITION BY 1 ORDER BY 1) TOT_CNT,
+            ROW_NUMBER() OVER (PARTITION BY 1 ORDER BY 1) RNUM,
+            A.VER_SER_NO,
+            A.STORE_CD,
+            B.STORE_NM,
+            B.SYS_STAT_FG,
+            C.POS_NO,
+            C.POS_NM,
+            A.VER_RECV_FG,
+            A.VER_RECV_DT,
+            A.POS_IP,
+            A.REG_DT,
+            A.REG_ID,
+            A.MOD_DT,
+            A.MOD_ID
+       FROM TB_CM_POS_VERSN_STORE A,
+            TB_MS_STORE B,
+            TB_MS_POS C
+      WHERE B.STORE_CD = A.STORE_CD
+        AND C.STORE_CD = A.STORE_CD
+        AND C.POS_NO = A.POS_NO
+        AND A.VER_SER_NO = #{verSerNo}
+  </select>
+  
+  <select id="srchStoreList" parameterType="applcStoreVO" resultType="DefaultMap">
+    /* VerManageMapper.srchStoreList */
+    <![CDATA[
+    SELECT *
+      FROM (
+      SELECT COUNT(1) OVER (PARTITION BY 1 ORDER BY 1) TOT_CNT,
+             ROW_NUMBER() OVER(PARTITION BY 1 ORDER BY 1) RNUM,
+             A.STORE_CD, A.POS_NO, A.POS_NM, A.POS_VER_NO LAST_VER,
+             B.SYS_STAT_FG, B.VAN_CD, B.CLS_FG, B.STORE_NM,
+             C.HQ_OFFICE_CD, C.HQ_OFFICE_NM
+        FROM TB_MS_POS A,
+             TB_MS_STORE B,
+            TB_HQ_OFFICE C
+       WHERE A.USE_YN = 'Y'
+         AND (A.STORE_CD, A.POS_NO) NOT IN (
+                                        SELECT STORE_CD, POS_NO
+                                        FROM TB_CM_POS_VERSN_STORE
+                                       WHERE VER_SER_NO = #{verSerNo}
+                                        )
+         AND B.STORE_CD = A.STORE_CD
+         AND C.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+       ]]>
+      <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+         AND B.HQ_OFFICE_CD = #{hqOfficeCd}
+      </if>
+      <if test='hqOfficeNm != null and hqOfficeNm != ""'>
+         AND C.HQ_OFFICE_NM = #{hqOfficeNm}
+      </if>
+      <if test='storeCd != null and storeCd != ""'>
+         AND A.STORE_CD = #{storeCd}
+      </if>
+      <if test='storeNm != null and storeNm != ""'>
+         AND B.STORE_NM = #{storeNm}
+      </if>
+      <if test='clsFg != null and clsFg != "" and clsFg.toString() != "ALL"'>
+         AND B.CLS_FG = #{clsFg}
+      </if>
+      <if test='sysStatFg != null and sysStatFg != "" and sysStatFg.toString() != "ALL"'>
+         AND B.SYS_STAT_FG = #{sysStatFg}
+      </if>
+      <if test='vanCd != null and vanCd != "" and vanCd.toString() != "ALL"'>
+         AND B.VAN_C = #{vanCd}
+      </if>
+      <if test='lastVer != null and lastVer != ""'>
+         AND A.POS_VER_NO = #{lastVer}
+      </if>
+       ORDER BY HQ_OFFICE_CD, STORE_CD
+        )
+      <![CDATA[
+      WHERE RNUM >= #{prev}
+        AND RNUM <= #{next}
+      ]]>
+  </select>
+  
+  <insert id="registStore" parameterType="applcStoreVO" >
+    /* VerManageMapper.registStore */
+    <![CDATA[
+    INSERT INTO TB_CM_POS_VERSN_STORE
+    (
+      VER_SER_NO,
+      STORE_CD,
+      POS_NO,
+      VER_RECV_FG,
+      VER_RECV_DT,
+      POS_IP,
+      REG_DT,
+      REG_ID,
+      MOD_DT,
+      MOD_ID
+    )
+    VALUES
+    (
+      #{verSerNo},
+      #{storeCd},
+      #{posNo},
+      #{verRecvFg},
+      #{verRecvDt},
+      #{posIp},
+      #{regDt},
+      #{regId},
+      #{modDt},
+      #{modId}
+    )
+    ]]>
+  </insert>
+
+  <select id="chkVerSerNo" parameterType="verInfoVO" resultType="Integer">
+    /* VerManageMapper.chkVerSerNo */
+    SELECT COUNT(1)
+      FROM TB_CM_POS_VERSN
+     WHERE VER_SER_NO = ${verSerNo}
+  </select>
+
+</mapper>
+

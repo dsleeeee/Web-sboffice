@@ -57,6 +57,8 @@ public class Prop {
     public String excelTempDir;
     @Value("#{config['excel.font']}")
     public String defaultFont;
+    @Value("#{config['file.upload.dir']}")
+    public String fileUploadDir;
 
     public String DELI = String.valueOf((char) 31);
 }

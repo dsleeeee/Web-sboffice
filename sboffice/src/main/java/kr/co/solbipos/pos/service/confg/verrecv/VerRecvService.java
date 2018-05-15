@@ -1,7 +1,7 @@
 package kr.co.solbipos.pos.service.confg.verrecv;
 
 import java.util.List;
-import kr.co.solbipos.pos.domain.confg.verrecv.VerRecv;
+import kr.co.solbipos.pos.domain.confg.verrecv.VerRecvVO;
 import kr.co.common.data.structure.DefaultMap;
 
 /**
@@ -17,7 +17,7 @@ public interface VerRecvService {
      * @param verRecv
      * @return
      */
-    List<DefaultMap<String>> selectVerList(VerRecv verRecv);
+    List<DefaultMap<String>> selectVerList(VerRecvVO verRecv);
 
     /**
      * 버전별수신현황 - 매장 목록 조회
@@ -25,7 +25,7 @@ public interface VerRecvService {
      * @param verRecv
      * @return
      */
-    List<DefaultMap<String>> selectStoreList(VerRecv verRecv);
+    List<DefaultMap<String>> selectStoreList(VerRecvVO verRecv);
 
     /**
      * 매장별수신현황 - 수신매장 목록 조회
@@ -33,7 +33,7 @@ public interface VerRecvService {
      * @param verRecv
      * @return
      */
-    List<DefaultMap<String>> selectStoreRecvList(VerRecv verRecv);
+    List<DefaultMap<String>> selectStoreRecvList(VerRecvVO verRecv);
 
     /**
      * 매장별수신현황 - 매장 리스트 조회 - 매장상세
@@ -41,7 +41,7 @@ public interface VerRecvService {
      * @param verRecv
      * @return
      */
-    List<DefaultMap<String>> selectStoreDtl(VerRecv verRecv);
+    List<DefaultMap<String>> selectStoreDtl(VerRecvVO verRecv);
 
     /**
      * 버전별매장현황 - 버전 리스트 조회
@@ -49,7 +49,7 @@ public interface VerRecvService {
      * @param verRecv
      * @return
      */
-    List<DefaultMap<String>> selectVerStoreList(VerRecv verRecv);
+    List<DefaultMap<String>> selectVerStoreList(VerRecvVO verRecv);
 
     /**
      * 버전별매장현황 - 매장 리스트 조회
@@ -57,5 +57,6 @@ public interface VerRecvService {
      * @param verRecv
      * @return
      */
-    List<DefaultMap<String>> selectVerStoreDtlList(VerRecv verRecv);
+    List<DefaultMap<String>> selectVerStoreDtlList(VerRecvVO verRecv);
+
 }

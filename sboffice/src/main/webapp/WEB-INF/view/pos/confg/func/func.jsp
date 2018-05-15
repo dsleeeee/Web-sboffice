@@ -58,7 +58,7 @@ var storeKind   = ${ccu.getCommCodeExcpAll("088")};
 var posFg       = ${ccu.getCommCodeExcpAll("035")};
 var useYn       = ${ccu.getCommCodeExcpAll("904")};
 
-var storeKindDataMap   = new wijmo.grid.DataMap(storeKind, 'value', 'name');  // 전체는 어떻게 할 것인지
+var storeKindDataMap   = new wijmo.grid.DataMap(storeKind, 'value', 'name');
 var posFgDataMap     = new wijmo.grid.DataMap(posFg, 'value', 'name');
 
 <%-- CollectionView --%>

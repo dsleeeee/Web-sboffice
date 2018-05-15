@@ -11,18 +11,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import kr.co.common.data.enums.Status;
-import kr.co.solbipos.pos.domain.confg.verrecv.VerRecv;
-import kr.co.solbipos.pos.service.confg.verrecv.VerRecvService;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
-import lombok.extern.slf4j.Slf4j;
+import kr.co.solbipos.pos.domain.confg.verrecv.VerRecvVO;
+import kr.co.solbipos.pos.service.confg.verrecv.VerRecvService;
 
 /**
  * 포스관리 > POS 설정관리 > POS 버전 수신현황
  * 
  * @author 김지은
  */
-@Slf4j
+
 @Controller
 @RequestMapping(value = "/pos/confg/verrecv/")
 public class VerRecvController {
@@ -55,7 +54,7 @@ public class VerRecvController {
      */
     @RequestMapping(value = "verrecv/list.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result verrecvlist(VerRecv verRecv, HttpServletRequest request,
+    public Result verrecvlist(VerRecvVO verRecv, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
         List<DefaultMap<String>> list = service.selectVerList(verRecv);
@@ -73,7 +72,7 @@ public class VerRecvController {
      */
     @RequestMapping(value = "verrecv/storeList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result verrecvStoreList(VerRecv verRecv, HttpServletRequest request,
+    public Result verrecvStoreList(VerRecvVO verRecv, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
         List<DefaultMap<String>> list = service.selectStoreList(verRecv);
@@ -105,7 +104,7 @@ public class VerRecvController {
      */
     @RequestMapping(value = "storerecv/list.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result storerecvList(VerRecv verRecv, HttpServletRequest request,
+    public Result storerecvList(VerRecvVO verRecv, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
         List<DefaultMap<String>> list = service.selectStoreRecvList(verRecv);
@@ -124,12 +123,10 @@ public class VerRecvController {
      */
     @RequestMapping(value = "storerecv/storeDtl.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result storerecvStoreDtl(VerRecv verRecv, HttpServletRequest request,
+    public Result storerecvStoreDtl(VerRecvVO verRecv, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
         List<DefaultMap<String>> list = service.selectStoreDtl(verRecv);
-        
-        log.debug("list ====> "+ list.size());
         
         return returnListJson(Status.OK, list);
     }
@@ -160,7 +157,7 @@ public class VerRecvController {
      */
     @RequestMapping(value = "verstore/list.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result verstoreList(VerRecv verRecv, HttpServletRequest request,
+    public Result verstoreList(VerRecvVO verRecv, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
         List<DefaultMap<String>> list = service.selectVerStoreList(verRecv);
@@ -179,7 +176,7 @@ public class VerRecvController {
      */
     @RequestMapping(value = "verstore/storeList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result verstoreStoreList(VerRecv verRecv, HttpServletRequest request,
+    public Result verstoreStoreList(VerRecvVO verRecv, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
         List<DefaultMap<String>> list = service.selectVerStoreDtlList(verRecv);

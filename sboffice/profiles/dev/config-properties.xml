@@ -64,4 +64,7 @@
   <entry key="email.host">192.168.0.1</entry>
   <entry key="email.port">31901</entry>
   
+  <!-- 파일업로드 관련 -->
+  <entry key="file.upload.dir">resources/upload/</entry>
+  
 </properties>

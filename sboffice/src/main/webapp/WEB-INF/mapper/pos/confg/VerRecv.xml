@@ -3,7 +3,7 @@
 
 <mapper namespace="kr.co.solbipos.pos.persistence.confg.verrecv.VerRecvMapper">
 
-  <select id="selectVerList" parameterType="verRecv" resultType="DefaultMap">
+  <select id="selectVerList" parameterType="verRecvVO" resultType="DefaultMap">
     /* VerRecvMapper.selectVerList */
     <![CDATA[
     SELECT *
@@ -44,7 +44,7 @@
     ]]>
   </select>
   
-  <select id="selectStoreList" parameterType="verRecv" resultType="DefaultMap">
+  <select id="selectStoreList" parameterType="verRecvVO" resultType="DefaultMap">
     /* VerRecvMapper.selectStoreList */
     <![CDATA[
     SELECT *
@@ -75,7 +75,7 @@
       ]]>
   </select>
   
-  <select id="selectStoreRecvList" parameterType="verRecv" resultType="DefaultMap">
+  <select id="selectStoreRecvList" parameterType="verRecvVO" resultType="DefaultMap">
     /* VerRecvMapper.selectStoreRecvList */
     <![CDATA[
     SELECT A.HQ_OFFICE_CD,
@@ -140,7 +140,7 @@
      ORDER BY A.HQ_OFFICE_CD, B.STORE_CD 
   </select>
   
-  <select id="selectStoreDtl" parameterType="verRecv" resultType="DefaultMap">
+  <select id="selectStoreDtl" parameterType="verRecvVO" resultType="DefaultMap">
     /* VerRecvMapper.selectStoreDtl */
     <![CDATA[
     SELECT A.VER_SER_NO, 
@@ -157,7 +157,7 @@
      ]]>
   </select>
   
-  <select id="selectVerStoreList" parameterType="verRecv" resultType="DefaultMap">
+  <select id="selectVerStoreList" parameterType="verRecvVO" resultType="DefaultMap">
     /* VerRecvMapper.selectVerStoreList */
     <![CDATA[
     SELECT *
@@ -191,7 +191,7 @@
   </select>
   
    
-  <select id="selectVerStoreDtlList" parameterType="verRecv" resultType="DefaultMap">
+  <select id="selectVerStoreDtlList" parameterType="verRecvVO" resultType="DefaultMap">
     /* VerRecvMapper.selectVerStoreDtlList */
     <![CDATA[
     SELECT *

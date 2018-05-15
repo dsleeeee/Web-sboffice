@@ -191,10 +191,33 @@
         }
       });
     }
+    , postJSONFile: function( url, form, succ, fail ){
+      return $.ajax({
+        url: url,
+        type: "POST",
+        data: form,
+        processData: false, 
+        contentType: false,
+        cache: false,
+        success : function(result) {
+          alert("success");
+        },
+        error : function(result){
+          alert("error");
+        }
+      })
+      .fail(function(){
+        s_alert.pop("Ajax Fail");
+      });
+//      return $.post( url, data, func, "json" );
+      
+      return false;
+    }
     , countUtf8Bytes: function( s ){
       for( var b = 0, i = 0, c; c = s.charCodeAt(i++); b += c >> 11 ? 3 : (c >> 7 ? 2 : 1) );
       return b;
     }
+    
   });
   
   // jQuery Selector Method 추가
