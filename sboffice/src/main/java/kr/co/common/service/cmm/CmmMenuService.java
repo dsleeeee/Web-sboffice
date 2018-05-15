@@ -6,8 +6,8 @@ import kr.co.solbipos.application.domain.cmm.MenuUseHistVO;
 import kr.co.solbipos.application.domain.cmm.StoreVO;
 import kr.co.solbipos.application.domain.login.SessionInfoVO;
 import kr.co.solbipos.application.domain.resource.MenuVO;
-import kr.co.solbipos.application.domain.resource.ResrceInfoVO;
 import kr.co.solbipos.application.domain.resource.ResrceInfoBaseVO;
+import kr.co.solbipos.application.domain.resource.ResrceInfoVO;
 
 /**
  *
@@ -136,8 +136,7 @@ public interface CmmMenuService {
      * @param authedList
      * @return
      */
-    List<MenuVO> makeTreeData(List<DefaultMap<String>> list,
-            List<DefaultMap<String>> authedList);
+    List<MenuVO> makeTreeData(List<DefaultMap<String>> list, List<DefaultMap<String>> authedList);
 
 }
 

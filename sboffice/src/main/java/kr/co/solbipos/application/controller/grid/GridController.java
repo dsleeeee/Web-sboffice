@@ -16,7 +16,6 @@ import kr.co.common.service.grid.GridSupportService;
 import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.domain.cmm.GridDispItemVO;
 import kr.co.solbipos.application.domain.login.SessionInfoVO;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * 그리드 관련 공통 기능 컨트롤러

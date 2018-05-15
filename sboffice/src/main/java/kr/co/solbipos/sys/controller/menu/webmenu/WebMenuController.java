@@ -1,7 +1,9 @@
 package kr.co.solbipos.sys.controller.menu.webmenu;
 
-import static kr.co.common.utils.grid.ReturnUtil.*;
-import static kr.co.common.utils.spring.StringUtil.*;
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
+import static kr.co.common.utils.grid.ReturnUtil.returnJsonBindingFieldError;
+import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 import java.util.HashMap;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +23,6 @@ import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.domain.resource.ResrceInfoVO;
 import kr.co.solbipos.sys.service.menu.webmenu.WebMenuService;
 import kr.co.solbipos.sys.validate.menu.webmenu.WebMenuSave;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  *
@@ -29,7 +30,6 @@ import lombok.extern.slf4j.Slf4j;
  *
  * @author 정용길
  */
-@Slf4j
 @Controller
 @RequestMapping(value = "sys/menu/webmenu/webmenu/")
 public class WebMenuController {

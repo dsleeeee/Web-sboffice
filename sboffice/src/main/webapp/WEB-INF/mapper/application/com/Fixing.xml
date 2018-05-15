@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.application.persistence.com.FixingMapper">
+
+	<!-- 고정메뉴 등록 -->
+    <insert id="insertFixing" parameterType="fixingVO">
+        /* FixingMapper.insertFixing */
+        <foreach collection="resrceCds" item="resrceCds" open="INSERT ALL " close="SELECT * FROM DUAL" separator=" " >
+        INTO TB_WB_FIXING
+        (
+            USER_ID,
+            RESRCE_CD,
+            USE_YN,
+            REG_DT,
+            REG_ID
+        ) VALUES (
+            #{userId},
+            #{resrceCds},
+            'Y',
+            #{regDt},
+            #{regId}
+        )
+        </foreach>
+    </insert>
+
+    <!-- 고정메뉴 삭제 -->
+    <delete id="deleteFixing" parameterType="fixingVO">
+        /* FixingMapper.deleteFixing */
+        DELETE
+        FROM
+            TB_WB_FIXING
+        WHERE
+            USER_ID = #{userId}
+    </delete>
+
+</mapper>

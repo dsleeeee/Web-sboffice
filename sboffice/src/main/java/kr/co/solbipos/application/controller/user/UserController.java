@@ -500,6 +500,7 @@ public class UserController {
         pwdChgHistVO.setPriorPwd(pwdChgVO.getCurrentPw());
         pwdChgHistVO.setRegDt(currentDateTimeString());
         pwdChgHistVO.setRegIp(getClientIp(WebUtil.getRequest()));
+        @SuppressWarnings("unused")
         int r2 = userService.insertPwdChgHist(pwdChgHistVO);
 
         HashMap<String, String> result = new HashMap<>();

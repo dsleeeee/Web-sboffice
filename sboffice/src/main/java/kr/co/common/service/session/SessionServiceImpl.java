@@ -1,6 +1,8 @@
 package kr.co.common.service.session;
 
-import static kr.co.common.utils.spring.StringUtil.*;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
+import static kr.co.common.utils.spring.StringUtil.generateUUID;
+import static org.springframework.util.StringUtils.isEmpty;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.http.Cookie;
@@ -46,42 +48,45 @@ public class SessionServiceImpl implements SessionService {
     private static final String SESSION_KEY = "SBSESSIONID";
 
     @Override
-    public String setSessionInfo(HttpServletRequest request, HttpServletResponse response,
-            SessionInfoVO sessionInfoVO) {
+    public String setSessionInfo( HttpServletRequest request, HttpServletResponse response,
+            SessionInfoVO sessionInfoVO ) {
         String sessionId = generateUUID();
 
         // sessionId 세팅
-        sessionInfoVO.setSessionId(sessionId);
+        sessionInfoVO.setSessionId( sessionId );
         // 권한 있는 메뉴 저장
-        sessionInfoVO.setAuthMenu(loginService.selectAuthMenu(sessionInfoVO));
+        sessionInfoVO.setAuthMenu( loginService.selectAuthMenu( sessionInfoVO ) );
         // 고정 메뉴 리스트 저장
-        sessionInfoVO.setFixMenu(cmmMenuService.selectFixingMenu(sessionInfoVO));
+        sessionInfoVO.setFixMenu( cmmMenuService.selectFixingMenu( sessionInfoVO ) );
         // 즐겨찾기 메뉴 리스트 저장
-        sessionInfoVO.setBkmkMenu(cmmMenuService.selectBkmkMenu(sessionInfoVO));
+        sessionInfoVO.setBkmkMenu( cmmMenuService.selectBkmkMenu( sessionInfoVO ) );
         // 전체메뉴 조회(리스트)
-        sessionInfoVO.setMenuData(convertToJson(cmmMenuService.makeMenu(sessionInfoVO, "A")));
+        sessionInfoVO.setMenuData( convertToJson( cmmMenuService.makeMenu( sessionInfoVO, "A" ) ) );
         // 즐겨찾기메뉴 조회 (리스트)
-        sessionInfoVO.setBkmkData(convertToJson(cmmMenuService.makeMenu(sessionInfoVO, "F")));
+        sessionInfoVO.setBkmkData( convertToJson( cmmMenuService.makeMenu( sessionInfoVO, "F" ) ) );
+        // 고정 메뉴 조회 (리스트)
+        sessionInfoVO.setFixData( convertToJson(sessionInfoVO.getFixMenu()) );
 
         // 본사는 소속된 가맹점을 세션에 저장
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            List<String> storeCdList = cmmMenuService.selectStoreCdList(sessionInfoVO.getOrgnCd());
-            sessionInfoVO.setArrStoreCdList(storeCdList);
+        if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
+            List<String> storeCdList =
+                    cmmMenuService.selectStoreCdList( sessionInfoVO.getOrgnCd() );
+            sessionInfoVO.setArrStoreCdList( storeCdList );
         }
 
         // redis에 세션 세팅
-        setSessionInfo(sessionId, sessionInfoVO);
+        setSessionInfo( sessionId, sessionInfoVO );
 
         // 쿠키 생성
-        makeCookie(sessionId);
+        makeCookie( sessionId );
         return sessionId;
     }
 
     @Override
-    public String setSessionInfo(SessionInfoVO sessionInfoVO) {
+    public String setSessionInfo( SessionInfoVO sessionInfoVO ) {
         String sessionId = sessionInfoVO.getSessionId();
         // redis에 세션 세팅
-        setSessionInfo(sessionId, sessionInfoVO);
+        setSessionInfo( sessionId, sessionInfoVO );
         return sessionId;
     }
 
@@ -91,31 +96,31 @@ public class SessionServiceImpl implements SessionService {
      * @param sessionId {@link String} 세션 ID
      * @param sessionInfo {@link SessionInfoVO}
      */
-    private void setSessionInfo(String sessionId, SessionInfoVO sessionInfoVO) {
-        if (redisConnService.isAvailable()) {
+    private void setSessionInfo( String sessionId, SessionInfoVO sessionInfoVO ) {
+        if ( redisConnService.isAvailable() ) {
             try {
-                redisCustomTemplate.set(redisCustomTemplate.makeKey(sessionId), sessionInfoVO,
-                        prop.sessionTimeout, TimeUnit.MINUTES);
-            } catch (Exception e) {
-                log.error("Redis server not available!! setSessionInfo {}", e);
+                redisCustomTemplate.set( redisCustomTemplate.makeKey( sessionId ), sessionInfoVO,
+                        prop.sessionTimeout, TimeUnit.MINUTES );
+            } catch ( Exception e ) {
+                log.error( "Redis server not available!! setSessionInfo {}", e );
                 redisConnService.disable();
             }
         }
     }
 
     @Override
-    public SessionInfoVO getSessionInfo(String sessionId) {
+    public SessionInfoVO getSessionInfo( String sessionId ) {
         SessionInfoVO sessionInfoVO = new SessionInfoVO();
-        if (redisConnService.isAvailable()) {
+        if ( redisConnService.isAvailable() ) {
             try {
-                sessionInfoVO = redisCustomTemplate.get(redisCustomTemplate.makeKey(sessionId));
-                if (!ObjectUtils.isEmpty(sessionInfoVO)) {
+                sessionInfoVO = redisCustomTemplate.get( redisCustomTemplate.makeKey( sessionId ) );
+                if ( !ObjectUtils.isEmpty( sessionInfoVO ) ) {
                     // 세션 타임 연장
-                    redisCustomTemplate.expire(redisCustomTemplate.makeKey(sessionId),
-                            prop.sessionTimeout, TimeUnit.MINUTES);
+                    redisCustomTemplate.expire( redisCustomTemplate.makeKey( sessionId ),
+                            prop.sessionTimeout, TimeUnit.MINUTES );
                 }
-            } catch (Exception e) {
-                log.error("Redis server not available!! getSessionInfo {}", e);
+            } catch ( Exception e ) {
+                log.error( "Redis server not available!! getSessionInfo {}", e );
                 redisConnService.disable();
             }
         }
@@ -123,34 +128,34 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public SessionInfoVO getSessionInfo(HttpServletRequest request) {
+    public SessionInfoVO getSessionInfo( HttpServletRequest request ) {
 
-        Cookie cookie = WebUtils.getCookie(request, SESSION_KEY);
-        String sessionId = cookie == null ? request.getParameter(SESSION_KEY) : cookie.getValue();
+        Cookie cookie = WebUtils.getCookie( request, SESSION_KEY );
+        String sessionId = cookie == null ? request.getParameter( SESSION_KEY ) : cookie.getValue();
 
         // HttpSession session = request.getSession();
         // String sessionId = session.getId();
 
-        SessionInfoVO sessionInfoVO = getSessionInfo(sessionId);
+        SessionInfoVO sessionInfoVO = getSessionInfo( sessionId );
         return sessionInfoVO;
     }
 
     @Override
     public SessionInfoVO getSessionInfo() {
-        return getSessionInfo(WebUtil.getRequest());
+        return getSessionInfo( WebUtil.getRequest() );
     }
 
     @Override
-    public boolean isValidSession(HttpServletRequest request) {
-        SessionInfoVO sessionInfoVO = getSessionInfo(request);
+    public boolean isValidSession( HttpServletRequest request ) {
+        SessionInfoVO sessionInfoVO = getSessionInfo( request );
 
         // 세션 객체가 없는 경우
-        if (isEmpty(sessionInfoVO)) {
+        if ( isEmpty( sessionInfoVO ) ) {
             return false;
         }
         // 세션 객체는 있지만 필수값들이 없는 경우
         else {
-            if (isEmpty(sessionInfoVO.getUserId()) && isEmpty(sessionInfoVO.getAuthMenu())) {
+            if ( isEmpty( sessionInfoVO.getUserId() ) && isEmpty( sessionInfoVO.getAuthMenu() ) ) {
                 return false;
             }
         }
@@ -159,43 +164,43 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public boolean isValidSession(String sessionId) {
-        return getSessionInfo(sessionId) != null;
+    public boolean isValidSession( String sessionId ) {
+        return getSessionInfo( sessionId ) != null;
     }
 
     @Override
-    public void deleteSessionInfo(String sessionId) {
-        if (redisConnService.isAvailable()) {
+    public void deleteSessionInfo( String sessionId ) {
+        if ( redisConnService.isAvailable() ) {
             try {
-                redisCustomTemplate.delete(redisCustomTemplate.makeKey(sessionId));
-            } catch (Exception e) {
-                log.error("Redis server not available!! deleteSessionInfo {}", e);
+                redisCustomTemplate.delete( redisCustomTemplate.makeKey( sessionId ) );
+            } catch ( Exception e ) {
+                log.error( "Redis server not available!! deleteSessionInfo {}", e );
                 redisConnService.disable();
             }
         }
     }
 
     @Override
-    public void deleteSessionInfo(HttpServletRequest request) {
-        if (!ObjectUtils.isEmpty(request)) {
-            SessionInfoVO sessionInfoVO = getSessionInfo(request);
-            if (!ObjectUtils.isEmpty(sessionInfoVO)) {
+    public void deleteSessionInfo( HttpServletRequest request ) {
+        if ( !ObjectUtils.isEmpty( request ) ) {
+            SessionInfoVO sessionInfoVO = getSessionInfo( request );
+            if ( !ObjectUtils.isEmpty( sessionInfoVO ) ) {
 
                 // redis
                 String sessionId = sessionInfoVO.getSessionId();
-                deleteSessionInfo(sessionId);
+                deleteSessionInfo( sessionId );
 
                 // cookie
-                deleteCookie(request);
+                deleteCookie( request );
             }
         }
     }
 
     @Override
-    public void deleteSessionInfo(SessionInfoVO sessionInfoVO) {
-        if (!ObjectUtils.isEmpty(sessionInfoVO)) {
-            deleteSessionInfo(sessionInfoVO.getSessionId());
-            deleteCookie(WebUtil.getRequest());
+    public void deleteSessionInfo( SessionInfoVO sessionInfoVO ) {
+        if ( !ObjectUtils.isEmpty( sessionInfoVO ) ) {
+            deleteSessionInfo( sessionInfoVO.getSessionId() );
+            deleteCookie( WebUtil.getRequest() );
         }
     }
 
@@ -204,9 +209,9 @@ public class SessionServiceImpl implements SessionService {
      *
      * @param request {@link HttpServletRequest}
      */
-    private void deleteCookie(HttpServletRequest request) {
-        Cookie cookie = WebUtils.getCookie(request, SESSION_KEY);
-        WebUtil.removeCookie(cookie);
+    private void deleteCookie( HttpServletRequest request ) {
+        Cookie cookie = WebUtils.getCookie( request, SESSION_KEY );
+        WebUtil.removeCookie( cookie );
     }
 
     /**
@@ -214,8 +219,8 @@ public class SessionServiceImpl implements SessionService {
      *
      * @param sessionId {@link String} 세션 ID
      */
-    private void makeCookie(String sessionId) {
-        WebUtil.setCookie(SESSION_KEY, sessionId, -1);
+    private void makeCookie( String sessionId ) {
+        WebUtil.setCookie( SESSION_KEY, sessionId, -1 );
     }
 
 }

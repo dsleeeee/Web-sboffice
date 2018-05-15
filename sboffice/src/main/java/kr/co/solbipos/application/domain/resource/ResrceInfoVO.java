@@ -3,8 +3,6 @@ package kr.co.solbipos.application.domain.resource;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
-import org.springframework.format.annotation.NumberFormat;
-import org.springframework.format.annotation.NumberFormat.Style;
 import kr.co.common.data.enums.UseYn;
 import kr.co.solbipos.application.domain.cmm.CmmVO;
 import kr.co.solbipos.application.enums.resrce.ResrceFg;
@@ -15,7 +13,7 @@ import lombok.EqualsAndHashCode;
 /**
  * 리소스<br>
  * table : TB_WB_RESRCE_INFO
- * 
+ *
  * @author 정용길
  */
 @Data
@@ -23,19 +21,19 @@ import lombok.EqualsAndHashCode;
 public class ResrceInfoVO extends CmmVO {
 
     private static final long serialVersionUID = 1L;
-    
+
     /** 리소스 코드 */
     private String resrceCd;
 
     /** 상위 리소스 */
     private String pResrce;
-    
+
     /** 리소스 구분 */
     private ResrceFg resrceFg;
-    
+
     /** 리소스 배열 : 메뉴 관리에서 기능 목록을 저장할때 사용 */
     private ResrceInfoVO[] resrceInfoArr;
-    
+
     /** 기능 구분 */
     private String funcFg;
 
@@ -57,13 +55,13 @@ public class ResrceInfoVO extends CmmVO {
     /** 표기 인덱스 */
     @NotNull(groups = {WebMenuSave.class}, message = "{webMenu.dispIndx}{cmm.require.text}")
     private Long dispIdx;
-    
+
     /** 메뉴 아이콘명 */
     private String iconNm;
 
     /** 사용 여부 */
     private UseYn useYn;
-    
+
     public String getpResrce() {
         return pResrce;
     }
@@ -71,7 +69,7 @@ public class ResrceInfoVO extends CmmVO {
     public void setpResrce(String pResrce) {
         this.pResrce = pResrce;
     }
-    
+
     public String getPResrce() {
         return pResrce;
     }

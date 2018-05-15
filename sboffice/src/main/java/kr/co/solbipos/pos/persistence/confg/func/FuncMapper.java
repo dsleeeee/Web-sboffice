@@ -2,7 +2,6 @@ package kr.co.solbipos.pos.persistence.confg.func;
 
 import java.util.List;
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.application.domain.login.SessionInfoVO;
 import kr.co.solbipos.pos.domain.confg.func.FuncVO;
 
 /**

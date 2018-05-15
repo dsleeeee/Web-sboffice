@@ -3,8 +3,6 @@ package kr.co.common.utils;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -18,10 +16,10 @@ public class DateUtil extends DateUtils {
     private static final String DEFAULT_YMD_FORMAT = "yyyyMMdd";
     private static final String DEFAULT_TIME_FORMAT = "HHmmss";
     private static final String DEFAULT_TIME_MS_FORMAT = "HHmmssSSS";
-    
+
     /**
      * Date객체 반환
-     * 
+     *
      * @return Date
      */
     private static Date currentDate() {
@@ -30,7 +28,7 @@ public class DateUtil extends DateUtils {
 
     /**
      * 현재 일자 가져오기
-     * 
+     *
      * @return 현재 일자 String
      */
     public static String currentDateString() {
@@ -39,24 +37,24 @@ public class DateUtil extends DateUtils {
 
     /**
      * 현재 일자 시간 가져오기
-     * 
+     *
      * @return 현재 일자 시간 String
      */
     public static String currentDateTimeString() {
         return date2string(currentDate(), DEFAULT_DATE_FORMAT);
     }
-    
+
     /**
-      * 
-      * 
+      *
+      *
       * @return 현재 시간 String
       */
     public static String currentTimeString() {
         return date2string(currentDate(), DEFAULT_TIME_FORMAT);
     }
-    
+
     /**
-      * 
+      *
       * @return
       */
     public static String currentTimeMsString() {
@@ -65,7 +63,7 @@ public class DateUtil extends DateUtils {
 
     /**
      * 년 변경 (날짜 포맷 필요)
-     * 
+     *
      * @param amount int
      * @param pattern String
      * @return Date
@@ -74,15 +72,15 @@ public class DateUtil extends DateUtils {
         Calendar cal = Calendar.getInstance();
         cal.setTime(currentDate());
         cal.add(Calendar.YEAR, amount);
-        
+
         DateFormat df = new SimpleDateFormat(pattern);
-        
+
         return df.format(cal.getTime());
     }
-    
+
     /**
      * 월 변경 (날짜 포맷 필요)
-     * 
+     *
      * @param amount int
      * @param pattern String
      * @return Date
@@ -91,15 +89,15 @@ public class DateUtil extends DateUtils {
         Calendar cal = Calendar.getInstance();
         cal.setTime(currentDate());
         cal.add(Calendar.MONTH, amount);
-        
+
         DateFormat df = new SimpleDateFormat(pattern);
-        
+
         return df.format(cal.getTime());
     }
-    
+
     /**
      * 일 변경 (날짜 포맷 필요)
-     * 
+     *
      * @param amount int
      * @param pattern String
      * @return Date
@@ -108,15 +106,15 @@ public class DateUtil extends DateUtils {
         Calendar cal = Calendar.getInstance();
         cal.setTime(currentDate());
         cal.add(Calendar.DATE, amount);
-        
+
         DateFormat df = new SimpleDateFormat(pattern);
-        
+
         return df.format(cal.getTime());
     }
-    
+
     /**
      * 일 변경
-     * 
+     *
      * @param amount int
      * @return date String
      */
@@ -126,7 +124,7 @@ public class DateUtil extends DateUtils {
 
     /**
      * 일 변경
-     * 
+     *
      * @param date String
      * @param amount int
      * @return date String
@@ -137,7 +135,7 @@ public class DateUtil extends DateUtils {
 
     /**
      * 일 변경
-     * 
+     *
      * @param date String
      * @param amount int
      * @param pattern String
@@ -149,7 +147,7 @@ public class DateUtil extends DateUtils {
 
     /**
      * 일 변경
-     * 
+     *
      * @param date Date
      * @param amount int
      * @param pattern String
@@ -161,7 +159,7 @@ public class DateUtil extends DateUtils {
 
     /**
      * 날짜 가져오기
-     * 
+     *
      * @param date String
      * @return date Date
      */
@@ -171,7 +169,7 @@ public class DateUtil extends DateUtils {
 
     /**
      * 날짜 시간 가져오기
-     * 
+     *
      * @param date String
      * @return date Date
      */
@@ -181,17 +179,17 @@ public class DateUtil extends DateUtils {
 
     /**
      * 시간 가져오기
-     * 
+     *
      * @param time String
      * @return date Date
      */
     public static Date getTime(String time) {
         return string2date(time, DEFAULT_TIME_FORMAT);
     }
-    
+
     /**
      * 날짜 가져오기 ( 날짜 포맷 필요 )
-     * 
+     *
      * @param date String
      * @param pattern String
      * @return date Date
@@ -213,7 +211,7 @@ public class DateUtil extends DateUtils {
 
     /**
      * Date &gt; String 변환
-     * 
+     *
      * @param date Date
      * @param pattern String
      * @return String 형 날짜
@@ -224,7 +222,7 @@ public class DateUtil extends DateUtils {
 
     /**
      * 입력일자가 있는 달의 총 일수 구하기
-     * 
+     *
      * @param date(YYYYMMDD) String
      * @return int 일수
      */
@@ -238,7 +236,7 @@ public class DateUtil extends DateUtils {
 
     /**
      * 주어진 날짜가 속한 주의 특정 요일 일자을 구함 <br>
-     * 
+     *
      * @param date String yyyymmdd 형식의 날짜
      * @param dayOfWeek int 요일 (Calendar.SUNDAY ~ SATURDAY 중 하나)
      * @return yyyyMMdd 형식의 8자리 날짜
@@ -267,7 +265,7 @@ public class DateUtil extends DateUtils {
 
     /**
      * 주어진 날짜의 요일을 구함
-     * 
+     *
      * @param date String yyyymmdd 형식의 날짜
      * @return int 요일 (Calendar.SUNDAY ~ SATURDAY 중 하나)
      */

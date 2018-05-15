@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletResponse;
 import kr.co.solbipos.application.domain.login.LoginHistVO;
 import kr.co.solbipos.application.domain.login.SessionInfoVO;
 import kr.co.solbipos.application.domain.resource.ResrceInfoVO;
-import kr.co.solbipos.application.enums.login.LoginResult;
 
 /**
  *
