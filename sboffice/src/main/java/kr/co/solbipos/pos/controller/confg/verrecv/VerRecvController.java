@@ -11,11 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import kr.co.common.data.enums.Status;
-<<<<<<< HEAD
-=======
-import kr.co.solbipos.pos.domain.confg.verrecv.VerRecv;
-import kr.co.solbipos.pos.service.confg.verrecv.VerRecvService;
->>>>>>> refs/heads/verRecv
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.solbipos.pos.domain.confg.verrecv.VerRecvVO;
