@@ -26,7 +26,7 @@ import kr.co.solbipos.pos.service.confg.verrecv.VerRecvService;
 @RequestMapping(value = "/pos/confg/verrecv/")
 public class VerRecvController {
     
-    @Autowired
+    @Autowired 
     VerRecvService service;
     
     
