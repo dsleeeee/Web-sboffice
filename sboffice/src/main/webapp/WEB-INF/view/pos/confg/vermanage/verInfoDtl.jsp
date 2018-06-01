@@ -20,10 +20,10 @@
           </ul>
         </div>
         <div id="verInfoArea">
-          
+
           <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
           <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
-          
+
           <%-- 버전정보 상세 --%>
 
           <table id="verInfoViewArea" class="tblType01 mt20">
@@ -76,13 +76,13 @@
             <%-- 수정 --%>
             <button class="btn_skyblue" id="btnEdit"><s:message code="cmm.edit" /></button>
           </div>
-          
-          
+
+
           <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
           <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
-          
+
           <%-- 버전정보 상세 수정 --%>
-          
+
           <form id="uploadForm" enctype="multipart/form-data">
           <table id="verInfoEditArea" class="tblType01 mt20" style="display:none;">
             <colgroup>
@@ -113,7 +113,7 @@
                   <th><s:message code="verManage.file.upload" /></th>
                   <td colspan="3">
                     <%-- <form action='"${baseUrl}" + "upload.sb' method="post" enctype="multipart/form-data"></form> --%>
-                    <!-- 
+                    <!--
                     <div class="sb-select fl w70">
                       <div id="fileNm" class="sb-input w80"></div>
                     </div>
@@ -166,6 +166,7 @@
                 </tr>
             </tbody>
           </table>
+          </form>
           <div id="editBtnArea"class="mt10 tc" style="display:none;">
             <%-- 등록 --%>
             <button class="btn_skyblue" id="btnSave"><s:message code="cmm.save" /></button>
@@ -174,12 +175,11 @@
             <%-- 취소 --%>
             <button class="btn_skyblue" id="btnCancel"><s:message code="cmm.cancel" /></button>
           </div>
-          </form>
         </div>
-        
+
         <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
         <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
-          
+
         <%-- 버전 적용 매장 --%>
         <div id="storeInfoArea" class="con sc2" style="height:500px; display:none;"><!--높이는 style로 조정-->
           <div class="tr">
@@ -188,37 +188,37 @@
             <%-- 엑셀 다운로드 --%>
             <a href="javascript:;" id="btnExcel2" class="btn_grayS2"><s:message code="cmm.excel.down" /></a>
           </div>
-          <!--위즈모 테이블--> 
-          <div>   
+          <!--위즈모 테이블-->
+          <div>
             <div id="theGrid2" class="mt10 mb20" style="height:350px;"></div>
-          </div>  
+          </div>
           <!--//위즈모 테이블-->
         </div>
-        
-        
+
+
       </div>
     </div>
   </div>
 </div>
 <script>
 
-    
+
   <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
   <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
-  
+
   <%-- 적용매장 --%>
-      
+
     <%-- dataMap 조회 --%>
     var clsFg     = ${ccu.getCommCodeExcpAll("003")};
     var sysStatFg = ${ccu.getCommCode("009")};
     var verRecvFg = ${ccu.getCommCodeExcpAll("091")};
-    
+
     var clsFgDataMap     = new wijmo.grid.DataMap(clsFg, 'value', 'name');
     var sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
     var verRecvFgDataMap = new wijmo.grid.DataMap(verRecvFg, 'value', 'name');
-    
+
     <%-- 적용매장 Header --%>
-    var hData2 = 
+    var hData2 =
       [
         {binding:"rnum", header:"<s:message code='cmm.no' />"},
         {binding:"storeCd", header:"<s:message code='verManage.store.storeCd' />"},
@@ -233,11 +233,11 @@
         {binding:"regDt", header:"<s:message code='verManage.regDt' />"},
         {binding:"regId", header:"<s:message code='verManage.regId' />"}
       ];
-    
+
     <%-- 적용매장 그리드 생성 --%>
     var grid2 = wgrid.genGrid("#theGrid2", hData2, "${menuCd}", 2, ${clo.getColumnLayout(2)});
     grid2.isReadOnly = true;
-    
+
     <%-- 적용매장 탭 클릭 --%>
     $("#storeInfoTab").click(function(e){
       <%-- 버전정보 등록시, 버전정보 없을 경우 --%>
@@ -245,34 +245,34 @@
         s_alert.pop("<s:message code='verManage.require.verSerNo'/>");
         return false;
       }
-      
-      var param = {}; 
+
+      var param = {};
       param.verSerNo = selectVerSerNo;
-      
+
       searchVerStore(param);
-      
+
       $(this).addClass("on");
       $("#verInfoTab").removeClass("on");
       $("#verInfoArea").hide();
       $("#storeInfoArea").show();
     });
-    
+
     <%-- 매장추가 버튼 클릭 --%>
     $("#btnAddStore").click(function(e){
       showAddStorelLayer();
     });
-    
+
     <%-- 엑셀 다운로드 버튼 클릭 --%>
     $("#btnExcel2").click(function(e){
       var name = "<s:message code='verManage.store.registed'/>";
       wexcel.down(grid2, name, name + ".xlsx");
     });
-  
+
   <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
   <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
-  
+
     <%-- 버전정보 --%>
-  
+
     <%-- 버전정보 탭 클릭 --%>
     $("#verInfoTab").click(function(e){
       $(this).addClass("on");
@@ -280,7 +280,7 @@
       $("#verInfoArea").show();
       $("#storeInfoArea").hide();
     });
-    
+
     <%-- 버전정보  등록 및 수정 form 생성  --%>
     var verSerNoInput = wcombo.genInput("#verSerNo");
     var verSerNmInput = wcombo.genInput("#verSerNm");
@@ -292,29 +292,29 @@
     var useYnCombo    = wcombo.genCommonBox("#useYn", useYn);
 
     fileSizeInput.isReadOnly  = true;
-    
+
     <%-- 버전정보 - 수정버튼 클릭 --%>
     $("#btnEdit").click(function(e){
       $("#verInfoViewArea").hide();
       $("#viewBtnArea").hide();
-      
+
       $("#verInfoEditArea").show();
       $("#editBtnArea").show();
     });
-    
+
     <%-- 버전정보 - 삭제 버튼 클릭 --%>
     $("#btnDel").click(function(e){
-    
+
       if(selectVerSerCnt > 0 ){
         s_alert.pop("<s:message code='verManage.store.exist'/>");
         return;
       }
-      
+
       var param = {};
       param.verSerNo = selectVerSerNo;
-      
+
       var msg = "<s:message code='cmm.choo.delete'/>";
-    
+
       s_alert.popConf(msg, function(){
         $.postJSON("/pos/confg/vermanage/verinfo/remove.sb", param, function(result) {
           if(result.status === "FAIL") {
@@ -332,7 +332,7 @@
         });
       });
     });
-    
+
     <%-- 취소버튼 클릭 --%>
     $("#btnCancel").click(function(e){
       if(selectVerSerNo == "") {
@@ -347,12 +347,12 @@
 
   <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
   <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
-  
+
     <%-- 공통 --%>
 
     <%-- 상세정보 조회 --%>
     function searchVerInfoDtl(obj) {
-      
+
       var param = obj;
       $.postJSON("/pos/confg/vermanage/verinfo/dtlInfo.sb", param, function(result) {
         if(result.status === "FAIL") {
@@ -365,7 +365,7 @@
         s_alert.pop("Ajax Fail");
       });
     }
-    
+
     <%-- 적용매장  조회 --%>
     function searchVerStore(obj){
       $.postJSON("/pos/confg/vermanage/applcstore/list.sb", obj, function(result) {
@@ -375,11 +375,11 @@
         }
 
         var list = result.data.list;
-        
+
         grid2.itemsSource = list;
         selectVerSerCnt = list.length;
-        
-        /* 
+
+        /*
         if(list.length === undefined || list.length == 0) {
           s_alert.pop(result.message);
           return;
@@ -390,7 +390,7 @@
         s_alert.pop("Ajax Fail");
       });
     }
-    
+
     <%-- 파일 업로드시, 파일 사이즈 --%>
     $("#fileNm").bind("change", function(){
       fileSizeInput.text = document.getElementById("fileNm").files[0].size;
@@ -399,9 +399,9 @@
     <%-- 등록버튼 클릭 --%>
     $("#btnSave").click(function(e){
       // validation
-      
+
       var sendUrl = "";
-      
+
       if(selectVerSerNo == "") {
         sendUrl = "/pos/confg/vermanage/verinfo/regist.sb";
         //chkSerNo(sendUrl);
@@ -412,13 +412,13 @@
     });
 
     <%-- 버전일련번호 중복체크 --%>
-    /* 
+    /*
     function chkSerNo(sendUrl){
       console.log('1')
       if(selectVerSerNo == "") {
         var param = {};
         param.verSerNo = verSerNoInput.text;
-  
+
         $.postJSON("/pos/confg/vermanage/verinfo/chkVerSerNo.sb", param, function(result) {
           console.log(result);
           console.log(result.data > 0);
@@ -426,7 +426,7 @@
             console.log(":::  ")
             s_alert.pop("<s:message code='verManage.duplicate.verSerNo' />");
             return;
-          } 
+          }
           sendFormData(sendUrl);
         })
         .fail(function(){
@@ -437,20 +437,20 @@
      */
     <%-- 저장 또는 수정 --%>
     function sendFormData(sendUrl) {
-      
+
       console.log('3')
       var pgmYn = $('input:checkbox[id="pgm"]').is(":checked") == true ? "Y" : "N";
       var dbYn  = $('input:checkbox[id="db"]').is(":checked") == true ? "Y" : "N";
       var imgYn = $('input:checkbox[id="img"]').is(":checked") == true ? "Y" : "N";
-      
-      
+
+
       // test
       /*
       var formData = new FormData(document.getElementById("uploadForm"));
       var file = $('input[type=file]')[0].files[0];
-      
+
       formData.append("file" , file);
-      
+
       formData.append("verSerNo", verSerNoInput.text);
       formData.append("verSerNm", verSerNmInput.text);
       formData.append("fileSize", fileSizeInput.text);
@@ -461,9 +461,9 @@
       formData.append("imgYn", imgYn);
       formData.append("useYn", useYnCombo.selectedValue);
       */
-      
+
       var formData = new FormData($("#uploadForm")[0]);
-      
+
       formData.append("verSerNo", verSerNoInput.text);
       formData.append("verSerNm", verSerNmInput.text);
       formData.append("fileSize", fileSizeInput.text);
@@ -473,34 +473,34 @@
       formData.append("dbYn", dbYn);
       formData.append("imgYn", imgYn);
       formData.append("useYn", useYnCombo.selectedValue);
-       
+
       $.postJSONFile(sendUrl, formData, function(result) {
         console.log("save success");
         console.log(result);
-        
+
         if(result.status === "FAIL") {
           s_alert.pop(result.message);
           return;
         }
-        
+
         $("#verInfoViewArea").hide();
         $("#viewBtnArea").hide();
         $("#verInfoEditArea").show();
         $("#editBtnArea").show();
-        
+
       })
       .fail(function(){
         s_alert.pop("Ajax Fail");
       });
-      
+
       return false;
     }
-    
+
     <%-- 레이어 닫기 버튼 클릭--%>
     $(".btn_close").click(function(e){
       closeVerInfoLayer();
     });
-    
+
     <%--- 레이어 닫기 --%>
     function closeVerInfoLayer(){
       $("#uploadForm")[0].reset();
@@ -508,46 +508,46 @@
       $("#verInfoDtlLayer").hide();
       $("#dim1").hide();
     }
-    
+
   <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
   <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
-    
+
     <%-- 등록 --%>
-    
+
     function showVerInfoDtlRegistLayer(){
 
       <%-- 레이어 보이기 --%>
       $("#verInfoViewArea").hide();
       $("#viewBtnArea").hide();
-      
+
       $("#verInfoEditArea").show();
       $("#editBtnArea").show();
-      
+
       $("#verInfoDtl").hide();
       $("#verInfoDtlLayer").show();
-      
+
       $("#dim1").show();
       $("#verInfoTab").click();
-      
+
       //verSerNoInput.text = "자동입력";
     }
-      
+
   <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
   <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
-    
+
     <%-- 수정 --%>
-  
+
     <%-- 수정 - 레이어 열기  --%>
     function showVerInfoDtlEditLayer(obj) {
-    
+
       var incldDtls = "";
       if(obj.pgmYn == "Y") incldDtls += "<s:message code='verManage.pgm' />";
       if(obj.dbYn  == "Y") incldDtls += ((incldDtls == ""? "" : " / ") + "<s:message code='verManage.db' />");
       if(obj.imgYn == "Y") incldDtls += ((incldDtls == ""? "" : " / ") + "<s:message code='verManage.img' />");
-      
+
       var progFgTxt;
       var useYnTxt;
-      
+
       $.each(pData, function(i, item){
         if(obj.progFg == item.value) {
           progFgTxt = item.name;
@@ -559,7 +559,7 @@
           useYnTxt = item.name;
         }
       });
-      
+
       <%-- 버전정보 조회 --%>
       $("#_verSerNo").text(obj.verSerNo);
       $("#_verSerNm").text(obj.verSerNm);
@@ -569,25 +569,25 @@
       $("#_incldDtls").text(incldDtls);
       $("#_useYn").text(useYnTxt);
       $("#_fileDesc").text(obj.fileDesc);
-      
+
       <%-- 버전정보 수정 --%>
       verSerNoInput.text  = obj.verSerNo;
       verSerNmInput.text  = obj.verSerNm;
       //fileNmInput.text    = obj.fileNm;
       fileSizeInput.text  = obj.fileSize;
       fileDescInput.text  = obj.fileDesc;
-      
+
       <%-- 레이어 보이기 --%>
       $("#verInfoViewArea").show();
       $("#viewBtnArea").show();
-      
+
       $("#verInfoEditArea").hide();
       $("#editBtnArea").hide();
-      
+
       $("#verInfoDtl").show();
       $("#verInfoDtlLayer").show();
       $("#dim1").show();
       $("#verInfoTab").click();
     }
-  
+
 </script>
