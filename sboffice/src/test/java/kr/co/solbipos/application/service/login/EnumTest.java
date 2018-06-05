@@ -9,10 +9,11 @@ import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-import kr.co.solbipos.application.domain.login.LoginHistVO;
-import kr.co.solbipos.application.domain.login.SessionInfoVO;
-import kr.co.solbipos.application.enums.login.LoginOrigin;
-import kr.co.solbipos.application.enums.login.LoginResult;
+import kr.co.solbipos.application.session.auth.enums.LoginOrigin;
+import kr.co.solbipos.application.session.auth.enums.LoginResult;
+import kr.co.solbipos.application.session.auth.service.LoginHistVO;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.auth.service.impl.AuthServiceImpl;
 import kr.co.solbipos.config.AbstractApplicationContextTest;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 public class EnumTest extends AbstractApplicationContextTest {
 
     @Autowired
-    LoginServiceImpl loginService;
+    AuthServiceImpl authService;
 
     SessionInfoVO sessionInfoVO;
     LoginHistVO loginHistVO;
@@ -52,7 +53,7 @@ public class EnumTest extends AbstractApplicationContextTest {
         s.setLoginIp("127.0.0.1");
         s.setLoginResult(LoginResult.SUCCESS);
 
-        int result = loginService.loginHist(s);
+        int result = authService.loginHist(s);
         log.debug(String.valueOf(result));
         assertTrue(result == 1);
     }
@@ -65,7 +66,7 @@ public class EnumTest extends AbstractApplicationContextTest {
     //@Ignore
     public void getLoginHistVO() {
         loginHistVO.setUserId("bjcho");
-        List<LoginHistVO> result = loginService.selectLoginHist(loginHistVO);
+        List<LoginHistVO> result = authService.selectLoginHist(loginHistVO);
         log.debug(result.toString());
         for(LoginHistVO loginHistVO : result) {
           if(loginHistVO.getSeq().equals("381")) {

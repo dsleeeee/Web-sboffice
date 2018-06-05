@@ -13,16 +13,17 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.system.Prop;
-import kr.co.solbipos.application.domain.login.SessionInfoVO;
-import kr.co.solbipos.application.enums.login.LoginResult;
-import kr.co.solbipos.application.persistence.login.LoginMapper;
+import kr.co.solbipos.application.session.auth.enums.LoginResult;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.auth.service.impl.AuthMapper;
+import kr.co.solbipos.application.session.auth.service.impl.AuthServiceImpl;
 
 @RunWith(MockitoJUnitRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class LoginServiceTests {
 
     @Mock
-    LoginMapper loginMapper;
+    AuthMapper authMapper;
 
     @Mock
     SessionService sessionService;
@@ -31,7 +32,7 @@ public class LoginServiceTests {
     Prop prop;
 
     @InjectMocks
-    LoginServiceImpl loginService;
+    AuthServiceImpl authService;
 
     SessionInfoVO sessionInfoVO;
 
@@ -49,9 +50,9 @@ public class LoginServiceTests {
     public void userIdEmpty() {
         // 존재하지 않는 아이디
         sessionInfoVO.setUserId("fff");
-        given(loginService.selectWebUser(sessionInfoVO)).willReturn(new SessionInfoVO());
+        given(authService.selectWebUser(sessionInfoVO)).willReturn(new SessionInfoVO());
 
-        SessionInfoVO sessionInfo = loginService.login(sessionInfoVO);
+        SessionInfoVO sessionInfo = authService.login(sessionInfoVO);
 
         assertNull(sessionInfo.getUserId());
         assertTrue("".equals(sessionInfo.getUserPwd()));
@@ -74,9 +75,9 @@ public class LoginServiceTests {
         s.setLastPwdChg("20180101");
 
         sessionInfoVO.setUserId("ygjeong");
-        given(loginService.selectWebUser(sessionInfoVO)).willReturn(s);
+        given(authService.selectWebUser(sessionInfoVO)).willReturn(s);
 
-        SessionInfoVO sessionInfo = loginService.login(sessionInfoVO);
+        SessionInfoVO sessionInfo = authService.login(sessionInfoVO);
 
         assertTrue("".equals(sessionInfo.getUserPwd()));
         assertTrue(sessionInfo.getLoginResult() == LoginResult.PASSWORD_ERROR);
@@ -96,9 +97,9 @@ public class LoginServiceTests {
 
         sessionInfoVO.setUserId("ygjeong");
         sessionInfoVO.setUserPwd("qwer");
-        given(loginService.selectWebUser(sessionInfoVO)).willReturn(s);
+        given(authService.selectWebUser(sessionInfoVO)).willReturn(s);
 
-        SessionInfoVO sessionInfo = loginService.login(sessionInfoVO);
+        SessionInfoVO sessionInfo = authService.login(sessionInfoVO);
 
         assertTrue("".equals(sessionInfo.getUserPwd()));
         assertTrue(sessionInfo.getLoginResult() == LoginResult.SUCCESS);
@@ -118,9 +119,9 @@ public class LoginServiceTests {
 
         sessionInfoVO.setUserId("ygjeong");
         sessionInfoVO.setUserPwd("qwer");
-        given(loginService.selectWebUser(sessionInfoVO)).willReturn(s);
+        given(authService.selectWebUser(sessionInfoVO)).willReturn(s);
 
-        SessionInfoVO sessionInfo = loginService.login(sessionInfoVO);
+        SessionInfoVO sessionInfo = authService.login(sessionInfoVO);
 
         assertTrue("".equals(sessionInfo.getUserPwd()));
         assertTrue(sessionInfo.getLoginResult() == LoginResult.PASSWORD_ERROR);
@@ -140,9 +141,9 @@ public class LoginServiceTests {
 
         sessionInfoVO.setUserId("ygjeong");
         sessionInfoVO.setUserPwd("qwer");
-        given(loginService.selectWebUser(sessionInfoVO)).willReturn(s);
+        given(authService.selectWebUser(sessionInfoVO)).willReturn(s);
 
-        SessionInfoVO sessionInfo = loginService.login(sessionInfoVO);
+        SessionInfoVO sessionInfo = authService.login(sessionInfoVO);
 
         assertTrue("".equals(sessionInfo.getUserPwd()));
         assertTrue(sessionInfo.getLoginResult() == LoginResult.LOCK);
@@ -162,9 +163,9 @@ public class LoginServiceTests {
 
         sessionInfoVO.setUserId("ygjeong");
         sessionInfoVO.setUserPwd("qwer");
-        given(loginService.selectWebUser(sessionInfoVO)).willReturn(s);
+        given(authService.selectWebUser(sessionInfoVO)).willReturn(s);
 
-        SessionInfoVO sessionInfo = loginService.login(sessionInfoVO);
+        SessionInfoVO sessionInfo = authService.login(sessionInfoVO);
 
         assertTrue("".equals(sessionInfo.getUserPwd()));
         assertTrue(sessionInfo.getLoginResult() == LoginResult.PASSWORD_EXPIRE);
@@ -184,9 +185,9 @@ public class LoginServiceTests {
 
         sessionInfoVO.setUserId("ygjeong");
         sessionInfoVO.setUserPwd("qwer");
-        given(loginService.selectWebUser(sessionInfoVO)).willReturn(s);
+        given(authService.selectWebUser(sessionInfoVO)).willReturn(s);
 
-        SessionInfoVO sessionInfo = loginService.login(sessionInfoVO);
+        SessionInfoVO sessionInfo = authService.login(sessionInfoVO);
 
         assertTrue("".equals(sessionInfo.getUserPwd()));
         assertTrue(sessionInfo.getLoginResult() == LoginResult.PASSWORD_CHANGE);

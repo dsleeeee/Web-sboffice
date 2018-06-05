@@ -12,15 +12,15 @@ import org.springframework.stereotype.Service;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.system.Prop;
-import kr.co.solbipos.application.domain.cmm.HqVO;
-import kr.co.solbipos.application.domain.cmm.MenuUseHistVO;
-import kr.co.solbipos.application.domain.cmm.StoreVO;
-import kr.co.solbipos.application.domain.login.SessionInfoVO;
-import kr.co.solbipos.application.domain.resource.MenuVO;
-import kr.co.solbipos.application.domain.resource.ResrceInfoVO;
-import kr.co.solbipos.application.domain.resource.ResrceInfoBaseVO;
-import kr.co.solbipos.application.persistence.cmm.CmmCodeMapper;
-import kr.co.solbipos.application.persistence.cmm.CmmMenuMapper;
+import kr.co.solbipos.application.common.service.HqVO;
+import kr.co.solbipos.application.common.service.MenuUseHistVO;
+import kr.co.solbipos.application.common.service.MenuVO;
+import kr.co.solbipos.application.common.service.ResrceInfoBaseVO;
+import kr.co.solbipos.application.common.service.ResrceInfoVO;
+import kr.co.solbipos.application.common.service.StoreVO;
+import kr.co.solbipos.application.common.service.impl.CmmCodeMapper;
+import kr.co.solbipos.application.common.service.impl.CmmMenuMapper;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

@@ -9,7 +9,7 @@ import kr.co.sample.application.domain.TbMsStoreVO;
 import kr.co.sample.application.domain.TestTableVO;
 import kr.co.sample.application.domain.TmpBoardTVO;
 import kr.co.sample.application.domain.TmpDragtTVO;
-import kr.co.solbipos.application.domain.resource.ResrceInfoVO;
+import kr.co.solbipos.application.common.service.ResrceInfoVO;
 
 /**
  * 샘플

@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.springframework.transaction.annotation.Transactional;
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.sys.domain.auth.authgroup.AuthorGrpResrceVO;
+import kr.co.solbipos.sys.auth.authgroup.service.AuthorGrpResrceVO;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

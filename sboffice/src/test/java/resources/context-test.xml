@@ -109,18 +109,7 @@
     <!-- Domain Class Name 자동 등록 -->
     <property name="typeAliasesPackage" value=" kr.co.common.data.domain,
                                                 kr.co.common.data.structure,
-                                                kr.co.sample.application.domain,
-                                                kr.co.solbipos.application.domain,
-                                                kr.co.solbipos.base.domain,
-                                                kr.co.solbipos.pos.domain,
-                                                kr.co.solbipos.store.domain,
-                                                kr.co.solbipos.sys.domain,
-                                                kr.co.solbipos.sale.domain,
-                                                kr.co.solbipos.member.domain,
-                                                kr.co.solbipos.iostock.domain,
-                                                kr.co.solbipos.stock.domain,
-                                                kr.co.solbipos.excclc.domain,
-                                                kr.co.solbipos.adi.domain" />
+                                                kr.co.sample.application.domain" />
   </bean>
 
   <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">

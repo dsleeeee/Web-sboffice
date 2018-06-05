@@ -2,13 +2,13 @@ package kr.co.common.service.cmm;
 
 import java.util.List;
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.application.domain.cmm.HqVO;
-import kr.co.solbipos.application.domain.cmm.MenuUseHistVO;
-import kr.co.solbipos.application.domain.cmm.StoreVO;
-import kr.co.solbipos.application.domain.login.SessionInfoVO;
-import kr.co.solbipos.application.domain.resource.MenuVO;
-import kr.co.solbipos.application.domain.resource.ResrceInfoBaseVO;
-import kr.co.solbipos.application.domain.resource.ResrceInfoVO;
+import kr.co.solbipos.application.common.service.HqVO;
+import kr.co.solbipos.application.common.service.MenuUseHistVO;
+import kr.co.solbipos.application.common.service.MenuVO;
+import kr.co.solbipos.application.common.service.ResrceInfoBaseVO;
+import kr.co.solbipos.application.common.service.ResrceInfoVO;
+import kr.co.solbipos.application.common.service.StoreVO;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 
 /**
  *

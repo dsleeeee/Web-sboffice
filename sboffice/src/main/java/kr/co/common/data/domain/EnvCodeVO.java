@@ -2,7 +2,7 @@ package kr.co.common.data.domain;
 
 import java.util.List;
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.application.domain.cmm.CmmVO;
+import kr.co.solbipos.application.common.service.CmmVO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

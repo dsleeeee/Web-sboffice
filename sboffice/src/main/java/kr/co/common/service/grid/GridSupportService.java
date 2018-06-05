@@ -3,7 +3,7 @@ package kr.co.common.service.grid;
 import java.util.HashMap;
 import java.util.List;
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.application.domain.cmm.GridDispItemVO;
+import kr.co.solbipos.application.common.service.GridDispItemVO;
 
 /**
  * @author 정용길

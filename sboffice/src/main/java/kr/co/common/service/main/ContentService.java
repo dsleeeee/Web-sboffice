@@ -3,8 +3,8 @@ package kr.co.common.service.main;
 import java.util.List;
 import java.util.Map;
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.application.domain.login.SessionInfoVO;
-import kr.co.solbipos.application.enums.main.MainSrchFg;
+import kr.co.solbipos.application.common.enums.MainSrchFg;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 
 /**
  * 메인 컨텐츠를 가져오기 위한 서비스

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="kr.co.solbipos.pos.persistence.confg.func.FuncMapper">
+<mapper namespace="kr.co.solbipos.pos.confg.func.service.impl.FuncMapper">
 
   <select id="getFuncList" parameterType="funcVO" resultType="DefaultMap">
     <![CDATA[
@@ -87,25 +87,25 @@
         #{modDt},
         #{modId}
     )
-  
+
   </insert>
 
   <update id="updateFunc" parameterType="funcVO">
     /* FuncMapper.updateFunc */
     UPDATE TB_CM_POS_FNKEY
-       SET FNKEY_NM     = #{fnkeyNm}, 
-           FNKEY_FG     = #{fnkeyFg}, 
-           STORE_FG     = #{storeFg}, 
-           POS_FG       = #{posFg}, 
-           IMG_FILE_NM_0    = #{imgFileNm0}, 
-           IMG_FILE_NM_1    = #{imgFileNm1}, 
-           FNKEY_USE_YN_0   = #{cmmImgUseYn}, 
-           FNKEY_USE_YN_1   = #{foodImgseYn}, 
-           DISP_SEQ     = #{dispSeq}, 
-           POSI_ADJ_YN  = #{posiAdjYn}, 
-           COL_POSI     = #{colPosi}, 
-           ROW_POSI     = #{rowPosi}, 
-           WIDTH        = #{width}, 
+       SET FNKEY_NM     = #{fnkeyNm},
+           FNKEY_FG     = #{fnkeyFg},
+           STORE_FG     = #{storeFg},
+           POS_FG       = #{posFg},
+           IMG_FILE_NM_0    = #{imgFileNm0},
+           IMG_FILE_NM_1    = #{imgFileNm1},
+           FNKEY_USE_YN_0   = #{cmmImgUseYn},
+           FNKEY_USE_YN_1   = #{foodImgseYn},
+           DISP_SEQ     = #{dispSeq},
+           POSI_ADJ_YN  = #{posiAdjYn},
+           COL_POSI     = #{colPosi},
+           ROW_POSI     = #{rowPosi},
+           WIDTH        = #{width},
            HEIGHT       = #{height},
            USE_YN       = #{useYn},
            MOD_DT       = #{modDt},

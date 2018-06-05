@@ -7,7 +7,7 @@ import kr.co.common.data.domain.CommonCodeVO;
 import kr.co.common.service.redis.RedisConnService;
 import kr.co.common.system.Prop;
 import kr.co.common.template.RedisCustomTemplate;
-import kr.co.solbipos.application.persistence.cmm.CmmCodeMapper;
+import kr.co.solbipos.application.common.service.impl.CmmCodeMapper;
 import lombok.extern.slf4j.Slf4j;
 
 /**

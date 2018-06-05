@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="kr.co.solbipos.store.persistence.hq.hqbrand.HqBrandMapper">
+<mapper namespace="kr.co.solbipos.store.hq.brand.service.impl.HqBrandMapper">
 
   <select id="list" parameterType="DefaultMap" resultType="DefaultMap">
     /* HqBrandMapper.list */
@@ -37,14 +37,14 @@
 
   <select id="getHqBrandCd" parameterType="hqBrandVO" resultType="String">
     /* HqBrandMapper.getHqBrandCd */
-    SELECT CONCAT(#{hqOfficeCd}, LPAD(SUBSTR(NVL(MAX(HQ_BRAND_CD), '0000000'), 6, 2) +1, 2, '0')) 
+    SELECT CONCAT(#{hqOfficeCd}, LPAD(SUBSTR(NVL(MAX(HQ_BRAND_CD), '0000000'), 6, 2) +1, 2, '0'))
       FROM TB_HQ_BRAND
      WHERE HQ_OFFICE_CD = #{hqOfficeCd}
   </select>
 
   <insert id="insertBrand" parameterType="DefaultMap">
     /* HqBrandMapper.insertBrand */
-      INSERT INTO TB_HQ_BRAND 
+      INSERT INTO TB_HQ_BRAND
     (
       HQ_BRAND_CD,
       HQ_BRAND_NM,
@@ -82,7 +82,7 @@
      WHERE HQ_BRAND_CD = #{hqBrandCd}
        AND HQ_OFFICE_CD = #{hqOfficeCd}
   </delete>
-  
+
   <select id="getConfigList" parameterType="hqBrandVO" resultType="DefaultMap">
     /* HqBrandMapper.getConfigList */
     SELECT A.ENVST_GRP_CD,
@@ -143,7 +143,7 @@
       REG_DT,
       REG_ID,
       MOD_DT,
-      MOD_ID 
+      MOD_ID
     )
     VALUES
     (
@@ -176,7 +176,7 @@
      WHERE STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND HQ_BRAND_CD = #{hqBrandCd} )
        AND ENVST_CD = #{envstCd}
   </update>
-  
+
   <select id="getClsList" parameterType="hqBrandVO" resultType="DefaultMap">
     /* HqBrandMapper.getClsList */
     SELECT HQ_BRAND_CD,
@@ -186,7 +186,7 @@
       FROM TB_HQ_PRODUCT_CLASS
      WHERE HQ_BRAND_CD = #{hqBrandCd}
   </select>
-  
+
   <select id="getClsCd" parameterType="hqClsVO" resultType="String">
     /* HqBrandMapper.getClsCd */
     SELECT LPAD( NVL(MAX(PROD_CLASS_CD), 0) + 1, 5, '0') PROD_CLASS_CD
@@ -241,7 +241,7 @@
                  #{modId} MOD_ID
             FROM DUAL
           ) B
-       ON 
+       ON
         (
           B.HQ_BRAND_CD = A.HQ_BRAND_CD
       AND B.PROD_CLASS_CD = A.PROD_CLASS_CD

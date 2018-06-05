@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="kr.co.solbipos.pos.persistence.confg.vermanage.VerManageMapper">
+<mapper namespace="kr.co.solbipos.pos.confg.vermanage.service.impl.VerManageMapper">
 
   <select id="getList" parameterType="verInfoVO" resultType="DefaultMap">
     /* VerManageMapper.getList */
@@ -28,7 +28,7 @@
              B.RECV_CNT
         FROM TB_CM_POS_VERSN A,
              (
-        SELECT VER_SER_NO, 
+        SELECT VER_SER_NO,
                SUM(DECODE(VER_RECV_FG , '1' , 1, 0)) REG_CNT,
                SUM(DECODE(VER_RECV_FG , '2' , 1, 0)) RECV_CNT
           FROM TB_CM_POS_VERSN_STORE
@@ -49,7 +49,7 @@
        AND RNUM <= #{next}
     ]]>
   </select>
-  
+
   <select id="dtlInfo" parameterType="verInfoVO" resultType="DefaultMap">
     /* VerManageMapper.dtlInfo */
     SELECT VER_SER_NO,
@@ -68,7 +68,7 @@
       FROM TB_CM_POS_VERSN
      WHERE VER_SER_NO = #{verSerNo}
   </select>
-  
+
   <insert id="verRegist" parameterType="verInfoVO">
     /* VerManageMapper.verRegist */
     <![CDATA[
@@ -130,7 +130,7 @@
      WHERE VER_SER_NO = #{verSerNo}
      ]]>
   </update>
-  
+
   <delete id="verDelete" parameterType="verInfoVO" >
     /* VerManageMapper.deleteVersion */
     DELETE
@@ -163,7 +163,7 @@
         AND C.POS_NO = A.POS_NO
         AND A.VER_SER_NO = #{verSerNo}
   </select>
-  
+
   <select id="srchStoreList" parameterType="applcStoreVO" resultType="DefaultMap">
     /* VerManageMapper.srchStoreList */
     <![CDATA[
@@ -224,7 +224,7 @@
         AND RNUM <= #{next}
       ]]>
   </select>
-  
+
   <insert id="registStore" parameterType="applcStoreVO" >
     /* VerManageMapper.registStore */
     <![CDATA[

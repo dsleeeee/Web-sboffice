@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="kr.co.solbipos.pos.persistence.confg.verrecv.VerRecvMapper">
+<mapper namespace="kr.co.solbipos.pos.confg.verrecv.service.impl.VerRecvMapper">
 
   <select id="selectVerList" parameterType="verRecvVO" resultType="DefaultMap">
     /* VerRecvMapper.selectVerList */
@@ -22,7 +22,7 @@
              NVL(B.RECV_CNT, 0) RECV_CNT
         FROM TB_CM_POS_VERSN A,
             (
-       SELECT VER_SER_NO, 
+       SELECT VER_SER_NO,
               SUM(DECODE(VER_RECV_FG , '1' , 1, 0)) REG_CNT,
               SUM(DECODE(VER_RECV_FG , '2' , 1, 0)) RECV_CNT
          FROM TB_CM_POS_VERSN_STORE
@@ -43,7 +43,7 @@
        AND RNUM <= #{next}
     ]]>
   </select>
-  
+
   <select id="selectStoreList" parameterType="verRecvVO" resultType="DefaultMap">
     /* VerRecvMapper.selectStoreList */
     <![CDATA[
@@ -74,7 +74,7 @@
        AND RNUM <= #{next}
       ]]>
   </select>
-  
+
   <select id="selectStoreRecvList" parameterType="verRecvVO" resultType="DefaultMap">
     /* VerRecvMapper.selectStoreRecvList */
     <![CDATA[
@@ -137,17 +137,17 @@
     <if test='lastVer != null and lastVer != ""'>
        AND C.POS_VER_NO = #{lastVer}
     </if>
-     ORDER BY A.HQ_OFFICE_CD, B.STORE_CD 
+     ORDER BY A.HQ_OFFICE_CD, B.STORE_CD
   </select>
-  
+
   <select id="selectStoreDtl" parameterType="verRecvVO" resultType="DefaultMap">
     /* VerRecvMapper.selectStoreDtl */
     <![CDATA[
-    SELECT A.VER_SER_NO, 
+    SELECT A.VER_SER_NO,
          B.VER_SER_NM,
          B.PROG_FG,
          A.VER_RECV_FG,
-         B.FILE_NM, 
+         B.FILE_NM,
          TO_CHAR(TO_DATE(B.REG_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') REG_DT,
          TO_CHAR(TO_DATE(A.VER_RECV_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') VER_RECV_DT
     FROM TB_CM_POS_VERSN_STORE A,
@@ -156,7 +156,7 @@
      AND B.VER_SER_NO = A.VER_SER_NO
      ]]>
   </select>
-  
+
   <select id="selectVerStoreList" parameterType="verRecvVO" resultType="DefaultMap">
     /* VerRecvMapper.selectVerStoreList */
     <![CDATA[
@@ -172,7 +172,7 @@
              (
         SELECT VER_SER_NO, COUNT(POS_NO) POS_CNT
           FROM TB_CM_POS_VERSN_STORE
-         GROUP BY VER_SER_NO     
+         GROUP BY VER_SER_NO
               ) B
         WHERE B.VER_SER_NO = A.VER_SER_NO
     ]]>
@@ -189,8 +189,8 @@
        AND RNUM <= #{next}
     ]]>
   </select>
-  
-   
+
+
   <select id="selectVerStoreDtlList" parameterType="verRecvVO" resultType="DefaultMap">
     /* VerRecvMapper.selectVerStoreDtlList */
     <![CDATA[

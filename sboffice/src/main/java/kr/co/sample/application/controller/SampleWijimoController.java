@@ -25,7 +25,7 @@ import kr.co.common.service.session.SessionService;
 import kr.co.sample.application.domain.CcdCodemTVO;
 import kr.co.sample.application.domain.TmpDragtTVO;
 import kr.co.sample.application.service.SampleService;
-import kr.co.solbipos.application.domain.resource.ResrceInfoVO;
+import kr.co.solbipos.application.common.service.ResrceInfoVO;
 import lombok.extern.slf4j.Slf4j;
 
 /**

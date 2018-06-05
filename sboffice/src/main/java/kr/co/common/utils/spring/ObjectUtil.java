@@ -30,7 +30,7 @@ import org.springframework.beans.propertyeditors.StringArrayPropertyEditor;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.util.ObjectUtils;
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.application.domain.cmm.CmmVO;
+import kr.co.solbipos.application.common.service.CmmVO;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

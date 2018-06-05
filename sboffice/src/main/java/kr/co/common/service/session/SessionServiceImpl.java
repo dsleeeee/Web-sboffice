@@ -17,9 +17,9 @@ import kr.co.common.service.redis.RedisConnService;
 import kr.co.common.system.Prop;
 import kr.co.common.template.RedisCustomTemplate;
 import kr.co.common.utils.spring.WebUtil;
-import kr.co.solbipos.application.domain.login.SessionInfoVO;
-import kr.co.solbipos.application.enums.user.OrgnFg;
-import kr.co.solbipos.application.service.login.LoginService;
+import kr.co.solbipos.application.session.auth.service.AuthService;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -37,7 +37,7 @@ public class SessionServiceImpl implements SessionService {
     RedisConnService redisConnService;
 
     @Autowired
-    LoginService loginService;
+    AuthService authService;
 
     @Autowired
     CmmMenuService cmmMenuService;
@@ -55,7 +55,7 @@ public class SessionServiceImpl implements SessionService {
         // sessionId 세팅
         sessionInfoVO.setSessionId( sessionId );
         // 권한 있는 메뉴 저장
-        sessionInfoVO.setAuthMenu( loginService.selectAuthMenu( sessionInfoVO ) );
+        sessionInfoVO.setAuthMenu( authService.selectAuthMenu( sessionInfoVO ) );
         // 고정 메뉴 리스트 저장
         sessionInfoVO.setFixMenu( cmmMenuService.selectFixingMenu( sessionInfoVO ) );
         // 즐겨찾기 메뉴 리스트 저장

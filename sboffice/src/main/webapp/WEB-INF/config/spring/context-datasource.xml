@@ -4,10 +4,12 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:jee="http://www.springframework.org/schema/jee"
   xmlns:tx="http://www.springframework.org/schema/tx"
+  xmlns:aop="http://www.springframework.org/schema/aop"
 
   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
                            http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
                            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+                           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
                            ">
 
   <jee:jndi-lookup id="dataSource" jndi-name="#{config['jndi.main.jdbc.name']}" />
@@ -21,39 +23,41 @@
   <!-- @Transactional 을 사용할 때 checked Exception 은 rollback 이 안되니 주의 -->
   <tx:annotation-driven />
 
+  <!-- aop -->
+  <aop:config>
+      <aop:pointcut id="requiredTx" expression="execution(* co.kr..impl.*Impl.*(..))"/>
+      <aop:advisor advice-ref="txAdviceMaster" pointcut-ref="requiredTx" />
+  </aop:config>
+
+  <!-- Master DB -->
+  <tx:advice id="txAdviceMaster" transaction-manager="sqlSessionFactory">
+      <tx:attributes>
+          <tx:method name="*" rollback-for="Exception"/>
+      </tx:attributes>
+  </tx:advice>
+
   <!-- Mybatis Config -->
   <!-- Reference URL : http://mybatis.github.io/spring -->
   <!-- 한글 레퍼런스 URL : http://mybatis.github.io/spring/ko -->
-  <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+  <bean id="txAdviceMaster" class="org.mybatis.spring.SqlSessionFactoryBean">
     <property name="configLocation" value="/WEB-INF/config/mybatis-setting.xml" />
     <property name="mapperLocations" value="/WEB-INF/mapper/**/*.xml" />
     <property name="dataSource" ref="dataSource" />
     <!-- Domain Class Name 자동 등록 -->
     <property name="typeAliasesPackage" value=" kr.co.common.data.domain,
                                                 kr.co.common.data.structure,
-                                                kr.co.sample.application.domain,
-                                                kr.co.solbipos.application.domain,
-                                                kr.co.solbipos.base.domain,
-                                                kr.co.solbipos.pos.domain,
-                                                kr.co.solbipos.store.domain,
-                                                kr.co.solbipos.sys.domain,
-                                                kr.co.solbipos.sale.domain,
-                                                kr.co.solbipos.member.domain,
-                                                kr.co.solbipos.iostock.domain,
-                                                kr.co.solbipos.stock.domain,
-                                                kr.co.solbipos.excclc.domain,
-                                                kr.co.solbipos.adi.domain" />
+                                                kr.co.sample.application.domain"/>
   </bean>
 
   <!-- destroy-method="clearCache" -->
   <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
-    <constructor-arg index="0" ref="sqlSessionFactory" />
+    <constructor-arg index="0" ref="txAdviceMaster" />
   </bean>
 
   <!-- Mybatis IoC Mapper Class from SqlSessionTemplate -->
   <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-    <property name="basePackage" value="kr.co.**.persistence" />
-    <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+    <property name="basePackage" value="kr.co.**.impl, kr.co.**.persistence" />
+    <property name="sqlSessionFactoryBeanName" value="txAdviceMaster" />
   </bean>
 
 </beans>

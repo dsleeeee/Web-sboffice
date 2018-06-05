@@ -2,7 +2,7 @@ package kr.co.common.service.session;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import kr.co.solbipos.application.domain.login.SessionInfoVO;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 
 /**
  * 세션 관리 서비스

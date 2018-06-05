@@ -9,8 +9,8 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import kr.co.common.service.grid.GridSupportService;
 import kr.co.common.service.session.SessionService;
-import kr.co.solbipos.application.domain.cmm.GridDispItemVO;
-import kr.co.solbipos.application.domain.login.SessionInfoVO;
+import kr.co.solbipos.application.common.service.GridDispItemVO;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 
 /**
  * @author 정용길

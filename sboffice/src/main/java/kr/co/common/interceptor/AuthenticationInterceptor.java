@@ -15,10 +15,10 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.AppUtil;
 import kr.co.common.utils.spring.WebUtil;
-import kr.co.solbipos.application.domain.login.SessionInfoVO;
-import kr.co.solbipos.application.domain.resource.ResrceInfoVO;
-import kr.co.solbipos.application.enums.resrce.ResrceFg;
-import kr.co.solbipos.application.enums.user.OrgnFg;
+import kr.co.solbipos.application.common.enums.ResrceFg;
+import kr.co.solbipos.application.common.service.ResrceInfoVO;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

@@ -19,10 +19,10 @@ import com.mxgraph.model.mxIGraphModel;
 import com.mxgraph.util.mxXmlUtils;
 import com.mxgraph.view.mxGraph;
 import com.nhncorp.lucy.security.xss.XssPreventer;
-import kr.co.solbipos.base.domain.prod.touchkey.TouchVO;
-import kr.co.solbipos.base.domain.prod.touchkey.TouchClassVO;
-import kr.co.solbipos.base.enums.InFg;
-import kr.co.solbipos.base.enums.Style;
+import kr.co.solbipos.base.common.enums.InFg;
+import kr.co.solbipos.base.prod.touchkey.service.TouchClassVO;
+import kr.co.solbipos.base.prod.touchkey.service.TouchVO;
+import kr.co.solbipos.base.store.tableattr.enums.Style;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="kr.co.solbipos.application.persistence.login.LoginMapper">
+<mapper namespace="kr.co.solbipos.application.session.auth.service.impl.AuthMapper">
 
   <select id="selectWebUser" parameterType="sessionInfoVO" resultType="sessionInfoVO" >
-  /* LoginMapper.selectWebUser */
+  /* AuthMapper.selectWebUser */
      SELECT A.USER_ID,
             A.USER_PWD,
             B.USER_NM,
@@ -84,7 +84,7 @@
   </select>
 
   <select id="selectLoginHist" resultType="loginHistVO" parameterType="loginHistVO">
-  /* LoginMapper.selectLoginHist */
+  /* AuthMapper.selectLoginHist */
      SELECT SEQ,
             USER_ID,
             STAT_CD,
@@ -98,7 +98,7 @@
   </select>
 
   <insert id="insertLoginHist" parameterType="loginHistVO">
-  /* LoginMapper.insertLoginHist */
+  /* AuthMapper.insertLoginHist */
     INSERT INTO TB_WB_LOGIN_HIST
     (
       SEQ,
@@ -126,7 +126,7 @@
 <!--    권한 있는 리소스 가져오기 -->
   <select id="selectAuthMenu" parameterType="sessionInfoVO" resultType="resrceInfoVO">
   <![CDATA[
-  /* LoginMapper.selectAuthMenu */
+  /* AuthMapper.selectAuthMenu */
      SELECT DISTINCT RESRCE_CD,
             P_RESRCE,
             RESRCE_FG,

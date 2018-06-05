@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.utils.DateUtil;
-import kr.co.solbipos.application.domain.login.SessionInfoVO;
-import kr.co.solbipos.application.enums.main.MainSrchFg;
-import kr.co.solbipos.application.persistence.main.ContentMapper;
+import kr.co.solbipos.application.common.enums.MainSrchFg;
+import kr.co.solbipos.application.main.content.service.impl.ContentMapper;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 
 @Service
 public class ContentServiceImpl implements ContentService{

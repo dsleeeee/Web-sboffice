@@ -17,11 +17,11 @@ import com.mxgraph.model.mxGeometry;
 import com.mxgraph.model.mxIGraphModel;
 import com.mxgraph.util.mxXmlUtils;
 import com.mxgraph.view.mxGraph;
-import kr.co.solbipos.base.domain.store.tablelayout.TableVO;
-import kr.co.solbipos.base.domain.store.tablelayout.TableGroupVO;
-import kr.co.solbipos.base.enums.Style;
-import kr.co.solbipos.base.enums.TblGrpFg;
-import kr.co.solbipos.base.enums.TblTypeFg;
+import kr.co.solbipos.base.store.tableattr.enums.Style;
+import kr.co.solbipos.base.store.tableattr.enums.TblGrpFg;
+import kr.co.solbipos.base.store.tableattr.enums.TblTypeFg;
+import kr.co.solbipos.base.store.tablelayout.service.TableGroupVO;
+import kr.co.solbipos.base.store.tablelayout.service.TableVO;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

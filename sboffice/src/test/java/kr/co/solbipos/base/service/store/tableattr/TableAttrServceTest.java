@@ -21,12 +21,12 @@ import com.mxgraph.model.mxIGraphModel;
 import com.mxgraph.util.mxUtils;
 import com.mxgraph.util.mxXmlUtils;
 import com.mxgraph.view.mxGraph;
-import kr.co.solbipos.base.domain.store.tableattr.TableAttrVO;
-import kr.co.solbipos.base.enums.AttrCd;
-import kr.co.solbipos.base.enums.Style;
-import kr.co.solbipos.base.enums.TblTypeFg;
-import kr.co.solbipos.base.enums.TextalignFg;
-import kr.co.solbipos.base.enums.TextvalignFg;
+import kr.co.solbipos.base.store.tableattr.enums.AttrCd;
+import kr.co.solbipos.base.store.tableattr.enums.Style;
+import kr.co.solbipos.base.store.tableattr.enums.TblTypeFg;
+import kr.co.solbipos.base.store.tableattr.enums.TextalignFg;
+import kr.co.solbipos.base.store.tableattr.enums.TextvalignFg;
+import kr.co.solbipos.base.store.tableattr.service.TableAttrVO;
 import kr.co.solbipos.config.AbstractApplicationContextTest;
 import lombok.extern.slf4j.Slf4j;
 

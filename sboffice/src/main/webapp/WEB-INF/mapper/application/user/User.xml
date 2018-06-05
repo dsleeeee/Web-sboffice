@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="kr.co.solbipos.application.persistence.user.UserMapper">
+<mapper namespace="kr.co.solbipos.application.session.user.service.impl.UserMapper">
 
   <select id="selectUserList" parameterType="userVO" resultType="userVO" >
   /* UserMapper.selectUserList */
@@ -144,7 +144,7 @@
 
   <update id="updateUserPwd" parameterType="sessionInfoVO">
   <![CDATA[
-  /* LoginMapper.updateUserPwd */
+  /* AuthMapper.updateUserPwd */
     UPDATE TB_WB_USER_INFO
        SET USER_PWD = #{userPwd}
      WHERE USER_ID = #{userId}

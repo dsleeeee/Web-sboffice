@@ -10,7 +10,7 @@ import org.springframework.validation.ObjectError;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
-import kr.co.solbipos.application.domain.cmm.PageVO;
+import kr.co.solbipos.application.common.service.PageVO;
 
 /**
  * @author 정용길

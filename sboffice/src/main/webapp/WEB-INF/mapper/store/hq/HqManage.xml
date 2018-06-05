@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="kr.co.solbipos.store.persistence.hq.hqmanage.HqManageMapper">
+<mapper namespace="kr.co.solbipos.store.hq.hqmanage.service.impl.HqManageMapper">
   <select id="list" parameterType="hqManageVO" resultType="DefaultMap">
     /* HqManageMapper.list */
     <![CDATA[
@@ -42,14 +42,14 @@
                COUNT(HQ_OFFICE_CD) CNT
           FROM TB_MS_STORE
          WHERE SYS_STAT_FG = '1'
-         GROUP BY HQ_OFFICE_CD  
+         GROUP BY HQ_OFFICE_CD
               ) B,
               (
         SELECT A.HQ_BRAND_CD HQ_OFFICE_CD, B.ENVST_NM POS_NM
           FROM TB_HQ_ENVST A,
                TB_CM_ENVST B
          WHERE A.ENVST_CD = '140'
-           AND B.ENVST_CD = A.ENVST_CD     
+           AND B.ENVST_CD = A.ENVST_CD
               ) C
        WHERE A.HQ_OFFICE_CD != '00000'
          AND B.HQ_OFFICE_CD (+) = A.HQ_OFFICE_CD
@@ -77,7 +77,7 @@
        AND RNUM <= #{next}
      ]]>
   </select>
-  
+
   <select id="dtlInfo" parameterType="hqManageVO" resultType="DefaultMap">
     /* HqManageMapper.dtlInfo */
     <![CDATA[
@@ -124,7 +124,7 @@
        AND D.NMCODE_CD = A.SYS_STAT_FG
      ]]>
   </select>
- 
+
   <select id="chkBizNo" parameterType="hqManageVO" resultType="Integer">
     /* HqManageMapper.chkBizNo */
     <![CDATA[
@@ -135,21 +135,21 @@
        WHERE SYS_STAT_FG <> '9'
          AND BIZ_NO = #{bizNo}
        UNION ALL
-      SELECT STORE_CD 
+      SELECT STORE_CD
         FROM TB_MS_STORE
        WHERE SYS_STAT_FG <> '9'
        AND BIZ_NO = #{bizNo}
            )
      ]]>
   </select>
-  
+
   <select id="getBizUseList" parameterType="hqManageVO" resultType="DefaultMap">
     /* HqManageMapper.getBizUseList */
     SELECT 'H' STORE_FG,
-           A.HQ_OFFICE_CD STORE_CD, 
-           A.HQ_OFFICE_NM STORE_NM, 
+           A.HQ_OFFICE_CD STORE_CD,
+           A.HQ_OFFICE_NM STORE_NM,
            A.OWNER_NM,
-           A.BIZ_NO, 
+           A.BIZ_NO,
            (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '005' AND NMCODE_CD = A.SYS_STAT_FG) SYS_STAT_FG_NM,
            (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '003' AND NMCODE_CD = A.CLS_FG) CLS_FG_NM
       FROM TB_HQ_OFFICE A
@@ -165,7 +165,7 @@
        FROM TB_MS_STORE A
       WHERE BIZ_NO = #{bizNo}
   </select>
-  
+
   <select id="getBizInfoDtl" parameterType="hqManageVO" resultType="DefaultMap">
     /* HqManageMapper.getBizInfoDtl */
     SELECT A.OWNER_NM,
@@ -201,7 +201,7 @@
        AND B.AGENCY_CD = A.AGENCY_CD
        </if>
   </select>
-  
+
   <select id="getHqOfficeCd" parameterType="DefaultMap" resultType="String">
     /* HqManageMapper.chkBizNo */
     <if test='sysClosureDate == "99991231"'>
@@ -276,7 +276,7 @@
     )
     ]]>
   </insert>
-  
+
   <insert id="registEmployee" parameterType="DefaultMap">
     /* HqManageMapper.registEmployee */
     INSERT INTO TB_HQ_EMPLOYEE
@@ -295,7 +295,7 @@
       REG_ID,
       MOD_DT,
       MOD_ID
-    ) 
+    )
     VALUES
     (
       #{hqOfficeCd},
@@ -314,7 +314,7 @@
       #{modId}
     )
   </insert>
-  
+
   <insert id="registWebUser" parameterType="DefaultMap">
     /* HqManageMapper.registWebUser */
     INSERT INTO TB_WB_USER_INFO
@@ -334,7 +334,7 @@
       'N'
     )
   </insert>
-  
+
   <update id="modify" parameterType="hqManageVO">
     /* HqManageMapper.modify */
     <![CDATA[
@@ -364,7 +364,7 @@
      WHERE HQ_OFFICE_CD   = #{hqOfficeCd}
    ]]>
   </update>
-  
+
   <select id="authHqList" parameterType="hqManageVO" resultType="DefaultMap">
     /* HqManageMapper.authHqList */
     <![CDATA[
@@ -381,10 +381,10 @@
   <select id="avlblMenu" parameterType="hqManageVO" resultType="DefaultMap">
     /* HqManageMapper.avlblMenu */
    SELECT A.*
-    FROM ( 
+    FROM (
     SELECT A.RESRCE_CD RESRCE_CD_LARGE,
            A.RESRCE_NM RESRCE_NM_LARGE,
-           B.RESRCE_CD RESRCE_CD_MID, 
+           B.RESRCE_CD RESRCE_CD_MID,
            B.RESRCE_NM RESRCE_NM_MID,
            C.RESRCE_CD RESRCE_CD_SMALL,
            C.RESRCE_NM RESRCE_NM_SMALL
@@ -393,7 +393,7 @@
            TB_WB_RESRCE_INFO C
      WHERE A.USE_YN = 'Y'
        AND (A.SPCL_AUTHOR IS NULL OR A.SPCL_AUTHOR NOT IN ('A01'))
-       AND B.P_RESRCE = A.RESRCE_CD 
+       AND B.P_RESRCE = A.RESRCE_CD
        AND B.USE_YN = 'Y'
        AND C.P_RESRCE = B.RESRCE_CD
        AND C.DISP_LEVEL = '2'
@@ -430,7 +430,7 @@
        AND A.EMP_NO = '0000'
        AND B.USER_ID = A.USER_ID
        AND C.USER_ID = B.USER_ID
-       AND C.INCLD_EXCLD_FG = 'E' 
+       AND C.INCLD_EXCLD_FG = 'E'
            ) B
    WHERE B.RESRCE_CD = A.RESRCE_CD_SMALL
   </select>
@@ -441,7 +441,7 @@
     FROM (
     SELECT A.RESRCE_CD RESRCE_CD_LARGE,
            A.RESRCE_NM RESRCE_NM_LARGE,
-           B.RESRCE_CD RESRCE_CD_MID, 
+           B.RESRCE_CD RESRCE_CD_MID,
            B.RESRCE_NM RESRCE_NM_MID,
            C.RESRCE_CD RESRCE_CD_SMALL,
            C.RESRCE_NM RESRCE_NM_SMALL
@@ -450,7 +450,7 @@
            TB_WB_RESRCE_INFO C
      WHERE A.USE_YN = 'Y'
        AND (A.SPCL_AUTHOR IS NULL OR A.SPCL_AUTHOR NOT IN ('A01'))
-       AND B.P_RESRCE = A.RESRCE_CD 
+       AND B.P_RESRCE = A.RESRCE_CD
        AND B.USE_YN = 'Y'
        AND C.P_RESRCE = B.RESRCE_CD
        AND C.DISP_LEVEL = '2'
@@ -490,7 +490,7 @@
         ) B
    WHERE B.RESRCE_CD = A.RESRCE_CD_SMALL
   </select>
-  
+
   <update id="copyAuth" parameterType="DefaultMap" >
     /* HqManageMapper.copyAuth */
     UPDATE TB_WB_USER_INFO
@@ -509,13 +509,13 @@
                          AND B.USER_ID = A.USER_ID
                       )
   </update>
-  
+
   <insert id="copyAuthExcp" parameterType="hqMenuVO" >
     /* HqManageMapper.copyAuthExcp */
     <![CDATA[
-    MERGE INTO TB_WB_AUTHOR_EXCEPT A 
+    MERGE INTO TB_WB_AUTHOR_EXCEPT A
     USING (
-          SELECT USER_ID, RESRCE_CD, INCLD_EXCLD_FG, USE_YN 
+          SELECT USER_ID, RESRCE_CD, INCLD_EXCLD_FG, USE_YN
             FROM TB_WB_AUTHOR_EXCEPT
            WHERE USER_ID = (
                             SELECT B.USER_ID
@@ -545,7 +545,7 @@
             )
    ]]>
   </insert>
-  
+
   <!-- <insert id="addAuth" parameterType="hqManageVO"> -->
   <insert id="addAuth" parameterType="DefaultMap">
     /* HqManageMapper.addAuth */
@@ -559,8 +559,8 @@
       REG_ID,
       MOD_DT,
       MOD_ID
-    )   
-    VALUES 
+    )
+    VALUES
     (
       (SELECT B.USER_ID FROM TB_HQ_EMPLOYEE A, TB_WB_USER_INFO B WHERE A.HQ_OFFICE_CD = #{hqOfficeCd} AND B.USER_ID = A.USER_ID),
       #{resrceCd},
@@ -572,13 +572,13 @@
       #{modId}
     )
   </insert>
-  
+
   <!-- <select id="isAuth" parameterType="hqMenuVO"> -->
   <select id="isAuth" parameterType="DefaultMap" resultType="Integer">
     /* HqManageMapper.isAuth */
     SELECT COUNT(RESRCE_CD)
       FROM TB_WB_AUTHOR_EXCEPT
-     WHERE USER_ID = (SELECT B.USER_ID 
+     WHERE USER_ID = (SELECT B.USER_ID
                         FROM TB_HQ_EMPLOYEE A,
                              TB_WB_USER_INFO B
                        WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -587,12 +587,12 @@
        AND RESRCE_CD = #{resrceCd}
        AND USE_YN = 'Y'
   </select>
-  
+
   <!-- <delete id="removeAuth" parameterType="hqManageVO"> -->
   <delete id="removeAuth" parameterType="DefaultMap">
     /* HqManageMapper.removeAuth */
     DELETE TB_WB_AUTHOR_EXCEPT
-     WHERE USER_ID = (SELECT B.USER_ID 
+     WHERE USER_ID = (SELECT B.USER_ID
                         FROM TB_HQ_EMPLOYEE A,
                              TB_WB_USER_INFO B
                        WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -600,5 +600,5 @@
                          AND B.USER_ID = A.USER_ID)
        AND RESRCE_CD = #{resrceCd}
   </delete>
-  
+
 </mapper>
