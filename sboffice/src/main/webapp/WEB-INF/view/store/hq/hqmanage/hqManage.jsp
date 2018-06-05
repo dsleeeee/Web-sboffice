@@ -183,7 +183,20 @@
   
   <%-- 본사 목록 조회 --%>
   function search(index) {
-    //TODO validation 추가
+    if(srchHqOfficeCd.text.length > 5) {
+      s_alert.pop("<s:message code='hqManage.hqOfficeCd'/><s:message code='cmm.regexp' arguments='5'/>");
+      return;
+    }
+    
+    if(srchHqOfficeNm.text.length > 15) {
+      s_alert.pop("<s:message code='hqManage.hqOfficeNm'/><s:message code='cmm.regexp' arguments='15'/>");
+      return;
+    }
+    
+    if(srchBizNo.text.length > 15) {
+      s_alert.pop("<s:message code='hqManage.bizNo'/><s:message code='cmm.regexp' arguments='15'/>");
+      return;
+    }
     
     var param = {};
     param.hqOfficeCd  = srchHqOfficeCd.text;
