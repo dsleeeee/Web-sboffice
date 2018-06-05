@@ -1,5 +1,6 @@
 package kr.co.solbipos.store.domain.hq.hqbrand;
 
+import java.util.List;
 import kr.co.common.data.enums.UseYn;
 import kr.co.solbipos.application.domain.cmm.CmmVO;
 import lombok.Data;
@@ -12,22 +13,24 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class HqBrandVO extends CmmVO {
+public class HqClsVO extends CmmVO {
 
     
     /** 본사코드 */
     private String hqOfficeCd;
     
-    /** 본사명 */
-    private String hqOfficeNm;
-    
     /** 브랜드코드 */
     private String hqBrandCd;
+
+    /** 상품분류코드 */
+    private String prodClassCd;
     
-    /** 브랜드명 */
-    private String hqBrandNm;
-    
-    /** 사용여부 */
-    private UseYn UseYn;
-    
+    /** 상품분류명 */
+    private String prodClassNm;
+
+    /** 상위상품분류코드 */
+    private String pProdClassCd;
+
+    /** Child Items */
+    private List<HqClsVO> items;
 }

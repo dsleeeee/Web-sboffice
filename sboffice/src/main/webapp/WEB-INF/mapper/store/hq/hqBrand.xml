@@ -18,24 +18,31 @@
      WHERE B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
     ]]>
     <if test='hqOfficeCd != null and hqOfficeCd != ""'>
-       AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+       AND A.HQ_OFFICE_CD LIKE '%'||#{hqOfficeCd}||'%'
     </if>
     <if test='hqOfficeNm != null and hqOfficeNm != ""'>
-       AND B.HQ_OFFICE_NM = #{hqOfficeNm}
+       AND B.HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'
     </if>
     <if test='hqBrandCd != null and hqBrandCd != ""'>
-       AND A.HQ_BRAND_CD = #{hqBrandCd}
+       AND A.HQ_BRAND_CD LIKE '%'||#{hqBrandCd}||'%'
     </if>
     <if test='hqBrandNm != null and hqBrandNm != ""'>
-       AND A.HQ_BRAND_NM = #{hqBrandNm}
+       AND A.HQ_BRAND_NM LIKE '%'||#{hqBrandNm}||'%'
     </if>
     <if test='useYn != null and useYn.toString() != "ALL"'>
        AND A.USE_YN = #{useYn}
     </if>
-     ORDER BY A.HQ_OFFICE_CD, A.HQ_BRAND_CD ASC
+     ORDER BY A.REG_DT, A.HQ_OFFICE_CD, A.HQ_BRAND_CD ASC
   </select>
 
-  <insert id="insertBrand" parameterType="hqBrandVO">
+  <select id="getHqBrandCd" parameterType="hqBrandVO" resultType="String">
+    /* HqBrandMapper.getHqBrandCd */
+    SELECT CONCAT(#{hqOfficeCd}, LPAD(SUBSTR(NVL(MAX(HQ_BRAND_CD), '0000000'), 6, 2) +1, 2, '0')) 
+      FROM TB_HQ_BRAND
+     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+  </select>
+
+  <insert id="insertBrand" parameterType="DefaultMap">
     /* HqBrandMapper.insertBrand */
       INSERT INTO TB_HQ_BRAND 
     (
@@ -50,21 +57,16 @@
     )
     VALUES
     (
-         (
-         SELECT CONCAT(#{hqOfficeCd}, LPAD(SUBSTR(NVL(MAX(HQ_BRAND_CD), '0000000'), 6, 2) +1, 2, '0')) 
-           FROM TB_HQ_BRAND
-          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-         ),
-         #{hqBrandNm},
-         #{hqOfficeCd},
-         #{useYn},
-         #{regDt},
-         #{regId},
-         #{modDt},
-         #{modId}
+       #{hqBrandCd},
+       #{hqBrandNm},
+       #{hqOfficeCd},
+       #{useYn},
+       #{regDt},
+       #{regId},
+       #{modDt},
+       #{modId}
     )
   </insert>
-
 
   <update id="updateBrand" parameterType="hqBrandVO">
     /* HqBrandMapper.updateBrand */
@@ -174,7 +176,119 @@
      WHERE STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND HQ_BRAND_CD = #{hqBrandCd} )
        AND ENVST_CD = #{envstCd}
   </update>
+  
+  <select id="getClsList" parameterType="hqBrandVO" resultType="DefaultMap">
+    /* HqBrandMapper.getClsList */
+    SELECT HQ_BRAND_CD,
+           PROD_CLASS_CD,
+           PROD_CLASS_NM,
+           P_PROD_CLASS_CD
+      FROM TB_HQ_PRODUCT_CLASS
+     WHERE HQ_BRAND_CD = #{hqBrandCd}
+  </select>
+  
+  <select id="getClsCd" parameterType="hqClsVO" resultType="String">
+    /* HqBrandMapper.getClsCd */
+    SELECT LPAD( NVL(MAX(PROD_CLASS_CD), 0) + 1, 5, '0') PROD_CLASS_CD
+      FROM TB_HQ_PRODUCT_CLASS
+     WHERE HQ_BRAND_CD = #{hqBrandCd}
+  </select>
 
+  <select id="getPProdClsCd" parameterType="hqClsVO" resultType="String">
+    /* HqBrandMapper.getPProdClsCd */
+    SELECT MAX(PROD_CLASS_CD)
+      FROM TB_HQ_PRODUCT_CLASS
+     WHERE HQ_BRAND_CD = #{hqBrandCd}
+  </select>
 
+  <insert id="insertCls" parameterType="hqClsVO">
+    /* HqBrandMapper.insertCls */
+    INSERT INTO TB_HQ_PRODUCT_CLASS
+    (
+      HQ_BRAND_CD,
+      PROD_CLASS_CD,
+      PROD_CLASS_NM,
+      P_PROD_CLASS_CD,
+      REG_DT,
+      REG_ID,
+      MOD_DT,
+      MOD_ID
+    )
+    VALUES
+    (
+      #{hqBrandCd},
+      #{prodClassCd},
+      #{prodClassNm},
+      #{pProdClassCd},
+      #{regDt},
+      #{regId},
+      #{modDt},
+      #{modId}
+    )
+  </insert>
+
+  <update id="updateCls" parameterType="hqClsVO">
+    /* HqBrandMapper.updateCls */
+    MERGE INTO TB_HQ_PRODUCT_CLASS A
+    USING (
+          SELECT #{hqBrandCd} HQ_BRAND_CD,
+                 #{prodClassCd} PROD_CLASS_CD,
+                 #{prodClassNm} PROD_CLASS_NM,
+                 #{pProdClassCd} P_PROD_CLASS_CD,
+                 #{regDt} REG_DT,
+                 #{regId} REG_ID,
+                 #{modDt} MOD_DT,
+                 #{modId} MOD_ID
+            FROM DUAL
+          ) B
+       ON 
+        (
+          B.HQ_BRAND_CD = A.HQ_BRAND_CD
+      AND B.PROD_CLASS_CD = A.PROD_CLASS_CD
+        )
+     WHEN MATCHED THEN
+          UPDATE SET
+                 A.PROD_CLASS_NM = B.PROD_CLASS_NM,
+                 A.MOD_DT = B.MOD_DT,
+                 A.MOD_ID = B.MOD_ID
+     WHEN NOT MATCHED THEN
+          INSERT
+          (
+            A.HQ_BRAND_CD,
+            A.PROD_CLASS_CD,
+            A.PROD_CLASS_NM,
+            A.P_PROD_CLASS_CD,
+            A.REG_DT,
+            A.REG_ID,
+            A.MOD_DT,
+            A.MOD_ID
+          )
+          VALUES
+          (
+            B.HQ_BRAND_CD,
+            B.PROD_CLASS_CD,
+            B.PROD_CLASS_NM,
+            B.P_PROD_CLASS_CD,
+            B.REG_DT,
+            B.REG_ID,
+            B.MOD_DT,
+            B.MOD_ID
+          )
+  </update>
+
+  <select id="chkProdCnt" parameterType="hqClsVO" resultType="Integer">
+    /* HqBrandMapper.chkProdCnt */
+    SELECT COUNT(1)
+      FROM TB_HQ_PRODUCT
+     WHERE HQ_BRAND_CD = #{hqBrandCd}
+       AND PROD_CLASS_CD = #{prodClassCd}
+  </select>
+
+  <delete id="deleteCls">
+    /* HqBrandMapper.deleteCls */
+    DELETE TB_HQ_PRODUCT_CLASS
+     WHERE HQ_BRAND_CD = #{hqBrandCd}
+       AND PROD_CLASS_CD = #{prodClassCd}
+  </delete>
 
 </mapper>

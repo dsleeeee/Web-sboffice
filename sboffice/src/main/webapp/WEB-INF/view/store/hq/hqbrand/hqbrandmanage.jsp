@@ -54,7 +54,6 @@
           </div>
         </td>
       </tr>
-      
       <tr>
         <%-- 사용여부 --%>
         <th><s:message code="hqBrand.useYn" /></th>
@@ -73,6 +72,19 @@
   <div class="mt10 pdb20 oh bb">
     <%-- 조회 --%>  
     <button class="btn_blue fr" id="btnSearch"><s:message code="cmm.search" /></button>
+  </div>
+  
+  <div class="mt20 oh sb-select dkbr">
+    <%--페이지 스케일 --%>
+    <div id="listScaleBox" class="w130 fl"></div>
+    <div class="tr">
+      <%-- 브랜드신규등록 --%>
+      <button class="btn_skyblue" id="btnAdd"><s:message code="hqBrand.newBrand" /></button>
+      <%-- 삭제 --%>
+      <button class="btn_skyblue" id="btnDel"><s:message code="cmm.delete" /></button>
+      <%-- 저장 --%>
+      <button class="btn_skyblue" id="btnSave"><s:message code="cmm.save" /></button>
+    </div>
   </div>
   
   <%-- 위즈모 테이블 --%>
@@ -98,8 +110,8 @@
   var hData =
     [
     <c:if test="${orgnFg == 'MASTER'}">
-      {binding:"hqOfficeCd", header:"<s:message code='hqBrand.hqOfficeCd' />", isReadOnly:true, allowMerging:true},
-      {binding:"hqOfficeNm", header:"<s:message code='hqBrand.hqOfficeNm' />", isReadOnly:true, allowMerging:true},
+      {binding:"hqOfficeCd", header:"<s:message code='hqBrand.hqOfficeCd' />", isReadOnly:true},
+      {binding:"hqOfficeNm", header:"<s:message code='hqBrand.hqOfficeNm' />", isReadOnly:true},
     </c:if>
       {binding:"hqBrandCd", header:"<s:message code='hqBrand.hqBrandCd' />", visible:false},
       {binding:"hqBrandNm", header:"<s:message code='hqBrand.hqBrandNm' />", maxLength:15},
@@ -136,7 +148,7 @@
       } else {
         if( col.binding == "hqBrandNm") {
           selectedBrand = grid.rows[ht.row].dataItem;
-          openCodeLayer();
+          openEnvLayer();
         } 
       }
     }
@@ -147,7 +159,7 @@
     if(col.maxLength){
       var val = s.getCellData(e.row, e.col);
       if (val.length > col.maxLength) {
-        s_alert.pop("<s:message code='hqBrand.hqBrandNm.regexp' arguments='"+col.maxLength+"'/>");
+        s_alert.pop("<s:message code='hqBrand.hqBrandNm'/><s:message code='cmm.regexp' arguments='"+col.maxLength+"'/>");
       }
     }
   });
@@ -157,15 +169,27 @@
     search(1);
   });
   
-  <%-- 페이징 --%>
-  $(document).on("click", ".page1", function() {
-    search($(this).data("value"));  //TODO 페이징테스트
-  });
-  
-  
   <%-- 브랜드 목록 조회 --%>
   function search(index) {
-    //TODO validation 추가
+    if(srchHqOfficeCd.text.length > 5) {
+      s_alert.pop("<s:message code='hqBrand.hqOfficeCd'/><s:message code='cmm.regexp' arguments='15'/>");
+      return;
+    }
+    
+    if(srchHqOfficeNm.text.length > 15) {
+      s_alert.pop("<s:message code='hqBrand.hqOfficeNm'/><s:message code='cmm.regexp' arguments='15'/>");
+      return;
+    }
+    
+    if(srchHqBrandCd.text.length > 5) {
+      s_alert.pop("<s:message code='hqBrand.hqBrandCd'/><s:message code='cmm.regexp' arguments='5'/>");
+      return;
+    }
+    
+    if(srchHqBrandNm.text.length > 15 ) {
+      s_alert.pop("<s:message code='hqBrand.hqBrandNm'/><s:message code='cmm.regexp' arguments='15'/>");
+      return;
+    }
     
     var param = {};
     param.hqOfficeCd  = srchHqOfficeCd.text;
@@ -292,8 +316,8 @@
 <c:import url="/WEB-INF/view/application/layer/hqOffice.jsp">
 </c:import>
 
-<%-- 코드관리 --%>
-<c:import url="/WEB-INF/view/store/hq/hqbrand/codlen.jsp">
+<%-- 환정설정 --%>
+<c:import url="/WEB-INF/view/store/hq/hqbrand/config.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
   <c:param name="orgnFg" value="${orgnFg}"/>
@@ -301,8 +325,8 @@
   <c:param name="orgnNm" value="${orgnNm}"/>
 </c:import>
 
-<%-- 환정설정 --%>
-<c:import url="/WEB-INF/view/store/hq/hqbrand/config.jsp">
+<%-- 분류관리 --%>
+<c:import url="/WEB-INF/view/store/hq/hqbrand/productclass.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
   <c:param name="orgnFg" value="${orgnFg}"/>

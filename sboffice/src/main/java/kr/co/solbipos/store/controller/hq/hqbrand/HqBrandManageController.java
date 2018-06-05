@@ -19,6 +19,7 @@ import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.domain.login.SessionInfoVO;
 import kr.co.solbipos.store.domain.hq.hqbrand.HqBrandVO;
+import kr.co.solbipos.store.domain.hq.hqbrand.HqClsVO;
 import kr.co.solbipos.store.domain.hq.hqbrand.HqEnvstVO;
 import kr.co.solbipos.store.service.hq.hqbrand.HqBrandService;
 
@@ -128,4 +129,48 @@ public class HqBrandManageController {
         
         return returnJson(Status.OK, result);
     }
+    
+    /**
+     * 분류 조회
+     * @param hqBrand
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "productclass/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result clsList(HqBrandVO hqBrand, HttpServletRequest request,
+            HttpServletResponse response, Model model) {
+        
+        List<HqClsVO> list = service.getClsList(hqBrand);
+        
+        return returnListJson(Status.OK, list, hqBrand);
+    }
+    
+    
+    /**
+     * 분류 등록
+     * @param hqBrand
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "productclass/save.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result clsSave(@RequestBody HqClsVO[] HqClsVOs, HttpServletRequest request,
+            HttpServletResponse response, Model model) {
+        
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = service.clsSave(HqClsVOs, sessionInfoVO);
+        
+        return returnJson(Status.OK, result);
+    }
+    
+    
+    
+    
+    
 }

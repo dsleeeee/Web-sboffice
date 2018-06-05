@@ -3,6 +3,7 @@ package kr.co.solbipos.store.persistence.hq.hqbrand;
 import java.util.List;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.store.domain.hq.hqbrand.HqBrandVO;
+import kr.co.solbipos.store.domain.hq.hqbrand.HqClsVO;
 import kr.co.solbipos.store.domain.hq.hqbrand.HqEnvstVO;
 
 /**
@@ -19,6 +20,14 @@ public interface HqBrandMapper {
      */
     List<DefaultMap<String>> list(HqBrandVO hqBrand);
 
+
+    /**
+     * 브랜드 코드 조회
+     * @param hqBrandVO
+     * @return
+     */
+    String getHqBrandCd(HqBrandVO hqBrandVO);
+    
     /**
      * 브랜드 추가
      * @param hqBrandVO
@@ -67,4 +76,57 @@ public interface HqBrandMapper {
      * @return
      */
     int updateConfigStore(HqEnvstVO hqEnvst);
+
+    /**
+     * 분류목록 조회
+     * @param hqBrand
+     * @return
+     */
+    List<DefaultMap<String>> getClsList(HqBrandVO hqBrand);
+    
+    /**
+     * 분류 코드 조회
+     * @param hqClsVO
+     * @return
+     */
+    String getClsCd(HqClsVO hqClsVO);
+    
+    /**
+     * 상위분류 코드 조회
+     * @param hqClsVO
+     * @return
+     */
+    String getPProdClsCd(HqClsVO hqClsVO);
+    
+    /**
+     * 분류 등록
+     * @param hqBrandVO
+     * @return
+     */
+    int insertCls(HqClsVO hqClsVO);
+
+    /**
+     * 분류 수정
+     * @param hqBrandVO
+     * @return
+     */
+    int updateCls(HqClsVO hqClsVO);
+
+    /**
+     * 해당 분류로 등록된 상품 조회
+     * @param hqClsVO
+     * @return
+     */
+    int chkProdCnt(HqClsVO hqClsVO);
+    
+    /**
+     * 분류 삭제
+     * @param hqClsVO
+     * @return
+     */
+    int deleteCls(HqClsVO hqClsVO);
+
+
+
+    
 }

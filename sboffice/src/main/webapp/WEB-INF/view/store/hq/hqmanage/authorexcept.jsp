@@ -17,7 +17,6 @@
           <ul>
             <li><a id="hqInfoTab" href="javascript:;"><s:message code="hqManage.hqInfo" /></a></li>
             <li><a id="menuSettingTab" href="javascript:;" class="on"><s:message code="hqManage.menuSetting" /></a></li>
-            <%-- <li><a id="envSettingTab" href="javascript:;"><s:message code="hqManage.envSetting" /></a></li> --%>
           </ul>
         </div>
 
@@ -30,7 +29,7 @@
           </ul>
         </div>
           
-        <div id="MwebArea">
+        <div id="webArea">
           <%-- 권한복사 영역 --%>
           <table class="tblType01 moreDark mb10 mt10">
             <colgroup>
@@ -234,7 +233,6 @@
   <%-- 상세정보 팝업 열기 --%>
   function openAuthLayer() {
     
-    // 데이터 조회
     var param = selectedHq;
     
     $.postJSON("/store/hq/hqmanage/authorexcept/authHqList.sb", param, function(result) {

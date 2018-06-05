@@ -12,8 +12,10 @@
       <div class="con">
         <div class="tabType1">
           <ul>
-            <li><a href="javascript:;" id="codeSettingTab"><s:message code="hqBrand.codeSetting" /></a></li>
+            <%-- 환경설정 탭 --%>
             <li><a href="javascript:;" id="envSettingTab" class="on"><s:message code="hqBrand.envSetting" /></a></li>
+            <%-- 분류관리 탭 --%>
+            <li><a href="javascript:;" id="classSettingTab" ><s:message code="hqBrand.classSetting" /></a></li>
           </ul>
         </div>
         <%-- 환경설정 컨텐츠 --%>
@@ -64,9 +66,6 @@ function getConfigList(){
     
     var list = result.data.list;
 
-    console.log(">>> list <<<");
-    console.log(list);
-    
     for(var i=0; i<envstGrpCd.length; i++) {
       
       var envCnt    = 0;
@@ -164,7 +163,7 @@ function getConfigList(){
 }
 
 <%-- 저장 버튼 클릭 --%>
-$("#btnSave").click(function(){
+$("#envLayer #btnSave").click(function(){
   
   var objStatus = document.getElementsByName("status");
   var objEnvstCd = document.getElementsByName("envstCd");
@@ -203,7 +202,7 @@ $("#btnSave").click(function(){
 });
 
 <%-- 기본값 설정 버튼 클릭 --%>
-$("#btnDefault").click(function(){
+$("#envLayer #btnDefault").click(function(){
   
   objEnvSetVal  = document.getElementsByName("ENV_SET_VAL");
   objDefaultCd  = document.getElementsByName("DEFAULT_CD"); // 디폴트값을 갖고있어야하네 
@@ -216,15 +215,14 @@ $("#btnDefault").click(function(){
           objEnvSetVal[i].value = objDefaultCd[i].value;
       }
   }
-  
 });
 
-<%-- 코드관리 탭--%>
-$("#envLayer #codeSettingTab").click(function(){
+<%-- 분류관리 탭--%>
+$("#envLayer #classSettingTab").click(function(){
   $("#envDim").hide();
   $("#envLayer").hide();
   
-  openCodeLayer();
+  openClsLayer();
 });
 
 <%-- 레이어팝업 닫기 --%>

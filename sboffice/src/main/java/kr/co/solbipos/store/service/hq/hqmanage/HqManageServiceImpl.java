@@ -6,13 +6,19 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import kr.co.common.data.enums.Status;
+import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.domain.login.SessionInfoVO;
 import kr.co.solbipos.pos.enums.SysStatFg;
+import kr.co.solbipos.store.domain.hq.hqbrand.HqBrandVO;
 import kr.co.solbipos.store.domain.hq.hqmanage.HqManageVO;
 import kr.co.solbipos.store.domain.hq.hqmanage.HqMenuVO;
+import kr.co.solbipos.store.domain.hq.hqmanage.HqNmcodeVO;
+import kr.co.solbipos.store.domain.hq.hqmanage.HqPrintTemplVO;
+import kr.co.solbipos.store.persistence.hq.hqbrand.HqBrandMapper;
 import kr.co.solbipos.store.persistence.hq.hqmanage.HqManageMapper;
 import kr.co.solbipos.sys.enums.IncldExcldFg;
 
@@ -21,6 +27,9 @@ public class HqManageServiceImpl implements HqManageService{
 
     @Autowired
     HqManageMapper mapper;
+
+    @Autowired
+    HqBrandMapper brandMapper;
 
     @Autowired
     MessageService messageService;
@@ -66,7 +75,7 @@ public class HqManageServiceImpl implements HqManageService{
             hqManage.setSysClosureDate(currentDateString());
         }
         
-        // 본사 코드
+        // 본사 코드 조회
         String hqOfficeCd = mapper.getHqOfficeCd(hqManage);
         
         hqManage.setHqOfficeCd(hqOfficeCd);
@@ -81,11 +90,141 @@ public class HqManageServiceImpl implements HqManageService{
             // 웹 사용자 등록
             int webUserReg = mapper.registWebUser(hqManage);
             
-            return (employeeReg + webUserReg);
+            procCnt += employeeReg + webUserReg;
         }
         else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
+        
+        // 기본 브랜드 등록
+        HqBrandVO hqBrandVO = new HqBrandVO();
+        
+        hqBrandVO.setHqOfficeCd(hqOfficeCd);
+
+        // 브랜드 코드 조회
+        String hqBrandCd = brandMapper.getHqBrandCd(hqBrandVO);
+        
+        hqBrandVO.setHqBrandCd(hqBrandCd);
+        hqBrandVO.setHqBrandNm(hqManage.getHqOfficeNm());
+        hqBrandVO.setUseYn(UseYn.Y);
+        hqBrandVO.setRegDt(dt);
+        hqBrandVO.setRegId(sessionInfoVO.getUserId());
+        hqBrandVO.setModDt(dt);
+        hqBrandVO.setModId(sessionInfoVO.getUserId());
+        
+        // 브랜드 등록
+        int brandReg = brandMapper.insertBrand(hqBrandVO);
+        
+        procCnt += brandReg;
+        
+        // 코드 등록 (본사 코드 마스터)
+        int cmmCodeReg = 0;
+        
+        HqNmcodeVO nmcodeVO = new HqNmcodeVO();
+        
+        nmcodeVO.setHqBrandCd(hqBrandCd);
+        nmcodeVO.setUseYn(UseYn.Y);
+        nmcodeVO.setRegDt(dt);
+        nmcodeVO.setRegId(sessionInfoVO.getUserId());
+        nmcodeVO.setModDt(dt);
+        nmcodeVO.setModId(sessionInfoVO.getUserId());
+        
+        // 주문단위 등록
+        nmcodeVO.setNmcodeGrpCd("097");
+        nmcodeVO.setNmcodeCd("0");
+        nmcodeVO.setNmcodeNm("낱개");
+
+        cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
+        
+        nmcodeVO.setNmcodeGrpCd("097");
+        nmcodeVO.setNmcodeCd("1");
+        nmcodeVO.setNmcodeNm("낱개");
+        
+        cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
+        
+        // 판매형태
+        nmcodeVO.setNmcodeGrpCd("098");
+        nmcodeVO.setNmcodeCd("0");
+        nmcodeVO.setNmcodeNm("정상");
+        
+        cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
+
+        // 입금계정 기본 등록
+        nmcodeVO.setNmcodeGrpCd("099");
+        nmcodeVO.setNmcodeCd("00");
+        nmcodeVO.setNmcodeNm("입금");
+        
+        cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
+        
+        // 매장형태 - 직영
+        nmcodeVO.setNmcodeGrpCd("100");
+        nmcodeVO.setNmcodeCd("1");
+        nmcodeVO.setNmcodeNm("직영");
+        
+        cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
+
+        // 매장형태 - 가맹
+        nmcodeVO.setNmcodeGrpCd("100");
+        nmcodeVO.setNmcodeCd("2");
+        nmcodeVO.setNmcodeNm("가맹");
+        
+        cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
+
+        // 매장그룹
+        nmcodeVO.setNmcodeGrpCd("101");
+        nmcodeVO.setNmcodeCd("100");
+        nmcodeVO.setNmcodeNm("일반");
+        
+        cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
+
+        // 고객분류
+        nmcodeVO.setNmcodeGrpCd("102");
+        nmcodeVO.setNmcodeCd("01");
+        nmcodeVO.setNmcodeNm("남");
+        
+        cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
+        
+        nmcodeVO.setNmcodeGrpCd("102");
+        nmcodeVO.setNmcodeCd("02");
+        nmcodeVO.setNmcodeNm("여");
+        
+        cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
+        
+        // 포스 출력물 등록
+        HqPrintTemplVO printTempVO = new HqPrintTemplVO();
+        
+        printTempVO.setHqBrandCd(hqBrandCd);
+        printTempVO.setRegDt(dt);
+        printTempVO.setRegId(sessionInfoVO.getUserId());
+        printTempVO.setModDt(dt);
+        printTempVO.setModId(sessionInfoVO.getUserId());
+        
+        int printTempReg = mapper.hqPrintTempReg(printTempVO);
+        
+        procCnt += printTempReg;
+        
+        // 기본 매출 시간대 등록 (심야:00시-05시, 아침:06시-10시, 점심:11시-15시, 저녁:16시-23시)
+        for(int i=0; i<24; i++){
+            
+            String nmcodeNm = "";
+            
+            if(i<=5)                nmcodeNm = "심야";
+            else if(i>=6  && i<=10) nmcodeNm = "아침";
+            else if(i>=11 && i<=15) nmcodeNm = "점심";
+            else if(i>=16 && i<=23) nmcodeNm = "저녁";
+
+            nmcodeVO.setNmcodeGrpCd("096"); // 기본 매출 시간대
+            nmcodeVO.setNmcodeCd(StringUtil.lpad(String.valueOf(i), 2));
+            nmcodeVO.setNmcodeNm(nmcodeNm);
+            
+            int saleTimeReg = mapper.cmmCodeReg(nmcodeVO);
+            
+            cmmCodeReg += saleTimeReg;
+        }
+        
+        procCnt += cmmCodeReg;
+        
+        return procCnt;
     }
 
     @Override

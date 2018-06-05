@@ -3,7 +3,6 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
 <%-- 사업자번호 사용현황  레이어 팝업 --%>
-
 <div id="BizInfoDim" class="fullDimmed" style="display:none;"></div>
 <div id="BizInfoLayer" class="layer" style="display:none;">
   <div class="layer_inner">

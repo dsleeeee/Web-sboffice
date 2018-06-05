@@ -5,6 +5,8 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.domain.login.SessionInfoVO;
 import kr.co.solbipos.store.domain.hq.hqmanage.HqManageVO;
 import kr.co.solbipos.store.domain.hq.hqmanage.HqMenuVO;
+import kr.co.solbipos.store.domain.hq.hqmanage.HqNmcodeVO;
+import kr.co.solbipos.store.domain.hq.hqmanage.HqPrintTemplVO;
 
 /**
  * 가맹점관리 > 본사정보 > 본사정보관리
@@ -64,7 +66,6 @@ public interface HqManageMapper {
      */
     int regist(HqManageVO hqManage);
 
-
     /**
      * 본사 사원등록
      * @param hqManage
@@ -79,7 +80,20 @@ public interface HqManageMapper {
      */
     int registWebUser(HqManageVO hqManage);
 
-    
+    /**
+     * 본사 공통코드 등록
+     * @param nmcodeVO
+     * @return
+     */
+    int cmmCodeReg(HqNmcodeVO nmcodeVO);
+
+    /**
+     * 본사 포스 출력물 등록
+     * @param printTempVO
+     * @return
+     */
+    int hqPrintTempReg(HqPrintTemplVO printTempVO);
+
     /**
      * 본사 수정
      * @param hqManage
@@ -143,6 +157,8 @@ public interface HqManageMapper {
      * @return
      */
     int removeAuth(HqMenuVO hqMenus);
+
+    
 
 
 }

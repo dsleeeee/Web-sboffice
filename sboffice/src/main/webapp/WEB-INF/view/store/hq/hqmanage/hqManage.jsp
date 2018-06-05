@@ -5,7 +5,6 @@
 
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
-<%-- <c:set var="baseUrl" value="/store/hq/hqmanage/"/> --%>
 
 <div class="subCon">
   <div class="searchBar">
@@ -76,7 +75,7 @@
     <div class="tr">
       <%-- 본사신규등록 --%>
       <button class="btn_skyblue" id="btnRegist"><s:message code="hqManage.newHq" /></button>
-      <%-- sms 전송 --%>
+      <%-- sms 전송 //TODO --%>
       <button class="btn_skyblue" id="btnSMS"><s:message code="hqManage.sendSMS" /></button>
       <%-- 엑셀다운로드 --%>
       <button class="btn_skyblue" id="btnExcel"><s:message code="cmm.excel.down" /></button>
@@ -222,7 +221,7 @@
 
   <%-- SMS전송 버튼 클릭--%>
   $("#btnSMS").click(function(){
-    
+    s_alert.pop("서비스 준비중입니다.");
   });
   
   <%-- 엑셀 다운로드 버튼 클릭 --%>
