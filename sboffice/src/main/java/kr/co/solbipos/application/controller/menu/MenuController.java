@@ -13,6 +13,7 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.cmm.CmmMenuService;
 import kr.co.common.service.session.SessionService;
+import kr.co.solbipos.application.domain.cmm.HqVO;
 import kr.co.solbipos.application.domain.cmm.StoreVO;
 import kr.co.solbipos.application.domain.login.SessionInfoVO;
 
@@ -80,6 +81,22 @@ public class MenuController {
         return returnJson(Status.OK, list);
     }
 
+    /**
+     * 레이어 팝업 본사 조회
+     *
+     * @param hqVO
+     * @param request
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/selectHq.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result selectHq(HqVO hqVO, HttpServletRequest request, Model model) {
+        
+        System.out.println("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ selectHq");
+        List<HqVO> list = cmmMenuService.selectHq(hqVO);
+        return returnJson(Status.OK, list);
+   }
 }
 
 

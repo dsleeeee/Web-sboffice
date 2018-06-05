@@ -19,7 +19,10 @@ public enum UseYn implements CodeEnum {
     /** 사용 */
     Y("Y"),
     /** 미사용 */
-    N("N");
+    N("N"),
+    /** 선택 */
+    S("");
+    
     
     private String code;
   

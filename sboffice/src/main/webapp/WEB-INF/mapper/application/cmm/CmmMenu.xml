@@ -25,6 +25,25 @@
      </if>
      ORDER BY REG_DT, MOD_DT DESC
   </select>
+  
+  
+  <select id="selectHq" parameterType="hqVO" resultType="hqVO">
+  <![CDATA[
+    /* CmmMenuMapper.selectHq */
+    SELECT HQ_OFFICE_CD,
+           HQ_OFFICE_NM,
+           OWNER_NM
+      FROM TB_HQ_OFFICE
+     WHERE SYS_STAT_FG != '9'
+       AND SYS_OPEN_DATE < SYSDATE
+       AND SYS_CLOSURE_DATE > SYSDATE
+  ]]>
+   <if test="hqOfficeNm != null and hqOfficeNm != ''">
+       AND HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'
+   </if>
+     ORDER BY REG_DT, MOD_DT DESC
+  </select>
+  
 
   <insert id="insertMenuUseHist" parameterType="menuUseHistVO">
   <![CDATA[

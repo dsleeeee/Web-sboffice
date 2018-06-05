@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.store.persistence.hq.hqbrand.HqBrandMapper">
+
+  <select id="list" parameterType="DefaultMap" resultType="DefaultMap">
+    /* HqBrandMapper.list */
+    <![CDATA[
+    SELECT COUNT(1) OVER (PARTITION BY 1 ORDER BY 1) TOT_CNT,
+           ROW_NUMBER() OVER(PARTITION BY 1 ORDER BY 1) RNUM,
+           A.HQ_OFFICE_CD,
+           B.HQ_OFFICE_NM,
+           A.HQ_BRAND_CD,
+           A.HQ_BRAND_NM,
+           A.USE_YN
+      FROM TB_HQ_BRAND A,
+           TB_HQ_OFFICE B
+     WHERE B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+    ]]>
+    <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+       AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+    </if>
+    <if test='hqOfficeNm != null and hqOfficeNm != ""'>
+       AND B.HQ_OFFICE_NM = #{hqOfficeNm}
+    </if>
+    <if test='hqBrandCd != null and hqBrandCd != ""'>
+       AND A.HQ_BRAND_CD = #{hqBrandCd}
+    </if>
+    <if test='hqBrandNm != null and hqBrandNm != ""'>
+       AND A.HQ_BRAND_NM = #{hqBrandNm}
+    </if>
+    <if test='useYn != null and useYn.toString() != "ALL"'>
+       AND A.USE_YN = #{useYn}
+    </if>
+     ORDER BY A.HQ_OFFICE_CD, A.HQ_BRAND_CD ASC
+  </select>
+
+  <insert id="insertBrand" parameterType="hqBrandVO">
+    /* HqBrandMapper.insertBrand */
+      INSERT INTO TB_HQ_BRAND 
+    (
+      HQ_BRAND_CD,
+      HQ_BRAND_NM,
+      HQ_OFFICE_CD,
+      USE_YN,
+      REG_DT,
+      REG_ID,
+      MOD_DT,
+      MOD_ID
+    )
+    VALUES
+    (
+         (
+         SELECT CONCAT(#{hqOfficeCd}, LPAD(SUBSTR(NVL(MAX(HQ_BRAND_CD), '0000000'), 6, 2) +1, 2, '0')) 
+           FROM TB_HQ_BRAND
+          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+         ),
+         #{hqBrandNm},
+         #{hqOfficeCd},
+         #{useYn},
+         #{regDt},
+         #{regId},
+         #{modDt},
+         #{modId}
+    )
+  </insert>
+
+
+  <update id="updateBrand" parameterType="hqBrandVO">
+    /* HqBrandMapper.updateBrand */
+    UPDATE TB_HQ_BRAND
+       SET USE_YN = #{useYn}
+     WHERE HQ_BRAND_CD = #{hqBrandCd}
+       AND HQ_OFFICE_CD = #{hqOfficeCd}
+  </update>
+
+  <delete id="deleteBrand" parameterType="hqBrandVO">
+    /* HqBrandMapper.deleteBrand */
+    DELETE TB_HQ_BRAND
+     WHERE HQ_BRAND_CD = #{hqBrandCd}
+       AND HQ_OFFICE_CD = #{hqOfficeCd}
+  </delete>
+  
+  <select id="getConfigList" parameterType="hqBrandVO" resultType="DefaultMap">
+    /* HqBrandMapper.getConfigList */
+    SELECT A.ENVST_GRP_CD,
+           C.NMCODE_NM,
+           A.ENVST_CD,
+           A.ENVST_NM,
+           A.DIRCT_IN_YN,
+           A.REMARK,
+           A.ENVST_VAL_CD,
+           A.ENVST_VAL_NM,
+           A.DEFLT_YN,
+           A.TARGT_FG,
+           DECODE(B.ENVST_CD, NULL, 'N', 'Y') EXIST_FG,
+           B.ENVST_VAL
+      FROM (
+      SELECT AA.ENVST_GRP_CD,
+             AA.ENVST_CD,
+             AA.ENVST_NM,
+             AA.ENVST_FG,
+             AA.TARGT_FG,
+             AA.DIRCT_IN_YN,
+             AA.REMARK,
+             BB.ENVST_VAL_CD,
+             BB.ENVST_VAL_NM,
+             BB.DEFLT_YN
+        FROM TB_CM_ENVST AA,
+             TB_CM_ENVST_DTL BB
+       WHERE AA.TARGT_FG IN ('H','X','C')
+         AND AA.USE_YN = 'Y'
+         AND BB.ENVST_CD (+)= AA.ENVST_CD
+         ) A,
+           TB_HQ_ENVST B,
+           TB_CM_NMCODE C,
+         (
+      SELECT A.HQ_BRAND_CD, B.HQ_OFFICE_CD, B.CLS_FG
+        FROM TB_HQ_BRAND A,
+             TB_HQ_OFFICE B
+       WHERE B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+         ) D
+     WHERE B.HQ_BRAND_CD (+)= #{hqBrandCd}
+       AND B.ENVST_CD (+)= A.ENVST_CD
+       AND C.NMCODE_GRP_CD = '048'
+       AND C.NMCODE_CD = A.ENVST_GRP_CD
+       AND D.HQ_BRAND_CD (+)= B.HQ_BRAND_CD
+     ORDER BY A.ENVST_GRP_CD, A.ENVST_CD, A.ENVST_VAL_CD
+  </select>
+
+
+  <insert id="insertConfig" parameterType="DefaultMap">
+    /* HqBrandMapper.insertConfig */
+    INSERT INTO TB_HQ_ENVST
+    (
+      HQ_BRAND_CD,
+      ENVST_CD,
+      ENVST_VAL,
+      DIRCT_IN_YN,
+      USE_YN,
+      REG_DT,
+      REG_ID,
+      MOD_DT,
+      MOD_ID 
+    )
+    VALUES
+    (
+      #{hqBrandCd},
+      #{envstCd},
+      #{envstVal},
+      #{dirctInYn},
+      #{useYn},
+      #{regDt},
+      #{regId},
+      #{modDt},
+      #{modId}
+    )
+  </insert>
+
+  <update id="updateConfig" parameterType="DefaultMap">
+    /* HqBrandMapper.updateConfig */
+    UPDATE TB_HQ_ENVST
+       SET ENVST_VAL = #{envstVal},
+           MOD_DT = #{modDt},
+           MOD_ID = #{modId}
+     WHERE HQ_BRAND_CD = #{hqBrandCd}
+       AND ENVST_CD = #{envstCd}
+  </update>
+
+  <update id="updateConfigStore" parameterType="DefaultMap">
+    /* HqBrandMapper.updateConfigStore */
+    UPDATE TB_MS_STORE_ENVST
+       SET ENVST_VAL = #{envstVal}
+     WHERE STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND HQ_BRAND_CD = #{hqBrandCd} )
+       AND ENVST_CD = #{envstCd}
+  </update>
+
+
+
+</mapper>

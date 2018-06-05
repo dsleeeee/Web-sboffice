@@ -2,6 +2,7 @@ package kr.co.solbipos.application.persistence.cmm;
 
 import java.util.List;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.application.domain.cmm.HqVO;
 import kr.co.solbipos.application.domain.cmm.MenuUseHistVO;
 import kr.co.solbipos.application.domain.cmm.StoreVO;
 import kr.co.solbipos.application.domain.login.SessionInfoVO;
@@ -30,6 +31,13 @@ public interface CmmMenuMapper {
       */
     List<StoreVO> selectStore(StoreVO storeVO);
 
+    /**
+     * 레이어 팝업 본사 조회
+     * @param hqVO
+     * @return
+     */
+    List<HqVO> selectHq(HqVO hqVO);
+    
     /**
       * 메뉴 사용 내역 저장
       *
@@ -74,5 +82,7 @@ public interface CmmMenuMapper {
      * @return
      */
     List<DefaultMap<String>> selectAuthedBkmk(DefaultMap<String> map);
+
+
 
 }

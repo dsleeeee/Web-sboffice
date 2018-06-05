@@ -84,6 +84,23 @@ public class CmmCodeUtil {
         // 결과 형태를 만들어서 json 으로 리턴
         return assmblObj(commonCodeVO.getCodeList(), "nmcodeNm", "nmcodeCd", UseYn.N);
     }
+    
+    /**
+     * 공통 코드 조회  선택 포함 (JSON, 명칭/코드)
+     *
+     * @param nmcodeGrpCd
+     * @return
+     */
+    public String getCommCodeSelect(String nmcodeGrpCd) {
+
+        CommonCodeVO commonCodeVO = getCommCodeData(nmcodeGrpCd);
+        if(commonCodeVO == null) {
+            return assmblEmptyCombo();
+        }
+        // 결과 형태를 만들어서 json 으로 리턴
+        return assmblObj(commonCodeVO.getCodeList(), "nmcodeNm", "nmcodeCd", UseYn.S);
+    }
+    
 
     /**
      * 공통 코드 조회(JSON, 선택안함)
@@ -191,6 +208,12 @@ public class CmmCodeUtil {
             m.put(COMBO_VALUE, "N");
             list.add(m);
         }
+        else if(option == UseYn.S) {
+            HashMap<String, String> m = new HashMap<>();
+            m.put(COMBO_NAME, "선택");
+            m.put(COMBO_VALUE, "");
+            list.add(m);
+        }
 
         source.stream().forEach(x -> {
             list.add(assmbl(x, name, value)); // 콤보박스의 내용을 리스트에 추가
@@ -284,4 +307,19 @@ public class CmmCodeUtil {
             
         return envCodeVO;
     }
+    
+    /**
+     * 대리점코드 조회
+     *
+     * @param nmcodeGrpCd
+     * @return
+     */
+    public String getAgencyList() {
+
+        List<DefaultMap<String>> agencyList = cmmCodeService.getAgencyList();
+        
+        // 결과 형태를 만들어서 json 으로 리턴
+        return assmblObj(agencyList, "agencyNm", "agencyCd", UseYn.S);
+    }
+    
 }

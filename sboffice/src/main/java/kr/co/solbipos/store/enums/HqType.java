@@ -1,4 +1,4 @@
-package kr.co.solbipos.pos.enums;
+package kr.co.solbipos.store.enums;
 
 import org.apache.ibatis.type.MappedTypes;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -6,35 +6,29 @@ import kr.co.common.data.enums.CodeEnum;
 import kr.co.common.data.handler.CodeEnumTypeHandler;
 
 /**
- * 매장 상태 enum type 009<br>
- * TB_MS_STORE > SYS_STAT_FG
+ * 본사, 매장 타입 (일반, 데모)
+ * TB_HQ_OFFICE
  * 
  * @author bjcho
  *
  */
-public enum SysStatFg implements CodeEnum {
+public enum HqType implements CodeEnum {
     
-    /** 전체 */
-    ALL("all"),
-    /** 오픈 */
-    OPEN("1"),
-    /** 폐점 */
-    CLOSE("2"),
-    /** 중지 */
-    STOP("3"),
+    /** 일반 */
+    COMM("C"),
     /** 데모 */
-    DEMO("9");
+    DEMO("D");
     
     private String code;
   
-    SysStatFg(String code) {
+    HqType(String code) {
         this.code = code;
     }
     
-    @MappedTypes(SysStatFg.class)
-    public static class TypeHandler extends CodeEnumTypeHandler<SysStatFg> {
+    @MappedTypes(HqType.class)
+    public static class TypeHandler extends CodeEnumTypeHandler<HqType> {
         public TypeHandler() {
-            super(SysStatFg.class);
+            super(HqType.class);
         }
     }
      
@@ -43,4 +37,5 @@ public enum SysStatFg implements CodeEnum {
     public String getCode() {
         return code;
     }
+    
 }

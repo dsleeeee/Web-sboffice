@@ -38,6 +38,13 @@
      AND USE_YN = 'Y'
   ]]>
   </select>
+  
+  <select id="selectAgencyList" resultType="DefaultMap">
+    /* CmmCodeMapper.selectAgencyList */
+    SELECT AGENCY_CD, AGENCY_NM
+      FROM TB_CM_AGENCY
+  </select>
+  
 
 </mapper>
 

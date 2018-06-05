@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.system.Prop;
+import kr.co.solbipos.application.domain.cmm.HqVO;
 import kr.co.solbipos.application.domain.cmm.MenuUseHistVO;
 import kr.co.solbipos.application.domain.cmm.StoreVO;
 import kr.co.solbipos.application.domain.login.SessionInfoVO;
@@ -48,6 +49,15 @@ public class CmmMenuServiceImpl implements CmmMenuService {
     public List<StoreVO> selectStore( StoreVO storeVO ) {
         return cmmMenuMapper.selectStore( storeVO );
     }
+
+    /**
+     * 레이어 팝업 본사 조회
+     */
+    @Override
+    public List<HqVO> selectHq(HqVO hqVO) {
+        return cmmMenuMapper.selectHq(hqVO);
+    }
+    
 
     /**
      *
@@ -328,6 +338,7 @@ public class CmmMenuServiceImpl implements CmmMenuService {
         log.debug( retrunData.toString() );
         return retrunData;
     }
+
 }
 
 

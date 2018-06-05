@@ -60,4 +60,10 @@ public interface CmmCodeService {
      * @return
      */
     <E> List<E> selectEnvCodeList(String envstCd);
+
+    /**
+     * 대리점 목록 조회
+     * @return
+     */
+    <E> List<E> getAgencyList();
 }

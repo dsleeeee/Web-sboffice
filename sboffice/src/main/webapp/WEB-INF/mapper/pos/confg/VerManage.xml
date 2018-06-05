@@ -171,12 +171,19 @@
       FROM (
       SELECT COUNT(1) OVER (PARTITION BY 1 ORDER BY 1) TOT_CNT,
              ROW_NUMBER() OVER(PARTITION BY 1 ORDER BY 1) RNUM,
-             A.STORE_CD, A.POS_NO, A.POS_NM, A.POS_VER_NO LAST_VER,
-             B.SYS_STAT_FG, B.VAN_CD, B.CLS_FG, B.STORE_NM,
-             C.HQ_OFFICE_CD, C.HQ_OFFICE_NM
+             A.STORE_CD,
+             A.POS_NO,
+             A.POS_NM,
+             A.POS_VER_NO LAST_VER,
+             B.SYS_STAT_FG,
+             B.VAN_CD,
+             B.CLS_FG,
+             B.STORE_NM,
+             C.HQ_OFFICE_CD,
+             C.HQ_OFFICE_NM
         FROM TB_MS_POS A,
              TB_MS_STORE B,
-            TB_HQ_OFFICE C
+             TB_HQ_OFFICE C
        WHERE A.USE_YN = 'Y'
          AND (A.STORE_CD, A.POS_NO) NOT IN (
                                         SELECT STORE_CD, POS_NO

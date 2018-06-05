@@ -2,6 +2,7 @@ package kr.co.common.service.cmm;
 
 import java.util.List;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.application.domain.cmm.HqVO;
 import kr.co.solbipos.application.domain.cmm.MenuUseHistVO;
 import kr.co.solbipos.application.domain.cmm.StoreVO;
 import kr.co.solbipos.application.domain.login.SessionInfoVO;
@@ -32,6 +33,13 @@ public interface CmmMenuService {
       */
     List<StoreVO> selectStore(StoreVO storeVO);
 
+    /**
+     * 레이어 팝업 본사 조회
+     * @param hqVO
+     * @return
+     */
+    List<HqVO> selectHq(HqVO hqVO);
+    
     /**
      *
      * 메뉴 디비 작업 관련
