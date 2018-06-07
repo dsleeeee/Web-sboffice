@@ -321,7 +321,7 @@
     (
       USER_ID,
       USER_PWD,
-      GRP_CD,
+      AUTH_GRP_CD,
       LOGIN_FAIL_CNT,
       LOCK_CD
     )
@@ -410,7 +410,7 @@
      WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
        AND A.EMP_NO = '0000'
        AND B.USER_ID = A.USER_ID
-       AND C.GRP_CD = B.GRP_CD
+       AND C.AUTH_GRP_CD = B.AUTH_GRP_CD
      MINUS
     SELECT C.RESRCE_CD
       FROM TB_HQ_EMPLOYEE A,
@@ -464,7 +464,7 @@
      WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
        AND A.EMP_NO = '0000'
        AND B.USER_ID = A.USER_ID
-       AND C.GRP_CD = B.GRP_CD
+       AND C.AUTH_GRP_CD = B.AUTH_GRP_CD
      UNION ALL
     SELECT C.RESRCE_CD
       FROM TB_HQ_EMPLOYEE A,
@@ -494,7 +494,7 @@
   <update id="copyAuth" parameterType="DefaultMap" >
     /* HqManageMapper.copyAuth */
     UPDATE TB_WB_USER_INFO
-       SET GRP_CD = (SELECT B.GRP_CD
+       SET AUTH_GRP_CD = (SELECT B.AUTH_GRP_CD
                        FROM TB_HQ_EMPLOYEE A,
                             TB_WB_USER_INFO B
                       WHERE A.HQ_OFFICE_CD = #{copyHqOfficeCd}

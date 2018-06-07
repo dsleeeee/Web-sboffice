@@ -14,13 +14,13 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class AuthGroupVO extends CmmVO {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -4385655718150753431L;
 
     /** 그룹 코드 */
-    private String grpCd;
+    private String authGrpCd;
 
     /** 그룹 명 */
-    private String grpNm;
+    private String authGrpNm;
 
     /** 전체 적용 구분 */
     private TargetAllFg targetAllFg;
@@ -36,5 +36,5 @@ public class AuthGroupVO extends CmmVO {
 
     /** 사용자 아이디 */
     private String userId;
-    
+
 }

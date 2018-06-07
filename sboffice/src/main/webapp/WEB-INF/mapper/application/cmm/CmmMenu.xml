@@ -140,8 +140,8 @@
              SELECT B.RESRCE_CD
                FROM TB_WB_AUTHOR_GRP_INFO A,
                     TB_WB_AUTHOR_GRP_RESRCE B
-              WHERE A.GRP_CD = B.GRP_CD
-                AND B.GRP_CD = #{grpCd}
+              WHERE A.AUTH_GRP_CD = B.AUTH_GRP_CD
+                AND B.AUTH_GRP_CD = #{authGrpCd}
                 AND A.USE_YN = 'Y'
                 AND B.USE_YN = 'Y'
               UNION ALL
@@ -176,8 +176,8 @@
              SELECT B.RESRCE_CD
                FROM TB_WB_AUTHOR_GRP_INFO A,
                     TB_WB_AUTHOR_GRP_RESRCE B
-              WHERE A.GRP_CD = B.GRP_CD
-                AND B.GRP_CD = #{grpCd}
+              WHERE A.AUTH_GRP_CD = B.AUTH_GRP_CD
+                AND B.AUTH_GRP_CD = #{authGrpCd}
                 AND A.USE_YN = 'Y'
                 AND B.USE_YN = 'Y'
               UNION ALL

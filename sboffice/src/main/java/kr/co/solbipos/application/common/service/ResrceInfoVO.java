@@ -19,7 +19,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class ResrceInfoVO extends CmmVO {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 6149780192504788158L;
 
     /** 리소스 코드 */
     private String resrceCd;

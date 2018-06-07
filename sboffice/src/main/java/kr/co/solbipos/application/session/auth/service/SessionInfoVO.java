@@ -40,7 +40,7 @@ public class SessionInfoVO extends CmmVO {
     private String userNm;
 
     /** 그룹 코드 */
-    private String grpCd;
+    private String authGrpCd;
 
     /**
      * 본사는 소속된 가맹점<br>
