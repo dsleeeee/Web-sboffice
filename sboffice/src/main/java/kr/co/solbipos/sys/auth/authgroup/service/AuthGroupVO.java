@@ -20,7 +20,7 @@ public class AuthGroupVO extends CmmVO {
     private String authGrpCd;
 
     /** 그룹 명 */
-    private String grpNm;
+    private String authGrpNm;
 
     /** 전체 적용 구분 */
     private TargetAllFg targetAllFg;
