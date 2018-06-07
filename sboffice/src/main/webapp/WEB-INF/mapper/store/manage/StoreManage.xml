@@ -1,0 +1,578 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.store.manage.storemanage.service.impl.StoreManageMapper">
+
+  <select id="list" parameterType="storeManageVO" resultType="DefaultMap">
+    /* StoreManageMapper.list */
+    <![CDATA[
+    SELECT *
+      FROM (
+      SELECT COUNT(1) OVER (PARTITION BY 1 ORDER BY 1) TOT_CNT,
+             ROW_NUMBER() OVER(PARTITION BY 1 ORDER BY 1) RNUM,
+             A.HQ_OFFICE_CD, 
+             B.HQ_OFFICE_NM,
+             A.HQ_BRAND_CD,
+             C.HQ_BRAND_NM,
+             A.CLS_FG,
+             A.SYS_STAT_FG,
+             A.SYS_OPEN_DATE
+        FROM TB_MS_STORE A,
+             TB_HQ_OFFICE B,
+             TB_HQ_BRAND C
+       WHERE B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+         AND C.HQ_BRAND_CD = A.HQ_BRAND_CD
+      ]]>
+      <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+         AND A.HQ_OFFICE_CD LIKE '%'||#{hqOfficeCd}||'%'
+      </if>
+      <if test='hqOfficeNm != null and hqOfficeNm != ""'>
+         AND B.HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'
+      </if>
+      <if test='storeCd != null and storeCd != ""'>
+         AND A.STORE_CD LIKE '%'||#{storeCd}||'%'
+      </if>
+      <if test='storeNm != null and storeNm != ""'>
+         AND B.STORE_NM LIKE '%'||#{storeNm}||'%'
+      </if>
+      <if test='bizNo != null and bizNo != ""'>
+         AND A.BIZ_NO LIKE '%'||#{bizNo}||'%'
+      </if>
+      <if test='clsFg != null and clsFg != ""'>
+         AND A.CLS_FG = #{clsFg}
+      </if>
+      <if test='sysStatFg != null and sysStatFg != ""'>
+         AND A.SYS_STAT_FG = #{sysStatFg}
+      </if>
+       ORDER BY A.HQ_OFFICE_CD, A.STORE_CD, A.SYS_OPEN_DATE ASC
+       )
+    <![CDATA[
+     WHERE RNUM >= #{prev}
+       AND RNUM <= #{next}
+     ]]>
+  </select>
+
+  <select id="dtlInfo" parameterType="hqManageVO" resultType="DefaultMap">
+    /* HqManageMapper.dtlInfo */
+    <![CDATA[
+    SELECT A.HQ_OFFICE_CD,
+           A.HQ_OFFICE_NM,
+           A.OWNER_NM,
+           A.BIZ_NO,
+           SUBSTR(A.BIZ_NO,0,3) BIZ_NO1,
+           SUBSTR(A.BIZ_NO,4,2) BIZ_NO2,
+           SUBSTR(A.BIZ_NO,6,5) BIZ_NO3,
+           A.BIZ_TYPE_CD,
+           A.BIZ_ITEM_CD,
+           A.BIZ_STORE_NM,
+           A.TEL_NO,
+           A.FAX_NO,
+           A.EMAIL_ADDR,
+           A.HMPG_ADDR,
+           A.POST_NO,
+           A.ADDR,
+           A.ADDR_DTL,
+           A.AREA_CD,
+           A.SYS_STAT_FG,
+           D.NMCODE_NM SYS_STAT_FG_NM,
+           TO_CHAR(TO_DATE(A.SYS_OPEN_DATE, 'YYYYMMDD'), 'YYYY.MM.DD') SYS_OPEN_DATE,
+           TO_CHAR(TO_DATE(A.SYS_CLOSURE_DATE, 'YYYYMMDD'), 'YYYY.MM.DD') SYS_CLOSURE_DATE,
+           A.AGENCY_CD,
+           B.AGENCY_NM,
+           A.REMARK,
+           A.CLS_FG,
+           C.NMCODE_NM CLS_FG_NM,
+           A.REG_DT,
+           A.REG_ID,
+           A.MOD_DT,
+           A.MOD_ID
+      FROM TB_HQ_OFFICE A,
+           TB_CM_AGENCY B,
+           TB_CM_NMCODE C,
+           TB_CM_NMCODE D
+     WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+       AND B.AGENCY_CD (+)= A.AGENCY_CD
+       AND C.NMCODE_GRP_CD = '003'
+       AND C.NMCODE_CD = A.CLS_FG
+       AND D.NMCODE_GRP_CD = '005'
+       AND D.NMCODE_CD = A.SYS_STAT_FG
+     ]]>
+  </select>
+
+  <select id="chkBizNo" parameterType="hqManageVO" resultType="Integer">
+    /* HqManageMapper.chkBizNo */
+    <![CDATA[
+    SELECT COUNT(STORE_CD) CNT
+      FROM (
+      SELECT HQ_OFFICE_CD STORE_CD
+        FROM TB_HQ_OFFICE
+       WHERE SYS_STAT_FG <> '9'
+         AND BIZ_NO = #{bizNo}
+       UNION ALL
+      SELECT STORE_CD
+        FROM TB_MS_STORE
+       WHERE SYS_STAT_FG <> '9'
+       AND BIZ_NO = #{bizNo}
+           )
+     ]]>
+  </select>
+
+  <select id="getBizUseList" parameterType="hqManageVO" resultType="DefaultMap">
+    /* HqManageMapper.getBizUseList */
+    SELECT 'H' STORE_FG,
+           A.HQ_OFFICE_CD STORE_CD,
+           A.HQ_OFFICE_NM STORE_NM,
+           A.OWNER_NM,
+           A.BIZ_NO,
+           (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '005' AND NMCODE_CD = A.SYS_STAT_FG) SYS_STAT_FG_NM,
+           (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '003' AND NMCODE_CD = A.CLS_FG) CLS_FG_NM
+      FROM TB_HQ_OFFICE A
+     WHERE BIZ_NO = #{bizNo}
+     UNION ALL
+     SELECT 'S' STORE_FG,
+            A.STORE_CD,
+            A.STORE_NM,
+            A.OWNER_NM,
+            A.BIZ_NO,
+            (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '005' AND NMCODE_CD = A.SYS_STAT_FG) SYS_STAT_FG_NM,
+            (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '003' AND NMCODE_CD = A.CLS_FG) CLS_FG_NM
+       FROM TB_MS_STORE A
+      WHERE BIZ_NO = #{bizNo}
+  </select>
+
+  <select id="getBizInfoDtl" parameterType="hqManageVO" resultType="DefaultMap">
+    /* HqManageMapper.getBizInfoDtl */
+    SELECT A.OWNER_NM,
+           A.BIZ_NO,
+           A.BIZ_STORE_NM,
+           A.TEL_NO,
+           A.FAX_NO,
+           A.POST_NO,
+           A.ADDR,
+           A.ADDR_DTL,
+           A.AREA_CD,
+           (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '092' AND NMCODE_CD = A.AREA_CD) AREA_NM,
+           A.SYS_STAT_FG,
+           (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '005' AND NMCODE_CD = A.SYS_STAT_FG) SYS_STAT_FG_NM,
+           A.SYS_OPEN_DATE,
+           A.AGENCY_CD,
+           B.AGENCY_NM,
+           A.CLS_FG,
+           (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '003' AND NMCODE_CD = A.CLS_FG) CLS_FG_NM,
+       <if test='storeFg == "H"'>
+           A.HQ_OFFICE_CD STORE_CD,
+           A.HQ_OFFICE_NM STORE_NM
+      FROM TB_HQ_OFFICE A,
+           TB_CM_AGENCY B
+     WHERE A.HQ_OFFICE_CD = #{storeCd}
+       AND B.AGENCY_CD = A.AGENCY_CD
+       </if>
+       <if test='storeFg != "H"'>
+           A.STORE_CD,
+           A.STORE_NM
+      FROM TB_MS_STORE A
+     WHERE A.STORE_CD = #{storeCd}
+       AND B.AGENCY_CD = A.AGENCY_CD
+       </if>
+  </select>
+
+  <select id="getHqOfficeCd" parameterType="DefaultMap" resultType="String">
+    /* HqManageMapper.chkBizNo */
+    <if test='sysClosureDate == "99991231"'>
+      SELECT 'D'||LPAD(TO_CHAR(NVL(MAX(SUBSTR(HQ_OFFICE_CD, 2, 4)), 0) + 1), 4, '0') HQ_OFFICE_CD
+        FROM TB_HQ_OFFICE
+       WHERE SYS_STAT_FG = '9'
+    </if>
+    <if test='sysClosureDate != "99991231"'>
+      SELECT 'H'||LPAD(TO_CHAR(NVL(MAX(SUBSTR(HQ_OFFICE_CD, 2, 4)), 0) + 1), 4, '0') HQ_OFFICE_CD
+        FROM TB_HQ_OFFICE
+       WHERE SYS_STAT_FG != '9'
+    </if>
+  </select>
+
+  <insert id="regist" parameterType="DefaultMap">
+    /* HqManageMapper.regist */
+    <![CDATA[
+    INSERT INTO TB_HQ_OFFICE
+    (
+      HQ_OFFICE_CD,
+      HQ_OFFICE_NM,
+      OWNER_NM,
+      BIZ_NO,
+      BIZ_TYPE_CD,
+      BIZ_ITEM_CD,
+      BIZ_STORE_NM,
+      TEL_NO,
+      FAX_NO,
+      EMAIL_ADDR,
+      HMPG_ADDR,
+      POST_NO,
+      ADDR,
+      ADDR_DTL,
+      AREA_CD,
+      SYS_STAT_FG,
+      SYS_OPEN_DATE,
+      SYS_CLOSURE_DATE,
+      AGENCY_CD,
+      REMARK,
+      CLS_FG,
+      REG_DT,
+      REG_ID,
+      MOD_DT,
+      MOD_ID
+    )
+    VALUES (
+      #{hqOfficeCd},
+      #{hqOfficeNm},
+      #{ownerNm},
+      #{bizNo},
+      #{bizTypeCd},
+      #{bizItemCd},
+      #{bizStoreNm},
+      #{telNo},
+      #{faxNo},
+      #{emailAddr},
+      #{hmpgAddr},
+      #{postNo},
+      #{addr},
+      #{addrDtl},
+      #{areaCd},
+      #{sysStatFg},
+      #{sysOpenDate},
+      '99991231',
+      #{agencyCd},
+      #{remark},
+      #{clsFg},
+      #{regDt},
+      #{regId},
+      #{modDt},
+      #{modId}
+    )
+    ]]>
+  </insert>
+
+  <insert id="registEmployee" parameterType="DefaultMap">
+    /* HqManageMapper.registEmployee */
+    INSERT INTO TB_HQ_EMPLOYEE
+    (
+      HQ_OFFICE_CD,
+      EMP_NO,
+      EMP_NM,
+      EMP_PWD,
+      WEB_USE_YN,
+      USER_ID,
+      MP_NO,
+      HIRE_FG,
+      SMS_RECV_YN,
+      USE_YN,
+      REG_DT,
+      REG_ID,
+      MOD_DT,
+      MOD_ID
+    )
+    VALUES
+    (
+      #{hqOfficeCd},
+      '0000',
+      #{ownerNm},
+      '0000',
+      'Y',
+      LOWER(#{hqOfficeCd}),
+      #{telNo},
+      '1',
+      'N',
+      'Y',
+      #{regDt},
+      #{regId},
+      #{modDt},
+      #{modId}
+    )
+  </insert>
+
+  <insert id="registWebUser" parameterType="DefaultMap">
+    /* HqManageMapper.registWebUser */
+    INSERT INTO TB_WB_USER_INFO
+    (
+      USER_ID,
+      USER_PWD,
+      GRP_CD,
+      LOGIN_FAIL_CNT,
+      LOCK_CD
+    )
+    VALUES
+    (
+      LOWER(#{hqOfficeCd}),
+      '0000',
+      '000002',
+      0,
+      'N'
+    )
+  </insert>
+
+  <update id="modify" parameterType="hqManageVO">
+    /* HqManageMapper.modify */
+    <![CDATA[
+    UPDATE TB_HQ_OFFICE
+       SET HQ_OFFICE_NM   = #{hqOfficeNm},
+           OWNER_NM       = #{ownerNm},
+           BIZ_NO         = #{bizNo},
+           BIZ_TYPE_CD    = #{bizTypeCd},
+           BIZ_ITEM_CD    = #{bizItemCd},
+           BIZ_STORE_NM   = #{bizStoreNm},
+           TEL_NO         = #{telNo},
+           FAX_NO         = #{faxNo},
+           EMAIL_ADDR     = #{emailAddr},
+           HMPG_ADDR      = #{hmpgAddr},
+           POST_NO        = #{postNo},
+           ADDR           = #{addr},
+           ADDR_DTL       = #{addrDtl},
+           AREA_CD        = #{areaCd},
+           SYS_STAT_FG    = #{sysStatFg.code},
+           SYS_OPEN_DATE  = #{sysOpenDate},
+           SYS_CLOSURE_DATE = #{sysClosureDate},
+           AGENCY_CD      = #{agencyCd},
+           REMARK         = #{remark},
+           CLS_FG         = #{clsFg},
+           MOD_DT         = #{modDt},
+           MOD_ID         = #{modId}
+     WHERE HQ_OFFICE_CD   = #{hqOfficeCd}
+   ]]>
+  </update>
+
+  <select id="authHqList" parameterType="hqManageVO" resultType="DefaultMap">
+    /* HqManageMapper.authHqList */
+    <![CDATA[
+    SELECT HQ_OFFICE_CD VALUE,
+           HQ_OFFICE_NM NAME
+      FROM TB_HQ_OFFICE
+     WHERE HQ_OFFICE_CD != #{hqOfficeCd}
+       AND SYS_OPEN_DATE <> '2'
+       AND SYS_CLOSURE_DATE > SYSDATE
+       AND CLS_FG = #{clsFg}
+     ]]>
+  </select>
+
+  <select id="avlblMenu" parameterType="hqManageVO" resultType="DefaultMap">
+    /* HqManageMapper.avlblMenu */
+   SELECT A.*
+    FROM (
+    SELECT A.RESRCE_CD RESRCE_CD_LARGE,
+           A.RESRCE_NM RESRCE_NM_LARGE,
+           B.RESRCE_CD RESRCE_CD_MID,
+           B.RESRCE_NM RESRCE_NM_MID,
+           C.RESRCE_CD RESRCE_CD_SMALL,
+           C.RESRCE_NM RESRCE_NM_SMALL
+      FROM TB_WB_RESRCE_INFO A,
+           TB_WB_RESRCE_INFO B,
+           TB_WB_RESRCE_INFO C
+     WHERE A.USE_YN = 'Y'
+       AND (A.SPCL_AUTHOR IS NULL OR A.SPCL_AUTHOR NOT IN ('A01'))
+       AND B.P_RESRCE = A.RESRCE_CD
+       AND B.USE_YN = 'Y'
+       AND C.P_RESRCE = B.RESRCE_CD
+       AND C.DISP_LEVEL = '2'
+     ORDER BY A.RESRCE_CD, B.RESRCE_CD, C.RESRCE_CD
+          ) A,
+          (
+    SELECT RESRCE_CD
+      FROM TB_WB_RESRCE_INFO
+     MINUS
+    SELECT C.RESRCE_CD
+      FROM TB_HQ_EMPLOYEE A,
+           TB_WB_USER_INFO B,
+           TB_WB_AUTHOR_GRP_RESRCE C
+     WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+       AND A.EMP_NO = '0000'
+       AND B.USER_ID = A.USER_ID
+       AND C.GRP_CD = B.GRP_CD
+     MINUS
+    SELECT C.RESRCE_CD
+      FROM TB_HQ_EMPLOYEE A,
+           TB_WB_USER_INFO B,
+           TB_WB_AUTHOR_EXCEPT C
+     WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+       AND A.EMP_NO = '0000'
+       AND B.USER_ID = A.USER_ID
+       AND C.USER_ID = B.USER_ID
+       AND C.INCLD_EXCLD_FG = 'I'
+     UNION ALL
+    SELECT C.RESRCE_CD
+      FROM TB_HQ_EMPLOYEE A,
+           TB_WB_USER_INFO B,
+           TB_WB_AUTHOR_EXCEPT C
+     WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+       AND A.EMP_NO = '0000'
+       AND B.USER_ID = A.USER_ID
+       AND C.USER_ID = B.USER_ID
+       AND C.INCLD_EXCLD_FG = 'E'
+           ) B
+   WHERE B.RESRCE_CD = A.RESRCE_CD_SMALL
+  </select>
+
+  <select id="beUseMenu" parameterType="hqManageVO" resultType="DefaultMap">
+    /* HqManageMapper.beUseMenu */
+    SELECT A.*
+    FROM (
+    SELECT A.RESRCE_CD RESRCE_CD_LARGE,
+           A.RESRCE_NM RESRCE_NM_LARGE,
+           B.RESRCE_CD RESRCE_CD_MID,
+           B.RESRCE_NM RESRCE_NM_MID,
+           C.RESRCE_CD RESRCE_CD_SMALL,
+           C.RESRCE_NM RESRCE_NM_SMALL
+      FROM TB_WB_RESRCE_INFO A,
+           TB_WB_RESRCE_INFO B,
+           TB_WB_RESRCE_INFO C
+     WHERE A.USE_YN = 'Y'
+       AND (A.SPCL_AUTHOR IS NULL OR A.SPCL_AUTHOR NOT IN ('A01'))
+       AND B.P_RESRCE = A.RESRCE_CD
+       AND B.USE_YN = 'Y'
+       AND C.P_RESRCE = B.RESRCE_CD
+       AND C.DISP_LEVEL = '2'
+     ORDER BY A.RESRCE_CD, B.RESRCE_CD, C.RESRCE_CD
+         ) A,
+         (
+    SELECT C.RESRCE_CD
+      FROM TB_HQ_EMPLOYEE A,
+           TB_WB_USER_INFO B,
+           TB_WB_AUTHOR_GRP_RESRCE C
+     WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+       AND A.EMP_NO = '0000'
+       AND B.USER_ID = A.USER_ID
+       AND C.GRP_CD = B.GRP_CD
+     UNION ALL
+    SELECT C.RESRCE_CD
+      FROM TB_HQ_EMPLOYEE A,
+           TB_WB_USER_INFO B,
+           TB_WB_AUTHOR_EXCEPT C
+     WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+       AND A.EMP_NO = '0000'
+       AND B.USER_ID = A.USER_ID
+       AND C.USER_ID = B.USER_ID
+       AND C.INCLD_EXCLD_FG = 'I'
+       AND C.USE_YN = 'Y'
+     MINUS
+    SELECT C.RESRCE_CD
+     FROM TB_HQ_EMPLOYEE A,
+          TB_WB_USER_INFO B,
+          TB_WB_AUTHOR_EXCEPT C
+    WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+      AND A.EMP_NO = '0000'
+      AND B.USER_ID = A.USER_ID
+      AND C.USER_ID = B.USER_ID
+      AND C.INCLD_EXCLD_FG = 'E'
+      AND C.USE_YN = 'Y'
+        ) B
+   WHERE B.RESRCE_CD = A.RESRCE_CD_SMALL
+  </select>
+
+  <update id="copyAuth" parameterType="DefaultMap" >
+    /* HqManageMapper.copyAuth */
+    UPDATE TB_WB_USER_INFO
+       SET GRP_CD = (SELECT B.GRP_CD
+                       FROM TB_HQ_EMPLOYEE A,
+                            TB_WB_USER_INFO B
+                      WHERE A.HQ_OFFICE_CD = #{copyHqOfficeCd}
+                        AND A.EMP_NO = '0000'
+                        AND B.USER_ID = A.USER_ID
+                     )
+     WHERE USER_ID = (SELECT A.USER_ID
+                        FROM TB_HQ_EMPLOYEE A,
+                             TB_WB_USER_INFO B
+                       WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+                         AND A.EMP_NO = '0000'
+                         AND B.USER_ID = A.USER_ID
+                      )
+  </update>
+
+  <insert id="copyAuthExcp" parameterType="hqMenuVO" >
+    /* HqManageMapper.copyAuthExcp */
+    <![CDATA[
+    MERGE INTO TB_WB_AUTHOR_EXCEPT A
+    USING (
+          SELECT USER_ID, RESRCE_CD, INCLD_EXCLD_FG, USE_YN
+            FROM TB_WB_AUTHOR_EXCEPT
+           WHERE USER_ID = (
+                            SELECT B.USER_ID
+                              FROM TB_HQ_EMPLOYEE A,
+                                   TB_WB_USER_INFO B
+                             WHERE A.HQ_OFFICE_CD = #{copyHqOfficeCd}
+                               AND A.EMP_NO = '0000'
+                               AND B.USER_ID = A.USER_ID
+                           )
+          ) B
+     ON (A.USER_ID = B.USER_ID AND A.RESRCE_CD = B.RESRCE_CD)
+     WHEN MATCHED THEN
+     UPDATE
+        SET A.INCLD_EXCLD_FG = B.INCLD_EXCLD_FG,
+            A.USE_YN = B.USE_YN,
+            A.MOD_DT = #{modDt},
+            A.MOD_ID = #{modId}
+     WHEN NOT MATCHED THEN
+     INSERT (USER_ID, RESRCE_CD, INCLD_EXCLD_FG, USE_YN, REG_DT, REG_ID)
+     VALUES (
+              (SELECT A.USER_ID FROM TB_HQ_EMPLOYEE A, TB_WB_USER_INFO B WHERE A.HQ_OFFICE_CD = #{hqOfficeCd} AND A.EMP_NO = '0000'  AND B.USER_ID = A.USER_ID),
+              B.RESRCE_CD,
+              B.INCLD_EXCLD_FG,
+              B.USE_YN,
+              #{regDt},
+              #{regId}
+            )
+   ]]>
+  </insert>
+
+  <!-- <insert id="addAuth" parameterType="hqManageVO"> -->
+  <insert id="addAuth" parameterType="DefaultMap">
+    /* HqManageMapper.addAuth */
+    INSERT INTO TB_WB_AUTHOR_EXCEPT
+    (
+      USER_ID,
+      RESRCE_CD,
+      INCLD_EXCLD_FG,
+      USE_YN,
+      REG_DT,
+      REG_ID,
+      MOD_DT,
+      MOD_ID
+    )
+    VALUES
+    (
+      (SELECT B.USER_ID FROM TB_HQ_EMPLOYEE A, TB_WB_USER_INFO B WHERE A.HQ_OFFICE_CD = #{hqOfficeCd} AND B.USER_ID = A.USER_ID),
+      #{resrceCd},
+      #{incldExcldFg},
+      'Y',
+      #{regDt},
+      #{regId},
+      #{modDt},
+      #{modId}
+    )
+  </insert>
+
+  <!-- <select id="isAuth" parameterType="hqMenuVO"> -->
+  <select id="isAuth" parameterType="DefaultMap" resultType="Integer">
+    /* HqManageMapper.isAuth */
+    SELECT COUNT(RESRCE_CD)
+      FROM TB_WB_AUTHOR_EXCEPT
+     WHERE USER_ID = (SELECT B.USER_ID
+                        FROM TB_HQ_EMPLOYEE A,
+                             TB_WB_USER_INFO B
+                       WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+                         AND A.EMP_NO = '0000'
+                         AND B.USER_ID = A.USER_ID)
+       AND RESRCE_CD = #{resrceCd}
+       AND USE_YN = 'Y'
+  </select>
+
+  <!-- <delete id="removeAuth" parameterType="hqManageVO"> -->
+  <delete id="removeAuth" parameterType="DefaultMap">
+    /* HqManageMapper.removeAuth */
+    DELETE TB_WB_AUTHOR_EXCEPT
+     WHERE USER_ID = (SELECT B.USER_ID
+                        FROM TB_HQ_EMPLOYEE A,
+                             TB_WB_USER_INFO B
+                       WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+                         AND A.EMP_NO = '0000'
+                         AND B.USER_ID = A.USER_ID)
+       AND RESRCE_CD = #{resrceCd}
+  </delete>
+
+</mapper>

@@ -97,8 +97,9 @@
     <typeAlias alias="hqBrandVO" type="kr.co.solbipos.store.hq.brand.service.HqBrandVO"/>
     <typeAlias alias="hqClsVO" type="kr.co.solbipos.store.hq.brand.service.HqClsVO"/>
     <typeAlias alias="hqEnvstVO" type="kr.co.solbipos.store.hq.brand.service.HqEnvstVO"/>
-<!--
+    
     <typeAlias alias="storeManageVO" type="kr.co.solbipos.store.manage.storemanage.service.StoreManageVO"/>
+<!--
     <typeAlias alias="storeViewVO" type="kr.co.solbipos.store.manage.storeview.service.StoreViewVO"/>
     <typeAlias alias="storeConfgVO" type="kr.co.solbipos.store.manage.storeconfg.service.StoreConfgVO"/>
     <typeAlias alias="confgBatchVO" type="kr.co.solbipos.store.manage.confgbatch.service.ConfgBatchVO"/>
