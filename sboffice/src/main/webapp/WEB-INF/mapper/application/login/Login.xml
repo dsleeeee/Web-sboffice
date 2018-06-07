@@ -8,7 +8,7 @@
      SELECT A.USER_ID,
             A.USER_PWD,
             B.USER_NM,
-            A.GRP_CD,
+            A.AUTH_GRP_CD,
             B.ORGN_FG,
             B.ORGN_CD,
             B.ORGN_NM,
@@ -148,8 +148,8 @@
              WHERE RESRCE_CD IN (
               SELECT RESRCE_CD
                 FROM TB_WB_AUTHOR_GRP_RESRCE
-               WHERE GRP_CD = (
-                SELECT GRP_CD
+               WHERE AUTH_GRP_CD = (
+                SELECT AUTH_GRP_CD
                   FROM TB_WB_USER_INFO
                  WHERE USER_ID = #{userId}
                 ) AND USE_YN = 'Y'

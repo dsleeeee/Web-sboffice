@@ -89,9 +89,9 @@ public interface AuthGroupMapper {
      * 로그인 아이디로 그룹코드 조회
      *
      * @param userId
-     * @return grpCd
+     * @return authGrpCd
      */
-    String selectGrpCdById(String userId);
+    String selectAuthGrpCdById(String userId);
 
     /**
      * 아이디로 그룹의 리소스 정보 조회

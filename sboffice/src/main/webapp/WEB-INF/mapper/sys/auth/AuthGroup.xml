@@ -5,13 +5,13 @@
 
   <select id="selectAvailGroup" parameterType="string" resultType="DefaultMap">
     /* AuthGroupMapper.selectAvailGroup */
-     SELECT GRP_CD VALUE,
-            GRP_NM NAME
+     SELECT AUTH_GRP_CD AS VALUE,
+            AUTH_GRP_NM AS NAME
        FROM TB_WB_AUTHOR_GRP_INFO A
       WHERE TARGET_ALL_FG = 'A'
       UNION ALL
-     SELECT GRP_CD VALUE,
-            GRP_NM NAME
+     SELECT AUTH_GRP_CD AS VALUE,
+            AUTH_GRP_NM AS NAME
        FROM TB_WB_AUTHOR_GRP_INFO A
       WHERE TARGET_ALL_FG = 'P'
         AND TARGET_ORGN = #{orgnCd}
@@ -21,17 +21,17 @@
   <select id="selectGroup" parameterType="authGroupVO" resultType="DefaultMap">
     /* AuthGroupMapper.selectGroup */
      SELECT ROW_NUMBER() OVER (PARTITION BY 1 ORDER BY 1) NO,
-            GRP_CD,
-            GRP_NM,
+            AUTH_GRP_CD,
+            AUTH_GRP_NM,
             TARGET_ALL_FG,
-            (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '903' AND NMCODE_CD = A.TARGET_ALL_FG) TARGET_ALL_FG_NM,
+            (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '903' AND NMCODE_CD = A.TARGET_ALL_FG) AS TARGET_ALL_FG_NM,
             TARGET_ORGN,
             ( SELECT MAX(TARGET_ORGN_NM)
                 FROM ( SELECT HQ_OFFICE_NM TARGET_ORGN_NM FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = A.TARGET_ORGN
                        UNION ALL
                        SELECT AGENCY_NM TARGET_ORGN_NM FROM TB_CM_AGENCY WHERE AGENCY_CD = A.TARGET_ORGN
                 )
-            ) TARGET_ORGN_NM,
+            ) AS TARGET_ORGN_NM,
             REMARK,
             USE_YN,
             REG_DT,
@@ -47,34 +47,34 @@
         AND A.GRP_NM LIKE '%'||#{grpNm}||'%'
      </if>
      <if test='targetOrgn != null and targetOrgn != ""'>
-        AND A.GRP_CD IN (
-             SELECT GRP_CD
+        AND A.AUTH_GRP_CD IN (
+             SELECT AUTH_GRP_CD
            FROM TB_WB_AUTHOR_GRP_INFO A
           WHERE TARGET_ALL_FG = 'A'
           UNION ALL
-         SELECT GRP_CD
+         SELECT AUTH_GRP_CD
            FROM TB_WB_AUTHOR_GRP_INFO A
           WHERE TARGET_ALL_FG = 'P'
             AND TARGET_ORGN = #{targetOrgn}
             )
      </if>
      </where>
-      ORDER BY GRP_CD
+      ORDER BY AUTH_GRP_CD
   </select>
 
   <select id="selectGroupCnt" parameterType="authGroupVO" resultType="integer">
     /* AuthGroupMapper.selectGroupCnt */
      SELECT COUNT(1)
        FROM TB_WB_AUTHOR_GRP_INFO A
-      WHERE A.GRP_CD = #{grpCd}
+      WHERE A.AUTH_GRP_CD = #{authGrpCd}
   </select>
 
   <insert id="insertGroup" parameterType="authGroupVO">
     /* AuthGroupMapper.insertGroup */
     INSERT INTO TB_WB_AUTHOR_GRP_INFO
     (
-        GRP_CD,
-        GRP_NM,
+        AUTH_GRP_CD,
+        AUTH_GRP_NM,
         TARGET_ALL_FG,
         TARGET_ORGN,
         REMARK,
@@ -87,7 +87,7 @@
     VALUES
     (
         LPAD(SQ_WB_AUTHOR_GRP.NEXTVAL, 6, '0'),
-        #{grpNm},
+        #{authGrpNm},
         #{targetAllFg},
         #{targetOrgn},
         #{remark},
@@ -102,21 +102,21 @@
   <update id="updateGroup" parameterType="authGroupVO">
     /* AuthGroupMapper.updateGroup */
      UPDATE TB_WB_AUTHOR_GRP_INFO A
-        SET A.GRP_NM = #{grpNm},
+        SET A.AUTH_GRP_NM = #{authGrpNm},
             A.TARGET_ALL_FG = #{targetAllFg},
             A.TARGET_ORGN = #{targetOrgn},
             A.REMARK = #{remark},
             A.USE_YN = #{useYn},
             A.MOD_DT = #{modDt},
             A.MOD_ID = #{modId}
-      WHERE A.GRP_CD = #{grpCd}
+      WHERE A.AUTH_GRP_CD = #{authGrpCd}
   </update>
 
   <delete id="deleteGroup" parameterType="authGroupVO">
     /* AuthGroupMapper.deleteGroup */
      DELETE
        FROM TB_WB_AUTHOR_GRP_INFO A
-      WHERE A.GRP_CD = #{grpCd}
+      WHERE A.AUTH_GRP_CD = #{authGrpCd}
   </delete>
 
 
@@ -149,8 +149,8 @@
              SELECT B.RESRCE_CD
                FROM TB_WB_AUTHOR_GRP_INFO A,
                     TB_WB_AUTHOR_GRP_RESRCE B
-              WHERE A.GRP_CD = B.GRP_CD
-                AND B.GRP_CD = #{grpCd}
+              WHERE A.AUTH_GRP_CD = B.AUTH_GRP_CD
+                AND B.AUTH_GRP_CD = #{authGrpCd}
                 AND A.USE_YN = 'Y'
                 AND B.USE_YN = 'Y'
             ) B
@@ -174,8 +174,8 @@
              SELECT B.RESRCE_CD
                FROM TB_WB_AUTHOR_GRP_INFO A,
                     TB_WB_AUTHOR_GRP_RESRCE B
-              WHERE A.GRP_CD = B.GRP_CD
-                AND B.GRP_CD = #{grpCd}
+              WHERE A.AUTH_GRP_CD = B.AUTH_GRP_CD
+                AND B.AUTH_GRP_CD = #{authGrpCd}
                 AND A.USE_YN = 'Y'
                 AND B.USE_YN = 'Y'
               UNION ALL
@@ -229,8 +229,8 @@
              SELECT B.RESRCE_CD
                FROM TB_WB_AUTHOR_GRP_INFO A,
                     TB_WB_AUTHOR_GRP_RESRCE B
-              WHERE A.GRP_CD = B.GRP_CD
-                AND B.GRP_CD = #{grpCd}
+              WHERE A.AUTH_GRP_CD = B.AUTH_GRP_CD
+                AND B.AUTH_GRP_CD = #{authGrpCd}
                 AND A.USE_YN = 'Y'
                 AND B.USE_YN = 'Y'
               UNION ALL
@@ -254,11 +254,11 @@
   <update id="mergeAuthorGrpResrce" parameterType="DefaultMap">
     /* AuthGroupMapper.mergeAuthorGrpResrce */
     MERGE INTO TB_WB_AUTHOR_GRP_RESRCE A
-    USING (SELECT #{grpCd} GRP_CD,
-                  #{resrceCd} RESRCE_CD
+    USING (SELECT #{authGrpCd} AS AUTH_GRP_CD,
+                  #{resrceCd} AS RESRCE_CD
              FROM DUAL
           ) ORG
-    ON (  A.GRP_CD = ORG.GRP_CD
+    ON (  A.AUTH_GRP_CD = ORG.AUTH_GRP_CD
       AND A.RESRCE_CD = ORG.RESRCE_CD)
 
     WHEN MATCHED THEN
@@ -269,14 +269,14 @@
 
     WHEN NOT MATCHED THEN
     INSERT (
-        A.GRP_CD,
+        A.AUTH_GRP_CD,
         A.RESRCE_CD,
         A.USE_YN,
         A.REG_DT,
         A.REG_ID
     )
     VALUES (
-        #{grpCd},
+        #{authGrpCd},
         #{resrceCd},
         #{useYn},
         #{regDt},
@@ -284,9 +284,9 @@
     )
   </update>
 
-  <select id="selectGrpCdById" parameterType="string" resultType="string">
-    /* AuthGroupMapper.selectGrpCdById */
-     SELECT GRP_CD
+  <select id="selectAuthGrpCdById" parameterType="string" resultType="string">
+    /* AuthGroupMapper.selectAuthGrpCdById */
+     SELECT AUTH_GRP_CD
        FROM TB_WB_USER_INFO A
       WHERE A.USER_ID = #{userId}
   </select>
@@ -296,8 +296,8 @@
      SELECT B.RESRCE_CD
        FROM TB_WB_AUTHOR_GRP_INFO A,
             TB_WB_AUTHOR_GRP_RESRCE B
-      WHERE A.GRP_CD = B.GRP_CD
-        AND B.GRP_CD = (SELECT GRP_CD FROM TB_WB_USER_INFO WHERE USER_ID = #{userId})
+      WHERE A.AUTH_GRP_CD = B.AUTH_GRP_CD
+        AND B.AUTH_GRP_CD = (SELECT AUTH_GRP_CD FROM TB_WB_USER_INFO WHERE USER_ID = #{userId})
   </select>
 
   <update id="mergeAuthorExcept" parameterType="DefaultMap">

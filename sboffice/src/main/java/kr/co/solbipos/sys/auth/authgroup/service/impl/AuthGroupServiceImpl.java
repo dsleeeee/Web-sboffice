@@ -92,14 +92,14 @@ public class AuthGroupServiceImpl implements AuthGroupService {
     public List<AuthorGrpResrceVO> listResrce(AuthGroupVO authGroupVO, SessionInfoVO sessionInfoVO) {
 
         //Tree 생성을 위한 그룹 기준 권한이 있는 모든! 리소스(Menu 포함) 조회 - 기준
-        authGroupVO.setGrpCd(authGroupVO.getGrpCd());
+        authGroupVO.setAuthGrpCd(authGroupVO.getAuthGrpCd());
         List<DefaultMap<String>> list = mapper.selectResrceByGroup(authGroupVO);
 
         //로그인 아이디 기준 권한이 있는 기능의 탐색 경로 조회
         //Tree의 기준 데이터에서 권한이 없는 리소스를 빼기 위해 사용
         List<DefaultMap<String>> authedList = new ArrayList<DefaultMap<String>>();
         if(sessionInfoVO.getOrgnFg() != OrgnFg.MASTER) {
-            authGroupVO.setGrpCd(sessionInfoVO.getGrpCd());
+            authGroupVO.setAuthGrpCd(sessionInfoVO.getAuthGrpCd());
             authGroupVO.setUserId(sessionInfoVO.getUserId());
             authedList = mapper.selectResrceById(authGroupVO);
         }
@@ -214,7 +214,7 @@ public class AuthGroupServiceImpl implements AuthGroupService {
 
         //Tree 생성을 위한 모든 리소스(Menu 포함) 조회
         //로그인 아이디의 그룹 기준 권한이 있는 것 체크
-        authGroupVO.setGrpCd(mapper.selectGrpCdById(userId));
+        authGroupVO.setAuthGrpCd(mapper.selectAuthGrpCdById(userId));
         authGroupVO.setUserId(userId);
         List<DefaultMap<String>> list = mapper.selectResrceByGroupAndId(authGroupVO);
 
@@ -222,7 +222,7 @@ public class AuthGroupServiceImpl implements AuthGroupService {
         //Tree의 기준 데이터에서 권한이 없는 리소스를 빼기 위해 사용
         List<DefaultMap<String>> authedList = new ArrayList<DefaultMap<String>>();
         if(sessionInfoVO.getOrgnFg() != OrgnFg.MASTER) {
-            authGroupVO.setGrpCd(sessionInfoVO.getGrpCd());
+            authGroupVO.setAuthGrpCd(sessionInfoVO.getAuthGrpCd());
             authGroupVO.setUserId(sessionInfoVO.getUserId());
             authedList = mapper.selectResrceById(authGroupVO);
         }

@@ -57,7 +57,7 @@ public class CmmMenuServiceImpl implements CmmMenuService {
     public List<HqVO> selectHq(HqVO hqVO) {
         return cmmMenuMapper.selectHq(hqVO);
     }
-    
+
 
     /**
      *
@@ -243,7 +243,7 @@ public class CmmMenuServiceImpl implements CmmMenuService {
 
         DefaultMap<String> map = new DefaultMap<String>();
 
-        map.put( "grpCd", sessionInfoVO.getGrpCd() );
+        map.put( "authGrpCd", sessionInfoVO.getAuthGrpCd() );
         map.put( "userId", sessionInfoVO.getUserId() );
 
         // Tree 생성을 위한 모든 리소스(Menu 포함) 조회
