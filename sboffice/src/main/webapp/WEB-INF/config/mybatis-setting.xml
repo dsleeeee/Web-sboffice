@@ -367,9 +367,10 @@
 
   <!-- typeHandlers -->
   <typeHandlers>
-<!--     <package name="kr.co" /> -->
     <!-- DB의 CLOB 형태의 컬럼을 String 형태로 Casting 하여 사용하도록 설정 -->
     <typeHandler handler="org.apache.ibatis.type.ClobTypeHandler" jdbcType="CLOB" javaType="java.lang.String"/>
+    <!-- enum Casting 을 위한 설정 -->
+    <package name="kr.co" />
   </typeHandlers>
 
   <plugins>
