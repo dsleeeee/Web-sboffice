@@ -23,7 +23,7 @@
     <tbody>
       <tr>
         <%-- 그룹명 --%>
-        <th><s:message code="authGroup.grpNm" /></th>
+        <th><s:message code="authGroup.authGrpNm" /></th>
         <td>
           <div class="sb-select fl">
             <div id="grpNm" class="sb-input"></div>
