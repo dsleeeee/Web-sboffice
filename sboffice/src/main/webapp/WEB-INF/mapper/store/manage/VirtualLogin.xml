@@ -1,7 +1,97 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!--
+    VirtualLogin.xml
+    가상로그인 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       노현수     2018.06.08      최초작성
+-->
 <mapper namespace="kr.co.solbipos.store.manage.virtuallogin.service.impl.VirtualLoginMapper">
+
+    <!-- 가상로그인 대상 목록 조회 -->
+    <!--
+        USE      : VirtualLoginMapper.getVirtualLoginList
+        TABLE    : TB_MS_STORE, TB_HQ_OFFICE, TB_CM_AGENCY, TB_MS_EMPLOYEE, TB_CM_NMCODE
+        PARAM    : virtualLoginVO
+        COMMENTS : 가상로그인 대상 목록을 조회한다.
+    -->
+    <select id="getVirtualLoginList" parameterType="virtualLoginVO" resultType="DefaultMap">
+        SELECT
+            thq.HQ_OFFICE_CD,
+            thq.HQ_OFFICE_NM,
+            tms.STORE_CD,
+            tms.STORE_NM,
+            tms.CLS_FG,
+            tcm_cls_fg.NMCODE_NM AS CLS_FG_NM,
+            tms.SYS_STAT_FG,
+            tcm_sys_stat_fg.NMCODE_NM AS SYS_STAT_FG_NM,
+            tms.OWNER_NM,
+            tms.TEL_NO,
+            tme.MP_NO,
+            tca.AGENCY_NM,
+            tms.SYS_OPEN_DATE,
+            tms.SYS_CLOSURE_DATE
+        FROM
+            TB_MS_STORE tms
+        LEFT OUTER JOIN TB_HQ_OFFICE thq ON
+            tms.HQ_OFFICE_CD = thq.HQ_OFFICE_CD
+        LEFT OUTER JOIN TB_CM_AGENCY tca ON
+            tms.AGENCY_CD = tca.AGENCY_CD
+        LEFT OUTER JOIN TB_MS_EMPLOYEE tme ON
+            tms.STORE_CD = tme.STORE_CD
+            AND tme.EMP_NO = '0000'
+        LEFT OUTER JOIN TB_CM_NMCODE tcm_cls_fg ON
+            tms.CLS_FG = tcm_cls_fg.NMCODE_CD
+            AND tcm_cls_fg.NMCODE_GRP_CD = '003'
+        LEFT OUTER JOIN TB_CM_NMCODE tcm_sys_stat_fg ON
+            tms.CLS_FG = tcm_sys_stat_fg.NMCODE_CD
+            AND tcm_sys_stat_fg.NMCODE_GRP_CD = '009'
+    </select>
+
+    <!-- 가상로그인 권한 체크 -->
+    <!--
+        USE      : VirtualLoginMapper.checkVirtualLoginAuth
+        TABLE    : TB_WB_RESRCE_INFO, TB_WB_AUTHOR_GRP_RESRCE, TB_WB_USER_INFO, TB_WB_AUTHOR_EXCEPT
+        PARAM    : virtualLoginVO
+        COMMENTS : 가상로그인 수행시 해당 권한을 체크한다.
+    -->
+    <select id="checkVirtualLoginAuth" parameterType="virtualLoginVO" resultType="DefaultMap">
+        SELECT
+            COUNT(RESRCE_CD) AS CNT
+        FROM
+            TB_WB_RESRCE_INFO
+        WHERE
+            RESRCE_CD IN (
+                SELECT
+                    RESRCE_CD
+                FROM
+                    TB_WB_AUTHOR_GRP_RESRCE
+                WHERE
+                    AUTH_GRP_CD = (
+                        SELECT
+                            AUTH_GRP_CD
+                        FROM
+                            TB_WB_USER_INFO
+                        WHERE
+                            USER_ID = #{userId}
+                    )
+                    AND RESRCE_CD = '000419'
+                    AND USE_YN = 'Y'
+            UNION ALL
+                SELECT
+                    RESRCE_CD
+                FROM
+                    TB_WB_AUTHOR_EXCEPT
+                WHERE
+                    USER_ID = #{userId}
+                    AND RESRCE_CD = '000419'
+                    AND INCLD_EXCLD_FG = 'I'
+                    AND USE_YN = 'Y'
+            )
+    </select>
 
 
 </mapper>

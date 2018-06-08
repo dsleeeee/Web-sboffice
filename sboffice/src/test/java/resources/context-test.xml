@@ -118,7 +118,7 @@
 
   <!-- Mybatis IoC Mapper Class from SqlSessionTemplate -->
   <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-    <property name="basePackage" value="kr.co.**.**.persistence" />
+    <property name="basePackage" value="kr.co.**.impl, kr.co.**.**.persistence" />
     <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
   </bean>
 

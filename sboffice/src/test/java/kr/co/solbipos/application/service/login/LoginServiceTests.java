@@ -14,9 +14,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.system.Prop;
 import kr.co.solbipos.application.session.auth.enums.LoginResult;
+import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.auth.service.impl.AuthMapper;
-import kr.co.solbipos.application.session.auth.service.impl.AuthServiceImpl;
 
 @RunWith(MockitoJUnitRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -32,7 +32,7 @@ public class LoginServiceTests {
     Prop prop;
 
     @InjectMocks
-    AuthServiceImpl authService;
+    AuthService authService;
 
     SessionInfoVO sessionInfoVO;
 

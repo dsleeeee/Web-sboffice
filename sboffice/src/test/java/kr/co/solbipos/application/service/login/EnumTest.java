@@ -1,19 +1,18 @@
 package kr.co.solbipos.application.service.login;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 import java.util.List;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import kr.co.solbipos.application.session.auth.enums.LoginOrigin;
 import kr.co.solbipos.application.session.auth.enums.LoginResult;
+import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.LoginHistVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.application.session.auth.service.impl.AuthServiceImpl;
 import kr.co.solbipos.config.AbstractApplicationContextTest;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 public class EnumTest extends AbstractApplicationContextTest {
 
     @Autowired
-    AuthServiceImpl authService;
+    AuthService authService;
 
     SessionInfoVO sessionInfoVO;
     LoginHistVO loginHistVO;
