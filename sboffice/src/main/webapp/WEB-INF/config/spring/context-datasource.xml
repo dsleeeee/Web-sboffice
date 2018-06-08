@@ -56,7 +56,7 @@
 
   <!-- Mybatis IoC Mapper Class from SqlSessionTemplate -->
   <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-    <property name="basePackage" value="kr.co.**.impl, kr.co.**.persistence" />
+    <property name="basePackage" value="kr.co.**.impl" />
     <property name="sqlSessionFactoryBeanName" value="txAdviceMaster" />
   </bean>
 
