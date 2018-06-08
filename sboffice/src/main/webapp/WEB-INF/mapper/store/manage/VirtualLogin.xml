@@ -13,12 +13,12 @@
 
     <!-- 가상로그인 대상 목록 조회 -->
     <!--
-        USE      : VirtualLoginMapper.getVirtualLoginList
         TABLE    : TB_MS_STORE, TB_HQ_OFFICE, TB_CM_AGENCY, TB_MS_EMPLOYEE, TB_CM_NMCODE
         PARAM    : virtualLoginVO
         COMMENTS : 가상로그인 대상 목록을 조회한다.
     -->
     <select id="getVirtualLoginList" parameterType="virtualLoginVO" resultType="DefaultMap">
+        /* USE : VirtualLoginMapper.getVirtualLoginList */
         SELECT
             thq.HQ_OFFICE_CD,
             thq.HQ_OFFICE_NM,
@@ -53,12 +53,12 @@
 
     <!-- 가상로그인 권한 체크 -->
     <!--
-        USE      : VirtualLoginMapper.checkVirtualLoginAuth
         TABLE    : TB_WB_RESRCE_INFO, TB_WB_AUTHOR_GRP_RESRCE, TB_WB_USER_INFO, TB_WB_AUTHOR_EXCEPT
         PARAM    : virtualLoginVO
         COMMENTS : 가상로그인 수행시 해당 권한을 체크한다.
     -->
     <select id="checkVirtualLoginAuth" parameterType="virtualLoginVO" resultType="DefaultMap">
+        /* USE : VirtualLoginMapper.checkVirtualLoginAuth */
         SELECT
             COUNT(RESRCE_CD) AS CNT
         FROM
