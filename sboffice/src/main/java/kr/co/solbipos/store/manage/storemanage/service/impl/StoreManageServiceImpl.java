@@ -14,7 +14,12 @@ public class StoreManageServiceImpl implements StoreManageService{
     StoreManageMapper mapper;
     
     @Override
-    public List<DefaultMap<String>> list(StoreManageVO storeManageVO) {
-        return mapper.list(storeManageVO);
+    public List<DefaultMap<String>> getStoreList(StoreManageVO storeManageVO) {
+        return mapper.getStoreList(storeManageVO);
+    }
+    
+    @Override
+    public DefaultMap<String> getStoreDetail(StoreManageVO storeManageVO) {
+        return mapper.getStoreDetail(storeManageVO);
     }
 }

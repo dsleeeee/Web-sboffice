@@ -16,5 +16,12 @@ public interface StoreManageMapper {
      * @param storeManageVO
      * @return
      */
-    List<DefaultMap<String>> list(StoreManageVO storeManageVO);
+    List<DefaultMap<String>> getStoreList(StoreManageVO storeManageVO);
+
+    /**
+     * 매장 상세 조회
+     * @param storeManageVO
+     * @return
+     */
+    DefaultMap<String> getStoreDetail(StoreManageVO storeManageVO);
 }

@@ -79,7 +79,7 @@
             <button class="btn_skyblue" id="btnFold"><s:message code="cmm.all.fold" /></button>
           </div>
         </div>
-        <div id="theGrid" style="height:400px;"></div> 
+        <div id="theGrid" style="height:500px;"></div> 
           
         <%-- 페이지리스트 --%>
         <div class="pageNum mt20">
@@ -90,19 +90,19 @@
         
       </div>
     </div>
-      
-    <div class="w50 fr" id="noDataArea">
-      <div class="wj-TblWrapBr ml10 pd20" style="height:700px;">
-        <p class="tc s18 mt200 bk"><s:message code="storeManage.require.select.store" /></p>
-        <p class="tc s14 mt40 lh25"><s:message code="storeManage.select.hqOffice" /><br /><s:message code="storeManage.can.regist.store" /></p>
-        <p class="tc s14 mt40 lh25"><s:message code="storeManage.select.store" /><br /><s:message code="storeManage.can.edit.store" /></p> 
-      </div>
-    </div>
+    
+    <%-- 매장 상세정보 --%>
+    <c:import url="/WEB-INF/view/store/manage/storeManage/storeManageDetail.jsp">
+      <c:param name="menuCd" value="${menuCd}"/>
+      <c:param name="menuNm" value="${menuNm}"/>
+    </c:import>
     
   </div>
 </div>
 
 <script>
+
+  var selectedStore;
 
   var clsFg             = ${ccu.getCommCodeSelect("003")};
   var sysStatFg         = ${ccu.getCommCodeSelect("005")};
@@ -116,6 +116,8 @@
   <%-- header --%>
   var hData =
     [
+      {binding:"hqOfficeCd", header:"<s:message code='storeManage.storeCd' />", visible:false},
+      {binding:"hqOfficeNm", header:"<s:message code='storeManage.storeNm' />", visible:false},
       {binding:"storeCd", header:"<s:message code='storeManage.storeCd' />"},
       {binding:"storeNm", header:"<s:message code='storeManage.storeNm' />"},
       {binding:"clsFg", header:"<s:message code='storeManage.clsFg' />", dataMap:clsFgDataMap},
@@ -124,38 +126,119 @@
     ];
   
   var grid          = wgrid.genGrid("#theGrid", hData, "${menuCd}", 1, ${clo.getColumnLayout(1)});
+  
+  grid.showMarquee = true;
+  
+  
   var ldata         = ${ccu.getListScale()};
   var listScaleBox  = wcombo.genCommonBox("#listScaleBox", ldata);
   
-  grid.sortDescriptions= [ 'hdShopCdNm'];
-  grid.groupDescriptions= [ 'hdShopCdNm'];
-
+  <%-- 그리드 포맷 --%>
+  grid.formatItem.addHandler(function(s, e) {
+    if (e.panel == s.cells) {
+      var col = s.columns[e.col];
+      var item = s.rows[e.row].dataItem;
+      if( col.binding == "storeNm") {
+        wijmo.addClass(e.cell, 'wijLink');
+      }
+    }
+  });
+  
+  <%-- 그리드 선택 이벤트 --%>
+  grid.addEventListener(grid.hostElement, 'mousedown', function(e) {
+    var ht = grid.hitTest(e);
+    if( ht.cellType == wijmo.grid.CellType.Cell) {
+      var col = ht.panel.columns[ht.col];
+      if( col.binding == "storeNm") {
+        selectedStore = grid.rows[ht.row].dataItem;
+        showDetail();
+      }
+    }
+  });
+  
   <%-- 조회 버튼 클릭 --%>
   $("#btnSearch").click(function(){
-    
+    search(1);
+  });
+  
+  <%-- 페이징 --%>
+  $(document).on("click", ".page1", function() {
+    search($(this).data("value"));
+  });
+  
+  <%-- 매장 목록 조회 --%>
+  function search(index) {
+
     var param = {};
-    
+    param.listScale   = listScaleBox.selectedValue;
+    param.curr        = index;
     
     // 검색 조건 추가
     $.postJSON("/store/manage/storeManage/storeManage/getStoreList.sb", param, function(result) {
+      
       if(result.status === "FAIL") {
         s_alert.pop(result.message);
         return;
       }
       var list = result.data.list;
+
+      console.log(list);
       
       if(list.length === undefined || list.length == 0) {
         s_alert.pop(result.message);
         return;
       }
-      grid.itemsSource = list;
+      grid.itemsSource = new wijmo.collections.CollectionView(list, {
+        sortDescriptions  : [ 'hqOfficeCd'], // grouping 컬럼
+        groupDescriptions : [ 'hqOfficeNm'] // grouping 후 Descriptions으로 보여지는 컬럼 
+      });
+
+      /* 
+      grid.itemsSource = new wijmo.collections.CollectionView(list, {
+        sortDescriptions  : [new wijmo.collections.SortDescription('hqOfficeNm', false)],
+        groupDescriptions : []
+      });
+      
+      for(var i=0; i<list.length; i++){
+        console.log(list)
+        var grupHeader;
+        if(i==0 || (list[i].hqOfficeCd != list[i-1].hqOfficeCd)) {
+          grupHeader = new wijmo.collections.PropertyGroupDescription(list[i].hqOfficeCd);
+        }
+        
+        grid.groupDescriptions.push(grupHeader);
+      }
+      */
       
       page.make("#page", result.data.page.curr, result.data.page.totalPage);
+      
+
+      $("#noDataArea").show();
+      $("#storeInfoEditArea").hide();
+      
+    })
+    .fail(function(){
+        s_alert.pop("Ajax Fail");
+    });
+  }
+  
+  <%-- 매장 선택시 --%>
+  function showDetail() {
+    
+    var param = selectedStore;
+    
+    $.postJSON("/store/manage/storeManage/storeManage/getStoreDetail.sb", param, function(result) {
+      
+      if(result.status === "FAIL") {
+        s_alert.pop(result.message);
+        return;
+      }
+      
+      showStoreDetail(result.data);
     })
     .fail(function(){
         s_alert.pop("Ajax Fail");
     });
     
-  });
-  
+  }
 </script>

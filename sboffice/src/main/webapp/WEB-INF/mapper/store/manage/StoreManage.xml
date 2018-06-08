@@ -1,10 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!--
+    StoreManage.xml
+    매장관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김지은     2018.06.08     최초작성
+-->
+
 <mapper namespace="kr.co.solbipos.store.manage.storemanage.service.impl.StoreManageMapper">
 
-  <select id="list" parameterType="storeManageVO" resultType="DefaultMap">
-    /* StoreManageMapper.list */
+  <!-- 매장목록 조회 -->
+  <!--
+      TABLE    : TB_MS_STORE, TB_HQ_OFFICE, TB_HQ_BRAND
+      PARAM    : storeManageVO
+      COMMENTS : 매장목록을 조회한다.
+  -->
+  <select id="getStoreList" parameterType="storeManageVO" resultType="DefaultMap">
+    /* USE : StoreManageMapper.getStoreList */
     <![CDATA[
     SELECT *
       FROM (
@@ -14,6 +29,8 @@
              B.HQ_OFFICE_NM,
              A.HQ_BRAND_CD,
              C.HQ_BRAND_NM,
+             A.STORE_CD,
+             A.STORE_NM,
              A.CLS_FG,
              A.SYS_STAT_FG,
              A.SYS_OPEN_DATE
@@ -52,50 +69,47 @@
      ]]>
   </select>
 
-  <select id="dtlInfo" parameterType="hqManageVO" resultType="DefaultMap">
-    /* HqManageMapper.dtlInfo */
+  <!-- 매장목록 조회 -->
+  <!--
+      TABLE    : TB_MS_STORE, TB_HQ_OFFICE, TB_HQ_BRAND
+      PARAM    : storeManageVO
+      COMMENTS : 매장목록을 조회한다.
+  -->
+  <select id="getStoreDetail" parameterType="storeManageVO" resultType="DefaultMap">
+    /* USE : StoreManageMapper.getStoreDetail */
     <![CDATA[
-    SELECT A.HQ_OFFICE_CD,
-           A.HQ_OFFICE_NM,
-           A.OWNER_NM,
-           A.BIZ_NO,
-           SUBSTR(A.BIZ_NO,0,3) BIZ_NO1,
-           SUBSTR(A.BIZ_NO,4,2) BIZ_NO2,
-           SUBSTR(A.BIZ_NO,6,5) BIZ_NO3,
-           A.BIZ_TYPE_CD,
-           A.BIZ_ITEM_CD,
-           A.BIZ_STORE_NM,
-           A.TEL_NO,
-           A.FAX_NO,
-           A.EMAIL_ADDR,
-           A.HMPG_ADDR,
-           A.POST_NO,
-           A.ADDR,
-           A.ADDR_DTL,
-           A.AREA_CD,
-           A.SYS_STAT_FG,
-           D.NMCODE_NM SYS_STAT_FG_NM,
-           TO_CHAR(TO_DATE(A.SYS_OPEN_DATE, 'YYYYMMDD'), 'YYYY.MM.DD') SYS_OPEN_DATE,
-           TO_CHAR(TO_DATE(A.SYS_CLOSURE_DATE, 'YYYYMMDD'), 'YYYY.MM.DD') SYS_CLOSURE_DATE,
-           A.AGENCY_CD,
-           B.AGENCY_NM,
-           A.REMARK,
-           A.CLS_FG,
-           C.NMCODE_NM CLS_FG_NM,
-           A.REG_DT,
-           A.REG_ID,
-           A.MOD_DT,
-           A.MOD_ID
-      FROM TB_HQ_OFFICE A,
-           TB_CM_AGENCY B,
-           TB_CM_NMCODE C,
-           TB_CM_NMCODE D
-     WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
-       AND B.AGENCY_CD (+)= A.AGENCY_CD
-       AND C.NMCODE_GRP_CD = '003'
-       AND C.NMCODE_CD = A.CLS_FG
-       AND D.NMCODE_GRP_CD = '005'
-       AND D.NMCODE_CD = A.SYS_STAT_FG
+    SELECT ms_t1.STORE_CD,
+           ms_t1.STORE_NM,
+           ms_t1.OWNER_NM,
+           ms_t1.HQ_OFFICE_CD,
+           ms_t1.BIZ_STORE_NM,
+           ms_t1.BIZ_NO, 
+           ms_t1.TEL_NO,
+           ms_t1.FAX_NO,
+           ms_t1.EMAIL_ADDR,
+           ms_t1.HMPG_ADDR,
+           ms_t1.POST_NO,
+           ms_t1.ADDR,
+           ms_t1.ADDR_DTL,
+           ms_t1.AREA_CD,
+           ms_t1.AGENCY_CD,
+           ag_t1.AGENCY_NM,
+           ms_t1.VAN_CD,
+           van_t1.NMCODE_NM,
+           ms_t1.SYS_STAT_FG,
+           stat_t1.NMCODE_NM,
+           ms_t1.REMARK
+      FROM TB_MS_STORE ms_t1,
+           TB_CM_AGENCY ag_t1,
+           TB_CM_NMCODE van_t1,
+           TB_CM_NMCODE stat_t1
+     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+       AND STORE_CD = #{storeCd}
+       AND ag_t1.AGENCY_CD = ms_t1.AGENCY_CD
+       AND van_t1.NMCODE_GRP_CD = '003'
+       AND van_t1.NMCODE_CD = ms_t1.CLS_FG
+       AND stat_t1.NMCODE_GRP_CD = '005'
+       AND stat_t1.NMCODE_CD = ms_t1.SYS_STAT_FG
      ]]>
   </select>
 

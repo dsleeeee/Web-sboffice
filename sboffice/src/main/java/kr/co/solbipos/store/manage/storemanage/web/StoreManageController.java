@@ -1,5 +1,6 @@
 package kr.co.solbipos.store.manage.storemanage.web;
 
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -15,12 +16,14 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.solbipos.store.manage.storemanage.service.StoreManageService;
 import kr.co.solbipos.store.manage.storemanage.service.StoreManageVO;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 가맹점관리 > 매장관리 > 매장정보관리
  * 
  * @author 김지은
  */
+@Slf4j
 @Controller
 @RequestMapping(value = "/store/manage/storeManage/")
 public class StoreManageController {
@@ -51,12 +54,29 @@ public class StoreManageController {
      */
     @RequestMapping(value = "storeManage/getStoreList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result list(StoreManageVO storeManageVO, HttpServletRequest request,
+    public Result getStoreList(StoreManageVO storeManageVO, HttpServletRequest request,
             HttpServletResponse response, Model model) {
         
-        List<DefaultMap<String>> list = service.list(storeManageVO);
+        List<DefaultMap<String>> list = service.getStoreList(storeManageVO);
         
-        return returnListJson(Status.OK, list);
+        return returnListJson(Status.OK, list, storeManageVO);
     }
     
+    /**
+     * 매장 정보 상세 조회
+     * @param storeManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "storeManage/getStoreDetail.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreDetail(StoreManageVO storeManageVO, HttpServletRequest request,
+            HttpServletResponse response, Model model) {
+        
+        DefaultMap<String> result = service.getStoreDetail(storeManageVO);
+        
+        return returnJson(Status.OK, result);
+    }
 }
