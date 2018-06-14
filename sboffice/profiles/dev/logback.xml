@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
 <!-- https://github.com/sonegy/how-to-use-logback 참고 -->
 
 <configuration scan="true" scanPeriod="30 seconds"><!-- scanPeriod 마다 설정 파일의 변경을 확인하여 로딩 -->
