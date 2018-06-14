@@ -16,6 +16,8 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class HqEnvstVO extends CmmVO{
     
+    private static final long serialVersionUID = 713050528057597639L;
+
     /** 본사코드 */
     private String hqOfficeCd;
     

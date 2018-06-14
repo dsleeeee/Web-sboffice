@@ -15,7 +15,9 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class EnvCodeVO extends CmmVO {
-
+    
+    private static final long serialVersionUID = -1741117450552741289L;
+    
     private String envstCd;
     private String envstValCd;
     private String envstValNm;
