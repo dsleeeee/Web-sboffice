@@ -12,7 +12,6 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.JavaScriptResult;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.message.MessageService;
-import kr.co.common.service.session.SessionService;
 
 /**
  * Return 되는 객체를 받아 Handling 해주는 Class
@@ -26,9 +25,6 @@ public class ResultHandlerAspect {
     /** 메세지 서비스 */
     @Autowired
     MessageService messageService;
-
-    @Autowired
-    SessionService sessionService;
 
     /**
      * 결과 처리
