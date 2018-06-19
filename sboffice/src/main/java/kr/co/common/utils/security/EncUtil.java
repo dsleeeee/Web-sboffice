@@ -64,12 +64,13 @@ public class EncUtil {
         return null;
     }
 
+    @SuppressWarnings("unlikely-arg-type")
     public static byte[] convertHash(String _msg, String _type, Charset _charSet) throws Exception {
         MessageDigest md = null;
         byte[] ditarr = null;
         try {
             md = MessageDigest.getInstance(_type);
-            if (_charSet.equals("")) {
+            if ( "".equals(_charSet) ) {
                 md.update(_msg.getBytes());
             } else {
                 md.update(_msg.getBytes(_charSet));
