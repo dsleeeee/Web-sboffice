@@ -9,9 +9,8 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.Date;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import kr.co.common.system.Prop;
+import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,8 +24,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 public class MailSocket {
-    @Autowired
-    Prop prop;
 
     private String host;
     private int port;
@@ -53,8 +50,8 @@ public class MailSocket {
      * @return MailSocket
      */
     public MailSocket init(String SendData) {
-        host = prop.emailHost;
-        port = prop.emailPort;
+        host = BaseEnv.EMAIL_HOST;
+        port = BaseEnv.EMAIL_PORT;
 
         comeData = "";
         sendData = "";

@@ -13,7 +13,7 @@ import kr.co.common.data.structure.DefaultMap;
  * @ 2015.06.15  노현수      최초생성
  *
  * @author 솔비포스 차세대개발실 노현수
- * @since 2018. 06.08
+ * @since 2018. 05.01
  * @version 1.0
  * @see
  *
@@ -24,7 +24,7 @@ public interface VirtualLoginService {
     /** 가상로그인 목록 조회 */
     List<DefaultMap<String>> getVirtualLoginList(VirtualLoginVO virtualLoginVO);
 
-
-//    checkVirtualLoginAuth
-
+    /** 가상로그인 권한 조회 */
+    Integer checkVirtualLoginAuth(String userId);
+    
 }

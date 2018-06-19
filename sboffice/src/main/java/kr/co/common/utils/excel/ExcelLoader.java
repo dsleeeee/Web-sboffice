@@ -31,9 +31,8 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.xmlbeans.impl.common.XMLChar;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import kr.co.common.system.Prop;
+import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.spring.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,9 +45,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class ExcelLoader implements ResultHandler<T> {
-
-    @Autowired
-    Prop prop;
 
     /* ---------------------------------------------------------------------- */
     /* external variable */
@@ -104,7 +100,7 @@ public class ExcelLoader implements ResultHandler<T> {
         exnRowIdx = 0;
         exnColIdx = 0;
 
-        this.fullPath = StringUtil.removeTrailingSlash(prop.excelTempDir);
+        this.fullPath = StringUtil.removeTrailingSlash(BaseEnv.EXCEL_TEMP_DIR);
         this.fileName = fileName;
         this.tempFileName = "temp_" + fileName;
 
@@ -455,7 +451,7 @@ public class ExcelLoader implements ResultHandler<T> {
         XSSFFont font_title = wb.createFont();
         font_title.setBold(true);
         font_title.setFontHeight(9);
-        font_title.setFontName(prop.defaultFont);
+        font_title.setFontName(BaseEnv.EXCEL_FONT);
         style_title.setFillForegroundColor(IndexedColors.LIGHT_YELLOW.getIndex());
         style_title.setFillPattern(XSSFCellStyle.SOLID_FOREGROUND);
         style_title.setBorderRight(XSSFCellStyle.BORDER_THIN); // 테두리 설정
@@ -475,7 +471,7 @@ public class ExcelLoader implements ResultHandler<T> {
          */
         XSSFFont font_data = wb.createFont();
         font_data.setFontHeight(9);
-        font_data.setFontName(prop.defaultFont);
+        font_data.setFontName(BaseEnv.EXCEL_FONT);
 
 
         // Cell Style 지정

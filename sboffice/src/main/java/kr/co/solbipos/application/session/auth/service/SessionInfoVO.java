@@ -122,7 +122,6 @@ public class SessionInfoVO extends CmmVO {
     /** 조회 종료 일자 */
     private String endDt;
 
-
     /**
      * 메뉴 관련 데이터
      */
@@ -135,12 +134,6 @@ public class SessionInfoVO extends CmmVO {
 
     /** 고정 메뉴 (JSON) */
     private String fixData;
-
-    /** 전체 메뉴 : 위즈모 그리드용 데이터 */
-    //private String madeMenuData;
-
-    /** 즐겨찾기 메뉴 : 위즈모 그리드용 데이터 */
-    //private String madeBkmkData;
 
     /** 현재 선택한 메뉴 정보 */
     private ResrceInfoBaseVO currentMenu;
@@ -156,4 +149,7 @@ public class SessionInfoVO extends CmmVO {
 
     /** 고정 메뉴 */
     private List<ResrceInfoBaseVO> fixMenu;
+    
+    /** 가상로그인 ID */
+    private String vUserId;
 }

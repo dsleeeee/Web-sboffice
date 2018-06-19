@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import kr.co.common.data.domain.CommonCodeVO;
 import kr.co.common.service.redis.RedisConnService;
-import kr.co.common.system.Prop;
 import kr.co.common.template.RedisCustomTemplate;
 import kr.co.solbipos.application.common.service.impl.CmmCodeMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -22,9 +21,6 @@ public class CmmCodeServiceImpl implements CmmCodeService {
 
     @Autowired
     CmmCodeMapper cmmCodeMapper;
-
-    @Autowired
-    Prop prop;
 
     @Autowired
     RedisConnService redisConnService;

@@ -14,7 +14,7 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import kr.co.common.service.session.SessionService;
-import kr.co.common.system.Prop;
+import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.DateUtil;
 import kr.co.common.utils.security.EncUtil;
 import kr.co.common.utils.spring.ObjectUtil;
@@ -31,9 +31,6 @@ import kr.co.solbipos.application.session.user.service.UserVO;
 
 @Service
 public class UserServiceImpl implements UserService {
-
-    @Autowired
-    Prop prop;
 
     @Autowired
     SessionService sessionService;
@@ -211,11 +208,11 @@ public class UserServiceImpl implements UserService {
         otpAuthVO.setUserId(userVO.getUserId());
         otpAuthVO.setAuthFg("001");
         otpAuthVO.setReqDate(currentDateString());
-        otpAuthVO.setOtpLimit(prop.otpLimit);
+        otpAuthVO.setOtpLimit(BaseEnv.OTP_LIMIT_MINUTE);
 
         OtpAuthVO findOtp = selectOtpTopOne(otpAuthVO);
 
-        if (checkOtpLimit(findOtp, prop.otpLimit)) {
+        if (checkOtpLimit(findOtp, BaseEnv.OTP_LIMIT_MINUTE)) {
             /**
              *
              * otp 체크 완료
@@ -293,7 +290,7 @@ public class UserServiceImpl implements UserService {
     public int insertOtpAuth(OtpAuthVO otpAuthVO) {
 
         otpAuthVO.setSeq(generateUUID());
-        otpAuthVO.setAuthNo(getRandomNumber(prop.otpSize));
+        otpAuthVO.setAuthNo(getRandomNumber(BaseEnv.OTP_SIZE));
         otpAuthVO.setReqDt(currentTimeString());
 
         //TODO OTP 이력 테이블에 암호화된 휴대폰번호로 저장

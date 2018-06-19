@@ -14,8 +14,9 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.util.WebUtils;
 import kr.co.common.service.cmm.CmmMenuService;
 import kr.co.common.service.redis.RedisConnService;
-import kr.co.common.system.Prop;
+import kr.co.common.system.BaseEnv;
 import kr.co.common.template.RedisCustomTemplate;
+import kr.co.common.utils.SessionUtil;
 import kr.co.common.utils.spring.WebUtil;
 import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -29,9 +30,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class SessionServiceImpl implements SessionService {
-
-    @Autowired
-    Prop prop;
 
     @Autowired
     RedisConnService redisConnService;
@@ -73,10 +71,9 @@ public class SessionServiceImpl implements SessionService {
                     cmmMenuService.selectStoreCdList( sessionInfoVO.getOrgnCd() );
             sessionInfoVO.setArrStoreCdList( storeCdList );
         }
-
         // redis에 세션 세팅
         setSessionInfo( sessionId, sessionInfoVO );
-
+        
         // 쿠키 생성
         makeCookie( sessionId );
         return sessionId;
@@ -100,7 +97,7 @@ public class SessionServiceImpl implements SessionService {
         if ( redisConnService.isAvailable() ) {
             try {
                 redisCustomTemplate.set( redisCustomTemplate.makeKey( sessionId ), sessionInfoVO,
-                        prop.sessionTimeout, TimeUnit.MINUTES );
+                        BaseEnv.SESSION_TIMEOUT_MIN, TimeUnit.MINUTES );
             } catch ( Exception e ) {
                 log.error( "Redis server not available!! setSessionInfo {}", e );
                 redisConnService.disable();
@@ -117,7 +114,7 @@ public class SessionServiceImpl implements SessionService {
                 if ( !ObjectUtils.isEmpty( sessionInfoVO ) ) {
                     // 세션 타임 연장
                     redisCustomTemplate.expire( redisCustomTemplate.makeKey( sessionId ),
-                            prop.sessionTimeout, TimeUnit.MINUTES );
+                            BaseEnv.SESSION_TIMEOUT_MIN, TimeUnit.MINUTES );
                 }
             } catch ( Exception e ) {
                 log.error( "Redis server not available!! getSessionInfo {}", e );
@@ -132,11 +129,15 @@ public class SessionServiceImpl implements SessionService {
 
         Cookie cookie = WebUtils.getCookie( request, SESSION_KEY );
         String sessionId = cookie == null ? request.getParameter( SESSION_KEY ) : cookie.getValue();
+        
+        SessionInfoVO sessionInfoVO = new SessionInfoVO();
+        
+        if ( request.getParameter("vLoginId") != null && request.getParameter("vLoginId").length() > 0 ) {
+            sessionInfoVO = SessionUtil.getEnv(request.getSession(), request.getParameter("vLoginId"));
+        } else {
+            sessionInfoVO = getSessionInfo(sessionId);
+        }
 
-        // HttpSession session = request.getSession();
-        // String sessionId = session.getId();
-
-        SessionInfoVO sessionInfoVO = getSessionInfo( sessionId );
         return sessionInfoVO;
     }
 

@@ -12,7 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import kr.co.common.service.session.SessionService;
-import kr.co.common.system.Prop;
+import kr.co.common.system.BaseEnv;
 import kr.co.solbipos.application.session.auth.enums.LoginResult;
 import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -28,9 +28,6 @@ public class LoginServiceTests {
     @Mock
     SessionService sessionService;
 
-    @Mock
-    Prop prop;
-
     @InjectMocks
     AuthService authService;
 
@@ -39,7 +36,7 @@ public class LoginServiceTests {
     @Before
     public void init() {
         sessionInfoVO = new SessionInfoVO();
-        prop.loginPwdChgDays = 90;
+        BaseEnv.LOGIN_PWD_CHG_DAYS = 90;
     }
 
     /**

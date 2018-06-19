@@ -67,4 +67,7 @@
   <!-- 파일업로드 관련 -->
   <entry key="file.upload.dir">resources/upload/</entry>
   
+  <!-- 공통 변수 저장소 명칭 관련 -->
+  <entry key ="baseEnv.prop.env">env</entry>
+  
 </properties>

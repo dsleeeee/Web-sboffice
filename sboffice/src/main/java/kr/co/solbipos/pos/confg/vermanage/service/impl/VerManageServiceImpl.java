@@ -13,7 +13,7 @@ import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
-import kr.co.common.system.Prop;
+import kr.co.common.system.BaseEnv;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.pos.confg.vermanage.service.ApplcStoreVO;
 import kr.co.solbipos.pos.confg.vermanage.service.VerInfoVO;
@@ -23,9 +23,6 @@ import kr.co.solbipos.pos.confg.verrecv.enums.VerRecvFg;
 @Service
 public class VerManageServiceImpl implements VerManageService{
 
-    @Autowired
-    Prop prop;
-    
     @Autowired
     VerManageMapper mapper;
 
@@ -189,7 +186,7 @@ public class VerManageServiceImpl implements VerManageService{
         // 저장 경로 설정
         String root = multi.getSession().getServletContext().getRealPath("/");
 //        String path = root+"resources/upload/";
-        String path = root+prop.fileUploadDir;
+        String path = root+BaseEnv.FILE_UPLOAD_DIR;
         
 
         String newFileName = ""; // 업로드 되는 파일명

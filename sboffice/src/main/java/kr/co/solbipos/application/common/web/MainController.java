@@ -7,7 +7,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.system.BaseEnv;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 
@@ -29,16 +31,20 @@ public class MainController {
       * @param model
       * @return
       */
-    @RequestMapping(value = "main.sb", method = RequestMethod.GET)
-    public String main(HttpServletRequest request, HttpServletResponse response, Model model) {
+    @RequestMapping(value = "/main.sb", method = RequestMethod.GET)
+    public String main(HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes, Model model) {
 
         if (!sessionService.isValidSession(request)) {
             return "redirect:/auth/login.sb";
         }
-
+        
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         OrgnFg orgnFg = sessionInfoVO.getOrgnFg();
-
+        
+        if ( request.getParameter("vLoginId") != null && request.getParameter("vLoginId").length() > 0 ) {
+            redirectAttributes.addAttribute("vLoginId", BaseEnv.VIRTUAL_LOGIN_ID);
+        }
+        
         /**
          * 유져 권한 타입<br>
          * */

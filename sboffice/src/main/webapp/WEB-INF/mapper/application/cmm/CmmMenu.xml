@@ -69,19 +69,20 @@
 
   <!-- 즐겨찾기 가져오기 -->
   <select id="selectBkmkMenu" parameterType="sessionInfoVO" resultType="resrceInfoBaseVO">
-  <![CDATA[
     /* CmmMenuMapper.selectBkmkMenu */
     SELECT B.RESRCE_CD,
            B.P_RESRCE,
            B.RESRCE_NM,
            B.URL
+           <if test="vUserId != null and vUserId != ''">
+           ,#{vUserId,jdbcType=VARCHAR} AS V_LOGIN_ID
+           </if>
       FROM TB_WB_BKMK A
       LEFT OUTER JOIN
            TB_WB_RESRCE_INFO B
         ON A.RESRCE_CD = B.RESRCE_CD
      WHERE A.USER_ID = #{userId}
        AND A.USE_YN = 'Y'
-  ]]>
   </select>
 
   <!-- 즐겨찾기 조회 -->
@@ -89,19 +90,20 @@
 
 <!-- 고정 메뉴 가져오기 -->
   <select id="selectFixingMenu" parameterType="sessionInfoVO" resultType="resrceInfoBaseVO">
-  <![CDATA[
     /* CmmMenuMapper.selectFixingMenu */
     SELECT B.RESRCE_CD,
            B.P_RESRCE,
            B.RESRCE_NM,
            B.URL
+           <if test="vUserId != null and vUserId != ''">
+           ,#{vUserId,jdbcType=VARCHAR} AS V_LOGIN_ID
+           </if>
       FROM TB_WB_FIXING A
       LEFT OUTER JOIN
            TB_WB_RESRCE_INFO B
         ON A.RESRCE_CD = B.RESRCE_CD
      WHERE A.USER_ID = #{userId}
        AND A.USE_YN = 'Y'
-  ]]>
   </select>
 
   <select id="selectAllResrce" parameterType="DefaultMap" resultType="DefaultMap">
@@ -114,6 +116,9 @@
                FROM TB_CM_NMCODE
               WHERE NMCODE_GRP_CD = '086'
                 AND NMCODE_ITEM_1 = A.RESRCE_CD) ICON
+            <if test="vUserId != null and vUserId != ''">
+            ,#{vUserId,jdbcType=VARCHAR} AS V_LOGIN_ID
+            </if>
        FROM TB_WB_RESRCE_INFO A
       WHERE A.USE_YN = 'Y'
         AND A.RESRCE_FG = 'M'
@@ -128,6 +133,9 @@
     /* CmmMenuMapper.selectAuthedResrce */
      SELECT A.RESRCE_CD,
             A.RESRCE_PATH
+            <if test="vUserId != null and vUserId != ''">
+            ,#{vUserId,jdbcType=VARCHAR} AS V_LOGIN_ID
+            </if>
        FROM (
              SELECT A.RESRCE_CD,
                     SYS_CONNECT_BY_PATH(RESRCE_CD, '/') RESRCE_PATH
@@ -164,6 +172,9 @@
     /* CmmMenuMapper.selectAuthedBkmk */
      SELECT A.RESRCE_CD,
             A.RESRCE_PATH
+            <if test="vUserId != null and vUserId != ''">
+            ,#{vUserId,jdbcType=VARCHAR} AS V_LOGIN_ID
+            </if>
        FROM (
              SELECT A.RESRCE_CD,
                     SYS_CONNECT_BY_PATH(RESRCE_CD, '/') RESRCE_PATH

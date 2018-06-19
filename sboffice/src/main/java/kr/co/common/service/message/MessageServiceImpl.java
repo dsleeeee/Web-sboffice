@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
  * @author 정용길
  *
  */
-@Service
+@Service("messageService")
 public class MessageServiceImpl implements MessageService {
     /**
      * 메세지 처리

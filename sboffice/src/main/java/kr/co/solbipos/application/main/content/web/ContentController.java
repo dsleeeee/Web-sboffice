@@ -130,7 +130,7 @@ public class ContentController {
      */
     @RequestMapping(value = "store.sb", method = RequestMethod.GET)
     public String mainMRHST(HttpServletRequest request, HttpServletResponse response, Model model) {
-
+        
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         /** 매출현황 날짜 select box */
@@ -146,7 +146,12 @@ public class ContentController {
         model.addAttribute("dateSelList1", dateSelList1);
         model.addAttribute("dateSelList2", dateSelList2);
         model.addAttribute("noticeList", noticeList);
-
+        
+        /** 가상로그인시 ID 설정 */
+        if ( request.getParameter("vLoginId") != null && request.getParameter("vLoginId").length() > 0 ) {
+            model.addAttribute("vLoginId", request.getParameter("vLoginId"));
+        }
+        
         return "application/main/mrhstMain";
     }
 

@@ -1,6 +1,6 @@
 package kr.co.solbipos.store.manage.virtuallogin.service;
 
-import kr.co.solbipos.application.common.service.CmmVO;
+import kr.co.solbipos.application.common.service.PageVO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -22,9 +22,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class VirtualLoginVO extends CmmVO {
-
-    private static final long serialVersionUID = 7083716747167766680L;
+public class VirtualLoginVO extends PageVO {
 
     /** 본사코드 */
     private String hqOfficeCd;
@@ -40,7 +38,13 @@ public class VirtualLoginVO extends CmmVO {
 
     /** 용도 */
     private String clsFg;
-
+    
+    /** 용도 */
+    private String clsFgNm;
+    
+    /** 상태 */
+    private String sysStatFg;
+    
     /** 상태 */
     private String sysStatFgNm;
 
@@ -54,6 +58,9 @@ public class VirtualLoginVO extends CmmVO {
     private String mpNo;
 
     /** 관리업체 */
+    private String agencyCd;
+    
+    /** 관리업체 */
     private String agencyNm;
 
     /** 시스템오픈일 */
@@ -61,5 +68,17 @@ public class VirtualLoginVO extends CmmVO {
 
     /** 시스템폐점일 */
     private String sysClosureDate;
+    
+    /** 본사로그인 ID */
+    private String hqUserId;
+    
+    /** 매장로그인 ID */
+    private String msUserId;
+    
+    /** 관리업체로그인 ID */
+    private String cmUserId;
+    
+    /** 가상로그인ID */
+    private String vUserId;
 
 }

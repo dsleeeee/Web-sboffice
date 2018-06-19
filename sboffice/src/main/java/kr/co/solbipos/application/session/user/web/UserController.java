@@ -26,7 +26,7 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.exception.AuthenticationException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
-import kr.co.common.system.Prop;
+import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.DateUtil;
 import kr.co.common.utils.security.EncUtil;
 import kr.co.common.utils.spring.ObjectUtil;
@@ -58,9 +58,6 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequestMapping(value = "/user")
 public class UserController {
-
-    @Autowired
-    Prop prop;
 
     @Autowired
     UserService userService;
@@ -118,11 +115,11 @@ public class UserController {
         otpAuthVO.setRecvMpNo(findUser.getMpNo());
         otpAuthVO.setReqIp(getClientIp(request));
         otpAuthVO.setReqDate(currentDateString());
-        otpAuthVO.setOtpLimit(prop.otpLimit);
+        otpAuthVO.setOtpLimit(BaseEnv.OTP_LIMIT_MINUTE);
 
         // limit 에 걸렸는지 확인
         if (checkOtpLimit(otpAuthVO)) {
-            log.warn("인증문자 제한 시간 걸림, 제한 시간 : {}, id : {}, name : {}", prop.otpLimit,
+            log.warn("인증문자 제한 시간 걸림, 제한 시간 : {}, id : {}, name : {}", BaseEnv.OTP_LIMIT_MINUTE,
                     findUser.getUserId(), findUser.getEmpNm());
             String msg = String.valueOf(otpAuthVO.getOtpLimit())
                     + messageService.get("login.pw.find.otp.limit");
@@ -160,7 +157,7 @@ public class UserController {
         String otpDateTime = o.getReqDate() + o.getReqDt();
         Date otpDt = DateUtil.getDatetime(otpDateTime);
         // otp 리미티드 시간 더해줌
-        otpDt = DateUtils.addMinutes(otpDt, prop.otpLimit);
+        otpDt = DateUtils.addMinutes(otpDt, BaseEnv.OTP_LIMIT_MINUTE);
 
         // 현재 시간
         Date current = new Date();
@@ -230,7 +227,7 @@ public class UserController {
     @RequestMapping(value = "pwdFind.sb", method = RequestMethod.GET)
     public String passwordFind(HttpServletRequest request, HttpServletResponse response,
             Model model) {
-        model.addAttribute("otpLimit", prop.otpLimit);
+        model.addAttribute("otpLimit", BaseEnv.OTP_LIMIT_MINUTE);
         return "user/login:pwdFind";
     }
 
@@ -270,7 +267,7 @@ public class UserController {
         // otp 입력시간 지남
         else if (pfr == PwFindResult.OTP_LIMIT_ERROR) {
             return returnJson(Status.FAIL, "authNumber",
-                    prop.otpLimit + messageService.get("login.pw.find.limit.otp.minute"));
+                    BaseEnv.OTP_LIMIT_MINUTE + messageService.get("login.pw.find.limit.otp.minute"));
         } else {
             return returnJson(Status.FAIL);
         }

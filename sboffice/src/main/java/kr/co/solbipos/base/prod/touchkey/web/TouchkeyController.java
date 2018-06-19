@@ -16,7 +16,6 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
-import kr.co.common.system.Prop;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.prod.touchkey.service.TouchkeyService;
 import lombok.extern.slf4j.Slf4j;
@@ -33,8 +32,6 @@ public class TouchkeyController {
 
     private final String RESULT_URI = "base/prod/touchkey";
 
-    @Autowired
-    Prop prop;
     @Autowired
     SessionService sessionService;
     @Autowired

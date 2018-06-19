@@ -1,6 +1,6 @@
 package kr.co.solbipos.base.store.tableattr.web;
 
-import static kr.co.common.utils.spring.StringUtil.*;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +16,6 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
-import kr.co.common.system.Prop;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.store.tableattr.service.TableAttrService;
@@ -34,8 +33,6 @@ public class TableAttrController {
 
     private final String RESULT_URI = "base/store/tableattr";
 
-    @Autowired
-    Prop prop;
     @Autowired
     SessionService sessionService;
     @Autowired
