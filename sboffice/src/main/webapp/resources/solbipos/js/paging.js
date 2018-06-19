@@ -66,16 +66,3 @@
   };
   win.page = page;
 }( "undefined" != typeof window ? window : this, jQuery );
-
-
-
-
-
-
-
-
-
-
-
-
-
