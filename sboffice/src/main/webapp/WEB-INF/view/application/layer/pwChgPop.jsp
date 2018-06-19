@@ -57,8 +57,9 @@
 
               <tr>
                 <th><s:message code="login.userId" /></th>
-                <td id="labelUserId">${id}</td>
+                <td id="labelUserId">${id}
                 <input id="pwdUserId" style="display: none" value="${id}" />
+                </td>
               </tr>
 
               <tr>
