@@ -440,7 +440,7 @@ public class UserController {
             /**
              * 변경 패스워드가 기존 비밀번호가 같은지 체크
              */
-            return returnJson(Status.FAIL, "msg", messageService.get("login.layer.pwchg."));
+            return returnJson(Status.FAIL, "msg", messageService.get("login.layer.pwchg.current"));
         } else if (result == PwChgResult.PASSWORD_REGEXP) {
             /**
              * 패스워드 정책 체크
