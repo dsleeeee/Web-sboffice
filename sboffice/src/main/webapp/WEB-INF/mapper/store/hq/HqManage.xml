@@ -288,7 +288,7 @@
       WEB_USE_YN,
       USER_ID,
       MP_NO,
-      HIRE_FG,
+      SERVICE_FG,
       SMS_RECV_YN,
       USE_YN,
       REG_DT,

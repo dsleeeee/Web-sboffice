@@ -66,7 +66,7 @@ public class UserVO extends CmmVO {
     private String addrDtl;
 
     /** 고용구분_1:재직,2:휴직,9:퇴직 */
-    private String hireFg;
+    private String serviceFg;
 
     /** SMS수신여부 */
     private String smsRecvYn;
