@@ -133,7 +133,7 @@
       return $.ajax({
         type: "POST",
         url: url,
-        data: data,
+        data: JSON.stringify(data),
         success: function(result) {
           if(result.status === "OK") {
             return succ(result);

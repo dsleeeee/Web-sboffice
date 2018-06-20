@@ -1,7 +1,6 @@
 package kr.co.solbipos.store.manage.virtuallogin.web;
 
 import static kr.co.common.utils.HttpUtils.getClientIp;
-import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 import static kr.co.common.utils.spring.StringUtil.convertToJson;
 import static kr.co.common.utils.spring.StringUtil.generateUUID;
 import java.io.IOException;

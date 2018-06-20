@@ -105,8 +105,8 @@
     <typeAlias alias="statusVO" type="kr.co.solbipos.store.manage.status.service.StatusVO"/>
 -->
     <typeAlias alias="virtualLoginVO" type="kr.co.solbipos.store.manage.virtuallogin.service.VirtualLoginVO"/>
-<!--
     <typeAlias alias="pwdManageVO" type="kr.co.solbipos.store.manage.pwdmanage.service.PwdManageVO"/>
+<!--
     <typeAlias alias="modifyReqVO" type="kr.co.solbipos.store.manage.modifyreq.service.ModifyReqVO"/>
     시스템관리
     <typeAlias alias="webMenuVO" type="kr.co.solbipos.sys.menu.webmenu.service.WebMenuVO"/>

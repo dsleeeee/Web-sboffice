@@ -186,7 +186,7 @@
 	    });
 	
 	    <%-- 페이징 --%>
-	    $(document).on("click", ".page1", function() {
+	    $(document).on("click", ".page", function() {
 	      search($(this).data("value"));
 	    });
 	

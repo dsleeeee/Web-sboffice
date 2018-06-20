@@ -23,7 +23,7 @@ import kr.co.solbipos.store.manage.virtuallogin.service.VirtualLoginVO;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-@Service
+@Service("virtualLogin")
 public class VirtualLoginServiceImpl implements VirtualLoginService {
 
     @Autowired
