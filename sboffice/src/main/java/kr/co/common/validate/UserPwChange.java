@@ -1,4 +1,4 @@
-package kr.co.solbipos.application.session.user.validate;
+package kr.co.common.validate;
 
 /**
  * {@link kr.co.solbipos.application.session.user.service.PwdChgVO} 

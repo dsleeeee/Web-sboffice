@@ -1,4 +1,4 @@
-package kr.co.solbipos.sys.menu.webmenu.service;
+package kr.co.common.validate;
 
 /**
  * {@link kr.co.solbipos.application.common.service.ResrceInfoVO} 
