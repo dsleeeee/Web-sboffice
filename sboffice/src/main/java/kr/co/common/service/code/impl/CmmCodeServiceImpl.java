@@ -1,9 +1,10 @@
-package kr.co.common.service.code;
+package kr.co.common.service.code.impl;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import kr.co.common.data.domain.CommonCodeVO;
+import kr.co.common.service.code.CmmCodeService;
 import kr.co.common.service.redis.RedisConnService;
 import kr.co.common.template.RedisCustomTemplate;
 import kr.co.solbipos.application.common.service.impl.CmmCodeMapper;
@@ -16,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
  *
  */
 @Slf4j
-@Service
+@Service("cmmCodeService")
 public class CmmCodeServiceImpl implements CmmCodeService {
 
     @Autowired

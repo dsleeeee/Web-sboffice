@@ -1,4 +1,4 @@
-package kr.co.solbipos.sys.menu.webmenu.service;
+package kr.co.common.validate;
 
 import java.util.HashMap;
 import java.util.List;

@@ -1,4 +1,4 @@
-package kr.co.common.service.main;
+package kr.co.common.service.main.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,13 +7,14 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.main.ContentService;
 import kr.co.common.utils.DateUtil;
 import kr.co.solbipos.application.common.enums.MainSrchFg;
 import kr.co.solbipos.application.main.content.service.impl.ContentMapper;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 
-@Service
-public class ContentServiceImpl implements ContentService{
+@Service("contentService")
+public class ContentServiceImpl implements ContentService {
 
     @Autowired
     ContentMapper contentMapper;

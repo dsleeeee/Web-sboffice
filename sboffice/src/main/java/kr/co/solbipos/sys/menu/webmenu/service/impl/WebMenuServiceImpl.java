@@ -13,11 +13,11 @@ import kr.co.common.data.enums.UseYn;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.validate.WebMenuService;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.common.enums.ResrceFg;
 import kr.co.solbipos.application.common.service.ResrceInfoVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.sys.menu.webmenu.service.WebMenuService;
 import lombok.extern.slf4j.Slf4j;
 
 /**

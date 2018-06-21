@@ -1,9 +1,10 @@
-package kr.co.common.service.redis;
+package kr.co.common.service.redis.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import kr.co.common.service.redis.RedisConnService;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Data
 @Component
-
 public class RedisConnServiceImpl implements RedisConnService {
 
     @Autowired

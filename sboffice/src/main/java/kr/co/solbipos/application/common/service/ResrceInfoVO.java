@@ -5,7 +5,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
 import kr.co.common.data.enums.UseYn;
 import kr.co.solbipos.application.common.enums.ResrceFg;
-import kr.co.solbipos.sys.menu.webmenu.validate.WebMenuSave;
+import kr.co.solbipos.sys.menu.webmenu.service.WebMenuSave;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

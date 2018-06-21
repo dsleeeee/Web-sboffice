@@ -1,4 +1,4 @@
-package kr.co.common.service.cmm;
+package kr.co.common.service.cmm.impl;
 
 import static kr.co.common.utils.DateUtil.currentDateString;
 import static kr.co.common.utils.DateUtil.currentTimeMsString;
@@ -10,6 +10,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.cmm.CmmMenuService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.system.BaseEnv;
 import kr.co.solbipos.application.common.service.HqVO;
@@ -24,7 +25,7 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Service
+@Service("cmmMenuService")
 public class CmmMenuServiceImpl implements CmmMenuService {
 
     @Autowired

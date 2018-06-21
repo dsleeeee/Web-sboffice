@@ -1,4 +1,4 @@
-package kr.co.common.service.session;
+package kr.co.common.service.session.impl;
 
 import static kr.co.common.utils.spring.StringUtil.convertToJson;
 import static kr.co.common.utils.spring.StringUtil.generateUUID;
@@ -14,6 +14,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.util.WebUtils;
 import kr.co.common.service.cmm.CmmMenuService;
 import kr.co.common.service.redis.RedisConnService;
+import kr.co.common.service.session.SessionService;
 import kr.co.common.system.BaseEnv;
 import kr.co.common.template.RedisCustomTemplate;
 import kr.co.common.utils.SessionUtil;
@@ -28,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
  *
  */
 @Slf4j
-@Service
+@Service("sessionService")
 public class SessionServiceImpl implements SessionService {
 
     @Autowired

@@ -1,4 +1,4 @@
-package kr.co.common.service.grid;
+package kr.co.common.service.grid.impl;
 
 import static kr.co.common.utils.spring.StringUtil.convertToJson;
 import static kr.co.common.utils.spring.StringUtil.toCamelCaseName;
@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.grid.GridSupportService;
 import kr.co.common.service.message.MessageService;
 import kr.co.sample.application.service.SampleService;
 import kr.co.solbipos.application.common.service.GridDispItemVO;
@@ -19,7 +20,7 @@ import kr.co.solbipos.application.common.service.impl.CmmGridMapper;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Service
+@Service("gridSupportService")
 public class GridSupportServiceImpl implements GridSupportService {
 
     @Autowired
