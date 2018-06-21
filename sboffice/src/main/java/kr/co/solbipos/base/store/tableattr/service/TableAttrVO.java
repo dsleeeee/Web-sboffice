@@ -12,10 +12,20 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
- * 기초관리 - 매장관리 - 테이블속성
- * table : TB_CM_TABLE_ATTR, TB_MS_TABLE_ATTR
+ * @Class Name : TableAttrVO.java
+ * @Description : 기초관리 > 매장관리 > 테이블속성
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2015.05.01  조병준      최초생성
  *
- * @author 조병준
+ * @author NHN한국사이버결제 KCP 조병준
+ * @since 2018. 05.01
+ * @version 1.0
+ * @see
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Data
 @Builder

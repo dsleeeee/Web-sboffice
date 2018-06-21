@@ -1,6 +1,7 @@
 package kr.co.solbipos.sys.menu.webmenu.service.impl;
 
 import java.util.List;
+import org.apache.ibatis.annotations.Mapper;
 import kr.co.solbipos.application.common.service.ResrceInfoVO;
 
 /**
@@ -10,6 +11,7 @@ import kr.co.solbipos.application.common.service.ResrceInfoVO;
  * @author 정용길
  *
  */
+@Mapper
 public interface WebMenuMapper {
 
     /**

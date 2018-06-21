@@ -1,6 +1,7 @@
 package kr.co.solbipos.pos.confg.func.service.impl;
 
 import java.util.List;
+import org.apache.ibatis.annotations.Mapper;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.pos.confg.func.service.FuncVO;
 
@@ -9,6 +10,7 @@ import kr.co.solbipos.pos.confg.func.service.FuncVO;
  *
  * @author 김지은
  */
+@Mapper
 public interface FuncMapper {
     /**
      * 기능구분 상세 조회

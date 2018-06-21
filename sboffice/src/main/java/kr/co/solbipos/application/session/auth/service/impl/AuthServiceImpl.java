@@ -19,8 +19,24 @@ import kr.co.solbipos.application.session.auth.service.LoginHistVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * @Class Name : AuthServiceImpl.java
+ * @Description : 어플리케이션 > 세션 > 인증
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2015.05.01  정용길      최초생성
+ *
+ * @author NHN한국사이버결제 KCP 정용길
+ * @since 2018. 05.01
+ * @version 1.0
+ * @see
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ */
 @Slf4j
-@Service
+@Service("authService")
 public class AuthServiceImpl implements AuthService {
 
     @Autowired

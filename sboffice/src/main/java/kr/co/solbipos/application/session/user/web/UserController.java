@@ -32,9 +32,14 @@ import kr.co.common.utils.security.EncUtil;
 import kr.co.common.utils.spring.ObjectUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.common.utils.spring.WebUtil;
+import kr.co.common.validate.AuthNumber;
+import kr.co.common.validate.IdFind;
+import kr.co.common.validate.Login;
+import kr.co.common.validate.PwChange;
+import kr.co.common.validate.PwFind;
+import kr.co.common.validate.UserPwChange;
 import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.application.session.auth.validate.Login;
 import kr.co.solbipos.application.session.user.enums.PwChgResult;
 import kr.co.solbipos.application.session.user.enums.PwFindResult;
 import kr.co.solbipos.application.session.user.service.OtpAuthVO;
@@ -42,18 +47,24 @@ import kr.co.solbipos.application.session.user.service.PwdChgHistVO;
 import kr.co.solbipos.application.session.user.service.PwdChgVO;
 import kr.co.solbipos.application.session.user.service.UserService;
 import kr.co.solbipos.application.session.user.service.UserVO;
-import kr.co.solbipos.application.session.user.validate.AuthNumber;
-import kr.co.solbipos.application.session.user.validate.IdFind;
-import kr.co.solbipos.application.session.user.validate.PwChange;
-import kr.co.solbipos.application.session.user.validate.PwFind;
-import kr.co.solbipos.application.session.user.validate.UserPwChange;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * @Class Name : UserController.java
+ * @Description : 어플리케이션 > 세션 > 사용자
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2015.05.01  정용길      최초생성
  *
- * @author 정용길
+ * @author NHN한국사이버결제 KCP 정용길
+ * @since 2018. 05.01
+ * @version 1.0
+ * @see
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-
 @Slf4j
 @Controller
 @RequestMapping(value = "/user")

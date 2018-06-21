@@ -21,10 +21,21 @@ import kr.co.solbipos.base.prod.touchkey.service.TouchkeyService;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 기초관리 - 상품관리 - 판매터치키등록
- * @author 조병준
+ * @Class Name : TouchkeyController.java
+ * @Description : 기초관리 - 상품관리 - 판매터치키등록
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2015.05.01  조병준      최초생성
+ *
+ * @author NHN한국사이버결제 KCP 조병준
+ * @since 2018. 05.01
+ * @version 1.0
+ * @see
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-
 @Slf4j
 @Controller
 @RequestMapping(value = "/base/prod/touchkey/touchkey")

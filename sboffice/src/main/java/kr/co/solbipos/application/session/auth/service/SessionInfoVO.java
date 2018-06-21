@@ -3,19 +3,30 @@ package kr.co.solbipos.application.session.auth.service;
 import java.util.List;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
+import kr.co.common.validate.Login;
 import kr.co.solbipos.application.common.service.CmmVO;
 import kr.co.solbipos.application.common.service.ResrceInfoBaseVO;
 import kr.co.solbipos.application.common.service.ResrceInfoVO;
 import kr.co.solbipos.application.session.auth.enums.LoginResult;
-import kr.co.solbipos.application.session.auth.validate.Login;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 레디스 세션에 저장 되는 객체
+ * @Class Name : SessionInfoVO.java
+ * @Description : 어플리케이션 > 세션 > 인증
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2015.05.01  정용길      최초생성
  *
- * @author 정용길
+ * @author NHN한국사이버결제 KCP 정용길
+ * @since 2018. 05.01
+ * @version 1.0
+ * @see
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

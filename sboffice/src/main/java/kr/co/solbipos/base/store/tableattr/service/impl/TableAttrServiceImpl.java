@@ -33,8 +33,24 @@ import kr.co.solbipos.base.store.tableattr.service.TableAttrService;
 import kr.co.solbipos.base.store.tableattr.service.TableAttrVO;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * @Class Name : TableAttrServiceImpl.java
+ * @Description : 기초관리 > 매장관리 > 테이블속성
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2015.05.01  조병준      최초생성
+ *
+ * @author NHN한국사이버결제 KCP 조병준
+ * @since 2018. 05.01
+ * @version 1.0
+ * @see
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ */
 @Slf4j
-@Service
+@Service("tableAttrService")
 @Transactional
 public class TableAttrServiceImpl implements TableAttrService {
 

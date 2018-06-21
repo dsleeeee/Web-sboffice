@@ -30,8 +30,24 @@ import kr.co.solbipos.base.store.tablelayout.service.TableLayoutService;
 import kr.co.solbipos.base.store.tablelayout.service.TableVO;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * @Class Name : TableLayoutServiceImpl.java
+ * @Description : 기초관리 > 매장관리 > 테이블관리
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2015.05.01  조병준      최초생성
+ *
+ * @author NHN한국사이버결제 KCP 조병준
+ * @since 2018. 05.01
+ * @version 1.0
+ * @see
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ */
 @Slf4j
-@Service
+@Service("tableLayoutService")
 @Transactional
 public class TableLayoutServiceImpl implements TableLayoutService {
 

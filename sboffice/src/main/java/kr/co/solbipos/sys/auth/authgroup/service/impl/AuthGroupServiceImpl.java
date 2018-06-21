@@ -29,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
  *
  */
 @Slf4j
-@Service
+@Service("authGroupService")
 public class AuthGroupServiceImpl implements AuthGroupService {
 
     @Autowired

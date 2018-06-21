@@ -18,11 +18,21 @@ import kr.co.solbipos.application.common.service.GridDispItemVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 
 /**
- * 그리드 관련 공통 기능 컨트롤러
- *
- * @author 정용길
- */
-
+* @Class Name : GridController.java
+* @Description : 그리드 관련 공통 기능
+* @Modification Information
+* @
+* @  수정일      수정자              수정내용
+* @ ----------  ---------   -------------------------------
+* @ 2015.05.01  정용길      최초생성
+*
+* @author NHN한국사이버결제 KCP 정용길
+* @since 2018. 05.01
+* @version 1.0
+* @see
+*
+*  Copyright (C) by SOLBIPOS CORP. All right reserved.
+*/
 @Controller
 public class GridController {
 

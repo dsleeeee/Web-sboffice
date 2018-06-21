@@ -2,17 +2,28 @@ package kr.co.solbipos.application.session.user.service;
 
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
+import kr.co.common.validate.Login;
+import kr.co.common.validate.PwChange;
+import kr.co.common.validate.UserPwChange;
 import kr.co.solbipos.application.common.service.CmmVO;
-import kr.co.solbipos.application.session.auth.validate.Login;
-import kr.co.solbipos.application.session.user.validate.PwChange;
-import kr.co.solbipos.application.session.user.validate.UserPwChange;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 패스워드 변경
- * 
- * @author 정용길
+ * @Class Name : PwdChgVO.java
+ * @Description : 어플리케이션 > 세션 > 사용자
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2015.05.01  정용길      최초생성
+ *
+ * @author NHN한국사이버결제 KCP 정용길
+ * @since 2018. 05.01
+ * @version 1.0
+ * @see
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
