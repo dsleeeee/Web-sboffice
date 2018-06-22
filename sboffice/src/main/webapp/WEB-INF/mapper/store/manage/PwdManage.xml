@@ -19,76 +19,55 @@
     -->
     <select id="getPwdManageList" parameterType="pwdManageVO" resultType="DefaultMap">
         /* USE : PwdManageMapper.getPwdManageList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
-            HQ_OFFICE_CD,
-            HQ_OFFICE_NM,
-            STORE_CD,
-            STORE_NM,
-            USER_ID,
-            USER_NM,
-            SERVICE_FG,
-            WEB_USE_YN,
-            MP_NO,
-            EMAIL_ADDR,
-            ADDR,
-            RNUM,
-            TOT_CNT
+            tho.HQ_OFFICE_CD,
+            tho.HQ_OFFICE_NM,
+            tms.STORE_CD,
+            tms.STORE_NM,
+            tme.USER_ID,
+            tme.EMP_NM AS USER_NM,
+            tme.SERVICE_FG,
+            tme.WEB_USE_YN,
+            tme.MP_NO,
+            tme.EMAIL_ADDR,
+            tme.ADDR || tme.ADDR_DTL AS ADDR
+            <include refid="CmmSQL.PagingTemplateCount"/>
         FROM
-            (
-                 SELECT
-                     tho.HQ_OFFICE_CD,
-                     tho.HQ_OFFICE_NM,
-                     tms.STORE_CD,
-                     tms.STORE_NM,
-                     tme.USER_ID,
-                     tme.EMP_NM AS USER_NM,
-                     tme.SERVICE_FG,
-                     tme.WEB_USE_YN,
-                     tme.MP_NO,
-                     tme.EMAIL_ADDR,
-                     tme.ADDR || tme.ADDR_DTL AS ADDR,
-                     COUNT(1) OVER (PARTITION BY 1 ORDER BY 1) AS TOT_CNT,
-                     ROW_NUMBER() OVER(PARTITION BY 1 ORDER BY 1) AS RNUM
-                 FROM
-                     TB_MS_EMPLOYEE tme
-                 LEFT OUTER JOIN TB_MS_STORE tms ON
-                     tme.STORE_CD = tms.STORE_CD
-                 LEFT OUTER JOIN TB_HQ_OFFICE tho ON
-                     tms.HQ_OFFICE_CD = tho.HQ_OFFICE_CD
-                 LEFT OUTER JOIN TB_CM_NMCODE tcn ON
-                     tme.SERVICE_FG = tcn.NMCODE_CD
-                     AND tcn.NMCODE_GRP_CD = '008'
-                 WHERE
-                     tho.HQ_OFFICE_CD != '00000'
-                 <if test='hqOfficeCd != null and hqOfficeCd != ""'>
-                     AND tho.HQ_OFFICE_CD = #{hqOfficeCd}
-                 </if>
-                 <if test='hqOfficeNm != null and hqOfficeNm != ""'>
-                     <![CDATA[
-                     AND tho.HQ_OFFICE_NM LIKE #{hqOfficeNm} || '%'
-                     ]]>
-                 </if>
-                 <if test='storeCd != null and storeCd != ""'>
-                     AND tme.STORE_CD = #{storeCd}
-                 </if>
-                 <if test='storeNm != null and storeNm != ""'>
-                     <![CDATA[
-                     AND tme.STORE_NM LIKE #{storeNm} || '%'
-                     ]]>
-                 </if>
-                 <if test='userId != null and userId != ""'>
-                     AND tme.USER_ID LIKE #{userId}||'%'
-                 </if>
-                 <if test='userNm != null and userNm != ""'>
-                     AND tme.USER_NM LIKE #{userNm}||'%'
-                 </if>
-                ORDER BY tho.HQ_OFFICE_CD DESC, tms.STORE_CD DESC, tme.EMP_NM
-            )
-        <![CDATA[
-        WHERE 
-            RNUM >= #{prev}
-            AND RNUM <= #{next}
-        ]]>
+            TB_MS_EMPLOYEE tme
+        LEFT OUTER JOIN TB_MS_STORE tms ON
+            tme.STORE_CD = tms.STORE_CD
+        LEFT OUTER JOIN TB_HQ_OFFICE tho ON
+            tms.HQ_OFFICE_CD = tho.HQ_OFFICE_CD
+        LEFT OUTER JOIN TB_CM_NMCODE tcn ON
+            tme.SERVICE_FG = tcn.NMCODE_CD
+            AND tcn.NMCODE_GRP_CD = '008'
+        WHERE
+            tho.HQ_OFFICE_CD != '00000'
+        <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+            AND tho.HQ_OFFICE_CD = #{hqOfficeCd}
+        </if>
+        <if test='hqOfficeNm != null and hqOfficeNm != ""'>
+            <![CDATA[
+            AND tho.HQ_OFFICE_NM LIKE #{hqOfficeNm} || '%'
+            ]]>
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+            AND tme.STORE_CD = #{storeCd}
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            <![CDATA[
+            AND tme.STORE_NM LIKE #{storeNm} || '%'
+            ]]>
+        </if>
+        <if test='userId != null and userId != ""'>
+            AND tme.USER_ID LIKE #{userId}||'%'
+        </if>
+        <if test='userNm != null and userNm != ""'>
+            AND tme.USER_NM LIKE #{userNm}||'%'
+        </if>
+       ORDER BY tho.HQ_OFFICE_CD DESC, tms.STORE_CD DESC, tme.EMP_NM
+       <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
     
     <!-- 기존 비밀번호 조회 -->

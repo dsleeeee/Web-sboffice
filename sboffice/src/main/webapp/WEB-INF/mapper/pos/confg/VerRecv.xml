@@ -5,74 +5,58 @@
 
   <select id="selectVerList" parameterType="verRecvVO" resultType="DefaultMap">
     /* VerRecvMapper.selectVerList */
-    <![CDATA[
-    SELECT *
-      FROM (
-      SELECT
-             COUNT(1) OVER (PARTITION BY 1 ORDER BY 1) TOT_CNT,
-             ROW_NUMBER() OVER(PARTITION BY 1 ORDER BY 1) RNUM,
-             A.VER_SER_NO,
-             A.VER_SER_NM,
-             A.USE_YN,
-             TO_CHAR(TO_DATE(A.REG_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') REG_DT,
-             A.REG_ID,
-             TO_CHAR(TO_DATE(A.MOD_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') MOD_DT,
-             A.MOD_ID,
-             NVL(B.REG_CNT, 0) REG_CNT,
-             NVL(B.RECV_CNT, 0) RECV_CNT
-        FROM TB_CM_POS_VERSN A,
-            (
-       SELECT VER_SER_NO,
-              SUM(DECODE(VER_RECV_FG , '1' , 1, 0)) REG_CNT,
-              SUM(DECODE(VER_RECV_FG , '2' , 1, 0)) RECV_CNT
-         FROM TB_CM_POS_VERSN_STORE
-        GROUP BY VER_SER_NO
-             ) B
-       WHERE B.VER_SER_NO (+)= A.VER_SER_NO
-      ]]>
-        <if test='verSerNo != null and verSerNo != ""'>
-         AND A.VER_SER_NO = #{verSerNo}
-        </if>
-        <if test='verSerNm != null and verSerNm != ""'>
-         AND A.VER_SER_NM = #{verSerNm}
-        </if>
-       ORDER BY REG_DT DESC
-           )
-    <![CDATA[
-     WHERE RNUM >= #{prev}
-       AND RNUM <= #{next}
-    ]]>
+    <include refid="CmmSQL.PagingTemplateHeader"/>
+    SELECT
+           A.VER_SER_NO,
+           A.VER_SER_NM,
+           A.USE_YN,
+           TO_CHAR(TO_DATE(A.REG_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') REG_DT,
+           A.REG_ID,
+           TO_CHAR(TO_DATE(A.MOD_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') MOD_DT,
+           A.MOD_ID,
+           NVL(B.REG_CNT, 0) REG_CNT,
+           NVL(B.RECV_CNT, 0) RECV_CNT
+           <include refid="CmmSQL.PagingTemplateCount"/>
+      FROM TB_CM_POS_VERSN A,
+          (
+     SELECT VER_SER_NO,
+            SUM(DECODE(VER_RECV_FG , '1' , 1, 0)) REG_CNT,
+            SUM(DECODE(VER_RECV_FG , '2' , 1, 0)) RECV_CNT
+       FROM TB_CM_POS_VERSN_STORE
+      GROUP BY VER_SER_NO
+           ) B
+     WHERE B.VER_SER_NO (+)= A.VER_SER_NO
+      <if test='verSerNo != null and verSerNo != ""'>
+       AND A.VER_SER_NO = #{verSerNo}
+      </if>
+      <if test='verSerNm != null and verSerNm != ""'>
+       AND A.VER_SER_NM = #{verSerNm}
+      </if>
+     ORDER BY REG_DT DESC
+     <include refid="CmmSQL.PagingTemplateBottom"/>
   </select>
 
   <select id="selectStoreList" parameterType="verRecvVO" resultType="DefaultMap">
     /* VerRecvMapper.selectStoreList */
-    <![CDATA[
-    SELECT *
-      FROM (
-      SELECT COUNT(1) OVER (PARTITION BY 1 ORDER BY 1) TOT_CNT,
-             ROW_NUMBER() OVER(PARTITION BY 1 ORDER BY 1) RNUM,
-             A.VER_SER_NO,
-             A.STORE_CD,
-             B.STORE_NM,
-             A.VER_RECV_FG,
-             TO_CHAR(TO_DATE(A.VER_RECV_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') VER_RECV_DT,
-             A.POS_IP,
-             TO_CHAR(TO_DATE(A.REG_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') REG_DT,
-             A.REG_ID,
-             TO_CHAR(TO_DATE(A.MOD_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') MOD_DT,
-             A.MOD_ID,
-             A.POS_NO
-        FROM TB_CM_POS_VERSN_STORE A,
-             TB_MS_STORE B
-      ]]>
-       WHERE A.VER_SER_NO = #{verSerNo}
-         AND B.STORE_CD = A.STORE_CD
-       ORDER BY STORE_CD
-           )
-     <![CDATA[
-     WHERE RNUM >= #{prev}
-       AND RNUM <= #{next}
-      ]]>
+    <include refid="CmmSQL.PagingTemplateHeader"/>
+    SELECT A.VER_SER_NO,
+           A.STORE_CD,
+           B.STORE_NM,
+           A.VER_RECV_FG,
+           TO_CHAR(TO_DATE(A.VER_RECV_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') VER_RECV_DT,
+           A.POS_IP,
+           TO_CHAR(TO_DATE(A.REG_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') REG_DT,
+           A.REG_ID,
+           TO_CHAR(TO_DATE(A.MOD_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') MOD_DT,
+           A.MOD_ID,
+           A.POS_NO
+           <include refid="CmmSQL.PagingTemplateCount"/>
+      FROM TB_CM_POS_VERSN_STORE A,
+           TB_MS_STORE B
+     WHERE A.VER_SER_NO = #{verSerNo}
+       AND B.STORE_CD = A.STORE_CD
+     ORDER BY STORE_CD
+     <include refid="CmmSQL.PagingTemplateBottom"/>
   </select>
 
   <select id="selectStoreRecvList" parameterType="verRecvVO" resultType="DefaultMap">
@@ -159,58 +143,44 @@
 
   <select id="selectVerStoreList" parameterType="verRecvVO" resultType="DefaultMap">
     /* VerRecvMapper.selectVerStoreList */
-    <![CDATA[
-    SELECT *
-      FROM (
-      SELECT COUNT(1) OVER (PARTITION BY 1 ORDER BY 1) TOT_CNT,
-             ROW_NUMBER() OVER(PARTITION BY 1 ORDER BY 1) RNUM,
-             A.VER_SER_NO,
-             A.VER_SER_NM,
-             A.PROG_FG,
-             B.POS_CNT
-        FROM TB_CM_POS_VERSN A,
-             (
-        SELECT VER_SER_NO, COUNT(POS_NO) POS_CNT
-          FROM TB_CM_POS_VERSN_STORE
-         GROUP BY VER_SER_NO
-              ) B
-        WHERE B.VER_SER_NO = A.VER_SER_NO
-    ]]>
-      <if test='verSerNo != null and verSerNo != ""'>
-          AND A.VER_SER_NO = #{verSerNo}
-      </if>
-      <if test='verSerNm != null and verSerNm != ""'>
-          AND A.VER_SER_NM = #{verSerNm}
-      </if>
-        ORDER BY A.VER_SER_NO DESC
-            )
-    <![CDATA[
-     WHERE RNUM >= #{prev}
-       AND RNUM <= #{next}
-    ]]>
+    <include refid="CmmSQL.PagingTemplateHeader"/>
+    SELECT A.VER_SER_NO,
+           A.VER_SER_NM,
+           A.PROG_FG,
+           B.POS_CNT
+           <include refid="CmmSQL.PagingTemplateCount"/>
+      FROM TB_CM_POS_VERSN A,
+           (
+      SELECT VER_SER_NO, COUNT(POS_NO) POS_CNT
+        FROM TB_CM_POS_VERSN_STORE
+       GROUP BY VER_SER_NO
+            ) B
+      WHERE B.VER_SER_NO = A.VER_SER_NO
+    <if test='verSerNo != null and verSerNo != ""'>
+        AND A.VER_SER_NO = #{verSerNo}
+    </if>
+    <if test='verSerNm != null and verSerNm != ""'>
+        AND A.VER_SER_NM = #{verSerNm}
+    </if>
+      ORDER BY A.VER_SER_NO DESC
+      <include refid="CmmSQL.PagingTemplateBottom"/>
   </select>
-
 
   <select id="selectVerStoreDtlList" parameterType="verRecvVO" resultType="DefaultMap">
     /* VerRecvMapper.selectVerStoreDtlList */
-    <![CDATA[
-    SELECT *
-      FROM (
-      SELECT COUNT(1) OVER (PARTITION BY 1 ORDER BY 1) TOT_CNT,
-             ROW_NUMBER() OVER(PARTITION BY 1 ORDER BY 1) RNUM,
-             A.VER_SER_NO,
-             A.STORE_CD,
-             B.STORE_NM,
-             A.POS_NO,
-             TO_CHAR(TO_DATE(A.VER_RECV_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') VER_RECV_DT,
-             A.POS_IP
-        FROM TB_CM_POS_VERSN_STORE A,
-             TB_MS_STORE B
-       WHERE A.VER_SER_NO = #{verSerNo}
-         AND B.STORE_CD = A.STORE_CD
-          )
-     WHERE RNUM >= #{prev}
-       AND RNUM <= #{next}
-  ]]>
+    <include refid="CmmSQL.PagingTemplateHeader"/>
+    SELECT A.VER_SER_NO,
+           A.STORE_CD,
+           B.STORE_NM,
+           A.POS_NO,
+           TO_CHAR(TO_DATE(A.VER_RECV_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') VER_RECV_DT,
+           A.POS_IP
+           <include refid="CmmSQL.PagingTemplateCount"/>
+      FROM TB_CM_POS_VERSN_STORE A,
+           TB_MS_STORE B
+     WHERE A.VER_SER_NO = #{verSerNo}
+       AND B.STORE_CD = A.STORE_CD
+    <include refid="CmmSQL.PagingTemplateBottom"/>
   </select>
+  
 </mapper>

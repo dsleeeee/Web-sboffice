@@ -20,9 +20,9 @@ public class PageVO implements Serializable {
     /** 현재 페이지 */
     Integer curr;
     /** 다음 보여질 페이지그룹의 첫 번째 페이지 */
-    Integer next;
+    Integer limit;
     /** 이전 보여질 페이지그룹의 마지막 페이지 */
-    Integer prev;
+    Integer offset;
     
     /** 검색 시작 날짜 */
     private String startDt;
@@ -43,8 +43,8 @@ public class PageVO implements Serializable {
 
     public void prevNext() {
         if (listScale != null && curr != null) {
-            prev = ((curr - 1) * listScale) + 1;
-            next = curr * listScale;
+            offset = ((curr - 1) * listScale) + 1;
+            limit = curr * listScale;
         }
     }
 
@@ -62,13 +62,8 @@ public class PageVO implements Serializable {
         }
         
         totalPage = totCnt < 0 ? 1 : (int) Math.ceil((double) totCnt / listScale);
-        
-        System.out.println("########################### totalPage : " + totalPage);
-        System.out.println("########################### (double) totCnt / listScale : " + (double) totCnt / listScale);
-        System.out.println("########################### Math.ceil((double) totCnt / listScale : " + Math.ceil((double) totCnt / listScale));
-        
-        prev = Math.max(1, curr - 1 - ((curr - 1) % pageScale));
-        next = Math.min(totalPage,
+        offset = Math.max(1, curr - 1 - ((curr - 1) % pageScale));
+        limit = Math.min(totalPage,
                 curr + 1 + (pageScale - (curr % pageScale > 0 ? curr % pageScale : pageScale)));
     }
 }

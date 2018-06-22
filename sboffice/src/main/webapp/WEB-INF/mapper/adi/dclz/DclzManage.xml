@@ -5,51 +5,43 @@
 
   <select id="selectDclzManage" parameterType="dclzManageVO" resultType="DefaultMap">
     /* DclzManageMapper.selectDclzManage */
-    <![CDATA[
-    SELECT *
-      FROM (
-      SELECT
-            COUNT(1) OVER (PARTITION BY 1 ORDER BY 1) TOT_CNT,
-            ROW_NUMBER() OVER(PARTITION BY 1 ORDER BY 1) RNUM,
-            A.STORE_CD,
-            (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = A.STORE_CD) STORE_NM,
-            A.EMP_NO,
-            (SELECT EMP_NM FROM TB_MS_EMPLOYEE WHERE EMP_NO = A.EMP_NO AND STORE_CD = A.STORE_CD) EMP_NM,
-            A.EMP_IN_DATE,
-            A.POS_NO,
-            TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') SALE_DATE,
-            TO_CHAR(TO_DATE(A.EMP_IN_DT, 'yyyymmddhh24mi'), 'yyyy-mm-dd hh:mi') EMP_IN_DT,
-            TO_CHAR(TO_DATE(A.EMP_OUT_DT, 'yyyymmddhh24mi'), 'yyyy-mm-dd hh:mi') EMP_OUT_DT,
-            A.WORK_TIME,
-            A.IN_FG,
-            (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD='087' AND NMCODE_CD = A.IN_FG) IN_FG_NM,
-            A.REMARK,
-            A.REG_DT,
-            A.REG_ID,
-            A.MOD_DT,
-            A.MOD_ID
-       FROM TB_PS_EMPLOYEE_COMMTE A
-      ]]>
-      <where>
-        <if test='inFg != null and inFg.toString() != "ALL"'>
-          AND A.IN_FG = #{inFg}
-        </if>
-        <if test='storeCd != null and storeCd != ""'>
-          AND A.STORE_CD IN
-          <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
-            #{item}
-          </foreach>
-        </if>
-        <if test="startDt != null and startDt != '' and endDt != null and endDt != ''">
-          AND A.SALE_DATE BETWEEN #{startDt} AND #{endDt}
-        </if>
-      </where>
-        ORDER BY A.SALE_DATE DESC
-        )
-    <![CDATA[
-     WHERE RNUM >= #{prev}
-       AND RNUM <= #{next}
-    ]]>
+    <include refid="CmmSQL.PagingTemplateHeader"/>
+    SELECT
+          A.STORE_CD,
+          (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = A.STORE_CD) STORE_NM,
+          A.EMP_NO,
+          (SELECT EMP_NM FROM TB_MS_EMPLOYEE WHERE EMP_NO = A.EMP_NO AND STORE_CD = A.STORE_CD) EMP_NM,
+          A.EMP_IN_DATE,
+          A.POS_NO,
+          TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') SALE_DATE,
+          TO_CHAR(TO_DATE(A.EMP_IN_DT, 'yyyymmddhh24mi'), 'yyyy-mm-dd hh:mi') EMP_IN_DT,
+          TO_CHAR(TO_DATE(A.EMP_OUT_DT, 'yyyymmddhh24mi'), 'yyyy-mm-dd hh:mi') EMP_OUT_DT,
+          A.WORK_TIME,
+          A.IN_FG,
+          (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD='087' AND NMCODE_CD = A.IN_FG) IN_FG_NM,
+          A.REMARK,
+          A.REG_DT,
+          A.REG_ID,
+          A.MOD_DT,
+          A.MOD_ID
+          <include refid="CmmSQL.PagingTemplateCount"/>
+    FROM TB_PS_EMPLOYEE_COMMTE A
+    <where>
+      <if test='inFg != null and inFg.toString() != "ALL"'>
+        AND A.IN_FG = #{inFg}
+      </if>
+      <if test='storeCd != null and storeCd != ""'>
+        AND A.STORE_CD IN
+        <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
+          #{item}
+        </foreach>
+      </if>
+      <if test="startDt != null and startDt != '' and endDt != null and endDt != ''">
+        AND A.SALE_DATE BETWEEN #{startDt} AND #{endDt}
+      </if>
+    </where>
+    ORDER BY A.SALE_DATE DESC
+    <include refid="CmmSQL.PagingTemplateBottom"/>
   </select>
 
   <insert id="insertDclzManage" parameterType="dclzManageVO">

@@ -37,6 +37,7 @@ public class MybatisInterceptor implements Interceptor {
     private Properties properties;
 
     public Object intercept(Invocation invocation) throws Throwable {
+        
         MappedStatement mappedStatement = (MappedStatement) invocation.getArgs()[0];
         Object parameter = null;
 
@@ -110,8 +111,9 @@ public class MybatisInterceptor implements Interceptor {
 
         // 줄삭제하고(한줄로) 표시할때
         // String sql = boundSql.getSql().replaceAll("[\\s]+", " ");
-        String sql = boundSql.getSql();
-
+        // 쿼리 정렬 (공백라인 제거)
+        String sql = boundSql.getSql().replaceAll("(?m)^[ \\t]*\\r?\\n", "");
+        
         if (parameterMappings.size() > 0 && parameterObject != null) {
             TypeHandlerRegistry typeHandlerRegistry = configuration.getTypeHandlerRegistry();
             if (typeHandlerRegistry.hasTypeHandler(parameterObject.getClass())) {
