@@ -118,18 +118,18 @@
 	   
 		var rdata =
 		    [
-		      {"binding":"hqOfficeCd","header":"<s:message code='virtualLogin.hqOfficeCd' />"},
-		      {"binding":"hqOfficeNm","header":"<s:message code='virtualLogin.hqOfficeNm' />"},
-		      {"binding":"storeCd","header":"<s:message code='virtualLogin.storeCd' />"},
-		      {"binding":"storeNm","header":"<s:message code='virtualLogin.storeNm' />"},
-		      {"binding":"clsFgNm","header":"<s:message code='virtualLogin.clsFgNm' />"},
-		      {"binding":"sysStatFgNm","header":"<s:message code='virtualLogin.sysStatFgNm' />"},
-		      {"binding":"ownerNm","header":"<s:message code='virtualLogin.ownerNm' />"},
-		      {"binding":"telNo","header":"<s:message code='virtualLogin.telNo' />"},
-		      {"binding":"mpNo","header":"<s:message code='virtualLogin.mpNo' />"},
-		      {"binding":"agencyNm","header":"<s:message code='virtualLogin.agencyNm' />"},
-		      {"binding":"sysOpenDate","header":"<s:message code='virtualLogin.sysOpenDate' />"},
-		      {"binding":"sysClosureDate","header":"<s:message code='virtualLogin.sysClosureDate' />"}
+		      {"binding":"hqOfficeCd","header":"<s:message code='virtualLogin.hqOfficeCd' />", "width":"*"},
+		      {"binding":"hqOfficeNm","header":"<s:message code='virtualLogin.hqOfficeNm' />", "width":"*"},
+		      {"binding":"storeCd","header":"<s:message code='virtualLogin.storeCd' />", "width":"*"},
+		      {"binding":"storeNm","header":"<s:message code='virtualLogin.storeNm' />", "width":"*"},
+		      {"binding":"clsFgNm","header":"<s:message code='virtualLogin.clsFgNm' />", "width":"*"},
+		      {"binding":"sysStatFgNm","header":"<s:message code='virtualLogin.sysStatFgNm' />", "width":"*"},
+		      {"binding":"ownerNm","header":"<s:message code='virtualLogin.ownerNm' />", "width":"*"},
+		      {"binding":"telNo","header":"<s:message code='virtualLogin.telNo' />", "width":"*"},
+		      {"binding":"mpNo","header":"<s:message code='virtualLogin.mpNo' />", "width":"*"},
+		      {"binding":"agencyNm","header":"<s:message code='virtualLogin.agencyNm' />", "width":"*"},
+		      {"binding":"sysOpenDate","header":"<s:message code='virtualLogin.sysOpenDate' />", "width":"*"},
+		      {"binding":"sysClosureDate","header":"<s:message code='virtualLogin.sysClosureDate' />", "width":"*"}
 		    ];
 	
 		var grid         = wgrid.genGrid("#theGrid", rdata, "${menuCd}", 1, ${clo.getColumnLayout(1)});

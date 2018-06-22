@@ -72,7 +72,7 @@
   </table>
 
   <%-- 조회 --%>
-  <div class="mt10 pdb20 oh bb">
+  <div class="mt10 pdb20 oh">
       <button class="btn_blue fr" id="btnSearch"><s:message code="cmm.search" /></button>
   </div>
 
@@ -161,7 +161,7 @@
 
 <script>
     var popupCnt = 0;
-    
+    var grid;
 	$(document).ready(function() {
 	  
 	    var srchHqOfficeCd = wcombo.genInput("#srchHqOfficeCd");
@@ -179,28 +179,23 @@
 	    
 		var rdata =
 		    [
-		      {"binding":"hqOfficeCd","header":"<s:message code='pwdManage.hqOfficeCd' />"},
-		      {"binding":"hqOfficeNm","header":"<s:message code='pwdManage.hqOfficeNm' />"},
-		      {"binding":"storeCd","header":"<s:message code='pwdManage.storeCd' />"},
-		      {"binding":"storeNm","header":"<s:message code='pwdManage.storeNm' />"},
-		      {"binding":"userId","header":"<s:message code='pwdManage.userId' />"},
-		      {"binding":"userNm","header":"<s:message code='pwdManage.userNm' />"},
-		      {"binding":"serviceFg","header":"<s:message code='pwdManage.serviceFg' />", dataMap:serviceFgDataMap},
-		      {"binding":"webUseYn","header":"<s:message code='pwdManage.webUseYn' />", dataMap:webUseYnDataMap},
-		      {"binding":"emailAddr","header":"<s:message code='pwdManage.emailAddr' />"},
-		      {"binding":"mpNo","header":"<s:message code='pwdManage.mpNo' />"},
-		      {"binding":"addr","header":"<s:message code='pwdManage.addr' />"}
+		      { binding:"hqOfficeCd",header:"<s:message code='pwdManage.hqOfficeCd' />", width:"*" },
+		      { binding:"hqOfficeNm",header:"<s:message code='pwdManage.hqOfficeNm' />", width:"*" },
+		      { binding:"storeCd",header:"<s:message code='pwdManage.storeCd' />", width:"*" },
+		      { binding:"storeNm",header:"<s:message code='pwdManage.storeNm' />", width:"*" },
+		      { binding:"userId",header:"<s:message code='pwdManage.userId' />", width:"*" },
+		      { binding:"userNm",header:"<s:message code='pwdManage.userNm' />", width:"*" },
+		      { binding:"serviceFg",header:"<s:message code='pwdManage.serviceFg' />", dataMap:serviceFgDataMap, width:"*" },
+		      { binding:"webUseYn",header:"<s:message code='pwdManage.webUseYn' />", dataMap:webUseYnDataMap, width:"*" },
+		      { binding:"emailAddr",header:"<s:message code='pwdManage.emailAddr' />", width:"*" },
+		      { binding:"mpNo",header:"<s:message code='pwdManage.mpNo' />", width:"*" },
+		      { binding:"addr",header:"<s:message code='pwdManage.addr' />", width:"*" }
 		    ];
 	
-		var grid         = wgrid.genGrid("#theGrid", rdata, "${menuCd}", 1, ${clo.getColumnLayout(1)});
+		grid         = wgrid.genGrid("#theGrid", rdata, "${menuCd}", 1, ${clo.getColumnLayout(1)});
 		grid.autoSizeColumn(1, true);
 	    var ldata        = ${ccu.getListScale()};
 	    var listScaleBox = wcombo.genCommonBox("#listScaleBox", ldata);
-	
-	    <%-- 그리드 길이 자동 FIT --%>
-	    grid.itemsSourceChanged.addHandler(function(sender, args) {
-	        sender.autoSizeColumns();
-	    });
 	
 	    <%-- 그리드 포맷 --%>
 	    grid.formatItem.addHandler(function(s, e) {

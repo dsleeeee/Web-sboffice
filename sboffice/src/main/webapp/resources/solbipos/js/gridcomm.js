@@ -15,7 +15,7 @@
           stickyHeaders: true,
           selectionMode: "Row",
           formatItem : function(s, e) {
-            // 표시 화면 입력 생성
+            // 그리드 Column헤더(첫번째)에 ColumnPicker 표시
             if (e.panel == s.topLeftCells) {
               e.cell.innerHTML = "<div class=\"v-center\"></div>";
             }
@@ -57,6 +57,20 @@
           
           // column picker gen
           wgridPic.genGridPicker("#" + item.id, grid, resrceCd, gridIdx);
+        }
+        
+        genGridRowHeaderNumber(g);
+        // RowHeader 에 RowNumber 표시처리
+        function genGridRowHeaderNumber(grid) {
+          grid.itemFormatter = function(panel, r, c, cell) {
+            if ( panel.cellType == wijmo.grid.CellType.RowHeader ) {
+                if ( $("#page").data("size") > 0 ) {
+                  cell.textContent = (panel._rows[r]._data.rnum).toString();
+                } else {
+                  cell.textContent = (r + 1).toString();
+                }
+            }
+          }
         }
         
         return g; 
