@@ -1,14 +1,16 @@
 package kr.co.solbipos.application.common.service;
 
+import java.io.Serializable;
 import lombok.Data;
 
 @Data
-public class PageVO {
+public class PageVO implements Serializable {
 
+    private static final long serialVersionUID = -2149669246783003251L;
     private static final int DEFAULT_PAGE_SCALE = 10;
 
     /** 레코드의 총 갯수 */
-    Integer totalCount = 0;
+    Integer totCnt = 0;
     /** 총 페이지 갯수 */
     Integer totalPage;
     /** 보여지는 페이지그룹의 페이지 갯수 */
@@ -46,8 +48,8 @@ public class PageVO {
         }
     }
 
-    public void setTotalCount(Integer totalCount) {
-        this.totalCount = totalCount;
+    public void setTotalCount(Integer totCnt) {
+        this.totCnt = totCnt;
         calc();
     }
 
@@ -58,7 +60,13 @@ public class PageVO {
         if (curr < 0) {
             curr = 1;
         }
-        totalPage = totalCount < 0 ? 1 : (int) Math.ceil((double) totalCount / listScale);
+        
+        totalPage = totCnt < 0 ? 1 : (int) Math.ceil((double) totCnt / listScale);
+        
+        System.out.println("########################### totalPage : " + totalPage);
+        System.out.println("########################### (double) totCnt / listScale : " + (double) totCnt / listScale);
+        System.out.println("########################### Math.ceil((double) totCnt / listScale : " + Math.ceil((double) totCnt / listScale));
+        
         prev = Math.max(1, curr - 1 - ((curr - 1) % pageScale));
         next = Math.min(totalPage,
                 curr + 1 + (pageScale - (curr % pageScale > 0 ? curr % pageScale : pageScale)));

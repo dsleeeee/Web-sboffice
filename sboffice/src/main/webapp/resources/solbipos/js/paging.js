@@ -35,23 +35,27 @@
         var pre = "<li class=\"btn_previous\" data-tot={tot}><a href=\"javascript:;\"></a></li>";
         var nav = "<li><a href=\"javascript:;\" class=\"{cnm}\" data-value={i}>{i}</a></li>";
         var nex = "<li class=\"btn_next\" data-curr={curr}><a href=\"javascript:;\"></a></li>";
-
+        
         $(div).children().remove();
         var item = {};
-        item.curr=curr, item.tot=tot, item.start=0, item.end=0;
+        item.curr = curr;
+        item.tot = tot;
+        item.start = 0;
+        item.end = 0;
         // 페이징 계산
         var t = curr / page_scale;
-        if(t.toString().indexOf(".") == -1) {
-          item.end = curr, item.start = item.end - page_end;
-        }
-        else {
-          item.start = (parseInt(t) * page_scale) + 1, item.end = item.start + page_end;
+        if ( t.toString().indexOf(".") == -1 ) {
+          item.end = curr;
+          item.start = item.end - page_end;
+        } else {
+          item.start = (parseInt(t) * page_scale) + 1;
+          item.end = item.start + page_end;
         }
         if(item.end > tot) {
           item.end = tot;
         }
         // 페이징 제작
-        if(tot > page_scale) {
+        if ( tot > page_scale ) {
           $(div).append(wijmo.format(pre, item));
         }
         for(var i=item.start; i<=item.end; i++) {
