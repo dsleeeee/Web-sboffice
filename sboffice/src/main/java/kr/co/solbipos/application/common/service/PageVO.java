@@ -1,6 +1,8 @@
 package kr.co.solbipos.application.common.service;
 
 import java.io.Serializable;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import lombok.Data;
 
 @Data
@@ -66,4 +68,10 @@ public class PageVO implements Serializable {
         limit = Math.min(totalPage,
                 curr + 1 + (pageScale - (curr % pageScale > 0 ? curr % pageScale : pageScale)));
     }
+    
+    /** VO내의 모든 값 출력 */
+    public String getProperties() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
+    
 }
