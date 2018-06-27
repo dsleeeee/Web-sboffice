@@ -6,9 +6,7 @@
   <select id="getList" parameterType="verInfoVO" resultType="DefaultMap">
     /* VerManageMapper.getList */
     <include refid="CmmSQL.PagingTemplateHeader"/>
-    SELECT COUNT(1) OVER (PARTITION BY 1 ORDER BY 1) TOT_CNT,
-           ROW_NUMBER() OVER(PARTITION BY 1 ORDER BY 1) RNUM,
-           A.VER_SER_NO,
+    SELECT A.VER_SER_NO,
            A.VER_SER_NM,
            A.FILE_DESC,
            A.FILE_SIZE,
