@@ -2,6 +2,7 @@ package kr.co.solbipos.store.manage.virtuallogin.service;
 
 import java.util.List;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 
 /**
  * @Class Name : VirtualLoginService.java
@@ -25,6 +26,9 @@ public interface VirtualLoginService {
     List<DefaultMap<String>> getVirtualLoginList(VirtualLoginVO virtualLoginVO);
 
     /** 가상로그인 권한 조회 */
-    Integer checkVirtualLoginAuth(String userId);
+    int checkVirtualLoginAuth(String userId);
+    
+    /** 가상로그인 이력 생성 */
+    int insertLoginHistory(SessionInfoVO sessionInfoVO);
     
 }

@@ -22,9 +22,13 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.cmm.CmmMenuService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.system.BaseEnv;
+import kr.co.common.utils.DateUtil;
 import kr.co.common.utils.SessionUtil;
 import kr.co.common.utils.grid.ReturnUtil;
+import kr.co.solbipos.application.session.auth.enums.LoginOrigin;
+import kr.co.solbipos.application.session.auth.enums.LoginResult;
 import kr.co.solbipos.application.session.auth.service.AuthService;
+import kr.co.solbipos.application.session.auth.service.LoginHistVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.store.manage.virtuallogin.service.VirtualLoginService;
@@ -127,6 +131,7 @@ public class VirtualLoginController {
             log.info("가상로그인 시작 : {} ", sessionInfoVO.getUserId());
             
             sessionInfoVO = new SessionInfoVO();
+            sessionInfoVO.setLoginResult(LoginResult.SUCCESS);
             sessionInfoVO.setLoginIp(getClientIp(request));
             sessionInfoVO.setBrwsrInfo(request.getHeader("User-Agent"));
             // 사용자ID를 가상로그인ID로 설정
@@ -158,7 +163,10 @@ public class VirtualLoginController {
             SessionUtil.setEnv(request.getSession(), BaseEnv.VIRTUAL_LOGIN_ID, sessionInfoVO);
             
             sw.stop();
-            log.error("가상로그인 성공 처리 시간 : {}", sw.getTotalTimeSeconds());
+            log.info("가상로그인 성공 처리 시간 : {}", sw.getTotalTimeSeconds());
+            
+            // 로그인이력 생성
+            virtualLoginService.insertLoginHistory(sessionInfoVO);
             
             redirectAttributes.addAttribute("vLoginId", BaseEnv.VIRTUAL_LOGIN_ID);
             return "redirect:" + returnUrl;
