@@ -44,9 +44,9 @@
             <s:message code="login.layer.pwchg.info" />
           </p>
         </c:if>
-
-
+	                    
         <div class="mt20">
+          <input type="hidden" id="pwdUserId" value="" />
           <!--높이는 style로 조정, 스크롤 들어가는경우 sc추가-->
           <table class="tblType01">
             <colgroup>
@@ -54,20 +54,17 @@
               <col width="70%" />
             </colgroup>
             <tbody>
-
               <tr>
                 <th><s:message code="login.userId" /></th>
-                <td id="labelUserId">${id}
-                <input id="pwdUserId" style="display: none" value="${id}" />
-                </td>
+                <td id="labelUserId"></td>
               </tr>
 
               <tr>
                 <th><s:message code="login.userPasswd" /></th>
                 <td>
                   <div class="msgWrap">
-                    <input type="password" id="currentPw" maxlength="25" /> <span
-                      id="currentPwError" class="errorMsg" style="display: none"></span>
+                    <input type="password" id="currentPw" maxlength="25" /> 
+                    <span id="currentPwError" class="errorMsg" style="display: none"></span>
                   </div>
                 </td>
               </tr>
@@ -141,8 +138,8 @@
       } else if (result.status === "FAIL") {
         processError(result.data);
       }
-    }).fail(function() {
-      alert("Ajax Fail");
+    }, function(result) {
+      alert(result.data.msg);
     });
   });
 
@@ -161,8 +158,8 @@
       } else if (result.status === "FAIL") {
         processError(result.data);
       }
-    }).fail(function() {
-      alert("Ajax Fail");
+    }, function(result) {
+      alert(result.data.msg);
     });
   });
 
