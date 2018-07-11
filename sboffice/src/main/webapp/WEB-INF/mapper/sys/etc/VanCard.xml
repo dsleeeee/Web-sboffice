@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    VanCard.xml
+    VAN/CARD사 관리 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       노현수     2018.06.15      최초작성
+-->
+<mapper namespace="kr.co.solbipos.sys.etc.vancard.service.impl.VanCardMapper">
+    
+    <!-- VAN사 목록 조회 -->
+    <!--
+        TABLE    : TB_CM_VAN_CMPNY
+        PARAM    : vanCmpnyVO
+        COMMENTS : VAN사 목록을 조회한다.
+    -->
+    <select id="getVanCmpnyList" parameterType="vanCmpnyVO" resultType="defaultMap">
+        /* USE : VanCardMapper.getVanCmpnyList */
+        SELECT
+            tcvc.VAN_CD,
+            tcvc.VAN_NM,
+            tcvc.TEL_NO,
+            tcvc.FAX_NO,
+            tcvc.MAIN_IP,
+            tcvc.MAIN_PORT,
+            tcvc.SUB_IP,
+            tcvc.SUB_PORT
+        FROM
+            TB_CM_VAN_CMPNY tcvc
+        ORDER BY
+            tcvc.VAN_CD
+    </select>
+    
+    <!-- VAN사 목록 수정 -->
+    <!--
+        TABLE    : TB_CM_VAN_CMPNY
+        PARAM    : vanCmpnyVO
+        COMMENTS : VAN사 목록을 수정한다.
+    -->
+    <update id="updateVanCmpnyList" parameterType="vanCmpnyVO">
+        /* USE : VanCardMapper.updateVanCmpnyList */
+        UPDATE
+            TB_CM_VAN_CMPNY
+        SET
+            VAN_NM = #{vanNm}, 
+            TEL_NO = #{telNo}, 
+            FAX_NO = #{faxNo,jdbcType=VARCHAR},
+            MAIN_IP = #{mainIp},
+            MAIN_PORT = #{mainPort},
+            SUB_IP = #{subIp,jdbcType=VARCHAR},
+            SUB_PORT = #{subPort,jdbcType=NUMERIC},
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId},
+        WHERE
+            VAN_CD = #{vanCd}
+    
+    </update>
+    
+    <!-- VAN사 목록 생성 -->
+    <!--
+        TABLE    : TB_CM_VAN_CMPNY
+        PARAM    : vanCmpnyVO
+        COMMENTS : VAN사 목록을 생성한다.
+    -->
+    <insert id="insertVanCmpnyList" parameterType="vanCmpnyVO">
+        /* USE : VanCardMapper.insertVanCmpnyList */
+        INSERT INTO TB_CM_VAN_CMPNY
+        (
+            VAN_CD,
+            VAN_NM,
+            TEL_NO,
+            FAX_NO,
+            MAIN_IP,
+            MAIN_PORT,
+            SUB_IP,
+            SUB_PORT,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{vanCd},
+            #{vanNm},
+            #{telNo},
+            #{faxNo,jdbcType=VARCHAR},
+            #{mainIp},
+            #{mainPort},
+            #{subIp,jdbcType=VARCHAR},
+            #{subPort,jdbcType=NUMERIC},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+        
+    </insert>
+    
+    <!-- CARD사 목록 조회 -->
+    <!--
+        TABLE    : TB_CM_CARD_CMPNY
+        PARAM    : cardCmpnyVO
+        COMMENTS : CARD사 목록을 조회한다.
+    -->
+    <select id="getCardCmpnyList" parameterType="cardCmpnyVO" resultType="defaultMap">
+        /* USE : VanCardMapper."getCardCmpnyList" */
+        SELECT
+            tccc.CARDCO_CD,
+            tccc.CARDCO_NM,
+            tccc.BIZ_NO,
+            tccc.TEL_NO,
+            tccc.FAX_NO,
+            tccc.HMPG_ADDR
+        FROM
+            TB_CM_CARD_CMPNY tccc
+        ORDER BY
+            tccc.CARDCO_CD
+    </select>
+    
+    <!-- CARD사 목록 수정 -->
+    <!--
+        TABLE    : TB_CM_CARD_CMPNY
+        PARAM    : cardCmpnyVO
+        COMMENTS : CARD사 목록을 수정한다.
+    -->
+    <update id="updateCardCmpnyList" parameterType="cardCmpnyVO">
+        /* USE : VanCardMapper.updateCardCmpnyList */
+        UPDATE
+            TB_CM_CARD_CMPNY
+        SET
+            CARDCO_NM = #{cardcoNm},
+            BIZ_NO = #{bizNo,jdbcType=VARCHAR},
+            TEL_NO = #{telNo,jdbcType=VARCHAR},
+            FAX_NO = #{faxNo,jdbcType=VARCHAR},
+            HMPG_ADDR = #{hmpgAddr,jdbcType=VARCHAR},
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId},
+        WHERE
+            CARDCO_CD = #{cardcoCd}
+    
+    </update>
+    
+    <!-- CARD사 목록 생성 -->
+    <!--
+        TABLE    : TB_CM_CARD_CMPNY
+        PARAM    : cardCmpnyVO
+        COMMENTS : CARD사 목록을 생성한다.
+    -->
+    <insert id="insertCardCmpnyList" parameterType="cardCmpnyVO">
+        /* USE : VanCardMapper.insertCardCmpnyList */
+        INSERT INTO TB_CM_CARD_CMPNY
+        (
+            CARDCO_CD,
+            CARDCO_NM,
+            BIZ_NO,
+            TEL_NO,
+            FAX_NO,
+            HMPG_ADDR,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{cardcoCd},
+            #{cardcoNm},
+            #{bizNo,jdbcType=VARCHAR},
+            #{telNo,jdbcType=VARCHAR},
+            #{faxNo,jdbcType=VARCHAR},
+            #{hmpgAddr,jdbcType=VARCHAR},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+        
+    </insert>
+    
+    <!-- VAN/CARD사 매핑 목록 조회 -->
+    <!--
+        TABLE    : TB_CM_VAN_CARD
+        PARAM    : vanCardVO
+        COMMENTS : VAN사와 CARD사 간의 매핑 목록을 조회한다.
+    -->
+    <select id="getMappingList" parameterType="vanCardVO" resultType="defaultMap">
+        /* USE : VanCardMapper.getMappingList */
+        SELECT
+            tcvc.VAN_CD,
+            tcvc.VAN_CARDCO_CD,
+            tcvc.VAN_CARDCO_NM,
+            tcvc.CARDCO_CD
+        FROM
+            TB_CM_VAN_CARD tcvc
+        WHERE
+            tcvc.VAN_CD = #{vanCd}
+        ORDER BY
+            tcvc.VAN_CD, tcvc.VAN_CARDCO_CD
+    </select>
+    
+    <!-- VAN/CARD사 매핑 목록 수정 -->
+    <!--
+        TABLE    : TB_CM_VAN_CARD
+        PARAM    : vanCardVO
+        COMMENTS : CARD사 목록을 수정한다.
+    -->
+    <update id="updateMappingList" parameterType="vanCardVO">
+        /* USE : VanCardMapper.updateMappingList */
+        UPDATE
+            TB_CM_VAN_CARD
+        SET
+            VAN_CARDCO_NM = #{vanCardcoNm},
+            CARDCO_CD = #{cardcoCd},
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId},
+        WHERE
+            VAN_CD = #{vanCd}
+            AND VAN_CARDCO_CD = #{vanCardcoCd}
+    
+    </update>
+    
+    <!-- VAN/CARD사 매핑 목록 생성 -->
+    <!--
+        TABLE    : TB_CM_VAN_CARD
+        PARAM    : vanCardVO
+        COMMENTS : CARD사 목록을 생성한다.
+    -->
+    <insert id="insertMappingList" parameterType="vanCardVO">
+        /* USE : VanCardMapper.insertMappingList */
+        INSERT INTO TB_CM_VAN_CARD
+        (
+            VAN_CD,
+            VAN_CARDCO_CD,
+            VAN_CARDCO_NM,
+            CARDCO_CD,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{vanCd},
+            #{vanCardcoCd},
+            #{vanCardcoNm},
+            #{cardcoCd},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+        
+    </insert>
+    
+    
+</mapper>
