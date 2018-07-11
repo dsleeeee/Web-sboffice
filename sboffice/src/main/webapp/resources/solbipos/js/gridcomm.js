@@ -7,7 +7,6 @@
         var g = new wijmo.grid.FlexGrid(div, {
           itemsSource : new wijmo.collections.CollectionView(),
           columns : columns,
-          selectionMode: 'Row',
           isReadOnly : true,
           showSort : true,
           autoGenerateColumns: false,  // 이거 안하면 컬럼이 자동으로 막 생김

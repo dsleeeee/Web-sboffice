@@ -12,7 +12,7 @@ import kr.co.solbipos.store.manage.virtuallogin.service.VirtualLoginVO;
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2015.06.15  노현수      최초생성
+ * @ 2018.06.15  노현수      최초생성
  *
  * @author 솔비포스 차세대개발실 노현수
  * @since 2018. 05.01

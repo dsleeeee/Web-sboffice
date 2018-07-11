@@ -30,7 +30,7 @@ import kr.co.solbipos.pos.confg.vermanage.service.VerManageService;
 * @
 * @  수정일      수정자              수정내용
 * @ ----------  ---------   -------------------------------
-* @ 2015.06.01  김지은      최초생성
+* @ 2018.06.01  김지은      최초생성
 *
 * @author 솔비포스 차세대개발실 김지은
 * @since 2018. 05.01

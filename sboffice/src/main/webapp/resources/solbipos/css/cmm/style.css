@@ -735,6 +735,7 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .searchBar a:before {content:''; position:absolute; right:15px; top:17px; background:url(../img/menu_bullet_blue.png) no-repeat; width:6px; height:10px;}
 .searchBar a.open:before {transform:rotate(-90deg);}
 .searchBar a.close:before {transform:rotate(90deg);}
+.searchBar a.none:before {display:none;}
 
 .searchTbl {position:relative; border-collapse:collapse; width:100%;}
 .searchTbl tr > th:first-child {border-left:1px solid #ccc;}
@@ -1627,13 +1628,3 @@ a.btn_underline, a.btn_underline:hover, a.btn_underline.on {background-position:
 
 .theTreeAll.wj-treeview > .wj-nodelist > .wj-node.on span {color:#fff;}
 .theTreeAll.wj-treeview > .wj-nodelist > .wj-nodelist > .wj-node.on span {color:#fff;}
-
-
-
-
-
-
-
-
-
-

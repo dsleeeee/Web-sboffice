@@ -14,10 +14,12 @@ import kr.co.common.data.handler.CodeEnumTypeHandler;
  */
 public enum LoginOrigin implements CodeEnum  {
 
-  /** 웹 로그인 */
+    /** 웹 로그인 */
     WEB("WEB")
     /** 포스 로그인 */
     , POS("POS")
+    /** 가상 로그인 */
+    , VIR("VIR")
     /** 기타 */
     , ETC("ETC")
     ;

@@ -28,9 +28,9 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class PwdChgVO extends CmmVO {
-
-    private static final long serialVersionUID = 1L;
-
+    
+    private static final long serialVersionUID = -4842995979467618739L;
+    
     /** 기존 비밀번호 */
     @NotBlank(groups = {UserPwChange.class, Login.class},
             message = "{login.userPasswd}{cmm.require.text}")

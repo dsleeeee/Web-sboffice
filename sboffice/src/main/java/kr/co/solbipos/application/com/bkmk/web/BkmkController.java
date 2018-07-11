@@ -30,7 +30,7 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 * @
 * @  수정일      수정자              수정내용
 * @ ----------  ---------   -------------------------------
-* @ 2015.06.01  노현수      최초생성
+* @ 2018.06.01  노현수      최초생성
 *
 * @author 솔비포스 차세대개발실 노현수
 * @since 2018. 05.01
