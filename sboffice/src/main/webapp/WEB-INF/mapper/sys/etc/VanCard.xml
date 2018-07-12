@@ -187,11 +187,14 @@
         /* USE : VanCardMapper.getMappingList */
         SELECT
             tcvc.VAN_CD,
+            tcvcy.VAN_NM,
             tcvc.VAN_CARDCO_CD,
             tcvc.VAN_CARDCO_NM,
             tcvc.CARDCO_CD
         FROM
             TB_CM_VAN_CARD tcvc
+        LEFT OUTER JOIN TB_CM_VAN_CMPNY tcvcy ON
+            tcvc.VAN_CD = tcvcy.VAN_CD
         WHERE
             tcvc.VAN_CD = #{vanCd}
         ORDER BY

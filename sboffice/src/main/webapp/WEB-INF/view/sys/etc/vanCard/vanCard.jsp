@@ -18,7 +18,7 @@
       <button class="btn_blue fr" id="btnSearch"><s:message code="cmm.search" /></button>
   </div>
     
-  <div class="w70 fl" style="width: 65%">
+  <div class="w70 fl" style="width: 60%">
     <%--위즈모 테이블--%>
     <div class="wj-TblWrapBr pd20" style="height: 300px;">
       <div class="updownSet oh mb10">
@@ -40,7 +40,7 @@
     <%--//위즈모 테이블--%>
   </div>
   
-  <div class="w30 fr" style="width: 35%">
+  <div class="w30 fr" style="width: 40%">
     <%--위즈모 테이블--%>
     <div class="wj-TblWrapBr ml10 pd20" style="height: 610px;">
       <div class="updownSet oh mb10">
@@ -62,7 +62,7 @@
     <%--//위즈모 테이블--%>
   </div>
   
-  <div class="w70 fl" style="width: 65%">
+  <div class="w70 fl" style="width: 60%">
     <%--위즈모 테이블--%>
     <div class="wj-TblWrapBr mt10 pd20 mb10" style="height: 300px;">
       <div class="updownSet oh mb10">
@@ -144,21 +144,27 @@
         var selectedRow = gridVan.rows[ht.row].dataItem;
         
         if ( selectedRow.status != "I" ) {
-          // 코드
-          if( col.binding == "vanCd" ) {
+          if ( col.binding == "vanCd" ) {
             gridVan.isReadOnly = true;
             searchMapping(selectedRow.vanCd);
+          } else {
+            gridVan.isReadOnly = false;
           }
-        }
-        <%-- 원클릭 에디팅 --%>
-        setTimeout(function() {
+        } else {
           gridVan.isReadOnly = false;
-          var _cellData = gridVan.getCellData(ht.row, ht.col, true);
-          if ( col.dataType !== wijmo.DataType.Boolean ) {
-            gridVan.startEditing(true, e.row, ht.col, true); // quick mode
-            wijmo.setSelectionRange(gridVan.activeEditor, _cellData.length); // caret position
-          }
-        }, 50);
+        }
+        <%-- 그리드 읽기 전용 아닐때만 에디팅 --%>
+        if ( !gridVan.isReadOnly ) {
+          <%-- 원클릭 에디팅 --%>
+          setTimeout(function() {
+            gridVan.isReadOnly = false;
+            var _cellData = gridVan.getCellData(ht.row, ht.col, true);
+            if ( col.dataType !== wijmo.DataType.Boolean ) {
+              gridVan.startEditing(true, e.row, ht.col, true); // quick mode
+              wijmo.setSelectionRange(gridVan.activeEditor, _cellData.length); // caret position
+            }
+          }, 50);
+        }
         
       }
     });
@@ -236,7 +242,6 @@
       
     });
     
-    
     <%-- CARD사 그리드 --%>
     var dataCard =
       [
@@ -280,21 +285,27 @@
         var selectedRow = gridCard.rows[ht.row].dataItem;
         
         if ( selectedRow.status != "I" ) {
-          // 코드
-          if( col.binding == "vanCd" ) {
+          if ( col.binding == "vanCd" ) {
             gridCard.isReadOnly = true;
             searchMapping(selectedRow.vanCd);
+          } else {
+            gridCard.isReadOnly = false;
           }
-        }
-        <%-- 원클릭 에디팅 --%>
-        setTimeout(function() {
+        } else {
           gridCard.isReadOnly = false;
-          var _cellData = gridCard.getCellData(ht.row, ht.col, true);
-          if ( col.dataType !== wijmo.DataType.Boolean ) {
-            gridCard.startEditing(true, e.row, ht.col, true); // quick mode
-            wijmo.setSelectionRange(gridCard.activeEditor, _cellData.length); // caret position
-          }
-        }, 50);
+        }
+        <%-- 그리드 읽기 전용 아닐때만 에디팅 --%>
+        if ( !gridVan.isReadOnly ) {
+          <%-- 원클릭 에디팅 --%>
+          setTimeout(function() {
+            gridCard.isReadOnly = false;
+            var _cellData = gridCard.getCellData(ht.row, ht.col, true);
+            if ( col.dataType !== wijmo.DataType.Boolean ) {
+              gridCard.startEditing(true, e.row, ht.col, true); // quick mode
+              wijmo.setSelectionRange(gridCard.activeEditor, _cellData.length); // caret position
+            }
+          }, 50);
+        }
         
       }
     });
@@ -310,7 +321,6 @@
             return;
           }
           var list = result.data.list;
-          
           gridCard.itemsSource = new wijmo.collections.CollectionView(list);
           gridCard.itemsSource.trackChanges = true;
           
@@ -368,14 +378,16 @@
       
     });
     
+    var cardCmpnyDataMap = new wijmo.grid.DataMap(${cardCmpnyList}, 'value', 'name');
     
     <%-- VAN/CARD사 매핑 그리드 --%>
     var dataMapping =
       [
         {"binding":"chk", header:"<s:message code='vanCard.chk' />", dataType:wijmo.DataType.Boolean, width:40},
+        {"binding":"vanNm", header:"<s:message code='vanCard.vanNm' />", width:"*"},
         {"binding":"vanCardcoCd", header:"<s:message code='vanCard.vanCardcoCd'/>", width:"*"},
         {"binding":"vanCardcoNm", header:"<s:message code='vanCard.vanCardcoNm'/>", width:"*"},
-        {"binding":"cardcoCd", header:"<s:message code='vanCard.cardcoCd'/>", width:"*", dataMap:cardcoCdDataMap},
+        {"binding":"cardcoCd", header:"<s:message code='vanCard.cardcoCd'/>", width:"*", dataMap:cardCmpnyDataMap},
       ];
     <%-- VAN/CARD사 매핑 그리드 생성 --%>
     var gridMapping = wgrid.genGrid("#gridMapping", dataMapping, "${menuCd}", 2, ${clo.getColumnLayout(2)});
@@ -393,7 +405,7 @@
         if ( col.binding == "chk" ) {
           var chk = document.createElement('input');
           chk.type = 'checkbox';
-          chk.checked = gridVanCard.rows[e.row].dataItem['chk'];
+          chk.checked = gridMapping.rows[e.row].dataItem['chk'];
           chk.className = "my-custom-checkbox";
           e.cell.innerHTML = '';
           e.cell.appendChild(chk);
@@ -402,27 +414,26 @@
     });
     
     <%-- VAN/CARD사 매핑 그리드 선택 이벤트 --%>
-    gridMapping.addEventListener(gridVanCard.hostElement, 'click', function(e) {
+    gridMapping.addEventListener(gridMapping.hostElement, 'click', function(e) {
       var ht = gridMapping.hitTest(e);
       if ( ht.cellType == wijmo.grid.CellType.Cell ) {
         var col = ht.panel.columns[ht.col];
         var selectedRow = gridMapping.rows[ht.row].dataItem;
         
-        if ( selectedRow.status != "I" ) {
-          // 코드
-          if( col.binding == "vanCd" ) {
-            gridMapping.isReadOnly = true;
-          }
+        // 코드
+        if( col.binding == "vanNm" ) {
+          gridMapping.isReadOnly = true;
+        } else {
+          <%-- 원클릭 에디팅 --%>
+          setTimeout(function() {
+            gridMapping.isReadOnly = false;
+            var _cellData = gridMapping.getCellData(ht.row, ht.col, true);
+            if ( col.dataType !== wijmo.DataType.Boolean ) {
+              gridMapping.startEditing(true, e.row, ht.col, true); // quick mode
+              wijmo.setSelectionRange(gridMapping.activeEditor, _cellData.length); // caret position
+            }
+          }, 50);
         }
-        <%-- 원클릭 에디팅 --%>
-        setTimeout(function() {
-          gridMapping.isReadOnly = false;
-          var _cellData = gridMapping.getCellData(ht.row, ht.col, true);
-          if ( col.dataType !== wijmo.DataType.Boolean ) {
-            gridMapping.startEditing(true, e.row, ht.col, true); // quick mode
-            wijmo.setSelectionRange(gridMapping.activeEditor, _cellData.length); // caret position
-          }
-        }, 50);
         
       }
     });
@@ -445,13 +456,16 @@
             return;
           }
           var list = result.data.list;
+          gridMapping.itemsSource = new wijmo.collections.CollectionView(list);
+          gridMapping.itemsSource.trackChanges = true;
           
           if ( list.length === undefined || list.length == 0 ) {
+            <%-- 그리드 초기화 --%>
+            gridMapping.itemsSource = [];
             s_alert.pop(result.message);
             return;
           }
-          gridMapping.itemsSource = new wijmo.collections.CollectionView(list);
-          gridMapping.itemsSource.trackChanges = true;
+          
           
         },
         function(){
@@ -462,14 +476,19 @@
     
     <%-- VAN/CARD사 매핑 그리드 추가 버튼 클릭 --%>
     $("#btnAddMapping").click(function(e) {
+      
+      var selectedVan = gridVan.selectedRows[0]._data;
+      
       gridMapping.collectionView.trackChanges = true;
       var newRow = gridMapping.collectionView.addNew();
       newRow.status = "I";
       newRow.chk = true;
+      newRow.vanCd = selectedVan.vanCd;
+      newRow.vanNm = selectedVan.vanNm;
       
       gridMapping.collectionView.commitNew();
       <%-- 추가된 Row 선택--%>
-      gridMapping.select(gridVanCard.rows.length, 1);
+      gridMapping.select(gridMapping.rows.length, 1);
     });
     
     <%-- VAN/CARD사 매핑 그리드 저장 버튼 클릭 --%>
