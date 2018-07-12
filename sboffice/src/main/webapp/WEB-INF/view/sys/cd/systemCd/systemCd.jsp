@@ -259,6 +259,7 @@
               gridRight.itemsSource.trackChanges = true;
               
               if ( list.length === undefined || list.length == 0 ) {
+                <%-- 그리드 초기화 --%>
                 gridRight.itemsSource = [];
                 s_alert.pop(result.message);
                 return;
