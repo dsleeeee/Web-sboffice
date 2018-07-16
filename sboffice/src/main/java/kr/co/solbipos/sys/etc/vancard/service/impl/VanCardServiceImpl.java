@@ -127,13 +127,13 @@ public class VanCardServiceImpl implements VanCardService {
     
     /** VAN/CARD사 매핑 목록 조회 */
     @Override
-    public List<DefaultMap<String>> getMappingList(VanCardVO vanCardVO) {
-        return vanCardMapper.getMappingList(vanCardVO);
+    public List<DefaultMap<String>> getMapngList(VanCardVO vanCardVO) {
+        return vanCardMapper.getMapngList(vanCardVO);
     }
     
     /** VAN/CARD사 매핑 목록 저장 */
     @Override
-    public int saveMappingList(VanCardVO[] vanCardVOs, SessionInfoVO sessionInfoVO) {
+    public int saveMapngList(VanCardVO[] vanCardVOs, SessionInfoVO sessionInfoVO) {
         
         int result = 0;
         String currentDt = currentDateTimeString();
@@ -148,11 +148,11 @@ public class VanCardServiceImpl implements VanCardService {
             // 추가
             if ( vanCardVO.getStatus() == GridDataFg.INSERT ) {
                 
-                result += vanCardMapper.insertMappingList(vanCardVO);
+                result += vanCardMapper.insertMapngList(vanCardVO);
             // 수정
             } else if ( vanCardVO.getStatus() == GridDataFg.UPDATE ) {
                 
-                result += vanCardMapper.updateMappingList(vanCardVO);
+                result += vanCardMapper.updateMapngList(vanCardVO);
             // 삭제
             } else if ( vanCardVO.getStatus() == GridDataFg.DELETE ) {
                 

@@ -45,12 +45,12 @@ public interface VanCardMapper {
     int updateCardCmpnyList(CardCmpnyVO cardCmpnyVO);
     
     /** VAN사 CARD사 매핑 목록 조회 */
-    List<DefaultMap<String>> getMappingList(VanCardVO vanCardVO);
+    List<DefaultMap<String>> getMapngList(VanCardVO vanCardVO);
     
     /** VAN사 CARD사 매핑 목록 생성 */
-    int insertMappingList(VanCardVO vanCardVO);
+    int insertMapngList(VanCardVO vanCardVO);
     
     /** VAN사 CARD사 매핑 목록 수정 */
-    int updateMappingList(VanCardVO vanCardVO);
+    int updateMapngList(VanCardVO vanCardVO);
     
 }

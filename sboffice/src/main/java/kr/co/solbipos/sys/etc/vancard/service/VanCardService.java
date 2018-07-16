@@ -35,9 +35,9 @@ public interface VanCardService {
     int saveCardCmpnyList(CardCmpnyVO[] cardCmpnyVOs, SessionInfoVO sessionInfoVO);
     
     /** VAN/CARD사 매핑 목록 조회 */
-    List<DefaultMap<String>> getMappingList(VanCardVO vanCardVO);
+    List<DefaultMap<String>> getMapngList(VanCardVO vanCardVO);
     
     /** VAN/CARD사 매핑 목록 조회 */
-    int saveMappingList(VanCardVO[] vanCardVOs, SessionInfoVO sessionInfoVO);
+    int saveMapngList(VanCardVO[] vanCardVOs, SessionInfoVO sessionInfoVO);
     
 }

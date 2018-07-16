@@ -183,8 +183,8 @@
         PARAM    : vanCardVO
         COMMENTS : VAN사와 CARD사 간의 매핑 목록을 조회한다.
     -->
-    <select id="getMappingList" parameterType="vanCardVO" resultType="defaultMap">
-        /* USE : VanCardMapper.getMappingList */
+    <select id="getMapngList" parameterType="vanCardVO" resultType="defaultMap">
+        /* USE : VanCardMapper.getMapngList */
         SELECT
             tcvc.VAN_CD,
             tcvcy.VAN_NM,
@@ -207,8 +207,8 @@
         PARAM    : vanCardVO
         COMMENTS : CARD사 목록을 수정한다.
     -->
-    <update id="updateMappingList" parameterType="vanCardVO">
-        /* USE : VanCardMapper.updateMappingList */
+    <update id="updateMapngList" parameterType="vanCardVO">
+        /* USE : VanCardMapper.updateMapngList */
         UPDATE
             TB_CM_VAN_CARD
         SET
@@ -228,8 +228,8 @@
         PARAM    : vanCardVO
         COMMENTS : CARD사 목록을 생성한다.
     -->
-    <insert id="insertMappingList" parameterType="vanCardVO">
-        /* USE : VanCardMapper.insertMappingList */
+    <insert id="insertMapngList" parameterType="vanCardVO">
+        /* USE : VanCardMapper.insertMapngList */
         INSERT INTO TB_CM_VAN_CARD
         (
             VAN_CD,

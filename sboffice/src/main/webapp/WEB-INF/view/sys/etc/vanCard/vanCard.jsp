@@ -45,13 +45,13 @@
     <div class="wj-TblWrapBr ml10 pd20" style="height: 610px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='vanCard.gridVanCardNm' /></span>
-        <button class="btn_skyblue" id="btnAddMapping" style="display: none;">
+        <button class="btn_skyblue" id="btnAddMapng" style="display: none;">
           <s:message code="cmm.add" />
         </button>
-        <button class="btn_skyblue" id="btnDelMapping" style="display: none;">
+        <button class="btn_skyblue" id="btnDelMapng" style="display: none;">
           <s:message code="cmm.delete" />
         </button>
-        <button class="btn_skyblue" id="btnSaveMapping" style="display: none;">
+        <button class="btn_skyblue" id="btnSaveMapng" style="display: none;">
           <s:message code="cmm.save" />
         </button>
       </div>
@@ -392,10 +392,10 @@
     <%-- VAN/CARD사 매핑 그리드 생성 --%>
     var gridMapping = wgrid.genGrid("#gridMapping", dataMapping, "${menuCd}", 2, ${clo.getColumnLayout(2)});
     <%-- 읽기전용을 해제하지 않으면 그리드 에디팅이 되지 않는다. --%>
-    gridMapping.isReadOnly = false;
+    gridMapng.isReadOnly = false;
     
     <%-- VAN/CARD사 매핑 그리드 포맷 --%>
-    gridMapping.formatItem.addHandler(function(s, e) {
+    gridMapng.formatItem.addHandler(function(s, e) {
       if (e.panel == s.cells) {
         var col = s.columns[e.col];
         var item = s.rows[e.row].dataItem;
@@ -405,7 +405,7 @@
         if ( col.binding == "chk" ) {
           var chk = document.createElement('input');
           chk.type = 'checkbox';
-          chk.checked = gridMapping.rows[e.row].dataItem['chk'];
+          chk.checked = gridMapng.rows[e.row].dataItem['chk'];
           chk.className = "my-custom-checkbox";
           e.cell.innerHTML = '';
           e.cell.appendChild(chk);
@@ -414,23 +414,23 @@
     });
     
     <%-- VAN/CARD사 매핑 그리드 선택 이벤트 --%>
-    gridMapping.addEventListener(gridMapping.hostElement, 'click', function(e) {
-      var ht = gridMapping.hitTest(e);
+    gridMapng.addEventListener(gridMapng.hostElement, 'click', function(e) {
+      var ht = gridMapng.hitTest(e);
       if ( ht.cellType == wijmo.grid.CellType.Cell ) {
         var col = ht.panel.columns[ht.col];
-        var selectedRow = gridMapping.rows[ht.row].dataItem;
+        var selectedRow = gridMapng.rows[ht.row].dataItem;
         
         // 코드
         if( col.binding == "vanNm" ) {
-          gridMapping.isReadOnly = true;
+          gridMapng.isReadOnly = true;
         } else {
           <%-- 원클릭 에디팅 --%>
           setTimeout(function() {
-            gridMapping.isReadOnly = false;
-            var _cellData = gridMapping.getCellData(ht.row, ht.col, true);
+            gridMapng.isReadOnly = false;
+            var _cellData = gridMapng.getCellData(ht.row, ht.col, true);
             if ( col.dataType !== wijmo.DataType.Boolean ) {
-              gridMapping.startEditing(true, e.row, ht.col, true); // quick mode
-              wijmo.setSelectionRange(gridMapping.activeEditor, _cellData.length); // caret position
+              gridMapng.startEditing(true, e.row, ht.col, true); // quick mode
+              wijmo.setSelectionRange(gridMapng.activeEditor, _cellData.length); // caret position
             }
           }, 50);
         }
@@ -443,25 +443,25 @@
       var param = {};
       param.vanCd = value;
       
-      $.postJSON("/sys/etc/vanCard/vanCard/mapping/list.sb", param, 
+      $.postJSON("/sys/etc/vanCard/vanCard/mapng/list.sb", param, 
         function(result) {
           
           <%-- 버튼 Show --%>
-          $("#btnAddMapping").show();
-          $("#btnDelMapping").show();
-          $("#btnSaveMapping").show();
+          $("#btnAddMapng").show();
+          $("#btnDelMapng").show();
+          $("#btnSaveMapng").show();
           
           if(result.status === "FAIL") {
             s_alert.pop(result.message);
             return;
           }
           var list = result.data.list;
-          gridMapping.itemsSource = new wijmo.collections.CollectionView(list);
-          gridMapping.itemsSource.trackChanges = true;
+          gridMapng.itemsSource = new wijmo.collections.CollectionView(list);
+          gridMapng.itemsSource.trackChanges = true;
           
           if ( list.length === undefined || list.length == 0 ) {
             <%-- 그리드 초기화 --%>
-            gridMapping.itemsSource = [];
+            gridMapng.itemsSource = [];
             s_alert.pop(result.message);
             return;
           }
@@ -475,34 +475,34 @@
     };
     
     <%-- VAN/CARD사 매핑 그리드 추가 버튼 클릭 --%>
-    $("#btnAddMapping").click(function(e) {
+    $("#btnAddMapng").click(function(e) {
       
       var selectedVan = gridVan.selectedRows[0]._data;
       
-      gridMapping.collectionView.trackChanges = true;
-      var newRow = gridMapping.collectionView.addNew();
+      gridMapng.collectionView.trackChanges = true;
+      var newRow = gridMapng.collectionView.addNew();
       newRow.status = "I";
       newRow.chk = true;
       newRow.vanCd = selectedVan.vanCd;
       newRow.vanNm = selectedVan.vanNm;
       
-      gridMapping.collectionView.commitNew();
+      gridMapng.collectionView.commitNew();
       <%-- 추가된 Row 선택--%>
-      gridMapping.select(gridMapping.rows.length, 1);
+      gridMapng.select(gridMapng.rows.length, 1);
     });
     
     <%-- VAN/CARD사 매핑 그리드 저장 버튼 클릭 --%>
-    $("#btnSaveMapping").click(function(e) {
+    $("#btnSaveMapng").click(function(e) {
       
       var paramArr = new Array();
       
-      for ( var i = 0; i < gridMapping.collectionView.itemsEdited.length; i++ ) {
-        gridMapping.collectionView.itemsEdited[i].status = "U";
-        paramArr.push(gridMapping.collectionView.itemsEdited[i]);
+      for ( var i = 0; i < gridMapng.collectionView.itemsEdited.length; i++ ) {
+        gridMapng.collectionView.itemsEdited[i].status = "U";
+        paramArr.push(gridMapng.collectionView.itemsEdited[i]);
       }
-      for ( var i = 0; i < gridMapping.collectionView.itemsAdded.length; i++ ) {
-        gridMapping.collectionView.itemsAdded[i].status = "I";
-        paramArr.push(gridMapping.collectionView.itemsAdded[i]);
+      for ( var i = 0; i < gridMapng.collectionView.itemsAdded.length; i++ ) {
+        gridMapng.collectionView.itemsAdded[i].status = "I";
+        paramArr.push(gridMapng.collectionView.itemsAdded[i]);
       }
       
       if ( paramArr.length <= 0 ) {
@@ -510,9 +510,9 @@
         return;
       }
       
-      $.postJSONArray("/sys/etc/vanCard/vanCard/mapping/save.sb", paramArr, function(result) {
+      $.postJSONArray("/sys/etc/vanCard/vanCard/mapng/save.sb", paramArr, function(result) {
           s_alert.pop("<s:message code='msg.save.succ' />");
-          gridMapping.collectionView.clearChanges();
+          gridMapng.collectionView.clearChanges();
         },
         function(result) {
           s_alert.pop(result.data.msg);

@@ -191,14 +191,14 @@ public class VanCardController {
      * @author 노현수
      * @since 2018. 06. 15.
      */
-    @RequestMapping(value = "/vanCard/mapping/list.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/vanCard/mapng/list.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getMappingList(HttpServletRequest request, HttpServletResponse response,
+    public Result getMapngList(HttpServletRequest request, HttpServletResponse response,
             VanCardVO vanCardVO, Model model) {
 
         List<DefaultMap<String>> list = new ArrayList<DefaultMap<String>>();
         // VAN사 목록 조회
-        list = vanCardService.getMappingList(vanCardVO);
+        list = vanCardService.getMapngList(vanCardVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, vanCardVO);
 
@@ -215,14 +215,14 @@ public class VanCardController {
      * @author 노현수
      * @since 2018. 06. 15.
      */
-    @RequestMapping(value = "/vanCard/mapping/save.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/vanCard/mapng/save.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result saveMappingList(@RequestBody VanCardVO[] vanCardVOs,
+    public Result saveMapngList(@RequestBody VanCardVO[] vanCardVOs,
             HttpServletRequest request, HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = vanCardService.saveMappingList(vanCardVOs, sessionInfoVO);
+        int result = vanCardService.saveMapngList(vanCardVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
 
