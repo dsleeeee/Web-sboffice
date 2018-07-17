@@ -6,9 +6,13 @@
   <select id="selectProdByStore" parameterType="String" resultType="DefaultMap">
     /* TouchkeyMapper.selectProdByStore */
      SELECT A.PROD_CD,
-            A.PROD_NM
-       FROM TB_MS_PRODUCT A
-      WHERE A.STORE_CD = #{storeCd}
+            A.PROD_NM,
+            B.PROD_CLASS_NM
+       FROM TB_MS_PRODUCT A,
+            TB_MS_PRODUCT_CLASS B
+      WHERE A.STORE_CD = B.STORE_CD
+        AND A.PROD_CLASS_CD = B.PROD_CLASS_CD
+        AND A.STORE_CD = #{storeCd}
   </select>
 
     <delete id="deleteTouchClassByStore" parameterType="String">
@@ -23,6 +27,7 @@
     INSERT INTO TB_MS_TOUCH_CLASS A
     (
         A.STORE_CD,
+        A.TUKEY_GRP_CD,
         A.TUKEY_CLASS_CD,
         A.TUKEY_CLASS_NM,
         A.PAGE_NO,
@@ -39,6 +44,7 @@
     VALUES
     (
         #{storeCd},
+        #{tukeyGrpCd},
         #{tukeyClassCd},
         #{tukeyClassNm},
         #{pageNo},

@@ -34,6 +34,9 @@ public class TouchClassVO extends CmmVO {
     private String storeCd;
 
     /** 터치키분류코드 */
+    private String tukeyGrpCd;
+    
+    /** 터치키분류코드 */
     private String tukeyClassCd;
 
     /** 터치키분류명 */

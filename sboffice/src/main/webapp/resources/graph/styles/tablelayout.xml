@@ -9,7 +9,7 @@
     <add as="fillColor" value="#ffffff"/>
     <add as="strokeColor" value="#808080"/>
     <add as="fontColor" value="#000000"/>
-    <add as="rounded" value="1"/>
+    <add as="rounded" value="0"/>
   </add>
 
   <add as="label">
@@ -21,22 +21,35 @@
   </add>
 
 
-  <add as="ts2">
-    <add as="shape" value="label"/>
-    <add as="perimeter" value="rectanglePerimeter"/>
+  <add as="box">
+    <add as="shape" value="swimlane"/>
+    <add as="shadow" value="0"/>
+    <add as="startSize" value="30"/>
     <add as="align" value="left"/>
-    <add as="verticalAlign" value="top"/>
-    <add as="verticalLabelPosition" value="top"/>
-    <add as="fillColor" value="#ffffff"/>
-    <add as="strokeColor" value="#808080"/>
-    <add as="fontColor" value="#000000"/>
-    <add as="fontSize" value="11"/>
-    <add as="fontFamily" value="Helvetica"/>
-    <add as="image" value="/resource/graph/stencils/tableSquare2.jpg"/>
-    <add as="imageWidth" value="30"/>
-    <add as="imageHeight" value="30"/>
-    <add as="imageAlign" value="center"/>
-    <add as="imageVerticalAlign" value="middle"/>
+    <add as="verticalAlign" value="middle"/>
+    <add as="strokeColor" value="#7C7C7C"/>
+    <add as="fillColor" value="#4956A3"/>
+    <add as="gradientColor" value="#FFFFFF"/>
+    <add as="swimlaneFillColor" value="#FFFFFF"/>
+    <add as="rounded" value="1"/>
+    <add as="arcSize" value="5"/>
   </add>
+
+  <add as="table">
+    <add as="shape" value="image"/>
+    <add as="perimeter" value="rectanglePerimeter"/>
+    <add as="fontSize" value="10"/>
+    <add as="align" value="center"/>
+    <add as="verticalAlign" value="middle"/>
+  </add>
+
+  <add as="ts2" extend="table">
+    <add as="image" value="/resource/graph/stencils/ts2.png"/>
+  </add>
+
+  <add as="ts4" extend="table">
+    <add as="image" value="/resource/graph/stencils/ts4.png"/>
+  </add>
+
 
 </mxStylesheet>

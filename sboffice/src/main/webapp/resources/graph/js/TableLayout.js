@@ -9,17 +9,17 @@ mxGraph.prototype.allowNegativeCoordinates = false;
 
 //셀 가이드 사용 여부
 mxGraphHandler.prototype.guidesEnabled = true;
-
+mxDragSource.guideEnabled = true;
 
 /**
  * 메인 Class
  */
-TableLayout = function(container, themes) {
+TableLayout = function(themes) {
   mxEventSource.call(this);
-  this.container = container || document.body;
+  this.container = document.getElementById('content');
   
   //그래프 객체 생성
-  this.graph = new Graph(this.container, null, null, null, themes);
+  this.graph = new Graph(this.container, themes);
   
   //왼쪽 구성요소
   this.comp = new Sidebar(this.graph);
@@ -32,19 +32,6 @@ TableLayout = function(container, themes) {
   
   this.init();
   
-  //화면 오픈 스플래시 이미지(부가)
-  var splash = document.getElementById('splash');
-  if (splash != null) {
-    try {
-      mxEvent.release(splash);
-      mxEffects.fadeOut(splash, 100, true);
-    }
-    catch (e) {
-      // mxUtils is not available (library not loaded)
-      splash.parentNode.removeChild(splash);
-    }
-  }
-  
 };
 
 //Extends mxEditor
@@ -56,13 +43,6 @@ TableLayout.prototype.comp = null;
 TableLayout.prototype.layer = null;
 TableLayout.prototype.format = null;
 
-//배경색
-TableLayout.prototype.defaultBackgroundColor = '#ffffff';
-
-//배경이미지
-TableLayout.prototype.containerBackgroundImage = 'url(' + IMAGE_PATH + '/grid.gif' + ')';
-
-
 
 /**
  * 메인 - 초기화
@@ -70,12 +50,8 @@ TableLayout.prototype.containerBackgroundImage = 'url(' + IMAGE_PATH + '/grid.gi
 TableLayout.prototype.init = function() {
   
 
-  //그래프 영역의 배경 이미지 설정
-  this.container.style.backgroundImage = this.containerBackgroundImage;
-  this.container.style.backgroundColor = this.defaultBackgroundColor; 
-
   //마우스 오른쪽 클릭 - 컨텍스트 메뉴
-  //mxEvent.disableContextMenu(this.container);
+  mxEvent.disableContextMenu(this.container);
 
   //매장영역에서 이벤트 발생 시 설정영역을 새로 그려주기 위한 이벤트 핸들러
   this.graph.getSelectionModel().addListener(mxEvent.CHANGE, this.format.update);
@@ -86,11 +62,6 @@ TableLayout.prototype.init = function() {
 
   //서버의 초기 설정 로드
   var openResult = this.format.open(true);
-  
-  //TODO 오픈 실패 or 기존 설정 정보가 없을 경우 기본 구성 로딩
-  //if(!openResult) {
-    //console.log('')
-  //}
   
 };
 /**
@@ -104,6 +75,27 @@ TableLayout.prototype.initValue = function() {
   this.graph.initValue();
   
 };
+
+/** 
+ * DOM element 클릭 이벤트 추가
+ */
+function addClickHandler(elt, funct) {
+  if (funct != null) {
+    mxEvent.addListener(elt, 'click', function(evt) {
+      funct(evt);
+      mxEvent.consume(evt);
+    });
+    
+    if (document.documentMode != null && document.documentMode >= 9) {
+      // Prevents focus
+      mxEvent.addListener(elt, 'mousedown', function(evt) {
+        evt.preventDefault();
+      });
+    }
+  }
+};
+
+
 
 /**
 * 왼쪽 매장구성요소 처리
@@ -120,29 +112,27 @@ Sidebar = function(graph) {
  */
 Sidebar.prototype.init = function() {
   
-  this.toolbar = new mxToolbar(this.container);
-  this.toolbar.enabled = false;
-
-  toolbar = this.toolbar;
-  
   var tableSize = this.graph.defaultTableSize;
   
   //ts2는 xml과 message 파일에 정의되어야 함
   //tblTypeFg:1:사각,2:원탁,3:포장,4:배달,5:최소
-  this.addToolbarIcon('ts2','tblTypeFg=1;tblSeatCnt=2;', STENCIL_PATH + '/ts2.png', tableSize.width, tableSize.height);
-  toolbar.addLine();
-  //this.addSidebarIcon('ts2', '/tableSquare2.jpg');
+  this.addIcon('ts2','tblTypeFg=1;tblSeatCnt=2;', STENCIL_PATH + '/ts2.png', tableSize.width, tableSize.height);
+  this.addIcon('ts4','tblTypeFg=1;tblSeatCnt=4;', STENCIL_PATH + '/ts4.png', tableSize.width, tableSize.height);
 };
 
 /**
  * 왼쪽 매장구성요소 아이콘 추가
  */
-Sidebar.prototype.addToolbarIcon = function(type, style, icon, w, h) {
+Sidebar.prototype.addIcon = function(type, style, icon, w, h) {
   var graph = this.graph;
   var toolbar = this.toolbar;
 
-  var vertex = new mxCell(null, new mxGeometry(0, 0, w, h), type + ';' + style);
-  vertex.setVertex(true);
+  function lpad(s, padLength, padString){
+    s = '' + s;
+    while(s.length < padLength)
+        s = padString + s;
+    return s;
+  }
 
   //Drop 이벤트 처리
   var funct = function(graph, evt, cell) {
@@ -150,235 +140,235 @@ Sidebar.prototype.addToolbarIcon = function(type, style, icon, w, h) {
     
     var parent = graph.getDefaultParent();
     var pt = graph.getPointForEvent(evt);
-    var v1 = graph.getModel().cloneCell(vertex);
-    //v1.value = graph.getModel().getChildCount(parent) + 1;
-    //console.log(pt.x + ',' + pt.y);
-    //미리보기 위치와 맞추기 위해 미리보기 포인트 만큼 마이너스 처리 
-    v1.geometry.x = pt.x - (w/2);
-    v1.geometry.y = pt.y - (h/2);
+
+    var x = pt.x - (w/2);
+    var y = pt.y - (h/2);
     
-    //라벨 추가
-    //TODO 테이블속성 기능에서 테이블명 위치를 가져와 동일 위치로 지정할 때 사용(relative, 0~1, 0~1)
-    var label = graph.insertVertex(v1, null, graph.getModel().getChildCount(parent) + 1, 0.1, 0.1, 30, 10, 'label', true);
+    //다른 테이블과 겹치는 경우 Drop 금지
+    var isCollision = graph.checkCollision(new mxPoint(x, y), new mxPoint(x+w, y+h), null);
+    if(isCollision) {
+      mxEvent.consume(evt);
+      return;
+    }
     
-    graph.setSelectionCells(graph.importCells([v1], 0, 0));
+    //swinlane 박스
+    var table = graph.insertVertex(parent, null, 
+        lpad(graph.getModel().getChildCount(parent) + 1, 2, '0'),
+        x,  y, w, h,
+        'box;'+ style);
+    //테이블 이미지 추가
+    var image = graph.insertVertex(table, null, null, 0.5, 0.5, 30, 30, type, true);
+    //relative 위치로 지정된 이미지 위치 조정
+    image.geometry.offset = new mxPoint(-parseInt(image.geometry.width/2), 0); 
+    
+    graph.setSelectionCells(table);
+    graph.refresh();
     
   }
 
-  // Creates the image which is used as the drag icon (preview)
-  var img = toolbar.addMode(null, icon, funct);
-  img.title = mxResources.get(type);
+  //영역에 이미지를 넣고 DnD 처리
+  var template = '<li><a href="javascript:;"><img src="{icon}" alt="{alt}" /></a></li>';
+  var tag = wijmo.format(template, {
+    icon: icon,
+    alt: mxResources.get(type)
+  });
+  var elt = wijmo.createElement(tag);
   
   //DnD 활성화
-  var ds = mxUtils.makeDraggable(img, graph, funct, img, -(w/2), -(h/2));
-  ds.setGuidesEnabled(true);
+  var ds = mxUtils.makeDraggable(elt, graph, funct, elt, -(w/2), -(h/2));
+  
+  var divCompos = document.getElementById('divCompos');
+  divCompos.appendChild(elt);
+
 };
 
 /**
-* 상단 층설정
+* 층 설정 영역
 */
 Floor = function(graph) {
-  
-  this.container = document.getElementById('floor');
   this.graph = graph;
-  
-  this.toolbar = new mxToolbar(this.container);
-  this.toolbar.enabled = false;
-  
+  this.init();
+  this.initValue();
   this.refresh();
 }
-/**  툴바 구분자 */
-Floor.prototype.SEPARATOR_IMG = mxClient.imageBasePath + '/separator.gif';
+
+Floor.prototype.floorGrid = null;
 
 /**
- * 툴바 층설정 버튼 생성
+ * 층 설정 엘리멘트 생성
  */
-Floor.prototype.clear = function() {
+Floor.prototype.init = function() {
+
+  var floor = this;
+  var graph = this.graph;
+  var model = graph.getModel();
+
+  addClickHandler(document.getElementById('btnLayerConfig'), function() {
+    
+    //데이터 재생성
+    floor.initValue();
+    
+    //레이어 show/hide
+    document.getElementById('floorMask').style.display = 'block';
+    document.getElementById('floorLayer').style.display = 'table';
+    
+    //레이어를 show 했을 때 refresh를 해줘야 모양이 제대로 표시되었음
+    wijmo.grid.FlexGrid.refreshAll();
+  });
+  
+  
+  //그룹구분 설정
+  //그룹 등록 시 선택한 값을 레이어에 등록해 두었다가 팝업 재 생성 시 사용
+  var tblGrpFg = [
+    {id:'1', name:mxResources.get('tblGrpFgNormal')}, //일반
+    {id:'2', name:mxResources.get('tblGrpFgTogo')},  //포장
+    {id:'3', name:mxResources.get('tblGrpFgDelivery')}  //배달
+  ];
+  var tblGrpFgMap = new wijmo.grid.DataMap(tblGrpFg, 'id', 'name');
+
+  //그룹(층) 설정 FlexGrid 생성
+  this.floorGrid = new wijmo.grid.FlexGrid('#floorGrid', {
+    autoGenerateColumns: false,
+    selectionMode: 'Row',
+    columns: [
+      {binding: 'id', isReadOnly: true, visible: false},
+      {binding: 'name', header: mxResources.get('floorName'), isRequired: true, width: 90},
+      {binding: 'tblGrpFg', header: mxResources.get('tblGrpFg'), dataMap:tblGrpFgMap, width: 70},
+      {binding: 'btnDel', header: mxResources.get('del'), isReadOnly: true, width: 65},
+      {binding: 'layer', visible: false}
+    ],
+    formatItem: function(s, e) {
+      if (e.panel == s.cells) {
+        var col = s.columns[e.col];
+        var item = s.rows[e.row].dataItem;
+        //삭제 버튼 생성
+        if( item && col.binding == "btnDel" && e.row != 0 ) {
+          e.cell.innerHTML = '<a href="javascript:;" class="btn_grayS2">' + mxResources.get('del') + '</a>';
+        }
+      }
+    }
+  });
+  
+  var floorGrid = this.floorGrid;
+  
+  //RowHeader 없애기
+  //floorGrid.rowHeaders.columns.splice(0, 1);
+  
+  //삭제버튼 높이에 맞춰 그리드 크기 조정
+  floorGrid.rows.defaultSize = 40;
+  
+  //삭제버튼 이벤트 처리
+  floorGrid.hostElement.addEventListener('click', function (e) {
+    var target = wijmo.closest(e.target, 'a');
+    var ht = floorGrid.hitTest(e);
+    if(target instanceof HTMLAnchorElement) {
+      if(ht.row != 0) {
+        floorGrid.collectionView.remove(floorGrid.rows[ht.row].dataItem);
+      }
+    }
+  });
+  
+  //추가버튼 이벤트
+  addClickHandler(document.getElementById('btnAdd'), function() {
+    floorGrid.collectionView.newItemCreator = function() {
+      return {
+        tblGrpFg: '1'
+      }
+    };
+    var newItem = floorGrid.collectionView.addNew();
+    floorGrid.collectionView.commitNew();
+  });
+  
+  //적용 버튼 추가 이벤트
+  addClickHandler(document.getElementById('btnApply'), function() {
+    var view = floorGrid.collectionView;
+    
+    if (graph.isEnabled()) {
+      graph.model.beginUpdate();
+      try {
+        
+        //신규 생성된 레이어 추가
+        for(var i = 0; i < view.itemsAdded.length; i++) {
+          var item = view.itemsAdded[i];
+          var layer = graph.addCell(new mxCell(), graph.model.root);
+          layer.value = item.name;
+          graph.setCellStyles('tblGrpFg', item.tblGrpFg, [layer]);
+        }
+        
+        //변경된 레이어 반영
+        for(var i = 0; i < view.itemsEdited.length; i++) {
+          var item = view.itemsEdited[i];
+          model.setValue(item.layer, item.name);
+          graph.setCellStyles('tblGrpFg', item.tblGrpFg, [item.layer]);
+        }
+        
+        //삭제된 레이어 처리
+        for(var i = 0; i < view.itemsRemoved.length; i++) {
+          var item = view.itemsRemoved[i];
+          var index = graph.model.root.getIndex(item.layer);
+          graph.removeCells([item.layer], false);
+          
+          // Creates default layer if no layer exists
+          if (graph.model.getChildCount(graph.model.root) == 0) {
+            graph.model.add(graph.model.root, new mxCell());
+            graph.setDefaultParent(null);
+          }
+          else if (index > 0 && index <= graph.model.getChildCount(graph.model.root)) {
+            graph.setDefaultParent(graph.model.getChildAt(graph.model.root, index - 1));
+          }
+          else {
+            graph.setDefaultParent(null);
+          }
+        }
+        
+      }
+      finally {
+        graph.model.endUpdate();
+      }
+    }
+
+    floor.refresh();
+    
+    //적용한 후에는 view에 데이터 clear
+    view.clearChanges();
+  });
+
+};
+
+/**
+ * 데이터 생성
+ */
+Floor.prototype.initValue = function() {
   
   var floor = this;
   var graph = this.graph;
-  var toolbar = this.toolbar;
-  
-  //팝업 변수
-  var wnd = null;
-  
-  this.container.innerHTML = '';
-  
   var model = graph.getModel();
   var layerCount = model.getChildCount(model.root);
-  
-  //그리드 row 수에 따라 레이어 높이 변경
-  var getLayerHeight = function(count) {
-    return ((count+3)*30)+50;
-  };
-  
-  //TODO 그룹구분 설정
-  //그룹 등록 시 선택한 값을 레이어에 등록해 두었다가 팝업 재 생성 시 사용
-  var tblGrpFg = [
-    {id:'1', name:mxResources.get('tblGrpFgNormal')},
-    {id:'2', name:mxResources.get('tblGrpFgTogo')},
-    {id:'3', name:mxResources.get('tblGrpFgDelivery')}
-  ];
-  var tblGrpFgMap = new wijmo.grid.DataMap(tblGrpFg, 'id', 'name');
-  
-  //층설정 레이어 생성 - Wijmo 그리드 포함
-  var makePopup = function(btn) {
-    var data = [];
-    for (var i = 0; i < layerCount; i++) {
-      (mxUtils.bind(this, function(layer) {
-        data.push({
-            id: layer.id,
-            name: layer.value||mxResources.get('background'),
-            tblGrpFg: graph.getCellStyle(layer)['tblGrpFg'] || '1',
-            layer: layer //graph Cell 정보 추가, add/remove/rename에 사용!
-          });
-      }))(model.getChildAt(model.root, i));
-    }
-    
-    var div = document.createElement('div'); 
-    div.id = 'floorGrid';
-    graph.container.appendChild(div);
-    
-    var floorGrid = new wijmo.grid.FlexGrid('#floorGrid', {
-      itemsSource: data,
-      allowAddNew: true,
-      allowDelete: true,
-      //newRowAtTop: true,
-      selectionMode: 'Row',
-      columns: [
-        {binding: 'id', isReadOnly: true, visible: false},
-        {binding: 'name', header: mxResources.get('floorName'), isRequired: true},
-        {binding: 'tblGrpFg', header: mxResources.get('tblGrpFg'), dataMap:tblGrpFgMap},
-        {binding: 'layer', visible: false}
-      ],
-      rowAdded: function(s, e) {
-        //레이어 높이 조정
-        wnd.setSize(300, getLayerHeight(s.rows.length-1));
-        
-        if (graph.isEnabled()) {
-          graph.model.beginUpdate();
-          try {
-            var layer = graph.addCell(new mxCell(), graph.model.root);
-            //graph.setDefaultParent(layer);
-            s.rows[e.row].dataItem.tblGrpFg = '1';
-            graph.setCellStyles('tblGrpFg', s.rows[e.row].dataItem.tblGrpFg, [layer]);
-            s.rows[e.row].dataItem.layer = layer;
-          }
-          finally {
-            graph.model.endUpdate();
-          }
-        }
-      },
-      rowEditEnded: function(s, e) {
-        //console.log(s.rows[e.row]);
-        var layer = s.rows[e.row].dataItem.layer;
-        var layerName = s.rows[e.row].dataItem.name;
-        var tblGrpFg = s.rows[e.row].dataItem.tblGrpFg;
-        var model = graph.getModel();
-        if (graph.isEnabled() && layerName != null) {
-          model.beginUpdate();
-          try {
-            model.setValue(layer, layerName);
-            graph.setCellStyles('tblGrpFg', tblGrpFg, [layer]);
-          }
-          finally {
-            model.endUpdate();
-          }
-        }
-      },
-      deletingRow: function(s, e) {
-        //레이어 높이 조정
-        wnd.setSize(300, getLayerHeight(s.rows.length-1));
-        var layer = s.rows[e.row].dataItem.layer;
-        //console.log(layer);
-        if (graph.isEnabled()) {
-          graph.model.beginUpdate();
-          try {
-            var index = graph.model.root.getIndex(layer);
-            graph.removeCells([layer], false);
-            
-            // Creates default layer if no layer exists
-            if (graph.model.getChildCount(graph.model.root) == 0) {
-              graph.model.add(graph.model.root, new mxCell());
-              graph.setDefaultParent(null);
-            }
-            else if (index > 0 && index <= graph.model.getChildCount(graph.model.root)) {
-              graph.setDefaultParent(graph.model.getChildAt(graph.model.root, index - 1));
-            }
-            else {
-              graph.setDefaultParent(null);
-            }
-          }
-          finally {
-            graph.model.endUpdate();
-          }
-        }
-      }
 
-    });
+  var floorGrid = this.floorGrid;
 
-    //TODO 수정/삭제 버튼 추가
-    //http://demos.wijmo.com/5/PureJS/LearnWijmo/LearnWijmo/#hkxco8kb
-    
-    return floorGrid;
-  };
+  var data = [];
+  floorGrid.itemsSource = data;
   
-  //기어 버튼 클릭 시 층설정 팝업 오픈
-  toolbar.addItem(mxResources.get('floorConfig'), IMAGE_PATH + '/gear.png', function(evt){
+  for (var i = 0; i < layerCount; i++) {
+    (mxUtils.bind(this, function(layer) {
+      data.push({
+          id: layer.id,
+          name: layer.value||mxResources.get('background'),
+          tblGrpFg: graph.getCellStyle(layer)['tblGrpFg'] || '1',
+          layer: layer //graph Cell 정보 추가, add/remove/rename에 사용!
+        });
+    }))(model.getChildAt(model.root, i));
+  }
 
-    //레이어 생성
-    var floorGrid = makePopup(this);
-    
-    //팝업 기능
-    var div = document.createElement('div');
-    div.appendChild(floorGrid.hostElement);
-    div.style.padding = '4px';
-    
-    var divBtn = document.createElement('div');
-    //취소 버튼
-    var cancelBtn = mxUtils.button(mxResources.get('cancelBtn'), function() {
-      wnd.hide();
-    });
-    cancelBtn.className = 'geBtn';
-    //TODO CSS 우선순위 확인 후 삭제 필요
-    cancelBtn.style.background = '#f5f5f5';
-    divBtn.appendChild(cancelBtn);
-    
-    //적용 버튼
-    var applyBtn = mxUtils.button(mxResources.get('applyBtn'), function() {
-      
-      //그리드에 있는 층 설정으로 레이어 생성
-      //층버튼 다시 그리기
-      floor.refresh();
-      wnd.hide();
-    });
-    applyBtn.className = 'geBtn gePrimaryBtn';
-    //TODO CSS 우선순위 확인 후 삭제 필요(다자인)
-    applyBtn.style.backgroundColor = '#4d90fe';
-    applyBtn.style.backgroundImage = 'linear-gradient(#4d90fe 0px,#4787ed 100%)';
-    divBtn.appendChild(applyBtn);
-    
-    div.appendChild(divBtn);
-    //div.appendChild(cancelBtn);
-    //div.appendChild(applyBtn);
-    
-    //팝업 설정 및 show
-    var cx = graph.container.clientWidth / 2;
-    var cy = graph.container.clientHeight / 2;
-    wnd = new mxWindow(mxResources.get('floorConfig'), div, cx, cy, 300, getLayerHeight(layerCount), false);
-    wnd.setMaximizable(false);
-    wnd.setScrollable(false);
-    wnd.setResizable(false);
-    wnd.setClosable(true);
-    wnd.setVisible(true);
-    
-    
+  //데이터 생성, 변경사항 추적하도록 설정
+  floorGrid.itemsSource = new wijmo.collections.CollectionView(data, {
+    trackChanges: true
   });
   
-  //툴바에 분리 이미지 추가
-  toolbar.addSeparator(this.SEPARATOR_IMG);
-  
 };
+
+
 /**
  * 화면 새로 그리기 - 층설정이 변경되었을 때 마다
  */
@@ -386,10 +376,6 @@ Floor.prototype.refresh = function() {
 
   var floor = this;
   var graph = this.graph;
-  var toolbar = this.toolbar;
-  
-  //초기화, 층설정 버튼
-  this.clear();
   
   //층버튼 생성
   var model = graph.getModel();
@@ -400,7 +386,6 @@ Floor.prototype.refresh = function() {
     //클릭이벤트 - 모든 레이어 visible false
     for(var layerIdx = 0; layerIdx < layerCount; layerIdx++) {
       (mxUtils.bind(this, function(layerCell) {
-        //console.log(layerCell);
         model.setVisible(layerCell, false);
       }))(model.getChildAt(model.root, layerIdx));
     }
@@ -435,30 +420,33 @@ Floor.prototype.refresh = function() {
     //클릭이벤트 - 선택된 레이어 visible true
     model.setVisible(layer, true);
   };
-
+  //visibleLayer
+  
+  var template = '<span><a href="javascript:;" class="{on}">{name}</a></span>';
+  var divFloor = document.getElementById('divLayers');
+  divFloor.innerHTML = '';
+  
   //레이어 수 만큼 버튼 생성
   for (var i = 0; i < layerCount; i++) {
     
     (mxUtils.bind(this, function(layer) {
-      //레이어 이름으로 버튼 생성
-      var layerBtn = mxUtils.button(layer.value||mxResources.get('background'), function() {
+      
+      var tag = wijmo.format(template, {
+        name: layer.value,
+        on: (layer == graph.getDefaultParent() ? 'on' : '')
+      });
+      var elt = wijmo.createElement(tag);
 
+      addClickHandler(elt, function(){
         //클릭된 레이어 view 처리
         visibleLayer(layer);
         
         //툴바 초기화로 refresh
         floor.refresh();
       });
-      //선택된 레이어 버튼 색상 적용
-      if( layer == graph.getDefaultParent() ) {
-        layerBtn.className = 'geBtn gePrimaryBtn';
-        visibleLayer(layer);
-      }
-      else {
-        layerBtn.className = 'geBtn'; 
-      }
-        
-      this.container.appendChild(layerBtn);
+      
+      divFloor.appendChild(elt);
+
     }))(model.getChildAt(model.root, i));
   }
   
@@ -468,9 +456,9 @@ Floor.prototype.refresh = function() {
 /**
 * 그래픽 영역
 */
-function Graph(container, model, renderHint, stylesheet, themes) {
+function Graph(container, themes) {
 
-  mxGraph.call(this, container, model, renderHint, stylesheet);
+  mxGraph.call(this, container);
   this.themes = themes || this.defaultThemes;
   
   var loadStylesheet = function(graph) {
@@ -484,9 +472,7 @@ function Graph(container, model, renderHint, stylesheet, themes) {
     }
   };
   this.currentVertexStyle = mxUtils.clone(this.defaultVertexStyle);
-  if (stylesheet == null) {
-    loadStylesheet(this);
-  }
+  loadStylesheet(this);
   
 }
 /**
@@ -499,11 +485,15 @@ Graph.prototype.defaultVertexStyle = {};
 
 Graph.prototype.defaultThemeName = 'tablelayout';
 
+//그래픽 영역 사이즈
+Graph.prototype.minimumGraphSize = new mxRectangle(0, 0, 510, 510);
+Graph.prototype.maximumGraphBounds = new mxRectangle(0, 0, 510, 510);
+
 //DnD에서 생성되는 크기
-Graph.prototype.defaultTableSize = {width:40,height:40};
+Graph.prototype.defaultTableSize = {width:100,height:80};
 
 //배경이미지 - 기본설정
-Graph.prototype.graphBackgroundImage = IMAGE_PATH + '/gradient_background.jpg';
+//Graph.prototype.graphBackgroundImage = IMAGE_PATH + '/gradient_background.jpg';
 
 
 /**
@@ -532,22 +522,47 @@ Graph.prototype.init = function() {
   graph.undoManager = graph.createUndoManager(graph);
   var rubberband = new mxRubberband(graph);
   graph.keyHandler = graph.createKeyHandler(graph);
-  //console.log(this);
   
   //구성요소 이동 시 처리
   var mxGraphHandlerMoveCells = mxGraphHandler.prototype.moveCells;
   graph.graphHandler.moveCells = function(cells, dx, dy, clone, target, evt) {
-    //대상 셀에 이미 상품이 있을 경우 이동 금지
-    //getCellAt에서 gridSize 범위를 가지고 해당 위치에 셀을 가져온다.
-    var pt = this.graph.getPointForEvent(evt);
-    var cellAt = this.graph.getCellAt(pt.x, pt.y);
-    if (cellAt != null) {
+
+    var pt = graph.getPointForEvent(evt);
+    
+    //네 모서리에 셀이 있으면 이동 금지
+    var x1 = this.bounds.x + dx;
+    var y1 = this.bounds.y + dy;
+    var x2 = x1 + this.bounds.width;
+    var y2 = y1 + this.bounds.height;
+    
+    //다른 테이블과 겹치는 경우 이동 금지
+    var isCollision = graph.checkCollision(new mxPoint(x1, y1), new mxPoint(x2, y2), cells);
+    if(isCollision) {
       mxEvent.consume(evt);
       return;
     }
+    
     mxGraphHandlerMoveCells.apply(this, arguments);
   };
   
+  //셀의 사이즈가 변경되었을 때 배경 크기에 맞게 보정
+  var mxGraphResizeCell = mxGraph.prototype.resizeCell;
+  graph.resizeCell = function(cell, bounds, recurse) {
+    
+    //네 모서리에 셀이 있으면 이동 금지
+    var x1 = bounds.x;
+    var y1 = bounds.y;
+    var x2 = x1 + bounds.width;
+    var y2 = y1 + bounds.height;
+    //다른 테이블과 겹치는 경우 이동 금지
+    var isCollision = graph.checkCollision(new mxPoint(x1, y1), new mxPoint(x2, y2), [cell]);
+    if(isCollision) {
+      return;
+    }
+
+    mxGraphResizeCell.apply(this, arguments);
+  };
+    
   /* 이하 라벨 텍스트 선택 및 변경에 사용 */
   //graph.vertexLabelsMovable = false;
   //graph.setCellsMovable(false);
@@ -606,7 +621,10 @@ Graph.prototype.init = function() {
   /* 이상 라벨 텍스트 선택 및 변경에 사용 */
 
   //그래프가 생성될 때 첫번째 child의 이름 초기값 지정
-  graph.getModel().getChildAt(graph.getModel().root, 0).setValue(mxResources.get('background'));
+  var firstChild = graph.getModel().getChildAt(graph.getModel().root, 0);
+  firstChild.setValue(mxResources.get('background'));
+  //첫번째 child 속성에 tblGrpFg 기본값(1) 셋팅
+  graph.setCellStyles('tblGrpFg', '1', [firstChild]);
 
 };
 
@@ -662,6 +680,66 @@ Graph.prototype.switchLayer = function(layer) {
 };
 
 /**
+ * 테이블 간 겹치지 않는지 체크
+ */
+Graph.prototype.checkCollision = function(pt1, pt2, cells) {
+
+  var graph = this;
+  
+  //마우스 포인터를 그래픽 영역 밖에 놓았을 때 마이너스 위치 0으로 보정
+  pt1 = new mxPoint(Math.max(pt1.x, 0), Math.max(pt1.y, 0));
+  pt2 = new mxPoint(Math.max(pt2.x, 0), Math.max(pt2.y, 0));
+  
+  //이동범위의 셀 중에 자신이 있는지 체크
+  var isMyself = function(cell) {
+    var isMyself = false;
+    if(cells == null || cell == null) return isMyself;
+    
+    for(var i = 0; i <  cells.length; i++ ) {
+      if(graph.isSwimlane(cell)) {
+        if(cells[i] == cell) {
+          isMyself = true;
+          break;
+        }
+      }
+      else {
+        if(cell.getParent() != null) {
+          if(cells[i] == cell.getParent()) {
+            isMyself = true;
+            break;
+          }
+        }
+      }
+    }
+    return isMyself;
+  };
+
+  //네 모서리 기준 해당 위치에 셀이 있는지 체크
+  var cellLT = graph.getCellAt(pt1.x, pt1.y);
+  var cellLB = graph.getCellAt(pt1.x, pt2.y);
+  var cellRT = graph.getCellAt(pt2.x, pt1.y);
+  var cellRB = graph.getCellAt(pt2.x, pt2.y);
+  if( (cellLT != null && !isMyself(cellLT)) 
+      || (cellLB != null && !isMyself(cellLB))
+      || (cellRT != null && !isMyself(cellRT))
+      || (cellRB != null && !isMyself(cellRB)) ) {
+    return true;
+  }
+  
+  //큰 테이블로 작은 테이블을 덮는 경우 금지
+  var incCells = graph.getCells(pt1.x, pt1.y, pt2.x, pt2.y);
+  for(var i = 0; i < incCells.length; i++ ) {
+    if(graph.isSwimlane(incCells[i]) && !isMyself(incCells[i])) {
+      return true;
+    }
+  }
+  
+  return false;
+
+};
+
+
+/**
  * UNDO/REDO 이벤트 생성 
  */
 Graph.prototype.createUndoManager = function(graph) {
@@ -709,11 +787,6 @@ Graph.prototype.createKeyHandler = function(graph) {
   
   return keyHandler;
 };
-/**
- * 키보드 이벤트 생성
- */
-Graph.prototype.removeStyle = function(key) {
-};
 
 
 
@@ -738,50 +811,10 @@ Format.prototype.init = function() {
     this.refresh();
   });
   
-  this.clear();
+  //모든 구성 요소 생성
+  this.initElements();
 };
 
-/**
- * 설정 패널 생성
- */
-Format.prototype.clear = function() {
-  
-  this.container.innerHTML = '';
-  
-  //console.log('refresh');
-  var div = document.createElement('div');
-  div.style.whiteSpace = 'nowrap';
-  div.style.color = 'rgb(112, 112, 112)';
-  div.style.textAlign = 'left';
-  div.style.cursor = 'default';
-  
-  var label = document.createElement('div');
-  label.style.border = '1px solid #c0c0c0';
-  label.style.borderWidth = '0px 0px 1px 0px';
-  label.style.textAlign = 'center';
-  label.style.fontWeight = 'bold';
-  label.style.overflow = 'hidden';
-  label.style.display = (mxClient.IS_QUIRKS) ? 'inline' : 'inline-block';
-  label.style.paddingTop = '4px';
-  label.style.height = (mxClient.IS_QUIRKS) ? '34px' : '25px';
-  label.style.width = '100%';
-  this.container.appendChild(div);
-
-  //console.log(this.container);
-  
-  //"설정" 라벨
-  mxUtils.write(label, mxResources.get('labelFunction'));
-  div.appendChild(label);
-
-  //초기화/저장 버튼
-  div.appendChild(this.addSaveBtn());
-  
-  //배경색
-  this.backgroundColor();
-
-  //배경이미지
-  this.backgroundImage();
-};
 /**
  * 화면 새로 그리기
  */
@@ -789,10 +822,8 @@ Format.prototype.refresh = function() {
 
   var graph = this.graph;
   
-  //상단 라벨, 초기화/저장 버튼
-  this.clear();
-  
   //셀을 2개 이상 선택 했을 때 정렬 기능 활성화
+  document.getElementById('tableAlign').style.display = 'none';
   var cells = graph.getSelectionCells();
   var model = graph.getModel();
   var vertexCnt = 0;
@@ -803,94 +834,31 @@ Format.prototype.refresh = function() {
   }
   if(vertexCnt > 1) {
     //테이블 정렬
-    this.addAlign();
+    document.getElementById('tableAlign').style.display = 'block';
   }
 };
 
-
 /**
- * 공통 제목 생성 함수
+ * 폰트/정렬 설정 초기화
  */
-Format.prototype.createTitle = function(title) {
-  var span = document.createElement('span');
-  span.style.whiteSpace = 'nowrap';
-  span.style.overflow = 'hidden';
-  span.style.width = '100px';
-  span.style.fontWeight = 'bold';
-  mxUtils.write(span, title);
-  return span;
-};
-/**
- * 공통 패널 생성 함수
- */
-Format.prototype.createPanel = function() {
-  var div = document.createElement('div');
-  div.style.padding = '12px 0px 12px 18px';
-  div.style.borderBottom = '1px solid #c0c0c0';
-  return div;
-};
+Format.prototype.initElements = function() {
 
-/**
- * 공통 패널 생성 함수
- */
-Format.prototype.createWijmoContainer = function(id) {
-  var div = document.createElement('div');
-  div.id = id;
-  div.style.width = '150px';
-  div.style.margin = '0px 0px 0px 10px';
-  return div;
-};
-
-/**
- * 초기화/저장 버튼
- */
-Format.prototype.addSaveBtn = function() {
-  var div = this.createPanel();
-  
-  var btn = mxUtils.button(mxResources.get('initBtn'), mxUtils.bind(this, function(evt) {
-    this.open(false);
-  }));
-  
-  btn.setAttribute('title', mxResources.get('initBtn'));
-  btn.className = 'geBtn';
-  btn.style.width = '98px';
-  btn.style.marginRight = '5px';
-  btn.style.marginBottom = '2px';
-  div.appendChild(btn);
-
-  btn = mxUtils.button(mxResources.get('saveBtn'), mxUtils.bind(this, function(evt) {
-    this.save();
-  }));
-      
-  btn.setAttribute('title', mxResources.get('saveBtn'));
-  btn.className = 'geBtn';
-  btn.style.width = '98px';
-  btn.style.marginRight = '0px';
-  btn.style.marginBottom = '2px';
-  div.appendChild(btn);
-
-  return div;
-};
-
-/**
- * 그래픽 영역 배경색 설정
- */
-Format.prototype.backgroundColor = function() {
-  
-  var graphContainer = this.main.container;
   var graph = this.graph;
+  var format = this;
+  var graphContainer = this.main.container;
   
-  //라벨 설정
-  var div = this.createPanel();
-  div.appendChild(this.createTitle(mxResources.get('backgroundColor')));
-  mxUtils.br(div);
+  //초기화 버튼
+  addClickHandler(document.getElementById('btnInit'), function() {
+    format.open(false);
+  });
   
-  //wijmo 컴포넌트 추가
-  div.appendChild(this.createWijmoContainer('backgroundColor'));
-  //format 컨테이너에 추가
-  this.container.appendChild(div);
-  
-  var theInputColor = new wijmo.input.InputColor('#backgroundColor', {
+  //저장 버튼
+  addClickHandler(document.getElementById('btnSave'), function() {
+    format.save();
+  });
+
+  //배경색 wijmo 컴포넌트 생성
+  var backgroundColor = new wijmo.input.InputColor('#bgColor', {
     value: graphContainer.style.backgroundColor,
     valueChanged: function(s, e) {
       var layer = graph.getDefaultParent();
@@ -898,42 +866,9 @@ Format.prototype.backgroundColor = function() {
       graphContainer.style.backgroundColor = s.value; 
     }
   });
-};
-
-/**
- * 그래픽 영역 배경 이미지 설정
- */
-Format.prototype.backgroundImage = function() {
-  
-  var graph = this.graph;
-  var formatContainer =   this.container;
-
-  //라벨 설정
-  var div = this.createPanel();
-  div.appendChild(this.createTitle(mxResources.get('backgroundImage')));
-  mxUtils.br(div);
-  
-  //이미지 삭제 버튼
-  var btn = mxUtils.button(mxResources.get('initBackgroundImage'), mxUtils.bind(this, function(evt) {
-    graph.setBackgroundImage();
-    graph.view.validateBackgroundImage();
-    //해당 레이어에 이미지 정보 저장
-    var layer = graph.getDefaultParent();
-    graph.setCellStyles(mxConstants.STYLE_IMAGE, '', [layer]);
-  }));
-  btn.setAttribute('title', mxResources.get('initBackgroundImage'));
-  btn.className = 'geBtn';
-  btn.style.width = '98px';
-  btn.style.marginRight = '5px';
-  btn.style.marginBottom = '2px';
-  div.appendChild(btn);
 
   
-  //input image
-  var input = document.createElement('input');
-  input.setAttribute('type', 'file');
-  input.setAttribute('accept', 'image/x-png, image/gif, image/jpeg');
-  
+  //배경 이미지 버튼
   var apply = mxUtils.bind(this, function(evt){
     var canvas = graph.view.canvas; 
     if (canvas.ownerSVGElement != null) {
@@ -959,112 +894,41 @@ Format.prototype.backgroundImage = function() {
     readURL(evt.target);
     
   });
-  mxEvent.addListener(input, 'change', apply); 
-  div.appendChild(input);
+  mxEvent.addListener(document.getElementById('btnBgFile'), 'change', apply);
   
-  //format 컨테이너에 추가
-  formatContainer.appendChild(div);
   
-};
-/**
- * 정렬 설정
- */
-Format.prototype.addAlign = function() {
-  var graph = this.graph;
+  
+  //배경 이미지 삭제 버튼
+  addClickHandler(document.getElementById('btnDelBgImg'), function() {
+    graph.setBackgroundImage();
+    graph.view.validateBackgroundImage();
+    //해당 레이어에 이미지 정보 저장
+    var layer = graph.getDefaultParent();
+    graph.setCellStyles(mxConstants.STYLE_IMAGE, '', [layer]);
+  });
 
-  //라벨 설정
-  var div = this.createPanel();
-  div.appendChild(this.createTitle(mxResources.get('cellAlign')));
-  
-  var stylePanel = this.stylePanel();
-  
-  var left = this.addButton('geSprite-alignleft', mxResources.get('left'),
-    function() { graph.alignCells(mxConstants.ALIGN_LEFT); }, stylePanel);
-  var center = this.addButton('geSprite-aligncenter', mxResources.get('center'),
-    function() { graph.alignCells(mxConstants.ALIGN_CENTER); }, stylePanel);
-  var right = this.addButton('geSprite-alignright', mxResources.get('right'),
-    function() { graph.alignCells(mxConstants.ALIGN_RIGHT); }, stylePanel);
+  //테이블 정렬 옵션(왼쪽/가운데/오른쪽, 상단/중단/하단)
+  addClickHandler(document.getElementById('btnLeft'), function() {
+    graph.alignCells(mxConstants.ALIGN_LEFT);
+  });
+  addClickHandler(document.getElementById('btnCenter'), function() {
+    graph.alignCells(mxConstants.ALIGN_CENTER);
+  });
+  addClickHandler(document.getElementById('btnRight'), function() {
+    graph.alignCells(mxConstants.ALIGN_RIGHT);
+  });
 
-  var top = this.addButton('geSprite-aligntop', mxResources.get('top'),
-    function() { graph.alignCells(mxConstants.ALIGN_TOP); }, stylePanel);
-  var middle = this.addButton('geSprite-alignmiddle', mxResources.get('middle'),
-    function() { graph.alignCells(mxConstants.ALIGN_MIDDLE); }, stylePanel);
-  var bottom = this.addButton('geSprite-alignbottom', mxResources.get('bottom'),
-    function() { graph.alignCells(mxConstants.ALIGN_BOTTOM); }, stylePanel);
-
-  this.styleButtons([left, center, right, top, middle, bottom]);
-  right.style.marginRight = '6px';
-  div.appendChild(stylePanel);
+  addClickHandler(document.getElementById('btnTop'), function() {
+    graph.alignCells(mxConstants.ALIGN_TOP);
+  });
+  addClickHandler(document.getElementById('btnMiddle'), function() {
+    graph.alignCells(mxConstants.ALIGN_MIDDLE);
+  });
+  addClickHandler(document.getElementById('btnBottom'), function() {
+    graph.alignCells(mxConstants.ALIGN_BOTTOM);
+  });
   
-  //format 컨테이너에 추가
-  this.container.appendChild(div);
 };
-/**
- * 포맷 패널에 들어갈 sprite 아이콘 holder
- */
-Format.prototype.stylePanel = function() {
-  var stylePanel = document.createElement('div');
-  stylePanel.style.position = 'relative';
-  stylePanel.style.paddingLeft = '0px';
-  stylePanel.style.borderWidth = '0px';
-  stylePanel.className = 'geToolbarContainer';
-  
-  return stylePanel;
-};
-/**
- * 포맷 패널에 들어갈 sprite 아이콘 버튼 스타일 지정
- */
-Format.prototype.styleButtons = function(elts) {
-//var styleButtons = function(elts) {
-  for (var i = 0; i < elts.length; i++) {
-    mxUtils.setPrefixedStyle(elts[i].style, 'borderRadius', '3px');
-    mxUtils.setOpacity(elts[i], 100);
-    elts[i].className += ' geColorBtn';
-  }
-};
-/**
- * 포맷 패널에 들어갈 sprite 아이콘 버튼 생성
- */
-Format.prototype.addButton = function(classname, tooltip, funct, c) {
-//var addButton = function(classname, tooltip, funct, c) {
-  
-  var createButton = function(classname) {
-    var elt = document.createElement('a');
-    elt.setAttribute('href', 'javascript:void(0);');
-    elt.className = 'geButton';
-    var inner = document.createElement('div');
-    if (classname != null) {
-      inner.className = 'geSprite ' + classname;
-    }
-    elt.appendChild(inner);
-    return elt;
-  };
-  
-  var addClickHandler = function(elt, funct) {
-    if (funct != null) {
-      mxEvent.addListener(elt, 'click', function(evt) {
-        funct(evt);
-        mxEvent.consume(evt);
-      });
-      
-      if (document.documentMode != null && document.documentMode >= 9) {
-        // Prevents focus
-        mxEvent.addListener(elt, 'mousedown', function(evt) {
-          evt.preventDefault();
-        });
-      }
-    }
-  };
-  
-  var elt = createButton(classname);
-  if (tooltip != null) {
-    elt.setAttribute('title', tooltip);
-  }
-  addClickHandler(elt, funct);
-  c.appendChild(elt);
-  return elt;
-};
-
 
 /**
  * 기존 구성 조회
@@ -1106,10 +970,8 @@ Format.prototype.open = function(isLoad) {
  */
 Format.prototype.setGraphXml = function(graph, node) {
   
-  //console.log(node);
   if (node != null) {
     var dec = new mxCodec(node.ownerDocument);
-    //console.log(dec);
     if (node.nodeName == 'mxGraphModel') {
       graph.model.beginUpdate();
       try {
@@ -1146,10 +1008,12 @@ Format.prototype.save = function() {
   var enc = new mxCodec(mxUtils.createXmlDocument());
   node = enc.encode(graph.getModel());
   
+  //저장 될 XML을 보고 싶을 때 사용
+  /*
   var xmlPretty = mxUtils.getPrettyXml(node);
   mxLog.show();
   mxLog.write(xmlPretty);
-  
+  */
   var xml = encodeURIComponent(mxUtils.getXml(node));
   try {
     if (xml.length < MAX_REQUEST_SIZE) {
@@ -1163,7 +1027,6 @@ Format.prototype.save = function() {
     }
     else {
       mxUtils.alert(mxResources.get('drawingTooLarge'));
-      //mxUtils.popup(xml);
       return;
     }
   }
@@ -1196,5 +1059,7 @@ Format.prototype.save = function() {
   mxConstants.HIGHLIGHT_OPACITY = 30;
   mxConstants.HIGHLIGHT_SIZE = 8;
   
+
+
 })();
 

@@ -171,6 +171,9 @@ public class TouchkeyServiceImpl implements TouchkeyService {
 
                 touchClassVO = TouchClassVO.builder().build();
 
+                //TODO [터치키그룹코드] 신규 컬럼으로 임시로 분류코드와 같은 값으로 넣음
+                touchClassVO.setTukeyGrpCd(cell.getId());
+                
                 touchClassVO.setTukeyClassCd(cell.getId());
                 touchClassVO.setTukeyClassNm(String.valueOf(cell.getValue()));
 

@@ -140,8 +140,10 @@ public class TableAttrServiceImpl implements TableAttrService {
             Object[] cells = graph.getChildVertices(graph.getDefaultParent());
             for(Object c : cells) {
                 mxCell cell = (mxCell) c;
-
+                
+                //lombok 초기값 셋팅 사용
                 tableAttrVO = TableAttrVO.builder().build();
+
                 tableAttrVO.setAttrCd(AttrCd.getEnum(cell.getId()));
                 tableAttrVO.setAttrNm(String.valueOf(cell.getValue()));
 
