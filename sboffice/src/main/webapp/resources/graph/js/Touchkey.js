@@ -254,6 +254,13 @@ Sidebar.prototype.makeGrid = function() {
     if (ht.cellType == wijmo.grid.CellType.ColumnHeader) {
         return;
     }
+    // row 클릭시 선택되도록 설정 : 자연스러운 드래그를 위함
+    if ( ht.cellType == wijmo.grid.CellType.Cell ) {
+      for (var i = 0; i < flex.rows.length; i++) {
+        flex.rows[i].isSelected = false;
+      }
+      flex.rows[ht.row].isSelected = true;
+    }
     
     // toggle row selection when clicking row headers
     if (ht.cellType == wijmo.grid.CellType.RowHeader) {
@@ -344,6 +351,7 @@ Sidebar.prototype.makeGrid = function() {
   
   return flex;
 };
+
 /**
  * Cell을 드래그 할수 있도록 처리
  */
@@ -387,6 +395,8 @@ Sidebar.prototype.makeDragSource = function() {
       finally {
         model.endUpdate();
         sidebar.initUsed();
+        // 좌측 그리드 선택 Clear
+        rows.isSelected = false;
       }
     }
   }
@@ -832,7 +842,7 @@ Graph.prototype.initGroupArea = function(prod) {
     return layer;
   };
 
-  //override 마우스 이벤트 - 그룹, 상품 영역
+  //override 마우스 이벤트 - 그룹영역
   graph.addMouseListener({
     //상품 그룹 영역 마우스 클릭 시 해당 상품 레이어 보이기
     //상품 레이어가 없을 경우 새로 생성
@@ -924,8 +934,10 @@ Graph.prototype.createUndoManager = function(graph) {
  */
 Graph.prototype.createKeyHandler = function(graph) {
   var keyHandler = new mxKeyHandler(graph);
+  // Delete
   keyHandler.bindKey(46, function(evt) {
-    graph.escape();
+    // 최초클릭으로 item 선택시에는 delete 가 바로 되지 않는 현상으로 주석처리
+//    graph.escape();
     var cells = graph.getDeletableCells(graph.getSelectionCells());
     
     if (cells != null && cells.length > 0) { 
@@ -1031,7 +1043,7 @@ Graph.prototype.initProdArea = function(group, sidebar) {
       wrap.scrollLeft += scrollWidth;
     }
   });
-
+  
 };
 
 
