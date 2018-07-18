@@ -49,7 +49,7 @@ public class ColumnLayout {
         GridDispItemVO result = gsService.selectGridItem(gridDispItemVO);
 
         // 저장된 레이아웃이 없으면 기본 레이아웃 조회
-        return Optional.ofNullable(result).map(GridDispItemVO::getColumnItem).orElse("");
+        return Optional.ofNullable(result).map(GridDispItemVO::getColumnItem).orElse("\"\"");
     }
 
 

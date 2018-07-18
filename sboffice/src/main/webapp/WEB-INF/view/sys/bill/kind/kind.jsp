@@ -73,18 +73,18 @@
 <script>
 
   $(document).ready(function() {
-    
+    var gridPrint;
     <%-- 출력물종류 그리드 --%>
     var dataPrint =
       [
         { binding:"chkGrid", header:"<s:message code='kind.chk' />", dataType:wijmo.DataType.Boolean, width:50},
-        { binding:"prtClassCd", header:"<s:message code='kind.prtClassCd'/>", width:70},
+        { binding:"prtClassCd", header:"<s:message code='kind.prtClassCd'/>", width:70, isReadOnly: true },
         { binding:"prtClassNm", header:"<s:message code='kind.prtClassNm'/>", width:"*"},
         { binding:"general", header:"<s:message code='kind.general'/>", dataType:wijmo.DataType.Boolean, width:50},
         { binding:"food", header:"<s:message code='kind.food'/>", dataType:wijmo.DataType.Boolean, width:50}
       ];
     <%-- 출력물종류 그리드 생성 --%>
-    var gridPrint = wgrid.genGrid("#gridPrint", dataPrint, "${menuCd}", 1, ${clo.getColumnLayout(1)});
+    gridPrint = wgrid.genGrid("#gridPrint", dataPrint, "${menuCd}", 1, ${clo.getColumnLayout(1)});
     gridPrint.isReadOnly = false;
     
     <%-- 출력물종류 그리드 포맷 --%>
@@ -111,24 +111,6 @@
       }
     });
     
-    <%-- 출력물종류 그리드 선택 이벤트 --%>
-    gridPrint.addEventListener(gridPrint.hostElement, 'click', function(e) {
-      var ht = gridPrint.hitTest(e);
-      if ( ht.cellType == wijmo.grid.CellType.Cell ) {
-        var col = ht.panel.columns[ht.col];
-        var selectedRow = gridPrint.rows[ht.row].dataItem;
-        
-        <%-- 원클릭 에디팅 --%>
-        setTimeout(function() {
-          var _cellData = gridPrint.getCellData(ht.row, ht.col, true);
-          if ( col.dataType !== wijmo.DataType.Boolean ) {
-            gridPrint.startEditing(true, e.row, ht.col, true); // quick mode
-            wijmo.setSelectionRange(gridPrint.activeEditor, _cellData.length); // caret position
-          }
-        }, 50);
-      }
-    });
-    
     <%-- 출력물종류 그리드 조회 --%>
     gridPrint.selectionChanged.addHandler(function (s, e) {
       var col = s.columns[e.col];
@@ -145,7 +127,6 @@
     var gridMapng = wgrid.genGrid("#gridMapng", dataMapng, "${menuCd}", 2, ${clo.getColumnLayout(2)});
     <%-- 읽기전용을 해제하지 않으면 그리드 에디팅이 되지 않는다. --%>
     gridMapng.isReadOnly = false;
-    
     
     <%-- 조회버튼 클릭 --%>
     $("#btnSearch").click(function(e){

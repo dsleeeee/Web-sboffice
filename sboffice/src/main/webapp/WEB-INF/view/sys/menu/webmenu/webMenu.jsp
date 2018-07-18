@@ -170,9 +170,9 @@
     var url                 = wcombo.genInput("#url");
     var dispIdx             = wcombo.genInput("#dispIdx");
     var sdata               = ${ccu.getCommCodeNoSelect("905")};
-	var spclAuthor          = wcombo.genCommonBox("#spclAuthor", sdata);
-	resrceCd.isDisabled = true;
-  	
+    var spclAuthor          = wcombo.genCommonBox("#spclAuthor", sdata);
+    resrceCd.isDisabled = true;
+    
     var grid = new wijmo.nav.TreeView("#theGrid", {
       itemsSource: ${menuData},
       displayMemberPath: "header",
@@ -182,9 +182,9 @@
         s.collapseToLevel(0);
       },
       itemClicked: function(s, e) {
-		if(s.selectedItem === grid.selectedItem) {
-		  selectItem(s.selectedItem);
-		}
+        if(s.selectedItem === grid.selectedItem) {
+          selectItem(s.selectedItem);
+        }
       }
     });
     
@@ -225,7 +225,7 @@
         grid2.collectionView.trackChanges = true;
       },
       function(result){
-        s_alert.pop(result.data.msg);
+        s_alert.pop(result.message);
       })
       .fail(function(){
         s_alert.pop("Ajax Fail");
@@ -234,7 +234,7 @@
     
     <%-- 리소스 트리 검색 콤보 박스 생성 --%>
     var searchResrceNm = new wijmo.input.AutoComplete("#searchResrceNm", {
-    	itemsSource: getSearchList(grid.itemsSource),
+        itemsSource: getSearchList(grid.itemsSource),
         selectedIndex: -1,
         displayMemberPath: "path",
         searchMemberPath: "keywords",
@@ -247,25 +247,25 @@
     });
     
     <%-- 리소스 트리 검색 콤보 박스 데이터 가져오기 --%>
-  	function getSearchList(items, searchList, path) {
-  	  if (searchList == null) {
-  	    searchList = [];
-  	  }
-  	  if (path == null) {
-  	    path = "";
-  	  }
-  	  for (var i = 0; i < items.length; i++) {
-  	    var item = items[i];
-  	    searchList.push({
-  	      item: item,
+    function getSearchList(items, searchList, path) {
+      if (searchList == null) {
+        searchList = [];
+      }
+      if (path == null) {
+        path = "";
+      }
+      for (var i = 0; i < items.length; i++) {
+        var item = items[i];
+        searchList.push({
+          item: item,
           path: path + item.header,
           keywords: item.url
-  	    });
-  	    if (item.items) {
-  	      getSearchList(item.items, searchList, path + item.header + " / ");
-  	    }
-  	  }
-  	  return searchList;
+        });
+        if (item.items) {
+          getSearchList(item.items, searchList, path + item.header + " / ");
+        }
+      }
+      return searchList;
     }
     
     <%-- 메뉴 삭제 버튼 --%>
@@ -281,7 +281,7 @@
           refreshMenu();
         },
         function(result) {
-          s_alert.pop(result.data.msg);
+          s_alert.pop(result.message);
         });
       });
     });
@@ -315,14 +315,14 @@
       <%-- 메뉴명을 입력해주세요. --%>
       var msg = "<s:message code='webMenu.nm'/> <s:message code='cmm.require.text'/>";
       if(resrceNm.text === "") {
-		s_alert.pop(msg);
-		return;
+        s_alert.pop(msg);
+        return;
       }
       <%-- 메뉴명을 입력해주세요. --%>
       var msg1 = "<s:message code='webMenu.dispIndx'/> <s:message code='cmm.require.text'/>";
       if(dispIdx.text === "") {
-		s_alert.pop(msg1);
-		return;
+        s_alert.pop(msg1);
+        return;
       }
       
       var arr = setGridCRUD(grid2);
@@ -374,7 +374,7 @@
         rightInit();
       },
       function(result) {
-        s_alert.pop(result.data.msg);
+        s_alert.pop(result.message);
       });
     }
     

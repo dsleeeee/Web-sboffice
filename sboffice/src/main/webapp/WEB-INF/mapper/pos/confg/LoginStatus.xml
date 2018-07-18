@@ -46,7 +46,6 @@
      <if test="sysStatFg != null and sysStatFg.name() != 'ALL'">
        AND B.SYS_STAT_FG = #{sysStatFg} --매장상태
      </if>
-     ORDER BY RNUM ASC
      <include refid="CmmSQL.PagingTemplateBottom"/>
   </select>
 

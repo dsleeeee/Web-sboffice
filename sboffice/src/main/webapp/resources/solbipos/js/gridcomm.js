@@ -25,7 +25,7 @@
         });
         
         // 저장된 레이아웃이 있을 경우 적용
-        if( columnLayout != null ) {
+        if( columnLayout.constructor == Object ) {
           var userCols = columnLayout.columns;
           var isVisibleColumn = function(id) {
             var visible = true;
@@ -40,6 +40,7 @@
           for(var i = 0; i < g.columns.length; i++) {
             g.columns[i].visible = isVisibleColumn(g.columns[i].binding);
           }
+//        g.columnLayout = JSON.stringify(columnLayout);
         }
         
         genGridPicker(g, resrceCd, gridIdx);
@@ -70,6 +71,25 @@
                 }
             }
           }
+        }
+        
+        genGridDblClickEvent(g);
+        // 그리드 더블클릭 이벤트시 커서위치 조정 ( isReadOnly : false 일때만 )
+        function genGridDblClickEvent(grid) {
+          grid.addEventListener(grid.hostElement, 'dblclick', function(e) {
+            if ( !grid.isReadOnly ) {
+              var ht = grid.hitTest(e);
+              if ( ht.cellType == wijmo.grid.CellType.Cell ) {
+                var col = ht.panel.columns[ht.col];
+                if ( !col.isReadOnly ) {
+                  var _cellData = g.getCellData(ht.row, ht.col, true);
+                  setTimeout(function() {
+                    wijmo.setSelectionRange(grid.activeEditor, _cellData.length); // caret position
+                  }, 50);
+                }
+              }
+            }
+          })
         }
         
         return g; 
@@ -110,6 +130,7 @@
           }
         });
       }
+      
   };
   
   //그리드 표시 항목 생성

@@ -1,12 +1,17 @@
 package kr.co.common.interceptor;
 
-import static org.springframework.util.ObjectUtils.isEmpty;
+import static org.springframework.util.ObjectUtils.*;
+
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+
 import kr.co.common.data.enums.Status;
 import kr.co.common.exception.AuthenticationException;
 import kr.co.common.exception.JsonException;
@@ -92,7 +97,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
             // 권한 없음 처리
             //TODO 개발 진행중 주석처리
-            //throw new AuthenticationException(exceptionMsg, "/error/403.sb");
+            throw new AuthenticationException(exceptionMsg, "/error/403.sb");
         }
 
 
@@ -166,6 +171,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         }
 
         int n = auth.size();
+        boolean resultCheck = false;
         for (int i = 0; i < n; i++) {
             ResrceInfoVO resrceInfoVO = auth.get(i);
             String authUrl = resrceInfoVO.getUrl();
@@ -176,20 +182,34 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                 }
 
                 if (authUrl.equals(url)) {
+                    if(RequestMethod.GET.toString().equals(request.getMethod()) 
+                            && resrceInfoVO.getResrceFg() == ResrceFg.FUNC) {
+                        resultCheck = true;
+                    }
+                    else if(RequestMethod.POST.toString().equals(request.getMethod())) {
+                        return true;
+                    }
+                    
                     // 메뉴 일때만 사용 등록과 메뉴 히스토리에 추가함
-                    if (resrceInfoVO.getResrceFg() == ResrceFg.MENU) {
-                        // 메뉴 사용 등록
-                        cmmMenuService.insertMenuUseHist(resrceInfoVO, sessionInfoVO);
+                    if (resrceInfoVO.getResrceFg() == ResrceFg.MENU 
+                            && RequestMethod.GET.toString().equals(request.getMethod())) {
+                        
                         // 세션에 사용 메뉴 넣기
                         cmmMenuService.addHistMenu(resrceInfoVO, sessionInfoVO);
+                        // 사용 히스토리 등록
+                        cmmMenuService.insertMenuUseHist(resrceInfoVO, sessionInfoVO);
                         return true;
                     }
                 }
             }
         }
-        return false;
+        return resultCheck;
     }
 
 }
+
+
+
+
 
 

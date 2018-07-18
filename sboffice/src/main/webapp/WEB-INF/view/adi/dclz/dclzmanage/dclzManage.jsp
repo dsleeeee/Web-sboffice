@@ -216,15 +216,16 @@
     var ldata        = ${ccu.getListScale()};
     var listScaleBox = wcombo.genCommonBox("#listScaleBox", ldata);
     var cdata        = ${ccu.getCommCode("087")};
-	var inFg         = wcombo.genCommonBox("#inFg", cdata);
-	var storeCd      = wcombo.genInput("#storeCd");
-	
-	<c:if test="${orgnFg == 'HQ'}">
-    var storeCdText  = wcombo.genInput("#storeCdText");
+    var inFg         = wcombo.genCommonBox("#inFg", cdata);
+    var storeCd      = wcombo.genInput("#storeCd");
+    
+    <c:if test="${orgnFg == 'HQ'}">
+        var storeCdText  = wcombo.genInput("#storeCdText");
     </c:if>
+    
     <c:if test="${orgnFg != 'HQ'}">
-	storeCd.text = "${sessionScope.sessionInfo.orgnCd}";
-    var storeCdText  = "";
+        storeCd.text = "${sessionScope.sessionInfo.orgnCd}";
+        var storeCdText  = "";
     </c:if>
     
     storeCdText.isDisabled = true;
@@ -308,7 +309,7 @@
       param.startDt = getDate(startDt);
       param.endDt = getDate(endDt);
       param.storeCd = storeCd.text;
-	  param.inFg = inFg.selectedValue;
+      param.inFg = inFg.selectedValue;
       param.listScale = listScaleBox.selectedValue;
       param.curr = index;
       
@@ -322,7 +323,7 @@
         page.make("#page", result.data.page.curr, result.data.page.totalPage);
         },
         function(result){
-          s_alert.pop(result.data.msg);
+          s_alert.pop(result.message);
         })
         .fail(function(){
           s_alert.pop("Ajax Fail");
@@ -358,7 +359,7 @@
         closeDclzLayer();
         },
         function(result){
-          s_alert.pop(result.data.msg);
+          s_alert.pop(result.message);
         })
         .fail(function(){
           s_alert.pop("Ajax Fail");
@@ -388,15 +389,14 @@
           comboData.push(data);
         }
         empNo.itemsSource = comboData;
+        showDclzLayer("reg", null);
       },
       function(result){
-        s_alert.pop(result.data.msg);
+        s_alert.pop(result.message);
       })
       .fail(function(){
         s_alert.pop("Ajax Fail");
       });
-      
-      showDclzLayer("reg", null);
     });
     
     $(".dclzRegClose").click(function(e){
@@ -460,7 +460,7 @@
         });
         },
         function(result){
-          s_alert.pop(result.data.msg);
+          s_alert.pop(result.message);
         })
         .fail(function(){
           s_alert.pop("Ajax Fail");
@@ -487,7 +487,7 @@
           });
           },
           function(result){
-            s_alert.pop(result.data.msg);
+            s_alert.pop(result.message);
           })
           .fail(function(){
             s_alert.pop("Ajax Fail");
