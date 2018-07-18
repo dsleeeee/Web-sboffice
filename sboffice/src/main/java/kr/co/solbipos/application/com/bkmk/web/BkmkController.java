@@ -40,7 +40,7 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 *  Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
 @Controller
-@RequestMapping(value = "/com/bkmk")
+@RequestMapping(value = "/application/com")
 public class BkmkController {
 
     @Autowired
@@ -60,7 +60,7 @@ public class BkmkController {
      * @param response
      * @return
      */
-    @RequestMapping(value = "list.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/bkmk/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result bkmkList(HttpServletRequest request, HttpServletResponse response) {
         List<String> menuData = new ArrayList<String>();
@@ -82,7 +82,7 @@ public class BkmkController {
      * @param response
      * @return
      */
-    @RequestMapping(value = "save.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "//bkmk/save.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result bkmkSave(@RequestParam HashMap<String, Object> params, HttpServletRequest request,
             HttpServletResponse response) {

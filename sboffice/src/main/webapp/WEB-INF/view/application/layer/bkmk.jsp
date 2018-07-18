@@ -57,7 +57,7 @@ $(document).ready(function() {
       }
     }
     $("#_brmkLayer, #_brmkFullDimmed").hide();
-    $.postJSONSave("/com/bkmk/save.sb", param, function(result) {
+    $.postJSONSave("/application/com/bkmk/save.sb", param, function(result) {
       var data = isEmpty(result.data[0]) ? '' : JSON.parse(result.data[0]);
       if ( data == '' ) {
         $("#_bkmkTxt").show();
@@ -92,7 +92,7 @@ $(document).ready(function() {
     var menuCnt = 0;
     var menuHtml = "";
     var param = {};
-    $.postJSON("/com/bkmk/list.sb", param, function(result) {
+    $.postJSON("/application/com/bkmk/list.sb", param, function(result) {
       var menuDatas = isEmpty(result.data[0]) ? '' : JSON.parse(result.data[0]);
       if ( menuDatas ) {
           menuDatas.forEach(function(first) {
