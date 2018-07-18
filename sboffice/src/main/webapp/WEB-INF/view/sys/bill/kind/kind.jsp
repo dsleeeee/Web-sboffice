@@ -15,7 +15,7 @@
   
   <%-- 조회 --%>
   <div class="mt10 pdb20 oh">
-      <button class="btn_blue fr" id="btnSearch"><s:message code="cmm.search" /></button>
+    <button class="btn_blue fr" id="btnSearch"><s:message code="cmm.search" /></button>
   </div>
     
   <div class="w50 fl" style="width: 40%">
@@ -67,13 +67,42 @@
     </div>
     <%--//위즈모 테이블--%>
   </div>
-    
+  <input type="hidden" id="prtClassCd" />
+</div>
+
+<%-- 출력물코드 선택 레이어 --%>
+<div id="itemSelTent" class="fullDimmed" style="display: none;"></div>
+<div id="itemSelLayer" class="layer" style="display: none;">
+  <div class="layer_inner">
+    <div class="title w800">
+      <p class="tit"><s:message code="kind.gridNm" /></p>
+      <a href="javascript:;" class="btn_close itemSelClose"></a>
+      <div class="con">
+          <%--위즈모 테이블--%>
+          <div class="wj-TblWrapBr mt10" style="height: 400px;">
+            <%-- 개발시 높이 조절해서 사용--%>
+            <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
+            <div id="theGrid" style="width:100%;height:393px;"></div>
+          </div>
+      </div>
+      <%-- 저장 --%>
+      <div class="btnSet">
+        <span><a href="javascript:;" id="btnSaveItem" class="btn_blue"><s:message code="cmm.save" /></a></span>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
 
+var gridMapng;
   $(document).ready(function() {
-    var gridPrint;
+    
+    <%-- 조회버튼 클릭 --%>
+    $("#btnSearch").click(function(e){
+      search();
+    });
+    
     <%-- 출력물종류 그리드 --%>
     var dataPrint =
       [
@@ -84,7 +113,7 @@
         { binding:"food", header:"<s:message code='kind.food'/>", dataType:wijmo.DataType.Boolean, width:50}
       ];
     <%-- 출력물종류 그리드 생성 --%>
-    gridPrint = wgrid.genGrid("#gridPrint", dataPrint, "${menuCd}", 1, ${clo.getColumnLayout(1)});
+    var gridPrint = wgrid.genGrid("#gridPrint", dataPrint, "${menuCd}", 1, ${clo.getColumnLayout(1)});
     gridPrint.isReadOnly = false;
     
     <%-- 출력물종류 그리드 포맷 --%>
@@ -92,45 +121,24 @@
       if (e.panel == s.cells) {
         var col = s.columns[e.col];
         var item = s.rows[e.row].dataItem;
-        
-        if ( col.binding == "general" || col.binding == "food" ) {
-//           var chk = document.createElement('input');
-//           chk.type = 'checkbox';
-//           chk.checked = gridPrint.rows[e.row].dataItem['chk'];
-//           chk.className = "wj-cell-check";
-//           e.cell.innerHTML = '';
-//           e.cell.appendChild(chk);
-        } else if ( col.binding == "content" ) {
-          
-//           col.multiLine = true;
-//           if ( !isEmpty(item.content) ) {
-//             var formattedData = item.content.replace(/\n/g, '<br/>');
-//             e.panel.setCellData(e.row, e.col, formattedData);
-//           }
+        if( col.binding == "prtClassCd" ) {
+          wijmo.addClass(e.cell, 'wijLink');
         }
       }
     });
     
-    <%-- 출력물종류 그리드 조회 --%>
-    gridPrint.selectionChanged.addHandler(function (s, e) {
-      var col = s.columns[e.col];
-//       search();
-    });
-    
-    <%-- 출력물매핑 그리드 --%>
-    var dataMapng =
-      [
-        {"binding":"chk", header:"<s:message code='kind.chk' />", dataType:wijmo.DataType.Boolean, width:50},
-        {"binding":"prtCd", header:"<s:message code='kind.prtCd'/>", width:"*"},
-      ];
-    <%-- 출력물매핑 그리드 생성 --%>
-    var gridMapng = wgrid.genGrid("#gridMapng", dataMapng, "${menuCd}", 2, ${clo.getColumnLayout(2)});
-    <%-- 읽기전용을 해제하지 않으면 그리드 에디팅이 되지 않는다. --%>
-    gridMapng.isReadOnly = false;
-    
-    <%-- 조회버튼 클릭 --%>
-    $("#btnSearch").click(function(e){
-      search();
+    <%-- 출력물종류 그리드 클릭 이벤트 --%>
+    gridPrint.addEventListener(gridPrint.hostElement, 'click', function(e) {
+      var ht = gridPrint.hitTest(e);
+      if ( ht.cellType == wijmo.grid.CellType.Cell ) {
+        var selectedRow = gridPrint.rows[ht.row].dataItem;
+        if ( selectedRow.status != "I" ) {
+          var col = ht.panel.columns[ht.col];
+          if ( col.binding == "prtClassCd" ) {
+            searchMapng(selectedRow.prtClassCd);
+          }
+        }
+      }
     });
     
     <%-- 출력물종류 코드목록 조회 --%>
@@ -158,6 +166,11 @@
               s_alert.pop(result.message);
               return;
             } else {
+              
+              param = {};
+              param.prtClassCd = list[0].prtClassCd; 
+              $("#prtClassCd").val(list[0].prtClassCd);
+              
               $.postJSON("/sys/bill/kind/mapng/list.sb", param, 
                   function(result) {
                     if(result.status === "FAIL") {
@@ -249,14 +262,111 @@
       
     });
     
+    <%-- 출력물매핑 그리드 --%>
+    var dataMapng =
+      [
+        {"binding":"chk", header:"<s:message code='kind.chk' />", dataType:wijmo.DataType.Boolean, width:50},
+        {"binding":"prtCd", header:"<s:message code='kind.prtCd'/>", width:"*"},
+      ];
+    <%-- 출력물매핑 그리드 생성 --%>
+    gridMapng = wgrid.genGrid("#gridMapng", dataMapng, "${menuCd}", 2, ${clo.getColumnLayout(2)});
+    <%-- 읽기전용을 해제하지 않으면 그리드 에디팅이 되지 않는다. --%>
+    gridMapng.isReadOnly = false;
+    
+    <%-- 출력물매핑 목록 조회 --%>
+    function searchMapng(value) {
+      
+      $("#prtClassCd").val(value);
+      var param = {};
+      param.prtClassCd = value;
+      
+      $.postJSON("/sys/bill/kind/mapng/list.sb", param, 
+          function(result) {
+            if(result.status === "FAIL") {
+              s_alert.pop(result.message);
+              return;
+            }
+            
+            var list = result.data.list;
+            gridMapng.itemsSource = new wijmo.collections.CollectionView(list);
+            gridMapng.itemsSource.trackChanges = true;
+            
+            <%-- 버튼 Show --%>
+            $("#btnUpMapng").show();
+            $("#btnDownMapng").show();
+            $("#btnAddMapng").show();
+            $("#btnDelMapng").show();
+            $("#btnSaveMapng").show();
+            
+            if ( list.length === undefined || list.length == 0 ) {
+              <%-- 그리드 초기화 --%>
+              gridMapng.itemsSource = [];
+            }
+            
+          },
+          function(){
+            s_alert.pop("Ajax Fail");
+          }
+      );
+      
+    };
+    
+    <%-- 출력물매핑 UP 버튼 클릭 --%>
+    $("#btnUpMapng").click(function(e) {
+      var movedRows = 0;
+      for ( var i = 0; i < gridMapng.collectionView.itemCount; i++ ) {
+        var item = gridMapng.collectionView.items[i];
+        if ( i > 0 && item.chk ) {
+          if ( !gridMapng.collectionView.items[i-1].chk ) {
+            movedRows = i-1;
+            var tmpItem = gridMapng.collectionView.items[movedRows];
+            gridMapng.collectionView.items[movedRows] = gridMapng.collectionView.items[i];
+            gridMapng.collectionView.items[i] = tmpItem;
+            gridMapng.collectionView.commitEdit();
+            gridMapng.collectionView.refresh();
+          }
+        }
+      }
+      gridMapng.select(movedRows, 1);
+    });
+
+    <%-- 출력물매핑 DOWN 버튼 클릭 --%>
+    $("#btnDownMapng").click(function(e){
+      var movedRows = 0;
+      for ( var i = gridMapng.itemsSource.itemCount-1; i >= 0; i-- ) {
+        var item = gridMapng.collectionView.items[i];
+        if ( ( i < gridMapng.itemsSource.itemCount-1 ) && item.chk ) {
+          if ( !gridMapng.collectionView.items[i+1].chk ) {
+            movedRows = i+1;
+            var tmpItem = gridMapng.collectionView.items[movedRows];
+            gridMapng.collectionView.items[movedRows] = gridMapng.collectionView.items[i];
+            gridMapng.collectionView.items[i] = tmpItem;
+            gridMapng.collectionView.commitEdit();
+            gridMapng.collectionView.refresh();
+          } 
+        }
+      }
+      gridMapng.select(movedRows, 1);
+    });
+    
     <%-- 출력물매핑 추가 버튼 클릭 --%>
     $("#btnAddMapng").click(function(e) {
-      // 팝업처리 ( TB_CM_PRINT_CODE )
-      
+      var selectedRow = gridPrint.selectedRows[0]._data;
+      showItemLayer(selectedRow.prtClassCd);
     });
     
     <%-- 출력물매핑 저장 버튼 클릭 --%>
     $("#btnSaveMapng").click(function(e) {
+      
+      gridMapng.collectionView.trackChanges = true;
+      
+      <%-- dispSeq 재설정 --%>
+      for ( var i = 0; i < gridMapng.collectionView.itemCount; i++ ) {
+        gridMapng.collectionView.editItem(gridMapng.collectionView.items[i]);
+        gridMapng.collectionView.items[i].prtClassCd = $("#prtClassCd").val();
+        gridMapng.collectionView.items[i].dispSeq = ( i + 1 );
+        gridMapng.collectionView.commitEdit();
+      }
       
       var paramArr = new Array();
       
@@ -284,6 +394,102 @@
       );
       
     });
+    
+    <%-- 출력물코드구성 선택 레이어 --%>
+    <%-- 레이어 보이기 --%>
+    function showItemLayer(value) {
+      
+      $("#prtClassCd").val(value);
+      
+      $("#itemSelTent, #itemSelLayer").show();
+      <%-- 자동조회 --%>
+      setTimeout(function() {
+        var param = {};
+        
+        $.postJSON("/sys/bill/item/item/list.sb", param, 
+            function(result) {
+              if(result.status === "FAIL") {
+                s_alert.pop(result.message);
+                return;
+              }
+              
+              var list = result.data.list;
+              theGrid.itemsSource = new wijmo.collections.CollectionView(list);
+              theGrid.itemsSource.trackChanges = true;
+              
+              if ( list.length === undefined || list.length == 0 ) {
+                <%-- 그리드 초기화 --%>
+                theGrid.itemsSource = [];
+                s_alert.pop(result.message);
+                return;
+              }
+              
+            },
+            function(){
+              s_alert.pop("Ajax Fail");
+            }
+        );
+      }, 50);
+      
+    }
+    <%-- 레이어 감추기 --%>
+    $(".itemSelClose").click(function(e) {
+      $("#itemSelTent, #itemSelLayer").hide();
+    });
+    
+    <%-- 출력코드구성 그리드 --%>
+    var data =
+      [
+        { binding:"chk", header:"<s:message code='item.chk' />", dataType:wijmo.DataType.Boolean, width:40},
+        { binding:"prtCd", header:"<s:message code='item.prtCd'/>", width:100, isReadOnly: true },
+        { binding:"prtNm", header:"<s:message code='item.prtNm'/>", width:100, isReadOnly: true },
+        { binding:"samplYn", header:"<s:message code='item.samplYn'/>", dataType:wijmo.DataType.Boolean, isReadOnly: true, width:60},
+        { binding:"content", header:"<s:message code='item.content'/>", width:"*", isReadOnly: true },
+      ];
+    <%-- 출력코드구성 그리드 생성 --%>
+    var theGrid = wgrid.genGrid("#theGrid", data, "${menuCd}", 3, ${clo.getColumnLayout(3)});
+    theGrid.isReadOnly = false;
+    
+    <%-- 출력코드구성 그리드 포맷 --%>
+    theGrid.formatItem.addHandler(function(s, e) {
+      if (e.panel == s.cells) {
+        var col = s.columns[e.col];
+        var item = s.rows[e.row].dataItem;
+      }
+    });
+    
+    <%-- 저장버튼 클릭 --%>
+    $("#btnSaveItem").click(function(e) {
+      
+      for ( var i = 0; i < theGrid.collectionView.itemCount; i++ ) {
+        var item = theGrid.collectionView.items[i];
+        if ( item.chk ) {
+          var dupCheck = false;
+          for ( var j = 0; j < gridMapng.collectionView.itemCount; j++ ) {
+            var savedItem = gridMapng.collectionView.items[j];
+            if ( savedItem.prtCd == item.prtCd ) {
+              dupCheck = true;
+              break;
+            }
+          }
+          
+          if ( !dupCheck ) {
+            gridMapng.collectionView.trackChanges = true;
+            var newRow = gridMapng.collectionView.addNew();
+            newRow.status = "I";
+            newRow.prtClassCd = $("#prtClassCd").val();
+            newRow.prtCd = item.prtCd;
+            newRow.chk = true;
+            
+            gridMapng.collectionView.commitNew();
+          }
+        }
+      }
+      <%-- 추가된 Row 선택--%>
+      gridMapng.select(gridMapng.rows.length, 1);
+      $("#itemSelTent, #itemSelLayer").hide();
+    });
+    
     
   });
   
