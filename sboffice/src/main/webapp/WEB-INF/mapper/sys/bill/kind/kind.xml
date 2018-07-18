@@ -144,6 +144,25 @@
         )
     </insert>
     
+    <!-- 출력물매핑 수정 -->
+    <!--
+        TABLE    : TB_CM_PRINT_DTL
+        PARAM    : kindVO
+        COMMENTS : 출력물매핑 목록을 수정한다.
+    -->
+    <update id="updatePrintMapngList" parameterType="kindVO">
+        /* USE : KindMapper.updatePrintMapngList */
+        UPDATE
+            TB_CM_PRINT_DTL
+        SET
+            DISP_SEQ = #{dispSeq},
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId}
+        WHERE
+            PRT_CLASS_CD = #{prtClassCd}
+            AND PRT_CD = #{prtCd}
+    </update>
+    
     <!-- 출력물매핑 삭제 -->
     <!--
         TABLE    : TB_CM_PRINT_DTL

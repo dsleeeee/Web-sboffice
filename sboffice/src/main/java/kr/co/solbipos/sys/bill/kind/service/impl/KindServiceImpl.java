@@ -10,7 +10,6 @@ import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.sys.bill.item.service.ItemVO;
 import kr.co.solbipos.sys.bill.kind.service.KindService;
 import kr.co.solbipos.sys.bill.kind.service.KindVO;
 
@@ -88,7 +87,36 @@ public class KindServiceImpl implements KindService {
     /** 출력물매핑 목록 저장 */
     @Override
     public int savePrintMapngList(KindVO[] kindVOs, SessionInfoVO sessionInfoVO) {
-        return 0;
+        
+        int result = 0;
+        String currentDt = currentDateTimeString();
+        
+        for ( KindVO kindVO : kindVOs ) {
+            
+            kindVO.setRegDt(currentDt);
+            kindVO.setRegId(sessionInfoVO.getUserId());
+            kindVO.setModDt(currentDt);
+            kindVO.setModId(sessionInfoVO.getUserId());
+            
+            // 추가
+            if ( kindVO.getStatus() == GridDataFg.INSERT ) {
+                result += kindMapper.insertPrintMapngList(kindVO);
+            // 수정
+            } else if ( kindVO.getStatus() == GridDataFg.UPDATE ) {
+                result += kindMapper.updatePrintMapngList(kindVO);
+            // 삭제
+            } else if ( kindVO.getStatus() == GridDataFg.DELETE ) {
+                result += kindMapper.deletePrintMapngList(kindVO);
+            }
+            
+        }
+        
+        if ( result == kindVOs.length) {
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+        
     }
 
 }
