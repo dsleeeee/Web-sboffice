@@ -24,10 +24,23 @@ import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqMenuVO;
 
 /**
- * 가맹점관리 > 본사정보 > 본사정보관리
- * 
- * @author 김지은
+ * @Class Name : HqManageController.java
+ * @Description : 가맹점관리 > 본사정보 > 본사정보관리
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2018.06.15  김지은      최초생성
+ *
+ * @author 솔비포스 차세대개발실 김지은
+ * @since 2018. 05.01
+ * @version 1.0
+ * @see
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
+
+
 @Controller
 @RequestMapping(value = "/store/hq/hqmanage/")
 public class HqManageController {
@@ -41,10 +54,12 @@ public class HqManageController {
     
     /**
      * 본사정보관리 화면 이동
-     * @param request
-     * @param response
-     * @param model
-     * @return
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  String
+     * @author  김지은
+     * @since   2018. 06. 08.
      */
     @RequestMapping(value = "hqmanage/list.sb", method = RequestMethod.GET)
     public String list(HttpServletRequest request, HttpServletResponse response, 
@@ -54,11 +69,13 @@ public class HqManageController {
     
     /**
      * 본사정보관리 리스트 조회
-     * @param hqManage
-     * @param request
-     * @param response
-     * @param model
-     * @return
+     * @param   hqManage
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  김지은
+     * @since   2018. 06. 08.
      */
     @RequestMapping(value = "hqmanage/list.sb", method = RequestMethod.POST)
     @ResponseBody
@@ -72,11 +89,13 @@ public class HqManageController {
     
     /**
      * 본사정보 상세조회
-     * @param hqManage
-     * @param request
-     * @param response
-     * @param model
-     * @return
+     * @param   hqManage
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  김지은
+     * @since   2018. 06. 08.
      */
     @RequestMapping(value = "master/dtlInfo.sb", method = RequestMethod.POST)
     @ResponseBody
@@ -90,11 +109,13 @@ public class HqManageController {
     
     /**
      * 사업자번호 중복체크
-     * @param hqManage
-     * @param request
-     * @param response
-     * @param model
-     * @return
+     * @param   hqManage
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  김지은
+     * @since   2018. 06. 08.
      */
     @RequestMapping(value = "master/chkBizNo.sb", method = RequestMethod.POST)
     @ResponseBody
@@ -108,11 +129,13 @@ public class HqManageController {
     
     /**
      * 사업자번호 사용현황 조회
-     * @param hqManage
-     * @param request
-     * @param response
-     * @param model
-     * @return
+     * @param   hqManage
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  김지은
+     * @since   2018. 06. 08.
      */
     @RequestMapping(value = "master/bizUseList.sb", method = RequestMethod.POST)
     @ResponseBody
@@ -126,11 +149,13 @@ public class HqManageController {
     
     /**
      * 사업자번호 사용현황 상세
-     * @param hqManage
-     * @param request
-     * @param response
-     * @param model
-     * @return
+     * @param   hqManage
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  김지은
+     * @since   2018. 06. 08.
      */
     @RequestMapping(value = "master/bizInfoDtl.sb", method = RequestMethod.POST)
     @ResponseBody
@@ -144,11 +169,13 @@ public class HqManageController {
     
     /**
      * 본사 신규등록
-     * @param hqManage
-     * @param request
-     * @param response
-     * @param model
-     * @return
+     * @param   hqManage
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  김지은
+     * @since   2018. 06. 08.
      */
     @RequestMapping(value = "master/regist.sb", method = RequestMethod.POST)
     @ResponseBody
@@ -164,11 +191,13 @@ public class HqManageController {
     
     /**
      * 본사 수정
-     * @param hqManage
-     * @param request
-     * @param response
-     * @param model
-     * @return
+     * @param   hqManage
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  김지은
+     * @since   2018. 06. 08.
      */
     @RequestMapping(value = "master/modify.sb", method = RequestMethod.POST)
     @ResponseBody
@@ -184,11 +213,13 @@ public class HqManageController {
     
     /**
      * 메뉴권한 데이터 조회
-     * @param hqManage
-     * @param request
-     * @param response
-     * @param model
-     * @return
+     * @param   hqManage
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  김지은
+     * @since   2018. 06. 08.
      */
     @RequestMapping(value = "authorexcept/authHqList.sb", method = RequestMethod.POST)
     @ResponseBody
@@ -215,11 +246,13 @@ public class HqManageController {
     
     /**
      * 메뉴권한복사
-     * @param hqManage
-     * @param request
-     * @param response
-     * @param model
-     * @return
+     * @param   hqManage
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  김지은
+     * @since   2018. 06. 08.
      */
     @RequestMapping(value = "authorexcept/copyAuth.sb", method = RequestMethod.POST)
     @ResponseBody
@@ -235,11 +268,13 @@ public class HqManageController {
     
     /**
      * 사용메뉴 추가
-     * @param hqManage
-     * @param request
-     * @param response
-     * @param model
-     * @return
+     * @param   hqManage
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  김지은
+     * @since   2018. 06. 08.
      */
     @RequestMapping(value = "authorexcept/addAuth.sb", method = RequestMethod.POST)
     @ResponseBody
@@ -255,11 +290,13 @@ public class HqManageController {
     
     /**
      * 사용메뉴 삭제
-     * @param hqManage
-     * @param request
-     * @param response
-     * @param model
-     * @return
+     * @param   hqManage
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  김지은
+     * @since   2018. 06. 08.
      */
     @RequestMapping(value = "authorexcept/removeAuth.sb", method = RequestMethod.POST)
     @ResponseBody

@@ -7,9 +7,20 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 가맹점관리 > 본사정보 > 본사정보관리
- * 
- * @author 김지은
+ * @Class Name : HqManageVO.java
+ * @Description : 가맹점관리 > 본사정보 > 본사정보관리
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2018.06.15  김지은      최초생성
+ *
+ * @author 솔비포스 차세대개발실 김지은
+ * @since 2018. 06.08
+ * @version 1.0
+ * @see
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
