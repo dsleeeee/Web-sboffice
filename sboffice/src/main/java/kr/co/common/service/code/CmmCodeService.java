@@ -2,7 +2,6 @@ package kr.co.common.service.code;
 
 import java.util.List;
 import kr.co.common.data.domain.CommonCodeVO;
-import kr.co.common.data.structure.DefaultMap;
 
 /**
  * 공통 코드 관련 서비스

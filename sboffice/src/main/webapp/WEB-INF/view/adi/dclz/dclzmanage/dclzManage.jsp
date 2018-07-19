@@ -63,7 +63,7 @@
     </tbody>
   </table>
 
-  <div class="mt10 pdb20 oh bb">
+  <div class="mt10 pdb20 oh">
     <button id="searchBtn" class="btn_blue fr" >
       <s:message code="cmm.search" />
     </button>
@@ -90,7 +90,7 @@
   <%-- 페이지 리스트 --%>
   <div class="pageNum mt20">
     <%-- id --%>
-    <ul id="page1" data-size="10">
+    <ul id="page" data-size="10">
     </ul>
   </div>
   <%--//페이지 리스트--%>
@@ -193,20 +193,21 @@
 </c:import>
 
 <script>
+
   $(document).ready(function() {
     
     <%-- 근태관리 부분 --%>
     var rdata = 
       [
-        {binding:"storeNm", header:"<s:message code='loginStatus.storeNm' />"},
-        {binding:"saleDate", header:"<s:message code='dclzManage.sale.date' />"},
-        {binding:"empNo", header:"<s:message code='dclzManage.empNo' />"},
-        {binding:"empNm", header:"<s:message code='dclzManage.empNm' />"},
-        {binding:"empInDt", header:"<s:message code='dclzManage.empInDt' />"},
-        {binding:"empOutDt", header:"<s:message code='dclzManage.empOutDt' />"},
-        {binding:"workTime", header:"<s:message code='dclzManage.workTime' />"},
-        {binding:"inFgNm", header:"<s:message code='dclzManage.inFg' />"},
-        {binding:"remark", header:"<s:message code='dclzManage.remark' />"}
+        {binding:"storeNm", header:"<s:message code='loginStatus.storeNm' />",width:"*"},
+        {binding:"saleDate", header:"<s:message code='dclzManage.sale.date' />",width:"*"},
+        {binding:"empNo", header:"<s:message code='dclzManage.empNo' />",width:"*"},
+        {binding:"empNm", header:"<s:message code='dclzManage.empNm' />",width:"*"},
+        {binding:"empInDt", header:"<s:message code='dclzManage.empInDt' />",width:"*"},
+        {binding:"empOutDt", header:"<s:message code='dclzManage.empOutDt' />",width:"*"},
+        {binding:"workTime", header:"<s:message code='dclzManage.workTime' />",width:"*"},
+        {binding:"inFgNm", header:"<s:message code='dclzManage.inFg' />",width:"*"},
+        {binding:"remark", header:"<s:message code='dclzManage.remark' />",width:"*"}
       ];
     
     var grid         = wgrid.genGrid("#theGrid", rdata, "${menuCd}", 1, ${clo.getColumnLayout(1)});
@@ -215,17 +216,17 @@
     var ldata        = ${ccu.getListScale()};
     var listScaleBox = wcombo.genCommonBox("#listScaleBox", ldata);
     var cdata        = ${ccu.getCommCode("087")};
-	var inFg         = wcombo.genCommonBox("#inFg", cdata);
-	var storeCd      = wcombo.genInput("#storeCd");
-	
-	<c:if test="${orgnFg == 'HQ'}">
-    var storeCdText  = wcombo.genInput("#storeCdText");
-    </c:if>
-    <c:if test="${orgnFg != 'HQ'}">
-	storeCd.text = "${sessionScope.sessionInfo.orgnCd}";
-    var storeCdText  = "";
+    var inFg         = wcombo.genCommonBox("#inFg", cdata);
+    var storeCd      = wcombo.genInput("#storeCd");
+    
+    <c:if test="${orgnFg == 'HQ'}">
+        var storeCdText  = wcombo.genInput("#storeCdText");
     </c:if>
     
+    <c:if test="${orgnFg != 'HQ'}">
+        storeCd.text = "${sessionScope.sessionInfo.orgnCd}";
+        var storeCdText  = "";
+    </c:if>
     
     storeCdText.isDisabled = true;
     
@@ -286,7 +287,7 @@
     });
     
     <%-- 페이징 --%>
-    $(document).on("click", ".page1", function() {
+    $(document).on("click", ".page", function() {
       search($(this).data("value"));
     });
     
@@ -308,7 +309,7 @@
       param.startDt = getDate(startDt);
       param.endDt = getDate(endDt);
       param.storeCd = storeCd.text;
-	  param.inFg = inFg.selectedValue;
+      param.inFg = inFg.selectedValue;
       param.listScale = listScaleBox.selectedValue;
       param.curr = index;
       
@@ -319,10 +320,10 @@
           return;
         }
         grid.itemsSource = list;
-        page.make("#page1", result.data.page.curr, result.data.page.totalPage);
+        page.make("#page", result.data.page.curr, result.data.page.totalPage);
         },
         function(result){
-          s_alert.pop(result.data.msg);
+          s_alert.pop(result.message);
         })
         .fail(function(){
           s_alert.pop("Ajax Fail");
@@ -358,7 +359,7 @@
         closeDclzLayer();
         },
         function(result){
-          s_alert.pop(result.data.msg);
+          s_alert.pop(result.message);
         })
         .fail(function(){
           s_alert.pop("Ajax Fail");
@@ -388,15 +389,14 @@
           comboData.push(data);
         }
         empNo.itemsSource = comboData;
+        showDclzLayer("reg", null);
       },
       function(result){
-        s_alert.pop(result.data.msg);
+        s_alert.pop(result.message);
       })
       .fail(function(){
         s_alert.pop("Ajax Fail");
       });
-      
-      showDclzLayer("reg", null);
     });
     
     $(".dclzRegClose").click(function(e){
@@ -460,7 +460,7 @@
         });
         },
         function(result){
-          s_alert.pop(result.data.msg);
+          s_alert.pop(result.message);
         })
         .fail(function(){
           s_alert.pop("Ajax Fail");
@@ -487,7 +487,7 @@
           });
           },
           function(result){
-            s_alert.pop(result.data.msg);
+            s_alert.pop(result.message);
           })
           .fail(function(){
             s_alert.pop("Ajax Fail");

@@ -162,70 +162,64 @@
   </select>
 
   <select id="selectDdlTrdtlTest" resultType="DefaultMap" parameterType="kr.co.sample.application.domain.SslTrdtlTVO">
-  <![CDATA[
-    SELECT *
-      FROM (
-              SELECT
-                     COUNT(1) OVER (PARTITION BY 1 ORDER BY 1) TOT_CNT,
-                     ROWNUM AS RNUM,
-                     SHOP_CD,
-                     SALE_DATE,
-                     POS_NO,
-                     BILL_NO,
-                     DTL_NO,
-                     REGI_SEQ,
-                     SALE_YN,
-                     SALE_FG,
-                     PROD_CD,
-                     PROD_TYPE_FG,
-                     CORNER_CD,
-                     CHG_BILL_NO,
-                     TAX_YN,
-                     DLV_PACK_FG,
-                     ORG_SALE_MG_CD,
-                     ORG_SALE_UPRC,
-                     NORMAL_UPRC,
-                     SALE_MG_CD,
-                     SALE_QTY,
-                     SALE_UPRC,
-                     SALE_AMT,
-                     DC_AMT,
-                     ETC_AMT,
-                     SVC_TIP_AMT,
-                     DCM_SALE_AMT,
-                     VAT_AMT,
-                     SVC_CD,
-                     TK_CPN_CD,
-                     DC_AMT_GEN,
-                     DC_AMT_SVC,
-                     DC_AMT_JCD,
-                     DC_AMT_CPN,
-                     DC_AMT_CST,
-                     DC_AMT_FOD,
-                     DC_AMT_PRM,
-                     DC_AMT_CRD,
-                     DC_AMT_PACK,
-                     CST_SALE_POINT,
-                     CST_USE_POINT,
-                     PRM_PROC_YN,
-                     PRM_CD,
-                     PRM_SEQ,
-                     SDA_CD,
-                     SDS_ORG_DTL_NO,
-                     POS_INS_DT,
-                     EMP_NO,
-                     INS_DT,
-                     UPD_DT,
-                     UPD_ID,
-                     COST_AMT,
-                     SET_PROD_FG,
-                     LOCAL_POINT_YN
-                FROM SSL_TRDTL_T
-               WHERE SHOP_CD = 'C06401'
-           )
-     WHERE RNUM >= #{prev}
-       AND RNUM <= #{next}
-  ]]>
+    <include refid="CmmSQL.PagingTemplateHeader"/>
+    SELECT
+           SHOP_CD,
+           SALE_DATE,
+           POS_NO,
+           BILL_NO,
+           DTL_NO,
+           REGI_SEQ,
+           SALE_YN,
+           SALE_FG,
+           PROD_CD,
+           PROD_TYPE_FG,
+           CORNER_CD,
+           CHG_BILL_NO,
+           TAX_YN,
+           DLV_PACK_FG,
+           ORG_SALE_MG_CD,
+           ORG_SALE_UPRC,
+           NORMAL_UPRC,
+           SALE_MG_CD,
+           SALE_QTY,
+           SALE_UPRC,
+           SALE_AMT,
+           DC_AMT,
+           ETC_AMT,
+           SVC_TIP_AMT,
+           DCM_SALE_AMT,
+           VAT_AMT,
+           SVC_CD,
+           TK_CPN_CD,
+           DC_AMT_GEN,
+           DC_AMT_SVC,
+           DC_AMT_JCD,
+           DC_AMT_CPN,
+           DC_AMT_CST,
+           DC_AMT_FOD,
+           DC_AMT_PRM,
+           DC_AMT_CRD,
+           DC_AMT_PACK,
+           CST_SALE_POINT,
+           CST_USE_POINT,
+           PRM_PROC_YN,
+           PRM_CD,
+           PRM_SEQ,
+           SDA_CD,
+           SDS_ORG_DTL_NO,
+           POS_INS_DT,
+           EMP_NO,
+           INS_DT,
+           UPD_DT,
+           UPD_ID,
+           COST_AMT,
+           SET_PROD_FG,
+           LOCAL_POINT_YN
+           <include refid="CmmSQL.PagingTemplateCount"/>
+      FROM SSL_TRDTL_T
+     WHERE SHOP_CD = 'C06401'
+     <include refid="CmmSQL.PagingTemplateBottom"/>
   </select>
 
   <select id="selectTreeMenu" resultType="DefaultMap" >
@@ -338,38 +332,26 @@
 
 
   <select id="selectDdlTrhdrTest" resultType="DefaultMap" parameterType="kr.co.sample.application.domain.SslTrhdrTVO">
-  <![CDATA[
-    SELECT *
-      FROM (
-              SELECT
-                     COUNT(1) OVER (PARTITION BY 1 ORDER BY 1) TOT_CNT,
-                     ROWNUM AS RNUM
-              ,      A.*
-                FROM SSL_TRHDR_T A
-               WHERE SHOP_CD = 'C06401'
-           )
-     WHERE RNUM >= #{prev}
-       AND RNUM <= #{next}
-  ]]>
+    <include refid="CmmSQL.PagingTemplateHeader"/>
+    SELECT
+           A.*
+           <include refid="CmmSQL.PagingTemplateCount"/>
+     FROM SSL_TRHDR_T A
+    WHERE SHOP_CD = 'C06401'
+    <include refid="CmmSQL.PagingTemplateBottom"/>
   </select>
 
   <select id="selectDdlTrdtl2Test" resultType="DefaultMap" parameterType="kr.co.sample.application.domain.SslTrhdrTVO">
-  <![CDATA[
-    SELECT *
-      FROM (
-              SELECT
-                     COUNT(1) OVER (PARTITION BY 1 ORDER BY 1) TOT_CNT,
-                     ROWNUM AS RNUM
-              ,      A.*
-                FROM SSL_TRDTL_T A
-               WHERE SHOP_CD    = #{shopCd}
-                 AND SALE_DATE  = #{saleDate}
-                 AND POS_NO     = #{posNo}
-                 AND BILL_NO    = #{billNo}
-           )
-     WHERE RNUM >= #{prev}
-       AND RNUM <= #{next}
-  ]]>
+    <include refid="CmmSQL.PagingTemplateHeader"/>
+    SELECT
+           A.*
+           <include refid="CmmSQL.PagingTemplateCount"/>
+      FROM SSL_TRDTL_T A
+     WHERE SHOP_CD    = #{shopCd}
+       AND SALE_DATE  = #{saleDate}
+       AND POS_NO     = #{posNo}
+       AND BILL_NO    = #{billNo}
+    <include refid="CmmSQL.PagingTemplateBottom"/>
   </select>
 </mapper>
 

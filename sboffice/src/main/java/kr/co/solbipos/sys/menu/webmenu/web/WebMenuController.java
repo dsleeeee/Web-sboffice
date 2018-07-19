@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.validate.WebMenuSave;
 import kr.co.solbipos.application.common.service.ResrceInfoVO;
 import kr.co.solbipos.sys.menu.webmenu.service.WebMenuService;
-import kr.co.solbipos.sys.menu.webmenu.validate.WebMenuSave;
 
 /**
  *

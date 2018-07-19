@@ -29,4 +29,7 @@ public class MenuVO {
     
     /** Child Items */
     private List<MenuVO> items;
+    
+    /** 가상로그인 ID */
+    private String vLoginId;
 }

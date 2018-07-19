@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    Item.xml
+    출력코드구성 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       노현수     2018.06.15      최초작성
+-->
+<mapper namespace="kr.co.solbipos.sys.bill.item.service.impl.ItemMapper">
+    
+    <!-- 출력코드 목록 조회 -->
+    <!--
+        TABLE    : TB_CM_PRINT_CODE
+        PARAM    : itemVO
+        COMMENTS : 출력코드 목록을 조회한다.
+    -->
+    <select id="getItemList" parameterType="itemVO" resultType="defaultMap">
+        /* USE : ItemMapper.getItemList */
+        SELECT
+            tcpc.PRT_CD,
+            tcpc.PRT_NM,
+            CASE tcpc.SAMPL_YN 
+                WHEN 'Y' THEN '1'
+                ELSE '0' END AS SAMPL_YN,
+            tcpc.CONTENT,
+            tcpc.REG_DT,
+            tcpc.REG_ID,
+            tcpc.MOD_DT,
+            tcpc.MOD_ID
+        FROM
+            TB_CM_PRINT_CODE tcpc
+        <where>
+            <if test="prtCd != null and prtCd != ''">
+            <![CDATA[
+                tcpc.PRT_CD = #{prtCd}
+            ]]>
+            </if>
+            <if test="prtNm != null and prtNm != ''">
+                AND tcpc.PRT_NM LIKE #{prtNm}||'%'
+            </if>
+        </where>
+        ORDER BY tcpc.PRT_CD
+    </select>
+    
+    <!-- 출력코드 수정 -->
+    <!--
+        TABLE    : TB_CM_PRINT_CODE
+        PARAM    : itemVO
+        COMMENTS : 출력코드를 수정한다.
+    -->
+    <update id="updateItemList" parameterType="itemVO">
+        /* USE : ItemMapper.updateItemList */
+        UPDATE
+            TB_CM_PRINT_CODE
+        SET
+            PRT_NM = #{prtNm},
+            <if test="samplYn == 'true'">
+            SAMPL_YN = 'Y',
+            </if>
+            <if test="samplYn == 'false'">
+            SAMPL_YN = 'N',
+            </if>
+        <![CDATA[
+            CONTENT = #{content},
+        ]]>
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId}
+        WHERE
+        <![CDATA[
+            PRT_CD = #{prtCd}
+        ]]>
+    </update>
+    
+    <!-- 출력코드 생성 -->
+    <!--
+        TABLE    : TB_CM_PRINT_CODE
+        PARAM    : itemVO
+        COMMENTS : 출력코드를 생성한다.
+    -->
+    <insert id="insertItemList" parameterType="itemVO">
+        /* USE : ItemMapper.insertItemList */
+        INSERT INTO TB_CM_PRINT_CODE
+        (
+            PRT_CD,
+            PRT_NM,
+            SAMPL_YN,
+            CONTENT,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+        <![CDATA[
+            #{prtCd},
+        ]]>
+            #{prtNm},
+            <if test="samplYn == 'true'">
+            'Y',
+            </if>
+            <if test="samplYn == 'false'">
+            'N',
+            </if>
+        <![CDATA[
+            #{content},
+        ]]>
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+    
+</mapper>

@@ -1,7 +1,7 @@
 package kr.co.solbipos.application.session.auth.web;
 
-import static kr.co.common.utils.HttpUtils.*;
-import static org.springframework.util.ObjectUtils.*;
+import static kr.co.common.utils.HttpUtils.getClientIp;
+import static org.springframework.util.ObjectUtils.isEmpty;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,23 +15,35 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import kr.co.common.exception.AuthenticationException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
-import kr.co.common.system.Prop;
+import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.spring.WebUtil;
+import kr.co.common.validate.Login;
 import kr.co.solbipos.application.session.auth.enums.LoginResult;
 import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.application.session.auth.validate.Login;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * @Class Name : AuthController.java
+ * @Description : 어플리케이션 > 세션 > 인증
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2015.05.01  정용길      최초생성
  *
- * @author 정용길
+ * @author NHN한국사이버결제 KCP 정용길
+ * @since 2018. 05.01
+ * @version 1.0
+ * @see
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-
 @Slf4j
 @Controller
 @RequestMapping(value = "/auth")
 public class AuthController {
+    
     @Autowired
     AuthService authService;
 
@@ -40,9 +52,6 @@ public class AuthController {
 
     @Autowired
     MessageService messageService;
-
-    @Autowired
-    Prop prop;
 
     final String MAIN_PAGE_URL = "main.sb";
 
@@ -61,6 +70,7 @@ public class AuthController {
         if (sessionService.isValidSession(request)) {
             return "redirect:/" + MAIN_PAGE_URL;
         }
+        
         model.addAttribute("userId", userId);
         model.addAttribute("type", isEmpty(type) ? "" : type);
         return "login/login:Login";
@@ -92,7 +102,7 @@ public class AuthController {
         }
 
         // 아이디 저장 쿠키 처리
-        WebUtil.setCookie(prop.loginSaveId, sessionInfoVO.getUserId(), sessionInfoVO.isChk() ? -1 : 0);
+        WebUtil.setCookie(BaseEnv.LOGIN_CHECK_ID_SAVE, sessionInfoVO.getUserId(), sessionInfoVO.isChk() ? -1 : 0);
 
         sessionInfoVO.setLoginIp(getClientIp(request));
         sessionInfoVO.setBrwsrInfo(request.getHeader("User-Agent"));

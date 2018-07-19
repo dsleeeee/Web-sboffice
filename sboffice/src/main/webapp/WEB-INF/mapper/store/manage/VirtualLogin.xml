@@ -19,11 +19,14 @@
     -->
     <select id="getVirtualLoginList" parameterType="virtualLoginVO" resultType="DefaultMap">
         /* USE : VirtualLoginMapper.getVirtualLoginList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
-            thq.HQ_OFFICE_CD,
-            thq.HQ_OFFICE_NM,
+            tho.HQ_OFFICE_CD,
+            tho.HQ_OFFICE_NM,
+            the.USER_ID AS HQ_USER_ID,
             tms.STORE_CD,
             tms.STORE_NM,
+            tme.USER_ID AS MS_USER_ID,
             tms.CLS_FG,
             tcm_cls_fg.NMCODE_NM AS CLS_FG_NM,
             tms.SYS_STAT_FG,
@@ -31,24 +34,51 @@
             tms.OWNER_NM,
             tms.TEL_NO,
             tme.MP_NO,
+            tca.AGENCY_CD,
             tca.AGENCY_NM,
+            tce.USER_ID AS CM_USER_ID,
             tms.SYS_OPEN_DATE,
             tms.SYS_CLOSURE_DATE
+            <include refid="CmmSQL.PagingTemplateCount"/>
         FROM
             TB_MS_STORE tms
-        LEFT OUTER JOIN TB_HQ_OFFICE thq ON
-            tms.HQ_OFFICE_CD = thq.HQ_OFFICE_CD
-        LEFT OUTER JOIN TB_CM_AGENCY tca ON
-            tms.AGENCY_CD = tca.AGENCY_CD
         LEFT OUTER JOIN TB_MS_EMPLOYEE tme ON
             tms.STORE_CD = tme.STORE_CD
             AND tme.EMP_NO = '0000'
+        LEFT OUTER JOIN TB_HQ_OFFICE tho ON
+            tms.HQ_OFFICE_CD = tho.HQ_OFFICE_CD
+        LEFT OUTER JOIN TB_HQ_EMPLOYEE the ON
+            tho.HQ_OFFICE_CD = the.HQ_OFFICE_CD
+            AND the.EMP_NO = '0000'
+        LEFT OUTER JOIN TB_CM_AGENCY tca ON
+            tms.AGENCY_CD = tca.AGENCY_CD
+        LEFT OUTER JOIN TB_CM_EMPLOYEE tce ON
+            tca.AGENCY_CD = tce.AGENCY_CD
+            AND tce.EMP_NO = '0000'
         LEFT OUTER JOIN TB_CM_NMCODE tcm_cls_fg ON
             tms.CLS_FG = tcm_cls_fg.NMCODE_CD
             AND tcm_cls_fg.NMCODE_GRP_CD = '003'
         LEFT OUTER JOIN TB_CM_NMCODE tcm_sys_stat_fg ON
             tms.CLS_FG = tcm_sys_stat_fg.NMCODE_CD
             AND tcm_sys_stat_fg.NMCODE_GRP_CD = '009'
+        WHERE
+            tho.HQ_OFFICE_CD != '00000'
+        <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+            AND tho.HQ_OFFICE_CD = #{hqOfficeCd}
+        </if>
+        <if test='hqOfficeNm != null and hqOfficeNm != ""'>
+            <![CDATA[
+            AND tho.HQ_OFFICE_NM LIKE #{hqOfficeNm} || '%'
+            ]]>
+        </if>
+        <if test='clsFg != null and clsFg != ""'>
+            AND tho.CLS_FG = #{clsFg}
+        </if>
+        <if test='sysStatFg != null and sysStatFg != ""'>
+            AND tho.SYS_STAT_FG = #{sysStatFg}
+        </if>
+        ORDER BY tho.HQ_OFFICE_CD DESC, tms.STORE_CD DESC, tca.AGENCY_CD DESC
+        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
     <!-- 가상로그인 권한 체크 -->
@@ -57,7 +87,7 @@
         PARAM    : virtualLoginVO
         COMMENTS : 가상로그인 수행시 해당 권한을 체크한다.
     -->
-    <select id="checkVirtualLoginAuth" parameterType="virtualLoginVO" resultType="DefaultMap">
+    <select id="checkVirtualLoginAuth" parameterType="virtualLoginVO" resultType="java.lang.Integer">
         /* USE : VirtualLoginMapper.checkVirtualLoginAuth */
         SELECT
             COUNT(RESRCE_CD) AS CNT
@@ -87,11 +117,11 @@
                     TB_WB_AUTHOR_EXCEPT
                 WHERE
                     USER_ID = #{userId}
+                    /* 가상로그인 화면에 대한 권한 체크 */
                     AND RESRCE_CD = '000419'
                     AND INCLD_EXCLD_FG = 'I'
                     AND USE_YN = 'Y'
             )
     </select>
-
-
+    
 </mapper>

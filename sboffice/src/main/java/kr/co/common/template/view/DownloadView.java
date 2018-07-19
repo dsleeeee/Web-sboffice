@@ -11,11 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.servlet.view.AbstractView;
-import kr.co.common.system.Prop;
+import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.spring.ObjectUtil;
 import kr.co.common.utils.spring.StringUtil;
 
@@ -26,13 +25,11 @@ import kr.co.common.utils.spring.StringUtil;
  */
 @Component(value = "download")
 public class DownloadView extends AbstractView {
+    
     /** 기록자 */
     private static final Logger logger = LoggerFactory.getLogger(DownloadView.class);
     /** 파일명 */
     String fileName;
-    /** 프로퍼티 */
-    @Autowired
-    Prop prop;
 
     public DownloadView() {
         setContentType("application/download;charset=UTF-8");
@@ -41,7 +38,7 @@ public class DownloadView extends AbstractView {
     @Override
     protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request,
             HttpServletResponse response) {
-        File file = new File(StringUtil.removeTrailingSlash(prop.excelTempDir) + "/"
+        File file = new File(StringUtil.removeTrailingSlash(BaseEnv.EXCEL_TEMP_DIR) + "/"
                 + model.get("targetFile").toString());
         Object changeFileName = model.get("changeFile");
         String fileName =

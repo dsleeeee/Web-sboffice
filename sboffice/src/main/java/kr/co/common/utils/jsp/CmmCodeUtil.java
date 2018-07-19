@@ -13,7 +13,6 @@ import kr.co.common.data.domain.EnvCodeVO;
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.code.CmmCodeService;
-import kr.co.common.system.Prop;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -24,9 +23,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component("cmmCodeUtil")
 public class CmmCodeUtil {
-
-    @Autowired
-    Prop prop;
 
     @Autowired
     CmmCodeService cmmCodeService;

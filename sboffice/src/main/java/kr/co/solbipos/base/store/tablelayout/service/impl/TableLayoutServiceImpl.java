@@ -30,8 +30,24 @@ import kr.co.solbipos.base.store.tablelayout.service.TableLayoutService;
 import kr.co.solbipos.base.store.tablelayout.service.TableVO;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * @Class Name : TableLayoutServiceImpl.java
+ * @Description : 기초관리 > 매장관리 > 테이블관리
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2015.05.01  조병준      최초생성
+ *
+ * @author NHN한국사이버결제 KCP 조병준
+ * @since 2018. 05.01
+ * @version 1.0
+ * @see
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ */
 @Slf4j
-@Service
+@Service("tableLayoutService")
 @Transactional
 public class TableLayoutServiceImpl implements TableLayoutService {
 
@@ -138,8 +154,6 @@ public class TableLayoutServiceImpl implements TableLayoutService {
 
                 tableGroupVO.setTblGrpCd(layer.getId());
                 tableGroupVO.setTblGrpNm(String.valueOf(layer.getValue()));
-                //TODO 배경이미지 그룹별로 넣을 수 있게 JS부터 개발할 것
-                //tableGroup.setBgImgNm("")
 
                 //스타일
                 String styleStr = layer.getStyle();
@@ -201,17 +215,44 @@ public class TableLayoutServiceImpl implements TableLayoutService {
             tableVO = TableVO.builder().build();
             tableVO.setStoreCd(tableGroupVO.getStoreCd());
             tableVO.setTblCd(cell.getId());
-            tableVO.setTblNm(getLabel(graph, cell));
+            
+            //swimlane으로 했을 때 테이블 번호(명)
+            tableVO.setTblNm(String.valueOf(cell.getValue()));
+            //swimlane 아니고 박스로 할 경우 라벨 추출
+            //tableVO.setTblNm(getLabel(graph, cell));
+            
             tableVO.setTblGrpCd(tableGroupVO.getTblGrpCd());
-            //TODO 테이블 좌석 수 설정
-            //table.setTblSeatCnt(tblSeatCnt);
+           
+            //테이블 좌석 수 설정
+            //스타일
+            String styleStr = cell.getStyle();
+            if(styleStr != null) {
+                String[] styles = styleStr.split(";");
+                for(String style : styles) {
+
+                    String[] styleKeyValue = style.split("=");
+                    if(styleKeyValue.length < 2) {
+                        continue;
+                    }
+                    switch(Style.getEnum(styleKeyValue[0])) {
+                        case TBL_SEAT_CNT: tableVO.setTblSeatCnt(Long.parseLong(styleKeyValue[1]));
+                            break;
+                        case TBL_TYPE_FG: tableVO.setTblTypeFg(TblTypeFg.getEnum(styleKeyValue[1]));
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            
             //좌표, 크기
             mxGeometry geo = cell.getGeometry();
             tableVO.setX((long)geo.getX());
             tableVO.setY((long)geo.getY());
             tableVO.setWidth((long)geo.getWidth());
             tableVO.setHeight((long)geo.getHeight());
-
+            
+            //TODO 원탁의 경우가 생기면 XML의 STYLE에 셋팅하고 여기서 저장 
             tableVO.setTblTypeFg(TblTypeFg.SQUARE);
             tableVO.setUseYn(tableGroupVO.getUseYn());
             tableVO.setRegDt(tableGroupVO.getRegDt());
@@ -225,6 +266,7 @@ public class TableLayoutServiceImpl implements TableLayoutService {
      * @param id
      * @return
      */
+    @SuppressWarnings("unused")
     private String getLabel(mxGraph graph, mxCell cell) {
         Object[] labels = graph.getChildVertices(cell);
         String finalLabel = "";

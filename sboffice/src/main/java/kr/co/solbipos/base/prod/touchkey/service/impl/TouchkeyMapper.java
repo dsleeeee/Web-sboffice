@@ -1,16 +1,28 @@
 package kr.co.solbipos.base.prod.touchkey.service.impl;
 
 import java.util.List;
+import org.apache.ibatis.annotations.Mapper;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.base.prod.touchkey.service.TouchClassVO;
 import kr.co.solbipos.base.prod.touchkey.service.TouchVO;
 
 /**
- * 기초관리 - 상품관리 - 판매터치키등록
+ * @Class Name : TouchkeyMapper.java
+ * @Description : 기초관리 - 상품관리 - 판매터치키등록
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2015.05.01  조병준      최초생성
  *
- * @author 조병준
+ * @author NHN한국사이버결제 KCP 조병준
+ * @since 2018. 05.01
+ * @version 1.0
+ * @see
  *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
+@Mapper
 public interface TouchkeyMapper {
 
     /**

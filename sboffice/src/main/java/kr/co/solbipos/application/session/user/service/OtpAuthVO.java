@@ -5,10 +5,20 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 패스워드 변경시에 otp 저장
- * table : TB_WB_OTP_AUTH_HIST
- * 
- * @author 정용길
+ * @Class Name : OtpAuthVO.java
+ * @Description : 어플리케이션 > 세션 > 사용자
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2015.05.01  정용길      최초생성
+ *
+ * @author NHN한국사이버결제 KCP 정용길
+ * @since 2018. 05.01
+ * @version 1.0
+ * @see
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

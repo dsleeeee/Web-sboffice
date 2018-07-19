@@ -1,28 +1,43 @@
 package kr.co.solbipos.application.session.auth.service.impl;
 
-import static kr.co.common.utils.DateUtil.*;
-import static org.springframework.util.ObjectUtils.*;
+import static kr.co.common.utils.DateUtil.addDaysString;
+import static kr.co.common.utils.DateUtil.currentDateString;
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
+import static org.springframework.util.ObjectUtils.isEmpty;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import kr.co.common.service.session.SessionService;
-import kr.co.common.system.Prop;
+import kr.co.common.system.BaseEnv;
 import kr.co.solbipos.application.common.service.ResrceInfoVO;
-import kr.co.solbipos.application.session.auth.service.LoginHistVO;
 import kr.co.solbipos.application.session.auth.enums.LoginOrigin;
 import kr.co.solbipos.application.session.auth.enums.LoginResult;
 import kr.co.solbipos.application.session.auth.service.AuthService;
+import kr.co.solbipos.application.session.auth.service.LoginHistVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * @Class Name : AuthServiceImpl.java
+ * @Description : 어플리케이션 > 세션 > 인증
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2015.05.01  정용길      최초생성
+ *
+ * @author NHN한국사이버결제 KCP 정용길
+ * @since 2018. 05.01
+ * @version 1.0
+ * @see
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ */
 @Slf4j
-@Service
+@Service("authService")
 public class AuthServiceImpl implements AuthService {
-
-    @Autowired
-    Prop prop;
 
     @Autowired
     AuthMapper authMapper;
@@ -74,7 +89,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
 
-        int pwdChgDays = Integer.parseInt(addDaysString(webUser.getLastPwdChg(), prop.loginPwdChgDays));
+        int pwdChgDays = Integer.parseInt(addDaysString(webUser.getLastPwdChg(), BaseEnv.LOGIN_PWD_CHG_DAYS));
         int currentDay = Integer.parseInt(currentDateString());
 
         /**

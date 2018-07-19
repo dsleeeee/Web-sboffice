@@ -1,6 +1,7 @@
 package kr.co.solbipos.sys.auth.authgroup.service.impl;
 
 import java.util.List;
+import org.apache.ibatis.annotations.Mapper;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.sys.auth.authgroup.service.AuthGroupVO;
 import kr.co.solbipos.sys.auth.authgroup.service.AuthorExceptVO;
@@ -11,6 +12,7 @@ import kr.co.solbipos.sys.auth.authgroup.service.AuthorGrpResrceVO;
  * @author 조병준
  *
  */
+@Mapper
 public interface AuthGroupMapper {
 
     /**

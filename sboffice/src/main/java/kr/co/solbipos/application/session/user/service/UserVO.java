@@ -2,19 +2,29 @@ package kr.co.solbipos.application.session.user.service;
 
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
+import kr.co.common.validate.AuthNumber;
+import kr.co.common.validate.IdFind;
+import kr.co.common.validate.PwFind;
 import kr.co.solbipos.application.common.service.CmmVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
-import kr.co.solbipos.application.session.user.validate.AuthNumber;
-import kr.co.solbipos.application.session.user.validate.IdFind;
-import kr.co.solbipos.application.session.user.validate.PwFind;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 유저 정보 조회
- * table : TB_MS_EMPLOYEE, TB_CM_AGENCY, TB_HQ_EMPLOYEE
- * 
- * @author 정용길
+ * @Class Name : UserVO.java
+ * @Description : 어플리케이션 > 세션 > 사용자
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2015.05.01  정용길      최초생성
+ *
+ * @author NHN한국사이버결제 KCP 정용길
+ * @since 2018. 05.01
+ * @version 1.0
+ * @see
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -66,7 +76,7 @@ public class UserVO extends CmmVO {
     private String addrDtl;
 
     /** 고용구분_1:재직,2:휴직,9:퇴직 */
-    private String hireFg;
+    private String serviceFg;
 
     /** SMS수신여부 */
     private String smsRecvYn;

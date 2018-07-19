@@ -5,9 +5,20 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 
 /**
- * 포스관리 > POS 설정관리 > POS 기능정의
+ * @Class Name : FuncService.java
+ * @Description : 포스관리 > POS 설정관리 > POS 기능정의
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2018.06.01  김지은      최초생성
  *
- * @author 김지은
+ * @author 솔비포스 차세대개발실 김지은
+ * @since 2018. 05.01
+ * @version 1.0
+ * @see
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 public interface FuncService {
 

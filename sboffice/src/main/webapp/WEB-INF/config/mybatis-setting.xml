@@ -110,21 +110,27 @@
     <typeAlias alias="statusVO" type="kr.co.solbipos.store.manage.status.service.StatusVO"/>
 -->
     <typeAlias alias="virtualLoginVO" type="kr.co.solbipos.store.manage.virtuallogin.service.VirtualLoginVO"/>
-<!--
     <typeAlias alias="pwdManageVO" type="kr.co.solbipos.store.manage.pwdmanage.service.PwdManageVO"/>
+<!--
     <typeAlias alias="modifyReqVO" type="kr.co.solbipos.store.manage.modifyreq.service.ModifyReqVO"/>
     시스템관리
     <typeAlias alias="webMenuVO" type="kr.co.solbipos.sys.menu.webmenu.service.WebMenuVO"/>
 -->
     <typeAlias alias="authGroupVO" type="kr.co.solbipos.sys.auth.authgroup.service.AuthGroupVO"/>
-<!--
     <typeAlias alias="systemCdVO" type="kr.co.solbipos.sys.cd.systemcd.service.SystemCdVO"/>
-    <typeAlias alias="envConfgVO" type="kr.co.solbipos.sys.cd.envconfg.service.EnvConfgVO"/>
+    <typeAlias alias="envstVO" type="kr.co.solbipos.sys.cd.envconfig.service.EnvstVO"/>
+    <typeAlias alias="envstDtlVO" type="kr.co.solbipos.sys.cd.envconfig.service.EnvstDtlVO"/>
+    <typeAlias alias="cardCmpnyVO" type="kr.co.solbipos.sys.etc.vancard.service.CardCmpnyVO"/>
     <typeAlias alias="vanCardVO" type="kr.co.solbipos.sys.etc.vancard.service.VanCardVO"/>
+    <typeAlias alias="vanCmpnyVO" type="kr.co.solbipos.sys.etc.vancard.service.VanCmpnyVO"/>
+    
+<!--
     <typeAlias alias="boardVO" type="kr.co.solbipos.sys.etc.board.service.BoardVO"/>
     <typeAlias alias="exceptStoreRemoveVO" type="kr.co.solbipos.sys.etc.exceptstoreremove.service.ExceptStoreRemoveVO"/>
+-->
     <typeAlias alias="itemVO" type="kr.co.solbipos.sys.bill.item.service.ItemVO"/>
     <typeAlias alias="kindVO" type="kr.co.solbipos.sys.bill.kind.service.KindVO"/>
+<!-- 
     <typeAlias alias="templateVO" type="kr.co.solbipos.sys.bill.template.service.TemplateVO"/>
     <typeAlias alias="menuBaseVO" type="kr.co.solbipos.sys.stats.menubase.service.MenuBaseVO"/>
     <typeAlias alias="userBaseVO" type="kr.co.solbipos.sys.stats.userbase.service.UserBaseVO"/>

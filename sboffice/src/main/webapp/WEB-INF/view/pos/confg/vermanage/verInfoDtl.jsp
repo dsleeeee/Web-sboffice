@@ -70,7 +70,7 @@
                 </tr>
             </tbody>
           </table>
-          <div id="viewBtnArea"class="mt10 tc">
+          <div id="viewBtnArea" class="mt10 tc">
             <%-- 삭제 --%>
             <button class="btn_skyblue" id="btnDel"><s:message code="cmm.delete" /></button>
             <%-- 수정 --%>
@@ -167,7 +167,7 @@
             </tbody>
           </table>
           </form>
-          <div id="editBtnArea"class="mt10 tc" style="display:none;">
+          <div id="editBtnArea" class="mt10 tc" style="display:none;">
             <%-- 등록 --%>
             <button class="btn_skyblue" id="btnSave"><s:message code="cmm.save" /></button>
             <%-- 수정 --%>

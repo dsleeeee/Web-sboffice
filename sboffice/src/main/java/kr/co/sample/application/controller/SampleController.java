@@ -18,7 +18,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.JavaScriptResult;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.message.MessageService;
-import kr.co.common.system.Prop;
+import kr.co.common.system.BaseEnv;
 import kr.co.sample.application.domain.SslTrdtlTVO;
 import kr.co.sample.application.domain.SslTrhdrTVO;
 import kr.co.sample.application.domain.TbMsStoreVO;
@@ -34,8 +34,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
 public class SampleController {
-    @Autowired
-    Prop prop;
 
     @Autowired
     SampleService sampleService;
@@ -53,7 +51,7 @@ public class SampleController {
     @RequestMapping(value = "sample.sb")
     public String sample(HttpSession session, Model model) {
 
-        String encoding = prop.getEncoding();
+        String encoding = BaseEnv.ENCODING;
         log.error("sample...... : {}", encoding);
 
         String param = "test";

@@ -13,19 +13,32 @@ import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
-import kr.co.common.system.Prop;
+import kr.co.common.system.BaseEnv;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.pos.confg.vermanage.service.ApplcStoreVO;
 import kr.co.solbipos.pos.confg.vermanage.service.VerInfoVO;
 import kr.co.solbipos.pos.confg.vermanage.service.VerManageService;
 import kr.co.solbipos.pos.confg.verrecv.enums.VerRecvFg;
 
-@Service
-public class VerManageServiceImpl implements VerManageService{
+/**
+* @Class Name : VerManageServiceImpl.java
+* @Description : 포스관리 > POS 설정관리 > POS 버전 관리
+* @Modification Information
+* @
+* @  수정일      수정자              수정내용
+* @ ----------  ---------   -------------------------------
+* @ 2018.06.01  김지은      최초생성
+*
+* @author 솔비포스 차세대개발실 김지은
+* @since 2018. 05.01
+* @version 1.0
+* @see
+*
+*  Copyright (C) by SOLBIPOS CORP. All right reserved.
+*/
+@Service("verManageService")
+public class VerManageServiceImpl implements VerManageService {
 
-    @Autowired
-    Prop prop;
-    
     @Autowired
     VerManageMapper mapper;
 
@@ -189,7 +202,7 @@ public class VerManageServiceImpl implements VerManageService{
         // 저장 경로 설정
         String root = multi.getSession().getServletContext().getRealPath("/");
 //        String path = root+"resources/upload/";
-        String path = root+prop.fileUploadDir;
+        String path = root+BaseEnv.FILE_UPLOAD_DIR;
         
 
         String newFileName = ""; // 업로드 되는 파일명

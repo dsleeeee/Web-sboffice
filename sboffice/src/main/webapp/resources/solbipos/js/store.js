@@ -1,4 +1,3 @@
-"use strict";
 !function(win, $) {
 
   var c_store = {

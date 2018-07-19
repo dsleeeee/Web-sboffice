@@ -2,9 +2,20 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
-<link rel="stylesheet" type="text/css" href="/resource/graph/styles/touchkey.css">
-
+<style>
+#group div {
+    font-family:inherit;
+    font-weight:inherit;
+    font-size:inherit;
+    color:inherit;
+}
+#prod div {
+    font-family:inherit;
+    font-weight:inherit;
+    font-size:inherit;
+    color:inherit;
+}
+</style>
 <script>
 var urlParams = (function(url) {
   var result = new Object();
@@ -48,6 +59,15 @@ window.mxLanguage = window.mxLanguage || urlParams['lang'];
 window.mxLanguages = window.mxLanguages || ['ko'];
 
 window.PRODS = ${prods};
+<%--
+//local test
+var prods = [];
+prods.push({prodClassNm:'커피', prodCd:'000001', prodNm: '아메리카노'});
+prods.push({prodClassNm:'커피', prodCd:'000002', prodNm: '아이스라떼'});
+prods.push({prodClassNm:'음료', prodCd:'000003', prodNm: '레몬티'});
+window.PRODS = prods;
+--%>
+
 window.MAX_GROUP_ROW = '${maxGroupRow}' || '2';
 
 </script>
@@ -56,20 +76,100 @@ window.MAX_GROUP_ROW = '${maxGroupRow}' || '2';
 <script type="text/javascript" src="/resource/graph/sanitizer/sanitizer.min.js"></script>
 <script type="text/javascript" src="/resource/graph/js/Touchkey.js"></script>
 
-<div class="container">
-  <div id="grid">상품조회, Grid
-    <div id="theGrid"></div>
-  </div>
-  <div id="content">
-    <div id="geGroupContainer" tabindex="-1">
-      <div id="pagingShapeGroup"></div>
+    <%--서브컨텐츠--%>
+    <div class="subCon2">
+      <%--테이블속성, 테이블관리, 판매터치키 page에만 쓰임--%>
+      <div class="posWrap oh">
+        <%--left--%>
+        <div class="w40 fl">
+          <%--상품--%>
+          <div class="updownSet oh mb10">
+            <span class="fl bk lh30"><s:message code="touchkey.class"/></span>
+            <div class="txtIn">
+              <%--<button class="btn_skyblue">적용</button>--%>
+              <div class="sb-select dkbr fl w110 mr10" style="background:red;">
+                <div id="selectClass"></div>
+              </div>
+
+
+
+            </div>
+
+
+          </div>
+
+          <div class="cfgWrap2">
+            <%--위즈모 테이블--%>
+            <div id="theGrid"></div>
+            <%--//위즈모 테이블--%>
+          </div>
+          <%--//상품--%>
+        </div>
+        <%--//left--%>
+        <%--right--%>
+        <div class="w60 fr">
+          <%--미리보기--%>
+          <div class="ml20">
+            <h2 class="h2_tit2 lh30"><s:message code="touchkey.preview"/></h2>
+            <div class="prev2">
+            
+              <%--그룹--%>
+              <div class="touchGroupWrap h180" id="groupWrap">
+                <%--2줄 "h120", 3줄 "h180"--%>
+                <div class="touchGroup h180" id="group" tabindex="-1">
+                  <%--2줄 "h120", 3줄 "h180"--%>
+                  <%--터치키가 들어가는 위치--%>
+                </div>
+              </div>
+              <p class="touchBtn hPo1" id="groupNav">
+                <a href="javascript:;" class="fl" id="grp"><s:message code="cmm.pre"/></a>
+                <a href="javascript:;" class="fl" id="grn"><s:message code="cmm.next"/></a>
+              </p>
+              <%--//그룹--%>
+
+              <%--상품명--%>
+              <div class="touchgoodsWrap" id="prodWrap">
+                <div class="touchgoods" id="prod" tabindex="-1">
+                  <%--터치키가 들어가는 위치--%>
+                </div>
+              </div>
+              <p class="touchBtn hPo2" id="prodNav">
+                <a href="javascript:;" class="fl" id="prp"><s:message code="cmm.pre"/></a>
+                <a href="javascript:;" class="fl" id="prn"><s:message code="cmm.next"/></a>
+              </p>
+              <%--//상품명--%>
+            </div>
+          </div>
+          <%--//미리보기--%>
+        </div>
+        <%--//right--%>
+        <%--설정--%>
+        <div class="shopSetting2" id="format">
+          <div class="btn_int">
+            <button class="btn_skyblue" id="btnInit"><s:message code="cmm.init"/></button>
+            <button class="btn_skyblue" id="btnSave"><s:message code="cmm.save"/></button>
+          </div>
+          <div>
+            <div class="oh" id="keyStyle" style="display:none;">
+              <span class="s12 fl lh30 bk mr10"><s:message code="touchkey.font"/></span>
+              <div class="sb-select txtIn fl w130 mr5">
+                <div id="fontColor"></div>
+              </div>
+              <div class="sb-select txtIn fl w115 mr5">
+                <div id="fontSize"></div>
+              </div>
+              <span class="s12 fl lh30 bk ml20 mr10"><s:message code="touchkey.fill"/></span>
+              <div class="sb-select txtIn w130 mr5">
+                <div id="fillColor"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <%--//설정--%>
+      </div>
+
     </div>
-    <div id="geProdContainer" tabindex="-1">
-      <div id="pagingShapeProd"></div>
-    </div>
-  </div>
-  <div id="format"></div>
-</div>
+    <%--//서브컨텐츠--%>
 
 <script>
 (function() {
@@ -101,7 +201,7 @@ window.MAX_GROUP_ROW = '${maxGroupRow}' || '2';
         themes[Graph.prototype.defaultThemeName] = xhr[1].getDocumentElement();
 
         // Main
-        var touchkey = new Touchkey(document.getElementById('content'), themes);
+        var touchkey = new Touchkey(themes);
       },
       function() {
         document.body.innerHTML = '<center style="margin-top:10%;">Error loading resource files. Please check browser console.</center>';

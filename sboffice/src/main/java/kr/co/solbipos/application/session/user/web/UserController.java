@@ -26,15 +26,20 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.exception.AuthenticationException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
-import kr.co.common.system.Prop;
+import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.DateUtil;
 import kr.co.common.utils.security.EncUtil;
 import kr.co.common.utils.spring.ObjectUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.common.utils.spring.WebUtil;
+import kr.co.common.validate.AuthNumber;
+import kr.co.common.validate.IdFind;
+import kr.co.common.validate.Login;
+import kr.co.common.validate.PwChange;
+import kr.co.common.validate.PwFind;
+import kr.co.common.validate.UserPwChange;
 import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.application.session.auth.validate.Login;
 import kr.co.solbipos.application.session.user.enums.PwChgResult;
 import kr.co.solbipos.application.session.user.enums.PwFindResult;
 import kr.co.solbipos.application.session.user.service.OtpAuthVO;
@@ -42,25 +47,28 @@ import kr.co.solbipos.application.session.user.service.PwdChgHistVO;
 import kr.co.solbipos.application.session.user.service.PwdChgVO;
 import kr.co.solbipos.application.session.user.service.UserService;
 import kr.co.solbipos.application.session.user.service.UserVO;
-import kr.co.solbipos.application.session.user.validate.AuthNumber;
-import kr.co.solbipos.application.session.user.validate.IdFind;
-import kr.co.solbipos.application.session.user.validate.PwChange;
-import kr.co.solbipos.application.session.user.validate.PwFind;
-import kr.co.solbipos.application.session.user.validate.UserPwChange;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * @Class Name : UserController.java
+ * @Description : 어플리케이션 > 세션 > 사용자
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2015.05.01  정용길      최초생성
  *
- * @author 정용길
+ * @author NHN한국사이버결제 KCP 정용길
+ * @since 2018. 05.01
+ * @version 1.0
+ * @see
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-
 @Slf4j
 @Controller
 @RequestMapping(value = "/user")
 public class UserController {
-
-    @Autowired
-    Prop prop;
 
     @Autowired
     UserService userService;
@@ -118,11 +126,11 @@ public class UserController {
         otpAuthVO.setRecvMpNo(findUser.getMpNo());
         otpAuthVO.setReqIp(getClientIp(request));
         otpAuthVO.setReqDate(currentDateString());
-        otpAuthVO.setOtpLimit(prop.otpLimit);
+        otpAuthVO.setOtpLimit(BaseEnv.OTP_LIMIT_MINUTE);
 
         // limit 에 걸렸는지 확인
         if (checkOtpLimit(otpAuthVO)) {
-            log.warn("인증문자 제한 시간 걸림, 제한 시간 : {}, id : {}, name : {}", prop.otpLimit,
+            log.warn("인증문자 제한 시간 걸림, 제한 시간 : {}, id : {}, name : {}", BaseEnv.OTP_LIMIT_MINUTE,
                     findUser.getUserId(), findUser.getEmpNm());
             String msg = String.valueOf(otpAuthVO.getOtpLimit())
                     + messageService.get("login.pw.find.otp.limit");
@@ -160,7 +168,7 @@ public class UserController {
         String otpDateTime = o.getReqDate() + o.getReqDt();
         Date otpDt = DateUtil.getDatetime(otpDateTime);
         // otp 리미티드 시간 더해줌
-        otpDt = DateUtils.addMinutes(otpDt, prop.otpLimit);
+        otpDt = DateUtils.addMinutes(otpDt, BaseEnv.OTP_LIMIT_MINUTE);
 
         // 현재 시간
         Date current = new Date();
@@ -230,7 +238,7 @@ public class UserController {
     @RequestMapping(value = "pwdFind.sb", method = RequestMethod.GET)
     public String passwordFind(HttpServletRequest request, HttpServletResponse response,
             Model model) {
-        model.addAttribute("otpLimit", prop.otpLimit);
+        model.addAttribute("otpLimit", BaseEnv.OTP_LIMIT_MINUTE);
         return "user/login:pwdFind";
     }
 
@@ -270,7 +278,7 @@ public class UserController {
         // otp 입력시간 지남
         else if (pfr == PwFindResult.OTP_LIMIT_ERROR) {
             return returnJson(Status.FAIL, "authNumber",
-                    prop.otpLimit + messageService.get("login.pw.find.limit.otp.minute"));
+                    BaseEnv.OTP_LIMIT_MINUTE + messageService.get("login.pw.find.limit.otp.minute"));
         } else {
             return returnJson(Status.FAIL);
         }
@@ -443,7 +451,7 @@ public class UserController {
             /**
              * 변경 패스워드가 기존 비밀번호가 같은지 체크
              */
-            return returnJson(Status.FAIL, "msg", messageService.get("login.layer.pwchg."));
+            return returnJson(Status.FAIL, "msg", messageService.get("login.layer.pwchg.current"));
         } else if (result == PwChgResult.PASSWORD_REGEXP) {
             /**
              * 패스워드 정책 체크

@@ -1,9 +1,13 @@
-<%@ page pageEncoding="UTF-8" %>
-<%@ taglib prefix="f" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
-<link rel="stylesheet" type="text/css" href="/resource/graph/styles/tableattr.css">
+<style>
+#content div {
+    font-family:inherit;
+    font-weight:inherit;
+    font-size:inherit;
+    color:inherit;
+}
+</style>
 <script>
 var urlParams = (function(url) {
   var result = new Object();
@@ -50,6 +54,20 @@ window.mxLanguages = window.mxLanguages || ['ko'];
 //Custom varible
 window.TABLE_ATTR_ITEMS = ${tableAttrs};
 window.TABLE_ATTR_DEFAULTS = ${defaults};
+<%--
+//local test
+var tableAttrs = [];
+tableAttrs.push({nmcodeNm:"테이블명", nmcodeItem1: "1번"});
+tableAttrs.push({nmcodeNm:"주문메뉴", nmcodeItem1: "아메리카노<br>아이스라떼"});
+
+var defaults = [];
+defaults.push({attrCd:'01', x:0, y: 0, width:100, height:150});
+defaults.push({attrCd:'02', x:150, y: 150, width:200, height:250});
+
+window.TABLE_ATTR_ITEMS = tableAttrs;
+window.TABLE_ATTR_DEFAULTS = defaults;
+--%>
+
 
 </script>
 <script type="text/javascript" src="/resource/vender/mxgraph/mxClient.js"></script>
@@ -57,15 +75,81 @@ window.TABLE_ATTR_DEFAULTS = ${defaults};
 <script type="text/javascript" src="/resource/graph/sanitizer/sanitizer.min.js"></script>
 <script type="text/javascript" src="/resource/graph/js/TableAttr.js"></script>
 
-<div id="container">
-  <div id="component">
-    <div id="theGrid"></div>
-  </div>
-  <div id="content" tabindex="-1">
-    <div id="splash"><img src="/resource/graph/images/loading.gif"></div>
-  </div>
-  <div id="format"></div>
-</div>
+    <%--서브컨텐츠--%>
+    <div class="subCon2">
+      <%--테이블속성, 테이블관리, 판매터치키 page에만 쓰임--%>
+      <div class="posWrap oh">
+        <%--left--%>
+        <div class="w30 fl">
+          <%--구성요소--%>
+          <h2 class="h2_tit2"><s:message code="tableAttr.component"/></h2>
+          <div class="cfgWrap">
+            <%--위즈모 테이블--%>
+            <div id="theGrid"></div><%--tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요.--%>
+            <%--//위즈모 테이블--%>
+          </div>
+          <%--//구성요소--%>
+
+        </div>
+        <%--//left--%>
+        <%--right--%>
+        <div class="w70 fr">
+          <%--미리보기--%>
+          <div class="ml20">
+            <h2 class="h2_tit2"><s:message code="tableAttr.preview"/></h2>
+            <div class="prev1 patternBg" id="content" tabindex="-1">
+              <%--점 패턴 background classname : "patternBg"--%>
+              <%--510 * 510 pixel 입니다.--%>
+            </div>
+          </div>
+          <%--//미리보기--%>
+
+          <%--설정--%>
+          <div class="shopSetting ml20" id="format">
+            <div class="btn_int">
+              <button class="btn_skyblue" id="btnInit"><s:message code="cmm.init"/></button>
+              <button class="btn_skyblue" id="btnSave"><s:message code="cmm.save"/></button>
+            </div>
+            <div>
+              <div class="oh" id="fontStyle" style="display:none;">
+                <span class="s12 fl lh30 bk mr10"><s:message code="tableAttr.font"/></span>
+                <div class="sb-select txtIn w105 mr5">
+                  <div id="fontFamily"></div>
+                </div>
+                <div class="sb-select txtIn w115 mr5">
+                  <div id="fontColor"></div>
+                </div>
+                <div class="sb-select txtIn w98px mr5">
+                  <div id="fontSize"></div>
+                </div>
+                <span class="align">
+                <a href="javascript:;" class="btn_bold" id="btnBold"></a>
+                <a href="javascript:;" class="btn_italic" id="btnItalic"></a>
+                <a href="javascript:;" class="btn_underline" id="btnUnderline"></a>
+                </span>
+              </div>
+              <div class="mt10 oh" id="textAlign" style="display:none;">
+                <span class="s12 fl lh30 bk mr10"><s:message code="tableAttr.align"/></span>
+                <span class="align">
+                <a href="javascript:;" class="btn_left" id="btnLeft"></a>
+                <a href="javascript:;" class="btn_center" id="btnCenter"></a>
+                <a href="javascript:;" class="btn_right" id="btnRight"></a>
+                </span>
+                <span class="align ml10">
+                <a href="javascript:;" class="btn_top" id="btnTop"></a>
+                <a href="javascript:;" class="btn_middle" id="btnMiddle"></a>
+                <a href="javascript:;" class="btn_bottom" id="btnBottom"></a>
+                </span>
+              </div>
+            </div>
+          </div>
+          <%--//설정--%>
+        </div>
+        <%--//right--%>
+      </div>
+
+    </div>
+    <%--//서브컨텐츠--%>
 
 <script>
 (function() {
@@ -76,7 +160,7 @@ window.TABLE_ATTR_DEFAULTS = ${defaults};
   
   <%-- 그래픽 영역에 삭제(del키) 이벤트를 활성화 화기 위해 blur에 focus 처리--%>
   $("#content").blur(function(){
-    //console.log("blur");
+
     $(this).focus();
   });
   
@@ -103,7 +187,7 @@ window.TABLE_ATTR_DEFAULTS = ${defaults};
         themes[Graph.prototype.defaultThemeName] = xhr[1].getDocumentElement();
 
         // Main
-        var tableattr = new TableAttr(document.getElementById('content'), themes);
+        var tableattr = new TableAttr(themes);
       },
       function() {
         document.body.innerHTML = '<center style="margin-top:10%;">Error loading resource files. Please check browser console.</center>';
@@ -111,3 +195,4 @@ window.TABLE_ATTR_DEFAULTS = ${defaults};
   }
 })();
 </script>
+

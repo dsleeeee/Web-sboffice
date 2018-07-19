@@ -16,11 +16,21 @@ import kr.co.solbipos.application.common.enums.MainSrchFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 
 /**
- * 메인
- *
- * @author 김지은
- */
-
+* @Class Name : ContentController.java
+* @Description : 어플리케이션 > 메인 > 내용
+* @Modification Information
+* @
+* @  수정일      수정자              수정내용
+* @ ----------  ---------   -------------------------------
+* @ 2018.06.01  김지은      최초생성
+*
+* @author 솔비포스 차세대개발실 김지은
+* @since 2018. 05.01
+* @version 1.0
+* @see
+*
+*  Copyright (C) by SOLBIPOS CORP. All right reserved.
+*/
 @Controller
 @RequestMapping(value = "/application/main/content")
 public class ContentController {
@@ -130,7 +140,7 @@ public class ContentController {
      */
     @RequestMapping(value = "store.sb", method = RequestMethod.GET)
     public String mainMRHST(HttpServletRequest request, HttpServletResponse response, Model model) {
-
+        
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         /** 매출현황 날짜 select box */
@@ -146,7 +156,12 @@ public class ContentController {
         model.addAttribute("dateSelList1", dateSelList1);
         model.addAttribute("dateSelList2", dateSelList2);
         model.addAttribute("noticeList", noticeList);
-
+        
+        /** 가상로그인시 ID 설정 */
+        if ( request.getParameter("vLoginId") != null && request.getParameter("vLoginId").length() > 0 ) {
+            model.addAttribute("vLoginId", request.getParameter("vLoginId"));
+        }
+        
         return "application/main/mrhstMain";
     }
 

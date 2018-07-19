@@ -1,4 +1,4 @@
-"use strict";
+//"use strict";
 !function( win, $ ){
 
   !"".trim && ( String.prototype.trim = function(){ return this.replace(/^\s|\s$/g, ""); } );
@@ -133,7 +133,7 @@
       return $.ajax({
         type: "POST",
         url: url,
-        data: data,
+        data: JSON.stringify(data),
         success: function(result) {
           if(result.status === "OK") {
             return succ(result);
@@ -274,7 +274,8 @@
         return this[ 0 ].className;
     }
   });
-
+  
+  
 }( "undefined" != typeof window ? window : this, jQuery );
 
 //트리 생성
@@ -333,6 +334,9 @@ function makeTree(div, data, initMenu) {
     // URL 이 있을 경우 페이지 이동
     if(!isEmpty(s.selectedNode.dataItem.url)) {
       location.href = s.selectedNode.dataItem.url;
+      if ( !isEmpty(s.selectedNode.dataItem.vloginId) ) {
+        location.href = s.selectedNode.dataItem.url + "?vLoginId=" + s.selectedNode.dataItem.vloginId ;
+      }
     }
     // 같은 메뉴를 다시 선택 했을 때 메뉴 닫기 기능
     if( pNode == s.selectedNode) {
@@ -352,3 +356,26 @@ function makeTree(div, data, initMenu) {
   return tree;
 }
 
+function getParam(name){
+  var result = "";
+  var queryString = window.location.search;
+  var paramMap = {}
+  if (queryString == "") {
+    result = undefined;
+  }
+  if (typeof result != "undefined") {
+    var params = queryString.split("?")[1];
+    if (params == "") {
+      result = undefined;
+    }
+    if (typeof result != "undefined") {
+      var paramObj = params.split("&");
+      for (var i=0; i<paramObj.length; i++){
+        var datas = paramObj[i].split("=");
+        paramMap[datas[0]] = datas[1];
+      }
+      result = paramMap[name];
+    }
+  }
+  return result;
+};

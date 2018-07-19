@@ -7,7 +7,6 @@
         var g = new wijmo.grid.FlexGrid(div, {
           itemsSource : new wijmo.collections.CollectionView(),
           columns : columns,
-          selectionMode: 'Row',
           isReadOnly : true,
           showSort : true,
           autoGenerateColumns: false,  // 이거 안하면 컬럼이 자동으로 막 생김
@@ -15,7 +14,7 @@
           stickyHeaders: true,
           selectionMode: "Row",
           formatItem : function(s, e) {
-            // 표시 화면 입력 생성
+            // 그리드 Column헤더(첫번째)에 ColumnPicker 표시
             if (e.panel == s.topLeftCells) {
               e.cell.innerHTML = "<div class=\"v-center\"></div>";
             }
@@ -26,7 +25,7 @@
         });
         
         // 저장된 레이아웃이 있을 경우 적용
-        if( columnLayout != null ) {
+        if( columnLayout.constructor == Object ) {
           var userCols = columnLayout.columns;
           var isVisibleColumn = function(id) {
             var visible = true;
@@ -41,6 +40,7 @@
           for(var i = 0; i < g.columns.length; i++) {
             g.columns[i].visible = isVisibleColumn(g.columns[i].binding);
           }
+//        g.columnLayout = JSON.stringify(columnLayout);
         }
         
         genGridPicker(g, resrceCd, gridIdx);
@@ -57,6 +57,39 @@
           
           // column picker gen
           wgridPic.genGridPicker("#" + item.id, grid, resrceCd, gridIdx);
+        }
+        
+        genGridRowHeaderNumber(g);
+        // RowHeader 에 RowNumber 표시처리
+        function genGridRowHeaderNumber(grid) {
+          grid.itemFormatter = function(panel, r, c, cell) {
+            if ( panel.cellType == wijmo.grid.CellType.RowHeader ) {
+                if ( $("#page").data("size") > 0 ) {
+                  cell.textContent = (panel._rows[r]._data.rnum).toString();
+                } else {
+                  cell.textContent = (r + 1).toString();
+                }
+            }
+          }
+        }
+        
+        genGridDblClickEvent(g);
+        // 그리드 더블클릭 이벤트시 커서위치 조정 ( isReadOnly : false 일때만 )
+        function genGridDblClickEvent(grid) {
+          grid.addEventListener(grid.hostElement, 'dblclick', function(e) {
+            if ( !grid.isReadOnly ) {
+              var ht = grid.hitTest(e);
+              if ( ht.cellType == wijmo.grid.CellType.Cell ) {
+                var col = ht.panel.columns[ht.col];
+                if ( !col.isReadOnly ) {
+                  var _cellData = g.getCellData(ht.row, ht.col, true);
+                  setTimeout(function() {
+                    wijmo.setSelectionRange(grid.activeEditor, _cellData.length); // caret position
+                  }, 50);
+                }
+              }
+            }
+          })
         }
         
         return g; 
@@ -97,6 +130,7 @@
           }
         });
       }
+      
   };
   
   //그리드 표시 항목 생성

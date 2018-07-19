@@ -34,7 +34,7 @@
 
   <update id="insertStoreConfgXml" parameterType="DefaultMap">
     /* TableAttrMapper.insertStoreConfgXml */
-    INSERT INTO TB_WB_STORE_CONFG_XML
+    INSERT INTO TB_WB_STORE_CONFG_XML A
     (
         A.STORE_CD,
         A.CONFG_FG,

@@ -13,6 +13,8 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class HqPrintTemplVO extends CmmVO {
     
+    private static final long serialVersionUID = -9209204862785671429L;
+
     /** 본사브랜드코드 */
     private String hqBrandCd;
     

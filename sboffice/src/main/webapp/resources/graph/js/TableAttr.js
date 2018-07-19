@@ -1,7 +1,6 @@
 
 //그리드의 크기
 mxGraph.prototype.gridSize = 10;
-mxGraphView.prototype.gridColor = '#e0e0e0';
 
 //지정된 영역에만 구성요소를 넣을 수 있도록 처리 
 mxGraph.prototype.allowNegativeCoordinates = false;
@@ -13,12 +12,12 @@ mxGraphHandler.prototype.guidesEnabled = true;
 /**
  * 메인 Class
  */
-TableAttr = function(container, themes) {
+TableAttr = function(themes) {
   mxEventSource.call(this);
-  this.container = container || document.body;
+  this.container = document.getElementById('content');
   
   //그래프 객체 생성
-  this.graph = new Graph(this.container, null, null, null, themes);
+  this.graph = new Graph(this.container, themes);
   
   //왼쪽 속성명
   this.comp = new Sidebar(this.graph);
@@ -27,21 +26,6 @@ TableAttr = function(container, themes) {
   this.format = new Format(this);
   
   this.init();
-  
-  //화면 오픈 스플래시 이미지(부가)
-  var splash = document.getElementById('splash');
-  if (splash != null) {
-    try {
-      mxEvent.release(splash);
-      mxEffects.fadeOut(splash, 100, true);
-    }
-    catch (e) {
-      // mxUtils is not available (library not loaded)
-      splash.parentNode.removeChild(splash);
-    }
-  }
-  
-
   
 };
 
@@ -57,10 +41,6 @@ TableAttr.prototype.format = null;
 //배경색
 TableAttr.prototype.defaultBackgroundColor = '#ffffff';
 
-//배경이미지
-TableAttr.prototype.containerBackgroundImage = 'url(' + IMAGE_PATH + '/grid.gif' + ')';
-
-
 
 /**
  * 메인 - 초기화
@@ -68,14 +48,8 @@ TableAttr.prototype.containerBackgroundImage = 'url(' + IMAGE_PATH + '/grid.gif'
 TableAttr.prototype.init = function() {
   
 
-  //그래프 영역의 배경 이미지 설정
-  this.container.style.backgroundImage = this.containerBackgroundImage;
-  this.container.style.backgroundColor = this.defaultBackgroundColor; 
-
   //마우스 오른쪽 클릭 - 컨텍스트 메뉴
-  //mxEvent.disableContextMenu(this.container);
-
-  //this.container.appendChild(this.graphContainer);
+  mxEvent.disableContextMenu(this.container);
 
   //매장영역에서 이벤트 발생 시 설정영역을 새로 그려주기 위한 이벤트 핸들러
   this.graph.getSelectionModel().addListener(mxEvent.CHANGE, this.format.update);
@@ -87,11 +61,6 @@ TableAttr.prototype.init = function() {
   //서버의 초기 설정 로드
   var openResult = this.format.open(true);
   
-  //TODO 오픈 실패 or 기존 설정 정보가 없을 경우 기본 구성 로딩
-  //if(!openResult) {
-    //console.log('')
-  //}
-  
 };
 /**
  * 메인 - 기존 설정 opn 시 값 초기화 
@@ -102,14 +71,33 @@ TableAttr.prototype.initValue = function() {
   this.comp.initValue();
 };
 
+/** 
+ * DOM element 클릭 이벤트 추가 공통 함수
+ */
+function addClickHandler(elt, funct) {
+  if (funct != null) {
+    mxEvent.addListener(elt, 'click', function(evt) {
+      funct(evt);
+      mxEvent.consume(evt);
+    });
+    
+    if (document.documentMode != null && document.documentMode >= 9) {
+      // Prevents focus
+      mxEvent.addListener(elt, 'mousedown', function(evt) {
+        evt.preventDefault();
+      });
+    }
+  }
+}
+
+
+
+
 /**
 * 왼쪽 속성명 처리
 */
 Sidebar = function(graph) {
-  
-  this.container = document.getElementById('component');
   this.graph = graph;
-  
   this.init();
 }
 
@@ -187,10 +175,12 @@ Sidebar.prototype.initUsed = function() {
   var graph = this.graph;
   var theGrid = this.grid;
 
+  //모든 속성 사용여부 false로 초기화
   for(i = 0; i < theGrid.rows.length; i++) {
     theGrid.setCellData(theGrid.rows[i].index, 'used', false);
   }
-
+  
+  //그래픽 영역의 Object를 체크해 사용여부 true 처리
   var parent = graph.getDefaultParent();
   var model = graph.getModel();
   var childCount = model.getChildCount(parent);
@@ -209,17 +199,17 @@ Sidebar.prototype.makeGrid = function() {
   var sidebar = this;
   var graph = this.graph;
   
-
+  //속성명 FlexGrid 생성
   var theGrid = new wijmo.grid.FlexGrid('#theGrid', {
     autoGenerateColumns: false,
-    selectionMode: 'ListBox',//'RowRange','ListBox'
+    selectionMode: 'ListBox',
     isReadOnly: true,
     itemsSource: getData(),
     columns: [
       { binding: 'idx', visible: false},
-      { binding: 'name', header: mxResources.get('attrName'), width: 80, isReadOnly: true },
-      { binding: 'tag', header: mxResources.get('preview'), width: 100, isReadOnly: true, visible: false},
-      { binding: 'used', header: mxResources.get('alreadyUsed'), width: 80, isReadOnly: true },
+      { binding: 'name', header: mxResources.get('attrName'), width: '*', isReadOnly: true },
+      { binding: 'tag', header: mxResources.get('preview'), isReadOnly: true, visible: false},
+      { binding: 'used', header: mxResources.get('alreadyUsed'), width: 60, isReadOnly: true },
       { binding: 'rect', visible: false}
     ],
     showAlternatingRows: false,
@@ -239,32 +229,7 @@ Sidebar.prototype.makeGrid = function() {
   theGrid.select(-1, -1);
   theGrid.select(0, 1);
   
-  
-  //마우스 text selection 이벤트를 방지하기 위해 사용
-  //TODO 기본 이벤트가 문제가 될 경우 아래 소스 고려
-  /*
-  function pauseEvent(e){
-    if(e.stopPropagation) e.stopPropagation();
-    if(e.preventDefault) e.preventDefault();
-    e.cancelBubble=true;
-    e.returnValue=false;
-    return false;
-  }
-  var mouseDown = false;
-  theGrid.hostElement.addEventListener('mousedown', function (e) {
-    mouseDown = true;
-    return pauseEvent(e);
-  });
-  theGrid.hostElement.addEventListener('mousemove', function (e) {
-    //console.log('mousemove');
-    pauseEvent(e);
-  });
-  theGrid.hostElement.addEventListener('mouseup', function (e) {
-    mouseDown = false;
-  });
-  */
-  
-  //TODO 선택한 ROW가 바뀌었을 때 그래픽 영역에서 활성화
+  //선택한 ROW가 바뀌었을 때 그래픽 영역에서 활성화
   theGrid.selectionChanged.addHandler(function (s, e) {
     //idx가져오기(0번째 항목)
     var idx = theGrid.getCellData(e.row, 0, true);
@@ -331,12 +296,13 @@ Sidebar.prototype.makeGrid = function() {
   for(var i = 1; i < cells.length; i++) {
     var ds = mxUtils.makeDraggable(cells[i], graph, dropEvent, cells[i], -10, -(theGrid.rows.defaultSize * (i-1)));
     ds.highlightDropTargets = true;
+    ds.guidesEnabled = true;
   }
   
-  // create some random data
-  //서버에서 받은 데이터로 대체
+  //서버에서 받은 데이터로 설정
   function getData() {
     
+    //기본값 테이블에서 초기 위치 추출
     var findPos = function(cd) {
       var obj;
       for(x = 0; x < TABLE_ATTR_DEFAULTS.length; x++) {
@@ -355,6 +321,7 @@ Sidebar.prototype.makeGrid = function() {
       return s;
     }
     
+    //데이터 생성
     var data = [];
     for(i = 0; i < TABLE_ATTR_ITEMS.length; i++) {
       //console.log(TABLE_ATTR_ITEMS[i]);
@@ -376,9 +343,9 @@ Sidebar.prototype.makeGrid = function() {
 /**
 * 그래픽 영역
 */
-function Graph(container, model, renderHint, stylesheet, themes) {
+function Graph(container, themes) {
 
-  mxGraph.call(this, container, model, renderHint, stylesheet);
+  mxGraph.call(this, container, null, null, null);
   this.themes = themes || this.defaultThemes;
 
   var loadStylesheet = function(graph) {
@@ -392,11 +359,7 @@ function Graph(container, model, renderHint, stylesheet, themes) {
     }
   };
   this.currentVertexStyle = mxUtils.clone(this.defaultVertexStyle);
-  if (stylesheet == null) {
-    loadStylesheet(this);
-  }
-  
-  //this.init();
+  loadStylesheet(this);
 }
 /**
  * Graph inherits from mxGraph.
@@ -409,7 +372,8 @@ Graph.prototype.defaultVertexStyle = {};
 Graph.prototype.defaultThemeName = 'tableattr';
 
 //배경이미지 - 기본설정
-Graph.prototype.graphBackgroundImage = IMAGE_PATH + '/gradient_background.jpg';
+//테이블 구성 모양을 넣고 싶을 때 사용 가능
+//Graph.prototype.graphBackgroundImage = IMAGE_PATH + '/gradient_background.jpg';
 
 
 /**
@@ -426,8 +390,8 @@ Graph.prototype.init = function() {
   //그래프 영역의 배경 색 설정 - 기본설정
   //graph.setBackgroundImage(new mxImage(this.graphBackgroundImage, 600, 640));
   
-  graph.minimumGraphSize = new mxRectangle(0, 0, 400, 400);
-  graph.maximumGraphBounds = new mxRectangle(0, 0, 400, 400);
+  graph.minimumGraphSize = new mxRectangle(0, 0, 510, 510);
+  graph.maximumGraphBounds = new mxRectangle(0, 0, 510, 510);
 
   
   //마우스를 영역 밖으로 드래그 했을 때 패닝이 되지 않도록 처리
@@ -543,6 +507,12 @@ function Format(tableattr) {
   this.init();
 }
 
+Format.prototype.fontFamily = null;
+Format.prototype.fontColor = null;
+Format.prototype.fontSize = null;
+Format.prototype.fontBold = null;
+
+//TODO 폰트 종류 - POS에서 가능한 폰트로 변경할 것
 Format.prototype.defaultFonts = [
   {name:'NotoR', value:0},
   {name:'Hanna', value:1},
@@ -564,49 +534,18 @@ Format.prototype.defaultFonts = [
  */
 Format.prototype.init = function() {
 
+  var format = this;
+  
+  //그래픽 영역에서 선택 항목 변경 시 이벤트 처리
   this.update = mxUtils.bind(this, function(sender, evt) {
-    this.refresh();
+    format.refresh();
   });
-  
-  this.clear();
+
+  //모든 구성 요소 생성
+  this.initElements();
+
 };
 
-/**
- * 설정 패널 생성
- */
-Format.prototype.clear = function() {
-  
-  this.container.innerHTML = '';
-  
-  //console.log('refresh');
-  var div = document.createElement('div');
-  div.style.whiteSpace = 'nowrap';
-  div.style.color = 'rgb(112, 112, 112)';
-  div.style.textAlign = 'left';
-  div.style.cursor = 'default';
-  
-  var label = document.createElement('div');
-  label.style.border = '1px solid #c0c0c0';
-  label.style.borderWidth = '0px 0px 1px 0px';
-  label.style.textAlign = 'center';
-  label.style.fontWeight = 'bold';
-  label.style.overflow = 'hidden';
-  label.style.display = (mxClient.IS_QUIRKS) ? 'inline' : 'inline-block';
-  label.style.paddingTop = '4px';
-  label.style.height = (mxClient.IS_QUIRKS) ? '34px' : '25px';
-  label.style.width = '100%';
-  this.container.appendChild(div);
-
-  //console.log(this.container);
-  
-  //"설정" 라벨
-  mxUtils.write(label, mxResources.get('labelFunction'));
-  div.appendChild(label);
-
-  //초기화/저장 버튼
-  div.appendChild(this.addSaveBtn());
-  
-};
 /**
  * 화면 새로 그리기
  */
@@ -614,99 +553,134 @@ Format.prototype.refresh = function() {
 
   var graph = this.graph;
   
-  //상단 라벨, 초기화/저장 버튼
-  this.clear();
-
+  //설정 값 초기화
+  this.setElementsValue();
+  
   //선택된 셀이 있을 때만 활성화 되는 부분
   var cells = graph.getSelectionCells();
+  document.getElementById('fontStyle').style.display = 'none';
+  document.getElementById('textAlign').style.display = 'none';
   if(cells.length > 0 ) {
     //폰트 설정
-    this.fontStyle();
-    
+    document.getElementById('fontStyle').style.display = 'block';
     //정렬 옵션
-    this.align();
+    document.getElementById('textAlign').style.display = 'block';
   }
 
   
 };
 
-
 /**
- * 공통 제목 생성 함수
+ * 폰트/정렬 설정 초기화
  */
-Format.prototype.createTitle = function(title) {
-  var span = document.createElement('span');
-  span.style.whiteSpace = 'nowrap';
-  span.style.overflow = 'hidden';
-  span.style.width = '100px';
-  span.style.fontWeight = 'bold';
-  mxUtils.write(span, title);
-  return span;
-};
-/**
- * 공통 패널 생성 함수
- */
-Format.prototype.createPanel = function() {
-  var div = document.createElement('div');
-  div.style.padding = '12px 0px 12px 18px';
-  div.style.borderBottom = '1px solid #c0c0c0';
-  return div;
-};
-
-/**
- * 공통 패널 생성 함수
- */
-Format.prototype.createWijmoContainer = function(id) {
-  var div = document.createElement('div');
-  div.id = id;
-  div.style.width = '150px';
-  div.style.margin = '0px 0px 0px 10px';
-  return div;
-};
-
-/**
- * 초기화/저장 버튼
- */
-Format.prototype.addSaveBtn = function() {
-  var div = this.createPanel();
-  
-  var btn = mxUtils.button(mxResources.get('initBtn'), mxUtils.bind(this, function(evt) {
-    this.open(false);
-  }));
-  
-  btn.setAttribute('title', mxResources.get('initBtn'));
-  btn.className = 'geBtn';
-  btn.style.width = '98px';
-  btn.style.marginRight = '5px';
-  btn.style.marginBottom = '2px';
-  div.appendChild(btn);
-
-  btn = mxUtils.button(mxResources.get('saveBtn'), mxUtils.bind(this, function(evt) {
-    this.save();
-  }));
-      
-  btn.setAttribute('title', mxResources.get('saveBtn'));
-  btn.className = 'geBtn';
-  btn.style.width = '98px';
-  btn.style.marginRight = '0px';
-  btn.style.marginBottom = '2px';
-  div.appendChild(btn);
-
-  return div;
-};
-
-/**
- * 폰트 설정
- */
-Format.prototype.fontStyle = function() {
+Format.prototype.initElements = function() {
   var graph = this.graph;
   var format = this;
   
-  //"폰트" 라벨 설정
-  var div = this.createPanel();
+  //초기화 버튼
+  addClickHandler(document.getElementById('btnInit'), function() {
+    format.open(false);
+  });
   
-  div.appendChild(this.createTitle(mxResources.get('font')));
-  mxUtils.br(div);
+  //저장 버튼
+  addClickHandler(document.getElementById('btnSave'), function() {
+    format.save();
+  });
+
+  /**
+   * 폰트 종류
+   */
+  var template = '<div style="font-family:{name}">{name}</div>';
+  this.fontFamily = new wijmo.input.ComboBox('#fontFamily', {
+    itemsSource: format.defaultFonts,
+    displayMemberPath: 'name',
+    selectedValuePath: 'value',
+    formatItem: function(s, e) {
+      //콤보박스 안에 폰트모양 적용
+      var html = wijmo.format(template, e.data, function(data, name, fmt, val) {
+        return wijmo.isString(data[name]) ? wijmo.escapeHtml(data[name]) : val;
+      });
+      e.item.innerHTML = html;
+    },
+    selectedIndexChanged: function(s, e) {
+      //콤보 박스 선택한 내용이 변경되었을 때 처리
+      graph.setCellStyles(mxConstants.STYLE_FONTFAMILY, s.text, graph.getSelectionCells());
+    }
+  });
+  //폰트 기본값 설정
+  this.fontFamily.text = 'NotoR';
+  
+  
+  /**
+   * 폰트 색상 설정 시작
+   */
+  this.fontColor = new wijmo.input.InputColor('#fontColor', {
+    placeholder: 'Select the color',
+    value: '#000000',
+    valueChanged: function(s, e) {
+      graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, s.value, graph.getSelectionCells());
+    }
+  });
+
+  /**
+   * 폰트 크기 설정
+   */
+  this.fontSize = new wijmo.input.InputNumber('#fontSize', {
+    format: 'n0',
+    step: 1,
+    min: 8,
+    max: 20,
+    value: 10,
+    valueChanged: function(s, e) {
+      graph.setCellStyles(mxConstants.STYLE_FONTSIZE, s.value, graph.getSelectionCells());
+    }
+  });
+
+  /**
+   * 폰트 스타일(굵게, 기울임, 밑줄)
+   */
+  addClickHandler(document.getElementById('btnBold'), function() {
+    graph.toggleCellStyleFlags(mxConstants.STYLE_FONTSTYLE, mxConstants.FONT_BOLD);
+  });
+  addClickHandler(document.getElementById('btnItalic'), function() {
+    graph.toggleCellStyleFlags(mxConstants.STYLE_FONTSTYLE, mxConstants.FONT_ITALIC);
+  });
+  addClickHandler(document.getElementById('btnUnderline'), function() {
+    graph.toggleCellStyleFlags(mxConstants.STYLE_FONTSTYLE, mxConstants.FONT_UNDERLINE);
+  });
+
+  /**
+   * 텍스트 위치(왼쪽/중앙/오른쪽, TOP/MIDDLE/BOTTOM)
+   */
+  addClickHandler(document.getElementById('btnLeft'), function() {
+    graph.setCellStyles(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_LEFT);
+  });
+  addClickHandler(document.getElementById('btnCenter'), function() {
+    graph.setCellStyles(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);
+  });
+  addClickHandler(document.getElementById('btnRight'), function() {
+    graph.setCellStyles(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_RIGHT);
+  });
+
+  addClickHandler(document.getElementById('btnTop'), function() {
+    graph.setCellStyles(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_TOP);
+  });
+  addClickHandler(document.getElementById('btnMiddle'), function() {
+    graph.setCellStyles(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);
+  });
+  addClickHandler(document.getElementById('btnBottom'), function() {
+    graph.setCellStyles(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_BOTTOM);
+  });
+
+  
+};
+
+/**
+ * 폰트/정렬 설정값 Set
+ */
+Format.prototype.setElementsValue = function() {
+  var graph = this.graph;
+  var format = this;
 
   //선택된 셀에서 스타일 정보 읽기
   var cells = graph.getSelectionCells();
@@ -714,6 +688,8 @@ Format.prototype.fontStyle = function() {
   var initFontFamily;
   var initFontColor;
   var initFontStyle;
+  var initAlign;
+  var initVAlign;
   for(var i=0; i < cells.length; i++) {
     var cell = cells[i];
     var state = graph.view.getState(cell);
@@ -722,243 +698,43 @@ Format.prototype.fontStyle = function() {
       initFontFamily = mxUtils.getValue(state.style, mxConstants.STYLE_FONTFAMILY, null);
       initFontColor = mxUtils.getValue(state.style, mxConstants.STYLE_FONTCOLOR, null);
       initFontStyle = mxUtils.getValue(state.style, mxConstants.STYLE_FONTSTYLE, 0); 
-    }
-  }
-
-  /**
-   * 폰트 종류
-   */
-  //wijmo 컴포넌트 추가
-  div.appendChild(this.createWijmoContainer('fontFamily'));
-  //format 컨테이너에 추가
-  this.container.appendChild(div);
-  
-  var template = '<div style="font-family:{name}">{name}</div>';
-  var theInputColor = new wijmo.input.ComboBox('#fontFamily', {
-    itemsSource: format.defaultFonts,
-    displayMemberPath: 'name',
-    selectedValuePath: 'value',
-    formatItem: function(s, e) {
-      var html = wijmo.format(template, e.data, function(data, name, fmt, val) {
-        return wijmo.isString(data[name]) ? wijmo.escapeHtml(data[name]) : val;
-      });
-      e.item.innerHTML = html;
-    },
-    selectedIndexChanged: function(s, e) {
-      graph.setCellStyles(mxConstants.STYLE_FONTFAMILY, s.text, cells);
-    }
-  });
-  theInputColor.text = initFontFamily;
-  
-  mxUtils.br(div);
-  //console.log(graph.view);
-  
-  /**
-   * 폰트 색상 설정 시작
-   */
-  //wijmo 컴포넌트 추가
-  div.appendChild(this.createWijmoContainer('fontColor'));
-  //format 컨테이너에 추가
-  this.container.appendChild(div);
-
-  var theInputColor = new wijmo.input.InputColor('#fontColor', {
-    placeholder: 'Select the color',
-    value: initFontColor,
-    valueChanged: function(s, e) {
-      graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, s.value, cells);
-    }
-  });
-  mxUtils.br(div);
-
-  /**
-   * 폰트 크기 설정 시작
-   */
-  //wijmo 컴포넌트 추가
-  div.appendChild(this.createWijmoContainer('fontSize'));
-  //format 컨테이너에 추가
-  this.container.appendChild(div);
-
-  var theInputNumber = new wijmo.input.InputNumber('#fontSize', {
-    format: 'n0',
-    step: 1,
-    min: 8,
-    max: 20,
-    value: initFontSize,
-    valueChanged: function(s, e) {
-      graph.setCellStyles(mxConstants.STYLE_FONTSIZE, s.value, cells);
-    }
-  });
-  mxUtils.br(div);
-
-  /**
-   * 폰트 스타일(굵게, 기울임, 밑줄)
-   */
-  var stylePanel = this.stylePanel();
-  var bold = this.addButton('geSprite-bold', mxResources.get('bold'), function() {
-      graph.toggleCellStyleFlags(mxConstants.STYLE_FONTSTYLE, mxConstants.FONT_BOLD);
-    }, stylePanel);
-  var italic = this.addButton('geSprite-italic', mxResources.get('italic'), function() {
-      graph.toggleCellStyleFlags(mxConstants.STYLE_FONTSTYLE, mxConstants.FONT_ITALIC);
-    }, stylePanel);
-  var underline = this.addButton('geSprite-underline', mxResources.get('underline'), function() {
-    graph.toggleCellStyleFlags(mxConstants.STYLE_FONTSTYLE, mxConstants.FONT_UNDERLINE);
-    }, stylePanel);
-  
-  this.styleButtons([bold, italic, underline]);
-  underline.style.marginRight = '6px';
-  
-  this.setSelected(bold, (initFontStyle & mxConstants.FONT_BOLD) == mxConstants.FONT_BOLD);
-  this.setSelected(italic, (initFontStyle & mxConstants.FONT_ITALIC) == mxConstants.FONT_ITALIC);
-  this.setSelected(underline, (initFontStyle & mxConstants.FONT_UNDERLINE) == mxConstants.FONT_UNDERLINE);
-  
-  div.appendChild(stylePanel);
-
-  this.container.appendChild(div);
-};
-
-/**
- * 폰트 속성/정렬
- */
-Format.prototype.align = function() {
-  var graph = this.graph;
-  var format = this;
-  
-  //"정렬" 라벨 설정
-  var div = this.createPanel();
-  
-  div.appendChild(this.createTitle(mxResources.get('align')));
-  mxUtils.br(div);
-
-  /**
-   * 텍스트 위치(왼쪽/중앙/오른쪽, TOP/MIDDLE/BOTTOM)
-   */
-  var stylePanel = this.stylePanel();
-  var left = this.addButton('geSprite-left', mxResources.get('left'),
-      function() { graph.setCellStyles(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_LEFT); }, stylePanel);
-  var center = this.addButton('geSprite-center', mxResources.get('center'),
-      function() { graph.setCellStyles(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER); }, stylePanel);
-  var right = this.addButton('geSprite-right', mxResources.get('right'),
-      function() { graph.setCellStyles(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_RIGHT); }, stylePanel);
-
-  var top = this.addButton('geSprite-top', mxResources.get('top'),
-      function() { graph.setCellStyles(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_TOP); }, stylePanel);
-  var middle = this.addButton('geSprite-middle', mxResources.get('middle'),
-      function() { graph.setCellStyles(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);}, stylePanel);
-  var bottom = this.addButton('geSprite-bottom', mxResources.get('bottom'),
-      function() { graph.setCellStyles(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_BOTTOM);}, stylePanel);
-  
-  this.styleButtons([left, center, right, top, middle, bottom]);
-  right.style.marginRight = '6px';
-  
-  //선택된 셀에서 스타일 정보 읽기
-  var cells = graph.getSelectionCells();
-  var initAlign;
-  var initVAlign;
-  for(var i=0; i < cells.length; i++) {
-    var cell = cells[i];
-    var state = graph.view.getState(cell);
-    if (state != null) {
       initAlign = mxUtils.getValue(state.style, mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER); 
       initVAlign = mxUtils.getValue(state.style, mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE); 
     }
   }
-  this.setSelected(left, initAlign == mxConstants.ALIGN_LEFT);
-  this.setSelected(center, initAlign == mxConstants.ALIGN_CENTER);
-  this.setSelected(right, initAlign == mxConstants.ALIGN_RIGHT);
   
-  this.setSelected(top, initVAlign == mxConstants.ALIGN_TOP);
-  this.setSelected(middle, initVAlign == mxConstants.ALIGN_MIDDLE);
-  this.setSelected(bottom, initVAlign == mxConstants.ALIGN_BOTTOM);
+  format.fontFamily.text = initFontFamily;
+  format.fontColor.value = initFontColor;
+  format.fontSize.value = initFontSize;
   
-  div.appendChild(stylePanel);
+  this.setSelected(document.getElementById('btnBold'), 'on', (initFontStyle & mxConstants.FONT_BOLD) == mxConstants.FONT_BOLD);
+  this.setSelected(document.getElementById('btnItalic'), 'on', (initFontStyle & mxConstants.FONT_ITALIC) == mxConstants.FONT_ITALIC);
+  this.setSelected(document.getElementById('btnUnderline'), 'on', (initFontStyle & mxConstants.FONT_UNDERLINE) == mxConstants.FONT_UNDERLINE);
   
-  //format 컨테이너에 추가
-  this.container.appendChild(div);
-
-
-};
-
-/**
- * 포맷 패널에 들어갈 sprite 아이콘 holder
- */
-Format.prototype.stylePanel = function() {
-  var stylePanel = document.createElement('div');
-  stylePanel.style.position = 'relative';
-  stylePanel.style.paddingLeft = '0px';
-  stylePanel.style.borderWidth = '0px';
-  stylePanel.className = 'geToolbarContainer';
+  this.setSelected(document.getElementById('btnLeft'), 'on', initAlign == mxConstants.ALIGN_LEFT);
+  this.setSelected(document.getElementById('btnCenter'), 'on', initAlign == mxConstants.ALIGN_CENTER);
+  this.setSelected(document.getElementById('btnRight'), 'on', initAlign == mxConstants.ALIGN_RIGHT);
   
-  return stylePanel;
-};
-
-
-/**
- * 포맷 패널에 들어갈 sprite 아이콘 버튼 스타일 지정
- */
-Format.prototype.styleButtons = function(elts) {
-  for (var i = 0; i < elts.length; i++) {
-    mxUtils.setPrefixedStyle(elts[i].style, 'borderRadius', '3px');
-    mxUtils.setOpacity(elts[i], 100);
-    elts[i].className += ' geColorBtn';
-  }
+  this.setSelected(document.getElementById('btnTop'), 'on', initVAlign == mxConstants.ALIGN_TOP);
+  this.setSelected(document.getElementById('btnMiddle'), 'on', initVAlign == mxConstants.ALIGN_MIDDLE);
+  this.setSelected(document.getElementById('btnBottom'), 'on', initVAlign == mxConstants.ALIGN_BOTTOM);
+  
 };
 
 /**
  * 엘리먼트 선택 표시
  */
-Format.prototype.setSelected = function(elt, selected) {
-  if (mxClient.IS_IE && (mxClient.IS_QUIRKS || document.documentMode < 10)) {
-    elt.style.filter = (selected) ? 'progid:DXImageTransform.Microsoft.Gradient('
-        + 'StartColorStr=\'#c5ecff\', EndColorStr=\'#87d4fb\', GradientType=0)'
-        : '';
-  } else {
-    elt.style.backgroundImage = (selected) ? 'linear-gradient(#c5ecff 0px,#87d4fb 100%)'
-        : '';
-  }
-};
-
-/**
- * 포맷 패널에 들어갈 sprite 아이콘 버튼 생성
- */
-Format.prototype.addButton = function(classname, tooltip, funct, c) {
+Format.prototype.setSelected = function(elt, name, selected) {
   
-  var format = this;
-  
-  var createButton = function(classname) {
-    var elt = document.createElement('a');
-    elt.setAttribute('href', 'javascript:void(0);');
-    elt.className = 'geButton';
-    var inner = document.createElement('div');
-    if (classname != null) {
-      inner.className = 'geSprite ' + classname;
+  if(selected){
+    var arr = elt.className.split(' ');
+    if(arr.indexOf('on') == -1) {
+      elt.className += ' ' + name;
     }
-    elt.appendChild(inner);
-    return elt;
-  };
-  
-  var addClickHandler = function(elt, funct) {
-    if (funct != null) {
-      mxEvent.addListener(elt, 'click', function(evt) {
-        funct(evt);
-        mxEvent.consume(evt);
-      });
-      
-      if (document.documentMode != null && document.documentMode >= 9) {
-        // Prevents focus
-        mxEvent.addListener(elt, 'mousedown', function(evt) {
-          evt.preventDefault();
-        });
-      }
-    }
-  };
-  
-  var elt = createButton(classname);
-  if (tooltip != null) {
-    elt.setAttribute('title', tooltip);
   }
-  addClickHandler(elt, funct);
-  c.appendChild(elt);
-  return elt;
+  else {
+    elt.className = elt.className.replace(new RegExp(name, 'g'), '').trim();
+  }
 };
 
 
@@ -1002,10 +778,8 @@ Format.prototype.open = function(isLoad) {
  */
 Format.prototype.setGraphXml = function(graph, node) {
   
-  //console.log(node);
   if (node != null) {
     var dec = new mxCodec(node.ownerDocument);
-    //console.log(dec);
     if (node.nodeName == 'mxGraphModel') {
       graph.model.beginUpdate();
       try {
@@ -1044,12 +818,14 @@ Format.prototype.save = function() {
   var enc = new mxCodec(mxUtils.createXmlDocument());
   node = enc.encode(graph.getModel());
   
+  //저장 될 XML을 보고 싶을 때 사용
+  /*
   var xmlPretty = mxUtils.getPrettyXml(node);
   mxLog.show();
   mxLog.write(xmlPretty);
+  */
   
   var xml = mxUtils.getXml(node);
-  //console.log(xml);
 
   var xml = encodeURIComponent(xml);
   
@@ -1101,5 +877,5 @@ Format.prototype.save = function() {
   mxConstants.HIGHLIGHT_OPACITY = 30;
   mxConstants.HIGHLIGHT_SIZE = 8;
 
-})();
 
+})();
