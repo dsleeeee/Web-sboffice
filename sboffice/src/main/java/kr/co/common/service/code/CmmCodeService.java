@@ -66,4 +66,9 @@ public interface CmmCodeService {
      * @return
      */
     <E> List<E> getAgencyList();
+    
+    /**
+     * 벤사 목록 조회
+     */
+    <E> List<E> getVanList();
 }

@@ -5,6 +5,7 @@
 
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
+<c:set var="hqComboList">${hqOfficeComboList}</c:set>
 
 <div class="subCon">
   <div class="searchBar">
@@ -55,7 +56,7 @@
           </div>
         </td>
         <%-- 매장구분 --%>
-        <th><s:message code="storeManage.storeFg" /></th>
+        <th><s:message code="storeManage.sysStatFg" /></th>
         <td><input type="text" class="sb-input w100" /></td>
       </tr>
     </tbody>
@@ -67,7 +68,7 @@
   </div>
 
   <div class="wj-TblWrap mt20">
-    <div class="w50 fl">  
+    <div class="w35 fl">  
       <div class="wj-TblWrapBr mr10 pd20" style="height:700px;">
         <div class="sb-select dkbr mb10 oh">
           <%-- 페이지스케일 --%>
@@ -97,6 +98,12 @@
       <c:param name="menuNm" value="${menuNm}"/>
     </c:import>
     
+    <%-- 매장 환경설정 --%>
+    <c:import url="/WEB-INF/view/store/manage/storeManage/storeConfigManage.jsp">
+      <c:param name="menuCd" value="${menuCd}"/>
+      <c:param name="menuNm" value="${menuNm}"/>
+    </c:import>
+    
   </div>
 </div>
 
@@ -116,13 +123,13 @@
   <%-- header --%>
   var hData =
     [
-      {binding:"hqOfficeCd", header:"<s:message code='storeManage.storeCd' />", visible:false},
-      {binding:"hqOfficeNm", header:"<s:message code='storeManage.storeNm' />", visible:false},
-      {binding:"storeCd", header:"<s:message code='storeManage.storeCd' />"},
-      {binding:"storeNm", header:"<s:message code='storeManage.storeNm' />"},
-      {binding:"clsFg", header:"<s:message code='storeManage.clsFg' />", dataMap:clsFgDataMap},
-      {binding:"sysStatFg", header:"<s:message code='storeManage.sysStatFg' />", dataMap:sysStatFgDataMap},
-      {binding:"sysOpenDate", header:"<s:message code='storeManage.sysOpenDate' />"}
+      {binding:"hqOfficeCd", header:"<s:message code='storeManage.storeCd' />", visible:false, width:"*"},
+      {binding:"hqOfficeNm", header:"<s:message code='storeManage.storeNm' />", visible:false, width:"*"},
+      {binding:"storeCd", header:"<s:message code='storeManage.storeCd' />", width:"*"},
+      {binding:"storeNm", header:"<s:message code='storeManage.storeNm' />", width:"*"},
+      {binding:"clsFg", header:"<s:message code='storeManage.clsFg' />", dataMap:clsFgDataMap, width:"*"},
+      {binding:"sysStatFg", header:"<s:message code='storeManage.sysStatFg' />", dataMap:sysStatFgDataMap, width:"*"},
+      {binding:"sysOpenDate", header:"<s:message code='storeManage.sysOpenDate' />", width:"*"}
     ];
   
   var grid          = wgrid.genGrid("#theGrid", hData, "${menuCd}", 1, ${clo.getColumnLayout(1)});
@@ -145,6 +152,7 @@
   });
   
   <%-- 그리드 선택 이벤트 --%>
+  /*  //TODO 헤더 작업하고 합치자
   grid.addEventListener(grid.hostElement, 'mousedown', function(e) {
     var ht = grid.hitTest(e);
     if( ht.cellType == wijmo.grid.CellType.Cell) {
@@ -155,6 +163,7 @@
       }
     }
   });
+   */
   
   <%-- 조회 버튼 클릭 --%>
   $("#btnSearch").click(function(){
@@ -182,39 +191,39 @@
       }
       var list = result.data.list;
 
-      console.log(list);
-      
       if(list.length === undefined || list.length == 0) {
         s_alert.pop(result.message);
         return;
       }
-      grid.itemsSource = new wijmo.collections.CollectionView(list, {
-        sortDescriptions  : [ 'hqOfficeCd'], // grouping 컬럼
-        groupDescriptions : [ 'hqOfficeNm'] // grouping 후 Descriptions으로 보여지는 컬럼 
-      });
 
-      /* 
       grid.itemsSource = new wijmo.collections.CollectionView(list, {
-        sortDescriptions  : [new wijmo.collections.SortDescription('hqOfficeNm', false)],
-        groupDescriptions : []
+        groupDescriptions : [ 'hqOfficeCd']
       });
       
-      for(var i=0; i<list.length; i++){
-        console.log(list)
-        var grupHeader;
-        if(i==0 || (list[i].hqOfficeCd != list[i-1].hqOfficeCd)) {
-          grupHeader = new wijmo.collections.PropertyGroupDescription(list[i].hqOfficeCd);
-        }
+      <%-- 그리드 선택 이벤트 --%>
+      grid.addEventListener(grid.hostElement, 'mousedown', function(e) {
+        var ht = grid.hitTest(e);
         
-        grid.groupDescriptions.push(grupHeader);
-      }
-      */
+        if(ht.panel == grid.cells) {
+          if (grid.rows[ht.row] instanceof wijmo.grid.GroupRow) {
+            // 그룹헤더일때 본사코드 받아와서 본사에 매장 새로 등록 가능하도록
+            var hdOfficeCd = grid.rows[ht.row].dataItem.name;
+            newStoreReg(hdOfficeCd);
+          } else {
+            var col = ht.panel.columns[ht.col];
+            if( col.binding == "storeNm") {
+              selectedStore = grid.rows[ht.row].dataItem;
+              showDetail();
+            }
+          }
+        }
+      });
       
       page.make("#page", result.data.page.curr, result.data.page.totalPage);
-      
 
       $("#noDataArea").show();
-      $("#storeInfoEditArea").hide();
+      $("#storeInfoViewArea").hide();
+      $("#storeEnvInfoArea").hide();
       
     })
     .fail(function(){
@@ -225,7 +234,7 @@
   <%-- 매장 선택시 --%>
   function showDetail() {
     
-    var param = selectedStore;
+    var param = selectedStore;  //TODO 수정필요
     
     $.postJSON("/store/manage/storeManage/storeManage/getStoreDetail.sb", param, function(result) {
       
@@ -233,12 +242,44 @@
         s_alert.pop(result.message);
         return;
       }
+
+      $("#noDataArea").hide();
+      $("#storeEnvInfoArea").hide();
       
       showStoreDetail(result.data);
     })
     .fail(function(){
         s_alert.pop("Ajax Fail");
     });
-    
   }
 </script>
+
+<%-- 매장환경조회 팝업 --%>
+<c:import url="/WEB-INF/view/store/manage/storeManage/storeEnvSearch.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 사업자번호 사용현황 레이어 팝업 --%>
+<c:import url="/WEB-INF/view/store/hq/hqmanage/bizInfo.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 포스 환경설정 : 테이블 그룹셋팅 레이어팝업 --%>
+<c:import url="/WEB-INF/view/store/manage/storeManage/storeTabGrpSetting.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 포스 환경설정 : 테이블 명칭설정 레이어팝업 --%>
+<c:import url="/WEB-INF/view/store/manage/storeManage/storePosNmSetting.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 포스 환경설정 : 테이블 설정복사 레이어팝업 --%>
+<c:import url="/WEB-INF/view/store/manage/storeManage/posSettingCopy.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>

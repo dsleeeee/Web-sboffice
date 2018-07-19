@@ -110,7 +110,7 @@
   
   var avlblMenuGrid = wgrid.genGrid("#avlblMenuGrid", avlblMenuGridData, "${menuCd}", 2, ${clo.getColumnLayout(2)});
   var beUseMenuGrid = wgrid.genGrid("#beUseMenuGrid", beUseMenuGridData, "${menuCd}", 3, ${clo.getColumnLayout(3)});
-  var authCombo     = authCombo = wcombo.genCommonBox("#authCombo", null);
+  var authCombo     = wcombo.genCommonBox("#authCombo", null);
 
   avlblMenuGrid.allowMerging    = wijmo.grid.AllowMerging.All;
   beUseMenuGrid.allowMerging    = wijmo.grid.AllowMerging.All;

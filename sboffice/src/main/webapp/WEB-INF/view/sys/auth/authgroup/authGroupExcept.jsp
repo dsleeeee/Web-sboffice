@@ -151,7 +151,7 @@ authTree.prototype.save = function() {
     return;
   }
   $.postJSONArray("/sys/auth/authgroup/authgroup/saveResrceById.sb", paramArr, function(result) {
-    s_alert.pop("<s:message code='msg.save.succ' />");
+    s_alert.pop("<s:message code='cmm.saveSucc' />");
     tree.view.clearChanges();
   },
   function(result) {

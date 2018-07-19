@@ -302,7 +302,7 @@
     }
     
     $.postJSONArray("/store/hq/hqbrand/hqbrandmanage/save.sb", paramArr, function(result) {
-      s_alert.pop("<s:message code='msg.save.succ' />");
+      s_alert.pop("<s:message code='cmm.saveSucc' />");
       gridView.clearChanges();
     },
     function(result) {
@@ -325,7 +325,8 @@
   <c:param name="orgnNm" value="${orgnNm}"/>
 </c:import>
 
-<%-- 분류관리 --%>
+<%-- 분류관리 (추후 상품 분류관리로 이동) --%>
+<%-- 
 <c:import url="/WEB-INF/view/store/hq/hqbrand/productclass.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
@@ -333,3 +334,4 @@
   <c:param name="orgnCd" value="${orgnCd}"/>
   <c:param name="orgnNm" value="${orgnNm}"/>
 </c:import>
+ --%>

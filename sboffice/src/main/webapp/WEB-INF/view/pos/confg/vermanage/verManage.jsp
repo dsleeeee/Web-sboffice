@@ -235,5 +235,5 @@ $("#btnExcel").click(function(){
 </c:import>
 
 <%-- 매장추가 레이어 --%>
-<c:import url="/WEB-INF/view/pos/confg/vermanage/stroeAdd.jsp">
+<c:import url="/WEB-INF/view/pos/confg/vermanage/storeAdd.jsp">
 </c:import>

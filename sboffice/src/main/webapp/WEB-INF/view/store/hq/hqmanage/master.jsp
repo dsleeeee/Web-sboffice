@@ -484,7 +484,6 @@
   
   $("#btnChkBizNo").click(function(e){
     
-    <%-- 사업자번호 중복체크 --%>
     var param = {};
     param.bizNo1 = rBizNo1.text;
     param.bizNo2 = rBizNo2.text;
@@ -689,10 +688,11 @@
   <%-- 폼 리셋 --%>
   function resetForm() {
     $("#regForm")[0].reset();
-    rWeatherArea.selectedValue  = "";
-    rSysStatFg.selectedValue    = "";
-    rAgency.selectedValue       = "";
-    rClsFg.selectedValue        = "";
+    
+    rWeatherArea.selectedIndex  = 0;
+    rSysStatFg.selectedIndex    = 0;
+    rAgency.selectedIndex       = 0;
+    rClsFg.selectedIndex        = 0;
     rSysOpenDate.value          = new Date();
   }
   

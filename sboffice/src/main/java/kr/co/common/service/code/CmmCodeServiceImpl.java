@@ -111,4 +111,9 @@ public class CmmCodeServiceImpl implements CmmCodeService {
     public <E> List<E> getAgencyList() {
         return cmmCodeMapper.selectAgencyList();
     }
+    
+    @Override
+    public <E> List<E> getVanList() {
+        return cmmCodeMapper.selectVanList();
+    }
 }

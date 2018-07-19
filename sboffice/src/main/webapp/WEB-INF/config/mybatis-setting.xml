@@ -99,6 +99,10 @@
     <typeAlias alias="hqEnvstVO" type="kr.co.solbipos.store.hq.brand.service.HqEnvstVO"/>
     
     <typeAlias alias="storeManageVO" type="kr.co.solbipos.store.manage.storemanage.service.StoreManageVO"/>
+    <typeAlias alias="storeEnvVO" type="kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO"/>
+    <typeAlias alias="storePosEnvVO" type="kr.co.solbipos.store.manage.storemanage.service.StorePosEnvVO"/>
+    <typeAlias alias="kitchenPrintVO" type="kr.co.solbipos.store.manage.storemanage.service.KitchenPrintVO"/>
+    <typeAlias alias="storeProductVO" type="kr.co.solbipos.store.manage.storemanage.service.StoreProductVO"/>
 <!--
     <typeAlias alias="storeViewVO" type="kr.co.solbipos.store.manage.storeview.service.StoreViewVO"/>
     <typeAlias alias="storeConfgVO" type="kr.co.solbipos.store.manage.storeconfg.service.StoreConfgVO"/>

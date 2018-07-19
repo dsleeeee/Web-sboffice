@@ -280,7 +280,7 @@ public class CmmCodeUtil {
             return assmblEmptyCombo();
         }
         // 결과 형태를 만들어서 json 으로 리턴
-        return assmblObj(envCodeVO.getCodeList(), "envstValCd", "envstValNm", UseYn.N);
+        return assmblObj(envCodeVO.getCodeList(), "envstValNm", "envstValCd", UseYn.N);
     }
     
     /**
@@ -322,4 +322,14 @@ public class CmmCodeUtil {
         return assmblObj(agencyList, "agencyNm", "agencyCd", UseYn.S);
     }
     
+    /**
+     * 벤사 코드 조회
+     * @return
+     */
+    public String getVanList() {
+        List<DefaultMap<String>> agencyList = cmmCodeService.getVanList();
+        
+        // 결과 형태를 만들어서 json 으로 리턴
+        return assmblObj(agencyList, "vanNm", "vanCd", UseYn.S);
+    }
 }

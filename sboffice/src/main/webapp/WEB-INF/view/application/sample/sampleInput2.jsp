@@ -132,7 +132,7 @@ onload = function(){
 
     $("#storelayer").show();
     $(".btn-layerClose").click(function(){
-      srchStroeClose();
+      srchStoreClose();
     });
     
     $("#srchStoreBtn").click(function(){
@@ -147,7 +147,7 @@ onload = function(){
   
   
   /* 팝업 닫기 */
-  srchStroeClose = function(){
+  srchStoreClose = function(){
     $("#storelayer").hide();
     $("#searchStore").val(""); 
     if(storeTree) {
@@ -184,7 +184,7 @@ onload = function(){
                 if(wijmo.format('{shopFg}', s.selectedItem) == "S") { //  단일매장 선택시 
                   $("#storeNm1").val(wijmo.format('{storeNm}', s.selectedItem)); // 매장코드도 저장필요
                   // 매장코드를 value에 담을 것인지
-                  srchStroeClose();
+                  srchStoreClose();
                 } 
               }
             });
@@ -201,7 +201,7 @@ onload = function(){
                 if(srchFg == "S" && (wijmo.format('{shopFg}', s.selectedItem) == "S")) { //  단일매장 선택시 
                   $("#storeNm1").val(wijmo.format('{storeNm}', s.selectedItem)); // 매장코드도 저장필요
                   // 매장코드를 value에 담을 것인지
-                  srchStroeClose();
+                  srchStoreClose();
                 } 
               }
             });

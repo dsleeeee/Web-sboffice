@@ -154,6 +154,8 @@
   <%-- 사업자번호 사용현황 팝업 오픈 --%>
   function openBizInfoLayer(param) {
     
+    console.log('openBizInfoLayer')
+    
     $("#BizInfoDim").show();
     $("#BizInfoLayer").show();
     
