@@ -10,7 +10,7 @@
   <div class="searchBar">
       <a href="javascript:;" class="open">${menuNm}</a>
   </div>
-  <table class="searchTbl">
+  <table class="searchTbl"> 
     <colgroup>
       <col class="w15" />
       <col class="w35" />

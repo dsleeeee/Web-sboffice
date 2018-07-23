@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
 <%-- 매장추가 레이어 --%>
-<div id="dim2" class="fullDimmed" style="display:none;" ></div>
+<div id="dim2" class="fullDimmed" style="display:none;" ></div> 
 <div id="addStorelLayer" class="layer"  style="display:none; z-index:9999;">
   <div class="layer_inner">
     <div class="title w600">
