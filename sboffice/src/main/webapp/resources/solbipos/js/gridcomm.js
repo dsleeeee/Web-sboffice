@@ -1,6 +1,6 @@
 //"use strict";
 !function( win, $ ){
-  
+
   // 그리드
   var wgrid = {
       genGrid: function( div, columns, resrceCd, gridIdx, columnLayout ) {
