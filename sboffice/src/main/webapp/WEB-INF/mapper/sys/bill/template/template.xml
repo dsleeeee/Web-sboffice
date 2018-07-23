@@ -38,7 +38,7 @@
         /* USE : TemplateMapper.getPrintCodeList */
         SELECT
             tcpd.PRT_CD,
-            NVL(tcpc.CONTENT, '') AS CONTENT
+            tcpc.CONTENT
         FROM
             TB_CM_PRINT_DTL tcpd
         LEFT OUTER JOIN TB_CM_PRINT_CODE tcpc ON
@@ -59,7 +59,8 @@
         /* USE : TemplateMapper.getTemplateList */
         SELECT
             tcpt.TEMPLT_CD,
-            tcpt.TEMPLT_NM
+            tcpt.TEMPLT_NM,
+            tcpt.PRT_FORM
         FROM
             TB_CM_PRINT_TEMPL tcpt
         WHERE
