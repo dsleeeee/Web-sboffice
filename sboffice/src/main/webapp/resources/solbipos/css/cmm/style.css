@@ -1624,12 +1624,11 @@ p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17p
 .theTreeAll.wj-treeview > .wj-nodelist > .wj-node.on span {color:#fff;}
 .theTreeAll.wj-treeview > .wj-nodelist > .wj-nodelist > .wj-node.on span {color:#fff;}
 
-
-
-
-
-
-
-
-
+/* IE10+ */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    /* Enter your style code */
+    .receiptEdit {
+        width:368px !important;
+    }
+}
 
