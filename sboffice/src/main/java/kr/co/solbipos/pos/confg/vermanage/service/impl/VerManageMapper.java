@@ -23,9 +23,9 @@ import kr.co.solbipos.pos.confg.vermanage.service.VerInfoVO;
 *  Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
 @Mapper
-public interface VerManageMapper {
+public interface VerManageMapper { 
 
-    /**
+    /** 
      * 포스버전 목록 조회
      * 
      * @param verInfo

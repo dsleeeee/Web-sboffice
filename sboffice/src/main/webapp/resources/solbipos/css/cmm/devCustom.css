@@ -1,0 +1,18 @@
+@charset "utf-8";
+
+
+
+/* **************************************** *
+ * 개발자 추가
+ * **************************************** */
+ 
+ 
+/** input readonly 스타일 */
+
+ol,ul, li {list-style: none;}
+
+input[readonly] {background-color: :#F0F0F0 !important; color:#303030 !important;}
+input[disable] {background-color: :#F0F0F0 !important; color:#303030 !important;}
+
+
+

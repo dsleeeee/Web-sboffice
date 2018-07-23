@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <link href="/resource/solbipos/css/cmm/style.css" rel="stylesheet" type="text/css" media="all"/>
+<link href="/resource/solbipos/css/cmm/devCustom.css" rel="stylesheet" type="text/css" media="all"/>
 <link href="/resource/solbipos/css/cmm/wijmo.css" rel="stylesheet" type="text/css"/>
 
 <link rel="stylesheet" type="text/css" href="/resource/vender/awesome-font/css/font-awesome.min.css" />

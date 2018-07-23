@@ -1,45 +1,36 @@
-package kr.co.solbipos.store.hq.hqmanage.service;
+package kr.co.solbipos.store.manage.storemanage.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
 import kr.co.solbipos.pos.confg.loginstatus.enums.SysStatFg;
-import kr.co.solbipos.sys.auth.authgroup.enums.IncldExcldFg;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * @Class Name : HqManageVO.java
- * @Description : 가맹점관리 > 본사정보 > 본사정보관리
- * @Modification Information
- * @
- * @  수정일      수정자              수정내용
- * @ ----------  ---------   -------------------------------
- * @ 2018.06.15  김지은      최초생성
- *
- * @author 솔비포스 차세대개발실 김지은
- * @since 2018. 06.08
- * @version 1.0
- * @see
- *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * 가맹점관리 > 매장관리 > 매장정보관리
+ * 
+ * @author 김지은
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class HqManageVO extends PageVO {
+public class StoreManageVO extends PageVO {
 
-    /** 본사매장 구분 (H:본사, S:매장) */
-    private String storeFg;
-    
-    /** 본사코드 */
-    private String hqOfficeCd;
-    
-    /** 본사명 */
-    private String hqOfficeNm;
-    
-    /** 매장명 */
+    /** 매장코드 */
     private String storeCd;
     
+    /** 매장명 */
+    private String storeNm;
+
     /** 대표자명 */
     private String ownerNm;
+
+    /** 본사사업장코드 */
+    private String hqOfficeCd;
+
+    /** 본사사업장명 */
+    private String hqOfficeNm;
+    
+    /** 본사브랜드코드 */
+    private String hqBrandCd;
 
     /** 사업자번호 */
     private String bizNo;
@@ -77,7 +68,10 @@ public class HqManageVO extends PageVO {
     /** 지역코드 */
     private String areaCd;
 
-    /** 시스템상태구분  */
+    /** 용도구분  */
+    private String clsFg;
+
+    /** 시스템상태구분 */
     private SysStatFg sysStatFg;
 
     /** 시스템오픈일자 */
@@ -86,23 +80,38 @@ public class HqManageVO extends PageVO {
     /** 시스템폐점일자 */
     private String sysClosureDate;
 
+    /** 밴사코드 */
+    private String vanCd;
+
     /** 대리점코드 */
     private String agencyCd;
 
-    /** 용도구분  */
-    private String clsFg;
-
+    /** 시스템 비고 */
+    private String sysRemark;
+    
+    /** 본사 비고 */
+    private String hqRemark;
+    
     /** 비고 */
     private String remark;
-
-    /** 복사 본사 */
-    private String copyHqOfficeCd;
     
-    /** 사용자ID */
-    private String userId;
+    /** 설치포스수  */
+    private String installPosCnt;
+    
+    /** 매장환경 복사 대상이 되는 본사  */
+    private String copyHqOfficeCd;
 
-    /** 포함 제외 여부 */
-    private IncldExcldFg incldExcldFg;
+    /** 매장환경 복사 대상이 되는 매장 */
+    private String copyStoreCd;
+    
+    /** 터치키 입력 구분 (H:본사, S:매장) - 매장 등록시 사용 */
+    private String inFg;
+    
+    /** 복사할 환경값 */
+    private String copyChkVal;
+
+    /** 포스번호 */
+    private int posNo;
     
     /** 등록일시 */
     private String regDt;
@@ -115,4 +124,5 @@ public class HqManageVO extends PageVO {
 
     /** 수정아이디 */
     private String modId;
+
 }

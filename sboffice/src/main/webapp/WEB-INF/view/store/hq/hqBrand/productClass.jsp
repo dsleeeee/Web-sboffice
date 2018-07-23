@@ -177,8 +177,8 @@ $("#clsLayer #btnSave").click(function(){
     return a.level < b.level ? -1 : a.level > b.level ? 1 : 0;  
   });
   
-  $.postJSONArray("/store/hq/hqbrand/productclass/save.sb", paramArr, function(result) {
-    s_alert.pop("<s:message code='msg.save.succ' />");
+  $.postJSONArray("/store/hq/hqBrand/productClass/save.sb", paramArr, function(result) {
+    s_alert.pop("<s:message code='cmm.saveSucc' />");
     view.clearChanges();
     getClsTreeData();
   },
@@ -207,7 +207,7 @@ function getClsTreeData(){
   param.hqOfficeCd = selectedBrand.hqOfficeCd;
   param.hqBrandCd  = selectedBrand.hqBrandCd;
    
-  $.postJSON("/store/hq/hqbrand/productclass/list.sb", param, function(result) {
+  $.postJSON("/store/hq/hqBrand/productClass/list.sb", param, function(result) {
 
     if(result.data.list == null || result.data.list.length == 0){
       var addStr        = "<s:message code='hqBrand.require.input.clsNm'/>";

@@ -22,6 +22,22 @@ import kr.co.solbipos.store.hq.hqmanage.service.HqNmcodeVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqPrintTemplVO;
 import kr.co.solbipos.sys.auth.authgroup.enums.IncldExcldFg;
 
+/**
+ * @Class Name : HqManageServiceImpl.java
+ * @Description : 가맹점관리 > 본사정보 > 본사정보관리
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2018.06.15  김지은      최초생성
+ *
+ * @author 솔비포스 차세대개발실 김지은
+ * @since 2018. 05.01
+ * @version 1.0
+ * @see
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ */
 @Service
 public class HqManageServiceImpl implements HqManageService{
 
@@ -34,31 +50,37 @@ public class HqManageServiceImpl implements HqManageService{
     @Autowired
     MessageService messageService;
     
+    /** 본사 목록 조회 */
     @Override
     public List<DefaultMap<String>> list(HqManageVO hqManage) {
         return mapper.list(hqManage);
     }
 
+    /** 본사 상세정보 조회 */
     @Override
     public DefaultMap<String> dtlInfo(HqManageVO hqManage) {
         return mapper.dtlInfo(hqManage);
     }
 
+    /** 사업자번호 중복 체크 */
     @Override
     public int chkBizNo(HqManageVO hqManage) {
         return mapper.chkBizNo(hqManage);
     }
     
+    /** 사업자번호 사용현황 목록 */
     @Override
     public List<DefaultMap<String>> getBizUseList(HqManageVO hqManage) {
         return mapper.getBizUseList(hqManage);
     }
 
+    /** 사업자번호 사용현황 상세 */
     @Override
     public DefaultMap<String> getBizInfoDtl(HqManageVO hqManage) {
         return mapper.getBizInfoDtl(hqManage);
     }
     
+    /** 본사 신규 등록 */
     @Override
     public int regist(HqManageVO hqManage, SessionInfoVO sessionInfoVO) {
         
@@ -227,6 +249,7 @@ public class HqManageServiceImpl implements HqManageService{
         return procCnt;
     }
 
+    /** 본사 수정 */
     @Override
     public int modify(HqManageVO hqManage, SessionInfoVO sessionInfoVO) {
         
@@ -252,21 +275,25 @@ public class HqManageServiceImpl implements HqManageService{
         }
     }
 
+    /** 권한그룹 목록 조회 */
     @Override
     public List<DefaultMap<String>> authHqList(HqManageVO hqManage) {
         return mapper.authHqList(hqManage);
     }
 
+    /** 사용가능한 메뉴 */
     @Override
     public List<DefaultMap<String>> avlblMenu(HqManageVO hqManage) {
         return mapper.avlblMenu(hqManage);
     }
 
+    /** 사용중인 메뉴 */
     @Override
     public List<DefaultMap<String>> beUseMenu(HqManageVO hqManage) {
         return mapper.beUseMenu(hqManage);
     }
 
+    /** 메뉴권한복사 */
     @Override
     public int copyAuth(HqMenuVO hqMenu, SessionInfoVO sessionInfoVO) {
         
@@ -293,7 +320,8 @@ public class HqManageServiceImpl implements HqManageService{
         }
         return (authGrpCopy+authExpCopy);
     }
-    
+
+    /** 메뉴 권한 추가 */
     @Override
     public int addAuth(HqMenuVO[] hqMenus, SessionInfoVO sessionInfoVO) {
 
@@ -302,7 +330,6 @@ public class HqManageServiceImpl implements HqManageService{
 
         for(HqMenuVO hqMenu : hqMenus){
             
-            //hqManage.setIncldExcldFg("I");
             hqMenu.setIncldExcldFg(IncldExcldFg.INCLUDE);
             hqMenu.setRegDt(insertDt);
             hqMenu.setRegId(sessionInfoVO.getUserId());
@@ -314,13 +341,10 @@ public class HqManageServiceImpl implements HqManageService{
         return procCnt;
     }
 
+    /** 메뉴 권한 삭제 */
     @Override
     public int removeAuth(HqMenuVO[] hqMenus, SessionInfoVO sessionInfoVO) {
 
-        // 삭제시에는 예외권한 테이블에 i로 있는지 확인하고 있으면 지우고
-        // 그 테이블에 없으면 예외권한 테이블에 e로 넣어
-        // enum insert 는  incldExcld보고 참고해
-        
         int procCnt = 0;
         String insertDt = currentDateTimeString();
 
@@ -331,7 +355,7 @@ public class HqManageServiceImpl implements HqManageService{
             hqMenu.setModDt(insertDt);
             hqMenu.setModId(sessionInfoVO.getUserId());
             
-            // 예외 테이블에 있는지 조회
+            // 권한 예외 테이블에 있는지 조회 후, 예외로 들어간 권한이 있으면 삭제
             int isAuth = mapper.isAuth(hqMenu);
             
             if(isAuth > 0) {
@@ -347,7 +371,6 @@ public class HqManageServiceImpl implements HqManageService{
                 procCnt = mapper.addAuth(hqMenu);
             }
         }
-        
         return procCnt;
     }
 

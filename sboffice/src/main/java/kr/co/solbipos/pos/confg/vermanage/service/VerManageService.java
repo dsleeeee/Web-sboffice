@@ -21,7 +21,7 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 *
 *  Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
-public interface VerManageService {
+public interface VerManageService { 
 
     /**
      * 포스버전 목록 조회

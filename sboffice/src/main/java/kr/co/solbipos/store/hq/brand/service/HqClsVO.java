@@ -1,7 +1,6 @@
 package kr.co.solbipos.store.hq.brand.service;
 
 import java.util.List;
-import kr.co.common.data.enums.UseYn;
 import kr.co.solbipos.application.common.service.CmmVO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

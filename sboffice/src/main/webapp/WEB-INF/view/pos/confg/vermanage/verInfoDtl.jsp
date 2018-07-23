@@ -19,7 +19,7 @@
             <li><a href="javascript:;" id="storeInfoTab" ><s:message code="verManage.store.registed" /></a></li>
           </ul>
         </div>
-        <div id="verInfoArea">
+        <div id="verInfoArea"> 
 
           <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
           <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>

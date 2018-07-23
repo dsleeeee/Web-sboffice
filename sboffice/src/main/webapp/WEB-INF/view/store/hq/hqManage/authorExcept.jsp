@@ -15,7 +15,7 @@
         <%-- 본사정보, 메뉴권한, 코드자리수, 환경설정, 브랜드관리 탭 --%>
         <div class="tabType1">
           <ul>
-            <li><a id="hqInfoTab" href="javascript:;"><s:message code="hqManage.hqInfo" /></a></li>
+            <li><a id="" href="javascript:;"><s:message code="hqManage.hqInfo" /></a></li>
             <li><a id="menuSettingTab" href="javascript:;" class="on"><s:message code="hqManage.menuSetting" /></a></li>
           </ul>
         </div>
@@ -39,7 +39,7 @@
             <tbody>
               <tr>
                 <%-- 메뉴권한복사 --%>
-                <th><s:message code="hqManage.copy.authorexcept" /></th>
+                <th><s:message code="hqManage.copy.authorExcept" /></th>
                 <td colspan="3">
                   <div class="sb-select fl w40 mr10">
                     <span id="authCombo"></span>
@@ -82,14 +82,22 @@
 </div>
 <script>
 
+
+$(document).ready(function() {
+  
+  
+  
+  
+  
+});
+
+  /*
   var avlblMenuGridData = [
     {binding:"resrceCdLarge", header:"<s:message code='hqManage.lMenuCd' />", allowMerging:true, visible:false},
     {binding:"resrceNmLarge", header:"<s:message code='hqManage.lMenuNm' />", allowMerging:true, width:80},
-    //{binding:"menuChkMid", header:"<s:message code='hqManage.chk.menu' />", allowMerging:true, width:70,dataType:wijmo.DataType.Boolean},
     {binding:"menuChkMid", header:"<s:message code='hqManage.chk.menu' />", width:70,dataType:wijmo.DataType.Boolean, isReadOnly:false},
     {binding:"resrceCdMid", header:"<s:message code='hqManage.mMenuCd' />", allowMerging:true, visible:false},
     {binding:"resrceNmMid", header:"<s:message code='hqManage.mMenuNm' />", allowMerging:true},
-    //{binding:"menuChkSmall", header:"<s:message code='hqManage.chk.menu' />", allowMerging:true, width:70, dataType:wijmo.DataType.Boolean},
     {binding:"menuChkSmall", header:"<s:message code='hqManage.chk.menu' />", width:70, dataType:wijmo.DataType.Boolean, isReadOnly:false},
     {binding:"resrceCdSmall", header:"<s:message code='hqManage.sMenuCd' />", visible:false},
     {binding:"resrceNmSmall", header:"<s:message code='hqManage.sMenuNm' />"}
@@ -98,19 +106,45 @@
   var beUseMenuGridData = [
     {binding:"resrceCdLarge", header:"<s:message code='hqManage.lMenuCd' />", allowMerging:true, visible:false},
     {binding:"resrceNmLarge", header:"<s:message code='hqManage.lMenuNm' />", allowMerging:true, width:80},
-    //{binding:"menuChkMid", header:"<s:message code='hqManage.chk.menu' />", allowMerging:true, width:70, dataType:wijmo.DataType.Boolean},
     {binding:"menuChkMid", header:"<s:message code='hqManage.chk.menu' />", width:70, dataType:wijmo.DataType.Boolean, isReadOnly:false},
     {binding:"resrceCdMid", header:"<s:message code='hqManage.mMenuCd' />", allowMerging:true, visible:false},
     {binding:"resrceNmMid", header:"<s:message code='hqManage.mMenuNm' />", allowMerging:true},
-    //{binding:"menuChkSmall", header:"<s:message code='hqManage.chk.menu' />", allowMerging:true, width:70, dataType:wijmo.DataType.Boolean},
     {binding:"menuChkSmall", header:"<s:message code='hqManage.chk.menu' />", width:70, dataType:wijmo.DataType.Boolean, isReadOnly:false},
     {binding:"resrceCdSmall", header:"<s:message code='hqManage.sMenuCd' />", visible:false},
     {binding:"resrceNmSmall", header:"<s:message code='hqManage.sMenuNm' />"}
   ];
+  */
   
-  var avlblMenuGrid = wgrid.genGrid("#avlblMenuGrid", avlblMenuGridData, "${menuCd}", 2, ${clo.getColumnLayout(2)});
-  var beUseMenuGrid = wgrid.genGrid("#beUseMenuGrid", beUseMenuGridData, "${menuCd}", 3, ${clo.getColumnLayout(3)});
-  var authCombo     = authCombo = wcombo.genCommonBox("#authCombo", null);
+  
+  var avlblMenuGridData = [
+    {"binding":"resrceCdLarge", "header":"<s:message code='hqManage.lMenuCd' />", "allowMerging":"true", "visible":"false", "width":"*"},
+    {"binding":"resrceNmLarge", "header":"<s:message code='hqManage.lMenuNm' />", "allowMerging":"true", "width":"*"},
+    {"binding":"menuChkMid", "header":"<s:message code='hqManage.chk.menu' />", "dataType":"wijmo.DataType.Boolean", "isReadOnly":"false", "width":"*"},
+    {"binding":"resrceCdMid", "header":"<s:message code='hqManage.mMenuCd' />", "allowMerging":"true", "visible":"false", "width":"*"},
+    {"binding":"resrceNmMid", "header":"<s:message code='hqManage.mMenuNm' />", "allowMerging":"true", "width":"*"},
+    {"binding":"menuChkSmall", "header":"<s:message code='hqManage.chk.menu' />", "dataType":"wijmo.DataType.Boolean", "isReadOnly":"false", "width":"*"},
+    {"binding":"resrceCdSmall", "header":"<s:message code='hqManage.sMenuCd' />", "visible":"false", "width":"*"},
+    {"binding":"resrceNmSmall", "header":"<s:message code='hqManage.sMenuNm' />", "width":"*"}
+  ];
+
+  var beUseMenuGridData = [
+    {"binding":"resrceCdLarge", "header":"<s:message code='hqManage.lMenuCd' />", "allowMerging":"true", "visible":"false", "width":"*"},
+    {"binding":"resrceNmLarge", "header":"<s:message code='hqManage.lMenuNm' />", "allowMerging":"true", "width":"*"},
+    {"binding":"menuChkMid", "header":"<s:message code='hqManage.chk.menu' />", "dataType":"wijmo.DataType.Boolean", "isReadOnly":"false", "width":"*"},
+    {"binding":"resrceCdMid", "header":"<s:message code='hqManage.mMenuCd' />", "allowMerging":"true", "visible":"false", "width":"*"},
+    {"binding":"resrceNmMid", "header":"<s:message code='hqManage.mMenuNm' />", "allowMerging":"true", "width":"*"},
+    {"binding":"menuChkSmall", "header":"<s:message code='hqManage.chk.menu' />", "dataType":"wijmo.DataType.Boolean", "isReadOnly":"false", "width":"*"},
+    {"binding":"resrceCdSmall", "header":"<s:message code='hqManage.sMenuCd' />", "visible":"false", "width":"*"},
+    {"binding":"resrceNmSmall", "header":"<s:message code='hqManage.sMenuNm' />", "width":"*"}
+  ];
+  
+  //var avlblMenuGrid = wgrid.genGrid("#avlblMenuGrid", avlblMenuGridData, "${menuCd}", 2, ${clo.getColumnLayout(2)});
+  //var beUseMenuGrid = wgrid.genGrid("#beUseMenuGrid", beUseMenuGridData, "${menuCd}", 3, ${clo.getColumnLayout(3)});
+  
+  var avlblMenuGrid         = wgrid.genGrid("#avlblMenuGrid", avlblMenuGridData, "${menuCd}", 2, ${clo.getColumnLayout(2)});
+  var beUseMenuGrid         = wgrid.genGrid("#beUseMenuGrid", beUseMenuGridData, "${menuCd}", 3, ${clo.getColumnLayout(3)});
+  
+  var authCombo  = wcombo.genCommonBox("#authCombo", null);
 
   avlblMenuGrid.allowMerging    = wijmo.grid.AllowMerging.All;
   beUseMenuGrid.allowMerging    = wijmo.grid.AllowMerging.All;
@@ -143,39 +177,6 @@
       }
     }
   });
-  /* 
-  avlblMenuGrid.beginningEdit.addHandler(function (s, e) {
-    if (e.panel.rows[e.row] instanceof wijmo.grid.GroupRow && e.panel.cellType != wijmo.grid.CellType.RowHeader) {
-        console.log('Edit Prevent');
-        e.cancel = true;
-    }
-  });
-   */
-  
-   /*
-  avlblMenuGrid.addEventListener(avlblMenuGrid.hostElement, 'click', function (e) {
-    if (wijmo.hasClass(e.target, 'wj-cell-check')) {
-      console.log(e)
-      console.log('avlblMenuGrid.selection.row : '+ avlblMenuGrid.selection.row)
-      console.log('avlblMenuGrid.selection.col : '+ avlblMenuGrid.selection.col)
-      var groupData = avlblMenuGrid.rows[avlblMenuGrid.selection.row].dataItem;
-      console.log(groupData);
-      
-      console.log(avlblMenuGrid.selection.col);
-    
-      avlblMenuGrid.beginUpdate();
-
-      if(avlblMenuGrid.selection.col == 2) {
-        groupData.menuChkSmall = true;
-      }
-    
-      if(avlblMenuGrid.selection.col == 5) {
-        groupData.menuChkSmall = true;
-      }
-      avlblMenuGrid.endUpdate();
-    }
-  }, true);
-  */
   
   <%-- 체크박스 핸들러 --%>
   avlblMenuGrid.addEventListener(avlblMenuGrid.hostElement, 'mousedown', function(e) {
@@ -232,15 +233,19 @@
   
   <%-- 상세정보 팝업 열기 --%>
   function openAuthLayer() {
-    
+
+    $("#munuAuthLayer #popTitle").text("["+ selectedHq.hqOfficeCd +"] " + selectedHq.hqOfficeNm);
+
     var param = selectedHq;
     
-    $.postJSON("/store/hq/hqmanage/authorexcept/authHqList.sb", param, function(result) {
+    $.postJSON("/store/hq/hqManage/authorExcept/authHqList.sb", param, function(result) {
       console.log(result);
       if(result.status === "FAIL") {
         s_alert.pop(result.message);
         return;
       }
+      
+      //authCombo.itemsSource = result.data.authHqList;
       authCombo.itemsSource = result.data.authHqList;
       avlblMenuGrid.itemsSource = result.data.avlblMenu;
       beUseMenuGrid.itemsSource = result.data.beUseMenu;
@@ -257,16 +262,11 @@
     param.hqOfficeCd      = selectedHq.hqOfficeCd;
     param.copyHqOfficeCd  = authCombo.selectedValue;
     
-    console.log(param);
-
-    $.postJSONSave("/store/hq/hqmanage/authorexcept/copyAuth.sb", JSON.stringify(param), function(result) {
-
-      console.log(result);
+    $.postJSONSave("/store/hq/hqManage/authorExcept/copyAuth.sb", JSON.stringify(param), function(result) {
       var res = result.data;
       if(res > 0) {
         s_alert.pop("<s:message code='cmm.copySucc' />");
       }
-      
     })
     .fail(function(){
       s_alert.pop("Ajax Fail");
@@ -286,17 +286,12 @@
       }
     }
     
-    console.log(paramArr)
-    console.log(JSON.stringify(paramArr))
-    
-    $.postJSONArray("/store/hq/hqmanage/authorexcept/addAuth.sb", paramArr, function(result) {
-      
+    $.postJSONArray("/store/hq/hqManage/authorExcept/addAuth.sb", paramArr, function(result) {
       var res = result.data;
       if(res > 0) {
         s_alert.pop("<s:message code='cmm.saveSucc' />");
         openAuthLayer();
       }
-      
     })
     .fail(function(){
       s_alert.pop("Ajax Fail");
@@ -315,11 +310,8 @@
         paramArr.push(beUseMenu);
       }
     }
-    console.log(paramArr);
     
-    $.postJSONArray("/store/hq/hqmanage/authorexcept/removeAuth.sb", JSON.stringify(paramArr), function(result) {
-
-      console.log(result)
+    $.postJSONArray("/store/hq/hqManage/authorExcept/removeAuth.sb", JSON.stringify(paramArr), function(result) {
       var res = result.data;
       if(res > 0) {
         s_alert.pop("<s:message code='cmm.delSucc' />");
@@ -334,7 +326,6 @@
 
   <%-- 탭 클릭 --%>
   $(".tabType1 ul li #hqInfoTab").click(function(){
-    console.log("탭 클릭");
     changeTab2();
   });
   
@@ -348,14 +339,13 @@
     openDtlLayer(selectedHq);
   }
   
-  
   <%-- 모바일 메뉴 클릭--%>
   $("#mobMenu").click(function(e){
     s_alert.pop("<s:message code='cmm.menu.preparing' />");
   });
   
   <%-- 닫기 버튼 클릭 --%>
-  $(".btn_close").click(function(e){
+  $("#munuAuthLayer .btn_close").click(function(e){
     $("#munuAuthLayer").hide();
     $("#dim2").hide();
   });

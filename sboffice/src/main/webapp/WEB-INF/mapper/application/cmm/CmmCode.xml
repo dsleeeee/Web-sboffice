@@ -39,10 +39,26 @@
   ]]>
   </select>
 
+  <!-- 대리점 목록 조회 -->
+  <!--
+      TABLE    : TB_CM_AGENCY
+      COMMENTS : 벤사 목록을 조회한다.
+  -->
   <select id="selectAgencyList" resultType="DefaultMap">
     /* CmmCodeMapper.selectAgencyList */
     SELECT AGENCY_CD, AGENCY_NM
       FROM TB_CM_AGENCY
+  </select>
+
+  <!-- 벤사 목록 조회 -->
+  <!--
+      TABLE    : TB_CM_VAN_CMPNY
+      COMMENTS : 벤사 목록을 조회한다.
+  -->
+  <select id="selectVanList" resultType="DefaultMap">
+    /* CmmCodeMapper.selectVanList */
+    SELECT VAN_CD, VAN_NM
+      FROM TB_CM_VAN_CMPNY
   </select>
 
 

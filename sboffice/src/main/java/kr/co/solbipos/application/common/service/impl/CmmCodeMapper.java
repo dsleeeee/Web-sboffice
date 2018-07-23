@@ -32,4 +32,10 @@ public interface CmmCodeMapper {
      * @return
      */
     <E> List<E> selectAgencyList();
+
+    /**
+     * 벤사 목록 조회
+     * @return
+     */
+    <E> List<E> selectVanList();
 }

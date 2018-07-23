@@ -22,7 +22,7 @@
            A.MOD_ID,
            B.REG_CNT,
            B.RECV_CNT
-           <include refid="CmmSQL.PagingTemplateCount"/>
+           <include refid="CmmSQL.PagingTemplateCount"/> 
       FROM TB_CM_POS_VERSN A,
            (
       SELECT VER_SER_NO,

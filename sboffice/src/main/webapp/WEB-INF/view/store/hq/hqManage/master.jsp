@@ -428,7 +428,7 @@
   function getDtlData(items) {
     var param = items;
     
-    $.postJSON("/store/hq/hqmanage/master/dtlInfo.sb", param, function(result) {
+    $.postJSON("/store/hq/hqManage/master/dtlInfo.sb", param, function(result) {
       if(result.status === "FAIL") {
         s_alert.pop(result.message);
         return;
@@ -484,14 +484,13 @@
   
   $("#btnChkBizNo").click(function(e){
     
-    <%-- 사업자번호 중복체크 --%>
     var param = {};
     param.bizNo1 = rBizNo1.text;
     param.bizNo2 = rBizNo2.text;
     param.bizNo3 = rBizNo3.text;
     param.bizNo = rBizNo1.text + rBizNo2.text + rBizNo3.text;
     
-    $.postJSON("/store/hq/hqmanage/master/chkBizNo.sb", param, function(result) {
+    $.postJSON("/store/hq/hqManage/master/chkBizNo.sb", param, function(result) {
       if(result.status === "FAIL") {
         s_alert.pop(result.message);
         return;
@@ -518,12 +517,12 @@
   
   <%-- 신규등록 버튼 클릭 --%>
   $("#btnReg").click(function(e){
-    chkVal("/store/hq/hqmanage/master/regist.sb");
+    chkVal("/store/hq/hqManage/master/regist.sb");
   });
   
   <%-- 저장 버튼 클릭 (수정) --%>
   $("#btnSave").click(function(e){
-    chkVal("/store/hq/hqmanage/master/modify.sb");
+    chkVal("/store/hq/hqManage/master/modify.sb");
   });
   
   <%-- validation --%>
@@ -689,10 +688,11 @@
   <%-- 폼 리셋 --%>
   function resetForm() {
     $("#regForm")[0].reset();
-    rWeatherArea.selectedValue  = "";
-    rSysStatFg.selectedValue    = "";
-    rAgency.selectedValue       = "";
-    rClsFg.selectedValue        = "";
+    
+    rWeatherArea.selectedIndex  = 0;
+    rSysStatFg.selectedIndex    = 0;
+    rAgency.selectedIndex       = 0;
+    rClsFg.selectedIndex        = 0;
     rSysOpenDate.value          = new Date();
   }
   

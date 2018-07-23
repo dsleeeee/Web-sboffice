@@ -60,7 +60,7 @@ public class VerManageController {
     @RequestMapping(value = "/verinfo/view.sb", method = RequestMethod.GET)
     public String view(HttpServletRequest request, HttpServletResponse response,
             Model model) {
-        return "pos/confg/vermanage/verManage";
+        return "pos/confg/vermanage/verManage"; 
     }
 
     /**

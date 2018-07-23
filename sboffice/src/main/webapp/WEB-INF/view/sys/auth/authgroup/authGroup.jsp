@@ -267,7 +267,7 @@
       }
 
       $.postJSONArray("${baseUrl}" + "save.sb", paramArr, function(result) {
-        s_alert.pop("<s:message code='msg.save.succ' />");
+        s_alert.pop("<s:message code='cmm.saveSucc' />");
         gridView.clearChanges();
       },
       function(result) {
@@ -299,7 +299,7 @@
         return;
       }
       $.postJSONArray("${baseUrl}" + "saveResrce.sb", paramArr, function(result) {
-        s_alert.pop("<s:message code='msg.save.succ' />");
+        s_alert.pop("<s:message code='cmm.saveSucc' />");
         view.clearChanges();
       },
       function(result) {

@@ -40,7 +40,7 @@ import kr.co.solbipos.pos.confg.verrecv.enums.VerRecvFg;
 public class VerManageServiceImpl implements VerManageService {
 
     @Autowired
-    VerManageMapper mapper;
+    VerManageMapper mapper; 
 
     @Autowired
     MessageService messageService;
