@@ -254,6 +254,11 @@
                 return;
               }
               
+              <%-- 버튼 Show --%>
+              $("#btnAddRight").show();
+              $("#btnDelRight").show();
+              $("#btnSaveRight").show();
+              
               var list = result.data.list;
               gridRight.itemsSource = new wijmo.collections.CollectionView(list);
               gridRight.itemsSource.trackChanges = true;
@@ -264,11 +269,6 @@
                 s_alert.pop(result.message);
                 return;
               }
-              
-              <%-- 버튼 Show --%>
-              $("#btnAddRight").show();
-              $("#btnDelRight").show();
-              $("#btnSaveRight").show();
               
             },
             function(){
@@ -313,6 +313,7 @@
     $("#btnAddLeft").click(function(e) {
       gridLeft.collectionView.trackChanges = true;
       var newRow = gridLeft.collectionView.addNew();
+      newRow.nmcodeGrpCd = "000";
       newRow.status = "I";
       newRow.chk = true;
       
