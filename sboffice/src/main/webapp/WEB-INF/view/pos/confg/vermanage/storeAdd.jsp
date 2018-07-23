@@ -181,8 +181,6 @@
     vanCd.text                = "";
     clsFgCb.selectedValue     = "ALL";
     sysStatFgCb.selectedValue = "ALL";
-    
-    console.log(sysStatFgCb)
   }
   
   <%-- 매장 추가 레이어 버튼 클릭 --%>

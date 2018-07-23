@@ -343,7 +343,7 @@
 <c:import url="/WEB-INF/view/application/layer/hqOffice.jsp">
 </c:import>
 
-<%-- 환정설정 --%>
+<%-- 환경설정 --%>
 <c:import url="/WEB-INF/view/store/hq/hqBrand/config.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>

@@ -84,7 +84,7 @@
   
   <%-- 위즈모 테이블 --%>
   <div class="wj-TblWrap mt10">
-    <div id="theGrid" style="height:450px;"></div>
+    <div id="theGrid" style="height:435px;"></div>
   </div>
   
   <%-- 페이지 리스트 --%>
