@@ -57,7 +57,7 @@ public interface HqManageMapper {
     int registWebUser(HqManageVO hqManage);
 
     /** 본사 공통코드 등록 */
-    int cmmCodeReg(HqNmcodeVO nmcodeVO);
+    int cmmCodeReg(HqNmcodeVO nmcodeVO);    //TODO 추가 필요
 
     /** 본사 포스 출력물 등록 */
     int hqPrintTempReg(HqPrintTemplVO printTempVO);
@@ -68,10 +68,10 @@ public interface HqManageMapper {
     /** 권한그룹 목록조회 */
     List<DefaultMap<String>> authHqList(HqManageVO hqManage);
 
-    /** 사용가능 메뉴 */
+    /** 사용가능 메뉴 조회 */
     List<DefaultMap<String>> avlblMenu(HqManageVO hqManage);
 
-    /** 사용중인 메뉴 */
+    /** 사용중인 메뉴 조회 */
     List<DefaultMap<String>> beUseMenu(HqManageVO hqManage);
 
     /** 메뉴권한복사 */

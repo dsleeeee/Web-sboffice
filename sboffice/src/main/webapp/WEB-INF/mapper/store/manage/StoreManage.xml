@@ -38,12 +38,8 @@
   -->
   <select id="getStoreList" parameterType="storeManageVO" resultType="DefaultMap">
     /* USE : StoreManageMapper.getStoreList */
-    <![CDATA[
-    SELECT *
-      FROM (
-      SELECT COUNT(1) OVER (PARTITION BY 1 ORDER BY 1) AS TOT_CNT,
-             ROW_NUMBER() OVER(PARTITION BY 1 ORDER BY 1) AS RNUM,
-             A.HQ_OFFICE_CD, 
+    <include refid="CmmSQL.PagingTemplateHeader"/>
+      SELECT A.HQ_OFFICE_CD, 
              B.HQ_OFFICE_NM,
              A.HQ_BRAND_CD,
              C.HQ_BRAND_NM,
@@ -52,12 +48,12 @@
              A.CLS_FG,
              A.SYS_STAT_FG,
              A.SYS_OPEN_DATE
+            <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_MS_STORE A,
              TB_HQ_OFFICE B,
              TB_HQ_BRAND C
        WHERE B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
          AND C.HQ_BRAND_CD = A.HQ_BRAND_CD
-      ]]>
       <if test='hqOfficeCd != null and hqOfficeCd != ""'>
          AND A.HQ_OFFICE_CD LIKE '%'||#{hqOfficeCd}||'%'
       </if>
@@ -80,11 +76,7 @@
          AND A.SYS_STAT_FG = #{sysStatFg}
       </if>
        ORDER BY A.HQ_OFFICE_CD, A.STORE_CD, A.SYS_OPEN_DATE ASC
-       )
-    <![CDATA[
-     WHERE RNUM >= #{prev}
-       AND RNUM <= #{next}
-     ]]>
+       <include refid="CmmSQL.PagingTemplateBottom"/>
   </select>
 
   <!-- 매장상세정보 조회 -->

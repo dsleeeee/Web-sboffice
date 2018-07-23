@@ -245,19 +245,19 @@
 </script>
 
 <%-- 버전 상세정보 레이어 --%>
-<c:import url="/WEB-INF/view/store/hq/hqmanage/master.jsp">
+<c:import url="/WEB-INF/view/store/hq/hqManage/master.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
 <%-- 메뉴권한 레이어 --%>
-<c:import url="/WEB-INF/view/store/hq/hqmanage/authorexcept.jsp">
+<c:import url="/WEB-INF/view/store/hq/hqManage/authorExcept.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
 <%-- 사업자번호 사용현황 레이어 팝업 --%>
-<c:import url="/WEB-INF/view/store/hq/hqmanage/bizInfo.jsp">
+<c:import url="/WEB-INF/view/store/hq/hqManage/bizInfo.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

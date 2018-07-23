@@ -39,10 +39,10 @@
             <tbody>
               <tr>
                 <%-- 메뉴권한복사 --%>
-                <th><s:message code="hqManage.copy.authorexcept" /></th>
+                <th><s:message code="hqManage.copy.authorExcept" /></th>
                 <td colspan="3">
                   <div class="sb-select fl w40 mr10">
-                    <span id="authCombo"></span>
+                    <span id="authComboConfig"></span>
                   </div>
                   <%-- 메뉴권한복사 버튼  --%>
                   <div class="fl">
@@ -110,7 +110,7 @@
   
   var avlblMenuGrid = wgrid.genGrid("#avlblMenuGrid", avlblMenuGridData, "${menuCd}", 2, ${clo.getColumnLayout(2)});
   var beUseMenuGrid = wgrid.genGrid("#beUseMenuGrid", beUseMenuGridData, "${menuCd}", 3, ${clo.getColumnLayout(3)});
-  var authCombo     = wcombo.genCommonBox("#authCombo", null);
+  var authComboConfig = wcombo.genCommonBox("#authComboConfig", null);
 
   avlblMenuGrid.allowMerging    = wijmo.grid.AllowMerging.All;
   beUseMenuGrid.allowMerging    = wijmo.grid.AllowMerging.All;
@@ -236,13 +236,13 @@
     // 데이터 조회
     var param = selectedHq;
     
-    $.postJSON("/store/hq/hqmanage/authorexcept/authHqList.sb", param, function(result) {
+    $.postJSON("/store/hq/hqManage/authorExcept/authHqList.sb", param, function(result) {
       console.log(result);
       if(result.status === "FAIL") {
         s_alert.pop(result.message);
         return;
       }
-      authCombo.itemsSource = result.data.authHqList;
+      authComboConfig.itemsSource = result.data.authHqList;
       avlblMenuGrid.itemsSource = result.data.avlblMenu;
       beUseMenuGrid.itemsSource = result.data.beUseMenu;
       
@@ -256,11 +256,11 @@
   $("#btnCopyAuth").click(function(e){
     var param = {};
     param.hqOfficeCd      = selectedHq.hqOfficeCd;
-    param.copyHqOfficeCd  = authCombo.selectedValue;
+    param.copyHqOfficeCd  = authComboConfig.selectedValue;
     
     console.log(param);
 
-    $.postJSONSave("/store/hq/hqmanage/authorexcept/copyAuth.sb", JSON.stringify(param), function(result) {
+    $.postJSONSave("/store/hq/hqManage/authorExcept/copyAuth.sb", JSON.stringify(param), function(result) {
 
       console.log(result);
       var res = result.data;
@@ -290,7 +290,7 @@
     console.log(paramArr)
     console.log(JSON.stringify(paramArr))
     
-    $.postJSONArray("/store/hq/hqmanage/authorexcept/addAuth.sb", paramArr, function(result) {
+    $.postJSONArray("/store/hq/hqManage/authorExcept/addAuth.sb", paramArr, function(result) {
 
       console.log(result)
       
@@ -320,7 +320,7 @@
     }
     console.log(paramArr);
     
-    $.postJSONArray("/store/hq/hqmanage/authorexcept/removeAuth.sb", JSON.stringify(paramArr), function(result) {
+    $.postJSONArray("/store/hq/hqManage/authorExcept/removeAuth.sb", JSON.stringify(paramArr), function(result) {
 
       console.log(result)
       var res = result.data;

@@ -40,8 +40,15 @@
 
 <%-- 환경설정 팝업 오픈 --%>
 function openEnvLayer(){
+  
+  console.log('openEnvLayer');
+  
+  
   $("#envDim").show();
   $("#envLayer").show();
+  
+  
+  console.log(selectedBrand);
   
   var envTitle = "[" + selectedBrand.hqBrandCd + "] "+ selectedBrand.hqBrandNm;
   
@@ -58,7 +65,7 @@ function getConfigList(){
   
   var envstGrpCd = ${ccu.getCommCodeExcpAll("048")};
   
-  $.postJSON("/store/hq/hqbrand/config/list.sb", param, function(result) {
+  $.postJSON("/store/hq/hqBrand/config/getConfiglist.sb", param, function(result) {
     
     var innerHtml = "";
     
@@ -221,7 +228,7 @@ $("#envLayer #btnSave").click(function(){
     paramArr.push(param);
   }
   
-  $.postJSONArray("/store/hq/hqbrand/config/save.sb", paramArr, function(result) {
+  $.postJSONArray("/store/hq/hqBrand/config/save.sb", paramArr, function(result) {
     console.log(result);
     s_alert.pop("<s:message code='cmm.saveSucc' />");
   },

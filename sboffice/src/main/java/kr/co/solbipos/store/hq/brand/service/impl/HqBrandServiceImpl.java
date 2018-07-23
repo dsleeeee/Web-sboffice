@@ -20,7 +20,24 @@ import kr.co.solbipos.store.hq.brand.service.HqBrandVO;
 import kr.co.solbipos.store.hq.brand.service.HqClsVO;
 import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 
-@Service
+/**
+ * @Class Name : HqBrandServiceImpl.java
+ * @Description : 가맹점관리 > 본사정보 > 브랜드정보관리
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2018.06.15  김지은      최초생성
+ *
+ * @author 솔비포스 차세대개발실 김지은
+ * @since 2018. 05.01
+ * @version 1.0
+ * @see
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ */
+
+@Service("hqBrandService")
 public class HqBrandServiceImpl implements HqBrandService{
 
     @Autowired
@@ -29,11 +46,13 @@ public class HqBrandServiceImpl implements HqBrandService{
     @Autowired
     MessageService messageService;
     
+    /**  브랜드 목록 조회 */
     @Override
-    public List<DefaultMap<String>> list(HqBrandVO hqBrand) {
-        return mapper.list(hqBrand);
+    public List<DefaultMap<String>> getBrandlist(HqBrandVO hqBrand) {
+        return mapper.getBrandlist(hqBrand);
     }
     
+    /** 브랜드 저장 */
     @Override
     public int save(HqBrandVO[] hqBrandVOs, SessionInfoVO sessionInfoVO) {
         
@@ -64,6 +83,7 @@ public class HqBrandServiceImpl implements HqBrandService{
         return procCnt;
     }
     
+    /** 환경설정 조회 */
     @Override
     public List<DefaultMap<String>> getConfigList(HqBrandVO hqBrand) {
         return mapper.getConfigList(hqBrand);
@@ -95,12 +115,11 @@ public class HqBrandServiceImpl implements HqBrandService{
             if("00000".equals(hqEnvst.getHqOfficeCd()) && hqEnvst.getTargtFg() == TargtFg.BOTH ) {
                 procCnt += mapper.updateConfigStore(hqEnvst);
             }
-            
         }
-        
         return procCnt;
     }
 
+    /** 분류 목록 조회 */
     @Override
     public List<HqClsVO> getClsList(HqBrandVO hqBrand) {
         
@@ -109,6 +128,8 @@ public class HqBrandServiceImpl implements HqBrandService{
         return makeTreeData(clsList);
     }
     
+    
+    /** 트리 데이터 생성 */
     public List<HqClsVO> makeTreeData(List<DefaultMap<String>> lists) {
         
         List<HqClsVO> clsVOs = new ArrayList<HqClsVO>();
@@ -150,6 +171,7 @@ public class HqBrandServiceImpl implements HqBrandService{
         return returnData;
     }
 
+    /** 분류 등록 */
     @Override
     public int clsSave(HqClsVO[] hqClsVOs, SessionInfoVO sessionInfoVO) {
 

@@ -132,7 +132,7 @@
   
   <%-- 사업자번호 사용현황 목록 조회 --%>
   function getBizInfo(param) {
-    $.postJSON("/store/hq/hqmanage/master/bizUseList.sb", param, function(result) {
+    $.postJSON("/store/hq/hqManage/master/bizUseList.sb", param, function(result) {
       if(result.status === "FAIL") {
         s_alert.pop(result.message);
         return;
@@ -146,7 +146,7 @@
   }
   
   function getBizInfoDtl(param) {
-    $.postJSON("/store/hq/hqmanage/master/bizInfoDtl.sb", param, function(result) {
+    $.postJSON("/store/hq/hqManage/master/bizInfoDtl.sb", param, function(result) {
       if(result.status === "FAIL") {
         s_alert.pop(result.message);
         return;

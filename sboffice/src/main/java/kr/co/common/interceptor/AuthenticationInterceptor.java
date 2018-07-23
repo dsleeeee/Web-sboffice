@@ -97,7 +97,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
             // 권한 없음 처리
             //TODO 개발 진행중 주석처리
-            throw new AuthenticationException(exceptionMsg, "/error/403.sb");
+            //throw new AuthenticationException(exceptionMsg, "/error/403.sb");
         }
 
 

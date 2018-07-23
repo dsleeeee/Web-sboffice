@@ -28,7 +28,6 @@ import kr.co.solbipos.store.manage.storemanage.service.StoreManageService;
 import kr.co.solbipos.store.manage.storemanage.service.StoreManageVO;
 import kr.co.solbipos.store.manage.storemanage.service.StorePosEnvVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreProductVO;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @Class Name : StoreManageController.java
@@ -48,7 +47,6 @@ import lombok.extern.slf4j.Slf4j;
  */
 
 
-@Slf4j
 @Controller
 @RequestMapping(value = "/store/manage/storeManage/")
 public class StoreManageController {

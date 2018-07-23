@@ -5,55 +5,39 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 
 /**
- * 가맹점관리 > 본사정보 > 브랜드정보관리
- * 
- * @author 김지은
+ * @Class Name : HqBrandService.java
+ * @Description : 가맹점관리 > 본사정보 > 브랜드정보관리
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2018.06.15  김지은      최초생성
+ *
+ * @author 솔비포스 차세대개발실 김지은
+ * @since 2018. 05.01
+ * @version 1.0
+ * @see
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 public interface HqBrandService {
 
-    /**
-     * 브랜드 목록 조회
-     * @param brand
-     * @return
-     */
-    List<DefaultMap<String>> list(HqBrandVO hqBrand);
+    /**  브랜드 목록 조회 */
+    List<DefaultMap<String>> getBrandlist(HqBrandVO hqBrand);
 
-    /**
-     * 브랜드 저장
-     * @param hqBrandVOs
-     * @param sessionInfoVO
-     * @return
-     */
+    /** 브랜드 저장 */
     int save(HqBrandVO[] hqBrandVOs, SessionInfoVO sessionInfoVO);
 
-    /**
-     * 환경설정 조회
-     * @param hqBrand
-     * @return
-     */
+    /** 환경설정 조회 */
     List<DefaultMap<String>> getConfigList(HqBrandVO hqBrand);
 
-    /**
-     * 환경설정 저장
-     * @param hqBrands
-     * @param sessionInfoVO
-     * @return
-     */
+    /** 환경설정 저장 */
     int saveConfig(HqEnvstVO[] hqEnvsts, SessionInfoVO sessionInfoVO);
 
-    /**
-     * 분류 목록 조회
-     * @param hqBrand
-     * @return
-     */
+    /** 분류 목록 조회 */
     List<HqClsVO> getClsList(HqBrandVO hqBrand);
 
-    /**
-     * 분류 등록
-     * @param hqBrandVOs
-     * @param sessionInfoVO
-     * @return
-     */
+    /** 분류 등록 */
     int clsSave(HqClsVO[] HqClsVOs, SessionInfoVO sessionInfoVO);
 
 }

@@ -484,7 +484,7 @@ $("#btnChkBizNo").click(function(){
   param.bizNo3 = $("#rBizNo3").val();
   param.bizNo = $("#rBizNo1").val() + $("#rBizNo2").val() + $("#rBizNo3").val();
   
-  $.postJSON("/store/hq/hqmanage/master/chkBizNo.sb", param, function(result) {
+  $.postJSON("/store/hq/hqManage/master/chkBizNo.sb", param, function(result) {
     if(result.status === "FAIL") {
       s_alert.pop(result.message);
       return;

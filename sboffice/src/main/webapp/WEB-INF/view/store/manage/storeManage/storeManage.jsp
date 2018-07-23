@@ -80,7 +80,7 @@
             <button class="btn_skyblue" id="btnFold"><s:message code="cmm.all.fold" /></button>
           </div>
         </div>
-        <div id="theGrid" style="height:500px;"></div> 
+        <div id="theGrid" style="height:550px;"></div> 
           
         <%-- 페이지리스트 --%>
         <div class="pageNum mt20">
@@ -261,11 +261,13 @@
 </c:import>
 
 <%-- 사업자번호 사용현황 레이어 팝업 --%>
-<c:import url="/WEB-INF/view/store/hq/hqmanage/bizInfo.jsp">
+<%-- 
+<c:import url="/WEB-INF/view/store/hq/hqManage/bizInfo.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
-
+ --%>
+ 
 <%-- 포스 환경설정 : 테이블 그룹셋팅 레이어팝업 --%>
 <c:import url="/WEB-INF/view/store/manage/storeManage/storeTabGrpSetting.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
