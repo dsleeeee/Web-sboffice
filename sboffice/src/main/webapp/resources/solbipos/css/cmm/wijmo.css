@@ -3181,3 +3181,11 @@ body.full-screen {
     -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
+
+/** merged 컬럼 정렬 용 */
+.merged-custom {
+    position: relative;
+    height: 100%;
+    line-height: 0;
+    transform: translateY(50%);
+}
