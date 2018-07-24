@@ -209,7 +209,8 @@
     }
     
     <%-- 리스트박스 생성 --%>
-    var listBox = new wijmo.input.ListBox('#listBoxCode', {
+    var listBox = new wijmo.input.ListBox('#listBoxCode', 
+      {
       <%-- 보여지는 데이터 --%>
       displayMemberPath: 'prtCd',
       <%-- 선택시 데이터 --%>
