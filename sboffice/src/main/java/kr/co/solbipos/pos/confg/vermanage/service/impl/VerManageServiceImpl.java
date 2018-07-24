@@ -45,68 +45,40 @@ public class VerManageServiceImpl implements VerManageService {
     @Autowired
     MessageService messageService;
 
+    /** 포스버전 목록 조회 */
     @Override
     public List<DefaultMap<String>> list(VerInfoVO verInfo) {
         return mapper.getList(verInfo);
     }
 
+    /** 포스버전정보 상세 조회 */
     @Override
     public DefaultMap<String> dtlInfo(VerInfoVO verInfo) {
         return mapper.dtlInfo(verInfo);
     }
-    
+
+    /** 매장목록 조회 */
     @Override
     public List<DefaultMap<String>> storeList(VerInfoVO verInfo) {
         return mapper.storeList(verInfo);
     }
     
+    /** 버전 삭제 */
     @Override
     public int verDelete(VerInfoVO verInfo) {
-        //TODO 버전 적용 매장도 함께 삭제해야 할지?
         return mapper.verDelete(verInfo);
     }
-
+    
+    /** 버전 시리얼넘버 중복 체크 */
     @Override
     public int chkVerSerNo(VerInfoVO verInfo) {
         return mapper.chkVerSerNo(verInfo);
     }
     
-
-    @Override
-    public List<DefaultMap<String>> srchStoreList(ApplcStoreVO applcStore) {
-        return mapper.srchStoreList(applcStore);
-    }
-
-    @Override
-    public int registStore(ApplcStoreVO[] applcStores, SessionInfoVO sessionInfo) {
-        
-        int procCnt = 0;
-        
-        String insertDt = currentDateTimeString();
-        
-        for(ApplcStoreVO applcStore : applcStores) {
-            applcStore.setRegDt(insertDt);
-            applcStore.setModDt(insertDt);
-            applcStore.setRegId(sessionInfo.getUserId());
-            applcStore.setModId(sessionInfo.getUserId());
-            applcStore.setVerRecvFg(VerRecvFg.REG);
-            applcStore.setVerRecvDt(insertDt);;
-
-            procCnt += mapper.registStore(applcStore);
-        }
-        
-        if(procCnt == applcStores.length) {
-            return procCnt;
-        } else {
-            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-        }
-    }
-
-    
+    /** 버전 등록 */
     @Override
     public boolean regist(MultipartHttpServletRequest multi, SessionInfoVO sessionInfo) {
 
-        //TODO 업로드랑 저장 됐는데 어디서 오류나는지 찾기
         boolean isSuccess = false;
         
         try{
@@ -146,11 +118,10 @@ public class VerManageServiceImpl implements VerManageService {
         return isSuccess;
     }
     
-
+    /** 버전 수정 */
     @Override
     public boolean modify(MultipartHttpServletRequest multi, SessionInfoVO sessionInfo) {
 
-        //TODO 업로드랑 저장 됐는데 어디서 오류나는지 찾기
         boolean isSuccess = false;
         
         try{
@@ -190,12 +161,7 @@ public class VerManageServiceImpl implements VerManageService {
 
     }
     
-    
-    /**
-     * 파일 업로드 
-     * @param multi
-     * @return
-     */
+    /** 파일 업로드 (등록, 수정 )  */
     private VerInfoVO uploadFile(MultipartHttpServletRequest multi) {
         VerInfoVO verInfo = new VerInfoVO();
 
@@ -231,5 +197,55 @@ public class VerManageServiceImpl implements VerManageService {
             }
         }
         return verInfo;
+    }
+
+
+    /** 매장검색 (매장추가용) */
+    @Override
+    public List<DefaultMap<String>> srchStoreList(ApplcStoreVO applcStore) {
+        return mapper.srchStoreList(applcStore);
+    }
+
+    /** 버전 적용 매장 등록 */
+    @Override
+    public int registStore(ApplcStoreVO[] applcStores, SessionInfoVO sessionInfo) {
+        
+        int procCnt = 0;
+        
+        String dt = currentDateTimeString();
+        
+        for(ApplcStoreVO applcStore : applcStores) {
+            applcStore.setRegDt(dt);
+            applcStore.setModDt(dt);
+            applcStore.setRegId(sessionInfo.getUserId());
+            applcStore.setModId(sessionInfo.getUserId());
+            applcStore.setVerRecvFg(VerRecvFg.REG);
+            applcStore.setVerRecvDt(dt);;
+
+            procCnt += mapper.registStore(applcStore);
+        }
+        
+        if(procCnt == applcStores.length) {
+            return procCnt;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+    }
+    
+    /** 버전 적용 매장 삭제 */
+    @Override
+    public int removeStore(ApplcStoreVO[] applcStores, SessionInfoVO sessionInfo) {
+        
+        int procCnt = 0;
+        
+        for(ApplcStoreVO applcStore : applcStores) {
+            procCnt += mapper.removeStore(applcStore);
+        }
+        
+        if(procCnt == applcStores.length) {
+            return procCnt;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
     }
 }

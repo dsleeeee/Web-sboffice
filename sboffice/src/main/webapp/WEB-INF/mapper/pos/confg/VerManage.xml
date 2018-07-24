@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!--
+    VerManage.xml
+    포스버전관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김지은     2018.06.08     최초작성
+-->
+
 <mapper namespace="kr.co.solbipos.pos.confg.vermanage.service.impl.VerManageMapper">
 
+  <!-- 포스버전 목록 조회  -->
+  <!--
+      TABLE    : TB_CM_POS_VERSN, TB_CM_POS_VERSN_STORE
+      COMMENTS : 포스버전 리스트를 조회한다.
+  -->
   <select id="getList" parameterType="verInfoVO" resultType="DefaultMap">
-    /* VerManageMapper.getList */
+    /* USE : VerManageMapper.getList */
     <include refid="CmmSQL.PagingTemplateHeader"/>
     SELECT A.VER_SER_NO,
            A.VER_SER_NM,
@@ -42,8 +56,13 @@
     <include refid="CmmSQL.PagingTemplateBottom"/>
   </select>
 
+  <!-- 포스버전정보 상세 조회  -->
+  <!--
+      TABLE    : TB_CM_POS_VERSN
+      COMMENTS : 포스버전에 대한 상세 정보를 조회한다.
+  -->
   <select id="dtlInfo" parameterType="verInfoVO" resultType="DefaultMap">
-    /* VerManageMapper.dtlInfo */
+    /* USE : VerManageMapper.dtlInfo */
     SELECT VER_SER_NO,
            VER_SER_NM,
            FILE_NM,
@@ -61,8 +80,13 @@
      WHERE VER_SER_NO = #{verSerNo}
   </select>
 
+  <!-- 버전 등록   -->
+  <!--
+      TABLE    : TB_CM_POS_VERSN
+      COMMENTS : 포스버전을 등록한다.
+  -->
   <insert id="verRegist" parameterType="verInfoVO">
-    /* VerManageMapper.verRegist */
+    /* USE : VerManageMapper.verRegist */
     <![CDATA[
     INSERT INTO TB_CM_POS_VERSN
     (
@@ -103,8 +127,13 @@
     ]]>
   </insert>
 
+  <!-- 버전 수정   -->
+  <!--
+      TABLE    : TB_CM_POS_VERSN
+      COMMENTS : 포스버전을 수정한다.
+  -->
   <update id="verModify" parameterType="verInfoVO">
-    /* VerManageMapper.verModify */
+    /* USE : VerManageMapper.verModify */
     <![CDATA[
     UPDATE TB_CM_POS_VERSN
        SET VER_SER_NM = #{verSerNm},
@@ -123,15 +152,25 @@
      ]]>
   </update>
 
+  <!-- 버전 삭제   -->
+  <!--
+      TABLE    : TB_CM_POS_VERSN
+      COMMENTS : 포스버전을 삭제한다.
+  -->
   <delete id="verDelete" parameterType="verInfoVO" >
-    /* VerManageMapper.deleteVersion */
+    /* USE : VerManageMapper.deleteVersion */
     DELETE
       FROM TB_CM_POS_VERSN
      WHERE VER_SER_NO = #{verSerNo}
   </delete>
 
+  <!-- 등록 매장 목록 조회  -->
+  <!--
+      TABLE    : TB_CM_POS_VERSN_STORE, TB_MS_STORE, TB_MS_POS
+      COMMENTS : 등록 매장 목록을 조회한다.
+  -->
   <select id="storeList" parameterType="verInfoVO" resultType="DefaultMap">
-    /* VerManageMapper.storeList */
+    /* USE : VerManageMapper.storeList */
     SELECT  A.VER_SER_NO,
             A.STORE_CD,
             B.STORE_NM,
@@ -155,8 +194,13 @@
         AND A.VER_SER_NO = #{verSerNo}
   </select>
 
+  <!-- 추가가능한 매장 목록 조회   -->
+  <!--
+      TABLE    : TB_MS_POS, TB_MS_STORE, TB_HQ_OFFICE
+      COMMENTS : 추가가능한 매장 목록을 조회한다.
+  -->
   <select id="srchStoreList" parameterType="applcStoreVO" resultType="DefaultMap">
-    /* VerManageMapper.srchStoreList */
+    /* USE : VerManageMapper.srchStoreList */
     <include refid="CmmSQL.PagingTemplateHeader"/>
     SELECT A.STORE_CD,
            A.POS_NO,
@@ -208,8 +252,13 @@
      <include refid="CmmSQL.PagingTemplateBottom"/>
   </select>
 
+  <!-- 버전 적용 매장 등록   -->
+  <!--
+      TABLE    : TB_CM_POS_VERSN_STORE
+      COMMENTS : 버전 적용 매장 등록한다.
+  -->
   <insert id="registStore" parameterType="applcStoreVO" >
-    /* VerManageMapper.registStore */
+    /* USE : VerManageMapper.registStore */
     <![CDATA[
     INSERT INTO TB_CM_POS_VERSN_STORE
     (
@@ -240,12 +289,32 @@
     ]]>
   </insert>
 
+  <!-- 버전 일련번호 중복 체크   -->
+  <!--
+      TABLE    : TB_CM_POS_VERSN
+      COMMENTS : 버전 일련번호 중복 체크한다.
+  -->
   <select id="chkVerSerNo" parameterType="verInfoVO" resultType="Integer">
-    /* VerManageMapper.chkVerSerNo */
+    /* USE : VerManageMapper.chkVerSerNo */
     SELECT COUNT(1)
       FROM TB_CM_POS_VERSN
      WHERE VER_SER_NO = ${verSerNo}
   </select>
+  
+  <!-- 버전 적용 매장 삭제   -->
+  <!--
+      TABLE    : TB_CM_POS_VERSN_STORE
+      COMMENTS : 버전 적용 매장 삭제한다.
+  -->
+  <delete id="removeStore" parameterType="applcStoreVO" >
+    /* USE : VerManageMapper.removeStore */
+    <![CDATA[
+    DELETE TB_CM_POS_VERSN_STORE
+     WHERE VER_SER_NO = #{verSerNo}
+       AND STORE_CD = #{storeCd}
+       AND POS_NO = #{posNo}
+    ]]>
+  </delete>
 
 </mapper>
 
