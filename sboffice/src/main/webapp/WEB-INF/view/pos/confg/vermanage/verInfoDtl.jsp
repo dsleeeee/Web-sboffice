@@ -224,7 +224,7 @@
     <%-- 적용매장 Header --%>
     var hData2 =
       [
-        {binding:"chk", header:"<s:message code='cmm.chk' />", width:"*"},
+        {binding:"chk", header:"<s:message code='cmm.chk' />", width:40},
         {binding:"storeCd", header:"<s:message code='verManage.store.storeCd' />"},
         {binding:"storeNm", header:"<s:message code='verManage.store.storeNm' />"},
         {binding:"posNo", header:"<s:message code='verManage.store.posNo' />"},
