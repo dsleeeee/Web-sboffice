@@ -428,7 +428,7 @@
   function getDtlData(items) {
     var param = items;
     
-    $.postJSON("/store/hq/hqManage/master/dtlInfo.sb", param, function(result) {
+    $.postJSON("/store/hq/hqmanage/master/dtlInfo.sb", param, function(result) {
       if(result.status === "FAIL") {
         s_alert.pop(result.message);
         return;
@@ -490,7 +490,7 @@
     param.bizNo3 = rBizNo3.text;
     param.bizNo = rBizNo1.text + rBizNo2.text + rBizNo3.text;
     
-    $.postJSON("/store/hq/hqManage/master/chkBizNo.sb", param, function(result) {
+    $.postJSON("/store/hq/hqmanage/master/chkBizNo.sb", param, function(result) {
       if(result.status === "FAIL") {
         s_alert.pop(result.message);
         return;
@@ -517,12 +517,12 @@
   
   <%-- 신규등록 버튼 클릭 --%>
   $("#btnReg").click(function(e){
-    chkVal("/store/hq/hqManage/master/regist.sb");
+    chkVal("/store/hq/hqmanage/master/regist.sb");
   });
   
   <%-- 저장 버튼 클릭 (수정) --%>
   $("#btnSave").click(function(e){
-    chkVal("/store/hq/hqManage/master/modify.sb");
+    chkVal("/store/hq/hqmanage/master/modify.sb");
   });
   
   <%-- validation --%>

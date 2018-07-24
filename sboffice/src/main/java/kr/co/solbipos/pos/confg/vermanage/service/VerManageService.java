@@ -1,6 +1,7 @@
 package kr.co.solbipos.pos.confg.vermanage.service;
 
 import java.util.List;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -23,79 +24,33 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 */
 public interface VerManageService { 
 
-    /**
-     * 포스버전 목록 조회
-     * 
-     * @param verInfo
-     * @return
-     */
+    /** 포스버전 목록 조회 */
     List<DefaultMap<String>> list(VerInfoVO verInfo);
 
-    /**
-     * 포스버전정보 상세 조회
-     * 
-     * @param verInfo
-     * @return
-     */
+    /** 포스버전정보 상세 조회 */
     DefaultMap<String> dtlInfo(VerInfoVO verInfo);
 
-    /**
-     * 매장목록 조회
-     * 
-     * @param verInfo
-     * @return
-     */
+    /** 매장목록 조회 */
     List<DefaultMap<String>> storeList(VerInfoVO verInfo);
     
-    /**
-     * 버전 삭제
-     * 
-     * @param verInfo
-     * @return
-     */
+    /** 버전 삭제 */
     int verDelete(VerInfoVO verInfo);
     
-    /**
-     * 버전 중복 체크
-     * 
-     * @param verInfo
-     * @return
-     */
+    /** 버전 시리얼넘버 중복 체크 */
     int chkVerSerNo(VerInfoVO verInfo);
     
-    /**
-     * 버전 등록
-     * 
-     * @param request
-     * @param verInfo
-     * @return
-     */
+    /** 버전 등록 */
     boolean regist(MultipartHttpServletRequest multi, SessionInfoVO sessionInfo);
     
-    /**
-     * 버전 수정
-     * 
-     * @param request
-     * @param verInfo
-     * @return
-     */
+    /** 버전 수정 */
     boolean modify(MultipartHttpServletRequest request, SessionInfoVO sessionInfo);
 
-    /**
-     * 매장추가 매장검색
-     * 
-     * @param applcStore
-     * @return
-     */
+    /** 매장검색 (매장추가용) */
     List<DefaultMap<String>> srchStoreList(ApplcStoreVO applcStore);
 
-    /**
-     * 버전 적용 매장 등록
-     * 
-     * @param applcStore
-     * @param sessionInfo
-     * @return
-     */
-    int registStore(ApplcStoreVO[] applcStore, SessionInfoVO sessionInfo);
+    /** 버전 적용 매장 등록 */
+    int registStore(ApplcStoreVO[] applcStores, SessionInfoVO sessionInfo);
 
+    /** 버전 적용 매장 삭제 */
+    int removeStore(ApplcStoreVO[] applcStores, SessionInfoVO sessionInfo);
 }

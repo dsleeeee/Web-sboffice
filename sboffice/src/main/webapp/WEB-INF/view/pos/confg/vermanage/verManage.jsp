@@ -102,7 +102,7 @@ var hData1 =
   ];
 
 <%-- 그리드 생성 --%>
-var grid1 = wgrid.genGrid("#theGrid1", hData1, "${menuCd}", 1, ${clo.getColumnLayout(1)});
+var grid1         = wgrid.genGrid("#theGrid1", hData1, "${menuCd}", 1, ${clo.getColumnLayout(1)});
 var ldata         = ${ccu.getListScale()};
 var listScaleBox  = wcombo.genCommonBox("#listScaleBox", ldata);
 

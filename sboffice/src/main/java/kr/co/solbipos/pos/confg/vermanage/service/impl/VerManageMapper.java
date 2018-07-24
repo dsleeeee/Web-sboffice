@@ -25,76 +25,33 @@ import kr.co.solbipos.pos.confg.vermanage.service.VerInfoVO;
 @Mapper
 public interface VerManageMapper { 
 
-    /** 
-     * 포스버전 목록 조회
-     * 
-     * @param verInfo
-     * @return
-     */
+    /** 포스버전 목록 조회 */
     List<DefaultMap<String>> getList(VerInfoVO verInfo);
 
-    /**
-     * 포스버전정보 상세 조회
-     * 
-     * @param verInfo
-     * @return
-     */
+    /** 포스버전정보 상세 조회 */
     DefaultMap<String> dtlInfo(VerInfoVO verInfo);
 
-    /**
-     * 버전 삭제
-     * 
-     * @param verInfo
-     * @return
-     */
+    /** 버전 삭제 */
     int verDelete(VerInfoVO verInfo);
 
-    /**
-     * 등록 매장 목록
-     * 
-     * @param verInfo
-     * @return
-     */
+    /** 등록 매장 목록 */
     List<DefaultMap<String>> storeList(VerInfoVO verInfo);
 
-    /**
-     * 매장추가 매장검색
-     * 
-     * @param applcStore
-     * @return
-     */
-    List<DefaultMap<String>> srchStoreList(ApplcStoreVO applcStore);
-
-    /**
-     * 버전 적용 매장 등록
-     * 
-     * @param applcStore
-     * @return
-     */
-    int registStore(ApplcStoreVO applcStore);
-    
-    /**
-     * 일련번호 중복 체크
-     * 
-     * @param verInfo
-     * @return
-     */
+    /** 일련번호 중복 체크 */
     int chkVerSerNo(VerInfoVO verInfo);
     
-    /**
-     * 버전 등록 
-     * 
-     * @param verInfo
-     */
+    /** 버전 등록 */
     int verRegist(VerInfoVO verInfo);
 
-    /**
-     * 버전 수정
-     * 
-     * @param verInfo
-     * @return
-     */
+    /** 버전 수정 */
     int verModify(VerInfoVO verInfo);
 
-   
+    /** 추가가능한 매장 목록 조회  */
+    List<DefaultMap<String>> srchStoreList(ApplcStoreVO applcStore);
+
+    /** 버전 적용 매장 등록 */
+    int registStore(ApplcStoreVO applcStore);
+    
+    /** 버전 적용 매장 삭제 */
+    int removeStore(ApplcStoreVO applcStore);
 }

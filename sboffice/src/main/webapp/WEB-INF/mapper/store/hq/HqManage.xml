@@ -177,7 +177,7 @@
            tho.HQ_OFFICE_NM AS STORE_NM,
            tho.OWNER_NM,
            tho.BIZ_NO,
-           (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '005' AND NMCODE_CD = thoA.SYS_STAT_FG) AS SYS_STAT_FG_NM,
+           (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '005' AND NMCODE_CD = tho.SYS_STAT_FG) AS SYS_STAT_FG_NM,
            (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '003' AND NMCODE_CD = tho.CLS_FG) AS CLS_FG_NM
       FROM TB_HQ_OFFICE tho
      WHERE tho.BIZ_NO = #{bizNo}
@@ -185,7 +185,7 @@
      SELECT 'S' AS STORE_FG,
             tms.STORE_CD,
             tms.STORE_NM,
-            tms.A.OWNER_NM,
+            tms.OWNER_NM,
             tms.BIZ_NO,
             (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '005' AND NMCODE_CD = tms.SYS_STAT_FG) AS SYS_STAT_FG_NM,
             (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '003' AND NMCODE_CD = tms.CLS_FG) AS CLS_FG_NM
@@ -467,7 +467,7 @@
              TB_WB_RESRCE_INFO twri,
              TB_WB_RESRCE_INFO twrif
        WHERE twr.USE_YN = 'Y'
-         AND (twr.SPCL_AUTHOR IS NULL OR A.SPCL_AUTHOR NOT IN ('A01'))
+         AND (twr.SPCL_AUTHOR IS NULL OR twr.SPCL_AUTHOR NOT IN ('A01'))
          AND twri.P_RESRCE = twr.RESRCE_CD
          AND twri.USE_YN = 'Y'
          AND twrif.P_RESRCE = twri.RESRCE_CD
@@ -524,7 +524,7 @@
              twr.RESRCE_NM AS RESRCE_NM_LARGE,
              twri.RESRCE_CD AS RESRCE_CD_MID,
              twri.RESRCE_NM AS RESRCE_NM_MID,
-             twrif.RESRCE_CD AS AS RESRCE_CD_SMALL,
+             twrif.RESRCE_CD AS RESRCE_CD_SMALL,
              twrif.RESRCE_NM AS RESRCE_NM_SMALL
         FROM TB_WB_RESRCE_INFO twr,
              TB_WB_RESRCE_INFO twri,
@@ -578,10 +578,10 @@
       PARAM    : hqManageVO
       COMMENTS : 메뉴권한을 복사한다.
   -->
-  <update id="copyAuth" parameterType="DefaultMap" >
+  <update id="copyAuth" parameterType="hqMenuVO" >
     /* USE : HqManageMapper.copyAuth */
     UPDATE TB_WB_USER_INFO
-       SET AUTH_GRP_CD = (SELECT B.AUTH_GRP_CD
+       SET AUTH_GRP_CD = (SELECT twu.AUTH_GRP_CD
                             FROM TB_HQ_EMPLOYEE the,
                                  TB_WB_USER_INFO twu
                            WHERE the.HQ_OFFICE_CD = #{copyHqOfficeCd}
@@ -629,7 +629,7 @@
      WHEN NOT MATCHED THEN
      INSERT (USER_ID, RESRCE_CD, INCLD_EXCLD_FG, USE_YN, REG_DT, REG_ID)
      VALUES (
-              (SELECT the.USER_ID FROM TB_HQ_EMPLOYEE the, TB_WB_USER_INFO twu WHERE the.HQ_OFFICE_CD = #{hqOfficeCd} AND the.EMP_NO = '0000'  AND twu.USER_ID = the.USER_ID),
+              (SELECT the.USER_ID FROM TB_HQ_EMPLOYEE the, TB_WB_USER_INFO twu WHERE the.HQ_OFFICE_CD = #{hqOfficeCd} AND the.EMP_NO = '0000' AND twu.USER_ID = the.USER_ID),
               twae.RESRCE_CD,
               twae.INCLD_EXCLD_FG,
               twae.USE_YN,
@@ -660,7 +660,7 @@
     )
     VALUES
     (
-      (SELECT twu.USER_ID FROM TB_HQ_EMPLOYEE the, TB_WB_USER_INFO twu WHERE the.HQ_OFFICE_CD = #{hqOfficeCd} AND twu.USER_ID = the.USER_ID),
+      (SELECT twu.USER_ID FROM TB_HQ_EMPLOYEE the, TB_WB_USER_INFO twu WHERE the.HQ_OFFICE_CD = #{hqOfficeCd} AND the.EMP_NO = '0000' AND twu.USER_ID = the.USER_ID),
       #{resrceCd},
       #{incldExcldFg},
       'Y',
@@ -681,7 +681,7 @@
     /* USE : HqManageMapper.isAuth */
     SELECT COUNT(RESRCE_CD) AS CNT
       FROM TB_WB_AUTHOR_EXCEPT
-     WHERE USER_ID = (SELECT B.USER_ID
+     WHERE USER_ID = (SELECT twu.USER_ID
                         FROM TB_HQ_EMPLOYEE the,
                              TB_WB_USER_INFO twu
                        WHERE the.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -700,7 +700,7 @@
   <delete id="removeAuth" parameterType="DefaultMap">
     /* HqManageMapper.removeAuth */
     DELETE TB_WB_AUTHOR_EXCEPT
-     WHERE USER_ID = (SELECT B.USER_ID
+     WHERE USER_ID = (SELECT twu.USER_ID
                         FROM TB_HQ_EMPLOYEE the,
                              TB_WB_USER_INFO twu
                        WHERE the.HQ_OFFICE_CD = #{hqOfficeCd}

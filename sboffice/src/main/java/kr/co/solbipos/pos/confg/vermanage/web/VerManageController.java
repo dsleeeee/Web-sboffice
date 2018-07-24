@@ -239,6 +239,26 @@ public class VerManageController {
         return returnJson(Status.OK, result);
     }
 
+    /**
+     * 버전 적용 매장 삭제
+     *
+     * @param applcStore
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/applcstore/removeStore.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result removeStore(@RequestBody ApplcStoreVO[] applcStore, HttpServletRequest request,
+            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfo = sessionService.getSessionInfo(request);
+
+        int result = service.removeStore(applcStore, sessionInfo);
+
+        return returnJson(Status.OK, result);
+    }
 
 
 }

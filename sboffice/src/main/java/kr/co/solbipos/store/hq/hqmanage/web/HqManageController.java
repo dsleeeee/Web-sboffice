@@ -42,7 +42,7 @@ import kr.co.solbipos.store.hq.hqmanage.service.HqMenuVO;
 
 
 @Controller
-@RequestMapping(value = "/store/hq/hqManage/")
+@RequestMapping(value = "/store/hq/hqmanage/")
 public class HqManageController {
 
     @Autowired
@@ -61,7 +61,7 @@ public class HqManageController {
      * @author  김지은
      * @since   2018. 06. 08.
      */
-    @RequestMapping(value = "hqManage/list.sb", method = RequestMethod.GET)
+    @RequestMapping(value = "hqmanage/list.sb", method = RequestMethod.GET)
     public String list(HttpServletRequest request, HttpServletResponse response, 
             Model model) {
         return "store/hq/hqManage/hqManage";
@@ -77,7 +77,7 @@ public class HqManageController {
      * @author  김지은
      * @since   2018. 06. 08.
      */
-    @RequestMapping(value = "hqManage/list.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "hqmanage/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result list(HqManageVO hqManage, HttpServletRequest request,
             HttpServletResponse response, Model model) {
@@ -221,7 +221,7 @@ public class HqManageController {
      * @author  김지은
      * @since   2018. 06. 08.
      */
-    @RequestMapping(value = "authorExcept/authHqList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "authorexcept/authHqList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result authHqList(HqManageVO hqManage, HttpServletRequest request,
             HttpServletResponse response, Model model) {
@@ -254,9 +254,9 @@ public class HqManageController {
      * @author  김지은
      * @since   2018. 06. 08.
      */
-    @RequestMapping(value = "authorExcept/copyAuth.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "authorexcept/copyAuth.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result copyAuth(@RequestBody HqMenuVO hqMenu, HttpServletRequest request,
+    public Result copyAuth(HqMenuVO hqMenu, HttpServletRequest request,
             HttpServletResponse response, Model model) {
         
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
@@ -276,7 +276,7 @@ public class HqManageController {
      * @author  김지은
      * @since   2018. 06. 08.
      */
-    @RequestMapping(value = "authorExcept/addAuth.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "authorexcept/addAuth.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result addAuth(@RequestBody HqMenuVO[] hqMenu, HttpServletRequest request,
             HttpServletResponse response, Model model) {
@@ -298,7 +298,7 @@ public class HqManageController {
      * @author  김지은
      * @since   2018. 06. 08.
      */
-    @RequestMapping(value = "authorExcept/removeAuth.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "authorexcept/removeAuth.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result removeAuth(@RequestBody HqMenuVO[] hqMenu, HttpServletRequest request,
             HttpServletResponse response, Model model) {

@@ -236,7 +236,7 @@
     // 데이터 조회
     var param = selectedHq;
     
-    $.postJSON("/store/hq/hqManage/authorExcept/authHqList.sb", param, function(result) {
+    $.postJSON("/store/hq/hqmanage/authorexcept/authHqList.sb", param, function(result) {
       console.log(result);
       if(result.status === "FAIL") {
         s_alert.pop(result.message);
@@ -260,7 +260,7 @@
     
     console.log(param);
 
-    $.postJSONSave("/store/hq/hqManage/authorExcept/copyAuth.sb", JSON.stringify(param), function(result) {
+    $.postJSONSave("/store/hq/hqmanage/authorexcept/copyAuth.sb", JSON.stringify(param), function(result) {
 
       console.log(result);
       var res = result.data;
@@ -290,7 +290,7 @@
     console.log(paramArr)
     console.log(JSON.stringify(paramArr))
     
-    $.postJSONArray("/store/hq/hqManage/authorExcept/addAuth.sb", paramArr, function(result) {
+    $.postJSONArray("/store/hq/hqmanage/authorExcept/addAuth.sb", paramArr, function(result) {
 
       console.log(result)
       
@@ -320,7 +320,7 @@
     }
     console.log(paramArr);
     
-    $.postJSONArray("/store/hq/hqManage/authorExcept/removeAuth.sb", JSON.stringify(paramArr), function(result) {
+    $.postJSONArray("/store/hq/hqmanage/authorexcept/removeAuth.sb", JSON.stringify(paramArr), function(result) {
 
       console.log(result)
       var res = result.data;

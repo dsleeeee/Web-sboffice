@@ -185,6 +185,10 @@
           <div class="tr">
             <%-- 매장추가 --%>
             <a href="javascript:;" id="btnAddStore" class="btn_grayS2"><s:message code="verManage.add.store" /></a>
+            
+            <%-- 매장추가 --%>
+            <a href="javascript:;" id="btnDelStore" class="btn_grayS2"><s:message code="verManage.delete.store" /></a>
+            
             <%-- 엑셀 다운로드 --%>
             <a href="javascript:;" id="btnExcel2" class="btn_grayS2"><s:message code="cmm.excel.down" /></a>
           </div>
@@ -220,12 +224,12 @@
     <%-- 적용매장 Header --%>
     var hData2 =
       [
-        {binding:"rnum", header:"<s:message code='cmm.no' />"},
+        {binding:"chk", header:"<s:message code='cmm.chk' />", width:"*"},
         {binding:"storeCd", header:"<s:message code='verManage.store.storeCd' />"},
         {binding:"storeNm", header:"<s:message code='verManage.store.storeNm' />"},
         {binding:"posNo", header:"<s:message code='verManage.store.posNo' />"},
         {binding:"posNm", header:"<s:message code='verManage.store.posNm' />"},
-        {binding:"verRecvFg", header:"<s:message code='verManage.store.verRecvFg' />",dataMap:verRecvFgDataMap},
+        {binding:"verRecvFg", header:"<s:message code='verManage.store.verRecvFg' />"},
         {binding:"verRecvDt", header:"<s:message code='verManage.store.verRecvDt' />"},
         {binding:"posIp", header:"<s:message code='verManage.store.posIp' />"},
         {binding:"clsFg", header:"<s:message code='verManage.store.clsFg' />", dataMap:clsFgDataMap},
@@ -238,6 +242,35 @@
     var grid2 = wgrid.genGrid("#theGrid2", hData2, "${menuCd}", 2, ${clo.getColumnLayout(2)});
     grid2.isReadOnly = true;
 
+    <%-- 체크박스 초기화 --%>
+    grid2.formatItem.addHandler(function(s, e) {
+      if (e.panel == s.cells) {
+        var col = s.columns[e.col];
+        var item = s.rows[e.row].dataItem;
+        if( col.binding == "chk") {
+          e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.chk == true || item.chk == "Y" ? 'checked' : '') + '>';
+        }
+      }
+    });
+
+    <%-- 체크박스 핸들러 --%>
+    grid2.addEventListener(grid2.hostElement, 'mousedown', function(e) {
+      var ht = grid2.hitTest(e);
+      if( ht.cellType == wijmo.grid.CellType.Cell) {
+        var col = ht.panel.columns[ht.col];
+        if(col.binding == "chk") {
+          grid2.beginUpdate();
+          if(grid2.cells.getCellData(ht.row, ht.col, true)){
+            grid2.cells.setCellData(ht.row, ht.col, false);
+          } else {
+            grid2.cells.setCellData(ht.row, ht.col, true);
+          }
+          grid2.endUpdate();
+        }
+      }
+    });
+    
+    
     <%-- 적용매장 탭 클릭 --%>
     $("#storeInfoTab").click(function(e){
       <%-- 버전정보 등록시, 버전정보 없을 경우 --%>
@@ -262,6 +295,35 @@
       showAddStorelLayer();
     });
 
+    <%-- 매장삭제 버튼 클릭 --%>
+    $("#btnDelStore").click(function(e){
+      for(var i = grid2.itemsSource.itemCount-1; i >= 0; i-- ){
+        var item = grid2.itemsSource.items[i];
+        if(item.chk){
+          grid2.itemsSource.removeAt(i);
+        }
+      }
+      
+      if(grid2.itemsSource.itemsRemoved.length == 0) {
+        s_alert("<s:message code='verManage.no.delete.item' />");
+        return;
+      }
+      else {
+        var paramArr = new Array();
+        for(var i=0; i<grid2.collectionView.itemsRemoved.length; i++){
+          grid2.collectionView.itemsRemoved[i].status = "D";
+          paramArr.push(grid2.collectionView.itemsRemoved[i]);
+        }
+        $.postJSONArray("/pos/confg/vermanage/applcstore/removeStore.sb", paramArr, function(result) {
+          s_alert.pop("<s:message code='cmm.delSucc' />");
+          grid2.collectionView.clearChanges();
+        },
+        function(result) {
+          s_alert.pop(result.data.msg);
+        });
+      }
+    });
+    
     <%-- 엑셀 다운로드 버튼 클릭 --%>
     $("#btnExcel2").click(function(e){
       var name = "<s:message code='verManage.store.registed'/>";
@@ -376,7 +438,9 @@
 
         var list = result.data.list;
 
-        grid2.itemsSource = list;
+        grid2.itemsSource = new wijmo.collections.CollectionView(list);
+        grid2.itemsSource.trackChanges = true;
+
         selectVerSerCnt = list.length;
 
         /*
@@ -414,16 +478,12 @@
     <%-- 버전일련번호 중복체크 --%>
     /*
     function chkSerNo(sendUrl){
-      console.log('1')
       if(selectVerSerNo == "") {
         var param = {};
         param.verSerNo = verSerNoInput.text;
 
         $.postJSON("/pos/confg/vermanage/verinfo/chkVerSerNo.sb", param, function(result) {
-          console.log(result);
-          console.log(result.data > 0);
           if(result.data > 0) {
-            console.log(":::  ")
             s_alert.pop("<s:message code='verManage.duplicate.verSerNo' />");
             return;
           }
@@ -438,29 +498,9 @@
     <%-- 저장 또는 수정 --%>
     function sendFormData(sendUrl) {
 
-      console.log('3')
       var pgmYn = $('input:checkbox[id="pgm"]').is(":checked") == true ? "Y" : "N";
       var dbYn  = $('input:checkbox[id="db"]').is(":checked") == true ? "Y" : "N";
       var imgYn = $('input:checkbox[id="img"]').is(":checked") == true ? "Y" : "N";
-
-
-      // test
-      /*
-      var formData = new FormData(document.getElementById("uploadForm"));
-      var file = $('input[type=file]')[0].files[0];
-
-      formData.append("file" , file);
-
-      formData.append("verSerNo", verSerNoInput.text);
-      formData.append("verSerNm", verSerNmInput.text);
-      formData.append("fileSize", fileSizeInput.text);
-      formData.append("fileDesc", fileDescInput.text);
-      formData.append("progFg", progFgCombo.selectedValue);
-      formData.append("pgmYn", pgmYn);
-      formData.append("dbYn", dbYn);
-      formData.append("imgYn", imgYn);
-      formData.append("useYn", useYnCombo.selectedValue);
-      */
 
       var formData = new FormData($("#uploadForm")[0]);
 
@@ -475,9 +515,6 @@
       formData.append("useYn", useYnCombo.selectedValue);
 
       $.postJSONFile(sendUrl, formData, function(result) {
-        console.log("save success");
-        console.log(result);
-
         if(result.status === "FAIL") {
           s_alert.pop(result.message);
           return;
@@ -535,9 +572,7 @@
   <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
   <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
 
-    <%-- 수정 --%>
-
-    <%-- 수정 - 레이어 열기  --%>
+    <%-- 레이어 열기  --%>
     function showVerInfoDtlEditLayer(obj) {
 
       var incldDtls = "";
