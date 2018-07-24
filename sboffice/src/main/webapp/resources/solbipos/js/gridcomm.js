@@ -59,11 +59,18 @@
           wgridPic.genGridPicker("#" + item.id, grid, resrceCd, gridIdx);
         }
         
-        genGridRowHeaderNumber(g);
-        // RowHeader 에 RowNumber 표시처리
-        function genGridRowHeaderNumber(grid) {
+        genGridRowNumberAndVerticalAlign(g);
+        // 그리드 Custom 표시/정렬 추가
+        function genGridRowNumberAndVerticalAlign(grid) {
           grid.itemFormatter = function(panel, r, c, cell) {
-            if ( panel.cellType == wijmo.grid.CellType.RowHeader ) {
+            //merged header 정렬
+            if ( panel.cellType == wijmo.grid.CellType.ColumnHeader ) {
+              var range = grid.getMergedRange(panel, r, c);
+              if ( range ) {
+                cell.innerHTML = "<div class='wj-header merged-custom'>" + cell.innerHTML + "</div>";
+              }
+           // RowHeader 에 RowNumber 표시
+            } else if ( panel.cellType == wijmo.grid.CellType.RowHeader ) {
               if ( !isEmpty(panel._rows[r]._data.rnum) ) {
                 cell.textContent = (panel._rows[r]._data.rnum).toString();
               } else {
