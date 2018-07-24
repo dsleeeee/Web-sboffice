@@ -66,14 +66,6 @@ public class TemplateController {
         list = templateService.getPrintTypeList(params);
         model.addAttribute("listPrintType", convertToJson(list));
         
-        // 출력물코드 목록 조회
-        if ( params.getPrtClassCd() == null ) {
-            params.setPrtClassCd(list.get(0).get("value"));
-        }
-        list = templateService.getPrintCodeList(params);
-        model.addAttribute("listPrintCode", convertToJson(list));
-        
-        
         return "sys/bill/template/template";
     }
     

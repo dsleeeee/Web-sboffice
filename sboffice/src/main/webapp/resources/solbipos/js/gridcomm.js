@@ -64,11 +64,11 @@
         function genGridRowHeaderNumber(grid) {
           grid.itemFormatter = function(panel, r, c, cell) {
             if ( panel.cellType == wijmo.grid.CellType.RowHeader ) {
-                if ( $("#page").data("size") > 0 ) {
-                  cell.textContent = (panel._rows[r]._data.rnum).toString();
-                } else {
-                  cell.textContent = (r + 1).toString();
-                }
+              if ( !isEmpty(panel._rows[r]._data.rnum) ) {
+                cell.textContent = (panel._rows[r]._data.rnum).toString();
+              } else {
+                cell.textContent = (r + 1).toString();
+              }
             }
           }
         }

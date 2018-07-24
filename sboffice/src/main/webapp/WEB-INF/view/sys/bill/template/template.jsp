@@ -29,8 +29,9 @@
         </td>
         <td>
           <%-- 버튼 --%>
-          <div class="">
-            <button class="btn_blue fl" id="btnSearch"><s:message code="template.btnNm" /></button>
+          <div class="updownSet oh">
+            <button class="btn_blue fl mr10" id="btnSearch"><s:message code="template.srchBtnNm" /></button>
+            <button class="btn_blue fl " id="btnSearchStore"><s:message code="template.btnNm" /></button>
           </div>
         </td>
       </tr>
@@ -79,7 +80,7 @@
     <div class="wj-TblWrapBr ml10 pd10" style="height: 400px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='template.editNm' /></span>
-        <button class="btn_skyblue" id="btnSaveMapng" style="display: none;">
+        <button class="btn_skyblue" id="btnSaveTemplate" style="display: none;">
           <s:message code="cmm.save" />
         </button>
       </div>
@@ -132,8 +133,7 @@
     <%-- 출력물종류 선택 콤보박스 --%>
     var cData       = ${listPrintType};
     var srchPrtTypeList = wcombo.genCommonBoxFun("#srchPrtTypeList", cData, function(e) {
-      
-      
+      searchPrintCodeList();
     });
     srchPrtTypeList.inputElement.disabled = true;
     
@@ -147,8 +147,67 @@
     var gridTemplate = wgrid.genGrid("#gridTemplate", dataTemplate, "${menuCd}", 1, ${clo.getColumnLayout(1)});
     gridTemplate.isReadOnly = false;
     
-    <%-- 리스트박스용 데이터 --%>
-    var listData = ${listPrintCode};
+    <%-- 대표명칭 그리드 선택변경 이벤트 --%>
+    gridTemplate.selectionChanged.addHandler(function (s, e) {
+      var col = s.columns[e.col];
+      if ( col.binding == "templtNm" ) {
+        var selectedRow = gridTemplate.rows[e.row].dataItem;
+        if ( selectedRow.prtForm != null ) {
+          theTarget.value = selectedRow.prtForm;
+          thePreview.innerHTML = replacePrtCd(selectedRow.prtForm);
+        } else {
+          theTarget.value = "";
+          thePreview.innerHTML = "";
+        }
+        $("#btnSaveTemplate").show();
+      }
+    });
+    
+    <%-- 조회버튼 클릭 --%>
+    $("#btnSearch").click(function(e){
+      searchPrintCodeList();
+    });
+    
+    <%-- 그리드 조회 --%>
+    function searchGrid(value) {
+      
+      var param = {};
+      param.prtClassCd = value; 
+      
+      $.postJSON("/sys/bill/template/item/list.sb", param, 
+          function(result) {
+            if(result.status === "FAIL") {
+              s_alert.pop(result.message);
+              return;
+            }
+            
+            var list = result.data.list;
+            gridTemplate.itemsSource = new wijmo.collections.CollectionView(list);
+            gridTemplate.itemsSource.trackChanges = true;
+            
+            <%-- 버튼 Show --%>
+            $("#btnAddPrint").show();
+            $("#btnDelPrint").show();
+            $("#btnSavePrint").show();
+            
+            if ( list.length === undefined || list.length == 0 ) {
+              <%-- 그리드 초기화 --%>
+              gridTemplate.itemsSource = [];
+              <%-- 편집/미리보기 폼 초기화 --%>
+              theTarget.value = "";
+              thePreview.innerHTML = "";
+            } else {
+              gridTemplate.select(0, 1);
+            }
+            
+          },
+          function(){
+            s_alert.pop("Ajax Fail");
+          }
+      );
+      
+    }
+    
     <%-- 리스트박스 생성 --%>
     var listBox = new wijmo.input.ListBox('#listBoxCode', {
       <%-- 보여지는 데이터 --%>
@@ -158,12 +217,11 @@
       <%-- 드래그 사용하도록 설정 --%>
       formatItem: function(s, e) { 
         e.item.setAttribute('draggable', 'true');
-      },
-      itemsSource: listData
+      }
     });
     
-    <%-- 그리드와 리스트박스 조회 --%>
-    function searchGridAndListBox() {
+    <%-- 출력물코드 목록 조회 --%>
+    function searchPrintCodeList() {
       
       var param = {};
       param.prtClassCd = srchPrtTypeList.selectedItem["value"]; 
@@ -180,6 +238,8 @@
             
             if ( list.length === undefined || list.length == 0 ) {
               listBox.itemsSource = [];
+            } else {
+              searchGrid(srchPrtTypeList.selectedItem["value"]);
             }
             
           },
@@ -188,7 +248,7 @@
           }
       );
       
-    }
+    };
     
     <%-- 클릭드래그시 선택이벤트 발생 --%>
     listBox.hostElement.addEventListener("mousedown",function(e){
@@ -209,6 +269,7 @@
       
     }, true);
     
+    <%-- 편집/미리보기 폼 element 할당 --%>
     var theTarget = document.getElementById('editTextArea');
     var thePreview = document.getElementById('preview');
     
@@ -259,6 +320,7 @@
     <%-- 미리보기 적용 --%>
     function replacePrtCd(value) {
       
+      var listData = listBox.itemsSource;
       <%-- 정규식으로 {} 코드값 단위로 끊기--%>
       var matches = value.match(/\{([^}]+)\}/gm);
       if ( matches != null ) {

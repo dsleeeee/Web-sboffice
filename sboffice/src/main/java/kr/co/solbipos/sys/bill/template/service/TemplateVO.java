@@ -29,6 +29,15 @@ public class TemplateVO extends CmmVO {
     /** 출력물분류코드 */
     private String prtClassCd;
     
+    /** 템플릿코드 */
+    private String templtCd;
+    
+    /** 템플릿명 */
+    private String templtNm;
+    
+    /** 출력물폼 */
+    private String prtForm;
+    
     /** 출력물분류코드명 */
     private String prtClassNm;
     
