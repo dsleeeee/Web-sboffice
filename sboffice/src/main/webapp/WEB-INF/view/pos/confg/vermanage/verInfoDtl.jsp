@@ -224,19 +224,18 @@
     <%-- 적용매장 Header --%>
     var hData2 =
       [
-        //{binding:"rnum", header:"<s:message code='cmm.no' />"},
         {binding:"chk", header:"<s:message code='cmm.chk' />", width:"*"},
-        {binding:"storeCd", header:"<s:message code='verManage.store.storeCd' />", width:"*"},
-        {binding:"storeNm", header:"<s:message code='verManage.store.storeNm' />", width:"*"},
-        {binding:"posNo", header:"<s:message code='verManage.store.posNo' />", width:"*"},
-        {binding:"posNm", header:"<s:message code='verManage.store.posNm' />", width:"*"},
-        {binding:"verRecvFg", header:"<s:message code='verManage.store.verRecvFg' />",dataMap:verRecvFgDataMap, width:"*"},
-        {binding:"verRecvDt", header:"<s:message code='verManage.store.verRecvDt' />", width:"*"},
-        {binding:"posIp", header:"<s:message code='verManage.store.posIp' />", width:"*"},
-        {binding:"clsFg", header:"<s:message code='verManage.store.clsFg' />", dataMap:clsFgDataMap, width:"*"},
-        {binding:"sysStatFg", header:"<s:message code='verManage.store.sysStatFg' />",dataMap:sysStatFgDataMap, width:"*"},
-        {binding:"regDt", header:"<s:message code='verManage.regDt' />", width:"*"},
-        {binding:"regId", header:"<s:message code='verManage.regId' />", width:"*"}
+        {binding:"storeCd", header:"<s:message code='verManage.store.storeCd' />"},
+        {binding:"storeNm", header:"<s:message code='verManage.store.storeNm' />"},
+        {binding:"posNo", header:"<s:message code='verManage.store.posNo' />"},
+        {binding:"posNm", header:"<s:message code='verManage.store.posNm' />"},
+        {binding:"verRecvFg", header:"<s:message code='verManage.store.verRecvFg' />"},
+        {binding:"verRecvDt", header:"<s:message code='verManage.store.verRecvDt' />"},
+        {binding:"posIp", header:"<s:message code='verManage.store.posIp' />"},
+        {binding:"clsFg", header:"<s:message code='verManage.store.clsFg' />", dataMap:clsFgDataMap},
+        {binding:"sysStatFg", header:"<s:message code='verManage.store.sysStatFg' />",dataMap:sysStatFgDataMap},
+        {binding:"regDt", header:"<s:message code='verManage.regDt' />"},
+        {binding:"regId", header:"<s:message code='verManage.regId' />"}
       ];
 
     <%-- 적용매장 그리드 생성 --%>
