@@ -59,7 +59,7 @@
       </div>
       <%-- 개발시 높이 조절해서 사용--%>
       <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
-      <div id="gridTemplate" style="height:310px;"></div>
+      <div id="gridTemplate" style="height:335px;"></div>
     </div>
     <%--//위즈모 테이블--%>
   </div>
@@ -71,12 +71,12 @@
         <span class="fl bk lh30"><s:message code='template.listNm' /></span>
       </div>
       <div class="app-input-group">
-        <div id="listBoxCode" style="height:310px;"></div>
+        <div id="listBoxCode" style="height:335px;"></div>
       </div>
     </div>
   </div>
   
-  <div class="fl receiptEdit" style="width:42ch;">
+  <div class="fl receiptEdit" style="width:348px;">
     <div class="wj-TblWrapBr ml10 pd10" style="height: 400px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='template.editNm' /></span>
@@ -84,19 +84,19 @@
           <s:message code="cmm.save" />
         </button>
       </div>
-      <div style="height:310px;">
-        <textarea id="editTextArea" style="width:100%;height:100%;resize:none;overflow: auto;"></textarea>
+      <div style="height:335px;">
+        <textarea id="editTextArea"></textarea>
       </div>
     </div>
   </div>
   
-  <div class="fl receiptEdit" style="width:42ch;">
+  <div class="fl receiptEdit" style="width:348px;">
     <div class="wj-TblWrapBr ml10 pd10" style="height: 400px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='template.viewNm' /></span>
       </div>
-      <div style="height:310px;">
-        <pre id="preview" style="font-family:'굴림체', 'sans-serif';word-wrap: break-word;white-space: pre-wrap;white-space: -moz-pre-wrap;white-space: -pre-wrap;white-space: -o-pre-wrap;word-break:break-all;"></pre>
+      <div style="height:335px;">
+        <pre id="preview"></pre>
       </div>
     </div>
   </div>
@@ -140,7 +140,7 @@
     <%-- 템플릿 그리드 --%>
     var dataTemplate =
       [
-        { binding:"chkGrid", header:"<s:message code='template.chk' />", dataType:wijmo.DataType.Boolean, width:45},
+        { binding:"gChk", header:"<s:message code='template.chk' />", dataType:wijmo.DataType.Boolean, width:45},
         { binding:"templtNm", header:"<s:message code='template.templtNm'/>", width:"*"},
       ];
     <%-- 템플릿 그리드 생성 --%>
@@ -209,7 +209,8 @@
     }
     
     <%-- 리스트박스 생성 --%>
-    var listBox = new wijmo.input.ListBox('#listBoxCode', {
+    var listBox = new wijmo.input.ListBox('#listBoxCode', 
+      {
       <%-- 보여지는 데이터 --%>
       displayMemberPath: 'prtCd',
       <%-- 선택시 데이터 --%>
@@ -304,7 +305,14 @@
         } else {
           return;
         }
+        <%-- 특정문자 html 태그 처리 --%>
+        if ( prtCd.indexOf("CENTER") > 0 ) {
+          var htmlTag = prtCd.replace("{", "<").replace("}", ">");
+          
+        }
         theTarget.value = strFront + prtCd + strEnd;
+        
+        console.log(prtCd);
         
         <%-- 미리보기 적용 --%>
         thePreview.innerHTML = replacePrtCd(theTarget.value);
@@ -319,7 +327,7 @@
     
     <%-- 미리보기 적용 --%>
     function replacePrtCd(value) {
-      
+      <%-- 리스트박스 데이터 가져옴 --%>
       var listData = listBox.itemsSource;
       <%-- 정규식으로 {} 코드값 단위로 끊기--%>
       var matches = value.match(/\{([^}]+)\}/gm);

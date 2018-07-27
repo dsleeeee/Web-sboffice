@@ -7,6 +7,8 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import kr.co.common.service.session.SessionService;
@@ -17,7 +19,6 @@ import kr.co.solbipos.application.session.auth.enums.LoginResult;
 import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.LoginHistVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @Class Name : AuthServiceImpl.java
@@ -35,10 +36,11 @@ import lombok.extern.slf4j.Slf4j;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-@Slf4j
 @Service("authService")
 public class AuthServiceImpl implements AuthService {
-
+    
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    
     @Autowired
     AuthMapper authMapper;
 
@@ -112,7 +114,7 @@ public class AuthServiceImpl implements AuthService {
     private boolean loginPasswordCheck(SessionInfoVO sessionInfoVO, SessionInfoVO webUser) {
 
         if (isEmpty(sessionInfoVO) || isEmpty(webUser)) {
-            log.warn("password check object null...");
+            LOGGER.warn("password check object null...");
             return false;
         }
 
@@ -120,7 +122,7 @@ public class AuthServiceImpl implements AuthService {
         String userPw = webUser.getUserPwd();
 
         if (isEmpty(loginPw) || isEmpty(userPw)) {
-            log.warn("password string null, loginPw empty:{}, userPw empty:{}", isEmpty(loginPw),
+            LOGGER.warn("password string null, loginPw empty:{}, userPw empty:{}", isEmpty(loginPw),
                     isEmpty(userPw));
             return false;
         }
@@ -193,7 +195,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public int loginHist(LoginHistVO loginHistVO) {
-        log.debug(loginHistVO.toString());
+        LOGGER.debug(loginHistVO.toString());
         return authMapper.insertLoginHist(loginHistVO);
     }
 

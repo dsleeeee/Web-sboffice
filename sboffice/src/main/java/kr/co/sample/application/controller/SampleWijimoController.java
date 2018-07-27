@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,7 +28,6 @@ import kr.co.sample.application.domain.CcdCodemTVO;
 import kr.co.sample.application.domain.TmpDragtTVO;
 import kr.co.sample.application.service.SampleService;
 import kr.co.solbipos.application.common.service.ResrceInfoVO;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * 샘플 컨트롤러다.
@@ -34,10 +35,11 @@ import lombok.extern.slf4j.Slf4j;
  * @author 정용길
  */
 
-@Slf4j
 @Controller
 public class SampleWijimoController {
-
+    
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    
     @Autowired
     SampleService sampleService;
 
@@ -189,7 +191,7 @@ public class SampleWijimoController {
                 HashMap<String, Object> m2Header = new HashMap<>();
 
                 // 상위 메뉴를 찾음
-                if(r2.getPResrce().equals(m1ResrceCd)) {
+                if(r2.getpResrce().equals(m1ResrceCd)) {
                     if(isEmpty(r2.getUrl())) {
                         m2Header.put("header", r2.getResrceNm());
                     }
@@ -202,7 +204,7 @@ public class SampleWijimoController {
                     for (int k = 0; k < m3.size(); k++) {
                         ResrceInfoVO r3 = m3.get(k);
 
-                        if(r3.getPResrce().equals(m2ResrceCd)) {
+                        if(r3.getpResrce().equals(m2ResrceCd)) {
                             HashMap<String, Object> m3Header = new HashMap<>();
 
                             if(isEmpty(r3.getUrl())) {
@@ -228,7 +230,7 @@ public class SampleWijimoController {
 
               HashMap<String, Object> m3Header = new HashMap<>();
 
-              if(r3.getPResrce().equals(m1ResrceCd)) {
+              if(r3.getpResrce().equals(m1ResrceCd)) {
 
                   if(isEmpty(r3.getUrl())) {
                       m3Header.put("header", r3.getResrceNm());
@@ -239,7 +241,7 @@ public class SampleWijimoController {
                   }
                   List<HashMap<String, Object>> mitems = new ArrayList<HashMap<String, Object>>();
 
-                  if(r3.getPResrce().equals(m3ResrceCd)) {
+                  if(r3.getpResrce().equals(m3ResrceCd)) {
 
                       if(isEmpty(r3.getUrl())) {
                           m3Header.put("header", r3.getResrceNm());
@@ -261,7 +263,7 @@ public class SampleWijimoController {
         sw.stop();
 
         String test = convertToJson(rList);
-        log.error(test);
+        LOGGER.error(test);
 
         model.addAttribute("treeData", test);
         model.addAttribute("task", sw.getTotalTimeSeconds());
@@ -353,25 +355,26 @@ public class SampleWijimoController {
     * @param model
     * @return
     */
-   @RequestMapping(value = "saveDragNDrop.sb", method = RequestMethod.POST)
-   @ResponseBody
-   public Result saveDragNDrop(HttpSession sessions, Model model, @RequestBody TmpDragtTVO[] tmpDragtTVO) {
+    @RequestMapping(value = "saveDragNDrop.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveDragNDrop(HttpSession sessions, Model model,
+            @RequestBody TmpDragtTVO[] tmpDragtTVO) {
 
-     log.error("tmpDragtT.length  : " + tmpDragtTVO.length);
+        LOGGER.error("tmpDragtT.length  : " + tmpDragtTVO.length);
 
-     if(tmpDragtTVO.length > 0) {
-       for(int i=0; i<tmpDragtTVO.length; i++) {
+        if (tmpDragtTVO.length > 0) {
+            for (int i = 0; i < tmpDragtTVO.length; i++) {
 
-         log.error(i + " : " + tmpDragtTVO[i]);
-         log.error("comCd : " + tmpDragtTVO[i].getComCd());
+                LOGGER.error(i + " : " + tmpDragtTVO[i]);
+                LOGGER.error("comCd : " + tmpDragtTVO[i].getComCd());
 
-         //TODO insert, update, delete 로직 추가
-       }
-     }
+                // TODO insert, update, delete 로직 추가
+            }
+        }
 
-     List<DefaultMap<Object>> temp = sampleService.selectDdSum();
-     return new Result(Status.OK, temp);
-   }
+        List<DefaultMap<Object>> temp = sampleService.selectDdSum();
+        return new Result(Status.OK, temp);
+    }
 
    /**
     * drag & drop  test

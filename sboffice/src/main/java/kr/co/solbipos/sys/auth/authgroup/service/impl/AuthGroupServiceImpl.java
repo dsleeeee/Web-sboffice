@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import kr.co.common.data.enums.Status;
@@ -21,23 +23,21 @@ import kr.co.solbipos.sys.auth.authgroup.service.AuthGroupService;
 import kr.co.solbipos.sys.auth.authgroup.service.AuthGroupVO;
 import kr.co.solbipos.sys.auth.authgroup.service.AuthorExceptVO;
 import kr.co.solbipos.sys.auth.authgroup.service.AuthorGrpResrceVO;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * 시스템관리 - 권한관리 - 권한 그룹 관리
  * @author 조병준
  *
  */
-@Slf4j
 @Service("authGroupService")
 public class AuthGroupServiceImpl implements AuthGroupService {
-
+    
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    
     @Autowired
     AuthGroupMapper mapper;
-
     @Autowired
     AuthMapper authMapper;
-
     @Autowired
     MessageService messageService;
 
@@ -145,7 +145,7 @@ public class AuthGroupServiceImpl implements AuthGroupService {
         for(DefaultMap<String> rm : list) {
             authorGrpResrceVO = new AuthorGrpResrceVO();
             authorGrpResrceVO.setResrceCd(rm.getStr("resrceCd"));
-            authorGrpResrceVO.setPResrce(rm.getStr("pResrce"));
+            authorGrpResrceVO.setpResrce(rm.getStr("pResrce"));
             authorGrpResrceVO.setResrceNm(rm.getStr("resrceNm"));
             authorGrpResrceVO.setResrceDisp(rm.getStr("resrceDisp"));
             authorGrpResrceVO.setAuthFg(rm.getLong("authFg") == 1 ? true : false);
@@ -165,7 +165,7 @@ public class AuthGroupServiceImpl implements AuthGroupService {
                     authedResrce.put(res, "");
                 }
             }
-            log.debug(authedResrce.toString());
+            LOGGER.debug(authedResrce.toString());
         }
 
         Map<String, AuthorGrpResrceVO> hm = new LinkedHashMap<String, AuthorGrpResrceVO>();
@@ -186,9 +186,9 @@ public class AuthGroupServiceImpl implements AuthGroupService {
             }
             child = hm.get(item.getResrceCd());
 
-            if(!item.getPResrce().equals("") && !item.getPResrce().equals("000000")) {
-                if(hm.containsKey(item.getPResrce())) {
-                    mmdParent = hm.get(item.getPResrce());
+            if(!item.getpResrce().equals("") && !item.getpResrce().equals("000000")) {
+                if(hm.containsKey(item.getpResrce())) {
+                    mmdParent = hm.get(item.getpResrce());
                     mmdParent.getItems().add(child);
                 }
             }
@@ -198,12 +198,12 @@ public class AuthGroupServiceImpl implements AuthGroupService {
 
         List<AuthorGrpResrceVO> retrunData = new ArrayList<AuthorGrpResrceVO>();
         for (AuthorGrpResrceVO mmd : hm.values()) {
-            if (mmd.getPResrce() == null || mmd.getPResrce().equals("")
-                    || mmd.getPResrce().equals("000000")) {
+            if (mmd.getpResrce() == null || mmd.getpResrce().equals("")
+                    || mmd.getpResrce().equals("000000")) {
                 retrunData.add(mmd);
             }
         }
-        log.debug( retrunData.toString() );
+        LOGGER.debug( retrunData.toString() );
         return retrunData;
     }
 

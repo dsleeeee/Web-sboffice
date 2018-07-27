@@ -6,6 +6,8 @@ import static kr.co.common.utils.spring.StringUtil.convertToJson;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +25,6 @@ import kr.co.sample.application.domain.SslTrdtlTVO;
 import kr.co.sample.application.domain.SslTrhdrTVO;
 import kr.co.sample.application.domain.TbMsStoreVO;
 import kr.co.sample.application.service.SampleService;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * 샘플 컨트롤러다.
@@ -31,10 +32,11 @@ import lombok.extern.slf4j.Slf4j;
  * @author 정용길
  */
 
-@Slf4j
 @Controller
 public class SampleController {
-
+    
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    
     @Autowired
     SampleService sampleService;
 
@@ -52,13 +54,13 @@ public class SampleController {
     public String sample(HttpSession session, Model model) {
 
         String encoding = BaseEnv.ENCODING;
-        log.error("sample...... : {}", encoding);
+        LOGGER.error("sample...... : {}", encoding);
 
         String param = "test";
 
         List<DefaultMap<Object>> temp = sampleService.selectSample(param);
 
-        log.error("result : {}", temp);
+        LOGGER.error("result : {}", temp);
 
         model.addAttribute("data", temp);
 
@@ -309,7 +311,7 @@ public class SampleController {
 
         for (int i = 0; i < size; i++) {
             SslTrdtlTVO t = sslTrdtlTVO[i];
-            log.info(t.toString());
+            LOGGER.info(t.toString());
         }
 
         return returnJson(Status.OK, null);

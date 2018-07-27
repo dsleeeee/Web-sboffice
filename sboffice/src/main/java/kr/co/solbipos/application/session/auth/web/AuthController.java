@@ -4,6 +4,8 @@ import static kr.co.common.utils.HttpUtils.getClientIp;
 import static org.springframework.util.ObjectUtils.isEmpty;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +23,6 @@ import kr.co.common.validate.Login;
 import kr.co.solbipos.application.session.auth.enums.LoginResult;
 import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @Class Name : AuthController.java
@@ -39,17 +40,16 @@ import lombok.extern.slf4j.Slf4j;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-@Slf4j
 @Controller
 @RequestMapping(value = "/auth")
 public class AuthController {
     
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    
     @Autowired
     AuthService authService;
-
     @Autowired
     SessionService sessionService;
-
     @Autowired
     MessageService messageService;
 
@@ -95,7 +95,7 @@ public class AuthController {
         StopWatch sw = new StopWatch();
         sw.start();
 
-        log.info("login start : {} ", sessionInfoVO.getUserId());
+        LOGGER.info("login start : {} ", sessionInfoVO.getUserId());
 
         if (bindingResult.hasErrors()) {
             return "login/login:Login";
@@ -151,7 +151,7 @@ public class AuthController {
         // 로그인 실패
         else {
             sw.stop();
-            log.error("로그인 실패 처리 시간 : {}", sw.getTotalTimeSeconds());
+            LOGGER.error("로그인 실패 처리 시간 : {}", sw.getTotalTimeSeconds());
             returnUrl = "auth/login.sb?userId=" + si.getUserId();
             // 실패 처리
             throw new AuthenticationException(messageService.get("login.fail"), returnUrl);
@@ -163,7 +163,7 @@ public class AuthController {
          */
 
         sw.stop();
-        log.error("로그인 성공 처리 시간 : {}", sw.getTotalTimeSeconds());
+        LOGGER.error("로그인 성공 처리 시간 : {}", sw.getTotalTimeSeconds());
 
         return "redirect:/" + returnUrl;
     }

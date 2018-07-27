@@ -2,12 +2,14 @@ package kr.co.common.utils.spring;
 
 import java.io.UnsupportedEncodingException;
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.util.HtmlUtils;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public class HtmlUtil extends HtmlUtils {
-
+    
+    private final static Logger LOGGER = LoggerFactory.getLogger(HtmlUtil.class);
+    
     public static String unescape(String hexDecimal) {
         return unescape(hexDecimal, Charset.UTF_8);
     }
@@ -37,8 +39,8 @@ public class HtmlUtil extends HtmlUtils {
                 if (li == lj)
                     continue;
 
-                if (log.isDebugEnabled())
-                    log.debug("{} -> {} : {}", li, lj, unescape(hexDecimal, li, lj));
+                if (LOGGER.isDebugEnabled())
+                    LOGGER.debug("{} -> {} : {}", li, lj, unescape(hexDecimal, li, lj));
             }
     }
 

@@ -20,7 +20,6 @@ import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sys.bill.item.service.ItemService;
 import kr.co.solbipos.sys.bill.item.service.ItemVO;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @Class Name : ItemController.java
@@ -38,7 +37,6 @@ import lombok.extern.slf4j.Slf4j;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-@Slf4j
 @Controller
 @RequestMapping(value = "/sys/bill/item")
 public class ItemController {

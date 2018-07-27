@@ -16,10 +16,8 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
-import kr.co.solbipos.sys.bill.kind.service.KindVO;
 import kr.co.solbipos.sys.bill.template.service.TemplateService;
 import kr.co.solbipos.sys.bill.template.service.TemplateVO;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @Class Name : TemplateController.java
@@ -37,7 +35,6 @@ import lombok.extern.slf4j.Slf4j;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-@Slf4j
 @Controller
 @RequestMapping(value = "/sys/bill/template")
 public class TemplateController {

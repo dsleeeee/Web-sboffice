@@ -2,8 +2,6 @@ package kr.co.solbipos.store.hq.brand.service;
 
 import kr.co.common.data.enums.UseYn;
 import kr.co.solbipos.application.common.service.CmmVO;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * @Class Name : HqBrandVO.java
@@ -21,23 +19,80 @@ import lombok.EqualsAndHashCode;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-@Data
-@EqualsAndHashCode(callSuper = false)
 public class HqBrandVO extends CmmVO {
 
+    private static final long serialVersionUID = 829520160199087941L;
     /** 본사코드 */
     private String hqOfficeCd;
-    
     /** 본사명 */
     private String hqOfficeNm;
-    
     /** 브랜드코드 */
     private String hqBrandCd;
-    
     /** 브랜드명 */
     private String hqBrandNm;
-    
     /** 사용여부 */
     private UseYn UseYn;
+    
+    
+    /**
+     * @return the hqOfficeCd
+     */
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
+    /**
+     * @param hqOfficeCd the hqOfficeCd to set
+     */
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
+    }
+    /**
+     * @return the hqOfficeNm
+     */
+    public String getHqOfficeNm() {
+        return hqOfficeNm;
+    }
+    /**
+     * @param hqOfficeNm the hqOfficeNm to set
+     */
+    public void setHqOfficeNm(String hqOfficeNm) {
+        this.hqOfficeNm = hqOfficeNm;
+    }
+    /**
+     * @return the hqBrandCd
+     */
+    public String getHqBrandCd() {
+        return hqBrandCd;
+    }
+    /**
+     * @param hqBrandCd the hqBrandCd to set
+     */
+    public void setHqBrandCd(String hqBrandCd) {
+        this.hqBrandCd = hqBrandCd;
+    }
+    /**
+     * @return the hqBrandNm
+     */
+    public String getHqBrandNm() {
+        return hqBrandNm;
+    }
+    /**
+     * @param hqBrandNm the hqBrandNm to set
+     */
+    public void setHqBrandNm(String hqBrandNm) {
+        this.hqBrandNm = hqBrandNm;
+    }
+    /**
+     * @return the useYn
+     */
+    public UseYn getUseYn() {
+        return UseYn;
+    }
+    /**
+     * @param useYn the useYn to set
+     */
+    public void setUseYn(UseYn useYn) {
+        UseYn = useYn;
+    }
     
 }

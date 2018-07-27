@@ -1,8 +1,6 @@
 package kr.co.solbipos.sys.bill.item.service;
 
 import kr.co.solbipos.application.common.service.CmmVO;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * @Class Name : ItemVO.java
@@ -20,22 +18,66 @@ import lombok.EqualsAndHashCode;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-@Data
-@EqualsAndHashCode(callSuper = false)
 public class ItemVO extends CmmVO {
     
     private static final long serialVersionUID = 3145750355286359515L;
-    
     /** 출력물코드 */
     private String prtCd;
-    
     /** 출력물명 */
     private String prtNm;
-    
     /** 예제사용여부 */
     private String samplYn;
-    
     /** 예제 */
     private String content;
-
+    
+    
+    /**
+     * @return the prtCd
+     */
+    public String getPrtCd() {
+        return prtCd;
+    }
+    /**
+     * @param prtCd the prtCd to set
+     */
+    public void setPrtCd(String prtCd) {
+        this.prtCd = prtCd;
+    }
+    /**
+     * @return the prtNm
+     */
+    public String getPrtNm() {
+        return prtNm;
+    }
+    /**
+     * @param prtNm the prtNm to set
+     */
+    public void setPrtNm(String prtNm) {
+        this.prtNm = prtNm;
+    }
+    /**
+     * @return the samplYn
+     */
+    public String getSamplYn() {
+        return samplYn;
+    }
+    /**
+     * @param samplYn the samplYn to set
+     */
+    public void setSamplYn(String samplYn) {
+        this.samplYn = samplYn;
+    }
+    /**
+     * @return the content
+     */
+    public String getContent() {
+        return content;
+    }
+    /**
+     * @param content the content to set
+     */
+    public void setContent(String content) {
+        this.content = content;
+    }
+    
 }

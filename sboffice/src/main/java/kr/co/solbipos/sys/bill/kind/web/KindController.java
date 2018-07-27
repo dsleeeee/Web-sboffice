@@ -20,7 +20,6 @@ import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sys.bill.kind.service.KindService;
 import kr.co.solbipos.sys.bill.kind.service.KindVO;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @Class Name : KindController.java
@@ -38,7 +37,6 @@ import lombok.extern.slf4j.Slf4j;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-@Slf4j
 @Controller
 @RequestMapping(value = "/sys/bill/kind")
 public class KindController {

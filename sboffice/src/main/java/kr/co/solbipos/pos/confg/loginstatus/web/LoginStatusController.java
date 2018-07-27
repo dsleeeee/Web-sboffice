@@ -4,6 +4,8 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +17,6 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.solbipos.pos.confg.loginstatus.service.LoginStatusService;
 import kr.co.solbipos.pos.confg.loginstatus.service.LoginStatusVO;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @Class Name : LoginStatusController.java
@@ -33,11 +34,12 @@ import lombok.extern.slf4j.Slf4j;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-@Slf4j
 @Controller
 @RequestMapping(value = "/pos/confg/loginstatus/loginstatus/")
 public class LoginStatusController {
-
+    
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    
     @Autowired
     LoginStatusService loginStatusService;
 
@@ -68,7 +70,7 @@ public class LoginStatusController {
     public Result loginstatusListPost(LoginStatusVO loginStatusVO, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
-        log.debug(loginStatusVO.toString());
+        LOGGER.debug(loginStatusVO.toString());
         List<DefaultMap<Object>> result = loginStatusService.selectLoginStatus(loginStatusVO);
 
         return returnListJson(Status.OK, result, loginStatusVO);

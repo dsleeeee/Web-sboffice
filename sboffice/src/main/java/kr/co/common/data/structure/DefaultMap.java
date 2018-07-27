@@ -7,6 +7,12 @@ import kr.co.common.utils.spring.StringUtil;
 public class DefaultMap<Value> extends HashMap<String, Value> {
     private static final long serialVersionUID = 717352001507309726L;
 
+    @SuppressWarnings("unchecked")
+    public DefaultMap() {
+        /** 생성자를 통한 공통변수-기본값 설정 */
+        super.put("gChk", (Value) "0");
+    }
+    
     public String getStr(Object k) {
         return ObjectUtil.cast(String.class, get(k), "");
     }

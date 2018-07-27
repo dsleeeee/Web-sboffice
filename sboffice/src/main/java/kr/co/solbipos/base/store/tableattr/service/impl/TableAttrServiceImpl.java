@@ -4,6 +4,8 @@ import static kr.co.common.utils.DateUtil.*;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +33,6 @@ import kr.co.solbipos.base.store.tableattr.enums.TextalignFg;
 import kr.co.solbipos.base.store.tableattr.enums.TextvalignFg;
 import kr.co.solbipos.base.store.tableattr.service.TableAttrService;
 import kr.co.solbipos.base.store.tableattr.service.TableAttrVO;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @Class Name : TableAttrServiceImpl.java
@@ -49,14 +50,14 @@ import lombok.extern.slf4j.Slf4j;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-@Slf4j
 @Service("tableAttrService")
 @Transactional
 public class TableAttrServiceImpl implements TableAttrService {
-
+    
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    
     @Autowired
     MessageService messageService;
-
     @Autowired
     private TableAttrMapper mapper;
 
@@ -136,13 +137,13 @@ public class TableAttrServiceImpl implements TableAttrService {
 
             codec.decode(elt, model);
 
-            TableAttrVO tableAttrVO = TableAttrVO.builder().build();
+            TableAttrVO tableAttrVO = new TableAttrVO();
             Object[] cells = graph.getChildVertices(graph.getDefaultParent());
             for(Object c : cells) {
                 mxCell cell = (mxCell) c;
                 
                 //lombok 초기값 셋팅 사용
-                tableAttrVO = TableAttrVO.builder().build();
+                tableAttrVO = new TableAttrVO();
 
                 tableAttrVO.setAttrCd(AttrCd.getEnum(cell.getId()));
                 tableAttrVO.setAttrNm(String.valueOf(cell.getValue()));
@@ -168,7 +169,7 @@ public class TableAttrServiceImpl implements TableAttrService {
                         if(styleKeyValue.length < 2) {
                             continue;
                         }
-                        //log.debug(styleKeyValue[0]);
+                        //LOGGER.debug(styleKeyValue[0]);
                         switch(Style.getEnum(styleKeyValue[0])) {
                             case FONT_COLOR:
                                 tableAttrVO.setFontColor(styleKeyValue[1]);
@@ -196,7 +197,7 @@ public class TableAttrServiceImpl implements TableAttrService {
                 tableAttrVO.setUseYn("Y");
                 tableAttrVO.setRegDt(currentDateTimeString());
                 tableAttrVOs.add(tableAttrVO);
-                //log.debug(tableAttr.toString());
+                //LOGGER.debug(tableAttr.toString());
             }
         }
         catch (Exception ex) {
@@ -242,7 +243,7 @@ public class TableAttrServiceImpl implements TableAttrService {
             }
             mxCodec codec = new mxCodec();
             Node node = codec.encode(graph.getModel());
-            log.debug(mxUtils.getPrettyXml(node));
+            LOGGER.debug(mxUtils.getPrettyXml(node));
             return mxUtils.getXml(node);
         }
         catch (Exception ex) {

@@ -5,6 +5,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +21,6 @@ import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.store.tableattr.service.TableAttrService;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @Class Name : TableAttrController.java
@@ -37,11 +38,12 @@ import lombok.extern.slf4j.Slf4j;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-@Slf4j
 @Controller
 @RequestMapping(value = "/base/store/tableattr/tableattr")
 public class TableAttrController {
-
+    
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    
     private final String RESULT_URI = "base/store/tableattr";
 
     @Autowired
@@ -88,9 +90,9 @@ public class TableAttrController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        log.debug(sessionInfoVO.toString());
+        LOGGER.debug(sessionInfoVO.toString());
         String xml = tableAttrService.selectTableAttrByStore(sessionInfoVO);
-        log.debug(xml);
+        LOGGER.debug(xml);
         return new Result(Status.OK, xml);
     }
 
@@ -109,15 +111,15 @@ public class TableAttrController {
         String xml = "";
         Result result = new Result(Status.FAIL);
         try {
-          log.debug(request.getParameter("xml"));
+          LOGGER.debug(request.getParameter("xml"));
           xml = URLDecoder.decode(request.getParameter("xml"), "UTF-8").replace("\n", "&#xa;");
-          log.debug(XssPreventer.unescape(xml));
+          LOGGER.debug(XssPreventer.unescape(xml));
 
           SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-          log.debug(sessionInfoVO.toString());
+          LOGGER.debug(sessionInfoVO.toString());
 
           result = tableAttrService.setTableAttr(sessionInfoVO, XssPreventer.unescape(xml));
-          log.debug(result.toString());
+          LOGGER.debug(result.toString());
         } catch (UnsupportedEncodingException e) {
           e.printStackTrace();
         }

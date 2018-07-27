@@ -13,6 +13,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.time.DateUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,7 +49,6 @@ import kr.co.solbipos.application.session.user.service.PwdChgHistVO;
 import kr.co.solbipos.application.session.user.service.PwdChgVO;
 import kr.co.solbipos.application.session.user.service.UserService;
 import kr.co.solbipos.application.session.user.service.UserVO;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @Class Name : UserController.java
@@ -65,20 +66,18 @@ import lombok.extern.slf4j.Slf4j;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-@Slf4j
 @Controller
 @RequestMapping(value = "/user")
 public class UserController {
-
+    
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    
     @Autowired
     UserService userService;
-
     @Autowired
     AuthService authService;
-
     @Autowired
     MessageService messageService;
-
     @Autowired
     SessionService sessionService;
 
@@ -105,14 +104,14 @@ public class UserController {
 
         // 조회된 유져가 없으면 에러 메세지 전송
         if (ObjectUtil.isEmpty(findUsers)) {
-            log.warn("문자 발송 유져 조회 실패 : id : {}, nm : {}", userVO.getUserId(), userVO.getEmpNm());
+            LOGGER.warn("문자 발송 유져 조회 실패 : id : {}, nm : {}", userVO.getUserId(), userVO.getEmpNm());
             String msg = messageService.get("login.pw.find.error1")
                     + messageService.get("login.pw.find.error2");
             return returnJson(Status.FAIL, "msg", msg);
         }
         // 조회된 사용자 정보가 2개 이상일 때 오류 처리
         if (findUsers.size() > 1) {
-            log.warn("문자 발송 유져 여러명 조회됨 : id : {}, nm : {}", userVO.getUserId(), userVO.getEmpNm());
+            LOGGER.warn("문자 발송 유져 여러명 조회됨 : id : {}, nm : {}", userVO.getUserId(), userVO.getEmpNm());
             String msg = messageService.get("login.pw.find.error1")
                     + messageService.get("login.pw.find.error2");
             return returnJson(Status.FAIL, "msg", msg);
@@ -130,7 +129,7 @@ public class UserController {
 
         // limit 에 걸렸는지 확인
         if (checkOtpLimit(otpAuthVO)) {
-            log.warn("인증문자 제한 시간 걸림, 제한 시간 : {}, id : {}, name : {}", BaseEnv.OTP_LIMIT_MINUTE,
+            LOGGER.warn("인증문자 제한 시간 걸림, 제한 시간 : {}, id : {}, name : {}", BaseEnv.OTP_LIMIT_MINUTE,
                     findUser.getUserId(), findUser.getEmpNm());
             String msg = String.valueOf(otpAuthVO.getOtpLimit())
                     + messageService.get("login.pw.find.otp.limit");
@@ -379,7 +378,7 @@ public class UserController {
 
         PwChgResult pcr = userService.processPwdChg(pwdChgVO);
 
-        log.info("패스워드 변경 결과 : halfId : {}, result : {}, uuid : {}", pwdChgVO.getHalfId(), pcr,
+        LOGGER.info("패스워드 변경 결과 : halfId : {}, result : {}, uuid : {}", pwdChgVO.getHalfId(), pcr,
                 pwdChgVO.getUuid());
 
         if (pcr == PwChgResult.PASSWORD_NOT_MATCH) {

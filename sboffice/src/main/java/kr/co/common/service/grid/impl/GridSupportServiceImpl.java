@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -17,18 +19,15 @@ import kr.co.common.service.message.MessageService;
 import kr.co.sample.application.service.SampleService;
 import kr.co.solbipos.application.common.service.GridDispItemVO;
 import kr.co.solbipos.application.common.service.impl.CmmGridMapper;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service("gridSupportService")
 public class GridSupportServiceImpl implements GridSupportService {
-
+    
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
     @Autowired
     MessageService messageService;
-
     @Autowired
     SampleService sampleService;
-
     @Autowired
     CmmGridMapper cmmGridMapper;
 
@@ -111,7 +110,7 @@ public class GridSupportServiceImpl implements GridSupportService {
 
         boolean isSelectColumn = !ObjectUtils.isEmpty(columnFilter);
 
-        log.debug("■■■■■■■■ columnFilter : " + columnFilter + " , isSelectColumn : "+ isSelectColumn);
+        LOGGER.debug("■■■■■■■■ columnFilter : " + columnFilter + " , isSelectColumn : "+ isSelectColumn);
 
         List<HashMap<String, String>> gridHeaderNames = new ArrayList<HashMap<String, String>>();
 
@@ -141,7 +140,7 @@ public class GridSupportServiceImpl implements GridSupportService {
                 .filter(x -> x.trim().length() != 0) // 다국어 메세지가 없으면 키 이름을 돌려줌
                 .orElse(keyName);
 
-        log.debug("■■■■■■■■■■■■■■■■■■■■■■■■  makeHeader keyName: " + keyName + ", msg : "+ msg);
+        LOGGER.debug("■■■■■■■■■■■■■■■■■■■■■■■■  makeHeader keyName: " + keyName + ", msg : "+ msg);
 
         HashMap<String, String> rMap = new HashMap<>();
         rMap.put(COLUMN_BINDING, keyName);

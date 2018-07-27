@@ -1,8 +1,6 @@
 package kr.co.solbipos.sys.cd.envconfig.service;
 
 import kr.co.solbipos.application.common.service.CmmVO;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * @Class Name : EnvConfigVO.java
@@ -20,26 +18,80 @@ import lombok.EqualsAndHashCode;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-@Data
-@EqualsAndHashCode(callSuper = false)
 public class EnvstDtlVO extends CmmVO {
 
     private static final long serialVersionUID = 7029471376127078552L;
-
     /** 환경설정코드 */
     private String envstCd;
-    
     /** 환경설정값코드 */
     private String envstValCd;
-    
     /** 환경설정값명 */
     private String envstValNm;
-    
     /** 기본여부 */
     private String defltYn;
-    
     /** 사용여부 */
     private String useYn;
     
-   
+    
+    /**
+     * @return the envstCd
+     */
+    public String getEnvstCd() {
+        return envstCd;
+    }
+    /**
+     * @param envstCd the envstCd to set
+     */
+    public void setEnvstCd(String envstCd) {
+        this.envstCd = envstCd;
+    }
+    /**
+     * @return the envstValCd
+     */
+    public String getEnvstValCd() {
+        return envstValCd;
+    }
+    /**
+     * @param envstValCd the envstValCd to set
+     */
+    public void setEnvstValCd(String envstValCd) {
+        this.envstValCd = envstValCd;
+    }
+    /**
+     * @return the envstValNm
+     */
+    public String getEnvstValNm() {
+        return envstValNm;
+    }
+    /**
+     * @param envstValNm the envstValNm to set
+     */
+    public void setEnvstValNm(String envstValNm) {
+        this.envstValNm = envstValNm;
+    }
+    /**
+     * @return the defltYn
+     */
+    public String getDefltYn() {
+        return defltYn;
+    }
+    /**
+     * @param defltYn the defltYn to set
+     */
+    public void setDefltYn(String defltYn) {
+        this.defltYn = defltYn;
+    }
+    /**
+     * @return the useYn
+     */
+    public String getUseYn() {
+        return useYn;
+    }
+    /**
+     * @param useYn the useYn to set
+     */
+    public void setUseYn(String useYn) {
+        this.useYn = useYn;
+    }
+    
 }

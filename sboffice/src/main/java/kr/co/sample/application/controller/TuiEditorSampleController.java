@@ -1,6 +1,8 @@
 package kr.co.sample.application.controller;
 
 import javax.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,17 +15,17 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.message.MessageService;
 import kr.co.sample.application.domain.TmpBoardTVO;
 import kr.co.sample.application.service.SampleService;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * 에디터샘플
  * @author 김지은
  */
 
-@Slf4j
 @Controller
 public class TuiEditorSampleController {
-
+    
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    
     @Autowired
     SampleService  sampleService;
 
@@ -47,18 +49,18 @@ public class TuiEditorSampleController {
     @ResponseBody
     public Result editorSampleSave(HttpSession sessions, Model model, @RequestBody TmpBoardTVO tmpBoardTVO) {
 
-      log.error("seq : "+ tmpBoardTVO.getBoardSeqNo());
-      log.error("title : "+ tmpBoardTVO.getBoardTitle());
-      log.error("html : "+ tmpBoardTVO.getBoardContents());
+        LOGGER.error("seq : "+ tmpBoardTVO.getBoardSeqNo());
+      LOGGER.error("title : "+ tmpBoardTVO.getBoardTitle());
+      LOGGER.error("html : "+ tmpBoardTVO.getBoardContents());
 
       //String boardContents = tmpBoardTVO.getBoardContents();
       //tmpBoardTVO.setBoardContents(boardContents.replace("\n","<br>"));
       if(tmpBoardTVO.getBoardSeqNo().equals("")) {
 
-        log.error("111111");
+          LOGGER.error("111111");
         sampleService.insertBoardSample(tmpBoardTVO);
       } else {
-        log.error("222222");
+          LOGGER.error("222222");
         sampleService.updateBoardSample(tmpBoardTVO);
       }
 
@@ -72,9 +74,9 @@ public class TuiEditorSampleController {
 
       String boardContents = tmpBoardTVO.getBoardContents();
 
-      log.error("boardContents1 :" + boardContents);
-      log.error("boardContents2 :" + boardContents.replace("\n","<br>"));
-      log.error("boardContents3 :" + boardContents.replace("\"", "'"));
+      LOGGER.error("boardContents1 :" + boardContents);
+      LOGGER.error("boardContents2 :" + boardContents.replace("\n","<br>"));
+      LOGGER.error("boardContents3 :" + boardContents.replace("\"", "'"));
 
       tmpBoardTVO.setBoardContents(boardContents.replace("\n","<br>").replace("\"", "'"));
 
@@ -90,9 +92,9 @@ public class TuiEditorSampleController {
 
       String boardContents = tmpBoardTVO.getBoardContents();
 
-      log.error("boardContents1 :" + boardContents);
-      log.error("boardContents2 :" + boardContents.replace("\n","<br>"));
-      log.error("boardContents3 :" + boardContents.replace("\"", "'"));
+      LOGGER.error("boardContents1 :" + boardContents);
+      LOGGER.error("boardContents2 :" + boardContents.replace("\n","<br>"));
+      LOGGER.error("boardContents3 :" + boardContents.replace("\"", "'"));
 
       tmpBoardTVO.setBoardContents(boardContents.replace("\n","<br>").replace("\"", "'"));
 

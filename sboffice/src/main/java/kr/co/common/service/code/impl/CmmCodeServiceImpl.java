@@ -1,6 +1,8 @@
 package kr.co.common.service.code.impl;
 
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import kr.co.common.data.domain.CommonCodeVO;
@@ -8,7 +10,6 @@ import kr.co.common.service.code.CmmCodeService;
 import kr.co.common.service.redis.RedisConnService;
 import kr.co.common.template.RedisCustomTemplate;
 import kr.co.solbipos.application.common.service.impl.CmmCodeMapper;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * 공통 코드 관련 서비스
@@ -16,16 +17,14 @@ import lombok.extern.slf4j.Slf4j;
  * @author 정용길
  *
  */
-@Slf4j
 @Service("cmmCodeService")
 public class CmmCodeServiceImpl implements CmmCodeService {
-
+    
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
     @Autowired
     CmmCodeMapper cmmCodeMapper;
-
     @Autowired
     RedisConnService redisConnService;
-
     @Autowired
     private RedisCustomTemplate<String, CommonCodeVO> redisCustomTemplate;
 
@@ -39,7 +38,7 @@ public class CmmCodeServiceImpl implements CmmCodeService {
                  * 레디스에서 공통코드를 조회 할때는 아래 코드로 처리 하지 않고 예외 처리함. redisConnService.disable() 레디스가 죽었다고
                  * 공통 코드가 조회 안되면 안되기 때문에 디비에서 조회해서 사용 가능
                  */
-                log.error("Redis server not available!! setSessionInfo {}", e);
+                LOGGER.error("Redis server not available!! setSessionInfo {}", e);
             }
         } else {
             throw new Exception();
@@ -53,7 +52,7 @@ public class CmmCodeServiceImpl implements CmmCodeService {
             try {
                 commonCodeVO = redisCustomTemplate.get(redisCustomTemplate.makeKeyCode(comCdFg));
             } catch (Exception e) {
-                log.error("Redis server not available!! getSessionInfo {}", e);
+                LOGGER.error("Redis server not available!! getSessionInfo {}", e);
             }
         } else {
             throw new Exception();
@@ -85,7 +84,7 @@ public class CmmCodeServiceImpl implements CmmCodeService {
                 redisCustomTemplate.set(makeKeyComCdFg, commonCodeVO);
                 return true;
             } catch (Exception e) {
-                log.error("Redis server not available!! CommonCode update fail...");
+                LOGGER.error("Redis server not available!! CommonCode update fail...");
                 return false;
             }
         } else {

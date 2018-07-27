@@ -1,32 +1,26 @@
 package kr.co.common.service.redis.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import kr.co.common.service.redis.RedisConnService;
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author 정용길 레디스 connection 관리
  */
-@Slf4j
-@Data
 @Component
 public class RedisConnServiceImpl implements RedisConnService {
-
+    
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    
     @Autowired
     private JedisConnectionFactory jedisConnectionFactory;
-
-    /**
-     * Redis server 장애 여부 판단
-     */
+    /** Redis server 장애 여부 판단 */
     private boolean available = true;
-
-    /**
-     * health check delay seconds (defalut 5 seconds)
-     */
+    /** health check delay seconds (defalut 5 seconds) */
     private int healthCheckDelaySeconds = 5;
 
     public void setHealthCheckDelaySeconds(int healthCheckDelaySeconds) {
@@ -36,7 +30,7 @@ public class RedisConnServiceImpl implements RedisConnService {
     @Override
     public void enable() {
 
-        log.error(
+        LOGGER.error(
                 "\n■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n"
                         + "      Redis server enable......"
                         + "\n■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
@@ -47,14 +41,14 @@ public class RedisConnServiceImpl implements RedisConnService {
     @Override
     public void disable() {
 
-        log.error(
+        LOGGER.error(
                 "\n■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n"
                         + "      Redis server disable......"
                         + "\n■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
 
         this.available = false;
 
-        log.error(
+        LOGGER.error(
                 "\n■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n"
                         + "      Redis server health check start......"
                         + "\n■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
@@ -76,7 +70,7 @@ public class RedisConnServiceImpl implements RedisConnService {
     @Async
     public void healthCheck() {
 
-        log.debug("Redis server to reconnect after {} seconds.", healthCheckDelaySeconds);
+        LOGGER.debug("Redis server to reconnect after {} seconds.", healthCheckDelaySeconds);
 
         while (isNotAvailable()) {
 
@@ -87,15 +81,15 @@ public class RedisConnServiceImpl implements RedisConnService {
 
                 for (int i = healthCheckDelaySeconds; i >= 1; i--) {
                     Thread.sleep(1000);
-                    log.debug("Redis server to reconnect {} {}.", i, progress);
+                    LOGGER.debug("Redis server to reconnect {} {}.", i, progress);
                     progress += dot;
                 }
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
-                log.error("RedisConnServiceImpl.healthCheck : {}", e);
+                LOGGER.error("RedisConnServiceImpl.healthCheck : {}", e);
 
-                log.error(
+                LOGGER.error(
                         "\n■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n"
                                 + "      Redis 서버가 죽었습니다. Redis 서버 상태를 확인해주세요...... "
                                 + "\n■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
@@ -105,9 +99,9 @@ public class RedisConnServiceImpl implements RedisConnService {
                 this.ping();
                 this.enable();
             } catch (Exception e) {
-                log.error("RedisConnServiceImpl.ping / enable: {}", e);
+                LOGGER.error("RedisConnServiceImpl.ping / enable: {}", e);
 
-                log.error(
+                LOGGER.error(
                         "\n■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n"
                                 + "      Redis 서버가 죽었습니다. Redis 서버 상태를 확인해주세요...."
                                 + "\n■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
@@ -121,6 +115,32 @@ public class RedisConnServiceImpl implements RedisConnService {
         return jedisConnectionFactory.getConnection().ping();
     }
 
+
+    /**
+     * @return the jedisConnectionFactory
+     */
+    public JedisConnectionFactory getJedisConnectionFactory() {
+        return jedisConnectionFactory;
+    }
+    /**
+     * @param jedisConnectionFactory the jedisConnectionFactory to set
+     */
+    public void setJedisConnectionFactory(JedisConnectionFactory jedisConnectionFactory) {
+        this.jedisConnectionFactory = jedisConnectionFactory;
+    }
+    /**
+     * @return the healthCheckDelaySeconds
+     */
+    public int getHealthCheckDelaySeconds() {
+        return healthCheckDelaySeconds;
+    }
+    /**
+     * @param available the available to set
+     */
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+    
 }
 
 

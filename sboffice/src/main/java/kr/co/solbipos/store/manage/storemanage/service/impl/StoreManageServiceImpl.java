@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import kr.co.common.data.enums.Status;
@@ -18,14 +20,12 @@ import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.pos.confg.loginstatus.enums.SysStatFg;
 import kr.co.solbipos.store.hq.brand.service.HqBrandVO;
-import kr.co.solbipos.store.hq.brand.service.HqClsVO;
 import kr.co.solbipos.store.manage.storemanage.service.KitchenPrintVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreManageService;
 import kr.co.solbipos.store.manage.storemanage.service.StoreManageVO;
 import kr.co.solbipos.store.manage.storemanage.service.StorePosEnvVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreProductVO;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @Class Name : StoreManageServiceImpl.java
@@ -43,16 +43,17 @@ import lombok.extern.slf4j.Slf4j;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-@Slf4j
 @Service
 public class StoreManageServiceImpl implements StoreManageService{
-
+    
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    
     @Autowired
     StoreManageMapper mapper;
-
     @Autowired
     MessageService messageService;
-        /** 본사 목록 조회 */
+    
+    /** 본사 목록 조회 */
     @Override
     public List<DefaultMap<String>> getHqOfficeComboList() {
         return mapper.getHqOfficeComboList();
@@ -134,7 +135,7 @@ public class StoreManageServiceImpl implements StoreManageService{
             // 본사의 포스 프로그램 구분 조회
             posEnvValue = mapper.getPosEnvValue(storeManageVO);
             
-            log.debug("posEnvValue : "+ posEnvValue);
+            LOGGER.debug("posEnvValue : "+ posEnvValue);
             
             if(posEnvValue == null ){
                 // 메세지 변경 필요 (본사의 환경[100]이 설정되지 않았습니다.)
@@ -499,7 +500,7 @@ public class StoreManageServiceImpl implements StoreManageService{
             StoreProductVO storeProductVO = new StoreProductVO();
             
             storeProductVO.setProdClassCd(prodClassList.getStr("prodClassCd"));
-            storeProductVO.setPProdClassCd(prodClassList.getStr("pProdClassCd"));
+            storeProductVO.setpProdClassCd(prodClassList.getStr("pProdClassCd"));
             
             storeProductVO.setProdCd(prodClassList.getStr("prodClassCd")); // 트리에서 상품 상위로 분류코드를 보여주기 위함
             storeProductVO.setProdNm(prodClassList.getStr("prodClassNm"));
@@ -521,9 +522,9 @@ public class StoreManageServiceImpl implements StoreManageService{
             }
             
             child = hm.get(storeProductVO.getProdClassCd());
-            if( child != null && !"".equals( storeProductVO.getPProdClassCd() ) && !"0000".equals( storeProductVO.getPProdClassCd() )) {
-                if(hm.containsKey( storeProductVO.getPProdClassCd() )) {
-                    parent = hm.get(storeProductVO.getPProdClassCd());
+            if( child != null && !"".equals( storeProductVO.getpProdClassCd() ) && !"0000".equals( storeProductVO.getpProdClassCd() )) {
+                if(hm.containsKey( storeProductVO.getpProdClassCd() )) {
+                    parent = hm.get(storeProductVO.getpProdClassCd());
                     parent.getItems().add(child);
                 }
             }
@@ -544,7 +545,7 @@ public class StoreManageServiceImpl implements StoreManageService{
         
         List<StoreProductVO> returnData = new ArrayList<StoreProductVO>();
         for(StoreProductVO storeProductVO : hm.values()) {
-            if(storeProductVO.getPProdClassCd() == null || "".equals(storeProductVO.getPProdClassCd()) || "00000".equals(storeProductVO.getPProdClassCd())) {
+            if(storeProductVO.getpProdClassCd() == null || "".equals(storeProductVO.getpProdClassCd()) || "00000".equals(storeProductVO.getpProdClassCd())) {
                 returnData.add(storeProductVO);
             } 
         }
