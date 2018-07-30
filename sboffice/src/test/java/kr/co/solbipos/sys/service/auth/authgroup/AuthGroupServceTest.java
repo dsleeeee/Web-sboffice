@@ -8,16 +8,18 @@ import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.sys.auth.authgroup.service.AuthorGrpResrceVO;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Transactional
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AuthGroupServceTest {
-
+    
+    private final static Logger LOGGER = LoggerFactory.getLogger(AuthGroupServceTest.class);
+    
     List<DefaultMap<String>> list;
     List<DefaultMap<String>> authed;
 
@@ -122,7 +124,7 @@ public class AuthGroupServceTest {
         for(DefaultMap<String> rm : list) {
             authorGrpResrceVO = new AuthorGrpResrceVO();
             authorGrpResrceVO.setResrceCd(rm.getStr("resrceCd"));
-            authorGrpResrceVO.setPResrce(rm.getStr("pResrce"));
+            authorGrpResrceVO.setpResrce(rm.getStr("pResrce"));
             authorGrpResrceVO.setResrceNm(rm.getStr("resrceNm"));
             authorGrpResrceVO.setItems(new ArrayList<AuthorGrpResrceVO>());
             input.add(authorGrpResrceVO);
@@ -138,7 +140,7 @@ public class AuthGroupServceTest {
                 authedResrce.put(res, "");
             }
         }
-        log.debug(authedResrce.toString());
+        LOGGER.debug(authedResrce.toString());
 
         Map<String, AuthorGrpResrceVO> hm = new LinkedHashMap<String, AuthorGrpResrceVO>();
         AuthorGrpResrceVO child;
@@ -150,9 +152,9 @@ public class AuthGroupServceTest {
             }
             child = hm.get(item.getResrceCd());
 
-            if(!item.getPResrce().equals("") && !item.getPResrce().equals("000000")) {
-                if(hm.containsKey(item.getPResrce())) {
-                    mmdParent = hm.get(item.getPResrce());
+            if(!item.getpResrce().equals("") && !item.getpResrce().equals("000000")) {
+                if(hm.containsKey(item.getpResrce())) {
+                    mmdParent = hm.get(item.getpResrce());
                     mmdParent.getItems().add(child);
                 }
             }
@@ -162,8 +164,8 @@ public class AuthGroupServceTest {
 
         List<AuthorGrpResrceVO> retrunData = new ArrayList<AuthorGrpResrceVO>();
         for (AuthorGrpResrceVO mmd : hm.values()) {
-            if (mmd.getPResrce() == null || mmd.getPResrce().equals("")
-                    || mmd.getPResrce().equals("000000")) {
+            if (mmd.getpResrce() == null || mmd.getpResrce().equals("")
+                    || mmd.getpResrce().equals("000000")) {
                 System.out.println( mmd.toString() );
                 retrunData.add(mmd);
             }

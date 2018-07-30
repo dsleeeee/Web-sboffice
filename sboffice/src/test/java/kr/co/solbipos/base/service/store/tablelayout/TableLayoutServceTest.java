@@ -8,6 +8,8 @@ import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -22,13 +24,13 @@ import kr.co.solbipos.base.store.tableattr.enums.TblGrpFg;
 import kr.co.solbipos.base.store.tableattr.enums.TblTypeFg;
 import kr.co.solbipos.base.store.tablelayout.service.TableGroupVO;
 import kr.co.solbipos.base.store.tablelayout.service.TableVO;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Transactional
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TableLayoutServceTest {
-
+    
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    
     private String xml;
     mxGraph graph;
     mxIGraphModel model;
@@ -120,7 +122,7 @@ public class TableLayoutServceTest {
             mxCell layer = new mxCell();
             for(int i = 0; i < model.getChildCount(model.getRoot()); i++) {
                 layer = (mxCell)model.getChildAt(model.getRoot(), i);
-                log.debug(layer.toString());
+                LOGGER.debug(layer.toString());
 
                 tableGroupVO = new TableGroupVO();
 
@@ -133,17 +135,17 @@ public class TableLayoutServceTest {
 
                 //스타일
                 String styleStr = layer.getStyle();
-                log.debug(styleStr);
+                LOGGER.debug(styleStr);
                 if(styleStr != null) {
                     String[] styles = styleStr.split(";");
                     for(String style : styles) {
-                        log.debug(style);
+                        LOGGER.debug(style);
                         String[] styleKeyValue = style.split("=");
                         if(styleKeyValue.length < 2) {
                             continue;
                         }
-                        log.debug(styleKeyValue[0]);
-                        log.debug(styleKeyValue[1]);
+                        LOGGER.debug(styleKeyValue[0]);
+                        LOGGER.debug(styleKeyValue[1]);
                         switch(Style.getEnum(styleKeyValue[0])) {
                             case TBL_GRP_FG:
                                 tableGroupVO.setTblGrpFg(TblGrpFg.getEnum(styleKeyValue[1]));
@@ -170,7 +172,7 @@ public class TableLayoutServceTest {
 
                 tableGroupVOs.add(tableGroupVO);
 
-                log.debug(tableGroupVOs.toString());
+                LOGGER.debug(tableGroupVOs.toString());
             }
             assertTrue(true);
         }
@@ -190,7 +192,7 @@ public class TableLayoutServceTest {
         Object[] cells = graph.getChildVertices(layer);
         for(Object c : cells) {
             mxCell cell = (mxCell) c;
-            tableVO = TableVO.builder().build();
+            tableVO = new TableVO();
             tableVO.setStoreCd(tableGroupVO.getStoreCd());
             tableVO.setTblNm(String.valueOf(cell.getValue()));
             tableVO.setTblGrpCd(tableGroupVO.getTblGrpCd());

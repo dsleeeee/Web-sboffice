@@ -139,7 +139,7 @@ public class HqBrandServiceImpl implements HqBrandService{
             clsVO.setHqBrandCd(list.getStr("hqBrandCd"));
             clsVO.setProdClassCd(list.getStr("prodClassCd"));
             clsVO.setProdClassNm(list.getStr("prodClassNm"));
-            clsVO.setPProdClassCd(list.getStr("pProdClassCd"));
+            clsVO.setpProdClassCd(list.getStr("pProdClassCd"));
             clsVO.setItems(new ArrayList<HqClsVO>());
             clsVOs.add(clsVO);
         }
@@ -154,16 +154,16 @@ public class HqBrandServiceImpl implements HqBrandService{
             }
             
             child = hm.get(clsVO.getProdClassCd());
-            if ( child != null && !"".equals( clsVO.getPProdClassCd() ) && !"000000".equals( clsVO.getPProdClassCd() ) ) {
-                if(hm.containsKey(clsVO.getPProdClassCd())){
-                    parent = hm.get(clsVO.getPProdClassCd());
+            if ( child != null && !"".equals( clsVO.getpProdClassCd() ) && !"000000".equals( clsVO.getpProdClassCd() ) ) {
+                if(hm.containsKey(clsVO.getpProdClassCd())){
+                    parent = hm.get(clsVO.getpProdClassCd());
                     parent.getItems().add(child);
                 }
             }
         }
         List<HqClsVO> returnData = new ArrayList<HqClsVO>();
         for(HqClsVO clsVO : hm.values()) {
-            if(clsVO.getPProdClassCd() == null || "".equals(clsVO.getPProdClassCd()) || "00000".equals(clsVO.getPProdClassCd())) {
+            if(clsVO.getpProdClassCd() == null || "".equals(clsVO.getpProdClassCd()) || "00000".equals(clsVO.getpProdClassCd())) {
                 returnData.add(clsVO);
             } 
         }
@@ -192,10 +192,10 @@ public class HqBrandServiceImpl implements HqBrandService{
                 hqClsVO.setProdClassCd(prodClassCd);
             }
             // 상위 분류까지 신규로 만들 경우 상위 분류코드 조회
-            if("".equals(hqClsVO.getPProdClassCd()) || hqClsVO.getPProdClassCd() == null) {
+            if("".equals(hqClsVO.getpProdClassCd()) || hqClsVO.getpProdClassCd() == null) {
                 String pprodClassCd = "";
                 pprodClassCd = mapper.getPProdClsCd(hqClsVO);
-                hqClsVO.setPProdClassCd(pprodClassCd);
+                hqClsVO.setpProdClassCd(pprodClassCd);
             }
             
             if(hqClsVO.getStatus() == GridDataFg.INSERT) {

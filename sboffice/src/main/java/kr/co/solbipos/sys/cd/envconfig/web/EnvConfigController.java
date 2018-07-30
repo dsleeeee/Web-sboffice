@@ -21,7 +21,6 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sys.cd.envconfig.service.EnvConfigService;
 import kr.co.solbipos.sys.cd.envconfig.service.EnvstDtlVO;
 import kr.co.solbipos.sys.cd.envconfig.service.EnvstVO;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @Class Name : EnvConfigController.java
@@ -39,7 +38,6 @@ import lombok.extern.slf4j.Slf4j;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-@Slf4j
 @Controller
 @RequestMapping(value = "/sys/cd/envConfig")
 public class EnvConfigController {

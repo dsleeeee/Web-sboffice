@@ -24,7 +24,6 @@ import kr.co.solbipos.sys.etc.vancard.service.CardCmpnyVO;
 import kr.co.solbipos.sys.etc.vancard.service.VanCardService;
 import kr.co.solbipos.sys.etc.vancard.service.VanCardVO;
 import kr.co.solbipos.sys.etc.vancard.service.VanCmpnyVO;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @Class Name : VanCardController.java
@@ -42,7 +41,6 @@ import lombok.extern.slf4j.Slf4j;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-@Slf4j
 @Controller
 @RequestMapping(value = "/sys/etc/vanCard")
 public class VanCardController {

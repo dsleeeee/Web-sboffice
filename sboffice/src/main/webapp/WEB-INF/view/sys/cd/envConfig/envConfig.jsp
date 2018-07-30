@@ -116,7 +116,7 @@
     <%-- 대표명칭 그리드 --%>
     var dataLeft =
       [
-        { binding:"chk", header:"<s:message code='envConfig.chk'/>", dataType:wijmo.DataType.Boolean, width:40 },
+        { binding:"gChk", header:"<s:message code='envConfig.chk'/>", dataType:wijmo.DataType.Boolean, width:40 },
         { binding:"envstCd", header:"<s:message code='envConfig.envstCd'/>", width:70, align:"center" },
         { binding:"envstNm", header:"<s:message code='envConfig.envstNm'/>", maxLength:100 },
         { binding:"envstFg", header:"<s:message code='envConfig.envstFgNm'/>", width:140, dataMap:envstFgNmDataMap },
@@ -138,14 +138,6 @@
         var item = s.rows[e.row].dataItem;
         if( col.binding == "envstCd" ) {
           wijmo.addClass(e.cell, 'wijLink');
-        }
-        if ( col.binding == "chk" ) {
-          var chk = document.createElement('input');
-          chk.type = 'checkbox';
-          chk.checked = gridLeft.rows[e.row].dataItem['chk'];
-          chk.className = "my-custom-checkbox";
-          e.cell.innerHTML = '';
-          e.cell.appendChild(chk);
         }
       }
     });
@@ -208,7 +200,7 @@
     <%-- 세부명칭 그리드 --%>
     var dataRight =
       [
-        {"binding":"chk", header:"<s:message code='envConfig.chk' />", dataType:wijmo.DataType.Boolean, width:40},
+        {"binding":"gChk", header:"<s:message code='envConfig.chk' />", dataType:wijmo.DataType.Boolean, width:40},
         {"binding":"envstValCd", header:"<s:message code='envConfig.envstValCd'/>", width:70},
         {"binding":"envstValNm", header:"<s:message code='envConfig.envstValNm'/>", width:"*"},
         {"binding":"defltYn", header:"<s:message code='envConfig.defltYn'/>", width:80, dataMap:defltYnDataMap},
@@ -218,21 +210,6 @@
     var gridRight = wgrid.genGrid("#gridRight", dataRight, "${menuCd}", 2, ${clo.getColumnLayout(2)});
     <%-- 읽기전용을 해제하지 않으면 그리드 에디팅이 되지 않는다. --%>
     gridRight.isReadOnly = false;
-    
-    <%-- 세부명칭 그리드 포맷 --%>
-    gridRight.formatItem.addHandler(function(s, e) {
-      if (e.panel == s.cells) {
-        var col = s.columns[e.col];
-        if ( col.binding == "chk" ) {
-          var chk = document.createElement('input');
-          chk.type = 'checkbox';
-          chk.checked = gridLeft.rows[e.row].dataItem['chk'];
-          chk.className = "my-custom-checkbox";
-          e.cell.innerHTML = '';
-          e.cell.appendChild(chk);
-        }
-      }
-    });
     
     <%-- 세부명칭 그리드 원클릭 에디팅 --%>
     gridRight.selectionChanged.addHandler(function (s, e) {

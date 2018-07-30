@@ -19,7 +19,6 @@ import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.user.enums.PwChgResult;
 import kr.co.solbipos.store.manage.pwdmanage.service.PwdManageService;
 import kr.co.solbipos.store.manage.pwdmanage.service.PwdManageVO;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @Class Name : PwdManageController.java
@@ -37,7 +36,6 @@ import lombok.extern.slf4j.Slf4j;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-@Slf4j
 @Controller
 @RequestMapping(value = "/store/manage/pwdManage")
 public class PwdManageController {

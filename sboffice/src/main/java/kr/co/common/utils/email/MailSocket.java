@@ -9,10 +9,11 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.Date;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.DateUtil;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * 메일발송 소켓 Class
@@ -21,10 +22,11 @@ import lombok.extern.slf4j.Slf4j;
  *
  */
 
-@Slf4j
 @Component
 public class MailSocket {
-
+    
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    
     private String host;
     private int port;
 
@@ -126,7 +128,7 @@ public class MailSocket {
                                         + " PORT : " + port + "\n")
                                 .append("SEND_DATA : [" + sendData + "]\n");
 
-                log.error(msg1.toString(), ce);
+                LOGGER.error(msg1.toString(), ce);
 
                 msg1 = null;
                 ce.printStackTrace();
@@ -137,7 +139,7 @@ public class MailSocket {
                                 .append("[MailSocket - CreateSocket Error] - IP : " + host
                                         + " PORT : " + port + "\n")
                                 .append("SEND_DATA : [" + sendData + "]\n");
-                log.error(msg1.toString(), ioe);
+                LOGGER.error(msg1.toString(), ioe);
 
                 msg1 = null;
                 ioe.printStackTrace();
@@ -159,7 +161,7 @@ public class MailSocket {
             bw.write(sendData);
             logMsg.append("SEND_DATA : [").append(sendData).append("]\n\n");
 
-            log.debug(String.format("Mail SendData:%s", sendData));
+            LOGGER.debug(String.format("Mail SendData:%s", sendData));
 
             bw.flush();
 
@@ -186,7 +188,7 @@ public class MailSocket {
                             + "\n");
                     msg1.append("SEND_DATA : [" + sendData + "]\n");
 
-                    log.error(msg1.toString(), ioe2);
+                    LOGGER.error(msg1.toString(), ioe2);
 
                     msg1 = null;
                     ioe2.printStackTrace();
@@ -200,7 +202,7 @@ public class MailSocket {
             msg1.append("[MailSocket - Exception Error] - IP : " + host + " PORT : " + port + "\n");
             msg1.append("SEND_DATA : [" + sendData + "]\n");
 
-            log.error(msg1.toString(), ex);
+            LOGGER.error(msg1.toString(), ex);
 
             msg1 = null;
             ex.printStackTrace();
@@ -213,7 +215,7 @@ public class MailSocket {
             if (mailSocket != null)
                 mailSocket.close();
 
-            log.debug(logMsg.toString());
+            LOGGER.debug(logMsg.toString());
 
             logMsg = null;
         }

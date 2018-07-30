@@ -28,20 +28,20 @@ public interface EnvConfigMapper {
     /** 대표명칭 코드목록 조회 */
     List<DefaultMap<String>> getEnvstList(EnvstVO envstVO);
     
-    /** 세부명칭 코드목록 조회 */
-    List<DefaultMap<String>> getEnvstDtlList(EnvstDtlVO envstDtlVO);
-    
     /** 대표명칭 코드 생성 */
     int insertEnvst(EnvstVO envConfigVO);
     
     /** 대표명칭 코드 수정 */
     int updateEnvst(EnvstVO envConfigVO);
     
+    /** 세부명칭 코드목록 조회 */
+    List<DefaultMap<String>> getEnvstDtlList(EnvstDtlVO envstDtlVO);
+    
     /** 세부명칭 코드 생성 */
-    int insertEnvstDtl(EnvstVO envConfigVO);
+    int insertEnvstDtl(EnvstDtlVO envConfigVO);
     
     /** 세부명칭 코드 수정 */
-    int updateEnvstDtl(EnvstVO envConfigVO);
+    int updateEnvstDtl(EnvstDtlVO envConfigVO);
     
     
 }

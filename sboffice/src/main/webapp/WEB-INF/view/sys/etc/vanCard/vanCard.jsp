@@ -102,7 +102,7 @@
     <%-- VAN사 그리드 --%>
     var dataVan =
       [
-        { binding:"chk", header:"<s:message code='vanCard.chk'/>", dataType:wijmo.DataType.Boolean, width:40 },
+        { binding:"gChk", header:"<s:message code='vanCard.chk'/>", dataType:wijmo.DataType.Boolean, width:40 },
         { binding:"vanCd", header:"<s:message code='vanCard.vanCd'/>", width:70, align:"center" },
         { binding:"vanNm", header:"<s:message code='vanCard.vanNm'/>", width:"*" },
         { binding:"mainIp", header:"<s:message code='vanCard.mainIp'/>", width:"*" },
@@ -124,14 +124,6 @@
         var item = s.rows[e.row].dataItem;
         if( col.binding == "vanCd" ) {
           wijmo.addClass(e.cell, 'wijLink');
-        }
-        if ( col.binding == "chk" ) {
-          var chk = document.createElement('input');
-          chk.type = 'checkbox';
-          chk.checked = gridVan.rows[e.row].dataItem['chk'];
-          chk.className = "my-custom-checkbox";
-          e.cell.innerHTML = '';
-          e.cell.appendChild(chk);
         }
       }
     });
@@ -245,7 +237,7 @@
     <%-- CARD사 그리드 --%>
     var dataCard =
       [
-        { binding:"chk", header:"<s:message code='vanCard.chk'/>", dataType:wijmo.DataType.Boolean, width:40 },
+        { binding:"gChk", header:"<s:message code='vanCard.chk'/>", dataType:wijmo.DataType.Boolean, width:40 },
         { binding:"cardcoCd", header:"<s:message code='vanCard.cardcoCd'/>", width:70, align:"center" },
         { binding:"cardcoNm", header:"<s:message code='vanCard.cardcoNm'/>", width:"*" },
         { binding:"bizNo", header:"<s:message code='vanCard.bizNo'/>", width:"*" },
@@ -266,14 +258,6 @@
         if( col.binding == "cardcoCd" ) {
           wijmo.addClass(e.cell, 'wijLink');
         } 
-        if ( col.binding == "chk" ) {
-          var chk = document.createElement('input');
-          chk.type = 'checkbox';
-          chk.checked = gridCard.rows[e.row].dataItem['chk'];
-          chk.className = "my-custom-checkbox";
-          e.cell.innerHTML = '';
-          e.cell.appendChild(chk);
-        }
       }
     });
     
@@ -383,7 +367,7 @@
     <%-- VAN/CARD사 매핑 그리드 --%>
     var dataMapping =
       [
-        {"binding":"chk", header:"<s:message code='vanCard.chk' />", dataType:wijmo.DataType.Boolean, width:40},
+        {"binding":"gChk", header:"<s:message code='vanCard.chk' />", dataType:wijmo.DataType.Boolean, width:40},
         {"binding":"vanNm", header:"<s:message code='vanCard.vanNm' />", width:"*"},
         {"binding":"vanCardcoCd", header:"<s:message code='vanCard.vanCardcoCd'/>", width:"*"},
         {"binding":"vanCardcoNm", header:"<s:message code='vanCard.vanCardcoNm'/>", width:"*"},
@@ -401,14 +385,6 @@
         var item = s.rows[e.row].dataItem;
         if( col.binding == "vanCd" ) {
           wijmo.addClass(e.cell, 'wijLink');
-        }
-        if ( col.binding == "chk" ) {
-          var chk = document.createElement('input');
-          chk.type = 'checkbox';
-          chk.checked = gridMapng.rows[e.row].dataItem['chk'];
-          chk.className = "my-custom-checkbox";
-          e.cell.innerHTML = '';
-          e.cell.appendChild(chk);
         }
       }
     });

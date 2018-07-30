@@ -1,22 +1,28 @@
 package kr.co.common.exception;
 
 import kr.co.common.data.enums.Status;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
- * 업무관련 예외
+ * @Class Name : BizException.java
+ * @Description : 업무관련 예외
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2015.05.01  이호원      최초생성
  *
- * @author 이호원
+ * @author NHN한국사이버결제 KCP 이호원
+ * @since 2018. 05.01
+ * @version 1.0
+ * @see
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-@Data
-@EqualsAndHashCode(callSuper=false)
 public class BizException extends RuntimeException {
+    
     private static final long serialVersionUID = 3209717720718123566L;
-
     /** 응답 유형 */
     private Status status;
-
     /** 리턴 URL */
     private String responseURL = "";
 
@@ -55,4 +61,31 @@ public class BizException extends RuntimeException {
         this.responseURL = responseURL;
         this.status = status;
     }
+
+    
+    /**
+     * @return the status
+     */
+    public Status getStatus() {
+        return status;
+    }
+    /**
+     * @param status the status to set
+     */
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+    /**
+     * @return the responseURL
+     */
+    public String getResponseURL() {
+        return responseURL;
+    }
+    /**
+     * @param responseURL the responseURL to set
+     */
+    public void setResponseURL(String responseURL) {
+        this.responseURL = responseURL;
+    }
+    
 }

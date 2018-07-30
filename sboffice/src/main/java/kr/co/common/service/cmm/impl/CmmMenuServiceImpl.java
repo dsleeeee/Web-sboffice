@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import kr.co.common.data.structure.DefaultMap;
@@ -22,18 +24,15 @@ import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.common.service.impl.CmmCodeMapper;
 import kr.co.solbipos.application.common.service.impl.CmmMenuMapper;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service("cmmMenuService")
 public class CmmMenuServiceImpl implements CmmMenuService {
-
+    
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
     @Autowired
     SessionService sessionService;
-
     @Autowired
     CmmMenuMapper cmmMenuMapper;
-
     @Autowired
     CmmCodeMapper cmmCodeMapper;
 
@@ -102,7 +101,7 @@ public class CmmMenuServiceImpl implements CmmMenuService {
         // 추가 할 리소스 생성 및 세팅
         ResrceInfoBaseVO resrceInfoBaseVO = new ResrceInfoBaseVO();
         resrceInfoBaseVO.setResrceCd(resrceInfoVO.getResrceCd());
-        resrceInfoBaseVO.setPResrce(resrceInfoVO.getPResrce());
+        resrceInfoBaseVO.setpResrce(resrceInfoVO.getpResrce());
         resrceInfoBaseVO.setResrceNm(resrceInfoVO.getResrceNm());
         resrceInfoBaseVO.setUrl(resrceInfoVO.getUrl());
         addHistMenu(resrceInfoBaseVO, sessionInfoVO);
@@ -244,8 +243,8 @@ public class CmmMenuServiceImpl implements CmmMenuService {
         map.put("authGrpCd", sessionInfoVO.getAuthGrpCd());
         map.put("userId", sessionInfoVO.getUserId());
         // 가상로그인용 변수
-        if ( sessionInfoVO.getVUserId() != null && !"".equals(sessionInfoVO.getVUserId()) ) {
-            map.put("vUserId", sessionInfoVO.getVUserId());
+        if ( sessionInfoVO.getvUserId() != null && !"".equals(sessionInfoVO.getvUserId()) ) {
+            map.put("vUserId", sessionInfoVO.getvUserId());
         }
         
         // Tree 생성을 위한 모든 리소스(Menu 포함) 조회
@@ -286,7 +285,7 @@ public class CmmMenuServiceImpl implements CmmMenuService {
             menu.setIcon(item.getStr("icon"));
             menu.setItems(new ArrayList<MenuVO>());
             if ( item.getStr("vLoginId") != null && !"".equals(item.getStr("vLoginId")) ) {
-                menu.setVLoginId(item.getStr("vLoginId"));
+                menu.setvLoginId(item.getStr("vLoginId"));
             }
             menuVOs.add(menu);
         }
@@ -303,7 +302,7 @@ public class CmmMenuServiceImpl implements CmmMenuService {
                     authedResrce.put(res, "");
                 }
             }
-            log.debug(authedResrce.toString());
+            LOGGER.debug(authedResrce.toString());
         }
 
         Map<String, MenuVO> hm = new LinkedHashMap<String, MenuVO>();
@@ -340,7 +339,7 @@ public class CmmMenuServiceImpl implements CmmMenuService {
                 retrunData.add(mmd);
             }
         }
-        log.debug(retrunData.toString());
+        LOGGER.debug(retrunData.toString());
         return retrunData;
     }
 

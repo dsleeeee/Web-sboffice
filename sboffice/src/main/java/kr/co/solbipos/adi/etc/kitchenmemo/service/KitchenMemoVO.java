@@ -5,8 +5,6 @@ import org.hibernate.validator.constraints.NotBlank;
 import kr.co.common.validate.Login;
 import kr.co.common.validate.PwChange;
 import kr.co.solbipos.application.common.service.CmmVO;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
 * @Class Name : KitchenMemoVO.java
@@ -24,31 +22,87 @@ import lombok.EqualsAndHashCode;
 *
 *  Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
-@Data
-@EqualsAndHashCode(callSuper = false)
 public class KitchenMemoVO extends CmmVO{
 
     private static final long serialVersionUID = 1L;
-
     /** 매장코드 */
     private String storeCd;
-
     /** 주방메모코드 */
     @NotBlank
     @Size(   min = 2, max = 3, message = "{msg.cmm.size.max}")
     private String kitchnMemoCd;
-
     /** 주방메모명 */
     @NotBlank
     @Size(groups = {PwChange.class}, min = 1, max = 50, message = "{msg.cmm.size.max}")
     private String kitchnMemoNm;
-
     /** 메모구분  */
     @NotBlank
     @Size( groups={ Login.class }, max = 1, message = "{msg.cmm.size.max}" )
     private String memoFg;
-
     /** 사용여부  */
     @NotBlank
     private String useYn;
+    
+    
+    /**
+     * @return the storeCd
+     */
+    public String getStoreCd() {
+        return storeCd;
+    }
+    /**
+     * @param storeCd the storeCd to set
+     */
+    public void setStoreCd(String storeCd) {
+        this.storeCd = storeCd;
+    }
+    /**
+     * @return the kitchnMemoCd
+     */
+    public String getKitchnMemoCd() {
+        return kitchnMemoCd;
+    }
+    /**
+     * @param kitchnMemoCd the kitchnMemoCd to set
+     */
+    public void setKitchnMemoCd(String kitchnMemoCd) {
+        this.kitchnMemoCd = kitchnMemoCd;
+    }
+    /**
+     * @return the kitchnMemoNm
+     */
+    public String getKitchnMemoNm() {
+        return kitchnMemoNm;
+    }
+    /**
+     * @param kitchnMemoNm the kitchnMemoNm to set
+     */
+    public void setKitchnMemoNm(String kitchnMemoNm) {
+        this.kitchnMemoNm = kitchnMemoNm;
+    }
+    /**
+     * @return the memoFg
+     */
+    public String getMemoFg() {
+        return memoFg;
+    }
+    /**
+     * @param memoFg the memoFg to set
+     */
+    public void setMemoFg(String memoFg) {
+        this.memoFg = memoFg;
+    }
+    /**
+     * @return the useYn
+     */
+    public String getUseYn() {
+        return useYn;
+    }
+    /**
+     * @param useYn the useYn to set
+     */
+    public void setUseYn(String useYn) {
+        this.useYn = useYn;
+    }
+    
 }

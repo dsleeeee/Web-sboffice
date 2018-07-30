@@ -1,8 +1,6 @@
 package kr.co.solbipos.application.com.bizno.service;
 
 import kr.co.solbipos.application.common.service.CmmVO;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
 * @Class Name : BizNoVO.java
@@ -20,13 +18,24 @@ import lombok.EqualsAndHashCode;
 *
 *  Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
-@Data
-@EqualsAndHashCode(callSuper = false)
 public class BizNoVO extends CmmVO {
 
     private static final long serialVersionUID = 7527886695969858538L;
-
     /** 사업자번호 */
     private String bizNo;
-
+    
+    
+    /**
+     * @return the bizNo
+     */
+    public String getBizNo() {
+        return bizNo;
+    }
+    /**
+     * @param bizNo the bizNo to set
+     */
+    public void setBizNo(String bizNo) {
+        this.bizNo = bizNo;
+    }
+    
 }

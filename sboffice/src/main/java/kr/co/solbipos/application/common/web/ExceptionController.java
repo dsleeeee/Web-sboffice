@@ -1,6 +1,8 @@
 package kr.co.solbipos.application.common.web;
 
 import static org.springframework.util.ObjectUtils.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,16 +19,16 @@ import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.common.utils.spring.WebUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author 정용길
  *
  */
-@Slf4j
 @ControllerAdvice
 public class ExceptionController {
-
+    
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    
     /** 메세지 서비스 */
     @Autowired
     MessageService messageService;
@@ -93,7 +95,7 @@ public class ExceptionController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
         String userId = isEmpty(sessionInfoVO) ? "" : sessionInfoVO.getUserId();
 
-        log.error("Exception : id: {}", userId, e);
+        LOGGER.error("Exception : id: {}", userId, e);
 
         if (WebUtil.isJsonRequest()) {
             String msg = messageService.get("cmm.error");

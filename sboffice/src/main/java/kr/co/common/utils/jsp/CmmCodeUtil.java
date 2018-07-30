@@ -5,6 +5,8 @@ import static org.springframework.util.StringUtils.isEmpty;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
@@ -13,17 +15,16 @@ import kr.co.common.data.domain.EnvCodeVO;
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.code.CmmCodeService;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * jsp 에서 직접 사용 공통 코드 comboBox 에 직접 사용하는 data 형식으로 돌려줌
  *
  * @author 정용길
  */
-@Slf4j
 @Component("cmmCodeUtil")
 public class CmmCodeUtil {
-
+    
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
     @Autowired
     CmmCodeService cmmCodeService;
 
@@ -162,7 +163,7 @@ public class CmmCodeUtil {
                 cmmCodeService.setCodeList(commonCodeVO);
             }
         } catch (Exception e) {
-            log.warn("redis error.... 공통코드 디비에서 조회 : {}", nmcodeGrpCd);
+            LOGGER.warn("redis error.... 공통코드 디비에서 조회 : {}", nmcodeGrpCd);
 
             if (isEmpty(codeList)) { // 디비에서 조회가 안되었으면 조회
                 codeList = cmmCodeService.selectCmmCodeList(nmcodeGrpCd);
@@ -187,7 +188,7 @@ public class CmmCodeUtil {
      */
     public <E> String assmblObj(List<DefaultMap<E>> source, String name, String value, UseYn option) {
         if (ObjectUtils.isEmpty(source)) {
-            log.warn("assmble source empty...");
+            LOGGER.warn("assmble source empty...");
             return "";
         }
         List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();

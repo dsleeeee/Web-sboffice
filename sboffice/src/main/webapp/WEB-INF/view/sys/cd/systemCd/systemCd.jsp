@@ -100,7 +100,7 @@
     <%-- 대표명칭 그리드 --%>
     var dataLeft =
       [
-        { binding:"chk", header:"<s:message code='systemCd.chk' />", dataType:wijmo.DataType.Boolean, width:40},
+        { binding:"gChk", header:"<s:message code='systemCd.chk' />", dataType:wijmo.DataType.Boolean, width:40},
         { binding:"nmcodeCd", header:"<s:message code='systemCd.nmcodeCd'/>", width:70},
         { binding:"nmcodeNm", header:"<s:message code='systemCd.nmcodeNm'/>", width:"*"},
         { binding:"nmcodeItem1", header:"<s:message code='systemCd.nmcodeItem1'/>", width:"*"},
@@ -113,7 +113,7 @@
     <%-- 세부명칭 그리드 --%>
     var dataRight =
       [
-        {"binding":"chk", header:"<s:message code='systemCd.chk' />", dataType:wijmo.DataType.Boolean, width:40},
+        {"binding":"gChk", header:"<s:message code='systemCd.chk' />", dataType:wijmo.DataType.Boolean, width:40},
         {"binding":"nmcodeCd", header:"<s:message code='systemCd.nmcodeCd'/>", width:70},
         {"binding":"nmcodeNm", header:"<s:message code='systemCd.nmcodeNm'/>", width:"*"},
         {"binding":"nmcodeItem1", header:"<s:message code='systemCd.nmcodeItem1'/>", width:"*"},
@@ -131,14 +131,6 @@
         var item = s.rows[e.row].dataItem;
         if( col.binding == "nmcodeCd" ) {
           wijmo.addClass(e.cell, 'wijLink');
-        }
-        if ( col.binding == "chk" ) {
-          var chk = document.createElement('input');
-          chk.type = 'checkbox';
-          chk.checked = gridLeft.rows[e.row].dataItem['chk'];
-          chk.className = "my-custom-checkbox";
-          e.cell.innerHTML = '';
-          e.cell.appendChild(chk);
         }
       }
     });
@@ -171,21 +163,6 @@
           setTimeout(function() {
             gridLeft.startEditing(false, e.row, ht.col, true);
           }, 50);
-        }
-      }
-    });
-    
-    <%-- 세부명칭 그리드 포맷 --%>
-    gridRight.formatItem.addHandler(function(s, e) {
-      if (e.panel == s.cells) {
-        var col = s.columns[e.col];
-        if ( col.binding == "chk" ) {
-          var chk = document.createElement('input');
-          chk.type = 'checkbox';
-          chk.checked = gridLeft.rows[e.row].dataItem['chk'];
-          chk.className = "my-custom-checkbox";
-          e.cell.innerHTML = '';
-          e.cell.appendChild(chk);
         }
       }
     });

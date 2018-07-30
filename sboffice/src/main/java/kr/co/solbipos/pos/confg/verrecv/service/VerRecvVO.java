@@ -1,8 +1,6 @@
 package kr.co.solbipos.pos.confg.verrecv.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
 * @Class Name : VerRecvVO.java
@@ -20,43 +18,122 @@ import lombok.EqualsAndHashCode;
 *
 *  Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
-@Data
-@EqualsAndHashCode(callSuper = false)
 public class VerRecvVO extends PageVO {
     
+    private static final long serialVersionUID = -6089897008439296961L;
     /** 버전일련번호 */
     private String verSerNo;
-    
     /** 버전명 */
     private String verSerNm;
-
     /** 본사코드 */
     private String hqOfficeCd;
-
     /** 본사명 */
     private String hqOfficeNm;
-    
     /** 매장코드 */
     private String storeCd;
-    
     /** 매장명 */
     private String storeNm;
-    
     /** 최종버전 */
     private String lastVer;
-    
     /** 사용여부 */
     private String useYn;
     
-    /** 등록일시 */
-    private String regDt;
     
-    /** 등록아이디 */
-    private String regId;
+    /**
+     * @return the verSerNo
+     */
+    public String getVerSerNo() {
+        return verSerNo;
+    }
+    /**
+     * @param verSerNo the verSerNo to set
+     */
+    public void setVerSerNo(String verSerNo) {
+        this.verSerNo = verSerNo;
+    }
+    /**
+     * @return the verSerNm
+     */
+    public String getVerSerNm() {
+        return verSerNm;
+    }
+    /**
+     * @param verSerNm the verSerNm to set
+     */
+    public void setVerSerNm(String verSerNm) {
+        this.verSerNm = verSerNm;
+    }
+    /**
+     * @return the hqOfficeCd
+     */
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
+    /**
+     * @param hqOfficeCd the hqOfficeCd to set
+     */
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
+    }
+    /**
+     * @return the hqOfficeNm
+     */
+    public String getHqOfficeNm() {
+        return hqOfficeNm;
+    }
+    /**
+     * @param hqOfficeNm the hqOfficeNm to set
+     */
+    public void setHqOfficeNm(String hqOfficeNm) {
+        this.hqOfficeNm = hqOfficeNm;
+    }
+    /**
+     * @return the storeCd
+     */
+    public String getStoreCd() {
+        return storeCd;
+    }
+    /**
+     * @param storeCd the storeCd to set
+     */
+    public void setStoreCd(String storeCd) {
+        this.storeCd = storeCd;
+    }
+    /**
+     * @return the storeNm
+     */
+    public String getStoreNm() {
+        return storeNm;
+    }
+    /**
+     * @param storeNm the storeNm to set
+     */
+    public void setStoreNm(String storeNm) {
+        this.storeNm = storeNm;
+    }
+    /**
+     * @return the lastVer
+     */
+    public String getLastVer() {
+        return lastVer;
+    }
+    /**
+     * @param lastVer the lastVer to set
+     */
+    public void setLastVer(String lastVer) {
+        this.lastVer = lastVer;
+    }
+    /**
+     * @return the useYn
+     */
+    public String getUseYn() {
+        return useYn;
+    }
+    /**
+     * @param useYn the useYn to set
+     */
+    public void setUseYn(String useYn) {
+        this.useYn = useYn;
+    }
     
-    /** 수정일시 */
-    private String modDt;
-    
-    /** 수정아이디 */
-    private String modId;
 }

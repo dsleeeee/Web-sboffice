@@ -2,8 +2,6 @@ package kr.co.solbipos.pos.confg.vermanage.service;
 
 import kr.co.common.data.enums.UseYn;
 import kr.co.solbipos.application.common.service.PageVO;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
 * @Class Name : VerInfoVO.java
@@ -21,53 +19,164 @@ import lombok.EqualsAndHashCode;
 *
 *  Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
-@Data
-@EqualsAndHashCode(callSuper = false)
 public class VerInfoVO extends PageVO {
 
+    private static final long serialVersionUID = -1179266936609857210L;
     /** 버전일련번호 */
     private String verSerNo;
-    
     /** 버전일련번호 */
     private String verSerNm;
-
     /** 파일설명 (버전적용명) */
     private String fileNm;
-
     /** 파일사이즈 */
     private String fileSize;
-
     /** 파일 저장 디렉토리 */
     private String fileDir;
-    
     /** 파일설명 */
     private String fileDesc;
-
     /** 포스 프로그램 구분 */
     private String progFg;
-
     /** PGM 포함 여부 */
     private String pgmYn;
-
     /** DB 포함 여부 */
     private String dbYn;
-
     /** IMG 포함 여부 */
     private String imgYn;
-
     /** 사용여부 */
     private UseYn useYn;
-
-    /** 등록일시 */
-    private String regDt;
-
-    /** 등록아이디 */
-    private String regId;
-
-    /** 수정일시 */
-    private String modDt;
     
-    /** 수정아이디 */
-    private String modId;
-
+    
+    /**
+     * @return the verSerNo
+     */
+    public String getVerSerNo() {
+        return verSerNo;
+    }
+    /**
+     * @param verSerNo the verSerNo to set
+     */
+    public void setVerSerNo(String verSerNo) {
+        this.verSerNo = verSerNo;
+    }
+    /**
+     * @return the verSerNm
+     */
+    public String getVerSerNm() {
+        return verSerNm;
+    }
+    /**
+     * @param verSerNm the verSerNm to set
+     */
+    public void setVerSerNm(String verSerNm) {
+        this.verSerNm = verSerNm;
+    }
+    /**
+     * @return the fileNm
+     */
+    public String getFileNm() {
+        return fileNm;
+    }
+    /**
+     * @param fileNm the fileNm to set
+     */
+    public void setFileNm(String fileNm) {
+        this.fileNm = fileNm;
+    }
+    /**
+     * @return the fileSize
+     */
+    public String getFileSize() {
+        return fileSize;
+    }
+    /**
+     * @param fileSize the fileSize to set
+     */
+    public void setFileSize(String fileSize) {
+        this.fileSize = fileSize;
+    }
+    /**
+     * @return the fileDir
+     */
+    public String getFileDir() {
+        return fileDir;
+    }
+    /**
+     * @param fileDir the fileDir to set
+     */
+    public void setFileDir(String fileDir) {
+        this.fileDir = fileDir;
+    }
+    /**
+     * @return the fileDesc
+     */
+    public String getFileDesc() {
+        return fileDesc;
+    }
+    /**
+     * @param fileDesc the fileDesc to set
+     */
+    public void setFileDesc(String fileDesc) {
+        this.fileDesc = fileDesc;
+    }
+    /**
+     * @return the progFg
+     */
+    public String getProgFg() {
+        return progFg;
+    }
+    /**
+     * @param progFg the progFg to set
+     */
+    public void setProgFg(String progFg) {
+        this.progFg = progFg;
+    }
+    /**
+     * @return the pgmYn
+     */
+    public String getPgmYn() {
+        return pgmYn;
+    }
+    /**
+     * @param pgmYn the pgmYn to set
+     */
+    public void setPgmYn(String pgmYn) {
+        this.pgmYn = pgmYn;
+    }
+    /**
+     * @return the dbYn
+     */
+    public String getDbYn() {
+        return dbYn;
+    }
+    /**
+     * @param dbYn the dbYn to set
+     */
+    public void setDbYn(String dbYn) {
+        this.dbYn = dbYn;
+    }
+    /**
+     * @return the imgYn
+     */
+    public String getImgYn() {
+        return imgYn;
+    }
+    /**
+     * @param imgYn the imgYn to set
+     */
+    public void setImgYn(String imgYn) {
+        this.imgYn = imgYn;
+    }
+    /**
+     * @return the useYn
+     */
+    public UseYn getUseYn() {
+        return useYn;
+    }
+    /**
+     * @param useYn the useYn to set
+     */
+    public void setUseYn(UseYn useYn) {
+        this.useYn = useYn;
+    }
+    
 }

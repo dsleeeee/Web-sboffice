@@ -12,7 +12,6 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.Result;
 import kr.co.solbipos.application.com.bizno.service.BizNoService;
 import kr.co.solbipos.application.com.bizno.service.BizNoVO;
-import lombok.extern.slf4j.Slf4j;
 
 /**
 * @Class Name : BizNoController.java
@@ -30,7 +29,6 @@ import lombok.extern.slf4j.Slf4j;
 *
 *  Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
-@Slf4j
 @Controller
 @RequestMapping(value = "/com/bizno")
 public class BizNoController {

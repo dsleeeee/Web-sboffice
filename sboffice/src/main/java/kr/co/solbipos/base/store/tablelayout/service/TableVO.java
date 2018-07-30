@@ -2,9 +2,6 @@ package kr.co.solbipos.base.store.tablelayout.service;
 
 import kr.co.solbipos.application.common.service.CmmVO;
 import kr.co.solbipos.base.store.tableattr.enums.TblTypeFg;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * @Class Name : TableVO.java
@@ -22,56 +19,164 @@ import lombok.EqualsAndHashCode;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-@Data
-@Builder
-@EqualsAndHashCode(callSuper = false)
 public class TableVO extends CmmVO {
 
-    private static final long serialVersionUID = 1L;
-
+    private static final long serialVersionUID = -5141418534001504479L;
     /** 매장코드 */
     private String storeCd;
-
     /** 테이블코드 */
     private String tblCd;
-
     /** 테이블명 */
     private String tblNm;
-
     /** 테이블그룹코드 */
     private String tblGrpCd;
-
     /** 테이블좌석수 */
-    @Builder.Default private Long tblSeatCnt = 0L;;
-
+    private Long tblSeatCnt = 0L;;
     /** X */
-    @Builder.Default private Long x = 0L;
-
+    private Long x = 0L;
     /** Y */
-    @Builder.Default private Long y = 0L;
-
+    private Long y = 0L;
     /** 폭 */
-    @Builder.Default private Long width = 0L;
-
+    private Long width = 0L;
     /** 높이 */
-    @Builder.Default private Long height = 0L;
-
+    private Long height = 0L;
     /** 테이블유형구분 */
     private TblTypeFg tblTypeFg;
-
     /** 사용여부 */
     private String useYn;
-
-    /** 등록일시 */
-    private String regDt;
-
-    /** 등록아이디 */
-    private String regId;
-
-    /** 수정일시 */
-    private String modDt;
-
-    /** 수정아이디 */
-    private String modId;
+    
+    
+    /**
+     * @return the storeCd
+     */
+    public String getStoreCd() {
+        return storeCd;
+    }
+    /**
+     * @param storeCd the storeCd to set
+     */
+    public void setStoreCd(String storeCd) {
+        this.storeCd = storeCd;
+    }
+    /**
+     * @return the tblCd
+     */
+    public String getTblCd() {
+        return tblCd;
+    }
+    /**
+     * @param tblCd the tblCd to set
+     */
+    public void setTblCd(String tblCd) {
+        this.tblCd = tblCd;
+    }
+    /**
+     * @return the tblNm
+     */
+    public String getTblNm() {
+        return tblNm;
+    }
+    /**
+     * @param tblNm the tblNm to set
+     */
+    public void setTblNm(String tblNm) {
+        this.tblNm = tblNm;
+    }
+    /**
+     * @return the tblGrpCd
+     */
+    public String getTblGrpCd() {
+        return tblGrpCd;
+    }
+    /**
+     * @param tblGrpCd the tblGrpCd to set
+     */
+    public void setTblGrpCd(String tblGrpCd) {
+        this.tblGrpCd = tblGrpCd;
+    }
+    /**
+     * @return the tblSeatCnt
+     */
+    public Long getTblSeatCnt() {
+        return tblSeatCnt;
+    }
+    /**
+     * @param tblSeatCnt the tblSeatCnt to set
+     */
+    public void setTblSeatCnt(Long tblSeatCnt) {
+        this.tblSeatCnt = tblSeatCnt;
+    }
+    /**
+     * @return the x
+     */
+    public Long getX() {
+        return x;
+    }
+    /**
+     * @param x the x to set
+     */
+    public void setX(Long x) {
+        this.x = x;
+    }
+    /**
+     * @return the y
+     */
+    public Long getY() {
+        return y;
+    }
+    /**
+     * @param y the y to set
+     */
+    public void setY(Long y) {
+        this.y = y;
+    }
+    /**
+     * @return the width
+     */
+    public Long getWidth() {
+        return width;
+    }
+    /**
+     * @param width the width to set
+     */
+    public void setWidth(Long width) {
+        this.width = width;
+    }
+    /**
+     * @return the height
+     */
+    public Long getHeight() {
+        return height;
+    }
+    /**
+     * @param height the height to set
+     */
+    public void setHeight(Long height) {
+        this.height = height;
+    }
+    /**
+     * @return the tblTypeFg
+     */
+    public TblTypeFg getTblTypeFg() {
+        return tblTypeFg;
+    }
+    /**
+     * @param tblTypeFg the tblTypeFg to set
+     */
+    public void setTblTypeFg(TblTypeFg tblTypeFg) {
+        this.tblTypeFg = tblTypeFg;
+    }
+    /**
+     * @return the useYn
+     */
+    public String getUseYn() {
+        return useYn;
+    }
+    /**
+     * @param useYn the useYn to set
+     */
+    public void setUseYn(String useYn) {
+        this.useYn = useYn;
+    }
 
 }

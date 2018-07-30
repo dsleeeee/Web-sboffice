@@ -8,6 +8,8 @@ import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,18 +24,14 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.cmm.CmmMenuService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.system.BaseEnv;
-import kr.co.common.utils.DateUtil;
 import kr.co.common.utils.SessionUtil;
 import kr.co.common.utils.grid.ReturnUtil;
-import kr.co.solbipos.application.session.auth.enums.LoginOrigin;
 import kr.co.solbipos.application.session.auth.enums.LoginResult;
 import kr.co.solbipos.application.session.auth.service.AuthService;
-import kr.co.solbipos.application.session.auth.service.LoginHistVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.store.manage.virtuallogin.service.VirtualLoginService;
 import kr.co.solbipos.store.manage.virtuallogin.service.VirtualLoginVO;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @Class Name : VirtualLoginController.java
@@ -51,11 +49,12 @@ import lombok.extern.slf4j.Slf4j;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-@Slf4j
 @Controller
 @RequestMapping(value = "/store/manage/virtualLogin")
 public class VirtualLoginController {
-
+    
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    
     /** service */
     @Autowired
     VirtualLoginService virtualLoginService;
@@ -124,11 +123,11 @@ public class VirtualLoginController {
         
         if ( authResult > 0 ) {
             
-            BaseEnv.VIRTUAL_LOGIN_ID = virtualLoginVO.getVUserId();
+            BaseEnv.VIRTUAL_LOGIN_ID = virtualLoginVO.getvUserId();
             
             StopWatch sw = new StopWatch();
             sw.start();
-            log.info("가상로그인 시작 : {} ", sessionInfoVO.getUserId());
+            LOGGER.info("가상로그인 시작 : {} ", sessionInfoVO.getUserId());
             
             sessionInfoVO = new SessionInfoVO();
             sessionInfoVO.setLoginResult(LoginResult.SUCCESS);
@@ -136,7 +135,7 @@ public class VirtualLoginController {
             sessionInfoVO.setBrwsrInfo(request.getHeader("User-Agent"));
             // 사용자ID를 가상로그인ID로 설정
             sessionInfoVO.setUserId(BaseEnv.VIRTUAL_LOGIN_ID);
-            sessionInfoVO.setVUserId(BaseEnv.VIRTUAL_LOGIN_ID);
+            sessionInfoVO.setvUserId(BaseEnv.VIRTUAL_LOGIN_ID);
             // userId 로 사용자 조회
             sessionInfoVO = authService.selectWebUser(sessionInfoVO);
             // sessionId 세팅
@@ -163,7 +162,7 @@ public class VirtualLoginController {
             SessionUtil.setEnv(request.getSession(), BaseEnv.VIRTUAL_LOGIN_ID, sessionInfoVO);
             
             sw.stop();
-            log.info("가상로그인 성공 처리 시간 : {}", sw.getTotalTimeSeconds());
+            LOGGER.info("가상로그인 성공 처리 시간 : {}", sw.getTotalTimeSeconds());
             
             // 로그인이력 생성
             virtualLoginService.insertLoginHistory(sessionInfoVO);
@@ -200,7 +199,7 @@ public class VirtualLoginController {
     public Result vLogout(HttpServletRequest request, HttpServletResponse response, VirtualLoginVO virtualLoginVO) {
         
         // 세선유틸에 담겨진 가상로그인 정보 삭제
-        SessionUtil.removeEnv(request.getSession(), virtualLoginVO.getVUserId());
+        SessionUtil.removeEnv(request.getSession(), virtualLoginVO.getvUserId());
         
         return ReturnUtil.returnJson(Status.OK);
         

@@ -1,8 +1,6 @@
 package kr.co.solbipos.application.com.bkmk.service;
 
 import kr.co.solbipos.application.common.service.CmmVO;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
 * @Class Name : BkmkVO.java
@@ -20,25 +18,52 @@ import lombok.EqualsAndHashCode;
 *
 *  Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
-@Data
-@EqualsAndHashCode(callSuper = false)
 public class BkmkVO extends CmmVO {
 
     private static final long serialVersionUID = -8417487189063159637L;
-
     /** 사용자 아이디 */
     private String userId;
-
     /** 리소스 코드 */
     private String resrceCd;
-
-    /** 등록 일시 */
-    private String regDt;
-
-    /** 등록 아이디 */
-    private String regId;
-
     /** 리소스코드 (Array) */
     private String[] resrceCds;
-
+    
+    
+    /**
+     * @return the userId
+     */
+    public String getUserId() {
+        return userId;
+    }
+    /**
+     * @param userId the userId to set
+     */
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+    /**
+     * @return the resrceCd
+     */
+    public String getResrceCd() {
+        return resrceCd;
+    }
+    /**
+     * @param resrceCd the resrceCd to set
+     */
+    public void setResrceCd(String resrceCd) {
+        this.resrceCd = resrceCd;
+    }
+    /**
+     * @return the resrceCds
+     */
+    public String[] getResrceCds() {
+        return resrceCds;
+    }
+    /**
+     * @param resrceCds the resrceCds to set
+     */
+    public void setResrceCds(String[] resrceCds) {
+        this.resrceCds = resrceCds;
+    }
+    
 }

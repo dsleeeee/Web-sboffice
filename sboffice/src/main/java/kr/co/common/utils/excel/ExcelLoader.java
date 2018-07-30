@@ -31,10 +31,11 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.xmlbeans.impl.common.XMLChar;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.spring.StringUtil;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * 엑셀 생성 Class
@@ -42,10 +43,11 @@ import lombok.extern.slf4j.Slf4j;
  * @author bjcho
  */
 
-@Slf4j
 @Service
 public class ExcelLoader implements ResultHandler<T> {
-
+    
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    
     /* ---------------------------------------------------------------------- */
     /* external variable */
     /* ---------------------------------------------------------------------- */
@@ -261,7 +263,7 @@ public class ExcelLoader implements ResultHandler<T> {
             addRow(dataMap);
 
             this.totalDataCount++;
-            log.debug(this.totalDataCount + ":" + dataMap.toString());
+            LOGGER.debug(this.totalDataCount + ":" + dataMap.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }

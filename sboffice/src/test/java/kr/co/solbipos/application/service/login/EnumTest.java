@@ -6,6 +6,8 @@ import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import kr.co.solbipos.application.session.auth.enums.LoginOrigin;
@@ -14,13 +16,13 @@ import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.LoginHistVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.config.AbstractApplicationContextTest;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Transactional
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class EnumTest extends AbstractApplicationContextTest {
-
+    
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    
     @Autowired
     AuthService authService;
 
@@ -53,7 +55,7 @@ public class EnumTest extends AbstractApplicationContextTest {
         s.setLoginResult(LoginResult.SUCCESS);
 
         int result = authService.loginHist(s);
-        log.debug(String.valueOf(result));
+        LOGGER.debug(String.valueOf(result));
         assertTrue(result == 1);
     }
 
@@ -66,10 +68,10 @@ public class EnumTest extends AbstractApplicationContextTest {
     public void getLoginHistVO() {
         loginHistVO.setUserId("bjcho");
         List<LoginHistVO> result = authService.selectLoginHist(loginHistVO);
-        log.debug(result.toString());
+        LOGGER.debug(result.toString());
         for(LoginHistVO loginHistVO : result) {
           if(loginHistVO.getSeq().equals("381")) {
-            log.debug(loginHistVO.toString());
+            LOGGER.debug(loginHistVO.toString());
             assertTrue(loginHistVO.getLoginOrgn() == LoginOrigin.WEB);
             assertTrue(loginHistVO.getStatCd() == LoginResult.PASSWORD_CHANGE);
           }

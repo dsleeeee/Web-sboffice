@@ -1,7 +1,6 @@
 package kr.co.solbipos.application.common.service.impl;
 
 import java.util.List;
-import kr.co.common.data.domain.CommonCodeVO;
 
 /**
  * 공통 코드 조회

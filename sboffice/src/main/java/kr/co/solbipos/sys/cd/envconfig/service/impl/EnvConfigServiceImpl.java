@@ -44,12 +44,6 @@ public class EnvConfigServiceImpl implements EnvConfigService {
         return envConfigMapper.getEnvstList(envstVO);
     }
     
-    /** 세부명칭 코드목록 조회 */
-    @Override
-    public List<DefaultMap<String>> getEnvstDtlList(EnvstDtlVO envstDtlVO) {
-        return envConfigMapper.getEnvstDtlList(envstDtlVO);
-    }
-    
     /** 대표명칭 코드 저장 */
     @Override
     public int saveEnvstList(EnvstVO[] envstVOs, SessionInfoVO sessionInfoVO) {
@@ -87,11 +81,47 @@ public class EnvConfigServiceImpl implements EnvConfigService {
         
     }
     
+    /** 세부명칭 코드목록 조회 */
+    @Override
+    public List<DefaultMap<String>> getEnvstDtlList(EnvstDtlVO envstDtlVO) {
+        return envConfigMapper.getEnvstDtlList(envstDtlVO);
+    }
+    
     /** 세부명칭 코드 저장 */
     @Override
-    public int saveEnvstDtlList(EnvstDtlVO[] envstDtlVO, SessionInfoVO sessionInfoVO) {
+    public int saveEnvstDtlList(EnvstDtlVO[] envstDtlVOs, SessionInfoVO sessionInfoVO) {
         
-        return 0;
+        int result = 0;
+        String currentDt = currentDateTimeString();
+        
+        for ( EnvstDtlVO envstDtlVO : envstDtlVOs ) {
+            
+            envstDtlVO.setRegDt(currentDt);
+            envstDtlVO.setRegId(sessionInfoVO.getUserId());
+            envstDtlVO.setModDt(currentDt);
+            envstDtlVO.setModId(sessionInfoVO.getUserId());
+            
+            // 추가
+            if ( envstDtlVO.getStatus() == GridDataFg.INSERT ) {
+                
+                result += envConfigMapper.insertEnvstDtl(envstDtlVO);
+            // 수정
+            } else if ( envstDtlVO.getStatus() == GridDataFg.UPDATE ) {
+                
+                result += envConfigMapper.updateEnvstDtl(envstDtlVO);
+            // 삭제
+            } else if ( envstDtlVO.getStatus() == GridDataFg.DELETE ) {
+                
+            }
+            
+        }
+        
+        if ( result == envstDtlVOs.length) {
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+        
     }
     
 }

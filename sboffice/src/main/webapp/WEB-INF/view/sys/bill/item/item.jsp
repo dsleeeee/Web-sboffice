@@ -78,7 +78,7 @@
     <%-- 출력코드구성 그리드 --%>
     var data =
       [
-        { binding:"chk", header:"<s:message code='item.chk' />", dataType:wijmo.DataType.Boolean, width:40},
+        { binding:"gChk", header:"<s:message code='item.chk' />", dataType:wijmo.DataType.Boolean, width:40},
         { binding:"prtCd", header:"<s:message code='item.prtCd'/>", width:100},
         { binding:"prtNm", header:"<s:message code='item.prtNm'/>", width:150},
         { binding:"samplYn", header:"<s:message code='item.samplYn'/>", dataType:wijmo.DataType.Boolean, width:80},
@@ -91,30 +91,6 @@
     var contentColumn = theGrid.columns.getColumn("content");
     contentColumn.multiLine = true;
     contentColumn.wordWrap = true;
-    
-    <%-- 출력코드구성 그리드 포맷 --%>
-    theGrid.formatItem.addHandler(function(s, e) {
-      if (e.panel == s.cells) {
-        var col = s.columns[e.col];
-        var item = s.rows[e.row].dataItem;
-        
-        if ( col.binding == "chk" ) {
-          var chk = document.createElement('input');
-          chk.type = 'checkbox';
-          chk.checked = theGrid.rows[e.row].dataItem['chk'];
-          chk.className = "my-custom-checkbox";
-          e.cell.innerHTML = '';
-          e.cell.appendChild(chk);
-        } else if ( col.binding == "content" ) {
-          
-//           col.multiLine = true;
-//           if ( !isEmpty(item.content) ) {
-//             var formattedData = item.content.replace(/\n/g, '<br/>');
-//             e.panel.setCellData(e.row, e.col, formattedData);
-//           }
-        }
-      }
-    });
     
     // auto-size visible rows
     function autoSizeVisibleRows(flex, force) {

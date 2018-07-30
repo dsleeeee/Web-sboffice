@@ -1,6 +1,6 @@
 package kr.co.solbipos.util.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -14,14 +14,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.mockito.runners.MockitoJUnitRunner;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Slf4j
 
 @RunWith(MockitoJUnitRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class Tests {
-
+    
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    
     @Before
     public void init() {
     }
@@ -67,7 +69,7 @@ public class Tests {
             }
         }
         
-        log.error("result 1, {} : {}", i, check);
+        LOGGER.error("result 1, {} : {}", i, check);
     }
     
     @Test
@@ -85,7 +87,7 @@ public class Tests {
             check = true;
         }
 
-        log.error("result 2 : {}", check);
+        LOGGER.error("result 2 : {}", check);
     }
 }
 

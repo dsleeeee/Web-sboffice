@@ -2,6 +2,8 @@ package kr.co.solbipos.base.store.tablelayout.web;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +17,6 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.store.tablelayout.service.TableLayoutService;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @Class Name : TableLayoutController.java
@@ -33,11 +34,12 @@ import lombok.extern.slf4j.Slf4j;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-@Slf4j
 @Controller
 @RequestMapping(value = "/base/store/tablelayout/tablelayout")
 public class TableLayoutController {
-
+    
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    
     private final String RESULT_URI = "base/store/tablelayout";
 
     @Autowired
@@ -76,9 +78,9 @@ public class TableLayoutController {
       //String xml = "<mxGraphModel>  <root>    <mxCell id=\"0\"/>    <mxCell id=\"1\" parent=\"0\"/>    <mxCell id=\"4\" value=\"1\" style=\"ts2\" vertex=\"1\" parent=\"1\">      <mxGeometry x=\"130\" y=\"40\" width=\"80\" height=\"80\" as=\"geometry\"/>    </mxCell>    <mxCell id=\"5\" value=\"2\" style=\"ts2\" vertex=\"1\" parent=\"1\">      <mxGeometry x=\"130\" y=\"150\" width=\"80\" height=\"80\" as=\"geometry\"/>    </mxCell>    <mxCell id=\"2\" value=\"2층\" parent=\"0\" visible=\"0\"/>    <mxCell id=\"6\" value=\"3\" style=\"ts2\" vertex=\"1\" parent=\"2\">      <mxGeometry x=\"20\" y=\"20\" width=\"80\" height=\"80\" as=\"geometry\"/>    </mxCell>    <mxCell id=\"7\" value=\"4\" style=\"ts2\" vertex=\"1\" parent=\"2\">      <mxGeometry x=\"150\" y=\"20\" width=\"80\" height=\"80\" as=\"geometry\"/>    </mxCell>    <mxCell id=\"3\" value=\"3층\" parent=\"0\" visible=\"0\"/>    <mxCell id=\"8\" value=\"5\" style=\"ts2\" vertex=\"1\" parent=\"3\">      <mxGeometry x=\"30\" y=\"330\" width=\"80\" height=\"80\" as=\"geometry\"/>    </mxCell>    <mxCell id=\"9\" value=\"6\" style=\"ts2\" vertex=\"1\" parent=\"3\">      <mxGeometry x=\"270\" y=\"200\" width=\"80\" height=\"80\" as=\"geometry\"/>    </mxCell>  </root></mxGraphModel>";
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        log.debug(sessionInfoVO.toString());
+        LOGGER.debug(sessionInfoVO.toString());
         String xml = tableLayoutService.selectTableLayoutByStore(sessionInfoVO);
-        log.debug(xml);
+        LOGGER.debug(xml);
         return new Result(Status.OK, xml);
     }
 
@@ -97,17 +99,17 @@ public class TableLayoutController {
         String xml = "";
         Result result = new Result(Status.FAIL);
 
-        //log.debug( XssPreventer.unescape(request.getParameter("xml")) );
+        //LOGGER.debug( XssPreventer.unescape(request.getParameter("xml")) );
         xml = XssPreventer.unescape(request.getParameter("xml"));
 
-        log.debug(xml);
-        //log.debug(XssPreventer.unescape(xml));
+        LOGGER.debug(xml);
+        //LOGGER.debug(XssPreventer.unescape(xml));
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        //log.debug(sessionInfoVO.toString());
+        //LOGGER.debug(sessionInfoVO.toString());
 
         result = tableLayoutService.setTableLayout(sessionInfoVO, xml);
-        log.debug(result.toString());
+        LOGGER.debug(result.toString());
         return result;
     }
 

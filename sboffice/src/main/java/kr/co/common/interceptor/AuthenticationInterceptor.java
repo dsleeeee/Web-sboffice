@@ -7,7 +7,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -24,11 +25,11 @@ import kr.co.solbipos.application.common.enums.ResrceFg;
 import kr.co.solbipos.application.common.service.ResrceInfoVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
-
+    
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    
     @Autowired
     SessionService sessionService;
 
@@ -43,7 +44,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             Object handler) throws Exception {
 
         String requestURL = request.getRequestURI().toString();
-        log.info("url : {}, accept : {}, ", requestURL, request.getHeader("accept"));
+        LOGGER.info("url : {}, accept : {}, ", requestURL, request.getHeader("accept"));
 
         /**
          * 세션 종료 처리
@@ -86,7 +87,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         // 권한 체크
 
         if (!checkUrl(request, auth, requestURL, sessionInfoVO.getUserId(), sessionInfoVO)) {
-            log.error(
+            LOGGER.error(
                     "\n■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n"
                      + "not auth : id : {},  url : {}, accept : {}",
                      sessionInfoVO.getUserId(), requestURL, request.getHeader("accept")

@@ -8,6 +8,8 @@ import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -23,13 +25,13 @@ import kr.co.solbipos.base.common.enums.InFg;
 import kr.co.solbipos.base.prod.touchkey.service.TouchClassVO;
 import kr.co.solbipos.base.prod.touchkey.service.TouchVO;
 import kr.co.solbipos.base.store.tableattr.enums.Style;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Transactional
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TouchkeyServceTest {
-
+    
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    
     String xml = "";
 
     @Before
@@ -111,12 +113,12 @@ public class TouchkeyServceTest {
     public void test_100() {
         try {
             String[] xmls = xml.split("\\|");
-            log.info(XssPreventer.unescape(xmls[0]));
-            log.info(XssPreventer.unescape(xmls[1]));
+            LOGGER.info(XssPreventer.unescape(xmls[0]));
+            LOGGER.info(XssPreventer.unescape(xmls[1]));
 
 
             List<TouchClassVO> touchClassVOs = new ArrayList<TouchClassVO>();
-            TouchClassVO touchClassVO = TouchClassVO.builder().build();
+            TouchClassVO touchClassVO = new TouchClassVO();
 
             List<TouchVO> touchVOs = new ArrayList<TouchVO>();
 
@@ -141,9 +143,9 @@ public class TouchkeyServceTest {
             Object[] cells = graphClass.getChildVertices(graphClass.getDefaultParent());
             for(Object c : cells) {
                 cell = (mxCell) c;
-                log.debug(cell.toString());
+                LOGGER.debug(cell.toString());
 
-                touchClassVO = TouchClassVO.builder().build();
+                touchClassVO = new TouchClassVO();
 
                 touchClassVO.setTukeyClassCd(cell.getId());
                 touchClassVO.setTukeyClassNm(String.valueOf(cell.getValue()));
@@ -196,7 +198,7 @@ public class TouchkeyServceTest {
 
                 touchClassVOs.add(touchClassVO);
 
-                log.debug(touchClassVOs.toString());
+                LOGGER.debug(touchClassVOs.toString());
             }
             assertTrue(true);
         }
@@ -215,7 +217,7 @@ public class TouchkeyServceTest {
         Object[] cells = graph.getChildVertices(layer);
         for(Object c : cells) {
             mxCell cell = (mxCell) c;
-            touchVO = TouchVO.builder().build();
+            touchVO = new TouchVO();
             touchVO.setStoreCd(tableClass.getStoreCd());
             touchVO.setTukeyClassCd(tableClass.getTukeyClassCd());
             touchVO.setTukeyCd(cell.getId());

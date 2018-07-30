@@ -5,6 +5,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +20,6 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.prod.touchkey.service.TouchkeyService;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @Class Name : TouchkeyController.java
@@ -36,18 +37,18 @@ import lombok.extern.slf4j.Slf4j;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-@Slf4j
 @Controller
 @RequestMapping(value = "/base/prod/touchkey/touchkey")
 public class TouchkeyController {
 
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    
     private final String RESULT_URI = "base/prod/touchkey";
 
     @Autowired
     SessionService sessionService;
     @Autowired
     MessageService messageService;
-
     @Autowired
     TouchkeyService touchkeyService;
 
@@ -89,13 +90,13 @@ public class TouchkeyController {
         xml = "<mxGraphModel rowPerPage=\"3\"><root><mxCell id=\"0\"/><mxCell id=\"1\" parent=\"0\"/><UserObject label=\"그룹명\" id=\"g1\"><mxCell vertex=\"1\" parent=\"1\"><mxGeometry width=\"80\" height=\"60\" as=\"geometry\"/></mxCell></UserObject><UserObject label=\"그룹명\" id=\"g2\"><mxCell style=\"fillColor=#ffff00;\" vertex=\"1\" parent=\"1\"><mxGeometry x=\"80\" width=\"80\" height=\"60\" as=\"geometry\"/></mxCell></UserObject><UserObject label=\"그룹명\" id=\"g3\"><mxCell style=\"fillColor=#00b050;fontColor=#ff0000;\" vertex=\"1\" parent=\"1\"><mxGeometry x=\"160\" width=\"80\" height=\"60\" as=\"geometry\"/></mxCell></UserObject></root></mxGraphModel>";
         xml += "|";
         xml += "<mxGraphModel rowPerPage=\"6\"><root><mxCell id=\"0\"/><mxCell id=\"1\" value=\"g1\" parent=\"0\" visible=\"0\"/><UserObject label=\"상품1\" price=\"10392\" id=\"p1\"><mxCell vertex=\"1\" parent=\"1\"><mxGeometry width=\"80\" height=\"60\" as=\"geometry\"/></mxCell></UserObject><UserObject label=\"상품2\" price=\"5261\" id=\"p2\"><mxCell vertex=\"1\" parent=\"1\"><mxGeometry x=\"80\" width=\"80\" height=\"60\" as=\"geometry\"/></mxCell></UserObject><UserObject label=\"상품3\" price=\"11571\" id=\"p3\"><mxCell vertex=\"1\" parent=\"1\"><mxGeometry x=\"160\" width=\"80\" height=\"60\" as=\"geometry\"/></mxCell></UserObject><mxCell id=\"2\" value=\"g2\" parent=\"0\" visible=\"0\"/><UserObject label=\"상품2\" price=\"5261\" id=\"p4\"><mxCell style=\"fillColor=#c4e6a1;\" vertex=\"1\" parent=\"2\"><mxGeometry y=\"60\" width=\"80\" height=\"60\" as=\"geometry\"/></mxCell></UserObject><UserObject label=\"상품3\" price=\"11571\" id=\"p5\"><mxCell style=\"fillColor=#fff9e5;fontColor=#367eb2;\" vertex=\"1\" parent=\"2\"><mxGeometry x=\"80\" y=\"60\" width=\"80\" height=\"60\" as=\"geometry\"/></mxCell></UserObject><mxCell id=\"3\" value=\"g3\" parent=\"0\"/><UserObject label=\"상품3\" price=\"11571\" id=\"p6\"><mxCell vertex=\"1\" parent=\"3\"><mxGeometry x=\"240\" y=\"60\" width=\"80\" height=\"60\" as=\"geometry\"/></mxCell></UserObject></root></mxGraphModel>";
-        log.debug(xml);
+        LOGGER.debug(xml);
         */
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        log.debug(sessionInfoVO.toString());
+        LOGGER.debug(sessionInfoVO.toString());
         String xml = touchkeyService.selectTouchkeyByStore(sessionInfoVO);
-        log.debug(xml);
+        LOGGER.debug(xml);
         return new Result(Status.OK, xml);
     }
 
@@ -113,13 +114,13 @@ public class TouchkeyController {
 
         Result result = new Result(Status.FAIL);
         try {
-            log.debug(request.getParameter("xml"));
+            LOGGER.debug(request.getParameter("xml"));
             String xml = URLDecoder.decode(request.getParameter("xml"), "UTF-8").replace("\n", "&#xa;");
             SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-            log.debug(sessionInfoVO.toString());
+            LOGGER.debug(sessionInfoVO.toString());
 
             result = touchkeyService.setTouchkey(sessionInfoVO, XssPreventer.unescape(xml));
-            log.debug(result.toString());
+            LOGGER.debug(result.toString());
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();

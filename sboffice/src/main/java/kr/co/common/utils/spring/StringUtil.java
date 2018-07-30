@@ -6,20 +6,21 @@ import java.text.ParseException;
 import java.util.Random;
 import java.util.UUID;
 import javax.swing.text.MaskFormatter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.utils.MD5Utils;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author 정용길
  *
  */
-@Slf4j
 public class StringUtil extends StringUtils {
-
-    private static final char UNDER_SCORE = '_';
+    
+    private final static Logger LOGGER = LoggerFactory.getLogger(StringUtil.class);
+    private final static char UNDER_SCORE = '_';
 
     public static String generateUUID() {
         return MD5Utils.md5toHex(System.nanoTime() + "-" + UUID.randomUUID().toString());
@@ -166,8 +167,8 @@ public class StringUtil extends StringUtils {
 
             return mf.valueToString(string);
         } catch (ParseException e) {
-            if (log.isErrorEnabled())
-                log.error(e.getMessage());
+            if (LOGGER.isErrorEnabled())
+                LOGGER.error(e.getMessage());
 
             return "";
         }

@@ -4,16 +4,18 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.util.WebUtils;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public class WebUtil extends WebUtils {
-
+    
+    private final static Logger LOGGER = LoggerFactory.getLogger(WebUtil.class);
+    
     private static RequestAttributes getRequestAttributes() {
         return RequestContextHolder.getRequestAttributes();
     }
@@ -35,8 +37,8 @@ public class WebUtil extends WebUtils {
      */
     public static boolean isJsonRequest(HttpServletRequest request) {
         if (request == null) {
-            if (log.isErrorEnabled())
-                log.error("isJsonRequest : request parameter is null");
+            if (LOGGER.isErrorEnabled())
+                LOGGER.error("isJsonRequest : request parameter is null");
 
             return false;
         }

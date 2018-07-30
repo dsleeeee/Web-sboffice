@@ -5,6 +5,8 @@ import static kr.co.common.utils.spring.StringUtil.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +20,6 @@ import kr.co.solbipos.application.common.enums.ResrceFg;
 import kr.co.solbipos.application.common.service.ResrceInfoVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sys.menu.webmenu.service.WebMenuService;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  *
@@ -27,17 +28,16 @@ import lombok.extern.slf4j.Slf4j;
  * @author 정용길
  *
  */
-@Slf4j
 @Service("webMenuService")
 @Transactional
 public class WebMenuServiceImpl implements WebMenuService {
-
+    
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    
     @Autowired
     WebMenuMapper webMenuMapper;
-
     @Autowired
     SessionService sessionService;
-
     @Autowired
     MessageService messageService;
 
@@ -102,7 +102,7 @@ public class WebMenuServiceImpl implements WebMenuService {
                 String m2ResrceCd = resrceInfoVO2.getResrceCd();
                 HashMap<String, Object> m2Header = new HashMap<>();
 
-                if (resrceInfoVO2.getPResrce().equals(resrceCd1)) {
+                if (resrceInfoVO2.getpResrce().equals(resrceCd1)) {
                     m2Header.put("level", 1);
                     m2Header.put("header", resrceInfoVO2.getResrceNm());
                     m2Header.put("resrceCd", resrceInfoVO2.getResrceCd());
@@ -115,7 +115,7 @@ public class WebMenuServiceImpl implements WebMenuService {
                     int l3 = level_3.size();
                     for (int k = 0; k < l3; k++) {
                         ResrceInfoVO resrceInfoVO3 = level_3.get(k);
-                        if (resrceInfoVO3.getPResrce().equals(m2ResrceCd)) {
+                        if (resrceInfoVO3.getpResrce().equals(m2ResrceCd)) {
 
                             HashMap<String, Object> m3Header = new HashMap<>();
                             m3Header.put("level", 2);
@@ -135,7 +135,7 @@ public class WebMenuServiceImpl implements WebMenuService {
             for (int m = 0; m < level_3.size(); m++) {
                 ResrceInfoVO resrceInfoVO3 = level_3.get(m);
                 HashMap<String, Object> m3Header = new HashMap<>();
-                if (resrceInfoVO3.getPResrce().equals(resrceCd1)) {
+                if (resrceInfoVO3.getpResrce().equals(resrceCd1)) {
                     m3Header.put("level", 1);
                     m3Header.put("header", resrceInfoVO3.getResrceNm());
                     m3Header.put("resrceCd", resrceInfoVO3.getResrceCd());
@@ -220,18 +220,18 @@ public class WebMenuServiceImpl implements WebMenuService {
 
                 // 그리드에 추가된 정보
                 if (r.getStatus() == GridDataFg.INSERT) {
-                    log.info("insert : {}", r);
+                    LOGGER.info("insert : {}", r);
 
                     r.setUseYn(UseYn.Y);
                     r.setpResrce(pResrce);
                     procCnt += webMenuMapper.insertWebMenu(r);
                 } else if (r.getStatus() == GridDataFg.UPDATE) {
-                    log.info("update : {}", r);
+                    LOGGER.info("update : {}", r);
 
                     procCnt += webMenuMapper.updateWebMenu(r);
                     throw new JsonException(Status.FAIL, "aaaaaaaaaaaaaaa");
                 } else if (r.getStatus() == GridDataFg.DELETE) {
-                    log.info("delete : {}", r);
+                    LOGGER.info("delete : {}", r);
 
                     procCnt += webMenuMapper.deleteWebMenu(r);
                 }

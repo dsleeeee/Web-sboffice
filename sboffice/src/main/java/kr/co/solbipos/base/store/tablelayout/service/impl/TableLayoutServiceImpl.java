@@ -3,6 +3,8 @@ package kr.co.solbipos.base.store.tablelayout.service.impl;
 import static kr.co.common.utils.DateUtil.*;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +30,6 @@ import kr.co.solbipos.base.store.tableattr.service.impl.TableAttrMapper;
 import kr.co.solbipos.base.store.tablelayout.service.TableGroupVO;
 import kr.co.solbipos.base.store.tablelayout.service.TableLayoutService;
 import kr.co.solbipos.base.store.tablelayout.service.TableVO;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @Class Name : TableLayoutServiceImpl.java
@@ -46,11 +47,12 @@ import lombok.extern.slf4j.Slf4j;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-@Slf4j
 @Service("tableLayoutService")
 @Transactional
 public class TableLayoutServiceImpl implements TableLayoutService {
-
+    
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    
     @Autowired
     MessageService messageService;
 
@@ -148,7 +150,7 @@ public class TableLayoutServiceImpl implements TableLayoutService {
 
             for(int i = 0; i < model.getChildCount(model.getRoot()); i++) {
                 layer = (mxCell)model.getChildAt(model.getRoot(), i);
-                log.debug(layer.toString());
+                LOGGER.debug(layer.toString());
 
                 tableGroupVO = new TableGroupVO();
 
@@ -165,7 +167,7 @@ public class TableLayoutServiceImpl implements TableLayoutService {
                         if(styleKeyValue.length < 2) {
                             continue;
                         }
-                        //log.debug(styleKeyValue[0]);
+                        //LOGGER.debug(styleKeyValue[0]);
                         switch(Style.getEnum(styleKeyValue[0])) {
                             case TBL_GRP_FG:
                                 tableGroupVO.setTblGrpFg(TblGrpFg.getEnum(styleKeyValue[1]));
@@ -192,7 +194,7 @@ public class TableLayoutServiceImpl implements TableLayoutService {
 
                 tableGroupVOs.add(tableGroupVO);
 
-                log.debug(tableGroupVOs.toString());
+                LOGGER.debug(tableGroupVOs.toString());
             }
         }
         catch (Exception ex) {
@@ -212,7 +214,7 @@ public class TableLayoutServiceImpl implements TableLayoutService {
         Object[] cells = graph.getChildVertices(layer);
         for(Object c : cells) {
             cell = (mxCell) c;
-            tableVO = TableVO.builder().build();
+            tableVO = new TableVO();
             tableVO.setStoreCd(tableGroupVO.getStoreCd());
             tableVO.setTblCd(cell.getId());
             

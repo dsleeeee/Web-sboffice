@@ -1,6 +1,6 @@
 //"use strict";
+var wCell;
 !function( win, $ ){
-
   // 그리드
   var wgrid = {
       genGrid: function( div, columns, resrceCd, gridIdx, columnLayout ) {
@@ -15,8 +15,29 @@
           selectionMode: "Row",
           formatItem : function(s, e) {
             // 그리드 Column헤더(첫번째)에 ColumnPicker 표시
-            if (e.panel == s.topLeftCells) {
+            if ( e.panel == s.topLeftCells ) {
               e.cell.innerHTML = "<div class=\"v-center\"></div>";
+              wCell = e.cell;
+              console.log(wCell);
+            // 컬럼헤더 merged 의 헤더타이틀 중앙(vertical) 정렬
+            } else if ( e.panel.cellType == wijmo.grid.CellType.ColumnHeader ) {
+              var mRange = g.getMergedRange(e.panel, e.row, e.col);
+              if ( mRange ) {
+                e.cell.innerHTML = "<div class='wj-header merged-custom'>" + e.cell.innerHTML + "</div>";
+              }
+            // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+            } else if ( e.panel.cellType == wijmo.grid.CellType.RowHeader ) {
+              if ( !isEmpty( e.panel._rows[e.row]._data.rnum ) ) {
+                e.cell.textContent = ( e.panel._rows[e.row]._data.rnum ).toString();
+              } else {
+                e.cell.textContent = ( e.row + 1 ).toString();
+              }
+            // cell 속성 readonly 일때 backgrond 컬러 지정
+            } else if ( e.panel == s.cells ) {
+              var col = s.columns[e.col];
+              if ( col.isReadOnly ) {
+                e.cell.classList.add("wj-custom-readonly");
+              }
             }
           },
           draggedColumn : function(s, e){
@@ -57,27 +78,6 @@
           
           // column picker gen
           wgridPic.genGridPicker("#" + item.id, grid, resrceCd, gridIdx);
-        }
-        
-        genGridRowNumberAndVerticalAlign(g);
-        // 그리드 Custom 표시/정렬 추가
-        function genGridRowNumberAndVerticalAlign(grid) {
-          grid.itemFormatter = function(panel, r, c, cell) {
-            //merged header 정렬
-            if ( panel.cellType == wijmo.grid.CellType.ColumnHeader ) {
-              var range = grid.getMergedRange(panel, r, c);
-              if ( range ) {
-                cell.innerHTML = "<div class='wj-header merged-custom'>" + cell.innerHTML + "</div>";
-              }
-           // RowHeader 에 RowNumber 표시
-            } else if ( panel.cellType == wijmo.grid.CellType.RowHeader ) {
-              if ( !isEmpty(panel._rows[r]._data.rnum) ) {
-                cell.textContent = (panel._rows[r]._data.rnum).toString();
-              } else {
-                cell.textContent = (r + 1).toString();
-              }
-            }
-          }
         }
         
         genGridDblClickEvent(g);

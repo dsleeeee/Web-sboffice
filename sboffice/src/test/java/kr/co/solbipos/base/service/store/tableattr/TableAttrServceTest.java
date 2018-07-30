@@ -10,6 +10,8 @@ import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -28,13 +30,13 @@ import kr.co.solbipos.base.store.tableattr.enums.TextalignFg;
 import kr.co.solbipos.base.store.tableattr.enums.TextvalignFg;
 import kr.co.solbipos.base.store.tableattr.service.TableAttrVO;
 import kr.co.solbipos.config.AbstractApplicationContextTest;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Transactional
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TableAttrServceTest extends AbstractApplicationContextTest {
-
+    
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    
     List<TableAttrVO> tableAttrVOs = null;
 
     @Before
@@ -117,12 +119,12 @@ public class TableAttrServceTest extends AbstractApplicationContextTest {
             codec.decode(elt, model);
 
             tableAttrVOs = new ArrayList<TableAttrVO>();
-            TableAttrVO tableAttrVO = TableAttrVO.builder().build();
+            TableAttrVO tableAttrVO = new TableAttrVO();
             Object[] cells = graph.getChildVertices(graph.getDefaultParent());
             for(Object c : cells) {
                 mxCell cell = (mxCell) c;
 
-                tableAttrVO = TableAttrVO.builder().build();
+                tableAttrVO = new TableAttrVO();
                 tableAttrVO.setAttrCd(AttrCd.getEnum(cell.getId()));
                 tableAttrVO.setAttrNm(String.valueOf(cell.getValue()));
 
@@ -177,7 +179,7 @@ public class TableAttrServceTest extends AbstractApplicationContextTest {
                 tableAttrVO.setRegDt(currentDateTimeString());
                 tableAttrVO.setRegId("bjcho");
                 tableAttrVOs.add(tableAttrVO);
-                log.debug(tableAttrVO.toString());
+                LOGGER.debug(tableAttrVO.toString());
             }
             assertTrue(true);
         }
@@ -225,7 +227,7 @@ public class TableAttrServceTest extends AbstractApplicationContextTest {
             }
             mxCodec codec = new mxCodec();
             Node node = codec.encode(graph.getModel());
-            log.debug(mxUtils.getPrettyXml(node));
+            LOGGER.debug(mxUtils.getPrettyXml(node));
         }
         catch (Exception ex) {
             ex.printStackTrace();

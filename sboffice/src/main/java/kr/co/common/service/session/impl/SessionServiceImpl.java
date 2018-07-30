@@ -8,6 +8,8 @@ import java.util.concurrent.TimeUnit;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -22,25 +24,21 @@ import kr.co.common.utils.spring.WebUtil;
 import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author 정용길
  *
  */
-@Slf4j
 @Service("sessionService")
 public class SessionServiceImpl implements SessionService {
-
+    
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
     @Autowired
     RedisConnService redisConnService;
-
     @Autowired
     AuthService authService;
-
     @Autowired
     CmmMenuService cmmMenuService;
-
     @Autowired
     private RedisCustomTemplate<String, SessionInfoVO> redisCustomTemplate;
 
@@ -100,7 +98,7 @@ public class SessionServiceImpl implements SessionService {
                 redisCustomTemplate.set( redisCustomTemplate.makeKey( sessionId ), sessionInfoVO,
                         BaseEnv.SESSION_TIMEOUT_MIN, TimeUnit.MINUTES );
             } catch ( Exception e ) {
-                log.error( "Redis server not available!! setSessionInfo {}", e );
+                LOGGER.error( "Redis server not available!! setSessionInfo {}", e );
                 redisConnService.disable();
             }
         }
@@ -118,7 +116,7 @@ public class SessionServiceImpl implements SessionService {
                             BaseEnv.SESSION_TIMEOUT_MIN, TimeUnit.MINUTES );
                 }
             } catch ( Exception e ) {
-                log.error( "Redis server not available!! getSessionInfo {}", e );
+                LOGGER.error( "Redis server not available!! getSessionInfo {}", e );
                 redisConnService.disable();
             }
         }
@@ -176,7 +174,7 @@ public class SessionServiceImpl implements SessionService {
             try {
                 redisCustomTemplate.delete( redisCustomTemplate.makeKey( sessionId ) );
             } catch ( Exception e ) {
-                log.error( "Redis server not available!! deleteSessionInfo {}", e );
+                LOGGER.error( "Redis server not available!! deleteSessionInfo {}", e );
                 redisConnService.disable();
             }
         }

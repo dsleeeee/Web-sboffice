@@ -14,6 +14,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.propertyeditors.ByteArrayPropertyEditor;
 import org.springframework.beans.propertyeditors.CharArrayPropertyEditor;
 import org.springframework.beans.propertyeditors.CharacterEditor;
@@ -31,10 +33,11 @@ import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.util.ObjectUtils;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.common.service.CmmVO;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public class ObjectUtil extends ObjectUtils {
+    
+    private final static Logger LOGGER = LoggerFactory.getLogger(ObjectUtil.class);
+    
     @SuppressWarnings("serial")
     private static final Map<Class<?>, PropertyEditor> EDITOR =
             new HashMap<Class<?>, PropertyEditor>() {
@@ -125,8 +128,8 @@ public class ObjectUtil extends ObjectUtils {
 
             return t == null ? d : t;
         } catch (Exception e) {
-            if (log.isErrorEnabled())
-                log.error("Cast Fail : {} to {}", v, c.getName());
+            if (LOGGER.isErrorEnabled())
+                LOGGER.error("Cast Fail : {} to {}", v, c.getName());
 
             return d;
         }
@@ -146,8 +149,8 @@ public class ObjectUtil extends ObjectUtils {
                 try {
                     val = field.get(o);
                 } catch (IllegalAccessException e) {
-                    if (log.isErrorEnabled())
-                        log.error(e.getMessage());
+                    if (LOGGER.isErrorEnabled())
+                        LOGGER.error(e.getMessage());
 
                     return m;
                 }

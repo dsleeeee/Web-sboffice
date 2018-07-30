@@ -1,8 +1,6 @@
 package kr.co.solbipos.application.session.user.service;
 
 import kr.co.solbipos.application.common.service.CmmVO;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * @Class Name : PwdChgHistVO.java
@@ -20,27 +18,66 @@ import lombok.EqualsAndHashCode;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-@Data
-@EqualsAndHashCode(callSuper = false)
 public class PwdChgHistVO extends CmmVO {
 
-    private static final long serialVersionUID = 1L;
-    
+    private static final long serialVersionUID = -1556192295591875098L;
     /** 사용자 아이디 */
     private String userId;
-
     /** 인덱스 */
     private Long idx;
-
     /** 이전 비밀번호 */
     private String priorPwd;
-
     /** 등록 IP */
     private String regIp;
-
-    /** 등록 일시 */
-    private String regDt;
-
-    /** 등록 아이디 */
-    private String regId;
+    
+    
+    /**
+     * @return the userId
+     */
+    public String getUserId() {
+        return userId;
+    }
+    /**
+     * @param userId the userId to set
+     */
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+    /**
+     * @return the idx
+     */
+    public Long getIdx() {
+        return idx;
+    }
+    /**
+     * @param idx the idx to set
+     */
+    public void setIdx(Long idx) {
+        this.idx = idx;
+    }
+    /**
+     * @return the priorPwd
+     */
+    public String getPriorPwd() {
+        return priorPwd;
+    }
+    /**
+     * @param priorPwd the priorPwd to set
+     */
+    public void setPriorPwd(String priorPwd) {
+        this.priorPwd = priorPwd;
+    }
+    /**
+     * @return the regIp
+     */
+    public String getRegIp() {
+        return regIp;
+    }
+    /**
+     * @param regIp the regIp to set
+     */
+    public void setRegIp(String regIp) {
+        this.regIp = regIp;
+    }
+    
 }

@@ -6,11 +6,14 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import kr.co.common.utils.spring.StringUtil;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public class EncUtil {
+    
+    private final static Logger LOGGER = LoggerFactory.getLogger(EncUtil.class);
+    
     private static String PASSWORD_REGEX =
             "^(?=.*[a-z]+)(?=.*[A-Z]+)(?=.*\\d+)(?=.*[^\\w\\sㄱ-ㅎㅏ-ㅣ가-힣]).{8,}$";
     public static final String SHA2_ALGORITHM_NAME = "SHA-256";
@@ -92,7 +95,7 @@ public class EncUtil {
      */
     public static boolean passwordPolicyCheck(String password) {
         if (isEmpty(password)) {
-            log.warn("password-policy check password null. password:{}", password);
+            LOGGER.warn("password-policy check password null. password:{}", password);
             return false;
         }
 
@@ -105,7 +108,7 @@ public class EncUtil {
             return true;
         }
 
-        log.info("password policy check false");
+        LOGGER.info("password policy check false");
         return false;
     }
 }

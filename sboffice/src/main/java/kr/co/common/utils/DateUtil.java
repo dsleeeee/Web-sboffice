@@ -7,11 +7,14 @@ import java.util.Calendar;
 import java.util.Date;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import kr.co.common.utils.spring.StringUtil;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public class DateUtil extends DateUtils {
+    
+    private final static Logger LOGGER = LoggerFactory.getLogger(DateUtil.class);
+    
     private static final String DEFAULT_DATE_FORMAT = "yyyyMMddHHmmss";
     private static final String DEFAULT_YMD_FORMAT = "yyyyMMdd";
     private static final String DEFAULT_TIME_FORMAT = "HHmmss";
@@ -202,9 +205,7 @@ public class DateUtil extends DateUtils {
         try {
             return parseDate(date, pattern);
         } catch (ParseException e) {
-            if (log.isErrorEnabled())
-                log.error("getDate Fail : {}, {}", date, pattern);
-
+            LOGGER.error("getDate Fail : {}, {}", date, pattern);
             return null;
         }
     }

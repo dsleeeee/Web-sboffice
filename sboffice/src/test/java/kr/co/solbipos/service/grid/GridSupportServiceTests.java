@@ -20,9 +20,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.grid.impl.GridSupportServiceImpl;
 import kr.co.common.service.message.MessageService;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 
 @RunWith(MockitoJUnitRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)

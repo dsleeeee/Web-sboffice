@@ -3,6 +3,8 @@ package kr.co.solbipos.base.prod.touchkey.service.impl;
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
@@ -28,7 +30,6 @@ import kr.co.solbipos.base.prod.touchkey.service.TouchVO;
 import kr.co.solbipos.base.prod.touchkey.service.TouchkeyService;
 import kr.co.solbipos.base.store.tableattr.enums.Style;
 import kr.co.solbipos.base.store.tableattr.service.impl.TableAttrMapper;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @Class Name : TouchkeyServiceImpl.java
@@ -46,16 +47,15 @@ import lombok.extern.slf4j.Slf4j;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-@Slf4j
 @Service("touchkeyService")
 public class TouchkeyServiceImpl implements TouchkeyService {
-
+    
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    
     @Autowired
     MessageService messageService;
-
     @Autowired
     private TouchkeyMapper mapper;
-
     @Autowired
     private TableAttrMapper attrMapper;
 
@@ -135,12 +135,12 @@ public class TouchkeyServiceImpl implements TouchkeyService {
     private List<TouchClassVO> parseXML(String xml) {
 
         String[] xmls = xml.split("\\|");
-        log.info(XssPreventer.unescape(xmls[0]));
-        log.info(XssPreventer.unescape(xmls[1]));
+        LOGGER.info(XssPreventer.unescape(xmls[0]));
+        LOGGER.info(XssPreventer.unescape(xmls[1]));
 
 
         List<TouchClassVO> touchClassVOs = new ArrayList<TouchClassVO>();
-        TouchClassVO touchClassVO = TouchClassVO.builder().build();
+        TouchClassVO touchClassVO = new TouchClassVO();
 
         List<TouchVO> touchVOs = new ArrayList<TouchVO>();
 
@@ -167,9 +167,9 @@ public class TouchkeyServiceImpl implements TouchkeyService {
             Object[] cells = graphClass.getChildVertices(graphClass.getDefaultParent());
             for(Object c : cells) {
                 cell = (mxCell) c;
-                log.debug(cell.toString());
+                LOGGER.debug(cell.toString());
 
-                touchClassVO = TouchClassVO.builder().build();
+                touchClassVO = new TouchClassVO();
 
                 //TODO [터치키그룹코드] 신규 컬럼으로 임시로 분류코드와 같은 값으로 넣음
                 touchClassVO.setTukeyGrpCd(cell.getId());
@@ -200,7 +200,7 @@ public class TouchkeyServiceImpl implements TouchkeyService {
                         if(styleKeyValue.length < 2) {
                             continue;
                         }
-                        //log.debug(styleKeyValue[0]);
+                        //LOGGER.debug(styleKeyValue[0]);
                         switch(Style.getEnum(styleKeyValue[0])) {
                             case FONT_COLOR:
                                 touchClassVO.setFontColor(styleKeyValue[1]);
@@ -225,7 +225,7 @@ public class TouchkeyServiceImpl implements TouchkeyService {
 
                 touchClassVOs.add(touchClassVO);
 
-                log.debug(touchClassVOs.toString());
+                LOGGER.debug(touchClassVOs.toString());
             }
         }
         catch (Exception ex) {
@@ -249,7 +249,7 @@ public class TouchkeyServiceImpl implements TouchkeyService {
         Object[] cells = graph.getChildVertices(layer);
         for(Object c : cells) {
             mxCell cell = (mxCell) c;
-            touchVO = TouchVO.builder().build();
+            touchVO = new TouchVO();
             touchVO.setStoreCd(tableClassVO.getStoreCd());
             touchVO.setTukeyClassCd(tableClassVO.getTukeyClassCd());
             touchVO.setTukeyCd(cell.getId());
@@ -271,7 +271,7 @@ public class TouchkeyServiceImpl implements TouchkeyService {
                     if(styleKeyValue.length < 2) {
                         continue;
                     }
-                    //log.debug(styleKeyValue[0]);
+                    //LOGGER.debug(styleKeyValue[0]);
                     switch(Style.getEnum(styleKeyValue[0])) {
                         case PROD_CD:
                             touchVO.setProdCd(styleKeyValue[1]);

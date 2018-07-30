@@ -95,7 +95,6 @@
 
 <script>
 
-var gridMapng;
   $(document).ready(function() {
     
     <%-- 조회버튼 클릭 --%>
@@ -106,7 +105,7 @@ var gridMapng;
     <%-- 출력물종류 그리드 --%>
     var dataPrint =
       [
-        { binding:"chkGrid", header:"<s:message code='kind.chk' />", dataType:wijmo.DataType.Boolean, width:50},
+        { binding:"gChk", header:"<s:message code='kind.chk' />", dataType:wijmo.DataType.Boolean, width:50},
         { binding:"prtClassCd", header:"<s:message code='kind.prtClassCd'/>", width:70, isReadOnly: true },
         { binding:"prtClassNm", header:"<s:message code='kind.prtClassNm'/>", width:"*"},
         { binding:"general", header:"<s:message code='kind.general'/>", dataType:wijmo.DataType.Boolean, width:50},
@@ -265,11 +264,11 @@ var gridMapng;
     <%-- 출력물매핑 그리드 --%>
     var dataMapng =
       [
-        {"binding":"chk", header:"<s:message code='kind.chk' />", dataType:wijmo.DataType.Boolean, width:50},
+        {"binding":"gChk", header:"<s:message code='kind.chk' />", dataType:wijmo.DataType.Boolean, width:50},
         {"binding":"prtCd", header:"<s:message code='kind.prtCd'/>", width:"*"},
       ];
     <%-- 출력물매핑 그리드 생성 --%>
-    gridMapng = wgrid.genGrid("#gridMapng", dataMapng, "${menuCd}", 2, ${clo.getColumnLayout(2)});
+    var gridMapng = wgrid.genGrid("#gridMapng", dataMapng, "${menuCd}", 2, ${clo.getColumnLayout(2)});
     <%-- 읽기전용을 해제하지 않으면 그리드 에디팅이 되지 않는다. --%>
     gridMapng.isReadOnly = false;
     
@@ -440,7 +439,7 @@ var gridMapng;
     <%-- 출력코드구성 그리드 --%>
     var data =
       [
-        { binding:"chk", header:"<s:message code='item.chk' />", dataType:wijmo.DataType.Boolean, width:40},
+        { binding:"gChk", header:"<s:message code='item.chk' />", dataType:wijmo.DataType.Boolean, width:40},
         { binding:"prtCd", header:"<s:message code='item.prtCd'/>", width:100, isReadOnly: true },
         { binding:"prtNm", header:"<s:message code='item.prtNm'/>", width:100, isReadOnly: true },
         { binding:"samplYn", header:"<s:message code='item.samplYn'/>", dataType:wijmo.DataType.Boolean, isReadOnly: true, width:60},
