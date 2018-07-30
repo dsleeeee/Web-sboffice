@@ -19,6 +19,8 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.store.hq.brand.service.HqBrandVO;
+import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqManageService;
 import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqMenuVO;
@@ -310,5 +312,47 @@ public class HqManageController {
         return returnJson(Status.OK, cnt);
     }
     
+
+    /**
+     * 환경설정 조회
+     * @param   hqBrand
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  김지은
+     * @since   2018. 06. 08.
+     */
+    @RequestMapping(value = "config/getConfiglist.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result configList(HqManageVO hqManageVO, HttpServletRequest request,
+            HttpServletResponse response, Model model) {
+        
+        List<DefaultMap<String>> list = service.getConfigList(hqManageVO);
+        
+        return returnListJson(Status.OK, list, hqManageVO);
+    }
+    
+    /**
+     * 환경설정 저장
+     * @param   hqBrands
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  김지은
+     * @since   2018. 06. 08.
+     */
+    @RequestMapping(value = "config/save.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveConfig(@RequestBody HqEnvstVO[] hqEnvsts, HttpServletRequest request,
+            HttpServletResponse response, Model model) {
+        
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = service.saveConfig(hqEnvsts, sessionInfoVO);
+        
+        return returnJson(Status.OK, result);
+    }
     
 }

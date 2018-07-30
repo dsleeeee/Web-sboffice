@@ -57,7 +57,7 @@
        GROUP BY HQ_OFFICE_CD
             ) tms,
             (
-      SELECT the.HQ_BRAND_CD AS HQ_OFFICE_CD,
+      SELECT the.HQ_OFFICE_CD,
              tcm.ENVST_NM AS POS_NM
         FROM TB_HQ_ENVST the,
              TB_CM_ENVST tcm
@@ -708,5 +708,122 @@
                          AND twu.USER_ID = the.USER_ID)
        AND RESRCE_CD = #{resrceCd}
   </delete>
+  
+  <!-- 본사 환경정보 조회 -->
+  <!--
+      TABLE    : TB_CM_ENVST, TB_CM_ENVST_DTL, TB_HQ_ENVST, TB_CM_NMCODE, TB_HQ_OFFICE
+      COMMENTS : 브랜드의 환경정보를 조회한다.
+  -->
+  <select id="getConfigList" parameterType="hqManageVO" resultType="DefaultMap">
+    /* USE : HqManageMapper.getConfigList */
+    SELECT tcd.ENVST_GRP_CD,
+           tcn.NMCODE_NM,
+           tcd.ENVST_CD,
+           tcd.ENVST_NM,
+           tcd.DIRCT_IN_YN,
+           tcd.REMARK,
+           tcd.ENVST_VAL_CD,
+           tcd.ENVST_VAL_NM,
+           tcd.DEFLT_YN,
+           tcd.TARGT_FG,
+           DECODE(the.ENVST_CD, NULL, 'N', 'Y') AS EXIST_FG,
+           the.ENVST_VAL AS SEL_ENVST_VAL,
+           tce.ENVST_CD_CNT
+      FROM (
+      SELECT tce.ENVST_GRP_CD,
+             tce.ENVST_CD,
+             tce.ENVST_NM,
+             tce.ENVST_FG,
+             tce.TARGT_FG,
+             tce.DIRCT_IN_YN,
+             tce.REMARK,
+             tcd.ENVST_VAL_CD,
+             tcd.ENVST_VAL_NM,
+             tcd.DEFLT_YN
+        FROM TB_CM_ENVST tce,
+             TB_CM_ENVST_DTL tcd
+       WHERE tce.TARGT_FG IN ('H','X','C')
+         AND tce.USE_YN = 'Y'
+         AND tcd.ENVST_CD (+)= tce.ENVST_CD
+            ) tcd,
+            (
+       SELECT tce.ENVST_GRP_CD,
+              COUNT(*) AS ENVST_CD_CNT
+         FROM TB_CM_ENVST tce
+        WHERE tce.TARGT_FG IN ('H','X','C')
+          AND tce.USE_YN = 'Y'
+        GROUP BY tce.ENVST_GRP_CD
+            ) tce,
+           TB_HQ_ENVST the,
+           TB_CM_NMCODE tcn
+     WHERE the.HQ_OFFICE_CD (+)= #{hqOfficeCd}
+       AND the.ENVST_CD (+)= tcd.ENVST_CD
+       AND tcn.NMCODE_GRP_CD = '048'
+       AND tcn.NMCODE_CD = tcd.ENVST_GRP_CD
+       AND tce.ENVST_GRP_CD = tcd.ENVST_GRP_CD
+     ORDER BY tcd.ENVST_GRP_CD, tcd.ENVST_CD, tcd.ENVST_VAL_CD
+  </select>
+
+  <!-- 브랜드환경정보 등록 -->
+  <!--
+      TABLE    : TB_HQ_ENVST
+      COMMENTS : 브랜드의 환경정보를 조회한다.
+  -->
+  <insert id="insertConfig" parameterType="DefaultMap">
+    /* USE : HqManageMapper.insertConfig */
+    INSERT INTO TB_HQ_ENVST
+    (
+      HQ_OFFICE_CD,
+      ENVST_CD,
+      ENVST_VAL,
+      DIRCT_IN_YN,
+      USE_YN,
+      REG_DT,
+      REG_ID,
+      MOD_DT,
+      MOD_ID
+    )
+    VALUES
+    (
+      #{hqOfficeCd},
+      #{envstCd},
+      #{envstVal},
+      #{dirctInYn},
+      #{useYn},
+      #{regDt},
+      #{regId},
+      #{modDt},
+      #{modId}
+    )
+  </insert>
+
+  <!-- 환경설정 수정 -->
+  <!--
+      TABLE    : TB_HQ_ENVST
+      COMMENTS : 환경설정정보를 수정한다.
+  -->
+  <update id="updateConfig" parameterType="DefaultMap">
+    /* USE : HqManageMapper.updateConfig */
+    UPDATE TB_HQ_ENVST
+       SET ENVST_VAL = #{envstVal},
+           MOD_DT = #{modDt},
+           MOD_ID = #{modId}
+     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+       AND ENVST_CD = #{envstCd}
+  </update>
+
+  <!-- 매장 환경설정 수정 -->
+  <!--
+      TABLE    : TB_MS_STORE_ENVST
+      COMMENTS : 매장의환경설정정보를 수정한다. 
+  -->
+  <update id="updateConfigStore" parameterType="DefaultMap">
+    /* USE : HqManageMapper.updateConfigStore */
+    UPDATE TB_MS_STORE_ENVST
+       SET ENVST_VAL = #{envstVal}
+     WHERE STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} )
+       AND ENVST_CD = #{envstCd}
+  </update>
+  
 
 </mapper>

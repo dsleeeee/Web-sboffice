@@ -2,348 +2,268 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
-<%-- 메뉴권한 레이어 --%>
-
-<div id="dim2" class="fullDimmed" style="display:none;"></div>
-<div id="munuAuthLayer" class="layer" style="display:none;">
+<%-- 환경설정 레이어 --%>
+<div id="envDim" class="fullDimmed" style="display:none;"></div>
+<div id="envLayer" class="layer" style="display:none;">
   <div class="layer_inner">
-    <div class="title w600">
+    <div class="title w65">
       <p id="popTitle" class="tit"></p>
       <a href="javascript:;" class="btn_close"></a>
       <div class="con">
-        <%-- 본사정보, 메뉴권한, 코드자리수, 환경설정, 브랜드관리 탭 --%>
         <div class="tabType1">
           <ul>
-            <li><a id="hqInfoTab" href="javascript:;"><s:message code="hqManage.hqInfo" /></a></li>
+            <%-- 상세정보 탭 --%>
+            <li><a id="hqInfoTab" href="javascript:;" ><s:message code="hqManage.hqInfo" /></a></li>
+            <%-- 환경설정 탭 --%>
+            <li><a id="envSettingTab" href="javascript:;" class="on"><s:message code="hqManage.envSetting" /></a></li>
+            <%-- 메뉴관리 탭  --%>
             <li><a id="menuSettingTab" href="javascript:;"><s:message code="hqManage.menuSetting" /></a></li>
-            <%-- <li><a id="envSettingTab" href="javascript:;" class="on"><s:message code="hqManage.envSetting" /></a></li> --%>
           </ul>
         </div>
-
-        <div class="tabType2 mt20">
-          <ul>
-            <%-- 웹사이트 메뉴 --%>
-            <li><a id="webMenu" href="javascript:;" class="on"><s:message code="hqManage.webMenu" /></a></li>
-            <%-- 모바일 메뉴 --%>
-            <li><a id="mobMenu" href="javascript:;"><s:message code="hqManage.mobMenu" /></a></li>
-          </ul>
-        </div>
-          
-        <div id="MwebArea">
-          <%-- 권한복사 영역 --%>
-          <table class="tblType01 moreDark mb10 mt10">
-            <colgroup>
-              <col class="w20" />
-              <col class="w55" />
-            </colgroup>
-            <tbody>
-              <tr>
-                <%-- 메뉴권한복사 --%>
-                <th><s:message code="hqManage.copy.authorExcept" /></th>
-                <td colspan="3">
-                  <div class="sb-select fl w40 mr10">
-                    <span id="authComboConfig"></span>
-                  </div>
-                  <%-- 메뉴권한복사 버튼  --%>
-                  <div class="fl">
-                    <a href="javascript:;" class="btn_grayS" id="btnCopyAuth"><s:message code="hqManage.copy.auth" /></a>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <%-- 사용가능한 메뉴 --%>
-          <div class="oh mt10">
-            <div class="wj-TblWrap mr10" style="height:200px;">
-              <div class="oh mb10">
-                <span class="fl bk lh20 s14"><s:message code="hqManage.usable.menu" /> </span>
-                <span class="fr"><a id="btnAddMenu" href="javascript:;" class="btn_grayS2"><s:message code="cmm.save" /></a></span>
-              </div>
-              <%-- 위즈모 --%>
-              <div id="avlblMenuGrid" style="height:160px;"></div> 
-            </div>
+        <%-- 환경설정 컨텐츠 --%>
+        <form id="envForm" name="envForm">
+          <div class="oh mt20 mb15">
+            <span class="fr"><a href="javascript:;" class="btn_grayS2" id="btnDefault"><s:message code="hqManage.setting.default.env" /></a></span>
           </div>
-          
-          <%-- 사용중인 메뉴 --%>
-          <div class="oh mt10">
-            <div class="wj-TblWrap mr10" style="height:200px;">
-              <div class="oh mb10">
-                <span class="fl bk lh20 s14"><s:message code="hqManage.inUse.menu" /> </span>
-                <span class="fr"><a id="btnRemoveMenu" href="javascript:;" class="btn_grayS2"><s:message code="cmm.delete" /></a></span>
-              </div>
-              <%-- 위즈모 --%>
-              <div id="beUseMenuGrid" style="height:160px;"></div> 
-            </div>
-          </div>
-          </div>
+          <div class="mt20 sc" style="height:450px;border:0px;" id="contents"></div>
+        </form>
+      </div>
+      <div class="btnSet">
+        <%-- 저장 --%>
+        <span><a href="javascript:;" class="btn_blue" id="btnSave" ><s:message code="cmm.save" /></a></span>
       </div>
     </div>
   </div>
 </div>
+
 <script>
 
-  var avlblMenuGridData = [
-    {binding:"resrceCdLarge", header:"<s:message code='hqManage.lMenuCd' />", allowMerging:true, visible:false},
-    {binding:"resrceNmLarge", header:"<s:message code='hqManage.lMenuNm' />", allowMerging:true, width:80},
-    //{binding:"menuChkMid", header:"<s:message code='hqManage.chk.menu' />", allowMerging:true, width:70,dataType:wijmo.DataType.Boolean},
-    {binding:"menuChkMid", header:"<s:message code='hqManage.chk.menu' />", width:70,dataType:wijmo.DataType.Boolean, isReadOnly:false},
-    {binding:"resrceCdMid", header:"<s:message code='hqManage.mMenuCd' />", allowMerging:true, visible:false},
-    {binding:"resrceNmMid", header:"<s:message code='hqManage.mMenuNm' />", allowMerging:true},
-    //{binding:"menuChkSmall", header:"<s:message code='hqManage.chk.menu' />", allowMerging:true, width:70, dataType:wijmo.DataType.Boolean},
-    {binding:"menuChkSmall", header:"<s:message code='hqManage.chk.menu' />", width:70, dataType:wijmo.DataType.Boolean, isReadOnly:false},
-    {binding:"resrceCdSmall", header:"<s:message code='hqManage.sMenuCd' />", visible:false},
-    {binding:"resrceNmSmall", header:"<s:message code='hqManage.sMenuNm' />"}
-  ];
+<%-- 환경설정 팝업 오픈 --%>
+function openEnvLayer(){
+  
+  $("#envDim").show();
+  $("#envLayer").show();
+  
+  console.log(selectedHq);
+  
+  var envTitle = "[" + selectedHq.hqOfficeCd + "] "+ selectedHq.hqOfficeNm;
+  
+  $("#popTitle").text(envTitle);
+  
+  getConfigList();
+}
 
-  var beUseMenuGridData = [
-    {binding:"resrceCdLarge", header:"<s:message code='hqManage.lMenuCd' />", allowMerging:true, visible:false},
-    {binding:"resrceNmLarge", header:"<s:message code='hqManage.lMenuNm' />", allowMerging:true, width:80},
-    //{binding:"menuChkMid", header:"<s:message code='hqManage.chk.menu' />", allowMerging:true, width:70, dataType:wijmo.DataType.Boolean},
-    {binding:"menuChkMid", header:"<s:message code='hqManage.chk.menu' />", width:70, dataType:wijmo.DataType.Boolean, isReadOnly:false},
-    {binding:"resrceCdMid", header:"<s:message code='hqManage.mMenuCd' />", allowMerging:true, visible:false},
-    {binding:"resrceNmMid", header:"<s:message code='hqManage.mMenuNm' />", allowMerging:true},
-    //{binding:"menuChkSmall", header:"<s:message code='hqManage.chk.menu' />", allowMerging:true, width:70, dataType:wijmo.DataType.Boolean},
-    {binding:"menuChkSmall", header:"<s:message code='hqManage.chk.menu' />", width:70, dataType:wijmo.DataType.Boolean, isReadOnly:false},
-    {binding:"resrceCdSmall", header:"<s:message code='hqManage.sMenuCd' />", visible:false},
-    {binding:"resrceNmSmall", header:"<s:message code='hqManage.sMenuNm' />"}
-  ];
+<%-- 환경설정 테이블 --%>
+function getConfigList(){
+  var param = {};
+  param.hqOfficeCd = selectedHq.hqOfficeCd;
+  //param.hqBrandCd  = selectedHq.hqBrandCd;
   
-  var avlblMenuGrid = wgrid.genGrid("#avlblMenuGrid", avlblMenuGridData, "${menuCd}", 2, ${clo.getColumnLayout(2)});
-  var beUseMenuGrid = wgrid.genGrid("#beUseMenuGrid", beUseMenuGridData, "${menuCd}", 3, ${clo.getColumnLayout(3)});
-  var authComboConfig = wcombo.genCommonBox("#authComboConfig", null);
+  var envstGrpCd = ${ccu.getCommCodeExcpAll("048")};
+  
+  //TODO url변경필요
+  $.postJSON("/store/hq/hqBrand/config/getConfiglist.sb", param, function(result) {
+    
+    var innerHtml = "";
+    
+    var envCnt   = 0;
+    var allCnt   = 0;
+    var existCnt = 0;
+    
+    var list = result.data.list;
+    
+    console.log(list);
 
-  avlblMenuGrid.allowMerging    = wijmo.grid.AllowMerging.All;
-  beUseMenuGrid.allowMerging    = wijmo.grid.AllowMerging.All;
-  
-  <%-- 체크박스 초기화 --%>
-  avlblMenuGrid.formatItem.addHandler(function(s, e) {
-    if (e.panel == s.cells) {
-      var col = s.columns[e.col];
-      var item = s.rows[e.row].dataItem;
+    for(var i=0; i<envstGrpCd.length; i++) {
       
-      if( col.binding == "menuChkMid") {
-        e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.menuChkMid == true || item.menuChkMid == "Y" ? 'checked' : '') + '>';
-      }
-      if( col.binding == "menuChkSmall") {
-        e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.menuChkSmall == true || item.menuChkSmall == "Y" ? 'checked' : '') + '>';
-      }
-    }
-  });
-    
-  beUseMenuGrid.formatItem.addHandler(function(s, e) {
-    if (e.panel == s.cells) {
-      var col = s.columns[e.col];
-      var item = s.rows[e.row].dataItem;
-      
-      if( col.binding == "menuChkMid") {
-        e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.menuChkMid == true || item.menuChkMid == "Y" ? 'checked' : '') + '>';
-      }
-      if( col.binding == "menuChkSmall") {
-        e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.menuChkSmall == true || item.menuChkSmall == "Y" ? 'checked' : '') + '>';
-      }
-    }
-  });
-  /* 
-  avlblMenuGrid.beginningEdit.addHandler(function (s, e) {
-    if (e.panel.rows[e.row] instanceof wijmo.grid.GroupRow && e.panel.cellType != wijmo.grid.CellType.RowHeader) {
-        console.log('Edit Prevent');
-        e.cancel = true;
-    }
-  });
-   */
-  
-   /*
-  avlblMenuGrid.addEventListener(avlblMenuGrid.hostElement, 'click', function (e) {
-    if (wijmo.hasClass(e.target, 'wj-cell-check')) {
-      console.log(e)
-      console.log('avlblMenuGrid.selection.row : '+ avlblMenuGrid.selection.row)
-      console.log('avlblMenuGrid.selection.col : '+ avlblMenuGrid.selection.col)
-      var groupData = avlblMenuGrid.rows[avlblMenuGrid.selection.row].dataItem;
-      console.log(groupData);
-      
-      console.log(avlblMenuGrid.selection.col);
-    
-      avlblMenuGrid.beginUpdate();
+      var envCnt    = 0;
+      var envHtml   = "";
+      var envstGrp  = envstGrpCd[i];
 
-      if(avlblMenuGrid.selection.col == 2) {
-        groupData.menuChkSmall = true;
-      }
-    
-      if(avlblMenuGrid.selection.col == 5) {
-        groupData.menuChkSmall = true;
-      }
-      avlblMenuGrid.endUpdate();
-    }
-  }, true);
-  */
-  
-  <%-- 체크박스 핸들러 --%>
-  avlblMenuGrid.addEventListener(avlblMenuGrid.hostElement, 'mousedown', function(e) {
-    var ht = avlblMenuGrid.hitTest(e);
-    if( ht.cellType == wijmo.grid.CellType.Cell) {
-      var col = ht.panel.columns[ht.col];
-      if( col.binding == "menuChkMid" || col.binding == "menuChkSmall") {
-        avlblMenuGrid.beginUpdate();
-        if(avlblMenuGrid.cells.getCellData(ht.row, ht.col, true)){
-          avlblMenuGrid.cells.setCellData(ht.row, ht.col, false);
-        } else {
-          avlblMenuGrid.cells.setCellData(ht.row, ht.col, true);
+      envHtml += envstGrp.name;
+      
+      envHtml += "<div class='mt20 sc'>";
+      envHtml += "<table class='tblType01'>";
+      envHtml += "  <colgroup>";
+      envHtml += "    <col class='w5' />";
+      envHtml += "    <col class='w25' />";
+      envHtml += "    <col class='w25' />";
+      envHtml += "    <col class='w5' />";
+      envHtml += "    <col class='w25' />";
+      envHtml += "    <col class='w25' />";
+      envHtml += "  </colgroup>";
+      envHtml += "  <tbody id='evnTable'>";
+      
+      var envSub = "";
+      
+      for(var j=0; j<list.length; j++){
+        if(envstGrp.value == list[j].envstGrpCd) {
+          
+          if(envSub == "" || envSub != list[j].envstCd) {
+            
+            if(envCnt == 0 || envCnt % 2 == 0) envHtml += "<tr>";
+            
+            console.log("list["+j+"].envstNm : "+ list[j].envstNm);
+            
+            
+            envHtml += "      <th>" + list[j].envstCd + "</th>";
+            envHtml += "      <td>" + list[j].envstNm + "</td>";
+            envHtml += "      <td>";
+            
+            if(list[j].envstGrpCd == "Y"){
+              
+              //list[j].selEnvstVal != null && (list[j].selEnvstVal == list[j].envstValCd)
+              
+              if(list[j].selEnvstVal != null) {
+                console.log("선택선택 : "+ list[j].selEnvstVal);
+                console.log("디폴트디폴트 : "+ list[j].defltYn);
+                console.log("원래 밸류 : "+ list[j].envstCd);
+              }
+              
+              envHtml += "        <input type='text' name='envstValCd' id='env" + list[j].envstCd + "' >";
+            } else {
+              envHtml += "        <select name='envstValCd' id='env" + list[j].envstCd + "' />";
+            }
+            
+            envHtml += "        <input type='hidden' name='status'    value='"+ (list[j].existFg =="N" ? "I":"U") +"'>";
+            envHtml += "        <input type='hidden' name='envstCd'   value='"+ list[j].envstCd +"'>";
+            envHtml += "        <input type='hidden' name='envstNm'   value='"+ list[j].envstNm +"'>";
+            envHtml += "        <input type='hidden' name='envstGrpCd'value='"+ list[j].envstGrpCd +"'>";
+            envHtml += "        <input type='hidden' name='defltYn'   value='"+ list[j].defltYn +"'>";
+            envHtml += "        <input type='hidden' name='dirctInYn' value='"+ list[j].dirctInYn +"'>";
+            envHtml += "        <input type='hidden' name='targtFg'   value='"+ list[j].targtFg +"'>";
+            envHtml += "      </td>";
+            
+            envSub = list[j].envstCd;
+            envCnt ++;
+            allCnt ++;
+            
+            if(list[j].existFg == "Y") existCnt++;
+            
+            if(list[j].envstCdCnt == envCnt && (envCnt % 2 == 1) ) {
+              envHtml += "      <td></td>";
+              envHtml += "      <td></td>";
+              envHtml += "      <td></td>";
+              envHtml += "  </tr>";
+            } else if(envCnt % 2 == 0) {
+              envHtml += "  </tr>";
+            }
+          }
         }
-        avlblMenuGrid.endUpdate();
       }
-    }
-  });
-
-  beUseMenuGrid.addEventListener(beUseMenuGrid.hostElement, 'mousedown', function(e) {
-    var ht = beUseMenuGrid.hitTest(e);
-    if( ht.cellType == wijmo.grid.CellType.Cell) {
-      var col = ht.panel.columns[ht.col];
-      if( col.binding == "menuChkMid" || col.binding == "menuChkSmall") {
-        beUseMenuGrid.beginUpdate();
-        if(beUseMenuGrid.cells.getCellData(ht.row, ht.col, true)){
-          beUseMenuGrid.cells.setCellData(ht.row, ht.col, false);
-        } else {
-          beUseMenuGrid.cells.setCellData(ht.row, ht.col, true);
-        }
-        beUseMenuGrid.endUpdate();
-        console.log(beUseMenuGrid.cells.getCellData(ht.row, ht.col, true))
-      }
-    }
-  });
-
-  <%-- 전체 체크가능한 체크박스 생성 --%>
-  avlblMenuGrid.formatItem.addHandler(function(s, e) { //TODO 왜 체크가 안되는것인가 //TODO checkbox merge
-    if (e.panel == s.columnHeaders) {
-      var html = e.cell.innerHTML;
-      if(html == "<s:message code='hqManage.chk.menu' />") {
-        e.cell.innerHTML = "<input type='checkbox' class='wj-cell-check'>";
-      }
-    }
-  });
-  
-  beUseMenuGrid.formatItem.addHandler(function(s, e) {
-    if (e.panel == s.columnHeaders) {
-      var html = e.cell.innerHTML;
-      if(html == "<s:message code='hqManage.chk.menu' />") {
-        e.cell.innerHTML = "<input type='checkbox' class='wj-cell-check'>";
-      }
-    }
-  });
-  
-  <%-- 상세정보 팝업 열기 --%>
-  function openAuthLayer() {
-    
-    // 데이터 조회
-    var param = selectedHq;
-    
-    $.postJSON("/store/hq/hqmanage/authorexcept/authHqList.sb", param, function(result) {
-      console.log(result);
-      if(result.status === "FAIL") {
-        s_alert.pop(result.message);
-        return;
-      }
-      authComboConfig.itemsSource = result.data.authHqList;
-      avlblMenuGrid.itemsSource = result.data.avlblMenu;
-      beUseMenuGrid.itemsSource = result.data.beUseMenu;
       
-    })
-    .fail(function(){
-      s_alert.pop("Ajax Fail");
-    });
+      envHtml += "  </tbody>";
+      envHtml += "</table>";
+      envHtml += "</div>";
+      envHtml += "<br>";
+      
+      if(envCnt > 0) innerHtml += envHtml;
+    }
+    
+    $("#contents").html(innerHtml);
+    
+    <%-- select box option --%>
+    for(var i=0; i<envstGrpCd.length; i++) {
+      var envstGrp  = envstGrpCd[i];
+      for(var j=0; j<list.length; j++){
+
+        if(envstGrp.value == list[j].envstGrpCd && list[j].dirctInYn == "N") {
+          // 선택된 값이 우선
+          if(list[j].selEnvstVal != null && (list[j].selEnvstVal == list[j].envstValCd) ) {
+            $("#env"+list[j].envstCd).append("<option value='"+ list[j].envstValCd +"' selected>" + list[j].envstValNm +  "</option>");
+          } 
+          // 그 다음이 디폴트 값
+          else if(list[j].defltYn == "Y") {
+            $("#env"+list[j].envstCd).append("<option value='"+ list[j].envstValCd +"' selected>" + list[j].envstValNm +  "</option>");
+          }
+          else {
+            $("#env"+list[j].envstCd).append("<option value='"+ list[j].envstValCd +"'>" + list[j].envstValNm +  "</option>");
+          }
+        }
+      }
+    }
+    
+    <%-- 등록되지 않은 환경값이 있음--%>
+    if(allCnt > existCnt) {
+      var msg = "<s:message code='hqManage.no.regist.env'/> "
+              + "<s:message code='hqManage.require.regist.env'/> "
+              + "<s:message code='hqManage.total.env.count' arguments='"+ allCnt +"'/> "
+              + "<s:message code='hqManage.no.regist.env.count' arguments='"+ (allCnt - existCnt) +"'/>"
+              ;
+      
+      s_alert.pop(msg);
+    }
+  });
+}
+
+<%-- 저장 버튼 클릭 --%>
+$("#envLayer #btnSave").click(function(){
+  
+  var objStatus = document.getElementsByName("status");
+  var objEnvstCd = document.getElementsByName("envstCd");
+  var objEnvstNm = document.getElementsByName("envstNm");
+  var objEnvstGrpCd = document.getElementsByName("envstGrpCd");
+  var objDefault = document.getElementsByName("default");
+  var objEnvstValCd = document.getElementsByName("envstValCd");
+  var objDirctInYn = document.getElementsByName("dirctInYn");
+
+  var paramArr = new Array();
+  
+  for(var i=0; i<objEnvstCd.length; i++){
+    
+    var param = {};
+    
+    param.hqOfficeCd  = selectedHq.hqOfficeCd;
+    //param.hqBrandCd   = selectedBrand.hqBrandCd;
+    param.status      = objStatus[i].value;
+    param.envstCd     = objEnvstCd[i].value;
+    param.envstNm     = objEnvstNm[i].value;
+    param.envstGrpCd  = objEnvstGrpCd[i].value;
+    param.envstVal    = objEnvstValCd[i].value;
+    param.dirctInYn   = objDirctInYn[i].value;
+    
+    paramArr.push(param);
   }
   
-  <%-- 권한 복사 버튼 클릭 --%>
-  $("#btnCopyAuth").click(function(e){
-    var param = {};
-    param.hqOfficeCd      = selectedHq.hqOfficeCd;
-    param.copyHqOfficeCd  = authComboConfig.selectedValue;
-    
-    console.log(param);
-
-    $.postJSONSave("/store/hq/hqmanage/authorexcept/copyAuth.sb", JSON.stringify(param), function(result) {
-
-      console.log(result);
-      var res = result.data;
-      if(res > 0) {
-        s_alert.pop("<s:message code='cmm.copySucc' />");
-      }
-      
-    })
-    .fail(function(){
-      s_alert.pop("Ajax Fail");
-    });
+  //TODO url 변경
+  $.postJSONArray("/store/hq/hqBrand/config/save.sb", paramArr, function(result) {
+    console.log(result);
+    s_alert.pop("<s:message code='cmm.saveSucc' />");
+  },
+  function(result) {
+    s_alert.pop(result.data.msg);
   });
   
-  <%-- 추가 버튼 클릭 --%>
-  $("#btnAddMenu").click(function(e){
-    
-    var paramArr = new Array();
-    for(var i=0; i<avlblMenuGrid.collectionView.items.length; i++){
-      var avlblMenu = avlblMenuGrid.collectionView.items[i];
-      if(avlblMenu.menuChkSmall || avlblMenu.menuChkMid) {
-        avlblMenu.hqOfficeCd = selectedHq.hqOfficeCd;
-        avlblMenu.resrceCd = avlblMenu.resrceCdSmall;
-        paramArr.push(avlblMenu);
-      }
-    }
-    
-    console.log(paramArr)
-    console.log(JSON.stringify(paramArr))
-    
-    $.postJSONArray("/store/hq/hqmanage/authorExcept/addAuth.sb", paramArr, function(result) {
+});
 
-      console.log(result)
-      
-      var res = result.data;
-      if(res > 0) {
-        s_alert.pop("<s:message code='cmm.saveSucc' />");
-        openAuthLayer();
-      }
-      
-    })
-    .fail(function(){
-      s_alert.pop("Ajax Fail");
-    });
-    
-  });
-
-  <%-- 삭제 버튼 클릭 --%>
-  $("#btnRemoveMenu").click(function(e){
-    var paramArr = new Array();
-    for(var i=0; i<beUseMenuGrid.collectionView.items.length; i++){
-      var beUseMenu = beUseMenuGrid.collectionView.items[i];
-      if(beUseMenu.menuChkSmall || beUseMenu.menuChkMid) {
-        beUseMenu.hqOfficeCd = selectedHq.hqOfficeCd;
-        beUseMenu.resrceCd = beUseMenu.resrceCdSmall;
-        paramArr.push(beUseMenu);
-      }
-    }
-    console.log(paramArr);
-    
-    $.postJSONArray("/store/hq/hqmanage/authorexcept/removeAuth.sb", JSON.stringify(paramArr), function(result) {
-
-      console.log(result)
-      var res = result.data;
-      if(res > 0) {
-        s_alert.pop("<s:message code='cmm.delSucc' />");
-        openAuthLayer();
-      }
-    })
-    .fail(function(){
-      s_alert.pop("Ajax Fail");
-    });
-     
-  });
+<%-- 기본값 설정 버튼 클릭 --%>
+$("#envLayer #btnDefault").click(function(){
   
-  <%-- 모바일 메뉴 클릭--%>
-  $("#mobMenu").click(function(e){
-    s_alert.pop("<s:message code='cmm.menu.preparing' />");
-  });
+  objDefaultCd  = document.getElementsByName("defltYn"); // 디폴트 유무 
   
-  <%-- 닫기 버튼 클릭 --%>
-  $(".btn_close").click(function(e){
-    $("#munuAuthLayer").hide();
-    $("#dim2").hide();
-  });
+  var loop_cnt = objEnvSetVal.length;
+  for(var i = 0; i < loop_cnt; i++)
+  {
+      if(objDefaultCd[i].value != '')
+      {
+          objEnvSetVal[i].value = objDefaultCd[i].value;
+      }
+  }
+});
+
+<%-- 분류관리 탭--%>
+$("#envLayer #classSettingTab").click(function(){
+  $("#envDim").hide();
+  $("#envLayer").hide();
+  
+  openClsLayer();
+});
+
+<%-- 레이어팝업 닫기 --%>
+$("#envLayer .btn_close").click(function(){
+  $("#envDim").hide();
+  $("#envLayer").hide();
+});
 
 </script>
+

@@ -250,6 +250,15 @@
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
+<%-- 환경설정 --%>
+<c:import url="/WEB-INF/view/store/hq/hqManage/config.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+  <c:param name="orgnFg" value="${orgnFg}"/>
+  <c:param name="orgnCd" value="${orgnCd}"/>
+  <c:param name="orgnNm" value="${orgnNm}"/>
+</c:import>
+
 <%-- 메뉴권한 레이어 --%>
 <c:import url="/WEB-INF/view/store/hq/hqManage/authorExcept.jsp">
   <c:param name="menuCd" value="${menuCd}"/>

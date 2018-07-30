@@ -11,9 +11,12 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.pos.confg.loginstatus.enums.SysStatFg;
+import kr.co.solbipos.store.hq.brand.enums.TargtFg;
 import kr.co.solbipos.store.hq.brand.service.HqBrandVO;
+import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 import kr.co.solbipos.store.hq.brand.service.impl.HqBrandMapper;
 import kr.co.solbipos.store.hq.hqmanage.service.HqManageService;
 import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;
@@ -373,5 +376,43 @@ public class HqManageServiceImpl implements HqManageService{
         }
         return procCnt;
     }
+
+    /** 환경설정 조회 */
+    @Override
+    public List<DefaultMap<String>> getConfigList(HqManageVO hqManageVO) {
+        return mapper.getConfigList(hqManageVO);
+    }
+    
+    /** 환경설정 저장 */
+    @Override
+    public int saveConfig(HqEnvstVO[] hqEnvsts, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String dt = currentDateTimeString();
+
+        for(HqEnvstVO hqEnvst: hqEnvsts) {
+            
+            hqEnvst.setRegDt(dt);
+            hqEnvst.setRegId(sessionInfoVO.getUserId());
+            hqEnvst.setModDt(dt);
+            hqEnvst.setModId(sessionInfoVO.getUserId());
+            
+            if(hqEnvst.getStatus() == GridDataFg.INSERT) {
+                hqEnvst.setUseYn(UseYn.Y);
+                procCnt += mapper.insertConfig(hqEnvst);
+            }
+            else if(hqEnvst.getStatus() == GridDataFg.UPDATE) {
+                procCnt += mapper.updateConfig(hqEnvst);
+            }
+            
+            // 적용 타겟이 본사기준 매장까지인 경우, 매장까지 적용
+            // 단독매장 제외(프렌차이즈만 해당)
+            if("00000".equals(hqEnvst.getHqOfficeCd()) && hqEnvst.getTargtFg() == TargtFg.BOTH ) {
+                procCnt += mapper.updateConfigStore(hqEnvst);
+            }
+        }
+        return procCnt;
+    }
+
 
 }

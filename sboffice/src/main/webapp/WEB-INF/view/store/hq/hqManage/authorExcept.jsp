@@ -15,7 +15,11 @@
         <%-- 본사정보, 메뉴권한, 코드자리수, 환경설정, 브랜드관리 탭 --%>
         <div class="tabType1">
           <ul>
-            <li><a id="" href="javascript:;"><s:message code="hqManage.hqInfo" /></a></li>
+            <%-- 상세정보 탭 --%>
+            <li><a id="hqInfoTab" href="javascript:;"><s:message code="hqManage.hqInfo" /></a></li>
+            <%-- 환경설정 탭 --%>
+            <li><a id="envSettingTab" href="javascript:;" class="on"><s:message code="hqManage.envSetting" /></a></li>
+            <%-- 메뉴관리 탭  --%>
             <li><a id="menuSettingTab" href="javascript:;" class="on"><s:message code="hqManage.menuSetting" /></a></li>
           </ul>
         </div>
