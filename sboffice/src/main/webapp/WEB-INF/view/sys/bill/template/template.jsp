@@ -141,7 +141,7 @@
     var dataTemplate =
       [
         { binding:"gChk", header:"<s:message code='template.chk' />", dataType:wijmo.DataType.Boolean, width:45},
-        { binding:"templtNm", header:"<s:message code='template.templtNm'/>", width:"*"},
+        { binding:"templtNm", header:"<s:message code='template.templtNm'/>", width:"*", isReadOnly: true },
       ];
     <%-- 템플릿 그리드 생성 --%>
     var gridTemplate = wgrid.genGrid("#gridTemplate", dataTemplate, "${menuCd}", 1, ${clo.getColumnLayout(1)});
