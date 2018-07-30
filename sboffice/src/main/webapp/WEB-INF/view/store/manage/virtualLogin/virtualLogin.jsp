@@ -103,8 +103,7 @@
 
 <script type="text/javascript">
   
-  var menuCd = ${menuCd};
-  var popupCnt = 0;
+  var menuCd = "${menuCd}";
   var clsFg = ${ccu.getCommCodeSelect("003")};
   var sysStatFg = ${ccu.getCommCodeSelect("005")};
   var columnLayout1 = ${clo.getColumnLayout(1)};
@@ -127,5 +126,3 @@
     ];
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/store/manage/virtualLogin/virtualLogin.js"></script>
-  
-  

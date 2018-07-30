@@ -8,6 +8,8 @@
  * 2018.06.15     노현수      1.0            
  * 
  * **************************************************************/
+var popupCnt = 0;
+
 $(document).ready(function() {
     
     var srchHqOfficeCd = wcombo.genInput("#srchHqOfficeCd");
