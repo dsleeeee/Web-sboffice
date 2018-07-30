@@ -1,5 +1,4 @@
 //"use strict";
-var wCell;
 !function( win, $ ){
   // 그리드
   var wgrid = {
@@ -17,8 +16,6 @@ var wCell;
             // 그리드 Column헤더(첫번째)에 ColumnPicker 표시
             if ( e.panel == s.topLeftCells ) {
               e.cell.innerHTML = "<div class=\"v-center\"></div>";
-              wCell = e.cell;
-              console.log(wCell);
             // 컬럼헤더 merged 의 헤더타이틀 중앙(vertical) 정렬
             } else if ( e.panel.cellType == wijmo.grid.CellType.ColumnHeader ) {
               var mRange = g.getMergedRange(e.panel, e.row, e.col);

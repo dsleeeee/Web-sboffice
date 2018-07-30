@@ -7,7 +7,7 @@
 
 <link rel="stylesheet" type="text/css" href="/resource/vender/awesome-font/css/font-awesome.min.css" />
 
-<script src="/resource/solbipos/js/jquery-1.11.1.min.js"></script>
+<script src="/resource/solbipos/js/common/jquery-1.11.1.min.js"></script>
 <script src="/resource/vender/prefixfree/prefixfree.js"></script>
 
 <script src="/resource/vender/wijmo/js/wijmo.min.js"></script>
@@ -23,9 +23,9 @@
 
 <!-- <script src="/resource/vender/spin/spin.js"></script> -->
 
-<script src="/resource/solbipos/js/common.js"></script>
-<script src="/resource/solbipos/js/gridcomm.js"></script>
-<script src="/resource/solbipos/js/gencomm.js"></script>
-<script src="/resource/solbipos/js/alert.js"></script>
-<script src="/resource/solbipos/js/paging.js"></script>
+<script src="/resource/solbipos/js/common/common.js"></script>
+<script src="/resource/solbipos/js/common/grid.comm.js"></script>
+<script src="/resource/solbipos/js/common/gen.comm.js"></script>
+<script src="/resource/solbipos/js/common/alert.js"></script>
+<script src="/resource/solbipos/js/common/paging.js"></script>
 
