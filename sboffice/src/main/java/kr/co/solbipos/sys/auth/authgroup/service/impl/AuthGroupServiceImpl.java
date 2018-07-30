@@ -186,7 +186,7 @@ public class AuthGroupServiceImpl implements AuthGroupService {
             }
             child = hm.get(item.getResrceCd());
 
-            if(!item.getpResrce().equals("") && !item.getpResrce().equals("000000")) {
+            if(child != null && !item.getpResrce().equals("") && !item.getpResrce().equals("000000")) {
                 if(hm.containsKey(item.getpResrce())) {
                     mmdParent = hm.get(item.getpResrce());
                     mmdParent.getItems().add(child);
