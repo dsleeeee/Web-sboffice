@@ -398,7 +398,7 @@
   <%-- 본사신규등록 팝업 열기 --%>
   function openRegistLayer() {
     
-    $("#popTitle").text("<s:message code='hqManage.newHq' />");
+    $("#hqDtlLayer #popTitle").text("<s:message code='hqManage.newHq' />");
     
     $("#hqDtlLayer").show();
     $("#hqDtlDim").show();
@@ -739,18 +739,16 @@
   });
 
   
-  <%-- 환경설정 화면 보여줌--%>
-  function showEnvSet(){
-    hideMaster();
-   
-    openEnvLayer();
-  }
-  
-  <%-- 메뉴권한 화면 보여줌 --%>
-  function showMenuAuth() {
+  <%-- 상세정보 레이아웃 숨김 --%>
+  //function showMaster(pageId){
+  function showMaster(){
+    hideEnvSet();
+    hideMenuAuth();
     resetForm();
-    hideMaster();
-    openAuthLayer();
+
+    $("#hqDtlLayer").show();
+    $("#hqDtlDim").show();
+    // 상세정보일 경우 데이터 조회
   }
   
   <%-- 상세정보 레이아웃 숨김 --%>

@@ -77,10 +77,10 @@ public interface HqManageMapper {
     List<DefaultMap<String>> beUseMenu(HqManageVO hqManage);
 
     /** 메뉴권한복사 */
-    int copyAuth(HqMenuVO hqMen, SessionInfoVO sessionInfoVO);
+    int copyAuth(HqMenuVO hqMenuVO);
 
     /** 권한예외 복사 */
-    int copyAuthExcp(HqMenuVO hqMen, SessionInfoVO sessionInfoVO);
+    int copyAuthExcp(HqMenuVO hqMenuVO);
 
     /** 권한확인 */
     int isAuth(HqMenuVO hqMenus);

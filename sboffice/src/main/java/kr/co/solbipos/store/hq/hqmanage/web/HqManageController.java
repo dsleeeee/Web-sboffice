@@ -222,7 +222,7 @@ public class HqManageController {
      * @author  김지은
      * @since   2018. 06. 08.
      */
-    @RequestMapping(value = "authorexcept/authHqList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "authorExcept/getAuthHqList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result authHqList(HqManageVO hqManage, HttpServletRequest request,
             HttpServletResponse response, Model model) {
@@ -255,14 +255,16 @@ public class HqManageController {
      * @author  김지은
      * @since   2018. 06. 08.
      */
-    @RequestMapping(value = "authorexcept/copyAuth.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "authorExcept/copyAuth.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result copyAuth(HqMenuVO hqMenu, HttpServletRequest request,
+    public Result copyAuth(@RequestBody HqMenuVO hqMenu, HttpServletRequest request,
             HttpServletResponse response, Model model) {
         
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
         
         int cnt = service.copyAuth(hqMenu, sessionInfoVO);
+        
+        System.out.println("========= cnt : "+ cnt);
         
         return returnJson(Status.OK, cnt);
     }
@@ -277,7 +279,7 @@ public class HqManageController {
      * @author  김지은
      * @since   2018. 06. 08.
      */
-    @RequestMapping(value = "authorexcept/addAuth.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "authorExcept/addAuth.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result addAuth(@RequestBody HqMenuVO[] hqMenu, HttpServletRequest request,
             HttpServletResponse response, Model model) {
@@ -299,7 +301,7 @@ public class HqManageController {
      * @author  김지은
      * @since   2018. 06. 08.
      */
-    @RequestMapping(value = "authorexcept/removeAuth.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "authorExcept/removeAuth.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result removeAuth(@RequestBody HqMenuVO[] hqMenu, HttpServletRequest request,
             HttpServletResponse response, Model model) {

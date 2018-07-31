@@ -40,15 +40,10 @@
 
 <%-- 환경설정 팝업 오픈 --%>
 function openEnvLayer(){
-
-  $("#envLayer").show();
-  $("#envDim").show();
-  
-  console.log(selectedHq);
   
   var envTitle = "[" + selectedHq.hqOfficeCd + "] "+ selectedHq.hqOfficeNm;
   
-  $("#popTitle").text(envTitle);
+  $("#envLayer #popTitle").text(envTitle);
   
   getConfigList();
 }
@@ -57,9 +52,6 @@ function openEnvLayer(){
 function getConfigList(){
   var param = {};
   param.hqOfficeCd = selectedHq.hqOfficeCd;
-  //param.hqBrandCd  = selectedHq.hqBrandCd;
-  //param.listScale   = 1;
-  //param.curr        = 1;
   
   var envstGrpCd = ${ccu.getCommCodeExcpAll("048")};
   
@@ -104,9 +96,7 @@ function getConfigList(){
             
             if(envCnt == 0 || envCnt % 2 == 0) envHtml += "<tr>";
             
-            console.log("list["+j+"].envstNm : "+ list[j].envstNm);
-            
-            
+            //console.log("list["+j+"].envstNm : "+ list[j].envstNm);
             envHtml += "      <th>" + list[j].envstCd + "</th>";
             envHtml += "      <td>" + list[j].envstNm + "</td>";
             envHtml += "      <td>";
@@ -114,9 +104,9 @@ function getConfigList(){
             if(list[j].envstGrpCd == "Y"){
                             
               if(list[j].selEnvstVal != null) {
-                console.log("선택선택 : "+ list[j].selEnvstVal);
-                console.log("디폴트디폴트 : "+ list[j].defltYn);
-                console.log("원래 밸류 : "+ list[j].envstCd);
+                //console.log("선택선택 : "+ list[j].selEnvstVal);
+                //console.log("디폴트디폴트 : "+ list[j].defltYn);
+                //console.log("원래 밸류 : "+ list[j].envstCd);
               }
               
               envHtml += "        <input type='text' name='envstValCd' id='env" + list[j].envstCd + "' >";
@@ -213,7 +203,6 @@ $("#envLayer #btnSave").click(function(){
     var param = {};
     
     param.hqOfficeCd  = selectedHq.hqOfficeCd;
-    //param.hqBrandCd   = selectedBrand.hqBrandCd;
     param.status      = objStatus[i].value;
     param.envstCd     = objEnvstCd[i].value;
     param.envstNm     = objEnvstNm[i].value;
@@ -249,46 +238,55 @@ $("#envLayer #btnDefault").click(function(){
   }
 });
 
-<%-- 분류관리 탭--%>
-<%--
-$("#envLayer #classSettingTab").click(function(){
-  $("#envDim").hide();
-  $("#envLayer").hide();
-  
-  openClsLayer();
-});
---%>
-
-
 <%-- 상세정보 탭 클릭 --%>
 $("#envLayer #hqInfoTab").click(function(){
+  /* 
   if(!$("#viewArea").is(":visible")) {
     var msg = "<s:message code='hqManage.confirm.editmode.quit'/>";
     s_alert.popConf(msg, function(){
-      showEnvSet();
+      showMaster();
     });
-  } else { 
-    showEnvSet();
-  }
+  } else {
+  */
+    showMaster();
+  //}
 });
 
 <%-- 메뉴권한 탭 클릭 --%>
 $("#envLayer #menuSettingTab").click(function(e){
+  /* 
   if(!$("#viewArea").is(":visible")) {
     var msg = "<s:message code='hqManage.confirm.editmode.quit'/>";
     s_alert.popConf(msg, function(){
       showMenuAuth();
     });
-  } else { 
+  } else {
+  */
     showMenuAuth();
-  }
+  //}
 });
 
-<%-- 레이어팝업 닫기 --%>
+<%-- 환경설정 화면 보여줌--%>
+function showEnvSet(){
+
+  hideMaster();
+  hideMenuAuth();
+  
+  $("#envLayer").show();
+  $("#envDim").show();
+  
+  openEnvLayer();
+}
+
+<%-- 환경설정 화면 닫기 --%>
 $("#envLayer .btn_close").click(function(){
+  hideEnvSet();
+});
+
+function hideEnvSet(){
   $("#envDim").hide();
   $("#envLayer").hide();
-});
+}
 
 </script>
 
