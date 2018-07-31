@@ -181,6 +181,7 @@ input[type=submit] {
 .wj-listbox-item {
     box-sizing: border-box;
     padding: 3px 10px;
+    font-size: 14px;
 }
 
     .wj-listbox-item:focus,
@@ -585,7 +586,7 @@ input[type=submit] {
 }
 
 /* Default grid cell color */
-.wj-cell:not(.wj-header):not(.wj-group):not(.wj-alt):not(.wj-state-selected):not(.wj-state-multi-selected) {
+.wj-cell:not(.wj-header):not(.wj-group):not(.wj-alt):not(.wj-state-selected):not(.wj-state-multi-selected):not(.wj-custom-readonly) {
     background: #fff;
 }
 
@@ -3188,4 +3189,9 @@ body.full-screen {
     height: 100%;
     line-height: 0;
     transform: translateY(50%);
+}
+
+.wj-custom-readonly:not(.wj-header):not(.wj-state-selected):not(.wj-state-multi-selected) {
+	color: #666;
+	background-color: #f2f2f2;
 }
