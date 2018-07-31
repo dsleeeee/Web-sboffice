@@ -24,6 +24,8 @@ public class PageVO extends CmmVO {
     private static final long serialVersionUID = -2149669246783003251L;
     /** 기본페이징 사이즈 */
     private static final int DEFAULT_PAGE_SCALE = 10;
+    /** 기본리스트 사이즈 */
+    private static final int DEFAULT_LIST_SCALE = 15;
     /** 레코드의 총 갯수 */
     Integer totCnt = 0;
     /** 총 페이지 갯수 */
@@ -115,7 +117,7 @@ public class PageVO extends CmmVO {
     }
     
     public void prevNext() {
-        if (listScale != null && curr != null) {
+        if ( listScale != null && curr != null ) {
             offset = ((curr - 1) * listScale) + 1;
             limit = curr * listScale;
         }
@@ -127,11 +129,14 @@ public class PageVO extends CmmVO {
     }
 
     public void calc() {
-        if (pageScale == null) {
+        if ( pageScale == null ) {
             pageScale = DEFAULT_PAGE_SCALE;
         }
-        if (curr < 0) {
+        if ( curr < 0 || curr == null ) {
             curr = 1;
+        }
+        if ( listScale == null ) {
+            listScale = DEFAULT_LIST_SCALE;
         }
         
         totalPage = totCnt < 0 ? 1 : (int) Math.ceil((double) totCnt / listScale);
