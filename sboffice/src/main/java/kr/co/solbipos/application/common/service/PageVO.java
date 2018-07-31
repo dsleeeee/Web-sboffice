@@ -31,11 +31,11 @@ public class PageVO extends CmmVO {
     /** 총 페이지 갯수 */
     Integer totalPage;
     /** 보여지는 페이지그룹의 페이지 갯수 */
-    Integer pageScale;
+    Integer pageScale = DEFAULT_PAGE_SCALE;
     /** 한 페이지에 표시되는 레코드 갯수 */
-    Integer listScale;
+    Integer listScale = DEFAULT_LIST_SCALE;
     /** 현재 페이지 */
-    Integer curr;
+    Integer curr = 1;
     /** 다음 보여질 페이지그룹의 첫 번째 페이지 */
     Integer limit;
     /** 이전 보여질 페이지그룹의 마지막 페이지 */
@@ -117,10 +117,8 @@ public class PageVO extends CmmVO {
     }
     
     public void prevNext() {
-        if ( listScale != null && curr != null ) {
-            offset = ((curr - 1) * listScale) + 1;
-            limit = curr * listScale;
-        }
+        offset = ((curr - 1) * listScale) + 1;
+        limit = curr * listScale;
     }
 
     public void setTotalCount(Integer totCnt) {
@@ -129,16 +127,6 @@ public class PageVO extends CmmVO {
     }
 
     public void calc() {
-        if ( pageScale == null ) {
-            pageScale = DEFAULT_PAGE_SCALE;
-        }
-        if ( curr < 0 || curr == null ) {
-            curr = 1;
-        }
-        if ( listScale == null ) {
-            listScale = DEFAULT_LIST_SCALE;
-        }
-        
         totalPage = totCnt < 0 ? 1 : (int) Math.ceil((double) totCnt / listScale);
         offset = Math.max(1, curr - 1 - ((curr - 1) % pageScale));
         limit = Math.min(totalPage,
