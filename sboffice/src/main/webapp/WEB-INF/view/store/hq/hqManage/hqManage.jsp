@@ -177,8 +177,8 @@
   });
   
   <%-- 페이징 --%>
-  $(document).on("click", ".page1", function() {
-    search($(this).data("value"));  //TODO 페이징테스트
+  $(document).on("click", ".page", function() {
+    search($(this).data("value"));
   });
   
   <%-- 본사 목록 조회 --%>

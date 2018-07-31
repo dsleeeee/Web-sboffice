@@ -48,6 +48,9 @@
            tho.MOD_ID,
            NVL(tms.CNT, 0) AS CNT,
            the.POS_NM
+      ]]>
+       <include refid="CmmSQL.PagingTemplateCount"/>
+      <![CDATA[
       FROM TB_HQ_OFFICE tho,
            (
       SELECT HQ_OFFICE_CD,

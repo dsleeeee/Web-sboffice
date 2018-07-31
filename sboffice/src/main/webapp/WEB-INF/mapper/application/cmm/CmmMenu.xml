@@ -38,6 +38,9 @@
        AND SYS_OPEN_DATE < SYSDATE
        AND SYS_CLOSURE_DATE > SYSDATE
   ]]>
+   <if test="hqOfficeCd != null and hqOfficeCd != ''">
+       AND HQ_OFFICE_CD LIKE '%'||#{hqOfficeCd}||'%'
+   </if>
    <if test="hqOfficeNm != null and hqOfficeNm != ''">
        AND HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'
    </if>

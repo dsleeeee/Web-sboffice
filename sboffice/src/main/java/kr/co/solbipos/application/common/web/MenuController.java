@@ -92,8 +92,6 @@ public class MenuController {
     @RequestMapping(value = "/selectHq.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result selectHq(HqVO hqVO, HttpServletRequest request, Model model) {
-        
-        System.out.println("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ selectHq");
         List<HqVO> list = cmmMenuService.selectHq(hqVO);
         return returnJson(Status.OK, list);
    }

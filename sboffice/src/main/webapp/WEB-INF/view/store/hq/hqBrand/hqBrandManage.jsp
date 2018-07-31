@@ -75,6 +75,8 @@
   </div>
   
   <div class="mt20 oh sb-select dkbr">
+    <%--페이지 스케일 --%>
+    <div id="listScaleBox" class="w130 fl"></div>
     <div class="tr">
       <%-- 브랜드신규등록 --%>
       <button class="btn_skyblue" id="btnAdd"><s:message code="hqBrand.newBrand" /></button>
@@ -89,15 +91,15 @@
   <div class="wj-TblWrap mt10">
     <div id="thegrid" style="height:450px;"></div>
   </div>
+  
+  <%-- 페이지 리스트 --%>
+  <div class="pageNum mt20">
+    <%-- id --%>
+    <ul id="page" data-size="10">
+    </ul>
+  </div>
 </div>
-
-<!-- template for buttons on items in edit mode -->
-<div id="tplBtnEditMode" style="display:none">
-  <button id="btnEnvSetting" class="btn btn-primary btn-sm">
-    <span class="glyphicon glyphicon-ok"></span> <s:message code='hqBrand.envSetting' />
-  </button>
-</div>
-
+ 
 <script>
   
   var selectedBrand;
@@ -123,28 +125,15 @@
         {binding:"hqBrandCd", header:"<s:message code='hqBrand.hqBrandCd' />", visible:false, width:"*"},
         {binding:"hqBrandNm", header:"<s:message code='hqBrand.hqBrandNm' />", maxLength:15, width:"*"},
         {binding:"useYn", header:"<s:message code='hqBrand.useYn' />", isReadOnly:false, dataMap:useYnDataMap, width:"*"},
-        {binding:"buttons", header:"<s:message code='hqBrand.envSetting' />", width:"*"}
       ];
 
     var grid     = wgrid.genGrid("#thegrid", hData, "${menuCd}", 1, ${clo.getColumnLayout(1)});
+    var ldata         = ${ccu.getListScale()};
+    var listScaleBox  = wcombo.genCommonBox("#listScaleBox", ldata);
 
     grid.isReadOnly  = false;
     grid.collectionView.trackChanges = true;
-
-    <%-- 그리드 포맷 --%>
-    grid.formatItem.addHandler(function(s, e) {
-      if (e.panel == s.cells) {
-        var col = s.columns[e.col];
-        var item = s.rows[e.row].dataItem;
-        if( col.binding == "buttons"){
-          if(item.regId != undefined) {
-            e.cell.innerHTML = document.getElementById('tplBtnEditMode').innerHTML;
-            e.cell.dataItem = item;
-          }
-        }
-      }
-    });
-
+    
     <%-- 그리드 선택 이벤트 --%>
     grid.addEventListener(grid.hostElement, 'mousedown', function(e) {
       var ht = grid.hitTest(e);
@@ -159,22 +148,7 @@
         }
       }
     });
-    
-    <%-- 환경설정 버튼 클릭 --%>
-    grid.addEventListener(grid.hostElement, 'click', function(e) {
-      var ht = grid.hitTest(e);
-      var row = ht.row;
-      if( ht.cellType == wijmo.grid.CellType.Cell) {
-        var col = ht.panel.columns[ht.col];
-        if( col.binding == "buttons") {
-          selectedBrand = grid.rows[ht.row].dataItem;
-          if(selectedBrand.regId != undefined) {
-            openEnvLayer();
-          }
-        }
-      }
-    });
-    
+
     <%-- 브랜드명 수정 --%>
     grid.cellEditEnded.addHandler(function (s, e){
       var col = s.columns[e.col];
@@ -189,6 +163,11 @@
     <%-- 조회 버튼 클릭 --%>
     $("#btnSearch").click(function(e){
       search(1);
+    });
+    
+    <%-- 페이징 --%>
+    $(document).on("click", ".page", function() {
+      search($(this).data("value"));  //TODO 페이징테스트
     });
     
     <%-- 브랜드 목록 조회 --%>
@@ -219,6 +198,8 @@
       param.hqBrandCd   = srchHqBrandCd.text;
       param.hqBrandNm   = srchHqBrandCd.text;
       param.useYn       = srchUseYn.selectedValue;
+      param.listScale   = listScaleBox.selectedValue;
+      param.curr        = index;
       
       $.postJSON("/store/hq/hqBrand/hqBrandManage/getBrandlist.sb", param, function(result) {
         if(result.status === "FAIL") {
@@ -235,12 +216,12 @@
         grid.itemsSource = new wijmo.collections.CollectionView(list);
         grid.collectionView.trackChanges = true;
         
+        page.make("#page", result.data.page.curr, result.data.page.totalPage);
       })
       .fail(function(){
           s_alert.pop("Ajax Fail");
       });
     }
-    
 
     <%-- 브랜드 추가 --%>
     $("#btnAdd").click(function(e){
@@ -272,7 +253,6 @@
         }
       });
     }
-    
 
     <%-- 브랜드 삭제 --%>
     $("#btnDel").click(function(e){
@@ -330,6 +310,7 @@
       $.postJSONArray("/store/hq/hqBrand/hqBrandManage/save.sb", paramArr, function(result) {
         s_alert.pop("<s:message code='cmm.saveSucc' />");
         gridView.clearChanges();
+        search(1);
       },
       function(result) {
         s_alert.pop(result.data.msg);
@@ -341,15 +322,6 @@
 
 <%-- 본사 선택 --%>
 <c:import url="/WEB-INF/view/application/layer/hqOffice.jsp">
-</c:import>
-
-<%-- 환경설정 --%>
-<c:import url="/WEB-INF/view/store/hq/hqBrand/config.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
-  <c:param name="orgnFg" value="${orgnFg}"/>
-  <c:param name="orgnCd" value="${orgnCd}"/>
-  <c:param name="orgnNm" value="${orgnNm}"/>
 </c:import>
 
 <%-- 분류관리 ( //TODO 추후 상품 분류관리로 이동) --%>

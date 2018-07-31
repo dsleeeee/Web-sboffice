@@ -2,6 +2,7 @@ package kr.co.solbipos.store.hq.brand.service;
 
 import kr.co.common.data.enums.UseYn;
 import kr.co.solbipos.application.common.service.CmmVO;
+import kr.co.solbipos.application.common.service.PageVO;
 
 /**
  * @Class Name : HqBrandVO.java
@@ -19,7 +20,7 @@ import kr.co.solbipos.application.common.service.CmmVO;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-public class HqBrandVO extends CmmVO {
+public class HqBrandVO extends PageVO {
 
     private static final long serialVersionUID = 829520160199087941L;
     /** 본사코드 */

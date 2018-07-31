@@ -35,8 +35,9 @@
       return arr;
     },
 
-    select : function(hqOfficeNm) {
+    select : function(hqOfficeCd, hqOfficeNm) {
       var param = {};
+      param.hqOfficeCd = hqOfficeCd;
       param.hqOfficeNm = hqOfficeNm;
       c_hq.search(param);
     },

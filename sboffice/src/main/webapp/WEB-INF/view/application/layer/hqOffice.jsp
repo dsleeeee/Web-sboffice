@@ -22,26 +22,36 @@
               <col width="35%" />
               <col width="15%" />
               <col width="35%" />
+              
             </colgroup>
             <tbody>
               <tr>
-                <th><s:message code="cmm.search.word" /></th>
-                <td colspan="3">
+                <%-- 본사코드 --%>
+                <th><s:message code="cmm.hedofc.cd" /></th>
+                <td>
                   <div class="sb-select">
                     <div id="_hqcode"></div>
+                  </div>
+                </td>
+                <%-- 본사명 --%>
+                <th><s:message code="cmm.hedofc.nm" /></th>
+                <td>
+                  <div class="sb-select">
+                    <div id="_hqname"></div>
                   </div>
                 </td>
               </tr>
             </tbody>
           </table>
           <div class="mt10 tr">
+            <%-- 조회 버튼 --%>
             <button id="_hqsearch" class="btn_skyblue">
               <s:message code="cmm.search" />
             </button>
           </div>
         </div>
         <div class="mt40">
-          <table class="tblType01 moreDark">
+          <table class="tblType01 moreDark" style="height:100px;">
             <colgroup>
               <col width="10%" />
               <col width="15%" />
@@ -56,7 +66,7 @@
                 <th><s:message code="cmm.owner.nm" /></th>
               </tr>
             </thead>
-            <tbody id="_hqbody">
+            <tbody id="_hqbody" >
             </tbody>
           </table>
         </div>
@@ -80,6 +90,7 @@
 <script>
   $(document).ready(function() {
     var hqcode = wcombo.genInput("#_hqcode");
+    var hqname = wcombo.genInput("#_hqname");
     $("#_hqall").click(function() {
       if ($("#_hqall").prop("checked")) {
         $("input[name=_hqlist]:checkbox").prop("checked", true);
@@ -92,7 +103,7 @@
       c_hq.close();
     });
     $("#_hqsearch").click(function(e) {
-      c_hq.select(hqcode.text);
+      c_hq.select(hqcode.text, hqname.text);
     });
   });
 </script>

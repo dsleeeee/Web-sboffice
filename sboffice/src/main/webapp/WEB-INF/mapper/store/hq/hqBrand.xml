@@ -19,6 +19,7 @@
   -->
   <select id="getBrandlist" parameterType="DefaultMap" resultType="DefaultMap">
     /* USE : HqBrandMapper.list */
+    <include refid="CmmSQL.PagingTemplateHeader"/>
     <![CDATA[
     SELECT thb.HQ_OFFICE_CD,
            tho.HQ_OFFICE_NM,
@@ -29,6 +30,9 @@
            thb.REG_ID,
            thb.MOD_DT,
            thb.MOD_ID
+     ]]>
+     <include refid="CmmSQL.PagingTemplateCount"/>
+     <![CDATA[
       FROM TB_HQ_BRAND thb,
            TB_HQ_OFFICE tho
      WHERE tho.HQ_OFFICE_CD = thb.HQ_OFFICE_CD
@@ -49,6 +53,7 @@
        AND thb.USE_YN = #{useYn}
     </if>
      ORDER BY thb.REG_DT, thb.HQ_OFFICE_CD, thb.HQ_BRAND_CD ASC
+     <include refid="CmmSQL.PagingTemplateBottom"/>
   </select>
 
   <!-- 브랜드 코드 조회  -->
