@@ -298,22 +298,23 @@ public class HqManageServiceImpl implements HqManageService{
 
     /** 메뉴권한복사 */
     @Override
-    public int copyAuth(HqMenuVO hqMenu, SessionInfoVO sessionInfoVO) {
+    public int copyAuth(HqMenuVO hqMenuVO, SessionInfoVO sessionInfoVO) {
         
         String dt = currentDateTimeString();
         
-        hqMenu.setRegDt(dt);
-        hqMenu.setRegId(sessionInfoVO.getUserId());
-        hqMenu.setModDt(dt);
-        hqMenu.setModId(sessionInfoVO.getUserId());
+        hqMenuVO.setRegDt(dt);
+        hqMenuVO.setRegId(sessionInfoVO.getUserId());
+        hqMenuVO.setModDt(dt);
+        hqMenuVO.setModId(sessionInfoVO.getUserId());
         
         // hqOfficeCd : 복사 대상이 되는 본사
         // copyHqOfficeCd : 복사할 기준이 되는 본사
-        System.out.println("hqOfficeCd : "+ hqMenu.getHqOfficeCd());
-        System.out.println("CopyHqOfficeCd : "+ hqMenu.getCopyHqOfficeCd());
+        System.out.println("hqOfficeCd : "+ hqMenuVO.getHqOfficeCd());
+        System.out.println("CopyHqOfficeCd : "+ hqMenuVO.getCopyHqOfficeCd());
         
-        int authGrpCopy = mapper.copyAuth(hqMenu, sessionInfoVO);
-        int authExpCopy = mapper.copyAuthExcp(hqMenu, sessionInfoVO);
+        // 권한 복사
+        int authGrpCopy = mapper.copyAuth(hqMenuVO);
+        int authExpCopy = mapper.copyAuthExcp(hqMenuVO);
         
         if(authGrpCopy <= 0) {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));

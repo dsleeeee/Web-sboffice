@@ -18,7 +18,7 @@
             <%-- 상세정보 탭 --%>
             <li><a id="hqInfoTab" href="javascript:;"><s:message code="hqManage.hqInfo" /></a></li>
             <%-- 환경설정 탭 --%>
-            <li><a id="envSettingTab" href="javascript:;" class="on"><s:message code="hqManage.envSetting" /></a></li>
+            <li><a id="envSettingTab" href="javascript:;"><s:message code="hqManage.envSetting" /></a></li>
             <%-- 메뉴관리 탭  --%>
             <li><a id="menuSettingTab" href="javascript:;" class="on"><s:message code="hqManage.menuSetting" /></a></li>
           </ul>
@@ -92,10 +92,6 @@
 var avlblMenuGrid;
 var beUseMenuGrid;
 var authCombo;
-
-
-$(document).ready(function() {
-  
 
   var avlblMenuGridData = [
     {"binding":"resrceCdLarge", "header":"<s:message code='hqManage.lMenuCd' />", allowMerging:true, visible:false, width:"*"},
@@ -244,14 +240,13 @@ $(document).ready(function() {
     param.hqOfficeCd      = selectedHq.hqOfficeCd;
     param.copyHqOfficeCd  = authCombo.selectedValue;
     
-    console.log("========================== btnCopyAuth ==========================");
-    console.log(param);
+    //console.log(param);
     
-    
-    $.postJSONSave("/store/hq/hqmanage/authorexcept/copyAuth.sb", param, function(result) {
+    $.postJSONSave("/store/hq/hqManage/authorExcept/copyAuth.sb", param, function(result) {
       var res = result.data;
       if(res > 0) {
         s_alert.pop("<s:message code='cmm.copySucc' />");
+        openAuthLayer();
       }
     })
     .fail(function(){
@@ -279,7 +274,7 @@ $(document).ready(function() {
       }
     }
     
-    $.postJSONArray("/store/hq/hqmanage/authorexcept/addAuth.sb", paramArr, function(result) {
+    $.postJSONArray("/store/hq/hqManage/authorExcept/addAuth.sb", paramArr, function(result) {
       var res = result.data;
       if(res > 0) {
         s_alert.pop("<s:message code='cmm.saveSucc' />");
@@ -311,7 +306,7 @@ $(document).ready(function() {
       }
     }
     
-    $.postJSONArray("/store/hq/hqmanage/authorexcept/removeAuth.sb", paramArr, function(result) {
+    $.postJSONArray("/store/hq/hqManage/authorExcept/removeAuth.sb", paramArr, function(result) {
       var res = result.data;
       if(res > 0) {
         s_alert.pop("<s:message code='cmm.delSucc' />");
@@ -321,23 +316,7 @@ $(document).ready(function() {
     .fail(function(){
       s_alert.pop("Ajax Fail");
     });
-     
   });
-  
-
-  <%-- 모바일 메뉴 클릭--%>
-  $("#mobMenu").click(function(e){
-    s_alert.pop("<s:message code='cmm.menu.preparing' />");
-  });
-  
-  <%-- 닫기 버튼 클릭 --%>
-  $("#munuAuthLayer .btn_close").click(function(e){
-    $("#munuAuthLayer").hide();
-    $("#munuAuthDim").hide();
-  });
-  
-  
-});
 
   <%-- 권한 팝업 열기 --%>
   function openAuthLayer() {
@@ -349,7 +328,7 @@ $(document).ready(function() {
 
     var param = selectedHq;
     
-    $.postJSON("/store/hq/hqmanage/authorexcept/authHqList.sb", param, function(result) {
+    $.postJSON("/store/hq/hqManage/authorExcept/getAuthHqList.sb", param, function(result) {
       console.log(result);
       if(result.status === "FAIL") {
         s_alert.pop(result.message);
@@ -364,17 +343,39 @@ $(document).ready(function() {
       s_alert.pop("Ajax Fail");
     });
   }
-  
 
+  <%-- 모바일 메뉴 클릭--%>
+  $("#mobMenu").click(function(e){
+    s_alert.pop("<s:message code='cmm.menu.preparing' />");
+  });
+  
   <%-- 상세정보 탭 클릭 --%>
   $("#munuAuthLayer #hqInfoTab").click(function(){
     showMaster();
   });
   
-  function showMaster(pageId){
+  <%-- 상세정보 탭 클릭 --%>
+  $("#munuAuthLayer #envSettingTab").click(function(){
+    showEnvSet();
+  });
+  
+  <%-- 메뉴권한 화면 보여줌 --%>
+  function showMenuAuth() {
+    hideMaster();
+    hideEnvSet();
+    openAuthLayer();
+  }
+  
+  <%-- 닫기 버튼 클릭 --%>
+  $("#munuAuthLayer .btn_close").click(function(e){
+    $("#munuAuthLayer").hide();
+    $("#munuAuthDim").hide();
+  });
+  
+  <%-- 메뉴권한 화면 숨김 --%>
+  function hideMenuAuth() {
     $("#munuAuthLayer").hide();
     $("#munuAuthDim").hide();
   }
   
-
 </script>
