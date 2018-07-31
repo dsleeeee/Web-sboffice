@@ -108,7 +108,7 @@ copyTouchKeyHq.selectedIndexChanged.addHandler(function(s, e){
 copyTouchKeyBrand.selectedIndexChanged.addHandler(function(s, e){
   var param = {};
   param.hqOfficeCd  = copyTouchKeyHq.selectedValue;
-  param.hqBrandCd   = copyTouchKeyBrand.selectedValue;
+//  param.hqBrandCd   = copyTouchKeyBrand.selectedValue;
   
   $.postJSON("/store/manage/storeManage/storeManage/getTouchKeyStoreList.sb", param, function(result) {
     

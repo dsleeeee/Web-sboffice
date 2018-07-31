@@ -5,7 +5,7 @@
 
 <%-- 메뉴권한 레이어 --%>
 
-<div id="dim2" class="fullDimmed" style="display:none;"></div>
+<div id="munuAuthDim" class="fullDimmed" style="display:none;"></div>
 <div id="munuAuthLayer" class="layer" style="display:none;">
   <div class="layer_inner">
     <div class="title w600">
@@ -15,7 +15,11 @@
         <%-- 본사정보, 메뉴권한, 코드자리수, 환경설정, 브랜드관리 탭 --%>
         <div class="tabType1">
           <ul>
-            <li><a id="" href="javascript:;"><s:message code="hqManage.hqInfo" /></a></li>
+            <%-- 상세정보 탭 --%>
+            <li><a id="hqInfoTab" href="javascript:;"><s:message code="hqManage.hqInfo" /></a></li>
+            <%-- 환경설정 탭 --%>
+            <li><a id="envSettingTab" href="javascript:;" class="on"><s:message code="hqManage.envSetting" /></a></li>
+            <%-- 메뉴관리 탭  --%>
             <li><a id="menuSettingTab" href="javascript:;" class="on"><s:message code="hqManage.menuSetting" /></a></li>
           </ul>
         </div>
@@ -329,15 +333,18 @@ $(document).ready(function() {
   <%-- 닫기 버튼 클릭 --%>
   $("#munuAuthLayer .btn_close").click(function(e){
     $("#munuAuthLayer").hide();
-    $("#dim2").hide();
+    $("#munuAuthDim").hide();
   });
   
   
 });
 
-  <%-- 상세정보 팝업 열기 --%>
+  <%-- 권한 팝업 열기 --%>
   function openAuthLayer() {
 
+    $("#munuAuthLayer").show();
+    $("#munuAuthDim").show();
+    
     $("#munuAuthLayer #popTitle").text("["+ selectedHq.hqOfficeCd +"] " + selectedHq.hqOfficeNm);
 
     var param = selectedHq;
@@ -359,19 +366,14 @@ $(document).ready(function() {
   }
   
 
-  <%-- 탭 클릭 --%>
-  $(".tabType1 ul li #hqInfoTab").click(function(){
-    changeTab2();
+  <%-- 상세정보 탭 클릭 --%>
+  $("#munuAuthLayer #hqInfoTab").click(function(){
+    showMaster();
   });
   
-  function changeTab2(pageId){
-    $("#hqDtlLayer").show();
-    $("#dim1").show();
-    
+  function showMaster(pageId){
     $("#munuAuthLayer").hide();
-    $("#dim2").hide();
-    
-    openDtlLayer(selectedHq);
+    $("#munuAuthDim").hide();
   }
   
 

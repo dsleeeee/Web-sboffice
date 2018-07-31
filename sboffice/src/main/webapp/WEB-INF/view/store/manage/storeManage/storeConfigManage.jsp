@@ -78,7 +78,7 @@ function openEnvLayer(){
   var param = {};
   
   param.hqOfficeCd  = selectedStore.hqOfficeCd;
-  param.hqBrandCd   = selectedStore.hqBrandCd;
+//  param.hqBrandCd   = selectedStore.hqBrandCd;
   param.storeCd     = selectedStore.storeCd;
     
   <%-- 포스목록 조회 --%>

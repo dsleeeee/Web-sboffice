@@ -11,17 +11,21 @@
 
 <%-- 본사 상세정보 레이어 --%>
 
-<div id="dim1" class="fullDimmed" style="display:none;"></div>
+<div id="hqDtlDim" class="fullDimmed" style="display:none;"></div>
 <div id="hqDtlLayer" class="layer" style="display:none;">
   <div class="layer_inner">
     <div class="title w600">
       <p id="popTitle" class="tit"></p>
       <a href="javascript:;" class="btn_close"></a>
       <div class="con">
-        <%-- 본사정보, 메뉴권한, 코드자리수, 환경설정, 브랜드관리 탭 --%>
+        <%-- 본사정보, 메뉴권한, 코드자리수, 환경설정 탭 --%>
         <div class="tabType1">
           <ul>
+            <%-- 상세정보 탭 --%>
             <li><a id="hqInfoTab" href="javascript:;" class="on"><s:message code="hqManage.hqInfo" /></a></li>
+            <%-- 환경설정 탭 --%>
+            <li><a id="envSettingTab" href="javascript:;" ><s:message code="hqManage.envSetting" /></a></li>
+            <%-- 메뉴관리 탭  --%>
             <li><a id="menuSettingTab" href="javascript:;"><s:message code="hqManage.menuSetting" /></a></li>
           </ul>
         </div>
@@ -397,7 +401,7 @@
     $("#popTitle").text("<s:message code='hqManage.newHq' />");
     
     $("#hqDtlLayer").show();
-    $("#dim1").show();
+    $("#hqDtlDim").show();
 
     $("#viewArea").hide();
     $("#regArea").show();
@@ -412,13 +416,16 @@
   
   <%-- 상세정보 팝업 열기 --%>
   function openDtlLayer(items) {
+
+    $("#hqDtlLayer").show();
+    $("#hqDtlDim").show();
     
     getDtlData(items);
     
     $("#popTitle").text("["+ items.hqOfficeCd +"] " + items.hqOfficeNm);
     
     $("#hqDtlLayer").show();
-    $("#dim1").show();
+    $("#hqDtlDim").show();
     
     $("#btnReg").hide();
     $("#btnSave").hide();
@@ -428,7 +435,7 @@
   function getDtlData(items) {
     var param = items;
     
-    $.postJSON("/store/hq/hqmanage/master/dtlInfo.sb", param, function(result) {
+    $.postJSON("/store/hq/hqManage/master/dtlInfo.sb", param, function(result) {
       if(result.status === "FAIL") {
         s_alert.pop(result.message);
         return;
@@ -490,7 +497,7 @@
     param.bizNo3 = rBizNo3.text;
     param.bizNo = rBizNo1.text + rBizNo2.text + rBizNo3.text;
     
-    $.postJSON("/store/hq/hqmanage/master/chkBizNo.sb", param, function(result) {
+    $.postJSON("/store/hq/hqManage/master/chkBizNo.sb", param, function(result) {
       if(result.status === "FAIL") {
         s_alert.pop(result.message);
         return;
@@ -517,12 +524,12 @@
   
   <%-- 신규등록 버튼 클릭 --%>
   $("#btnReg").click(function(e){
-    chkVal("/store/hq/hqmanage/master/regist.sb");
+    chkVal("/store/hq/hqManage/master/regist.sb");
   });
   
   <%-- 저장 버튼 클릭 (수정) --%>
   $("#btnSave").click(function(e){
-    chkVal("/store/hq/hqmanage/master/modify.sb");
+    chkVal("/store/hq/hqManage/master/modify.sb");
   });
   
   <%-- validation --%>
@@ -613,7 +620,7 @@
     }
     
     <%-- (신규등록) 본사코드 데모 선택시 상태도 데모를 선택해주세요. --%>
-    if($("#rHqOfficeRadio").is(":visible")) {
+    if($("#hqDtlLayer #rHqOfficeRadio").is(":visible")) {
       var hqType = $('input:radio[name="rHqOfficeCdType"]:checked').val();
       var msg = "<s:message code='hqManage.hqType.comm.error' />";
       if(hqType == "C") {
@@ -663,7 +670,7 @@
   }
   
   <%-- 수정 버튼 클릭 --%>
-  $("#btnEdit").click(function(e){
+  $("#hqDtlLayer #btnEdit").click(function(e){
     $("#viewArea").hide();
     $("#regArea").show();
 
@@ -677,12 +684,12 @@
   });
   
   <%-- 닫기 버튼 클릭 --%>
-  $(".btn_close, #btnClose").click(function(e){
+  $("#hqDtlLayer .btn_close, #hqDtlLayer #btnClose").click(function(e){
     resetForm();
     $("#viewArea").show();
     $("#regArea").hide();
     $("#hqDtlLayer").hide();
-    $("#dim1").hide();
+    $("#hqDtlDim").hide();
   });
   
   <%-- 폼 리셋 --%>
@@ -695,9 +702,26 @@
     rClsFg.selectedIndex        = 0;
     rSysOpenDate.value          = new Date();
   }
+
+  <%-- 환경설정 탭 클릭 --%>
+  $("#hqDtlLayer #envSettingTab").click(function(){
+    if(selectedHq.hqOfficeCd == "") {
+      s_alert.pop("<s:message code='hqManage.require.regist.hq'/>");
+      return;
+    }
+
+    if(!$("#viewArea").is(":visible")) {
+      var msg = "<s:message code='hqManage.confirm.editmode.quit'/>";
+      s_alert.popConf(msg, function(){
+        showEnvSet();
+      });
+    } else { 
+      showEnvSet();
+    }
+  });
   
   <%-- 메뉴권한 탭 클릭 --%>
-  $(".tabType1 ul li #menuSettingTab").click(function(e){
+  $("#hqDtlLayer #menuSettingTab").click(function(e){
     
     if(selectedHq.hqOfficeCd == "") {
       s_alert.pop("<s:message code='hqManage.require.regist.hq'/>");
@@ -707,23 +731,33 @@
     if(!$("#viewArea").is(":visible")) {
       var msg = "<s:message code='hqManage.confirm.editmode.quit'/>";
       s_alert.popConf(msg, function(){
-        changeTab1();
+        showMenuAuth();
       });
     } else { 
-      changeTab1();
+      showMenuAuth();
     }
   });
+
   
-  function changeTab1() {
+  <%-- 환경설정 화면 보여줌--%>
+  function showEnvSet(){
+    hideMaster();
+   
+    openEnvLayer();
+  }
+  
+  <%-- 메뉴권한 화면 보여줌 --%>
+  function showMenuAuth() {
     resetForm();
-    
-    $("#hqDtlLayer").hide();
-    $("#dim1").hide();
-    
-    $("#munuAuthLayer").show();
-    $("#dim2").show();
-    
+    hideMaster();
     openAuthLayer();
   }
+  
+  <%-- 상세정보 레이아웃 숨김 --%>
+  function hideMaster(){
+    $("#hqDtlLayer").hide();
+    $("#hqDtlDim").hide();
+  }
+  
 </script>
 

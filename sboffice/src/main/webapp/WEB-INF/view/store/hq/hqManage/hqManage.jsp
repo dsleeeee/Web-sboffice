@@ -207,7 +207,7 @@
     param.listScale   = listScaleBox.selectedValue;
     param.curr        = index;
     
-    $.postJSON("/store/hq/hqmanage/hqmanage/list.sb", param, function(result) {
+    $.postJSON("/store/hq/hqManage/hqManage/list.sb", param, function(result) {
       if(result.status === "FAIL") {
         s_alert.pop(result.message);
         return;
@@ -248,6 +248,15 @@
 <c:import url="/WEB-INF/view/store/hq/hqManage/master.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 환경설정 --%>
+<c:import url="/WEB-INF/view/store/hq/hqManage/config.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+  <c:param name="orgnFg" value="${orgnFg}"/>
+  <c:param name="orgnCd" value="${orgnCd}"/>
+  <c:param name="orgnNm" value="${orgnNm}"/>
 </c:import>
 
 <%-- 메뉴권한 레이어 --%>

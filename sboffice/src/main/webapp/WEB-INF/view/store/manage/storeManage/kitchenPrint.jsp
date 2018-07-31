@@ -81,7 +81,7 @@ function showkitchenPrintLayout(){
   
   var param = {};
   param.hqOfficeCd  = selectedStore.hqOfficeCd;
-  param.hqBrandCd   = selectedStore.hqBrandCd;
+//  param.hqBrandCd   = selectedStore.hqBrandCd;
   param.storeCd     = selectedStore.storeCd;
     
   <%-- 주방프린터 목록 조회 --%>

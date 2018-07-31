@@ -4,6 +4,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.store.hq.brand.service.HqBrandVO;
+import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqMenuVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqNmcodeVO;
@@ -88,4 +90,16 @@ public interface HqManageMapper {
 
     /** 권한 삭제 */
     int removeAuth(HqMenuVO hqMenus);
+
+    /** 환경설정 조회 */
+    List<DefaultMap<String>> getConfigList(HqManageVO hqManageVO);
+
+    /** 환경설정 등록 */
+    int insertConfig(HqEnvstVO hqEnvst);
+
+    /** 환경설정 수정 */
+    int updateConfig(HqEnvstVO hqEnvst);
+
+    /** 환경설정 수정 - 매장 */
+    int updateConfigStore(HqEnvstVO hqEnvst);
 }

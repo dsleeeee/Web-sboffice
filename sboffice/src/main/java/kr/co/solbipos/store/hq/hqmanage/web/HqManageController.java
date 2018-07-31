@@ -19,6 +19,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqManageService;
 import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqMenuVO;
@@ -42,7 +43,7 @@ import kr.co.solbipos.store.hq.hqmanage.service.HqMenuVO;
 
 
 @Controller
-@RequestMapping(value = "/store/hq/hqmanage/")
+@RequestMapping(value = "/store/hq/hqManage/")
 public class HqManageController {
 
     @Autowired
@@ -61,7 +62,7 @@ public class HqManageController {
      * @author  김지은
      * @since   2018. 06. 08.
      */
-    @RequestMapping(value = "hqmanage/list.sb", method = RequestMethod.GET)
+    @RequestMapping(value = "hqManage/list.sb", method = RequestMethod.GET)
     public String list(HttpServletRequest request, HttpServletResponse response, 
             Model model) {
         return "store/hq/hqManage/hqManage";
@@ -77,7 +78,7 @@ public class HqManageController {
      * @author  김지은
      * @since   2018. 06. 08.
      */
-    @RequestMapping(value = "hqmanage/list.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "hqManage/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result list(HqManageVO hqManage, HttpServletRequest request,
             HttpServletResponse response, Model model) {
@@ -310,5 +311,47 @@ public class HqManageController {
         return returnJson(Status.OK, cnt);
     }
     
+
+    /**
+     * 환경설정 조회
+     * @param   hqBrand
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  김지은
+     * @since   2018. 06. 08.
+     */
+    @RequestMapping(value = "config/getConfiglist.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result configList(HqManageVO hqManageVO, HttpServletRequest request,
+            HttpServletResponse response, Model model) {
+        
+        List<DefaultMap<String>> list = service.getConfigList(hqManageVO);
+        
+        return returnListJson(Status.OK, list, hqManageVO);
+    }
+    
+    /**
+     * 환경설정 저장
+     * @param   hqBrands
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  김지은
+     * @since   2018. 06. 08.
+     */
+    @RequestMapping(value = "config/save.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveConfig(@RequestBody HqEnvstVO[] hqEnvsts, HttpServletRequest request,
+            HttpServletResponse response, Model model) {
+        
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = service.saveConfig(hqEnvsts, sessionInfoVO);
+        
+        return returnJson(Status.OK, result);
+    }
     
 }

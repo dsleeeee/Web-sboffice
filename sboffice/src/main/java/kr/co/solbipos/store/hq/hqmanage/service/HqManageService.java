@@ -3,6 +3,8 @@ package kr.co.solbipos.store.hq.hqmanage.service;
 import java.util.List;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.store.hq.brand.service.HqBrandVO;
+import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 
 /**
  * @Class Name : HqManageService.java
@@ -61,5 +63,10 @@ public interface HqManageService {
 
     /** 메뉴 권한 삭제 */
     int removeAuth(HqMenuVO[] hqMenu, SessionInfoVO sessionInfoVO);
-    
+
+    /** 환경설정 조회 */
+    List<DefaultMap<String>> getConfigList(HqManageVO hqManageVO);
+
+    /** 환경설정 저장 */
+    int saveConfig(HqEnvstVO[] hqEnvsts, SessionInfoVO sessionInfoVO);
 }

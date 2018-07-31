@@ -258,7 +258,7 @@
     /* USE : StoreManageMapper.getPosEnvValue */
       SELECT ENVST_VAL
         FROM TB_HQ_ENVST
-       WHERE HQ_BRAND_CD = #{hqBrandCd}
+       WHERE HQ_OFFICE_CD = #{hqOfficeCd}
          AND ENVST_CD = '100'
   </select>
   
@@ -276,7 +276,6 @@
       STORE_NM,
       OWNER_NM,
       HQ_OFFICE_CD,
-      HQ_BRAND_CD,
       BIZ_NO,
       BIZ_STORE_NM,
       TEL_NO,
@@ -307,7 +306,6 @@
       #{storeNm},
       #{ownerNm},
       #{hqOfficeCd},
-      #{hqBrandCd},
       #{bizNo},
       #{bizStoreNm},
       #{telNo},
@@ -364,7 +362,7 @@
            #{modDt},
            #{modId}
       FROM TB_HQ_PRODUCT_CLASS
-     WHERE HQ_BRAND_CD = #{hqBrandCd}
+     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
   </insert>
   
   <!-- 매장 기본 사용자 등록 -->
@@ -480,7 +478,7 @@
            #{modDt},
            #{modId}
       FROM TB_HQ_PRINT
-     WHERE HQ_BRAND_CD = #{hqBrandCd}
+     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
   </insert>
   
   <!-- 포스마스터 등록 -->
@@ -1732,7 +1730,7 @@
            '[' || STORE_CD || '] ' || STORE_NM AS NAME
       FROM TB_MS_STORE
      WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-       AND HQ_BRAND_CD = #{hqBrandCd}
+       AND HQ_OFFICE_CD = #{hqOfficeCd}
      ORDER BY VALUE NULLS FIRST, VALUE ASC
   </select>
   

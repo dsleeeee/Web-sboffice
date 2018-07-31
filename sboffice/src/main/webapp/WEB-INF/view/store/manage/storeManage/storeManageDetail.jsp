@@ -778,7 +778,7 @@ function saveStore(sendUrl){
   var param = {};
   
   param.hqOfficeCd      = selectedHqOfficeCd;
-  param.hqBrandCd       = rHqBrand.selectedValue;
+//  param.hqBrandCd       = rHqBrand.selectedValue;
   
   param.storeCd         = $("#rStoreCd").val();
   param.storeNm         = $("#rStoreNm").val();

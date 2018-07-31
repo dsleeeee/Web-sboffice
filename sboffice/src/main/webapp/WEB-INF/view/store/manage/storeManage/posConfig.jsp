@@ -54,7 +54,7 @@ function showPosConfigLayout(envstFg){
   var param = {};
   
   param.hqOfficeCd  = selectedStore.hqOfficeCd;
-  param.hqBrandCd   = selectedStore.hqBrandCd;
+//  param.hqBrandCd   = selectedStore.hqBrandCd;
   param.storeCd     = selectedStore.storeCd;
     
   <%-- 포스목록 조회 --%>
@@ -114,7 +114,7 @@ function getPosInfo(){
   var param = {};
   
   param.hqOfficeCd  = selectedStore.hqOfficeCd;
-  param.hqBrandCd   = selectedStore.hqBrandCd;
+//  param.hqBrandCd   = selectedStore.hqBrandCd;
   param.storeCd     = selectedStore.storeCd;
   param.posNo       = $("#sPosNm option:selected").val();
   param.envstFg     = selectedEnvstFg;
@@ -302,7 +302,7 @@ $("#posConfigArea #btnSavePos").click(function(){
     var param = {};
     
     param.hqOfficeCd  = selectedStore.hqOfficeCd;
-    param.hqBrandCd   = selectedStore.hqBrandCd;
+//    param.hqBrandCd   = selectedStore.hqBrandCd;
     param.storeCd     = selectedStore.storeCd;
     param.status      = posObjStatus[i].value;
     param.posNo       = $("#sPosNm option:selected").val();
@@ -374,7 +374,7 @@ $("#btnDeletePos").click(function(){
   
   var param = {};
   param.hqOfficeCd  = selectedStore.hqOfficeCd;
-  param.hqBrandCd   = selectedStore.hqBrandCd;
+//  param.hqBrandCd   = selectedStore.hqBrandCd;
   param.storeCd     = selectedStore.storeCd;
   param.posNo       = $("#sPosNm option:selected").val();
 
