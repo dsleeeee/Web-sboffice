@@ -40,9 +40,9 @@
 
 <%-- 환경설정 팝업 오픈 --%>
 function openEnvLayer(){
-  
-  $("#envDim").show();
+
   $("#envLayer").show();
+  $("#envDim").show();
   
   console.log(selectedHq);
   
@@ -58,11 +58,12 @@ function getConfigList(){
   var param = {};
   param.hqOfficeCd = selectedHq.hqOfficeCd;
   //param.hqBrandCd  = selectedHq.hqBrandCd;
+  //param.listScale   = 1;
+  //param.curr        = 1;
   
   var envstGrpCd = ${ccu.getCommCodeExcpAll("048")};
   
-  //TODO url변경필요
-  $.postJSON("/store/hq/hqBrand/config/getConfiglist.sb", param, function(result) {
+  $.postJSON("/store/hq/hqManage/config/getConfiglist.sb", param, function(result) {
     
     var innerHtml = "";
     
@@ -111,9 +112,7 @@ function getConfigList(){
             envHtml += "      <td>";
             
             if(list[j].envstGrpCd == "Y"){
-              
-              //list[j].selEnvstVal != null && (list[j].selEnvstVal == list[j].envstValCd)
-              
+                            
               if(list[j].selEnvstVal != null) {
                 console.log("선택선택 : "+ list[j].selEnvstVal);
                 console.log("디폴트디폴트 : "+ list[j].defltYn);
@@ -225,8 +224,7 @@ $("#envLayer #btnSave").click(function(){
     paramArr.push(param);
   }
   
-  //TODO url 변경
-  $.postJSONArray("/store/hq/hqBrand/config/save.sb", paramArr, function(result) {
+  $.postJSONArray("/store/hq/hqManage/config/save.sb", paramArr, function(result) {
     console.log(result);
     s_alert.pop("<s:message code='cmm.saveSucc' />");
   },
@@ -252,11 +250,38 @@ $("#envLayer #btnDefault").click(function(){
 });
 
 <%-- 분류관리 탭--%>
+<%--
 $("#envLayer #classSettingTab").click(function(){
   $("#envDim").hide();
   $("#envLayer").hide();
   
   openClsLayer();
+});
+--%>
+
+
+<%-- 상세정보 탭 클릭 --%>
+$("#envLayer #hqInfoTab").click(function(){
+  if(!$("#viewArea").is(":visible")) {
+    var msg = "<s:message code='hqManage.confirm.editmode.quit'/>";
+    s_alert.popConf(msg, function(){
+      showEnvSet();
+    });
+  } else { 
+    showEnvSet();
+  }
+});
+
+<%-- 메뉴권한 탭 클릭 --%>
+$("#envLayer #menuSettingTab").click(function(e){
+  if(!$("#viewArea").is(":visible")) {
+    var msg = "<s:message code='hqManage.confirm.editmode.quit'/>";
+    s_alert.popConf(msg, function(){
+      showMenuAuth();
+    });
+  } else { 
+    showMenuAuth();
+  }
 });
 
 <%-- 레이어팝업 닫기 --%>

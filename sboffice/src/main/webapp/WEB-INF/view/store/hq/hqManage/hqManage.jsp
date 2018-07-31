@@ -207,7 +207,7 @@
     param.listScale   = listScaleBox.selectedValue;
     param.curr        = index;
     
-    $.postJSON("/store/hq/hqmanage/hqmanage/list.sb", param, function(result) {
+    $.postJSON("/store/hq/hqManage/hqManage/list.sb", param, function(result) {
       if(result.status === "FAIL") {
         s_alert.pop(result.message);
         return;

@@ -139,7 +139,7 @@ function getPrintList(){
   
   var param = {};
   param.hqOfficeCd  = selectedStore.hqOfficeCd;
-  param.hqBrandCd   = selectedStore.hqBrandCd;
+//  param.hqBrandCd   = selectedStore.hqBrandCd;
   param.storeCd     = selectedStore.storeCd;
   
   $.postJSON("/store/manage/storeManage/storeManage/getKitchenPrintInfo.sb", param, function(result) {

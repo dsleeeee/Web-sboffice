@@ -19,7 +19,6 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.store.hq.brand.service.HqBrandVO;
 import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqManageService;
 import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;
@@ -44,7 +43,7 @@ import kr.co.solbipos.store.hq.hqmanage.service.HqMenuVO;
 
 
 @Controller
-@RequestMapping(value = "/store/hq/hqmanage/")
+@RequestMapping(value = "/store/hq/hqManage/")
 public class HqManageController {
 
     @Autowired
@@ -63,7 +62,7 @@ public class HqManageController {
      * @author  김지은
      * @since   2018. 06. 08.
      */
-    @RequestMapping(value = "hqmanage/list.sb", method = RequestMethod.GET)
+    @RequestMapping(value = "hqManage/list.sb", method = RequestMethod.GET)
     public String list(HttpServletRequest request, HttpServletResponse response, 
             Model model) {
         return "store/hq/hqManage/hqManage";
@@ -79,7 +78,7 @@ public class HqManageController {
      * @author  김지은
      * @since   2018. 06. 08.
      */
-    @RequestMapping(value = "hqmanage/list.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "hqManage/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result list(HqManageVO hqManage, HttpServletRequest request,
             HttpServletResponse response, Model model) {

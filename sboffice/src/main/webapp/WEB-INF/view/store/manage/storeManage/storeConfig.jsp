@@ -26,7 +26,7 @@ function showStoreConfigLayout(envstFg){
   
   var param = {};
   param.hqOfficeCd  = selectedStore.hqOfficeCd;
-  param.hqBrandCd   = selectedStore.hqBrandCd;
+//  param.hqBrandCd   = selectedStore.hqBrandCd;
   param.storeCd     = selectedStore.storeCd;
   param.envstFg     = envstFg;
 
@@ -211,7 +211,7 @@ $("#storeEnvInfoArea #btnSaveStore").click(function(){
   for(var i=0; i<objEnvstCd.length; i++){
     var param = {};
     param.hqOfficeCd  = selectedStore.hqOfficeCd;
-    param.hqBrandCd   = selectedStore.hqBrandCd;
+//    param.hqBrandCd   = selectedStore.hqBrandCd;
     param.storeCd     = selectedStore.storeCd;
     param.status      = objStatus[i].value;
     param.envstCd     = objEnvstCd[i].value;
