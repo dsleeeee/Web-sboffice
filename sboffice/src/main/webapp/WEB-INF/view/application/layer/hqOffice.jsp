@@ -61,8 +61,8 @@
             <thead>
               <tr>
                 <th id="_hqall"></th>
-                <th><s:message code="cmm.mrhst.cd" /></th>
-                <th><s:message code="cmm.mrhst.nm" /></th>
+                <th><s:message code="cmm.hedofc.cd" /></th>
+                <th><s:message code="cmm.hedofc.nm" /></th>
                 <th><s:message code="cmm.owner.nm" /></th>
               </tr>
             </thead>

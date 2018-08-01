@@ -285,8 +285,8 @@ grid2.cellEditEnded.addHandler(function (s, e){
 $("#btnUp").click(function(e){
   for(var i = 0; i < grid2.collectionView.itemCount; i++ ){
     var item = grid2.collectionView.items[i];
-    if(i > 0 && item.chk){
-      if(!grid2.collectionView.items[i-1].chk){
+    if(i > 0 && (item.chk == true)){
+      if(grid2.collectionView.items[i-1].chk != true){
         var tmpItem = grid2.collectionView.items[i-1];
         grid2.collectionView.items[i-1] = grid2.collectionView.items[i];
         grid2.collectionView.items[i] = tmpItem;

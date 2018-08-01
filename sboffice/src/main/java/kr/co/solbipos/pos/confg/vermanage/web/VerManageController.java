@@ -40,7 +40,7 @@ import kr.co.solbipos.pos.confg.vermanage.service.VerManageService;
 *  Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
 @Controller
-@RequestMapping(value = "/pos/confg/vermanage")
+@RequestMapping(value = "/pos/confg/verManage")
 public class VerManageController {
 
     @Autowired
@@ -57,7 +57,7 @@ public class VerManageController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "/verinfo/view.sb", method = RequestMethod.GET)
+    @RequestMapping(value = "/verInfo/view.sb", method = RequestMethod.GET)
     public String view(HttpServletRequest request, HttpServletResponse response,
             Model model) {
         return "pos/confg/vermanage/verManage"; 
@@ -72,7 +72,7 @@ public class VerManageController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "/verinfo/list.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/verInfo/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result list(VerInfoVO verInfo, HttpServletRequest request,
             HttpServletResponse response, Model model) {
@@ -91,7 +91,7 @@ public class VerManageController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "/verinfo/dtlInfo.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/verInfo/dtlInfo.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result dtlInfo(VerInfoVO verInfo, HttpServletRequest request,
             HttpServletResponse response, Model model) {
@@ -110,7 +110,7 @@ public class VerManageController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "/verinfo/remove.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/verInfo/remove.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result delete(VerInfoVO verInfo, HttpServletRequest request,
             HttpServletResponse response, Model model) {
@@ -129,7 +129,7 @@ public class VerManageController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "/verinfo/chkVerSerNo.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/verInfo/chkVerSerNo.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result chkSerNo(VerInfoVO verInfo, HttpServletRequest request,
             HttpServletResponse response, Model model) {
@@ -146,7 +146,7 @@ public class VerManageController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/verinfo/regist.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/verInfo/regist.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result regist(MultipartHttpServletRequest request) {
 
@@ -166,7 +166,7 @@ public class VerManageController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/verinfo/modify.sb", method = RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/verInfo/modify.sb", method = RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Result modify(MultipartHttpServletRequest request){
 
@@ -188,7 +188,7 @@ public class VerManageController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "/applcstore/list.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/applcStore/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result storeList(VerInfoVO verInfo, HttpServletRequest request,
             HttpServletResponse response, Model model) {
@@ -207,7 +207,7 @@ public class VerManageController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "/applcstore/srchStoreList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/applcStore/srchStoreList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result srchStoreList(ApplcStoreVO applcStore, HttpServletRequest request,
             HttpServletResponse response, Model model) {
@@ -227,7 +227,7 @@ public class VerManageController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "/applcstore/regist.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/applcStore/regist.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result registStore(@RequestBody ApplcStoreVO[] applcStore, HttpServletRequest request,
             HttpServletResponse response, Model model) {
@@ -248,7 +248,7 @@ public class VerManageController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "/applcstore/removeStore.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/applcStore/removeStore.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result removeStore(@RequestBody ApplcStoreVO[] applcStore, HttpServletRequest request,
             HttpServletResponse response, Model model) {

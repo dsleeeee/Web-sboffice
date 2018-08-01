@@ -5,7 +5,7 @@
 
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
-<c:set var="baseUrl" value="/pos/confg/verrecv/verstore/"/>
+<c:set var="baseUrl" value="/pos/confg/verRecv/verStore/"/>
 
 <div class="subCon">
   <%-- 탭 --%>
@@ -107,15 +107,15 @@
 
   <%-- 탭 클릭 --%>
   $("#verrecv").click(function(){
-    location.href = "/pos/confg/verrecv/verrecv/list.sb";
+    location.href = "/pos/confg/verRecv/verRecv/list.sb";
   });
   
   $("#storerecv").click(function(){
-    location.href = "/pos/confg/verrecv/storerecv/list.sb";
+    location.href = "/pos/confg/verRecv/storeRecv/list.sb";
   });
   
   $("#verstore").click(function(){
-    location.href = "/pos/confg/verrecv/verstore/list.sb";
+    location.href = "/pos/confg/verRecv/verStore/list.sb";
   });
   
   <%-- 검색조건 --%>
