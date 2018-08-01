@@ -42,7 +42,7 @@
   </div>
   
   <%-- 템플릿 --%>
-  <div class="w20 fl">
+  <div class="w30 fl">
     <%--위즈모 테이블--%>
     <div class="wj-TblWrapBr pd10" style="height: 400px;">
       <div class="updownSet oh mb10">
@@ -76,7 +76,7 @@
     </div>
   </div>
   
-  <div class="fl receiptEdit" style="width:348px;">
+  <div class="fl receiptEdit" style="width:310px;">
     <div class="wj-TblWrapBr ml10 pd10" style="height: 400px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='template.editNm' /></span>
@@ -85,18 +85,18 @@
         </button>
       </div>
       <div style="height:335px;">
-        <textarea id="editTextArea"></textarea>
+        <textarea id="editTextArea" cols="42"></textarea>
       </div>
     </div>
   </div>
   
-  <div class="fl receiptEdit" style="width:348px;">
+  <div class="fl receiptEdit" style="width:310px;">
     <div class="wj-TblWrapBr ml10 pd10" style="height: 400px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='template.viewNm' /></span>
       </div>
       <div style="height:335px;">
-        <pre id="preview"></pre>
+          <div id="preview"></div>
       </div>
     </div>
   </div>

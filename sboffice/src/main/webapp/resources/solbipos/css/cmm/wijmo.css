@@ -181,7 +181,7 @@ input[type=submit] {
 .wj-listbox-item {
     box-sizing: border-box;
     padding: 3px 10px;
-    font-size: 14px;
+    font-size: 12px;
 }
 
     .wj-listbox-item:focus,

@@ -379,3 +379,73 @@ function getParam(name){
   }
   return result;
 };
+
+
+String.prototype.getByteLength = function() {
+    for(var size=i=0;c=this.charCodeAt(i++);size+=c>>11?2:c>>7?2:1);
+    return size;
+};
+
+String.prototype.centerPad = function(padStr, padLen) {
+    if ( parseInt(padLen) + 1 <= this.getByteLength() ) {
+        return this;
+    } else {
+        var calcLen = padLen - this.getByteLength();
+        var rightPad = Math.ceil(calcLen / 2);
+        var leftPad = calcLen - rightPad + 1;
+        return Array(leftPad).join(padStr).concat(this,Array(rightPad+1).join(padStr));
+    }
+}
+
+String.prototype.leftPad = function(padStr, padLen) {
+    if ( parseInt(padLen) + 1 <= this.getByteLength() ) {
+        return this;
+    } else {
+        var rightPad = padLen - this.getByteLength() + 1;
+        return this.concat(Array(rightPad).join(padStr));
+    }
+}
+
+String.prototype.rightPad = function(padStr, padLen) {
+    if ( parseInt(padLen) + 1 <= this.getByteLength() ) {
+        return this;
+    } else {
+        var leftPad = padLen - this.getByteLength() + 1;
+        return Array(leftPad).join(padStr).concat(this);
+    }
+}
+
+String.prototype.setPadding = function(padType, padStr, padLen) {
+    if ( padType === "C" ) {
+        return this.centerPad(padStr, padLen);
+    } else if ( padType === "L" ) {
+        return this.leftPad(padStr, padLen);
+    } else if ( padType === "R" ) {
+        return this.rightPad(padStr, padLen);
+    }
+}
+
+String.prototype.splitByteLen = function(byteLen) {
+    var resultArr = new Array();
+    var rIndex = 0;
+    var valueByteLen = this.getByteLength();
+    var valueLen = this.length;
+    var bIndex = valueLen - 1;
+    var str = "";
+
+    if (valueByteLen <= byteLen) {
+        return resultArr[0] = this;
+    } else {
+        for (var i = 0; i < valueLen; i++) {
+            str += this.charAt(i);
+            if ((str + this.charAt(i + 1)).getByteLength() > byteLen) {
+                resultArr[rIndex++] = str;
+                str = "";
+            }
+            if (i == bIndex) {
+                resultArr[rIndex++] = str;
+            }
+        }
+        return resultArr;
+    }
+}

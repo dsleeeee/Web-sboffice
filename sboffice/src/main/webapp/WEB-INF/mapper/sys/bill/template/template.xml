@@ -10,7 +10,7 @@
     1       노현수     2018.06.15      최초작성
 -->
 <mapper namespace="kr.co.solbipos.sys.bill.template.service.impl.TemplateMapper">
-    
+
     <!-- 출력물종류 목록 조회 -->
     <!--
         TABLE    : TB_CM_PRINT
@@ -27,7 +27,7 @@
         ORDER BY
             tcp.PRT_CLASS_CD
     </select>
-    
+
     <!-- 출력물코드 목록 조회 -->
     <!--
         TABLE    : TB_CM_PRINT_DTL
@@ -38,7 +38,8 @@
         /* USE : TemplateMapper.getPrintCodeList */
         SELECT
             tcpd.PRT_CD,
-            tcpc.CONTENT
+            tcpc.CONTENT,
+            tcpc.SAMPL_YN
         FROM
             TB_CM_PRINT_DTL tcpd
         LEFT OUTER JOIN TB_CM_PRINT_CODE tcpc ON
@@ -48,7 +49,7 @@
         ORDER BY
             tcpd.DISP_SEQ
     </select>
-    
+
     <!-- 출력물템플릿 목록 조회 -->
     <!--
         TABLE    : TB_CM_PRINT_TEMPL
@@ -67,7 +68,7 @@
             tcpt.PRT_CLASS_CD = #{prtClassCd}
         ORDER BY tcpt.TEMPLT_CD
     </select>
-    
+
     <!-- 출력물종류 생성 -->
     <!--
         TABLE    : TB_CM_PRINT
@@ -97,7 +98,7 @@
             #{modId}
         )
     </insert>
-    
+
     <!-- 출력물종류 수정 -->
     <!--
         TABLE    : TB_CM_PRINT
@@ -115,7 +116,7 @@
         WHERE
             PRT_CLASS_CD = #{prtClassCd}
     </update>
-    
+
     <!-- 출력물종류 삭제 -->
     <!--
         TABLE    : TB_CM_PRINT
@@ -129,7 +130,7 @@
         WHERE
             PRT_CLASS_CD = #{prtClassCd}
     </delete>
-    
+
     <!-- 출력물매핑 목록 조회 -->
     <!--
         TABLE    : TB_CM_PRINT_DTL, TB_CM_PRINT_CODE
@@ -151,7 +152,7 @@
         ORDER BY
             tcpd.DISP_SEQ
     </select>
-    
+
     <!-- 출력물매핑 생성 -->
     <!--
         TABLE    : TB_CM_PRINT_DTL
@@ -179,7 +180,7 @@
             #{modId}
         )
     </insert>
-    
+
     <!-- 출력물매핑 수정 -->
     <!--
         TABLE    : TB_CM_PRINT_DTL
@@ -198,7 +199,7 @@
             PRT_CLASS_CD = #{prtClassCd}
             AND PRT_CD = #{prtCd}
     </update>
-    
+
     <!-- 출력물매핑 삭제 -->
     <!--
         TABLE    : TB_CM_PRINT_DTL
@@ -213,5 +214,5 @@
             PRT_CLASS_CD = #{prtClassCd}
             AND PRT_CD = #{prtCd}
     </delete>
-    
+
 </mapper>
