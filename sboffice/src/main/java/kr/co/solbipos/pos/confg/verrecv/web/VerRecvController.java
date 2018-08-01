@@ -33,7 +33,7 @@ import kr.co.solbipos.pos.confg.verrecv.service.VerRecvVO;
 *  Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
 @Controller
-@RequestMapping(value = "/pos/confg/verrecv/")
+@RequestMapping(value = "/pos/confg/verRecv/")
 public class VerRecvController {
     
     @Autowired 
@@ -48,7 +48,7 @@ public class VerRecvController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "verrecv/list.sb", method = RequestMethod.GET)
+    @RequestMapping(value = "verRecv/list.sb", method = RequestMethod.GET)
     public String verrecvlist(HttpServletRequest request, HttpServletResponse response, 
             Model model) {
         return "pos/confg/verrecv/verrecv";
@@ -62,7 +62,7 @@ public class VerRecvController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "verrecv/list.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "verRecv/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result verrecvlist(VerRecvVO verRecv, HttpServletRequest request,
             HttpServletResponse response, Model model) {
@@ -80,7 +80,7 @@ public class VerRecvController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "verrecv/storeList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "verRecv/storeList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result verrecvStoreList(VerRecvVO verRecv, HttpServletRequest request,
             HttpServletResponse response, Model model) {
@@ -98,7 +98,7 @@ public class VerRecvController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "storerecv/list.sb", method = RequestMethod.GET)
+    @RequestMapping(value = "storeRecv/list.sb", method = RequestMethod.GET)
     public String storerecvList(HttpServletRequest request, HttpServletResponse response, 
             Model model) {
         return "pos/confg/verrecv/storerecv";
@@ -112,7 +112,7 @@ public class VerRecvController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "storerecv/list.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "storeRecv/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result storerecvList(VerRecvVO verRecv, HttpServletRequest request,
             HttpServletResponse response, Model model) {
@@ -131,7 +131,7 @@ public class VerRecvController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "storerecv/storeDtl.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "storeRecv/storeDtl.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result storerecvStoreDtl(VerRecvVO verRecv, HttpServletRequest request,
             HttpServletResponse response, Model model) {
@@ -150,7 +150,7 @@ public class VerRecvController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "verstore/list.sb", method = RequestMethod.GET)
+    @RequestMapping(value = "verStore/list.sb", method = RequestMethod.GET)
     public String verstoreList(HttpServletRequest request, HttpServletResponse response, 
             Model model) {
         return "pos/confg/verrecv/verstore";
@@ -165,7 +165,7 @@ public class VerRecvController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "verstore/list.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "verStore/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result verstoreList(VerRecvVO verRecv, HttpServletRequest request,
             HttpServletResponse response, Model model) {
@@ -184,7 +184,7 @@ public class VerRecvController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "verstore/storeList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "verStore/storeList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result verstoreStoreList(VerRecvVO verRecv, HttpServletRequest request,
             HttpServletResponse response, Model model) {

@@ -292,8 +292,6 @@ public class StoreManageServiceImpl implements StoreManageService{
         int procCnt = 0;
         String dt = currentDateTimeString();
         
-        
-        
         for(StorePosEnvVO storePosEnvVO : storePosEnvVOs) {
             storePosEnvVO.setPosFg("W");    // WEB
             storePosEnvVO.setRegDt(dt);
@@ -303,7 +301,13 @@ public class StoreManageServiceImpl implements StoreManageService{
             
             if(storePosEnvVO.getStatus() == GridDataFg.INSERT) {
                 storePosEnvVO.setUseYn(UseYn.Y);
+                
+                // 환경정보 저장
                 procCnt += mapper.insertPosConfig(storePosEnvVO);
+                
+                // 기능키 복사
+                
+                
             }
             else if(storePosEnvVO.getStatus() == GridDataFg.UPDATE) {
                 procCnt += mapper.updatePosConfig(storePosEnvVO);
