@@ -31,5 +31,4 @@
 <script type="text/javascript" src="/resource/solbipos/js/common/alert.js" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/common/paging.js" charset="utf-8"></script>
 
-<script type="text/javascript" src="/resource/solbipos/js/variables/commonVariables.js" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/variables/lang.js" charset="utf-8"></script>
