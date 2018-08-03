@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Controller
 @RequestMapping(value = "/resource/solbipos/js/variables")
-public class CommonController {
+public class CommonScriptController {
 
     @Autowired
     SessionService sessionService;
