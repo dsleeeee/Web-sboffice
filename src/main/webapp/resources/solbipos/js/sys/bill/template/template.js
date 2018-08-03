@@ -20,6 +20,21 @@ $(document).ready(function () {
     var gridTemplate = wgrid.genGrid("#gridTemplate", dataTemplate, menuCd, 1, coulmnLayout1);
     gridTemplate.isReadOnly = false;
 
+    // ReadOnly 효과설정
+    gridTemplate.formatItem.addHandler(function(s, e) {
+        if (e.panel == s.cells) {
+            var col = s.columns[e.col];
+            if (col.binding === "templtNm") {
+                var item = s.rows[e.row].dataItem;
+                if (item.status != "I") {
+                    wijmo.addClass(e.cell, 'wj-custom-readonly');
+                } else {
+                    wijmo.removeClass(e.cell, 'wj-custom-readonly');
+                }
+            }
+        }
+    });
+
     // 대표명칭 그리드 선택변경 이벤트
     gridTemplate.selectionChanged.addHandler(function (s, e) {
         var col = s.columns[e.col];
@@ -27,12 +42,20 @@ $(document).ready(function () {
             var selectedRow = gridTemplate.rows[e.row].dataItem;
             if (selectedRow.prtForm != null) {
                 theTarget.value = selectedRow.prtForm;
-                thePreview.innerHTML = replacePrtCd(selectedRow.prtForm);
+                makePreview();
             } else {
                 theTarget.value = "";
                 thePreview.innerHTML = "";
             }
             $("#btnSaveTemplate").show();
+        }
+    });
+
+    // 그리드 에디팅 방지
+    gridTemplate.beginningEdit.addHandler(function (s, e) {
+        var dataItem = gridTemplate.rows[e.row].dataItem;
+        if ( nvl(dataItem.status, "") == "" && dataItem.status != "I" ) {
+            e.cancel = true;
         }
     });
 
@@ -59,9 +82,9 @@ $(document).ready(function () {
                 gridTemplate.itemsSource.trackChanges = true;
 
                 // 버튼 Show
-                $("#btnAddPrint").show();
-                $("#btnDelPrint").show();
-                $("#btnSavePrint").show();
+                $("#btnAddTemplate").show();
+                $("#btnDelTemplate").show();
+                $("#btnSaveTemplate").show();
 
                 if (list.length === undefined || list.length == 0) {
                     // 그리드 초기화
@@ -80,6 +103,58 @@ $(document).ready(function () {
         );
 
     }
+
+    // 템플릿 추가버튼 클릭
+    $("#btnAddTemplate").click(function (e) {
+        gridTemplate.collectionView.trackChanges = true;
+        var newRow = gridTemplate.collectionView.addNew();
+        newRow.status = "I";
+        newRow.prtClassCd = srchPrtTypeList.selectedItem["value"];
+        newRow.gChk = true;
+
+        gridTemplate.collectionView.commitNew();
+        // 추가된 Row 선택
+        gridTemplate.select(gridTemplate.rows.length, 1);
+    });
+
+    // 템플릿 삭제버튼 클릭
+    $("#btnDelTemplate").click(function (e) {
+
+    });
+
+    // 템플릿 저장버튼 클릭
+    $("#btnSaveTemplate").click(function (e) {
+
+        var paramArr = new Array();
+        for ( var i = 0; i < gridTemplate.collectionView.itemsEdited.length; i++ ) {
+            gridTemplate.collectionView.itemsEdited[i].status = "U";
+            paramArr.push(gridTemplate.collectionView.itemsEdited[i]);
+        }
+        for ( var i = 0; i < gridTemplate.collectionView.itemsAdded.length; i++ ) {
+            gridTemplate.collectionView.itemsAdded[i].status = "I";
+            paramArr.push(gridTemplate.collectionView.itemsAdded[i]);
+        }
+        for ( var i = 0; i < gridTemplate.collectionView.itemsRemoved.length; i++ ) {
+            gridTemplate.collectionView.itemsRemoved[i].status = "D";
+            paramArr.push(gridTemplate.collectionView.itemsRemoved[i]);
+        }
+
+        if ( paramArr.length <= 0 ) {
+            s_alert.pop(cmm.not.modify);
+            return;
+        }
+
+        $.postJSONArray("/sys/bill/kind/bill/save.sb", paramArr, function(result) {
+                s_alert.pop("<s:message code='msg.save.succ' />");
+                gridTemplate.collectionView.clearChanges();
+            },
+            function(result) {
+                s_alert.pop(result.data.msg);
+            }
+        );
+
+
+    });
 
     // 리스트박스 생성
     var listBox = new wijmo.input.ListBox('#listBoxCode',
@@ -181,7 +256,7 @@ $(document).ready(function () {
 
             theTarget.value = strFront + prtCd + strEnd;
             // 미리보기 적용
-            thePreview.innerHTML = replacePrtCd();
+            makePreview();
 
         }
         e.preventDefault();
@@ -189,11 +264,11 @@ $(document).ready(function () {
 
     // 키이벤트 (키보드수정시 이벤트발생)
     theTarget.addEventListener('keyup', function (e) {
-        thePreview.innerHTML = replacePrtCd();
+        makePreview();
     })
 
     // 미리보기 적용
-    function replacePrtCd() {
+    function makePreview() {
 
         var value = theTarget.value;
         var codeLen = 0;
@@ -201,7 +276,6 @@ $(document).ready(function () {
         var listData = listBox.itemsSource;
         // {} 코드값 정규식 처리
         var matches = value.match(/\{([^}]+)\}/gm);
-        var replaceStr = "";
         if (matches != null) {
             // 정규식처리된 문자 처리
             for (var k = 0; k < matches.length; k++) {
@@ -243,19 +317,17 @@ $(document).ready(function () {
         if (lineArray != null) {
             for (var m = 0; m < lineArray.length; m++ ) {
                 lineArray[m] = lineArray[m].replace(/<P>|<\/P>?/g, "");
-                console.log(!isEmpty(lineArray[m].match(/<font.*?>/g)));
                 if ( lineArray[m].getByteLength() <= 42 || !isEmpty(lineArray[m].match(/<img src.*?>/g)) || !isEmpty(lineArray[m].match(/<font.*?>/g)) ) {
                     newValues[newLine++] = lineArray[m];
                 } else {
                     splitStr = lineArray[m].splitByteLen(42);
-                    console.log(splitStr);
                     for ( var n = 0; n < splitStr.length; n++ ) {
                         newValues[newLine++] = splitStr[n];
                     }
                 }
             }
         }
-        return "<PRE><P>" + newValues.join("</P><P>") + "</P></PRE>";
+        thePreview.innerHTML = "<PRE><P>" + newValues.join("</P><P>") + "</P></PRE>";
     }
 
 });

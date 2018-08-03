@@ -3,13 +3,8 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
-<%-- 선택된 메뉴와 부모 메뉴 --%>
-<c:set var="cMenu" value="${sessionScope.sessionInfo.currentMenu}" />
-
-<%-- 접힌 메뉴용 --%>
-<c:set var="menuData" value="${sessionScope.sessionInfo.menuData}" />
-<c:set var="bkmkData" value="${sessionScope.sessionInfo.bkmkData}" />
-
+  <script type="text/javascript" src="/resource/solbipos/js/variables/menu.js"></script>
+  <script type="text/javascript" src="/resource/solbipos/js/layout/basic/menu.js"></script>
 
   <%--로고영역--%>
   <h1><a href="/main.sb" class="on">
@@ -44,66 +39,3 @@
     <%--//접혔을때--%>
   </div>
 
-<script>
-$(document).ready(function() {
-
-  <%-- 데이터 파싱 --%>
-  var menuStr = '${menuData}';
-  var menus = isEmpty(menuStr) ? '' : JSON.parse(menuStr);
-  var bkmkStr = '${bkmkData}';
-  var bkmks = isEmpty(bkmkStr) ? '' : JSON.parse(bkmkStr);
-
-  <%-- 트리 생성 --%>
-  allMenu = makeTree('#_theTreeAll', menus, "${cMenu.getResrceCd()}");
-  bkmkMenu = makeTree('#_theTreeBkmk', bkmks);
-
-  <%-- 단축 메뉴 생성--%>
-  $(menus).each(function(index) {
-    $("#_smallMenuUl").append(wijmo.format('<li class="{icon}"><a href="javascript:;"></a></li>', this));
-  });
-
-  <%-- 전체메뉴 클릭--%>
-  $(".menuTab .all").click(function() {
-    $("#_all").addClass("on");
-    $("#_favorite").removeClass("on");
-    $("#_bkmkTxt, #_faMenu").hide();
-    $("#_theTreeAll").show();
-    $("#_theTreeBkmk").hide();
-  });
-
-  <%-- 즐겨찾기 메뉴 클릭--%>
-  $(".menuTab .favorite").click(function() {
-    $("#_all").removeClass();
-    $("#_favorite").addClass("on");
-    $("#_faMenu").show();
-    $("#_theTreeAll").hide();
-    if(isEmpty(bkmks)) {
-      $("#_bkmkTxt").show();
-    }
-    $("#_theTreeBkmk").show();
-  });
-
-  <%-- 접힌 메뉴 클릭 시 열린 메뉴 오픈--%>
-  $(document).on("click", ".smallMenu li", function(){
-    $(".menuControl").trigger("click");
-    var findClass = $(this).attr("class");
-    if(findClass != null) {
-      for (var node = allMenu.getFirstNode(); node; node = node.nextSibling()) {
-        if(node.dataItem.icon == findClass) {
-          allMenu.selectedItem = node.dataItem;
-          node.isCollapsed = false;
-        }
-      }
-    }
-  });
-
-  <%-- 접힌 메뉴(즐겨찾기) 클릭 시 열린 메뉴 오픈--%>
-  $(document).on("click", "#_favorite", function(){
-    if($("#_nav").attr("class")=="menuClose"){
-      $(".menuControl").trigger("click");
-      $(".menuTab .favorite").trigger("click");
-    }
-  });
-
-});
-</script>

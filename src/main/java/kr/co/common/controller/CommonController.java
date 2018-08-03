@@ -36,7 +36,7 @@ public class CommonController {
     private MessageResolveService messageResolveService;
 
     /**
-     * 언어 프로퍼티 JS : JSP에 코딩하여 JS처럼 사용
+     * 언어 프로퍼티 : JSP에 코딩하여 JS처럼 사용
      *
      * @param request
      * @return String
@@ -46,6 +46,20 @@ public class CommonController {
     @RequestMapping(value = "/resource/solbipos/js/variables/lang.js")
     public ModelAndView langProperties(HttpServletRequest request) {
         return new ModelAndView("application/variables/lang", "keys", messageResolveService.getMessages(
+            LocaleContextHolder.getLocale()));
+    }
+
+    /**
+     * 메뉴 생성용 변수 : JSP에 코딩하여 JS처럼 사용
+     *
+     * @param request
+     * @return String
+     * @author 노현수
+     * @since 2018. 08. 03.
+     */
+    @RequestMapping(value = "/resource/solbipos/js/variables/menu.js")
+    public ModelAndView menuVariables(HttpServletRequest request) {
+        return new ModelAndView("application/variables/menuVariable", "keys", messageResolveService.getMessages(
             LocaleContextHolder.getLocale()));
     }
 
