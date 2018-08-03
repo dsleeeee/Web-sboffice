@@ -26,7 +26,8 @@
   <!-- File Upload & Download -->
   <bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver" />
 
-  <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+  <!-- <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource"> -->
+  <bean id="messageSource" class="kr.co.common.service.message.ExposedResourceMessageBundleSource">
     <property name="basenames">
       <list>
         <value>classpath:/language/lang</value>

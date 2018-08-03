@@ -77,9 +77,9 @@
                 wgridPic.genGridPicker("#" + item.id, grid, resrceCd, gridIdx);
             }
 
-            genGridDblClickEvent(g);
+            genGridEditingEvent(g);
             // 그리드 에디팅 이벤트시 커서위치 조정 (값의 맨뒤로)
-            function genGridDblClickEvent(grid) {
+            function genGridEditingEvent(grid) {
                 grid.beginningEdit.addHandler(function (s, e) {
                     setTimeout(function () {
                         if (s.columns[e.col].dataType !== wijmo.DataType.Boolean) {

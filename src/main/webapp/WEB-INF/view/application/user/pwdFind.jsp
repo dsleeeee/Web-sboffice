@@ -8,7 +8,7 @@
 <div class="loginArea">
   <h2 class="sTit"><s:message code="login.find.pw" /></h2>
   <p class="h2_txt">
-      <s:message code="login.pw.find.h2.1" /><br /><s:message code="login.pw.find.h2.2" />
+      <s:message code="login.pw.find.h1.1" /><br /><s:message code="login.pw.find.h1.2" />
       <span>
       <s:message code="login.pw.find.h2.3" /><br />
       <s:message code="login.pw.find.h2.4" />
