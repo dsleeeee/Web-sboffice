@@ -2,6 +2,7 @@ package kr.co.solbipos.sys.bill.template.service;
 
 import java.util.List;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 
 /**
  * @Class Name : TemplateService.java
@@ -15,7 +16,6 @@ import kr.co.common.data.structure.DefaultMap;
  * @author 솔비포스 차세대개발실 노현수
  * @since 2018. 05.01
  * @version 1.0
- * @see
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
@@ -29,5 +29,8 @@ public interface TemplateService {
     
     /** 출력물템플릿 목록 조회 */
     List<DefaultMap<String>> getTemplateList(TemplateVO templateVO);
-    
+
+    /** 출력물템플릿 목록 저장 */
+    int saveTemplateList(TemplateVO[] templateVOs, SessionInfoVO sessionInfoVO);
+
 }
