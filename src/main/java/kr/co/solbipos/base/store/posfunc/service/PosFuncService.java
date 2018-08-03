@@ -16,7 +16,6 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
  * @author 솔비포스 차세대개발실 김지은
  * @since 2018. 06.26
  * @version 1.0
- * @see
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
@@ -26,12 +25,24 @@ public interface PosFuncService {
     List<DefaultMap<String>> getPosList(PosFuncVO posFuncVO);
 
     /** 포스기능목록 조회 */
-    List<DefaultMap<String>> getPosFuncList(PosFuncVO posFuncVO);
-    
+    List<DefaultMap<String>> getPosFuncList(PosFuncVO posFuncVO,SessionInfoVO sessionInfoVO);
+
     /** 포스기능 상세조회 */
     List<DefaultMap<String>> getPosConfDetail(PosFuncVO posFuncVO);
 
     /** 포스기능 상세저장 */
     int savePosConf(PosFuncVO[] posFuncVOs, SessionInfoVO sessionInfoVO);
+
+    /** 포스기능 복사 */
+    int copyPosFunc(PosFuncVO posFuncVO, SessionInfoVO sessionInfoVO);
+
+    /** 포스기능 인증목록 조회 */
+    List<DefaultMap<String>> getPosConfAuthDetail(PosFuncVO posFuncVO, SessionInfoVO sessionInfoVO);
+
+    /** 포스기능 인증허용대상 조회 */
+    List<DefaultMap<String>> getAuthEmpList(PosFuncVO posFuncVO);
+
+    /** 포스기능 인증허용대상 저장 */
+    int saveAuthEmp(PosFuncVO[] posFuncVOs, SessionInfoVO sessionInfoVO);
 
 }

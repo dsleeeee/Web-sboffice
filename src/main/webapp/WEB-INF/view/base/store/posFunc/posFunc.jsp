@@ -16,22 +16,23 @@
     <%-- 포스기능 인증관리 탭 --%>
     <li><a href="javascript:;" id="funAuthTab" ><s:message code="posFunc.auth.posFunc" /></a></li>
   </ul>
-  
+
   <div class="wj-TblWrap mt20">
-     
+
     <%-- 왼쪽  --%>
     <div class="w50 fl">
       <div class="wj-TblWrapBr oh mr10 pd20" style="height:500px;">
-        <div id="posTotListBox" class="w110 fl"></div>
-        <div class="fr mb10">
-          <%-- 기능복사버튼 --%>
-          <button class="btn_skyblue" id="btnCopyFunc"><s:message code="posFunc.copy.func" /></button>
+        <div class="sb-select dkbr mb10 oh">
+          <div id="posTotListBox" class="w220 fl"></div>
+          <div class="fr mb10">
+            <%-- 기능복사버튼 --%>
+            <button class="btn_skyblue" id="btnCopyFunc"><s:message code="posFunc.copy.func" /></button>
+          </div>
         </div>
         <%-- 그리드 --%>
-        <div id="posFuncGrid"></div> 
-      </div> 
+        <div id="posFuncGrid"></div>
+      </div>
     </div>
-      
     <!--오른쪽-->
     <div class="w50 fr">
       <div class="wj-TblWrapBr oh ml10 pd20" style="height:500px;">
@@ -55,11 +56,15 @@
 
 <script>
 
+var posList = ${posList};
+
 $(document).ready(function(){
-  
+
+  var selectedRow;
+
   var posUsageEnv = ${ccu.getEnvCodeExcpAll("202")};
   var posTypeEnv  = ${ccu.getEnvCodeExcpAll("204")};
-  
+
   <%-- header --%>
   var posFuncHeader =
     [
@@ -71,7 +76,7 @@ $(document).ready(function(){
       {binding:"totCnt", header:"<s:message code='posFunc.func.cnt' />", width:"*"},
       {binding:"regCnt", header:"<s:message code='posFunc.regist.cnt' />", width:"*"},
     ];
-  
+
   var useFuncHeader =
     [
       {binding:"fnkeyNo", header:"<s:message code='posFunc.fnkeyNo' />", isReadOnly:true, width:"*"},
@@ -93,12 +98,38 @@ $(document).ready(function(){
 
   posFuncGrid.isReadOnly = true;
   useFuncGrid.isReadOnly = false;
-  
+
   var posTotList = ${posTotList};
-  var posTotListBox  = wcombo.genCommonBox("#posTotListBox", posTotList);
-  
-  var posFuncGridList = ${funcList};
-  posFuncGrid.itemsSource = new wijmo.collections.CollectionView(posFuncGridList);
+  var posTotListBox = wcombo.genCommonBox("#posTotListBox", posTotList);
+
+  getGridData();
+
+  <%-- 그리드 데이터 조회 --%>
+  function getGridData(){
+
+    var param = {};
+    param.posNo = posTotListBox.selectedValue;
+
+    $.postJSON("${baseUrl}" + "use/getPosConfList.sb", param, function(result) {
+      console.log(result);
+      if(result.status === "FAIL") {
+          s_alert.pop(result.message);
+          return;
+      }
+      var list = result.data.list;
+      posFuncGrid.itemsSource = new wijmo.collections.CollectionView(list);
+      posFuncGrid.collectionView.trackChanges = true;
+      //changeColSet(list);
+    })
+    .fail(function(){
+        s_alert.pop("Ajax Fail");
+    });
+  }
+
+  <%-- 기능복사 버튼 클릭 //TODO 작업중 --%>
+  $("#btnCopyFunc").click(function(){
+    openCopyFuncLayer();
+  });
 
    <%-- up 버튼 클릭 --%>
    $("#btnUp").click(function(e){
@@ -125,11 +156,11 @@ $(document).ready(function(){
            useFuncGrid.collectionView.items[i] = tmpItem;
            useFuncGrid.collectionView.commitEdit();
            useFuncGrid.collectionView.refresh();
-         } 
+         }
        }
      }
    });
-  
+
   <%-- 그리드 포맷 --%>
   posFuncGrid.formatItem.addHandler(function(s, e) {
     if (e.panel == s.cells) {
@@ -140,12 +171,12 @@ $(document).ready(function(){
       }
     }
   });
-  
+
   <%--//TODO 좌표자동세팅 버튼 클릭 --%>
   $("#btnAutoPosition").click(function(){
-    
+
   });
-  
+
   <%-- 그리드 선택 이벤트 --%>
   posFuncGrid.addEventListener(posFuncGrid.hostElement, 'click', function(e) {
     var ht = posFuncGrid.hitTest(e);
@@ -159,7 +190,7 @@ $(document).ready(function(){
         } else {
           $("#btnAutoPosition").hide();
         }
-        
+
         <%-- 결제메뉴의 경우에는 오른쪽 div에 기능키가 들어감 --%>
         if(selectedRow.fnkeyFg == "56") {
           $("#useFuncGrid").hide();
@@ -172,7 +203,7 @@ $(document).ready(function(){
       }
     }
   });
-  
+
   <%-- 포스기능 상세 조회 --%>
   function getPosFuncDetail() {
     var param = {};
@@ -186,7 +217,7 @@ $(document).ready(function(){
         return;
       }
       var list = result.data.list;
-      /* 
+      /*
       if(list.length === undefined || list.length == 0) {
         s_alert.pop(result.message);
         return;
@@ -200,7 +231,7 @@ $(document).ready(function(){
         s_alert.pop("Ajax Fail");
     });
   }
-  
+
   <%-- 컬럼 셋팅 변경 --%>
   function changeColSet(list){
     for ( var i = useFuncGrid.itemsSource.itemCount-1; i >= 0; i-- ) {
@@ -216,7 +247,7 @@ $(document).ready(function(){
       }
     }
   }
-  
+
   <%-- 저장버튼 클릭 --%>
   $("#btnSave").click(function(){
     var paramArr = new Array();
@@ -230,25 +261,30 @@ $(document).ready(function(){
       useFuncGrid.collectionView.items[i].storeCd = selectedRow.storeCd;
       useFuncGrid.collectionView.items[i].posNo = selectedRow.posNo;
       useFuncGrid.collectionView.items[i].fnkeyFg = selectedRow.fnkeyFg;
-      
+
       useFuncGrid.collectionView.commitEdit();
       paramArr.push(useFuncGrid.collectionView.items[i]);
     }
-    
+
     $.postJSONArray("${baseUrl}" + "use/savePosConf.sb", paramArr, function(result) {
       s_alert.pop("<s:message code='cmm.saveSucc' />");
       useFuncGrid.collectionView.clearChanges();
       getPosFuncDetail();
     },
     function(result) {
-      s_alert.pop(result.data.msg);
+        s_alert.pop(result.data.msg);
     });
   });
-  
+
   <%-- 탭 클릭 --%>
   $("#funAuthTab").click(function(){
-    location.href = "${baseUrl}" + "use/getPosAuthInfo.sb";
+      location.href = "${baseUrl}" + "auth/posAuthView.sb";
   });
 });
-
 </script>
+
+<%-- 기능복사 팝업 --%>
+<c:import url="/WEB-INF/view/base/store/posFunc/posFuncCopy.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>

@@ -17,7 +17,6 @@ import kr.co.solbipos.base.store.posfunc.service.PosFuncVO;
  * @author 솔비포스 차세대개발실 김지은
  * @since 2018. 06.26
  * @version 1.0
- * @see
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
@@ -35,4 +34,16 @@ public interface PosFuncMapper {
 
     /** 포스기능상세 저장 */
     int savePosConfDetail(PosFuncVO posFuncVO);
+
+    /** 포스기능 복사 */
+    int copyPosFunc(PosFuncVO posFuncVO);
+
+    /** 포스기능 인증목록 조회 */
+    List<DefaultMap<String>> getPosConfAuthDetail(PosFuncVO posFuncVO);
+
+    /** 포스기능 인증허용대상 조회 */
+    List<DefaultMap<String>> getAuthEmpList(PosFuncVO posFuncVO);
+
+    /** 포스기능 인증허용대상 저장 */
+    int saveAuthEmp(PosFuncVO posFuncVO);
 }

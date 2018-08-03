@@ -23,7 +23,7 @@ import kr.co.common.service.code.CmmCodeService;
  */
 @Component("cmmCodeUtil")
 public class CmmCodeUtil {
-    
+
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
     @Autowired
     CmmCodeService cmmCodeService;
@@ -81,7 +81,7 @@ public class CmmCodeUtil {
         // 결과 형태를 만들어서 json 으로 리턴
         return assmblObj(commonCodeVO.getCodeList(), "nmcodeNm", "nmcodeCd", UseYn.N);
     }
-    
+
     /**
      * 공통 코드 조회  선택 포함 (JSON, 명칭/코드)
      *
@@ -97,7 +97,7 @@ public class CmmCodeUtil {
         // 결과 형태를 만들어서 json 으로 리턴
         return assmblObj(commonCodeVO.getCodeList(), "nmcodeNm", "nmcodeCd", UseYn.S);
     }
-    
+
 
     /**
      * 공통 코드 조회(JSON, 선택안함)
@@ -137,7 +137,7 @@ public class CmmCodeUtil {
      * @param nmcodeGrpCd
      * @return
      */
-    private CommonCodeVO getCommCodeData(String nmcodeGrpCd) {
+    public CommonCodeVO getCommCodeData(String nmcodeGrpCd) {
 
         CommonCodeVO commonCodeVO = new CommonCodeVO();
         commonCodeVO.setComCdFg(nmcodeGrpCd);
@@ -247,11 +247,11 @@ public class CmmCodeUtil {
         list.add(m);
         return convertToJson(list);
     }
-    
+
     /**
      * 환경변수 공통코드 조회 (TB_CM_ENVST_DTL)
      *
-     * @param nmcodeGrpCd
+     * @param envstCd
      * @return
      */
     public String getEnvCode(String envstCd) {
@@ -263,10 +263,10 @@ public class CmmCodeUtil {
         // 결과 형태를 만들어서 json 으로 리턴
         return assmblObj(envCodeVO.getCodeList(), "envstValNm", "envstValCd", UseYn.ALL);
     }
-    
+
     /**
      * 환경변수 공통코드 조회  "ALL" 제외 (TB_CM_ENVST_DTL)
-     * 
+     *
      * @param envstCd
      * @return
      */
@@ -279,17 +279,17 @@ public class CmmCodeUtil {
         // 결과 형태를 만들어서 json 으로 리턴
         return assmblObj(envCodeVO.getCodeList(), "envstValNm", "envstValCd", UseYn.N);
     }
-    
+
     /**
      * 환경변수 코드 조회
      *
-     * @param nmcodeGrpCd
+     * @param envstCd
      * @return
      */
     private EnvCodeVO getEnvCodeData(String envstCd) {
 
         EnvCodeVO envCodeVO = new EnvCodeVO();
-        
+
         envCodeVO.setEnvstCd(envstCd);
 
         List<DefaultMap<String>> codeList = null;
@@ -301,31 +301,31 @@ public class CmmCodeUtil {
         }
 
         envCodeVO.setCodeList(codeList);
-            
+
         return envCodeVO;
     }
-    
+
     /**
      * 대리점코드 조회
      *
-     * @param nmcodeGrpCd
+     * @param
      * @return
      */
     public String getAgencyList() {
 
         List<DefaultMap<String>> agencyList = cmmCodeService.getAgencyList();
-        
+
         // 결과 형태를 만들어서 json 으로 리턴
         return assmblObj(agencyList, "agencyNm", "agencyCd", UseYn.S);
     }
-    
+
     /**
      * 벤사 코드 조회
      * @return
      */
     public String getVanList() {
         List<DefaultMap<String>> agencyList = cmmCodeService.getVanList();
-        
+
         // 결과 형태를 만들어서 json 으로 리턴
         return assmblObj(agencyList, "vanNm", "vanCd", UseYn.S);
     }

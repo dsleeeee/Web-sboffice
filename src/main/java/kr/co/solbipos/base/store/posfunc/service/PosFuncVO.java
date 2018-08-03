@@ -14,7 +14,6 @@ import kr.co.solbipos.application.common.service.CmmVO;
  * @author 솔비포스 차세대개발실 김지은
  * @since 2018.07.31
  * @version 1.0
- * @see
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
@@ -42,8 +41,19 @@ public class PosFuncVO extends CmmVO {
     private String width;
     /** 넓이 */
     private String height;
-    
-    
+    /** 사용여부 */
+    private String useYn = "0";
+    /** 인증여부 */
+    private String authYn = "0";
+    /** 사원번호 */
+    private String empNo;
+
+    /** 복사 대상이 되는 포스 */
+    private String copyPos;
+    /** 복사 타겟이 되는 포스 */
+    private String targetPos;
+
+
     /**
      * @return the storeCd
      */
@@ -176,5 +186,57 @@ public class PosFuncVO extends CmmVO {
     public void setHeight(String height) {
         this.height = height;
     }
-    
+    /**
+     * @return the authYn
+     */
+    public String getAuthYn() { return authYn; }
+    /**
+     * @param authYn the authYn to set
+     */
+    public void setAuthYn(String authYn) {
+        if(authYn == "true") {
+            this.authYn = "Y";
+        } else {
+            this.authYn = "N";
+        }
+    }
+    /**
+     * @return the useYn
+     */
+    public String getUseYn() { return useYn; }
+    /**
+     * @param useYn the useYn to set
+     */
+    public void setUseYn(String useYn) {
+        if(useYn == "true") {
+            this.useYn = "Y";
+        } else {
+            this.useYn = "N";
+        }
+    }
+    /**
+     * @return the empNo
+     */
+    public String getEmpNo() { return empNo; }
+    /**
+     * @param empNo the useYn to empNo
+     */
+    public void setEmpNo(String empNo) { this.empNo = empNo; }
+
+    /**
+     * @return the copyPos
+     */
+    public String getCopyPos() { return copyPos; }
+    /**
+     * @param copyPos the useYn to copyPos
+     */
+    public void setCopyPos(String copyPos) { this.copyPos = copyPos; }
+    /**
+     * @return the targetPos
+     */
+    public String getTargetPos() { return targetPos; }
+    /**
+     * @param targetPos the useYn to targetPos
+     */
+    public void setTargetPos(String targetPos) { this.targetPos = targetPos; }
 }

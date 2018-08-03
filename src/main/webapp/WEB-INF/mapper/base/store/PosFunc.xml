@@ -32,7 +32,7 @@
            TB_CM_ENVST_DTL tcd1,
            TB_CM_ENVST_DTL tcd2
      WHERE tmp.STORE_CD = #{storeCd}
-       AND tmp.USE_YN = 'Y'  
+       AND tmp.USE_YN = 'Y'
        AND tme1.ENVST_CD = '202'
        AND tme1.STORE_CD = tmp.STORE_CD
        AND tme1.POS_NO = tmp.POS_NO
@@ -44,7 +44,7 @@
        AND tcd2.ENVST_CD = '204'
        AND tcd2.ENVST_VAL_CD = tme2.ENVST_VAL
   </select>
-  
+
   <!-- 포스기능목록 조회 -->
   <!--
       TABLE    : TB_MS_POS, TB_MS_STORE_FNKEY, TB_MS_POS_ENVST, TB_MS_POS_FNKEY
@@ -66,7 +66,7 @@
         FROM TB_MS_POS tmp,
              TB_MS_STORE_FNKEY tmsf
        WHERE tmsf.STORE_CD = tmp.STORE_CD
-       GROUP 
+       GROUP
           BY tmp.STORE_CD, tmp.POS_NO, tmsf.POS_FG, tmsf.FNKEY_FG, tmsf.FNKEY_NO
         ) tmp,
         TB_MS_POS_ENVST tmpe1,
@@ -78,8 +78,8 @@
        AND tmpe1.STORE_CD = tmp.STORE_CD
        AND tmpe1.POS_NO = tmp.POS_NO
        AND tmpe1.ENVST_CD = '202'
-       AND 'T' = DECODE(tmpe1.ENVST_VAL,'0',DECODE(tmp.POS_FG,'0','T','1','F','2','T') 
-                                       ,'1',DECODE(tmp.POS_FG,'0','F','1','T','2','T') 
+       AND 'T' = DECODE(tmpe1.ENVST_VAL,'0',DECODE(tmp.POS_FG,'0','T','1','F','2','T')
+                                       ,'1',DECODE(tmp.POS_FG,'0','F','1','T','2','T')
                                        ,'2','T'                                      )
        AND tmpe2.STORE_CD = tmp.STORE_CD
        AND tmpe2.POS_NO = tmp.POS_NO
@@ -118,10 +118,10 @@
              tms.DISP_SEQ, tms.POSI_ADJ_YN, tms.FNKEY_FG, tms.FNKEY_NO, tms.FNKEY_NM
         FROM TB_MS_STORE_FNKEY tms,
              TB_MS_POS_ENVST tmp
-       WHERE tmp.STORE_CD = tms.STORE_CD 
+       WHERE tmp.STORE_CD = tms.STORE_CD
          AND tmp.ENVST_CD = '202'
-         AND 'T' = DECODE(tmp.ENVST_VAL, '0', DECODE(tms.POS_FG, '0', 'T', '1', 'F', '2', 'T') 
-                                       , '1', DECODE(tms.POS_FG, '0', 'F', '1', 'T', '2', 'T') 
+         AND 'T' = DECODE(tmp.ENVST_VAL, '0', DECODE(tms.POS_FG, '0', 'T', '1', 'F', '2', 'T')
+                                       , '1', DECODE(tms.POS_FG, '0', 'F', '1', 'T', '2', 'T')
                                        , '2', 'T'                                            )
            ) tms,
            TB_MS_POS_FNKEY tmp
@@ -136,9 +136,9 @@
 
   <!-- 포스기능상세 저장 -->
   <!--
-      TABLE    : 
-      PARAM    : posFuncVO
-      COMMENTS : 포스기능 상세 목록을 저장한다.
+    TABLE    : TB_MS_POS_FNKEY
+    PARAM    : posFuncVO
+    COMMENTS : 포스기능 상세 목록을 저장한다.
   -->
   <update id="savePosConfDetail" parameterType="posFuncVO">
     /* USE : PosFuncMapper.savePosConfDetail */
@@ -153,6 +153,111 @@
      WHERE STORE_CD = #{storeCd}
        AND POS_NO = #{posNo}
        AND FNKEY_NO = #{fnkeyNo}
+  </update>
+
+  <!-- 포스기능 복사 -->
+  <!--
+    TABLE    : TB_MS_POS_FNKEY
+    PARAM    : posFuncVO
+    COMMENTS : 포스기능을 복사한다.
+  -->
+  <update id="copyPosFunc" parameterType="posFuncVO">
+    /* USE : PosFuncMapper.copyPosFunc */
+    <!--
+    UPDATE TB_MS_POS_FNKEY
+       SET DISP_SEQ = #{dispSeq},
+           COL_POSI = #{colPosi},
+           ROW_POSI = #{rowPosi},
+           WIDTH = #{width},
+           HEIGHT = #{height},
+           MOD_DT = #{modDt},
+           MOD_ID = #{modId}
+     WHERE STORE_CD = #{storeCd}
+       AND POS_NO = #{posNo}
+       AND FNKEY_NO = #{fnkeyNo}
+     -->
+  </update>
+
+  <!-- 포스기능 인증목록 조회 -->
+  <!--
+      TABLE    : TB_MS_STORE_FNKEY
+      PARAM    : posFuncVO
+      COMMENTS : 포스기능 인증목록을 조회한다.
+  -->
+  <select id="getPosConfAuthDetail" parameterType="posFuncVO" resultType="DefaultMap">
+    /* USE : PosFuncMapper.getPosConfAuthDetail */
+    SELECT STORE_CD,
+           FNKEY_FG,
+           FNKEY_NO,
+           FNKEY_NM,
+           AUTH_YN,
+           USE_YN
+      FROM TB_MS_STORE_FNKEY
+     WHERE STORE_CD = #{storeCd}
+       AND FNKEY_FG = #{fnkeyFg}
+  </select>
+
+
+  <!-- 포스기능 인증허용대상 조회 -->
+  <!--
+      TABLE    : TB_MS_EMPLOYEE, TB_MS_EMPLOYEE_FNKEY
+      PARAM    : posFuncVO
+      COMMENTS : 포스기능 인증허용대상을 조회한다.
+  -->
+  <select id="getAuthEmpList" parameterType="posFuncVO" resultType="DefaultMap">
+    /* USE : PosFuncMapper.getAuthEmpList */
+    SELECT tme.STORE_CD, tme.EMP_NO, tme.EMP_NM,
+           tmf.EMP_NO,
+           DECODE(tmf.EMP_NO, NULL, 0, 1) AS USE_YN
+      FROM TB_MS_EMPLOYEE tme,
+           TB_MS_EMPLOYEE_FNKEY tmf
+     WHERE tme.STORE_CD = #{storeCd}
+       AND tmf.STORE_CD (+)= tme.STORE_CD
+       AND tmf.EMP_NO (+)= tme.EMP_NO
+       AND tmf.FNKEY_NO (+)= #{fnkeyNo}
+  </select>
+
+  <!-- 포스기능 인증허용대상 저장 -->
+  <!--
+    TABLE    : TB_MS_POS_FNKEY
+    PARAM    : posFuncVO
+    COMMENTS : 포스기능 상세 목록을 저장한다.
+  -->
+  <update id="saveAuthEmp" parameterType="posFuncVO">
+    /* USE : PosFuncMapper.saveAuthEmp */
+    MERGE INTO TB_MS_EMPLOYEE_FNKEY tmf
+    USING (SELECT #{storeCd} AS STORE_CD,
+                  #{empNo} AS EMP_NO,
+                  #{fnkeyNo} AS FNKEY_NO
+             FROM DUAL
+          ) tmp
+       ON (tmf.STORE_CD = tmp.STORE_CD AND tmf.EMP_NO = tmp.EMP_NO AND tmf.FNKEY_NO = tmp.FNKEY_NO)
+     WHEN MATCHED THEN
+     UPDATE
+        SET tmf.USE_YN = #{useYn},
+            tmf.MOD_DT = #{modDt},
+            tmf.MOD_ID = #{modId}
+     WHEN NOT MATCHED THEN
+     INSERT (
+            tmf.STORE_CD,
+            tmf.EMP_NO,
+            tmf.FNKEY_NO,
+            tmf.USE_YN,
+            tmf.REG_DT,
+            tmf.REG_ID,
+            tmf.MOD_DT,
+            tmf.MOD_ID
+     )
+     VALUES(
+            #{storeCd},
+            #{empNo},
+            #{fnkeyNo},
+            #{useYn},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+     )
   </update>
 
 </mapper>
