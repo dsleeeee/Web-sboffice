@@ -190,7 +190,7 @@
       }
       
       $.postJSONArray("/sys/bill/item/item/save.sb", paramArr, function(result) {
-          s_alert.pop("<s:message code='msg.save.succ' />");
+          s_alert.pop("<s:message code='cmm.saveSucc' />");
           theGrid.collectionView.clearChanges();
         },
         function(result) {

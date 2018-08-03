@@ -224,7 +224,7 @@
       }
       
       $.postJSONArray("/sys/etc/vanCard/vanCard/van/save.sb", paramArr, function(result) {
-          s_alert.pop("<s:message code='msg.save.succ' />");
+          s_alert.pop("<s:message code='cmm.saveSucc' />");
           gridVan.collectionView.clearChanges();
         },
         function(result) {
@@ -352,7 +352,7 @@
       }
       
       $.postJSONArray("/sys/etc/vanCard/vanCard/card/save.sb", paramArr, function(result) {
-          s_alert.pop("<s:message code='msg.save.succ' />");
+          s_alert.pop("<s:message code='cmm.saveSucc' />");
           gridCard.collectionView.clearChanges();
         },
         function(result) {
@@ -487,7 +487,7 @@
       }
       
       $.postJSONArray("/sys/etc/vanCard/vanCard/mapng/save.sb", paramArr, function(result) {
-          s_alert.pop("<s:message code='msg.save.succ' />");
+          s_alert.pop("<s:message code='cmm.saveSucc' />");
           gridMapng.collectionView.clearChanges();
         },
         function(result) {

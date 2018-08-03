@@ -376,7 +376,7 @@ $("#btnSave").click(function(e){
   }
   
   $.postJSONArray("${baseUrl}" + "save.sb", paramArr, function(result) {
-    s_alert.pop("<s:message code='msg.save.succ' />");
+    s_alert.pop("<s:message code='cmm.saveSucc' />");
     grid2.collectionView.clearChanges();
   },
   function(result) {

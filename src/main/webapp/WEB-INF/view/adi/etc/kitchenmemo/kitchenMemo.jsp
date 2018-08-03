@@ -121,7 +121,7 @@ $(document).ready(function(){
     }
 
     $.postJSON("${baseUrl}" + "save.sb", JSON.stringify(paramArr), function(result) {
-      s_alert.pop("<s:message code='msg.save.succ' />");
+      s_alert.pop("<s:message code='cmm.saveSucc' />");
       grid.collectionView.clearChanges();
     },
     function(result) {

@@ -276,7 +276,7 @@
       }
       
       $.postJSONArray("/sys/cd/systemCd/systemCd/save.sb", paramArr, function(result) {
-          s_alert.pop("<s:message code='msg.save.succ' />");
+          s_alert.pop("<s:message code='cmm.saveSucc' />");
           gridLeft.collectionView.clearChanges();
         },
         function(result) {
@@ -333,7 +333,7 @@
       }
       
       $.postJSONArray("/sys/cd/systemCd/systemCd/save.sb", paramArr, function(result) {
-          s_alert.pop("<s:message code='msg.save.succ' />");
+          s_alert.pop("<s:message code='cmm.saveSucc' />");
           gridRight.collectionView.clearChanges();
         },
         function(result) {
