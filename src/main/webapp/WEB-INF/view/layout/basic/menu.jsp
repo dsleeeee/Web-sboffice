@@ -3,8 +3,8 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
-  <script type="text/javascript" src="/resource/solbipos/js/variables/menu.js"></script>
-  <script type="text/javascript" src="/resource/solbipos/js/layout/basic/menu.js"></script>
+  <script type="text/javascript" src="/resource/solbipos/js/variables/menu.js" charset="utf-8"></script>
+  <script type="text/javascript" src="/resource/solbipos/js/layout/basic/menu.js" charset="utf-8"></script>
 
   <%--로고영역--%>
   <h1><a href="/main.sb" class="on">

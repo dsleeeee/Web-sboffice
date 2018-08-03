@@ -26,4 +26,4 @@
     </div>
     <!--//layer:For Center screen-->
 
-<script type="text/javascript" src="/resource/solbipos/js/application/layer/bkmk.js"></script>
+<script type="text/javascript" src="/resource/solbipos/js/application/layer/bkmk.js" charset="utf-8"></script>

@@ -125,4 +125,4 @@
       {"binding":"sysClosureDate","header":"<s:message code='virtualLogin.sysClosureDate' />", "width":"*"}
     ];
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/virtualLogin/virtualLogin.js"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/virtualLogin/virtualLogin.js" charset="utf-8"></script>

@@ -64,6 +64,6 @@
   <c:import url="/WEB-INF/view/application/layer/bkmk.jsp">
   </c:import>
 
-<script type="text/javascript" src="/resource/solbipos/js/layout/basic/body.js"></script>
+<script type="text/javascript" src="/resource/solbipos/js/layout/basic/body.js" charset="utf-8"></script>
 
 </body>

@@ -5,13 +5,13 @@
 
 
 
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular.js" charset="utf-8"></script>
 <!--     <link rel="stylesheet" type="text/css" href="/css/result-light.css">-->  
 <link rel="stylesheet" type="text/css" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="http://cdn.wijmo.com/5.latest/styles/wijmo.min.css">
 
-<script type="text/javascript" src="http://cdn.wijmo.com/5.latest/controls/wijmo.min.js"></script>
-<script type="text/javascript" src="http://cdn.wijmo.com/5.latest/controls/wijmo.nav.min.js"></script>
+<script type="text/javascript" src="http://cdn.wijmo.com/5.latest/controls/wijmo.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="http://cdn.wijmo.com/5.latest/controls/wijmo.nav.min.js" charset="utf-8"></script>
 <%-- 
 <script src="/resource/vender/wijmo/js/wijmo.min.js"></script>
 <script src="/resource/vender/wijmo/js/wijmo.nav.min.js"></script>

@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Controller
+@RequestMapping(value = "/resource/solbipos/js/variables")
 public class CommonController {
 
     @Autowired
@@ -43,7 +44,7 @@ public class CommonController {
      * @author 노현수
      * @since 2018. 08. 03.
      */
-    @RequestMapping(value = "/resource/solbipos/js/variables/lang.js")
+    @RequestMapping(value = "/lang.js")
     public ModelAndView langProperties(HttpServletRequest request) {
         return new ModelAndView("application/variables/lang", "keys", messageResolveService.getMessages(
             LocaleContextHolder.getLocale()));
@@ -57,10 +58,9 @@ public class CommonController {
      * @author 노현수
      * @since 2018. 08. 03.
      */
-    @RequestMapping(value = "/resource/solbipos/js/variables/menu.js")
+    @RequestMapping(value = "/menu.js")
     public ModelAndView menuVariables(HttpServletRequest request) {
-        return new ModelAndView("application/variables/menuVariable", "keys", messageResolveService.getMessages(
-            LocaleContextHolder.getLocale()));
+        return new ModelAndView("application/variables/menuVariable");
     }
 
 }
