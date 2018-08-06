@@ -19,7 +19,6 @@ import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
  * @author 솔비포스 차세대개발실 김지은
  * @since 2018. 05.01
  * @version 1.0
- * @see
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
@@ -31,7 +30,7 @@ public interface HqBrandMapper {
 
     /** 브랜드 코드 조회 */
     String getHqBrandCd(HqBrandVO hqBrandVO);
-    
+
     /** 브랜드 추가 */
     int insertBrand(HqBrandVO hqBrandVO);
 
@@ -55,13 +54,13 @@ public interface HqBrandMapper {
 
     /** 분류목록 조회 */
     List<DefaultMap<String>> getClsList(HqBrandVO hqBrand);
-    
+
     /** 분류 코드 조회 */
     String getClsCd(HqClsVO hqClsVO);
-    
+
     /** 상위분류 코드 조회 */
     String getPProdClsCd(HqClsVO hqClsVO);
-    
+
     /** 분류 등록 */
     int insertCls(HqClsVO hqClsVO);
 
@@ -70,11 +69,8 @@ public interface HqBrandMapper {
 
     /** 해당 분류로 등록된 상품 조회 */
     int chkProdCnt(HqClsVO hqClsVO);
-    
+
     /** 분류 삭제 */
     int deleteCls(HqClsVO hqClsVO);
 
-
-
-    
 }

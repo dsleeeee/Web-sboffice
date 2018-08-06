@@ -32,7 +32,6 @@ import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
  * @author 솔비포스 차세대개발실 김지은
  * @since 2018. 05.01
  * @version 1.0
- * @see
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
@@ -45,31 +44,31 @@ public class HqBrandServiceImpl implements HqBrandService{
 
     @Autowired
     MessageService messageService;
-    
+
     /**  브랜드 목록 조회 */
     @Override
     public List<DefaultMap<String>> getBrandlist(HqBrandVO hqBrand) {
         return mapper.getBrandlist(hqBrand);
     }
-    
+
     /** 브랜드 저장 */
     @Override
     public int save(HqBrandVO[] hqBrandVOs, SessionInfoVO sessionInfoVO) {
-        
+
         int procCnt = 0;
         String dt = currentDateTimeString();
 
         for(HqBrandVO hqBrandVO: hqBrandVOs) {
-            
+
             hqBrandVO.setRegDt(dt);
             hqBrandVO.setRegId(sessionInfoVO.getUserId());
             hqBrandVO.setModDt(dt);
             hqBrandVO.setModId(sessionInfoVO.getUserId());
-            
+
             String hqBrandCd = mapper.getHqBrandCd(hqBrandVO);
 
             hqBrandVO.setHqBrandCd(hqBrandCd);
-            
+
             if(hqBrandVO.getStatus() == GridDataFg.INSERT) {
                 procCnt += mapper.insertBrand(hqBrandVO);
             }
@@ -82,7 +81,7 @@ public class HqBrandServiceImpl implements HqBrandService{
         }
         return procCnt;
     }
-    
+
     /** 환경설정 조회 */
     @Override
     public List<DefaultMap<String>> getConfigList(HqBrandVO hqBrand) {
@@ -96,12 +95,12 @@ public class HqBrandServiceImpl implements HqBrandService{
         String dt = currentDateTimeString();
 
         for(HqEnvstVO hqEnvst: hqEnvsts) {
-            
+
             hqEnvst.setRegDt(dt);
             hqEnvst.setRegId(sessionInfoVO.getUserId());
             hqEnvst.setModDt(dt);
             hqEnvst.setModId(sessionInfoVO.getUserId());
-            
+
             if(hqEnvst.getStatus() == GridDataFg.INSERT) {
                 hqEnvst.setUseYn(UseYn.Y);
                 procCnt += mapper.insertConfig(hqEnvst);
@@ -109,7 +108,7 @@ public class HqBrandServiceImpl implements HqBrandService{
             else if(hqEnvst.getStatus() == GridDataFg.UPDATE) {
                 procCnt += mapper.updateConfig(hqEnvst);
             }
-            
+
             // 적용 타겟이 본사기준 매장까지인 경우, 매장까지 적용
             // 단독매장 제외(프렌차이즈만 해당)
             if("00000".equals(hqEnvst.getHqOfficeCd()) && hqEnvst.getTargtFg() == TargtFg.BOTH ) {
@@ -122,18 +121,18 @@ public class HqBrandServiceImpl implements HqBrandService{
     /** 분류 목록 조회 */
     @Override
     public List<HqClsVO> getClsList(HqBrandVO hqBrand) {
-        
+
         List<DefaultMap<String>> clsList = mapper.getClsList(hqBrand);
-        
+
         return makeTreeData(clsList);
     }
-    
-    
+
+
     /** 트리 데이터 생성 */
     public List<HqClsVO> makeTreeData(List<DefaultMap<String>> lists) {
-        
+
         List<HqClsVO> clsVOs = new ArrayList<HqClsVO>();
-        
+
         for(DefaultMap<String> list : lists){
             HqClsVO clsVO = new HqClsVO();
             clsVO.setHqBrandCd(list.getStr("hqBrandCd"));
@@ -143,16 +142,16 @@ public class HqBrandServiceImpl implements HqBrandService{
             clsVO.setItems(new ArrayList<HqClsVO>());
             clsVOs.add(clsVO);
         }
-        
+
         Map<String, HqClsVO> hm = new LinkedHashMap<String, HqClsVO>();
         HqClsVO child;
         HqClsVO parent;
-        
+
         for(HqClsVO clsVO : clsVOs){
             if(!hm.containsKey(clsVO.getProdClassCd())) {
                 hm.put(clsVO.getProdClassCd(), clsVO);
             }
-            
+
             child = hm.get(clsVO.getProdClassCd());
             if ( child != null && !"".equals( clsVO.getpProdClassCd() ) && !"000000".equals( clsVO.getpProdClassCd() ) ) {
                 if(hm.containsKey(clsVO.getpProdClassCd())){
@@ -165,9 +164,9 @@ public class HqBrandServiceImpl implements HqBrandService{
         for(HqClsVO clsVO : hm.values()) {
             if(clsVO.getpProdClassCd() == null || "".equals(clsVO.getpProdClassCd()) || "00000".equals(clsVO.getpProdClassCd())) {
                 returnData.add(clsVO);
-            } 
+            }
         }
-       
+
         return returnData;
     }
 
@@ -177,14 +176,14 @@ public class HqBrandServiceImpl implements HqBrandService{
 
         int procCnt = 0;
         String dt = currentDateTimeString();
-        
+
         for(HqClsVO hqClsVO : hqClsVOs) {
-            
+
             hqClsVO.setRegDt(dt);
             hqClsVO.setModDt(dt);
             hqClsVO.setRegId(sessionInfoVO.getUserId());
             hqClsVO.setModId(sessionInfoVO.getUserId());
-            
+
             // 새 분류코드 생성시, 분류코드 조회부터
             if("".equals(hqClsVO.getProdClassCd()) || hqClsVO.getProdClassCd() == null) {
                 String prodClassCd = "";
@@ -197,7 +196,7 @@ public class HqBrandServiceImpl implements HqBrandService{
                 pprodClassCd = mapper.getPProdClsCd(hqClsVO);
                 hqClsVO.setpProdClassCd(pprodClassCd);
             }
-            
+
             if(hqClsVO.getStatus() == GridDataFg.INSERT) {
                 procCnt += mapper.insertCls(hqClsVO);
             }
@@ -205,10 +204,10 @@ public class HqBrandServiceImpl implements HqBrandService{
                 procCnt += mapper.updateCls(hqClsVO);
             }
             else if(hqClsVO.getStatus() == GridDataFg.DELETE) {
-                
+
                 // 해당 분류로 상품이 등록되어있으면 삭제 불가능
                 int chkProdCnt = mapper.chkProdCnt(hqClsVO);
-                
+
                 if(chkProdCnt > 0) {
                     throw new JsonException(Status.FAIL, messageService.get("hqBrand.delete.fail"));
                 }
@@ -217,7 +216,7 @@ public class HqBrandServiceImpl implements HqBrandService{
                 }
             }
         }
-        
+
         if(procCnt == hqClsVOs.length) {
             return procCnt;
         }

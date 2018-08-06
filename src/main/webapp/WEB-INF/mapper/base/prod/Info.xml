@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    Info.xml
+    상품기초정보등록
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김지은     2018.08.06     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.base.prod.info.service.impl.InfoMapper">
+
+  <!-- 본사 상품 분류 조회 -->
+  <!--
+      TABLE    : TB_HQ_PRODUCT_CLASS
+      COMMENTS : 본사의 상품 분류를 조회한다.
+  -->
+  <select id="getHqProdClsList" parameterType="DefaultMap" resultType="DefaultMap">
+    /* USE : InfoMapper.getHqProdClsList */
+    SELECT HQ_OFFICE_CD,
+           PROD_CLASS_CD,
+           PROD_CLASS_NM,
+           P_PROD_CLASS_CD
+      FROM TB_HQ_PRODUCT_CLASS
+     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+  </select>
+
+  <!-- 매장 상품 분류 조회 -->
+  <!--
+      TABLE    : TB_MS_PRODUCT_CLASS
+      COMMENTS : 매장의 상품 분류를 조회한다.
+  -->
+  <select id="getStoreProdClsList" parameterType="DefaultMap" resultType="DefaultMap">
+    /* USE : InfoMapper.getStoreProdClsList */
+    SELECT 'S000013' AS STORE_CD,
+           '00000' AS PROD_CLASS_CD,
+           '상품분류' AS PROD_CLASS_NM,
+           NULL AS P_PROD_CLASS_CD
+      FROM DUAL
+     UNION
+    SELECT STORE_CD,
+           PROD_CLASS_CD,
+           PROD_CLASS_NM,
+           P_PROD_CLASS_CD
+      FROM TB_MS_PRODUCT_CLASS
+     WHERE STORE_CD = #{storeCd}
+  </select>
+
+  <!-- 신규 분류 코드 조회 -->
+  <!--
+      TABLE    : TB_HQ_PRODUCT_CLASS, TB_MS_PRODUCT_CLASS
+      COMMENTS : 새로운 분류 코드를 조회한다.
+  -->
+  <select id="getClsCd" parameterType="DefaultMap" resultType="String">
+    /* USE : InfoMapper.getClsCd */
+    SELECT LPAD( NVL(MAX(PROD_CLASS_CD), 0) + 1, 5, '0') AS PROD_CLASS_CD
+    <if test='orgnFg != null and orgnFg.toString == "HQ"'>
+      FROM TB_HQ_PRODUCT_CLASS
+     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+    </if>
+    <if test='orgnFg != null and orgnFg.toString == "STORE"'>
+      FROM TB_MS_PRODUCT_CLASS
+     WHERE STORE_CD = #{storeCd}
+    </if>
+  </select>
+
+  <!-- 상위분류 코드 조회 -->
+  <!--
+      TABLE    : TB_HQ_PRODUCT_CLASS, TB_MS_PRODUCT_CLASS
+      COMMENTS : 해당분류코드의 상위 분류코드를 조회한다.
+  -->
+  <select id="getPProdClsCd" parameterType="DefaultMap" resultType="String">
+    /* USE : InfoMapper.getPProdClsCd */
+    SELECT MAX(PROD_CLASS_CD) AS PROD_CLASS_CD
+    <if test='orgnFg != null and orgnFg.toString == "HQ"'>
+      FROM TB_HQ_PRODUCT_CLASS
+     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+    </if>
+    <if test='orgnFg != null and orgnFg.toString == "STORE"'>
+      FROM TB_MS_PRODUCT_CLASS
+     WHERE STORE_CD = #{storeCd}
+    </if>
+  </select>
+
+  <!-- 분류 등록 -->
+  <!--
+      TABLE    : TB_HQ_PRODUCT_CLASS, TB_MS_PRODUCT_CLASS
+      COMMENTS : 분류를 등록한다.
+  -->
+  <insert id="insertCls" parameterType="DefaultMap">
+    /* USE : InfoMapper.insertCls */
+    <if test='orgnFg != null and orgnFg.toString() == "HQ"'>
+    INSERT INTO TB_HQ_PRODUCT_CLASS
+    (
+      HQ_OFFICE_CD,
+    </if>
+    <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+    INSERT INTO TB_MS_PRODUCT_CLASS
+    (
+      STORE_CD,
+    </if>
+      PROD_CLASS_CD,
+      PROD_CLASS_NM,
+      P_PROD_CLASS_CD,
+      REG_DT,
+      REG_ID,
+      MOD_DT,
+      MOD_ID
+    )
+    VALUES
+    (
+    <if test='orgnFg != null and orgnFg.toString() == "HQ"'>
+      #{hqOfficeCd},
+    </if>
+    <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+      #{storeCd},
+    </if>
+
+      #{prodClassCd},
+      #{prodClassNm},
+      #{pProdClassCd},
+      #{regDt},
+      #{regId},
+      #{modDt},
+      #{modId}
+    )
+  </insert>
+
+
+  <!-- 본사 분류 수정  -->
+  <!--
+      TABLE    : TB_HQ_PRODUCT_CLASS
+      COMMENTS : 본사의 상품 분류를 수정한다.
+  -->
+  <update id="updateHqCls" parameterType="DefaultMap">
+    /* USE : InfoMapper.updateHqCls */
+    MERGE INTO TB_HQ_PRODUCT_CLASS thp
+    USING (
+          SELECT #{hqOfficeCd} AS HQ_OFFICE_CD,
+                 #{prodClassCd} AS PROD_CLASS_CD,
+                 #{prodClassNm} AS PROD_CLASS_NM,
+                 #{pProdClassCd} AS P_PROD_CLASS_CD,
+                 #{regDt} AS REG_DT,
+                 #{regId} AS REG_ID,
+                 #{modDt} AS MOD_DT,
+                 #{modId} AS MOD_ID
+            FROM DUAL
+          ) thpc
+       ON
+        (
+          thpc.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+      AND thpc.PROD_CLASS_CD = thp.PROD_CLASS_CD
+        )
+     WHEN MATCHED THEN
+          UPDATE SET
+                 thp.PROD_CLASS_NM = thpc.PROD_CLASS_NM,
+                 thp.MOD_DT = thpc.MOD_DT,
+                 thp.MOD_ID = thpc.MOD_ID
+     WHEN NOT MATCHED THEN
+          INSERT
+          (
+            thp.HQ_OFFICE_CD,
+            thp.PROD_CLASS_CD,
+            thp.PROD_CLASS_NM,
+            thp.P_PROD_CLASS_CD,
+            thp.REG_DT,
+            thp.REG_ID,
+            thp.MOD_DT,
+            thp.MOD_ID
+          )
+          VALUES
+          (
+            thpc.HQ_OFFICE_CD,
+            thpc.PROD_CLASS_CD,
+            thpc.PROD_CLASS_NM,
+            thpc.P_PROD_CLASS_CD,
+            thpc.REG_DT,
+            thpc.REG_ID,
+            thpc.MOD_DT,
+            thpc.MOD_ID
+          )
+  </update>
+
+
+  <!-- 매장 분류 수정  -->
+  <!--
+      TABLE    : TB_MS_PRODUCT_CLASS
+      COMMENTS : 매장의 상품 분류를 수정한다.
+  -->
+  <update id="updateStoreCls" parameterType="DefaultMap">
+    /* USE : InfoMapper.updateStoreCls */
+    MERGE INTO TB_MS_PRODUCT_CLASS thp
+    USING (
+          SELECT #{storeCd} AS STORE_CD,
+                 #{prodClassCd} AS PROD_CLASS_CD,
+                 #{prodClassNm} AS PROD_CLASS_NM,
+                 #{pProdClassCd} AS P_PROD_CLASS_CD,
+                 #{regDt} AS REG_DT,
+                 #{regId} AS REG_ID,
+                 #{modDt} AS MOD_DT,
+                 #{modId} AS MOD_ID
+            FROM DUAL
+          ) thpc
+       ON
+        (
+          thpc.STORE_CD = thp.STORE_CD
+      AND thpc.PROD_CLASS_CD = thp.PROD_CLASS_CD
+        )
+     WHEN MATCHED THEN
+          UPDATE SET
+                 thp.PROD_CLASS_NM = thpc.PROD_CLASS_NM,
+                 thp.MOD_DT = thpc.MOD_DT,
+                 thp.MOD_ID = thpc.MOD_ID
+     WHEN NOT MATCHED THEN
+          INSERT
+          (
+            thp.STORE_CD,
+            thp.PROD_CLASS_CD,
+            thp.PROD_CLASS_NM,
+            thp.P_PROD_CLASS_CD,
+            thp.REG_DT,
+            thp.REG_ID,
+            thp.MOD_DT,
+            thp.MOD_ID
+          )
+          VALUES
+          (
+            thpc.STORE_CD,
+            thpc.PROD_CLASS_CD,
+            thpc.PROD_CLASS_NM,
+            thpc.P_PROD_CLASS_CD,
+            thpc.REG_DT,
+            thpc.REG_ID,
+            thpc.MOD_DT,
+            thpc.MOD_ID
+          )
+  </update>
+
+  <!-- 해당 분류로 등록된 상품 조회 -->
+  <!--
+      TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT
+      COMMENTS : 해당 분류로 등록된 상품을 조회한다.
+  -->
+  <select id="chkProdCnt" parameterType="DefaultMap" resultType="Integer">
+    /* USE : InfoMapper.chkProdCnt */
+    SELECT COUNT(1) AS CNT
+    <if test='orgnFg != null and orgnFg.toString() == "HQ"'>
+      FROM TB_HQ_PRODUCT
+     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+    </if>
+    <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+     FROM TB_MS_PRODUCT
+     WHERE STORE_CD = #{storeCd}
+    </if>
+       AND PROD_CLASS_CD = #{prodClassCd}
+  </select>
+
+  <!-- 분류 삭제 -->
+  <!--
+      TABLE    : TB_HQ_PRODUCT_CLASS, TB_MS_PRODUCT_CLASS
+      COMMENTS : 해당 분류를 삭제한다.
+  -->
+  <delete id="deleteCls" parameterType="DefaultMap" >
+    /* USE : InfoMapper.deleteCls */
+    <if test='orgnFg != null and orgnFg.toString() == "HQ"'>
+    DELETE TB_HQ_PRODUCT_CLASS
+     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+    </if>
+    <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+    DELETE TB_MS_PRODUCT_CLASS
+     WHERE STORE_CD = #{storeCd}
+    </if>
+       AND PROD_CLASS_CD = #{prodClassCd}
+  </delete>
+
+</mapper>
+
+
+

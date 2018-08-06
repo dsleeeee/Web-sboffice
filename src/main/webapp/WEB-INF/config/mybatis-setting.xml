@@ -97,13 +97,13 @@
     <typeAlias alias="hqBrandVO" type="kr.co.solbipos.store.hq.brand.service.HqBrandVO"/>
     <typeAlias alias="hqClsVO" type="kr.co.solbipos.store.hq.brand.service.HqClsVO"/>
     <typeAlias alias="hqEnvstVO" type="kr.co.solbipos.store.hq.brand.service.HqEnvstVO"/>
-    
+
     <typeAlias alias="storeManageVO" type="kr.co.solbipos.store.manage.storemanage.service.StoreManageVO"/>
     <typeAlias alias="storeEnvVO" type="kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO"/>
     <typeAlias alias="storePosEnvVO" type="kr.co.solbipos.store.manage.storemanage.service.StorePosEnvVO"/>
     <typeAlias alias="kitchenPrintVO" type="kr.co.solbipos.store.manage.storemanage.service.KitchenPrintVO"/>
     <typeAlias alias="storeProductVO" type="kr.co.solbipos.store.manage.storemanage.service.StoreProductVO"/>
-    
+
     <!-- 기초관리 -->
     <typeAlias alias="posFuncVO" type="kr.co.solbipos.base.store.posfunc.service.PosFuncVO"/>
 <!--
@@ -126,7 +126,7 @@
     <typeAlias alias="cardCmpnyVO" type="kr.co.solbipos.sys.etc.vancard.service.CardCmpnyVO"/>
     <typeAlias alias="vanCardVO" type="kr.co.solbipos.sys.etc.vancard.service.VanCardVO"/>
     <typeAlias alias="vanCmpnyVO" type="kr.co.solbipos.sys.etc.vancard.service.VanCmpnyVO"/>
-    
+
 <!--
     <typeAlias alias="boardVO" type="kr.co.solbipos.sys.etc.board.service.BoardVO"/>
     <typeAlias alias="exceptStoreRemoveVO" type="kr.co.solbipos.sys.etc.exceptstoreremove.service.ExceptStoreRemoveVO"/>
@@ -134,7 +134,7 @@
     <typeAlias alias="itemVO" type="kr.co.solbipos.sys.bill.item.service.ItemVO"/>
     <typeAlias alias="kindVO" type="kr.co.solbipos.sys.bill.kind.service.KindVO"/>
     <typeAlias alias="templateVO" type="kr.co.solbipos.sys.bill.template.service.TemplateVO"/>
-<!-- 
+<!--
     <typeAlias alias="menuBaseVO" type="kr.co.solbipos.sys.stats.menubase.service.MenuBaseVO"/>
     <typeAlias alias="userBaseVO" type="kr.co.solbipos.sys.stats.userbase.service.UserBaseVO"/>
     <typeAlias alias="webLoginVO" type="kr.co.solbipos.sys.stats.weblogin.service.WebLoginVO"/>
@@ -149,6 +149,7 @@
     <typeAlias alias="tableAttrVO" type="kr.co.solbipos.base.store.tableattr.service.TableAttrVO"/>
     <typeAlias alias="tableVO" type="kr.co.solbipos.base.store.tablelayout.service.TableVO"/>
     <typeAlias alias="tableGroupVO" type="kr.co.solbipos.base.store.tablelayout.service.TableGroupVO"/>
+    <typeAlias alias="infoVO" type="kr.co.solbipos.base.prod.info.service.ProductClassVO"/>
 <!--
     <typeAlias alias="posFuncVO" type="kr.co.solbipos.base.store.posfunc.service.PosFuncVO"/>
     <typeAlias alias="empStoreVO" type="kr.co.solbipos.base.store.empstore.service.EmpStoreVO"/>

@@ -24,7 +24,7 @@ import kr.co.solbipos.base.store.posfunc.service.PosFuncService;
 import kr.co.solbipos.base.store.posfunc.service.PosFuncVO;
 
 /**
- * @Class Name : roller.java
+ * @Class Name : PosFuncController.java
  * @Description : 기초관리 > 매장관리 > 포스기능정의
  * @Modification Information
  * @
