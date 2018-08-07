@@ -145,4 +145,28 @@ public class TemplateController {
 
     }
 
+    /**
+     * 출력물 샘플 - 출력물템플릿 저장
+     *
+     * @param request
+     * @param response
+     * @param templateVO
+     * @param model
+     * @return Result
+     * @author 노현수
+     * @since 2018. 08. 01.
+     */
+    @RequestMapping(value = "/bill/save.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveTemplate(@RequestBody TemplateVO templateVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = templateService.saveTemplate(templateVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+
+    }
+
 }

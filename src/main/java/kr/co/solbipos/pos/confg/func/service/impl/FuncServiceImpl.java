@@ -58,6 +58,8 @@ public class FuncServiceImpl implements FuncService {
             funcVO.setRegId(sessionInfoVO.getUserId());
             funcVO.setModId(sessionInfoVO.getUserId());
 
+            System.out.println(funcVO.getProperties());
+
             if(funcVO.getStatus() == GridDataFg.INSERT) {
                 String fnKeyNo = funcVO.getFnkeyFg() + funcVO.getFnkeyNo();
 

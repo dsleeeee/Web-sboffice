@@ -2,7 +2,43 @@
 !function (win, $) {
     // 그리드
     var wgrid = {
-        genGrid: function (div, columns, resrceCd, gridIdx, columnLayout) {
+        /**
+         * 파라미터 구분에 따른 Grid 생성 기능
+         *    2개 :
+         *       파라미터 : div, columns
+         *       기능설명 : columnPicker 표시 안함, coulmnLayout 저장 안함.
+         *    3개 :
+         *       파라미터 : div, columns, picker Y/N
+         *       기능설명 : columnPicker 표시 Y/N 처리, columnLayout 저장 안함.
+         *    5개 :
+         *       파라미터 : div, columns, resrceCd, gridIdx, columnLayout
+         *       기능설명 : columnPicker 표시 함, columnLayout 저장 함.
+         *
+         * @returns {*|FlexGrid}
+         */
+        genGrid: function () {
+            var div, columns, resrceCd, gridIdx, columnLayout = "";
+            var isSave, isView = false;
+            var arg = arguments;
+            switch (arg.length) {
+                case 2:
+                    div = arg[0];
+                    columns = arg[1];
+                    break;
+                case 3:
+                    div = arg[0];
+                    columns = arg[1];
+                    isView = arg[2];
+                    break;
+                case 5:
+                    div = arg[0];
+                    columns = arg[1];
+                    resrceCd = arg[2];
+                    gridIdx = arg[3];
+                    columnLayout = arg[4];
+                    isSave = true;
+                    break;
+            };
             var g = new wijmo.grid.FlexGrid(div, {
                 itemsSource: new wijmo.collections.CollectionView(),
                 columns: columns,
@@ -13,11 +49,16 @@
                 stickyHeaders: true,
                 selectionMode: "Row",
                 formatItem: function (s, e) {
-                    // 그리드 Column헤더(첫번째)에 ColumnPicker 표시
+                    // 그리드 Column헤더(첫번째)에 ColumnPicker 표시여부
                     if (e.panel == s.topLeftCells) {
-                        e.cell.innerHTML = "<div class=\"v-center\"></div>";
-                        // 컬럼헤더 merged 의 헤더타이틀 중앙(vertical) 정렬
-                    } else if (e.panel.cellType == wijmo.grid.CellType.ColumnHeader) {
+                        if (isSave || isView) {
+                            e.cell.innerHTML = "<div class=\"v-center\"></div>";
+                        } else {
+                            $(e.cell).css({"background":"none", "background-color":"#e8e8e8"});
+                        }
+                    }
+                    // 컬럼헤더 merged 의 헤더타이틀 중앙(vertical) 정렬
+                    if (e.panel.cellType == wijmo.grid.CellType.ColumnHeader) {
                         var mRange = g.getMergedRange(e.panel, e.row, e.col);
                         if (mRange) {
                             e.cell.innerHTML = "<div class='wj-header merged-custom'>" + e.cell.innerHTML + "</div>";
@@ -38,33 +79,34 @@
                     }
                 },
                 draggedColumn: function (s, e) {
-                    wgrid.setGridItem(resrceCd, gridIdx, s.columnLayout);
+                    if (isSave && !isEmpty(resrceCd)) {
+                        wgrid.setGridItem(resrceCd, gridIdx, s.columnLayout);
+                    }
                 }
             });
-
             // 저장된 레이아웃이 있을 경우 적용
-            if (columnLayout.constructor == Object) {
-                var userCols = columnLayout.columns;
-                var isVisibleColumn = function (id) {
-                    var visible = true;
-                    for (var j = 0; j < userCols.length; j++) {
-                        if (id == userCols[j].binding) {
-                            visible = (userCols[j].visible == null ? true : userCols[j].visible);
-                            break;
+            if ( !isEmpty(columnLayout) ) {
+                if (columnLayout.constructor === Object) {
+                    var userCols = columnLayout.columns;
+                    var isVisibleColumn = function (id) {
+                        var visible = true;
+                        for (var j = 0; j < userCols.length; j++) {
+                            if (id == userCols[j].binding) {
+                                visible = (userCols[j].visible == null ? true : userCols[j].visible);
+                                break;
+                            }
                         }
+                        return visible;
+                    };
+                    for (var i = 0; i < g.columns.length; i++) {
+                        g.columns[i].visible = isVisibleColumn(g.columns[i].binding);
                     }
-                    return visible;
-                };
-                for (var i = 0; i < g.columns.length; i++) {
-                    g.columns[i].visible = isVisibleColumn(g.columns[i].binding);
                 }
-//        g.columnLayout = JSON.stringify(columnLayout);
             }
-
-            genGridPicker(g, resrceCd, gridIdx);
-
+            if (isView) {
+                genGridPicker(g, resrceCd, gridIdx);
+            }
             function genGridPicker(grid, resrceCd, gridIdx) {
-
                 // column picker element add
                 var item = {};
                 item.style = "display:none";
@@ -72,11 +114,9 @@
                 item.cl = "column-picker";
                 var html = wijmo.format("<div style=\"{style}\"><div id=\"{id}\" class=\"{cl}\"></div></div>", item);
                 $(document.body).append(html); // main div class
-
                 // column picker gen
                 wgridPic.genGridPicker("#" + item.id, grid, resrceCd, gridIdx);
             }
-
             genGridEditingEvent(g);
             // 그리드 에디팅 이벤트시 커서위치 조정 (값의 맨뒤로)
             function genGridEditingEvent(grid) {
@@ -91,7 +131,17 @@
                     });
                 });
             }
-
+            genGridCheckBoxClickEvent(g);
+            function genGridCheckBoxClickEvent(grid) {
+                grid.addEventListener(grid.hostElement, 'click', function (e) {
+                    if (e.target.type=="checkbox") {
+                        var ht = grid.hitTest(e);
+                        var colName = ht.panel.columns[ht.col].binding;
+                        var selectedRow = grid.rows[ht.row].dataItem;
+                        selectedRow.colName = !selectedRow.colName;
+                    }
+                });
+            }
             return g;
         },
 
@@ -101,12 +151,14 @@
             param.resrceCd = resrceCd;
             param.gridIdx = idx;
             param.columnItem = columnLayout;
-            $.postJSONAsync("/setGridItem.sb", param, function (result) {
-                console.log("resource : " + resrceCd + ", idx : " + idx + ", setGridItem success..");
-            })
-                .fail(function () {
-                    alert("Ajax Fail");
-                });
+            if ( !isEmpty(resrceCd) && !isEmpty(idx) ) {
+                $.postJSONAsync("/setGridItem.sb", param, function (result) {
+                    console.log("resource : " + resrceCd + ", idx : " + idx + ", setGridItem success..");
+                })
+                    .fail(function () {
+                        alert("Ajax Fail");
+                    });
+            }
         },
 
         getGridData: function (url, param, target, success, fail) {

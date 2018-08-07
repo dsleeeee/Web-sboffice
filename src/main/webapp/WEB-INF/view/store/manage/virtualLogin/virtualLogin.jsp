@@ -102,27 +102,7 @@
 </div>
 
 <script type="text/javascript">
-  
-  var menuCd = "${menuCd}";
   var clsFg = ${ccu.getCommCodeSelect("003")};
   var sysStatFg = ${ccu.getCommCodeSelect("005")};
-  var columnLayout1 = ${clo.getColumnLayout(1)};
-  
-  var ldata = ${ccu.getListScale()};
-  var rdata =
-    [
-      {"binding":"hqOfficeCd","header":"<s:message code='virtualLogin.hqOfficeCd' />", "width":"*"},
-      {"binding":"hqOfficeNm","header":"<s:message code='virtualLogin.hqOfficeNm' />", "width":"*"},
-      {"binding":"storeCd","header":"<s:message code='virtualLogin.storeCd' />", "width":"*"},
-      {"binding":"storeNm","header":"<s:message code='virtualLogin.storeNm' />", "width":"*"},
-      {"binding":"clsFgNm","header":"<s:message code='virtualLogin.clsFgNm' />", "width":"*"},
-      {"binding":"sysStatFgNm","header":"<s:message code='virtualLogin.sysStatFgNm' />", "width":"*"},
-      {"binding":"ownerNm","header":"<s:message code='virtualLogin.ownerNm' />", "width":"*"},
-      {"binding":"telNo","header":"<s:message code='virtualLogin.telNo' />", "width":"*"},
-      {"binding":"mpNo","header":"<s:message code='virtualLogin.mpNo' />", "width":"*"},
-      {"binding":"agencyNm","header":"<s:message code='virtualLogin.agencyNm' />", "width":"*"},
-      {"binding":"sysOpenDate","header":"<s:message code='virtualLogin.sysOpenDate' />", "width":"*"},
-      {"binding":"sysClosureDate","header":"<s:message code='virtualLogin.sysClosureDate' />", "width":"*"}
-    ];
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/virtualLogin/virtualLogin.js" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/virtualLogin/virtualLogin.js?ver=20180806" charset="utf-8"></script>

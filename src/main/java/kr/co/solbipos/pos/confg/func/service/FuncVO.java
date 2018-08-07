@@ -36,13 +36,13 @@ public class FuncVO extends CmmVO{
     /** 외식 이미지파일명 */
     private String imgFileNm1;
     /** 일반 사용여부 */
-    private String fnkeyUseYn0;
+    private Boolean fnkeyUseYn0;
     /** 외식 사용여부 */
-    private String fnkeyUseYn1;
+    private Boolean fnkeyUseYn1;
     /** 표기순번 */
     private String dispSeq;
     /** 위치조정여부 */
-    private String posiAdjYn;
+    private Boolean posiAdjYn;
     /** 열위치 */
     private String colPosi;
     /** 줄위치 */
@@ -142,25 +142,25 @@ public class FuncVO extends CmmVO{
     /**
      * @return the fnkeyUseYn0
      */
-    public String getFnkeyUseYn0() {
+    public Boolean getFnkeyUseYn0() {
         return fnkeyUseYn0;
     }
     /**
      * @param fnkeyUseYn0 the fnkeyUseYn0 to set
      */
-    public void setFnkeyUseYn0(String fnkeyUseYn0) {
+    public void setFnkeyUseYn0(Boolean fnkeyUseYn0) {
         this.fnkeyUseYn0 = fnkeyUseYn0;
     }
     /**
      * @return the fnkeyUseYn1
      */
-    public String getFnkeyUseYn1() {
+    public Boolean getFnkeyUseYn1() {
         return fnkeyUseYn1;
     }
     /**
      * @param fnkeyUseYn1 the fnkeyUseYn1 to set
      */
-    public void setFnkeyUseYn1(String fnkeyUseYn1) {
+    public void setFnkeyUseYn1(Boolean fnkeyUseYn1) {
         this.fnkeyUseYn1 = fnkeyUseYn1;
     }
     /**
@@ -178,13 +178,13 @@ public class FuncVO extends CmmVO{
     /**
      * @return the posiAdjYn
      */
-    public String getPosiAdjYn() {
+    public Boolean getPosiAdjYn() {
         return posiAdjYn;
     }
     /**
      * @param posiAdjYn the posiAdjYn to set
      */
-    public void setPosiAdjYn(String posiAdjYn) {
+    public void setPosiAdjYn(Boolean posiAdjYn) {
         this.posiAdjYn = posiAdjYn;
     }
     /**

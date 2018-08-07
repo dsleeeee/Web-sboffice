@@ -33,7 +33,6 @@ import kr.co.solbipos.pos.confg.func.service.FuncVO;
  * @author 솔비포스 차세대개발실 김지은
  * @since 2018. 05.01
  * @version 1.0
- * @see
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
@@ -84,13 +83,17 @@ public class FuncController {
 
         List<DefaultMap<String>> list = service.list(funcVO);
 
+        for( DefaultMap<String> f : list) {
+            System.out.println(f);
+        }
+
         return returnListJson(Status.OK, list, funcVO);
     }
 
     /**
      * 기능구분상세 저장
      *
-     * @param funcVO
+     * @param funcVOs
      * @param request
      * @param response
      * @param model

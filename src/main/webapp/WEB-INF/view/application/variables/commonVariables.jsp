@@ -7,6 +7,5 @@
 var coulmnLayout1, coulmnLayout2, coulmnLayout3, coulmnLayout4 = "";
 var menuCd = "${menuCd}";
 var menuNm = "${menuNm}";
-<c:if test="${menuCd ne ''}">
-var coulmnLayout1 = ${clo.getColumnLayout(1)};
-</c:if>
+var listScaleBoxData = ${ccu.getListScale()};
+
