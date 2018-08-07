@@ -132,5 +132,4 @@ public class InfoController {
         return returnJson(Status.OK, result);
     }
 
-
 }

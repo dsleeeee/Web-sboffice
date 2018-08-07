@@ -10,6 +10,7 @@
 <c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
 <c:set var="baseUrl" value="/base/prod/info/" />
 
+
 <div class="subCon">
 
   <%-- 상품 분류 관리 --%>
@@ -18,9 +19,9 @@
   </h2>
 
   <div class="wj-TblWrap mt20">
-    <div class="w40">
+    <%-- 왼쪽 --%>
+    <div class="w50 fl">
       <div class="wj-TblWrapBr ml10 pd20" style="height:500px;">
-
         <div class="sb-select dkbr mb10 oh">
           <div id="theComboBox3" class="w130 fl"></div>
           <div class="fl">
@@ -38,10 +39,21 @@
             <button class="btn_skyblue" id="btnSave"><s:message code="cmm.save" /></button>
           </div>
         </div>
-
         <%--위즈모 트리--%>
         <div id="clsTree" class="mt20" style="height:380px;"></div>
         <%--//위즈모 트리--%>
+      </div>
+    </div>
+
+    <%--- 오른쪽 --%>
+    <div class="w50 fl">
+      <div class="wj-TblWrap ml10 pd10" style="height:500px;">
+        <p class="tl s14 mt30 lh15">▶ [상품분류]는 삭제할 수 없습니다.</p>
+        <p class="tl s14 mt30 lh15">▶ 초기 분류 등록시 [상품분류]를 선택 후, [추가]버튼을 클릭하여 분류를 등록해 주세요.</p>
+        <p class="tl s14 mt30 lh15">▶ 분류 선택 후 [추가]버튼 클릭시, 하위 분류를 추가할 수 있습니다.</p>
+        <p class="tl s14 mt30 lh15">▶ 분류 삭제시, 해당 분류의 하위 분류가 등록되어 있으면 분류 삭제가 불가능합니다.</p>
+        <p class="tl s14 mt30 lh15">▶ 분류 삭제시, 해당 분류에 등록된 상품이 있으면 분류 삭제가 불가능합니다.</p>
+        <p class="tl s14 mt30 lh15">▶ 분류 추가/삭제 후, [저장]버튼을 클릭해야 변경이 적용됩니다.</p>
       </div>
     </div>
   </div>

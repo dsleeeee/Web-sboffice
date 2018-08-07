@@ -19,6 +19,12 @@
   -->
   <select id="getHqProdClsList" parameterType="DefaultMap" resultType="DefaultMap">
     /* USE : InfoMapper.getHqProdClsList */
+    SELECT #{hqOfficeCd} AS HQ_OFFICE_CD,
+           '00000' AS PROD_CLASS_CD,
+           '상품분류' AS PROD_CLASS_NM,
+           NULL AS P_PROD_CLASS_CD
+      FROM DUAL
+     UNION
     SELECT HQ_OFFICE_CD,
            PROD_CLASS_CD,
            PROD_CLASS_NM,
@@ -34,7 +40,7 @@
   -->
   <select id="getStoreProdClsList" parameterType="DefaultMap" resultType="DefaultMap">
     /* USE : InfoMapper.getStoreProdClsList */
-    SELECT 'S000013' AS STORE_CD,
+    SELECT #{storeCd} AS STORE_CD,
            '00000' AS PROD_CLASS_CD,
            '상품분류' AS PROD_CLASS_NM,
            NULL AS P_PROD_CLASS_CD

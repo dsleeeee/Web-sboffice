@@ -75,7 +75,7 @@ public class InfoServiceImpl implements InfoService {
 
         for(DefaultMap<String> list : lists){
             ProductClassVO prodClsVO = new ProductClassVO();
-            prodClsVO.setHqOfficeCd(list.getStr("hqBrandCd"));
+            prodClsVO.setHqOfficeCd(list.getStr("hqOfficeCd"));
             prodClsVO.setStoreCd(list.getStr("storeCd"));
             prodClsVO.setProdClassCd(list.getStr("prodClassCd"));
             prodClsVO.setProdClassNm(list.getStr("prodClassNm"));
@@ -104,6 +104,8 @@ public class InfoServiceImpl implements InfoService {
 
         List<ProductClassVO> returnData = new ArrayList<ProductClassVO>();
         for(ProductClassVO prodClsVO : hm.values()) {
+
+
             if(prodClsVO.getpProdClassCd() == null || "".equals(prodClsVO.getpProdClassCd())) {
                 returnData.add(prodClsVO);
             }
