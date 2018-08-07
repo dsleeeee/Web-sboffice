@@ -43,4 +43,7 @@ public interface TemplateMapper {
 
     /** 출력물템플릿 목록 삭제 */
     int deleteTemplateList(TemplateVO templateVO);
+
+    /** 출력물템플릿 수정 */
+    int saveTemplate(TemplateVO templateVO);
 }

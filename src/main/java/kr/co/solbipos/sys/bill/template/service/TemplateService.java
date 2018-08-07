@@ -33,4 +33,7 @@ public interface TemplateService {
     /** 출력물템플릿 목록 저장 */
     int saveTemplateList(TemplateVO[] templateVOs, SessionInfoVO sessionInfoVO);
 
+    /** 출력물템플릿 저장 */
+    int saveTemplate(TemplateVO templateVO, SessionInfoVO sessionInfoVO);
+
 }
