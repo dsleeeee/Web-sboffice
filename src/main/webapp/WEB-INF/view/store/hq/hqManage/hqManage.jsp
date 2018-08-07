@@ -108,12 +108,6 @@
   var clsFgDataMap      = new wijmo.grid.DataMap(clsFg, 'value', 'name');
   var sysStatFgDataMap  = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
 
-
-  console.log(agencyList);
-  console.log(areaCd);
-  console.log(clsFg);
-  console.log(sysStatFg);
-
   var srchHqOfficeCd     = wcombo.genInput("#srchHqOfficeCd");
   var srchHqOfficeNm    = wcombo.genInput("#srchHqOfficeNm");
   var srchBizNo         = wcombo.genInput("#srchBizNo");
