@@ -3,7 +3,13 @@
 
 <mapper namespace="kr.co.solbipos.pos.confg.func.service.impl.FuncMapper">
 
-  <select id="getFuncList" parameterType="funcVO" resultType="DefaultMap">
+    <resultMap id="funcListMap" type="DefaultMap">
+        <result column="POSI_ADJ_YN" property="posiAdjYn" typeHandler="CustomBooleanTypeHandler"/>
+        <result column="FNKEY_USE_YN_0" property="fnkeyUseYn0" typeHandler="CustomBooleanTypeHandler"/>
+        <result column="FNKEY_USE_YN_1" property="fnkeyUseYn1" typeHandler="CustomBooleanTypeHandler"/>
+    </resultMap>
+
+  <select id="getFuncList" parameterType="funcVO" resultMap="funcListMap">
     <![CDATA[
     /* FuncMapper.getFuncList */
     SELECT FNKEY_NO,
@@ -13,10 +19,10 @@
            POS_FG,
            IMG_FILE_NM_0,
            IMG_FILE_NM_1,
-           FNKEY_USE_YN_0,
-           FNKEY_USE_YN_1,
+           NVL(FNKEY_USE_YN_0, 'N') AS FNKEY_USE_YN_0,
+           NVL(FNKEY_USE_YN_1, 'N') AS FNKEY_USE_YN_1,
            DISP_SEQ,
-           POSI_ADJ_YN,
+           NVL(POSI_ADJ_YN, 'N') AS POSI_ADJ_YN,
            COL_POSI,
            ROW_POSI,
            WIDTH,
@@ -73,10 +79,10 @@
         #{posFg},
         #{imgFileNm0},
         #{imgFileNm1},
-        #{cmmImgUseYn},
-        #{foodImgseYn},
+        #{fnkeyUseYn0, jdbcType=VARCHAR},
+        #{fnkeyUseYn1, jdbcType=VARCHAR},
         #{dispSeq},
-        #{posiAdjYn},
+        #{posiAdjYn, jdbcType=VARCHAR},
         #{colPosi},
         #{rowPosi},
         #{width},
@@ -99,10 +105,10 @@
            POS_FG       = #{posFg},
            IMG_FILE_NM_0    = #{imgFileNm0},
            IMG_FILE_NM_1    = #{imgFileNm1},
-           FNKEY_USE_YN_0   = #{cmmImgUseYn},
-           FNKEY_USE_YN_1   = #{foodImgseYn},
+           FNKEY_USE_YN_0   = #{fnkeyUseYn0, jdbcType=VARCHAR},
+           FNKEY_USE_YN_1   = #{fnkeyUseYn1, jdbcType=VARCHAR},
            DISP_SEQ     = #{dispSeq},
-           POSI_ADJ_YN  = #{posiAdjYn},
+           POSI_ADJ_YN  = #{posiAdjYn, jdbcType=VARCHAR},
            COL_POSI     = #{colPosi},
            ROW_POSI     = #{rowPosi},
            WIDTH        = #{width},
