@@ -8,10 +8,12 @@ import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreManageVO;
 import kr.co.solbipos.store.manage.storemanage.service.StorePosEnvVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreProductVO;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 /**
  * 가맹점관리 > 매장관리 > 매장정보관리
- * 
+ *
  * @author 김지은
  */
 
@@ -27,11 +29,11 @@ import kr.co.solbipos.store.manage.storemanage.service.StoreProductVO;
  * @author 솔비포스 차세대개발실 김지은
  * @since 2018. 06.08
  * @version 1.0
- * @see
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-
+@Mapper
+@Repository
 public interface StoreManageMapper {
 
     /** 본사 목록 조회 */
@@ -54,7 +56,7 @@ public interface StoreManageMapper {
 
     /** 매장환경조회 팝업 데이터(포스정보) 조회 */
     List<DefaultMap<String>> getStorePosInfo(StoreManageVO storeManageVO);
-    
+
     /** 매장환경조회 팝업 데이터(주방프린터) 조회 */
     List<DefaultMap<String>> getStorePrintInfo(StoreManageVO storeManageVO);
 
@@ -81,7 +83,7 @@ public interface StoreManageMapper {
 
     /** 포스 마스터 등록*/
     int insertPosInfo(StoreManageVO storeManageVO);
-    
+
     /** 테이블 기본 그룹 생성 */
     int insertTabGroup(StoreManageVO storeManageVO);
 
@@ -120,19 +122,19 @@ public interface StoreManageMapper {
 
     /** 매장환경 정보 수정 */
     int updateStoreConfig(StoreEnvVO storeEnvVO);
-    
+
     /** 매장 포스 환경 정보 조회 */
     List<DefaultMap<String>> getPosEnvGroupList(StorePosEnvVO storePosEnvVOs);
-    
+
     /** 매장 포스 환경 정보 저장 */
     int insertPosConfig(StorePosEnvVO storePosEnvVO);
-    
+
     /** 매장 포스 환경 정보 수정 */
     int updatePosConfig(StorePosEnvVO storePosEnvVO);
 
     /** 포스 목록 조회  */
     List<DefaultMap<String>> getPosList(StorePosEnvVO storePosEnvVO);
-    
+
     /** 포스그룹설정 selectBox 용 그룹목록 조회 */
     List<DefaultMap<String>> getGroupList(StorePosEnvVO storePosEnvVO);
 
@@ -143,10 +145,10 @@ public interface StoreManageMapper {
     int updatePosNm(StorePosEnvVO storePosEnvVO);
 
     // 여기부터 =========================================================
-    
+
     /** 매장 포스 환경 삭제 */
     int deletePosEnvTarget(StorePosEnvVO storePosEnvVO);
-    
+
     /** 매장 포스 환경 복사 */
     int copyPosEnvInfo(StorePosEnvVO storePosEnvVO);
 
@@ -173,10 +175,10 @@ public interface StoreManageMapper {
 
     /** 포스 환경 삭제 */
     int deletePosEnv(StorePosEnvVO storePosEnvVO);
-    
+
     /** 포스 환경 삭제 */
     int deletePosFunkey(StorePosEnvVO storePosEnvVO);
-    
+
     /** 포스 환경 삭제 */
     int deletePosMaster(StorePosEnvVO storePosEnvVO);
 
@@ -185,7 +187,7 @@ public interface StoreManageMapper {
 
     /** 주방프린터 등록 */
     int insertKitchenPrint(KitchenPrintVO kitchenPrintVO);
-    
+
     /** 주방프린터 수정 */
     int updateKitchenPrint(KitchenPrintVO kitchenPrintVO);
 
@@ -206,7 +208,7 @@ public interface StoreManageMapper {
 
     /** 터치키 복사할 본사 목록 조회 */
     List<DefaultMap<String>> getHqList();
-    
+
     /** 터치키 복사할 브랜드 목록 조회 */
     List<DefaultMap<String>> getHqBrandList(HqBrandVO hqBrandVO);
 

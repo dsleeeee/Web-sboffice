@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.pos.confg.vermanage.service.ApplcStoreVO;
 import kr.co.solbipos.pos.confg.vermanage.service.VerInfoVO;
+import org.springframework.stereotype.Repository;
 
 /**
 * @Class Name : VerManageMapper.java
@@ -22,6 +23,7 @@ import kr.co.solbipos.pos.confg.vermanage.service.VerInfoVO;
 *  Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
 @Mapper
+@Repository
 public interface VerManageMapper {
 
     /** 포스버전 목록 조회 */

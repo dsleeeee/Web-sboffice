@@ -6,6 +6,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.store.hq.brand.service.HqBrandVO;
 import kr.co.solbipos.store.hq.brand.service.HqClsVO;
 import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
+import org.springframework.stereotype.Repository;
 
 /**
  * @Class Name : HqBrandMapper.java
@@ -23,6 +24,7 @@ import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Mapper
+@Repository
 public interface HqBrandMapper {
 
     /** 브랜드 목록 조회 */

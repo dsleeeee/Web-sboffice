@@ -3,6 +3,7 @@ package kr.co.solbipos.base.prod.info.service.impl;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.base.prod.info.service.ProductClassVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ import java.util.List;
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Mapper
+@Repository
 public interface InfoMapper {
 
     /** 본사 분류 조회 */

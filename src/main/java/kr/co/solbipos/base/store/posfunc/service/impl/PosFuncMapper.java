@@ -4,6 +4,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.base.store.posfunc.service.PosFuncVO;
+import org.springframework.stereotype.Repository;
 
 /**
  * @Class Name : PosFuncMapper.java
@@ -21,6 +22,7 @@ import kr.co.solbipos.base.store.posfunc.service.PosFuncVO;
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Mapper
+@Repository
 public interface PosFuncMapper {
 
     /** 포스목록 조회 */

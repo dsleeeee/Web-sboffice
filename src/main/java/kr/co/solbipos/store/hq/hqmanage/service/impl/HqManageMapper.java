@@ -10,6 +10,7 @@ import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqMenuVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqNmcodeVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqPrintTemplVO;
+import org.springframework.stereotype.Repository;
 
 /**
  * @Class Name : HqManageMapper.java
@@ -28,6 +29,7 @@ import kr.co.solbipos.store.hq.hqmanage.service.HqPrintTemplVO;
  */
 
 @Mapper
+@Repository
 public interface HqManageMapper {
 
     /** 본사 목록 조회 */

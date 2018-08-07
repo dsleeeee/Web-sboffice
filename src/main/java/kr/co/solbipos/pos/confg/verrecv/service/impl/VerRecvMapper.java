@@ -4,6 +4,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.pos.confg.verrecv.service.VerRecvVO;
+import org.springframework.stereotype.Repository;
 
 /**
 * @Class Name : VerRecvMapper.java
@@ -17,23 +18,23 @@ import kr.co.solbipos.pos.confg.verrecv.service.VerRecvVO;
 * @author 솔비포스 차세대개발실 김지은
 * @since 2018. 05.01
 * @version 1.0
-* @see
 *
 *  Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
 @Mapper
+@Repository
 public interface VerRecvMapper {
 
     /**
      * 버전별수신현황 - 버전 목록 조회
-     * 
+     *
      * @return
      */
     List<DefaultMap<String>> selectVerList(VerRecvVO verRecv);
 
     /**
      * 버전별수신현황 - 매장 목록 조회
-     * 
+     *
      * @param verRecv
      * @return
      */
@@ -41,7 +42,7 @@ public interface VerRecvMapper {
 
     /**
      * 매장별수신현황 - 수신매장 목록 조회
-     * 
+     *
      * @param verRecv
      * @return
      */
@@ -49,7 +50,7 @@ public interface VerRecvMapper {
 
     /**
      * 매장별수신현황 - 매장 리스트 조회 - 매장상세
-     * 
+     *
      * @param verRecv
      * @return
      */
@@ -57,7 +58,7 @@ public interface VerRecvMapper {
 
     /**
      * 버전별매장현황 - 버전 리스트 조회
-     * 
+     *
      * @param verRecv
      * @return
      */
