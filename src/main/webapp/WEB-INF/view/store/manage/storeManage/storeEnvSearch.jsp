@@ -36,7 +36,7 @@
               </tr>
             </tbody>
           </table>
-          
+
           <%-- 포스 기종--%>
           <div id="posArea" style="display:none;">
             <p class="s14 bk mb5 mt20"><s:message code="storeManage.posKindInfo" /></p>
@@ -49,7 +49,7 @@
               </tbody>
             </table>
           </div>
-          
+
           <%-- 주방 프린터 기종 --%>
           <div id="printArea" style="display:none;">
             <p class="s14 bk mb5 mt20"><s:message code="storeManage.printKindInfo" /></p>
@@ -62,7 +62,7 @@
               </tbody>
             </table>
           </div>
-          
+
         </div>
       </div>
       <div class="btnSet">
@@ -83,20 +83,20 @@
         s_alert.pop(result.message);
         return;
       }
-      
+
       var storeInfo = result.data.storeInfo;
       var posInfo =  result.data.posInfo;
       var printInfo =  result.data.printInfo;
-      
+
       if(storeInfo == null){
         s_alert.pop("<s:message code='storeManage.no.store.info' />");
         return;
       }
-      
+
       $("#envHqOfficeCd").text(storeInfo.hqOfficeNm);
       $("#envStoreNm").text(storeInfo.storeNm);
       $("#envCls").text(storeInfo.nmcodeNm);
-      
+
       var posHtml = "";
       if(posInfo.length > 0) {
         for(var i=0; i<posInfo.length; i++){
@@ -108,8 +108,8 @@
         $("#posKind").html(posHtml);
         $("#posArea").show();
       }
-      
-      
+
+
       var printHtml = "";
       if(printInfo.length > 0) {
         for(var i=0; i<printInfo.length; i++){
@@ -121,7 +121,7 @@
         $("#printKind").html(printHtml);
         $("#printArea").show();
       }
-      
+
       $("#storeEnvDim").show();
       $("#storeEnvLayer").show();
     })
@@ -129,10 +129,10 @@
       s_alert.pop("Ajax Fail");
     });
   }
-  
+
   <%-- 사업자번호 사용현황 목록 조회 --%>
   function getBizInfo(param) {
-    $.postJSON("/store/hq/hqmanage/master/bizUseList.sb", param, function(result) {
+    $.postJSON("/store/hq/hqManage/master/bizUseList.sb", param, function(result) {
       if(result.status === "FAIL") {
         s_alert.pop(result.message);
         return;
@@ -144,16 +144,16 @@
       s_alert.pop("Ajax Fail");
     });
   }
-  
+
   function getBizInfoDtl(param) {
-    $.postJSON("/store/hq/hqmanage/master/bizInfoDtl.sb", param, function(result) {
+    $.postJSON("/store/hq/hqManage/master/bizInfoDtl.sb", param, function(result) {
       if(result.status === "FAIL") {
         s_alert.pop(result.message);
         return;
       }
-      
+
       var dtlData = result.data;
-      
+
       $("#bStoreCd").text(dtlData.storeCd);
       $("#bStoreNm").text(dtlData.storeNm);
       $("#bStoreCd").text(dtlData.storeCd);
@@ -168,18 +168,18 @@
       $("#bClsFg").text(dtlData.clsFgNm);
       $("#bSysOpenDate").text(dtlData.sysOpenDate);
       $("#bAddr").text("(" + dtlData.postNo + ") " + dtlData.addr + " " + dtlData.addrDtl);
-      
+
     })
     .fail(function(){
       s_alert.pop("Ajax Fail");
     });
   }
-  
+
   <%-- 레이어 팝업 닫기 --%>
   $("#storeEnvLayer .btn_close, #storeEnvLayer #btnClose").click(function(){
     $("#posArea").hide();
     $("#printArea").hide();
-    
+
     $("#storeEnvDim").hide();
     $("#storeEnvLayer").hide();
   });

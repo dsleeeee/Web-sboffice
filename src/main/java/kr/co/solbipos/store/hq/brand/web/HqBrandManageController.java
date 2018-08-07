@@ -35,7 +35,6 @@ import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
  * @author 솔비포스 차세대개발실 김지은
  * @since 2018. 05.01
  * @version 1.0
- * @see
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
@@ -45,10 +44,10 @@ public class HqBrandManageController {
 
     @Autowired
     HqBrandService service;
-    
+
     @Autowired
     SessionService sessionService;
-    
+
     @Autowired
     CmmCodeUtil cmmCodeUtil;
 
@@ -62,11 +61,11 @@ public class HqBrandManageController {
      * @since   2018. 06. 08.
      */
     @RequestMapping(value = "hqBrandManage/list.sb", method = RequestMethod.GET)
-    public String list(HttpServletRequest request, HttpServletResponse response, 
+    public String list(HttpServletRequest request, HttpServletResponse response,
             Model model) {
         return "store/hq/hqBrand/hqBrandManage";
     }
-    
+
     /**
      * 브랜드 목록 조회
      * @param   hqBrand
@@ -81,12 +80,12 @@ public class HqBrandManageController {
     @ResponseBody
     public Result getBrandlist(HqBrandVO hqBrand, HttpServletRequest request,
             HttpServletResponse response, Model model) {
-        
+
         List<DefaultMap<String>> list = service.getBrandlist(hqBrand);
-        
+
         return returnListJson(Status.OK, list, hqBrand);
     }
-    
+
     /**
      * 브랜드 등록, 수정
      * @param   hqBrandVOs
@@ -101,14 +100,14 @@ public class HqBrandManageController {
     @ResponseBody
     public Result save(@RequestBody HqBrandVO[] hqBrandVOs, HttpServletRequest request,
             HttpServletResponse response, Model model) {
-        
+
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = service.save(hqBrandVOs, sessionInfoVO);
-        
+
         return returnJson(Status.OK, result);
     }
-    
+
     /**
      * 환경설정 조회
      * @param   hqBrand
@@ -123,15 +122,15 @@ public class HqBrandManageController {
     @ResponseBody
     public Result configList(HqBrandVO hqBrand, HttpServletRequest request,
             HttpServletResponse response, Model model) {
-        
+
         List<DefaultMap<String>> list = service.getConfigList(hqBrand);
-        
+
         return returnListJson(Status.OK, list, hqBrand);
     }
-    
+
     /**
      * 환경설정 저장
-     * @param   hqBrands
+     * @param   hqEnvsts
      * @param   request
      * @param   response
      * @param   model
@@ -143,14 +142,14 @@ public class HqBrandManageController {
     @ResponseBody
     public Result saveConfig(@RequestBody HqEnvstVO[] hqEnvsts, HttpServletRequest request,
             HttpServletResponse response, Model model) {
-        
+
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = service.saveConfig(hqEnvsts, sessionInfoVO);
-        
+
         return returnJson(Status.OK, result);
     }
-    
+
     /**
      * 분류 조회
      * @param   hqBrand
@@ -165,15 +164,15 @@ public class HqBrandManageController {
     @ResponseBody
     public Result clsList(HqBrandVO hqBrand, HttpServletRequest request,
             HttpServletResponse response, Model model) {
-        
+
         List<HqClsVO> list = service.getClsList(hqBrand);
-        
+
         return returnListJson(Status.OK, list, hqBrand);
     }
-    
+
     /**
      * 분류 등록
-     * @param   hqBrand
+     * @param   HqClsVOs
      * @param   request
      * @param   response
      * @param   model
@@ -185,12 +184,12 @@ public class HqBrandManageController {
     @ResponseBody
     public Result clsSave(@RequestBody HqClsVO[] HqClsVOs, HttpServletRequest request,
             HttpServletResponse response, Model model) {
-        
+
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = service.clsSave(HqClsVOs, sessionInfoVO);
-        
+
         return returnJson(Status.OK, result);
     }
-    
+
 }

@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
 <%-- 매장추가 레이어 --%>
-<div id="dim2" class="fullDimmed" style="display:none;" ></div> 
+<div id="dim2" class="fullDimmed" style="display:none;" ></div>
 <div id="addStorelLayer" class="layer"  style="display:none; z-index:9999;">
   <div class="layer_inner">
     <div class="title w600">
@@ -90,16 +90,16 @@
             <button id="btnSearchStore" class="btn_skyblue"><s:message code="cmm.search" /></button>
           </div>
         </div>
-          
+
         <div class="mt20 oh sb-select dkbr">
           <%-- 페이지 스케일  --%>
           <div id="listScaleBox2" class="w150 fl"></div>
         </div>
-        
-        <%-- 위즈모 테이블 --%> 
-        <div>   
+
+        <%-- 위즈모 테이블 --%>
+        <div>
           <div id="theGrid3" class="mt10 mb20" style="height:250px;"></div>
-        </div>  
+        </div>
         <%-- 페이지 리스트 --%>
         <div class="pageNum mt20">
           <%-- id --%>
@@ -128,9 +128,9 @@
   var clsFgCb     = wcombo.genCommonBox("#s_clsFg", ${ccu.getCommCode("003")});
 
   var clsFgDataMap     = new wijmo.grid.DataMap(clsFg, 'value', 'name');
-  
+
   <%-- 적용매장 Header --%>
-  var hData3 = 
+  var hData3 =
     [
       {binding:"chk", header:"<s:message code='verManage.store.chk' />", dataType:wijmo.DataType.Boolean},
       {binding:"hqOfficeCd", header:"<s:message code='verManage.store.hqOfficeCd' />", isReadOnly:true},
@@ -146,15 +146,15 @@
       // 벤사 추가
       // 용도 추가
     ];
-  
+
   <%-- 매장조회 그리드 생성 --%>
   var grid3 = wgrid.genGrid("#theGrid3", hData3, "${menuCd}", 3, ${clo.getColumnLayout(3)});
   var ldata2         = ${ccu.getListScale()};
   var listScaleBox2  = wcombo.genCommonBox("#listScaleBox2", ldata2);
-  
+
   grid3.isReadOnly  = false;
   grid3.itemsSource = new wijmo.collections.CollectionView();
-  
+
   <%-- 체크박스 초기화 --%>
   grid3.formatItem.addHandler(function(s, e) {
     if (e.panel == s.cells) {
@@ -165,12 +165,12 @@
       }
     }
   });
-  
+
   <%-- 매장 추가 레이어 열기--%>
   function showAddStorelLayer(){
     $("#addStorelLayer").show();
     $("#dim2").show();
-    
+
     grid3.itemsSource = [];
 
     hqOfficeCd.text           = "";
@@ -182,18 +182,18 @@
     clsFgCb.selectedValue     = "ALL";
     sysStatFgCb.selectedValue = "ALL";
   }
-  
+
   <%-- 매장 추가 레이어 버튼 클릭 --%>
   $("#btnCloseSLayer").click(function(){
     closeStoreLayer();
   });
-  
+
   <%-- 매장 추가 레이어 닫기 --%>
   function closeStoreLayer(){
     $("#addStorelLayer").hide();
     $("#dim2").hide();
   }
-  
+
   <%-- 페이징 --%>
   $(document).on("click", ".page3", function() {
     searchStore($(this).data("value"));
@@ -203,12 +203,12 @@
   $("#btnSearchStore").click(function(){
     searchStore(1);
   });
-  
+
   <%-- 매장 조회--%>
   function searchStore(index) {
-    
+
     var param = {};
-    
+
     param.verSerNo    = selectVerSerNo;
     param.hqOfficeCd  = hqOfficeCd.text;
     param.hqOfficeNm  = hqOfficeNm.text;
@@ -220,18 +220,18 @@
     param.lastVer     = lastVer.text;
     param.curr        = index;
     param.listScale   = listScaleBox2.selectedValue;
-    
-    $.postJSON("/pos/confg/vermanage/applcstore/srchStoreList.sb", param, function(result) {
+
+    $.postJSON("/pos/confg/verManage/applcStore/srchStoreList.sb", param, function(result) {
       if(result.status === "FAIL") {
         s_alert.pop(result.message);
         return;
       }
       var list = result.data.list;
-      
+
       grid3.itemsSource = list;
       grid3.itemsSource.trackChanges = true;
       grid3.itemsSource.canSort = true;
-      
+
       if(list.length === undefined || list.length == 0) {
         s_alert.pop(result.message);
         return;
@@ -242,12 +242,12 @@
       s_alert.pop("Ajax Fail");
     });
   }
-  
+
   <%-- 저장버튼 클릭 --%>
   $("#btnSaveStore").click(function(){
-    
+
     var paramArr = new Array();
-    
+
     for(var i = 0; i < grid3.collectionView.itemCount; i++ ){
       var item = grid3.collectionView.items[i];
       if(item.chk){
@@ -260,8 +260,8 @@
       s_alert.pop("<s:message code='cmm.not.select'/>");
       return;
     }
-    
-    $.postJSONArray("/pos/confg/vermanage/applcstore/regist.sb", paramArr, function(result) {
+
+    $.postJSONArray("/pos/confg/verManage/applcStore/regist.sb", paramArr, function(result) {
       s_alert.pop("<s:message code='cmm.saveSucc' />");
       grid3.collectionView.clearChanges();
       closeStoreLayer();

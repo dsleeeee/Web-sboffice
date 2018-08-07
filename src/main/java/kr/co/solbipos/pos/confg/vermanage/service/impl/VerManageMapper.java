@@ -18,12 +18,11 @@ import kr.co.solbipos.pos.confg.vermanage.service.VerInfoVO;
 * @author 솔비포스 차세대개발실 김지은
 * @since 2018. 05.01
 * @version 1.0
-* @see
 *
 *  Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
 @Mapper
-public interface VerManageMapper { 
+public interface VerManageMapper {
 
     /** 포스버전 목록 조회 */
     List<DefaultMap<String>> getList(VerInfoVO verInfo);
@@ -39,7 +38,7 @@ public interface VerManageMapper {
 
     /** 일련번호 중복 체크 */
     int chkVerSerNo(VerInfoVO verInfo);
-    
+
     /** 버전 등록 */
     int verRegist(VerInfoVO verInfo);
 
@@ -51,7 +50,7 @@ public interface VerManageMapper {
 
     /** 버전 적용 매장 등록 */
     int registStore(ApplcStoreVO applcStore);
-    
+
     /** 버전 적용 매장 삭제 */
     int removeStore(ApplcStoreVO applcStore);
 }

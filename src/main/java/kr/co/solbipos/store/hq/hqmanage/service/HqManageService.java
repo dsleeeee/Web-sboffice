@@ -18,13 +18,12 @@ import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
  * @author 솔비포스 차세대개발실 김지은
  * @since 2018. 05.01
  * @version 1.0
- * @see
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 
 public interface HqManageService {
-    
+
     /** 본사 목록 조회 */
     List<DefaultMap<String>> list(HqManageVO hqManave);
 
@@ -39,7 +38,7 @@ public interface HqManageService {
 
     /** 사업자번호 사용현황 상세 */
     DefaultMap<String> getBizInfoDtl(HqManageVO hqManage);
-    
+
     /** 본사 신규 등록 */
     int regist(HqManageVO hqManage, SessionInfoVO sessionInfoVO);
 

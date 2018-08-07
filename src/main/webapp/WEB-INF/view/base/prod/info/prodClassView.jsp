@@ -20,18 +20,27 @@
   <div class="wj-TblWrap mt20">
     <div class="w40">
       <div class="wj-TblWrapBr ml10 pd20" style="height:500px;">
-        <div class="updownSet oh mb10">
-          <div class="oh mb10">
-            <%-- 저장 --%>
-            <span class="fr ml5"><a id="btnSave" href="javascript:;" class="btn_grayS2"><s:message code="cmm.save" /></a></span>
-            <%-- 삭제 --%>
-            <span class="fr ml5"><a id="btnDel" href="javascript:;" class="btn_grayS2"><s:message code="cmm.delete" /></a></span>
-            <%-- 추가 --%>
-            <span class="fr"><a id="btnAdd" href="javascript:;" class="btn_grayS2"><s:message code="cmm.add" /></a></span>
+
+        <div class="sb-select dkbr mb10 oh">
+          <div id="theComboBox3" class="w130 fl"></div>
+          <div class="fl">
+            <%-- 전체펼치기 --%>
+            <button class="btn_skyblue" id="btnExpand"><s:message code="cmm.all.expand" /></button>
+            <%-- 전체접기 --%>
+            <button class="btn_skyblue" id="btnFold"><s:message code="cmm.all.fold" /></button>
+          </div>
+          <div class="fr">
+            <%-- 추가버튼 --%>
+            <button class="btn_skyblue" id="btnAdd"><s:message code="cmm.add" /></button>
+            <%-- 삭제버튼 --%>
+            <button class="btn_skyblue" id="btnDel"><s:message code="cmm.delete" /></button>
+            <%-- 저장버튼 --%>
+            <button class="btn_skyblue" id="btnSave"><s:message code="cmm.save" /></button>
           </div>
         </div>
+
         <%--위즈모 트리--%>
-        <div id="clsTree" style="height:450px;"></div>
+        <div id="clsTree" class="mt20" style="height:380px;"></div>
         <%--//위즈모 트리--%>
       </div>
     </div>
@@ -51,6 +60,8 @@
     <c:if test="${orgnFg == 'STORE'}">
       middleUrl = "store/";
     </c:if>
+
+    console.log(middleUrl);
 
     <%-- 메뉴 트리 생성 --%>
     var tree = new wijmo.nav.TreeView('#clsTree', {
@@ -136,6 +147,16 @@
         s_alert.pop(result.data.msg);
       });
     }
+
+    <%-- 펼침 버튼 클릭 --%>
+    $("#btnExpand").click(function(){
+      tree.collapseToLevel(100000);
+    });
+
+    <%-- 접기 버튼 클릭 --%>
+    $("#btnFold").click(function(){
+      tree.collapseToLevel(0);
+    });
 
     <%-- 추가 버튼 클릭 --%>
     $("#btnAdd").click(function(){

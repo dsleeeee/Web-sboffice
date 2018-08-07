@@ -13,7 +13,7 @@
   <div class="wj-TblWrapBr ml10 pd20" style="height:700px;">
     <p class="tc s18 mt200 bk"><s:message code="storeManage.require.select.store" /></p>
     <p class="tc s14 mt40 lh25"><s:message code="storeManage.select.hqOffice" /><br /><s:message code="storeManage.can.regist.store" /></p>
-    <p class="tc s14 mt40 lh25"><s:message code="storeManage.select.store" /><br /><s:message code="storeManage.can.edit.store" /></p> 
+    <p class="tc s14 mt40 lh25"><s:message code="storeManage.select.store" /><br /><s:message code="storeManage.can.edit.store" /></p>
   </div>
 </div>
 
@@ -30,7 +30,7 @@
       <%-- <li><a id="storeMenuAuth" href="javascript:;"><s:message code="storeManage.storeMenuAuth" /></a></li> --%>
       <%-- 매장환경 --%>
       <li><a id="storeEnv"  href="javascript:;"><s:message code="storeManage.storeEnv" /></a></li>
-    </ul>    
+    </ul>
 
     <%-- 기본정보 --%>
     <f:form id="regForm">
@@ -200,7 +200,7 @@
           </tr>
         </tbody>
       </table>
-      
+
       <%-- 추가설정 (등록시에만)  --%>
       <div id="additionalArea" style="display:none;">
         <h3 class="h3_tbl"><s:message code="storeManage.additionalSetting" /></h3>
@@ -240,7 +240,7 @@
           </tbody>
         </table>
       </div>
-      
+
       <%-- VAN사 설정 --%>
       <h3 class="h3_tbl"><s:message code="storeManage.vanSetting" /></h3>
       <table class="searchTbl2">
@@ -248,7 +248,7 @@
           <col class="w15" />
           <col class="w40" />
           <col class="w45" />
-        </colgroup> 
+        </colgroup>
         <thead>
           <tr>
             <%-- 구분 --%>
@@ -272,7 +272,7 @@
           </tr>
         </tbody>
       </table>
-      
+
       <%-- 매장 코너 승인 설정 --%>
       <h3 class="h3_tbl pdt5 lh30"><s:message code="storeManage.storeCornerSetting" /></h3>
       <table class="searchTbl2">
@@ -295,7 +295,7 @@
           </tr>
         </tbody>
       </table>
-      
+
       <%-- 코너별 승인 (매장 코너 승인 설정이 '코너개별승인'일때 사용)--%>
       <div id="cornerApproveArea" style="display:none;">
         <h3 class="h3_tbl pdt5 lh30"><s:message code="storeManage.cornerApproval" />
@@ -308,7 +308,7 @@
         </h3>
         <div id="theCornerGrid" style="height:150px;"></div>
       </div>
-      
+
       <%-- 포스별 승인 (매장 코너 승인 설정이 '포스별승인'일때 사용) --%>
       <div id="posApproveArea" style="display:none;">
         <h3 class="h3_tbl">포스별 승인</h3>
@@ -321,7 +321,7 @@
       <button id="btnRegist" class="btn_blue"><s:message code="cmm.new.add" /></button>
       <%-- 저장 --%>
       <button id="btnSave"class="btn_blue" style="display:none;"><s:message code="cmm.save" /></button>
-    </div> 
+    </div>
   </div>
 </div>
 
@@ -386,9 +386,9 @@ thePosGrid.isReadOnly = false;
 rEnvHqOffice.selectedIndexChanged.addHandler(function(s, e){
   var param = {};
   param.hqOfficeCd = rEnvHqOffice.selectedValue;
-  
+
   $.postJSON("/store/manage/storeManage/storeManage/getStoreComboList.sb", param, function(result) {
-    
+
     if(result.status === "FAIL") {
       s_alert.pop(result.message);
       return;
@@ -402,13 +402,13 @@ rEnvHqOffice.selectedIndexChanged.addHandler(function(s, e){
 
 <%-- 코너 사용여부 변경시 --%>
 rCornerUseYn.selectedIndexChanged.addHandler(function(s, e){
-  
+
   if(rCornerUseYn.selectedValue == null || rCornerUseYn.selectedValue == "" || rCornerUseYn.selectedValue == "") {
     $("#cornerApproveArea").hide();
     $("#posApproveArea").hide();
   }
   else if(rCornerUseYn.selectedValue == "1" || rCornerUseYn.selectedValue == "2" ) {  <%-- 매장단위승인 또는 코너 개별승인--%>
-  
+
     $("#cornerApproveArea").show();
     $("#posApproveArea").hide();
 
@@ -419,7 +419,7 @@ rCornerUseYn.selectedIndexChanged.addHandler(function(s, e){
     theCornerGrid.itemsSource = [];
   }
   else if(rCornerUseYn.selectedValue == "3" ) { <%-- 포스별승인 --%>
-  
+
     $("#cornerApproveArea").hide();
     $("#posApproveArea").show();
 
@@ -429,14 +429,14 @@ rCornerUseYn.selectedIndexChanged.addHandler(function(s, e){
         return;
       }
     }
-    // 포스별 승인 그리드 내용 지우고 
+    // 포스별 승인 그리드 내용 지우고
     for(var i = thePosGrid.itemsSource.itemCount-1; i >= 0; i-- ){
       thePosGrid.itemsSource.removeAt(i);
     }
-    
+
     // 설치포스수 만큼 포스수 입력
     var posCnt = $("#rInstallPosCnt").val();
-    
+
     for(var i=1; i<=posCnt; i++){
       var newItem = thePosGrid.collectionView.addNew();
       newItem.posNo  = (i < 10 ? "0"+i : i);
@@ -449,23 +449,23 @@ rCornerUseYn.selectedIndexChanged.addHandler(function(s, e){
 
 <%-- 매장환경조회 버튼 클릭 --%>
 $("#btnStoreSetting").click(function(){
-  
+
   if(rEnvHqOffice.selectedValue == null || rEnvHqOffice.selectedValue == "") {
     s_alert.pop("<s:message code='storeManage.require.select.hq' />");
     return;
   }
-  
+
   if(rEnvStore.selectedValue == null || rEnvStore.selectedValue == "") {
     s_alert.pop("<s:message code='storeManage.require.select.store' />");
     return;
   }
-  
+
   var param = {};
   param.hqOfficeCd = rEnvHqOffice.selectedValue;
   param.storeCd = rEnvStore.selectedValue;
-  
+
   openEnvInfoLayer(param);
-  
+
 });
 
 <%-- 사업자번호 중복 체크 버튼 클릭--%>
@@ -477,20 +477,20 @@ $("#btnChkBizNo").click(function(){
     s_alert.pop("<s:message code='storeManage.require.input.bizNo'/>");
     return;
   }
-  
+
   var param = {};
   param.bizNo1 = $("#rBizNo1").val();
   param.bizNo2 = $("#rBizNo2").val();
   param.bizNo3 = $("#rBizNo3").val();
   param.bizNo = $("#rBizNo1").val() + $("#rBizNo2").val() + $("#rBizNo3").val();
-  
-  $.postJSON("/store/hq/hqmanage/master/chkBizNo.sb", param, function(result) {
+
+  $.postJSON("/store/hq/hqManage/master/chkBizNo.sb", param, function(result) {
     if(result.status === "FAIL") {
       s_alert.pop(result.message);
       return;
     }
     isBizChk = true;
-    
+
     if(result.data == 0 ){
       <%-- 중복되는 사업자번호가 없습니다.--%>
       s_alert.pop("<s:message code='hqManage.no.duplicate.bizNo.msg'/>");
@@ -522,17 +522,17 @@ function resetForm() {
 
 <%-- 매장 신규등록 --%>
 function newStoreReg(hqOfficeCd) {
-  
+
   selectedHqOfficeCd = hqOfficeCd;
-  
+
   resetForm();
-  
+
   $("#noDataArea").hide();
   $("#storeInfoViewArea").show();
   $("#additionalArea").show();
-  
+
   $("#storeInfoTitle").text("<s:message code='storeManage.new.store' />");
-  
+
   $("#rStoreCdTxt").hide();
   $("#rStoreCdRadio").show();
 
@@ -547,9 +547,9 @@ function getBrandList(){
 
   var param = {};
   param.hqOfficeCd = selectedHqOfficeCd;
-  
+
   $.postJSON("/store/manage/storeManage/storeManage/getBrandComboList.sb", param, function(result) {
-    
+
     if(result.status === "FAIL") {
       s_alert.pop(result.message);
       return;
@@ -564,13 +564,13 @@ function getBrandList(){
 
 <%-- 매장 상세정보 --%>
 function showStoreDetail(data) {
-  
+
   $("#noDataArea").hide();
   $("#storeInfoViewArea").show();
   $("#additionalArea").hide();
-  
+
   $("#storeInfoTitle").text("[" + selectedStore.storeCd + "] " + selectedStore.storeNm);
-  
+
   // 조회한 데이터 셋팅
   $("#rStoreCd").val(data.storeCd);
   $("#rStoreNm").val(data.storeNm);
@@ -601,7 +601,7 @@ function showStoreDetail(data) {
 
   $("#rStoreCdTxt").show();
   $("#rStoreCdRadio").hide();
-  
+
   $("#btnRegist").hide();
   $("#btnSave").show();
 }
@@ -615,7 +615,7 @@ $("#btnCornerAdd").click(function(){
 
 <%-- 코너별 승인 데이터 삭제--%>
 $("#btnCornerDel").click(function(){
-  
+
 });
 
 <%-- 신규등록 --%>
@@ -630,14 +630,14 @@ $("#btnSave").click(function(){
 
 <%-- validation --%>
 function chkVal(sendUrl) {
-  
+
   <%-- 브랜드를 선택해주세요. --%>
   var msg = "<s:message code='storeManage.hqBrand'/> <s:message code='cmm.require.select'/>";
   if(rHqBrand.selectedValue == "" || rHqBrand.selectedValue == null) {
     s_alert.pop(msg);
     return;
   }
-  
+
   <%-- 매장명을 입력해주세요. --%>
   var msg = "<s:message code='storeManage.storeNm'/> <s:message code='cmm.require.text'/>";
   if($("#rStoreNm").val() === "") {
@@ -651,28 +651,28 @@ function chkVal(sendUrl) {
     s_alert.pop(msg);
     return;
   }
-  
+
   <%-- 사업자번호를 입력해주세요. --%>
   var msg = "<s:message code='storeManage.bizNo'/> <s:message code='cmm.require.text'/>";
   if($("#rBizNo1").val() === "" || $("#rBizNo2").val() === "" || $("#rBizNo3").val() === "") {
     s_alert.pop(msg);
     return;
   }
-  
+
   <%-- 상호명을 입력해주세요. --%>
   var msg = "<s:message code='storeManage.bizStoreNm'/> <s:message code='cmm.require.text'/>";
   if($("#rBizStoreNm").val() === "") {
     s_alert.pop(msg);
     return;
   }
-  
+
   <%-- 용도를 선택해주세요. --%>
   var msg = "<s:message code='storeManage.clsFg'/> <s:message code='cmm.require.select'/>";
   if(rClsFg.selectedValue == "" || rClsFg.selectedValue == null) {
     s_alert.pop(msg);
     return;
   }
-  
+
   <%-- 매장상태구분을 선택해주세요. --%>
   var msg = "<s:message code='storeManage.sysStatFg'/> <s:message code='cmm.require.select'/>";
   if(rSysStatFg.selectedValue == "" || rSysStatFg.selectedValue == null) {
@@ -686,28 +686,28 @@ function chkVal(sendUrl) {
     s_alert.pop(msg);
     return;
   }
-  
+
   <%-- 날씨표시지역을 선택해주세요. --%>
   var msg = "<s:message code='storeManage.weatherArea'/> <s:message code='cmm.require.select'/>";
   if(rArea.selectedValue == "" || rArea.selectedValue == null) {
     s_alert.pop(msg);
     return;
   }
-  
+
   <%-- 사업자번호를 입력해주세요. --%>
   var msg = "<s:message code='storeManage.bizNo'/> <s:message code='cmm.require.text'/>";
   if($("#rBizNo1").val() === "" || $("#rBizNo2").val() === "" || $("#rBizNo3").val() === "") {
     s_alert.pop(msg);
     return;
   }
-  
+
   <%-- 사업자번호 중복체크를 해주세요. --%>
   var msg = "<s:message code='storeManage.require.duplicate.bizNo'/>";
   if(!isBizChk) {
     s_alert.pop(msg);
     return;
   }
-  
+
   <%-- 전화번호를 입력해주세요. --%>
   var msg = "<s:message code='storeManage.telNo'/> <s:message code='cmm.require.text'/>";
   if($("#rTelNo").val() === "") {
@@ -728,7 +728,7 @@ function chkVal(sendUrl) {
     s_alert.pop(msg);
     return;
   }
-  
+
   <%-- 관리벤사를 선택해주세요. --%>
   var msg = "<s:message code='storeManage.van'/> <s:message code='cmm.require.select'/>";
   if(rVan.selectedValue == "" || rVan.selectedValue == null) {
@@ -745,7 +745,7 @@ function chkVal(sendUrl) {
 
   <%-- 신규등록시 --%>
   if($("#rStoreCdRadio").is(":visible")) {
-    
+
     <%--  본사코드 데모 선택시 상태도 데모를 선택해주세요. --%>
     var storeType = $('input:radio[name="rStroreCdRadio"]:checked').val();
     var msg = "<s:message code='storeManage.storeType.comm.error' />";
@@ -755,7 +755,7 @@ function chkVal(sendUrl) {
         return;
       }
     }
-    
+
     <%-- 매장환경 복사할 본사를 선택해주세요.--%>
     var msg = "<s:message code='storeManage.copy.storeEnv.hqOfficeCd'/> <s:message code='cmm.require.select'/>";
     if(rEnvHqOffice.selectedValue == "" || rEnvHqOffice.selectedValue == null) {
@@ -768,7 +768,7 @@ function chkVal(sendUrl) {
       s_alert.pop(msg);
       return;
     }
-    
+
   }
   saveStore(sendUrl);
 }
@@ -776,10 +776,10 @@ function chkVal(sendUrl) {
 <%-- 신규등록 또는 저장 --%>
 function saveStore(sendUrl){
   var param = {};
-  
+
   param.hqOfficeCd      = selectedHqOfficeCd;
 //  param.hqBrandCd       = rHqBrand.selectedValue;
-  
+
   param.storeCd         = $("#rStoreCd").val();
   param.storeNm         = $("#rStoreNm").val();
   param.openPosDate     = getDate(rOpenPosDate);  //포스개점일자 = 시스템오픈일자?
@@ -806,28 +806,28 @@ function saveStore(sendUrl){
   param.sysRemark       = $("#rSysRemark").val();
   param.hqRemark        = $("#rHqRemark").val();
   param.remark          = $("#rStoreRemark").val();
-  
+
   param.copyHqOfficeCd  = rEnvHqOffice.selectedValue;
   param.copyStoreCd     = rEnvStore.selectedValue;
   param.cornerUseYn     = rCornerUseYn.selectedValue; // 코너 사용여부에 따라 포스별, 코너별 그리드 구분
-  
+
   var copyChkVal = "";
 
-  $("input[name=copyChk]:checked").each(function() { 
+  $("input[name=copyChk]:checked").each(function() {
     copyChkVal += ($(this).val() + "|");
   });
   param.copyChkVal = copyChkVal;
 
   //TODO 우선 아래 코너 제외하고 저장해보기
   $.postJSONSave(sendUrl, JSON.stringify(param), function(result) {
-    
+
     if(result.status === "FAIL") {
       s_alert.pop(result.message);
       return;
     }
     s_alert.pop("<s:message code='cmm.saveSucc'/>");
     //TODO 저장 후 액션
-    
+
   })
   .fail(function(){
     s_alert.pop("Ajax Fail");

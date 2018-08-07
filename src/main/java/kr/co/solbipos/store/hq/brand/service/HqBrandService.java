@@ -16,7 +16,6 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
  * @author 솔비포스 차세대개발실 김지은
  * @since 2018. 05.01
  * @version 1.0
- * @see
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */

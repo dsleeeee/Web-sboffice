@@ -18,11 +18,10 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 * @author 솔비포스 차세대개발실 김지은
 * @since 2018. 05.01
 * @version 1.0
-* @see
 *
 *  Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
-public interface VerManageService { 
+public interface VerManageService {
 
     /** 포스버전 목록 조회 */
     List<DefaultMap<String>> list(VerInfoVO verInfo);
@@ -32,16 +31,16 @@ public interface VerManageService {
 
     /** 매장목록 조회 */
     List<DefaultMap<String>> storeList(VerInfoVO verInfo);
-    
+
     /** 버전 삭제 */
     int verDelete(VerInfoVO verInfo);
-    
+
     /** 버전 시리얼넘버 중복 체크 */
     int chkVerSerNo(VerInfoVO verInfo);
-    
+
     /** 버전 등록 */
     boolean regist(MultipartHttpServletRequest multi, SessionInfoVO sessionInfo);
-    
+
     /** 버전 수정 */
     boolean modify(MultipartHttpServletRequest request, SessionInfoVO sessionInfo);
 

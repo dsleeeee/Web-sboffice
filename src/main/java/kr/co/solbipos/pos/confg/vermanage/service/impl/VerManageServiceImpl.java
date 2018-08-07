@@ -32,7 +32,6 @@ import kr.co.solbipos.pos.confg.verrecv.enums.VerRecvFg;
 * @author 솔비포스 차세대개발실 김지은
 * @since 2018. 05.01
 * @version 1.0
-* @see
 *
 *  Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
@@ -40,7 +39,7 @@ import kr.co.solbipos.pos.confg.verrecv.enums.VerRecvFg;
 public class VerManageServiceImpl implements VerManageService {
 
     @Autowired
-    VerManageMapper mapper; 
+    VerManageMapper mapper;
 
     @Autowired
     MessageService messageService;
@@ -62,31 +61,31 @@ public class VerManageServiceImpl implements VerManageService {
     public List<DefaultMap<String>> storeList(VerInfoVO verInfo) {
         return mapper.storeList(verInfo);
     }
-    
+
     /** 버전 삭제 */
     @Override
     public int verDelete(VerInfoVO verInfo) {
         return mapper.verDelete(verInfo);
     }
-    
+
     /** 버전 시리얼넘버 중복 체크 */
     @Override
     public int chkVerSerNo(VerInfoVO verInfo) {
         return mapper.chkVerSerNo(verInfo);
     }
-    
+
     /** 버전 등록 */
     @Override
     public boolean regist(MultipartHttpServletRequest multi, SessionInfoVO sessionInfo) {
 
         boolean isSuccess = false;
-        
+
         try{
-            
+
             VerInfoVO verInfo = uploadFile(multi);
-            
+
             String insertDt = currentDateTimeString();
-            
+
             verInfo.setVerSerNo((String)multi.getParameter("verSerNo"));
             verInfo.setVerSerNm((String)multi.getParameter("verSerNm"));
             verInfo.setFileSize((String)multi.getParameter("fileSize"));
@@ -95,7 +94,7 @@ public class VerManageServiceImpl implements VerManageService {
             verInfo.setPgmYn((String)multi.getParameter("pgmYn"));
             verInfo.setImgYn((String)multi.getParameter("imgYn"));
             verInfo.setDbYn((String)multi.getParameter("dbYn"));
-          
+
             if(String.valueOf(UseYn.Y) == multi.getParameter("useYn")){
                 verInfo.setUseYn(UseYn.Y);
             } else {
@@ -106,29 +105,29 @@ public class VerManageServiceImpl implements VerManageService {
             verInfo.setRegId(sessionInfo.getUserId());
             verInfo.setModDt(insertDt);
             verInfo.setModId(sessionInfo.getUserId());
-            
+
             mapper.verRegist(verInfo);
-            
+
             isSuccess = true;
-            
+
         }catch(Exception e){
-            
+
             isSuccess = false;
         }
         return isSuccess;
     }
-    
+
     /** 버전 수정 */
     @Override
     public boolean modify(MultipartHttpServletRequest multi, SessionInfoVO sessionInfo) {
 
         boolean isSuccess = false;
-        
+
         try{
             VerInfoVO verInfo = uploadFile(multi);
-            
+
             String insertDt = currentDateTimeString();
-            
+
             verInfo.setVerSerNo((String)multi.getParameter("verSerNo"));
             verInfo.setVerSerNm((String)multi.getParameter("verSerNm"));
             verInfo.setFileSize((String)multi.getParameter("fileSize"));
@@ -137,7 +136,7 @@ public class VerManageServiceImpl implements VerManageService {
             verInfo.setPgmYn((String)multi.getParameter("pgmYn"));
             verInfo.setImgYn((String)multi.getParameter("imgYn"));
             verInfo.setDbYn((String)multi.getParameter("dbYn"));
-          
+
             if(String.valueOf(UseYn.Y) == multi.getParameter("useYn")){
                 verInfo.setUseYn(UseYn.Y);
             } else {
@@ -150,17 +149,17 @@ public class VerManageServiceImpl implements VerManageService {
             verInfo.setModId(sessionInfo.getUserId());
 
             mapper.verModify(verInfo);
-            
+
             isSuccess = true;
-            
+
         }catch(Exception e){
-            
+
             isSuccess = false;
         }
         return isSuccess;
 
     }
-    
+
     /** 파일 업로드 (등록, 수정 )  */
     private VerInfoVO uploadFile(MultipartHttpServletRequest multi) {
         VerInfoVO verInfo = new VerInfoVO();
@@ -169,27 +168,27 @@ public class VerManageServiceImpl implements VerManageService {
         String root = multi.getSession().getServletContext().getRealPath("/");
 //        String path = root+"resources/upload/";
         String path = root+BaseEnv.FILE_UPLOAD_DIR;
-        
+
 
         String newFileName = ""; // 업로드 되는 파일명
-         
+
         File dir = new File(path);
         if(!dir.isDirectory()){
             dir.mkdir();
         }
-         
+
         Iterator<String> files = multi.getFileNames();
         while(files.hasNext()){
             String uploadFile = files.next();
-                         
+
             MultipartFile mFile = multi.getFile(uploadFile);
             String fileName = mFile.getOriginalFilename();
             newFileName = System.currentTimeMillis()+"."
                     +fileName.substring(fileName.lastIndexOf(".")+1);
-            
+
             verInfo.setFileNm(newFileName);
             verInfo.setFileDir(path);
-            
+
             try {
                 mFile.transferTo(new File(path+newFileName));
             } catch (Exception e) {
@@ -209,11 +208,11 @@ public class VerManageServiceImpl implements VerManageService {
     /** 버전 적용 매장 등록 */
     @Override
     public int registStore(ApplcStoreVO[] applcStores, SessionInfoVO sessionInfo) {
-        
+
         int procCnt = 0;
-        
+
         String dt = currentDateTimeString();
-        
+
         for(ApplcStoreVO applcStore : applcStores) {
             applcStore.setRegDt(dt);
             applcStore.setModDt(dt);
@@ -224,24 +223,24 @@ public class VerManageServiceImpl implements VerManageService {
 
             procCnt += mapper.registStore(applcStore);
         }
-        
+
         if(procCnt == applcStores.length) {
             return procCnt;
         } else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
     }
-    
+
     /** 버전 적용 매장 삭제 */
     @Override
     public int removeStore(ApplcStoreVO[] applcStores, SessionInfoVO sessionInfo) {
-        
+
         int procCnt = 0;
-        
+
         for(ApplcStoreVO applcStore : applcStores) {
             procCnt += mapper.removeStore(applcStore);
         }
-        
+
         if(procCnt == applcStores.length) {
             return procCnt;
         } else {

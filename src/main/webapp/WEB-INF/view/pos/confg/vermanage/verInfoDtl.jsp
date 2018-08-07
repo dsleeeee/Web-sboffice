@@ -19,7 +19,7 @@
             <li><a href="javascript:;" id="storeInfoTab" ><s:message code="verManage.store.registed" /></a></li>
           </ul>
         </div>
-        <div id="verInfoArea"> 
+        <div id="verInfoArea">
 
           <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
           <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
@@ -185,10 +185,10 @@
           <div class="tr">
             <%-- 매장추가 --%>
             <a href="javascript:;" id="btnAddStore" class="btn_grayS2"><s:message code="verManage.add.store" /></a>
-            
+
             <%-- 매장추가 --%>
             <a href="javascript:;" id="btnDelStore" class="btn_grayS2"><s:message code="verManage.delete.store" /></a>
-            
+
             <%-- 엑셀 다운로드 --%>
             <a href="javascript:;" id="btnExcel2" class="btn_grayS2"><s:message code="cmm.excel.down" /></a>
           </div>
@@ -269,8 +269,8 @@
         }
       }
     });
-    
-    
+
+
     <%-- 적용매장 탭 클릭 --%>
     $("#storeInfoTab").click(function(e){
       <%-- 버전정보 등록시, 버전정보 없을 경우 --%>
@@ -303,7 +303,7 @@
           grid2.itemsSource.removeAt(i);
         }
       }
-      
+
       if(grid2.itemsSource.itemsRemoved.length == 0) {
         s_alert("<s:message code='verManage.no.delete.item' />");
         return;
@@ -314,7 +314,7 @@
           grid2.collectionView.itemsRemoved[i].status = "D";
           paramArr.push(grid2.collectionView.itemsRemoved[i]);
         }
-        $.postJSONArray("/pos/confg/vermanage/applcstore/removeStore.sb", paramArr, function(result) {
+        $.postJSONArray("/pos/confg/verManage/applcStore/removeStore.sb", paramArr, function(result) {
           s_alert.pop("<s:message code='cmm.delSucc' />");
           grid2.collectionView.clearChanges();
         },
@@ -323,7 +323,7 @@
         });
       }
     });
-    
+
     <%-- 엑셀 다운로드 버튼 클릭 --%>
     $("#btnExcel2").click(function(e){
       var name = "<s:message code='verManage.store.registed'/>";
@@ -378,7 +378,7 @@
       var msg = "<s:message code='cmm.choo.delete'/>";
 
       s_alert.popConf(msg, function(){
-        $.postJSON("/pos/confg/vermanage/verinfo/remove.sb", param, function(result) {
+        $.postJSON("/pos/confg/verManage/verInfo/remove.sb", param, function(result) {
           if(result.status === "FAIL") {
             s_alert.pop(result.message);
             return;
@@ -416,7 +416,7 @@
     function searchVerInfoDtl(obj) {
 
       var param = obj;
-      $.postJSON("/pos/confg/vermanage/verinfo/dtlInfo.sb", param, function(result) {
+      $.postJSON("/pos/confg/verManage/verInfo/dtlInfo.sb", param, function(result) {
         if(result.status === "FAIL") {
           s_alert.pop(result.message);
           return;
@@ -430,7 +430,7 @@
 
     <%-- 적용매장  조회 --%>
     function searchVerStore(obj){
-      $.postJSON("/pos/confg/vermanage/applcstore/list.sb", obj, function(result) {
+      $.postJSON("/pos/confg/verManage/applcStore/list.sb", obj, function(result) {
         if(result.status === "FAIL") {
           s_alert.pop(result.message);
           return;
@@ -467,10 +467,10 @@
       var sendUrl = "";
 
       if(selectVerSerNo == "") {
-        sendUrl = "/pos/confg/vermanage/verinfo/regist.sb";
+        sendUrl = "/pos/confg/verManage/verInfo/regist.sb";
         //chkSerNo(sendUrl);
       } else {
-        sendUrl = "/pos/confg/vermanage/verinfo/modify.sb";
+        sendUrl = "/pos/confg/verManage/verInfo/modify.sb";
       }
       sendFormData(sendUrl);
     });
@@ -482,7 +482,7 @@
         var param = {};
         param.verSerNo = verSerNoInput.text;
 
-        $.postJSON("/pos/confg/vermanage/verinfo/chkVerSerNo.sb", param, function(result) {
+        $.postJSON("/pos/confg/vermMnage/verInfo/chkVerSerNo.sb", param, function(result) {
           if(result.data > 0) {
             s_alert.pop("<s:message code='verManage.duplicate.verSerNo' />");
             return;

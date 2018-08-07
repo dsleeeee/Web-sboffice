@@ -35,7 +35,6 @@ import kr.co.solbipos.pos.confg.vermanage.service.VerManageService;
 * @author 솔비포스 차세대개발실 김지은
 * @since 2018. 05.01
 * @version 1.0
-* @see
 *
 *  Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
@@ -60,7 +59,7 @@ public class VerManageController {
     @RequestMapping(value = "/verInfo/view.sb", method = RequestMethod.GET)
     public String view(HttpServletRequest request, HttpServletResponse response,
             Model model) {
-        return "pos/confg/vermanage/verManage"; 
+        return "pos/confg/vermanage/verManage";
     }
 
     /**
@@ -142,7 +141,6 @@ public class VerManageController {
     /**
      * 버전 등록
      *
-     * @param verInfo
      * @param request
      * @return
      */
@@ -162,7 +160,6 @@ public class VerManageController {
 
     /**
      * 버전 수정
-     * @param verInfo
      * @param request
      * @return
      */
@@ -201,7 +198,7 @@ public class VerManageController {
     /**
      * 매장추가 매장검색
      *
-     * @param verInfo
+     * @param applcStore
      * @param request
      * @param response
      * @param model
