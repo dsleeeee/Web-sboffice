@@ -37,7 +37,7 @@ public class CmmVO implements Serializable {
     /** 가상로그인 ID */
     private String vLoginId;
     /** 그리드 공통 체크박스 */
-    private String gChk = "0";
+    private Boolean gChk = false;
     
     /** VO내의 모든 값 출력 */
     public String getProperties() {
@@ -120,13 +120,13 @@ public class CmmVO implements Serializable {
     /**
      * @return the gChk
      */
-    public String getgChk() {
+    public Boolean getgChk() {
         return gChk;
     }
     /**
      * @param gChk the gChk to set
      */
-    public void setgChk(String gChk) {
+    public void setgChk(Boolean gChk) {
         this.gChk = gChk;
     }
 

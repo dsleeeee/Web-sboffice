@@ -10,7 +10,7 @@ public class DefaultMap<Value> extends HashMap<String, Value> {
     @SuppressWarnings("unchecked")
     public DefaultMap() {
         /** 생성자를 통한 공통변수-기본값 설정 */
-        super.put("gChk", (Value) "0");
+        super.put("gChk", (Value) new Boolean(false));
     }
     
     public String getStr(Object k) {
