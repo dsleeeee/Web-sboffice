@@ -103,6 +103,7 @@
                     }
                 }
             }
+            // gridPicker 사용여부
             if (isView) {
                 genGridPicker(g, resrceCd, gridIdx);
             }
@@ -132,13 +133,14 @@
                 });
             }
             genGridCheckBoxClickEvent(g);
+            // 체크박스 클릭시 체크박스 value Set
             function genGridCheckBoxClickEvent(grid) {
                 grid.addEventListener(grid.hostElement, 'click', function (e) {
                     if (e.target.type=="checkbox") {
                         var ht = grid.hitTest(e);
                         var colName = ht.panel.columns[ht.col].binding;
                         var selectedRow = grid.rows[ht.row].dataItem;
-                        selectedRow.colName = !selectedRow.colName;
+                        selectedRow[colName] = !selectedRow[colName];
                     }
                 });
             }
