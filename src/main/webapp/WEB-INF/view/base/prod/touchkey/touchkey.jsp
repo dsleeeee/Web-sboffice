@@ -71,10 +71,10 @@ window.PRODS = prods;
 window.MAX_GROUP_ROW = '${maxGroupRow}' || '2';
 
 </script>
-<script type="text/javascript" src="/resource/vender/mxgraph/mxClient.js"></script>
+<script type="text/javascript" src="/resource/vender/mxgraph/mxClient.js" charset="utf-8"></script>
 <!--script type="text/javascript" src="/resource/vender/mxgraph/mxClient.min.js"></script-->
-<script type="text/javascript" src="/resource/graph/sanitizer/sanitizer.min.js"></script>
-<script type="text/javascript" src="/resource/graph/js/Touchkey.js"></script>
+<script type="text/javascript" src="/resource/graph/sanitizer/sanitizer.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/graph/js/Touchkey.js" charset="utf-8"></script>
 
     <%--서브컨텐츠--%>
     <div class="subCon2">

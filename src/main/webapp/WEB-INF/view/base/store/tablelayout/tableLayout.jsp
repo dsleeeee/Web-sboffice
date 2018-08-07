@@ -55,10 +55,10 @@ window.mxLanguage = window.mxLanguage || urlParams['lang'];
 window.mxLanguages = window.mxLanguages || ['ko'];
 
 </script>
-<script type="text/javascript" src="/resource/vender/mxgraph/mxClient.js"></script>
+<script type="text/javascript" src="/resource/vender/mxgraph/mxClient.js" charset="utf-8"></script>
 <!--script type="text/javascript" src="/resource/vender/mxgraph/mxClient.min.js"></script-->
-<script type="text/javascript" src="/resource/graph/sanitizer/sanitizer.min.js"></script>
-<script type="text/javascript" src="/resource/graph/js/TableLayout.js"></script>
+<script type="text/javascript" src="/resource/graph/sanitizer/sanitizer.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/graph/js/TableLayout.js" charset="utf-8"></script>
 
     <%--서브컨텐츠--%>
     <div class="subCon2">

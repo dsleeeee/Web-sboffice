@@ -16,6 +16,12 @@ $(document).ready(function () {
     });
     srchPrtTypeList.inputElement.disabled = true;
 
+    // 템플릿 그리드 Data
+    var dataTemplate =
+        [
+            { binding:"gChk", header:messages["template.chk"], dataType:wijmo.DataType.Boolean, width:45},
+            { binding:"templtNm", header:messages["template.templtNm"], width:"*"},
+        ];
     // 템플릿 그리드 생성
     var gridTemplate = wgrid.genGrid("#gridTemplate", dataTemplate, menuCd, 1, coulmnLayout1);
     gridTemplate.isReadOnly = false;
@@ -140,12 +146,12 @@ $(document).ready(function () {
         }
 
         if ( paramArr.length <= 0 ) {
-            s_alert.pop(cmm.not.modify);
+            s_alert.pop(messages["cmm.not.modify"]);
             return;
         }
 
         $.postJSONArray("/sys/bill/kind/bill/save.sb", paramArr, function(result) {
-                s_alert.pop("<s:message code='msg.save.succ' />");
+                s_alert.pop(messages["cmm.saveSucc"]);
                 gridTemplate.collectionView.clearChanges();
             },
             function(result) {

@@ -3,8 +3,6 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
-<c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
 <c:set var="baseUrl" value="/sys/bill/template/" />
 
 <div class="subCon">
@@ -47,13 +45,13 @@
     <div class="wj-TblWrapBr pd10" style="height: 400px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='template.gridNm' /></span>
-        <button class="btn_skyblue" id="btnAddPrint" style="display: none;">
+        <button class="btn_skyblue" id="btnAddTemplate" style="display: none;">
           <s:message code="cmm.add" />
         </button>
-        <button class="btn_skyblue" id="btnDelPrint" style="display: none;">
+        <button class="btn_skyblue" id="btnDelTemplate" style="display: none;">
           <s:message code="cmm.delete" />
         </button>
-        <button class="btn_skyblue" id="btnSavePrint" style="display: none;">
+        <button class="btn_skyblue" id="btnSaveTemplate" style="display: none;">
           <s:message code="cmm.save" />
         </button>
       </div>
@@ -76,11 +74,11 @@
     </div>
   </div>
   
-  <div class="fl receiptEdit" style="width:310px;">
+  <div class="fl templateEdit" style="width:310px;">
     <div class="wj-TblWrapBr ml10 pd10" style="height: 400px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='template.editNm' /></span>
-        <button class="btn_skyblue" id="btnSaveTemplate" style="display: none;">
+        <button class="btn_skyblue" id="btnSaveEditTemplate" style="display: none;">
           <s:message code="cmm.save" />
         </button>
       </div>
@@ -90,7 +88,7 @@
     </div>
   </div>
   
-  <div class="fl receiptEdit" style="width:310px;">
+  <div class="fl templateEdit" style="width:310px;">
     <div class="wj-TblWrapBr ml10 pd10" style="height: 400px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='template.viewNm' /></span>
@@ -127,17 +125,7 @@
 </div>
 
 <script type="text/javascript">
-
-  var menuCd = "${menuCd}";
-  var coulmnLayout1 = ${clo.getColumnLayout(1)};
-  <%-- 출력물종류 선택 콤보박스 --%>
-  var cData       = ${listPrintType};
-  <%-- 템플릿 그리드 Data --%>
-  var dataTemplate =
-    [
-      { binding:"gChk", header:"<s:message code='template.chk' />", dataType:wijmo.DataType.Boolean, width:45},
-      { binding:"templtNm", header:"<s:message code='template.templtNm'/>", width:"*", isReadOnly: true },
-    ];
-  
+<%-- 출력물종류 선택 콤보박스 --%>
+var cData = ${listPrintType};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sys/bill/template/template.js"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/bill/template/template.js" charset="utf-8"></script>

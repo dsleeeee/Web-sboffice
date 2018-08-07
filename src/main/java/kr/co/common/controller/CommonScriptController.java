@@ -12,8 +12,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * @Class Name : CommonController.java
- * @Description : 공통 컨트롤러
+ * @Class Name : CommonScriptController.java
+ * @Description : 공통 스크립트 컨트롤러
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
@@ -27,7 +27,8 @@ import javax.servlet.http.HttpServletRequest;
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Controller
-public class CommonController {
+@RequestMapping(value = "/resource/solbipos/js/variables")
+public class CommonScriptController {
 
     @Autowired
     SessionService sessionService;
@@ -43,7 +44,7 @@ public class CommonController {
      * @author 노현수
      * @since 2018. 08. 03.
      */
-    @RequestMapping(value = "/resource/solbipos/js/variables/lang.js")
+    @RequestMapping(value = "/lang.js")
     public ModelAndView langProperties(HttpServletRequest request) {
         return new ModelAndView("application/variables/lang", "keys", messageResolveService.getMessages(
             LocaleContextHolder.getLocale()));
@@ -57,10 +58,22 @@ public class CommonController {
      * @author 노현수
      * @since 2018. 08. 03.
      */
-    @RequestMapping(value = "/resource/solbipos/js/variables/menu.js")
+    @RequestMapping(value = "/menu.js")
     public ModelAndView menuVariables(HttpServletRequest request) {
-        return new ModelAndView("application/variables/menuVariable", "keys", messageResolveService.getMessages(
-            LocaleContextHolder.getLocale()));
+        return new ModelAndView("application/variables/menuVariable");
+    }
+
+    /**
+     * 공통 변수 : JSP에 코딩하여 JS처럼 사용
+     *
+     * @param request
+     * @return String
+     * @author 노현수
+     * @since 2018. 08. 03.
+     */
+    @RequestMapping(value = "/commonVariables.js")
+    public ModelAndView commonVariables(HttpServletRequest request) {
+        return new ModelAndView("application/variables/commonVariables");
     }
 
 }

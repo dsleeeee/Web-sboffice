@@ -156,7 +156,7 @@ $("#btnSaveKitchenPrint").click(function(){
   
   $.postJSONArray("/store/manage/storeManage/storeManage/saveKitchenPrintInfo.sb", paramArr, function(result) {
     console.log(result);
-    s_alert.pop("<s:message code='msg.save.succ' />");
+    s_alert.pop("<s:message code='cmm.saveSucc' />");
     kitchenPrintGrid.collectionView.clearChanges();
   },
   function(result) {

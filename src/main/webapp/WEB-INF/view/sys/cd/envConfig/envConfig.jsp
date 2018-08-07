@@ -187,7 +187,7 @@
       }
       
       $.postJSONArray("/sys/cd/envConfig/envConfig/envst/save.sb", paramArr, function(result) {
-          s_alert.pop("<s:message code='msg.save.succ' />");
+          s_alert.pop("<s:message code='cmm.saveSucc' />");
           gridLeft.collectionView.clearChanges();
         },
         function(result) {
@@ -262,7 +262,7 @@
       }
       
       $.postJSONArray("/sys/cd/envConfig/envConfig/envstDtl/save.sb", paramArr, function(result) {
-          s_alert.pop("<s:message code='msg.save.succ' />");
+          s_alert.pop("<s:message code='cmm.saveSucc' />");
           gridRight.collectionView.clearChanges();
         },
         function(result) {

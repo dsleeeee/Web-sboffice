@@ -1,4 +1,4 @@
-<%@ page contentType="text/javascript" pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
+<%@ page contentType="text/javascript" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%-- 선택된 메뉴와 부모 메뉴 --%>
 <c:set var="cMenu" value="${sessionScope.sessionInfo.currentMenu}" />

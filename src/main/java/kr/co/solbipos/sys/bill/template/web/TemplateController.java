@@ -1,13 +1,20 @@
 package kr.co.solbipos.sys.bill.template.web;
 
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.spring.StringUtil.convertToJson;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import kr.co.common.service.message.MessageResolveService;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,6 +25,7 @@ import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.sys.bill.template.service.TemplateService;
 import kr.co.solbipos.sys.bill.template.service.TemplateVO;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @Class Name : TemplateController.java
@@ -31,7 +39,6 @@ import kr.co.solbipos.sys.bill.template.service.TemplateVO;
  * @author 솔비포스 차세대개발실 노현수
  * @since 2018. 05.01
  * @version 1.0
- * @see
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
@@ -43,10 +50,10 @@ public class TemplateController {
     TemplateService templateService;
     @Autowired
     SessionService sessionService;
-    
+
     /**
      * 출력물 샘플 - 페이지 이동
-     * 
+     *
      * @param request
      * @param response
      * @param model
@@ -113,5 +120,29 @@ public class TemplateController {
         return ReturnUtil.returnListJson(Status.OK, list, templateVO);
         
     }
-    
+
+    /**
+     * 출력물 샘플 - 출력물템플릿 목록 저장
+     *
+     * @param request
+     * @param response
+     * @param templateVOs
+     * @param model
+     * @return Result
+     * @author 노현수
+     * @since 2018. 08. 01.
+     */
+    @RequestMapping(value = "/item/save.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveTemplateList(@RequestBody TemplateVO[] templateVOs, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = templateService.saveTemplateList(templateVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+
+    }
+
 }

@@ -1,9 +1,11 @@
 package kr.co.solbipos.sys.bill.template.service.impl;
 
-import java.util.List;
-import org.apache.ibatis.annotations.Mapper;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.sys.bill.template.service.TemplateVO;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @Class Name : TemplateMapper.java
@@ -17,11 +19,11 @@ import kr.co.solbipos.sys.bill.template.service.TemplateVO;
  * @author 솔비포스 차세대개발실 노현수
  * @since 2018. 05.01
  * @version 1.0
- * @see
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Mapper
+@Repository
 public interface TemplateMapper {
     
     /** 출력물종류 목록 조회 */
@@ -29,8 +31,16 @@ public interface TemplateMapper {
     
     /** 출력물코드 목록 조회 */
     List<DefaultMap<String>> getPrintCodeList(TemplateVO templateVO);
-    
+
     /** 출력물템플릿 목록 조회 */
     List<DefaultMap<String>> getTemplateList(TemplateVO templateVO);
-    
+
+    /** 출력물템플릿 목록 생성 */
+    int insertTemplateList(TemplateVO templateVO);
+
+    /** 출력물템플릿 목록 수정 */
+    int updateTemplateList(TemplateVO templateVO);
+
+    /** 출력물템플릿 목록 삭제 */
+    int deleteTemplateList(TemplateVO templateVO);
 }

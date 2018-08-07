@@ -262,7 +262,7 @@
     }
     
     $.postJSONArray("/pos/confg/vermanage/applcstore/regist.sb", paramArr, function(result) {
-      s_alert.pop("<s:message code='msg.save.succ' />");
+      s_alert.pop("<s:message code='cmm.saveSucc' />");
       grid3.collectionView.clearChanges();
       closeStoreLayer();
       $("#storeInfoTab").click();

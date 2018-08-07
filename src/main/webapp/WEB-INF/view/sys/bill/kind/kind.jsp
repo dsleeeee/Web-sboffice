@@ -251,7 +251,7 @@
       }
       
       $.postJSONArray("/sys/bill/kind/bill/save.sb", paramArr, function(result) {
-          s_alert.pop("<s:message code='msg.save.succ' />");
+          s_alert.pop("<s:message code='cmm.saveSucc' />");
           gridPrint.collectionView.clearChanges();
         },
         function(result) {
@@ -384,7 +384,7 @@
       }
       
       $.postJSONArray("/sys/bill/kind/mapng/save.sb", paramArr, function(result) {
-          s_alert.pop("<s:message code='msg.save.succ' />");
+          s_alert.pop("<s:message code='cmm.saveSucc' />");
           gridMapng.collectionView.clearChanges();
         },
         function(result) {
