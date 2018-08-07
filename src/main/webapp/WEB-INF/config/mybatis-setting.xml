@@ -378,12 +378,17 @@
     <typeAlias alias="storeOrderVO" type="kr.co.solbipos.si.edi.storeorder.service.StoreOrderVO"/>
     <typeAlias alias="orderListVO" type="kr.co.solbipos.si.edi.orderlist.service.OrderListVO"/>
 -->
+
+    <typeAlias type="kr.co.common.data.handler.CustomBooleanTypeHandler" alias="CustomBooleanTypeHandler" />
+
   </typeAliases>
 
   <!-- typeHandlers -->
   <typeHandlers>
     <!-- DB의 CLOB 형태의 컬럼을 String 형태로 Casting 하여 사용하도록 설정 -->
     <typeHandler handler="org.apache.ibatis.type.ClobTypeHandler" jdbcType="CLOB" javaType="java.lang.String"/>
+    <!-- Boolean 형태의 컬럼을 String 형태로 Casting 하여 사용하도록 설정 -->
+    <typeHandler handler="kr.co.common.data.handler.CustomBooleanTypeHandler" jdbcType="VARCHAR" javaType="java.lang.Boolean"/>
     <!-- enum Casting 을 위한 설정 -->
     <package name="kr.co" />
   </typeHandlers>

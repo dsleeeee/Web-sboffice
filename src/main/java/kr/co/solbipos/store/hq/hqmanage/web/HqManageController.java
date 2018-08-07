@@ -39,10 +39,8 @@ import kr.co.solbipos.store.hq.hqmanage.service.HqMenuVO;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-
-
 @Controller
-@RequestMapping(value = "/store/hq/hqManage/")
+@RequestMapping(value="/store/hq/hqManage/")
 public class HqManageController {
 
     @Autowired

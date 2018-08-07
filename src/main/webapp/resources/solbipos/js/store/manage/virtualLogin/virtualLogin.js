@@ -18,10 +18,24 @@ $(document).ready(function() {
     var srchStoreNm    = wcombo.genInput("#srchStoreNm");
     var srchClsFg      = wcombo.genCommonBox("#srchClsFg", clsFg);
     var srchSysStatFg  = wcombo.genCommonBox("#srchSysStatFg", sysStatFg);
-     
-    var grid = wgrid.genGrid("#theGrid", rdata, menuCd, 1, columnLayout1);
-    var listScaleBox = wcombo.genCommonBox("#listScaleBox", ldata);
-    
+    var gridData =
+        [
+            {"binding":"hqOfficeCd","header":messages["virtualLogin.hqOfficeCd"], "width":"*"},
+            {"binding":"hqOfficeNm","header":messages["virtualLogin.hqOfficeNm"], "width":"*"},
+            {"binding":"storeCd","header":messages["virtualLogin.storeCd"], "width":"*"},
+            {"binding":"storeNm","header":messages["virtualLogin.storeNm"], "width":"*"},
+            {"binding":"clsFgNm","header":messages["virtualLogin.clsFgNm"], "width":"*"},
+            {"binding":"sysStatFgNm","header":messages["virtualLogin.sysStatFgNm"], "width":"*"},
+            {"binding":"ownerNm","header":messages["virtualLogin.ownerNm"], "width":"*"},
+            {"binding":"telNo","header":messages["virtualLogin.telNo"], "width":"*"},
+            {"binding":"mpNo","header":messages["virtualLogin.mpNo"], "width":"*"},
+            {"binding":"agencyNm","header":messages["virtualLogin.agencyNm"], "width":"*"},
+            {"binding":"sysOpenDate","header":messages["virtualLogin.sysOpenDate"], "width":"*"},
+            {"binding":"sysClosureDate","header":messages["virtualLogin.sysClosureDate"], "width":"*"}
+        ];
+    var grid = wgrid.genGrid("#theGrid", gridData);
+    var listScaleBox = wcombo.genCommonBox("#listScaleBox", listScaleBoxData);
+
     // 그리드 포맷
     grid.formatItem.addHandler(function(s, e) {
       if ( e.panel == s.cells ) {

@@ -23,7 +23,8 @@ $(document).ready(function () {
             { binding:"templtNm", header:messages["template.templtNm"], width:"*"},
         ];
     // 템플릿 그리드 생성
-    var gridTemplate = wgrid.genGrid("#gridTemplate", dataTemplate, menuCd, 1, coulmnLayout1);
+    // var gridTemplate = wgrid.genGrid("#gridTemplate", dataTemplate, menuCd, 1, coulmnLayout1);
+    var gridTemplate = wgrid.genGrid("#gridTemplate", dataTemplate, false);
     gridTemplate.isReadOnly = false;
 
     // ReadOnly 효과설정
@@ -41,7 +42,7 @@ $(document).ready(function () {
         }
     });
 
-    // 대표명칭 그리드 선택변경 이벤트
+    // 템플릿 그리드 선택변경 이벤트
     gridTemplate.selectionChanged.addHandler(function (s, e) {
         var col = s.columns[e.col];
         if (col.binding == "templtNm") {
@@ -57,7 +58,19 @@ $(document).ready(function () {
         }
     });
 
-    // 그리드 에디팅 방지
+    gridTemplate.addEventListener(gridTemplate.hostElement, 'click', function (e) {
+        console.log(e.target);
+        if (e.target.type=="checkbox") {
+            var ht = gridTemplate.hitTest(e);
+            var col = ht.panel.columns[ht.col];
+            var selectedRow = gridTemplate.rows[ht.row].dataItem;
+            console.log(selectedRow);
+            //posiAdjYn
+            selectedRow.gChk = !selectedRow.gChk;
+        }
+    });
+
+    // 템플릿 그리드 에디팅 방지
     gridTemplate.beginningEdit.addHandler(function (s, e) {
         var dataItem = gridTemplate.rows[e.row].dataItem;
         if ( nvl(dataItem.status, "") == "" && dataItem.status != "I" ) {
@@ -70,7 +83,7 @@ $(document).ready(function () {
         searchPrintCodeList();
     });
 
-    // 그리드 조회
+    // 템플릿 그리드 조회
     function searchGrid(value) {
 
         var param = {};
@@ -91,6 +104,7 @@ $(document).ready(function () {
                 $("#btnAddTemplate").show();
                 $("#btnDelTemplate").show();
                 $("#btnSaveTemplate").show();
+                $("#btnSaveEditTemplate").show();
 
                 if (list.length === undefined || list.length == 0) {
                     // 그리드 초기화
@@ -125,7 +139,11 @@ $(document).ready(function () {
 
     // 템플릿 삭제버튼 클릭
     $("#btnDelTemplate").click(function (e) {
-
+        for(var i = gridTemplate.itemsSource.itemCount-1; i >= 0; i-- ){
+            if ( gridTemplate.collectionView.items[i].gChk === true ) {
+                gridTemplate.itemsSource.removeAt(i);
+            }
+        }
     });
 
     // 템플릿 저장버튼 클릭
@@ -150,15 +168,16 @@ $(document).ready(function () {
             return;
         }
 
-        $.postJSONArray("/sys/bill/kind/bill/save.sb", paramArr, function(result) {
+        $.postJSONArray("/sys/bill/template/item/save.sb", paramArr, function(result) {
+            console.log(result);
                 s_alert.pop(messages["cmm.saveSucc"]);
                 gridTemplate.collectionView.clearChanges();
             },
             function(result) {
-                s_alert.pop(result.data.msg);
+            console.log(result);
+                s_alert.pop(result.message);
             }
         );
-
 
     });
 
@@ -272,6 +291,29 @@ $(document).ready(function () {
     theTarget.addEventListener('keyup', function (e) {
         makePreview();
     })
+
+    // 편집 저장버튼 클릭
+    $("#btnSaveEditTemplate").click(function (e) {
+
+        var selectedRow = gridTemplate.selectedRows[0]._data;
+        var param = {};
+        param.prtClassCd = srchPrtTypeList.selectedItem["value"];
+        param.templtCd   = selectedRow.templtCd;
+        param.templtNm   = selectedRow.templtNm;
+        param.prtForm    = theTarget.value;
+
+        $.postJSONSave("/sys/bill/template/bill/save.sb", param, function(result) {
+            if(result.status === "FAIL") {
+                s_alert.pop(result.message);
+                return;
+            }
+            s_alert.pop(messages["cmm.saveSucc"]);
+            gridTemplate.collectionView.clearChanges();
+        }).fail(function(){
+            s_alert.pop("Ajax Fail");
+        });
+
+    });
 
     // 미리보기 적용
     function makePreview() {

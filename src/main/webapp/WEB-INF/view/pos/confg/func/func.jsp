@@ -73,7 +73,7 @@ var hData1 =
   
 var hData2 = 
   [
-    {binding:"chk", header:"<s:message code='func.chk' />", allowMerging:true, dataType:wijmo.DataType.Boolean},
+    {binding:"gChk", header:"<s:message code='func.chk' />", allowMerging:true, dataType:wijmo.DataType.Boolean},
     {binding:"fnkeyNo", header:"<s:message code='func.fnkeyNo' />", maxLength:4, allowMerging:true, isReadOnly:true},
     {binding:"fnkeyNm", header:"<s:message code='func.fnkeyNm' />", maxLength:20, allowMerging:true},
     {binding:"storeFg", header:"<s:message code='func.storeFg' />", dataMap:storeKindDataMap, allowMerging:true},
@@ -83,9 +83,9 @@ var hData2 =
     {binding:"rowPosi", header:"<s:message code='func.rowPosi' />", allowMerging:true},
     {binding:"width", header:"<s:message code='func.width' />", allowMerging:true},
     {binding:"height", header:"<s:message code='func.height' />", allowMerging:true},
-    {binding:"fnkeyFunUseYn0", header:"<s:message code='func.useYn' />", dataType:wijmo.DataType.Boolean},
+    {binding:"fnkeyUseYn0", header:"<s:message code='func.useYn' />", dataType:wijmo.DataType.Boolean},
     {binding:"imgFileNm0", header:"<s:message code='func.imgFileNm' />", maxLength:50},
-    {binding:"fnkeyFunUseYn1", header:"<s:message code='func.useYn' />", dataType:wijmo.DataType.Boolean},
+    {binding:"fnkeyUseYn1", header:"<s:message code='func.useYn' />", dataType:wijmo.DataType.Boolean},
     {binding:"imgFileNm1", header:"<s:message code='func.imgFileNm' />", maxLength:50},
     {binding:"useYn", header:"<s:message code='func.useYn' />"},
     {binding:"dispSeq", header:"<s:message code='func.dispSeq' />"}
@@ -220,7 +220,7 @@ function srchFuncData(rowData) {
       }
       <%-- 일반 사용 Y일때만 일반 이미지명 입력 가능 --%>
       if( col.binding == "imgFileNm0") {
-        if(item.fnkeyFunUseYn0 == "Y" || item.fnkeyFunUseYn0 == true){
+        if(item.fnkeyUseYn0 == true){
           e.cancel = false;
         }else{
           e.cancel = true;
@@ -228,7 +228,7 @@ function srchFuncData(rowData) {
       }
       <%-- 외식 사용 Y일때만 외식 이미지명 입력 가능 --%>
       if( col.binding == "imgFileNm1") {
-        if(item.fnkeyFunUseYn1 == "Y" || item.fnkeyFunUseYn1 == true){
+        if(item.fnkeyUseYn1 == true){
           e.cancel = false;
         }else{
           e.cancel = true;
@@ -247,21 +247,21 @@ grid2.formatItem.addHandler(function(s, e) {
     var col = s.columns[e.col];
     var item = s.rows[e.row].dataItem;
     
-    if( col.binding == "chk") {
-      e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.chk == true || item.chk == "Y" ? 'checked' : '') + '>';
-    }
-    if( col.binding == "fnkeyFunUseYn0") {
-      e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.fnkeyFunUseYn0 == true || item.fnkeyFunUseYn0 == "Y" ? 'checked' : '') + '>';
-    }
-    if( col.binding == "fnkeyFunUseYn1") {
-      e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.fnkeyFunUseYn1 == true || item.fnkeyFunUseYn1 == "Y" ? 'checked' : '') + '>';
-    }
-    if( col.binding == "posiAdjYn") {
-      e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.posiAdjYn == true || item.posiAdjYn == "Y" ? 'checked' : '') + '>';
-    }
-    if( col.binding == "useYn") {
-      e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.useYn == true || item.useYn == "Y" ? 'checked' : '') + '>';
-    }
+    // if( col.binding == "chk") {
+    //   e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.chk == true || item.chk == "Y" ? 'checked' : '') + '>';
+    // }
+    // if( col.binding == "fnkeyFunUseYn0") {
+    //   e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.fnkeyFunUseYn0 == true || item.fnkeyFunUseYn0 == "Y" ? 'checked' : '') + '>';
+    // }
+    // if( col.binding == "fnkeyFunUseYn1") {
+    //   e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.fnkeyFunUseYn1 == true || item.fnkeyFunUseYn1 == "Y" ? 'checked' : '') + '>';
+    // }
+    // if( col.binding == "posiAdjYn") {
+    //   e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.posiAdjYn == true || item.posiAdjYn == "Y" ? 'checked' : '') + '>';
+    // }
+    // if( col.binding == "useYn") {
+    //   e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.useYn == true || item.useYn == "Y" ? 'checked' : '') + '>';
+    // }
   }
 });
 
@@ -369,11 +369,11 @@ $("#btnSave").click(function(e){
     return;
   }
   
-  for(var i=0; i<paramArr.length; i++){
-    paramArr[i].posiAdjYn   = (paramArr[i].posiAdjYn   == true ? "Y":"N");
-    paramArr[i].cmmImgUseYn = (paramArr[i].cmmImgUseYn == true ? "Y":"N");
-    paramArr[i].foodImgseYn = (paramArr[i].foodImgseYn == true ? "Y":"N");
-  }
+  // for(var i=0; i<paramArr.length; i++){
+  //   paramArr[i].posiAdjYn   = (paramArr[i].posiAdjYn   == true ? "Y":"N");
+  //   paramArr[i].fnkeyUseYn0 = (paramArr[i].fnkeyUseYn0 == true ? "Y":"N");
+  //   paramArr[i].fnkeyUseYn1 = (paramArr[i].fnkeyUseYn1 == true ? "Y":"N");
+  // }
   
   $.postJSONArray("${baseUrl}" + "save.sb", paramArr, function(result) {
     s_alert.pop("<s:message code='cmm.saveSucc' />");

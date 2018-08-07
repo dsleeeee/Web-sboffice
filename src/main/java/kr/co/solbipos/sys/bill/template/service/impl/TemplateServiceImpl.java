@@ -91,4 +91,24 @@ public class TemplateServiceImpl implements TemplateService {
 
     }
 
+    /** 출력물템플릿 저장 */
+    @Override
+    public int saveTemplate(TemplateVO templateVO, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        templateVO.setRegDt(currentDt);
+        templateVO.setRegId(sessionInfoVO.getUserId());
+        templateVO.setModDt(currentDt);
+        templateVO.setModId(sessionInfoVO.getUserId());
+
+        result = templateMapper.saveTemplate(templateVO);
+
+        if ( result >= 0 ) {
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+    }
+
 }
