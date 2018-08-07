@@ -23,8 +23,7 @@ $(document).ready(function () {
             { binding:"templtNm", header:messages["template.templtNm"], width:"*"},
         ];
     // 템플릿 그리드 생성
-    // var gridTemplate = wgrid.genGrid("#gridTemplate", dataTemplate, menuCd, 1, coulmnLayout1);
-    var gridTemplate = wgrid.genGrid("#gridTemplate", dataTemplate, false);
+    var gridTemplate = wgrid.genGrid("#gridTemplate", dataTemplate);
     gridTemplate.isReadOnly = false;
 
     // ReadOnly 효과설정
@@ -44,30 +43,15 @@ $(document).ready(function () {
 
     // 템플릿 그리드 선택변경 이벤트
     gridTemplate.selectionChanged.addHandler(function (s, e) {
-        var col = s.columns[e.col];
-        if (col.binding == "templtNm") {
-            var selectedRow = gridTemplate.rows[e.row].dataItem;
-            if (selectedRow.prtForm != null) {
-                theTarget.value = selectedRow.prtForm;
-                makePreview();
-            } else {
-                theTarget.value = "";
-                thePreview.innerHTML = "";
-            }
-            $("#btnSaveTemplate").show();
+        var selectedRow = gridTemplate.rows[e.row].dataItem;
+        if (selectedRow.prtForm != null) {
+            theTarget.value = selectedRow.prtForm;
+            makePreview();
+        } else {
+            theTarget.value = "";
+            thePreview.innerHTML = "";
         }
-    });
-
-    gridTemplate.addEventListener(gridTemplate.hostElement, 'click', function (e) {
-        console.log(e.target);
-        if (e.target.type=="checkbox") {
-            var ht = gridTemplate.hitTest(e);
-            var col = ht.panel.columns[ht.col];
-            var selectedRow = gridTemplate.rows[ht.row].dataItem;
-            console.log(selectedRow);
-            //posiAdjYn
-            selectedRow.gChk = !selectedRow.gChk;
-        }
+        $("#btnSaveTemplate").show();
     });
 
     // 템플릿 그리드 에디팅 방지
@@ -152,10 +136,12 @@ $(document).ready(function () {
         var paramArr = new Array();
         for ( var i = 0; i < gridTemplate.collectionView.itemsEdited.length; i++ ) {
             gridTemplate.collectionView.itemsEdited[i].status = "U";
+            gridTemplate.collectionView.itemsEdited[i].prtForm = theTarget.value;
             paramArr.push(gridTemplate.collectionView.itemsEdited[i]);
         }
         for ( var i = 0; i < gridTemplate.collectionView.itemsAdded.length; i++ ) {
             gridTemplate.collectionView.itemsAdded[i].status = "I";
+            gridTemplate.collectionView.itemsEdited[i].prtForm = theTarget.value;
             paramArr.push(gridTemplate.collectionView.itemsAdded[i]);
         }
         for ( var i = 0; i < gridTemplate.collectionView.itemsRemoved.length; i++ ) {
