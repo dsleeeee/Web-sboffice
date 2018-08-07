@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Context path="/">
-    <Resource defaultAutoCommit="false" driverClassName="oracle.jdbc.OracleDriver" maxTotal="3" maxWaitMillis="10000" minIdle="2" name="jdbc/oracle/sb" password="sbpora1234" type="javax.sql.DataSource" url="jdbc:oracle:thin:@192.168.0.160:1521:SBP" username="sbpora"/>
-</Context>
