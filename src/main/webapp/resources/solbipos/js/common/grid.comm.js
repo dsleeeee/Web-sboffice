@@ -63,14 +63,19 @@
                         if (mRange) {
                             e.cell.innerHTML = "<div class='wj-header merged-custom'>" + e.cell.innerHTML + "</div>";
                         }
-                        // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+                    // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
                     } else if (e.panel.cellType == wijmo.grid.CellType.RowHeader) {
-                        if (!isEmpty(e.panel._rows[e.row]._data.rnum)) {
-                            e.cell.textContent = (e.panel._rows[e.row]._data.rnum).toString();
+                        // GroupRow 인 경우에는 표시하지 않는다.
+                        if ( e.panel.rows[e.row] instanceof wijmo.grid.GroupRow ) {
+                            e.cell.textContent = "";
                         } else {
-                            e.cell.textContent = (e.row + 1).toString();
+                            if ( !isEmpty(e.panel._rows[e.row]._data.rnum) ) {
+                                e.cell.textContent = (e.panel._rows[e.row]._data.rnum).toString();
+                            } else {
+                                e.cell.textContent = (e.row + 1).toString();
+                            }
                         }
-                        // cell 속성 readonly 일때 backgrond 컬러 지정
+                    // cell 속성 readonly 일때 backgrond 컬러 지정
                     } else if (e.panel == s.cells) {
                         var col = s.columns[e.col];
                         if (col.isReadOnly) {
@@ -103,6 +108,7 @@
                     }
                 }
             }
+            // gridPicker 사용여부
             if (isView) {
                 genGridPicker(g, resrceCd, gridIdx);
             }
@@ -132,13 +138,14 @@
                 });
             }
             genGridCheckBoxClickEvent(g);
+            // 체크박스 클릭시 체크박스 value Set
             function genGridCheckBoxClickEvent(grid) {
                 grid.addEventListener(grid.hostElement, 'click', function (e) {
                     if (e.target.type=="checkbox") {
                         var ht = grid.hitTest(e);
                         var colName = ht.panel.columns[ht.col].binding;
                         var selectedRow = grid.rows[ht.row].dataItem;
-                        selectedRow.colName = !selectedRow.colName;
+                        selectedRow[colName] = !selectedRow[colName];
                     }
                 });
             }

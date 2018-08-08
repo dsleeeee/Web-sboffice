@@ -59,6 +59,7 @@
     <select id="getTemplateList" parameterType="templateVO" resultType="defaultMap">
         /* USE : TemplateMapper.getTemplateList */
         SELECT
+            tcpt.PRT_CLASS_CD,
             tcpt.TEMPLT_CD,
             tcpt.TEMPLT_NM,
             tcpt.PRT_FORM
@@ -82,6 +83,7 @@
             PRT_CLASS_CD,
             TEMPLT_CD,
             TEMPLT_NM,
+            PRT_FORM,
             REG_DT,
             REG_ID,
             MOD_DT,
@@ -90,6 +92,7 @@
             #{prtClassCd},
             ( SELECT TRIM(TO_CHAR(MAX(tcpt.TEMPLT_CD) + 1, '000')) FROM TB_CM_PRINT_TEMPL tcpt WHERE tcpt.PRT_CLASS_CD = #{prtClassCd} ),
             #{templtNm},
+            #{prtForm, jdbcType=VARCHAR},
             #{regDt},
             #{regId},
             #{modDt},
