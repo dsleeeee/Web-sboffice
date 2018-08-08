@@ -53,26 +53,4 @@ public interface HqBrandMapper {
 
     /** 환경설정 수정 - 매장 */
     int updateConfigStore(HqEnvstVO hqEnvst);
-
-    /** 분류목록 조회 */
-    List<DefaultMap<String>> getClsList(HqBrandVO hqBrand);
-
-    /** 분류 코드 조회 */
-    String getClsCd(HqClsVO hqClsVO);
-
-    /** 상위분류 코드 조회 */
-    String getPProdClsCd(HqClsVO hqClsVO);
-
-    /** 분류 등록 */
-    int insertCls(HqClsVO hqClsVO);
-
-    /** 분류 수정 */
-    int updateCls(HqClsVO hqClsVO);
-
-    /** 해당 분류로 등록된 상품 조회 */
-    int chkProdCnt(HqClsVO hqClsVO);
-
-    /** 분류 삭제 */
-    int deleteCls(HqClsVO hqClsVO);
-
 }

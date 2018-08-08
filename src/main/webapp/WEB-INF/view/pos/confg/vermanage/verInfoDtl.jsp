@@ -143,9 +143,9 @@
                   <%-- 포함내역 (chkbox) --%>
                   <th><s:message code="verManage.incldDtls" /></th>
                   <td class="mt10">
-                    <input name="incldDtls" id="pgm" type="checkbox" value="pgm"/><label for="chk"><s:message code='verManage.pgm' /></label>
-                    <input name="incldDtls" id="db" type="checkbox" value="db"/><label for="chk"><s:message code='verManage.db' /></label>
-                    <input name="incldDtls" id="img" type="checkbox" value="img"/><label for="chk"><s:message code='verManage.img' /></label>
+                    <input name="incldDtls" id="pgm" type="checkbox" value="pgm"/><label for="pgm"><s:message code='verManage.pgm' /></label>
+                    <input name="incldDtls" id="db" type="checkbox" value="db"/><label for="db"><s:message code='verManage.db' /></label>
+                    <input name="incldDtls" id="img" type="checkbox" value="img"/><label for="img"><s:message code='verManage.img' /></label>
                   </td>
                   <%-- 사용여부 (selectBox) --%>
                   <th><s:message code="verManage.useYn" /></th>
@@ -227,11 +227,8 @@
         {binding:"chk", header:"<s:message code='cmm.chk' />", width:40},
         {binding:"storeCd", header:"<s:message code='verManage.store.storeCd' />"},
         {binding:"storeNm", header:"<s:message code='verManage.store.storeNm' />"},
-        {binding:"posNo", header:"<s:message code='verManage.store.posNo' />"},
-        {binding:"posNm", header:"<s:message code='verManage.store.posNm' />"},
         {binding:"verRecvFg", header:"<s:message code='verManage.store.verRecvFg' />"},
         {binding:"verRecvDt", header:"<s:message code='verManage.store.verRecvDt' />"},
-        {binding:"posIp", header:"<s:message code='verManage.store.posIp' />"},
         {binding:"clsFg", header:"<s:message code='verManage.store.clsFg' />", dataMap:clsFgDataMap},
         {binding:"sysStatFg", header:"<s:message code='verManage.store.sysStatFg' />",dataMap:sysStatFgDataMap},
         {binding:"regDt", header:"<s:message code='verManage.regDt' />"},
@@ -388,8 +385,8 @@
             closeVerInfoLayer();
             search(1);
           });
-        })
-        .fail(function(){
+        }
+        ,function(){
           s_alert.pop("Ajax Fail");
         });
       });
@@ -410,8 +407,6 @@
   <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
   <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
 
-    <%-- 공통 --%>
-
     <%-- 상세정보 조회 --%>
     function searchVerInfoDtl(obj) {
 
@@ -422,8 +417,8 @@
           return;
         }
         showVerInfoDtlEditLayer(result.data);
-      })
-      .fail(function(){
+      }
+      ,function(){
         s_alert.pop("Ajax Fail");
       });
     }
@@ -435,22 +430,18 @@
           s_alert.pop(result.message);
           return;
         }
-
         var list = result.data.list;
-
         grid2.itemsSource = new wijmo.collections.CollectionView(list);
         grid2.itemsSource.trackChanges = true;
-
         selectVerSerCnt = list.length;
-
         /*
         if(list.length === undefined || list.length == 0) {
           s_alert.pop(result.message);
           return;
         }
         */
-      })
-      .fail(function(){
+      }
+      ,function(){
         s_alert.pop("Ajax Fail");
       });
     }
@@ -475,26 +466,6 @@
       sendFormData(sendUrl);
     });
 
-    <%-- 버전일련번호 중복체크 --%>
-    /*
-    function chkSerNo(sendUrl){
-      if(selectVerSerNo == "") {
-        var param = {};
-        param.verSerNo = verSerNoInput.text;
-
-        $.postJSON("/pos/confg/vermMnage/verInfo/chkVerSerNo.sb", param, function(result) {
-          if(result.data > 0) {
-            s_alert.pop("<s:message code='verManage.duplicate.verSerNo' />");
-            return;
-          }
-          sendFormData(sendUrl);
-        })
-        .fail(function(){
-          s_alert.pop("Ajax Fail");
-        });
-      }
-    }
-     */
     <%-- 저장 또는 수정 --%>
     function sendFormData(sendUrl) {
 
@@ -519,17 +490,14 @@
           s_alert.pop(result.message);
           return;
         }
-
         $("#verInfoViewArea").hide();
         $("#viewBtnArea").hide();
         $("#verInfoEditArea").show();
         $("#editBtnArea").show();
-
-      })
-      .fail(function(){
+      }
+      ,function(){
         s_alert.pop("Ajax Fail");
       });
-
       return false;
     }
 

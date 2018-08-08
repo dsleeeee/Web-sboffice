@@ -32,7 +32,7 @@
             <li><a id="mobMenu" href="javascript:;"><s:message code="hqManage.mobMenu" /></a></li>
           </ul>
         </div>
-          
+
         <div id="webArea">
           <%-- 권한복사 영역 --%>
           <table class="tblType01 moreDark mb10 mt10">
@@ -65,10 +65,10 @@
                 <span class="fr"><a id="btnAddMenu" href="javascript:;" class="btn_grayS2"><s:message code="cmm.add" /></a></span>
               </div>
               <%-- 위즈모 --%>
-              <div id="avlblMenuGrid" style="height:160px;"></div> 
+              <div id="avlblMenuGrid" style="height:160px;"></div>
             </div>
           </div>
-          
+
           <%-- 사용중인 메뉴 --%>
           <div class="oh mt10">
             <div class="wj-TblWrap mr10" style="height:200px;">
@@ -78,7 +78,7 @@
                 <span class="fr"><a id="btnRemoveMenu" href="javascript:;" class="btn_grayS2"><s:message code="cmm.delete" /></a></span>
               </div>
               <%-- 위즈모 --%>
-              <div id="beUseMenuGrid" style="height:160px;"></div> 
+              <div id="beUseMenuGrid" style="height:160px;"></div>
             </div>
           </div>
           </div>
@@ -114,20 +114,20 @@ var authCombo;
     {"binding":"resrceCdSmall", "header":"<s:message code='hqManage.sMenuCd' />", visible:false, width:"*"},
     {"binding":"resrceNmSmall", "header":"<s:message code='hqManage.sMenuNm' />", width:"*"}
   ];
-  
+
   avlblMenuGrid = wgrid.genGrid("#avlblMenuGrid", avlblMenuGridData, "${menuCd}", 2, ${clo.getColumnLayout(2)});
   beUseMenuGrid = wgrid.genGrid("#beUseMenuGrid", beUseMenuGridData, "${menuCd}", 3, ${clo.getColumnLayout(3)});
   authCombo     = wcombo.genCommonBox("#authCombo", null);
 
   avlblMenuGrid.allowMerging  = wijmo.grid.AllowMerging.All;
   beUseMenuGrid.allowMerging  = wijmo.grid.AllowMerging.All;
-  
+
   <%-- 체크박스 초기화 --%>
   avlblMenuGrid.formatItem.addHandler(function(s, e) {
     if (e.panel == s.cells) {
       var col = s.columns[e.col];
       var item = s.rows[e.row].dataItem;
-      /* 
+      /*
       if( col.binding == "menuChkMid") {
         e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.menuChkMid == true || item.menuChkMid == "Y" ? 'checked' : '') + '>';
       }
@@ -137,12 +137,12 @@ var authCombo;
       }
     }
   });
-    
+
   beUseMenuGrid.formatItem.addHandler(function(s, e) {
     if (e.panel == s.cells) {
       var col = s.columns[e.col];
       var item = s.rows[e.row].dataItem;
-      /* 
+      /*
       if( col.binding == "menuChkMid") {
         e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.menuChkMid == true || item.menuChkMid == "Y" ? 'checked' : '') + '>';
       }
@@ -152,13 +152,13 @@ var authCombo;
       }
     }
   });
-  
+
   <%-- 체크박스 핸들러 --%>
   avlblMenuGrid.addEventListener(avlblMenuGrid.hostElement, 'mousedown', function(e) {
     var ht = avlblMenuGrid.hitTest(e);
     if( ht.cellType == wijmo.grid.CellType.Cell) {
       var col = ht.panel.columns[ht.col];
-      /* 
+      /*
       if( col.binding == "menuChkMid" || col.binding == "menuChkSmall") {
         avlblMenuGrid.beginUpdate();
         if(avlblMenuGrid.cells.getCellData(ht.row, ht.col, true)){
@@ -179,7 +179,7 @@ var authCombo;
         }
         avlblMenuGrid.endUpdate();
       }
-      
+
     }
   });
 
@@ -187,7 +187,7 @@ var authCombo;
     var ht = beUseMenuGrid.hitTest(e);
     if( ht.cellType == wijmo.grid.CellType.Cell) {
       var col = ht.panel.columns[ht.col];
-      /* 
+      /*
       if( col.binding == "menuChkMid" || col.binding == "menuChkSmall") {
         beUseMenuGrid.beginUpdate();
         if(beUseMenuGrid.cells.getCellData(ht.row, ht.col, true)){
@@ -210,7 +210,7 @@ var authCombo;
         beUseMenuGrid.endUpdate();
         console.log(beUseMenuGrid.cells.getCellData(ht.row, ht.col, true))
       }
-      
+
     }
   });
 
@@ -223,7 +223,7 @@ var authCombo;
       }
     }
   });
-  
+
   beUseMenuGrid.formatItem.addHandler(function(s, e) {
     if (e.panel == s.columnHeaders) {
       var html = e.cell.innerHTML;
@@ -232,35 +232,33 @@ var authCombo;
       }
     }
   });
-  
+
 
   <%-- 권한 복사 버튼 클릭 --%>
   $("#btnCopyAuth").click(function(e){
     var param = {};
     param.hqOfficeCd      = selectedHq.hqOfficeCd;
     param.copyHqOfficeCd  = authCombo.selectedValue;
-    
-    //console.log(param);
-    
+
     $.postJSONSave("/store/hq/hqManage/authorExcept/copyAuth.sb", param, function(result) {
       var res = result.data;
       if(res > 0) {
         s_alert.pop("<s:message code='cmm.copySucc' />");
         openAuthLayer();
       }
-    })
-    .fail(function(){
+    }
+    ,function(){
       s_alert.pop("Ajax Fail");
     });
   });
-  
+
   <%-- 추가 버튼 클릭 --%>
   $("#btnAddMenu").click(function(e){
-    
+
     var paramArr = new Array();
     for(var i=0; i<avlblMenuGrid.collectionView.items.length; i++){
       var avlblMenu = avlblMenuGrid.collectionView.items[i];
-      /* 
+      /*
       if(avlblMenu.menuChkSmall || avlblMenu.menuChkMid) {
         avlblMenu.hqOfficeCd = selectedHq.hqOfficeCd;
         avlblMenu.resrceCd = avlblMenu.resrceCdSmall;
@@ -273,18 +271,18 @@ var authCombo;
         paramArr.push(avlblMenu);
       }
     }
-    
+
     $.postJSONArray("/store/hq/hqManage/authorExcept/addAuth.sb", paramArr, function(result) {
       var res = result.data;
       if(res > 0) {
         s_alert.pop("<s:message code='cmm.saveSucc' />");
         openAuthLayer();
       }
-    })
-    .fail(function(){
+    }
+    ,function(){
       s_alert.pop("Ajax Fail");
     });
-    
+
   });
 
   <%-- 삭제 버튼 클릭 --%>
@@ -292,7 +290,7 @@ var authCombo;
     var paramArr = new Array();
     for(var i=0; i<beUseMenuGrid.collectionView.items.length; i++){
       var beUseMenu = beUseMenuGrid.collectionView.items[i];
-      /* 
+      /*
       if(beUseMenu.menuChkSmall || beUseMenu.menuChkMid) {
         beUseMenu.hqOfficeCd = selectedHq.hqOfficeCd;
         beUseMenu.resrceCd = beUseMenu.resrceCdSmall;
@@ -305,15 +303,15 @@ var authCombo;
         paramArr.push(beUseMenu);
       }
     }
-    
+
     $.postJSONArray("/store/hq/hqManage/authorExcept/removeAuth.sb", paramArr, function(result) {
       var res = result.data;
       if(res > 0) {
         s_alert.pop("<s:message code='cmm.delSucc' />");
         openAuthLayer();
       }
-    })
-    .fail(function(){
+    }
+    ,function(){
       s_alert.pop("Ajax Fail");
     });
   });
@@ -323,23 +321,23 @@ var authCombo;
 
     $("#munuAuthLayer").show();
     $("#munuAuthDim").show();
-    
+
     $("#munuAuthLayer #popTitle").text("["+ selectedHq.hqOfficeCd +"] " + selectedHq.hqOfficeNm);
 
     var param = selectedHq;
-    
+
     $.postJSON("/store/hq/hqManage/authorExcept/getAuthHqList.sb", param, function(result) {
       console.log(result);
       if(result.status === "FAIL") {
         s_alert.pop(result.message);
         return;
       }
-      
+
       authCombo.itemsSource = result.data.authHqList;
       avlblMenuGrid.itemsSource = result.data.avlblMenu;
       beUseMenuGrid.itemsSource = result.data.beUseMenu;
-    })
-    .fail(function(){
+    }
+    ,function(){
       s_alert.pop("Ajax Fail");
     });
   }
@@ -348,34 +346,34 @@ var authCombo;
   $("#mobMenu").click(function(e){
     s_alert.pop("<s:message code='cmm.menu.preparing' />");
   });
-  
+
   <%-- 상세정보 탭 클릭 --%>
   $("#munuAuthLayer #hqInfoTab").click(function(){
     showMaster();
   });
-  
+
   <%-- 상세정보 탭 클릭 --%>
   $("#munuAuthLayer #envSettingTab").click(function(){
     showEnvSet();
   });
-  
+
   <%-- 메뉴권한 화면 보여줌 --%>
   function showMenuAuth() {
     hideMaster();
     hideEnvSet();
     openAuthLayer();
   }
-  
+
   <%-- 닫기 버튼 클릭 --%>
   $("#munuAuthLayer .btn_close").click(function(e){
     $("#munuAuthLayer").hide();
     $("#munuAuthDim").hide();
   });
-  
+
   <%-- 메뉴권한 화면 숨김 --%>
   function hideMenuAuth() {
     $("#munuAuthLayer").hide();
     $("#munuAuthDim").hide();
   }
-  
+
 </script>

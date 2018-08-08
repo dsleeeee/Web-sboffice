@@ -60,7 +60,7 @@ public interface HqManageMapper {
     int registWebUser(HqManageVO hqManage);
 
     /** 본사 공통코드 등록 */
-    int cmmCodeReg(HqNmcodeVO nmcodeVO);    //TODO 추가 필요
+    int cmmCodeReg(HqNmcodeVO nmcodeVO);
 
     /** 본사 포스 출력물 등록 */
     int hqPrintTempReg(HqPrintTemplVO printTempVO);

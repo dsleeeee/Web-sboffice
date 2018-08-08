@@ -90,8 +90,8 @@ $("#funcCopyLayer #btnSave").click(function(){
     }
     s_alert.pop("<s:message code='cmm.saveSucc'/>");
     $("#funcCopyLayer .btn_close").click();
-  })
-  .fail(function(){
+  }
+  ,function(){
     s_alert.pop("Ajax Fail");
   });
 

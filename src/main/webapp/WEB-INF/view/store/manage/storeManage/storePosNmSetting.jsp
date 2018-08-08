@@ -27,7 +27,7 @@
             <tbody id="posNmContent">
             </tbody>
           </table>
-        </div> 
+        </div>
       </div>
       <div class="btnSet">
         <%-- 저장 --%>
@@ -46,9 +46,9 @@
 
     var param = {};
     param.storeCd = selectedStore.storeCd;
-    
+
     $.postJSON("/store/manage/storeManage/storeManage/getPosList.sb", param, function(result) {
-      
+
       if(result.status === "FAIL") {
         s_alert.pop(result.message);
         return;
@@ -57,7 +57,7 @@
       var posList = result.data.list.posList;
       var innerHtml = "";
       for(var i=0; i<posList.length; i++) {
-        
+
         innerHtml += "<tr>";
         innerHtml += "<td class='tc'>"+posList[i].rownum+"</td>";
         innerHtml += "<td class='tc'>"+posList[i].posNo+"</td>";
@@ -66,19 +66,19 @@
         innerHtml += "</td>";
         innerHtml += "</tr>";
       }
-       
+
       $("#posNmContent").html(innerHtml);
       $("#storePosNmDim").show();
       $("#storePosNmLayer").show();
-    })
-    .fail(function(){
+    }
+    ,function(){
       s_alert.pop("Ajax Fail");
     });
   }
-  
+
   <%-- 저장 버튼 클릭 --%>
   $("#btnSavePosNm").click(function(){
-    
+
     var paramArr = new Array();
     var posLength = $("input[name=pos]").length;
 
@@ -88,22 +88,22 @@
       param.storeCd = selectedStore.storeCd;
       param.posNo = id.substring(3,id.length);
       param.posNm = $("#"+ id).val();
-      
+
       paramArr.push(param);
     });
-    
+
     $.postJSONArray("/store/manage/storeManage/storeManage/savePosNm.sb", paramArr, function(result) {
-      
+
       s_alert.pop("<s:message code='cmm.saveSucc' />");
-      
+
       $("#storePosNmLayer .btn_close").click();
     },
     function(result) {
       s_alert.pop(result.data.msg);
     });
-    
+
   });
-  
+
   <%-- 레이어 팝업 닫기 --%>
   $("#storePosNmLayer .btn_close, #storePosNmLayer #btnClosePosNm").click(function(){
     $("#storePosNmDim").hide();

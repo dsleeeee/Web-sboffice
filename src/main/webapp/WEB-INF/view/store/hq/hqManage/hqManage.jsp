@@ -228,8 +228,8 @@
       grid.itemsSource = list;
 
       page.make("#page", result.data.page.curr, result.data.page.totalPage);
-    })
-    .fail(function(){
+    }
+    ,function(){
         s_alert.pop("Ajax Fail");
     });
   }

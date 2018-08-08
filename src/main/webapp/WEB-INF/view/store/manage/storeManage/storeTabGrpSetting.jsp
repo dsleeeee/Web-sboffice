@@ -27,7 +27,7 @@
             <tbody id="tabGrpContent">
             </tbody>
           </table>
-        </div> 
+        </div>
       </div>
       <div class="btnSet">
         <%-- 저장 --%>
@@ -46,9 +46,9 @@
 
     var param = {};
     param.storeCd = selectedStore.storeCd;
-    
+
     $.postJSON("/store/manage/storeManage/storeManage/getPosConfigList.sb", param, function(result) {
-      
+
       if(result.status === "FAIL") {
         s_alert.pop(result.message);
         return;
@@ -56,37 +56,37 @@
 
       var posList = result.data.list.posList;
       var grpList = result.data.list.groupList;
-      
+
       var innerHtml = "";
       for(var i=0; i<posList.length; i++) {
-        
+
         innerHtml += "<tr>";
         innerHtml += "<td class='tc'>"+posList[i].rownum+"</td>";
         innerHtml += "<td class='tc'>"+posList[i].posNo+"</td>";
         innerHtml += "<td class='tc'>";
         innerHtml += "<select name='pos'id='pos"+posList[i].posNo+"'>";
-        
+
         for(var j=0; j<grpList.length; j++){
           innerHtml += "<option value='"+grpList[j].tblGrpCd+"'>"+grpList[j].tblGrpNm+"</option>";
         }
-        
+
         innerHtml += "</select>";
         innerHtml += "</td>";
         innerHtml += "</tr>";
       }
-       
+
       $("#tabGrpContent").html(innerHtml);
       $("#storeTabGrpDim").show();
       $("#storeTabGrpLayer").show();
-    })
-    .fail(function(){
+    }
+    ,function(){
       s_alert.pop("Ajax Fail");
     });
   }
-  
+
   <%-- 저장 버튼 클릭 --%>
   $("#btnSaveTabGrp").click(function(){
-    
+
     var paramArr = new Array();
     var posLength = $("select[name=pos]").length;
 
@@ -98,19 +98,19 @@
       param.envstVal  = $("#"+ id).val();
       paramArr.push(param);
     });
-    
+
     $.postJSONArray("/store/manage/storeManage/storeManage/savePosTabGrp.sb", paramArr, function(result) {
-      
+
       s_alert.pop("<s:message code='cmm.saveSucc' />");
-      
+
       $("#storeTabGrpLayer .btn_close").click();
     },
     function(result) {
       s_alert.pop(result.data.msg);
     });
-    
+
   });
-  
+
   <%-- 레이어 팝업 닫기 --%>
   $("#storeTabGrpLayer .btn_close, #storeTabGrpLayer #btnCloseTabGrp").click(function(){
     $("#storeTabGrpDim").hide();

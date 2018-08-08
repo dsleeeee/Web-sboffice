@@ -27,7 +27,7 @@
             <span class="txtIn"> <input id="startDt" name="startDt" class="w200" /></span>
             <span class="rg">~</span>
             <span class="txtIn"> <input id="endDt" name="endDt" class="w200" /></span>
-            <span class="chk ml10"> <input type="checkbox" id="chkDt" /> 
+            <span class="chk ml10"> <input type="checkbox" id="chkDt" />
             <label for="chk"><s:message code="cmm.all.day" /></label>
             </span>
           </div>
@@ -117,7 +117,7 @@
 <script>
 $(document).ready(function(){
 
-  var rdata = 
+  var rdata =
     [
       {"binding":"rnum","header":"No"},
       {"binding":"hqOfficeCd","header":"<s:message code='loginStatus.hqOfficeCd' />"},
@@ -132,7 +132,7 @@ $(document).ready(function(){
       {"binding":"posVerNo","header":"<s:message code='loginStatus.posVerNo' />"},
       {"binding":"sysStatFgNm","header":"<s:message code='loginStatus.sysStatFgNm' />"}
     ];
-  
+
   var grid         = wgrid.genGrid("#theGrid", rdata, "${menuCd}", 1, ${clo.getColumnLayout(1)});
   var hqOfficeCd   = wcombo.genInput("#hqOfficeCd");
   var hqOfficeNm   = wcombo.genInput("#hqOfficeNm");
@@ -144,7 +144,7 @@ $(document).ready(function(){
   var listScaleBox = wcombo.genCommonBox("#listScaleBox", ldata);
   var cdata        = ${ccu.getCommCode("009")};
   var sysStatFg    = wcombo.genCommonBox("#sysStatFg", cdata);
-  
+
   function search(index) {
     var param = {};
 
@@ -158,48 +158,48 @@ $(document).ready(function(){
     param.sysStatFg = sysStatFg.selectedValue;
     param.listScale = listScaleBox.selectedValue;
     param.curr = index;
-    
+
     $.postJSON("/pos/confg/loginstatus/loginstatus/list.sb", param, function(result) {
       var list = result.data.list;
-      
+
       if(list.length == 0) {
         s_alert.pop(result.message);
       }
-    
+
       grid.itemsSource = list;
       page.make("#page1", result.data.page.curr, result.data.page.totalPage);
       },
       function(result){
         s_alert.pop(result.data.msg);
-      })
-      .fail(function(){
+      }
+      ,function(){
         s_alert.pop("Ajax Fail");
     });
   }
-  
+
   <%-- 리스트 조회 --%>
   $("#searchBtn").click(function( e ){
     search(1);
   });
-  
+
   <%-- 엑셀 다운로드 --%>
   $("#excelBtn").click(function( e ){
     var name = "${menuNm}";
     wexcel.down(grid, name, name + ".xlsx");
   });
-  
+
   <%-- 페이징 --%>
   $(document).on("click", ".page1", function() {
     search($(this).data("value"));
   });
-  
+
   <%-- 전체기간 체크박스 --%>
   $(document).on("click", "#chkDt", function() {
     var chkDt = $('#chkDt').is(":checked");
     startDt.isDisabled = chkDt;
     endDt.isDisabled = chkDt;
   });
-  
+
 });
-  
+
 </script>

@@ -402,8 +402,8 @@ rEnvHqOffice.selectedIndexChanged.addHandler(function(s, e){
       return;
     }
     rEnvStore.itemsSource = result.data.list;
-  })
-  .fail(function(){
+  }
+  ,function(){
       s_alert.pop("Ajax Fail");
   });
 });
@@ -507,8 +507,8 @@ function showStoreDetail() {
     console.log(result);
 
     setStoreData(result.data);
-  })
-  .fail(function(){
+  }
+  ,function(){
     s_alert.pop("Ajax Fail");
   });
 }
@@ -601,10 +601,10 @@ $("#btnChkBizNo").click(function(){
       <%-- 사업자번호 사용현황 팝업 --%>
       openBizInfoLayer(param);
     }
-  })
-      .fail(function(){
-        s_alert.pop("Ajax Fail");
-      });
+  }
+  ,function(){
+    s_alert.pop("Ajax Fail");
+  });
 });
 
 

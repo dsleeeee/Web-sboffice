@@ -120,8 +120,8 @@ $(document).ready(function(){
       posFuncGrid.itemsSource = new wijmo.collections.CollectionView(list);
       posFuncGrid.collectionView.trackChanges = true;
       //changeColSet(list);
-    })
-    .fail(function(){
+    }
+    ,function(){
         s_alert.pop("Ajax Fail");
     });
   }
@@ -174,7 +174,6 @@ $(document).ready(function(){
 
   <%--//TODO 좌표자동세팅 버튼 클릭 --%>
   $("#btnAutoPosition").click(function(){
-
   });
 
   <%-- 그리드 선택 이벤트 --%>
@@ -226,8 +225,8 @@ $(document).ready(function(){
       useFuncGrid.itemsSource = new wijmo.collections.CollectionView(list);
       useFuncGrid.collectionView.trackChanges = true;
       changeColSet(list);
-    })
-    .fail(function(){
+    }
+    ,function(){
         s_alert.pop("Ajax Fail");
     });
   }

@@ -67,8 +67,8 @@ function getPosAuthData(){
         var list = result.data.list;
         authSettingGrid.itemsSource = new wijmo.collections.CollectionView(list);
         authSettingGrid.collectionView.trackChanges = true;
-    })
-    .fail(function(){
+    }
+    ,function(){
         s_alert.pop("Ajax Fail");
     });
 }

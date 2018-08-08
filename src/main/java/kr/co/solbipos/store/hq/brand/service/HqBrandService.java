@@ -33,10 +33,4 @@ public interface HqBrandService {
     /** 환경설정 저장 */
     int saveConfig(HqEnvstVO[] hqEnvsts, SessionInfoVO sessionInfoVO);
 
-    /** 분류 목록 조회 */
-    List<HqClsVO> getClsList(HqBrandVO hqBrand);
-
-    /** 분류 등록 */
-    int clsSave(HqClsVO[] HqClsVOs, SessionInfoVO sessionInfoVO);
-
 }

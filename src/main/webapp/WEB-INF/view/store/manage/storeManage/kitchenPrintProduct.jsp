@@ -14,10 +14,10 @@
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code="storeManage.kitchenPrint" /></span>
         </div>
-        <div id="kpProductGrid" style="height:400px;"></div> 
-      </div> 
+        <div id="kpProductGrid" style="height:400px;"></div>
+      </div>
     </div>
-    
+
     <%-- 출력상품 --%>
     <div class="w33 fl">
       <div class="wj-TblWrapBr ml10 pd20" style="height:470px;">
@@ -30,7 +30,7 @@
         <div id="productTree1"></div>
       </div>
     </div>
-    
+
     <%-- 미출력상품 --%>
     <div class="w33 fl">
       <div class="wj-TblWrapBr ml10 pd20" style="height:470px;">
@@ -50,14 +50,14 @@
 var selectedDataItem;
 
 <%-- 그리드 설정 --%>
-var kpProductGridHeader = 
+var kpProductGridHeader =
   [
     {binding:"no", header:"<s:message code='cmm.no' />", width:"*"},
     {binding:"prterNo", header:"<s:message code='storeManage.prterNo' />", width:"*"},
     {binding:"prterNm", header:"<s:message code='storeManage.prterNm' />", width:"*"},
     {binding:"cnt", header:"<s:message code='storeManage.product.cnt' />", width:"*"}
   ];
-  
+
 var kpProductGrid = wgrid.genGrid("#kpProductGrid", kpProductGridHeader, "${menuCd}", 3, ${clo.getColumnLayout(3)});
 
 kpProductGrid.isReadOnly = true;
@@ -136,12 +136,12 @@ function showKitchenPrintProductLayout(){
 function getPrintList(){
 
   kpProductGrid.itemsSource = [];
-  
+
   var param = {};
   param.hqOfficeCd  = selectedStore.hqOfficeCd;
 //  param.hqBrandCd   = selectedStore.hqBrandCd;
   param.storeCd     = selectedStore.storeCd;
-  
+
   $.postJSON("/store/manage/storeManage/storeManage/getKitchenPrintInfo.sb", param, function(result) {
 
     if(result.status === "FAIL") {
@@ -152,33 +152,31 @@ function getPrintList(){
 
     kpProductGrid.itemsSource = new wijmo.collections.CollectionView(list);
     kpProductGrid.itemsSource.trackChanges = true;
-  })
-  .fail(function(){
+  }
+  ,function(){
     s_alert.pop("Ajax Fail");
   });
 }
 
 <%-- 주방프린터 출력상품 조회 --%>
 function getProductList(){
-  
+
   var param = {};
   param.storeCd     = selectedDataItem.storeCd;
   param.prterNo     = selectedDataItem.prterNo;
-  
+
   productTree1.itemsSource = [];
   productTree2.itemsSource = [];
-  
-  $.postJSON("/store/manage/storeManage/storeManage/getKitchenPrintProductInfo.sb", param, function(result) {
 
+  $.postJSON("/store/manage/storeManage/storeManage/getKitchenPrintProductInfo.sb", param, function(result) {
     if(result.status === "FAIL") {
       s_alert.pop(result.message);
       return;
     }
-    
     productTree1.itemsSource = result.data.list.printProductList;
     productTree2.itemsSource = result.data.list.noPrintProductList;
-  })
-  .fail(function(){
+  }
+  ,function(){
     s_alert.pop("Ajax Fail");
   });
 }
@@ -190,12 +188,12 @@ $("#btnProdDel").click(function(){
     delView.itemsAdded[i].status = 'D';
     paramArr.push(delView.itemsAdded[i]);
   }
-  
+
   if(paramArr.length <= 0) {
     s_alert.pop("<s:message code='cmm.not.modify'/>");
     return;
   }
-  
+
   $.postJSONArray("/store/manage/storeManage/storeManage/saveKitchenPrintProduct.sb", paramArr, function(result) {
     s_alert.pop("<s:message code='cmm.saveSucc' />");
     delView.clearChanges();
@@ -213,12 +211,12 @@ $("#btnProdAdd").click(function(){
     addView.itemsAdded[i].status = 'I';
     paramArr.push(addView.itemsAdded[i]);
   }
-  
+
   if(paramArr.length <= 0) {
     s_alert.pop("<s:message code='cmm.not.modify'/>");
     return;
   }
-  
+
   $.postJSONArray("/store/manage/storeManage/storeManage/saveKitchenPrintProduct.sb", paramArr, function(result) {
     s_alert.pop("<s:message code='cmm.saveSucc' />");
     addView.clearChanges();
@@ -227,7 +225,7 @@ $("#btnProdAdd").click(function(){
   function(result) {
     s_alert.pop(result.data.msg);
   });
-  
+
 });
 
 <%-- 주방프린터-상품등록 레이아웃 보이지 않기--%>

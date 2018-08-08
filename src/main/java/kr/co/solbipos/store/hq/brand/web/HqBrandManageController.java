@@ -149,47 +149,4 @@ public class HqBrandManageController {
 
         return returnJson(Status.OK, result);
     }
-
-    /**
-     * 분류 조회
-     * @param   hqBrand
-     * @param   request
-     * @param   response
-     * @param   model
-     * @return  Result
-     * @author  김지은
-     * @since   2018. 06. 08.
-     */
-    @RequestMapping(value = "productClass/list.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result clsList(HqBrandVO hqBrand, HttpServletRequest request,
-            HttpServletResponse response, Model model) {
-
-        List<HqClsVO> list = service.getClsList(hqBrand);
-
-        return returnListJson(Status.OK, list, hqBrand);
-    }
-
-    /**
-     * 분류 등록
-     * @param   HqClsVOs
-     * @param   request
-     * @param   response
-     * @param   model
-     * @return  Result
-     * @author  김지은
-     * @since   2018. 06. 08.
-     */
-    @RequestMapping(value = "productClass/save.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result clsSave(@RequestBody HqClsVO[] HqClsVOs, HttpServletRequest request,
-            HttpServletResponse response, Model model) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        int result = service.clsSave(HqClsVOs, sessionInfoVO);
-
-        return returnJson(Status.OK, result);
-    }
-
 }

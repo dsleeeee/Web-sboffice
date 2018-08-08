@@ -65,13 +65,13 @@ var posFgDataMap     = new wijmo.grid.DataMap(posFg, 'value', 'name');
 var funcFgCView = new wijmo.collections.CollectionView(funcFgList);
 
 <%-- Header --%>
-var hData1 = 
+var hData1 =
   [
     {binding:"nmcodeCd", header:"<s:message code='func.funFgCd' />"},
     {binding:"nmcodeNm", header:"<s:message code='func.funFg' />"}
   ];
-  
-var hData2 = 
+
+var hData2 =
   [
     {binding:"gChk", header:"<s:message code='func.chk' />", allowMerging:true, dataType:wijmo.DataType.Boolean},
     {binding:"fnkeyNo", header:"<s:message code='func.fnkeyNo' />", maxLength:4, allowMerging:true, isReadOnly:true},
@@ -182,14 +182,14 @@ grid1.addEventListener(grid1.hostElement, 'mousedown', function(e) {
 <%-- 그리드2 데이터 조회 --%>
 function srchFuncData(rowData) {
   var param = {};
-  
+
   param.fnkeyFg = rowData.nmcodeCd;
-  
+
   $.postJSON("${baseUrl}" + "funcList.sb", param, function(result) {
 
     $("#funcName").text(rowData.nmcodeNm);
     $("button").show();
-    
+
     if(result.status === "FAIL") {
       s_alert.pop(result.message);
       return;
@@ -198,18 +198,18 @@ function srchFuncData(rowData) {
     grid2.itemsSource = new wijmo.collections.CollectionView(list);
     grid2.itemsSource.trackChanges = true;
     grid2.itemsSource.canSort = true;
-    
+
     if(list.length === undefined || list.length == 0) {
       s_alert.pop(result.message);
       return;
     }
-    
+
     <%-- 그리드2 데이터 수정 옵션 --%>
     grid2.beginningEdit.addHandler(function (s, e) {
-      
+
       var col   = s.columns[e.col];
       var item  = s.rows[e.row].dataItem;
-      
+
       <%-- 위치조정여부 Y시에만 열위치, 줄위치, 폭, 높이 입력 가능  --%>
       if( col.binding == "colPosi" || col.binding == "rowPosi" || col.binding == "width" || col.binding == "height") {
         if(item.posiAdjYn == "Y" || item.posiAdjYn == true){
@@ -235,8 +235,8 @@ function srchFuncData(rowData) {
         }
       }
     });
-  })
-  .fail(function(){
+  }
+  ,function(){
     s_alert.pop("Ajax Fail");
   });
 }
@@ -246,7 +246,7 @@ grid2.formatItem.addHandler(function(s, e) {
   if (e.panel == s.cells) {
     var col = s.columns[e.col];
     var item = s.rows[e.row].dataItem;
-    
+
     // if( col.binding == "chk") {
     //   e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.chk == true || item.chk == "Y" ? 'checked' : '') + '>';
     // }
@@ -308,7 +308,7 @@ $("#btnDown").click(function(e){
         grid2.collectionView.items[i] = tmpItem;
         grid2.collectionView.commitEdit();
         grid2.collectionView.refresh();
-      } 
+      }
     }
   }
 });
@@ -341,15 +341,15 @@ $("#btnDel").click(function(e){
 
 <%-- 저장 버튼 클릭 --%>
 $("#btnSave").click(function(e){
- 
+
   for(var i = 0; i < grid2.collectionView.itemCount; i ++) {  // dispSeq 재설정
     grid2.collectionView.editItem(grid2.collectionView.items[i]);
     grid2.collectionView.items[i].dispSeq = (i+1);
     grid2.collectionView.commitEdit();
   }
-  
+
   var paramArr = new Array();
-  
+
   for(var i=0; i<grid2.collectionView.itemsEdited.length; i++){
     grid2.collectionView.itemsEdited[i].status = "U";
     paramArr.push(grid2.collectionView.itemsEdited[i]);
@@ -363,18 +363,18 @@ $("#btnSave").click(function(e){
     grid2.collectionView.itemsRemoved[i].status = "D";
     paramArr.push(grid2.collectionView.itemsRemoved[i]);
   }
-  
+
   if(paramArr.length <= 0) {
     s_alert.pop("<s:message code='cmm.not.modify'/>");
     return;
   }
-  
+
   // for(var i=0; i<paramArr.length; i++){
   //   paramArr[i].posiAdjYn   = (paramArr[i].posiAdjYn   == true ? "Y":"N");
   //   paramArr[i].fnkeyUseYn0 = (paramArr[i].fnkeyUseYn0 == true ? "Y":"N");
   //   paramArr[i].fnkeyUseYn1 = (paramArr[i].fnkeyUseYn1 == true ? "Y":"N");
   // }
-  
+
   $.postJSONArray("${baseUrl}" + "save.sb", paramArr, function(result) {
     s_alert.pop("<s:message code='cmm.saveSucc' />");
     grid2.collectionView.clearChanges();

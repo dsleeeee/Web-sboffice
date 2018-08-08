@@ -282,7 +282,7 @@ var wijmo;
                  * You can use this event to perform validation and prevent invalid edits.
                  * For example, the code below prevents users from entering values that
                  * do not contain the letter 'a'. The code demonstrates how you can obtain
-                 * the old and new values before the edits are applied.
+                 * the old and new values before the edits are applied.v
                  *
                  * <pre>function cellEditEnding (sender, e) {
                  *   // get old and new values
@@ -524,7 +524,7 @@ var wijmo;
                 });
                 // when you click an element with tabIndex < 0, Chrome and Firefox
                 // move the focus to the body, which seems like the right thing to do.
-                // IE gives the focus to the element even with tabIndex < 0, 
+                // IE gives the focus to the element even with tabIndex < 0,
                 // so let's fix that inconsistency here! // TFS 270776
                 _this.addEventListener(host, 'focus', function (e) {
                     if (host.tabIndex > -1) {
@@ -3362,7 +3362,7 @@ var wijmo;
                 // raise the event
                 this.onUpdatedLayout(e);
             };
-            // update the top of the header elements to remain visible 
+            // update the top of the header elements to remain visible
             // when the user scrolls the window
             FlexGrid.prototype._updateStickyHeaders = function () {
                 var stuck = false, offset = 0;
@@ -3459,7 +3459,7 @@ var wijmo;
             // updates the scrollPosition property based on the element's scroll position
             // note that IE/Chrome/FF handle scrollLeft differently under RTL:
             // - Chrome reverses direction,
-            // - FF uses negative values, 
+            // - FF uses negative values,
             // - IE does the right thing (nothing)
             FlexGrid.prototype._updateScrollPosition = function () {
                 var root = this._root, top = root.scrollTop, left = root.scrollLeft;
@@ -3603,7 +3603,7 @@ var wijmo;
                 this.invalidate();
             };
             // use a separate div for frozen cells in IE/Firefox/Mobile browsers
-            // this improves perceived performance by reducing flicker 
+            // this improves perceived performance by reducing flicker
             // when scrolling with frozen cells.
             /*private*/ FlexGrid.prototype._useFrozenDiv = function () {
                 return wijmo.isBoolean(this._fzClone)
@@ -3730,7 +3730,7 @@ var wijmo;
                     }
                 }
             };
-            // get the binding column 
+            // get the binding column
             // (in the MultiRow grid, each physical column may contain several binding columns)
             /*protected*/ FlexGrid.prototype._getBindingColumn = function (p, r, c) {
                 return c;
@@ -3923,7 +3923,7 @@ var wijmo;
                 '<div wj-part="ch" aria-hidden="true" style="position:absolute;overflow:hidden;outline:none">' + // col header container
                 '<div wj-part="chcells" class="wj-colheaders" style="position:relative"></div>' + // col header cells
                 '</div>' +
-                '<div wj-part="bl" aria-hidden="true" style="position:absolute;overflow:hidden;outline:none">' + // bottom-left container 
+                '<div wj-part="bl" aria-hidden="true" style="position:absolute;overflow:hidden;outline:none">' + // bottom-left container
                 '<div wj-part="blcells" class="wj-bottomleft" style="position:relative"></div>' + // top-left cells
                 '</div>' +
                 '<div wj-part="tl" aria-hidden="true" style="position:absolute;overflow:hidden;outline:none">' + // top-left container
@@ -5034,7 +5034,7 @@ var wijmo;
                 // use checkboxes if the dataType is Boolean and there's no dataMap
                 var checkBox = bcol.dataType == wijmo.DataType.Boolean && !bcol.dataMap;
                 // get cell position accounting for frozen rows/columns
-                // in non-Chrome browsers, frozen cells: will be moved to a fixed div, 
+                // in non-Chrome browsers, frozen cells: will be moved to a fixed div,
                 // so adjust the scroll position for that
                 // in Chrome, they will remain in the cells div, so adjust for that instead
                 // (not when editing...)
@@ -6654,7 +6654,7 @@ var wijmo;
                             : null;
                         // check if it's a group row or a new row template
                         var gr = wijmo.tryCast(rNext, GroupRow), nr = wijmo.tryCast(rNext, grid_1._NewRowTemplate);
-                        // return true if there is a next row and 
+                        // return true if there is a next row and
                         // it's a data row or a deeper group row
                         return rNext != null && nr == null && (gr == null || gr.level > this.level);
                     }
@@ -8409,7 +8409,7 @@ var wijmo;
                             break;
                     }
                 }
-                // default key handling 
+                // default key handling
                 // https://www.w3.org/TR/wai-aria-practices-1.1/#grid
                 var smv = grid.SelMove, sm = grid.SelectionMode;
                 switch (keyCode) {
@@ -8871,7 +8871,7 @@ var wijmo;
                 // create target indicator element
                 this._dvMarker = wijmo.createElement('<div class="wj-marker">&nbsp;</div>');
                 // mouse events:
-                // when the user presses the mouse on the control, hook up handlers to 
+                // when the user presses the mouse on the control, hook up handlers to
                 // mouse move/up on the *document*, and unhook on mouse up.
                 // this simulates a mouse capture (nice idea from ngGrid).
                 // note: use 'document' since 'window' doesn't work on Android.
@@ -9762,7 +9762,7 @@ var wijmo;
                 // update marker
                 wijmo.setCss(t, css);
             };
-            // raises the ResizedRow/Column events and 
+            // raises the ResizedRow/Column events and
             // applies the new size to the selection if the control key is pressed
             _MouseHandler.prototype._finishResizing = function (e) {
                 var g = this._g, sel = g.selection, args = this._szArgs, ctrl = this._eMouse && this._eMouse.ctrlKey; // TFS 290725
@@ -9807,7 +9807,7 @@ var wijmo;
                     }
                 }
             };
-            // starts ListBox selection by keeping track of which rows were selected 
+            // starts ListBox selection by keeping track of which rows were selected
             // when the action started
             _MouseHandler.prototype._startListBoxSelection = function (row) {
                 var rows = this._g.rows;
@@ -11129,3 +11129,56 @@ var wijmo;
     })(grid = wijmo.grid || (wijmo.grid = {}));
 })(wijmo || (wijmo = {}));
 
+var wijmo;
+(function (wijmo) {
+  var grid;
+  (function (grid) {
+    'use strict';
+    /**
+     * Class that extends the standard MergeManager to support merged ranges that
+     * span both rows and columns.
+     *
+     * This class uses the same content-based approach used by the built-in merge
+     * manager, but it could use any other logic instead (for example, a fixed list
+     * of pre-defined merged ranges).
+     */
+    var CustomMergeManager = (function (_super) {
+      __extends(CustomMergeManager, _super);
+      function CustomMergeManager() {
+        _super.apply(this, arguments);
+      }
+      CustomMergeManager.prototype.getMergedRange = function (panel, r, c, clip) {
+        if (clip === void 0) { clip = true; }
+        // create basic cell range
+        var rg = new grid.CellRange(r, c);
+        // expand left/right
+        for (var i = rg.col; i < panel.columns.length - 1; i++) {
+          if (panel.getCellData(rg.row, i, true) != panel.getCellData(rg.row, i + 1, true))
+            break;
+          rg.col2 = i + 1;
+        }
+        for (var i = rg.col; i > 0; i--) {
+          if (panel.getCellData(rg.row, i, true) != panel.getCellData(rg.row, i - 1, true))
+            break;
+          rg.col = i - 1;
+        }
+        // expand up/down
+        for (var i = rg.row; i < panel.rows.length - 1; i++) {
+          if (panel.getCellData(i, rg.col, true) != panel.getCellData(i + 1, rg.col, true))
+            break;
+          rg.row2 = i + 1;
+        }
+        for (var i = rg.row; i > 0; i--) {
+          if (panel.getCellData(i, rg.col, true) != panel.getCellData(i - 1, rg.col, true))
+            break;
+          rg.row = i - 1;
+        }
+        // done
+        return rg;
+      };
+      return CustomMergeManager;
+    }(grid.MergeManager));
+    grid.CustomMergeManager = CustomMergeManager;
+  })(grid = wijmo.grid || (wijmo.grid = {}));
+})(wijmo || (wijmo = {}));
+//# sourceMappingURL=CustomMergeManager.js.map

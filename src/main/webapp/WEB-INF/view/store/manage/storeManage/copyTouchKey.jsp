@@ -5,7 +5,7 @@
 
 <%--
 
-터치키 관련 개발 되고나서 진행해야 함.
+//TODO 터치키 관련 개발 되고나서 진행해야 함.
 
 1. 사용자가 시스템관리자 - 특정 매장의 터치키를 특정본사 또는 특정매장의 터치로 복사함.
 2.         매장         - 자기 터치키를 자기 본사 또는 자기 프랜차이즈의 타 매장에서 복사함.
@@ -28,7 +28,7 @@
       <p>(매장을 선택하지 않으면 본사의 터치키가 선택됩니다.)</p>
     </li>
   </ul>
-  <%-- 
+  <%--
   <select id="copyTouchKeyHq" class="wj-TblWrapBr"></select>
   <select id="copyTouchKeyBrand"></select>
   <select id="copyTouchKeyStore"></select>
@@ -45,12 +45,12 @@
   <div class="sb-select w40">
     <div id="copyTouchKeyStore"></div>
   </div>
-  
+
   <div id="viewBtnArea"class="mt10 tc">
     <%-- 저장 --%>
     <button class="btn_skyblue" id="btnDel"><s:message code="cmm.delete" /></button>
   </div>
-  
+
   <ul class="txtSty2 mt10 pdb20">
     <li class="mt10">타겟매장의 상품마스터가 있는 자료만 복사됩니다. </li>
     <li class="mt10">매장을 선택하지 않은 경우 본사의 터치가 복사됩니다. </li>
@@ -80,8 +80,8 @@ function getHqList(){
       return;
     }
     copyTouchKeyHq.itemsSource = result.data.list;
-  })
-  .fail(function(){
+  }
+  ,function(){
     s_alert.pop("Ajax Fail");
   });
 }
@@ -90,16 +90,16 @@ function getHqList(){
 copyTouchKeyHq.selectedIndexChanged.addHandler(function(s, e){
   var param = {};
   param.hqOfficeCd = copyTouchKeyHq.selectedValue;
-  
+
   $.postJSON("/store/manage/storeManage/storeManage/getHqBrandList.sb", param, function(result) {
-    
+
     if(result.status === "FAIL") {
       s_alert.pop(result.message);
       return;
     }
     copyTouchKeyBrand.itemsSource = result.data.list;
-  })
-  .fail(function(){
+  }
+  ,function(){
       s_alert.pop("Ajax Fail");
   });
 });
@@ -108,17 +108,15 @@ copyTouchKeyHq.selectedIndexChanged.addHandler(function(s, e){
 copyTouchKeyBrand.selectedIndexChanged.addHandler(function(s, e){
   var param = {};
   param.hqOfficeCd  = copyTouchKeyHq.selectedValue;
-//  param.hqBrandCd   = copyTouchKeyBrand.selectedValue;
-  
+
   $.postJSON("/store/manage/storeManage/storeManage/getTouchKeyStoreList.sb", param, function(result) {
-    
     if(result.status === "FAIL") {
       s_alert.pop(result.message);
       return;
     }
     copyTouchKeyStore.itemsSource = result.data.list;
-  })
-  .fail(function(){
+  }
+  ,function(){
       s_alert.pop("Ajax Fail");
   });
 });

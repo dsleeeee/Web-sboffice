@@ -12,14 +12,14 @@
       <span class="fr"><a id="btnkitchenPrintAdd" href="javascript:;" class="btn_grayS2"><s:message code="cmm.add" /></a></span>
     </div>
   </div>
-  
+
   <%-- 주방프린터 그리드 --%>
   <div id="kitchenPrintGrid" style="height:400px;"></div>
-  
+
   <%-- 저장버튼 --%>
   <div class="tc">
     <button type="button" id="btnSaveKitchenPrint" class="btn_blue" ><s:message code="cmm.save" /></button>
-  </div> 
+  </div>
 </div>
 
 <script>
@@ -37,7 +37,7 @@ var prterSpeedDM = new wijmo.grid.DataMap(prterSpeed, 'value', 'name');
 var useYnDataMap  = new wijmo.grid.DataMap(useYn, 'value', 'name');
 
 <%-- 그리드  설정 --%>
-var kitchenPrintHeader = 
+var kitchenPrintHeader =
   [
     {binding:"posNo", header:"<s:message code='storeManage.kitchenPrint.posNo' />"},
     {binding:"prterNo", header:"<s:message code='storeManage.prterNo' />"},
@@ -61,7 +61,7 @@ kitchenPrintGrid.formatItem.addHandler(function(s, e) {
   if (e.panel == s.cells) {
     var col = s.columns[e.col];
     var item = s.rows[e.row].dataItem;
-    
+
     if( col.binding == "chk") {
       e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.chk == true || item.chk == "Y" ? 'checked' : '') + '>';
     }
@@ -70,20 +70,20 @@ kitchenPrintGrid.formatItem.addHandler(function(s, e) {
 
 <%-- 주방프린터 영역 보여줌 --%>
 function showkitchenPrintLayout(){
-  
+
   $("#kitchenPrintArea").show();
 
   if(posNoDM == undefined) {
     posNoDM = new wijmo.grid.DataMap(posList, 'posNo', 'posNm');
   }
-  
+
   kitchenPrintGrid.columns[0].dataMap = posNoDM;  // posNo dataMap 설정
-  
+
   var param = {};
   param.hqOfficeCd  = selectedStore.hqOfficeCd;
 //  param.hqBrandCd   = selectedStore.hqBrandCd;
   param.storeCd     = selectedStore.storeCd;
-    
+
   <%-- 주방프린터 목록 조회 --%>
   $.postJSON("/store/manage/storeManage/storeManage/getKitchenPrintInfo.sb", param, function(result) {
 
@@ -91,14 +91,11 @@ function showkitchenPrintLayout(){
       s_alert.pop(result.message);
       return;
     }
-    
     var list = result.data.list;
-
     kitchenPrintGrid.itemsSource = new wijmo.collections.CollectionView(list);
     kitchenPrintGrid.itemsSource.trackChanges = true;
-
-  })
-  .fail(function(){
+  }
+  ,function(){
     s_alert.pop("Ajax Fail");
   });
 }
@@ -128,18 +125,18 @@ $("#btnkitchenPrintDel").click(function(){
 
 <%-- 저장 버튼 클릭 --%>
 $("#btnSaveKitchenPrint").click(function(){
-  
+
   var paramArr = new Array();
 
   // validateion Check
   // 우선은 저장하고 val 체크하자
-  
+
   for(var i=0; i<kitchenPrintGrid.itemsSource.itemsEdited.length; i++){
     kitchenPrintGrid.itemsSource.itemsEdited[i].storeCd = selectedStore.storeCd;
     kitchenPrintGrid.itemsSource.itemsEdited[i].status = "U";
     paramArr.push(kitchenPrintGrid.itemsSource.itemsEdited[i]);
   }
-  
+
   for(var i=0; i<kitchenPrintGrid.itemsSource.itemsAdded.length; i++){
     kitchenPrintGrid.itemsSource.itemsAdded[i].storeCd = selectedStore.storeCd;
     kitchenPrintGrid.itemsSource.itemsAdded[i].status = "I";
@@ -151,9 +148,9 @@ $("#btnSaveKitchenPrint").click(function(){
     kitchenPrintGrid.itemsSource.itemsRemoved[i].status = "D";
     paramArr.push(kitchenPrintGrid.itemsSource.itemsRemoved[i]);
   }
-  
+
   console.log(paramArr);
-  
+
   $.postJSONArray("/store/manage/storeManage/storeManage/saveKitchenPrintInfo.sb", paramArr, function(result) {
     console.log(result);
     s_alert.pop("<s:message code='cmm.saveSucc' />");

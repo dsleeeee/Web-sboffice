@@ -14,15 +14,14 @@ import kr.co.solbipos.application.common.service.CmmVO;
  * @author 솔비포스 차세대개발실 김지은
  * @since 2018. 06.08
  * @version 1.0
- * @see
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 public class HqPrintTemplVO extends CmmVO {
-    
+
     private static final long serialVersionUID = -9209204862785671429L;
     /** 본사브랜드코드 */
-    private String hqBrandCd;
+    private String hqOfficeCd;
     /** 출력물분류코드 */
     private String prtClassCd;
     /** 템플릿코드 */
@@ -31,19 +30,19 @@ public class HqPrintTemplVO extends CmmVO {
     private String templtNm;
     /** 출력물폼 */
     private String prtForm;
-    
-    
+
+
     /**
-     * @return the hqBrandCd
+     * @return the hqOfficeCd
      */
-    public String getHqBrandCd() {
-        return hqBrandCd;
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
     }
     /**
-     * @param hqBrandCd the hqBrandCd to set
+     * @param hqOfficeCd the hqOfficeCd to set
      */
-    public void setHqBrandCd(String hqBrandCd) {
-        this.hqBrandCd = hqBrandCd;
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
     }
     /**
      * @return the prtClassCd
@@ -93,5 +92,5 @@ public class HqPrintTemplVO extends CmmVO {
     public void setPrtForm(String prtForm) {
         this.prtForm = prtForm;
     }
-    
+
 }

@@ -1,10 +1,5 @@
 package kr.co.solbipos.store.hq.hqmanage.service.impl;
 
-import static kr.co.common.utils.DateUtil.currentDateString;
-import static kr.co.common.utils.DateUtil.currentDateTimeString;
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
@@ -15,15 +10,16 @@ import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.pos.confg.loginstatus.enums.SysStatFg;
 import kr.co.solbipos.store.hq.brand.enums.TargtFg;
-import kr.co.solbipos.store.hq.brand.service.HqBrandVO;
 import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
-import kr.co.solbipos.store.hq.brand.service.impl.HqBrandMapper;
-import kr.co.solbipos.store.hq.hqmanage.service.HqManageService;
-import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;
-import kr.co.solbipos.store.hq.hqmanage.service.HqMenuVO;
-import kr.co.solbipos.store.hq.hqmanage.service.HqNmcodeVO;
-import kr.co.solbipos.store.hq.hqmanage.service.HqPrintTemplVO;
+import kr.co.solbipos.store.hq.hqmanage.service.*;
 import kr.co.solbipos.sys.auth.authgroup.enums.IncldExcldFg;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+import static kr.co.common.utils.DateUtil.currentDateString;
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
  * @Class Name : HqManageServiceImpl.java
@@ -45,9 +41,6 @@ public class HqManageServiceImpl implements HqManageService{
 
     @Autowired
     HqManageMapper mapper;
-
-    @Autowired
-    HqBrandMapper brandMapper;
 
     @Autowired
     MessageService messageService;
@@ -120,33 +113,12 @@ public class HqManageServiceImpl implements HqManageService{
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
 
-        // 기본 브랜드 등록
-        HqBrandVO hqBrandVO = new HqBrandVO();
-
-        hqBrandVO.setHqOfficeCd(hqOfficeCd);
-
-        // 브랜드 코드 조회
-        String hqBrandCd = brandMapper.getHqBrandCd(hqBrandVO);
-
-        hqBrandVO.setHqBrandCd(hqBrandCd);
-        hqBrandVO.setHqBrandNm(hqManage.getHqOfficeNm());
-        hqBrandVO.setUseYn(UseYn.Y);
-        hqBrandVO.setRegDt(dt);
-        hqBrandVO.setRegId(sessionInfoVO.getUserId());
-        hqBrandVO.setModDt(dt);
-        hqBrandVO.setModId(sessionInfoVO.getUserId());
-
-        // 브랜드 등록
-        int brandReg = brandMapper.insertBrand(hqBrandVO);
-
-        procCnt += brandReg;
-
         // 코드 등록 (본사 코드 마스터)
         int cmmCodeReg = 0;
 
         HqNmcodeVO nmcodeVO = new HqNmcodeVO();
 
-        nmcodeVO.setHqBrandCd(hqBrandCd);
+        nmcodeVO.setHqOfficeCd(hqOfficeCd);
         nmcodeVO.setUseYn(UseYn.Y);
         nmcodeVO.setRegDt(dt);
         nmcodeVO.setRegId(sessionInfoVO.getUserId());
@@ -217,15 +189,15 @@ public class HqManageServiceImpl implements HqManageService{
         // 포스 출력물 등록
         HqPrintTemplVO printTempVO = new HqPrintTemplVO();
 
-        printTempVO.setHqBrandCd(hqBrandCd);
+        printTempVO.setHqOfficeCd(hqOfficeCd);
         printTempVO.setRegDt(dt);
         printTempVO.setRegId(sessionInfoVO.getUserId());
         printTempVO.setModDt(dt);
         printTempVO.setModId(sessionInfoVO.getUserId());
 
-        int printTempReg = mapper.hqPrintTempReg(printTempVO);
-
-        procCnt += printTempReg;
+        //TODO
+        //int printTempReg = mapper.hqPrintTempReg(printTempVO);
+        //procCnt += printTempReg;
 
         // 기본 매출 시간대 등록 (심야:00시-05시, 아침:06시-10시, 점심:11시-15시, 저녁:16시-23시)
         for(int i=0; i<24; i++){

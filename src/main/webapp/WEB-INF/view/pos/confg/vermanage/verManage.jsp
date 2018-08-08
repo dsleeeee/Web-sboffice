@@ -10,7 +10,7 @@
   <div class="searchBar">
       <a href="javascript:;" class="open">${menuNm}</a>
   </div>
-  <table class="searchTbl"> 
+  <table class="searchTbl">
     <colgroup>
       <col class="w15" />
       <col class="w35" />
@@ -36,12 +36,12 @@
       </tr>
     </tbody>
   </table>
-    
+
   <%-- 조회 --%>
   <div class="mt10 pdb20 oh bb">
     <button class="btn_blue fr" id="btnSearch"><s:message code="cmm.search" /></button>
   </div>
-  
+
   <div class="mt20 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
     <div id="listScaleBox" class="w150 fl"></div>
@@ -52,12 +52,12 @@
       <button id="btnExcel" class="btn_skyblue" ><s:message code="cmm.excel.down" /></button>
     </div>
   </div>
-    
+
   <%-- 위즈모 테이블 --%>
   <div class="wj-TblWrap mt10">
-    <div id="theGrid1" style="height:450px;"></div> 
+    <div id="theGrid1" style="height:450px;"></div>
   </div>
-    
+
   <%-- 페이지 리스트 --%>
   <div class="pageNum mt20">
     <%-- id --%>
@@ -85,7 +85,7 @@ var useYnDataMap     = new wijmo.grid.DataMap(useYn, 'value', 'name');
 var progFgDataMap    = new wijmo.grid.DataMap(progFg, 'value', 'name');
 
 <%-- Header --%>
-var hData1 = 
+var hData1 =
   [
     {binding:"verSerNo", header:"<s:message code='verManage.verSerNo' />", allowMerging:true},
     {binding:"verSerNm", header:"<s:message code='verManage.verSerNm' />", allowMerging:true},
@@ -190,29 +190,28 @@ $(document).on("click", ".page1", function() {
 <%-- 포스버전관리 목록 조회 --%>
 function search(index) {
   // validation 추가
-  
+
   var param = {};
   param.verSerNo  = verSerNo.text;
   param.verSerNm  = verSerNm.text;
   param.listScale = listScaleBox.selectedValue;
   param.curr = index;
-  
+
   $.postJSON("/pos/confg/verManage/verInfo/list.sb", param, function(result) {
     if(result.status === "FAIL") {
       s_alert.pop(result.message);
       return;
     }
     var list = result.data.list;
-    
+
     if(list.length === undefined || list.length == 0) {
       s_alert.pop(result.message);
       return;
     }
     grid1.itemsSource = list;
-    
     page.make("#page", result.data.page.curr, result.data.page.totalPage);
-  })
-  .fail(function(){
+  }
+  ,function(){
       s_alert.pop("Ajax Fail");
   });
 }

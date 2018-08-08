@@ -103,8 +103,8 @@ $(document).ready(function(){
     funcListGrid.itemsSource = new wijmo.collections.CollectionView(list);
     funcListGrid.collectionView.trackChanges = true;
     //changeColSet(list);
-  })
-  .fail(function(){
+  }
+  ,function(){
       s_alert.pop("Ajax Fail");
   });
 
@@ -201,8 +201,8 @@ $(document).ready(function(){
 
       funcAuthGrid.itemsSource = new wijmo.collections.CollectionView(list);
       funcAuthGrid.collectionView.trackChanges = true;
-    })
-    .fail(function(){
+    }
+    ,function(){
         s_alert.pop("Ajax Fail");
     });
   }

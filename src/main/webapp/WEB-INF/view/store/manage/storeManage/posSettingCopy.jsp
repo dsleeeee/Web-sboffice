@@ -5,7 +5,7 @@
 <%-- 포스 환경설정 포스명칭설정 레이어팝업--%>
 <div id="posCopyDim" class="fullDimmed" style="display:none;"></div>
 <div id="posCopyLayer" class="layer" style="display:none;">
-  <div class="layer_inner">   
+  <div class="layer_inner">
     <div class="title w600">
       <p class="tit"><s:message code="storeManage.copy.posSetting" /></p>
       <a href="#" class="btn_close"></a>
@@ -34,42 +34,38 @@
 
 <%-- 매장환경조회 팝업 오픈 --%>
 function openPosCopyLayer() {
-  
+
   $("#posCopyDim").show();
   $("#posCopyLayer").show();
 
   var param = {};
   param.storeCd = selectedStore.storeCd;
-  
+
   $.postJSON("/store/manage/storeManage/storeManage/getPosList.sb", param, function(result) {
-    
     if(result.status === "FAIL") {
       s_alert.pop(result.message);
       return;
     }
-
     var posList = result.data.list.posList;
-    
     for(var i=0; i<posList.length; i++) {
-
       if(i == 0) {
         $("#copyPos").append("<option value='"+posList[i].posNo+"' selected >"  + posList[i].posCdNm +  "</option>")
       } else {
         $("#copyPos").append("<option value='"+posList[i].posNo+"'  >"  + posList[i].posCdNm +  "</option>")
       }
     }
-  })
-  .fail(function(){
+  }
+  ,function(){
     s_alert.pop("Ajax Fail");
   });
 }
-  
+
 <%-- 복사 버튼 클릭 --%>
 $("#posCopyLayer #btnCopyPosSetting").click(function(){
 
   var originalPos = $("#copyPos option:selected").val();
   var targetPos = $("#targetPos").val();
-  
+
   if(targetPos == null || targetPos == ''){
     s_alert.pop("<s:message code='storeManage.require.target.posNo' />");
     return;
@@ -79,22 +75,20 @@ $("#posCopyLayer #btnCopyPosSetting").click(function(){
     s_alert.pop("<s:message code='storeManage.require.diff.posNo' />");
     return;
   }
-  
+
   var param = {};
-  
+
   param.storeCd     = selectedStore.storeCd;
   param.posNo       = originalPos;
   param.targetPosNo = targetPos;
-  
+
   $.postJSON("/store/manage/storeManage/storeManage/copyPosSetting.sb", param, function(result) {
-    
+
     if(result.status === "FAIL") {
       s_alert.pop(result.message);
       return;
     }
-    
     s_alert.pop("<s:message code='cmm.saveSucc' />");
-    
     $("#posCopyLayer .btn_close").click();
   },
   function(result) {

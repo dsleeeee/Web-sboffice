@@ -163,20 +163,20 @@
     var popupCnt = 0;
     var grid;
 	$(document).ready(function() {
-	  
+
 	    var srchHqOfficeCd = wcombo.genInput("#srchHqOfficeCd");
 	    var srchHqOfficeNm = wcombo.genInput("#srchHqOfficeNm");
 	    var srchStoreCd    = wcombo.genInput("#srchStoreCd");
 	    var srchStoreNm    = wcombo.genInput("#srchStoreNm");
 	    var srchUserId     = wcombo.genInput("#srchUserId");
 	    var srchUserNm     = wcombo.genInput("#srchUserNm");
-	   
+
 	    <%-- dataMap --%>
 	    var serviceFg = ${ccu.getCommCodeExcpAll("008")};
 	    var webUseYn = ${ccu.getCommCodeExcpAll("904")};
 	    var serviceFgDataMap = new wijmo.grid.DataMap(serviceFg, 'value', 'name');
 	    var webUseYnDataMap = new wijmo.grid.DataMap(webUseYn, 'value', 'name');
-	    
+
 		var rdata =
 		    [
 		      { binding:"hqOfficeCd",header:"<s:message code='pwdManage.hqOfficeCd' />", width:"*" },
@@ -191,12 +191,12 @@
 		      { binding:"mpNo",header:"<s:message code='pwdManage.mpNo' />", width:"*" },
 		      { binding:"addr",header:"<s:message code='pwdManage.addr' />", width:"*" }
 		    ];
-	
+
 		grid         = wgrid.genGrid("#theGrid", rdata, "${menuCd}", 1, ${clo.getColumnLayout(1)});
 		grid.autoSizeColumn(1, true);
 	    var ldata        = ${ccu.getListScale()};
 	    var listScaleBox = wcombo.genCommonBox("#listScaleBox", ldata);
-	
+
 	    <%-- 그리드 포맷 --%>
 	    grid.formatItem.addHandler(function(s, e) {
 	      if (e.panel == s.cells) {
@@ -207,7 +207,7 @@
 	        }
 	      }
 	    });
-	
+
 	    <%-- 그리드 선택 이벤트 --%>
 	    grid.addEventListener(grid.hostElement, 'click', function(e) {
 	      var ht = grid.hitTest(e);
@@ -220,17 +220,17 @@
 	          }
 	        }
 	    });
-	
+
 	    <%-- 조회버튼 클릭 --%>
 	    $("#btnSearch").click(function(e){
 	      search(1);
 	    });
-	
+
 	    <%-- 페이징 --%>
 	    $(document).on("click", ".page", function() {
 	      search($(this).data("value"));
 	    });
-	
+
 	    <%-- 가상로그인 대상 목록 조회 --%>
 	    function search(index) {
 	      // validation 추가
@@ -243,41 +243,41 @@
 	      param.userNm     = srchUserNm.text;
 	      param.listScale  = listScaleBox.selectedValue;
 	      param.curr       = index;
-	
+
 	      $.postJSON("/store/manage/pwdManage/pwdManage/list.sb", param, function(result) {
 	        if(result.status === "FAIL") {
 	          s_alert.pop(result.message);
 	          return;
 	        }
 	        var list = result.data.list;
-	
+
 	        if(list.length === undefined || list.length == 0) {
 	          s_alert.pop(result.message);
 	          return;
 	        }
 	        grid.itemsSource = list;
-	
+
 	        page.make("#page", result.data.page.curr, result.data.page.totalPage);
-	      })
-	      .fail(function(){
+	      }
+	      ,function(){
 	          s_alert.pop("Ajax Fail");
 	      });
 	    };
-	    
+
 	    <%-- 레이어영역 시작 --%>
-	    
+
 	    $(".pwdModifyClose").click(function(e){
 	      closePwdManageLayer();
 	    });
-	    
+
 	    function showPwdManageLayer(data) {
 	      $("#pwdModifyTent").show();
 	      $("#pwdModifyLayer").show();
-	      
+
 	      $("#pwdModifyUserId").val(data.userId);
 	      $("#layerUserId").text(data.userId);
 	      $("#layerUserNm").text(data.userNm);
-	      
+
 	    }
 
 	    function closePwdManageLayer() {
@@ -288,29 +288,29 @@
 	      $("#pwdModifyTent").hide();
 	      $("#pwdModifyLayer").hide();
 	    }
-	    
+
 	    <%-- 비밀번호 변경 --%>
 	    $("#btnModify").click(function(e) {
-	      
+
 	      var param = {};
 	      param.userId = $("#pwdModifyUserId").val();
 	      param.newPassword = $("#layerNewPassword").val();
 	      param.confirmPassword = $("#layerConfirmPassword").val();
-	      
-	      $.postJSON("/store/manage/pwdManage/pwdManage/modify.sb", param, 
+
+	      $.postJSON("/store/manage/pwdManage/pwdManage/modify.sb", param,
 	        function(result) {
 	          var msg = "<s:message code='pwdManage.modifySucc'/>";
 	          s_alert.popOk(msg, function() {
 	            closePwdManageLayer();
 	          });
-	        }, 
+	        },
 	        function(result) {
 	          processError(result.data);
 	        }
 	      );
-	      
-	    }); 
-	    
+
+	    });
+
 	    function processError(data) {
 
 	      if (data.newPassword != undefined) {
@@ -332,7 +332,7 @@
 	        s_alert.pop(data.msg);
 	      }
 	    }
-	    
+
 	});
-	
+
 </script>
