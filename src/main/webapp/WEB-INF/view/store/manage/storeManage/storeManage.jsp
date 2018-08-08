@@ -138,7 +138,8 @@ var hData =
 
 var grid          = wgrid.genGrid("#theGrid", hData, "${menuCd}", 1, ${clo.getColumnLayout(1)});
 
-grid.showMarquee = true;
+grid.showMarquee  = true;
+grid.mergeManager = new wijmo.grid.CustomMergeManager(grid);  //TODO 매장없을 경우만 셀 머지되도록 수정 필요
 
 var ldata         = ${ccu.getListScale()};
 var listScaleBox  = wcombo.genCommonBox("#listScaleBox", ldata);
@@ -148,7 +149,7 @@ grid.formatItem.addHandler(function(s, e) {
   if (e.panel == s.cells) {
     var col = s.columns[e.col];
     var item = s.rows[e.row].dataItem;
-    if( col.binding == "storeNm") {
+    if( col.binding == "storeNm" && item.storeCd != null) {
       wijmo.addClass(e.cell, 'wijLink');
     }
   }
@@ -230,7 +231,6 @@ function search(index) {
 
     console.log(list);
 
-    //TODO 본사 하위 매장이 없을 경우 어떻게 보여줄 것인지
     grid.itemsSource = new wijmo.collections.CollectionView(list, {
       groupDescriptions : [ 'hqOfficeCdNm']
     });
@@ -239,22 +239,12 @@ function search(index) {
     for(var i=0; i<grid.itemsSource.items.length; i++){
       if(grid.itemsSource.items[i].storeNm == null) {
         grid.itemsSource.items[i].storeNm = "<s:message code='storeManage.require.regist.store2'/>";
-        /*
-        if ((row == 0 && col == 0) || row == 1 && col == 0 ) {
-          grid.columnHeaders.setCellData(i, col, "<s:message code='storeManage.require.regist.store2' />");
-        }
-        */
-        /*
-        var item = grid.itemsSource.items[i];
-        if( col.binding == "storeNm") {
-          wijmo.addClass(e.cell, 'wijLink');
-        }
-        */
-        console.log(grid.formatItem);
+        grid.itemsSource.items[i].storeCd = "<s:message code='storeManage.require.regist.store2'/>";
+        grid.itemsSource.items[i].clsFg = "<s:message code='storeManage.require.regist.store2'/>";
+        grid.itemsSource.items[i].sysStatFg = "<s:message code='storeManage.require.regist.store2'/>";
+        grid.itemsSource.items[i].sysOpenDate = "<s:message code='storeManage.require.regist.store2'/>";
       }
     }
-
-
 
     <%-- 그리드 선택 이벤트 --%>
     grid.addEventListener(grid.hostElement, 'mousedown', function(e) {
@@ -292,6 +282,9 @@ function search(index) {
 
     showStoreDetail();
   }
+
+
+
 </script>
 
 <%-- 매장환경조회 팝업 --%>
@@ -323,3 +316,4 @@ function search(index) {
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
+
