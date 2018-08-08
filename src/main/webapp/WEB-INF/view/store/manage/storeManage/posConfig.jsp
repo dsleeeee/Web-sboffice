@@ -6,18 +6,18 @@
   <div class="s12 tl oh">
     <%-- 포스명칭 --%>
     <span class="bk fl lh30 mr10">
-      <s:message code="storeManage.posNm" /> : 
+      <s:message code="storeManage.posNm" /> :
     </span>
     <div class="sb-select dkbr fl w150 mr10">
       <select id="sPosNm" class="wj-content"></select>
     </div>
-    
+
     <%-- 기본값으로 설정 --%>
     <a href="javascript:;" id="btnDefault" class="btn_grayS"><s:message code="storeManage.setting.default.env" /></a>
     <%-- 저장 --%>
     <%-- <a href="javascript:;" id="btnSavePos" class="btn_grayS"><s:message code="cmm.save" /></a> --%>
   </div>
-  
+
   <div class="mt20 mb20">
     <%-- 테이블 그룹설정 --%>
     <button id="btnSetTabGrp" type="button" class="btn_skyblue"><s:message code="storeManage.setting.tableGroup" /></button>
@@ -28,14 +28,14 @@
     <%-- 삭제 --%>
     <button id="btnDeletePos" type="button" class="btn_skyblue"><s:message code="cmm.delete" /></button>
   </div>
-  
+
   <%-- 포스 환경설정 컨텐츠 --%>
   <div id="posConfigContent" class="mt20"></div>
-  
+
   <div class="tc mt20">
     <%-- 저장 --%>
     <button type="button" id="btnSavePos"class="btn_blue" ><s:message code="cmm.save" /></button>
-  </div> 
+  </div>
 </div>
 
 <script>
@@ -44,19 +44,19 @@ var selectedEnvstFg = "";
 
 <%-- 매장환경, 외식환경의 환경값 조회 --%>
 function showPosConfigLayout(envstFg){
-  
+
   selectedEnvstFg = envstFg;
-  
+
   $("#posConfigContent").empty();
   $("#posConfigContent").show();
   $("#posConfigArea").show();
 
   var param = {};
-  
+
   param.hqOfficeCd  = selectedStore.hqOfficeCd;
 //  param.hqBrandCd   = selectedStore.hqBrandCd;
   param.storeCd     = selectedStore.storeCd;
-    
+
   <%-- 포스목록 조회 --%>
   <%--
   $.postJSON("/store/manage/storeManage/storeManage/getPosList.sb", param, function(result) {
@@ -67,9 +67,9 @@ function showPosConfigLayout(envstFg){
     }
 
     var posList = result.data.list.posList;
-    
+
     $("#sPosNm").empty();
-    
+
     for(var i=0; i<posList.length; i++) {
       if(i==0){
         $("#sPosNm").append("<option value='"+ posList[i].posNo +"' selected> " + posList[i].posCdNm +  "</option>");
@@ -77,19 +77,19 @@ function showPosConfigLayout(envstFg){
         $("#sPosNm").append("<option value='"+ posList[i].posNo +"' > " + posList[i].posCdNm +  "</option>");
       }
     }
-  })
-  .fail(function(){
+  }
+  ,function(){
     s_alert.pop("Ajax Fail");
   });
   --%>
-  
+
   if(posList != null) {
 
     console.log("---- posList 2");
     console.log(posList);
-    
+
     $("#sPosNm").empty();
-    
+
     for(var i=0; i<posList.length; i++) {
       if(i==0){
         $("#sPosNm").append("<option value='"+ posList[i].posNo +"' selected> " + posList[i].posCdNm +  "</option>");
@@ -97,9 +97,9 @@ function showPosConfigLayout(envstFg){
         $("#sPosNm").append("<option value='"+ posList[i].posNo +"' > " + posList[i].posCdNm +  "</option>");
       }
     }
-    
+
   }
-  
+
   getPosInfo();
 }
 
@@ -112,37 +112,37 @@ $("#sPosNm").on("change", function(){
 function getPosInfo(){
 
   var param = {};
-  
+
   param.hqOfficeCd  = selectedStore.hqOfficeCd;
 //  param.hqBrandCd   = selectedStore.hqBrandCd;
   param.storeCd     = selectedStore.storeCd;
   param.posNo       = $("#sPosNm option:selected").val();
   param.envstFg     = selectedEnvstFg;
-  
+
   var envstGrpCd = ${ccu.getCommCodeExcpAll("048")};
-  
+
   $.postJSON("/store/manage/storeManage/storeManage/getPosConfigList.sb", param, function(result) {
-    
+
     if(result.status === "FAIL") {
       s_alert.pop(result.message);
       return;
     }
-    
+
     // 환경설정
     var innerHtml = "";
-    
+
     var envCnt   = 0;
     var allCnt   = 0; // 전체 환경값 갯수
     var existCnt = 0; // 현재 등록된 환경값 갯수
-    
+
     var list = result.data.list.envGroupList;
-    
+
     for(var i=0; i<envstGrpCd.length; i++) {
-      
+
       var storeEnvCnt    = 0;
       var storeEnvHtml   = "";
       var storeEnvstGrp  = envstGrpCd[i];
-      
+
       storeEnvHtml += "<h3 class='h3_tbl2 lh30'>"+storeEnvstGrp.name+" <button class='open'></button></h3>";
       storeEnvHtml += "<table class='searchTbl'>";
       storeEnvHtml += "  <colgroup>";
@@ -154,27 +154,27 @@ function getPosInfo(){
       storeEnvHtml += "    <col class='w20' />";
       storeEnvHtml += "  </colgroup>";
       storeEnvHtml += "<tbody>";
-      
+
       var b_env = "";
-      
+
       for(var j=0; j<list.length; j++) {
         if(storeEnvstGrp.value == list[j].envstGrpCd) {
-          
-            
+
+
           if(b_env == "" || b_env != list[j].envstCd ){
-            
+
             if(storeEnvCnt == 0 || storeEnvCnt % 2 == 0) storeEnvHtml += "<tr>";
 
             storeEnvHtml += "  <th class='tc'>" + list[j].envstCd + "</th>";
             storeEnvHtml += "  <td>" + list[j].envstNm + "</td>";
             storeEnvHtml += "  <td>";
-            
+
             if(list[j].dirctInYn == "Y"){ // 직접입력
               storeEnvHtml += "    <input type='text' name='posEnvstValCd' id='env" + list[j].envstCd + "' class='sb-input w100'>";
             } else {  // 값 선택
               storeEnvHtml += "    <select name='posEnvstValCd' id='env" + list[j].envstCd + "'/>";
             }
-            
+
             storeEnvHtml += "    <input type='hidden' name='posEnvstatus'    value='"+ (list[j].existFg =="N" ? "I":"U") +"'>";
             storeEnvHtml += "    <input type='hidden' name='posEnvstCd'   value='"+ list[j].envstCd +"'>";
             storeEnvHtml += "    <input type='hidden' name='posEnvstNm'   value='"+ list[j].envstNm +"'>";
@@ -188,7 +188,7 @@ function getPosInfo(){
             b_env = list[j].envstCd;
             storeEnvCnt ++;
             allCnt ++;
-            
+
             if(list[j].existFg == "Y") existCnt++;
 
             if(list[j].envstCdCnt == storeEnvCnt && (storeEnvCnt % 2 == 1)) {
@@ -202,26 +202,26 @@ function getPosInfo(){
           }
         }
       }
-      
+
       storeEnvHtml += "  </tbody>";
       storeEnvHtml += "</table>";
       storeEnvHtml += "</div>";
       storeEnvHtml += "<br>";
-      
+
       if(storeEnvCnt > 0) innerHtml += storeEnvHtml;
     }
-    
+
     $("#posConfigContent").html(innerHtml);
-    
+
     var envstCd = "";
     var sOption = false;
 
-    
+
     for(var i=0; i<list.length; i++){
       if(list[i].dirctInYn == "N") {
 
         $("#env"+list[i].envstCd).append("<option value='"+ list[i].envstValCd +"' >" + list[i].envstValNm +  "</option>");
-        
+
         if(i == 0 || envstCd != list[i].envstCd ) {
           envstCd = list[i].envstCd;
           if(list[i].selEnvstVal == list[i].envstValCd){
@@ -238,11 +238,11 @@ function getPosInfo(){
         }else if(sOption == false && list[i].defltYn == "Y") {
           $("#env"+list[i].envstCd).val(list[i].envstValCd).prop("selected", true);
         }
-        
+
         if(list[i].defltYn == "Y") {
           $("#env"+list[i].envstCd).attr("defaultVal", list[i].envstValCd);
         }
-        
+
       }
     }
 
@@ -253,11 +253,11 @@ function getPosInfo(){
               + "<s:message code='storeManage.total.env.count' arguments='"+ allCnt +"'/> "
               + "<s:message code='storeManage.no.regist.env.count' arguments='"+ (allCnt - existCnt) +"'/>"
               ;
-      
+
       s_alert.pop(msg);
     }
-  })
-  .fail(function(){
+  }
+  ,function(){
       s_alert.pop("Ajax Fail");
   });
 }
@@ -273,7 +273,7 @@ $("#posConfigArea #btnSavePos").click(function(){
   var posObjEnvstValCd   = document.getElementsByName("posEnvstValCd");
   var posObjDirctInYn    = document.getElementsByName("posEnvDirctInYn");
   var posObjOldEnvstVal  = document.getElementsByName("posOldEnvstVal");
-  
+
   <%-- 포스형태[204]가 외식업-후불제인 경우에만 후불제를 선택할 수 있습니다. --%>
   var env101 = $("#env101").val();
   var env204 = $("#env204").val();
@@ -286,23 +286,22 @@ $("#posConfigArea #btnSavePos").click(function(){
 
   var chngCnt  = 0; // 변경된 건수
   var paramArr = new Array();
-  
+
   for(var i=0; i<posObjEnvstCd.length; i++){
     if(posObjOldEnvstVal[i].value != $("#posConfigContent #env"+posObjEnvstCd[i].value).val()) {
       chngCnt ++;
     }
   }
-  
+
   if(chngCnt == 0 ){
     s_alert.pop("<s:message code='cmm.not.modify' />");
     return;
   }
-  
+
   for(var i=0; i<posObjEnvstCd.length; i++){
     var param = {};
-    
+
     param.hqOfficeCd  = selectedStore.hqOfficeCd;
-//    param.hqBrandCd   = selectedStore.hqBrandCd;
     param.storeCd     = selectedStore.storeCd;
     param.status      = posObjStatus[i].value;
     param.posNo       = $("#sPosNm option:selected").val();
@@ -312,34 +311,32 @@ $("#posConfigArea #btnSavePos").click(function(){
     param.envstVal    = posObjEnvstValCd[i].value;
     param.dirctInYn   = posObjDirctInYn[i].value;
     param.useYn       = "Y";
-    
+
     paramArr.push(param);
   }
-  
-  $.postJSONArray("/store/manage/storeManage/storeManage/savePosConfig.sb", paramArr, function(result) {
 
+  $.postJSONArray("/store/manage/storeManage/storeManage/savePosConfig.sb", paramArr, function(result) {
     s_alert.pop("<s:message code='cmm.saveSucc' />");
-    
     // 저장 완료후에 재로딩
     showPosConfigLayout(selectedEnvstFg);
   },
   function(result) {
     s_alert.pop(result.data.msg);
   });
-  
+
 });
 
 <%-- 기본값으로 설정 버튼 클릭 --%>
 $(document).on("click", "#posConfigArea #btnDefault", function(){
-  
+
   var posObjEnvstCd      = document.getElementsByName("posEnvstCd");
   var posObjEnvstNm      = document.getElementsByName("posEnvstNm");
   var posObjDirctInYn    = document.getElementsByName("poeEnvDirctInYn");
- 
+
   for(var i=0; i<posObjEnvstCd.length; i++){
-    
+
     var defaultVal = $("#posConfigContent #env"+posObjEnvstCd[i].value).attr("posEnvDefaultVal");
-    
+
     if(posObjDirctInYn[i].value == "Y") {
       $("#env"+posObjEnvstCd[i].value).val(defaultVal);
     } else {
@@ -365,13 +362,13 @@ $("#btnCopyPosSetting").click(function(){
 
 <%-- 삭제 버튼 클릭 --%>
 $("#btnDeletePos").click(function(){
-  
+
   <%-- 01번 포스는 삭제 할 수 없습니다. --%>
   if($("#sPosNm option:selected").val() == "01") {
     s_alert.pop("<s:message code='storeManage.unable.delete.defaultPos' />");
     return;
   }
-  
+
   var param = {};
   param.hqOfficeCd  = selectedStore.hqOfficeCd;
 //  param.hqBrandCd   = selectedStore.hqBrandCd;
@@ -379,12 +376,12 @@ $("#btnDeletePos").click(function(){
   param.posNo       = $("#sPosNm option:selected").val();
 
   $.postJSON("/store/manage/storeManage/storeManage/deletePos.sb", param, function(result) {
-    
+
     if(result.status === "FAIL") {
       s_alert.pop(result.message);
       return;
     }
-    
+
     s_alert.pop("<s:message code='cmm.delSucc' />");
     showPosConfigLayout(selectedEnvstFg);
   },

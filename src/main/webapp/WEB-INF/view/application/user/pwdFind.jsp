@@ -78,7 +78,7 @@ genEvent($("#authNumber"), $("#authNumberError"));
       else if(result.status === "FAIL") {
         processError(result.data);
       }
-    }).fail(function() {
+    },function() {
       alert("Ajax Fail");
     });
   }
@@ -107,7 +107,7 @@ genEvent($("#authNumber"), $("#authNumberError"));
 		else if(result.status === "FAIL") {
 		  processError(result.data);
 		}
-    }).fail(function() {
+    },function() {
       alert("Ajax Fail");
     });
   }

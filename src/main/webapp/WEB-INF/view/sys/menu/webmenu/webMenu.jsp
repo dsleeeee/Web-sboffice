@@ -39,7 +39,7 @@
     <%-- 왼쪽 메뉴 트리 --%>
     <div class="w30 fl">
       <div class="wj-TblWrapBr mr10 pd20" style="height: 500px;">
-      
+
         <div class="sb-select dkbr mb10 oh">
           <div id="theComboBox3" class="w130 fl"></div>
           <div class="fr">
@@ -53,7 +53,7 @@
             </button>
           </div>
         </div>
-        
+
         <div id="theGrid"></div>
       </div>
     </div>
@@ -61,7 +61,7 @@
     <%-- 오른쪽 메뉴 정보 --%>
     <div class="w70 fr">
       <div class="wj-TblWrapBr ml10 pd20" style="height: 500px;">
-        
+
         <div class="tr mb10">
           <%-- 삭제 버튼 --%>
           <button id="deleteBtn" class="btn_blk">
@@ -136,18 +136,18 @@
         <%-- 기능정보 --%>
         <h3 class="h3_tbl2 pdt5 lh30 mt20">
           <s:message code="webMenu.fun.info" />
-          <span class="fr"> 
-            <%-- 추가버튼 --%> 
+          <span class="fr">
+            <%-- 추가버튼 --%>
             <a id="funcReg" href="javascript:;" class="btn_grayS">
               <s:message code="cmm.add" />
-            </a> 
-            <%-- 삭제버튼 --%> 
+            </a>
+            <%-- 삭제버튼 --%>
             <a id="funcDel" href="javascript:;" class="btn_grayS">
               <s:message code="cmm.del" />
             </a>
           </span>
         </h3>
-        
+
         <div id="theGrid2"></div>
 
         <%-- 저장 버튼 --%>
@@ -155,7 +155,7 @@
           <button id="funcSave" class="btn_blue">
             <s:message code="cmm.save" />
           </button>
-        </div> 
+        </div>
       </div>
     </div>
   </div>
@@ -172,7 +172,7 @@
     var sdata               = ${ccu.getCommCodeNoSelect("905")};
     var spclAuthor          = wcombo.genCommonBox("#spclAuthor", sdata);
     resrceCd.isDisabled = true;
-    
+
     var grid = new wijmo.nav.TreeView("#theGrid", {
       itemsSource: ${menuData},
       displayMemberPath: "header",
@@ -187,21 +187,21 @@
         }
       }
     });
-    
+
     var gdata = ${ccu.getCommCodeExcpAll("901")};
     var mFuncFg = new wijmo.grid.DataMap(gdata, "value", "name");
-    
-    var rdata2 = 
+
+    var rdata2 =
       [
         {binding:"funcFg", header:"<s:message code='webMenu.fun.class' />", dataMap:mFuncFg},
         {binding:"resrceNm", header:"<s:message code='webMenu.fun.nm' />"},
         {binding:"url", header:"URL"}
       ];
     var grid2         = wgrid.genGrid("#theGrid2", rdata2, "${menuCd}", 2, ${clo.getColumnLayout(2)});
-    
+
     grid2.rowHeaders.columns.splice(0, 1);
     grid2.isReadOnly      = false;
-    
+
     <%-- 리소스 트리 선택 이벤트 --%>
     function selectItem(selectedItem) {
       $.postJSON("/sys/menu/webmenu/webmenu/view.sb", selectedItem, function(result) {
@@ -226,12 +226,12 @@
       },
       function(result){
         s_alert.pop(result.message);
-      })
-      .fail(function(){
+      }
+      ,function(){
         s_alert.pop("Ajax Fail");
       });
     }
-    
+
     <%-- 리소스 트리 검색 콤보 박스 생성 --%>
     var searchResrceNm = new wijmo.input.AutoComplete("#searchResrceNm", {
         itemsSource: getSearchList(grid.itemsSource),
@@ -245,7 +245,7 @@
           }
         }
     });
-    
+
     <%-- 리소스 트리 검색 콤보 박스 데이터 가져오기 --%>
     function getSearchList(items, searchList, path) {
       if (searchList == null) {
@@ -267,16 +267,16 @@
       }
       return searchList;
     }
-    
+
     <%-- 메뉴 삭제 버튼 --%>
     $("#deleteBtn").click(function(e) {
       <%-- 메뉴 삭제시 해당 메뉴 기능도 같이 삭제 됩니다. 삭제 하시겠습니까? --%>
       var msg = "<s:message code='webMenu.delete.msg'/>";
       s_alert.popConf(msg, function(){
         var param = {};
-        
+
         param.resrceCd = grid.selectedItem.resrceCd;
-        
+
         $.postJSON("/sys/menu/webmenu/webmenu/remove.sb", param, function(result) {
           refreshMenu();
         },
@@ -285,7 +285,7 @@
         });
       });
     });
-    
+
     <%-- 신규등록+ 버튼 --%>
     $("#regBtn").click(function(e){
       var item = grid.selectedItem;
@@ -295,21 +295,21 @@
         s_alert.pop(msg);
         return;
       }
-      
+
       <%-- 초기화 --%>
       rightInit();
     });
-    
+
     <%-- 추가 버튼 --%>
     $("#funcReg").click(function(e){
       grid2.collectionView.addNew();
     });
-    
+
     <%-- 기능 삭제 버튼 --%>
     $("#funcDel").click(function(e){
       grid2.collectionView.removeAt(grid2.selection.row);
     });
-    
+
     <%-- 저장 버튼 --%>
     $("#funcSave").click(function(e){
       <%-- 메뉴명을 입력해주세요. --%>
@@ -324,7 +324,7 @@
         s_alert.pop(msg1);
         return;
       }
-      
+
       var arr = setGridCRUD(grid2);
       var item = grid.selectedItem;
       var param = {};
@@ -336,7 +336,7 @@
       param.resrceInfoArr = arr;
       param.dispIdx = parseInt(dispIdx.text);
       param.spclAuthor = spclAuthor.selectedValue === "N" ? null : spclAuthor.selectedValue;
-      
+
       $.postJSONArray("/sys/menu/webmenu/webmenu/save.sb", param, function(result) {
         refreshMenu();
         grid.selectedItem = item;
@@ -353,19 +353,19 @@
           s_alert.pop(result.data.url);
         }
       });
-      
+
     });
-    
+
     <%-- 전체펼치기 --%>
     $("#expandBtn").click(function(e){
       grid.collapseToLevel(100000);
     });
-    
+
     <%-- 전체접기 --%>
     $("#foldBtn").click(function(e){
       grid.collapseToLevel(0);
     });
-    
+
     <%-- 메뉴 등록 및 삭제 후 리소스 트리 데이터 업데이트 --%>
     function refreshMenu() {
       $.postJSONArray("/sys/menu/webmenu/webmenu/list.sb", {}, function(result) {
@@ -377,7 +377,7 @@
         s_alert.pop(result.message);
       });
     }
-    
+
     <%-- 오른쪽 리소스 입력 화면 초기화 --%>
     function rightInit() {
       url.text = "";
@@ -385,11 +385,11 @@
       resrceNm.text = "";
       dispIdx.text = "";
       spclAuthor.selectedValue = "N";
-      
+
       grid2.itemsSource = new wijmo.collections.CollectionView();
       grid2.collectionView.trackChanges = true;
     }
-    
+
   });
 </script>
 

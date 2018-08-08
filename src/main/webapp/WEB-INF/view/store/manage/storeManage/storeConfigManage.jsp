@@ -88,8 +88,8 @@ function openEnvLayer(){
       return;
     }
     posList = result.data.list.posList;
-  })
-  .fail(function(){
+  }
+  ,function(){
     s_alert.pop("Ajax Fail");
   });
 }

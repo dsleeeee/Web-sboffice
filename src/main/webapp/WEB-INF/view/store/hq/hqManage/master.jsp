@@ -14,7 +14,7 @@
 <div id="hqDtlDim" class="fullDimmed" style="display:none;"></div>
 <div id="hqDtlLayer" class="layer" style="display:none;">
   <div class="layer_inner">
-    <div class="title w600">
+    <div class="title w650">
       <p id="popTitle" class="tit"></p>
       <a href="javascript:;" class="btn_close"></a>
       <div class="con">
@@ -128,10 +128,10 @@
           <form id="regForm">
             <table class="tblType01">
               <colgroup>
-                <col class="w15" />
-                <col class="w35" />
-                <col class="w15" />
-                <col class="w35" />
+                <col class="w20" />
+                <col class="w30" />
+                <col class="w20" />
+                <col class="w30" />
               </colgroup>
               <tbody>
                 <tr>
@@ -148,11 +148,11 @@
                     <div id="rHqOfficeRadio">
                       <span class="sb-radio">
                         <input type="radio" name="rHqOfficeCdType" id="rHqOfficeCdr1" value='<s:message code="hqManage.hqType.comm" />' checked style="width:17px; height:17px; margin-right: 1px;"/>
-                        <label for="rdo1"><s:message code="hqManage.comm" /></label>
+                        <label for="rHqOfficeCdr1"><s:message code="hqManage.comm" /></label>
                       </span>
                       <span class="sb-radio">
                         <input type="radio" name="rHqOfficeCdType" id="rHqOfficeCdr2" value='<s:message code="hqManage.hqType.demo" />' style="width:17px; height:17px; margin-right: 1px;"/>
-                        <label for="rdo1"><s:message code="hqManage.demo" /></label>
+                        <label for="rHqOfficeCdr2"><s:message code="hqManage.demo" /></label>
                       </span>
                     </div>
                   </td>
@@ -194,7 +194,7 @@
                       </div>
                     </span>
                     <span class="w15 txtIn">
-                      <div class="sb-select">
+                      <div class="sb-select w10">
                         <div id="rBizNo3"></div>
                       </div>
                     </span>
@@ -377,23 +377,7 @@
   var rAgency       = wcombo.genCommonBox("#rAgency", agencyList);
   var rClsFg        = wcombo.genCommonBox("#rClsFg", clsFg);
 
-
-  rHqOfficeCd.maxLength = 5;
-  rHqOfficeNm.maxLength = 5;
-
-
-  rHqOfficeCd.isReadOnly  = true;
-  rHqOfficeNm.isRequired = true;
-
-  <%-- 본사정보 탭 클릭 --%>
-  $("#hqInfoTab").click(function(e){
-
-  });
-
-  <%-- 메뉴권한 탭 클릭 --%>
-  $("#codeSettingTab").click(function(e){
-
-  });
+<%-- ============================================= 신규등록, 수정 폼 관련 =========================================== --%>
 
   <%-- 본사신규등록 팝업 열기 --%>
   function openRegistLayer() {
@@ -479,58 +463,40 @@
       rHmpgAddr.text             = data.hmpgAddr;
       rAgency.selectedValue      = data.agencyCd;
       rClsFg.selectedValue       = data.clsFg;
-
-    })
-    .fail(function(){
+    }
+    ,function(){
       s_alert.pop("Ajax Fail");
     });
   }
 
-  <%-- 사업자번호 중복체크 버튼 클릭 --%>
-  var isBizChk = false;
+  <%-- 폼 리셋 --%>
+  function resetForm() {
+    $("#regForm")[0].reset();
 
-  $("#btnChkBizNo").click(function(e){
+    rWeatherArea.selectedIndex  = 0;
+    rSysStatFg.selectedIndex    = 0;
+    rAgency.selectedIndex       = 0;
+    rClsFg.selectedIndex        = 0;
+    rSysOpenDate.value          = new Date();
+  }
 
-    var param = {};
-    param.bizNo1 = rBizNo1.text;
-    param.bizNo2 = rBizNo2.text;
-    param.bizNo3 = rBizNo3.text;
-    param.bizNo = rBizNo1.text + rBizNo2.text + rBizNo3.text;
+  <%-- 상세정보 보여주기 숨김 --%>
+  function showMaster(){
+    hideEnvSet();
+    hideMenuAuth();
+    resetForm();
 
-    $.postJSON("/store/hq/hqManage/master/chkBizNo.sb", param, function(result) {
-      if(result.status === "FAIL") {
-        s_alert.pop(result.message);
-        return;
-      }
-      isBizChk = true;
+    $("#hqDtlLayer").show();
+    $("#hqDtlDim").show();
+  }
 
-      if(result.data == 0 ){
-        <%-- 중복되는 사업자번호가 없습니다.--%>
-        s_alert.pop("<s:message code='hqManage.no.duplicate.bizNo.msg'/>");
-      } else {
-        <%-- 사업자번호 사용현황 팝업 --%>
-        openBizInfoLayer(param);
-      }
-    })
-    .fail(function(){
-      s_alert.pop("Ajax Fail");
-    });
-  });
+  <%-- 상세정보 레이아웃 숨김 --%>
+  function hideMaster(){
+    $("#hqDtlLayer").hide();
+    $("#hqDtlDim").hide();
+  }
 
-  <%-- 주소찾기 버튼 클릭 --%>
-  $("#btnFindAddr").click(function(e){
-    //TODO
-  });
-
-  <%-- 신규등록 버튼 클릭 --%>
-  $("#btnReg").click(function(e){
-    chkVal("/store/hq/hqManage/master/regist.sb");
-  });
-
-  <%-- 저장 버튼 클릭 (수정) --%>
-  $("#btnSave").click(function(e){
-    chkVal("/store/hq/hqManage/master/modify.sb");
-  });
+<%-- ============================================= 데이터 저장 관련 =========================================== --%>
 
   <%-- validation --%>
   function chkVal(sendUrl) {
@@ -598,15 +564,6 @@
       return;
     }
 
-    <%-- 이메일주소를 입력해주세요. --%>
-    /*
-    var msg = "<s:message code='hqManage.emailAddr'/> <s:message code='cmm.require.text'/>";
-    if(rEmailAddr.text === "") {
-      s_alert.pop(msg);
-      return;
-    }
-    */
-
     <%-- 관리업체를 선택해주세요. --%>
     var msg = "<s:message code='hqManage.agency'/> <s:message code='cmm.require.select'/>";
     if(rAgency.text == "선택" || rAgency.text === "") {
@@ -621,17 +578,6 @@
       return;
     }
 
-    <%-- (신규등록) 본사코드 데모 선택시 상태도 데모를 선택해주세요. --%>
-    if($("#hqDtlLayer #rHqOfficeRadio").is(":visible")) {
-      var hqType = $('input:radio[name="rHqOfficeCdType"]:checked').val();
-      var msg = "<s:message code='hqManage.hqType.comm.error' />";
-      if(hqType == "C") {
-        if(rSysStatFg.selectedValue == "9") {
-          s_alert.pop(msg);
-          return;
-        }
-      }
-    }
     saveHqOffice(sendUrl);
   }
 
@@ -674,6 +620,67 @@
     });
   }
 
+<%-- ============================================= 버튼 이벤트 관련 =========================================== --%>
+
+  <%-- 사업자번호 중복체크 버튼 클릭 --%>
+  var isBizChk = false;
+
+  $("#btnChkBizNo").click(function(e){
+
+    var param = {};
+    param.bizNo1 = rBizNo1.text;
+    param.bizNo2 = rBizNo2.text;
+    param.bizNo3 = rBizNo3.text;
+    param.bizNo = rBizNo1.text + rBizNo2.text + rBizNo3.text;
+
+    $.postJSON("/store/hq/hqManage/master/chkBizNo.sb", param, function(result) {
+      if(result.status === "FAIL") {
+        s_alert.pop(result.message);
+        return;
+      }
+      isBizChk = true;
+
+      if(result.data == 0 ){
+        <%-- 중복되는 사업자번호가 없습니다.--%>
+        s_alert.pop("<s:message code='hqManage.no.duplicate.bizNo.msg'/>");
+      } else {
+        <%-- 사업자번호 사용현황 팝업 --%>
+        openBizInfoLayer(param);
+      }
+    }
+    ,function(){
+      s_alert.pop("Ajax Fail");
+    });
+  });
+
+  <%-- 본사코드 선택 이벤트 --%>
+  $("input[name=rHqOfficeCdType]").change(function(){
+    var hqType = $("input[name=rHqOfficeCdType]:checked").val();
+    alert('changed value : '+ hqType);
+    if(hqType == "D") {
+      rSysStatFg.selectedValue = "9";
+      rSysStatFg.isReadOnly = true;
+    } else {
+      rSysStatFg.selectedValue = "";
+      rSysStatFg.isReadOnly = false;
+    }
+  });
+
+  <%-- 주소찾기 버튼 클릭 --%>
+  $("#btnFindAddr").click(function(e){
+    //TODO 주소검색 공통 추가 필요
+  });
+
+  <%-- 신규등록 버튼 클릭 --%>
+  $("#btnReg").click(function(e){
+    chkVal("/store/hq/hqManage/master/regist.sb");
+  });
+
+  <%-- 저장 버튼 클릭 (수정) --%>
+  $("#btnSave").click(function(e){
+    chkVal("/store/hq/hqManage/master/modify.sb");
+  });
+
   <%-- 수정 버튼 클릭 --%>
   $("#hqDtlLayer #btnEdit").click(function(e){
     $("#viewArea").hide();
@@ -697,16 +704,6 @@
     $("#hqDtlDim").hide();
   });
 
-  <%-- 폼 리셋 --%>
-  function resetForm() {
-    $("#regForm")[0].reset();
-
-    rWeatherArea.selectedIndex  = 0;
-    rSysStatFg.selectedIndex    = 0;
-    rAgency.selectedIndex       = 0;
-    rClsFg.selectedIndex        = 0;
-    rSysOpenDate.value          = new Date();
-  }
 
   <%-- 환경설정 탭 클릭 --%>
   $("#hqDtlLayer #envSettingTab").click(function(){
@@ -742,25 +739,6 @@
       showMenuAuth();
     }
   });
-
-
-  <%-- 상세정보 레이아웃 숨김 --%>
-  //function showMaster(pageId){
-  function showMaster(){
-    hideEnvSet();
-    hideMenuAuth();
-    resetForm();
-
-    $("#hqDtlLayer").show();
-    $("#hqDtlDim").show();
-    // 상세정보일 경우 데이터 조회
-  }
-
-  <%-- 상세정보 레이아웃 숨김 --%>
-  function hideMaster(){
-    $("#hqDtlLayer").hide();
-    $("#hqDtlDim").hide();
-  }
 
 </script>
 

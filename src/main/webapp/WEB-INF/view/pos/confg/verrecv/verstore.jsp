@@ -14,7 +14,7 @@
     <li><a href="javascript:;" id="storerecv"><s:message code="verRecv.storerecv" /></a></li>
     <li><a href="javascript:;" id="verstore" class="on"><s:message code="verRecv.verstore" /></a></li>
   </ul>
-    
+
   <div class="searchBar">
     <a href="javascript:;" class="open"><s:message code="verRecv.verstore" /></a>
   </div>
@@ -44,12 +44,12 @@
       </tr>
     </tbody>
   </table>
-  
+
   <%-- 조회 --%>
   <div class="mt10 pdb20 oh bb">
       <button class="btn_blue fr" id="btnSearch"><s:message code="cmm.search" /></button>
   </div>
-    
+
   <!--2단-->
   <div class="wj-TblWrap mt20">
    <!--left-->
@@ -65,7 +65,7 @@
         </div>
         <%--위즈모 테이블 --%>
         <div style="height:410px;" id="theGrid1"></div>
-      </div> 
+      </div>
       <%-- 페이지 리스트 --%>
       <div class="pageNum mt20">
         <%-- id --%>
@@ -75,7 +75,7 @@
       <%--//페이지 리스트--%>
     </div>
     <!--//left-->
-      
+
     <!--right-->
     <div class="w50 fr">
       <div class="wj-TblWrapBr ml10 pd20" style="height:500px;">
@@ -87,7 +87,7 @@
               <button id="btnExcel2" class="btn_skyblue"><s:message code="cmm.excel.down" /></button>
           </div>
         </div>
-        <p class="s12 bk tl mb10 mt10" id="storeTit"></p> 
+        <p class="s12 bk tl mb10 mt10" id="storeTit"></p>
         <div style="height:350px;" id="theGrid2"></div>
       </div>
       <%-- 페이지 리스트 --%>
@@ -109,25 +109,25 @@
   $("#verrecv").click(function(){
     location.href = "/pos/confg/verRecv/verRecv/list.sb";
   });
-  
+
   $("#storerecv").click(function(){
     location.href = "/pos/confg/verRecv/storeRecv/list.sb";
   });
-  
+
   $("#verstore").click(function(){
     location.href = "/pos/confg/verRecv/verStore/list.sb";
   });
-  
+
   <%-- 검색조건 --%>
   var verSerNo = wcombo.genInput("#verSerNo");
   var verSerNm = wcombo.genInput("#verSerNm");
-  
+
   <%-- 공통코드 --%>
   var progFg    = ${ccu.getCommCodeExcpAll("090")};
   var progFgDataMap     = new wijmo.grid.DataMap(progFg, 'value', 'name');
-  
+
   <%-- Header --%>
-  var hData1 = 
+  var hData1 =
     [
       {binding:"verSerNo", header:"<s:message code='verRecv.verSerNo' />"},
       {binding:"verSerNm", header:"<s:message code='verRecv.verSerNm' />"},
@@ -135,7 +135,7 @@
       {binding:"posCnt", header:"<s:message code='verRecv.posCnt' />"}
     ];
 
-  var hData2 = 
+  var hData2 =
     [
       {binding:"verSerNo", header:"<s:message code='verRecv.verSerNo' />"},
       {binding:"storeCd", header:"<s:message code='verRecv.storeCd' />"},
@@ -151,7 +151,7 @@
   var ldata         = ${ccu.getListScale()};
   var listScaleBox1 = wcombo.genCommonBox("#listScaleBox1", ldata);
   var listScaleBox2 = wcombo.genCommonBox("#listScaleBox2", ldata);
-  
+
   <%-- 그리드 포맷 --%>
   grid1.formatItem.addHandler(function(s, e) {
     if (e.panel == s.cells) {
@@ -162,9 +162,9 @@
       }
     }
   });
-  
+
   var selValue = "";
-  
+
   <%-- 그리드 선택 이벤트 --%>
   grid1.addEventListener(grid1.hostElement, 'mousedown', function(e) {
     var ht = grid1.hitTest(e);
@@ -179,15 +179,15 @@
       }
     }
   });
-  
+
   <%-- 매장조회 --%>
   function searchStore(index) {
-    
+
     var param = {};
     param.verSerNo = selValue;
     param.listScale = listScaleBox2.selectedValue;
     param.curr      = index;
-    
+
     $.postJSON("${baseUrl}" + "storeList.sb", param, function(result) {
       var list = result.data.list;
       if(result.status === "FAIL") {
@@ -197,27 +197,27 @@
       }
       grid2.itemsSource = list;
       page.make("#page2", result.data.page.curr, result.data.page.totalPage);
-   })
-    .fail(function(){
+    }
+    ,function(){
       s_alert.pop("Ajax Fail");
     });
   }
-  
+
   <%-- 조회버튼 클릭 --%>
   $("#btnSearch").click(function(e){
     search(1);
   });
-  
+
   <%-- 버전리스트 조회  --%>
   function search(index) {
     //TODO 조회조건 validation
-    
+
     var param = {};
     param.verSerNo  = verSerNo.text;
     param.verSerNm  = verSerNm.text;
     param.listScale = listScaleBox1.selectedValue;
     param.curr      = index;
-    
+
     $.postJSON("${baseUrl}" + "list.sb", param, function(result) {
       if(result.status === "FAIL") {
         s_alert.pop(result.message);
@@ -232,21 +232,21 @@
       }
       grid1.itemsSource = list;
       page.make("#page1", result.data.page.curr, result.data.page.totalPage);
-    })
-    .fail(function(){
+    }
+    ,function(){
         s_alert.pop("Ajax Fail");
     });
   }
-  
+
   <%-- 페이징 --%>
   $(document).on("click", ".page1", function() {
     search($(this).data("value"));
   });
-  
+
   $(document).on("click", ".page2", function() {
     searchStore($(this).data("value"));
   });
-  
+
   <%-- 엑셀다운로드 --%>
   $("#btnExcel1").click(function(e){
     var name = "${menuNm}";
@@ -257,6 +257,6 @@
     var name = "${menuNm}";
     wexcel.down(grid2, name, name + ".xlsx");
   });
-  
-  
+
+
 </script>

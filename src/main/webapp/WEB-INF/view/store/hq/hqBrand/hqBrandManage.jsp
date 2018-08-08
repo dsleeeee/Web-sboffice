@@ -19,7 +19,7 @@
       <col class="w35" />
       <col class="w15" />
       <col class="w35" />
-    </colgroup>   
+    </colgroup>
     <tbody>
       <tr>
         <%-- 본사코드 --%>
@@ -37,7 +37,7 @@
           </div>
         </td>
       </tr>
-      
+
       <tr>
         <%-- 브랜드코드 --%>
         <th><s:message code="hqBrand.hqBrandCd" /></th>
@@ -65,15 +65,15 @@
         <th></th>
         <td></td>
       </tr>
-      
+
     </tbody>
   </table>
-  
+
   <div class="mt10 pdb20 oh bb">
-    <%-- 조회 --%>  
+    <%-- 조회 --%>
     <button class="btn_blue fr" id="btnSearch"><s:message code="cmm.search" /></button>
   </div>
-  
+
   <div class="mt20 oh sb-select dkbr">
     <%--페이지 스케일 --%>
     <div id="listScaleBox" class="w130 fl"></div>
@@ -86,12 +86,12 @@
       <button class="btn_skyblue" id="btnSave"><s:message code="cmm.save" /></button>
     </div>
   </div>
-  
+
   <%-- 위즈모 테이블 --%>
   <div class="wj-TblWrap mt10">
     <div id="thegrid" style="height:450px;"></div>
   </div>
-  
+
   <%-- 페이지 리스트 --%>
   <div class="pageNum mt20">
     <%-- id --%>
@@ -99,16 +99,16 @@
     </ul>
   </div>
 </div>
- 
+
 <script>
-  
+
   var selectedBrand;
-  
+
   $(document).ready(function() {
 
     var useYn             = ${ccu.getCommCode("904")};
     var useYnDataMap      = new wijmo.grid.DataMap(useYn, 'value', 'name');
-    
+
     var srchHqOfficeCd    = wcombo.genInput("#srchHqOfficeCd");
     var srchHqOfficeNm    = wcombo.genInput("#srchHqOfficeNm");
     var srchHqBrandCd     = wcombo.genInput("#srchHqBrandCd");
@@ -133,7 +133,7 @@
 
     grid.isReadOnly  = false;
     grid.collectionView.trackChanges = true;
-    
+
     <%-- 그리드 선택 이벤트 --%>
     grid.addEventListener(grid.hostElement, 'mousedown', function(e) {
       var ht = grid.hitTest(e);
@@ -144,7 +144,7 @@
           selectedBrand = grid.rows[ht.row].dataItem;
           if(selectedBrand.regId == undefined) {
             addHqOfficeLayer(row);
-          } 
+          }
         }
       }
     });
@@ -159,39 +159,39 @@
         }
       }
     });
-    
+
     <%-- 조회 버튼 클릭 --%>
     $("#btnSearch").click(function(e){
       search(1);
     });
-    
+
     <%-- 페이징 --%>
     $(document).on("click", ".page", function() {
       search($(this).data("value"));  //TODO 페이징테스트
     });
-    
+
     <%-- 브랜드 목록 조회 --%>
     function search(index) {
       if(srchHqOfficeCd.text.length > 5) {
         s_alert.pop("<s:message code='hqBrand.hqOfficeCd'/><s:message code='cmm.regexp' arguments='15'/>");
         return;
       }
-      
+
       if(srchHqOfficeNm.text.length > 15) {
         s_alert.pop("<s:message code='hqBrand.hqOfficeNm'/><s:message code='cmm.regexp' arguments='15'/>");
         return;
       }
-      
+
       if(srchHqBrandCd.text.length > 5) {
         s_alert.pop("<s:message code='hqBrand.hqBrandCd'/><s:message code='cmm.regexp' arguments='5'/>");
         return;
       }
-      
+
       if(srchHqBrandNm.text.length > 15 ) {
         s_alert.pop("<s:message code='hqBrand.hqBrandNm'/><s:message code='cmm.regexp' arguments='15'/>");
         return;
       }
-      
+
       var param = {};
       param.hqOfficeCd  = srchHqOfficeCd.text;
       param.hqOfficeNm  = srchHqOfficeNm.text;
@@ -200,14 +200,14 @@
       param.useYn       = srchUseYn.selectedValue;
       param.listScale   = listScaleBox.selectedValue;
       param.curr        = index;
-      
+
       $.postJSON("/store/hq/hqBrand/hqBrandManage/getBrandlist.sb", param, function(result) {
         if(result.status === "FAIL") {
           s_alert.pop(result.message);
           return;
         }
         var list = result.data.list;
-        
+
         if(list.length === undefined || list.length == 0) {
           s_alert.pop(result.message);
           return;
@@ -215,10 +215,10 @@
 
         grid.itemsSource = new wijmo.collections.CollectionView(list);
         grid.collectionView.trackChanges = true;
-        
+
         page.make("#page", result.data.page.curr, result.data.page.totalPage);
-      })
-      .fail(function(){
+      }
+      ,function(){
           s_alert.pop("Ajax Fail");
       });
     }
@@ -237,11 +237,11 @@
       var newItem = grid.collectionView.addNew();
       grid.collectionView.commitNew();
     });
-    
+
     <%-- 본사 코드 클릭시, 본사 선택 팝업 --%>
     function addHqOfficeLayer(row){
       console.log(row);
-      
+
       c_hq.init(function(arr){
         console.log(arr);
         if(arr.length > 0) {
@@ -267,11 +267,11 @@
         }
       }
     });
-    
+
     <%-- 브랜드 저장 --%>
     $("#btnSave").click(function(e){
       var paramArr = new Array();
-      
+
       var gridView = grid.collectionView;
 
       for(var i = 0; i < gridView.items.length; i++) {
@@ -288,7 +288,7 @@
           return;
         }
       }
-      
+
       for(var i = 0; i < gridView.itemsAdded.length; i++) {
         gridView.itemsAdded[i].status = 'I';
         paramArr.push(gridView.itemsAdded[i]);
@@ -301,12 +301,12 @@
         gridView.itemsRemoved[i].status = 'D';
         paramArr.push(gridView.itemsRemoved[i]);
       }
-      
+
       if(paramArr.length <= 0) {
         s_alert.pop("<s:message code='cmm.not.modify'/>");
         return;
       }
-      
+
       $.postJSONArray("/store/hq/hqBrand/hqBrandManage/save.sb", paramArr, function(result) {
         s_alert.pop("<s:message code='cmm.saveSucc' />");
         gridView.clearChanges();
@@ -317,20 +317,10 @@
       });
     });
   });
-  
+
 </script>
 
 <%-- 본사 선택 --%>
 <c:import url="/WEB-INF/view/application/layer/hqOffice.jsp">
 </c:import>
 
-<%-- 분류관리 ( //TODO 추후 상품 분류관리로 이동) --%>
-<%-- 
-<c:import url="/WEB-INF/view/store/hq/hqBrand/productClass.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
-  <c:param name="orgnFg" value="${orgnFg}"/>
-  <c:param name="orgnCd" value="${orgnCd}"/>
-  <c:param name="orgnNm" value="${orgnNm}"/>
-</c:import>
- --%>

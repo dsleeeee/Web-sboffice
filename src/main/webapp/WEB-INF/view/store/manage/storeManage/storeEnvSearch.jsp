@@ -124,8 +124,8 @@
 
       $("#storeEnvDim").show();
       $("#storeEnvLayer").show();
-    })
-    .fail(function(){
+    }
+    ,function(){
       s_alert.pop("Ajax Fail");
     });
   }
@@ -139,8 +139,8 @@
       }
       var list = result.data.list;
       theGridBizInfo.itemsSource = list;
-    })
-    .fail(function(){
+    }
+    ,function(){
       s_alert.pop("Ajax Fail");
     });
   }
@@ -169,8 +169,8 @@
       $("#bSysOpenDate").text(dtlData.sysOpenDate);
       $("#bAddr").text("(" + dtlData.postNo + ") " + dtlData.addr + " " + dtlData.addrDtl);
 
-    })
-    .fail(function(){
+    }
+    ,function(){
       s_alert.pop("Ajax Fail");
     });
   }

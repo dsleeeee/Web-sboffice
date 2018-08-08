@@ -12,7 +12,7 @@
       <div class="con sc2">
         <%-- 위즈모 그리드  --%>
         <div>
-          <div id="theGridBizInfo" class="mt10 mb20" style="height:100px;"></div> 
+          <div id="theGridBizInfo" class="mt10 mb20" style="height:100px;"></div>
         </div>
         <div class="wj-TblWrap mr10">
           <div class="oh mb10">
@@ -150,25 +150,23 @@
       }
     }
   });
- 
+
   <%-- 사업자번호 사용현황 팝업 오픈 --%>
   function openBizInfoLayer(param) {
-    
-    console.log('openBizInfoLayer')
-    
+
     $("#BizInfoDim").show();
     $("#BizInfoLayer").show();
-    
+
     bizParam = param;
-    
+
     var title = "<s:message code='hqManage.bizInfo' />"
               + " (" + "<s:message code='hqManage.bizNo' />" + " : "
               + param.bizNo1 + "-" + param.bizNo2 + "-" + param.bizNo3 + ")";
-    
+
     $("#bizInfoLayerTitle").text(title);
     getBizInfo(param);
   }
-  
+
   <%-- 사업자번호 사용현황 목록 조회 --%>
   function getBizInfo(param) {
     $.postJSON("/store/hq/hqManage/master/bizUseList.sb", param, function(result) {
@@ -178,23 +176,20 @@
       }
       var list = result.data.list;
       theGridBizInfo.itemsSource = list;
-    })
-    .fail(function(){
+    }
+    ,function(){
       s_alert.pop("Ajax Fail");
     });
   }
-  
+
   function getBizInfoDtl(param) {
     $.postJSON("/store/hq/hqManage/master/bizInfoDtl.sb", param, function(result) {
       if(result.status === "FAIL") {
         s_alert.pop(result.message);
         return;
       }
-      console.log(result);
-      console.log(param);
-      
       var dtlData = result.data;
-      
+
       $("#bStoreCd").text(dtlData.storeCd);
       $("#bStoreNm").text(dtlData.storeNm);
       $("#bStoreCd").text(dtlData.storeCd);
@@ -209,13 +204,12 @@
       $("#bClsFg").text(dtlData.clsFgNm);
       $("#bSysOpenDate").text(dtlData.sysOpenDate);
       $("#bAddr").text("(" + dtlData.postNo + ") " + dtlData.addr + " " + dtlData.addrDtl);
-      
-    })
-    .fail(function(){
+    }
+    ,function(){
       s_alert.pop("Ajax Fail");
     });
   }
-  
+
   <%-- 레이어 팝업 닫기 --%>
   $("#BizInfoLayer .btn_close").click(function(){
     $("#BizInfoDim").hide();

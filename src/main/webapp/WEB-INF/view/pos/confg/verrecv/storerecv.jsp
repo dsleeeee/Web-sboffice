@@ -13,8 +13,8 @@
     <li><a href="javascript:;" id="verrecv"><s:message code="verRecv.verrecv" /></a></li>
     <li><a href="javascript:;" id="storerecv" class="on"><s:message code="verRecv.storerecv" /></a></li>
     <li><a href="javascript:;" id="verstore"><s:message code="verRecv.verstore" /></a></li>
-  </ul>    
-  
+  </ul>
+
   <div class="searchBar">
     <a href="javascript:;" class="open"><s:message code="verRecv.storerecv" /></a>
   </div>
@@ -24,7 +24,7 @@
       <col class="w35" />
       <col class="w15" />
       <col class="w35" />
-    </colgroup>   
+    </colgroup>
     <tbody>
       <tr>
         <%-- 본사코드 --%>
@@ -76,21 +76,21 @@
   <div class="mt10 pdb20 oh bb">
     <button id="btnSearch" class="btn_blue fr"><s:message code="cmm.search" /></button>
   </div>
-  
+
   <div class="mt20 oh sb-select dkbr">
     <%--페이지 스케일 --%>
     <div id="listScaleBox" class="w130 fl"></div>
-    
+
     <%-- 엑셀다운로드 버튼 --%>
     <div class="w150 fl"></div>
     <button id="btnExcel" class="btn_skyblue fr"><s:message code="cmm.excel.down" /></button>
   </div>
-  
+
   <%-- 위즈모 테이블 --%>
   <div class="wj-TblWrapBr mt10" style="height:400px;">
-    <div id="theGrid1" class="pd20" style="height:390px;"></div> 
+    <div id="theGrid1" class="pd20" style="height:390px;"></div>
   </div>
-  
+
   <%-- 페이지 리스트 --%>
   <div class="pageNum mt20">
     <%-- id --%>
@@ -106,11 +106,11 @@
   $("#verrecv").click(function(){
     location.href = "/pos/confg/verRecv/verRecv/list.sb";
   });
-  
+
   $("#storerecv").click(function(){
     location.href = "/pos/confg/verRecv/storeRecv/list.sb";
   });
-  
+
   $("#verstore").click(function(){
     location.href = "/pos/confg/verRecv/verStore/list.sb";
   });
@@ -123,20 +123,20 @@
   var lastVer       = wcombo.genInput("#lastVer");
   var ldata         = ${ccu.getListScale()};
   var listScaleBox  = wcombo.genCommonBox("#listScaleBox", ldata);
-  
+
   <%-- 공통코드 --%>
   var mainYn  = ${ccu.getEnvCodeExcpAll("205")};
   var posFg   = ${ccu.getEnvCodeExcpAll("101")};
   var payFg   = ${ccu.getEnvCodeExcpAll("204")};
-  
+
   console.log(mainYn);
   console.log(posFg);
   console.log(payFg);
-  
-  var mainYnDataMap   = new wijmo.grid.DataMap(mainYn, 'value', 'name');  //TODO name, value가 바뀜 
+
+  var mainYnDataMap   = new wijmo.grid.DataMap(mainYn, 'value', 'name');  //TODO name, value가 바뀜
   var posFgDataMap    = new wijmo.grid.DataMap(posFg, 'value', 'name');
   var payFgDataMap    = new wijmo.grid.DataMap(payFg, 'value', 'name');
-  
+
   <%-- header --%>
   var hData1 =
     [
@@ -151,10 +151,10 @@
       {binding:"lastLoginDt", header:"<s:message code='verRecv.lastLoginDt' />"},
       {binding:"lastLoginIp", header:"<s:message code='verRecv.lastLoginIp' />"}
     ];
-  
+
   <%-- 그리드 생성 --%>
   var grid1 = wgrid.genGrid("#theGrid1", hData1, "${menuCd}", 1, ${clo.getColumnLayout(1)});
-  
+
   <%-- 그리드 포맷 --%>
   grid1.formatItem.addHandler(function(s, e) {
     if (e.panel == s.cells) {
@@ -165,7 +165,7 @@
       }
     }
   });
-  
+
   <%-- 그리드 선택 이벤트 --%>
   grid1.addEventListener(grid1.hostElement, 'mousedown', function(e) {
     var ht = grid1.hitTest(e);
@@ -176,18 +176,18 @@
       }
     }
   });
-  
+
   <%-- 매장 수신목록 레이어 팝업--%>
-  
+
   <%-- 조회버튼 클릭 --%>
   $("#btnSearch").click(function(e){
     search(1);
   });
-  
+
   <%-- 매장목록 조회 --%>
   function search(index) {
     //TODO 조회조건 validation
-    
+
     var param = {};
     param.hqOfficeCd  = hqOfficeCd.text;
     param.hqOfficeNm  = hqOfficeNm.text;
@@ -196,7 +196,7 @@
     param.lastVer     = lastVer.text;
     param.listScale   = listScaleBox.selectedValue;
     param.curr        = index;
-    
+
     $.postJSON("${baseUrl}" + "list.sb", param, function(result) {
       if(result.status === "FAIL") {
         s_alert.pop(result.message);
@@ -210,8 +210,8 @@
       }
       grid1.itemsSource = list;
       page.make("#page", result.data.page.curr, result.data.page.totalPage);
-    })
-    .fail(function(){
+    }
+    ,function(){
         s_alert.pop("Ajax Fail");
     });
   }
@@ -244,9 +244,9 @@
       <a href="javascript:;" class="btn_close"></a>
       <div class="con">
         <p class="s14 bk mb5" id="storeTit"></p>
-        <%-- 위즈모테이블 --%> 
-        <div>   
-          <div id="theGrid2" class="mt10" style="height:400px;"></div> 
+        <%-- 위즈모테이블 --%>
+        <div>
+          <div id="theGrid2" class="mt10" style="height:400px;"></div>
         </div>
       </div>
       <div class="btnSet">
@@ -257,17 +257,17 @@
 </div>
 
 <script>
-  
+
   <%-- 공통코드 --%>
-  
+
   var progFg    = ${ccu.getCommCodeExcpAll("090")};
   var verRecvFg = ${ccu.getCommCodeExcpAll("091")};
-  
+
   var progFgDataMap     = new wijmo.grid.DataMap(progFg, 'value', 'name');
   var verRecvFgDataMap  = new wijmo.grid.DataMap(verRecvFg, 'value', 'name');
-  
+
   <%-- Header --%>
-  var hData2 = 
+  var hData2 =
     [
       {binding:"verSerNo", header:"<s:message code='verRecv.storeCd' />"},
       {binding:"verSerNm", header:"<s:message code='verRecv.storeNm' />"},
@@ -277,36 +277,36 @@
       {binding:"regDt", header:"<s:message code='verRecv.regDt' />"},
       {binding:"verRecvDt", header:"<s:message code='verRecv.verRecvDt' />"}
     ];
-  
+
   <%-- 그리드 생성 --%>
   var grid2 = wgrid.genGrid("#theGrid2", hData2, "${menuCd}", 2, ${clo.getColumnLayout(1)});
-  
+
   <%-- 레이어팝업 호출 --%>
   function showStoreDtl(items) {
 
     var param = {};
-    
+
     param.hqOfficeCd = items.hqOfficeCd;
     param.storeCd    = items.storeCd;
-    
+
     $.postJSON("${baseUrl}" + "storeDtl.sb", param, function(result) {
       if(result.status === "FAIL") {
         s_alert.pop(result.message);
         return;
       }
       grid2.itemsSource = result.data.list;
-    })
-    .fail(function(){
+    }
+    ,function(){
         s_alert.pop("Ajax Fail");
     });
-    
+
     var storeTitle = "["+items.storeCd+"] " + items.storeNm;
-     
+
     $("#storeTit").text(storeTitle)
     $("#storeDtlDim").show();
     $("#storeDtlLayer").show();
   }
-  
+
   $(".btn_close, #btnClose").click(function(){
     $("#storeDtlDim").hide();
     $("#storeDtlLayer").hide();

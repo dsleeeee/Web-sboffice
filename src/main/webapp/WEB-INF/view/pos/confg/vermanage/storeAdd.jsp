@@ -137,14 +137,9 @@
       {binding:"hqOfficeNm", header:"<s:message code='verManage.store.hqOfficeNm' />", isReadOnly:true},
       {binding:"storeCd", header:"<s:message code='verManage.store.storeCd' />", isReadOnly:true},
       {binding:"storeNm", header:"<s:message code='verManage.store.storeNm' />", isReadOnly:true},
-      {binding:"posNo", header:"<s:message code='verManage.store.posNo' />", isReadOnly:true},
-      {binding:"posNm", header:"<s:message code='verManage.store.posNm' />", isReadOnly:true},
       {binding:"lastVer", header:"<s:message code='verManage.store.lastVer' />", isReadOnly:true},
       {binding:"clsFg", header:"<s:message code='verManage.store.clsFg' />", dataMap:clsFgDataMap, isReadOnly:true},
       {binding:"sysStatFg", header:"<s:message code='verManage.store.sysStatFg' />", dataMap:sysStatFgDataMap, isReadOnly:true}
-      //{binding:"sysStatFg", header:"<s:message code='verManage.store.sysStatFg' />", isReadOnly:true}, //포스형태
-      // 벤사 추가
-      // 용도 추가
     ];
 
   <%-- 매장조회 그리드 생성 --%>
@@ -237,17 +232,15 @@
         return;
       }
       page.make("#page3", result.data.page.curr, result.data.page.totalPage);
-    })
-    .fail(function(){
+    }
+    ,function(){
       s_alert.pop("Ajax Fail");
     });
   }
 
   <%-- 저장버튼 클릭 --%>
   $("#btnSaveStore").click(function(){
-
     var paramArr = new Array();
-
     for(var i = 0; i < grid3.collectionView.itemCount; i++ ){
       var item = grid3.collectionView.items[i];
       if(item.chk){
