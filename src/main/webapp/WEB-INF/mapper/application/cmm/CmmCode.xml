@@ -61,6 +61,20 @@
       FROM TB_CM_VAN_CMPNY
   </select>
 
+  <!-- 본사 목록 조회 -->
+  <!--
+      TABLE    : TB_HQ_OFFICE
+      COMMENTS : 벤사 목록을 조회한다.
+  -->
+  <select id="selectHqOfficeList" resultType="DefaultMap">
+    /* CmmCodeMapper.selectVanList */
+    SELECT HQ_OFFICE_CD, HQ_OFFICE_NM
+      FROM TB_HQ_OFFICE
+     WHERE SYS_STAT_FG = '1'
+     ORDER BY HQ_OFFICE_CD NULLS FIRST
+  </select>
+
+
 
 </mapper>
 

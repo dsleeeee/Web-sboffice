@@ -19,24 +19,17 @@ import kr.co.solbipos.store.hq.brand.service.HqBrandVO;
  * @author 솔비포스 차세대개발실 김지은
  * @since 2018. 06.08
  * @version 1.0
- * @see
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 public interface StoreManageService {
 
-    /** 본사 목록 조회 */
-    List<DefaultMap<String>> getHqOfficeComboList();
-    
     /** 매장 목록 조회 */
     List<DefaultMap<String>> getStoreList(StoreManageVO storeManageVO);
 
     /** 매장정보 상세조회 */
-    DefaultMap<String> getStoreDetail(StoreManageVO storeManageVO);
+    Map<String, Object> getStoreDetail(StoreManageVO storeManageVO);
 
-    /** 브랜드 콤보 리스트 조회 */
-    List<DefaultMap<String>> getBrandComboList(StoreManageVO storeManageVO);
-    
     /** 매장 콤보 리스트 조회 */
     List<DefaultMap<String>> getStoreComboList(StoreManageVO storeManageVO);
 
@@ -46,6 +39,9 @@ public interface StoreManageService {
     /** 매장 신규등록 */
     int saveStoreInfo(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
 
+    /** 매장 정보 수정 */
+    int updateStoreInfo(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
+
     /** 매장환경 정보 조회 */
     List<DefaultMap<String>> getEnvGroupList(StoreEnvVO storeEnvVO);
 
@@ -54,7 +50,7 @@ public interface StoreManageService {
 
     /** 매장 포스 환경정보 조회 */
     List<DefaultMap<String>> getPosEnvGroupList(StorePosEnvVO storePosEnvVOs);
-    
+
     /** 매장 포스 환경정보 저장 */
     int savePosConfig(StorePosEnvVO[] storePosEnvVOs, SessionInfoVO sessionInfoVO);
 

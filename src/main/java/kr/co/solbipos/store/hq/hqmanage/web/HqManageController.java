@@ -39,6 +39,7 @@ import kr.co.solbipos.store.hq.hqmanage.service.HqMenuVO;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
+
 @Controller
 @RequestMapping(value="/store/hq/hqManage/")
 public class HqManageController {
@@ -244,7 +245,7 @@ public class HqManageController {
 
     /**
      * 메뉴권한복사
-     * @param   hqManage
+     * @param   hqMenu
      * @param   request
      * @param   response
      * @param   model
@@ -268,7 +269,7 @@ public class HqManageController {
 
     /**
      * 사용메뉴 추가
-     * @param   hqManage
+     * @param   hqMenu
      * @param   request
      * @param   response
      * @param   model
@@ -290,7 +291,7 @@ public class HqManageController {
 
     /**
      * 사용메뉴 삭제
-     * @param   hqManage
+     * @param   hqMenu
      * @param   request
      * @param   response
      * @param   model
@@ -313,7 +314,7 @@ public class HqManageController {
 
     /**
      * 환경설정 조회
-     * @param   hqBrand
+     * @param   hqManageVO
      * @param   request
      * @param   response
      * @param   model
@@ -333,7 +334,7 @@ public class HqManageController {
 
     /**
      * 환경설정 저장
-     * @param   hqBrands
+     * @param   hqEnvsts
      * @param   request
      * @param   response
      * @param   model

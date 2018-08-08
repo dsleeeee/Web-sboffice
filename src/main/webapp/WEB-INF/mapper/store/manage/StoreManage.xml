@@ -12,70 +12,50 @@
 
 <mapper namespace="kr.co.solbipos.store.manage.storemanage.service.impl.StoreManageMapper">
 
-  <!-- 본사목록 조회 -->
-  <!--
-      TABLE    : TB_HQ_OFFICE
-      COMMENTS : 본사 선택 콤보에서 사용할 본사 목록을 조회한다.
-  -->
-  <select id="getHqOfficeComboList" resultType="DefaultMap">
-    /* USE : StoreManageMapper.getHqOfficeComboList */
-    SELECT '' AS VALUE,
-           '선택' AS NAME
-       FROM DUAL
-      UNION
-    SELECT HQ_OFFICE_CD AS VALUE, 
-           '[' || HQ_OFFICE_CD || '] ' || HQ_OFFICE_NM AS NAME
-      FROM TB_HQ_OFFICE
-     WHERE SYS_STAT_FG = '1'
-     ORDER BY VALUE NULLS FIRST
-  </select>
-
   <!-- 매장목록 조회 -->
   <!--
-      TABLE    : TB_MS_STORE, TB_HQ_OFFICE, TB_HQ_BRAND
+      TABLE    : TB_MS_STORE, TB_HQ_OFFICE
       PARAM    : storeManageVO
       COMMENTS : 매장목록을 조회한다.
   -->
-  <select id="getStoreList" parameterType="storeManageVO" resultType="DefaultMap">
+  <select id="getStoreList" parameterType="DefaultMap" resultType="DefaultMap">
     /* USE : StoreManageMapper.getStoreList */
     <include refid="CmmSQL.PagingTemplateHeader"/>
-      SELECT A.HQ_OFFICE_CD, 
-             B.HQ_OFFICE_NM,
-             A.HQ_BRAND_CD,
-             C.HQ_BRAND_NM,
-             A.STORE_CD,
-             A.STORE_NM,
-             A.CLS_FG,
-             A.SYS_STAT_FG,
-             A.SYS_OPEN_DATE
+      SELECT '[' || tho.HQ_OFFICE_CD || '] ' || tho.HQ_OFFICE_NM AS HQ_OFFICE_CD_NM,
+             tho.HQ_OFFICE_CD,
+             tho.HQ_OFFICE_NM,
+             tms.STORE_CD,
+             tms.STORE_NM,
+             tms.CLS_FG,
+             tms.SYS_STAT_FG,
+             tms.SYS_OPEN_DATE,
+             TO_CHAR(TO_DATE(tms.SYS_OPEN_DATE, 'YYYYMMDD') , 'YYYY/MM/DD')
             <include refid="CmmSQL.PagingTemplateCount"/>
-        FROM TB_MS_STORE A,
-             TB_HQ_OFFICE B,
-             TB_HQ_BRAND C
-       WHERE B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
-         AND C.HQ_BRAND_CD = A.HQ_BRAND_CD
+        FROM TB_HQ_OFFICE tho,
+             TB_MS_STORE tms
+       WHERE tms.HQ_OFFICE_CD (+)= tho.HQ_OFFICE_CD
       <if test='hqOfficeCd != null and hqOfficeCd != ""'>
-         AND A.HQ_OFFICE_CD LIKE '%'||#{hqOfficeCd}||'%'
+         AND tho.HQ_OFFICE_CD LIKE '%'||#{hqOfficeCd}||'%'
       </if>
       <if test='hqOfficeNm != null and hqOfficeNm != ""'>
-         AND B.HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'
+         AND tho.HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'
       </if>
       <if test='storeCd != null and storeCd != ""'>
-         AND A.STORE_CD LIKE '%'||#{storeCd}||'%'
+         AND tms.STORE_CD LIKE '%'||#{storeCd}||'%'
       </if>
       <if test='storeNm != null and storeNm != ""'>
-         AND B.STORE_NM LIKE '%'||#{storeNm}||'%'
+         AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
       </if>
       <if test='bizNo != null and bizNo != ""'>
-         AND A.BIZ_NO LIKE '%'||#{bizNo}||'%'
+         AND tms.BIZ_NO LIKE '%'||#{bizNo}||'%'
       </if>
-      <if test='clsFg != null and clsFg != ""'>
-         AND A.CLS_FG = #{clsFg}
+      <if test='clsFg != null and clsFg.toString() != ""'>
+         AND tms.CLS_FG = #{clsFg}
       </if>
-      <if test='sysStatFg != null and sysStatFg != ""'>
-         AND A.SYS_STAT_FG = #{sysStatFg}
+      <if test='sysStatFg != null and sysStatFg.toString() != ""'>
+         AND tms.SYS_STAT_FG = #{sysStatFg}
       </if>
-       ORDER BY A.HQ_OFFICE_CD, A.STORE_CD, A.SYS_OPEN_DATE ASC
+       ORDER BY tho.HQ_OFFICE_CD, tms.STORE_CD, tms.SYS_OPEN_DATE ASC
        <include refid="CmmSQL.PagingTemplateBottom"/>
   </select>
 
@@ -94,9 +74,9 @@
            tms.HQ_OFFICE_CD,
            tms.BIZ_STORE_NM,
            tms.BIZ_NO,
-           SUBSTR(tms.BIZ_NO, 0, 3) AS BIZNO1,
-           SUBSTR(tms.BIZ_NO, 4, 2) AS BIZNO2,
-           SUBSTR(tms.BIZ_NO, 6, 5) AS BIZNO3,
+           SUBSTR(tms.BIZ_NO, 0, 3) AS BIZ_NO1,
+           SUBSTR(tms.BIZ_NO, 4, 2) AS BIZ_NO2,
+           SUBSTR(tms.BIZ_NO, 6, 5) AS BIZ_NO3,
            tms.TEL_NO,
            tms.FAX_NO,
            tms.EMAIL_ADDR,
@@ -119,29 +99,6 @@
        AND tms.STORE_CD = #{storeCd}
      ]]>
   </select>
-
-  <!-- 브랜드 콤보리스트  조회 -->
-  <!--
-      TABLE    : TB_HQ_BRAND
-      PARAM    : storeManageVO
-      COMMENTS : 매장정보관리에서 사용할 브랜드 선택 콤보리스트를 조회한다.
-  -->
-  <select id="getBrandComboList" parameterType="storeManageVO" resultType="DefaultMap">
-    /* USE : StoreManageMapper.getBrandComboList */
-    <![CDATA[
-    SELECT '' AS VALUE,
-           '선택' AS NAME
-      FROM DUAL
-     UNION
-    SELECT HQ_BRAND_CD AS VALUE,
-           '['||HQ_BRAND_CD||'] '||HQ_BRAND_NM AS NAME
-      FROM TB_HQ_BRAND
-     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-       AND USE_YN = 'Y'
-     ORDER BY VALUE NULLS FIRST
-    ]]>
-  </select>
-
 
   <!-- 매장 콤보리스트  조회 -->
   <!--
@@ -179,7 +136,7 @@
       FROM TB_MS_STORE tms,
            TB_HQ_OFFICE thq,
            TB_CM_NMCODE tcm
-     WHERE thq.HQ_OFFICE_CD = tms.HQ_OFFICE_CD 
+     WHERE thq.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
        AND tms.STORE_CD = #{storeCd}
        AND tcm.NMCODE_GRP_CD = '003'
        AND tms.CLS_FG = tcm.NMCODE_CD
@@ -195,7 +152,7 @@
   <select id="getStorePosInfo" parameterType="storeManageVO" resultType="DefaultMap">
     /* USE : StoreManageMapper.getStorePosInfo */
     <![CDATA[
-    SELECT tmp.POS_FG, 
+    SELECT tmp.POS_FG,
            tmp.ENVST_CD,
            tmp.ENVST_VAL,
            tcd.ENVST_VAL_NM
@@ -227,7 +184,7 @@
     ]]>
   </select>
 
-  <!-- 매장코드 조회  -->
+  <!-- 신규 매장코드 조회  -->
   <!--
       TABLE    : TB_MS_STORE
       PARAM    : storeManageVO
@@ -246,8 +203,7 @@
        WHERE SYS_STAT_FG != '9'
     </if>
   </select>
-  
-  
+
   <!-- 포스프로그램 구분 환경값 조회  -->
   <!--
       TABLE    : TB_HQ_ENVST
@@ -261,7 +217,7 @@
        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
          AND ENVST_CD = '100'
   </select>
-  
+
   <!-- 신규 매장정보 저장 -->
   <!--
       TABLE    : TB_MS_STORE
@@ -331,7 +287,44 @@
       #{modId}
     )
   </insert>
-  
+
+  <!-- 매장정보 수정 -->
+  <!--
+      TABLE    : TB_MS_STORE
+      PARAM    : storeManageVO
+      COMMENTS : 매장정보를 수정한다.
+  -->
+  <insert id="updateStoreInfo" parameterType="DefaultMap" >
+    /* USE : StoreManageMapper.updateStoreInfo */
+    UPDATE TB_MS_STORE
+       SET STORE_NM = #{storeNm},
+           OWNER_NM = #{ownerNm},
+           BIZ_NO = #{bizNo},
+           BIZ_STORE_NM = #{bizStoreNm},
+           TEL_NO = #{telNo},
+           FAX_NO = #{faxNo},
+           EMAIL_ADDR = #{emailAddr},
+           HMPG_ADDR = #{hmpgAddr},
+           POST_NO = #{postNo},
+           ADDR = #{addr},
+           ADDR_DTL = #{addrDtl},
+           AREA_CD = #{areaCd},
+           CLS_FG = #{clsFg},
+           SYS_STAT_FG = #{sysStatFg},
+           SYS_OPEN_DATE = #{sysOpenDate},
+           SYS_CLOSURE_DATE = #{sysClosureDate},
+           VAN_CD = #{vanCd},
+           AGENCY_CD = #{agencyCd},
+           REMARK = #{remark},
+           SYS_REMARK = #{sysRemark},
+           HD_REMARK = #{hqRemark},
+           MOD_DT = #{modDt},
+           MOD_ID = #{modId}
+     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+       AND STORE_CD = #{storeCd}
+  </insert>
+
+
   <!-- 매장 분류 복사 -->
   <!--
       TABLE    : TB_MS_PRODUCT_CLASS
@@ -346,17 +339,15 @@
       PROD_CLASS_CD,
       PROD_CLASS_NM,
       P_PROD_CLASS_CD,
-      USE_YN,
       REG_DT,
       REG_ID,
       MOD_DT,
       MOD_ID
     )
-    SELECT #{storeCd}, 
-           PROD_CLASS_CD, 
-           PROD_CLASS_NM, 
+    SELECT #{storeCd},
+           PROD_CLASS_CD,
+           PROD_CLASS_NM,
            P_PROD_CLASS_CD,
-           'Y',
            #{regDt},
            #{regId},
            #{modDt},
@@ -364,7 +355,7 @@
       FROM TB_HQ_PRODUCT_CLASS
      WHERE HQ_OFFICE_CD = #{hqOfficeCd}
   </insert>
-  
+
   <!-- 매장 기본 사용자 등록 -->
   <!--
       TABLE    : TB_MS_EMPLOYEE
@@ -416,7 +407,7 @@
       #{modId}
     )
   </insert>
-  
+
   <!-- 포스 출력물 마스터 등록 (단독매장) -->
   <!--
       TABLE    : TB_MS_PRINT
@@ -443,7 +434,7 @@
            #{modDt},
            #{modId}
       FROM TB_CM_PRINT_TEMPL
-     WHERE (PRT_CLASS_CD, TEMPLT_CD) IN 
+     WHERE (PRT_CLASS_CD, TEMPLT_CD) IN
      (
      SELECT PRT_CLASS_CD,
             MIN(TEMPLT_CD)
@@ -451,7 +442,7 @@
       GROUP BY PRT_CLASS_CD
       )
   </insert>
-  
+
   <!-- 포스 출력물 마스터 등록 (프랜차이즈) -->
   <!--
       TABLE    : TB_MS_PRINT
@@ -480,7 +471,7 @@
       FROM TB_HQ_PRINT
      WHERE HQ_OFFICE_CD = #{hqOfficeCd}
   </insert>
-  
+
   <!-- 포스마스터 등록 -->
   <!--
       TABLE    : TB_MS_POS
@@ -512,7 +503,7 @@
       #{modId}
     )
   </insert>
-  
+
   <!-- 테이블 기본 그룹 생성 -->
   <!--
       TABLE    : TB_MS_TABLE_GROUP
@@ -534,7 +525,7 @@
       MOD_DT,
       MOD_ID
     )
-    VALUES 
+    VALUES
     (
       #{storeCd},
       (SELECT NVL( MAX(TBL_GRP_CD) , 0 ) + 1 FROM TB_MS_TABLE_GROUP WHERE STORE_CD = #{storeCd}),
@@ -548,7 +539,7 @@
       #{modId}
     )
   </insert>
-  
+
   <!-- 매장환경 등록 -->
   <!--
       TABLE    : TB_MS_STORE_ENVST
@@ -583,7 +574,7 @@
        AND ENVST_CD IN (SELECT ENVST_CD FROM TB_CM_ENVST WHERE ENVST_FG = '1')
        AND ENVST_CD NOT IN (SELECT ENVST_CD FROM TB_MS_STORE_ENVST WHERE STORE_CD = #{storeCd})
   </insert>
-  
+
   <!-- 외식환경 등록 -->
   <!--
       TABLE    : TB_MS_STORE_ENVST
@@ -618,7 +609,7 @@
        AND ENVST_CD IN (SELECT ENVST_CD FROM TB_CM_ENVST WHERE ENVST_FG = '2')
        AND ENVST_CD NOT IN (SELECT ENVST_CD FROM TB_MS_STORE_ENVST WHERE STORE_CD = #{storeCd})
   </insert>
-  
+
   <!-- 포스환경 등록 -->
   <!--
       TABLE    : TB_MS_POS_ENVST
@@ -656,7 +647,7 @@
      WHERE STORE_CD = #{copyStoreCd}
        AND POS_NO IN (SELECT POS_NO FROM TB_MS_POS_ENVST WHERE STORE_CD = #{storeCd})
   </insert>
-  
+
   <!-- 포스 기능키 등록 -->
   <!--
       TABLE    : TB_MS_POS_FNKEY
@@ -698,7 +689,7 @@
      WHERE STORE_CD = #{copyStoreCd}
        AND POS_NO IN (SELECT POS_NO FROM TB_MS_POS WHERE STORE_CD = #{storeCd})
   </insert>
-  
+
   <!-- 주방 프린터 환경 등록 -->
   <!--
       TABLE    : TB_MS_PRINTER
@@ -742,10 +733,10 @@
            #{modId}
       FROM TB_MS_PRINTER
      WHERE STORE_CD = #{copyStoreCd}
-       AND POS_NO IN (SELECT POS_NO FROM TB_MS_POS WHERE STORE_CD = #{storeCd}) 
+       AND POS_NO IN (SELECT POS_NO FROM TB_MS_POS WHERE STORE_CD = #{storeCd})
   </insert>
-  
-  
+
+
   <!-- 판매가  복사 -->
   <!--
       TABLE    : TB_MS_PRODUCT_SALE_PRICE
@@ -766,7 +757,7 @@
       REG_ID,
       MOD_DT,
       MOD_ID
-    )  
+    )
     SELECT #{storeCd},
            PROD_CD,
            SALE_PRC_FG,
@@ -780,7 +771,7 @@
       FROM TB_MS_PRODUCT_SALE_PRICE
      WHERE STORE_CD = #{copyStoreCd}
   </insert>
-  
+
   <!-- 공급가 복사 -->
   <!--
       TABLE    : TB_MS_PRODUCT
@@ -805,7 +796,7 @@
                         )
     ]]>
   </update>
-  
+
 
   <!-- 터치분류 복사 -->
   <!--
@@ -850,8 +841,8 @@
      WHERE STORE_CD = #{copyStoreCd}
        AND IN_FG = #{inFg}
   </insert>
-  
-  
+
+
   <!-- 터치키 복사 -->
   <!--
       TABLE    : TB_MS_PRINTER
@@ -898,7 +889,7 @@
        AND tmp.STORE_CD = #{storeCd}
        AND tmp.PROD_CD = tmt.PROD_CD
   </insert>
-  
+
   <!-- 매장환경 정보 조회 -->
   <!--
       TABLE    : TB_CM_ENVST, TB_CM_ENVST_DTL, TB_MS_STORE_ENVST, TB_CM_NMCODE
@@ -946,7 +937,7 @@
        WHERE tce.TARGT_FG IN ('S','C','X')
          AND tce.ENVST_FG = #{envstFg}
          AND tce.USE_YN = 'Y'
-       GROUP BY tce.ENVST_GRP_CD 
+       GROUP BY tce.ENVST_GRP_CD
            ) tce3,
            TB_MS_STORE_ENVST tms,
            TB_CM_NMCODE tcn
@@ -958,7 +949,7 @@
      ORDER BY tce2.ENVST_GRP_CD, tce2.ENVST_CD, tce2.ENVST_VAL_CD
      ]]>
   </select>
-  
+
   <!-- 매장환경 정보 저장 -->
   <!--
       TABLE    : TB_MS_STORE_ENVST
@@ -992,7 +983,7 @@
       #{modId}
     )
   </insert>
-  
+
   <!-- 매장환경 정보 수정 -->
   <!--
       TABLE    : TB_MS_STORE_ENVST
@@ -1108,7 +1099,7 @@
       #{modId}
     )
   </insert>
-  
+
   <!-- 매장 포스 환경 정보 수정 -->
   <!--
       TABLE    : TB_MS_POS_ENVST
@@ -1143,7 +1134,7 @@
      WHERE STORE_CD = #{storeCd}
      ]]>
   </select>
-  
+
   <!-- 그룹목록 조회 -->
   <!--
       TABLE    : TB_MS_TABLE_GROUP
@@ -1159,7 +1150,7 @@
      WHERE STORE_CD = #{storeCd}
      ]]>
   </select>
-  
+
   <!-- 테이블 그룹설정 정보 저장 -->
   <!--
       TABLE    : TB_MS_POS_ENVST
@@ -1204,7 +1195,7 @@
                      #{modId}
                   )
   </insert>
-  
+
   <!-- 포스명칭설정 정보 저장 -->
   <!--
       TABLE    : TB_MS_POS
@@ -1220,7 +1211,7 @@
    WHERE STORE_CD = #{storeCd}
      AND POS_NO = #{posNo}
   </update>
-  
+
   <!-- 복사 타켓 포스 데이터 삭제 -->
   <!--
       TABLE    : TB_MS_POS_ENVST
@@ -1233,7 +1224,7 @@
     WHERE   STORE_CD = #{storeCd}
     AND     POS_NO  = LPAD(#{targetPosNo}, 2, '0')
   </delete>
-  
+
   <!-- 복사 타켓 포스 데이터 복사 -->
   <!--
       TABLE    : TB_MS_POS_ENVST
@@ -1271,7 +1262,7 @@
      WHERE STORE_CD = #{storeCd}
        AND POS_NO = #{posNo}
   </insert>
-  
+
   <!-- 포스 셋팅 복사, 메인포스 지정 -->
   <!--
       TABLE    : TB_MS_POS_ENVST
@@ -1286,7 +1277,7 @@
        AND POS_NO = LPAD(#{targetPosNo}, 2, '0')
        AND ENVST_CD = #{envstCd}
   </update>
-  
+
   <!-- 타켓 포스 데이터 삭제 -->
   <!--
       TABLE    : TB_MS_POS
@@ -1299,7 +1290,7 @@
     WHERE   STORE_CD = #{storeCd}
     AND     POS_NO  = LPAD(#{targetPosNo}, 2, '0')
   </delete>
-  
+
   <!-- 포스마스터 복사 -->
   <!--
       TABLE    : TB_MS_POS
@@ -1333,8 +1324,8 @@
       #{modId}
     )
   </insert>
-  
-  
+
+
   <!-- 타켓 포스 기능키 데이터 삭제 -->
   <!--
       TABLE    : TB_MS_POS_FNKEY
@@ -1347,8 +1338,8 @@
     WHERE   STORE_CD = #{storeCd}
     AND     POS_NO  = LPAD(#{targetPosNo}, 2, '0')
   </delete>
-  
-  
+
+
   <!-- 포스 기능키 복사 -->
   <!--
       TABLE    : TB_MS_POS_FNKEY
@@ -1401,7 +1392,7 @@
                                        '1', DECODE(tsf.POS_FG, '0', 'T', 1, 'F', '2', 'T'),
                                        '2', 'T')
   </insert>
-  
+
   <!-- 포스 설치여부 체크 -->
   <!--
       TABLE    : TB_CM_INSTLL
@@ -1416,7 +1407,7 @@
        AND POS_NO = #{posNo}
        AND INST_FG IN ('1', '2')
   </select>
-  
+
   <!-- 매출자료 존재여부 체크 -->
   <!--
       TABLE    : TB_SL_SALE_HDR
@@ -1430,7 +1421,7 @@
      WHERE STORE_CD = #{storeCd}
        AND POS_NO = #{posNo}
   </select>
-  
+
   <!-- 포스 데이터 삭제 -->
   <!--
       TABLE    : TB_MS_POS_ENVST
@@ -1443,7 +1434,7 @@
     WHERE   STORE_CD = #{storeCd}
     AND     POS_NO  = #{posNo}
   </delete>
-  
+
   <!-- 포스 기능키 데이터 삭제 -->
   <!--
       TABLE    : TB_MS_POS_FNKEY
@@ -1456,7 +1447,7 @@
     WHERE   STORE_CD = #{storeCd}
     AND     POS_NO  = #{posNo}
   </delete>
-    
+
   <!-- 포스 마스터 데이터 삭제 -->
   <!--
       TABLE    : TB_MS_POS
@@ -1469,7 +1460,7 @@
     WHERE   STORE_CD = #{storeCd}
     AND     POS_NO  = #{posNo}
   </delete>
-  
+
   <!-- 주방프린터 목록 조회 -->
   <!--
       TABLE    : TB_MS_PRINTER, TB_MS_PRODUCT
@@ -1502,7 +1493,7 @@
        AND tmt.USE_YN = 'Y'
        AND tmp.STORE_CD (+)= tmt.STORE_CD
   </select>
-  
+
   <!-- 주방프린터 등록 -->
   <!--
       TABLE    : TB_MS_PRINTER
@@ -1548,7 +1539,7 @@
       #{modId}
     )
   </insert>
-  
+
   <!-- 주방프린터 수정 -->
   <!--
       TABLE    : TB_MS_PRINTER
@@ -1570,8 +1561,8 @@
      WHERE STORE_CD = #{storeCd}
        AND PRTER_NO = LPAD(#{prterNo}, 2, '0')
   </update>
-  
-  
+
+
   <!-- 주방프린터 삭제 -->
   <!--
       TABLE    : TB_MS_PRINTER
@@ -1584,7 +1575,7 @@
      WHERE STORE_CD = #{storeCd}
        AND PRTER_NO = LPAD(#{prterNo}, 2, '0')
   </delete>
-  
+
   <!-- 상품 분류 조회  -->
   <!--
       TABLE    : TB_MS_PRODUCT
@@ -1594,16 +1585,14 @@
   <select id="getProdClass" parameterType="DefaultMap" resultType="DefaultMap">
     /* USE : StoreManageMapper.getProdClass */
     SELECT STORE_CD,
-           PROD_CLASS_CD, 
+           PROD_CLASS_CD,
            PROD_CLASS_NM,
            P_PROD_CLASS_CD,
-           USE_YN
       FROM TB_MS_PRODUCT_CLASS
      WHERE STORE_CD = #{storeCd}
-       AND USE_YN = 'Y'
   </select>
-  
-  
+
+
   <!-- 주방프린터 연결상품 조회 -->
   <!--
       TABLE    : TB_MS_PRODUCT
@@ -1632,7 +1621,7 @@
                             AND PRTER_NO = #{prterNo})
      </if>
   </select>
-  
+
   <!-- 주방프린터 연결상품 등록 -->
   <!--
       TABLE    : TB_MS_PRINTER_PROD
@@ -1662,7 +1651,7 @@
       #{modId}
     )
   </insert>
-  
+
   <!-- 주방프린터 연결상품 삭제 -->
   <!--
       TABLE    : TB_MS_PRINTER_PROD
@@ -1676,7 +1665,7 @@
        AND PRTER_NO = #{prterNo}
        AND PROD_CD = #{prodCd}
   </delete>
-  
+
   <!-- 터치키 복사 - 본사 목록 조회 -->
   <!--
       TABLE    : TB_HQ_OFFICE
@@ -1693,7 +1682,7 @@
       FROM TB_HQ_OFFICE
      ORDER BY VALUE NULLS FIRST, VALUE ASC
   </select>
-  
+
   <!-- 터치키 복사 - 브랜드 목록 조회 -->
   <!--
       TABLE    : TB_HQ_BRAND
@@ -1712,8 +1701,8 @@
      WHERE HQ_OFFICE_CD = #{hqOfficeCd}
      ORDER BY VALUE NULLS FIRST, VALUE ASC
   </select>
-  
-  
+
+
   <!-- 터치키 복사 - 매장 목록 조회 -->
   <!--
       TABLE    : TB_MS_STORE
@@ -1733,6 +1722,81 @@
        AND HQ_OFFICE_CD = #{hqOfficeCd}
      ORDER BY VALUE NULLS FIRST, VALUE ASC
   </select>
-  
-  
+
+
+
+  <!-- 벤사, 코너 조회 -->
+  <select id="getVanCornrList" parameterType="DefaultMap" resultType="DefaultMap">
+    /* USE : StoreManageMapper.getVanCornrList */
+    SELECT tms.STORE_CD,
+           NVL2( tmc.CORNR_CD, tmc.CORNR_CD, '00' ) AS CORNR_CD,
+           NVL2( tmc.CORNR_NM, tmc.CORNR_NM, '기본코너') AS CORNR_NM,
+           NVL2( tmc.OWNER_NM, tmc.OWNER_NM, tms.OWNER_NM) AS OWNER_NM,
+           NVL2( tmc.BIZ_NO, tmc.BIZ_NO, tms.BIZ_NO ) AS BIZ_NO,
+           NVL2( tmc.TEL_NO, tmc.TEL_NO, tms.TEL_NO ) AS TEL_NO,
+           NVL2( tmc.VAN_CD, tmc.VAN_CD, '' ) AS VAN_CD,
+           NVL2( tmc.VAN_SER_NO, tmc.VAN_SER_NO, '' ) AS VAN_SER_NO,
+           NVL2( tmc.VAN_TERMNL_NO, tmc.VAN_TERMNL_NO, '') AS VAN_TERMNL_NO
+      FROM TB_MS_STORE tms,
+           TB_MS_CORNER tmc
+     WHERE tmc.STORE_CD (+)= tms.STORE_CD
+       AND tms.STORE_CD = #{storeCd}
+       AND tmc.CORNR_CD (+)= '00'
+
+  </select>
+
+  <!-- 설치 포스수 조회 -->
+  <select id="getInstPosCnt" parameterType="DefaultMap" resultType="Integer">
+      /* USE : StoreManageMapper.getInstPosCnt */
+      SELECT COUNT(*)
+        FROM TB_MS_POS
+       WHERE STORE_CD = #{storeCd}
+  </select>
+
+
+
+  <!-- 코너별 승인 목록 조회 -->
+  <select id="getCornrApproveList" parameterType="DefaultMap" resultType="DefaultMap">
+    /* USE : StoreManageMapper.getCornrApproveList */
+    <![CDATA[
+    SELECT tmc.STORE_CD,
+           tmc.CORNR_CD,
+           tmc.CORNR_NM,
+           tmc.OWNER_NM,
+           tmc.BIZ_NO,
+           tmc.TEL_NO,
+           tmc.VAN_CD,
+           tmc.VAN_SER_NO,
+           tmc.VAN_TERMNL_NO,
+           tmc.CORNR_NM AS BEFORE_CORNR_NM,
+           tmc.OWNER_NM AS BEFORE_OWNER_NM,
+           tmc.BIZ_NO AS BEFORE_BIZ_NO,
+           tmc.TEL_NO AS BEFORE_TEL_NO,
+           tmc.VAN_CD AS BEFORE_VAN_CD,
+           tmc.VAN_SER_NO AS BEFORE_VAN_SER_NO,
+           tmc.VAN_TERMNL_NO AS BEFORE_VAN_TERMNL_NO
+      FROM TB_MS_CORNER tmc
+     WHERE STORE_CD = #{storeCd}
+       AND CORNR_CD <> '00'
+     ORDER BY CORNR_CD
+      ]]>
+  </select>
+
+  <!-- 포스별 승인 목록 조회 -->
+  <select id="getPosApproveList" parameterType="DefaultMap" resultType="DefaultMap">
+    /* USE : StoreManageMapper.getPosApproveList */
+    <![CDATA[
+     SELECT tmp.STORE_CD,
+            tmp.POS_NO,
+            tmp.POS_NM,
+            tmp.HW_AUTH_KEY,
+            tmp.POS_VER_NO,
+            tmp.VAN_CERT_YN,
+            tmp.VAN_TERMNL_NO,
+            tmp.VAN_TERMNL_NO AS BEFORE_VAN_TERMNL_NO
+       FROM TB_MS_POS tmp
+      WHERE tmp.STORE_CD = #{storeCd}
+      ORDER BY tmp.POS_NO
+      ]]>
+  </select>
 </mapper>

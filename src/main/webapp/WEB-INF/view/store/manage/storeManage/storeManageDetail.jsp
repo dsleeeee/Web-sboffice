@@ -2,12 +2,6 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
-<%--
-* id 규칙
- 1. v로 시작하는 id는 단순 조회용 데이터
- 2. r로 시작하는 id는 수정, 등록용 데이터
---%>
-
 <%-- 매장 선택 전 --%>
 <div class="w65 fr" id="noDataArea">
   <div class="wj-TblWrapBr ml10 pd20" style="height:700px;">
@@ -22,7 +16,7 @@
   <div class="wj-TblWrapBr ml10 pd20" style="height:700px;">
     <h2 class="h2_tit" id="storeInfoTitle"></h2>
 
-    <%-- 탭 --%>
+    <%--============================================= 탭 =============================================--%>
     <ul class="subTab">
       <%-- 매장정보 --%>
       <li><a id="storeInfo" href="javascript:;" class="on"><s:message code="storeManage.storeInfo" /></a></li>
@@ -32,7 +26,7 @@
       <li><a id="storeEnv"  href="javascript:;"><s:message code="storeManage.storeEnv" /></a></li>
     </ul>
 
-    <%-- 기본정보 --%>
+    <%--============================================= 기본정보 =============================================--%>
     <f:form id="regForm">
       <h3 class="h3_tbl"><s:message code="storeManage.basicInfo" /></h3>
       <table class="searchTbl">
@@ -44,41 +38,34 @@
         </colgroup>
         <tbody>
           <tr>
-            <%-- 브랜드 --%>
-            <th><s:message code="storeManage.hqBrand" /><em class="imp">*</em></th>
-            <td>
-              <div class="sb-select">
-                <div id="rHqBrand"></div>
-              </div>
-            </td>
-            <%-- 매장코드 --%>
+            <%-- 매장코드 (등록시에 일반/데모 선택 라디오버튼, 조회시에 등록된 매장코드 보여줌) --%>
             <th><s:message code="storeManage.storeCd" /><em class="imp">*</em></th>
-            <td id="rStoreCdTxt">
+            <td id="rStoreCdTxt"> <%-- 수정 --%>
               <input type="text" id="rStoreCd" class="sb-input w100" readonly="readonly"/>
             </td>
-            <td id="rStoreCdRadio">
+            <td id="rStoreCdRadio"> <%-- 등록 --%>
               <span class="sb-radio">
                 <input type="radio" name="rStoreCdRadio" id="rStoreCdRadio1" value='<s:message code="storeManage.storeType.comm" />' checked style="width:17px; height:17px; margin-right: 1px;"/>
-                <label for="rdo1"><s:message code="storeManage.comm" /></label>
+                <label for="rStoreCdRadio"><s:message code="storeManage.comm" /></label>
               </span>
               <span class="sb-radio">
                 <input type="radio" name="rStoreCdRadio" id="rStoreCdRadio2" value='<s:message code="storeManage.storeType.demo" />' style="width:17px; height:17px; margin-right: 1px;"/>
-                <label for="rdo1"><s:message code="storeManage.demo" /></label>
+                <label for="rStoreCdRadio"><s:message code="storeManage.demo" /></label>
               </span>
             </td>
-          </tr>
-          <tr>
             <%-- 매장명 --%>
             <th><s:message code="storeManage.storeNm" /><em class="imp">*</em></th>
             <td><input type="text" id="rStoreNm" class="sb-input w100" maxlength="15"/></td>
+          </tr>
+          <tr>
             <%-- 상호명 --%>
             <th><s:message code="storeManage.bizStoreNm" /><em class="imp">*</em></th>
             <td><input type="text" id="rBizStoreNm" class="sb-input w100" /></td>
-          </tr>
-          <tr>
             <%-- 대표자명 --%>
             <th><s:message code="storeManage.onwerNm" /><em class="imp">*</em></th>
             <td><input type="text" id="rOwnerNm" class="sb-input w100" /></td>
+          </tr>
+          <tr>
             <%-- 포스개점일자 --%>
             <th><s:message code="storeManage.posOpenDate" /></th>
             <td>
@@ -86,6 +73,13 @@
                 <span class="txtIn">
                   <input id="rOpenPosDate" name="startDt" class="w200" />
                 </span>
+              </div>
+            </td>
+            <%-- 날씨표시지역 --%>
+            <th><s:message code="storeManage.weatherArea" /><em class="imp">*</em></th>
+            <td>
+              <div class="sb-select">
+                <div id="rArea"></div>
               </div>
             </td>
           </tr>
@@ -109,13 +103,8 @@
             <%-- 설치포스수 --%>
             <th><s:message code="storeManage.installPosCnt" /><em class="imp">*</em></th>
             <td><input type="text" id="rInstallPosCnt" class="sb-input w100"/></td>
-            <%-- 날씨표시지역 --%>
-            <th><s:message code="storeManage.weatherArea" /><em class="imp">*</em></th>
-            <td>
-              <div class="sb-select">
-                <div id="rArea"></div>
-              </div>
-            </td>
+            <td></td>
+            <td></td>
           </tr>
           <tr>
             <%-- 사업자번호 --%>
@@ -130,10 +119,10 @@
           <tr>
             <%-- 전화번호 --%>
             <th><s:message code="storeManage.telNo" /><em class="imp">*</em></th>
-            <td><input type="text" id="rTelNo" class="sb-input w100" /></td>
+            <td><input type="text" id="rTelNo" class="sb-input w100" placeholder="<s:message code='storeManage.bizNo.comment' />" /></td>
             <%-- 팩스번호 --%>
             <th><s:message code="storeManage.faxNo" /></th>
-            <td><input type="text" id="rFaxNo" class="sb-input w100" /></td>
+            <td><input type="text" id="rFaxNo" class="sb-input w100" placeholder="<s:message code='storeManage.bizNo.comment' />" /></td>
           </tr>
           <tr>
             <%-- 이메일 --%>
@@ -146,7 +135,7 @@
             <td colspan="3"><input type="text" id="rHmpgAddr" class="sb-input w100" /></td>
           </tr>
           <tr>
-            <%-- 주소 --%>
+            <%-- 주소 //TODO 주소검색 추가 필요 --%>
             <th><s:message code="storeManage.addr" /><em class="imp">*</em></th>
             <td colspan="3">
               <input type="text" id="rPostNo" class="sb-input w30" />
@@ -156,14 +145,14 @@
             </td>
           </tr>
           <tr>
-            <%-- 관리밴사 (팝업?)--%>
-            <th><s:message code="storeManage.van" /><em class="imp">*</em></th>
+            <%-- 관리업체 //TODO 팝업으로 변경 --%>
+            <th><s:message code="storeManage.manageVan" /><em class="imp">*</em></th>
             <td>
               <div class="sb-select">
                 <div id="rManageVan"></div>
               </div>
             </td>
-            <%-- 대리점  (팝업?) --%>
+            <%-- 대리점 //TODO 팝업으로 변경 --%>
             <th><s:message code="storeManage.agency" /><em class="imp">*</em></th>
             <td>
               <div class="sb-select">
@@ -201,7 +190,7 @@
         </tbody>
       </table>
 
-      <%-- 추가설정 (등록시에만)  --%>
+      <%-- ============================================= 추가설정 (등록시에만)  =============================================--%>
       <div id="additionalArea" style="display:none;">
         <h3 class="h3_tbl"><s:message code="storeManage.additionalSetting" /></h3>
         <table class="searchTbl">
@@ -213,7 +202,7 @@
           </colgroup>
           <tbody>
             <tr>
-              <%-- 매장환경 복사 --%>
+              <%-- 매장환경복사 --%>
               <th><s:message code="storeManage.copyStoreSetting" /></th>
               <td colspan="3" class="oh">
                 <div class="sb-select mr5 w50 fl">
@@ -227,21 +216,37 @@
                 <%-- 매장환경 체크박스  --%>
                 <%-- <span class="chk mr10 pdb5 txtIn"><input type="checkbox" name="copyChk" value="productCls"/> <label for="chk1" ><s:message code="storeManage.product" /></label></span> --%><%-- 상품분류--%>
                 <%-- <span class="chk mr10 pdb5 txtIn"><input type="checkbox" name="copyChk" value="auth"/> <label for="chk2" ><s:message code="storeManage.auth" /></label></span> --%><%-- 메뉴권한 --%>
-                <span class="chk mr10 pdb5 txtIn"><input type="checkbox" name="copyChk" value="storeEnv"/> <label for="chk3" ><s:message code="storeManage.storeEnv" /></label></span><%-- 매장환경 --%>
-                <span class="chk mr10 pdb5 txtIn"><input type="checkbox" name="copyChk" value="posEnv"/> <label for="chk4" ><s:message code="storeManage.posEnv" /></label></span><%-- 포스환경 --%>
-                <span class="chk mr10 pdb5 txtIn"><input type="checkbox" name="copyChk" value="foodEnv"/> <label for="chk5" ><s:message code="storeManage.foodEnv" /></label></span><%-- 외식환경 --%>
-                <span class="chk mr10 pdb5 txtIn"><input type="checkbox" name="copyChk" value="kitchenPrint"/> <label for="chk6" ><s:message code="storeManage.kitchenPrint" /></label></span><%-- 주방프린터 --%>
-                <span class="chk mr10 pdb5 txtIn"><input type="checkbox" name="copyChk" value="product"/> <label for="chk7" ><s:message code="storeManage.product" /></label></span> <%-- 상품 --%>
-                <span class="chk mr10 pdb5 txtIn"><input type="checkbox" name="copyChk" value="salePrice"/> <label for="chk8" ><s:message code="storeManage.salePrice" /></label></span><%-- 판매가격 --%>
-                <span class="chk mr10 pdb5 txtIn"><input type="checkbox" name="copyChk" value="supplyPrice"/> <label for="chk9" ><s:message code="storeManage.supplyPrice" /></label></span><%-- 공급가격 --%>
-                <span class="chk mr10 pdb5 txtIn"><input type="checkbox" name="copyChk" value="touchKey"/> <label for="chk10" ><s:message code="storeManage.touchKey" /></label></span><%-- 터치키(판매) --%>
+                <span class="chk mr10 pdb5 txtIn"><input type="checkbox" name="copyChk" id="storeEnvChk" value="storeEnv"/><%-- 매장환경 --%>
+                  <label for="storeEnvChk" ><s:message code="storeManage.storeEnv" /></label>
+                </span>
+                <span class="chk mr10 pdb5 txtIn"><input type="checkbox" name="copyChk" id="posEnvChk" value="posEnv"/>  <%-- 포스환경 --%>
+                  <label for="posEnvChk" ><s:message code="storeManage.posEnv" /></label>
+                </span>
+                <span class="chk mr10 pdb5 txtIn"><input type="checkbox" name="copyChk" id="foodEnvChk" value="foodEnv"/> <%-- 외식환경 --%>
+                  <label for="foodEnvChk" ><s:message code="storeManage.foodEnv" /></label>
+                </span>
+                <span class="chk mr10 pdb5 txtIn"><input type="checkbox" name="copyChk" id="kitchenPrintChk" value="kitchenPrint"/> <%-- 주방프린터 --%>
+                  <label for="kitchenPrintChk" ><s:message code="storeManage.kitchenPrint" /></label>
+                </span>
+                <span class="chk mr10 pdb5 txtIn"><input type="checkbox" name="copyChk" id="productChk" value="product"/><%-- 상품 --%>
+                  <label for="productChk" ><s:message code="storeManage.product" /></label>
+                </span>
+                <span class="chk mr10 pdb5 txtIn"><input type="checkbox" name="copyChk" id="salePriceChk" value="salePrice"/><%-- 판매가격 --%>
+                  <label for="salePriceChk" ><s:message code="storeManage.salePrice" /></label>
+                </span>
+                <span class="chk mr10 pdb5 txtIn"><input type="checkbox" name="copyChk" id="supplyPriceChk" value="supplyPrice"/><%-- 공급가격 --%>
+                  <label for="supplyPriceChk" ><s:message code="storeManage.supplyPrice" /></label>
+                </span>
+                <span class="chk mr10 pdb5 txtIn"><input type="checkbox" name="copyChk" id="touchKeyChk" value="touchKey"/><%-- 터치키(판매) --%>
+                  <label for="touchKeyChk" ><s:message code="storeManage.touchKey" /></label>
+                </span>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <%-- VAN사 설정 --%>
+      <%--============================================= VAN사 설정 =============================================--%>
       <h3 class="h3_tbl"><s:message code="storeManage.vanSetting" /></h3>
       <table class="searchTbl2">
         <colgroup>
@@ -251,8 +256,6 @@
         </colgroup>
         <thead>
           <tr>
-            <%-- 구분 --%>
-            <th><s:message code="storeManage.division" /></th>
             <%-- VAN사 --%>
             <th><s:message code="storeManage.vanCompany" /></th>
             <%-- VAN사 계약번호 --%>
@@ -261,19 +264,19 @@
         </thead>
         <tbody>
           <tr>
-            <%-- 기본 --%>
-            <th><s:message code="storeManage.vanCommon" /></th>
+            <%-- VAN사 --%>
             <td>
               <div class="sb-select">
                 <div id="rVan"></div>
               </div>
             </td>
+            <%-- VAN사 계약번호 --%>
             <td><input id="rVanContractNum" type="text" class="sb-input w100" /></td>
           </tr>
         </tbody>
       </table>
 
-      <%-- 매장 코너 승인 설정 --%>
+      <%--============================================= 매장 코너 승인 설정 =============================================--%>
       <h3 class="h3_tbl pdt5 lh30"><s:message code="storeManage.storeCornerSetting" /></h3>
       <table class="searchTbl2">
         <tbody>
@@ -296,7 +299,7 @@
         </tbody>
       </table>
 
-      <%-- 코너별 승인 (매장 코너 승인 설정이 '코너개별승인'일때 사용)--%>
+      <%--============================================= 코너별 승인 (매장 코너 승인 설정이 '코너개별승인'일때 사용) =============================================--%>
       <div id="cornerApproveArea" style="display:none;">
         <h3 class="h3_tbl pdt5 lh30"><s:message code="storeManage.cornerApproval" />
           <span class="fr">
@@ -309,13 +312,14 @@
         <div id="theCornerGrid" style="height:150px;"></div>
       </div>
 
-      <%-- 포스별 승인 (매장 코너 승인 설정이 '포스별승인'일때 사용) --%>
+      <%--============================================= 포스별 승인 (매장 코너 승인 설정이 '포스별승인'일때 사용) ============================================= --%>
       <div id="posApproveArea" style="display:none;">
         <h3 class="h3_tbl">포스별 승인</h3>
         <div id="thePosGrid" style="height:150px;"></div>
       </div>
     </f:form>
 
+    <%--============================================= 버튼 =============================================--%>
     <div class="tc mt20">
       <%-- 신규 등록 --%>
       <button id="btnRegist" class="btn_blue"><s:message code="cmm.new.add" /></button>
@@ -329,30 +333,33 @@
 
 var selectedHqOfficeCd = "";
 
-var vanLit            = ${ccu.getVanList()};
-var agencyList        = ${ccu.getAgencyList()};
-var hqList            = ${hqOfficeComboList};
-var clsFg             = ${ccu.getCommCodeSelect("003")};
-var sysStatFg         = ${ccu.getCommCodeSelect("005")};
-var areaCd            = ${ccu.getCommCodeSelect("092")};
-var cornerUseYn       = ${ccu.getEnvCodeExcpAll("114")};
-var cashBillYn        = ${ccu.getEnvCodeExcpAll("276")};
-var useYn             = ${ccu.getCommCodeExcpAll("904")};
+var vanList        = ${ccu.getVanList()};
+var agencyList     = ${ccu.getAgencyList()};
+var hqList         = ${ccu.getHqOfficeList()};
+var clsFg          = ${ccu.getCommCodeSelect("003")};
+var sysStatFg      = ${ccu.getCommCodeSelect("005")};
+var areaCd         = ${ccu.getCommCodeSelect("092")};
+var cornerUseYn    = ${ccu.getEnvCodeExcpAll("114")};
+var cashBillYn     = ${ccu.getEnvCodeExcpAll("276")};
+var useYn          = ${ccu.getCommCodeExcpAll("904")};
+
+console.log(hqList);
+
+<%-- ============================================= 그리드, 위즈모 관련 =========================================== --%>
 
 var rOpenPosDate   = wcombo.genDateVal("#rOpenPosDate", "${sessionScope.sessionInfo.startDt}");
 var rClsFg         = wcombo.genCommonBox("#rClsFg", clsFg);
 var rSysStatFg     = wcombo.genCommonBox("#rSysStatFg", sysStatFg);
 var rArea          = wcombo.genCommonBox("#rArea", areaCd);
-var rManageVan     = wcombo.genCommonBox("#rManageVan", vanLit);
+var rManageVan     = wcombo.genCommonBox("#rManageVan", vanList);
 var rAgency        = wcombo.genCommonBox("#rAgency", agencyList);
 var rEnvHqOffice   = wcombo.genCommonBox("#rEnvHqOffice", hqList);
 var rEnvStore      = wcombo.genCommonBox("#rEnvStore", []);
-var rVan           = wcombo.genCommonBox("#rVan", vanLit);
-var rHqBrand       = wcombo.genCommonBox("#rHqBrand", []);
+var rVan           = wcombo.genCommonBox("#rVan", vanList);
 var rCornerUseYn   = wcombo.genCommonBox("#rCornerUseYn", cornerUseYn);
 var rCashBillUseYn = wcombo.genCommonBox("#rCashBillAutoUseYn", cashBillYn);
 
-
+<%-- 코너별 승인 그리드 헤더 --%>
 var cornerHeaderData =
   [
     {binding:"chk", header:"<s:message code='storeManage.chk' />"},
@@ -366,6 +373,7 @@ var cornerHeaderData =
     {binding:"useYn", header:"<s:message code='storeManage.useYn' />", dataType:wijmo.DataType.Boolean}
   ];
 
+<%-- 포스별 승인 그리드 헤더 --%>
 var posHeaderData =
   [
     {binding:"posNo", header:"<s:message code='storeManage.posNo' />"},
@@ -400,7 +408,7 @@ rEnvHqOffice.selectedIndexChanged.addHandler(function(s, e){
   });
 });
 
-<%-- 코너 사용여부 변경시 --%>
+<%-- 코너 사용여부 변경 --%>
 rCornerUseYn.selectedIndexChanged.addHandler(function(s, e){
 
   if(rCornerUseYn.selectedValue == null || rCornerUseYn.selectedValue == "" || rCornerUseYn.selectedValue == "") {
@@ -447,62 +455,7 @@ rCornerUseYn.selectedIndexChanged.addHandler(function(s, e){
   }
 });
 
-<%-- 매장환경조회 버튼 클릭 --%>
-$("#btnStoreSetting").click(function(){
-
-  if(rEnvHqOffice.selectedValue == null || rEnvHqOffice.selectedValue == "") {
-    s_alert.pop("<s:message code='storeManage.require.select.hq' />");
-    return;
-  }
-
-  if(rEnvStore.selectedValue == null || rEnvStore.selectedValue == "") {
-    s_alert.pop("<s:message code='storeManage.require.select.store' />");
-    return;
-  }
-
-  var param = {};
-  param.hqOfficeCd = rEnvHqOffice.selectedValue;
-  param.storeCd = rEnvStore.selectedValue;
-
-  openEnvInfoLayer(param);
-
-});
-
-<%-- 사업자번호 중복 체크 버튼 클릭--%>
-var isBizChk = false;
-
-$("#btnChkBizNo").click(function(){
-
-  if($("#rBizNo1").val() == "" || $("#rBizNo1").val() == "" || $("#rBizNo1").val() == "") {
-    s_alert.pop("<s:message code='storeManage.require.input.bizNo'/>");
-    return;
-  }
-
-  var param = {};
-  param.bizNo1 = $("#rBizNo1").val();
-  param.bizNo2 = $("#rBizNo2").val();
-  param.bizNo3 = $("#rBizNo3").val();
-  param.bizNo = $("#rBizNo1").val() + $("#rBizNo2").val() + $("#rBizNo3").val();
-
-  $.postJSON("/store/hq/hqManage/master/chkBizNo.sb", param, function(result) {
-    if(result.status === "FAIL") {
-      s_alert.pop(result.message);
-      return;
-    }
-    isBizChk = true;
-
-    if(result.data == 0 ){
-      <%-- 중복되는 사업자번호가 없습니다.--%>
-      s_alert.pop("<s:message code='hqManage.no.duplicate.bizNo.msg'/>");
-    } else {
-      <%-- 사업자번호 사용현황 팝업 --%>
-      openBizInfoLayer(param);
-    }
-  })
-  .fail(function(){
-    s_alert.pop("Ajax Fail");
-  });
-});
+<%-- ============================================= 신규등록, 수정 폼 관련 =========================================== --%>
 
 <%-- form reset --%>
 function resetForm() {
@@ -538,66 +491,75 @@ function newStoreReg(hqOfficeCd) {
 
   $("#btnRegist").show();
   $("#btnSave").hide();
-
-  getBrandList();
 }
 
-<%-- 브랜드 목록 조회 --%>
-function getBrandList(){
+<%-- 매장 상세정보 조회 --%>
+function showStoreDetail() {
 
-  var param = {};
-  param.hqOfficeCd = selectedHqOfficeCd;
+  var param = selectedStore;
 
-  $.postJSON("/store/manage/storeManage/storeManage/getBrandComboList.sb", param, function(result) {
+  $.postJSON("/store/manage/storeManage/storeManage/getStoreDetail.sb", param, function(result) {
 
     if(result.status === "FAIL") {
       s_alert.pop(result.message);
       return;
     }
-    rHqBrand.itemsSource = result.data.list;
+    console.log(result);
+
+    setStoreData(result.data);
   })
   .fail(function(){
-      s_alert.pop("Ajax Fail");
+    s_alert.pop("Ajax Fail");
   });
 }
 
-
-<%-- 매장 상세정보 --%>
-function showStoreDetail(data) {
+<%-- 매장 상세정보 데이터 셋팅 --%>
+function setStoreData(data){
 
   $("#noDataArea").hide();
   $("#storeInfoViewArea").show();
   $("#additionalArea").hide();
 
+  console.log(data);
+
+  var storeDtlInfo = data.storeDtlInfo;
+  var instPosCnt = data.instPosCnt;
+  var vanCornrList = data.vanCornrList;
+  var cornrApproveList = data.cornrApproveList;
+  var posApproveList = data.posApproveList;
+
   $("#storeInfoTitle").text("[" + selectedStore.storeCd + "] " + selectedStore.storeNm);
 
   // 조회한 데이터 셋팅
-  $("#rStoreCd").val(data.storeCd);
-  $("#rStoreNm").val(data.storeNm);
-  $("#rOpenPosDate").val();
-  $("#rInstallPosCnt").val();
-  $("#rOwnerNm").val(data.ownerNm);
-  $("#rBizStoreNm").val(data.bizStoreNm);
-  $("#rBizNo1").val(data.bizNo1);
-  $("#rBizNo2").val(data.bizNo2);
-  $("#rBizNo3").val(data.bizNo3);
-  $("#rTelNo").val(data.telNo);
-  $("#rFaxNo").val(data.faxNo);
-  $("#rEmailAddr").val(data.emailAddr);
-  $("#rHmpgAddr").val(data.hmpgAddr);
-  $("#rPostNo").val(data.postNo);
-  $("#rAddr").val(data.addr);
-  $("#rAddrDtl").val(data.addrDtl);
-  $("#rSysRemark").val(data.sysRemark);
-  $("#rHqRemark").val(data.hqRemark);
-  $("#rStoreRemark").val(data.remark);
+  $("#rStoreCd").val(storeDtlInfo.storeCd);
+  $("#rStoreNm").val(storeDtlInfo.storeNm);
+  //$("#rOpenPosDate").val();
+  $("#rInstallPosCnt").val(instPosCnt);
+  $("#rOwnerNm").val(storeDtlInfo.ownerNm);
+  $("#rBizStoreNm").val(storeDtlInfo.bizStoreNm);
+  $("#rBizNo1").val(storeDtlInfo.bizNo1);
+  $("#rBizNo2").val(storeDtlInfo.bizNo2);
+  $("#rBizNo3").val(storeDtlInfo.bizNo3);
+  $("#rTelNo").val(storeDtlInfo.telNo);
+  $("#rFaxNo").val(storeDtlInfo.faxNo);
+  $("#rEmailAddr").val(storeDtlInfo.emailAddr);
+  $("#rHmpgAddr").val(storeDtlInfo.hmpgAddr);
+  $("#rPostNo").val(storeDtlInfo.postNo);
+  $("#rAddr").val(storeDtlInfo.addr);
+  $("#rAddrDtl").val(storeDtlInfo.addrDtl);
+  $("#rSysRemark").val(storeDtlInfo.sysRemark);
+  $("#rHqRemark").val(storeDtlInfo.hqRemark);
+  $("#rStoreRemark").val(storeDtlInfo.remark);
 
-  rClsFg.selectedValue = data.clsFg;
-  rSysStatFg.selectedValue = data.sysStatFg;
-  rArea.selectedValue = data.areaCd;
-  rVan.selectedValue = data.vanCd;
-  rAgency.selectedValue = data.agencyCd;
-  rOpenPosDate.value = data.sysOpenDate;
+  rClsFg.selectedValue = storeDtlInfo.clsFg;
+  rSysStatFg.selectedValue = storeDtlInfo.sysStatFg;
+  rArea.selectedValue = storeDtlInfo.areaCd;
+  rManageVan.selectedValue = storeDtlInfo.vanCd;
+  rAgency.selectedValue = storeDtlInfo.agencyCd;
+  rOpenPosDate.value = storeDtlInfo.sysOpenDate;
+
+  theCornerGrid.itemsSource = new wijmo.collections.CollectionView(cornrApproveList);
+  thePosGrid.itemsSource = new wijmo.collections.CollectionView(posApproveList);
 
   $("#rStoreCdTxt").show();
   $("#rStoreCdRadio").hide();
@@ -605,6 +567,67 @@ function showStoreDetail(data) {
   $("#btnRegist").hide();
   $("#btnSave").show();
 }
+
+
+<%-- ============================================= 버튼 클릭 이벤트 관련 =========================================== --%>
+
+<%-- 사업자번호 중복 체크 버튼 클릭--%>
+var isBizChk = false;
+
+$("#btnChkBizNo").click(function(){
+
+  if($("#rBizNo1").val() == "" || $("#rBizNo1").val() == "" || $("#rBizNo1").val() == "") {
+    s_alert.pop("<s:message code='storeManage.require.input.bizNo'/>");
+    return;
+  }
+
+  var param = {};
+  param.bizNo1 = $("#rBizNo1").val();
+  param.bizNo2 = $("#rBizNo2").val();
+  param.bizNo3 = $("#rBizNo3").val();
+  param.bizNo = $("#rBizNo1").val() + $("#rBizNo2").val() + $("#rBizNo3").val();
+
+  $.postJSON("/store/hq/hqManage/master/chkBizNo.sb", param, function(result) {
+    if(result.status === "FAIL") {
+      s_alert.pop(result.message);
+      return;
+    }
+    isBizChk = true;
+
+    if(result.data == 0 ){
+      <%-- 중복되는 사업자번호가 없습니다.--%>
+      s_alert.pop("<s:message code='hqManage.no.duplicate.bizNo.msg'/>");
+    } else {
+      <%-- 사업자번호 사용현황 팝업 --%>
+      openBizInfoLayer(param);
+    }
+  })
+      .fail(function(){
+        s_alert.pop("Ajax Fail");
+      });
+});
+
+
+<%-- 매장환경조회 버튼 클릭 --%>
+$("#btnStoreSetting").click(function(){
+
+  if(rEnvHqOffice.selectedValue == null || rEnvHqOffice.selectedValue == "") {
+    s_alert.pop("<s:message code='storeManage.require.select.hq' />");
+    return;
+  }
+
+  if(rEnvStore.selectedValue == null || rEnvStore.selectedValue == "") {
+    s_alert.pop("<s:message code='storeManage.require.select.store' />");
+    return;
+  }
+
+  var param = {};
+  param.hqOfficeCd = rEnvHqOffice.selectedValue;
+  param.storeCd = rEnvStore.selectedValue;
+
+  openEnvInfoLayer(param);
+});
+
 
 <%-- 코너별 승인 데이터 추가--%>
 $("#btnCornerAdd").click(function(){
@@ -628,15 +651,19 @@ $("#btnSave").click(function(){
   chkVal("/store/manage/storeManage/storeManage/updateStoreInfo.sb");
 });
 
-<%-- validation --%>
-function chkVal(sendUrl) {
-
-  <%-- 브랜드를 선택해주세요. --%>
-  var msg = "<s:message code='storeManage.hqBrand'/> <s:message code='cmm.require.select'/>";
-  if(rHqBrand.selectedValue == "" || rHqBrand.selectedValue == null) {
-    s_alert.pop(msg);
+<%-- 매장환경 탭 클릭시 --%>
+$("#storeInfoViewArea #storeEnv").click(function(){
+  if(selectedStore.storeCd == null || selectedStore.storeCd == "") {
+    s_alert.pop("<s:message code='storeManage.require.regist.store1'/>");
     return;
   }
+  openEnvLayer();
+});
+
+<%-- ============================================= 데이터 저장 관련 =========================================== --%>
+
+<%-- validation --%>
+function chkVal(sendUrl) {
 
   <%-- 매장명을 입력해주세요. --%>
   var msg = "<s:message code='storeManage.storeNm'/> <s:message code='cmm.require.text'/>";
@@ -729,9 +756,9 @@ function chkVal(sendUrl) {
     return;
   }
 
-  <%-- 관리벤사를 선택해주세요. --%>
-  var msg = "<s:message code='storeManage.van'/> <s:message code='cmm.require.select'/>";
-  if(rVan.selectedValue == "" || rVan.selectedValue == null) {
+  <%-- 관리업체를 선택해주세요. --%>
+  var msg = "<s:message code='storeManage.manageVan'/> <s:message code='cmm.require.select'/>";
+  if(rManageVan.selectedValue == "" || rManageVan.selectedValue == null) {
     s_alert.pop(msg);
     return;
   }
@@ -756,19 +783,22 @@ function chkVal(sendUrl) {
       }
     }
 
-    <%-- 매장환경 복사할 본사를 선택해주세요.--%>
-    var msg = "<s:message code='storeManage.copy.storeEnv.hqOfficeCd'/> <s:message code='cmm.require.select'/>";
-    if(rEnvHqOffice.selectedValue == "" || rEnvHqOffice.selectedValue == null) {
-      s_alert.pop(msg);
-      return;
-    }
-    <%-- 매장환경 복사할 매장을 선택해주세요.--%>
-    var msg = "<s:message code='storeManage.copy.storeEnv.storeCd'/> <s:message code='cmm.require.select'/>";
-    if(rEnvStore.selectedValue == "" || rEnvStore.selectedValue == null) {
-      s_alert.pop(msg);
-      return;
-    }
+    <%-- 매장환경복사 체크된 값이 있을때 --%>
+    if($("input:checkbox[name='copyChk']:checked").length > 0) {
 
+      <%-- 매장환경 복사할 본사를 선택해주세요.--%>
+      var msg = "<s:message code='storeManage.copy.storeEnv.hqOfficeCd'/> <s:message code='cmm.require.select'/>";
+      if(rEnvHqOffice.selectedValue == "" || rEnvHqOffice.selectedValue == null) {
+        s_alert.pop(msg);
+        return;
+      }
+      <%-- 매장환경 복사할 매장을 선택해주세요.--%>
+      var msg = "<s:message code='storeManage.copy.storeEnv.storeCd'/> <s:message code='cmm.require.select'/>";
+      if(rEnvStore.selectedValue == "" || rEnvStore.selectedValue == null) {
+        s_alert.pop(msg);
+        return;
+      }
+    }
   }
   saveStore(sendUrl);
 }
@@ -778,11 +808,10 @@ function saveStore(sendUrl){
   var param = {};
 
   param.hqOfficeCd      = selectedHqOfficeCd;
-//  param.hqBrandCd       = rHqBrand.selectedValue;
 
   param.storeCd         = $("#rStoreCd").val();
   param.storeNm         = $("#rStoreNm").val();
-  param.openPosDate     = getDate(rOpenPosDate);  //포스개점일자 = 시스템오픈일자?
+  param.openPosDate     = getDate(rOpenPosDate);
   param.installPosCnt  = $("#rInstallPosCnt").val();
   param.ownerNm         = $("#rOwnerNm").val();
   param.bizStoreNm      = $("#rBizStoreNm").val();
@@ -819,28 +848,20 @@ function saveStore(sendUrl){
   param.copyChkVal = copyChkVal;
 
   //TODO 우선 아래 코너 제외하고 저장해보기
-  $.postJSONSave(sendUrl, JSON.stringify(param), function(result) {
+  $.postJSONSave(sendUrl, param, function(result) {
 
     if(result.status === "FAIL") {
       s_alert.pop(result.message);
       return;
     }
     s_alert.pop("<s:message code='cmm.saveSucc'/>");
-    //TODO 저장 후 액션
-
-  })
-  .fail(function(){
-    s_alert.pop("Ajax Fail");
+    showStoreDetail();
+  }
+  ,function(result){
+    console.log(result);
+    s_alert.pop(result.message);
   });
 }
 
-<%-- 매장환경 탭 클릭시 --%>
-$("#storeInfoViewArea #storeEnv").click(function(){
-  if(selectedStore.storeCd == null || selectedStore.storeCd == "") {
-    s_alert.pop("<s:message code='storeManage.require.regist.store'/>");
-    return;
-  }
-  openEnvLayer();
-});
 
 </script>
