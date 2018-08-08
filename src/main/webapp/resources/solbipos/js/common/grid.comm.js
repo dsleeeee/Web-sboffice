@@ -238,6 +238,7 @@
                 selectedValuePath: "value",
                 isAnimated: true,
                 itemsSource: data,
+                isEditable: false,
                 selectedIndexChanged: function (s, e) {
                     f(s, e);
                 }
@@ -260,6 +261,18 @@
         },
         genInput: function (div) {
             return new wijmo.input.ComboBox(div);
+        },
+        genInputText: function(div, mask, placeHolder, lostFocus) {
+            if ( isNumber(mask) ) {
+                mask = new Array(mask - 'a'.length + 1).join('a') + 'a';
+            }
+            inputBox.genInputBox(div, mask, placeHolder, lostFocus);
+        },
+        genInputNumber: function(div, mask, placeHolder, lostFocus) {
+            if ( isNumber(mask) ) {
+                mask = new Array(mask - '0'.length + 1).join('0') + '0';
+            }
+            inputBox.genInputBox(div, mask, placeHolder, lostFocus);
         },
         genTime: function (div, step) {
             return new wijmo.input.InputTime(div, {
@@ -286,6 +299,27 @@
             dt.value = new Date(date);
             return dt;
         }
+    };
+    
+    // 인풋박스 생성
+    var inputBox  = {
+      genInputBox: function(div, mask, placeHolder, lostFocus) {
+          return new wijmo.input.InputMask(div, {
+              mask: mask,
+              placeholder: placeHolder,
+              isRequired: false,
+              // isReadOnly: false,
+              value: '',
+              valueChanged: function(s, e) {
+                  wijmo.toggleClass(s.hostElement, 'state-invalid', !s.maskFull);
+              },
+              lostFocus: function(s, e) {
+                  if (lostFocus != null) {
+                      lostFocus(s, e);
+                  }
+              }
+          });
+      }
     };
 
     // 엑셀 다운로드

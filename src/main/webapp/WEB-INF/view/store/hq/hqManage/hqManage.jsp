@@ -108,7 +108,14 @@
   var clsFgDataMap      = new wijmo.grid.DataMap(clsFg, 'value', 'name');
   var sysStatFgDataMap  = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
 
-  var srchHqOfficeCd     = wcombo.genInput("#srchHqOfficeCd");
+  var srchHqOfficeCd = wcombo.genInputText("#srchHqOfficeCd", "7", "본사코드", function(s, e) {
+      if ( s.maskFull ) {
+          console.log("통과");
+      } else {
+          console.log("실패");
+      }
+  });
+
   var srchHqOfficeNm    = wcombo.genInput("#srchHqOfficeNm");
   var srchBizNo         = wcombo.genInput("#srchBizNo");
   var srchClsFg         = wcombo.genCommonBox("#srchClsFg", clsFg);

@@ -1642,7 +1642,6 @@ p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17p
 }
 
 .templateEdit #preview {
-    height: 100%;
     overflow-y: scroll;
 }
 .templateEdit #preview pre {
@@ -1661,4 +1660,7 @@ p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17p
     margin-bottom: 3px;
     font-family: '굴림체', 'sans-serif';
     font-size: 12px;
+}
+.state-invalid div {
+    color: red !important;
 }
