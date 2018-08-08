@@ -41,7 +41,6 @@ import kr.co.solbipos.store.manage.storemanage.service.StoreProductVO;
  * @author 솔비포스 차세대개발실 김지은
  * @since 2018. 06.08
  * @version 1.0
- * @see
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
@@ -54,10 +53,10 @@ public class StoreManageController {
     /** service */
     @Autowired
     StoreManageService service;
-    
+
     @Autowired
     SessionService sessionService;
-    
+
     /**
      * 매장정보관리 - 화면 이동
      * @param request
@@ -68,16 +67,11 @@ public class StoreManageController {
      * @since 2018.06.08
      */
     @RequestMapping(value = "storeManage/view.sb", method = RequestMethod.GET)
-    public String list(HttpServletRequest request, HttpServletResponse response, 
+    public String list(HttpServletRequest request, HttpServletResponse response,
             Model model) {
-        
-        List<DefaultMap<String>> hqOfficeComboList = service.getHqOfficeComboList();
-        
-        model.addAttribute("hqOfficeComboList", convertToJson(hqOfficeComboList));
-        
         return "store/manage/storeManage/storeManage";
     }
-    
+
     /**
      * 매장 목록 - 조회
      * @param storeManageVO
@@ -92,12 +86,12 @@ public class StoreManageController {
     @ResponseBody
     public Result getStoreList(StoreManageVO storeManageVO, HttpServletRequest request,
             HttpServletResponse response, Model model) {
-        
+
         List<DefaultMap<String>> list = service.getStoreList(storeManageVO);
-        
+
         return returnListJson(Status.OK, list, storeManageVO);
     }
-    
+
     /**
      * 매장 정보 상세 - 조회
      * @param storeManageVO
@@ -112,32 +106,14 @@ public class StoreManageController {
     @ResponseBody
     public Result getStoreDetail(StoreManageVO storeManageVO, HttpServletRequest request,
             HttpServletResponse response, Model model) {
-        
-        DefaultMap<String> result = service.getStoreDetail(storeManageVO);
-        
+
+        Map<String, Object> result = service.getStoreDetail(storeManageVO);
+
         return returnJson(Status.OK, result);
     }
-    
+
     /**
-     * 브랜드 선택 콤보리스트 
-     * @param storeManageVO
-     * @param request
-     * @param response
-     * @param model
-     * @return
-     */
-    @RequestMapping(value = "storeManage/getBrandComboList.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result getBrandComboList(StoreManageVO storeManageVO, HttpServletRequest request,
-            HttpServletResponse response, Model model) {
-        
-        List<DefaultMap<String>> list = service.getBrandComboList(storeManageVO);
-        
-        return returnListJson(Status.OK, list);
-    }
-    
-    /**
-     * 매장 선택 콤보리스트 
+     * 매장 선택 콤보리스트
      * @param storeManageVO
      * @param request
      * @param response
@@ -148,12 +124,12 @@ public class StoreManageController {
     @ResponseBody
     public Result getStoreComboList(StoreManageVO storeManageVO, HttpServletRequest request,
             HttpServletResponse response, Model model) {
-        
+
         List<DefaultMap<String>> list = service.getStoreComboList(storeManageVO);
-        
+
         return returnListJson(Status.OK, list);
     }
-    
+
     /**
      * 매장환경조회 팝업 데이터 조회
      * @param storeManageVO
@@ -166,12 +142,12 @@ public class StoreManageController {
     @ResponseBody
     public Result getStoreEnvInfo(StoreManageVO storeManageVO, HttpServletRequest request,
             HttpServletResponse response, Model model) {
-        
+
         Map<String, Object> result = service.getStoreEnvInfo(storeManageVO);
-        
+
         return returnJson(Status.OK, result);
     }
-    
+
     /**
      * 매장 정보 신규 등록
      * @param storeManageVO
@@ -184,19 +160,37 @@ public class StoreManageController {
     @ResponseBody
     public Result saveStoreInfo(@RequestBody StoreManageVO storeManageVO, HttpServletRequest request,
             HttpServletResponse response, Model model) {
-        
+
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
-        
+
         // 저장
         int cnt = service.saveStoreInfo(storeManageVO, sessionInfoVO);
-        
+
         return returnJson(Status.OK, cnt);
     }
 
-    // update 필요
-    
-    
-   /**
+    /**
+     * 매장 정보 수정
+     * @param storeManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "storeManage/updateStoreInfo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result updateStoreInfo(@RequestBody StoreManageVO storeManageVO, HttpServletRequest request,
+            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        // 저장
+        int cnt = service.updateStoreInfo(storeManageVO, sessionInfoVO);
+
+        return returnJson(Status.OK, cnt);
+    }
+
+    /**
     * 매장 환경정보 조회
     * @param storeEnvVO
     * @param request
@@ -210,12 +204,12 @@ public class StoreManageController {
    @ResponseBody
    public Result getStoreConfigList(StoreEnvVO storeEnvVO, HttpServletRequest request,
            HttpServletResponse response, Model model) {
-       
+
        List<DefaultMap<String>> envGroupList = service.getEnvGroupList(storeEnvVO);
-       
+
        return returnListJson(Status.OK, envGroupList);
    }
-   
+
    /**
     * 매장 환경정보 저장
     * @param storeEnvVOs
@@ -228,14 +222,14 @@ public class StoreManageController {
    @ResponseBody
    public Result saveStoreConfig(@RequestBody StoreEnvVO[] storeEnvVOs, HttpServletRequest request,
            HttpServletResponse response, Model model) {
-       
+
        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
        int result = service.saveStoreConfig(storeEnvVOs, sessionInfoVO);
-       
+
        return returnJson(Status.OK, result);
    }
-   
+
    /**
     * 매장 포스 환경정보 저장
     * @param storePosEnvVOs
@@ -248,14 +242,14 @@ public class StoreManageController {
    @ResponseBody
    public Result savePosConfig(@RequestBody StorePosEnvVO[] storePosEnvVOs, HttpServletRequest request,
            HttpServletResponse response, Model model) {
-       
+
        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
        int result = service.savePosConfig(storePosEnvVOs, sessionInfoVO);
-       
+
        return returnJson(Status.OK, result);
    }
-   
+
    /**
     * 포스 환경정보 조회
     * @param storePosEnvVO
@@ -270,21 +264,21 @@ public class StoreManageController {
    @ResponseBody
    public Result getPosConfigList(StorePosEnvVO storePosEnvVO, HttpServletRequest request,
            HttpServletResponse response, Model model) {
-       
+
        Map<String, Object> resultMap = new HashMap<String, Object>();
-       
+
        // 포스 환경정보 조회
        List<DefaultMap<String>> envGroupList = service.getPosEnvGroupList(storePosEnvVO);
-     
+
        // 그룹설정 selectBox
        List<DefaultMap<String>> groupList = service.getGroupList(storePosEnvVO);
-       
+
        resultMap.put("envGroupList", envGroupList);
        resultMap.put("groupList", groupList);
-     
+
        return returnListJson(Status.OK, resultMap);
    }
-   
+
    /**
     * 테이블 그룹설정정보 저장
     * @param storePosEnvVOs
@@ -299,14 +293,14 @@ public class StoreManageController {
    @ResponseBody
    public Result savePosTabGrp(@RequestBody StorePosEnvVO[] storePosEnvVOs, HttpServletRequest request,
            HttpServletResponse response, Model model) {
-       
+
        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-       
+
        int result = service.savePosTabGrp(storePosEnvVOs, sessionInfoVO);
-       
+
        return returnJson(Status.OK, result);
    }
-   
+
 
    /**
     * 포스 목록 조회
@@ -322,14 +316,14 @@ public class StoreManageController {
    @ResponseBody
    public Result getPosList(StorePosEnvVO storePosEnvVO, HttpServletRequest request,
            HttpServletResponse response, Model model) {
-       
+
        Map<String, Object> resultMap = new HashMap<String, Object>();
-       
+
        // 포스 번호 목록 조회
        List<DefaultMap<String>> posList = service.getPosList(storePosEnvVO);
 
        resultMap.put("posList", posList);
-     
+
        return returnListJson(Status.OK, resultMap);
    }
 
@@ -347,14 +341,14 @@ public class StoreManageController {
    @ResponseBody
    public Result savePosNm(@RequestBody StorePosEnvVO[] storePosEnvVOs, HttpServletRequest request,
            HttpServletResponse response, Model model) {
-       
+
        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-       
+
        int result = service.savePosTabNm(storePosEnvVOs, sessionInfoVO);
-       
+
        return returnJson(Status.OK, result);
    }
-   
+
 
    /**
     * 포스 셋팅 복사
@@ -370,14 +364,14 @@ public class StoreManageController {
    @ResponseBody
    public Result copyPosSetting(StorePosEnvVO storePosEnvVO, HttpServletRequest request,
            HttpServletResponse response, Model model) {
-       
+
        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-       
+
        int result = service.copyPosSetting(storePosEnvVO, sessionInfoVO);
-       
+
        return returnJson(Status.OK, result);
    }
-   
+
 
    /**
     * 포스 삭제
@@ -393,14 +387,14 @@ public class StoreManageController {
    @ResponseBody
    public Result deletePos(StorePosEnvVO storePosEnvVO, HttpServletRequest request,
            HttpServletResponse response, Model model) {
-       
+
        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-       
+
        int result = service.deletePos(storePosEnvVO, sessionInfoVO);
-       
+
        return returnJson(Status.OK, result);
    }
-   
+
    /**
     * 주방프린터 조회
     * @param storeEnvVO
@@ -415,13 +409,13 @@ public class StoreManageController {
    @ResponseBody
    public Result getKitchenPrintInfo(StoreEnvVO storeEnvVO, HttpServletRequest request,
            HttpServletResponse response, Model model) {
-       
+
        // 주방프린터 목록 조회
        List<DefaultMap<String>> printList = service.getKitchenPrintInfo(storeEnvVO);
 
        return returnListJson(Status.OK, printList);
    }
-   
+
 
    /**
     * 주방프린터 저장
@@ -444,7 +438,7 @@ public class StoreManageController {
 
        return returnJson(Status.OK, result);
    }
-   
+
    /**
     * 주방프린터 연결상품 조회
     * @param storeProductVO
@@ -459,24 +453,24 @@ public class StoreManageController {
    @ResponseBody
    public Result getKitchenPrintProductInfo(StoreProductVO storeProductVO, HttpServletRequest request,
            HttpServletResponse response, Model model) {
-       
+
        Map<String, Object> resultMap = new HashMap<String, Object>();
-       
+
        // 출력상품 목록 조회
        List<StoreProductVO> printProductList = service.getPrintProductInfo(storeProductVO, UseYn.Y);
-       
+
        // 미출력상품 목록 조회
        List<StoreProductVO> noPrintProductList = service.getPrintProductInfo(storeProductVO, UseYn.N);
 
        resultMap.put("printProductList", printProductList);
        resultMap.put("noPrintProductList", noPrintProductList);
-       
+
        return returnListJson(Status.OK, resultMap);
    }
-   
+
    /**
     * 주방프린터 연결상품 등록 및 삭제
-    * @param storeManageVO
+    * @param storeProductVOs
     * @param request
     * @param response
     * @param model
@@ -488,17 +482,17 @@ public class StoreManageController {
    @ResponseBody
    public Result saveKitchenPrintProduct(@RequestBody StoreProductVO[] storeProductVOs, HttpServletRequest request,
            HttpServletResponse response, Model model) {
-       
+
        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
        int result = service.saveKitchenPrintProduct(storeProductVOs, sessionInfoVO);
-       
+
        return returnJson(Status.OK, result);
    }
-    
+
    /**
     * 터치키 복사할 본사 목록 조회
-    * @param 
+    * @param
     * @param request
     * @param response
     * @param model
@@ -510,13 +504,13 @@ public class StoreManageController {
    @ResponseBody
    public Result getHqList(HttpServletRequest request,
            HttpServletResponse response, Model model) {
-       
+
        // 터치키 복사할 본사 목록 조회
        List<DefaultMap<String>> hqList = service.getHqList();
 
        return returnListJson(Status.OK, hqList);
    }
-   
+
    /**
     * 터치키 복사할 브랜드 목록 조회
     * @param hqBrandVO
@@ -531,14 +525,14 @@ public class StoreManageController {
    @ResponseBody
    public Result getHqBrandList(HqBrandVO hqBrandVO, HttpServletRequest request,
            HttpServletResponse response, Model model) {
-       
+
        // 터치키 복사할 브랜드 조회
        List<DefaultMap<String>> hqList = service.getHqBrandList(hqBrandVO);
 
        return returnListJson(Status.OK, hqList);
    }
    // getTouchKeyStoreList
-   
+
    /**
     * 터치키 복사할 매장 목록 조회
     * @param hqBrandVO
@@ -553,7 +547,7 @@ public class StoreManageController {
    @ResponseBody
    public Result getTouchKeyStoreList(HqBrandVO hqBrandVO, HttpServletRequest request,
            HttpServletResponse response, Model model) {
-       
+
        // 터치키 복사할 브랜드 조회
        List<DefaultMap<String>> hqList = service.getTouchKeyStoreList(hqBrandVO);
 

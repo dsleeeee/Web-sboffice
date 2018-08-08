@@ -36,17 +36,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface StoreManageMapper {
 
-    /** 본사 목록 조회 */
-    List<DefaultMap<String>> getHqOfficeComboList();
-
     /** 매장 목록 조회 */
     List<DefaultMap<String>> getStoreList(StoreManageVO storeManageVO);
 
     /** 매장 상세 조회 */
     DefaultMap<String> getStoreDetail(StoreManageVO storeManageVO);
-
-    /** 매장 콤보리스트 조회 */
-    List<DefaultMap<String>> getBrandComboList(StoreManageVO storeManageVO);
 
     /** 매장 콤보리스트 조회 */
     List<DefaultMap<String>> getStoreComboList(StoreManageVO storeManageVO);
@@ -63,11 +57,14 @@ public interface StoreManageMapper {
     /** 신규매장 등록을 위한 매장 코드 조회 */
     String getStoreCd(StoreManageVO storeManageVO);
 
-    /** 포스 프로그램 구분 조회 */
+    /** 포스 프로그램 구분 조회 (//TODO 환경값 조회 공통처리 필요) */
     String getPosEnvValue(StoreManageVO storeManageVO);
 
     /** 신규 매장정보 저장 */
     int saveStoreInfo(StoreManageVO storeManageVO);
+
+    /** 매장정보 수정 */
+    int updateStoreInfo(StoreManageVO storeManageVO);
 
     /** 해당 브랜드의 분류 복사하여 매장 분류 등록하기 */
     int copyClsInfo(StoreManageVO storeManageVO);
@@ -214,5 +211,15 @@ public interface StoreManageMapper {
 
     /** 터치키 복사할 매장 목록 조회 */
     List<DefaultMap<String>> getTouchKeyStoreList(HqBrandVO hqBrandVO);
+
+    ///////////////////////////////////////////////////////매장조회
+    /** 벤사, 코너 정보 조회 */
+    List<DefaultMap<String>> getVanCornrList(StoreManageVO storeManageVO);
+    /** 설치 포스수 조회 */
+    int getInstPosCnt(StoreManageVO storeManageVO); //TODO
+    /** 코너별 승인 목록 조회 */
+    List<DefaultMap<String>> getCornrApproveList(StoreManageVO storeManageVO);
+    /** 포스별 승인 목록 조회*/
+    List<DefaultMap<String>> getPosApproveList(StoreManageVO storeManageVO);
 }
 

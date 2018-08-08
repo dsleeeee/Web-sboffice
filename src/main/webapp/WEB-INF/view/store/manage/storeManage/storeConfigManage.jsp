@@ -12,12 +12,12 @@
     <ul class="subTab">
       <%-- 매장정보 --%>
       <li><a id="storeInfo" href="javascript:;" ><s:message code="storeManage.storeInfo" /></a></li>
-      <%-- 메뉴권한 --%>
+      <%-- 메뉴권한 (권한 관련 메뉴 : [시스템관리 > 권한관리] 로 분리 --%>
       <%-- <li><a id="storeMenuAuth" href="javascript:;"><s:message code="storeManage.storeMenuAuth" /></a></li> --%>
       <%-- 매장환경 --%>
       <li><a id="storeEnv"  href="javascript:;" class="on"><s:message code="storeManage.storeEnv" /></a></li>
     </ul>
-    
+
     <%-- 매장환경 분류 탭 --%>
     <div class="subTab2 mt20 mb10">
       <ul id="envGroupTab">
@@ -25,7 +25,7 @@
         <li><a href="javascript:;" id="storeEnvFg" envstFg="0" class="on"><s:message code="storeManage.storeEnv" /></a></li>
         <%-- 외식환경 --%>
         <li><a href="javascript:;" id="foodEnvFg" envstFg="1"><s:message code="storeManage.foodEnv" /></a></li>
-        <%-- 유통환경  //TODO 추후 추가 --%>
+        <%-- 유통환경  //TODO 추후 추가 -%>
         <%-- <li><a href="javascript:;" id="distributionEnvFg" envstFg="2"><s:message code="storeManage.distributionEnv" /></a></li> --%>
         <%-- 포스환경 --%>
         <li><a href="javascript:;" id="posEnvFg" envstFg="3"><s:message code="storeManage.posEnv" /></a></li>
@@ -37,7 +37,7 @@
         <%-- <li><a href="javascript:;" id="touchkeyEnvFg" envstFg="6"><s:message code="storeManage.copy.touchKey" /></a></li> --%>
       </ul>
     </div>
-    
+
     <form id="envForm" name="envForm">
       <%-- 매장환경, 외식환경, 유통환경 --%>
       <c:import url="/WEB-INF/view/store/manage/storeManage/storeConfig.jsp">
@@ -70,17 +70,16 @@ function openEnvLayer(){
   $("#storeEnvInfoArea").show();
 
   var envTitle = "[" + selectedStore.storeCd + "] "+ selectedStore.storeNm;
-  
+
   $("#storeEnvInfoTitle").text(envTitle);
   $("#storeEnvFg").click();
-  
+
   // 매장환경에서 사용할 포스목록 조회
   var param = {};
-  
+
   param.hqOfficeCd  = selectedStore.hqOfficeCd;
-//  param.hqBrandCd   = selectedStore.hqBrandCd;
   param.storeCd     = selectedStore.storeCd;
-    
+
   <%-- 포스목록 조회 --%>
   $.postJSON("/store/manage/storeManage/storeManage/getPosList.sb", param, function(result) {
 
@@ -88,22 +87,17 @@ function openEnvLayer(){
       s_alert.pop(result.message);
       return;
     }
-
     posList = result.data.list.posList;
-    
-    console.log("---- posList 1");
-    console.log(posList);
   })
   .fail(function(){
     s_alert.pop("Ajax Fail");
   });
-  
 }
 
 <%-- 매장환경 서브 탭 클릭시 --%>
 $("#envGroupTab li a").click(function(e){
   var envstFg = $(this).attr("envstFg");
-  
+
   $("#envGroupTab li a").each(function(index, item){
     if($(this).attr("envstFg") == envstFg) {
       $(this).attr("class", "on");
@@ -111,7 +105,7 @@ $("#envGroupTab li a").click(function(e){
       $(this).removeAttr("class");
     }
   });
-  
+
   if(envstFg == 0 || envstFg == 1 || envstFg == 2) { <%-- 매장환경, 외식환경, 유통환경 --%>
     hidePosConfigLayout();
     hideKitchenPrintLayout();

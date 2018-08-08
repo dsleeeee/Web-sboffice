@@ -19,7 +19,7 @@ import kr.co.solbipos.application.common.service.impl.CmmCodeMapper;
  */
 @Service("cmmCodeService")
 public class CmmCodeServiceImpl implements CmmCodeService {
-    
+
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
     @Autowired
     CmmCodeMapper cmmCodeMapper;
@@ -111,5 +111,10 @@ public class CmmCodeServiceImpl implements CmmCodeService {
     @Override
     public <E> List<E> getVanList() {
         return cmmCodeMapper.selectVanList();
+    }
+
+    /** 본사 목록 조회*/
+    @Override public <E> List<E> getHqOfficeList() {
+        return cmmCodeMapper.selectHqOfficeList();
     }
 }

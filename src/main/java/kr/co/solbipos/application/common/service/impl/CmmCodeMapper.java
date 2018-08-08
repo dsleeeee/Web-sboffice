@@ -1,25 +1,30 @@
 package kr.co.solbipos.application.common.service.impl;
 
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
 /**
  * 공통 코드 조회
- * 
+ *
  * @author 정용길
  */
+@Mapper
+@Repository
 public interface CmmCodeMapper {
 
     /**
      * 공통 코드 조회
-     * 
-     * @param comCdFg
+     *
+     * @param nmcodeGrpCd
      * @return
      */
     <E> List<E> selectCmmCodeList(String nmcodeGrpCd);
 
     /**
      * 환경변수 코드 조회
-     * 
+     *
      * @param envstCd
      * @return
      */
@@ -27,7 +32,7 @@ public interface CmmCodeMapper {
 
     /**
      * 대리점 목록 조회
-     * 
+     *
      * @return
      */
     <E> List<E> selectAgencyList();
@@ -37,4 +42,10 @@ public interface CmmCodeMapper {
      * @return
      */
     <E> List<E> selectVanList();
+
+    /**
+     * 본사 목록 조회
+     * @return
+     */
+    <E> List<E> selectHqOfficeList();
 }

@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import kr.co.solbipos.application.common.service.ResrceInfoVO;
 import kr.co.solbipos.application.session.auth.service.LoginHistVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import org.springframework.stereotype.Repository;
 
 /**
  * @Class Name : AuthMapper.java
@@ -18,11 +19,11 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
  * @author NHN한국사이버결제 KCP 정용길
  * @since 2018. 05.01
  * @version 1.0
- * @see
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Mapper
+@Repository
 public interface AuthMapper {
 
     /**

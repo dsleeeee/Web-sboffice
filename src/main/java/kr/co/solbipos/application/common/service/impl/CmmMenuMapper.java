@@ -7,12 +7,16 @@ import kr.co.solbipos.application.common.service.MenuUseHistVO;
 import kr.co.solbipos.application.common.service.ResrceInfoBaseVO;
 import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author 정용길
  *
  */
+@Mapper
+@Repository
 public interface CmmMenuMapper {
 
     /**
@@ -37,7 +41,7 @@ public interface CmmMenuMapper {
      * @return
      */
     List<HqVO> selectHq(HqVO hqVO);
-    
+
     /**
       * 메뉴 사용 내역 저장
       *
