@@ -15,15 +15,14 @@ import kr.co.solbipos.application.common.service.CmmVO;
  * @author 솔비포스 차세대개발실 김지은
  * @since 2018. 06.08
  * @version 1.0
- * @see
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 public class HqNmcodeVO extends CmmVO {
-    
+
     private static final long serialVersionUID = 8427290281086426173L;
-    /** 브랜드코드 */
-    private String hqBrandCd;
+    /** 본사코드 */
+    private String hqOfficeCd;
     /** 명칭코드그룹코드 */
     private String nmcodeGrpCd;
     /** 명칭코드코드 */
@@ -36,19 +35,19 @@ public class HqNmcodeVO extends CmmVO {
     private String nmcodeItem2;
     /** 사용여부 (사용:Y 사용안함:N) */
     private UseYn useYn;
-    
-    
+
+
     /**
-     * @return the hqBrandCd
+     * @return the hqOfficeCd
      */
-    public String getHqBrandCd() {
-        return hqBrandCd;
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
     }
     /**
-     * @param hqBrandCd the hqBrandCd to set
+     * @param hqOfficeCd the hqOfficeCd to set
      */
-    public void setHqBrandCd(String hqBrandCd) {
-        this.hqBrandCd = hqBrandCd;
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
     }
     /**
      * @return the nmcodeGrpCd
@@ -122,5 +121,5 @@ public class HqNmcodeVO extends CmmVO {
     public void setUseYn(UseYn useYn) {
         this.useYn = useYn;
     }
-    
+
 }

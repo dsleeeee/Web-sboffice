@@ -29,7 +29,7 @@
             <li><a id="menuSettingTab" href="javascript:;"><s:message code="hqManage.menuSetting" /></a></li>
           </ul>
         </div>
-        
+
         <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
         <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
 
@@ -118,12 +118,12 @@
             </tbody>
           </table>
         </div>
-      
+
         <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
         <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
-      
+
         <%-- 등록 / 수정 --%>
-      
+
         <div id="regArea" class="mt20 sc" style="height:350px;display:none;">
           <form id="regForm">
             <table class="tblType01">
@@ -293,7 +293,7 @@
                 <tr>
                   <%-- 이메일주소 --%>
                   <th>
-                    <div class="impWrap"><s:message code="hqManage.emailAddr" /><em class="imp">*</em></div>
+                    <div class="impWrap"><s:message code="hqManage.emailAddr" /></div>
                   </th>
                   <td>
                     <div class="sb-select">
@@ -302,7 +302,7 @@
                   </td>
                   <%-- 홈페이지 --%>
                   <th>
-                    <div class="impWrap"><s:message code="hqManage.hmpgAddr" /><em class="imp">*</em></div>
+                    <div class="impWrap"><s:message code="hqManage.hmpgAddr" /></div>
                   </th>
                   <td>
                     <div class="sb-select">
@@ -335,7 +335,7 @@
           </form>
         </div>
       </div>
-        
+
       <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
       <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
 
@@ -376,65 +376,65 @@
   var rHmpgAddr     = wcombo.genInput("#rHmpgAddr");
   var rAgency       = wcombo.genCommonBox("#rAgency", agencyList);
   var rClsFg        = wcombo.genCommonBox("#rClsFg", clsFg);
-  
-  
+
+
   rHqOfficeCd.maxLength = 5;
   rHqOfficeNm.maxLength = 5;
-  
-  
+
+
   rHqOfficeCd.isReadOnly  = true;
   rHqOfficeNm.isRequired = true;
-  
+
   <%-- 본사정보 탭 클릭 --%>
   $("#hqInfoTab").click(function(e){
-    
+
   });
-  
+
   <%-- 메뉴권한 탭 클릭 --%>
   $("#codeSettingTab").click(function(e){
-    
+
   });
 
   <%-- 본사신규등록 팝업 열기 --%>
   function openRegistLayer() {
-    
+
     $("#hqDtlLayer #popTitle").text("<s:message code='hqManage.newHq' />");
-    
+
     $("#hqDtlLayer").show();
     $("#hqDtlDim").show();
 
     $("#viewArea").hide();
     $("#regArea").show();
-    
+
     $("#btnReg").show();
     $("#btnSave").hide();
     $("#btnEdit").hide();
-    
+
     $("#rHqOfficeTxt").hide();
     $("#rHqOfficeRadio").show();
   }
-  
+
   <%-- 상세정보 팝업 열기 --%>
   function openDtlLayer(items) {
 
     $("#hqDtlLayer").show();
     $("#hqDtlDim").show();
-    
+
     getDtlData(items);
-    
+
     $("#popTitle").text("["+ items.hqOfficeCd +"] " + items.hqOfficeNm);
-    
+
     $("#hqDtlLayer").show();
     $("#hqDtlDim").show();
-    
+
     $("#btnReg").hide();
     $("#btnSave").hide();
     $("#btnEdit").show();
   }
-  
+
   function getDtlData(items) {
     var param = items;
-    
+
     $.postJSON("/store/hq/hqManage/master/dtlInfo.sb", param, function(result) {
       if(result.status === "FAIL") {
         s_alert.pop(result.message);
@@ -458,7 +458,7 @@
       $("#vHmpgAddr").text(data.hmpgAddr);
       $("#vAgency").text(data.agencyNm);
       $("#vClsFg").text(data.clsFgNm);
-      
+
       <%-- 상세정보 수정 --%>
       rHqOfficeCd.text           = data.hqOfficeCd;
       rHqOfficeNm.text           = data.hqOfficeNm;
@@ -479,31 +479,31 @@
       rHmpgAddr.text             = data.hmpgAddr;
       rAgency.selectedValue      = data.agencyCd;
       rClsFg.selectedValue       = data.clsFg;
-      
+
     })
     .fail(function(){
       s_alert.pop("Ajax Fail");
     });
   }
-    
+
   <%-- 사업자번호 중복체크 버튼 클릭 --%>
   var isBizChk = false;
-  
+
   $("#btnChkBizNo").click(function(e){
-    
+
     var param = {};
     param.bizNo1 = rBizNo1.text;
     param.bizNo2 = rBizNo2.text;
     param.bizNo3 = rBizNo3.text;
     param.bizNo = rBizNo1.text + rBizNo2.text + rBizNo3.text;
-    
+
     $.postJSON("/store/hq/hqManage/master/chkBizNo.sb", param, function(result) {
       if(result.status === "FAIL") {
         s_alert.pop(result.message);
         return;
       }
       isBizChk = true;
-      
+
       if(result.data == 0 ){
         <%-- 중복되는 사업자번호가 없습니다.--%>
         s_alert.pop("<s:message code='hqManage.no.duplicate.bizNo.msg'/>");
@@ -516,22 +516,22 @@
       s_alert.pop("Ajax Fail");
     });
   });
-  
+
   <%-- 주소찾기 버튼 클릭 --%>
   $("#btnFindAddr").click(function(e){
     //TODO
   });
-  
+
   <%-- 신규등록 버튼 클릭 --%>
   $("#btnReg").click(function(e){
     chkVal("/store/hq/hqManage/master/regist.sb");
   });
-  
+
   <%-- 저장 버튼 클릭 (수정) --%>
   $("#btnSave").click(function(e){
     chkVal("/store/hq/hqManage/master/modify.sb");
   });
-  
+
   <%-- validation --%>
   function chkVal(sendUrl) {
 
@@ -541,84 +541,86 @@
       s_alert.pop(msg);
       return;
     }
-    
+
     <%-- 대표자명을 입력해주세요. --%>
     var msg = "<s:message code='hqManage.ownerNm'/> <s:message code='cmm.require.text'/>";
     if(rOwnerNm.text === "") {
       s_alert.pop(msg);
       return;
     }
-    
+
     <%-- 사업자번호를 입력해주세요. --%>
     var msg = "<s:message code='hqManage.bizNo'/> <s:message code='cmm.require.text'/>";
     if(rBizNo1.text === "" || rBizNo2.text === "" || rBizNo3.text === "") {
       s_alert.pop(msg);
       return;
     }
-    
+
     <%-- 사업자번호 중복체크를 해주세요. --%>
     var msg = "<s:message code='hqManage.require.duplicate.bizNo'/>";
     if(!isBizChk) {
       s_alert.pop(msg);
       return;
     }
-    
+
     <%-- 상호명을 입력해주세요. --%>
     var msg = "<s:message code='hqManage.bizStoreNm'/> <s:message code='cmm.require.text'/>";
     if(rBizStoreNm.text === "") {
       s_alert.pop(msg);
       return;
     }
-    
+
     <%-- 날씨표시지역을 선택해주세요. --%>
     var msg = "<s:message code='hqManage.weatherArea'/> <s:message code='cmm.require.select'/>";
     if(rWeatherArea.text == "선택" || rWeatherArea.text === "") {
       s_alert.pop(msg);
       return;
     }
-    
+
     <%-- 전화번호를 입력해주세요. --%>
     var msg = "<s:message code='hqManage.telNo'/> <s:message code='cmm.require.text'/>";
     if(rTelNo.text === "") {
       s_alert.pop(msg);
       return;
     }
-    
+
     <%-- 상태를 선택해주세요. --%>
     var msg = "<s:message code='hqManage.sysStatFg'/> <s:message code='cmm.require.select'/>";
     if(rSysStatFg.text == "선택" || rSysStatFg.text === "") {
       s_alert.pop(msg);
       return;
     }
-    
+
     <%-- 주소를 입력해주세요. --%>
     var msg = "<s:message code='hqManage.addr'/> <s:message code='cmm.require.text'/>";
     if(rPostNo.text === "" || rAddr.text === "" || rAddrDtl.text === "") {
       s_alert.pop(msg);
       return;
     }
-    
+
     <%-- 이메일주소를 입력해주세요. --%>
+    /*
     var msg = "<s:message code='hqManage.emailAddr'/> <s:message code='cmm.require.text'/>";
     if(rEmailAddr.text === "") {
       s_alert.pop(msg);
       return;
     }
-    
+    */
+
     <%-- 관리업체를 선택해주세요. --%>
     var msg = "<s:message code='hqManage.agency'/> <s:message code='cmm.require.select'/>";
     if(rAgency.text == "선택" || rAgency.text === "") {
       s_alert.pop(msg);
       return;
     }
-    
+
     <%-- 용도를 선택해주세요. --%>
     var msg = "<s:message code='hqManage.clsFg'/> <s:message code='cmm.require.select'/>";
     if(rClsFg.text == "선택" || rClsFg.text === "") {
       s_alert.pop(msg);
       return;
     }
-    
+
     <%-- (신규등록) 본사코드 데모 선택시 상태도 데모를 선택해주세요. --%>
     if($("#hqDtlLayer #rHqOfficeRadio").is(":visible")) {
       var hqType = $('input:radio[name="rHqOfficeCdType"]:checked').val();
@@ -632,12 +634,12 @@
     }
     saveHqOffice(sendUrl);
   }
-  
+
   <%-- 저장 --%>
   function saveHqOffice(sendUrl) {
-    
+
     var param = {};
-    
+
     param.hqOfficeCd = rHqOfficeCd.text;
     param.hqOfficeNm = rHqOfficeNm.text;
     param.ownerNm = rOwnerNm.text;
@@ -655,20 +657,23 @@
     param.sysOpenDate = getDate(rSysOpenDate);
     param.agencyCd = rAgency.selectedValue;
     param.clsFg = rClsFg.selectedValue;
-    
-    $.postJSONSave(sendUrl, JSON.stringify(param), function(result) {
+
+    console.log(param)
+
+    $.postJSONSave(sendUrl, param, function(result) {
       if(result.status === "FAIL") {
         s_alert.pop(result.message);
         return;
       }
       s_alert.pop("<s:message code='cmm.saveSucc'/>");
       $(".btn_close").click();
-    })
-    .fail(function(){
+      search(1);
+    }
+    ,function(){
       s_alert.pop("Ajax Fail");
     });
   }
-  
+
   <%-- 수정 버튼 클릭 --%>
   $("#hqDtlLayer #btnEdit").click(function(e){
     $("#viewArea").hide();
@@ -677,12 +682,12 @@
     $("#btnReg").hide();
     $("#btnSave").show();
     $("#btnEdit").hide();
-    
+
     $("#rHqOfficeTxt").show();
     $("#rHqOfficeRadio").hide();
-    
+
   });
-  
+
   <%-- 닫기 버튼 클릭 --%>
   $("#hqDtlLayer .btn_close, #hqDtlLayer #btnClose").click(function(e){
     resetForm();
@@ -691,11 +696,11 @@
     $("#hqDtlLayer").hide();
     $("#hqDtlDim").hide();
   });
-  
+
   <%-- 폼 리셋 --%>
   function resetForm() {
     $("#regForm")[0].reset();
-    
+
     rWeatherArea.selectedIndex  = 0;
     rSysStatFg.selectedIndex    = 0;
     rAgency.selectedIndex       = 0;
@@ -715,14 +720,14 @@
       s_alert.popConf(msg, function(){
         showEnvSet();
       });
-    } else { 
+    } else {
       showEnvSet();
     }
   });
-  
+
   <%-- 메뉴권한 탭 클릭 --%>
   $("#hqDtlLayer #menuSettingTab").click(function(e){
-    
+
     if(selectedHq.hqOfficeCd == "") {
       s_alert.pop("<s:message code='hqManage.require.regist.hq'/>");
       return;
@@ -733,12 +738,12 @@
       s_alert.popConf(msg, function(){
         showMenuAuth();
       });
-    } else { 
+    } else {
       showMenuAuth();
     }
   });
 
-  
+
   <%-- 상세정보 레이아웃 숨김 --%>
   //function showMaster(pageId){
   function showMaster(){
@@ -750,12 +755,12 @@
     $("#hqDtlDim").show();
     // 상세정보일 경우 데이터 조회
   }
-  
+
   <%-- 상세정보 레이아웃 숨김 --%>
   function hideMaster(){
     $("#hqDtlLayer").hide();
     $("#hqDtlDim").hide();
   }
-  
+
 </script>
 
