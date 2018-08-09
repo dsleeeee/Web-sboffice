@@ -16,10 +16,10 @@ import kr.co.solbipos.application.common.service.CmmVO;
  * @version 1.0
  * @see
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 public class TemplateVO extends CmmVO {
-    
+
     private static final long serialVersionUID = -4652244117741649825L;
     /** 출력물분류코드 */
     private String prtClassCd;
@@ -35,91 +35,168 @@ public class TemplateVO extends CmmVO {
     private String prtCd;
     /** 출력물코드 예제 */
     private String content;
-    
-    
+
+    /** 매장코드 */
+    private String storeCd;
+    /** 매장명 */
+    private String storeNm;
+    /** 매장 상태 */
+    private String sysStatFgNm;
+    /** 매장 용도 */
+    private String clsFgNm;
+
     /**
      * @return the prtClassCd
      */
     public String getPrtClassCd() {
         return prtClassCd;
     }
+
     /**
      * @param prtClassCd the prtClassCd to set
      */
     public void setPrtClassCd(String prtClassCd) {
         this.prtClassCd = prtClassCd;
     }
+
     /**
      * @return the templtCd
      */
     public String getTempltCd() {
         return templtCd;
     }
+
     /**
      * @param templtCd the templtCd to set
      */
     public void setTempltCd(String templtCd) {
         this.templtCd = templtCd;
     }
+
     /**
      * @return the templtNm
      */
     public String getTempltNm() {
         return templtNm;
     }
+
     /**
      * @param templtNm the templtNm to set
      */
     public void setTempltNm(String templtNm) {
         this.templtNm = templtNm;
     }
+
     /**
      * @return the prtForm
      */
     public String getPrtForm() {
         return prtForm;
     }
+
     /**
      * @param prtForm the prtForm to set
      */
     public void setPrtForm(String prtForm) {
         this.prtForm = prtForm;
     }
+
     /**
      * @return the prtClassNm
      */
     public String getPrtClassNm() {
         return prtClassNm;
     }
+
     /**
      * @param prtClassNm the prtClassNm to set
      */
     public void setPrtClassNm(String prtClassNm) {
         this.prtClassNm = prtClassNm;
     }
+
     /**
      * @return the prtCd
      */
     public String getPrtCd() {
         return prtCd;
     }
+
     /**
      * @param prtCd the prtCd to set
      */
     public void setPrtCd(String prtCd) {
         this.prtCd = prtCd;
     }
+
     /**
      * @return the content
      */
     public String getContent() {
         return content;
     }
+
     /**
      * @param content the content to set
      */
     public void setContent(String content) {
         this.content = content;
     }
-    
+
+    /**
+     * @return the storeCd
+     */
+    public String getStoreCd() {
+        return storeCd;
+    }
+
+    /**
+     * @param storeCd the storeCd to set
+     */
+    public void setStoreCd(String storeCd) {
+        this.storeCd = storeCd;
+    }
+
+    /**
+     * @return the storeNm
+     */
+    public String getStoreNm() {
+        return storeNm;
+    }
+
+    /**
+     * @param storeNm the storeNm to set
+     */
+    public void setStoreNm(String storeNm) {
+        this.storeNm = storeNm;
+    }
+
+    /**
+     * @return the sysStatFgNm
+     */
+    public String getSysStatFgNm() {
+        return sysStatFgNm;
+    }
+
+    /**
+     * @param sysStatFgNm the sysStatFgNm to set
+     */
+    public void setSysStatFg(String sysStatFgNm) {
+        this.sysStatFgNm = sysStatFgNm;
+    }
+
+    /**
+     * @return the clsFgNm
+     */
+    public String getClsFgNm() {
+        return clsFgNm;
+    }
+
+    /**
+     * @param clsFgNm the clsFgNm to set
+     */
+    public void setClsFgNm(String clsFgNm) {
+        this.clsFgNm = clsFgNm;
+    }
+
 }

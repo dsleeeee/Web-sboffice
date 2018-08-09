@@ -20,7 +20,7 @@ import kr.co.solbipos.application.com.bkmk.service.BkmkVO;
 * @version 1.0
 * @see
 *
-*  Copyright (C) by SOLBIPOS CORP. All right reserved.
+* @Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
 @Service("bkmkService")
 public class BkmkServiceImpl implements BkmkService {

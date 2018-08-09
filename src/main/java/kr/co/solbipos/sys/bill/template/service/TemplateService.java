@@ -16,8 +16,9 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
  * @author 솔비포스 차세대개발실 노현수
  * @since 2018. 05.01
  * @version 1.0
+ * @See
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 public interface TemplateService {
     
@@ -35,5 +36,11 @@ public interface TemplateService {
 
     /** 출력물템플릿 저장 */
     int saveTemplate(TemplateVO templateVO, SessionInfoVO sessionInfoVO);
+
+    /** 미적용 본사/단독매장 조회 */
+    List<DefaultMap<String>> getUnUsedList(TemplateVO templateVO);
+
+    /** 미적용 본사/단독매장 저장 */
+    int saveUnUsedList(TemplateVO templateVO, SessionInfoVO sessionInfoVO);
 
 }

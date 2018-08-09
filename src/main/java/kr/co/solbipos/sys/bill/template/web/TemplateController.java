@@ -40,7 +40,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @since 2018. 05.01
  * @version 1.0
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Controller
 @RequestMapping(value = "/sys/bill/template")
@@ -69,7 +69,7 @@ public class TemplateController {
         // 출력물종류 목록 조회
         list = templateService.getPrintTypeList(params);
         model.addAttribute("listPrintType", convertToJson(list));
-        
+
         return "sys/bill/template/template";
     }
     
@@ -138,7 +138,6 @@ public class TemplateController {
         HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
         int result = templateService.saveTemplateList(templateVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
@@ -162,8 +161,54 @@ public class TemplateController {
         HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
         int result = templateService.saveTemplate(templateVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+
+    }
+
+    /**
+     * 출력물 샘플 - 미적용 본사/단독매장 조회
+     *
+     * @param request
+     * @param response
+     * @param templateVO
+     * @param model
+     * @return Result
+     * @author 노현수
+     * @since 2018. 06. 15.
+     */
+    @RequestMapping(value = "/unUsed/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getUnUsedList(HttpServletRequest request, HttpServletResponse response,
+        TemplateVO templateVO, Model model) {
+
+        List<DefaultMap<String>> list = new ArrayList<DefaultMap<String>>();
+        // 미적용 본사/단독매장 목록 조회
+        list = templateService.getUnUsedList(templateVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, templateVO);
+
+    }
+
+    /**
+     * 출력물 샘플 - 미적용 본사/단독매장 저장
+     *
+     * @param request
+     * @param response
+     * @param templateVO
+     * @param model
+     * @return Result
+     * @author 노현수
+     * @since 2018. 08. 01.
+     */
+    @RequestMapping(value = "/unUsed/save.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveUnUsedList(@RequestBody TemplateVO templateVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        int result = templateService.saveUnUsedList(templateVO, sessionInfoVO);
 
         return returnJson(Status.OK, result);
 

@@ -35,7 +35,7 @@ import kr.co.solbipos.base.prod.touchkey.service.TouchkeyService;
  * @version 1.0
  * @see
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Controller
 @RequestMapping(value = "/base/prod/touchkey/touchkey")

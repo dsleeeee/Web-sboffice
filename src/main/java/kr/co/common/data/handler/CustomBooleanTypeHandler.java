@@ -21,7 +21,7 @@ import java.sql.SQLException;
  * @since 2018. 05.01
  * @version 1.0
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 public class CustomBooleanTypeHandler extends BaseTypeHandler<Boolean> {
 

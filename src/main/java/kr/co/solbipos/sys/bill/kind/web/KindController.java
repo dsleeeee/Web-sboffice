@@ -35,7 +35,7 @@ import kr.co.solbipos.sys.bill.kind.service.KindVO;
  * @version 1.0
  * @see
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Controller
 @RequestMapping(value = "/sys/bill/kind")

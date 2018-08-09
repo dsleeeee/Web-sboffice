@@ -27,8 +27,9 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
  * @author 솔비포스 차세대개발실 노현수
  * @since 2018. 05.01
  * @version 1.0
+ * @see
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Service("templateService")
 public class TemplateServiceImpl implements TemplateService {
@@ -110,5 +111,33 @@ public class TemplateServiceImpl implements TemplateService {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
     }
+
+    /** 미적용 본사/단독매장 조회 */
+    @Override
+    public List<DefaultMap<String>> getUnUsedList(TemplateVO templateVO) {
+        return templateMapper.getUnUsedList(templateVO);
+    }
+
+    /** 미적용 본사/단독매장 저장 */
+    @Override
+    public int saveUnUsedList(TemplateVO templateVO, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        templateVO.setRegDt(currentDt);
+        templateVO.setRegId(sessionInfoVO.getUserId());
+        templateVO.setModDt(currentDt);
+        templateVO.setModId(sessionInfoVO.getUserId());
+
+        result = templateMapper.insertUnUsedList(templateVO);
+
+        if ( result >= 0 ) {
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+    }
+
+
 
 }

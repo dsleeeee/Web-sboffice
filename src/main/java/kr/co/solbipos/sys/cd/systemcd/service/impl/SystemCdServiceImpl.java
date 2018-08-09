@@ -27,7 +27,7 @@ import kr.co.solbipos.sys.cd.systemcd.service.SystemCdVO;
  * @version 1.0
  * @see
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Service("systemCdService")
 public class SystemCdServiceImpl implements SystemCdService {

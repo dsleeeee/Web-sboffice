@@ -19,7 +19,7 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 * @since 2018. 05.01
 * @version 1.0
 *
-*  Copyright (C) by SOLBIPOS CORP. All right reserved.
+* @Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
 public interface VerManageService {
 

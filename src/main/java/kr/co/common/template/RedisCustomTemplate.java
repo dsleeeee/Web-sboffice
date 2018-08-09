@@ -19,7 +19,7 @@ import org.springframework.data.redis.core.RedisTemplate;
  * @version 1.0
  * @see
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 public class RedisCustomTemplate<K, V> extends RedisTemplate<K, V> {
 

@@ -20,7 +20,7 @@ import kr.co.solbipos.application.com.fixing.service.FixingVO;
 * @version 1.0
 * @see
 *
-*  Copyright (C) by SOLBIPOS CORP. All right reserved.
+* @Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
 @Service("fixingService")
 public class FixingServiceImpl implements FixingService {

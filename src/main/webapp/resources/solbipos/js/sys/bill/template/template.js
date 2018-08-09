@@ -11,23 +11,27 @@
 $(document).ready(function () {
 
     // 출력물종류 선택 콤보박스
-    var srchPrtTypeList = wcombo.genCommonBoxFun("#srchPrtTypeList", cData, function (e) {
+    var srchPrtTypeCombo = wcombo.genCommonBoxFun("#srchPrtTypeCombo", printTypeComboData, function (e) {
         searchPrintCodeList();
     });
-    srchPrtTypeList.inputElement.disabled = true;
 
     // 템플릿 그리드 Data
     var dataTemplate =
         [
-            { binding:"gChk", header:messages["template.chk"], dataType:wijmo.DataType.Boolean, width:45},
-            { binding:"templtNm", header:messages["template.templtNm"], width:"*"},
+            {
+                binding: "gChk",
+                header: messages["template.chk"],
+                dataType: wijmo.DataType.Boolean,
+                width: 45
+            },
+            {binding: "templtNm", header: messages["template.templtNm"], width: "*"},
         ];
     // 템플릿 그리드 생성
     var gridTemplate = wgrid.genGrid("#gridTemplate", dataTemplate);
     gridTemplate.isReadOnly = false;
 
     // ReadOnly 효과설정
-    gridTemplate.formatItem.addHandler(function(s, e) {
+    gridTemplate.formatItem.addHandler(function (s, e) {
         if (e.panel == s.cells) {
             var col = s.columns[e.col];
             if (col.binding === "templtNm") {
@@ -57,63 +61,17 @@ $(document).ready(function () {
     // 템플릿 그리드 에디팅 방지
     gridTemplate.beginningEdit.addHandler(function (s, e) {
         var dataItem = gridTemplate.rows[e.row].dataItem;
-        if ( nvl(dataItem.status, "") == "" && dataItem.status != "I" ) {
+        if (nvl(dataItem.status, "") == "" && dataItem.status != "I") {
             e.cancel = true;
         }
     });
-
-    // 조회버튼 클릭
-    $("#btnSearch").click(function (e) {
-        searchPrintCodeList();
-    });
-
-    // 템플릿 그리드 조회
-    function searchGrid(value) {
-
-        var param = {};
-        param.prtClassCd = value;
-
-        $.postJSON("/sys/bill/template/item/list.sb", param,
-            function (result) {
-                if (result.status === "FAIL") {
-                    s_alert.pop(result.message);
-                    return;
-                }
-
-                var list = result.data.list;
-                gridTemplate.itemsSource = new wijmo.collections.CollectionView(list);
-                gridTemplate.itemsSource.trackChanges = true;
-
-                // 버튼 Show
-                $("#btnAddTemplate").show();
-                $("#btnDelTemplate").show();
-                $("#btnSaveTemplate").show();
-                $("#btnSaveEditTemplate").show();
-
-                if (list.length === undefined || list.length == 0) {
-                    // 그리드 초기화
-                    gridTemplate.itemsSource = [];
-                    // 편집/미리보기 폼 초기화
-                    theTarget.value = "";
-                    thePreview.innerHTML = "";
-                } else {
-                    gridTemplate.select(0, 1);
-                }
-
-            },
-            function () {
-                s_alert.pop("Ajax Fail");
-            }
-        );
-
-    }
 
     // 템플릿 추가버튼 클릭
     $("#btnAddTemplate").click(function (e) {
         gridTemplate.collectionView.trackChanges = true;
         var newRow = gridTemplate.collectionView.addNew();
         newRow.status = "I";
-        newRow.prtClassCd = srchPrtTypeList.selectedItem["value"];
+        newRow.prtClassCd = srchPrtTypeCombo.selectedItem["value"];
         newRow.gChk = true;
 
         gridTemplate.collectionView.commitNew();
@@ -123,8 +81,8 @@ $(document).ready(function () {
 
     // 템플릿 삭제버튼 클릭
     $("#btnDelTemplate").click(function (e) {
-        for(var i = gridTemplate.itemsSource.itemCount-1; i >= 0; i-- ){
-            if ( gridTemplate.collectionView.items[i].gChk === true ) {
+        for (var i = gridTemplate.itemsSource.itemCount - 1; i >= 0; i--) {
+            if (gridTemplate.collectionView.items[i].gChk === true) {
                 gridTemplate.itemsSource.removeAt(i);
             }
         }
@@ -134,33 +92,31 @@ $(document).ready(function () {
     $("#btnSaveTemplate").click(function (e) {
 
         var paramArr = new Array();
-        for ( var i = 0; i < gridTemplate.collectionView.itemsEdited.length; i++ ) {
+        for (var i = 0; i < gridTemplate.collectionView.itemsEdited.length; i++) {
             gridTemplate.collectionView.itemsEdited[i].status = "U";
             gridTemplate.collectionView.itemsEdited[i].prtForm = theTarget.value;
             paramArr.push(gridTemplate.collectionView.itemsEdited[i]);
         }
-        for ( var i = 0; i < gridTemplate.collectionView.itemsAdded.length; i++ ) {
+        for (var i = 0; i < gridTemplate.collectionView.itemsAdded.length; i++) {
             gridTemplate.collectionView.itemsAdded[i].status = "I";
             gridTemplate.collectionView.itemsEdited[i].prtForm = theTarget.value;
             paramArr.push(gridTemplate.collectionView.itemsAdded[i]);
         }
-        for ( var i = 0; i < gridTemplate.collectionView.itemsRemoved.length; i++ ) {
+        for (var i = 0; i < gridTemplate.collectionView.itemsRemoved.length; i++) {
             gridTemplate.collectionView.itemsRemoved[i].status = "D";
             paramArr.push(gridTemplate.collectionView.itemsRemoved[i]);
         }
 
-        if ( paramArr.length <= 0 ) {
+        if (paramArr.length <= 0) {
             s_alert.pop(messages["cmm.not.modify"]);
             return;
         }
 
-        $.postJSONArray("/sys/bill/template/item/save.sb", paramArr, function(result) {
-            console.log(result);
+        $.postJSONArray("/sys/bill/template/item/save.sb", paramArr, function (result) {
                 s_alert.pop(messages["cmm.saveSucc"]);
                 gridTemplate.collectionView.clearChanges();
             },
-            function(result) {
-            console.log(result);
+            function (result) {
                 s_alert.pop(result.message);
             }
         );
@@ -184,7 +140,7 @@ $(document).ready(function () {
     function searchPrintCodeList() {
 
         var param = {};
-        param.prtClassCd = srchPrtTypeList.selectedItem["value"];
+        param.prtClassCd = srchPrtTypeCombo.selectedItem["value"];
 
         $.postJSON("/sys/bill/template/code/list.sb", param,
             function (result) {
@@ -197,9 +153,48 @@ $(document).ready(function () {
                 listBox.itemsSource = list;
 
                 if (list.length === undefined || list.length == 0) {
+                    // 코드리스트 초기화
                     listBox.itemsSource = [];
+                    // 그리드 초기화
+                    gridTemplate.itemsSource = [];
+                    // 편집/미리보기 폼 초기화
+                    theTarget.value = "";
+                    thePreview.innerHTML = "";
                 } else {
-                    searchGrid(srchPrtTypeList.selectedItem["value"]);
+
+                    $.postJSON("/sys/bill/template/item/list.sb", param,
+                        function (result) {
+                            if (result.status === "FAIL") {
+                                s_alert.pop(result.message);
+                                return;
+                            }
+
+                            list = result.data.list;
+                            gridTemplate.itemsSource = new wijmo.collections.CollectionView(list);
+                            gridTemplate.itemsSource.trackChanges = true;
+
+                            // 버튼 Show
+                            $("#btnAddTemplate").show();
+                            $("#btnDelTemplate").show();
+                            $("#btnSaveTemplate").show();
+                            $("#btnSaveEditTemplate").show();
+
+                            if (list.length === undefined || list.length == 0) {
+                                // 그리드 초기화
+                                gridTemplate.itemsSource = [];
+                                // 편집/미리보기 폼 초기화
+                                theTarget.value = "";
+                                thePreview.innerHTML = "";
+                            } else {
+                                gridTemplate.select(0, 1);
+                            }
+
+                        },
+                        function () {
+                            s_alert.pop("Ajax Fail");
+                        }
+                    );
+
                 }
 
             },
@@ -209,7 +204,7 @@ $(document).ready(function () {
         );
 
     };
-
+    
     // 클릭드래그시 선택이벤트 발생
     listBox.hostElement.addEventListener("mousedown", function (e) {
         listBox.selectedValue = e.target.innerText;
@@ -283,19 +278,19 @@ $(document).ready(function () {
 
         var selectedRow = gridTemplate.selectedRows[0]._data;
         var param = {};
-        param.prtClassCd = srchPrtTypeList.selectedItem["value"];
-        param.templtCd   = selectedRow.templtCd;
-        param.templtNm   = selectedRow.templtNm;
-        param.prtForm    = theTarget.value;
+        param.prtClassCd = srchPrtTypeCombo.selectedItem["value"];
+        param.templtCd = selectedRow.templtCd;
+        param.templtNm = selectedRow.templtNm;
+        param.prtForm = theTarget.value;
 
-        $.postJSONSave("/sys/bill/template/bill/save.sb", param, function(result) {
-            if(result.status === "FAIL") {
+        $.postJSONSave("/sys/bill/template/bill/save.sb", param, function (result) {
+            if (result.status === "FAIL") {
                 s_alert.pop(result.message);
                 return;
             }
             s_alert.pop(messages["cmm.saveSucc"]);
             gridTemplate.collectionView.clearChanges();
-        }).fail(function(){
+        }).fail(function () {
             s_alert.pop("Ajax Fail");
         });
 
@@ -339,7 +334,7 @@ $(document).ready(function () {
                         }
                     }
                     // 바이트길이 만큼 좌우 여백채우기
-                    value = value.replace(textSplit[0], textSplit[3].setPadding(textSplit[1], " ", codeLen + tagLen)) ;
+                    value = value.replace(textSplit[0], textSplit[3].setPadding(textSplit[1], " ", codeLen + tagLen));
                 }
             }
         }
@@ -349,13 +344,13 @@ $(document).ready(function () {
         var newLine = 0;
         var splitStr = "";
         if (lineArray != null) {
-            for (var m = 0; m < lineArray.length; m++ ) {
+            for (var m = 0; m < lineArray.length; m++) {
                 lineArray[m] = lineArray[m].replace(/<P>|<\/P>?/g, "");
-                if ( lineArray[m].getByteLength() <= 42 || !isEmpty(lineArray[m].match(/<img src.*?>/g)) || !isEmpty(lineArray[m].match(/<font.*?>/g)) ) {
+                if (lineArray[m].getByteLength() <= 42 || !isEmpty(lineArray[m].match(/<img src.*?>/g)) || !isEmpty(lineArray[m].match(/<font.*?>/g))) {
                     newValues[newLine++] = lineArray[m];
                 } else {
                     splitStr = lineArray[m].splitByteLen(42);
-                    for ( var n = 0; n < splitStr.length; n++ ) {
+                    for (var n = 0; n < splitStr.length; n++) {
                         newValues[newLine++] = splitStr[n];
                     }
                 }
@@ -363,5 +358,117 @@ $(document).ready(function () {
         }
         thePreview.innerHTML = "<PRE><P>" + newValues.join("</P><P>") + "</P></PRE>";
     }
+
+    // 미적용 본사/단독매장 버튼 클릭
+    $("#btnApplyTemplate").click(function (e) {
+        showApplyTemplateLayer();
+    });
+
+    // 레이어 보이기
+    function showApplyTemplateLayer(){
+        $("#applyTemplateDim").show();
+        $("#applyTemplateLayer").show();
+        // 레이어 내용 생성
+        createApplyTemplateLayer();
+    }
+
+    // Object 변수
+    var srchTemplateTypeCombo, srchSysStatFgCombo, srchClsFgCombo, gridApplyStoreTemplate, gridDataApplyStoreTemplate;
+
+    // 레이어 내용 생성
+    function createApplyTemplateLayer() {
+
+        // 템플릿 선택 콤보박스
+        srchTemplateTypeCombo = new wijmo.input.ComboBox("#srchTemplateTypeCombo",
+            {
+                displayMemberPath: "templtNm",
+                selectedValuePath: "templtCd",
+                isAnimated: true,
+                itemsSource: JSON.parse(JSON.stringify(gridTemplate.itemsSource._src)),
+                selectedIndexChanged: function (s, e) {
+                    // searchTemplateTypeList();
+                }
+            });
+
+        // 상태 선택 콤보박스
+        srchSysStatFgCombo = wcombo.genCommonBoxFun("#srchSysStatFgCombo", sysStatFgComboData, function (e) {
+
+        });
+
+        // 용도 선택 콤보박스
+        srchClsFgCombo = wcombo.genCommonBoxFun("#srchClsFgCombo", clsFgComboData, function (e) {
+
+        });
+
+        // 레이어 그리드 Data
+        gridDataApplyStoreTemplate =
+            [
+                {
+                    binding: "gChk",
+                    header: messages[ "template.chk" ],
+                    dataType: wijmo.DataType.Boolean,
+                    width: 45
+                },
+                { binding: "storeCd", header: messages[ "template.layer.storeCd" ], width: "*" },
+                { binding: "storeNm", header: messages[ "template.layer.storeNm" ], width: "*" },
+                {
+                    binding: "sysStatFgNm",
+                    header: messages[ "template.layer.sysStatFg" ],
+                    width: "*"
+                },
+                { binding: "clsFgNm", header: messages[ "template.layer.clsFg" ], width: "*" }
+            ];
+        gridApplyStoreTemplate = wgrid.genGrid("#gridApplyStoreTemplate", gridDataApplyStoreTemplate);
+
+    }
+
+    function srchLayerGrid() {
+
+        var param = {};
+        param.templtCd = srchTemplateTypeCombo.selectedItem["value"];
+        param.sysStatFg = srchSysStatFgCombo.selectedItem["value"];
+        param.clsFg = srchClsFgCombo.selectedItem["value"];
+
+        $.postJSON("/sys/bill/template/unUsed/list.sb", param,
+            function (result) {
+                if (result.status === "FAIL") {
+                    s_alert.pop(result.message);
+                    return;
+                }
+
+                list = result.data.list;
+                gridApplyStoreTemplate.itemsSource = new wijmo.collections.CollectionView(list);
+                gridApplyStoreTemplate.itemsSource.trackChanges = true;
+
+                // 버튼 Show
+                $("#btnApplyStore").show();
+
+                if (list.length === undefined || list.length == 0) {
+                    // 그리드 초기화
+                    gridApplyStoreTemplate.itemsSource = [];
+                }
+
+            },
+            function () {
+                s_alert.pop("Ajax Fail");
+            }
+        );
+    }
+
+    // 레이어 닫기 버튼 클릭
+    $(".btn_close").click(function(e){
+        closeApplyTemplateLayer();
+    });
+
+    // 레이어 닫기
+    function closeApplyTemplateLayer(){
+        $("#applyTemplateLayer").hide();
+        $("#applyTemplateDim").hide();
+    }
+
+    // 페이지 로드 이후 자동 로딩
+    setTimeout(function() {
+        srchPrtTypeCombo.onSelectedIndexChanged(0);
+    }, 50);
 
 });

@@ -36,7 +36,7 @@ import kr.co.solbipos.base.store.tableattr.service.TableAttrService;
  * @version 1.0
  * @see
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Controller
 @RequestMapping(value = "/base/store/tableattr/tableattr")

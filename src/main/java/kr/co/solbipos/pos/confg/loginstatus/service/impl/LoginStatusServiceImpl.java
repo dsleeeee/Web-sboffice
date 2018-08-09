@@ -21,7 +21,7 @@ import kr.co.solbipos.pos.confg.loginstatus.service.LoginStatusVO;
  * @version 1.0
  * @see
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Service("loginStatusService")
 @Transactional

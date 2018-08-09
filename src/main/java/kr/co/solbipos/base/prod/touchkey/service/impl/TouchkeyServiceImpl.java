@@ -45,7 +45,7 @@ import kr.co.solbipos.base.store.tableattr.service.impl.TableAttrMapper;
  * @version 1.0
  * @see
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Service("touchkeyService")
 public class TouchkeyServiceImpl implements TouchkeyService {

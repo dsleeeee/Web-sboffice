@@ -20,7 +20,7 @@ import java.util.List;
  * @since 2018. 05.01
  * @version 1.0
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Mapper
 @Repository
@@ -46,4 +46,11 @@ public interface TemplateMapper {
 
     /** 출력물템플릿 수정 */
     int saveTemplate(TemplateVO templateVO);
+
+    /** 미사용 본사/단독매장 조회 */
+    List<DefaultMap<String>> getUnUsedList(TemplateVO templateVO);
+
+    /** 미적용 본사/단독매장 저장 */
+    int insertUnUsedList(TemplateVO templateVO);
+
 }

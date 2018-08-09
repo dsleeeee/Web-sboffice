@@ -27,7 +27,7 @@ import kr.co.solbipos.pos.confg.func.service.FuncVO;
  * @version 1.0
  * @see
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Service("funcService")
 public class FuncServiceImpl implements FuncService {

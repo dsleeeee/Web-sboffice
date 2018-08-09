@@ -178,4 +178,27 @@
             )
     </insert>
 
+    <!-- 미적용 본사/단독매장 조회 -->
+    <!--
+        TABLE    : TB_CM_PRINT_TEMPL
+        PARAM    : templateVO
+        COMMENTS : 출력물코드 목록을 조회한다.
+    -->
+    <select id="getUnUsedList" parameterType="templateVO" resultType="defaultMap">
+        /* USE : TemplateMapper.getUnUsedList */
+
+
+
+        SELECT
+            tcpt.PRT_CLASS_CD,
+            tcpt.TEMPLT_CD,
+            tcpt.TEMPLT_NM,
+            tcpt.PRT_FORM
+        FROM
+            TB_CM_PRINT_TEMPL tcpt
+        WHERE
+            tcpt.PRT_CLASS_CD = #{prtClassCd}
+        ORDER BY tcpt.TEMPLT_CD
+    </select>
+
 </mapper>

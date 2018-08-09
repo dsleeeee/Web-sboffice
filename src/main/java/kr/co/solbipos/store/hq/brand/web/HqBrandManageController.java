@@ -36,7 +36,7 @@ import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
  * @since 2018. 05.01
  * @version 1.0
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Controller
 @RequestMapping(value = "/store/hq/hqBrand/")

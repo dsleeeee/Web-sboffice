@@ -21,7 +21,7 @@ import kr.co.common.data.handler.CodeEnumTypeHandler;
  * @version 1.0
  * @see
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 public enum DclzInFg implements CodeEnum {
 

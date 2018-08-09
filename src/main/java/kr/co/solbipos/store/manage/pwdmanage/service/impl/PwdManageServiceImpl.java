@@ -26,7 +26,7 @@ import kr.co.solbipos.store.manage.pwdmanage.service.PwdManageVO;
  * @version 1.0
  * @see
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Service("pwdManageService")
 public class PwdManageServiceImpl implements PwdManageService {

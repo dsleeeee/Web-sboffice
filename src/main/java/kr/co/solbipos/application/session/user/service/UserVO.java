@@ -22,7 +22,7 @@ import kr.co.solbipos.application.session.user.enums.OrgnFg;
  * @version 1.0
  * @see
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 public class UserVO extends CmmVO {
 
