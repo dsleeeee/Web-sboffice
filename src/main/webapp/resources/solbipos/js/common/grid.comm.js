@@ -75,7 +75,7 @@
                                 e.cell.textContent = (e.row + 1).toString();
                             }
                         }
-                    // cell 속성 readonly 일때 backgrond 컬러 지정
+                    // cell 속성 readonly 일때 background 컬러 지정
                     } else if (e.panel == s.cells) {
                         var col = s.columns[e.col];
                         if (col.isReadOnly) {
@@ -135,18 +135,6 @@
                             }
                         }
                     });
-                });
-            }
-            genGridCheckBoxClickEvent(g);
-            // 체크박스 클릭시 체크박스 value Set
-            function genGridCheckBoxClickEvent(grid) {
-                grid.addEventListener(grid.hostElement, 'click', function (e) {
-                    if (e.target.type=="checkbox") {
-                        var ht = grid.hitTest(e);
-                        var colName = ht.panel.columns[ht.col].binding;
-                        var selectedRow = grid.rows[ht.row].dataItem;
-                        selectedRow[colName] = !selectedRow[colName];
-                    }
                 });
             }
             return g;
