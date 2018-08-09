@@ -261,7 +261,7 @@
       $("#storeInfoTab").click();
     },
     function(result) {
-      s_alert.pop(result.data.msg);
+      s_alert.pop(result.message);
     });
   });
 

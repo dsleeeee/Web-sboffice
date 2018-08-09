@@ -126,7 +126,7 @@ $(document).ready(function(){
     },
     function(result) {
       console.log(result) // 중복된 데이터가 있을때 오류 메세지가....?
-      s_alert.pop(result.data.msg);
+      s_alert.pop(result.message);
     });
     
   });

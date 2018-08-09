@@ -198,7 +198,7 @@
               tree.currentAuthGrpCd = param.authGrpCd;
             },
             function(result) {
-              s_alert.pop(result.data.msg);
+              s_alert.pop(result.message);
             });
           }
         }
@@ -271,7 +271,7 @@
         gridView.clearChanges();
       },
       function(result) {
-        s_alert.pop(result.data.msg);
+        s_alert.pop(result.message);
       });
     });
 
@@ -303,7 +303,7 @@
         view.clearChanges();
       },
       function(result) {
-        s_alert.pop(result.data.msg);
+        s_alert.pop(result.message);
       });
 
     });

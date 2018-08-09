@@ -100,8 +100,8 @@ genEvent($("#authNumber"), $("#authNumberError"));
 		  $("#userIdError").hide();
 		  $("#empNmError").hide();
 
-		  if(result.data.msg != undefined) {
-		    alert(result.data.msg);
+		  if(result.message != undefined) {
+		    alert(result.message);
 		  }
 		}
 		else if(result.status === "FAIL") {

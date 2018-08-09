@@ -118,7 +118,7 @@ authTree.prototype.getData = function(userId) {
       tree.itemsSource = result.data.list;
     },
     function(result) {
-      s_alert.pop(result.data.msg);
+      s_alert.pop(result.message);
     });
   }
 };
@@ -155,7 +155,7 @@ authTree.prototype.save = function() {
     tree.view.clearChanges();
   },
   function(result) {
-    s_alert.pop(result.data.msg);
+    s_alert.pop(result.message);
   });
 };
 

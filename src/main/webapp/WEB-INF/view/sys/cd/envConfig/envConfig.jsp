@@ -191,7 +191,7 @@
           gridLeft.collectionView.clearChanges();
         },
         function(result) {
-          s_alert.pop(result.data.msg);
+          s_alert.pop(result.message);
         }
       );
       
@@ -266,7 +266,7 @@
           gridRight.collectionView.clearChanges();
         },
         function(result) {
-          s_alert.pop(result.data.msg);
+          s_alert.pop(result.message);
         }
       );
       

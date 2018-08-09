@@ -316,7 +316,7 @@
           grid2.collectionView.clearChanges();
         },
         function(result) {
-          s_alert.pop(result.data.msg);
+          s_alert.pop(result.message);
         });
       }
     });

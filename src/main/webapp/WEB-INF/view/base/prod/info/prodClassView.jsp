@@ -156,7 +156,7 @@
         view.trackChanges = true;
       },
       function(result) {
-        s_alert.pop(result.data.msg);
+        s_alert.pop(result.message);
       });
     }
 
@@ -282,7 +282,7 @@
         getClsTreeData();
       },
       function(result) {
-        s_alert.pop(result.data.msg);
+        s_alert.pop(result.message);
       });
     });
   });

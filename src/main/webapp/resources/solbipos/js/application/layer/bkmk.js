@@ -62,7 +62,7 @@ $(document).ready(function() {
                 }
             },
             function(result){
-                s_alert.pop(result.data.msg);
+                s_alert.pop(result.message);
             }).fail(function(){
             s_alert.pop("Ajax Fail");
         });
@@ -155,7 +155,7 @@ $(document).ready(function() {
                 $("#_brmkLayer, #_brmkFullDimmed").show();
             },
             function(result){
-                s_alert.pop(result.data.msg);
+                s_alert.pop(result.message);
             }).fail(function(){
             s_alert.pop("Ajax Fail");
         });

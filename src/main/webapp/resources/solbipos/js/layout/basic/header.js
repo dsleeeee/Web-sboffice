@@ -32,7 +32,7 @@ function callPostJson(url, menuId) {
             $("#" + menuId).remove();
         },
         function(result){
-            s_alert.pop(result.data.msg);
+            s_alert.pop(result.message);
         }).fail(function() {
         s_alert.pop("Ajax Fail");
     });

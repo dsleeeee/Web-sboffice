@@ -170,7 +170,7 @@ $(document).ready(function(){
       page.make("#page1", result.data.page.curr, result.data.page.totalPage);
       },
       function(result){
-        s_alert.pop(result.data.msg);
+        s_alert.pop(result.message);
       }
       ,function(){
         s_alert.pop("Ajax Fail");
