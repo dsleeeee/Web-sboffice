@@ -95,7 +95,7 @@ public class CmmCodeUtil {
             return assmblEmptyCombo();
         }
         // 결과 형태를 만들어서 json 으로 리턴
-        return assmblObj(commonCodeVO.getCodeList(), "nmcodeNm", "nmcodeCd", UseYn.S);
+        return assmblObj(commonCodeVO.getCodeList(), "nmcodeNm", "nmcodeCd", UseYn.ALL);
     }
 
 
@@ -196,19 +196,13 @@ public class CmmCodeUtil {
         if(option == UseYn.ALL) {
             HashMap<String, String> m = new HashMap<>();
             m.put(COMBO_NAME, "전체");
-            m.put(COMBO_VALUE, "ALL");
+            m.put(COMBO_VALUE, "");
             list.add(m);
         }
         else if(option == UseYn.Y) {
             HashMap<String, String> m = new HashMap<>();
             m.put(COMBO_NAME, "선택안함");
             m.put(COMBO_VALUE, "N");
-            list.add(m);
-        }
-        else if(option == UseYn.S) {
-            HashMap<String, String> m = new HashMap<>();
-            m.put(COMBO_NAME, "선택");
-            m.put(COMBO_VALUE, "");
             list.add(m);
         }
 
@@ -316,7 +310,7 @@ public class CmmCodeUtil {
         List<DefaultMap<String>> agencyList = cmmCodeService.getAgencyList();
 
         // 결과 형태를 만들어서 json 으로 리턴
-        return assmblObj(agencyList, "agencyNm", "agencyCd", UseYn.S);
+        return assmblObj(agencyList, "agencyNm", "agencyCd", UseYn.ALL);
     }
 
     /**
@@ -327,7 +321,7 @@ public class CmmCodeUtil {
         List<DefaultMap<String>> agencyList = cmmCodeService.getVanList();
 
         // 결과 형태를 만들어서 json 으로 리턴
-        return assmblObj(agencyList, "vanNm", "vanCd", UseYn.S);
+        return assmblObj(agencyList, "vanNm", "vanCd", UseYn.ALL);
     }
 
 
@@ -339,6 +333,6 @@ public class CmmCodeUtil {
         List<DefaultMap<String>> hqOfficeList = cmmCodeService.getHqOfficeList();
 
         // 결과 형태를 만들어서 json 으로 리턴
-        return assmblObj(hqOfficeList, "vanNm", "vanCd", UseYn.S);
+        return assmblObj(hqOfficeList, "vanNm", "vanCd", UseYn.ALL);
     }
 }

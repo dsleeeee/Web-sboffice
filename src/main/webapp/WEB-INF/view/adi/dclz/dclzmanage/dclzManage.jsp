@@ -257,7 +257,7 @@
         storeCdText.text = "";
         storeCd.text = "";
 
-        if(arr[0].cd === "ALL") {
+        if(arr[0].cd === "") {
           storeCdText.text = "전체";
           arr.splice(0, 1);
         }

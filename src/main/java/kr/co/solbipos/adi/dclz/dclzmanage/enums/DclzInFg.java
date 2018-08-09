@@ -26,7 +26,7 @@ import kr.co.common.data.handler.CodeEnumTypeHandler;
 public enum DclzInFg implements CodeEnum {
 
     /** 전체 */
-    ALL("ALL")
+    ALL("")
     /** 웹 입력 */
     ,WEB("010")
     /** 포스 입력 */

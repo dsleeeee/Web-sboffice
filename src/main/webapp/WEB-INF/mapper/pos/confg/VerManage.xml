@@ -229,13 +229,13 @@
     <if test='storeNm != null and storeNm != ""'>
        AND tms.STORE_NM = #{storeNm}
     </if>
-    <if test='clsFg != null and clsFg != "" and clsFg.toString() != "ALL"'>
+    <if test='clsFg != null and clsFg != "" and clsFg.toString() != ""'>
        AND tms.CLS_FG = #{clsFg}
     </if>
-    <if test='sysStatFg != null and sysStatFg != "" and sysStatFg.toString() != "ALL"'>
+    <if test='sysStatFg != null and sysStatFg != "" and sysStatFg.toString() != ""'>
        AND tms.SYS_STAT_FG = #{sysStatFg}
     </if>
-    <if test='vanCd != null and vanCd != "" and vanCd.toString() != "ALL"'>
+    <if test='vanCd != null and vanCd != "" and vanCd.toString() != ""'>
        AND tms.VAN_CD = #{vanCd}
     </if>
      ORDER BY HQ_OFFICE_CD, STORE_CD
