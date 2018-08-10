@@ -120,16 +120,18 @@ public class TemplateServiceImpl implements TemplateService {
 
     /** 미적용 본사/단독매장 저장 */
     @Override
-    public int saveUnUsedList(TemplateVO templateVO, SessionInfoVO sessionInfoVO) {
+    public int saveUnUsedList(TemplateVO[] templateVOs, SessionInfoVO sessionInfoVO) {
         int result = 0;
         String currentDt = currentDateTimeString();
 
-        templateVO.setRegDt(currentDt);
-        templateVO.setRegId(sessionInfoVO.getUserId());
-        templateVO.setModDt(currentDt);
-        templateVO.setModId(sessionInfoVO.getUserId());
+        for ( TemplateVO templateVO : templateVOs ) {
+            templateVO.setRegDt(currentDt);
+            templateVO.setRegId(sessionInfoVO.getUserId());
+            templateVO.setModDt(currentDt);
+            templateVO.setModId(sessionInfoVO.getUserId());
 
-        result = templateMapper.insertUnUsedList(templateVO);
+            result = templateMapper.insertUnUsedList(templateVO);
+        }
 
         if ( result >= 0 ) {
             return result;

@@ -204,7 +204,7 @@ $(document).ready(function () {
         );
 
     };
-    
+
     // 클릭드래그시 선택이벤트 발생
     listBox.hostElement.addEventListener("mousedown", function (e) {
         listBox.selectedValue = e.target.innerText;
@@ -359,75 +359,73 @@ $(document).ready(function () {
         thePreview.innerHTML = "<PRE><P>" + newValues.join("</P><P>") + "</P></PRE>";
     }
 
+    // 조회버튼 클릭
+    $("#btnSrchTemplate").click(function (e) {
+        searchPrintCodeList();
+    });
+
     // 미적용 본사/단독매장 버튼 클릭
     $("#btnApplyTemplate").click(function (e) {
+        if ( gridTemplate.itemsSource.items.length <= 0 ) {
+            s_alert.pop(messages['template.msg.fail']);
+            return;
+        }
         showApplyTemplateLayer();
     });
 
-    // 레이어 보이기
-    function showApplyTemplateLayer(){
-        $("#applyTemplateDim").show();
-        $("#applyTemplateLayer").show();
-        // 레이어 내용 생성
-        createApplyTemplateLayer();
-    }
-
     // Object 변수
-    var srchTemplateTypeCombo, srchSysStatFgCombo, srchClsFgCombo, gridApplyStoreTemplate, gridDataApplyStoreTemplate;
+    var srchTemplateTypeCombo, srchSysStatFgCombo, srchClsFgCombo = "";
+    var gridLayer, gridLayerData = "";
 
-    // 레이어 내용 생성
-    function createApplyTemplateLayer() {
+    // 레이어 템플릿 선택 콤보박스
+    srchTemplateTypeCombo = new wijmo.input.ComboBox("#srchTemplateTypeCombo",
+        {
+            displayMemberPath: "templtNm",
+            selectedValuePath: "prtClassCd",
+            isAnimated: true
+        });
 
-        // 템플릿 선택 콤보박스
-        srchTemplateTypeCombo = new wijmo.input.ComboBox("#srchTemplateTypeCombo",
+    // 레이어 상태 선택 콤보박스
+    srchSysStatFgCombo = wcombo.genCommonBoxFun("#srchSysStatFgCombo", sysStatFgComboData, function (e) {
+        srchLayerGrid();
+    });
+
+    // 레이어 용도 선택 콤보박스
+    srchClsFgCombo = wcombo.genCommonBoxFun("#srchClsFgCombo", clsFgComboData, function (e) {
+        srchLayerGrid();
+    });
+
+    // 레이어 그리드 Data
+    gridLayerData =
+        [
             {
-                displayMemberPath: "templtNm",
-                selectedValuePath: "templtCd",
-                isAnimated: true,
-                itemsSource: JSON.parse(JSON.stringify(gridTemplate.itemsSource._src)),
-                selectedIndexChanged: function (s, e) {
-                    // searchTemplateTypeList();
-                }
-            });
+                binding: "gChk",
+                header: messages[ "template.layer.chk" ],
+                dataType: wijmo.DataType.Boolean,
+                width: 45
+            },
+            { binding: "storeCd", header: messages[ "template.layer.storeCd" ], width: "*", isReadOnly:true },
+            { binding: "storeNm", header: messages[ "template.layer.storeNm" ], width: "*", isReadOnly:true },
+            {
+                binding: "sysStatFgNm",
+                header: messages[ "template.layer.sysStatFg" ],
+                width: "*",
+                isReadOnly:true
+            },
+            { binding: "clsFgNm", header: messages[ "template.layer.clsFg" ], width: "*", isReadOnly:true }
+        ];
 
-        // 상태 선택 콤보박스
-        srchSysStatFgCombo = wcombo.genCommonBoxFun("#srchSysStatFgCombo", sysStatFgComboData, function (e) {
+    gridLayer = wgrid.genGrid("#gridLayer", gridLayerData);
+    gridLayer.isReadOnly = false;
+    gridLayer.headersVisibility = 'Column';
 
-        });
-
-        // 용도 선택 콤보박스
-        srchClsFgCombo = wcombo.genCommonBoxFun("#srchClsFgCombo", clsFgComboData, function (e) {
-
-        });
-
-        // 레이어 그리드 Data
-        gridDataApplyStoreTemplate =
-            [
-                {
-                    binding: "gChk",
-                    header: messages[ "template.chk" ],
-                    dataType: wijmo.DataType.Boolean,
-                    width: 45
-                },
-                { binding: "storeCd", header: messages[ "template.layer.storeCd" ], width: "*" },
-                { binding: "storeNm", header: messages[ "template.layer.storeNm" ], width: "*" },
-                {
-                    binding: "sysStatFgNm",
-                    header: messages[ "template.layer.sysStatFg" ],
-                    width: "*"
-                },
-                { binding: "clsFgNm", header: messages[ "template.layer.clsFg" ], width: "*" }
-            ];
-        gridApplyStoreTemplate = wgrid.genGrid("#gridApplyStoreTemplate", gridDataApplyStoreTemplate);
-
-    }
-
+    // 레이어 그리드 조회
     function srchLayerGrid() {
 
         var param = {};
-        param.templtCd = srchTemplateTypeCombo.selectedItem["value"];
-        param.sysStatFg = srchSysStatFgCombo.selectedItem["value"];
-        param.clsFg = srchClsFgCombo.selectedItem["value"];
+        param.prtClassCd = srchTemplateTypeCombo.selectedValue;
+        param.sysStatFg = srchSysStatFgCombo.selectedValue;
+        param.clsFg = srchClsFgCombo.selectedValue;
 
         $.postJSON("/sys/bill/template/unUsed/list.sb", param,
             function (result) {
@@ -436,16 +434,18 @@ $(document).ready(function () {
                     return;
                 }
 
-                list = result.data.list;
-                gridApplyStoreTemplate.itemsSource = new wijmo.collections.CollectionView(list);
-                gridApplyStoreTemplate.itemsSource.trackChanges = true;
+                var list = result.data.list;
+                gridLayer.itemsSource = new wijmo.collections.CollectionView(list);
+                gridLayer.itemsSource.trackChanges = true;
+                gridLayer.autoSizeMode = 1;
+                gridLayer.autoSizeRows();
 
                 // 버튼 Show
                 $("#btnApplyStore").show();
 
                 if (list.length === undefined || list.length == 0) {
                     // 그리드 초기화
-                    gridApplyStoreTemplate.itemsSource = [];
+                    gridLayer.itemsSource = [];
                 }
 
             },
@@ -453,6 +453,51 @@ $(document).ready(function () {
                 s_alert.pop("Ajax Fail");
             }
         );
+    }
+
+    // 레이어 조회버튼 클릭
+    $("#btnSrchApplyStore").click(function (e) {
+        srchLayerGrid();
+    });
+
+    // 레이어 저장버튼 클릭
+    $("#btnSaveApplyStore").click(function (e) {
+
+        var paramArr = new Array();
+        for ( var i = 0; i < gridLayer.collectionView.itemsEdited.length; i++ ) {
+            gridLayer.collectionView.itemsEdited[i].status = "U";
+            gridLayer.collectionView.itemsEdited[i].prtClassCd = srchTemplateTypeCombo.selectedValue;
+            gridLayer.collectionView.itemsEdited[i].prtForm = srchTemplateTypeCombo.selectedItem.prtForm;
+            paramArr.push(gridLayer.collectionView.itemsEdited[i]);
+        }
+
+        if ( paramArr.length <= 0 ) {
+            s_alert.pop(messages["template.msg.select"]);
+            return;
+        }
+
+        $.postJSONArray("/sys/bill/template/unUsed/save.sb", paramArr, function(result) {
+                s_alert.pop(messages[ "cmm.saveSucc" ]);
+                gridLayer.collectionView.clearChanges();
+                // 그리드 재조회
+                srchLayerGrid();
+            },
+            function(result) {
+                s_alert.pop(result.message);
+            }
+        );
+
+    });
+
+    // 레이어 보이기
+    function showApplyTemplateLayer(){
+        $("#applyTemplateDim").show();
+        $("#applyTemplateLayer").show();
+
+        srchTemplateTypeCombo.itemsSource = JSON.parse(JSON.stringify(gridTemplate.itemsSource._src));
+        gridLayer.autoSizeMode = 2;
+        gridLayer.autoSizeRow(0, true);
+
     }
 
     // 레이어 닫기 버튼 클릭
@@ -464,11 +509,8 @@ $(document).ready(function () {
     function closeApplyTemplateLayer(){
         $("#applyTemplateLayer").hide();
         $("#applyTemplateDim").hide();
-    }
 
-    // 페이지 로드 이후 자동 로딩
-    setTimeout(function() {
-        srchPrtTypeCombo.onSelectedIndexChanged(0);
-    }, 50);
+        gridLayer.itemsSource = [];
+    }
 
 });

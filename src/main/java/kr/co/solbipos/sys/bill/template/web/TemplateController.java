@@ -196,7 +196,7 @@ public class TemplateController {
      *
      * @param request
      * @param response
-     * @param templateVO
+     * @param templateVOs
      * @param model
      * @return Result
      * @author 노현수
@@ -204,11 +204,11 @@ public class TemplateController {
      */
     @RequestMapping(value = "/unUsed/save.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result saveUnUsedList(@RequestBody TemplateVO templateVO, HttpServletRequest request,
+    public Result saveUnUsedList(@RequestBody TemplateVO[] templateVOs, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        int result = templateService.saveUnUsedList(templateVO, sessionInfoVO);
+        int result = templateService.saveUnUsedList(templateVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
 

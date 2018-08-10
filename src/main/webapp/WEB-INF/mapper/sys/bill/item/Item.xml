@@ -10,21 +10,23 @@
     1       노현수     2018.06.15      최초작성
 -->
 <mapper namespace="kr.co.solbipos.sys.bill.item.service.impl.ItemMapper">
-    
+
+    <resultMap id="itemListMap" type="DefaultMap">
+        <result column="SAMPL_YN" property="samplYn" typeHandler="CustomBooleanTypeHandler"/>
+    </resultMap>
+
     <!-- 출력코드 목록 조회 -->
     <!--
         TABLE    : TB_CM_PRINT_CODE
         PARAM    : itemVO
         COMMENTS : 출력코드 목록을 조회한다.
     -->
-    <select id="getItemList" parameterType="itemVO" resultType="defaultMap">
+    <select id="getItemList" parameterType="itemVO" resultMap="itemListMap">
         /* USE : ItemMapper.getItemList */
         SELECT
             tcpc.PRT_CD,
             tcpc.PRT_NM,
-            CASE tcpc.SAMPL_YN 
-                WHEN 'Y' THEN '1'
-                ELSE '0' END AS SAMPL_YN,
+            tcpc.SAMPL_YN,
             tcpc.CONTENT,
             tcpc.REG_DT,
             tcpc.REG_ID,
@@ -57,12 +59,7 @@
             TB_CM_PRINT_CODE
         SET
             PRT_NM = #{prtNm},
-            <if test="samplYn == 'true'">
-            SAMPL_YN = 'Y',
-            </if>
-            <if test="samplYn == 'false'">
-            SAMPL_YN = 'N',
-            </if>
+            SAMPL_YN = #{samplYn},
         <![CDATA[
             CONTENT = #{content},
         ]]>
@@ -97,12 +94,7 @@
             #{prtCd},
         ]]>
             #{prtNm},
-            <if test="samplYn == 'true'">
-            'Y',
-            </if>
-            <if test="samplYn == 'false'">
-            'N',
-            </if>
+            #{samplYn},
         <![CDATA[
             #{content},
         ]]>

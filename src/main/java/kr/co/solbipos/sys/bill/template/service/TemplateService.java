@@ -41,6 +41,6 @@ public interface TemplateService {
     List<DefaultMap<String>> getUnUsedList(TemplateVO templateVO);
 
     /** 미적용 본사/단독매장 저장 */
-    int saveUnUsedList(TemplateVO templateVO, SessionInfoVO sessionInfoVO);
+    int saveUnUsedList(TemplateVO[] templateVOs, SessionInfoVO sessionInfoVO);
 
 }

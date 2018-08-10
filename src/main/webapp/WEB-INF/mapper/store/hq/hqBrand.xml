@@ -49,7 +49,7 @@
     <if test='hqBrandNm != null and hqBrandNm != ""'>
        AND thb.HQ_BRAND_NM LIKE '%'||#{hqBrandNm}||'%'
     </if>
-    <if test='useYn != null and useYn.toString() != "ALL"'>
+    <if test='useYn != null and useYn.toString() != ""'>
        AND thb.USE_YN = #{useYn}
     </if>
      ORDER BY thb.REG_DT, thb.HQ_OFFICE_CD, thb.HQ_BRAND_CD ASC

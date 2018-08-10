@@ -36,13 +36,19 @@ public class TemplateVO extends CmmVO {
     /** 출력물코드 예제 */
     private String content;
 
+    /** 본사/단독매장 구분 */
+    private String storeFg;
     /** 매장코드 */
     private String storeCd;
     /** 매장명 */
     private String storeNm;
     /** 매장 상태 */
+    private String sysStatFg;
+    /** 매장 상태명 */
     private String sysStatFgNm;
     /** 매장 용도 */
+    private String clsFg;
+    /** 매장 용도명 */
     private String clsFgNm;
 
     /**
@@ -144,6 +150,20 @@ public class TemplateVO extends CmmVO {
     }
 
     /**
+     * @return the storeFg
+     */
+    public String getStoreFg() {
+        return storeFg;
+    }
+
+    /**
+     * @param storeFg the storeFg to set
+     */
+    public void setStoreFg(String storeFg) {
+        this.storeFg = storeFg;
+    }
+
+    /**
      * @return the storeCd
      */
     public String getStoreCd() {
@@ -172,6 +192,20 @@ public class TemplateVO extends CmmVO {
     }
 
     /**
+     * @return the sysStatFg
+     */
+    public String getSysStatFg() {
+        return sysStatFg;
+    }
+
+    /**
+     * @param sysStatFg the sysStatFg to set
+     */
+    public void setSysStatFg(String sysStatFg) {
+        this.sysStatFg = sysStatFg;
+    }
+
+    /**
      * @return the sysStatFgNm
      */
     public String getSysStatFgNm() {
@@ -181,8 +215,22 @@ public class TemplateVO extends CmmVO {
     /**
      * @param sysStatFgNm the sysStatFgNm to set
      */
-    public void setSysStatFg(String sysStatFgNm) {
+    public void setSysStatFgNm(String sysStatFgNm) {
         this.sysStatFgNm = sysStatFgNm;
+    }
+
+    /**
+     * @return the clsFg
+     */
+    public String getClsFg() {
+        return clsFg;
+    }
+
+    /**
+     * @param clsFg the clsFg to set
+     */
+    public void setClsFg(String clsFg) {
+        this.clsFg = clsFg;
     }
 
     /**
@@ -198,5 +246,4 @@ public class TemplateVO extends CmmVO {
     public void setClsFgNm(String clsFgNm) {
         this.clsFgNm = clsFgNm;
     }
-
 }

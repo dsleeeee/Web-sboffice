@@ -180,25 +180,123 @@
 
     <!-- 미적용 본사/단독매장 조회 -->
     <!--
-        TABLE    : TB_CM_PRINT_TEMPL
+        TABLE    : TB_HQ_OFFICE, TB_HQ_PRINT, TB_MS_STORE, TB_MS_PRINT
         PARAM    : templateVO
-        COMMENTS : 출력물코드 목록을 조회한다.
+        COMMENTS : 미적용 본사/단독매장을 조회한다.
     -->
     <select id="getUnUsedList" parameterType="templateVO" resultType="defaultMap">
         /* USE : TemplateMapper.getUnUsedList */
-
-
-
         SELECT
-            tcpt.PRT_CLASS_CD,
-            tcpt.TEMPLT_CD,
-            tcpt.TEMPLT_NM,
-            tcpt.PRT_FORM
+            unused.STORE_FG,
+            unused.STORE_CD,
+            unused.STORE_NM,
+            tcm_sys_stat_fg.NMCODE_NM AS sys_stat_fg_nm,
+            tcm_cls_stat_fg.NMCODE_NM AS cls_fg_nm
         FROM
-            TB_CM_PRINT_TEMPL tcpt
+            (
+                SELECT
+                    'HQ' AS STORE_FG,
+                    tho.HQ_OFFICE_CD AS STORE_CD,
+                    tho.HQ_OFFICE_NM AS STORE_NM,
+                    tho.SYS_STAT_FG,
+                    tho.CLS_FG,
+                    thp.PRT_CLASS_CD
+                FROM
+                    TB_HQ_OFFICE tho
+                LEFT OUTER JOIN TB_HQ_PRINT thp ON
+                    tho.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                    AND thp.PRT_CLASS_CD = #{prtClassCd}
+                UNION ALL
+                SELECT
+                    'MS' AS STORE_FG,
+                    tms.STORE_CD,
+                    tms.STORE_NM,
+                    tms.SYS_STAT_FG,
+                    tms.CLS_FG,
+                    tmp.PRT_CLASS_CD
+                FROM
+                    TB_MS_STORE tms
+                LEFT OUTER JOIN TB_MS_PRINT tmp ON
+                    tms.STORE_CD = tmp.STORE_CD
+                    AND tmp.PRT_CLASS_CD = #{prtClassCd}
+                WHERE
+                    /* 단독매장만 조회 */
+                    tms.HQ_OFFICE_CD = '00000'
+            ) unused
+        LEFT OUTER JOIN TB_CM_NMCODE tcm_sys_stat_fg ON
+            unused.SYS_STAT_FG = tcm_sys_stat_fg.NMCODE_CD
+            AND tcm_sys_stat_fg.NMCODE_GRP_CD = '009'
+        LEFT OUTER JOIN TB_CM_NMCODE tcm_cls_stat_fg ON
+            unused.CLS_FG = tcm_cls_stat_fg.NMCODE_CD
+            AND tcm_cls_stat_fg.NMCODE_GRP_CD = '003'
         WHERE
-            tcpt.PRT_CLASS_CD = #{prtClassCd}
-        ORDER BY tcpt.TEMPLT_CD
+            unused.PRT_CLASS_CD IS NULL
+        <if test='sysStatFg != null and sysStatFg != ""'>
+            AND unused.SYS_STAT_FG = #{sysStatFg}
+        </if>
+        <if test='clsFg != null and clsFg != ""'>
+            AND unused.CLS_FG = #{clsFg}
+        </if>
+        ORDER BY
+            unused.STORE_FG,
+            unused.SYS_STAT_FG,
+            unused.STORE_CD
     </select>
+
+    <!-- 미적용 본사/단독매장 저장 -->
+    <!--
+        TABLE    : TB_HQ_PRINT, TB_MS_PRINT
+        PARAM    : templateVO
+        COMMENTS : 미적용 본사/단독매장을 저장한다.
+    -->
+    <insert id="insertUnUsedList" parameterType="templateVO">
+        /* USE : TemplateMapper.insertUnUsedList */
+        <choose>
+            <when test="storeFg == 'HQ'">
+                INSERT INTO TB_HQ_PRINT
+                (
+                    HQ_OFFICE_CD,
+                    PRT_CLASS_CD,
+                    PRT_FORM,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                ) VALUES (
+                    #{storeCd},
+                    #{prtClassCd},
+                    #{prtForm, jdbcType=VARCHAR},
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
+            </when>
+            <otherwise>
+                INSERT INTO TB_MS_PRINT
+                (
+                    STORE_CD,
+                    PRT_CLASS_CD,
+                    PRT_FORM,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                ) VALUES (
+                    #{storeCd},
+                    #{prtClassCd},
+                    #{prtForm, jdbcType=VARCHAR},
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
+            </otherwise>
+        </choose>
+
+
+    </insert>
+
+
 
 </mapper>

@@ -26,7 +26,13 @@
           <div class="sb-select fl w200 mr10">
             <div id="srchPrtTypeCombo"></div>
           </div>
-          <a href="#" id="btnApplyTemplate" class="btn_grayS"><s:message code="template.btnNm" /></a>
+          <button class="btn_blue" id="btnSrchTemplate">
+            <s:message code="template.srchBtnNm" />
+          </button>
+          <button class="btn_blk" id="btnApplyTemplate">
+            <s:message code="template.layerBtnNm" />
+          </button>
+          <%--<a href="#" id="btnApplyTemplate" class="btn_grayS"><s:message code="template.layerBtnNm" /></a>--%>
         </td>
         <td>
         </td>
@@ -143,14 +149,22 @@
         </div>
 
         <%-- 미적용 본사/단독매장 --%>
-        <div id="storeInfoArea" class="con sc2" style="height:500px;"><!--높이는 style로 조정-->
+        <div id="storeInfoArea" class="mt10" style="height:450px;"><!--높이는 style로 조정-->
           <div class="tr">
-            <%-- 저장 --%>
-            <a href="javascript:;" id="btnApplyStore" class="btn_grayS2" style="display: none;"><s:message code="template.layer.applyBtn" /></a>
+            <%-- 조회 --%>
+            <button class="btn_blue" id="btnSrchApplyStore">
+              <s:message code="template.layer.srchBtn" />
+            </button>
           </div>
           <!--위즈모 테이블-->
-          <div>
-            <div id="gridApplyStoreTemplate" class="mt10 mb20" style="height:350px;"></div>
+          <div class="wj-TblWrapBr mt10 pd10">
+            <div class="updownSet oh mb10">
+              <%-- 저장 --%>
+              <button class="btn_skyblue" id="btnSaveApplyStore">
+                <s:message code="cmm.save" />
+              </button>
+            </div>
+            <div id="gridLayer" style="height:350px;"></div>
           </div>
           <!--//위즈모 테이블-->
         </div>
