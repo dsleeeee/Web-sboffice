@@ -61,7 +61,7 @@
   <entry key="email.port">31901</entry>
   
   <!-- 파일업로드 관련 -->
-  <entry key="file.upload.dir">resources/upload/</entry>
+  <entry key="file.upload.dir">/FileRoot/</entry>
   
   <!-- 공통 변수 저장소 명칭 관련 -->
   <entry key ="baseEnv.prop.env">env</entry>
