@@ -437,6 +437,7 @@ $(document).ready(function () {
                 var list = result.data.list;
                 gridLayer.itemsSource = new wijmo.collections.CollectionView(list);
                 gridLayer.itemsSource.trackChanges = true;
+                // 레이어 팝업시 그리드 사이즈 뭉개짐 해결
                 gridLayer.autoSizeMode = 1;
                 gridLayer.autoSizeRows();
 
@@ -495,6 +496,7 @@ $(document).ready(function () {
         $("#applyTemplateLayer").show();
 
         srchTemplateTypeCombo.itemsSource = JSON.parse(JSON.stringify(gridTemplate.itemsSource._src));
+        // 레이어 팝업시 그리드 사이즈 뭉개짐 해결
         gridLayer.autoSizeMode = 2;
         gridLayer.autoSizeRow(0, true);
 
@@ -509,7 +511,7 @@ $(document).ready(function () {
     function closeApplyTemplateLayer(){
         $("#applyTemplateLayer").hide();
         $("#applyTemplateDim").hide();
-
+        // 레이어 그리드 내용 삭제
         gridLayer.itemsSource = [];
     }
 
