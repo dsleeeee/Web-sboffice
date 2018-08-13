@@ -453,9 +453,6 @@
       formData.append("useYn", useYnCombo.selectedValue);
 
       $.postJSONFile(sendUrl, formData, function(result) {
-
-            s_alert.pop(result.status);
-
        if(result.status === "FAIL") {
           s_alert.pop(result.message);
           return;
