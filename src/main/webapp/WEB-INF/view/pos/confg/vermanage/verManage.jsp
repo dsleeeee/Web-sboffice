@@ -189,7 +189,7 @@ $(document).on("click", ".page1", function() {
 
 <%-- 포스버전관리 목록 조회 --%>
 function search(index) {
-  // validation 추가
+  //TODO validation 추가
 
   var param = {};
   param.verSerNo  = verSerNo.text;

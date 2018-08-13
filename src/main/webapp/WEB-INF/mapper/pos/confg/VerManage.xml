@@ -174,9 +174,7 @@
   -->
   <update id="verDelete" parameterType="verInfoVO" >
     /* USE : VerManageMapper.deleteVersion */
-    UPDATE
-        DEL_YN = 'Y'
-      FROM TB_CM_POS_VERSN
+    DELETE TB_CM_POS_VERSN
      WHERE VER_SER_NO = #{verSerNo}
   </update>
 
