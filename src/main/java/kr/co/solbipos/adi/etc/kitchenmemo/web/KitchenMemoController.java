@@ -39,7 +39,7 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 * @Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
 @Controller
-@RequestMapping(value = "/adi/etc/kitchenmemo/kitchenmemo/")
+@RequestMapping(value = "/adi/etc/kitchenMemo/kitchenMemo/")
 public class KitchenMemoController {
 
     @Autowired

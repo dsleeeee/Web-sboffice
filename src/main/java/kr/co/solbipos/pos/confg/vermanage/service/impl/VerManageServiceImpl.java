@@ -187,17 +187,14 @@ public class VerManageServiceImpl implements VerManageService {
         while(files.hasNext()){
 
             String uploadFile = files.next();
+            newFileName = String.valueOf(System.currentTimeMillis());
 
             MultipartFile mFile = multi.getFile(uploadFile);
             String orgFileName = mFile.getOriginalFilename();
             String fileExt = FilenameUtils.getExtension(orgFileName);
             if(mFile.getOriginalFilename().lastIndexOf('.') > 1) {
 
-                System.out.println(mFile.getOriginalFilename());
-                System.out.println(mFile.getOriginalFilename().substring(0, mFile.getOriginalFilename().lastIndexOf('.')));
-
                 orgFileName = mFile.getOriginalFilename().substring(0, mFile.getOriginalFilename().lastIndexOf('.'));
-                System.out.println("5");
                 // 파일경로
                 verInfo.setFileDir(path);
                 // 파일명 (물리적으로 저장되는 파일명)
@@ -216,7 +213,6 @@ public class VerManageServiceImpl implements VerManageService {
             try {
                 mFile.transferTo(new File(path+newFileName));
             } catch (Exception e) {
-                System.out.println(e.getMessage());
                 e.printStackTrace();
             }
         }
