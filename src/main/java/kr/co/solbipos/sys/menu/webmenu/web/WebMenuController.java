@@ -31,7 +31,7 @@ import kr.co.solbipos.sys.menu.webmenu.service.WebMenuService;
  * @author 정용길
  */
 @Controller
-@RequestMapping(value = "sys/menu/webmenu/webmenu/")
+@RequestMapping(value = "sys/menu/webMenu/webMenu/")
 public class WebMenuController {
 
     @Autowired

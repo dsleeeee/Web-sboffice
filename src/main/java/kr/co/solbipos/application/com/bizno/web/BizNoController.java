@@ -39,7 +39,7 @@ public class BizNoController {
     /**
      * 사업자번호 유효성검사
      *
-     * @param menuType
+     * @param bizNoVO
      * @param request
      * @param response
      * @return
