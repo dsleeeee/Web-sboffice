@@ -875,8 +875,8 @@ function saveStore(sendUrl){
       return;
     }
     s_alert.pop("<s:message code='cmm.saveSucc'/>");
-    //showStoreDetail();
-    saveOtherInfo();
+    showStoreDetail();
+    //saveOtherInfo();
   }
   ,function(result){
     console.log(result);
