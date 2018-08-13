@@ -173,7 +173,7 @@ public class VerManageServiceImpl implements VerManageService {
 //        String root = multi.getSession().getServletContext().getRealPath("/");
 //        String path = root+"resources/upload/";
         // 파일서버 대응 경로 지정
-        String path = "D://"+ BaseEnv.FILE_UPLOAD_DIR + "posVer/";
+        String path = BaseEnv.FILE_UPLOAD_DIR + "posVer/";
         // 업로드 되는 파일명
         String newFileName = "";
 
@@ -216,6 +216,7 @@ public class VerManageServiceImpl implements VerManageService {
             try {
                 mFile.transferTo(new File(path+newFileName));
             } catch (Exception e) {
+                System.out.println(e.getMessage());
                 e.printStackTrace();
             }
         }
