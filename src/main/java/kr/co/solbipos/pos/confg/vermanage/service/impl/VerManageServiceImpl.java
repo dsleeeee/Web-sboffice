@@ -198,7 +198,7 @@ public class VerManageServiceImpl implements VerManageService {
                 // 파일경로
                 verInfo.setFileDir(path);
                 // 파일명 (물리적으로 저장되는 파일명)
-                verInfo.setFileNm(String.valueOf(System.currentTimeMillis()));
+                verInfo.setFileNm(newFileName);
                 // 파일확장자
                 verInfo.setFileExt(fileExt);
                 // 파일사이즈
