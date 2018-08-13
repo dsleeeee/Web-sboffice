@@ -25,10 +25,10 @@
 
 <!-- <script type="text/javascript" src="/resource/vender/spin/spin.js" charset="utf-8"></script> -->
 
-<script type="text/javascript" src="/resource/solbipos/js/common/common.js" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/solbipos/js/common/grid.comm.js" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/solbipos/js/common/gen.comm.js" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/solbipos/js/common/alert.js" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/solbipos/js/common/paging.js" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/common/common.js?ver=20180801" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/common/grid.comm.js?ver=20180801" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/common/gen.comm.js?ver=20180801" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/common/alert.js?ver=20180801" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/common/paging.js?ver=20180801" charset="utf-8"></script>
 
-<script type="text/javascript" src="/resource/solbipos/js/variables/lang.js" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/variables/lang.js?ver=20180801" charset="utf-8"></script>
