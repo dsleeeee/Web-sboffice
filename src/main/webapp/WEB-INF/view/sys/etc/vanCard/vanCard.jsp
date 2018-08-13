@@ -437,7 +437,7 @@
           
           if ( list.length === undefined || list.length == 0 ) {
             <%-- 그리드 초기화 --%>
-            gridMapng.itemsSource = [];
+            gridMapng.itemsSource = new wijmo.collections.CollectionView([]);
             s_alert.pop(result.message);
             return;
           }

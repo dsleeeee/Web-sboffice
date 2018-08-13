@@ -191,7 +191,7 @@
           var param = {};
           param.authGrpCd = grid.cells.getCellData(ht.row, ht.col, true);
           if(param.authGrpCd != '') {
-            tree.itemsSource = [];
+            tree.itemsSource = new wijmo.collections.CollectionView([]);
             $.postJSON("${baseUrl}" + "listResrce.sb", param, function(result) {
               tree.itemsSource = result.data.list;
               <%-- 트리에서 저장 예외관리 시 키로 사용--%>

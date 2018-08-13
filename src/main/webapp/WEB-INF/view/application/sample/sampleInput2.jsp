@@ -151,7 +151,7 @@ onload = function(){
     $("#storelayer").hide();
     $("#searchStore").val(""); 
     if(storeTree) {
-      storeTree.itemsSource = [];
+      storeTree.itemsSource = new wijmo.collections.CollectionView([]);
     }
   }
   
