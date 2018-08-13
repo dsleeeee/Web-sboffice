@@ -10,7 +10,10 @@
     1       노현수     2018.06.15      최초작성
 -->
 <mapper namespace="kr.co.solbipos.sys.bill.kind.service.impl.KindMapper">
-    
+
+
+
+
     <!-- 출력물종류 목록 조회 -->
     <!--
         TABLE    : TB_CM_PRINT
@@ -22,12 +25,8 @@
         SELECT 
             tcp.PRT_CLASS_CD,
             tcp.PRT_CLASS_NM,
-            CASE tcp.GENERAL 
-                WHEN 'Y' THEN '1'
-                ELSE '0' END AS GENERAL,
-            CASE tcp.FOOD 
-                WHEN 'Y' THEN '1'
-                ELSE '0' END AS FOOD
+            tcp.GENERAL,
+            tcp.FOOD
         FROM TB_CM_PRINT tcp
         ORDER BY tcp.PRT_CLASS_CD
     </select>
