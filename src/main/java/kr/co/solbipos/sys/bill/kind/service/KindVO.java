@@ -26,9 +26,9 @@ public class KindVO extends CmmVO {
     /** 출력물분류명 */
     private String prtClassNm;
     /** 일반사용여부 */
-    private String general;
+    private Boolean generalYn;
     /** 외식사용여부 */
-    private String food;
+    private Boolean foodYn;
     /** 출력물코드 */
     private String prtCd;
     /** 표기순번 */
@@ -62,28 +62,28 @@ public class KindVO extends CmmVO {
         this.prtClassNm = prtClassNm;
     }
     /**
-     * @return the general
+     * @return the generalYn
      */
-    public String getGeneral() {
-        return general;
+    public Boolean getGeneralYn() {
+        return generalYn;
     }
     /**
-     * @param general the general to set
+     * @param generalYn the generalYn to set
      */
-    public void setGeneral(String general) {
-        this.general = general;
+    public void setGeneralYn(Boolean generalYn) {
+        this.generalYn = generalYn;
     }
     /**
-     * @return the food
+     * @return the foodYn
      */
-    public String getFood() {
-        return food;
+    public Boolean getFoodYn() {
+        return foodYn;
     }
     /**
-     * @param food the food to set
+     * @param foodYn the food to set
      */
-    public void setFood(String food) {
-        this.food = food;
+    public void setFoodYn(Boolean foodYn) {
+        this.foodYn = foodYn;
     }
     /**
      * @return the prtCd
