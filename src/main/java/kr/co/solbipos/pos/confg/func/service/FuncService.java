@@ -1,8 +1,9 @@
 package kr.co.solbipos.pos.confg.func.service;
 
-import java.util.List;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+
+import java.util.List;
 
 /**
  * @Class Name : FuncService.java
@@ -16,7 +17,6 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
  * @author 솔비포스 차세대개발실 김지은
  * @since 2018. 05.01
  * @version 1.0
- * @see
  *
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
@@ -33,7 +33,7 @@ public interface FuncService {
     /**
      * 기능구분상세 저장
      *
-     * @param funcVO[]
+     * @param funcVOs
      * @param sessionInfoVO
      * @return
      */

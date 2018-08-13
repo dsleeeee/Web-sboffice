@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    Coupon.xml
+    쿠폰등록
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김지은     2018.08.10     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.base.pay.coupon.service.impl.CouponMapper">
+
+  <resultMap id="classListMap" type="DefaultMap">
+    <result column="USE_YN" property="useYn" typeHandler="CustomBooleanTypeHandler"/>
+    <result column="SER_NO_YN" property="serNoYn" typeHandler="CustomBooleanTypeHandler"/>
+  </resultMap>
+
+  <resultMap id="couponListMap" type="DefaultMap">
+    <result column="USE_YN" property="useYn" typeHandler="CustomBooleanTypeHandler"/>
+  </resultMap>
+
+
+  <!-- 본사 쿠폰 분류 조회 -->
+  <!--
+      TABLE    : TB_HQ_PAY_METHOD_CLASS
+      COMMENTS : 본사의 쿠폰 분류를 조회한다.
+  -->
+  <select id="getHqCouponClassList" parameterType="DefaultMap" resultMap="classListMap">
+    /* USE : CouponMapper.getHqCouponClassList */
+    SELECT HQ_OFFICE_CD,
+           PAY_CLASS_CD,
+           PAY_TYPE_FG,
+           PAY_CLASS_NM,
+           SER_NO_YN,
+           USE_YN,
+           REG_ID
+      FROM TB_HQ_PAY_METHOD_CLASS
+     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+  </select>
+
+  <!-- 매장 쿠폰 분류 조회 -->
+  <!--
+      TABLE    : TB_MS_PAY_METHOD_CLASS
+      COMMENTS : 매장의 쿠폰 분류를 조회한다.
+  -->
+  <select id="getStoreCouponClassList" parameterType="DefaultMap" resultMap="classListMap">
+    /* USE : CouponMapper.getStoreCouponClassList */
+    SELECT STORE_CD,
+           PAY_TYPE_FG,
+           PAY_CLASS_CD,
+           PAY_CLASS_NM,
+           SER_NO_YN,
+           USE_YN,
+           REG_ID
+      FROM TB_MS_PAY_METHOD_CLASS
+     WHERE STORE_CD = #{storeCd}
+  </select>
+
+  <!-- 본사 쿠폰 분류 등록 -->
+  <!--
+      TABLE    : TB_HQ_PAY_METHOD_CLASS
+      COMMENTS : 분류를 등록한다.
+  -->
+  <insert id="insertHqCouponClass" parameterType="DefaultMap">
+    /* USE : CouponMapper.insertHqCouponClass */
+    INSERT INTO TB_HQ_PAY_METHOD_CLASS
+    (
+      HQ_OFFICE_CD,
+      PAY_CLASS_CD,
+      PAY_TYPE_FG,
+      PAY_CLASS_NM,
+      SER_NO_YN,
+      USE_YN,
+      REG_DT,
+      REG_ID,
+      MOD_DT,
+      MOD_ID
+    )
+    VALUES
+    (
+      #{hqOfficeCd},
+      #{payClassCd},
+      #{payTypeFg},
+      #{payClassNm},
+      #{serNoYn},
+      #{useYn},
+      #{regDt},
+      #{regId},
+      #{modDt},
+      #{modId}
+    )
+  </insert>
+
+  <!-- 본사 쿠폰 분류 수정 -->
+  <!--
+      TABLE    : TB_HQ_PAY_METHOD_CLASS
+      COMMENTS : 분류를 수정한다.
+  -->
+  <update id="updateHqCouponClass" parameterType="DefaultMap">
+    /* USE : CouponMapper.updateHqCouponClass */
+    UPDATE TB_HQ_PAY_METHOD_CLASS
+       SET PAY_CLASS_NM = #{payClassNm},
+           SER_NO_YN = #{serNoYn},
+           USE_YN = #{useYn},
+           MOD_DT = #{modDt},
+           MOD_ID = #{modId}
+     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+       AND PAY_CLASS_CD = #{payClassCd}
+       AND PAY_TYPE_FG =  #{payTypeFg}
+  </update>
+
+  <!-- 본사 쿠폰 분류 삭제 -->
+  <!--
+      TABLE    : TB_HQ_PAY_METHOD_CLASS
+      COMMENTS : 분류를 삭제한다.
+  -->
+  <delete id="deleteHqCouponClass" parameterType="DefaultMap">
+    /* USE : CouponMapper.deleteHqCouponClass */
+    DELETE TB_HQ_PAY_METHOD_CLASS
+     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+       AND PAY_CLASS_CD = #{payClassCd}
+       AND PAY_TYPE_FG =  #{payTypeFg}
+  </delete>
+
+  <!-- 매장 쿠폰 분류 등록 -->
+  <!--
+      TABLE    : TB_HQ_PAY_METHOD_CLASS
+      COMMENTS : 분류를 등록한다.
+  -->
+  <insert id="insertStoreCouponClass" parameterType="DefaultMap">
+    /* USE : CouponMapper.insertStoreCouponClass */
+    INSERT INTO TB_MS_PAY_METHOD_CLASS
+    (
+      STORE_CD,
+      PAY_CLASS_CD,
+      PAY_TYPE_FG,
+      PAY_CLASS_NM,
+      SER_NO_YN,
+      USE_YN,
+      REG_DT,
+      REG_ID,
+      MOD_DT,
+      MOD_ID
+    )
+    VALUES
+    (
+      #{storeCd},
+      #{payClassCd},
+      #{payTypeFg},
+      #{payClassNm},
+      #{serNoYn},
+      #{useYn},
+      #{regDt},
+      #{regId},
+      #{modDt},
+      #{modId}
+    )
+  </insert>
+
+  <!-- 매장 쿠폰 분류 수정 -->
+  <!--
+      TABLE    : TB_HQ_PAY_METHOD_CLASS
+      COMMENTS : 분류를 수정한다.
+  -->
+  <update id="updateStoreCouponClass" parameterType="DefaultMap">
+    /* USE : CouponMapper.updateStoreCouponClass */
+    UPDATE TB_MS_PAY_METHOD_CLASS
+       SET PAY_CLASS_NM = #{payClassNm},
+           SER_NO_YN = #{serNoYn},
+           USE_YN = #{useYn},
+           MOD_DT = #{modDt},
+           MOD_ID = #{modId}
+     WHERE STORE_CD = #{storeCd}
+       AND PAY_CLASS_CD = #{payClassCd}
+       AND PAY_TYPE_FG =  #{payTypeFg}
+  </update>
+
+  <!-- 매장 쿠폰 분류 삭제 -->
+  <!--
+      TABLE    : TB_HQ_PAY_METHOD_CLASS
+      COMMENTS : 분류를 삭제한다.
+  -->
+  <delete id="deleteStoreCouponClass" parameterType="DefaultMap">
+    /* USE : CouponMapper.deleteStoreCouponClass */
+    DELETE TB_MS_PAY_METHOD_CLASS
+     WHERE STORE_CD = #{storeCd}
+       AND PAY_TYPE_FG = #{payTypeFg}
+       AND PAY_CLASS_CD = #{payClassCd}
+  </delete>
+
+
+  <!-- 본사 쿠폰 조회 -->
+  <!--
+      TABLE    : TB_HQ_COUPON
+      COMMENTS : 본사의 쿠폰을 조회한다.
+  -->
+  <select id="getHqCouponList" parameterType="DefaultMap" resultMap="couponListMap">
+    /* USE : CouponMapper.getHqCouponList */
+    SELECT HQ_OFFICE_CD,
+           COUPN_CD,
+           COUPN_NM,
+           PAY_CLASS_CD,
+           COUPN_DC_FG,
+           COUPN_DC_RATE,
+           COUPN_DC_AMT,
+           COUPN_APPLY_FG,
+           USE_YN,
+           REG_ID
+      FROM TB_HQ_COUPON
+     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+  </select>
+
+  <!-- 매장 쿠폰 조회 -->
+  <!--
+      TABLE    : TB_MS_PAY_METHOD_CLASS
+      COMMENTS : 매장의 쿠폰을 조회한다.
+  -->
+  <select id="getStoreCouponList" parameterType="DefaultMap" resultMap="couponListMap">
+    /* USE : CouponMapper.getStoreCouponList */
+    SELECT STORE_CD,
+           COUPN_CD,
+           COUPN_NM,
+           PAY_CLASS_CD,
+           COUPN_DC_FG,
+           COUPN_DC_RATE,
+           COUPN_DC_AMT,
+           COUPN_APPLY_FG,
+           USE_YN,
+           REG_ID
+      FROM TB_MS_COUPON
+     WHERE STORE_CD = #{storeCd}
+  </select>
+
+
+
+
+
+
+
+</mapper>
+
+
+
