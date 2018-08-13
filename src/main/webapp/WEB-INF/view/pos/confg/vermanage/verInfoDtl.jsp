@@ -453,10 +453,15 @@
       formData.append("useYn", useYnCombo.selectedValue);
 
       $.postJSONFile(sendUrl, formData, function(result) {
-        if(result.status === "FAIL") {
+
+        console.log(result);
+
+       if(result.status === "FAIL") {
           s_alert.pop(result.message);
           return;
         }
+        
+
         $("#verInfoViewArea").hide();
         $("#viewBtnArea").hide();
         $("#verInfoEditArea").show();
