@@ -11,6 +11,7 @@
 -->
 <mapper namespace="kr.co.solbipos.sys.bill.item.service.impl.ItemMapper">
 
+    <!-- 출력코드 ListMap -->
     <resultMap id="itemListMap" type="DefaultMap">
         <result column="SAMPL_YN" property="samplYn" typeHandler="CustomBooleanTypeHandler"/>
     </resultMap>
@@ -24,10 +25,14 @@
     <select id="getItemList" parameterType="itemVO" resultMap="itemListMap">
         /* USE : ItemMapper.getItemList */
         SELECT
+        <![CDATA[
             tcpc.PRT_CD,
+        ]]>
             tcpc.PRT_NM,
             tcpc.SAMPL_YN,
+        <![CDATA[
             tcpc.CONTENT,
+        ]]>
             tcpc.REG_DT,
             tcpc.REG_ID,
             tcpc.MOD_DT,
