@@ -99,7 +99,7 @@ public class VerManageServiceImpl implements VerManageService {
             verInfo.setDbYn(Boolean.valueOf(multi.getParameter("dbYn")));
             verInfo.setDelYn("N");
 
-            if(String.valueOf(UseYn.Y) == multi.getParameter("useYn")){
+            if(String.valueOf(UseYn.Y).equals(multi.getParameter("useYn"))){
                 verInfo.setUseYn(UseYn.Y);
             } else {
                 verInfo.setUseYn(UseYn.N);
@@ -142,7 +142,7 @@ public class VerManageServiceImpl implements VerManageService {
             verInfo.setDbYn(Boolean.valueOf(multi.getParameter("dbYn")));
             verInfo.setDelYn("N");
 
-            if(String.valueOf(UseYn.Y) == multi.getParameter("useYn")){
+            if(String.valueOf(UseYn.Y).equals(multi.getParameter("useYn"))){
                 verInfo.setUseYn(UseYn.Y);
             } else {
                 verInfo.setUseYn(UseYn.N);
