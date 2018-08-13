@@ -66,8 +66,8 @@ $(document).ready(function() {
   // 출력물종류 그리드 선택 이벤트
   gridPrint.selectionChanged.addHandler(function (s, e) {
     var col = s.columns[e.col];
-    if ( col.binding === "prtClassCd" ) {
-      var selectedRow = gridPrint.rows[e.row].dataItem;
+    var selectedRow = gridPrint.rows[e.row].dataItem;
+    if ( col.binding === "prtClassCd" && selectedRow.status != "I") {
       searchMapng(selectedRow.prtClassCd);
     }
   });
