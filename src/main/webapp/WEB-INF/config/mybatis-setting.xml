@@ -196,7 +196,9 @@
     <typeAlias alias="timesalePriceVO" type="kr.co.solbipos.base.price.timesaleprice.service.TimesalePriceVO"/>
     <typeAlias alias="prmVO" type="kr.co.solbipos.base.price.prm.service.PrmVO"/>
     <typeAlias alias="giftVO" type="kr.co.solbipos.base.pay.gift.service.GiftVO"/>
-    <typeAlias alias="couponVO" type="kr.co.solbipos.base.pay.coupon.service.CouponVO"/>
+    -->
+    <typeAlias alias="payMethodClassVO" type="kr.co.solbipos.base.pay.coupon.service.PayMethodClassVO"/>
+    <!--
     <typeAlias alias="coprtnCardVO" type="kr.co.solbipos.base.pay.coprtncard.service.CoprtnCardVO"/>
     <typeAlias alias="giftcardLedgrVO" type="kr.co.solbipos.base.pay.giftcardledgr.service.GiftcardLedgrVO"/>
     <typeAlias alias="giftcardBatchChargeVO" type="kr.co.solbipos.base.pay.giftcardbatchcharge.service.GiftcardBatchChargeVO"/>

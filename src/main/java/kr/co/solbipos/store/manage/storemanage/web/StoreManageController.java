@@ -1,20 +1,5 @@
 package kr.co.solbipos.store.manage.storemanage.web;
 
-import static kr.co.common.utils.grid.ReturnUtil.returnJson;
-import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
-import static kr.co.common.utils.spring.StringUtil.convertToJson;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
@@ -22,12 +7,23 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.store.hq.brand.service.HqBrandVO;
-import kr.co.solbipos.store.manage.storemanage.service.KitchenPrintVO;
-import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;
-import kr.co.solbipos.store.manage.storemanage.service.StoreManageService;
-import kr.co.solbipos.store.manage.storemanage.service.StoreManageVO;
-import kr.co.solbipos.store.manage.storemanage.service.StorePosEnvVO;
-import kr.co.solbipos.store.manage.storemanage.service.StoreProductVO;
+import kr.co.solbipos.store.manage.storemanage.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
+import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 
 /**
  * @Class Name : StoreManageController.java
@@ -163,7 +159,6 @@ public class StoreManageController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
-        // 저장
         int cnt = service.saveStoreInfo(storeManageVO, sessionInfoVO);
 
         return returnJson(Status.OK, cnt);
@@ -184,7 +179,6 @@ public class StoreManageController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
-        // 저장
         int cnt = service.updateStoreInfo(storeManageVO, sessionInfoVO);
 
         return returnJson(Status.OK, cnt);

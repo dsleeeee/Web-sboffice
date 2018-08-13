@@ -31,9 +31,9 @@ import kr.co.solbipos.sys.auth.authgroup.service.AuthorGrpResrceVO;
  */
 @Service("authGroupService")
 public class AuthGroupServiceImpl implements AuthGroupService {
-    
+
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    
+
     @Autowired
     AuthGroupMapper mapper;
     @Autowired

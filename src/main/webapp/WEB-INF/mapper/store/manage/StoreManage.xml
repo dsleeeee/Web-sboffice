@@ -1753,8 +1753,6 @@
        WHERE STORE_CD = #{storeCd}
   </select>
 
-
-
   <!-- 코너별 승인 목록 조회 -->
   <select id="getCornrApproveList" parameterType="DefaultMap" resultType="DefaultMap">
     /* USE : StoreManageMapper.getCornrApproveList */
@@ -1793,7 +1791,9 @@
             tmp.POS_VER_NO,
             tmp.VAN_CERT_YN,
             tmp.VAN_TERMNL_NO,
-            tmp.VAN_TERMNL_NO AS BEFORE_VAN_TERMNL_NO
+            tmp.VAN_TERMNL_NO AS BEFORE_VAN_TERMNL_NO,
+            TO_CHAR(TO_DATE(tmp.REG_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD') VAN_CERT_START_DATE,
+            TO_CHAR(TO_DATE(tmp.MOD_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD') VAN_CERT_END_DATE
        FROM TB_MS_POS tmp
       WHERE tmp.STORE_CD = #{storeCd}
       ORDER BY tmp.POS_NO

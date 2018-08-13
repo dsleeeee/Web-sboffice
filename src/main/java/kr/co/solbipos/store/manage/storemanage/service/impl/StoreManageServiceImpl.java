@@ -1,16 +1,5 @@
 package kr.co.solbipos.store.manage.storemanage.service.impl;
 
-import static kr.co.common.utils.DateUtil.currentDateString;
-import static kr.co.common.utils.DateUtil.currentDateTimeString;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
@@ -20,12 +9,16 @@ import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.pos.confg.loginstatus.enums.SysStatFg;
 import kr.co.solbipos.store.hq.brand.service.HqBrandVO;
-import kr.co.solbipos.store.manage.storemanage.service.KitchenPrintVO;
-import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;
-import kr.co.solbipos.store.manage.storemanage.service.StoreManageService;
-import kr.co.solbipos.store.manage.storemanage.service.StoreManageVO;
-import kr.co.solbipos.store.manage.storemanage.service.StorePosEnvVO;
-import kr.co.solbipos.store.manage.storemanage.service.StoreProductVO;
+import kr.co.solbipos.store.manage.storemanage.service.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
+
+import static kr.co.common.utils.DateUtil.currentDateString;
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
  * @Class Name : StoreManageServiceImpl.java
@@ -245,6 +238,7 @@ public class StoreManageServiceImpl implements StoreManageService{
             }
         }
 
+        //TODO 판매가 테이블 생성시 추가
         if(!"00000".equals(storeManageVO.getHqOfficeCd())) { // 프랜차이즈
             // 프랜차이즈 설정 - 판매가 HD 복사
             // 프랜차이즈 설정 - 판매가 DT 복사
@@ -258,9 +252,7 @@ public class StoreManageServiceImpl implements StoreManageService{
 
         String dt = currentDateTimeString();
 
-        storeManageVO.setRegDt(dt);
         storeManageVO.setModDt(dt);
-        storeManageVO.setRegId(sessionInfoVO.getUserId());
         storeManageVO.setModId(sessionInfoVO.getUserId());
 
         if(SysStatFg.CLOSE == storeManageVO.getSysStatFg()) {
@@ -272,64 +264,6 @@ public class StoreManageServiceImpl implements StoreManageService{
         // 매장 정보 수정
         int procCnt = mapper.updateStoreInfo(storeManageVO);
 
-        // 매장환경 복사
-        /*
-        String[] copyEnv = storeManageVO.getCopyChkVal().split("\\|");
-
-        if(copyEnv.length > 0) {
-
-            for(int i=0; i<copyEnv.length; i++) {
-
-                // 매장환경 복사
-                if( "storeEnv".equals(copyEnv[i]) ) {
-                    procCnt += mapper.insertStoreEnvInfo(storeManageVO);
-                }
-
-                // 포스환경 복사
-                if( "posEnv".equals(copyEnv[i]) ) {
-                    procCnt += mapper.insertPosEnvInfo(storeManageVO);
-                    procCnt += mapper.insertPosFunKeyInfo(storeManageVO);
-                }
-
-                // 외식환경 복사
-                if( "foodEnv".equals(copyEnv[i]) ) {
-                    procCnt += mapper.insertFoodEnvInfo(storeManageVO);
-                }
-
-                // 주방프린터 복사
-                if( "kitchenPrint".equals(copyEnv[i]) ) {
-                    procCnt += mapper.insertKitchenPrintEnvInfo(storeManageVO);
-                }
-
-                // 상품 복사 ?
-                if( "product".equals(copyEnv[i]) ) {
-
-                }
-
-                // 판매가 복사
-                if( "salePrice".equals(copyEnv[i]) ) {
-                    procCnt += mapper.copySaleUprc(storeManageVO);
-                }
-
-                // 공급가 복사
-                if( "supplyPrice".equals(copyEnv[i]) ) {
-                    procCnt += mapper.updateSplyUprc(storeManageVO);
-                }
-
-                // 터치키 복사
-                if( "touchKey".equals(copyEnv[i]) ) {
-
-                    storeManageVO.setInFg("S");
-                    procCnt += mapper.copyTouchkeyCls(storeManageVO);
-                    procCnt += mapper.copyTouchkey(storeManageVO);
-
-                    storeManageVO.setInFg("T");
-                    procCnt += mapper.copyTouchkeyCls(storeManageVO);
-                    procCnt += mapper.copyTouchkey(storeManageVO);
-                }
-            }
-        }
-        */
 
         return procCnt;
     }

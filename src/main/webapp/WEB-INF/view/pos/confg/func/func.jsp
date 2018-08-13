@@ -112,7 +112,7 @@ for (var row = 0; row < grid2.columnHeaders.rows.length; row++) {
   grid2.columnHeaders.rows[row].allowMerging = true;
   for (var col = 0; col < grid2.columns.length; col++) {
     if ((row == 0 && col == 0) || row == 1 && col == 0 ) {
-      grid2.columnHeaders.setCellData(row, col, "<s:message code='func.chk' />");
+      grid2.columnHeaders.setCellData(row, col, "<s:message code='cmm.chk' />");
     }
     if ((row == 0 && col == 1) || row == 1 && col == 1 ) {
       grid2.columnHeaders.setCellData(row, col, "<s:message code='func.fnkeyNo' />");
@@ -285,8 +285,8 @@ grid2.cellEditEnded.addHandler(function (s, e){
 $("#btnUp").click(function(e){
   for(var i = 0; i < grid2.collectionView.itemCount; i++ ){
     var item = grid2.collectionView.items[i];
-    if(i > 0 && (item.chk == true)){
-      if(grid2.collectionView.items[i-1].chk != true){
+    if(i > 0 && (item.gChk == true)){
+      if(grid2.collectionView.items[i-1].gChk != true){
         var tmpItem = grid2.collectionView.items[i-1];
         grid2.collectionView.items[i-1] = grid2.collectionView.items[i];
         grid2.collectionView.items[i] = tmpItem;
@@ -301,8 +301,8 @@ $("#btnUp").click(function(e){
 $("#btnDown").click(function(e){
   for(var i = grid2.itemsSource.itemCount-1; i >= 0; i-- ){
     var item = grid2.collectionView.items[i];
-    if((i < grid2.itemsSource.itemCount-1) && item.chk){
-      if(!grid2.collectionView.items[i+1].chk){
+    if((i < grid2.itemsSource.itemCount-1) && item.gChk){
+      if(!grid2.collectionView.items[i+1].gChk){
         var tmpItem = grid2.collectionView.items[i+1];
         grid2.collectionView.items[i+1] = grid2.collectionView.items[i];
         grid2.collectionView.items[i] = tmpItem;
@@ -333,7 +333,7 @@ $("#btnAdd").click(function(e){
 $("#btnDel").click(function(e){
   for(var i = grid2.itemsSource.itemCount-1; i >= 0; i-- ){
     var item = grid2.itemsSource.items[i];
-    if(item.chk){
+    if(item.gChk){
       grid2.itemsSource.removeAt(i);
     }
   }
@@ -356,6 +356,7 @@ $("#btnSave").click(function(e){
   }
   for(var i=0; i<grid2.collectionView.itemsAdded.length; i++){
     grid2.collectionView.itemsAdded[i].status = "I";
+
     grid2.collectionView.itemsAdded[i].fnkeyFg = selectData.nmcodeCd;
     paramArr.push(grid2.collectionView.itemsAdded[i]);
   }
@@ -369,12 +370,6 @@ $("#btnSave").click(function(e){
     return;
   }
 
-  // for(var i=0; i<paramArr.length; i++){
-  //   paramArr[i].posiAdjYn   = (paramArr[i].posiAdjYn   == true ? "Y":"N");
-  //   paramArr[i].fnkeyUseYn0 = (paramArr[i].fnkeyUseYn0 == true ? "Y":"N");
-  //   paramArr[i].fnkeyUseYn1 = (paramArr[i].fnkeyUseYn1 == true ? "Y":"N");
-  // }
-
   $.postJSONArray("${baseUrl}" + "save.sb", paramArr, function(result) {
     s_alert.pop("<s:message code='cmm.saveSucc' />");
     grid2.collectionView.clearChanges();
@@ -382,6 +377,12 @@ $("#btnSave").click(function(e){
   function(result) {
     s_alert.pop(result.message);
   });
+  // for(var i=0; i<paramArr.length; i++){
+  //   paramArr[i].posiAdjYn   = (paramArr[i].posiAdjYn   == true ? "Y":"N");
+  //   paramArr[i].fnkeyUseYn0 = (paramArr[i].fnkeyUseYn0 == true ? "Y":"N");
+  //   paramArr[i].fnkeyUseYn1 = (paramArr[i].fnkeyUseYn1 == true ? "Y":"N");
+  // }
+
 });
 
 </script>

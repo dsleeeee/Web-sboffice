@@ -377,7 +377,7 @@ var cornerHeaderData =
 var posHeaderData =
   [
     {binding:"posNo", header:"<s:message code='storeManage.posNo' />"},
-    {binding:"vanTermNo", header:"<s:message code='storeManage.vanTermNo' />", visible:false },
+    {binding:"vanTermnlNo", header:"<s:message code='storeManage.vanTermNo' />", visible:false },
     {binding:"vanCertYn", header:"<s:message code='storeManage.vanCertYn' />", dataType:wijmo.DataType.Boolean},
     {binding:"vanCertStartDate", header:"<s:message code='storeManage.vanCertStartDate' />", isReadOnly:true},
     {binding:"vanCertEndDate", header:"<s:message code='storeManage.vanCertEndDate' />", isReadOnly:true},
@@ -420,11 +420,15 @@ rCornerUseYn.selectedIndexChanged.addHandler(function(s, e){
     $("#cornerApproveArea").show();
     $("#posApproveArea").hide();
 
+    <%--
     if(thePosGrid.rows.length > 0){
       s_alert.pop("<s:message code='storeManage.subCorner.exist' />");
       return;
     }
-    theCornerGrid.itemsSource = [];
+    --%>
+    //theCornerGrid.itemsSource = [];
+    theCornerGrid.itemsSource = new wijmo.collections.CollectionView([]);
+    theCornerGrid.itemsSource.trackChanges = true;
   }
   else if(rCornerUseYn.selectedValue == "3" ) { <%-- 포스별승인 --%>
 
@@ -451,9 +455,10 @@ rCornerUseYn.selectedIndexChanged.addHandler(function(s, e){
       newItem.vanCertYn  = "N";
       thePosGrid.collectionView.commitNew();
     }
-
   }
 });
+
+
 
 <%-- ============================================= 신규등록, 수정 폼 관련 =========================================== --%>
 
@@ -471,6 +476,9 @@ function resetForm() {
   rEnvHqOffice.selectedIndex    = 0;
   rCornerUseYn.selectedIndex    = 0;
   rCashBillUseYn.selectedIndex  = 0;
+
+  rClsFg.isReadOnly = false;
+  $("#rInstallPosCnt").removeAttr("readonly");
 }
 
 <%-- 매장 신규등록 --%>
@@ -558,8 +566,20 @@ function setStoreData(data){
   rAgency.selectedValue = storeDtlInfo.agencyCd;
   rOpenPosDate.value = storeDtlInfo.sysOpenDate;
 
+  if(vanCornrList.length > 0) {
+    $("#rVan").val(vanCornrList[0].vanCd);
+    $("#rVanContractNum").val(vanCornrList[0].vanTermnlNo);//TODO 벤사 계약번호 확인(vanTermnlNo와 vanSerNo)
+
+  }
+
+  rClsFg.isReadOnly = true;
+  $("#rInstallPosCnt").attr("readonly", "readonly");
+
   theCornerGrid.itemsSource = new wijmo.collections.CollectionView(cornrApproveList);
   thePosGrid.itemsSource = new wijmo.collections.CollectionView(posApproveList);
+
+  theCornerGrid.itemsSource.trackChanges = true;
+  thePosGrid.itemsSource.trackChanges = true;
 
   $("#rStoreCdTxt").show();
   $("#rStoreCdRadio").hide();
@@ -855,11 +875,73 @@ function saveStore(sendUrl){
       return;
     }
     s_alert.pop("<s:message code='cmm.saveSucc'/>");
-    showStoreDetail();
+    //showStoreDetail();
+    saveOtherInfo();
   }
   ,function(result){
     console.log(result);
     s_alert.pop(result.message);
+  });
+}
+
+<%-- 기본정보 이외 정보 저장 --%>
+function saveOtherInfo() {
+
+  var saveUrl = "";
+
+  if(rCornerUseYn.selectedValue == "1" || rCornerUseYn.selectedValue == "2" ) { <%-- 매장단위 승인, 코너개별승인  --%>
+    saveUrl = "/store/manage/storeManage/storeManage/saveStoreCornr.sb";
+  }  else if(rCornerUseYn.selectedValue == "3" ) { <%-- 포스별 승인 --%>
+    saveUrl = "/store/manage/storeManage/storeManage/saveStorePos.sb";
+  }
+
+  if(rCornerUseYn.selectedValue == "1" || rCornerUseYn.selectedValue == "2" ){ <%-- 매장단위 승인, 코너개별승인  --%>
+
+    var paramArr = new Array();
+
+    for(var i=0; i<theCornerGrid.collectionView.itemsEdited.length; i++){
+      theCornerGrid.collectionView.itemsEdited[i].status = "U";
+      paramArr.push(theCornerGrid.collectionView.itemsEdited[i]);
+    }
+    for(var i=0; i<theCornerGrid.collectionView.itemsAdded.length; i++){
+      theCornerGrid.collectionView.itemsAdded[i].status = "I";
+      paramArr.push(grid2.collectionView.itemsAdded[i]);
+    }
+    for(var i=0; i<theCornerGrid.collectionView.itemsRemoved.length; i++){
+      theCornerGrid.collectionView.itemsRemoved[i].status = "D";
+      paramArr.push(theCornerGrid.collectionView.itemsRemoved[i]);
+    }
+  }
+  else if(rCornerUseYn.selectedValue == "3" ){ <%-- 포스별 승인 --%>
+
+    var paramArr = new Array();
+
+    for(var i=0; i<thePosGrid.collectionView.itemsEdited.length; i++){
+      thePosGrid.collectionView.itemsEdited[i].status = "U";
+      paramArr.push(thePosGrid.collectionView.itemsEdited[i]);
+    }
+    for(var i=0; i<thePosGrid.collectionView.itemsAdded.length; i++){
+      grthePosGridid2.collectionView.itemsAdded[i].status = "I";
+      paramArr.push(thePosGrid.collectionView.itemsAdded[i]);
+    }
+    for(var i=0; i<thePosGrid.collectionView.itemsRemoved.length; i++){
+      thePosGrid.collectionView.itemsRemoved[i].status = "D";
+      paramArr.push(thePosGrid.collectionView.itemsRemoved[i]);
+    }
+  }
+
+  if(paramArr.length <= 0) {
+    s_alert.pop("<s:message code='cmm.not.modify'/>");
+    return;
+  }
+
+  $.postJSONArray(saveUrl, paramArr, function(result) {
+    s_alert.pop("<s:message code='cmm.saveSucc' />");
+    theCornerGrid.collectionView.clearChanges();
+    showStoreDetail();
+  },
+  function(result) {
+    s_alert.pop(result.data.msg);
   });
 }
 

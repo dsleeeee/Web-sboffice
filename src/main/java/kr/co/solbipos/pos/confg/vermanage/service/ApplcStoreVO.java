@@ -15,7 +15,6 @@ import kr.co.solbipos.pos.confg.verrecv.enums.VerRecvFg;
 * @author 솔비포스 차세대개발실 김지은
 * @since 2018. 05.01
 * @version 1.0
-* @see
 *
 * @Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
@@ -50,8 +49,8 @@ public class ApplcStoreVO extends PageVO {
     private String posIp;
     /** 최종버전 */
     private String lastVer;
-    
-    
+
+
     /**
      * @return the verSerNo
      */
@@ -220,5 +219,5 @@ public class ApplcStoreVO extends PageVO {
     public void setLastVer(String lastVer) {
         this.lastVer = lastVer;
     }
-    
+
 }
