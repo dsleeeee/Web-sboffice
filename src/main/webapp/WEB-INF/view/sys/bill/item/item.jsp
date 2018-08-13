@@ -67,4 +67,4 @@
   </div>
   
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/sys/bill/item/item.js?ver=20180810" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/bill/item/item.js?ver=20180813" charset="utf-8"></script>
