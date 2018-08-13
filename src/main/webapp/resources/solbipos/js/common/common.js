@@ -240,28 +240,44 @@
         url: url,
         type: "POST",
         data: form,
-        processData: false, 
+        processData: false,
         contentType: false,
         cache: false,
-        success : function(result) {
-          alert("success");
+        success: function(result) {
+          if (result.status === "OK") {
+            return succ(result);
+          }
+          else if (result.status === "FAIL") {
+            return fail(result);
+          }
+          else if (result.status === "SESSION_EXFIRE") {
+            s_alert.popOk(result.message, function () {
+              location.href = result.url;
+            });
+          }
+          else if (result.status === "SERVER_ERROR") {
+            s_alert.pop(result.message);
+          }
+          else {
+            var msg = result.status + " : " + result.message;
+            alert(msg);
+          }
         },
         error : function(result){
           alert("error");
         }
-      })
-      .fail(function(){
+      },function(){
         s_alert.pop("Ajax Fail");
       });
 //      return $.post( url, data, func, "json" );
-      
+
       return false;
     }
     , countUtf8Bytes: function( s ){
       for( var b = 0, i = 0, c; c = s.charCodeAt(i++); b += c >> 11 ? 3 : (c >> 7 ? 2 : 1) );
       return b;
     }
-    
+
   });
 
   // jQuery Selector Method 추가
@@ -274,8 +290,8 @@
         return this[ 0 ].className;
     }
   });
-  
-  
+
+
 }( "undefined" != typeof window ? window : this, jQuery );
 
 //트리 생성
