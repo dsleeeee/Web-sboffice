@@ -61,10 +61,10 @@
       </div>
       <%-- 개발시 높이 조절해서 사용--%>
       <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
-      <div id="theGrid" style="height:310px"></div>
+      <div id="gridPrintCode" style="height:310px"></div>
     </div>
     <%--//위즈모 테이블--%>
   </div>
   
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/sys/bill/item/item.js?ver=20180810" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/bill/item/item.js?ver=20180813" charset="utf-8"></script>
