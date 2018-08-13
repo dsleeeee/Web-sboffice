@@ -26,7 +26,7 @@ public class ItemVO extends CmmVO {
     /** 출력물명 */
     private String prtNm;
     /** 예제사용여부 */
-    private String samplYn;
+    private Boolean samplYn;
     /** 예제 */
     private String content;
     
@@ -58,13 +58,13 @@ public class ItemVO extends CmmVO {
     /**
      * @return the samplYn
      */
-    public String getSamplYn() {
+    public Boolean getSamplYn() {
         return samplYn;
     }
     /**
      * @param samplYn the samplYn to set
      */
-    public void setSamplYn(String samplYn) {
+    public void setSamplYn(Boolean samplYn) {
         this.samplYn = samplYn;
     }
     /**
