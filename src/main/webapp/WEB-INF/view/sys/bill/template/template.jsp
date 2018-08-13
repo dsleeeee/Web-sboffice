@@ -179,4 +179,4 @@ var printTypeComboData = ${listPrintType};
 var sysStatFgComboData = ${ccu.getCommCode("009")};
 var clsFgComboData = ${ccu.getCommCode("003")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sys/bill/template/template.js?ver=20180810" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/bill/template/template.js?ver=20180813" charset="utf-8"></script>
