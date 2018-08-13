@@ -321,7 +321,7 @@ $("#posConfigArea #btnSavePos").click(function(){
     showPosConfigLayout(selectedEnvstFg);
   },
   function(result) {
-    s_alert.pop(result.data.msg);
+    s_alert.pop(result.message);
   });
 
 });
@@ -386,7 +386,7 @@ $("#btnDeletePos").click(function(){
     showPosConfigLayout(selectedEnvstFg);
   },
   function(result) {
-    s_alert.pop(result.data.msg);
+    s_alert.pop(result.message);
   });
 });
 

@@ -17,7 +17,7 @@ import kr.co.solbipos.pos.confg.loginstatus.enums.SysStatFg;
  * @version 1.0
  * @see
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 public class LoginStatusVO extends PageVO {
 

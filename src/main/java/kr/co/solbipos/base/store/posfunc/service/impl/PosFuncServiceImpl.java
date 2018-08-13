@@ -23,7 +23,7 @@ import kr.co.solbipos.base.store.posfunc.service.PosFuncVO;
  * @since 2018. 06.26
  * @version 1.0
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Service("posFunService")
 public class PosFuncServiceImpl implements PosFuncService{

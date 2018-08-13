@@ -119,7 +119,7 @@ button {outline:none; border:0; font-family:'NotoR', Malgun Gothic, '맑은 고�
 .pdt5 {padding-top:5px;} .pdt10 {padding-top:10px;} .pdt20 {padding-top:20px;} .pdt30 {padding-top:30px;} .pdt40 {padding-top:40px;}
 .pdb5 {padding-bottom:5px;} .pdb10 {padding-bottom:10px;} .pdb20 {padding-bottom:20px;} .pdb30 {padding-bottom:30px;} .pdb40 {padding-bottom:40px;}
 
-button.btn_blue {background:#1e88e5; color:#fff; border-radius:4px; line-height:30px; padding:0 30px; font-size:1em; transition:all 0.2s;}
+button.btn_blue {background:#1e88e5; border:1px solid #1e88e5; color:#fff; border-radius:4px; line-height:30px; padding:0 30px; font-size:1em; transition:all 0.2s;}
 button.btn_blue:hover {background:#174291; transition:all 0.2s;}
 
 button.btn_skyblue {background:#ebf5ff; border:1px solid #93cbfc; color:#337dde; border-radius:4px; line-height:28px; padding:0 10px; font-size:0.75em; transition:all 0.2s;}
@@ -1642,7 +1642,6 @@ p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17p
 }
 
 .templateEdit #preview {
-    height: 100%;
     overflow-y: scroll;
 }
 .templateEdit #preview pre {
@@ -1661,4 +1660,7 @@ p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17p
     margin-bottom: 3px;
     font-family: '굴림체', 'sans-serif';
     font-size: 12px;
+}
+.state-invalid div {
+    color: red !important;
 }

@@ -233,7 +233,7 @@ $("#envLayer #btnSave").click(function(){
     s_alert.pop("<s:message code='cmm.saveSucc' />");
   },
   function(result) {
-    s_alert.pop(result.data.msg);
+    s_alert.pop(result.message);
   });
   
 });

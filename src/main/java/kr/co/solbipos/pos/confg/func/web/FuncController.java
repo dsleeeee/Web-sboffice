@@ -34,7 +34,7 @@ import kr.co.solbipos.pos.confg.func.service.FuncVO;
  * @since 2018. 05.01
  * @version 1.0
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Controller
 @RequestMapping(value = "/pos/confg/func/func")

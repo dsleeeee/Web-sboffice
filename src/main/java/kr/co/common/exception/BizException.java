@@ -16,7 +16,7 @@ import kr.co.common.data.enums.Status;
  * @version 1.0
  * @see
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 public class BizException extends RuntimeException {
     

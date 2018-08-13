@@ -21,7 +21,7 @@ import kr.co.solbipos.application.common.enums.ResrceFg;
  * @version 1.0
  * @see
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 public class ResrceInfoVO extends CmmVO {
 

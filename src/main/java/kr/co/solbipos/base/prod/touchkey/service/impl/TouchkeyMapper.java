@@ -20,7 +20,7 @@ import kr.co.solbipos.base.prod.touchkey.service.TouchVO;
  * @version 1.0
  * @see
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Mapper
 public interface TouchkeyMapper {

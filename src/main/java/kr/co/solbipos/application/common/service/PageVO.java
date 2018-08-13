@@ -17,7 +17,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @version 1.0
  * @see
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 public class PageVO extends CmmVO {
 

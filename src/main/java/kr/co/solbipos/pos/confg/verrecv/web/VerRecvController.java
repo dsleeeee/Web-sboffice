@@ -30,7 +30,7 @@ import kr.co.solbipos.pos.confg.verrecv.service.VerRecvVO;
 * @version 1.0
 * @see
 *
-*  Copyright (C) by SOLBIPOS CORP. All right reserved.
+* @Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
 @Controller
 @RequestMapping(value = "/pos/confg/verRecv/")

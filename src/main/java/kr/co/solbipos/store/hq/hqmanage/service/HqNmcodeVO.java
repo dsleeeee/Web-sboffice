@@ -16,7 +16,7 @@ import kr.co.solbipos.application.common.service.CmmVO;
  * @since 2018. 06.08
  * @version 1.0
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 public class HqNmcodeVO extends CmmVO {
 

@@ -27,7 +27,7 @@
           <include refid="CmmSQL.PagingTemplateCount"/>
     FROM TB_PS_EMPLOYEE_COMMTE A
     <where>
-      <if test='inFg != null and inFg.toString() != "ALL"'>
+      <if test='inFg != null and inFg.toString() != ""'>
         AND A.IN_FG = #{inFg}
       </if>
       <if test='storeCd != null and storeCd != ""'>

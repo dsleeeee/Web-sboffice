@@ -18,7 +18,7 @@ import kr.co.solbipos.base.common.enums.InFg;
  * @version 1.0
  * @see
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 public class TouchClassVO extends CmmVO {
 

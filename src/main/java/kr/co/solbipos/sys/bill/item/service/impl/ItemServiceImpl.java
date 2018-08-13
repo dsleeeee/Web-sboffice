@@ -27,7 +27,7 @@ import kr.co.solbipos.sys.bill.item.service.ItemVO;
  * @version 1.0
  * @see
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Service("itemService")
 public class ItemServiceImpl implements ItemService {

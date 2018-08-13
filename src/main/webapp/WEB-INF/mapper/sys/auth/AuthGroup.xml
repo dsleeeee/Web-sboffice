@@ -40,7 +40,7 @@
            MOD_ID
       FROM TB_WB_AUTHOR_GRP_INFO A
      <where>
-     <if test='useYn != null and useYn.toString() != "ALL"'>
+     <if test='useYn != null and useYn.toString() != ""'>
         AND A.USE_YN = #{useYn}
      </if>
      <if test='authGrpNm != null and authGrpNm != ""'>

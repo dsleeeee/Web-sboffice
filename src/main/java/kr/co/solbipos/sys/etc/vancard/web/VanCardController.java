@@ -39,7 +39,7 @@ import kr.co.solbipos.sys.etc.vancard.service.VanCmpnyVO;
  * @version 1.0
  * @see
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Controller
 @RequestMapping(value = "/sys/etc/vanCard")

@@ -36,7 +36,7 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 * @version 1.0
 * @see
 *
-*  Copyright (C) by SOLBIPOS CORP. All right reserved.
+* @Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
 @Controller
 @RequestMapping(value = "/adi/etc/kitchenmemo/kitchenmemo/")

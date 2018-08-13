@@ -74,3 +74,21 @@ function nvl(str, defaultStr) {
 
   return str;
 }
+
+/**
+ * 문자열이 숫자형인지 아닌지 체크하여 결과값을 리턴한다.
+ * @param value : 체크할 문자열
+ *
+ *  isNan 함수는 입력값이 숫자인지 아닌지 확인하는데 입력값이 숫자이면 false를 입력값이 숫자가 아니면 true를 반환
+ *  또한 입력값이 공백문자이거나 빈값이어도 false를 반환함
+ */
+function isNumber(value) {
+    value = String(value);
+    if ( value.indexOf(" ") != -1 || value == "" ) {
+        return false;
+    } else if ( isNaN(value) ) {
+        return false;
+    } else {
+        return true;
+    }
+}

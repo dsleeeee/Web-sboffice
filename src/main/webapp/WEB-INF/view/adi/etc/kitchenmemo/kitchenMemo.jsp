@@ -3,8 +3,8 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
-<c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
+<c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
+<c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/adi/etc/kitchenmemo/kitchenmemo/" />
 
 <div class="subCon">
@@ -126,7 +126,7 @@ $(document).ready(function(){
     },
     function(result) {
       console.log(result) // 중복된 데이터가 있을때 오류 메세지가....?
-      s_alert.pop(result.data.msg);
+      s_alert.pop(result.message);
     });
     
   });

@@ -158,7 +158,7 @@ $("#btnSaveKitchenPrint").click(function(){
   },
   function(result) {
     console.log(result);
-    s_alert.pop(result.data.msg);
+    s_alert.pop(result.message);
   });
 });
 

@@ -21,8 +21,8 @@ $("#confirmBtn").click(function() {
 
     $.postJSON("/user/userPwdChg.sb", param, function(result) {
         if (result.status === "OK") {
-            if (result.data.msg != undefined) {
-                s_alert.popOk(result.data.msg, function() {
+            if (result.message != undefined) {
+                s_alert.popOk(result.message, function() {
                     location.href = result.data.url;
                 });
             }
@@ -30,7 +30,7 @@ $("#confirmBtn").click(function() {
             processError(result.data);
         }
     }, function(result) {
-        alert(result.data.msg);
+        alert(result.message);
     });
 });
 
@@ -41,8 +41,8 @@ $("#extensionBtn").click(function() {
 
     $.postJSON("/user/pwdExtension.sb", param, function(result) {
         if (result.status === "OK") {
-            if (result.data.msg != undefined) {
-                s_alert.popOk(result.data.msg, function() {
+            if (result.message != undefined) {
+                s_alert.popOk(result.message, function() {
                     location.href = result.data.url;
                 });
             }
@@ -50,7 +50,7 @@ $("#extensionBtn").click(function() {
             processError(result.data);
         }
     }, function(result) {
-        alert(result.data.msg);
+        alert(result.message);
     });
 });
 

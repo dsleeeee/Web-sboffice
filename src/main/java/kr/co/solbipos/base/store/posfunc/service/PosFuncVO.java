@@ -15,7 +15,7 @@ import kr.co.solbipos.application.common.service.CmmVO;
  * @since 2018.07.31
  * @version 1.0
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 public class PosFuncVO extends CmmVO {
 

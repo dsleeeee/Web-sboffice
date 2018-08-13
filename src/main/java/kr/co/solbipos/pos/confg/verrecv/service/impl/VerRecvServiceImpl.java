@@ -21,7 +21,7 @@ import kr.co.common.data.structure.DefaultMap;
 * @version 1.0
 * @see
 *
-*  Copyright (C) by SOLBIPOS CORP. All right reserved.
+* @Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
 @Service("verRecvService")
 public class VerRecvServiceImpl implements VerRecvService {

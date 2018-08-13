@@ -28,7 +28,7 @@ import kr.co.solbipos.sys.cd.envconfig.service.EnvstVO;
  * @version 1.0
  * @see
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Service("envConfigService")
 public class EnvConfigServiceImpl implements EnvConfigService {

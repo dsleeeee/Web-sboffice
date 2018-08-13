@@ -200,7 +200,7 @@ $("#btnProdDel").click(function(){
     getProductList();
   },
   function(result) {
-    s_alert.pop(result.data.msg);
+    s_alert.pop(result.message);
   });
 });
 
@@ -223,7 +223,7 @@ $("#btnProdAdd").click(function(){
     getProductList();
   },
   function(result) {
-    s_alert.pop(result.data.msg);
+    s_alert.pop(result.message);
   });
 
 });

@@ -15,14 +15,12 @@ import kr.co.common.data.handler.CodeEnumTypeHandler;
 public enum UseYn implements CodeEnum {
     
     /** 전체 */
-    ALL("ALL"),
+    ALL(""),
     /** 사용 */
     Y("Y"),
     /** 미사용 */
-    N("N"),
-    /** 선택 */
-    S("");
-    
+    N("N");
+
     
     private String code;
   

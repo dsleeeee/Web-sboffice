@@ -20,7 +20,7 @@ import java.util.List;
  * @since 2018.08.03
  * @version 1.0
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Mapper
 @Repository

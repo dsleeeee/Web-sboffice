@@ -30,7 +30,7 @@ import kr.co.solbipos.adi.dclz.dclzmanage.service.DclzManageVO;
  * @version 1.0
  * @see
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Service("dclzManageService")
 @Transactional
