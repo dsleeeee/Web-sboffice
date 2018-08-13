@@ -1,10 +1,13 @@
 package kr.co.solbipos.pos.confg.vermanage.web;
 
-import static kr.co.common.utils.grid.ReturnUtil.returnJson;
-import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import kr.co.common.data.enums.Status;
+import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.data.structure.Result;
+import kr.co.common.service.session.SessionService;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.pos.confg.vermanage.service.ApplcStoreVO;
+import kr.co.solbipos.pos.confg.vermanage.service.VerInfoVO;
+import kr.co.solbipos.pos.confg.vermanage.service.VerManageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -14,14 +17,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-import kr.co.common.data.enums.Status;
-import kr.co.common.data.structure.DefaultMap;
-import kr.co.common.data.structure.Result;
-import kr.co.common.service.session.SessionService;
-import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.pos.confg.vermanage.service.ApplcStoreVO;
-import kr.co.solbipos.pos.confg.vermanage.service.VerInfoVO;
-import kr.co.solbipos.pos.confg.vermanage.service.VerManageService;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
+import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 
 /**
 * @Class Name : VerManageController.java
@@ -256,6 +258,4 @@ public class VerManageController {
 
         return returnJson(Status.OK, result);
     }
-
-
 }

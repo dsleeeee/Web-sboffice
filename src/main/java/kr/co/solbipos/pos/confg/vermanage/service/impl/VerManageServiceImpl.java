@@ -1,15 +1,5 @@
 package kr.co.solbipos.pos.confg.vermanage.service.impl;
 
-import static kr.co.common.utils.DateUtil.currentDateTimeString;
-import java.io.File;
-import java.util.Iterator;
-import java.util.List;
-
-import org.apache.commons.io.FilenameUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
@@ -21,6 +11,17 @@ import kr.co.solbipos.pos.confg.vermanage.service.ApplcStoreVO;
 import kr.co.solbipos.pos.confg.vermanage.service.VerInfoVO;
 import kr.co.solbipos.pos.confg.vermanage.service.VerManageService;
 import kr.co.solbipos.pos.confg.verrecv.enums.VerRecvFg;
+import org.apache.commons.io.FilenameUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import java.io.File;
+import java.util.Iterator;
+import java.util.List;
+
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
 * @Class Name : VerManageServiceImpl.java
@@ -93,9 +94,9 @@ public class VerManageServiceImpl implements VerManageService {
 //            verInfo.setFileSize((String)multi.getParameter("fileSize"));
             verInfo.setFileDesc((String)multi.getParameter("fileDesc"));
             verInfo.setProgFg((String)multi.getParameter("progFg"));
-            verInfo.setPgmYn((String)multi.getParameter("pgmYn"));
-            verInfo.setImgYn((String)multi.getParameter("imgYn"));
-            verInfo.setDbYn((String)multi.getParameter("dbYn"));
+            verInfo.setPgmYn(Boolean.valueOf(multi.getParameter("pgmYn")));
+            verInfo.setImgYn(Boolean.valueOf(multi.getParameter("imgYn")));
+            verInfo.setDbYn(Boolean.valueOf(multi.getParameter("dbYn")));
             verInfo.setDelYn("N");
 
             if(String.valueOf(UseYn.Y) == multi.getParameter("useYn")){
@@ -136,9 +137,9 @@ public class VerManageServiceImpl implements VerManageService {
 //            verInfo.setFileSize((String)multi.getParameter("fileSize"));
             verInfo.setFileDesc((String)multi.getParameter("fileDesc"));
             verInfo.setProgFg((String)multi.getParameter("progFg"));
-            verInfo.setPgmYn((String)multi.getParameter("pgmYn"));
-            verInfo.setImgYn((String)multi.getParameter("imgYn"));
-            verInfo.setDbYn((String)multi.getParameter("dbYn"));
+            verInfo.setPgmYn(Boolean.valueOf(multi.getParameter("pgmYn")));
+            verInfo.setImgYn(Boolean.valueOf(multi.getParameter("imgYn")));
+            verInfo.setDbYn(Boolean.valueOf(multi.getParameter("dbYn")));
             verInfo.setDelYn("N");
 
             if(String.valueOf(UseYn.Y) == multi.getParameter("useYn")){
@@ -172,7 +173,7 @@ public class VerManageServiceImpl implements VerManageService {
 //        String root = multi.getSession().getServletContext().getRealPath("/");
 //        String path = root+"resources/upload/";
         // 파일서버 대응 경로 지정
-        String path = BaseEnv.FILE_UPLOAD_DIR + "posVer/";
+        String path = "D://"+ BaseEnv.FILE_UPLOAD_DIR + "posVer/";
         // 업로드 되는 파일명
         String newFileName = "";
 
@@ -182,27 +183,35 @@ public class VerManageServiceImpl implements VerManageService {
         }
 
         Iterator<String> files = multi.getFileNames();
+
         while(files.hasNext()){
+
             String uploadFile = files.next();
 
             MultipartFile mFile = multi.getFile(uploadFile);
             String orgFileName = mFile.getOriginalFilename();
             String fileExt = FilenameUtils.getExtension(orgFileName);
-            orgFileName = mFile.getOriginalFilename().substring(0, mFile.getOriginalFilename().lastIndexOf('.'));
-            // 파일경로
-            verInfo.setFileDir(path);
-            // 파일명 (물리적으로 저장되는 파일명)
-            verInfo.setFileNm(String.valueOf(System.currentTimeMillis()));
-            // 파일확장자
-            verInfo.setFileExt(fileExt);
-            // 파일사이즈
-            Long fileSize = mFile.getSize();
-            verInfo.setFileSize(fileSize.intValue());
-            // 파일 MIME_TYPE
-            verInfo.setFileMimeType(mFile.getContentType());
-            // 원본 파일명
-            verInfo.setFileOrgNm(orgFileName);
+            if(mFile.getOriginalFilename().lastIndexOf('.') > 1) {
 
+                System.out.println(mFile.getOriginalFilename());
+                System.out.println(mFile.getOriginalFilename().substring(0, mFile.getOriginalFilename().lastIndexOf('.')));
+
+                orgFileName = mFile.getOriginalFilename().substring(0, mFile.getOriginalFilename().lastIndexOf('.'));
+                System.out.println("5");
+                // 파일경로
+                verInfo.setFileDir(path);
+                // 파일명 (물리적으로 저장되는 파일명)
+                verInfo.setFileNm(String.valueOf(System.currentTimeMillis()));
+                // 파일확장자
+                verInfo.setFileExt(fileExt);
+                // 파일사이즈
+                Long fileSize = mFile.getSize();
+                verInfo.setFileSize(fileSize.intValue());
+                // 파일 MIME_TYPE
+                verInfo.setFileMimeType(mFile.getContentType());
+                // 원본 파일명
+                verInfo.setFileOrgNm(orgFileName);
+            }
 
             try {
                 mFile.transferTo(new File(path+newFileName));

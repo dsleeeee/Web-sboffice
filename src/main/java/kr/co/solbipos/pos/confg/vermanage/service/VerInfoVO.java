@@ -43,11 +43,11 @@ public class VerInfoVO extends PageVO {
     /** 포스 프로그램 구분 */
     private String progFg;
     /** PGM 포함 여부 */
-    private String pgmYn;
+    private Boolean pgmYn;
     /** DB 포함 여부 */
-    private String dbYn;
+    private Boolean dbYn;
     /** IMG 포함 여부 */
-    private String imgYn;
+    private Boolean imgYn;
     /** 삭제여부 */
     private String delYn;
 
@@ -195,42 +195,45 @@ public class VerInfoVO extends PageVO {
     /**
      * @return the pgmYn
      */
-    public String getPgmYn() {
+
+    public Boolean getPgmYn() {
         return pgmYn;
     }
 
     /**
      * @param pgmYn the pgmYn to set
      */
-    public void setPgmYn(String pgmYn) {
+    public void setPgmYn(Boolean pgmYn) {
         this.pgmYn = pgmYn;
     }
 
     /**
      * @return the dbYn
      */
-    public String getDbYn() {
+
+    public Boolean getDbYn() {
         return dbYn;
     }
 
     /**
      * @param dbYn the dbYn to set
      */
-    public void setDbYn(String dbYn) {
+    public void setDbYn(Boolean dbYn) {
         this.dbYn = dbYn;
     }
 
     /**
      * @return the imgYn
      */
-    public String getImgYn() {
+
+    public Boolean getImgYn() {
         return imgYn;
     }
 
     /**
      * @param imgYn the imgYn to set
      */
-    public void setImgYn(String imgYn) {
+    public void setImgYn(Boolean imgYn) {
         this.imgYn = imgYn;
     }
 

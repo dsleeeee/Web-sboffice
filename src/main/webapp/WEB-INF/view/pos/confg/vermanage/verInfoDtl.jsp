@@ -224,7 +224,7 @@
     <%-- 적용매장 Header --%>
     var hData2 =
       [
-        {binding:"chk", header:"<s:message code='cmm.chk' />", width:40},
+        {binding:"chk", header:"<s:message code='cmm.chk' />", dataType:wijmo.DataType.Boolean, width:40},
         {binding:"storeCd", header:"<s:message code='verManage.store.storeCd' />"},
         {binding:"storeNm", header:"<s:message code='verManage.store.storeNm' />"},
         {binding:"verRecvFg", header:"<s:message code='verManage.store.verRecvFg' />"},
@@ -251,6 +251,7 @@
     });
 
     <%-- 체크박스 핸들러 --%>
+  /*
     grid2.addEventListener(grid2.hostElement, 'mousedown', function(e) {
       var ht = grid2.hitTest(e);
       if( ht.cellType == wijmo.grid.CellType.Cell) {
@@ -266,7 +267,7 @@
         }
       }
     });
-
+*/
 
     <%-- 적용매장 탭 클릭 --%>
     $("#storeInfoTab").click(function(e){
@@ -469,10 +470,6 @@
     <%-- 저장 또는 수정 --%>
     function sendFormData(sendUrl) {
 
-      var pgmYn = $('input:checkbox[id="pgm"]').is(":checked") == true ? "Y" : "N";
-      var dbYn  = $('input:checkbox[id="db"]').is(":checked") == true ? "Y" : "N";
-      var imgYn = $('input:checkbox[id="img"]').is(":checked") == true ? "Y" : "N";
-
       var formData = new FormData($("#uploadForm")[0]);
 
       formData.append("verSerNo", verSerNoInput.text);
@@ -480,10 +477,13 @@
       formData.append("fileSize", fileSizeInput.text);
       formData.append("fileDesc", fileDescInput.text);
       formData.append("progFg", progFgCombo.selectedValue);
-      formData.append("pgmYn", pgmYn);
-      formData.append("dbYn", dbYn);
-      formData.append("imgYn", imgYn);
+      formData.append("pgmYn", $('input:checkbox[id="pgm"]').is(":checked"));
+      formData.append("dbYn",  $('input:checkbox[id="db"]').is(":checked"));
+      formData.append("imgYn", $('input:checkbox[id="img"]').is(":checked"));
       formData.append("useYn", useYnCombo.selectedValue);
+
+      console.log(formData)
+
 
       $.postJSONFile(sendUrl, formData, function(result) {
         if(result.status === "FAIL") {
@@ -509,6 +509,10 @@
     <%--- 레이어 닫기 --%>
     function closeVerInfoLayer(){
       $("#uploadForm")[0].reset();
+
+      progFgCombo.selectedValue = "0";
+      useYnCombo.selectedValue = "Y";
+
       $("#verInfoDtl").hide();
       $("#verInfoDtlLayer").hide();
       $("#dim1").hide();
@@ -534,7 +538,6 @@
       $("#dim1").show();
       $("#verInfoTab").click();
 
-      //verSerNoInput.text = "자동입력";
     }
 
   <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
@@ -544,12 +547,30 @@
     function showVerInfoDtlEditLayer(obj) {
 
       var incldDtls = "";
-      if(obj.pgmYn == "Y") incldDtls += "<s:message code='verManage.pgm' />";
-      if(obj.dbYn  == "Y") incldDtls += ((incldDtls == ""? "" : " / ") + "<s:message code='verManage.db' />");
-      if(obj.imgYn == "Y") incldDtls += ((incldDtls == ""? "" : " / ") + "<s:message code='verManage.img' />");
+      if(obj.pgmYn == "Y"){
+        $("#pgm").prop("checked", true);
+        incldDtls += "<s:message code='verManage.pgm' />";
+      }
+      if(obj.dbYn  == "Y"){
+        $("#db").prop("checked", true);
+        incldDtls += ((incldDtls == ""? "" : " / ") + "<s:message code='verManage.db' />");
+      }
+      if(obj.imgYn == "Y"){
+        $("#img").prop("checked", true);
+        incldDtls += ((incldDtls == ""? "" : " / ") + "<s:message code='verManage.img' />");
+      }
 
       var progFgTxt;
       var useYnTxt;
+
+      console.log("progFgCombo : " + progFgCombo.selectedValue);
+      console.log("useYnCombo : "+useYnCombo.selectedValue);
+
+      progFgCombo.selectedValue = obj.progFg;
+      useYnCombo.selectedValue = obj.useYn;
+
+      console.log(progFgCombo.selectedValue);
+      console.log(useYnCombo.selectedValue);
 
       $.each(pData, function(i, item){
         if(obj.progFg == item.value) {
@@ -566,7 +587,7 @@
       <%-- 버전정보 조회 --%>
       $("#_verSerNo").text(obj.verSerNo);
       $("#_verSerNm").text(obj.verSerNm);
-      $("#_fileNm").text(obj.fileNm);
+      $("#_fileNm").text(obj.fileTotNm);
       $("#_fileSize").text(obj.fileSize);
       $("#_progFg").text(progFgTxt);
       $("#_incldDtls").text(incldDtls);
@@ -576,7 +597,6 @@
       <%-- 버전정보 수정 --%>
       verSerNoInput.text  = obj.verSerNo;
       verSerNmInput.text  = obj.verSerNm;
-      //fileNmInput.text    = obj.fileNm;
       fileSizeInput.text  = obj.fileSize;
       fileDescInput.text  = obj.fileDesc;
 

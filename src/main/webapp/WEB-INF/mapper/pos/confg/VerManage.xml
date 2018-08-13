@@ -12,12 +12,18 @@
 
 <mapper namespace="kr.co.solbipos.pos.confg.vermanage.service.impl.VerManageMapper">
 
+  <resultMap id="verListMap" type="DefaultMap">
+    <result column="PGN_YN" property="pgmYn" typeHandler="CustomBooleanTypeHandler"/>
+    <result column="DB_YN" property="dbYn" typeHandler="CustomBooleanTypeHandler"/>
+    <result column="IMG_YN" property="imgYn" typeHandler="CustomBooleanTypeHandler"/>
+  </resultMap>
+
   <!-- 포스버전 목록 조회  -->
   <!--
       TABLE    : TB_CM_POS_VERSN, TB_CM_POS_VERSN_STORE
       COMMENTS : 포스버전 리스트를 조회한다.
   -->
-  <select id="getList" parameterType="verInfoVO" resultType="DefaultMap">
+  <select id="getList" parameterType="verInfoVO" resultMap="verListMap">
     /* USE : VerManageMapper.getList */
     <include refid="CmmSQL.PagingTemplateHeader"/>
     SELECT A.VER_SER_NO,
@@ -68,6 +74,7 @@
            FILE_DIR,
            FILE_NM,
            FILE_EXT,
+           FILE_NM || '.' || FILE_EXT AS FILE_TOT_NM,
            FILE_SIZE,
            FILE_MIME_TYPE,
            FILE_ORG_NM,
@@ -82,6 +89,7 @@
            REG_ID
       FROM TB_CM_POS_VERSN
      WHERE VER_SER_NO = #{verSerNo}
+       AND DEL_YN = 'N'
   </select>
 
   <!-- 버전 등록   -->
@@ -149,12 +157,16 @@
     <![CDATA[
     UPDATE TB_CM_POS_VERSN
        SET VER_SER_NM     = #{verSerNm},
-           FILE_DIR       = #{fileDir},
-           FILE_NM        = #{fileNm},
-           FILE_EXT       = #{fileExt},
-           FILE_SIZE      = #{fileSize},
-           FILE_MIME_TYPE = #{fileMimeType},
-           FILE_ORG_NM    = #{fileOrgNm},
+        ]]>
+       <if test='fileDir != null and fileDir.toString() != ""'>
+         FILE_DIR       = #{fileDir},
+         FILE_NM        = #{fileNm},
+         FILE_EXT       = #{fileExt},
+         FILE_SIZE      = #{fileSize},
+         FILE_MIME_TYPE = #{fileMimeType},
+         FILE_ORG_NM    = #{fileOrgNm},
+       </if>
+       <![CDATA[
            FILE_DESC      = #{fileDesc},
            PROG_FG        = #{progFg},
            PGM_YN         = #{pgmYn},
@@ -174,7 +186,9 @@
   -->
   <update id="verDelete" parameterType="verInfoVO" >
     /* USE : VerManageMapper.deleteVersion */
-    DELETE TB_CM_POS_VERSN
+    UPDATE TB_CM_POS_VERSN
+       SET DEL_YN = 'Y',
+           USE_YN = 'N'
      WHERE VER_SER_NO = #{verSerNo}
   </update>
 
