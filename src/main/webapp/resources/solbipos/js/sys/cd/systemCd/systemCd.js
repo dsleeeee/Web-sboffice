@@ -97,6 +97,7 @@ $(document).ready(function () {
         gridRepresent.itemsSource.trackChanges = true;
 
         if (list.length === undefined || list.length == 0) {
+          gridRepresent.itemsSource = new wijmo.collections.CollectionView([]);
           s_alert.pop(result.message);
           return;
         }
