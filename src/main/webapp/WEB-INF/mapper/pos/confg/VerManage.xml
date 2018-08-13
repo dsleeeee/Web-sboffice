@@ -227,7 +227,7 @@
            TB_HQ_OFFICE tho,
            (
       SELECT STORE_CD,
-             MAX(VER_SER_NO) AS LAST_VER_SER_NO
+             MAX(VER_SER_NO) AS  LAST_VER_SER_NO
         FROM TB_CM_POS_VERSN_STORE
        GROUP BY STORE_CD
             ) tcp
@@ -254,7 +254,7 @@
     <if test='vanCd != null and vanCd != "" and vanCd.toString() != ""'>
        AND tms.VAN_CD = #{vanCd}
     </if>
-     ORDER BY HQ_OFFICE_CD, STORE_CD
+     ORDER BY HQ_OFFICE_CD,  STORE_CD
      <include refid="CmmSQL.PagingTemplateBottom"/>
   </select>
 
