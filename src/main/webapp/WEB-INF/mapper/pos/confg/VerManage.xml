@@ -205,7 +205,7 @@
            tms.STORE_NM,
            tho.HQ_OFFICE_CD,
            tho.HQ_OFFICE_NM,
-           tcp.LAST_VER
+           tcp.LAST_VER_SER_NO
            <include refid="CmmSQL.PagingTemplateCount"/>
       FROM TB_MS_STORE tms,
            TB_HQ_OFFICE tho,
