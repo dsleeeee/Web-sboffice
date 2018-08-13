@@ -362,15 +362,15 @@ var rCashBillUseYn = wcombo.genCommonBox("#rCashBillAutoUseYn", cashBillYn);
 <%-- 코너별 승인 그리드 헤더 --%>
 var cornerHeaderData =
   [
-    {binding:"chk", header:"<s:message code='storeManage.chk' />"},
-    {binding:"cornrCd", header:"<s:message code='storeManage.cornrCd' />", visible:false },
-    {binding:"cornrNm", header:"<s:message code='storeManage.cornrNm' />", maxLength:15},
-    {binding:"vanTermNo", header:"<s:message code='storeManage.vanContract' />", maxLength:20},
-    {binding:"vanSerNo", header:"<s:message code='storeManage.vanSerNo' />", maxLength:20},
-    {binding:"ownerNm", header:"<s:message code='storeManage.onwerNm' />", maxLength:15},
-    {binding:"bizNo", header:"<s:message code='storeManage.bizNo' />", maxLength:10},
-    {binding:"telNo", header:"<s:message code='storeManage.telNo' />", maxLength:15},
-    {binding:"useYn", header:"<s:message code='storeManage.useYn' />", dataType:wijmo.DataType.Boolean}
+    {binding:"gChk", header:"<s:message code='storeManage.chk' />", dataType:wijmo.DataType.Boolean, width:40},
+    {binding:"cornrCd", header:"<s:message code='storeManage.cornrCd' />", visible:false, width:"*" },
+    {binding:"cornrNm", header:"<s:message code='storeManage.cornrNm' />", maxLength:15, width:"*"},
+    {binding:"vanTermNo", header:"<s:message code='storeManage.vanContract' />", maxLength:20, width:"*"},
+    {binding:"vanSerNo", header:"<s:message code='storeManage.vanSerNo' />", maxLength:20, width:"*"},
+    {binding:"ownerNm", header:"<s:message code='storeManage.onwerNm' />", maxLength:15, width:"*"},
+    {binding:"bizNo", header:"<s:message code='storeManage.bizNo' />", maxLength:10, width:"*"},
+    {binding:"telNo", header:"<s:message code='storeManage.telNo' />", maxLength:15, width:"*"},
+    {binding:"useYn", header:"<s:message code='storeManage.useYn' />", dataType:wijmo.DataType.Boolean, width:"*"}
   ];
 
 <%-- 포스별 승인 그리드 헤더 --%>
