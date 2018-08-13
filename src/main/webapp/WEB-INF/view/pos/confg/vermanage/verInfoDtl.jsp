@@ -454,13 +454,14 @@
 
       $.postJSONFile(sendUrl, formData, function(result) {
 
-        console.log(result);
+            s_alert.pop(result.status);
 
        if(result.status === "FAIL") {
           s_alert.pop(result.message);
           return;
         }
-        
+
+        s_alert.pop("<s:message code='cmm.saveSucc'/>");
 
         $("#verInfoViewArea").hide();
         $("#viewBtnArea").hide();
