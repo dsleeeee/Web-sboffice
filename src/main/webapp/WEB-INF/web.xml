@@ -54,8 +54,8 @@
 
     <multipart-config>
 <!--       <location>${file.tempDir}</location> -->
-      <max-file-size>307200</max-file-size>
-      <max-request-size>307200</max-request-size>
+      <max-file-size>314572800</max-file-size>
+      <max-request-size>314572800</max-request-size>
       <file-size-threshold>0</file-size-threshold>
     </multipart-config>
 
