@@ -13,17 +13,18 @@
 <mapper namespace="kr.co.solbipos.pos.confg.vermanage.service.impl.VerManageMapper">
 
   <resultMap id="verListMap" type="DefaultMap">
-    <result column="PGN_YN" property="pgmYn" typeHandler="CustomBooleanTypeHandler"/>
+    <result column="PGM_YN" property="pgmYn" typeHandler="CustomBooleanTypeHandler"/>
     <result column="DB_YN" property="dbYn" typeHandler="CustomBooleanTypeHandler"/>
     <result column="IMG_YN" property="imgYn" typeHandler="CustomBooleanTypeHandler"/>
   </resultMap>
+
 
   <!-- 포스버전 목록 조회  -->
   <!--
       TABLE    : TB_CM_POS_VERSN, TB_CM_POS_VERSN_STORE
       COMMENTS : 포스버전 리스트를 조회한다.
   -->
-  <select id="getList" parameterType="verInfoVO" resultMap="verListMap">
+  <select id="getList" parameterType="verInfoVO" resultType="DefaultMap">
     /* USE : VerManageMapper.getList */
     <include refid="CmmSQL.PagingTemplateHeader"/>
     SELECT A.VER_SER_NO,
@@ -67,7 +68,7 @@
       TABLE    : TB_CM_POS_VERSN
       COMMENTS : 포스버전에 대한 상세 정보를 조회한다.
   -->
-  <select id="dtlInfo" parameterType="verInfoVO" resultType="DefaultMap">
+  <select id="dtlInfo" parameterType="verInfoVO" resultMap="verListMap">
     /* USE : VerManageMapper.dtlInfo */
     SELECT VER_SER_NO,
            VER_SER_NM,
