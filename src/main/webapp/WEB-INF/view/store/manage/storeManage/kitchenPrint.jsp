@@ -39,45 +39,33 @@ var useYnDataMap  = new wijmo.grid.DataMap(useYn, 'value', 'name');
 <%-- 그리드  설정 --%>
 var kitchenPrintHeader =
   [
-    {binding:"posNo", header:"<s:message code='storeManage.kitchenPrint.posNo' />"},
-    {binding:"prterNo", header:"<s:message code='storeManage.prterNo' />"},
-    {binding:"prterNm", header:"<s:message code='storeManage.prterNm' />"},
-    {binding:"prterKindFg", header:"<s:message code='storeManage.prterKind' />", dataMap:prterKindDM},
-    {binding:"prterPortFg", header:"<s:message code='storeManage.prterPort' />", dataMap:prterPortDM},
-    {binding:"prterSpeedFg", header:"<s:message code='storeManage.prterSpeed' />", dataMap:prterSpeedDM},
-    {binding:"prterOutputQty", header:"<s:message code='storeManage.prterOutputQty' />"},
-    {binding:"prterNetIp", header:"<s:message code='storeManage.prterNetIp' />"},
-    {binding:"prterNetPort", header:"<s:message code='storeManage.prterNetPort' />"},
-    {binding:"useYn", header:"<s:message code='storeManage.useYn' />", dataMap:useYnDataMap},
-    {binding:"chk", header:"<s:message code='cmm.delete' />", dataType:wijmo.DataType.Boolean}
+    {binding:"gChk", header:"<s:message code='cmm.chk' />", dataType:wijmo.DataType.Boolean, width:40},
+    {binding:"posNo", header:"<s:message code='storeManage.kitchenPrint.posNo' />", width:"*"},
+    {binding:"prterNo", header:"<s:message code='storeManage.prterNo' />", width:"*"},
+    {binding:"prterNm", header:"<s:message code='storeManage.prterNm' />", width:"*"},
+    {binding:"prterKindFg", header:"<s:message code='storeManage.prterKind' />", dataMap:prterKindDM, width:"*"},
+    {binding:"prterPortFg", header:"<s:message code='storeManage.prterPort' />", dataMap:prterPortDM, width:"*"},
+    {binding:"prterSpeedFg", header:"<s:message code='storeManage.prterSpeed' />", dataMap:prterSpeedDM, width:"*"},
+    {binding:"prterOutputQty", header:"<s:message code='storeManage.prterOutputQty' />", width:"*"},
+    {binding:"prterNetIp", header:"<s:message code='storeManage.prterNetIp' />", width:"*"},
+    {binding:"prterNetPort", header:"<s:message code='storeManage.prterNetPort' />", width:"*"},
+    {binding:"useYn", header:"<s:message code='storeManage.useYn' />", dataMap:useYnDataMap, width:"*"}
   ];
 
-var kitchenPrintGrid = wgrid.genGrid("#kitchenPrintGrid", kitchenPrintHeader, "${menuCd}", 2, ${clo.getColumnLayout(2)});
-
+var kitchenPrintGrid = wgrid.genGrid("#kitchenPrintGrid", kitchenPrintHeader);
 kitchenPrintGrid.isReadOnly = false;
-
-<%-- 체크박스 초기화 --%>
-kitchenPrintGrid.formatItem.addHandler(function(s, e) {
-  if (e.panel == s.cells) {
-    var col = s.columns[e.col];
-    var item = s.rows[e.row].dataItem;
-
-    if( col.binding == "chk") {
-      e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.chk == true || item.chk == "Y" ? 'checked' : '') + '>';
-    }
-  }
-});
 
 <%-- 주방프린터 영역 보여줌 --%>
 function showkitchenPrintLayout(){
 
   $("#kitchenPrintArea").show();
-
+  // TODO : kitchenPrintHeader 바인드 처리 시작
   if(posNoDM == undefined) {
     posNoDM = new wijmo.grid.DataMap(posList, 'posNo', 'posNm');
   }
 
-  kitchenPrintGrid.columns[0].dataMap = posNoDM;  // posNo dataMap 설정
+  kitchenPrintGrid.columns[1].dataMap = posNoDM;  // posNo dataMap 설정
+  // TODO : kitchenPrintHeader 바인드 처리 끝
 
   var param = {};
   param.hqOfficeCd  = selectedStore.hqOfficeCd;

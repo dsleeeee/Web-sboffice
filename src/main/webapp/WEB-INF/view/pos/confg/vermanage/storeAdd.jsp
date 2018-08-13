@@ -132,7 +132,7 @@
   <%-- 적용매장 Header --%>
   var hData3 =
     [
-      {binding:"chk", header:"<s:message code='verManage.store.chk' />", dataType:wijmo.DataType.Boolean},
+      {binding:"gChk", header:"<s:message code='verManage.store.chk' />", dataType:wijmo.DataType.Boolean},
       {binding:"hqOfficeCd", header:"<s:message code='verManage.store.hqOfficeCd' />", isReadOnly:true},
       {binding:"hqOfficeNm", header:"<s:message code='verManage.store.hqOfficeNm' />", isReadOnly:true},
       {binding:"storeCd", header:"<s:message code='verManage.store.storeCd' />", isReadOnly:true},

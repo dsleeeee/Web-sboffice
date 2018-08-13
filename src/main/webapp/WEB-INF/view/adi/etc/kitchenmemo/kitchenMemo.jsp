@@ -33,21 +33,17 @@ $(document).ready(function(){
   var useYnData  = new wijmo.grid.DataMap([{id:"Y", name:"Y"},{id:"N", name:"N"}], 'id', 'name');
   var rdata = 
     [
-      {binding:"chk", header:"<s:message code='kitchenMemo.chk' />"},
-      {binding:"kitchnMemoCd", header:"<s:message code='kitchenMemo.kitchnMemoCd' />", maxLength:3},
-      {binding:"kitchnMemoNm", header:"<s:message code='kitchenMemo.kitchnMemoNm' />", maxLength:30},
-      {binding:"memoFg", header:"<s:message code='kitchenMemo.memoFg' />", dataMap:memoFgData},
-      {binding:"useYn", header:"<s:message code='kitchenMemo.useYn' />", dataMap:useYnData}
+      {binding:"gChk", header:"<s:message code='kitchenMemo.chk' />", dataType:wijmo.DataType.Boolean, width:40},
+      {binding:"kitchnMemoCd", header:"<s:message code='kitchenMemo.kitchnMemoCd' />", maxLength:3, width:"*"},
+      {binding:"kitchnMemoNm", header:"<s:message code='kitchenMemo.kitchnMemoNm' />", maxLength:30, width:"*"},
+      {binding:"memoFg", header:"<s:message code='kitchenMemo.memoFg' />", dataMap:memoFgData, width:"*"},
+      {binding:"useYn", header:"<s:message code='kitchenMemo.useYn' />", dataMap:useYnData, width:"*"}
     ];
   
   var kitchenMemoList = ${kitchenMemoList};
-  <%-- 체크박스 초기화 --%>
-  kitchenMemoList.forEach(function(item){
-    item.chk = false;
-  });
   
   <%-- 그리드 div, column data, 화면명, 화면 그리드 순서 --%>
-  var grid             = wgrid.genGrid("#theGrid", rdata, "${menuCd}", 1, ${clo.getColumnLayout(1)});
+  var grid             = wgrid.genGrid("#theGrid", rdata);
   var kitchenMemo      = new wijmo.collections.CollectionView(kitchenMemoList);
   kitchenMemo.trackChanges = true;
   

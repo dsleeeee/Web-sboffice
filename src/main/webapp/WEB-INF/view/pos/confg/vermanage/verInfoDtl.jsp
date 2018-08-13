@@ -224,7 +224,7 @@
     <%-- 적용매장 Header --%>
     var hData2 =
       [
-        {binding:"chk", header:"<s:message code='cmm.chk' />", width:40},
+        {binding:"gChk", header:"<s:message code='cmm.chk' />", dataType:wijmo.DataType.Boolean, width:40},
         {binding:"storeCd", header:"<s:message code='verManage.store.storeCd' />"},
         {binding:"storeNm", header:"<s:message code='verManage.store.storeNm' />"},
         {binding:"verRecvFg", header:"<s:message code='verManage.store.verRecvFg' />"},
@@ -238,35 +238,6 @@
     <%-- 적용매장 그리드 생성 --%>
     var grid2 = wgrid.genGrid("#theGrid2", hData2, "${menuCd}", 2, ${clo.getColumnLayout(2)});
     grid2.isReadOnly = true;
-
-    <%-- 체크박스 초기화 --%>
-    grid2.formatItem.addHandler(function(s, e) {
-      if (e.panel == s.cells) {
-        var col = s.columns[e.col];
-        var item = s.rows[e.row].dataItem;
-        if( col.binding == "chk") {
-          e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.chk == true || item.chk == "Y" ? 'checked' : '') + '>';
-        }
-      }
-    });
-
-    <%-- 체크박스 핸들러 --%>
-    grid2.addEventListener(grid2.hostElement, 'mousedown', function(e) {
-      var ht = grid2.hitTest(e);
-      if( ht.cellType == wijmo.grid.CellType.Cell) {
-        var col = ht.panel.columns[ht.col];
-        if(col.binding == "chk") {
-          grid2.beginUpdate();
-          if(grid2.cells.getCellData(ht.row, ht.col, true)){
-            grid2.cells.setCellData(ht.row, ht.col, false);
-          } else {
-            grid2.cells.setCellData(ht.row, ht.col, true);
-          }
-          grid2.endUpdate();
-        }
-      }
-    });
-
 
     <%-- 적용매장 탭 클릭 --%>
     $("#storeInfoTab").click(function(e){
