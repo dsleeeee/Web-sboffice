@@ -113,7 +113,7 @@ authTree.prototype.getData = function(userId) {
   var param = {};
   if(!isEmpty(userId)) {
     param.userId = userId;
-    tree.itemsSource = [];
+    tree.itemsSource = new wijmo.collections.CollectionView([]);
     $.postJSON("/sys/auth/authgroup/authgroup/listResrceById.sb", param, function(result) {
       tree.itemsSource = result.data.list;
     },

@@ -205,7 +205,7 @@
       var list = result.data.list;
       if(list.length === undefined || list.length == 0) {
         s_alert.pop(result.message);
-        grid1.itemsSource = [];
+        grid1.itemsSource = new wijmo.collections.CollectionView([]);
         return;
       }
       grid1.itemsSource = list;
