@@ -225,7 +225,7 @@ function search(index) {
 
     if(list.length === undefined || list.length == 0) {
       s_alert.pop(result.message);
-      grid.itemsSource = [];
+      grid.itemsSource = new wijmo.collections.CollectionView([]);
       return;
     }
 

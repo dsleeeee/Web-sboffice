@@ -77,21 +77,21 @@
 <div id="itemSelLayer" class="layer" style="display: none;">
   <div class="layer_inner">
     <div class="title w800">
-      <p class="tit"><s:message code="kind.gridNm" /></p>
+      <p class="tit"><s:message code="kind.layer.gridNm" /></p>
       <a href="javascript:;" class="btn_close itemSelClose"></a>
       <div class="con">
           <%--위즈모 테이블--%>
           <div class="wj-TblWrapBr mt10" style="height: 400px;">
             <%-- 개발시 높이 조절해서 사용--%>
             <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
-            <div id="theGrid" style="width:100%;height:393px;"></div>
+            <div id="gridPrintCode" style="width:100%;height:393px;"></div>
           </div>
       </div>
       <%-- 저장 --%>
       <div class="btnSet">
-        <span><a href="javascript:;" id="btnSaveItem" class="btn_blue"><s:message code="cmm.save" /></a></span>
+        <span><a href="javascript:;" id="btnSaveItem" class="btn_blue"><s:message code="cmm.chk" /></a></span>
       </div>
     </div>
   </div>
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/sys/bill/kind/kind.js?ver=20180810" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/bill/kind/kind.js?ver=2018081302" charset="utf-8"></script>

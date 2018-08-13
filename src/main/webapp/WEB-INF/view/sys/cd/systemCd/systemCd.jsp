@@ -242,7 +242,7 @@
               
               if ( list.length === undefined || list.length == 0 ) {
                 <%-- 그리드 초기화 --%>
-                gridRight.itemsSource = [];
+                gridRight.itemsSource = new wijmo.collections.CollectionView([]);
                 s_alert.pop(result.message);
                 return;
               }

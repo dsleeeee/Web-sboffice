@@ -135,7 +135,7 @@ function showKitchenPrintProductLayout(){
 <%-- 주방프린터 목록 조회 --%>
 function getPrintList(){
 
-  kpProductGrid.itemsSource = [];
+  kpProductGrid.itemsSource = new wijmo.collections.CollectionView([]);
 
   var param = {};
   param.hqOfficeCd  = selectedStore.hqOfficeCd;
@@ -165,8 +165,8 @@ function getProductList(){
   param.storeCd     = selectedDataItem.storeCd;
   param.prterNo     = selectedDataItem.prterNo;
 
-  productTree1.itemsSource = [];
-  productTree2.itemsSource = [];
+  productTree1.itemsSource = new wijmo.collections.CollectionView([]);
+  productTree2.itemsSource = new wijmo.collections.CollectionView([]);
 
   $.postJSON("/store/manage/storeManage/storeManage/getKitchenPrintProductInfo.sb", param, function(result) {
     if(result.status === "FAIL") {
