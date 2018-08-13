@@ -225,19 +225,19 @@
     var hData2 =
       [
         {binding:"gChk", header:"<s:message code='cmm.chk' />", dataType:wijmo.DataType.Boolean, width:40},
-        {binding:"storeCd", header:"<s:message code='verManage.store.storeCd' />"},
-        {binding:"storeNm", header:"<s:message code='verManage.store.storeNm' />"},
-        {binding:"verRecvFg", header:"<s:message code='verManage.store.verRecvFg' />"},
-        {binding:"verRecvDt", header:"<s:message code='verManage.store.verRecvDt' />"},
-        {binding:"clsFg", header:"<s:message code='verManage.store.clsFg' />", dataMap:clsFgDataMap},
-        {binding:"sysStatFg", header:"<s:message code='verManage.store.sysStatFg' />",dataMap:sysStatFgDataMap},
-        {binding:"regDt", header:"<s:message code='verManage.regDt' />"},
-        {binding:"regId", header:"<s:message code='verManage.regId' />"}
+        {binding:"storeCd", header:"<s:message code='verManage.store.storeCd' />", isReadOnly:true},
+        {binding:"storeNm", header:"<s:message code='verManage.store.storeNm' />", isReadOnly:true},
+        {binding:"verRecvFg", header:"<s:message code='verManage.store.verRecvFg' />", isReadOnly:true},
+        {binding:"verRecvDt", header:"<s:message code='verManage.store.verRecvDt' />", isReadOnly:true},
+        {binding:"clsFg", header:"<s:message code='verManage.store.clsFg' />", dataMap:clsFgDataMap, isReadOnly:true},
+        {binding:"sysStatFg", header:"<s:message code='verManage.store.sysStatFg' />",dataMap:sysStatFgDataMap, isReadOnly:true},
+        {binding:"regDt", header:"<s:message code='verManage.regDt' />", isReadOnly:true},
+        {binding:"regId", header:"<s:message code='verManage.regId' />", isReadOnly:true}
       ];
 
     <%-- 적용매장 그리드 생성 --%>
     var grid2 = wgrid.genGrid("#theGrid2", hData2, "${menuCd}", 2, ${clo.getColumnLayout(2)});
-    grid2.isReadOnly = true;
+    grid2.isReadOnly = false;
 
     <%-- 적용매장 탭 클릭 --%>
     $("#storeInfoTab").click(function(e){
@@ -267,13 +267,13 @@
     $("#btnDelStore").click(function(e){
       for(var i = grid2.itemsSource.itemCount-1; i >= 0; i-- ){
         var item = grid2.itemsSource.items[i];
-        if(item.chk){
+        if(item.gChk){
           grid2.itemsSource.removeAt(i);
         }
       }
 
       if(grid2.itemsSource.itemsRemoved.length == 0) {
-        s_alert("<s:message code='verManage.no.delete.item' />");
+        s_alert.pop("<s:message code='verManage.no.delete.item' />");
         return;
       }
       else {
@@ -452,9 +452,6 @@
       formData.append("imgYn", $('input:checkbox[id="img"]').is(":checked"));
       formData.append("useYn", useYnCombo.selectedValue);
 
-      console.log(formData)
-
-
       $.postJSONFile(sendUrl, formData, function(result) {
         if(result.status === "FAIL") {
           s_alert.pop(result.message);
@@ -534,14 +531,8 @@
       var progFgTxt;
       var useYnTxt;
 
-      console.log("progFgCombo : " + progFgCombo.selectedValue);
-      console.log("useYnCombo : "+useYnCombo.selectedValue);
-
       progFgCombo.selectedValue = obj.progFg;
       useYnCombo.selectedValue = obj.useYn;
-
-      console.log(progFgCombo.selectedValue);
-      console.log(useYnCombo.selectedValue);
 
       $.each(pData, function(i, item){
         if(obj.progFg == item.value) {

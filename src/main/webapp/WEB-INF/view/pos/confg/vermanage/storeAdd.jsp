@@ -132,7 +132,7 @@
   <%-- 적용매장 Header --%>
   var hData3 =
     [
-      {binding:"gChk", header:"<s:message code='verManage.store.chk' />", dataType:wijmo.DataType.Boolean},
+      {binding:"gChk", header:"<s:message code='verManage.store.chk' />", dataType:wijmo.DataType.Boolean, width:40},
       {binding:"hqOfficeCd", header:"<s:message code='verManage.store.hqOfficeCd' />", isReadOnly:true},
       {binding:"hqOfficeNm", header:"<s:message code='verManage.store.hqOfficeNm' />", isReadOnly:true},
       {binding:"storeCd", header:"<s:message code='verManage.store.storeCd' />", isReadOnly:true},
@@ -149,17 +149,6 @@
 
   grid3.isReadOnly  = false;
   grid3.itemsSource = new wijmo.collections.CollectionView();
-
-  <%-- 체크박스 초기화 --%>
-  grid3.formatItem.addHandler(function(s, e) {
-    if (e.panel == s.cells) {
-      var col = s.columns[e.col];
-      var item = s.rows[e.row].dataItem;
-      if( col.binding == "chk") {
-        e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.chk == true || item.chk == "Y" ? 'checked' : '') + '>';
-      }
-    }
-  });
 
   <%-- 매장 추가 레이어 열기--%>
   function showAddStorelLayer(){
@@ -243,7 +232,7 @@
     var paramArr = new Array();
     for(var i = 0; i < grid3.collectionView.itemCount; i++ ){
       var item = grid3.collectionView.items[i];
-      if(item.chk){
+      if(item.gChk){
         item.verSerNo = selectVerSerNo;
         paramArr.push(item);
       }
