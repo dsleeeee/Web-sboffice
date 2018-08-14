@@ -656,7 +656,7 @@
   <%-- 본사코드 선택 이벤트 --%>
   $("input[name=rHqOfficeCdType]").change(function(){
     var hqType = $("input[name=rHqOfficeCdType]:checked").val();
-    alert('changed value : '+ hqType);
+    //alert('changed value : '+ hqType);
     if(hqType == "D") {
       rSysStatFg.selectedValue = "9";
       rSysStatFg.isReadOnly = true;
