@@ -256,13 +256,14 @@ public class StoreManageServiceImpl implements StoreManageService{
 
         if(SysStatFg.CLOSE == storeManageVO.getSysStatFg()) {
             storeManageVO.setSysClosureDate("99991231");
+        } else  if(SysStatFg.DEMO == storeManageVO.getSysStatFg() ) {
+            storeManageVO.setSysClosureDate("99991231");
         } else {
             storeManageVO.setSysClosureDate(currentDateString());
         }
 
         // 매장 정보 수정
         int procCnt = mapper.updateStoreInfo(storeManageVO);
-
 
         return procCnt;
     }
