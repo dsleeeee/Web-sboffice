@@ -110,9 +110,9 @@
 
   var srchHqOfficeCd = wcombo.genInputText("#srchHqOfficeCd", "7", "본사코드", function(s, e) {
       if ( s.maskFull ) {
-          console.log("통과");
+          //console.log("통과");
       } else {
-          console.log("실패");
+          //console.log("실패");
       }
   });
 
@@ -190,11 +190,12 @@
 
   <%-- 본사 목록 조회 --%>
   function search(index) {
+    /*
     if(srchHqOfficeCd.text.length > 5) {
       s_alert.pop("<s:message code='hqManage.hqOfficeCd'/><s:message code='cmm.regexp' arguments='5'/>");
       return;
     }
-
+    */
     if(srchHqOfficeNm.text.length > 15) {
       s_alert.pop("<s:message code='hqManage.hqOfficeNm'/><s:message code='cmm.regexp' arguments='15'/>");
       return;
