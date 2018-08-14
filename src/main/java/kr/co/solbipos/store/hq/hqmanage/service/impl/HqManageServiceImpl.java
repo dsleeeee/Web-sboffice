@@ -86,7 +86,10 @@ public class HqManageServiceImpl implements HqManageService{
         hqManage.setRegId(sessionInfoVO.getUserId());
         hqManage.setModId(sessionInfoVO.getUserId());
 
-        if(SysStatFg.CLOSE == hqManage.getSysStatFg()) {
+
+        if(SysStatFg.CLOSE == hqManage.getSysStatFg() ) {
+            hqManage.setSysClosureDate("99991231");
+        } else  if(SysStatFg.DEMO == hqManage.getSysStatFg() ) {
             hqManage.setSysClosureDate("99991231");
         } else {
             hqManage.setSysClosureDate(currentDateString());
