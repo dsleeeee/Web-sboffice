@@ -122,6 +122,8 @@ public class StoreManageServiceImpl implements StoreManageService{
 
         if(SysStatFg.CLOSE == storeManageVO.getSysStatFg()) {
             storeManageVO.setSysClosureDate("99991231");
+        } else  if(SysStatFg.DEMO == storeManageVO.getSysStatFg() ) {
+            storeManageVO.setSysClosureDate("99991231");
         } else {
             storeManageVO.setSysClosureDate(currentDateString());
         }
@@ -153,9 +155,6 @@ public class StoreManageServiceImpl implements StoreManageService{
 
         // 신규 매장정보 저장
         int procCnt = mapper.saveStoreInfo(storeManageVO);
-
-        // 해당 브랜드의 분류 복사하여 등록
-        procCnt += mapper.copyClsInfo(storeManageVO);
 
         // 기본 사용자 등록
         procCnt += mapper.insertStoreDefaultUser(storeManageVO);
