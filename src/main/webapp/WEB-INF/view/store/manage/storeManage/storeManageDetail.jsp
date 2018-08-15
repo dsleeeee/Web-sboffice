@@ -384,8 +384,8 @@ var posHeaderData =
     {binding:"vanCertCnt", header:"<s:message code='storeManage.vanCertCnt' />", isReadOnly:true}
   ];
 
-var theCornerGrid = wgrid.genGrid("#theCornerGrid", cornerHeaderData, "${menuCd}", 2, ${clo.getColumnLayout(2)});
-var thePosGrid    = wgrid.genGrid("#thePosGrid", posHeaderData, "${menuCd}", 3, ${clo.getColumnLayout(3)});
+var theCornerGrid = wgrid.genGrid("#theCornerGrid", cornerHeaderData);
+var thePosGrid    = wgrid.genGrid("#thePosGrid", posHeaderData);
 
 theCornerGrid.isReadOnly = false;
 thePosGrid.isReadOnly = false;
@@ -591,6 +591,18 @@ function setStoreData(data){
 
 <%-- ============================================= 버튼 클릭 이벤트 관련 =========================================== --%>
 
+<%-- 매장유형선택 이벤트 --%>
+$("input[name=rStoreCdRadio]").change(function(){
+ var thisVal = $(this).val();
+ if(thisVal == "<s:message code='storeManage.storeType.demo' />") {
+   rSysStatFg.selectedValue = "9";
+   rSysStatFg.isReadOnly = true;
+ } else {
+   rSysStatFg.selectedValue = "";
+   rSysStatFg.isReadOnly = false;
+ }
+});
+
 <%-- 사업자번호 중복 체크 버튼 클릭--%>
 var isBizChk = false;
 
@@ -749,6 +761,7 @@ function chkVal(sendUrl) {
   }
 
   <%-- 사업자번호 중복체크를 해주세요. --%>
+  //TODO 등록시에만 체크
   var msg = "<s:message code='storeManage.require.duplicate.bizNo'/>";
   if(!isBizChk) {
     s_alert.pop(msg);
@@ -870,12 +883,17 @@ function saveStore(sendUrl){
   //TODO 우선 아래 코너 제외하고 저장해보기
   $.postJSONSave(sendUrl, param, function(result) {
 
+    console.log("====================================================");
+    console.log(result);
     if(result.status === "FAIL") {
       s_alert.pop(result.message);
       return;
     }
     s_alert.pop("<s:message code='cmm.saveSucc'/>");
-    showStoreDetail();
+
+    selectedStore = result.data[0];
+    search(1);
+    //showStoreDetail();
     //saveOtherInfo();
   }
   ,function(result){

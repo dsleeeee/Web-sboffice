@@ -50,6 +50,8 @@ public class VerInfoVO extends PageVO {
     private Boolean imgYn;
     /** 삭제여부 */
     private String delYn;
+    /** 사용여부 */
+    private UseYn useYn;
 
 
     /**
@@ -264,8 +266,5 @@ public class VerInfoVO extends PageVO {
     public void setUseYn(UseYn useYn) {
         this.useYn = useYn;
     }
-
-    /** 사용여부 */
-    private UseYn useYn;
 
 }

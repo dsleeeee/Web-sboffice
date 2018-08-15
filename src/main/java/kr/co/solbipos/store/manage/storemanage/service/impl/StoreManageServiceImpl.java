@@ -159,6 +159,9 @@ public class StoreManageServiceImpl implements StoreManageService{
         // 기본 사용자 등록
         procCnt += mapper.insertStoreDefaultUser(storeManageVO);
 
+        // 웹 사용자 등록
+        procCnt += mapper.insertStoreWebUser(storeManageVO);
+
         // 포스 출력물 마스터 등록
         if("00000".equals(storeManageVO.getHqOfficeCd())) { // 단독매장
             procCnt += mapper.insertDefaultPrintTemplete(storeManageVO);

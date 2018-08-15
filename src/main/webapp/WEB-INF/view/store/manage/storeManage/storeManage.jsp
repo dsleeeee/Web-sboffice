@@ -126,23 +126,23 @@ var srchSysStatFg     = wcombo.genCommonBox("#srchSysStatFg", sysStatFg);
 <%-- header --%>
 var hData =
   [
-    {binding:"hqOfficeCdNm", header:"<s:message code='storeManage.hqOffice' />", visible:false, width:0},
-    {binding:"hqOfficeCd", header:"<s:message code='storeManage.hqOfficeCd' />", visible:false, width:"*"},
-    {binding:"hqOfficeNm", header:"<s:message code='storeManage.hqOfficeNm' />", visible:false, width:"*"},
-    {binding:"storeCd", header:"<s:message code='storeManage.storeCd' />", width:"*"},
-    {binding:"storeNm", header:"<s:message code='storeManage.storeNm' />", width:"*"},
+    {binding:"hqOfficeCdNm", header:"<s:message code='storeManage.hqOffice' />", visible:false},
+    {binding:"hqOfficeCd", header:"<s:message code='storeManage.hqOfficeCd' />", visible:false},
+    {binding:"hqOfficeNm", header:"<s:message code='storeManage.hqOfficeNm' />", visible:false},
+    {binding:"storeCd", header:"<s:message code='storeManage.storeCd' />", width:80},
+    {binding:"storeNm", header:"<s:message code='storeManage.storeNm' />", width:80},
     {binding:"clsFg", header:"<s:message code='storeManage.clsFg' />", dataMap:clsFgDataMap, width:"*"},
     {binding:"sysStatFg", header:"<s:message code='storeManage.sysStatFg' />", dataMap:sysStatFgDataMap, width:"*"},
     {binding:"sysOpenDate", header:"<s:message code='storeManage.sysOpenDate' />", width:"*"}
   ];
 
-var grid          = wgrid.genGrid("#theGrid", hData, "${menuCd}", 1, ${clo.getColumnLayout(1)});
+var grid          = wgrid.genGrid("#theGrid", hData);
 
-grid.showMarquee  = true;
-grid.mergeManager = new wijmo.grid.CustomMergeManager(grid);  //TODO 매장없을 경우만 셀 머지되도록 수정 필요
+grid.allowMerging = "Cells";
 
 var ldata         = ${ccu.getListScale()};
 var listScaleBox  = wcombo.genCommonBox("#listScaleBox", ldata);
+
 
 <%-- 그리드 포맷 --%>
 grid.formatItem.addHandler(function(s, e) {
@@ -234,8 +234,10 @@ function search(index) {
     grid.itemsSource = new wijmo.collections.CollectionView(list, {
       groupDescriptions : [ 'hqOfficeCdNm']
     });
-    console.log(grid.itemsSource);
 
+    grid.collapseGroupsToLevel(1);
+
+    <%-- 매장 없는 본사 merge --%>
     for(var i=0; i<grid.itemsSource.items.length; i++){
       if(grid.itemsSource.items[i].storeNm == null) {
         grid.itemsSource.items[i].storeNm = "<s:message code='storeManage.require.regist.store2'/>";
@@ -244,6 +246,12 @@ function search(index) {
         grid.itemsSource.items[i].sysStatFg = "<s:message code='storeManage.require.regist.store2'/>";
         grid.itemsSource.items[i].sysOpenDate = "<s:message code='storeManage.require.regist.store2'/>";
       }
+    }
+
+    for(var i=0; i<grid.rows.length; i++) {
+     if(grid.rows[i].dataItem.storeNm) {
+       grid.rows[i].allowMerging = true;
+     }
     }
 
     <%-- 그리드 선택 이벤트 --%>
@@ -256,8 +264,10 @@ function search(index) {
         } else {
           var col = ht.panel.columns[ht.col];
           if( col.binding == "storeNm") {
-            selectedStore = grid.rows[ht.row].dataItem;
-            showDetail();
+            if(grid.rows[ht.row].dataItem.storeCd != "<s:message code='storeManage.require.regist.store2'/>") {
+              selectedStore = grid.rows[ht.row].dataItem;
+              showDetail();
+            }
           }
         }
       }
@@ -276,14 +286,10 @@ function search(index) {
 
   <%-- 매장 선택시, 상세 정보 조회 --%>
   function showDetail() {
-
     $("#noDataArea").hide();
     $("#storeEnvInfoArea").hide();
-
     showStoreDetail();
   }
-
-
 
 </script>
 

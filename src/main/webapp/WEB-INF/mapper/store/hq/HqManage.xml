@@ -156,13 +156,11 @@
       FROM (
       SELECT HQ_OFFICE_CD AS STORE_CD
         FROM TB_HQ_OFFICE
-       WHERE SYS_STAT_FG <> '9'
-         AND BIZ_NO = #{bizNo}
+       WHERE BIZ_NO = #{bizNo}
        UNION ALL
       SELECT STORE_CD
         FROM TB_MS_STORE
-       WHERE SYS_STAT_FG <> '9'
-       AND BIZ_NO = #{bizNo}
+       WHERE BIZ_NO = #{bizNo}
            )
      ]]>
   </select>

@@ -408,6 +408,32 @@
     )
   </insert>
 
+  <!-- 웹 사용자 등록  -->
+  <!--
+      TABLE    : TB_WB_USER_INFO
+      PARAM    : storeManageVO
+      COMMENTS : 웹 사용자를 등록한다.
+  -->
+  <insert id="insertStoreWebUser" parameterType="DefaultMap">
+    /* USE : StoreManageMapper.insertStoreWebUser */
+    INSERT INTO TB_WB_USER_INFO
+    (
+      USER_ID,
+      USER_PWD,
+      AUTH_GRP_CD,
+      LOGIN_FAIL_CNT,
+      LOCK_CD
+    )
+    VALUES
+    (
+      LOWER(#{storeCd}),
+      '0000',
+      '000003',
+      0,
+      'N'
+    )
+  </insert>
+
   <!-- 포스 출력물 마스터 등록 (단독매장) -->
   <!--
       TABLE    : TB_MS_PRINT
@@ -520,7 +546,7 @@
       TBL_GRP_FG,
       DISP_SEQ,
       USE_YN,
-      REG_DT,,
+      REG_DT,
       REG_ID,
       MOD_DT,
       MOD_ID
