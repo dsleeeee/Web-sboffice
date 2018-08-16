@@ -8,9 +8,9 @@
 
 <script src="http://cdn.wijmo.com/5.20163.259/controls/wijmo.xlsx.min.js"></script>
 <script src="http://cdn.wijmo.com/5.20163.259/controls/wijmo.grid.xlsx.min.js"></script>
-<script src="/resource/vender/jszip/js/jszip.js"></script>
+<script src="/resource/vendor/jszip/js/jszip.js"></script>
 
-<link rel="stylesheet" type="text/css" href="/resource/vender/wijmo/css/wijmo.min.css" />
+<link rel="stylesheet" type="text/css" href="/resource/vendor/wijmo/css/wijmo.min.css" />
 
 <style>
 .wj-flexgrid {

@@ -28,7 +28,7 @@ import kr.co.solbipos.sys.auth.authgroup.service.AuthorGrpResrceVO;
  * @author 조병준
  */
 @Controller
-@RequestMapping(value = "/sys/auth/authgroup/authgroup/")
+@RequestMapping(value = "/sys/auth/authGroup/authGroup/")
 public class AuthGroupController {
 
     @Autowired

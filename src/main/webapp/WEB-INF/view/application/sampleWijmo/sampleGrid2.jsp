@@ -5,7 +5,7 @@
 
 <script src="http://cdn.wijmo.com/5.latest/controls/wijmo.xlsx.min.js"></script>
 <script src="http://cdn.wijmo.com/5.latest/controls/wijmo.grid.xlsx.min.js"></script>
-<script src="/resource/vender/jszip/js/jszip.js"></script>
+<script src="/resource/vendor/jszip/js/jszip.js"></script>
 
 <style>
 #theGrid.wj-flexgrid {

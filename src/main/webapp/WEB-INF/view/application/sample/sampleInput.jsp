@@ -11,18 +11,18 @@
 <script type="text/javascript" src="http://cdn.wijmo.com/5.latest/controls/wijmo.input.min.js"></script>
  --%>
 <%-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.1.1/angular.min.js"></script> --%>
-<%-- <script type="text/javascript" src="/resource/vender/wijmo/js/angular.min.js"></script> --%>
+<%-- <script type="text/javascript" src="/resource/vendor/wijmo/js/angular.min.js"></script> --%>
 <%-- <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script> --%>
 <%-- <script type="text/javascript" src="http://cdn.wijmo.com/5.latest/interop/angular/wijmo.angular.min.js"></script> --%>
-<%-- <script type="text/javascript" src="/resource/vender/wijmo/js/wijmo.angular.min.js"></script> --%>
+<%-- <script type="text/javascript" src="/resource/vendor/wijmo/js/wijmo.angular.min.js"></script> --%>
 
-<link rel="stylesheet" type="text/css" href="/resource/vender/wijmo/css/wijmo.min.css" />
-<script type="text/javascript" src="/resource/vender/wijmo/js/angular.js"></script>
-<script type="text/javascript" src="/resource/vender/wijmo/js/jquery-2.1.0.min.js"></script>
-<script type="text/javascript" src="/resource/vender/wijmo/js/wijmo.min.js"></script>
-<script type="text/javascript" src="/resource/vender/wijmo/js/wijmo.nav.min.js"></script>
-<script type="text/javascript" src="/resource/vender/wijmo/js/wijmo.input.js"></script>
-<script type="text/javascript" src="/resource/vender/wijmo/js/wijmo.angular.js"></script>
+<link rel="stylesheet" type="text/css" href="/resource/vendor/wijmo/css/wijmo.min.css" />
+<script type="text/javascript" src="/resource/vendor/wijmo/js/angular.js"></script>
+<script type="text/javascript" src="/resource/vendor/wijmo/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript" src="/resource/vendor/wijmo/js/wijmo.min.js"></script>
+<script type="text/javascript" src="/resource/vendor/wijmo/js/wijmo.nav.min.js"></script>
+<script type="text/javascript" src="/resource/vendor/wijmo/js/wijmo.input.js"></script>
+<script type="text/javascript" src="/resource/vendor/wijmo/js/wijmo.angular.js"></script>
 <style>
 
 .wj-dropdown {

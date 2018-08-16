@@ -3,35 +3,35 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<script src="/resource/vender/wijmo/js/wijmo.min.js"></script>
+<script src="/resource/vendor/wijmo/js/wijmo.min.js"></script>
 <script src="http://cdn.wijmo.com/5.20163.259/controls/wijmo.grid.min.js"></script>
 <script src="http://cdn.wijmo.com/5.20163.259/controls/wijmo.input.min.js"></script>
 <script src="http://cdn.wijmo.com/5.20163.259/controls/wijmo.chart.min.js"></script>
 
-<link rel="stylesheet" type="text/css" href="/resource/vender/wijmo/css/wijmo.min.css" />
+<link rel="stylesheet" type="text/css" href="/resource/vendor/wijmo/css/wijmo.min.css" />
 <%-- 
-<link rel="stylesheet" type="text/css" href="/resource/vender/tuiEditor/css/normalize.css" media="screen">
+<link rel="stylesheet" type="text/css" href="/resource/vendor/tuiEditor/css/normalize.css" media="screen">
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-<link rel="stylesheet" type="text/css" href="/resource/vender/tuiEditor/css/stylesheet.css" media="screen">
-<link rel="stylesheet" type="text/css" href="/resource/vender/tuiEditor/css/github-light.css" media="screen">
-<link rel="stylesheet" href="/resource/vender/tuiEditor/tui-component-colorpicker/dist/colorpicker.min.css">
-<link rel="stylesheet" href="/resource/vender/tuiEditor/codemirror/lib/codemirror.css">
-<link rel="stylesheet" href="/resource/vender/tuiEditor/highlightjs/styles/github.css">
-<link rel="stylesheet" href="/resource/vender/tuiEditor/tui-chart/dist/chart.min.css">
-<link rel="stylesheet" href="/resource/vender/tuiEditor/tui-editor/dist/tui-editor.css">
-<link rel="stylesheet" href="/resource/vender/tuiEditor/tui-editor/dist/tui-editor-contents.css">
-<script src="/resource/vender/tuiEditor/markdown-it/dist/markdown-it.js"></script>
-<script src="/resource/vender/tuiEditor/toMark/dist/toMark.js"></script>
-<script src="/resource/vender/tuiEditor/jquery/dist/jquery.js"></script>
-<script src="/resource/vender/tuiEditor/tui-code-snippet/dist/tui-code-snippet.min.js"></script>
-<script src="/resource/vender/tuiEditor/tui-component-colorpicker/dist/colorpicker.min.js"></script>
-<script src="/resource/vender/tuiEditor/codemirror/lib/codemirror.js"></script>
-<script src="/resource/vender/tuiEditor/highlightjs/highlight.pack.js"></script>
-<script src="/resource/vender/tuiEditor/squire-rte/build/squire.js"></script>
-<script src="/resource/vender/tuiEditor/plantuml-encoder/dist/plantuml-encoder.min.js"></script>
-<script src="/resource/vender/tuiEditor/raphael/raphael.min.js"></script>
-<script src="/resource/vender/tuiEditor/tui-chart/dist/chart.min.js"></script>
-<script src="/resource/vender/tuiEditor/tui-editor/dist/tui-editor.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/resource/vendor/tuiEditor/css/stylesheet.css" media="screen">
+<link rel="stylesheet" type="text/css" href="/resource/vendor/tuiEditor/css/github-light.css" media="screen">
+<link rel="stylesheet" href="/resource/vendor/tuiEditor/tui-component-colorpicker/dist/colorpicker.min.css">
+<link rel="stylesheet" href="/resource/vendor/tuiEditor/codemirror/lib/codemirror.css">
+<link rel="stylesheet" href="/resource/vendor/tuiEditor/highlightjs/styles/github.css">
+<link rel="stylesheet" href="/resource/vendor/tuiEditor/tui-chart/dist/chart.min.css">
+<link rel="stylesheet" href="/resource/vendor/tuiEditor/tui-editor/dist/tui-editor.css">
+<link rel="stylesheet" href="/resource/vendor/tuiEditor/tui-editor/dist/tui-editor-contents.css">
+<script src="/resource/vendor/tuiEditor/markdown-it/dist/markdown-it.js"></script>
+<script src="/resource/vendor/tuiEditor/toMark/dist/toMark.js"></script>
+<script src="/resource/vendor/tuiEditor/jquery/dist/jquery.js"></script>
+<script src="/resource/vendor/tuiEditor/tui-code-snippet/dist/tui-code-snippet.min.js"></script>
+<script src="/resource/vendor/tuiEditor/tui-component-colorpicker/dist/colorpicker.min.js"></script>
+<script src="/resource/vendor/tuiEditor/codemirror/lib/codemirror.js"></script>
+<script src="/resource/vendor/tuiEditor/highlightjs/highlight.pack.js"></script>
+<script src="/resource/vendor/tuiEditor/squire-rte/build/squire.js"></script>
+<script src="/resource/vendor/tuiEditor/plantuml-encoder/dist/plantuml-encoder.min.js"></script>
+<script src="/resource/vendor/tuiEditor/raphael/raphael.min.js"></script>
+<script src="/resource/vendor/tuiEditor/tui-chart/dist/chart.min.js"></script>
+<script src="/resource/vendor/tuiEditor/tui-editor/dist/tui-editor.min.js"></script>
  --%>
  
 <style>
