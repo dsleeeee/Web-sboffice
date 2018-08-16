@@ -47,16 +47,16 @@ window.IMAGE_PATH = window.IMAGE_PATH || '/resource/graph/images';
 window.STENCIL_PATH = window.STENCIL_PATH || '/resource/graph/stencils';
 //window.CONFIG_PATH = window.CONFIG_PATH || '/resource/graph/config';
 
-window.TABLELAYOUT_OPEN_URL = window.TABLELAYOUT_OPEN_URL || '/base/store/tablelayout/tablelayout/view.sb';
-window.TABLELAYOUT_SAVE_URL = window.TABLELAYOUT_SAVE_URL || '/base/store/tablelayout/tablelayout/save.sb';
+window.TABLELAYOUT_OPEN_URL = window.TABLELAYOUT_OPEN_URL || '/base/store/tableLayout/tableLayout/view.sb';
+window.TABLELAYOUT_SAVE_URL = window.TABLELAYOUT_SAVE_URL || '/base/store/tableLayout/tableLayout/save.sb';
 
-window.mxBasePath = window.mxBasePath || '/resource/vender/mxgraph/src';
+window.mxBasePath = window.mxBasePath || '/resource/vendor/mxgraph/src';
 window.mxLanguage = window.mxLanguage || urlParams['lang'];
 window.mxLanguages = window.mxLanguages || ['ko'];
 
 </script>
-<script type="text/javascript" src="/resource/vender/mxgraph/mxClient.js" charset="utf-8"></script>
-<!--script type="text/javascript" src="/resource/vender/mxgraph/mxClient.min.js"></script-->
+<script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.js" charset="utf-8"></script>
+<!--script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.min.js"></script-->
 <script type="text/javascript" src="/resource/graph/sanitizer/sanitizer.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/graph/js/TableLayout.js" charset="utf-8"></script>
 

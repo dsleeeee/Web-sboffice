@@ -9,12 +9,12 @@
 <script src="http://cdn.wijmo.com/5.20163.259/controls/wijmo.grid.xlsx.min.js"></script>
 
 <%-- 
-<script src="/resource/vender/wijmo/js/wijmo.min.js"></script>
+<script src="/resource/vendor/wijmo/js/wijmo.min.js"></script>
  --%>
  
-<script src="/resource/vender/jszip/js/jszip.js"></script>
+<script src="/resource/vendor/jszip/js/jszip.js"></script>
 
-<link rel="stylesheet" type="text/css" href="/resource/vender/wijmo/css/wijmo.min.css" />
+<link rel="stylesheet" type="text/css" href="/resource/vendor/wijmo/css/wijmo.min.css" />
 
 <style>
 #theGrid.wj-flexgrid {

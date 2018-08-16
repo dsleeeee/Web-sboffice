@@ -159,7 +159,9 @@ button.btn_down:hover:before {content:''; position:absolute; left:7px; top:9px; 
 .wrap > nav.menuClose {width:60px; height:100%; position:fixed; z-index:60;}
 
 nav.menuOpen .menuTree {height:100%; width:219px; overflow:hidden;}
-nav.menuOpen .menuTree .theTreeAll.wj-treeview {height:calc(100% - 120px); width:240px; overflow-y:scroll; position:relative; top:20px;}
+/*nav.menuOpen .menuTree .theTreeAll.wj-treeview {height:calc(100% - 120px); width:240px; overflow-y:scroll; position:relative; top:20px;}*/
+nav.menuOpen .menuTree .theTreeAll.wj-treeview {height:calc(100% - 120px); width:228px; overflow-y:scroll; position:relative; top:20px;}
+@media screen and (min-width:0\0){nav.menuOpen .menuTree .theTreeAll.wj-treeview {width:240px;}}
 
 /*ie용 스크롤 숨기기*/
 nav.menuOpen .menuTree .theTreeAll.wj-treeview {
@@ -174,7 +176,10 @@ nav.menuOpen .menuTree .theTreeAll.wj-treeview {
 }
 
 /*크롬용 스크롤 숨기기*/
-nav.menuOpen .menuTree .theTreeAll.wj-treeview::-webkit-scrollbar {width:12px; height:12px; }
+
+/*nav.menuOpen .menuTree .theTreeAll.wj-treeview::-webkit-scrollbar {width:12px; height:12px; }*/
+nav.menuOpen .menuTree .theTreeAll.wj-treeview::-webkit-scrollbar {width:0px; height:12px; }
+
 nav.menuOpen .menuTree .theTreeAll.wj-treeview::-webkit-scrollbar-button:start:decrement, 
 nav.menuOpen .menuTree .theTreeAll.wj-treeview::-webkit-scrollbar-button:end:increment {display:block; width: 12px;height: 12px; background:#2e333f;}
 nav.menuOpen .menuTree .theTreeAll.wj-treeview::-webkit-scrollbar-track {background: #2e333f;}
@@ -798,13 +803,15 @@ div.commtWrap textarea {width:100%; border:1px solid #ccc; resize:none; height:5
 div.commtWrap .btn_skyblue {width:140px; position:absolute; top:0px; right:0px; height:50px; line-height:50px; margin-left:10px;}
 
 .sb-select.dkbr .wj-content {border:1px solid #ccc;}
-.sb-select.dkbr .wj-content .wj-input-group-btn > .wj-btn {padding-top:5px; border-left:1px solid #ccc;}
+/*.sb-select.dkbr .wj-content .wj-input-group-btn > .wj-btn {padding-top:5px; border-left:1px solid #ccc;}*/
+.sb-select.dkbr .wj-content .wj-input-group-btn > .wj-btn {padding-top:1px; border-left:1px solid #ccc;}
 
 .sb-select .wj-content {display:block!important; border:1px solid #e8e8e8; height:30px; line-height:30px; border-radius:0px; }
 .sb-select .wj-content .wj-template {height:28px!important;}
 .sb-select .wj-content .wj-btn {height:28px!important; font-size:12px!important; margin-left:-1px; border-color:#e8e8e8!important;}
 .sb-select .wj-content input {font-size:0.75em; height:28px!important;}
-.sb-select .wj-content .wj-input-group-btn > .wj-btn {padding-top:5px; border-left:1px solid #e8e8e8;}
+/*.sb-select .wj-content .wj-input-group-btn > .wj-btn {padding-top:5px; border-left:1px solid #e8e8e8;}*/
+.sb-select .wj-content .wj-input-group-btn > .wj-btn {padding-top:1px; border-left:1px solid #e8e8e8;}
 .wj-dropdown-panel {margin-top:-1px; border-radius:0px!important; border:1px solid #e8e8e8!important;}
 .wj-dropdown-panel .wj-listbox-item {font-size:0.75em; line-height:18px;}
 

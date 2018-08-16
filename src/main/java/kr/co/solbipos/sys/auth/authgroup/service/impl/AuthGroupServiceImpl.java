@@ -2,6 +2,7 @@ package kr.co.solbipos.sys.auth.authgroup.service.impl;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -154,7 +155,7 @@ public class AuthGroupServiceImpl implements AuthGroupService {
         }
         //권한이 있는 기능에서 상위 리소스 정보 생성
         //상위 리소스 맵에 없는 리소스는 권한이 없는 것으로 판단.
-        DefaultMap<String> authedResrce = new DefaultMap<String>();
+        Map<String, String> authedResrce = new HashMap<String, String>();
         if(authedList != null && authedList.size() > 0) {
             String resrcePath = "";
             String[] arrayRes;

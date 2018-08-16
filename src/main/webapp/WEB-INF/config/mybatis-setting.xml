@@ -355,8 +355,9 @@
     <typeAlias alias="resveVO" type="kr.co.solbipos.adi.etc.resve.service.ResveVO"/>
 -->
     <typeAlias alias="kitchenMemoVO" type="kr.co.solbipos.adi.etc.kitchenmemo.service.KitchenMemoVO"/>
-<!--
     <typeAlias alias="ehgtVO" type="kr.co.solbipos.adi.etc.ehgt.service.EhgtVO"/>
+    <typeAlias alias="hqCdVO" type="kr.co.solbipos.adi.etc.ehgt.service.HqCdVO"/>
+<!--
     <typeAlias alias="dlvrZoneVO" type="kr.co.solbipos.adi.etc.dlvrzone.service.DlvrZoneVO"/>
     <typeAlias alias="msgManageVO" type="kr.co.solbipos.adi.sms.msgmanage.service.MsgManageVO"/>
     <typeAlias alias="sendStatusVO" type="kr.co.solbipos.adi.sms.sendstatus.service.SendStatusVO"/>
@@ -380,6 +381,7 @@
 -->
 
     <typeAlias type="kr.co.common.data.handler.CustomBooleanTypeHandler" alias="CustomBooleanTypeHandler" />
+    <typeAlias type="kr.co.common.data.handler.CustomDateTypeHandler" alias="CustomDateTypeHandler" />
 
   </typeAliases>
 
@@ -389,6 +391,8 @@
     <typeHandler handler="org.apache.ibatis.type.ClobTypeHandler" jdbcType="CLOB" javaType="java.lang.String"/>
     <!-- Boolean 형태의 컬럼을 String 형태로 Casting 하여 사용하도록 설정 -->
     <typeHandler handler="kr.co.common.data.handler.CustomBooleanTypeHandler" jdbcType="VARCHAR" javaType="java.lang.Boolean"/>
+    <!-- Date 형태의 컬럼을 String 형태로 Casting 하여 사용하도록 설정 -->
+    <typeHandler handler="kr.co.common.data.handler.CustomDateTypeHandler" jdbcType="VARCHAR" javaType="java.sql.Date"/>
     <!-- enum Casting 을 위한 설정 -->
     <package name="kr.co" />
   </typeHandlers>

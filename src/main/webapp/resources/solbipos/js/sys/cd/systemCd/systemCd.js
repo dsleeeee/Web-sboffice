@@ -30,7 +30,7 @@ $(document).ready(function () {
       {binding: "nmcodeCd", header: messages["systemCd.nmcodeCd"], width: 60},
       {binding: "nmcodeNm", header: messages["systemCd.nmcodeNm"], width: "*"},
       {binding: "nmcodeItem1", header: messages["systemCd.nmcodeItem1"], width: "*"},
-      {binding: "nmcodeItem2", header: messages["systemCd.nmcodeItem2"], width: "*"},
+      {binding: "nmcodeItem2", header: messages["systemCd.nmcodeItem2"], width: "*", dataType:wijmo.DataType.Date, format: 'yyyy-MM-dd'},
       {binding: "useColNm", header: messages["systemCd.useColNm"], width: "*"}
     ];
   // 대표명칭 그리드 생성

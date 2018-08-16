@@ -6,7 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
-<c:set var="baseUrl" value="/sys/auth/authgroup/authgroup/" />
+<c:set var="baseUrl" value="/sys/auth/authGroup/authGroup/" />
 
 <div class="subCon">
   <div class="searchBar">
@@ -59,7 +59,7 @@
 
   <div class="mt10 pdb20 oh bb">
     <button id="btnSearch" class="btn_blue fr" >
-      <s:message code="label.cmm.search" />
+      <s:message code="cmm.search" />
     </button>
   </div>
 
@@ -191,7 +191,8 @@
           var param = {};
           param.authGrpCd = grid.cells.getCellData(ht.row, ht.col, true);
           if(param.authGrpCd != '') {
-            tree.itemsSource = new wijmo.collections.CollectionView([]);
+            tree.itemsSource = new Array();
+            tree.refresh();
             $.postJSON("${baseUrl}" + "listResrce.sb", param, function(result) {
               tree.itemsSource = result.data.list;
               <%-- 트리에서 저장 예외관리 시 키로 사용--%>

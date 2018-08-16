@@ -54,7 +54,7 @@ window.IMAGE_PATH = window.IMAGE_PATH || '/resource/graph/images';
 window.TOUCHKEY_OPEN_URL = window.TOUCHKEY_OPEN_URL || '/base/prod/touchkey/touchkey/list.sb';
 window.TOUCHKEY_SAVE_URL = window.TOUCHKEY_SAVE_URL || '/base/prod/touchkey/touchkey/save.sb';
 
-window.mxBasePath = window.mxBasePath || '/resource/vender/mxgraph/src';
+window.mxBasePath = window.mxBasePath || '/resource/vendor/mxgraph/src';
 window.mxLanguage = window.mxLanguage || urlParams['lang'];
 window.mxLanguages = window.mxLanguages || ['ko'];
 
@@ -71,8 +71,8 @@ window.PRODS = prods;
 window.MAX_GROUP_ROW = '${maxGroupRow}' || '2';
 
 </script>
-<script type="text/javascript" src="/resource/vender/mxgraph/mxClient.js" charset="utf-8"></script>
-<!--script type="text/javascript" src="/resource/vender/mxgraph/mxClient.min.js"></script-->
+<script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.js" charset="utf-8"></script>
+<!--script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.min.js"></script-->
 <script type="text/javascript" src="/resource/graph/sanitizer/sanitizer.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/graph/js/Touchkey.js" charset="utf-8"></script>
 

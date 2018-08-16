@@ -121,7 +121,7 @@
 
 
   <select id="selectResrceByGroup" parameterType="authGroupVO" resultType="DefaultMap">
-    /* AuthGroupMapper.selectResrce */
+    /* AuthGroupMapper.selectResrceByGroup */
      SELECT A.P_RESRCE,
             A.RESRCE_CD,
             '[' || A.RESRCE_CD || ']' || A.RESRCE_NM RESRCE_DISP,

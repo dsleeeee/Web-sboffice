@@ -37,6 +37,7 @@
           gridIdx = arg[3];
           columnLayout = arg[4];
           isSave = true;
+          isView = true;
           break;
       }
       ;
