@@ -156,13 +156,11 @@
       FROM (
       SELECT HQ_OFFICE_CD AS STORE_CD
         FROM TB_HQ_OFFICE
-       WHERE SYS_STAT_FG <> '9'
-         AND BIZ_NO = #{bizNo}
+       WHERE BIZ_NO = #{bizNo}
        UNION ALL
       SELECT STORE_CD
         FROM TB_MS_STORE
-       WHERE SYS_STAT_FG <> '9'
-       AND BIZ_NO = #{bizNo}
+       WHERE BIZ_NO = #{bizNo}
            )
      ]]>
   </select>
@@ -245,13 +243,13 @@
       COMMENTS : 본사 코드 조회를 조회한다.
   -->
   <select id="getHqOfficeCd" parameterType="DefaultMap" resultType="String">
-    /* HqManageMapper.chkBizNo */
-    <if test='sysClosureDate == "99991231"'>
+    /* HqManageMapper.getHqOfficeCd */
+    <if test='sysStatFg.toString() == "DEMO"'>
       SELECT 'D'||LPAD(TO_CHAR(NVL(MAX(SUBSTR(HQ_OFFICE_CD, 2, 4)), 0) + 1), 4, '0') AS HQ_OFFICE_CD
         FROM TB_HQ_OFFICE
        WHERE SYS_STAT_FG = '9'
     </if>
-    <if test='sysClosureDate != "99991231"'>
+    <if test='sysStatFg.toString() != "DEMO"'>
       SELECT 'H'||LPAD(TO_CHAR(NVL(MAX(SUBSTR(HQ_OFFICE_CD, 2, 4)), 0) + 1), 4, '0') AS HQ_OFFICE_CD
         FROM TB_HQ_OFFICE
        WHERE SYS_STAT_FG != '9'

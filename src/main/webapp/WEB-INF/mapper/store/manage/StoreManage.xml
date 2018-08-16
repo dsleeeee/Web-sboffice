@@ -192,12 +192,12 @@
   -->
   <select id="getStoreCd" parameterType="storeManageVO" resultType="String">
     /* USE : StoreManageMapper.getStoreCd */
-    <if test='sysClosureDate == "99991231"'>
+    <if test='sysStatFg.toString() == "DEMO"'>
       SELECT 'D'||LPAD(TO_CHAR(NVL(MAX(SUBSTR(STORE_CD, 2, 6)), 0) + 1), 6, '0') AS STORE_CD
         FROM TB_MS_STORE
        WHERE SYS_STAT_FG = '9'
     </if>
-    <if test='sysClosureDate != "99991231"'>
+    <if test='sysStatFg.toString() != "DEMO"'>
       SELECT 'S'||LPAD(TO_CHAR(NVL(MAX(SUBSTR(STORE_CD, 2, 6)), 0) + 1), 6, '0') STORE_CD
         FROM TB_MS_STORE
        WHERE SYS_STAT_FG != '9'
@@ -377,7 +377,7 @@
       POST_NO,
       ADDR,
       ADDR_DTL,
-      HIRE_FG,
+      SERVICE_FG,
       SMS_RECV_YN,
       USE_YN,
       REG_DT,
@@ -405,6 +405,32 @@
       #{regId},
       #{modDt},
       #{modId}
+    )
+  </insert>
+
+  <!-- 웹 사용자 등록  -->
+  <!--
+      TABLE    : TB_WB_USER_INFO
+      PARAM    : storeManageVO
+      COMMENTS : 웹 사용자를 등록한다.
+  -->
+  <insert id="insertStoreWebUser" parameterType="DefaultMap">
+    /* USE : StoreManageMapper.insertStoreWebUser */
+    INSERT INTO TB_WB_USER_INFO
+    (
+      USER_ID,
+      USER_PWD,
+      AUTH_GRP_CD,
+      LOGIN_FAIL_CNT,
+      LOCK_CD
+    )
+    VALUES
+    (
+      LOWER(#{storeCd}),
+      '0000',
+      '000003',
+      0,
+      'N'
     )
   </insert>
 
@@ -520,7 +546,7 @@
       TBL_GRP_FG,
       DISP_SEQ,
       USE_YN,
-      REG_DT,,
+      REG_DT,
       REG_ID,
       MOD_DT,
       MOD_ID

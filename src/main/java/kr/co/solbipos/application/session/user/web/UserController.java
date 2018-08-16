@@ -1,17 +1,23 @@
 package kr.co.solbipos.application.session.user.web;
 
-import static kr.co.common.utils.DateUtil.currentDateString;
-import static kr.co.common.utils.DateUtil.currentDateTimeString;
-import static kr.co.common.utils.HttpUtils.getClientIp;
-import static kr.co.common.utils.grid.ReturnUtil.returnJson;
-import static kr.co.common.utils.grid.ReturnUtil.returnJsonBindingFieldError;
-import static kr.co.common.utils.spring.StringUtil.strMaskingHalf;
-import static org.springframework.util.StringUtils.isEmpty;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import kr.co.common.data.enums.Status;
+import kr.co.common.data.structure.Result;
+import kr.co.common.exception.AuthenticationException;
+import kr.co.common.exception.JsonException;
+import kr.co.common.service.message.MessageService;
+import kr.co.common.service.session.SessionService;
+import kr.co.common.system.BaseEnv;
+import kr.co.common.utils.DateUtil;
+import kr.co.common.utils.security.EncUtil;
+import kr.co.common.utils.spring.ObjectUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.common.utils.spring.WebUtil;
+import kr.co.common.validate.*;
+import kr.co.solbipos.application.session.auth.service.AuthService;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.PwChgResult;
+import kr.co.solbipos.application.session.user.enums.PwFindResult;
+import kr.co.solbipos.application.session.user.service.*;
 import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,32 +29,20 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import kr.co.common.data.enums.Status;
-import kr.co.common.data.structure.Result;
-import kr.co.common.exception.AuthenticationException;
-import kr.co.common.service.message.MessageService;
-import kr.co.common.service.session.SessionService;
-import kr.co.common.system.BaseEnv;
-import kr.co.common.utils.DateUtil;
-import kr.co.common.utils.security.EncUtil;
-import kr.co.common.utils.spring.ObjectUtil;
-import kr.co.common.utils.spring.StringUtil;
-import kr.co.common.utils.spring.WebUtil;
-import kr.co.common.validate.AuthNumber;
-import kr.co.common.validate.IdFind;
-import kr.co.common.validate.Login;
-import kr.co.common.validate.PwChange;
-import kr.co.common.validate.PwFind;
-import kr.co.common.validate.UserPwChange;
-import kr.co.solbipos.application.session.auth.service.AuthService;
-import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.application.session.user.enums.PwChgResult;
-import kr.co.solbipos.application.session.user.enums.PwFindResult;
-import kr.co.solbipos.application.session.user.service.OtpAuthVO;
-import kr.co.solbipos.application.session.user.service.PwdChgHistVO;
-import kr.co.solbipos.application.session.user.service.PwdChgVO;
-import kr.co.solbipos.application.session.user.service.UserService;
-import kr.co.solbipos.application.session.user.service.UserVO;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+
+import static kr.co.common.utils.DateUtil.currentDateString;
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
+import static kr.co.common.utils.HttpUtils.getClientIp;
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
+import static kr.co.common.utils.grid.ReturnUtil.returnJsonBindingFieldError;
+import static kr.co.common.utils.spring.StringUtil.strMaskingHalf;
+import static org.springframework.util.StringUtils.isEmpty;
 
 /**
  * @Class Name : UserController.java
@@ -69,9 +63,9 @@ import kr.co.solbipos.application.session.user.service.UserVO;
 @Controller
 @RequestMapping(value = "/user")
 public class UserController {
-    
+
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    
+
     @Autowired
     UserService userService;
     @Autowired
@@ -153,7 +147,7 @@ public class UserController {
     /**
      * otp limit 해당되는지 확인
      *
-     * @param otp
+     * @param otpAuthVO
      * @return 10:23(limit) >= 10:20(now) ? true : false 조회 못한 경우에도 false return
      */
     public boolean checkOtpLimit(OtpAuthVO otpAuthVO) {
@@ -440,22 +434,23 @@ public class UserController {
             /**
              * 기존 패스워드 비교
              */
-            return returnJson(Status.FAIL, "msg", messageService.get("login.layer.pwchg.pwfail"));
+            throw new JsonException(Status.FAIL,  messageService.get("login.layer.pwchg.pwfail"));
         } else if (result == PwChgResult.NEW_PASSWORD_NOT_MATCH) {
+
             /**
              * 새 비밀번호와 새 비밀번호 확인이 일치하는지 확인
              */
-            return returnJson(Status.FAIL, "msg", messageService.get("login.pw.find.not.match"));
+            throw new JsonException(Status.FAIL,  messageService.get("login.pw.find.not.match"));
         } else if (result == PwChgResult.PASSWORD_NEW_OLD_MATH) {
             /**
              * 변경 패스워드가 기존 비밀번호가 같은지 체크
              */
-            return returnJson(Status.FAIL, "msg", messageService.get("login.layer.pwchg.current"));
+            throw new JsonException(Status.FAIL, messageService.get("login.layer.pwchg.current"));
         } else if (result == PwChgResult.PASSWORD_REGEXP) {
             /**
              * 패스워드 정책 체크
              */
-            return returnJson(Status.FAIL, "msg", messageService.get("login.pw.chg.regexp"));
+            throw new JsonException(Status.FAIL, messageService.get("login.pw.chg.regexp"));
         }
 
         HashMap<String, String> returnData = new HashMap<>();

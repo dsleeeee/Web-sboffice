@@ -161,7 +161,7 @@ public class StoreManageController {
 
         int cnt = service.saveStoreInfo(storeManageVO, sessionInfoVO);
 
-        return returnJson(Status.OK, cnt);
+        return returnJson(Status.OK, String.valueOf(cnt), storeManageVO);
     }
 
     /**

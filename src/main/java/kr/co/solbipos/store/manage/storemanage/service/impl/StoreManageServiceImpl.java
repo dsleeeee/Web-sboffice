@@ -122,6 +122,8 @@ public class StoreManageServiceImpl implements StoreManageService{
 
         if(SysStatFg.CLOSE == storeManageVO.getSysStatFg()) {
             storeManageVO.setSysClosureDate("99991231");
+        } else  if(SysStatFg.DEMO == storeManageVO.getSysStatFg() ) {
+            storeManageVO.setSysClosureDate("99991231");
         } else {
             storeManageVO.setSysClosureDate(currentDateString());
         }
@@ -154,11 +156,11 @@ public class StoreManageServiceImpl implements StoreManageService{
         // 신규 매장정보 저장
         int procCnt = mapper.saveStoreInfo(storeManageVO);
 
-        // 해당 브랜드의 분류 복사하여 등록
-        procCnt += mapper.copyClsInfo(storeManageVO);
-
         // 기본 사용자 등록
         procCnt += mapper.insertStoreDefaultUser(storeManageVO);
+
+        // 웹 사용자 등록
+        procCnt += mapper.insertStoreWebUser(storeManageVO);
 
         // 포스 출력물 마스터 등록
         if("00000".equals(storeManageVO.getHqOfficeCd())) { // 단독매장
@@ -257,13 +259,14 @@ public class StoreManageServiceImpl implements StoreManageService{
 
         if(SysStatFg.CLOSE == storeManageVO.getSysStatFg()) {
             storeManageVO.setSysClosureDate("99991231");
+        } else  if(SysStatFg.DEMO == storeManageVO.getSysStatFg() ) {
+            storeManageVO.setSysClosureDate("99991231");
         } else {
             storeManageVO.setSysClosureDate(currentDateString());
         }
 
         // 매장 정보 수정
         int procCnt = mapper.updateStoreInfo(storeManageVO);
-
 
         return procCnt;
     }

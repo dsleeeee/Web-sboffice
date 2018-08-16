@@ -70,7 +70,6 @@
     /* CmmCodeMapper.selectVanList */
     SELECT HQ_OFFICE_CD, HQ_OFFICE_NM
       FROM TB_HQ_OFFICE
-     WHERE SYS_STAT_FG = '1'
      ORDER BY HQ_OFFICE_CD NULLS FIRST
   </select>
 

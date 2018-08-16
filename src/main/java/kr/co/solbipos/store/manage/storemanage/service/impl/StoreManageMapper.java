@@ -1,15 +1,12 @@
 package kr.co.solbipos.store.manage.storemanage.service.impl;
 
-import java.util.List;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.store.hq.brand.service.HqBrandVO;
-import kr.co.solbipos.store.manage.storemanage.service.KitchenPrintVO;
-import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;
-import kr.co.solbipos.store.manage.storemanage.service.StoreManageVO;
-import kr.co.solbipos.store.manage.storemanage.service.StorePosEnvVO;
-import kr.co.solbipos.store.manage.storemanage.service.StoreProductVO;
+import kr.co.solbipos.store.manage.storemanage.service.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * 가맹점관리 > 매장관리 > 매장정보관리
@@ -71,6 +68,9 @@ public interface StoreManageMapper {
 
     /** 매장 기본 사용자 등록 */
     int insertStoreDefaultUser(StoreManageVO storeManageVO);
+
+    /** 매장 웹 사용자 등록 */
+    int insertStoreWebUser(StoreManageVO storeManageVO);
 
     /** 포스 출력물 마스터 등록 (단독) */
     int insertDefaultPrintTemplete(StoreManageVO storeManageVO);

@@ -14,7 +14,7 @@
 <div id="hqDtlDim" class="fullDimmed" style="display:none;"></div>
 <div id="hqDtlLayer" class="layer" style="display:none;">
   <div class="layer_inner">
-    <div class="title w650">
+    <div class="title w870">
       <p id="popTitle" class="tit"></p>
       <a href="javascript:;" class="btn_close"></a>
       <div class="con">
@@ -194,7 +194,7 @@
                       </div>
                     </span>
                     <span class="w15 txtIn">
-                      <div class="sb-select w10">
+                      <div class="sb-select w70">
                         <div id="rBizNo3"></div>
                       </div>
                     </span>
@@ -656,7 +656,7 @@
   <%-- 본사코드 선택 이벤트 --%>
   $("input[name=rHqOfficeCdType]").change(function(){
     var hqType = $("input[name=rHqOfficeCdType]:checked").val();
-    alert('changed value : '+ hqType);
+    //alert('changed value : '+ hqType);
     if(hqType == "D") {
       rSysStatFg.selectedValue = "9";
       rSysStatFg.isReadOnly = true;
