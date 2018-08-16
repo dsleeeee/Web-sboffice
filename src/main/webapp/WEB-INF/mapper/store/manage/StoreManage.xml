@@ -26,8 +26,8 @@
              tho.HQ_OFFICE_NM,
              tms.STORE_CD,
              tms.STORE_NM,
-             tms.CLS_FG,
-             tms.SYS_STAT_FG,
+             NVL(tms.CLS_FG, tho.CLS_FG) AS CLS_FG,
+             NVL(tms.SYS_STAT_FG,  tho.SYS_STAT_FG) AS SYS_STAT_FG,
              tms.SYS_OPEN_DATE,
              TO_CHAR(TO_DATE(tms.SYS_OPEN_DATE, 'YYYYMMDD') , 'YYYY/MM/DD')
             <include refid="CmmSQL.PagingTemplateCount"/>
@@ -193,7 +193,7 @@
   <select id="getStoreCd" parameterType="storeManageVO" resultType="String">
     /* USE : StoreManageMapper.getStoreCd */
     <if test='sysStatFg.toString() == "DEMO"'>
-      SELECT 'D'||LPAD(TO_CHAR(NVL(MAX(SUBSTR(STORE_CD, 2, 6)), 0) + 1), 6, '0') AS STORE_CD
+      SELECT 'DS'||LPAD(TO_CHAR(NVL(MAX(SUBSTR(STORE_CD, 2, 6)), 0) + 1), 5, '0') AS STORE_CD
         FROM TB_MS_STORE
        WHERE SYS_STAT_FG = '9'
     </if>
@@ -428,7 +428,7 @@
     (
       LOWER(#{storeCd}),
       '0000',
-      '000003',
+      '000004',
       0,
       'N'
     )

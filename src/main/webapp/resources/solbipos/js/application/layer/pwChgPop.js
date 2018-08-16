@@ -21,8 +21,8 @@ $("#confirmBtn").click(function() {
 
     $.postJSON("/user/userPwdChg.sb", param, function(result) {
         if (result.status === "OK") {
-            if (result.message != undefined) {
-                s_alert.popOk(result.message, function() {
+            if (result.data.msg != undefined) {
+                s_alert.popOk(result.data.msg, function() {
                     location.href = result.data.url;
                 });
             }
@@ -30,7 +30,7 @@ $("#confirmBtn").click(function() {
             processError(result.data);
         }
     }, function(result) {
-        alert(result.message);
+      alert(result.message);
     });
 });
 
@@ -41,8 +41,8 @@ $("#extensionBtn").click(function() {
 
     $.postJSON("/user/pwdExtension.sb", param, function(result) {
         if (result.status === "OK") {
-            if (result.message != undefined) {
-                s_alert.popOk(result.message, function() {
+            if (result.data.msg != undefined) {
+                s_alert.popOk(result.data.msg, function() {
                     location.href = result.data.url;
                 });
             }
@@ -50,7 +50,7 @@ $("#extensionBtn").click(function() {
             processError(result.data);
         }
     }, function(result) {
-        alert(result.message);
+        alert(result.data.message);
     });
 });
 
@@ -69,14 +69,14 @@ function processError(data) {
     }
 
     if (data.newPw != undefined) {
-        $("#newPwError").text(data.newPw != undefined ? data.newPw : "");
+      $("#newPwError").text(data.newPw != undefined ? data.newPw : "");
         $("#newPwError").show();
     } else {
         $("#newPwError").hide();
     }
 
     if (data.newPwConf != undefined) {
-        $("#newPwConfError").text(
+      $("#newPwConfError").text(
             data.newPwConf != undefined ? data.newPwConf : "");
         $("#newPwConfError").show();
     } else {

@@ -151,5 +151,19 @@ public class CouponController {
         return returnJson(Status.OK, result);
     }
 
+    /**
+     * 쿠폰 적용상품 등록 화면
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  String
+     * @author  김지은
+     * @since   2018.08.09
+     */
+    @RequestMapping(value = "/class/couponProdView.sb", method = RequestMethod.GET)
+    public String couponProdView(HttpServletRequest request, HttpServletResponse response,
+        Model model) {
+        return "base/pay/coupon/couponProd";
+    }
 
 }

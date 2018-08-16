@@ -1,7 +1,7 @@
 package kr.co.solbipos.base.pay.coupon.service;
 
+import kr.co.common.data.enums.UseYn;
 import kr.co.solbipos.application.common.service.CmmVO;
-import kr.co.solbipos.base.pay.coupon.service.enums.CoupnDcFg;
 /**
  * @Class Name : CouponVO.java
  * @Description : 기초관리 > 결제수단 > 쿠폰등록
@@ -30,7 +30,7 @@ public class CouponVO extends CmmVO {
     /** 권종분류코드 */
     private String payClassCd;
     /** 쿠폰할인구분 */
-    private CoupnDcFg coupnDcFg;
+    private String coupnDcFg;
     /** 쿠폰할인율 */
     private double coupnDcRate;
     /** 쿠폰할인금액 */
@@ -38,11 +38,12 @@ public class CouponVO extends CmmVO {
     /** 쿠폰적용구분 */
     private String coupnApplyFg;
     /** 사용여부 */
-    private boolean useYn;
+    private UseYn useYn;
 
     /**
      * @return the hqOfficeCd
      */
+
     public String getHqOfficeCd() {
         return hqOfficeCd;
     }
@@ -114,6 +115,78 @@ public class CouponVO extends CmmVO {
         this.payClassCd = payClassCd;
     }
 
+    /**
+     * @return the coupnDcFg
+     */
 
+    public String getCoupnDcFg() {
+        return coupnDcFg;
+    }
 
+    /**
+     * @param coupnDcFg the coupnDcFg to set
+     */
+    public void setCoupnDcFg(String coupnDcFg) {
+        this.coupnDcFg = coupnDcFg;
+    }
+
+    /**
+     * @return the coupnDcRate
+     */
+
+    public double getCoupnDcRate() {
+        return coupnDcRate;
+    }
+
+    /**
+     * @param coupnDcRate the coupnDcRate to set
+     */
+    public void setCoupnDcRate(double coupnDcRate) {
+        this.coupnDcRate = coupnDcRate;
+    }
+
+    /**
+     * @return the coupnDcAmt
+     */
+
+    public double getCoupnDcAmt() {
+        return coupnDcAmt;
+    }
+
+    /**
+     * @param coupnDcAmt the coupnDcAmt to set
+     */
+    public void setCoupnDcAmt(double coupnDcAmt) {
+        this.coupnDcAmt = coupnDcAmt;
+    }
+
+    /**
+     * @return the coupnApplyFg
+     */
+
+    public String getCoupnApplyFg() {
+        return coupnApplyFg;
+    }
+
+    /**
+     * @param coupnApplyFg the coupnApplyFg to set
+     */
+    public void setCoupnApplyFg(String coupnApplyFg) {
+        this.coupnApplyFg = coupnApplyFg;
+    }
+
+    /**
+     * @return the useYn
+     */
+
+    public UseYn getUseYn() {
+        return useYn;
+    }
+
+    /**
+     * @param useYn the useYn to set
+     */
+    public void setUseYn(UseYn useYn) {
+        this.useYn = useYn;
+    }
 }

@@ -5,6 +5,9 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.orgnCd}"/>
+<c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}"/>
 
 <div class="subCon">
   <div class="searchBar">
@@ -18,6 +21,8 @@
       <col class="w35" />
     </colgroup>
     <tbody>
+
+    <c:if test="${orgnFg == 'MASTER'}">
       <tr>
         <%-- 본사코드 --%>
         <th><s:message code="storeManage.hqOfficeCd" /></th>
@@ -26,6 +31,8 @@
         <th><s:message code="storeManage.hqOfficeNm" /></th>
         <td><input type="text" id="srchHqOfficeNm" class="sb-input w100" maxlength="15" /></td>
       </tr>
+    </c:if>
+
       <tr>
         <%-- 매장코드 --%>
         <th><s:message code="storeManage.storeCd" /></th>
@@ -182,14 +189,17 @@ $(document).on("click", ".page", function() {
 <%-- 매장 목록 조회 --%>
 function search(index) {
 
-  if($("#srchHqOfficeCd").val().length > 5) {
-    s_alert.pop("<s:message code='hqManage.hqOfficeCd'/><s:message code='cmm.regexp' arguments='5'/>");
-    return;
-  }
-  if($("#srchHqOfficeNm").val().length > 15) {
-    s_alert.pop("<s:message code='hqManage.hqOfficeNm'/><s:message code='cmm.regexp' arguments='15'/>");
-    return;
-  }
+  <c:if test="${orgnFg == 'MASTER'}">
+    if($("#srchHqOfficeCd").val().length > 5) {
+      s_alert.pop("<s:message code='hqManage.hqOfficeCd'/><s:message code='cmm.regexp' arguments='5'/>");
+      return;
+    }
+    if($("#srchHqOfficeNm").val().length > 15) {
+      s_alert.pop("<s:message code='hqManage.hqOfficeNm'/><s:message code='cmm.regexp' arguments='15'/>");
+      return;
+    }
+  </c:if>
+
   if($("#srchStoreCd").val().length > 7) {
     s_alert.pop("<s:message code='storeManage.storeCd'/><s:message code='cmm.regexp' arguments='7'/>");
     return;
@@ -204,8 +214,15 @@ function search(index) {
   }
 
   var param = {};
-  param.hqOfficeCd = $("#srchHqOfficeCd").val();
-  param.hqOfficeNm = $("#srchHqOfficeNm").val();
+
+  if("${orgnFg}" == "MASTER") {
+    param.hqOfficeCd = $("#srchHqOfficeCd").val();
+    param.hqOfficeNm = $("#srchHqOfficeNm").val();
+  } else if("${orgnFg}" == "HQ") {
+    param.hqOfficeCd = "${hqOfficeCd}";
+    param.hqOfficeNm = "";
+  }
+
   param.storeCd = $("#srchStoreCd").val();
   param.storeNm = $("#srchStoreNm").val();
   param.bizNo = $("#srchBizNo").val();
@@ -213,6 +230,8 @@ function search(index) {
   param.sysStatFg = srchSysStatFg.selectedValue;
   param.listScale   = listScaleBox.selectedValue;
   param.curr        = index;
+
+  //console.log(param)
 
   $.postJSON("/store/manage/storeManage/storeManage/getStoreList.sb", param, function(result) {
 
@@ -223,13 +242,13 @@ function search(index) {
 
     var list = result.data.list;
 
+    console.log(list);
+
     if(list.length === undefined || list.length == 0) {
       s_alert.pop(result.message);
       grid.itemsSource = new wijmo.collections.CollectionView([]);
       return;
     }
-
-    console.log(list);
 
     grid.itemsSource = new wijmo.collections.CollectionView(list, {
       groupDescriptions : [ 'hqOfficeCdNm']
@@ -243,8 +262,7 @@ function search(index) {
         grid.itemsSource.items[i].storeNm = "<s:message code='storeManage.require.regist.store2'/>";
         grid.itemsSource.items[i].storeCd = "<s:message code='storeManage.require.regist.store2'/>";
         grid.itemsSource.items[i].clsFg = "<s:message code='storeManage.require.regist.store2'/>";
-        grid.itemsSource.items[i].sysStatFg = "<s:message code='storeManage.require.regist.store2'/>";
-        grid.itemsSource.items[i].sysOpenDate = "<s:message code='storeManage.require.regist.store2'/>";
+        grid.itemsSource.items[i].sysOpenDate = "";
       }
     }
 
@@ -259,8 +277,8 @@ function search(index) {
       var ht = grid.hitTest(e);
       if(ht.panel == grid.cells) {
         if (grid.rows[ht.row] instanceof wijmo.grid.GroupRow) {
-          var hdOfficeCd = grid.rows[ht.row].dataItem.items[0].hqOfficeCd;
-          newStoreReg(hdOfficeCd);
+          var hdOfficeInfo = grid.rows[ht.row].dataItem.items[0];
+          newStoreReg(hdOfficeInfo);
         } else {
           var col = ht.panel.columns[ht.col];
           if( col.binding == "storeNm") {

@@ -67,7 +67,7 @@
       COMMENTS : 벤사 목록을 조회한다.
   -->
   <select id="selectHqOfficeList" resultType="DefaultMap">
-    /* CmmCodeMapper.selectVanList */
+    /* CmmCodeMapper.selectHqOfficeList */
     SELECT HQ_OFFICE_CD, HQ_OFFICE_NM
       FROM TB_HQ_OFFICE
      ORDER BY HQ_OFFICE_CD NULLS FIRST

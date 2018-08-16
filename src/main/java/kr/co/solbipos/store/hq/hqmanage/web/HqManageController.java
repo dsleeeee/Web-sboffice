@@ -1,19 +1,5 @@
 package kr.co.solbipos.store.hq.hqmanage.web;
 
-import static kr.co.common.utils.grid.ReturnUtil.returnJson;
-import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
@@ -23,6 +9,22 @@ import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqManageService;
 import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqMenuVO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
+import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 
 /**
  * @Class Name : HqManageController.java
@@ -65,6 +67,9 @@ public class HqManageController {
             Model model) {
         return "store/hq/hqManage/hqManage";
     }
+
+    //TB_MS_TABLE_ATTR
+    //    TB_MS_TABLE_GROUP
 
     /**
      * 본사정보관리 리스트 조회

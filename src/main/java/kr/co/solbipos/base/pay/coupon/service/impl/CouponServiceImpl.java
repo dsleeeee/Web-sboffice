@@ -140,11 +140,6 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public List<DefaultMap<String>> getCouponList(CouponVO couponVO, SessionInfoVO sessionInfoVO) {
 
-
-        LOGGER.debug("====== orgnFg : "+ sessionInfoVO.getOrgnFg());
-        LOGGER.debug("====== storeCd : "+ sessionInfoVO.getStoreCd());
-        LOGGER.debug("====== orgnCd : "+ sessionInfoVO.getOrgnCd());
-
         List<DefaultMap<String>> returnList = null;
 
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
@@ -187,6 +182,8 @@ public class CouponServiceImpl implements CouponService {
 
             if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
 
+                couponVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
+
                 if(couponVO.getStatus() == GridDataFg.INSERT) {
                     procCnt += mapper.insertHqCoupon(couponVO);
                 }
@@ -198,6 +195,8 @@ public class CouponServiceImpl implements CouponService {
                 }
 
             } else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+
+                couponVO.setStoreCd(sessionInfoVO.getStoreCd());
 
                 if(couponVO.getStatus() == GridDataFg.INSERT) {
                     procCnt += mapper.insertStoreCoupon(couponVO);

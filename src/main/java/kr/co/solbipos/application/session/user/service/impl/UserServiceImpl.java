@@ -1,18 +1,5 @@
 package kr.co.solbipos.application.session.user.service.impl;
 
-import static kr.co.common.utils.DateUtil.currentDateString;
-import static kr.co.common.utils.DateUtil.currentDateTimeString;
-import static kr.co.common.utils.DateUtil.currentTimeString;
-import static kr.co.common.utils.HttpUtils.getClientIp;
-import static kr.co.common.utils.spring.StringUtil.generateUUID;
-import static kr.co.common.utils.spring.StringUtil.getRandomNumber;
-import static kr.co.common.utils.spring.StringUtil.strMaskingHalf;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import org.apache.commons.lang3.time.DateUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.DateUtil;
@@ -23,11 +10,18 @@ import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.PwChgResult;
 import kr.co.solbipos.application.session.user.enums.PwFindResult;
-import kr.co.solbipos.application.session.user.service.OtpAuthVO;
-import kr.co.solbipos.application.session.user.service.PwdChgHistVO;
-import kr.co.solbipos.application.session.user.service.PwdChgVO;
-import kr.co.solbipos.application.session.user.service.UserService;
-import kr.co.solbipos.application.session.user.service.UserVO;
+import kr.co.solbipos.application.session.user.service.*;
+import org.apache.commons.lang3.time.DateUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import static kr.co.common.utils.DateUtil.*;
+import static kr.co.common.utils.HttpUtils.getClientIp;
+import static kr.co.common.utils.spring.StringUtil.*;
 
 /**
  * @Class Name : UserServiceImpl.java
@@ -89,6 +83,7 @@ public class UserServiceImpl implements UserService {
          */
         if (!EncUtil.passwordPolicyCheck(pwdChgVO.getNewPw())
                 || !EncUtil.passwordPolicyCheck(pwdChgVO.getNewPwConf())) {
+
             return PwChgResult.PASSWORD_REGEXP;
         }
 
@@ -260,7 +255,7 @@ public class UserServiceImpl implements UserService {
     /**
      * otp limit 해당되는지 확인
      *
-     * @param otp : otp 번호
+     * @param otpAuthVO : otp 번호
      * @param limit : 분 단위
      * @return 10:23(limit) >= 10:20(now) ? true : false 조회 못한 경우에도 false return
      */

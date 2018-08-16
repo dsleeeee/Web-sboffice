@@ -126,7 +126,7 @@
           </tr>
           <tr>
             <%-- 이메일 --%>
-            <th><s:message code="storeManage.emailAddr" /><em class="imp">*</em></th>
+            <th><s:message code="storeManage.emailAddr" /></th>
             <td colspan="3"><input type="text" id="rEmailAddr" class="sb-input w100" /></td>
           </tr>
           <tr>
@@ -331,7 +331,8 @@
 
 <script>
 
-var selectedHqOfficeCd = "";
+
+var selectedHq = "";
 
 var vanList        = ${ccu.getVanList()};
 var agencyList     = ${ccu.getAgencyList()};
@@ -342,8 +343,6 @@ var areaCd         = ${ccu.getCommCodeSelect("092")};
 var cornerUseYn    = ${ccu.getEnvCodeExcpAll("114")};
 var cashBillYn     = ${ccu.getEnvCodeExcpAll("276")};
 var useYn          = ${ccu.getCommCodeExcpAll("904")};
-
-console.log(hqList);
 
 <%-- ============================================= 그리드, 위즈모 관련 =========================================== --%>
 
@@ -476,16 +475,28 @@ function resetForm() {
   rEnvHqOffice.selectedIndex    = 0;
   rCornerUseYn.selectedIndex    = 0;
   rCashBillUseYn.selectedIndex  = 0;
-
   rClsFg.isReadOnly = false;
+
   $("#rInstallPosCnt").removeAttr("readonly");
+
+  // 본사가 데모면 데모 매장으로만 등록하도록
+  if(selectedHq.sysStatFg == "9") {
+    $("#rStoreCdRadio2").prop("checked", true);
+    $("input[name=rStoreCdRadio]").attr("disabled", true);
+    rSysStatFg.selectedValue = "9";
+    rSysStatFg.isReadOnly = true;
+  } else {
+    $("#rStoreCdRadio1").prop("checked", true);
+    $("input[name=rStoreCdRadio]").attr("disabled", false);
+    rSysStatFg.selectedValue = "";
+    rSysStatFg.isReadOnly = false;
+  }
 }
 
 <%-- 매장 신규등록 --%>
-function newStoreReg(hqOfficeCd) {
+function newStoreReg(hqOfficeInfo) {
 
-  selectedHqOfficeCd = hqOfficeCd;
-
+  selectedHq = hqOfficeInfo;
   resetForm();
 
   $("#noDataArea").hide();
@@ -513,7 +524,7 @@ function showStoreDetail() {
       return;
     }
     console.log(result);
-
+    isBizChk = true;
     setStoreData(result.data);
   }
   ,function(){
@@ -761,7 +772,6 @@ function chkVal(sendUrl) {
   }
 
   <%-- 사업자번호 중복체크를 해주세요. --%>
-  //TODO 등록시에만 체크
   var msg = "<s:message code='storeManage.require.duplicate.bizNo'/>";
   if(!isBizChk) {
     s_alert.pop(msg);
@@ -776,11 +786,13 @@ function chkVal(sendUrl) {
   }
 
   <%-- 이메일주소를 입력해주세요. --%>
+  <%--
   var msg = "<s:message code='storeManage.emailAddr'/> <s:message code='cmm.require.text'/>";
   if($("#rEmailAddr").val() === "") {
     s_alert.pop(msg);
     return;
   }
+  --%>
 
   <%-- 주소를 입력해주세요. --%>
   var msg = "<s:message code='storeManage.addr'/> <s:message code='cmm.require.text'/>";
@@ -840,7 +852,7 @@ function chkVal(sendUrl) {
 function saveStore(sendUrl){
   var param = {};
 
-  param.hqOfficeCd      = selectedHqOfficeCd;
+  param.hqOfficeCd      = selectedHq.hqOfficeCd;
 
   param.storeCd         = $("#rStoreCd").val();
   param.storeNm         = $("#rStoreNm").val();

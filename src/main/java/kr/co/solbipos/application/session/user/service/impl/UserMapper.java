@@ -1,12 +1,14 @@
 package kr.co.solbipos.application.session.user.service.impl;
 
-import java.util.List;
-import org.apache.ibatis.annotations.Mapper;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.service.OtpAuthVO;
 import kr.co.solbipos.application.session.user.service.PwdChgHistVO;
 import kr.co.solbipos.application.session.user.service.PwdChgVO;
 import kr.co.solbipos.application.session.user.service.UserVO;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @Class Name : UserMapper.java
@@ -25,6 +27,7 @@ import kr.co.solbipos.application.session.user.service.UserVO;
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Mapper
+@Repository
 public interface UserMapper {
     /**
      * 담당자 이름, 핸드폰 번호로 userId 조회
