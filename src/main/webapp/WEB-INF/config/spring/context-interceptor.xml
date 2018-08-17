@@ -30,6 +30,9 @@
       <mvc:exclude-mapping path="/menu/*.sb" />
 
       <mvc:exclude-mapping path="/system/user/info/modifyPasswd.sb" />
+
+      <mvc:exclude-mapping path="/application/pos/posLogin.sb" />
+
       <bean class="kr.co.common.interceptor.AuthenticationInterceptor" />
     </mvc:interceptor>
 
