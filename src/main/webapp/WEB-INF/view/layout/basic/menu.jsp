@@ -13,8 +13,8 @@
 
   <%--전체,즐겨찾기--%>
   <div class="menuTab">
-    <p class="all"><a id="_all" href="javascript:;" class="on"><span>전체</span></a></p><%-- 활성화 : class="on" --%>
-    <p class="favorite"><a id="_favorite" href="javascript:;"><span>즐겨찾기</span></a></p>
+    <p class="all"><a id="_all" href="javascript:void(0);" class="on"><span>전체</span></a></p><%-- 활성화 : class="on" --%>
+    <p class="favorite"><a id="_favorite" href="javascript:void(0);"><span>즐겨찾기</span></a></p>
   </div>
   <%--//전체,즐겨찾기--%>
 

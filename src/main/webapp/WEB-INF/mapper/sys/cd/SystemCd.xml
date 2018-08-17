@@ -10,6 +10,12 @@
     1       노현수     2018.06.15      최초작성
 -->
 <mapper namespace="kr.co.solbipos.sys.cd.systemcd.service.impl.SystemCdMapper">
+
+
+    <resultMap id="systemCdMap" type="DefaultMap">
+        <result column="NMCODE_ITEM_2" property="nmcodeItem2" typeHandler="CustomDateTypeHandler"/>
+    </resultMap>
+
     
     <!-- 대표명칭 코드목록 조회 -->
     <!--
@@ -17,7 +23,7 @@
         PARAM    : systemCdVO
         COMMENTS : 대표명칭 코드 목록을 조회한다.
     -->
-    <select id="getNmcodeGrpCdList" parameterType="systemCdVO" resultType="DefaultMap">
+    <select id="getNmcodeGrpCdList" parameterType="systemCdVO" resultMap="systemCdMap">
         /* USE : SystemCdMapper.getNmcodeGrpCdList */
         SELECT
             NMCODE_GRP_CD,
@@ -30,6 +36,7 @@
             TB_CM_NMCODE
         WHERE
             NMCODE_GRP_CD = '000'
+        AND NMCODE_CD = '888'
         <if test="nmcodeCd != null and nmcodeCd != ''">
             AND NMCODE_CD LIKE #{nmcodeCd}||'%'
         </if>

@@ -1,18 +1,5 @@
 package kr.co.solbipos.base.store.tableattr.web;
 
-import static kr.co.common.utils.spring.StringUtil.convertToJson;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import com.nhncorp.lucy.security.xss.XssPreventer;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.Result;
@@ -21,6 +8,21 @@ import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.store.tableattr.service.TableAttrService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
  * @Class Name : TableAttrController.java
@@ -39,7 +41,7 @@ import kr.co.solbipos.base.store.tableattr.service.TableAttrService;
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Controller
-@RequestMapping(value = "/base/store/tableattr/tableattr")
+@RequestMapping(value = "/base/store/tableAttr/tableAttr")
 public class TableAttrController {
     
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());

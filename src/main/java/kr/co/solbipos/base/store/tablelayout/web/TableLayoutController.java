@@ -1,7 +1,12 @@
 package kr.co.solbipos.base.store.tablelayout.web;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import com.nhncorp.lucy.security.xss.XssPreventer;
+import kr.co.common.data.enums.Status;
+import kr.co.common.data.structure.Result;
+import kr.co.common.service.message.MessageService;
+import kr.co.common.service.session.SessionService;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.store.tablelayout.service.TableLayoutService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +15,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.nhncorp.lucy.security.xss.XssPreventer;
-import kr.co.common.data.enums.Status;
-import kr.co.common.data.structure.Result;
-import kr.co.common.service.message.MessageService;
-import kr.co.common.service.session.SessionService;
-import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.base.store.tablelayout.service.TableLayoutService;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * @Class Name : TableLayoutController.java
@@ -35,7 +36,7 @@ import kr.co.solbipos.base.store.tablelayout.service.TableLayoutService;
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Controller
-@RequestMapping(value = "/base/store/tablelayout/tablelayout")
+@RequestMapping(value = "/base/store/tableLayout/tableLayout")
 public class TableLayoutController {
     
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());

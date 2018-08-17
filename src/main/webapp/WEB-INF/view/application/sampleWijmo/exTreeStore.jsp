@@ -12,8 +12,8 @@
 <script type="text/javascript" src="http://cdn.wijmo.com/5.latest/controls/wijmo.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="http://cdn.wijmo.com/5.latest/controls/wijmo.nav.min.js" charset="utf-8"></script>
 <%-- 
-<script src="/resource/vender/wijmo/js/wijmo.min.js"></script>
-<script src="/resource/vender/wijmo/js/wijmo.nav.min.js"></script>
+<script src="/resource/vendor/wijmo/js/wijmo.min.js"></script>
+<script src="/resource/vendor/wijmo/js/wijmo.nav.min.js"></script>
  --%>
 
 <style>
