@@ -350,8 +350,9 @@ function makeTree(div, data, initMenu) {
     // URL 이 있을 경우 페이지 이동
     if(!isEmpty(s.selectedNode.dataItem.url)) {
       location.href = s.selectedNode.dataItem.url;
-      if ( !isEmpty(s.selectedNode.dataItem.vloginId) ) {
-        location.href = s.selectedNode.dataItem.url + "?vLoginId=" + s.selectedNode.dataItem.vloginId ;
+      // 가상로그인ID 파라미터 설정
+      if ( !isEmpty(s.selectedNode.dataItem.vLoginId) ) {
+        location.href = s.selectedNode.dataItem.url + "?vLoginId=" + s.selectedNode.dataItem.vLoginId ;
       }
     }
     // 같은 메뉴를 다시 선택 했을 때 메뉴 닫기 기능

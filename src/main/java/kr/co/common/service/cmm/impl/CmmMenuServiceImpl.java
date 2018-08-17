@@ -239,6 +239,7 @@ public class CmmMenuServiceImpl implements CmmMenuService {
 
         map.put("authGrpCd", sessionInfoVO.getAuthGrpCd());
         map.put("userId", sessionInfoVO.getUserId());
+
         // 가상로그인용 변수
         if ( sessionInfoVO.getvUserId() != null && !"".equals(sessionInfoVO.getvUserId()) ) {
             map.put("vUserId", sessionInfoVO.getvUserId());

@@ -57,15 +57,18 @@ $(document).ready(function () {
   });
 
   // 그리드 선택 이벤트
-  grid.selectionChanged.addHandler(function (s, e) {
-    var col = s.columns[e.col];
-    var selectedRow = grid.rows[e.row].dataItem;
-    if (col.binding === "hqOfficeCd" && selectedRow.hqOfficeCd != "00000") {
-      vLoginProcess(selectedRow.hqUserId);
-    } else if (col.binding == "storeCd" && selectedRow.storeCd != "00000") {
-      vLoginProcess(selectedRow.msUserId);
-    } else if (col.binding == "agencyNm") {
-      vLoginProcess(selectedRow.cmUserId);
+  grid.addEventListener(grid.hostElement, 'click', function(e) {
+    var ht = grid.hitTest(e);
+    if( ht.cellType == wijmo.grid.CellType.Cell) {
+      var col = ht.panel.columns[ht.col];
+      var selectedRow = grid.rows[ht.row].dataItem;
+      if (col.binding === "hqOfficeCd" && selectedRow.hqOfficeCd != "00000") {
+        vLoginProcess(selectedRow.hqUserId);
+      } else if (col.binding == "storeCd" && selectedRow.storeCd != "00000") {
+        vLoginProcess(selectedRow.msUserId);
+      } else if (col.binding == "agencyNm") {
+        vLoginProcess(selectedRow.cmUserId);
+      }
     }
   });
 
@@ -115,6 +118,7 @@ $(document).ready(function () {
   };
 
   // 가상로그인 수행
+  // 최초 가상로그인으로 로그인시에는 vLoginId 가 아닌 vUserId 파라미터로 로그인 후 vLoginId로 사용한다.
   function vLoginProcess(value) {
 
     if (isEmpty(value)) {

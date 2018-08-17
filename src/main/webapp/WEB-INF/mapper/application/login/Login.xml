@@ -26,7 +26,8 @@
             (SELECT NVL(MAX(B.REG_DT) KEEP(DENSE_RANK FIRST ORDER BY B.IDX DESC), 0) LAST_PWD_CHG
                FROM TB_WB_PWD_CHG_HIST B
               WHERE B.USER_ID = A.USER_ID
-            ) LAST_PWD_CHG
+            ) LAST_PWD_CHG,
+            #{vUserId, jdbcType=VARCHAR} AS V_USER_ID
        FROM TB_WB_USER_INFO A,
             (SELECT USER_ID,
                     ORGN_FG,

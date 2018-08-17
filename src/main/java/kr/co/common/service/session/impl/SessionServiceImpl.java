@@ -1,19 +1,5 @@
 package kr.co.common.service.session.impl;
 
-import static kr.co.common.utils.spring.StringUtil.convertToJson;
-import static kr.co.common.utils.spring.StringUtil.generateUUID;
-import static org.springframework.util.StringUtils.isEmpty;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
-import org.springframework.web.util.WebUtils;
 import kr.co.common.service.cmm.CmmMenuService;
 import kr.co.common.service.redis.RedisConnService;
 import kr.co.common.service.session.SessionService;
@@ -24,6 +10,22 @@ import kr.co.common.utils.spring.WebUtil;
 import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.util.WebUtils;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
+import static kr.co.common.utils.spring.StringUtil.generateUUID;
+import static org.springframework.util.StringUtils.isEmpty;
 
 /**
  * @author 정용길
@@ -90,7 +92,7 @@ public class SessionServiceImpl implements SessionService {
      * 레디스에 sessionInfo 객체 저장
      *
      * @param sessionId {@link String} 세션 ID
-     * @param sessionInfo {@link SessionInfoVO}
+     * @param sessionInfoVO {@link SessionInfoVO}
      */
     private void setSessionInfo( String sessionId, SessionInfoVO sessionInfoVO ) {
         if ( redisConnService.isAvailable() ) {
@@ -130,7 +132,8 @@ public class SessionServiceImpl implements SessionService {
         String sessionId = cookie == null ? request.getParameter( SESSION_KEY ) : cookie.getValue();
         
         SessionInfoVO sessionInfoVO = new SessionInfoVO();
-        
+
+        // 가상로그인 사용시에는 파라미터로 vLoginId를 달고 다니기 때문에 별도 체크로직 추가 : 20180817 노현수
         if ( request.getParameter("vLoginId") != null && request.getParameter("vLoginId").length() > 0 ) {
             sessionInfoVO = SessionUtil.getEnv(request.getSession(), request.getParameter("vLoginId"));
         } else {
