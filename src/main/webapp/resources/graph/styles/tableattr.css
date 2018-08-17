@@ -11,7 +11,7 @@
 @import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
 @font-face {
      font-family: 'NotoR';
-     src: url('https://cdn.kcp.co.kr/font_web/NotoSansCJKkr-Regular.woff') format('woff');
+     src: url('../resource/solbipos/css/cmm/NotoSansCJKkr-Regular.woff') format('woff');
 }
 
 #container {
