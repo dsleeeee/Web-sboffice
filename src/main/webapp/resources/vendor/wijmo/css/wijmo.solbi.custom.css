@@ -1,0 +1,164 @@
+/*
+ *
+ * Wijmo Library 5.20181.436
+ * 버전에 대한 solbipos 커스텀 CSS
+ * 원본은 보존하고, 본 파일에 오버라이드 개념으로 재정의하여 사용한다
+ *
+ * 2018.08.16 솔비포스 차세대개발실 노현수
+ *
+ */
+
+.wj-control {
+    color: initial;
+    background: initial;
+    outline: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.wj-header {
+    background: #e8e8e8;
+    color: #222!important;
+    font-weight: initial;
+    font-size:12px;
+    text-align:center!important;
+}
+
+.wj-state-selected {
+    background: #93cbfc;
+    color: #fff!important; }
+
+.wj-state-multi-selected {
+    background: #ebf5ff;
+    color: #fff;
+}
+
+.wj-content {
+    display: inline-block;
+    /*위즈모 컨텐츠 라인과 radius 없애기*/
+    border: none;
+    border-radius: unset;
+    background-color: #fff;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.wj-control .wj-template {
+    position: relative;
+    display: unset;
+}
+
+.wj-control .wj-input-group {
+    border-collapse: unset;
+    width: auto;
+    height: auto;
+}
+
+.wj-input-group {
+    position: relative;
+    display: table;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    border-collapse: separate;
+    background: inherit;
+}
+
+.wj-control .wj-input-group .wj-form-control {
+    box-sizing: border-box;
+    display: table-cell;
+    position: relative;
+    float: left;
+    padding: 0 8px;
+    min-height: 2em;
+    vertical-align: middle;
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 0;
+    background-color: transparent;
+    color: inherit;
+}
+
+.wj-flexgrid {
+    width: 100%;
+    cursor: default;
+    flex:auto;
+    overflow-y:auto; /*브라우저창 크기에 따라서 테이블 높이 변경되게 처리*/
+}
+
+.wj-flexgrid .wj-grid-editor {
+    width: 100%;
+    height: 100%;
+    border: none;
+    margin: 0;
+    padding: 0;
+    background: inherit;
+    color: inherit;
+    overflow: hidden;
+    resize: none;
+    font-size:12px; /*클릭시 크기 고정*/
+}
+
+.wj-listbox .wj-listbox-item {
+    padding: 4px 6px;
+    font-size:12px;
+}
+
+.wj-cell {
+    position: absolute;
+    box-sizing: border-box;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding:9px 5px;
+    line-height:15px;
+    outline: none;
+    color:#666;
+    font-size:12px;
+}
+
+.wj-cell:not(.wj-header):not(.wj-group):not(.wj-state-selected):not(.wj-state-multi-selected) {
+    background: initial;
+}
+.wj-cell:not(.wj-header):not(.wj-group):not(.wj-state-selected):not(.wj-state-multi-selected):not(.wj-custom-readonly) {
+    background: #fff;
+}
+
+.wj-alt:not(.wj-header):not(.wj-group):not(.wj-state-selected):not(.wj-state-multi-selected):not(.wj-custom-readonly) {
+    background: initial; /*홀수번째 배경 삭제*/
+}
+
+.form-control {
+    display: block;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+/** merged 컬럼 정렬 용 */
+.merged-custom {
+    position: relative;
+    height: 100%;
+    line-height: 0;
+    transform: translateY(50%);
+}
+
+.wj-custom-readonly:not(.wj-header):not(.wj-group):not(.wj-state-selected):not(.wj-state-multi-selected) {
+    color: #666;
+    background-color: #f2f2f2;
+}
