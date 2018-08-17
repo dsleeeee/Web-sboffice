@@ -13,6 +13,17 @@
     </definition>
     <!-- JS 변수용 JSP 제외 설정 끝 -->
 
+    <!-- POS 화면용 웹 설정 -->
+    <definition name="posEmptyLayout" template="/WEB-INF/view/layout/posEmptyLayout.jsp">
+        <put-attribute name="content" value=""/>
+    </definition>
+
+    <definition name="application/pos/*" extends="posEmptyLayout">
+        <put-attribute name="body" value="/WEB-INF/view/application/pos/{1}.jsp"/>
+        <put-attribute name="resource" value="/WEB-INF/view/layout/resource.jsp"/>
+    </definition>
+    <!-- POS 화면용 웹 설정 끝 -->
+
     <!-- 에러화면 -->
     <definition name="error/*" extends="layout">
         <put-attribute name="view" value="Error"/>

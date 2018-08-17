@@ -10,8 +10,14 @@
             B.USER_NM,
             A.AUTH_GRP_CD,
             B.ORGN_FG,
+            B.ORGN_GRP_CD,
+            B.ORGN_GRP_NM,
             B.ORGN_CD,
             B.ORGN_NM,
+            B.STORE_CD,
+            B.STORE_NM,
+            B.HQ_OFFICE_CD,
+            B.HQ_OFFICE_NM,
             B.EMP_NO,
             A.LAST_LOGIN_DATE,
             A.LAST_PWD_CHG_DATE,
@@ -20,9 +26,7 @@
             (SELECT NVL(MAX(B.REG_DT) KEEP(DENSE_RANK FIRST ORDER BY B.IDX DESC), 0) LAST_PWD_CHG
                FROM TB_WB_PWD_CHG_HIST B
               WHERE B.USER_ID = A.USER_ID
-            ) LAST_PWD_CHG,
-            B.STORE_CD,
-            B.STORE_NM
+            ) LAST_PWD_CHG
        FROM TB_WB_USER_INFO A,
             (SELECT USER_ID,
                     ORGN_FG,
@@ -31,7 +35,11 @@
                     USER_NM,
                     EMP_NO,
                     STORE_CD,
-                    STORE_NM
+                    STORE_NM,
+                    HQ_OFFICE_CD,
+                    HQ_OFFICE_NM,
+                    ORGN_GRP_CD,
+                    ORGN_GRP_NM
                FROM (SELECT A.USER_ID,
                             'S' ORGN_FG,
                             A.STORE_CD ORGN_CD,
@@ -39,7 +47,11 @@
                             A.EMP_NM USER_NM,
                             A.EMP_NO,
                             C.HQ_OFFICE_CD STORE_CD, -- 가맹점일 경우 해당본사의 코드, 이름 필요
-                            C.HQ_OFFICE_NM STORE_NM
+                            C.HQ_OFFICE_NM STORE_NM,
+                            C.HQ_OFFICE_CD,
+                            C.HQ_OFFICE_NM,
+                            DECODE(C.HQ_OFFICE_CD, '00000', A.STORE_CD, C.HQ_OFFICE_CD) ORGN_GRP_CD,
+                            DECODE(C.HQ_OFFICE_CD, '00000', B.STORE_NM, C.HQ_OFFICE_NM) ORGN_GRP_NM
                        FROM TB_MS_EMPLOYEE A,
                             TB_MS_STORE B,
                             TB_HQ_OFFICE C
@@ -55,7 +67,11 @@
                             A.EMP_NM USER_NM,
                             A.EMP_NO,
                             '' STORE_CD,
-                            '' STORE_NM
+                            '' STORE_NM,
+                            A.HQ_OFFICE_CD,
+                            B.HQ_OFFICE_NM,
+                            A.HQ_OFFICE_CD ORGN_GRP_CD,
+                            B.HQ_OFFICE_NM ORGN_GRP_NM
                        FROM TB_HQ_EMPLOYEE A,
                             TB_HQ_OFFICE B
                       WHERE A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
@@ -69,7 +85,11 @@
                             A.EMP_NM USER_NM,
                             A.EMP_NO,
                             '' STORE_CD,
-                            '' STORE_NM
+                            '' STORE_NM,
+                            '' HQ_OFFICE_CD,
+                            '' HQ_OFFICE_NM,
+                            A.AGENCY_CD ORGN_GRP_CD,
+                            B.AGENCY_NM ORGN_GRP_NM
                        FROM TB_CM_EMPLOYEE A,
                             TB_CM_AGENCY B
                       WHERE A.AGENCY_CD = B.AGENCY_CD
@@ -177,4 +197,11 @@
   ]]>
   </select>
 
+    <select id="selectStoreHwAuthKeyCheck" parameterType="sessionInfoVO" resultType="String">
+  /* AuthMapper.selectStoreHwAuthKeyCheck */
+     SELECT DECODE(COUNT(tmp.POS_NO), 0, 'N', 'Y') AS EXIST_FG
+       FROM TB_MS_POS tmp
+      WHERE tmp.STORE_CD = #{storeCd}
+        AND tmp.HW_AUTH_KEY = #{hwAuthKey}
+  </select>
 </mapper>

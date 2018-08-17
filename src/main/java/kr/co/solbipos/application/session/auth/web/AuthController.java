@@ -1,9 +1,14 @@
 package kr.co.solbipos.application.session.auth.web;
 
-import static kr.co.common.utils.HttpUtils.getClientIp;
-import static org.springframework.util.ObjectUtils.isEmpty;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import kr.co.common.exception.AuthenticationException;
+import kr.co.common.service.message.MessageService;
+import kr.co.common.service.session.SessionService;
+import kr.co.common.system.BaseEnv;
+import kr.co.common.utils.spring.WebUtil;
+import kr.co.common.validate.Login;
+import kr.co.solbipos.application.session.auth.enums.LoginResult;
+import kr.co.solbipos.application.session.auth.service.AuthService;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,15 +19,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import kr.co.common.exception.AuthenticationException;
-import kr.co.common.service.message.MessageService;
-import kr.co.common.service.session.SessionService;
-import kr.co.common.system.BaseEnv;
-import kr.co.common.utils.spring.WebUtil;
-import kr.co.common.validate.Login;
-import kr.co.solbipos.application.session.auth.enums.LoginResult;
-import kr.co.solbipos.application.session.auth.service.AuthService;
-import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import static kr.co.common.utils.HttpUtils.getClientIp;
+import static org.springframework.util.ObjectUtils.isEmpty;
 
 /**
  * @Class Name : AuthController.java
@@ -140,7 +142,7 @@ public class AuthController {
 
             // 패스워드 변경 레이어 팝업
             // 초기 비밀번호 입니다. 비밀번호 변경이 필요합니다.
-             returnUrl = "/auth/login.sb?userId=" + si.getUserId() + "&type=pwChg";
+            returnUrl = "/auth/login.sb?userId=" + si.getUserId() + "&type=pwChg";
             throw new AuthenticationException(messageService.get("login.pwd.chg"), returnUrl);
         }
         else if(code == LoginResult.PASSWORD_EXPIRE) {

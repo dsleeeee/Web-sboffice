@@ -402,6 +402,12 @@ String.prototype.getByteLength = function() {
     return size;
 };
 
+/** 오라클에서 한글을 3바이트로 인식해서 한글인 경우 3바이트로 byte length 함수가 필요하여 추가 */
+String.prototype.getKr3ByteLength = function() {
+    for(var size=i=0;c=this.charCodeAt(i++);size+=c>>11?3:c>>7?2:1);
+    return size;
+};
+
 String.prototype.centerPad = function(padStr, padLen) {
     if ( parseInt(padLen) + 1 <= this.getByteLength() ) {
         return this;

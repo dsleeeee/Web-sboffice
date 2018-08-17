@@ -1,14 +1,15 @@
 package kr.co.solbipos.application.session.auth.service;
 
-import java.util.List;
-import javax.validation.constraints.Size;
-import org.hibernate.validator.constraints.NotBlank;
 import kr.co.common.validate.Login;
 import kr.co.solbipos.application.common.service.CmmVO;
 import kr.co.solbipos.application.common.service.ResrceInfoBaseVO;
 import kr.co.solbipos.application.common.service.ResrceInfoVO;
 import kr.co.solbipos.application.session.auth.enums.LoginResult;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.Size;
+import java.util.List;
 
 /**
  * @Class Name : SessionInfoVO.java
@@ -56,6 +57,19 @@ public class SessionInfoVO extends CmmVO {
      * S : 매장, 가맹점
      */
     private OrgnFg orgnFg;
+
+    /**
+     * 소속 그룹 코드
+     * 프렌차이즈인 경우 본사코드, 단독매장인 경우 자기자신의 매장코드, 시스템 or 대리점인 경우 AGENCY_CD
+     */
+    private String orgnGrpCd;
+
+    /**
+     * 소속 그룹명
+     * 프렌차이즈인 경우 본사명, 단독매장인 경우 자기자신의 매장명, 시스템 or 대리점인 경우 AGENCY_NM
+     */
+    private String orgnGrpNm;
+
     /**
      * 소속 코드<br>
      * 테이블 마다 쓰이는 컬럼이 다르다<br>
@@ -82,6 +96,11 @@ public class SessionInfoVO extends CmmVO {
      * {@link SessionInfoVO} : {@code orgnFg} S 상태 일때만 값 저장
      */
     private String storeNm;
+
+    /** 본사코드 */
+    private String hqOfficeCd;
+    /** 본사명 */
+    private String hqOfficeNm;
     /** 사원번호 */
     private String empNo;
     /** 최종 로그인 일자 */
@@ -123,8 +142,10 @@ public class SessionInfoVO extends CmmVO {
     private List<ResrceInfoBaseVO> fixMenu;
     /** 가상로그인ID */
     private String vUserId;
-    
-    
+    /** POS 로그인을 위한 하드웨어인증키 */
+    private String hwAuthKey;
+
+
     /**
      * @return the sessionId
      */
@@ -210,6 +231,33 @@ public class SessionInfoVO extends CmmVO {
         this.orgnFg = orgnFg;
     }
     /**
+     * @return the orgnGrpCd
+     */
+    public String getOrgnGrpCd() {
+        return orgnGrpCd;
+    }
+
+    /**
+     * @param orgnGrpCd the orgnGrpCd to set
+     */
+    public void setOrgnGrpCd(String orgnGrpCd) {
+        this.orgnGrpCd = orgnGrpCd;
+    }
+
+    /**
+     * @return the orgnGrpNm
+     */
+    public String getOrgnGrpNm() {
+        return orgnGrpNm;
+    }
+
+    /**
+     * @param orgnGrpNm the orgnGrpNm to set
+     */
+    public void setOrgnGrpNm(String orgnGrpNm) {
+        this.orgnGrpNm = orgnGrpNm;
+    }
+    /**
      * @return the orgnCd
      */
     public String getOrgnCd() {
@@ -256,6 +304,33 @@ public class SessionInfoVO extends CmmVO {
      */
     public void setStoreNm(String storeNm) {
         this.storeNm = storeNm;
+    }
+    /**
+     * @return the hqOfficeCd
+     */
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
+
+    /**
+     * @param hqOfficeCd the hqOfficeCd to set
+     */
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
+    }
+
+    /**
+     * @return the hqOfficeNm
+     */
+    public String getHqOfficeNm() {
+        return hqOfficeNm;
+    }
+
+    /**
+     * @param hqOfficeNm the hqOfficeNm to set
+     */
+    public void setHqOfficeNm(String hqOfficeNm) {
+        this.hqOfficeNm = hqOfficeNm;
     }
     /**
      * @return the empNo
@@ -497,5 +572,15 @@ public class SessionInfoVO extends CmmVO {
     public void setvUserId(String vUserId) {
         this.vUserId = vUserId;
     }
-    
+
+    /**
+     * @return the hwAuthKey
+     */
+    public String getHwAuthKey() { return hwAuthKey; }
+
+    /**
+     * @param hwAuthKey the hwAuthKey to set
+     */
+    public void setHwAuthKey(String hwAuthKey) { this.hwAuthKey = hwAuthKey; }
+
 }

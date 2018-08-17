@@ -1,12 +1,13 @@
 package kr.co.solbipos.application.common.web;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import kr.co.common.service.session.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import kr.co.common.service.session.SessionService;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -23,6 +24,11 @@ public class ErrorController {
     @RequestMapping(value = "/403.sb")
     public String denied(HttpServletRequest request, HttpServletResponse response, Model model) {
         return "error/403";
+    }
+
+    @RequestMapping(value = "/application/pos/403.sb")
+    public String posDenied(HttpServletRequest request, HttpServletResponse response, Model model) {
+        return "application/pos/403";
     }
 
     @RequestMapping(value = "/404.sb")

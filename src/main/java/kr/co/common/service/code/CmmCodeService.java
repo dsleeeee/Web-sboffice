@@ -1,8 +1,9 @@
 package kr.co.common.service.code;
 
-import java.util.List;
 import kr.co.common.data.domain.CommonCodeVO;
-import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+
+import java.util.List;
 
 /**
  * 공통 코드 관련 서비스
@@ -76,4 +77,9 @@ public interface CmmCodeService {
      * 본사 목록 조회
      */
     <E> List<E> getHqOfficeList();
+
+    /**
+     * 회원 등급 조회
+     */
+    <E> List<E> getMemberClassList(SessionInfoVO sessionInfoVO);
 }

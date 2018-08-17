@@ -1,20 +1,25 @@
 package kr.co.common.utils.jsp;
 
-import static kr.co.common.utils.spring.StringUtil.convertToJson;
-import static org.springframework.util.StringUtils.isEmpty;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.util.ObjectUtils;
 import kr.co.common.data.domain.CommonCodeVO;
 import kr.co.common.data.domain.EnvCodeVO;
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.code.CmmCodeService;
+import kr.co.common.service.session.SessionService;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
+import static org.springframework.util.StringUtils.isEmpty;
 
 /**
  * jsp 에서 직접 사용 공통 코드 comboBox 에 직접 사용하는 data 형식으로 돌려줌
@@ -27,6 +32,8 @@ public class CmmCodeUtil {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
     @Autowired
     CmmCodeService cmmCodeService;
+    @Autowired
+    SessionService sessionService;
 
     public static final String COMBO_NAME = "name";
     public static final String COMBO_VALUE = "value";
@@ -334,5 +341,41 @@ public class CmmCodeUtil {
 
         // 결과 형태를 만들어서 json 으로 리턴
         return assmblObj(hqOfficeList, "vanNm", "vanCd", UseYn.ALL);
+    }
+
+    /**
+     * 회원 등급 조회
+     * @return
+     */
+    public String getMemberClassList(HttpServletRequest request,  String option) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> source = cmmCodeService.getMemberClassList(sessionInfoVO);
+
+        if (ObjectUtils.isEmpty(source)) {
+            LOGGER.warn("source empty...");
+            return "";
+        }
+        List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+
+        String defaultNm = "";
+
+        if(option.equals("ALL")) {
+            defaultNm = "전체";
+        }
+        else if(option.equals("SEL")) {
+            defaultNm = "선택";
+        }
+
+        HashMap<String, String> m = new HashMap<>();
+        m.put(COMBO_NAME, defaultNm);
+        m.put(COMBO_VALUE, "");
+        list.add(m);
+
+        source.stream().forEach(x -> {
+            list.add(assmbl(x, "NM", "VALUE")); // 콤보박스의 내용을 리스트에 추가
+        });
+
+        return convertToJson(list);
     }
 }

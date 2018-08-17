@@ -42,6 +42,16 @@ public interface AuthService {
     SessionInfoVO login(SessionInfoVO sessionInfoVO);
 
     /**
+     * POS 로그인
+     *
+     * @param request
+     * @param response
+     * @param sessionInfoVO
+     * @return
+     */
+    SessionInfoVO posLogin(SessionInfoVO sessionInfoVO);
+
+    /**
      * 로그아웃
      *
      * @param request
@@ -80,4 +90,5 @@ public interface AuthService {
       * @return
       */
     List<ResrceInfoVO> selectAuthMenu(SessionInfoVO sessionInfoVO);
+
 }

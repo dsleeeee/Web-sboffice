@@ -1,5 +1,6 @@
 package kr.co.solbipos.application.common.service.impl;
 
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -48,4 +49,12 @@ public interface CmmCodeMapper {
      * @return
      */
     <E> List<E> selectHqOfficeList();
+
+    /**
+     * 회원 등급 조회
+     * @return
+     */
+    <E> List<E> selectMemberClassList(SessionInfoVO sessionInfoVO);
+
+
 }

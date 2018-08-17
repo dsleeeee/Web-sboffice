@@ -1,16 +1,6 @@
 package kr.co.solbipos.application.session.auth.service.impl;
 
-import static kr.co.common.utils.DateUtil.addDaysString;
-import static kr.co.common.utils.DateUtil.currentDateString;
-import static kr.co.common.utils.DateUtil.currentDateTimeString;
-import static org.springframework.util.ObjectUtils.isEmpty;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.system.BaseEnv;
 import kr.co.solbipos.application.common.service.ResrceInfoVO;
@@ -19,6 +9,17 @@ import kr.co.solbipos.application.session.auth.enums.LoginResult;
 import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.LoginHistVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+
+import static kr.co.common.utils.DateUtil.*;
+import static org.springframework.util.ObjectUtils.isEmpty;
 
 /**
  * @Class Name : AuthServiceImpl.java
@@ -47,6 +48,9 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     SessionService sessionService;
 
+    @Autowired
+    MessageService messageService;
+
     @Override
     public SessionInfoVO selectWebUser(SessionInfoVO sessionInfoVO) {
         SessionInfoVO si = authMapper.selectWebUser(sessionInfoVO);
@@ -56,7 +60,7 @@ public class AuthServiceImpl implements AuthService {
     /**
      * 로그인 성공 여부
      *
-     * @param sessionInfo : 사용자가 입력 객체
+     * @param sessionInfoVO : 사용자가 입력 객체
      * @param webUser : 디비에서 조회한 객체
      * @return
      */
@@ -107,7 +111,7 @@ public class AuthServiceImpl implements AuthService {
     /**
      * 패스워드 체크 암호화 후 비교 하는 과정은 아직 안들어감
      *
-     * @param sessionInfo 로그인 페이지에서 입력된 로그인 유져 정보
+     * @param sessionInfoVO 로그인 페이지에서 입력된 로그인 유져 정보
      * @param webUser 입력된 ID로 조회된 유져 정보
      * @return
      */
@@ -163,6 +167,42 @@ public class AuthServiceImpl implements AuthService {
         return si;
     }
 
+    /**
+     * POS에서 로그인
+     *
+     * @param sessionInfoVO
+     * @return
+     */
+    @Override
+    public SessionInfoVO posLogin(SessionInfoVO sessionInfoVO) {
+
+        // 하드웨어인증키 조회
+        String isExist = authMapper.selectStoreHwAuthKeyCheck(sessionInfoVO);
+        // 하드웨어인증이 정상이 아닌 경우
+        if (isExist.equals("N")) {
+            //throw new AuthenticationException(messageService.get("login.pos.hwAuthKey.fail"), "/error/application/pos/403.sb");
+        }
+
+        // 기본사용자로 세팅하기위해 userId를 storeCd 의 소문자로 변경한다.
+        sessionInfoVO.setUserId(sessionInfoVO.getStoreCd().toLowerCase());
+        // userId 로 사용자 조회
+        SessionInfoVO posSi = selectWebUser(sessionInfoVO);
+
+        // 로그인 결과
+        posSi.setLoginResult(LoginResult.SUCCESS);
+
+        // 조회된 패스워드 초기화
+        posSi.setUserPwd("");
+        posSi.setLoginIp(sessionInfoVO.getLoginIp());
+        posSi.setBrwsrInfo(sessionInfoVO.getBrwsrInfo());
+
+        // 로그인 시도 기록
+        loginHist(posSi);
+
+        return posSi;
+    }
+
+
     @Override
     public boolean logout(HttpServletRequest request, HttpServletResponse response) {
         sessionService.deleteSessionInfo(request);
@@ -172,7 +212,7 @@ public class AuthServiceImpl implements AuthService {
     /**
      * 로그인 시도 결과를 히스토리 저장
      *
-     * @param sessionInfo
+     * @param sessionInfoVO
      * @return
      */
     @Override
