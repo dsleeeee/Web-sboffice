@@ -5,6 +5,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.pay.coupon.service.CouponProdVO;
 import kr.co.solbipos.base.pay.coupon.service.CouponService;
 import kr.co.solbipos.base.pay.coupon.service.CouponVO;
 import kr.co.solbipos.base.pay.coupon.service.PayMethodClassVO;
@@ -18,7 +19,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
@@ -60,7 +63,7 @@ public class CouponController {
     @RequestMapping(value = "/class/couponView.sb", method = RequestMethod.GET)
     public String prodClassView(HttpServletRequest request, HttpServletResponse response,
             Model model) {
-        return "base/pay/coupon/coupon";
+        return "base/pay/coupon/couponView";
     }
 
     /**
@@ -160,10 +163,42 @@ public class CouponController {
      * @author  김지은
      * @since   2018.08.09
      */
-    @RequestMapping(value = "/class/couponProdView.sb", method = RequestMethod.GET)
+    @RequestMapping(value = "/prod/couponProdView.sb", method = RequestMethod.GET)
     public String couponProdView(HttpServletRequest request, HttpServletResponse response,
         Model model) {
-        return "base/pay/coupon/couponProd";
+
+        System.out.println("================ couponProdView");
+
+        return "base/pay/coupon/couponProdView";
     }
+
+    /**
+     * 쿠폰 상품 조회
+     * @param   couponProdVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  String
+     * @author  김지은
+     * @since   2018.08.17
+     */
+    @RequestMapping(value = "/prod/getProdList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getCouponList(CouponProdVO couponProdVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        List<DefaultMap<String>> registProdList = service.getRegistProdList(couponProdVO, sessionInfoVO);
+        List<DefaultMap<String>> noRegistProdList = service.getNoRegistProdList(couponProdVO, sessionInfoVO);
+
+        Map<String,Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("registProdList", registProdList);
+        resultMap.put("noRegistProdList", noRegistProdList);
+
+        return returnListJson(Status.OK, resultMap, couponProdVO);
+    }
+
+
 
 }

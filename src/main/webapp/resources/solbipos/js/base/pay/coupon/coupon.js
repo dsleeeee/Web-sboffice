@@ -14,7 +14,7 @@ $(document).ready(function(){
 
   var useYnDataMap        = new wijmo.grid.DataMap(useYn, 'value', 'name');
   var coupnDcFgDataMap    = new wijmo.grid.DataMap(coupnDcFg, 'value', 'name');
-  //var targetFgDataMap = new wijmo.grid.DataMap(targetFg, 'value', 'name');
+  var coupnApplyFgDataMap = new wijmo.grid.DataMap(coupnApplyFg, 'value', 'name');
 
   // ========================================================================= 쿠폰분류 그리드 초기화
 
@@ -61,21 +61,6 @@ $(document).ready(function(){
     }
   });
 
-  // 쿠폰분류 그리드 데이터 수정시 코드는 수정 불가
-  /*
-  couponClassGrid.cellEditEnded.addHandler(function(s, e) {
-    if(couponClassGrid.rows[e.row].dataItem.status == "I"){// 추가된 데이터만 코드 수정가능
-      e.cancel = false;
-    }else{
-      if(e.col != 1){
-        e.cancel = false;
-      }else{
-        e.cancel = true;
-      }
-    }
-  });
-*/
-
   // ========================================================================= 쿠폰 그리드 초기화
 
   var couponGridHeader =
@@ -89,7 +74,7 @@ $(document).ready(function(){
       {binding:"coupnDcRate", header:messages["coupon.coupnDcRate"], width:"*"},
       {binding:"coupnDcAmt", header:messages["coupon.coupnDcAmt"], maxLength:5, width:"*"},
       //{binding:"targetCnt", header:messages["coupon.targetCnt"], dataMap:targetFgDataMap, width:"*"},
-      {binding:"coupnApplyFg", header:messages["coupon.coupnApplyFg"], dataMap:coupnDcFgDataMap, width:"*"},
+      {binding:"coupnApplyFg", header:messages["coupon.coupnApplyFg"], dataMap:coupnApplyFgDataMap, width:"*"},
       {binding:"prodCnt", header:messages["coupon.prodCnt"], isReadOnly:true, width:"*"},
       {binding:"storeCnt", header:messages["coupon.storeCnt"], isReadOnly:true, width:"*"},
       {binding:"useYn", header:messages["cmm.useYn"], dataMap:useYnDataMap, width:"*"},
@@ -100,7 +85,7 @@ $(document).ready(function(){
   couponGrid.isReadOnly = false;
 
   // 쿠폰 그리드 선택 이벤트
-  couponGrid.addEventListener(couponClassGrid.hostElement, 'mousedown', function(e) {
+  couponGrid.addEventListener(couponGrid.hostElement, 'mousedown', function(e) {
     var ht = couponGrid.hitTest(e);
     var row = ht.row;
     if( ht.cellType == wijmo.grid.CellType.Cell) {
@@ -338,11 +323,11 @@ $(document).ready(function(){
 
   //TODO 탭 클릭
   $("#couponProdTab").click(function(){
-    location.href = "/base/pay/coupon/class/couponProdView.sb";
+    location.href = "/base/pay/coupon/prod/couponProdView.sb";
   });
 
   $("#couponStoreTab").click(function(){
-    location.href = "/base/pay/coupon/class/couponStoreView.sb";
+    location.href = "/base/pay/coupon/store/couponStoreView.sb";
   });
 
 });

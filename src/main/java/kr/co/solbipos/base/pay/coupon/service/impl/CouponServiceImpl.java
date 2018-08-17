@@ -7,6 +7,7 @@ import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.base.pay.coupon.service.CouponProdVO;
 import kr.co.solbipos.base.pay.coupon.service.CouponService;
 import kr.co.solbipos.base.pay.coupon.service.CouponVO;
 import kr.co.solbipos.base.pay.coupon.service.PayMethodClassVO;
@@ -16,7 +17,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
@@ -220,4 +223,34 @@ public class CouponServiceImpl implements CouponService {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
     }
+
+    /** 쿠폰 등록상품 조회 */
+    @Override
+    public List<DefaultMap<String>> getRegistProdList(CouponProdVO couponProdVO,
+        SessionInfoVO sessionInfoVO) {
+
+        // TODO 진행중
+        //List<DefaultMap<String>> resultList = mapper.getRegistProdList(couponProdVO);
+
+        return null;
+    }
+
+    /** 쿠폰 미등록상품 조회 */
+    @Override
+    public List<DefaultMap<String>> getNoRegistProdList(CouponProdVO couponProdVO,
+        SessionInfoVO sessionInfoVO) {
+
+        // TODO 진행중
+        //List<DefaultMap<String>> resultList = mapper.getNogistProdList(couponProdVO);
+
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+
+        } else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+
+
+        }
+
+        return null;
+    }
+
 }

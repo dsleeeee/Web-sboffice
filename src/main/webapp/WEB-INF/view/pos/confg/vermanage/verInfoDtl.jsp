@@ -318,7 +318,6 @@
     var fileDescInput = wcombo.genInput("#fileDesc");
     var pData         = ${ccu.getCommCodeExcpAll("090")};
     var progFgCombo   = wcombo.genCommonBox("#progFg", pData);
-    var useYnData     = ${ccu.getCommCodeExcpAll("904")};
     var useYnCombo    = wcombo.genCommonBox("#useYn", useYn);
 
     fileSizeInput.isReadOnly  = true;

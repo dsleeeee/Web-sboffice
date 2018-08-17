@@ -4,6 +4,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Class Name : CouponService.java
@@ -33,4 +34,10 @@ public interface CouponService {
 
     /** 쿠폰 저장 */
     int saveCouponList(CouponVO[] couponVOs, SessionInfoVO sessionInfoVO);
+
+    /** 쿠폰 등록상품 조회*/
+    List<DefaultMap<String>> getRegistProdList(CouponProdVO couponProdVO, SessionInfoVO sessionInfoVO);
+
+    /** 쿠폰 미등록상품 조회*/
+    List<DefaultMap<String>> getNoRegistProdList(CouponProdVO couponProdVO, SessionInfoVO sessionInfoVO);
 }

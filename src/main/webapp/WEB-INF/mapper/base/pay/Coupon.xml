@@ -210,7 +210,12 @@
            REG_ID
       FROM TB_HQ_COUPON
      WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+    <if test='payClassCd != null and payClassCd.toString() != ""'>
        AND PAY_CLASS_CD = #{payClassCd}
+    </if>
+    <if test='useYn != null and useYn.toString() == "Y"'>
+       AND USE_YN = #{useYn}
+    </if>
   </select>
 
   <!-- 매장 쿠폰 조회 -->
@@ -232,7 +237,12 @@
            REG_ID
       FROM TB_MS_COUPON
      WHERE STORE_CD = #{storeCd}
+    <if test='payClassCd != null and payClassCd.toString() != ""'>
        AND PAY_CLASS_CD = #{payClassCd}
+    </if>
+    <if test='useYn != null and useYn.toString() == "Y"'>
+       AND USE_YN = #{useYn}
+    </if>
   </select>
 
   <!-- 본사 쿠폰 등록 -->
