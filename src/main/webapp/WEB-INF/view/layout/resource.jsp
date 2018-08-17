@@ -14,10 +14,7 @@
 <script type="text/javascript" src="/resource/vendor/prefixfree/prefixfree.js" charset="utf-8"></script>
 
 <script type="text/javascript" src="/resource/vendor/wijmo/js/wijmo.min.js?ver=5.20182.500" charset="utf-8"></script>
-<%-- wijmo LicenseKey 설정 --%>
-<script type="text/javascript">
-    wijmo.setLicenseKey('127.0.0.1|192.168.0.85|192.168.0.170,999199446559797#B0HbhZmOiI7ckJye0ICbuFkI1pjIEJCLi4TPBhjNXRmd7Z4R9BXOrI5aUNjdJ56dFJTYrsWVjJDdvRlSP9kTFRTSQF7ZhNlN7pGavI4ToJkNK36b6JjSiJHMDVVT9hke8UzcGZFME9kYadnV6p7SGlGeMx4YMZGOkpGThdGaQdUdXllWhF7KMZUTlJDVJpWRwonWsdUdy2ycY3SY5UDTwZ5T5hFSCdjY03SWYpXUNVnNRhjazM6c5NlZp3kcJZUWoF4SsZnZ8hHZtNjd7QFThd6KI3SZFFUQEFEMwJGT72ScwUXdNlkMtFzUZR6LwJGMRVjeshTak54L8YUOzskd8skQihnYWt4NYZWZZZlWwRWaHRHM4w4ZNtCV0tCbJp6ajx4UUVGaq5mdkdGNyNHdmlGV6MWdBZjRMBHdWhzTvk7TidlRvREbNBXWxIHbZd6dh54ThtkdLxkcjF6dZNjbGNGNYZ6Mw8EMVlnNmVWZpZTYiojITJCLiMkR7cTMCFjNiojIIJCLwYTN9YjM8UzN0IicfJye35XX3JSSwIjUiojIDJCLi86bpNnblRHeFBCI4VWZoNFelxmRg2Wbql6ViojIOJyes4nI5kkTRJiOiMkIsIibvl6cuVGd8VEIgIXZ7VWaWRncvBXZSBybtpWaXJiOi8kI1xSfis4N8gkI0IyQiwiIu3Waz9WZ4hXRgAydvJVa4xWdNBybtpWaXJiOi8kI1xSfiQjR6QkI0IyQiwiIu3Waz9WZ4hXRgACUBx4TgAybtpWaXJiOi8kI1xSfiMzQwIkI0IyQiwiIlJ7bDBybtpWaXJiOi8kI1xSfiUFO7EkI0IyQiwiIu3Waz9WZ4hXRgACdyFGaDxWYpNmbh9WaGBybtpWaXJiOi8kI1tlOiQmcQJCLiIDM4QzNwACOwgDM8EDMyIiOiQncDJCLiAzNx8CMugjNx8iM9EDL5gjLw8CO6EjLykTMsEjLw8CMucjMxIiOiMXbEJCLiQqisz0jtTYurTphsLiOiEmTDJCLicTO7kTN5YDN4kTOxkTO9IiOiQWSiwSfiIjd8EDMyIiOiIXZ6JLLcN');
-</script>
+<script type="text/javascript" src="/resource/vendor/wijmo/js/wijmo.license.key?ver=5.20182.500" charset="utf-8"></script>
 
 <script type="text/javascript" src="/resource/vendor/wijmo/js/grid/wijmo.grid.min.js?ver=5.20182.500" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/vendor/wijmo/js/grid/wijmo.grid.xlsx.min.js?ver=5.20182.500" charset="utf-8"></script>

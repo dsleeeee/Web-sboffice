@@ -84,6 +84,9 @@
     <definition name="*/*/*/*" extends="Main">
         <put-attribute name="view" value="{4}"/>
         <put-attribute name="content" cascade="true" value="/WEB-INF/view/{1}/{2}/{3}/{4}.jsp"/>
+    </definition><definition name="*/*/*/*/*" extends="Main">
+        <put-attribute name="view" value="{5}"/>
+        <put-attribute name="content" cascade="true" value="/WEB-INF/view/{1}/{2}/{3}/{4}/{5}.jsp"/>
     </definition>
     <!-- 화면 end -->
 
