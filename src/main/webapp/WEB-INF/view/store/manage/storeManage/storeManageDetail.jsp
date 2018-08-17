@@ -523,7 +523,7 @@ function showStoreDetail() {
       s_alert.pop(result.message);
       return;
     }
-    console.log(result);
+    //console.log(result);
     isBizChk = true;
     setStoreData(result.data);
   }
@@ -539,7 +539,7 @@ function setStoreData(data){
   $("#storeInfoViewArea").show();
   $("#additionalArea").hide();
 
-  console.log(data);
+  //console.log(data);
 
   var storeDtlInfo = data.storeDtlInfo;
   var instPosCnt = data.instPosCnt;
@@ -852,7 +852,11 @@ function chkVal(sendUrl) {
 function saveStore(sendUrl){
   var param = {};
 
-  param.hqOfficeCd      = selectedHq.hqOfficeCd;
+  if($("#rStoreCdRadio").is(":visible")) {
+    param.hqOfficeCd = selectedHq.hqOfficeCd;
+  }else {
+    param.hqOfficeCd = selectedStore.hqOfficeCd;
+  }
 
   param.storeCd         = $("#rStoreCd").val();
   param.storeNm         = $("#rStoreNm").val();
@@ -895,8 +899,7 @@ function saveStore(sendUrl){
   //TODO 우선 아래 코너 제외하고 저장해보기
   $.postJSONSave(sendUrl, param, function(result) {
 
-    console.log("====================================================");
-    console.log(result);
+    //console.log(result);
     if(result.status === "FAIL") {
       s_alert.pop(result.message);
       return;
@@ -909,7 +912,7 @@ function saveStore(sendUrl){
     //saveOtherInfo();
   }
   ,function(result){
-    console.log(result);
+    //console.log(result);
     s_alert.pop(result.message);
   });
 }
