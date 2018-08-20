@@ -110,14 +110,25 @@
 
   var srchHqOfficeCd = wcombo.genInputText("#srchHqOfficeCd", "7", "본사코드", function(s, e) {
       if ( s.maskFull ) {
-          //console.log("통과");
+        console.log("srchHqOfficeCd validation 통과");
       } else {
-          //console.log("실패");
+        console.log("srchHqOfficeCd validation 실패");
+        srchHqOfficeCd.value = '';
       }
   });
 
   var srchHqOfficeNm    = wcombo.genInput("#srchHqOfficeNm");
-  var srchBizNo         = wcombo.genInput("#srchBizNo");
+  // var srchBizNo         = wcombo.genInput("#srchBizNo");
+
+  var srchBizNo = wcombo.genInputText("#srchBizNo", "000-00-00000", "사업자번호", function(s, e) {
+    if ( s.maskFull ) {
+      console.log("srchBizNo validation 통과");
+    } else {
+      console.log("srchBizNo validation 실패");
+      srchBizNo.value = '';
+    }
+  });
+
   var srchClsFg         = wcombo.genCommonBox("#srchClsFg", clsFg);
   var srchSysStatFg     = wcombo.genCommonBox("#srchSysStatFg", sysStatFg);
 
@@ -201,15 +212,23 @@
       return;
     }
 
-    if(srchBizNo.text.length > 15) {
+    if(srchBizNo.rawValue.length > 15) {
       s_alert.pop("<s:message code='hqManage.bizNo'/><s:message code='cmm.regexp' arguments='15'/>");
       return;
     }
 
     var param = {};
-    param.hqOfficeCd  = srchHqOfficeCd.text;
+    // 마스킹 없을때의 필드 값
+    param.hqOfficeCd  = srchHqOfficeCd.value;
+    console.log("srchHqOfficeCd : " + srchHqOfficeCd.rawValue);
+
     param.hqOfficeNm  = srchHqOfficeNm.text;
-    param.bizNo       = srchBizNo.text;
+
+    // 마스킹 했을때의 필드 값
+    param.bizNo       = srchBizNo.rawValue;
+    console.log("srchBizNo.rawValue : " + srchBizNo.rawValue);
+    console.log("srchBizNo.maskingValue : " + srchBizNo.value);
+
     param.clsFg       = srchClsFg.selectedValue;
     param.sysStatFg   = srchSysStatFg.selectedValue;
     param.listScale   = listScaleBox.selectedValue;
