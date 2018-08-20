@@ -91,10 +91,6 @@ $(document).ready(function () {
 
     $.postJSON("/sys/bill/item/item/list.sb", param,
       function (result) {
-        if (result.status === "FAIL") {
-          s_alert.pop(result.message);
-          return;
-        }
 
         // 버튼 Show
         $("#btnAdd").show();
@@ -113,8 +109,9 @@ $(document).ready(function () {
         }
 
       },
-      function () {
-        s_alert.pop("Ajax Fail");
+      function (result) {
+        s_alert.pop(result.message);
+        return;
       }
     );
 

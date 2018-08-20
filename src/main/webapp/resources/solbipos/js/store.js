@@ -73,9 +73,10 @@
         
         $("#_storetent").show();
         $("#_storelayer").show();
-      })
-      .fail(function(){
-        s_alert.pop("Ajax Fail");
+      },
+      function (result) {
+        s_alert.pop(result.message);
+        return;
       });
     }
     

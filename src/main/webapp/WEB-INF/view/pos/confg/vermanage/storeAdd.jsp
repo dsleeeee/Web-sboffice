@@ -206,10 +206,6 @@
     param.listScale   = listScaleBox2.selectedValue;
 
     $.postJSON("/pos/confg/verManage/applcStore/srchStoreList.sb", param, function(result) {
-      if(result.status === "FAIL") {
-        s_alert.pop(result.message);
-        return;
-      }
       var list = result.data.list;
 
       grid3.itemsSource = list;
@@ -221,10 +217,12 @@
         return;
       }
       page.make("#page3", result.data.page.curr, result.data.page.totalPage);
-    }
-    ,function(){
-      s_alert.pop("Ajax Fail");
-    });
+    },
+      function (result) {
+        s_alert.pop(result.message);
+        return;
+      }
+    );
   }
 
   <%-- 저장버튼 클릭 --%>

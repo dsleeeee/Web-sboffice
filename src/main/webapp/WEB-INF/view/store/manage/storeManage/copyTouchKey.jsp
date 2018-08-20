@@ -75,15 +75,13 @@ function showCopyTouchKeyLayout(){
 function getHqList(){
   var param = {};
   $.postJSON("/store/manage/storeManage/storeManage/getHqList.sb", param, function(result) {
-    if(result.status === "FAIL") {
+    copyTouchKeyHq.itemsSource = result.data.list;
+  },
+    function (result) {
       s_alert.pop(result.message);
       return;
     }
-    copyTouchKeyHq.itemsSource = result.data.list;
-  }
-  ,function(){
-    s_alert.pop("Ajax Fail");
-  });
+  );
 }
 
 <%-- 본사 선택시 브랜드 목록 조회  --%>
@@ -92,16 +90,13 @@ copyTouchKeyHq.selectedIndexChanged.addHandler(function(s, e){
   param.hqOfficeCd = copyTouchKeyHq.selectedValue;
 
   $.postJSON("/store/manage/storeManage/storeManage/getHqBrandList.sb", param, function(result) {
-
-    if(result.status === "FAIL") {
+    copyTouchKeyBrand.itemsSource = result.data.list;
+  },
+    function (result) {
       s_alert.pop(result.message);
       return;
     }
-    copyTouchKeyBrand.itemsSource = result.data.list;
-  }
-  ,function(){
-      s_alert.pop("Ajax Fail");
-  });
+  );
 });
 
 <%-- 브랜드 선택시 매장 목록 조회  --%>
@@ -110,15 +105,13 @@ copyTouchKeyBrand.selectedIndexChanged.addHandler(function(s, e){
   param.hqOfficeCd  = copyTouchKeyHq.selectedValue;
 
   $.postJSON("/store/manage/storeManage/storeManage/getTouchKeyStoreList.sb", param, function(result) {
-    if(result.status === "FAIL") {
+    copyTouchKeyStore.itemsSource = result.data.list;
+  },
+    function (result) {
       s_alert.pop(result.message);
       return;
     }
-    copyTouchKeyStore.itemsSource = result.data.list;
-  }
-  ,function(){
-      s_alert.pop("Ajax Fail");
-  });
+  );
 });
 
 <%-- 주방프린터-상품등록 레이아웃 보이지 않기--%>

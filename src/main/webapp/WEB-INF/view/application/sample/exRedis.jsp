@@ -94,11 +94,10 @@ function ajaxSend(url, param) {
 		}
 		
 		
-	})
-	// 오류발생 시 
-	.fail(function(){
-		alert("Ajax Fail");
-	});
+	},
+    function (result) {
+      s_alert.pop(result.message);
+    });
 }
 
 

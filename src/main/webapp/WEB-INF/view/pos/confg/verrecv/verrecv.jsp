@@ -191,16 +191,13 @@
 
     $.postJSON("${baseUrl}" + "storeList.sb", param, function(result) {
       var list = result.data.list;
-      if(result.status === "FAIL") {
+      grid2.itemsSource = list;
+      page.make("#page2", result.data.page.curr, result.data.page.totalPage);
+    },
+      function(result) {
         s_alert.pop(result.message);
         grid2.itemsSource = new wijmo.collections.CollectionView([]);
         return;
-      }
-      grid2.itemsSource = list;
-      page.make("#page2", result.data.page.curr, result.data.page.totalPage);
-    }
-    ,function(){
-      s_alert.pop("Ajax Fail");
     });
   }
 
@@ -220,10 +217,6 @@
     param.curr      = index;
 
     $.postJSON("${baseUrl}" + "list.sb", param, function(result) {
-      if(result.status === "FAIL") {
-        s_alert.pop(result.message);
-        return;
-      }
       var list = result.data.list;
       if(list.length === undefined || list.length == 0) {
         s_alert.pop(result.message);
@@ -233,9 +226,10 @@
       }
       grid1.itemsSource = list;
       page.make("#page1", result.data.page.curr, result.data.page.totalPage);
-    }
-    ,function(){
-        s_alert.pop("Ajax Fail");
+    },
+      function(result) {
+        s_alert.pop(result.message);
+        return;
     });
   }
 

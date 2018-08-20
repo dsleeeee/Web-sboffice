@@ -420,10 +420,6 @@
     var param = items;
 
     $.postJSON("/store/hq/hqManage/master/dtlInfo.sb", param, function(result) {
-      if(result.status === "FAIL") {
-        s_alert.pop(result.message);
-        return;
-      }
       var data = result.data;
 
       <%-- 상세정보 --%>
@@ -463,10 +459,12 @@
       rHmpgAddr.text             = data.hmpgAddr;
       rAgency.selectedValue      = data.agencyCd;
       rClsFg.selectedValue       = data.clsFg;
-    }
-    ,function(){
-      s_alert.pop("Ajax Fail");
-    });
+    },
+      function (result) {
+        s_alert.pop(result.message);
+        return;
+      }
+    );
   }
 
   <%-- 폼 리셋 --%>
@@ -607,17 +605,15 @@
     console.log(param)
 
     $.postJSONSave(sendUrl, param, function(result) {
-      if(result.status === "FAIL") {
-        s_alert.pop(result.message);
-        return;
-      }
       s_alert.pop("<s:message code='cmm.saveSucc'/>");
       $(".btn_close").click();
       search(1);
-    }
-    ,function(){
-      s_alert.pop("Ajax Fail");
-    });
+    },
+      function (result) {
+        s_alert.pop(result.message);
+        return;
+      }
+    );
   }
 
 <%-- ============================================= 버튼 이벤트 관련 =========================================== --%>
@@ -634,10 +630,6 @@
     param.bizNo = rBizNo1.text + rBizNo2.text + rBizNo3.text;
 
     $.postJSON("/store/hq/hqManage/master/chkBizNo.sb", param, function(result) {
-      if(result.status === "FAIL") {
-        s_alert.pop(result.message);
-        return;
-      }
       isBizChk = true;
 
       if(result.data == 0 ){
@@ -647,10 +639,12 @@
         <%-- 사업자번호 사용현황 팝업 --%>
         openBizInfoLayer(param);
       }
-    }
-    ,function(){
-      s_alert.pop("Ajax Fail");
-    });
+    },
+      function (result) {
+        s_alert.pop(result.message);
+        return;
+      }
+    );
   });
 
   <%-- 본사코드 선택 이벤트 --%>

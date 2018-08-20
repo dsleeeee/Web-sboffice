@@ -116,10 +116,6 @@ $(document).ready(function () {
 
     $.postJSON("/sys/cd/envConfig/envConfig/envst/list.sb", param,
       function (result) {
-        if (result.status === "FAIL") {
-          s_alert.pop(result.message);
-          return;
-        }
         // 버튼 Show
         $("#btnAddRepresent").show();
         $("#btnDelRepresent").show();
@@ -136,8 +132,9 @@ $(document).ready(function () {
         }
 
       },
-      function () {
-        s_alert.pop("Ajax Fail");
+      function (result) {
+        s_alert.pop(result.message);
+        return;
       }
     );
   }
@@ -223,10 +220,6 @@ $(document).ready(function () {
 
     $.postJSON("/sys/cd/envConfig/envConfig/envstDtl/list.sb", param,
       function (result) {
-        if (result.status === "FAIL") {
-          s_alert.pop(result.message);
-          return;
-        }
         // 버튼 Show
         $("#btnAddDetail").show();
         $("#btnDelDetail").show();
@@ -242,8 +235,9 @@ $(document).ready(function () {
         }
 
       },
-      function () {
-        s_alert.pop("Ajax Fail");
+      function (result) {
+        s_alert.pop(result.message);
+        return;
       }
     );
 

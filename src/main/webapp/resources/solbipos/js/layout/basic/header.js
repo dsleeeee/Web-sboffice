@@ -33,9 +33,11 @@ function callPostJson(url, menuId) {
         },
         function(result){
             s_alert.pop(result.message);
-        }).fail(function() {
-        s_alert.pop("Ajax Fail");
-    });
+        },
+        function (result) {
+            s_alert.pop(result.message);
+            return;
+        });
 }
 
 // 고정메뉴영역 오른쪽 스크롤

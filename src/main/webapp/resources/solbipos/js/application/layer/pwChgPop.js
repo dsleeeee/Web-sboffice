@@ -13,24 +13,26 @@ genEventSingle($("#newPw"));
 genEventSingle($("#newPwConf"));
 
 $("#confirmBtn").click(function() {
-    var param = {};
-    param.userId = $("#pwdUserId").val();
-    param.currentPw = $("#currentPw").val();
-    param.newPw = $("#newPw").val();
-    param.newPwConf = $("#newPwConf").val();
+  var param = {};
+  param.userId = $("#pwdUserId").val();
+  param.currentPw = $("#currentPw").val();
+  param.newPw = $("#newPw").val();
+  param.newPwConf = $("#newPwConf").val();
 
-    $.postJSON("/user/userPwdChg.sb", param, function(result) {
-        if (result.status === "OK") {
-            if (result.data.msg != undefined) {
-                s_alert.popOk(result.data.msg, function() {
-                    location.href = result.data.url;
-                });
-            }
-        } else if (result.status === "FAIL") {
-            processError(result.data);
+  $.postJSON("/user/userPwdChg.sb", param, function (result) {
+      if (result.status === "OK") {
+        if (result.data.msg != undefined) {
+          s_alert.popOk(result.data.msg, function () {
+            location.href = result.data.url;
+          });
         }
-    }, function(result) {
-      alert(result.message);
+      } else if (result.status === "FAIL") {
+        processError(result.data);
+      }
+    },
+    function (result) {
+      s_alert.pop(result.message);
+      return;
     });
 });
 
@@ -49,8 +51,10 @@ $("#extensionBtn").click(function() {
         } else if (result.status === "FAIL") {
             processError(result.data);
         }
-    }, function(result) {
-        alert(result.data.message);
+    },
+    function (result) {
+      s_alert.pop(result.message);
+      return;
     });
 });
 

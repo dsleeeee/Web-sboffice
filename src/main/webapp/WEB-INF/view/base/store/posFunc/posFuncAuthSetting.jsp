@@ -59,18 +59,15 @@ function getPosAuthData(){
     param.fnkeyNo = selectedFnkey.fnkeyNo;
 
     $.postJSON("/base/store/posfunc/auth/getAuthEmpList.sb", param, function(result) {
-        console.log(result);
-        if(result.status === "FAIL") {
-            s_alert.pop(result.message);
-            return;
-        }
         var list = result.data.list;
         authSettingGrid.itemsSource = new wijmo.collections.CollectionView(list);
         authSettingGrid.collectionView.trackChanges = true;
-    }
-    ,function(){
-        s_alert.pop("Ajax Fail");
-    });
+    },
+      function (result) {
+        s_alert.pop(result.message);
+        return;
+      }
+    );
 }
 
 <%-- 체크박스 초기화 --%>

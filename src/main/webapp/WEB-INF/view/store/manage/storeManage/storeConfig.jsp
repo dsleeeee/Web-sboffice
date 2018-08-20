@@ -167,10 +167,12 @@ function showStoreConfigLayout(envstFg){
 
       s_alert.pop(msg);
     }
-  }
-  ,function(){
-      s_alert.pop("Ajax Fail");
-  });
+  },
+    function (result) {
+      s_alert.pop(result.message);
+      return;
+    }
+  );
 }
 
 $("#storeEnvInfoArea #btnSaveStore").click(function(){

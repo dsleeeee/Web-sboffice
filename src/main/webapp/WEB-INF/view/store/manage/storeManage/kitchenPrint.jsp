@@ -74,18 +74,15 @@ function showkitchenPrintLayout(){
 
   <%-- 주방프린터 목록 조회 --%>
   $.postJSON("/store/manage/storeManage/storeManage/getKitchenPrintInfo.sb", param, function(result) {
-
-    if(result.status === "FAIL") {
-      s_alert.pop(result.message);
-      return;
-    }
     var list = result.data.list;
     kitchenPrintGrid.itemsSource = new wijmo.collections.CollectionView(list);
     kitchenPrintGrid.itemsSource.trackChanges = true;
-  }
-  ,function(){
-    s_alert.pop("Ajax Fail");
-  });
+  },
+    function (result) {
+      s_alert.pop(result.message);
+      return;
+    }
+  );
 }
 
 <%-- 추가 버튼 클릭 --%>

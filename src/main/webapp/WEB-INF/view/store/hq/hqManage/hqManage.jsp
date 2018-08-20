@@ -216,10 +216,6 @@
     param.curr        = index;
 
     $.postJSON("/store/hq/hqManage/hqManage/list.sb", param, function(result) {
-      if(result.status === "FAIL") {
-        s_alert.pop(result.message);
-        return;
-      }
       var list = result.data.list;
 
       if(list.length === undefined || list.length == 0) {
@@ -229,10 +225,12 @@
       grid.itemsSource = list;
 
       page.make("#page", result.data.page.curr, result.data.page.totalPage);
-    }
-    ,function(){
-        s_alert.pop("Ajax Fail");
-    });
+    },
+      function (result) {
+        s_alert.pop(result.message);
+        return;
+      }
+    );
   }
 
   <%-- 본사신규등록 버튼 클릭--%>

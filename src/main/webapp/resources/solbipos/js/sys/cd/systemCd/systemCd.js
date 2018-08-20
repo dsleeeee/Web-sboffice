@@ -82,10 +82,6 @@ $(document).ready(function () {
 
     $.postJSON("/sys/cd/systemCd/systemCd/list.sb", param,
       function (result) {
-        if (result.status === "FAIL") {
-          s_alert.pop(result.message);
-          return;
-        }
 
         // 버튼 Show
         $("#btnAddRepresent").show();
@@ -103,8 +99,9 @@ $(document).ready(function () {
         }
 
       },
-      function () {
-        s_alert.pop("Ajax Fail");
+      function (result) {
+        s_alert.pop(result.message);
+        return;
       }
     );
   }
@@ -179,10 +176,6 @@ $(document).ready(function () {
 
     $.postJSON("/sys/cd/systemCd/systemCd/list.sb", param,
       function (result) {
-        if (result.status === "FAIL") {
-          s_alert.pop(result.message);
-          return;
-        }
 
         // 버튼 Show
         $("#btnAddDetail").show();
@@ -201,8 +194,9 @@ $(document).ready(function () {
         }
 
       },
-      function () {
-        s_alert.pop("Ajax Fail");
+      function (result) {
+        s_alert.pop(result.message);
+        return;
       }
     );
   };

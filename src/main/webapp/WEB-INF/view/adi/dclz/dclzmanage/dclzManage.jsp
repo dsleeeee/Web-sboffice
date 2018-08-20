@@ -322,11 +322,8 @@
         grid.itemsSource = list;
         page.make("#page", result.data.page.curr, result.data.page.totalPage);
         },
-        function(result){
+        function(result) {
           s_alert.pop(result.message);
-        }
-        ,function(){
-          s_alert.pop("Ajax Fail");
       });
     }
 
@@ -360,9 +357,6 @@
         },
         function(result){
           s_alert.pop(result.message);
-        }
-        ,function(){
-          s_alert.pop("Ajax Fail");
       });
     });
 
@@ -393,10 +387,6 @@
       },
       function(result){
         s_alert.pop(result.message);
-      }
-      ,function(){
-        s_alert.pop("Ajax Fail");
-      });
     });
 
     $(".dclzRegClose").click(function(e){
@@ -461,9 +451,6 @@
         },
         function(result){
           s_alert.pop(result.message);
-        }
-        ,function(){
-          s_alert.pop("Ajax Fail");
       });
     });
 
@@ -482,15 +469,11 @@
       s_alert.popConf(msg, function(){
         $.postJSON("/adi/dclz/dclzmanage/dclzmanage/modify.sb", param, function(result) {
           var msg2 = "<s:message code='cmm.modify'/>";
-          s_alert.popOk(msg2, function() {
+            s_alert.popOk(msg2, function() {
             closeDclzLayer();
-          });
           },
           function(result){
             s_alert.pop(result.message);
-          }
-          ,function(){
-            s_alert.pop("Ajax Fail");
         });
       });
     });

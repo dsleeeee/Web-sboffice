@@ -83,17 +83,14 @@ $("#funcCopyLayer #btnSave").click(function(){
   console.log(param);
 
   $.postJSONSave("/base/store/posfunc/use/copyPosFunc.sb", JSON.stringify(param), function(result) {
-    console.log(result);
-    if(result.status === "FAIL") {
+    s_alert.pop("<s:message code='cmm.saveSucc'/>");
+    $("#funcCopyLayer .btn_close").click();
+  },
+    function (result) {
       s_alert.pop(result.message);
       return;
     }
-    s_alert.pop("<s:message code='cmm.saveSucc'/>");
-    $("#funcCopyLayer .btn_close").click();
-  }
-  ,function(){
-    s_alert.pop("Ajax Fail");
-  });
+  );
 
 });
 

@@ -121,7 +121,6 @@ $(document).ready(function(){
       grid.collectionView.clearChanges();
     },
     function(result) {
-      console.log(result) // 중복된 데이터가 있을때 오류 메세지가....?
       s_alert.pop(result.message);
     });
     

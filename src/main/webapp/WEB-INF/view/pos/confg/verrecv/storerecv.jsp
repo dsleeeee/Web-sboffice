@@ -210,9 +210,9 @@
       }
       grid1.itemsSource = list;
       page.make("#page", result.data.page.curr, result.data.page.totalPage);
-    }
-    ,function(){
-        s_alert.pop("Ajax Fail");
+    },
+      function (result) {
+        s_alert.pop(result.message);
     });
   }
 
@@ -290,14 +290,11 @@
     param.storeCd    = items.storeCd;
 
     $.postJSON("${baseUrl}" + "storeDtl.sb", param, function(result) {
-      if(result.status === "FAIL") {
+      grid2.itemsSource = result.data.list;
+    },
+      function (result) {
         s_alert.pop(result.message);
         return;
-      }
-      grid2.itemsSource = result.data.list;
-    }
-    ,function(){
-        s_alert.pop("Ajax Fail");
     });
 
     var storeTitle = "["+items.storeCd+"] " + items.storeNm;

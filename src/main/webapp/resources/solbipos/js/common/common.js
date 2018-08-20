@@ -171,7 +171,7 @@
         }
       })
       .fail(function(){
-        s_alert.pop("Ajax Fail");
+        s_alert.pop("Ajax Fail By HTTP Request");
       });
 //      return $.post( url, data, func, "json" );
     }
@@ -216,7 +216,7 @@
         }
       })
       .fail(function(){
-        s_alert.pop("Ajax Fail");
+        s_alert.pop("Ajax Fail By HTTP Request");
       });
 //      return $.post( url, data, func, "json" );
     }
@@ -269,7 +269,7 @@
           alert("error");
         }
       },function(){
-        s_alert.pop("Ajax Fail");
+        s_alert.pop("Ajax Fail By HTTP Request");
       });
 //      return $.post( url, data, func, "json" );
 

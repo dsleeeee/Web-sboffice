@@ -97,10 +97,7 @@ $(document).ready(function () {
 
     $.postJSON("/store/manage/virtualLogin/virtualLogin/list.sb", param,
       function (result) {
-        if (result.status === "FAIL") {
-          s_alert.pop(result.message);
-          return;
-        }
+
         var list = result.data.list;
         grid.itemsSource = new wijmo.collections.CollectionView(list);
 
@@ -111,10 +108,11 @@ $(document).ready(function () {
           return;
         }
       },
-      function () {
-        s_alert.pop("Ajax Fail");
+      function (result) {
+        s_alert.pop(result.message);
+        return;
       }
-    )
+    );
   };
 
   // 가상로그인 수행
@@ -149,15 +147,13 @@ $(document).ready(function () {
           param.vUserId = value;
           $.postJSON("/store/manage/virtualLogin/virtualLogin/vLogout.sb", param,
             function (result) {
-              if (result.status === "FAIL") {
-                s_alert.pop(result.message);
-                return;
-              }
+
             },
-            function () {
-              s_alert.pop("Ajax Fail");
+            function (result) {
+              s_alert.pop(result.message);
+              return;
             }
-          )
+          );
         }
       }, 250);
       form.submit();
