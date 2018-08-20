@@ -38,7 +38,8 @@
             tca.AGENCY_NM,
             tce.USER_ID AS CM_USER_ID,
             tms.SYS_OPEN_DATE,
-            tms.SYS_CLOSURE_DATE
+            tms.SYS_CLOSURE_DATE,
+            #{orgnFg} AS orgnFg
             <include refid="CmmSQL.PagingTemplateCount"/>
         FROM
             TB_MS_STORE tms

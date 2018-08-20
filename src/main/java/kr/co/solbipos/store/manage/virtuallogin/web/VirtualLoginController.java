@@ -98,6 +98,9 @@ public class VirtualLoginController {
     public Result getVirtualLoginList(HttpServletRequest request, HttpServletResponse response,
             VirtualLoginVO virtualLoginVO, Model model) {
 
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+        virtualLoginVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+
         List<DefaultMap<String>> list = virtualLoginService.getVirtualLoginList(virtualLoginVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, virtualLoginVO);

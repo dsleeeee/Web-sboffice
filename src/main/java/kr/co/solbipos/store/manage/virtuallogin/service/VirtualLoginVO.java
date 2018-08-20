@@ -59,8 +59,10 @@ public class VirtualLoginVO extends PageVO {
     private String cmUserId;
     /** 가상로그인ID */
     private String vUserId;
-    
-    
+    /** 세션구분 */
+    private String orgnFg;
+
+
     /**
      * @return the hqOfficeCd
      */
@@ -289,5 +291,16 @@ public class VirtualLoginVO extends PageVO {
     public void setvUserId(String vUserId) {
         this.vUserId = vUserId;
     }
-    
+    /**
+     * @return the orgnFg
+     */
+    public String getOrgnFg() {
+        return orgnFg;
+    }
+    /**
+     * @param orgnFg the orgnFg to set
+     */
+    public void setOrgnFg(String orgnFg) {
+        this.orgnFg = orgnFg;
+    }
 }
