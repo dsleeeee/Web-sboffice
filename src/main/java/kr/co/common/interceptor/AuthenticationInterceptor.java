@@ -1,18 +1,5 @@
 package kr.co.common.interceptor;
 
-import static org.springframework.util.ObjectUtils.*;
-
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-
 import kr.co.common.data.enums.Status;
 import kr.co.common.exception.AuthenticationException;
 import kr.co.common.exception.JsonException;
@@ -25,6 +12,18 @@ import kr.co.solbipos.application.common.enums.ResrceFg;
 import kr.co.solbipos.application.common.service.ResrceInfoVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.List;
+
+import static org.springframework.util.ObjectUtils.isEmpty;
 
 public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
     
@@ -50,11 +49,13 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
          * 세션 종료 처리
          */
         if (!sessionService.isValidSession(request)) {
+            LOGGER.info("AuthenticationInterceptor :: isValidSession :: deleteSessionInfo");
             sessionService.deleteSessionInfo(request);
 
             if (WebUtil.isJsonRequest(request)) {
                 String msg = messageService.get("cmm.session.expire");
                 String msg1 = messageService.get("cmm.move.login");
+                LOGGER.info("AuthenticationInterceptor :: isJsonRequest :: " + msg);
                 throw new JsonException(Status.SESSION_EXFIRE, msg + msg1, "/");
             } else {
                 response.sendRedirect("/");
