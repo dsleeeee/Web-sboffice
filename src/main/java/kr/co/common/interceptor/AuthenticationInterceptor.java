@@ -6,7 +6,7 @@ import kr.co.common.exception.JsonException;
 import kr.co.common.service.cmm.CmmMenuService;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
-import kr.co.common.utils.AppUtil;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.WebUtil;
 import kr.co.solbipos.application.common.enums.ResrceFg;
 import kr.co.solbipos.application.common.service.ResrceInfoVO;
@@ -121,7 +121,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         String storeCd = request.getParameter("storeCd");
         if(!isEmpty(storeCd)) {
             if(storeCd.indexOf(",") > -1) {
-                if(!AppUtil.listIndexOf(sessionInfoVO.getArrStoreCdList(), storeCd.split(","))) {
+                if(!CmmUtil.listIndexOf(sessionInfoVO.getArrStoreCdList(), storeCd.split(","))) {
                     // 유효하지 않는 매장코드 입니다.
                     String msg = messageService.get("cmm.not.storecd");
                     throw new AuthenticationException(msg, "/error/403.sb");
@@ -129,7 +129,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
             }
             else {
-                if(!AppUtil.listIndexOf(sessionInfoVO.getArrStoreCdList(), storeCd)) {
+                if(!CmmUtil.listIndexOf(sessionInfoVO.getArrStoreCdList(), storeCd)) {
                     // 유효하지 않는 매장코드 입니다.
                     String msg = messageService.get("cmm.not.storecd");
                     throw new AuthenticationException(msg, "/error/403.sb");

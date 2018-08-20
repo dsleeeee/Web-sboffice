@@ -172,6 +172,8 @@
     <typeAlias alias="kitchenPrtProdVO" type="kr.co.solbipos.base.prod.kitchenprtprod.service.KitchenPrtProdVO"/>
     <typeAlias alias="kitchenPrtTimeVO" type="kr.co.solbipos.base.prod.kitchenprttime.service.KitchenPrtTimeVO"/>
 -->
+    <typeAlias alias="vendrVO" type="kr.co.solbipos.base.prod.vendr.service.VendrVO"/>
+
     <typeAlias alias="touchVO" type="kr.co.solbipos.base.prod.touchkey.service.TouchVO"/>
     <typeAlias alias="touchClassVO" type="kr.co.solbipos.base.prod.touchkey.service.TouchClassVO"/>
 <!--

@@ -3,7 +3,7 @@
 
 <!--
     PwdManage.xml
-    가상로그인 sql
+    비밀번호 임의변경 sql
     ======================================================
     No  ||  수정자 ||  수정일자    ||  수정내역
     ======================================================
@@ -25,8 +25,9 @@
             tho.HQ_OFFICE_NM,
             tms.STORE_CD,
             tms.STORE_NM,
-            tme.USER_ID,
+            tme.EMP_NO,
             tme.EMP_NM AS USER_NM,
+            tme.USER_ID,
             tme.SERVICE_FG,
             tme.WEB_USE_YN,
             tme.MP_NO,
@@ -72,36 +73,62 @@
     
     <!-- 기존 비밀번호 조회 -->
     <!--
-        TABLE    : TB_MS_EMPLOYEE
+        TABLE    : TB_WB_USER_INFO, TB_MS_EMPLOYEE
         PARAM    : pwdManageVO
         COMMENTS : 사용자의 기존 비밀번호를 조회한다.
     -->
     <select id="getOldPassword" parameterType="pwdManageVO" resultType="java.lang.String">
         /* USE : PwdManageMapper.getOldPassword */
-        SELECT
-            EMP_PWD
-        FROM
-            TB_MS_EMPLOYEE
-        WHERE
-            USER_ID = #{userId}
+        <choose>
+            <when test="pwdChgFg != null and pwdChgFg.toString() == 'WEB'">
+                SELECT
+                    USER_PWD
+                FROM
+                    TB_WB_USER_INFO
+                WHERE
+                    USER_ID = #{userId}
+            </when>
+            <otherwise>
+                SELECT
+                    EMP_PWD
+                FROM
+                    TB_MS_EMPLOYEE
+                WHERE
+                    EMP_NO = #{empNo}
+            </otherwise>
+        </choose>
     </select>
     
     <!-- 비밀번호 변경 -->
     <!--
-        TABLE    : TB_MS_EMPLOYEE
+        TABLE    : TB_WB_USER_INFO, TB_MS_EMPLOYEE
         PARAM    : pwdManageVO
         COMMENTS : 사용자의 비밀번호를 변경한다.
     -->
     <update id="updatePassword" parameterType="pwdManageVO">
         /* USE : PwdManageMapper.updatePassword */
-        UPDATE
-            TB_MS_EMPLOYEE
-        SET
-            EMP_PWD = #{newPassword},
-            MOD_DT = #{modDt},
-            MOD_ID = #{modId}
-        WHERE
-            USER_ID = #{userId}
+        <choose>
+            <when test="pwdChgFg != null and pwdChgFg.toString() == 'WEB'">
+                UPDATE
+                    TB_WB_USER_INFO
+                SET
+                    USER_PWD = #{newPassword},
+                    LAST_PWD_CHG_DATE = #{lastPwdChgDate}
+                WHERE
+                    USER_ID = #{userId}
+            </when>
+            <otherwise>
+                UPDATE
+                    TB_MS_EMPLOYEE
+                SET
+                    EMP_PWD = #{newPassword},
+                    MOD_DT = #{modDt},
+                    MOD_ID = #{modId}
+                WHERE
+                    EMP_NO = #{empNo}
+            </otherwise>
+        </choose>
+
     </update>
     
     <!-- 비밀번호 변경이력 저장 -->

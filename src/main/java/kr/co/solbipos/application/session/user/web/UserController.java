@@ -8,7 +8,6 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.DateUtil;
-import kr.co.common.utils.security.EncUtil;
 import kr.co.common.utils.spring.ObjectUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.common.utils.spring.WebUtil;
@@ -139,7 +138,6 @@ public class UserController {
          * TODO : OTP 문자 발송 로직 들어가야됨
          *
          */
-
         return returnJson(Status.OK, "msg", messageService.get("login.pw.find.send.ok"));
     }
 
@@ -365,10 +363,10 @@ public class UserController {
         /**
          * 패스워드 정책 체크
          */
-        if (!EncUtil.passwordPolicyCheck(pwdChgVO.getNewPw())
-                || !EncUtil.passwordPolicyCheck(pwdChgVO.getNewPwConf())) {
-            throw new AuthenticationException(messageService.get("login.pw.chg.regexp"), "");
-        }
+//        if (!CmmUtil.passwordPolicyCheck(pwdChgVO.getNewPw())
+//                || !CmmUtil.passwordPolicyCheck(pwdChgVO.getNewPwConf())) {
+//            throw new AuthenticationException(messageService.get("login.pw.chg.regexp"), "");
+//        }
 
         PwChgResult pcr = userService.processPwdChg(pwdChgVO);
 
@@ -421,14 +419,14 @@ public class UserController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        SessionInfoVO si = new SessionInfoVO();
+        SessionInfoVO param = new SessionInfoVO();
 
         // 메인 화면에서 패스워드를 변경 할때는 세션이 없음
-        si.setUserId(
+        param.setUserId(
                 ObjectUtil.isEmpty(sessionInfoVO) ? pwdChgVO.getUserId() : sessionInfoVO.getUserId());
 
         // 패스워드 결과 조회
-        PwChgResult result = userService.processLayerPwdChg(si, pwdChgVO);
+        PwChgResult result = userService.processLayerPwdChg(param, pwdChgVO);
 
         if (result == PwChgResult.PASSWORD_NOT_MATCH) {
             /**

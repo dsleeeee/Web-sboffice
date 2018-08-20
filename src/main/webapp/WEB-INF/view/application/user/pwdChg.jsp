@@ -25,11 +25,11 @@
   <f:form class="loginF" method="post" modelAttribute="pwdChg" action="/user/pwdChgOk.sb" >
     <div class="writeInfo">
       <div>
-        <input type="password" id="newPw" name="newPw" placeholder="<s:message code="login.pw.chg.new" />" class="pw" /><label for="pw"></label>
+        <input type="password" id="newPw" name="newPw" placeholder="<s:message code="login.pw.chg.new" />" class="pw" /><label for="newPw"></label>
         <f:errors path="newPw" id="newPwError" class="errorMsg" />
       </div>
       <div>
-        <input type="password" id="newPwConf" name="newPwConf" placeholder="<s:message code="login.pw.chg.new" />&nbsp;<s:message code="cmm.confirm" />" class="pw" /><label for="pw"></label>
+        <input type="password" id="newPwConf" name="newPwConf" placeholder="<s:message code="login.pw.chg.new" />&nbsp;<s:message code="cmm.confirm" />" class="pw" /><label for="newPwConf"></label>
         <f:errors path="newPwConf" id="newPwConfError" class="errorMsg" />
       </div>
     </div>

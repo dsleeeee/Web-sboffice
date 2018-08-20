@@ -86,6 +86,8 @@
         popup.focus();
       }
     }
+    // succ 펑션, fail 펑션 각각 개별적으로 움직인다.
+    // 실제 HTTP Request 오류(통신오류)는 .fail 부분의 함수 수행
     , postJSON: function( url, data, succ, fail ){
       return $.ajax({
         type: "POST",
@@ -125,7 +127,7 @@
         }
       })
       .fail(function(){
-        s_alert.pop("Ajax Fail");
+        s_alert.pop("Ajax Fail By HTTP Request");
       });
 //      return $.post( url, data, func, "json" );
     }

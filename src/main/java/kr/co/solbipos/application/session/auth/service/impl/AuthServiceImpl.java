@@ -3,6 +3,7 @@ package kr.co.solbipos.application.session.auth.service.impl;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.system.BaseEnv;
+import kr.co.common.utils.security.EncUtil;
 import kr.co.solbipos.application.common.service.ResrceInfoVO;
 import kr.co.solbipos.application.session.auth.enums.LoginOrigin;
 import kr.co.solbipos.application.session.auth.enums.LoginResult;
@@ -60,56 +61,64 @@ public class AuthServiceImpl implements AuthService {
     /**
      * 로그인 성공 여부
      *
-     * @param sessionInfoVO : 사용자가 입력 객체
-     * @param webUser : 디비에서 조회한 객체
+     * @param params : 사용자가 입력 객체
      * @return
      */
-    private LoginResult loginProcess(SessionInfoVO sessionInfoVO, SessionInfoVO webUser) {
+    private SessionInfoVO loginProcess(SessionInfoVO params) {
+
+        // userId 로 사용자 조회
+        SessionInfoVO result = selectWebUser(params);
 
         /**
          * 존재하는 id 인지 체크
          */
-        if (isEmpty(webUser) || isEmpty(webUser.getUserId())) {
-            return LoginResult.NOT_EXISTS_ID;
+        if (isEmpty(result) || isEmpty(result.getUserId())) {
+            result.setLoginResult(LoginResult.NOT_EXISTS_ID);
+            return result;
         }
 
         /**
          * 패스워드 체크
          */
-        if (!loginPasswordCheck(sessionInfoVO, webUser)) {
-            return LoginResult.PASSWORD_ERROR;
+        if (!loginPasswordCheck(params, result)) {
+            result.setLoginResult(LoginResult.PASSWORD_ERROR);
+            return result;
         }
 
         /**
          * 사용자 잠금 여부
          * */
-        if(webUser.getLockCd().equals("Y")) {
-            return LoginResult.LOCK;
+        if("Y".equals(result.getLockCd())) {
+            result.setLoginResult(LoginResult.LOCK);
+            return result;
         }
 
         /**
          * 패스워드 초기 변경 인지 체크
          * */
-        if( webUser.getLastPwdChg().equals("0") ) {
-            return LoginResult.PASSWORD_CHANGE;
+        if( "0".equals(result.getLastPwdChg()) ) {
+            result.setLoginResult(LoginResult.PASSWORD_CHANGE);
+            return result;
         }
 
-
-        int pwdChgDays = Integer.parseInt(addDaysString(webUser.getLastPwdChg(), BaseEnv.LOGIN_PWD_CHG_DAYS));
+        int pwdChgDays = Integer.parseInt(addDaysString(result.getLastPwdChg(), BaseEnv.LOGIN_PWD_CHG_DAYS));
         int currentDay = Integer.parseInt(currentDateString());
 
         /**
          * 패스워드 변경 날짜 체크
          * */
         if( currentDay >= pwdChgDays ) {
-            return LoginResult.PASSWORD_EXPIRE;
+            result.setLoginResult(LoginResult.PASSWORD_EXPIRE);
+            return result;
         }
 
-        return LoginResult.SUCCESS;
+        result.setLoginResult(LoginResult.SUCCESS);
+
+        return result;
     }
 
     /**
-     * 패스워드 체크 암호화 후 비교 하는 과정은 아직 안들어감
+     * 패스워드 체크
      *
      * @param sessionInfoVO 로그인 페이지에서 입력된 로그인 유져 정보
      * @param webUser 입력된 ID로 조회된 유져 정보
@@ -121,50 +130,48 @@ public class AuthServiceImpl implements AuthService {
             LOGGER.warn("password check object null...");
             return false;
         }
-
-        String loginPw = sessionInfoVO.getUserPwd();
+        // 입력된 ID/비밀번호
+        String inputId = sessionInfoVO.getUserId();
+        String inputPw = sessionInfoVO.getUserPwd();
+        // 조회된 비밀번호
         String userPw = webUser.getUserPwd();
-
-        if (isEmpty(loginPw) || isEmpty(userPw)) {
-            LOGGER.warn("password string null, loginPw empty:{}, userPw empty:{}", isEmpty(loginPw),
+        // 비밀번호 암호화
+        String encryptPw = EncUtil.setEncSHA256(inputId + inputPw);
+        // 둘중 하나라도 비었다면 오류
+        if (isEmpty(encryptPw) || isEmpty(userPw)) {
+            LOGGER.warn("password string null, inputPw empty:{}, userPw empty:{}", isEmpty(encryptPw),
                     isEmpty(userPw));
             return false;
         }
-
-        if (loginPw.equals(userPw)) {
+        // 비밀번호 일치하는지 확인
+        if (encryptPw.equals(userPw)) {
             return true;
+        } else {
+            return false;
         }
-
-        return false;
     }
 
 
     @Override
-    public SessionInfoVO login(SessionInfoVO sessionInfoVO) {
-
-        // userId 로 사용자 조회
-        SessionInfoVO si = selectWebUser(sessionInfoVO);
+    public SessionInfoVO login(SessionInfoVO params) {
 
         // 로그인 과정
-        LoginResult result = loginProcess(sessionInfoVO, si);
+        SessionInfoVO result = loginProcess(params);
 
-        // 없는 id 일 경우에
-        if(result == LoginResult.NOT_EXISTS_ID) {
-            si.setUserId(sessionInfoVO.getUserId());
+        // 없는 id 일 경우에 로그인시도 ID Set 후 이력 남김
+        if(result.getLoginResult() == LoginResult.NOT_EXISTS_ID) {
+            result.setUserId(params.getUserId());
         }
 
-        // 로그인 결과
-        si.setLoginResult(result);
-
         // 조회된 패스워드 초기화
-        si.setUserPwd("");
-        si.setLoginIp(sessionInfoVO.getLoginIp());
-        si.setBrwsrInfo(sessionInfoVO.getBrwsrInfo());
+        result.setUserPwd("");
+        result.setLoginIp(params.getLoginIp());
+        result.setBrwsrInfo(params.getBrwsrInfo());
 
         // 로그인 시도 기록
-        loginHist(si);
+        loginHist(result);
 
-        return si;
+        return result;
     }
 
     /**
