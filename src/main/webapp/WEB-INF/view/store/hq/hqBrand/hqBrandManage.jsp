@@ -202,10 +202,6 @@
       param.curr        = index;
 
       $.postJSON("/store/hq/hqBrand/hqBrandManage/getBrandlist.sb", param, function(result) {
-        if(result.status === "FAIL") {
-          s_alert.pop(result.message);
-          return;
-        }
         var list = result.data.list;
 
         if(list.length === undefined || list.length == 0) {
@@ -217,10 +213,12 @@
         grid.collectionView.trackChanges = true;
 
         page.make("#page", result.data.page.curr, result.data.page.totalPage);
-      }
-      ,function(){
-          s_alert.pop("Ajax Fail");
-      });
+      },
+        function (result) {
+          s_alert.pop(result.message);
+          return;
+        }
+      );
     }
 
     <%-- 브랜드 추가 --%>

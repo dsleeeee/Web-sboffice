@@ -68,16 +68,15 @@ genEvent($("#authNumber"), $("#authNumberError"));
     param.authNumber = $("#authNumber").val();
 
     $.postJSON("/user/pwdFind.sb", param, function(result) {
-      console.log(result.status);
-      console.log(result.data);
-
       if(result.status === "OK") {
         document.forms.frm.elements.uuid.value = result.data.uuid;
         document.forms.frm.submit();
       }
-    },function(result) {
-      processError(result.data);
-    });
+    },
+      function(result) {
+        processError(result.data);
+      }
+    );
   }
 
 /* 인증번호 받기 */

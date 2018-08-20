@@ -170,24 +170,18 @@
   <%-- 사업자번호 사용현황 목록 조회 --%>
   function getBizInfo(param) {
     $.postJSON("/store/hq/hqManage/master/bizUseList.sb", param, function(result) {
-      if(result.status === "FAIL") {
+      var list = result.data.list;
+      theGridBizInfo.itemsSource = list;
+    },
+      function (result) {
         s_alert.pop(result.message);
         return;
       }
-      var list = result.data.list;
-      theGridBizInfo.itemsSource = list;
-    }
-    ,function(){
-      s_alert.pop("Ajax Fail");
-    });
+    );
   }
 
   function getBizInfoDtl(param) {
     $.postJSON("/store/hq/hqManage/master/bizInfoDtl.sb", param, function(result) {
-      if(result.status === "FAIL") {
-        s_alert.pop(result.message);
-        return;
-      }
       var dtlData = result.data;
 
       $("#bStoreCd").text(dtlData.storeCd);
@@ -204,10 +198,12 @@
       $("#bClsFg").text(dtlData.clsFgNm);
       $("#bSysOpenDate").text(dtlData.sysOpenDate);
       $("#bAddr").text("(" + dtlData.postNo + ") " + dtlData.addr + " " + dtlData.addrDtl);
-    }
-    ,function(){
-      s_alert.pop("Ajax Fail");
-    });
+    },
+      function (result) {
+        s_alert.pop(result.message);
+        return;
+      }
+    );
   }
 
   <%-- 레이어 팝업 닫기 --%>

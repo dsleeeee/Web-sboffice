@@ -94,19 +94,16 @@ $(document).ready(function(){
   var param = {};
 
   $.postJSON("${baseUrl}" + "auth/getPosFuncList.sb", param, function(result) {
-    console.log(result);
-    if(result.status === "FAIL") {
-        s_alert.pop(result.message);
-        return;
-    }
     var list = result.data.list;
     funcListGrid.itemsSource = new wijmo.collections.CollectionView(list);
     funcListGrid.collectionView.trackChanges = true;
     //changeColSet(list);
-  }
-  ,function(){
-      s_alert.pop("Ajax Fail");
-  });
+  },
+    function (result) {
+      s_alert.pop(result.message);
+      return;
+    }
+  );
 
   <%-- up 버튼 클릭 --%>
   $("#btnUp").click(function(e){
@@ -193,17 +190,14 @@ $(document).ready(function(){
 
     $.postJSON("${baseUrl}" + "auth/getPosConfAuthDetail.sb", param, function(result) {
 
-      if(result.status === "FAIL") {
-        s_alert.pop(result.message);
-        return;
-      }
       var list = result.data.list;
 
       funcAuthGrid.itemsSource = new wijmo.collections.CollectionView(list);
       funcAuthGrid.collectionView.trackChanges = true;
-    }
-    ,function(){
-        s_alert.pop("Ajax Fail");
+    },
+      function (result) {
+        s_alert.pop(result.message);
+        return;
     });
   }
 

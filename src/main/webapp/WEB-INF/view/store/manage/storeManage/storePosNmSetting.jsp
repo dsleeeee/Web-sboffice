@@ -49,11 +49,6 @@
 
     $.postJSON("/store/manage/storeManage/storeManage/getPosList.sb", param, function(result) {
 
-      if(result.status === "FAIL") {
-        s_alert.pop(result.message);
-        return;
-      }
-
       var posList = result.data.list.posList;
       var innerHtml = "";
       for(var i=0; i<posList.length; i++) {
@@ -70,10 +65,12 @@
       $("#posNmContent").html(innerHtml);
       $("#storePosNmDim").show();
       $("#storePosNmLayer").show();
-    }
-    ,function(){
-      s_alert.pop("Ajax Fail");
-    });
+    },
+      function (result) {
+        s_alert.pop(result.message);
+        return;
+      }
+    );
   }
 
   <%-- 저장 버튼 클릭 --%>

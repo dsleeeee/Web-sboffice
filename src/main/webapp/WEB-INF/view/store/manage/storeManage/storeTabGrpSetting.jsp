@@ -49,11 +49,6 @@
 
     $.postJSON("/store/manage/storeManage/storeManage/getPosConfigList.sb", param, function(result) {
 
-      if(result.status === "FAIL") {
-        s_alert.pop(result.message);
-        return;
-      }
-
       var posList = result.data.list.posList;
       var grpList = result.data.list.groupList;
 
@@ -78,10 +73,12 @@
       $("#tabGrpContent").html(innerHtml);
       $("#storeTabGrpDim").show();
       $("#storeTabGrpLayer").show();
-    }
-    ,function(){
-      s_alert.pop("Ajax Fail");
-    });
+    },
+      function (result) {
+        s_alert.pop(result.message);
+        return;
+      }
+    );
   }
 
   <%-- 저장 버튼 클릭 --%>

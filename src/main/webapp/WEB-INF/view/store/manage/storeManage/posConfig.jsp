@@ -77,9 +77,9 @@ function showPosConfigLayout(envstFg){
         $("#sPosNm").append("<option value='"+ posList[i].posNo +"' > " + posList[i].posCdNm +  "</option>");
       }
     }
-  }
-  ,function(){
-    s_alert.pop("Ajax Fail");
+  },
+  function (result) {
+      s_alert.pop(result.message);
   });
   --%>
 
@@ -122,11 +122,6 @@ function getPosInfo(){
   var envstGrpCd = ${ccu.getCommCodeExcpAll("048")};
 
   $.postJSON("/store/manage/storeManage/storeManage/getPosConfigList.sb", param, function(result) {
-
-    if(result.status === "FAIL") {
-      s_alert.pop(result.message);
-      return;
-    }
 
     // 환경설정
     var innerHtml = "";
@@ -256,10 +251,12 @@ function getPosInfo(){
 
       s_alert.pop(msg);
     }
-  }
-  ,function(){
-      s_alert.pop("Ajax Fail");
-  });
+  },
+    function (result) {
+      s_alert.pop(result.message);
+      return;
+    }
+  );
 }
 
 

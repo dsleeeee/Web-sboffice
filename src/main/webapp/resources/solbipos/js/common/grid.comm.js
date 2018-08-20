@@ -155,10 +155,11 @@
       if (!isEmpty(resrceCd) && !isEmpty(idx)) {
         $.postJSONAsync("/setGridItem.sb", param, function (result) {
           console.log("resource : " + resrceCd + ", idx : " + idx + ", setGridItem success..");
-        })
-          .fail(function () {
-            alert("Ajax Fail");
-          });
+        },
+        function (result) {
+          s_alert.pop(result.message);
+          return;
+        });
       }
     },
 

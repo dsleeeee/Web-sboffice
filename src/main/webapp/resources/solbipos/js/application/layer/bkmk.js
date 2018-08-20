@@ -63,8 +63,7 @@ $(document).ready(function() {
             },
             function(result){
                 s_alert.pop(result.message);
-            }).fail(function(){
-            s_alert.pop("Ajax Fail");
+                return;
         });
     });
 
@@ -156,8 +155,6 @@ $(document).ready(function() {
             },
             function(result){
                 s_alert.pop(result.message);
-            }).fail(function(){
-            s_alert.pop("Ajax Fail");
         });
     };
 

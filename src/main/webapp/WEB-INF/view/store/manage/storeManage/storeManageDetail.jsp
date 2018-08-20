@@ -395,16 +395,13 @@ rEnvHqOffice.selectedIndexChanged.addHandler(function(s, e){
   param.hqOfficeCd = rEnvHqOffice.selectedValue;
 
   $.postJSON("/store/manage/storeManage/storeManage/getStoreComboList.sb", param, function(result) {
-
-    if(result.status === "FAIL") {
+    rEnvStore.itemsSource = result.data.list;
+  },
+    function (result) {
       s_alert.pop(result.message);
       return;
     }
-    rEnvStore.itemsSource = result.data.list;
-  }
-  ,function(){
-      s_alert.pop("Ajax Fail");
-  });
+  );
 });
 
 <%-- 코너 사용여부 변경 --%>
@@ -518,18 +515,15 @@ function showStoreDetail() {
   var param = selectedStore;
 
   $.postJSON("/store/manage/storeManage/storeManage/getStoreDetail.sb", param, function(result) {
-
-    if(result.status === "FAIL") {
-      s_alert.pop(result.message);
-      return;
-    }
     //console.log(result);
     isBizChk = true;
     setStoreData(result.data);
-  }
-  ,function(){
-    s_alert.pop("Ajax Fail");
-  });
+  },
+    function (result) {
+      s_alert.pop(result.message);
+      return;
+    }
+  );
 }
 
 <%-- 매장 상세정보 데이터 셋팅 --%>
@@ -631,10 +625,6 @@ $("#btnChkBizNo").click(function(){
   param.bizNo = $("#rBizNo1").val() + $("#rBizNo2").val() + $("#rBizNo3").val();
 
   $.postJSON("/store/hq/hqManage/master/chkBizNo.sb", param, function(result) {
-    if(result.status === "FAIL") {
-      s_alert.pop(result.message);
-      return;
-    }
     isBizChk = true;
 
     if(result.data == 0 ){
@@ -644,10 +634,12 @@ $("#btnChkBizNo").click(function(){
       <%-- 사업자번호 사용현황 팝업 --%>
       openBizInfoLayer(param);
     }
-  }
-  ,function(){
-    s_alert.pop("Ajax Fail");
-  });
+  },
+    function (result) {
+      s_alert.pop(result.message);
+      return;
+    }
+  );
 });
 
 
@@ -899,22 +891,18 @@ function saveStore(sendUrl){
   //TODO 우선 아래 코너 제외하고 저장해보기
   $.postJSONSave(sendUrl, param, function(result) {
 
-    //console.log(result);
-    if(result.status === "FAIL") {
-      s_alert.pop(result.message);
-      return;
-    }
     s_alert.pop("<s:message code='cmm.saveSucc'/>");
 
     selectedStore = result.data[0];
     search(1);
     //showStoreDetail();
     //saveOtherInfo();
-  }
-  ,function(result){
-    //console.log(result);
-    s_alert.pop(result.message);
-  });
+  },
+    function (result) {
+      s_alert.pop(result.message);
+      return;
+    }
+  );
 }
 
 <%-- 기본정보 이외 정보 저장 --%>

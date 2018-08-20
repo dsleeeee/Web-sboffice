@@ -172,9 +172,7 @@ $(document).ready(function(){
       function(result){
         s_alert.pop(result.message);
       }
-      ,function(){
-        s_alert.pop("Ajax Fail");
-    });
+    );
   }
 
   <%-- 리스트 조회 --%>

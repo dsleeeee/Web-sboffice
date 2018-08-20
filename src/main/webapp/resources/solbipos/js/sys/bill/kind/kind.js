@@ -78,10 +78,6 @@ $(document).ready(function() {
     var param = {};
     $.postJSON("/sys/bill/kind/bill/list.sb", param,
       function (result) {
-        if (result.status === "FAIL") {
-          s_alert.pop(result.message);
-          return;
-        }
 
         var list = result.data.list;
         gridPrint.itemsSource = new wijmo.collections.CollectionView(list);
@@ -132,8 +128,9 @@ $(document).ready(function() {
         }
 
       },
-      function () {
-        s_alert.pop("Ajax Fail");
+      function (result) {
+        s_alert.pop(result.message);
+        return;
       }
     );
 
