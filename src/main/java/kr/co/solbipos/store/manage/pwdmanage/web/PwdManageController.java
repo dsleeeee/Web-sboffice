@@ -6,6 +6,8 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
+import kr.co.common.utils.security.EncUtil;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.PwChgResult;
 import kr.co.solbipos.store.manage.pwdmanage.service.PwdManageService;
 import kr.co.solbipos.store.manage.pwdmanage.service.PwdManageVO;
@@ -62,6 +64,14 @@ public class PwdManageController {
     @RequestMapping(value = "/pwdManage/view.sb", method = RequestMethod.GET)
     public String pwdManageView(HttpServletRequest request, HttpServletResponse response,
             Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        System.out.println("####################################################");
+        System.out.println(EncUtil.setEncSHA256("sysAdmin0000"));
+        System.out.println(EncUtil.setEncSHA256(sessionInfoVO.getUserId() + "Qwer1234!"));
+        System.out.println(EncUtil.setEncSHA256(sessionInfoVO.getUserId() + "0000"));
+        System.out.println("####################################################");
+
         return "store/manage/pwdManage/pwdManage";
     }
 

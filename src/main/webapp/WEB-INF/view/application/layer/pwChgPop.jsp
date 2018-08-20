@@ -16,7 +16,7 @@
 <div id="layerpw" class="layer" style="display: none;">
   <div class="layer_inner">
     <!--layerContent-->
-    <div class="title w500">
+    <div class="title w400">
 
       <%-- 타이틀 --%>
       <p class="tit">
@@ -50,13 +50,15 @@
           <!--높이는 style로 조정, 스크롤 들어가는경우 sc추가-->
           <table class="tblType01">
             <colgroup>
-              <col width="30%" />
-              <col width="70%" />
+              <col width="40%" />
+              <col width="60%" />
             </colgroup>
             <tbody>
               <tr>
                 <th><s:message code="login.userId" /></th>
-                <td id="labelUserId"></td>
+                <td id="labelUserId">
+                  ${sessionScope.sessionInfo.userId}
+                </td>
               </tr>
 
               <tr>

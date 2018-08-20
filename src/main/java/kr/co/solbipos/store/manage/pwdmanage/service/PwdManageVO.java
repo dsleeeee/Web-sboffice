@@ -1,10 +1,11 @@
 package kr.co.solbipos.store.manage.pwdmanage.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
+import kr.co.solbipos.store.manage.pwdmanage.enums.PwdChgFg;
 
 /**
  * @Class Name : PwdManageVO.java
- * @Description : 가맹점관리 > 매장관리 > 가상 로그인
+ * @Description : 가맹점관리 > 매장관리 > 비밀번호 임의변경
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
@@ -29,6 +30,8 @@ public class PwdManageVO extends PageVO {
     private String storeCd;
     /** 매장명 */
     private String storeNm;
+    /** 사원번호 */
+    private String empNo;
     /** 사용자ID */
     private String userId;
     /** 사용자명 */
@@ -51,6 +54,10 @@ public class PwdManageVO extends PageVO {
     private String priorPwd;
     /** 등록IP */
     private String regIp;
+    /** 최종 비밀번호 변경일자 */
+    private String lastPwdChgDate;
+    /** 비밀번호 변경구분 */
+    private PwdChgFg pwdChgFg;
     
     
     /**
@@ -100,6 +107,18 @@ public class PwdManageVO extends PageVO {
      */
     public void setStoreNm(String storeNm) {
         this.storeNm = storeNm;
+    }
+    /**
+     * @return the empNo
+     */
+    public String getEmpNo() {
+        return empNo;
+    }
+    /**
+     * @param empNo the empNo to set
+     */
+    public void setEmpNo(String empNo) {
+        this.empNo = empNo;
     }
     /**
      * @return the userId
@@ -233,5 +252,28 @@ public class PwdManageVO extends PageVO {
     public void setRegIp(String regIp) {
         this.regIp = regIp;
     }
-    
+    /**
+     * @return the lastPwdChgDate
+     */
+    public String getLastPwdChgDate() {
+        return lastPwdChgDate;
+    }
+    /**
+     * @param lastPwdChgDate the lastPwdChgDate to set
+     */
+    public void setLastPwdChgDate(String lastPwdChgDate) {
+        this.lastPwdChgDate = lastPwdChgDate;
+    }
+    /**
+     * @return the pwdChgFg
+     */
+    public PwdChgFg getPwdChgFg() {
+        return pwdChgFg;
+    }
+    /**
+     * @param pwdChgFg the pwdChgFg to set
+     */
+    public void setPwdChgFg(PwdChgFg pwdChgFg) {
+        this.pwdChgFg = pwdChgFg;
+    }
 }

@@ -1,9 +1,11 @@
 package kr.co.solbipos.store.manage.pwdmanage.service.impl;
 
-import java.util.List;
-import org.apache.ibatis.annotations.Mapper;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.store.manage.pwdmanage.service.PwdManageVO;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @Class Name : PwdManageMapper.java
@@ -22,6 +24,7 @@ import kr.co.solbipos.store.manage.pwdmanage.service.PwdManageVO;
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Mapper
+@Repository
 public interface PwdManageMapper {
     
     /** 비밀번호 임의변경 대상 조회 */

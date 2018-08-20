@@ -44,18 +44,18 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     SessionService sessionService;
-
     @Autowired
     AuthService authService;
-
     @Autowired
     UserMapper userMapper;
 
     @SuppressWarnings( "unused" )
     @Override
     public PwChgResult processLayerPwdChg(SessionInfoVO sessionInfoVO, PwdChgVO pwdChgVO) {
-
+        // 사용자정보 조회
         SessionInfoVO sessionInfo = authService.selectWebUser(sessionInfoVO);
+        // 비밀번호 암호화
+        String newPassword = EncUtil.setEncSHA256(sessionInfo.getUserId() + pwdChgVO.getNewPw());
 
         /**
          * 기존 패스워드 비교
@@ -74,24 +74,24 @@ public class UserServiceImpl implements UserService {
         /**
          * 변경 패스워드가 기존 비밀번호가 같은지 체크
          */
-        if (sessionInfo.getUserPwd().equals(pwdChgVO.getNewPw())) {
+        if (sessionInfo.getUserPwd().equals(newPassword)) {
             return PwChgResult.PASSWORD_NEW_OLD_MATH;
         }
 
         /**
          * 패스워드 정책 체크
          */
-        if (!EncUtil.passwordPolicyCheck(pwdChgVO.getNewPw())
-                || !EncUtil.passwordPolicyCheck(pwdChgVO.getNewPwConf())) {
-
-            return PwChgResult.PASSWORD_REGEXP;
-        }
+//        if (!CmmUtil.passwordPolicyCheck(pwdChgVO.getNewPw())
+//                || !CmmUtil.passwordPolicyCheck(pwdChgVO.getNewPwConf())) {
+//
+//            return PwChgResult.PASSWORD_REGEXP;
+//        }
 
         String userId = sessionInfo.getUserId();
 
         // 패스워드 세팅 및 변경
         sessionInfo.setUserId(userId);
-        sessionInfo.setUserPwd(pwdChgVO.getNewPw());
+        sessionInfo.setUserPwd(newPassword);
         int r1 = updateUserPwd(sessionInfo);
 
         // 패스워드 변경 내역 저장
@@ -109,9 +109,7 @@ public class UserServiceImpl implements UserService {
     public PwChgResult processPwdChg(PwdChgVO pwdChgVO) {
 
         /**
-         *
          * 입력한 새비밀번호가 서로 다른 경우
-         *
          */
         if (!pwdChgVO.getNewPw().equals(pwdChgVO.getNewPwConf())) {
             return PwChgResult.PASSWORD_NOT_MATCH;
@@ -121,18 +119,14 @@ public class UserServiceImpl implements UserService {
         OtpAuthVO findOtp = selectOtpBySeq(pwdChgVO);
 
         /**
-         *
          * uuid 로 발송한 ID 를 가져온다. uuid 검증
-         *
          */
         if (ObjectUtil.isEmpty(findOtp)) {
             return PwChgResult.UUID_NOT_MATCH;
         }
 
         /**
-         *
          * uuid 로 패스워드 변경 가능 시간은 발송후 10분
-         *
          */
         if (!checkOtpLimit(findOtp, 10)) {
             return PwChgResult.UUID_LIMIT_ERROR;
@@ -144,42 +138,37 @@ public class UserServiceImpl implements UserService {
         SessionInfoVO si = authService.selectWebUser(sessionInfoVO);
 
         /**
-         *
          * uuid 의 userId 가 다른경우
-         *
          */
         if (si.getUserId().indexOf(pwdChgVO.getHalfId().replaceAll("\\*", "")) < 0) {
             return PwChgResult.ID_NOT_MATCH;
         }
 
         /**
-         *
          * uuid 로 조회한 userId 가 유효한지 확인
-         *
          */
         if (ObjectUtil.isEmpty(si)) {
             return PwChgResult.EMPTY_USER;
         }
 
         /**
-         *
          * 패스워드 변경 유져가 잠금 여부면 패스워드 변경 불가
-         *
          */
         if (si.getLockCd().equals("Y")) {
             return PwChgResult.LOCK_USER;
         }
 
         /**
-         *
          * 패스워드 변경 성공
-         *
          */
         String userId = si.getUserId();
 
+        // 비밀번호 암호화
+        String newPassword = EncUtil.setEncSHA256(userId + pwdChgVO.getNewPw());
+
         // 패스워드 세팅 및 변경
         sessionInfoVO.setUserId(userId);
-        sessionInfoVO.setUserPwd(pwdChgVO.getNewPw());
+        sessionInfoVO.setUserPwd(newPassword);
         int r1 = updateUserPwd(sessionInfoVO);
 
         // 패스워드 변경 내역 저장
@@ -204,9 +193,7 @@ public class UserServiceImpl implements UserService {
         List<UserVO> findUsers = selectUserList(userVO, false);
 
         /**
-         *
          * 사용자 정보가 없음, 2개 이상 조회될 경우 오류
-         *
          */
         if (ObjectUtil.isEmpty(findUsers)) {
             return PwFindResult.EMPTY_USER;
@@ -225,27 +212,21 @@ public class UserServiceImpl implements UserService {
 
         if (checkOtpLimit(findOtp, BaseEnv.OTP_LIMIT_MINUTE)) {
             /**
-             *
              * otp 체크 완료
-             *
              */
             if (userVO.getAuthNumber().equals(findOtp.getAuthNo())) {
                 userVO.setAuthNumber(findOtp.getSeq());
                 return PwFindResult.OTP_OK;
             }
             /**
-             *
              * 인증번호 틀림
-             *
              */
             else {
                 return PwFindResult.OTP_ERROR;
             }
         }
         /**
-         *
          * 인증번호 통과 못함 : 분이 지났습니다.
-         *
          */
         else {
             return PwFindResult.OTP_LIMIT_ERROR;

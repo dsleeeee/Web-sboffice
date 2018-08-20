@@ -27,6 +27,7 @@ $(document).ready(function () {
       {binding: "hqOfficeNm", header: messages["pwdManage.hqOfficeNm"], width: "*"},
       {binding: "storeCd", header: messages["pwdManage.storeCd"], width: "*"},
       {binding: "storeNm", header: messages["pwdManage.storeNm"], width: "*"},
+      {binding: "empNo", header: messages["pwdManage.empNo"], visible: false, width: "*"},
       {binding: "userId", header: messages["pwdManage.userId"], width: "*"},
       {binding: "userNm", header: messages["pwdManage.userNm"], width: "*"},
       {
@@ -61,11 +62,14 @@ $(document).ready(function () {
   });
 
   // 그리드 선택 이벤트
-  grid.selectionChanged.addHandler(function (s, e) {
-    var col = s.columns[e.col];
-    var selectedRow = grid.rows[e.row].dataItem;
-    if (col.binding === "userId") {
-      showPwdManageLayer(selectedRow);
+  grid.addEventListener(grid.hostElement, 'click', function(e) {
+    var ht = grid.hitTest(e);
+    if ( ht.cellType == wijmo.grid.CellType.Cell ) {
+      var col = ht.panel.columns[ht.col];
+      var selectedRow = grid.rows[ht.row].dataItem;
+      if( col.binding == "userId" ) {
+        showPwdManageLayer(selectedRow);
+      }
     }
   });
 
@@ -79,9 +83,8 @@ $(document).ready(function () {
     search($(this).data("value"));
   });
 
-  //  가상로그인 대상 목록 조회 
+  //  비밀번호 임의변경 대상 목록 조회
   function search(index) {
-    // validation 추가
     var param = {};
     param.hqOfficeCd = srchHqOfficeCd.text;
     param.hqOfficeNm = srchHqOfficeNm.text;
@@ -115,7 +118,21 @@ $(document).ready(function () {
     );
   };
 
-  //  레이어영역 시작 
+  var layerPwdChgFgDataMap = [{"name":"웹(WEB) 비밀번호","value":"WEB"},{"name":"포스(POS) 비밀번호","value":"POS"}];
+  var layerPwdChgFgCombo = wcombo.genCommonBoxFun("#layerPwdChgFg", layerPwdChgFgDataMap, function(s,e) {
+      $("#layerNewPassword, #layerConfirmPassword").val("");
+      if ( s.selectedValue === "WEB" ) {
+        $("#layerNewPassword, #layerConfirmPassword").attr('maxlength','16');
+        $("#layerNewPassword, #layerConfirmPassword").removeAttr("keyup");
+      } else {
+        $("#layerNewPassword, #layerConfirmPassword").attr('maxlength','4');
+        $("#layerNewPassword, #layerConfirmPassword").on("keyup", function() {
+          $(this).val($(this).val().replace(/[^0-9]/g,""));
+        });
+      }
+  });
+
+  // 레이어영역 시작
   $(".pwdModifyClose").click(function (e) {
     closePwdManageLayer();
   });
@@ -125,6 +142,7 @@ $(document).ready(function () {
     $("#pwdModifyLayer").show();
 
     $("#pwdModifyUserId").val(data.userId);
+    $("#pwdModifyEmpNo").val(data.empNo);
     $("#layerUserId").text(data.userId);
     $("#layerUserNm").text(data.userNm);
 
@@ -143,6 +161,8 @@ $(document).ready(function () {
   $("#btnModify").click(function (e) {
 
     var param = {};
+    param.pwdChgFg = layerPwdChgFgCombo.selectedValue;
+    param.empNo = $("#pwdModifyEmpNo").val();
     param.userId = $("#pwdModifyUserId").val();
     param.newPassword = $("#layerNewPassword").val();
     param.confirmPassword = $("#layerConfirmPassword").val();
