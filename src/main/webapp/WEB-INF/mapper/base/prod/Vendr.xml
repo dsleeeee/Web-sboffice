@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.base.prod.vendr.service.impl.VendrMapper">
+
+  <select id="getHqVendrList" parameterType="vendrVO" resultType="DefaultMap">
+     /* VendrMapper.getHqVendrList */
+     <include refid="CmmSQL.PagingTemplateHeader"/>
+     SELECT
+            A.HQ_BRAND_CD,
+            A.VENDR_CD,
+            A.VENDR_NM,
+            A.OWNER_NM,
+            A.BIZ_NO,
+            A.BIZ_TYPE_CD,
+            A.BIZ_ITEM_CD,
+            A.TEL_NO,
+            A.FAX_NO,
+            A.EMAIL_ADDR,
+            A.POST_NO,
+            A.ADDR,
+            A.ADDR_DTL,
+            A.SHIP_FG,
+            A.VAT_INCLD_YN,
+            A.USE_YN,
+            A.REMARK,
+            A.REG_DT,
+            A.REG_ID,
+            A.MOD_DT,
+            A.MOD_ID,
+            A.VENDOR_FG
+     <include refid="CmmSQL.PagingTemplateCount"/>
+       FROM TB_HQ_VENDOR A
+     <where>
+         <if test="vendrCd != null and vendrCd != ''">
+           AND A.VENDR_CD = #{vendrCd} --거래처코드
+         </if>
+         <if test="vendrNm != null and vendrNm != ''">
+           AND A.VENDR_NM LIKE '%'||#{vendrNm}||'%' --거래처명
+         </if>
+         <if test="vendorFg != null and vendorFg.name() != 'ALL'">
+           AND A.VENDOR_FG = #{vendorFg} --거래처구분
+         </if>
+     </where>
+     <include refid="CmmSQL.PagingTemplateBottom"/>
+  </select>
+  
+  <select id="getMsVendrList" parameterType="vendrVO" resultType="DefaultMap">
+     /* VendrMapper.getMsVendrList */
+     <include refid="CmmSQL.PagingTemplateHeader"/>
+     SELECT
+            A.STORE_CD,
+            A.VENDR_CD,
+            A.VENDR_NM,
+            A.OWNER_NM,
+            A.BIZ_NO,
+            A.BIZ_TYPE_CD,
+            A.BIZ_ITEM_CD,
+            A.TEL_NO,
+            A.FAX_NO,
+            A.EMAIL_ADDR,
+            A.POST_NO,
+            A.ADDR,
+            A.ADDR_DTL,
+            A.SHIP_FG,
+            A.VAT_INCLD_YN,
+            A.USE_YN,
+            A.REMARK,
+            A.REG_DT,
+            A.REG_ID,
+            A.MOD_DT,
+            A.MOD_ID,
+            A.VENDOR_FG
+     <include refid="CmmSQL.PagingTemplateCount"/>
+       FROM TB_MS_VENDOR A
+     <where>
+         <if test="vendrCd != null and vendrCd != ''">
+           AND A.VENDR_CD = #{vendrCd} --거래처코드
+         </if>
+         <if test="vendrNm != null and vendrNm != ''">
+           AND A.VENDR_NM LIKE '%'||#{vendrNm}||'%' --거래처명
+         </if>
+         <if test="vendorFg != null and vendorFg.name() != 'ALL'">
+           AND A.VENDOR_FG = #{vendorFg} --거래처구분
+         </if>
+     </where>
+     <include refid="CmmSQL.PagingTemplateBottom"/>
+  </select>
+
+</mapper>
