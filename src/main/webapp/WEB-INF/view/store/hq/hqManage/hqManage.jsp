@@ -183,6 +183,7 @@
       // 단독매장본사의 경우에는 선택 불가능
       if( col.binding == "hqOfficeCd" && grid.rows[ht.row].dataItem.hqOfficeCd != "00000") {
         selectedHq = grid.rows[ht.row].dataItem;
+        console.log(selectedHq)
         openDtlLayer(selectedHq);
       }
     }
@@ -201,12 +202,12 @@
 
   <%-- 본사 목록 조회 --%>
   function search(index) {
-    /*
+    <%--
     if(srchHqOfficeCd.text.length > 5) {
       s_alert.pop("<s:message code='hqManage.hqOfficeCd'/><s:message code='cmm.regexp' arguments='5'/>");
       return;
     }
-    */
+    --%>
     if(srchHqOfficeNm.text.length > 15) {
       s_alert.pop("<s:message code='hqManage.hqOfficeNm'/><s:message code='cmm.regexp' arguments='15'/>");
       return;

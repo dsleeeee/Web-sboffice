@@ -401,12 +401,14 @@
   <%-- 상세정보 팝업 열기 --%>
   function openDtlLayer(items) {
 
+    console.log(items)
+
     $("#hqDtlLayer").show();
     $("#hqDtlDim").show();
 
-    getDtlData(items);
-
     $("#popTitle").text("["+ items.hqOfficeCd +"] " + items.hqOfficeNm);
+
+    getDtlData(items);
 
     $("#hqDtlLayer").show();
     $("#hqDtlDim").show();
@@ -420,6 +422,9 @@
     var param = items;
 
     $.postJSON("/store/hq/hqManage/master/dtlInfo.sb", param, function(result) {
+
+      console.log(result);
+
       var data = result.data;
 
       <%-- 상세정보 --%>

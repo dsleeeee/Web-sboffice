@@ -136,7 +136,7 @@
            TB_CM_NMCODE tcnm
      WHERE tho.HQ_OFFICE_CD = #{hqOfficeCd}
        AND tca.AGENCY_CD (+)= tho.AGENCY_CD
-       AND tcn.NMCODE_GRP_CD = '003'
+       AND tcn.NMCODE_GRP_CD = '001'
        AND tcn.NMCODE_CD = tho.CLS_FG
        AND tcnm.NMCODE_GRP_CD = '005'
        AND tcnm.NMCODE_CD = tho.SYS_STAT_FG
@@ -791,7 +791,7 @@
            TB_CM_NMCODE tcn
      WHERE the.HQ_OFFICE_CD (+)= #{hqOfficeCd}
        AND the.ENVST_CD (+)= tcd.ENVST_CD
-       AND tcn.NMCODE_GRP_CD = '048'
+       AND tcn.NMCODE_GRP_CD = '004'
        AND tcn.NMCODE_CD = tcd.ENVST_GRP_CD
        AND tce.ENVST_GRP_CD = tcd.ENVST_GRP_CD
      ORDER BY tcd.ENVST_GRP_CD, tcd.ENVST_CD, tcd.ENVST_VAL_CD

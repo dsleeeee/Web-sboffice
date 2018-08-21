@@ -97,18 +97,15 @@ function getConfigList(){
             if(envCnt == 0 || envCnt % 2 == 0) envHtml += "<tr>";
 
             //console.log("list["+j+"].envstNm : "+ list[j].envstNm);
+
             envHtml += "      <th>" + list[j].envstCd + "</th>";
             envHtml += "      <td>" + list[j].envstNm + "</td>";
             envHtml += "      <td>";
 
-            if(list[j].envstGrpCd == "Y"){
+            //console.log("envstGrpCd : "+ list[j].envstGrpCd );
+            //console.log("dirctInYn : "+ list[j].dirctInYn);
 
-              if(list[j].selEnvstVal != null) {
-                //console.log("선택선택 : "+ list[j].selEnvstVal);
-                //console.log("디폴트디폴트 : "+ list[j].defltYn);
-                //console.log("원래 밸류 : "+ list[j].envstCd);
-              }
-
+            if(list[j].dirctInYn == "Y"){
               envHtml += "        <input type='text' name='envstValCd' id='env" + list[j].envstCd + "' >";
             } else {
               envHtml += "        <select name='envstValCd' id='env" + list[j].envstCd + "' />";
@@ -152,23 +149,37 @@ function getConfigList(){
     $("#contents").html(innerHtml);
 
     <%-- select box option --%>
-    for(var i=0; i<envstGrpCd.length; i++) {
-      var envstGrp  = envstGrpCd[i];
-      for(var j=0; j<list.length; j++){
+    var envstCd = "";
+    var sOption = false;
 
-        if(envstGrp.value == list[j].envstGrpCd && list[j].dirctInYn == "N") {
-          // 선택된 값이 우선
-          if(list[j].selEnvstVal != null && (list[j].selEnvstVal == list[j].envstValCd) ) {
-            $("#env"+list[j].envstCd).append("<option value='"+ list[j].envstValCd +"' selected>" + list[j].envstValNm +  "</option>");
+    for(var i=0; i<list.length; i++){
+      if(list[i].dirctInYn == "N") {
+
+        $("#env"+list[i].envstCd).append("<option value='"+ list[i].envstValCd +"' >" + list[i].envstValNm +  "</option>");
+
+        if(i == 0 || envstCd != list[i].envstCd ) {
+          envstCd = list[i].envstCd;
+          if(list[i].selEnvstVal == list[i].envstValCd){
+            sOption = true;
+            $("#env"+list[i].envstCd).val(list[i].envstValCd).prop("selected", true);
           }
-          // 그 다음이 디폴트 값
-          else if(list[j].defltYn == "Y") {
-            $("#env"+list[j].envstCd).append("<option value='"+ list[j].envstValCd +"' selected>" + list[j].envstValNm +  "</option>");
+          else{
+            sOption = false;
+            $("#env"+list[i].envstCd).val(list[i].envstValCd).prop("selected", true);
           }
-          else {
-            $("#env"+list[j].envstCd).append("<option value='"+ list[j].envstValCd +"'>" + list[j].envstValNm +  "</option>");
-          }
+        }else if(list[i].selEnvstVal == list[i].envstValCd){
+          sOption = true;
+          $("#env"+list[i].envstCd).val(list[i].envstValCd).prop("selected", true);
+        }else if(sOption == false && list[i].defltYn == "Y") {
+          $("#env"+list[i].envstCd).val(list[i].envstValCd).prop("selected", true);
         }
+
+        if(list[i].defltYn == "Y") {
+          $("#env"+list[i].envstCd).attr("defaultVal", list[i].envstValCd);
+        }
+
+      } else {
+        $("#env"+list[i].envstCd).val(list[i].selEnvstVal);
       }
     }
 
@@ -200,6 +211,15 @@ $("#envLayer #btnSave").click(function(){
 
   for(var i=0; i<objEnvstCd.length; i++){
 
+    if(objDirctInYn[i].value == "Y" && objEnvstValCd[i].value == ""){
+      var msgStr = "<s:message code='hqManage.envSetting' /> "
+                 + "[ " + objEnvstCd[i].value + "] "+ objEnvstNm[i].value
+                 + " <s:message code='hqManage.require.regist.inputEnv' /> ";
+
+      s_alert.pop(msgStr);
+      return;
+    }
+
     var param = {};
 
     param.hqOfficeCd  = selectedHq.hqOfficeCd;
@@ -226,44 +246,32 @@ $("#envLayer #btnSave").click(function(){
 <%-- 기본값 설정 버튼 클릭 --%>
 $("#envLayer #btnDefault").click(function(){
 
-  objDefaultCd  = document.getElementsByName("defltYn"); // 디폴트 유무
+  var objEnvstCd      = document.getElementsByName("envstCd");
+  var objEnvstNm      = document.getElementsByName("envstNm");
+  var objDirctInYn    = document.getElementsByName("dirctInYn");
+  var objDefaultCd    = document.getElementsByName("defltYn");
 
-  var loop_cnt = objEnvSetVal.length;
-  for(var i = 0; i < loop_cnt; i++)
-  {
-      if(objDefaultCd[i].value != '')
-      {
-          objEnvSetVal[i].value = objDefaultCd[i].value;
-      }
+  for(var i=0; i<objEnvstCd.length; i++){
+
+    var defaultVal = $("#env"+objEnvstCd[i].value).attr("defaultVal");
+
+    if(objDirctInYn[i].value == "Y") {
+      $("#env"+objEnvstCd[i].value).val(defaultVal);
+    } else {
+      $("#env"+objEnvstCd[i].value).val(defaultVal).prop("selected", true);
+    }
   }
+
 });
 
 <%-- 상세정보 탭 클릭 --%>
 $("#envLayer #hqInfoTab").click(function(){
-  /*
-  if(!$("#viewArea").is(":visible")) {
-    var msg = "<s:message code='hqManage.confirm.editmode.quit'/>";
-    s_alert.popConf(msg, function(){
-      showMaster();
-    });
-  } else {
-  */
-    showMaster();
-  //}
+  showMaster();
 });
 
 <%-- 메뉴권한 탭 클릭 --%>
 $("#envLayer #menuSettingTab").click(function(e){
-  /*
-  if(!$("#viewArea").is(":visible")) {
-    var msg = "<s:message code='hqManage.confirm.editmode.quit'/>";
-    s_alert.popConf(msg, function(){
-      showMenuAuth();
-    });
-  } else {
-  */
-    showMenuAuth();
-  //}
+  showMenuAuth();
 });
 
 <%-- 환경설정 화면 보여줌--%>
