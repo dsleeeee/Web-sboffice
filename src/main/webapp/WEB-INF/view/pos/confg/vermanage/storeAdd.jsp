@@ -127,7 +127,7 @@
   var sysStatFgCb = wcombo.genCommonBox("#s_sysStatFg", ${ccu.getCommCode("009")});
   var clsFg       = wcombo.genCommonBox("#s_clsFg", ${ccu.getCommCode("001")});
 
-  var clsFgDataMap     = new wijmo.grid.DataMap(clsFg, 'value', 'name');
+  var clsFgDataMap     = new wijmo.grid.DataMap(clsFgCb, 'value', 'name');
 
   <%-- 적용매장 Header --%>
   var hData3 =

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.solbipos.application.session.auth.service.impl.AuthMapper">
 
@@ -24,13 +25,6 @@
             twui.LAST_PWD_CHG_DT,
             twui.LOGIN_FAIL_CNT,
             twui.LOCK_CD,
-            (
-            SELECT
-                NVL( MAX( twpch.REG_DT ) KEEP( DENSE_RANK FIRST ORDER BY twpch.IDX DESC ), 0 ) AS LAST_PWD_CHG
-            FROM
-                TB_WB_PWD_CHG_HIST twpch
-            WHERE
-                twpch.USER_ID = twui.USER_ID ) AS LAST_PWD_CHG,
             #{vUserId, jdbcType=VARCHAR} AS V_USER_ID
         FROM
             TB_WB_USER_INFO twui
@@ -122,107 +116,119 @@
             twui.USER_ID = #{userId}
             AND twui.LOCK_CD = 'N'
 
-  </select>
+    </select>
 
-  <select id="selectLoginHist" resultType="loginHistVO" parameterType="loginHistVO">
-  /* AuthMapper.selectLoginHist */
-     SELECT SEQ,
-            USER_ID,
-            STAT_CD,
-            LOGIN_ORGN,
-            LOGIN_IP,
-            BRWSR_INFO,
-            LOGIN_DATE,
-            LOGIN_DT
-       FROM TB_WB_LOGIN_HIST
-      WHERE USER_ID = #{userId}
-  </select>
+    <select id="selectLoginHist" resultType="loginHistVO" parameterType="loginHistVO">
+        /* AuthMapper.selectLoginHist */
+         SELECT SEQ,
+                USER_ID,
+                STAT_CD,
+                LOGIN_ORGN,
+                LOGIN_IP,
+                BRWSR_INFO,
+                LOGIN_DATE,
+                LOGIN_DT
+         FROM TB_WB_LOGIN_HIST
+         WHERE USER_ID = #{userId}
+    </select>
 
-  <insert id="insertLoginHist" parameterType="loginHistVO">
-  /* AuthMapper.insertLoginHist */
-    INSERT INTO TB_WB_LOGIN_HIST
-    (
-      SEQ,
-      USER_ID,
-      STAT_CD,
-      LOGIN_ORGN,
-      LOGIN_IP,
-      BRWSR_INFO,
-      LOGIN_DATE,
-      LOGIN_DT
-    )
-    VALUES
-    (
-      SQ_WB_LOGIN_HIST.NEXTVAL,
-      #{userId},
-      #{statCd},
-      #{loginOrgn},
-      #{loginIp},
-      #{brwsrInfo},
-      #{loginDate},
-      #{loginDt}
-    )
-  </insert>
+    <insert id="insertLoginHist" parameterType="loginHistVO">
+      /* AuthMapper.insertLoginHist */
+        INSERT INTO TB_WB_LOGIN_HIST
+        (
+          SEQ,
+          USER_ID,
+          STAT_CD,
+          LOGIN_ORGN,
+          LOGIN_IP,
+          BRWSR_INFO,
+          LOGIN_DATE,
+          LOGIN_DT
+        )
+        VALUES
+        (
+          SQ_WB_LOGIN_HIST.NEXTVAL,
+          #{userId},
+          #{statCd},
+          #{loginOrgn},
+          #{loginIp},
+          #{brwsrInfo},
+          #{loginDate},
+          #{loginDt}
+        )
+    </insert>
 
-<!--    권한 있는 리소스 가져오기 -->
-  <select id="selectAuthMenu" parameterType="sessionInfoVO" resultType="resrceInfoVO">
-  <![CDATA[
-  /* AuthMapper.selectAuthMenu */
-     SELECT *
-       FROM (
-         SELECT DISTINCT RESRCE_CD,
-                P_RESRCE,
-                RESRCE_FG,
-                FUNC_FG,
-                RESRCE_NM,
-                URL,
-                SPCL_AUTHOR,
-                DISP_LEVEL,
-                DISP_IDX,
-                USE_YN,
-                REG_DT,
-                REG_ID,
-                MOD_DT,
-                MOD_ID
-           FROM TB_WB_RESRCE_INFO
-          START WITH RESRCE_CD IN (
-                SELECT RESRCE_CD
-                  FROM TB_WB_RESRCE_INFO
-                 WHERE RESRCE_CD IN (
-                  SELECT RESRCE_CD
-                    FROM TB_WB_AUTHOR_GRP_RESRCE
-                   WHERE AUTH_GRP_CD = (
-                    SELECT AUTH_GRP_CD
-                      FROM TB_WB_USER_INFO
+    <!--    권한 있는 리소스 가져오기 -->
+    <select id="selectAuthMenu" parameterType="sessionInfoVO" resultType="resrceInfoVO">
+      /* AuthMapper.selectAuthMenu */
+         SELECT *
+           FROM (
+             SELECT DISTINCT RESRCE_CD,
+                    P_RESRCE,
+                    RESRCE_FG,
+                    FUNC_FG,
+                    RESRCE_NM,
+                    URL,
+                    SPCL_AUTHOR,
+                    DISP_LEVEL,
+                    DISP_IDX,
+                    USE_YN,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+               FROM TB_WB_RESRCE_INFO
+              START WITH RESRCE_CD IN (
+                    SELECT RESRCE_CD
+                      FROM TB_WB_RESRCE_INFO
+                     WHERE RESRCE_CD IN (
+                      SELECT RESRCE_CD
+                        FROM TB_WB_AUTHOR_GRP_RESRCE
+                       WHERE AUTH_GRP_CD = (
+                        SELECT AUTH_GRP_CD
+                          FROM TB_WB_USER_INFO
+                         WHERE USER_ID = #{userId}
+                        ) AND USE_YN = 'Y'
+                     UNION ALL
+                    SELECT RESRCE_CD
+                      FROM TB_WB_AUTHOR_EXCEPT
                      WHERE USER_ID = #{userId}
-                    ) AND USE_YN = 'Y'
-                 UNION ALL
-                SELECT RESRCE_CD
-                  FROM TB_WB_AUTHOR_EXCEPT
-                 WHERE USER_ID = #{userId}
-                   AND INCLD_EXCLD_FG = 'I'
-                   AND USE_YN = 'Y'
-                  )
-          AND RESRCE_CD NOT IN (
-                SELECT RESRCE_CD
-                  FROM TB_WB_AUTHOR_EXCEPT
-                 WHERE USER_ID = #{userId}
-                   AND INCLD_EXCLD_FG = 'E'
-                   AND USE_YN = 'Y')
-          /*AND RESRCE_FG = 'F'*/
-          )
-      CONNECT BY PRIOR P_RESRCE = RESRCE_CD
-          AND LEVEL < 3
-     )
-     ORDER BY URL ASC
-  ]]>
-  </select>
+                       AND INCLD_EXCLD_FG = 'I'
+                       AND USE_YN = 'Y'
+                      )
+              AND RESRCE_CD NOT IN (
+                    SELECT RESRCE_CD
+                      FROM TB_WB_AUTHOR_EXCEPT
+                     WHERE USER_ID = #{userId}
+                       AND INCLD_EXCLD_FG = 'E'
+                       AND USE_YN = 'Y')
+              /*AND RESRCE_FG = 'F'*/
+              )
+          CONNECT BY PRIOR P_RESRCE = RESRCE_CD
+        <![CDATA[
+              AND LEVEL < 3
+        ]]>
+         )
+         ORDER BY URL ASC
+      </select>
 
     <select id="selectStoreHwAuthKeyCheck" parameterType="sessionInfoVO" resultType="String">
-  /* AuthMapper.selectStoreHwAuthKeyCheck */
-     SELECT DECODE(COUNT(tmp.POS_NO), 0, 'N', 'Y') AS EXIST_FG
-       FROM TB_MS_POS tmp
-      WHERE tmp.STORE_CD = #{storeCd}
-        AND tmp.HW_AUTH_KEY = #{hwAuthKey}
-  </select>
+      /* AuthMapper.selectStoreHwAuthKeyCheck */
+      SELECT DECODE(COUNT(tmp.POS_NO), 0, 'N', 'Y') AS EXIST_FG
+           FROM TB_MS_POS tmp
+          WHERE tmp.STORE_CD = #{storeCd}
+            AND tmp.HW_AUTH_KEY = #{hwAuthKey}
+    </select>
+
+
+    <update id="updateLoginDt" parameterType="sessionInfoVO">
+        /* AuthMapper.updateLoginDt */
+        UPDATE TB_WB_USER_INFO
+        SET
+            LAST_LOGIN_DT = #{lastLoginDt}
+        WHERE
+            USER_ID = #{userId}
+    </update>
+
+
 </mapper>

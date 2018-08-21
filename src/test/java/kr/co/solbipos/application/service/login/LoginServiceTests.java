@@ -1,8 +1,11 @@
 package kr.co.solbipos.application.service.login;
 
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.BDDMockito.given;
+import kr.co.common.service.session.SessionService;
+import kr.co.common.system.BaseEnv;
+import kr.co.solbipos.application.session.auth.enums.LoginResult;
+import kr.co.solbipos.application.session.auth.service.AuthService;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.auth.service.impl.AuthMapper;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -11,12 +14,10 @@ import org.junit.runners.MethodSorters;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import kr.co.common.service.session.SessionService;
-import kr.co.common.system.BaseEnv;
-import kr.co.solbipos.application.session.auth.enums.LoginResult;
-import kr.co.solbipos.application.session.auth.service.AuthService;
-import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.application.session.auth.service.impl.AuthMapper;
+
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -69,7 +70,7 @@ public class LoginServiceTests {
         s.setUserId("ygjeong");
         s.setUserPwd("qwer");
         s.setLockCd("N");
-        s.setLastPwdChg("20180101");
+        s.setLastPwdChgDt("20180101000000");
 
         sessionInfoVO.setUserId("ygjeong");
         given(authService.selectWebUser(sessionInfoVO)).willReturn(s);
@@ -90,7 +91,7 @@ public class LoginServiceTests {
         s.setUserId("ygjeong");
         s.setUserPwd("qwer"); // 동일한 패스워드
         s.setLockCd("N");
-        s.setLastPwdChg("20180101");
+        s.setLastPwdChgDt("20180101000000");
 
         sessionInfoVO.setUserId("ygjeong");
         sessionInfoVO.setUserPwd("qwer");
@@ -112,7 +113,7 @@ public class LoginServiceTests {
         s.setUserId("ygjeong");
         s.setUserPwd("qwera"); // 다른 패스워드
         s.setLockCd("N");
-        s.setLastPwdChg("20180101");
+        s.setLastPwdChgDt("20180101000000");
 
         sessionInfoVO.setUserId("ygjeong");
         sessionInfoVO.setUserPwd("qwer");
@@ -134,7 +135,7 @@ public class LoginServiceTests {
         s.setUserId("ygjeong");
         s.setUserPwd("qwer");
         s.setLockCd("Y"); // 사용자 잠금 처리 됨
-        s.setLastPwdChg("20180101");
+        s.setLastPwdChgDt("20180101000000");
 
         sessionInfoVO.setUserId("ygjeong");
         sessionInfoVO.setUserPwd("qwer");
@@ -156,7 +157,7 @@ public class LoginServiceTests {
         s.setUserId("ygjeong");
         s.setUserPwd("qwer");
         s.setLockCd("N");
-        s.setLastPwdChg("20170603"); // 마지막 패스워드 변경 날짜
+        s.setLastPwdChgDt("20170603000000"); // 마지막 패스워드 변경 날짜
 
         sessionInfoVO.setUserId("ygjeong");
         sessionInfoVO.setUserPwd("qwer");
@@ -178,7 +179,7 @@ public class LoginServiceTests {
         s.setUserId("ygjeong");
         s.setUserPwd("qwer");
         s.setLockCd("N");
-        s.setLastPwdChg("0"); // 패스워드 변경 한적 없음
+        s.setLastPwdChgDt(""); // 패스워드 변경 한적 없음
 
         sessionInfoVO.setUserId("ygjeong");
         sessionInfoVO.setUserPwd("qwer");
