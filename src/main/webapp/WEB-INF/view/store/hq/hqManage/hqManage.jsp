@@ -102,8 +102,8 @@
 
   <%-- 검색조건 및 dataMap 조회 --%>
   var agencyList        = ${ccu.getAgencyList()};
-  var areaCd            = ${ccu.getCommCodeSelect("092")};
-  var clsFg             = ${ccu.getCommCodeSelect("003")};
+  var areaCd            = ${ccu.getCommCodeSelect("061")};
+  var clsFg             = ${ccu.getCommCodeSelect("001")};
   var sysStatFg         = ${ccu.getCommCodeSelect("005")};
   var clsFgDataMap      = new wijmo.grid.DataMap(clsFg, 'value', 'name');
   var sysStatFgDataMap  = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');

@@ -260,8 +260,8 @@
 
   <%-- 공통코드 --%>
 
-  var progFg    = ${ccu.getCommCodeExcpAll("090")};
-  var verRecvFg = ${ccu.getCommCodeExcpAll("091")};
+  var progFg    = ${ccu.getCommCodeExcpAll("059")};
+  var verRecvFg = ${ccu.getCommCodeExcpAll("060")};
 
   var progFgDataMap     = new wijmo.grid.DataMap(progFg, 'value', 'name');
   var verRecvFgDataMap  = new wijmo.grid.DataMap(verRecvFg, 'value', 'name');

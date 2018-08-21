@@ -15,7 +15,7 @@
             <%-- 환경설정 탭 --%>
             <li><a href="javascript:;" id="envSettingTab" class="on"><s:message code="hqBrand.envSetting" /></a></li>
             <%-- 분류관리 탭 (추후 상품관리로 이동)--%>
-            <%-- 
+            <%--
             <li><a href="javascript:;" id="classSettingTab" ><s:message code="hqBrand.classSetting" /></a></li>
              --%>
           </ul>
@@ -40,20 +40,20 @@
 
 <%-- 환경설정 팝업 오픈 --%>
 function openEnvLayer(){
-  
+
   console.log('openEnvLayer');
-  
-  
+
+
   $("#envDim").show();
   $("#envLayer").show();
-  
-  
+
+
   console.log(selectedBrand);
-  
+
   var envTitle = "[" + selectedBrand.hqBrandCd + "] "+ selectedBrand.hqBrandNm;
-  
+
   $("#popTitle").text(envTitle);
-  
+
   getConfigList();
 }
 
@@ -62,29 +62,29 @@ function getConfigList(){
   var param = {};
   param.hqOfficeCd = selectedBrand.hqOfficeCd;
   param.hqBrandCd  = selectedBrand.hqBrandCd;
-  
-  var envstGrpCd = ${ccu.getCommCodeExcpAll("048")};
-  
+
+  var envstGrpCd = ${ccu.getCommCodeExcpAll("004")};
+
   $.postJSON("/store/hq/hqBrand/config/getConfiglist.sb", param, function(result) {
-    
+
     var innerHtml = "";
-    
+
     var envCnt   = 0;
     var allCnt   = 0;
     var existCnt = 0;
-    
+
     var list = result.data.list;
-    
+
     console.log(list);
 
     for(var i=0; i<envstGrpCd.length; i++) {
-      
+
       var envCnt    = 0;
       var envHtml   = "";
       var envstGrp  = envstGrpCd[i];
 
       envHtml += envstGrp.name;
-      
+
       envHtml += "<div class='mt20 sc'>";
       envHtml += "<table class='tblType01'>";
       envHtml += "  <colgroup>";
@@ -96,38 +96,38 @@ function getConfigList(){
       envHtml += "    <col class='w25' />";
       envHtml += "  </colgroup>";
       envHtml += "  <tbody id='evnTable'>";
-      
+
       var envSub = "";
-      
+
       for(var j=0; j<list.length; j++){
         if(envstGrp.value == list[j].envstGrpCd) {
-          
+
           if(envSub == "" || envSub != list[j].envstCd) {
-            
+
             if(envCnt == 0 || envCnt % 2 == 0) envHtml += "<tr>";
-            
+
             console.log("list["+j+"].envstNm : "+ list[j].envstNm);
-            
-            
+
+
             envHtml += "      <th>" + list[j].envstCd + "</th>";
             envHtml += "      <td>" + list[j].envstNm + "</td>";
             envHtml += "      <td>";
-            
+
             if(list[j].envstGrpCd == "Y"){
-              
+
               //list[j].selEnvstVal != null && (list[j].selEnvstVal == list[j].envstValCd)
-              
+
               if(list[j].selEnvstVal != null) {
                 console.log("선택선택 : "+ list[j].selEnvstVal);
                 console.log("디폴트디폴트 : "+ list[j].defltYn);
                 console.log("원래 밸류 : "+ list[j].envstCd);
               }
-              
+
               envHtml += "        <input type='text' name='envstValCd' id='env" + list[j].envstCd + "' >";
             } else {
               envHtml += "        <select name='envstValCd' id='env" + list[j].envstCd + "' />";
             }
-            
+
             envHtml += "        <input type='hidden' name='status'    value='"+ (list[j].existFg =="N" ? "I":"U") +"'>";
             envHtml += "        <input type='hidden' name='envstCd'   value='"+ list[j].envstCd +"'>";
             envHtml += "        <input type='hidden' name='envstNm'   value='"+ list[j].envstNm +"'>";
@@ -136,13 +136,13 @@ function getConfigList(){
             envHtml += "        <input type='hidden' name='dirctInYn' value='"+ list[j].dirctInYn +"'>";
             envHtml += "        <input type='hidden' name='targtFg'   value='"+ list[j].targtFg +"'>";
             envHtml += "      </td>";
-            
+
             envSub = list[j].envstCd;
             envCnt ++;
             allCnt ++;
-            
+
             if(list[j].existFg == "Y") existCnt++;
-            
+
             if(list[j].envstCdCnt == envCnt && (envCnt % 2 == 1) ) {
               envHtml += "      <td></td>";
               envHtml += "      <td></td>";
@@ -154,17 +154,17 @@ function getConfigList(){
           }
         }
       }
-      
+
       envHtml += "  </tbody>";
       envHtml += "</table>";
       envHtml += "</div>";
       envHtml += "<br>";
-      
+
       if(envCnt > 0) innerHtml += envHtml;
     }
-    
+
     $("#contents").html(innerHtml);
-    
+
     <%-- select box option --%>
     for(var i=0; i<envstGrpCd.length; i++) {
       var envstGrp  = envstGrpCd[i];
@@ -174,7 +174,7 @@ function getConfigList(){
           // 선택된 값이 우선
           if(list[j].selEnvstVal != null && (list[j].selEnvstVal == list[j].envstValCd) ) {
             $("#env"+list[j].envstCd).append("<option value='"+ list[j].envstValCd +"' selected>" + list[j].envstValNm +  "</option>");
-          } 
+          }
           // 그 다음이 디폴트 값
           else if(list[j].defltYn == "Y") {
             $("#env"+list[j].envstCd).append("<option value='"+ list[j].envstValCd +"' selected>" + list[j].envstValNm +  "</option>");
@@ -185,7 +185,7 @@ function getConfigList(){
         }
       }
     }
-    
+
     <%-- 등록되지 않은 환경값이 있음--%>
     if(allCnt > existCnt) {
       var msg = "<s:message code='hqBrand.no.regist.env'/> "
@@ -193,7 +193,7 @@ function getConfigList(){
               + "<s:message code='hqBrand.total.env.count' arguments='"+ allCnt +"'/> "
               + "<s:message code='hqBrand.no.regist.env.count' arguments='"+ (allCnt - existCnt) +"'/>"
               ;
-      
+
       s_alert.pop(msg);
     }
   });
@@ -201,7 +201,7 @@ function getConfigList(){
 
 <%-- 저장 버튼 클릭 --%>
 $("#envLayer #btnSave").click(function(){
-  
+
   var objStatus = document.getElementsByName("status");
   var objEnvstCd = document.getElementsByName("envstCd");
   var objEnvstNm = document.getElementsByName("envstNm");
@@ -211,11 +211,11 @@ $("#envLayer #btnSave").click(function(){
   var objDirctInYn = document.getElementsByName("dirctInYn");
 
   var paramArr = new Array();
-  
+
   for(var i=0; i<objEnvstCd.length; i++){
-    
+
     var param = {};
-    
+
     param.hqOfficeCd  = selectedBrand.hqOfficeCd;
     param.hqBrandCd   = selectedBrand.hqBrandCd;
     param.status      = objStatus[i].value;
@@ -224,10 +224,10 @@ $("#envLayer #btnSave").click(function(){
     param.envstGrpCd  = objEnvstGrpCd[i].value;
     param.envstVal    = objEnvstValCd[i].value;
     param.dirctInYn   = objDirctInYn[i].value;
-    
+
     paramArr.push(param);
   }
-  
+
   $.postJSONArray("/store/hq/hqBrand/config/save.sb", paramArr, function(result) {
     console.log(result);
     s_alert.pop("<s:message code='cmm.saveSucc' />");
@@ -235,14 +235,14 @@ $("#envLayer #btnSave").click(function(){
   function(result) {
     s_alert.pop(result.message);
   });
-  
+
 });
 
 <%-- 기본값 설정 버튼 클릭 --%>
 $("#envLayer #btnDefault").click(function(){
-  
-  objDefaultCd  = document.getElementsByName("defltYn"); // 디폴트 유무 
-  
+
+  objDefaultCd  = document.getElementsByName("defltYn"); // 디폴트 유무
+
   var loop_cnt = objEnvSetVal.length;
   for(var i = 0; i < loop_cnt; i++)
   {
@@ -257,7 +257,7 @@ $("#envLayer #btnDefault").click(function(){
 $("#envLayer #classSettingTab").click(function(){
   $("#envDim").hide();
   $("#envLayer").hide();
-  
+
   openClsLayer();
 });
 

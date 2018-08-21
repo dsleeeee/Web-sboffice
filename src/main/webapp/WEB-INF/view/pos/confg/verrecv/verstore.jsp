@@ -123,7 +123,7 @@
   var verSerNm = wcombo.genInput("#verSerNm");
 
   <%-- 공통코드 --%>
-  var progFg    = ${ccu.getCommCodeExcpAll("090")};
+  var progFg    = ${ccu.getCommCodeExcpAll("059")};
   var progFgDataMap     = new wijmo.grid.DataMap(progFg, 'value', 'name');
 
   <%-- Header --%>

@@ -213,9 +213,9 @@
   <%-- 적용매장 --%>
 
     <%-- dataMap 조회 --%>
-    var clsFg     = ${ccu.getCommCodeExcpAll("003")};
+    var clsFg     = ${ccu.getCommCodeExcpAll("001")};
     var sysStatFg = ${ccu.getCommCode("009")};
-    var verRecvFg = ${ccu.getCommCodeExcpAll("091")};
+    var verRecvFg = ${ccu.getCommCodeExcpAll("060")};
 
     var clsFgDataMap     = new wijmo.grid.DataMap(clsFg, 'value', 'name');
     var sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
@@ -316,7 +316,7 @@
     var verSerNmInput = wcombo.genInput("#verSerNm");
     var fileSizeInput = wcombo.genInput("#fileSize");
     var fileDescInput = wcombo.genInput("#fileDesc");
-    var pData         = ${ccu.getCommCodeExcpAll("090")};
+    var pData         = ${ccu.getCommCodeExcpAll("059")};
     var progFgCombo   = wcombo.genCommonBox("#progFg", pData);
     var useYnCombo    = wcombo.genCommonBox("#useYn", useYn);
 

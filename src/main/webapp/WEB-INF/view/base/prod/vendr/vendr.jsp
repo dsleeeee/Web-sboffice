@@ -64,7 +64,7 @@
     <button class="btn_skyblue fr" id="">
       <s:message code="vendr.reg" />
     </button>
-    
+
   </div>
 
   <%--위즈모 테이블--%>
@@ -91,16 +91,16 @@ $(document).ready(function(){
     <%-- 검색조건 및 dataMap 조회 --%>
     var vendrCd  = wcombo.genInput("#vendrCd");
     var vendrNm  = wcombo.genInput("#vendrNm");
-    var cdata    = ${ccu.getCommCode("013")};
+    var cdata    = ${ccu.getCommCode("011")};
     var vendorFg = wcombo.genCommonBox("#vendorFg", cdata);
     var ldata    = ${ccu.getListScale()};
     var listScaleBox = wcombo.genCommonBox("#listScaleBox", ldata);
-    var vendorFgNm = ${ccu.getCommCodeExcpAll("013")};
-    var useYn      = ${ccu.getCommCodeExcpAll("904")};
+    var vendorFgNm = ${ccu.getCommCodeExcpAll("011")};
+    var useYn      = ${ccu.getCommCodeExcpAll("067")};
     var vendorFgDataMap = new wijmo.grid.DataMap(vendorFgNm, 'value', 'name');
     var useYnDataMap    = new wijmo.grid.DataMap(useYn, 'value', 'name');
-    
-    var rdata = 
+
+    var rdata =
     [
       {binding:"rnum",header:"No",width:"*"},
       {binding:"vendrCd",header:"<s:message code='vendr.vendrCd' />",width:"*"},
@@ -112,9 +112,9 @@ $(document).ready(function(){
       {binding:"addr",header:"<s:message code='vendr.addr' />",width:"*"},
       {binding:"useYn",header:"<s:message code='vendr.useYn' />",dataMap:useYnDataMap,width:"*"}
     ];
-    
+
     var grid = wgrid.genGrid( "#theGrid", rdata, "${menuCd}", 1, ${clo.getColumnLayout(1)} );
-  
+
   function search(index) {
     var param = {};
 
@@ -123,14 +123,14 @@ $(document).ready(function(){
     param.vendorFg = vendorFg.selectedValue;
     param.listScale = listScaleBox.selectedValue;
     param.curr = index;
-    
+
     $.postJSON("/base/prod/vendr/vendr/list.sb", param, function(result) {
       var list = result.data.list;
-      
+
       if(list.length == 0) {
         s_alert.pop(result.message);
       }
-    
+
       grid.itemsSource = list;
       page.make("#page1", result.data.page.curr, result.data.page.totalPage);
       },
@@ -141,7 +141,7 @@ $(document).ready(function(){
         s_alert.pop("Ajax Fail");
     });
   }
-  
+
   <%-- 그리드 포맷 --%>
   grid.formatItem.addHandler(function(s, e) {
     if (e.panel == s.cells) {
@@ -152,7 +152,7 @@ $(document).ready(function(){
       }
     }
   });
-  
+
   <%-- 그리드 선택 이벤트 --%>
   grid.addEventListener(grid.hostElement, 'click', function(e) {
     var ht = grid.hitTest(e);
@@ -162,21 +162,21 @@ $(document).ready(function(){
         if( col.binding == "vendrCd" ) {
           //todo 유나대리 부탁해요..
           alert("거래처상세 팝업을 띄우시오")
-          
+
         }
       }
   });
-  
+
   <%-- 리스트 조회 --%>
   $("#searchBtn").click(function( e ){
     search(1);
   });
-  
+
   <%-- 페이징 --%>
   $(document).on("click", ".page1", function() {
     search($(this).data("value"));
   });
-  
+
 });
-  
+
 </script>

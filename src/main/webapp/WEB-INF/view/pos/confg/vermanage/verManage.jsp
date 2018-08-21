@@ -76,9 +76,9 @@ var selectVerSerCnt = 0;
 <%-- 검색조건 및 dataMap 조회 --%>
 var verSerNo    = wcombo.genInput("#srchVerSerNo");
 var verSerNm    = wcombo.genInput("#srchVerSerNm");
-var containYn   = ${ccu.getCommCodeExcpAll("089")};
-var useYn       = ${ccu.getCommCodeExcpAll("904")};
-var progFg      = ${ccu.getCommCodeExcpAll("090")};
+var containYn   = ${ccu.getCommCodeExcpAll("058")};
+var useYn       = ${ccu.getCommCodeExcpAll("067")};
+var progFg      = ${ccu.getCommCodeExcpAll("059")};
 
 var containYnDataMap = new wijmo.grid.DataMap(containYn, 'value', 'name');
 var useYnDataMap     = new wijmo.grid.DataMap(useYn, 'value', 'name');

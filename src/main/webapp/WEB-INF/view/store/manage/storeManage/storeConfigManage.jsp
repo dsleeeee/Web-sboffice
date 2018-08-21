@@ -60,7 +60,7 @@
 
 <script>
 
-var envstGrpCd = ${ccu.getCommCodeExcpAll("048")};
+var envstGrpCd = ${ccu.getCommCodeExcpAll("004")};
 var posList;
 
 <%-- 환경설정 팝업 오픈 --%>

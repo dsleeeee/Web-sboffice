@@ -54,9 +54,9 @@ var funcFgList  = ${fnkeyFgList};
 var funcList    = [];
 var selectData;
 
-var storeKind   = ${ccu.getCommCodeExcpAll("088")};
+var storeKind   = ${ccu.getCommCodeExcpAll("057")};
 var posFg       = ${ccu.getCommCodeExcpAll("035")};
-var useYn       = ${ccu.getCommCodeExcpAll("904")};
+var useYn       = ${ccu.getCommCodeExcpAll("067")};
 
 var storeKindDataMap   = new wijmo.grid.DataMap(storeKind, 'value', 'name');
 var posFgDataMap     = new wijmo.grid.DataMap(posFg, 'value', 'name');

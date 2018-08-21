@@ -61,18 +61,18 @@ public class EhgtController {
             Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        
+
         //본사 통화구분 코드 조회
         HqCdVO hqCdVO = new HqCdVO();
 
         hqCdVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
-        hqCdVO.setNmcodeGrpCd("052");
+        hqCdVO.setNmcodeGrpCd("062");
         hqCdVO.setUseYn(UseYn.Y);
         List<DefaultMap<String>> hqCrncys = ehgtService.getHqCdListByGrpCd(hqCdVO);
-        
+
         //입력 table과 grid의 헤더를 위한 데이터
         model.addAttribute("hqCrncys", hqCrncys);
-        
+
         return "adi/etc/ehgt/regist";
     }
 
@@ -91,9 +91,9 @@ public class EhgtController {
             HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        
+
         List<DefaultMap<Object>> list = ehgtService.getEhgtListBySaleDt(ehgtVO, sessionInfoVO);
-        
+
         return returnListJson(Status.OK, list);
     }
 
@@ -112,9 +112,9 @@ public class EhgtController {
             HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        
+
         List<DefaultMap<String>> list = ehgtService.getEhgtDetailBySaleDt(ehgtVO, sessionInfoVO);
-        
+
         return returnListJson(Status.OK, list);
     }
 
@@ -158,9 +158,9 @@ public class EhgtController {
 
         //본사 통화구분 코드 조회
         HqCdVO hqCdVO = new HqCdVO();
-        
+
         hqCdVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
-        hqCdVO.setNmcodeGrpCd("052");
+        hqCdVO.setNmcodeGrpCd("062");
         hqCdVO.setUseYn(UseYn.ALL);
         List<DefaultMap<String>> list = ehgtService.getHqCdListByGrpCd(hqCdVO);
         return returnListJson(Status.OK, list);

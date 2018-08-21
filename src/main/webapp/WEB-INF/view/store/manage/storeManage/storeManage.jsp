@@ -121,7 +121,7 @@
 
 var selectedStore;  <%-- 매장정보 수정시, 선택 매장 --%>
 
-var clsFg             = ${ccu.getCommCodeSelect("003")};
+var clsFg             = ${ccu.getCommCodeSelect("001")};
 var sysStatFg         = ${ccu.getCommCodeSelect("005")};
 
 var clsFgDataMap      = new wijmo.grid.DataMap(clsFg, 'value', 'name');

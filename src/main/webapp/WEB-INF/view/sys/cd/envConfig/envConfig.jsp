@@ -8,7 +8,7 @@
 <c:set var="baseUrl" value="/sys/cd/envConfig/envConfig/" />
 
 <div class="subCon">
-  
+
   <div class="searchBar">
     <a href="javascript:;" class="open">${menuNm}</a>
   </div>
@@ -38,12 +38,12 @@
       </tr>
     </tbody>
   </table>
-  
+
   <%-- 조회 --%>
   <div class="mt10 pdb20 oh">
       <button class="btn_blue fr" id="btnSearch"><s:message code="cmm.search" /></button>
   </div>
-    
+
   <div class="w50 fl" style="width: 60%">
     <%--위즈모 테이블--%>
     <div class="wj-TblWrapBr mr10 pd20" style="height: 400px;">
@@ -65,7 +65,7 @@
     </div>
     <%--//위즈모 테이블--%>
   </div>
-  
+
   <div class="w50 fr" style="width: 40%">
     <%--위즈모 테이블--%>
     <div class="wj-TblWrapBr ml10 pd20" style="height: 400px;">
@@ -87,12 +87,12 @@
     </div>
     <%--//위즈모 테이블--%>
   </div>
-    
+
 </div>
 
 <script type="text/javascript">
-  var envstFgNm = ${ccu.getCommCodeExcpAll("004")};
-  var envstGrpCdNm = ${ccu.getCommCodeExcpAll("048")};
-  var targtFg = ${ccu.getCommCodeExcpAll("062")};
+  var envstFgNm = ${ccu.getCommCodeExcpAll("003")};
+  var envstGrpCdNm = ${ccu.getCommCodeExcpAll("004")};
+  var targtFg = ${ccu.getCommCodeExcpAll("038")};
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/sys/cd/envConfig/envConfig.js?ver=2018081201" charset="utf-8"></script>

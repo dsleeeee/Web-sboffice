@@ -28,7 +28,7 @@
 var prterKind   = ${ccu.getEnvCodeExcpAll("206")};
 var prterPort   = ${ccu.getEnvCodeExcpAll("207")};
 var prterSpeed = ${ccu.getEnvCodeExcpAll("208")};
-var useYn         = ${ccu.getCommCodeExcpAll("904")};
+var useYn         = ${ccu.getCommCodeExcpAll("067")};
 
 var posNoDM;
 var prterKindDM   = new wijmo.grid.DataMap(prterKind, 'value', 'name');

@@ -8,11 +8,11 @@
 <c:set var="baseUrl" value="/sys/bill/template/" />
 
 <div class="subCon">
-  
+
   <div class="searchBar">
     <a href="javascript:;" class="open">${menuNm}</a>
   </div>
-  
+
   <table class="searchTbl">
     <colgroup>
       <col class="w10" />
@@ -177,6 +177,6 @@
 <script type="text/javascript">
 var printTypeComboData = ${listPrintType};
 var sysStatFgComboData = ${ccu.getCommCode("009")};
-var clsFgComboData = ${ccu.getCommCode("003")};
+var clsFgComboData = ${ccu.getCommCode("001")};
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/sys/bill/template/template.js?ver=20180813" charset="utf-8"></script>

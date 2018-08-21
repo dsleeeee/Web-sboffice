@@ -30,7 +30,7 @@ function showStoreConfigLayout(envstFg){
   param.storeCd     = selectedStore.storeCd;
   param.envstFg     = envstFg;
 
-  var envstGrpCd = ${ccu.getCommCodeExcpAll("048")};
+  var envstGrpCd = ${ccu.getCommCodeExcpAll("004")};
 
   $.postJSON("/store/manage/storeManage/storeManage/getStoreConfigList.sb", param, function(result) {
 

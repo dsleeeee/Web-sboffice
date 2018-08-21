@@ -35,23 +35,23 @@ a, a:active, a:hover {
   <div class="page-header">
     <h3></h3>
   </div>
-  
+
   <div>
-  
+
 <!--   listScale -->
     <div id="listScaleBox"></div>
-  
+
 <!--   공통 코드 콤보박스 -->
     <div id="theComboBox"></div>
-  
+
 <!--   검색어 -->
     <div id="shopCd"></div>
-    
+
 <!--     검색 버튼 -->
     <button id="registBtn" type="button" class="btn btn_dark btn_md" onclick="search(1);">
       search
     </button>
-    
+
 <!--     엑셀 다운로드 -->
     <button id="xlsxBtn" type="button" class="btn btn_dark btn_md" >
       xlsx
@@ -62,12 +62,12 @@ a, a:active, a:hover {
     </button>
 
   </div>
-  
+
   <div class="jumbotron">
-    
+
     <!-- 그리드 -->
     <div id="theGrid"></div>
-    
+
 <!--     페이징1 -->
     <div id="pager">
       <button id="btnFirst" class="btn btn_dark btn_md"><span class="wj-glyph-step-backward"></span></button>
@@ -75,12 +75,12 @@ a, a:active, a:hover {
       &nbsp;&nbsp;&nbsp;<span id="spanCurrent"></span>&nbsp;&nbsp;&nbsp;
       <button id="btnNext" class="btn btn_dark btn_md"><span class="wj-glyph-right"></span></button>
       <button id="btnLast" class="btn btn_dark btn_md"><span class="wj-glyph-step-forward"></span></button>
-    </div> 
+    </div>
 
     <div id="rowData"></div>
 
   </div>
-  
+
   <div id="theGrid2"></div>
   <!--     페이징2 -->
     <!-- <div id="pager2" style="display:none;"> -->
@@ -90,12 +90,12 @@ a, a:active, a:hover {
       &nbsp;&nbsp;&nbsp;<span id="spanCurrent2"></span>&nbsp;&nbsp;&nbsp;
       <button id="btnNext2" class="btn btn_dark btn_md"><span class="wj-glyph-right"></span></button>
       <button id="btnLast2" class="btn btn_dark btn_md"><span class="wj-glyph-step-forward"></span></button>
-    </div> 
-    
+    </div>
+
 </div>
 
 <script>
-$(document).ready(function() { 
+$(document).ready(function() {
 	updateCurrentPage(0, 0);
 	updateCurrentPage2(0, 0);
 	shopCd.text = "C06419";
@@ -145,42 +145,42 @@ grid.formatItem.addHandler(function(s, e) {
 /** 위에서 선언한 rnum 선택 이벤트 **/
 function rowClick(row, col) {
   console.log("grid.rows[row].dataItem : " + JSON.stringify(grid.rows[row].dataItem));
- 
+
   var param = {};
-  
+
   param.shopCd = grid.rows[row].dataItem.shopCd;
   param.saleDate = grid.rows[row].dataItem.saleDate;
   param.posNo = grid.rows[row].dataItem.posNo;
   param.billNo = grid.rows[row].dataItem.billNo;
-  
+
   search2(1, param);
-  /* 
+  /*
   param.curr = index;
-  
+
   $.postJSON("/exGridPageDtlJson.sb", param, function(result)
   {
     var list = result.data.list;
     var page = result.data.page;
-    
-    // 데이터 메칭 
+
+    // 데이터 메칭
     grid2.itemsSource = list;
-    
+
     // 조회껀수
     //listScaleBox.selectedValue = page.listScale;
     // 스크롤 최상단
     grid2.scrollIntoView(0,0);
-    
+
     grid2.autoSizeColumns();
-    
+
     updateCurrentPage(index, page.totalPage);
-    
+
   })
-  // 오류발생 시 
+  // 오류발생 시
   .fail(function()
   {
     alert("Ajax Fail");
   });
-  
+
 	var rowData = grid.rows[row].dataItem;
 	var keys = Object.keys(rowData);
 	var str = "";
@@ -189,7 +189,7 @@ function rowClick(row, col) {
 		str += item;
 	}
 	$("#rowData").text(str);
-	
+
 	 */
 }
 
@@ -198,7 +198,7 @@ function rowClick(row, col) {
 
 /***** combo start *****/
 // 공통코드
-var cdata = ${ccu.getCommCode("004")};
+var cdata = ${ccu.getCommCode("003")};
 var comboBox = wcombo.genCommonBox("#theComboBox", cdata);
 comboBox.selectedIndexChanged.addHandler(function(s, e){
   console.log(s["selectedItem"]["name"] + s["selectedItem"]["value"]);
@@ -260,30 +260,30 @@ function updateCurrentPage2(index, totCnt)
 
 function search(index) {
   var param = {};
-  
+
   param.curr = index;
   param.listScale = listScaleBox.selectedValue;
   param.shopCd = shopCd.text;
-  
+
   searchPage(index, "/exGridPageJson2.sb", param, grid1srchRes);
 }
 
 
 function search2(index, param) {
-  
+
   console.log('search2');
-  
+
   param.curr = index;
   param.listScale = listScaleBox.selectedValue;
   param.shopCd = shopCd.text;
-  
+
   searchPage(index, "/exGridPageDtlJson.sb", param, grid2srchRes);
 }
 
 
 function searchPage(index, url, param, resFun) {
   console.log('searchPage');
-  
+
   $.postJSON( url, param, function(result) {
     return resFun(index, result);
   })
@@ -296,67 +296,67 @@ function grid1srchRes(index, result) {
 
   var list = result.data.list;
   var page = result.data.page;
-  
+
   console.log('grid1srchRes : '+ page);
 
-  // 데이터 메칭 
+  // 데이터 메칭
   grid.itemsSource = list;
-  
+
   // 조회껀수
   listScaleBox.selectedValue = page.listScale;
   // 스크롤 최상단
   grid.scrollIntoView(0,0);
-  
+
   grid.autoSizeColumns();
-  
+
   updateCurrentPage(index, page.totalPage);
 }
 
 function grid2srchRes(index, result) {
   console.log('grid2srchRes');
-  
+
   var list = result.data.list;
   var page = result.data.page;
-  
+
   console.log('grid2srchRes : '+ page);
 
-  // 데이터 메칭 
+  // 데이터 메칭
   grid2.itemsSource = list;
-  
+
   // 조회껀수
   //listScaleBox.selectedValue = page.listScale;
   // 스크롤 최상단
   grid2.scrollIntoView(0,0);
-  
+
   grid2.autoSizeColumns();
-  
+
   updateCurrentPage(index, page.totalPage);
-  
+
  }
 
-/* 
+/*
 function search(index) {
 	var param = {};
-	
+
 	param.curr = index;
 	param.listScale = listScaleBox.selectedValue;
 	param.shopCd = shopCd.text;
-	
+
 	$.postJSON("/exGridPageJson2.sb", param, function(result) {
-		
+
 		var list = result.data.list;
 		var page = result.data.page;
-		
-		// 데이터 메칭 
+
+		// 데이터 메칭
 		grid.itemsSource = list;
-		
+
 		// 조회껀수
 		listScaleBox.selectedValue = page.listScale;
 		// 스크롤 최상단
 		grid.scrollIntoView(0,0);
-		
+
 		grid.autoSizeColumns();
-		
+
 		updateCurrentPage(index, page.totalPage);
 	})
 	.fail(function(){
@@ -366,26 +366,26 @@ function search(index) {
 
 function search2(index) {
   var param = {};
-  
+
   param.curr = index;
   param.listScale = listScaleBox.selectedValue;
   param.shopCd = shopCd.text;
-  
+
   $.postJSON("/exGridPageJson2.sb", param, function(result) {
-    
+
     var list = result.data.list;
     var page = result.data.page;
-    
-    // 데이터 메칭 
+
+    // 데이터 메칭
     grid.itemsSource = list;
-    
+
     // 조회껀수
     listScaleBox.selectedValue = page.listScale;
     // 스크롤 최상단
     grid.scrollIntoView(0,0);
-    
+
     grid.autoSizeColumns();
-    
+
     updateCurrentPage(index, page.totalPage);
   })
   .fail(function(){

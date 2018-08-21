@@ -106,7 +106,7 @@
 
   $(document).ready(function() {
 
-    var useYn             = ${ccu.getCommCode("904")};
+    var useYn             = ${ccu.getCommCode("067")};
     var useYnDataMap      = new wijmo.grid.DataMap(useYn, 'value', 'name');
 
     var srchHqOfficeCd    = wcombo.genInput("#srchHqOfficeCd");

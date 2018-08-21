@@ -172,7 +172,7 @@
 </div>
 
 <script type="text/javascript">
-  var serviceFg = ${ccu.getCommCodeExcpAll("008")};
-  var webUseYn = ${ccu.getCommCodeExcpAll("904")};
+  var serviceFg = ${ccu.getCommCodeExcpAll("007")};
+  var webUseYn = ${ccu.getCommCodeExcpAll("067")};
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/store/manage/pwdManage/pwdManage.js?ver=20180813" charset="utf-8"></script>

@@ -36,7 +36,7 @@ $(document).ready(function() {
     $("#${layerName}Mask, #${layerName}Layer").hide();
     $("#btnSearch").click();
   });
-  
+
   <%-- 정보 저장 --%>
   $("#${layerName}Save").click(function(e){
     _codeGrid.save();
@@ -46,7 +46,7 @@ $(document).ready(function() {
 
 <%-- 레이어 호출 --%>
 function _showCrncyRegistLayer() {
-  
+
   if(isEmpty(_codeGrid)) {
     _codeGrid = new codeGrid('#_codeGrid');
   }
@@ -60,12 +60,12 @@ function _showCrncyRegistLayer() {
 <script>
 //init Grid
 codeGrid = function(div) {
-  
+
   <%-- 사용 여부 --%>
-  var useYn = ${ccu.getCommCodeExcpAll("904")};
+  var useYn = ${ccu.getCommCodeExcpAll("067")};
   var useYnDataMap = new wijmo.grid.DataMap(useYn, 'value', 'name');
 
-  var rdata = 
+  var rdata =
     [
       {binding: "nmcodeNm", header: "<s:message code='ehgt.name' />", width: "*", isReadOnly: true},
       {binding: "nmcodeItem1", header: "<s:message code='ehgt.crncyUnit' />", width: "*", isReadOnly: true},
@@ -74,9 +74,9 @@ codeGrid = function(div) {
     ];
 
   this.grid = wgrid.genGrid(div, rdata, false);
-  
+
   var grid = this.grid;
-  
+
   <%-- 그리드 전체 편집 가능하게, 편집 불가항목은 binding에서 처리 --%>
   grid.isReadOnly = false;
 
@@ -95,7 +95,7 @@ codeGrid.prototype.getData = function() {
 };
 
 codeGrid.prototype.save = function() {
-  
+
   var grid = this.grid;
   var view = grid.collectionView;
 

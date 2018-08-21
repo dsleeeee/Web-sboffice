@@ -59,9 +59,9 @@
 </div>
 
 <script type="text/javascript">
-var useYn        = ${ccu.getCommCodeExcpAll("904")};
-var coupnDcFg    = ${ccu.getCommCodeExcpAll("015")};
-var coupnApplyFg = ${ccu.getCommCodeExcpAll("071")};
+var useYn        = ${ccu.getCommCodeExcpAll("067")};
+var coupnDcFg    = ${ccu.getCommCodeExcpAll("013")};
+var coupnApplyFg = ${ccu.getCommCodeExcpAll("043")};
 var baseUrl      = "${baseUrl}";
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/coupon.js?ver=20180813" charset="utf-8"></script>

@@ -337,12 +337,12 @@ var selectedHq = "";
 var vanList        = ${ccu.getVanList()};
 var agencyList     = ${ccu.getAgencyList()};
 var hqList         = ${ccu.getHqOfficeList()};
-var clsFg          = ${ccu.getCommCodeSelect("003")};
+var clsFg          = ${ccu.getCommCodeSelect("001")};
 var sysStatFg      = ${ccu.getCommCodeSelect("005")};
-var areaCd         = ${ccu.getCommCodeSelect("092")};
+var areaCd         = ${ccu.getCommCodeSelect("061")};
 var cornerUseYn    = ${ccu.getEnvCodeExcpAll("114")};
 var cashBillYn     = ${ccu.getEnvCodeExcpAll("276")};
-var useYn          = ${ccu.getCommCodeExcpAll("904")};
+var useYn          = ${ccu.getCommCodeExcpAll("067")};
 
 <%-- ============================================= 그리드, 위즈모 관련 =========================================== --%>
 

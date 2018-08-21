@@ -119,7 +119,7 @@ function getPosInfo(){
   param.posNo       = $("#sPosNm option:selected").val();
   param.envstFg     = selectedEnvstFg;
 
-  var envstGrpCd = ${ccu.getCommCodeExcpAll("048")};
+  var envstGrpCd = ${ccu.getCommCodeExcpAll("004")};
 
   $.postJSON("/store/manage/storeManage/storeManage/getPosConfigList.sb", param, function(result) {
 

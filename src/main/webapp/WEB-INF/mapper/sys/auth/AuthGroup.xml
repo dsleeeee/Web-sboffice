@@ -206,7 +206,7 @@
             NVL2(B.RESRCE_CD, 1, 0) AUTH_FG,
             (SELECT NMCODE_ITEM_2
                FROM TB_CM_NMCODE
-              WHERE NMCODE_GRP_CD = '086'
+              WHERE NMCODE_GRP_CD = '056'
                 AND NMCODE_ITEM_1 = A.RESRCE_CD) ICON_NM
        FROM (
              SELECT ROWNUM LIST_SEQ,
