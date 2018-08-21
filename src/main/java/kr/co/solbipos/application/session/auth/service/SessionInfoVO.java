@@ -103,10 +103,10 @@ public class SessionInfoVO extends CmmVO {
     private String hqOfficeNm;
     /** 사원번호 */
     private String empNo;
-    /** 최종 로그인 일자 */
-    private String lastLoginDate;
-    /** 마지막으로 패스워드 변경 날짜 */
-    private String lastPwdChg;
+    /** 최종 로그인 일시 */
+    private String lastLoginDt;
+    /** 마지막으로 패스워드 변경일시 */
+    private String lastPwdChgDt;
     /** 로그인 실패 건수 */
     private Long loginFailCnt;
     /** 잠금 코드 */
@@ -345,28 +345,28 @@ public class SessionInfoVO extends CmmVO {
         this.empNo = empNo;
     }
     /**
-     * @return the lastLoginDate
+     * @return the lastLoginDt
      */
-    public String getLastLoginDate() {
-        return lastLoginDate;
+    public String getLastLoginDt() {
+        return lastLoginDt;
     }
     /**
-     * @param lastLoginDate the lastLoginDate to set
+     * @param lastLoginDt the lastLoginDt to set
      */
-    public void setLastLoginDate(String lastLoginDate) {
-        this.lastLoginDate = lastLoginDate;
+    public void setLastLoginDt(String lastLoginDt) {
+        this.lastLoginDt = lastLoginDt;
     }
     /**
-     * @return the lastPwdChg
+     * @return the lastPwdChgDt
      */
-    public String getLastPwdChg() {
-        return lastPwdChg;
+    public String getLastPwdChgDt() {
+        return lastPwdChgDt;
     }
     /**
-     * @param lastPwdChg the lastPwdChg to set
+     * @param lastPwdChgDt the lastPwdChgDt to set
      */
-    public void setLastPwdChg(String lastPwdChg) {
-        this.lastPwdChg = lastPwdChg;
+    public void setLastPwdChgDt(String lastPwdChgDt) {
+        this.lastPwdChgDt = lastPwdChgDt;
     }
     /**
      * @return the loginFailCnt

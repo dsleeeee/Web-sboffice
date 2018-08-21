@@ -45,10 +45,8 @@ public class AuthServiceImpl implements AuthService {
     
     @Autowired
     AuthMapper authMapper;
-
     @Autowired
     SessionService sessionService;
-
     @Autowired
     MessageService messageService;
 
@@ -96,12 +94,12 @@ public class AuthServiceImpl implements AuthService {
         /**
          * 패스워드 초기 변경 인지 체크
          * */
-        if( "0".equals(result.getLastPwdChg()) ) {
+        if( "".equals(result.getLastPwdChgDt()) ) {
             result.setLoginResult(LoginResult.PASSWORD_CHANGE);
             return result;
         }
 
-        int pwdChgDays = Integer.parseInt(addDaysString(result.getLastPwdChg(), BaseEnv.LOGIN_PWD_CHG_DAYS));
+        int pwdChgDays = Integer.parseInt(addDaysString(result.getLastPwdChgDt(), BaseEnv.LOGIN_PWD_CHG_DAYS));
         int currentDay = Integer.parseInt(currentDateString());
 
         /**
@@ -111,6 +109,10 @@ public class AuthServiceImpl implements AuthService {
             result.setLoginResult(LoginResult.PASSWORD_EXPIRE);
             return result;
         }
+
+        // 전부 통과했다면 로그인 정상 판단, 로그인일시 업데이트
+        result.setLastLoginDt(currentDateTimeString());
+        authMapper.updateLoginDt(result);
 
         result.setLoginResult(LoginResult.SUCCESS);
 

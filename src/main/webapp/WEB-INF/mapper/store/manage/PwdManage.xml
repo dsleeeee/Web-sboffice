@@ -113,7 +113,7 @@
                     TB_WB_USER_INFO
                 SET
                     USER_PWD = #{newPassword},
-                    LAST_PWD_CHG_DATE = #{lastPwdChgDate}
+                    LAST_PWD_CHG_DT = #{lastPwdChgDt}
                 WHERE
                     USER_ID = #{userId}
             </when>

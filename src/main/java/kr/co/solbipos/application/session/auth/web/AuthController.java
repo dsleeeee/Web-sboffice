@@ -69,10 +69,11 @@ public class AuthController {
      */
     @RequestMapping(value = "login.sb", method = RequestMethod.GET)
     public String login(String userId, String type, HttpServletRequest request, HttpServletResponse response, Model model) {
+
         if (sessionService.isValidSession(request)) {
             return "redirect:/" + MAIN_PAGE_URL;
         }
-        
+
         model.addAttribute("userId", userId);
         model.addAttribute("type", isEmpty(type) ? "" : type);
         return "login/login:Login";

@@ -54,8 +54,8 @@ public class PwdManageVO extends PageVO {
     private String priorPwd;
     /** 등록IP */
     private String regIp;
-    /** 최종 비밀번호 변경일자 */
-    private String lastPwdChgDate;
+    /** 최종 비밀번호 변경일시 */
+    private String lastPwdChgDt;
     /** 비밀번호 변경구분 */
     private PwdChgFg pwdChgFg;
     
@@ -253,16 +253,16 @@ public class PwdManageVO extends PageVO {
         this.regIp = regIp;
     }
     /**
-     * @return the lastPwdChgDate
+     * @return the lastPwdChgDt
      */
-    public String getLastPwdChgDate() {
-        return lastPwdChgDate;
+    public String getLastPwdChgDt() {
+        return lastPwdChgDt;
     }
     /**
-     * @param lastPwdChgDate the lastPwdChgDate to set
+     * @param lastPwdChgDt the lastPwdChgDt to set
      */
-    public void setLastPwdChgDate(String lastPwdChgDate) {
-        this.lastPwdChgDate = lastPwdChgDate;
+    public void setLastPwdChgDt(String lastPwdChgDt) {
+        this.lastPwdChgDt = lastPwdChgDt;
     }
     /**
      * @return the pwdChgFg

@@ -35,6 +35,9 @@ public interface AuthMapper {
      */
     SessionInfoVO selectWebUser(SessionInfoVO sessionInfoVO);
 
+    /** 로그인 일시 업데이트 */
+    int updateLoginDt(SessionInfoVO sessionInfoVO);
+
     /**
      * 로그인 시도 저장
      *
