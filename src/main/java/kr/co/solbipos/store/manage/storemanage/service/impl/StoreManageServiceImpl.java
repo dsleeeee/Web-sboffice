@@ -133,7 +133,9 @@ public class StoreManageServiceImpl implements StoreManageService{
 
         storeManageVO.setStoreCd(storeCd);
 
-        // 포스 프로그램 구분
+        // 본사의 포스 프로그램 구분
+        // 20180821 환경변수 값 바꾸면서 매장환경으로 변경됨 -> 매장환경설정에서 변경해야하는 값.
+        /*
         String posEnvValue = "";
 
         if(!"00000".equals(storeManageVO.getHqOfficeCd())) { // 프랜차이즈의 경우
@@ -150,6 +152,7 @@ public class StoreManageServiceImpl implements StoreManageService{
         } else {
             posEnvValue = "0";
         }
+        */
 
         // 마스터 관련 ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
@@ -211,7 +214,7 @@ public class StoreManageServiceImpl implements StoreManageService{
                     procCnt += mapper.insertKitchenPrintEnvInfo(storeManageVO);
                 }
 
-                // 상품 복사 ?
+                //TODO 상품 복사
                 if( "product".equals(copyEnv[i]) ) {
 
                 }

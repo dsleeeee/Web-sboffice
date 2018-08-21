@@ -210,6 +210,7 @@
       PARAM    : storeManageVO
       COMMENTS : 본사의 포스프로그램 구분값을 조회한다.
   -->
+  <!--
   <select id="getPosEnvValue" parameterType="storeManageVO" resultType="String">
     /* USE : StoreManageMapper.getPosEnvValue */
       SELECT ENVST_VAL
@@ -217,6 +218,7 @@
        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
          AND ENVST_CD = '100'
   </select>
+  -->
 
   <!-- 신규 매장정보 저장 -->
   <!--
@@ -597,7 +599,7 @@
            #{modId}
       FROM TB_MS_STORE_ENVST
      WHERE STORE_CD = #{copyStoreCd}
-       AND ENVST_CD IN (SELECT ENVST_CD FROM TB_CM_ENVST WHERE ENVST_FG = '1')
+       AND ENVST_CD IN (SELECT ENVST_CD FROM TB_CM_ENVST WHERE ENVST_FG = '00')
        AND ENVST_CD NOT IN (SELECT ENVST_CD FROM TB_MS_STORE_ENVST WHERE STORE_CD = #{storeCd})
   </insert>
 
@@ -632,7 +634,7 @@
            #{modId}
       FROM TB_MS_STORE_ENVST
      WHERE STORE_CD = #{copyStoreCd}
-       AND ENVST_CD IN (SELECT ENVST_CD FROM TB_CM_ENVST WHERE ENVST_FG = '2')
+       AND ENVST_CD IN (SELECT ENVST_CD FROM TB_CM_ENVST WHERE ENVST_FG = '01')
        AND ENVST_CD NOT IN (SELECT ENVST_CD FROM TB_MS_STORE_ENVST WHERE STORE_CD = #{storeCd})
   </insert>
 
@@ -969,7 +971,7 @@
            TB_CM_NMCODE tcn
      WHERE tms.STORE_CD (+)= #{storeCd}
        AND tms.ENVST_CD (+)= tce2.ENVST_CD
-       AND tcn.NMCODE_GRP_CD = '048'
+       AND tcn.NMCODE_GRP_CD = '004'
        AND tcn.NMCODE_CD = tce2.ENVST_GRP_CD
        AND tce3.ENVST_GRP_CD = tce2.ENVST_GRP_CD
      ORDER BY tce2.ENVST_GRP_CD, tce2.ENVST_CD, tce2.ENVST_VAL_CD
@@ -1081,7 +1083,7 @@
      WHERE tms.STORE_CD (+)= #{storeCd}
        AND tms.POS_NO (+)= #{posNo}
        AND tms.ENVST_CD (+)= tce2.ENVST_CD
-       AND tcn.NMCODE_GRP_CD = '048'
+       AND tcn.NMCODE_GRP_CD = '004'
        AND tcn.NMCODE_CD = tce2.ENVST_GRP_CD
        AND tce3.ENVST_GRP_CD = tce2.ENVST_GRP_CD
      ORDER BY tce2.ENVST_GRP_CD, tce2.ENVST_CD, tce2.ENVST_VAL_CD
@@ -1411,12 +1413,12 @@
        AND tpk.POS_NO = #{posNo}
        AND tsf.STORE_CD = tpk.STORE_CD
        AND tsf.FNKEY_NO = tpk.FNKEY_NO
-       AND tpe.ENVST_CD = '202'
+       AND tpe.ENVST_CD = '4019'
        AND tpe.STORE_CD = tpk.STORE_CD
        AND tpe.POS_NO = LPAD(#{targetPosNo}, 2, '0')
-       AND 'T' = DECODE(tpe.ENVST_VAL, '0', DECODE(tsf.POS_FG, '0', 'T', 1, 'F', '2', 'T'),
-                                       '1', DECODE(tsf.POS_FG, '0', 'T', 1, 'F', '2', 'T'),
-                                       '2', 'T')
+       AND 'T' = DECODE(tpe.ENVST_VAL, '00', DECODE(tsf.POS_FG, '0', 'T', 1, 'F', '2', 'T'),
+                                       '01', DECODE(tsf.POS_FG, '0', 'T', 1, 'F', '2', 'T'),
+                                       '02', 'T')
   </insert>
 
   <!-- 포스 설치여부 체크 -->

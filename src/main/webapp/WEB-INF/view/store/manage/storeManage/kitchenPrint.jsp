@@ -25,15 +25,15 @@
 <script>
 
 <%-- 공통코드 --%>
-var prterKind   = ${ccu.getEnvCodeExcpAll("206")};
-var prterPort   = ${ccu.getEnvCodeExcpAll("207")};
-var prterSpeed = ${ccu.getEnvCodeExcpAll("208")};
-var useYn         = ${ccu.getCommCodeExcpAll("067")};
+var prterKind   = ${ccu.getEnvCodeExcpAll("4030")};
+var prterPort   = ${ccu.getEnvCodeExcpAll("4031")};
+var prterSpeed  = ${ccu.getEnvCodeExcpAll("4032")};
+var useYn       = ${ccu.getCommCodeExcpAll("067")};
 
 var posNoDM;
 var prterKindDM   = new wijmo.grid.DataMap(prterKind, 'value', 'name');
 var prterPortDM   = new wijmo.grid.DataMap(prterPort, 'value', 'name');
-var prterSpeedDM = new wijmo.grid.DataMap(prterSpeed, 'value', 'name');
+var prterSpeedDM  = new wijmo.grid.DataMap(prterSpeed, 'value', 'name');
 var useYnDataMap  = new wijmo.grid.DataMap(useYn, 'value', 'name');
 
 <%-- 그리드  설정 --%>

@@ -247,7 +247,6 @@ $("#envLayer #btnSave").click(function(){
 $("#envLayer #btnDefault").click(function(){
 
   var objEnvstCd      = document.getElementsByName("envstCd");
-  var objEnvstNm      = document.getElementsByName("envstNm");
   var objDirctInYn    = document.getElementsByName("dirctInYn");
   var objDefaultCd    = document.getElementsByName("defltYn");
 

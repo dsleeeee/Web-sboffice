@@ -114,7 +114,6 @@ function getPosInfo(){
   var param = {};
 
   param.hqOfficeCd  = selectedStore.hqOfficeCd;
-//  param.hqBrandCd   = selectedStore.hqBrandCd;
   param.storeCd     = selectedStore.storeCd;
   param.posNo       = $("#sPosNm option:selected").val();
   param.envstFg     = selectedEnvstFg;
@@ -122,6 +121,8 @@ function getPosInfo(){
   var envstGrpCd = ${ccu.getCommCodeExcpAll("004")};
 
   $.postJSON("/store/manage/storeManage/storeManage/getPosConfigList.sb", param, function(result) {
+
+    console.log(result)
 
     // 환경설정
     var innerHtml = "";
@@ -167,7 +168,7 @@ function getPosInfo(){
             if(list[j].dirctInYn == "Y"){ // 직접입력
               storeEnvHtml += "    <input type='text' name='posEnvstValCd' id='env" + list[j].envstCd + "' class='sb-input w100'>";
             } else {  // 값 선택
-              storeEnvHtml += "    <select name='posEnvstValCd' id='env" + list[j].envstCd + "'/>";
+              storeEnvHtml += "    <select name='posEnvstValCd' id='env" + list[j].envstCd + "'  class='sb-select w100' />";
             }
 
             storeEnvHtml += "    <input type='hidden' name='posEnvstatus'    value='"+ (list[j].existFg =="N" ? "I":"U") +"'>";
@@ -237,7 +238,8 @@ function getPosInfo(){
         if(list[i].defltYn == "Y") {
           $("#env"+list[i].envstCd).attr("defaultVal", list[i].envstValCd);
         }
-
+      }else {
+        $("#env"+list[i].envstCd).val(list[i].selEnvstVal);
       }
     }
 
@@ -288,6 +290,17 @@ $("#posConfigArea #btnSavePos").click(function(){
     if(posObjOldEnvstVal[i].value != $("#posConfigContent #env"+posObjEnvstCd[i].value).val()) {
       chngCnt ++;
     }
+
+
+    if(posObjDirctInYn[i].value == "Y" && posObjOldEnvstVal[i].value == ""){
+      var msgStr = "<s:message code='hqManage.envSetting' /> "
+                 + " [" + posObjEnvstCd[i].value + "] "+ posObjEnvstNm[i].value
+                 + " <s:message code='hqManage.require.regist.inputEnv' /> ";
+
+      s_alert.pop(msgStr);
+      return;
+    }
+
   }
 
   if(chngCnt == 0 ){

@@ -22,17 +22,17 @@
     <div class="subTab2 mt20 mb10">
       <ul id="envGroupTab">
         <%-- 매장환경 --%>
-        <li><a href="javascript:;" id="storeEnvFg" envstFg="0" class="on"><s:message code="storeManage.storeEnv" /></a></li>
+        <li><a href="javascript:;" id="storeEnvFg" envstFg="00" class="on"><s:message code="storeManage.storeEnv" /></a></li>
         <%-- 외식환경 --%>
-        <li><a href="javascript:;" id="foodEnvFg" envstFg="1"><s:message code="storeManage.foodEnv" /></a></li>
+        <li><a href="javascript:;" id="foodEnvFg" envstFg="01"><s:message code="storeManage.foodEnv" /></a></li>
         <%-- 유통환경  //TODO 추후 추가 -%>
         <%-- <li><a href="javascript:;" id="distributionEnvFg" envstFg="2"><s:message code="storeManage.distributionEnv" /></a></li> --%>
         <%-- 포스환경 --%>
-        <li><a href="javascript:;" id="posEnvFg" envstFg="3"><s:message code="storeManage.posEnv" /></a></li>
+        <li><a href="javascript:;" id="posEnvFg" envstFg="03"><s:message code="storeManage.posEnv" /></a></li>
         <%-- 주방프린터 --%>
-        <li><a href="javascript:;" id="printEnvFg" envstFg="4"><s:message code="storeManage.kitchenPrint" /></a></li>
+        <li><a href="javascript:;" id="printEnvFg" envstFg="98"><s:message code="storeManage.kitchenPrint" /></a></li>
         <%-- 주방프린터 상품연결--%>
-        <li><a href="javascript:;" id="printProductEnvFg" envstFg="5"><s:message code="storeManage.kitchenPrintProduct" /></a></li>
+        <li><a href="javascript:;" id="printProductEnvFg" envstFg="99"><s:message code="storeManage.kitchenPrintProduct" /></a></li>
         <%-- 터치키복사 --%>
         <%-- <li><a href="javascript:;" id="touchkeyEnvFg" envstFg="6"><s:message code="storeManage.copy.touchKey" /></a></li> --%>
       </ul>
@@ -103,28 +103,28 @@ $("#envGroupTab li a").click(function(e){
     }
   });
 
-  if(envstFg == 0 || envstFg == 1 || envstFg == 2) { <%-- 매장환경, 외식환경, 유통환경 --%>
+  if(envstFg == "00" || envstFg == "01" || envstFg == "02") { <%-- 매장환경, 외식환경, 유통환경 --%>
     hidePosConfigLayout();
     hideKitchenPrintLayout();
     hideKitchenPrintProductLayout();
     hideCopyTouchKeyLayout();
     showStoreConfigLayout(envstFg);
   }
-  else if(envstFg == 3) { <%-- 포스환경 --%>
+  else if(envstFg == "03") { <%-- 포스환경 --%>
     hideStoreConfigLayout();
     hideKitchenPrintLayout();
     hideKitchenPrintProductLayout();
     hideCopyTouchKeyLayout();
     showPosConfigLayout(envstFg);
   }
-  else if(envstFg == 4) { <%-- 주방프린터 --%>
+  else if(envstFg == "98") { <%-- 주방프린터 --%>
     hideStoreConfigLayout();
     hidePosConfigLayout();
     hideKitchenPrintProductLayout();
     hideCopyTouchKeyLayout();
     showkitchenPrintLayout();
   }
-  else if(envstFg == 5) { <%-- 주방프린터 상품연결 --%>
+  else if(envstFg == "99") { <%-- 주방프린터 상품연결 --%>
     hideStoreConfigLayout();
     hidePosConfigLayout();
     hideKitchenPrintLayout();

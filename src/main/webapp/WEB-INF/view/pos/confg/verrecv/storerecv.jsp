@@ -125,9 +125,9 @@
   var listScaleBox  = wcombo.genCommonBox("#listScaleBox", ldata);
 
   <%-- 공통코드 --%>
-  var mainYn  = ${ccu.getEnvCodeExcpAll("205")};
-  var posFg   = ${ccu.getEnvCodeExcpAll("101")};
-  var payFg   = ${ccu.getEnvCodeExcpAll("204")};
+  var mainYn  = ${ccu.getEnvCodeExcpAll("4021")};
+  var posFg   = ${ccu.getEnvCodeExcpAll("4020")};
+  var payFg   = ${ccu.getEnvCodeExcpAll("204")};//TODO
 
   console.log(mainYn);
   console.log(posFg);

@@ -116,7 +116,8 @@ public class HqManageServiceImpl implements HqManageService{
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
 
-        // 코드 등록 (본사 코드 마스터)
+        // 코드 등록 (본사 코드 마스터 - TB_HQ_NMCODE)
+        // TB_CM_NMCODE와 별개로 본사에서 사용하는 본사전용코드
         int cmmCodeReg = 0;
 
         HqNmcodeVO nmcodeVO = new HqNmcodeVO();

@@ -54,8 +54,8 @@ public interface StoreManageMapper {
     /** 신규매장 등록을 위한 매장 코드 조회 */
     String getStoreCd(StoreManageVO storeManageVO);
 
-    /** 포스 프로그램 구분 조회 (//TODO 환경값 조회 공통처리 필요) */
-    String getPosEnvValue(StoreManageVO storeManageVO);
+    /** 포스 프로그램 구분 조회 */
+    //String getPosEnvValue(StoreManageVO storeManageVO);
 
     /** 신규 매장정보 저장 */
     int saveStoreInfo(StoreManageVO storeManageVO);

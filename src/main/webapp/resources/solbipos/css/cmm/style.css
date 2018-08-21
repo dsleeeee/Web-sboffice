@@ -13,7 +13,7 @@
  * RESET
  * **************************************** */
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,time,figure,article,main,nav,header,footer,hgroup,video,audio,aside,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,dl,dt,dd,ol,ul,li,fieldset,form,input,label,legend,table,caption,tbody,tfoot,thead,tr,th,td, select, :before, :after, textarea {
-    margin:0; 
+    margin:0;
     padding:0;
     border:0;
     outline:0;
@@ -23,7 +23,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,time,figure,article,
     font-size:16px; /*em : psd의 px기준에서 16으로 나누기*/
     color:#888;
     line-height:1em;
-} 
+}
 ol,ul, li {list-style: none;}
 fieldset, legend, caption {display:none;}
 table {border-collapse:collapse; border-spacing:0;}
@@ -51,7 +51,7 @@ button {outline:none; border:0; font-family:'NotoR', Malgun Gothic, '맑은 고�
    Dark:#ee8418;
    MenuBg:#fff3e7;
    FxBg:#b96209;
-   FxBorder:#83470a; 
+   FxBorder:#83470a;
 
  * 대리점(Blue)
    basic:#1e88e5;
@@ -61,7 +61,7 @@ button {outline:none; border:0; font-family:'NotoR', Malgun Gothic, '맑은 고�
    FxBg:#174291;
    FxBorder:#0d2c67;
 
- * 프랜차이즈본사(Purple) 
+ * 프랜차이즈본사(Purple)
    basic:#ae63ff;
    light:#bf84fe;
    Dark:#8c38e6;
@@ -83,7 +83,7 @@ button {outline:none; border:0; font-family:'NotoR', Malgun Gothic, '맑은 고�
 /* **************************************** *
  * COMMON
  * **************************************** */
-.w4 {width:4%;} .w5 {width:5%;} .w7 {width:7%;} .w8 {width:8%;} .w10 {width:10%;} .w11 {width:11.111111%;} .w15 {width:15%;} .w20 {width:20%;} .w25 {width:25%;} .w28 {width:28%;} .w30 {width:30%;} .w33 {width:33.333333%;} .w35 {width:35%;} .w40 {width:40%;} .w45 {width:45%;} .w50 {width:50%;} .w60 {width:60%;} .w65 {width:65%;} .w70 {width:70%;} .w75 {width:75%;} .w80 {width:80%;} .w85 {width:85%;} .w90 {width:90%;} .w100 {width:100%;} 
+.w4 {width:4%;} .w5 {width:5%;} .w7 {width:7%;} .w8 {width:8%;} .w10 {width:10%;} .w11 {width:11.111111%;} .w15 {width:15%;} .w20 {width:20%;} .w25 {width:25%;} .w28 {width:28%;} .w30 {width:30%;} .w33 {width:33.333333%;} .w35 {width:35%;} .w40 {width:40%;} .w45 {width:45%;} .w50 {width:50%;} .w60 {width:60%;} .w65 {width:65%;} .w70 {width:70%;} .w75 {width:75%;} .w80 {width:80%;} .w85 {width:85%;} .w90 {width:90%;} .w100 {width:100%;}
 
 .w98px {width:98px;} .w105 {width:105px;} .w110 {width:110px;} .w115 {width:115px;} .w120 {width:120px;} .w130 {width:130px;} .w150 {width:150px;} .w180 {width:180px;} .w200 {width:200px;} .w210 {width:210px;} .w300 {width:300px;} w400 {width:400px;} .w500 {width:500px;} .w600 {width:600px;} .w700 {width:700px;} .w800 {width:800px;} .w870 {width:870px;}
 
@@ -93,7 +93,7 @@ button {outline:none; border:0; font-family:'NotoR', Malgun Gothic, '맑은 고�
 
 .s12 {font-size:12px;} .s14 {font-size:14px;} .s16 {font-size:16px;} .s18 {font-size:18px;}
 
-.lh15 {line-height:15px;} .lh20 {line-height:20px;} .lh25 {line-height:25px;} .lh30 {line-height:30px;} 
+.lh15 {line-height:15px;} .lh20 {line-height:20px;} .lh25 {line-height:25px;} .lh30 {line-height:30px;}
 
 .bk {color:#222!important;} .gr {color:#888!important;} .red {color:#f11f09!important;} .blue {color:#2c59ff!important;}
 
@@ -165,10 +165,10 @@ nav.menuOpen .menuTree .theTreeAll.wj-treeview {height:calc(100% - 120px); width
 /*ie용 스크롤 숨기기*/
 nav.menuOpen .menuTree .theTreeAll.wj-treeview {
     scrollbar-arrow-color: #2e333f;
-    scrollbar-Track-Color: #2e333f; 
+    scrollbar-Track-Color: #2e333f;
     scrollbar-base-color: #2e333f;
     scrollbar-Face-Color: #2e333f;
-    scrollbar-3dLight-Color: #2e333f;         
+    scrollbar-3dLight-Color: #2e333f;
     scrollbar-DarkShadow-Color: #2e333f;
     scrollbar-Highlight-Color: #2e333f;
     scrollbar-Shadow-Color: #2e333f;
@@ -180,7 +180,7 @@ nav.menuOpen .menuTree .theTreeAll.wj-treeview {
 /*nav.menuOpen .menuTree .theTreeAll.wj-treeview::-webkit-scrollbar {width:12px; height:12px; }*/
 nav.menuOpen .menuTree .theTreeAll.wj-treeview::-webkit-scrollbar {width:0px; height:12px; }
 
-nav.menuOpen .menuTree .theTreeAll.wj-treeview::-webkit-scrollbar-button:start:decrement, 
+nav.menuOpen .menuTree .theTreeAll.wj-treeview::-webkit-scrollbar-button:start:decrement,
 nav.menuOpen .menuTree .theTreeAll.wj-treeview::-webkit-scrollbar-button:end:increment {display:block; width: 12px;height: 12px; background:#2e333f;}
 nav.menuOpen .menuTree .theTreeAll.wj-treeview::-webkit-scrollbar-track {background: #2e333f;}
 nav.menuOpen .menuTree .theTreeAll.wj-treeview::-webkit-scrollbar-thumb {background: #2e333f;}
@@ -247,19 +247,19 @@ nav.menuClose + .topWrap {position:fixed; width:100%; min-width:964px; padding-l
 
 /*에러메세지*/
 .loginF div {position:relative;}
-.loginF div span.errorMsg {position:absolute; left:20px; top:40px; background:#888; color:#fff; padding:5px 20px; font-size:0.75em; line-height:16px; border-radius:4px; z-index:999;} 
+.loginF div span.errorMsg {position:absolute; left:20px; top:40px; background:#888; color:#fff; padding:5px 20px; font-size:0.75em; line-height:16px; border-radius:4px; z-index:999;}
 .loginF div span.errorMsg:before {content:''; position:absolute; left:20px; top:-4px; display:inline-block; background:url(../img/bg_errorMsg.png) no-repeat; width:7px; height:5px;}
 
 @keyframes chkAni {
   0% {
     width:0px;
-    height:0px; 
+    height:0px;
     opacity:0;
     left:12px; top:8px;
   }
   20% {
     width:25px;
-    height:25px; 
+    height:25px;
     opacity: 0.3;
     left:0px; top:-3px;
   }
@@ -282,7 +282,7 @@ nav.menuClose + .topWrap {position:fixed; width:100%; min-width:964px; padding-l
 .linkArea .find {display:block; overflow:hidden; margin-bottom:60px;}
 .fdId, .fdPw, .login_gray {height:40px; line-height:40px; border:1px solid #dbdbdb; display:inline-block; text-align:center; border-radius:4px; transition:all 0.3s;}
 .login_blue {height:40px; line-height:40px; display:inline-block; text-align:center; background:#1e88e5; border-radius:4px; color:#fff; transition:all 0.3s;}
-.fdId, .login_blue {width:150px; float:left;} 
+.fdId, .login_blue {width:150px; float:left;}
 .fdPw, .login_gray {width:150px;}
 .fdId:hover, .fdPw:hover, .login_gray:hover {background:#dbdbdb; transition:all 0.3s;}
 .login_blue:hover {background:#174291; transition:all 0.3s;}
@@ -450,7 +450,7 @@ nav.menuClose + .topWrap {position:fixed; width:100%; min-width:964px; padding-l
 .menuControl {width:60px; height:100%; position:relative;}
 .menuControl a {display:inline-block; width:100%; height:100%; overflow:hidden; position:relative;}
 .menuControl a.arrowOpen span {display:inline-block; width:29px; height:14px; margin:18px 0 0 16px; background:url(../img/ic_arrowOpen.png) no-repeat;}
-.menuControl a.arrowClose span {display:inline-block; width:29px; height:14px; margin:18px 0 0 16px; background:url(../img/ic_arrowClose.png) no-repeat;} 
+.menuControl a.arrowClose span {display:inline-block; width:29px; height:14px; margin:18px 0 0 16px; background:url(../img/ic_arrowClose.png) no-repeat;}
 .type_Blue .menuControl a:after {content:''; position:absolute; left:-120px; top:-125px; width:300px; height:300px; background:#174291; opacity:0; transition:all 1.5s;}
 .type_Blue .menuControl a:active:after {left:50%; top:50%; width:0px; height:0px; border-radius:50px; opacity:0.5; transition:0s;}
 
@@ -465,7 +465,7 @@ nav.menuClose + .topWrap {position:fixed; width:100%; min-width:964px; padding-l
     animation-fill-mode: both;
 }
 .userLayer p {background:#f3f3f3; padding:15px 30px; border-radius:5px 5px 0 0;}
-.userLayer p span {display:block; font-size:0.875em; line-height:2em; color:#222;} 
+.userLayer p span {display:block; font-size:0.875em; line-height:2em; color:#222;}
 .userLayer p span em {font-size:1em; color:#222;}
 .userLayer li a {font-size:0.875em;}
 .userLayer li {border-bottom:1px solid #f3f3f3;}
@@ -806,6 +806,7 @@ div.commtWrap .btn_skyblue {width:140px; position:absolute; top:0px; right:0px; 
 /*.sb-select.dkbr .wj-content .wj-input-group-btn > .wj-btn {padding-top:5px; border-left:1px solid #ccc;}*/
 .sb-select.dkbr .wj-content .wj-input-group-btn > .wj-btn {padding-top:1px; border-left:1px solid #ccc;}
 
+select.sb-select {display:block!important; border:1px solid #e8e8e8; height:28px!important; line-height:30px; border-radius:0px; font-size:0.85em;} /* 20180821 추가*/
 .sb-select .wj-content {display:block!important; border:1px solid #e8e8e8; height:30px; line-height:30px; border-radius:0px; }
 .sb-select .wj-content .wj-template {height:28px!important;}
 .sb-select .wj-content .wj-btn {height:28px!important; font-size:12px!important; margin-left:-1px; border-color:#e8e8e8!important;}
@@ -854,7 +855,7 @@ div.commtWrap .btn_skyblue {width:140px; position:absolute; top:0px; right:0px; 
 .wijLink {
   color: #2c59ff!important;
   text-decoration:underline;
-  cursor:pointer;    
+  cursor:pointer;
 }
 
 .pageNum {position:relative; width:100%; text-align:center;}
@@ -987,7 +988,7 @@ div.commtWrap .btn_skyblue {width:140px; position:absolute; top:0px; right:0px; 
 .sms textarea {background:#ebf5ff; height:150px; border-radius:5px; margin-top:20px; padding:10px; width:100%; font-size:0.875em; line-height:1.5em; color:#222; resize:none;}
 .sms input {width:100%; margin-top:10px; border:1px solid #93cbfc; border-radius:5px; color:#222; padding:0 10px; line-height:25px; font-size:0.875em;}
 .byte {position:absolute; top:258px;}
-.byte p {font-size:0.75em; color:#222; display:inline-block; width:210px; text-align:center; margin-bottom:20px;} 
+.byte p {font-size:0.75em; color:#222; display:inline-block; width:210px; text-align:center; margin-bottom:20px;}
 .byte p span {font-size:1em; color:#222;}
 .byte .btn {text-align:center;}
 .byte .sb-select {width:210px;}
@@ -1034,7 +1035,7 @@ div.commtWrap .btn_skyblue {width:140px; position:absolute; top:0px; right:0px; 
 .shopSetting2 .btn_int {position:absolute; top:10px; right:15px;}
 .shopSetting2 .btn_int button {width:70px;}
 
-    
+
 .align a {display:inline-block; width:30px; height:30px; background:url(../img/ic_shop_setting.png) #e8e8e8 no-repeat; border-radius:5px;}
 .align a:hover {background:url(../img/ic_shop_setting.png) #c8c8c8 no-repeat;}
 .align a.on {background:url(../img/ic_shop_setting.png) #93cbfc no-repeat;}
@@ -1075,10 +1076,10 @@ a.btn_underline, a.btn_underline:hover, a.btn_underline.on {background-position:
 .h120 {height:120px;} .h180 {height:180px;}
 .touchGroupWrap {width:400px; overflow:hidden; position:relative;}
 .touchGroup {width:1000%; background:url(../img/bg_touchkey.png) repeat;}
-div.h120+.hPo1 {top:60px;} 
+div.h120+.hPo1 {top:60px;}
 div.h180+.hPo1 {top:120px;}
-div.h120+.hPo1+div.touchgoodsWrap+.hPo2 {top:420px;} 
-div.h180+.hPo1+div.touchgoodsWrap+.hPo2 {top:480px;} 
+div.h120+.hPo1+div.touchgoodsWrap+.hPo2 {top:420px;}
+div.h180+.hPo1+div.touchgoodsWrap+.hPo2 {top:480px;}
 p.touchBtn {width:80px; height:60px; background:#fff; position:absolute; right:0px; overflow:hidden; padding:7px 0 0 8px;}
 p.touchBtn a {border:1px solid #93cbfc; background:#ebf5ff; display:inline-block; width:30px; height:46px; font-size:0px; border-radius:5px;}
 p.touchBtn a:hover {background:#93cbfc;}
@@ -1120,13 +1121,13 @@ p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17p
 
 .noTitle .btnSet {padding-top:60px; display:table; margin:0 auto;}
 .title .btnSet {padding-top:40px; display:table; margin:0 auto;}
-.btnSet a {color:#fff; display:inline-block; padding:10px 30px; border-radius:4px; margin:0 5px; transition:all 0.3s;} 
+.btnSet a {color:#fff; display:inline-block; padding:10px 30px; border-radius:4px; margin:0 5px; transition:all 0.3s;}
 .btnSet a:hover {transition:all 0.3s;}
 .btn_blue {background:#1e88e5;} .btn_blue:hover {background:#174291;}
 .btn_gray {background:#aeaeae;} .btn_gray:hover {background:#777;}
 
 /*.title .btnSet2 {}
-.title .btnSet2 a {color:#fff; display:inline-block; padding:7px 20px; border-radius:4px; font-size:0.75em; transition:all 0.3s;} 
+.title .btnSet2 a {color:#fff; display:inline-block; padding:7px 20px; border-radius:4px; font-size:0.75em; transition:all 0.3s;}
 .title .btnSet2 a:hover {transition:all 0.3s;}
 .title .btnSet2 .btn_gray {background:#666;} .title .btnSet2 .btn_gray:hover {background:#444;}*/
 
@@ -1141,14 +1142,14 @@ p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17p
 .tblType01 tbody tr {border-bottom:1px solid #e8e8e8;}
 .tblType01 th {padding:15px;}
 .tblType01 td {padding:7px 10px; font-size:0.75em; color:#888; background:#fff;}
-.tblType01 td input {border:1px solid #e8e8e8; width:100%; height:30px; font-size:1em; padding:0 10px; color:#888;} 
+.tblType01 td input {border:1px solid #e8e8e8; width:100%; height:30px; font-size:1em; padding:0 10px; color:#888;}
 .tblType01 td input:disabled {background:#f6f6f6; border:1px solid #e8e8e8;}
 .tblType01 .impWrap {position:relative; font-size:1em; color:#222;}
 .tblType01 em.imp {color:red; position:absolute; margin:2px 0 0 2px;}
 .tblType01 input[type="checkbox"] {width:18px; height:18px;}
 .tblType01 select {border:1px solid #e8e8e8;  width:100%; height:30px; font-size:1em; color:#888; padding:0 0 0 10px;}
 .tblType01 .msgWrap {position:relative; font-size:1em;}
-.tblType01 span.errorMsg {position:absolute; left:15px; top:25px; background:#888; color:#fff; padding:5px 20px; font-size:1em; line-height:16px; border-radius:4px; z-index:999;} 
+.tblType01 span.errorMsg {position:absolute; left:15px; top:25px; background:#888; color:#fff; padding:5px 20px; font-size:1em; line-height:16px; border-radius:4px; z-index:999;}
 .tblType01 span.errorMsg:before {content:''; position:absolute; left:20px; top:-4px; display:inline-block; background:url(../img/bg_errorMsg.png) no-repeat; width:7px; height:5px;}
 .tblType01 .link {color:#337dde; text-decoration:underline; font-size:12px;}
 .tblType01 .goodsNo {display:inline-block; height:100px; background:RGBA(46,51,63,0.15); color:#fff; line-height:100px; width:100%; text-align:center;}
@@ -1404,7 +1405,7 @@ p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17p
 }
 
 
-.menuOpen .theTreeAll.wj-content {width:220px; overflow:hidden; transition:width 0.2s cubic-bezier(.13, 1.09, .78, 1);} 
+.menuOpen .theTreeAll.wj-content {width:220px; overflow:hidden; transition:width 0.2s cubic-bezier(.13, 1.09, .78, 1);}
 .menuClose .theTreeAll.wj-content {display:inline-block; position:absolute; border:0; padding:0; width:0px; height:0px; opacity:0; transition:width 0s;}
 
 
@@ -1497,7 +1498,7 @@ p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17p
     display:block;
     width:140px;
     padding-left:20px;
-}    
+}
 .theTreeAll.wj-treeview .wj-nodelist .wj-nodelist .wj-nodelist .wj-node span:before {
     content:'';
     position:absolute; top:19px; left:70px;
@@ -1511,8 +1512,8 @@ p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17p
     width:120px;
 }
 
-/* 순서 
-   포스관리, 가맹점괌리, 시스템관리, 기초관리, 매출관리, 회원관리, 수불관리, 정산관리, 부가서비스 
+/* 순서
+   포스관리, 가맹점괌리, 시스템관리, 기초관리, 매출관리, 회원관리, 수불관리, 정산관리, 부가서비스
 */
 .theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_pos > span:before {content:''; position:absolute;left:20px; background:url(../img/menu.png) no-repeat; background-position:-40px 0; width:20px; height:22px;}
 .theTreeAll.wj-treeview > .wj-nodelist > .wj-node.menu_pos.on > span:before {background-position: -40px -110px;}

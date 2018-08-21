@@ -85,9 +85,9 @@
           <div id="listScaleBox" class="w130 fl"></div>
           <div class="fr">
             <%-- 전체펼치기 --%>
-            <button class="btn_skyblue" id="btnExpand"><s:message code="cmm.all.expand" /></button>
+            <%--<button class="btn_skyblue" id="btnExpand"><s:message code="cmm.all.expand" /></button>--%>
             <%-- 전체접기 --%>
-            <button class="btn_skyblue" id="btnFold"><s:message code="cmm.all.fold" /></button>
+            <%--<button class="btn_skyblue" id="btnFold"><s:message code="cmm.all.fold" /></button>--%>
           </div>
         </div>
         <div id="theGrid" style="height:550px;"></div>
@@ -123,6 +123,9 @@ var selectedStore;  <%-- 매장정보 수정시, 선택 매장 --%>
 
 var clsFg             = ${ccu.getCommCodeSelect("001")};
 var sysStatFg         = ${ccu.getCommCodeSelect("005")};
+
+console.log(clsFg)
+console.log(clsFg)
 
 var clsFgDataMap      = new wijmo.grid.DataMap(clsFg, 'value', 'name');
 var sysStatFgDataMap  = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
@@ -231,7 +234,6 @@ function search(index) {
   param.listScale   = listScaleBox.selectedValue;
   param.curr        = index;
 
-  //console.log(param)
 
   $.postJSON("/store/manage/storeManage/storeManage/getStoreList.sb", param, function(result) {
 

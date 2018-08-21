@@ -26,13 +26,14 @@ function showStoreConfigLayout(envstFg){
 
   var param = {};
   param.hqOfficeCd  = selectedStore.hqOfficeCd;
-//  param.hqBrandCd   = selectedStore.hqBrandCd;
   param.storeCd     = selectedStore.storeCd;
   param.envstFg     = envstFg;
 
   var envstGrpCd = ${ccu.getCommCodeExcpAll("004")};
 
   $.postJSON("/store/manage/storeManage/storeManage/getStoreConfigList.sb", param, function(result) {
+
+    console.log(result)
 
     var innerHtml = "";
 
@@ -83,7 +84,7 @@ function showStoreConfigLayout(envstFg){
             if(list[j].dirctInYn == "Y"){ // 직접입력
               storeEnvHtml += "    <input type='text' name='envstValCd' id='env" + list[j].envstCd + "' class='sb-input w100'>";
             } else {  // 값 선택
-              storeEnvHtml += "    <select name='envstValCd' id='env" + list[j].envstCd + "'/>";
+              storeEnvHtml += "    <select name='envstValCd' id='env" + list[j].envstCd + "' class='sb-select w100' />";
             }
 
             storeEnvHtml += "    <input type='hidden' name='status'    value='"+ (list[j].existFg =="N" ? "I":"U") +"'>";
@@ -127,7 +128,6 @@ function showStoreConfigLayout(envstFg){
     var envstCd = "";
     var sOption = false;
 
-
     for(var i=0; i<list.length; i++){
       if(list[i].dirctInYn == "N") {
 
@@ -154,6 +154,8 @@ function showStoreConfigLayout(envstFg){
           $("#env"+list[i].envstCd).attr("defaultVal", list[i].envstValCd);
         }
 
+      } else {
+        $("#env"+list[i].envstCd).val(list[i].selEnvstVal);
       }
     }
 
@@ -195,10 +197,21 @@ $("#storeEnvInfoArea #btnSaveStore").click(function(){
     return;
   }
 
+
   var chngCnt  = 0; // 변경된 건수
   var paramArr = new Array();
 
   for(var i=0; i<objEnvstCd.length; i++){
+
+    if(objDirctInYn[i].value == "Y" && objEnvstValCd[i].value == ""){
+      var msgStr = "<s:message code='hqManage.envSetting' /> "
+                 + " [" + objEnvstCd[i].value + "] "+ objEnvstNm[i].value
+                 + " <s:message code='hqManage.require.regist.inputEnv' /> ";
+
+      s_alert.pop(msgStr);
+      return;
+    }
+
     if(objOldEnvstVal[i].value != $("#env"+objEnvstCd[i].value).val()) {
       chngCnt ++;
     }
@@ -212,7 +225,6 @@ $("#storeEnvInfoArea #btnSaveStore").click(function(){
   for(var i=0; i<objEnvstCd.length; i++){
     var param = {};
     param.hqOfficeCd  = selectedStore.hqOfficeCd;
-//    param.hqBrandCd   = selectedStore.hqBrandCd;
     param.storeCd     = selectedStore.storeCd;
     param.status      = objStatus[i].value;
     param.envstCd     = objEnvstCd[i].value;
@@ -223,8 +235,6 @@ $("#storeEnvInfoArea #btnSaveStore").click(function(){
 
     paramArr.push(param);
   }
-
-  console.log(paramArr);
 
   $.postJSONArray("/store/manage/storeManage/storeManage/saveStoreConfig.sb", paramArr, function(result) {
 
