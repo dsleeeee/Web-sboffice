@@ -128,8 +128,8 @@ $(document).ready(function () {
   function search() {
 
     var param = {};
-    param.prtCd = srchPrtCd.text;
-    param.prtNm = srchPrtNm.text;
+    param.prtCd = srchPrtCd.value;
+    param.prtNm = srchPrtNm.value;
 
     $.postJSON("/sys/bill/item/item/list.sb", param,
       function (result) {

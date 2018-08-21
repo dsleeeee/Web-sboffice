@@ -111,8 +111,8 @@ $(document).ready(function () {
   // 대표명칭 그리드 조회
   function srchRepresent() {
     var param = {};
-    param.envstCd = srchEnvstCd.text;
-    param.envstNm = srchEnvstNm.text;
+    param.envstCd = srchEnvstCd.value;
+    param.envstNm = srchEnvstNm.value;
 
     $.postJSON("/sys/cd/envConfig/envConfig/envst/list.sb", param,
       function (result) {

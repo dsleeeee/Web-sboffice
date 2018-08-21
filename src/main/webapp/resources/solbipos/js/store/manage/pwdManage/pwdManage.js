@@ -86,12 +86,12 @@ $(document).ready(function () {
   //  비밀번호 임의변경 대상 목록 조회
   function search(index) {
     var param = {};
-    param.hqOfficeCd = srchHqOfficeCd.text;
-    param.hqOfficeNm = srchHqOfficeNm.text;
-    param.hqStoreCd = srchStoreCd.text;
-    param.hqStoreNm = srchStoreNm.text;
-    param.userId = srchUserId.text;
-    param.userNm = srchUserNm.text;
+    param.hqOfficeCd = srchHqOfficeCd.value;
+    param.hqOfficeNm = srchHqOfficeNm.value;
+    param.hqStoreCd = srchStoreCd.value;
+    param.hqStoreNm = srchStoreNm.value;
+    param.userId = srchUserId.value;
+    param.userNm = srchUserNm.value;
     param.listScale = listScaleBox.selectedValue;
     param.curr = index;
 

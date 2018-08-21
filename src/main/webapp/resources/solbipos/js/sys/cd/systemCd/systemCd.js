@@ -77,8 +77,8 @@ $(document).ready(function () {
   function srchGridRepresent() {
     var param = {};
     param.nmcodeGrpCd = "000";
-    param.nmcodeCd = srchNmcodeCd.text;
-    param.nmcodeNm = srchNmcodeNm.text;
+    param.nmcodeCd = srchNmcodeCd.value;
+    param.nmcodeNm = srchNmcodeNm.value;
 
     $.postJSON("/sys/cd/systemCd/systemCd/list.sb", param,
       function (result) {
