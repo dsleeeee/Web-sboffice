@@ -5,6 +5,7 @@ import kr.co.common.utils.HttpUtils;
 import kr.co.common.utils.security.EncUtil;
 import kr.co.common.utils.spring.WebUtil;
 import kr.co.solbipos.application.session.user.enums.PwChgResult;
+import kr.co.solbipos.store.manage.pwdmanage.enums.PwdChgFg;
 import kr.co.solbipos.store.manage.pwdmanage.service.PwdManageService;
 import kr.co.solbipos.store.manage.pwdmanage.service.PwdManageVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static kr.co.common.utils.DateUtil.currentDateString;
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
@@ -46,16 +46,28 @@ public class PwdManageServiceImpl implements PwdManageService {
     /** 비밀번호 변경 */
     @Override
     public PwChgResult modifyPwd(PwdManageVO pwdManageVO) {
-        
-        // 기본값 세팅
-        pwdManageVO.setModDt(currentDateTimeString());
-        pwdManageVO.setLastPwdChgDate(currentDateString());
 
-        // 비밀번호 암호화
-        String newPassword = EncUtil.setEncSHA256(pwdManageVO.getUserId() + pwdManageVO.getNewPassword());
         // 기존 비밀번호 조회
-        String oldPassword = pwdManageMapper.getOldPassword(pwdManageVO); 
-        
+        String oldPassword = pwdManageMapper.getOldPassword(pwdManageVO);
+
+        String newPassword = "";
+        // 기본값 세팅
+        // 비밀번호 암호화
+        if ( pwdManageVO.getPwdChgFg() == PwdChgFg.WEB ) {
+            pwdManageVO.setLastPwdChgDt(currentDateTimeString());
+            newPassword = EncUtil.setEncSHA256(pwdManageVO.getUserId() + pwdManageVO.getNewPassword());
+
+            /** 패스워드 정책 체크 */
+            //        if ( !CmmUtil.passwordPolicyCheck(pwdManageVO.getNewPassword())
+            //                || !CmmUtil.passwordPolicyCheck(pwdManageVO.getConfirmPassword()) ) {
+            //            return PwChgResult.PASSWORD_REGEXP;
+            //        }
+
+        } else {
+            pwdManageVO.setModDt(currentDateTimeString());
+            newPassword = EncUtil.setEncSHA256(pwdManageVO.getEmpNo() + pwdManageVO.getNewPassword());
+        }
+
         /** 변경 패스워드가 기존 비밀번호가 같은지 체크 */
         if ( oldPassword.equals(newPassword) ) {
             return PwChgResult.PASSWORD_NEW_OLD_MATH;
@@ -64,11 +76,6 @@ public class PwdManageServiceImpl implements PwdManageService {
         if ( !pwdManageVO.getNewPassword().equals(pwdManageVO.getConfirmPassword()) ) {
             return PwChgResult.NEW_PASSWORD_NOT_MATCH;
         }
-        /** 패스워드 정책 체크 */
-//        if ( !CmmUtil.passwordPolicyCheck(pwdManageVO.getNewPassword())
-//                || !CmmUtil.passwordPolicyCheck(pwdManageVO.getConfirmPassword()) ) {
-//            return PwChgResult.PASSWORD_REGEXP;
-//        }
 
         // 암호화된 비밀번호 Set 후 업데이트
         pwdManageVO.setNewPassword(newPassword);
@@ -84,6 +91,5 @@ public class PwdManageServiceImpl implements PwdManageService {
         
         return PwChgResult.CHECK_OK;
     }
-    
-    
+
 }
