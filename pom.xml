@@ -1,13 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  
+
   <modelVersion>4.0.0</modelVersion>
   <groupId>co.kr.solbipos</groupId>
   <artifactId>sboffice-${env}</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>war</packaging>
-  
+
   <properties>
     <encoding>UTF-8</encoding>
     <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
@@ -18,10 +18,10 @@
     <poi.version>3.10-FINAL</poi.version>
     <war.name>sboffice-${env}</war.name>
     <java.compile>1.8</java.compile>
-    <redis.client>2.9.0</redis.client>    
+    <redis.client>2.9.0</redis.client>
     <jedis.version>1.8.8.RELEASE</jedis.version>
   </properties>
-  
+
   <repositories>
     <repository>
       <id>solbipos-nexus</id>
@@ -34,7 +34,7 @@
       <url>http://192.168.0.85:30015/nexus/content/groups/public/</url>
     </pluginRepository>
   </pluginRepositories>
-   
+
   <dependencies>
     <dependency>
       <groupId>org.hibernate</groupId>
@@ -138,12 +138,12 @@
       <artifactId>validation-api</artifactId>
       <version>1.1.0.Final</version>
     </dependency>
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
 <!--     redis -->
     <dependency>
       <groupId>redis.clients</groupId>
@@ -155,12 +155,12 @@
         <artifactId>spring-data-redis</artifactId>
         <version>${jedis.version}</version>
     </dependency>
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
 <!--     tiles lib -->
     <dependency>
       <groupId>org.apache.tiles</groupId>
@@ -192,9 +192,9 @@
       <artifactId>ojdbc7</artifactId>
       <version>12.1.0.1</version>
     </dependency>
-    
-    
-    
+
+
+
 <!--     jackson lib -->
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
@@ -244,7 +244,7 @@
       <artifactId>aspectjweaver</artifactId>
       <version>1.8.8</version>
     </dependency>
-    
+
 <!--     mxGraph -->
     <dependency>
       <groupId>com.mxgraph</groupId>
@@ -261,27 +261,27 @@
 
 
   </dependencies>
-  
-  
+
+
   <build>
 
     <defaultGoal>install</defaultGoal>
     <finalName>${war.name}</finalName>
     <directory>${basedir}/target</directory>
-    
+
     <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
     <outputDirectory>${basedir}/target/classes</outputDirectory>
-    
+
     <resources>
       <resource>
         <directory>${basedir}/src/main/resources</directory>
         <filtering>true</filtering>
       </resource>
     </resources>
-    
+
     <testSourceDirectory>${basedir}/src/test/java</testSourceDirectory>
     <testOutputDirectory>${basedir}/target/test-classes</testOutputDirectory>
-    
+
     <testResources>
       <testResource>
         <directory>${basedir}/src/test/resources</directory>
@@ -293,7 +293,7 @@
     </testResources>
 
     <plugins>
-    
+
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.3</version>
@@ -303,47 +303,47 @@
           <encoding>${encoding}</encoding>
         </configuration>
       </plugin>
-      
+
       <!-- prifiles + 개발환경 폴더에 포함된 xml 파일을 war 생성시에 config 폴더로 복사한다.(overwrite) -->
       <!-- 개발환경 별로 설정을 다르게 가져 갈수 있음 > logback.xml 등 -->
       <plugin>
         <artifactId>maven-war-plugin</artifactId>
         <version>2.6</version>
         <configuration>
-          <webResources>
           <overwrite>true</overwrite>
+          <webResources>
             <resource>
               <directory>${basedir}/profiles/${env}</directory>
               <targetPath>WEB-INF/config</targetPath>
-              <includes> 
-              </includes> 
-            </resource> 
-          </webResources> 
+              <includes>
+              </includes>
+            </resource>
+          </webResources>
         </configuration>
       </plugin>
-      
+
     </plugins>
-    
+
   </build>
-  
-  
+
+
 <!--   프로파일 설정 : mvn package -P <id> -->
 <!--   각 프로파일별 프로퍼티를 사용할 수 있다  -->
   <profiles>
-    
+
     <!-- 로컬 -->
     <profile>
       <id>local</id>
       <properties>
         <env>local</env>
-      </properties> 
-      
+      </properties>
+
       <activation>
         <activeByDefault>true</activeByDefault>
       </activation>
-      
+
     </profile>
-    
+
     <!-- 개발 -->
     <profile>
       <id>dev</id>
@@ -351,19 +351,19 @@
         <env>dev</env>
       </properties>
     </profile>
-    
+
     <!-- 운영 -->
     <profile>
       <id>realv</id>
-      <properties> 
+      <properties>
         <env>real</env>
       </properties>
     </profile>
-    
+
   </profiles>
-  
-  
-  
+
+
+
 </project>
 
 
