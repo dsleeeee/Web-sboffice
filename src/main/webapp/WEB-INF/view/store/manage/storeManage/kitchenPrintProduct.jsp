@@ -144,18 +144,16 @@ function getPrintList(){
 
   $.postJSON("/store/manage/storeManage/storeManage/getKitchenPrintInfo.sb", param, function(result) {
 
-    if(result.status === "FAIL") {
-      s_alert.pop(result.message);
-      return;
-    }
     var list = result.data.list;
 
     kpProductGrid.itemsSource = new wijmo.collections.CollectionView(list);
     kpProductGrid.itemsSource.trackChanges = true;
-  }
-  ,function(){
-    s_alert.pop("Ajax Fail");
-  });
+  },
+    function (result) {
+      s_alert.pop(result.message);
+      return;
+    }
+  );
 }
 
 <%-- 주방프린터 출력상품 조회 --%>
@@ -169,16 +167,14 @@ function getProductList(){
   productTree2.itemsSource = new wijmo.collections.CollectionView([]);
 
   $.postJSON("/store/manage/storeManage/storeManage/getKitchenPrintProductInfo.sb", param, function(result) {
-    if(result.status === "FAIL") {
+    productTree1.itemsSource = result.data.list.printProductList;
+    productTree2.itemsSource = result.data.list.noPrintProductList;
+  },
+    function (result) {
       s_alert.pop(result.message);
       return;
     }
-    productTree1.itemsSource = result.data.list.printProductList;
-    productTree2.itemsSource = result.data.list.noPrintProductList;
-  }
-  ,function(){
-    s_alert.pop("Ajax Fail");
-  });
+  );
 }
 
 <%-- 삭제버튼 클릭 --%>

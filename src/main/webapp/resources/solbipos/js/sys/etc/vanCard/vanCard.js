@@ -83,10 +83,6 @@ $(document).ready(function () {
 
     $.postJSON("/sys/etc/vanCard/vanCard/van/list.sb", param,
       function (result) {
-        if (result.status === "FAIL") {
-          s_alert.pop(result.message);
-          return;
-        }
 
         // 버튼 Show
         $("#btnAddVan").show();
@@ -104,8 +100,9 @@ $(document).ready(function () {
         }
 
       },
-      function () {
-        s_alert.pop("Ajax Fail");
+      function (result) {
+        s_alert.pop(result.message);
+        return;
       }
     );
   };
@@ -216,10 +213,6 @@ $(document).ready(function () {
 
     $.postJSON("/sys/etc/vanCard/vanCard/card/list.sb", param,
       function (result) {
-        if (result.status === "FAIL") {
-          s_alert.pop(result.message);
-          return;
-        }
         // 버튼 Show
         $("#btnAddCard").show();
         $("#btnDelCard").show();
@@ -236,8 +229,9 @@ $(document).ready(function () {
         }
 
       },
-      function () {
-        s_alert.pop("Ajax Fail");
+      function (result) {
+        s_alert.pop(result.message);
+        return;
       }
     );
   }
@@ -351,10 +345,6 @@ $(document).ready(function () {
         $("#btnDelMapng").show();
         $("#btnSaveMapng").show();
 
-        if (result.status === "FAIL") {
-          s_alert.pop(result.message);
-          return;
-        }
         var list = result.data.list;
         gridMapng.itemsSource = new wijmo.collections.CollectionView(list);
         gridMapng.itemsSource.trackChanges = true;
@@ -368,8 +358,9 @@ $(document).ready(function () {
 
 
       },
-      function () {
-        s_alert.pop("Ajax Fail");
+      function (result) {
+        s_alert.pop(result.message);
+        return;
       }
     );
   };

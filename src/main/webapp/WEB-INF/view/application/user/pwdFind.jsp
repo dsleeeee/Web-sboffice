@@ -68,19 +68,15 @@ genEvent($("#authNumber"), $("#authNumberError"));
     param.authNumber = $("#authNumber").val();
 
     $.postJSON("/user/pwdFind.sb", param, function(result) {
-      console.log(result.status);
-      console.log(result.data);
-
       if(result.status === "OK") {
         document.forms.frm.elements.uuid.value = result.data.uuid;
         document.forms.frm.submit();
       }
-      else if(result.status === "FAIL") {
+    },
+      function(result) {
         processError(result.data);
       }
-    },function() {
-      alert("Ajax Fail");
-    });
+    );
   }
 
 /* 인증번호 받기 */
@@ -90,25 +86,21 @@ genEvent($("#authNumber"), $("#authNumberError"));
     param.empNm = $("#empNm").val();
 
     $.postJSON("/user/sendNum.sb", param, function(result) {
-      console.log(result.status);
-      console.log(result.data);
-		if(result.status === "OK") {
-		  startTimer();
-		  $("#otpBtn").hide();
-		  $("#timer").show();
+      if (result.status === "OK") {
+        startTimer();
+        $("#otpBtn").hide();
+        $("#timer").show();
 
-		  $("#userIdError").hide();
-		  $("#empNmError").hide();
+        $("#userIdError").hide();
+        $("#empNmError").hide();
 
-		  if(result.message != undefined) {
-		    alert(result.message);
-		  }
-		}
-		else if(result.status === "FAIL") {
-		  processError(result.data);
-		}
-    },function() {
-      alert("Ajax Fail");
+        if (result.message != undefined) {
+          alert(result.message);
+        }
+      }
+    },
+      function(result) {
+        processError(result.data);
     });
   }
 

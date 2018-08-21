@@ -1,21 +1,16 @@
 package kr.co.common.utils.security;
 
-import static org.springframework.util.StringUtils.*;
+import kr.co.common.utils.spring.StringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import kr.co.common.utils.spring.StringUtil;
 
 public class EncUtil {
-    
-    private final static Logger LOGGER = LoggerFactory.getLogger(EncUtil.class);
-    
-    private static String PASSWORD_REGEX =
-            "^(?=.*[a-z]+)(?=.*[A-Z]+)(?=.*\\d+)(?=.*[^\\w\\sㄱ-ㅎㅏ-ㅣ가-힣]).{8,}$";
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EncUtil.class);
     public static final String SHA2_ALGORITHM_NAME = "SHA-256";
 
     public static String encrypt(String str) {
@@ -39,7 +34,7 @@ public class EncUtil {
     }
 
     static String eXtaHEX[] =
-            {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"};
+        {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"};
 
     public static String byteToHex(byte[] baHex) {
         StringBuffer stringbuffer = new StringBuffer();
@@ -73,7 +68,7 @@ public class EncUtil {
         byte[] ditarr = null;
         try {
             md = MessageDigest.getInstance(_type);
-            if ( "".equals(_charSet) ) {
+            if ("".equals(_charSet)) {
                 md.update(_msg.getBytes());
             } else {
                 md.update(_msg.getBytes(_charSet));
@@ -86,29 +81,44 @@ public class EncUtil {
     }
 
     /**
-     * <pre>
-     * 패스워드 정책 체크
-     * </pre>
-     * 
-     * @param password
-     * @return
+     *
+     * 데이터를 SHA-256 암호화 한다.
+     *
+     * @param value
+     * @return String
+     * @throws Exception
+     * @comment
+     * @author 노현수
+     * @since 2018. 06. 08.
      */
-    public static boolean passwordPolicyCheck(String password) {
-        if (isEmpty(password)) {
-            LOGGER.warn("password-policy check password null. password:{}", password);
-            return false;
+    public static String setEncSHA256(String value) {
+
+        try {
+
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            md.update(value.getBytes());
+
+            byte byteData[] = md.digest();
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < byteData.length; i++) {
+                sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+            }
+
+            StringBuffer hexString = new StringBuffer();
+            String hex = null;
+            for (int i = 0; i < byteData.length; i++) {
+                hex = Integer.toHexString(0xff & byteData[i]);
+                if (hex.length() == 1) {
+                    hexString.append('0');
+                }
+                hexString.append(hex);
+            }
+
+            return hexString.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            LOGGER.error("[EncUtil::setEncSHA256::NoSuchAlgorithmException] : " + e.getMessage());
+            throw new RuntimeException();
         }
-
-        // 비밀번호 8자리 이상, 비밀번호는 영문 대문자, 영문 소문자, 숫자, 특수기호 모두가 포함되어야 합니다.
-        Pattern pattern = Pattern.compile(PASSWORD_REGEX);
-
-        Matcher m = pattern.matcher(password);
-
-        if (m.find()) {
-            return true;
-        }
-
-        LOGGER.info("password policy check false");
-        return false;
     }
 }

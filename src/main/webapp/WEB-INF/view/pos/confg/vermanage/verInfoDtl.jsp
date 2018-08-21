@@ -346,18 +346,15 @@
 
       s_alert.popConf(msg, function(){
         $.postJSON("/pos/confg/verManage/verInfo/remove.sb", param, function(result) {
-          if(result.status === "FAIL") {
-            s_alert.pop(result.message);
-            return;
-          }
           var msg2 = "<s:message code='cmm.deleteSucc'/>";
           s_alert.popOk(msg2, function() {
             closeVerInfoLayer();
             search(1);
           });
-        }
-        ,function(){
-          s_alert.pop("Ajax Fail");
+        },
+          function(result) {
+            s_alert.pop(result.message);
+            return;
         });
       });
     });
@@ -382,24 +379,17 @@
 
       var param = obj;
       $.postJSON("/pos/confg/verManage/verInfo/dtlInfo.sb", param, function(result) {
-        if(result.status === "FAIL") {
+        showVerInfoDtlEditLayer(result.data);
+      },
+        function (result) {
           s_alert.pop(result.message);
           return;
-        }
-        showVerInfoDtlEditLayer(result.data);
-      }
-      ,function(){
-        s_alert.pop("Ajax Fail");
       });
     }
 
     <%-- 적용매장  조회 --%>
     function searchVerStore(obj){
       $.postJSON("/pos/confg/verManage/applcStore/list.sb", obj, function(result) {
-        if(result.status === "FAIL") {
-          s_alert.pop(result.message);
-          return;
-        }
         var list = result.data.list;
         grid2.itemsSource = new wijmo.collections.CollectionView(list);
         grid2.itemsSource.trackChanges = true;
@@ -410,10 +400,12 @@
           return;
         }
         */
-      }
-      ,function(){
-        s_alert.pop("Ajax Fail");
-      });
+      },
+        function (result) {
+          s_alert.pop(result.message);
+          return;
+        }
+      );
     }
 
     <%-- 파일 업로드시, 파일 사이즈 --%>
@@ -452,10 +444,6 @@
       formData.append("useYn", useYnCombo.selectedValue);
 
       $.postJSONFile(sendUrl, formData, function(result) {
-       if(result.status === "FAIL") {
-          s_alert.pop(result.message);
-          return;
-        }
 
         s_alert.pop("<s:message code='cmm.saveSucc'/>");
 
@@ -463,10 +451,12 @@
         $("#viewBtnArea").hide();
         $("#verInfoEditArea").show();
         $("#editBtnArea").show();
-      }
-      ,function(){
-        s_alert.pop("Ajax Fail");
-      });
+      },
+        function (result) {
+          s_alert.pop(result.message);
+          return;
+        }
+      );
       return false;
     }
 

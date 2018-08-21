@@ -226,9 +226,6 @@
       },
       function(result){
         s_alert.pop(result.message);
-      }
-      ,function(){
-        s_alert.pop("Ajax Fail");
       });
     }
 

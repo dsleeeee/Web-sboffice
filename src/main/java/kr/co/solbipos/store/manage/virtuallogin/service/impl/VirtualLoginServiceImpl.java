@@ -1,8 +1,5 @@
 package kr.co.solbipos.store.manage.virtuallogin.service.impl;
 
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.utils.DateUtil;
 import kr.co.solbipos.application.session.auth.enums.LoginOrigin;
@@ -11,6 +8,10 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.auth.service.impl.AuthMapper;
 import kr.co.solbipos.store.manage.virtuallogin.service.VirtualLoginService;
 import kr.co.solbipos.store.manage.virtuallogin.service.VirtualLoginVO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @Class Name : VirtualLoginServiceImpl.java
@@ -55,14 +56,14 @@ public class VirtualLoginServiceImpl implements VirtualLoginService {
         // 로그인 히스토리 생성
         LoginHistVO loginHistVO = new LoginHistVO();
         // 로그인 결과
-        loginHistVO.setStatCd(sessionInfoVO.getLoginResult());
         loginHistVO.setUserId(sessionInfoVO.getUserId());
+        loginHistVO.setStatCd(sessionInfoVO.getLoginResult());
         loginHistVO.setLoginOrgn(LoginOrigin.VIR);
         loginHistVO.setBrwsrInfo(sessionInfoVO.getBrwsrInfo());
         loginHistVO.setLoginIp(sessionInfoVO.getLoginIp());
         loginHistVO.setLoginDate(DateUtil.currentDateString());
         loginHistVO.setLoginDt(DateUtil.currentDateString());
-        
+
         return authMapper.insertLoginHist(loginHistVO);
     }
     

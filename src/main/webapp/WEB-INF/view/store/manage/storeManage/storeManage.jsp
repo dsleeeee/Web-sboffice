@@ -235,11 +235,6 @@ function search(index) {
 
   $.postJSON("/store/manage/storeManage/storeManage/getStoreList.sb", param, function(result) {
 
-    if(result.status === "FAIL") {
-      s_alert.pop(result.message);
-      return;
-    }
-
     var list = result.data.list;
 
     console.log(list);
@@ -296,10 +291,12 @@ function search(index) {
     $("#noDataArea").show();
     $("#storeInfoViewArea").hide();
     $("#storeEnvInfoArea").hide();
-  }
-  ,function(){
-    s_alert.pop("Ajax Fail");
-  });
+  },
+    function (result) {
+      s_alert.pop(result.message);
+      return;
+    }
+  );
 }
 
   <%-- 매장 선택시, 상세 정보 조회 --%>

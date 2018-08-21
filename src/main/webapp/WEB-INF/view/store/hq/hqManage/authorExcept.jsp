@@ -246,10 +246,12 @@ var authCombo;
         s_alert.pop("<s:message code='cmm.copySucc' />");
         openAuthLayer();
       }
-    }
-    ,function(){
-      s_alert.pop("Ajax Fail");
-    });
+    },
+      function (result) {
+        s_alert.pop(result.message);
+        return;
+      }
+    );
   });
 
   <%-- 추가 버튼 클릭 --%>
@@ -278,10 +280,12 @@ var authCombo;
         s_alert.pop("<s:message code='cmm.saveSucc' />");
         openAuthLayer();
       }
-    }
-    ,function(){
-      s_alert.pop("Ajax Fail");
-    });
+    },
+      function (result) {
+        s_alert.pop(result.message);
+        return;
+      }
+    );
 
   });
 
@@ -310,10 +314,12 @@ var authCombo;
         s_alert.pop("<s:message code='cmm.delSucc' />");
         openAuthLayer();
       }
-    }
-    ,function(){
-      s_alert.pop("Ajax Fail");
-    });
+    },
+      function (result) {
+        s_alert.pop(result.message);
+        return;
+      }
+    );
   });
 
   <%-- 권한 팝업 열기 --%>
@@ -328,18 +334,16 @@ var authCombo;
 
     $.postJSON("/store/hq/hqManage/authorExcept/getAuthHqList.sb", param, function(result) {
       console.log(result);
-      if(result.status === "FAIL") {
-        s_alert.pop(result.message);
-        return;
-      }
 
       authCombo.itemsSource = result.data.authHqList;
       avlblMenuGrid.itemsSource = result.data.avlblMenu;
       beUseMenuGrid.itemsSource = result.data.beUseMenu;
-    }
-    ,function(){
-      s_alert.pop("Ajax Fail");
-    });
+    },
+      function (result) {
+        s_alert.pop(result.message);
+        return;
+      }
+    );
   }
 
   <%-- 모바일 메뉴 클릭--%>

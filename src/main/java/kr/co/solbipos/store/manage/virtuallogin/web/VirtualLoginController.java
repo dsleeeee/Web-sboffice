@@ -1,23 +1,5 @@
 package kr.co.solbipos.store.manage.virtuallogin.web;
 
-import static kr.co.common.utils.HttpUtils.getClientIp;
-import static kr.co.common.utils.spring.StringUtil.convertToJson;
-import static kr.co.common.utils.spring.StringUtil.generateUUID;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.util.StopWatch;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
@@ -32,6 +14,26 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.store.manage.virtuallogin.service.VirtualLoginService;
 import kr.co.solbipos.store.manage.virtuallogin.service.VirtualLoginVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.StopWatch;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
+
+import static kr.co.common.utils.HttpUtils.getClientIp;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
+import static kr.co.common.utils.spring.StringUtil.generateUUID;
 
 /**
  * @Class Name : VirtualLoginController.java
@@ -96,6 +98,9 @@ public class VirtualLoginController {
     public Result getVirtualLoginList(HttpServletRequest request, HttpServletResponse response,
             VirtualLoginVO virtualLoginVO, Model model) {
 
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+        virtualLoginVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+
         List<DefaultMap<String>> list = virtualLoginService.getVirtualLoginList(virtualLoginVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, virtualLoginVO);
@@ -130,14 +135,15 @@ public class VirtualLoginController {
             LOGGER.info("가상로그인 시작 : {} ", sessionInfoVO.getUserId());
             
             sessionInfoVO = new SessionInfoVO();
-            sessionInfoVO.setLoginResult(LoginResult.SUCCESS);
             sessionInfoVO.setLoginIp(getClientIp(request));
             sessionInfoVO.setBrwsrInfo(request.getHeader("User-Agent"));
             // 사용자ID를 가상로그인ID로 설정
             sessionInfoVO.setUserId(BaseEnv.VIRTUAL_LOGIN_ID);
             sessionInfoVO.setvUserId(BaseEnv.VIRTUAL_LOGIN_ID);
-            // userId 로 사용자 조회
+            // userId 로 사용자 조회 ( sessionInfoVO 값 Override 주의 )
             sessionInfoVO = authService.selectWebUser(sessionInfoVO);
+            // 가상로그인은 로그인 상태 정상으로 판단
+            sessionInfoVO.setLoginResult(LoginResult.SUCCESS);
             // sessionId 세팅
             sessionInfoVO.setSessionId( generateUUID() );
             // 권한 있는 메뉴 저장
@@ -189,7 +195,7 @@ public class VirtualLoginController {
      * 가상로그인 - 로그인 종료
      * @param   request
      * @param   response
-     * @param   redirectAttributes
+     * @param   virtualLoginVO
      * @return  Result
      * @author  노현수
      * @since   2018. 06. 08.

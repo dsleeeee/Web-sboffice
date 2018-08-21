@@ -34,38 +34,57 @@ $(document).ready(function () {
       {binding: "agencyNm", header: messages["virtualLogin.agencyNm"], width: "*"},
       {binding: "cmUserId", header: messages["virtualLogin.cmUserId"], visible: false, width: "*"},
       {binding: "sysOpenDate", header: messages["virtualLogin.sysOpenDate"], width: "*"},
-      {binding: "sysClosureDate", header: messages["virtualLogin.sysClosureDate"], width: "*"}
+      {binding: "sysClosureDate", header: messages["virtualLogin.sysClosureDate"], width: "*"},
+      {binding: "orgnFg", header: messages["virtualLogin.orgnFg"], visible: false, width: "*"}
     ];
   var grid = wgrid.genGrid("#theGrid", gridData);
   var listScaleBox = wcombo.genCommonBox("#listScaleBox", listScaleBoxData);
 
   // 그리드 포맷
   grid.formatItem.addHandler(function (s, e) {
-    if (e.panel == s.cells) {
+    if (e.panel === s.cells) {
       var col = s.columns[e.col];
       var item = s.rows[e.row].dataItem;
-      if (col.binding == "hqOfficeCd" && item.hqOfficeCd != "00000") {
-        wijmo.addClass(e.cell, 'wijLink wj-custom-readonly');
+      // 본사
+      if (col.binding === "hqOfficeCd" && item.hqOfficeCd !== "00000") {
+        if ( item.orgnFg === "M" ) {
+          wijmo.addClass(e.cell, 'wijLink wj-custom-readonly');
+        }
       }
-      if (col.binding == "storeCd" && item.storeCd != "00000") {
-        wijmo.addClass(e.cell, 'wijLink wj-custom-readonly');
+      // 매장
+      if (col.binding === "storeCd" && item.storeCd !== "00000") {
+        if ( item.orgnFg !== "S" ) {
+          wijmo.addClass(e.cell, 'wijLink wj-custom-readonly');
+        }
       }
-      if (col.binding == "agencyNm") {
-        wijmo.addClass(e.cell, 'wijLink wj-custom-readonly');
+      // 대리점
+      if (col.binding === "agencyNm") {
+        if ( item.orgnFg === "M" ) {
+          wijmo.addClass(e.cell, 'wijLink wj-custom-readonly');
+        }
       }
     }
   });
 
   // 그리드 선택 이벤트
-  grid.selectionChanged.addHandler(function (s, e) {
-    var col = s.columns[e.col];
-    var selectedRow = grid.rows[e.row].dataItem;
-    if (col.binding === "hqOfficeCd" && selectedRow.hqOfficeCd != "00000") {
-      vLoginProcess(selectedRow.hqUserId);
-    } else if (col.binding == "storeCd" && selectedRow.storeCd != "00000") {
-      vLoginProcess(selectedRow.msUserId);
-    } else if (col.binding == "agencyNm") {
-      vLoginProcess(selectedRow.cmUserId);
+  grid.addEventListener(grid.hostElement, 'click', function(e) {
+    var ht = grid.hitTest(e);
+    if( ht.cellType === wijmo.grid.CellType.Cell) {
+      var col = ht.panel.columns[ht.col];
+      var selectedRow = grid.rows[ht.row].dataItem;
+      if (col.binding === "hqOfficeCd" && selectedRow.hqOfficeCd !== "00000") {
+        if ( item.orgnFg === "M" ) {
+          vLoginProcess(selectedRow.hqUserId);
+        }
+      } else if (col.binding === "storeCd" && selectedRow.storeCd !== "00000") {
+        if ( item.orgnFg !== "S" ) {
+          vLoginProcess(selectedRow.msUserId);
+        }
+      } else if (col.binding === "agencyNm") {
+        if ( item.orgnFg === "M" ) {
+          vLoginProcess(selectedRow.cmUserId);
+        }
+      }
     }
   });
 
@@ -94,27 +113,26 @@ $(document).ready(function () {
 
     $.postJSON("/store/manage/virtualLogin/virtualLogin/list.sb", param,
       function (result) {
-        if (result.status === "FAIL") {
-          s_alert.pop(result.message);
-          return;
-        }
+
         var list = result.data.list;
         grid.itemsSource = new wijmo.collections.CollectionView(list);
 
         page.make("#page", result.data.page.curr, result.data.page.totalPage);
-        if (list.length === undefined || list.length == 0) {
+        if (list.length === undefined || list.length === 0) {
           grid.itemsSource = new wijmo.collections.CollectionView([]);
           s_alert.pop(result.message);
           return;
         }
       },
-      function () {
-        s_alert.pop("Ajax Fail");
+      function (result) {
+        s_alert.pop(result.message);
+        return;
       }
-    )
+    );
   };
 
   // 가상로그인 수행
+  // 최초 가상로그인으로 로그인시에는 vLoginId 가 아닌 vUserId 파라미터로 로그인 후 vLoginId로 사용한다.
   function vLoginProcess(value) {
 
     if (isEmpty(value)) {
@@ -145,15 +163,13 @@ $(document).ready(function () {
           param.vUserId = value;
           $.postJSON("/store/manage/virtualLogin/virtualLogin/vLogout.sb", param,
             function (result) {
-              if (result.status === "FAIL") {
-                s_alert.pop(result.message);
-                return;
-              }
+
             },
-            function () {
-              s_alert.pop("Ajax Fail");
+            function (result) {
+              s_alert.pop(result.message);
+              return;
             }
-          )
+          );
         }
       }, 250);
       form.submit();

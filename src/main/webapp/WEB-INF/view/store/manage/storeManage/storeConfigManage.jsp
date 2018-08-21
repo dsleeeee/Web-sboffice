@@ -82,16 +82,13 @@ function openEnvLayer(){
 
   <%-- 포스목록 조회 --%>
   $.postJSON("/store/manage/storeManage/storeManage/getPosList.sb", param, function(result) {
-
-    if(result.status === "FAIL") {
+    posList = result.data.list.posList;
+  },
+    function (result) {
       s_alert.pop(result.message);
       return;
     }
-    posList = result.data.list.posList;
-  }
-  ,function(){
-    s_alert.pop("Ajax Fail");
-  });
+  );
 }
 
 <%-- 매장환경 서브 탭 클릭시 --%>

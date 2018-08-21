@@ -82,7 +82,7 @@ public class AuthController {
       * <pre>
       * 사용자 웹 로그인
       * </pre>
-      * @param sessionInfoVO
+      * @param params
       * @param bindingResult
       * @param request
       * @param response
@@ -90,29 +90,29 @@ public class AuthController {
       * @return
       */
     @RequestMapping(value = "login.sb", method = RequestMethod.POST)
-    public String loginProcess(@Validated(Login.class) SessionInfoVO sessionInfoVO,
+    public String loginProcess(@Validated(Login.class) SessionInfoVO params,
             BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response,
             Model model) {
 
         StopWatch sw = new StopWatch();
         sw.start();
 
-        LOGGER.info("login start : {} ", sessionInfoVO.getUserId());
+        LOGGER.info("login start : {} ", params.getUserId());
 
         if (bindingResult.hasErrors()) {
             return "login/login:Login";
         }
 
         // 아이디 저장 쿠키 처리
-        WebUtil.setCookie(BaseEnv.LOGIN_CHECK_ID_SAVE, sessionInfoVO.getUserId(), sessionInfoVO.isChk() ? -1 : 0);
+        WebUtil.setCookie(BaseEnv.LOGIN_CHECK_ID_SAVE, params.getUserId(), params.isChk() ? -1 : 0);
 
-        sessionInfoVO.setLoginIp(getClientIp(request));
-        sessionInfoVO.setBrwsrInfo(request.getHeader("User-Agent"));
+        params.setLoginIp(getClientIp(request));
+        params.setBrwsrInfo(request.getHeader("User-Agent"));
 
         // 로그인 시도
-        SessionInfoVO si = authService.login(sessionInfoVO);
-
-        LoginResult code = si.getLoginResult();
+        SessionInfoVO result = authService.login(params);
+        // 로그인 결과값
+        LoginResult code = result.getLoginResult();
 
         /**
          * TODO 로그인 시도 결과로 이동 경로<br>
@@ -121,7 +121,6 @@ public class AuthController {
          * 2-1. 메세지와 함께 로그인 페이지로 이동<br>
          * 2-2. 패스워드 변경 페이지로 이동<br>
          */
-
         String returnUrl = MAIN_PAGE_URL;
 
         // 로그인 성공
@@ -129,32 +128,31 @@ public class AuthController {
             // 메인 페이지
             returnUrl = MAIN_PAGE_URL;
             // 세션 생성
-            sessionService.setSessionInfo(request, response, si);
+            sessionService.setSessionInfo(request, response, result);
         } else if (code == LoginResult.NOT_EXISTS_ID || code == LoginResult.PASSWORD_ERROR) {
             // 다시 로그인 페이지로 이동
-            returnUrl = "/auth/login.sb?userId=" + si.getUserId();
+            returnUrl = "/auth/login.sb?userId=" + result.getUserId();
             throw new AuthenticationException(messageService.get("login.idpw.fail"), returnUrl);
         } else if (code == LoginResult.LOCK) {
             // 잠금상태의 유져
-            returnUrl = "/auth/login.sb?userId=" + si.getUserId();
+            returnUrl = "/auth/login.sb?userId=" + result.getUserId();
             throw new AuthenticationException(messageService.get("login.pw.find.lock.user"), returnUrl);
         } else if (code == LoginResult.PASSWORD_CHANGE) {
-
             // 패스워드 변경 레이어 팝업
             // 초기 비밀번호 입니다. 비밀번호 변경이 필요합니다.
-            returnUrl = "/auth/login.sb?userId=" + si.getUserId() + "&type=pwChg";
+            returnUrl = "/auth/login.sb?userId=" + result.getUserId() + "&type=pwChg";
             throw new AuthenticationException(messageService.get("login.pwd.chg"), returnUrl);
         }
         else if(code == LoginResult.PASSWORD_EXPIRE) {
             // 비밀번호 변경 및 연장이 필요합니다.
-            returnUrl = "/auth/login.sb?userId=" + si.getUserId() + "&type=pwExpire";
+            returnUrl = "/auth/login.sb?userId=" + result.getUserId() + "&type=pwExpire";
             throw new AuthenticationException(messageService.get("login.pwd.expire"), returnUrl);
         }
         // 로그인 실패
         else {
             sw.stop();
             LOGGER.error("로그인 실패 처리 시간 : {}", sw.getTotalTimeSeconds());
-            returnUrl = "auth/login.sb?userId=" + si.getUserId();
+            returnUrl = "auth/login.sb?userId=" + result.getUserId();
             // 실패 처리
             throw new AuthenticationException(messageService.get("login.fail"), returnUrl);
         }
@@ -163,7 +161,6 @@ public class AuthController {
          * try { Thread.sleep(3000); } catch (InterruptedException e) { // TODO Auto-generated catch
          * block e.printStackTrace(); }
          */
-
         sw.stop();
         LOGGER.error("로그인 성공 처리 시간 : {}", sw.getTotalTimeSeconds());
 

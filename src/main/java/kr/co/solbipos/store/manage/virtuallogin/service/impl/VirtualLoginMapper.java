@@ -1,9 +1,11 @@
 package kr.co.solbipos.store.manage.virtuallogin.service.impl;
 
-import java.util.List;
-import org.apache.ibatis.annotations.Mapper;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.store.manage.virtuallogin.service.VirtualLoginVO;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @Class Name : VirtualLoginMapper.java
@@ -22,6 +24,7 @@ import kr.co.solbipos.store.manage.virtuallogin.service.VirtualLoginVO;
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Mapper
+@Repository
 public interface VirtualLoginMapper {
 
     /** 가상로그인 목록 조회 */

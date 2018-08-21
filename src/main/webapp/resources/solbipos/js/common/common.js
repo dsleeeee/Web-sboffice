@@ -86,6 +86,8 @@
         popup.focus();
       }
     }
+    // succ 펑션, fail 펑션 각각 개별적으로 움직인다.
+    // 실제 HTTP Request 오류(통신오류)는 .fail 부분의 함수 수행
     , postJSON: function( url, data, succ, fail ){
       return $.ajax({
         type: "POST",
@@ -125,7 +127,7 @@
         }
       })
       .fail(function(){
-        s_alert.pop("Ajax Fail");
+        s_alert.pop("Ajax Fail By HTTP Request");
       });
 //      return $.post( url, data, func, "json" );
     }
@@ -169,7 +171,7 @@
         }
       })
       .fail(function(){
-        s_alert.pop("Ajax Fail");
+        s_alert.pop("Ajax Fail By HTTP Request");
       });
 //      return $.post( url, data, func, "json" );
     }
@@ -214,7 +216,7 @@
         }
       })
       .fail(function(){
-        s_alert.pop("Ajax Fail");
+        s_alert.pop("Ajax Fail By HTTP Request");
       });
 //      return $.post( url, data, func, "json" );
     }
@@ -267,7 +269,7 @@
           alert("error");
         }
       },function(){
-        s_alert.pop("Ajax Fail");
+        s_alert.pop("Ajax Fail By HTTP Request");
       });
 //      return $.post( url, data, func, "json" );
 
@@ -350,8 +352,9 @@ function makeTree(div, data, initMenu) {
     // URL 이 있을 경우 페이지 이동
     if(!isEmpty(s.selectedNode.dataItem.url)) {
       location.href = s.selectedNode.dataItem.url;
-      if ( !isEmpty(s.selectedNode.dataItem.vloginId) ) {
-        location.href = s.selectedNode.dataItem.url + "?vLoginId=" + s.selectedNode.dataItem.vloginId ;
+      // 가상로그인ID 파라미터 설정
+      if ( !isEmpty(s.selectedNode.dataItem.vLoginId) ) {
+        location.href = s.selectedNode.dataItem.url + "?vLoginId=" + s.selectedNode.dataItem.vLoginId ;
       }
     }
     // 같은 메뉴를 다시 선택 했을 때 메뉴 닫기 기능

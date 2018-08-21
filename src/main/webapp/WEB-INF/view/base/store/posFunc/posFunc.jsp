@@ -111,19 +111,16 @@ $(document).ready(function(){
     param.posNo = posTotListBox.selectedValue;
 
     $.postJSON("${baseUrl}" + "use/getPosConfList.sb", param, function(result) {
-      console.log(result);
-      if(result.status === "FAIL") {
-          s_alert.pop(result.message);
-          return;
-      }
       var list = result.data.list;
       posFuncGrid.itemsSource = new wijmo.collections.CollectionView(list);
       posFuncGrid.collectionView.trackChanges = true;
       //changeColSet(list);
-    }
-    ,function(){
-        s_alert.pop("Ajax Fail");
-    });
+    },
+      function (result) {
+        s_alert.pop(result.message);
+        return;
+      }
+    );
   }
 
   <%-- 기능복사 버튼 클릭 //TODO 작업중 --%>
@@ -211,10 +208,6 @@ $(document).ready(function(){
     param.fnkeyFg = selectedRow.fnkeyFg;
 
     $.postJSON("${baseUrl}" + "use/getPosConfDetail.sb", param, function(result) {
-      if(result.status === "FAIL") {
-        s_alert.pop(result.message);
-        return;
-      }
       var list = result.data.list;
       /*
       if(list.length === undefined || list.length == 0) {
@@ -225,10 +218,12 @@ $(document).ready(function(){
       useFuncGrid.itemsSource = new wijmo.collections.CollectionView(list);
       useFuncGrid.collectionView.trackChanges = true;
       changeColSet(list);
-    }
-    ,function(){
-        s_alert.pop("Ajax Fail");
-    });
+    },
+      function (result) {
+        s_alert.pop(result.message);
+        return;
+      }
+    );
   }
 
   <%-- 컬럼 셋팅 변경 --%>

@@ -107,9 +107,10 @@
   <div class="layer_inner">
     <div class="title w350">
       <%-- 비밀번호 변경 --%>
-      <p class="tit"><s:message code="pwdManage.modify" /></p>
+      <p class="tit"><s:message code="pwdManage.layer.modify" /></p>
       <a href="javascript:;" class="btn_close pwdModifyClose"></a>
       <input id="pwdModifyUserId" style="display: none;" />
+      <input id="pwdModifyEmpNo" style="display: none;" />
       <div class="con">
         <div>
           <table class="tblType01">
@@ -118,19 +119,27 @@
               <col class="w60" />
             </colgroup>
             <tbody>
+              <%-- 비밀번호 구분 --%>
+              <tr>
+                <th><s:message code="pwdManage.layer.pwdChgFg" /></th>
+                <td>
+                  <div class="sb-select">
+                    <div id="layerPwdChgFg"></div>
+                  </div>
+              </tr>
               <%-- 사용자ID --%>
               <tr>
-                <th><s:message code="pwdManage.userId" /></th>
+                <th><s:message code="pwdManage.layer.userId" /></th>
                 <td id="layerUserId"></td>
               </tr>
               <%-- 사용자명 --%>
               <tr>
-                <th><s:message code="pwdManage.userNm" /></th>
+                <th><s:message code="pwdManage.layer.userNm" /></th>
                 <td id="layerUserNm"></td>
               </tr>
               <%-- 새비밀번호 --%>
               <tr>
-                <th><s:message code="pwdManage.newPassword" /></th>
+                <th><s:message code="pwdManage.layer.newPassword" /></th>
                 <td>
                     <input id="layerNewPassword" type="password" maxlength="16"/>
                     <span id="newPasswordError" class="errorMsg" style="display: none"></span>
@@ -138,7 +147,7 @@
               </tr>
               <%-- 새비밀번호확인 --%>
               <tr>
-                <th><s:message code="pwdManage.confirmPassword" /></th>
+                <th><s:message code="pwdManage.layer.confirmPassword" /></th>
                 <td>
                     <input id="layerConfirmPassword" type="password" maxlength="16" />
                     <span id="confirmPasswordError" class="errorMsg" style="display: none"></span>
@@ -148,12 +157,15 @@
           </table>
           <p class="mt20 s12">
             <s:message code="login.layer.pwchg.policy" arguments="6,20" />
+            <br>
+            <br>
+            <s:message code="pwdManage.layer.msg" />
           </p>
         </div>
       </div>
-      <div id="viewBtnArea" class="mt40 tc">
+      <div id="viewBtnArea" class="mt30 tc">
         <%-- 변경하기 --%>
-        <button class="btn_skyblue" id="btnModify"><s:message code="pwdManage.modifyBtn" /></button>
+        <button class="btn_skyblue" id="btnModify"><s:message code="pwdManage.layer.modifyBtn" /></button>
       </div>
     </div>
   </div>

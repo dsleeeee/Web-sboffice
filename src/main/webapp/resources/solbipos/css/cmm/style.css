@@ -161,9 +161,6 @@ button.btn_down:hover:before {content:''; position:absolute; left:7px; top:9px; 
 nav.menuOpen .menuTree {height:100%; width:219px; overflow:hidden;}
 /*nav.menuOpen .menuTree .theTreeAll.wj-treeview {height:calc(100% - 120px); width:240px; overflow-y:scroll; position:relative; top:20px;}*/
 nav.menuOpen .menuTree .theTreeAll.wj-treeview {height:calc(100% - 120px); width:228px; overflow-y:scroll; position:relative; top:20px;}
-@media screen and (min-width:0\0) {
-    nav.menuOpen .menuTree .theTreeAll.wj-treeview { width:240px; }
-}
 
 /*ie용 스크롤 숨기기*/
 nav.menuOpen .menuTree .theTreeAll.wj-treeview {
@@ -175,6 +172,7 @@ nav.menuOpen .menuTree .theTreeAll.wj-treeview {
     scrollbar-DarkShadow-Color: #2e333f;
     scrollbar-Highlight-Color: #2e333f;
     scrollbar-Shadow-Color: #2e333f;
+    -ms-overflow-style: none;
 }
 
 /*크롬용 스크롤 숨기기*/

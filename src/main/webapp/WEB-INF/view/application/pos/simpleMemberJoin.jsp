@@ -4,70 +4,71 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <style type="text/css">
-    /*.cusWrap {min-height: 800px; height: 100%;}*/
+    /*.cusWrap {min-height: 768px; height: 100%;}*/
     /*.content-middle {transform: translateY(50%);}*/
 
     .cusWrap {width: 100%; min-height: 768px; height: 100%; display: table;}
     .content-middle {width: 100%; height: 100%; display: table-cell; vertical-align: middle;}
+    .cusTitle {display:block; width:100%; height:100%; line-height:45px; color:#337dde;  padding:0 15px; font-size:0.875em; position:relative;}
 
 </style>
 
 <div class="cusWrap">
     <div class="content-middle">
         <div class="subCon">
-          <div class="searchBar">
-            <a href="javscript:;" class="open"><s:message code="application.pos.simpleMemberJoin.title"/></a>
-          </div>
-        <table class="searchTbl">
-            <colgroup>
-                <col class="w30" />
-                <col class="w70" />
-            </colgroup>
-            <tbody>
-            <tr>
-                <%-- 연락처 --%>
-                <th><s:message code="application.pos.simpleMemberJoin.telNo"/></th>
-                <td><input type="text" id="telNo" name="telNo" class="sb-input w100" maxlength="13" placeholder="<s:message code='application.pos.simpleMemberJoin.numberOnly'/> <s:message code='application.pos.simpleMemberJoin.telNo.ex'/>"/></td>
-            </tr>
-            <tr>
-                <%-- 회원명 --%>
-                <th><s:message code="application.pos.simpleMemberJoin.membrNm"/></th>
-                <td><input type="text" id="membrNm" name="membrNm" class="sb-input w100" maxlength="25" /></td>
-            </tr>
-            <tr>
-                <%-- 생년월일 --%>
-                <th><s:message code="application.pos.simpleMemberJoin.birthday"/></th>
-                <td><input type="text" id="birthday" name="birthday" class="sb-input w100" maxlength="8" placeholder="<s:message code='application.pos.simpleMemberJoin.numberOnly'/> <s:message code='application.pos.simpleMemberJoin.birthday.ex'/>"/></td>
-            </tr>
-            <tr>
-                <%-- 성별 --%>
-                <th><s:message code="application.pos.simpleMemberJoin.gendrFg"/></th>
-                <td>
-                    <span class="sb-radio"><input type="radio" id="gendrFgM" name="gendrFg" value="M" checked /><label for="gendrFgM">남</label></span>
-                    <span class="sb-radio"><input type="radio" id="gendrFgF" name="gendrFg" value="F" /><label for="gendrFgF">여</label></span>
-                </td>
-            </tr>
-            <%--<tr>--%>
-            <%--&lt;%&ndash; 회원분류 &ndash;%&gt;--%>
-            <%--<th><s:message code="application.pos.simpleMemberJoin.membrClass"/></th>--%>
-            <%--<td>--%>
-            <%--<div class="sb-select">--%>
-            <%--<div id="membrClass"></div>--%>
-            <%--</div>--%>
-            <%--</td>--%>
-            <%--</tr>--%>
-            <tr>
-                <%-- 비고 --%>
-                <th><s:message code="application.pos.simpleMemberJoin.remark"/></th>
-                <td><input type="text" id="remark" name="remark" class="sb-input w100" maxlength="100" /></td>
-            </tr>
-            </tbody>
-        </table>
+            <div class="searchBar">
+                <span class="cusTitle"><s:message code="application.pos.simpleMemberJoin.title"/></span>
+            </div>
+            <table class="searchTbl">
+                <colgroup>
+                    <col class="w30" />
+                    <col class="w70" />
+                </colgroup>
+                <tbody>
+                <tr>
+                    <%-- 연락처 --%>
+                    <th><s:message code="application.pos.simpleMemberJoin.telNo"/></th>
+                    <td><input type="text" id="telNo" name="telNo" class="sb-input w100" maxlength="13" placeholder="<s:message code='application.pos.simpleMemberJoin.numberOnly'/> <s:message code='application.pos.simpleMemberJoin.telNo.ex'/>"/></td>
+                </tr>
+                <tr>
+                    <%-- 회원명 --%>
+                    <th><s:message code="application.pos.simpleMemberJoin.membrNm"/></th>
+                    <td><input type="text" id="membrNm" name="membrNm" class="sb-input w100" maxlength="25" /></td>
+                </tr>
+                <tr>
+                    <%-- 생년월일 --%>
+                    <th><s:message code="application.pos.simpleMemberJoin.birthday"/></th>
+                    <td><input type="text" id="birthday" name="birthday" class="sb-input w100" maxlength="8" placeholder="<s:message code='application.pos.simpleMemberJoin.numberOnly'/> <s:message code='application.pos.simpleMemberJoin.birthday.ex'/>"/></td>
+                </tr>
+                <tr>
+                    <%-- 성별 --%>
+                    <th><s:message code="application.pos.simpleMemberJoin.gendrFg"/></th>
+                    <td>
+                        <span class="sb-radio"><input type="radio" id="gendrFgM" name="gendrFg" value="M" checked /><label for="gendrFgM">남</label></span>
+                        <span class="sb-radio"><input type="radio" id="gendrFgF" name="gendrFg" value="F" /><label for="gendrFgF">여</label></span>
+                    </td>
+                </tr>
+                <%--<tr>--%>
+                <%--&lt;%&ndash; 회원분류 &ndash;%&gt;--%>
+                <%--<th><s:message code="application.pos.simpleMemberJoin.membrClass"/></th>--%>
+                <%--<td>--%>
+                <%--<div class="sb-select">--%>
+                <%--<div id="membrClass"></div>--%>
+                <%--</div>--%>
+                <%--</td>--%>
+                <%--</tr>--%>
+                <tr>
+                    <%-- 비고 --%>
+                    <th><s:message code="application.pos.simpleMemberJoin.remark"/></th>
+                    <td><input type="text" id="remark" name="remark" class="sb-input w100" maxlength="100" /></td>
+                </tr>
+                </tbody>
+            </table>
 
-        <div class="mt10 pdb20 oh">
-            <button class="btn_blue fr" id="btnSave"><s:message code="cmm.save" /></button>
+            <div class="mt10 pdb20 oh">
+                <button class="btn_blue fr" id="btnSave"><s:message code="cmm.save" /></button>
+            </div>
         </div>
-      </div>
     </div>
 </div>
 

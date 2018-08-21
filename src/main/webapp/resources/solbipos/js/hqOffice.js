@@ -70,9 +70,10 @@
         
         $("#_hqtent").show();
         $("#_hqlayer").show();
-      })
-      .fail(function(){
-        s_alert.pop("Ajax Fail");
+      },
+      function (result) {
+        s_alert.pop(result.message);
+        return;
       });
     }
     

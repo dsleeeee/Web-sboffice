@@ -144,10 +144,6 @@ $(document).ready(function () {
 
     $.postJSON("/sys/bill/template/code/list.sb", param,
       function (result) {
-        if (result.status === "FAIL") {
-          s_alert.pop(result.message);
-          return;
-        }
 
         var list = result.data.list;
         listBoxCodeList.itemsSource = list;
@@ -164,10 +160,6 @@ $(document).ready(function () {
 
           $.postJSON("/sys/bill/template/item/list.sb", param,
             function (result) {
-              if (result.status === "FAIL") {
-                s_alert.pop(result.message);
-                return;
-              }
 
               list = result.data.list;
               gridTemplate.itemsSource = new wijmo.collections.CollectionView(list);
@@ -190,16 +182,18 @@ $(document).ready(function () {
               }
 
             },
-            function () {
-              s_alert.pop("Ajax Fail");
+            function (result) {
+              s_alert.pop(result.message);
+              return;
             }
           );
 
         }
 
       },
-      function () {
-        s_alert.pop("Ajax Fail");
+      function (result) {
+        s_alert.pop(result.message);
+        return;
       }
     );
 
@@ -284,14 +278,12 @@ $(document).ready(function () {
     param.prtForm = theTarget.value;
 
     $.postJSONSave("/sys/bill/template/bill/save.sb", param, function (result) {
-      if (result.status === "FAIL") {
-        s_alert.pop(result.message);
-        return;
-      }
       s_alert.pop(messages["cmm.saveSucc"]);
       gridTemplate.collectionView.clearChanges();
-    }).fail(function () {
-      s_alert.pop("Ajax Fail");
+    },
+    function (result) {
+      s_alert.pop(result.message);
+      return;
     });
 
   });
@@ -435,10 +427,6 @@ $(document).ready(function () {
 
     $.postJSON("/sys/bill/template/unUsed/list.sb", param,
       function (result) {
-        if (result.status === "FAIL") {
-          s_alert.pop(result.message);
-          return;
-        }
 
         var list = result.data.list;
         gridLayer.itemsSource = new wijmo.collections.CollectionView(list);
@@ -456,8 +444,9 @@ $(document).ready(function () {
         }
 
       },
-      function () {
-        s_alert.pop("Ajax Fail");
+      function (result) {
+        s_alert.pop(result.message);
+        return;
       }
     );
   }
