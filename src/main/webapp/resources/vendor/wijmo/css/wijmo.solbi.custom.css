@@ -162,3 +162,13 @@
     color: #666;
     background-color: #f2f2f2;
 }
+
+.wj-grid-multi-editor {
+    font-family: '굴림체';
+    font-size: 14px !important;
+}
+
+.wj-grid-multi-editor textarea {
+    font-family: '굴림체';
+    font-size: 14px !important;
+}

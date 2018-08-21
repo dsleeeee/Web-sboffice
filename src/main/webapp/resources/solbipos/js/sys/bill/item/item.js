@@ -8,6 +8,7 @@
  * 2018.08.10     노현수      1.0
  *
  * **************************************************************/
+var gridPrintCode;
 $(document).ready(function () {
 
   var srchPrtCd = wcombo.genInputText("#srchPrtCd", 30, "");
@@ -29,7 +30,7 @@ $(document).ready(function () {
       {binding: "content", header: messages["item.content"], width: "*"}
     ];
   // 출력코드구성 그리드 생성
-  var gridPrintCode = wgrid.genGrid("#gridPrintCode", gridPrintCodeData);
+  gridPrintCode = wgrid.genGrid("#gridPrintCode", gridPrintCodeData);
   gridPrintCode.isReadOnly = false;
 
   // ReadOnly 효과설정
@@ -43,6 +44,8 @@ $(document).ready(function () {
         } else {
           wijmo.removeClass(e.cell, 'wj-custom-readonly');
         }
+      } else if ( col.binding === "content") {
+        wijmo.addClass(e.cell, 'wj-grid-multi-editor');
       }
     }
   });
@@ -50,8 +53,8 @@ $(document).ready(function () {
   // 출력코드구성 그리드 에디팅 방지
   gridPrintCode.beginningEdit.addHandler(function (s, e) {
     var col = s.columns[e.col];
+    var dataItem = gridPrintCode.rows[e.row].dataItem;
     if (col.binding === "prtCd") {
-      var dataItem = gridPrintCode.rows[e.row].dataItem;
       if (nvl(dataItem.status, "") == "" && dataItem.status != "I") {
         e.cancel = true;
       }
@@ -61,20 +64,59 @@ $(document).ready(function () {
   var contentColumn = gridPrintCode.columns.getColumn("content");
   contentColumn.multiLine = true;
   contentColumn.wordWrap = true;
-
-  // auto-size visible rows
+  
+  // 그리드 Row 사이즈 정렬
   function autoSizeVisibleRows(flex, force) {
     var rng = flex.viewRange;
     for (var r = rng.row; r <= rng.row2; r++) {
       if (force || flex.rows[r].height == null) {
-        // flex.autoSizeRow(r, false)
+        flex.autoSizeRow(r, false);
       }
     }
   }
 
-  // validation
+  // alt + Enter 이벤트. 예제 필드에만.
+  gridPrintCode.addEventListener(gridPrintCode.hostElement, 'keydown', function(e) {
+    var rowNum = gridPrintCode.selection.row;
+    var colNum = gridPrintCode.selection.col;
+    var col = gridPrintCode.columns[colNum];
+    if (col.binding === "content") {
+      if (e.altKey) {
+        if (e.keyCode === wijmo.Key.Enter) {
+          gridPrintCode.finishEditing(false);
+          setTimeout(function () {
+            gridPrintCode.startEditing(true, rowNum, colNum, true);
+          },10);
+        }
+      }
+    }
+  });
+
+  // cell 에디트 종료시 42글자 포멧팅. 예제 필드에만.
   gridPrintCode.cellEditEnded.addHandler(function (s, e) {
-    // autoSizeVisibleRows(s, true);
+    var col = s.columns[e.col];
+    if(col.binding === "content") {
+      var val = s.getCellData(e.row, e.col);
+      var lines = val.split("\n");
+      if ( lines != null ) {
+        var newValues = new Array();
+        var newLine = 0;
+        var splitStr = "";
+        for (var i = 0; i < lines.length; i++) {
+          if (lines[i].getByteLength() <= 42) {
+            newValues[newLine++] = lines[i];
+          } else {
+            splitStr = lines[i].splitByteLen(42);
+            for (var n = 0; n < splitStr.length; n++) {
+              newValues[newLine++] = splitStr[n];
+            }
+          }
+        }
+        val = newValues.join("\n");
+        s.setCellData(e.row, e.col, val);
+        s.rows[e.row].height = 40 + ( newValues.length * 14 );
+      }
+    }
   });
 
   // 조회버튼 클릭
@@ -106,6 +148,8 @@ $(document).ready(function () {
           gridPrintCode.itemsSource = new wijmo.collections.CollectionView([]);
           s_alert.pop(result.message);
           return;
+        } else {
+          autoSizeVisibleRows(gridPrintCode, false);
         }
 
       },
@@ -124,11 +168,11 @@ $(document).ready(function () {
 
     for (var i = 0; i < gridPrintCode.collectionView.itemsEdited.length; i++) {
       gridPrintCode.collectionView.itemsEdited[i].status = "U";
-      paramArr.push(theGrid.collectionView.itemsEdited[i]);
+      paramArr.push(gridPrintCode.collectionView.itemsEdited[i]);
     }
     for (var i = 0; i < gridPrintCode.collectionView.itemsAdded.length; i++) {
       gridPrintCode.collectionView.itemsAdded[i].status = "I";
-      paramArr.push(theGrid.collectionView.itemsAdded[i]);
+      paramArr.push(gridPrintCode.collectionView.itemsAdded[i]);
     }
 
     if (paramArr.length <= 0) {
