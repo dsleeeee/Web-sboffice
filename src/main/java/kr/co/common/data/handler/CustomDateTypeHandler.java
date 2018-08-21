@@ -25,8 +25,6 @@ import java.text.SimpleDateFormat;
  */
 public class CustomDateTypeHandler extends BaseTypeHandler<Date> {
 
-
-
     @Override
     public void setNonNullParameter(PreparedStatement ps, int i, Date parameter, JdbcType jdbcType)
         throws SQLException {
@@ -54,28 +52,22 @@ public class CustomDateTypeHandler extends BaseTypeHandler<Date> {
         DateFormat beforeFormat = new SimpleDateFormat("yyyyMMdd");
         DateFormat afterFormat = new SimpleDateFormat("yyyy-MM-dd");
         java.util.Date tempDate = null;
-
+        Date result = null;
+        String convertDate = "";
         if (strValue == null) {
             return null;
         }
-        if ( strValue.length() == 8 ) {
-            // strValue += "000000";
+        if ( strValue.length() > 8 ) {
+            strValue = strValue.substring(0,8);
         }
         try {
             // 현재 yyyymmdd로된 날짜 형식으로 java.util.Date객체를 만든다.
             tempDate = beforeFormat.parse(strValue);
+            convertDate = afterFormat.format(tempDate);
+            result = Date.valueOf(convertDate);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        System.out.println("##############################################");
-
-        String convertDate = afterFormat.format(tempDate);
-        System.out.println(convertDate);
-
-        Date result = Date.valueOf(convertDate);
-        System.out.println(result);
-
-        System.out.println("##############################################");
 
         return result;
 

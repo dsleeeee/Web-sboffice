@@ -121,8 +121,8 @@
 -->
     <typeAlias alias="authGroupVO" type="kr.co.solbipos.sys.auth.authgroup.service.AuthGroupVO"/>
     <typeAlias alias="systemCdVO" type="kr.co.solbipos.sys.cd.systemcd.service.SystemCdVO"/>
-    <typeAlias alias="envstVO" type="kr.co.solbipos.sys.cd.envconfig.service.EnvstVO"/>
-    <typeAlias alias="envstDtlVO" type="kr.co.solbipos.sys.cd.envconfig.service.EnvstDtlVO"/>
+    <typeAlias alias="envstVO" type="kr.co.solbipos.sys.cd.envconfg.service.EnvstVO"/>
+    <typeAlias alias="envstDtlVO" type="kr.co.solbipos.sys.cd.envconfg.service.EnvstDtlVO"/>
     <typeAlias alias="cardCmpnyVO" type="kr.co.solbipos.sys.etc.vancard.service.CardCmpnyVO"/>
     <typeAlias alias="vanCardVO" type="kr.co.solbipos.sys.etc.vancard.service.VanCardVO"/>
     <typeAlias alias="vanCmpnyVO" type="kr.co.solbipos.sys.etc.vancard.service.VanCmpnyVO"/>

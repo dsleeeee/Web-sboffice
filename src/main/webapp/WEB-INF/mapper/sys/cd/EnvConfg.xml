@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    EnvConfg.xml
+    환경설정관리 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       노현수     2018.06.15      최초작성
+-->
+<mapper namespace="kr.co.solbipos.sys.cd.envconfg.service.impl.EnvConfgMapper">
+
+    <!-- 대표명칭 코드목록 조회 -->
+    <!--
+        TABLE    : TB_CM_ENVST
+        PARAM    : envstVO
+        COMMENTS : 대표명칭 코드 목록을 조회한다.
+    -->
+    <select id="getEnvstList" parameterType="envstVO" resultType="DefaultMap">
+        /* USE : EnvConfgMapper.getEnvstList */
+        SELECT
+            tce.ENVST_CD,
+            tce.ENVST_NM,
+            tce.ENVST_FG,
+            tcn_envst_fg.NMCODE_NM AS ENVST_FG_NM,
+            tce.ENVST_GRP_CD,
+            tcn_envst_grp_cd.NMCODE_NM AS ENVST_GRP_CD_NM,
+            tce.DIRCT_IN_YN,
+            tce.TARGT_FG,
+            tcn_targt_fg.NMCODE_NM AS TARGT_FG_NM,
+            tce.USE_YN,
+            tce.REMARK
+        FROM
+            TB_CM_ENVST tce
+        LEFT OUTER JOIN TB_CM_NMCODE tcn_envst_fg ON
+            tce.ENVST_FG = tcn_envst_fg.NMCODE_CD
+            AND tcn_envst_fg.NMCODE_GRP_CD = '003'
+        LEFT OUTER JOIN TB_CM_NMCODE tcn_envst_grp_cd ON
+            tce.ENVST_GRP_CD = tcn_envst_grp_cd.NMCODE_CD
+            AND tcn_envst_grp_cd.NMCODE_GRP_CD = '004'
+        LEFT OUTER JOIN TB_CM_NMCODE tcn_targt_fg ON
+            tce.TARGT_FG = tcn_targt_fg.NMCODE_CD
+            AND tcn_targt_fg.NMCODE_GRP_CD = '038'
+        <where>
+            <if test="envstCd != null and envstCd != ''">
+                tce.ENVST_CD = #{envstCd}
+            </if>
+            <if test="envstNm != null and envstNm != ''">
+                AND tce.ENVST_NM LIKE #{envstNm}||'%'
+            </if>
+        </where>
+        ORDER BY
+            tce.ENVST_CD,
+            tce.ENVST_FG,
+            tce.ENVST_GRP_CD
+
+    </select>
+
+    <!-- 대표명칭 업데이트 -->
+    <!--
+        TABLE    : TB_CM_ENVST
+        PARAM    : envstVO
+        COMMENTS : 대표명칭을 수정한다.
+    -->
+    <update id="updateEnvst" parameterType="envstVO">
+        /* USE : EnvConfgMapper.updateEnvst */
+        UPDATE
+            TB_CM_ENVST
+        SET
+            ENVST_NM = #{envstNm,jdbcType=VARCHAR},
+            ENVST_FG = #{envstFg},
+            ENVST_GRP_CD = #{envstGrpCd},
+            DIRCT_IN_YN = #{dirctInYn},
+            USE_YN = #{useYn},
+            REMARK = #{remark},
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId}
+        WHERE
+            ENVST_CD = #{envstCd}
+    </update>
+
+    <!-- 대표명칭 생성 -->
+    <!--
+        TABLE    : TB_CM_ENVST
+        PARAM    : envstVO
+        COMMENTS : 대표명칭을 생성한다.
+    -->
+    <insert id="insertEnvst" parameterType="envstVO">
+        /* USE : EnvConfgMapper.insertEnvst */
+        INSERT INTO TB_CM_ENVST
+        (
+            ENVST_CD,
+            ENVST_NM,
+            ENVST_FG,
+            ENVST_GRP_CD,
+            DIRCT_IN_YN,
+            TARGT_FG,
+            USE_YN,
+            REMARK,
+            REQUIRED_YN,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{envstCd},
+            #{envstNm,jdbcType=VARCHAR},
+            #{envstFg},
+            #{envstGrpCd},
+            #{dirctInYn},
+            #{targtFg},
+            #{useYn},
+            #{remark,jdbcType=VARCHAR},
+            #{requiredYn},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+
+    </insert>
+
+    <!-- 세부명칭 코드목록 조회 -->
+    <!--
+        TABLE    : TB_CM_ENVST_DTL
+        PARAM    : envstDtlVO
+        COMMENTS : 세부명칭 코드 목록을 조회한다.
+    -->
+    <select id="getEnvstDtlList" parameterType="envstDtlVO" resultType="DefaultMap">
+        /* USE : EnvConfgMapper.getEnvstDtlList */
+        SELECT
+            tced.ENVST_CD,
+            tced.ENVST_VAL_CD,
+            tced.ENVST_VAL_NM,
+            tced.DEFLT_YN,
+            tced.USE_YN
+        FROM
+            TB_CM_ENVST_DTL tced
+        WHERE
+            tced.ENVST_CD = #{envstCd}
+        ORDER BY
+            tced.ENVST_VAL_CD
+    </select>
+
+    <!-- 세부명칭 업데이트 -->
+    <!--
+        TABLE    : TB_CM_ENVST_DTL
+        PARAM    : envstDtlVO
+        COMMENTS : 세부명칭을 수정한다.
+    -->
+    <update id="updateEnvstDtl" parameterType="envstDtlVO">
+        /* USE : EnvConfgMapper.updateEnvstDtl */
+        UPDATE
+            TB_CM_ENVST_DTL
+        SET
+            ENVST_VAL_NM = #{envstValNm,jdbcType=VARCHAR},
+            DEFLT_YN = #{defltYn},
+            USE_YN = #{useYn},
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId}
+        WHERE
+            ENVST_CD = #{envstCd}
+            AND ENVST_VAL_CD = #{envstValCd}
+    </update>
+
+    <!-- 세부명칭 생성 -->
+    <!--
+        TABLE    : TB_CM_ENVST_DTL
+        PARAM    : envstDtlVO
+        COMMENTS : 세부명칭을 생성한다.
+    -->
+    <insert id="insertEnvstDtl" parameterType="envstDtlVO">
+        /* USE : EnvConfgMapper.insertEnvstDtl */
+        INSERT INTO TB_CM_ENVST_DTL
+        (
+            ENVST_CD,
+            ENVST_VAL_CD,
+            ENVST_VAL_NM,
+            DEFLT_YN,
+            USE_YN,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{envstCd},
+            #{envstValCd},
+            #{envstValNm,jdbcType=VARCHAR},
+            #{defltYn},
+            #{useYn},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+
+    </insert>
+
+</mapper>

@@ -6,7 +6,7 @@
 <link href="/resource/solbipos/css/cmm/style.css?ver=20180801" rel="stylesheet" type="text/css" media="all"/>
 <link href="/resource/solbipos/css/cmm/devCustom.css?ver=20180801" rel="stylesheet" type="text/css" media="all"/>
 <link href="/resource/vendor/wijmo/css/wijmo.css?ver=5.20182.500" rel="stylesheet" type="text/css"/>
-<link href="/resource/vendor/wijmo/css/wijmo.solbi.custom.css?ver=20180801" rel="stylesheet" type="text/css"/>
+<link href="/resource/solbipos/css/cmm/wijmo.solbi.custom.css?ver=2018082102" rel="stylesheet" type="text/css"/>
 
 <link rel="stylesheet" type="text/css" href="/resource/vendor/awesome-font/css/font-awesome.min.css" />
 

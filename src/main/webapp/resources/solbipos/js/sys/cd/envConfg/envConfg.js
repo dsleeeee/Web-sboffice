@@ -1,6 +1,6 @@
 /****************************************************************
  *
- * 파일명 : envConfig.js
+ * 파일명 : envConfg.js
  * 설  명 : 환경설정관리 JavaScript
  *
  *    수정일      수정자      Version        Function 명
@@ -39,33 +39,33 @@ $(document).ready(function () {
     [
       {
         binding: "gChk",
-        header: messages["envConfig.chk"],
+        header: messages["envConfg.chk"],
         dataType: wijmo.DataType.Boolean,
         width: 40
       },
-      {binding: "envstCd", header: messages["envConfig.envstCd"], width: 70},
-      {binding: "envstNm", header: messages["envConfig.envstNm"], maxLength: 100},
+      {binding: "envstCd", header: messages["envConfg.envstCd"], width: 70},
+      {binding: "envstNm", header: messages["envConfg.envstNm"], maxLength: 100},
       {
         binding: "envstFg",
-        header: messages["envConfig.envstFgNm"],
+        header: messages["envConfg.envstFgNm"],
         width: 140,
         dataMap: envstFgNmDataMap
       },
       {
         binding: "envstGrpCd",
-        header: messages["envConfig.envstGrpCdNm"],
+        header: messages["envConfg.envstGrpCdNm"],
         width: 100,
         dataMap: envstGrpCdNmDataMap
       },
       {
         binding: "dirctInYn",
-        header: messages["envConfig.dirctInYn"],
+        header: messages["envConfg.dirctInYn"],
         width: 70,
         dataMap: dirctInYnDataMap
       },
-      {binding: "targtFg", header: messages["envConfig.targtFgNm"], dataMap: targtFgDataMap},
-      {binding: "useYn", header: messages["envConfig.useYn"], width: 80, dataMap: useYnDataMap},
-      {binding: "remark", header: messages["envConfig.remark"], width: 200, maxLength: 250}
+      {binding: "targtFg", header: messages["envConfg.targtFgNm"], dataMap: targtFgDataMap},
+      {binding: "useYn", header: messages["envConfg.useYn"], width: 80, dataMap: useYnDataMap},
+      {binding: "remark", header: messages["envConfg.remark"], width: 200, maxLength: 250}
     ];
   // 대표명칭 그리드 생성
   var gridRepresent = wgrid.genGrid("#gridRepresent", gridRepresentData, "Y");
@@ -114,7 +114,7 @@ $(document).ready(function () {
     param.envstCd = srchEnvstCd.value;
     param.envstNm = srchEnvstNm.value;
 
-    $.postJSON("/sys/cd/envConfig/envConfig/envst/list.sb", param,
+    $.postJSON("/sys/cd/envConfg/envConfg/envst/list.sb", param,
       function (result) {
         // 버튼 Show
         $("#btnAddRepresent").show();
@@ -172,7 +172,7 @@ $(document).ready(function () {
       return;
     }
 
-    $.postJSONArray("/sys/cd/envConfig/envConfig/envst/save.sb", paramArr, function (result) {
+    $.postJSONArray("/sys/cd/envConfg/envConfg/envst/save.sb", paramArr, function (result) {
         s_alert.pop(messages["cmm.saveSucc"]);
         gridRepresent.collectionView.clearChanges();
       },
@@ -188,21 +188,21 @@ $(document).ready(function () {
     [
       {
         binding: "gChk",
-        header: messages["envConfig.chk"],
+        header: messages["envConfg.chk"],
         dataType: wijmo.DataType.Boolean,
         width: 40
       },
-      {binding: "envstValCd", header: messages["envConfig.envstValCd"], width: 70},
-      {binding: "envstValNm", header: messages["envConfig.envstValNm"], width: "*"},
+      {binding: "envstValCd", header: messages["envConfg.envstValCd"], width: 70},
+      {binding: "envstValNm", header: messages["envConfg.envstValNm"], width: "*"},
       {
         binding: "defltYn",
-        header: messages["envConfig.defltYn"],
+        header: messages["envConfg.defltYn"],
         width: 80,
         dataMap: defltYnDataMap
       },
       {
         binding: "useYn",
-        header: messages["envConfig.useYn"],
+        header: messages["envConfg.useYn"],
         width: 80,
         dataMap: useYnDataMap
       }
@@ -218,7 +218,7 @@ $(document).ready(function () {
     var param = {};
     param.envstCd = value;
 
-    $.postJSON("/sys/cd/envConfig/envConfig/envstDtl/list.sb", param,
+    $.postJSON("/sys/cd/envConfg/envConfg/envstDtl/list.sb", param,
       function (result) {
         // 버튼 Show
         $("#btnAddDetail").show();
@@ -276,7 +276,7 @@ $(document).ready(function () {
       return;
     }
 
-    $.postJSONArray("/sys/cd/envConfig/envConfig/envstDtl/save.sb", paramArr, function (result) {
+    $.postJSONArray("/sys/cd/envConfg/envConfg/envstDtl/save.sb", paramArr, function (result) {
         s_alert.pop(messages["cmm.saveSucc"]);
         gridDetail.collectionView.clearChanges();
       },
