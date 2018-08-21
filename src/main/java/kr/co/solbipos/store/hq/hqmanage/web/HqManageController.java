@@ -216,7 +216,7 @@ public class HqManageController {
     }
 
     /**
-     * 메뉴권한 데이터 조회
+     * 메뉴권한 데이터 조회config/getConfiglist.sb
      * @param   hqManage
      * @param   request
      * @param   response

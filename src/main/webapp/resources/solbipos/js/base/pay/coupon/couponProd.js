@@ -136,9 +136,7 @@ $(document).ready(function(){
       s_alert.pop("Ajax Fail");
     });
 
-
   }
-
 
   // 탭 클릭
   $("#couponProdTab").click(function(){
