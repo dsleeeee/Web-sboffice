@@ -20,8 +20,8 @@
             info.HQ_OFFICE_CD,
             info.HQ_OFFICE_NM,
             info.EMP_NO,
-            twui.LAST_LOGIN_DATE,
-            twui.LAST_PWD_CHG_DATE,
+            twui.LAST_LOGIN_DT,
+            twui.LAST_PWD_CHG_DT,
             twui.LOGIN_FAIL_CNT,
             twui.LOCK_CD,
             (
@@ -168,7 +168,7 @@
   <select id="selectAuthMenu" parameterType="sessionInfoVO" resultType="resrceInfoVO">
   <![CDATA[
   /* AuthMapper.selectAuthMenu */
-     SELECT * 
+     SELECT *
        FROM (
          SELECT DISTINCT RESRCE_CD,
                 P_RESRCE,
@@ -214,7 +214,7 @@
       CONNECT BY PRIOR P_RESRCE = RESRCE_CD
           AND LEVEL < 3
      )
-     ORDER BY URL ASC     
+     ORDER BY URL ASC
   ]]>
   </select>
 
