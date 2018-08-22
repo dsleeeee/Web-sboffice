@@ -62,7 +62,7 @@ public class FuncController {
             Model model) {
 
         // 기능구분 조회
-        model.addAttribute("fnkeyFgList", cmmCodeUtil.getCommCodeAll("034"));
+        model.addAttribute("fnkeyFgList", cmmCodeUtil.getCommCodeAll("026"));
 
         return "pos/confg/func/func";
     }
