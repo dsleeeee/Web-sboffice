@@ -85,9 +85,6 @@ function showPosConfigLayout(envstFg){
 
   if(posList != null) {
 
-    console.log("---- posList 2");
-    console.log(posList);
-
     $("#sPosNm").empty();
 
     for(var i=0; i<posList.length; i++) {
@@ -121,8 +118,6 @@ function getPosInfo(){
   var envstGrpCd = ${ccu.getCommCodeExcpAll("004")};
 
   $.postJSON("/store/manage/storeManage/storeManage/getPosConfigList.sb", param, function(result) {
-
-    console.log(result)
 
     // 환경설정
     var innerHtml = "";
@@ -295,7 +290,7 @@ $("#posConfigArea #btnSavePos").click(function(){
     if(posObjDirctInYn[i].value == "Y" && posObjOldEnvstVal[i].value == ""){
       var msgStr = "<s:message code='hqManage.envSetting' /> "
                  + " [" + posObjEnvstCd[i].value + "] "+ posObjEnvstNm[i].value
-                 + " <s:message code='hqManage.require.regist.inputEnv' /> ";
+                 + " <s:message code='storeManage.require.regist.inputEnv' /> ";
 
       s_alert.pop(msgStr);
       return;

@@ -53,7 +53,7 @@ function openSetAuthLayer(){
 <%-- 그리드 데이터 조회 --%>
 function getPosAuthData(){
 
-    console.log(selectedFnkey);
+    //console.log(selectedFnkey);
     var param = {};
     param.storeCd = selectedFnkey.storeCd;
     param.fnkeyNo = selectedFnkey.fnkeyNo;
@@ -92,7 +92,7 @@ $("#posAuthLayer #btnSave").click(function(){
         paramArr.push(authSettingGrid.collectionView.items[i]);
     }
 
-    console.log(paramArr);
+    //console.log(paramArr);
 
     $.postJSONArray("/base/store/posfunc/auth/saveAuthEmp.sb", paramArr, function(result) {
         s_alert.pop("<s:message code='cmm.saveSucc' />");

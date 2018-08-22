@@ -1,5 +1,6 @@
 package kr.co.common.utils;
 
+import kr.co.solbipos.application.session.user.enums.PwChgResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +34,7 @@ public class CmmUtil {
         "^(?=.*[a-z]+)(?=.*[A-Z]+)(?=.*\\d+)(?=.*[^\\w\\sㄱ-ㅎㅏ-ㅣ가-힣]).{8,}$";
 
     /**
-      * 
+      *
       * @param list
       * @param target
       * @return
@@ -46,7 +47,7 @@ public class CmmUtil {
     }
 
     /**
-      * 
+      *
       * @param list
       * @param target
       * @return
@@ -132,7 +133,7 @@ public class CmmUtil {
      * @author 노현수
      * @since 2018. 06. 08.
      */
-    public static String checkPasswd(String value) throws Exception {
+    public static PwChgResult checkPasswd(String value) throws Exception {
 
         String rs = "";
         int len = value.length();
@@ -141,24 +142,21 @@ public class CmmUtil {
         boolean flag1 = Pattern.matches(".*[0-9]+.*", value);
         boolean flag2 = Pattern.matches(".*[a-zA-Z]+.*", value);
 
-        if(len < 10 || len > 15) {
-            rs = "비밀번호는 최소 10자 이상 15자 이하만 가능 합니다. ";
+        if(len < 6 || len > 20) {
+            return PwChgResult.PASSWORD_NOT_MATCH_LENGTH;
         } else if (flag == false) {
-            rs = "비밀번호는 숫자와 영문, 특수문자(!,@,$,~)만 사용 가능합니다.";
+            return PwChgResult.PASSWORD_NOT_MATCH_CHAR;
         } else if (flag1 == false) {
-            rs = "비밀번호는 반드시 숫자가 포함되어야 합니다.";
+            return PwChgResult.PASSWORD_NOT_CONTAIN_NUMBER;
         } else if(flag2 == false) {
-            rs = "비밀번호는 영문자가 반드시 포함되어야 합니다.";
+            return PwChgResult.PASSWORD_NOT_CONTAIN_ENG_CHAR;
         } else if(checkContinuous3Character(value)) {
-            rs = "숫자 또는 알파벳 순서대로 3자이상 사용하는 비밀번호는 사용할 수 없습니다.";
+            return PwChgResult.PASSWORD_CONTINUED_CHAR;
         } else if (checkDuplicateCharacter(value, 3)){
-            rs = "동일한 문자 또는 숫자를 3자 이상 사용할 수 없습니다.";
+            return PwChgResult.PASSWORD_SAME_CHAR;
         } else {
-            rs = "";
+            return PwChgResult.CHECK_OK;
         }
-
-        return rs;
-
     }
 
     /**

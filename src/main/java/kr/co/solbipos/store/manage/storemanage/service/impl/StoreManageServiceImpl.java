@@ -5,6 +5,7 @@ import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.utils.security.EncUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.pos.confg.loginstatus.enums.SysStatFg;
@@ -131,7 +132,16 @@ public class StoreManageServiceImpl implements StoreManageService{
         // 매장 신규 코드 조회
         String storeCd = mapper.getStoreCd(storeManageVO);
 
+        String wUuserId = storeCd.toLowerCase(); // 웹 사용자 아이디
+        String wUserPwd = EncUtil.setEncSHA256(wUuserId+"0000");    // 웹 패스워드
+        String pEmpNo = "0000"; // 포스 기본 사용자 사원번호
+        String pUserPwd = EncUtil.setEncSHA256(pEmpNo+"1234");  // 포스 패스워드
+
         storeManageVO.setStoreCd(storeCd);
+        storeManageVO.setUserId(wUuserId);
+        storeManageVO.setUserPwd(wUserPwd);
+        storeManageVO.setPosEmpNo(pEmpNo);
+        storeManageVO.setPosUserPwd(pUserPwd);
 
         // 본사의 포스 프로그램 구분
         // 20180821 환경변수 값 바꾸면서 매장환경으로 변경됨 -> 매장환경설정에서 변경해야하는 값.
@@ -181,6 +191,9 @@ public class StoreManageServiceImpl implements StoreManageService{
                 procCnt += mapper.insertPosInfo(storeManageVO);
             }
         }
+
+        // 회원등급 생성
+        procCnt += mapper.insertMemberClass(storeManageVO);
 
         // 테이블 그룹 생성
         procCnt += mapper.insertTabGroup(storeManageVO);

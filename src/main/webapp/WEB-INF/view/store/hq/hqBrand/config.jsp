@@ -23,7 +23,7 @@
         <%-- 환경설정 컨텐츠 --%>
         <form id="envForm" name="envForm">
           <div class="oh mt20 mb15">
-            <span class="fr"><a href="javascript:;" class="btn_grayS2" id="btnDefault"><s:message code="hqBrand.setting.default.env" /></a></span>
+            <span class="fr"><a href="javascript:;" class="btn_grayS2" id="btnDefault"><s:message code="hqManage.setting.default.env" /></a></span>
           </div>
           <div class="mt20 sc" style="height:450px;border:0px;" id="contents"></div>
         </form>
@@ -106,8 +106,6 @@ function getConfigList(){
 
             if(envCnt == 0 || envCnt % 2 == 0) envHtml += "<tr>";
 
-            console.log("list["+j+"].envstNm : "+ list[j].envstNm);
-
 
             envHtml += "      <th>" + list[j].envstCd + "</th>";
             envHtml += "      <td>" + list[j].envstNm + "</td>";
@@ -188,10 +186,10 @@ function getConfigList(){
 
     <%-- 등록되지 않은 환경값이 있음--%>
     if(allCnt > existCnt) {
-      var msg = "<s:message code='hqBrand.no.regist.env'/> "
-              + "<s:message code='hqBrand.require.regist.env'/> "
-              + "<s:message code='hqBrand.total.env.count' arguments='"+ allCnt +"'/> "
-              + "<s:message code='hqBrand.no.regist.env.count' arguments='"+ (allCnt - existCnt) +"'/>"
+      var msg = "<s:message code='hqManage.no.regist.env'/> "
+              + "<s:message code='hqManage.require.regist.env'/> "
+              + "<s:message code='hqManage.total.env.count' arguments='"+ allCnt +"'/> "
+              + "<s:message code='hqManage.no.regist.env.count' arguments='"+ (allCnt - existCnt) +"'/>"
               ;
 
       s_alert.pop(msg);

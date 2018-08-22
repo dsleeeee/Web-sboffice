@@ -33,7 +33,7 @@ function showStoreConfigLayout(envstFg){
 
   $.postJSON("/store/manage/storeManage/storeManage/getStoreConfigList.sb", param, function(result) {
 
-    console.log(result)
+    // console.log(result)
 
     var innerHtml = "";
 
@@ -197,7 +197,6 @@ $("#storeEnvInfoArea #btnSaveStore").click(function(){
     return;
   }
 
-
   var chngCnt  = 0; // 변경된 건수
   var paramArr = new Array();
 
@@ -206,7 +205,7 @@ $("#storeEnvInfoArea #btnSaveStore").click(function(){
     if(objDirctInYn[i].value == "Y" && objEnvstValCd[i].value == ""){
       var msgStr = "<s:message code='hqManage.envSetting' /> "
                  + " [" + objEnvstCd[i].value + "] "+ objEnvstNm[i].value
-                 + " <s:message code='hqManage.require.regist.inputEnv' /> ";
+                 + " <s:message code='storeManage.require.regist.inputEnv' /> ";
 
       s_alert.pop(msgStr);
       return;

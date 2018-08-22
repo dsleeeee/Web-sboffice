@@ -80,7 +80,7 @@ $("#funcCopyLayer #btnSave").click(function(){
   param.copyPos = copyPosVal;
   param.targetPos = targetPosVal;
 
-  console.log(param);
+  //console.log(param);
 
   $.postJSONSave("/base/store/posfunc/use/copyPosFunc.sb", JSON.stringify(param), function(result) {
     s_alert.pop("<s:message code='cmm.saveSucc'/>");

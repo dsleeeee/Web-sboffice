@@ -96,14 +96,9 @@ function getConfigList(){
 
             if(envCnt == 0 || envCnt % 2 == 0) envHtml += "<tr>";
 
-            //console.log("list["+j+"].envstNm : "+ list[j].envstNm);
-
             envHtml += "      <th>" + list[j].envstCd + "</th>";
             envHtml += "      <td>" + list[j].envstNm + "</td>";
             envHtml += "      <td>";
-
-            //console.log("envstGrpCd : "+ list[j].envstGrpCd );
-            //console.log("dirctInYn : "+ list[j].dirctInYn);
 
             if(list[j].dirctInYn == "Y"){
               envHtml += "        <input type='text' name='envstValCd' id='env" + list[j].envstCd + "' >";
@@ -234,7 +229,7 @@ $("#envLayer #btnSave").click(function(){
   }
 
   $.postJSONArray("/store/hq/hqManage/config/save.sb", paramArr, function(result) {
-    console.log(result);
+    //console.log(result);
     s_alert.pop("<s:message code='cmm.saveSucc' />");
   },
   function(result) {

@@ -688,7 +688,7 @@ $("#btnSave").click(function(){
 
 <%-- 매장환경 탭 클릭시 --%>
 $("#storeInfoViewArea #storeEnv").click(function(){
-  if(selectedStore.storeCd == null || selectedStore.storeCd == "") {
+  if( selectedStore == null || selectedStore.storeCd == null || selectedStore.storeCd == "") {
     s_alert.pop("<s:message code='storeManage.require.regist.store1'/>");
     return;
   }

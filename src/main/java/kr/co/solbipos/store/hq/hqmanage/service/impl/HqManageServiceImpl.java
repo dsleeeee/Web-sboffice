@@ -5,6 +5,7 @@ import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.utils.security.EncUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -86,7 +87,6 @@ public class HqManageServiceImpl implements HqManageService{
         hqManage.setRegId(sessionInfoVO.getUserId());
         hqManage.setModId(sessionInfoVO.getUserId());
 
-
         if(SysStatFg.CLOSE == hqManage.getSysStatFg() ) {
             hqManage.setSysClosureDate("99991231");
         } else  if(SysStatFg.DEMO == hqManage.getSysStatFg() ) {
@@ -98,7 +98,16 @@ public class HqManageServiceImpl implements HqManageService{
         // 본사 코드 조회
         String hqOfficeCd = mapper.getHqOfficeCd(hqManage);
 
+        String wUuserId = hqOfficeCd.toLowerCase(); // 웹 사용자 아이디
+        String wUserPwd = EncUtil.setEncSHA256(wUuserId+"0000");    // 웹 패스워드
+        String pEmpNo = "0000"; // 포스 기본 사용자 사원번호
+        String pUserPwd = EncUtil.setEncSHA256(pEmpNo+"1234");  // 포스 패스워드
+
         hqManage.setHqOfficeCd(hqOfficeCd);
+        hqManage.setUserId(wUuserId);
+        hqManage.setUserPwd(wUserPwd);
+        hqManage.setPosEmpNo(pEmpNo);
+        hqManage.setPosUserPwd(pUserPwd);
 
         // 본사 등록
         int procCnt = mapper.regist(hqManage);
@@ -284,8 +293,6 @@ public class HqManageServiceImpl implements HqManageService{
 
         // hqOfficeCd : 복사 대상이 되는 본사
         // copyHqOfficeCd : 복사할 기준이 되는 본사
-        System.out.println("hqOfficeCd : "+ hqMenuVO.getHqOfficeCd());
-        System.out.println("CopyHqOfficeCd : "+ hqMenuVO.getCopyHqOfficeCd());
 
         // 권한 복사
         int authGrpCopy = mapper.copyAuth(hqMenuVO);

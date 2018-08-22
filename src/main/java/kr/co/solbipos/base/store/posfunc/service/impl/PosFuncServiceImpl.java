@@ -112,8 +112,6 @@ public class PosFuncServiceImpl implements PosFuncService{
 
         for(PosFuncVO posFuncVO : posFuncVOs) {
 
-            System.out.println("=============== useYn : " + posFuncVO.getUseYn());
-
             posFuncVO.setRegDt(dt);
             posFuncVO.setRegId(sessionInfoVO.getUserId());
             posFuncVO.setModDt(dt);

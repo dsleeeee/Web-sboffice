@@ -81,6 +81,9 @@ public interface StoreManageMapper {
     /** 포스 마스터 등록*/
     int insertPosInfo(StoreManageVO storeManageVO);
 
+    /** 회원 기본등급 등록 */
+    int insertMemberClass(StoreManageVO storeManageVO);
+
     /** 테이블 기본 그룹 생성 */
     int insertTabGroup(StoreManageVO storeManageVO);
 
@@ -221,5 +224,6 @@ public interface StoreManageMapper {
     List<DefaultMap<String>> getCornrApproveList(StoreManageVO storeManageVO);
     /** 포스별 승인 목록 조회*/
     List<DefaultMap<String>> getPosApproveList(StoreManageVO storeManageVO);
+
 }
 

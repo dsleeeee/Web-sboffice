@@ -73,7 +73,7 @@
       middleUrl = "store/";
     </c:if>
 
-    console.log(middleUrl);
+    //console.log(middleUrl);
 
     <%-- 메뉴 트리 생성 --%>
     var tree = new wijmo.nav.TreeView('#clsTree', {

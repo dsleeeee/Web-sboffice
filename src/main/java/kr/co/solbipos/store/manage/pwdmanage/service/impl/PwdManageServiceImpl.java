@@ -1,6 +1,9 @@
 package kr.co.solbipos.store.manage.pwdmanage.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.exception.AuthenticationException;
+import kr.co.common.service.message.MessageService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.HttpUtils;
 import kr.co.common.utils.security.EncUtil;
 import kr.co.common.utils.spring.WebUtil;
@@ -33,16 +36,18 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
  */
 @Service("pwdManageService")
 public class PwdManageServiceImpl implements PwdManageService {
-    
+
+    @Autowired
+    MessageService messageService;
     @Autowired
     PwdManageMapper pwdManageMapper;
-    
+
     /** 비밀번호 임의변경 대상 조회 */
     @Override
     public List<DefaultMap<String>> getPwdManageList(PwdManageVO pwdManageVO) {
         return pwdManageMapper.getPwdManageList(pwdManageVO);
     }
-    
+
     /** 비밀번호 변경 */
     @Override
     public PwChgResult modifyPwd(PwdManageVO pwdManageVO) {
@@ -58,10 +63,15 @@ public class PwdManageServiceImpl implements PwdManageService {
             newPassword = EncUtil.setEncSHA256(pwdManageVO.getUserId() + pwdManageVO.getNewPassword());
 
             /** 패스워드 정책 체크 */
-            //        if ( !CmmUtil.passwordPolicyCheck(pwdManageVO.getNewPassword())
-            //                || !CmmUtil.passwordPolicyCheck(pwdManageVO.getConfirmPassword()) ) {
-            //            return PwChgResult.PASSWORD_REGEXP;
-            //        }
+            PwChgResult pwdChk ;
+            try {
+                pwdChk = CmmUtil.checkPasswd(pwdManageVO.getNewPassword());
+                if(pwdChk != PwChgResult.CHECK_OK) {
+                    return pwdChk;
+                }
+            } catch (Exception e) {
+                throw new AuthenticationException(messageService.get("login.pwchg.error"), "");
+            }
 
         } else {
             pwdManageVO.setModDt(currentDateTimeString());
@@ -81,14 +91,14 @@ public class PwdManageServiceImpl implements PwdManageService {
         pwdManageVO.setNewPassword(newPassword);
         // 비밀번호 업데이트
         int updateResult = pwdManageMapper.updatePassword(pwdManageVO);
-        
+
         // 비밀번호 변경내역 저장
         pwdManageVO.setPriorPwd(oldPassword);
         pwdManageVO.setRegDt(currentDateTimeString());
         pwdManageVO.setRegIp(HttpUtils.getClientIp(WebUtil.getRequest()));
-        
+
         int insertResult = pwdManageMapper.insertPasswordHistory(pwdManageVO);
-        
+
         return PwChgResult.CHECK_OK;
     }
 

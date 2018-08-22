@@ -94,14 +94,9 @@ public class AuthServiceImpl implements AuthService {
         /**
          * 패스워드 초기 변경 인지 체크
          */
-        if( "".equals(result.getLastPwdChgDt()) ) {
+        if( result.getLastPwdChgDt() == null || "".equals(result.getLastPwdChgDt()) ) {
             result.setLoginResult(LoginResult.PASSWORD_CHANGE);
             return result;
-        }
-
-        /** 마지막비밀번호 변경일자 없는 경우... */
-        if ( result.getLastPwdChgDt() == null ) {
-            result.setLastPwdChgDt(currentDateTimeString());
         }
 
         int pwdChgDays = Integer.parseInt(addDaysString(result.getLastPwdChgDt(), BaseEnv.LOGIN_PWD_CHG_DAYS));

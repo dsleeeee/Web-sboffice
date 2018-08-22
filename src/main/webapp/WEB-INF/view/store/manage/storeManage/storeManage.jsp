@@ -124,9 +124,6 @@ var selectedStore;  <%-- 매장정보 수정시, 선택 매장 --%>
 var clsFg             = ${ccu.getCommCodeSelect("001")};
 var sysStatFg         = ${ccu.getCommCodeSelect("005")};
 
-console.log(clsFg)
-console.log(clsFg)
-
 var clsFgDataMap      = new wijmo.grid.DataMap(clsFg, 'value', 'name');
 var sysStatFgDataMap  = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
 
@@ -159,7 +156,7 @@ grid.formatItem.addHandler(function(s, e) {
   if (e.panel == s.cells) {
     var col = s.columns[e.col];
     var item = s.rows[e.row].dataItem;
-    if( col.binding == "storeNm" && item.storeCd != null) {
+    if( (col.binding == "storeCd" || col.binding == "storeNm" ) && item.storeCd != null) {
       wijmo.addClass(e.cell, 'wijLink');
     }
   }
@@ -239,7 +236,7 @@ function search(index) {
 
     var list = result.data.list;
 
-    console.log(list);
+    //console.log(list);
 
     if(list.length === undefined || list.length == 0) {
       s_alert.pop(result.message);

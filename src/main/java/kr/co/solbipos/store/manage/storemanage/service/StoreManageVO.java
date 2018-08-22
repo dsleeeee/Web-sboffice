@@ -87,6 +87,14 @@ public class StoreManageVO extends PageVO {
     private String copyChkVal;
     /** 포스번호 */
     private int posNo;
+    /** 웹 사용자 아이디 */
+    private String userId;
+    /** 웹 사용자 패스워드 */
+    private String userPwd;
+    /** 포스 사원번호 */
+    private String posEmpNo;
+    /** 포스 사용자 패스워드 */
+    private String posUserPwd;
 
 
     /**
@@ -486,4 +494,63 @@ public class StoreManageVO extends PageVO {
         this.posNo = posNo;
     }
 
+    /**
+     * @return the userId
+     */
+
+    public String getUserId() {
+        return userId;
+    }
+
+    /**
+     * @param userId the userId to set
+     */
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    /**
+     * @return the userPwd
+     */
+
+    public String getUserPwd() {
+        return userPwd;
+    }
+
+    /**
+     * @param userPwd the userPwd to set
+     */
+    public void setUserPwd(String userPwd) {
+        this.userPwd = userPwd;
+    }
+
+    /**
+     * @return the posEmpNo
+     */
+
+    public String getPosEmpNo() {
+        return posEmpNo;
+    }
+
+    /**
+     * @param posEmpNo the posEmpNo to set
+     */
+    public void setPosEmpNo(String posEmpNo) {
+        this.posEmpNo = posEmpNo;
+    }
+
+    /**
+     * @return the posUserPwd
+     */
+
+    public String getPosUserPwd() {
+        return posUserPwd;
+    }
+
+    /**
+     * @param posUserPwd the posUserPwd to set
+     */
+    public void setPosUserPwd(String posUserPwd) {
+        this.posUserPwd = posUserPwd;
+    }
 }

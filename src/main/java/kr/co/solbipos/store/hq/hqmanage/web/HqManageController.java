@@ -267,8 +267,6 @@ public class HqManageController {
 
         int cnt = service.copyAuth(hqMenu, sessionInfoVO);
 
-        System.out.println("========= cnt : "+ cnt);
-
         return returnJson(Status.OK, cnt);
     }
 
