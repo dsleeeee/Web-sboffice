@@ -36,7 +36,7 @@
     ]]>
     <where>
       <if test='fnkeyFg != null and fnkeyFg != ""'>
-        AND FNKEY_FG = ${fnkeyFg}
+        AND FNKEY_FG = #{fnkeyFg}
       </if>
     </where>
     <![CDATA[

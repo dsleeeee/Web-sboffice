@@ -54,12 +54,12 @@ $(document).ready(function () {
   });
 
   // 대표명칭 그리드 에디팅 방지
-  gridRepresent.beginningEdit.addHandler(function (s, e) {
-    var col = s.columns[e.col];
+  gridRepresent.beginningEdit.addHandler(function (sender, elements) {
+    var col = sender.columns[elements.col];
     if (col.binding === "nmcodeCd") {
-      var dataItem = gridRepresent.rows[e.row].dataItem;
+      var dataItem = gridRepresent.rows[elements.row].dataItem;
       if (nvl(dataItem.status, "") == "" && dataItem.status != "I") {
-        e.cancel = true;
+        elements.cancel = true;
       }
     }
   });
@@ -77,8 +77,8 @@ $(document).ready(function () {
   function srchGridRepresent() {
     var param = {};
     param.nmcodeGrpCd = "000";
-    param.nmcodeCd = srchNmcodeCd.text;
-    param.nmcodeNm = srchNmcodeNm.text;
+    param.nmcodeCd = srchNmcodeCd.value;
+    param.nmcodeNm = srchNmcodeNm.value;
 
     $.postJSON("/sys/cd/systemCd/systemCd/list.sb", param,
       function (result) {

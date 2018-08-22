@@ -315,7 +315,7 @@
     /* USE : VerManageMapper.chkVerSerNo */
     SELECT COUNT(1)
       FROM TB_CM_POS_VERSN
-     WHERE VER_SER_NO = ${verSerNo}
+     WHERE VER_SER_NO = #{verSerNo}
   </select>
 
   <!-- 버전 적용 매장 삭제   -->
