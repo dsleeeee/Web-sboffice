@@ -83,9 +83,9 @@ public class FuncController {
 
         List<DefaultMap<String>> list = service.list(funcVO);
 
-        for( DefaultMap<String> f : list) {
-            System.out.println(f);
-        }
+//        for( DefaultMap<String> f : list) {
+//            System.out.println(f);
+//        }
 
         return returnListJson(Status.OK, list, funcVO);
     }

@@ -166,9 +166,6 @@ public class CouponController {
     @RequestMapping(value = "/prod/couponProdView.sb", method = RequestMethod.GET)
     public String couponProdView(HttpServletRequest request, HttpServletResponse response,
         Model model) {
-
-        System.out.println("================ couponProdView");
-
         return "base/pay/coupon/couponProdView";
     }
 
