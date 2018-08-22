@@ -3,7 +3,10 @@ package kr.co.solbipos.base.pay.coupon.service.impl;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
+import kr.co.common.service.code.CmmCodeService;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.utils.SessionUtil;
+import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
@@ -11,7 +14,9 @@ import kr.co.solbipos.base.pay.coupon.service.CouponProdVO;
 import kr.co.solbipos.base.pay.coupon.service.CouponService;
 import kr.co.solbipos.base.pay.coupon.service.CouponVO;
 import kr.co.solbipos.base.pay.coupon.service.PayMethodClassVO;
+import kr.co.solbipos.base.pay.coupon.service.enums.CoupnEnvFg;
 import kr.co.solbipos.base.pay.coupon.service.enums.PayTypeFg;
+import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +50,10 @@ public class CouponServiceImpl implements CouponService {
 
     @Autowired
     CouponMapper mapper;
+
+    @Autowired
+    CmmCodeUtil cmmCodeUtil;
+
     @Autowired
     MessageService messageService;
 
@@ -53,11 +62,12 @@ public class CouponServiceImpl implements CouponService {
     public List<DefaultMap<String>> getCouponClassList(PayMethodClassVO payMethodAClassVO,
         SessionInfoVO sessionInfoVO) {
 
-        LOGGER.debug("====== orgnFg : "+ sessionInfoVO.getOrgnFg());
-        LOGGER.debug("====== storeCd : "+ sessionInfoVO.getStoreCd());
-        LOGGER.debug("====== orgnCd : "+ sessionInfoVO.getOrgnCd());
-
         List<DefaultMap<String>> returnList = null;
+
+
+        if(cmmCodeUtil.getHqEnvst(sessionInfoVO, "0019") != null ){
+            LOGGER.info("=========================>>>> co11111l : "+ CoupnEnvFg.getEnum(cmmCodeUtil.getHqEnvst(sessionInfoVO, "0019")));
+        }
 
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
 
@@ -97,10 +107,10 @@ public class CouponServiceImpl implements CouponService {
 
             LOGGER.debug(payMethodClassVO.getProperties());
 
-
+            /** 본사 */
             if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-                payMethodClassVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
 
+                payMethodClassVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
 
                 if(payMethodClassVO.getStatus() == GridDataFg.INSERT) {
                     procCnt += mapper.insertHqCouponClass(payMethodClassVO);
@@ -112,7 +122,9 @@ public class CouponServiceImpl implements CouponService {
                     procCnt += mapper.deleteHqCouponClass(payMethodClassVO);
                 }
 
-            } else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            }
+            /** 매장 */
+            else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
 
                 payMethodClassVO.setStoreCd(sessionInfoVO.getOrgnCd());
 
@@ -182,7 +194,7 @@ public class CouponServiceImpl implements CouponService {
 
             LOGGER.debug(couponVO.getProperties());
 
-
+            /** 본사 */
             if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
 
                 couponVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
@@ -197,7 +209,9 @@ public class CouponServiceImpl implements CouponService {
                     procCnt += mapper.deleteHqCoupon(couponVO);
                 }
 
-            } else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            }
+            /** 매장 */
+            else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
 
                 couponVO.setStoreCd(sessionInfoVO.getStoreCd());
 
@@ -243,9 +257,12 @@ public class CouponServiceImpl implements CouponService {
         // TODO 진행중
         //List<DefaultMap<String>> resultList = mapper.getNogistProdList(couponProdVO);
 
+        /** env 본사 통제시, 본사 쿠폰, 쿠폰 등록상품 조회 */
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
 
-        } else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+        }
+        /** env 매장 통제시, 매장 쿠폰, 쿠폰 등록상품 조회  */
+        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
 
 
         }

@@ -1,6 +1,7 @@
 package kr.co.solbipos.application.common.service.impl;
 
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -22,14 +23,6 @@ public interface CmmCodeMapper {
      * @return
      */
     <E> List<E> selectCmmCodeList(String nmcodeGrpCd);
-
-    /**
-     * 환경변수 코드 조회
-     *
-     * @param envstCd
-     * @return
-     */
-    <E> List<E> selectEnvCodeList(String envstCd);
 
     /**
      * 대리점 목록 조회
@@ -55,6 +48,5 @@ public interface CmmCodeMapper {
      * @return
      */
     <E> List<E> selectMemberClassList(SessionInfoVO sessionInfoVO);
-
 
 }

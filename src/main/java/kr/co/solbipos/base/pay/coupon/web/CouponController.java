@@ -1,9 +1,14 @@
 package kr.co.solbipos.base.pay.coupon.web;
 
+import kr.co.common.data.enums.CodeType;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
+import kr.co.common.exception.BizException;
+import kr.co.common.exception.CodeException;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.SessionUtil;
+import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.pay.coupon.service.CouponProdVO;
 import kr.co.solbipos.base.pay.coupon.service.CouponService;
@@ -51,6 +56,10 @@ public class CouponController {
     @Autowired
     SessionService sessionService;
 
+    /** util */
+    @Autowired
+    CmmCodeUtil cmmCodeUtil;
+
     /**
      * 쿠폰 등록 화면
      * @param   request
@@ -63,6 +72,18 @@ public class CouponController {
     @RequestMapping(value = "/class/couponView.sb", method = RequestMethod.GET)
     public String prodClassView(HttpServletRequest request, HttpServletResponse response,
             Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        String envstCd = "0019";
+
+        // 환경변수 체크
+        if(cmmCodeUtil.getHqEnvst(sessionInfoVO, envstCd) == null ) {
+            String msg = "";
+
+            throw new CodeException(CodeType.HQ_ENV, envstCd, "/error/envError.sb");
+        }
+
         return "base/pay/coupon/couponView";
     }
 
@@ -195,7 +216,5 @@ public class CouponController {
 
         return returnListJson(Status.OK, resultMap, couponProdVO);
     }
-
-
 
 }
