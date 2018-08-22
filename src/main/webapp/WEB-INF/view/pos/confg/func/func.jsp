@@ -92,8 +92,8 @@ var hData2 =
   ];
 
 <%-- 그리드 생성 --%>
-var grid1 = wgrid.genGrid("#theGrid1", hData1, "${menuCd}", 1, ${clo.getColumnLayout(1)});
-var grid2 = wgrid.genGrid("#theGrid2", hData2, "${menuCd}", 2, ${clo.getColumnLayout(1)});
+var grid1 = wgrid.genGrid("#theGrid1", hData1);
+var grid2 = wgrid.genGrid("#theGrid2", hData2);
 
 grid1.itemsSource     = funcFgCView;
 grid1.isReadOnly      = true;

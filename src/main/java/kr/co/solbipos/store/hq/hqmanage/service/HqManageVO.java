@@ -71,12 +71,18 @@ public class HqManageVO extends PageVO {
     private String remark;
     /** 복사 본사 */
     private String copyHqOfficeCd;
-    /** 사용자ID */
-    private String userId;
     /** 포함 제외 여부 */
     private IncldExcldFg incldExcldFg;
-    
-    
+    /** 웹 사용자 아이디 */
+    private String userId;
+    /** 웹 사용자 패스워드 */
+    private String userPwd;
+    /** 포스 사원번호 */
+    private String posEmpNo;
+    /** 포스 사용자 패스워드 */
+    private String posUserPwd;
+
+
     /**
      * @return the storeFg
      */
@@ -366,18 +372,6 @@ public class HqManageVO extends PageVO {
         this.copyHqOfficeCd = copyHqOfficeCd;
     }
     /**
-     * @return the userId
-     */
-    public String getUserId() {
-        return userId;
-    }
-    /**
-     * @param userId the userId to set
-     */
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-    /**
      * @return the incldExcldFg
      */
     public IncldExcldFg getIncldExcldFg() {
@@ -389,5 +383,44 @@ public class HqManageVO extends PageVO {
     public void setIncldExcldFg(IncldExcldFg incldExcldFg) {
         this.incldExcldFg = incldExcldFg;
     }
-    
+
+    /**
+     * @return the userId
+     */
+    public String getUserId() { return userId; }
+
+    /**
+     * @param userId the userId to set
+     */
+    public void setUserId(String userId) { this.userId = userId; }
+
+    /**
+     * @return the userPwd
+     */
+    public String getUserPwd() { return userPwd; }
+
+    /**
+     * @param userPwd the userPwd to set
+     */
+    public void setUserPwd(String userPwd) { this.userPwd = userPwd; }
+
+    /**
+     * @return the posEmpNo
+     */
+    public String getPosEmpNo() { return posEmpNo; }
+
+    /**
+     * @param posEmpNo the posEmpNo to set
+     */
+    public void setPosEmpNo(String posEmpNo) { this.posEmpNo = posEmpNo;}
+
+    /**
+     * @return the posUserPwd
+     */
+    public String getPosUserPwd() { return posUserPwd; }
+
+    /**
+     * @param posUserPwd the posUserPwd to set
+     */
+    public void setPosUserPwd(String posUserPwd) { this.posUserPwd = posUserPwd; }
 }

@@ -129,10 +129,6 @@
   var posFg   = ${ccu.getEnvCodeExcpAll("4020")};
   var payFg   = ${ccu.getEnvCodeExcpAll("204")};//TODO
 
-  console.log(mainYn);
-  console.log(posFg);
-  console.log(payFg);
-
   var mainYnDataMap   = new wijmo.grid.DataMap(mainYn, 'value', 'name');  //TODO name, value가 바뀜
   var posFgDataMap    = new wijmo.grid.DataMap(posFg, 'value', 'name');
   var payFgDataMap    = new wijmo.grid.DataMap(payFg, 'value', 'name');
