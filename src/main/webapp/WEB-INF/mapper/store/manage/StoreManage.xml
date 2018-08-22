@@ -424,7 +424,12 @@
       USER_PWD,
       AUTH_GRP_CD,
       LOGIN_FAIL_CNT,
-      LOCK_CD
+      USER_STAT_FG,
+      USE_YN,
+      REG_DT,
+      REG_ID,
+      MOD_DT,
+      MOD_ID
     )
     VALUES
     (
@@ -432,7 +437,12 @@
       #{userPwd},
       '000004',
       0,
-      'N'
+      '00',
+      'Y',
+      #{regDt},
+      #{regId},
+      #{modDt},
+      #{modId}
     )
   </insert>
 

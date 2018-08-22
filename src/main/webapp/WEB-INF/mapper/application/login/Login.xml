@@ -24,7 +24,7 @@
             twui.LAST_LOGIN_DT,
             twui.LAST_PWD_CHG_DT,
             twui.LOGIN_FAIL_CNT,
-            twui.LOCK_CD,
+            twui.USER_STAT_FG,
             #{vUserId, jdbcType=VARCHAR} AS V_USER_ID
         FROM
             TB_WB_USER_INFO twui
@@ -114,7 +114,7 @@
             twui.USER_ID = info.USER_ID
         WHERE
             twui.USER_ID = #{userId}
-            AND twui.LOCK_CD = 'N'
+            AND twui.USE_YN = 'Y'
 
     </select>
 
@@ -221,11 +221,16 @@
     </select>
 
 
-    <update id="updateLoginDt" parameterType="sessionInfoVO">
-        /* AuthMapper.updateLoginDt */
+    <update id="updateLoginInfo" parameterType="sessionInfoVO">
+        /* AuthMapper.updateLoginInfo */
         UPDATE TB_WB_USER_INFO
         SET
             LAST_LOGIN_DT = #{lastLoginDt}
+            <if test="loginFailCnt != null">
+            , LOGIN_FAIL_CNT = #{loginFailCnt}
+            </if><if test="userStatFg.toString() != null and userStatFg.toString() != ''">
+            , USER_STAT_FG = #{userStatFg}
+            </if>
         WHERE
             USER_ID = #{userId}
     </update>

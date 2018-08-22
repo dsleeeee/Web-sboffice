@@ -385,13 +385,11 @@ public class UserController {
             throw new AuthenticationException(messageService.get("login.pw.find.not.match"), "");
         } else if (pcr == PwChgResult.UUID_NOT_MATCH || pcr == PwChgResult.EMPTY_USER
                 || pcr == PwChgResult.ID_NOT_MATCH) {
-            /**
-             * uuid가 없는 경우 uuid로 조회한 user가 있는지 확인 halfId 와 uuid 로 조회된 id 매칭 여부 리턴 메세지 : 잘못된 접근입니다.
-             */
+            /**uuid가 없는 경우 uuid로 조회한 user가 있는지 확인 halfId 와 uuid 로 조회된 id 매칭 여부 리턴 메세지 : 잘못된 접근입니다. */
             throw new AuthenticationException(messageService.get("cmm.invalid.access"), "");
-        } else if (pcr == PwChgResult.LOCK_USER) {
-            // 잠금 유져는 패스워드 변경 불가능 > 잠겨있는 유저 입니다. 고객센터로 연락 주세요.
-            throw new AuthenticationException(messageService.get("login.pw.find.lock.user"), "");
+        } else if (pcr == PwChgResult.NOT_USE) {
+            // 사용하지 않는 사용자 패스워드 변경 불가능 > 사용하지 않는 유저 입니다. 고객센터로 연락 주세요.
+            throw new AuthenticationException(messageService.get("login.pw.find.not.use"), "");
         } else if (pcr == PwChgResult.UUID_LIMIT_ERROR) {
             // 인증유효 시간이 지났습니다. 다시 인증 해주세요.
             throw new AuthenticationException(messageService.get("login.pw.find.limit"),

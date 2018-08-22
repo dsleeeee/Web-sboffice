@@ -40,8 +40,8 @@ public enum PwChgResult implements CodeEnum  {
     EMPTY_USER("EMPTY_USER"),
     /** id 정보가 맞지 않음 */
     ID_NOT_MATCH("ID_NOT_MATCH"),
-    /** 잠긴 상태 유져 */
-    LOCK_USER("LOCK_USER"),
+    /** 사용하지 않는 계정 */
+    NOT_USE("NOT_USE"),
     /** 체크 오류 */
     CHECK_NOK("CHECK_NOK"),
     /** 체크 완료 */

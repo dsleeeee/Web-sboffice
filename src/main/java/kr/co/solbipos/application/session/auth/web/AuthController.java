@@ -123,37 +123,41 @@ public class AuthController {
          * 2-2. 패스워드 변경 페이지로 이동<br>
          */
         String returnUrl = MAIN_PAGE_URL;
-
+        String failUrl = "/auth/login.sb?userId=" + result.getUserId();
         // 로그인 성공
         if (code == LoginResult.SUCCESS) {
-            // 메인 페이지
-            returnUrl = MAIN_PAGE_URL;
+            // 메인 페이지로
             // 세션 생성
             sessionService.setSessionInfo(request, response, result);
         } else if (code == LoginResult.NOT_EXISTS_ID || code == LoginResult.PASSWORD_ERROR) {
             // 다시 로그인 페이지로 이동
-            returnUrl = "/auth/login.sb?userId=" + result.getUserId();
+            returnUrl = failUrl;
             throw new AuthenticationException(messageService.get("login.idpw.fail"), returnUrl);
-        } else if (code == LoginResult.LOCK) {
-            // 잠금상태의 유져
-            returnUrl = "/auth/login.sb?userId=" + result.getUserId();
-            throw new AuthenticationException(messageService.get("login.pw.find.lock.user"), returnUrl);
-        } else if (code == LoginResult.PASSWORD_CHANGE) {
+        } else if (code == LoginResult.NOT_USE_ID) {
+            // 사용하지 않는 유저
+            returnUrl = failUrl;
+            throw new AuthenticationException(messageService.get("login.pw.find.not.use"), returnUrl);
+        } else if (code == LoginResult.PASSWORD_TEMPORARY) {
             // 패스워드 변경 레이어 팝업
             // 초기 비밀번호 입니다. 비밀번호 변경이 필요합니다.
-            returnUrl = "/auth/login.sb?userId=" + result.getUserId() + "&type=pwChg";
+            returnUrl = failUrl + "&type=pwChg";
             throw new AuthenticationException(messageService.get("login.pwd.chg"), returnUrl);
+        }
+        else if(code == LoginResult.LOGIN_FAIL_CNT_OVER) {
+            // 로그인 오류 횟수 초과
+            returnUrl = failUrl;
+            throw new AuthenticationException(messageService.get("login.fail.cnt"), returnUrl);
         }
         else if(code == LoginResult.PASSWORD_EXPIRE) {
             // 비밀번호 변경 및 연장이 필요합니다.
-            returnUrl = "/auth/login.sb?userId=" + result.getUserId() + "&type=pwExpire";
+            returnUrl = failUrl + "&type=pwExpire";
             throw new AuthenticationException(messageService.get("login.pwd.expire"), returnUrl);
         }
         // 로그인 실패
         else {
             sw.stop();
             LOGGER.error("로그인 실패 처리 시간 : {}", sw.getTotalTimeSeconds());
-            returnUrl = "auth/login.sb?userId=" + result.getUserId();
+            returnUrl = failUrl;
             // 실패 처리
             throw new AuthenticationException(messageService.get("login.fail"), returnUrl);
         }
