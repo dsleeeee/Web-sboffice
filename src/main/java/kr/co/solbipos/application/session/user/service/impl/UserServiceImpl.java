@@ -1,7 +1,10 @@
 package kr.co.solbipos.application.session.user.service.impl;
 
+import kr.co.common.exception.AuthenticationException;
+import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.system.BaseEnv;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.DateUtil;
 import kr.co.common.utils.security.EncUtil;
 import kr.co.common.utils.spring.ObjectUtil;
@@ -47,6 +50,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     AuthService authService;
     @Autowired
+    MessageService messageService;
+    @Autowired
     UserMapper userMapper;
 
     @SuppressWarnings( "unused" )
@@ -54,13 +59,15 @@ public class UserServiceImpl implements UserService {
     public PwChgResult processLayerPwdChg(SessionInfoVO sessionInfoVO, PwdChgVO pwdChgVO) {
         // 사용자정보 조회
         SessionInfoVO sessionInfo = authService.selectWebUser(sessionInfoVO);
+
         // 비밀번호 암호화
         String newPassword = EncUtil.setEncSHA256(sessionInfo.getUserId() + pwdChgVO.getNewPw());
+        String curPassword = EncUtil.setEncSHA256(sessionInfo.getUserId() + pwdChgVO.getCurrentPw());
 
         /**
          * 기존 패스워드 비교
          */
-        if (!sessionInfo.getUserPwd().equals(pwdChgVO.getCurrentPw())) {
+        if (!sessionInfo.getUserPwd().equals(curPassword)) {
             return PwChgResult.PASSWORD_NOT_MATCH;
         }
 
@@ -81,17 +88,23 @@ public class UserServiceImpl implements UserService {
         /**
          * 패스워드 정책 체크
          */
-//        if (!CmmUtil.passwordPolicyCheck(pwdChgVO.getNewPw())
-//                || !CmmUtil.passwordPolicyCheck(pwdChgVO.getNewPwConf())) {
-//
-//            return PwChgResult.PASSWORD_REGEXP;
-//        }
+        PwChgResult pwdChk ;
+        try {
+            pwdChk = CmmUtil.checkPasswd(pwdChgVO.getNewPw());
+            if(pwdChk != PwChgResult.CHECK_OK) {
+                System.out.println("======> pwdChk : "+ pwdChk.toString());
+                return pwdChk;
+            }
+        } catch (Exception e) {
+            throw new AuthenticationException(messageService.get("login.pwchg.error"), "");
+        }
 
         String userId = sessionInfo.getUserId();
 
         // 패스워드 세팅 및 변경
         sessionInfo.setUserId(userId);
         sessionInfo.setUserPwd(newPassword);
+        sessionInfo.setLastPwdChgDt(currentDateTimeString());
         int r1 = updateUserPwd(sessionInfo);
 
         // 패스워드 변경 내역 저장

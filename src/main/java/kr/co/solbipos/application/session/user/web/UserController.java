@@ -7,6 +7,7 @@ import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.system.BaseEnv;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.DateUtil;
 import kr.co.common.utils.spring.ObjectUtil;
 import kr.co.common.utils.spring.StringUtil;
@@ -363,10 +364,16 @@ public class UserController {
         /**
          * 패스워드 정책 체크
          */
-//        if (!CmmUtil.passwordPolicyCheck(pwdChgVO.getNewPw())
-//                || !CmmUtil.passwordPolicyCheck(pwdChgVO.getNewPwConf())) {
-//            throw new AuthenticationException(messageService.get("login.pw.chg.regexp"), "");
-//        }
+        PwChgResult pwdChk;
+        try {
+            pwdChk = CmmUtil.checkPasswd(pwdChgVO.getNewPw());
+            if(pwdChk != PwChgResult.CHECK_OK) {
+                throw new JsonException(Status.FAIL, pwdChk.toString());
+            }
+        } catch (Exception e) {
+            LOGGER.info(messageService.get("login.pwchg.error"));
+            throw new JsonException(Status.FAIL, messageService.get("login.pwchg.error"));
+        }
 
         PwChgResult pcr = userService.processPwdChg(pwdChgVO);
 
@@ -444,16 +451,40 @@ public class UserController {
              * 변경 패스워드가 기존 비밀번호가 같은지 체크
              */
             throw new JsonException(Status.FAIL, messageService.get("login.layer.pwchg.current"));
-        } else if (result == PwChgResult.PASSWORD_REGEXP) {
+        } else if (result == PwChgResult.PASSWORD_NOT_MATCH_LENGTH) {
             /**
-             * 패스워드 정책 체크
+             * 비밀번호는 최소 6자 이상 20자 이하만 가능
              */
-            throw new JsonException(Status.FAIL, messageService.get("login.pw.chg.regexp"));
+            throw new JsonException(Status.FAIL, messageService.get("login.pw.not.match.length"));
+        } else if (result == PwChgResult.PASSWORD_NOT_MATCH_CHAR) {
+            /**
+             * 비밀번호는 숫자와 영문, 특수문자(!,@,$,~)만 사용 가능
+             */
+            throw new JsonException(Status.FAIL, messageService.get("login.pw.not.match.char"));
+        } else if (result == PwChgResult.PASSWORD_NOT_CONTAIN_NUMBER) {
+            /**
+             * 비밀번호는 반드시 숫자가 포함
+             */
+            throw new JsonException(Status.FAIL, messageService.get("login.pw.not.contain.number"));
+        } else if (result == PwChgResult.PASSWORD_NOT_CONTAIN_ENG_CHAR) {
+            /**
+             * 비밀번호는 영문자가 반드시 포함
+             */
+            throw new JsonException(Status.FAIL, messageService.get("login.pw.not.contain.char"));
+        } else if (result == PwChgResult.PASSWORD_CONTINUED_CHAR) {
+            /**
+             * 숫자 또는 알파벳 순서대로 3자이상 사용하는 비밀번호는 사용할 수 없습니다.
+             */
+            throw new JsonException(Status.FAIL, messageService.get("login.pw.cannot.be.used.continued.char"));
+        } else if (result == PwChgResult.PASSWORD_SAME_CHAR) {
+            /**
+             * 동일한 문자 또는 숫자를 3자 이상 사용할 수 없습니다.
+             */
+            throw new JsonException(Status.FAIL, messageService.get("login.pw.cannot.be.used.same.char"));
         }
 
         HashMap<String, String> returnData = new HashMap<>();
-        returnData.put("msg", messageService.get("login.pw.find.h2.1")
-                + messageService.get("login.pw.find.h2.2"));
+        returnData.put("msg", messageService.get("login.pw.find.h2.1") +"\\n" + messageService.get("login.pw.find.h2.2"));
         returnData.put("url", "/auth/logout.sb");
 
         return returnJson(Status.OK, returnData);
@@ -504,8 +535,7 @@ public class UserController {
         int r2 = userService.insertPwdChgHist(pwdChgHistVO);
 
         HashMap<String, String> result = new HashMap<>();
-        result.put("msg", messageService.get("login.pw.find.h2.1")
-                + messageService.get("login.pw.find.h2.2"));
+        result.put("msg", messageService.get("login.pw.find.h2.1") + "\\n" + messageService.get("login.pw.find.h2.2"));
 
         result.put("url", "/auth/logout.sb");
 

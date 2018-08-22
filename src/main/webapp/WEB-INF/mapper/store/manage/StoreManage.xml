@@ -193,7 +193,7 @@
   <select id="getStoreCd" parameterType="storeManageVO" resultType="String">
     /* USE : StoreManageMapper.getStoreCd */
     <if test='sysStatFg.toString() == "DEMO"'>
-      SELECT 'DS'||LPAD(TO_CHAR(NVL(MAX(SUBSTR(STORE_CD, 2, 6)), 0) + 1), 5, '0') AS STORE_CD
+      SELECT 'DS'||LPAD(TO_CHAR(NVL(MAX(SUBSTR(STORE_CD, 3, 6)), 0) + 1), 5, '0') AS STORE_CD
         FROM TB_MS_STORE
        WHERE SYS_STAT_FG = '9'
     </if>
@@ -390,11 +390,11 @@
     VALUES
     (
       #{storeCd},
-      '0000',
+      #{posEmpNo},
       #{ownerNm},
-      '0000',
+      #{posUserPwd},
       'Y',
-      LOWER(#{storeCd}),
+      #{userId},
       #{telNo},
       #{emailAddr},
       #{postNo},
@@ -428,8 +428,8 @@
     )
     VALUES
     (
-      LOWER(#{storeCd}),
-      '0000',
+      #{userId},
+      #{userPwd},
       '000004',
       0,
       'N'
@@ -531,6 +531,55 @@
       #{modId}
     )
   </insert>
+
+  <!-- 회원 기본등급 등록 -->
+  <!--
+      TABLE    : TB_MB_MEMBER_CLASS
+      PARAM    : storeManageVO
+      COMMENTS : 회원 기본등급을 저장한다.
+  -->
+  <insert id="insertMemberClass" parameterType="DefaultMap" >
+    /* USE : StoreManageMapper.insertMemberClass */
+    INSERT INTO TB_MB_MEMBER_CLASS
+    (
+      MEMBR_ORGN_CD,
+      MEMBR_CLASS_CD,
+      MEMBR_CLASS_NM,
+      DC_RATE,
+      POINT_SAVE_FG,
+      DEFLT_YN,
+      NEW_JOIN_SAVE_POINT,
+      FIRST_SALE_SAVE_POINT,
+      MIN_USE_POINT,
+      ANVSR_POINT_SAVE_FG,
+      ANVSR_SAVE_POINT,
+      USE_YN,
+      REG_DT,
+      REG_ID,
+      MOD_DT,
+      MOD_ID
+    )
+    VALUES
+    (
+      #{storeCd},
+      '000',
+      '기본',
+      0,
+      '1',
+      'Y',
+      0,
+      0,
+      0,
+      '1',
+      0,
+      'Y',
+      #{regDt},
+      #{regId},
+      #{modDt},
+      #{modId}
+    )
+  </insert>
+
 
   <!-- 테이블 기본 그룹 생성 -->
   <!--
