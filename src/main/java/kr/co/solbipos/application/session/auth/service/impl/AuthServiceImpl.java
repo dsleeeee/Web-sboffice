@@ -85,7 +85,7 @@ public class AuthServiceImpl implements AuthService {
 
         /**
          * 사용자 잠금 여부
-         * */
+         */
         if("Y".equals(result.getLockCd())) {
             result.setLoginResult(LoginResult.LOCK);
             return result;
@@ -93,8 +93,8 @@ public class AuthServiceImpl implements AuthService {
 
         /**
          * 패스워드 초기 변경 인지 체크
-         * */
-        if( "".equals(result.getLastPwdChgDt()) ) {
+         */
+        if( result.getLastPwdChgDt() == null || "".equals(result.getLastPwdChgDt()) ) {
             result.setLoginResult(LoginResult.PASSWORD_CHANGE);
             return result;
         }
@@ -104,7 +104,7 @@ public class AuthServiceImpl implements AuthService {
 
         /**
          * 패스워드 변경 날짜 체크
-         * */
+         */
         if( currentDay >= pwdChgDays ) {
             result.setLoginResult(LoginResult.PASSWORD_EXPIRE);
             return result;
