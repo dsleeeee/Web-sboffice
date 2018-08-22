@@ -11,139 +11,60 @@
     <%--<button type="submit" class="btn_skyblue">gogogogo</button>--%>
 <%--</f:form>--%>
 
-<div ng-app="app" ng-controller="appCtrl">
+<div id="theGrid" ng-app="app" ng-controller="appTCCtrl">
     <%-- 조회 --%>
     <div class="mt10 pdb20 oh bb">
         <button class="btn_blue fr" id="btnSearch" ng-click="search()"><s:message code="cmm.search"/></button>
     </div>
-<wj-flex-grid
+    <wj-flex-grid
         class="gridStyle"
-        items-source="data" >
+        items-source="data"
+        control="flex">
 
-    <!-- define columns -->
-    <wj-flex-grid-column header="ID" binding="id" width="50"></wj-flex-grid-column>
-    <wj-flex-grid-column header="Date" binding="date" width="100"></wj-flex-grid-column>
-    <wj-flex-grid-column header="Country" binding="country" width="100"></wj-flex-grid-column>
-    <wj-flex-grid-column header="Product" binding="product" width="140"></wj-flex-grid-column>
-    <wj-flex-grid-column header="Color" binding="color" width="140"></wj-flex-grid-column>
-    <wj-flex-grid-column header="Amount" binding="amount" width="100"></wj-flex-grid-column>
-    <wj-flex-grid-column header="Active" binding="active"></wj-flex-grid-column>
-    <%--<wj-flex-grid-column header="STORECD" binding="storeCd" width="100"></wj-flex-grid-column>--%>
-    <%--<wj-flex-grid-column header="STORENM" binding="storeNm" width="100"></wj-flex-grid-column>--%>
+        <!-- define columns -->
+        <wj-flex-grid-column header="NmcodeCd" binding="nmcodeCd" width="*"></wj-flex-grid-column>
+        <wj-flex-grid-column header="NmcodeNm" binding="nmcodeNm" width="*"></wj-flex-grid-column>
 
-    <!-- enable column filtering-->
-    <wj-flex-grid-filter></wj-flex-grid-filter>
-</wj-flex-grid>
+        <!-- enable column filtering-->
+        <wj-flex-grid-filter></wj-flex-grid-filter>
+    </wj-flex-grid>
 </div>
 
 <script type="text/javascript">
-    var test;
 
-    // declare app module
-    var app = angular.module('app', ['wj']);
-    // app controller provides data
-    app.controller('appCtrl', ['$scope', function($scope) {
-        $scope.count = 0;
-        $scope.search = function() {
-            $scope.itemCount = 0;
-            // var data = getList();
-            // var data = getData(0);
-            // $scope.data = new wijmo.collections.CollectionView(data);
+    var app = agrid.genGrid('app', 'appTCCtrl');
 
-            test =$scope;
-            var param = {};
-            param.listScale = 15;
-            param.curr = 1;
+    $(document).ready(function () {
+        var theGrid = agrid.getGrid("theGrid");
 
-
-            // $.postJSON("/iostock/loan/storeLoanManage/storeLoanManage/list.sb", param,
-            //     function (result) {
-            //         var list = result.data.list;
-            //         if (list.length === undefined || list.length === 0) {
-            //             s_alert.pop(result.message);
-            //             return;
-            //         }
-            //
-            //         // console.log("list =======================");
-            //         // console.log(list);
-            //
-            //         // $scope.data = new wijmo.collections.CollectionView(getData(0));
-            //
-            //         var data2 = getData(0);
-            //         $scope.data = new wijmo.collections.CollectionView(data2);
-            //
-            //     },
-            //     function (result) {
-            //         s_alert.pop(result.message);
-            //         return;
-            //     }
-            // );
-        };
-    }]);
-
-    function getList() {
-        // validation 추가
         var param = {};
-        param.listScale = 15;
-        param.curr = 1;
-
-        var list;
-        $.postJSON("/iostock/loan/storeLoanManage/storeLoanManage/list.sb", param,
+        param.nmcodeGrpCd = "000";
+        theGrid.search = function () {
+          $.postJSON("/sys/cd/systemCd/systemCd/list.sb", param,
             function (result) {
-                list = result.data.list;
-                if (list.length === undefined || list.length === 0) {
-                    s_alert.pop(result.message);
-                    return;
-                }
-
-                list = getData(0);
-                return list;
-            },
-            function (result) {
+              var list = result.data.list;
+              if (list.length === undefined || list.length === 0) {
                 s_alert.pop(result.message);
                 return;
+              }
+              var data = new wijmo.collections.CollectionView(list);
+              //track the changes
+              data.trackChanges = true;
+              // initialize the scope data.
+              theGrid.data = data;
+
+            },
+            function (result) {
+              s_alert.pop(result.message);
+              return;
             }
-        );
-
-    }
-
-
-
-
-
-
-    // create some random data
-    function getData(count) {
-        var data = [];
-        var countries = ['US', 'Germany', 'UK', 'Japan', 'Italy'];
-        var products = ['Widget', 'Gadget', 'Doohickey'];
-        var colors = ['Black', 'White', 'Red', 'Green', 'Blue', 'Yellow', 'Orange', 'Brown'];
-        var dt = new Date();
-        for (var i = 0; i <= count; i++) {
-
-            // create a new item
-            var item = {
-                id: i,
-                date: new Date(dt.getFullYear(), i % 12, 1),
-                country: countries[Math.floor(Math.random() * countries.length)],
-                product: products[Math.floor(Math.random() * products.length)],
-                color: colors[Math.floor(Math.random() * colors.length)],
-                amount: 1000 + Math.random() * 10000,
-                active: i % 6 != 0
-            };
-
-            // binding to null values
-            if ((i + 1) % 10 == 0) {
-                item.date = null;
-                item.amount = null;
-                item.active = null;
-            }
-
-            // add new item to list
-            data.push(item);
+          );
         }
 
-        // console.log(data);
-        return data;
-    }
+        theGrid.getGrid.selectionChanged.addHandler(function (s, e) {
+          console.log("click");
+        });
+
+    });
+
 </script>

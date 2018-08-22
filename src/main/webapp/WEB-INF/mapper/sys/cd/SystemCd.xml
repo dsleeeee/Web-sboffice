@@ -30,11 +30,10 @@
             TB_CM_NMCODE
         WHERE
             NMCODE_GRP_CD = '000'
-        AND
         <if test="nmcodeCd != null and nmcodeCd != ''">
             AND NMCODE_CD LIKE #{nmcodeCd}||'%'
         </if>
-        ORDER BY NMCODE_GRP_CD, NMCODE_CD DESC
+        ORDER BY NMCODE_GRP_CD, NMCODE_CD
     </select>
     
     <!-- 세부명칭 코드목록 조회 -->
@@ -58,7 +57,7 @@
         <if test="nmcodeCd != null and nmcodeCd != ''">
             AND NMCODE_CD LIKE #{nmcodeCd}||'%'
         </if>
-        ORDER BY NMCODE_CD DESC
+        ORDER BY NMCODE_CD
     </select>
     
     <!-- 코드목록 업데이트 -->
