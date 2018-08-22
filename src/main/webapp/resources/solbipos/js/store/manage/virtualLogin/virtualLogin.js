@@ -38,7 +38,7 @@ $(document).ready(function () {
       {binding: "orgnFg", header: messages["virtualLogin.orgnFg"], visible: false, width: "*"}
     ];
   var grid = wgrid.genGrid("#theGrid", gridData);
-  var listScaleBox = wcombo.genCommonBox("#listScaleBox", listScaleBoxData);
+  var listScaleBox = wcombo.genCommonBox("#listScaleBox", gvListScaleBoxData);
 
   // 그리드 포맷
   grid.formatItem.addHandler(function (s, e) {

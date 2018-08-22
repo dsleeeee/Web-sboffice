@@ -48,7 +48,7 @@ $(document).ready(function () {
     ];
 
   var grid = wgrid.genGrid("#theGrid", gridData, "Y");
-  var listScaleBox = wcombo.genCommonBox("#listScaleBox", listScaleBoxData);
+  var listScaleBox = wcombo.genCommonBox("#listScaleBox", gvListScaleBoxData);
 
   //  그리드 포맷 
   grid.formatItem.addHandler(function (s, e) {
