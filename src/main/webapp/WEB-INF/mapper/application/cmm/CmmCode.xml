@@ -73,7 +73,19 @@
      ORDER BY HQ_OFFICE_CD NULLS FIRST
   </select>
 
-
+  <!-- 본사 환경변수 조회 -->
+  <!--
+      TABLE    : TB_HQ_ENVST
+      COMMENTS : 본사 환경변수 테이블에 등록된 값을 조회한다.
+  -->
+  <select id="getHqEnvst" parameterType="hqEnvstVO" resultType="String">
+    /* CmmCodeMapper.getHqEnvst */
+    SELECT ENVST_VAL
+      FROM TB_HQ_ENVST
+     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+       AND ENVST_CD = #{envstCd}
+       AND USE_YN = 'Y'
+  </select>
 
 </mapper>
 

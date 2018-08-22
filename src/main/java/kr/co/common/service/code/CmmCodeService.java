@@ -55,14 +55,6 @@ public interface CmmCodeService {
     <E> List<E> selectCmmCodeList(String nmcodeGrpCd);
 
     /**
-     * 환경변수 조회
-     *
-     * @param envstCd
-     * @return
-     */
-    <E> List<E> selectEnvCodeList(String envstCd);
-
-    /**
      * 대리점 목록 조회
      * @return
      */
@@ -82,4 +74,5 @@ public interface CmmCodeService {
      * 회원 등급 조회
      */
     <E> List<E> getMemberClassList(SessionInfoVO sessionInfoVO);
+
 }

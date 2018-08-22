@@ -7,6 +7,8 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.code.CmmCodeService;
 import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
+import kr.co.solbipos.sys.cd.envconfg.service.EnvstVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -282,15 +284,16 @@ public class CmmCodeUtil {
     }
 
     /**
-     * 환경변수 코드 조회
+     * 환경변수 코드 조회 (select box용 list 데이터)
      *
-     * @param envstCd
-     * @return
+     * @param envstCd (TB_CM_ENVST.ENVST_CD)
+     * @return EnvCodeVO (TB_CM_ENVST_DTL)
      */
     private EnvCodeVO getEnvCodeData(String envstCd) {
 
         EnvCodeVO envCodeVO = new EnvCodeVO();
 
+        //
         envCodeVO.setEnvstCd(envstCd);
 
         List<DefaultMap<String>> codeList = null;
@@ -378,4 +381,26 @@ public class CmmCodeUtil {
 
         return convertToJson(list);
     }
+
+    /**
+     * 본사 환경변수 테이블에 등록된 값 조회
+     * (시스템 권한 : 가맹점관리 > 본사관리 > 환경설정에서 환경변수 값 저장 후 사용)
+     *
+     * @param sessionInfoVO, envstCd
+     * @return String (TB_HQ_ENVST)
+     */
+    public String getHqEnvst(SessionInfoVO sessionInfoVO, String envstCd) {
+
+        HqEnvstVO hqEnvstVO = new HqEnvstVO();
+        hqEnvstVO.setHqOfficeCd(sessionInfoVO.getStoreCd());
+        hqEnvstVO.setEnvstCd(envstCd);
+
+        return cmmCodeService.getHqEnvst(hqEnvstVO);
+    }
+
+    /** 환경변수명 조회 */
+    public String getEnvNm(EnvstVO envstVO) {
+        return cmmCodeService.getEnvNm(envstVO);
+    }
+
 }

@@ -1,5 +1,6 @@
 package kr.co.common.exception;
 
+import kr.co.common.data.enums.CodeType;
 import kr.co.common.data.enums.Status;
 
 /**
@@ -19,12 +20,16 @@ import kr.co.common.data.enums.Status;
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 public class BizException extends RuntimeException {
-    
+
     private static final long serialVersionUID = 3209717720718123566L;
     /** 응답 유형 */
     private Status status;
     /** 리턴 URL */
     private String responseURL = "";
+    /** 코드 구분 (코드, 환경변수 Exception 처리시 사용) */
+    private CodeType codeType;
+    /** 코드 (공통코드 또는 환경변수코드) */
+    private String codeCd;
 
     /**
      * @param message
@@ -62,7 +67,19 @@ public class BizException extends RuntimeException {
         this.status = status;
     }
 
-    
+    /**
+     * @param codeType
+     * @param codeCd
+     * @param responseURL
+     */
+    public BizException(CodeType codeType, String codeCd, String responseURL) {
+        //super(code);
+        this.codeCd = codeCd;
+        this.responseURL = responseURL;
+        this.codeType = codeType;
+    }
+
+
     /**
      * @return the status
      */
@@ -87,5 +104,22 @@ public class BizException extends RuntimeException {
     public void setResponseURL(String responseURL) {
         this.responseURL = responseURL;
     }
-    
+    /**
+     * @return the codeType
+     */
+    public CodeType getCodeType() { return codeType; }
+    /**
+     * @param codeType the codeType to set
+     */
+    public void setCodeType(CodeType codeType) { this.codeType = codeType; }
+
+    /**
+     * @return the codeCd
+     */
+    public String getCodeCd() { return codeCd; }
+
+    /**
+     * @param codeCd the codeCd to set
+     */
+    public void setCodeCd(String codeCd) { this.codeCd = codeCd; }
 }
