@@ -197,7 +197,7 @@ public class PosFuncController {
                                HttpServletResponse response, Model model) {
 
         // 포스기능구분 조회
-        CommonCodeVO commonCodeVO = cmmCodeUtil.getCommCodeData("034");
+        CommonCodeVO commonCodeVO = cmmCodeUtil.getCommCodeData("026");
 
         List<DefaultMap<String>> codeList = commonCodeVO.getCodeList();
 
