@@ -10,9 +10,6 @@
 <meta charset="UTF-8">
 <title></title>
 <tiles:insertAttribute name="resource"/>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js" type="text/javascript"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-route.min.js" type="text/javascript"></script>
-    <script type="text/javascript" src="/resource/vendor/wijmo/js/wijmo.angular.min.js?ver=5.20182.500" charset="utf-8"></script>
 </head>
 <body>
     <tiles:insertAttribute name="body"/>
