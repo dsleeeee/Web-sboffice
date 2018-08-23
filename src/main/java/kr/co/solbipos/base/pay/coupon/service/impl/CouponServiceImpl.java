@@ -64,21 +64,21 @@ public class CouponServiceImpl implements CouponService {
 
         List<DefaultMap<String>> returnList = null;
 
+        CoupnEnvFg  coupnEnvFg = payMethodAClassVO.getCoupnEnvstVal();
+
         // 본사 통제
-        if("2".equals(payMethodAClassVO.getCoupnEnvstVal())) {
+        if(payMethodAClassVO.getCoupnEnvstVal() == CoupnEnvFg.HQ) {
 
             payMethodAClassVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
 
             returnList = mapper.getHqCouponClassList(payMethodAClassVO);
-
         }
         // 매장 통제
-        else if("1".equals(payMethodAClassVO.getCoupnEnvstVal())) {
+        else if(payMethodAClassVO.getCoupnEnvstVal() == CoupnEnvFg.STORE) {
 
             payMethodAClassVO.setStoreCd(sessionInfoVO.getStoreCd());
 
             returnList = mapper.getStoreCouponClassList(payMethodAClassVO);
-
         }
         // 권한 확인 필요
         else {
@@ -106,8 +106,7 @@ public class CouponServiceImpl implements CouponService {
             LOGGER.debug(payMethodClassVO.getProperties());
 
             // 본사 통제
-            if("2".equals(payMethodClassVO.getCoupnEnvstVal())) {
-
+            if(payMethodClassVO.getCoupnEnvstVal() == CoupnEnvFg.HQ) {
                 payMethodClassVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
 
                 if(payMethodClassVO.getStatus() == GridDataFg.INSERT) {
@@ -119,11 +118,9 @@ public class CouponServiceImpl implements CouponService {
                 else if(payMethodClassVO.getStatus() == GridDataFg.DELETE) {
                     procCnt += mapper.deleteHqCouponClass(payMethodClassVO);
                 }
-
             }
             // 매장 통제
-            else  if("1".equals(payMethodClassVO.getCoupnEnvstVal())) {
-
+            else if(payMethodClassVO.getCoupnEnvstVal() == CoupnEnvFg.STORE) {
                 payMethodClassVO.setStoreCd(sessionInfoVO.getOrgnCd());
 
                 if(payMethodClassVO.getStatus() == GridDataFg.INSERT) {
@@ -155,35 +152,31 @@ public class CouponServiceImpl implements CouponService {
 
         List<DefaultMap<String>> returnList = null;
 
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-
+        // 본사 통제
+        if(couponVO.getCoupnEnvstVal() == CoupnEnvFg.HQ) {
             couponVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
-
             returnList = mapper.getHqCouponList(couponVO);
-
-        } else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
-
+        }
+        // 매장 통제
+        else if(couponVO.getCoupnEnvstVal() == CoupnEnvFg.STORE) {
             couponVO.setStoreCd(sessionInfoVO.getStoreCd());
-
             returnList = mapper.getStoreCouponList(couponVO);
-
-        } else {
-
-            // 본사와 매장 권한으로만 사용가능한 메뉴
+        }
+        // 권한 확인 필요
+        else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.access.denied"));
         }
-
         return returnList;
     }
 
     /** 쿠폰 저장 */
-    @Override public int saveCouponList(CouponVO[] couponVOs, SessionInfoVO sessionInfoVO) {
+    @Override
+    public int saveCouponList(CouponVO[] couponVOs, SessionInfoVO sessionInfoVO) {
 
         int procCnt = 0;
         String dt = currentDateTimeString();
 
         for(CouponVO couponVO : couponVOs) {
-
 
             couponVO.setRegDt(dt);
             couponVO.setRegId(sessionInfoVO.getUserId());
@@ -192,8 +185,8 @@ public class CouponServiceImpl implements CouponService {
 
             LOGGER.debug(couponVO.getProperties());
 
-            /** 본사 */
-            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 본사 통제
+            if(couponVO.getCoupnEnvstVal() == CoupnEnvFg.HQ) {
 
                 couponVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
 
@@ -206,10 +199,9 @@ public class CouponServiceImpl implements CouponService {
                 else if(couponVO.getStatus() == GridDataFg.DELETE) {
                     procCnt += mapper.deleteHqCoupon(couponVO);
                 }
-
             }
-            /** 매장 */
-            else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            // 매장 통제
+            else if(couponVO.getCoupnEnvstVal() == CoupnEnvFg.STORE) {
 
                 couponVO.setStoreCd(sessionInfoVO.getStoreCd());
 
@@ -222,9 +214,9 @@ public class CouponServiceImpl implements CouponService {
                 else if(couponVO.getStatus() == GridDataFg.DELETE) {
                     procCnt += mapper.deleteStoreCoupon(couponVO);
                 }
-            }else {
-
-                // 본사와 매장 권한으로만 사용가능한 메뉴
+            }
+            // 권한 확인 필요
+            else {
                 throw new JsonException(Status.FAIL, messageService.get("cmm.access.denied"));
             }
         }

@@ -10,6 +10,13 @@
  * **************************************************************/
 $(document).ready(function(){
 
+  // 쿠폰적용매장 등록 (본사에서만 보임)
+  if(orgnFg == "HQ") {
+    $("#couponStoreTab").show();
+  } else {
+    $("#couponStoreTab").hide();
+  }
+
   var selectedClass;
 
   var useYnDataMap        = new wijmo.grid.DataMap(useYn, 'value', 'name');
@@ -141,6 +148,8 @@ $(document).ready(function(){
     var param = {};
     param.coupnEnvstVal = coupnEnvstVal;
 
+    console.log(param);
+
     $.postJSON(baseUrl+"/class/getCouponClassList.sb", param, function(result) {
       console.log(result);
 
@@ -187,18 +196,23 @@ $(document).ready(function(){
 
     var paramArr = new Array();
 
+    //TODO validation 체크
+
     for(var i=0; i<couponClassGrid.collectionView.itemsAdded.length; i++){
       couponClassGrid.collectionView.itemsAdded[i].status = "I";
+      // couponClassGrid.collectionView.itemsAdded[i].coupnEnvstVal = "HQ";
       couponClassGrid.collectionView.itemsAdded[i].coupnEnvstVal = coupnEnvstVal;
       paramArr.push(couponClassGrid.collectionView.itemsAdded[i]);
     }
     for(var i=0; i<couponClassGrid.collectionView.itemsEdited.length; i++){
       couponClassGrid.collectionView.itemsEdited[i].status = "U";
+      // couponClassGrid.collectionView.itemsAdded[i].coupnEnvstVal = "HQ";
       couponClassGrid.collectionView.itemsEdited[i].coupnEnvstVal = coupnEnvstVal;
       paramArr.push(couponClassGrid.collectionView.itemsEdited[i]);
     }
     for(var i=0; i<couponClassGrid.collectionView.itemsRemoved.length; i++){
       couponClassGrid.collectionView.itemsRemoved[i].status = "D";
+      // couponClassGrid.collectionView.itemsRemoved[i].coupnEnvstVal = "HQ";
       couponClassGrid.collectionView.itemsRemoved[i].coupnEnvstVal = coupnEnvstVal;
       paramArr.push(couponClassGrid.collectionView.itemsRemoved[i]);
     }
@@ -207,6 +221,8 @@ $(document).ready(function(){
       s_alert.pop(messages["cmm.not.modify"]);
       return;
     }
+
+    console.log(paramArr);
 
     $.postJSONArray(baseUrl + "/class/saveCouponClassList.sb", paramArr, function(result) {
       s_alert.pop(messages["cmm.saveSucc"]);
@@ -218,7 +234,6 @@ $(document).ready(function(){
     });
   });
 
-
   // ========================================================================= 쿠폰 관련 함수
 
   // 쿠폰 데이터 조회
@@ -229,6 +244,7 @@ $(document).ready(function(){
 
     var param = {};
     param.payClassCd = selectedClass.payClassCd;
+    param.coupnEnvstVal = coupnEnvstVal;
 
     $.postJSON(baseUrl+"/class/getCouponList.sb", param, function(result) {
 

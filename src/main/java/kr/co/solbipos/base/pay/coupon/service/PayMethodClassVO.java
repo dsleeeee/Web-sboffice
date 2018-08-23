@@ -2,6 +2,7 @@ package kr.co.solbipos.base.pay.coupon.service;
 
 import kr.co.common.data.enums.UseYn;
 import kr.co.solbipos.application.common.service.CmmVO;
+import kr.co.solbipos.base.pay.coupon.service.enums.CoupnEnvFg;
 import kr.co.solbipos.base.pay.coupon.service.enums.PayTypeFg;
 
 /**
@@ -36,7 +37,7 @@ public class PayMethodClassVO extends CmmVO {
     /** 사용여부 */
     private UseYn useYn;
     /** 쿠폰등록 본사 통제여부 */
-    private String coupnEnvstVal;
+    private CoupnEnvFg coupnEnvstVal;
 
     /**
      * @return the hqOfficeCd
@@ -145,10 +146,10 @@ public class PayMethodClassVO extends CmmVO {
     /**
      * @return the coupnEnvstVal
      */
-    public String getCoupnEnvstVal() { return coupnEnvstVal; }
+    public CoupnEnvFg getCoupnEnvstVal() { return coupnEnvstVal; }
 
     /**
      * @param coupnEnvstVal the coupnEnvstVal to set
      */
-    public void setCoupnEnvstVal(String coupnEnvstVal) { this.coupnEnvstVal = coupnEnvstVal; }
+    public void setCoupnEnvstVal(CoupnEnvFg coupnEnvstVal) { this.coupnEnvstVal = coupnEnvstVal; }
 }
