@@ -68,7 +68,8 @@ public class AuthServiceImpl implements AuthService {
         // userId 로 사용자 조회
         SessionInfoVO result = selectWebUser(params);
         // 로그인실패 횟수
-        Long loginFailCnt = result.getLoginFailCnt();
+        Long loginFailCnt = result.getLoginFailCnt() + 1;
+        Boolean isFailOver = loginFailCnt > BaseEnv.LOGIN_FAIL_CNT ? true : false;
 
         /** 존재하는 id 인지 체크 */
         if (isEmpty(result) || isEmpty(result.getUserId())) {
@@ -78,13 +79,15 @@ public class AuthServiceImpl implements AuthService {
 
         /** 패스워드 체크 */
         if (!loginPasswordCheck(params, result)) {
-            result.setLoginFailCnt(loginFailCnt + 1);
-            if ( loginFailCnt + 1 > BaseEnv.LOGIN_FAIL_CNT ) {
+            if ( isFailOver ) {
+                result.setLoginResult(LoginResult.LOGIN_FAIL_CNT_OVER);
                 result.setUserStatFg(UserStatFg.LOGIN_FAIL_CNT_OVER);
+            } else {
+                result.setLoginResult(LoginResult.PASSWORD_ERROR);
             }
+            result.setLoginFailCnt(loginFailCnt);
             authMapper.updateLoginInfo(result);
 
-            result.setLoginResult(LoginResult.PASSWORD_ERROR);
             return result;
         }
 
@@ -111,8 +114,10 @@ public class AuthServiceImpl implements AuthService {
 
         /** 패스워드 변경 날짜 체크 */
         if( currentDay >= pwdChgDays ) {
-            result.setUserStatFg(UserStatFg.PASSWORD_EXPIRE);
-            authMapper.updateLoginInfo(result);
+            if( !UserStatFg.PASSWORD_EXPIRE.equals(result.getUserStatFg()) ) {
+                result.setUserStatFg(UserStatFg.PASSWORD_EXPIRE);
+                authMapper.updateLoginInfo(result);
+            }
 
             result.setLoginResult(LoginResult.PASSWORD_EXPIRE);
             return result;
