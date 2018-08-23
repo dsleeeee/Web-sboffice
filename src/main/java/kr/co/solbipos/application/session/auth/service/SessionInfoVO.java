@@ -5,6 +5,7 @@ import kr.co.solbipos.application.common.service.CmmVO;
 import kr.co.solbipos.application.common.service.ResrceInfoBaseVO;
 import kr.co.solbipos.application.common.service.ResrceInfoVO;
 import kr.co.solbipos.application.session.auth.enums.LoginResult;
+import kr.co.solbipos.application.session.auth.enums.UserStatFg;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -109,8 +110,10 @@ public class SessionInfoVO extends CmmVO {
     private String lastPwdChgDt;
     /** 로그인 실패 건수 */
     private Long loginFailCnt;
-    /** 잠금 코드 */
-    private String lockCd;
+    /** 사용자상태구분 */
+    private UserStatFg userStatFg;
+    /** 사용 여부 */
+    private String useYn;
     /** 로그인 IP */
     private String loginIp;
     /** 브라우저 정보 */
@@ -381,16 +384,28 @@ public class SessionInfoVO extends CmmVO {
         this.loginFailCnt = loginFailCnt;
     }
     /**
-     * @return the lockCd
+     * @return the userStatFg
      */
-    public String getLockCd() {
-        return lockCd;
+    public UserStatFg getUserStatFg() {
+        return userStatFg;
     }
     /**
-     * @param lockCd the lockCd to set
+     * @param userStatFg the userStatFg to set
      */
-    public void setLockCd(String lockCd) {
-        this.lockCd = lockCd;
+    public void setUserStatFg(UserStatFg userStatFg) {
+        this.userStatFg = userStatFg;
+    }
+    /**
+     * @return the useYn
+     */
+    public String getUseYn() {
+        return useYn;
+    }
+    /**
+     * @param useYn the useYn to set
+     */
+    public void setUseYn(String useYn) {
+        this.useYn = useYn;
     }
     /**
      * @return the loginIp

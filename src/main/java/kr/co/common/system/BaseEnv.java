@@ -37,8 +37,10 @@ public class BaseEnv {
     
     public static int SESSION_HIST_MENU_SIZE;
     
+    public static int LOGIN_FAIL_CNT;
+
     public static int LOGIN_PWD_CHG_DAYS;
-    
+
     public static String LOGIN_CHECK_ID_SAVE;
     
     public static int OTP_LIMIT_MINUTE;
@@ -102,7 +104,12 @@ public class BaseEnv {
     public void setSessionHistMenuSize(int sessionHistMenuSize) {
         SESSION_HIST_MENU_SIZE = sessionHistMenuSize;
     }
-    
+
+    @Value("#{config['login.fail.cnt']}")
+    public void setLoginFailCnt(int loginFailCnt) {
+        LOGIN_FAIL_CNT = loginFailCnt;
+    }
+
     @Value("#{config['login.pwd.chg.days']}")
     public void setLoginPwdChgDays(int loginPwdChgDays) {
         LOGIN_PWD_CHG_DAYS = loginPwdChgDays;

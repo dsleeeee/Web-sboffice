@@ -1,4 +1,4 @@
-//"use strict";
+"use strict";
 !function (win, $) {
   // 그리드
   var wgrid = {
@@ -380,11 +380,29 @@
     }
   };
 
+  // angular Grid 생성
+  var agrid = {
+    genGrid: function (appName, ctrlName) {
+      var app = angular.module(appName, ['wj']);
+      app.controller(ctrlName, ['$scope', function($scope) {
+
+      }]);
+      return app;
+    },
+    getGrid: function(div) {
+      angular.element(document.getElementById(div)).scope();
+    }
+  };
+
+  win.agrid = agrid;
   win.wgrid = wgrid;
   win.wcombo = wcombo;
   win.wgridPic = wgridPic;
   win.wexcel = wexcel;
+
 }("undefined" != typeof window ? window : this, jQuery);
+
+
 
 
 

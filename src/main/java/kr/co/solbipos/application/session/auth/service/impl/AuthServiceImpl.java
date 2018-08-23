@@ -7,6 +7,7 @@ import kr.co.common.utils.security.EncUtil;
 import kr.co.solbipos.application.common.service.ResrceInfoVO;
 import kr.co.solbipos.application.session.auth.enums.LoginOrigin;
 import kr.co.solbipos.application.session.auth.enums.LoginResult;
+import kr.co.solbipos.application.session.auth.enums.UserStatFg;
 import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.LoginHistVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -66,53 +67,64 @@ public class AuthServiceImpl implements AuthService {
 
         // userId 로 사용자 조회
         SessionInfoVO result = selectWebUser(params);
+        // 로그인실패 횟수
+        Long loginFailCnt = result.getLoginFailCnt();
 
-        /**
-         * 존재하는 id 인지 체크
-         */
+        /** 존재하는 id 인지 체크 */
         if (isEmpty(result) || isEmpty(result.getUserId())) {
             result.setLoginResult(LoginResult.NOT_EXISTS_ID);
             return result;
         }
 
-        /**
-         * 패스워드 체크
-         */
+        /** 패스워드 체크 */
         if (!loginPasswordCheck(params, result)) {
+            result.setLoginFailCnt(loginFailCnt + 1);
+            if ( loginFailCnt + 1 > BaseEnv.LOGIN_FAIL_CNT ) {
+                result.setUserStatFg(UserStatFg.LOGIN_FAIL_CNT_OVER);
+            }
+            authMapper.updateLoginInfo(result);
+
             result.setLoginResult(LoginResult.PASSWORD_ERROR);
             return result;
         }
 
-        /**
-         * 사용자 잠금 여부
-         */
-        if("Y".equals(result.getLockCd())) {
-            result.setLoginResult(LoginResult.LOCK);
+        /** 사용여부 */
+        if("N".equals(result.getUseYn())) {
+            result.setLoginResult(LoginResult.NOT_USE_ID);
             return result;
         }
 
-        /**
-         * 패스워드 초기 변경 인지 체크
-         */
-        if( result.getLastPwdChgDt() == null || "".equals(result.getLastPwdChgDt()) ) {
-            result.setLoginResult(LoginResult.PASSWORD_CHANGE);
+        /** 패스워드 초기 변경 인지 체크 */
+        if( UserStatFg.PASSWORD_TEMPORARY.equals(result.getUserStatFg()) ) {
+            result.setLoginResult(LoginResult.PASSWORD_TEMPORARY);
+            return result;
+        }
+
+        /** 로그인 횟수 오류 체크 */
+        if (UserStatFg.LOGIN_FAIL_CNT_OVER.equals(result.getUserStatFg())) {
+            result.setLoginResult(LoginResult.LOGIN_FAIL_CNT_OVER);
             return result;
         }
 
         int pwdChgDays = Integer.parseInt(addDaysString(result.getLastPwdChgDt(), BaseEnv.LOGIN_PWD_CHG_DAYS));
         int currentDay = Integer.parseInt(currentDateString());
 
-        /**
-         * 패스워드 변경 날짜 체크
-         */
+        /** 패스워드 변경 날짜 체크 */
         if( currentDay >= pwdChgDays ) {
+            result.setUserStatFg(UserStatFg.PASSWORD_EXPIRE);
+            authMapper.updateLoginInfo(result);
+
             result.setLoginResult(LoginResult.PASSWORD_EXPIRE);
             return result;
         }
 
+        // TODO: 로그인이후 90/180일 경과, 휴면계정, 일시정지 처리 필요. (화면에서 정보수정 없어서 일단 구현 안함)
+
         // 전부 통과했다면 로그인 정상 판단, 로그인일시 업데이트
         result.setLastLoginDt(currentDateTimeString());
-        authMapper.updateLoginDt(result);
+        // TODO: 정상 로그인시 로그인 실패횟수 초기화 시킬건지 정의 필요.
+        result.setLoginFailCnt(0L);
+        authMapper.updateLoginInfo(result);
 
         result.setLoginResult(LoginResult.SUCCESS);
 

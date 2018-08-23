@@ -377,14 +377,18 @@
   -->
   <insert id="registWebUser" parameterType="DefaultMap">
     /* USE : HqManageMapper.registWebUser */
-    <![CDATA[
     INSERT INTO TB_WB_USER_INFO
     (
       USER_ID,
       USER_PWD,
       AUTH_GRP_CD,
       LOGIN_FAIL_CNT,
-      LOCK_CD
+      USER_STAT_FG,
+      USE_YN,
+      REG_DT,
+      REG_ID,
+      MOD_DT,
+      MOD_ID
     )
     VALUES
     (
@@ -392,9 +396,13 @@
       #{userPwd},
       '000003',
       0,
-      'N'
+      '99',
+      'Y',
+      #{regDt},
+      #{regId},
+      #{modDt},
+      #{modId}
     )
-    ]]>
   </insert>
 
   <!-- 본사 공통코드 등록  -->
