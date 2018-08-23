@@ -5,7 +5,7 @@ import kr.co.common.data.domain.EnvCodeVO;
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.code.CmmCodeService;
-import kr.co.common.service.code.CmmEvnService;
+import kr.co.common.service.code.CmmEnvService;
 import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
@@ -43,10 +43,11 @@ import static org.springframework.util.StringUtils.isEmpty;
 public class CmmEnvUtil {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    @Autowired
-    CmmEvnService cmmEnvService;
+
     @Autowired
     CmmCodeUtil cmmCodeUtil;
+    @Autowired
+    CmmEnvService cmmEnvService;
     @Autowired
     SessionService sessionService;
 

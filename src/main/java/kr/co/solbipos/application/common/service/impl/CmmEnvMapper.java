@@ -1,6 +1,7 @@
 package kr.co.solbipos.application.common.service.impl;
 
 import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
+import kr.co.solbipos.sys.cd.envconfg.service.EnvstVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -31,4 +32,6 @@ public interface CmmEnvMapper {
     /** 본사 환경변수 값 조회 */
     String getHqEnvst(HqEnvstVO hqEnvstVO);
 
+    /** 환경변수명 조회 */
+    String getEnvNm(EnvstVO envstVO);
 }

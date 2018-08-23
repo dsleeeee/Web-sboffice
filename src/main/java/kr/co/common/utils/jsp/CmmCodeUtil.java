@@ -5,6 +5,7 @@ import kr.co.common.data.domain.EnvCodeVO;
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.code.CmmCodeService;
+import kr.co.common.service.code.CmmEnvService;
 import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
@@ -34,6 +35,8 @@ public class CmmCodeUtil {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
     @Autowired
     CmmCodeService cmmCodeService;
+    @Autowired
+    CmmEnvService cmmEnvService;
     @Autowired
     SessionService sessionService;
 
@@ -298,7 +301,7 @@ public class CmmCodeUtil {
 
         List<DefaultMap<String>> codeList = null;
 
-        codeList = cmmCodeService.selectEnvCodeList(envstCd);
+        codeList = cmmEnvService.selectEnvCodeList(envstCd);
 
         if (isEmpty(codeList)) { // 조회 결과 없으면 데이터 없음 리턴
             return null;
@@ -395,12 +398,12 @@ public class CmmCodeUtil {
         hqEnvstVO.setHqOfficeCd(sessionInfoVO.getStoreCd());
         hqEnvstVO.setEnvstCd(envstCd);
 
-        return cmmCodeService.getHqEnvst(hqEnvstVO);
+        return cmmEnvService.getHqEnvst(hqEnvstVO);
     }
 
     /** 환경변수명 조회 */
     public String getEnvNm(EnvstVO envstVO) {
-        return cmmCodeService.getEnvNm(envstVO);
+        return cmmEnvService.getEnvNm(envstVO);
     }
 
 }

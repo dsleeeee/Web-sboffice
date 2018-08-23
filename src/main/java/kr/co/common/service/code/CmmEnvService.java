@@ -1,7 +1,5 @@
 package kr.co.common.service.code;
 
-import kr.co.common.data.domain.CommonCodeVO;
-import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 import kr.co.solbipos.sys.cd.envconfg.service.EnvstVO;
 
@@ -22,7 +20,7 @@ import java.util.List;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-public interface CmmEvnService {
+public interface CmmEnvService {
 
     /**
      * 환경변수 조회
@@ -40,6 +38,11 @@ public interface CmmEvnService {
      */
     String getHqEnvst(HqEnvstVO hqEnvstVO);
 
-    /** 환경변수명 조회 */
+    /**
+     * 환경변수명 값 조회
+     *
+     * @param envstVO
+     * @return String
+     */
     String getEnvNm(EnvstVO envstVO);
 }

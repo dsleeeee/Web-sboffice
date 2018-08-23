@@ -67,33 +67,42 @@ public class ErrorController {
         CodeType codeType =  CodeType.valueOf(request.getParameter("codeType"));
         String codeCd = request.getParameter("codeCd");
         String codeNm = "";
-        String codeStr = "";
+        String codeStr[] = new String[0];
         String msg = "";
 
-
+        // 해당 사원의 {0}일의 근태가 존재합니다.
         if(codeType == CodeType.HQ_ENV ) {
 
             EnvstVO envstVO = new EnvstVO();
+
             envstVO.setEnvstCd(codeCd);
 
             codeNm = cmmEnvUtil.getEnvNm(envstVO);
 
-            codeStr = "[" + codeCd + "]" + codeNm;
+            codeStr[0] = "[" + codeCd + "]" + codeNm;
 
-            msg = messageService.get("cmm.hqEnv.error", codeStr);
+            msg = (String) messageService.get("cmm.hqEnv.error", codeStr);
 
         } else if(codeType == CodeType.ST_ENV) {
 
             EnvstVO envstVO = new EnvstVO();
+
             envstVO.setEnvstCd(codeCd);
 
             codeNm = cmmEnvUtil.getEnvNm(envstVO);
 
-            codeStr = "[" + codeCd + "]" + codeNm;
+            codeStr[0] = "[" + codeCd + "]" + codeNm;
 
-            msg = messageService.get("cmm.storeEnv.error", codeStr);    // TODO 이거 코드 메세지처리해야함
+            msg = (String) messageService.get("cmm.storeEnv.error", codeStr);    // TODO 이거 코드 메세지처리해야함
 
         }
+
+        LOGGER.info("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+
+        LOGGER.info("codeCd : "+ codeCd);
+        LOGGER.info("codeNm : "+ codeNm);
+        LOGGER.info("msg : "+ msg);
+
 
         model.addAttribute("codeCd", codeCd);
         model.addAttribute("codeNm", codeNm);

@@ -1,7 +1,6 @@
 package kr.co.solbipos.application.common.service.impl;
 
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
