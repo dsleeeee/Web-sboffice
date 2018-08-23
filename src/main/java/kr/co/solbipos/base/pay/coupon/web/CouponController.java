@@ -76,13 +76,20 @@ public class CouponController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
         String envstCd = "0019";
+        String coupnEnvstVal = "";
 
         // 환경변수 체크
+        // 쿠폰등록화면 본사통제여부 ( 1: 매장통제, 2:본사통제 )
         if(cmmCodeUtil.getHqEnvst(sessionInfoVO, envstCd) == null ) {
             String msg = "";
 
             throw new CodeException(CodeType.HQ_ENV, envstCd, "/error/envError.sb");
+        } else{
+            coupnEnvstVal = cmmCodeUtil.getHqEnvst(sessionInfoVO, envstCd);
         }
+
+
+        model.addAttribute("coupnEnvstVal", coupnEnvstVal);
 
         return "base/pay/coupon/couponView";
     }

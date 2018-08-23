@@ -806,7 +806,6 @@ div.commtWrap .btn_skyblue {width:140px; position:absolute; top:0px; right:0px; 
 /*.sb-select.dkbr .wj-content .wj-input-group-btn > .wj-btn {padding-top:5px; border-left:1px solid #ccc;}*/
 .sb-select.dkbr .wj-content .wj-input-group-btn > .wj-btn {padding-top:1px; border-left:1px solid #ccc;}
 
-select.sb-select {display:block!important; border:1px solid #e8e8e8; height:28px!important; line-height:30px; border-radius:0px; font-size:0.85em;} /* 20180821 추가*/
 .sb-select .wj-content {display:block!important; border:1px solid #e8e8e8; height:30px; line-height:30px; border-radius:0px; }
 .sb-select .wj-content .wj-template {height:28px!important;}
 .sb-select .wj-content .wj-btn {height:28px!important; font-size:12px!important; margin-left:-1px; border-color:#e8e8e8!important;}

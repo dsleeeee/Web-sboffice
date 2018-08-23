@@ -57,56 +57,44 @@ public class ErrorController {
         return "error/500";
     }
 
+    /**
+     * 환경변수 설정이 안됐을 경우
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "/envError.sb")
     public String envError(HttpServletRequest request, HttpServletResponse response, Model model) {
-
-        LOGGER.info("■■■■■■■■■■■■■■■■■■■■■■■■■■ envError여기왔다");
-        LOGGER.info("■■■■■■■■■■■■■■■■■■■■■■■■■■ msg : " + String.valueOf(request.getParameter("codeType")));
-        LOGGER.info("■■■■■■■■■■■■■■■■■■■■■■■■■■ msg : " + request.getParameter("codeCd"));
 
         CodeType codeType =  CodeType.valueOf(request.getParameter("codeType"));
         String codeCd = request.getParameter("codeCd");
         String codeNm = "";
-        String codeStr[] = new String[0];
-        String msg = "";
+        String codeStr = "";
 
-        // 해당 사원의 {0}일의 근태가 존재합니다.
+        // 본사 환경변수가 없을 경우
         if(codeType == CodeType.HQ_ENV ) {
 
             EnvstVO envstVO = new EnvstVO();
-
             envstVO.setEnvstCd(codeCd);
 
             codeNm = cmmEnvUtil.getEnvNm(envstVO);
-
-            codeStr[0] = "[" + codeCd + "]" + codeNm;
-
-            msg = (String) messageService.get("cmm.hqEnv.error", codeStr);
-
-        } else if(codeType == CodeType.ST_ENV) {
+            codeStr = "'[" + codeCd + "]" + codeNm + "'";
+        }
+        // 매장 환경변수가 없을 경우
+        else if(codeType == CodeType.STORE_ENV) {
 
             EnvstVO envstVO = new EnvstVO();
-
             envstVO.setEnvstCd(codeCd);
 
             codeNm = cmmEnvUtil.getEnvNm(envstVO);
-
-            codeStr[0] = "[" + codeCd + "]" + codeNm;
-
-            msg = (String) messageService.get("cmm.storeEnv.error", codeStr);    // TODO 이거 코드 메세지처리해야함
-
+            codeStr = "'[" + codeCd + "]  " + codeNm + "'";
         }
 
-        LOGGER.info("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
-
-        LOGGER.info("codeCd : "+ codeCd);
-        LOGGER.info("codeNm : "+ codeNm);
-        LOGGER.info("msg : "+ msg);
-
-
+        model.addAttribute("codeType", codeType);
         model.addAttribute("codeCd", codeCd);
         model.addAttribute("codeNm", codeNm);
-        model.addAttribute("msg", msg);
+        model.addAttribute("codeStr", codeStr);
 
         return "error/envError";
     }
