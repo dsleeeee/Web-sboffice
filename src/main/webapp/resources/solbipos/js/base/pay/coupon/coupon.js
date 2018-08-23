@@ -139,6 +139,8 @@ $(document).ready(function(){
   function getCouponClassList(){
 
     var param = {};
+    param.coupnEnvstVal = coupnEnvstVal;
+
     $.postJSON(baseUrl+"/class/getCouponClassList.sb", param, function(result) {
       console.log(result);
 
@@ -187,14 +189,17 @@ $(document).ready(function(){
 
     for(var i=0; i<couponClassGrid.collectionView.itemsAdded.length; i++){
       couponClassGrid.collectionView.itemsAdded[i].status = "I";
+      couponClassGrid.collectionView.itemsAdded[i].coupnEnvstVal = coupnEnvstVal;
       paramArr.push(couponClassGrid.collectionView.itemsAdded[i]);
     }
     for(var i=0; i<couponClassGrid.collectionView.itemsEdited.length; i++){
       couponClassGrid.collectionView.itemsEdited[i].status = "U";
+      couponClassGrid.collectionView.itemsEdited[i].coupnEnvstVal = coupnEnvstVal;
       paramArr.push(couponClassGrid.collectionView.itemsEdited[i]);
     }
     for(var i=0; i<couponClassGrid.collectionView.itemsRemoved.length; i++){
       couponClassGrid.collectionView.itemsRemoved[i].status = "D";
+      couponClassGrid.collectionView.itemsRemoved[i].coupnEnvstVal = coupnEnvstVal;
       paramArr.push(couponClassGrid.collectionView.itemsRemoved[i]);
     }
 

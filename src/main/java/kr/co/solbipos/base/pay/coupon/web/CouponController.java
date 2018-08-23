@@ -9,6 +9,7 @@ import kr.co.common.exception.CodeException;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.SessionUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.pay.coupon.service.CouponProdVO;
 import kr.co.solbipos.base.pay.coupon.service.CouponService;
@@ -59,6 +60,8 @@ public class CouponController {
     /** util */
     @Autowired
     CmmCodeUtil cmmCodeUtil;
+    @Autowired
+    CmmEnvUtil cmmEnvUtil;
 
     /**
      * 쿠폰 등록 화면
@@ -80,14 +83,13 @@ public class CouponController {
 
         // 환경변수 체크
         // 쿠폰등록화면 본사통제여부 ( 1: 매장통제, 2:본사통제 )
-        if(cmmCodeUtil.getHqEnvst(sessionInfoVO, envstCd) == null ) {
+        if(cmmEnvUtil.getHqEnvst(sessionInfoVO, envstCd) == null ) {
             String msg = "";
 
             throw new CodeException(CodeType.HQ_ENV, envstCd, "/error/envError.sb");
         } else{
-            coupnEnvstVal = cmmCodeUtil.getHqEnvst(sessionInfoVO, envstCd);
+            coupnEnvstVal = cmmEnvUtil.getHqEnvst(sessionInfoVO, envstCd);
         }
-
 
         model.addAttribute("coupnEnvstVal", coupnEnvstVal);
 

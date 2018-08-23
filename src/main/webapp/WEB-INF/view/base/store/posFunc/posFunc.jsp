@@ -62,8 +62,8 @@ $(document).ready(function(){
 
   var selectedRow;
 
-  var posUsageEnv = ${ccu.getEnvCodeExcpAll("4019")};
-  var posTypeEnv  = ${ccu.getEnvCodeExcpAll("4020")};
+  var posUsageEnv = ${cnv.getEnvCodeExcpAll("4019")};
+  var posTypeEnv  = ${cnv.getEnvCodeExcpAll("4020")};
 
   <%-- header --%>
   var posFuncHeader =

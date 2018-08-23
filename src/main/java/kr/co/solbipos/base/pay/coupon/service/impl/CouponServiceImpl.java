@@ -64,26 +64,24 @@ public class CouponServiceImpl implements CouponService {
 
         List<DefaultMap<String>> returnList = null;
 
-
-        if(cmmCodeUtil.getHqEnvst(sessionInfoVO, "0019") != null ){
-            LOGGER.info("=========================>>>> co11111l : "+ CoupnEnvFg.getEnum(cmmCodeUtil.getHqEnvst(sessionInfoVO, "0019")));
-        }
-
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+        // 본사 통제
+        if("2".equals(payMethodAClassVO.getCoupnEnvstVal())) {
 
             payMethodAClassVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
 
             returnList = mapper.getHqCouponClassList(payMethodAClassVO);
 
-        } else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+        }
+        // 매장 통제
+        else if("1".equals(payMethodAClassVO.getCoupnEnvstVal())) {
 
             payMethodAClassVO.setStoreCd(sessionInfoVO.getStoreCd());
 
             returnList = mapper.getStoreCouponClassList(payMethodAClassVO);
 
-        } else {
-
-            // 본사와 매장 권한으로만 사용가능한 메뉴
+        }
+        // 권한 확인 필요
+        else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.access.denied"));
         }
 
@@ -107,8 +105,8 @@ public class CouponServiceImpl implements CouponService {
 
             LOGGER.debug(payMethodClassVO.getProperties());
 
-            /** 본사 */
-            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 본사 통제
+            if("2".equals(payMethodClassVO.getCoupnEnvstVal())) {
 
                 payMethodClassVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
 
@@ -123,8 +121,8 @@ public class CouponServiceImpl implements CouponService {
                 }
 
             }
-            /** 매장 */
-            else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            // 매장 통제
+            else  if("1".equals(payMethodClassVO.getCoupnEnvstVal())) {
 
                 payMethodClassVO.setStoreCd(sessionInfoVO.getOrgnCd());
 
@@ -137,9 +135,9 @@ public class CouponServiceImpl implements CouponService {
                 else if(payMethodClassVO.getStatus() == GridDataFg.DELETE) {
                     procCnt += mapper.deleteStoreCouponClass(payMethodClassVO);
                 }
-            }else {
-
-                // 본사와 매장 권한으로만 사용가능한 메뉴
+            }
+            // 권한 확인 필요
+            else {
                 throw new JsonException(Status.FAIL, messageService.get("cmm.access.denied"));
             }
         }

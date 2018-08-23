@@ -6,7 +6,6 @@
 <%--
  * 본사 권한 : 쿠폰, 쿠폰적용상품, 쿠폰적용매장
  * 매장 권한 : 쿠폰, 쿠폰적용상품
-  //TODO 환경변수값 이용해서 쿠폰등록을 본사에서 컨트롤하는지, 매장에서 컨트록하는지, 둘다 하는지 받아야 함
 --%>
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
@@ -66,5 +65,6 @@ var baseUrl      = "${baseUrl}";
 var coupnEnvstVal = ${coupnEnvstVal};
 
 console.log("coupnEnvstVal : "+ coupnEnvstVal);
+
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/coupon.js?ver=20180813" charset="utf-8"></script>
