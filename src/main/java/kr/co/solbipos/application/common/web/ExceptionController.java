@@ -90,11 +90,6 @@ public class ExceptionController {
         String codeCd = e.getCodeCd();
         String responseURL = e.getResponseURL();
 
-        LOGGER.info("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
-        LOGGER.info(" ================ codeCd : "+ codeCd);
-        LOGGER.info(" ================ responseURL : "+ responseURL);
-        LOGGER.info(" ================ responseURL : "+ codeType.toString());
-
         redirectAttributes.addAttribute("codeType", codeType);
         redirectAttributes.addAttribute("codeCd", codeCd);
         return "redirect:" + responseURL;

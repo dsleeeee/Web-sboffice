@@ -16,17 +16,15 @@
 
 <div class="subCon">
 
-  <%-- 탭 (본사에서만 보임) --%>
-  <c:if test="${orgnFg == 'HQ'}">
-    <ul class="subTab mb20">
-      <%-- 쿠폰등록 --%>
-      <li><a href="javascript:;" id="couponRegTab" class="on"><s:message code='coupon.regist.coupon' /></a></li>
-      <%-- 쿠폰적용상품 등록 --%>
-      <li><a href="javascript:;" id="couponProdTab"><s:message code='coupon.regist.product' /></a></li>
-      <%-- 쿠폰적용매장 등록 --%>
-      <li><a href="javascript:;" id="couponStoreTab"><s:message code='coupon.regist.store' /></a></li>
-    </ul>
-  </c:if>
+  <%-- 탭  --%>
+  <ul class="subTab mb20">
+    <%-- 쿠폰등록 --%>
+    <li><a href="javascript:;" id="couponRegTab" class="on"><s:message code='coupon.regist.coupon' /></a></li>
+    <%-- 쿠폰적용상품 등록 --%>
+    <li><a href="javascript:;" id="couponProdTab"><s:message code='coupon.regist.product' /></a></li>
+    <%-- 쿠폰적용매장 등록 (본사에서만 보임) --%>
+    <li><a href="javascript:;" id="couponStoreTab" style="display: none"><s:message code='coupon.regist.store' /></a></li>
+  </ul>
 
   <%-- 쿠폰분류등록 //TODO 페이징 --%>
   <div class="wj-TblWrap mb40">
@@ -58,13 +56,12 @@
 </div>
 
 <script type="text/javascript">
+var orgnFg       = "${orgnFg}";
 var useYn        = ${ccu.getCommCodeExcpAll("067")};
 var coupnDcFg    = ${ccu.getCommCodeExcpAll("013")};
 var coupnApplyFg = ${ccu.getCommCodeExcpAll("043")};
 var baseUrl      = "${baseUrl}";
-var coupnEnvstVal = ${coupnEnvstVal};
-
-console.log("coupnEnvstVal : "+ coupnEnvstVal);
+var coupnEnvstVal = "${coupnEnvstVal}";
 
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/coupon.js?ver=20180813" charset="utf-8"></script>
