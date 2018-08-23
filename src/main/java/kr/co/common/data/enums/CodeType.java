@@ -11,7 +11,7 @@ public enum CodeType {
     /** 본사 환경변수 */
     HQ_ENV("HQ_ENV"),
     /** 매장환경변수 */
-    ST_ENV("ST_ENV"),
+    STORE_ENV("STORE_ENV"),
     /** 공통코드 */
     CMM("CMM");
 

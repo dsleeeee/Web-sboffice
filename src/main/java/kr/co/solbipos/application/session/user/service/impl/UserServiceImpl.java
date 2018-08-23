@@ -9,6 +9,7 @@ import kr.co.common.utils.DateUtil;
 import kr.co.common.utils.security.EncUtil;
 import kr.co.common.utils.spring.ObjectUtil;
 import kr.co.common.utils.spring.WebUtil;
+import kr.co.solbipos.application.session.auth.enums.UserStatFg;
 import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.PwChgResult;
@@ -96,6 +97,7 @@ public class UserServiceImpl implements UserService {
         // 패스워드 세팅 및 변경
         userInfo.setUserId(userId);
         userInfo.setUserPwd(newPassword);
+        userInfo.setUserStatFg(UserStatFg.NORMAL);
         userInfo.setLastPwdChgDt(currentDateTimeString());
         int r1 = updateUserPwd(userInfo);
 
@@ -104,7 +106,7 @@ public class UserServiceImpl implements UserService {
         pwdChgHistVO.setUserId(userId);
         pwdChgHistVO.setPriorPwd(curPassword);
         pwdChgHistVO.setRegDt(currentDateTimeString());
-        pwdChgHistVO.setRegIp(getClientIp(WebUtil.getRequest()));
+        pwdChgHistVO.setRegId(getClientIp(WebUtil.getRequest()));
         int r2 = insertPwdChgHist(pwdChgHistVO);
 
         return PwChgResult.CHECK_OK;
