@@ -35,6 +35,8 @@ public class PayMethodClassVO extends CmmVO {
     private UseYn serNoYn;
     /** 사용여부 */
     private UseYn useYn;
+    /** 쿠폰등록 본사 통제여부 */
+    private String coupnEnvstVal;
 
     /**
      * @return the hqOfficeCd
@@ -139,4 +141,14 @@ public class PayMethodClassVO extends CmmVO {
     public void setUseYn(UseYn useYn) {
         this.useYn = useYn;
     }
+
+    /**
+     * @return the coupnEnvstVal
+     */
+    public String getCoupnEnvstVal() { return coupnEnvstVal; }
+
+    /**
+     * @param coupnEnvstVal the coupnEnvstVal to set
+     */
+    public void setCoupnEnvstVal(String coupnEnvstVal) { this.coupnEnvstVal = coupnEnvstVal; }
 }

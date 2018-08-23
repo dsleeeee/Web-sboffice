@@ -125,9 +125,9 @@
   var listScaleBox  = wcombo.genCommonBox("#listScaleBox", ldata);
 
   <%-- 공통코드 --%>
-  var mainYn  = ${ccu.getEnvCodeExcpAll("4021")};
-  var posFg   = ${ccu.getEnvCodeExcpAll("4020")};
-  var payFg   = ${ccu.getEnvCodeExcpAll("204")};//TODO
+  var mainYn  = ${cnv.getEnvCodeExcpAll("4021")};
+  var posFg   = ${cnv.getEnvCodeExcpAll("4020")};
+  var payFg   = ${cnv.getEnvCodeExcpAll("204")};//TODO
 
   var mainYnDataMap   = new wijmo.grid.DataMap(mainYn, 'value', 'name');  //TODO name, value가 바뀜
   var posFgDataMap    = new wijmo.grid.DataMap(posFg, 'value', 'name');

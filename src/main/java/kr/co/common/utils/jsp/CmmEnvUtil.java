@@ -1,10 +1,9 @@
 package kr.co.common.utils.jsp;
 
-import kr.co.common.data.domain.CommonCodeVO;
 import kr.co.common.data.domain.EnvCodeVO;
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.common.service.code.CmmCodeService;
+
 import kr.co.common.service.code.CmmEnvService;
 import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -14,14 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ObjectUtils;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-
-import static kr.co.common.utils.spring.StringUtil.convertToJson;
 import static org.springframework.util.StringUtils.isEmpty;
 
 /**
@@ -93,7 +85,6 @@ public class CmmEnvUtil {
 
         EnvCodeVO envCodeVO = new EnvCodeVO();
 
-        //
         envCodeVO.setEnvstCd(envstCd);
 
         List<DefaultMap<String>> codeList = null;

@@ -124,10 +124,11 @@
   var storeNm     = wcombo.genInput("#s_storeNm");
   var lastVer     = wcombo.genInput("#s_lastVer");
   var vanCd       = wcombo.genInput("#s_vanCd");  //TODO combobox로 바꿔야함
-  var sysStatFgCb = wcombo.genCommonBox("#s_sysStatFg", ${ccu.getCommCode("009")});
-  var clsFg       = wcombo.genCommonBox("#s_clsFg", ${ccu.getCommCode("001")});
 
-  var clsFgDataMap     = new wijmo.grid.DataMap(clsFgCb, 'value', 'name');
+  var clsFg       = ${ccu.getCommCode("001")};
+  var sysStatFgCb = wcombo.genCommonBox("#s_sysStatFg", ${ccu.getCommCode("009")});
+  var clsFgCb     = wcombo.genCommonBox("#s_clsFg", clsFg);
+  var clsFgDataMap= new wijmo.grid.DataMap(clsFg, 'value', 'name');
 
   <%-- 적용매장 Header --%>
   var hData3 =

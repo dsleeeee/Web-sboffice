@@ -340,8 +340,8 @@ var hqList         = ${ccu.getHqOfficeList()};
 var clsFg          = ${ccu.getCommCodeSelect("001")};
 var sysStatFg      = ${ccu.getCommCodeSelect("005")};
 var areaCd         = ${ccu.getCommCodeSelect("061")};
-var cornerUseYn    = ${ccu.getEnvCodeExcpAll("2028")};
-var cashBillYn     = ${ccu.getEnvCodeExcpAll("1007")};
+var cornerUseYn    = ${cnv.getEnvCodeExcpAll("2028")};
+var cashBillYn     = ${cnv.getEnvCodeExcpAll("1007")};
 var useYn          = ${ccu.getCommCodeExcpAll("067")};
 
 <%-- ============================================= 그리드, 위즈모 관련 =========================================== --%>
