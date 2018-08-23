@@ -41,6 +41,19 @@
        AND USE_YN = 'Y'
   </select>
 
+  <!-- 환경변수명 값 조회 -->
+  <!--
+      TABLE    : TB_CM_ENVST
+      COMMENTS : 환경변수명을 조회한다.
+  -->
+  <select id="getEnvNm" parameterType="envstVO" resultType="String">
+    /* CmmEnvMapper.getEnvNm */
+    SELECT ENVST_NM
+      FROM TB_CM_ENVST
+     WHERE ENVST_CD = #{envstCd}
+       AND USE_YN = 'Y'
+  </select>
+
 </mapper>
 
 

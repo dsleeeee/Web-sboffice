@@ -1,13 +1,9 @@
 package kr.co.common.service.code.impl;
 
 import kr.co.common.data.domain.CommonCodeVO;
-import kr.co.common.service.code.CmmCodeService;
-import kr.co.common.service.code.CmmEvnService;
-import kr.co.common.service.redis.RedisConnService;
+import kr.co.common.service.code.CmmEnvService;
 import kr.co.common.template.RedisCustomTemplate;
-import kr.co.solbipos.application.common.service.impl.CmmCodeMapper;
 import kr.co.solbipos.application.common.service.impl.CmmEnvMapper;
-import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 import kr.co.solbipos.sys.cd.envconfg.service.EnvstVO;
 import org.slf4j.Logger;
@@ -32,8 +28,8 @@ import java.util.List;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-@Service("cmmCodeService")
-public class CmmEnvServiceImpl implements CmmEvnService {
+@Service("cmmEnvService")
+public class CmmEnvServiceImpl implements CmmEnvService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
     @Autowired
@@ -41,6 +37,7 @@ public class CmmEnvServiceImpl implements CmmEvnService {
     @Autowired
     private RedisCustomTemplate<String, CommonCodeVO> redisCustomTemplate;
 
+    /** 환경변수 코드 조회 */
     @Override
     public <E> List<E> selectEnvCodeList(String envstCd) {
         return cmmEnvMapper.selectEnvCodeList(envstCd);
@@ -55,6 +52,6 @@ public class CmmEnvServiceImpl implements CmmEvnService {
     /** 환경변수명 조회 */
     @Override
     public String getEnvNm(EnvstVO envstVO) {
-        return null;
+        return cmmEnvMapper.getEnvNm(envstVO);
     }
 }

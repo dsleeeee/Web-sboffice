@@ -74,5 +74,4 @@ public interface CmmCodeService {
      * 회원 등급 조회
      */
     <E> List<E> getMemberClassList(SessionInfoVO sessionInfoVO);
-
 }
