@@ -10,9 +10,12 @@
 
 <link rel="stylesheet" type="text/css" href="/resource/vendor/awesome-font/css/font-awesome.min.css" />
 
-<script type="text/javascript" src="/resource/solbipos/js/common/jquery-1.11.1.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js" type="text/javascript"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-route.min.js" type="text/javascript"></script>
+<%--<script type="text/javascript" src="/resource/vendor/jquery/jquery-1.11.1.min.js"></script>--%>
+<script type="text/javascript" src="/resource/vendor/jquery/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="/resource/vendor/bootstrap/bootstrap.min.js?ver=3.3.2"></script>
+<script type="text/javascript" src="/resource/vendor/angularjs/angular.min.js?ver=1.3.15"></script>
+<script type="text/javascript" src="/resource/vendor/angularjs/angular-route.min.js?ver=1.3.15"></script>
+
 <script type="text/javascript" src="/resource/vendor/prefixfree/prefixfree.js" charset="utf-8"></script>
 
 <script type="text/javascript" src="/resource/vendor/wijmo/js/wijmo.min.js?ver=5.20182.500" charset="utf-8"></script>

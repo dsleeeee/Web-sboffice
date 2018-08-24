@@ -8,6 +8,7 @@
  * 2018.07.30     노현수      1.0
  *
  * **************************************************************/
+var gridTemplate;
 $(document).ready(function () {
 
   // 출력물종류 선택 콤보박스
@@ -22,21 +23,21 @@ $(document).ready(function () {
         binding: "gChk",
         header: messages["template.chk"],
         dataType: wijmo.DataType.Boolean,
-        width: 45
+        width: 40
       },
-      {binding: "templtNm", header: messages["template.templtNm"], width: "*"},
+      {binding: "templtNm", header: messages["template.templtNm"], width: "*"}
     ];
   // 템플릿 그리드 생성
-  var gridTemplate = wgrid.genGrid("#gridTemplate", gridTemplateData);
+  gridTemplate = wgrid.genGrid("#gridTemplate", gridTemplateData);
   gridTemplate.isReadOnly = false;
 
   // ReadOnly 효과설정
   gridTemplate.formatItem.addHandler(function (s, e) {
-    if (e.panel == s.cells) {
+    if (e.panel === s.cells) {
       var col = s.columns[e.col];
       if (col.binding === "templtNm") {
         var item = s.rows[e.row].dataItem;
-        if (item.status != "I") {
+        if (item.status !== "I") {
           wijmo.addClass(e.cell, 'wj-custom-readonly');
         } else {
           wijmo.removeClass(e.cell, 'wj-custom-readonly');
@@ -45,24 +46,33 @@ $(document).ready(function () {
     }
   });
 
-  // 템플릿 그리드 선택변경 이벤트
-  gridTemplate.selectionChanged.addHandler(function (s, e) {
-    var selectedRow = gridTemplate.rows[e.row].dataItem;
-    if (selectedRow.prtForm != null) {
-      theTarget.value = selectedRow.prtForm;
-      makePreview();
-    } else {
-      theTarget.value = "";
-      thePreview.innerHTML = "";
-    }
-    $("#btnSaveTemplate").show();
-  });
-
   // 템플릿 그리드 에디팅 방지
   gridTemplate.beginningEdit.addHandler(function (s, e) {
-    var dataItem = gridTemplate.rows[e.row].dataItem;
-    if (nvl(dataItem.status, "") == "" && dataItem.status != "I") {
-      e.cancel = true;
+    var col = s.columns[e.col];
+    if (col.binding === "templtNm") {
+      var dataItem = gridTemplate.rows[e.row].dataItem;
+      if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
+        e.cancel = true;
+      }
+    }
+  });
+
+  // 템플릿 그리드 선택 이벤트
+  gridTemplate.addEventListener(gridTemplate.hostElement, 'mousedown', function(e) {
+    var ht = gridTemplate.hitTest(e);
+    if ( ht.cellType === wijmo.grid.CellType.Cell ) {
+      var col = ht.panel.columns[ht.col];
+      var selectedRow = gridTemplate.rows[ht.row].dataItem;
+      if ( col.binding === "templtNm" && selectedRow.status !== "I") {
+        if (selectedRow.prtForm != null) {
+          theTarget.value = selectedRow.prtForm;
+          makePreview();
+        } else {
+          theTarget.value = "";
+          thePreview.innerHTML = "";
+        }
+        $("#btnSaveTemplate").show();
+      }
     }
   });
 
@@ -76,7 +86,7 @@ $(document).ready(function () {
 
     gridTemplate.collectionView.commitNew();
     // 추가된 Row 선택
-    gridTemplate.select(gridTemplate.rows.length, 1);
+    gridTemplate.select(gridTemplate.rows.length-1, 1);
   });
 
   // 템플릿 삭제버튼 클릭
@@ -390,7 +400,7 @@ $(document).ready(function () {
         binding: "gChk",
         header: messages["template.layer.chk"],
         dataType: wijmo.DataType.Boolean,
-        width: 45
+        width: 40
       },
       {
         binding: "storeCd",

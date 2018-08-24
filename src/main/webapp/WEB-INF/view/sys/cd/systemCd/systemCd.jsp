@@ -44,7 +44,8 @@
       <button class="btn_blue fr" id="btnSearch"><s:message code="cmm.search" /></button>
   </div>
     
-  <div id="gridRepresent" class="w50 fl" style="width: 60%" ng-app="app" ng-controller="appTCCtrl">
+  <%--<div id="gridRepresent" class="w50 fl" style="width: 60%" ng-app="representApp" ng-controller="representCtrl">--%>
+  <div id="gridRepresent" class="w50 fl" style="width: 60%" ng-app="representApp" ng-controller="representCtrl">
     <%--위즈모 테이블--%>
     <div class="wj-TblWrapBr mr10 pd20" style="height: 400px;">
       <div class="updownSet oh mb10">
@@ -63,6 +64,7 @@
       <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
       <div class="wj-gridWrap" style="height:310px">
         <wj-flex-grid
+                autoGenerateColumns="false"
                 control="flex"
                 initialized="initGrid(s,e)"
                 sticky-headers="true"
@@ -77,36 +79,21 @@
           <wj-flex-grid-column header="<s:message code="systemCd.nmcodeItem1"/>" binding="nmcodeItem1" width="*"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="systemCd.nmcodeItem2"/>" binding="nmcodeItem2" width="*"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="systemCd.useColNm"/>" binding="useColNm" width="*"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="systemCd.nmcodeGrpCd"/>" binding="nmcodeGrpCd" visible="false"></wj-flex-grid-column>
 
         </wj-flex-grid>
-        <!-- dialog used to pick and re-order grid columns -->
-        <wj-popup control="pickColumn" show-trigger="Click" hide-trigger="Click" style="display: none;">
-          <div class="wj-dialog wj-dialog-columns">
-            <div class="wj-dialog-header wj-dialog-header-font">
-              컬럼을 선택하세요.
-              <a href="javascript:;" class="btn_close"></a>
-            </div>
-            <div class="wj-dialog-body">
-              <div class="text-info mb10">
-                표시하려는 열을 오른쪽의 목록으로 드래그하십시오.<br/>
-                원하지 않는 항목을 왼쪽의 목록으로 드래그하십시오.<br/>
-                오른쪽의 목록에서 드래그하여 열의 순서를 변경하십시오.<br/>
-                그리드에 변경 사항을 적용하려면 "적용"버튼을 클릭하십시오.
-              </div>
-              <div id="columnPicker"></div>
-            </div>
-            <div class="wj-dialog-footer">
-              <button class="btn wj-hide-apply btn_blue">적용</button>
-              <button class="btn wj-hide btn_gray">취소</button>
-            </div>
-          </div>
-        </wj-popup>
+        <%-- ColumnPicker 사용시 include --%>
+        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+          <jsp:param name="pickerTarget" value="representApp"/>
+        </jsp:include>
+        <%--// ColumnPicker 사용시 include --%>
       </div>
     </div>
     <%--//위즈모 테이블--%>
   </div>
   
-  <div class="w50 fr" style="width: 40%">
+  <%--<div id="gridDetail" class="w50 fr" style="width: 40%" ng-app="detailApp" ng-controller="detailCtrl">--%>
+  <div id="gridDetail" class="w50 fr" style="width: 40%" ng-app="detailApp"  ng-controller="detailCtrl">
     <%--위즈모 테이블--%>
     <div class="wj-TblWrapBr ml10 pd20" style="height: 400px;">
       <div class="updownSet oh mb10">
@@ -123,10 +110,33 @@
       </div>
       <%-- 개발시 높이 조절해서 사용--%>
       <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
-      <div id="gridDetail" style="height:310px;"></div>
+      <div class="wj-gridWrap" style="height:310px">
+        <wj-flex-grid
+                autoGenerateColumns="false"
+                control="flex"
+                initialized="initGrid(s,e)"
+                sticky-headers="true"
+                selection-mode="Row"
+                items-source="data"
+                item-formatter="itemFormatter">
+
+          <!-- define columns -->
+          <wj-flex-grid-column header="<s:message code="systemCd.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="systemCd.nmcodeCd"/>" binding="nmcodeCd" width="60"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="systemCd.nmcodeNm"/>" binding="nmcodeNm" width="*"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="systemCd.nmcodeItem1"/>" binding="nmcodeItem1" width="*"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="systemCd.nmcodeItem2"/>" binding="nmcodeItem2" width="*"></wj-flex-grid-column>
+
+        </wj-flex-grid>
+        <%-- ColumnPicker 사용시 include --%>
+        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+          <jsp:param name="pickerTarget" value="detailApp"/>
+        </jsp:include>
+        <%--// ColumnPicker 사용시 include --%>
+      </div>
     </div>
     <%--//위즈모 테이블--%>
   </div>
-    
+
 </div>
 <script type="text/javascript" src="/resource/solbipos/js/sys/cd/systemCd/systemCd.js?ver=2018081301" charset="utf-8"></script>

@@ -9,39 +9,23 @@
  *
  * **************************************************************/
 // angularjs App 생성
-var gridRepresentApp = agrid.genGrid('app', 'appTCCtrl');
-var gridRepresent;
+var gridRepresentApp = agrid.genGrid('representApp', 'representCtrl', true);
+var gridDetailApp = agrid.genGrid('detailApp', 'detailCtrl', true);
 // 페이지로드 후 동작 선언
 $(document).ready(function () {
+
+  // grid 여러개일때 2번째 그리드부터 갯수만큼 지정해야 정상적으로 그려짐.
+  angular.bootstrap(document.getElementById("gridDetail"), ['detailApp']);
 
   var srchNmcodeCd = wcombo.genInputText("#srchNmcodeCd", 3, "");
   var srchNmcodeNm = wcombo.genInputText("#srchNmcodeNm", 50, "");
 
   // 대표명칭 그리드 생성
-  gridRepresent = agrid.getGrid("gridRepresent");
-
+  var gridRepresent = agrid.getGrid("gridRepresent");
   // 조회버튼 클릭
   $("#btnSearch").click(function (e) {
     srchGridRepresent();
   });
-
-  // var gridRepresentData =
-  //   [
-  //     {
-  //       binding: "gChk",
-  //       header: messages["systemCd.chk"],
-  //       dataType: wijmo.DataType.Boolean,
-  //       width: 40
-  //     },
-  //     {binding: "nmcodeCd", header: messages["systemCd.nmcodeCd"], width: 60},
-  //     {binding: "nmcodeNm", header: messages["systemCd.nmcodeNm"], width: "*"},
-  //     {binding: "nmcodeItem1", header: messages["systemCd.nmcodeItem1"], width: "*"},
-  //     {binding: "nmcodeItem2", header: messages["systemCd.nmcodeItem2"], width: "*"},
-  //     {binding: "useColNm", header: messages["systemCd.useColNm"], width: "*"}
-  //   ];
-  // // 대표명칭 그리드 생성
-  // var gridRepresent = wgrid.genGrid("#gridRepresent", gridRepresentData);
-  // gridRepresent.isReadOnly = false;
 
   // ReadOnly 효과설정
   gridRepresent.flex.formatItem.addHandler(function (s, e) {
@@ -79,22 +63,22 @@ $(document).ready(function () {
     }
   });
 
-  function showBtn() {
-    // 버튼 Show
-    $("#btnAddRepresent").show();
-    $("#btnDelRepresent").show();
-    $("#btnSaveRepresent").show();
-  }
-
   // 대표명칭 그리드 목록 조회
   function srchGridRepresent() {
     var param = {};
     param.nmcodeGrpCd = "000";
     param.nmcodeCd = srchNmcodeCd.value;
     param.nmcodeNm = srchNmcodeNm.value;
-    // 그리드 조회
-    gridRepresent.search("/sys/cd/systemCd/systemCd/list.sb", param, showBtn());
 
+    // 대표명칭 그리드 버튼 show
+    function btnShowRepresent() {
+      $("#btnAddRepresent").show();
+      $("#btnDelRepresent").show();
+      $("#btnSaveRepresent").show();
+    }
+
+    // 그리드 조회
+    gridRepresent.search("/sys/cd/systemCd/systemCd/list.sb", param, btnShowRepresent());
   }
 
   // 대표명칭 추가 버튼 클릭
@@ -107,7 +91,7 @@ $(document).ready(function () {
 
   // 대표명칭 저장 버튼 클릭
   $("#btnSaveRepresent").click(function (e) {
-
+    console.log(gridRepresent.flex);
     var paramArr = new Array();
 
     for (var i = 0; i < gridRepresent.flex.collectionView.itemsEdited.length; i++) {
@@ -135,83 +119,50 @@ $(document).ready(function () {
 
   });
 
-  // 세부명칭 그리드
-  var gridDetailData =
-    [
-      {
-        binding: "gChk",
-        header: messages["systemCd.chk"],
-        dataType: wijmo.DataType.Boolean,
-        width: 40
-      },
-      {binding: "nmcodeCd", header: messages["systemCd.nmcodeCd"], width: 60},
-      {binding: "nmcodeNm", header: messages["systemCd.nmcodeNm"], width: "*"},
-      {binding: "nmcodeItem1", header: messages["systemCd.nmcodeItem1"], width: "*"},
-      {binding: "nmcodeItem2", header: messages["systemCd.nmcodeItem2"], width: "*"}
-    ];
   // 세부명칭 그리드 생성
-  var gridDetail = wgrid.genGrid("#gridDetail", gridDetailData);
-  // 읽기전용을 해제하지 않으면 그리드 에디팅이 되지 않는다.
-  gridDetail.isReadOnly = false;
+  var gridDetail = agrid.getGrid("gridDetail");
 
   // 세부명칭 그리드 목록 조회
   function srchGridDetail(value) {
-
     var param = {};
     param.nmcodeGrpCd = value;
+    if (!value) {
+      var selectedRow = gridRepresent.flex.selectedRows[0]._data;
+      param.nmcodeGrpCd = selectedRow.nmcodeCd;
+    }
 
-    $.postJSON("/sys/cd/systemCd/systemCd/list.sb", param,
-      function (result) {
+    // 세부명칭 그리드 버튼 show
+    function btnShowDetail() {
+      $("#btnAddDetail").show();
+      $("#btnDelDetail").show();
+      $("#btnSaveDetail").show();
+    }
 
-        // 버튼 Show
-        $("#btnAddDetail").show();
-        $("#btnDelDetail").show();
-        $("#btnSaveDetail").show();
-
-        var list = result.data.list;
-        gridDetail.itemsSource = new wijmo.collections.CollectionView(list);
-        gridDetail.itemsSource.trackChanges = true;
-
-        if (list.length === undefined || list.length == 0) {
-          // 그리드 초기화
-          gridDetail.itemsSource = new wijmo.collections.CollectionView([]);
-          s_alert.pop(result.message);
-          return;
-        }
-
-      },
-      function (result) {
-        s_alert.pop(result.message);
-        return;
-      }
-    );
-  };
+    // 그리드 조회
+    gridDetail.search("/sys/cd/systemCd/systemCd/list.sb", param, btnShowDetail());
+  }
 
   // 세부명칭 추가 버튼 클릭
   $("#btnAddDetail").click(function (e) {
-    var selectedRow = gridDetail.selectedRows[0]._data;
+    var selectedRow = gridRepresent.flex.selectedRows[0]._data;
 
-    gridDetail.collectionView.trackChanges = true;
-    var newRow = gridDetail.collectionView.addNew();
-    newRow.nmcodeGrpCd = selectedRow.nmcodeCd;
-    newRow.gChk = true;
+    var value = {};
+    value.nmcodeGrpCd = selectedRow.nmcodeCd;
 
-    gridDetail.collectionView.commitNew();
-    // 추가된 Row 선택
-    gridDetail.select(gridDetail.rows.length, 1);
+    gridDetail.addNewRow(value, 1);
   });
 
   // 세부명칭 저장 버튼 클릭
   $("#btnSaveDetail").click(function (e) {
-
+    console.log(gridDetail.flex);
     var paramArr = new Array();
-    for (var i = 0; i < gridDetail.collectionView.itemsEdited.length; i++) {
-      gridDetail.collectionView.itemsEdited[i].status = "U";
-      paramArr.push(gridDetail.collectionView.itemsEdited[i]);
+    for (var i = 0; i < gridDetail.flex.collectionView.itemsEdited.length; i++) {
+      gridDetail.flex.collectionView.itemsEdited[i].status = "U";
+      paramArr.push(gridDetail.flex.collectionView.itemsEdited[i]);
     }
-    for (var i = 0; i < gridDetail.collectionView.itemsAdded.length; i++) {
-      gridDetail.collectionView.itemsAdded[i].status = "I";
-      paramArr.push(gridDetail.collectionView.itemsAdded[i]);
+    for (var i = 0; i < gridDetail.flex.collectionView.itemsAdded.length; i++) {
+      gridDetail.flex.collectionView.itemsAdded[i].status = "I";
+      paramArr.push(gridDetail.flex.collectionView.itemsAdded[i]);
     }
 
     if (paramArr.length <= 0) {
@@ -221,7 +172,8 @@ $(document).ready(function () {
 
     $.postJSONArray("/sys/cd/systemCd/systemCd/save.sb", paramArr, function (result) {
         s_alert.pop(messages["cmm.saveSucc"]);
-        gridDetail.collectionView.clearChanges();
+        gridDetail.flex.collectionView.clearChanges();
+        srchGridDetail();
       },
       function (result) {
         s_alert.pop(result.message);

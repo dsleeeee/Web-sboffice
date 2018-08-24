@@ -60,7 +60,7 @@
         </div>
         <%-- 개발시 높이 조절해서 사용--%>
         <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
-        <div id="gridTemplate"></div>
+        <div id="gridTemplate" style="height:393px;"></div>
       </div>
       <%--//위즈모 테이블--%>
     </div>
@@ -179,4 +179,4 @@ var printTypeComboData = ${listPrintType};
 var sysStatFgComboData = ${ccu.getCommCode("009")};
 var clsFgComboData = ${ccu.getCommCode("001")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sys/bill/template/template.js?ver=20180813" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/bill/template/template.js?ver=20180824" charset="utf-8"></script>
