@@ -55,14 +55,6 @@ public interface CmmCodeService {
     <E> List<E> selectCmmCodeList(String nmcodeGrpCd);
 
     /**
-     * 환경변수 조회
-     *
-     * @param envstCd
-     * @return
-     */
-    <E> List<E> selectEnvCodeList(String envstCd);
-
-    /**
      * 대리점 목록 조회
      * @return
      */

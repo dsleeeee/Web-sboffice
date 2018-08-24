@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.application.common.service.impl.CmmEnvMapper">
+
+  <!-- 환경변수 상세 코드 조회 -->
+  <!--
+      TABLE    : TB_CM_ENVST_DTL
+      PARAM    : hqManageVO
+      COMMENTS : 환경변수 상세 코드를 조회한다.
+  -->
+  <select id="selectEnvCodeList" parameterType="String" resultType="DefaultMap">
+  <![CDATA[
+  /* CmmEnvMapper.selectEnvCodeList */
+  SELECT ENVST_CD,
+         ENVST_VAL_CD,
+         ENVST_VAL_NM,
+         DEFLT_YN,
+         USE_YN,
+         REG_DT,
+         REG_ID,
+         MOD_DT,
+         MOD_ID
+    FROM TB_CM_ENVST_DTL
+   WHERE ENVST_CD = #{envstCd}
+     AND USE_YN = 'Y'
+  ]]>
+  </select>
+
+  <!-- 본사 환경변수 값 조회 -->
+  <!--
+      TABLE    : TB_HQ_ENVST
+      COMMENTS : 본사 환경변수 테이블에 등록된 값을 조회한다.
+  -->
+  <select id="getHqEnvst" parameterType="hqEnvstVO" resultType="String">
+    /* CmmEnvMapper.getHqEnvst */
+    SELECT ENVST_VAL
+      FROM TB_HQ_ENVST
+     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+       AND ENVST_CD = #{envstCd}
+       AND USE_YN = 'Y'
+  </select>
+
+  <!-- 환경변수명 값 조회 -->
+  <!--
+      TABLE    : TB_CM_ENVST
+      COMMENTS : 환경변수명을 조회한다.
+  -->
+  <select id="getEnvNm" parameterType="envstVO" resultType="String">
+    /* CmmEnvMapper.getEnvNm */
+    SELECT ENVST_NM
+      FROM TB_CM_ENVST
+     WHERE ENVST_CD = #{envstCd}
+       AND USE_YN = 'Y'
+  </select>
+
+</mapper>
+
+
+
+
+

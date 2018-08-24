@@ -25,9 +25,9 @@
 <script>
 
 <%-- 공통코드 --%>
-var prterKind   = ${ccu.getEnvCodeExcpAll("4030")};
-var prterPort   = ${ccu.getEnvCodeExcpAll("4031")};
-var prterSpeed  = ${ccu.getEnvCodeExcpAll("4032")};
+var prterKind   = ${cnv.getEnvCodeExcpAll("4030")};
+var prterPort   = ${cnv.getEnvCodeExcpAll("4031")};
+var prterSpeed  = ${cnv.getEnvCodeExcpAll("4032")};
 var useYn       = ${ccu.getCommCodeExcpAll("067")};
 
 var posNoDM;
