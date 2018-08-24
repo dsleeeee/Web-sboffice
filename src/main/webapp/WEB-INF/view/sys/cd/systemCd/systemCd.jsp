@@ -62,7 +62,8 @@
       </div>
       <%-- 개발시 높이 조절해서 사용--%>
       <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
-      <div class="wj-gridWrap" style="height:310px">
+      <div class="wj-gridWrap" style="height:315px">
+        <div class="row">
         <wj-flex-grid
                 autoGenerateColumns="false"
                 control="flex"
@@ -74,7 +75,7 @@
 
           <!-- define columns -->
           <wj-flex-grid-column header="<s:message code="systemCd.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="systemCd.nmcodeCd"/>" binding="nmcodeCd" width="60"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="systemCd.nmcodeCd"/>" binding="nmcodeCd" width="50"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="systemCd.nmcodeNm"/>" binding="nmcodeNm" width="*"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="systemCd.nmcodeItem1"/>" binding="nmcodeItem1" width="*"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="systemCd.nmcodeItem2"/>" binding="nmcodeItem2" width="*"></wj-flex-grid-column>
@@ -87,6 +88,7 @@
           <jsp:param name="pickerTarget" value="representApp"/>
         </jsp:include>
         <%--// ColumnPicker 사용시 include --%>
+        </div>
       </div>
     </div>
     <%--//위즈모 테이블--%>
@@ -122,7 +124,7 @@
 
           <!-- define columns -->
           <wj-flex-grid-column header="<s:message code="systemCd.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="systemCd.nmcodeCd"/>" binding="nmcodeCd" width="60"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="systemCd.nmcodeCd"/>" binding="nmcodeCd" width="50"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="systemCd.nmcodeNm"/>" binding="nmcodeNm" width="*"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="systemCd.nmcodeItem1"/>" binding="nmcodeItem1" width="*"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="systemCd.nmcodeItem2"/>" binding="nmcodeItem2" width="*"></wj-flex-grid-column>
