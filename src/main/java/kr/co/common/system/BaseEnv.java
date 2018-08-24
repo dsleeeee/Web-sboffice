@@ -37,7 +37,7 @@ public class BaseEnv {
     
     public static int SESSION_HIST_MENU_SIZE;
     
-    public static int LOGIN_FAIL_CNT;
+    public static int LOGIN_FAIL_CHECK_CNT;
 
     public static int LOGIN_PWD_CHG_DAYS;
 
@@ -105,9 +105,9 @@ public class BaseEnv {
         SESSION_HIST_MENU_SIZE = sessionHistMenuSize;
     }
 
-    @Value("#{config['login.fail.cnt']}")
-    public void setLoginFailCnt(int loginFailCnt) {
-        LOGIN_FAIL_CNT = loginFailCnt;
+    @Value("#{config['login.fail.check.cnt']}")
+    public void setloginFailCheckCnt(int loginFailCheckCnt) {
+        LOGIN_FAIL_CHECK_CNT = loginFailCheckCnt;
     }
 
     @Value("#{config['login.pwd.chg.days']}")

@@ -151,6 +151,7 @@
   /* AuthMapper.updateUserPwd */
     UPDATE TB_WB_USER_INFO
        SET USER_PWD = #{userPwd},
+           USER_STAT_FG = #{userStatFg},
            LAST_PWD_CHG_DT = #{lastPwdChgDt}
      WHERE USER_ID = #{userId}
   </update>

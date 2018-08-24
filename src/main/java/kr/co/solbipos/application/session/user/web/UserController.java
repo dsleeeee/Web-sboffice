@@ -482,7 +482,7 @@ public class UserController {
         }
 
         HashMap<String, String> returnData = new HashMap<>();
-        returnData.put("msg", messageService.get("login.pw.find.h2.1") +"\\n" + messageService.get("login.pw.find.h2.2"));
+        returnData.put("msg", messageService.get("login.pw.find.h2.1") + messageService.get("login.pw.find.h2.2"));
         returnData.put("url", "/auth/logout.sb");
 
         return returnJson(Status.OK, returnData);
@@ -533,7 +533,7 @@ public class UserController {
         int r2 = userService.insertPwdChgHist(pwdChgHistVO);
 
         HashMap<String, String> result = new HashMap<>();
-        result.put("msg", messageService.get("login.pw.find.h2.1") + "\\n" + messageService.get("login.pw.find.h2.2"));
+        result.put("msg", messageService.get("login.pw.find.h2.1") +  messageService.get("login.pw.find.h2.2"));
 
         result.put("url", "/auth/logout.sb");
 

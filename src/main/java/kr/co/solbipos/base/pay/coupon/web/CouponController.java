@@ -1,21 +1,28 @@
 package kr.co.solbipos.base.pay.coupon.web;
 
+import kr.co.common.data.enums.CodeType;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
+import kr.co.common.exception.BizException;
+import kr.co.common.exception.CodeException;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.SessionUtil;
+import kr.co.common.utils.jsp.CmmCodeUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.pay.coupon.service.CouponProdVO;
 import kr.co.solbipos.base.pay.coupon.service.CouponService;
 import kr.co.solbipos.base.pay.coupon.service.CouponVO;
 import kr.co.solbipos.base.pay.coupon.service.PayMethodClassVO;
+import kr.co.solbipos.base.pay.coupon.service.enums.CoupnEnvFg;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -45,11 +52,19 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 @RequestMapping(value = "/base/pay/coupon")
 public class CouponController {
 
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
     /** service */
     @Autowired
     CouponService service;
     @Autowired
     SessionService sessionService;
+
+    /** util */
+    @Autowired
+    CmmCodeUtil cmmCodeUtil;
+    @Autowired
+    CmmEnvUtil cmmEnvUtil;
 
     /**
      * 쿠폰 등록 화면
@@ -63,7 +78,24 @@ public class CouponController {
     @RequestMapping(value = "/class/couponView.sb", method = RequestMethod.GET)
     public String prodClassView(HttpServletRequest request, HttpServletResponse response,
             Model model) {
-        return "base/pay/coupon/couponView";
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        String envstCd = "0019";
+        String coupnEnvstVal = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, envstCd));
+
+        LOGGER.info("======================> coupnEnvstVal : "+ coupnEnvstVal);
+        LOGGER.info("======================> CoupnEnvFg enum : "+ CoupnEnvFg.getEnum(coupnEnvstVal));
+
+        // 환경설정값 체크 : [0019] 쿠폰등록-본사통제여부 확인 ( 1: 매장통제, 2:본사통제 )
+        // 매장통제, 본사통제 둘다 메뉴 사용 가능하지만 null인 경우는 사용 불가능.
+        // 해당 환경설정값이 없는 경우, 본사환경설정에서 환경설정 필요.
+        if("".equals(coupnEnvstVal)) {
+            throw new CodeException(CodeType.HQ_ENV, envstCd, "/error/envError.sb");
+        } else{
+            model.addAttribute("coupnEnvstVal", coupnEnvstVal);
+            return "base/pay/coupon/couponView";
+        }
     }
 
     /**
@@ -81,9 +113,15 @@ public class CouponController {
     public Result getCouponClassList(PayMethodClassVO payMethodClassVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
+        LOGGER.debug(payMethodClassVO.getProperties());
+
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
         List<DefaultMap<String>> list = service.getCouponClassList(payMethodClassVO, sessionInfoVO);
+
+        for( DefaultMap<String> f : list) {
+            System.out.println(f);
+        }
 
         return returnListJson(Status.OK, list, payMethodClassVO);
     }
@@ -195,7 +233,5 @@ public class CouponController {
 
         return returnListJson(Status.OK, resultMap, couponProdVO);
     }
-
-
 
 }

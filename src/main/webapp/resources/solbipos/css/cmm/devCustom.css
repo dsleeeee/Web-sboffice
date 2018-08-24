@@ -10,3 +10,15 @@ ol,ul, li {list-style: none;}
 
 input[readonly] {background-color: #F0F0F0 !important; color: #303030 !important;}
 input[disable] {background-color: #F0F0F0 !important; color: #303030 !important;}
+
+/*
+ *  20180821 추가
+ *  wijmo가 아닌 일반 select box의 경우에도 sb-select 클래스 적용
+ */
+select.sb-select {display:block!important; border:1px solid #e8e8e8; height:28px!important; line-height:30px; border-radius:0px; font-size:0.85em;}
+
+/*
+ * 20180823 추가
+ * elseCon 중간 글씨체 추가
+ */
+.elseCon .mdTxt {font-size:1.450em; line-height:1.5em; color:#222; font-weight:bold;}

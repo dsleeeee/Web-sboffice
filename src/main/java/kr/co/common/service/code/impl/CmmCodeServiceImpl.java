@@ -101,11 +101,6 @@ public class CmmCodeServiceImpl implements CmmCodeService {
     }
 
     @Override
-    public <E> List<E> selectEnvCodeList(String envstCd) {
-        return cmmCodeMapper.selectEnvCodeList(envstCd);
-    }
-
-    @Override
     public <E> List<E> getAgencyList() {
         return cmmCodeMapper.selectAgencyList();
     }

@@ -49,7 +49,7 @@
   <entry key="login.check.id.save">saveid</entry>
   <entry key="login.otp.limit.minute">3</entry>
   <entry key="login.otp.size">4</entry>
-  <entry key="login.fail.cnt">3</entry>
+  <entry key="login.fail.check.cnt">3</entry>
 
   <!-- ====================================--> 
   <!--  session Properties--> 

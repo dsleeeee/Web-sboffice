@@ -1,7 +1,6 @@
 package kr.co.common.utils.jsp;
 
 import kr.co.common.data.domain.CommonCodeVO;
-import kr.co.common.data.domain.EnvCodeVO;
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.code.CmmCodeService;
@@ -250,63 +249,6 @@ public class CmmCodeUtil {
     }
 
     /**
-     * 환경변수 공통코드 조회 (TB_CM_ENVST_DTL)
-     *
-     * @param envstCd
-     * @return
-     */
-    public String getEnvCode(String envstCd) {
-
-        EnvCodeVO envCodeVO = getEnvCodeData(envstCd);
-        if(envCodeVO == null) {
-            return assmblEmptyCombo();
-        }
-        // 결과 형태를 만들어서 json 으로 리턴
-        return assmblObj(envCodeVO.getCodeList(), "envstValNm", "envstValCd", UseYn.ALL);
-    }
-
-    /**
-     * 환경변수 공통코드 조회  "ALL" 제외 (TB_CM_ENVST_DTL)
-     *
-     * @param envstCd
-     * @return
-     */
-    public String getEnvCodeExcpAll(String envstCd) {
-
-        EnvCodeVO envCodeVO = getEnvCodeData(envstCd);
-        if(envCodeVO == null) {
-            return assmblEmptyCombo();
-        }
-        // 결과 형태를 만들어서 json 으로 리턴
-        return assmblObj(envCodeVO.getCodeList(), "envstValNm", "envstValCd", UseYn.N);
-    }
-
-    /**
-     * 환경변수 코드 조회
-     *
-     * @param envstCd
-     * @return
-     */
-    private EnvCodeVO getEnvCodeData(String envstCd) {
-
-        EnvCodeVO envCodeVO = new EnvCodeVO();
-
-        envCodeVO.setEnvstCd(envstCd);
-
-        List<DefaultMap<String>> codeList = null;
-
-        codeList = cmmCodeService.selectEnvCodeList(envstCd);
-
-        if (isEmpty(codeList)) { // 조회 결과 없으면 데이터 없음 리턴
-            return null;
-        }
-
-        envCodeVO.setCodeList(codeList);
-
-        return envCodeVO;
-    }
-
-    /**
      * 대리점코드 조회
      *
      * @param
@@ -378,4 +320,6 @@ public class CmmCodeUtil {
 
         return convertToJson(list);
     }
+
+
 }

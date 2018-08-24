@@ -1,6 +1,10 @@
 package kr.co.solbipos.application.common.web;
 
 import static org.springframework.util.ObjectUtils.*;
+
+import kr.co.common.data.enums.CodeType;
+import kr.co.common.exception.CodeException;
+import kr.co.common.system.BaseEnv;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +23,8 @@ import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.common.utils.spring.WebUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 /**
  * @author 정용길
@@ -26,9 +32,9 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
  */
 @ControllerAdvice
 public class ExceptionController {
-    
+
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    
+
     /** 메세지 서비스 */
     @Autowired
     MessageService messageService;
@@ -69,6 +75,26 @@ public class ExceptionController {
 
         return new JavaScriptResult(script);
     }
+
+    /**
+     * 코드관련 예외 처리<br>
+     * {@link CodeException} 를 상속 받은 모든 {@code Exception} 을 처리
+     *
+     * @param e {@code CodeException}
+     * @return JSON 요청일 때 아닐 때 script {@code String}
+     */
+    @ExceptionHandler(CodeException.class)
+    public String codeExceptionHandle(CodeException e, RedirectAttributes redirectAttributes) {
+
+        CodeType codeType = e.getCodeType();
+        String codeCd = e.getCodeCd();
+        String responseURL = e.getResponseURL();
+
+        redirectAttributes.addAttribute("codeType", codeType);
+        redirectAttributes.addAttribute("codeCd", codeCd);
+        return "redirect:" + responseURL;
+    }
+
 
     /**
      * 인증 예외 처리
