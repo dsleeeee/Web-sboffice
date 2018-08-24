@@ -69,7 +69,7 @@ public class AuthServiceImpl implements AuthService {
         SessionInfoVO result = selectWebUser(params);
         // 로그인실패 횟수
         Long loginFailCnt = result.getLoginFailCnt() + 1;
-        Boolean isFailOver = loginFailCnt > BaseEnv.LOGIN_FAIL_CNT ? true : false;
+        Boolean isFailOver = loginFailCnt > BaseEnv.LOGIN_FAIL_CHECK_CNT ? true : false;
 
         /** 존재하는 id 인지 체크 */
         if (isEmpty(result) || isEmpty(result.getUserId())) {
