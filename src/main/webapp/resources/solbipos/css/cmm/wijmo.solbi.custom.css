@@ -173,3 +173,89 @@
     font-family: '굴림체';
     font-size: 14px !important;
 }
+
+.wj-dialog-columns {
+    width: 400px;
+}
+.wj-popup {
+    border-radius: 4px;
+}
+.wj-popup .wj-dialog-header {
+    height: 50px;
+    border-bottom: 1px solid #dbdbdb;
+    line-height: 50px;
+    padding: 0 30px;
+    color: #222;
+    background: initial;
+}
+.wj-dialog-header .btn_close {position: absolute;right: 10px;top: 5px;}
+.wj-dialog-header .btn_close {display: inline-block;width: 45px;height: 40px;border-radius: 5px;transition: all 0.3s;}
+.wj-dialog-header .btn_close:hover {background:#e8e8e8; transition:all 0.3s;}
+.wj-dialog-header .btn_close:hover:before {transform:rotate(225deg);}
+.wj-dialog-header .btn_close:hover:after {transform:rotate(135deg);}
+.wj-dialog-header .btn_close:before {content: ''; position: absolute; top: 18px; right: 10px; width: 24px; height: 3px; background: #aeaeae; border-radius: 20%; transform: rotate(45deg); transition: all 0.3s;}
+.wj-dialog-header .btn_close:after {content: ''; position: absolute; top: 18px; right: 10px; width: 24px; height: 3px; background: #aeaeae; border-radius: 20%; transform: rotate(-45deg); transition: all 0.3s;}
+
+.wj-popup .wj-dialog-header-font {
+    font-family: 'NotoR', Malgun Gothic, '맑은 고딕', Dotum, '돋움', sans-serif;
+    font-weight: normal;
+    font-size: 16px;
+}
+.wj-popup .wj-dialog-body {
+    padding: 20px 30px 0;
+}
+.wj-dialog-body .text-info {
+    font-size: 12px;
+    line-height: 1.2em;
+}
+.wj-column-picker-wrap {
+    border: 1px solid #dbdbdb;
+}
+.wj-columnlists .column-list {
+    width: 50%;
+    height: 200px;
+}
+.wj-column-picker-wrap .column-list-title {
+    text-align: center;
+    font-size: 14px;
+    color: #222;
+    padding: 5px;
+    border-bottom: 1px solid #dbdbdb;
+}
+.wj-columnpicker {
+    height: 200px;
+    position: relative;
+}
+.wj-columnpicker .wj-columnlists {
+    height: 100%;
+    display: flex;
+    padding: 4px;
+}
+.wj-column-picker-wrap .wj-column-picker-list {
+    height: 170px !important;
+    width: 100%;
+    overflow-y: auto;
+    display: inline-block;
+}
+.wj-columnpicker .wj-listbox {
+    flex-grow: 1;
+    height: 100%;
+    padding: 4px;
+    border: none;
+}
+.wj-columnpicker .wj-listbox .wj-listbox-item.wj-state-selected {
+    background-color: transparent;
+    color: inherit;
+    font-weight: bold;
+}
+.wj-columnpicker .wj-marker {
+    position: absolute;
+    background-color: #0085c7;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.wj-column-picker-list .wj-state-selected {
+    background: #0085c7;
+    color: #888 !important;
+}

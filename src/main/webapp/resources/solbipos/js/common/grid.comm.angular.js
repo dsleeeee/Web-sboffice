@@ -5,7 +5,7 @@
     genGrid: function (appName, ctrlName) {
       var app = angular.module(appName, ['wj']);
       app.controller(ctrlName, ['$scope', '$http', function ($scope, $http) {
-        $scope.search = function (url, param) {
+        $scope.search = function (url, param, callback) {
           $http({
             method: 'POST', //방식
             url: url, /* 통신할 URL */
@@ -22,18 +22,57 @@
             }
             list.trackChanges = true;
             $scope.data = new wijmo.collections.CollectionView(list);
-
           }, function errorCallback(response) {
             // called asynchronously if an error occurs
             // or server returns response with an error status.
             console.log(response);
             s_alert.pop(response.data.message);
             return;
+          }).then(function() {
+            // "complete" code here
+            if ( callback != null ) {
+              setTimeout(function() {
+                callback;
+              }, 10);
+            }
           });
         }
-        var test = "와";
-        $scope.setTest = function() {
-          alert(test);
+        $scope.addNewRow = function(values, pos) {
+          var flex = $scope.flex;
+          flex.collectionView.trackChanges = true;
+          flex.select(flex.rows.length, 0);
+
+          var newRow = flex.collectionView.addNew();
+          newRow.status = "I";
+          newRow.gChk = true;
+          for (var prop in values) {
+            newRow[prop] = values[prop];
+          }
+          flex.collectionView.commitNew();
+          // 추가된 Row 선택
+          flex.scrollIntoView(flex.rows.length - 1, 0);
+          flex.select(flex.rows.length - 1, 1);
+          setTimeout(function() {
+            flex.startEditing(true, flex.rows.length - 1, (pos === null ? 0 : pos), true);
+            flex.focus();
+          }, 10);
+        }
+        // show column picker for the grid
+        $scope.pickColumns = function () {
+
+          // create column picker (once)
+          if (!$scope.picker) {
+            $scope.picker = new wijmo.grid.ColumnPicker('#columnPicker');
+          }
+
+          // show column picker in a dialog
+          $scope.picker.grid = $scope.flex;
+          $scope.pickColumn.show(true, function (s) {
+            var dr = s.dialogResult;
+            if (dr && dr.indexOf('apply') > -1) {
+              $scope.picker.save();
+            }
+          });
         }
         // show grid and restore scroll position
         $scope.initGrid = function (s, e) {
@@ -48,8 +87,15 @@
                   if (sender.activeEditor != null && sender.activeEditor.value != "") {
                     wijmo.setSelectionRange(sender.activeEditor, _cellData.length); // caret position
                   }
-                }, 10);
+                }, 0);
               }
+            }
+          });
+          s.hostElement.addEventListener('mousedown', function(e) {
+            var ht = s.hitTest(e);
+            if( ht.cellType == wijmo.grid.CellType.TopLeft) {
+              $scope.pickColumns();
+              e.preventDefault();
             }
           });
         }
@@ -107,7 +153,6 @@
       app.config(function ($httpProvider) {
         $httpProvider.interceptors.push('myHttpInterceptor');
       });
-
       return app;
     },
     getGrid: function (div) {

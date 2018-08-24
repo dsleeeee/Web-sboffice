@@ -105,4 +105,4 @@
   var clsFg = ${ccu.getCommCodeSelect("001")};
   var sysStatFg = ${ccu.getCommCodeSelect("005")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/virtualLogin/virtualLogin.js?ver=20180820" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/virtualLogin/virtualLogin.js?ver=20180824" charset="utf-8"></script>
