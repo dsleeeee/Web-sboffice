@@ -76,7 +76,7 @@ public class AuthServiceImpl implements AuthService {
 
         // 로그인실패 횟수
         Long loginFailCnt = result.getLoginFailCnt() + 1;
-        Boolean isFailOver = loginFailCnt > BaseEnv.LOGIN_FAIL_CNT ? true : false;
+        Boolean isFailOver = loginFailCnt > BaseEnv.LOGIN_FAIL_CHECK_CNT ? true : false;
 
         /** 패스워드 체크 */
         if (!loginPasswordCheck(params, result)) {
