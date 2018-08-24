@@ -11,14 +11,12 @@ var __extends = (this && this.__extends) || (function () {
 var wijmo;
 (function (wijmo) {
   var grid;
+  var orgColumns = {};
   (function (grid) {
     var ColumnPicker = /** @class */ (function (_super) {
       __extends(ColumnPicker, _super);
       function ColumnPicker(element, options) {
         var _this = _super.call(this, element) || this;
-
-        console.log(_this);
-
         // instantiate and apply template
         var tpl = _this.getTemplate();
         _this.applyTemplate('wj-control wj-columnpicker', tpl, {
@@ -61,6 +59,23 @@ var wijmo;
         enumerable: true,
         configurable: true
       });
+      Object.defineProperty(ColumnPicker.prototype, "orgColumns", {
+        get: function () {
+          return this._orgColumns;
+        },
+        set: function (value) {
+          var cols = new Array;
+          for (var i = 0; i < value.length; i++) {
+            cols[i] = {
+              binding : value[i].binding,
+              name : value[i]._hdr,
+              isVisible : value[i].isVisible
+            };
+          }
+          cols['length'] = value.length
+          this._orgColumns = cols;
+        }
+      });
       // saves the column layout to the grid
       ColumnPicker.prototype.save = function () {
         var g = this._grid, cols = this._lbInUse.itemsSource;
@@ -88,9 +103,9 @@ var wijmo;
         this._lbAll.itemsSource = all;
         this._lbInUse.itemsSource = inUse;
         // sort 'all' list by header (binding?)
-        var sd = this._lbAll.collectionView.sortDescriptions;
-        sd.clear();
-        sd.push(new wijmo.collections.SortDescription('header', true));
+        // var sd = this._lbAll.collectionView.sortDescriptions;
+        // sd.clear();
+        // sd.push(new wijmo.collections.SortDescription('header', true));
         // reset mouse state/list selection
         this._resetMouseState();
       };
@@ -100,17 +115,24 @@ var wijmo;
         if (g) {
           // columns currently in use (preserve formatting, etc)
           for (var i = 0; i < g.columns.length; i++) {
-            all.push(g.columns[i]);
+            // 화면에서 보이지 않는 컬럼은 picker 에서도 제외한다 : 20180824 노현수
+            if (g.columns[i].isVisible) {
+              all.push(g.columns[i]);
+            }
           }
           // columns available but not in use
           if (wijmo.hasItems(g.collectionView)) {
             var item = g.collectionView.items[0];
             for (var k in item) {
               if (!g.columns.getColumn(k)) {
-                all.push(new grid.Column({
-                  binding: k,
-                  header: wijmo.toHeaderCase(k)
-                }));
+                for(var v = 0; v < this._orgColumns.length; v++ ) {
+                  if (this._orgColumns[v].binding === k && this._orgColumns[v].isVisible) {
+                    all.push(new grid.Column({
+                      binding: k,
+                      header: wijmo.toHeaderCase(this._orgColumns[v].name)
+                    }));
+                  }
+                }
               }
             }
           }
@@ -168,15 +190,17 @@ var wijmo;
         if (target) {
           // check whether the move is valid
           var valid = false;
+          // gChk 는 드래그 되지 않도록 지역변수로 설정해서 컨트롤 : 20180824 노현수
+          var srcList = wijmo.Control.getControl(this._dragSource), col = srcList.selectedItem;
           // dragging from All to InUse (valid if the target does not contain the item)
           if (this._dragSource == this._dAll && target != this._lbAll) {
-            var srcList = wijmo.Control.getControl(this._dragSource), col = srcList.selectedItem;
-            if (target.itemsSource.indexOf(col) < 0) {
+            // var srcList = wijmo.Control.getControl(this._dragSource), col = srcList.selectedItem;
+            if (target.itemsSource.indexOf(col) < 0 && col.binding !== "gChk") {
               valid = true;
             }
           }
           // dragging from InUse to All (to remove the column) or within the inUse list
-          if (this._dragSource && this._dragSource != this._dAll) {
+          if (this._dragSource && this._dragSource != this._dAll && col.binding !== "gChk") {
             valid = true;
           }
           // if valid, prevent default to allow drop
@@ -195,7 +219,8 @@ var wijmo;
         var target = this._getListBoxTarget(e);
         if (target) {
           var srcList = wijmo.Control.getControl(this._dragSource), col = (srcList ? srcList.selectedItem : null), items = target.itemsSource;
-          if (col) {
+          // gChk 는 드래그 되지 않도록 설정 : 20180824 노현수
+          if (col && col.binding !== "gChk") {
             // if the target is the All list, remove from InUse
             // otherwise, add to or re-position field in target list
             if (target == this._lbAll) {
