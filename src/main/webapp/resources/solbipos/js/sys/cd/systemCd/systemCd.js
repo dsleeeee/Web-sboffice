@@ -8,37 +8,43 @@
  * 2018.08.13     노현수      1.0
  *
  * **************************************************************/
+// angularjs App 생성
+var gridRepresentApp = agrid.genGrid('app', 'appTCCtrl');
+var gridRepresent;
+// 페이지로드 후 동작 선언
 $(document).ready(function () {
 
   var srchNmcodeCd = wcombo.genInputText("#srchNmcodeCd", 3, "");
   var srchNmcodeNm = wcombo.genInputText("#srchNmcodeNm", 50, "");
+
+  // 대표명칭 그리드 생성
+  gridRepresent = agrid.getGrid("gridRepresent");
 
   // 조회버튼 클릭
   $("#btnSearch").click(function (e) {
     srchGridRepresent();
   });
 
-  // 대표명칭 그리드
-  var gridRepresentData =
-    [
-      {
-        binding: "gChk",
-        header: messages["systemCd.chk"],
-        dataType: wijmo.DataType.Boolean,
-        width: 40
-      },
-      {binding: "nmcodeCd", header: messages["systemCd.nmcodeCd"], width: 60},
-      {binding: "nmcodeNm", header: messages["systemCd.nmcodeNm"], width: "*"},
-      {binding: "nmcodeItem1", header: messages["systemCd.nmcodeItem1"], width: "*"},
-      {binding: "nmcodeItem2", header: messages["systemCd.nmcodeItem2"], width: "*"},
-      {binding: "useColNm", header: messages["systemCd.useColNm"], width: "*"}
-    ];
-  // 대표명칭 그리드 생성
-  var gridRepresent = wgrid.genGrid("#gridRepresent", gridRepresentData);
-  gridRepresent.isReadOnly = false;
+  // var gridRepresentData =
+  //   [
+  //     {
+  //       binding: "gChk",
+  //       header: messages["systemCd.chk"],
+  //       dataType: wijmo.DataType.Boolean,
+  //       width: 40
+  //     },
+  //     {binding: "nmcodeCd", header: messages["systemCd.nmcodeCd"], width: 60},
+  //     {binding: "nmcodeNm", header: messages["systemCd.nmcodeNm"], width: "*"},
+  //     {binding: "nmcodeItem1", header: messages["systemCd.nmcodeItem1"], width: "*"},
+  //     {binding: "nmcodeItem2", header: messages["systemCd.nmcodeItem2"], width: "*"},
+  //     {binding: "useColNm", header: messages["systemCd.useColNm"], width: "*"}
+  //   ];
+  // // 대표명칭 그리드 생성
+  // var gridRepresent = wgrid.genGrid("#gridRepresent", gridRepresentData);
+  // gridRepresent.isReadOnly = false;
 
   // ReadOnly 효과설정
-  gridRepresent.formatItem.addHandler(function (s, e) {
+  gridRepresent.flex.formatItem.addHandler(function (s, e) {
     if (e.panel == s.cells) {
       var col = s.columns[e.col];
       if (col.binding === "nmcodeCd") {
@@ -54,10 +60,10 @@ $(document).ready(function () {
   });
 
   // 대표명칭 그리드 에디팅 방지
-  gridRepresent.beginningEdit.addHandler(function (sender, elements) {
+  gridRepresent.flex.beginningEdit.addHandler(function (sender, elements) {
     var col = sender.columns[elements.col];
     if (col.binding === "nmcodeCd") {
-      var dataItem = gridRepresent.rows[elements.row].dataItem;
+      var dataItem = gridRepresent.flex.rows[elements.row].dataItem;
       if (nvl(dataItem.status, "") == "" && dataItem.status != "I") {
         elements.cancel = true;
       }
@@ -65,13 +71,20 @@ $(document).ready(function () {
   });
 
   // 대표명칭 그리드 선택 이벤트
-  gridRepresent.selectionChanged.addHandler(function (s, e) {
+  gridRepresent.flex.selectionChanged.addHandler(function (s, e) {
     var col = s.columns[e.col];
-    var selectedRow = gridRepresent.rows[e.row].dataItem;
+    var selectedRow = gridRepresent.flex.rows[e.row].dataItem;
     if (col.binding === "nmcodeCd" && selectedRow.status != "I") {
       srchGridDetail(selectedRow.nmcodeCd);
     }
   });
+
+  function showBtn() {
+    // 버튼 Show
+    $("#btnAddRepresent").show();
+    $("#btnDelRepresent").show();
+    $("#btnSaveRepresent").show();
+  }
 
   // 대표명칭 그리드 목록 조회
   function srchGridRepresent() {
@@ -79,44 +92,17 @@ $(document).ready(function () {
     param.nmcodeGrpCd = "000";
     param.nmcodeCd = srchNmcodeCd.value;
     param.nmcodeNm = srchNmcodeNm.value;
+    // 그리드 조회
+    gridRepresent.search("/sys/cd/systemCd/systemCd/list.sb", param, showBtn());
 
-    $.postJSON("/sys/cd/systemCd/systemCd/list.sb", param,
-      function (result) {
-
-        // 버튼 Show
-        $("#btnAddRepresent").show();
-        $("#btnDelRepresent").show();
-        $("#btnSaveRepresent").show();
-
-        var list = result.data.list;
-        gridRepresent.itemsSource = new wijmo.collections.CollectionView(list);
-        gridRepresent.itemsSource.trackChanges = true;
-
-        if (list.length === undefined || list.length == 0) {
-          gridRepresent.itemsSource = new wijmo.collections.CollectionView([]);
-          s_alert.pop(result.message);
-          return;
-        }
-
-      },
-      function (result) {
-        s_alert.pop(result.message);
-        return;
-      }
-    );
   }
 
   // 대표명칭 추가 버튼 클릭
   $("#btnAddRepresent").click(function (e) {
-    gridRepresent.collectionView.trackChanges = true;
-    var newRow = gridRepresent.collectionView.addNew();
-    newRow.status = "I";
-    newRow.nmcodeGrpCd = "000";
-    newRow.gChk = true;
+    var value = {};
+    value.nmcodeGrpCd = "000";
 
-    gridRepresent.collectionView.commitNew();
-    // 추가된 Row 선택
-    gridRepresent.select(gridRepresent.rows.length, 1);
+    gridRepresent.addNewRow(value, 1);
   });
 
   // 대표명칭 저장 버튼 클릭
@@ -124,13 +110,13 @@ $(document).ready(function () {
 
     var paramArr = new Array();
 
-    for (var i = 0; i < gridRepresent.collectionView.itemsEdited.length; i++) {
-      gridRepresent.collectionView.itemsEdited[i].status = "U";
-      paramArr.push(gridRepresent.collectionView.itemsEdited[i]);
+    for (var i = 0; i < gridRepresent.flex.collectionView.itemsEdited.length; i++) {
+      gridRepresent.flex.collectionView.itemsEdited[i].status = "U";
+      paramArr.push(gridRepresent.flex.collectionView.itemsEdited[i]);
     }
-    for (var i = 0; i < gridRepresent.collectionView.itemsAdded.length; i++) {
-      gridRepresent.collectionView.itemsAdded[i].status = "I";
-      paramArr.push(gridRepresent.collectionView.itemsAdded[i]);
+    for (var i = 0; i < gridRepresent.flex.collectionView.itemsAdded.length; i++) {
+      gridRepresent.flex.collectionView.itemsAdded[i].status = "I";
+      paramArr.push(gridRepresent.flex.collectionView.itemsAdded[i]);
     }
 
     if (paramArr.length <= 0) {
@@ -140,7 +126,7 @@ $(document).ready(function () {
 
     $.postJSONArray("/sys/cd/systemCd/systemCd/save.sb", paramArr, function (result) {
         s_alert.pop(messages["cmm.saveSucc"]);
-        gridRepresent.collectionView.clearChanges();
+        gridRepresent.flex.collectionView.clearChanges();
       },
       function (result) {
         s_alert.pop(result.message);

@@ -37,5 +37,8 @@
 <script type="text/javascript" src="/resource/solbipos/js/common/gen.comm.js?ver=20180801" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/common/alert.js?ver=20180801" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/common/paging.js?ver=20180801" charset="utf-8"></script>
+<%-- wijmo ColumnPicker --%>
+<script type="text/javascript" src="/resource/solbipos/js/common/ColumnPicker.js?ver=20180801" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/common/DragDropTouch.js?ver=20180801" charset="utf-8"></script>
 
 <script type="text/javascript" src="/resource/solbipos/js/variables/lang.js?ver=20180801" charset="utf-8"></script>
