@@ -385,6 +385,8 @@
 -->
 
     <typeAlias alias="memberVO" type="kr.co.solbipos.application.pos.service.MemberVO"/>
+    <typeAlias alias="StoreLoanManageVO" type="kr.co.solbipos.iostock.loan.storeLoanManage.service.StoreLoanManageVO"/>
+    <typeAlias alias="StoreLoanInfoVO" type="kr.co.solbipos.iostock.loan.storeLoanInfo.service.StoreLoanInfoVO"/>
 
     <typeAlias type="kr.co.common.data.handler.CustomBooleanTypeHandler" alias="CustomBooleanTypeHandler" />
     <typeAlias type="kr.co.common.data.handler.CustomDateTypeHandler" alias="CustomDateTypeHandler" />

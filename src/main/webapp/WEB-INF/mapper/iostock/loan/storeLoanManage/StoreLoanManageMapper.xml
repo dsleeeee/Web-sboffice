@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    StoreLoanManageMapper.xml
+    매장여신관리 리스트 조회
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       안동관     2018.08.21     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.iostock.loan.storeLoanManage.service.impl.StoreLoanManageMapper">
+
+    <!-- 매장여신관리 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_LOAN
+        PARAM    : storeLoanManageVO
+        COMMENTS : 매장여신관리 리스트를 조회한다.
+    -->
+    <select id="getStoreLoanManageList" parameterType="storeLoanManageVO" resultType="DefaultMap">
+        /* USE : StoreLoanManageMapper.getStoreLoanList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        <![CDATA[
+        SELECT  tms.STORE_CD, tms.STORE_NM
+        ,       tphsl.LIMIT_LOAN_AMT, tphsl.USE_LOAN_AMT, tphsl.CURR_LOAN_AMT
+        ,       tphsl.MAX_ORDER_AMT, tphsl.ORDER_FG, tphsl.NO_OUTSTOCK_AMT_FG
+        ,       DECODE(tphsl.ORDER_FG
+                      ,'1'
+                      ,DECODE(SIGN(tphsl.CURR_LOAN_AMT)
+                             ,1
+                             ,DECODE(tphsl.MAX_ORDER_AMT
+                                    ,NULL
+                                    ,tphsl.CURR_LOAN_AMT
+                                    ,DECODE(SIGN(tphsl.CURR_LOAN_AMT-tphsl.MAX_ORDER_AMT)
+                                           ,1
+                                           ,tphsl.MAX_ORDER_AMT
+                                           ,tphsl.CURR_LOAN_AMT
+                                           )
+                                    )
+                             ,0
+                             )
+                      ,'2'
+                      ,DECODE(SIGN(tphsl.CURR_LOAN_AMT)
+                             ,1
+                             ,DECODE(tphsl.MAX_ORDER_AMT
+                                    ,NULL
+                                    ,tphsl.LIMIT_LOAN_AMT+tphsl.CURR_LOAN_AMT
+                                    ,DECODE(SIGN(tphsl.LIMIT_LOAN_AMT+tphsl.CURR_LOAN_AMT-tphsl.MAX_ORDER_AMT)
+                                           ,1
+                                           ,tphsl.MAX_ORDER_AMT
+                                           ,tphsl.LIMIT_LOAN_AMT+tphsl.CURR_LOAN_AMT
+                                           )
+                                    )
+                             ,0
+                             )
+                      ,'3'
+                      ,DECODE(SIGN(tphsl.CURR_LOAN_AMT)
+                             ,1
+                             ,tphsl.MAX_ORDER_AMT
+                             ,0
+                             )
+                      )   AVAILABLE_ORDER_AMT
+        ,       tphsl.REMARK
+        ]]>
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        <![CDATA[
+        FROM    TB_MS_STORE tms
+        ,       TB_PO_HQ_STORE_LOAN tphsl
+        WHERE   tms.HQ_OFFICE_CD    =   #{hqOfficeCd}
+        AND     tphsl.STORE_CD  (+) =   tms.STORE_CD
+        ]]>
+        <if test='storeCd != null and storeCd != ""'>
+            AND tms.STORE_CD = #{storeCd}
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            AND tho.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        ORDER BY tms.STORE_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 매장여신 저장 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_LOAN
+        PARAM    : storeLoanManageVO
+        COMMENTS : 매장여신을 등록한다.
+    -->
+    <insert id="insertStoreLoanManage" parameterType="storeLoanManageVO">
+    /* USE : StoreLoanManageMapper.insertStoreLoanManage */
+    INSERT INTO TB_PO_HQ_STORE_LOAN
+    (
+        HQ_OFFICE_CD,
+        STORE_CD,
+        LIMIT_LOAN_AMT,
+        USE_LOAN_AMT,
+        CURR_LOAN_AMT,
+        MAX_ORDER_AMT,
+        ORDER_FG,
+        NO_OUTSTOCK_AMT_FG,
+        REMARK,
+        REG_DT,
+        REG_ID,
+        MOD_DT,
+        MOD_ID
+    )
+    VALUES
+    (
+        #{hqOfficeCd},
+        #{storeCd},
+        #{limitLoanAmt},
+        #{useLoanAmt},
+        #{currLoanAmt},
+        #{maxOrderAmt},
+        #{orderFg},
+        #{noOutstockAmtFg},
+        #{remark},
+        #{regDt},
+        #{regId},
+        #{modDt},
+        #{modId}
+    )
+  </insert>
+
+    <!-- 매장여신 저장 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_LOAN
+        PARAM    : storeLoanManageVO
+        COMMENTS : 매장여신을 수정한다.
+    -->
+    <update id="updateStoreLoanManage" parameterType="storeLoanManageVO">
+    /* USE : StoreLoanManageMapper.updateStoreLoanManage */
+    UPDATE  TB_PO_HQ_STORE_LOAN
+    SET     LIMIT_LOAN_AMT        = #{limitLoanAmt},
+            MAX_ORDER_AMT         = #{maxOrderAmt},
+            ORDER_FG              = #{orderFg},
+            NO_OUTSTOCK_AMT_FG    = #{noOutstockAmtFg},
+            REMARK                = #{remark},
+            MOD_DT                = #{modDt},
+            MOD_ID                = #{modId}
+    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+    AND     STORE_CD     = #{storeCd}
+    </update>
+
+</mapper>
