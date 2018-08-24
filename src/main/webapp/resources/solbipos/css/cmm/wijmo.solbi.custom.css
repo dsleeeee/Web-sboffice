@@ -26,6 +26,10 @@
     text-align:center!important;
 }
 
+.wj-flexgrid .wj-state-sticky .wj-header {
+    opacity: 0.90;
+}
+
 .wj-state-selected {
     background: #93cbfc;
     color: #fff!important; }

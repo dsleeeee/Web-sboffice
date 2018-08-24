@@ -10,7 +10,7 @@
  * **************************************************************/
 // angularjs App 생성
 var gridRepresentApp = agrid.genGrid('representApp', 'representCtrl', true);
-var gridDetailApp = agrid.genGrid('detailApp', 'detailCtrl', true);
+var gridDetailApp = agrid.genGrid('detailApp', 'detailCtrl', false);
 // 페이지로드 후 동작 선언
 $(document).ready(function () {
 
@@ -121,6 +121,21 @@ $(document).ready(function () {
 
   // 세부명칭 그리드 생성
   var gridDetail = agrid.getGrid("gridDetail");
+
+  // ReadOnly 효과설정
+  gridDetail.flex.formatItem.addHandler(function (s, e) {
+    if (e.panel == s.cells) {
+      var col = s.columns[e.col];
+      if (col.binding === "nmcodeCd") {
+        var item = s.rows[e.row].dataItem;
+        if (item.status != "I") {
+          wijmo.addClass(e.cell, 'wj-custom-readonly');
+        } else {
+          wijmo.removeClass(e.cell, 'wj-custom-readonly');
+        }
+      }
+    }
+  });
 
   // 세부명칭 그리드 목록 조회
   function srchGridDetail(value) {

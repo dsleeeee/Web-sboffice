@@ -110,6 +110,11 @@
             if (mRange) {
               cell.innerHTML = "<div class='wj-header merged-custom'>" + cell.innerHTML + "</div>";
             }
+          // picker 를 위한 설정
+          } else if (panel.cellType === wijmo.grid.CellType.TopLeft) {
+            if(!isPicker) {
+              $(cell).css({"background": "none", "background-color": "#e8e8e8"});
+            }
           // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
           } else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
             // GroupRow 인 경우에는 표시하지 않는다.
