@@ -229,12 +229,18 @@ function getPosInfo(){
         }else if(sOption == false && list[i].defltYn == "Y") {
           $("#env"+list[i].envstCd).val(list[i].envstValCd).prop("selected", true);
         }
-
         if(list[i].defltYn == "Y") {
+
           $("#env"+list[i].envstCd).attr("defaultVal", list[i].envstValCd);
         }
       }else {
-        $("#env"+list[i].envstCd).val(list[i].selEnvstVal);
+        var envstVal = "";
+        if(list[i].selEnvstVal == null || list[i].selEnvstVal == "") {
+          envstVal = "*";
+        } else{
+          envstVal = list[i].selEnvstVal;
+        }
+        $("#env"+list[i].envstCd).val(envstVal);
       }
     }
 

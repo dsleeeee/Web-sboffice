@@ -41,14 +41,8 @@
 <%-- 환경설정 팝업 오픈 --%>
 function openEnvLayer(){
 
-  console.log('openEnvLayer');
-
-
   $("#envDim").show();
   $("#envLayer").show();
-
-
-  console.log(selectedBrand);
 
   var envTitle = "[" + selectedBrand.hqBrandCd + "] "+ selectedBrand.hqBrandNm;
 

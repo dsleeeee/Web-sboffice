@@ -275,7 +275,7 @@ function search(index) {
           newStoreReg(hdOfficeInfo);
         } else {
           var col = ht.panel.columns[ht.col];
-          if( col.binding == "storeNm") {
+          if( col.binding == "storeCd" || col.binding == "storeNm") {
             if(grid.rows[ht.row].dataItem.storeCd != "<s:message code='storeManage.require.regist.store2'/>") {
               selectedStore = grid.rows[ht.row].dataItem;
               showDetail();

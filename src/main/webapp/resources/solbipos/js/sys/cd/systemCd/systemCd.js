@@ -10,6 +10,8 @@
  * **************************************************************/
 $(document).ready(function () {
 
+  var selectedRepresent = "";
+
   var srchNmcodeCd = wcombo.genInputText("#srchNmcodeCd", 3, "");
   var srchNmcodeNm = wcombo.genInputText("#srchNmcodeNm", 50, "");
 
@@ -171,6 +173,8 @@ $(document).ready(function () {
   // 세부명칭 그리드 목록 조회
   function srchGridDetail(value) {
 
+    selectedRepresent = value;
+
     var param = {};
     param.nmcodeGrpCd = value;
 
@@ -203,11 +207,10 @@ $(document).ready(function () {
 
   // 세부명칭 추가 버튼 클릭
   $("#btnAddDetail").click(function (e) {
-    var selectedRow = gridDetail.selectedRows[0]._data;
 
     gridDetail.collectionView.trackChanges = true;
     var newRow = gridDetail.collectionView.addNew();
-    newRow.nmcodeGrpCd = selectedRow.nmcodeCd;
+    newRow.nmcodeGrpCd = selectedRepresent;
     newRow.gChk = true;
 
     gridDetail.collectionView.commitNew();

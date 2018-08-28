@@ -47,7 +47,16 @@
                 tce.ENVST_CD = #{envstCd}
             </if>
             <if test="envstNm != null and envstNm != ''">
-                AND tce.ENVST_NM LIKE #{envstNm}||'%'
+                AND tce.ENVST_NM LIKE '%'||#{envstNm}||'%'
+            </if>
+            <if test="envstFg != null and envstFg != ''">
+                AND tce.ENVST_FG = #{envstFg}
+            </if>
+            <if test="envstGrpCd != null and envstGrpCd != ''">
+                AND tce.ENVST_GRP_CD = #{envstGrpCd}
+            </if>
+            <if test="targtFg != null and targtFg != ''">
+                AND tce.TARGT_FG = #{targtFg}
             </if>
         </where>
         ORDER BY
@@ -98,7 +107,6 @@
             TARGT_FG,
             USE_YN,
             REMARK,
-            REQUIRED_YN,
             REG_DT,
             REG_ID,
             MOD_DT,
@@ -112,7 +120,6 @@
             #{targtFg},
             #{useYn},
             #{remark,jdbcType=VARCHAR},
-            #{requiredYn},
             #{regDt},
             #{regId},
             #{modDt},

@@ -25,7 +25,7 @@ public interface PosFuncService {
     List<DefaultMap<String>> getPosList(PosFuncVO posFuncVO);
 
     /** 포스기능목록 조회 */
-    List<DefaultMap<String>> getPosFuncList(PosFuncVO posFuncVO,SessionInfoVO sessionInfoVO);
+    List<DefaultMap<String>> getPosFuncList(PosFuncVO posFuncVO);
 
     /** 포스기능 상세조회 */
     List<DefaultMap<String>> getPosConfDetail(PosFuncVO posFuncVO);
@@ -37,7 +37,7 @@ public interface PosFuncService {
     int copyPosFunc(PosFuncVO posFuncVO, SessionInfoVO sessionInfoVO);
 
     /** 포스기능 인증목록 조회 */
-    List<DefaultMap<String>> getPosConfAuthDetail(PosFuncVO posFuncVO, SessionInfoVO sessionInfoVO);
+    List<DefaultMap<String>> getPosConfAuthDetail(PosFuncVO posFuncVO);
 
     /** 포스기능 인증허용대상 조회 */
     List<DefaultMap<String>> getAuthEmpList(PosFuncVO posFuncVO);
