@@ -61,8 +61,6 @@ var posTypeEnv  = ${cnv.getEnvCodeExcpAll("4020")};
 <%-- header --%>
 var posFuncHeader =
     [
-      /*{binding:"storeCd", header:"<s:message code='posFunc.storeCd' />", visible:false, width:"*"},*/
-      /*{binding:"posNo", header:"<s:message code='posFunc.posNo' />", visible:false, width:"*"},*/
       {binding:"fnkeyFg", header:"<s:message code='posFunc.fnkeyFg' />", visible:false, width:"*"},
       {binding:"fnkeyNm", header:"<s:message code='posFunc.fnkeyNm' />", width:"*"},
       {binding:"array", header:"<s:message code='posFunc.array' />", width:"*"},
