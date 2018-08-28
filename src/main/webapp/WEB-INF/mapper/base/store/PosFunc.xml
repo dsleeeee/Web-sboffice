@@ -126,10 +126,11 @@
            tmp.COL_POSI,
            tmp.ROW_POSI,
            tmp.WIDTH,
-           tmp.HEIGHT
+           tmp.HEIGHT,
+           tms.USE_YN
       FROM (
       SELECT tms.STORE_CD, tmp.POS_NO,
-             tms.DISP_SEQ, tms.POSI_ADJ_YN, tms.FNKEY_FG, tms.FNKEY_NO, tms.FNKEY_NM
+             tms.DISP_SEQ, tms.POSI_ADJ_YN, tms.FNKEY_FG, tms.FNKEY_NO, tms.FNKEY_NM, tms.USE_YN
         FROM TB_MS_STORE_FNKEY tms,
              TB_MS_POS_ENVST tmp
        WHERE tmp.STORE_CD = tms.STORE_CD

@@ -80,7 +80,7 @@ var useFuncHeader =
       {binding:"rowPosi", header:"<s:message code='posFunc.rowPosi' />", visible:false, width:"*"},
       {binding:"width", header:"<s:message code='posFunc.width' />", visible:false, width:"*"},
       {binding:"height", header:"<s:message code='posFunc.height' />", visible:false, width:"*"},
-      {binding:"gChk", header:"<s:message code='cmm.chk' />", dataType:wijmo.DataType.Boolean, width:40}
+      {binding:"useYn", header:"<s:message code='cmm.chk' />", dataType:wijmo.DataType.Boolean, width:40}
     ];
 
 <%-- 그리드 생성 --%>
@@ -290,6 +290,8 @@ $("#posFuncManageArea #btnSave").click(function(){
     useFuncGrid.collectionView.commitEdit();
     paramArr.push(useFuncGrid.collectionView.items[i]);
   }
+
+  console.log(paramArr);
 
   $.postJSONArray("/base/store/posfunc/use/savePosConf.sb", paramArr,
     function(result) {
