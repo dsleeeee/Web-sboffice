@@ -122,7 +122,7 @@
            DECODE(tmp.DISP_SEQ, NULL, '0', '1') AS EXIST_FG_BEFORE,
            DECODE(tmp.DISP_SEQ, NULL, '0', '1') AS EXIST_FG,
            tms.POSI_ADJ_YN,
-           tmp.DISP_SEQ,
+           tms.DISP_SEQ,
            tmp.COL_POSI,
            tmp.ROW_POSI,
            tmp.WIDTH,
@@ -145,7 +145,7 @@
        AND tmp.STORE_CD = tms.STORE_CD
        AND tmp.POS_NO = tms.POS_NO
        AND tmp.FNKEY_NO = tms.FNKEY_NO
-     ORDER BY tmp.DISP_SEQ, tms.DISP_SEQ
+     ORDER BY tms.DISP_SEQ, tmp.DISP_SEQ
   </select>
 
   <!-- 포스기능상세 저장 -->
