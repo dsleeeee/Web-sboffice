@@ -114,7 +114,7 @@
       PARAM    : posFuncVO
       COMMENTS : 포스기능 상세 목록을 조회한다.
   -->
-  <select id="getPosConfDetail" parameterType="posFuncVO" resultType="DefaultMap">
+  <select id="getPosConfDetail" parameterType="posFuncVO" resultMap="posFuncMap">
     /* USE : PosFuncMapper.getPosConfDetail */
     SELECT tms.FNKEY_FG,
            tms.FNKEY_NO,
