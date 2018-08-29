@@ -55,7 +55,7 @@ var funcList    = [];
 var selectData;
 
 var storeKind   = ${ccu.getCommCodeExcpAll("057")};
-var posFg       = ${ccu.getCommCodeExcpAll("027")};
+var posFg       = ${ccu.getCommCodeExcpAll("035")};
 var useYn       = ${ccu.getCommCodeExcpAll("067")};
 
 var storeKindDataMap   = new wijmo.grid.DataMap(storeKind, 'value', 'name');
@@ -87,7 +87,7 @@ var hData2 =
     {binding:"imgFileNm0", header:"<s:message code='func.imgFileNm' />", maxLength:50},
     {binding:"fnkeyUseYn1", header:"<s:message code='func.useYn' />", dataType:wijmo.DataType.Boolean},
     {binding:"imgFileNm1", header:"<s:message code='func.imgFileNm' />", maxLength:50},
-    {binding:"useYn", header:"<s:message code='func.useYn' />"},
+    {binding:"useYn", header:"<s:message code='func.useYn' />", dataType:wijmo.DataType.Boolean},
     {binding:"dispSeq", header:"<s:message code='func.dispSeq' />"}
   ];
 
@@ -318,10 +318,10 @@ $("#btnAdd").click(function(e){
   grid2.collectionView.newItemCreator = function() {
     return {
       fnkeyNo: '자동채번',
-      posiAdjYn: 'N',
-      fnkeyFunUseYn0: 'N',
-      fnkeyFunUseYn1: 'N',
-      useYn: 'Y'
+      posiAdjYn: false,
+      fnkeyFunUseYn0: false,
+      fnkeyFunUseYn1: false,
+      useYn: true
     }
   };
   var newItem = grid2.collectionView.addNew();
@@ -369,6 +369,8 @@ $("#btnSave").click(function(e){
     s_alert.pop("<s:message code='cmm.not.modify'/>");
     return;
   }
+
+  console.log(paramArr)
 
   $.postJSONArray("${baseUrl}" + "save.sb", paramArr, function(result) {
     s_alert.pop("<s:message code='cmm.saveSucc' />");

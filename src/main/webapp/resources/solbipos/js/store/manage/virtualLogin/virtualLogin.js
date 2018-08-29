@@ -47,19 +47,19 @@ $(document).ready(function () {
       var item = s.rows[e.row].dataItem;
       // 본사
       if (col.binding === "hqOfficeCd" && item.hqOfficeCd !== "00000") {
-        if ( item.orgnFg === "M" ) {
+        if ( item.orgnfg === "M" ) {
           wijmo.addClass(e.cell, 'wijLink wj-custom-readonly');
         }
       }
       // 매장
       if (col.binding === "storeCd" && item.storeCd !== "00000") {
-        if ( item.orgnFg !== "S" ) {
+        if ( item.orgnfg !== "S" ) {
           wijmo.addClass(e.cell, 'wijLink wj-custom-readonly');
         }
       }
       // 대리점
       if (col.binding === "agencyNm") {
-        if ( item.orgnFg === "M" ) {
+        if ( item.orgnfg === "M" ) {
           wijmo.addClass(e.cell, 'wijLink wj-custom-readonly');
         }
       }
@@ -73,15 +73,15 @@ $(document).ready(function () {
       var col = ht.panel.columns[ht.col];
       var selectedRow = grid.rows[ht.row].dataItem;
       if (col.binding === "hqOfficeCd" && selectedRow.hqOfficeCd !== "00000") {
-        if ( item.orgnFg === "M" ) {
+        if ( selectedRow.orgnfg === "M" ) {
           vLoginProcess(selectedRow.hqUserId);
         }
       } else if (col.binding === "storeCd" && selectedRow.storeCd !== "00000") {
-        if ( item.orgnFg !== "S" ) {
+        if ( selectedRow.orgnfg !== "S" ) {
           vLoginProcess(selectedRow.msUserId);
         }
       } else if (col.binding === "agencyNm") {
-        if ( item.orgnFg === "M" ) {
+        if ( selectedRow.orgnfg === "M" ) {
           vLoginProcess(selectedRow.cmUserId);
         }
       }
@@ -102,10 +102,10 @@ $(document).ready(function () {
   function search(index) {
     // validation 추가
     var param = {};
-    param.hqOfficeCd = srchHqOfficeCd.text;
-    param.hqOfficeNm = srchHqOfficeNm.text;
-    param.hqStoreCd = srchStoreCd.text;
-    param.hqStoreNm = srchStoreNm.text;
+    param.hqOfficeCd = srchHqOfficeCd.value;
+    param.hqOfficeNm = srchHqOfficeNm.value;
+    param.hqStoreCd = srchStoreCd.value;
+    param.hqStoreNm = srchStoreNm.value;
     param.clsFg = srchClsFg.selectedValue;
     param.sysStatFg = srchSysStatFg.selectedValue;
     param.listScale = listScaleBox.selectedValue;

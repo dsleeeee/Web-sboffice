@@ -7,6 +7,7 @@
         <result column="POSI_ADJ_YN" property="posiAdjYn" typeHandler="CustomBooleanTypeHandler"/>
         <result column="FNKEY_USE_YN_0" property="fnkeyUseYn0" typeHandler="CustomBooleanTypeHandler"/>
         <result column="FNKEY_USE_YN_1" property="fnkeyUseYn1" typeHandler="CustomBooleanTypeHandler"/>
+        <result column="USE_YN" property="useYn" typeHandler="CustomBooleanTypeHandler"/>
     </resultMap>
 
   <select id="getFuncList" parameterType="funcVO" resultMap="funcListMap">
@@ -79,10 +80,10 @@
         #{posFg},
         #{imgFileNm0},
         #{imgFileNm1},
-        #{fnkeyUseYn0, jdbcType=VARCHAR},
-        #{fnkeyUseYn1, jdbcType=VARCHAR},
+        #{fnkeyUseYn0},
+        #{fnkeyUseYn1},
         #{dispSeq},
-        #{posiAdjYn, jdbcType=VARCHAR},
+        #{posiAdjYn},
         #{colPosi},
         #{rowPosi},
         #{width},

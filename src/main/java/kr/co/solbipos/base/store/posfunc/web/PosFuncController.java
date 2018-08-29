@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import kr.co.common.data.domain.CommonCodeVO;
+import kr.co.solbipos.store.manage.storemanage.service.StoreManageService;
+import kr.co.solbipos.store.manage.storemanage.service.StoreManageVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,6 +48,9 @@ public class PosFuncController {
     @Autowired
     PosFuncService service;
     @Autowired
+    StoreManageService storeService;
+
+    @Autowired
     SessionService sessionService;
     @Autowired
     CmmCodeUtil cmmCodeUtil;
@@ -65,17 +70,67 @@ public class PosFuncController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
+//        PosFuncVO posFuncVO = new PosFuncVO();
+//        posFuncVO.setStoreCd(sessionInfoVO.getOrgnCd());
+//        posFuncVO.setPosNo("01");
+
+        // 포스 목록 조회
+//        List<DefaultMap<String>> posList = service.getPosList(posFuncVO);
+
+//        model.addAttribute("posList", cmmCodeUtil.assmblObj(posList,"posNm", "posNo", UseYn.Y));
+//        model.addAttribute("posTotList", cmmCodeUtil.assmblObj(posList,"posTotNm", "posNo", UseYn.N));
+
+        return "base/store/posFunc/posFunc";
+    }
+
+    /**
+     * 매장목록 조회
+     * @param   storeManageVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  김지은
+     * @since   2018. 06. 08.
+     */
+    @RequestMapping(value = "/use/getStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreList(StoreManageVO storeManageVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        // 매장 목록 조회
+        List<DefaultMap<String>> list = storeService.getStoreList(storeManageVO);
+
+        return returnListJson(Status.OK, list);
+    }
+
+    /**
+     * 포스목록 조회
+     * @param   storeManageVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  김지은
+     * @since   2018. 06. 08.
+     */
+    @RequestMapping(value = "/use/getPosList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getPosList(StoreManageVO storeManageVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
         PosFuncVO posFuncVO = new PosFuncVO();
-        posFuncVO.setStoreCd(sessionInfoVO.getOrgnCd());
+        posFuncVO.setStoreCd(storeManageVO.getStoreCd());
         posFuncVO.setPosNo("01");
 
         // 포스 목록 조회
         List<DefaultMap<String>> posList = service.getPosList(posFuncVO);
 
-        model.addAttribute("posList", cmmCodeUtil.assmblObj(posList,"posNm", "posNo", UseYn.Y));
-        model.addAttribute("posTotList", cmmCodeUtil.assmblObj(posList,"posTotNm", "posNo", UseYn.N));
-
-        return "base/store/posFunc/posFunc";
+        return returnListJson(Status.OK, posList);
     }
 
     /**
@@ -88,15 +143,13 @@ public class PosFuncController {
      * @author  김지은
      * @since   2018. 06. 08.
      */
-    @RequestMapping(value = "/use/getPosConfList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/use/getPosFuncList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getPosConfList(PosFuncVO posFuncVO, HttpServletRequest request,
+    public Result getPosFuncList(PosFuncVO posFuncVO, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
-
         // 포스 기능목록 조회
-        List<DefaultMap<String>> list = service.getPosFuncList(posFuncVO, sessionInfoVO);
+        List<DefaultMap<String>> list = service.getPosFuncList(posFuncVO);
 
         return returnListJson(Status.OK, list);
     }
@@ -189,6 +242,7 @@ public class PosFuncController {
      * @param   model
      * @return  Result
      * @author  김지은
+     * @author  김지은
      * @since   2018. 06. 08.
      */
     @RequestMapping(value = "/auth/getPosFuncList.sb", method = RequestMethod.POST)
@@ -220,9 +274,7 @@ public class PosFuncController {
     public Result getPosConfAuthDetail(PosFuncVO posFuncVO, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        List<DefaultMap<String>> list = service.getPosConfAuthDetail(posFuncVO, sessionInfoVO);
+        List<DefaultMap<String>> list = service.getPosConfAuthDetail(posFuncVO);
 
         return returnListJson(Status.OK, list, posFuncVO);
     }

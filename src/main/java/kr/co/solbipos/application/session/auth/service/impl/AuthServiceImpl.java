@@ -41,9 +41,9 @@ import static org.springframework.util.ObjectUtils.isEmpty;
  */
 @Service("authService")
 public class AuthServiceImpl implements AuthService {
-    
+
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    
+
     @Autowired
     AuthMapper authMapper;
     @Autowired
@@ -67,15 +67,16 @@ public class AuthServiceImpl implements AuthService {
 
         // userId 로 사용자 조회
         SessionInfoVO result = selectWebUser(params);
-        // 로그인실패 횟수
-        Long loginFailCnt = result.getLoginFailCnt() + 1;
-        Boolean isFailOver = loginFailCnt > BaseEnv.LOGIN_FAIL_CHECK_CNT ? true : false;
 
         /** 존재하는 id 인지 체크 */
         if (isEmpty(result) || isEmpty(result.getUserId())) {
             result.setLoginResult(LoginResult.NOT_EXISTS_ID);
             return result;
         }
+
+        // 로그인실패 횟수
+        Long loginFailCnt = result.getLoginFailCnt() + 1;
+        Boolean isFailOver = loginFailCnt > BaseEnv.LOGIN_FAIL_CHECK_CNT ? true : false;
 
         /** 패스워드 체크 */
         if (!loginPasswordCheck(params, result)) {

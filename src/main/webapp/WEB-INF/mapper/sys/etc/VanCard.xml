@@ -10,7 +10,7 @@
     1       노현수     2018.06.15      최초작성
 -->
 <mapper namespace="kr.co.solbipos.sys.etc.vancard.service.impl.VanCardMapper">
-    
+
     <!-- VAN사 목록 조회 -->
     <!--
         TABLE    : TB_CM_VAN_CMPNY
@@ -33,7 +33,7 @@
         ORDER BY
             tcvc.VAN_CD
     </select>
-    
+
     <!-- VAN사 목록 수정 -->
     <!--
         TABLE    : TB_CM_VAN_CMPNY
@@ -45,20 +45,20 @@
         UPDATE
             TB_CM_VAN_CMPNY
         SET
-            VAN_NM = #{vanNm}, 
-            TEL_NO = #{telNo}, 
+            VAN_NM = #{vanNm},
+            TEL_NO = #{telNo},
             FAX_NO = #{faxNo,jdbcType=VARCHAR},
             MAIN_IP = #{mainIp},
             MAIN_PORT = #{mainPort},
             SUB_IP = #{subIp,jdbcType=VARCHAR},
             SUB_PORT = #{subPort,jdbcType=NUMERIC},
             MOD_DT = #{modDt},
-            MOD_ID = #{modId},
+            MOD_ID = #{modId}
         WHERE
             VAN_CD = #{vanCd}
-    
+
     </update>
-    
+
     <!-- VAN사 목록 생성 -->
     <!--
         TABLE    : TB_CM_VAN_CMPNY
@@ -95,9 +95,9 @@
             #{modDt},
             #{modId}
         )
-        
+
     </insert>
-    
+
     <!-- CARD사 목록 조회 -->
     <!--
         TABLE    : TB_CM_CARD_CMPNY
@@ -118,7 +118,7 @@
         ORDER BY
             tccc.CARDCO_CD
     </select>
-    
+
     <!-- CARD사 목록 수정 -->
     <!--
         TABLE    : TB_CM_CARD_CMPNY
@@ -136,12 +136,12 @@
             FAX_NO = #{faxNo,jdbcType=VARCHAR},
             HMPG_ADDR = #{hmpgAddr,jdbcType=VARCHAR},
             MOD_DT = #{modDt},
-            MOD_ID = #{modId},
+            MOD_ID = #{modId}
         WHERE
             CARDCO_CD = #{cardcoCd}
-    
+
     </update>
-    
+
     <!-- CARD사 목록 생성 -->
     <!--
         TABLE    : TB_CM_CARD_CMPNY
@@ -174,9 +174,9 @@
             #{modDt},
             #{modId}
         )
-        
+
     </insert>
-    
+
     <!-- VAN/CARD사 매핑 목록 조회 -->
     <!--
         TABLE    : TB_CM_VAN_CARD
@@ -200,7 +200,7 @@
         ORDER BY
             tcvc.VAN_CD, tcvc.VAN_CARDCO_CD
     </select>
-    
+
     <!-- VAN/CARD사 매핑 목록 수정 -->
     <!--
         TABLE    : TB_CM_VAN_CARD
@@ -215,13 +215,13 @@
             VAN_CARDCO_NM = #{vanCardcoNm},
             CARDCO_CD = #{cardcoCd},
             MOD_DT = #{modDt},
-            MOD_ID = #{modId},
+            MOD_ID = #{modId}
         WHERE
             VAN_CD = #{vanCd}
             AND VAN_CARDCO_CD = #{vanCardcoCd}
-    
+
     </update>
-    
+
     <!-- VAN/CARD사 매핑 목록 생성 -->
     <!--
         TABLE    : TB_CM_VAN_CARD
@@ -250,8 +250,8 @@
             #{modDt},
             #{modId}
         )
-        
+
     </insert>
-    
-    
+
+
 </mapper>

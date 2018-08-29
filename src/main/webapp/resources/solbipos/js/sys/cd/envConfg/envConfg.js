@@ -15,8 +15,13 @@ $(document).ready(function () {
     srchRepresent();
   });
 
-  var srchEnvstCd = wcombo.genInputText("#srchEnvstCd", 3, "");
+  var srchEnvstCd = wcombo.genInputText("#srchEnvstCd", 4, "");
   var srchEnvstNm = wcombo.genInputText("#srchEnvstNm", 100, "");
+
+  //TODO 검색조건 추가 => 진행중임
+  var srchEnvstFg = wcombo.genCommonBox("#srchEnvstFg", envstFgNm);
+  var srchEnvstGrpCd = wcombo.genCommonBox("#srchEnvstGrpCd", envstGrpCdNm);
+  var srchTargtFg = wcombo.genCommonBox("#srchTargtFg", targtFg);
 
   var envstFgNmDataMap = new wijmo.grid.DataMap(envstFgNm, 'value', 'name');
   var envstGrpCdNmDataMap = new wijmo.grid.DataMap(envstGrpCdNm, 'value', 'name');
@@ -113,6 +118,11 @@ $(document).ready(function () {
     var param = {};
     param.envstCd = srchEnvstCd.value;
     param.envstNm = srchEnvstNm.value;
+    param.envstFg = srchEnvstFg.selectedValue;
+    param.envstGrpCd = srchEnvstGrpCd.selectedValue;
+    param.targtFg = srchTargtFg.selectedValue;
+
+    console.log(param);
 
     $.postJSON("/sys/cd/envConfg/envConfg/envst/list.sb", param,
       function (result) {
@@ -145,13 +155,16 @@ $(document).ready(function () {
     var newRow = gridRepresent.collectionView.addNew();
     newRow.status = "I";
     newRow.gChk = true;
+    newRow.envstFg = "";
+    newRow.envstGrpCd = "";
+    newRow.targtFg = "";
     newRow.dirctInYn = "N";
     newRow.useYn = "N";
-
     gridRepresent.collectionView.commitNew();
     // 추가된 Row 선택
     gridRepresent.select(gridRepresent.rows.length, 1);
   });
+
 
   // 대표명칭 저장 버튼 클릭
   $("#btnSaveRepresent").click(function (e) {
@@ -162,6 +175,7 @@ $(document).ready(function () {
       gridRepresent.collectionView.itemsEdited[i].status = "U";
       paramArr.push(gridRepresent.collectionView.itemsEdited[i]);
     }
+
     for (var i = 0; i < gridRepresent.collectionView.itemsAdded.length; i++) {
       gridRepresent.collectionView.itemsAdded[i].status = "I";
       paramArr.push(gridRepresent.collectionView.itemsAdded[i]);
@@ -172,9 +186,37 @@ $(document).ready(function () {
       return;
     }
 
+    console.log(paramArr)
+
+    for(var i=0; i<paramArr.length; i++) {
+      console.log(i + "번째");
+      console.log(paramArr);
+      if(paramArr[i].envstCd == "") {
+        s_alert.pop(messages["envConfg.envstCd"] + messages["envConfg.require"]);
+        return;
+      }
+      if(paramArr[i].envstNm == "") {
+        s_alert.pop(messages["envConfg.envstNm"] + messages["envConfg.require"]);
+        return;
+      }
+      if(paramArr[i].envstFg == "") {
+        s_alert.pop(messages["envConfg.envstFg"] + messages["envConfg.require"]);
+        return;
+      }
+      if(paramArr[i].envstGrpCd == "") {
+        s_alert.pop(messages["envConfg.envstGrpCd"] + messages["envConfg.require"]);
+        return;
+      }
+      if(paramArr[i].targtFg == "") {
+        s_alert.pop(messages["envConfg.targtFg"] + messages["envConfg.require"]);
+        return;
+      }
+    }
+
     $.postJSONArray("/sys/cd/envConfg/envConfg/envst/save.sb", paramArr, function (result) {
         s_alert.pop(messages["cmm.saveSucc"]);
         gridRepresent.collectionView.clearChanges();
+        srchRepresent();
       },
       function (result) {
         s_alert.pop(result.message);
@@ -226,14 +268,15 @@ $(document).ready(function () {
         $("#btnSaveDetail").show();
 
         var list = result.data.list;
-        gridDetail.itemsSource = new wijmo.collections.CollectionView(list);
-        gridDetail.itemsSource.trackChanges = true;
+        //gridDetail.itemsSource.trackChanges = true;
         if (list.length === undefined || list.length == 0) {
           gridDetail.itemsSource = new wijmo.collections.CollectionView([]);
+          gridDetail.itemsSource.trackChanges = true;
           s_alert.pop(result.message);
           return;
         }
-
+        gridDetail.itemsSource = new wijmo.collections.CollectionView(list);
+        gridDetail.itemsSource.trackChanges = true;
       },
       function (result) {
         s_alert.pop(result.message);
@@ -262,6 +305,8 @@ $(document).ready(function () {
 
     var paramArr = new Array();
 
+    console.log(gridDetail)
+
     for (var i = 0; i < gridDetail.collectionView.itemsEdited.length; i++) {
       gridDetail.collectionView.itemsEdited[i].status = "U";
       paramArr.push(gridDetail.collectionView.itemsEdited[i]);
@@ -279,6 +324,7 @@ $(document).ready(function () {
     $.postJSONArray("/sys/cd/envConfg/envConfg/envstDtl/save.sb", paramArr, function (result) {
         s_alert.pop(messages["cmm.saveSucc"]);
         gridDetail.collectionView.clearChanges();
+        srchRepresent();
       },
       function (result) {
         s_alert.pop(result.message);

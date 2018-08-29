@@ -2,10 +2,10 @@
 !function (win, $) {
   // angular Grid 생성
   var agrid = {
-    genGrid: function (appName, ctrlName) {
+    genGrid: function (appName, ctrlName, isPicker) {
       var app = angular.module(appName, ['wj']);
       app.controller(ctrlName, ['$scope', '$http', function ($scope, $http) {
-        $scope.search = function (url, param) {
+        $scope.search = function (url, param, callback) {
           $http({
             method: 'POST', //방식
             url: url, /* 통신할 URL */
@@ -15,25 +15,66 @@
             // this callback will be called asynchronously
             // when the response is available
             var list = response.data.data.list;
-            if (list.length === undefined || list.length == 0) {
+            if (list.length === undefined || list.length === 0) {
               $scope.data = new wijmo.collections.CollectionView([]);
               s_alert.pop(response.data.message);
               return;
             }
-            list.trackChanges = true;
-            $scope.data = new wijmo.collections.CollectionView(list);
-
+            var data = new wijmo.collections.CollectionView(list);
+            data.trackChanges = true;
+            $scope.data = data;
           }, function errorCallback(response) {
             // called asynchronously if an error occurs
             // or server returns response with an error status.
             console.log(response);
             s_alert.pop(response.data.message);
             return;
+          }).then(function() {
+            // "complete" code here
+            if ( callback != null ) {
+              setTimeout(function() {
+                callback;
+              }, 10);
+            }
           });
         }
-        var test = "와";
-        $scope.setTest = function() {
-          alert(test);
+        $scope.addNewRow = function(values, pos) {
+          var flex = $scope.flex;
+          flex.collectionView.trackChanges = true;
+          flex.select(flex.rows.length, 0);
+
+          var newRow = flex.collectionView.addNew();
+          newRow.status = "I";
+          newRow.gChk = true;
+          for (var prop in values) {
+            newRow[prop] = values[prop];
+          }
+          flex.collectionView.commitNew();
+          // 추가된 Row 선택
+          flex.scrollIntoView(flex.rows.length - 1, 0);
+          flex.select(flex.rows.length - 1, 1);
+          setTimeout(function() {
+            flex.startEditing(true, flex.rows.length - 1, (pos === null ? 0 : pos), true);
+            flex.focus();
+          }, 10);
+        }
+        // show column picker for the grid
+        $scope.makePickColumns = function (appName, toMake) {
+          if (toMake) {
+            // create column picker (once)
+            if (!$scope.picker) {
+              $scope.picker = new wijmo.grid.ColumnPicker('#'+appName);
+              $scope.picker.orgColumns = $scope.flex.columns;
+            }
+            // show column picker in a dialog
+            $scope.picker.grid = $scope.flex;
+            $scope.pickColumn.show(true, function (s) {
+              var dr = s.dialogResult;
+              if (dr && dr.indexOf('apply') > -1) {
+                $scope.picker.save();
+              }
+            });
+          }
         }
         // show grid and restore scroll position
         $scope.initGrid = function (s, e) {
@@ -45,23 +86,37 @@
               } else {
                 setTimeout(function () {
                   var _cellData = s.getCellData(e.row, e.col, true);
-                  if (sender.activeEditor != null && sender.activeEditor.value != "") {
+                  if (sender.activeEditor !== null && sender.activeEditor.value !== "") {
                     wijmo.setSelectionRange(sender.activeEditor, _cellData.length); // caret position
                   }
-                }, 10);
+                }, 0);
               }
             }
           });
+          if (isPicker) {
+            s.hostElement.addEventListener('mousedown', function(e) {
+              var ht = s.hitTest(e);
+              if( ht.cellType === wijmo.grid.CellType.TopLeft) {
+                $scope.makePickColumns(appName, isPicker);
+                e.preventDefault();
+              }
+            });
+          }
         }
         $scope.itemFormatter = function (panel, r, c, cell) {
           // 컬럼헤더 merged 의 헤더타이틀 중앙(vertical) 정렬
-          if (panel.cellType == wijmo.grid.CellType.ColumnHeader) {
+          if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
             var mRange = $scope.flex.getMergedRange(panel, r, c);
             if (mRange) {
               cell.innerHTML = "<div class='wj-header merged-custom'>" + cell.innerHTML + "</div>";
             }
+          // picker 를 위한 설정
+          } else if (panel.cellType === wijmo.grid.CellType.TopLeft) {
+            if(!isPicker) {
+              $(cell).css({"background": "none", "background-color": "#e8e8e8"});
+            }
           // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
-          } else if (panel.cellType == wijmo.grid.CellType.RowHeader) {
+          } else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
             // GroupRow 인 경우에는 표시하지 않는다.
             if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
               cell.textContent = "";
@@ -73,7 +128,7 @@
               }
             }
           // readOnly 배경색 표시
-          } else if (panel.cellType == wijmo.grid.CellType.Cell) {
+          } else if (panel.cellType === wijmo.grid.CellType.Cell) {
             var col = panel.columns[c];
             if (col.isReadOnly) {
               wijmo.addClass(cell, 'wj-custom-readonly');
@@ -107,7 +162,6 @@
       app.config(function ($httpProvider) {
         $httpProvider.interceptors.push('myHttpInterceptor');
       });
-
       return app;
     },
     getGrid: function (div) {

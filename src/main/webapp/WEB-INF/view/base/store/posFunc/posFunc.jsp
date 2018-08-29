@@ -8,277 +8,233 @@
 <c:set var="baseUrl" value="/base/store/posfunc/"/>
 
 <div class="subCon">
+  <div class="searchBar">
+    <a href="javscript:;" class="open">${menuNm}</a>
+  </div>
+  <table class="searchTbl">
+    <colgroup>
+      <col class="w15" />
+      <col class="w35" />
+      <col class="w15" />
+      <col class="w35" />
+    </colgroup>
+    <tbody>
+    <tr>
+      <%-- 본사코드 --%>
+      <th><s:message code="posFunc.hqOfficeCd" /></th>
+      <td><input type="text" id="srchHqOfficeCd" class="sb-input w100" maxlength="5" /></td>
+      <%-- 본사명 --%>
+      <th><s:message code="posFunc.hqOfficeNm" /></th>
+      <td><input type="text" id="srchHqOfficeNm" class="sb-input w100" maxlength="15" /></td>
+    </tr>
+    <tr>
+      <%-- 매장코드 --%>
+      <th><s:message code="posFunc.storeCd" /></th>
+      <td><input type="text" id="srchStoreCd" class="sb-input w100" maxlength="7"/></td>
+      <%-- 매장명 --%>
+      <th><s:message code="posFunc.storeNm" /></th>
+      <td><input type="text" id="srchStoreNm" class="sb-input w100" maxlength="15"/></td>
+    </tr>
+    </tbody>
+  </table>
 
-  <%-- 탭 --%>
-  <ul class="subTab mb20">
-    <%-- 포스기능 사용관리 탭 --%>
-    <li><a href="javascript:;" id="funcManageTab" class="on"><s:message code="posFunc.manage.posFunc" /></a></li>
-    <%-- 포스기능 인증관리 탭 --%>
-    <li><a href="javascript:;" id="funAuthTab" ><s:message code="posFunc.auth.posFunc" /></a></li>
-  </ul>
+  <%-- 조회 --%>
+  <div class="mt10 pdb20 oh bb">
+    <button class="btn_blue fr" id="btnSearch"><s:message code="cmm.search" /></button>
+  </div>
 
   <div class="wj-TblWrap mt20">
-
-    <%-- 왼쪽  --%>
-    <div class="w50 fl">
-      <div class="wj-TblWrapBr oh mr10 pd20" style="height:500px;">
+    <div class="w25 fl">
+      <div class="wj-TblWrapBr mr10 pd20" style="height:700px;">
         <div class="sb-select dkbr mb10 oh">
-          <div id="posTotListBox" class="w220 fl"></div>
-          <div class="fr mb10">
-            <%-- 기능복사버튼 --%>
-            <button class="btn_skyblue" id="btnCopyFunc"><s:message code="posFunc.copy.func" /></button>
+          <%-- 페이지스케일 --%>
+          <div id="listScaleBox" class="w130 fl"></div>
+          <div class="fr">
+            <%-- 전체펼치기 --%>
+            <%--<button class="btn_skyblue" id="btnExpand"><s:message code="cmm.all.expand" /></button>--%>
+            <%-- 전체접기 --%>
+            <%--<button class="btn_skyblue" id="btnFold"><s:message code="cmm.all.fold" /></button>--%>
           </div>
         </div>
-        <%-- 그리드 --%>
-        <div id="posFuncGrid"></div>
-      </div>
-    </div>
-    <!--오른쪽-->
-    <div class="w50 fr">
-      <div class="wj-TblWrapBr oh ml10 pd20" style="height:500px;">
-        <div class="fr mb10">
-          <%-- up 버튼 --%>
-          <button class="btn_up" id="btnUp"><s:message code="cmm.up" /></button>
-          <%-- down 버튼 --%>
-          <button class="btn_down" id="btnDown"><s:message code="cmm.down" /></button>
-          <%-- 좌표자동세팅 버튼 --%>
-          <button class="btn_skyblue" id="btnAutoPosition" style="display:none"><s:message code="posFunc.autoSet.position" /></button>
-          <%-- 저장버튼 --%>
-          <button class="btn_skyblue" id="btnSave"><s:message code="cmm.save" /></button>
+        <div id="storeGrid" style="height:550px; width:280px;"></div>
+
+        <%-- 페이지리스트 --%>
+        <div class="pageNum mt20">
+          <%-- id --%>
+          <ul id="page" data-size="10">
+          </ul>
         </div>
-        <%-- 그리드 --%>
-        <div id="useFuncGrid"></div>
-        <div id="funcKeyDiv" style="display:none"></div>
+
       </div>
     </div>
+
+    <%-- 포스기능 사용관리--%>
+    <c:import url="/WEB-INF/view/base/store/posFunc/posFuncUseManage.jsp">
+      <c:param name="menuCd" value="${menuCd}"/>
+      <c:param name="menuNm" value="${menuNm}"/>
+      <c:param name="baseUrl" value="${baseUrl}"/>
+    </c:import>
+
+    <%-- 포스기능 사용관리--%>
+    <c:import url="/WEB-INF/view/base/store/posFunc/posFuncAuth.jsp">
+      <c:param name="menuCd" value="${menuCd}"/>
+      <c:param name="menuNm" value="${menuNm}"/>
+      <c:param name="baseUrl" value="${baseUrl}"/>
+    </c:import>
+
+
   </div>
 </div>
 
 <script>
 
-var posList = ${posList};
+  var selectedStore;
 
-$(document).ready(function(){
+  $(document).ready(function(){
 
-  var selectedRow;
+    var clsFg             = ${ccu.getCommCodeSelect("001")};
+    var sysStatFg         = ${ccu.getCommCodeSelect("005")};
 
-  var posUsageEnv = ${cnv.getEnvCodeExcpAll("4019")};
-  var posTypeEnv  = ${cnv.getEnvCodeExcpAll("4020")};
+    var clsFgDataMap      = new wijmo.grid.DataMap(clsFg, 'value', 'name');
+    var sysStatFgDataMap  = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
 
-  <%-- header --%>
-  var posFuncHeader =
-    [
-      {binding:"storeCd", header:"<s:message code='posFunc.storeCd' />", visible:false, width:"*"},
-      {binding:"posNo", header:"<s:message code='posFunc.posNo' />", visible:false, width:"*"},
-      {binding:"fnkeyFg", header:"<s:message code='posFunc.fnkeyFg' />", visible:false, width:"*"},
-      {binding:"fnkeyNm", header:"<s:message code='posFunc.fnkeyNm' />", width:"*"},
-      {binding:"array", header:"<s:message code='posFunc.array' />", width:"*"},
-      {binding:"totCnt", header:"<s:message code='posFunc.func.cnt' />", width:"*"},
-      {binding:"regCnt", header:"<s:message code='posFunc.regist.cnt' />", width:"*"},
-    ];
+    <%-- 매장목록 header --%>
+    var storeData =
+        [
+          {binding:"hqOfficeCdNm", header:"<s:message code='posFunc.hqOffice' />", visible:false},
+          {binding:"hqOfficeCd", header:"<s:message code='posFunc.hqOfficeCd' />", visible:false},
+          {binding:"hqOfficeNm", header:"<s:message code='posFunc.hqOfficeNm' />", visible:false},
+          {binding:"storeCd", header:"<s:message code='posFunc.storeCd' />", width:80},
+          {binding:"storeNm", header:"<s:message code='posFunc.storeNm' />", width:80},
+          {binding:"clsFg", header:"<s:message code='posFunc.clsFg' />", dataMap:clsFgDataMap, width:"*"},
+          {binding:"sysStatFg", header:"<s:message code='posFunc.sysStatFg' />", dataMap:sysStatFgDataMap, width:"*"}
+          //{binding:"sysOpenDate", header:"<s:message code='posFunc.sysOpenDate' />", width:"*"}
+        ];
 
-  var useFuncHeader =
-    [
-      {binding:"fnkeyNo", header:"<s:message code='posFunc.fnkeyNo' />", isReadOnly:true, width:"*"},
-      {binding:"fnkeyNm", header:"<s:message code='posFunc.fnkeyNm' />", isReadOnly:true, width:"*"},
-      {binding:"existFgBefore", header:"<s:message code='posFunc.existFgBefore' />", visible:false, width:"*"},
-      {binding:"existFg", header:"<s:message code='posFunc.existFg' />", visible:false, width:"*"},
-      {binding:"posiAdjYn", header:"<s:message code='posFunc.posiAdjYn' />", visible:false, width:"*"},
-      {binding:"dispSeq", header:"<s:message code='posFunc.dispSeq' />", visible:false, width:"*"},
-      {binding:"colPosi", header:"<s:message code='posFunc.colPosi' />", visible:false, width:"*"},
-      {binding:"rowPosi", header:"<s:message code='posFunc.rowPosi' />", visible:false, width:"*"},
-      {binding:"width", header:"<s:message code='posFunc.width' />", visible:false, width:"*"},
-      {binding:"height", header:"<s:message code='posFunc.height' />", visible:false, width:"*"},
-      {binding:"gChk", header:"<s:message code='cmm.chk' />", dataType:wijmo.DataType.Boolean, width:40}
-    ];
+    var storeGrid = wgrid.genGrid("#storeGrid", storeData);
 
-  <%-- 그리드 생성 --%>
-  var posFuncGrid = wgrid.genGrid("#posFuncGrid", posFuncHeader, "${menuCd}", 1, ${clo.getColumnLayout(1)});
-  var useFuncGrid = wgrid.genGrid("#useFuncGrid", useFuncHeader, "${menuCd}", 1, ${clo.getColumnLayout(1)});
+    storeGrid.allowMerging = "Cells";
 
-  posFuncGrid.isReadOnly = true;
-  useFuncGrid.isReadOnly = false;
+    var ldata         = ${ccu.getListScale()};
+    var listScaleBox  = wcombo.genCommonBox("#listScaleBox", ldata);
 
-  var posTotList = ${posTotList};
-  var posTotListBox = wcombo.genCommonBox("#posTotListBox", posTotList);
-
-  getGridData();
-
-  <%-- 그리드 데이터 조회 --%>
-  function getGridData(){
-
-    var param = {};
-    param.posNo = posTotListBox.selectedValue;
-
-    $.postJSON("${baseUrl}" + "use/getPosConfList.sb", param, function(result) {
-      var list = result.data.list;
-      posFuncGrid.itemsSource = new wijmo.collections.CollectionView(list);
-      posFuncGrid.collectionView.trackChanges = true;
-      //changeColSet(list);
-    },
-      function (result) {
-        s_alert.pop(result.message);
-        return;
-      }
-    );
-  }
-
-  <%-- 기능복사 버튼 클릭 //TODO 작업중 --%>
-  $("#btnCopyFunc").click(function(){
-    openCopyFuncLayer();
-  });
-
-   <%-- up 버튼 클릭 --%>
-   $("#btnUp").click(function(e){
-     for(var i = 0; i < useFuncGrid.collectionView.itemCount; i++ ){
-       if(i > 0 && (useFuncGrid.collectionView.items[i].gChk == true)){
-         if(useFuncGrid.collectionView.items[i-1].gChk != true){
-           var tmpItem = useFuncGrid.collectionView.items[i-1];
-           useFuncGrid.collectionView.items[i-1] = useFuncGrid.collectionView.items[i];
-           useFuncGrid.collectionView.items[i] = tmpItem;
-           useFuncGrid.collectionView.commitEdit();
-           useFuncGrid.collectionView.refresh();
-         }
-       }
-     }
-   });
-
-   <%-- down 버튼 클릭 --%>
-   $("#btnDown").click(function(e){
-     for(var i = useFuncGrid.itemsSource.itemCount-1; i >= 0; i-- ){
-       if((i < useFuncGrid.itemsSource.itemCount-1) && (useFuncGrid.collectionView.items[i].gChk == true)){
-         if(useFuncGrid.collectionView.items[i+1].gChk != true){
-           var tmpItem = useFuncGrid.collectionView.items[i+1];
-           useFuncGrid.collectionView.items[i+1] = useFuncGrid.collectionView.items[i];
-           useFuncGrid.collectionView.items[i] = tmpItem;
-           useFuncGrid.collectionView.commitEdit();
-           useFuncGrid.collectionView.refresh();
-         }
-       }
-     }
-   });
-
-  <%-- 그리드 포맷 --%>
-  posFuncGrid.formatItem.addHandler(function(s, e) {
-    if (e.panel == s.cells) {
-      var col = s.columns[e.col];
-      var item = s.rows[e.row].dataItem;
-      if( col.binding == "fnkeyNm" ) {
-        wijmo.addClass(e.cell, 'wijLink');
-      }
-    }
-  });
-
-  <%--//TODO 좌표자동세팅 버튼 클릭 --%>
-  $("#btnAutoPosition").click(function(){
-  });
-
-  <%-- 그리드 선택 이벤트 --%>
-  posFuncGrid.addEventListener(posFuncGrid.hostElement, 'click', function(e) {
-    var ht = posFuncGrid.hitTest(e);
-    if ( ht.cellType == wijmo.grid.CellType.Cell ) {
-      var col = ht.panel.columns[ht.col];
-      if( col.binding == "fnkeyNm" ) {
-        selectedRow = posFuncGrid.rows[ht.row].dataItem;
-        <%-- 위치조정여부 'N'이면 버튼 보여주기 --%>
-        if(selectedRow.posiAdjYn == "N"){
-          $("#btnAutoPosition").show();
-        } else {
-          $("#btnAutoPosition").hide();
-        }
-
-        <%-- 결제메뉴의 경우에는 오른쪽 div에 기능키가 들어감 --%>
-        if(selectedRow.fnkeyFg == "56") {
-          $("#useFuncGrid").hide();
-          $("#funcKeyDiv").show();
-        } else {
-          $("#useFuncGrid").show();
-          $("#funcKeyDiv").hide();
-          getPosFuncDetail();
+    <%-- 그리드 포맷 --%>
+    storeGrid.formatItem.addHandler(function(s, e) {
+      if (e.panel == s.cells) {
+        var col = s.columns[e.col];
+        var item = s.rows[e.row].dataItem;
+        if( (col.binding == "storeCd" || col.binding == "storeNm" ) && item.storeCd != null) {
+          wijmo.addClass(e.cell, 'wijLink');
         }
       }
-    }
-  });
-
-  <%-- 포스기능 상세 조회 --%>
-  function getPosFuncDetail() {
-    var param = {};
-    param.storeCd = selectedRow.storeCd;
-    param.posNo = selectedRow.posNo;
-    param.fnkeyFg = selectedRow.fnkeyFg;
-
-    $.postJSON("${baseUrl}" + "use/getPosConfDetail.sb", param, function(result) {
-      var list = result.data.list;
-      /*
-      if(list.length === undefined || list.length == 0) {
-        s_alert.pop(result.message);
-        return;
-      }
-       */
-      useFuncGrid.itemsSource = new wijmo.collections.CollectionView(list);
-      useFuncGrid.collectionView.trackChanges = true;
-      changeColSet(list);
-    },
-      function (result) {
-        s_alert.pop(result.message);
-        return;
-      }
-    );
-  }
-
-  <%-- 컬럼 셋팅 변경 --%>
-  function changeColSet(list){
-    for ( var i = useFuncGrid.itemsSource.itemCount-1; i >= 0; i-- ) {
-      var item = useFuncGrid.collectionView.items[i];
-      if ( item.posiAdjYn ) {
-        item.colPosi = "";
-        item.rowPosi = "";
-        item.width = "";
-        item.height = "";
-        //TODO row단위 readonly 바꿔야함
-        useFuncGrid.collectionView.commitEdit();
-        useFuncGrid.collectionView.refresh();
-      }
-    }
-  }
-
-  <%-- 저장버튼 클릭 --%>
-  $("#btnSave").click(function(){
-    var paramArr = new Array();
-
-    for(var i = 0; i < useFuncGrid.collectionView.itemCount; i ++) {  // dispSeq 재설정
-      useFuncGrid.collectionView.editItem(useFuncGrid.collectionView.items[i]);
-
-      useFuncGrid.collectionView.items[i].status = 'U';
-      useFuncGrid.collectionView.items[i].dispSeq = (i+1);
-
-      useFuncGrid.collectionView.items[i].storeCd = selectedRow.storeCd;
-      useFuncGrid.collectionView.items[i].posNo = selectedRow.posNo;
-      useFuncGrid.collectionView.items[i].fnkeyFg = selectedRow.fnkeyFg;
-
-      useFuncGrid.collectionView.commitEdit();
-      paramArr.push(useFuncGrid.collectionView.items[i]);
-    }
-
-    $.postJSONArray("${baseUrl}" + "use/savePosConf.sb", paramArr, function(result) {
-      s_alert.pop("<s:message code='cmm.saveSucc' />");
-      useFuncGrid.collectionView.clearChanges();
-      getPosFuncDetail();
-    },
-    function(result) {
-        s_alert.pop(result.message);
     });
-  });
 
-  <%-- 탭 클릭 --%>
-  $("#funAuthTab").click(function(){
-      location.href = "${baseUrl}" + "auth/posAuthView.sb";
+    <%-- 조회 버튼 클릭 --%>
+    $("#btnSearch").click(function(){
+      search(1);
+    });
+
+    <%-- 페이징 --%>
+    $(document).on("click", ".page", function() {
+      search($(this).data("value"));
+    });
+
+    <%-- 매장 목록 조회 --%>
+    function search(index) {
+
+      if($("#srchHqOfficeCd").val().length > 5) {
+        s_alert.pop("<s:message code='posFunc.hqOfficeCd'/><s:message code='cmm.regexp' arguments='5'/>");
+        return;
+      }
+      if($("#srchHqOfficeNm").val().length > 15) {
+        s_alert.pop("<s:message code='posFunc.hqOfficeNm'/><s:message code='cmm.regexp' arguments='15'/>");
+        return;
+      }
+
+      if($("#srchStoreCd").val().length > 7) {
+        s_alert.pop("<s:message code='posFunc.storeCd'/><s:message code='cmm.regexp' arguments='7'/>");
+        return;
+      }
+      if($("#srchStoreNm").val().length > 15) {
+        s_alert.pop("<s:message code='posFunc.storeNm'/><s:message code='cmm.regexp' arguments='15'/>");
+        return;
+      }
+
+      var param = {};
+
+      param.hqOfficeCd = $("#srchHqOfficeCd").val();
+      param.hqOfficeNm = $("#srchHqOfficeNm").val();
+      param.storeCd = $("#srchStoreCd").val();
+      param.storeNm = $("#srchStoreNm").val();
+      param.listScale   = listScaleBox.selectedValue;
+      param.curr        = index;
+
+      $.postJSON("/base/store/posfunc/use/getStoreList.sb", param,
+
+        function(result) {
+
+          var list = result.data.list;
+
+          if(list.length === undefined || list.length == 0) {
+            s_alert.pop(result.message);
+            storeGrid.itemsSource = new wijmo.collections.CollectionView([]);
+            return;
+          }
+
+          storeGrid.itemsSource = new wijmo.collections.CollectionView(list, {
+            groupDescriptions : [ 'hqOfficeCdNm']
+          });
+
+          storeGrid.collapseGroupsToLevel(1);
+
+          <%-- 매장 없는 본사 merge --%>
+          for(var i=0; i<storeGrid.itemsSource.items.length; i++){
+            if(storeGrid.itemsSource.items[i].storeNm == null) {
+              storeGrid.itemsSource.items[i].storeNm = "<s:message code='posFunc.no.regist.store'/>";
+              storeGrid.itemsSource.items[i].storeCd = "<s:message code='posFunc.no.regist.store'/>";
+              storeGrid.itemsSource.items[i].clsFg = "<s:message code='posFunc.no.regist.store'/>";
+              storeGrid.itemsSource.items[i].sysOpenDate = "";
+            }
+          }
+
+          for(var i=0; i<storeGrid.rows.length; i++) {
+            if(storeGrid.rows[i].dataItem.storeNm) {
+              storeGrid.rows[i].allowMerging = true;
+            }
+          }
+
+          <%-- 그리드 선택 이벤트 --%>
+          storeGrid.addEventListener(storeGrid.hostElement, 'mousedown', function(e) {
+            var ht = storeGrid.hitTest(e);
+            if(ht.panel == storeGrid.cells) {
+              if(!(storeGrid.rows[ht.row] instanceof wijmo.grid.GroupRow)) {
+                var col = ht.panel.columns[ht.col];
+                if( col.binding == "storeCd" || col.binding == "storeNm") {
+                  if(storeGrid.rows[ht.row].dataItem.storeCd != "<s:message code='posFunc.no.regist.store'/>") {
+                    selectedStore = storeGrid.rows[ht.row].dataItem;
+                    showPosFuncList();
+                  }
+                }
+              }
+            }
+          });
+          // page.make("#page", result.data.page.curr, result.data.page.totalPage);
+        },
+        function (result) {
+          s_alert.pop(result.message);
+          return;
+        }
+      );
+    }
   });
-});
 </script>
 
-<%-- 기능복사 팝업 --%>
-<c:import url="/WEB-INF/view/base/store/posFunc/posFuncCopy.jsp">
+<%-- 인증허용대상 설정 팝업 --%>
+<c:import url="/WEB-INF/view/base/store/posFunc/posFuncAuthSetting.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
+
+
+
+

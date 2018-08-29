@@ -353,7 +353,7 @@ var authCombo;
 
   <%-- 상세정보 탭 클릭 --%>
   $("#munuAuthLayer #hqInfoTab").click(function(){
-    showMaster();
+    openDtlLayer(selectedHq);
   });
 
   <%-- 상세정보 탭 클릭 --%>

@@ -382,6 +382,9 @@
   <%-- 본사신규등록 팝업 열기 --%>
   function openRegistLayer() {
 
+    hideEnvSet();
+    hideMenuAuth();
+
     $("#hqDtlLayer #popTitle").text("<s:message code='hqManage.newHq' />");
 
     $("#hqDtlLayer").show();
@@ -400,6 +403,9 @@
 
   <%-- 상세정보 팝업 열기 --%>
   function openDtlLayer(items) {
+
+    hideEnvSet();
+    hideMenuAuth();
 
     console.log(items)
 
@@ -422,8 +428,6 @@
     var param = items;
 
     $.postJSON("/store/hq/hqManage/master/dtlInfo.sb", param, function(result) {
-
-      console.log(result);
 
       var data = result.data;
 
@@ -483,7 +487,7 @@
     rSysOpenDate.value          = new Date();
   }
 
-  <%-- 상세정보 보여주기 숨김 --%>
+  <%-- 상세정보 초기화면 보여주기 --%>
   function showMaster(){
     hideEnvSet();
     hideMenuAuth();

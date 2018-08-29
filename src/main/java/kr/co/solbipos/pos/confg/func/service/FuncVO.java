@@ -36,13 +36,13 @@ public class FuncVO extends CmmVO{
     /** 외식 이미지파일명 */
     private String imgFileNm1;
     /** 일반 사용여부 */
-    private Boolean fnkeyUseYn0;
+    private Boolean fnkeyUseYn0 = false;
     /** 외식 사용여부 */
-    private Boolean fnkeyUseYn1;
+    private Boolean fnkeyUseYn1 = false;
     /** 표기순번 */
     private String dispSeq;
     /** 위치조정여부 */
-    private Boolean posiAdjYn;
+    private Boolean posiAdjYn = false;
     /** 열위치 */
     private String colPosi;
     /** 줄위치 */
@@ -52,9 +52,9 @@ public class FuncVO extends CmmVO{
     /** 높이 */
     private String height;
     /** 사용여부 */
-    private String useYn;
-    
-    
+    private Boolean useYn = false;
+
+
     /**
      * @return the fnkeyNo
      */
@@ -238,14 +238,14 @@ public class FuncVO extends CmmVO{
     /**
      * @return the useYn
      */
-    public String getUseYn() {
+    public Boolean getUseYn() {
         return useYn;
     }
     /**
      * @param useYn the useYn to set
      */
-    public void setUseYn(String useYn) {
+    public void setUseYn(Boolean useYn) {
         this.useYn = useYn;
     }
-    
+
 }
