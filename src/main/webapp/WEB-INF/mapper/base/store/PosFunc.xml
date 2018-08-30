@@ -3,10 +3,10 @@
 
 <!--
     PosFunc.xml
-    기초관리 > 매장관리 > 포스기능정의 sql
+    포스기능정의 sql
     ======================================================
     No  ||  수정자 ||  수정일자    ||  수정내역
-    ========================================p==============
+    ======================================================
     1       김지은     2018.07.26      최초작성
 -->
 <mapper namespace="kr.co.solbipos.base.store.posfunc.service.impl.PosFuncMapper">
@@ -26,10 +26,10 @@
   <select id="getPosList" parameterType="posFuncVO" resultType="DefaultMap">
     /* USE : PosFuncMapper.getPosList */
     SELECT tmp.POS_NO value ,
-          '['|| tmp.POS_NO || '] ' || tmp.POS_NM AS name
+    '['|| tmp.POS_NO || '] ' || tmp.POS_NM AS name
     FROM TB_MS_POS tmp
     WHERE tmp.STORE_CD = #{storeCd}
-      AND tmp.USE_YN = 'Y'
+    AND tmp.USE_YN = 'Y'
     <!--
     SELECT tmp.POS_NO,
            '['|| tmp.POS_NO || '] ' || tmp.POS_NM AS POS_NM,
@@ -122,7 +122,7 @@
            DECODE(tmp.DISP_SEQ, NULL, '0', '1') AS EXIST_FG_BEFORE,
            DECODE(tmp.DISP_SEQ, NULL, '0', '1') AS EXIST_FG,
            tms.POSI_ADJ_YN,
-           tms.DISP_SEQ,
+           tmp.DISP_SEQ,
            tmp.COL_POSI,
            tmp.ROW_POSI,
            tmp.WIDTH,

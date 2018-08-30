@@ -82,6 +82,7 @@
       <c:param name="baseUrl" value="${baseUrl}"/>
     </c:import>
 
+
   </div>
 </div>
 
@@ -170,59 +171,59 @@
 
       $.postJSON("/base/store/posfunc/use/getStoreList.sb", param,
 
-        function(result) {
+          function(result) {
 
-          var list = result.data.list;
+            var list = result.data.list;
 
-          if(list.length === undefined || list.length == 0) {
-            s_alert.pop(result.message);
-            storeGrid.itemsSource = new wijmo.collections.CollectionView([]);
-            return;
-          }
-
-          storeGrid.itemsSource = new wijmo.collections.CollectionView(list, {
-            groupDescriptions : [ 'hqOfficeCdNm']
-          });
-
-          storeGrid.collapseGroupsToLevel(1);
-
-          <%-- 매장 없는 본사 merge --%>
-          for(var i=0; i<storeGrid.itemsSource.items.length; i++){
-            if(storeGrid.itemsSource.items[i].storeNm == null) {
-              storeGrid.itemsSource.items[i].storeNm = "<s:message code='posFunc.no.regist.store'/>";
-              storeGrid.itemsSource.items[i].storeCd = "<s:message code='posFunc.no.regist.store'/>";
-              storeGrid.itemsSource.items[i].clsFg = "<s:message code='posFunc.no.regist.store'/>";
-              storeGrid.itemsSource.items[i].sysOpenDate = "";
+            if(list.length === undefined || list.length == 0) {
+              s_alert.pop(result.message);
+              storeGrid.itemsSource = new wijmo.collections.CollectionView([]);
+              return;
             }
-          }
 
-          for(var i=0; i<storeGrid.rows.length; i++) {
-            if(storeGrid.rows[i].dataItem.storeNm) {
-              storeGrid.rows[i].allowMerging = true;
+            storeGrid.itemsSource = new wijmo.collections.CollectionView(list, {
+              groupDescriptions : [ 'hqOfficeCdNm']
+            });
+
+            storeGrid.collapseGroupsToLevel(1);
+
+            <%-- 매장 없는 본사 merge --%>
+            for(var i=0; i<storeGrid.itemsSource.items.length; i++){
+              if(storeGrid.itemsSource.items[i].storeNm == null) {
+                storeGrid.itemsSource.items[i].storeNm = "<s:message code='posFunc.no.regist.store'/>";
+                storeGrid.itemsSource.items[i].storeCd = "<s:message code='posFunc.no.regist.store'/>";
+                storeGrid.itemsSource.items[i].clsFg = "<s:message code='posFunc.no.regist.store'/>";
+                storeGrid.itemsSource.items[i].sysOpenDate = "";
+              }
             }
-          }
 
-          <%-- 그리드 선택 이벤트 --%>
-          storeGrid.addEventListener(storeGrid.hostElement, 'mousedown', function(e) {
-            var ht = storeGrid.hitTest(e);
-            if(ht.panel == storeGrid.cells) {
-              if(!(storeGrid.rows[ht.row] instanceof wijmo.grid.GroupRow)) {
-                var col = ht.panel.columns[ht.col];
-                if( col.binding == "storeCd" || col.binding == "storeNm") {
-                  if(storeGrid.rows[ht.row].dataItem.storeCd != "<s:message code='posFunc.no.regist.store'/>") {
-                    selectedStore = storeGrid.rows[ht.row].dataItem;
-                    showPosFuncList();
+            for(var i=0; i<storeGrid.rows.length; i++) {
+              if(storeGrid.rows[i].dataItem.storeNm) {
+                storeGrid.rows[i].allowMerging = true;
+              }
+            }
+
+            <%-- 그리드 선택 이벤트 --%>
+            storeGrid.addEventListener(storeGrid.hostElement, 'mousedown', function(e) {
+              var ht = storeGrid.hitTest(e);
+              if(ht.panel == storeGrid.cells) {
+                if(!(storeGrid.rows[ht.row] instanceof wijmo.grid.GroupRow)) {
+                  var col = ht.panel.columns[ht.col];
+                  if( col.binding == "storeCd" || col.binding == "storeNm") {
+                    if(storeGrid.rows[ht.row].dataItem.storeCd != "<s:message code='posFunc.no.regist.store'/>") {
+                      selectedStore = storeGrid.rows[ht.row].dataItem;
+                      showPosFuncList();
+                    }
                   }
                 }
               }
-            }
-          });
-          // page.make("#page", result.data.page.curr, result.data.page.totalPage);
-        },
-        function (result) {
-          s_alert.pop(result.message);
-          return;
-        }
+            });
+            // page.make("#page", result.data.page.curr, result.data.page.totalPage);
+          },
+          function (result) {
+            s_alert.pop(result.message);
+            return;
+          }
       );
     }
   });
