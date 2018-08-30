@@ -69,6 +69,7 @@ function showkitchenPrintLayout(){
 
   var param = {};
   param.hqOfficeCd  = selectedStore.hqOfficeCd;
+//  param.hqBrandCd   = selectedStore.hqBrandCd;
   param.storeCd     = selectedStore.storeCd;
 
   <%-- 주방프린터 목록 조회 --%>
@@ -88,11 +89,9 @@ function showkitchenPrintLayout(){
 $("#btnkitchenPrintAdd").click(function(){
   kitchenPrintGrid.collectionView.newItemCreator = function() {
     return {
-      prterKindFg: '0',
-      prterPortFg: '0',
-      prterSpeedFg: '0',
-      prterOutputQty: 1,
-      useYn: 'Y'
+      prterKind: '0',
+      prterPort: '0',
+      prterSpeed: '0'
     }
   };
   var newItem = kitchenPrintGrid.collectionView.addNew();

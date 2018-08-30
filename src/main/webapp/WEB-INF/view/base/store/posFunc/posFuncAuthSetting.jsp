@@ -14,10 +14,11 @@
           <%-- 저장버튼 --%>
           <a id="btnSave" href="javascript:;" class="btn_grayS2"><s:message code="cmm.save" /></a>
         </div>
-        <%-- 위즈모 그리드 --%>
+        <!--위즈모 테이블-->
         <div>
           <div id="authSettingGrid" class="mt10 mb20"></div>
         </div>
+        <!--//위즈모 테이블-->
       </div>
     </div>
   </div>
@@ -34,7 +35,7 @@ var authSettingHeader =
     {binding:"useYn", header:"<s:message code='posFunc.useYn' />", dataType:wijmo.DataType.Boolean, width:"*"}
   ];
 <%-- 그리드 생성 --%>
-var authSettingGrid = wgrid.genGrid("#authSettingGrid", authSettingHeader);
+var authSettingGrid = wgrid.genGrid("#authSettingGrid", authSettingHeader, "${menuCd}", 3, ${clo.getColumnLayout(3)});
 
 authSettingGrid.isReadOnly = false;
 
@@ -52,6 +53,7 @@ function openSetAuthLayer(){
 <%-- 그리드 데이터 조회 --%>
 function getPosAuthData(){
 
+    //console.log(selectedFnkey);
     var param = {};
     param.storeCd = selectedFnkey.storeCd;
     param.fnkeyNo = selectedFnkey.fnkeyNo;
@@ -89,6 +91,8 @@ $("#posAuthLayer #btnSave").click(function(){
         authSettingGrid.collectionView.items[i].fnkeyNo = selectedFnkey.fnkeyNo;
         paramArr.push(authSettingGrid.collectionView.items[i]);
     }
+
+    //console.log(paramArr);
 
     $.postJSONArray("/base/store/posfunc/auth/saveAuthEmp.sb", paramArr, function(result) {
         s_alert.pop("<s:message code='cmm.saveSucc' />");

@@ -179,10 +179,11 @@
 }
 
 .wj-dialog-columns {
-    width: 400px;
+    width: 100%;
 }
 .wj-popup {
     border-radius: 4px;
+    box-shadow: 0 0 20px 0px #222;
 }
 .wj-popup .wj-dialog-header {
     height: 50px;
@@ -208,9 +209,27 @@
 .wj-popup .wj-dialog-body {
     padding: 20px 30px 0;
 }
+.wj-popup .wj-popup-loading {
+    padding: 20px 0;
+    text-align: center;
+}
+.wj-popup .wj-popup-alert {
+    padding: 40px 30px;
+    text-align: center;
+}
+.wj-popup .wj-dialog-footer {
+    text-align: center;
+}
+.wj-popup .wj-popup-alert-footer {
+    padding: 20px 0px 30px;
+}
 .wj-dialog-body .text-info {
     font-size: 12px;
     line-height: 1.2em;
+}
+.wj-dialog-body .wj-dialog-content {
+    overflow-y: auto;
+    width: 100%;
 }
 .wj-column-picker-wrap {
     border: 1px solid #dbdbdb;

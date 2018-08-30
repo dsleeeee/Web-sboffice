@@ -240,10 +240,10 @@
 
       if(list.length === undefined || list.length == 0) {
         s_alert.pop(result.message);
-        grid.itemsSource = new wijmo.collections.CollectionView([]);
         return;
       }
-      grid.itemsSource = new wijmo.collections.CollectionView(list);
+      grid.itemsSource = list;
+
       page.make("#page", result.data.page.curr, result.data.page.totalPage);
     },
       function (result) {

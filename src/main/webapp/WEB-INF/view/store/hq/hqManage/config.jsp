@@ -174,14 +174,7 @@ function getConfigList(){
         }
 
       } else {
-        var envstVal = "";
-        if(list[i].selEnvstVal == null || list[i].selEnvstVal == "") {
-          envstVal = "*";
-        } else{
-          envstVal = list[i].selEnvstVal;
-        }
-
-        $("#env"+list[i].envstCd).val(envstVal);
+        $("#env"+list[i].envstCd).val(list[i].selEnvstVal);
       }
     }
 
@@ -267,7 +260,7 @@ $("#envLayer #btnDefault").click(function(){
 
 <%-- 상세정보 탭 클릭 --%>
 $("#envLayer #hqInfoTab").click(function(){
-  openDtlLayer(selectedHq);
+  showMaster();
 });
 
 <%-- 메뉴권한 탭 클릭 --%>

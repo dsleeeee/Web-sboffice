@@ -2,7 +2,7 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
-<%-- 매장환경 레이어 팝업 --%>
+<%-- 매장환경   레이어 팝업 --%>
 <div id="storeEnvDim" class="fullDimmed" style="display:none;"></div>
 <div id="storeEnvLayer" class="layer" style="display:none;">
   <div class="layer_inner">
@@ -66,7 +66,7 @@
         </div>
       </div>
       <div class="btnSet">
-        <%--<span><a id="btnCopy" href="javascript:;" class="btn_gray"><s:message code="storeManage.copy.storeEnv" /></a></span>--%>
+        <span><a id="btnCopy" href="javascript:;" class="btn_gray"><s:message code="storeManage.copy.storeEnv" /></a></span>
         <span><a id="btnClose" href="javascript:;" class="btn_gray"><s:message code="cmm.close" /></a></span>
       </div>
     </div>
@@ -75,12 +75,8 @@
 
 <script>
 
-  var searchStore;
-
   <%-- 매장환경조회 팝업 오픈 --%>
   function openEnvInfoLayer(param) {
-
-    searchStore = param;
 
     $.postJSON("/store/manage/storeManage/storeManage/getStoreEnvInfo.sb", param, function(result) {
 
@@ -101,7 +97,7 @@
       if(posInfo.length > 0) {
         for(var i=0; i<posInfo.length; i++){
           posHtml += "<tr>";
-          posHtml += "<th>"+posInfo[i].posNo+"</th>";
+          posHtml += "<th>"+posInfo[i].prterNo+"</th>";
           posHtml += "<td>"+posInfo[i].envstValNm+"</td>";
           posHtml += "</tr>";
         }
@@ -172,7 +168,6 @@
       }
     );
   }
-
 
   <%-- 레이어 팝업 닫기 --%>
   $("#storeEnvLayer .btn_close, #storeEnvLayer #btnClose").click(function(){
