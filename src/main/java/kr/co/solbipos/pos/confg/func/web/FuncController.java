@@ -3,8 +3,11 @@ package kr.co.solbipos.pos.confg.func.web;
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import kr.co.solbipos.pos.confg.func.service.FuncStoreVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -83,10 +86,6 @@ public class FuncController {
 
         List<DefaultMap<String>> list = service.list(funcVO);
 
-//        for( DefaultMap<String> f : list) {
-//            System.out.println(f);
-//        }
-
         return returnListJson(Status.OK, list, funcVO);
     }
 
@@ -111,5 +110,44 @@ public class FuncController {
         return returnJson(Status.OK, result);
     }
 
+    /**
+     * 포스기능 등록/미등록 매장 조회
+     *
+     * @param funcStoreVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "getFuncStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getFuncStoreList(FuncStoreVO funcStoreVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        Map<String, Object> result = service.getFunStoreList(funcStoreVO);
+
+        return returnListJson(Status.OK, result);
+    }
+
+    /**
+     * 포스기능 등록매장 등록 및 삭제
+     *
+     * @param funcStoreVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "saveFuncStore.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveFuncStore(@RequestBody FuncStoreVO[] funcStoreVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int regCnt = service.saveFuncStore(funcStoreVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, regCnt);
+    }
 
 }

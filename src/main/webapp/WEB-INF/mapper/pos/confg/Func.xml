@@ -194,13 +194,13 @@
         AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
       </if>
       <if test='hqOfficeNm != null and hqOfficeNm != ""'>
-        AND tms.HQ_OFFICE_NM = #{hqOfficeNm}
+        AND tms.HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'
       </if>
       <if test='storeCd != null and storeCd != ""'>
         AND tms.STORE_CD = #{storeCd}
       </if>
       <if test='storeNm != null and storeNm != ""'>
-        AND tms.STORE_NM = #{storeNm}
+        AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
       </if>
       <if test='clsFg != null and clsFg != ""'>
         AND tms.CLS_FG = #{clsFg}
@@ -222,6 +222,50 @@
   </select>
 
 
+  <!-- 기능키 적용매장 등록 -->
+  <!--
+      TABLE    : TB_CM_POS_FNKEY_STORE
+      PARAM    : funcStoreVO
+      COMMENTS : 기능키 적용매장을 등록한다.
+  -->
+  <insert id="insertFuncStore" parameterType="funcStoreVO">
+    /* FuncMapper.insertFuncStore */
+    INSERT INTO TB_CM_POS_FNKEY_STORE
+    (
+        FNKEY_FG,
+        FNKEY_NO,
+        STORE_CD,
+        REG_DT,
+        REG_ID,
+        MOD_DT,
+        MOD_ID
+    )
+    VALUES
+    (
+        #{fnkeyFg},
+        #{fnkeyNo},
+        #{storeCd},
+        #{regDt},
+        #{regId},
+        #{modDt},
+        #{modId}
+    )
+  </insert>
+
+
+  <!-- 기능키 적용매장 삭제 -->
+  <!--
+      TABLE    : TB_CM_POS_FNKEY_STORE
+      PARAM    : funcStoreVO
+      COMMENTS : 기능키가 적용된 매장 목록에서 해당 매장을 삭제한다.
+  -->
+  <delete id="deleteFuncStore" parameterType="funcStoreVO">
+    /* FuncMapper.deleteFuncStore */
+    DELETE TB_CM_POS_FNKEY_STORE
+     WHERE FNKEY_FG = #{fnkeyFg}
+       AND FNKEY_NO = #{fnkeyNo}
+       AND STORE_CD = #{storeCd}
+  </delete>
 
 
 </mapper>

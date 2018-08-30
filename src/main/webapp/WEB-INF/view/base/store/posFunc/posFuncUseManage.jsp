@@ -80,7 +80,7 @@ var useFuncHeader =
       {binding:"rowPosi", header:"<s:message code='posFunc.rowPosi' />", visible:false, width:"*"},
       {binding:"width", header:"<s:message code='posFunc.width' />", visible:false, width:"*"},
       {binding:"height", header:"<s:message code='posFunc.height' />", visible:false, width:"*"},
-      {binding:"useYn", header:"<s:message code='cmm.chk' />", dataType:wijmo.DataType.Boolean, width:40}
+      {binding:"useYn", header:"<s:message code='posFunc.useYn' />", dataType:wijmo.DataType.Boolean, width:40}
     ];
 
 <%-- 그리드 생성 --%>
@@ -212,9 +212,11 @@ $("#posFuncManageArea #btnCopyFunc").click(function(){
 
 <%-- up 버튼 클릭 --%>
 $("#posFuncManageArea #btnUp").click(function(e){
+  console.log('btnUp')
   for(var i = 0; i < useFuncGrid.collectionView.itemCount; i++ ){
-    if(i > 0 && (useFuncGrid.collectionView.items[i].gChk == true)){
-      if(useFuncGrid.collectionView.items[i-1].gChk != true){
+    console.log(useFuncGrid.collectionView.items[i].useYn)
+    if(i > 0 && (useFuncGrid.collectionView.items[i].useYn == true)){
+      if(useFuncGrid.collectionView.items[i-1].useYn != true){
         var tmpItem = useFuncGrid.collectionView.items[i-1];
         useFuncGrid.collectionView.items[i-1] = useFuncGrid.collectionView.items[i];
         useFuncGrid.collectionView.items[i] = tmpItem;
@@ -227,9 +229,10 @@ $("#posFuncManageArea #btnUp").click(function(e){
 
 <%-- down 버튼 클릭 --%>
 $("#posFuncManageArea #btnDown").click(function(e){
+  console.log('btndown')
   for(var i = useFuncGrid.itemsSource.itemCount-1; i >= 0; i-- ){
-    if((i < useFuncGrid.itemsSource.itemCount-1) && (useFuncGrid.collectionView.items[i].gChk == true)){
-      if(useFuncGrid.collectionView.items[i+1].gChk != true){
+    if((i < useFuncGrid.itemsSource.itemCount-1) && (useFuncGrid.collectionView.items[i].useYn == true)){
+      if(useFuncGrid.collectionView.items[i+1].useYn != true){
         var tmpItem = useFuncGrid.collectionView.items[i+1];
         useFuncGrid.collectionView.items[i+1] = useFuncGrid.collectionView.items[i];
         useFuncGrid.collectionView.items[i] = tmpItem;

@@ -3,10 +3,10 @@
 
 <!--
     PosFunc.xml
-    포스기능정의 sql
+    기초관리 > 매장관리 > 포스기능정의 sql
     ======================================================
     No  ||  수정자 ||  수정일자    ||  수정내역
-    ======================================================
+    ========================================p==============
     1       김지은     2018.07.26      최초작성
 -->
 <mapper namespace="kr.co.solbipos.base.store.posfunc.service.impl.PosFuncMapper">
@@ -146,7 +146,7 @@
        AND tmp.STORE_CD = tms.STORE_CD
        AND tmp.POS_NO = tms.POS_NO
        AND tmp.FNKEY_NO = tms.FNKEY_NO
-     ORDER BY tms.DISP_SEQ, tmp.DISP_SEQ
+     ORDER BY tms.USE_YN DESC,tms.FNKEY_NO, tms.DISP_SEQ, tmp.DISP_SEQ
   </select>
 
   <!-- 포스기능상세 저장 -->
