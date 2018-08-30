@@ -8,283 +8,198 @@
  * 2018.08.13     노현수      1.0
  *
  * **************************************************************/
-$(document).ready(function () {
+/**
+ * get application
+ */
+var app = agrid.getApp();
 
-  // 조회버튼 클릭
-  $("#btnSearch").click(function (e) {
-    srchRepresent();
-  });
-
-  var srchEnvstCd = wcombo.genInputText("#srchEnvstCd", 3, "");
-  var srchEnvstNm = wcombo.genInputText("#srchEnvstNm", 100, "");
-
-  var envstFgNmDataMap = new wijmo.grid.DataMap(envstFgNm, 'value', 'name');
-  var envstGrpCdNmDataMap = new wijmo.grid.DataMap(envstGrpCdNm, 'value', 'name');
-  var targtFgDataMap = new wijmo.grid.DataMap(targtFg, 'value', 'name');
-  var dirctInYnDataMap = new wijmo.grid.DataMap([{id: "Y", name: "직접"}, {
-    id: "N",
-    name: "선택"
-  }], 'id', 'name');
-  var useYnDataMap = new wijmo.grid.DataMap([{id: "Y", name: "사용"}, {
-    id: "N",
-    name: "사용안함"
-  }], 'id', 'name');
-  var defltYnDataMap = new wijmo.grid.DataMap([{id: "Y", name: "기본"}, {
-    id: "N",
-    name: "기본아님"
-  }], 'id', 'name');
-
-  // 대표명칭 그리드
-  var gridRepresentData =
-    [
-      {
-        binding: "gChk",
-        header: messages["envConfg.chk"],
-        dataType: wijmo.DataType.Boolean,
-        width: 40
-      },
-      {binding: "envstCd", header: messages["envConfg.envstCd"], width: 70},
-      {binding: "envstNm", header: messages["envConfg.envstNm"], maxLength: 100},
-      {
-        binding: "envstFg",
-        header: messages["envConfg.envstFgNm"],
-        width: 140,
-        dataMap: envstFgNmDataMap
-      },
-      {
-        binding: "envstGrpCd",
-        header: messages["envConfg.envstGrpCdNm"],
-        width: 100,
-        dataMap: envstGrpCdNmDataMap
-      },
-      {
-        binding: "dirctInYn",
-        header: messages["envConfg.dirctInYn"],
-        width: 70,
-        dataMap: dirctInYnDataMap
-      },
-      {binding: "targtFg", header: messages["envConfg.targtFgNm"], dataMap: targtFgDataMap},
-      {binding: "useYn", header: messages["envConfg.useYn"], width: 80, dataMap: useYnDataMap},
-      {binding: "remark", header: messages["envConfg.remark"], width: 200, maxLength: 250}
-    ];
-  // 대표명칭 그리드 생성
-  var gridRepresent = wgrid.genGrid("#gridRepresent", gridRepresentData, "Y");
-  // 읽기전용을 해제하지 않으면 그리드 에디팅이 되지 않는다.
-  gridRepresent.isReadOnly = false;
-
-  // ReadOnly 효과설정
-  gridRepresent.formatItem.addHandler(function (s, e) {
-    if (e.panel == s.cells) {
+/**
+ * 대표명칭 그리드 생성
+ */
+app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
+  // 상위 객체 상속 : T/F 는 picker
+  angular.extend(this, new RootController($scope, $http, true));
+  // grid 초기화 : 생성되기전 초기화되면서 생성된다
+  $scope.initGrid = function (s, e) {
+    // picker 사용시 호출 : 미사용시 호출안함
+    $scope._makePickColumns("representCtrl");
+    // 그리드 DataMap 설정
+    $scope.envstFgNmDataMap = new wijmo.grid.DataMap(envstFgNm, 'value', 'name');
+    $scope.envstGrpCdNmDataMap = new wijmo.grid.DataMap(envstGrpCdNm, 'value', 'name');
+    $scope.targtFgDataMap = new wijmo.grid.DataMap(targtFg, 'value', 'name');
+    $scope.dirctInYnDataMap = new wijmo.grid.DataMap([{id: "Y", name: "직접"}, {
+      id: "N",
+      name: "선택"
+    }], 'id', 'name');
+    $scope.useYnDataMap = new wijmo.grid.DataMap([{id: "Y", name: "사용"}, {
+      id: "N",
+      name: "사용안함"
+    }], 'id', 'name');
+    // ReadOnly 효과설정
+    s.formatItem.addHandler(function (s, e) {
+      if (e.panel == s.cells) {
+        var col = s.columns[e.col];
+        if (col.binding === "envstCd") {
+          var item = s.rows[e.row].dataItem;
+          if (item.status != "I") {
+            wijmo.addClass(e.cell, 'wijLink');
+            wijmo.addClass(e.cell, 'wj-custom-readonly');
+          } else {
+            wijmo.removeClass(e.cell, 'wj-custom-readonly');
+          }
+        }
+      }
+    });
+    // 대표명칭 그리드 에디팅 방지
+    s.beginningEdit.addHandler(function (s, e) {
       var col = s.columns[e.col];
       if (col.binding === "envstCd") {
-        var item = s.rows[e.row].dataItem;
-        if (item.status != "I") {
-          wijmo.addClass(e.cell, 'wijLink');
-          wijmo.addClass(e.cell, 'wj-custom-readonly');
-        } else {
-          wijmo.removeClass(e.cell, 'wj-custom-readonly');
+        var dataItem = s.rows[e.row].dataItem;
+        if (nvl(dataItem.status, "") == "" && dataItem.status != "I") {
+          e.cancel = true;
         }
       }
-    }
-  });
-
-  // 대표명칭 그리드 에디팅 방지
-  gridRepresent.beginningEdit.addHandler(function (s, e) {
-    var col = s.columns[e.col];
-    if (col.binding === "envstCd") {
-      var dataItem = gridRepresent.rows[e.row].dataItem;
-      if (nvl(dataItem.status, "") == "" && dataItem.status != "I") {
-        e.cancel = true;
-      }
-    }
-  });
-
-  // 대표명칭 그리드 선택 이벤트
-  gridRepresent.selectionChanged.addHandler(function (s, e) {
-    var col = s.columns[e.col];
-    var selectedRow = gridRepresent.rows[e.row].dataItem;
-    if (col.binding === "envstCd" && selectedRow.status != "I") {
-      srchGridDetail(selectedRow.envstCd);
-    }
-  });
-
-  // 대표명칭 그리드 조회
-  function srchRepresent() {
-    var param = {};
-    param.envstCd = srchEnvstCd.value;
-    param.envstNm = srchEnvstNm.value;
-
-    $.postJSON("/sys/cd/envConfg/envConfg/envst/list.sb", param,
-      function (result) {
-        // 버튼 Show
-        $("#btnAddRepresent").show();
-        $("#btnDelRepresent").show();
-        $("#btnSaveRepresent").show();
-
-        var list = result.data.list;
-        gridRepresent.itemsSource = new wijmo.collections.CollectionView(list);
-        gridRepresent.itemsSource.trackChanges = true;
-
-        if (list.length === undefined || list.length == 0) {
-          gridRepresent.itemsSource = new wijmo.collections.CollectionView([]);
-          s_alert.pop(result.message);
-          return;
+    });
+    // 대표명칭 그리드 선택 이벤트
+    s.hostElement.addEventListener('mousedown', function(e) {
+      var ht = s.hitTest(e);
+      if( ht.cellType == wijmo.grid.CellType.Cell) {
+        var selectedRow = s.rows[ht.row].dataItem
+        var col = ht.panel.columns[ht.col];
+        if( col.binding == "envstCd" && selectedRow.status != "I") {
+          $scope._broadcast('detailCtrl', selectedRow.envstCd);
         }
-
-      },
-      function (result) {
-        s_alert.pop(result.message);
-        return;
       }
-    );
-  }
-
-  // 대표명칭 추가 버튼 클릭
-  $("#btnAddRepresent").click(function (e) {
-    gridRepresent.collectionView.trackChanges = true;
-    var newRow = gridRepresent.collectionView.addNew();
-    newRow.status = "I";
-    newRow.gChk = true;
-    newRow.dirctInYn = "N";
-    newRow.useYn = "N";
-
-    gridRepresent.collectionView.commitNew();
-    // 추가된 Row 선택
-    gridRepresent.select(gridRepresent.rows.length, 1);
-  });
-
-  // 대표명칭 저장 버튼 클릭
-  $("#btnSaveRepresent").click(function (e) {
-
-    var paramArr = new Array();
-
-    for (var i = 0; i < gridRepresent.collectionView.itemsEdited.length; i++) {
-      gridRepresent.collectionView.itemsEdited[i].status = "U";
-      paramArr.push(gridRepresent.collectionView.itemsEdited[i]);
-    }
-    for (var i = 0; i < gridRepresent.collectionView.itemsAdded.length; i++) {
-      gridRepresent.collectionView.itemsAdded[i].status = "I";
-      paramArr.push(gridRepresent.collectionView.itemsAdded[i]);
-    }
-
-    if (paramArr.length <= 0) {
-      s_alert.pop(messages["cmm.not.modify"]);
-      return;
-    }
-
-    $.postJSONArray("/sys/cd/envConfg/envConfg/envst/save.sb", paramArr, function (result) {
-        s_alert.pop(messages["cmm.saveSucc"]);
-        gridRepresent.collectionView.clearChanges();
-      },
-      function (result) {
-        s_alert.pop(result.message);
-      }
-    );
-
-  });
-
-  // 세부명칭 그리드
-  var gridDetailData =
-    [
-      {
-        binding: "gChk",
-        header: messages["envConfg.chk"],
-        dataType: wijmo.DataType.Boolean,
-        width: 40
-      },
-      {binding: "envstValCd", header: messages["envConfg.envstValCd"], width: 70},
-      {binding: "envstValNm", header: messages["envConfg.envstValNm"], width: "*"},
-      {
-        binding: "defltYn",
-        header: messages["envConfg.defltYn"],
-        width: 80,
-        dataMap: defltYnDataMap
-      },
-      {
-        binding: "useYn",
-        header: messages["envConfg.useYn"],
-        width: 80,
-        dataMap: useYnDataMap
-      }
-    ];
-  // 세부명칭 그리드 생성
-  var gridDetail = wgrid.genGrid("#gridDetail", gridDetailData);
-  // 읽기전용을 해제하지 않으면 그리드 에디팅이 되지 않는다.
-  gridDetail.isReadOnly = false;
-
-  // 세부명칭 그리드 조회
-  function srchGridDetail(value) {
-
-    var param = {};
-    param.envstCd = value;
-
-    $.postJSON("/sys/cd/envConfg/envConfg/envstDtl/list.sb", param,
-      function (result) {
-        // 버튼 Show
-        $("#btnAddDetail").show();
-        $("#btnDelDetail").show();
-        $("#btnSaveDetail").show();
-
-        var list = result.data.list;
-        gridDetail.itemsSource = new wijmo.collections.CollectionView(list);
-        gridDetail.itemsSource.trackChanges = true;
-        if (list.length === undefined || list.length == 0) {
-          gridDetail.itemsSource = new wijmo.collections.CollectionView([]);
-          s_alert.pop(result.message);
-          return;
-        }
-
-      },
-      function (result) {
-        s_alert.pop(result.message);
-        return;
-      }
-    );
-
+    });
   };
-
-  // 세부명칭 추가 버튼 클릭
-  $("#btnAddDetail").click(function (e) {
-    var selectedRow = gridRepresent.selectedRows[0]._data;
-    var newRow = gridDetail.collectionView.addNew();
-    newRow.envstCd = selectedRow.envstCd;
-    newRow.gChk = true;
-    newRow.defltYn = "N";
-    newRow.useYn = "N";
-
-    gridDetail.collectionView.commitNew();
-    // 추가된 Row 선택
-    gridDetail.select(gridDetail.rows.length, 1);
+  // 대표명칭 그리드 조회
+  $scope.$on("representCtrl", function(event, data) {
+    // 파라미터
+    var params = {};
+    // 조회 수행 : 조회URL, 파라미터, 콜백함수
+    $scope._inquiryMain("/sys/cd/envConfg/envConfg/envst/list.sb", params, function() {
+      // 대표명칭 그리드 버튼 show
+      $("#btnAddRepresent").show();
+      $("#btnDelRepresent").show();
+      $("#btnSaveRepresent").show();
+    });
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
   });
-
-  // 세부명칭 저장 버튼 클릭
-  $("#btnSaveDetail").click(function (e) {
-
-    var paramArr = new Array();
-
-    for (var i = 0; i < gridDetail.collectionView.itemsEdited.length; i++) {
-      gridDetail.collectionView.itemsEdited[i].status = "U";
-      paramArr.push(gridDetail.collectionView.itemsEdited[i]);
+  // 대표명칭 그리드 행 추가
+  $scope.addRow = function() {
+    // 파라미터 설정
+    var params = {};
+    params.status = "I";
+    params.gChk = true;
+    params.dirctInYn = "N";
+    params.useYn = "N";
+    // 추가기능 수행 : 파라미터
+    $scope._addRow(params);
+  };
+  // 대표명칭 그리드 저장
+  $scope.save = function() {
+    // 파라미터 설정
+    var params = new Array();
+    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+      $scope.flex.collectionView.itemsEdited[i].status = "U";
+      params.push($scope.flex.collectionView.itemsEdited[i]);
     }
-    for (var i = 0; i < gridDetail.collectionView.itemsAdded.length; i++) {
-      gridDetail.collectionView.itemsAdded[i].status = "I";
-      paramArr.push(gridDetail.collectionView.itemsAdded[i]);
+    for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+      $scope.flex.collectionView.itemsAdded[i].status = "I";
+      params.push($scope.flex.collectionView.itemsAdded[i]);
     }
+    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+    $scope._save("/sys/cd/envConfg/envConfg/envst/save.sb", params);
+  }
+}]);
 
-    if (paramArr.length <= 0) {
-      s_alert.pop(messages["cmm.not.modify"]);
-      return;
-    }
-
-    $.postJSONArray("/sys/cd/envConfg/envConfg/envstDtl/save.sb", paramArr, function (result) {
-        s_alert.pop(messages["cmm.saveSucc"]);
-        gridDetail.collectionView.clearChanges();
-      },
-      function (result) {
-        s_alert.pop(result.message);
+/**
+ * 세부명칭 그리드 생성
+ */
+app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
+  // 상위 객체 상속 : T/F 는 picker
+  angular.extend(this, new RootController($scope, $http, true));
+  // grid 초기화 : 생성되기전 초기화되면서 생성된다
+  $scope.initGrid = function (s, e) {
+    // picker 사용시 호출 : 미사용시 호출안함
+    $scope._makePickColumns("detailCtrl");
+    // 그리드 DataMap 설정
+    $scope.useYnDataMap = new wijmo.grid.DataMap([{id: "Y", name: "사용"}, {
+      id: "N",
+      name: "사용안함"
+    }], 'id', 'name');
+    $scope.defltYnDataMap = new wijmo.grid.DataMap([{id: "Y", name: "기본"}, {
+      id: "N",
+      name: "기본아님"
+    }], 'id', 'name');
+    // ReadOnly 효과설정
+    s.formatItem.addHandler(function (s, e) {
+      if (e.panel == s.cells) {
+        var col = s.columns[e.col];
+        if (col.binding === "envstValCd") {
+          var item = s.rows[e.row].dataItem;
+          if (item.status != "I") {
+            wijmo.addClass(e.cell, 'wj-custom-readonly');
+          } else {
+            wijmo.removeClass(e.cell, 'wj-custom-readonly');
+          }
+        }
       }
-    );
-
+    });
+    // 세부명칭 그리드 에디팅 방지
+    s.beginningEdit.addHandler(function (s, e) {
+      var col = s.columns[e.col];
+      if (col.binding === "envstValCd") {
+        var dataItem = s.rows[e.row].dataItem;
+        if (nvl(dataItem.status, "") == "" && dataItem.status != "I") {
+          e.cancel = true;
+        }
+      }
+    });
+  }
+  // 세부명칭 그리드 조회
+  $scope.$on("detailCtrl", function(event, data) {
+    // 파라미터
+    var params = {};
+    params.envstCd = data;
+    // 조회 수행 : 조회URL, 파라미터, 콜백함수
+    $scope._inquirySub("/sys/cd/envConfg/envConfg/envstDtl/list.sb", params, function() {
+      // 대표명칭 그리드 버튼 show
+      $("#btnAddDetail").show();
+      $("#btnDelDetail").show();
+      $("#btnSaveDetail").show();
+    });
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
   });
-
-});
+  // 세부명칭 그리드 행 추가
+  $scope.addRow = function() {
+    var gridRepresent = agrid.getScope("representCtrl");
+    var selectedRow = gridRepresent.flex.selectedRows[0]._data;
+    // 파라미터 설정
+    var params = {};
+    params.status = "I";
+    params.envstCd = selectedRow.envstCd;
+    params.gChk = true;
+    params.defltYn = "N";
+    params.useYn = "N";
+    // 추가기능 수행 : 파라미터
+    $scope._addRow(params);
+  };
+  // 세부명칭 그리드 저장
+  $scope.save = function() {
+    // 파라미터 설정
+    var params = new Array();
+    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+      $scope.flex.collectionView.itemsEdited[i].status = "U";
+      params.push($scope.flex.collectionView.itemsEdited[i]);
+    }
+    for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+      $scope.flex.collectionView.itemsAdded[i].status = "I";
+      params.push($scope.flex.collectionView.itemsAdded[i]);
+    }
+    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+    $scope._save("/sys/cd/envConfg/envConfg/envstDtl/save.sb", params);
+  }
+}]);
