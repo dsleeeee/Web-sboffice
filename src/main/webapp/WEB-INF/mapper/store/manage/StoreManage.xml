@@ -681,6 +681,46 @@
        AND ENVST_CD NOT IN (SELECT ENVST_CD FROM TB_MS_STORE_ENVST WHERE STORE_CD = #{storeCd})
   </insert>
 
+  <!-- 매장환경 등록 -->
+  <!--
+      TABLE    : TB_MS_STORE_ENVST
+      PARAM    : storeManageVO
+      COMMENTS : 매장환경 값이 없으면 insert, 있으면 update
+  -->
+  <insert id="updateStoreEnvst" parameterType="storeEnvVO" >
+    /* USE : StoreManageMapper.updateStoreEnvst */
+    MERGE INTO TB_MS_STORE_ENVST tmse
+    USING DUAL
+      ON (
+          tmse.STORE_CD = #{storeCd}
+      AND tmse.ENVST_CD = #{envstCd}
+         )
+      WHEN MATCHED THEN
+           UPDATE SET tmse.ENVST_VAL = #{envstVal},
+                      tmse.MOD_DT = #{modDt},
+                      tmse.MOD_ID = #{modId}
+      WHEN NOT MATCHED THEN
+           INSERT ( STORE_CD,
+                    ENVST_CD,
+                    ENVST_VAL,
+                    DIRCT_IN_YN,
+                    USE_YN,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID)
+            VALUES ( #{storeCd},
+                     #{envstCd},
+                     #{envstVal},
+                     'N',
+                     'N',
+                     #{regDt},
+                     #{regId},
+                     #{modDt},
+                     #{modId}
+                  )
+  </insert>
+
   <!-- 외식환경 등록 -->
   <!--
       TABLE    : TB_MS_STORE_ENVST
@@ -1274,6 +1314,7 @@
      WHERE STORE_CD = #{storeCd}
      ]]>
   </select>
+
 
   <!-- 테이블 그룹설정 정보 저장 -->
   <!--

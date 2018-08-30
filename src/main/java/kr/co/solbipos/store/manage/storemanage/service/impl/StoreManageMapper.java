@@ -93,6 +93,9 @@ public interface StoreManageMapper {
     /** 매장환경 등록  */
     int insertStoreEnvInfo(StoreManageVO storeManageVO);
 
+    /** 매장환경 등록  */
+    int updateStoreEnvst(StoreEnvVO storeEnvVO);
+
     /** 외식환경 등록 */
     int insertFoodEnvInfo(StoreManageVO storeManageVO);
 
@@ -224,10 +227,13 @@ public interface StoreManageMapper {
     ///////////////////////////////////////////////////////매장조회
     /** 벤사, 코너 정보 조회 */
     List<DefaultMap<String>> getVanCornrList(StoreManageVO storeManageVO);
+
     /** 설치 포스수 조회 */
     int getInstPosCnt(StoreManageVO storeManageVO); //TODO
+
     /** 코너별 승인 목록 조회 */
     List<DefaultMap<String>> getCornrApproveList(StoreManageVO storeManageVO);
+
     /** 포스별 승인 목록 조회*/
     List<DefaultMap<String>> getPosApproveList(StoreManageVO storeManageVO);
 

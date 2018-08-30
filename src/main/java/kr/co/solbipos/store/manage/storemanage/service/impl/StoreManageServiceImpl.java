@@ -256,6 +256,18 @@ public class StoreManageServiceImpl implements StoreManageService{
             }
         }
 
+        // 코너사용여부 환경변수 등록
+        StoreEnvVO storeEnvVO = new StoreEnvVO();
+        storeEnvVO.setStoreCd(storeCd);
+        storeEnvVO.setEnvstCd("2028");
+        storeEnvVO.setEnvstVal(storeManageVO.getCornerUseYn());
+        storeEnvVO.setRegDt(dt);
+        storeEnvVO.setRegId(sessionInfoVO.getUserId());
+        storeEnvVO.setModDt(dt);
+        storeEnvVO.setModId(sessionInfoVO.getUserId());
+
+        procCnt += mapper.updateStoreEnvst(storeEnvVO);
+
         //TODO 판매가 테이블 생성시 추가
         if(!"00000".equals(storeManageVO.getHqOfficeCd())) { // 프랜차이즈
             // 프랜차이즈 설정 - 판매가 HD 복사
@@ -283,6 +295,18 @@ public class StoreManageServiceImpl implements StoreManageService{
 
         // 매장 정보 수정
         int procCnt = mapper.updateStoreInfo(storeManageVO);
+
+        // 코너사용여부 환경변수 등록
+        StoreEnvVO storeEnvVO = new StoreEnvVO();
+        storeEnvVO.setStoreCd(storeManageVO.getStoreCd());
+        storeEnvVO.setEnvstCd("2028");
+        storeEnvVO.setEnvstVal(storeManageVO.getCornerUseYn());
+        storeEnvVO.setRegDt(dt);
+        storeEnvVO.setRegId(sessionInfoVO.getUserId());
+        storeEnvVO.setModDt(dt);
+        storeEnvVO.setModId(sessionInfoVO.getUserId());
+
+        procCnt += mapper.updateStoreEnvst(storeEnvVO);
 
         return procCnt;
     }
