@@ -30,7 +30,7 @@ public class PosFuncVO extends CmmVO {
     /** 기능키번호 */
     private String fnkeyNo;
     /** 위치조정여부 */
-    private Boolean posiAdjYn = false;
+    private String posiAdjYn;
     /** 표기순번 */
     private String dispSeq;
     /** 열위치 */
@@ -42,10 +42,9 @@ public class PosFuncVO extends CmmVO {
     /** 넓이 */
     private String height;
     /** 사용여부 */
-    //    private String useYn = "0";
-    private Boolean useYn = false;
+    private String useYn = "0";
     /** 인증여부 */
-    private Boolean authYn = false;
+    private String authYn = "0";
     /** 사원번호 */
     private String empNo;
 
@@ -118,13 +117,13 @@ public class PosFuncVO extends CmmVO {
     /**
      * @return the posiAdjYn
      */
-    public Boolean getPosiAdjYn() {
+    public String getPosiAdjYn() {
         return posiAdjYn;
     }
     /**
      * @param posiAdjYn the posiAdjYn to set
      */
-    public void setPosiAdjYn(Boolean posiAdjYn) {
+    public void setPosiAdjYn(String posiAdjYn) {
         this.posiAdjYn = posiAdjYn;
     }
     /**
@@ -190,36 +189,30 @@ public class PosFuncVO extends CmmVO {
     /**
      * @return the authYn
      */
-    public Boolean getAuthYn() { return authYn; }
+    public String getAuthYn() { return authYn; }
     /**
      * @param authYn the authYn to set
      */
-    public void setAuthYn(Boolean authYn) {
-        /*
+    public void setAuthYn(String authYn) {
         if(authYn == "true") {
             this.authYn = "Y";
         } else {
             this.authYn = "N";
         }
-        */
-        this.authYn = authYn;
     }
     /**
      * @return the useYn
      */
-    public Boolean getUseYn() { return useYn; }
+    public String getUseYn() { return useYn; }
     /**
      * @param useYn the useYn to set
      */
-    public void setUseYn(Boolean useYn) {
-        /*
+    public void setUseYn(String useYn) {
         if(useYn == "true") {
             this.useYn = "Y";
         } else {
             this.useYn = "N";
         }
-        */
-        this.useYn = useYn;
     }
     /**
      * @return the empNo

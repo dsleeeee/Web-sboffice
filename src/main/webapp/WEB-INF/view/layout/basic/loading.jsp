@@ -14,7 +14,16 @@
     </div>
   </div>
 </div>
-
-<script>
-</script>
+<wj-popup control="_loadTent" fade-in="false" fade-out="false" show-trigger="Click" hide-trigger="Click" style="display: none;width: 500px;">
+  <div class="wj-dialog-body">
+    <div class="wj-popup-loading">
+      <p class="bk">
+      <s:message code="cmm.loading" />
+      </p>
+      <p class="mt20">
+        <img src="/resource/solbipos/css/img/loading.gif" alt="" />
+      </p>
+    </div>
+  </div>
+</wj-popup>
 

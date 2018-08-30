@@ -38,5 +38,18 @@
   </div>
 </div>
 
+<wj-popup control="_alertTent" fade-in="false" fade-out="false" show-trigger="Click" hide-trigger="Click" style="display: none;width: 500px;">
+  <div class="wj-dialog-body">
+    <div class="wj-popup-alert">
+      <p class="bk">
+        {{ s_alert_msg }}
+      </p>
+    </div>
+  </div>
+  <div class="wj-dialog-footer wj-popup-alert-footer">
+    <button class="btn wj-hide-apply btn_blue"><s:message code="cmm.confirm" /></button>
+  </div>
+</wj-popup>
+
 <script>
 </script>

@@ -36,31 +36,6 @@
           </div>
         </td>
       </tr>
-      <tr>
-        <%-- 설정구분 --%>
-        <th><s:message code="envConfg.envstFgNm" /></th>
-        <td>
-          <div class="sb-select">
-            <div id="srchEnvstFg"></div>
-          </div>
-        </td>
-        <%-- 환경그룹 --%>
-        <th><s:message code="envConfg.envstGrpCdNm" /></th>
-        <td>
-          <div class="sb-select">
-            <div id="srchEnvstGrpCd"></div>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <%-- 대상구분 --%>
-        <th><s:message code="envConfg.targtFgNm" /></th>
-        <td colspan="3">
-          <div class="sb-select" style="width: 40%;">
-            <div id="srchTargtFg"></div>
-          </div>
-        </td>
-      </tr>
     </tbody>
   </table>
 
@@ -116,14 +91,8 @@
 </div>
 
 <script type="text/javascript">
-  var envstFgNm = ${ccu.getCommCode("003")};
-  var envstGrpCdNm = ${ccu.getCommCode("004")};
-  var targtFg = ${ccu.getCommCode("038")};
-
-  <%--
   var envstFgNm = ${ccu.getCommCodeExcpAll("003")};
   var envstGrpCdNm = ${ccu.getCommCodeExcpAll("004")};
   var targtFg = ${ccu.getCommCodeExcpAll("038")};
-  --%>
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/sys/cd/envConfg/envConfg.js?ver=2018082101" charset="utf-8"></script>

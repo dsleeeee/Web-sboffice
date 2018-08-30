@@ -4,7 +4,6 @@
 <mapper namespace="kr.co.solbipos.application.common.service.impl.CmmCodeMapper">
 
   <select id="selectCmmCodeList" parameterType="String" resultType="DefaultMap">
-  <![CDATA[
   /* CmmCodeMapper.selectCmmCodeList */
   SELECT NMCODE_GRP_CD,
          NMCODE_CD,
@@ -18,11 +17,9 @@
          MOD_ID
     FROM TB_CM_NMCODE
    WHERE NMCODE_GRP_CD = #{nmcodeGrpCd}
-  ]]>
   </select>
 
   <select id="selectEnvCodeList" parameterType="String" resultType="DefaultMap">
-  <![CDATA[
   /* CmmCodeMapper.selectEnvCodeList */
   SELECT ENVST_CD,
          ENVST_VAL_CD,
@@ -36,7 +33,6 @@
     FROM TB_CM_ENVST_DTL
    WHERE ENVST_CD = #{envstCd}
      AND USE_YN = 'Y'
-  ]]>
   </select>
 
   <!-- 대리점 목록 조회 -->

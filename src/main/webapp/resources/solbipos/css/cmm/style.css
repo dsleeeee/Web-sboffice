@@ -831,10 +831,10 @@ div.commtWrap .btn_skyblue {width:140px; position:absolute; top:0px; right:0px; 
 .subTab2 ul li a:hover {background:RGBA(0,0,0,0.2); color:#fff; transition:all 0.3s;}
 
 .subCon {}
-.wj-TblWrapBr {border:1px solid #e8e8e8; overflow:auto;}
-.wj-TblWrap {overflow:auto;}
-/*.wj-TblWrapBr {border:1px solid #e8e8e8;}*/
-/*.wj-TblWrap { }*/
+/*.wj-TblWrapBr {border:1px solid #e8e8e8; overflow:auto;}*/
+/*.wj-TblWrap {overflow:auto;}*/
+.wj-TblWrapBr {border:1px solid #e8e8e8;}
+.wj-TblWrap { }
 
 .wj-gridWrap { border:1px solid #e8e8e8;overflow: auto; }
 

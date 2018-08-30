@@ -1,17 +1,5 @@
 package kr.co.solbipos.sys.cd.systemcd.web;
 
-import static kr.co.common.utils.grid.ReturnUtil.returnJson;
-import java.util.ArrayList;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
@@ -20,6 +8,20 @@ import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sys.cd.systemcd.service.SystemCdService;
 import kr.co.solbipos.sys.cd.systemcd.service.SystemCdVO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
+
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 
 /**
  * @Class Name : SystemCdController.java
@@ -75,7 +77,7 @@ public class SystemCdController {
     @ResponseBody
     public Result getNmcodeGrpCdList(HttpServletRequest request, HttpServletResponse response,
             SystemCdVO systemCdVO, Model model) {
-        
+
         List<DefaultMap<String>> list = new ArrayList<DefaultMap<String>>(); 
         // Parameter 값으로 대표/세부 명칭 코드목록을 조회 분기처리
         if ( "000".equals(systemCdVO.getNmcodeGrpCd()) ) {
@@ -93,9 +95,9 @@ public class SystemCdController {
     
     /**
      * 시스템 명칭관리 - 저장
+     * @param   systemCdVOs
      * @param   request
      * @param   response
-     * @param   systemCdVO
      * @param   model
      * @return  Result
      * @author  노현수

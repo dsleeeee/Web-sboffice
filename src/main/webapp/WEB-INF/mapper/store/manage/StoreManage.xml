@@ -138,7 +138,7 @@
            TB_CM_NMCODE tcm
      WHERE thq.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
        AND tms.STORE_CD = #{storeCd}
-       AND tcm.NMCODE_GRP_CD = '005'
+       AND tcm.NMCODE_GRP_CD = '003'
        AND tms.CLS_FG = tcm.NMCODE_CD
     ]]>
   </select>
@@ -152,15 +152,14 @@
   <select id="getStorePosInfo" parameterType="storeManageVO" resultType="DefaultMap">
     /* USE : StoreManageMapper.getStorePosInfo */
     <![CDATA[
-    SELECT tmp.POS_NO,
-           tmp.POS_FG,
+    SELECT tmp.POS_FG,
            tmp.ENVST_CD,
            tmp.ENVST_VAL,
            tcd.ENVST_VAL_NM
       FROM TB_MS_POS_ENVST tmp,
            TB_CM_ENVST_DTL tcd
      WHERE tmp.STORE_CD = #{storeCd}
-       AND tmp.ENVST_CD = '4018'
+       AND tmp.ENVST_CD = '201'
        AND tmp.ENVST_CD = tcd.ENVST_CD
        AND tmp.ENVST_VAL = tcd.ENVST_VAL_CD
     ]]>
@@ -181,7 +180,7 @@
            TB_CM_ENVST_DTL tcd
      WHERE tmp.STORE_CD = #{storeCd}
        AND tcd.ENVST_VAL_CD = tmp.PRTER_KIND_FG
-       AND tcd.ENVST_CD = '4030'
+       AND tcd.ENVST_CD = '206'
     ]]>
   </select>
 
