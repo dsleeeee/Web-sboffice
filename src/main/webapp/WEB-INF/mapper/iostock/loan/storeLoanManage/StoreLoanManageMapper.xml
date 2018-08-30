@@ -24,8 +24,8 @@
         <include refid="CmmSQL.PagingTemplateHeader"/>
         <![CDATA[
         SELECT  tms.STORE_CD, tms.STORE_NM
-        ,       tphsl.LIMIT_LOAN_AMT, tphsl.USE_LOAN_AMT, tphsl.CURR_LOAN_AMT
-        ,       tphsl.MAX_ORDER_AMT, tphsl.ORDER_FG, tphsl.NO_OUTSTOCK_AMT_FG
+        ,       NVL(tphsl.LIMIT_LOAN_AMT, '') AS LIMIT_LOAN_AMT, tphsl.USE_LOAN_AMT, tphsl.CURR_LOAN_AMT
+        ,       NVL(tphsl.MAX_ORDER_AMT, '') AS MAX_ORDER_AMT, NVL(tphsl.ORDER_FG, '1') AS ORDER_FG, NVL(tphsl.NO_OUTSTOCK_AMT_FG, 'N') AS NO_OUTSTOCK_AMT_FG
         ,       DECODE(tphsl.ORDER_FG
                       ,'1'
                       ,DECODE(SIGN(tphsl.CURR_LOAN_AMT)
@@ -61,8 +61,8 @@
                              ,tphsl.MAX_ORDER_AMT
                              ,0
                              )
-                      )   AVAILABLE_ORDER_AMT
-        ,       tphsl.REMARK
+                      ) AVAILABLE_ORDER_AMT
+        ,       NVL(tphsl.REMARK, '') AS REMARK
         ]]>
         <include refid="CmmSQL.PagingTemplateCount"/>
         <![CDATA[

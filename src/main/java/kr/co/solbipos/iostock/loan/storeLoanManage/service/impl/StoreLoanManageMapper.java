@@ -13,7 +13,9 @@ public interface StoreLoanManageMapper {
     /** 매장여신관리 목록 조회 */
     List<DefaultMap<String>> getStoreLoanManageList(StoreLoanManageVO storeLoanManageVO);
 
+    /** 매장여신 수정 */
     int updateStoreLoanManage(StoreLoanManageVO storeLoanManageVO);
 
+    /** 매장여신 등록 */
     int insertStoreLoanManage(StoreLoanManageVO storeLoanManageVO);
 }

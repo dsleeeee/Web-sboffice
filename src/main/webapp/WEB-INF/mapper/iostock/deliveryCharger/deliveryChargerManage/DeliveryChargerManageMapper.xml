@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    DeliveryChargerManageMapper.xml
+    배송기사 리스트 조회
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       안동관     2018.08.29     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.iostock.deliveryCharger.deliveryChargerManage.service.impl.DeliveryChargerManageMapper">
+
+    <!-- 배송기사 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_DELIVERY_CHARGER
+        PARAM    : DeliveryChargerManageVO
+        COMMENTS : 배송기사 리스트를 조회한다.
+    -->
+    <select id="getDeliveryChargerList" parameterType="DeliveryChargerManageVO" resultType="DefaultMap">
+        /* USE : DeliveryChargerManageMapper.getDeliveryChargerList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        <![CDATA[
+        SELECT  tphdc.*
+        ]]>
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        <![CDATA[
+        FROM    TB_PO_HQ_DELIVERY_CHARGER tphdc
+        WHERE   tphdc.HQ_OFFICE_CD = #{hqOfficeCd}
+        ]]>
+        <if test='dlvrCd != null and dlvrCd != ""'>
+            AND tphdc.DLVR_CD = #{dlvrCd}
+        </if>
+        <if test='dlvrNm != null and dlvrNm != ""'>
+            AND tphdc.DLVR_NM LIKE '%'||#{dlvrNm}||'%'
+        </if>
+        <if test='carNo != null and carNo != ""'>
+            AND tphdc.CAR_NO = #{carNo}
+        </if>
+        ORDER BY tphdc.DLVR_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 배송기사 상세 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_DELIVERY_CHARGER
+        PARAM    : DeliveryChargerManageVO
+        COMMENTS : 배송기사 상세 조회한다.
+    -->
+    <select id="getDlvrInfo" parameterType="DeliveryChargerManageVO" resultType="DefaultMap">
+        /* USE : DeliveryChargerManageMapper.getDlvrInfo */
+        <![CDATA[
+        SELECT  tphdc.*
+        FROM    TB_PO_HQ_DELIVERY_CHARGER tphdc
+        WHERE   tphdc.HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     tphdc.DLVR_CD       = #{dlvrCd}
+        ]]>
+    </select>
+
+    <!-- 신규 배송기사코드 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_DELIVERY_CHARGER
+        PARAM    : sessionInfoVO
+        COMMENTS : 배송기사 등록시 사용할 신규 배송기사코드를 조회한다.
+    -->
+    <select id="getNewDlvrCd" parameterType="sessionInfoVO" resultType="String">
+        /* USE : DeliveryChargerManageMapper.getNewDlvrCd */
+      SELECT  LPAD(NVL(MAX(tphdc.DLVR_CD), '0')+1, 4, '0')
+      FROM    TB_PO_HQ_DELIVERY_CHARGER tphdc
+      WHERE   tphdc.HQ_OFFICE_CD = #{hqOfficeCd}
+    </select>
+
+    <!-- 배송기사 저장 -->
+    <!--
+        TABLE    : TB_PO_HQ_DELIVERY_CHARGER
+        PARAM    : deliveryChargerManageVO
+        COMMENTS : 배송기사를 등록한다.
+    -->
+    <insert id="insertDeliveryCharger" parameterType="deliveryChargerManageVO">
+    /* USE : DeliveryChargerManageMapper.insertDeliveryCharger */
+    INSERT INTO TB_PO_HQ_DELIVERY_CHARGER
+    (
+        HQ_OFFICE_CD,
+        DLVR_CD,
+        DLVR_NM,
+        CAR_NO,
+        TEL_NO,
+        HP_NO,
+        USE_YN,
+        REMARK,
+        REG_DT,
+        REG_ID,
+        MOD_DT,
+        MOD_ID
+    )
+    VALUES
+    (
+        #{hqOfficeCd},
+        #{dlvrCd},
+        #{dlvrNm},
+        #{carNo},
+        #{telNo},
+        #{hpNo},
+        #{useYn},
+        #{remark},
+        #{regDt},
+        #{regId},
+        #{modDt},
+        #{modId}
+    )
+  </insert>
+
+    <!-- 배송기사 저장 -->
+    <!--
+        TABLE    : TB_PO_HQ_DELIVERY_CHARGER
+        PARAM    : deliveryChargerManageVO
+        COMMENTS : 배송기사를 수정한다.
+    -->
+    <update id="updateDeliveryCharger" parameterType="deliveryChargerManageVO">
+    /* USE : DeliveryChargerManageMapper.updateDeliveryCharger */
+    UPDATE  TB_PO_HQ_DELIVERY_CHARGER
+    SET     DLVR_NM = #{dlvrNm},
+            CAR_NO  = #{carNo},
+            TEL_NO  = #{telNo},
+            HP_NO   = #{hpNo},
+            USE_YN  = #{useYn},
+            REMARK  = #{remark},
+            MOD_DT  = #{modDt},
+            MOD_ID  = #{modId}
+    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+    AND     DLVR_CD      = #{dlvrCd}
+    </update>
+
+    <!-- 배송기사 담당 창고 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_DELIVERY_CHARGER_STORAGE, TB_MS_STORE
+        PARAM    : DeliveryChargerManageVO
+        COMMENTS : 배송기사 담당 창고 리스트를 조회한다.
+    -->
+    <!-- TODO 2018.08.30 현재 매장의 창고관리 테이블이 없어 담당매장을 창고로 하여 코딩. 나중에 창고로 변경 필요 -->
+    <select id="getDeliveryChargerStorageList" parameterType="DeliveryChargerManageVO" resultType="DefaultMap">
+        /* USE : DeliveryChargerManageMapper.getDeliveryChargerStorageList */
+        <![CDATA[
+        SELECT  tphdcs.DLVR_CD
+        ,       tphdcs.STORAGE_CD, tms.STORE_NM AS STORAGE_NM
+        FROM    TB_PO_HQ_DELIVERY_CHARGER_STORAGE tphdcs
+        ,       TB_MS_STORE tms
+        WHERE   tphdcs.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tphdcs.DLVR_CD      = #{dlvrCd}
+        AND     tms.HQ_OFFICE_CD    = tphdcs.HQ_OFFICE_CD
+        AND     tms.STORE_CD        = tphdcs.STORAGE_CD
+        ORDER BY tphdcs.STORAGE_CD
+        ]]>
+    </select>
+
+    <!-- 배송기사 담당 창고 설정 리스트 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE, TB_PO_HQ_DELIVERY_CHARGER_STORAGE, TB_PO_HQ_DELIVERY_CHARGER
+        PARAM    : DeliveryChargerManageVO
+        COMMENTS : 배송기사 담당 창고 설정 리스트를 조회한다.
+    -->
+    <!-- TODO 2018.08.30 현재 매장의 창고관리 테이블이 없어 담당매장을 창고로 하여 코딩. 나중에 창고로 변경 필요 -->
+    <select id="getDeliveryChargerStorageAllList" parameterType="DeliveryChargerManageVO" resultType="DefaultMap">
+        /* USE : DeliveryChargerManageMapper.getDeliveryChargerStorageAllList */
+        <![CDATA[
+        SELECT  SUBSTR(tms.STORE_CD, 5, 3) AS STORAGE_CD, tms.STORE_NM AS STORAGE_NM
+        FROM    TB_MS_STORE tms
+        WHERE   tms.HQ_OFFICE_CD      =   #{hqOfficeCd}
+        AND     SUBSTR(tms.STORE_CD, 5, 3)	NOT IN	(	SELECT	STORAGE_CD
+                                                        FROM 	TB_PO_HQ_DELIVERY_CHARGER_STORAGE
+                                                        WHERE   HQ_OFFICE_CD	=	#{hqOfficeCd}
+                                                        AND     DLVR_CD			=	#{dlvrCd}
+                                                    )
+        ORDER BY SUBSTR(tms.STORE_CD, 5, 3)
+        ]]>
+    </select>
+
+    <!-- 배송기사 담당 창고 저장 -->
+    <!--
+        TABLE    : TB_PO_HQ_DELIVERY_CHARGER_STORAGE
+        PARAM    : deliveryChargerManageVO
+        COMMENTS : 배송기사의 담당 창고를 등록한다.
+    -->
+    <insert id="insertDeliveryChargerStorage" parameterType="deliveryChargerManageVO">
+    /* USE : DeliveryChargerManageMapper.insertDeliveryChargerStorage */
+    INSERT INTO TB_PO_HQ_DELIVERY_CHARGER_STORAGE
+    (
+        HQ_OFFICE_CD,
+        STORAGE_CD,
+        DLVR_CD,
+        REG_DT,
+        REG_ID,
+        MOD_DT,
+        MOD_ID
+    )
+    VALUES
+    (
+        #{hqOfficeCd},
+        #{storageCd},
+        #{dlvrCd},
+        #{regDt},
+        #{regId},
+        #{modDt},
+        #{modId}
+    )
+  </insert>
+
+    <!-- 배송기사 담당 창고 삭제 -->
+    <!--
+        TABLE    : TB_PO_HQ_DELIVERY_CHARGER_STORAGE
+        PARAM    : deliveryChargerManageVO
+        COMMENTS : 배송기사의 담당 창고를 삭제한다.
+    -->
+    <delete id="deleteDeliveryChargerStorage" parameterType="deliveryChargerManageVO">
+    /* USE : DeliveryChargerManageMapper.deleteDeliveryChargerStorage */
+    DELETE  TB_PO_HQ_DELIVERY_CHARGER_STORAGE
+    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+    AND     STORAGE_CD   = #{storageCd}
+    AND     DLVR_CD      = #{dlvrCd}
+    </delete>
+
+
+</mapper>

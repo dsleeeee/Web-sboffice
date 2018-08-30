@@ -77,7 +77,7 @@
     // 조회 변수 선언
     var srchStoreCd  = wcombo.genInputText("#srchStoreCd", 7, "");
     var srchStoreNm  = wcombo.genInputText("#srchStoreNm", 50, "");
-    var listScaleBox = wcombo.genCommonBox("#listScaleBox", listScaleBoxData); //listScaleBoxData 는 공통으로 빼둠. (commonVariables.jsp)
+    var listScaleBox = wcombo.genCommonBox("#listScaleBox", gvListScaleBoxData); //listScaleBoxData 는 공통으로 빼둠. (commonVariables.jsp)
 
     $(document).ready(function () {
         gridInit();
@@ -170,12 +170,11 @@
         var paramArr = new Array();
 
         for (var i = 0; i < gridStoreLoan.collectionView.itemsEdited.length; i++) {
+            if(!valueCheck(gridStoreLoan.collectionView.itemsEdited[i])) {
+                return;
+            }
             gridStoreLoan.collectionView.itemsEdited[i].status = "U";
             paramArr.push(gridStoreLoan.collectionView.itemsEdited[i]);
-        }
-        for (var i = 0; i < gridStoreLoan.collectionView.itemsAdded.length; i++) {
-            gridStoreLoan.collectionView.itemsAdded[i].status = "I";
-            paramArr.push(gridStoreLoan.collectionView.itemsAdded[i]);
         }
 
         if (paramArr.length <= 0) {
@@ -191,6 +190,27 @@
                 s_alert.pop(result.message);
             }
         );
+    }
+
+    function valueCheck(rowItem) {
+        console.log("====rowItem====");
+        console.log(rowItem);
+
+        if(rowItem.limitLoanAmt != "" && (rowItem.maxOrderAmt == "" || rowItem.maxOrderAmt == null)) {
+            // if(rowItem.maxOrderAmt == "" || rowItem.maxOrderAmt == null) {
+                s_alert.pop("<s:message code='loan.maxOrderAmt'/> <s:message code='cmm.require.text'/>");
+                return false;
+            // }
+        }
+
+        if(rowItem.maxOrderAmt != "" && (rowItem.limitLoanAmt == "" || rowItem.limitLoanAmt == null)) {
+            // if(rowItem.limitLoanAmt == "" || rowItem.limitLoanAmt == null) {
+                s_alert.pop("<s:message code='loan.limitLoanAmt'/> <s:message code='cmm.require.text'/>");
+                return false;
+            // }
+        }
+
+        return true;
     }
 </script>
 <%--<script type="text/javascript" src="/resource/solbipos/js/iostock/loan/storeLoan.js?ver=2018082101" charset="utf-8"></script>--%>

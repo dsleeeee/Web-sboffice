@@ -18,7 +18,9 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Service("StoreLoanManageService")
 public class StoreLoanManageServiceImpl implements StoreLoanManageService {
 
-    @Autowired StoreLoanManageMapper storeLoanManageMapper;
+    @Autowired
+    StoreLoanManageMapper storeLoanManageMapper;
+
     @Autowired
     MessageService messageService;
 
