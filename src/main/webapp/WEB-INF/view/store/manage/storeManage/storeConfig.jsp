@@ -239,7 +239,10 @@ $("#storeEnvInfoArea #btnSaveStore").click(function(){
     param.dirctInYn   = objDirctInYn[i].value;
 
     paramArr.push(param);
+
   }
+
+  console.log(paramArr);
 
   $.postJSONArray("/store/manage/storeManage/storeManage/saveStoreConfig.sb", paramArr, function(result) {
 

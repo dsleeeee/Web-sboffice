@@ -30,12 +30,6 @@ var prterPort   = ${cnv.getEnvCodeExcpAll("4031")};
 var prterSpeed  = ${cnv.getEnvCodeExcpAll("4032")};
 var useYn       = ${ccu.getCommCodeExcpAll("067")};
 
-console.log("]]]]]]]]]]]]]]]]]]]]]]]]]]]");
-console.log(prterKind);
-console.log(prterPort);
-console.log(prterSpeed);
-console.log(useYn);
-
 var posNoDM;
 var prterKindDM   = new wijmo.grid.DataMap(prterKind, 'value', 'name');
 var prterPortDM   = new wijmo.grid.DataMap(prterPort, 'value', 'name');

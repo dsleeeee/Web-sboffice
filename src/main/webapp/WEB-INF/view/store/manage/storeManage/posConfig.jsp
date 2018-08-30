@@ -54,34 +54,7 @@ function showPosConfigLayout(envstFg){
   var param = {};
 
   param.hqOfficeCd  = selectedStore.hqOfficeCd;
-//  param.hqBrandCd   = selectedStore.hqBrandCd;
   param.storeCd     = selectedStore.storeCd;
-
-  <%-- 포스목록 조회 --%>
-  <%--
-  $.postJSON("/store/manage/storeManage/storeManage/getPosList.sb", param, function(result) {
-
-    if(result.status === "FAIL") {
-      s_alert.pop(result.message);
-      return;
-    }
-
-    var posList = result.data.list.posList;
-
-    $("#sPosNm").empty();
-
-    for(var i=0; i<posList.length; i++) {
-      if(i==0){
-        $("#sPosNm").append("<option value='"+ posList[i].posNo +"' selected> " + posList[i].posCdNm +  "</option>");
-      } else {
-        $("#sPosNm").append("<option value='"+ posList[i].posNo +"' > " + posList[i].posCdNm +  "</option>");
-      }
-    }
-  },
-  function (result) {
-      s_alert.pop(result.message);
-  });
-  --%>
 
   if(posList != null) {
 
@@ -96,7 +69,6 @@ function showPosConfigLayout(envstFg){
     }
 
   }
-
   getPosInfo();
 }
 
@@ -358,7 +330,9 @@ $(document).on("click", "#posConfigArea #btnDefault", function(){
 
 <%-- 테이블 그룹설정 버튼 클릭 --%>
 $("#btnSetTabGrp").click(function(){
-  openTabGrpLayer();
+  s_alert.pop("준비중인 서비스입니다.");
+  return;
+  //openTabGrpLayer();//TODO
 });
 
 <%-- 포스 명칭설정 버튼 클릭--%>
@@ -382,7 +356,6 @@ $("#btnDeletePos").click(function(){
 
   var param = {};
   param.hqOfficeCd  = selectedStore.hqOfficeCd;
-//  param.hqBrandCd   = selectedStore.hqBrandCd;
   param.storeCd     = selectedStore.storeCd;
   param.posNo       = $("#sPosNm option:selected").val();
 

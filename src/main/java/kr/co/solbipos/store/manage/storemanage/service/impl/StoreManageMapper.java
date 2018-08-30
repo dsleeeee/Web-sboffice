@@ -63,6 +63,9 @@ public interface StoreManageMapper {
     /** 매장정보 수정 */
     int updateStoreInfo(StoreManageVO storeManageVO);
 
+    /** 매장포스승인정보 저장 */
+    int updateStorePosVanInfo(StorePosVO storePosVO);
+
     /** 해당 브랜드의 분류 복사하여 매장 분류 등록하기 */
     int copyClsInfo(StoreManageVO storeManageVO);
 
@@ -131,6 +134,9 @@ public interface StoreManageMapper {
 
     /** 매장 포스 환경 정보 수정 */
     int updatePosConfig(StorePosEnvVO storePosEnvVO);
+
+    /** 포스가 메인서버로 변경되면, 나머지 포스는 서브포스로 변경 */
+    int updateToSubPos(StorePosEnvVO storePosEnvVO);
 
     /** 포스 목록 조회  */
     List<DefaultMap<String>> getPosList(StorePosEnvVO storePosEnvVO);

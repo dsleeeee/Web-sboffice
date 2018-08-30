@@ -159,9 +159,9 @@ public class StoreManageController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
-        int cnt = service.saveStoreInfo(storeManageVO, sessionInfoVO);
+        String storeCd = service.saveStoreInfo(storeManageVO, sessionInfoVO);
 
-        return returnJson(Status.OK, String.valueOf(cnt), storeManageVO);
+        return returnJson(Status.OK, storeCd);
     }
 
     /**
@@ -180,6 +180,26 @@ public class StoreManageController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
         int cnt = service.updateStoreInfo(storeManageVO, sessionInfoVO);
+
+        return returnJson(Status.OK, cnt);
+    }
+
+    /**
+     * 매장 포스승인정보 저장
+     * @param storePosVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "storeManage/saveStorePosInfo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveStorePosInfo(@RequestBody StorePosVO[] storePosVOs, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        int cnt = service.saveStorePosVanInfo(storePosVOs, sessionInfoVO);
 
         return returnJson(Status.OK, cnt);
     }

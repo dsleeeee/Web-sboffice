@@ -72,7 +72,7 @@ public class StoreManageVO extends PageVO {
     /** 시스템 비고 */
     private String sysRemark;
     /** 본사 비고 */
-    private String hqRemark;
+    private String hdRemark;
     /** 비고 */
     private String remark;
     /** 설치포스수  */
@@ -398,16 +398,16 @@ public class StoreManageVO extends PageVO {
         this.sysRemark = sysRemark;
     }
     /**
-     * @return the hqRemark
+     * @return the hdRemark
      */
-    public String getHqRemark() {
-        return hqRemark;
+    public String getHdRemark() {
+        return hdRemark;
     }
     /**
-     * @param hqRemark the hqRemark to set
+     * @param hdRemark the hdRemark to set
      */
-    public void setHqRemark(String hqRemark) {
-        this.hqRemark = hqRemark;
+    public void setHdRemark(String hdRemark) {
+        this.hdRemark = hdRemark;
     }
     /**
      * @return the remark
