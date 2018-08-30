@@ -59,6 +59,7 @@ var wijmo;
         enumerable: true,
         configurable: true
       });
+      // 그리드의 최초 지정된 컬럼명 목록 : 20180824 노현수
       Object.defineProperty(ColumnPicker.prototype, "orgColumns", {
         get: function () {
           return this._orgColumns;

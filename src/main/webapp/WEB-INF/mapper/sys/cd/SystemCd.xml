@@ -32,6 +32,8 @@
             NMCODE_GRP_CD = '000'
         <if test="nmcodeCd != null and nmcodeCd != ''">
             AND NMCODE_CD LIKE #{nmcodeCd}||'%'
+        </if><if test="nmcodeNm != null and nmcodeNm != ''">
+            AND NMCODE_NM LIKE #{nmcodeNm}||'%'
         </if>
         ORDER BY NMCODE_GRP_CD, NMCODE_CD
     </select>
