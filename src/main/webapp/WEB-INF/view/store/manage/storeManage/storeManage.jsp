@@ -272,6 +272,7 @@ function search(index) {
       if(ht.panel == grid.cells) {
         if (grid.rows[ht.row] instanceof wijmo.grid.GroupRow) {
           var hdOfficeInfo = grid.rows[ht.row].dataItem.items[0];
+          selectedStore = "";
           newStoreReg(hdOfficeInfo);
         } else {
           var col = ht.panel.columns[ht.col];
