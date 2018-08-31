@@ -37,6 +37,9 @@ public interface PosFuncMapper {
     /** 포스기능상세 저장 */
     int savePosConf(PosFuncVO posFuncVO);
 
+    /** 포스기능 삭제 */
+    int deletePosFunc(PosFuncVO posFuncVO);
+
     /** 포스기능 복사 */
     int copyPosFunc(PosFuncVO posFuncVO);
 

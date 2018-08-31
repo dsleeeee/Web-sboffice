@@ -79,18 +79,25 @@ public class PosFuncServiceImpl implements PosFuncService{
     }
 
     /** 포스기능 복사 */
-    @Override public int copyPosFunc(PosFuncVO posFuncVO, SessionInfoVO sessionInfoVO) {
+    @Override
+    public int copyPosFunc(PosFuncVO posFuncVO, SessionInfoVO sessionInfoVO) {
 
         int procCnt = 0;
         String dt = currentDateTimeString();
 
-        posFuncVO.setStoreCd(sessionInfoVO.getOrgnCd());
         posFuncVO.setRegDt(dt);
         posFuncVO.setRegId(sessionInfoVO.getUserId());
         posFuncVO.setModDt(dt);
         posFuncVO.setModId(sessionInfoVO.getUserId());
 
-        procCnt = mapper.copyPosFunc(posFuncVO);
+
+        LOGGER.info("====================================");
+        LOGGER.info("copyPos : "+ posFuncVO.getStoreCd());
+        LOGGER.info("copyPos : "+ posFuncVO.getCopyPos());
+        LOGGER.info("targetPos : "+ posFuncVO.getTargetPos());
+
+        procCnt += mapper.deletePosFunc(posFuncVO);
+        procCnt += mapper.copyPosFunc(posFuncVO);
 
         return procCnt;
     }

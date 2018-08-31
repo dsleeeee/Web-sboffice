@@ -87,7 +87,7 @@
 </div>
 
 <script>
-
+  var posList;
   var selectedStore;
 
   $(document).ready(function(){
@@ -234,6 +234,13 @@
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
+
+<%-- 기능복사 팝업 --%>
+<c:import url="/WEB-INF/view/base/store/posFunc/posFuncCopy.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
 
 
 

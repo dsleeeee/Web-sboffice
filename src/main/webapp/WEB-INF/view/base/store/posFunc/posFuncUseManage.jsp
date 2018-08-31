@@ -51,10 +51,7 @@
 </div>
 
 <script>
-  var posList;
-
   var selectedRow;
-
   var posUsageEnv = ${cnv.getEnvCodeExcpAll("4019")};
   var posTypeEnv  = ${cnv.getEnvCodeExcpAll("4020")};
 
@@ -90,10 +87,7 @@
   posFuncGrid.isReadOnly = true;
   useFuncGrid.isReadOnly = false;
 
-  var posList;
-
   var posListBox = wcombo.genCommonBox("#posListBox", []);
-
 
   <%-- 그리드 포맷 --%>
   posFuncGrid.formatItem.addHandler(function(s, e) {
@@ -152,6 +146,8 @@
 
     $.postJSON("/base/store/posfunc/use/getPosList.sb", param,
         function(result) {
+      console.log("posList");
+      console.log(posList)
           posList = result.data.list;
           posListBox.itemsSource = posList;
           getPosConfList();
@@ -254,9 +250,6 @@
 
     $.postJSON("/base/store/posfunc/use/getPosConfDetail.sb", param,
         function(result) {
-
-      console.log(result
-      )
 
           var list = result.data.list;
           /*
