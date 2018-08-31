@@ -35,7 +35,7 @@ public interface PosFuncMapper {
     List<DefaultMap<String>> getPosConfDetail(PosFuncVO posFuncVO);
 
     /** 포스기능상세 저장 */
-    int savePosConfDetail(PosFuncVO posFuncVO);
+    int savePosConf(PosFuncVO posFuncVO);
 
     /** 포스기능 복사 */
     int copyPosFunc(PosFuncVO posFuncVO);

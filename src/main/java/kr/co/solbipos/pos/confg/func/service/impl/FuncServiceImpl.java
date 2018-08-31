@@ -1,7 +1,12 @@
 package kr.co.solbipos.pos.confg.func.service.impl;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import kr.co.solbipos.pos.confg.func.service.FuncStoreVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import kr.co.common.data.enums.Status;
@@ -32,18 +37,18 @@ import kr.co.solbipos.pos.confg.func.service.FuncVO;
 @Service("funcService")
 public class FuncServiceImpl implements FuncService {
 
-
     @Autowired
     FuncMapper mapper;
-
     @Autowired
     MessageService messageService;
 
+    /** 기능구분상세 조회 */
     @Override
     public List<DefaultMap<String>> list(FuncVO funcVO) {
         return mapper.getFuncList(funcVO);
     }
 
+    /** 기능구분상세 저장 */
     @Override
     public int save(FuncVO[] funcVOs, SessionInfoVO sessionInfoVO) {
 
@@ -78,5 +83,49 @@ public class FuncServiceImpl implements FuncService {
         } else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
+    }
+
+    /** 기능구분 등록매장 조회 */
+    @Override
+    public Map<String, Object> getFunStoreList(FuncStoreVO funcStoreVO) {
+
+        Map<String, Object> result = new HashMap<String,Object>();
+
+        // 기능키 적용매장 조회
+        funcStoreVO.setRegYn("Y");
+        List<DefaultMap<String>> regStoreList = mapper.getStoreList(funcStoreVO);
+
+        // 기능키 미적용매장 조회
+        funcStoreVO.setRegYn("N");
+        List<DefaultMap<String>> noRegStoreList = mapper.getStoreList(funcStoreVO);
+
+        result.put("regStoreList", regStoreList);
+        result.put("noRegStoreList", noRegStoreList);
+
+        return result;
+    }
+
+    /** 기능구분 적용매장 등록 및 삭제 */
+    @Override
+    public int saveFuncStore(FuncStoreVO[] funcStoreVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String dt = currentDateTimeString();
+
+        for(FuncStoreVO funcStoreVO : funcStoreVOs) {
+
+            funcStoreVO.setRegDt(dt);
+            funcStoreVO.setRegId(sessionInfoVO.getUserId());
+            funcStoreVO.setModDt(dt);
+            funcStoreVO.setModId(sessionInfoVO.getUserId());
+
+            if(funcStoreVO.getStatus() == GridDataFg.INSERT) {
+                procCnt += mapper.insertFuncStore(funcStoreVO);
+            } else if(funcStoreVO.getStatus() == GridDataFg.DELETE) {
+                procCnt += mapper.deleteFuncStore(funcStoreVO);
+            }
+        }
+
+        return procCnt;
     }
 }

@@ -11,6 +11,12 @@
 -->
 <mapper namespace="kr.co.solbipos.base.store.posfunc.service.impl.PosFuncMapper">
 
+  <resultMap id="posFuncMap" type="DefaultMap">
+    <result column="POSI_ADJ_YN" property="posiAdjYn" typeHandler="CustomBooleanTypeHandler"/>
+    <result column="USE_YN" property="useYn" typeHandler="CustomBooleanTypeHandler"/>
+    <result column="AUTH_YN" property="authYn" typeHandler="CustomBooleanTypeHandler"/>
+  </resultMap>
+
   <!-- 포스목록 조회 -->
   <!--
       TABLE    : TB_MS_POS
@@ -19,6 +25,12 @@
   -->
   <select id="getPosList" parameterType="posFuncVO" resultType="DefaultMap">
     /* USE : PosFuncMapper.getPosList */
+    SELECT tmp.POS_NO value ,
+    '['|| tmp.POS_NO || '] ' || tmp.POS_NM AS name
+    FROM TB_MS_POS tmp
+    WHERE tmp.STORE_CD = #{storeCd}
+    AND tmp.USE_YN = 'Y'
+    <!--
     SELECT tmp.POS_NO,
            '['|| tmp.POS_NO || '] ' || tmp.POS_NM AS POS_NM,
            tme1.ENVST_VAL,
@@ -33,16 +45,17 @@
            TB_CM_ENVST_DTL tcd2
      WHERE tmp.STORE_CD = #{storeCd}
        AND tmp.USE_YN = 'Y'
-       AND tme1.ENVST_CD = '202'
+       AND tme1.ENVST_CD = '4019'
        AND tme1.STORE_CD = tmp.STORE_CD
        AND tme1.POS_NO = tmp.POS_NO
-       AND tme2.ENVST_CD = '204'
+       AND tme2.ENVST_CD = '4020'
        AND tme2.STORE_CD = tmp.STORE_CD
        AND tme2.POS_NO = tmp.POS_NO
-       AND tcd1.ENVST_CD = '202'
+       AND tcd1.ENVST_CD = '4019'
        AND tcd1.ENVST_VAL_CD = tme1.ENVST_VAL
-       AND tcd2.ENVST_CD = '204'
+       AND tcd2.ENVST_CD = '4020'
        AND tcd2.ENVST_VAL_CD = tme2.ENVST_VAL
+    -->
   </select>
 
   <!-- 포스기능목록 조회 -->
@@ -52,7 +65,7 @@
       COMMENTS : 포스기능목록을 조회한다.
   -->
   <select id="getPosFuncList" parameterType="posFuncVO" resultType="DefaultMap">
-    /* USE : PosFuncMapper.getFuncList */
+    /* USE : PosFuncMapper.getPosFuncList */
     SELECT tmp.STORE_CD,
            tmpe1.POS_NO,
            tmpe1.ENVST_VAL AS ENV202,
@@ -77,20 +90,21 @@
        AND tmp.POS_NO = #{posNo}
        AND tmpe1.STORE_CD = tmp.STORE_CD
        AND tmpe1.POS_NO = tmp.POS_NO
-       AND tmpe1.ENVST_CD = '202'
+       AND tmpe1.ENVST_CD = '4019'
        AND 'T' = DECODE(tmpe1.ENVST_VAL,'0',DECODE(tmp.POS_FG,'0','T','1','F','2','T')
                                        ,'1',DECODE(tmp.POS_FG,'0','F','1','T','2','T')
                                        ,'2','T'                                      )
        AND tmpe2.STORE_CD = tmp.STORE_CD
        AND tmpe2.POS_NO = tmp.POS_NO
-       AND tmpe2.ENVST_CD = '204'
+       AND tmpe2.ENVST_CD = '4020'
        AND tmpf.STORE_CD (+)= tmp.STORE_CD
        AND tmpf.POS_NO (+)= tmp.POS_NO
        AND tmpf.FNKEY_NO (+)= tmp.FNKEY_NO
-       AND tcn.NMCODE_GRP_CD = '034'
+       AND tcn.NMCODE_GRP_CD = '026'
        AND tcn.NMCODE_CD = tmp.FNKEY_FG
      GROUP BY tmp.STORE_CD, tmpe1.POS_NO, tmpe1.ENVST_VAL, tmpe2.ENVST_VAL, tmp.FNKEY_FG, tcn.NMCODE_NM
      ORDER BY tmp.STORE_CD, tmpe1.POS_NO, tmp.FNKEY_FG
+
   </select>
 
 
@@ -100,7 +114,7 @@
       PARAM    : posFuncVO
       COMMENTS : 포스기능 상세 목록을 조회한다.
   -->
-  <select id="getPosConfDetail" parameterType="posFuncVO" resultType="DefaultMap">
+  <select id="getPosConfDetail" parameterType="posFuncVO" resultMap="posFuncMap">
     /* USE : PosFuncMapper.getPosConfDetail */
     SELECT tms.FNKEY_FG,
            tms.FNKEY_NO,
@@ -112,14 +126,15 @@
            tmp.COL_POSI,
            tmp.ROW_POSI,
            tmp.WIDTH,
-           tmp.HEIGHT
+           tmp.HEIGHT,
+           tms.USE_YN
       FROM (
       SELECT tms.STORE_CD, tmp.POS_NO,
-             tms.DISP_SEQ, tms.POSI_ADJ_YN, tms.FNKEY_FG, tms.FNKEY_NO, tms.FNKEY_NM
+             tms.DISP_SEQ, tms.POSI_ADJ_YN, tms.FNKEY_FG, tms.FNKEY_NO, tms.FNKEY_NM, tms.USE_YN
         FROM TB_MS_STORE_FNKEY tms,
              TB_MS_POS_ENVST tmp
        WHERE tmp.STORE_CD = tms.STORE_CD
-         AND tmp.ENVST_CD = '202'
+         AND tmp.ENVST_CD = '4019'
          AND 'T' = DECODE(tmp.ENVST_VAL, '0', DECODE(tms.POS_FG, '0', 'T', '1', 'F', '2', 'T')
                                        , '1', DECODE(tms.POS_FG, '0', 'F', '1', 'T', '2', 'T')
                                        , '2', 'T'                                            )
@@ -131,7 +146,7 @@
        AND tmp.STORE_CD = tms.STORE_CD
        AND tmp.POS_NO = tms.POS_NO
        AND tmp.FNKEY_NO = tms.FNKEY_NO
-     ORDER BY tmp.DISP_SEQ, tms.DISP_SEQ
+     ORDER BY tms.USE_YN DESC,tms.FNKEY_NO, tms.DISP_SEQ, tmp.DISP_SEQ
   </select>
 
   <!-- 포스기능상세 저장 -->
@@ -140,19 +155,17 @@
     PARAM    : posFuncVO
     COMMENTS : 포스기능 상세 목록을 저장한다.
   -->
-  <update id="savePosConfDetail" parameterType="posFuncVO">
-    /* USE : PosFuncMapper.savePosConfDetail */
-    UPDATE TB_MS_POS_FNKEY
+  <update id="savePosConf" parameterType="posFuncVO">
+    /* USE : PosFuncMapper.savePosConf */
+    UPDATE TB_MS_STORE_FNKEY
        SET DISP_SEQ = #{dispSeq},
-           COL_POSI = #{colPosi},
-           ROW_POSI = #{rowPosi},
-           WIDTH = #{width},
-           HEIGHT = #{height},
+           AUTH_YN = #{authYn},
+           POSI_ADJ_YN = #{posiAdjYn},
+           USE_YN = #{useYn},
            MOD_DT = #{modDt},
            MOD_ID = #{modId}
-     WHERE STORE_CD = #{storeCd}
-       AND POS_NO = #{posNo}
-       AND FNKEY_NO = #{fnkeyNo}
+    WHERE STORE_CD = #{storeCd}
+      AND FNKEY_NO = #{fnkeyNo}
   </update>
 
   <!-- 포스기능 복사 -->
@@ -184,7 +197,7 @@
       PARAM    : posFuncVO
       COMMENTS : 포스기능 인증목록을 조회한다.
   -->
-  <select id="getPosConfAuthDetail" parameterType="posFuncVO" resultType="DefaultMap">
+  <select id="getPosConfAuthDetail" parameterType="posFuncVO" resultMap="posFuncMap">
     /* USE : PosFuncMapper.getPosConfAuthDetail */
     SELECT STORE_CD,
            FNKEY_FG,
@@ -196,7 +209,6 @@
      WHERE STORE_CD = #{storeCd}
        AND FNKEY_FG = #{fnkeyFg}
   </select>
-
 
   <!-- 포스기능 인증허용대상 조회 -->
   <!--
@@ -261,6 +273,3 @@
   </update>
 
 </mapper>
-
-
-

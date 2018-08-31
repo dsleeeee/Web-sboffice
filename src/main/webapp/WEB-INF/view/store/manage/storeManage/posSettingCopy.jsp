@@ -96,6 +96,7 @@ $("#posCopyLayer #btnCopyPosSetting").click(function(){
 
 <%-- 레이어 팝업 닫기 --%>
 $("#posCopyLayer .btn_close, #posCopyLayer #btnClosePosCopy").click(function(){
+  $("#targetPos").val("");
   $("#posCopyDim").hide();
   $("#posCopyLayer").hide();
 });

@@ -76,6 +76,7 @@
 -->
     <!-- POS -->
     <typeAlias alias="funcVO" type="kr.co.solbipos.pos.confg.func.service.FuncVO"/>
+    <typeAlias alias="funcStoreVO" type="kr.co.solbipos.pos.confg.func.service.FuncStoreVO"/>
     <typeAlias alias="verInfoVO" type="kr.co.solbipos.pos.confg.vermanage.service.VerInfoVO"/>
     <typeAlias alias="applcStoreVO" type="kr.co.solbipos.pos.confg.vermanage.service.ApplcStoreVO"/>
     <typeAlias alias="verRecvVO" type="kr.co.solbipos.pos.confg.verrecv.service.VerRecvVO"/>

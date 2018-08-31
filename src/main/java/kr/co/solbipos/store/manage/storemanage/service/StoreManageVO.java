@@ -72,7 +72,7 @@ public class StoreManageVO extends PageVO {
     /** 시스템 비고 */
     private String sysRemark;
     /** 본사 비고 */
-    private String hqRemark;
+    private String hdRemark;
     /** 비고 */
     private String remark;
     /** 설치포스수  */
@@ -95,6 +95,8 @@ public class StoreManageVO extends PageVO {
     private String posEmpNo;
     /** 포스 사용자 패스워드 */
     private String posUserPwd;
+    /** 코너 사용여부 */
+    private String cornerUseYn;
 
 
     /**
@@ -398,16 +400,16 @@ public class StoreManageVO extends PageVO {
         this.sysRemark = sysRemark;
     }
     /**
-     * @return the hqRemark
+     * @return the hdRemark
      */
-    public String getHqRemark() {
-        return hqRemark;
+    public String getHdRemark() {
+        return hdRemark;
     }
     /**
-     * @param hqRemark the hqRemark to set
+     * @param hdRemark the hdRemark to set
      */
-    public void setHqRemark(String hqRemark) {
-        this.hqRemark = hqRemark;
+    public void setHdRemark(String hdRemark) {
+        this.hdRemark = hdRemark;
     }
     /**
      * @return the remark
@@ -552,5 +554,20 @@ public class StoreManageVO extends PageVO {
      */
     public void setPosUserPwd(String posUserPwd) {
         this.posUserPwd = posUserPwd;
+    }
+
+    /**
+     * @return the cornerUseYn
+     */
+
+    public String getCornerUseYn() {
+        return cornerUseYn;
+    }
+
+    /**
+     * @param cornerUseYn the cornerUseYn to set
+     */
+    public void setCornerUseYn(String cornerUseYn) {
+        this.cornerUseYn = cornerUseYn;
     }
 }
