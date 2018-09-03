@@ -82,7 +82,7 @@
 
   <%-- 조회 --%>
   <div class="mt10 pdb20 oh bb">
-      <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('gridCtrl')"><s:message code="cmm.search" /></button>
+      <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('gridCtrl');"><s:message code="cmm.search" /></button>
   </div>
 
   <div class="mt20 oh sb-select dkbr">
@@ -103,11 +103,11 @@
   </div>
 
   <div id="grid" class="w100" ng-controller="gridCtrl">
-    <%--위즈모 테이블--%>
-    <div class="wj-TblWrapBr mt10" style="height: 400px;">
+    <%-- 위즈모 테이블 : 그리드가 2개 이상인 경우 감싸서 사용--%>
+    <%--<div class="wj-TblWrapBr mt10">--%>
       <%-- 개발시 높이 조절해서 사용--%>
       <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
-        <div class="wj-gridWrap" style="height:315px">
+        <div class="wj-gridWrap mt10" style="height:315px">
           <div class="row">
             <wj-flex-grid
                     autoGenerateColumns="false"
@@ -144,14 +144,14 @@
             <%--// ColumnPicker 사용시 include --%>
           </div>
         </div>
-    </div>
+    <%--</div>--%>
     <%--//위즈모 테이블--%>
   </div>
 
   <%-- 페이지 리스트 --%>
   <div class="pageNum mt20">
     <%-- id --%>
-    <ul id="page" data-size="10">
+    <ul id="gridCtrlPager" data-size="10">
     </ul>
   </div>
   <%--//페이지 리스트--%>
