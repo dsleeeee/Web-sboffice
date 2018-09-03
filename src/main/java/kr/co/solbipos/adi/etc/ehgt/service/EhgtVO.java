@@ -1,5 +1,9 @@
 package kr.co.solbipos.adi.etc.ehgt.service;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import org.springframework.format.annotation.DateTimeFormat;
+import kr.co.common.validate.Save;
 import kr.co.solbipos.application.common.service.CmmVO;
 
 /**
@@ -31,11 +35,15 @@ public class EhgtVO extends CmmVO {
     /** 통화금액 */
     private long crncyAmt;
     /** 한화금액 */
-    private long krwAmt;
+    @Min(groups = {Save.class}, value=100, message = "{ehgt.krwAmt}{cmm.input.fail}")
+    @Max(groups = {Save.class}, value=10000, message = "{ehgt.krwAmt}{cmm.input.fail}")
+    private float krwAmt;
 
     /** 검색조건-시작일자 */
+    @DateTimeFormat(pattern="yyyyMMdd")
     private String startDt;
     /** 검색조건-종료일자 */
+    @DateTimeFormat(pattern="yyyyMMdd")
     private String endDt;
     
     /**
@@ -89,13 +97,13 @@ public class EhgtVO extends CmmVO {
     /**
      * @return the krwAmt
      */
-    public long getKrwAmt() {
+    public float getKrwAmt() {
       return krwAmt;
     }
     /**
      * @param krwAmt the krwAmt to set
      */
-    public void setKrwAmt(long krwAmt) {
+    public void setKrwAmt(float krwAmt) {
       this.krwAmt = krwAmt;
     }
     /**

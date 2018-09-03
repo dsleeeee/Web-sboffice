@@ -204,7 +204,7 @@
 
     <%-- 리소스 트리 선택 이벤트 --%>
     function selectItem(selectedItem) {
-      $.postJSON("/sys/menu/webmenu/webmenu/view.sb", selectedItem, function(result) {
+      $.postJSON("/sys/menu/webMenu/webMenu/view.sb", selectedItem, function(result) {
         var w = result.data.list;
         var f = [];
 
@@ -274,7 +274,7 @@
 
         param.resrceCd = grid.selectedItem.resrceCd;
 
-        $.postJSON("/sys/menu/webmenu/webmenu/remove.sb", param, function(result) {
+        $.postJSON("/sys/menu/webMenu/webMenu/remove.sb", param, function(result) {
           refreshMenu();
         },
         function(result) {
@@ -334,7 +334,7 @@
       param.dispIdx = parseInt(dispIdx.text);
       param.spclAuthor = spclAuthor.selectedValue === "N" ? null : spclAuthor.selectedValue;
 
-      $.postJSONArray("/sys/menu/webmenu/webmenu/save.sb", param, function(result) {
+      $.postJSONArray("/sys/menu/webMenu/webMenu/save.sb", param, function(result) {
         refreshMenu();
         grid.selectedItem = item;
         selectItem(grid.selectedItem);
@@ -365,7 +365,7 @@
 
     <%-- 메뉴 등록 및 삭제 후 리소스 트리 데이터 업데이트 --%>
     function refreshMenu() {
-      $.postJSONArray("/sys/menu/webmenu/webmenu/list.sb", {}, function(result) {
+      $.postJSONArray("/sys/menu/webMenu/webMenu/list.sb", {}, function(result) {
         grid.itemsSource = result.data.list;
         searchResrceNm.itemsSource = getSearchList(grid.itemsSource);
         rightInit();

@@ -4,7 +4,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.adi.etc.ehgt.service.EhgtVO;
-import kr.co.solbipos.adi.etc.ehgt.service.HqCdVO;
+import kr.co.solbipos.adi.etc.ehgt.service.CrncyCdVO;
 
 /**
  * @Class Name : EhgtMapper.java
@@ -76,18 +76,34 @@ public interface EhgtMapper {
     
 
     /**
-     * 본사 공통 코드 조회
+     * 프랜차이즈 본사/매장 공통 코드 조회
      *
-     * @param hqCdVO
+     * @param crncyCdVO
      * @return
      */
-    List<DefaultMap<String>> getHqCdListByGrpCd(HqCdVO hqCdVO);
+    List<DefaultMap<String>> getHqCdListByGrpCd(CrncyCdVO crncyCdVO);
+
+    /**
+     * 단독매장 공통 코드 조회
+     *
+     * @param crncyCdVO
+     * @return
+     */
+    List<DefaultMap<String>> getMsCdListByGrpCd(CrncyCdVO crncyCdVO);
 
     /**
      * 본사 공통 코드 수정
      *
-     * @param hqCdVO
+     * @param crncyCdVO
      * @return
      */
-    int updateHqCdUseYn(HqCdVO hqCdVO);
+    int updateHqCdUseYn(CrncyCdVO crncyCdVO);
+
+    /**
+     * 매장 공통 코드 수정
+     *
+     * @param crncyCdVO
+     * @return
+     */
+    int updateMsCdUseYn(CrncyCdVO crncyCdVO);
 }
