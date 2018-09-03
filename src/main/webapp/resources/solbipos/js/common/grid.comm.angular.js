@@ -124,11 +124,18 @@ function RootController($scope, $http, isPicker) {
       return;
     }).then(function() {
       // "complete" code here
-      if ( callback != null ) {
-        setTimeout(function() {
-          callback;
-        }, 10);
-      }
+      // if ( callback != null ) {
+      //   setTimeout(function() {
+      //     callback;
+      //   }, 10);
+      // }
+        if ( callback != null ) {
+            var callbackFunc = eval(callback);
+            if(typeof callbackFunc === "function") {
+                callbackFunc();
+            }
+        }
+
     });
   };
   // itemFormatter 기본설정

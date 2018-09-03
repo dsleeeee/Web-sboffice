@@ -394,9 +394,10 @@
 -->
 
     <typeAlias alias="memberVO" type="kr.co.solbipos.application.pos.service.MemberVO"/>
-    <typeAlias alias="StoreLoanManageVO" type="kr.co.solbipos.iostock.loan.storeLoanManage.service.StoreLoanManageVO"/>
-    <typeAlias alias="StoreLoanInfoVO" type="kr.co.solbipos.iostock.loan.storeLoanInfo.service.StoreLoanInfoVO"/>
-    <typeAlias alias="DeliveryChargerManageVO" type="kr.co.solbipos.iostock.deliveryCharger.deliveryChargerManage.service.DeliveryChargerManageVO"/>
+    <typeAlias alias="storeLoanManageVO" type="kr.co.solbipos.iostock.loan.storeLoanManage.service.StoreLoanManageVO"/>
+    <typeAlias alias="storeLoanInfoVO" type="kr.co.solbipos.iostock.loan.storeLoanInfo.service.StoreLoanInfoVO"/>
+    <typeAlias alias="deliveryChargerManageVO" type="kr.co.solbipos.iostock.deliveryCharger.deliveryChargerManage.service.DeliveryChargerManageVO"/>
+    <typeAlias alias="outstockReqDateVO" type="kr.co.solbipos.iostock.order.outstockReqDate.service.OutstockReqDateVO"/>
 
     <typeAlias type="kr.co.common.data.handler.CustomBooleanTypeHandler" alias="CustomBooleanTypeHandler" />
     <typeAlias type="kr.co.common.data.handler.CustomDateTypeHandler" alias="CustomDateTypeHandler" />
