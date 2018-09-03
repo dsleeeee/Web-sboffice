@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:context="http://www.springframework.org/schema/context"
-  xmlns:jee="http://www.springframework.org/schema/jee"
-  xmlns:mvc="http://www.springframework.org/schema/mvc"
-  xmlns:tx="http://www.springframework.org/schema/tx"
-  xmlns:util="http://www.springframework.org/schema/util"
-  xmlns:p="http://www.springframework.org/schema/p"
-  xsi:schemaLocation="http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
@@ -71,7 +71,7 @@
 
 
   <mvc:redirect-view-controller path="/"
-    redirect-url="#{config['welcome.url']}" />
+                                redirect-url="#{config['welcome.url']}" />
 
   <mvc:view-resolvers>
     <mvc:bean-name />
@@ -84,10 +84,10 @@
   </mvc:tiles-configurer>
 
   <bean id="dataSource" class="oracle.jdbc.pool.OracleDataSource">
-      <property name="dataSourceName" value="jdbc/oracle/sb"/>
-      <property name="URL" value="jdbc:oracle:thin:@192.168.0.160:1521:SBP"/>
-      <property name="user" value="sbpora"/>
-      <property name="password" value="sbpora1234"/>
+    <property name="dataSourceName" value="jdbc/oracle/sb"/>
+    <property name="URL" value="jdbc:oracle:thin:@192.168.0.160:1521:SBP"/>
+    <property name="user" value="sbpora"/>
+    <property name="password" value="sbpora1234"/>
   </bean>
 
   <!-- Spring Transaction Manager -->
@@ -123,19 +123,19 @@
   </bean>
 
   <bean id="jedisConnFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
-    p:hostName="#{config['redis.hostName']}"
-  p:port="#{config['redis.port']}"
-  p:password="#{config['redis.password']}"
-  p:usePool="#{config['redis.usePool']}"
-    />
+        p:hostName="#{config['redis.hostName']}"
+        p:port="#{config['redis.port']}"
+        p:password="#{config['redis.password']}"
+        p:usePool="#{config['redis.usePool']}"
+  />
 
   <!-- redis template definition -->
   <bean id="redisTemplate" class="kr.co.common.template.RedisCustomTemplate"
-    p:connection-factory-ref="jedisConnFactory"
-    p:keySerializer-ref="stringRedisSerializer"
-    p:keyPrefix="#{config['redis.web.prefix']}"
-    p:keyPrefixCode="#{config['redis.code.prefix']}"
-    />
+        p:connection-factory-ref="jedisConnFactory"
+        p:keySerializer-ref="stringRedisSerializer"
+        p:keyPrefix="#{config['redis.web.prefix']}"
+        p:keyPrefixCode="#{config['redis.code.prefix']}"
+  />
 
   <bean id="stringRedisSerializer" class="org.springframework.data.redis.serializer.StringRedisSerializer" />
 
