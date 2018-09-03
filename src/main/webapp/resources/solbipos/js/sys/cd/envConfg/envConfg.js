@@ -18,7 +18,7 @@ var app = agrid.getApp();
  */
 app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController($scope, $http, true));
+  angular.extend(this, new RootController('representCtrl', $scope, $http, true));
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // picker 사용시 호출 : 미사용시 호출안함
@@ -119,7 +119,7 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
  */
 app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController($scope, $http, true));
+  angular.extend(this, new RootController('detailCtrl', $scope, $http, true));
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // picker 사용시 호출 : 미사용시 호출안함

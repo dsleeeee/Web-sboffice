@@ -16,9 +16,9 @@ var app = agrid.getApp();
 /**
  * 가상로그인 그리드 생성
  */
-app.controller('gridCtrl', ['$scope', '$http', function ($scope, $http, $rootScope) {
+app.controller('gridCtrl',  ['$scope', '$http', function ($scope, $http, $rootScope) {
   // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController($scope, $http, true));
+  angular.extend(this, new RootController('gridCtrl', $scope, $http, true));
   // 가상로그인 개수
   $scope.popupCnt = 0;
   // 콤보박스 데이터 Set
@@ -78,16 +78,11 @@ app.controller('gridCtrl', ['$scope', '$http', function ($scope, $http, $rootSco
   };
   // 가상로그인 그리드 조회
   $scope.$on("gridCtrl", function(event, data) {
-    // 페이징
-    $scope.setCurr(1);
     // 파라미터
     var params = {};
-    // params.curr = index;
-
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/store/manage/virtualLogin/virtualLogin/list.sb", params, function() {
-      // 페이징 처리
-      page.make("#page", $scope.paging.curr, $scope.paging.totalPage);
+
     });
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();

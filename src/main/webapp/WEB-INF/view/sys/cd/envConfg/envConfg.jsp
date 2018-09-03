@@ -147,4 +147,4 @@
   var envstGrpCdNm = ${ccu.getCommCodeExcpAll("004")};
   var targtFg = ${ccu.getCommCodeExcpAll("038")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sys/cd/envConfg/envConfg.js?ver=2018083001" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/cd/envConfg/envConfg.js?ver=2018090301" charset="utf-8"></script>

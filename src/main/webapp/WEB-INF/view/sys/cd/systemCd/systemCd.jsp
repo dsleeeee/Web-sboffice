@@ -135,4 +135,4 @@
   </div>
 
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/sys/cd/systemCd/systemCd.js?ver=2018082901" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/cd/systemCd/systemCd.js?ver=2018090301" charset="utf-8"></script>
