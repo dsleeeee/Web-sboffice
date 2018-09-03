@@ -30,7 +30,7 @@ public class StoreLoanManageServiceImpl implements StoreLoanManageService {
         return storeLoanManageMapper.getStoreLoanManageList(storeLoanManageVO);
     }
 
-    /** 출력물템플릿 목록 저장 */
+    /** 매장여신 저장 */
     @Override
     public int saveLoanManageList(StoreLoanManageVO[] storeLoanManageVOs, SessionInfoVO sessionInfoVO) {
 

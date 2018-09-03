@@ -150,7 +150,7 @@
         WHERE   tphdcs.HQ_OFFICE_CD = #{hqOfficeCd}
         AND     tphdcs.DLVR_CD      = #{dlvrCd}
         AND     tms.HQ_OFFICE_CD    = tphdcs.HQ_OFFICE_CD
-        AND     tms.STORE_CD        = tphdcs.STORAGE_CD
+        AND     SUBSTR(tms.STORE_CD, 5, 3) = tphdcs.STORAGE_CD
         ORDER BY tphdcs.STORAGE_CD
         ]]>
     </select>

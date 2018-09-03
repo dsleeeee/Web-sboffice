@@ -51,6 +51,7 @@ public class DeliveryChargerManageServiceImpl implements DeliveryChargerManageSe
         if (StringUtil.getOrBlank(deliveryChargerManageVO.getDlvrCd()).equals("")) {
             // 신규 배송기사코드 조회
             String dlvrCd = deliveryChargerManageMapper.getNewDlvrCd(sessionInfoVO);
+            deliveryChargerManageVO.setDlvrCd(dlvrCd);
             // 추가
             result = deliveryChargerManageMapper.insertDeliveryCharger(deliveryChargerManageVO);
         }
@@ -80,7 +81,7 @@ public class DeliveryChargerManageServiceImpl implements DeliveryChargerManageSe
 
     /** 배송기사 담당 창고 저장 */
     @Override
-    public int saveDeliveryChargerStorage(DeliveryChargerManageVO[] deliveryChargerManageVOs, SessionInfoVO sessionInfoVO, String dlvrCd) {
+    public int saveDeliveryChargerStorage(DeliveryChargerManageVO[] deliveryChargerManageVOs, SessionInfoVO sessionInfoVO) {
         int returnResult = 0;
         int result = 0;
         String currentDt = currentDateTimeString();
@@ -92,10 +93,8 @@ public class DeliveryChargerManageServiceImpl implements DeliveryChargerManageSe
             deliveryChargerManageVO.setModId(sessionInfoVO.getUserId());
             deliveryChargerManageVO.setModDt(currentDt);
 
-            if (StringUtil.getOrBlank(deliveryChargerManageVO.getDlvrCd()).equals("") ||
-                !StringUtil.getOrBlank(deliveryChargerManageVO.getDlvrCd()).equals(dlvrCd)) {
+            if (!StringUtil.getOrBlank(deliveryChargerManageVO.getDlvrCd()).equals("")) {
                 // 추가
-                deliveryChargerManageVO.setDlvrCd(dlvrCd);
                 result = deliveryChargerManageMapper.insertDeliveryChargerStorage(deliveryChargerManageVO);
 
                 returnResult += result;

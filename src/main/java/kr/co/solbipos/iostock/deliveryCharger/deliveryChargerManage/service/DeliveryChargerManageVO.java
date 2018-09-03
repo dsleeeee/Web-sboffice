@@ -32,8 +32,10 @@ public class DeliveryChargerManageVO extends PageVO {
     private String modId;
     /** 창고코드 */
     private String storageCd;
-    /** 창고등록/미등록 여부 */
-    private String storageRegiFg;
+    /** 창고코드 */
+    private String storageNm;
+    /** 그리드 공통 체크박스 */
+    private Boolean gChk = false;
 
     /**
      * @return the hqOfficeCd
@@ -218,16 +220,30 @@ public class DeliveryChargerManageVO extends PageVO {
     }
 
     /**
-     * @return the storageRegiFg
+     * @return the storageNm
      */
-    public String getStorageRegiFg() {
-        return storageRegiFg;
+    public String getStorageNm() {
+        return storageNm;
     }
 
     /**
-     * @param storageRegiFg the storageRegiFg to set
+     * @param storageNm the storageNm to set
      */
-    public void setStorageRegiFg(String storageRegiFg) {
-        this.storageRegiFg = storageRegiFg;
+    public void setStorageNm(String storageNm) {
+        this.storageNm = storageNm;
+    }
+
+    /**
+     * @return the gChk
+     */
+    @Override public Boolean getgChk() {
+        return gChk;
+    }
+
+    /**
+     * @param gChk the gChk to set
+     */
+    @Override public void setgChk(Boolean gChk) {
+        this.gChk = gChk;
     }
 }

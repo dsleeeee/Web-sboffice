@@ -27,6 +27,7 @@ import kr.co.solbipos.iostock.deliveryCharger.deliveryChargerManage.service.Deli
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -154,4 +155,73 @@ public class DeliveryChargerManageController {
 
         return ReturnUtil.returnListJson(Status.OK, list, deliveryChargerManageVO);
     }
+
+    /**
+     * 배송기사관리 - 배송기사 담당 창고 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   deliveryChargerManageVO
+     * @return  String
+     * @author  안동관
+     * @since   2018. 08. 31.
+     */
+    @RequestMapping(value = "/deliveryChargerRegist/storageAllList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDeliveryChargerStorageAllList(HttpServletRequest request, HttpServletResponse response,
+        Model model, DeliveryChargerManageVO deliveryChargerManageVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        deliveryChargerManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        List<DefaultMap<String>> list = deliveryChargerManageService.getDeliveryChargerStorageAllList(deliveryChargerManageVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, deliveryChargerManageVO);
+    }
+
+    /**
+     * 배송기사관리 - 배송기사 담당 창고 삭제
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   deliveryChargerManageVOs
+     * @return  String
+     * @author  안동관
+     * @since   2018. 08. 31.
+     */
+    @RequestMapping(value = "/deliveryChargerRegist/delStorage.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result deleteDeliveryChargerStorage(HttpServletRequest request, HttpServletResponse response,
+        Model model, @RequestBody DeliveryChargerManageVO[] deliveryChargerManageVOs) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = deliveryChargerManageService.deleteDeliveryChargerStorage(deliveryChargerManageVOs, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+    /**
+     * 배송기사관리 - 배송기사 담당 창고 저장
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   deliveryChargerManageVOs
+     * @return  String
+     * @author  안동관
+     * @since   2018. 08. 31.
+     */
+    @RequestMapping(value = "/deliveryChargerRegist/addStorage.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveDeliveryChargerStorage(HttpServletRequest request, HttpServletResponse response,
+        Model model, @RequestBody DeliveryChargerManageVO[] deliveryChargerManageVOs) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = deliveryChargerManageService.saveDeliveryChargerStorage(deliveryChargerManageVOs, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+
 }
