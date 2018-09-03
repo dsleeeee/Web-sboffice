@@ -94,6 +94,8 @@
       s_alert.pop("<s:message code='cmm.saveSucc' />");
 
       $("#storePosNmLayer .btn_close").click();
+      showPosConfigLayout("03")
+
     },
     function(result) {
       s_alert.pop(result.message);

@@ -1,14 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!--
+    func.xml
+    포스관리 > POS 설정관리 > POS 기능정의 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ========================================p==============
+    1       김지은     2018.06.01      최초작성
+-->
 <mapper namespace="kr.co.solbipos.pos.confg.func.service.impl.FuncMapper">
 
     <resultMap id="funcListMap" type="DefaultMap">
         <result column="POSI_ADJ_YN" property="posiAdjYn" typeHandler="CustomBooleanTypeHandler"/>
         <result column="FNKEY_USE_YN_0" property="fnkeyUseYn0" typeHandler="CustomBooleanTypeHandler"/>
         <result column="FNKEY_USE_YN_1" property="fnkeyUseYn1" typeHandler="CustomBooleanTypeHandler"/>
+        <result column="USE_YN" property="useYn" typeHandler="CustomBooleanTypeHandler"/>
     </resultMap>
 
+  <!-- 기능구분 상세 조회 -->
+  <!--
+      TABLE    : TB_CM_POS_FNKEY
+      PARAM    : funcVO
+      COMMENTS : 기능구분의 상세 목록을 조회한다.
+  -->
   <select id="getFuncList" parameterType="funcVO" resultMap="funcListMap">
     <![CDATA[
     /* FuncMapper.getFuncList */
@@ -45,6 +60,13 @@
     ]]>
   </select>
 
+
+  <!-- 기능구분 상세 등록 -->
+  <!--
+      TABLE    : TB_CM_POS_FNKEY
+      PARAM    : funcVO
+      COMMENTS : 기능구분의 상세 목록을 등록한다.
+  -->
   <insert id="insertFunc" parameterType="funcVO">
     /* FuncMapper.insertFunc */
     INSERT INTO TB_CM_POS_FNKEY
@@ -79,10 +101,10 @@
         #{posFg},
         #{imgFileNm0},
         #{imgFileNm1},
-        #{fnkeyUseYn0, jdbcType=VARCHAR},
-        #{fnkeyUseYn1, jdbcType=VARCHAR},
+        #{fnkeyUseYn0},
+        #{fnkeyUseYn1},
         #{dispSeq},
-        #{posiAdjYn, jdbcType=VARCHAR},
+        #{posiAdjYn},
         #{colPosi},
         #{rowPosi},
         #{width},
@@ -96,6 +118,13 @@
 
   </insert>
 
+
+  <!-- 기능구분 상세 수정 -->
+  <!--
+      TABLE    : TB_CM_POS_FNKEY
+      PARAM    : funcVO
+      COMMENTS : 기능구분의 상세 목록을 수정한다.
+  -->
   <update id="updateFunc" parameterType="funcVO">
     /* FuncMapper.updateFunc */
     UPDATE TB_CM_POS_FNKEY
@@ -119,11 +148,125 @@
      WHERE FNKEY_NO     = #{fnkeyNo}
   </update>
 
+  <!-- 기능구분 상세 삭제 -->
+  <!--
+      TABLE    : TB_CM_POS_FNKEY
+      PARAM    : funcVO
+      COMMENTS : 기능구분의 상세 목록을 삭제한다.
+  -->
   <delete id="deleteFunc" parameterType="funcVO">
     /* FuncMapper.deleteFunc */
     DELETE TB_CM_POS_FNKEY
      WHERE FNKEY_NO = #{fnkeyNo}
   </delete>
+
+  <!-- 기능키 등록/미등록 매장 조회 -->
+  <!--
+      TABLE    : TB_CM_POS_FNKEY
+      PARAM    : funcVO
+      COMMENTS : 기능구분의 상세 목록을 조회한다.
+  -->
+  <select id="getStoreList" parameterType="funcVO" resultMap="funcListMap">
+    <![CDATA[
+    /* FuncMapper.getStoreList */
+    SELECT tms.HQ_OFFICE_CD,
+           tms.HQ_OFFICE_NM,
+           tms.STORE_CD,
+           tms.STORE_NM,
+           tms.CLS_FG,
+           tms.SYS_STAT_FG,
+           tcpfs.FNKEY_FG,
+           tcpfs.FNKEY_NO
+      FROM TB_CM_POS_FNKEY_STORE tcpfs,
+           (
+      SELECT tms.HQ_OFFICE_CD, tho.HQ_OFFICE_NM,
+           tms.STORE_CD, tms.STORE_NM,
+           tms.CLS_FG, tms.SYS_STAT_FG
+        FROM TB_MS_STORE tms,
+           TB_HQ_OFFICE tho
+       WHERE tms.HQ_OFFICE_CD = tho.HQ_OFFICE_CD
+           ) tms
+     WHERE tcpfs.STORE_CD (+)= tms.STORE_CD
+       AND tcpfs.FNKEY_FG (+)= #{fnkeyFg}
+       AND tcpfs.FNKEY_NO (+)= #{fnkeyNo}
+    ]]>
+      <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+        AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+      </if>
+      <if test='hqOfficeNm != null and hqOfficeNm != ""'>
+        AND tms.HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'
+      </if>
+      <if test='storeCd != null and storeCd != ""'>
+        AND tms.STORE_CD = #{storeCd}
+      </if>
+      <if test='storeNm != null and storeNm != ""'>
+        AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+      </if>
+      <if test='clsFg != null and clsFg != ""'>
+        AND tms.CLS_FG = #{clsFg}
+      </if>
+      <if test='sysStatFg != null and sysStatFg != ""'>
+        AND tms.SYS_STAT_FG = #{sysStatFg}
+      </if>
+      <if test='regYn != null and regYn.toString() == "Y"'>
+        AND tcpfs.FNKEY_NO IS NOT NULL
+      </if>
+      <if test='regYn != null and regYn.toString() == "N"'>
+        AND tcpfs.FNKEY_NO IS NULL
+      </if>
+    <![CDATA[
+     ORDER
+        BY tms.HQ_OFFICE_CD,
+           tms.STORE_CD
+    ]]>
+  </select>
+
+
+  <!-- 기능키 적용매장 등록 -->
+  <!--
+      TABLE    : TB_CM_POS_FNKEY_STORE
+      PARAM    : funcStoreVO
+      COMMENTS : 기능키 적용매장을 등록한다.
+  -->
+  <insert id="insertFuncStore" parameterType="funcStoreVO">
+    /* FuncMapper.insertFuncStore */
+    INSERT INTO TB_CM_POS_FNKEY_STORE
+    (
+        FNKEY_FG,
+        FNKEY_NO,
+        STORE_CD,
+        REG_DT,
+        REG_ID,
+        MOD_DT,
+        MOD_ID
+    )
+    VALUES
+    (
+        #{fnkeyFg},
+        #{fnkeyNo},
+        #{storeCd},
+        #{regDt},
+        #{regId},
+        #{modDt},
+        #{modId}
+    )
+  </insert>
+
+
+  <!-- 기능키 적용매장 삭제 -->
+  <!--
+      TABLE    : TB_CM_POS_FNKEY_STORE
+      PARAM    : funcStoreVO
+      COMMENTS : 기능키가 적용된 매장 목록에서 해당 매장을 삭제한다.
+  -->
+  <delete id="deleteFuncStore" parameterType="funcStoreVO">
+    /* FuncMapper.deleteFuncStore */
+    DELETE TB_CM_POS_FNKEY_STORE
+     WHERE FNKEY_FG = #{fnkeyFg}
+       AND FNKEY_NO = #{fnkeyNo}
+       AND STORE_CD = #{storeCd}
+  </delete>
+
 
 </mapper>
 

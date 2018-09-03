@@ -14,11 +14,10 @@
           <%-- 저장버튼 --%>
           <a id="btnSave" href="javascript:;" class="btn_grayS2"><s:message code="cmm.save" /></a>
         </div>
-        <!--위즈모 테이블-->
+        <%-- 위즈모 그리드 --%>
         <div>
           <div id="authSettingGrid" class="mt10 mb20"></div>
         </div>
-        <!--//위즈모 테이블-->
       </div>
     </div>
   </div>
@@ -26,87 +25,84 @@
 
 <script>
 
-<%--  인증허용대상 (사원) 그리드 --%>
-var authSettingHeader =
-  [
-    {binding:"storeCd", header:"<s:message code='posFunc.storeCd' />", isReadOnly:true, visible:false, width:"*"},
-    {binding:"empNo", header:"<s:message code='posFunc.empNo' />", isReadOnly:true, width:"*"},
-    {binding:"empNm", header:"<s:message code='posFunc.empNm' />", isReadOnly:true, width:"*"},
-    {binding:"useYn", header:"<s:message code='posFunc.useYn' />", dataType:wijmo.DataType.Boolean, width:"*"}
-  ];
-<%-- 그리드 생성 --%>
-var authSettingGrid = wgrid.genGrid("#authSettingGrid", authSettingHeader, "${menuCd}", 3, ${clo.getColumnLayout(3)});
+  <%--  인증허용대상 (사원) 그리드 --%>
+  var authSettingHeader =
+      [
+        {binding:"storeCd", header:"<s:message code='posFunc.storeCd' />", isReadOnly:true, visible:false, width:"*"},
+        {binding:"empNo", header:"<s:message code='posFunc.empNo' />", isReadOnly:true, width:"*"},
+        {binding:"empNm", header:"<s:message code='posFunc.empNm' />", isReadOnly:true, width:"*"},
+        {binding:"useYn", header:"<s:message code='posFunc.useYn' />", dataType:wijmo.DataType.Boolean, width:"*"}
+      ];
+  <%-- 그리드 생성 --%>
+  var authSettingGrid = wgrid.genGrid("#authSettingGrid", authSettingHeader);
 
-authSettingGrid.isReadOnly = false;
+  authSettingGrid.isReadOnly = false;
 
-<%--  인증허용대상 설정 레이어 팝업 오픈 --%>
-function openSetAuthLayer(){
+  <%--  인증허용대상 설정 레이어 팝업 오픈 --%>
+  function openSetAuthLayer(){
 
-  $("#posAuthDim").show();
-  $("#posAuthLayer").show();
+    $("#posAuthDim").show();
+    $("#posAuthLayer").show();
 
-  $("#popTitle").text("["+selectedFnkey.fnkeyNo+"] " + selectedFnkey.fnkeyNm);
+    $("#popTitle").text("["+selectedFnkey.fnkeyNo+"] " + selectedFnkey.fnkeyNm);
 
-  getPosAuthData();
-}
+    getPosAuthData();
+  }
 
-<%-- 그리드 데이터 조회 --%>
-function getPosAuthData(){
+  <%-- 그리드 데이터 조회 --%>
+  function getPosAuthData(){
 
-    //console.log(selectedFnkey);
     var param = {};
     param.storeCd = selectedFnkey.storeCd;
     param.fnkeyNo = selectedFnkey.fnkeyNo;
 
     $.postJSON("/base/store/posfunc/auth/getAuthEmpList.sb", param, function(result) {
-        var list = result.data.list;
-        authSettingGrid.itemsSource = new wijmo.collections.CollectionView(list);
-        authSettingGrid.collectionView.trackChanges = true;
-    },
-      function (result) {
-        s_alert.pop(result.message);
-        return;
-      }
+          var list = result.data.list;
+          authSettingGrid.itemsSource = new wijmo.collections.CollectionView(list);
+          authSettingGrid.collectionView.trackChanges = true;
+        },
+        function (result) {
+          s_alert.pop(result.message);
+          return;
+        }
     );
-}
-
-<%-- 체크박스 초기화 --%>
-authSettingGrid.formatItem.addHandler(function(s, e) {
-  if (e.panel == s.cells) {
-    var col = s.columns[e.col];
-    var item = s.rows[e.row].dataItem;
-
-    if( col.binding == "useYn") {
-        e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.useYn == 1 ? 'checked' : '') + '>';
-    }
   }
-});
+
+  <%-- 체크박스 초기화 --%>
+  authSettingGrid.formatItem.addHandler(function(s, e) {
+    if (e.panel == s.cells) {
+      var col = s.columns[e.col];
+      var item = s.rows[e.row].dataItem;
+
+      if( col.binding == "useYn") {
+        e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.useYn == 1 ? 'checked' : '') + '>';
+      }
+    }
+  });
 
 
-<%-- 저장버튼 클릭 --%>
-$("#posAuthLayer #btnSave").click(function(){
+  <%-- 저장버튼 클릭 --%>
+  $("#posAuthLayer #btnSave").click(function(){
     var paramArr = new Array();
 
     for(var i = 0; i < authSettingGrid.collectionView.itemCount; i ++) {
-        authSettingGrid.collectionView.items[i].fnkeyNo = selectedFnkey.fnkeyNo;
-        paramArr.push(authSettingGrid.collectionView.items[i]);
+      authSettingGrid.collectionView.items[i].fnkeyNo = selectedFnkey.fnkeyNo;
+      paramArr.push(authSettingGrid.collectionView.items[i]);
     }
 
-    //console.log(paramArr);
-
     $.postJSONArray("/base/store/posfunc/auth/saveAuthEmp.sb", paramArr, function(result) {
-        s_alert.pop("<s:message code='cmm.saveSucc' />");
-        getPosAuthData();
-    },
-    function(result) {
-        s_alert.pop(result.message);
-    });
-});
+          s_alert.pop("<s:message code='cmm.saveSucc' />");
+          getPosAuthData();
+        },
+        function(result) {
+          s_alert.pop(result.message);
+        });
+  });
 
-<%-- 레이어팝업 닫기 --%>
-$("#posAuthLayer .btn_close").click(function(){
+  <%-- 레이어팝업 닫기 --%>
+  $("#posAuthLayer .btn_close").click(function(){
     $("#posAuthDim").hide();
     $("#posAuthLayer").hide();
-});
+  });
 
 </script>

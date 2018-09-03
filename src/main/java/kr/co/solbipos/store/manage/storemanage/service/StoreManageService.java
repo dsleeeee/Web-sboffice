@@ -37,10 +37,13 @@ public interface StoreManageService {
     Map<String, Object> getStoreEnvInfo(StoreManageVO storeManageVO);
 
     /** 매장 신규등록 */
-    int saveStoreInfo(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
+    String saveStoreInfo(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
 
     /** 매장 정보 수정 */
     int updateStoreInfo(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
+
+    /** 매장 포스승인정보 저장 */
+    int saveStorePosVanInfo(StorePosVO[] storePosVOs, SessionInfoVO sessionInfoVO);
 
     /** 매장환경 정보 조회 */
     List<DefaultMap<String>> getEnvGroupList(StoreEnvVO storeEnvVO);

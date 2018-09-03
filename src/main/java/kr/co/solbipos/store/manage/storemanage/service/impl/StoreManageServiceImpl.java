@@ -68,7 +68,7 @@ public class StoreManageServiceImpl implements StoreManageService{
         int instPosCnt = mapper.getInstPosCnt(storeManageVO);
 
         // 코너별 승인
-        List<DefaultMap<String>> cornrApproveList = mapper.getCornrApproveList(storeManageVO);
+//        List<DefaultMap<String>> cornrApproveList = mapper.getCornrApproveList(storeManageVO);
 
         // 포스별 승인
         List<DefaultMap<String>> posApproveList = mapper.getPosApproveList(storeManageVO);
@@ -76,7 +76,7 @@ public class StoreManageServiceImpl implements StoreManageService{
         result.put("storeDtlInfo", storeDtlInfo);
         result.put("vanCornrList", vanCornrList);
         result.put("instPosCnt", instPosCnt);
-        result.put("cornrApproveList", cornrApproveList);
+//        result.put("cornrApproveList", cornrApproveList);
         result.put("posApproveList", posApproveList);
 
         return result;
@@ -112,7 +112,7 @@ public class StoreManageServiceImpl implements StoreManageService{
 
     /** 매장 신규 등록 */
     @Override
-    public int saveStoreInfo(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO) {
+    public String saveStoreInfo(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO) {
 
         String dt = currentDateTimeString();
 
@@ -256,12 +256,24 @@ public class StoreManageServiceImpl implements StoreManageService{
             }
         }
 
+        // 코너사용여부 환경변수 등록
+        StoreEnvVO storeEnvVO = new StoreEnvVO();
+        storeEnvVO.setStoreCd(storeCd);
+        storeEnvVO.setEnvstCd("2028");
+        storeEnvVO.setEnvstVal(storeManageVO.getCornerUseYn());
+        storeEnvVO.setRegDt(dt);
+        storeEnvVO.setRegId(sessionInfoVO.getUserId());
+        storeEnvVO.setModDt(dt);
+        storeEnvVO.setModId(sessionInfoVO.getUserId());
+
+        procCnt += mapper.updateStoreEnvst(storeEnvVO);
+
         //TODO 판매가 테이블 생성시 추가
         if(!"00000".equals(storeManageVO.getHqOfficeCd())) { // 프랜차이즈
             // 프랜차이즈 설정 - 판매가 HD 복사
             // 프랜차이즈 설정 - 판매가 DT 복사
         }
-        return procCnt;
+        return storeCd;
     }
 
     /** 매장 정보 수정 */
@@ -284,9 +296,39 @@ public class StoreManageServiceImpl implements StoreManageService{
         // 매장 정보 수정
         int procCnt = mapper.updateStoreInfo(storeManageVO);
 
+        // 코너사용여부 환경변수 등록
+        StoreEnvVO storeEnvVO = new StoreEnvVO();
+        storeEnvVO.setStoreCd(storeManageVO.getStoreCd());
+        storeEnvVO.setEnvstCd("2028");
+        storeEnvVO.setEnvstVal(storeManageVO.getCornerUseYn());
+        storeEnvVO.setRegDt(dt);
+        storeEnvVO.setRegId(sessionInfoVO.getUserId());
+        storeEnvVO.setModDt(dt);
+        storeEnvVO.setModId(sessionInfoVO.getUserId());
+
+        procCnt += mapper.updateStoreEnvst(storeEnvVO);
+
         return procCnt;
     }
 
+    /** 매장 포스승인정보 저장 */
+    @Override public int saveStorePosVanInfo(StorePosVO[] storePosVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String dt = currentDateTimeString();
+
+        for(StorePosVO storePosVO : storePosVOs) {
+
+            storePosVO.setRegDt(dt);
+            storePosVO.setRegId(sessionInfoVO.getUserId());
+            storePosVO.setModDt(dt);
+            storePosVO.setModId(sessionInfoVO.getUserId());
+
+            procCnt += mapper.updateStorePosVanInfo(storePosVO);
+        }
+
+        return 0;
+    }
 
     /** 매장환경 정보 조회 */
     @Override
@@ -327,6 +369,8 @@ public class StoreManageServiceImpl implements StoreManageService{
         if("".equals(storePosEnvVO.getPosNo()) || storePosEnvVO.getPosNo() == null){
             storePosEnvVO.setPosNo("01");
         }
+        storePosEnvVO.setEnvstFg("03");
+
         return mapper.getPosEnvGroupList(storePosEnvVO);
     }
 

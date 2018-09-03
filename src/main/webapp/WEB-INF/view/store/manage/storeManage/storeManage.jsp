@@ -236,8 +236,6 @@ function search(index) {
 
     var list = result.data.list;
 
-    //console.log(list);
-
     if(list.length === undefined || list.length == 0) {
       s_alert.pop(result.message);
       grid.itemsSource = new wijmo.collections.CollectionView([]);
@@ -272,10 +270,12 @@ function search(index) {
       if(ht.panel == grid.cells) {
         if (grid.rows[ht.row] instanceof wijmo.grid.GroupRow) {
           var hdOfficeInfo = grid.rows[ht.row].dataItem.items[0];
+
+          selectedStore = "";
           newStoreReg(hdOfficeInfo);
         } else {
           var col = ht.panel.columns[ht.col];
-          if( col.binding == "storeNm") {
+          if( col.binding == "storeCd" || col.binding == "storeNm") {
             if(grid.rows[ht.row].dataItem.storeCd != "<s:message code='storeManage.require.regist.store2'/>") {
               selectedStore = grid.rows[ht.row].dataItem;
               showDetail();

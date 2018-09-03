@@ -15,7 +15,7 @@
       <div class="wj-TblWrapBr mr10 pd20" style="height: 580px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='func.funFg' /></span>
-        </div>
+      </div>
         <%-- 기능구분 --%>
         <div id="theGrid1"></div>
       </div>
@@ -73,21 +73,21 @@ var hData1 =
 
 var hData2 =
   [
-    {binding:"gChk", header:"<s:message code='func.chk' />", allowMerging:true, dataType:wijmo.DataType.Boolean},
-    {binding:"fnkeyNo", header:"<s:message code='func.fnkeyNo' />", maxLength:4, allowMerging:true, isReadOnly:true},
-    {binding:"fnkeyNm", header:"<s:message code='func.fnkeyNm' />", maxLength:20, allowMerging:true},
-    {binding:"storeFg", header:"<s:message code='func.storeFg' />", dataMap:storeKindDataMap, allowMerging:true},
-    {binding:"posFg", header:"<s:message code='func.posFg' />", dataMap:posFgDataMap, allowMerging:true},
-    {binding:"posiAdjYn", header:"<s:message code='func.posiAdjYn' />", allowMerging:true, dataType:wijmo.DataType.Boolean},
-    {binding:"colPosi", header:"<s:message code='func.colPosi' />", allowMerging:true},
-    {binding:"rowPosi", header:"<s:message code='func.rowPosi' />", allowMerging:true},
-    {binding:"width", header:"<s:message code='func.width' />", allowMerging:true},
-    {binding:"height", header:"<s:message code='func.height' />", allowMerging:true},
-    {binding:"fnkeyUseYn0", header:"<s:message code='func.useYn' />", dataType:wijmo.DataType.Boolean},
-    {binding:"imgFileNm0", header:"<s:message code='func.imgFileNm' />", maxLength:50},
-    {binding:"fnkeyUseYn1", header:"<s:message code='func.useYn' />", dataType:wijmo.DataType.Boolean},
-    {binding:"imgFileNm1", header:"<s:message code='func.imgFileNm' />", maxLength:50},
-    {binding:"useYn", header:"<s:message code='func.useYn' />"},
+    {binding:"gChk", header:"<s:message code='func.chk' />", allowMerging:true, dataType:wijmo.DataType.Boolean, width:40},
+    {binding:"fnkeyNo", header:"<s:message code='func.fnkeyNo' />", maxLength:4, allowMerging:true, isReadOnly:true, width:'*'},
+    {binding:"fnkeyNm", header:"<s:message code='func.fnkeyNm' />", maxLength:20, allowMerging:true, width:'*'},
+    {binding:"storeFg", header:"<s:message code='func.storeFg' />", dataMap:storeKindDataMap, allowMerging:true, width:'*'},
+    {binding:"posFg", header:"<s:message code='func.posFg' />", dataMap:posFgDataMap, allowMerging:true, width:'*'},
+    {binding:"posiAdjYn", header:"<s:message code='func.posiAdjYn' />", allowMerging:true, dataType:wijmo.DataType.Boolean, width:70},
+    {binding:"colPosi", header:"<s:message code='func.colPosi' />", allowMerging:true, visible:false},
+    {binding:"rowPosi", header:"<s:message code='func.rowPosi' />", allowMerging:true, visible:false},
+    {binding:"width", header:"<s:message code='func.width' />", allowMerging:true, visible:false},
+    {binding:"height", header:"<s:message code='func.height' />", allowMerging:true, visible:false},
+    {binding:"fnkeyUseYn0", header:"<s:message code='func.useYn' />", dataType:wijmo.DataType.Boolean, width:40},
+    {binding:"imgFileNm0", header:"<s:message code='func.imgFileNm' />", maxLength:50, width:'*'},
+    {binding:"fnkeyUseYn1", header:"<s:message code='func.useYn' />", dataType:wijmo.DataType.Boolean, width:40},
+    {binding:"imgFileNm1", header:"<s:message code='func.imgFileNm' />", maxLength:50, width:'*'},
+    {binding:"useYn", header:"<s:message code='func.useYn' />", dataType:wijmo.DataType.Boolean, width:40},
     {binding:"dispSeq", header:"<s:message code='func.dispSeq' />"}
   ];
 
@@ -167,6 +167,16 @@ grid1.formatItem.addHandler(function(s, e) {
   }
 });
 
+grid2.formatItem.addHandler(function(s, e) {
+  if (e.panel == s.cells) {
+    var col = s.columns[e.col];
+    var item = s.rows[e.row].dataItem;
+    if( col.binding == "fnkeyNo" ) {
+      wijmo.addClass(e.cell, 'wijLink');
+    }
+  }
+});
+
 <%-- 그리드 선택 이벤트 --%>
 grid1.addEventListener(grid1.hostElement, 'mousedown', function(e) {
   var ht = grid1.hitTest(e);
@@ -178,6 +188,19 @@ grid1.addEventListener(grid1.hostElement, 'mousedown', function(e) {
     }
   }
 });
+
+grid2.addEventListener(grid2.hostElement, 'mousedown', function(e) {
+  var ht = grid2.hitTest(e);
+  if( ht.cellType == wijmo.grid.CellType.Cell) {
+    var col = ht.panel.columns[ht.col];
+    if( col.binding == "fnkeyNo") {
+      selectedFnkey = grid2.rows[ht.row].dataItem;
+      console.log(grid2.rows[ht.row].dataItem);
+      showStoreLayer();
+    }
+  }
+});
+
 
 <%-- 그리드2 데이터 조회 --%>
 function srchFuncData(rowData) {
@@ -211,13 +234,13 @@ function srchFuncData(rowData) {
       var item  = s.rows[e.row].dataItem;
 
       <%-- 위치조정여부 Y시에만 열위치, 줄위치, 폭, 높이 입력 가능  --%>
-      if( col.binding == "colPosi" || col.binding == "rowPosi" || col.binding == "width" || col.binding == "height") {
-        if(item.posiAdjYn == "Y" || item.posiAdjYn == true){
-          e.cancel = false;
-        }else{
-          e.cancel = true;
-        }
-      }
+//      if( col.binding == "colPosi" || col.binding == "rowPosi" || col.binding == "width" || col.binding == "height") {
+//        if(item.posiAdjYn == "Y" || item.posiAdjYn == true){
+//          e.cancel = false;
+//        }else{
+//          e.cancel = true;
+//        }
+//      }
       <%-- 일반 사용 Y일때만 일반 이미지명 입력 가능 --%>
       if( col.binding == "imgFileNm0") {
         if(item.fnkeyUseYn0 == true){
@@ -241,37 +264,13 @@ function srchFuncData(rowData) {
   });
 }
 
-<%-- 체크박스 초기화 --%>
-grid2.formatItem.addHandler(function(s, e) {
-  if (e.panel == s.cells) {
-    var col = s.columns[e.col];
-    var item = s.rows[e.row].dataItem;
-
-    // if( col.binding == "chk") {
-    //   e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.chk == true || item.chk == "Y" ? 'checked' : '') + '>';
-    // }
-    // if( col.binding == "fnkeyFunUseYn0") {
-    //   e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.fnkeyFunUseYn0 == true || item.fnkeyFunUseYn0 == "Y" ? 'checked' : '') + '>';
-    // }
-    // if( col.binding == "fnkeyFunUseYn1") {
-    //   e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.fnkeyFunUseYn1 == true || item.fnkeyFunUseYn1 == "Y" ? 'checked' : '') + '>';
-    // }
-    // if( col.binding == "posiAdjYn") {
-    //   e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.posiAdjYn == true || item.posiAdjYn == "Y" ? 'checked' : '') + '>';
-    // }
-    // if( col.binding == "useYn") {
-    //   e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.useYn == true || item.useYn == "Y" ? 'checked' : '') + '>';
-    // }
-  }
-});
-
-
 <%-- validation --%>
+<%--
 grid2.cellEditEnded.addHandler(function (s, e){
   var col = s.columns[e.col];
   if(col.maxLength){
     var val = s.getCellData(e.row, e.col);
-    <%-- 숫자만 --%>
+    // 숫자만
     if(col.binding == "fnkeyNo" || col.binding == "colPosi" || col.binding == "rowPosi" || col.binding == "width" || col.binding == "height") {
       if(val.match(/[^0-9]/)){
         s_alert.pop(col.header+"<s:message code='cmm.require.number'/>");
@@ -280,6 +279,7 @@ grid2.cellEditEnded.addHandler(function (s, e){
     }
   }
 });
+--%>
 
 <%-- up 버튼 클릭 --%>
 $("#btnUp").click(function(e){
@@ -318,10 +318,10 @@ $("#btnAdd").click(function(e){
   grid2.collectionView.newItemCreator = function() {
     return {
       fnkeyNo: '자동채번',
-      posiAdjYn: 'N',
-      fnkeyFunUseYn0: 'N',
-      fnkeyFunUseYn1: 'N',
-      useYn: 'Y'
+      posiAdjYn: false,
+      fnkeyFunUseYn0: false,
+      fnkeyFunUseYn1: false,
+      useYn: true
     }
   };
   var newItem = grid2.collectionView.addNew();
@@ -370,6 +370,8 @@ $("#btnSave").click(function(e){
     return;
   }
 
+  console.log(paramArr)
+
   $.postJSONArray("${baseUrl}" + "save.sb", paramArr, function(result) {
     s_alert.pop("<s:message code='cmm.saveSucc' />");
     grid2.collectionView.clearChanges();
@@ -384,5 +386,13 @@ $("#btnSave").click(function(e){
   // }
 
 });
-
 </script>
+
+<%-- 매장선택 --%>
+<c:import url="/WEB-INF/view/pos/confg/func/store.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+  <c:param name="baseUrl" value="${baseUrl}"/>
+</c:import>
+
+

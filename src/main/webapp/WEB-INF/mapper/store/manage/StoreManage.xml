@@ -28,6 +28,7 @@
              tms.STORE_NM,
              NVL(tms.CLS_FG, tho.CLS_FG) AS CLS_FG,
              NVL(tms.SYS_STAT_FG,  tho.SYS_STAT_FG) AS SYS_STAT_FG,
+             tho.SYS_STAT_FG AS HQ_SYS_STAT_FG,
              tms.SYS_OPEN_DATE,
              TO_CHAR(TO_DATE(tms.SYS_OPEN_DATE, 'YYYYMMDD') , 'YYYY/MM/DD')
             <include refid="CmmSQL.PagingTemplateCount"/>
@@ -138,7 +139,7 @@
            TB_CM_NMCODE tcm
      WHERE thq.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
        AND tms.STORE_CD = #{storeCd}
-       AND tcm.NMCODE_GRP_CD = '003'
+       AND tcm.NMCODE_GRP_CD = '005'
        AND tms.CLS_FG = tcm.NMCODE_CD
     ]]>
   </select>
@@ -152,14 +153,15 @@
   <select id="getStorePosInfo" parameterType="storeManageVO" resultType="DefaultMap">
     /* USE : StoreManageMapper.getStorePosInfo */
     <![CDATA[
-    SELECT tmp.POS_FG,
+    SELECT tmp.POS_NO,
+           tmp.POS_FG,
            tmp.ENVST_CD,
            tmp.ENVST_VAL,
            tcd.ENVST_VAL_NM
       FROM TB_MS_POS_ENVST tmp,
            TB_CM_ENVST_DTL tcd
      WHERE tmp.STORE_CD = #{storeCd}
-       AND tmp.ENVST_CD = '201'
+       AND tmp.ENVST_CD = '4018'
        AND tmp.ENVST_CD = tcd.ENVST_CD
        AND tmp.ENVST_VAL = tcd.ENVST_VAL_CD
     ]]>
@@ -180,7 +182,7 @@
            TB_CM_ENVST_DTL tcd
      WHERE tmp.STORE_CD = #{storeCd}
        AND tcd.ENVST_VAL_CD = tmp.PRTER_KIND_FG
-       AND tcd.ENVST_CD = '206'
+       AND tcd.ENVST_CD = '4030'
     ]]>
   </select>
 
@@ -282,7 +284,7 @@
       #{agencyCd},
       #{remark},
       #{sysRemark},
-      #{hqRemark},
+      #{hdRemark},
       #{regDt},
       #{regId},
       #{modDt},
@@ -319,13 +321,30 @@
            AGENCY_CD = #{agencyCd},
            REMARK = #{remark},
            SYS_REMARK = #{sysRemark},
-           HD_REMARK = #{hqRemark},
+           HD_REMARK = #{hdRemark},
            MOD_DT = #{modDt},
            MOD_ID = #{modId}
      WHERE HQ_OFFICE_CD = #{hqOfficeCd}
        AND STORE_CD = #{storeCd}
   </insert>
 
+  <!-- 매장포스승인정보 저장 -->
+  <!--
+      TABLE    : TB_MS_STORE
+      PARAM    : storeManageVO
+      COMMENTS : 매장정보를 수정한다.
+  -->
+  <insert id="updateStorePosVanInfo" parameterType="DefaultMap" >
+    /* USE : StoreManageMapper.updateStorePosVanInfo */
+    UPDATE TB_MS_POS
+       SET VAN_CD = #{vanCd},
+           VAN_TERMNL_NO = #{vanTermnlNo},
+           VAN_SER_NO = #{vanSerNo},
+           MOD_DT = #{modDt},
+           MOD_ID = #{modId}
+     WHERE STORE_CD = #{storeCd}
+       AND POS_NO = #{posNo}
+  </insert>
 
   <!-- 매장 분류 복사 -->
   <!--
@@ -660,6 +679,46 @@
      WHERE STORE_CD = #{copyStoreCd}
        AND ENVST_CD IN (SELECT ENVST_CD FROM TB_CM_ENVST WHERE ENVST_FG = '00')
        AND ENVST_CD NOT IN (SELECT ENVST_CD FROM TB_MS_STORE_ENVST WHERE STORE_CD = #{storeCd})
+  </insert>
+
+  <!-- 매장환경 등록 -->
+  <!--
+      TABLE    : TB_MS_STORE_ENVST
+      PARAM    : storeManageVO
+      COMMENTS : 매장환경 값이 없으면 insert, 있으면 update
+  -->
+  <insert id="updateStoreEnvst" parameterType="storeEnvVO" >
+    /* USE : StoreManageMapper.updateStoreEnvst */
+    MERGE INTO TB_MS_STORE_ENVST tmse
+    USING DUAL
+      ON (
+          tmse.STORE_CD = #{storeCd}
+      AND tmse.ENVST_CD = #{envstCd}
+         )
+      WHEN MATCHED THEN
+           UPDATE SET tmse.ENVST_VAL = #{envstVal},
+                      tmse.MOD_DT = #{modDt},
+                      tmse.MOD_ID = #{modId}
+      WHEN NOT MATCHED THEN
+           INSERT ( STORE_CD,
+                    ENVST_CD,
+                    ENVST_VAL,
+                    DIRCT_IN_YN,
+                    USE_YN,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID)
+            VALUES ( #{storeCd},
+                     #{envstCd},
+                     #{envstVal},
+                     'N',
+                     'N',
+                     #{regDt},
+                     #{regId},
+                     #{modDt},
+                     #{modId}
+                  )
   </insert>
 
   <!-- 외식환경 등록 -->
@@ -1204,6 +1263,24 @@
        AND POS_NO   = #{posNo}
   </update>
 
+  <!-- 서브포스로 변경  -->
+  <!--
+      TABLE    : TB_MS_POS_ENVST
+      PARAM    : storePosEnvVO
+      COMMENTS : 포스가 메인서버로 변경되면, 나머지 포스는 서브포스로 변경한다.
+  -->
+  <update id="updateToSubPos" parameterType="DefaultMap">
+    /* USE : StoreManageMapper.updateToSubPos */
+    UPDATE TB_MS_POS_ENVST
+       SET ENVST_VAL = '0',
+           MOD_DT = #{modDt},
+           MOD_ID = #{modId}
+     WHERE STORE_CD = #{storeCd}
+       AND ENVST_CD = #{envstCd}
+       AND POS_NO != #{posNo}
+  </update>
+
+
   <!-- 포스 목록 조회 -->
   <!--
       TABLE    : TB_MS_POS
@@ -1237,6 +1314,7 @@
      WHERE STORE_CD = #{storeCd}
      ]]>
   </select>
+
 
   <!-- 테이블 그룹설정 정보 저장 -->
   <!--
@@ -1877,7 +1955,9 @@
             tmp.HW_AUTH_KEY,
             tmp.POS_VER_NO,
             tmp.VAN_CERT_YN,
+            tmp.VAN_CD,
             tmp.VAN_TERMNL_NO,
+            tmp.VAN_SER_NO,
             tmp.VAN_TERMNL_NO AS BEFORE_VAN_TERMNL_NO,
             TO_CHAR(TO_DATE(tmp.REG_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD') VAN_CERT_START_DATE,
             TO_CHAR(TO_DATE(tmp.MOD_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD') VAN_CERT_END_DATE
