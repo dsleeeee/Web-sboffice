@@ -1,0 +1,48 @@
+package kr.co.solbipos.base.store.emp.hq.service;
+
+import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.store.emp.hq.service.enums.HqEmpResult;
+
+import java.util.List;
+
+/**
+ * @Class Name : HqEmpService.java
+ * @Description : 기초관리 > 매장관리 > 본사사원정보관리
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2018.08.14  정상화      최초생성
+ *
+ * @author NHN한국사이버결제 KCP 정상화
+ * @since 2018. 08.14
+ * @version 1.0
+ * @see
+ *
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
+ */
+public interface HqEmpService {
+
+    /** 본사 사원정보 리스트 조회*/
+    <E> List<E> selectHqEmpList(HqEmpVO hqEmpVO);
+
+    /** 본사 사원번호 조회*/
+    HqEmpResult selectHqEmpNoCnt(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO);
+
+    /** 본사 웹유저아이디 조회*/
+    HqEmpResult selectHqUserIdCnt(HqEmpVO hqEmpVO);
+
+    /** 본사 사원정보 등록*/
+    HqEmpResult insertHqEmpInfo(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO);
+
+    /** 본사 사원정보 수정*/
+    HqEmpResult saveHqEmpInfo(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO);
+
+    /** 본사 사원번호 패스워드변경*/
+    HqEmpResult modifyPassword(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO);
+
+    /** 본사 사원정보 상세*/
+    DefaultMap<String> selectHqEmpDtlInfo(HqEmpVO hqEmpVO);
+
+}

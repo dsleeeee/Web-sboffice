@@ -92,3 +92,12 @@ function isNumber(value) {
         return true;
     }
 }
+
+/**
+ *  금액에 대한 콤마처리
+ *  @param str : 변환할 문자열
+ */
+function comma(str) {
+  str = String(str);
+  return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+}
