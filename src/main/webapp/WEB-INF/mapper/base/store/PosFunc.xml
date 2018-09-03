@@ -91,9 +91,6 @@
        AND tmpe1.STORE_CD = tmp.STORE_CD
        AND tmpe1.POS_NO = tmp.POS_NO
        AND tmpe1.ENVST_CD = '4019'
-       AND 'T' = DECODE(tmpe1.ENVST_VAL,'0',DECODE(tmp.POS_FG,'0','T','1','F','2','T')
-                                       ,'1',DECODE(tmp.POS_FG,'0','F','1','T','2','T')
-                                       ,'2','T'                                      )
        AND tmpe2.STORE_CD = tmp.STORE_CD
        AND tmpe2.POS_NO = tmp.POS_NO
        AND tmpe2.ENVST_CD = '4020'
@@ -135,9 +132,6 @@
              TB_MS_POS_ENVST tmp
        WHERE tmp.STORE_CD = tms.STORE_CD
          AND tmp.ENVST_CD = '4019'
-         AND 'T' = DECODE(tmp.ENVST_VAL, '0', DECODE(tms.POS_FG, '0', 'T', '1', 'F', '2', 'T')
-                                       , '1', DECODE(tms.POS_FG, '0', 'F', '1', 'T', '2', 'T')
-                                       , '2', 'T'                                            )
            ) tms,
            TB_MS_POS_FNKEY tmp
      WHERE tms.STORE_CD = #{storeCd}
