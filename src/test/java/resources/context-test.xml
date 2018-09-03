@@ -85,9 +85,9 @@
 
   <bean id="dataSource" class="oracle.jdbc.pool.OracleDataSource">
     <property name="dataSourceName" value="jdbc/oracle/sb"/>
-    <property name="URL" value="jdbc:oracle:thin:@10.0.50.51:1521:POASP"/>
-    <property name="user" value="poadm"/>
-    <property name="password" value="devpoadm"/>
+    <property name="URL" value="jdbc:oracle:thin:@192.168.0.160:1521:SBP"/>
+    <property name="user" value="sbpora"/>
+    <property name="password" value="sbpora1234"/>
   </bean>
 
   <!-- Spring Transaction Manager -->
