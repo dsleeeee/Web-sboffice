@@ -146,8 +146,6 @@
 
     $.postJSON("/base/store/posfunc/use/getPosList.sb", param,
         function(result) {
-      console.log("posList");
-      console.log(posList)
           posList = result.data.list;
           posListBox.itemsSource = posList;
           getPosConfList();
@@ -286,8 +284,6 @@
       useFuncGrid.collectionView.commitEdit();
       paramArr.push(useFuncGrid.collectionView.items[i]);
     }
-
-    console.log(useFuncGrid)
 
     $.postJSONArray("/base/store/posfunc/use/savePosConf.sb", paramArr,
         function(result) {
