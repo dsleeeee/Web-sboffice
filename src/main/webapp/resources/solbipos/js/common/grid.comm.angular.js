@@ -15,6 +15,8 @@ function RootController($scope, $http, isPicker) {
     }
     $scope._inquiry(url, params, callback, isView, false);
   };
+  // 페이징 처리 변수
+  var paging;
   // 그리드 조회
   $scope._inquiry = function (url, params, callback, isView, isMaster) {
     if (isMaster) {
@@ -26,7 +28,11 @@ function RootController($scope, $http, isPicker) {
           params[name] = $scope[name];
         }
       }
-    }
+    };
+    // 페이징 처리
+    if($scope.getCurr() > 0) {
+      params['curr'] = $scope.getCurr();
+    };
     // ajax 통신 설정
     $http({
       method: 'POST', //방식
@@ -47,6 +53,12 @@ function RootController($scope, $http, isPicker) {
       var data = new wijmo.collections.CollectionView(list);
       data.trackChanges = true;
       $scope.data = data;
+
+      // 페이징 처리
+      if (response.data.data.page.curr) {
+        $scope.paging = response.data.data.page;
+      }
+
     }, function errorCallback(response) {
       // called asynchronously if an error occurs
       // or server returns response with an error status.
@@ -104,7 +116,6 @@ function RootController($scope, $http, isPicker) {
       // when the response is available
       $scope.s_alert(messages["cmm.saveSucc"]);
       $scope.flex.collectionView.clearChanges();
-      $scope._refresh();
     }, function errorCallback(response) {
       // called asynchronously if an error occurs
       // or server returns response with an error status.
@@ -212,11 +223,17 @@ function RootController($scope, $http, isPicker) {
 !function (win, $) {
   var app = angular.module('rootApp', ['wj']);
   // main-controller
-  app.controller('rootCtrl', ['$scope', '$http', function ($scope, $http) {
+  app.controller('rootCtrl', ['$scope', '$http', 'comboData', 'pagingData', function ($scope, $http, comboData, pagingData) {
     // 조회
     $scope._broadcast = function(controllerName, params) {
       $scope.$broadcast('init');
       $scope.$broadcast(controllerName, params);
+    };
+    // 페이징조회
+    $scope._pagingView = function(e) {
+      e.preventDefault(); // prevent it opens default
+      console.log("페이징 클릭");
+      // search($(this).data("value"));
     };
     // 로딩 메시지 팝업 열기
     $scope.$on('loadingPopupActive', function() {
@@ -238,7 +255,29 @@ function RootController($scope, $http, isPicker) {
           }
         });
       }, 100);
-    }
+    };
+    // 페이징 Data Setter
+    $scope.setCurr = function(idx) {
+      pagingData.set(idx);
+    };
+    // 페이징 Data Getter
+    $scope.getCurr = function() {
+      return pagingData.get();
+    };
+    // 콤보박스 Data Setter
+    $scope.setComboData = function(id, data) {
+      comboData.set(id, data);
+    };
+    // 콤보박스 Data Getter
+    $scope.getComboData = function(id) {
+      return comboData.get(id);
+    };
+    // 콤보박스 초기화.. ng-model 사용하기 위한 설정 : 20180831 노현수
+    $scope.initComboBox = function(s) {
+      s._tbx.id = s._orgAtts.id.value;
+      s._tbx.setAttribute("ng-model", s._orgAtts['ng-model']);
+      s._tbx.attributes['ng-model'].value = s._orgAtts['ng-model'].value;
+    };
   }]);
   app.factory('myHttpInterceptor', function ($timeout, $q, $rootScope) {
     return {
@@ -261,6 +300,24 @@ function RootController($scope, $http, isPicker) {
         return $q.reject(rejectionRequest)
       }
     }
+  }).factory('comboData', function() {
+    var comboDataMap = [];
+    comboDataMap.set = function(id, data) {
+      comboDataMap[id] = data;
+    }
+    comboDataMap.get = function(id) {
+      return comboDataMap[id];
+    }
+    return comboDataMap;
+  }).factory('pagingData', function() {
+    var currentPage = {};
+    currentPage.set = function(idx) {
+      currentPage.value = idx;
+    }
+    currentPage.get = function() {
+      return currentPage.value;
+    }
+    return currentPage;
   });
   app.config(function ($httpProvider) {
     $httpProvider.interceptors.push('myHttpInterceptor');

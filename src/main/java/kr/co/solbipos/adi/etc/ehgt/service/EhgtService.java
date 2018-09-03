@@ -1,6 +1,7 @@
 package kr.co.solbipos.adi.etc.ehgt.service;
 
 import java.util.List;
+import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 
@@ -47,23 +48,25 @@ public interface EhgtService {
      * @param sessionInfoVO
      * @return
      */
-    int saveEhgts(EhgtVO[] ehgtVOs, SessionInfoVO sessionInfoVO);
+    int saveEhgts(List<EhgtVO> ehgtVOs, SessionInfoVO sessionInfoVO);
 
     /**
-     * 본사 공통 코드 조회
+     * 프랜차이즈, 단독매장 공통 코드 조회
+     * 프랜차이즈 본사/매장은 HQ_NMCODE, 단독매장은 MS_STORE_NMCODE 조회
      *
-     * @param hqCdVO
+     * @param useYn
+     * @param sessionInfoVO
      * @return
      */
-    List<DefaultMap<String>> getHqCdListByGrpCd(HqCdVO hqCdVO);
+    List<DefaultMap<String>> getCdListByGrpCd(UseYn useYn, SessionInfoVO sessionInfoVO);
 
     /**
-     * 본사 공통 코드 저장
+     * 본사/가맹점 통화 코드 저장
      *
-     * @param hqCdVOs
+     * @param crncyCdVOs
      * @param sessionInfo
      * @return
      */
-    int updateHqCd(HqCdVO[] hqCdVOs, SessionInfoVO sessionInfoVO);
+    int updateCrncyCd(List<CrncyCdVO> crncyCdVOs, SessionInfoVO sessionInfoVO);
 
 }

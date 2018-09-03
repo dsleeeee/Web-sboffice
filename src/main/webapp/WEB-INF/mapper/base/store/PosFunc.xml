@@ -91,9 +91,6 @@
        AND tmpe1.STORE_CD = tmp.STORE_CD
        AND tmpe1.POS_NO = tmp.POS_NO
        AND tmpe1.ENVST_CD = '4019'
-       AND 'T' = DECODE(tmpe1.ENVST_VAL,'0',DECODE(tmp.POS_FG,'0','T','1','F','2','T')
-                                       ,'1',DECODE(tmp.POS_FG,'0','F','1','T','2','T')
-                                       ,'2','T'                                      )
        AND tmpe2.STORE_CD = tmp.STORE_CD
        AND tmpe2.POS_NO = tmp.POS_NO
        AND tmpe2.ENVST_CD = '4020'
@@ -135,9 +132,6 @@
              TB_MS_POS_ENVST tmp
        WHERE tmp.STORE_CD = tms.STORE_CD
          AND tmp.ENVST_CD = '4019'
-         AND 'T' = DECODE(tmp.ENVST_VAL, '0', DECODE(tms.POS_FG, '0', 'T', '1', 'F', '2', 'T')
-                                       , '1', DECODE(tms.POS_FG, '0', 'F', '1', 'T', '2', 'T')
-                                       , '2', 'T'                                            )
            ) tms,
            TB_MS_POS_FNKEY tmp
      WHERE tms.STORE_CD = #{storeCd}
@@ -168,6 +162,19 @@
       AND FNKEY_NO = #{fnkeyNo}
   </update>
 
+  <!-- 포스기능 삭제 -->
+  <!--
+    TABLE    : TB_MS_POS_FNKEY
+    PARAM    : posFuncVO
+    COMMENTS : 포스기능을 삭제한다.
+  -->
+  <update id="deletePosFunc" parameterType="posFuncVO">
+    /* USE : PosFuncMapper.deletePosFunc */
+    DELETE TB_MS_POS_FNKEY
+     WHERE STORE_CD = #{storeCd}
+       AND POS_NO = #{targetPos}
+  </update>
+
   <!-- 포스기능 복사 -->
   <!--
     TABLE    : TB_MS_POS_FNKEY
@@ -176,19 +183,37 @@
   -->
   <update id="copyPosFunc" parameterType="posFuncVO">
     /* USE : PosFuncMapper.copyPosFunc */
-    <!--
-    UPDATE TB_MS_POS_FNKEY
-       SET DISP_SEQ = #{dispSeq},
-           COL_POSI = #{colPosi},
-           ROW_POSI = #{rowPosi},
-           WIDTH = #{width},
-           HEIGHT = #{height},
-           MOD_DT = #{modDt},
-           MOD_ID = #{modId}
+    INSERT INTO TB_MS_POS_FNKEY
+    ( STORE_CD,
+      POS_NO,
+      FNKEY_NO,
+      DISP_SEQ,
+      COL_POSI,
+      ROW_POSI,
+      WIDTH,
+      HEIGHT,
+      USE_YN,
+      REG_DT,
+      REG_ID,
+      MOD_DT,
+      MOD_ID
+    )
+    SELECT #{storeCd},
+           #{targetPos},
+           FNKEY_NO,
+           DISP_SEQ,
+           COL_POSI,
+           ROW_POSI,
+           WIDTH,
+           HEIGHT,
+           USE_YN,
+           #{regDt},
+           #{regId},
+           #{modDt},
+           #{modId}
+      FROM TB_MS_POS_FNKEY
      WHERE STORE_CD = #{storeCd}
-       AND POS_NO = #{posNo}
-       AND FNKEY_NO = #{fnkeyNo}
-     -->
+       AND POS_NO = #{copyPos}
   </update>
 
   <!-- 포스기능 인증목록 조회 -->

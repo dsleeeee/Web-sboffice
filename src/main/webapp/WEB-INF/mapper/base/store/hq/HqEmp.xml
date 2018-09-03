@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.solbipos.base.store.emp.hq.service.impl.HqEmpMapper">
+
+    <select id="selectHqEmpList" parameterType="hqEmpVO" resultType="DefaultMap">
+        /* HqEmpMapper.selectHqEmpList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT THE.EMP_NO,
+               THE.EMP_NM,
+               THE.USER_ID,
+               (SELECT TCN.NMCODE_NM FROM TB_CM_NMCODE TCN WHERE TCN.NMCODE_GRP_CD ='008' AND TCN.NMCODE_CD = THE.SERVICE_FG ) AS SERVICE_FG_NM,
+               THE.MP_NO,
+               THE.SMS_RECV_YN
+               <include refid="CmmSQL.PagingTemplateCount"/>
+          FROM TB_HQ_EMPLOYEE THE
+         WHERE USE_YN = 'Y'
+         <if test="chkDt == false">
+           <if test="startDt != null and startDt != '' and endDt != null and endDt != ''">
+           AND THE.REG_DT BETWEEN #{startDt}||'000000' AND #{endDt}||'235959'
+           </if>
+         </if>
+         <if test="empNo != null and empNo != ''">
+           AND THE.EMP_NO = #{empNo}
+         </if>
+         <if test="empNm != null and empNm != ''">
+           AND THE.EMP_NM = #{empNm}
+         </if>
+         <if test="userId != null and userId != ''">
+           AND THE.USER_ID = #{userId}
+         </if>
+         <if test="serviceFg != null and serviceFg != ''">
+           AND THE.SERVICE_FG = #{serviceFg}
+         </if>
+         <if test="mpNo != null and mpNo != ''">
+           AND THE.MP_NO = #{mpNo}
+         </if>
+         <if test="webUseYn != null and webUseYn != ''">
+           AND THE.WEB_USE_YN = #{webUseYn}
+         </if>
+         <if test="smsRecvYn != null and smsRecvYn != ''">
+           AND THE.SMS_RECV_YN = #{smsRecvYn}
+         </if>
+         ORDER BY THE.REG_DT DESC
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <select id="selectHqEmpNoCnt" parameterType="hqEmpVO" resultType="Integer">
+        /* HqEmpMapper.selectHqEmpNoCnt */
+        SELECT COUNT(1) CNT
+          FROM TB_HQ_EMPLOYEE
+         WHERE EMP_NO = #{empNo}
+          AND  HQ_OFFICE_CD = #{hqOfficeCd}
+    </select>
+
+    <select id="selectHqUserIdCnt" parameterType="hqEmpVO" resultType="Integer">
+        /* HqEmpMapper.selectHqUserIdCnt */
+        SELECT COUNT(1) CNT
+          FROM TB_WB_USER_INFO
+         WHERE USER_ID = #{userId}
+    </select>
+
+    <insert id="insertHqEmpInfo" parameterType="hqEmpVO">
+        /* HqEmpMapper.insertHqEmpInfo */
+        INSERT INTO TB_HQ_EMPLOYEE
+        (
+            HQ_OFFICE_CD,
+            EMP_NO,
+            EMP_NM,
+            EMP_PWD,
+            WEB_USE_YN,
+            USER_ID,
+            MP_NO,
+            SERVICE_FG,
+            SMS_RECV_YN,
+            USE_YN,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        VALUES
+        (
+            #{hqOfficeCd},
+            #{empNo},
+            #{empNm},
+            #{empPwd},
+            #{webUseYn},
+            #{userId},
+            #{mpNo},
+            #{serviceFg},
+            #{smsRecvYn},
+            #{useYn},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+    <insert id="insertWbUserInfo" parameterType="hqEmpVO">
+        /* HqEmpMapper.insertWbUserInfo */
+        INSERT INTO TB_WB_USER_INFO
+        (
+            USER_ID,
+            USER_PWD,
+            AUTH_GRP_CD,
+            LOGIN_FAIL_CNT,
+            LOCK_CD,
+            USE_YN,
+            REG_DT,
+            REG_ID
+        )
+        VALUES
+        (
+            LOWER(#{userId}),
+            #{userPwd},
+            #{authGrpCd},
+            0,
+            'N',
+            #{webUseYn},
+            #{regDt},
+            #{regId}
+        )
+    </insert>
+    <select id="selectHqEmpDtlInfo" parameterType="hqEmpVO" resultType="DefaultMap">
+        /* HqEmpMapper.selectHqEmpDtlInfo */
+        SELECT THE.EMP_NO,
+               THE.EMP_NM,
+               THE.SMS_RECV_YN,
+               (SELECT TCN.NMCODE_NM FROM TB_CM_NMCODE TCN WHERE TCN.NMCODE_GRP_CD ='105' AND TCN.NMCODE_CD = THE.SMS_RECV_YN ) AS SMS_RECV_YN_NM,
+               TWUI.USER_ID,
+               THE.WEB_USE_YN,
+               (SELECT TCN.NMCODE_NM FROM TB_CM_NMCODE TCN WHERE TCN.NMCODE_GRP_CD ='904' AND TCN.NMCODE_CD = THE.WEB_USE_YN ) AS WEB_USE_YN_NM,
+               THE.SERVICE_FG,
+               (SELECT TCN.NMCODE_NM FROM TB_CM_NMCODE TCN WHERE TCN.NMCODE_GRP_CD ='008' AND TCN.NMCODE_CD = THE.SERVICE_FG ) AS SERVICE_FG_NM,
+               THE.MP_NO
+          FROM TB_HQ_EMPLOYEE THE, TB_WB_USER_INFO TWUI
+         WHERE THE.USER_ID = TWUI.USER_ID(+)
+           AND THE.EMP_NO = #{empNo}
+    </select>
+    <select id="selectHqEmpPassword" parameterType="hqEmpVO" resultType="java.lang.String">
+        /* HqEmpMapper.selectHqEmpPassword */
+        SELECT TWUI.USER_PWD
+          FROM TB_WB_USER_INFO TWUI
+         WHERE TWUI.USER_ID = #{userId}
+    </select>
+    <update id="updateHqEmpInfo" parameterType="hqEmpVO">
+        /* HqEmpMapper.updateHqEmpInfo */
+        UPDATE TB_HQ_EMPLOYEE SET
+               EMP_NM = #{empNm},
+               WEB_USE_YN = #{webUseYn},
+               USER_ID = #{userId},
+               MP_NO = #{mpNo},
+               SERVICE_FG = #{serviceFg},
+               SMS_RECV_YN = #{smsRecvYn},
+               MOD_DT = #{modDt},
+               MOD_ID = #{modId}
+         WHERE EMP_NO = #{empNo}
+    </update>
+    <update id="saveWbUserInfo" parameterType="hqEmpVO">
+        /* HqEmpMapper.saveWbUserInfo */
+        MERGE INTO TB_WB_USER_INFO TWUI
+        USING (SELECT THE.USER_ID
+                      FROM TB_HQ_EMPLOYEE THE
+                     WHERE THE.EMP_NO = #{empNo}
+                   ) ORG
+           ON (TWUI.USER_ID = ORG.USER_ID)
+         WHEN MATCHED THEN
+       UPDATE
+          SET TWUI.USE_YN = #{webUseYn},
+            <if test="newUserPwd != null and newUserPwd != ''">
+              TWUI.USER_PWD = #{userPwd},
+            </if>
+              TWUI.MOD_DT = #{modDt},
+              TWUI.MOD_ID = #{modId}
+         WHEN NOT MATCHED THEN
+       INSERT
+       (
+           TWUI.USER_ID,
+           TWUI.USER_PWD,
+           TWUI.AUTH_GRP_CD,
+           TWUI.LOGIN_FAIL_CNT,
+           TWUI.LOCK_CD,
+           TWUI.USE_YN,
+           TWUI.REG_DT,
+           TWUI.REG_ID
+       )
+       VALUES
+       (
+           #{userId},
+           #{userPwd},
+           #{authGrpCd},
+           '0',
+           'N',
+           #{webUseYn},
+           #{regDt},
+           #{regId}
+       )
+    </update>
+    <insert id="insertPasswordHistory" parameterType="hqEmpVO">
+        /* HqEmpMapper.insertPasswordHistory */
+        INSERT INTO TB_WB_PWD_CHG_HIST
+        (
+            USER_ID,
+            IDX,
+            PRIOR_PWD,
+            REG_IP,
+            REG_DT,
+            REG_ID
+        )
+        VALUES
+        (
+            #{userId},
+            (SELECT NVL(MAX(IDX),0) + 1 AS MAX FROM TB_WB_PWD_CHG_HIST WHERE USER_ID = #{userId}),
+            #{priorPwd},
+            #{regIp},
+            #{regDt},
+            #{regId}
+        )
+    </insert>
+    <update id="updateUserPassword" parameterType="hqEmpVO">
+        /* HqEmpMapper.updateUserPassword */
+        UPDATE TB_WB_USER_INFO SET
+               USER_PWD = #{userPwd},
+               LAST_PWD_CHG_DT = #{modDt},
+               MOD_DT = #{modDt},
+               MOD_ID = #{modId}
+         WHERE USER_ID = #{userId}
+    </update>
+
+</mapper>

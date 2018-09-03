@@ -19,11 +19,11 @@ import kr.co.solbipos.application.common.service.CmmVO;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-public class HqCdVO extends CmmVO {
+public class CrncyCdVO extends CmmVO {
 
     private static final long serialVersionUID = 1L;
-    /** 본사코드 */
-    private String hqOfficeCd;
+    /** 조직코드 */
+    private String orgnCd;
     /** 명칭코드그룹코드 */
     private String nmcodeGrpCd;
     /** 명칭코드코드 */
@@ -41,16 +41,16 @@ public class HqCdVO extends CmmVO {
     
     
     /**
-     * @return the hqOfficeCd
+     * @return the orgnCd
      */
-    public String getHqOfficeCd() {
-        return hqOfficeCd;
+    public String getOrgnCd() {
+        return orgnCd;
     }
     /**
-     * @param hqOfficeCd the hqOfficeCd to set
+     * @param orgnCd the orgnCd to set
      */
-    public void setHqOfficeCd(String hqOfficeCd) {
-        this.hqOfficeCd = hqOfficeCd;
+    public void setOrgnCd(String orgnCd) {
+        this.orgnCd = orgnCd;
     }
     /**
      * @return the nmcodeGrpCd

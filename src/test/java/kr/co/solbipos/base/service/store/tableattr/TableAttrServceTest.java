@@ -1,9 +1,15 @@
 package kr.co.solbipos.base.service.store.tableattr;
 
-import static kr.co.common.utils.DateUtil.currentDateTimeString;
-import static org.junit.Assert.*;
-import java.util.ArrayList;
-import java.util.List;
+import com.mxgraph.io.mxCodec;
+import com.mxgraph.model.mxCell;
+import com.mxgraph.model.mxGeometry;
+import com.mxgraph.model.mxIGraphModel;
+import com.mxgraph.util.mxUtils;
+import com.mxgraph.util.mxXmlUtils;
+import com.mxgraph.view.mxGraph;
+import kr.co.solbipos.base.store.tableattr.enums.*;
+import kr.co.solbipos.base.store.tableattr.service.TableAttrVO;
+import kr.co.solbipos.config.AbstractApplicationContextTest;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -16,27 +22,19 @@ import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import com.mxgraph.io.mxCodec;
-import com.mxgraph.model.mxCell;
-import com.mxgraph.model.mxGeometry;
-import com.mxgraph.model.mxIGraphModel;
-import com.mxgraph.util.mxUtils;
-import com.mxgraph.util.mxXmlUtils;
-import com.mxgraph.view.mxGraph;
-import kr.co.solbipos.base.store.tableattr.enums.AttrCd;
-import kr.co.solbipos.base.store.tableattr.enums.Style;
-import kr.co.solbipos.base.store.tableattr.enums.TblTypeFg;
-import kr.co.solbipos.base.store.tableattr.enums.TextalignFg;
-import kr.co.solbipos.base.store.tableattr.enums.TextvalignFg;
-import kr.co.solbipos.base.store.tableattr.service.TableAttrVO;
-import kr.co.solbipos.config.AbstractApplicationContextTest;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
+import static org.junit.Assert.assertTrue;
 
 @Transactional
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TableAttrServceTest extends AbstractApplicationContextTest {
-    
+
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    
+
     List<TableAttrVO> tableAttrVOs = null;
 
     @Before

@@ -12,13 +12,10 @@
 function showStoreLayer() {
   $("#storeDim").show();
   $("#storeLayer").show();
+
+  $("#storeLayerSubTitle").text("[" + selectedFnkey.fnkeyNo + "]  " + selectedFnkey.fnkeyNm);
+
 }
-
-$("#storeLayer .btn_close").click(function(){
-  $("#storeDim").hide();
-  $("#storeLayer").hide();
-});
-
 $(document).ready(function(){
 
   var srchClsFgCb     = wcombo.genCommonBox("#srchClsFg", clsFg);
@@ -159,5 +156,16 @@ $(document).ready(function(){
         }
     );
   });
+
+
+  $("#storeLayer .btn_close").click(function(){
+    $("#storeDim").hide();
+    $("#storeLayer").hide();
+
+    regStoreGrid.itemsSource =  new wijmo.collections.CollectionView([]);
+    noRegStoreGrid.itemsSource = new wijmo.collections.CollectionView([]);
+
+  });
+
 
 });
