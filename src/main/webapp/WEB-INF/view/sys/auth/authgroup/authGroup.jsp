@@ -84,13 +84,13 @@
 
     <%--right--%>
     <div class="w40 fr">
-      <div class="wj-TblWrapBr ml10 pd20" style="height:500px;">
+      <div class="wj-TblWrapBr ml10 pd20" style="height:800px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code="authGroup.resrcInfo"/></span>
           <button id="btnResrceSave" class="btn_skyblue"><s:message code="cmm.save"/></button>
         </div>
         <%--위즈모 트리--%>
-        <div id="treeResrce" style="height:450px;"></div>
+        <div id="treeResrce" style="height:800px;"></div>
         <%--//위즈모 트리--%>
       </div>
     </div>
@@ -122,7 +122,7 @@
     var grid         = wgrid.genGrid("#theGrid", rdata, "${menuCd}", 1, ${clo.getColumnLayout(1)});
     grid.isReadOnly  = false;
     var grpNm        = wcombo.genInput("#grpNm");
-    var useYn        = wcombo.genCommonBox("#useYn", ${ccu.getCommCode("067")});
+    var useYn        = wcombo.genCommonBox("#useYn", ${ccu.getCommCode("904")});
     var availCombo   = wcombo.genCommonBox("#availCombo", ${availAuthGrp});
     var userId       = wcombo.genInput("#userId");
 

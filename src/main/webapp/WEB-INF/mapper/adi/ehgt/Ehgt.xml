@@ -4,7 +4,7 @@
 <mapper namespace="kr.co.solbipos.adi.etc.ehgt.service.impl.EhgtMapper">
 
     <select id="getHqEhgtListBySaleDt" parameterType="ehgtVO" resultType="DefaultMap">
-    /* EhgtMapper.getEhgtBySaleDt */
+    /* EhgtMapper.getHqEhgtListBySaleDt */
      SELECT thc.SALE_DATE,
             thc.CRNCY_CD,
             thc.KRW_AMT
@@ -18,7 +18,7 @@
     </select>
 
     <insert id="insertHqEhgt" parameterType="ehgtVO">
-    /* EhgtMapper.insertEhgt */
+    /* EhgtMapper.insertHqEhgt */
     INSERT INTO TB_HQ_CURRENCY
     (
       HQ_OFFICE_CD,
@@ -46,7 +46,7 @@
     </insert>
 
     <update id="updateHqEhgt" parameterType="ehgtVO">
-    /* EhgtMapper.updateHqCdUseYn */
+    /* EhgtMapper.updateHqEhgt */
      UPDATE TB_HQ_CURRENCY
         SET KRW_AMT = #{krwAmt},
             MOD_DT = #{modDt},
@@ -58,7 +58,7 @@
 
 
     <select id="getMsEhgtListBySaleDt" parameterType="ehgtVO" resultType="DefaultMap">
-    /* EhgtMapper.getEhgtBySaleDt */
+    /* EhgtMapper.getMsEhgtListBySaleDt */
      SELECT thc.SALE_DATE,
             thc.CRNCY_CD,
             thc.KRW_AMT
@@ -72,7 +72,7 @@
     </select>
 
     <insert id="insertMsEhgt" parameterType="ehgtVO">
-    /* EhgtMapper.insertEhgt */
+    /* EhgtMapper.insertMsEhgt */
     INSERT INTO TB_MS_CURRENCY
     (
       STORE_CD,
@@ -100,7 +100,7 @@
     </insert>
 
     <update id="updateMsEhgt" parameterType="ehgtVO">
-    /* EhgtMapper.updateHqCdUseYn */
+    /* EhgtMapper.updateMsEhgt */
      UPDATE TB_MS_CURRENCY
         SET KRW_AMT = #{krwAmt},
             MOD_DT = #{modDt},
@@ -112,7 +112,7 @@
 
 
 
-    <select id="getHqCdListByGrpCd" parameterType="hqCdVO" resultType="DefaultMap">
+    <select id="getHqCdListByGrpCd" parameterType="crncyCdVO" resultType="DefaultMap">
     /* EhgtMapper.getHqCdListByGrpCd */
      SELECT thn.HQ_OFFICE_CD,
             thn.NMCODE_GRP_CD,
@@ -122,7 +122,7 @@
             thn.NMCODE_ITEM_2,
             thn.USE_YN
        FROM TB_HQ_NMCODE thn
-      WHERE thn.HQ_OFFICE_CD = #{hqOfficeCd} 
+      WHERE thn.HQ_OFFICE_CD = #{orgnCd}
         AND thn.NMCODE_GRP_CD = #{nmcodeGrpCd}
     <if test='useYn != null and useYn.toString() != "ALL"'>
         AND thn.USE_YN = #{useYn}
@@ -130,16 +130,45 @@
       ORDER BY thn.NMCODE_CD DESC
     </select>
     
-    <update id="updateHqCdUseYn" parameterType="hqCdVO">
+    <select id="getMsCdListByGrpCd" parameterType="crncyCdVO" resultType="DefaultMap">
+    /* EhgtMapper.getMsCdListByGrpCd */
+     SELECT tmsn.NMCODE_GRP_CD,
+            tmsn.NMCODE_CD,
+            tmsn.NMCODE_NM,
+            tmsn.NMCODE_ITEM_1,
+            tmsn.NMCODE_ITEM_2,
+            tmsn.USE_YN
+       FROM TB_MS_STORE_NMCODE tmsn
+      WHERE tmsn.STORE_CD = #{orgnCd}
+        AND tmsn.NMCODE_GRP_CD = #{nmcodeGrpCd}
+    <if test='useYn != null and useYn.toString() != "ALL"'>
+        AND tmsn.USE_YN = #{useYn}
+    </if>
+      ORDER BY tmsn.NMCODE_CD DESC
+    </select>
+
+    <update id="updateHqCdUseYn" parameterType="crncyCdVO">
     /* EhgtMapper.updateHqCdUseYn */
      UPDATE TB_HQ_NMCODE
         SET USE_YN = #{useYn},
             MOD_DT = #{modDt},
             MOD_ID = #{modId}
-      WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+      WHERE HQ_OFFICE_CD = #{orgnCd}
         AND NMCODE_GRP_CD = #{nmcodeGrpCd}
         AND NMCODE_CD = #{nmcodeCd}
     </update>
+
+    <update id="updateMsCdUseYn" parameterType="crncyCdVO">
+    /* EhgtMapper.updateMsCdUseYn */
+     UPDATE TB_MS_STORE_NMCODE
+        SET USE_YN = #{useYn},
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId}
+      WHERE STORE_CD = #{orgnCd}
+        AND NMCODE_GRP_CD = #{nmcodeGrpCd}
+        AND NMCODE_CD = #{nmcodeCd}
+    </update>
+
 </mapper>
 
 

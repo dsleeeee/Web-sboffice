@@ -8,6 +8,11 @@
 <c:set var="baseUrl" value="/adi/etc/ehgt/regist" />
 
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
+<c:set var="isManager" value='false'/>
+<c:if test="${orgnFg eq 'HQ' or storeCd eq '00000'}">
+    <c:set var="isManager" value='true'/>
+</c:if>
 
 <style>
 .font .wj-form-control{font-size:0.75em; color:#222}
@@ -52,13 +57,13 @@
     <button id="btnSearch" class="btn_blue fr"><s:message code="cmm.search" /><%--조회--%></button>
   </div>
 
-<c:if test="${orgnFg == 'HQ'}">
+<c:if test="${isManager}">
   <div class="mt20 tr">
     <button id="btnRegist" class="btn_skyblue"><s:message code="ehgt.btnCrncyRegist" /><%--통화구분등록--%></button>
   </div>
 </c:if>
 
-<c:if test="${orgnFg == 'HQ'}">
+<c:if test="${isManager}">
   <%--2단--%>
   <div class="wj-TblWrap mt20 oh">
     <%--left--%>
@@ -115,7 +120,7 @@
   <%--//2단--%>
 </c:if>
 
-<c:if test="${orgnFg != 'HQ'}">
+<c:if test="${not isManager}">
 
   <%--위즈모 테이블--%>
   <div class="wj-TblWrapBr mt10" style="height:400px;">
@@ -128,7 +133,7 @@
 </div>
 
 <%-- 통화구분등록 --%>
-<c:if test="${orgnFg == 'HQ'}">
+<c:if test="${isManager}">
 <c:import url="/WEB-INF/view/adi/etc/ehgt/crncy.jsp"/>
 </c:if>
 
@@ -140,7 +145,7 @@
     <%-- 환율관리 일자별 환율 --%>
     var rdata = 
       [
-        {binding: "saleDate", header: "<s:message code='ehgt.date' />", allowMerging: true, format: 'yyyy-MM-dd', width: "*"}
+        {binding: "saleDate", header: "<s:message code='ehgt.date' />", allowMerging: true, format: 'yyyy-MM-dd', width: "*", align: 'center'}
 
       <c:forEach var="item" items="${hqCrncys}">
         ,{binding: "crncy${item.nmcodeNm}", header: "${item.nmcodeItem1} ${item.nmcodeNm}", dataType:wijmo.DataType.Number, format:"n2", width: "*"}
@@ -155,19 +160,31 @@
     <%-- Row Header 없애기 --%>
     grid.rowHeaders.columns.splice(0, 1);
     
-<c:if test="${orgnFg == 'HQ'}">
+    <%-- 그리드 포맷 --%>
+    grid.formatItem.addHandler(function(s, e) {
+      if (e.panel == s.cells) {
+        var col = s.columns[e.col];
+        var item = s.rows[e.row].dataItem;
+        if( col.binding == "saleDate" ) {
+          if(typeof item.saleDate === 'string') {
+            item.saleDate = wijmo.Globalize.parseDate(item.saleDate, 'yyyyMMdd');
+            //s.refresh();
+          }
+        }
+      }
+    });
+
+<c:if test="${isManager}">
     
     var saleDate     = wcombo.genDate("#saleDate");
     
-    <%-- TODO 그리드 포맷 --%>
+    <%-- 그리드 포맷 --%>
     grid.formatItem.addHandler(function(s, e) {
       if (e.panel == s.cells) {
         var col = s.columns[e.col];
         var item = s.rows[e.row].dataItem;
         if( col.binding == "saleDate" ) {
           wijmo.addClass(e.cell, 'wijLink');
-          //item.saleDate = wijmo.Globalize.parseDate(item.saleDate, 'yyyy-MM-dd');
-          //console.log(item);
         }
       }
     });
@@ -180,12 +197,12 @@
         if( col.binding == "saleDate" ) {
           var selectedRow = grid.rows[ht.row].dataItem;
           var param = {};
-          param.saleDate = selectedRow.saleDate;
+          param.saleDate = wijmo.Globalize.format(selectedRow.saleDate, 'yyyyMMdd');
           
           if(param.saleDate != '') {
             $.postJSON("${baseUrl}/detail.sb", param, function(result) {
               var list = result.data.list;
-              saleDate.value = wijmo.Globalize.parseDate(selectedRow.saleDate, 'yyyyMMdd');
+              saleDate.value = selectedRow.saleDate;
               $.each(list, function(key, value){
                 $("#krwAmt_" + value.crncyCd).val(value.krwAmt);
               });
@@ -202,6 +219,21 @@
     <%-- 환율 저장 --%>
     $("#btnSave").click(function(e){
       var paramArr = new Array();
+      var validParam = true;
+      $(".crncy-item").each(function(index, element) {
+        var val = $(this).val();
+        if(isEmpty(val) || (parseFloat(val) < 1 && parseFloat(val) > 10000)) {
+          validParam = false;
+          $(this).focus();
+          return false;
+        }
+      });
+      if(!validParam){
+        s_alert.pop("<s:message code='cmm.input.fail'/>");
+        return;
+      }
+      
+      
       $(".crncy-item").each(function(index, element) {
         paramArr.push({
           saleDate:getDate(saleDate),
@@ -209,6 +241,7 @@
           crncyAmt:$(this).data("unit"),
           krwAmt:$(this).val()
         });
+        
       });
       
       $.postJSONArray("${baseUrl}/save.sb", paramArr, function(result) {
@@ -261,6 +294,7 @@
       param.startDt = getDate(startDt);
       param.endDt = getDate(endDt);
       wgrid.getGridData("${baseUrl}/list.sb", param, grid);
+      //grid.refresh();
     }
 
   });
