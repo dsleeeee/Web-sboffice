@@ -3,8 +3,10 @@ package kr.co.solbipos.application.common.web;
 import kr.co.common.data.enums.CodeType;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.SessionUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
-import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
+import kr.co.solbipos.application.common.service.ResrceInfoVO;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sys.cd.envconfg.service.EnvstVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,16 +14,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
+ * @Class Name : ErrorController.java
+ * @Description : 에러 처리용 컨트롤러
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2018.09.04  노현수       부분수정
  *
- * @author 정용길
+ * @author 솔비포스 차세대개발실 노현수
+ * @since 2018. 05.01
+ * @version 1.0
+ * @see
+ *
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-
 @Controller
 @RequestMapping(value = "/error")
 public class ErrorController {
@@ -30,15 +45,39 @@ public class ErrorController {
 
     @Autowired
     SessionService sessionService;
-
     @Autowired
     MessageService messageService;
-
     @Autowired
     CmmEnvUtil cmmEnvUtil;
 
+    /** 에러페이지는 인터셉터를 수행하지 않으므로, 세션처리를 별도로 하여 가상로그인 사용시 에러를 방지한다. */
+    private void setSessionInfo(HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = new SessionInfoVO();
+        // 가상로그인 사용시에는 파라미터로 vLoginId를 달고 다니기 때문에 별도 체크로직 추가 : 20180817 노현수
+        if ( request.getParameter("vLoginId") != null && request.getParameter("vLoginId").length() > 0 ) {
+            // 세션 가져오기
+            sessionInfoVO = SessionUtil.getEnv(request.getSession(), request.getParameter("vLoginId"));
+        } else {
+            // 세션 가져오기
+            sessionInfoVO = sessionService.getSessionInfo(request);
+        }
+        if ( sessionInfoVO != null && sessionInfoVO.getUserId() != null ) {
+            // 권한 메뉴
+            List<ResrceInfoVO> auth = auth = sessionInfoVO.getAuthMenu();
+
+            // jsp > sessionscope 로 쓸수 있게 httpsession 에 세팅
+            HttpSession session = request.getSession();
+            session.setAttribute("sessionInfo", sessionInfoVO);
+        }
+
+    }
+
     @RequestMapping(value = "/403.sb")
     public String denied(HttpServletRequest request, HttpServletResponse response, Model model) {
+        // 세션처리 수행 : 가상로그인 사용시 오류 방지
+        setSessionInfo(request);
+
         return "error/403";
     }
 
@@ -48,12 +87,18 @@ public class ErrorController {
     }
 
     @RequestMapping(value = "/404.sb")
-    public String notFound(HttpServletRequest request, HttpServletResponse response, Model model) {
+    public String notFound(HttpServletRequest request, HttpServletResponse response, Model model, RedirectAttributes redirectAttributes) {
+        // 세션처리 수행 : 가상로그인 사용시 오류 방지
+        setSessionInfo(request);
+
         return "error/404";
     }
 
     @RequestMapping(value = "/500.sb")
     public String serverError(HttpServletRequest request, HttpServletResponse response, Model model) {
+        // 세션처리 수행 : 가상로그인 사용시 오류 방지
+        setSessionInfo(request);
+
         return "error/500";
     }
 
