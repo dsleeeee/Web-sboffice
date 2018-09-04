@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    StoreLoanInfoMapper.xml
+    매장여신관리 리스트 조회
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       안동관     2018.08.21     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.iostock.loan.storeLoanInfo.service.impl.StoreLoanInfoMapper">
+
+    <!-- 매장별여신상세현황 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_LOAN, TB_PO_HQ_STORE_OUTSTOCK, TB_MS_STORE
+        PARAM    : storeLoanInfoVO
+        COMMENTS : 매장별여신상세현황 리스트를 조회한다.
+    -->
+    <select id="getStoreLoanInfoList" parameterType="storeLoanInfoVO" resultType="DefaultMap">
+        /* USE : StoreLoanInfoMapper.getStoreLoanInfoList */
+        <![CDATA[
+        SELECT  B.STORE_CD, tms.STORE_NM, B.LOAN_DATE, B.SLIP_NO, B.OUT_AMT, B.IN_AMT, B.REMARK, tphsl.LIMIT_LOAN_AMT
+        FROM    TB_PO_HQ_STORE_LOAN tphsl
+        ,       (   SELECT  STORE_CD, '조회기간 후' LOAN_DATE, '' SLIP_NO, SUM(OUT_AMT) OUT_AMT, SUM(IN_AMT) IN_AMT, '' REMARK, '1' ORDER_RANK
+                    FROM    (
+                                SELECT  STORE_CD, OUT_DATE LOAN_DATE, SLIP_NO, OUT_TOT OUT_AMT, 0 IN_AMT, REMARK
+                                FROM    TB_PO_HQ_STORE_OUTSTOCK
+                                WHERE   STORE_CD    IN   (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+                                AND     OUT_DATE    >   #{endDate}
+                                AND     SLIP_FG     =   '1'
+                                AND     PROC_FG     IN  ('2', '3')
+                                UNION ALL
+                                SELECT  tphso.STORE_CD, tphso.IN_DATE LOAN_DATE, tphso.SLIP_NO, (tphso.IN_TOT + SUM(tphsod.PENALTY_AMT)) OUT_AMT, 0 IN_AMT, tphso.REMARK
+                                FROM    TB_PO_HQ_STORE_OUTSTOCK tphso
+                                ,       TB_PO_HQ_STORE_OUTSTOCK_DTL tphsod
+                                WHERE   tphso.STORE_CD    IN   (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+                                AND     tphso.IN_DATE     >   #{startDate}
+                                AND     tphso.SLIP_FG     =   '-1'
+                                AND     tphso.PROC_FG     =   '3'
+                                AND     tphsod.HQ_OFFICE_CD    =   tphso.HQ_OFFICE_CD
+                                AND     tphsod.SLIP_NO         =   tphso.SLIP_NO
+                                GROUP
+                                BY      tphso.STORE_CD, tphso.IN_DATE, tphso.SLIP_NO, tphso.IN_TOT, tphso.REMARK
+                            )
+                    GROUP
+                    BY      STORE_CD
+                    HAVING  COUNT(*) > 0
+                    UNION ALL
+                    SELECT  STORE_CD, LOAN_DATE, SLIP_NO, OUT_AMT, IN_AMT, REMARK, '2' ORDER_RANK
+                    FROM    (
+                                SELECT  STORE_CD, OUT_DATE LOAN_DATE, SLIP_NO,  OUT_TOT OUT_AMT, 0 IN_AMT, REMARK
+                                FROM    TB_PO_HQ_STORE_OUTSTOCK
+                                WHERE   STORE_CD    IN   (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+                                AND     OUT_DATE    BETWEEN #{startDate} AND #{endDate}
+                                AND     SLIP_FG     =   '1'
+                                AND     PROC_FG     IN  ('2', '3')
+                                UNION ALL
+                                SELECT  tphso.STORE_CD, tphso.IN_DATE LOAN_DATE, tphso.SLIP_NO, (tphso.IN_TOT + SUM(tphsod.PENALTY_AMT)) OUT_AMT, 0 IN_AMT, tphso.REMARK
+                                FROM    TB_PO_HQ_STORE_OUTSTOCK tphso
+                                ,       TB_PO_HQ_STORE_OUTSTOCK_DTL tphsod
+                                WHERE   tphso.STORE_CD    IN   (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+                                AND     tphso.IN_DATE     BETWEEN #{startDate} AND #{endDate}
+                                AND     tphso.SLIP_FG     =   '-1'
+                                AND     tphso.PROC_FG     =   '3'
+                                AND     tphsod.HQ_OFFICE_CD    =   tphso.HQ_OFFICE_CD
+                                AND     tphsod.SLIP_NO         =   tphso.SLIP_NO
+                                GROUP
+                                BY      tphso.STORE_CD, tphso.IN_DATE, tphso.SLIP_NO, tphso.IN_TOT, tphso.REMARK
+                            )
+                    UNION ALL
+                    SELECT  STORE_CD, '조회기간 전' LOAN_DATE, '' SLIP_NO, SUM(OUT_AMT) OUT_AMT, SUM(IN_AMT) IN_AMT, '' REMARK, '3' ORDER_RANK
+                    FROM    (
+                                SELECT  STORE_CD, OUT_DATE LOAN_DATE, SLIP_NO, OUT_TOT OUT_AMT, 0 IN_AMT, REMARK
+                                FROM    TB_PO_HQ_STORE_OUTSTOCK
+                                WHERE   STORE_CD    IN   (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+                                AND     OUT_DATE    <   #{startDate}
+                                AND     SLIP_FG     =   '1'
+                                AND     PROC_FG     IN  ('2', '3')
+                                UNION ALL
+                                SELECT  tphso.STORE_CD, tphso.IN_DATE LOAN_DATE, tphso.SLIP_NO, (tphso.IN_TOT + SUM(tphsod.PENALTY_AMT)) OUT_AMT, 0 IN_AMT, tphso.REMARK
+                                FROM    TB_PO_HQ_STORE_OUTSTOCK tphso
+                                ,       TB_PO_HQ_STORE_OUTSTOCK_DTL tphsod
+                                WHERE   tphso.STORE_CD    IN   (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+                                AND     tphso.IN_DATE     <   #{startDate}
+                                AND     tphso.SLIP_FG     =   '-1'
+                                AND     tphso.PROC_FG     =   '3'
+                                AND     tphsod.HQ_OFFICE_CD    =   tphso.HQ_OFFICE_CD
+                                AND     tphsod.SLIP_NO         =   tphso.SLIP_NO
+                                GROUP
+                                BY      tphso.STORE_CD, tphso.IN_DATE, tphso.SLIP_NO, tphso.IN_TOT, tphso.REMARK
+                            )
+                    GROUP
+                    BY      STORE_CD
+                    HAVING  COUNT(*) > 0
+                ) B
+        ,       TB_MS_STORE tms
+        WHERE   B.STORE_CD     =   tphsl.STORE_CD
+        AND     tms.STORE_CD   =   tphsl.STORE_CD
+        ORDER
+        BY      B.STORE_CD, B.ORDER_RANK, B.LOAN_DATE DESC, B.SLIP_NO DESC
+        ]]>
+    </select>
+
+</mapper>

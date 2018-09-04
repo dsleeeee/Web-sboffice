@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    outstockReqDateMapper.xml
+    출고요청일관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       안동관     2018.09.03     최초작성
+-->
+<mapper namespace="kr.co.solbipos.iostock.order.outstockReqDate.service.impl.OutstockReqDateMapper">
+
+    <!-- 출력물종류 ListMap -->
+    <resultMap id="daysListMap" type="DefaultMap">
+        <result column="SUN" property="sun" typeHandler="CustomBooleanTypeHandler"/>
+        <result column="MON" property="mon" typeHandler="CustomBooleanTypeHandler"/>
+        <result column="TUE" property="tue" typeHandler="CustomBooleanTypeHandler"/>
+        <result column="WED" property="wed" typeHandler="CustomBooleanTypeHandler"/>
+        <result column="THU" property="thu" typeHandler="CustomBooleanTypeHandler"/>
+        <result column="FRI" property="fri" typeHandler="CustomBooleanTypeHandler"/>
+        <result column="SAT" property="sat" typeHandler="CustomBooleanTypeHandler"/>
+    </resultMap>
+
+    <!-- 출고요청일관리 요일별 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE, TB_PO_HQ_STORE_ORDER_DAYS
+        PARAM    : outstockReqDateVO
+        COMMENTS : 출고요청일관리 요일별 리스트를 조회한다.
+    -->
+    <select id="getDaysList" parameterType="outstockReqDateVO" resultMap="daysListMap">
+        /* USE : outstockReqDateMapper.getDaysList */
+        <![CDATA[
+        SELECT  tms.STORE_CD, tms.STORE_NM
+        --,       tphsod.REQ_NO_DAY
+        ,       DECODE(DECODE(INSTR(tphsod.REQ_NO_DAY, '1'), 0, 1, NULL, 1, 0), 0, 'N', 'Y') AS SUN
+        ,       DECODE(DECODE(INSTR(tphsod.REQ_NO_DAY, '2'), 0, 1, NULL, 1, 0), 0, 'N', 'Y') AS MON
+        ,       DECODE(DECODE(INSTR(tphsod.REQ_NO_DAY, '3'), 0, 1, NULL, 1, 0), 0, 'N', 'Y') AS TUE
+        ,       DECODE(DECODE(INSTR(tphsod.REQ_NO_DAY, '4'), 0, 1, NULL, 1, 0), 0, 'N', 'Y') AS WED
+        ,       DECODE(DECODE(INSTR(tphsod.REQ_NO_DAY, '5'), 0, 1, NULL, 1, 0), 0, 'N', 'Y') AS THU
+        ,       DECODE(DECODE(INSTR(tphsod.REQ_NO_DAY, '6'), 0, 1, NULL, 1, 0), 0, 'N', 'Y') AS FRI
+        ,       DECODE(DECODE(INSTR(tphsod.REQ_NO_DAY, '7'), 0, 1, NULL, 1, 0), 0, 'N', 'Y') AS SAT
+        ,       tphsod.REMARK AS DAYS_REMARK
+        ]]>
+        FROM    TB_MS_STORE tms
+        ,       TB_PO_HQ_STORE_ORDER_DAYS tphsod
+        WHERE   tms.HQ_OFFICE_CD    =   #{hqOfficeCd}
+        AND     tphsod.STORE_CD (+) =   tms.STORE_CD
+        <if test='storeCd != null and storeCd != ""'>
+            AND tms.STORE_CD = #{storeCd}
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            AND tho.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        ORDER BY tms.STORE_CD
+    </select>
+</mapper>

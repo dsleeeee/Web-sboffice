@@ -70,14 +70,28 @@ public class SimpleMemberJoinController {
      * @return
      */
     @RequestMapping(value = "smjtest.sb", method = RequestMethod.GET)
-    public String list(HttpServletRequest request, HttpServletResponse response,
+    public String smjtest(HttpServletRequest request, HttpServletResponse response,
                        Model model) {
-
-        System.out.println("들어옴??");
 
         return "application/pos/smjTest";
 
     }
+
+    /** 화면이동 테스트
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "agridTest.sb", method = RequestMethod.GET)
+    public String agridTest(HttpServletRequest request, HttpServletResponse response,
+        Model model) {
+
+        return "application/pos/agridTest";
+
+    }
+
 
     /**
      * TODO

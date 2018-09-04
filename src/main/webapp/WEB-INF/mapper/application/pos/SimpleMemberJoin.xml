@@ -33,7 +33,14 @@
     ]]>
   </select>
 
+    <!-- 신규회원번호 조회 -->
+    <!--
+        TABLE    : TB_MB_MEMBER
+        PARAM    : sessionInfoVO
+        COMMENTS : 회원등록시 사용할 신규회원번호를 조회한다.
+    -->
   <select id="getNewMembrNo" parameterType="sessionInfoVO" resultType="String">
+        /* USE : SimpleMemberJoinMapper.getNewMembrNo */
       SELECT LPAD(NVL(MAX(tmm.MEMBR_NO), '0')+1, 10, '0')
         FROM TB_MB_MEMBER tmm
        WHERE tmm.MEMBR_ORGN_CD = #{orgnGrpCd}
