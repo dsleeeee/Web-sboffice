@@ -13,19 +13,25 @@
 
 <mapper namespace="kr.co.solbipos.iostock.loan.storeLoanManage.service.impl.StoreLoanManageMapper">
 
+    <!-- 주문중지여부 ListMap -->
+    <resultMap id="orderCloseListMap" type="DefaultMap">
+        <result column="ORDER_CLOSE_YN" property="orderCloseYn" typeHandler="CustomBooleanTypeHandler"/>
+    </resultMap>
+
     <!-- 매장여신관리 리스트 조회 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_LOAN
         PARAM    : storeLoanManageVO
         COMMENTS : 매장여신관리 리스트를 조회한다.
     -->
-    <select id="getStoreLoanManageList" parameterType="storeLoanManageVO" resultType="DefaultMap">
+    <select id="getStoreLoanManageList" parameterType="storeLoanManageVO" resultMap="orderCloseListMap">
         /* USE : StoreLoanManageMapper.getStoreLoanList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         <![CDATA[
         SELECT  tms.STORE_CD, tms.STORE_NM
         ,       NVL(tphsl.LIMIT_LOAN_AMT, '') AS LIMIT_LOAN_AMT, tphsl.USE_LOAN_AMT, tphsl.CURR_LOAN_AMT
         ,       NVL(tphsl.MAX_ORDER_AMT, '') AS MAX_ORDER_AMT, NVL(tphsl.ORDER_FG, '1') AS ORDER_FG, NVL(tphsl.NO_OUTSTOCK_AMT_FG, 'N') AS NO_OUTSTOCK_AMT_FG
+        ,       NVL(tphsl.ORDER_CLOSE_YN, 'N') AS ORDER_CLOSE_YN
         ,       DECODE(tphsl.ORDER_FG
                       ,'1'
                       ,DECODE(SIGN(tphsl.CURR_LOAN_AMT)
@@ -99,6 +105,7 @@
         MAX_ORDER_AMT,
         ORDER_FG,
         NO_OUTSTOCK_AMT_FG,
+        ORDER_CLOSE_YN,
         REMARK,
         REG_DT,
         REG_ID,
@@ -115,6 +122,7 @@
         #{maxOrderAmt},
         #{orderFg},
         #{noOutstockAmtFg},
+        #{orderCloseYn},
         #{remark},
         #{regDt},
         #{regId},
@@ -136,6 +144,7 @@
             MAX_ORDER_AMT         = #{maxOrderAmt},
             ORDER_FG              = #{orderFg},
             NO_OUTSTOCK_AMT_FG    = #{noOutstockAmtFg},
+            ORDER_CLOSE_YN        = #{orderCloseYn},
             REMARK                = #{remark},
             MOD_DT                = #{modDt},
             MOD_ID                = #{modId}

@@ -39,6 +39,8 @@ public class StoreLoanInfoVO extends PageVO {
     private Integer inAmt;
     /** 여신한도금액 */
     private Integer limitLoanAmt;
+    /** 주문중지구분 */
+    private Boolean orderCloseYn;
     /** 비고 */
     private String remark;
 
@@ -166,6 +168,20 @@ public class StoreLoanInfoVO extends PageVO {
      */
     public void setLimitLoanAmt(Integer limitLoanAmt) {
         this.limitLoanAmt = limitLoanAmt;
+    }
+
+    /**
+     * @return the orderCloseYn
+     */
+    public Boolean getOrderCloseYn() {
+        return orderCloseYn;
+    }
+
+    /**
+     * @param orderCloseYn the orderCloseYn to set
+     */
+    public void setOrderCloseYn(Boolean orderCloseYn) {
+        this.orderCloseYn = orderCloseYn;
     }
 
     /**

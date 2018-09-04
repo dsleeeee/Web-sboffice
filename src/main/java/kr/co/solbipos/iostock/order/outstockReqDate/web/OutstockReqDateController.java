@@ -27,6 +27,7 @@ import kr.co.solbipos.iostock.order.outstockReqDate.service.OutstockReqDateVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -45,6 +46,7 @@ public class OutstockReqDateController {
     @Autowired
     OutstockReqDateService outstockReqDateService;
 
+
     /**
      * 출고요청일관리 - 페이지 이동
      * @param   request
@@ -54,11 +56,12 @@ public class OutstockReqDateController {
      * @author  안동관
      * @since   2018. 09. 03.
      */
-    @RequestMapping(value = "/days/view.sb", method = RequestMethod.GET)
+    @RequestMapping(value = "/outstockReqDate/view.sb", method = RequestMethod.GET)
     public String daysView(HttpServletRequest request, HttpServletResponse response,
         Model model) {
-        return "iostock/order/outstockReqDate/days";
+        return "iostock/order/outstockReqDate/outstockReqDate";
     }
+
 
     /**
      * 출고요청일관리 - 요일별 리스트 조회
@@ -81,5 +84,121 @@ public class OutstockReqDateController {
         List<DefaultMap<String>> list = outstockReqDateService.getDaysList(outstockReqDateVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, outstockReqDateVO);
+    }
+
+
+    /**
+     * 출고요청일관리 - 요일별 출고가능일 저장
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   outstockReqDateVOs
+     * @return  String
+     * @author  안동관
+     * @since   2018. 09. 04.
+     */
+    @RequestMapping(value = "/days/save.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveReqDateDays(HttpServletRequest request, HttpServletResponse response,
+        Model model, @RequestBody OutstockReqDateVO[] outstockReqDateVOs) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = outstockReqDateService.saveReqDateDays(outstockReqDateVOs, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+
+    /**
+     * 출고요청일관리 - 특정일 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   outstockReqDateVO
+     * @return  String
+     * @author  안동관
+     * @since   2018. 09. 04.
+     */
+    @RequestMapping(value = "specificDate/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSpecificDateList(HttpServletRequest request, HttpServletResponse response,
+        Model model, OutstockReqDateVO outstockReqDateVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        outstockReqDateVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        List<DefaultMap<String>> list = outstockReqDateService.getSpecificDateList(outstockReqDateVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, outstockReqDateVO);
+    }
+
+
+    /**
+     * 출고요청일관리 - 특정일 신규저장
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   outstockReqDateVO
+     * @return  String
+     * @author  안동관
+     * @since   2018. 09. 04.
+     */
+    @RequestMapping(value = "/specificDate/saveNew.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveNewSpecificDate(HttpServletRequest request, HttpServletResponse response,
+        Model model, OutstockReqDateVO outstockReqDateVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = outstockReqDateService.saveNewSpecificDate(outstockReqDateVO, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+
+    /**
+     * 출고요청일관리 - 특정일 수정
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   outstockReqDateVOs
+     * @return  String
+     * @author  안동관
+     * @since   2018. 09. 04.
+     */
+    @RequestMapping(value = "/specificDate/save.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveSpecificDate(HttpServletRequest request, HttpServletResponse response,
+        Model model, @RequestBody OutstockReqDateVO[] outstockReqDateVOs) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = outstockReqDateService.saveSpecificDate(outstockReqDateVOs, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+
+    /**
+     * 출고요청일관리 - 특정일 삭제
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   outstockReqDateVOs
+     * @return  String
+     * @author  안동관
+     * @since   2018. 09. 04.
+     */
+    @RequestMapping(value = "/specificDate/delete.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result deleteSpecificDate(HttpServletRequest request, HttpServletResponse response,
+        Model model, @RequestBody OutstockReqDateVO[] outstockReqDateVOs) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = outstockReqDateService.deleteSpecificDate(outstockReqDateVOs, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
     }
 }

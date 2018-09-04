@@ -43,7 +43,7 @@
         <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('dlvrChgrCtrl')"><s:message code="cmm.search" /></button>
     </div>
 
-    <div class="wj-TblWrap" ng-controller="dlvrChgrCtrl">
+    <div id="grid" class="w100" ng-controller="dlvrChgrCtrl">
         <div class="mt20 oh sb-select dkbr">
             <%--페이지 스케일 --%>
             <div id="listScaleBoxDlvrChgr" class="w130 fl"></div>
@@ -54,7 +54,7 @@
         </div>
 
         <%--위즈모 테이블--%>
-        <div class="wj-TblWrapBr mt10" style="height: 400px;" >
+        <div class="wj-gridWrap mt10" style="height: 400px;" >
             <wj-flex-grid
                 autoGenerateColumns="false"
                 selection-mode="Row"
@@ -70,12 +70,23 @@
                 <wj-flex-grid-column header="<s:message code="deliveryCharger.carNo"/>"  binding="carNo"  width="*"  align="left"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="deliveryCharger.useYn"/>"  binding="useYn"  width="70" align="center" data-map="useYnMap"></wj-flex-grid-column>
 
-                <!-- enable column filtering-->
-                <wj-flex-grid-filter></wj-flex-grid-filter>
             </wj-flex-grid>
+            <%-- ColumnPicker 사용시 include --%>
+            <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+                <jsp:param name="pickerTarget" value="dlvrChgrCtrl"/>
+            </jsp:include>
+            <%--// ColumnPicker 사용시 include --%>
         </div>
         <%--//위즈모 테이블--%>
     </div>
+
+    <%-- 페이지 리스트 --%>
+    <div class="pageNum mt20">
+        <%-- id --%>
+        <ul id="gridCtrlPager" data-size="10">
+        </ul>
+    </div>
+    <%--//페이지 리스트--%>
 </div>
 
 <script type="text/javascript">
@@ -105,7 +116,7 @@
     /** 배송기사 그리드 controller */
     app.controller('dlvrChgrCtrl', ['$scope', '$http', 'dlvrVO', function ($scope, $http, dlvrVO) {
         // 상위 객체 상속 : T/F 는 picker
-        angular.extend(this, new RootController($scope, $http, true));
+        angular.extend(this, new RootController('dlvrInfoCtrl', $scope, $http, true));
         // grid 초기화 : 생성되기전 초기화되면서 생성된다
         $scope.initGrid = function (s, e) {
             // picker 사용시 호출 : 미사용시 호출안함

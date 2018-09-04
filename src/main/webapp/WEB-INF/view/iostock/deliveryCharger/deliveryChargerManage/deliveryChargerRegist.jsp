@@ -69,7 +69,7 @@
         </div>
 
         <!--위즈모 테이블-->
-        <div class="wj-TblWrapBr mt10" style="height: 200px;" >
+        <div class="wj-gridWrap mt10" style="height: 200px;" >
             <wj-flex-grid
                     autoGenerateColumns="false"
                     selection-mode="Row"
@@ -210,11 +210,11 @@
     /** 배송기사 관리 창고 그리드 controller */
     app.controller('dlvrChgrStorageCtrl', ['$scope', '$http', 'dlvrVO', function ($scope, $http, dlvrVO) {
         // 상위 객체 상속 : T/F 는 picker
-        angular.extend(this, new RootController($scope, $http, true));
+        angular.extend(this, new RootController('dlvrChgrStorageCtrl', $scope, $http, true));
         // grid 초기화 : 생성되기전 초기화되면서 생성된다
         $scope.initGrid = function (s, e) {
             // picker 사용시 호출 : 미사용시 호출안함
-            $scope._makePickColumns("dlvrChgrStorageCtrl");
+            // $scope._makePickColumns("dlvrChgrStorageCtrl");
         };
 
         // 다른 컨트롤러의 broadcast 받기
@@ -262,7 +262,7 @@
                 $scope.flex.collectionView.itemsEdited[i].status = "U";
                 params.push($scope.flex.collectionView.itemsEdited[i]);
             }
-            $scope._save("/iostock/deliveryCharger/deliveryChargerManage/deliveryChargerRegist/delStorage.sb", params, '$scope.searchDlvrChgrStorageList');
+            $scope._save("/iostock/deliveryCharger/deliveryChargerManage/deliveryChargerRegist/delStorage.sb", params, function() { $scope.searchDlvrChgrStorageList(); });
         };
 
         // 창고 추가 팝업 오픈

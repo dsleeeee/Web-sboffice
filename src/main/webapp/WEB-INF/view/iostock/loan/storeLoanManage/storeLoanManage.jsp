@@ -50,7 +50,7 @@
         <%-- 엑셀 다운로드 --%>
         <button id="btnExcel" class="btn_skyblue fr"><s:message code="cmm.excel.down"/></button>
         <%-- 저장 --%>
-        <button id="btnSave" class="btn_skyblue fr"><s:message code="cmm.save"/></button>
+        <button id="btnSave" class="btn_skyblue fr mr5"><s:message code="cmm.save"/></button>
     </div>
 
     <%--위즈모 테이블--%>
@@ -126,6 +126,7 @@
                 {binding: "orderFg", header: messages["loan.orderFg"], width: 100, align: "center", dataMap:orderFg},
                 {binding: "availableOrderAmt", header: messages["loan.availableOrderAmt"], width: 100, align: "right", dataType: "Number", format: "n0", isReadOnly: true, aggregate: 'Sum'},
                 {binding: "noOutstockAmtFg", header: messages["loan.noOutstockAmtFg"], width: 120, align: "center", dataMap:noOutstockAmtFg},
+                {binding: "orderCloseYn", header: messages["loan.orderCloseYn"], width: 60, align: "center"},
                 {binding: "remark", header: messages["loan.remark"], width: "*", align: "left"}
             ];
         gridStoreLoan = wgrid.genGrid("#gridStoreLoan", gridDataStoreLoan);

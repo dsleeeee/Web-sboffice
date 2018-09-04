@@ -42,6 +42,10 @@ public class StoreLoanManageVO extends PageVO {
     private String noOutstockAmtFg;
     /** 비고 */
     private String remark;
+    /** 사용가능주문액 */
+    private String availableOrderAmt;
+    /** 주문중지구분 */
+    private Boolean orderCloseYn;
     /** 등록일시 */
     private String regDt;
     /** 등록자 */
@@ -50,8 +54,6 @@ public class StoreLoanManageVO extends PageVO {
     private String modDt;
     /** 수정자 */
     private String modId;
-    /** 사용가능주문액 */
-    private String availableOrderAmt;
 
     /**
      * @return the hqOfficeCd
@@ -194,70 +196,6 @@ public class StoreLoanManageVO extends PageVO {
     }
 
     /**
-     * @return the regDt
-     */
-    @Override
-    public String getRegDt() {
-        return regDt;
-    }
-
-    /**
-     * @param regDt the regDt to set
-     */
-    @Override
-    public void setRegDt(String regDt) {
-        this.regDt = regDt;
-    }
-
-    /**
-     * @return the regId
-     */
-    @Override
-    public String getRegId() {
-        return regId;
-    }
-
-    /**
-     * @param regId the regId to set
-     */
-    @Override
-    public void setRegId(String regId) {
-        this.regId = regId;
-    }
-
-    /**
-     * @return the modDt
-     */
-    @Override
-    public String getModDt() {
-        return modDt;
-    }
-
-    /**
-     * @param modDt the modDt to set
-     */
-    @Override
-    public void setModDt(String modDt) {
-        this.modDt = modDt;
-    }
-
-    /**
-     * @return the modId
-     */
-    @Override
-    public String getModId() {
-        return modId;
-    }
-
-    /**
-     * @param modId the modId to set
-     */
-    @Override
-    public void setModId(String modId) {
-        this.modId = modId;
-    }
-
-    /**
      * @return the availableOrderAmt
      */
     public String getAvailableOrderAmt() {
@@ -271,4 +209,73 @@ public class StoreLoanManageVO extends PageVO {
         this.availableOrderAmt = availableOrderAmt;
     }
 
+    /**
+     * @return the orderCloseYn
+     */
+    public Boolean getOrderCloseYn() {
+        return orderCloseYn;
+    }
+
+    /**
+     * @param orderCloseYn the orderCloseYn to set
+     */
+    public void setOrderCloseYn(Boolean orderCloseYn) {
+        this.orderCloseYn = orderCloseYn;
+    }
+
+    /**
+     * @return the regDt
+     */
+    @Override public String getRegDt() {
+        return regDt;
+    }
+
+    /**
+     * @param regDt the regDt to set
+     */
+    @Override public void setRegDt(String regDt) {
+        this.regDt = regDt;
+    }
+
+    /**
+     * @return the regId
+     */
+    @Override public String getRegId() {
+        return regId;
+    }
+
+    /**
+     * @param regId the regId to set
+     */
+    @Override public void setRegId(String regId) {
+        this.regId = regId;
+    }
+
+    /**
+     * @return the modDt
+     */
+    @Override public String getModDt() {
+        return modDt;
+    }
+
+    /**
+     * @param modDt the modDt to set
+     */
+    @Override public void setModDt(String modDt) {
+        this.modDt = modDt;
+    }
+
+    /**
+     * @return the modId
+     */
+    @Override public String getModId() {
+        return modId;
+    }
+
+    /**
+     * @param modId the modId to set
+     */
+    @Override public void setModId(String modId) {
+        this.modId = modId;
+    }
 }

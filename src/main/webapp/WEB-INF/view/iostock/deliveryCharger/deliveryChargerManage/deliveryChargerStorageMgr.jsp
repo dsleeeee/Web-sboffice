@@ -10,16 +10,16 @@
             <a href="javascript:;" class="wj-hide btn_close"></a>
         </div>
 
-        <div class="wj-TblWrap">
+        <div id="grid" class="w100 pdl20 pdr20 pdb20">
             <div class="mt20 oh sb-select dkbr">
                 <div class="tr">
                     <%-- 창고추가 --%>
-                    <button type="button" class="btn_blue ml5" ng-click="saveAddStore()"><s:message code="deliveryCharger.addStorage" /></button>
+                    <button type="button" class="btn_skyblue ml5" ng-click="saveAddStore()"><s:message code="deliveryCharger.addStorage" /></button>
                 </div>
             </div>
 
             <!--위즈모 테이블-->
-            <div class="wj-TblWrapBr mt10" style="height: 300px;">
+            <div class="wj-gridWrap mt10" style="height: 300px;">
                 <wj-flex-grid
                         autoGenerateColumns="false"
                         selection-mode="Row"
@@ -50,11 +50,11 @@
     /** 배송기사 관리 창고 추가 그리드 controller */
     app.controller('dlvrStorageMgrCtrl', ['$scope', '$http', 'dlvrVO', function ($scope, $http, dlvrVO) {
         // 상위 객체 상속 : T/F 는 picker
-        angular.extend(this, new RootController($scope, $http, true));
+        angular.extend(this, new RootController('dlvrStorageMgrCtrl', $scope, $http, true));
         // grid 초기화 : 생성되기전 초기화되면서 생성된다
         $scope.initGrid = function (s, e) {
             // picker 사용시 호출 : 미사용시 호출안함
-            $scope._makePickColumns("dlvrStorageMgrCtrl");
+            // $scope._makePickColumns("dlvrStorageMgrCtrl");
         };
 
         // 다른 컨트롤러의 broadcast 받기
@@ -97,7 +97,7 @@
 
             // return;
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-            $scope._save("/iostock/deliveryCharger/deliveryChargerManage/deliveryChargerRegist/addStorage.sb", params, '$scope.allSearch');
+            $scope._save("/iostock/deliveryCharger/deliveryChargerManage/deliveryChargerRegist/addStorage.sb", params, function() { $scope.allSearch(); });
         };
 
         // 저장 후 그리드 재조회
