@@ -129,9 +129,9 @@ function RootController(ctrlName, $scope, $http, isPicker) {
       return;
     }).then(function () {
       // "complete" code here
-      if (callback != null) {
+      if (typeof callback === 'function') {
         setTimeout(function () {
-          callback;
+          callback();
         }, 10);
       }
     });
@@ -199,26 +199,6 @@ function RootController(ctrlName, $scope, $http, isPicker) {
       });
     }
   });
-  // get a grid cell from the row/col indices
-  $scope.getGridCell = function (r, c) {
-    var flex = $scope.flex;
-    // find the cell from its bounding rectangle
-    var rc = flex.getCellBoundingRect(r, c);
-    var cell = document.elementFromPoint(rc.left + rc.width / 2, rc.top + rc.height / 2);
-
-    // make sure this is a regular cell (not a header)
-    if (wijmo.hasClass(cell, 'wj-header')) {
-      cell = null;
-    }
-
-    // make sure this is not an element within a cell
-    while (cell && !wijmo.hasClass(cell, 'wj-cell')) {
-      cell = cell.parentElement;
-    }
-
-    // ready!
-    return cell;
-  }
   // columnPicker 생성
   $scope._makePickColumns = function (ctrlName) {
     var flex = $scope.flex;
@@ -283,7 +263,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
           });
         }, 100);
       };
-      // 페이징 HTML
+      // 페이징바 동적 생성
       $scope.$on('drawPaging', function (event, pagingInfo) {
         // 페이징바 갯수
         var page_scale = pagingInfo.pageScale;
@@ -331,11 +311,11 @@ function RootController(ctrlName, $scope, $http, isPicker) {
         angular.element(document.getElementById(pagerName)).append(pager);
 
       });
-      // 페이징 Data Setter
+      // 페이징바 Data Setter
       $scope.setCurr = function (idx) {
         pagingData.set(idx);
       };
-      // 페이징 Data Getter
+      // 페이징바 Data Getter
       $scope.getCurr = function () {
         return pagingData.get();
       };
