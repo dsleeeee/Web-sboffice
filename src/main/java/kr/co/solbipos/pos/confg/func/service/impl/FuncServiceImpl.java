@@ -67,7 +67,7 @@ public class FuncServiceImpl implements FuncService {
                 String fnKeyNo = funcVO.getFnkeyFg() + funcVO.getFnkeyNo();
 
                 funcVO.setFnkeyNo(fnKeyNo);
-                funcVO.setUseYn("Y");
+                funcVO.setUseYn(true);
                 procCnt += mapper.insertFunc(funcVO);
             }
             else if(funcVO.getStatus() == GridDataFg.UPDATE) {
