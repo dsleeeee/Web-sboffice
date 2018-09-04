@@ -390,18 +390,3 @@ function RootController(ctrlName, $scope, $http, isPicker) {
   win.agrid = agrid;
 
 }("undefined" != typeof window ? window : this, angular);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
