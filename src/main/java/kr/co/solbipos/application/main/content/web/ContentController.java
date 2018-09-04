@@ -1,19 +1,20 @@
 package kr.co.solbipos.application.main.content.web;
 
-import java.util.List;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.main.ContentService;
 import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.common.enums.MainSrchFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.Map;
 
 /**
 * @Class Name : ContentController.java
@@ -93,6 +94,11 @@ public class ContentController {
 
         model.addAttribute("noticeList", noticeList);
 
+        /** 가상로그인시 ID 설정 */
+        if ( request.getParameter("vLoginId") != null && request.getParameter("vLoginId").length() > 0 ) {
+            model.addAttribute("vLoginId", request.getParameter("vLoginId"));
+        }
+
         return "application/main/agencyMain";
     }
 
@@ -126,6 +132,11 @@ public class ContentController {
         model.addAttribute("dateSelList2", dateSelList2);
         model.addAttribute("noticeList", noticeList);
 
+        /** 가상로그인시 ID 설정 */
+        if ( request.getParameter("vLoginId") != null && request.getParameter("vLoginId").length() > 0 ) {
+            model.addAttribute("vLoginId", request.getParameter("vLoginId"));
+        }
+
         return "application/main/hedofcMain";
     }
 
@@ -140,7 +151,7 @@ public class ContentController {
      */
     @RequestMapping(value = "store.sb", method = RequestMethod.GET)
     public String mainMRHST(HttpServletRequest request, HttpServletResponse response, Model model) {
-        
+
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         /** 매출현황 날짜 select box */
@@ -156,12 +167,12 @@ public class ContentController {
         model.addAttribute("dateSelList1", dateSelList1);
         model.addAttribute("dateSelList2", dateSelList2);
         model.addAttribute("noticeList", noticeList);
-        
+
         /** 가상로그인시 ID 설정 */
         if ( request.getParameter("vLoginId") != null && request.getParameter("vLoginId").length() > 0 ) {
             model.addAttribute("vLoginId", request.getParameter("vLoginId"));
         }
-        
+
         return "application/main/mrhstMain";
     }
 
