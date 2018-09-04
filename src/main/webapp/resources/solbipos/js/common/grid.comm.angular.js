@@ -1,5 +1,4 @@
 "use strict";
-
 function RootController(ctrlName, $scope, $http, isPicker) {
   // set $scope Name
   $scope.name = ctrlName;
@@ -334,19 +333,6 @@ function RootController(ctrlName, $scope, $http, isPicker) {
         s._tbx.attributes['ng-model'].value = s._orgAtts['ng-model'].value;
       };
     }]);
-  app.directive('compile', ['$compile', function ($compile) {
-    return function (scope, element, attrs) {
-      scope.$watch(
-        function (scope) {
-          return scope.$eval(attrs.compile);
-        },
-        function (value) {
-          element.html(value);
-          $compile(element.contents())(scope);
-        }
-      )
-    };
-  }]);
   app.factory('myHttpInterceptor', function ($timeout, $q, $rootScope) {
     return {
       'request': function (config) {
