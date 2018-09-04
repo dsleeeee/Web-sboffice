@@ -10,3 +10,7 @@ out/
 
 # File-based project format
 *.iws
+
+#local(jekim)
+context.xml
+sboffice.iml

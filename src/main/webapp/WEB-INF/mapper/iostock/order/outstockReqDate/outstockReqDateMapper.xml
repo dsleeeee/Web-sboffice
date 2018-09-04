@@ -12,7 +12,7 @@
 -->
 <mapper namespace="kr.co.solbipos.iostock.order.outstockReqDate.service.impl.OutstockReqDateMapper">
 
-    <!-- 출력물종류 ListMap -->
+    <!-- 요일 ListMap -->
     <resultMap id="daysListMap" type="DefaultMap">
         <result column="SUN" property="sun" typeHandler="CustomBooleanTypeHandler"/>
         <result column="MON" property="mon" typeHandler="CustomBooleanTypeHandler"/>
@@ -33,26 +33,163 @@
         /* USE : outstockReqDateMapper.getDaysList */
         <![CDATA[
         SELECT  tms.STORE_CD, tms.STORE_NM
-        --,       tphsod.REQ_NO_DAY
-        ,       DECODE(DECODE(INSTR(tphsod.REQ_NO_DAY, '1'), 0, 1, NULL, 1, 0), 0, 'N', 'Y') AS SUN
-        ,       DECODE(DECODE(INSTR(tphsod.REQ_NO_DAY, '2'), 0, 1, NULL, 1, 0), 0, 'N', 'Y') AS MON
-        ,       DECODE(DECODE(INSTR(tphsod.REQ_NO_DAY, '3'), 0, 1, NULL, 1, 0), 0, 'N', 'Y') AS TUE
-        ,       DECODE(DECODE(INSTR(tphsod.REQ_NO_DAY, '4'), 0, 1, NULL, 1, 0), 0, 'N', 'Y') AS WED
-        ,       DECODE(DECODE(INSTR(tphsod.REQ_NO_DAY, '5'), 0, 1, NULL, 1, 0), 0, 'N', 'Y') AS THU
-        ,       DECODE(DECODE(INSTR(tphsod.REQ_NO_DAY, '6'), 0, 1, NULL, 1, 0), 0, 'N', 'Y') AS FRI
-        ,       DECODE(DECODE(INSTR(tphsod.REQ_NO_DAY, '7'), 0, 1, NULL, 1, 0), 0, 'N', 'Y') AS SAT
+        ,       tms.OWNER_NM, tms.SYS_STAT_FG
+        ,       NVL(tphsl.ORDER_CLOSE_YN, 'N') AS ORDER_CLOSE_YN
+        ,       DECODE(INSTR(tphsod.REQ_NO_DAY, '1'), 0, 'Y', NULL, 'Y', 'N') AS SUN
+        ,       DECODE(INSTR(tphsod.REQ_NO_DAY, '2'), 0, 'Y', NULL, 'Y', 'N') AS MON
+        ,       DECODE(INSTR(tphsod.REQ_NO_DAY, '3'), 0, 'Y', NULL, 'Y', 'N') AS TUE
+        ,       DECODE(INSTR(tphsod.REQ_NO_DAY, '4'), 0, 'Y', NULL, 'Y', 'N') AS WED
+        ,       DECODE(INSTR(tphsod.REQ_NO_DAY, '5'), 0, 'Y', NULL, 'Y', 'N') AS THU
+        ,       DECODE(INSTR(tphsod.REQ_NO_DAY, '6'), 0, 'Y', NULL, 'Y', 'N') AS FRI
+        ,       DECODE(INSTR(tphsod.REQ_NO_DAY, '7'), 0, 'Y', NULL, 'Y', 'N') AS SAT
         ,       tphsod.REMARK AS DAYS_REMARK
         ]]>
         FROM    TB_MS_STORE tms
         ,       TB_PO_HQ_STORE_ORDER_DAYS tphsod
+        ,       TB_PO_HQ_STORE_LOAN tphsl
         WHERE   tms.HQ_OFFICE_CD    =   #{hqOfficeCd}
         AND     tphsod.STORE_CD (+) =   tms.STORE_CD
+        AND     tphsl.STORE_CD  (+) =   tms.STORE_CD
         <if test='storeCd != null and storeCd != ""'>
             AND tms.STORE_CD = #{storeCd}
         </if>
         <if test='storeNm != null and storeNm != ""'>
-            AND tho.STORE_NM LIKE '%'||#{storeNm}||'%'
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
         </if>
         ORDER BY tms.STORE_CD
     </select>
+
+    <!-- 출고요청일관리 요일별 요일 저장 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_ORDER_DAYS
+        PARAM    : outstockReqDateVO
+        COMMENTS : 출고요청일관리의 요일을 등록한다.
+    -->
+    <insert id="insertReqDateDays" parameterType="outstockReqDateVO">
+    /* USE : outstockReqDateMapper.insertReqDateDays */
+    INSERT INTO TB_PO_HQ_STORE_ORDER_DAYS
+    (
+        HQ_OFFICE_CD,
+        STORE_CD,
+        REQ_NO_DAY,
+        REMARK,
+        REG_DT,
+        REG_ID,
+        MOD_DT,
+        MOD_ID
+    )
+    VALUES
+    (
+        #{hqOfficeCd},
+        #{storeCd},
+        #{reqNoDay},
+        #{daysRemark},
+        #{regDt},
+        #{regId},
+        #{modDt},
+        #{modId}
+    )
+    </insert>
+
+    <!-- 출고요청일관리 요일별 요일 저장 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_ORDER_DAYS
+        PARAM    : outstockReqDateVO
+        COMMENTS : 출고요청일관리의 요일을 수정한다.
+    -->
+    <update id="updateReqDateDays" parameterType="outstockReqDateVO">
+    /* USE : outstockReqDateMapper.updateReqDateDays */
+    UPDATE  TB_PO_HQ_STORE_ORDER_DAYS
+    SET     REQ_NO_DAY      = #{reqNoDay},
+            REMARK          = #{daysRemark},
+            REG_DT          = #{regDt},
+            REG_ID          = #{regId},
+            MOD_DT          = #{modDt},
+            MOD_ID          = #{modId}
+    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+    AND     STORE_CD     = #{storeCd}
+    </update>
+
+    <!-- 출고요청일관리 특정일 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_ORDER_SPECIFIC, TB_MS_STORE
+        PARAM    : outstockReqDateVO
+        COMMENTS : 출고요청일관리 요일별 리스트를 조회한다.
+    -->
+    <select id="getSpecificDateList" parameterType="outstockReqDateVO" resultType="DefaultMap">
+        /* USE : outstockReqDateMapper.getSpecificDateList */
+        <![CDATA[
+        SELECT  tms.STORE_CD, tms.STORE_NM
+        ,       tms.OWNER_NM, tms.SYS_STAT_FG
+        ,       tphsos.SPECIFIC_DATE
+        ,       tphsos.OUTSTOCK_REQ_YN
+        ,       tphsos.REMARK AS SPECIFIC_DATE_REMARK
+        ]]>
+        FROM    TB_PO_HQ_STORE_ORDER_SPECIFIC tphsos
+        ,       TB_MS_STORE tms
+        WHERE   tphsos.HQ_OFFICE_CD =   #{hqOfficeCd}
+        AND     tms.STORE_CD        =   tphsos.STORE_CD
+        <if test='storeCd != null and storeCd != ""'>
+            AND tms.STORE_CD = #{storeCd}
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        ORDER BY tphsos.STORE_CD
+    </select>
+
+    <!-- 출고요청일관리 특정일 저장 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_ORDER_SPECIFIC
+        PARAM    : outstockReqDateVO
+        COMMENTS : 출고요청일관리의 특정일을 등록한다.
+    -->
+    <insert id="insertSpecificDate" parameterType="outstockReqDateVO">
+    /* USE : outstockReqDateMapper.insertSpecificDate */
+    INSERT INTO TB_PO_HQ_STORE_ORDER_SPECIFIC
+    (
+        HQ_OFFICE_CD,
+        STORE_CD,
+        SPECIFIC_DATE,
+        OUTSTOCK_REQ_YN,
+        REMARK,
+        REG_DT,
+        REG_ID,
+        MOD_DT,
+        MOD_ID
+    )
+    VALUES
+    (
+        #{hqOfficeCd},
+        #{storeCd},
+        #{specificDate},
+        #{outstockReqYn},
+        #{specificRemark},
+        #{regDt},
+        #{regId},
+        #{modDt},
+        #{modId}
+    )
+    </insert>
+
+    <!-- 출고요청일관리 특정일 저장 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_ORDER_SPECIFIC
+        PARAM    : outstockReqDateVO
+        COMMENTS : 출고요청일관리의 특정일을 수정한다.
+    -->
+    <update id="updateSpecificDate" parameterType="outstockReqDateVO">
+    /* USE : outstockReqDateMapper.updateSpecificDate */
+    UPDATE  TB_PO_HQ_STORE_ORDER_SPECIFIC
+    SET
+            OUTSTOCK_REQ_YN = #{outstockReqYn},
+            REMARK          = #{specificRemark},
+            REG_DT          = #{regDt},
+            REG_ID          = #{regId},
+            MOD_DT          = #{modDt},
+            MOD_ID          = #{modId}
+    WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+    AND     STORE_CD      = #{storeCd}
+    AND     SPECIFIC_DATE = #{specificDate}
+    </update>
 </mapper>

@@ -1,81 +1,110 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<%--
- * 본사 권한 : 쿠폰, 쿠폰적용상품, 쿠폰적용매장
- * 매장 권한 : 쿠폰, 쿠폰적용상품
- //TODO 환경변수값 이용해서 쿠폰등록을 본사에서 컨트롤하는지, 매장에서 컨트록하는지, 둘다 하는지 받아야 함
---%>
-<c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
-<c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
-<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
-<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
-<c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
-<c:set var="baseUrl" value="/base/pay/coupon/" />
+<wj-popup control="couponPordLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:900px;">
 
-<div class="subCon">
+  <div class="wj-dialog wj-dialog-columns">
+    <div class="wj-dialog-header wj-dialog-header-font">
+      쿠폰대상 상품등록
+      <a href="javascript:;" class="wj-hide btn_close"></a>
+    </div>
+    <div class="wj-dialog-body">
 
-  <%-- 탭 (본사에서만 보임) --%>
-  <c:if test="${orgnFg == 'HQ'}">
-    <ul class="subTab mb20">
-      <%-- 쿠폰등록 --%>
-      <li><a href="javascript:;" id="couponRegTab"><s:message code='coupon.regist.coupon' /></a></li>
-      <%-- 쿠폰적용상품 등록 --%>
-      <li><a href="javascript:;" id="couponProdTab" class="on"><s:message code='coupon.regist.product' /></a></li>
-      <%-- 쿠폰적용매장 등록 --%>
-      <li><a href="javascript:;" id="couponStoreTab"><s:message code='coupon.regist.store' /></a></li>
-    </ul>
-  </c:if>
-
-  <%-- 쿠폰 //TODO 페이징 --%>
-  <div class="wj-TblWrap mb40">
-    <div class="wj-TblWrapBr mr10 pd20" style="height:230px;">
-      <div class="updownSet oh mb10">
-        <span class="fl bk lh30"><s:message code='coupon.regist.coupon' /></span>
-        <button class="btn_skyblue" id="btnCouponAdd"><s:message code='cmm.add' /></button>
-        <button class="btn_skyblue" id="btnCouponDel"><s:message code='cmm.del' /></button>
-        <button class="btn_skyblue" id="btnCouponSave"><s:message code='cmm.save' /></button>
+      <table class="tblType01 mt20">
+        <colgroup>
+          <col class="w15" />
+          <col class="w35" />
+          <col class="w15" />
+          <col class="w35" />
+        </colgroup>
+        <tbody>
+        <tr>
+          <th>상품코드</th>
+          <td><input type="text" id="srchProdCd" ng-model="prodCd" /></td>
+          <th>상품명</th>
+          <td><input type="text" id="srchProdNm" ng-model="prodNm" /></td>
+        </tr>
+        </tbody>
+      </table>
+      <%-- 조회 --%>
+      <div class="mt10 tr">
+        <button class="btn_skyblue" id="btnSearch" ng-click="_broadcast('regProdCtrl', true)" ><s:message code="cmm.search" /></button>
       </div>
-      <%-- 쿠폰등록 그리드 --%>
-      <div id="couponGrid" style="height:190px"></div>
+
+      <div class="oh mt40">
+        <%--- 등록상품 그리드 --%>
+        <div class="w50 fl">
+
+          <div class="wj-TblWrap mr10" style="height:350px;" ng-controller="regProdCtrl">
+            <div class="oh mb10">
+              <span class="fl bk lh20 s14">취급상품</span>
+              <span class="fr"><a href="javascript:;" class="btn_grayS2" ng-click="delete()">삭제</a></span>
+            </div>
+            <div id="regProdGrid" style="height: 270px;">
+              <wj-flex-grid
+                      autoGenerateColumns="false"
+                      control="flex"
+                      initialized="initGrid(s,e)"
+                      sticky-headers="true"
+                      selection-mode="Row"
+                      items-source="data"
+                      item-formatter="_itemFormatter">
+
+                <!-- define columns -->
+                <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.hqOfficeCd"/>" binding="hqOfficeCd" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.storeCd"/>" binding="storeCd" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.prodClassCd"/>" binding="prodClassCd" width="*" isReadOnly="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.prodClassNm"/>" binding="prodClassNm" width="*" isReadOnly="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.prodCd"/>" binding="prodCd" width="*" isReadOnly="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.prodNm"/>" binding="prodNm" width="*" isReadOnly="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.costUprc"/>" binding="costUprc" width="*" isReadOnly="true"></wj-flex-grid-column>
+              </wj-flex-grid>
+            </div>
+            <!--페이지 리스트-->
+            <!--//페이지 리스트-->
+          </div>
+
+        </div>
+
+        <%--- 미등록상품 그리드 --%>
+        <div class="w50 fr">
+
+          <div class="wj-TblWrap ml10" style="height:350px;" ng-controller="noRegProdCtrl">
+            <div class="oh mb10">
+              <span class="fl bk lh20 s14">취급상품</span>
+              <span class="fr"><a href="javascript:;" class="btn_grayS2" ng-click="regist()" >등록</a></span>
+            </div>
+            <div id="noRegProdGrid" style="height: 270px;">
+              <wj-flex-grid
+                      autoGenerateColumns="false"
+                      control="flex"
+                      initialized="initGrid(s,e)"
+                      sticky-headers="true"
+                      selection-mode="Row"
+                      items-source="data"
+                      item-formatter="_itemFormatter">
+
+                <!-- define columns -->
+                <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.hqOfficeCd"/>" binding="hqOfficeCd" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.storeCd"/>" binding="storeCd" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.prodClassCd"/>" binding="prodClassCd" width="*"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.prodClassNm"/>" binding="prodClassNm" width="*"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.prodCd"/>" binding="prodCd" width="*"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.prodNm"/>" binding="prodNm" width="*"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.costUprc"/>" binding="costUprc" width="*"></wj-flex-grid-column>
+              </wj-flex-grid>
+            </div>
+            <!--페이지 리스트-->
+            <!--//페이지 리스트-->
+          </div>
+
+        </div>
+      </div>
     </div>
   </div>
+</wj-popup>
 
-  <%-- 상품 --%>
-  <div class="wj-TblWrap mt20 oh">
-    <%-- 등록 상품--%>
-    <div class="w50 fl">
-      <div class="wj-TblWrapBr mr10 pd20" style="height:500px;">
-        <div class="updownSet oh mb10">
-          <span class="fl bk lh30">등록 상품</span>
-          <button class="btn_skyblue">등록해제</button>
-        </div>
-        <%-- 등록 상품 그리드 --%>
-        <div id="gridRegistProd"></div>
-      </div>
-    </div>
-
-    <%-- 미등록 상품 --%>
-    <div class="w50 fr">
-      <div class="wj-TblWrapBr ml10 pd20" style="height:500px;">
-        <div class="updownSet oh mb10">
-          <span class="fl bk lh30">미등록 상품</span>
-          <button class="btn_skyblue">등록</button>
-        </div>
-        <%-- 미등록 상품 그리드 --%>
-        <div id="gridNoRegistProd"></div>
-      </div>
-    </div>
-  </div>
-
-</div>
-
-<script type="text/javascript">
-var useYn        = ${ccu.getCommCodeExcpAll("067")};
-var coupnDcFg    = ${ccu.getCommCodeExcpAll("013")};
-var coupnApplyFg = ${ccu.getCommCodeExcpAll("043")};
-var baseUrl      = "${baseUrl}";
-</script>
 <script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/couponProd.js?ver=20180817" charset="utf-8"></script>

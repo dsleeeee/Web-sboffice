@@ -4,10 +4,10 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
-<c:set var="baseUrl" value="/iostock/order/outstockReqDate/days/"/>
+<c:set var="baseUrl" value="/iostock/order/outstockReqDate/specificDate/"/>
 
 
-<div id="daysView" class="subCon" style="display: none;" ng-controller="daysCtrl">
+<div id="specificView" class="subCon" style="display: none;" ng-controller="specificCtrl">
     <div class="searchBar">
         <a href="javascript:;" class="open">${menuNm}</a>
     </div>
@@ -22,26 +22,30 @@
         <tr>
             <%-- 매장코드 --%>
             <th><s:message code="outstockReqDate.storeCd"/></th>
-            <td><input type="text" id="daysSearchStoreCd" name="daysSearchStoreCd" ng-model="storeCd" class="sb-input w100" maxlength="7"/></td>
+            <td><input type="text" id="specificSearchStoreCd" name="specificSearchStoreCd" ng-model="storeCd" class="sb-input w100" maxlength="7"/></td>
             <%-- 매장명 --%>
             <th><s:message code="outstockReqDate.storeNm"/></th>
-            <td><input type="text" id="daysSearchStoreNm" name="daysSearchStoreNm" ng-model="storeNm" class="sb-input w100" maxlength="16" /></td>
+            <td><input type="text" id="specificSearchStoreNm" name="specificSearchStoreNm" ng-model="storeNm" class="sb-input w100" maxlength="16" /></td>
         </tr>
         </tbody>
     </table>
 
     <div class="mt10 pdb20 oh bb">
         <%-- 조회 --%>
-        <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('daysCtrl')"><s:message code="cmm.search" /></button>
+        <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('specificCtrl')"><s:message code="cmm.search" /></button>
     </div>
 
     <div class="w100">
         <div class="mt20 oh sb-select dkbr">
             <%--페이지 스케일 --%>
-            <div id="listScaleBoxDays" class="w130 fl"></div>
+            <div id="listScaleBoxSpecific" class="w130 fl"></div>
             <div class="tr">
                 <%-- 신규등록 --%>
-                <button class="btn_skyblue" ng-click="saveDays()"><s:message code="cmm.save" /></button>
+                <button class="btn_skyblue" ng-click="newSpecificDate()"><s:message code="cmm.new.add" /></button>
+                <%-- 저장 --%>
+                <button class="btn_skyblue" ng-click="saveSpecificDate()"><s:message code="cmm.save" /></button>
+                <%-- 삭제 --%>
+                <button class="btn_skyblue" ng-click="deleteSpecificDate()"><s:message code="cmm.del" /></button>
             </div>
         </div>
 
@@ -57,25 +61,19 @@
                     item-formatter="_itemFormatter">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="cmm.chk"/>"                      binding="gChk"         width="40" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="outstockReqDate.storeCd"/>"      binding="storeCd"      width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="outstockReqDate.storeNm"/>"      binding="storeNm"      width="*"  align="left" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="cmm.owner.nm"/>"                 binding="ownerNm"      width="60" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="outstockReqDate.sysStatFg"/>"    binding="sysStatFg"    width="50" align="center" data-map="sysStatFgMap" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="outstockReqDate.orderCloseYn"/>" binding="orderCloseYn" width="70" align="center" data-map="orderCloseYnMap" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="outstockReqDate.sun"/>"          binding="sun"          width="40" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="outstockReqDate.mon"/>"          binding="mon"          width="40" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="outstockReqDate.tue"/>"          binding="tue"          width="40" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="outstockReqDate.wed"/>"          binding="wed"          width="40" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="outstockReqDate.thu"/>"          binding="thu"          width="40" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="outstockReqDate.fri"/>"          binding="fri"          width="40" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="outstockReqDate.sat"/>"          binding="sat"          width="40" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="outstockReqDate.remark"/>"       binding="daysRemark"   width="*" align="left" is-read-only="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cmm.chk"/>"                       binding="gChk"           width="40" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="outstockReqDate.storeCd"/>"       binding="storeCd"        width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="outstockReqDate.storeNm"/>"       binding="storeNm"        width="*"  align="left" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cmm.owner.nm"/>"                  binding="ownerNm"        width="60" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="outstockReqDate.sysStatFg"/>"     binding="sysStatFg"      width="50" align="center" data-map="sysStatFgMap" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="outstockReqDate.specificDate"/>"  binding="specificDate"   width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="outstockReqDate.remark"/>"        binding="specificDateRemark" width="*" align="left" is-read-only="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="outstockReqDate.outstockReqYn"/>" binding="outstockReqYn"  width="70" align="center" data-map="outstockReqYnMap" is-read-only="false"></wj-flex-grid-column>
 
             </wj-flex-grid>
             <%-- ColumnPicker 사용시 include --%>
             <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-                <jsp:param name="pickerTarget" value="daysCtrl"/>
+                <jsp:param name="pickerTarget" value="specificCtrl"/>
             </jsp:include>
             <%--// ColumnPicker 사용시 include --%>
         </div>
@@ -84,7 +82,7 @@
 </div>
 
 <script type="text/javascript">
-    var listScaleBoxDays;
+    var listScaleBoxSpecific;
     var sysStatFg = ${ccu.getCommCode("005")};
 
     /**
@@ -93,20 +91,19 @@
     var app = agrid.getApp();
 
     /** 요일별 그리드 controller */
-    app.controller('daysCtrl', ['$scope', '$http', function ($scope, $http) {
+    app.controller('specificCtrl', ['$scope', '$http', function ($scope, $http) {
         // 상위 객체 상속 : T/F 는 picker
-        angular.extend(this, new RootController('daysCtrl', $scope, $http, true));
+        angular.extend(this, new RootController('specificCtrl', $scope, $http, true));
         // grid 초기화 : 생성되기전 초기화되면서 생성된다
         $scope.initGrid = function (s, e) {
             // picker 사용시 호출 : 미사용시 호출안함
-            $scope._makePickColumns("daysCtrl");
-
+            $scope._makePickColumns("specificCtrl");
 
             // 그리드 DataMap 설정
             $scope.sysStatFgMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
-            $scope.orderCloseYnMap = new wijmo.grid.DataMap([
-                {id: "Y", name: "<s:message code='outstockReqDate.orderCloseYnY'/>"},
-                {id: "N", name: "<s:message code='outstockReqDate.orderCloseYnN'/>"},
+            $scope.outstockReqYnMap = new wijmo.grid.DataMap([
+                {id: "가능", name: "<s:message code='outstockReqDate.outstockReqYnY'/>"},
+                {id: "불가", name: "<s:message code='outstockReqDate.outstockReqYnN'/>"},
             ], 'id', 'name');
 
             // 그리드 링크 효과
@@ -140,36 +137,51 @@
         };
 
         // 다른 컨트롤러의 broadcast 받기
-        $scope.$on("daysCtrl", function(event, data) {
-            $scope.searchDaysList();
+        $scope.$on("specificCtrl", function(event, data) {
+            $scope.searchspecificDateList();
             // 기능수행 종료 : 반드시 추가
             event.preventDefault();
         });
 
-        $scope.searchDaysList = function() {
+        $scope.searchspecificDateList = function() {
             // 파라미터
             var params = {};
             // params.listScale = 15;
-            params.listScale = listScaleBoxDays.selectedValue;
+            params.listScale = listScaleBoxSpecific.selectedValue;
             params.curr = 1;
             // 조회 수행 : 조회URL, 파라미터, 콜백함수
-            $scope._inquiryMain("/iostock/order/outstockReqDate/days/list.sb", params);
+            $scope._inquiryMain("/iostock/order/outstockReqDate/specificDate/list.sb", params);
         };
 
-        // 요청일 저장
-        $scope.saveDays = function () {
+        // 특정일 신규등록
+        $scope.newSpecificDate = function () {
+            $scope._broadcast('');
+        };
+
+        // 특정일 저장
+        $scope.saveSpecificDate = function () {
             var params = new Array();
             for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
                 $scope.flex.collectionView.itemsEdited[i].status = "U";
                 params.push($scope.flex.collectionView.itemsEdited[i]);
             }
-            $scope._save("/iostock/order/outstockReqDate/days/save.sb", params, function() { $scope.searchDaysList() });
+            $scope._save("/iostock/order/outstockReqDate/specificDate/save.sb", params, function() { $scope.searchspecificDateList() });
+        };
+
+        // 특정일 삭제
+        $scope.deleteSpecificDate = function () {
+            var params = new Array();
+            for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+                $scope.flex.collectionView.itemsEdited[i].status = "U";
+                params.push($scope.flex.collectionView.itemsEdited[i]);
+            }
+            $scope._save("/iostock/order/outstockReqDate/specificDate/delete.sb", params, function() { $scope.searchspecificDateList() });
         };
 
     }]);
 
     $(document).ready(function () {
-        listScaleBoxDays = wcombo.genCommonBox("#listScaleBoxDays", gvListScaleBoxData); //listScaleBoxData 는 공통으로 빼둠. (commonVariables.jsp)
+        listScaleBoxSpecific = wcombo.genCommonBox("#listScaleBoxSpecific", gvListScaleBoxData); //listScaleBoxData 는 공통으로 빼둠. (commonVariables.jsp)
 
         <%-- 엑셀 다운로드 버튼 클릭 --%>
         $("#btnExcel").click(function(){

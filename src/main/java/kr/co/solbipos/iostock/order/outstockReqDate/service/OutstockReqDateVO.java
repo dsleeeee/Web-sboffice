@@ -29,13 +29,19 @@ public class OutstockReqDateVO extends PageVO {
     /** 출고요청일 토 */
     private Boolean sat;
     /** 요청일비고 */
-    private Boolean daysRemark;
+    private String daysRemark;
     /** 특정일 */
     private String specificDate;
     /** 출고요청가능여부 Y:가능 N:불가능 */
     private String outstockReqYn;
     /** 특정일비고 */
     private String specificDateRemark;
+    /** 대표자명 */
+    private String ownerNm;
+    /** 시스템상태 */
+    private String sysStatFg;
+    /** 발주가능여부 */
+    private String orderCloseYn;
 
     /**
      * @return the hqOfficeCd
@@ -194,14 +200,14 @@ public class OutstockReqDateVO extends PageVO {
     /**
      * @return the daysRemark
      */
-    public Boolean getDaysRemark() {
+    public String getDaysRemark() {
         return daysRemark;
     }
 
     /**
      * @param daysRemark the daysRemark to set
      */
-    public void setDaysRemark(Boolean daysRemark) {
+    public void setDaysRemark(String daysRemark) {
         this.daysRemark = daysRemark;
     }
 
@@ -246,4 +252,48 @@ public class OutstockReqDateVO extends PageVO {
     public void setSpecificDateRemark(String specificDateRemark) {
         this.specificDateRemark = specificDateRemark;
     }
+
+    /**
+     * @return the ownerNm
+     */
+    public String getOwnerNm() {
+        return ownerNm;
+    }
+
+    /**
+     * @param ownerNm the ownerNm to set
+     */
+    public void setOwnerNm(String ownerNm) {
+        this.ownerNm = ownerNm;
+    }
+
+    /**
+     * @return the sysStatFg
+     */
+    public String getSysStatFg() {
+        return sysStatFg;
+    }
+
+    /**
+     * @param sysStatFg the sysStatFg to set
+     */
+    public void setSysStatFg(String sysStatFg) {
+        this.sysStatFg = sysStatFg;
+    }
+
+    /**
+     * @return the orderCloseYn
+     */
+    public String getOrderCloseYn() {
+        return orderCloseYn;
+    }
+
+    /**
+     * @param orderCloseYn the orderCloseYn to set
+     */
+    public void setOrderCloseYn(String orderCloseYn) {
+        this.orderCloseYn = orderCloseYn;
+    }
+
+
 }

@@ -121,11 +121,27 @@ public class FuncServiceImpl implements FuncService {
 
             if(funcStoreVO.getStatus() == GridDataFg.INSERT) {
                 procCnt += mapper.insertFuncStore(funcStoreVO);
+
+                FuncStoreVO funStore = new FuncStoreVO();
+                String storeResult = mapper.insertStoreFuncKey(funcStoreVO);
+                funStore.setResult(storeResult);
+
+                FuncStoreVO funcPos = new FuncStoreVO();
+                String posResult = mapper.insertPosFuncKey(funcStoreVO);
+                funcPos.setResult(posResult);
+
             } else if(funcStoreVO.getStatus() == GridDataFg.DELETE) {
                 procCnt += mapper.deleteFuncStore(funcStoreVO);
+
+                FuncStoreVO funStore = new FuncStoreVO();
+                String storeResult = mapper.deleteStoreFuncKey(funcStoreVO);
+                funStore.setResult(storeResult);
+
+                FuncStoreVO funcPos = new FuncStoreVO();
+                String posResult = mapper.deletePosFuncKey(funcStoreVO);
+                funcPos.setResult(posResult);
             }
         }
-
         return procCnt;
     }
 }

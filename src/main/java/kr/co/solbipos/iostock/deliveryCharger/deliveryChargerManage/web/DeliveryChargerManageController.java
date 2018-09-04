@@ -74,7 +74,7 @@ public class DeliveryChargerManageController {
      */
     @RequestMapping(value = "/deliveryChargerList/list.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result deliveryChargerList(HttpServletRequest request, HttpServletResponse response,
+    public Result getDeliveryChargerList(HttpServletRequest request, HttpServletResponse response,
         Model model, DeliveryChargerManageVO deliveryChargerManageVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
@@ -97,7 +97,7 @@ public class DeliveryChargerManageController {
      */
     @RequestMapping(value = "/deliveryChargerRegist/dlvrInfo.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result deliveryChargerRegistDlvrInfo(HttpServletRequest request, HttpServletResponse response,
+    public Result getDlvrInfo(HttpServletRequest request, HttpServletResponse response,
         Model model, DeliveryChargerManageVO deliveryChargerManageVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
@@ -120,7 +120,7 @@ public class DeliveryChargerManageController {
      */
     @RequestMapping(value = "/deliveryChargerRegist/dlvrSave.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result deliveryChargerRegistDlvrSave(HttpServletRequest request, HttpServletResponse response,
+    public Result saveDeliveryCharger(HttpServletRequest request, HttpServletResponse response,
         Model model, DeliveryChargerManageVO deliveryChargerManageVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
@@ -145,7 +145,7 @@ public class DeliveryChargerManageController {
      */
     @RequestMapping(value = "/deliveryChargerRegist/storageList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result deliveryChargerStorageList(HttpServletRequest request, HttpServletResponse response,
+    public Result getDeliveryChargerStorageList(HttpServletRequest request, HttpServletResponse response,
         Model model, DeliveryChargerManageVO deliveryChargerManageVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
