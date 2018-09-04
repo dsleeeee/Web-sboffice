@@ -356,7 +356,6 @@ $("#btnSave").click(function(e){
   }
   for(var i=0; i<grid2.collectionView.itemsAdded.length; i++){
     grid2.collectionView.itemsAdded[i].status = "I";
-
     grid2.collectionView.itemsAdded[i].fnkeyFg = selectData.nmcodeCd;
     paramArr.push(grid2.collectionView.itemsAdded[i]);
   }

@@ -52,9 +52,9 @@ public class FuncVO extends CmmVO{
     /** 높이 */
     private String height;
     /** 사용여부 */
-    private String useYn;
-    
-    
+    private Boolean useYn;
+
+
     /**
      * @return the fnkeyNo
      */
@@ -235,17 +235,19 @@ public class FuncVO extends CmmVO{
     public void setHeight(String height) {
         this.height = height;
     }
+
     /**
      * @return the useYn
      */
-    public String getUseYn() {
+
+    public Boolean getUseYn() {
         return useYn;
     }
+
     /**
      * @param useYn the useYn to set
      */
-    public void setUseYn(String useYn) {
+    public void setUseYn(Boolean useYn) {
         this.useYn = useYn;
     }
-    
 }
