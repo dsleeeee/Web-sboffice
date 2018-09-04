@@ -37,6 +37,34 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
     }], 'id', 'name');
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
+      // 공통 안쓰고 페이지에서 헤더에 체크박스 그리는경우 사용 : 20180904 노현수
+      // if (e.panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+      //   var flex = e.panel.grid;
+      //   var col = s.columns[e.col];
+      //   // check that this is a boolean column
+      //   if (col.binding === "gChk") { // 여기에 해당하는 컬럼명 바인딩 바꿔줄 것.
+      //     // prevent sorting on click
+      //     col.allowSorting = false;
+      //     // count true values to initialize checkbox
+      //     var cnt = 0;
+      //     for (var i = 0; i < flex.rows.length; i++) {
+      //       if (flex.getCellData(i, col._idx) == true) cnt++;
+      //     }
+      //     // create and initialize checkbox
+      //     e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check" />';
+      //     var cb = e.cell.firstChild;
+      //     cb.checked = cnt > 0;
+      //     cb.indeterminate = cnt > 0 && cnt < flex.rows.length;
+      //     // apply checkbox value to cells
+      //     cb.addEventListener('click', function (e) {
+      //       flex.beginUpdate();
+      //       for (var i = 0; i < flex.rows.length; i++) {
+      //         flex.setCellData(i, col._idx, cb.checked);
+      //       }
+      //       flex.endUpdate();
+      //     });
+      //   }
+      // }
       if (e.panel == s.cells) {
         var col = s.columns[e.col];
         if (col.binding === "envstCd") {
