@@ -42,6 +42,8 @@ public class FuncStoreVO extends CmmVO {
     private SysStatFg sysStatFg;
     /** 기능키 적용매장 등록여부 */
     private String regYn;
+    /** 기능키 적용매장 등록여부 */
+    private String result;
 
     /**
      * @return the fnkeyNo
@@ -191,5 +193,21 @@ public class FuncStoreVO extends CmmVO {
      */
     public void setRegYn(String regYn) {
         this.regYn = regYn;
+    }
+
+    /**
+     * @return the result
+     * @param storeResult
+     */
+
+    public String getResult(String storeResult) {
+        return result;
+    }
+
+    /**
+     * @param result the result to set
+     */
+    public void setResult(String result) {
+        this.result = result;
     }
 }

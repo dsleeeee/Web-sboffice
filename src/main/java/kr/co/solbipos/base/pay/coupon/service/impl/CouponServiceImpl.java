@@ -1,6 +1,7 @@
 package kr.co.solbipos.base.pay.coupon.service.impl;
 
 import kr.co.common.data.enums.Status;
+import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.code.CmmCodeService;
@@ -228,36 +229,65 @@ public class CouponServiceImpl implements CouponService {
         }
     }
 
-    /** 쿠폰 등록상품 조회 */
+    /** 상품 조회 */
     @Override
-    public List<DefaultMap<String>> getRegistProdList(CouponProdVO couponProdVO,
-        SessionInfoVO sessionInfoVO) {
+    public List<DefaultMap<String>> getProdList(CouponProdVO couponProdVO) {
 
-        // TODO 진행중
-        //List<DefaultMap<String>> resultList = mapper.getRegistProdList(couponProdVO);
+        List<DefaultMap<String>> resultProdList = null;
 
-        return null;
-    }
+        LOGGER.info(" ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ");
+        LOGGER.info(" >>>>>>>>>>>>>>>> couponProdVO.getProdRegFg() : "+ couponProdVO.getProdRegFg());
+        LOGGER.info(" >>>>>>>>>>>>>>>> couponProdVO.getCoupnEnvstVal() : "+ couponProdVO.getCoupnEnvstVal());
 
-    /** 쿠폰 미등록상품 조회 */
-    @Override
-    public List<DefaultMap<String>> getNoRegistProdList(CouponProdVO couponProdVO,
-        SessionInfoVO sessionInfoVO) {
-
-        // TODO 진행중
-        //List<DefaultMap<String>> resultList = mapper.getNogistProdList(couponProdVO);
-
-        /** env 본사 통제시, 본사 쿠폰, 쿠폰 등록상품 조회 */
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-
+        // 본사권한
+        if(couponProdVO.getCoupnEnvstVal() == CoupnEnvFg.HQ) {
+            resultProdList = mapper.getHqProdList(couponProdVO);
         }
-        /** env 매장 통제시, 매장 쿠폰, 쿠폰 등록상품 조회  */
-        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
-
-
+        // 매장권한
+        else if(couponProdVO.getCoupnEnvstVal() == CoupnEnvFg.STORE) {
+            resultProdList = mapper.getStoreProdList(couponProdVO);
         }
 
-        return null;
+        return resultProdList;
     }
 
+    /** 쿠폰 적용 상품 등록 */
+    @Override
+    public int registCouponProd(CouponProdVO[] couponProdVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String dt = currentDateTimeString();
+
+        for(CouponProdVO couponProdVO : couponProdVOs) {
+            couponProdVO.setRegDt(dt);
+            couponProdVO.setRegId(sessionInfoVO.getUserId());
+            couponProdVO.setModDt(dt);
+            couponProdVO.setModId(sessionInfoVO.getUserId());
+
+            if(couponProdVO.getCoupnEnvstVal() == CoupnEnvFg.HQ ) {
+                procCnt += mapper.insertHqCouponProd(couponProdVO);
+            } else if(couponProdVO.getCoupnEnvstVal() == CoupnEnvFg.STORE ) {
+                procCnt += mapper.insertStoreCouponProd(couponProdVO);
+            }
+        }
+        return procCnt;
+    }
+
+    /** 쿠폰 적용 상품 삭제 */
+    @Override
+    public int deleteCouponProd(CouponProdVO[] couponProdVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String dt = currentDateTimeString();
+
+        for(CouponProdVO couponProdVO : couponProdVOs) {
+            if(couponProdVO.getCoupnEnvstVal() == CoupnEnvFg.HQ ) {
+                procCnt += mapper.deleteHqCouponProd(couponProdVO);
+            } else if(couponProdVO.getCoupnEnvstVal() == CoupnEnvFg.STORE ) {
+                procCnt += mapper.deleteStoreCouponProd(couponProdVO);
+            }
+        }
+
+        return procCnt;
+    }
 }

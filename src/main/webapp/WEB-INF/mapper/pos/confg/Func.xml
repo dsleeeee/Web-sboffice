@@ -252,7 +252,6 @@
     )
   </insert>
 
-
   <!-- 기능키 적용매장 삭제 -->
   <!--
       TABLE    : TB_CM_POS_FNKEY_STORE
@@ -267,6 +266,82 @@
        AND STORE_CD = #{storeCd}
   </delete>
 
+  <!-- 매장 기능키에 해당 기능키 등록 -->
+  <!--
+      TABLE    : TB_CM_POS_FNKEY_STORE
+      PARAM    : funcStoreVO
+      COMMENTS : 매장의 기능키 목록에 해당 기능키를 등록한다.
+  -->
+  <select id="insertStoreFuncKey" statementType="CALLABLE"  parameterType="funcStoreVO" resultType="DefaultMap">
+    {
+      CALL PKG_MS_STORE_POS_FNKEY.SP_MS_STORE_FNKEY_I
+      (
+        #{storeCd},
+        #{fnkeyNo},
+        #{regDt},
+        #{regId},
+        #{modDt},
+        #{modId},
+        #{result, mode=OUT, jdbcType=VARCHAR}
+      )
+    }
+
+  </select>
+
+  <!-- 포스별 기능키에 해당 기능키 등록 -->
+  <!--
+      TABLE    : TB_CM_POS_FNKEY_STORE
+      PARAM    : funcStoreVO
+      COMMENTS : 매장의 포스별 기능키 목록에 해당 기능키를 등록한다.
+  -->
+  <select id="insertPosFuncKey" statementType="CALLABLE"  parameterType="funcStoreVO" resultType="DefaultMap">
+    {
+      CALL PKG_MS_STORE_POS_FNKEY.SP_MS_POS_FNKEY_I
+      (
+        #{storeCd},
+        #{fnkeyNo},
+        #{regDt},
+        #{regId},
+        #{modDt},
+        #{modId},
+        #{result, mode=OUT, jdbcType=VARCHAR}
+      )
+    }
+  </select>
+
+  <!-- 매장 기능키에 해당 기능키 삭제 -->
+  <!--
+      TABLE    : TB_CM_POS_FNKEY_STORE
+      PARAM    : funcStoreVO
+      COMMENTS : 매장의 기능키 목록에서 해당 기능키를 삭제한다.
+  -->
+  <select id="deleteStoreFuncKey" statementType="CALLABLE"  parameterType="funcStoreVO" resultType="DefaultMap">
+    {
+      CALL PKG_MS_STORE_POS_FNKEY.SP_MS_STORE_FNKEY_D
+      (
+        #{storeCd},
+        #{fnkeyNo},
+        #{result, mode=OUT, jdbcType=VARCHAR}
+      )
+    }
+  </select>
+
+  <!-- 포스별 기능키에 해당 기능키 삭제 -->
+  <!--
+      TABLE    : TB_CM_POS_FNKEY_STORE
+      PARAM    : funcStoreVO
+      COMMENTS : 매장 포스별 기능키 목록에서 해당 기능키를 삭제한다.
+  -->
+  <select id="deletePosFuncKey" statementType="CALLABLE"  parameterType="funcStoreVO" resultType="DefaultMap">
+    {
+      CALL PKG_MS_STORE_POS_FNKEY.SP_MS_POS_FNKEY_D
+      (
+        #{storeCd},
+        #{fnkeyNo},
+        #{result, mode=OUT, jdbcType=VARCHAR}
+      )
+    }
+  </select>
 
 </mapper>
 

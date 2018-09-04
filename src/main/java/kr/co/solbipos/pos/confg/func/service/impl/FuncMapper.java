@@ -78,4 +78,32 @@ public interface FuncMapper {
      * @return
      */
     int deleteFuncStore(FuncStoreVO funcStoreVO);
+
+    /**
+     * 매장 기능키에 해당 기능키 등록
+     * @param funcStoreVO
+     * @return
+     */
+    String insertStoreFuncKey(FuncStoreVO funcStoreVO);
+
+    /**
+     * 포스 기능키에 해당 기능키 등록
+     * @param funcStoreVO
+     * @return
+     */
+    String insertPosFuncKey(FuncStoreVO funcStoreVO);
+
+    /**
+     * 매장 기능키 삭제
+     * @param funcStoreVO
+     * @return
+     */
+    String deleteStoreFuncKey(FuncStoreVO funcStoreVO);
+
+    /**
+     * 포스 기능키 삭제
+     * @param funcStoreVO
+     * @return
+     */
+    String deletePosFuncKey(FuncStoreVO funcStoreVO);
 }

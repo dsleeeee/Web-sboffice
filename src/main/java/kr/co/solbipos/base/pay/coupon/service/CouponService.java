@@ -36,8 +36,11 @@ public interface CouponService {
     int saveCouponList(CouponVO[] couponVOs, SessionInfoVO sessionInfoVO);
 
     /** 쿠폰 등록상품 조회*/
-    List<DefaultMap<String>> getRegistProdList(CouponProdVO couponProdVO, SessionInfoVO sessionInfoVO);
+    List<DefaultMap<String>> getProdList(CouponProdVO couponProdVO);
 
-    /** 쿠폰 미등록상품 조회*/
-    List<DefaultMap<String>> getNoRegistProdList(CouponProdVO couponProdVO, SessionInfoVO sessionInfoVO);
+    /** 쿠폰 적용 상품 등록 */
+    int registCouponProd(CouponProdVO[] couponProdVOs, SessionInfoVO sessionInfoVO);
+
+    /** 쿠폰 적용 상품 삭제 */
+    int deleteCouponProd(CouponProdVO[] couponProdVOs, SessionInfoVO sessionInfoVO);
 }

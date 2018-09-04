@@ -2,6 +2,7 @@ package kr.co.solbipos.base.pay.coupon.service;
 
 import kr.co.common.data.enums.UseYn;
 import kr.co.solbipos.application.common.service.CmmVO;
+import kr.co.solbipos.base.pay.coupon.service.enums.CoupnEnvFg;
 
 /**
  * @Class Name : CouponVO.java
@@ -26,20 +27,15 @@ public class CouponProdVO extends CmmVO {
     private String storeCd;
     /** 쿠폰코드 */
     private String coupnCd;
-    /** 쿠폰명 */
-    private String coupnNm;
-    /** 권종분류코드 */
-    private String payClassCd;
-    /** 쿠폰할인구분 */
-    private String coupnDcFg;
-    /** 쿠폰할인율 */
-    private double coupnDcRate;
-    /** 쿠폰할인금액 */
-    private double coupnDcAmt;
-    /** 쿠폰적용구분 */
-    private String coupnApplyFg;
+    /** 상품코드 */
+    private String prodCd;
     /** 사용여부 */
     private UseYn useYn;
+    /** 쿠폰등록여부 */
+    private UseYn prodRegFg;
+    /** 쿠폰등록 본사 통제여부 */
+    private CoupnEnvFg coupnEnvstVal;
+
 
     /**
      * @return the hqOfficeCd
@@ -87,93 +83,18 @@ public class CouponProdVO extends CmmVO {
     }
 
     /**
-     * @return the coupnNm
+     * @return the prodCd
      */
 
-    public String getCoupnNm() {
-        return coupnNm;
+    public String getProdCd() {
+        return prodCd;
     }
 
     /**
-     * @param coupnNm the coupnNm to set
+     * @param prodCd the prodCd to set
      */
-    public void setCoupnNm(String coupnNm) {
-        this.coupnNm = coupnNm;
-    }
-
-    /**
-     * @return the payClassCd
-     */
-
-    public String getPayClassCd() {
-        return payClassCd;
-    }
-
-    /**
-     * @param payClassCd the payClassCd to set
-     */
-    public void setPayClassCd(String payClassCd) {
-        this.payClassCd = payClassCd;
-    }
-
-    /**
-     * @return the coupnDcFg
-     */
-
-    public String getCoupnDcFg() {
-        return coupnDcFg;
-    }
-
-    /**
-     * @param coupnDcFg the coupnDcFg to set
-     */
-    public void setCoupnDcFg(String coupnDcFg) {
-        this.coupnDcFg = coupnDcFg;
-    }
-
-    /**
-     * @return the coupnDcRate
-     */
-
-    public double getCoupnDcRate() {
-        return coupnDcRate;
-    }
-
-    /**
-     * @param coupnDcRate the coupnDcRate to set
-     */
-    public void setCoupnDcRate(double coupnDcRate) {
-        this.coupnDcRate = coupnDcRate;
-    }
-
-    /**
-     * @return the coupnDcAmt
-     */
-
-    public double getCoupnDcAmt() {
-        return coupnDcAmt;
-    }
-
-    /**
-     * @param coupnDcAmt the coupnDcAmt to set
-     */
-    public void setCoupnDcAmt(double coupnDcAmt) {
-        this.coupnDcAmt = coupnDcAmt;
-    }
-
-    /**
-     * @return the coupnApplyFg
-     */
-
-    public String getCoupnApplyFg() {
-        return coupnApplyFg;
-    }
-
-    /**
-     * @param coupnApplyFg the coupnApplyFg to set
-     */
-    public void setCoupnApplyFg(String coupnApplyFg) {
-        this.coupnApplyFg = coupnApplyFg;
+    public void setProdCd(String prodCd) {
+        this.prodCd = prodCd;
     }
 
     /**
@@ -189,5 +110,35 @@ public class CouponProdVO extends CmmVO {
      */
     public void setUseYn(UseYn useYn) {
         this.useYn = useYn;
+    }
+
+    /**
+     * @return the prodRegFg
+     */
+
+    public UseYn getProdRegFg() {
+        return prodRegFg;
+    }
+
+    /**
+     * @param prodRegFg the prodRegFg to set
+     */
+    public void setProdRegFg(UseYn prodRegFg) {
+        this.prodRegFg = prodRegFg;
+    }
+
+    /**
+     * @return the coupnEnvstVal
+     */
+
+    public CoupnEnvFg getCoupnEnvstVal() {
+        return coupnEnvstVal;
+    }
+
+    /**
+     * @param coupnEnvstVal the coupnEnvstVal to set
+     */
+    public void setCoupnEnvstVal(CoupnEnvFg coupnEnvstVal) {
+        this.coupnEnvstVal = coupnEnvstVal;
     }
 }
