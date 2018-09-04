@@ -10,8 +10,8 @@
 <c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}"/>
 
 <div class="subCon">
-  <div class="searchBar">
-    <a href="javscript:;" class="open">${menuNm}</a>
+  <div class="searchBar flddUnfld">
+    <a href="javascript:void(0);" class="open">${menuNm}</a>
   </div>
   <table class="searchTbl">
     <colgroup>

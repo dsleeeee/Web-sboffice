@@ -9,12 +9,12 @@
  *
  * **************************************************************/
 // 검색 조건 닫고 열기
-$(".searchBar").click(function() {
-    if($(".searchBar").children().attr("class") == "open") {
-        $(".searchBar").children().attr("class", "close");
+$(".flddUnfld").click(function() {
+    if($(".flddUnfld").children().attr("class") == "open") {
+        $(".flddUnfld").children().attr("class", "close");
     }
     else {
-        $(".searchBar").children().attr("class", "open");
+        $(".flddUnfld").children().attr("class", "open");
     }
     $(".searchTbl").toggle();
 });

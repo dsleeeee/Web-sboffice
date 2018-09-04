@@ -8,9 +8,9 @@
 <c:set var="baseUrl" value="/sys/bill/item/item/" />
 
 <div class="subCon">
-  
-  <div class="searchBar">
-    <a href="javascript:;" class="open">${menuNm}</a>
+
+  <div class="searchBar flddUnfld">
+    <a href="javascript:void(0);" class="open">${menuNm}</a>
   </div>
   <table class="searchTbl">
     <colgroup>

@@ -9,8 +9,8 @@
 
 <div class="subCon">
 
-  <div class="searchBar">
-    <a href="javascript:;" class="open">${menuNm}</a>
+  <div class="searchBar flddUnfld">
+    <a href="javascript:void(0);" class="open">${menuNm}</a>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -85,65 +85,65 @@
       <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('gridCtrl');"><s:message code="cmm.search" /></button>
   </div>
 
-  <div class="mt20 oh sb-select dkbr">
-    <%-- 페이지 스케일  --%>
-    <wj-combo-box
-            class="w150 fl"
-            id="listScaleBox"
-            ng-model="listScale"
-            items-source="getComboData('listScaleBox')"
-            display-member-path="name"
-            selected-value-path="value"
-            is-editable="false"
-            initialized="initComboBox(s)">
-    </wj-combo-box>
-    <%--<div id="listScaleBox" class="w150 fl"></div>--%>
-    <%-- 엑셀 다운로드 --%>
-    <button id="btnExcel" class="btn_skyblue fr"><s:message code="cmm.excel.down" /></button>
-  </div>
-
   <div id="grid" class="w100" ng-controller="gridCtrl">
+
+    <div class="mt20 oh sb-select dkbr">
+      <%-- 페이지 스케일  --%>
+      <wj-combo-box
+              class="w150 fl"
+              id="listScaleBox"
+              ng-model="listScale"
+              items-source="getComboData('listScaleBox')"
+              display-member-path="name"
+              selected-value-path="value"
+              is-editable="false"
+              initialized="initComboBox(s)">
+      </wj-combo-box>
+      <%-- 엑셀 다운로드 --%>
+      <button id="btnExcel" class="btn_skyblue fr"><s:message code="cmm.excel.down" /></button>
+    </div>
+
     <%-- 위즈모 테이블 : 그리드가 2개 이상인 경우 감싸서 사용--%>
     <%--<div class="wj-TblWrapBr mt10">--%>
       <%-- 개발시 높이 조절해서 사용--%>
       <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
-        <div class="wj-gridWrap mt10" style="height:315px">
-          <div class="row">
-            <wj-flex-grid
-                    autoGenerateColumns="false"
-                    control="flex"
-                    initialized="initGrid(s,e)"
-                    sticky-headers="true"
-                    selection-mode="Row"
-                    items-source="data"
-                    item-formatter="_itemFormatter">
+    <div class="wj-gridWrap mt10" style="height:315px">
+      <div class="row">
+        <wj-flex-grid
+                autoGenerateColumns="false"
+                control="flex"
+                initialized="initGrid(s,e)"
+                sticky-headers="true"
+                selection-mode="Row"
+                items-source="data"
+                item-formatter="_itemFormatter">
 
-              <!-- define columns -->
-              <wj-flex-grid-column header="<s:message code="virtualLogin.hqOfficeCd"/>" binding="hqOfficeCd" width="*"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="virtualLogin.hqOfficeNm"/>" binding="hqOfficeNm" width="*"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="virtualLogin.hqUserId"/>" binding="hqUserId" visible="false"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="virtualLogin.storeCd"/>" binding="storeCd" width="*"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="virtualLogin.storeNm"/>" binding="storeNm" width="*"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="virtualLogin.msUserId"/>" binding="msUserId" visible="false"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="virtualLogin.clsFgNm"/>" binding="clsFgNm" width="*"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="virtualLogin.sysStatFgNm"/>" binding="sysStatFgNm" width="*"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="virtualLogin.ownerNm"/>" binding="ownerNm" width="*"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="virtualLogin.telNo"/>" binding="telNo" width="*"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="virtualLogin.mpNo"/>" binding="mpNo" width="*"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="virtualLogin.agencyNm"/>" binding="agencyNm" width="*"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="virtualLogin.cmUserId"/>" binding="cmUserId" visible="false"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="virtualLogin.sysOpenDate"/>" binding="sysOpenDate" width="*"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="virtualLogin.sysClosureDate"/>" binding="sysClosureDate" width="*"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="virtualLogin.orgnFg"/>" binding="orgnFg" width="*"></wj-flex-grid-column>
+          <!-- define columns -->
+          <wj-flex-grid-column header="<s:message code="virtualLogin.hqOfficeCd"/>" binding="hqOfficeCd" width="*"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.hqOfficeNm"/>" binding="hqOfficeNm" width="*"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.hqUserId"/>" binding="hqUserId" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.storeCd"/>" binding="storeCd" width="*"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.storeNm"/>" binding="storeNm" width="*"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.msUserId"/>" binding="msUserId" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.clsFgNm"/>" binding="clsFgNm" width="*"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.sysStatFgNm"/>" binding="sysStatFgNm" width="*"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.ownerNm"/>" binding="ownerNm" width="*"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.telNo"/>" binding="telNo" width="*"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.mpNo"/>" binding="mpNo" width="*"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.agencyNm"/>" binding="agencyNm" width="*"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.cmUserId"/>" binding="cmUserId" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.sysOpenDate"/>" binding="sysOpenDate" width="*"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.sysClosureDate"/>" binding="sysClosureDate" width="*"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.orgnFg"/>" binding="orgnFg" width="*"></wj-flex-grid-column>
 
-            </wj-flex-grid>
-            <%-- ColumnPicker 사용시 include --%>
-            <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-              <jsp:param name="pickerTarget" value="gridCtrl"/>
-            </jsp:include>
-            <%--// ColumnPicker 사용시 include --%>
-          </div>
-        </div>
+        </wj-flex-grid>
+        <%-- ColumnPicker 사용시 include --%>
+        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+          <jsp:param name="pickerTarget" value="gridCtrl"/>
+        </jsp:include>
+        <%--// ColumnPicker 사용시 include --%>
+      </div>
+    </div>
     <%--</div>--%>
     <%--//위즈모 테이블--%>
   </div>
@@ -162,4 +162,4 @@
   var clsFg = ${ccu.getCommCodeSelect("001")};
   var sysStatFg = ${ccu.getCommCodeSelect("005")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/virtualLogin/virtualLogin.js?ver=2018083001" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/virtualLogin/virtualLogin.js?ver=2018090401" charset="utf-8"></script>

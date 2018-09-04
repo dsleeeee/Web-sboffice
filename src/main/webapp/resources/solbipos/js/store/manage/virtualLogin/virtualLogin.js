@@ -28,7 +28,7 @@ app.controller('gridCtrl',  ['$scope', '$http', function ($scope, $http, $rootSc
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // picker 사용시 호출 : 미사용시 호출안함
-    $scope._makePickColumns("representCtrl");
+    $scope._makePickColumns("gridCtrl");
     // 그리드 포맷
     s.formatItem.addHandler(function (s, e) {
       if (e.panel === s.cells) {
