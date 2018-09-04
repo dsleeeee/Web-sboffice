@@ -110,7 +110,7 @@ public class CmmEnvUtil {
     public String getHqEnvst(SessionInfoVO sessionInfoVO, String envstCd) {
 
         HqEnvstVO hqEnvstVO = new HqEnvstVO();
-        hqEnvstVO.setHqOfficeCd(sessionInfoVO.getStoreCd());
+        hqEnvstVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         hqEnvstVO.setEnvstCd(envstCd);
 
         return cmmEnvService.getHqEnvst(hqEnvstVO);

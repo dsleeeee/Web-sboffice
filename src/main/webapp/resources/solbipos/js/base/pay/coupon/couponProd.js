@@ -8,143 +8,106 @@
  * 2018.08.17     김지은      1.0
  *
  * **************************************************************/
-$(document).ready(function(){
 
-  console.log("ssssssssssssssssssssssssssssss")
 
-  var useYnDataMap        = new wijmo.grid.DataMap(useYn, 'value', 'name');
-  var coupnDcFgDataMap    = new wijmo.grid.DataMap(coupnDcFg, 'value', 'name');
-  var coupnApplyFgDataMap = new wijmo.grid.DataMap(coupnApplyFg, 'value', 'name');
+/**
+ *  쿠폰 등록 상품 그리드 생성
+ */
+app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
+  // 상위 객체 상속 : T/F 는 picker
+  angular.extend(this, new RootController('regProdCtrl', $scope, $http, true));
+  // grid 초기화 : 생성되기전 초기화되면서 생성된다
+  $scope.initGrid = function (s, e) {
+    // 조회 이벤트 발생시킴.
+    setTimeout(function() {
+      $scope._broadcast('regProdCtrl', true);
+    }, 100)
+  };
 
-  // ========================================================================= 쿠폰 그리드 초기화
-  var couponGridHeader =
-    [
-      {binding:"hqOfficeCd", header:messages["coupon.hqOfficeCd"], visible:false},
-      {binding:"storeCd", header:messages["coupon.storeCd"], visible:false},
-      {binding:"coupnCd", header:messages["coupon.coupnCd"], maxLength:4, width:"*"},
-      {binding:"coupnNm", header:messages["coupon.coupnNm"], maxLength:15, width:"*"},
-      {binding:"payClassCd", header:messages["coupon.payClassCd"], width:"*"},
-      {binding:"coupnDcFg", header:messages["coupon.coupnDcFg"], dataMap:coupnDcFgDataMap, width:"*"},
-      {binding:"coupnDcRate", header:messages["coupon.coupnDcRate"], width:"*"},
-      {binding:"coupnDcAmt", header:messages["coupon.coupnDcAmt"], maxLength:5, width:"*"},
-      {binding:"coupnApplyFg", header:messages["coupon.coupnApplyFg"], dataMap:coupnApplyFgDataMap, width:"*"}
-    ];
+  // 쿠폰분류 그리드 조회
+  $scope.$on("regProdCtrl", function(event, data) {
+    // 파라미터
+    var params = {};
+    params.coupnEnvstVal = coupnEnvstVal;
+    params.prodRegFg = "Y";
 
-  var couponGrid = wgrid.genGrid("#couponGrid", couponGridHeader);
-  couponGrid.isReadOnly = true;
-
-  // 쿠폰 그리드 포맷
-  couponGrid.formatItem.addHandler(function(s, e) {
-    if (e.panel == s.cells) {
-      var col = s.columns[e.col];
-      var item = s.rows[e.row].dataItem;
-      if( col.binding == "coupnCd" ) {
-        wijmo.addClass(e.cell, 'wijLink');
-      }
-    }
-  });
-
-  // 쿠폰 그리드 선택 이벤트
-  couponGrid.addEventListener(couponGrid.hostElement, 'mousedown', function(e) {
-    var ht = couponGrid.hitTest(e);
-    var row = ht.row;
-    if( ht.cellType == wijmo.grid.CellType.Cell) {
-      var col = ht.panel.columns[ht.col];
-      if( col.binding == "coupnCd") {
-        var col = ht.panel.columns[ht.col];
-        var selectedCoupn = couponGrid.rows[ht.row].dataItem;
-        searchProdData(selectedCoupn);
-      }
-    }
-  });
-
-  // ========================================================================= 등록상품 그리드 초기화
-
-  var regProdGridHeader =
-    [
-      {binding:"gChk", header:messages["cmm.chk"], dataType:wijmo.DataType.Boolean, width:40},
-      {binding:"hqOfficeCd", header:messages["coupon.hqOfficeCd"], visible:false},
-      {binding:"storeCd", header:messages["coupon.storeCd"], visible:false},
-      {binding:"coupnCd", header:messages["coupon.coupnCd"], visible:false},
-      {binding:"prodCd", header:messages["coupon.prodCd"], isReadOnly:true},
-      {binding:"prodNm", header:messages["coupon.prodNm"], isReadOnly:true}
-    ];
-
-  var gridRegistProd = wgrid.genGrid("#gridRegistProd", regProdGridHeader);
-  gridRegistProd.isReadOnly = false;
-
-  // ========================================================================= 미등록상품 그리드 초기화
-  var noRegProdGridHeader =
-    [
-      {binding:"gChk", header:messages["cmm.chk"], dataType:wijmo.DataType.Boolean, width:40},
-      {binding:"hqOfficeCd", header:messages["coupon.hqOfficeCd"], visible:false},
-      {binding:"storeCd", header:messages["coupon.storeCd"], visible:false},
-      {binding:"coupnCd", header:messages["coupon.coupnCd"], visible:false},
-      {binding:"prodCd", header:messages["coupon.prodCd"], isReadOnly:true},
-      {binding:"prodNm", header:messages["coupon.prodNm"], isReadOnly:true}
-    ];
-
-  var gridNoRegistProd = wgrid.genGrid("#gridNoRegistProd", noRegProdGridHeader);
-  gridNoRegistProd.isReadOnly = false;
-
-  // =========================================================================
-
-  searchCouponList();
-
-  // 쿠폰 데이터 조회
-  function searchCouponList(){
-
-    var param = {};
-    param.useYn = 'Y';
-
-    console.log(param);
-
-    $.postJSON(baseUrl+"/class/getCouponList.sb", param, function(result) {
-      console.log(result);
-      if(result.status === "FAIL") {
-        s_alert.pop(result.message);
-        return;
-      }
-      var list = result.data.list;
-      couponGrid.itemsSource = new wijmo.collections.CollectionView(list);
-    }
-    ,function(){
-      s_alert.pop("Ajax Fail");
+    // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
+    $scope._inquiryMain(baseUrl + "prod/getProdList.sb", params, function() {
     });
-  }
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
 
-  // 상품 데이터 조회
-  function searchProdData(data){
-
-    console.log(data);
-
-    var param = {};
-    param.hqOfficeCd = data.hqOfficeCd;
-    param.storeCd = data.storeCd;
-    param.coupnCd = data.coupnCd;
-
-    $.postJSON(baseUrl+"/prod/getProdList.sb", param, function(result) {
-      console.log(result);
-      if(result.status === "FAIL") {
-        s_alert.pop(result.message);
-        return;
+  // 등록 상품 삭제
+  $scope.delete = function(){
+    var gridRepresent = agrid.getScope("couponCtrl");
+    var selectedRow = gridRepresent.flex.selectedRows[0]._data;
+    var params = new Array();
+    for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+      if($scope.flex.collectionView.items[i].gChk) {
+        $scope.flex.collectionView.items[i].coupnCd = selectedRow.coupnCd;
+        params.push($scope.flex.collectionView.items[i]);
       }
-      var list = result.data.list;
-      couponGrid.itemsSource = new wijmo.collections.CollectionView(list);
     }
-    ,function(){
-      s_alert.pop("Ajax Fail");
+
+    console.log(params);
+
+    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+    $scope._save(baseUrl + "prod/deleteCouponProd.sb", params, function(){
+      console.log("callback--------------------");
     });
+  };
+}]);
 
-  }
+/**
+ *  쿠폰 미등록 상품 그리드 생성
+ */
+app.controller('noRegProdCtrl', ['$scope', '$http', function ($scope, $http) {
+  // 상위 객체 상속 : T/F 는 picker
+  angular.extend(this, new RootController('noRegProdCtrl', $scope, $http, true));
 
-  // 탭 클릭
-  $("#couponProdTab").click(function(){
-    location.href = "/base/pay/coupon/class/couponProdView.sb";
+  // grid 초기화 : 생성되기전 초기화되면서 생성된다
+  $scope.initGrid = function (s, e) {
+    // 조회 이벤트 발생시킴.
+    setTimeout(function() {
+      $scope._broadcast('noRegProdCtrl', true);
+    }, 100)
+  };
+
+  // 쿠폰분류 그리드 조회
+  $scope.$on("noRegProdCtrl", function(event, data) {
+    // 파라미터
+    var params = {};
+    params.coupnEnvstVal = coupnEnvstVal;
+    params.prodRegFg = "N";
+
+    // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
+    $scope._inquiryMain(baseUrl + "prod/getProdList.sb", params, function() {
+    });
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
   });
 
-  $("#couponStoreTab").click(function(){
-    location.href = "/base/pay/coupon/class/couponStoreView.sb";
-  });
+  // 상품 등록
+  $scope.regist = function() {
+    var gridRepresent = agrid.getScope("couponCtrl");
+    var selectedRow = gridRepresent.flex.selectedRows[0]._data;
+    var params = new Array();
+    for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+      if($scope.flex.collectionView.items[i].gChk) {
+        $scope.flex.collectionView.items[i].coupnCd = selectedRow.coupnCd;
+        $scope.flex.collectionView.items[i].coupnEnvstVal = coupnEnvstVal;
+        params.push($scope.flex.collectionView.items[i]);
+      }
+    }
 
-});
+    console.log(params);
+
+    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+    $scope._save(baseUrl + "prod/registCouponProd.sb", params, function(){
+      console.log("callback--------------------");
+    });
+  };
+
+}]);
+

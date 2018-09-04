@@ -395,6 +395,139 @@
        AND COUPN_CD = #{coupnCd}
   </delete>
 
+  <!-- 본사 상품 조회 -->
+  <!--
+      TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_CLASS, TB_HQ_COUPON_PROD
+      COMMENTS : 본사의 상품을 조회한다.
+  -->
+  <select id="getHqProdList" parameterType="couponProdVO" resultType="DefaultMap">
+    /* USE : CouponMapper.getHqProdList */
+    SELECT thp.HQ_OFFICE_CD,
+           thp.PROD_CLASS_CD,
+           thpc.PROD_CLASS_NM,
+           thp.PROD_CD,
+           thp.PROD_NM,
+           thp.COST_UPRC,
+           NVL2(thcp.PROD_CD, 'Y', 'N') AS REG_YN
+      FROM TB_HQ_PRODUCT thp,
+           TB_HQ_PRODUCT_CLASS thpc,
+           TB_HQ_COUPON_PROD thcp
+     WHERE thp.USE_YN = 'Y'
+       AND thp.HQ_OFFICE_CD = thpc.HQ_OFFICE_CD
+       AND thp.PROD_CLASS_CD = thpc.PROD_CLASS_CD
+       AND thcp.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
+       AND thcp.PROD_CD (+)= thp.PROD_CD
+    <if test='prodRegFg != null and prodRegFg.toString() == "Y"'>
+       AND NVL2(thcp.PROD_CD, 'Y', 'N') = 'Y'
+    </if>
+    <if test='prodRegFg != null and prodRegFg.toString() == "N"'>
+       AND NVL2(thcp.PROD_CD, 'Y', 'N') = 'N'
+    </if>
+  </select>
+
+  <!-- 매장 상품 조회 -->
+  <!--
+      TABLE    : TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS, TB_MS_COUPON_PROD
+      COMMENTS : 매장의 상품을 조회한다
+  -->
+  <select id="getStoreProdList" parameterType="couponProdVO" resultType="DefaultMap">
+    /* USE : CouponMapper.getStoreProdList */
+    SELECT tmp.STORE_CD,
+           tmp.PROD_CLASS_CD,
+           tmpc.PROD_CLASS_NM,
+           tmp.PROD_CD,
+           tmp.PROD_NM,
+           tmp.COST_UPRC,
+           NVL2(tmcp.PROD_CD, 'Y', 'N') AS REG_YN
+      FROM TB_MS_PRODUCT tmp,
+           TB_MS_PRODUCT_CLASS tmpc,
+           TB_MS_COUPON_PROD tmcp
+    WHERE tmp.USE_YN = 'Y'
+      AND tmp.STORE_CD = tmpc.STORE_CD
+      AND tmp.PROD_CLASS_CD = tmpc.PROD_CLASS_CD
+      AND tmcp.STORE_CD (+)= tmp.STORE_CD
+      AND tmcp.PROD_CD (+)= tmp.PROD_CD
+    <if test='prodRegFg != null and prodRegFg.toString() == "Y"'>
+      AND NVL2(tmcp.PROD_CD, 'Y', 'N') = 'Y'
+    </if>
+    <if test='prodRegFg != null and prodRegFg.toString() == "N"'>
+      AND NVL2(tmcp.PROD_CD, 'Y', 'N') = 'N'
+    </if>
+  </select>
+
+  <!-- 본사 쿠폰 적용 상품 등록 -->
+  <!--
+      TABLE    : TB_HQ_COUPON_PROD
+      COMMENTS : 본사 쿠폰을 적용할 상품을 등록한다.
+  -->
+  <insert id="insertHqCouponProd" parameterType="couponProdVO">
+    /* USE : CouponMapper.insertHqCouponProd */
+    INSERT  INTO TB_HQ_COUPON_PROD
+    (
+      HQ_OFFICE_CD,
+      COUPN_CD,
+      PROD_CD,
+      REG_DT,
+      REG_ID,
+      MOD_DT,
+      MOD_ID
+    )
+    VALUES
+    (
+      #{hqOfficeCd},
+      #{coupnCd},
+      #{prodCd},
+      #{regDt},
+      #{regId},
+      #{modDt},
+      #{modId}
+    )
+  </insert>
+
+  <!-- 매장 쿠폰 적용 상품 등록 -->
+  <!--
+      TABLE    : TB_MS_COUPON_PROD
+      COMMENTS : 본사 쿠폰을 적용할 상품을 등록한다.
+  -->
+  <insert id="insertStoreCouponProd" parameterType="couponProdVO">
+    /* USE : CouponMapper.insertStoreCouponProd */
+    INSERT  INTO TB_MS_COUPON_PROD
+    (
+      STORE_CD,
+      COUPN_CD,
+      PROD_CD,
+      REG_DT,
+      REG_ID,
+      MOD_DT,
+      MOD_ID
+    )
+    VALUES
+    (
+      #{storeCd},
+      #{coupnCd},
+      #{prodCd},
+      #{regDt},
+      #{regId},
+      #{modDt},
+      #{modId}
+    )
+
+  </insert>
+
+  <!-- 본사 쿠폰 적용 상품 삭제 -->
+  <!--
+      TABLE    : TB_HQ_COUPON_PROD
+      COMMENTS : 본사 쿠폰을 적용한 상품을 삭제한다.
+  -->
+  <delete id="deleteHqCouponProd">
+      /* USE : CouponMapper.deleteHqCouponProd */
+      DELETE TB_HQ_COUPON_PROD
+       WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+         AND COUPN_CD = #{coupnCd}
+         AND PROD_CD = #{prodCd}
+  </delete>
+
+
 </mapper>
 
 

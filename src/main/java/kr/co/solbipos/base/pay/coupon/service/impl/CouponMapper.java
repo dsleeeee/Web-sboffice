@@ -1,6 +1,7 @@
 package kr.co.solbipos.base.pay.coupon.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.base.pay.coupon.service.CouponProdVO;
 import kr.co.solbipos.base.pay.coupon.service.CouponVO;
 import kr.co.solbipos.base.pay.coupon.service.PayMethodClassVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -74,4 +75,22 @@ public interface CouponMapper {
 
     /** 매장 쿠폰 삭제 */
     int deleteStoreCoupon(CouponVO couponVO);
+
+    /** 본사 상품 조회 */
+    List<DefaultMap<String>> getHqProdList(CouponProdVO couponProdVO);
+
+    /** 매장 상품 조회 */
+    List<DefaultMap<String>> getStoreProdList(CouponProdVO couponProdVO);
+
+    /** 본사 쿠폰 적용 상품 등록 */
+    int insertHqCouponProd(CouponProdVO couponProdVO);
+
+    /** 매장 쿠폰 적용 상품 등록 */
+    int insertStoreCouponProd(CouponProdVO couponProdVO);
+
+    /** 본사 쿠폰 적용 상품 삭제 */
+    int deleteHqCouponProd(CouponProdVO couponProdVO);
+
+    /** 매장 쿠폰 적용 상품 삭제 */
+    int deleteStoreCouponProd(CouponProdVO couponProdVO);
 }

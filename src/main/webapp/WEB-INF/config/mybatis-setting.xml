@@ -207,6 +207,7 @@
     <typeAlias alias="giftVO" type="kr.co.solbipos.base.pay.gift.service.GiftVO"/>
     -->
     <typeAlias alias="payMethodClassVO" type="kr.co.solbipos.base.pay.coupon.service.PayMethodClassVO"/>
+    <typeAlias alias="couponProdVO" type="kr.co.solbipos.base.pay.coupon.service.CouponProdVO"/>
     <!--
     <typeAlias alias="coprtnCardVO" type="kr.co.solbipos.base.pay.coprtncard.service.CoprtnCardVO"/>
     <typeAlias alias="giftcardLedgrVO" type="kr.co.solbipos.base.pay.giftcardledgr.service.GiftcardLedgrVO"/>
