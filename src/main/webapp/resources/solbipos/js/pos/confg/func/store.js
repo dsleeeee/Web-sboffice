@@ -27,8 +27,8 @@ $(document).ready(function(){
   var regStoreGridHeader =
     [
       {binding:"gChk", header:messages["cmm.chk"], dataType:wijmo.DataType.Boolean, width:40},
-      {binding:"hqOfficeCd", header:messages["func.hqOfficeCd"], width:"*", isReadOnly:true},
-      {binding:"hqOfficeNm", header:messages["func.hqOfficeNm"], width:"*", isReadOnly:true},
+      {binding:"hqOfficeCd", header:messages["func.hqOfficeCd"], width:"*", isReadOnly:true, visible:false},
+      {binding:"hqOfficeNm", header:messages["func.hqOfficeNm"], width:"*", isReadOnly:true, visible:false},
       {binding:"storeCd", header:messages["func.storeCd"], maxLength:3, width:"*", isReadOnly:true},
       {binding:"storeNm", header:messages["func.storeNm"], maxLength:20, width:"*", isReadOnly:true},
       // {binding:"clsFg", header:messages["func.clsFg"], dataMap:clsFgDataMap, width:"*", isReadOnly:true},
@@ -38,8 +38,8 @@ $(document).ready(function(){
   var noRegStoreGridHeader =
       [
         {binding:"gChk", header:messages["cmm.chk"], dataType:wijmo.DataType.Boolean, width:40},
-        {binding:"hqOfficeCd", header:messages["func.hqOfficeCd"], width:"*", isReadOnly:true},
-        {binding:"hqOfficeNm", header:messages["func.hqOfficeNm"], width:"*", isReadOnly:true},
+        {binding:"hqOfficeCd", header:messages["func.hqOfficeCd"], width:"*", isReadOnly:true, visible:false},
+        {binding:"hqOfficeNm", header:messages["func.hqOfficeNm"], width:"*", isReadOnly:true, visible:false},
         {binding:"storeCd", header:messages["func.storeCd"], maxLength:3, width:"*", isReadOnly:true},
         {binding:"storeNm", header:messages["func.storeNm"], maxLength:20, width:"*", isReadOnly:true},
         // {binding:"clsFg", header:messages["func.clsFg"], dataMap:clsFgDataMap, width:"*", isReadOnly:true},

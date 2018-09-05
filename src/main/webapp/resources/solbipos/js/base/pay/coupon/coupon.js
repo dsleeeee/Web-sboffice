@@ -23,6 +23,7 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 
+    console.log('couponClassCtrl init')
     // 그리드 DataMap 설정
     $scope.useYnDataMap = new wijmo.grid.DataMap(useYn, 'value', 'name');
     $scope.coupnDcFgDataMap = new wijmo.grid.DataMap(coupnDcFg, 'value', 'name');
@@ -61,18 +62,21 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
     }, 100)
   };
 
-  // 쿠폰분류 그리드 조회
   $scope.$on("couponClassCtrl", function(event, data) {
+    $scope.searchCouponClass();
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
+
+  // 쿠폰 분류 그리드 조회
+  $scope.searchCouponClass = function(){
     // 파라미터
     var params = {};
     params.coupnEnvstVal = coupnEnvstVal;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
-    $scope._inquiryMain(baseUrl + "class/getCouponClassList.sb", params, function() {
-    });
-    // 기능수행 종료 : 반드시 추가
-    event.preventDefault();
-  });
+    $scope._inquirySub(baseUrl + "class/getCouponClassList.sb", params, function() {}, true);
+  };
 
   // 쿠폰 분류 그리드 행 추가
   $scope.addRow = function() {
@@ -121,6 +125,8 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
   angular.extend(this, new RootController('couponCtrl', $scope, $http, false));
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
+
+    console.log('couponCtrl init')
     // 그리드 DataMap 설정
     $scope.useYnDataMap = new wijmo.grid.DataMap(useYn, 'value', 'name');
     $scope.coupnDcFgDataMap = new wijmo.grid.DataMap(coupnDcFg, 'value', 'name');
@@ -130,7 +136,7 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
     s.formatItem.addHandler(function (s, e) {
       if (e.panel == s.cells) {
         var col = s.columns[e.col];
-        if (col.binding === "coupnCd") {
+        if (col.binding === "coupnCd" || col.binding === "prodCnt" || col.binding === "storeCnt") {
           wijmo.addClass(e.cell, 'wj-custom-readonly');
         }
         else if (col.binding === "prodCnt" || col.binding === "storeCnt") {
@@ -182,37 +188,34 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
         if ( col.binding === "prodCnt" && selectedRow.status != "I") {
           // 상품 등록 팝업
           var popup = $scope.couponPordLayer;
-          // popup.shown.addHandler(function (s) {
-          //   // 팝업 열린 뒤. 딜레이줘서 열리고 나서 실행되도록 함
-          //   setTimeout(function() {
-          //     $scope._broadcast('printCodeCtrl', true);
-          //   }, 100)
-          // });
-          popup.show(true, function (s) {
-          });
-          // $scope._broadcast('couponProdCtrl', selectedRow);
+          popup.show(true, function (s) {});
         }
         else if ( col.binding === "storeCnt" && selectedRow.status != "I") {
           // 매장 등록 팝업
-          // $scope._broadcast('couponProdCtrl', selectedRow);
+          var popup = $scope.couponStoreLayer;
+          popup.show(true, function (s) {});
         }
       }
     });
   };
 
-  // 쿠폰 그리드 조회
   $scope.$on("couponCtrl", function(event, data) {
-    // 파라미터
+    $scope.searchCoupon(data);
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
+
+  // 쿠폰 그리드 조회
+  $scope.searchCoupon = function(data){
+
+    console.log('searchCoupon')
     var params = {};
     params.coupnEnvstVal = coupnEnvstVal;
     params.payClassCd = data.payClassCd;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
-    $scope._inquirySub(baseUrl + "class/getCouponList.sb", params, function(){
-    }, false);
-    // 기능수행 종료 : 반드시 추가
-    event.preventDefault();
-  });
+    $scope._inquirySub(baseUrl + "class/getCouponList.sb", params, function(){}, false);
+  };
 
   // 쿠폰 그리드 행 추가
   $scope.addRow = function() {
@@ -226,6 +229,8 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
     params.coupnDcFg = "1";
     params.coupnApplyFg = "1";
     params.useYn = "Y";
+    params.prodCnt = "0";
+    params.storeCnt = "0";
     params.payClassCd = selectedRow.payClassCd;
 
     // 추가기능 수행 : 파라미터

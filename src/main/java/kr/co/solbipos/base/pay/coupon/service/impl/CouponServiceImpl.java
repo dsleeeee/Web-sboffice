@@ -11,10 +11,7 @@ import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
-import kr.co.solbipos.base.pay.coupon.service.CouponProdVO;
-import kr.co.solbipos.base.pay.coupon.service.CouponService;
-import kr.co.solbipos.base.pay.coupon.service.CouponVO;
-import kr.co.solbipos.base.pay.coupon.service.PayMethodClassVO;
+import kr.co.solbipos.base.pay.coupon.service.*;
 import kr.co.solbipos.base.pay.coupon.service.enums.CoupnEnvFg;
 import kr.co.solbipos.base.pay.coupon.service.enums.PayTypeFg;
 import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
@@ -229,7 +226,7 @@ public class CouponServiceImpl implements CouponService {
         }
     }
 
-    /** 상품 조회 */
+    /** 쿠폰 적용/미적용 상품 조회 */
     @Override
     public List<DefaultMap<String>> getProdList(CouponProdVO couponProdVO) {
 
@@ -238,6 +235,8 @@ public class CouponServiceImpl implements CouponService {
         LOGGER.info(" ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ");
         LOGGER.info(" >>>>>>>>>>>>>>>> couponProdVO.getProdRegFg() : "+ couponProdVO.getProdRegFg());
         LOGGER.info(" >>>>>>>>>>>>>>>> couponProdVO.getCoupnEnvstVal() : "+ couponProdVO.getCoupnEnvstVal());
+        LOGGER.info(" >>>>>>>>>>>>>>>> couponProdVO.getProdCd() : "+ couponProdVO.getProdCd());
+        LOGGER.info(" >>>>>>>>>>>>>>>> couponProdVO.getProdNm() : "+ couponProdVO.getProdNm());
 
         // 본사권한
         if(couponProdVO.getCoupnEnvstVal() == CoupnEnvFg.HQ) {
@@ -286,6 +285,45 @@ public class CouponServiceImpl implements CouponService {
             } else if(couponProdVO.getCoupnEnvstVal() == CoupnEnvFg.STORE ) {
                 procCnt += mapper.deleteStoreCouponProd(couponProdVO);
             }
+        }
+
+        return procCnt;
+    }
+
+    /** 쿠폰 적용/미적용 상품 조회 */
+    @Override
+    public List<DefaultMap<String>> getStoreList(CouponStoreVO couponStoreVO) {
+        return mapper.getStoreList(couponStoreVO);
+    }
+
+    /** 쿠폰 적용 매장 등록 */
+    @Override
+    public int registCouponStore(CouponStoreVO[] couponStoreVOs, SessionInfoVO sessionInfoVO) {
+
+
+        int procCnt = 0;
+        String dt = currentDateTimeString();
+
+        for(CouponStoreVO couponStoreVO : couponStoreVOs) {
+            couponStoreVO.setRegDt(dt);
+            couponStoreVO.setRegId(sessionInfoVO.getUserId());
+            couponStoreVO.setModDt(dt);
+            couponStoreVO.setModId(sessionInfoVO.getUserId());
+
+            procCnt += mapper.insertCouponStore(couponStoreVO);
+        }
+        return procCnt;
+    }
+
+    /** 쿠폰 적용 매장 삭제 */
+    @Override
+    public int deleteCouponStore(CouponStoreVO[] couponStoreVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String dt = currentDateTimeString();
+
+        for(CouponStoreVO couponStoreVO : couponStoreVOs) {
+            procCnt += mapper.deleteCouponStore(couponStoreVO);
         }
 
         return procCnt;
