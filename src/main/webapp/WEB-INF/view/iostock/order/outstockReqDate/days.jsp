@@ -62,7 +62,7 @@
                 <wj-flex-grid-column header="<s:message code="outstockReqDate.storeNm"/>"      binding="storeNm"      width="*"  align="left" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="cmm.owner.nm"/>"                 binding="ownerNm"      width="60" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="outstockReqDate.sysStatFg"/>"    binding="sysStatFg"    width="50" align="center" data-map="sysStatFgMap" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="outstockReqDate.orderCloseYn"/>" binding="orderCloseYn" width="70" align="center" data-map="orderCloseYnMap" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="outstockReqDate.orderCloseYn"/>" binding="orderCloseYn" width="80" align="center" data-map="orderCloseYnMap" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="outstockReqDate.sun"/>"          binding="sun"          width="40" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="outstockReqDate.mon"/>"          binding="mon"          width="40" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="outstockReqDate.tue"/>"          binding="tue"          width="40" align="center"></wj-flex-grid-column>
