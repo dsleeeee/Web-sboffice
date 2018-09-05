@@ -124,7 +124,7 @@
            tmp.ROW_POSI,
            tmp.WIDTH,
            tmp.HEIGHT,
-           tms.USE_YN
+           tmp.USE_YN
       FROM (
       SELECT tms.STORE_CD, tmp.POS_NO,
              tms.DISP_SEQ, tms.POSI_ADJ_YN, tms.FNKEY_FG, tms.FNKEY_NO, tms.FNKEY_NM, tms.USE_YN
@@ -151,14 +151,13 @@
   -->
   <update id="savePosConf" parameterType="posFuncVO">
     /* USE : PosFuncMapper.savePosConf */
-    UPDATE TB_MS_STORE_FNKEY
+    UPDATE TB_MS_POS_FNKEY
        SET DISP_SEQ = #{dispSeq},
-           AUTH_YN = #{authYn},
-           POSI_ADJ_YN = #{posiAdjYn},
            USE_YN = #{useYn},
            MOD_DT = #{modDt},
            MOD_ID = #{modId}
     WHERE STORE_CD = #{storeCd}
+      AND POS_NO = #{posNo}
       AND FNKEY_NO = #{fnkeyNo}
   </update>
 

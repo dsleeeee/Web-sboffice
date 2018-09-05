@@ -60,7 +60,7 @@
       [
         {binding:"fnkeyFg", header:"<s:message code='posFunc.fnkeyFg' />", visible:false, width:"*"},
         {binding:"fnkeyNm", header:"<s:message code='posFunc.fnkeyNm' />", width:"*"},
-        {binding:"array", header:"<s:message code='posFunc.array' />", width:"*"},
+        {binding:"array", header:"<s:message code='posFunc.array' />", width:"*", visible:false},
         {binding:"totCnt", header:"<s:message code='posFunc.func.cnt' />", width:"*"},
         {binding:"regCnt", header:"<s:message code='posFunc.regist.cnt' />", width:"*"},
       ];
@@ -273,14 +273,11 @@
 
     for(var i = 0; i < useFuncGrid.collectionView.itemCount; i ++) {  // dispSeq 재설정
       useFuncGrid.collectionView.editItem(useFuncGrid.collectionView.items[i]);
-
       useFuncGrid.collectionView.items[i].status = 'U';
       useFuncGrid.collectionView.items[i].dispSeq = (i+1);
-
       useFuncGrid.collectionView.items[i].storeCd = selectedStore.storeCd;
       useFuncGrid.collectionView.items[i].posNo = posListBox.selectedValue;
       useFuncGrid.collectionView.items[i].fnkeyFg = selectedRow.fnkeyFg;
-
       useFuncGrid.collectionView.commitEdit();
       paramArr.push(useFuncGrid.collectionView.items[i]);
     }
