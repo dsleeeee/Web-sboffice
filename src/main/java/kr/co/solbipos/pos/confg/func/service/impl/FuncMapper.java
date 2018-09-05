@@ -106,4 +106,25 @@ public interface FuncMapper {
      * @return
      */
     String deletePosFuncKey(FuncStoreVO funcStoreVO);
+
+    /**
+     * 포스 기능키 적용 매장 삭제
+     * @param funcVO
+     * @return
+     */
+    int deleteCmmStoreFunc(FuncVO funcVO);
+
+    /**
+     * 포스 기능 적용 매장 삭제(매장 기능키 테이블)
+     * @param funcVO
+     * @return
+     */
+    int deleteAllStoreFunc(FuncVO funcVO);
+
+    /**
+     * 포스 기능키 적용 포스목록 삭제(매장 포스 기능키 테이블)
+     * @param funcVO
+     * @return
+     */
+    int deleteAllPosFunc(FuncVO funcVO);
 }

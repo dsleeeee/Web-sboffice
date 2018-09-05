@@ -75,6 +75,13 @@ public class FuncServiceImpl implements FuncService {
             }
             else if(funcVO.getStatus() == GridDataFg.DELETE) {
                 procCnt += mapper.deleteFunc(funcVO);
+
+                // 기능키 삭제시, 적용 매장, 매장에 적용된 기능키도 함께 삭제
+                procCnt += mapper.deleteCmmStoreFunc(funcVO);
+                procCnt += mapper.deleteAllStoreFunc(funcVO);
+
+                // 모든 포스에 적용된 기능키 데이터 삭제
+                procCnt += mapper.deleteAllPosFunc(funcVO);
             }
         }
 

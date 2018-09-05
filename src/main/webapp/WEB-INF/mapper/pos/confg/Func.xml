@@ -160,6 +160,43 @@
      WHERE FNKEY_NO = #{fnkeyNo}
   </delete>
 
+  <!-- 포스 기능키 적용 매장 삭제 -->
+  <!--
+      TABLE    : TB_CM_POS_FNKEY_STORE
+      PARAM    : funcVO
+      COMMENTS : 기능구분이 적용된 매장을 삭제한다.
+  -->
+  <delete id="deleteCmmStoreFunc" parameterType="funcVO">
+    /* FuncMapper.deleteCmmStoreFunc */
+    DELETE TB_CM_POS_FNKEY_STORE
+     WHERE FNKEY_NO = #{fnkeyNo}
+  </delete>
+
+  <!-- 포스 기능키 적용 매장 삭제 (매장 기능키 테이블) -->
+  <!--
+      TABLE    : TB_MS_STORE_FNKEY
+      PARAM    : funcVO
+      COMMENTS : 기능구분이 적용된 매장을 삭제한다.
+  -->
+  <delete id="deleteAllStoreFunc" parameterType="funcVO">
+    /* FuncMapper.deleteAllStoreFunc */
+    DELETE TB_MS_STORE_FNKEY
+     WHERE FNKEY_NO = #{fnkeyNo}
+  </delete>
+
+
+  <!-- 포스 기능키 적용 포스 삭제 (매장포스 기능키 테이블) -->
+  <!--
+      TABLE    : TB_CM_POS_FNKEY
+      PARAM    : funcVO
+      COMMENTS : 기능구분이 적용된 매장을 삭제한다.
+  -->
+  <delete id="deleteAllPosFunc" parameterType="funcVO">
+    /* FuncMapper.deleteAllPosFunc */
+    DELETE TB_MS_POS_FNKEY
+     WHERE FNKEY_NO = #{fnkeyNo}
+  </delete>
+
   <!-- 기능키 등록/미등록 매장 조회 -->
   <!--
       TABLE    : TB_CM_POS_FNKEY
@@ -342,6 +379,10 @@
       )
     }
   </select>
+
+
+
+
 
 </mapper>
 
