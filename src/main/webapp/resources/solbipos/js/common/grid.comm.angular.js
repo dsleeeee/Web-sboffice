@@ -143,12 +143,38 @@ function RootController(ctrlName, $scope, $http, isPicker) {
       if (mRange) {
         cell.innerHTML = "<div class='wj-header merged-custom'>" + cell.innerHTML + "</div>";
       }
-      // picker 를 위한 설정
+      // 헤더의 전체선택 클릭 로직
+      var flex = panel.grid;
+      var col = flex.columns[c];
+      // check that this is a boolean column
+      if (col.binding === "gChk") {
+        // prevent sorting on click
+        col.allowSorting = false;
+        // count true values to initialize checkbox
+        var cnt = 0;
+        for (var i = 0; i < flex.rows.length; i++) {
+          if (flex.getCellData(i, c) == true) cnt++;
+        }
+        // create and initialize checkbox
+        cell.innerHTML = '<input type="checkbox" class="wj-cell-check" />';
+        var cb = cell.firstChild;
+        cb.checked = cnt > 0;
+        cb.indeterminate = cnt > 0 && cnt < flex.rows.length;
+        // apply checkbox value to cells
+        cb.addEventListener('click', function (e) {
+          flex.beginUpdate();
+          for (var i = 0; i < flex.rows.length; i++) {
+            flex.setCellData(i, c, cb.checked);
+          }
+          flex.endUpdate();
+        });
+      }
+    // picker 를 위한 설정
     } else if (panel.cellType === wijmo.grid.CellType.TopLeft) {
       if (!isPicker) {
         $(cell).css({"background": "none", "background-color": "#e8e8e8"});
       }
-      // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+    // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
     } else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
       // GroupRow 인 경우에는 표시하지 않는다.
       if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
@@ -160,7 +186,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
           cell.textContent = (r + 1).toString();
         }
       }
-      // readOnly 배경색 표시
+    // readOnly 배경색 표시
     } else if (panel.cellType === wijmo.grid.CellType.Cell) {
       var col = panel.columns[c];
       if (col.isReadOnly) {

@@ -15,8 +15,8 @@
     <li><a href="javascript:;" id="verstore" class="on"><s:message code="verRecv.verstore" /></a></li>
   </ul>
 
-  <div class="searchBar">
-    <a href="javascript:;" class="open"><s:message code="verRecv.verstore" /></a>
+  <div class="searchBar flddUnfld">
+    <a href="javascript:void(0);" class="open">${menuNm}</a>
   </div>
   <table class="searchTbl">
     <colgroup>

@@ -42,7 +42,7 @@
            ROW_POSI,
            WIDTH,
            HEIGHT,
-           USE_YN,
+           NVL(USE_YN, 'N') AS USE_YN,
            REG_DT,
            REG_ID,
            MOD_DT,
@@ -94,7 +94,7 @@
     )
     VALUES
     (
-        (SELECT LPAD(MAX(FNKEY_NO)+1, 4, 0) FROM TB_CM_POS_FNKEY),
+        (SELECT LPAD(NVL(MAX(FNKEY_NO),0)+1, 4, 0) FROM TB_CM_POS_FNKEY),
         #{fnkeyNm},
         #{fnkeyFg},
         #{storeFg},
@@ -134,10 +134,10 @@
            POS_FG       = #{posFg},
            IMG_FILE_NM_0    = #{imgFileNm0},
            IMG_FILE_NM_1    = #{imgFileNm1},
-           FNKEY_USE_YN_0   = #{fnkeyUseYn0, jdbcType=VARCHAR},
-           FNKEY_USE_YN_1   = #{fnkeyUseYn1, jdbcType=VARCHAR},
+           FNKEY_USE_YN_0   = #{fnkeyUseYn0},
+           FNKEY_USE_YN_1   = #{fnkeyUseYn1},
            DISP_SEQ     = #{dispSeq},
-           POSI_ADJ_YN  = #{posiAdjYn, jdbcType=VARCHAR},
+           POSI_ADJ_YN  = #{posiAdjYn},
            COL_POSI     = #{colPosi},
            ROW_POSI     = #{rowPosi},
            WIDTH        = #{width},
@@ -157,6 +157,43 @@
   <delete id="deleteFunc" parameterType="funcVO">
     /* FuncMapper.deleteFunc */
     DELETE TB_CM_POS_FNKEY
+     WHERE FNKEY_NO = #{fnkeyNo}
+  </delete>
+
+  <!-- 포스 기능키 적용 매장 삭제 -->
+  <!--
+      TABLE    : TB_CM_POS_FNKEY_STORE
+      PARAM    : funcVO
+      COMMENTS : 기능구분이 적용된 매장을 삭제한다.
+  -->
+  <delete id="deleteCmmStoreFunc" parameterType="funcVO">
+    /* FuncMapper.deleteCmmStoreFunc */
+    DELETE TB_CM_POS_FNKEY_STORE
+     WHERE FNKEY_NO = #{fnkeyNo}
+  </delete>
+
+  <!-- 포스 기능키 적용 매장 삭제 (매장 기능키 테이블) -->
+  <!--
+      TABLE    : TB_MS_STORE_FNKEY
+      PARAM    : funcVO
+      COMMENTS : 기능구분이 적용된 매장을 삭제한다.
+  -->
+  <delete id="deleteAllStoreFunc" parameterType="funcVO">
+    /* FuncMapper.deleteAllStoreFunc */
+    DELETE TB_MS_STORE_FNKEY
+     WHERE FNKEY_NO = #{fnkeyNo}
+  </delete>
+
+
+  <!-- 포스 기능키 적용 포스 삭제 (매장포스 기능키 테이블) -->
+  <!--
+      TABLE    : TB_CM_POS_FNKEY
+      PARAM    : funcVO
+      COMMENTS : 기능구분이 적용된 매장을 삭제한다.
+  -->
+  <delete id="deleteAllPosFunc" parameterType="funcVO">
+    /* FuncMapper.deleteAllPosFunc */
+    DELETE TB_MS_POS_FNKEY
      WHERE FNKEY_NO = #{fnkeyNo}
   </delete>
 
@@ -342,6 +379,10 @@
       )
     }
   </select>
+
+
+
+
 
 </mapper>
 

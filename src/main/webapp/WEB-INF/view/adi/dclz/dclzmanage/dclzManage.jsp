@@ -8,8 +8,8 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 
 <div class="subCon">
-  <div class="searchBar">
-    <a href="javascript:;" class="open">${menuNm}</a>
+  <div class="searchBar flddUnfld">
+    <a href="javascript:void(0);" class="open">${menuNm}</a>
   </div>
 
   <table class="searchTbl">

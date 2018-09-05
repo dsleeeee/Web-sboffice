@@ -136,7 +136,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         HttpSession session = request.getSession();
         session.setAttribute("sessionInfo", sessionInfoVO);
 
-        return true;
+        return super.preHandle(request, response, handler);
     }
 
     /**
