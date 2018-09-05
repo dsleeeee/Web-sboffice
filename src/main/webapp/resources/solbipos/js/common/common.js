@@ -399,6 +399,29 @@ function getParam(name){
   return result;
 };
 
+/** 현재 날짜 가져오기 */
+function getCurDate(seperator)
+{
+    try
+    {
+        if(seperator == undefined)  seperator = "";
+
+        var date = new Date();
+        var year  = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var day   = date.getDate();
+
+        if( (""+month).length == 1 ) month = "0"+month;
+        if( (""+day).length   == 1 ) day   = "0"+day;
+
+        return (year + seperator + month + seperator + day );
+    }
+    catch(e)
+    {
+        //alert('udfMainFrm.js : '+e);
+    }
+}
+
 
 String.prototype.getByteLength = function() {
     for(var size=i=0;c=this.charCodeAt(i++);size+=c>>11?2:c>>7?2:1);

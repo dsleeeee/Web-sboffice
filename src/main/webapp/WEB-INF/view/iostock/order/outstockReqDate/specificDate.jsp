@@ -61,14 +61,14 @@
                     item-formatter="_itemFormatter">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="cmm.chk"/>"                       binding="gChk"           width="40" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="outstockReqDate.storeCd"/>"       binding="storeCd"        width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="outstockReqDate.storeNm"/>"       binding="storeNm"        width="*"  align="left" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="cmm.owner.nm"/>"                  binding="ownerNm"        width="60" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="outstockReqDate.sysStatFg"/>"     binding="sysStatFg"      width="50" align="center" data-map="sysStatFgMap" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="outstockReqDate.specificDate"/>"  binding="specificDate"   width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="outstockReqDate.remark"/>"        binding="specificDateRemark" width="*" align="left" is-read-only="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="outstockReqDate.outstockReqYn"/>" binding="outstockReqYn"  width="70" align="center" data-map="outstockReqYnMap" is-read-only="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cmm.chk"/>"                            binding="gChk"               width="40"  align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="outstockReqDate.storeCd"/>"            binding="storeCd"            width="70"  align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="outstockReqDate.storeNm"/>"            binding="storeNm"            width="*"   align="left"   is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cmm.owner.nm"/>"                       binding="ownerNm"            width="60"  align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="outstockReqDate.sysStatFg"/>"          binding="sysStatFg"          width="50"  align="center" data-map="sysStatFgMap" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="outstockReqDate.specificDate"/>"       binding="specificDate"       width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="outstockReqDate.specificDateRemark"/>" binding="specificDateRemark" width="*"   align="left"   is-read-only="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="outstockReqDate.outstockReqYn"/>"      binding="outstockReqYn"      width="70"  align="center" data-map="outstockReqYnMap" is-read-only="false"></wj-flex-grid-column>
 
             </wj-flex-grid>
             <%-- ColumnPicker 사용시 include --%>
@@ -80,6 +80,12 @@
         <%--//위즈모 테이블--%>
     </div>
 </div>
+
+<%-- 특정일 신규등록 레이어 --%>
+<c:import url="/WEB-INF/view/iostock/order/outstockReqDate/specificDateRegist.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
 
 <script type="text/javascript">
     var listScaleBoxSpecific;
@@ -155,7 +161,7 @@
 
         // 특정일 신규등록
         $scope.newSpecificDate = function () {
-            $scope._broadcast('');
+            $scope._broadcast('speDateRegistCtrl');
         };
 
         // 특정일 저장

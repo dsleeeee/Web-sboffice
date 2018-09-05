@@ -26,6 +26,11 @@
     text-align:center!important;
 }
 
+/* 그리드에서 "수불", "그룹", "대륭" 같은 텍스트가 시안성 높히기 위해 별도 적용 : 20180905 노현수 */
+.wj-flexgrid * {
+    font-family: Malgun Gothic, '맑은 고딕', Dotum, '돋움', sans-serif;
+}
+
 .wj-flexgrid .wj-state-sticky .wj-header {
     opacity: 0.90;
 }
