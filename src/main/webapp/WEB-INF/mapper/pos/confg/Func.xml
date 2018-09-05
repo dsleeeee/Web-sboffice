@@ -56,7 +56,7 @@
     </where>
     <![CDATA[
      ORDER
-        BY DISP_SEQ
+        BY FNKEY_NO, DISP_SEQ ASC
     ]]>
   </select>
 
