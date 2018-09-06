@@ -47,17 +47,16 @@
                 SELECT
                     A.USER_ID,
                     'S' ORGN_FG,
-                    A.STORE_CD ORGN_CD,
-                    B.STORE_NM ORGN_NM,
-                    A.EMP_NM USER_NM,
+                    A.STORE_CD AS ORGN_CD,
+                    B.STORE_NM AS ORGN_NM,
+                    A.EMP_NM AS USER_NM,
                     A.EMP_NO,
-                    C.HQ_OFFICE_CD STORE_CD,
-                    -- 가맹점일 경우 해당본사의 코드, 이름 필요
-                    C.HQ_OFFICE_NM STORE_NM,
+                    B.STORE_CD AS STORE_CD,
+                    B.STORE_NM AS STORE_NM,
                     C.HQ_OFFICE_CD,
                     C.HQ_OFFICE_NM,
-                    DECODE( C.HQ_OFFICE_CD, '00000', A.STORE_CD, C.HQ_OFFICE_CD ) ORGN_GRP_CD,
-                    DECODE( C.HQ_OFFICE_CD, '00000', B.STORE_NM, C.HQ_OFFICE_NM ) ORGN_GRP_NM
+                    DECODE( C.HQ_OFFICE_CD, '00000', A.STORE_CD, C.HQ_OFFICE_CD ) AS ORGN_GRP_CD,
+                    DECODE( C.HQ_OFFICE_CD, '00000', B.STORE_NM, C.HQ_OFFICE_NM ) AS ORGN_GRP_NM
                 FROM
                     TB_MS_EMPLOYEE A,
                     TB_MS_STORE B,
@@ -71,16 +70,16 @@
                 SELECT
                     A.USER_ID,
                     'H' ORGN_FG,
-                    A.HQ_OFFICE_CD ORGN_CD,
-                    B.HQ_OFFICE_NM ORGN_NM,
-                    A.EMP_NM USER_NM,
+                    A.HQ_OFFICE_CD AS ORGN_CD,
+                    B.HQ_OFFICE_NM AS ORGN_NM,
+                    A.EMP_NM AS USER_NM,
                     A.EMP_NO,
                     '' STORE_CD,
                     '' STORE_NM,
                     A.HQ_OFFICE_CD,
                     B.HQ_OFFICE_NM,
-                    A.HQ_OFFICE_CD ORGN_GRP_CD,
-                    B.HQ_OFFICE_NM ORGN_GRP_NM
+                    A.HQ_OFFICE_CD AS ORGN_GRP_CD,
+                    B.HQ_OFFICE_NM AS ORGN_GRP_NM
                 FROM
                     TB_HQ_EMPLOYEE A,
                     TB_HQ_OFFICE B
@@ -91,17 +90,17 @@
             UNION ALL
                 SELECT
                     A.USER_ID,
-                    DECODE( A.ADMIN_YN, 'Y', 'M', 'A' ) ORGN_FG,
-                    A.AGENCY_CD ORGN_CD,
-                    B.AGENCY_NM ORGN_NM,
-                    A.EMP_NM USER_NM,
+                    DECODE( A.ADMIN_YN, 'Y', 'M', 'A' ) AS ORGN_FG,
+                    A.AGENCY_CD AS ORGN_CD,
+                    B.AGENCY_NM AS ORGN_NM,
+                    A.EMP_NM AS USER_NM,
                     A.EMP_NO,
                     '' STORE_CD,
                     '' STORE_NM,
                     '' HQ_OFFICE_CD,
                     '' HQ_OFFICE_NM,
-                    A.AGENCY_CD ORGN_GRP_CD,
-                    B.AGENCY_NM ORGN_GRP_NM
+                    A.AGENCY_CD AS ORGN_GRP_CD,
+                    B.AGENCY_NM AS ORGN_GRP_NM
                 FROM
                     TB_CM_EMPLOYEE A,
                     TB_CM_AGENCY B
@@ -228,7 +227,7 @@
             LAST_LOGIN_DT = #{lastLoginDt}
             <if test="loginFailCnt != null">
             , LOGIN_FAIL_CNT = #{loginFailCnt}
-            </if><if test="userStatFg.toString() != null and userStatFg.toString() != ''">
+            </if><if test='userStatFg.toString() != null and userStatFg.toString() != ""'>
             , USER_STAT_FG = #{userStatFg}
             </if>
         WHERE

@@ -43,10 +43,10 @@
             tce.TARGT_FG = tcn_targt_fg.NMCODE_CD
             AND tcn_targt_fg.NMCODE_GRP_CD = '038'
         <where>
-            <if test="envstCd != null and envstCd != ''">
+            <if test='envstCd != null and envstCd != ""'>
                 tce.ENVST_CD = #{envstCd}
             </if>
-            <if test="envstNm != null and envstNm != ''">
+            <if test='envstNm != null and envstNm != ""'>
                 AND tce.ENVST_NM LIKE #{envstNm}||'%'
             </if>
         </where>

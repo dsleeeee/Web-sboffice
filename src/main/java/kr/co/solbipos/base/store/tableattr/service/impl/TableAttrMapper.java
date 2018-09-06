@@ -4,6 +4,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.base.store.tableattr.service.TableAttrVO;
+import org.springframework.stereotype.Repository;
 
 /**
  * @Class Name : TableAttrServiceImpl.java
@@ -22,6 +23,7 @@ import kr.co.solbipos.base.store.tableattr.service.TableAttrVO;
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Mapper
+@Repository
 public interface TableAttrMapper {
 
     /**

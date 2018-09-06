@@ -103,6 +103,11 @@
 
   </jsp-config>
 
+  <!-- 세션 타임아웃 시간 설정 -->
+  <session-config>
+    <session-timeout>30</session-timeout>
+  </session-config>
+
   <!-- Forbidden, 금지됨 -->
   <error-page>
     <error-code>403</error-code>

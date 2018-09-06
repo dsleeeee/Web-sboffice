@@ -22,9 +22,9 @@ app.controller('gridCtrl',  ['$scope', '$http', function ($scope, $http, $rootSc
   // 가상로그인 개수
   $scope.popupCnt = 0;
   // 콤보박스 데이터 Set
-  $scope.setComboData("listScaleBox", gvListScaleBoxData);
-  $scope.setComboData("srchClsFg", clsFg);
-  $scope.setComboData("srchStatFg", sysStatFg);
+  $scope._setComboData("listScaleBox", gvListScaleBoxData);
+  $scope._setComboData("srchClsFg", clsFg);
+  $scope._setComboData("srchStatFg", sysStatFg);
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // picker 사용시 호출 : 미사용시 호출안함

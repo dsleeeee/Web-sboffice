@@ -35,6 +35,13 @@
     opacity: 0.90;
 }
 
+.wj-header .wj-header-label {
+    color: #222!important;
+    font-weight: initial;
+    font-size:12px;
+    text-align:center!important;
+}
+
 .wj-state-selected {
     background: #93cbfc;
     color: #fff!important; }

@@ -464,7 +464,7 @@ function Graph(container, themes) {
   var loadStylesheet = function(graph) {
     var node = (graph.themes != null) ? graph.themes[graph.defaultThemeName] :
       (!mxStyleRegistry.dynamicLoading) ? null :
-      mxUtils.load(STYLE_PATH + '/tableattr.xml').getDocumentElement();
+      mxUtils.load(STYLE_PATH + '/tableAttr.xml').getDocumentElement();
 
     if (node != null) {
       var dec = new mxCodec(node.ownerDocument);

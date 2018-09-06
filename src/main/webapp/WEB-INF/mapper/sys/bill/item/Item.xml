@@ -40,12 +40,12 @@
         FROM
             TB_CM_PRINT_CODE tcpc
         <where>
-            <if test="prtCd != null and prtCd != ''">
+            <if test='prtCd != null and prtCd != ""'>
             <![CDATA[
                 tcpc.PRT_CD = #{prtCd}
             ]]>
             </if>
-            <if test="prtNm != null and prtNm != ''">
+            <if test='prtNm != null and prtNm != ""'>
                 AND tcpc.PRT_NM LIKE #{prtNm}||'%'
             </if>
         </where>

@@ -3,7 +3,7 @@ package kr.co.solbipos.base.prod.vendr.service;
 import java.util.List;
 
 /**
- * @Class Name : TouchkeyService.java
+ * @Class Name : TouchKeyService.java
  * @Description : 기초관리 - 상품관리 - 판매터치키등록
  * @Modification Information
  * @

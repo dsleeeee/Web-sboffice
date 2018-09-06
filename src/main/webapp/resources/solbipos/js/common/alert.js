@@ -3,6 +3,7 @@
 
   var s_alert = {
     pop : function(msg) {
+      console.log("pop", msg);
       s_alert.popOk(msg, null);
     },
 
@@ -13,8 +14,10 @@
       pop.find("a").bind("click", function() {
         $("#_alertTent").hide();
         pop.remove();
-        if (typeof callback == 'function') {
-          callback();
+        if (typeof callback === 'function') {
+          setTimeout(function() {
+            callback();
+          }, 50);
         }
       });
       $("#_alertTent").show();
@@ -29,8 +32,10 @@
       pop.find("a.btn_blue.conf").bind("click", function() {
         $("#_alertTent").hide();
         pop.remove();
-        if (typeof callback == 'function') {
-          callback();
+        if (typeof callback === 'function') {
+          setTimeout(function() {
+            callback();
+          }, 50);
         }
       });
       

@@ -10,7 +10,7 @@ import kr.co.solbipos.base.prod.vendr.service.VendrService;
 import kr.co.solbipos.base.prod.vendr.service.VendrVO;
 
 /**
- * @Class Name : TouchkeyServiceImpl.java
+ * @Class Name : TouchKeyServiceImpl.java
  * @Description : 기초관리 - 상품관리 - 거래처조회
  * @Modification Information
  * @
