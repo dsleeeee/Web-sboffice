@@ -1,28 +1,20 @@
 package kr.co.solbipos.base.pay.coupon.service.impl;
 
 import kr.co.common.data.enums.Status;
-import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
-import kr.co.common.service.code.CmmCodeService;
 import kr.co.common.service.message.MessageService;
-import kr.co.common.utils.SessionUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.pay.coupon.service.*;
 import kr.co.solbipos.base.pay.coupon.service.enums.CoupnEnvFg;
 import kr.co.solbipos.base.pay.coupon.service.enums.PayTypeFg;
-import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
@@ -100,8 +92,6 @@ public class CouponServiceImpl implements CouponService {
             payMethodClassVO.setModDt(dt);
             payMethodClassVO.setModId(sessionInfoVO.getUserId());
             payMethodClassVO.setPayTypeFg(PayTypeFg.COUPON);
-
-            LOGGER.debug(payMethodClassVO.getProperties());
 
             // 본사 통제
             if(payMethodClassVO.getCoupnEnvstVal() == CoupnEnvFg.HQ) {
@@ -228,22 +218,18 @@ public class CouponServiceImpl implements CouponService {
 
     /** 쿠폰 적용/미적용 상품 조회 */
     @Override
-    public List<DefaultMap<String>> getProdList(CouponProdVO couponProdVO) {
+    public List<DefaultMap<String>> getProdList(CouponProdVO couponProdVO, SessionInfoVO sessionInfoVO) {
 
         List<DefaultMap<String>> resultProdList = null;
 
-        LOGGER.info(" ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ");
-        LOGGER.info(" >>>>>>>>>>>>>>>> couponProdVO.getProdRegFg() : "+ couponProdVO.getProdRegFg());
-        LOGGER.info(" >>>>>>>>>>>>>>>> couponProdVO.getCoupnEnvstVal() : "+ couponProdVO.getCoupnEnvstVal());
-        LOGGER.info(" >>>>>>>>>>>>>>>> couponProdVO.getProdCd() : "+ couponProdVO.getProdCd());
-        LOGGER.info(" >>>>>>>>>>>>>>>> couponProdVO.getProdNm() : "+ couponProdVO.getProdNm());
-
         // 본사권한
         if(couponProdVO.getCoupnEnvstVal() == CoupnEnvFg.HQ) {
+            couponProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             resultProdList = mapper.getHqProdList(couponProdVO);
         }
         // 매장권한
         else if(couponProdVO.getCoupnEnvstVal() == CoupnEnvFg.STORE) {
+            couponProdVO.setStoreCd(sessionInfoVO.getStoreCd());
             resultProdList = mapper.getStoreProdList(couponProdVO);
         }
 
@@ -292,7 +278,10 @@ public class CouponServiceImpl implements CouponService {
 
     /** 쿠폰 적용/미적용 상품 조회 */
     @Override
-    public List<DefaultMap<String>> getStoreList(CouponStoreVO couponStoreVO) {
+    public List<DefaultMap<String>> getStoreList(CouponStoreVO couponStoreVO, SessionInfoVO sessionInfoVO) {
+
+        couponStoreVO.setOrgnCd(sessionInfoVO.getHqOfficeCd());
+
         return mapper.getStoreList(couponStoreVO);
     }
 
@@ -305,6 +294,8 @@ public class CouponServiceImpl implements CouponService {
         String dt = currentDateTimeString();
 
         for(CouponStoreVO couponStoreVO : couponStoreVOs) {
+
+            couponStoreVO.setOrgnCd(sessionInfoVO.getHqOfficeCd());
             couponStoreVO.setRegDt(dt);
             couponStoreVO.setRegId(sessionInfoVO.getUserId());
             couponStoreVO.setModDt(dt);
@@ -323,6 +314,9 @@ public class CouponServiceImpl implements CouponService {
         String dt = currentDateTimeString();
 
         for(CouponStoreVO couponStoreVO : couponStoreVOs) {
+
+            couponStoreVO.setOrgnCd(sessionInfoVO.getHqOfficeCd());
+
             procCnt += mapper.deleteCouponStore(couponStoreVO);
         }
 

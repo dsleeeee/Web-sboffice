@@ -57,6 +57,7 @@
           <wj-flex-grid-column header="<s:message code="coupon.serNoYn"/>" binding="serNoYn" width="150" data-map="useYnDataMap"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="cmm.useYn"/>" binding="useYn" width="150" data-map="useYnDataMap"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="cmm.regId"/>" binding="regId" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="coupon.couponCnt"/>" binding="couponCnt" visible="false"></wj-flex-grid-column>
 
         </wj-flex-grid>
         <%-- ColumnPicker 사용시 include --%>
@@ -97,7 +98,7 @@
           <wj-flex-grid-column header="<s:message code="coupon.coupnDcFg"/>" binding="coupnDcFg" width="*" data-map="coupnDcFgDataMap"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.coupnDcRate"/>" binding="coupnDcRate" width="*"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.coupnDcAmt"/>" binding="coupnDcAmt" maxLength="5" width="*"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="coupon.coupnApplyFg"/>" binding="coupnApplyFg" width="*" data-map="coupnApplyFgDataMap"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="coupon.coupnApplyFg"/>" binding="coupnApplyFg" width="*" data-map="coupnApplyFgDataMap" isReadOnly=false ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.prodCnt"/>" binding="prodCnt" isReadOnly=true width="*"></wj-flex-grid-column>
 
           <c:if test="${orgnFg == 'HQ'}">

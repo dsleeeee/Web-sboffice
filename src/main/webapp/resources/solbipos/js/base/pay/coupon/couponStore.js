@@ -19,7 +19,7 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {};
 
-  // 쿠폰분류 그리드 조회
+  // 쿠폰 등록 매장 그리드 조회
   $scope.$on("regStoreCtrl", function(event, data) {
     $scope.searchRegStore();
     // 등록상품 조회 후, 미등록상품 조회
@@ -39,12 +39,9 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
       params.coupnCd = couponGrid.flex.selectedItems[0].coupnCd;
       params.coupnEnvstVal = coupnEnvstVal;
       params.storeRegFg = "Y";
-
-      console.log(params)
       // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
-      $scope._inquirySub(baseUrl + "store/getStoreList.sb", params, function() {});
+      $scope._inquirySub(baseUrl + "store/getStoreList.sb", params, function() {}, false);
     }
-
   };
 
   // 등록 매장 삭제
@@ -61,9 +58,17 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
         params.push($scope.flex.collectionView.items[i]);
       }
     }
-    console.log(params);
-    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save(baseUrl + "store/deleteCouponStore.sb", params, function(){ $scope.allSearch() });
+    $http({
+      method: 'POST', //방식
+      url: baseUrl + "store/deleteCouponStore.sb",
+      data: JSON.stringify(params), /* 파라메터로 보낼 데이터 */
+      headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+    }).then(function successCallback(response) {
+      $scope.allSearch()
+    }, function errorCallback(response) {
+      s_alert.pop(response.data.message);
+      return;
+    });
   };
 
   // 매장 삭제 완료 후처리
@@ -71,7 +76,11 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.searchRegStore();
     var noRegCouponGrid = agrid.getScope("noRegStoreCtrl");
     noRegCouponGrid.searchNoRegStore();
+    // 쿠폰그리드 조회
+    var couponGrid = agrid.getScope("couponCtrl");
+    couponGrid.searchCoupon(selectedCouponClass);
   };
+
 }]);
 
 /**
@@ -83,14 +92,13 @@ app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {};
 
-  // 쿠폰분류 그리드 조회
+  // 쿠폰 미등록 매장 그리드 조회
   $scope.$on("noRegStoreCtrl", function(event, data) {
     $scope.searchNoRegStore();
-    // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
 
-  // 미등록 매장
+  // 미등록 매장 조회
   $scope.searchNoRegStore = function(){
     var couponClassGrid = agrid.getScope("couponClassCtrl");
     var couponGrid = agrid.getScope("couponCtrl");
@@ -99,10 +107,8 @@ app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
       params.payClassCd = couponClassGrid.flex.selectedItems[0].payClassCd;
       params.coupnCd = couponGrid.flex.selectedItems[0].coupnCd;
       params.storeRegFg = "N";
-
-      console.log(params);
       // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
-      $scope._inquirySub(baseUrl + "store/getStoreList.sb", params, function() {});
+      $scope._inquirySub(baseUrl + "store/getStoreList.sb", params, function() {}, false);
     }
   };
 
@@ -120,9 +126,17 @@ app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
         params.push($scope.flex.collectionView.items[i]);
       }
     }
-    console.log(params);
-    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save(baseUrl + "store/registCouponStore.sb", params, function(){ $scope.allSearch() });
+    $http({
+      method: 'POST', //방식
+      url: baseUrl + "store/registCouponStore.sb",
+      data: JSON.stringify(params), /* 파라메터로 보낼 데이터 */
+      headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+    }).then(function successCallback(response) {
+      $scope.allSearch()
+    }, function errorCallback(response) {
+      s_alert.pop(response.data.message);
+      return;
+    });
   };
 
   // 매장 등록 완료 후처리
@@ -130,9 +144,9 @@ app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.searchNoRegStore();
     var regCouponGrid = agrid.getScope("regStoreCtrl");
     regCouponGrid.searchRegStore();
-    // var couponClassGrid = agrid.getScope("couponClassCtrl");
-    // var couponGrid = agrid.getScope("couponCtrl");
-    // couponGrid.searchCoupon(couponClassGrid.flex.selectedItems[0]);
+    // 쿠폰그리드 조회(적용매장 수량 변화)
+    var couponGrid = agrid.getScope("couponCtrl");
+    couponGrid.searchCoupon(selectedCouponClass);
   };
 }]);
 

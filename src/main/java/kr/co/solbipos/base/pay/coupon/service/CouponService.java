@@ -36,7 +36,7 @@ public interface CouponService {
     int saveCouponList(CouponVO[] couponVOs, SessionInfoVO sessionInfoVO);
 
     /** 쿠폰 등록/미등록 상품 조회*/
-    List<DefaultMap<String>> getProdList(CouponProdVO couponProdVO);
+    List<DefaultMap<String>> getProdList(CouponProdVO couponProdVO, SessionInfoVO sessionInfoVO);
 
     /** 쿠폰 적용 상품 등록 */
     int registCouponProd(CouponProdVO[] couponProdVOs, SessionInfoVO sessionInfoVO);
@@ -45,7 +45,7 @@ public interface CouponService {
     int deleteCouponProd(CouponProdVO[] couponProdVOs, SessionInfoVO sessionInfoVO);
 
     /** 쿠폰 등록/미등록 매장 조회*/
-    List<DefaultMap<String>> getStoreList(CouponStoreVO couponStoreVO);
+    List<DefaultMap<String>> getStoreList(CouponStoreVO couponStoreVO, SessionInfoVO sessionInfoVO);
 
     /** 쿠폰 적용 매장 등록 */
     int registCouponStore(CouponStoreVO[] couponStoreVOs, SessionInfoVO sessionInfoVO);

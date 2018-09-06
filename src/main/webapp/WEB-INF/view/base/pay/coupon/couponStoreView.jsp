@@ -57,8 +57,6 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="coupon.hqOfficeCd"/>" binding="hqOfficeCd" isReadOnly="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="coupon.hqOfficeNm"/>" binding="hqOfficeNm" isReadOnly="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="coupon.storeCd"/>" binding="storeCd" width="*" isReadOnly="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="coupon.storeNm"/>" binding="storeNm" width="*" isReadOnly="true" ></wj-flex-grid-column>
               </wj-flex-grid>
@@ -88,8 +86,6 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="coupon.hqOfficeCd"/>" binding="hqOfficeCd" isReadOnly="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="coupon.hqOfficeNm"/>" binding="hqOfficeNm" isReadOnly="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="coupon.storeCd"/>" binding="storeCd" width="*" isReadOnly="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="coupon.storeNm"/>" binding="storeNm" width="*" isReadOnly="true" ></wj-flex-grid-column>
               </wj-flex-grid>

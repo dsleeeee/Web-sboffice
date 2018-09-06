@@ -5,10 +5,8 @@ import kr.co.common.data.enums.CodeType;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
-import kr.co.common.exception.BizException;
 import kr.co.common.exception.CodeException;
 import kr.co.common.service.session.SessionService;
-import kr.co.common.utils.SessionUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
@@ -24,9 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
@@ -205,7 +201,9 @@ public class CouponController {
     public Result getProdList(CouponProdVO couponProdVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
-        List<DefaultMap<String>> prodList = service.getProdList(couponProdVO);
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> prodList = service.getProdList(couponProdVO, sessionInfoVO);
 
         return returnListJson(Status.OK, prodList, couponProdVO);
     }
@@ -225,7 +223,13 @@ public class CouponController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = service.registCouponProd(couponProdVOs, sessionInfoVO);
+        int result = 0;
+
+        try{
+            result = service.registCouponProd(couponProdVOs, sessionInfoVO);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return returnListJson(Status.OK, result);
     }
@@ -266,7 +270,9 @@ public class CouponController {
     public Result getStoreList(CouponStoreVO couponStoreVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
-        List<DefaultMap<String>> storeList = service.getStoreList(couponStoreVO);
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> storeList = service.getStoreList(couponStoreVO, sessionInfoVO);
 
         return returnListJson(Status.OK, storeList, couponStoreVO);
     }

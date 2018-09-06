@@ -29,15 +29,16 @@
   -->
   <select id="getHqCouponClassList" parameterType="DefaultMap" resultType="DefaultMap">
     /* USE : CouponMapper.getHqCouponClassList */
-    SELECT HQ_OFFICE_CD,
-           PAY_CLASS_CD,
-           PAY_TYPE_FG,
-           PAY_CLASS_NM,
-           SER_NO_YN,
-           USE_YN,
-           REG_ID
-      FROM TB_HQ_PAY_METHOD_CLASS
-     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+    SELECT thpmc.HQ_OFFICE_CD,
+           thpmc.PAY_CLASS_CD,
+           thpmc.PAY_TYPE_FG,
+           thpmc.PAY_CLASS_NM,
+           thpmc.SER_NO_YN,
+           thpmc.USE_YN,
+           thpmc.REG_ID,
+           (SELECT COUNT(thc.COUPN_CD) FROM TB_HQ_COUPON thc WHERE thc.HQ_OFFICE_CD =thpmc.HQ_OFFICE_CD AND thc.PAY_CLASS_CD = thpmc.PAY_CLASS_CD) COUPON_CNT
+      FROM TB_HQ_PAY_METHOD_CLASS thpmc
+     WHERE thpmc.HQ_OFFICE_CD = #{hqOfficeCd}
   </select>
 
   <!-- 매장 쿠폰 분류 조회 -->
@@ -47,15 +48,16 @@
   -->
   <select id="getStoreCouponClassList" parameterType="DefaultMap" resultType="DefaultMap">
     /* USE : CouponMapper.getStoreCouponClassList */
-    SELECT STORE_CD,
-           PAY_TYPE_FG,
-           PAY_CLASS_CD,
-           PAY_CLASS_NM,
-           SER_NO_YN,
-           USE_YN,
-           REG_ID
-      FROM TB_MS_PAY_METHOD_CLASS
-     WHERE STORE_CD = #{storeCd}
+    SELECT tmpmc.STORE_CD,
+           tmpmc.PAY_TYPE_FG,
+           tmpmc.PAY_CLASS_CD,
+           tmpmc.PAY_CLASS_NM,
+           tmpmc.SER_NO_YN,
+           tmpmc.USE_YN,
+           tmpmc.REG_ID,
+           (SELECT COUNT(tmc.COUPN_CD) FROM TB_MS_COUPON tmc WHERE tmc.STORE_CD = tmpmc.STORE_CD AND tmc.PAY_CLASS_CD = tmpmc.PAY_CLASS_CD) COUPON_CNT
+      FROM TB_MS_PAY_METHOD_CLASS tmpmc
+     WHERE tmpmc.STORE_CD = #{storeCd}
   </select>
 
   <!-- 본사 쿠폰 분류 등록 -->
@@ -416,6 +418,7 @@
            TB_HQ_PRODUCT_CLASS thpc,
            TB_HQ_COUPON_PROD thcp
      WHERE thp.USE_YN = 'Y'
+       AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
        AND thp.HQ_OFFICE_CD = thpc.HQ_OFFICE_CD
        AND thp.PROD_CLASS_CD = thpc.PROD_CLASS_CD
        AND thcp.COUPN_CD (+)= #{coupnCd}
@@ -453,6 +456,7 @@
            TB_MS_PRODUCT_CLASS tmpc,
            TB_MS_COUPON_PROD tmcp
      WHERE tmp.USE_YN = 'Y'
+       AND tmp.STORE_CD = #{storeCd}
        AND tmp.STORE_CD = tmpc.STORE_CD
        AND tmp.PROD_CLASS_CD = tmpc.PROD_CLASS_CD
        AND tmcp.COUPN_CD (+)= #{coupnCd}
@@ -567,6 +571,7 @@
            TB_HQ_OFFICE tho,
            TB_HQ_COUPON_STORE thcs
      WHERE tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+       AND tms.HQ_OFFICE_CD = #{orgnCd}
        AND thcs.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
        AND thcs.STORE_CD (+)= tms.STORE_CD
        AND thcs.PAY_CLASS_CD (+)= #{payClassCd}
@@ -611,7 +616,7 @@
     )
     VALUES
     (
-      #{hqOfficeCd},
+      #{orgnCd},
       #{payClassCd},
       #{coupnCd},
       #{storeCd},
@@ -630,7 +635,7 @@
   <delete id="deleteCouponStore" parameterType="couponStoreVO">
       /* USE : CouponMapper.deleteCouponStore */
       DELETE TB_HQ_COUPON_STORE
-       WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+       WHERE HQ_OFFICE_CD = #{orgnCd}
          AND PAY_CLASS_CD = #{payClassCd}
          AND COUPN_CD = #{coupnCd}
          AND STORE_CD = #{storeCd}

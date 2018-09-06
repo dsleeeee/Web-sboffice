@@ -12,7 +12,7 @@
  * get application
  */
 var app = agrid.getApp();
-
+var selectedCouponClass;
 
 /**
  *  쿠폰분류등록 그리드 생성
@@ -22,8 +22,6 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
   angular.extend(this, new RootController('couponClassCtrl', $scope, $http, true));
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-
-    console.log('couponClassCtrl init')
     // 그리드 DataMap 설정
     $scope.useYnDataMap = new wijmo.grid.DataMap(useYn, 'value', 'name');
     $scope.coupnDcFgDataMap = new wijmo.grid.DataMap(coupnDcFg, 'value', 'name');
@@ -56,7 +54,16 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
         }
       }
     });
-    // 조회 이벤트 발생시킴.
+
+    // 쿠폰 분류 그리드 조회 후에 dropdown readonly 되는 것 방지
+    s.beginningEdit.addHandler(function (s, e) {
+      var col = s.columns[e.col];
+      if (col.binding === "serNoYn" || col.binding === "useYn") {
+          e.cancel = false;
+      }
+    });
+
+    // 조회 이벤트 발생
     setTimeout(function() {
       $scope._broadcast('couponClassCtrl', true);
     }, 100)
@@ -64,7 +71,6 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
 
   $scope.$on("couponClassCtrl", function(event, data) {
     $scope.searchCouponClass();
-    // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
 
@@ -75,7 +81,7 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
     params.coupnEnvstVal = coupnEnvstVal;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
-    $scope._inquirySub(baseUrl + "class/getCouponClassList.sb", params, function() {}, true);
+    $scope._inquirySub(baseUrl + "class/getCouponClassList.sb", params, function() {}, false);
   };
 
   // 쿠폰 분류 그리드 행 추가
@@ -89,6 +95,22 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 추가기능 수행 : 파라미터
     $scope._addRow(params);
+  };
+
+  // 쿠폰 분류 그리드 행 삭제
+  $scope.del = function(){
+    for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+      var item = $scope.flex.collectionView.items[i];
+
+      if(item.gChk) {
+        if(item.couponCnt > 0) {
+          // s_alert.pop("<s:message code='coupon.exists.coupon' />");
+          s_alert.pop("해당분류에 등록된 쿠폰이 존재합니다. 분류 삭제 전에 등록 쿠폰을 먼저 삭제해주세요.");
+          return;
+        }
+        $scope.flex.collectionView.removeAt(i);
+      }
+    }
   };
 
   // 쿠폰분류 그리드 저장
@@ -112,8 +134,13 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
     }
 
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save(baseUrl + "class/saveCouponClassList.sb", params);
-  }
+    $scope._save(baseUrl + "class/saveCouponClassList.sb", params, function(){ $scope.allSearch() });
+  };
+
+  // 쿠폰 삭제 완료 후처리 (쿠폰분류 재조회)
+  $scope.allSearch = function () {
+    $scope.searchCouponClass();
+  };
 }]);
 
 
@@ -125,8 +152,6 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
   angular.extend(this, new RootController('couponCtrl', $scope, $http, false));
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-
-    console.log('couponCtrl init')
     // 그리드 DataMap 설정
     $scope.useYnDataMap = new wijmo.grid.DataMap(useYn, 'value', 'name');
     $scope.coupnDcFgDataMap = new wijmo.grid.DataMap(coupnDcFg, 'value', 'name');
@@ -136,12 +161,11 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
     s.formatItem.addHandler(function (s, e) {
       if (e.panel == s.cells) {
         var col = s.columns[e.col];
-        if (col.binding === "coupnCd" || col.binding === "prodCnt" || col.binding === "storeCnt") {
+        if (col.binding === "coupnCd") {
           wijmo.addClass(e.cell, 'wj-custom-readonly');
         }
         else if (col.binding === "prodCnt" || col.binding === "storeCnt") {
           wijmo.addClass(e.cell, 'wijLink');
-          wijmo.addClass(e.cell, 'wj-custom-readonly');
         }
       }
     });
@@ -150,6 +174,16 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
       var col = s.columns[e.col];
       var dataItem = s.rows[e.row].dataItem;
 
+      // 데이터 조회 후 dropdown 이 readonly 되는 문제
+      if (col.binding === "coupnDcFg" || col.binding === "coupnApplyFg" || col.binding === "useYn") {
+        e.cancel = false;
+      }
+      // 상품수량과 적용매장수는 수정할 수 없음.
+      if (col.binding === "prodCnt" || col.binding === "storeCnt" ) {
+        e.cancel = true;
+      }
+
+      // 쿠폰 코드는 데이터 등록시에만 입력 가능
       if (col.binding === "coupnCd") {
         if (nvl(dataItem.status, "") == "" && dataItem.status != "I") {
           e.cancel = true;
@@ -173,9 +207,9 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
         }
       }
       // 상품수량과 적용매장수는 수정할 수 없음.
-      if(e.col == 9 || e.col == 10) {
-        e.cancel = true;
-      }
+      // if(e.col == 9 || e.col == 10) {
+      //   e.cancel = true;
+      // }
     });
 
     // 쿠폰 그리드 선택 이벤트
@@ -188,18 +222,31 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
         if ( col.binding === "prodCnt" && selectedRow.status != "I") {
           // 상품 등록 팝업
           var popup = $scope.couponPordLayer;
-          popup.show(true, function (s) {});
+          popup.show(true, function (s) {
+            var regProdGrid = agrid.getScope('regProdCtrl');
+            regProdGrid._gridDataInit();
+            var noRegProdGrid = agrid.getScope('noRegProdCtrl');
+            noRegProdGrid._gridDataInit();
+          });
         }
         else if ( col.binding === "storeCnt" && selectedRow.status != "I") {
           // 매장 등록 팝업
           var popup = $scope.couponStoreLayer;
-          popup.show(true, function (s) {});
+          popup.show(true, function (s) {
+            var regStoreGrid = agrid.getScope('regStoreCtrl');
+            regStoreGrid._gridDataInit();
+            var noRegStoreGrid = agrid.getScope('noRegStoreCtrl');
+            noRegStoreGrid._gridDataInit();
+          });
+
         }
       }
     });
   };
 
   $scope.$on("couponCtrl", function(event, data) {
+    selectedCouponClass = data;
+
     $scope.searchCoupon(data);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
@@ -207,12 +254,9 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 쿠폰 그리드 조회
   $scope.searchCoupon = function(data){
-
-    console.log('searchCoupon')
     var params = {};
     params.coupnEnvstVal = coupnEnvstVal;
     params.payClassCd = data.payClassCd;
-
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquirySub(baseUrl + "class/getCouponList.sb", params, function(){}, false);
   };
@@ -237,7 +281,30 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._addRow(params);
   };
 
-  // 저장
+  // 쿠폰 그리드 행 삭제
+  $scope.del = function(){
+    for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+      var item = $scope.flex.collectionView.items[i];
+
+      if(item.gChk) {
+        if(item.prodCnt > 0 ) {
+          // s_alert.pop("<s:message code='coupon.exists.prod' />");
+          s_alert.pop("쿠폰이 등록된 상품이 존재합니다. 쿠폰 삭제 전에 등록 상품을 먼저 삭제해주세요.");
+          return;
+        }
+        if(orgnFg == "HQ") {
+          if(item.storeCd > 0 ) {
+            // s_alert.pop("<s:message code='coupon.exists.store' />");
+            s_alert.pop("쿠폰이 등록된 매장이 존재합니다. 쿠폰 삭제 전에 등록 매장을 먼저 삭제해주세요.");
+            return;
+          }
+        }
+        $scope.flex.collectionView.removeAt(i);
+      }
+    }
+  };
+
+  // 쿠폰 저장
   $scope.save = function() {
     // 파라미터 설정
     var params = new Array();
@@ -259,8 +326,16 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
     }
 
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save(baseUrl + "class/saveCouponList.sb", params);
+    $scope._save(baseUrl + "class/saveCouponList.sb", params, function(){ $scope.allSearch() });
   }
+
+  // 쿠폰 삭제 완료 후처리 (쿠폰분류, 쿠폰 재조회)
+  $scope.allSearch = function () {
+    var couponClassGrid = agrid.getScope("couponClassCtrl");
+    couponClassGrid.searchCouponClass();
+    $scope.searchCoupon(selectedCouponClass);
+  };
+
 }]);
 
 // 탭 클릭
