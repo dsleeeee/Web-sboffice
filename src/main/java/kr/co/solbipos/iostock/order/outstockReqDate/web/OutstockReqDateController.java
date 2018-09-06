@@ -201,4 +201,49 @@ public class OutstockReqDateController {
 
         return ReturnUtil.returnJson(Status.OK, result);
     }
+
+
+    /**
+     * 출고요청일관리 - 특정일 복사
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   outstockReqDateVOs
+     * @return  String
+     * @author  안동관
+     * @since   2018. 09. 06.
+     */
+    @RequestMapping(value = "/specificDate/copy.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result copySpecificDate(HttpServletRequest request, HttpServletResponse response,
+        Model model, @RequestBody OutstockReqDateVO[] outstockReqDateVOs) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = outstockReqDateService.copySpecificDate(outstockReqDateVOs, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+    /**
+     * 출고요청일관리 - 요일 복사
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   outstockReqDateVO
+     * @return  String
+     * @author  안동관
+     * @since   2018. 09. 06.
+     */
+    @RequestMapping(value = "/days/copy.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result copyDays(HttpServletRequest request, HttpServletResponse response,
+        Model model, OutstockReqDateVO outstockReqDateVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = outstockReqDateService.copyDays(outstockReqDateVO, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
 }

@@ -37,9 +37,19 @@
 
     <div class="w100">
         <div class="mt20 oh sb-select dkbr">
-            <%--페이지 스케일 --%>
-            <div id="listScaleBoxDays" class="w130 fl"></div>
-            <div class="tr">
+            <%-- 페이지 스케일  --%>
+            <wj-combo-box
+                class="w150 fl"
+                id="listScaleBox"
+                ng-model="listScale"
+                items-source="_getComboData('listScaleBox')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="initComboBox(s)">
+            </wj-combo-box>
+            <%--// 페이지 스케일  --%>
+                <div class="tr">
                 <%-- 신규등록 --%>
                 <button class="btn_skyblue" ng-click="saveDays()"><s:message code="cmm.save" /></button>
             </div>
@@ -59,17 +69,17 @@
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>"                      binding="gChk"         width="40" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="outstockReqDate.storeCd"/>"      binding="storeCd"      width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="outstockReqDate.storeNm"/>"      binding="storeNm"      width="*"  align="left" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="outstockReqDate.storeNm"/>"      binding="storeNm"      width="*"  align="left"   format="cDate" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="cmm.owner.nm"/>"                 binding="ownerNm"      width="60" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="outstockReqDate.sysStatFg"/>"    binding="sysStatFg"    width="50" align="center" data-map="sysStatFgMap" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="outstockReqDate.orderCloseYn"/>" binding="orderCloseYn" width="80" align="center" data-map="orderCloseYnMap" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="outstockReqDate.sun"/>"          binding="sun"          width="40" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="outstockReqDate.mon"/>"          binding="mon"          width="40" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="outstockReqDate.tue"/>"          binding="tue"          width="40" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="outstockReqDate.wed"/>"          binding="wed"          width="40" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="outstockReqDate.thu"/>"          binding="thu"          width="40" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="outstockReqDate.fri"/>"          binding="fri"          width="40" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="outstockReqDate.sat"/>"          binding="sat"          width="40" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="outstockReqDate.sun"/>"          binding="sun"          width="50" align="center" format="checkbox"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="outstockReqDate.mon"/>"          binding="mon"          width="50" align="center" format="checkbox"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="outstockReqDate.tue"/>"          binding="tue"          width="50" align="center" format="checkbox"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="outstockReqDate.wed"/>"          binding="wed"          width="50" align="center" format="checkbox"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="outstockReqDate.thu"/>"          binding="thu"          width="50" align="center" format="checkbox"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="outstockReqDate.fri"/>"          binding="fri"          width="50" align="center" format="checkbox"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="outstockReqDate.sat"/>"          binding="sat"          width="50" align="center" format="checkbox"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="outstockReqDate.remark"/>"       binding="daysRemark"   width="*" align="left" is-read-only="false"></wj-flex-grid-column>
 
             </wj-flex-grid>
@@ -81,26 +91,32 @@
         </div>
         <%--//위즈모 테이블--%>
     </div>
+
+    <%-- 페이지 리스트 --%>
+    <div class="pageNum mt20">
+        <%-- id --%>
+        <ul id="daysCtrlPager" data-size="10">
+        </ul>
+    </div>
+    <%--//페이지 리스트--%>
 </div>
 
-<script type="text/javascript">
-    var listScaleBoxDays;
-    var sysStatFg = ${ccu.getCommCode("005")};
 
-    /**
-     * get application
-     */
-    var app = agrid.getApp();
+
+<script type="text/javascript">
 
     /** 요일별 그리드 controller */
     app.controller('daysCtrl', ['$scope', '$http', function ($scope, $http) {
         // 상위 객체 상속 : T/F 는 picker
         angular.extend(this, new RootController('daysCtrl', $scope, $http, true));
+
+        $scope._setComboData("listScaleBox", gvListScaleBoxData);
+        var sysStatFg = ${ccu.getCommCode("005")};
+
         // grid 초기화 : 생성되기전 초기화되면서 생성된다
         $scope.initGrid = function (s, e) {
             // picker 사용시 호출 : 미사용시 호출안함
             $scope._makePickColumns("daysCtrl");
-
 
             // 그리드 DataMap 설정
             $scope.sysStatFgMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
@@ -119,6 +135,35 @@
                         wijmo.addClass(e.cell, 'wj-custom-readonly');
                     }
                 }
+
+                if (e.panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+                  var flex = e.panel.grid;
+                  var col = s.columns[e.col];
+
+                  // check that this is a boolean column
+                  if (col.format === "checkbox") { // 여기에 해당하는 컬럼명 바인딩 바꿔줄 것.
+                    // prevent sorting on click
+                    col.allowSorting = false;
+                    // count true values to initialize checkbox
+                    var cnt = 0;
+                    for (var i = 0; i < flex.rows.length; i++) {
+                      if (flex.getCellData(i, col._idx) == true) cnt++;
+                    }
+                    // create and initialize checkbox
+                    e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check" />'+col.header;
+                    var cb = e.cell.firstChild;
+                    cb.checked = cnt > 0;
+                    cb.indeterminate = cnt > 0 && cnt < flex.rows.length;
+                    // apply checkbox value to cells
+                    cb.addEventListener('click', function (e) {
+                      flex.beginUpdate();
+                      for (var i = 0; i < flex.rows.length; i++) {
+                        flex.setCellData(i, col._idx, cb.checked);
+                      }
+                      flex.endUpdate();
+                    });
+                  }
+                }
             });
 
             // 그리드 매장코드 클릭 이벤트
@@ -131,8 +176,8 @@
                         var params = {};
                         params.storeCd = selectedRow.storeCd;
                         params.storeNm = selectedRow.storeNm;
-                        storeVO.setStoreCd(selectedRow.storeCd);
-                        storeVO.setStoreNm(selectedRow.storeNm);
+                        // storeVO.setStoreCd(selectedRow.storeCd);
+                        // storeVO.setStoreNm(selectedRow.storeNm);
                         // $scope._broadcast('dlvrInfoCtrl', params);
                     }
                 }
@@ -150,8 +195,8 @@
             // 파라미터
             var params = {};
             // params.listScale = 15;
-            params.listScale = listScaleBoxDays.selectedValue;
-            params.curr = 1;
+            // params.listScale = $scope.listScaleBoxDays.selectedValue;
+            // params.curr = 1;
             // 조회 수행 : 조회URL, 파라미터, 콜백함수
             $scope._inquiryMain("/iostock/order/outstockReqDate/days/list.sb", params);
         };
@@ -169,8 +214,6 @@
     }]);
 
     $(document).ready(function () {
-        listScaleBoxDays = wcombo.genCommonBox("#listScaleBoxDays", gvListScaleBoxData); //listScaleBoxData 는 공통으로 빼둠. (commonVariables.jsp)
-
         <%-- 엑셀 다운로드 버튼 클릭 --%>
         $("#btnExcel").click(function(){
             var name = "${menuNm}";

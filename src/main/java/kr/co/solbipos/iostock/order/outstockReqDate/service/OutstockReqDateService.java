@@ -24,4 +24,10 @@ public interface OutstockReqDateService {
     /** 출고요청일관리 특정일 출고가능여부 삭제 */
     int deleteSpecificDate(OutstockReqDateVO[] outstockReqDateVOs, SessionInfoVO sessionInfoVO);
 
+    /** 출고요청일관리 특정일 출고가능여부 복사 */
+    int copySpecificDate(OutstockReqDateVO[] outstockReqDateVOs, SessionInfoVO sessionInfoVO);
+
+    /** 출고요청일관리 요일별 출고가능여부 복사 */
+    int copyDays(OutstockReqDateVO outstockReqDateVO, SessionInfoVO sessionInfoVO);
+
 }

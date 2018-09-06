@@ -91,12 +91,13 @@ public class OutstockReqDateServiceImpl implements OutstockReqDateService {
         // 등록
         result = outstockReqDateMapper.insertSpecificDate(outstockReqDateVO);
 
-        if ( result > 0) {
+        if (result > 0) {
             return result;
         } else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
     }
+
 
     /** 출고요청일관리 특정일 수정 */
     @Override
@@ -146,6 +147,85 @@ public class OutstockReqDateServiceImpl implements OutstockReqDateService {
 
         if ( returnResult == outstockReqDateVOs.length) {
             return returnResult;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+    }
+
+
+    /** 출고요청일관리 특정일 복사 */
+    @Override
+    public int copySpecificDate(OutstockReqDateVO[] outstockReqDateVOs, SessionInfoVO sessionInfoVO) {
+        int returnResult = 0;
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        for (OutstockReqDateVO outstockReqDateVO : outstockReqDateVOs) {
+            outstockReqDateVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            outstockReqDateVO.setRegId(sessionInfoVO.getUserId());
+            outstockReqDateVO.setRegDt(currentDt);
+            outstockReqDateVO.setModId(sessionInfoVO.getUserId());
+            outstockReqDateVO.setModDt(currentDt);
+
+            // 복사할 매장을 여러개 선택한 경우
+            String storeCds[] = outstockReqDateVO.getCopyStoreCd().split(",");
+            for(String storeCd : storeCds) {
+                if(!outstockReqDateVO.getStoreCd().equals(storeCd)) {
+//                    OutstockReqDateVO paramVO = outstockReqDateVO;
+
+                    outstockReqDateVO.setCopyStoreCd(storeCd);
+
+                    // 복사할 매장의 이전 정보 삭제
+                    outstockReqDateMapper.deleteCopySpecificDate(outstockReqDateVO);
+
+                    // 등록
+                    result = outstockReqDateMapper.insertCopySpecificDate(outstockReqDateVO);
+                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                }
+            }
+
+            returnResult += result;
+        }
+
+        if ( returnResult == outstockReqDateVOs.length) {
+            return returnResult;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+    }
+
+
+    /** 출고요청일관리 요일 복사 */
+    @Override
+    public int copyDays(OutstockReqDateVO outstockReqDateVO, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        outstockReqDateVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        outstockReqDateVO.setRegId(sessionInfoVO.getUserId());
+        outstockReqDateVO.setRegDt(currentDt);
+        outstockReqDateVO.setModId(sessionInfoVO.getUserId());
+        outstockReqDateVO.setModDt(currentDt);
+
+        // 복사할 매장을 여러개 선택한 경우
+        String storeCds[] = outstockReqDateVO.getCopyStoreCd().split(",");
+        for(String storeCd : storeCds) {
+            if(!outstockReqDateVO.getStoreCd().equals(storeCd)) {
+//                OutstockReqDateVO paramVO = outstockReqDateVO;
+
+                outstockReqDateVO.setCopyStoreCd(storeCd);
+
+                // 복사할 매장의 이전 정보 삭제
+                outstockReqDateMapper.deleteAllCopyDays(outstockReqDateVO);
+
+                // 등록
+                result = outstockReqDateMapper.insertCopyDays(outstockReqDateVO);
+                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            }
+        }
+
+        if ( result >= 0) {
+            return result;
         } else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }

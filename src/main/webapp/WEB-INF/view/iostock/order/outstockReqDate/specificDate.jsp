@@ -37,9 +37,19 @@
 
     <div class="w100">
         <div class="mt20 oh sb-select dkbr">
-            <%--페이지 스케일 --%>
-            <div id="listScaleBoxSpecific" class="w130 fl"></div>
-            <div class="tr">
+            <%-- 페이지 스케일  --%>
+            <wj-combo-box
+                class="w150 fl"
+                id="listScaleBox"
+                ng-model="listScale"
+                items-source="_getComboData('listScaleBox')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="initComboBox(s)">
+            </wj-combo-box>
+            <%--// 페이지 스케일  --%>
+                <div class="tr">
                 <%-- 신규등록 --%>
                 <button class="btn_skyblue" ng-click="newSpecificDate()"><s:message code="cmm.new.add" /></button>
                 <%-- 저장 --%>
@@ -66,7 +76,7 @@
                 <wj-flex-grid-column header="<s:message code="outstockReqDate.storeNm"/>"            binding="storeNm"            width="*"   align="left"   is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="cmm.owner.nm"/>"                       binding="ownerNm"            width="60"  align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="outstockReqDate.sysStatFg"/>"          binding="sysStatFg"          width="50"  align="center" data-map="sysStatFgMap" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="outstockReqDate.specificDate"/>"       binding="specificDate"       width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="outstockReqDate.specificDate"/>"       binding="specificDate"       width="100" align="center" format="cDate" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="outstockReqDate.specificDateRemark"/>" binding="specificDateRemark" width="*"   align="left"   is-read-only="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="outstockReqDate.outstockReqYn"/>"      binding="outstockReqYn"      width="70"  align="center" data-map="outstockReqYnMap" is-read-only="false"></wj-flex-grid-column>
 
@@ -79,7 +89,17 @@
         </div>
         <%--//위즈모 테이블--%>
     </div>
+
+    <%-- 페이지 리스트 --%>
+    <div class="pageNum mt20">
+        <%-- id --%>
+        <ul id="specificCtrlPager" data-size="10">
+        </ul>
+    </div>
+    <%--//페이지 리스트--%>
 </div>
+
+
 
 <%-- 특정일 신규등록 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/order/outstockReqDate/specificDateRegist.jsp">
@@ -88,18 +108,15 @@
 </c:import>
 
 <script type="text/javascript">
-    var listScaleBoxSpecific;
-    var sysStatFg = ${ccu.getCommCode("005")};
 
-    /**
-     * get application
-     */
-    var app = agrid.getApp();
-
-    /** 요일별 그리드 controller */
+    /** 특정일 그리드 controller */
     app.controller('specificCtrl', ['$scope', '$http', function ($scope, $http) {
         // 상위 객체 상속 : T/F 는 picker
         angular.extend(this, new RootController('specificCtrl', $scope, $http, true));
+
+        $scope._setComboData("listScaleBox", gvListScaleBoxData);
+        var sysStatFg = ${ccu.getCommCode("005")};
+
         // grid 초기화 : 생성되기전 초기화되면서 생성된다
         $scope.initGrid = function (s, e) {
             // picker 사용시 호출 : 미사용시 호출안함
@@ -108,8 +125,8 @@
             // 그리드 DataMap 설정
             $scope.sysStatFgMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
             $scope.outstockReqYnMap = new wijmo.grid.DataMap([
-                {id: "가능", name: "<s:message code='outstockReqDate.outstockReqYnY'/>"},
-                {id: "불가", name: "<s:message code='outstockReqDate.outstockReqYnN'/>"},
+                {id: "Y", name: "<s:message code='outstockReqDate.outstockReqYnY'/>"},
+                {id: "N", name: "<s:message code='outstockReqDate.outstockReqYnN'/>"},
             ], 'id', 'name');
 
             // 그리드 링크 효과
@@ -134,8 +151,8 @@
                         var params = {};
                         params.storeCd = selectedRow.storeCd;
                         params.storeNm = selectedRow.storeNm;
-                        storeVO.setStoreCd(selectedRow.storeCd);
-                        storeVO.setStoreNm(selectedRow.storeNm);
+                        // storeVO.setStoreCd(selectedRow.storeCd);
+                        // storeVO.setStoreNm(selectedRow.storeNm);
                         // $scope._broadcast('dlvrInfoCtrl', params);
                     }
                 }
@@ -153,8 +170,8 @@
             // 파라미터
             var params = {};
             // params.listScale = 15;
-            params.listScale = listScaleBoxSpecific.selectedValue;
-            params.curr = 1;
+            // params.listScale = listScaleBoxSpecific.selectedValue;
+            // params.curr = 1;
             // 조회 수행 : 조회URL, 파라미터, 콜백함수
             $scope._inquiryMain("/iostock/order/outstockReqDate/specificDate/list.sb", params);
         };
@@ -187,8 +204,6 @@
     }]);
 
     $(document).ready(function () {
-        listScaleBoxSpecific = wcombo.genCommonBox("#listScaleBoxSpecific", gvListScaleBoxData); //listScaleBoxData 는 공통으로 빼둠. (commonVariables.jsp)
-
         <%-- 엑셀 다운로드 버튼 클릭 --%>
         $("#btnExcel").click(function(){
             var name = "${menuNm}";

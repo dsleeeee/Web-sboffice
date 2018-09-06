@@ -42,6 +42,8 @@ public class OutstockReqDateVO extends PageVO {
     private String sysStatFg;
     /** 발주가능여부 */
     private String orderCloseYn;
+    /** 요청일 복사할매장 */
+    private String copyStoreCd;
 
     /**
      * @return the hqOfficeCd
@@ -295,5 +297,17 @@ public class OutstockReqDateVO extends PageVO {
         this.orderCloseYn = orderCloseYn;
     }
 
+    /**
+     * @return the copyStoreCd
+     */
+    public String getCopyStoreCd() {
+        return copyStoreCd;
+    }
 
+    /**
+     * @param copyStoreCd the copyStoreCd to set
+     */
+    public void setCopyStoreCd(String copyStoreCd) {
+        this.copyStoreCd = copyStoreCd;
+    }
 }

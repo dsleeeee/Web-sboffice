@@ -31,6 +31,7 @@
     -->
     <select id="getDaysList" parameterType="outstockReqDateVO" resultMap="daysListMap">
         /* USE : outstockReqDateMapper.getDaysList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
         <![CDATA[
         SELECT  tms.STORE_CD, tms.STORE_NM
         ,       tms.OWNER_NM, tms.SYS_STAT_FG
@@ -44,12 +45,15 @@
         ,       DECODE(INSTR(tphsod.REQ_NO_DAY, '7'), 0, 'Y', NULL, 'Y', 'N') AS SAT
         ,       tphsod.REMARK AS DAYS_REMARK
         ]]>
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        <![CDATA[
         FROM    TB_MS_STORE tms
         ,       TB_PO_HQ_STORE_ORDER_DAYS tphsod
         ,       TB_PO_HQ_STORE_LOAN tphsl
         WHERE   tms.HQ_OFFICE_CD    =   #{hqOfficeCd}
         AND     tphsod.STORE_CD (+) =   tms.STORE_CD
         AND     tphsl.STORE_CD  (+) =   tms.STORE_CD
+        ]]>
         <if test='storeCd != null and storeCd != ""'>
             AND tms.STORE_CD = #{storeCd}
         </if>
@@ -57,6 +61,7 @@
             AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
         </if>
         ORDER BY tms.STORE_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
     <!-- 출고요청일관리 요일별 요일 저장 -->
@@ -118,6 +123,7 @@
     -->
     <select id="getSpecificDateList" parameterType="outstockReqDateVO" resultType="DefaultMap">
         /* USE : outstockReqDateMapper.getSpecificDateList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
         <![CDATA[
         SELECT  tms.STORE_CD, tms.STORE_NM
         ,       tms.OWNER_NM, tms.SYS_STAT_FG
@@ -125,10 +131,13 @@
         ,       tphsos.OUTSTOCK_REQ_YN
         ,       tphsos.REMARK AS SPECIFIC_DATE_REMARK
         ]]>
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        <![CDATA[
         FROM    TB_PO_HQ_STORE_ORDER_SPECIFIC tphsos
         ,       TB_MS_STORE tms
         WHERE   tphsos.HQ_OFFICE_CD =   #{hqOfficeCd}
         AND     tms.STORE_CD        =   tphsos.STORE_CD
+        ]]>
         <if test='storeCd != null and storeCd != ""'>
             AND tms.STORE_CD = #{storeCd}
         </if>
@@ -136,6 +145,7 @@
             AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
         </if>
         ORDER BY tphsos.STORE_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
     <!-- 출고요청일관리 특정일 저장 -->
@@ -164,7 +174,7 @@
         #{storeCd},
         #{specificDate},
         #{outstockReqYn},
-        #{specificRemark},
+        #{specificDateRemark},
         #{regDt},
         #{regId},
         #{modDt},
@@ -181,15 +191,121 @@
     <update id="updateSpecificDate" parameterType="outstockReqDateVO">
     /* USE : outstockReqDateMapper.updateSpecificDate */
     UPDATE  TB_PO_HQ_STORE_ORDER_SPECIFIC
-    SET
-            OUTSTOCK_REQ_YN = #{outstockReqYn},
-            REMARK          = #{specificRemark},
-            REG_DT          = #{regDt},
-            REG_ID          = #{regId},
+    SET     OUTSTOCK_REQ_YN = #{outstockReqYn},
+            REMARK          = #{specificDateRemark},
             MOD_DT          = #{modDt},
             MOD_ID          = #{modId}
     WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
     AND     STORE_CD      = #{storeCd}
     AND     SPECIFIC_DATE = #{specificDate}
     </update>
+
+    <!-- 출고요청일관리 특정일 삭제 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_ORDER_SPECIFIC
+        PARAM    : outstockReqDateVO
+        COMMENTS : 출고요청일관리의 특정일을 삭제한다.
+    -->
+    <delete id="deleteSpecificDate" parameterType="outstockReqDateVO">
+    /* USE : outstockReqDateMapper.deleteSpecificDate */
+    DELETE  TB_PO_HQ_STORE_ORDER_SPECIFIC
+    WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+    AND     STORE_CD      = #{storeCd}
+    AND     SPECIFIC_DATE = #{specificDate}
+    </delete>
+
+
+    <!-- 복사할 매장의 이전 출고요청일관리 특정일 삭제 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_ORDER_SPECIFIC
+        PARAM    : outstockReqDateVO
+        COMMENTS : 복사할 매장의 이전 출고요청일관리 특정일을 삭제한다.
+    -->
+    <delete id="deleteCopySpecificDate" parameterType="outstockReqDateVO">
+    /* USE : outstockReqDateMapper.deleteCopySpecificDate */
+    DELETE  TB_PO_HQ_STORE_ORDER_SPECIFIC
+    WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+    AND     STORE_CD      = #{copyStoreCd}
+    AND     SPECIFIC_DATE = #{specificDate}
+    </delete>
+
+
+    <!-- 출고요청일관리 특정일 복사 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_ORDER_SPECIFIC
+        PARAM    : outstockReqDateVO
+        COMMENTS : 출고요청일관리의 특정일을 복사한다.
+    -->
+    <insert id="insertCopySpecificDate" parameterType="outstockReqDateVO">
+    /* USE : outstockReqDateMapper.insertCopySpecificDate */
+    INSERT INTO TB_PO_HQ_STORE_ORDER_SPECIFIC
+    (
+        HQ_OFFICE_CD,
+        STORE_CD,
+        SPECIFIC_DATE,
+        OUTSTOCK_REQ_YN,
+        REMARK,
+        REG_DT,
+        REG_ID,
+        MOD_DT,
+        MOD_ID
+    )
+    VALUES
+    (
+        #{hqOfficeCd},
+        #{copyStoreCd},
+        #{specificDate},
+        #{outstockReqYn},
+        #{specificDateRemark},
+        #{regDt},
+        #{regId},
+        #{modDt},
+        #{modId}
+    )
+    </insert>
+
+    <!-- 복사할 매장의 이전 출고요청일관리 요일 삭제 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_ORDER_DAYS
+        PARAM    : outstockReqDateVO
+        COMMENTS : 복사할 매장의 이전 출고요청일관리 요일을 삭제한다.
+    -->
+    <delete id="deleteAllCopyDays" parameterType="outstockReqDateVO">
+    /* USE : outstockReqDateMapper.deleteAllCopyDays */
+    DELETE  TB_PO_HQ_STORE_ORDER_DAYS
+    WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+    AND     STORE_CD      = #{copyStoreCd}
+    </delete>
+
+    <!-- 출고요청일관리 요일별 요일 복사 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_ORDER_DAYS
+        PARAM    : outstockReqDateVO
+        COMMENTS : 출고요청일관리의 요일을 복사한다.
+    -->
+    <insert id="insertCopyDays" parameterType="outstockReqDateVO">
+    /* USE : outstockReqDateMapper.insertCopyDays */
+    INSERT INTO TB_PO_HQ_STORE_ORDER_DAYS
+    (
+        HQ_OFFICE_CD,
+        STORE_CD,
+        REQ_NO_DAY,
+        REMARK,
+        REG_DT,
+        REG_ID,
+        MOD_DT,
+        MOD_ID
+    )
+    SELECT  HQ_OFFICE_CD,
+            #{copyStoreCd},
+            REQ_NO_DAY,
+            REMARK,
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+    FROM    TB_PO_HQ_STORE_ORDER_DAYS
+    WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+    AND     STORE_CD      = #{storeCd}
+    </insert>
 </mapper>
