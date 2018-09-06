@@ -73,7 +73,7 @@
            tmp.FNKEY_FG,
            tcn.NMCODE_NM AS FNKEY_NM,
            COUNT(*) TOT_CNT,
-           SUM(DECODE(tmpf.FNKEY_NO, NULL, 0, 1)) REG_CNT
+           SUM(DECODE(tmpf.USE_YN, 'N', 0, 1)) REG_CNT
       FROM (
       SELECT tmp.STORE_CD, tmp.POS_NO, tmsf.POS_FG, tmsf.FNKEY_FG, tmsf.FNKEY_NO
         FROM TB_MS_POS tmp,

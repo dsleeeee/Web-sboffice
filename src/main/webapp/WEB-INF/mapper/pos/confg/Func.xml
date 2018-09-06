@@ -303,7 +303,7 @@
        AND STORE_CD = #{storeCd}
   </delete>
 
-  <!-- 매장 기능키에 해당 기능키 등록 -->
+  <!-- 매장 기능키에 해당 기능키 등록 프로시져 호출 -->
   <!--
       TABLE    : TB_CM_POS_FNKEY_STORE
       PARAM    : funcStoreVO
@@ -325,7 +325,7 @@
 
   </select>
 
-  <!-- 포스별 기능키에 해당 기능키 등록 -->
+  <!-- 포스별 기능키에 해당 기능키 등록 프로시져 호출 -->
   <!--
       TABLE    : TB_CM_POS_FNKEY_STORE
       PARAM    : funcStoreVO
@@ -346,7 +346,7 @@
     }
   </select>
 
-  <!-- 매장 기능키에 해당 기능키 삭제 -->
+  <!-- 매장 기능키에 해당 기능키 삭제 프로시져 호출 -->
   <!--
       TABLE    : TB_CM_POS_FNKEY_STORE
       PARAM    : funcStoreVO
@@ -363,7 +363,7 @@
     }
   </select>
 
-  <!-- 포스별 기능키에 해당 기능키 삭제 -->
+  <!-- 포스별 기능키에 해당 기능키 삭제 프로시져 호출 -->
   <!--
       TABLE    : TB_CM_POS_FNKEY_STORE
       PARAM    : funcStoreVO
@@ -382,8 +382,23 @@
 
 
 
-
-
+  <!-- 기능키 상세정보 수정 프로시져 호출 -->
+  <!--
+      TABLE    : TB_CM_POS_FNKEY_STORE
+      PARAM    : funcStoreVO
+      COMMENTS : 매장 포스별 기능키 목록에서 해당 기능키를 삭제한다.
+  -->
+  <!--
+  <select id="updateStoreFuncKey" statementType="CALLABLE"  parameterType="funcVO" resultType="DefaultMap">
+    {
+      CALL PKG_MS_STORE_POS_FNKEY.SP_MS_STORE_FNKEY_U
+      (
+        #{fnkeyNo},
+        #{result, mode=OUT, jdbcType=VARCHAR}
+      )
+    }
+  </select>
+  -->
 </mapper>
 
 

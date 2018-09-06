@@ -70,7 +70,7 @@
 
   <%-- 쿠폰등록  --%>
   <div class="mb40" ng-controller="couponCtrl">
-    <div class="wj-TblWrapBr mr10 pd20" style="height:250px;">
+    <div class="wj-TblWrapBr mr10 pd20" style="height:260px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='coupon.regist.coupon' /> <span id="couponSubTitle"></span> </span>
         <button class="btn_skyblue" id="btnCouponAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
@@ -78,8 +78,7 @@
         <button class="btn_skyblue" id="btnCouponSave" ng-click="save()"><s:message code='cmm.save' /></button>
       </div>
       <%-- 쿠폰등록 그리드 --%>
-      <div id="couponGrid" style="height:400px">
-
+      <div id="couponGrid" class="wj-gridWrap" style="height:190px">
         <wj-flex-grid
                 autoGenerateColumns="false"
                 control="flex"

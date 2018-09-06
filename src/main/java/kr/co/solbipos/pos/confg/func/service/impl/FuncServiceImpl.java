@@ -72,6 +72,12 @@ public class FuncServiceImpl implements FuncService {
             }
             else if(funcVO.getStatus() == GridDataFg.UPDATE) {
                 procCnt += mapper.updateFunc(funcVO);
+
+                // 기능 상세정보 수정 프로시져 호출 //TODO
+//                FuncVO func = new FuncVO();
+//                String storeResult = mapper.updateStoreFuncKey(funcVO);
+//                func.setResult(storeResult);
+
             }
             else if(funcVO.getStatus() == GridDataFg.DELETE) {
                 procCnt += mapper.deleteFunc(funcVO);
