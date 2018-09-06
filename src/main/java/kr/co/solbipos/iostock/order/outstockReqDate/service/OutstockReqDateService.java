@@ -30,4 +30,10 @@ public interface OutstockReqDateService {
     /** 출고요청일관리 요일별 출고가능여부 복사 */
     int copyDays(OutstockReqDateVO outstockReqDateVO, SessionInfoVO sessionInfoVO);
 
+
+
+    List<DefaultMap<String>> selectStoreList(OutstockReqDateVO outstockReqDateVO);
+
+
+
 }

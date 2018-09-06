@@ -230,4 +230,16 @@ public class OutstockReqDateServiceImpl implements OutstockReqDateService {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
     }
+
+
+
+
+
+
+    /** 출고요청일관리 매장선택 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> selectStoreList(OutstockReqDateVO outstockReqDateVO) {
+        return outstockReqDateMapper.selectStoreList(outstockReqDateVO);
+    }
+
 }

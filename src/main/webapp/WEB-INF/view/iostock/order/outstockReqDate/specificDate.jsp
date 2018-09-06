@@ -22,10 +22,18 @@
         <tr>
             <%-- 매장코드 --%>
             <th><s:message code="outstockReqDate.storeCd"/></th>
-            <td><input type="text" id="specificSearchStoreCd" name="specificSearchStoreCd" ng-model="storeCd" class="sb-input w100" maxlength="7"/></td>
-            <%-- 매장명 --%>
-            <th><s:message code="outstockReqDate.storeNm"/></th>
-            <td><input type="text" id="specificSearchStoreNm" name="specificSearchStoreNm" ng-model="storeNm" class="sb-input w100" maxlength="16" /></td>
+                <td>
+                    <%-- ColumnPicker 사용시 include --%>
+                    <jsp:include page="/WEB-INF/view/iostock/order/outstockReqDate/selectShopM.jsp" flush="true">
+                        <jsp:param name="targetId" value="speSelectStore"/>
+                    </jsp:include>
+                    <%--// ColumnPicker 사용시 include --%>
+                </td>
+
+            <%--<td><input type="text" id="specificSearchStoreCd" name="specificSearchStoreCd" ng-model="storeCd" class="sb-input w100" maxlength="7"/></td>--%>
+            <%--&lt;%&ndash; 매장명 &ndash;%&gt;--%>
+            <%--<th><s:message code="outstockReqDate.storeNm"/></th>--%>
+            <%--<td><input type="text" id="specificSearchStoreNm" name="specificSearchStoreNm" ng-model="storeNm" class="sb-input w100" maxlength="16" /></td>--%>
         </tr>
         </tbody>
     </table>
@@ -166,9 +174,11 @@
             event.preventDefault();
         });
 
+        // 특정일 그리드 조회
         $scope.searchspecificDateList = function() {
             // 파라미터
             var params = {};
+            params.storeCd = $("#speSelectStoreCd").val();
             // params.listScale = 15;
             // params.listScale = listScaleBoxSpecific.selectedValue;
             // params.curr = 1;
@@ -199,6 +209,13 @@
                 params.push($scope.flex.collectionView.itemsEdited[i]);
             }
             $scope._save("/iostock/order/outstockReqDate/specificDate/delete.sb", params, function() { $scope.searchspecificDateList() });
+        };
+
+        // 매장선택 모듈 팝업 사용시 정의
+        // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+        // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+        $scope.speSelectStoreShow = function () {
+            $scope._broadcast('speSelectStoreCtrl');
         };
 
     }]);

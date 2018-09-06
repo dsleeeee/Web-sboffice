@@ -43,4 +43,10 @@ public interface OutstockReqDateMapper {
     /** 출고요청일관리 요일 복사 */
     int insertCopyDays(OutstockReqDateVO outstockReqDateVO);
 
+
+
+
+    List<DefaultMap<String>> selectStoreList(OutstockReqDateVO outstockReqDateVO);
+
+
 }

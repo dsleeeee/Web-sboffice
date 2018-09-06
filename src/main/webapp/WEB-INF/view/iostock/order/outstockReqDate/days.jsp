@@ -21,11 +21,18 @@
         <tbody>
         <tr>
             <%-- 매장코드 --%>
-            <th><s:message code="outstockReqDate.storeCd"/></th>
-            <td><input type="text" id="daysSearchStoreCd" name="daysSearchStoreCd" ng-model="storeCd" class="sb-input w100" maxlength="7"/></td>
-            <%-- 매장명 --%>
-            <th><s:message code="outstockReqDate.storeNm"/></th>
-            <td><input type="text" id="daysSearchStoreNm" name="daysSearchStoreNm" ng-model="storeNm" class="sb-input w100" maxlength="16" /></td>
+            <th><s:message code="outstockReqDate.store"/></th>
+            <td>
+                <%-- ColumnPicker 사용시 include --%>
+                <jsp:include page="/WEB-INF/view/iostock/order/outstockReqDate/selectShopS.jsp" flush="true">
+                    <jsp:param name="targetId" value="daysSelectStore"/>
+                </jsp:include>
+                <%--// ColumnPicker 사용시 include --%>
+            </td>
+            <%--<td><input type="text" id="daysSearchStoreCd" name="daysSearchStoreCd" ng-model="storeCd" class="sb-input w100" maxlength="7"/></td>--%>
+            <%--&lt;%&ndash; 매장명 &ndash;%&gt;--%>
+            <%--<th><s:message code="outstockReqDate.storeNm"/></th>--%>
+            <%--<td><input type="text" id="daysSearchStoreNm" name="daysSearchStoreNm" ng-model="storeNm" class="sb-input w100" maxlength="16" /></td>--%>
         </tr>
         </tbody>
     </table>
@@ -194,6 +201,8 @@
         $scope.searchDaysList = function() {
             // 파라미터
             var params = {};
+            params.storeCd = $("#daysSelectStoreCd").val();
+            // params.storeNm = $("#daysSelectStoreNm").val();
             // params.listScale = 15;
             // params.listScale = $scope.listScaleBoxDays.selectedValue;
             // params.curr = 1;
@@ -209,6 +218,13 @@
                 params.push($scope.flex.collectionView.itemsEdited[i]);
             }
             $scope._save("/iostock/order/outstockReqDate/days/save.sb", params, function() { $scope.searchDaysList() });
+        };
+
+        // 매장선택 모듈 팝업 사용시 정의
+        // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+        // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+        $scope.daysSelectStoreShow = function () {
+            $scope._broadcast('daysSelectStoreCtrl');
         };
 
     }]);
