@@ -31,4 +31,22 @@ public interface OutstockReqDateMapper {
     /** 출고요청일관리 특정일 삭제 */
     int deleteSpecificDate(OutstockReqDateVO outstockReqDateVO);
 
+    /** 복사할 매장의 이전 출고요청일관리 특정일 삭제 */
+    int deleteCopySpecificDate(OutstockReqDateVO outstockReqDateVO);
+
+    /** 출고요청일관리 특정일 복사 */
+    int insertCopySpecificDate(OutstockReqDateVO outstockReqDateVO);
+
+    /** 복사할 매장의 이전 출고요청일관리 요일 삭제 */
+    int deleteAllCopyDays(OutstockReqDateVO outstockReqDateVO);
+
+    /** 출고요청일관리 요일 복사 */
+    int insertCopyDays(OutstockReqDateVO outstockReqDateVO);
+
+
+
+
+    List<DefaultMap<String>> selectStoreList(OutstockReqDateVO outstockReqDateVO);
+
+
 }
