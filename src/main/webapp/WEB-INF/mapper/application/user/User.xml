@@ -13,10 +13,10 @@
       WHERE A.STORE_CD = B.STORE_CD
         AND A.WEB_USE_YN = 'Y'
         AND A.EMP_NM = #{empNm}
-    <if test="mpNo != null and mpNo != ''">
+    <if test='mpNo != null and mpNo != ""'>
         AND A.MP_NO = #{mpNo}
     </if>
-    <if test="userId != null and userId != ''">
+    <if test='userId != null and userId != ""'>
         AND A.USER_ID = #{userId}
     </if>
      UNION ALL
@@ -28,10 +28,10 @@
       WHERE A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
         AND A.WEB_USE_YN = 'Y'
         AND A.EMP_NM = #{empNm}
-    <if test="mpNo != null and mpNo != ''">
+    <if test='mpNo != null and mpNo != ""'>
         AND A.MP_NO = #{mpNo}
     </if>
-    <if test="userId != null and userId != ''">
+    <if test='userId != null and userId != ""'>
         AND A.USER_ID = #{userId}
     </if>
      UNION ALL
@@ -43,10 +43,10 @@
       WHERE A.AGENCY_CD = B.AGENCY_CD
         AND A.WEB_USE_YN = 'Y'
         AND A.EMP_NM = #{empNm}
-    <if test="mpNo != null and mpNo != ''">
+    <if test='mpNo != null and mpNo != ""'>
         AND A.MP_NO = #{mpNo}
     </if>
-    <if test="userId != null and userId != ''">
+    <if test='userId != null and userId != ""'>
         AND A.USER_ID = #{userId}
     </if>
   </select>

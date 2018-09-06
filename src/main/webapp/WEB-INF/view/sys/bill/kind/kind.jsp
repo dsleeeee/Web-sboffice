@@ -51,7 +51,7 @@
             <wj-flex-grid-column header="<s:message code="kind.prtClassCd"/>" binding="prtClassCd" width="70"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="kind.prtClassNm"/>" binding="prtClassNm" width="*"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="kind.generalYn"/>" binding="generalYn" width="40"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="kind.foodYn"/>" binding="foodYn" width="40"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="kind.foodYn"/>" binding="foodYn" format="checkBoxText" width="40"></wj-flex-grid-column>
 
           </wj-flex-grid>
           <%-- ColumnPicker 사용시 include --%>

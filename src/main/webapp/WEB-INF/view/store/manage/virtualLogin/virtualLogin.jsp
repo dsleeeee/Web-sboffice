@@ -52,11 +52,11 @@
             <wj-combo-box
                     id="srchClsFg"
                     ng-model="clsFg"
-                    items-source="getComboData('srchClsFg')"
+                    items-source="_getComboData('srchClsFg')"
                     display-member-path="name"
                     selected-value-path="value"
                     is-editable="false"
-                    initialized="initComboBox(s)">
+                    initialized="_initComboBox(s)">
             </wj-combo-box>
           </div>
             {{clsFg}}
@@ -68,11 +68,11 @@
             <wj-combo-box
                     id="srchStatFg"
                     ng-model="statFg"
-                    items-source="getComboData('srchStatFg')"
+                    items-source="_getComboData('srchStatFg')"
                     display-member-path="name"
                     selected-value-path="value"
                     is-editable="false"
-                    initialized="initComboBox(s)">
+                    initialized="_initComboBox(s)">
             </wj-combo-box>
           </div>
         </td>
@@ -93,11 +93,11 @@
               class="w150 fl"
               id="listScaleBox"
               ng-model="listScale"
-              items-source="getComboData('listScaleBox')"
+              items-source="_getComboData('listScaleBox')"
               display-member-path="name"
               selected-value-path="value"
               is-editable="false"
-              initialized="initComboBox(s)">
+              initialized="_initComboBox(s)">
       </wj-combo-box>
       <%-- 엑셀 다운로드 --%>
       <button id="btnExcel" class="btn_skyblue fr"><s:message code="cmm.excel.down" /></button>

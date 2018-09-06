@@ -226,9 +226,11 @@ Sidebar.prototype.makeGrid = function() {
 
   //ListBox 선택모드에서 cell의 hostElement를 가져오는데 문제가 있어
   //아래 2줄을 추가 하였음
-  theGrid.select(-1, -1);
-  theGrid.select(0, 1);
-  
+  if ( theGrid.collectionView.items.length > 0 ) {
+    theGrid.select(-1, -1);
+    theGrid.select(0, 1);
+  }
+
   //선택한 ROW가 바뀌었을 때 그래픽 영역에서 활성화
   theGrid.selectionChanged.addHandler(function (s, e) {
     //idx가져오기(0번째 항목)
@@ -351,7 +353,7 @@ function Graph(container, themes) {
   var loadStylesheet = function(graph) {
     var node = (graph.themes != null) ? graph.themes[graph.defaultThemeName] :
       (!mxStyleRegistry.dynamicLoading) ? null :
-      mxUtils.load(STYLE_PATH + '/tableattr.xml').getDocumentElement();
+      mxUtils.load(STYLE_PATH + '/tableAttr.xml').getDocumentElement();
 
     if (node != null) {
       var dec = new mxCodec(node.ownerDocument);
@@ -369,7 +371,7 @@ mxUtils.extend(Graph, mxGraph);
 Graph.prototype.defaultThemes = {};
 Graph.prototype.defaultVertexStyle = {};
 
-Graph.prototype.defaultThemeName = 'tableattr';
+Graph.prototype.defaultThemeName = 'tableAttr';
 
 //배경이미지 - 기본설정
 //테이블 구성 모양을 넣고 싶을 때 사용 가능

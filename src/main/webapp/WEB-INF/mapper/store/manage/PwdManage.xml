@@ -80,7 +80,7 @@
     <select id="getOldPassword" parameterType="pwdManageVO" resultType="java.lang.String">
         /* USE : PwdManageMapper.getOldPassword */
         <choose>
-            <when test="pwdChgFg != null and pwdChgFg.toString() == 'WEB'">
+            <when test='pwdChgFg != null and pwdChgFg.toString() == "WEB"'>
                 SELECT
                     USER_PWD
                 FROM
@@ -108,7 +108,7 @@
     <update id="updatePassword" parameterType="pwdManageVO">
         /* USE : PwdManageMapper.updatePassword */
         <choose>
-            <when test="pwdChgFg != null and pwdChgFg.toString() == 'WEB'">
+            <when test='pwdChgFg != null and pwdChgFg.toString() == "WEB"'>
                 UPDATE
                     TB_WB_USER_INFO
                 SET
