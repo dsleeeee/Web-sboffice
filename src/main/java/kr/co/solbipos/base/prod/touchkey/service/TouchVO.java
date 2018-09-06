@@ -22,6 +22,15 @@ import kr.co.solbipos.base.common.enums.InFg;
 public class TouchVO extends CmmVO {
 
     private static final long serialVersionUID = -5156116686836619650L;
+
+    /** 소속구분
+     * M : 시스템
+     * A : 대리점
+     * H : 본사
+     * S : 매장, 가맹점 */
+    private String orgnFg;
+    /** 본사코드 */
+    private String hqOfficeCd;
     /** 매장코드 */
     private String storeCd;
     /** 터치키분류코드 */
@@ -48,8 +57,32 @@ public class TouchVO extends CmmVO {
     private String fontColor = "#000000";
     /** 채움색 */
     private String fillColor = "#000000";
-    
-    
+
+
+    /**
+     * @return the orgnFg
+     */
+    public String getOrgnFg() {
+        return orgnFg;
+    }
+    /**
+     * @param orgnFg the orgnFg to set
+     */
+    public void setOrgnFg(String orgnFg) {
+        this.orgnFg = orgnFg;
+    }
+    /**
+     * @return the hqOfficeCd
+     */
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
+    /**
+     * @param hqOfficeCd the hqOfficeCd to set
+     */
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
+    }
     /**
      * @return the storeCd
      */

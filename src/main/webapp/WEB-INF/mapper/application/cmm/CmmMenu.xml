@@ -20,7 +20,7 @@
       FROM TB_MS_STORE
      WHERE HQ_OFFICE_CD = #{hqOfficeCd}
   ]]>
-     <if test="storeNm != null and storeNm != ''">
+     <if test='storeNm != null and storeNm != ""'>
        AND STORE_NM LIKE '%'||#{storeNm}||'%'
      </if>
      ORDER BY REG_DT, MOD_DT DESC
@@ -38,10 +38,10 @@
        AND SYS_OPEN_DATE < SYSDATE
        AND SYS_CLOSURE_DATE > SYSDATE
   ]]>
-   <if test="hqOfficeCd != null and hqOfficeCd != ''">
+   <if test='hqOfficeCd != null and hqOfficeCd != ""'>
        AND HQ_OFFICE_CD LIKE '%'||#{hqOfficeCd}||'%'
    </if>
-   <if test="hqOfficeNm != null and hqOfficeNm != ''">
+   <if test='hqOfficeNm != null and hqOfficeNm != ""'>
        AND HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'
    </if>
      ORDER BY REG_DT, MOD_DT DESC
@@ -77,7 +77,7 @@
            B.P_RESRCE,
            B.RESRCE_NM,
            B.URL
-           <if test="vUserId != null and vUserId != ''">
+           <if test='vUserId != null and vUserId != ""'>
            ,#{vUserId,jdbcType=VARCHAR} AS V_LOGIN_ID
            </if>
       FROM TB_WB_BKMK A
@@ -98,7 +98,7 @@
            B.P_RESRCE,
            B.RESRCE_NM,
            B.URL
-           <if test="vUserId != null and vUserId != ''">
+           <if test='vUserId != null and vUserId != ""'>
            ,#{vUserId,jdbcType=VARCHAR} AS V_LOGIN_ID
            </if>
       FROM TB_WB_FIXING A
@@ -119,7 +119,7 @@
                FROM TB_CM_NMCODE
               WHERE NMCODE_GRP_CD = '056'
                 AND NMCODE_ITEM_1 = A.RESRCE_CD) ICON
-            <if test="vUserId != null and vUserId != ''">
+            <if test='vUserId != null and vUserId != ""'>
             ,#{vUserId,jdbcType=VARCHAR} AS V_LOGIN_ID
             </if>
        FROM TB_WB_RESRCE_INFO A
@@ -136,7 +136,7 @@
     /* CmmMenuMapper.selectAuthedResrce */
      SELECT A.RESRCE_CD,
             A.RESRCE_PATH
-            <if test="vUserId != null and vUserId != ''">
+            <if test='vUserId != null and vUserId != ""'>
             ,#{vUserId,jdbcType=VARCHAR} AS V_LOGIN_ID
             </if>
        FROM (
@@ -175,7 +175,7 @@
     /* CmmMenuMapper.selectAuthedBkmk */
      SELECT A.RESRCE_CD,
             A.RESRCE_PATH
-            <if test="vUserId != null and vUserId != ''">
+            <if test='vUserId != null and vUserId != ""'>
             ,#{vUserId,jdbcType=VARCHAR} AS V_LOGIN_ID
             </if>
        FROM (

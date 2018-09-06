@@ -177,7 +177,7 @@ window.TABLE_ATTR_DEFAULTS = defaults;
 
     // Fixes possible asynchronous requests
     mxUtils.getAll(
-      [ bundle, STYLE_PATH + '/tableattr.xml' ],
+      [ bundle, STYLE_PATH + '/tableAttr.xml' ],
       function(xhr) {
         // Adds bundle text to resources
         mxResources.parse(xhr[0].getText());

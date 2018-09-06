@@ -27,23 +27,23 @@
      WHERE A.STORE_CD = B.STORE_CD
        AND B.HQ_OFFICE_CD = C.HQ_OFFICE_CD
      <if test="chkDt == false">
-       <if test="startDt != null and startDt != '' and endDt != null and endDt != ''">
+       <if test='startDt != null and startDt != "" and endDt != null and endDt != ""'>
        AND A.LOGIN_DATE BETWEEN #{startDt} AND #{endDt} --조회(영업)일자
        </if>
      </if>
-     <if test="hqOfficeCd != null and hqOfficeCd != ''">
+     <if test='hqOfficeCd != null and hqOfficeCd != ""'>
        AND C.HQ_OFFICE_CD = #{hqOfficeCd} --본사코드
      </if>
-     <if test="hqOfficeNm != null and hqOfficeNm != ''">
+     <if test='hqOfficeNm != null and hqOfficeNm != ""'>
        AND C.HQ_OFFICE_NM = #{hqOfficeNm} --본사명
      </if>
-     <if test="storeCd != null and storeCd != ''">
+     <if test='storeCd != null and storeCd != ""'>
        AND B.STORE_CD = #{storeCd} --매장코드
      </if>
-     <if test="storeNm != null and storeNm != ''">
+     <if test='storeNm != null and storeNm != ""'>
        AND B.STORE_NM = #{storeNm}
      </if>
-     <if test="sysStatFg != null and sysStatFg.name() != 'ALL'">
+     <if test='sysStatFg != null and sysStatFg.name() != "ALL"'>
        AND B.SYS_STAT_FG = #{sysStatFg} --매장상태
      </if>
      <include refid="CmmSQL.PagingTemplateBottom"/>
