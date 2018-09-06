@@ -30,8 +30,8 @@ function RootController(ctrlName, $scope, $http, isPicker) {
       }
     }
     // 페이징 처리
-    if ($scope.getCurr() > 0) {
-      params['curr'] = $scope.getCurr();
+    if ($scope._getCurrPage() > 0) {
+      params['curr'] = $scope._getCurrPage();
     } else {
       params['curr'] = 1;
     }
@@ -42,32 +42,47 @@ function RootController(ctrlName, $scope, $http, isPicker) {
       params: params, /* 파라메터로 보낼 데이터 */
       headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
     }).then(function successCallback(response) {
-      // this callback will be called asynchronously
-      // when the response is available
-      var list = response.data.data.list;
-      if (list.length === undefined || list.length === 0) {
-        $scope.data = new wijmo.collections.CollectionView([]);
-        if (isView) {
-          $scope.s_alert(response.data.message);
+      if(response.data.status === "OK") {
+        // this callback will be called asynchronously
+        // when the response is available
+        var list = response.data.data.list;
+        if (list.length === undefined || list.length === 0) {
+          $scope.data = new wijmo.collections.CollectionView([]);
+          if (isView) {
+            $scope._popMsg(response.data.message);
+          }
+          return;
         }
-        return;
-      }
-      var data = new wijmo.collections.CollectionView(list);
-      data.trackChanges = true;
-      $scope.data = data;
+        var data = new wijmo.collections.CollectionView(list);
+        data.trackChanges = true;
+        $scope.data = data;
 
-      // 페이징 처리
-      if (response.data.data.page.curr) {
-        $scope.pagingInfo = response.data.data.page;
-        $scope.pagingInfo.ctrlName = $scope.name;
-        $scope._broadcast('drawPaging', $scope.pagingInfo);
+        // 페이징 처리
+        if (response.data.data.page.curr) {
+          $scope.pagingInfo = response.data.data.page;
+          $scope.pagingInfo.ctrlName = $scope.name;
+          $scope._broadcast('drawPaging', $scope.pagingInfo);
+        }
       }
-
+      else if(response.data.status === "FAIL") {
+        $scope._popMsg("Ajax Fail By HTTP Request");
+      }
+      else if(response.data.status === "SESSION_EXFIRE") {
+        $scope._popMsg(response.data.message, function() {
+          location.href = response.data.url;
+        });
+      }
+      else if(response.data.status === "SERVER_ERROR") {
+        $scope._popMsg(response.data.message);
+      }
+      else {
+        var msg = response.data.status + " : " + response.data.message;
+        $scope._popMsg(msg);
+      }
     }, function errorCallback(response) {
       // called asynchronously if an error occurs
       // or server returns response with an error status.
-      $scope.s_alert(messages["cmm.error"]);
-      // console.log(response);
+      $scope._popMsg(messages["cmm.error"]);
       return;
     }).then(function () {
       // "complete" code here
@@ -104,7 +119,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
   $scope._save = function (url, params, callback) {
     // 길이체크
     if (params.length <= 0) {
-      $scope.s_alert(messages["cmm.not.modify"]);
+      $scope._popMsg(messages["cmm.not.modify"]);
       return;
     } else {
       params = JSON.stringify(params);
@@ -116,15 +131,31 @@ function RootController(ctrlName, $scope, $http, isPicker) {
       data: params, /* 파라메터로 보낼 데이터 */
       headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
     }).then(function successCallback(response) {
-      // this callback will be called asynchronously
-      // when the response is available
-      $scope.s_alert(messages["cmm.saveSucc"]);
-      $scope.flex.collectionView.clearChanges();
+      if(response.data.status === "OK") {
+        // this callback will be called asynchronously
+        // when the response is available
+        $scope._popMsg(messages["cmm.saveSucc"]);
+        $scope.flex.collectionView.clearChanges();
+      }
+      else if(response.data.status === "FAIL") {
+        $scope._popMsg("Ajax Fail By HTTP Request");
+      }
+      else if(response.data.status === "SESSION_EXFIRE") {
+        $scope._popMsg(response.data.message, function() {
+          location.href = response.data.url;
+        });
+      }
+      else if(response.data.status === "SERVER_ERROR") {
+        $scope._popMsg(response.data.message);
+      }
+      else {
+        var msg = response.data.status + " : " + response.data.message;
+        $scope._popMsg(msg);
+      }
     }, function errorCallback(response) {
       // called asynchronously if an error occurs
       // or server returns response with an error status.
-      $scope.s_alert(messages["cmm.saveFail"]);
-      // console.log(response);
+      $scope._popMsg(messages["cmm.saveFail"]);
       return;
     }).then(function () {
       // "complete" code here
@@ -141,13 +172,13 @@ function RootController(ctrlName, $scope, $http, isPicker) {
     if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
       var mRange = $scope.flex.getMergedRange(panel, r, c);
       if (mRange) {
-        cell.innerHTML = "<div class='wj-header merged-custom'>" + cell.innerHTML + "</div>";
+        cell.innerHTML = "<div class=\"wj-header merged-custom\">" + cell.innerHTML + "</div>";
       }
       // 헤더의 전체선택 클릭 로직
       var flex = panel.grid;
       var col = flex.columns[c];
       // check that this is a boolean column
-      if (col.binding === "gChk") {
+      if (col.binding === "gChk" || col.format === "checkBox" || col.format === "checkBoxText") {
         // prevent sorting on click
         col.allowSorting = false;
         // count true values to initialize checkbox
@@ -156,7 +187,12 @@ function RootController(ctrlName, $scope, $http, isPicker) {
           if (flex.getCellData(i, c) == true) cnt++;
         }
         // create and initialize checkbox
-        cell.innerHTML = '<input type="checkbox" class="wj-cell-check" />';
+        if (col.format === "checkBoxText") {
+          cell.innerHTML = "<input id=\"" + col.binding + "\" type=\"checkbox\" class=\"wj-cell-check\" />"
+            + "<label for=\"" + col.binding + "\" class=\"wj-header-label\">" + cell.innerHTML + "</label>";
+        } else {
+          cell.innerHTML = "<input type=\"checkbox\" class=\"wj-cell-check\" />";
+        }
         var cb = cell.firstChild;
         cb.checked = cnt > 0;
         cb.indeterminate = cnt > 0 && cnt < flex.rows.length;
@@ -257,37 +293,14 @@ function RootController(ctrlName, $scope, $http, isPicker) {
   // main-controller
   app.controller('rootCtrl', ['$scope', '$http', '$compile', 'comboData', 'pagingData',
     function ($scope, $http, $compile, comboData, pagingData) {
-      // 조회
-      $scope._broadcast = function (controllerName, params) {
-        $scope.$broadcast('init');
-        $scope.$broadcast(controllerName, params);
-      };
-      // 페이징조회
-      $scope._pagingView = function (ctrlName, curr) {
-        $scope.setCurr(curr);
-        $scope.$broadcast(ctrlName);
-      };
       // 로딩 메시지 팝업 열기
       $scope.$on('loadingPopupActive', function () {
-        $scope._loadingTent.show(true);
+        $scope._loadingPopup.show(true);
       });
       // 로딩 메시지 팝업 닫기
       $scope.$on('loadingPopupInactive', function () {
-        $scope._loadingTent.hide();
+        $scope._loadingPopup.hide();
       });
-      // 메시지 팝업
-      $scope.s_alert = function (msg, callback) {
-        $scope.s_alert_msg = msg;
-        setTimeout(function () {
-          $scope._alertTent.show(true, function () {
-            if (typeof callback === 'function') {
-              setTimeout(function () {
-                callback();
-              }, 10);
-            }
-          });
-        }, 100);
-      };
       // 페이징바 동적 생성
       $scope.$on('drawPaging', function (event, pagingInfo) {
         // 페이징바 갯수
@@ -334,29 +347,51 @@ function RootController(ctrlName, $scope, $http, isPicker) {
         var pagerName = pagingInfo.ctrlName + 'Pager';
         angular.element(document.getElementById(pagerName)).children().remove();
         angular.element(document.getElementById(pagerName)).append(pager);
-
       });
-      // 페이징바 Data Setter
-      $scope.setCurr = function (idx) {
-        pagingData.set(idx);
+      // 조회
+      $scope._broadcast = function (controllerName, params) {
+        $scope.$broadcast('init');
+        $scope.$broadcast(controllerName, params);
       };
-      // 페이징바 Data Getter
-      $scope.getCurr = function () {
-        return pagingData.get();
+      // 페이징조회
+      $scope._pagingView = function (ctrlName, curr) {
+        $scope._setCurrPage(curr);
+        $scope.$broadcast(ctrlName);
       };
-      // 콤보박스 Data Setter
-      $scope.setComboData = function (id, data) {
-        comboData.set(id, data);
-      };
-      // 콤보박스 Data Getter
-      $scope.getComboData = function (id) {
-        return comboData.get(id);
+      // 메시지 팝업
+      $scope._popMsg = function (msg, callback) {
+        $scope.s_alert_msg = msg;
+        setTimeout(function () {
+          $scope._alertPopup.show(true, function () {
+            if (typeof callback === 'function') {
+              setTimeout(function () {
+                callback();
+              }, 50);
+            }
+          });
+        }, 100);
       };
       // 콤보박스 초기화.. ng-model 사용하기 위한 설정 : 20180831 노현수
-      $scope.initComboBox = function (s) {
+      $scope._initComboBox = function (s) {
         s._tbx.id = s._orgAtts.id.value;
         s._tbx.setAttribute("ng-model", s._orgAtts['ng-model']);
         s._tbx.attributes['ng-model'].value = s._orgAtts['ng-model'].value;
+      };
+      // 페이징바 Data Setter
+      $scope._setCurrPage = function (idx) {
+        pagingData.set(idx);
+      };
+      // 페이징바 Data Getter
+      $scope._getCurrPage = function () {
+        return pagingData.get();
+      };
+      // 콤보박스 Data Setter
+      $scope._setComboData = function (id, data) {
+        comboData.set(id, data);
+      };
+      // 콤보박스 Data Getter
+      $scope._getComboData = function (id) {
+        return comboData.get(id);
       };
     }]);
   app.factory('myHttpInterceptor', function ($timeout, $q, $rootScope) {

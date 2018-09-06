@@ -9,7 +9,7 @@
       <p class="bk"></p>
       <div class="btnSet">
         <span>
-          <a href="javascript:;" class="btn_blue alert">
+          <a href="javascript:void(0);" class="btn_blue alert">
             <s:message code="cmm.confirm" />
           </a>
         </span>
@@ -24,12 +24,12 @@
       <p class="bk"></p>
       <div class="btnSet">
         <span>
-          <a href="javascript:;" class="btn_blue conf">
+          <a href="javascript:void(0);" class="btn_blue conf">
             <s:message code="cmm.confirm" />
           </a>
         </span>
         <span>
-          <a href="javascript:;" class="btn_gray conf">
+          <a href="javascript:void(0);" class="btn_gray conf">
             <s:message code="cmm.cancel" />
           </a>
         </span>
@@ -38,7 +38,7 @@
   </div>
 </div>
 
-<wj-popup control="_alertTent" fade-in="false" fade-out="false" show-trigger="Click" hide-trigger="Click" style="display: none;width: 500px;">
+<wj-popup control="_alertPopup" fade-in="false" fade-out="false" show-trigger="Click" hide-trigger="Click" style="display: none;width: 500px;">
   <div class="wj-dialog-body">
     <div class="wj-popup-alert">
       <p class="bk">
