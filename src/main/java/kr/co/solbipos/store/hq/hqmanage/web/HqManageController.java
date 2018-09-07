@@ -205,7 +205,7 @@ public class HqManageController {
      */
     @RequestMapping(value = "master/modify.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result modify(HqManageVO hqManage, HttpServletRequest request,
+    public Result modify(@RequestBody HqManageVO hqManage, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();

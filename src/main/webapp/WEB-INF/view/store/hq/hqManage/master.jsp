@@ -141,9 +141,7 @@
                   </th>
                   <td colspan="3">
                      <div id="rHqOfficeTxt">
-                      <div class="sb-select">
-                        <div id="rHqOfficeCd"></div>
-                      </div>
+                       <input type="text" id="rHqOfficeCd" readonly="readonly"/>
                     </div>
                     <div id="rHqOfficeRadio">
                       <span class="sb-radio">
@@ -163,18 +161,14 @@
                     <div class="impWrap"><s:message code="hqManage.hqOfficeNm" /><em class="imp">*</em></div>
                   </th>
                   <td>
-                    <div class="sb-select">
-                      <div id="rHqOfficeNm"></div>
-                    </div>
+                    <input type="text" id="rHqOfficeNm"/>
                   </td>
                   <%-- 대표자명 --%>
                   <th>
                     <div class="impWrap"><s:message code="hqManage.ownerNm" /><em class="imp">*</em></div>
                   </th>
                   <td>
-                    <div class="sb-select">
-                      <div id="rOwnerNm"></div>
-                    </div>
+                    <input type="text" id="rOwnerNm"/>
                   </td>
                 </tr>
                 <tr>
@@ -183,25 +177,10 @@
                     <div class="impWrap"><s:message code="hqManage.bizNo" /><em class="imp">*</em></div>
                   </th>
                   <td colspan="3">
-                    <span class="w10 txtIn pdr5 pdb5" >
-                      <div class="sb-select">
-                        <div id="rBizNo1"></div>
-                      </div>
-                    </span>
-                    <span class="w10 txtIn pdr5">
-                      <div class="sb-select">
-                        <div id="rBizNo2"></div>
-                      </div>
-                    </span>
-                    <span class="w15 txtIn">
-                      <div class="sb-select w70">
-                        <div id="rBizNo3"></div>
-                      </div>
-                    </span>
-                    <%-- 사업자번호 중복체크 --%>
-                    <span class="w20 pdb10">
-                      <a href="javascript:;" class="btn_grayS" id="btnChkBizNo"><s:message code="hqManage.chk.duplicate.bizNo" /></a>
-                    </span>
+                    <input type="text" id="rBizNo1" maxlength="3" style="width:50px;"/>
+                    <input type="text" id="rBizNo2" maxlength="2" style="width:40px;"/>
+                    <input type="text" id="rBizNo3" maxlength="5" style="width:110px;"/>
+                    <a href="javascript:;" class="btn_grayS" id="btnChkBizNo"><s:message code="hqManage.chk.duplicate.bizNo" /></a>
                   </td>
                 </tr>
                 <tr>
@@ -210,9 +189,7 @@
                     <div class="impWrap"><s:message code="hqManage.bizStoreNm" /><em class="imp">*</em></div>
                   </th>
                   <td>
-                    <div class="sb-select">
-                      <div id="rBizStoreNm"></div>
-                    </div>
+                    <input type="text" id="rBizStoreNm"/>
                   </td>
                   <%-- 날씨표시지역 --%>
                   <th>
@@ -230,16 +207,12 @@
                     <div class="impWrap"><s:message code="hqManage.telNo" /><em class="imp">*</em></div>
                   </th>
                   <td>
-                    <div class="sb-select">
-                      <div id="rTelNo"></div>
-                    </div>
+                    <input type="text" id="rTelNo"/>
                   </td>
                   <%-- 팩스번호 --%>
                   <th><s:message code="hqManage.faxNo" /></th>
                   <td>
-                    <div class="sb-select">
-                      <div id="rFaxNo"></div>
-                    </div>
+                    <input type="text" id="rFaxNo"/>
                   </td>
                 </tr>
                 <tr>
@@ -268,26 +241,11 @@
                     <div class="impWrap"><s:message code="hqManage.addr" /><em class="imp">*</em></div>
                   </th>
                   <td colspan="3">
-                    <span class="w20 txtIn pdr5">
-                      <div class="sb-select w100">
-                        <div id="rPostNo"></div>
-                      </div>
-                    </span>
-                    <%-- 주소찾기 버튼 --%>
-                    <span class="w20 pdb10">
-                      <a href="javascript:;" class="btn_grayS" id="btnFindAddr"><s:message code="hqManage.findAddr" /></a>
-                    </span>
+                    <input type="text" id="rPostNo" style="width:60px"/>
+                    <a href="javascript:;" class="btn_grayS" id="btnFindAddr"><s:message code="hqManage.findAddr" /></a>
                     <br/>
-                    <span class="w40 txtIn pdr5">
-                      <div class="sb-select">
-                        <div id="rAddr"></div>
-                      </div>
-                    </span>
-                    <span class="w45 txtIn">
-                      <div class="sb-select">
-                        <div id="rAddrDtl"></div>
-                      </div>
-                    </span>
+                    <input type="text" id="rAddr" />
+                    <input type="text" id="rAddrDtl" />
                   </td>
                 </tr>
                 <tr>
@@ -296,18 +254,14 @@
                     <div class="impWrap"><s:message code="hqManage.emailAddr" /></div>
                   </th>
                   <td>
-                    <div class="sb-select">
-                      <div id="rEmailAddr"></div>
-                    </div>
+                    <input type="text" id="rEmailAddr"/>
                   </td>
                   <%-- 홈페이지 --%>
                   <th>
                     <div class="impWrap"><s:message code="hqManage.hmpgAddr" /></div>
                   </th>
                   <td>
-                    <div class="sb-select">
-                      <div id="rHmpgAddr"></div>
-                    </div>
+                    <input type="text" id="rHmpgAddr"/>
                   </td>
                 </tr>
                 <tr>
@@ -356,24 +310,9 @@
 </div>
 
 <script>
-
-  var rHqOfficeCd   = wcombo.genInput("#rHqOfficeCd");
-  var rHqOfficeNm   = wcombo.genInput("#rHqOfficeNm");
-  var rOwnerNm      = wcombo.genInput("#rOwnerNm");
-  var rBizNo1       = wcombo.genInput("#rBizNo1");
-  var rBizNo2       = wcombo.genInput("#rBizNo2");
-  var rBizNo3       = wcombo.genInput("#rBizNo3");
-  var rBizStoreNm   = wcombo.genInput("#rBizStoreNm");
   var rWeatherArea  = wcombo.genCommonBox("#rWeatherArea", areaCd);
-  var rTelNo        = wcombo.genInput("#rTelNo");
-  var rFaxNo        = wcombo.genInput("#rFaxNo");
   var rSysStatFg    = wcombo.genCommonBox("#rSysStatFg", sysStatFg);
   var rSysOpenDate  = wcombo.genDateVal("#rSysOpenDate", "${sessionScope.sessionInfo.startDt}");
-  var rPostNo       = wcombo.genInput("#rPostNo");
-  var rAddr         = wcombo.genInput("#rAddr");
-  var rAddrDtl      = wcombo.genInput("#rAddrDtl");
-  var rEmailAddr    = wcombo.genInput("#rEmailAddr");
-  var rHmpgAddr     = wcombo.genInput("#rHmpgAddr");
   var rAgency       = wcombo.genCommonBox("#rAgency", agencyList);
   var rClsFg        = wcombo.genCommonBox("#rClsFg", clsFg);
 
@@ -401,8 +340,6 @@
   <%-- 상세정보 팝업 열기 --%>
   function openDtlLayer(items) {
 
-    console.log(items)
-
     $("#hqDtlLayer").show();
     $("#hqDtlDim").show();
 
@@ -422,8 +359,6 @@
     var param = items;
 
     $.postJSON("/store/hq/hqManage/master/dtlInfo.sb", param, function(result) {
-
-      console.log(result);
 
       var data = result.data;
 
@@ -445,23 +380,24 @@
       $("#vClsFg").text(data.clsFgNm);
 
       <%-- 상세정보 수정 --%>
-      rHqOfficeCd.text           = data.hqOfficeCd;
-      rHqOfficeNm.text           = data.hqOfficeNm;
-      rOwnerNm.text              = data.ownerNm;
-      rBizNo1.text               = data.bizNo1;
-      rBizNo2.text               = data.bizNo2;
-      rBizNo3.text               = data.bizNo3;
-      rBizStoreNm.text           = data.bizStoreNm;
+      $("#rHqOfficeCd").val(data.hqOfficeCd);
+      $("#rHqOfficeNm").val(data.hqOfficeNm);
+      $("#rOwnerNm").val(data.ownerNm);
+      $("#rBizNo1").val(data.bizNo1);
+      $("#rBizNo2").val(data.bizNo2);
+      $("#rBizNo3").val(data.bizNo3);
+      $("#rBizStoreNm").val(data.bizStoreNm);
+      $("#rTelNo").val(data.telNo);
+      $("#rFaxNo").val(data.faxNo);
+      $("#rPostNo").val(data.postNo);
+      $("#rAddr").val(data.addr);
+      $("#rAddrDtl").val(data.addrDtl);
+      $("#rEmailAddr").val(data.emailAddr);
+      $("#rHmpgAddr").val(data.hmpgAddr);
+
       rWeatherArea.selectedValue = data.areaCd;
-      rTelNo.text                = data.telNo;
-      rFaxNo.text                = data.faxNo;
       rSysStatFg.selectedValue   = data.sysStatFg;
       rSysOpenDate.value         = data.sysOpenDate;
-      rPostNo.text               = data.postNo;
-      rAddr.text                 = data.addr;
-      rAddrDtl.text              = data.addrDtl;
-      rEmailAddr.text            = data.emailAddr;
-      rHmpgAddr.text             = data.hmpgAddr;
       rAgency.selectedValue      = data.agencyCd;
       rClsFg.selectedValue       = data.clsFg;
     },
@@ -506,21 +442,22 @@
 
     <%-- 본사명을 입력해주세요. --%>
     var msg = "<s:message code='hqManage.hqOfficeNm'/> <s:message code='cmm.require.text'/>";
-    if(rHqOfficeNm.text === "") {
+    if($("#rHqOfficeNm").val() === "") {
       s_alert.pop(msg);
       return;
     }
 
     <%-- 대표자명을 입력해주세요. --%>
     var msg = "<s:message code='hqManage.ownerNm'/> <s:message code='cmm.require.text'/>";
-    if(rOwnerNm.text === "") {
+    if($("#rOwnerNm").val() === "") {
       s_alert.pop(msg);
       return;
     }
 
+
     <%-- 사업자번호를 입력해주세요. --%>
     var msg = "<s:message code='hqManage.bizNo'/> <s:message code='cmm.require.text'/>";
-    if(rBizNo1.text === "" || rBizNo2.text === "" || rBizNo3.text === "") {
+    if($("#rBizNo1").val() === "" || $("#rBizNo2").val() === "" || $("#rBizNo3").val() === "") {
       s_alert.pop(msg);
       return;
     }
@@ -534,49 +471,49 @@
 
     <%-- 상호명을 입력해주세요. --%>
     var msg = "<s:message code='hqManage.bizStoreNm'/> <s:message code='cmm.require.text'/>";
-    if(rBizStoreNm.text === "") {
+    if($("#rBizStoreNm").val() === "") {
       s_alert.pop(msg);
       return;
     }
 
     <%-- 날씨표시지역을 선택해주세요. --%>
     var msg = "<s:message code='hqManage.weatherArea'/> <s:message code='cmm.require.select'/>";
-    if(rWeatherArea.text == "선택" || rWeatherArea.text === "") {
+    if(rWeatherArea.selectedValue == "선택" || rWeatherArea.selectedValue === "") {
       s_alert.pop(msg);
       return;
     }
 
     <%-- 전화번호를 입력해주세요. --%>
     var msg = "<s:message code='hqManage.telNo'/> <s:message code='cmm.require.text'/>";
-    if(rTelNo.text === "") {
+    if($("#rTelNo").val() === "") {
       s_alert.pop(msg);
       return;
     }
 
     <%-- 상태를 선택해주세요. --%>
     var msg = "<s:message code='hqManage.sysStatFg'/> <s:message code='cmm.require.select'/>";
-    if(rSysStatFg.text == "선택" || rSysStatFg.text === "") {
+    if(rSysStatFg.selectedValue == "선택" || rSysStatFg.selectedValue === "") {
       s_alert.pop(msg);
       return;
     }
 
     <%-- 주소를 입력해주세요. --%>
     var msg = "<s:message code='hqManage.addr'/> <s:message code='cmm.require.text'/>";
-    if(rPostNo.text === "" || rAddr.text === "" || rAddrDtl.text === "") {
+    if($("#rPostNo").val() === "" || $("#rAddr").val() === "" || $("#rAddrDtl").val() === "") {
       s_alert.pop(msg);
       return;
     }
 
     <%-- 관리업체를 선택해주세요. --%>
     var msg = "<s:message code='hqManage.agency'/> <s:message code='cmm.require.select'/>";
-    if(rAgency.text == "선택" || rAgency.text === "") {
+    if(rAgency.selectedValue == "선택" || rAgency.selectedValue === "") {
       s_alert.pop(msg);
       return;
     }
 
     <%-- 용도를 선택해주세요. --%>
     var msg = "<s:message code='hqManage.clsFg'/> <s:message code='cmm.require.select'/>";
-    if(rClsFg.text == "선택" || rClsFg.text === "") {
+    if(rClsFg.selectedValue == "선택" || rClsFg.selectedValue === "") {
       s_alert.pop(msg);
       return;
     }
@@ -589,25 +526,25 @@
 
     var param = {};
 
-    param.hqOfficeCd = rHqOfficeCd.text;
-    param.hqOfficeNm = rHqOfficeNm.text;
-    param.ownerNm = rOwnerNm.text;
-    param.bizNo = rBizNo1.text + rBizNo2.text + rBizNo3.text;
-    param.bizStoreNm = rBizStoreNm.text;
-    param.telNo = rTelNo.text;
-    param.faxNo = rFaxNo.text;
-    param.emailAddr = rEmailAddr.text;
-    param.hmpgAddr = rHmpgAddr.text;
-    param.postNo = rPostNo.text;
-    param.addr = rAddr.text;
-    param.addrDtl = rAddrDtl.text;
+    param.hqOfficeCd = $("#rHqOfficeCd").val();
+    param.hqOfficeNm = $("#rHqOfficeNm").val();
+    param.ownerNm = $("#rOwnerNm").val();
+    param.bizNo = $("#rBizNo1").val() + $("#rBizNo2").val() + $("#rBizNo3").val();
+    param.bizStoreNm = $("#rBizStoreNm").val();
+    param.telNo = $("#rTelNo").val();
+    param.faxNo = $("#rFaxNo").val();
+    param.emailAddr = $("#rEmailAddr").val();
+    param.hmpgAddr = $("#rHmpgAddr").val();
+    param.postNo = $("#rPostNo").val();
+    param.addr = $("#rAddr").val();
+    param.addrDtl = $("#rAddrDtl").val();
     param.areaCd = rWeatherArea.selectedValue;
     param.sysStatFg = rSysStatFg.selectedValue;
     param.sysOpenDate = getDate(rSysOpenDate);
     param.agencyCd = rAgency.selectedValue;
     param.clsFg = rClsFg.selectedValue;
 
-    console.log(param)
+    console.log(param);
 
     $.postJSONSave(sendUrl, param, function(result) {
       s_alert.pop("<s:message code='cmm.saveSucc'/>");
@@ -629,10 +566,10 @@
   $("#btnChkBizNo").click(function(e){
 
     var param = {};
-    param.bizNo1 = rBizNo1.text;
-    param.bizNo2 = rBizNo2.text;
-    param.bizNo3 = rBizNo3.text;
-    param.bizNo = rBizNo1.text + rBizNo2.text + rBizNo3.text;
+    param.bizNo1 = $("#rBizNo1").val();
+    param.bizNo2 = $("#rBizNo2").val();
+    param.bizNo3 = $("#rBizNo3").val();
+    param.bizNo = $("#rBizNo1").val()+ $("#rBizNo2").val() + $("#rBizNo3").val();
 
     $.postJSON("/store/hq/hqManage/master/chkBizNo.sb", param, function(result) {
       isBizChk = true;
@@ -706,7 +643,7 @@
 
   <%-- 환경설정 탭 클릭 --%>
   $("#hqDtlLayer #envSettingTab").click(function(){
-    if(selectedHq.hqOfficeCd == "") {
+    if(selectedHq == "") {
       s_alert.pop("<s:message code='hqManage.require.regist.hq'/>");
       return;
     }
@@ -724,7 +661,7 @@
   <%-- 메뉴권한 탭 클릭 --%>
   $("#hqDtlLayer #menuSettingTab").click(function(e){
 
-    if(selectedHq.hqOfficeCd == "") {
+    if(selectedHq == "") {
       s_alert.pop("<s:message code='hqManage.require.regist.hq'/>");
       return;
     }

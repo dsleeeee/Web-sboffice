@@ -16,7 +16,8 @@ import kr.co.solbipos.store.hq.hqmanage.service.*;
 import kr.co.solbipos.sys.auth.authgroup.enums.IncldExcldFg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateString;
@@ -39,6 +40,8 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
  */
 @Service
 public class HqManageServiceImpl implements HqManageService{
+
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     HqManageMapper mapper;
@@ -251,6 +254,12 @@ public class HqManageServiceImpl implements HqManageService{
         } else {
             hqManage.setSysClosureDate("99991231");
         }
+
+        LOGGER.debug(">>>>>>>>>>>>>>>>>>>>> 뭐야?");
+        LOGGER.debug(hqManage.getHqOfficeCd());
+        LOGGER.debug(hqManage.getHqOfficeNm());
+        LOGGER.debug(hqManage.getAddr());
+
 
         int procCnt = mapper.modify(hqManage);
 
