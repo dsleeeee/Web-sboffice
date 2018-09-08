@@ -150,7 +150,8 @@
 }
 
 .wj-alt:not(.wj-header):not(.wj-group):not(.wj-state-selected):not(.wj-state-multi-selected):not(.wj-custom-readonly) {
-    background: initial; /*홀수번째 배경 삭제*/
+    /*background: initial; !*홀수번째 배경 삭제*!*/
+    background: #fff; /* 홀수번째 배경도 하얗게 : 20180908 노현수 : cell-frozen 시 오류생김 */
 }
 
 .form-control {

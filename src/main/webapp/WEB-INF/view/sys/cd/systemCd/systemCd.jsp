@@ -91,15 +91,14 @@
       <div class="wj-gridWrap" style="height:315px">
         <div class="row">
           <wj-flex-grid
-                  autoGenerateColumns="false"
-                  control="flex"
-                  initialized="initGrid(s,e)"
-                  sticky-headers="true"
-                  selection-mode="Row"
-                  items-source="data"
-                  item-formatter="_itemFormatter"
-                  frozen-columns="3"
-                  sorted-column="toggleFreeze(false)">
+              autoGenerateColumns="false"
+              control="flex"
+              initialized="initGrid(s,e)"
+              sticky-headers="true"
+              selection-mode="Row"
+              items-source="data"
+              frozen-columns="3"
+              item-formatter="_itemFormatter">
 
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="systemCd.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
