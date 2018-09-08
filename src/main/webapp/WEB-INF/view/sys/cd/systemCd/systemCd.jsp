@@ -31,6 +31,37 @@
         <td>
             <input type="text" class="sb-input w100" id="srchNmcodeNm" ng-model="nmcodeNm" />
         </td>
+      </tr><tr>
+        <%-- 사용대상 --%>
+        <th><s:message code="systemCd.useTargetFg" /></th>
+        <td>
+          <div class="sb-select">
+            <wj-combo-box
+              id="srchUseTargetFg"
+              ng-model="useTargetFg"
+              items-source="_getComboData('srchUseTargetFg')"
+              display-member-path="name"
+              selected-value-path="value"
+              is-editable="false"
+              initialized="_initComboBox(s)">
+            </wj-combo-box>
+          </div>
+        </td>
+        <%-- 사용시스템 --%>
+        <th><s:message code="systemCd.useSystemFg" /></th>
+        <td>
+          <div class="sb-select">
+            <wj-combo-box
+              id="srchUseSystemFg"
+              ng-model="useSystemFg"
+              items-source="_getComboData('srchUseSystemFg')"
+              display-member-path="name"
+              selected-value-path="value"
+              is-editable="false"
+              initialized="_initComboBox(s)">
+            </wj-combo-box>
+          </div>
+        </td>
       </tr>
     </tbody>
   </table>
@@ -66,16 +97,20 @@
                   sticky-headers="true"
                   selection-mode="Row"
                   items-source="data"
-                  item-formatter="_itemFormatter">
+                  item-formatter="_itemFormatter"
+                  frozen-columns="3"
+                  sorted-column="toggleFreeze(false)">
 
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="systemCd.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="systemCd.nmcodeCd"/>" binding="nmcodeCd" width="50"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="systemCd.nmcodeNm"/>" binding="nmcodeNm" width="*"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="systemCd.nmcodeItem1"/>" binding="nmcodeItem1" width="*"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="systemCd.nmcodeItem2"/>" binding="nmcodeItem2" width="*"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="systemCd.useColNm"/>" binding="useColNm" width="*"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="systemCd.nmcodeGrpCd"/>" binding="nmcodeGrpCd" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="systemCd.nmcodeCd"/>" binding="nmcodeCd" width="50"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="systemCd.nmcodeNm"/>" binding="nmcodeNm" width="150"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="systemCd.nmcodeItem1"/>" binding="nmcodeItem1" width="100"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="systemCd.nmcodeItem2"/>" binding="nmcodeItem2" width="100"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="systemCd.useColNm"/>" binding="useColNm" width="100"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="systemCd.useTargetFg"/>" binding="useTargetFg" data-map="useTargetFgDataMap" width="100"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="systemCd.useSystemFg"/>" binding="useSystemFg" data-map="useSystemFgDataMap" width="100"></wj-flex-grid-column>
 
           </wj-flex-grid>
           <%-- ColumnPicker 사용시 include --%>
@@ -114,14 +149,18 @@
                 sticky-headers="true"
                 selection-mode="Row"
                 items-source="data"
-                item-formatter="_itemFormatter">
+                item-formatter="_itemFormatter"
+                frozen-columns="2"
+                sorted-column="toggleFreeze(false)">
 
           <!-- define columns -->
           <wj-flex-grid-column header="<s:message code="systemCd.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="systemCd.nmcodeCd"/>" binding="nmcodeCd" width="50"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="systemCd.nmcodeNm"/>" binding="nmcodeNm" width="*"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="systemCd.nmcodeItem1"/>" binding="nmcodeItem1" width="*"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="systemCd.nmcodeItem2"/>" binding="nmcodeItem2" width="*"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="systemCd.nmcodeNm"/>" binding="nmcodeNm" width="150"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="systemCd.nmcodeItem1"/>" binding="nmcodeItem1" width="100"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="systemCd.nmcodeItem2"/>" binding="nmcodeItem2" width="100"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="systemCd.useTargetFg"/>" binding="useTargetFg" data-map="useTargetFgDataMap" width="100"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="systemCd.useSystemFg"/>" binding="useSystemFg" data-map="useSystemFgDataMap" width="100"></wj-flex-grid-column>
 
         </wj-flex-grid>
         <%-- ColumnPicker 사용시 include --%>

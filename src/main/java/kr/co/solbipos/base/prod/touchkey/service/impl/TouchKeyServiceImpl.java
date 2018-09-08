@@ -50,17 +50,20 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
  *
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-@Service("touchkeyService")
+@Service("touchKeyService")
 public class TouchKeyServiceImpl implements TouchKeyService {
     
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    
-    @Autowired
-    MessageService messageService;
-    @Autowired
+    private final MessageService messageService;
     private TouchKeyMapper mapper;
-    @Autowired
     private TableAttrMapper attrMapper;
+
+    @Autowired
+    public TouchKeyServiceImpl(MessageService messageService, TouchKeyMapper mapper, TableAttrMapper attrMapper) {
+        this.messageService = messageService;
+        this.mapper = mapper;
+        this.attrMapper = attrMapper;
+    }
 
     /** 상품목록 조회 */
     @Override

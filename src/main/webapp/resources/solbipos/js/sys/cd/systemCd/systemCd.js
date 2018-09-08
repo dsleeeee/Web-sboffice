@@ -12,6 +12,33 @@
  * get application
  */
 var app = agrid.getApp();
+// 조회조건 DropBoxDataMap
+var useTargetFg = [
+  {"name":"전체","value":""},
+  {"name":"공통","value":"C"},
+  {"name":"본사전용","value":"H"},
+  {"name":"매장전용","value":"S"},
+  {"name":"시스템전용","value":"A"}
+];
+var useSystemFg = [
+  {"name":"전체","value":""},
+  {"name":"공통","value":"C"},
+  {"name":"포스전용","value":"P"},
+  {"name":"웹전용","value":"W"}
+];
+// 사용대상 DropBoxDataMap
+var useTargetFgDataMap = new wijmo.grid.DataMap([
+  {id: "C", name: "공통"},
+  {id: "H", name: "본사전용"},
+  {id: "S", name: "매장전용"},
+  {id: "A", name: "시스템전용"}
+  ], 'id', 'name');
+// 사용시스템 DropBoxDataMap
+var useSystemFgDataMap = new wijmo.grid.DataMap([
+  {id: "C", name: "공통"},
+  {id: "P", name: "포스전용"},
+  {id: "W", name: "웹전용"}
+  ], 'id', 'name');
 
 /**
  * 대표명칭 그리드 생성
@@ -19,10 +46,16 @@ var app = agrid.getApp();
 app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('representCtrl', $scope, $http, true));
+  // 조회조건 콤보박스 데이터 Set
+  $scope._setComboData("srchUseTargetFg", useTargetFg);
+  $scope._setComboData("srchUseSystemFg", useSystemFg);
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("representCtrl");
+    // 그리드 내 콤보박스 설정
+    $scope.useTargetFgDataMap = useTargetFgDataMap;
+    $scope.useSystemFgDataMap = useSystemFgDataMap;
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
       if (e.panel == s.cells) {
@@ -80,6 +113,9 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
     // 파라미터 설정
     var params = {};
     params.nmcodeGrpCd = "000";
+    params.useTargetFg = "C";
+    params.useSystemFg = "C";
+
     // 추가기능 수행 : 파라미터
     $scope._addRow(params);
   };
@@ -110,6 +146,9 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.initGrid = function (s, e) {
     // picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("detailCtrl");
+    // 그리드 내 콤보박스 설정
+    $scope.useTargetFgDataMap = useTargetFgDataMap;
+    $scope.useSystemFgDataMap = useSystemFgDataMap;
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
       if (e.panel == s.cells) {
@@ -151,6 +190,8 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
 
     var params = {};
     params.nmcodeGrpCd = selectedRow.nmcodeCd;
+    params.useTargetFg = "C";
+    params.useSystemFg = "C";
 
     $scope._addRow(params);
   };

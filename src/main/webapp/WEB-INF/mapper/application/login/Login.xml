@@ -46,7 +46,7 @@
                 (
                 SELECT
                     A.USER_ID,
-                    'S' ORGN_FG,
+                    'S' AS ORGN_FG,
                     A.STORE_CD AS ORGN_CD,
                     B.STORE_NM AS ORGN_NM,
                     A.EMP_NM AS USER_NM,
@@ -69,13 +69,13 @@
             UNION ALL
                 SELECT
                     A.USER_ID,
-                    'H' ORGN_FG,
+                    'H' AS ORGN_FG,
                     A.HQ_OFFICE_CD AS ORGN_CD,
                     B.HQ_OFFICE_NM AS ORGN_NM,
                     A.EMP_NM AS USER_NM,
                     A.EMP_NO,
-                    '' STORE_CD,
-                    '' STORE_NM,
+                    '' AS STORE_CD,
+                    '' AS STORE_NM,
                     A.HQ_OFFICE_CD,
                     B.HQ_OFFICE_NM,
                     A.HQ_OFFICE_CD AS ORGN_GRP_CD,
@@ -95,10 +95,10 @@
                     B.AGENCY_NM AS ORGN_NM,
                     A.EMP_NM AS USER_NM,
                     A.EMP_NO,
-                    '' STORE_CD,
-                    '' STORE_NM,
-                    '' HQ_OFFICE_CD,
-                    '' HQ_OFFICE_NM,
+                    '' AS STORE_CD,
+                    '' AS STORE_NM,
+                    '' AS HQ_OFFICE_CD,
+                    '' AS HQ_OFFICE_NM,
                     A.AGENCY_CD AS ORGN_GRP_CD,
                     B.AGENCY_NM AS ORGN_GRP_NM
                 FROM
