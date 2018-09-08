@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<!-- -->
 <mapper namespace="kr.co.solbipos.base.prod.touchkey.service.impl.TouchKeyMapper">
 
     <select id="selectProdByStore" parameterType="touchVO" resultType="DefaultMap">
@@ -10,161 +10,239 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT
-                    thp.PROD_CD,
-                    thp.PROD_NM,
-                    thpc.PROD_CLASS_NM,
-                    NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC
+                thp.PROD_CD,
+                thp.PROD_NM,
+                thpc.PROD_CLASS_NM,
+                NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC
                 FROM
-                    TB_HQ_PRODUCT thp
+                TB_HQ_PRODUCT thp
                 LEFT OUTER JOIN TB_HQ_PRODUCT_CLASS thpc ON
-                    thp.HQ_OFFICE_CD = thpc.HQ_OFFICE_CD
-                    AND thp.PROD_CLASS_CD = thpc.PROD_CLASS_CD
+                thp.HQ_OFFICE_CD = thpc.HQ_OFFICE_CD
+                AND thp.PROD_CLASS_CD = thpc.PROD_CLASS_CD
                 LEFT OUTER JOIN (
-                    SELECT
-                        PROD_CD,
-                        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
-                        ORDER BY
-                        START_DATE DESC ) AS SALE_UPRC
-                    FROM
-                        TB_HQ_PRODUCT_SALE_PRICE
-                    WHERE
-                        HQ_OFFICE_CD = #{hqOfficeCd}
-                        <![CDATA[
+                SELECT
+                PROD_CD,
+                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
+                ORDER BY
+                START_DATE DESC ) AS SALE_UPRC
+                FROM
+                TB_HQ_PRODUCT_SALE_PRICE
+                WHERE
+                HQ_OFFICE_CD = #{hqOfficeCd}
+                <![CDATA[
                         AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         ]]>
-                    GROUP BY
-                        PROD_CD ) thpsp ON
-                    thp.PROD_CD = thpsp.PROD_CD
+                GROUP BY
+                PROD_CD ) thpsp ON
+                thp.PROD_CD = thpsp.PROD_CD
                 WHERE
-                    thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                thp.HQ_OFFICE_CD = #{hqOfficeCd}
                 ORDER BY thp.PROD_CD
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 SELECT
-                    tmp.PROD_CD,
-                    tmp.PROD_NM,
-                    tmpc.PROD_CLASS_NM,
-                    NVL(tmpsp.SALE_UPRC, 0) AS SALE_UPRC
+                tmp.PROD_CD,
+                tmp.PROD_NM,
+                tmpc.PROD_CLASS_NM,
+                NVL(tmpsp.SALE_UPRC, 0) AS SALE_UPRC
                 FROM
-                    TB_MS_PRODUCT tmp
+                TB_MS_PRODUCT tmp
                 LEFT OUTER JOIN TB_MS_PRODUCT_CLASS tmpc ON
-                    tmp.STORE_CD = tmpc.STORE_CD
-                    AND tmp.PROD_CLASS_CD = tmpc.PROD_CLASS_CD
+                tmp.STORE_CD = tmpc.STORE_CD
+                AND tmp.PROD_CLASS_CD = tmpc.PROD_CLASS_CD
                 LEFT OUTER JOIN (
-                    SELECT
-                        PROD_CD,
-                        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
-                        ORDER BY
-                        START_DATE DESC ) AS SALE_UPRC
-                    FROM
-                        TB_MS_PRODUCT_SALE_PRICE
-                    WHERE
-                        STORE_CD = #{storeCd}
-                    <![CDATA[
+                SELECT
+                PROD_CD,
+                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
+                ORDER BY
+                START_DATE DESC ) AS SALE_UPRC
+                FROM
+                TB_MS_PRODUCT_SALE_PRICE
+                WHERE
+                STORE_CD = #{storeCd}
+                <![CDATA[
                         AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    ]]>
-                    GROUP BY
-                        PROD_CD ) tmpsp ON
-                    tmp.PROD_CD = tmpsp.PROD_CD
+                        ]]>
+                GROUP BY
+                PROD_CD ) tmpsp ON
+                tmp.PROD_CD = tmpsp.PROD_CD
                 WHERE
-                    tmp.STORE_CD = #{storeCd}
+                tmp.STORE_CD = #{storeCd}
                 ORDER BY tmp.PROD_CD
             </when>
         </choose>
-  </select>
+    </select>
 
     <delete id="deleteTouchClassByStore" parameterType="String">
-    /* TouchKeyMapper.deleteTouchClassByStore */
-    DELETE
-      FROM TB_MS_TOUCH_CLASS
-     WHERE STORE_CD = #{storeCd}
+        /* TouchkeyMapper.deleteTouchClassByStore */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE
+                FROM
+                TB_HQ_TOUCH_CLASS
+                WHERE
+                HQ_OFFICE_CD = #{hqOfficeCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE
+                FROM
+                TB_MS_TOUCH_CLASS
+                WHERE
+                STORE_CD = #{storeCd}
+            </when>
+        </choose>
+
+
     </delete>
 
-  <insert id="insertTouchClassByStore" parameterType="touchClassVO">
-    /* TouchKeyMapper.mergeTableGroupByStore */
-    INSERT INTO TB_MS_TOUCH_CLASS A
-    (
-        A.STORE_CD,
-        A.TUKEY_GRP_CD,
-        A.TUKEY_CLASS_CD,
-        A.TUKEY_CLASS_NM,
-        A.PAGE_NO,
-        A.X,
-        A.Y,
-        A.WIDTH,
-        A.HEIGHT,
-        A.IN_FG,
-        A.REG_DT,
-        A.REG_ID,
-        A.MOD_DT,
-        A.MOD_ID
-    )
-    VALUES
-    (
-        #{storeCd},
-        #{tukeyGrpCd},
-        #{tukeyClassCd},
-        #{tukeyClassNm},
-        #{pageNo},
-        #{x},
-        #{y},
-        #{width},
-        #{height},
-        #{inFg},
-        #{regDt},
-        #{regId},
-        #{regDt},
-        #{regId}
-    )
-  </insert>
+    <insert id="insertTouchClassByStore" parameterType="touchClassVO">
+        /* TouchkeyMapper.mergeTableGroupByStore */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_HQ_TOUCH_CLASS thtc (
+                thtc.HQ_OFFICE_CD,
+                thtc.TUKEY_GRP_CD,
+                thtc.TUKEY_CLASS_CD,
+                thtc.TUKEY_CLASS_NM,
+                thtc.STYLE_CD,
+                thtc.PAGE_NO,
+                thtc.X,
+                thtc.Y,
+                thtc.WIDTH,
+                thtc.HEIGHT,
+                thtc.IMG_NM,
+                thtc.REG_DT,
+                thtc.REG_ID,
+                thtc.MOD_DT,
+                thtc.MOD_ID
+                ) VALUES (
+                #{hqOfficeCd},
+                #{tukeyGrpCd},
+                #{tukeyClassCd},
+                #{tukeyClassNm},
+                #{styleCd},
+                #{pageNo},
+                #{x},
+                #{y},
+                #{width},
+                #{height},
+                #{imgNm, jdbcType=VARCHAR},
+                #{regDt},
+                #{regId},
+                #{regDt},
+                #{regId}
+                )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_MS_TOUCH_CLASS tmtc (
+                tmtc.STORE_CD,
+                tmtc.TUKEY_GRP_CD,
+                tmtc.TUKEY_CLASS_CD,
+                tmtc.TUKEY_CLASS_NM,
+                tmtc.STYLE_CD,
+                tmtc.PAGE_NO,
+                tmtc.X,
+                tmtc.Y,
+                tmtc.WIDTH,
+                tmtc.HEIGHT,
+                tmtc.IMG_NM,
+                tmtc.IN_FG,
+                tmtc.REG_DT,
+                tmtc.REG_ID,
+                tmtc.MOD_DT,
+                tmtc.MOD_ID
+                ) VALUES (
+                #{storeCd},
+                #{tukeyGrpCd},
+                #{tukeyClassCd},
+                #{tukeyClassNm},
+                #{styleCd},
+                #{pageNo},
+                #{x},
+                #{y},
+                #{width},
+                #{height},
+                #{imgNm, jdbcType=VARCHAR},
+                #{inFg},
+                #{regDt},
+                #{regId},
+                #{regDt},
+                #{regId}
+                )
+            </when>
+        </choose>
+
+    </insert>
 
     <update id="deleteTouchByStore" parameterType="String">
-    /* TouchKeyMapper.deleteTouchByStore */
-    DELETE
-      FROM TB_MS_TOUCH
-     WHERE STORE_CD = #{storeCd}
+        /* TouchkeyMapper.deleteTouchByStore */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE
+                FROM
+                TB_MS_TOUCH
+                WHERE
+                STORE_CD = #{storeCd}
+            </when>
+        </choose>
+
     </update>
 
-  <insert id="insertTouchByStore" parameterType="touchVO">
-    /* TouchKeyMapper.insertTouchByStore */
-    INSERT INTO TB_MS_TOUCH A
-    (
-        A.STORE_CD,
-        A.TUKEY_CLASS_CD,
-        A.TUKEY_CD,
-        A.PROD_CD,
-        A.PAGE_NO,
-        A.X,
-        A.Y,
-        A.WIDTH,
-        A.HEIGHT,
-        A.IN_FG,
-        A.REG_DT,
-        A.REG_ID,
-        A.MOD_DT,
-        A.MOD_ID
-    )
-    VALUES
-    (
-        #{storeCd},
-        #{tukeyClassCd},
-        #{tukeyCd},
-        #{prodCd},
-        #{pageNo},
-        #{x},
-        #{y},
-        #{width},
-        #{height},
-        #{inFg},
-        #{regDt},
-        #{regId},
-        #{regDt},
-        #{regId}
-    )
-  </insert>
+    <insert id="insertTouchByStore" parameterType="touchVO">
+        /* TouchkeyMapper.insertTouchByStore */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_MS_TOUCH tmt (
+                tmt.STORE_CD,
+                tmt.TUKEY_CLASS_CD,
+                tmt.TUKEY_CD,
+                tmt.PROD_CD,
+                tmt.PAGE_NO,
+                tmt.X,
+                tmt.Y,
+                tmt.WIDTH,
+                tmt.HEIGHT,
+                tmt.IN_FG,
+                tmt.REG_DT,
+                tmt.REG_ID,
+                tmt.MOD_DT,
+                tmt.MOD_ID
+                ) VALUES (
+                #{storeCd},
+                #{tukeyClassCd},
+                #{tukeyCd},
+                #{prodCd},
+                #{pageNo},
+                #{x},
+                #{y},
+                #{width},
+                #{height},
+                #{inFg},
+                #{regDt},
+                #{regId},
+                #{regDt},
+                #{regId}
+                )
+            </when>
+        </choose>
+    </insert>
 
 </mapper>
 
