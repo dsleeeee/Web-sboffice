@@ -60,13 +60,14 @@
       [
         {binding:"fnkeyFg", header:"<s:message code='posFunc.fnkeyFg' />", visible:false, width:"*"},
         {binding:"fnkeyNm", header:"<s:message code='posFunc.fnkeyNm' />", width:"*"},
-        {binding:"array", header:"<s:message code='posFunc.array' />", width:"*"},
+        {binding:"array", header:"<s:message code='posFunc.array' />", width:"*", visible:false},
         {binding:"totCnt", header:"<s:message code='posFunc.func.cnt' />", width:"*"},
         {binding:"regCnt", header:"<s:message code='posFunc.regist.cnt' />", width:"*"},
       ];
 
   var useFuncHeader =
       [
+        {binding:"gChk", header:"<s:message code='cmm.chk' />", dataType:wijmo.DataType.Boolean, width:40},
         {binding:"fnkeyNo", header:"<s:message code='posFunc.fnkeyNo' />", isReadOnly:true, width:"*"},
         {binding:"fnkeyNm", header:"<s:message code='posFunc.fnkeyNm' />", isReadOnly:true, width:"*"},
         {binding:"existFgBefore", header:"<s:message code='posFunc.existFgBefore' />", visible:false, width:"*"},
@@ -77,7 +78,7 @@
         {binding:"rowPosi", header:"<s:message code='posFunc.rowPosi' />", visible:false, width:"*"},
         {binding:"width", header:"<s:message code='posFunc.width' />", visible:false, width:"*"},
         {binding:"height", header:"<s:message code='posFunc.height' />", visible:false, width:"*"},
-        {binding:"useYn", header:"<s:message code='posFunc.useYn' />", dataType:wijmo.DataType.Boolean, width:40}
+        {binding:"useYn", header:"<s:message code='posFunc.useYn' />", dataType:wijmo.DataType.Boolean, width:60}
       ];
 
   <%-- 그리드 생성 --%>
@@ -207,8 +208,8 @@
   <%-- up 버튼 클릭 --%>
   $("#posFuncManageArea #btnUp").click(function(e){
     for(var i = 0; i < useFuncGrid.collectionView.itemCount; i++ ){
-      if(i > 0 && (useFuncGrid.collectionView.items[i].useYn == true)){
-        if(useFuncGrid.collectionView.items[i-1].useYn != true){
+      if(i > 0 && (useFuncGrid.collectionView.items[i].gChk == true)){
+        if(useFuncGrid.collectionView.items[i-1].gChk != true){
           var tmpItem = useFuncGrid.collectionView.items[i-1];
           useFuncGrid.collectionView.items[i-1] = useFuncGrid.collectionView.items[i];
           useFuncGrid.collectionView.items[i] = tmpItem;
@@ -222,8 +223,8 @@
   <%-- down 버튼 클릭 --%>
   $("#posFuncManageArea #btnDown").click(function(e){
     for(var i = useFuncGrid.itemsSource.itemCount-1; i >= 0; i-- ){
-      if((i < useFuncGrid.itemsSource.itemCount-1) && (useFuncGrid.collectionView.items[i].useYn == true)){
-        if(useFuncGrid.collectionView.items[i+1].useYn != true){
+      if((i < useFuncGrid.itemsSource.itemCount-1) && (useFuncGrid.collectionView.items[i].gChk == true)){
+        if(useFuncGrid.collectionView.items[i+1].gChk != true){
           var tmpItem = useFuncGrid.collectionView.items[i+1];
           useFuncGrid.collectionView.items[i+1] = useFuncGrid.collectionView.items[i];
           useFuncGrid.collectionView.items[i] = tmpItem;
@@ -273,14 +274,11 @@
 
     for(var i = 0; i < useFuncGrid.collectionView.itemCount; i ++) {  // dispSeq 재설정
       useFuncGrid.collectionView.editItem(useFuncGrid.collectionView.items[i]);
-
       useFuncGrid.collectionView.items[i].status = 'U';
       useFuncGrid.collectionView.items[i].dispSeq = (i+1);
-
       useFuncGrid.collectionView.items[i].storeCd = selectedStore.storeCd;
       useFuncGrid.collectionView.items[i].posNo = posListBox.selectedValue;
       useFuncGrid.collectionView.items[i].fnkeyFg = selectedRow.fnkeyFg;
-
       useFuncGrid.collectionView.commitEdit();
       paramArr.push(useFuncGrid.collectionView.items[i]);
     }

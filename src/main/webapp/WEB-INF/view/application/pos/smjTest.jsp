@@ -2,17 +2,18 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 
-<%--<f:form modelAttribute="sessionInfo" method="post" action="/application/pos/posLogin.sb">--%>
-    <%--매장코드 : <input type="text" id="storeCd" name="storeCd" value="D000001"/>--%>
-    <%--&lt;%&ndash;<input type="text" id="userId" name="userId" value="111"/>&ndash;%&gt;--%>
-    <%--하드웨어인증키 : <input type="text" id="hwAuthKey" name="hwAuthKey" value="1234"/>--%>
-    <%--요청url : <input type="text" id="url" name="url" value="simpleMemberJoin"/>--%>
+<f:form modelAttribute="sessionInfo" method="post" action="/application/pos/posLogin.sb">
+    매장코드 : <input type="text" id="storeCd" name="storeCd" value="DS00001"/>
+    <input type="text" id="userId" name="userId" value="ds00001"/>
+    하드웨어인증키 : <input type="text" id="hwAuthKey" name="hwAuthKey" value="1234"/>
+    요청url : <input type="text" id="url" name="url" value="simpleMemberJoin"/>
 
-    <%--<button type="submit" class="btn_skyblue">gogogogo</button>--%>
-<%--</f:form>--%>
+    <button type="submit" class="btn_skyblue">gogogogo</button>
+</f:form>
 
+<%--
 <div id="theGrid" ng-app="app" ng-controller="appTCCtrl">
-    <%-- 조회 --%>
+    &lt;%&ndash; 조회 &ndash;%&gt;
     <div class="mt10 pdb20 oh bb">
         <button class="btn_blue fr" id="btnSearch" ng-click="search()"><s:message code="cmm.search"/></button>
     </div>
@@ -68,3 +69,4 @@
     });
 
 </script>
+--%>

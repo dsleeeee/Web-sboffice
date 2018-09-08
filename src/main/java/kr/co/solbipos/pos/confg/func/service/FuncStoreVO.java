@@ -42,7 +42,7 @@ public class FuncStoreVO extends CmmVO {
     private SysStatFg sysStatFg;
     /** 기능키 적용매장 등록여부 */
     private String regYn;
-    /** 기능키 적용매장 등록여부 */
+    /** 기능키 관련 프로시져 실행 결과 */
     private String result;
 
     /**

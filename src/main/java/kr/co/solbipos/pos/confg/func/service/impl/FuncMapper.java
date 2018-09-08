@@ -80,28 +80,28 @@ public interface FuncMapper {
     int deleteFuncStore(FuncStoreVO funcStoreVO);
 
     /**
-     * 매장 기능키에 해당 기능키 등록
+     * 매장 기능키에 해당 기능키 등록 프로시져 호출
      * @param funcStoreVO
      * @return
      */
     String insertStoreFuncKey(FuncStoreVO funcStoreVO);
 
     /**
-     * 포스 기능키에 해당 기능키 등록
+     * 포스 기능키에 해당 기능키 등록 프로시져 호출
      * @param funcStoreVO
      * @return
      */
     String insertPosFuncKey(FuncStoreVO funcStoreVO);
 
     /**
-     * 매장 기능키 삭제
+     * 매장 기능키 삭제 프로시져 호출
      * @param funcStoreVO
      * @return
      */
     String deleteStoreFuncKey(FuncStoreVO funcStoreVO);
 
     /**
-     * 포스 기능키 삭제
+     * 포스 기능키 삭제 프로시져 호출
      * @param funcStoreVO
      * @return
      */
@@ -127,4 +127,11 @@ public interface FuncMapper {
      * @return
      */
     int deleteAllPosFunc(FuncVO funcVO);
+
+    /***
+     * 기능키 상세정보 수정 프로시져 호출
+     * @param funcVO
+     * @return
+     */
+//    String updateStoreFuncKey(FuncVO funcVO);
 }

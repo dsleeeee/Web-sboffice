@@ -87,6 +87,7 @@
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
+
     <!-- 매장여신 저장 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_LOAN
@@ -151,5 +152,4 @@
     WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
     AND     STORE_CD     = #{storeCd}
     </update>
-
 </mapper>

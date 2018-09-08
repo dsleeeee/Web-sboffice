@@ -29,15 +29,16 @@
   -->
   <select id="getHqCouponClassList" parameterType="DefaultMap" resultType="DefaultMap">
     /* USE : CouponMapper.getHqCouponClassList */
-    SELECT HQ_OFFICE_CD,
-           PAY_CLASS_CD,
-           PAY_TYPE_FG,
-           PAY_CLASS_NM,
-           SER_NO_YN,
-           USE_YN,
-           REG_ID
-      FROM TB_HQ_PAY_METHOD_CLASS
-     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+    SELECT thpmc.HQ_OFFICE_CD,
+           thpmc.PAY_CLASS_CD,
+           thpmc.PAY_TYPE_FG,
+           thpmc.PAY_CLASS_NM,
+           thpmc.SER_NO_YN,
+           thpmc.USE_YN,
+           thpmc.REG_ID,
+           (SELECT COUNT(thc.COUPN_CD) FROM TB_HQ_COUPON thc WHERE thc.HQ_OFFICE_CD =thpmc.HQ_OFFICE_CD AND thc.PAY_CLASS_CD = thpmc.PAY_CLASS_CD) COUPON_CNT
+      FROM TB_HQ_PAY_METHOD_CLASS thpmc
+     WHERE thpmc.HQ_OFFICE_CD = #{hqOfficeCd}
   </select>
 
   <!-- 매장 쿠폰 분류 조회 -->
@@ -47,15 +48,16 @@
   -->
   <select id="getStoreCouponClassList" parameterType="DefaultMap" resultType="DefaultMap">
     /* USE : CouponMapper.getStoreCouponClassList */
-    SELECT STORE_CD,
-           PAY_TYPE_FG,
-           PAY_CLASS_CD,
-           PAY_CLASS_NM,
-           SER_NO_YN,
-           USE_YN,
-           REG_ID
-      FROM TB_MS_PAY_METHOD_CLASS
-     WHERE STORE_CD = #{storeCd}
+    SELECT tmpmc.STORE_CD,
+           tmpmc.PAY_TYPE_FG,
+           tmpmc.PAY_CLASS_CD,
+           tmpmc.PAY_CLASS_NM,
+           tmpmc.SER_NO_YN,
+           tmpmc.USE_YN,
+           tmpmc.REG_ID,
+           (SELECT COUNT(tmc.COUPN_CD) FROM TB_MS_COUPON tmc WHERE tmc.STORE_CD = tmpmc.STORE_CD AND tmc.PAY_CLASS_CD = tmpmc.PAY_CLASS_CD) COUPON_CNT
+      FROM TB_MS_PAY_METHOD_CLASS tmpmc
+     WHERE tmpmc.STORE_CD = #{storeCd}
   </select>
 
   <!-- 본사 쿠폰 분류 등록 -->
@@ -198,23 +200,25 @@
   -->
   <select id="getHqCouponList" parameterType="DefaultMap" resultType="DefaultMap">
     /* USE : CouponMapper.getHqCouponList */
-    SELECT HQ_OFFICE_CD,
-           COUPN_CD,
-           COUPN_NM,
-           PAY_CLASS_CD,
-           COUPN_DC_FG,
-           COUPN_DC_RATE,
-           COUPN_DC_AMT,
-           COUPN_APPLY_FG,
-           USE_YN,
-           REG_ID
-      FROM TB_HQ_COUPON
-     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+    SELECT thc.HQ_OFFICE_CD,
+           thc.COUPN_CD,
+           thc.COUPN_NM,
+           thc.PAY_CLASS_CD,
+           thc.COUPN_DC_FG,
+           thc.COUPN_DC_RATE,
+           thc.COUPN_DC_AMT,
+           thc.COUPN_APPLY_FG,
+           thc.USE_YN,
+           thc.REG_ID,
+           (SELECT COUNT(thcp.PROD_CD) FROM TB_HQ_COUPON_PROD thcp WHERE thcp.HQ_OFFICE_CD = thc.HQ_OFFICE_CD AND thcp.COUPN_CD = thc.COUPN_CD ) AS PROD_CNT,
+           (SELECT COUNT(thcs.STORE_CD) FROM TB_HQ_COUPON_STORE thcs WHERE thcs.HQ_OFFICE_CD = thc.HQ_OFFICE_CD AND thcs.COUPN_CD = thc.COUPN_CD ) AS STORE_CNT
+     FROM TB_HQ_COUPON thc
+    WHERE thc.HQ_OFFICE_CD = #{hqOfficeCd}
     <if test='payClassCd != null and payClassCd.toString() != ""'>
-       AND PAY_CLASS_CD = #{payClassCd}
+       AND thc.PAY_CLASS_CD = #{payClassCd}
     </if>
     <if test='useYn != null and useYn.toString() == "Y"'>
-       AND USE_YN = #{useYn}
+       AND thc.USE_YN = #{useYn}
     </if>
   </select>
 
@@ -225,23 +229,24 @@
   -->
   <select id="getStoreCouponList" parameterType="DefaultMap" resultType="DefaultMap">
     /* USE : CouponMapper.getStoreCouponList */
-    SELECT STORE_CD,
-           COUPN_CD,
-           COUPN_NM,
-           PAY_CLASS_CD,
-           COUPN_DC_FG,
-           COUPN_DC_RATE,
-           COUPN_DC_AMT,
-           COUPN_APPLY_FG,
-           USE_YN,
-           REG_ID
-      FROM TB_MS_COUPON
-     WHERE STORE_CD = #{storeCd}
+    SELECT tmc.STORE_CD,
+           tmc.COUPN_CD,
+           tmc.COUPN_NM,
+           tmc.PAY_CLASS_CD,
+           tmc.COUPN_DC_FG,
+           tmc.COUPN_DC_RATE,
+           tmc.COUPN_DC_AMT,
+           tmc.COUPN_APPLY_FG,
+           tmc.USE_YN,
+           tmc.REG_ID,
+          (SELECT COUNT(tmcp.PROD_CD) FROM TB_MS_COUPON_PROD tmcp WHERE tmcp.STORE_CD = tmc.STORE_CD AND tmcp.COUPN_CD = tmc.COUPN_CD ) AS PROD_CNT
+     FROM TB_MS_COUPON tmc
+    WHERE tmc.STORE_CD = #{storeCd}
     <if test='payClassCd != null and payClassCd.toString() != ""'>
-       AND PAY_CLASS_CD = #{payClassCd}
+      AND tmc.PAY_CLASS_CD = #{payClassCd}
     </if>
     <if test='useYn != null and useYn.toString() == "Y"'>
-       AND USE_YN = #{useYn}
+      AND tmc.USE_YN = #{useYn}
     </if>
   </select>
 
@@ -395,7 +400,7 @@
        AND COUPN_CD = #{coupnCd}
   </delete>
 
-  <!-- 본사 상품 조회 -->
+  <!-- 쿠폰 적용/미적용 본사 상품 조회 -->
   <!--
       TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_CLASS, TB_HQ_COUPON_PROD
       COMMENTS : 본사의 상품을 조회한다.
@@ -413,19 +418,27 @@
            TB_HQ_PRODUCT_CLASS thpc,
            TB_HQ_COUPON_PROD thcp
      WHERE thp.USE_YN = 'Y'
+       AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
        AND thp.HQ_OFFICE_CD = thpc.HQ_OFFICE_CD
        AND thp.PROD_CLASS_CD = thpc.PROD_CLASS_CD
+       AND thcp.COUPN_CD (+)= #{coupnCd}
        AND thcp.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
        AND thcp.PROD_CD (+)= thp.PROD_CD
+    <if test='prodCd != null and prodCd.toString() != "null"'>
+      AND thp.PROD_CD = #{prodCd}
+    </if>
+    <if test='prodNm != null and prodNm.toString() != "null"'>
+      AND thp.PROD_NM LIKE '%'||#{prodCd}||'%'
+    </if>
     <if test='prodRegFg != null and prodRegFg.toString() == "Y"'>
-       AND NVL2(thcp.PROD_CD, 'Y', 'N') = 'Y'
+       AND thcp.PROD_CD IS NOT NULL
     </if>
     <if test='prodRegFg != null and prodRegFg.toString() == "N"'>
-       AND NVL2(thcp.PROD_CD, 'Y', 'N') = 'N'
+       AND thcp.PROD_CD IS NULL
     </if>
   </select>
 
-  <!-- 매장 상품 조회 -->
+  <!-- 쿠폰 적용/미적용 매장 상품 조회 -->
   <!--
       TABLE    : TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS, TB_MS_COUPON_PROD
       COMMENTS : 매장의 상품을 조회한다
@@ -442,16 +455,18 @@
       FROM TB_MS_PRODUCT tmp,
            TB_MS_PRODUCT_CLASS tmpc,
            TB_MS_COUPON_PROD tmcp
-    WHERE tmp.USE_YN = 'Y'
-      AND tmp.STORE_CD = tmpc.STORE_CD
-      AND tmp.PROD_CLASS_CD = tmpc.PROD_CLASS_CD
-      AND tmcp.STORE_CD (+)= tmp.STORE_CD
-      AND tmcp.PROD_CD (+)= tmp.PROD_CD
+     WHERE tmp.USE_YN = 'Y'
+       AND tmp.STORE_CD = #{storeCd}
+       AND tmp.STORE_CD = tmpc.STORE_CD
+       AND tmp.PROD_CLASS_CD = tmpc.PROD_CLASS_CD
+       AND tmcp.COUPN_CD (+)= #{coupnCd}
+       AND tmcp.STORE_CD (+)= tmp.STORE_CD
+       AND tmcp.PROD_CD (+)= tmp.PROD_CD
     <if test='prodRegFg != null and prodRegFg.toString() == "Y"'>
-      AND NVL2(tmcp.PROD_CD, 'Y', 'N') = 'Y'
+       AND tmcp.PROD_CD IS NOT NULL
     </if>
     <if test='prodRegFg != null and prodRegFg.toString() == "N"'>
-      AND NVL2(tmcp.PROD_CD, 'Y', 'N') = 'N'
+       AND tmcp.PROD_CD IS NULL
     </if>
   </select>
 
@@ -519,7 +534,7 @@
       TABLE    : TB_HQ_COUPON_PROD
       COMMENTS : 본사 쿠폰을 적용한 상품을 삭제한다.
   -->
-  <delete id="deleteHqCouponProd">
+  <delete id="deleteHqCouponProd"  parameterType="couponProdVO">
       /* USE : CouponMapper.deleteHqCouponProd */
       DELETE TB_HQ_COUPON_PROD
        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
@@ -527,6 +542,104 @@
          AND PROD_CD = #{prodCd}
   </delete>
 
+  <!-- 매장 쿠폰 적용 상품 삭제 -->
+  <!--
+      TABLE    : TB_MS_COUPON_PROD
+      COMMENTS : 본사 쿠폰을 적용한 상품을 삭제한다.
+  -->
+  <delete id="deleteStoreCouponProd"  parameterType="couponProdVO">
+      /* USE : CouponMapper.deleteStoreCouponProd */
+      DELETE TB_MS_COUPON_PROD
+       WHERE STORE_CD = #{storeCd}
+         AND COUPN_CD = #{coupnCd}
+         AND PROD_CD = #{prodCd}
+  </delete>
+
+  <!-- 쿠폰 적용/미적용 매장 조회 -->
+  <!--
+      TABLE    :
+      COMMENTS : 쿠폰 적용 대상인 매장을 조회한다.
+  -->
+  <select id="getStoreList" parameterType="couponStoreVO" resultType="DefaultMap">
+    /* USE : CouponMapper.getStoreList */
+    SELECT tms.HQ_OFFICE_CD,
+           tho.HQ_OFFICE_NM,
+           tms.STORE_CD,
+           tms.STORE_NM,
+           NVL2(thcs.STORE_CD, 'Y', 'N') AS REG_YN
+      FROM TB_MS_STORE tms,
+           TB_HQ_OFFICE tho,
+           TB_HQ_COUPON_STORE thcs
+     WHERE tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+       AND tms.HQ_OFFICE_CD = #{orgnCd}
+       AND thcs.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
+       AND thcs.STORE_CD (+)= tms.STORE_CD
+       AND thcs.PAY_CLASS_CD (+)= #{payClassCd}
+       AND thcs.COUPN_CD (+)= #{coupnCd}
+    <if test='hqOfficeCd != null and hqOfficeCd.toString() != "null"'>
+      AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+    </if>
+    <if test='hqOfficeNm != null and hqOfficeNm.toString() != "null"'>
+      AND tho.HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'
+    </if>
+    <if test='storeCd != null and storeCd.toString() != "null"'>
+       AND tms.STORE_CD = #{storeCd}
+    </if>
+    <if test='storeNm != null and storeNm.toString() != "null"'>
+       AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+    </if>
+    <if test='storeRegFg != null and storeRegFg.toString() == "Y"'>
+       AND thcs.STORE_CD IS NOT NULL
+    </if>
+    <if test='storeRegFg != null and storeRegFg.toString() == "N"'>
+       AND thcs.STORE_CD IS NULL
+    </if>
+  </select>
+
+  <!-- 쿠폰 적용 매장 등록 -->
+  <!--
+      TABLE    : TB_HQ_COUPON_STORE
+      COMMENTS : 본사 쿠폰을 적용할 매장을 등록한다.
+  -->
+  <insert id="insertCouponStore" parameterType="couponStoreVO">
+    /* USE : CouponMapper.insertCouponStore */
+    INSERT  INTO TB_HQ_COUPON_STORE
+    (
+      HQ_OFFICE_CD,
+      PAY_CLASS_CD,
+      COUPN_CD,
+      STORE_CD,
+      REG_DT,
+      REG_ID,
+      MOD_DT,
+      MOD_ID
+    )
+    VALUES
+    (
+      #{orgnCd},
+      #{payClassCd},
+      #{coupnCd},
+      #{storeCd},
+      #{regDt},
+      #{regId},
+      #{modDt},
+      #{modId}
+    )
+  </insert>
+
+  <!-- 쿠폰 적용 매장 삭제 -->
+  <!--
+      TABLE    : TB_HQ_COUPON_STORE
+      COMMENTS : 본사 쿠폰을 적용한 매장을 삭제한다.
+  -->
+  <delete id="deleteCouponStore" parameterType="couponStoreVO">
+      /* USE : CouponMapper.deleteCouponStore */
+      DELETE TB_HQ_COUPON_STORE
+       WHERE HQ_OFFICE_CD = #{orgnCd}
+         AND PAY_CLASS_CD = #{payClassCd}
+         AND COUPN_CD = #{coupnCd}
+         AND STORE_CD = #{storeCd}
+  </delete>
 
 </mapper>
 

@@ -29,8 +29,8 @@
   </ul>
 
   <%-- 쿠폰분류등록 --%>
-  <div class="wj-TblWrap mb40" ng-controller="couponClassCtrl">
-    <div class="wj-TblWrapBr mr10 pd20" style="height:250px;">
+  <div class="mb40" ng-controller="couponClassCtrl">
+    <div class="wj-TblWrapBr mr10 pd20" style="height:260px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='coupon.regist.class' /></span>
         <button class="btn_skyblue" id="btnClassAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
@@ -38,7 +38,7 @@
         <button class="btn_skyblue" id="btnClassSave" ng-click="save()"><s:message code='cmm.save' /></button>
       </div>
       <%-- 쿠폰분류등록 그리드 --%>
-      <div id="couponClassGrid" style="height:400px">
+      <div id="couponClassGrid" class="wj-gridWrap" style="height:190px">
         <wj-flex-grid
                 autoGenerateColumns="false"
                 control="flex"
@@ -57,6 +57,7 @@
           <wj-flex-grid-column header="<s:message code="coupon.serNoYn"/>" binding="serNoYn" width="150" data-map="useYnDataMap"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="cmm.useYn"/>" binding="useYn" width="150" data-map="useYnDataMap"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="cmm.regId"/>" binding="regId" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="coupon.couponCnt"/>" binding="couponCnt" visible="false"></wj-flex-grid-column>
 
         </wj-flex-grid>
         <%-- ColumnPicker 사용시 include --%>
@@ -69,8 +70,8 @@
   </div>
 
   <%-- 쿠폰등록  --%>
-  <div class="wj-TblWrap mb40" ng-controller="couponCtrl">
-    <div class="wj-TblWrapBr mr10 pd20" style="height:250px;">
+  <div class="mb40" ng-controller="couponCtrl">
+    <div class="wj-TblWrapBr mr10 pd20" style="height:260px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='coupon.regist.coupon' /> <span id="couponSubTitle"></span> </span>
         <button class="btn_skyblue" id="btnCouponAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
@@ -78,8 +79,7 @@
         <button class="btn_skyblue" id="btnCouponSave" ng-click="save()"><s:message code='cmm.save' /></button>
       </div>
       <%-- 쿠폰등록 그리드 --%>
-      <div id="couponGrid" style="height:400px">
-
+      <div id="couponGrid" class="wj-gridWrap" style="height:190px">
         <wj-flex-grid
                 autoGenerateColumns="false"
                 control="flex"
@@ -98,7 +98,7 @@
           <wj-flex-grid-column header="<s:message code="coupon.coupnDcFg"/>" binding="coupnDcFg" width="*" data-map="coupnDcFgDataMap"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.coupnDcRate"/>" binding="coupnDcRate" width="*"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.coupnDcAmt"/>" binding="coupnDcAmt" maxLength="5" width="*"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="coupon.coupnApplyFg"/>" binding="coupnApplyFg" width="*" data-map="coupnApplyFgDataMap"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="coupon.coupnApplyFg"/>" binding="coupnApplyFg" width="*" data-map="coupnApplyFgDataMap" isReadOnly=false ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.prodCnt"/>" binding="prodCnt" isReadOnly=true width="*"></wj-flex-grid-column>
 
           <c:if test="${orgnFg == 'HQ'}">
@@ -129,3 +129,7 @@ var coupnEnvstVal = "${coupnEnvstVal}";
 <c:import url="/WEB-INF/view/base/pay/coupon/couponProdView.jsp">
 </c:import>
 
+
+<%-- 쿠폰별 매장 등록 레이어 팝업 --%>
+<c:import url="/WEB-INF/view/base/pay/coupon/couponStoreView.jsp">
+</c:import>

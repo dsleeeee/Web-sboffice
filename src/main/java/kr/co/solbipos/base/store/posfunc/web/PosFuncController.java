@@ -67,19 +67,6 @@ public class PosFuncController {
     @RequestMapping(value = "/use/view.sb", method = RequestMethod.GET)
     public String list(HttpServletRequest request, HttpServletResponse response,
         Model model) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
-
-        //        PosFuncVO posFuncVO = new PosFuncVO();
-        //        posFuncVO.setStoreCd(sessionInfoVO.getOrgnCd());
-        //        posFuncVO.setPosNo("01");
-
-        // 포스 목록 조회
-        //        List<DefaultMap<String>> posList = service.getPosList(posFuncVO);
-
-        //        model.addAttribute("posList", cmmCodeUtil.assmblObj(posList,"posNm", "posNo", UseYn.Y));
-        //        model.addAttribute("posTotList", cmmCodeUtil.assmblObj(posList,"posTotNm", "posNo", UseYn.N));
-
         return "base/store/posFunc/posFunc";
     }
 

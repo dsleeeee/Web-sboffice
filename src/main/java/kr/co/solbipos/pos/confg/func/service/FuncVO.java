@@ -53,6 +53,8 @@ public class FuncVO extends CmmVO{
     private String height;
     /** 사용여부 */
     private Boolean useYn;
+    /** 기능키 관련 프로시져 실행 결과 */
+    private String result;
 
 
     /**
@@ -249,5 +251,20 @@ public class FuncVO extends CmmVO{
      */
     public void setUseYn(Boolean useYn) {
         this.useYn = useYn;
+    }
+
+    /**
+     * @return the result
+     */
+
+    public String getResult() {
+        return result;
+    }
+
+    /**
+     * @param result the result to set
+     */
+    public void setResult(String result) {
+        this.result = result;
     }
 }

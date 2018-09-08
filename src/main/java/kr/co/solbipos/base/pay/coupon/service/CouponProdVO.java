@@ -29,6 +29,8 @@ public class CouponProdVO extends CmmVO {
     private String coupnCd;
     /** 상품코드 */
     private String prodCd;
+    /** 상품명 */
+    private String prodNm;
     /** 사용여부 */
     private UseYn useYn;
     /** 쿠폰등록여부 */
@@ -95,6 +97,22 @@ public class CouponProdVO extends CmmVO {
      */
     public void setProdCd(String prodCd) {
         this.prodCd = prodCd;
+    }
+
+
+    /**
+     * @return the prodNm
+     */
+
+    public String getProdNm() {
+        return prodNm;
+    }
+
+    /**
+     * @param prodNm the prodNm to set
+     */
+    public void setProdNm(String prodNm) {
+        this.prodNm = prodNm;
     }
 
     /**

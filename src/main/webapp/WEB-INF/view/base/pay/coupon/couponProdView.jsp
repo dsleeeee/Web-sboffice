@@ -6,7 +6,7 @@
 
   <div class="wj-dialog wj-dialog-columns">
     <div class="wj-dialog-header wj-dialog-header-font">
-      쿠폰대상 상품등록
+      <s:message code="coupon.regist.product" />
       <a href="javascript:;" class="wj-hide btn_close"></a>
     </div>
     <div class="wj-dialog-body">
@@ -20,26 +20,25 @@
         </colgroup>
         <tbody>
         <tr>
-          <th>상품코드</th>
+          <th><s:message code="coupon.prodCd"/></th>
           <td><input type="text" id="srchProdCd" ng-model="prodCd" /></td>
-          <th>상품명</th>
+          <th><s:message code="coupon.prodNm"/></th>
           <td><input type="text" id="srchProdNm" ng-model="prodNm" /></td>
         </tr>
         </tbody>
       </table>
       <%-- 조회 --%>
       <div class="mt10 tr">
-        <button class="btn_skyblue" id="btnSearch" ng-click="_broadcast('regProdCtrl', true)" ><s:message code="cmm.search" /></button>
+        <button class="btn_skyblue" id="btnSearch" ng-click="_broadcast('regProdCtrl')" ><s:message code="cmm.search" /></button>
       </div>
-
       <div class="oh mt40">
+
         <%--- 등록상품 그리드 --%>
         <div class="w50 fl">
-
           <div class="wj-TblWrap mr10" style="height:350px;" ng-controller="regProdCtrl">
             <div class="oh mb10">
-              <span class="fl bk lh20 s14">취급상품</span>
-              <span class="fr"><a href="javascript:;" class="btn_grayS2" ng-click="delete()">삭제</a></span>
+              <span class="fl bk lh20 s14"><s:message code="coupon.regProd"/></span>
+              <span class="fr"><a href="javascript:;" class="btn_grayS2" ng-click="delete()"><s:message code="cmm.del" /></a></span>
             </div>
             <div id="regProdGrid" style="height: 270px;">
               <wj-flex-grid
@@ -70,11 +69,10 @@
 
         <%--- 미등록상품 그리드 --%>
         <div class="w50 fr">
-
           <div class="wj-TblWrap ml10" style="height:350px;" ng-controller="noRegProdCtrl">
             <div class="oh mb10">
-              <span class="fl bk lh20 s14">취급상품</span>
-              <span class="fr"><a href="javascript:;" class="btn_grayS2" ng-click="regist()" >등록</a></span>
+              <span class="fl bk lh20 s14"><s:message code="coupon.noRegProd" /></span>
+              <span class="fr"><a href="javascript:;" class="btn_grayS2" ng-click="regist()" ><s:message code="coupon.regist" /></a></span>
             </div>
             <div id="noRegProdGrid" style="height: 270px;">
               <wj-flex-grid

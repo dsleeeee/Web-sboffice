@@ -1,21 +1,17 @@
 package kr.co.solbipos.base.pay.coupon.web;
 
+
 import kr.co.common.data.enums.CodeType;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
-import kr.co.common.exception.BizException;
 import kr.co.common.exception.CodeException;
 import kr.co.common.service.session.SessionService;
-import kr.co.common.utils.SessionUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.base.pay.coupon.service.CouponProdVO;
-import kr.co.solbipos.base.pay.coupon.service.CouponService;
-import kr.co.solbipos.base.pay.coupon.service.CouponVO;
-import kr.co.solbipos.base.pay.coupon.service.PayMethodClassVO;
+import kr.co.solbipos.base.pay.coupon.service.*;
 import kr.co.solbipos.base.pay.coupon.service.enums.CoupnEnvFg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,9 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
@@ -193,7 +187,7 @@ public class CouponController {
     }
 
     /**
-     * 쿠폰 상품 조회
+     * 쿠폰 적용/미적용 상품 조회
      * @param   couponProdVO
      * @param   request
      * @param   response
@@ -204,10 +198,12 @@ public class CouponController {
      */
     @RequestMapping(value = "/prod/getProdList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getCouponList(CouponProdVO couponProdVO, HttpServletRequest request,
+    public Result getProdList(CouponProdVO couponProdVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
-        List<DefaultMap<String>> prodList = service.getProdList(couponProdVO);
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> prodList = service.getProdList(couponProdVO, sessionInfoVO);
 
         return returnListJson(Status.OK, prodList, couponProdVO);
     }
@@ -227,11 +223,16 @@ public class CouponController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = service.registCouponProd(couponProdVOs, sessionInfoVO);
+        int result = 0;
+
+        try{
+            result = service.registCouponProd(couponProdVOs, sessionInfoVO);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return returnListJson(Status.OK, result);
     }
-
 
     /**
      * 쿠폰 적용 상품 삭제
@@ -249,6 +250,69 @@ public class CouponController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = service.deleteCouponProd(couponProdVOs, sessionInfoVO);
+
+        return returnListJson(Status.OK, result);
+    }
+
+
+    /**
+     * 쿠폰 적용/미적용 매장 조회
+     * @param   couponStoreVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  String
+     * @author  김지은
+     * @since   2018.08.17
+     */
+    @RequestMapping(value = "/store/getStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreList(CouponStoreVO couponStoreVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> storeList = service.getStoreList(couponStoreVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, storeList, couponStoreVO);
+    }
+
+    /**
+     * 쿠폰 적용 매장 등록
+     * @param couponStoreVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/store/registCouponStore.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result registCouponProd(@RequestBody CouponStoreVO[] couponStoreVOs, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = service.registCouponStore(couponStoreVOs, sessionInfoVO);
+
+        return returnListJson(Status.OK, result);
+    }
+
+    /**
+     * 쿠폰 적용 매장 삭제
+     * @param couponStoreVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/store/deleteCouponStore.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result deleteCouponStore(@RequestBody CouponStoreVO[] couponStoreVOs, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = service.deleteCouponStore(couponStoreVOs, sessionInfoVO);
 
         return returnListJson(Status.OK, result);
     }
