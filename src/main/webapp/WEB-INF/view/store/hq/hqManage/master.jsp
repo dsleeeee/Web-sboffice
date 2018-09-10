@@ -454,7 +454,6 @@
       return;
     }
 
-
     <%-- 사업자번호를 입력해주세요. --%>
     var msg = "<s:message code='hqManage.bizNo'/> <s:message code='cmm.require.text'/>";
     if($("#rBizNo1").val() === "" || $("#rBizNo2").val() === "" || $("#rBizNo3").val() === "") {

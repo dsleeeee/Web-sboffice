@@ -149,6 +149,12 @@
         function(result) {
           posList = result.data.list;
           posListBox.itemsSource = posList;
+
+          if(posList.length == 0 ) {
+            s_alert.pop("<s:message code='posFunc.no.regist.pos' />");
+            return;
+          }
+
           getPosConfList();
         },
         function (result) {

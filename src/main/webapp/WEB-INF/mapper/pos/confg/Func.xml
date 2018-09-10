@@ -380,15 +380,12 @@
     }
   </select>
 
-
-
   <!-- 기능키 상세정보 수정 프로시져 호출 -->
   <!--
       TABLE    : TB_CM_POS_FNKEY_STORE
       PARAM    : funcStoreVO
-      COMMENTS : 매장 포스별 기능키 목록에서 해당 기능키를 삭제한다.
+      COMMENTS : 매장 포스별 기능키 수정시 해당 매장의 기능키도 수정한다.
   -->
-  <!--
   <select id="updateStoreFuncKey" statementType="CALLABLE"  parameterType="funcVO" resultType="DefaultMap">
     {
       CALL PKG_MS_STORE_POS_FNKEY.SP_MS_STORE_FNKEY_U
@@ -398,7 +395,6 @@
       )
     }
   </select>
-  -->
 </mapper>
 
 

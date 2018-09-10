@@ -133,5 +133,5 @@ public interface FuncMapper {
      * @param funcVO
      * @return
      */
-//    String updateStoreFuncKey(FuncVO funcVO);
+    String updateStoreFuncKey(FuncVO funcVO);
 }

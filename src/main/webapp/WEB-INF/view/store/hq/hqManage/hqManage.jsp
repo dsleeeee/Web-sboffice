@@ -190,6 +190,7 @@
       var list = result.data.list;
 
       if(list.length === undefined || list.length == 0) {
+        grid.itemsSource = new wijmo.collections.CollectionView([]);
         s_alert.pop(result.message);
         return;
       }
