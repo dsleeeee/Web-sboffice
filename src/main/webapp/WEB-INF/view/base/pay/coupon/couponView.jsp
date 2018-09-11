@@ -52,7 +52,7 @@
           <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.hqOfficeCd"/>" binding="hqOfficeCd" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.payTypeFg"/>" binding="payTypeFg" visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="coupon.payClassCd"/>" binding="payClassCd" width="200" maxLength="3" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="coupon.payClassCd"/>" binding="payClassCd" width="200" maxLength="3" isReadOnly="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.payClassNm"/>" binding="payClassNm" width="*" maxLength="20"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.serNoYn"/>" binding="serNoYn" width="150" data-map="useYnDataMap"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="cmm.useYn"/>" binding="useYn" width="150" data-map="useYnDataMap"></wj-flex-grid-column>
@@ -92,14 +92,14 @@
           <!-- define columns -->
           <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.hqOfficeCd"/>" binding="hqOfficeCd" visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="coupon.coupnCd"/>" binding="coupnCd" maxLength="4" width="*"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="coupon.coupnCd"/>" binding="coupnCd" width="*" isReadOnly="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.coupnNm"/>" binding="coupnNm" maxLength="15" width="*"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.payClassCd"/>" binding="payClassCd" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.coupnDcFg"/>" binding="coupnDcFg" width="*" data-map="coupnDcFgDataMap"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.coupnDcRate"/>" binding="coupnDcRate" width="*"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.coupnDcAmt"/>" binding="coupnDcAmt" maxLength="5" width="*"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="coupon.coupnApplyFg"/>" binding="coupnApplyFg" width="*" data-map="coupnApplyFgDataMap" isReadOnly=false ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="coupon.prodCnt"/>" binding="prodCnt" isReadOnly=true width="*"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="coupon.coupnApplyFg"/>" binding="coupnApplyFg" width="*" data-map="coupnApplyFgDataMap" isReadOnly="false" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="coupon.prodCnt"/>" binding="prodCnt" isReadOnly="true" width="*"></wj-flex-grid-column>
 
           <c:if test="${orgnFg == 'HQ'}">
             <wj-flex-grid-column header="<s:message code="coupon.storeCnt"/>" binding="storeCnt" isReadOnly=true width="*"></wj-flex-grid-column>
@@ -122,6 +122,9 @@ var coupnDcFg    = ${ccu.getCommCodeExcpAll("013")};
 var coupnApplyFg = ${ccu.getCommCodeExcpAll("043")};
 var baseUrl      = "${baseUrl}";
 var coupnEnvstVal = "${coupnEnvstVal}";
+
+console.log(coupnDcFg)
+
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/coupon.js?ver=20180813" charset="utf-8"></script>
 

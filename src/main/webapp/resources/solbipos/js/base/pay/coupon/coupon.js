@@ -90,6 +90,7 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
     var params = {};
     params.status = "I";
     params.gChk = true;
+    params.payClassCd="자동채번"
     params.serNoYn = "Y";
     params.useYn = "Y";
 
@@ -174,6 +175,10 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
       var col = s.columns[e.col];
       var dataItem = s.rows[e.row].dataItem;
 
+      // 쿠폰 코드는 입력 불가능
+      if (col.binding === "coupnCd") {
+        e.cancel = false;
+      }
       // 데이터 조회 후 dropdown 이 readonly 되는 문제
       if (col.binding === "coupnDcFg" || col.binding === "coupnApplyFg" || col.binding === "useYn") {
         e.cancel = false;
@@ -182,14 +187,6 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
       if (col.binding === "prodCnt" || col.binding === "storeCnt" ) {
         e.cancel = true;
       }
-
-      // 쿠폰 코드는 데이터 등록시에만 입력 가능
-      if (col.binding === "coupnCd") {
-        if (nvl(dataItem.status, "") == "" && dataItem.status != "I") {
-          e.cancel = true;
-        }
-      }
-
       // 할인구분 => 금액 관련이면, 할인율은 입력못함
       if(e.col == 6) {
         if(dataItem.coupnDcFg == "3" || dataItem.coupnDcFg == "4" || dataItem.coupnDcFg == "6") {
@@ -270,6 +267,7 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
     var params = {};
     params.status = "I";
     params.gChk = true;
+    params.coupnCd="자동채번"
     params.coupnDcFg = "1";
     params.coupnApplyFg = "1";
     params.useYn = "Y";

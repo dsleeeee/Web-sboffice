@@ -19,7 +19,7 @@ app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {};
 
-  // 쿠폰분류 그리드 조회
+  // 쿠폰등록 상품 그리드 조회
   $scope.$on("regProdCtrl", function(event, data) {
     $scope.searchRegProd();
     // 등록상품 조회 후, 미등록상품 조회
@@ -72,8 +72,8 @@ app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상품 삭제 완료 후처리
   $scope.allSearch = function () {
     $scope.searchRegProd();
-    var noRegCouponGrid = agrid.getScope("noRegProdCtrl");
-    noRegCouponGrid.searchNoRegProd();
+    var noRegProdGrid = agrid.getScope("noRegProdCtrl");
+    noRegProdGrid.searchNoRegProd();
     // 쿠폰그리드 조회
     var couponGrid = agrid.getScope("couponCtrl");
     couponGrid.searchCoupon(selectedCouponClass);
@@ -90,7 +90,7 @@ app.controller('noRegProdCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.initGrid = function (s, e) {
   };
 
-  // 쿠폰분류 그리드 조회
+  // 미등록 상품 그리드 조회
   $scope.$on("noRegProdCtrl", function(event, data) {
     $scope.searchNoRegProd();
     // 기능수행 종료 : 반드시 추가
@@ -142,8 +142,8 @@ app.controller('noRegProdCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상품 등록 완료 후처리 (상품수량 변화)
   $scope.allSearch = function () {
     $scope.searchNoRegProd();
-    var regCouponGrid = agrid.getScope("regProdCtrl");
-    regCouponGrid.searchRegProd();
+    var regProdGrid = agrid.getScope("regProdCtrl");
+    regProdGrid.searchRegProd();
     // 쿠폰그리드 조회
     var couponGrid = agrid.getScope("couponCtrl");
     couponGrid.searchCoupon(selectedCouponClass);

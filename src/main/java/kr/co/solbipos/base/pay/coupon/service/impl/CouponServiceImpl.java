@@ -49,26 +49,28 @@ public class CouponServiceImpl implements CouponService {
 
     /** 쿠폰분류 조회 */
     @Override
-    public List<DefaultMap<String>> getCouponClassList(PayMethodClassVO payMethodAClassVO,
+    public List<DefaultMap<String>> getCouponClassList(PayMethodClassVO payMethodClassVO,
         SessionInfoVO sessionInfoVO) {
 
         List<DefaultMap<String>> returnList = null;
 
-        CoupnEnvFg  coupnEnvFg = payMethodAClassVO.getCoupnEnvstVal();
+        CoupnEnvFg  coupnEnvFg = payMethodClassVO.getCoupnEnvstVal();
+
+        payMethodClassVO.setPayTypeFg(PayTypeFg.COUPON);
 
         // 본사 통제
-        if(payMethodAClassVO.getCoupnEnvstVal() == CoupnEnvFg.HQ) {
+        if(payMethodClassVO.getCoupnEnvstVal() == CoupnEnvFg.HQ) {
 
-            payMethodAClassVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
+            payMethodClassVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
 
-            returnList = mapper.getHqCouponClassList(payMethodAClassVO);
+            returnList = mapper.getHqCouponClassList(payMethodClassVO);
         }
         // 매장 통제
-        else if(payMethodAClassVO.getCoupnEnvstVal() == CoupnEnvFg.STORE) {
+        else if(payMethodClassVO.getCoupnEnvstVal() == CoupnEnvFg.STORE) {
 
-            payMethodAClassVO.setStoreCd(sessionInfoVO.getStoreCd());
+            payMethodClassVO.setStoreCd(sessionInfoVO.getStoreCd());
 
-            returnList = mapper.getStoreCouponClassList(payMethodAClassVO);
+            returnList = mapper.getStoreCouponClassList(payMethodClassVO);
         }
         // 권한 확인 필요
         else {
