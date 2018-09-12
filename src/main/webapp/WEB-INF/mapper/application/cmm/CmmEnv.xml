@@ -41,6 +41,21 @@
        AND USE_YN = 'Y'
   </select>
 
+
+  <!-- 매장 환경변수 값 조회 -->
+  <!--
+      TABLE    : TB_MS_STORE_ENVST
+      COMMENTS : 매장 환경변수 테이블에 등록된 값을 조회한다.
+  -->
+  <select id="getStoreEnvst" parameterType="storeEnvVO" resultType="String">
+    /* CmmEnvMapper.getStoreEnvst */
+    SELECT ENVST_VAL
+      FROM TB_MS_STORE_ENVST
+     WHERE STORE_CD = #{storeCd}
+       AND ENVST_CD = #{envstCd}
+       AND USE_YN = 'Y'
+  </select>
+
   <!-- 환경변수명 값 조회 -->
   <!--
       TABLE    : TB_CM_ENVST

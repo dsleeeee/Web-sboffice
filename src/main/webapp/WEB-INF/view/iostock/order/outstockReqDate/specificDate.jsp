@@ -23,11 +23,11 @@
             <%-- 매장코드 --%>
             <th><s:message code="outstockReqDate.storeCd"/></th>
                 <td>
-                    <%-- ColumnPicker 사용시 include --%>
+                    <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
                     <jsp:include page="/WEB-INF/view/iostock/order/outstockReqDate/selectShopM.jsp" flush="true">
                         <jsp:param name="targetId" value="speSelectStore"/>
                     </jsp:include>
-                    <%--// ColumnPicker 사용시 include --%>
+                    <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
                 </td>
 
             <%--<td><input type="text" id="specificSearchStoreCd" name="specificSearchStoreCd" ng-model="storeCd" class="sb-input w100" maxlength="7"/></td>--%>
@@ -57,7 +57,7 @@
                 initialized="initComboBox(s)">
             </wj-combo-box>
             <%--// 페이지 스케일  --%>
-                <div class="tr">
+            <div class="tr">
                 <%-- 신규등록 --%>
                 <button class="btn_skyblue" ng-click="newSpecificDate()"><s:message code="cmm.new.add" /></button>
                 <%-- 저장 --%>
@@ -203,12 +203,16 @@
 
         // 특정일 삭제
         $scope.deleteSpecificDate = function () {
-            var params = new Array();
-            for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-                $scope.flex.collectionView.itemsEdited[i].status = "U";
-                params.push($scope.flex.collectionView.itemsEdited[i]);
-            }
-            $scope._save("/iostock/order/outstockReqDate/specificDate/delete.sb", params, function() { $scope.searchspecificDateList() });
+            // 삭제 하시겠습니까?
+            var msg = "<s:message code='cmm.choo.delete'/>";
+            s_alert.popConf(msg, function(){
+                var params = new Array();
+                for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+                    $scope.flex.collectionView.itemsEdited[i].status = "U";
+                    params.push($scope.flex.collectionView.itemsEdited[i]);
+                }
+                $scope._save("/iostock/order/outstockReqDate/specificDate/delete.sb", params, function() { $scope.searchspecificDateList() });
+            });
         };
 
         // 매장선택 모듈 팝업 사용시 정의

@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <input type="hidden" id="<c:out value="${param.targetId}Cd"/>"/>
-<input type="text"   id="<c:out value="${param.targetId}Nm"/>" class="sb-input" style="cursor:pointer;" value="전체" ng-click="<c:out value="${param.targetId}"/>Show()" readonly/>
+<input type="text"   id="<c:out value="${param.targetId}Nm"/>" class="sb-input" style="cursor:pointer; width:200px;" value="전체" ng-click="<c:out value="${param.targetId}"/>Show()" readonly/>
 
 <wj-popup id="wj<c:out value="${param.targetId}"/>LayerM" control="wj<c:out value="${param.targetId}"/>LayerM" show-trigger="Click" hide-trigger="Click" style="display:none;width:500px;">
     <div class="wj-dialog wj-dialog-columns" >
@@ -36,7 +36,8 @@
                             autoGenerateColumns="false"
                             selection-mode="Row"
                             items-source="data"
-                            control="storeGridM"
+                            <%--control="storeGridM"--%>
+                            control="flex"
                             initialized="initGrid(s,e)"
                             is-read-only="false"
                             item-formatter="_itemFormatter">
@@ -99,28 +100,34 @@
         };
 
         $scope.storeSelected = function () {
-            var flex = $scope.storeGridM;
-            var strStoreCd = new Array();
+            var flex = agrid.getScope(targetId+'Ctrl').data.sourceCollection;
+            // var flex = $scope.storeGridM;
+            var arrStoreCd = new Array();
+            var strStoreCd = "";
             var strStoreNm = "";
             var cnt = 0;
 
-            for (var i = 0; i < flex.rows.length; i++) {
-                if(flex.getCellData(i, 0)) {
-                    if(cnt == 0) strStoreNm = flex.rows[i]._data.storeNm;
-                    strStoreCd.push(flex.rows[i]._data.storeCd);
+            for (var i = 0; i < flex.length; i++) {
+                if(flex[i].gChk) {
+                    if(cnt == 0) {
+                        strStoreCd = flex[i].storeCd;
+                        // strStoreNm = "["+flex[i].storeCd+"] "+flex[i].storeNm;
+                        strStoreNm = flex[i].storeNm;
+                    }
+                    arrStoreCd.push(flex[i].storeCd);
                     cnt++;
                 }
             }
 
-            $("#"+targetId+"Cd").val(strStoreCd.join());
-            if(cnt == 1) {
-                $("#"+targetId+"Nm").val(strStoreNm);
+            $("#"+targetId+"Cd").val(arrStoreCd.join());
+            if(cnt == 0) {
+                $("#"+targetId+"Nm").val("<s:message code='outstockReqDate.all'/>");
+            }
+            else if(cnt == 1) {
+                $("#"+targetId+"Nm").val("["+strStoreCd+"] "+strStoreNm);
             }
             else if(cnt > 1) {
                 $("#"+targetId+"Nm").val(strStoreNm+" <s:message code='outstockReqDate.except'/> "+(cnt-1)+"<s:message code='outstockReqDate.cntStore'/>");
-            }
-            else if(cnt == 0) {
-                $("#"+targetId+"Nm").val("<s:message code='outstockReqDate.all'/>");
             }
             eval('$scope.wj'+targetId+'LayerM.hide(true)');
         };

@@ -23,11 +23,11 @@
             <%-- 매장코드 --%>
             <th><s:message code="outstockReqDate.store"/></th>
             <td>
-                <%-- ColumnPicker 사용시 include --%>
-                <jsp:include page="/WEB-INF/view/iostock/order/outstockReqDate/selectShopS.jsp" flush="true">
+                <%-- 매장선택 모듈 싱글 선택 사용시 include --%>
+                <jsp:include page="/WEB-INF/view/iostock/order/outstockReqDate/selectShopM.jsp" flush="true">
                     <jsp:param name="targetId" value="daysSelectStore"/>
                 </jsp:include>
-                <%--// ColumnPicker 사용시 include --%>
+                <%--// 매장선택 모듈 싱글 선택 사용시 include --%>
             </td>
             <%--<td><input type="text" id="daysSearchStoreCd" name="daysSearchStoreCd" ng-model="storeCd" class="sb-input w100" maxlength="7"/></td>--%>
             <%--&lt;%&ndash; 매장명 &ndash;%&gt;--%>
@@ -43,7 +43,7 @@
     </div>
 
     <div class="w100">
-        <div class="mt20 oh sb-select dkbr">
+        <div class="mt20 oh sb-select">
             <%-- 페이지 스케일  --%>
             <wj-combo-box
                 class="w150 fl"
@@ -137,7 +137,7 @@
                 if (e.panel == s.cells) {
                     let col = s.columns[e.col];
                     if (col.binding === "storeCd") {
-                        let item = s.rows[e.row].dataItem;
+                        var item = s.rows[e.row].dataItem;
                         wijmo.addClass(e.cell, 'wijLink');
                         wijmo.addClass(e.cell, 'wj-custom-readonly');
                     }

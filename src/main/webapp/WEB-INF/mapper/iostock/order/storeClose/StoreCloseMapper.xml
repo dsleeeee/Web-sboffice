@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.iostock.order.storeClose.service.impl.StoreCloseMapper">
+
+    <!-- 마감여부 ListMap -->
+    <resultMap id="closeListMap" type="DefaultMap">
+        <result column="ORDER_CLOSE_FG" property="orderCloseFg" typeHandler="CustomBooleanTypeHandler"/>
+    </resultMap>
+
+    <!-- 매장요청마감 마감월 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_CLOSE
+        PARAM    : storeCloseVO
+        COMMENTS : 매장요청마감 마감월 리스트를 조회한다.
+    -->
+    <select id="getStoreCloseList" parameterType="storeCloseVO" resultType="DefaultMap">
+        /* USE : storeCloseMapper.getStoreCloseList */
+        <![CDATA[
+        SELECT   cal.YMD AS CLOSE_MONTH
+        ,        SUBSTR(cal.YMD, 5, 6) || ' 월' AS CLOSE_MONTH_NM
+        ,        TO_CHAR( TRUNC(LAST_DAY(cal.YMD||'01')),'DD') AS DATE_CNT
+        ,        SUM(DECODE(tphsc.ORDER_CLOSE_FG, 'Y', 1, 0)) AS CLOSE_DATE_CNT
+        FROM     TB_PO_HQ_STORE_CLOSE tphsc
+        ,        (	SELECT 	TO_CHAR(TRUNC(ADD_MONTHS(TO_CHAR(TO_DATE(#{closeMonth}, 'YYYYMM'), 'YYYY')||'0101', LEVEL-1), 'MM'), 'YYYYMM') YMD
+                    FROM 	DUAL
+                    CONNECT BY LEVEL <= 12
+                 ) cal
+        WHERE    tphsc.CLOSE_DATE(+) LIKE cal.YMD||'%'
+        AND      tphsc.HQ_OFFICE_CD(+) =   #{hqOfficeCd}
+        GROUP BY cal.YMD
+        ORDER BY cal.YMD
+        ]]>
+    </select>
+
+    <!-- 매장요청마감 마감월 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_CLOSE
+        PARAM    : storeCloseVO
+        COMMENTS : 매장요청마감 마감월 리스트를 조회한다.
+    -->
+    <select id="getStoreCloseDtlList" parameterType="storeCloseVO" resultMap="closeListMap">
+        /* USE : storeCloseMapper.getStoreCloseDtlList */
+        <![CDATA[
+        SELECT	cal.DATE1 AS CLOSE_DATE
+        ,		SUBSTR(cal.DATE1,5,8) AS CLOSE_DATE_NM
+        , 		NVL(tphsc.ORDER_CLOSE_FG, 'N') AS ORDER_CLOSE_FG
+        , 		tphsc.ORDER_CLOSE_DT
+        , 		(SELECT them.EMP_NM FROM TB_HQ_EMPLOYEE them WHERE tphsc.ORDER_CLOSE_ID = them.USER_ID) AS ORDER_CLOSE_NM
+        FROM	TB_PO_HQ_STORE_CLOSE tphsc
+        , 		(	SELECT 	(#{closeMonth} || LPAD(LEVEL, 2, '0')) DATE1
+                    FROM 	DUAL
+                    CONNECT BY LEVEL <= (SELECT TO_CHAR( TRUNC(LAST_DAY(#{closeMonth}||'01')),'DD') FROM DUAL)
+                ) cal
+        WHERE 	tphsc.HQ_OFFICE_CD    (+)   = 	#{hqOfficeCd}
+        AND 	tphsc.CLOSE_DATE      (+) 	= 	cal.DATE1
+        ORDER BY cal.DATE1
+        ]]>
+    </select>
+
+    <!-- 매장요청마감 마감일 마감여부 저장 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_CLOSE
+        PARAM    : storeCloseVO
+        COMMENTS : 매장요청마감 마감일 마감여부를 등록한다.
+    -->
+    <insert id="insertStoreClose" parameterType="storeCloseVO">
+        /* USE : storeCloseMapper.insertStoreClose */
+        INSERT INTO TB_PO_HQ_STORE_CLOSE
+        (
+            HQ_OFFICE_CD,
+            CLOSE_DATE,
+            ORDER_CLOSE_FG,
+            ORDER_CLOSE_DT,
+            ORDER_CLOSE_ID,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        VALUES
+        (
+            #{hqOfficeCd},
+            #{closeDate},
+            #{orderCloseFg},
+            #{orderCloseDt},
+            #{orderCloseId},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 매장요청마감 마감일 마감여부 삭제 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_CLOSE
+        PARAM    : storeCloseVO
+        COMMENTS : 매장요청마감 마감일 마감여부를 삭제한다.
+    -->
+    <delete id="deleteStoreClose" parameterType="storeCloseVO">
+        /* USE : storeCloseMapper.deleteStoreClose */
+        DELETE  TB_PO_HQ_STORE_CLOSE
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     CLOSE_DATE    = #{closeDate}
+    </delete>
+
+</mapper>

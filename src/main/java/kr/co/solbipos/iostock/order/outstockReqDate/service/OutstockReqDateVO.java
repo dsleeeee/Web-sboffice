@@ -10,6 +10,8 @@ public class OutstockReqDateVO extends PageVO {
     private String hqOfficeCd;
     /** 매장코드 */
     private String storeCd;
+    /** 다중 매장코드 */
+    private String[] arrStoreCd;
     /** 매장명 */
     private String storeNm;
     /** 출고요청불가능일 1:일 2:월 3:화 4:수 5:목 6:금 7:토 */
@@ -71,6 +73,20 @@ public class OutstockReqDateVO extends PageVO {
      */
     public void setStoreCd(String storeCd) {
         this.storeCd = storeCd;
+    }
+
+    /**
+     * @return the arrStoreCd
+     */
+    public String[] getArrStoreCd() {
+        return arrStoreCd;
+    }
+
+    /**
+     * @param arrStoreCd the arrStoreCd to set
+     */
+    public void setArrStoreCd(String[] arrStoreCd) {
+        this.arrStoreCd = arrStoreCd;
     }
 
     /**

@@ -118,8 +118,8 @@
         #{hqOfficeCd},
         #{storeCd},
         #{limitLoanAmt},
-        #{useLoanAmt},
-        #{currLoanAmt},
+        0,
+        #{limitLoanAmt},
         #{maxOrderAmt},
         #{orderFg},
         #{noOutstockAmtFg},
@@ -142,6 +142,7 @@
     /* USE : StoreLoanManageMapper.updateStoreLoanManage */
     UPDATE  TB_PO_HQ_STORE_LOAN
     SET     LIMIT_LOAN_AMT        = #{limitLoanAmt},
+            CURR_LOAN_AMT         = #{limitLoanAmt} - USE_LOAN_AMT,
             MAX_ORDER_AMT         = #{maxOrderAmt},
             ORDER_FG              = #{orderFg},
             NO_OUTSTOCK_AMT_FG    = #{noOutstockAmtFg},
