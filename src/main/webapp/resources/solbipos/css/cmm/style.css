@@ -1027,8 +1027,12 @@ div.commtWrap .btn_skyblue {width:140px; position:absolute; top:0px; right:0px; 
 
 /*포스화면 관련된 페이지 : 1024*768안에 스크롤없이 사이즈 고정*/
 .posWrap {width:760px; height:635px; position:relative;}
+.touchKeyWrap {width:100%; height:635px; position:relative;}
 .prev1 {width:510px; height:510px; border:1px solid #dbdbdb;}
-.prev2 {width:402px; height:542px; border:1px solid #dbdbdb; position:relative;}
+/*.prev2 {width:402px; height:542px; border:1px solid #dbdbdb; position:relative;}*/
+.groupKeyPrev {width:497px; height:542px; border:1px solid #dbdbdb; position:relative;}
+.touchKeyPrev {width:497px; height:542px; border:1px solid #dbdbdb; position:relative;}
+
 .patternBg {background:url(../img/bg_pattern.png) repeat;}
 .cfgWrap {overflow-y:auto; height:605px; border:1px solid #dbdbdb;}
 .cfgWrap > div.wj-flexgrid {margin-top:-1px; margin-bottom:10px;}
@@ -1080,13 +1084,13 @@ a.btn_underline, a.btn_underline:hover, a.btn_underline.on {background-position:
 .tableImg li img {width:60%;}
 
 .h120 {height:120px;} .h180 {height:180px;}
-.touchGroupWrap {width:400px; overflow:hidden; position:relative;}
-.touchGroup {width:1000%; background:url(../img/bg_touchkey.png) repeat;}
+.touchGroupWrap {width:495px; overflow:hidden; position:relative;}
+.touchGroup {width:1000%; background:url(../img/bg_touchkey_group.png) repeat;}
 div.h120+.hPo1 {top:60px;}
 div.h180+.hPo1 {top:120px;}
 div.h120+.hPo1+div.touchgoodsWrap+.hPo2 {top:420px;}
 div.h180+.hPo1+div.touchgoodsWrap+.hPo2 {top:480px;}
-p.touchBtn {width:80px; height:60px; background:#fff; position:absolute; right:0px; overflow:hidden; padding:7px 0 0 8px;}
+p.touchBtn {width:89px; height:74px; background:#fff; position:absolute; right:0px; overflow:hidden; padding:7px 0 0 8px;}
 p.touchBtn a {border:1px solid #93cbfc; background:#ebf5ff; display:inline-block; width:30px; height:46px; font-size:0px; border-radius:5px;}
 p.touchBtn a:hover {background:#93cbfc;}
 p.touchBtn a:last-child {margin-left:5px;}
@@ -1095,8 +1099,8 @@ p.touchBtn a:last-child:hover:before {content:''; position:absolute; margin:17px
 p.touchBtn a:first-child:before {content:''; position:absolute; margin:17px 0 0 11px; background:url(../img/menu_bullet_blue.png) no-repeat; width:6px; height:10px; transform:rotate(180deg);}
 p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17px 0 0 11px; background:url(../img/menu_bullet.png) no-repeat; width:6px; height:10px;}
 
-.touchgoodsWrap {width:400px; height:360px; overflow:hidden; position:relative;}
-.touchgoods {width:1000%; height:360px; background:url(../img/bg_touchkey.png) repeat;}
+.touchgoodsWrap {width:495px; height:444px; overflow:hidden; position:relative;}
+.touchgoods {width:1000%; height:444px; background:url(../img/bg_touchkey_resize.png) repeat;}
 
 /* **************************************** *
  * layer

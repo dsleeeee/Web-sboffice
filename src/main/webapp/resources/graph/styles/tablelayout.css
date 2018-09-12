@@ -1,6 +1,6 @@
 @font-face {
      font-family: 'NotoR';
-     src: url('../resource/solbipos/css/cmm/NotoSansCJKkr-Regular.woff') format('woff');
+     src: url('../../solbipos/css/cmm/NotoSansCJKkr-Regular.woff') format('woff');
 }
 
 #container {

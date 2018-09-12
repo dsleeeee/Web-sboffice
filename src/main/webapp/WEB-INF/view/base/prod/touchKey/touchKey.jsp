@@ -67,11 +67,13 @@ window.MAX_GROUP_ROW = '${maxGroupRow}' || '2';
 <!--script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.min.js"></script-->
 <script type="text/javascript" src="/resource/graph/sanitizer/sanitizer.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/graph/js/TouchKey.js" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/graph/js/TouchKeyGroup.js" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/graph/js/TouchKeyButton.js" charset="utf-8"></script>
 
     <%--서브컨텐츠--%>
     <div class="subCon2">
       <%--테이블속성, 테이블관리, 판매터치키 page에만 쓰임--%>
-      <div class="posWrap oh">
+      <div class="touchKeyWrap oh">
         <%--left--%>
         <div class="w40 fl">
           <%--상품--%>
