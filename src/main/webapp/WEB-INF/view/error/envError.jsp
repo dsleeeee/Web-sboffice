@@ -5,22 +5,22 @@
 
 <!--right-->
 <div class="contents">
-    <div class="elseCon">
-        <p class="lgTxt">
-          해당 메뉴 사용 권한이 없습니다.
-        </p>
-        <p class="smTxt mt20">
-          <c:if test="${codeType == 'HQ_ENV'}">
-            <s:message code="cmm.hqEnv" /> &nbsp;&nbsp; ${codeStr} <s:message code="cmm.env.setting.error" />
-            <br>
-            <s:message code="cmm.require.hqEnv.setting" />
-          </c:if>
-          <c:if test="${codeType == 'STORE_ENV'}">
-            <s:message code="cmm.storeEnv" /> &nbsp;&nbsp; ${codeStr} <s:message code="cmm.env.setting.error" />
-            <br>
-            <s:message code="cmm.require.storeEnv.setting" />
-          </c:if>
-        </p>
-    </div>
+  <div class="elseCon">
+    <p class="lgTxt">
+      해당 메뉴 사용 권한이 없습니다.
+    </p>
+    <p class="smTxt mt20">
+      <c:if test="${codeType == 'HQ_ENV'}">
+        <s:message code="cmm.require.hqEnv.setting" />
+        <br>
+        <s:message code="cmm.hqEnv" /> &nbsp; ${codeStr}
+      </c:if>
+      <c:if test="${codeType == 'STORE_ENV'}">
+        <s:message code="cmm.require.storeEnv.setting" />
+        <br>
+        <s:message code="cmm.storeEnv" /> &nbsp;& ${codeStr}
+      </c:if>
+    </p>
+  </div>
 </div>
 <!--//right-->

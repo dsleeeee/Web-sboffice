@@ -3,127 +3,61 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
-<c:set var="baseUrl" value="/adi/etc/kitchenmemo/kitchenmemo/" />
+<c:set var="baseUrl" value="/adi/etc/kitchenMemo/kitchenMemo/" />
 
-<div class="subCon">
+<div class="subCon" ng-controller="kitchenMemoCtrl">
   <div class="updownSet oh">
     <span class="fl bk lh30">${menuNm}</span>
     <div class="txtIn">
-      <button class="btn_skyblue" id="addBtn">
+      <button class="btn_skyblue" id="addBtn" style="display: none;" ng-click="addRow()">
         <s:message code="cmm.add" />
       </button>
-      <button class="btn_skyblue" id="deleteBtn">
+      <button class="btn_skyblue" id="deleteBtn" style="display: none;" ng-click="delete()">
         <s:message code="cmm.delete" />
       </button>
-      <button class="btn_skyblue" id="saveBtn">
+      <button class="btn_skyblue" id="saveBtn" style="display: none;" ng-click="save()">
         <s:message code="cmm.save" />
       </button>
     </div>
   </div>
   <div class="wj-TblWrapBr mt10" style="height: 400px;">
-    <div id="theGrid" class="mt10"></div>
+    <div id="theGrid" class="mt10">
+      <wj-flex-grid
+              autoGenerateColumns="false"
+              control="flex"
+              initialized="initGrid(s,e)"
+              sticky-headers="true"
+              selection-mode="Row"
+              items-source="data"
+              item-formatter="_itemFormatter">
+
+        <!-- define columns -->
+        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="kitchenMemo.kitchnMemoCd"/>" binding="kitchnMemoCd" maxLength="3" width="90" isReadOnly="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="kitchenMemo.kitchnMemoNm"/>" binding="kitchnMemoNm" maxLength="30" width="*"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="kitchenMemo.memoFg"/>" binding="memoFg" data-map="memoFgDataMap" width="60"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="kitchenMemo.useYn"/>" binding="useYn" data-map="useYnDataMap" width="60" ></wj-flex-grid-column>
+        <c:if test="${orgnFg == 'STORE'}">
+          <wj-flex-grid-column header="<s:message code="kitchenMemo.regFg"/>" binding="regFg" data-map="regFgDataMap" width="80"></wj-flex-grid-column>
+        </c:if>
+
+      </wj-flex-grid>
+
+    </div>
   </div>
 </div>
 
-<script>
-$(document).ready(function(){
-  var memoFgData = new wijmo.grid.DataMap([{id:"1", name:"주문"},{id:"2", name:"메뉴"}], 'id', 'name');
-  var useYnData  = new wijmo.grid.DataMap([{id:"Y", name:"Y"},{id:"N", name:"N"}], 'id', 'name');
-  var rdata = 
-    [
-      {binding:"gChk", header:"<s:message code='kitchenMemo.chk' />", dataType:wijmo.DataType.Boolean, width:40},
-      {binding:"kitchnMemoCd", header:"<s:message code='kitchenMemo.kitchnMemoCd' />", maxLength:3, width:"*"},
-      {binding:"kitchnMemoNm", header:"<s:message code='kitchenMemo.kitchnMemoNm' />", maxLength:30, width:"*"},
-      {binding:"memoFg", header:"<s:message code='kitchenMemo.memoFg' />", dataMap:memoFgData, width:"*"},
-      {binding:"useYn", header:"<s:message code='kitchenMemo.useYn' />", dataMap:useYnData, width:"*"}
-    ];
-  
-  var kitchenMemoList = ${kitchenMemoList};
-  
-  <%-- 그리드 div, column data, 화면명, 화면 그리드 순서 --%>
-  var grid             = wgrid.genGrid("#theGrid", rdata);
-  var kitchenMemo      = new wijmo.collections.CollectionView(kitchenMemoList);
-  kitchenMemo.trackChanges = true;
-  
-  grid.itemsSource     = kitchenMemo;
-  grid.isReadOnly      = false;
-  
-  <%-- 데이터 수정시 코드는 수정 불가 --%>
-  grid.beginningEdit.addHandler(function (s, e) {
-    <%-- 조회된 데이터는 kitchnMemoCd 수정 불가능 --%>
-    if(grid.rows[e.row].dataItem.regId == undefined || grid.rows[e.row].dataItem.regId == ""){
-      e.cancel = false;
-    }else{
-      if(e.col != 1){
-        e.cancel = false;
-      }else{
-        e.cancel = true;
-      }
-    }
-  });
-  
-  <%-- validation --%>
-  grid.cellEditEnded.addHandler(function (s, e){
-    var col = s.columns[e.col];
-    if(col.maxLength){
-      var val = s.getCellData(e.row, e.col);
-      if (val.length > col.maxLength) { <%-- 자리수 체크 --%>
-        s_alert.pop(col.header+"는(은) 최대 "+col.maxLength+ "자리 입력 가능합니다.");
-      }
-      if(col.binding == "kitchnMemoCd") { <%-- 숫자만 --%>
-        if(val.match(/[^0-9]/)){
-          s_alert.pop(col.header+"<s:message code='cmm.require.number'/>");
-          s.setCellData(e.row, e.col, val.replace(/[^0-9]/g,""));
-        }
-      }
-    }
-  });
-  
-  <%-- 추가 --%>
-  $("#addBtn").click(function( e ){
-    var newItem = grid.collectionView.addNew();
-    newItem.chk = false;
-    grid.collectionView.commitNew();
-  });
-  
-  <%-- 삭제 --%>
-  $("#deleteBtn").click(function( e ){
-    for(var i = kitchenMemo.items.length-1; i >= 0; i-- ){
-      var item = kitchenMemo.items[i];
-      if(item.chk){
-        kitchenMemo.removeAt(i);
-      }
-    }
-  });
-  
-  <%-- 저장 --%>
-  $("#saveBtn").click(function( e ){
+<script type="text/javascript">
+  var orgnFg      = "${orgnFg}";
+  var baseUrl     = "${baseUrl}";
+  var envstVal    = "${envstVal}";
 
-    var paramArr = new Array();
-    
-    for(var i=0; i<grid.collectionView.itemsEdited.length; i++){
-      grid.collectionView.itemsEdited[i].status = "U";
-      paramArr.push(grid.collectionView.itemsEdited[i]);
-    }
-    for(var i=0; i<grid.collectionView.itemsAdded.length; i++){
-      grid.collectionView.itemsAdded[i].status = "I";
-      paramArr.push(grid.collectionView.itemsAdded[i]);
-    }
-    for(var i=0; i<grid.collectionView.itemsRemoved.length; i++){
-      grid.collectionView.itemsRemoved[i].status = "D";
-      paramArr.push(grid.collectionView.itemsRemoved[i]);
-    }
-
-    $.postJSON("${baseUrl}" + "save.sb", JSON.stringify(paramArr), function(result) {
-      s_alert.pop("<s:message code='cmm.saveSucc' />");
-      grid.collectionView.clearChanges();
-    },
-    function(result) {
-      s_alert.pop(result.message);
-    });
-    
-  });
-});
+  var useYn       = ${ccu.getCommCodeExcpAll("067")};
+  var memoFg      = ${ccu.getCommCodeExcpAll("070")};
+  var regFg       = ${ccu.getCommCodeExcpAll("071")};
 </script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/etc/kitchenMemo/kitchenMemo.js?ver=20180911" charset="utf-8"></script>
+

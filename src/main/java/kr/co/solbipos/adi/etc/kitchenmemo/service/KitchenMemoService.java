@@ -1,6 +1,8 @@
 package kr.co.solbipos.adi.etc.kitchenmemo.service;
 
 import java.util.List;
+
+import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 
 /**
@@ -15,18 +17,15 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 * @author 솔비포스 차세대개발실 김지은
 * @since 2018. 05.01
 * @version 1.0
-* @see
 *
 * @Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
 public interface KitchenMemoService {
 
-    /** 주방메모 조회 */
-    <E> List<E> selectKitchenMemo(SessionInfoVO sessionInfoVO);
+    /** 주방메모 목록 조회 */
+    List<DefaultMap<String>> getKitchenMemoList(KitchenMemoVO kitchenMemoVO, SessionInfoVO sessionInfoVO);
 
-    /** 저장 */
+    /** 주방메모 저장 */
     int save(KitchenMemoVO[] kitchenMemoVOs, SessionInfoVO sessionInfoVO);
 
-    /** 주방메모 건수 조회 */
-    int selectKitchenMemoCnt(KitchenMemoVO kitchenMemoVO);
 }

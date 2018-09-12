@@ -1,9 +1,6 @@
 package kr.co.solbipos.adi.etc.kitchenmemo.service;
 
-import javax.validation.constraints.Size;
-import org.hibernate.validator.constraints.NotBlank;
-import kr.co.common.validate.Login;
-import kr.co.common.validate.PwChange;
+import kr.co.solbipos.adi.etc.kitchenmemo.service.enums.KitchenMemoEnvFg;
 import kr.co.solbipos.application.common.service.CmmVO;
 
 /**
@@ -24,85 +21,142 @@ import kr.co.solbipos.application.common.service.CmmVO;
 */
 public class KitchenMemoVO extends CmmVO{
 
-    private static final long serialVersionUID = 1L;
+    /** 본사코드 */
+    private String hqOfficeCd;
     /** 매장코드 */
     private String storeCd;
     /** 주방메모코드 */
-    @NotBlank
-    @Size(   min = 2, max = 3, message = "{msg.cmm.size.max}")
     private String kitchnMemoCd;
     /** 주방메모명 */
-    @NotBlank
-    @Size(groups = {PwChange.class}, min = 1, max = 50, message = "{msg.cmm.size.max}")
     private String kitchnMemoNm;
     /** 메모구분  */
-    @NotBlank
-    @Size( groups={ Login.class }, max = 1, message = "{msg.cmm.size.max}" )
     private String memoFg;
     /** 사용여부  */
-    @NotBlank
     private String useYn;
-    
-    
+    /** 본사통제여부 ( 1: 본사통제, 2:매장통제 )  */
+    private KitchenMemoEnvFg envstVal;
+    /** 등록주체구분 */
+    private String regFg;
+
+
+
+    /**
+     * @return the hqOfficeCd
+     */
+
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
+
+    /**
+     * @param hqOfficeCd the hqOfficeCd to set
+     */
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
+    }
+
     /**
      * @return the storeCd
      */
+
     public String getStoreCd() {
         return storeCd;
     }
+
     /**
      * @param storeCd the storeCd to set
      */
     public void setStoreCd(String storeCd) {
         this.storeCd = storeCd;
     }
+
     /**
      * @return the kitchnMemoCd
      */
+
     public String getKitchnMemoCd() {
         return kitchnMemoCd;
     }
+
     /**
      * @param kitchnMemoCd the kitchnMemoCd to set
      */
     public void setKitchnMemoCd(String kitchnMemoCd) {
         this.kitchnMemoCd = kitchnMemoCd;
     }
+
     /**
      * @return the kitchnMemoNm
      */
+
     public String getKitchnMemoNm() {
         return kitchnMemoNm;
     }
+
     /**
      * @param kitchnMemoNm the kitchnMemoNm to set
      */
     public void setKitchnMemoNm(String kitchnMemoNm) {
         this.kitchnMemoNm = kitchnMemoNm;
     }
+
     /**
      * @return the memoFg
      */
+
     public String getMemoFg() {
         return memoFg;
     }
+
     /**
      * @param memoFg the memoFg to set
      */
     public void setMemoFg(String memoFg) {
         this.memoFg = memoFg;
     }
+
     /**
      * @return the useYn
      */
+
     public String getUseYn() {
         return useYn;
     }
+
     /**
      * @param useYn the useYn to set
      */
     public void setUseYn(String useYn) {
         this.useYn = useYn;
     }
-    
+
+    /**
+     * @return the envstVal
+     */
+
+    public KitchenMemoEnvFg getEnvstVal() {
+        return envstVal;
+    }
+
+    /**
+     * @param envstVal the envstVal to set
+     */
+    public void setEnvstVal(KitchenMemoEnvFg envstVal) {
+        this.envstVal = envstVal;
+    }
+
+    /**
+     * @return the regFg
+     */
+
+    public String getRegFg() {
+        return regFg;
+    }
+
+    /**
+     * @param regFg the regFg to set
+     */
+    public void setRegFg(String regFg) {
+        this.regFg = regFg;
+    }
 }

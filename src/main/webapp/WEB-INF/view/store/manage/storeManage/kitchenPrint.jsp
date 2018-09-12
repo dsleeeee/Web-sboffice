@@ -102,7 +102,7 @@ $("#btnkitchenPrintAdd").click(function(){
 $("#btnkitchenPrintDel").click(function(){
   for(var i = kitchenPrintGrid.itemsSource.itemCount-1; i >= 0; i-- ){
     var item = kitchenPrintGrid.itemsSource.items[i];
-    if(item.chk){
+    if(item.gChk){
       kitchenPrintGrid.itemsSource.removeAt(i);
     }
   }
