@@ -3,8 +3,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <input type="hidden" id="<c:out value="${param.targetId}Cd"/>"/>
-<input type="text"   id="<c:out value="${param.targetId}Nm"/>" class="sb-input" style="cursor:pointer;" value="<s:message code="cmm.chk"/>" ng-click="<c:out value="${param.targetId}"/>Show()" readonly/>
-<button class="btn_skyblue" id="<c:out value="${param.targetId}SelectCancelBtn"/>"><s:message code="outstockReqDate.selectCancel" /></button>
+<input type="text"   id="<c:out value="${param.targetId}Nm"/>" class="sb-input" style="cursor:pointer; width:200px;" value="<s:message code="cmm.chk"/>" ng-click="<c:out value="${param.targetId}"/>Show()" readonly/>
+<button type="button" class="btn_skyblue" id="<c:out value="${param.targetId}SelectCancelBtn"/>"><s:message code="outstockReqDate.selectCancel" /></button>
 
 <wj-popup id="wj<c:out value="${param.targetId}"/>LayerS" control="wj<c:out value="${param.targetId}"/>LayerS" show-trigger="Click" hide-trigger="Click" style="display:none;width:500px;">
     <div class="wj-dialog wj-dialog-columns" ng-controller="<c:out value="${param.targetId}"/>Ctrl">
@@ -35,6 +35,7 @@
                             autoGenerateColumns="false"
                             selection-mode="Row"
                             items-source="data"
+                            <%--control="storeGridS"--%>
                             control="flex"
                             initialized="initGrid(s,e)"
                             is-read-only="true"
@@ -93,7 +94,7 @@
                     var selectedRow = s.rows[ht.row].dataItem;
                     if (col.binding === "storeCd") {
                         $("#"+targetId+"Cd").val(selectedRow.storeCd);
-                        $("#"+targetId+"Nm").val(selectedRow.storeNm);
+                        $("#"+targetId+"Nm").val("["+selectedRow.storeCd+"] "+selectedRow.storeNm);
                         eval('$scope.wj'+targetId+'LayerS.hide(true)');
                     }
                 }

@@ -5,6 +5,7 @@ import kr.co.common.service.code.CmmEnvService;
 import kr.co.common.template.RedisCustomTemplate;
 import kr.co.solbipos.application.common.service.impl.CmmEnvMapper;
 import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
+import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;
 import kr.co.solbipos.sys.cd.envconfg.service.EnvstVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +48,12 @@ public class CmmEnvServiceImpl implements CmmEnvService {
     @Override
     public String getHqEnvst(HqEnvstVO hqEnvstVO) {
         return cmmEnvMapper.getHqEnvst(hqEnvstVO);
+    }
+
+    /** 매장 환경변수 값 조회 */
+    @Override
+    public String getStoreEnvst(StoreEnvVO storeEnvVO) {
+        return cmmEnvMapper.getStoreEnvst(storeEnvVO);
     }
 
     /** 환경변수명 조회 */

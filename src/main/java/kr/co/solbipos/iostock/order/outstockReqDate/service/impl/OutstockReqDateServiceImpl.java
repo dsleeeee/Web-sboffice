@@ -4,6 +4,7 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.iostock.order.outstockReqDate.service.OutstockReqDateService;
 import kr.co.solbipos.iostock.order.outstockReqDate.service.OutstockReqDateVO;
@@ -25,6 +26,10 @@ public class OutstockReqDateServiceImpl implements OutstockReqDateService {
     /** 출고요청일관리 요일별 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getDaysList(OutstockReqDateVO outstockReqDateVO) {
+        if(!StringUtil.getOrBlank(outstockReqDateVO.getStoreCd()).equals("")) {
+            outstockReqDateVO.setArrStoreCd(outstockReqDateVO.getStoreCd().split(","));
+        }
+
         return outstockReqDateMapper.getDaysList(outstockReqDateVO);
     }
 
@@ -72,6 +77,10 @@ public class OutstockReqDateServiceImpl implements OutstockReqDateService {
     /** 출고요청일관리 특정일 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getSpecificDateList(OutstockReqDateVO outstockReqDateVO) {
+        if(!StringUtil.getOrBlank(outstockReqDateVO.getStoreCd()).equals("")) {
+            outstockReqDateVO.setArrStoreCd(outstockReqDateVO.getStoreCd().split(","));
+        }
+
         return outstockReqDateMapper.getSpecificDateList(outstockReqDateVO);
     }
 
@@ -171,7 +180,7 @@ public class OutstockReqDateServiceImpl implements OutstockReqDateService {
             String storeCds[] = outstockReqDateVO.getCopyStoreCd().split(",");
             for(String storeCd : storeCds) {
                 if(!outstockReqDateVO.getStoreCd().equals(storeCd)) {
-//                    OutstockReqDateVO paramVO = outstockReqDateVO;
+                    //                    OutstockReqDateVO paramVO = outstockReqDateVO;
 
                     outstockReqDateVO.setCopyStoreCd(storeCd);
 
@@ -211,7 +220,7 @@ public class OutstockReqDateServiceImpl implements OutstockReqDateService {
         String storeCds[] = outstockReqDateVO.getCopyStoreCd().split(",");
         for(String storeCd : storeCds) {
             if(!outstockReqDateVO.getStoreCd().equals(storeCd)) {
-//                OutstockReqDateVO paramVO = outstockReqDateVO;
+                //                OutstockReqDateVO paramVO = outstockReqDateVO;
 
                 outstockReqDateVO.setCopyStoreCd(storeCd);
 

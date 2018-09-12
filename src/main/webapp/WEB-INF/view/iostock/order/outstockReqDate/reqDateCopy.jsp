@@ -7,43 +7,54 @@
 <c:set var="baseUrl" value="/iostock/order/outstockReqDate/reqDateCopy/"/>
 
 
-<div id="reqDateCopyView" class="subCon" style="display: none;" ng-controller="reqDateCopyCtrl">
-    <div class="searchBar">
-        <a href="javascript:;" class="open">${menuNm}</a>
-    </div>
-    <table class="searchTbl">
-        <colgroup>
-            <col class="w15"/>
-            <col class="w35"/>
-            <col class="w15"/>
-            <col class="w35"/>
-        </colgroup>
-        <tbody>
-        <tr>
-            <%-- 매장 --%>
-            <th><s:message code="outstockReqDate.store"/></th>
-            <td colspan="3"><input type="text" id="targetSearchStoreCd" name="targetSearchStoreCd" ng-model="storeCd" class="sb-input" maxlength="7"/></td>
-        </tr>
-        <tr>
-            <%-- 요청일 복사매장 --%>
-            <th><s:message code="outstockReqDate.copyStore"/></th>
-            <td colspan="3">
-                <input type="text" id="copyStoreCd" name="copyStoreCd" ng-model="copyStoreCd" class="sb-input" />
-                <%-- 조회 --%>
-                <button class="btn_blue" id="btnSave" ng-click="reqDateCopy();"><s:message code="cmm.save" /></button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+<div id="reqDateCopyView" class="subCon" style="display: none;">
+    <div ng-controller="reqDateCopyCtrl">
+        <div class="searchBar">
+            <a href="javascript:;" class="open">${menuNm}</a>
+        </div>
+        <table class="searchTbl">
+            <colgroup>
+                <col class="w15"/>
+                <col class="w35"/>
+                <col class="w15"/>
+                <col class="w35"/>
+            </colgroup>
+            <tbody>
+            <tr>
+                <%-- 매장 --%>
+                <th><s:message code="outstockReqDate.store"/></th>
+                <td colspan="3">
+                    <%-- 매장선택 모듈 싱글 선택 사용시 include --%>
+                    <jsp:include page="/WEB-INF/view/iostock/order/outstockReqDate/selectShopS.jsp" flush="true">
+                        <jsp:param name="targetId" value="targetSelectStore"/>
+                    </jsp:include>
+                    <%--// 매장선택 모듈 싱글 선택 사용시 include --%>
+                </td>
+            </tr>
+            <tr>
+                <%-- 요청일 복사매장 --%>
+                <th><s:message code="outstockReqDate.copyStore"/></th>
+                <td colspan="3">
+                    <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
+                    <jsp:include page="/WEB-INF/view/iostock/order/outstockReqDate/selectShopM.jsp" flush="true">
+                        <jsp:param name="targetId" value="copySelectStore"/>
+                    </jsp:include>
+                    <%--// 매장선택 모듈 멀티 선택 사용시 include --%>                <%-- 조회 --%>
+                    <button class="btn_blue" id="btnSave" ng-click="reqDateCopy();"><s:message code="cmm.save" /></button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
 
-    <div class="mt10 pdb20 oh bb">
-        <%-- 조회 --%>
-        <button class="btn_blue fr" id="btnSearch" ng-click="search();"><s:message code="cmm.search" /></button>
+        <div class="mt10 pdb20 oh bb">
+            <%-- 조회 --%>
+            <button class="btn_blue fr" id="btnSearch" ng-click="search();"><s:message code="cmm.search" /></button>
+        </div>
     </div>
 
     <div class="w100" ng-controller="reqDateCopyDaysCtrl">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap mt10" style="height: 150px;" >
+        <div class="wj-gridWrap mt10" style="height: 100px;" >
             <wj-flex-grid
                     autoGenerateColumns="false"
                     selection-mode="Row"
@@ -80,7 +91,7 @@
 
     <div class="w100" ng-controller="reqDateCopySpecificCtrl">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap mt10" style="height: 250px;" >
+        <div class="wj-gridWrap mt10" style="height: 300px;" >
             <wj-flex-grid
                     autoGenerateColumns="false"
                     selection-mode="Row"
@@ -112,14 +123,15 @@
 </div>
 
 
-
 <script type="text/javascript">
 
     app.controller('reqDateCopyCtrl', ['$scope', '$http', function ($scope, $http) {
-        $scope.storeCd = "DS00001";
+        // angular.extend(this, new RootController('reqDateCopyCtrl', $scope, $http, true));
+
+        // $scope.storeCd = "DS00001";
         $scope.search = function () {
             // 매장을 선택해주세요.
-            if($("#targetSearchStoreCd").val() == "") {
+            if($("#targetSelectStoreCd").val() == "") {
                 s_alert.pop("<s:message code='outstockReqDate.require.selectStore'/>");
                 return;
             }
@@ -131,12 +143,12 @@
         // 복사를 실행하기 위해 저장버튼 클릭. 우선 특정일 먼저 복사하도록 broadcast 날림.
         $scope.reqDateCopy = function () {
             // 매장을 선택해주세요.
-            if($("#targetSearchStoreCd").val() == "") {
+            if($("#targetSelectStoreCd").val() == "") {
                 s_alert.pop("<s:message code='outstockReqDate.require.selectStore'/>");
                 return;
             }
             // 복사할 매장을 선택해주세요.
-            if($("#copyStoreCd").val() == "") {
+            if($("#copySelectStoreCd").val() == "") {
                 s_alert.pop("<s:message code='outstockReqDate.require.selectCopyStore'/>");
                 return;
             }
@@ -151,6 +163,20 @@
         $scope.$on("reqDateCopyCtrl", function(event, data) {
             $scope._broadcast('reqDateCopyDaysCtrl', {proc:"copy"});
         });
+
+        // 매장선택 모듈 팝업 사용시 정의
+        // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+        // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+        $scope.targetSelectStoreShow = function () {
+            $scope._broadcast('targetSelectStoreCtrl');
+        };
+
+        // 매장선택 모듈 팝업 사용시 정의
+        // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+        // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+        $scope.copySelectStoreShow = function () {
+            $scope._broadcast('copySelectStoreCtrl');
+        };
     }]);
 
     /** 요일별 그리드 controller */
@@ -175,9 +201,9 @@
             // 그리드 링크 효과
             s.formatItem.addHandler(function (s, e) {
                 if (e.panel == s.cells) {
-                    let col = s.columns[e.col];
+                    var col = s.columns[e.col];
                     if (col.binding === "storeCd") {
-                        let item = s.rows[e.row].dataItem;
+                        var item = s.rows[e.row].dataItem;
                         wijmo.addClass(e.cell, 'wijLink');
                         wijmo.addClass(e.cell, 'wj-custom-readonly');
                     }
@@ -214,11 +240,11 @@
             event.preventDefault();
         });
 
-        // 요청일 그리드 조회
+        // 요일별 그리드 조회
         $scope.searchReqDateDaysList = function() {
             // 파라미터
             var params = {};
-            params.storeCd = $("#targetSearchStoreCd").val();
+            params.storeCd = $("#targetSelectStoreCd").val();
             params.listScale = 1000;
             params.curr = 1;
             // 조회 수행 : 조회URL, 파라미터, 콜백함수
@@ -229,8 +255,8 @@
         $scope.daysCopy = function () {
 
             var params = {};
-            params.storeCd = $("#targetSearchStoreCd").val();
-            params.copyStoreCd = $("#copyStoreCd").val();
+            params.storeCd = $("#targetSelectStoreCd").val();
+            params.copyStoreCd = $("#copySelectStoreCd").val();
 
             // ajax 통신 설정
             $http({
@@ -305,7 +331,7 @@
         $scope.searchReqDateSpecificList = function() {
             // 파라미터
             var params = {};
-            params.storeCd = $("#targetSearchStoreCd").val();
+            params.storeCd = $("#targetSelectStoreCd").val();
             params.listScale = 1000;
             params.curr = 1;
             // 조회 수행 : 조회URL, 파라미터, 콜백함수
@@ -329,19 +355,26 @@
             var flex = $scope.flex;
             for (var i = 0; i < flex.rows.length; i++) {
                 if(flex.getCellData(i, 0)) {
-                    console.log(flex.rows[i]);
-                    console.log(flex.rows[i]._data);
-                    flex.rows[i]._data.copyStoreCd = $("#copyStoreCd").val();
+                    // 타겟매장과 복사할 매장이 동일합니다.
+                    if(flex.rows[i]._data.storeCd == $("#copySelectStoreCd").val()) {
+                        s_alert.pop("<s:message code='outstockReqDate.duplicate.targetSelectStore'/>");
+                        return;
+                    }
+                    flex.rows[i]._data.copyStoreCd = $("#copySelectStoreCd").val();
                     params.push(flex.rows[i]._data);
                 }
             }
 
-            console.log("==params==");
-            console.log(params);
-
             // 길이체크
             if (params.length <= 0) {
-                s_alert.pop("<s:message code='outstockReqDate.not.save'/>");
+                // 특정일은 복사할 내용이 없습니다. 출고가능요일을 복사하시겠습니까?
+                var msg = "<s:message code='outstockReqDate.not.copySpecificDate'/> <s:message code='outstockReqDate.copyDays'/>";
+                s_alert.popConf(msg, function(){
+                    $scope._broadcast('reqDateCopyDaysCtrl', {proc:"copy"});
+                });
+
+                <%--// 저장할 내용이 없습니다.--%>
+                <%--s_alert.pop("<s:message code='outstockReqDate.not.save'/>");--%>
                 return;
             }
 
@@ -377,7 +410,6 @@
                 return;
             }).then(function () {
             });
-            // $scope._save("/iostock/order/outstockReqDate/specificDate/copy.sb", params, function() { $scope._broadcast('reqDateCopyDaysCtrl', {proc:"copy"}) });
         }
     }]);
 

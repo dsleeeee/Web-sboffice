@@ -1,6 +1,7 @@
 package kr.co.common.service.code;
 
 import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
+import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;
 import kr.co.solbipos.sys.cd.envconfg.service.EnvstVO;
 
 import java.util.List;
@@ -37,6 +38,14 @@ public interface CmmEnvService {
      * @return String (TB_HQ_ENVST)
      */
     String getHqEnvst(HqEnvstVO hqEnvstVO);
+
+    /**
+     * 본사 환경변수 값 조회
+     *
+     * @param storeEnvVO
+     * @return String (TB_MS_STORE_ENVST)
+     */
+    String getStoreEnvst(StoreEnvVO storeEnvVO);
 
     /**
      * 환경변수명 값 조회

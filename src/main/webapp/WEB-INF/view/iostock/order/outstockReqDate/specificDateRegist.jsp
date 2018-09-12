@@ -2,7 +2,7 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
-<wj-popup id="wjSpeDateRegistLayer" control="wjSpeDateRegistLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:800px;">
+<wj-popup id="wjSpeDateRegistLayer" control="wjSpeDateRegistLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
     <div id="speDateRegistLayer" class="wj-dialog wj-dialog-columns" ng-controller="speDateRegistCtrl">
         <div class="wj-dialog-header wj-dialog-header-font">
             <s:message code="outstockReqDate.specificDate" /> &nbsp;<s:message code="cmm.new.add" />
@@ -26,7 +26,13 @@
                             </div>
                         </td>
                         <th><s:message code="outstockReqDate.store" /><em class="imp">*</em></th>
-                        <td><input type="text" id="storeCd" class="sb-input w100" maxlength="14" ng-model="speDate.storeCd"/></td>
+                        <td>
+                            <%-- 매장선택 모듈 싱글 선택 사용시 include --%>
+                            <jsp:include page="/WEB-INF/view/iostock/order/outstockReqDate/selectShopS.jsp" flush="true">
+                                <jsp:param name="targetId" value="speDateRegistStore"/>
+                            </jsp:include>
+                            <%--// 매장선택 모듈 싱글 선택 사용시 include --%>
+                        </td>
                     </tr>
                     <tr>
                         <th><s:message code="outstockReqDate.outstockReqYn"/></th>
@@ -38,7 +44,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <th><s:message code="outstockReqDate.specificDateRemark"/></th>
+                        <th><s:message code="outstockReqDate.specificDateRemark"/><em class="imp">*</em></th>
                         <td colspan="3">
                             <div>
                                 <textarea id="specificDateRemark" class="w100 tArea1" style="height:100px;" ng-model="speDate.specificDateRemark"></textarea>
@@ -75,6 +81,9 @@
             $scope.wjSpeDateRegistLayer.show(true);
             specificDate.value = getCurDate('-'); // 특정일 오늘날짜로 초기화
             $scope.speDate = angular.copy($scope.default);
+            // 신규등록 팝업 오픈시 매장선택모듈의 값 초기화
+            $("#speDateRegistStoreCd").val("");
+            $("#speDateRegistStoreNm").val("선택");
 
             // 기능수행 종료 : 반드시 추가
             event.preventDefault();
@@ -87,6 +96,8 @@
 
             // 특정일값 넘길 파라미터에 세팅
             $scope.speDate.specificDate = wijmo.Globalize.format(specificDate.value, 'yyyyMMdd');
+            // 매장 선택 모듈의 매장코드값 파라미터 세팅
+            $scope.speDate.storeCd = $("#speDateRegistStoreCd").val();
 
             $http({
                 method: 'POST', //방식
@@ -96,10 +107,6 @@
             }).then(function successCallback(response) {
                 // this callback will be called asynchronously
                 // when the response is available
-
-                console.log("==response===");
-                console.log(response);
-
                 var resData = response.data;
                 // 통신은 성공하였으나 데이터 엑세스에 실패한 경우
                 if(resData.status == "FAIL") {
@@ -121,14 +128,29 @@
                 return;
             });
         };
+
+        // 매장선택 모듈 팝업 사용시 정의
+        // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+        // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+        $scope.speDateRegistStoreShow = function () {
+            $scope._broadcast('speDateRegistStoreCtrl');
+        };
+
     }]);
 
     // 값 체크
     function valueCheck() {
         <%-- 매장을 선택해주세요. --%>
         var msg = "<s:message code='outstockReqDate.require.selectStore'/>";
-        if($("#storeCd").val() === "") {
+        if($("#speDateRegistStoreCd").val() === "") {
             s_alert.popOk(msg, function(){});
+            return false;
+        }
+
+        <%-- 설명(을)를 입력하세요. --%>
+        var msg = "<s:message code='outstockReqDate.specificDateRemark'/> <s:message code='cmm.require.text'/>";
+        if($("#specificDateRemark").val() === "") {
+            s_alert.popOk(msg, function(){ $("#specificDateRemark").select(); });
             return false;
         }
 

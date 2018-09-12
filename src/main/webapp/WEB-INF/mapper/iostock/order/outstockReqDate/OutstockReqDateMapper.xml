@@ -54,11 +54,11 @@
         AND     tphsod.STORE_CD (+) =   tms.STORE_CD
         AND     tphsl.STORE_CD  (+) =   tms.STORE_CD
         ]]>
-        <if test='storeCd != null and storeCd != ""'>
-            AND tms.STORE_CD = #{storeCd}
-        </if>
-        <if test='storeNm != null and storeNm != ""'>
-            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tms.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         ORDER BY tms.STORE_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -71,29 +71,29 @@
         COMMENTS : 출고요청일관리의 요일을 등록한다.
     -->
     <insert id="insertReqDateDays" parameterType="outstockReqDateVO">
-    /* USE : outstockReqDateMapper.insertReqDateDays */
-    INSERT INTO TB_PO_HQ_STORE_ORDER_DAYS
-    (
-        HQ_OFFICE_CD,
-        STORE_CD,
-        REQ_NO_DAY,
-        REMARK,
-        REG_DT,
-        REG_ID,
-        MOD_DT,
-        MOD_ID
-    )
-    VALUES
-    (
-        #{hqOfficeCd},
-        #{storeCd},
-        #{reqNoDay},
-        #{daysRemark},
-        #{regDt},
-        #{regId},
-        #{modDt},
-        #{modId}
-    )
+        /* USE : outstockReqDateMapper.insertReqDateDays */
+        INSERT INTO TB_PO_HQ_STORE_ORDER_DAYS
+        (
+            HQ_OFFICE_CD,
+            STORE_CD,
+            REQ_NO_DAY,
+            REMARK,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        VALUES
+        (
+            #{hqOfficeCd},
+            #{storeCd},
+            #{reqNoDay},
+            #{daysRemark},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
     </insert>
 
     <!-- 출고요청일관리 요일별 요일 저장 -->
@@ -103,16 +103,16 @@
         COMMENTS : 출고요청일관리의 요일을 수정한다.
     -->
     <update id="updateReqDateDays" parameterType="outstockReqDateVO">
-    /* USE : outstockReqDateMapper.updateReqDateDays */
-    UPDATE  TB_PO_HQ_STORE_ORDER_DAYS
-    SET     REQ_NO_DAY      = #{reqNoDay},
-            REMARK          = #{daysRemark},
-            REG_DT          = #{regDt},
-            REG_ID          = #{regId},
-            MOD_DT          = #{modDt},
-            MOD_ID          = #{modId}
-    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
-    AND     STORE_CD     = #{storeCd}
+        /* USE : outstockReqDateMapper.updateReqDateDays */
+        UPDATE  TB_PO_HQ_STORE_ORDER_DAYS
+        SET     REQ_NO_DAY      = #{reqNoDay},
+                REMARK          = #{daysRemark},
+                REG_DT          = #{regDt},
+                REG_ID          = #{regId},
+                MOD_DT          = #{modDt},
+                MOD_ID          = #{modId}
+        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     STORE_CD     = #{storeCd}
     </update>
 
     <!-- 출고요청일관리 특정일 조회 -->
@@ -138,11 +138,11 @@
         WHERE   tphsos.HQ_OFFICE_CD =   #{hqOfficeCd}
         AND     tms.STORE_CD        =   tphsos.STORE_CD
         ]]>
-        <if test='storeCd != null and storeCd != ""'>
-            AND tms.STORE_CD = #{storeCd}
-        </if>
-        <if test='storeNm != null and storeNm != ""'>
-            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tphsos.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         ORDER BY tphsos.STORE_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -155,31 +155,31 @@
         COMMENTS : 출고요청일관리의 특정일을 등록한다.
     -->
     <insert id="insertSpecificDate" parameterType="outstockReqDateVO">
-    /* USE : outstockReqDateMapper.insertSpecificDate */
-    INSERT INTO TB_PO_HQ_STORE_ORDER_SPECIFIC
-    (
-        HQ_OFFICE_CD,
-        STORE_CD,
-        SPECIFIC_DATE,
-        OUTSTOCK_REQ_YN,
-        REMARK,
-        REG_DT,
-        REG_ID,
-        MOD_DT,
-        MOD_ID
-    )
-    VALUES
-    (
-        #{hqOfficeCd},
-        #{storeCd},
-        #{specificDate},
-        #{outstockReqYn},
-        #{specificDateRemark},
-        #{regDt},
-        #{regId},
-        #{modDt},
-        #{modId}
-    )
+        /* USE : outstockReqDateMapper.insertSpecificDate */
+        INSERT INTO TB_PO_HQ_STORE_ORDER_SPECIFIC
+        (
+            HQ_OFFICE_CD,
+            STORE_CD,
+            SPECIFIC_DATE,
+            OUTSTOCK_REQ_YN,
+            REMARK,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        VALUES
+        (
+            #{hqOfficeCd},
+            #{storeCd},
+            #{specificDate},
+            #{outstockReqYn},
+            #{specificDateRemark},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
     </insert>
 
     <!-- 출고요청일관리 특정일 저장 -->
@@ -189,15 +189,15 @@
         COMMENTS : 출고요청일관리의 특정일을 수정한다.
     -->
     <update id="updateSpecificDate" parameterType="outstockReqDateVO">
-    /* USE : outstockReqDateMapper.updateSpecificDate */
-    UPDATE  TB_PO_HQ_STORE_ORDER_SPECIFIC
-    SET     OUTSTOCK_REQ_YN = #{outstockReqYn},
-            REMARK          = #{specificDateRemark},
-            MOD_DT          = #{modDt},
-            MOD_ID          = #{modId}
-    WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
-    AND     STORE_CD      = #{storeCd}
-    AND     SPECIFIC_DATE = #{specificDate}
+        /* USE : outstockReqDateMapper.updateSpecificDate */
+        UPDATE  TB_PO_HQ_STORE_ORDER_SPECIFIC
+        SET     OUTSTOCK_REQ_YN = #{outstockReqYn},
+                REMARK          = #{specificDateRemark},
+                MOD_DT          = #{modDt},
+                MOD_ID          = #{modId}
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     STORE_CD      = #{storeCd}
+        AND     SPECIFIC_DATE = #{specificDate}
     </update>
 
     <!-- 출고요청일관리 특정일 삭제 -->
@@ -207,11 +207,11 @@
         COMMENTS : 출고요청일관리의 특정일을 삭제한다.
     -->
     <delete id="deleteSpecificDate" parameterType="outstockReqDateVO">
-    /* USE : outstockReqDateMapper.deleteSpecificDate */
-    DELETE  TB_PO_HQ_STORE_ORDER_SPECIFIC
-    WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
-    AND     STORE_CD      = #{storeCd}
-    AND     SPECIFIC_DATE = #{specificDate}
+        /* USE : outstockReqDateMapper.deleteSpecificDate */
+        DELETE  TB_PO_HQ_STORE_ORDER_SPECIFIC
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     STORE_CD      = #{storeCd}
+        AND     SPECIFIC_DATE = #{specificDate}
     </delete>
 
 
@@ -237,31 +237,31 @@
         COMMENTS : 출고요청일관리의 특정일을 복사한다.
     -->
     <insert id="insertCopySpecificDate" parameterType="outstockReqDateVO">
-    /* USE : outstockReqDateMapper.insertCopySpecificDate */
-    INSERT INTO TB_PO_HQ_STORE_ORDER_SPECIFIC
-    (
-        HQ_OFFICE_CD,
-        STORE_CD,
-        SPECIFIC_DATE,
-        OUTSTOCK_REQ_YN,
-        REMARK,
-        REG_DT,
-        REG_ID,
-        MOD_DT,
-        MOD_ID
-    )
-    VALUES
-    (
-        #{hqOfficeCd},
-        #{copyStoreCd},
-        #{specificDate},
-        #{outstockReqYn},
-        #{specificDateRemark},
-        #{regDt},
-        #{regId},
-        #{modDt},
-        #{modId}
-    )
+        /* USE : outstockReqDateMapper.insertCopySpecificDate */
+        INSERT INTO TB_PO_HQ_STORE_ORDER_SPECIFIC
+        (
+            HQ_OFFICE_CD,
+            STORE_CD,
+            SPECIFIC_DATE,
+            OUTSTOCK_REQ_YN,
+            REMARK,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        VALUES
+        (
+            #{hqOfficeCd},
+            #{copyStoreCd},
+            #{specificDate},
+            #{outstockReqYn},
+            #{specificDateRemark},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
     </insert>
 
     <!-- 복사할 매장의 이전 출고요청일관리 요일 삭제 -->
@@ -271,10 +271,10 @@
         COMMENTS : 복사할 매장의 이전 출고요청일관리 요일을 삭제한다.
     -->
     <delete id="deleteAllCopyDays" parameterType="outstockReqDateVO">
-    /* USE : outstockReqDateMapper.deleteAllCopyDays */
-    DELETE  TB_PO_HQ_STORE_ORDER_DAYS
-    WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
-    AND     STORE_CD      = #{copyStoreCd}
+        /* USE : outstockReqDateMapper.deleteAllCopyDays */
+        DELETE  TB_PO_HQ_STORE_ORDER_DAYS
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     STORE_CD      = #{copyStoreCd}
     </delete>
 
     <!-- 출고요청일관리 요일별 요일 복사 -->
@@ -284,29 +284,29 @@
         COMMENTS : 출고요청일관리의 요일을 복사한다.
     -->
     <insert id="insertCopyDays" parameterType="outstockReqDateVO">
-    /* USE : outstockReqDateMapper.insertCopyDays */
-    INSERT INTO TB_PO_HQ_STORE_ORDER_DAYS
-    (
-        HQ_OFFICE_CD,
-        STORE_CD,
-        REQ_NO_DAY,
-        REMARK,
-        REG_DT,
-        REG_ID,
-        MOD_DT,
-        MOD_ID
-    )
-    SELECT  HQ_OFFICE_CD,
-            #{copyStoreCd},
+        /* USE : outstockReqDateMapper.insertCopyDays */
+        INSERT INTO TB_PO_HQ_STORE_ORDER_DAYS
+        (
+            HQ_OFFICE_CD,
+            STORE_CD,
             REQ_NO_DAY,
             REMARK,
-            #{regDt},
-            #{regId},
-            #{modDt},
-            #{modId}
-    FROM    TB_PO_HQ_STORE_ORDER_DAYS
-    WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
-    AND     STORE_CD      = #{storeCd}
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        SELECT  HQ_OFFICE_CD,
+                #{copyStoreCd},
+                REQ_NO_DAY,
+                REMARK,
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+        FROM    TB_PO_HQ_STORE_ORDER_DAYS
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     STORE_CD      = #{storeCd}
     </insert>
 
 
