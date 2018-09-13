@@ -52,23 +52,26 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
  */
 @Service("touchKeyService")
 public class TouchKeyServiceImpl implements TouchKeyService {
-    
+
+    // logger
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    // Constructor Injection
     private final MessageService messageService;
-    private TouchKeyMapper mapper;
-    private TableAttrMapper attrMapper;
+    private final TouchKeyMapper keyMapper;
+    private final TableAttrMapper attrMapper;
 
     @Autowired
-    public TouchKeyServiceImpl(MessageService messageService, TouchKeyMapper mapper, TableAttrMapper attrMapper) {
+    public TouchKeyServiceImpl(MessageService messageService, TouchKeyMapper keyMapper,
+        TableAttrMapper attrMapper) {
         this.messageService = messageService;
-        this.mapper = mapper;
+        this.keyMapper = keyMapper;
         this.attrMapper = attrMapper;
     }
 
     /** 상품목록 조회 */
     @Override
     public List<DefaultMap<String>> selectProdByStore(TouchVO touchVO) {
-        return mapper.selectProdByStore(touchVO);
+        return keyMapper.selectProdByStore(touchVO);
     }
 
     @Override
@@ -108,9 +111,9 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         List<TouchClassVO> touchClasssVOs = parseXML(xml);
 
         //매장의 현재 설정정보 삭제
-        mapper.deleteTouchClassByStore(sessionInfoVO.getOrgnCd());
+        keyMapper.deleteTouchClassByStore(sessionInfoVO.getOrgnCd());
 
-        mapper.deleteTouchByStore(sessionInfoVO.getOrgnCd());
+        keyMapper.deleteTouchByStore(sessionInfoVO.getOrgnCd());
 
         //리스트의 아이템을 DB에 Merge
         for(TouchClassVO touchClassVO : touchClasssVOs) {
@@ -118,14 +121,14 @@ public class TouchKeyServiceImpl implements TouchKeyService {
             touchClassVO.setStoreCd(sessionInfoVO.getOrgnCd());
             touchClassVO.setRegId(sessionInfoVO.getUserId());
 
-            if( mapper.insertTouchClassByStore(touchClassVO) != 1 ) {
+            if( keyMapper.insertTouchClassByStore(touchClassVO) != 1 ) {
                 throw new BizException( messageService.get("label.modifyFail") );
             }
             //테이블 저장
             for(TouchVO touchVO : touchClassVO.getTouchs()) {
                 touchVO.setStoreCd(sessionInfoVO.getOrgnCd());
                 touchVO.setRegId(sessionInfoVO.getUserId());
-                if( mapper.insertTouchByStore(touchVO) != 1 ) {
+                if( keyMapper.insertTouchByStore(touchVO) != 1 ) {
                     throw new BizException( messageService.get("label.modifyFail") );
                 }
             }
@@ -240,12 +243,13 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         }
         return touchClassVOs;
     }
+
     /**
      * 레이어 id로 해당 레이어에 있는 테이블 List 추출
-     * @param graph
-     * @param layerId
-     * @param tableClassVO
-     * @return
+     * @param graph mxGraph
+     * @param layerId String
+     * @param tableClassVO TouchClassVO
+     * @return List
      */
     private List<TouchVO> getTouchs(mxGraph graph, String layerId, TouchClassVO tableClassVO) {
 
