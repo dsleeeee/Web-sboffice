@@ -11,6 +11,7 @@ import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.pay.coupon.service.*;
 import kr.co.solbipos.base.pay.coupon.service.enums.CoupnEnvFg;
 import org.slf4j.Logger;
@@ -79,16 +80,17 @@ public class CouponController {
         String coupnEnvstVal = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, envstCd));
         String orgnFg = String.valueOf(sessionInfoVO.getOrgnFg());
 
-//        LOGGER.info("======================> coupnEnvstVal : "+ coupnEnvstVal);
-//        LOGGER.info("======================> CoupnEnvFg enum : "+ CoupnEnvFg.getEnum(coupnEnvstVal));
-//        LOGGER.info("======================> CoupnEnvFg enum : "+ CoupnEnvFg.getEnum(coupnEnvstVal).toString());
-//        LOGGER.info("======================> orgnFg : "+ sessionInfoVO.getOrgnFg());
+        LOGGER.info("======================> coupnEnvstVal : "+ coupnEnvstVal);
+        LOGGER.info("======================> CoupnEnvFg enum : "+ CoupnEnvFg.getEnum(coupnEnvstVal));
+        LOGGER.info("======================> CoupnEnvFg enum : "+ CoupnEnvFg.getEnum(coupnEnvstVal).toString());
+        LOGGER.info("======================> orgnFg : "+ sessionInfoVO.getOrgnFg());
 
         // 환경설정값 체크 : [0019] 쿠폰등록-본사통제여부 확인 ( 1: 매장통제, 2:본사통제 )
         // 매장통제, 본사통제 둘다 메뉴 사용 가능하지만 null인 경우는 사용 불가능.
         // 해당 환경설정값이 없는 경우, 본사환경설정에서 환경설정 필요.
         // 본사통제인데 매장에서 접속시, 권한 오류
-        if("".equals(coupnEnvstVal) || !(orgnFg.equals(CoupnEnvFg.getEnum(coupnEnvstVal).toString()))) {
+//        if("".equals(coupnEnvstVal) || !(orgnFg.equals(CoupnEnvFg.getEnum(coupnEnvstVal).toString()))) {
+        if("".equals(coupnEnvstVal) || ("2".equals(coupnEnvstVal) && sessionInfoVO.getOrgnFg() == OrgnFg.STORE )) {
             throw new CodeException(CodeType.HQ_ENV, envstCd, "/error/envError.sb");
         } else{
             model.addAttribute("coupnEnvstVal", coupnEnvstVal);

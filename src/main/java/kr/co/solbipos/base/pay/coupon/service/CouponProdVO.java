@@ -37,6 +37,8 @@ public class CouponProdVO extends CmmVO {
     private UseYn prodRegFg;
     /** 쿠폰등록 본사 통제여부 */
     private CoupnEnvFg coupnEnvstVal;
+    /** 기능키 관련 프로시져 실행 결과 */
+    private String result;
 
 
     /**
@@ -158,5 +160,20 @@ public class CouponProdVO extends CmmVO {
      */
     public void setCoupnEnvstVal(CoupnEnvFg coupnEnvstVal) {
         this.coupnEnvstVal = coupnEnvstVal;
+    }
+
+    /**
+     * @return the result
+     */
+
+    public String getResult() {
+        return result;
+    }
+
+    /**
+     * @param result the result to set
+     */
+    public void setResult(String result) {
+        this.result = result;
     }
 }

@@ -203,13 +203,30 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
           e.cancel = false;
         }
       }
-      // 상품수량과 적용매장수는 수정할 수 없음.
-      // if(e.col == 9 || e.col == 10) {
-      //   e.cancel = true;
-      // }
     });
 
-    // 쿠폰 그리드 선택 이벤트
+    s.cellEditEnded.addHandler(function (s, e) {
+      var col = s.columns[e.col];
+      var dataItem = s.rows[e.row].dataItem;
+
+      console.log(col)
+
+      if(col.binding == "coupnDcFg") {
+        // 할인구분 => 금액 관련이면, 할인율은 입력못함
+        if(dataItem.coupnDcFg == "3" || dataItem.coupnDcFg == "4" || dataItem.coupnDcFg == "6") {
+          console.log('1')
+          dataItem.coupnDcRate = "";
+        }
+        // 할인구분 => % 관련이면, 할인금액 입력못함
+        else if(dataItem.coupnDcFg == "1" || dataItem.coupnDcFg == "2") {
+          console.log('2')
+          dataItem.coupnDcAmt = "";
+        }
+      }
+
+    });
+
+      // 쿠폰 그리드 선택 이벤트
     s.addEventListener(s.hostElement, 'mousedown', function(e) {
       var ht = s.hitTest(e);
       if( ht.cellType === wijmo.grid.CellType.Cell) {

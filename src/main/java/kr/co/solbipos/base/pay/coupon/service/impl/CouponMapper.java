@@ -30,10 +30,13 @@ import java.util.List;
 public interface CouponMapper {
 
     /** 본사 쿠폰 분류 조회 */
-    List<DefaultMap<String>> getHqCouponClassList(PayMethodClassVO payMethodAClassVO);
+    List<DefaultMap<String>> getHqCouponClassList(PayMethodClassVO payMethodClassVO);
 
     /** 매장 쿠폰 분류 조회 */
-    List<DefaultMap<String>> getStoreCouponClassList(PayMethodClassVO payMethodAClassVO);
+    List<DefaultMap<String>> getStoreCouponClassList(PayMethodClassVO payMethodClassVO);
+
+    /** 쿠폰 분류코드 조회 */
+    String getPayMethodClassCd(PayMethodClassVO payMethodClassVO);
 
     /** 본사 쿠폰 분류 등록 */
     int insertHqCouponClass(PayMethodClassVO payMethodClassVO);
@@ -44,20 +47,32 @@ public interface CouponMapper {
     /** 본사 쿠폰 분류 삭제 */
     int deleteHqCouponClass(PayMethodClassVO payMethodClassVO);
 
-    /** 본사 쿠폰 분류 등록 */
+    /** 매장 쿠폰 분류 등록 */
     int insertStoreCouponClass(PayMethodClassVO payMethodClassVO);
 
-    /** 본사 쿠폰 분류 수정 */
+    /** 매장 쿠폰 분류 수정 */
     int updateStoreCouponClass(PayMethodClassVO payMethodClassVO);
 
-    /** 본사 쿠폰 분류 삭제 */
+    /** 매장 쿠폰 분류 삭제 */
     int deleteStoreCouponClass(PayMethodClassVO payMethodClassVO);
+
+    /** 본사 쿠폰 분류 등록 프로시져 */
+    String insertHqCouponClassToStore(PayMethodClassVO payMethodClassVO);
+
+    /** 본사 쿠폰 분류 수정 프로시져 */
+    String updateHqCouponClassToStore(PayMethodClassVO payMethodClassVO);
+
+    /** 본사 쿠폰 분류 삭제 프로시져 */
+    String deleteHqCouponClassToStore(PayMethodClassVO payMethodClassVO);
 
     /** 본사 쿠폰 조회 */
     List<DefaultMap<String>> getHqCouponList(CouponVO couponVO);
 
     /** 매장 쿠폰 조회*/
     List<DefaultMap<String>> getStoreCouponList(CouponVO couponVO);
+
+    /** 쿠폰 코드 조회 */
+    String getCouponCd(CouponVO couponVO);
 
     /** 본사 쿠폰 등록 */
     int insertHqCoupon(CouponVO couponVO);
@@ -67,6 +82,15 @@ public interface CouponMapper {
 
     /** 본사 쿠폰 삭제 */
     int deleteHqCoupon(CouponVO couponVO);
+
+    /** 본사 쿠폰 등록 프로시져 */
+    String insertHqCouponToStore(CouponVO couponVO);
+
+    /** 본사 쿠폰 등록 프로시져 */
+    String updateHqCouponToStore(CouponVO couponVO);
+
+    /** 본사 쿠폰 등록 프로시져 */
+    String deleteHqCouponToStore(CouponVO couponVO);
 
     /** 매장 쿠폰 등록 */
     int insertStoreCoupon(CouponVO couponVO);
@@ -95,6 +119,12 @@ public interface CouponMapper {
     /** 매장 쿠폰 적용 상품 삭제 */
     int deleteStoreCouponProd(CouponProdVO couponProdVO);
 
+    /** 본사 쿠폰 적용 상품 등록 프로시져 */
+    String insertHqCouponProdToStore(CouponProdVO couponProdVO);
+
+    /** 본사 쿠폰 적용 상품 삭제 프로시져 */
+    String deleteHqCouponProdToStore(CouponProdVO couponProdVO);
+
     /** 쿠폰 적용/미적용 매장 조회 */
     List<DefaultMap<String>> getStoreList(CouponStoreVO couponStoreVO);
 
@@ -103,4 +133,5 @@ public interface CouponMapper {
 
     /** 쿠폰 적용 매장 삭제 */
     int deleteCouponStore(CouponStoreVO couponStoreVO);
+
 }

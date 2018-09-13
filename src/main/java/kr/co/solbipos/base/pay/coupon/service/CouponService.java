@@ -24,7 +24,7 @@ import java.util.Map;
 public interface CouponService {
 
     /** 쿠폰분류 조회 */
-    List<DefaultMap<String>> getCouponClassList(PayMethodClassVO payMethodAClassVO, SessionInfoVO sessionInfoVO);
+    List<DefaultMap<String>> getCouponClassList(PayMethodClassVO payMethodClassVO, SessionInfoVO sessionInfoVO);
 
     /** 쿠폰분류 저장 */
     int saveCouponClassList(PayMethodClassVO[] payMethodClassVOs, SessionInfoVO sessionInfoVO);

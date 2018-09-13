@@ -64,6 +64,7 @@ public class CouponServiceImpl implements CouponService {
             payMethodClassVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
 
             returnList = mapper.getHqCouponClassList(payMethodClassVO);
+
         }
         // 매장 통제
         else if(payMethodClassVO.getCoupnEnvstVal() == CoupnEnvFg.STORE) {
@@ -97,16 +98,37 @@ public class CouponServiceImpl implements CouponService {
 
             // 본사 통제
             if(payMethodClassVO.getCoupnEnvstVal() == CoupnEnvFg.HQ) {
+
+                PayMethodClassVO resultVO = new PayMethodClassVO();
+
                 payMethodClassVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
 
                 if(payMethodClassVO.getStatus() == GridDataFg.INSERT) {
+
+                    String payMethodClassCd = mapper.getPayMethodClassCd(payMethodClassVO);
+                    payMethodClassVO.setPayClassCd(payMethodClassCd);
+
                     procCnt += mapper.insertHqCouponClass(payMethodClassVO);
+
+                    // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분류에도 본사의 쿠폰분류 적용.
+                    String payMethodClassResult = mapper.insertHqCouponClassToStore(payMethodClassVO);
+                    resultVO.setResult(payMethodClassResult);
                 }
                 else if(payMethodClassVO.getStatus() == GridDataFg.UPDATE) {
                     procCnt += mapper.updateHqCouponClass(payMethodClassVO);
+
+                    // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분류에도 본사의 쿠폰분류 적용.
+                    String payMethodClassResult = mapper.updateHqCouponClassToStore(payMethodClassVO);
+                    resultVO.setResult(payMethodClassResult);
+
                 }
                 else if(payMethodClassVO.getStatus() == GridDataFg.DELETE) {
                     procCnt += mapper.deleteHqCouponClass(payMethodClassVO);
+
+                    // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분류에도 본사의 쿠폰분류 적용.
+                    String payMethodClassResult = mapper.deleteHqCouponClassToStore(payMethodClassVO);
+                    resultVO.setResult(payMethodClassResult);
+
                 }
             }
             // 매장 통제
@@ -114,6 +136,10 @@ public class CouponServiceImpl implements CouponService {
                 payMethodClassVO.setStoreCd(sessionInfoVO.getOrgnCd());
 
                 if(payMethodClassVO.getStatus() == GridDataFg.INSERT) {
+
+                    String payMethodClassCd = mapper.getPayMethodClassCd(payMethodClassVO);
+                    payMethodClassVO.setPayClassCd(payMethodClassCd);
+
                     procCnt += mapper.insertStoreCouponClass(payMethodClassVO);
                 }
                 else if(payMethodClassVO.getStatus() == GridDataFg.UPDATE) {
@@ -178,16 +204,34 @@ public class CouponServiceImpl implements CouponService {
             // 본사 통제
             if(couponVO.getCoupnEnvstVal() == CoupnEnvFg.HQ) {
 
-                couponVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
+                couponVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+                CouponVO resultVO = new CouponVO();
 
                 if(couponVO.getStatus() == GridDataFg.INSERT) {
+
+                    String coupnCd = mapper.getCouponCd(couponVO);
+                    couponVO.setCoupnCd(coupnCd);
+
                     procCnt += mapper.insertHqCoupon(couponVO);
+
+                    // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분에도 본사의 쿠폰 적용.
+                    String couponResult = mapper.insertHqCouponToStore(couponVO);
+                    resultVO.setResult(couponResult);
                 }
                 else if(couponVO.getStatus() == GridDataFg.UPDATE) {
                     procCnt += mapper.updateHqCoupon(couponVO);
+                    // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분에도 본사의 쿠폰 적용.
+                    String couponResult = mapper.updateHqCouponToStore(couponVO);
+                    resultVO.setResult(couponResult);
+
                 }
                 else if(couponVO.getStatus() == GridDataFg.DELETE) {
                     procCnt += mapper.deleteHqCoupon(couponVO);
+                    // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분에도 본사의 쿠폰 적용.
+                    String couponResult = mapper.deleteHqCouponToStore(couponVO);
+                    resultVO.setResult(couponResult);
+
                 }
             }
             // 매장 통제
@@ -196,6 +240,9 @@ public class CouponServiceImpl implements CouponService {
                 couponVO.setStoreCd(sessionInfoVO.getStoreCd());
 
                 if(couponVO.getStatus() == GridDataFg.INSERT) {
+
+                    String coupnCd = mapper.getCouponCd(couponVO);
+                    couponVO.setCoupnCd(coupnCd);
                     procCnt += mapper.insertStoreCoupon(couponVO);
                 }
                 else if(couponVO.getStatus() == GridDataFg.UPDATE) {
@@ -251,8 +298,16 @@ public class CouponServiceImpl implements CouponService {
             couponProdVO.setModDt(dt);
             couponProdVO.setModId(sessionInfoVO.getUserId());
 
+
+
             if(couponProdVO.getCoupnEnvstVal() == CoupnEnvFg.HQ ) {
                 procCnt += mapper.insertHqCouponProd(couponProdVO);
+
+                // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분에도 본사의 쿠폰 적용.
+                CouponProdVO resultVO = new CouponProdVO();
+                String couponResult = mapper.insertHqCouponProdToStore(couponProdVO);
+                resultVO.setResult(couponResult);
+
             } else if(couponProdVO.getCoupnEnvstVal() == CoupnEnvFg.STORE ) {
                 procCnt += mapper.insertStoreCouponProd(couponProdVO);
             }
@@ -269,7 +324,14 @@ public class CouponServiceImpl implements CouponService {
 
         for(CouponProdVO couponProdVO : couponProdVOs) {
             if(couponProdVO.getCoupnEnvstVal() == CoupnEnvFg.HQ ) {
+
                 procCnt += mapper.deleteHqCouponProd(couponProdVO);
+
+                // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분에도 본사의 쿠폰 적용.
+                CouponProdVO resultVO = new CouponProdVO();
+                String couponResult = mapper.deleteHqCouponProdToStore(couponProdVO);
+                resultVO.setResult(couponResult);
+
             } else if(couponProdVO.getCoupnEnvstVal() == CoupnEnvFg.STORE ) {
                 procCnt += mapper.deleteStoreCouponProd(couponProdVO);
             }

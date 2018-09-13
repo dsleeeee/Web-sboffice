@@ -38,6 +38,8 @@ public class PayMethodClassVO extends CmmVO {
     private UseYn useYn;
     /** 쿠폰등록 본사 통제여부 */
     private CoupnEnvFg coupnEnvstVal;
+    /** 기능키 관련 프로시져 실행 결과 */
+    private String result;
 
     /**
      * @return the hqOfficeCd
@@ -152,4 +154,19 @@ public class PayMethodClassVO extends CmmVO {
      * @param coupnEnvstVal the coupnEnvstVal to set
      */
     public void setCoupnEnvstVal(CoupnEnvFg coupnEnvstVal) { this.coupnEnvstVal = coupnEnvstVal; }
+
+    /**
+     * @return the result
+     */
+
+    public String getResult() {
+        return result;
+    }
+
+    /**
+     * @param result the result to set
+     */
+    public void setResult(String result) {
+        this.result = result;
+    }
 }
