@@ -74,12 +74,14 @@ Graph.prototype.initProdArea = function (group, sidebar) {
     if (graph.pageNo > 1) {
       graph.pageNo -= 1;
       wrap.scrollLeft -= scrollWidth;
+      console.log("scrollWidth-", scrollWidth);
     }
   });
   addClickHandler(document.getElementById('prn'), function () {
     if (graph.pageNo < graph.MAX_PAGE) {
       graph.pageNo += 1;
       wrap.scrollLeft += scrollWidth;
+      console.log("scrollWidth+", scrollWidth);
     }
   });
 

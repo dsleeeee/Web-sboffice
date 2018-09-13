@@ -61,11 +61,6 @@
     box-sizing: border-box;
 }
 
-.wj-control .wj-template {
-    position: relative;
-    display: unset;
-}
-
 .wj-control .wj-input-group {
     border-collapse: unset;
     width: auto;
