@@ -9,6 +9,7 @@
     No  ||  수정자 ||  수정일자    ||  수정내역
     ======================================================
     1       노현수     2018.09.08     파일 재생성, 주석생성
+    2       노현수     2018.09.13     파일 재생성
 -->
 <mapper namespace="kr.co.solbipos.base.prod.touchkey.service.impl.TouchKeyMapper">
 
