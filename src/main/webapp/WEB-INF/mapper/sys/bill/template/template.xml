@@ -90,7 +90,7 @@
             MOD_ID
         ) VALUES (
             #{prtClassCd},
-            ( SELECT TRIM(TO_CHAR(MAX(tcpt.TEMPLT_CD) + 1, '000')) FROM TB_CM_PRINT_TEMPL tcpt WHERE tcpt.PRT_CLASS_CD = #{prtClassCd} ),
+            ( SELECT NVL(TRIM(TO_CHAR(MAX(tcpt.TEMPLT_CD) + 1, '000')), '000') FROM TB_CM_PRINT_TEMPL tcpt WHERE tcpt.PRT_CLASS_CD = #{prtClassCd} ),
             #{templtNm},
             #{prtForm, jdbcType=VARCHAR},
             #{regDt},

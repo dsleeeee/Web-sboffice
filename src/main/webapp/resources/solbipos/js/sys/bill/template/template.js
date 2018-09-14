@@ -8,7 +8,6 @@
  * 2018.07.30     노현수      1.0
  *
  * **************************************************************/
-var gridTemplate;
 $(document).ready(function () {
 
   // 출력물종류 선택 콤보박스
@@ -25,10 +24,11 @@ $(document).ready(function () {
         dataType: wijmo.DataType.Boolean,
         width: 40
       },
-      {binding: "templtNm", header: messages["template.templtNm"], width: "*"}
+      {binding: "templtNm", header: messages["template.templtNm"], width: "*"},
+      {binding: "prtForm", header: messages["template.prtForm"], visible: false}
     ];
   // 템플릿 그리드 생성
-  gridTemplate = wgrid.genGrid("#gridTemplate", gridTemplateData);
+  var gridTemplate = wgrid.genGrid("#gridTemplate", gridTemplateData);
   gridTemplate.isReadOnly = false;
 
   // ReadOnly 효과설정
@@ -101,6 +101,8 @@ $(document).ready(function () {
   // 템플릿 저장버튼 클릭
   $("#btnSaveTemplate").click(function (e) {
 
+    console.log(gridTemplate.collectionView);
+
     var paramArr = new Array();
     for (var i = 0; i < gridTemplate.collectionView.itemsEdited.length; i++) {
       gridTemplate.collectionView.itemsEdited[i].status = "U";
@@ -109,7 +111,7 @@ $(document).ready(function () {
     }
     for (var i = 0; i < gridTemplate.collectionView.itemsAdded.length; i++) {
       gridTemplate.collectionView.itemsAdded[i].status = "I";
-      gridTemplate.collectionView.itemsEdited[i].prtForm = theTarget.value;
+      gridTemplate.collectionView.itemsAdded[i].prtForm = theTarget.value;
       paramArr.push(gridTemplate.collectionView.itemsAdded[i]);
     }
     for (var i = 0; i < gridTemplate.collectionView.itemsRemoved.length; i++) {
