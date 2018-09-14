@@ -367,7 +367,9 @@
     <typeAlias alias="monthVO" type="kr.co.solbipos.adi.dclz.month.service.MonthVO"/>
     <typeAlias alias="planVO" type="kr.co.solbipos.adi.dclz.plan.service.PlanVO"/>
     <typeAlias alias="adjVO" type="kr.co.solbipos.adi.dclz.adj.service.AdjVO"/>
+-->
     <typeAlias alias="cdVO" type="kr.co.solbipos.adi.etc.cd.service.CdVO"/>
+<!--
     <typeAlias alias="resveVO" type="kr.co.solbipos.adi.etc.resve.service.ResveVO"/>
 -->
     <typeAlias alias="kitchenMemoVO" type="kr.co.solbipos.adi.etc.kitchenmemo.service.KitchenMemoVO"/>

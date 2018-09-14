@@ -1,9 +1,11 @@
 package kr.co.solbipos.sys.cd.systemcd.service.impl;
 
-import java.util.List;
-import org.apache.ibatis.annotations.Mapper;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.sys.cd.systemcd.service.SystemCdVO;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @Class Name : SystemCdMapper.java
@@ -22,6 +24,7 @@ import kr.co.solbipos.sys.cd.systemcd.service.SystemCdVO;
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Mapper
+@Repository
 public interface SystemCdMapper {
     
     /** 대표명칭 코드목록 조회 */

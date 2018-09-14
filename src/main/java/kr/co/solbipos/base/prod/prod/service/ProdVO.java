@@ -3,8 +3,6 @@ package kr.co.solbipos.base.prod.prod.service;
 import kr.co.solbipos.application.common.service.PageVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 
-import javax.validation.constraints.Size;
-
 /**
  * @author NHN한국사이버결제 KCP 장혁수
  * @version 1.0
@@ -15,7 +13,8 @@ import javax.validation.constraints.Size;
  * @ 수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2018.08.06  장혁수      최초생성
- * @see Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @see
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  * @since 2018. 08.06
  */
 public class ProdVO extends PageVO {
