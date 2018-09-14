@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SimpleMemberJoin.xml
+    POS 화면에서 간편 회원가입
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       안동관     2018.08.14     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.application.pos.service.impl.SimpleMemberJoinMapper">
+
+  <!-- 회원등급 콤보리스트  조회 -->
+  <!--
+      TABLE    : TB_MB_MEMBER_CLASS
+      PARAM    : sessionInfoVO
+      COMMENTS : 회원등록시 사용할 회원등급콤보리스트를 조회한다.
+  -->
+  <select id="getMemberClassComboList" parameterType="sessionInfoVO" resultType="DefaultMap">
+    /* USE : SimpleMemberJoinMapper.getMemberClassComboList */
+    <![CDATA[
+    SELECT '' AS VALUE,
+           '선택' AS NAME
+      FROM DUAL
+     UNION
+    SELECT tmmc.MEMBER_CLASS_CD AS VALUE,
+           tmmc.MEMBER_CLASS_NM AS NAME
+      FROM TB_MB_MEMBER_CLASS tmmc
+     WHERE tmmc.MEMBR_ORGN_CD = #{orgnGrpCd}
+     ORDER BY VALUE NULLS FIRST
+    ]]>
+  </select>
+
+    <!-- 신규회원번호 조회 -->
+    <!--
+        TABLE    : TB_MB_MEMBER
+        PARAM    : sessionInfoVO
+        COMMENTS : 회원등록시 사용할 신규회원번호를 조회한다.
+    -->
+  <select id="getNewMembrNo" parameterType="sessionInfoVO" resultType="String">
+        /* USE : SimpleMemberJoinMapper.getNewMembrNo */
+      SELECT LPAD(NVL(MAX(tmm.MEMBR_NO), '0')+1, 10, '0')
+        FROM TB_MB_MEMBER tmm
+       WHERE tmm.MEMBR_ORGN_CD = #{orgnGrpCd}
+  </select>
+
+    <!-- 신규 회원 저장 -->
+  <!--
+      TABLE    : TB_MB_MEMBER
+      PARAM    : memberVO
+      COMMENTS : 신규 회원을 등록한다.
+  -->
+  <insert id="insertMember" parameterType="memberVO">
+    /* USE : SimpleMemberJoinMapper.insertMember */
+    INSERT INTO TB_MB_MEMBER
+    (
+        MEMBR_ORGN_CD,
+        MEMBR_NO,
+        MEMBR_NM,
+        MEMBR_NICKNM,
+        MEMBR_CLASS_CD,
+        MEMBR_CARD_NO,
+        REG_STORE_CD,
+        POST_NO,
+        ADDR,
+        ADDR_DTL,
+        BIRTHDAY,
+        LUNAR_YN,
+        GENDR_FG,
+        EMAIL_ADDR,
+        SHORT_NO,
+        TEL_NO,
+        WEDDING_YN,
+        WEDDINGDAY,
+        EMAIL_RECV_YN,
+        SMS_RECV_YN,
+        USE_YN,
+        REMARK,
+        REG_DT,
+        REG_ID,
+        MOD_DT,
+        MOD_ID,
+        MEMBER_ENG_NM
+    )
+    VALUES
+    (
+        #{membrOrgnCd},
+        #{membrNo},
+        #{membrNm},
+        #{membrNicknm},
+        #{membrClassCd},
+        #{membrCardNo},
+        #{regStoreCd},
+        #{postNo},
+        #{addr},
+        #{addrDtl},
+        #{birthday},
+        #{lunarYn},
+        #{gendrFg},
+        #{emailAddr},
+        #{shortNo},
+        #{telNo},
+        #{weddingYn},
+        #{weddingday},
+        #{emailRecvYn},
+        #{smsRecvYn},
+        #{useYn},
+        #{remark},
+        #{regDt},
+        #{regId},
+        #{modDt},
+        #{modId},
+        #{memberEngNm}
+    )
+  </insert>
+
+</mapper>
