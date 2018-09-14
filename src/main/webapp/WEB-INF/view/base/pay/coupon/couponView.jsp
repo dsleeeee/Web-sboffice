@@ -34,7 +34,7 @@
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='coupon.regist.class' /></span>
         <button class="btn_skyblue" id="btnClassAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
-        <button class="btn_skyblue" id="btnClassDel" ng-click="del()"><s:message code='cmm.del' /></button>
+        <%--<button class="btn_skyblue" id="btnClassDel" ng-click="del()"><s:message code='cmm.del' /></button>--%>
         <button class="btn_skyblue" id="btnClassSave" ng-click="save()"><s:message code='cmm.save' /></button>
       </div>
       <%-- 쿠폰분류등록 그리드 --%>
@@ -60,11 +60,6 @@
           <wj-flex-grid-column header="<s:message code="coupon.couponCnt"/>" binding="couponCnt" visible="false"></wj-flex-grid-column>
 
         </wj-flex-grid>
-        <%-- ColumnPicker 사용시 include --%>
-        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-          <jsp:param name="pickerTarget" value="representCtrl"/>
-        </jsp:include>
-        <%--// ColumnPicker 사용시 include --%>
       </div>
     </div>
   </div>

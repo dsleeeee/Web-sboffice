@@ -25,12 +25,14 @@ public class CouponVO extends CmmVO {
     private String hqOfficeCd;
     /** 매장코드 */
     private String storeCd;
+    /** 쿠폰등록구분 */
+    private String coupnRegFg;
+    /** 권종분류코드 */
+    private String payClassCd;
     /** 쿠폰코드 */
     private String coupnCd;
     /** 쿠폰명 */
     private String coupnNm;
-    /** 권종분류코드 */
-    private String payClassCd;
     /** 쿠폰할인구분 */
     private String coupnDcFg;
     /** 쿠폰할인율 */
@@ -74,6 +76,21 @@ public class CouponVO extends CmmVO {
      */
     public void setStoreCd(String storeCd) {
         this.storeCd = storeCd;
+    }
+
+    /**
+     * @return the coupnRegFg
+     */
+
+    public String getCoupnRegFg() {
+        return coupnRegFg;
+    }
+
+    /**
+     * @param coupnRegFg the coupnRegFg to set
+     */
+    public void setCoupnRegFg(String coupnRegFg) {
+        this.coupnRegFg = coupnRegFg;
     }
 
     /**

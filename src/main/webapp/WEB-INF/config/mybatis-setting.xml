@@ -405,6 +405,8 @@
     <typeAlias alias="storeOrderVO" type="kr.co.solbipos.iostock.order.storeOrder.service.StoreOrderVO"/>
     <typeAlias alias="storeOrderDtlVO" type="kr.co.solbipos.iostock.order.storeOrder.service.StoreOrderDtlVO"/>
 
+    <typeAlias alias="excpForwardProductVO" type="kr.co.solbipos.application.pos.exceptForward.service.ExcpForwardProductVO"/>
+
     <typeAlias type="kr.co.common.data.handler.CustomBooleanTypeHandler" alias="CustomBooleanTypeHandler" />
     <typeAlias type="kr.co.common.data.handler.CustomDateTypeHandler" alias="CustomDateTypeHandler" />
 
