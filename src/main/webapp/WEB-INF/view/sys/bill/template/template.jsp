@@ -24,15 +24,23 @@
         <th><s:message code="template.srchNm" /></th>
         <td colspan="2" class="oh">
           <div class="sb-select fl w200 mr10">
-            <div id="srchPrtTypeCombo"></div>
+            <wj-combo-box
+                    id="srchPrtClassCdCombo"
+                    ng-model="prtClassCd"
+                    items-source="_getComboData('srchPrtClassCdCombo')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="_initComboBox(s)">
+            </wj-combo-box>
+            <input type="hidden" id="srchPrtClassCdVal" value={{prtClassCd}} />
           </div>
-          <button class="btn_blue" id="btnSrchTemplate">
+          <button class="btn_blue" id="btnSrchTemplate" ng-click="_broadcast('templateCtrl')">
             <s:message code="template.srchBtnNm" />
           </button>
-          <button class="btn_blk" id="btnApplyTemplate">
+          <button class="btn_blk" id="btnApplyTemplate" ng-click="$broadcast('showPopUp')">
             <s:message code="template.layerBtnNm" />
           </button>
-          <%--<a href="#" id="btnApplyTemplate" class="btn_grayS"><s:message code="template.layerBtnNm" /></a>--%>
         </td>
         <td>
         </td>
@@ -45,40 +53,57 @@
     <%-- 템플릿 --%>
     <div class="w25 fl">
       <%--위즈모 테이블--%>
-      <div class="wj-TblWrapBr pd20" style="height:470px;">
+      <div id="gridTemplate" class="wj-TblWrapBr pd20" style="height:485px;" ng-controller="templateCtrl">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='template.gridNm' /></span>
-          <button class="btn_skyblue" id="btnAddTemplate" style="display: none;">
+          <button class="btn_skyblue" id="btnAddTemplate" style="display: none;" ng-click="addRow()">
             <s:message code="cmm.add" />
           </button>
-          <button class="btn_skyblue" id="btnDelTemplate" style="display: none;">
+          <button class="btn_skyblue" id="btnDelTemplate" style="display: none;" ng-click="delete()">
             <s:message code="cmm.delete" />
           </button>
-          <button class="btn_skyblue" id="btnSaveTemplate" style="display: none;">
+          <button class="btn_skyblue" id="btnSaveTemplate" style="display: none;" ng-click="save()">
             <s:message code="cmm.save" />
           </button>
         </div>
         <%-- 개발시 높이 조절해서 사용--%>
         <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
-        <div id="gridTemplate" style="height:393px;"></div>
+        <div style="height:410px;">
+          <wj-flex-grid
+                  autoGenerateColumns="false"
+                  control="flex"
+                  initialized="initGrid(s,e)"
+                  sticky-headers="true"
+                  selection-mode="Row"
+                  items-source="data"
+                  item-formatter="_itemFormatter">
+
+            <!-- define columns -->
+            <wj-flex-grid-column header="<s:message code="template.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="template.templtNm"/>" binding="templtNm" width="*"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="template.prtForm"/>" binding="prtForm" visible="false"></wj-flex-grid-column>
+
+          </wj-flex-grid>
+
+        </div>
       </div>
       <%--//위즈모 테이블--%>
     </div>
 
     <%-- 코드리스트 --%>
     <div class="w15 fl">
-      <div class="wj-TblWrapBr ml10 pd20" style="height:470px;">
+      <div class="wj-TblWrapBr ml10 pd20" style="height:485px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='template.listNm' /></span>
         </div>
         <div class="app-input-group">
-          <div id="listBoxCode" style="height:335px;"></div>
+          <div id="listBoxCode" style="width: 100%;height: 410px;"></div>
         </div>
       </div>
     </div>
 
     <div class="w30 fl">
-      <div class="wj-TblWrapBr ml10 pd20 templateEdit" style="height:470px;">
+      <div class="wj-TblWrapBr ml10 pd20 templateEdit" style="height:485px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='template.editNm' /></span>
           <button class="btn_skyblue" id="btnSaveEditTemplate" style="display: none;">
@@ -86,97 +111,32 @@
           </button>
         </div>
         <div>
-          <textarea id="editTextArea" class="w100 tArea1" cols="42" style="height:380px;"></textarea>
+          <textarea id="editTextArea" class="w100" cols="42" style="height:410px;"></textarea>
         </div>
       </div>
     </div>
 
     <div class="w30 fl">
-      <div class="wj-TblWrapBr ml10 pd20 templateEdit" style="height:470px;">
+      <div class="wj-TblWrapBr ml10 pd20 templateEdit" style="height:485px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='template.viewNm' /></span>
         </div>
-        <div id="preview" class="s12 lh15" style="height:380px;">
+        <div id="preview" class="s12 lh15" style="height:410px;">
         </div>
       </div>
     </div>
 
   </div>
+
+  <script type="text/javascript">
+  var prtClassComboData = ${listPrintType};
+  </script>
+  <script type="text/javascript" src="/resource/solbipos/js/sys/bill/template/template.js?ver=20180914" charset="utf-8"></script>
+
+  <%-- 레이어 팝업 --%>
+  <c:import url="/WEB-INF/view/sys/bill/template/popUpTemplate.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+  </c:import>
+
 </div>
-
-<%-- 미적용 본사/단독매장 레이어 --%>
-<div id="applyTemplateDim" class="fullDimmed" style="display:none;"></div>
-<div id="applyTemplateLayer" class="layer" style="display:none;">
-  <div class="layer_inner">
-    <div class="title w700">
-      <%-- 레이어 타이틀 :  --%>
-      <p class="tit"><s:message code="template.layer.nm" /></p>
-      <a href="javascript:;" class="btn_close"></a>
-      <div class="con">
-        <div>
-          <table class="tblType01">
-            <colgroup>
-              <col width="10%" />
-              <col width="30%" />
-              <col width="10%" />
-              <col width="20%" />
-              <col width="10%" />
-              <col width="20%" />
-            </colgroup>
-            <tbody>
-            <tr>
-              <th><s:message code="template.layer.template" /></th>
-              <td>
-                <div class="sb-select">
-                  <div id="srchTemplateTypeCombo"></div>
-                </div>
-              </td>
-              <th><s:message code="template.layer.sysStatFg" /></th>
-              <td>
-                <div class="sb-select">
-                  <div id="srchSysStatFgCombo"></div>
-                </div>
-              </td>
-              <th><s:message code="template.layer.clsFg" /></th>
-              <td>
-                <div class="sb-select">
-                  <div id="srchClsFgCombo"></div>
-                </div>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <%-- 미적용 본사/단독매장 --%>
-        <div id="storeInfoArea" class="mt10" style="height:450px;"><!--높이는 style로 조정-->
-          <div class="tr">
-            <%-- 조회 --%>
-            <button class="btn_blue" id="btnSrchApplyStore">
-              <s:message code="template.layer.srchBtn" />
-            </button>
-          </div>
-          <!--위즈모 테이블-->
-          <div class="wj-TblWrapBr mt10 pd10">
-            <div class="updownSet oh mb10">
-              <%-- 저장 --%>
-              <button class="btn_skyblue" id="btnSaveApplyStore">
-                <s:message code="cmm.save" />
-              </button>
-            </div>
-            <div id="gridLayer" style="height:350px;"></div>
-          </div>
-          <!--//위즈모 테이블-->
-        </div>
-
-      </div>
-    </div>
-  </div>
-</div>
-
-<script type="text/javascript">
-var printTypeComboData = ${listPrintType};
-var sysStatFgComboData = ${ccu.getCommCode("009")};
-var clsFgComboData = ${ccu.getCommCode("001")};
-</script>
-<script type="text/javascript" src="/resource/solbipos/js/sys/bill/template/template.js?ver=20180914" charset="utf-8"></script>

@@ -38,11 +38,6 @@
                                          css-class="wj-grid-multi-editor"></wj-flex-grid-column>
 
                 </wj-flex-grid>
-                <%-- ColumnPicker 사용시 include --%>
-                <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-                    <jsp:param name="pickerTarget" value="printCodeCtrl"/>
-                </jsp:include>
-                <%--// ColumnPicker 사용시 include --%>
             </div>
         </div>
         <div class="wj-dialog-footer">
@@ -50,4 +45,4 @@
         </div>
     </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/sys/bill/kind/popUpKind.js?ver=2018090301" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/bill/kind/popUpKind.js?ver=2018091401" charset="utf-8"></script>

@@ -1,17 +1,5 @@
 package kr.co.solbipos.sys.bill.kind.web;
 
-import static kr.co.common.utils.grid.ReturnUtil.returnJson;
-import java.util.ArrayList;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
@@ -20,6 +8,20 @@ import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sys.bill.kind.service.KindService;
 import kr.co.solbipos.sys.bill.kind.service.KindVO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
+
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 
 /**
  * @Class Name : KindController.java
@@ -41,10 +43,15 @@ import kr.co.solbipos.sys.bill.kind.service.KindVO;
 @RequestMapping(value = "/sys/bill/kind")
 public class KindController {
 
+    private final KindService kindService;
+    private final SessionService sessionService;
+
+    /** Constructor Injection */
     @Autowired
-    KindService kindService;
-    @Autowired
-    SessionService sessionService;
+    public KindController(KindService kindService, SessionService sessionService) {
+        this.kindService = kindService;
+        this.sessionService = sessionService;
+    }
 
     /**
      * 출력물 종류 - 페이지 이동
@@ -131,6 +138,35 @@ public class KindController {
         list = kindService.getPrintMapngList(kindVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, kindVO);
+
+    }
+
+    /**
+     * 출력물 종류 - 출력물매핑 목록 팝업 조회
+     *
+     * @param request
+     * @param response
+     * @param kindVO
+     * @param model
+     * @return Result
+     * @author 노현수
+     * @since 2018. 06. 15.
+     */
+    @RequestMapping(value = "/mapng/unUsedList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getPrintMapngUnUsedList(HttpServletRequest request, HttpServletResponse response,
+        KindVO kindVO, Model model) {
+
+        List<DefaultMap<String>> list = new ArrayList<DefaultMap<String>>();
+        // 출력물매핑 목록 팝업 조회
+        list = kindService.getPrintMapngUnUsedList(kindVO);
+        // 데이터 없는 경우 커스텀 메시지 처리
+        Result result = ReturnUtil.returnListJson(Status.OK, list, kindVO);
+        if ( list.isEmpty() ) {
+            result.setMessage("추가할 출력코드가 없습니다.");
+        }
+
+        return result;
 
     }
 

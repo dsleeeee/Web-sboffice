@@ -83,7 +83,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
       // called asynchronously if an error occurs
       // or server returns response with an error status.
       $scope._popMsg(messages["cmm.error"]);
-      return;
+      return false;
     }).then(function () {
       // "complete" code here
       if (typeof callback === 'function') {
@@ -156,7 +156,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
       // called asynchronously if an error occurs
       // or server returns response with an error status.
       $scope._popMsg(messages["cmm.saveFail"]);
-      return;
+      return false;
     }).then(function () {
       // "complete" code here
       if (typeof callback === 'function') {
@@ -184,7 +184,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
         // count true values to initialize checkbox
         var cnt = 0;
         for (var i = 0; i < flex.rows.length; i++) {
-          if (flex.getCellData(i, c) == true) cnt++;
+          if (flex.getCellData(i, c) === true) cnt++;
         }
         // create and initialize checkbox
         if (col.format === "checkBoxText") {
@@ -305,7 +305,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
       $scope.$on('drawPaging', function (event, pagingInfo) {
         // 페이징바 갯수
         var page_scale = pagingInfo.pageScale;
-        var page_end = page_scale == 10 ? 9 : 4;
+        var page_end = page_scale === 10 ? 9 : 4;
         // 버튼 태그 동적 생성
         var prevBtnTag = "<li class=\"btn_previous\" data-tot={tot}><a href=\"javascript:;\"></a></li>";
         var pageBtnTag = "<li><a href=\"javascript:;\" class=\"{cnm}\" data-value={i} ng-click=\"_pagingView('{ctrlName}', '{i}');\">{i}</a></li>";
@@ -401,7 +401,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
         return config;
       },
       'requestError': function (rejectionRequest) {
-        console.log("from REQUEST ERROR")
+        console.log("from REQUEST ERROR");
         $rootScope.$broadcast('loadingPopupInactive');
         return $q.reject("Couldnot have a successfull request, Sorry :(");
       },
@@ -410,7 +410,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
         return response;
       },
       'responseError': function (rejectionRequest) {
-        console.log("from RESPONSE ERROR")
+        console.log("from RESPONSE ERROR");
         $rootScope.$broadcast('loadingPopupInactive');
         return $q.reject(rejectionRequest)
       }

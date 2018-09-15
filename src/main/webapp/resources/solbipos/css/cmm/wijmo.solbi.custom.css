@@ -40,6 +40,9 @@
     font-weight: initial;
     font-size:12px;
     text-align:center!important;
+    position: absolute;
+    top: 0px;
+    padding: 10px 0px 0px 3px;
 }
 
 .wj-state-selected {
@@ -208,6 +211,9 @@
     border-radius: 4px;
     box-shadow: 0 0 20px 0px #222;
 }
+.wj-dialog-index {
+    z-index: 1600 !important;
+}
 .wj-popup .wj-dialog-header {
     height: 50px;
     border-bottom: 1px solid #dbdbdb;
@@ -251,7 +257,7 @@
     line-height: 1.2em;
 }
 .wj-dialog-body .wj-dialog-content {
-    overflow-y: auto;
+    /*overflow-y: auto;*/
     width: 100%;
 }
 .wj-column-picker-wrap {

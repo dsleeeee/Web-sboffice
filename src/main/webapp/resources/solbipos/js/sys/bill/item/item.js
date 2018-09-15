@@ -8,200 +8,139 @@
  * 2018.08.10     노현수      1.0
  *
  * **************************************************************/
-var gridPrintCode;
-$(document).ready(function () {
+/**
+ * get application
+ */
+var app = agrid.getApp();
 
-  var srchPrtCd = wcombo.genInputText("#srchPrtCd", 30, "");
-  var srchPrtNm = wcombo.genInputText("#srchPrtNm", 50, "");
-  // var srchPrtNm = wcombo.genInputNumber("#srchPrtNm", "n2", "", 0, 100);
-
-  // 출력코드구성 그리드
-  var gridPrintCodeData =
-    [
-      {binding: "gChk", header: messages["item.chk"], dataType: wijmo.DataType.Boolean, width: 40},
-      {binding: "prtCd", header: messages["item.prtCd"], width: 200},
-      {binding: "prtNm", header: messages["item.prtNm"], width: 200},
-      {
-        binding: "samplYn",
-        header: messages["item.samplYn"],
-        dataType: wijmo.DataType.Boolean,
-        width: 60
-      },
-      {binding: "content", header: messages["item.content"], width: "*"}
-    ];
-  // 출력코드구성 그리드 생성
-  gridPrintCode = wgrid.genGrid("#gridPrintCode", gridPrintCodeData);
-  gridPrintCode.isReadOnly = false;
-
-  // ReadOnly 효과설정
-  gridPrintCode.formatItem.addHandler(function (s, e) {
-    if (e.panel == s.cells) {
-      var col = s.columns[e.col];
-      if (col.binding === "prtCd") {
-        var item = s.rows[e.row].dataItem;
-        if (item.status != "I") {
-          wijmo.addClass(e.cell, 'wj-custom-readonly');
-        } else {
-          wijmo.removeClass(e.cell, 'wj-custom-readonly');
+/**
+ * 출력코드구성 그리드 생성
+ */
+app.controller('printCodeCtrl', ['$scope', '$http', function ($scope, $http) {
+  // 상위 객체 상속 : T/F 는 picker
+  angular.extend(this, new RootController('printCodeCtrl', $scope, $http, false));
+  // grid 초기화 : 생성되기전 초기화되면서 생성된다
+  $scope.initGrid = function (s, e) {
+    var contentColumn = s.columns.getColumn("content");
+    contentColumn.multiLine = true;
+    contentColumn.wordWrap = true;
+    // ReadOnly 효과설정
+    s.formatItem.addHandler(function (s, e) {
+      if (e.panel === s.cells) {
+        var col = s.columns[e.col];
+        if (col.binding === "prtCd") {
+          var item = s.rows[e.row].dataItem;
+          if (item.status !== "I") {
+            wijmo.addClass(e.cell, 'wj-custom-readonly');
+          } else {
+            wijmo.removeClass(e.cell, 'wj-custom-readonly');
+          }
+        } else if ( col.binding === "content") {
+          wijmo.addClass(e.cell, 'wj-grid-multi-editor');
         }
-      } else if ( col.binding === "content") {
-        wijmo.addClass(e.cell, 'wj-grid-multi-editor');
       }
-    }
-  });
-
-  // 출력코드구성 그리드 에디팅 방지
-  gridPrintCode.beginningEdit.addHandler(function (s, e) {
-    var col = s.columns[e.col];
-    var dataItem = gridPrintCode.rows[e.row].dataItem;
-    if (col.binding === "prtCd") {
-      if (nvl(dataItem.status, "") == "" && dataItem.status != "I") {
-        e.cancel = true;
+    });
+    // 출력코드구성 그리드 에디팅 방지
+    s.beginningEdit.addHandler(function (s, e) {
+      var col = s.columns[e.col];
+      var dataItem = s.rows[e.row].dataItem;
+      if (col.binding === "prtCd") {
+        if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
+          e.cancel = true;
+        }
       }
-    }
-  });
-
-  var contentColumn = gridPrintCode.columns.getColumn("content");
-  contentColumn.multiLine = true;
-  contentColumn.wordWrap = true;
-  
+    });
+    // alt + Enter 이벤트. 예제 필드에만.
+    s.addEventListener(s.hostElement, 'keydown', function(e) {
+      var rowNum = s.selection.row;
+      var colNum = s.selection.col;
+      var col = s.columns[colNum];
+      if (col.binding === "content") {
+        if (e.altKey) {
+          if (e.keyCode === wijmo.Key.Enter) {
+            s.finishEditing(false);
+            setTimeout(function () {
+              s.startEditing(true, rowNum, colNum, true);
+            },10);
+          }
+        }
+      }
+    });
+    // cell 에디트 종료시 42글자 포멧팅. 예제 필드에만.
+    s.cellEditEnded.addHandler(function (s, e) {
+      var col = s.columns[e.col];
+      if(col.binding === "content") {
+        var val = s.getCellData(e.row, e.col);
+        var lines = val.split("\n");
+        if ( lines != null ) {
+          var newValues = new Array();
+          var newLine = 0;
+          var splitStr = "";
+          for (var i = 0; i < lines.length; i++) {
+            if (lines[i].getByteLength() <= 42) {
+              newValues[newLine++] = lines[i];
+            } else {
+              splitStr = lines[i].splitByteLen(42);
+              for (var n = 0; n < splitStr.length; n++) {
+                newValues[newLine++] = splitStr[n];
+              }
+            }
+          }
+          val = newValues.join("\n");
+          s.setCellData(e.row, e.col, val);
+          s.rows[e.row].height = 20 + ( newValues.length * 14 );
+        }
+      }
+    });
+  };
   // 그리드 Row 사이즈 정렬
-  function autoSizeVisibleRows(flex, force) {
-    var rng = flex.viewRange;
-    for (var r = rng.row; r <= rng.row2; r++) {
-      if (force || flex.rows[r].height == null) {
+  $scope.autoSizeVisibleRows = function(flex) {
+    for ( var r = 0; r < flex.itemsSource.itemCount; r++ ) {
+      if(flex.rows[r]._data.content && flex.rows[r]._data.content.split("\n").length > 1 ) {
         flex.autoSizeRow(r, false);
       }
     }
-  }
-
-  // alt + Enter 이벤트. 예제 필드에만.
-  gridPrintCode.addEventListener(gridPrintCode.hostElement, 'keydown', function(e) {
-    var rowNum = gridPrintCode.selection.row;
-    var colNum = gridPrintCode.selection.col;
-    var col = gridPrintCode.columns[colNum];
-    if (col.binding === "content") {
-      if (e.altKey) {
-        if (e.keyCode === wijmo.Key.Enter) {
-          gridPrintCode.finishEditing(false);
-          setTimeout(function () {
-            gridPrintCode.startEditing(true, rowNum, colNum, true);
-          },10);
-        }
-      }
-    }
-  });
-
-  // cell 에디트 종료시 42글자 포멧팅. 예제 필드에만.
-  gridPrintCode.cellEditEnded.addHandler(function (s, e) {
-    var col = s.columns[e.col];
-    if(col.binding === "content") {
-      var val = s.getCellData(e.row, e.col);
-      var lines = val.split("\n");
-      if ( lines != null ) {
-        var newValues = new Array();
-        var newLine = 0;
-        var splitStr = "";
-        for (var i = 0; i < lines.length; i++) {
-          if (lines[i].getByteLength() <= 42) {
-            newValues[newLine++] = lines[i];
-          } else {
-            splitStr = lines[i].splitByteLen(42);
-            for (var n = 0; n < splitStr.length; n++) {
-              newValues[newLine++] = splitStr[n];
-            }
-          }
-        }
-        val = newValues.join("\n");
-        s.setCellData(e.row, e.col, val);
-        s.rows[e.row].height = 40 + ( newValues.length * 14 );
-      }
-    }
-  });
-
-  // 조회버튼 클릭
-  $("#btnSearch").click(function (e) {
-    search();
-  });
-
-  // 출력코드구성 목록 조회
-  function search() {
-
-    var param = {};
-    param.prtCd = srchPrtCd.value;
-    param.prtNm = srchPrtNm.value;
-
-    $.postJSON("/sys/bill/item/item/list.sb", param,
-      function (result) {
-
-        // 버튼 Show
-        $("#btnAdd").show();
-        $("#btnDel").show();
-        $("#btnSave").show();
-
-        var list = result.data.list;
-        gridPrintCode.itemsSource = new wijmo.collections.CollectionView(list);
-        gridPrintCode.itemsSource.trackChanges = true;
-
-        if (list.length === undefined || list.length == 0) {
-          // 그리드 초기화
-          gridPrintCode.itemsSource = new wijmo.collections.CollectionView([]);
-          s_alert.pop(result.message);
-          return;
-        } else {
-          autoSizeVisibleRows(gridPrintCode, false);
-        }
-
-      },
-      function (result) {
-        s_alert.pop(result.message);
-        return;
-      }
-    );
-
   };
+  // 출력코드구성 그리드 조회
+  $scope.$on("printCodeCtrl", function(event, data) {
+    // 파라미터
+    var params = {};
+    // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
+    $scope._inquiryMain("/sys/bill/item/item/list.sb", params, function() {
+      // 버튼 Show
+      $("#btnAdd").show();
+      $("#btnDel").show();
+      $("#btnSave").show();
 
-  // 출력코드구성 저장 버튼 클릭
-  $("#btnSave").click(function (e) {
-
-    var paramArr = new Array();
-
-    for (var i = 0; i < gridPrintCode.collectionView.itemsEdited.length; i++) {
-      gridPrintCode.collectionView.itemsEdited[i].status = "U";
-      paramArr.push(gridPrintCode.collectionView.itemsEdited[i]);
-    }
-    for (var i = 0; i < gridPrintCode.collectionView.itemsAdded.length; i++) {
-      gridPrintCode.collectionView.itemsAdded[i].status = "I";
-      paramArr.push(gridPrintCode.collectionView.itemsAdded[i]);
-    }
-
-    if (paramArr.length <= 0) {
-      s_alert.pop(messages["cmm.not.modify"]);
-      return;
-    }
-
-    $.postJSONArray("/sys/bill/item/item/save.sb", paramArr, function (result) {
-        s_alert.pop(messages["cmm.saveSucc"]);
-        gridPrintCode.collectionView.clearChanges();
-      },
-      function (result) {
-        s_alert.pop(result.message);
-      }
-    );
-
+      $scope.autoSizeVisibleRows($scope.flex);
+    });
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
   });
+  // 출력코드구성 그리드 행 추가
+  $scope.addRow = function() {
+    // 파라미터 설정
+    var params = {};
+    params.status = "I";
+    params.gChk = true;
+    params.samplYn = false;
+    // 추가기능 수행 : 파라미터
+    $scope._addRow(params);
+  };
+  // 출력코드구성 저장
+  $scope.save = function() {
+    // 파라미터 설정
+    var params = new Array();
+    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+      $scope.flex.collectionView.itemsEdited[i].status = "U";
+      params.push($scope.flex.collectionView.itemsEdited[i]);
+    }
+    for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+      $scope.flex.collectionView.itemsAdded[i].status = "I";
+      params.push($scope.flex.collectionView.itemsAdded[i]);
+    }
+    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+    $scope._save("/sys/bill/item/item/save.sb", params);
+  }
+}]);
 
-  // 출력코드구성 추가 버튼 클릭
-  $("#btnAdd").click(function (e) {
-    gridPrintCode.collectionView.trackChanges = true;
-    var newRow = gridPrintCode.collectionView.addNew();
-    newRow.status = "I";
-    newRow.gChk = true;
-    newRow.samplYn = false;
-
-    gridPrintCode.collectionView.commitNew();
-    // 추가된 Row 선택
-    gridPrintCode.select(gridPrintCode.rows.length, 1);
-  });
-
-});

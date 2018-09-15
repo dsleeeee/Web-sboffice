@@ -38,7 +38,7 @@
   </div>
 </div>
 
-<wj-popup control="_alertPopup" fade-in="false" fade-out="false" show-trigger="Click" hide-trigger="Click" style="display: none;width: 500px;">
+<wj-popup control="_alertPopup" class="wj-dialog-index" fade-in="false" fade-out="false" show-trigger="Click" hide-trigger="Click" style="display: none;width: 500px;">
   <div class="wj-dialog-body">
     <div class="wj-popup-alert">
       <p class="bk">
