@@ -10,17 +10,17 @@
 <%-- 사용자정보영역 --%>
 <div class="topBar">
   <div class="menuControl">
-    <a href="javascript:;" id="_arrow" class="arrowOpen">
+    <a href="javascript:void(0);" id="_arrow" class="arrowOpen">
       <span></span>
     </a>
   </div>
   <div class="userInfo">
     <%--새로운 공지 있는경우 span추가--%>
-    <a href="javascript:;" class="userNotice">
+    <a href="javascript:void(0);" class="userNotice">
       <span>777</span>
     </a>
 
-    <a href="javascript:;" class="userId">
+    <a href="javascript:void(0);" class="userId">
       <span>${sessionScope.sessionInfo.userId}</span>
     </a>
 
@@ -34,7 +34,7 @@
         <span>${sessionScope.sessionInfo.userNm}</span>
       </p>
       <ul>
-        <li><a href="javascript:;">내 정보 변경</a></li>
+        <li><a href="javascript:void(0);">내 정보 변경</a></li>
         <li><a id="pwchg">비밀번호 변경</a></li>
         <li><a href="/auth/logout.sb">로그아웃</a></li>
       </ul>
