@@ -65,13 +65,13 @@
         <%--위즈모 테이블--%>
         <div class="wj-gridWrap mt10" style="height: 400px;" >
             <wj-flex-grid
-                    autoGenerateColumns="false"
-                    selection-mode="Row"
-                    items-source="data"
-                    control="flex"
-                    initialized="initGrid(s,e)"
-                    is-read-only="false"
-                    item-formatter="_itemFormatter">
+                autoGenerateColumns="false"
+                selection-mode="Row"
+                items-source="data"
+                control="flex"
+                initialized="initGrid(s,e)"
+                is-read-only="false"
+                item-formatter="_itemFormatter">
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>"                      binding="gChk"         width="40" align="center"></wj-flex-grid-column>

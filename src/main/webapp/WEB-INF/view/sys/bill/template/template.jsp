@@ -70,13 +70,13 @@
         <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
         <div style="height:410px;">
           <wj-flex-grid
-                  autoGenerateColumns="false"
-                  control="flex"
-                  initialized="initGrid(s,e)"
-                  sticky-headers="true"
-                  selection-mode="Row"
-                  items-source="data"
-                  item-formatter="_itemFormatter">
+            autoGenerateColumns="false"
+            control="flex"
+            initialized="initGrid(s,e)"
+            sticky-headers="true"
+            selection-mode="Row"
+            items-source="data"
+            item-formatter="_itemFormatter">
 
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="template.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
