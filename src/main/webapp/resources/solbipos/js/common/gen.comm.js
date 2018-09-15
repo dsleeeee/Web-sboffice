@@ -7,7 +7,7 @@ function genEvent(error, errorLabel) {
     errorLabel.hide();
   });
   error.blur(function() {
-    if (error.val().length == 0 && errorLabel.text().length > 0) {
+    if (error.val().length === 0 && errorLabel.text().length > 0) {
       errorLabel.show();
     }
   });
@@ -36,17 +36,17 @@ function setZero(s, l) {
 function setGridCRUD(grid) {
   var arr = new Array();
   
-  for(var i=0; i<grid.collectionView.itemsEdited.length; i++){
-    grid.collectionView.itemsEdited[i].status = "U";
-    arr.push(grid.collectionView.itemsEdited[i]);
+  for(var u = 0; u < grid.collectionView.itemsEdited.length; u++){
+    grid.collectionView.itemsEdited[u].status = "U";
+    arr.push(grid.collectionView.itemsEdited[u]);
   }
-  for(var i=0; i<grid.collectionView.itemsAdded.length; i++){
+  for(var i = 0; i < grid.collectionView.itemsAdded.length; i++){
     grid.collectionView.itemsAdded[i].status = "I";
     arr.push(grid.collectionView.itemsAdded[i]);
   }
-  for(var i=0; i<grid.collectionView.itemsRemoved.length; i++){
-    grid.collectionView.itemsRemoved[i].status = "D";
-    arr.push(grid.collectionView.itemsRemoved[i]);
+  for(var d = 0; d < grid.collectionView.itemsRemoved.length; d++){
+    grid.collectionView.itemsRemoved[d].status = "D";
+    arr.push(grid.collectionView.itemsRemoved[d]);
   }
   
   return arr;
@@ -57,7 +57,7 @@ function setGridCRUD(grid) {
  * @param str       : 체크할 문자열
  */
 function isEmpty(str) {
-  if (typeof str == "undefined" || str == null || str == "")
+  if (typeof str === "undefined" || str == null || str === "")
     return true;
   else
     return false;
@@ -69,7 +69,7 @@ function isEmpty(str) {
  * @param defaultStr    : 문자열이 비어있을경우 리턴할 기본 문자열
  */
 function nvl(str, defaultStr) {
-  if (typeof str == "undefined" || str == null || str == "")
+  if (typeof str === "undefined" || str == null || str === "")
     str = defaultStr;
 
   return str;
@@ -84,7 +84,7 @@ function nvl(str, defaultStr) {
  */
 function isNumber(value) {
     value = String(value);
-    if ( value.indexOf(" ") != -1 || value == "" ) {
+    if ( value.indexOf(" ") !== -1 || value === "" ) {
         return false;
     } else if ( isNaN(value) ) {
         return false;
