@@ -244,7 +244,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
             if (s.columns[e.col].dataType !== wijmo.DataType.Boolean) {
               setTimeout(function () {
                 var _cellData = s.getCellData(e.row, e.col, true);
-                if (s.activeEditor !== null && s.activeEditor.value !== "") {
+                if (!isEmpty(s.activeEditor) && s.activeEditor.value !== "") {
                   wijmo.setSelectionRange(s.activeEditor, _cellData.length); // caret position
                 }
               }, 0);
