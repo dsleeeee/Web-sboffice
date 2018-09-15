@@ -6,7 +6,6 @@ import kr.co.solbipos.application.common.service.PageVO;
 import kr.co.solbipos.base.store.emp.store.service.enums.ServiceFg;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.Digits;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 

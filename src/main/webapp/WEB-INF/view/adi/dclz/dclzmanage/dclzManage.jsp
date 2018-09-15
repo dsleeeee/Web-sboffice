@@ -8,8 +8,8 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 
 <div class="subCon">
-  <div class="searchBar flddUnfld">
-    <a href="javascript:void(0);" class="open">${menuNm}</a>
+  <div class="searchBar">
+    <a href="javascript:;" class="open">${menuNm}</a>
   </div>
 
   <table class="searchTbl">
@@ -387,6 +387,7 @@
       },
       function(result){
         s_alert.pop(result.message);
+      });
     });
 
     $(".dclzRegClose").click(function(e){
@@ -470,7 +471,8 @@
         $.postJSON("/adi/dclz/dclzmanage/dclzmanage/modify.sb", param, function(result) {
           var msg2 = "<s:message code='cmm.modify'/>";
             s_alert.popOk(msg2, function() {
-            closeDclzLayer();
+              closeDclzLayer();
+            });
           },
           function(result){
             s_alert.pop(result.message);

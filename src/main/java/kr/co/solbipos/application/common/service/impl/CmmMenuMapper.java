@@ -1,14 +1,12 @@
 package kr.co.solbipos.application.common.service.impl;
 
-import java.util.List;
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.application.common.service.HqVO;
-import kr.co.solbipos.application.common.service.MenuUseHistVO;
-import kr.co.solbipos.application.common.service.ResrceInfoBaseVO;
-import kr.co.solbipos.application.common.service.StoreVO;
+import kr.co.solbipos.application.common.service.*;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  *
@@ -42,6 +40,13 @@ public interface CmmMenuMapper {
      */
     List<HqVO> selectHq(HqVO hqVO);
 
+    /**
+     * 레이어 팝업 업체 조회
+     * @param caVO
+     * @return
+     */
+    List<CmAgencyVO> selectCmAgency(CmAgencyVO caVO);
+    
     /**
       * 메뉴 사용 내역 저장
       *

@@ -36,24 +36,20 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
  * @version 1.0
  * @see
  *
- * @Copyright (C) by SOLBIPOS CORP. All right reserved.
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Controller
 @RequestMapping(value = "/base/prod/prod/prod")
 public class ProdController {
 
     private final String RESULT_URI = "base/prod/prod";
-    private final SessionService sessionService;
-    private final MessageService messageService;
-    private final ProdService prodService;
 
-    /** Constructor Injection */
     @Autowired
-    public ProdController(SessionService sessionService, MessageService messageService, ProdService prodService) {
-        this.sessionService = sessionService;
-        this.messageService = messageService;
-        this.prodService = prodService;
-    }
+    SessionService sessionService;
+    @Autowired
+    MessageService messageService;
+    @Autowired
+    ProdService prodService;
 
     /**
      * 상품조회
@@ -63,6 +59,7 @@ public class ProdController {
      * @param model
      * @return
      */
+
     @RequestMapping(value = "/list.sb", method = RequestMethod.GET)
     public String view(HttpServletRequest request, HttpServletResponse response, Model model) {
         return RESULT_URI + "/prod";
@@ -72,6 +69,8 @@ public class ProdController {
      * 상품조회
      *
      * @param request HttpServletRequest
+     * @param session HttpSession
+     * @param model Model
      * @return
      */
     @RequestMapping(value = "/list.sb", method = RequestMethod.POST)

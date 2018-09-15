@@ -30,21 +30,18 @@ import java.util.List;
  * @version 1.0
  * @see
  *
- * @Copyright (C) by SOLBIPOS CORP. All right reserved.
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Service("prodService")
 public class ProdServiceImpl implements ProdService {
     
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    private final ProdMapper mapper;
-    private final MessageService messageService;
 
-    /** Constructor Injection */
     @Autowired
-    public ProdServiceImpl(ProdMapper mapper, MessageService messageService) {
-        this.mapper = mapper;
-        this.messageService = messageService;
-    }
+    private ProdMapper mapper;
+
+    @Autowired
+    private MessageService messageService;
 
     @Override
     public List<DefaultMap<String>> list(ProdVO prodVO, SessionInfoVO sessionInfoVO) {

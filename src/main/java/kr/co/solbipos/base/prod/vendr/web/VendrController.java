@@ -1,27 +1,30 @@
 package kr.co.solbipos.base.prod.vendr.web;
 
-import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
+import kr.co.common.service.code.CmmCodeService;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.vendr.service.VendrService;
 import kr.co.solbipos.base.prod.vendr.service.VendrVO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
+import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 
 /**
  * @Class Name : VendrController.java
@@ -40,11 +43,9 @@ import kr.co.solbipos.base.prod.vendr.service.VendrVO;
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Controller
-@RequestMapping(value = "/base/prod/vendr/vendr/")
+@RequestMapping(value = "/base/prod/vendr")
 public class VendrController {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    
     private final String RESULT_URI = "base/prod/vendr";
 
     @Autowired
@@ -54,6 +55,7 @@ public class VendrController {
     @Autowired
     VendrService vendrService;
 
+    CmmCodeService cmmCodeService;
     /**
      * 거래처 조회 페이지 이동
      *
@@ -62,8 +64,9 @@ public class VendrController {
      * @param model Model
      * @return
      */
-    @RequestMapping(value = "list.sb", method = RequestMethod.GET)
-    public String loginstatusList(HttpServletRequest request, HttpServletResponse response, Model model) {
+    @RequestMapping(value = "/vendr/list.sb", method = RequestMethod.GET)
+    public String list(HttpServletRequest request, HttpServletResponse response, Model model) 
+    {
         return RESULT_URI + "/vendr";
     }
 
@@ -75,24 +78,155 @@ public class VendrController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "list.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/vendr/list.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result loginstatusListPost(VendrVO vendrVO, HttpServletRequest request, HttpServletResponse response, Model model) {
+    public Result list(VendrVO vendrVO, HttpServletRequest request, HttpServletResponse response, Model model) {
 
-        LOGGER.debug(vendrVO.toString());
-
-        SessionInfoVO si = sessionService.getSessionInfo(request);
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
         
-        List<DefaultMap<Object>> result = null;
+        List<DefaultMap<String>> result =  vendrService.list(vendrVO, sessionInfoVO);
 
-        // 본사 또는 매장에 따라 분기 처리
-        if(si.getOrgnFg() == OrgnFg.HQ) {
-            result = vendrService.getHqVendrList(vendrVO);
-        }else if(si.getOrgnFg() == OrgnFg.STORE) {
-            result = vendrService.getMsVendrList(vendrVO);
-        }
-        
         return returnListJson(Status.OK, result, vendrVO);
     }
 
+    /**
+     * 거래처 등록 - 거래처 저장
+     * 
+     * @param request
+     * @param response
+     * @param vendrVO
+     * @param model
+     * @return Result
+     * @author 신유나
+     * @since 2018. 08. 29
+     */
+    @RequestMapping(value = "/regist/regist.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result save(@RequestBody VendrVO vendrVO, HttpServletRequest request,
+            HttpServletResponse response, Model model) {
+        
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+        
+        int result = vendrService.save(vendrVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+        
+    }
+    
+    /**
+     * 거래처 상세조회
+     * 
+     * @param   vendr
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  신유나
+     * @since   2018. 09. 02
+     */
+    @RequestMapping(value = "/regist/view.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result dtlInfo(VendrVO vendrVO, HttpServletRequest request,
+            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+        
+        DefaultMap<String> result = vendrService.dtlInfo(vendrVO, sessionInfoVO);
+        
+        return returnJson(Status.OK, result);
+    }
+    
+    /**
+     * 본사 수정
+     * 
+     * @param   vendr
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  신유나
+     * @since   2018. 09. 03.
+     */
+    @RequestMapping(value = "/regist/modify.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result modify(@RequestBody VendrVO vendrVO, HttpServletRequest request,
+            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        int cnt = vendrService.modify(vendrVO, sessionInfoVO);
+
+        return returnJson(Status.OK, cnt);
+    }
+    
+    /**
+     * 취급상품 조회 ( 취급상품, 미취급상품 )
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/trtMnt/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result listTrtMnt(VendrVO vendrVO, HttpServletRequest request, HttpServletResponse response, Model model) {
+        
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        
+        /** 취급/미취급 상품 리스트 */
+        List<DefaultMap<String>> dateSelList1 = vendrService.vendrProdList(vendrVO, sessionInfoVO);
+        List<DefaultMap<String>> dateSelList2 = vendrService.prodList(vendrVO, sessionInfoVO);
+        
+        resultMap.put("dateSelList1", dateSelList1);
+        resultMap.put("dateSelList2", dateSelList2);
+        
+        return returnJson(Status.OK, resultMap);
+    }
+    
+    /**
+     * 미취급상품 수정
+     * 
+     * @param   vendr
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  신유나
+     * @since   2018. 09. 03.
+     */
+    @RequestMapping(value = "/trtMnt/save.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result modifyProd(@RequestBody VendrVO[] vendrVO, HttpServletRequest request,
+            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        int cnt = vendrService.modifyProd(vendrVO, sessionInfoVO);
+
+        return returnJson(Status.OK, cnt);
+    }
+    
+    /**
+    * 취급상품 삭제
+    * 
+    * @param   vendr
+    * @param   request
+    * @param   response
+    * @param   model
+    * @return  Result
+    * @author  신유나
+    * @since   2018. 09. 07.
+    */
+   @RequestMapping(value = "/trtMnt/delete.sb", method = RequestMethod.POST)
+   @ResponseBody
+   public Result deleteProd(@RequestBody VendrVO[] vendrVO, HttpServletRequest request,
+           HttpServletResponse response, Model model) {
+
+       SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+       int cnt = vendrService.deleteProd(vendrVO, sessionInfoVO);
+
+       return returnJson(Status.OK, cnt);
+   }
 }

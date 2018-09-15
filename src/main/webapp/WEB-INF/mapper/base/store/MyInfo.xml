@@ -1,5 +1,117 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    MyInfo.xml
+    내정보관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이호원     2018.07.27     최초작성
+-->
 <mapper namespace="kr.co.solbipos.base.store.myinfo.service.impl.MyInfoMapper">
-
+  <!-- 본사코드 조회 -->
+  <select id="findAllHqNmcodeByHqOfficeCdAndNmcodeGrpCd" parameterType="hqNmcodeVO" resultType="hqNmcodeVO">
+    /* MyInfoMapper.findAllHqNmcodeByHqOfficeCdAndNmcodeGrpCd */
+    SELECT NMCODE_GRP_CD, NMCODE_CD, NMCODE_NM, NMCODE_ITEM_1, NMCODE_ITEM_2
+      FROM TB_HQ_NMCODE
+     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+       AND NMCODE_GRP_CD = #{nmcodeGrpCd}
+       AND USE_YN = 'Y'
+  </select>
+  <!-- 본사정보 조회 -->
+  <select id="findById" parameterType="String" resultType="myInfoVO">
+    /* MyInfoMapper.findById */
+    SELECT * FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+  </select>
+  <!-- 본사코드 등록여부 조회 -->
+  <select id="findHqNmcodeByHqOfficeCdAndNmcodeGrpCdAndNmcodeCd" parameterType="hqNmcodeVO" resultType="hqNmcodeVO">
+    /* MyInfoMapper.findHqNmcodeByHqOfficeCdAndNmcodeGrpCdAndNmcodeCd */
+    SELECT *
+      FROM TB_HQ_NMCODE
+     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+       AND NMCODE_GRP_CD = #{nmcodeGrpCd}
+       AND NMCODE_CD = #{nmcodeCd}
+  </select>
+  <!-- 본사정보 갱신 -->
+  <update id="updateHqOffice" parameterType="myInfoVO">
+    /* MyInfoMapper.updateHqOffice */
+    UPDATE TB_HQ_OFFICE
+       SET OWNER_NM = #{ownerNm},
+           BIZ_STORE_NM = #{bizStoreNm},
+           TEL_NO = #{telNo},
+           FAX_NO = #{faxNo},
+           AREA_CD = #{areaCd},
+           EMAIL_ADDR = #{emailAddr},
+           HMPG_ADDR = #{hmpgAddr},
+           <!--POST_NO = #{postNo},-->
+           ADDR = #{addr},
+           <!--ADDR_DTL = #{addrDtl},-->
+           MOD_DT = #{modDt},
+           MOD_ID = #{modId}
+     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+  </update>
+  <!-- 본사코드 저장 -->
+  <insert id="saveHqNmcodeFromCmNmcode" parameterType="hqNmcodeVO">
+    /* MyInfoMapper.saveHqNmcodeFromCmNmcode */
+               MERGE INTO TB_HQ_NMCODE THN
+                    USING ( SELECT * FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = #{nmcodeGrpCd} ) TCN
+                       ON (     THN.NMCODE_GRP_CD = TCN.NMCODE_GRP_CD
+                            AND THN.NMCODE_CD = TCN.NMCODE_CD
+                            AND THN.HQ_OFFICE_CD = #{hqOfficeCd} )
+        WHEN MATCHED THEN
+                   UPDATE
+                      SET USE_YN = 'Y',
+                          NMCODE_NM = TCN.NMCODE_NM,
+                          NMCODE_ITEM_1 = TCN.NMCODE_ITEM_1,
+                          NMCODE_ITEM_2 = TCN.NMCODE_ITEM_2
+    WHEN NOT MATCHED THEN
+                   INSERT ( HQ_OFFICE_CD, NMCODE_GRP_CD, NMCODE_CD, NMCODE_NM, NMCODE_ITEM_1,
+                            NMCODE_ITEM_2, USE_YN, REG_DT, REG_ID, MOD_DT, MOD_ID )
+                   VALUES ( #{hqOfficeCd}, TCN.NMCODE_GRP_CD, TCN.NMCODE_CD, TCN.NMCODE_NM, TCN.NMCODE_ITEM_1,
+                            TCN.NMCODE_ITEM_2, 'Y', TCN.REG_DT, TCN.REG_ID, TCN.MOD_DT, TCN.MOD_ID )
+  </insert>
+  <!-- 본사코드 삽입 -->
+  <insert id="insertHqNmcode" parameterType="hqNmcodeVO">
+    /* MyInfoMapper.insertHqNmcode */
+    <selectKey keyProperty="nmcodeCd" resultType="String" order="BEFORE">
+      SELECT DECODE( #{nmcodeCd},
+                              '',
+                     TO_CHAR( NVL( MAX( NMCODE_CD ), 0 ) + 1 ),
+                     #{nmcodeCd} )
+        FROM TB_HQ_NMCODE
+       WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+         AND NMCODE_GRP_CD = #{nmcodeGrpCd}
+    </selectKey>
+    INSERT INTO TB_HQ_NMCODE ( HQ_OFFICE_CD, NMCODE_GRP_CD, NMCODE_CD, NMCODE_NM, NMCODE_ITEM_1, NMCODE_ITEM_2, USE_YN, REG_DT, REG_ID, MOD_DT, MOD_ID )
+         VALUES ( #{hqOfficeCd}, #{nmcodeGrpCd}, #{nmcodeCd}, #{nmcodeNm}, #{nmcodeItem1}, #{nmcodeItem2}, #{useYn}, #{regDt}, #{regId}, #{modDt}, #{modId} )
+  </insert>
+  <!-- 본사코드 갱신 -->
+  <update id="updateHqNmcode" parameterType="hqNmcodeVO">
+    /* MyInfoMapper.updateHqNmcode */
+    UPDATE TB_HQ_NMCODE
+     <set>
+       <if test="nmcodeNm != null">NMCODE_NM = #{nmcodeNm},</if>
+       <if test="nmcodeItem1 != null">NMCODE_ITEM_1 = #{nmcodeItem1},</if>
+       <if test="nmcodeItem2 != null">NMCODE_ITEM_2 = #{nmcodeItem2},</if>
+       <if test="useYn != null">USE_YN = #{useYn},</if>
+       MOD_DT = #{modDt},
+       MOD_ID = #{modId}
+     </set>
+     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+       AND NMCODE_GRP_CD = #{nmcodeGrpCd}
+       AND NMCODE_CD = #{nmcodeCd}
+  </update>
+  <!-- 본사코드 삭제( 갱신 ) -->
+  <update id="deleteHqNmcode" parameterType="hqNmcodeVO">
+    /* MyInfoMapper.deleteHqNmcode */
+    UPDATE TB_HQ_NMCODE
+       SET USE_YN = 'N',
+           MOD_DT = #{modDt},
+           MOD_ID = #{modId}
+     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+       AND NMCODE_GRP_CD = #{nmcodeGrpCd}
+       AND NMCODE_CD = #{nmcodeCd}
+       AND USE_YN = 'Y'
+  </update>
+  
 </mapper>

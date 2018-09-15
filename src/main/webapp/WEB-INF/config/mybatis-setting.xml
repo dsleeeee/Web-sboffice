@@ -51,6 +51,7 @@
     <typeAlias alias="resrceInfoBaseVO" type="kr.co.solbipos.application.common.service.ResrceInfoBaseVO"/>
     <typeAlias alias="resrceInfoVO" type="kr.co.solbipos.application.common.service.ResrceInfoVO"/>
     <typeAlias alias="storeVO" type="kr.co.solbipos.application.common.service.StoreVO"/>
+    <typeAlias alias="cmAgencyVO" type="kr.co.solbipos.application.common.service.CmAgencyVO"/>
 
     <!-- 세션관련 -->
     <typeAlias alias="sessionInfoVO" type="kr.co.solbipos.application.session.auth.service.SessionInfoVO"/>
@@ -104,10 +105,14 @@
     <typeAlias alias="storePosEnvVO" type="kr.co.solbipos.store.manage.storemanage.service.StorePosEnvVO"/>
     <typeAlias alias="kitchenPrintVO" type="kr.co.solbipos.store.manage.storemanage.service.KitchenPrintVO"/>
     <typeAlias alias="storeProductVO" type="kr.co.solbipos.store.manage.storemanage.service.StoreProductVO"/>
+    <typeAlias alias="storeViewVO" type="kr.co.solbipos.store.manage.storeview.service.StoreViewVO"/>
+
 
     <!-- 기초관리 -->
     <typeAlias alias="posFuncVO" type="kr.co.solbipos.base.store.posfunc.service.PosFuncVO"/>
     <typeAlias alias="hqEmpVO" type="kr.co.solbipos.base.store.emp.hq.service.HqEmpVO"/>
+    <typeAlias alias="viewVO" type="kr.co.solbipos.base.store.view.service.ViewVO"/>
+    <typeAlias alias="vanConfigVO" type="kr.co.solbipos.base.store.view.service.VanConfigVO"/>
 <!--
     <typeAlias alias="storeViewVO" type="kr.co.solbipos.store.manage.storeview.service.StoreViewVO"/>
     <typeAlias alias="storeConfgVO" type="kr.co.solbipos.store.manage.storeconfg.service.StoreConfgVO"/>
@@ -144,7 +149,9 @@
     <typeAlias alias="userVO" type="kr.co.solbipos.sys.admin.user.service.UserVO"/>
     <typeAlias alias="dataRemoveVO" type="kr.co.solbipos.sys.admin.dataremove.service.DataRemoveVO"/>
     <typeAlias alias="logSendVO" type="kr.co.solbipos.sys.admin.logsend.service.LogSendVO"/>
+-->
     <typeAlias alias="myInfoVO" type="kr.co.solbipos.base.store.myinfo.service.MyInfoVO"/>
+<!--
     <typeAlias alias="viewVO" type="kr.co.solbipos.base.store.view.service.ViewVO"/>
 -->
     <typeAlias alias="webUserVO" type="kr.co.solbipos.base.store.emp.store.service.WebUserVO"/>
@@ -358,9 +365,9 @@
     <typeAlias alias="instockVersusVO" type="kr.co.solbipos.excclc.ern.instockversus.service.InstockVersusVO"/>
     <typeAlias alias="bilclctVO" type="kr.co.solbipos.excclc.bilclct.bilclct.service.BilclctVO"/>
     <typeAlias alias="accntManageVO" type="kr.co.solbipos.adi.mony.accntmanage.service.AccntManageVO"/>
+-->
     <typeAlias alias="statusVO" type="kr.co.solbipos.adi.mony.status.service.StatusVO"/>
     <typeAlias alias="drawHistVO" type="kr.co.solbipos.adi.mony.drawhist.service.DrawHistVO"/>
--->
     <typeAlias alias="dclzManageVO" type="kr.co.solbipos.adi.dclz.dclzmanage.service.DclzManageVO"/>
 <!--
     <typeAlias alias="pymhrVO" type="kr.co.solbipos.adi.dclz.pymhr.service.PymhrVO"/>
