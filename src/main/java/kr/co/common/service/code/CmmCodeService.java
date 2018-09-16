@@ -47,12 +47,20 @@ public interface CmmCodeService {
     boolean hasCode(String comCdFg);
 
     /**
-      * 공통 코드 조회
-      *
-      * @param nmcodeGrpCd {@code String} 조회 코드
-      * @return {@code <E> List<E>} 타입의 {@code List} 로 전달
-      */
+     * 공통 코드 조회
+     *
+     * @param nmcodeGrpCd {@code String} 조회 코드
+     * @return {@code <E> List<E>} 타입의 {@code List} 로 전달
+     */
     <E> List<E> selectCmmCodeList(String nmcodeGrpCd);
+
+    /**
+     * 환경변수 조회
+     *
+     * @param envstCd
+     * @return
+     */
+    <E> List<E> selectEnvCodeList(String envstCd);
 
     /**
      * 대리점 목록 조회

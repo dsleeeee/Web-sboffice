@@ -43,10 +43,19 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    @Autowired SessionService sessionService;
-    @Autowired CmmMenuService cmmMenuService;
-    @Autowired MessageService messageService;
+    private final SessionService sessionService;
+    private final CmmMenuService cmmMenuService;
+    private final MessageService messageService;
 
+    /**
+     * Constructor Injection
+     */
+    @Autowired public AuthenticationInterceptor(SessionService sessionService,
+        CmmMenuService cmmMenuService, MessageService messageService) {
+        this.sessionService = sessionService;
+        this.cmmMenuService = cmmMenuService;
+        this.messageService = messageService;
+    }
 
     /**
      * preHandler : Interceptor 진입시 수행
@@ -56,8 +65,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
      * @param handler
      * @Return boolean
      */
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
+    @Override public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
         Object handler) throws Exception {
 
         String requestURL = request.getRequestURI().toString();
@@ -125,7 +133,8 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                 requestURL, request.getHeader("accept")
                     + "\n■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
 
-            @SuppressWarnings("unused") String exceptionMsg = messageService.get("cmm.access.denied");
+            @SuppressWarnings("unused") String exceptionMsg =
+                messageService.get("cmm.access.denied");
 
             // 권한 없음 처리
             //TODO 개발 진행중 주석처리
@@ -237,9 +246,3 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
     }
 
 }
-
-
-
-
-
-

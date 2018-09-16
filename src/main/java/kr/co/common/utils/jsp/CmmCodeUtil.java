@@ -1,6 +1,7 @@
 package kr.co.common.utils.jsp;
 
 import kr.co.common.data.domain.CommonCodeVO;
+import kr.co.common.data.domain.EnvCodeVO;
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.code.CmmCodeService;
@@ -25,14 +26,11 @@ import static org.springframework.util.StringUtils.isEmpty;
  *
  * @author 정용길
  */
-@Component("cmmCodeUtil")
-public class CmmCodeUtil {
+@Component("cmmCodeUtil") public class CmmCodeUtil {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    @Autowired
-    CmmCodeService cmmCodeService;
-    @Autowired
-    SessionService sessionService;
+    @Autowired CmmCodeService cmmCodeService;
+    @Autowired SessionService sessionService;
 
     public static final String COMBO_NAME = "name";
     public static final String COMBO_VALUE = "value";
@@ -65,7 +63,7 @@ public class CmmCodeUtil {
     public String getCommCode(String nmcodeGrpCd) {
 
         CommonCodeVO commonCodeVO = getCommCodeData(nmcodeGrpCd);
-        if(commonCodeVO == null) {
+        if (commonCodeVO == null) {
             return assmblEmptyCombo();
         }
         // 결과 형태를 만들어서 json 으로 리턴
@@ -81,7 +79,7 @@ public class CmmCodeUtil {
     public String getCommCodeExcpAll(String nmcodeGrpCd) {
 
         CommonCodeVO commonCodeVO = getCommCodeData(nmcodeGrpCd);
-        if(commonCodeVO == null) {
+        if (commonCodeVO == null) {
             return assmblEmptyCombo();
         }
         // 결과 형태를 만들어서 json 으로 리턴
@@ -97,7 +95,7 @@ public class CmmCodeUtil {
     public String getCommCodeSelect(String nmcodeGrpCd) {
 
         CommonCodeVO commonCodeVO = getCommCodeData(nmcodeGrpCd);
-        if(commonCodeVO == null) {
+        if (commonCodeVO == null) {
             return assmblEmptyCombo();
         }
         // 결과 형태를 만들어서 json 으로 리턴
@@ -114,7 +112,7 @@ public class CmmCodeUtil {
     public String getCommCodeNoSelect(String nmcodeGrpCd) {
 
         CommonCodeVO commonCodeVO = getCommCodeData(nmcodeGrpCd);
-        if(commonCodeVO == null) {
+        if (commonCodeVO == null) {
             return assmblEmptyCombo();
         }
         // 결과 형태를 만들어서 json 으로 리턴
@@ -130,7 +128,7 @@ public class CmmCodeUtil {
     public String getCommCodeAll(String nmcodeGrpCd) {
 
         CommonCodeVO commonCodeVO = getCommCodeData(nmcodeGrpCd);
-        if(commonCodeVO == null) {
+        if (commonCodeVO == null) {
             return assmblEmptyCombo();
         }
         // 결과 형태를 만들어서 json 으로 리턴
@@ -188,24 +186,24 @@ public class CmmCodeUtil {
      * 공통코드 콤보박스의 내용을 json data 를 생성
      *
      * @param source 조회된 코드 리스트
-     * @param name 콤보박스에 보여줄 변수명
-     * @param value 콤보박스에 value로 사용될 변수명
+     * @param name   콤보박스에 보여줄 변수명
+     * @param value  콤보박스에 value로 사용될 변수명
      * @return
      */
-    public <E> String assmblObj(List<DefaultMap<E>> source, String name, String value, UseYn option) {
+    public <E> String assmblObj(List<DefaultMap<E>> source, String name, String value,
+        UseYn option) {
         if (ObjectUtils.isEmpty(source)) {
             LOGGER.warn("assmble source empty...");
             return "";
         }
         List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 
-        if(option == UseYn.ALL) {
+        if (option == UseYn.ALL) {
             HashMap<String, String> m = new HashMap<>();
             m.put(COMBO_NAME, "전체");
             m.put(COMBO_VALUE, "");
             list.add(m);
-        }
-        else if(option == UseYn.Y) {
+        } else if (option == UseYn.Y) {
             HashMap<String, String> m = new HashMap<>();
             m.put(COMBO_NAME, "선택안함");
             m.put(COMBO_VALUE, "N");
@@ -249,6 +247,63 @@ public class CmmCodeUtil {
     }
 
     /**
+     * 환경변수 공통코드 조회 (TB_CM_ENVST_DTL)
+     *
+     * @param envstCd
+     * @return
+     */
+    public String getEnvCode(String envstCd) {
+
+        EnvCodeVO envCodeVO = getEnvCodeData(envstCd);
+        if (envCodeVO == null) {
+            return assmblEmptyCombo();
+        }
+        // 결과 형태를 만들어서 json 으로 리턴
+        return assmblObj(envCodeVO.getCodeList(), "envstValNm", "envstValCd", UseYn.ALL);
+    }
+
+    /**
+     * 환경변수 공통코드 조회  "ALL" 제외 (TB_CM_ENVST_DTL)
+     *
+     * @param envstCd
+     * @return
+     */
+    public String getEnvCodeExcpAll(String envstCd) {
+
+        EnvCodeVO envCodeVO = getEnvCodeData(envstCd);
+        if (envCodeVO == null) {
+            return assmblEmptyCombo();
+        }
+        // 결과 형태를 만들어서 json 으로 리턴
+        return assmblObj(envCodeVO.getCodeList(), "envstValNm", "envstValCd", UseYn.N);
+    }
+
+    /**
+     * 환경변수 코드 조회
+     *
+     * @param envstCd
+     * @return
+     */
+    private EnvCodeVO getEnvCodeData(String envstCd) {
+
+        EnvCodeVO envCodeVO = new EnvCodeVO();
+
+        envCodeVO.setEnvstCd(envstCd);
+
+        List<DefaultMap<String>> codeList = null;
+
+        codeList = cmmCodeService.selectEnvCodeList(envstCd);
+
+        if (isEmpty(codeList)) { // 조회 결과 없으면 데이터 없음 리턴
+            return null;
+        }
+
+        envCodeVO.setCodeList(codeList);
+
+        return envCodeVO;
+    }
+
+    /**
      * 대리점코드 조회
      *
      * @param
@@ -264,18 +319,20 @@ public class CmmCodeUtil {
 
     /**
      * 벤사 코드 조회
+     *
      * @return
      */
     public String getVanList() {
         List<DefaultMap<String>> agencyList = cmmCodeService.getVanList();
 
         // 결과 형태를 만들어서 json 으로 리턴
-        return assmblObj(agencyList, "vanNm", "vanCd", UseYn.N);
+        return assmblObj(agencyList, "vanNm", "vanCd", UseYn.ALL);
     }
 
 
     /**
      * 본사 코드 조회
+     *
      * @return
      */
     public String getHqOfficeList() {
@@ -287,9 +344,10 @@ public class CmmCodeUtil {
 
     /**
      * 회원 등급 조회
+     *
      * @return
      */
-    public String getMemberClassList(HttpServletRequest request,  String option) {
+    public String getMemberClassList(HttpServletRequest request, String option) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<String>> source = cmmCodeService.getMemberClassList(sessionInfoVO);
@@ -302,10 +360,9 @@ public class CmmCodeUtil {
 
         String defaultNm = "";
 
-        if(option.equals("ALL")) {
+        if (option.equals("ALL")) {
             defaultNm = "전체";
-        }
-        else if(option.equals("SEL")) {
+        } else if (option.equals("SEL")) {
             defaultNm = "선택";
         }
 
@@ -320,6 +377,4 @@ public class CmmCodeUtil {
 
         return convertToJson(list);
     }
-
-
 }

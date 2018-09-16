@@ -137,8 +137,11 @@
         <div class="btnSet">
           <%-- 저장 --%>
           <span><a href="javascript:;" class="btn_blue" id="btnSave"><s:message code="cmm.save" /></a></span>
+<<<<<<< HEAD
+=======
           <%-- 닫기 --%>
           <span><a href="javascript:;" class="btn_gray btnClose"><s:message code="cmm.close" /></a></span>
+>>>>>>> refs/heads/master
         </div>
       </div>
     </div>

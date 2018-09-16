@@ -24,9 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
-import static kr.co.common.utils.grid.ReturnUtil.returnJson;
-import static kr.co.common.utils.grid.ReturnUtil.returnJsonBindingFieldError;
-import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
+import static kr.co.common.utils.grid.ReturnUtil.*;
 
 
 /**

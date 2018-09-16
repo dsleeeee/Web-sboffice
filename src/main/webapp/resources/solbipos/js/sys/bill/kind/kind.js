@@ -18,18 +18,16 @@ var app = agrid.getApp();
  */
 app.controller('printCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('printCtrl', $scope, $http, true));
+  angular.extend(this, new RootController('printCtrl', $scope, $http, false));
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-    // picker 사용시 호출 : 미사용시 호출안함
-    $scope._makePickColumns("printCtrl");
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
-      if (e.panel == s.cells) {
+      if (e.panel === s.cells) {
         var col = s.columns[e.col];
         if (col.binding === "prtClassCd") {
           var item = s.rows[e.row].dataItem;
-          if (item.status != "I") {
+          if (item.status !== "I") {
             wijmo.addClass(e.cell, 'wijLink');
             wijmo.addClass(e.cell, 'wj-custom-readonly');
           } else {
@@ -43,7 +41,7 @@ app.controller('printCtrl', ['$scope', '$http', function ($scope, $http) {
       var col = s.columns[e.col];
       if (col.binding === "prtClassCd") {
         var dataItem = s.rows[e.row].dataItem;
-        if (nvl(dataItem.status, "") == "" && dataItem.status != "I") {
+        if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
           e.cancel = true;
         }
       }
@@ -54,7 +52,7 @@ app.controller('printCtrl', ['$scope', '$http', function ($scope, $http) {
       if( ht.cellType === wijmo.grid.CellType.Cell) {
         var col = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
-        if ( col.binding === "prtClassCd" && selectedRow.status != "I") {
+        if ( col.binding === "prtClassCd" && selectedRow.status !== "I") {
           $scope._broadcast('mapngCtrl', selectedRow.prtClassCd);
         }
       }
@@ -117,11 +115,11 @@ app.controller('mapngCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.initGrid = function (s, e) {
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
-      if (e.panel == s.cells) {
+      if (e.panel === s.cells) {
         var col = s.columns[e.col];
         if (col.binding === "prtClassCd") {
           var item = s.rows[e.row].dataItem;
-          if (item.status != "I") {
+          if (item.status !== "I") {
             wijmo.addClass(e.cell, 'wijLink');
             wijmo.addClass(e.cell, 'wj-custom-readonly');
           } else {
@@ -135,7 +133,7 @@ app.controller('mapngCtrl', ['$scope', '$http', function ($scope, $http) {
       var col = s.columns[e.col];
       if (col.binding === "prtClassCd") {
         var dataItem = s.rows[e.row].dataItem;
-        if (nvl(dataItem.status, "") == "" && dataItem.status != "I") {
+        if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
           e.cancel = true;
         }
       }
@@ -146,18 +144,27 @@ app.controller('mapngCtrl', ['$scope', '$http', function ($scope, $http) {
       if( ht.cellType === wijmo.grid.CellType.Cell) {
         var col = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
-        if ( col.binding === "prtClassCd" && selectedRow.status != "I") {
+        if ( col.binding === "prtClassCd" && selectedRow.status !== "I") {
           // searchMapng(selectedRow.prtClassCd);
         }
       }
     });
   };
+  // prtClassCd Data Setter
+  $scope.setPrtClassCd = function (data) {
+    prtClassCd.set(data);
+  };
+  // prtClassCd Data Getter
+  $scope.getPrtClassCd = function () {
+    return prtClassCd.get();
+  };
   // 출력물매핑 그리드 조회
   $scope.$on("mapngCtrl", function(event, data) {
+    // scope 영역에 변수 Set
+    $scope.setPrtClassCd(data);
     // 파라미터
     var params = {};
     params.prtClassCd = data;
-    $("#prtClassCd").val(data);
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquirySub("/sys/bill/kind/mapng/list.sb", params, function(){
       $("#btnUpMapng").show();
@@ -176,38 +183,46 @@ app.controller('mapngCtrl', ['$scope', '$http', function ($scope, $http) {
     popup.shown.addHandler(function (s) {
       // 팝업 열린 뒤. 딜레이줘서 열리고 나서 실행되도록 함
       setTimeout(function() {
-        $scope._broadcast('printCodeCtrl', true);
-      }, 100)
+        var params = {};
+        var grid = agrid.getScope("printCtrl").flex;
+        var selectedRow = grid.selectedRows[0]._data;
+        params.prtClassCd = selectedRow.prtClassCd;
+
+        $scope._broadcast('printCodeCtrl', params);
+      }, 50)
     });
     popup.show(true, function (s) {
-      var gridPrintCode = agrid.getScope('printCodeCtrl');
-      for (var i = 0; i < gridPrintCode.flex.collectionView.itemCount; i++) {
-        var item = gridPrintCode.flex.collectionView.items[i];
-        // 선택된 행만 체크
-        if (item.gChk) {
-          var dupCheck = false;
-          // 중복체크
-          for (var j = 0; j < $scope.flex.collectionView.itemCount; j++) {
-            var savedItem = $scope.flex.collectionView.items[j];
-            if (savedItem.prtCd == item.prtCd) {
-              dupCheck = true;
-              break;
+      // 선택 버튼 눌렀을때만
+      if (popup.dialogResult === "wj-hide-apply") {
+        var gridPrintCode = agrid.getScope('printCodeCtrl');
+        for (var i = 0; i < gridPrintCode.flex.collectionView.itemCount; i++) {
+          var item = gridPrintCode.flex.collectionView.items[i];
+          // 선택된 행만 체크
+          if (item.gChk) {
+            var dupCheck = false;
+            // 중복체크
+            for (var j = 0; j < $scope.flex.collectionView.itemCount; j++) {
+              var savedItem = $scope.flex.collectionView.items[j];
+              if (savedItem.prtCd === item.prtCd) {
+                dupCheck = true;
+                break;
+              }
+            }
+            // 중복체크 통과시 추가
+            if (!dupCheck) {
+              $scope.flex.collectionView.trackChanges = true;
+              var newRow = $scope.flex.collectionView.addNew();
+              newRow.status = "I";
+              newRow.prtClassCd = $scope.getPrtClassCd();
+              newRow.prtCd = item.prtCd;
+              newRow.gChk = false;
+
+              $scope.flex.collectionView.commitNew();
             }
           }
-          // 중복체크 통과시 추가
-          if (!dupCheck) {
-            $scope.flex.collectionView.trackChanges = true;
-            var newRow = $scope.flex.collectionView.addNew();
-            newRow.status = "I";
-            newRow.prtClassCd = $("#prtClassCd").val();
-            newRow.prtCd = item.prtCd;
-            newRow.gChk = false;
-
-            $scope.flex.collectionView.commitNew();
-          }
         }
+        $scope.flex.select($scope.flex.rows.length - 1, 1);
       }
-      $scope.flex.select($scope.flex.rows.length - 1, 1);
     });
   };
   // 출력물매핑 그리드 저장
@@ -216,7 +231,7 @@ app.controller('mapngCtrl', ['$scope', '$http', function ($scope, $http) {
     // dispSeq 재설정
     for (var i = 0; i < $scope.flex.collectionView.itemCount; i++) {
       $scope.flex.collectionView.editItem($scope.flex.collectionView.items[i]);
-      $scope.flex.collectionView.items[i].prtClassCd = $("#prtClassCd").val();
+      $scope.flex.collectionView.items[i].prtClassCd = $scope.getPrtClassCd();
       $scope.flex.collectionView.items[i].dispSeq = (i + 1);
       $scope.flex.collectionView.commitEdit();
     }
@@ -271,3 +286,14 @@ app.controller('mapngCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.flex.select(movedRows, 1);
   };
 }]);
+/** 출력물매핑 그리드 의 변수 값 영역 */
+app.factory('kindPrtClassCd', function () {
+  var prtClassCd = {};
+  prtClassCd.set = function (data) {
+    prtClassCd.value = data;
+  };
+  prtClassCd.get = function () {
+    return prtClassCd.value;
+  };
+  return prtClassCd;
+});

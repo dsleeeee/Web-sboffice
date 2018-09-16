@@ -21,13 +21,13 @@
   <div class="wj-TblWrap">
     <div class="w50 fl" style="width: 40%">
       <%--위즈모 테이블--%>
-      <div id="gridPrint" class="wj-TblWrapBr mr10 pd20" style="height: 490px;" ng-controller="printCtrl">
+      <div id="gridPrint" class="wj-TblWrapBr mr10 pd20" style="height: 480px;" ng-controller="printCtrl">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='kind.gridNm' /></span>
           <button class="btn_skyblue" id="btnAddPrint" style="display: none;" ng-click="addRow()">
             <s:message code="cmm.add" />
           </button>
-          <button class="btn_skyblue" id="btnDelPrint" style="display: none;">
+          <button class="btn_skyblue" id="btnDelPrint" style="display: none;" ng-click="delete()">
             <s:message code="cmm.delete" />
           </button>
           <button class="btn_skyblue" id="btnSavePrint" style="display: none;" ng-click="save()">
@@ -36,7 +36,7 @@
         </div>
         <%-- 개발시 높이 조절해서 사용--%>
         <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
-        <div style="height:405px">
+        <div style="height:400px">
           <wj-flex-grid
                   autoGenerateColumns="false"
                   control="flex"
@@ -48,17 +48,12 @@
 
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="kind.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="kind.prtClassCd"/>" binding="prtClassCd" width="70"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="kind.prtClassCd"/>" binding="prtClassCd" width="50"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="kind.prtClassNm"/>" binding="prtClassNm" width="*"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="kind.generalYn"/>" binding="generalYn" width="40"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="kind.foodYn"/>" binding="foodYn" format="checkBoxText" width="40"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="kind.generalYn"/>" binding="generalYn" format="checkBoxText" width="*"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="kind.foodYn"/>" binding="foodYn" format="checkBoxText" width="*"></wj-flex-grid-column>
 
           </wj-flex-grid>
-          <%-- ColumnPicker 사용시 include --%>
-          <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-            <jsp:param name="pickerTarget" value="printCtrl"/>
-          </jsp:include>
-          <%--// ColumnPicker 사용시 include --%>
         </div>
       </div>
       <%--//위즈모 테이블--%>
@@ -66,7 +61,7 @@
 
     <div class="w50 fl" style="width: 60%">
       <%--위즈모 테이블--%>
-      <div id="gridMapng" class="wj-TblWrapBr ml10 pd20" style="height: 490px;" ng-controller="mapngCtrl">
+      <div id="gridMapng" class="wj-TblWrapBr ml10 pd20" style="height: 480px;" ng-controller="mapngCtrl">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='kind.gridMapngNm' /></span>
           <button class="btn_up" id="btnUpMapng" style="display: none;" ng-click="rowMoveUp()">
@@ -87,7 +82,7 @@
         </div>
         <%-- 개발시 높이 조절해서 사용--%>
         <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
-        <div style="height:405px;">
+        <div style="height:400px;">
           <wj-flex-grid
                   autoGenerateColumns="false"
                   control="flex"
