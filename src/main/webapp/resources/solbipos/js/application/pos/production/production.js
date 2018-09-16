@@ -1,11 +1,11 @@
 /****************************************************************
  *
- * 파일명 : excpForward.js
- * 설  명 : 예외출고 JavaScript
+ * 파일명 : production.js
+ * 설  명 : 생산량 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
- * 2018.09.14     김지은      1.0
+ * 2018.09.16     김지은      1.0
  *
  * **************************************************************/
 /**
@@ -18,9 +18,8 @@ var app = agrid.getApp();
  */
 var prod;
 
-
 /**
- *  예외출고 상품목록 그리드 생성
+ *  생산량 등록 상품목록 그리드 생성
  */
 app.controller('productCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
@@ -39,7 +38,7 @@ app.controller('productCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     });
 
-    // 대상 상품목록 그리드 선택 이벤트
+    // 생산량 대상 상품목록 그리드 선택 이벤트
     s.addEventListener(s.hostElement, 'mousedown', function(e) {
       var ht = s.hitTest(e);
       if( ht.cellType === wijmo.grid.CellType.Cell) {
@@ -62,7 +61,7 @@ app.controller('productCtrl', ['$scope', '$http', function ($scope, $http) {
   // 예외출고 대상상품 그리드 조회
   $scope.searchProduct = function(){
     var params = {};
-    $scope._inquiryMain("/application/pos/excpForward/excpForward/getExcpForwardProduct.sb", params, function() {}, false);
+    $scope._inquiryMain("/application/pos/production/production/getProductList.sb", params, function() {}, false);
   };
 }]);
 

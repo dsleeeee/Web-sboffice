@@ -18,7 +18,7 @@
     <div class="contents-middle">
         <div class="subCon">
             <div class="searchBar">
-                <span class="cusTitle"><s:message code="application.pos.excpForward"/></span>
+                <span class="cusTitle"><s:message code="application.pos.production"/></span>
             </div>
             <%-- 예외출고 상품 목록 --%>
             <div class="mb40" ng-controller="productCtrl">
@@ -36,12 +36,12 @@
 
                             <!-- define columns -->
                             <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="application.pos.excpForward.storeCd"/>" binding="storeCd" width="*" isReadOnly="true" visible="false"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="application.pos.excpForward.prodClassCd"/>" binding="prodClassCd" width="*" isReadOnly="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="application.pos.excpForward.prodClassNm"/>" binding="prodClassNm" width="*" isReadOnly="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="application.pos.excpForward.prodCd"/>" binding="prodCd" width="*" isReadOnly="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="application.pos.excpForward.prodNm"/>" binding="prodNm" width="*" isReadOnly="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="application.pos.excpForward.regProd"/>" binding="regProd" width="100" isReadOnly="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="application.pos.production.storeCd"/>" binding="storeCd" width="*" isReadOnly="true" visible="false"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="application.pos.production.prodClassCd"/>" binding="prodClassCd" width="*" isReadOnly="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="application.pos.production.prodClassNm"/>" binding="prodClassNm" width="*" isReadOnly="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="application.pos.production.prodCd"/>" binding="prodCd" width="*" isReadOnly="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="application.pos.production.prodNm"/>" binding="prodNm" width="*" isReadOnly="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="application.pos.production.regProd"/>" binding="regProd" width="100" isReadOnly="true"></wj-flex-grid-column>
                         </wj-flex-grid>
 
                     </div>
@@ -52,8 +52,8 @@
 </div>
 </body>
 
-<script type="text/javascript" src="/resource/solbipos/js/application/pos/excpForward/excpForward.js?ver=20180914" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/application/pos/production/production.js?ver=20180914" charset="utf-8"></script>
 
 <%-- 예외출고 수량 등록 팝업 --%>
-<c:import url="/WEB-INF/view/application/pos/excpForward/excpForwradRegist.jsp">
+<c:import url="/WEB-INF/view/application/pos/production/productionRegist.jsp">
 </c:import>

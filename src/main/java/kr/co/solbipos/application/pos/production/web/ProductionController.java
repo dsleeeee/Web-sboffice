@@ -1,4 +1,4 @@
-package kr.co.solbipos.application.pos.exceptForward.web;
+package kr.co.solbipos.application.pos.production.web;
 
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
@@ -6,10 +6,9 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.exception.AuthenticationException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
-import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.validate.Login;
-import kr.co.solbipos.application.pos.exceptForward.service.ExceptForwardService;
-import kr.co.solbipos.application.pos.exceptForward.service.ExcpForwardProductVO;
+import kr.co.solbipos.application.pos.production.service.ProductionService;
+import kr.co.solbipos.application.pos.production.service.ProductionVO;
 import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import org.slf4j.Logger;
@@ -25,41 +24,37 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.util.List;
 
 import static kr.co.common.utils.HttpUtils.getClientIp;
-import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 /**
- * @Class Name : ExecptForwardController.java
- * @Description : POS 화면에서 예외출고 등록
+ * @Class Name : ProductionController.java
+ * @Description : POS 화면에서 생산량 등록
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2018.09.14  김지은      최초생성
+ * @ 2018.09.16  김지은      최초생성
  *
  * @author 솔비포스 차세대개발실 김지은
- * @since 2018. 09.14
+ * @since 2018. 09.16
  * @version 1.0
  *
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Controller
-@RequestMapping(value = "/application/pos/excpForward/")
-public class ExecptForwardController {
+@RequestMapping(value = "/application/pos/production/")
+public class ProductionController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    ExceptForwardService service;
+    ProductionService service;
     @Autowired
     SessionService sessionService;
-    @Autowired
-    CmmCodeUtil cmmCodeUtil;
     @Autowired
     AuthService authService;
     @Autowired
@@ -67,17 +62,17 @@ public class ExecptForwardController {
 
 
     /**
-     * 상품 목록 조회 화면
+     * 조회 화면 전,
      * @param request
      * @param response
      * @param model
      * @return
      */
-    @RequestMapping(value = "forwardTest.sb", method = RequestMethod.GET)
-    public String forwardTest(HttpServletRequest request, HttpServletResponse response,
+    @RequestMapping(value = "productionTest.sb", method = RequestMethod.GET)
+    public String prodcutionTest(HttpServletRequest request, HttpServletResponse response,
         Model model) {
 
-        return "application/pos/excpForward/forwardTest";
+        return "application/pos/production/productionTest";
     }
 
     /**
@@ -87,14 +82,13 @@ public class ExecptForwardController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "excpForwardView.sb", method = RequestMethod.GET)
-    public String excpForwardView(HttpServletRequest request, HttpServletResponse response,
+    @RequestMapping(value = "productionView.sb", method = RequestMethod.GET)
+    public String productionView(HttpServletRequest request, HttpServletResponse response,
                        Model model) {
 
-        LOGGER.info(">>>>>>>>>>>>>>>>>>>>>>>> excpForwardView");
+        LOGGER.info(">>>>>>>>>>>>>>>>>>>>>>>> productionView");
 
-        return "application/pos/excpForward/excpForwardView";
-
+        return "application/pos/production/productionView";
     }
 
     /**
@@ -113,8 +107,6 @@ public class ExecptForwardController {
                                   BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response,
                                   Model model) {
 
-        LOGGER.info("posLogin start");
-
         String returnUrl = "";
 
         if(!isEmpty(request.getParameter("storeCd")) && !isEmpty(request.getParameter("hwAuthKey")) && !isEmpty(request.getParameter("url"))) {
@@ -128,9 +120,7 @@ public class ExecptForwardController {
             // 세션 생성
             sessionService.setSessionInfo(request, response, posSi);
 
-            returnUrl = "application/pos/excpForward/"+request.getParameter("url");
-
-            LOGGER.info(">>>> returnUrl : "+ returnUrl);
+            returnUrl = "application/pos/production/"+request.getParameter("url");
         }
         else {
             throw new AuthenticationException(messageService.get("login.pos.error"), "/error/application/pos/403.sb");
@@ -140,8 +130,8 @@ public class ExecptForwardController {
     }
 
     /**
-     * 예외출고 목록 조회
-     * @param   productVO
+     * 생산량 대상 상품 목록 조회
+     * @param   productionVO
      * @param   request
      * @param   response
      * @param   model
@@ -149,21 +139,20 @@ public class ExecptForwardController {
      * @author  김지은
      * @since   2018. 08. 14.
      */
-    @RequestMapping(value = "excpForward/getExcpForwardProduct.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "production/getProductList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getExcpForwardProduct(ExcpForwardProductVO productVO, HttpServletRequest request,
+    public Result getProductList(ProductionVO productionVO, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        LOGGER.info(">>>>>>>>>>>>> getExcpForwardProduct");
+        LOGGER.info(">>>>>>>>>>>>> getProductList");
 
-        List<DefaultMap<String>> list = service.getExcpForwardProduct(productVO, sessionInfoVO);
+        List<DefaultMap<String>> list = service.getProductList(productionVO, sessionInfoVO);
 
         LOGGER.info(">>>>>>> list.size() : " + list.size());
 
         return returnListJson(Status.OK, list);
     }
-
 
 }
