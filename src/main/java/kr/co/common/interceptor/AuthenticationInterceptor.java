@@ -7,7 +7,6 @@ import kr.co.common.service.cmm.CmmMenuService;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.CmmUtil;
-import kr.co.common.utils.SessionUtil;
 import kr.co.common.utils.spring.WebUtil;
 import kr.co.solbipos.application.common.enums.ResrceFg;
 import kr.co.solbipos.application.common.service.ResrceInfoVO;
