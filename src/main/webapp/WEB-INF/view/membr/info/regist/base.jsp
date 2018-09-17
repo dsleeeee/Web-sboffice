@@ -24,7 +24,11 @@
     </ul>
   <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
   <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
+<<<<<<< HEAD
+    <table class="searchTbl2" id="basicInfrm" style="display:none;">
+=======
     <table class="searchTbl2" id="baseInfrm" style="display:none;">
+>>>>>>> refs/heads/master
       <colgroup>
         <col class="w15" />
         <col class="w35" />

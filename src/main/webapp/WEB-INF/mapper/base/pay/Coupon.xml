@@ -141,13 +141,16 @@
       TABLE    : TB_HQ_PAY_METHOD_CLASS
       COMMENTS : 분류를 삭제한다.
   -->
-  <delete id="deleteHqCouponClass" parameterType="DefaultMap">
+  <update id="deleteHqCouponClass" parameterType="DefaultMap">
     /* USE : CouponMapper.deleteHqCouponClass */
-    DELETE TB_HQ_PAY_METHOD_CLASS
+    UPDATE TB_HQ_PAY_METHOD_CLASS
+       SET USE_YN = 'N',
+           MOD_DT = #{modDt},
+           MOD_ID = #{modId}
      WHERE HQ_OFFICE_CD = #{hqOfficeCd}
        AND PAY_CLASS_CD = #{payClassCd}
        AND PAY_TYPE_FG =  #{payTypeFg}
-  </delete>
+  </update>
 
   <!-- 매장 쿠폰 분류 등록 -->
   <!--
@@ -207,13 +210,16 @@
       TABLE    : TB_HQ_PAY_METHOD_CLASS
       COMMENTS : 분류를 삭제한다.
   -->
-  <delete id="deleteStoreCouponClass" parameterType="DefaultMap">
+  <update id="deleteStoreCouponClass" parameterType="DefaultMap">
     /* USE : CouponMapper.deleteStoreCouponClass */
-    DELETE TB_MS_PAY_METHOD_CLASS
+    UPDATE TB_MS_PAY_METHOD_CLASS
+       SET USE_YN = 'N',
+           MOD_DT = #{modDt},
+           MOD_ID = #{modId}
      WHERE STORE_CD = #{storeCd}
        AND PAY_TYPE_FG = #{payTypeFg}
        AND PAY_CLASS_CD = #{payClassCd}
-  </delete>
+  </update>
 
   <!-- 본사 쿠폰분류 등록시 프로시져 호출 -->
   <!--
@@ -289,8 +295,8 @@
            thc.COUPN_APPLY_FG,
            thc.USE_YN,
            thc.REG_ID,
-           (SELECT COUNT(thcp.PROD_CD) FROM TB_HQ_COUPON_PROD thcp WHERE thcp.HQ_OFFICE_CD = thc.HQ_OFFICE_CD AND thcp.COUPN_CD = thc.COUPN_CD ) AS PROD_CNT,
-           (SELECT COUNT(thcs.STORE_CD) FROM TB_HQ_COUPON_STORE thcs WHERE thcs.HQ_OFFICE_CD = thc.HQ_OFFICE_CD AND thcs.COUPN_CD = thc.COUPN_CD ) AS STORE_CNT
+           (SELECT COUNT(thcp.PROD_CD) FROM TB_HQ_COUPON_PROD thcp WHERE thcp.HQ_OFFICE_CD = thc.HQ_OFFICE_CD AND thcp.PAY_CLASS_CD = thc.PAY_CLASS_CD AND thcp.COUPN_CD = thc.COUPN_CD ) AS PROD_CNT,
+           (SELECT COUNT(thcs.STORE_CD) FROM TB_HQ_COUPON_STORE thcs WHERE thcs.HQ_OFFICE_CD = thc.HQ_OFFICE_CD AND thcs.PAY_CLASS_CD = thc.PAY_CLASS_CD AND thcs.COUPN_CD = thc.COUPN_CD ) AS STORE_CNT
      FROM TB_HQ_COUPON thc
     WHERE thc.HQ_OFFICE_CD = #{hqOfficeCd}
       AND thc.PAY_CLASS_CD = #{payClassCd}
@@ -316,7 +322,7 @@
            tmc.COUPN_APPLY_FG,
            tmc.USE_YN,
            tmc.REG_ID,
-          (SELECT COUNT(tmcp.PROD_CD) FROM TB_MS_COUPON_PROD tmcp WHERE tmcp.STORE_CD = tmc.STORE_CD AND tmcp.COUPN_CD = tmc.COUPN_CD ) AS PROD_CNT
+          (SELECT COUNT(tmcp.PROD_CD) FROM TB_MS_COUPON_PROD tmcp WHERE tmcp.STORE_CD = tmc.STORE_CD AND tmcp.PAY_CLASS_CD = tmc.PAY_CLASS_CD AND tmcp.COUPN_CD = tmc.COUPN_CD ) AS PROD_CNT
      FROM TB_MS_COUPON tmc
     WHERE tmc.STORE_CD = #{storeCd}
       AND tmc.PAY_CLASS_CD = #{payClassCd}
@@ -413,13 +419,16 @@
       TABLE    : TB_HQ_COUPON
       COMMENTS : 쿠폰을 삭제한다.
   -->
-  <delete id="deleteHqCoupon" parameterType="DefaultMap">
+  <update id="deleteHqCoupon" parameterType="DefaultMap">
     /* USE : CouponMapper.deleteHqCoupon */
-    DELETE TB_HQ_COUPON
+    UPDATE TB_HQ_COUPON
+       SET USE_YN = 'N',
+           MOD_DT = #{modDt},
+           MOD_ID = #{modId}
      WHERE HQ_OFFICE_CD = #{hqOfficeCd}
        AND PAY_CLASS_CD =  #{payClassCd}
        AND COUPN_CD = #{coupnCd}
-  </delete>
+  </update>
 
   <!-- 본사 쿠폰 등록시 프로시져 호출 -->
   <!--
@@ -427,8 +436,8 @@
       PARAM    :
       COMMENTS : 본사 쿠폰를 매장 쿠폰에 적용시킨다.
   -->
-  <select id="insertHqCouponToStore" statementType="CALLABLE"  parameterType="couponVO" resultType="String">
-    /* USE : CouponMapper.insertHqCouponClassToStore */
+  <select id="insertHqCouponToStore" statementType="CALLABLE"  parameterType="couponStoreVO" resultType="String">
+    /* USE : CouponMapper.insertHqCouponToStore */
     {
       CALL PKG_HQ_COUPON.SP_HQ_COUPON_I
       (
@@ -488,9 +497,10 @@
     INSERT INTO TB_MS_COUPON
     (
       STORE_CD,
+      COUPN_REG_FG,
+      PAY_CLASS_CD,
       COUPN_CD,
       COUPN_NM,
-      PAY_CLASS_CD,
       COUPN_DC_FG,
       COUPN_DC_RATE,
       COUPN_DC_AMT,
@@ -504,9 +514,10 @@
     VALUES
     (
       #{storeCd},
+      #{coupnRegFg},
+      #{payClassCd},
       #{coupnCd},
       #{coupnNm},
-      #{payClassCd},
       #{coupnDcFg},
       #{coupnDcRate},
       #{coupnDcAmt},
@@ -536,6 +547,7 @@
            MOD_DT = #{modDt},
            MOD_ID = #{modId}
      WHERE STORE_CD = #{storeCd}
+       AND COUPN_REG_FG =  #{coupnRegFg}
        AND PAY_CLASS_CD =  #{payClassCd}
        AND COUPN_CD = #{coupnCd}
   </update>
@@ -545,13 +557,17 @@
       TABLE    : TB_MS_COUPON
       COMMENTS : 쿠폰을 삭제한다.
   -->
-  <delete id="deleteStoreCoupon" parameterType="DefaultMap">
+  <update id="deleteStoreCoupon" parameterType="DefaultMap">
     /* USE : CouponMapper.deleteStoreCoupon */
-    DELETE TB_MS_COUPON
+    UPDATE TB_MS_COUPON
+       SET USE_YN = #{useYn, jdbcType=VARCHAR},
+           MOD_DT = #{modDt},
+           MOD_ID = #{modId}
      WHERE STORE_CD = #{storeCd}
+       AND COUPN_REG_FG =  #{coupnRegFg}
        AND PAY_CLASS_CD = #{payClassCd}
        AND COUPN_CD = #{coupnCd}
-  </delete>
+  </update>
 
   <!-- 쿠폰 적용/미적용 본사 상품 조회 -->
   <!--
@@ -574,8 +590,9 @@
        AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
        AND thp.HQ_OFFICE_CD = thpc.HQ_OFFICE_CD
        AND thp.PROD_CLASS_CD = thpc.PROD_CLASS_CD
-       AND thcp.COUPN_CD (+)= #{coupnCd}
        AND thcp.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
+       AND thcp.PAY_CLASS_CD (+)=  #{payClassCd}
+       AND thcp.COUPN_CD (+)= #{coupnCd}
        AND thcp.PROD_CD (+)= thp.PROD_CD
     <if test='prodCd != null and prodCd.toString() != "null"'>
       AND thp.PROD_CD = #{prodCd}
@@ -612,8 +629,9 @@
        AND tmp.STORE_CD = #{storeCd}
        AND tmp.STORE_CD = tmpc.STORE_CD
        AND tmp.PROD_CLASS_CD = tmpc.PROD_CLASS_CD
-       AND tmcp.COUPN_CD (+)= #{coupnCd}
        AND tmcp.STORE_CD (+)= tmp.STORE_CD
+       AND tmcp.PAY_CLASS_CD (+)= #{payClassCd}
+       AND tmcp.COUPN_CD (+)= #{coupnCd}
        AND tmcp.PROD_CD (+)= tmp.PROD_CD
     <if test='prodRegFg != null and prodRegFg.toString() == "Y"'>
        AND tmcp.PROD_CD IS NOT NULL
@@ -633,6 +651,7 @@
     INSERT  INTO TB_HQ_COUPON_PROD
     (
       HQ_OFFICE_CD,
+      PAY_CLASS_CD,
       COUPN_CD,
       PROD_CD,
       REG_DT,
@@ -643,6 +662,7 @@
     VALUES
     (
       #{hqOfficeCd},
+      #{payClassCd},
       #{coupnCd},
       #{prodCd},
       #{regDt},
@@ -662,6 +682,7 @@
     INSERT  INTO TB_MS_COUPON_PROD
     (
       STORE_CD,
+      PAY_CLASS_CD,
       COUPN_CD,
       PROD_CD,
       REG_DT,
@@ -672,6 +693,7 @@
     VALUES
     (
       #{storeCd},
+      #{payClassCd},
       #{coupnCd},
       #{prodCd},
       #{regDt},
@@ -691,6 +713,7 @@
       /* USE : CouponMapper.deleteHqCouponProd */
       DELETE TB_HQ_COUPON_PROD
        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+         AND PAY_CLASS_CD = #{payClassCd}
          AND COUPN_CD = #{coupnCd}
          AND PROD_CD = #{prodCd}
   </delete>
@@ -704,6 +727,7 @@
       /* USE : CouponMapper.deleteStoreCouponProd */
       DELETE TB_MS_COUPON_PROD
        WHERE STORE_CD = #{storeCd}
+         AND PAY_CLASS_CD = #{payClassCd}
          AND COUPN_CD = #{coupnCd}
          AND PROD_CD = #{prodCd}
   </delete>
@@ -834,7 +858,6 @@
          AND COUPN_CD = #{coupnCd}
          AND STORE_CD = #{storeCd}
   </delete>
-
 
 
 </mapper>

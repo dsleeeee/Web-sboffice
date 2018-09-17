@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <taglib version="2.0" xmlns="http://java.sun.com/xml/j2ee"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd">
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>
 
   <description>Util's function Library</description>
   <display-name>Util's function</display-name>
@@ -82,7 +82,7 @@
     <description>get value or default value</description>
     <example>${ufn:getOrDefault(Object, String)}</example>
     <name>getOrDefault</name>
-    <function-class>kr.co.common.utils.StringUtil</function-class>
+    <function-class>kr.co.common.utils.spring.StringUtil</function-class>
     <function-signature>java.lang.String getOrDefault(java.lang.Object, java.lang.String)</function-signature>
   </function>
   <function>

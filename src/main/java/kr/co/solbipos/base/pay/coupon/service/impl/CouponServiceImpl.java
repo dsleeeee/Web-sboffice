@@ -1,6 +1,7 @@
 package kr.co.solbipos.base.pay.coupon.service.impl;
 
 import kr.co.common.data.enums.Status;
+import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
@@ -9,6 +10,7 @@ import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.pay.coupon.service.*;
 import kr.co.solbipos.base.pay.coupon.service.enums.CoupnEnvFg;
+import kr.co.solbipos.base.pay.coupon.service.enums.CoupnRegFg;
 import kr.co.solbipos.base.pay.coupon.service.enums.PayTypeFg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -120,15 +122,14 @@ public class CouponServiceImpl implements CouponService {
                     // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분류에도 본사의 쿠폰분류 적용.
                     String payMethodClassResult = mapper.updateHqCouponClassToStore(payMethodClassVO);
                     resultVO.setResult(payMethodClassResult);
-
                 }
                 else if(payMethodClassVO.getStatus() == GridDataFg.DELETE) {
+
                     procCnt += mapper.deleteHqCouponClass(payMethodClassVO);
 
-                    // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분류에도 본사의 쿠폰분류 적용.
+                    // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분류에도 본사의 쿠폰분류 적용. (매장 분류 먼저 삭제)
                     String payMethodClassResult = mapper.deleteHqCouponClassToStore(payMethodClassVO);
                     resultVO.setResult(payMethodClassResult);
-
                 }
             }
             // 매장 통제
@@ -206,43 +207,37 @@ public class CouponServiceImpl implements CouponService {
 
                 couponVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-                CouponVO resultVO = new CouponVO();
-
                 if(couponVO.getStatus() == GridDataFg.INSERT) {
 
                     String coupnCd = mapper.getCouponCd(couponVO);
                     couponVO.setCoupnCd(coupnCd);
 
                     procCnt += mapper.insertHqCoupon(couponVO);
-
-                    // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분에도 본사의 쿠폰 적용.
-                    String couponResult = mapper.insertHqCouponToStore(couponVO);
-                    resultVO.setResult(couponResult);
                 }
                 else if(couponVO.getStatus() == GridDataFg.UPDATE) {
                     procCnt += mapper.updateHqCoupon(couponVO);
                     // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분에도 본사의 쿠폰 적용.
                     String couponResult = mapper.updateHqCouponToStore(couponVO);
-                    resultVO.setResult(couponResult);
-
                 }
                 else if(couponVO.getStatus() == GridDataFg.DELETE) {
                     procCnt += mapper.deleteHqCoupon(couponVO);
                     // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분에도 본사의 쿠폰 적용.
                     String couponResult = mapper.deleteHqCouponToStore(couponVO);
-                    resultVO.setResult(couponResult);
-
                 }
             }
             // 매장 통제
             else if(couponVO.getCoupnEnvstVal() == CoupnEnvFg.STORE) {
 
                 couponVO.setStoreCd(sessionInfoVO.getStoreCd());
+                couponVO.setCoupnRegFg(CoupnRegFg.STORE.getCode());
+
+//                LOGGER.info("CoupnRegFg.STORE.getCode() : "+ CoupnRegFg.STORE.getCode());
 
                 if(couponVO.getStatus() == GridDataFg.INSERT) {
 
                     String coupnCd = mapper.getCouponCd(couponVO);
                     couponVO.setCoupnCd(coupnCd);
+
                     procCnt += mapper.insertStoreCoupon(couponVO);
                 }
                 else if(couponVO.getStatus() == GridDataFg.UPDATE) {
@@ -298,12 +293,10 @@ public class CouponServiceImpl implements CouponService {
             couponProdVO.setModDt(dt);
             couponProdVO.setModId(sessionInfoVO.getUserId());
 
-
-
             if(couponProdVO.getCoupnEnvstVal() == CoupnEnvFg.HQ ) {
                 procCnt += mapper.insertHqCouponProd(couponProdVO);
 
-                // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분에도 본사의 쿠폰 적용.
+                // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분에도 본사의 쿠폰 적용. // TODO
                 CouponProdVO resultVO = new CouponProdVO();
                 String couponResult = mapper.insertHqCouponProdToStore(couponProdVO);
                 resultVO.setResult(couponResult);
@@ -358,7 +351,6 @@ public class CouponServiceImpl implements CouponService {
         String dt = currentDateTimeString();
 
         for(CouponStoreVO couponStoreVO : couponStoreVOs) {
-
             couponStoreVO.setOrgnCd(sessionInfoVO.getHqOfficeCd());
             couponStoreVO.setRegDt(dt);
             couponStoreVO.setRegId(sessionInfoVO.getUserId());
@@ -367,6 +359,20 @@ public class CouponServiceImpl implements CouponService {
 
             procCnt += mapper.insertCouponStore(couponStoreVO);
         }
+
+        // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분에도 본사의 쿠폰 적용. //TODO
+        // 적용매장 등록 완료된 후, 첫번째 매장의 등록정보로 등록
+
+        LOGGER.info(">>>>>>>>>>>>>>>>>여기다아아아");
+
+        LOGGER.info(couponStoreVOs[0].getHqOfficeCd());
+        LOGGER.info(couponStoreVOs[0].getPayClassCd());
+        LOGGER.info(couponStoreVOs[0].getCoupnCd());
+
+        CouponStoreVO resultVO = couponStoreVOs[0];
+        String couponResult = mapper.insertHqCouponToStore(resultVO);
+        resultVO.setResult(couponResult);
+
         return procCnt;
     }
 
@@ -379,10 +385,24 @@ public class CouponServiceImpl implements CouponService {
 
         for(CouponStoreVO couponStoreVO : couponStoreVOs) {
 
+            // 쿠폰적용 매장 삭제
             couponStoreVO.setOrgnCd(sessionInfoVO.getHqOfficeCd());
+            couponStoreVO.setUseYn(UseYn.N);
 
             procCnt += mapper.deleteCouponStore(couponStoreVO);
+
         }
+
+
+        //TODO
+        CouponVO resultVO = new CouponVO();
+        resultVO.setHqOfficeCd(couponStoreVOs[0].getHqOfficeCd());
+        resultVO.setPayClassCd(couponStoreVOs[0].getPayClassCd());
+        resultVO.setCoupnCd(couponStoreVOs[0].getCoupnCd());
+
+        // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분에도 본사의 쿠폰 적용.
+        String couponResult = mapper.deleteHqCouponToStore(resultVO);
+
 
         return procCnt;
     }

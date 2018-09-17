@@ -142,6 +142,12 @@ public class HqManageServiceImpl implements HqManageService{
         nmcodeVO.setModId(sessionInfoVO.getUserId());
 
         // 주문단위 등록
+        nmcodeVO.setNmcodeGrpCd("000");
+        nmcodeVO.setNmcodeCd("097");
+        nmcodeVO.setNmcodeNm("주문단위");
+
+        cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
+
         nmcodeVO.setNmcodeGrpCd("097");
         nmcodeVO.setNmcodeCd("0");
         nmcodeVO.setNmcodeNm("낱개");
@@ -155,6 +161,12 @@ public class HqManageServiceImpl implements HqManageService{
         cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
 
         // 판매형태
+        nmcodeVO.setNmcodeGrpCd("000");
+        nmcodeVO.setNmcodeCd("098");
+        nmcodeVO.setNmcodeNm("판매형태");
+
+        cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
+
         nmcodeVO.setNmcodeGrpCd("098");
         nmcodeVO.setNmcodeCd("0");
         nmcodeVO.setNmcodeNm("정상");
@@ -162,6 +174,12 @@ public class HqManageServiceImpl implements HqManageService{
         cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
 
         // 입금계정 기본 등록
+        nmcodeVO.setNmcodeGrpCd("000");
+        nmcodeVO.setNmcodeCd("099");
+        nmcodeVO.setNmcodeNm("입금계정");
+
+        cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
+
         nmcodeVO.setNmcodeGrpCd("099");
         nmcodeVO.setNmcodeCd("00");
         nmcodeVO.setNmcodeNm("입금");
@@ -169,13 +187,18 @@ public class HqManageServiceImpl implements HqManageService{
         cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
 
         // 매장형태 - 직영
+        nmcodeVO.setNmcodeGrpCd("000");
+        nmcodeVO.setNmcodeCd("100");
+        nmcodeVO.setNmcodeNm("매장형태");
+
+        cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
+
         nmcodeVO.setNmcodeGrpCd("100");
         nmcodeVO.setNmcodeCd("1");
         nmcodeVO.setNmcodeNm("직영");
 
         cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
 
-        // 매장형태 - 가맹
         nmcodeVO.setNmcodeGrpCd("100");
         nmcodeVO.setNmcodeCd("2");
         nmcodeVO.setNmcodeNm("가맹");
@@ -183,6 +206,12 @@ public class HqManageServiceImpl implements HqManageService{
         cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
 
         // 매장그룹
+        nmcodeVO.setNmcodeGrpCd("000");
+        nmcodeVO.setNmcodeCd("101");
+        nmcodeVO.setNmcodeNm("매장그룹");
+
+        cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
+
         nmcodeVO.setNmcodeGrpCd("101");
         nmcodeVO.setNmcodeCd("100");
         nmcodeVO.setNmcodeNm("일반");
@@ -190,6 +219,12 @@ public class HqManageServiceImpl implements HqManageService{
         cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
 
         // 고객분류
+        nmcodeVO.setNmcodeGrpCd("000");
+        nmcodeVO.setNmcodeCd("102");
+        nmcodeVO.setNmcodeNm("고객분류");
+
+        cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
+
         nmcodeVO.setNmcodeGrpCd("102");
         nmcodeVO.setNmcodeCd("01");
         nmcodeVO.setNmcodeNm("남");
@@ -216,6 +251,12 @@ public class HqManageServiceImpl implements HqManageService{
         //procCnt += printTempReg;
 
         // 기본 매출 시간대 등록 (심야:00시-05시, 아침:06시-10시, 점심:11시-15시, 저녁:16시-23시)
+        nmcodeVO.setNmcodeGrpCd("000");
+        nmcodeVO.setNmcodeCd("096");
+        nmcodeVO.setNmcodeNm("기본매출시간대");
+
+        cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
+
         for(int i=0; i<24; i++){
 
             String nmcodeNm = "";

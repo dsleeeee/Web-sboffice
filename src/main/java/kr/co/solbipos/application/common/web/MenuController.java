@@ -1,21 +1,24 @@
 package kr.co.solbipos.application.common.web;
 
-import static kr.co.common.utils.grid.ReturnUtil.*;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
+import kr.co.common.data.enums.Status;
+import kr.co.common.data.structure.Result;
+import kr.co.common.service.cmm.CmmMenuService;
+import kr.co.common.service.session.SessionService;
+import kr.co.solbipos.application.common.service.CmAgencyVO;
+import kr.co.solbipos.application.common.service.HqVO;
+import kr.co.solbipos.application.common.service.StoreVO;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import kr.co.common.data.enums.Status;
-import kr.co.common.data.structure.Result;
-import kr.co.common.service.cmm.CmmMenuService;
-import kr.co.common.service.session.SessionService;
-import kr.co.solbipos.application.common.service.HqVO;
-import kr.co.solbipos.application.common.service.StoreVO;
-import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 
 /**
  * 화면 상단에 고정 메뉴 및 히스토리 메뉴 관리 관련 컨트롤러
@@ -25,11 +28,16 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 @Controller
 @RequestMapping(value = "/menu")
 public class MenuController {
-    @Autowired
-    SessionService sessionService;
 
+    private final SessionService sessionService;
+    private final CmmMenuService cmmMenuService;
+
+    /** Constructor Injection */
     @Autowired
-    CmmMenuService cmmMenuService;
+    public MenuController(SessionService sessionService, CmmMenuService cmmMenuService) {
+        this.sessionService = sessionService;
+        this.cmmMenuService = cmmMenuService;
+    }
 
     /**
      * 히스토리 메뉴 삭제
@@ -93,6 +101,22 @@ public class MenuController {
     @ResponseBody
     public Result selectHq(HqVO hqVO, HttpServletRequest request, Model model) {
         List<HqVO> list = cmmMenuService.selectHq(hqVO);
+        return returnJson(Status.OK, list);
+    }
+    
+    
+    /**
+     * 레이어 팝업 업체 조회
+     *
+     * @param caVO
+     * @param request
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/selectCmAgency.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result selectCmAgency(CmAgencyVO caVO, HttpServletRequest request, Model model) {
+        List<CmAgencyVO> list = cmmMenuService.selectCmAgency(caVO);
         return returnJson(Status.OK, list);
    }
 }

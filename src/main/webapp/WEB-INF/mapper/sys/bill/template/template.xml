@@ -90,7 +90,7 @@
             MOD_ID
         ) VALUES (
             #{prtClassCd},
-            ( SELECT TRIM(TO_CHAR(MAX(tcpt.TEMPLT_CD) + 1, '000')) FROM TB_CM_PRINT_TEMPL tcpt WHERE tcpt.PRT_CLASS_CD = #{prtClassCd} ),
+            ( SELECT NVL(TRIM(TO_CHAR(MAX(tcpt.TEMPLT_CD) + 1, '000')), '000') FROM TB_CM_PRINT_TEMPL tcpt WHERE tcpt.PRT_CLASS_CD = #{prtClassCd} ),
             #{templtNm},
             #{prtForm, jdbcType=VARCHAR},
             #{regDt},
@@ -225,10 +225,10 @@
             ) unused
         LEFT OUTER JOIN TB_CM_NMCODE tcm_sys_stat_fg ON
             unused.SYS_STAT_FG = tcm_sys_stat_fg.NMCODE_CD
-            AND tcm_sys_stat_fg.NMCODE_GRP_CD = '009'
+            AND tcm_sys_stat_fg.NMCODE_GRP_CD = '005'
         LEFT OUTER JOIN TB_CM_NMCODE tcm_cls_stat_fg ON
             unused.CLS_FG = tcm_cls_stat_fg.NMCODE_CD
-            AND tcm_cls_stat_fg.NMCODE_GRP_CD = '003'
+            AND tcm_cls_stat_fg.NMCODE_GRP_CD = '001'
         WHERE
             unused.PRT_CLASS_CD IS NULL
         <if test='sysStatFg != null and sysStatFg != ""'>

@@ -1,9 +1,5 @@
 package kr.co.solbipos.sys.bill.kind.service.impl;
 
-import static kr.co.common.utils.DateUtil.currentDateTimeString;
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
@@ -12,6 +8,12 @@ import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sys.bill.kind.service.KindService;
 import kr.co.solbipos.sys.bill.kind.service.KindVO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
  * @Class Name : KindServiceImpl.java
@@ -32,11 +34,16 @@ import kr.co.solbipos.sys.bill.kind.service.KindVO;
 @Service("kindService")
 public class KindServiceImpl implements KindService {
     
+    private final KindMapper kindMapper;
+    private final MessageService messageService;
+
+    /** Constructor Injection */
     @Autowired
-    KindMapper kindMapper;
-    @Autowired
-    MessageService messageService;
-    
+    public KindServiceImpl(KindMapper kindMapper, MessageService messageService) {
+        this.kindMapper = kindMapper;
+        this.messageService = messageService;
+    }
+
     /** 출력물종류 목록 조회 */
     @Override
     public List<DefaultMap<String>> getPrintList(KindVO kindVO) {
@@ -82,6 +89,12 @@ public class KindServiceImpl implements KindService {
     @Override
     public List<DefaultMap<String>> getPrintMapngList(KindVO kindVO) {
         return kindMapper.getPrintMapngList(kindVO);
+    }
+
+    /** 출력물매핑 목록 팝업 조회 */
+    @Override
+    public List<DefaultMap<String>> getPrintMapngUnUsedList(KindVO kindVO) {
+        return kindMapper.getPrintMapngUnUsedList(kindVO);
     }
     
     /** 출력물매핑 목록 저장 */

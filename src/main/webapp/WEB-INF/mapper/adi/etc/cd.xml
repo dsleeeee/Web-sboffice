@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    Cd.xml
+    명칭관리 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       노현수     2018.09.13      최초작성
+-->
+<mapper namespace="kr.co.solbipos.adi.etc.cd.service.impl.CdMapper">
+
+    <!-- 대표명칭 코드목록 조회 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE, TB_MS_STORE_NMCODE
+        PARAM    : cdVO
+        COMMENTS : 대표명칭 코드 목록을 조회한다.
+    -->
+    <select id="getNmcodeGrpCdList" parameterType="cdVO" resultType="DefaultMap">
+        /* USE : CdMapper.getNmcodeGrpCdList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                    thn.NMCODE_GRP_CD,
+                    thn.NMCODE_CD,
+                    thn.NMCODE_NM,
+                    thn.NMCODE_ITEM_1,
+                    thn.NMCODE_ITEM_2,
+                    thn.USE_YN
+                FROM
+                    TB_HQ_NMCODE thn
+                WHERE
+                    thn.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND thn.NMCODE_GRP_CD = '000'
+                <if test='nmcodeCd != null and nmcodeCd != ""'>
+                    AND thn.NMCODE_CD LIKE #{nmcodeCd}||'%'
+                </if>
+                <if test='nmcodeNm != null and nmcodeNm != ""'>
+                    AND thn.NMCODE_NM LIKE #{nmcodeNm}||'%'
+                </if>
+                <if test='useYn != null and useYn != ""'>
+                    AND thn.USE_YN = #{useYn}
+                </if>
+                ORDER BY thn.NMCODE_GRP_CD, thn.NMCODE_CD
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                    tmsn.NMCODE_GRP_CD,
+                    tmsn.NMCODE_CD,
+                    tmsn.NMCODE_NM,
+                    tmsn.NMCODE_ITEM_1,
+                    tmsn.NMCODE_ITEM_2,
+                    tmsn.USE_YN
+                FROM
+                    TB_MS_STORE_NMCODE tmsn
+                WHERE
+                    tmsn.STORE_CD = #{storeCd}
+                    AND tmsn.NMCODE_GRP_CD = '000'
+                <if test='nmcodeCd != null and nmcodeCd != ""'>
+                    AND tmsn.NMCODE_CD LIKE #{nmcodeCd}||'%'
+                </if>
+                <if test='nmcodeNm != null and nmcodeNm != ""'>
+                    AND tmsn.NMCODE_NM LIKE #{nmcodeNm}||'%'
+                </if>
+                <if test='useYn != null and useYn != ""'>
+                    AND tmsn.USE_YN = #{useYn}
+                </if>
+                ORDER BY tmsn.NMCODE_GRP_CD, tmsn.NMCODE_CD
+            </when>
+        </choose>
+    </select>
+    
+    <!-- 세부명칭 코드목록 조회 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE, TB_MS_STORE_NMCODE
+        PARAM    : cdVO
+        COMMENTS : 세부명칭 코드 목록을 조회한다.
+    -->
+    <select id="getNmcodeCdList" parameterType="cdVO" resultType="DefaultMap">
+        /* USE : CdMapper.getNmcodeCdList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                    thn.NMCODE_GRP_CD,
+                    thn.NMCODE_CD,
+                    thn.NMCODE_NM,
+                    thn.NMCODE_ITEM_1,
+                    thn.NMCODE_ITEM_2
+                FROM
+                    TB_HQ_NMCODE thn
+                WHERE
+                    thn.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND thn.NMCODE_GRP_CD = #{nmcodeGrpCd}
+                <if test='nmcodeCd != null and nmcodeCd != ""'>
+                    AND thn.NMCODE_CD LIKE #{nmcodeCd}||'%'
+                </if>
+                ORDER BY thn.NMCODE_CD
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                    tmsn.NMCODE_GRP_CD,
+                    tmsn.NMCODE_CD,
+                    tmsn.NMCODE_NM,
+                    tmsn.NMCODE_ITEM_1,
+                    tmsn.NMCODE_ITEM_2
+                FROM
+                    TB_MS_STORE_NMCODE tmsn
+                WHERE
+                    tmsn.STORE_CD = #{storeCd}
+                    AND tmsn.NMCODE_GRP_CD = #{nmcodeGrpCd}
+                <if test='nmcodeCd != null and nmcodeCd != ""'>
+                    AND tmsn.NMCODE_CD LIKE #{nmcodeCd}||'%'
+                </if>
+                ORDER BY tmsn.NMCODE_CD
+            </when>
+        </choose>
+    </select>
+    
+    <!-- 코드목록 업데이트 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE, TB_MS_STORE_NMCODE
+        PARAM    : cdVO
+        COMMENTS : 코드 목록을 수정한다.
+    -->
+    <update id="updateNmcodeCdList" parameterType="cdVO">
+        /* USE : CdMapper.updateNmcodeCdList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE
+                    TB_HQ_NMCODE
+                SET
+                    NMCODE_NM = #{nmcodeNm,jdbcType=VARCHAR},
+                    NMCODE_ITEM_1 = #{nmcodeItem1,jdbcType=VARCHAR},
+                    NMCODE_ITEM_2 = #{nmcodeItem2,jdbcType=VARCHAR},
+                    USE_YN = #{useYn}
+                WHERE
+                    HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND NMCODE_GRP_CD = #{nmcodeGrpCd}
+                    AND NMCODE_CD = #{nmcodeCd}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE
+                    TB_MS_STORE_NMCODE
+                SET
+                    NMCODE_NM = #{nmcodeNm,jdbcType=VARCHAR},
+                    NMCODE_ITEM_1 = #{nmcodeItem1,jdbcType=VARCHAR},
+                    NMCODE_ITEM_2 = #{nmcodeItem2,jdbcType=VARCHAR},
+                    USE_YN = #{useYn}
+                WHERE
+                    STORE_CD = #{storeCd}
+                    AND NMCODE_GRP_CD = #{nmcodeGrpCd}
+                    AND NMCODE_CD = #{nmcodeCd}
+            </when>
+        </choose>
+    </update>
+    
+    <!-- 코드목록 생성 -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        PARAM    : systemCdVO
+        COMMENTS : 코드를 생성한다.
+    -->
+    <insert id="insertNmcodeCdList" parameterType="cdVO">
+        /* USE : CdMapper.insertNmcodeCdList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_HQ_NMCODE
+                (
+                    HQ_OFFICE_CD,
+                    NMCODE_GRP_CD,
+                    NMCODE_CD,
+                    NMCODE_NM,
+                    NMCODE_ITEM_1,
+                    NMCODE_ITEM_2,
+                    USE_YN,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                ) VALUES (
+                    #{hqOfficeCd},
+                    #{nmcodeGrpCd},
+                    #{nmcodeCd},
+                    #{nmcodeNm},
+                    #{nmcodeItem1,jdbcType=VARCHAR},
+                    #{nmcodeItem2,jdbcType=VARCHAR},
+                    'Y',
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_MS_STORE_NMCODE
+                (
+                    STORE_CD,
+                    NMCODE_GRP_CD,
+                    NMCODE_CD,
+                    NMCODE_NM,
+                    NMCODE_ITEM_1,
+                    NMCODE_ITEM_2,
+                    USE_YN,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                ) VALUES (
+                    #{storeCd},
+                    #{nmcodeGrpCd},
+                    #{nmcodeCd},
+                    #{nmcodeNm},
+                    #{nmcodeItem1,jdbcType=VARCHAR},
+                    #{nmcodeItem2,jdbcType=VARCHAR},
+                    'Y',
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
+            </when>
+        </choose>
+    </insert>
+    
+</mapper>

@@ -19,8 +19,8 @@ import kr.co.solbipos.application.common.service.CmmVO;
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 public class KindVO extends CmmVO {
-    
-    private static final long serialVersionUID = 1785828866965883036L;
+
+    private static final long serialVersionUID = -8264590468114276658L;
     /** 출력물분류코드 */
     private String prtClassCd;
     /** 출력물분류명 */
@@ -35,6 +35,10 @@ public class KindVO extends CmmVO {
     private String dispSeq;
     /** 출력물명 */
     private String prtNm;
+    /** 예제사용여부 */
+    private Boolean samplYn;
+    /** 예제 */
+    private String content;
     
     
     /**
@@ -121,5 +125,32 @@ public class KindVO extends CmmVO {
     public void setPrtNm(String prtNm) {
         this.prtNm = prtNm;
     }
-    
+
+    /**
+     * @return the samplYn
+     */
+    public Boolean getSamplYn() {
+        return samplYn;
+    }
+
+    /**
+     * @param samplYn the samplYn to set
+     */
+    public void setSamplYn(Boolean samplYn) {
+        this.samplYn = samplYn;
+    }
+
+    /**
+     * @return the content
+     */
+    public String getContent() {
+        return content;
+    }
+
+    /**
+     * @param content the content to set
+     */
+    public void setContent(String content) {
+        this.content = content;
+    }
 }

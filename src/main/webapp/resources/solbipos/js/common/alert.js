@@ -3,7 +3,6 @@
 
   var s_alert = {
     pop : function(msg) {
-      console.log("pop", msg);
       s_alert.popOk(msg, null);
     },
 

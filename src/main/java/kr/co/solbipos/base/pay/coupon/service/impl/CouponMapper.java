@@ -83,8 +83,9 @@ public interface CouponMapper {
     /** 본사 쿠폰 삭제 */
     int deleteHqCoupon(CouponVO couponVO);
 
-    /** 본사 쿠폰 등록 프로시져 */
-    String insertHqCouponToStore(CouponVO couponVO);
+    /** 본사 쿠폰 등록 프로시져
+     * @param couponVO*/
+    String insertHqCouponToStore(CouponStoreVO couponVO);
 
     /** 본사 쿠폰 등록 프로시져 */
     String updateHqCouponToStore(CouponVO couponVO);

@@ -1,9 +1,5 @@
 package kr.co.solbipos.sys.cd.systemcd.service.impl;
 
-import static kr.co.common.utils.DateUtil.currentDateTimeString;
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
@@ -12,6 +8,12 @@ import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sys.cd.systemcd.service.SystemCdService;
 import kr.co.solbipos.sys.cd.systemcd.service.SystemCdVO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
  * @Class Name : SystemCdService.java
@@ -31,12 +33,17 @@ import kr.co.solbipos.sys.cd.systemcd.service.SystemCdVO;
  */
 @Service("systemCdService")
 public class SystemCdServiceImpl implements SystemCdService {
-    
+
+    // Constructor Injection
+    private final SystemCdMapper systemCdMapper;
+    private final MessageService messageService;
+
     @Autowired
-    SystemCdMapper systemCdMapper;
-    @Autowired
-    MessageService messageService;
-    
+    public SystemCdServiceImpl(MessageService messageService, SystemCdMapper systemCdMapper) {
+        this.messageService = messageService;
+        this.systemCdMapper = systemCdMapper;
+    }
+
     /** 대표명칭 코드목록 조회 */
     @Override
     public List<DefaultMap<String>> getNmcodeGrpCdList(SystemCdVO systemCdVO) {

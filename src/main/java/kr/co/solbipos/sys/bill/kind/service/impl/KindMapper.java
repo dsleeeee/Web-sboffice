@@ -1,9 +1,11 @@
 package kr.co.solbipos.sys.bill.kind.service.impl;
 
-import java.util.List;
-import org.apache.ibatis.annotations.Mapper;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.sys.bill.kind.service.KindVO;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @Class Name : KindMapper.java
@@ -22,6 +24,7 @@ import kr.co.solbipos.sys.bill.kind.service.KindVO;
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Mapper
+@Repository
 public interface KindMapper {
     
     /** 출력물종류 목록 조회 */
@@ -38,6 +41,9 @@ public interface KindMapper {
     
     /** 출력물매핑 목록 조회 */
     List<DefaultMap<String>> getPrintMapngList(KindVO kindVO);
+
+    /** 출력물매핑 목록 팝업 조회 */
+    List<DefaultMap<String>> getPrintMapngUnUsedList(KindVO kindVO);
     
     /** 출력물매핑 목록 생성 */
     int insertPrintMapngList(KindVO kindVO);

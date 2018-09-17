@@ -46,7 +46,9 @@
             ]]>
             </if>
             <if test='prtNm != null and prtNm != ""'>
-                AND tcpc.PRT_NM LIKE #{prtNm}||'%'
+                <![CDATA[
+                AND tcpc.PRT_NM LIKE '%'||#{prtNm}||'%'
+                ]]>
             </if>
         </where>
         ORDER BY tcpc.PRT_CD
