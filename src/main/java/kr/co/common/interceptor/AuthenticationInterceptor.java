@@ -50,7 +50,8 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
     /**
      * Constructor Injection
      */
-    @Autowired public AuthenticationInterceptor(SessionService sessionService,
+    @Autowired
+    public AuthenticationInterceptor(SessionService sessionService,
         CmmMenuService cmmMenuService, MessageService messageService) {
         this.sessionService = sessionService;
         this.cmmMenuService = cmmMenuService;
@@ -65,7 +66,8 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
      * @param handler
      * @Return boolean
      */
-    @Override public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
         Object handler) throws Exception {
 
         String requestURL = request.getRequestURI().toString();
@@ -108,14 +110,15 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         sessionInfoVO = setUserSelectDate(request, sessionInfoVO);
 
         // 본사, 가맹점 만 storeCd 에 대해서 체크한다.
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            checkStoreCd(request, sessionInfoVO);
-        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+//        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+//            checkStoreCd(request, sessionInfoVO);
+//        } else
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             String storeCd = request.getParameter("storeCd");
             if (!isEmpty(storeCd)) {
                 if (!storeCd.equals(sessionInfoVO.getOrgnCd())) {
                     // 유효하지 않는 매장코드 입니다.
-                    String msg = messageService.get("cmm.not.storecd");
+                    String msg = messageService.get("cmm.not.storecd") + ">";
                     // 로그 기록
                     LOGGER.info("AuthenticationInterceptor :: " + storeCd + " :: " + msg);
                     throw new AuthenticationException(msg, "/error/403.sb");
@@ -160,14 +163,14 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             if (storeCd.indexOf(",") > -1) {
                 if (!CmmUtil.listIndexOf(sessionInfoVO.getArrStoreCdList(), storeCd.split(","))) {
                     // 유효하지 않는 매장코드 입니다.
-                    String msg = messageService.get("cmm.not.storecd");
+                    String msg = messageService.get("cmm.not.storecd") + ">>";
                     throw new AuthenticationException(msg, "/error/403.sb");
                 }
 
             } else {
                 if (!CmmUtil.listIndexOf(sessionInfoVO.getArrStoreCdList(), storeCd)) {
                     // 유효하지 않는 매장코드 입니다.
-                    String msg = messageService.get("cmm.not.storecd");
+                    String msg = messageService.get("cmm.not.storecd") + ">>>";
                     throw new AuthenticationException(msg, "/error/403.sb");
                 }
             }

@@ -12,7 +12,7 @@
 <mapper namespace="kr.co.solbipos.base.store.view.service.impl.ViewMapper">
 
   <!-- 매장정보조회  -->
-  <!--        
+  <!--
       TABLE    : TB_MS_STORE
       COMMENTS : 매장정보조회한다.
   -->
@@ -60,28 +60,28 @@
   ORDER BY TMS.REG_DT DESC
      <include refid="CmmSQL.PagingTemplateBottom"/>
   </select>
-  
-  
-  
+
+
+
   <!-- 매장정보상세조회  -->
-  <!--        
+  <!--
       TABLE    : TB_MS_STORE, TB_MS_STORE_ENVST
       COMMENTS : 매장정보상세조회한다.
   -->
   <select id="getViewDetail" parameterType="viewVO" resultType="DefaultMap">
     /* USE : ViewMapper.getViewDetail */
     SELECT  X.*,
-            (SELECT TCED.ENVST_VAL_NM FROM TB_CM_ENVST_DTL TCED WHERE TCED.ENVST_CD = '114' AND TCED.ENVST_VAL_CD = X.CORNER_USE_YN ) CORNER_USE_YN_NM,
-            (SELECT TCED.ENVST_VAL_NM FROM TB_CM_ENVST_DTL TCED WHERE TCED.ENVST_CD = '276' AND TCED.ENVST_VAL_CD = X.CASH_BILL_YN ) CASH_BILL_YN_NM
+            (SELECT TCED.ENVST_VAL_NM FROM TB_CM_ENVST_DTL TCED WHERE TCED.ENVST_CD = '1028' AND TCED.ENVST_VAL_CD = X.CORNER_USE_YN ) CORNER_USE_YN_NM,
+            (SELECT TCED.ENVST_VAL_NM FROM TB_CM_ENVST_DTL TCED WHERE TCED.ENVST_CD = '0007' AND TCED.ENVST_VAL_CD = X.CASH_BILL_YN ) CASH_BILL_YN_NM
       FROM
       (
         SELECT  TMS.STORE_CD,
                 TMS.STORE_NM,
                 DECODE(TMS.HQ_OFFICE_CD, '00000', '단독', '가맹') AS STORE_TYPE_NM,
                 TMS.CLS_FG,
-                (SELECT TCN.NMCODE_NM FROM TB_CM_NMCODE TCN  WHERE TCN.NMCODE_GRP_CD='003' AND TCN.NMCODE_CD = TMS.CLS_FG) AS CLS_FG_NM,
+                (SELECT TCN.NMCODE_NM FROM TB_CM_NMCODE TCN  WHERE TCN.NMCODE_GRP_CD='001' AND TCN.NMCODE_CD = TMS.CLS_FG) AS CLS_FG_NM,
                 TMS.SYS_STAT_FG,
-                (SELECT TCN.NMCODE_NM FROM TB_CM_NMCODE TCN  WHERE TCN.NMCODE_GRP_CD='009' AND TCN.NMCODE_CD = TMS.SYS_STAT_FG) AS SYS_STAT_FG_NM,
+                (SELECT TCN.NMCODE_NM FROM TB_CM_NMCODE TCN  WHERE TCN.NMCODE_GRP_CD='005' AND TCN.NMCODE_CD = TMS.SYS_STAT_FG) AS SYS_STAT_FG_NM,
                 (SELECT COUNT(TMP.STORE_CD) FROM TB_MS_POS TMP WHERE TMP.STORE_CD = TMS.STORE_CD AND TMP.USE_YN = 'Y') AS POS_CNT,
                 TMS.SYS_OPEN_DATE,
                 TMS.SYS_CLOSURE_DATE,
@@ -95,7 +95,7 @@
                 TMS.HMPG_ADDR,
                 TMS.POST_NO || ') ' || TMS.ADDR || TMS.ADDR_DTL AS ADDRESS,
                 TMS.AREA_CD,
-                (SELECT TCN.NMCODE_NM FROM TB_CM_NMCODE TCN  WHERE TCN.NMCODE_GRP_CD='092' AND TCN.NMCODE_CD = TMS.AREA_CD) AS AREA_NM,
+                (SELECT TCN.NMCODE_NM FROM TB_CM_NMCODE TCN  WHERE TCN.NMCODE_GRP_CD='061' AND TCN.NMCODE_CD = TMS.AREA_CD) AS AREA_NM,
                 TMS.VAN_CD,
                 (SELECT TCVC.VAN_NM FROM TB_CM_VAN_CMPNY TCVC  WHERE TCVC.VAN_CD = TMS.VAN_CD) AS VAN_NM,
                 TMS.AGENCY_CD,
@@ -103,14 +103,14 @@
                 TMS.SYS_REMARK,
                 TMS.HD_REMARK,
                 TMS.REMARK,
-                NVL((SELECT TMSE.ENVST_VAL FROM TB_MS_STORE_ENVST TMSE WHERE TMSE.STORE_CD   = TMS.STORE_CD AND TMSE.ENVST_CD = '114' ), 0 ) CORNER_USE_YN,
-                NVL((SELECT TMSE.ENVST_VAL FROM TB_MS_STORE_ENVST TMSE WHERE TMSE.STORE_CD   = TMS.STORE_CD AND TMSE.ENVST_CD = '276' ), 0 ) CASH_BILL_YN
+                NVL((SELECT TMSE.ENVST_VAL FROM TB_MS_STORE_ENVST TMSE WHERE TMSE.STORE_CD   = TMS.STORE_CD AND TMSE.ENVST_CD = '1028' ), 0 ) CORNER_USE_YN,
+                NVL((SELECT TMSE.ENVST_VAL FROM TB_MS_STORE_ENVST TMSE WHERE TMSE.STORE_CD   = TMS.STORE_CD AND TMSE.ENVST_CD = '0007' ), 0 ) CASH_BILL_YN
           FROM  TB_MS_STORE TMS
          WHERE  TMS.STORE_CD = #{storeCd}
        ) X
- 
+
   </select>
-  
+
   <!--
       TABLE    : TB_MS_STORE, TB_MS_CORNER
       PARAM    : vanConfigVO
@@ -131,14 +131,14 @@
             TMC.VAN_SER_NO,
             TMC.USE_YN
       FROM  TB_MS_STORE TMS,
-            TB_MS_CORNER TMC  
+            TB_MS_CORNER TMC
      WHERE  TMS.STORE_CD = TMC.STORE_CD(+)
        AND  TMS.STORE_CD = #{storeCd}
        AND  TMC.CORNR_CD (+)= '00'
   </select>
-  
-  
-  
+
+
+
    <!-- 코너별 승인 목록 조회 -->
   <select id="getCornrApproveList" parameterType="DefaultMap" resultType="DefaultMap">
     /* USE : StoreManageMapper.getCornrApproveList */

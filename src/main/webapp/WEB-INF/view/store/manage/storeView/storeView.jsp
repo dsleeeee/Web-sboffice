@@ -71,7 +71,7 @@
         <th><s:message code="storeView.agencyNm" /></th>
         <td>
             <div id="sAgencyCd" style="display: none;"></div>
-            <div class="sb-select">
+            <div class="sb-select w100">
               <div id="sAgencyNm"></div>
             </div>
         </td>
@@ -105,22 +105,25 @@
       <s:message code="cmm.search" />
     </button>
   </div>
-  
+
   <div class="mt20 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
     <div id="listScaleBox" class="w150 fl"></div>
+
     <%-- 엑셀 다운로드 --%>
+    <%--
     <button class="btn_skyblue fr" id="excelBtn">
       <s:message code="cmm.excel.down" />
     </button>
+    --%>
   </div>
-  
+
   <%--위즈모 테이블--%>
   <div class="wj-TblWrapBr mt10" style="height: 400px;">
     <div id="theGrid"></div>
   </div>
   <%--//위즈모 테이블--%>
-  
+
   <%-- 페이지 리스트 --%>
   <div class="pageNum mt20">
     <%-- id --%>
@@ -128,20 +131,20 @@
     </ul>
   </div>
   <%--//페이지 리스트--%>
-  
+
 </div>
 
 <script>
 
   $(document).ready(function() {
-      
+
     <%-- 조회조건 --%>
     var hqOfficeCd      = wcombo.genInput("#sHqOfficeCd");
     var hqOfficeNm      = wcombo.genInput("#sHqOfficeNm");
     var storeCd         = wcombo.genInput("#sStoreCd");
     var storeNm         = wcombo.genInput("#sStoreNm");
     var bizNo           = wcombo.genInput("#sBizNo");
-    
+
     var sysStatFg       = wcombo.genCommonBox("#sSysStatFg", ${ccu.getCommCode("009")});
     var agencyCd        = wcombo.genInput("#sAgencyCd");
     var agencyNm        = wcombo.genInput("#sAgencyNm");
@@ -151,9 +154,9 @@
     var startDt         = wcombo.genDateVal("#startDt", "${ufn:addDaysString( ufn:currentDateString() , -7)}");
     var endDt           = wcombo.genDateVal("#endDt", "${ufn:currentDateString()}");
     var listScaleBox    = wcombo.genCommonBox("#listScaleBox", ${ccu.getListScale()});
-    
+
     <%-- 조회결과 --%>
-    var svData = 
+    var svData =
       [
         {binding:"hqOfficeCd", header:"<s:message code='storeView.hqOfficeCd' />",width:"*"},
         {binding:"hqOfficeNm", header:"<s:message code='storeView.hqOfficeNm' />",width:"*"},
@@ -162,22 +165,22 @@
         {binding:"bizNo", header:"<s:message code='storeView.bizNo' />",width:"*"},
         {binding:"ownerNm", header:"<s:message code='storeView.ownerNm' />",width:"*"},
         {binding:"telNo", header:"<s:message code='storeView.telNo' />",width:"*"},
-        {binding:"sms", header:"<s:message code='storeView.sms' />",width:"*"},
+        {binding:"sms", header:"<s:message code='storeView.sms' />",width:"*", visible:false},
         {binding:"sysStatFgNm", header:"<s:message code='storeView.sysStatFgNm' />",width:"*"},
         {binding:"clsFgNm", header:"<s:message code='storeView.clsFgNm' />",width:"*"},
         {binding:"posCnt", header:"<s:message code='storeView.posCnt' />",width:"*"},
-        {binding:"agencyCd", header:"<s:message code='storeView.agencyCd' />",width:"*"},
+        {binding:"agencyCd", header:"<s:message code='storeView.agencyCd' />",width:"*", visible:false},
         {binding:"agencyNm", header:"<s:message code='storeView.agencyNm' />",width:"*"},
         {binding:"vanNm", header:"<s:message code='storeView.vanNm' />",width:"*"},
-        {binding:"", header:"<s:message code='storeView.goods' />",width:"*"},
-        {binding:"cornerUseYnNm", header:"<s:message code='storeView.cornerUseYnNm' />", width:"*"},
+        {binding:"", header:"<s:message code='storeView.goods' />",width:"*", visible:false},
+        {binding:"cornerUseYnNm", header:"<s:message code='storeView.cornerUseYnNm' />", width:"*", visible:false},
         {binding:"posLastLoginDt", header:"<s:message code='storeView.posLastLoginDt' />",width:"*"},
         {binding:"sysOpenDate", header:"<s:message code='storeView.sysOpenDate' />",width:"*"},
         {binding:"sysClosureDate", header:"<s:message code='storeView.sysClosureDate' />",width:"*"}
       ];
-    
+
     var grid  = wgrid.genGrid("#theGrid", svData, "${menuCd}", 1, ${clo.getColumnLayout(1)});
-    
+
     <%-- 그리드 링크 --%>
     grid.formatItem.addHandler(function(s, e) {
       if (e.panel == s.cells) {
@@ -187,7 +190,7 @@
         }
       }
     });
-    
+
     <%-- 그리드 선택 이벤트 --%>
     grid.addEventListener(grid.hostElement, 'click', function(e) {
       var ht = grid.hitTest(e);
@@ -201,7 +204,7 @@
         }
       }
     });
-    
+
     <%-- 매장선택 --%>
     $("#sAgencyNm").click(function(e){
       agencyCd.text = "";
@@ -212,26 +215,26 @@
         agencyNm.text = arr[0].nm;
       });
     });
-    
+
     <%-- 리스트 조회 --%>
     $("#searchBtn").click(function(e){
       search(1);
     });
-    
+
     <%-- 페이징 --%>
     $(document).on("click", ".page", function() {
       search($(this).data("value"));
     });
-    
+
     <%-- 엑셀 다운로드 --%>
     $("#excelBtn").click(function( e ){
       var name = "${menuNm}";
       wexcel.down(grid, name, name + ".xlsx");
     });
-    
-    <%-- 리스트 조회 --%>    
+
+    <%-- 리스트 조회 --%>
     function search(index) {
-    
+
       var param = {};
       param.hqOfficeCd = hqOfficeCd.text;
       param.hqOfficeNm = hqOfficeNm.text;
@@ -246,7 +249,7 @@
       param.endDt = getDate(endDt);
       param.listScale = listScaleBox.selectedValue;
       param.curr = index;
-      
+
       wgrid.getGridData("/store/manage/storeView/storeView/list.sb", param, grid, function(result){
         page.make("#page", result.data.page.curr, result.data.page.totalPage);
         },

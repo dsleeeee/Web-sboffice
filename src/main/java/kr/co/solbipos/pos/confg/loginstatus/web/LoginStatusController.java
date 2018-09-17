@@ -35,11 +35,11 @@ import kr.co.solbipos.pos.confg.loginstatus.service.LoginStatusVO;
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Controller
-@RequestMapping(value = "/pos/confg/loginstatus/loginstatus/")
+@RequestMapping(value = "/pos/confg/loginStatus/loginStatus/")
 public class LoginStatusController {
-    
+
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    
+
     @Autowired
     LoginStatusService loginStatusService;
 
@@ -54,7 +54,7 @@ public class LoginStatusController {
     @RequestMapping(value = "list.sb", method = RequestMethod.GET)
     public String loginstatusList(HttpServletRequest request, HttpServletResponse response,
             Model model) {
-        return "pos/confg/loginstatus/loginStatus";
+        return "pos/confg/loginStatus/loginStatus";
     }
 
     /**
