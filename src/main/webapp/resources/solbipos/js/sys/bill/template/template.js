@@ -25,11 +25,11 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.initGrid = function (s, e) {
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
-      if (e.panel == s.cells) {
+      if (e.panel === s.cells) {
         var col = s.columns[e.col];
         if (col.binding === "templtNm") {
           var item = s.rows[e.row].dataItem;
-          if (item.status != "I") {
+          if (item.status !== "I") {
             wijmo.addClass(e.cell, 'wj-custom-readonly');
           } else {
             wijmo.removeClass(e.cell, 'wj-custom-readonly');
@@ -42,7 +42,7 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
       var col = s.columns[e.col];
       if (col.binding === "templtNm") {
         var dataItem = s.rows[e.row].dataItem;
-        if (nvl(dataItem.status, "") == "" && dataItem.status != "I") {
+        if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
           e.cancel = true;
         }
       }
@@ -212,7 +212,7 @@ function searchPrintCodeList(params) {
         var list = result.data.list;
         listBoxCodeList.itemsSource = list;
 
-        if (list.length === undefined || list.length == 0) {
+        if (list.length === undefined || list.length === 0) {
           // 코드리스트 초기화
           listBoxCodeList.itemsSource = new wijmo.collections.CollectionView([]);
           // 편집/미리보기 폼 초기화
@@ -291,7 +291,7 @@ theTarget.addEventListener('drop', function (e) {
     var strFront = "";
     var strEnd = "";
     // textarea 의 커서 위치 구해서 커서위치에 값 넣기
-    if (iStartPos == iEndPos) {
+    if (iStartPos === iEndPos) {
       strFront = strOriginal.substring(0, iStartPos);
       strEnd = strOriginal.substring(iStartPos, strOriginal.length);
     } else {
@@ -346,7 +346,7 @@ function makePreview() {
     // 정규식처리된 문자 처리
     for (var k = 0; k < matches.length; k++) {
       for (var l = 0; l < listBoxData.length; l++) {
-        if (listBoxData[l].prtCd == matches[k] && listBoxData[l].content != null) {
+        if (listBoxData[l].prtCd === matches[k] && listBoxData[l].content != null) {
           // 코드값을 listBox 데이터에서 찾아서 예제 문구로 치환
           value = value.replace(matches[k], listBoxData[l].content);
         }
