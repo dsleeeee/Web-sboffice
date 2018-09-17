@@ -27,8 +27,8 @@
             <span class="txtIn"> <input id="startDt" name="startDt" class="w200" /></span>
             <span class="rg">~</span>
             <span class="txtIn"> <input id="endDt" name="endDt" class="w200" /></span>
-            <span class="chk ml10"> <input type="checkbox" id="chkDt" /> 
-            <label for="chk"><s:message code="cmm.all.day" /></label>
+            <span class="chk ml10"> <input type="checkbox" id="chkDt" />
+            <label for="chkDt"><s:message code="cmm.all.day" /></label>
             </span>
           </div>
         </td>
@@ -79,10 +79,12 @@
     <%-- 페이지 스케일  --%>
     <div id="listScaleBox" class="w150 fl"></div>
 
-    <%-- 엑셀 다운로드 --%>
+    <%-- 엑셀 다운로드 //TODO --%>
+    <%--
     <button class="btn_skyblue fr" id="excelBtn">
       <s:message code="cmm.excel.down" />
     </button>
+    --%>
   </div>
 
   <%--위즈모 테이블--%>
@@ -122,6 +124,7 @@
           </colgroup>
           <tbody>
             <tr>
+              <%-- 상품이미지 //TODO --%>
               <th rowspan="3"><s:message code="prod" /><br /><s:message code="image" />
               </th>
               <td rowspan="3">
@@ -131,7 +134,7 @@
                 <span class="goodsYes"><img src="img/sample.jpg" alt="" /></span> <%--등록한 상품이 있는 경우--%>
                 -->
               </td>
-              <%--단가구분--%>
+              <%--단가구분 //TODO --%>
               <th>
                 <div class="impWrap"><s:message code="prod.uprcFg" /></div>
               </th>
@@ -155,7 +158,7 @@
               <%--상품분류--%>
               <th><s:message code="prod.class" /></th>
               <td id="_prodClassNm"></td>
-              <%--거래처--%>
+              <%--거래처 //TODO --%>
               <th>
                 <div class="impWrap"><s:message code="prod.vendr" /></div>
               </th>
@@ -240,24 +243,24 @@
               <td id="_safeStockQty"></td>
             </tr>
             <tr>
-              <%--품절여부--%>
+              <%--품절여부 //TODO --%>
               <th>
                 <div class="impWrap"><s:message code="prod.soldOutYn" /><em class="imp">*</em></div>
               </th>
               <td id="_soldOutYn"></td>
-              <%--초기재고--%>
+              <%--초기재고 //TODO --%>
               <th>
                 <div class="impWrap"><s:message code="prod.defaultStock" /><em class="imp">*</em></div>
               </th>
               <td id="_defaultStock"></td>
             </tr>
             <tr>
-              <%--저장품코드--%>
+              <%--저장품코드 //TODO --%>
               <th>
                 <div class="impWrap"><s:message code="prod.saveProdCd" /><em class="imp">*</em></div>
               </th>
               <td><a href="#" class="link" id="_saveProdCd"></a></td>
-              <%--세트상품구분--%>
+              <%--세트상품구분//TODO --%>
               <th>
                 <div class="impWrap"><s:message code="prod.setProdFg" /><em class="imp">*</em></div>
               </th>
@@ -287,6 +290,8 @@
             </tr>
           </tbody>
         </table>
+
+        <%-- 할인 / 적립 --%>
         <p class="s14 bk mt20 mb5"><s:message code="prod.dcAndSaveInfo" /></p>
         <table class="tblType01">
           <colgroup>
@@ -295,12 +300,12 @@
           </colgroup>
           <tbody>
             <tr>
-              <%--할인--%>
+              <%--할인 //TODO --%>
               <th><s:message code="prod.dc" /></th>
               <td id="_dc"></td>
             </tr>
             <tr>
-              <%--적립--%>
+              <%--적립 //TODO --%>
               <th><s:message code="prod.save" /></th>
               <td id="_save"></td>
             </tr>
@@ -330,9 +335,10 @@
 $(document).ready(function(){
   var rdata =
     [
-      {"binding":"lProdClass","header":"<s:message code='prod.lClass' />","width":"*"},
-      {"binding":"mProdClass","header":"<s:message code='prod.mClass' />","width":"*"},
-      {"binding":"sProdClass","header":"<s:message code='prod.sClass' />","width":"*"},
+      <%--{"binding":"lProdClass","header":"<s:message code='prod.lClass' />","width":"*"},--%>
+      <%--{"binding":"mProdClass","header":"<s:message code='prod.mClass' />","width":"*"},--%>
+      <%--{"binding":"sProdClass","header":"<s:message code='prod.sClass' />","width":"*"},--%>
+      {"binding":"prodClassNm","header":"<s:message code='prod.prodClassNm' />","width":"*"},
       {"binding":"prodCd","header":"<s:message code='prod.prodCd' />","width":"*"},
       {"binding":"prodNm","header":"<s:message code='prod.prodNm' />","width":"*"},
       {"binding":"costUprc","header":"<s:message code='prod.costUprc' />","width":"*"},
@@ -341,7 +347,7 @@ $(document).ready(function(){
       {"binding":"orgplceCd","header":"<s:message code='prod.orgplceCd' />","width":"*"},
       {"binding":"poUnitFg","header":"<s:message code='prod.poUnitFg' />","width":"*"}
     ];
-  
+
   var grid         = wgrid.genGrid("#theGrid", rdata, "${menuCd}", 1, ${clo.getColumnLayout(1)});
   var prodCd       = wcombo.genInput("#prodCd");
   var prodNm       = wcombo.genInput("#prodNm");
@@ -364,14 +370,14 @@ $(document).ready(function(){
     param.prodClassCd = prodClassCd.text;
     param.listScale = listScaleBox.selectedValue;
     param.curr = index;
-    
+
     $.postJSON("/base/prod/prod/prod/list.sb", param, function(result) {
       var list = result.data.list;
 
       if(list.length === undefined || list.length == 0) {
         s_alert.pop(result.message);
       }
-    
+
       grid.itemsSource = list;
       page.make("#page1", result.data.page.curr, result.data.page.totalPage);
     },
@@ -417,10 +423,10 @@ $(document).ready(function(){
   <%-- 레이어 팝업 오픈 --%>
   function showProdLayer(item) {
 
-    var vatFg        = ${ccu.getCommCodeExcpAll("063")};
-    var poProdFg     = ${ccu.getCommCodeExcpAll("064")};
-    var setProdFg    = ${ccu.getCommCodeExcpAll("011")};
-    var useYn        = ${ccu.getCommCodeExcpAll("904")};
+    var vatFg        = ${ccu.getCommCodeExcpAll("039")};
+    var poProdFg     = ${ccu.getCommCodeExcpAll("064")}; //TODO 발주, 주문상품 구분 => 코드 추가 필요
+    var setProdFg    = ${ccu.getCommCodeExcpAll("009")};
+    var useYn        = ${ccu.getCommCodeExcpAll("067")};
     var vatFgDataMap = new wijmo.grid.DataMap(vatFg, 'value', 'name');
     var poProdFgDataMap  = new wijmo.grid.DataMap(poProdFg, 'value', 'name');
     var setProdFgDataMap = new wijmo.grid.DataMap(setProdFg, 'value', 'name');
@@ -479,19 +485,19 @@ $(document).ready(function(){
     var name = "${menuNm}";
     wexcel.down(grid, name, name + ".xlsx");
   });
-  
+
   <%-- 페이징 --%>
   $(document).on("click", ".page1", function() {
     search($(this).data("value"));
   });
-  
+
   <%-- 전체기간 체크박스 --%>
   $(document).on("click", "#chkDt", function() {
     var chkDt = $('#chkDt').is(":checked");
     startDt.isDisabled = chkDt;
     endDt.isDisabled = chkDt;
   });
-  
+
 });
-  
+
 </script>

@@ -28,13 +28,12 @@ import java.util.List;
  * @author NHN한국사이버결제 KCP 장혁수
  * @since 2018. 08.06
  * @version 1.0
- * @see
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Service("prodService")
 public class ProdServiceImpl implements ProdService {
-    
+
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
@@ -47,12 +46,12 @@ public class ProdServiceImpl implements ProdService {
     public List<DefaultMap<String>> list(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
         // 매장인 경우
         if( sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
-            prodVO.setStoreCd(sessionInfoVO.getOrgnCd());
+            prodVO.setStoreCd(sessionInfoVO.getStoreCd());
             return mapper.getProdList(prodVO);
         }
         // 본사인 경우
         else if( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
-            prodVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
+            prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             return mapper.getHqProdList(prodVO);
         }
         else {
@@ -64,12 +63,12 @@ public class ProdServiceImpl implements ProdService {
     public DefaultMap<String> detail(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
         // 매장인 경우
         if( sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
-            prodVO.setStoreCd(sessionInfoVO.getOrgnCd());
+            prodVO.setStoreCd(sessionInfoVO.getStoreCd());
             return mapper.getProdDetail(prodVO);
         }
         // 본사인 경우
         else if( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
-            prodVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
+            prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             return mapper.getHqProdDetail(prodVO);
         }
         else {
@@ -81,12 +80,12 @@ public class ProdServiceImpl implements ProdService {
     public List<DefaultMap<String>> unitstProdList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
         // 매장인 경우
         if( sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
-            prodVO.setStoreCd(sessionInfoVO.getOrgnCd());
+            prodVO.setStoreCd(sessionInfoVO.getStoreCd());
             return mapper.getUnitstProdList(prodVO);
         }
         // 본사인 경우
         else if( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
-            prodVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
+            prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             return mapper.getHqUnitstProdList(prodVO);
         }
         else {

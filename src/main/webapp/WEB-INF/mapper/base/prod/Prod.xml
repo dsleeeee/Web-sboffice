@@ -7,10 +7,7 @@
         /* ProdMapper.getProdList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
-        pl.*,
-        NVL(REGEXP_SUBSTR(PL.PROD_CLASS_NM, '[^|]+', 1,3),' ') L_PROD_CLASS,
-        NVL(REGEXP_SUBSTR(PL.PROD_CLASS_NM, '[^|]+', 1,2),' ') M_PROD_CLASS,
-        NVL(REGEXP_SUBSTR(PL.PROD_CLASS_NM, '[^|]+', 1,1),' ') S_PROD_CLASS
+        pl.*
         FROM
         (
         SELECT
@@ -69,20 +66,17 @@
 
     <select id="getProdDetail" parameterType="prodVO" resultType="DefaultMap">
         /* ProdMapper.getProdDetail */
-        SELECT pl.*,
-               NVL(REGEXP_SUBSTR(pl.PROD_CLASS_STR, '[^|]+', 1,3),' ') || ' > ' ||
-               NVL(REGEXP_SUBSTR(pl.PROD_CLASS_STR, '[^|]+', 1,2),' ') || ' > ' ||
-               NVL(REGEXP_SUBSTR(pl.PROD_CLASS_STR, '[^|]+', 1,1),' ') as PROD_CLASS_NM
+        SELECT pl.*
           FROM (
                 SELECT tmp.STORE_CD,        -- 매장코드
                        tmp.PROD_CD,         -- 상품코드
                        tmp.PROD_NM,         -- 상품명
                        tmp.PROD_CLASS_CD,   -- 상품분류코드
-                       NVL((SELECT SUBSTR(MAX(SYS_CONNECT_BY_PATH( PROD_CLASS_NM,  '|')), 2)
+                       NVL((SELECT SUBSTR(MAX(SYS_CONNECT_BY_PATH( PROD_CLASS_NM,  '>')), 2)
                               FROM TB_MS_PRODUCT_CLASS
                              START WITH PROD_CLASS_CD = tmp.PROD_CLASS_CD
                            CONNECT BY PRIOR P_PROD_CLASS_CD = PROD_CLASS_CD
-                               AND STORE_CD = tmp.STORE_CD),' ') as PROD_CLASS_STR,
+                               AND STORE_CD = tmp.STORE_CD),' ') as PROD_CLASS_NM,
                        NVL(tmp.COST_UPRC, 0) COST_UPRC,            -- 원가단가
                        NVL(tmp.LAST_COST_UPRC, 0) LAST_COST_UPRC,  -- 최종원가단가
                        NVL(tmp.SPLY_UPRC, 0) SPLY_UPRC,            -- 판매단가
@@ -93,16 +87,16 @@
                                AND TO_CHAR(SYSDATE, 'YYYYMMDD') BETWEEN START_DATE AND END_DATE
                                AND SALE_PRC_FG = '2'     -- 본사, 매장 구분이 필요한지 확인 무시면 조건 제거
                            ), 0) SALE_UPRC,   -- 최초판매단가
-                       tmp.ORGPLCE_CD,      -- 원산지 구분
-                       tmp.SALE_PROD_YN,    -- 판매상품여부
-                       tmp.PO_PROD_FG,      -- 주문상품구분
-                       tmp.PO_UNIT_FG,      -- 주문단위
+                       tmp.ORGPLCE_CD,      -- 원산지 구분 -- TODO 원산지명 조회 필요
+                       (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '067' AND NMCODE_CD = tmp.SALE_PROD_YN) AS SALE_PROD_YN,    -- 판매상품여부
+                       tmp.PO_PROD_FG,      -- 주문상품구분 --TODO 주문상품구분명 조회 필요
+                       tmp.PO_UNIT_FG,      -- 주문단위 --TODO 주문단위명 조회 필요
                        tmp.PO_MIN_QTY,      -- 최소주문
-                       tmp.VAT_FG,          -- 과세여부
-                       tmp.STOCK_PROD_YN,   -- 재고관리여부
-                       tmp.USE_YN,          -- 사용여부
+                       (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '039' AND NMCODE_CD = tmp.VAT_FG) AS VAT_FG ,          -- 과세여부
+                       (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '067' AND NMCODE_CD = tmp.STOCK_PROD_YN) AS STOCK_PROD_YN,   -- 재고관리여부
+                       (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '067' AND NMCODE_CD = tmp.USE_YN) AS USE_YN,          -- 사용여부
                        tmp.SAFE_STOCK_QTY,  -- 안전재고
-                       tmp.SET_PROD_FG,     -- 세트상품구분
+                       (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '009' AND NMCODE_CD = tmp.SET_PROD_FG) AS SET_PROD_FG,     -- 세트상품구분
                        tmp.REMARK,          -- 비고
                        tmp.REG_DT
                   FROM TB_MS_PRODUCT tmp
@@ -129,10 +123,7 @@
         /* ProdMapper.getHqProdList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
-        pl.*,
-        NVL(REGEXP_SUBSTR(PL.PROD_CLASS_NM, '[^|]+', 1,3),' ') L_PROD_CLASS,
-        NVL(REGEXP_SUBSTR(PL.PROD_CLASS_NM, '[^|]+', 1,2),' ') M_PROD_CLASS,
-        NVL(REGEXP_SUBSTR(PL.PROD_CLASS_NM, '[^|]+', 1,1),' ') S_PROD_CLASS
+        pl.*
         FROM
         (
         SELECT
@@ -140,7 +131,7 @@
                thp.PROD_CD,
                thp.PROD_NM,
                thp.PROD_CLASS_CD,
-               NVL((SELECT SUBSTR(MAX(SYS_CONNECT_BY_PATH( PROD_CLASS_NM,  '|')), 2)
+               NVL((SELECT SUBSTR(MAX(SYS_CONNECT_BY_PATH( PROD_CLASS_NM,  '>')), 2)
                       FROM TB_HQ_PRODUCT_CLASS
                      START WITH PROD_CLASS_CD = thp.PROD_CLASS_CD
                    CONNECT BY PRIOR P_PROD_CLASS_CD = PROD_CLASS_CD
@@ -154,7 +145,7 @@
                        AND TO_CHAR(SYSDATE, 'YYYYMMDD') BETWEEN START_DATE AND END_DATE
                        AND SALE_PRC_FG = '1'     -- 본사, 매장 상품 구분이 필요한지 확인 무시면 조건 제거
                    ), 0) SALE_UPRC,   -- 판매단가
-               thp.ORGPLCE_CD,
+               thp.ORGPLCE_CD, -- TODO 원산지명 조회 필요
                thp.PO_UNIT_FG,
                thp.REG_DT
                <include refid="CmmSQL.PagingTemplateCount"/>
@@ -191,20 +182,17 @@
 
     <select id="getHqProdDetail" parameterType="prodVO" resultType="DefaultMap">
         /* ProdMapper.getHqProdDetail */
-        SELECT pl.*,
-               NVL(REGEXP_SUBSTR(pl.PROD_CLASS_STR, '[^|]+', 1,3),' ') || ' > ' ||
-               NVL(REGEXP_SUBSTR(pl.PROD_CLASS_STR, '[^|]+', 1,2),' ') || ' > ' ||
-               NVL(REGEXP_SUBSTR(pl.PROD_CLASS_STR, '[^|]+', 1,1),' ') as PROD_CLASS_NM
+        SELECT pl.*
           FROM (
                 SELECT thp.HQ_OFFICE_CD,    -- 본사코드
                        thp.PROD_CD,         -- 상품코드
                        thp.PROD_NM,         -- 상품명
                        thp.PROD_CLASS_CD,   -- 상품분류코드
-                       NVL((SELECT SUBSTR(MAX(SYS_CONNECT_BY_PATH( PROD_CLASS_NM,  '|')), 2)
+                       NVL((SELECT SUBSTR(MAX(SYS_CONNECT_BY_PATH( PROD_CLASS_NM,  '>')), 2)
                              FROM TB_HQ_PRODUCT_CLASS
                             START WITH PROD_CLASS_CD = thp.PROD_CLASS_CD
                           CONNECT BY PRIOR P_PROD_CLASS_CD = PROD_CLASS_CD
-                              AND HQ_OFFICE_CD = thp.HQ_OFFICE_CD),' ') as PROD_CLASS_STR,
+                              AND HQ_OFFICE_CD = thp.HQ_OFFICE_CD),' ') as PROD_CLASS_NM,
                        NVL(thp.COST_UPRC, 0) COST_UPRC,            -- 원가단가
                        NVL(thp.LAST_COST_UPRC, 0) LAST_COST_UPRC,  -- 최종원가단가
                        NVL(thp.SPLY_UPRC, 0) SPLY_UPRC,            -- 판매단가
@@ -213,18 +201,18 @@
                              WHERE HQ_OFFICE_CD = thp.HQ_OFFICE_CD
                                AND PROD_CD = thp.PROD_CD
                                AND TO_CHAR(SYSDATE, 'YYYYMMDD') BETWEEN START_DATE AND END_DATE
-                               AND SALE_PRC_FG = '1'   -- 본사, 매장 상품 구분이 필요한지 확인 무시면 조건 제거
+                               AND SALE_PRC_FG = '1'   -- 본사, 매장 상품 구분이 필요한지 확인. 무시면 조건 제거
                             ), 0) SALE_UPRC,   -- 최초판매단가
-                       thp.ORGPLCE_CD,      -- 원산지 구분
-                       thp.SALE_PROD_YN,    -- 판매상품여부
-                       thp.PO_PROD_FG,      -- 주문상품구분
-                       thp.PO_UNIT_FG,      -- 주문단위
+                       thp.ORGPLCE_CD,      -- 원산지 구분 -- TODO 원산지명 추가 필요
+                       (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '067' AND NMCODE_CD = thp.SALE_PROD_YN) AS SALE_PROD_YN,    -- 판매상품여부
+                       thp.PO_PROD_FG,      -- 주문상품구분 --TODO 주문상품구분명 추가 필요
+                       thp.PO_UNIT_FG,      -- 주문단위 --TODO 주문단위명 추가 필요
                        thp.PO_MIN_QTY,      -- 최소주문
-                       thp.VAT_FG,          -- 과세여부
-                       thp.STOCK_PROD_YN,   -- 재고관리여부
-                       thp.USE_YN,          -- 사용여부
+                       (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '039' AND NMCODE_CD = thp.VAT_FG) AS VAT_FG ,          -- 과세여부
+                       (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '067' AND NMCODE_CD = thp.STOCK_PROD_YN) AS STOCK_PROD_YN,   -- 재고관리여부
+                       (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '067' AND NMCODE_CD = thp.USE_YN) AS USE_YN,          -- 사용여부
                        thp.SAFE_STOCK_QTY,  -- 안전재고
-                       thp.SET_PROD_FG,     -- 세트상품구분
+                       (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '009' AND NMCODE_CD = thp.SET_PROD_FG) AS SET_PROD_FG,     -- 세트상품구분
                        thp.REMARK,          -- 비고
                        thp.REG_DT
                   FROM TB_HQ_PRODUCT thp

@@ -17,7 +17,6 @@ import java.util.List;
  * @author NHN한국사이버결제 KCP 장혁수
  * @since 2018. 08.06
  * @version 1.0
- * @see
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */

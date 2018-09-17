@@ -19,9 +19,9 @@ import kr.co.common.data.enums.CodeEnum;
  */
 public enum NmcodeGrpCd implements CodeEnum{
     /** 날씨 */
-    AREA( "092" ),
+    AREA( "061" ),
     /** 매장형태 */
-    STORE_TYPE( "100" ),
+    STORE_TYPE( "068" ),
     /** 매장그룹 */
     GRP( "101" ),
     /** 시간대분류 */

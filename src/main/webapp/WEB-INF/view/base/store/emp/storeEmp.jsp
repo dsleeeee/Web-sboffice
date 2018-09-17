@@ -70,10 +70,6 @@
             <div id="srchServiceFg"></div>
           </div>
         </td>
-        <th></th>
-        <td></td>
-      </tr>
-      <tr>
         <%-- 휴대폰번호 --%>
         <th><s:message code="storeEmp.mpNo" /></th>
         <td>
@@ -81,8 +77,6 @@
             <div id="srchMpNo"></div>
           </div>
         </td>
-        <th></th>
-        <td></td>
       </tr>
       <tr>
         <%-- 웹사용여부 --%>
@@ -115,7 +109,7 @@
       <%-- 사원신규등록 --%>
       <button class="btn_skyblue" id="btnRegist"><s:message code="storeEmp.empRegist" /></button>
       <%-- 엑셀다운로드 --%>
-      <button class="btn_skyblue" id="btnExcel"><s:message code="cmm.excel.down" /></button>
+      <%--<button class="btn_skyblue" id="btnExcel"><s:message code="cmm.excel.down" /></button>--%>
     </div>
   </div>
 
@@ -132,9 +126,10 @@
 
 </div>
 <script>
-var serviceFg = ${ccu.getCommCodeSelect("008")};
-var useYn = ${ccu.getCommCodeSelect("904")};
-var RecvYn = ${ccu.getCommCodeSelect("105")};
+var serviceFg = ${ccu.getCommCodeSelect("007")};
+var useYn = ${ccu.getCommCodeSelect("067")};
+var RecvYn = ${ccu.getCommCodeSelect("072")};
+var listScaleBoxData = ${ccu.getListScale()};
 var baseUrl = "${baseUrl}";
 </script>
 

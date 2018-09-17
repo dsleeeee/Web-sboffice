@@ -100,7 +100,7 @@
       </tbody>
   </table>
 
-  <div class="mt10 pdb20 oh">
+  <div class="mt10 pdb20 oh bb">
     <button id="searchBtn" class="btn_blue fr" >
       <s:message code="cmm.search" />
     </button>

@@ -2,7 +2,7 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-  
+
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
 
@@ -23,7 +23,7 @@
             <li><a id="trtMntTab" href="javascript:;"><s:message code="vendr.trtMnt" /></a></li>
           </ul>
         </div>
-        
+
         <div id="viewArea" class="mt20 sc" style=" height:302px;">
           <table class="tblType01">
             <colgroup>
@@ -31,7 +31,7 @@
                 <col class="w35" />
                 <col class="w15" />
                 <col class="w35" />
-            </colgroup>   
+            </colgroup>
             <tbody>
               <tr>
                 <%-- 거래처코드 --%>
@@ -105,7 +105,7 @@
             </tbody>
           </table>
         </div>
-        
+
         <div id="regArea" class="mt20 sc" style="height:372px; display:none;">
           <table class="tblType01">
             <colgroup>
@@ -113,7 +113,7 @@
                 <col class="w35" />
                 <col class="w15" />
                 <col class="w35" />
-            </colgroup>   
+            </colgroup>
             <tbody>
               <tr class="brt">
                 <%-- 거래처코드 --%>
@@ -245,7 +245,7 @@
           </table>
         </div>
       </div>
-      
+
       <%-- 공통 버튼 영역 --%>
       <div class="btnSet">
         <%-- 등록 --%>
@@ -257,20 +257,20 @@
         <%-- 닫기 --%>
         <span><a href="javascript:;" class="btn_gray" id="btnClose"><s:message code="cmm.close" /></a></span>
       </div>
-      
+
     </div>
   </div>
 </div>
 <script>
 
-  var vendorFgData     = ${ccu.getCommCode("013")};
-  var vatIncldYnData   = ${ccu.getCommCodeExcpAll("904")};
-  var useYnData        = ${ccu.getCommCodeExcpAll("904")};
+  var vendorFgData     = ${ccu.getCommCode("011")};
+  var vatIncldYnData   = ${ccu.getCommCodeExcpAll("067")};
+  var useYnData        = ${ccu.getCommCodeExcpAll("067")};
 
   var rVendorFg    = wcombo.genCommonBox("#rVendorFg",vendorFgData);
   var rVatIncldYn  = wcombo.genCommonBox("#rVatIncldYn",vatIncldYnData);
   var rUseYn       = wcombo.genCommonBox("#rUseYn",useYnData);
-  
+
   var rVendrCd     = genInputText("#rVendrCd","10");
   var rVendrNm     = genInputText("#rVendrNm","50");
   var rOwnerNm     = genInputText("#rOwnerNm","50");
@@ -280,7 +280,7 @@
   var rTelNo       = genInputText("#rTelNo","15");
   var rFaxNo       = genInputText("#rFaxNo","15");
   var rEmailAddr   = genInputText("#rEmailAddr","200");
-  
+
   var rPostNo      = genInputText("#rPostNo","5");
   var rAddr        = genInputText("#rAddr","200");
   var rAddrDtl     = genInputText("#rAddrDtl","200");
@@ -289,14 +289,14 @@
   function genInputText(div, length) {
     return wcombo.genInputText(div, length, "", null);
   }
-  
+
   <%-- 거래처등록 레이어 --%>
   function openRegistLayer(val) {
 
     if( val=="reg" || val == "" )
     {
         infoInit();
-        
+
         $("#layerVendr #popTitle").text("<s:message code='vendr.layer.regist.title' />");
 
         $("#layerVendr").show();
@@ -311,7 +311,7 @@
     }else
     {
         $("#layerVendr #popTitle").text("["+ val +"] " + "<s:message code='vendr.layer.modify.title' />");
-        
+
         $("#layerVendr").show();
         $("#dimVendr").show();
 
@@ -321,7 +321,7 @@
         $("#btnSave").hide();
         $("#btnEdit").show();
         $("#btnReg").hide();
-        
+
     }
   }
   <%-- 거래처 상세정보 레이어 --%>
@@ -330,19 +330,19 @@
     getDtlData(items);
 
     $("#popTitle").text("["+ items.vendrCd +"] " + items.vendrNm);
-    
+
     $("#layerVendr").show();
     $("#dimVendr").show();
 
     $("#viewArea").show();
     $("#regArea").hide();
-    
+
 
     $("#btnSave").hide();
     $("#btnReg").hide();
     $("#btnEdit").show();
   }
-  
+
   function getDtlData(items) {
       var param = items;
 
@@ -356,26 +356,26 @@
         $("#vVendorFg").text(data.vendorFgNm);
         $("#vVatIncldYn").text(data.vatIncldYnNm);
         $("#vUseYn").text(data.useYnNm);
-        
+
         if(data.bizNo1 != null && data.bizNo2 != null && data.bizNo3 != null)
         $("#vBizNo").text(data.bizNo1 + "-" + data.bizNo2 + "-" + data.bizNo3);
-        
+
         if(data.telNo != null)
         $("#vTelNo").text(data.telNo);
-        
+
         if(data.emailAddr != null)
         $("#vEmailAddr").text(data.emailAddr);
-        
+
         if(data.faxNo != null)
         $("#vFaxNo").text(data.faxNo);
-        
+
         if(data.postNo != null && data.addr != null && data.addrDtl != null )
         $("#vAddr").text("("+data.postNo+") "+data.addr + " "+data.addrDtl);
-        
+
         if(data.remark != null)
         $("#vRemark").text(data.remark);
-        
-        
+
+
         <%-- 상세정보 수정 --%>
         rVendrCd.value              = data.vendrCd;
         rVendrNm.value              = data.vendrNm;
@@ -393,7 +393,7 @@
         rAddrDtl.value              = data.addrDtl;
         rEmailAddr.value            = data.emailAddr;
         rRemark.value               = data.remark
-        
+
         rVendrCd.isReadOnly = true;
       },
         function (result) {
@@ -402,7 +402,7 @@
         }
       );
     }
-  
+
   function saveHqOffice(sendUrl) {
 
     var param = {};
@@ -410,7 +410,7 @@
     param.vendrNm    = rVendrNm.value;
     param.ownerNm    = rOwnerNm.value;
     param.vendorFg   = "1";
-    param.vatIncldYn = rVatIncldYn.selectedValue; 
+    param.vatIncldYn = rVatIncldYn.selectedValue;
     param.useYn      = rUseYn.selectedValue;
     param.bizNo      = rBizNo1.value + rBizNo2.value + rBizNo3.value;
     param.telNo      = rTelNo.value;
@@ -432,26 +432,26 @@
       }
     );
   }
-  
+
   <%-- 신규등록 버튼 클릭 --%>
   $("#btnReg").click(function(e){
     chkVal("/base/prod/vendr/regist/regist.sb");
   });
-  
+
   <%-- 닫기 버튼 클릭 --%>
   $("#layerVendr .btn_close, #layerVendr #btnClose").click(function(e){
      infoInit();
-      
+
     $("#viewArea").show();
     $("#btnEdit").show();
-    
+
     $("#regArea").hide();
     $("#btnSave").hide();
-    
+
     $("#dimVendr").hide();
     $("#layerVendr").hide();
   });
-  
+
   <%-- 수정 버튼 클릭 --%>
   $("#layerVendr #btnEdit").click(function(e){
     $("#viewArea").hide();
@@ -460,64 +460,64 @@
     $("#btnSave").show();
     $("#btnEdit").hide();
   });
-  
+
   <%-- 저장 버튼 클릭 --%>
   $("#btnSave").click(function(e){
     chkVal("/base/prod/vendr/regist/modify.sb");
   });
-  
+
   <%-- validation --%>
   function chkVal(sendUrl) {
-      
+
     <%-- 거래처코드을 입력해주세요. --%>
     var msg = "<s:message code='vendr.vendrCd'/> <s:message code='cmm.require.text'/>";
     if(rVendrCd.value === "") {
       s_alert.pop(msg);
       return;
     }
-      
+
     <%-- 거래처명을 입력해주세요. --%>
     var msg = "<s:message code='vendr.vendrNm'/> <s:message code='cmm.require.text'/>";
     if(rVendrNm.value === "") {
       s_alert.pop(msg);
       return;
     }
-    
+
     <%-- 대표자명을 입력해주세요. --%>
     var msg = "<s:message code='vendr.ownerNm'/> <s:message code='cmm.require.text'/>";
     if(rOwnerNm.value === "") {
       s_alert.pop(msg);
       return;
     }
-    
+
     <%-- 거래처 구분 여부를 선택 해주세요. --%>
     var msg = "<s:message code='vendr.vendorFg'/> <s:message code='cmm.require.select'/>";
-    if(rVendorFg.value === "") { 
+    if(rVendorFg.value === "") {
       s_alert.pop(msg);
       return;
     }
-    
+
     <%-- 부가세 포함여부를 선택 해주세요. --%>
     var msg = "<s:message code='vendr.vatIncldYn'/> <s:message code='cmm.require.select'/>";
-    if(rVatIncldYn.value === "") { 
+    if(rVatIncldYn.value === "") {
       s_alert.pop(msg);
       return;
     }
-    
+
     <%-- 사용여부를 선택 해주세요. --%>
     var msg = "<s:message code='vendr.useYn'/> <s:message code='cmm.require.select'/>";
-    if(rUseYn.value === "") { 
+    if(rUseYn.value === "") {
       s_alert.pop(msg);
       return;
     }
-    
+
     saveHqOffice(sendUrl);
   }
-  
+
   <%--신규등록 탭 초기화--%>
   function infoInit() {
     var inputArr = [
-      rVendrCd, rVendrNm, rOwnerNm, rBizNo1, rBizNo2, rBizNo3, rTelNo, rEmailAddr, rFaxNo, rPostNo, rAddr, rAddrDtl, rRemark 
+      rVendrCd, rVendrNm, rOwnerNm, rBizNo1, rBizNo2, rBizNo3, rTelNo, rEmailAddr, rFaxNo, rPostNo, rAddr, rAddrDtl, rRemark
     ].forEach(function(element){element.value="";});
     var selectArr = [
         rVendorFg, rVatIncldYn, rUseYn
@@ -527,7 +527,11 @@
 
   <%-- 취급상품 탭 클릭 --%>
   $("#layerVendr #trtMntTab").click(function(e){
-     
-      showTrtMntSet($('#vVendrCd').text());
+    console.log(vendr);
+    if(vendr === undefined || vendr === null || vendr === "") {
+      s_alert.pop("<s:message code='vendr.request.regist.vendr'/>");
+      return;
+    }
+    showTrtMntSet($('#vVendrCd').text());
   });
 </script>

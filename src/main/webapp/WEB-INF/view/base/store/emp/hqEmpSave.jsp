@@ -154,9 +154,9 @@
 
 <script>
 
-  var smsRecvYnData  = ${ccu.getCommCodeExcpAll("105")};
-  var webUseYnData   = ${ccu.getCommCodeExcpAll("904")};
-  var fireFgData     = ${ccu.getCommCodeExcpAll("008")};
+  var smsRecvYnData  = ${ccu.getCommCodeExcpAll("072")};
+  <%--var webUseYnData   = ${ccu.getCommCodeExcpAll("067")};--%>
+  var fireFgData     = ${ccu.getCommCodeExcpAll("007")};
 
   var rEmpNo     = wcombo.genInputText("#rEmpNo",4,"",null);
   var rEmpNm     = wcombo.genInput("#rEmpNm");
@@ -246,6 +246,8 @@
     if(chkType == "btnReg") {
       <%-- 사원번호 입력해주세요. --%>
       var msg = "<s:message code='hqEmp.empNo'/> <s:message code='cmm.require.text'/>";
+      console.log("rEmpNo.value  : "+ rEmpNo.value );
+      console.log(rEmpNo );
       if(rEmpNo.value == "") {
         s_alert.pop(msg);
         return;
@@ -439,9 +441,15 @@
     param.empNo = rEmpNo.value;
 
     var msg = "<s:message code='hqEmp.empNo'/> <s:message code='cmm.require.text'/>";
-    if( param.empNo == "" || param.empNo.length != 4) {
+    if( param.empNo == "" ) {
         s_alert.pop(msg);
         return;
+    }
+
+    var msg = "<s:message code='hqEmp.empNoRegexp.msg'/>";
+    if(param.empNo.length != 4) {
+      s_alert.pop(msg);
+      return;
     }
 
     $.postJSON("/base/store/emp/hq/chkHqEmpNo.sb", param, function(result) {

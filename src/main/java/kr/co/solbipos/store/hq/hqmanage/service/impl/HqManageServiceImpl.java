@@ -43,6 +43,10 @@ public class HqManageServiceImpl implements HqManageService{
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
+    private final String DEFAULT_POS_EMPNO = "0000";
+    private final String DEFAULT_POS_PASSWORD = "1234";
+
+
     @Autowired
     HqManageMapper mapper;
 
@@ -102,9 +106,9 @@ public class HqManageServiceImpl implements HqManageService{
         String hqOfficeCd = mapper.getHqOfficeCd(hqManage);
 
         String wUuserId = hqOfficeCd.toLowerCase(); // 웹 사용자 아이디
-        String wUserPwd = EncUtil.setEncSHA256(wUuserId+"0000");    // 웹 패스워드
-        String pEmpNo = "0000"; // 포스 기본 사용자 사원번호
-        String pUserPwd = EncUtil.setEncSHA256(pEmpNo+"1234");  // 포스 패스워드
+        String wUserPwd = EncUtil.setEncSHA256(wUuserId + DEFAULT_POS_EMPNO);    // 웹 패스워드
+        String pEmpNo = DEFAULT_POS_EMPNO; // 포스 기본 사용자 사원번호
+        String pUserPwd = EncUtil.setEncSHA256(pEmpNo + DEFAULT_POS_PASSWORD);  // 포스 패스워드
 
         hqManage.setHqOfficeCd(hqOfficeCd);
         hqManage.setUserId(wUuserId);
@@ -141,6 +145,7 @@ public class HqManageServiceImpl implements HqManageService{
         nmcodeVO.setModDt(dt);
         nmcodeVO.setModId(sessionInfoVO.getUserId());
 
+        //TODO 로직 수정 필요 - 템플릿 코드나 테이블 만들어서 변경하기
         // 주문단위 등록
         nmcodeVO.setNmcodeGrpCd("000");
         nmcodeVO.setNmcodeCd("097");
@@ -295,12 +300,6 @@ public class HqManageServiceImpl implements HqManageService{
         } else {
             hqManage.setSysClosureDate("99991231");
         }
-
-        LOGGER.debug(">>>>>>>>>>>>>>>>>>>>> 뭐야?");
-        LOGGER.debug(hqManage.getHqOfficeCd());
-        LOGGER.debug(hqManage.getHqOfficeNm());
-        LOGGER.debug(hqManage.getAddr());
-
 
         int procCnt = mapper.modify(hqManage);
 
