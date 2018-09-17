@@ -1,7 +1,6 @@
 package kr.co.solbipos.base.store.emp.store.service;
 
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.store.emp.store.service.enums.StoreEmpResult;
 
 import java.util.List;

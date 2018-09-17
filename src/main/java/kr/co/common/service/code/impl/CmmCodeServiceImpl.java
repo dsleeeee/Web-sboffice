@@ -23,12 +23,17 @@ import java.util.List;
 public class CmmCodeServiceImpl implements CmmCodeService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    private final CmmCodeMapper cmmCodeMapper;
+    private final RedisConnService redisConnService;
+    private final RedisCustomTemplate<String, CommonCodeVO> redisCustomTemplate;
+
+    /** Constructor Injection */
     @Autowired
-    CmmCodeMapper cmmCodeMapper;
-    @Autowired
-    RedisConnService redisConnService;
-    @Autowired
-    private RedisCustomTemplate<String, CommonCodeVO> redisCustomTemplate;
+    public CmmCodeServiceImpl(CmmCodeMapper cmmCodeMapper, RedisConnService redisConnService, RedisCustomTemplate<String, CommonCodeVO> redisCustomTemplate) {
+        this.cmmCodeMapper = cmmCodeMapper;
+        this.redisConnService = redisConnService;
+        this.redisCustomTemplate = redisCustomTemplate;
+    }
 
     @Override
     public void setCodeList(CommonCodeVO commonCodeVO) throws Exception {
@@ -98,6 +103,11 @@ public class CmmCodeServiceImpl implements CmmCodeService {
     @Override
     public <E> List<E> selectCmmCodeList(String nmcodeGrpCd) {
         return cmmCodeMapper.selectCmmCodeList(nmcodeGrpCd);
+    }
+
+    @Override
+    public <E> List<E> selectEnvCodeList(String envstCd) {
+        return cmmCodeMapper.selectEnvCodeList(envstCd);
     }
 
     @Override

@@ -2,7 +2,6 @@ package kr.co.solbipos.base.store.emp.store.service;
 
 import kr.co.common.data.enums.UseYn;
 import kr.co.solbipos.application.common.service.CmmVO;
-import kr.co.solbipos.application.session.user.enums.PwChgResult;
 
 public class WebUserVO extends CmmVO{
     /** 웹 사용자 ID */

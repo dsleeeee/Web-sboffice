@@ -8,8 +8,8 @@
 
 <div class="subCon">
   <%--searchTbl--%>
-  <div class="searchBar flddUnfld">
-    <a href="javascript:void(0);" class="open">${menuNm}</a>
+  <div class="searchBar">
+    <a href="javascript:;" class="open">${menuNm}</a>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -49,7 +49,6 @@
     </tbody>
   </table>
   <%--//searchTbl--%>
-
   <div class="mt10 pdb20 oh bb">
     <button class="btn_blue fr" id="searchBtn">
       <s:message code="cmm.search" />
@@ -61,10 +60,10 @@
     <div id="listScaleBox" class="w150 fl"></div>
 
     <%-- 거래처 등록 --%>
-    <button class="btn_skyblue fr" id="">
+    <button class="btn_skyblue fr" id="regVendr">
       <s:message code="vendr.reg" />
     </button>
-
+    
   </div>
 
   <%--위즈모 테이블--%>
@@ -86,35 +85,34 @@
 </div>
 
 <script>
-$(document).ready(function(){
 
-    <%-- 검색조건 및 dataMap 조회 --%>
-    var vendrCd  = wcombo.genInput("#vendrCd");
-    var vendrNm  = wcombo.genInput("#vendrNm");
-    var cdata    = ${ccu.getCommCode("011")};
-    var vendorFg = wcombo.genCommonBox("#vendorFg", cdata);
-    var ldata    = ${ccu.getListScale()};
-    var listScaleBox = wcombo.genCommonBox("#listScaleBox", ldata);
-    var vendorFgNm = ${ccu.getCommCodeExcpAll("011")};
-    var useYn      = ${ccu.getCommCodeExcpAll("067")};
-    var vendorFgDataMap = new wijmo.grid.DataMap(vendorFgNm, 'value', 'name');
-    var useYnDataMap    = new wijmo.grid.DataMap(useYn, 'value', 'name');
-
-    var rdata =
-    [
-      {binding:"rnum",header:"No",width:"*"},
-      {binding:"vendrCd",header:"<s:message code='vendr.vendrCd' />",width:"*"},
-      {binding:"vendrNm",header:"<s:message code='vendr.vendrNm' />",width:"*"},
-      {binding:"bizNo",header:"<s:message code='vendr.bizNo' />",width:"*"},
-      {binding:"vendorFg",header:"<s:message code='vendr.vendorFg' />",dataMap:vendorFgDataMap,width:"*"},
-      {binding:"ownerNm",header:"<s:message code='vendr.ownerNm' />",width:"*"},
-      {binding:"telNo",header:"<s:message code='vendr.telNo' />",width:"*"},
-      {binding:"addr",header:"<s:message code='vendr.addr' />",width:"*"},
-      {binding:"useYn",header:"<s:message code='vendr.useYn' />",dataMap:useYnDataMap,width:"*"}
-    ];
-
-    var grid = wgrid.genGrid( "#theGrid", rdata, "${menuCd}", 1, ${clo.getColumnLayout(1)} );
-
+  <%-- 검색조건 및 dataMap 조회 --%>
+  var vendrCd  = wcombo.genInput("#vendrCd");
+  var vendrNm  = wcombo.genInput("#vendrNm");
+  var cdata    = ${ccu.getCommCodeSelect("013")};
+  var vendorFg = wcombo.genCommonBox("#vendorFg", cdata);
+  var ldata    = ${ccu.getListScale()};
+  var listScaleBox = wcombo.genCommonBox("#listScaleBox", ldata);
+  var vendorFgNm = ${ccu.getCommCodeExcpAll("013")};
+  var useYn      = ${ccu.getCommCodeExcpAll("904")};
+  var vendorFgDataMap = new wijmo.grid.DataMap(vendorFgNm, 'value', 'name');
+  var useYnDataMap    = new wijmo.grid.DataMap(useYn, 'value', 'name');
+  
+  var rdata = 
+  [
+    {binding:"rnum",header:"No",width:"*"},
+    {binding:"vendrCd",header:"<s:message code='vendr.vendrCd' />",width:"*"},
+    {binding:"vendrNm",header:"<s:message code='vendr.vendrNm' />",width:"*"},
+    {binding:"bizNo",header:"<s:message code='vendr.bizNo' />",width:"*"},
+    {binding:"vendorFg",header:"<s:message code='vendr.vendorFg' />",dataMap:vendorFgDataMap,width:"*"},
+    {binding:"ownerNm",header:"<s:message code='vendr.ownerNm' />",width:"*"},
+    {binding:"telNo",header:"<s:message code='vendr.telNo' />",width:"*"},
+    {binding:"addr",header:"<s:message code='vendr.addr' />",width:"*"},
+    {binding:"useYn",header:"<s:message code='vendr.useYn' />",dataMap:useYnDataMap,width:"*"}
+  ];
+  
+  var grid = wgrid.genGrid( "#theGrid", rdata, "${menuCd}", 1, ${clo.getColumnLayout(1)} );
+  
   function search(index) {
     var param = {};
 
@@ -123,14 +121,14 @@ $(document).ready(function(){
     param.vendorFg = vendorFg.selectedValue;
     param.listScale = listScaleBox.selectedValue;
     param.curr = index;
-
+    
     $.postJSON("/base/prod/vendr/vendr/list.sb", param, function(result) {
       var list = result.data.list;
-
+      
       if(list.length == 0) {
         s_alert.pop(result.message);
       }
-
+    
       grid.itemsSource = list;
       page.make("#page1", result.data.page.curr, result.data.page.totalPage);
       },
@@ -141,7 +139,7 @@ $(document).ready(function(){
         s_alert.pop("Ajax Fail");
     });
   }
-
+  
   <%-- 그리드 포맷 --%>
   grid.formatItem.addHandler(function(s, e) {
     if (e.panel == s.cells) {
@@ -152,7 +150,7 @@ $(document).ready(function(){
       }
     }
   });
-
+  
   <%-- 그리드 선택 이벤트 --%>
   grid.addEventListener(grid.hostElement, 'click', function(e) {
     var ht = grid.hitTest(e);
@@ -160,23 +158,39 @@ $(document).ready(function(){
         var col = ht.panel.columns[ht.col];
         // 거래처코드
         if( col.binding == "vendrCd" ) {
-          //todo 유나대리 부탁해요..
-          alert("거래처상세 팝업을 띄우시오")
-
+            vendr = grid.rows[ht.row].dataItem;
+            openDtlLayer(vendr);
+          
         }
       }
   });
-
+  
   <%-- 리스트 조회 --%>
   $("#searchBtn").click(function( e ){
     search(1);
   });
-
+  
   <%-- 페이징 --%>
   $(document).on("click", ".page1", function() {
     search($(this).data("value"));
   });
-
-});
-
+  
+  <%-- 거래처등록 --%>
+  $("#regVendr").bind("click", function() {
+      openRegistLayer("reg");
+  });
+  
+  function hideVendr(){
+    $("#layerVendr").hide();
+    $("#dimVendr").hide();
+  }
+  
 </script>
+<c:import url="/WEB-INF/view/base/prod/vendr/regist.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+<c:import url="/WEB-INF/view/base/prod/vendr/trtmnt.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>

@@ -4,7 +4,7 @@
 <mapper namespace="kr.co.solbipos.base.prod.vendr.service.impl.VendrMapper">
 
   <select id="getHqVendrList" parameterType="vendrVO" resultType="DefaultMap">
-     /* VendrMapper.getHqVendrList */
+     /* USE : VendrMapper.getHqVendrList */
      <include refid="CmmSQL.PagingTemplateHeader"/>
      SELECT
             A.HQ_BRAND_CD,
@@ -46,7 +46,7 @@
   </select>
   
   <select id="getMsVendrList" parameterType="vendrVO" resultType="DefaultMap">
-     /* VendrMapper.getMsVendrList */
+     /* USE : VendrMapper.getMsVendrList */
      <include refid="CmmSQL.PagingTemplateHeader"/>
      SELECT
             A.STORE_CD,
@@ -87,4 +87,509 @@
      <include refid="CmmSQL.PagingTemplateBottom"/>
   </select>
 
+  <!--
+    TABLE    : TB_HQ_BRAND
+    COMMENTS : 브랜드 코드 조회
+  -->
+  <select id="getHqBrandCd" parameterType="vendrVO" resultType="String">
+    /* USE : VendrMapper.getHqBrandCd */
+    SELECT HQ_BRAND_CD
+      FROM TB_HQ_BRAND
+     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+  </select>
+
+  <!-- 거래처 등록 -->
+  <!--
+    TABLE    : TB_HQ_VENDOR
+    COMMENTS : 거래처(본사) 등록 
+  -->
+  <insert id="insertHqVendr" parameterType="vendrVO">
+    /* USE : VendrMapper.insertHqVendr */
+    INSERT INTO TB_HQ_VENDOR
+    (
+       HQ_BRAND_CD,
+       VENDR_CD,
+       VENDR_NM,
+       OWNER_NM,
+       BIZ_NO,
+       BIZ_TYPE_CD,
+       BIZ_ITEM_CD,
+       TEL_NO,
+       FAX_NO,
+       EMAIL_ADDR,
+       POST_NO,
+       ADDR,
+       ADDR_DTL,
+       SHIP_FG,
+       VAT_INCLD_YN,
+       USE_YN,
+       REMARK,
+       REG_DT,
+       REG_ID,
+       MOD_DT,
+       MOD_ID,
+       VENDOR_FG
+      ) VALUES (
+         #{hqBrandCd},
+         #{vendrCd},
+         #{vendrNm},
+         #{ownerNm},
+         #{bizNo},
+         #{bizTypeCd},
+         #{bizItemCd},
+         #{telNo},
+         #{faxNo},
+         #{emailAddr},
+         #{postNo},
+         #{addr},
+         #{addrDtl},
+         #{shipFg},
+         #{vatIncldYn},
+         #{useYn},
+         #{remark},
+         #{regDt},
+         #{regId},
+         #{modDt},
+         #{modId},
+         #{vendorFg}
+      )
+  </insert>
+
+  <!-- 거래처 등록 -->
+  <!--
+    TABLE    : TB_MS_VENDOR
+    COMMENTS : 거래처(매장) 등록 
+  -->
+  <insert id="insertMsVendr" parameterType="vendrVO">
+    /* USE : VendrMapper.insertMsVendr */
+    INSERT INTO TB_MS_VENDOR
+    (
+      STORE_CD,
+      VENDR_CD,
+      VENDR_NM,
+      OWNER_NM,
+      BIZ_NO,
+      BIZ_TYPE_CD,
+      BIZ_ITEM_CD,
+      TEL_NO,
+      FAX_NO,
+      EMAIL_ADDR,
+      POST_NO,
+      ADDR,
+      ADDR_DTL,
+      SHIP_FG,
+      VAT_INCLD_YN,
+      USE_YN,
+      REMARK,
+      REG_DT,
+      REG_ID,
+      MOD_DT,
+      MOD_ID,
+      VENDOR_FG
+    ) VALUES (
+        #{storeCd},
+        #{vendrCd},
+        #{vendrNm},
+        #{ownerNm},
+        #{bizNo},
+        #{bizTypeCd},
+        #{bizItemCd},
+        #{telNo},
+        #{faxNo},
+        #{emailAddr},
+        #{postNo},
+        #{addr},
+        #{addrDtl},
+        #{shipFg},
+        #{vatIncldYn},
+        #{useYn},
+        #{remark},
+        #{regDt},
+        #{regId},
+        #{modDt},
+        #{modId},
+        #{vendorFg}
+    )
+  </insert>
+    
+  <!-- 거래처(본사) 상세정보 조회  -->
+  <!--
+      TABLE    : TB_HQ_VENDOR
+      PARAM    : vendrVO
+      COMMENTS :  거래처(본사) 상세정보 조회
+  -->
+  <select id="getHqDtlInfo" parameterType="vendrVO" resultType="DefaultMap">
+    /* USE : VendrMapper.getHqDtlInfo */
+    SELECT
+      HQ_BRAND_CD,
+      VENDR_CD,
+      VENDR_NM,
+      OWNER_NM,
+      BIZ_NO,
+      SUBSTR(thv.BIZ_NO,0,3) AS BIZ_NO1,
+      SUBSTR(thv.BIZ_NO,4,2) AS BIZ_NO2,
+      SUBSTR(thv.BIZ_NO,6,5) AS BIZ_NO3,
+      BIZ_TYPE_CD,
+      BIZ_ITEM_CD,
+      TEL_NO,
+      FAX_NO,
+      EMAIL_ADDR,
+      POST_NO,
+      ADDR,
+      ADDR_DTL,
+      SHIP_FG,
+      VAT_INCLD_YN,
+      USE_YN,
+      REMARK,
+      REG_DT,
+      REG_ID,
+      MOD_DT,
+      MOD_ID,
+      VENDOR_FG,
+      (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '074' AND NMCODE_CD = thv.SHIP_FG) AS SHIP_FG_NM,
+      (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '013' AND NMCODE_CD = thv.VENDOR_FG) AS VENDOR_FG_NM,
+      (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '904' AND NMCODE_CD = thv.USE_YN) AS USE_YN_NM,
+      (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '904' AND NMCODE_CD = thv.VAT_INCLD_YN) AS VAT_INCLD_YN_NM
+    FROM TB_HQ_VENDOR thv
+    WHERE VENDR_CD = #{vendrCd}
+      AND HQ_BRAND_CD = #{hqBrandCd}
+  </select>
+    
+  <!-- 거래처(매장) 상세정보 조회  -->
+  <!--
+      TABLE    : TB_MS_VENDOR
+      PARAM    : vendrVO
+      COMMENTS : 거래처(매장) 상세정보 조회
+  -->
+  <select id="getMsDtlInfo" parameterType="vendrVO" resultType="DefaultMap">
+    /* USE : VendrMapper.getMsDtlInfo */
+    SELECT
+      STORE_CD,
+      VENDR_CD,
+      VENDR_NM,
+      OWNER_NM,
+      BIZ_NO,
+      SUBSTR(tmv.BIZ_NO,0,3) AS BIZ_NO1,
+      SUBSTR(tmv.BIZ_NO,4,2) AS BIZ_NO2,
+      SUBSTR(tmv.BIZ_NO,6,5) AS BIZ_NO3,
+      BIZ_TYPE_CD,
+      BIZ_ITEM_CD,
+      TEL_NO,
+      FAX_NO,
+      EMAIL_ADDR,
+      POST_NO,
+      ADDR,
+      ADDR_DTL,
+      SHIP_FG,
+      VAT_INCLD_YN,
+      USE_YN,
+      REMARK,
+      REG_DT,
+      REG_ID,
+      MOD_DT,
+      MOD_ID,
+      VENDOR_FG,
+      (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '074' AND NMCODE_CD = tmv.SHIP_FG) AS SHIP_FG_NM,
+      (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '013' AND NMCODE_CD = tmv.VENDOR_FG) AS VENDOR_FG_NM,
+      (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '904' AND NMCODE_CD = tmv.USE_YN) AS USE_YN_NM,
+      (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '904' AND NMCODE_CD = tmv.VAT_INCLD_YN) AS VAT_INCLD_YN_NM
+    FROM TB_MS_VENDOR tmv
+    WHERE VENDR_CD = #{vendrCd}
+      AND STORE_CD = #{storeCd}
+    </select>
+    
+  <!-- 거래처(본사) 수정 -->
+  <!--
+      TABLE    : TB_HQ_VENDOR
+      PARAM    : vendrVO
+      COMMENTS : 거래처(본사) 정보 수정
+  -->
+  <update id="modifyHqVendr" parameterType="vendrVO">
+    /* USE : VendrMapper.modifyHqVendr */
+    UPDATE TB_HQ_VENDOR
+       SET VENDR_NM      = #{vendrNm},
+           OWNER_NM      = #{ownerNm},
+           BIZ_NO        = #{bizNo},
+           BIZ_TYPE_CD   = #{bizTypeCd},
+           BIZ_ITEM_CD   = #{bizItemCd},
+           TEL_NO        = #{telNo},
+           FAX_NO        = #{faxNo},
+           EMAIL_ADDR    = #{emailAddr},
+           POST_NO       = #{postNo},
+           ADDR          = #{addr},
+           ADDR_DTL      = #{addrDtl},
+           SHIP_FG       = #{shipFg},
+           VAT_INCLD_YN  = #{vatIncldYn},
+           USE_YN        = #{useYn},
+           REMARK        = #{remark},
+           MOD_DT        = #{modDt},
+           MOD_ID        = #{modId},
+           VENDOR_FG     = #{vendorFg}
+     WHERE HQ_BRAND_CD   = #{hqBrandCd}
+       AND VENDR_CD      = #{vendrCd}
+  </update>
+  
+  <!-- 거래처(매장) 수정 -->
+  <!--
+      TABLE    : TB_MS_VENDOR
+      PARAM    : vendrVO
+      COMMENTS : 거래처(매장) 정보 수정
+  -->
+  <update id="modifyMsVendr" parameterType="vendrVO">
+    /* USE : VendrMapper.modifyMsVendr */
+    UPDATE TB_MS_VENDOR
+       SET VENDR_NM      = #{vendrNm},
+           OWNER_NM      = #{ownerNm},
+           BIZ_NO        = #{bizNo},
+           BIZ_TYPE_CD   = #{bizTypeCd},
+           BIZ_ITEM_CD   = #{bizItemCd},
+           TEL_NO        = #{telNo},
+           FAX_NO        = #{faxNo},
+           EMAIL_ADDR    = #{emailAddr},
+           POST_NO       = #{postNo},
+           ADDR          = #{addr},
+           ADDR_DTL      = #{addrDtl},
+           SHIP_FG       = #{shipFg},
+           VAT_INCLD_YN  = #{vatIncldYn},
+           USE_YN        = #{useYn},
+           REMARK        = #{remark},
+           MOD_DT        = #{modDt},
+           MOD_ID        = #{modId},
+           VENDOR_FG     = #{vendorFg}
+     WHERE STORE_CD      = #{storeCd}
+       AND VENDR_CD      = #{vendrCd}
+  </update>
+  
+  <!-- 취급상품(본사) -->
+  <!--
+      TABLE    : TB_HQ_VENDOR_PROD
+      PARAM    : vendrVO
+      COMMENTS : 취급상품(본사) 정보
+  -->
+  <select id="getHqVendrProdList" parameterType="vendrVO" resultType="DefaultMap">
+   /* USE : VendrMapper.getHqVendrProdList */
+   SELECT 
+        ROWNUM AS RNUM,
+        thvp.PROD_CD,
+        thp.PROD_NM,
+        thp.SPLY_UPRC
+       FROM TB_HQ_VENDOR_PROD thvp, TB_HQ_PRODUCT thp
+      WHERE thvp.PROD_CD = thp.PROD_CD
+        AND thvp.HQ_BRAND_CD = #{hqBrandCd}
+        AND thvp.VENDR_CD    = #{vendrCd}
+        AND thvp.USE_YN      = 'Y'
+      <if test="prodCd != null and prodCd != ''">
+        AND thvp.PROD_CD = #{prodCd}
+      </if>
+      <if test="prodNm != null and prodNm != ''">
+        AND thp.PROD_NM = #{prodNm}
+      </if>
+  </select>
+  
+  <!-- 취급상품(매장) -->
+  <!--
+      TABLE    : TB_MS_VENDOR_PROD, TB_MS_PRODUCT
+      PARAM    : vendrVO
+      COMMENTS : 취급상품(매장) 정보
+  -->
+  <select id="getMsVendrProdList" parameterType="vendrVO" resultType="DefaultMap">
+     /* USE : VendrMapper.getMsVendrProdList */
+     SELECT 
+        ROWNUM AS RNUM,
+        tmvp.PROD_CD,
+        tmp.PROD_NM,
+        tmp.SPLY_UPRC
+       FROM TB_MS_VENDOR_PROD tmvp, TB_MS_PRODUCT tmp
+      WHERE tmvp.PROD_CD  = tmp.PROD_CD
+        AND tmvp.STORE_CD = tmp.STORE_CD
+        AND tmvp.VENDR_CD = #{vendrCd}
+        AND tmvp.USE_YN   = 'Y'
+      <if test="prodCd != null and prodCd != ''">
+        AND tmvp.PROD_CD = #{prodCd}
+      </if>
+      <if test="prodNm != null and prodNm != ''">
+        AND tmp.PROD_NM = #{prodNm} 
+      </if>
+  </select>
+  
+  <!-- 미취급상품(본사) -->
+  <!--
+      TABLE    : TB_HQ_PRODUCT
+      PARAM    : vendrVO
+      COMMENTS : 미취급상품(본사) 정보
+  -->
+  <select id="getHqProdList" parameterType="vendrVO" resultType="DefaultMap">
+     /* USE : VendrMapper.getHqProdList */
+     SELECT 
+        ROWNUM AS RNUM,
+        PROD_CD,
+        PROD_NM,
+        SPLY_UPRC
+       FROM TB_HQ_PRODUCT thp
+      WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND thp.USE_YN      = 'Y'
+      <if test="prodCd != null and prodCd != ''">
+        AND thp.PROD_CD = #{prodCd} -- 상품코드
+      </if>
+      <if test="prodNm != null and prodNm != ''">
+        AND thp.PROD_NM = #{prodNm} -- 상품명
+      </if>
+        AND NOT EXISTS 
+          ( SELECT 1 
+          FROM TB_HQ_VENDOR_PROD thvp 
+         WHERE thvp.PROD_CD  = thp.PROD_CD 
+           AND thvp.VENDR_CD = #{vendrCd}
+           AND thvp.USE_YN   = 'Y'
+          )
+  </select>
+  
+  <!-- 미취급상품(매장) -->
+  <!--
+      TABLE    : TB_MS_PRODUCT
+      PARAM    : vendrVO
+      COMMENTS : 미취급상품(매장) 정보
+  -->
+  <select id="getMsProdList" parameterType="vendrVO" resultType="DefaultMap">
+     /* USE : VendrMapper.getMsProdList */
+     SELECT
+        ROWNUM AS RNUM,
+        PROD_CD,
+        PROD_NM,
+        SPLY_UPRC
+       FROM TB_MS_PRODUCT tmp
+      WHERE tmp.STORE_CD = #{storeCd}
+        AND tmp.USE_YN   = 'Y'
+      <if test="prodCd != null and prodCd != ''">
+        AND tmp.PROD_CD = #{prodCd} -- 상품코드
+      </if>
+      <if test="prodNm != null and prodNm != ''">
+        AND tmp.PROD_NM = #{prodNm} -- 상품명
+      </if>
+        AND NOT EXISTS 
+          ( SELECT 1 
+          FROM TB_MS_VENDOR_PROD tmvp 
+         WHERE tmvp.PROD_CD  = tmp.PROD_CD 
+           AND tmvp.VENDR_CD = #{vendrCd}
+           AND tmvp.USE_YN   = 'Y'
+          )
+  </select>
+  
+  
+  <!-- 미취급 상품 수정 (취급상품으로 변경) / 본사  -->
+  <!--
+      TABLE    : TB_HQ_VENDOR_PROD
+      COMMENTS : 미취급상품을 취급상품으로 등록, 
+                 데이터가 존재하면 UPDATE, 존재하지 않으면 INSERT
+  -->
+  <update id="mergeHqVendrProd" parameterType="vendrVO">
+    /* USE : VendrMapper.mergeHqVendrProd */
+    MERGE INTO TB_HQ_VENDOR_PROD thvp
+    USING (
+          SELECT #{hqBrandCd} AS HQ_BRAND_CD,
+                 #{vendrCd}   AS VENDR_CD,
+                 #{prodCd}    AS PROD_CD,
+                 #{splyUprc}  AS SPLY_UPRC,
+                 #{useYn}     AS USE_YN,
+                 #{regDt}     AS REG_DT,
+                 #{regId}     AS REG_ID,
+                 #{modDt}     AS MOD_DT,
+                 #{modId}     AS MOD_ID
+            FROM DUAL
+          ) thvpc
+       ON
+        (
+          thvpc.HQ_BRAND_CD = thvp.HQ_BRAND_CD
+      AND thvpc.VENDR_CD    = thvp.VENDR_CD
+      AND thvpc.PROD_CD     = thvp.PROD_CD
+        )
+     WHEN MATCHED THEN
+          UPDATE SET
+                 thvp.USE_YN = thvpc.USE_YN,
+                 thvp.MOD_DT = thvpc.MOD_DT,
+                 thvp.MOD_ID = thvpc.MOD_ID
+     WHEN NOT MATCHED THEN
+          INSERT
+          (
+            thvp.HQ_BRAND_CD,
+            thvp.VENDR_CD,
+            thvp.PROD_CD,
+            thvp.SPLY_UPRC,
+            thvp.USE_YN,
+            thvp.REG_DT,
+            thvp.REG_ID,
+            thvp.MOD_DT,
+            thvp.MOD_ID
+          )
+          VALUES
+          (
+            thvpc.HQ_BRAND_CD,
+            thvpc.VENDR_CD,
+            thvpc.PROD_CD,
+            thvpc.SPLY_UPRC,
+            thvpc.USE_YN,
+            thvpc.REG_DT,
+            thvpc.REG_ID,
+            thvpc.MOD_DT,
+            thvpc.MOD_ID
+          )
+  </update>
+
+  
+  <!-- 미취급 상품 수정 (취급상품으로 변경) / 매장  -->
+  <!--
+      TABLE    : TB_MS_VENDOR_PROD
+      COMMENTS : 미취급상품을 취급상품으로 등록, 
+                 데이터가 존재하면 UPDATE, 존재하지 않으면 INSERT
+  -->
+  <update id="mergeMsVendrProd" parameterType="vendrVO">
+    /* USE : VendrMapper.mergeMsVendrProd */
+    MERGE INTO TB_MS_VENDOR_PROD tmvp
+    USING (
+          SELECT #{storeCd}   AS STORE_CD, 
+                 #{prodCd}    AS PROD_CD,
+                 #{vendrCd}   AS VENDR_CD,
+                 #{splyUprc}  AS SPLY_UPRC,
+                 #{useYn}     AS USE_YN,
+                 #{regDt}     AS REG_DT,
+                 #{regId}     AS REG_ID,
+                 #{modDt}     AS MOD_DT,
+                 #{modId}     AS MOD_ID
+            FROM DUAL
+          ) tmvpc
+       ON
+        (
+          tmvpc.STORE_CD    = tmvp.STORE_CD
+      AND tmvpc.PROD_CD     = tmvp.PROD_CD
+        )
+     WHEN MATCHED THEN
+          UPDATE SET
+                 tmvp.USE_YN = tmvpc.USE_YN,
+                 tmvp.MOD_DT = tmvpc.MOD_DT,
+                 tmvp.MOD_ID = tmvpc.MOD_ID
+     WHEN NOT MATCHED THEN
+          INSERT
+          (
+            tmvp.STORE_CD,
+            tmvp.VENDR_CD,
+            tmvp.PROD_CD,
+            tmvp.SPLY_UPRC,
+            tmvp.USE_YN,
+            tmvp.REG_DT,
+            tmvp.REG_ID,
+            tmvp.MOD_DT,
+            tmvp.MOD_ID
+          )
+          VALUES
+          (
+            tmvpc.STORE_CD,
+            tmvpc.VENDR_CD,
+            tmvpc.PROD_CD,
+            tmvpc.SPLY_UPRC,
+            tmvpc.USE_YN,
+            tmvpc.REG_DT,
+            tmvpc.REG_ID,
+            tmvpc.MOD_DT,
+            tmvpc.MOD_ID
+          )
+  </update>
 </mapper>

@@ -31,6 +31,8 @@ public class CouponStoreVO extends CmmVO {
     private UseYn useYn;
     /** 매장적용여부 */
     private UseYn storeRegFg;
+    /** 기능키 관련 프로시져 실행 결과 */
+    private String result;
 
     /** /////////////////////////////조회조건/////////////////// */
     /** 본사코드 */
@@ -175,5 +177,20 @@ public class CouponStoreVO extends CmmVO {
      */
     public void setStoreRegFg(UseYn storeRegFg) {
         this.storeRegFg = storeRegFg;
+    }
+
+    /**
+     * @return the result
+     */
+
+    public String getResult() {
+        return result;
+    }
+
+    /**
+     * @param result the result to set
+     */
+    public void setResult(String result) {
+        this.result = result;
     }
 }

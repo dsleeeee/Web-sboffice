@@ -26,19 +26,23 @@ import static org.springframework.util.StringUtils.isEmpty;
 public class CmmMenuServiceImpl implements CmmMenuService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    private final SessionService sessionService;
+    private final CmmMenuMapper cmmMenuMapper;
+    private final CmmCodeMapper cmmCodeMapper;
+
+    /** Constructor Injection */
     @Autowired
-    SessionService sessionService;
-    @Autowired
-    CmmMenuMapper cmmMenuMapper;
-    @Autowired
-    CmmCodeMapper cmmCodeMapper;
+    public CmmMenuServiceImpl(SessionService sessionService, CmmMenuMapper cmmMenuMapper, CmmCodeMapper cmmCodeMapper) {
+        this.sessionService = sessionService;
+        this.cmmMenuMapper = cmmMenuMapper;
+        this.cmmCodeMapper = cmmCodeMapper;
+    }
 
     /**
      *
      * 레이어 팝업 매장 조회
      *
      */
-
     @Override
     public List<StoreVO> selectStore(StoreVO storeVO) {
         return cmmMenuMapper.selectStore(storeVO);
@@ -51,6 +55,16 @@ public class CmmMenuServiceImpl implements CmmMenuService {
     public List<HqVO> selectHq(HqVO hqVO) {
         return cmmMenuMapper.selectHq(hqVO);
     }
+    
+    /**
+     * 레이어 팝업 업체 조회
+     * @param caVO
+     * @return
+     */
+    public List<CmAgencyVO> selectCmAgency(CmAgencyVO caVO) {
+    	return cmmMenuMapper.selectCmAgency(caVO);
+    }
+    
 
 
     /**

@@ -8,7 +8,6 @@ import kr.co.common.utils.HttpUtils;
 import kr.co.common.utils.security.EncUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.common.utils.spring.WebUtil;
-import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.store.emp.store.service.StoreEmpService;
 import kr.co.solbipos.base.store.emp.store.service.StoreEmpVO;
 import kr.co.solbipos.base.store.emp.store.service.WebUserVO;
@@ -23,7 +22,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static kr.co.common.utils.DateUtil.currentDateString;
-import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
  * @Class Name : StoreEmpServiceImpl.java

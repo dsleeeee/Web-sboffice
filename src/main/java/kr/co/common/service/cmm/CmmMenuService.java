@@ -1,14 +1,10 @@
 package kr.co.common.service.cmm;
 
-import java.util.List;
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.application.common.service.HqVO;
-import kr.co.solbipos.application.common.service.MenuUseHistVO;
-import kr.co.solbipos.application.common.service.MenuVO;
-import kr.co.solbipos.application.common.service.ResrceInfoBaseVO;
-import kr.co.solbipos.application.common.service.ResrceInfoVO;
-import kr.co.solbipos.application.common.service.StoreVO;
+import kr.co.solbipos.application.common.service.*;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+
+import java.util.List;
 
 /**
  *
@@ -39,6 +35,13 @@ public interface CmmMenuService {
      * @return
      */
     List<HqVO> selectHq(HqVO hqVO);
+    
+    /**
+     * 레이어 팝업 업체 조회
+     * @param hqVO
+     * @return
+     */
+    List<CmAgencyVO> selectCmAgency(CmAgencyVO caVO);
     
     /**
      *

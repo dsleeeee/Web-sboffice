@@ -59,7 +59,6 @@
                     initialized="_initComboBox(s)">
             </wj-combo-box>
           </div>
-            {{clsFg}}
         </td>
         <%-- 상태 --%>
         <th><s:message code="virtualLogin.sysStatFgNm" /></th>

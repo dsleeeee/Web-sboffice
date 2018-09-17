@@ -1,9 +1,12 @@
 package kr.co.solbipos.base.prod.vendr.service;
 
+import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+
 import java.util.List;
 
 /**
- * @Class Name : TouchKeyService.java
+ * @Class Name : TouchkeyService.java
  * @Description : 기초관리 - 상품관리 - 판매터치키등록
  * @Modification Information
  * @
@@ -21,17 +24,51 @@ import java.util.List;
 public interface VendrService {
 
     /**
-     * 
      * @param VendrVO
      * @return List
      */
-    <E> List<E> getHqVendrList(VendrVO vendrVO);
+    List<DefaultMap<String>> list(VendrVO vendrVO, SessionInfoVO sessionInfoVO);
+
+    /**
+     * @param VendrVO
+     * @return DefaultMap
+     */
+    DefaultMap<String> dtlInfo(VendrVO vendrVO, SessionInfoVO sessionInfoVO);
+    
+    /*
+    * @param VendrVO
+    * @return int
+    * */
+    int save(VendrVO vendrVO, SessionInfoVO sessionInfoVO);
+    
+    /*
+    * @param VendrVO
+    * @return int
+    * */
+    int modify(VendrVO vendrVO, SessionInfoVO sessionInfoVO);
     
     /**
-     * 
      * @param VendrVO
      * @return List
      */
-    <E> List<E> getMsVendrList(VendrVO vendrVO);
-
+    List<DefaultMap<String>> vendrProdList(VendrVO vendrVO, SessionInfoVO sessionInfoVO);
+    
+    /**
+     * @param VendrVO
+     * @return List
+     */
+    List<DefaultMap<String>> prodList(VendrVO vendrVO, SessionInfoVO sessionInfoVO);
+    
+    /*
+    * @param VendrVO
+    * @return int
+    * */
+    int modifyProd(VendrVO[] vendrVO, SessionInfoVO sessionInfoVO);
+    
+    /*
+    * @param VendrVO
+    * @return int
+    * */
+    int deleteProd(VendrVO[] vendrVO, SessionInfoVO sessionInfoVO);
+    
 }

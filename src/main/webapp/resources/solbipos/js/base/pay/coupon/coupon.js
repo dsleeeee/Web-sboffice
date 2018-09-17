@@ -47,6 +47,11 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
         if ( col.binding === "payClassCd" && selectedRow.status != "I") {
           if(selectedRow.status == "I") {
             e.cancel = false;
+          } else if(selectedRow.useYn == "N") {
+            s_alert.pop(messages["coupon.not.use.payClassCd"]);
+            var couponGrid = agrid.getScope('couponCtrl');
+            couponGrid._gridDataInit();
+            return;
           } else {
             $("#couponSubTitle").text(" [" + selectedRow.payClassNm+ "]");
             $scope._broadcast('couponCtrl', selectedRow);
@@ -99,20 +104,20 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
   };
 
   // 쿠폰 분류 그리드 행 삭제
-  $scope.del = function(){
-    for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-      var item = $scope.flex.collectionView.items[i];
-
-      if(item.gChk) {
-        if(item.couponCnt > 0) {
-          // s_alert.pop("<s:message code='coupon.exists.coupon' />");
-          s_alert.pop("해당분류에 등록된 쿠폰이 존재합니다. 분류 삭제 전에 등록 쿠폰을 먼저 삭제해주세요.");
-          return;
-        }
-        $scope.flex.collectionView.removeAt(i);
-      }
-    }
-  };
+  // $scope.del = function(){
+  //   for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+  //     var item = $scope.flex.collectionView.items[i];
+  //
+  //     if(item.gChk) {
+  //       if(item.couponCnt > 0) {
+  //         // s_alert.pop("<s:message code='coupon.exists.coupon' />");
+  //         s_alert.pop("해당분류에 등록된 쿠폰이 존재합니다. 분류 삭제 전에 등록 쿠폰을 먼저 삭제해주세요.");
+  //         return;
+  //       }
+  //       $scope.flex.collectionView.removeAt(i);
+  //     }
+  //   }
+  // };
 
   // 쿠폰분류 그리드 저장
   $scope.save = function() {
@@ -205,28 +210,24 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     });
 
+    // 할인구분에 따라 %와 금액 초기화
     s.cellEditEnded.addHandler(function (s, e) {
       var col = s.columns[e.col];
       var dataItem = s.rows[e.row].dataItem;
 
-      console.log(col)
-
       if(col.binding == "coupnDcFg") {
         // 할인구분 => 금액 관련이면, 할인율은 입력못함
         if(dataItem.coupnDcFg == "3" || dataItem.coupnDcFg == "4" || dataItem.coupnDcFg == "6") {
-          console.log('1')
           dataItem.coupnDcRate = "";
         }
         // 할인구분 => % 관련이면, 할인금액 입력못함
         else if(dataItem.coupnDcFg == "1" || dataItem.coupnDcFg == "2") {
-          console.log('2')
           dataItem.coupnDcAmt = "";
         }
       }
-
     });
 
-      // 쿠폰 그리드 선택 이벤트
+    // 쿠폰 그리드 선택 이벤트
     s.addEventListener(s.hostElement, 'mousedown', function(e) {
       var ht = s.hitTest(e);
       if( ht.cellType === wijmo.grid.CellType.Cell) {
@@ -344,7 +345,7 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._save(baseUrl + "class/saveCouponList.sb", params, function(){ $scope.allSearch() });
   }
 
-  // 쿠폰 삭제 완료 후처리 (쿠폰분류, 쿠폰 재조회)
+  // 저장 완료 후처리 (쿠폰분류, 쿠폰 재조회)
   $scope.allSearch = function () {
     var couponClassGrid = agrid.getScope("couponClassCtrl");
     couponClassGrid.searchCouponClass();

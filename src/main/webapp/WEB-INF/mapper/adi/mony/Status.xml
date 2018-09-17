@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.adi.mony.status.service.impl.StatusMapper">
+
+  <!-- 본사 계정 로그인 (HQ) 리스트 조회 -->
+  <select id="selectStatus" parameterType="StatusVO" resultType="DefaultMap">
+     /* StatusMapper.selectStatus */
+        SELECT ROWNUM,
+           A.STORE_NM,
+           TO_CHAR(TO_DATE(B.SALE_DATE), 'YYYY-MM-DD') AS SALE_DATE,
+           B.POS_NO,
+           B.ACCNT_FG,
+           C.ACCNT_NM,
+           TO_NUMBER(B.ACCNT_AMT) AS ACCNT_AMT,
+           B.REMARK
+      FROM TB_MS_STORE A,
+           TB_PS_ACCOUNT_IOMONEY B,
+           TB_HQ_ACCOUNT C
+     WHERE A.STORE_CD = B.STORE_CD
+       AND B.ACCNT_CD = C.ACCNT_CD
+       AND B.SALE_DATE BETWEEN #{startDt} AND #{endDt}
+       AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+       AND C.USE_YN = 'Y'
+       <if test='storeCd != null and storeCd != ""'>
+            AND A.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
+                #{item}
+            </foreach>
+       </if>
+       <if test="accntFg != null and accntFg != ''">
+            AND B.ACCNT_FG = #{accntFg}
+       </if>
+  </select>
+  
+  <!-- 가맹점 계정 로그인 (STORE) 리스트 조회 -->
+  <select id="selectStoreStatus" parameterType="StatusVO" resultType="DefaultMap">
+     /* StatusMapper.selectStoreStatus */
+     SELECT ROWNUM,
+           A.STORE_NM,
+           TO_CHAR(TO_DATE(B.SALE_DATE), 'YYYY-MM-DD') AS SALE_DATE,
+           B.POS_NO,
+           B.ACCNT_FG,
+           C.ACCNT_NM,
+           TO_NUMBER(B.ACCNT_AMT) AS ACCNT_AMT,
+           B.REMARK
+      FROM TB_MS_STORE A,
+           TB_PS_ACCOUNT_IOMONEY B,
+           TB_HQ_ACCOUNT C
+     WHERE A.STORE_CD = B.STORE_CD
+       AND B.ACCNT_CD = C.ACCNT_CD
+       AND B.SALE_DATE BETWEEN #{startDt} AND #{endDt}
+       AND A.STORE_CD = #{storeCd}
+       AND C.USE_YN = 'Y'
+     <if test="accntFg != null and accntFg != ''">
+            AND B.ACCNT_FG = #{accntFg}
+     </if>
+     <if test="accntCd != null and accntCd != ''">
+            AND B.ACCNT_CD = #{accntCd}
+     </if>
+  </select>
+  
+  <!-- 계정구분에 따른 계정 조회(입금/출금 계정) -->
+  <select id="selectAccntList" parameterType="StatusVO" resultType="DefaultMap">
+     /* StatusMapper.selectAccntList */
+      SELECT A.ACCNT_CD,
+             A.ACCNT_NM,
+             B.STORE_CD
+        FROM TB_MS_ACCOUNT A,
+             TB_MS_STORE B
+       WHERE A.STORE_CD = B.STORE_CD
+         AND B.STORE_CD = #{storeCd}
+         AND A.USE_YN = 'Y'
+         <if test="accntFg != null and accntFg != ''">
+            AND A.ACCNT_FG = #{accntFg}
+         </if>
+  </select>  
+</mapper>

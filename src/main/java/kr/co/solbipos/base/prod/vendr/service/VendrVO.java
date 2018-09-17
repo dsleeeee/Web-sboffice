@@ -25,12 +25,18 @@ public class VendrVO extends PageVO {
     private static final long serialVersionUID = -5156116686836619650L;
     /** 본사브랜드코드 */
     private String hqBrandCd;
+    /** 본사브랜드코드 */
+    private String hqOfficeCd;
     /** 매장코드 */
     private String storeCd;
     /** 거래처코드 */
     private String vendrCd;
     /** 거래처명 */
     private String vendrNm;
+    /** 상품코드 */
+    private String prodCd;
+    /** 상품명 */
+    private String prodNm;
     /** 대표자명 */
     private String ownerNm;
     /** 사업자번호 */
@@ -55,10 +61,14 @@ public class VendrVO extends PageVO {
     private String shipPg;
     /** 부가세포함여부 */
     private String vatIncldYn;
+    /** 배송구분 */
+    private String shipFg;
     /** 사용여부 */
     private UseYn useYn;
     /** 비고 */
     private String remark;
+    /** 공급단가 */
+    private String splyUprc;
     /** 등록일시 */
     private String regDt;
     /** 등록아이디 */
@@ -82,6 +92,20 @@ public class VendrVO extends PageVO {
     public void setHqBrandCd(String hqBrandCd) {
         this.hqBrandCd = hqBrandCd;
     }
+    
+    /**
+     * @return the hqOfficeCd
+     */
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
+    /**
+     * @param hqOfficeCd the hqOfficeCd to set
+     */
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
+    }
+    
     /**
      * @return the storeCd
      */
@@ -117,6 +141,30 @@ public class VendrVO extends PageVO {
      */
     public void setVendrNm(String vendrNm) {
         this.vendrNm = vendrNm;
+    }
+    /**
+     * @return the prodCd
+     */
+    public String getProdCd() {
+        return prodCd;
+    }
+    /**
+     * @param prodCd the prodCd to set
+     */
+    public void setProdCd(String prodCd) {
+        this.prodCd = prodCd;
+    }
+    /**
+     * @return the prodNm
+     */
+    public String getProdNm() {
+        return prodNm;
+    }
+    /**
+     * @param prodNm the prodNm to set
+     */
+    public void setProdNm(String prodNm) {
+        this.prodNm = prodNm;
     }
     /**
      * @return the ownerNm
@@ -263,6 +311,18 @@ public class VendrVO extends PageVO {
         this.vatIncldYn = vatIncldYn;
     }
     /**
+     * @return the shipFg
+     */
+    public String getShipFg() {
+        return shipFg;
+    }
+    /**
+     * @param shipFg the shipFg to set
+     */
+    public void setShipFg(String shipFg) {
+        this.shipFg = shipFg;
+    }
+    /**
      * @return the useYn
      */
     public UseYn getUseYn() {
@@ -285,6 +345,18 @@ public class VendrVO extends PageVO {
      */
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+    /**
+     * @return the splyUprc
+     */
+    public String getSplyUprc() {
+        return splyUprc;
+    }
+    /**
+     * @param splyUprc the splyUprc to set
+     */
+    public void setSplyUprc(String splyUprc) {
+        this.splyUprc = splyUprc;
     }
     /**
      * @return the regDt

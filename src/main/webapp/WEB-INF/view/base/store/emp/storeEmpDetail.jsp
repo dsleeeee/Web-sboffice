@@ -83,8 +83,11 @@
         <div class="btnSet">
           <%-- 수정 --%>
           <span><a href="javascript:;" class="btn_blue" id="btnEdit"><s:message code="cmm.edit" /></a></span>
+<<<<<<< HEAD
+=======
           <%-- 닫기 --%>
           <span><a href="javascript:;" class="btn_gray btnClose"><s:message code="cmm.close" /></a></span>
+>>>>>>> refs/heads/master
         </div>
       </div>
     </div>
