@@ -44,13 +44,13 @@
             <%--위즈모 테이블--%>
             <div class="wj-gridWrap" style="height: 315px;" >
                 <wj-flex-grid
-                        autoGenerateColumns="false"
-                        selection-mode="Row"
-                        items-source="data"
-                        control="flex"
-                        initialized="initGrid(s,e)"
-                        is-read-only="true"
-                        item-formatter="_itemFormatter">
+                    autoGenerateColumns="false"
+                    selection-mode="Row"
+                    items-source="data"
+                    control="flex"
+                    initialized="initGrid(s,e)"
+                    is-read-only="true"
+                    item-formatter="_itemFormatter">
 
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="storeClose.closeMonth"/>"   binding="closeMonth"   width="0"  align="center" visible="false"></wj-flex-grid-column>

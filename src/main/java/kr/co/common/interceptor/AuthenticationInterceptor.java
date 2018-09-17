@@ -43,20 +43,12 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    private final SessionService sessionService;
-    private final CmmMenuService cmmMenuService;
-    private final MessageService messageService;
-
-    /**
-     * Constructor Injection
-     */
     @Autowired
-    public AuthenticationInterceptor(SessionService sessionService,
-        CmmMenuService cmmMenuService, MessageService messageService) {
-        this.sessionService = sessionService;
-        this.cmmMenuService = cmmMenuService;
-        this.messageService = messageService;
-    }
+    private SessionService sessionService;
+    @Autowired
+    private CmmMenuService cmmMenuService;
+    @Autowired
+    private MessageService messageService;
 
     /**
      * preHandler : Interceptor 진입시 수행
@@ -93,17 +85,8 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                 return false;
             }
         }
-        SessionInfoVO sessionInfoVO = new SessionInfoVO();
-        // 가상로그인 사용시 vLoginId 파라미터로 체크하여 메인세션정보를 무엇으로 할지 지정한다 : 20180904 노현수
-        if (request.getParameter("vLoginId") != null
-            && request.getParameter("vLoginId").length() > 0) {
-            // 세션 가져오기
-            sessionInfoVO =
-                SessionUtil.getEnv(request.getSession(), request.getParameter("vLoginId"));
-        } else {
-            // 세션 가져오기
-            sessionInfoVO = sessionService.getSessionInfo(request);
-        }
+        // 세션 가져오기
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         // 권한 메뉴
         List<ResrceInfoVO> auth = auth = sessionInfoVO.getAuthMenu();
         // 유져 조회 날짜 저장

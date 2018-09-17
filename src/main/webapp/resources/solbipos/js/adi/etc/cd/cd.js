@@ -41,11 +41,11 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.useYnFgDataMap = useYnFgDataMap;
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
-      if (e.panel == s.cells) {
+      if (e.panel === s.cells) {
         var col = s.columns[e.col];
         if (col.binding === "nmcodeCd") {
           var item = s.rows[e.row].dataItem;
-          if (item.status != "I") {
+          if (item.status !== "I") {
             wijmo.addClass(e.cell, 'wijLink');
             wijmo.addClass(e.cell, 'wj-custom-readonly');
           } else {
@@ -59,7 +59,7 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
       var col = sender.columns[elements.col];
       if (col.binding === "nmcodeCd") {
         var dataItem = s.rows[elements.row].dataItem;
-        if (nvl(dataItem.status, "") == "" && dataItem.status != "I") {
+        if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
           elements.cancel = true;
         }
       }
@@ -67,10 +67,10 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
     // 대표명칭 그리드 선택 이벤트
     s.hostElement.addEventListener('mousedown', function(e) {
       var ht = s.hitTest(e);
-      if( ht.cellType == wijmo.grid.CellType.Cell) {
+      if( ht.cellType === wijmo.grid.CellType.Cell) {
         var selectedRow = s.rows[ht.row].dataItem
         var col = ht.panel.columns[ht.col];
-        if( col.binding == "nmcodeCd" && selectedRow.status != "I") {
+        if( col.binding === "nmcodeCd" && selectedRow.status !== "I") {
           $scope._broadcast('detailCtrl', selectedRow.nmcodeCd);
         }
       }
@@ -132,11 +132,11 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.useYnFgDataMap = useYnFgDataMap;
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
-      if (e.panel == s.cells) {
+      if (e.panel === s.cells) {
         var col = s.columns[e.col];
         if (col.binding === "nmcodeCd") {
           var item = s.rows[e.row].dataItem;
-          if (item.status != "I") {
+          if (item.status !== "I") {
             wijmo.addClass(e.cell, 'wj-custom-readonly');
           } else {
             wijmo.removeClass(e.cell, 'wj-custom-readonly');
@@ -173,7 +173,7 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
     params.nmcodeGrpCd = selectedRow.nmcodeCd;
     params.useYn = "Y";
 
-    $scope._addRow(params);
+    $scope._addRow(params, 1);
   };
   // 세부명칭 그리드 저장
   $scope.save = function() {

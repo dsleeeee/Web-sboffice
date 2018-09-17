@@ -89,14 +89,14 @@
     <div class="mt20 oh sb-select dkbr">
       <%-- 페이지 스케일  --%>
       <wj-combo-box
-              class="w150 fl"
-              id="listScaleBox"
-              ng-model="listScale"
-              items-source="_getComboData('listScaleBox')"
-              display-member-path="name"
-              selected-value-path="value"
-              is-editable="false"
-              initialized="_initComboBox(s)">
+        class="w150 fl"
+        id="listScaleBox"
+        ng-model="listScale"
+        items-source="_getComboData('listScaleBox')"
+        display-member-path="name"
+        selected-value-path="value"
+        is-editable="false"
+        initialized="_initComboBox(s)">
       </wj-combo-box>
       <%-- 엑셀 다운로드 --%>
       <button id="btnExcel" class="btn_skyblue fr"><s:message code="cmm.excel.down" /></button>
@@ -104,18 +104,18 @@
 
     <%-- 위즈모 테이블 : 그리드가 2개 이상인 경우 감싸서 사용--%>
     <%--<div class="wj-TblWrapBr mt10">--%>
-      <%-- 개발시 높이 조절해서 사용--%>
-      <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
+    <%-- 개발시 높이 조절해서 사용--%>
+    <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
     <div class="wj-gridWrap mt10" style="height:315px">
       <div class="row">
         <wj-flex-grid
-                autoGenerateColumns="false"
-                control="flex"
-                initialized="initGrid(s,e)"
-                sticky-headers="true"
-                selection-mode="Row"
-                items-source="data"
-                item-formatter="_itemFormatter">
+          autoGenerateColumns="false"
+          control="flex"
+          initialized="initGrid(s,e)"
+          sticky-headers="true"
+          selection-mode="Row"
+          items-source="data"
+          item-formatter="_itemFormatter">
 
           <!-- define columns -->
           <wj-flex-grid-column header="<s:message code="virtualLogin.hqOfficeCd"/>" binding="hqOfficeCd" width="*"></wj-flex-grid-column>

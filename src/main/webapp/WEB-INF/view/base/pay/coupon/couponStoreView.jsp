@@ -47,13 +47,13 @@
             </div>
             <div id="regStoreGrid" style="height: 270px;">
               <wj-flex-grid
-                      autoGenerateColumns="false"
-                      control="flex"
-                      initialized="initGrid(s,e)"
-                      sticky-headers="true"
-                      selection-mode="Row"
-                      items-source="data"
-                      item-formatter="_itemFormatter">
+                autoGenerateColumns="false"
+                control="flex"
+                initialized="initGrid(s,e)"
+                sticky-headers="true"
+                selection-mode="Row"
+                items-source="data"
+                item-formatter="_itemFormatter">
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
@@ -76,13 +76,13 @@
             </div>
             <div id="noRegStoreGrid" style="height: 270px;">
               <wj-flex-grid
-                      autoGenerateColumns="false"
-                      control="flex"
-                      initialized="initGrid(s,e)"
-                      sticky-headers="true"
-                      selection-mode="Row"
-                      items-source="data"
-                      item-formatter="_itemFormatter">
+                autoGenerateColumns="false"
+                control="flex"
+                initialized="initGrid(s,e)"
+                sticky-headers="true"
+                selection-mode="Row"
+                items-source="data"
+                item-formatter="_itemFormatter">
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>

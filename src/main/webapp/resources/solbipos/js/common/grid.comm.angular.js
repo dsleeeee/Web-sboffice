@@ -35,6 +35,9 @@ function RootController(ctrlName, $scope, $http, isPicker) {
     } else {
       params['curr'] = 1;
     }
+    if (document.getElementsByName("sessionId")[0]) {
+      params['sid'] = document.getElementsByName("sessionId")[0].value;
+    }
     // ajax 통신 설정
     $http({
       method: 'POST', //방식
@@ -244,7 +247,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
             if (s.columns[e.col].dataType !== wijmo.DataType.Boolean) {
               setTimeout(function () {
                 var _cellData = s.getCellData(e.row, e.col, true);
-                if (s.activeEditor !== null && s.activeEditor.value !== "") {
+                if (!isEmpty(s.activeEditor) && s.activeEditor.value !== "") {
                   wijmo.setSelectionRange(s.activeEditor, _cellData.length); // caret position
                 }
               }, 0);

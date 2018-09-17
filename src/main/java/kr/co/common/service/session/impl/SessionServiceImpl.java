@@ -10,6 +10,7 @@ import kr.co.common.utils.spring.WebUtil;
 import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.store.manage.virtuallogin.service.VirtualLoginInfoVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static kr.co.common.utils.spring.StringUtil.convertToJson;
-import static kr.co.common.utils.spring.StringUtil.generateUUID;
 import static org.springframework.util.StringUtils.isEmpty;
 
 /**
@@ -49,7 +49,7 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public String setSessionInfo( HttpServletRequest request, HttpServletResponse response,
             SessionInfoVO sessionInfoVO ) {
-        String sessionId = generateUUID();
+        String sessionId = request.getSession().getId();
 
         // sessionId 세팅
         sessionInfoVO.setSessionId( sessionId );
@@ -74,7 +74,9 @@ public class SessionServiceImpl implements SessionService {
         }
         // redis에 세션 세팅
         setSessionInfo( sessionId, sessionInfoVO );
-        
+        // 세션 담기
+        SessionUtil.setEnv(request.getSession(), sessionInfoVO.getSessionId(), sessionInfoVO);
+
         // 쿠키 생성
         makeCookie( sessionId );
         return sessionId;
@@ -131,16 +133,14 @@ public class SessionServiceImpl implements SessionService {
         Cookie cookie = WebUtils.getCookie( request, SESSION_KEY );
         String sessionId = cookie == null ? request.getParameter( SESSION_KEY ) : cookie.getValue();
         
-        SessionInfoVO sessionInfoVO = new SessionInfoVO();
-
-        // 가상로그인 사용시에는 파라미터로 vLoginId를 달고 다니기 때문에 별도 체크로직 추가 : 20180817 노현수
-        if ( request.getParameter("vLoginId") != null && request.getParameter("vLoginId").length() > 0 ) {
-            sessionInfoVO = SessionUtil.getEnv(request.getSession(), request.getParameter("vLoginId"));
+        SessionInfoVO sessionInfoVO = getSessionInfo(sessionId);
+        // 가상로그인 사용시에는 파라미터로 세션ID를 달고 다니기 때문에 별도 체크로직 추가 : 20180817 노현수
+        // 가상로그인 사용시 세션ID 파라미터로 체크하여 메인세션정보를 무엇으로 할지 지정한다 : 20180904 노현수
+        if ( request.getParameter("sid") != null && request.getParameter("sid").length() > 0 ) {
+            return getVirtualLoginInfo(request.getParameter("sid"), sessionInfoVO);
         } else {
-            sessionInfoVO = getSessionInfo(sessionId);
+            return sessionInfoVO;
         }
-
-        return sessionInfoVO;
     }
 
     @Override
@@ -226,6 +226,17 @@ public class SessionServiceImpl implements SessionService {
         WebUtil.setCookie( SESSION_KEY, sessionId, -1 );
     }
 
+    @Override
+    public SessionInfoVO getVirtualLoginInfo(String sessionId, SessionInfoVO sessionInfoVO) {
+        SessionInfoVO result = new SessionInfoVO();
+        for(VirtualLoginInfoVO vLoginInfo : sessionInfoVO.getvLogindIds()) {
+            if ( sessionId.equals(vLoginInfo.getSessionId()) ) {
+                // 세션 가져오기
+                result = vLoginInfo.getSessionInfoVO();
+            }
+        }
+        return result;
+    }
 }
 
 
