@@ -1,17 +1,17 @@
 package kr.co.solbipos.application.common.web;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import kr.co.common.service.session.SessionService;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import kr.co.common.service.session.SessionService;
-import kr.co.common.system.BaseEnv;
-import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.application.session.user.enums.OrgnFg;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -41,8 +41,8 @@ public class MainController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         OrgnFg orgnFg = sessionInfoVO.getOrgnFg();
         
-        if ( request.getParameter("vLoginId") != null && request.getParameter("vLoginId").length() > 0 ) {
-            redirectAttributes.addAttribute("vLoginId", BaseEnv.VIRTUAL_LOGIN_ID);
+        if ( request.getParameter("sid") != null && request.getParameter("sid").length() > 0 ) {
+            redirectAttributes.addAttribute("sid", request.getParameter("sid"));
         }
         
         /**

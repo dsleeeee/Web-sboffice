@@ -35,6 +35,9 @@ function RootController(ctrlName, $scope, $http, isPicker) {
     } else {
       params['curr'] = 1;
     }
+    if (document.getElementsByName("sessionId")[0]) {
+      params['sid'] = document.getElementsByName("sessionId")[0].value;
+    }
     // ajax 통신 설정
     $http({
       method: 'POST', //방식

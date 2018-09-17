@@ -12,6 +12,7 @@ import kr.co.solbipos.application.session.auth.enums.LoginResult;
 import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.store.manage.virtuallogin.service.VirtualLoginInfoVO;
 import kr.co.solbipos.store.manage.virtuallogin.service.VirtualLoginService;
 import kr.co.solbipos.store.manage.virtuallogin.service.VirtualLoginVO;
 import org.slf4j.Logger;
@@ -29,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 import static kr.co.common.utils.HttpUtils.getClientIp;
@@ -122,9 +124,9 @@ public class VirtualLoginController {
         
         String returnUrl = "/main.sb";
         
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+        SessionInfoVO rootSessionInfoVO = sessionService.getSessionInfo();
         // 권한조회
-        int authResult = virtualLoginService.checkVirtualLoginAuth(sessionInfoVO.getUserId());
+        int authResult = virtualLoginService.checkVirtualLoginAuth(rootSessionInfoVO.getUserId());
         
         if ( authResult > 0 ) {
             
@@ -132,9 +134,9 @@ public class VirtualLoginController {
             
             StopWatch sw = new StopWatch();
             sw.start();
-            LOGGER.info("가상로그인 시작 : {} ", sessionInfoVO.getUserId());
-            
-            sessionInfoVO = new SessionInfoVO();
+            LOGGER.info("가상로그인 시작 : {} ", rootSessionInfoVO.getUserId());
+
+            SessionInfoVO sessionInfoVO = new SessionInfoVO();
             sessionInfoVO.setLoginIp(getClientIp(request));
             sessionInfoVO.setBrwsrInfo(request.getHeader("User-Agent"));
             // 사용자ID를 가상로그인ID로 설정
@@ -164,16 +166,27 @@ public class VirtualLoginController {
                         cmmMenuService.selectStoreCdList( sessionInfoVO.getOrgnCd() );
                 sessionInfoVO.setArrStoreCdList( storeCdList );
             }
-            // 세선유틸에 담아두기
-            SessionUtil.setEnv(request.getSession(), BaseEnv.VIRTUAL_LOGIN_ID, sessionInfoVO);
-            
+
+            VirtualLoginInfoVO vLoginInfo = new VirtualLoginInfoVO();
+            vLoginInfo.setSessionId(sessionInfoVO.getSessionId());
+            vLoginInfo.setSessionInfoVO(sessionInfoVO);
+
+            List<VirtualLoginInfoVO> vLoginInfoList = rootSessionInfoVO.getvLogindIds();
+            if (vLoginInfoList == null) {
+                vLoginInfoList = new ArrayList<VirtualLoginInfoVO>();
+            }
+            vLoginInfoList.add(vLoginInfo);
+
+            rootSessionInfoVO.setvLogindIds(vLoginInfoList);
+            sessionService.setSessionInfo(rootSessionInfoVO);
+
             sw.stop();
             LOGGER.info("가상로그인 성공 처리 시간 : {}", sw.getTotalTimeSeconds());
             
             // 로그인이력 생성
             virtualLoginService.insertLoginHistory(sessionInfoVO);
-            
-            redirectAttributes.addAttribute("vLoginId", BaseEnv.VIRTUAL_LOGIN_ID);
+
+            redirectAttributes.addAttribute("sid", sessionInfoVO.getSessionId());
             return "redirect:" + returnUrl;
             
         } else {

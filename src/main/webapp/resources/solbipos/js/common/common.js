@@ -89,6 +89,11 @@
     // succ 펑션, fail 펑션 각각 개별적으로 움직인다.
     // 실제 HTTP Request 오류(통신오류)는 .fail 부분의 함수 수행
     , postJSON: function( url, data, succ, fail ){
+
+      if (document.getElementsByName("sessionId")[0]) {
+        data['sid'] = document.getElementsByName("sessionId")[0].value;
+      }
+
       return $.ajax({
         type: "POST",
         url: url,
@@ -132,6 +137,11 @@
 //      return $.post( url, data, func, "json" );
     }
     , postJSONSave: function( url, data, succ, fail ){
+
+      if (document.getElementsByName("sessionId")[0]) {
+        data['sid'] = document.getElementsByName("sessionId")[0].value;
+      }
+
       return $.ajax({
         type: "POST",
         url: url,
@@ -176,6 +186,11 @@
 //      return $.post( url, data, func, "json" );
     }
     , postJSONArray: function( url, data, succ, fail ){
+
+      if (document.getElementsByName("sessionId")[0]) {
+        data['sid'] = document.getElementsByName("sessionId")[0].value;
+      }
+
       return $.ajax({
         type: "POST",
         url: url,
@@ -352,9 +367,10 @@ function makeTree(div, data, initMenu) {
     // URL 이 있을 경우 페이지 이동
     if(!isEmpty(s.selectedNode.dataItem.url)) {
       location.href = s.selectedNode.dataItem.url;
-      // 가상로그인ID 파라미터 설정
-      if ( !isEmpty(s.selectedNode.dataItem.vLoginId) ) {
-        location.href = s.selectedNode.dataItem.url + "?vLoginId=" + s.selectedNode.dataItem.vLoginId ;
+      var vSessionId = document.getElementsByName("sessionId")[0].value;
+      // 가상로그인시 파라미터인 SessionID 설정
+      if ( !isEmpty(vSessionId) ) {
+        location.href = s.selectedNode.dataItem.url + "?sid=" + vSessionId;
       }
     }
     // 같은 메뉴를 다시 선택 했을 때 메뉴 닫기 기능
