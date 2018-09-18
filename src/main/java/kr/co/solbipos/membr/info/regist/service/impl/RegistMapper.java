@@ -2,11 +2,14 @@ package kr.co.solbipos.membr.info.regist.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.membr.info.regist.service.RegistVO;
+import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Mapper
+@Repository
 public interface RegistMapper {
 
     /**
@@ -14,7 +17,7 @@ public interface RegistMapper {
      *
      * @return
      */
-    List<DefaultMap<String>> selectRgstrStore();
+    List<DefaultMap<String>> selectRgstrStore(HqManageVO hqManageVO);
 
     /**
      * 회원정보 리스트 조회

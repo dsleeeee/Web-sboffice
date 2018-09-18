@@ -1,6 +1,7 @@
 package kr.co.solbipos.membr.info.regist.service;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ public interface RegistService {
      *
      * @return
      */
-    List<DefaultMap<String>> selectRgstrStore();
+    List<DefaultMap<String>> selectRgstrStore(SessionInfoVO sessionInfoVO);
 
     /**
      * 회원정보 리스트 조회
@@ -20,7 +21,7 @@ public interface RegistService {
      * @param <E>
      * @return
      */
-    <E> List<E> selectMembers(RegistVO registVO);
+    <E> List<E> selectMembers(RegistVO registVO, SessionInfoVO sessionInfoVO);
 
     /**
      * 회원정보 조회

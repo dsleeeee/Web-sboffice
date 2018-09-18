@@ -7,7 +7,8 @@
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
 <c:set var="orgnCd">${sessionScope.sessionInfo.orgnCd}</c:set>
 
-<div class="subCon">
+
+<%--<div class="subCon">--%>
   <div class="searchBar">
     <a href="javascript:;" class="open">${menuNm}</a>
   </div>
@@ -143,17 +144,14 @@
     <%-- left --%>
     <div class="w50 fl">
       <div class="wj-TblWrapBr mr10 pd20" style="height:700px;">
-        <%--위즈모 테이블--%>
-          <%--tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요.--%>
-          <div id="theGrid"></div>
-          <%--//위즈모 테이블--%>
-          </div>
+        <div id="theGrid"></div>
+      </div>
     </div>
     <%-- left --%>
-    <c:import url="/WEB-INF/view/membr/info/regist/base.jsp">
+    <c:import url="/WEB-INF/view/membr/info/view/base.jsp">
     </c:import>
   </div>
-</div>
+<%--</div>--%>
 
 <script>
 $(document).ready(function(){
@@ -164,12 +162,12 @@ $(document).ready(function(){
         {binding:"membrClassCd", header:"<s:message code='regist.class.cd' />"},
         {binding:"membrCardNo",  header:"<s:message code='regist.card.no' />"}
       ];
-  var grid         = wgrid.genGrid("#theGrid", rdata, "${menuCd}", 1, ${clo.getColumnLayout(1)});
-  var recvData     = ${ccu.getCommCode("105")}; <%--수신, 미수신--%>
-  var recvDataEx   = ${ccu.getCommCodeExcpAll("105")}; <%--수신, 미수신--%>
-  var genderData   = ${ccu.getCommCode("085")}; <%--여자, 남자, 사용안함--%>
-  var genderDataEx = ${ccu.getCommCodeExcpAll("085")}; <%--여자, 남자, 사용안함--%>
-  var useDataEx    = ${ccu.getCommCodeExcpAll("904")}; <%--사용, 미사용--%>
+  var grid         = wgrid.genGrid("#theGrid", rdata);
+  var recvData     = ${ccu.getCommCode("072")}; <%--수신, 미수신--%>
+  var recvDataEx   = ${ccu.getCommCodeExcpAll("072")}; <%--수신, 미수신--%>
+  var genderData   = ${ccu.getCommCode("055")}; <%--여자, 남자, 사용안함--%>
+  var genderDataEx = ${ccu.getCommCodeExcpAll("055")}; <%--여자, 남자, 사용안함--%>
+  var useDataEx    = ${ccu.getCommCodeExcpAll("067")}; <%--사용, 미사용--%>
 
   <%--조회 조건 생성--%>
   var startDt      = wcombo.genDateVal("#startDt", "${sessionScope.sessionInfo.startDt}");
@@ -178,7 +176,7 @@ $(document).ready(function(){
   var anvrsEndDt   = wcombo.genDateVal("#anvrsEndDt", "${sessionScope.sessionInfo.endDt}");
   <%--var classCd      = wcombo.genCommonBox("#classCd", ${comboData});--%>
   var periodDate   = wcombo.genCommonBox("#periodDate", ${periodDate});
-  var anvrsDate    = wcombo.genCommonBox("#anvrsDate", ${ccu.getCommCode("050")});
+  var anvrsDate    = wcombo.genCommonBox("#anvrsDate", ${ccu.getCommCode("032")});
   var gender       = wcombo.genCommonBox("#gender", genderData);
   var emailRecvYn  = wcombo.genCommonBox("#emailRecvYn", recvData);
   var smsRecvYn    = wcombo.genCommonBox("#smsRecvYn", recvData);
@@ -218,12 +216,13 @@ $(document).ready(function(){
     param.membrNo = data.membrNo;
     param.membrOrgnCd = data.membrOrgnCd;
 
-    $.postJSON("/membr/info/regist/base/list.sb", param, function(result) {
+    $.postJSON("/membr/info/view/base/list.sb", param, function(result) {
       infoInit();
       var data = result.data;
+
       vMembrNo.value     = data.membrNo;
       vMembrNm.value     = data.membrNm;
-      vMembrNmEng.value  = data.membrNicknm;
+      vMembrNmEng.value  = data.memberEngNm;
       vMembrCardNo.value = data.membrCardNo;
       vBrthdDt.text     = data.birthday;
       vTel.value         = data.telNo;
@@ -239,8 +238,12 @@ $(document).ready(function(){
       vEmailRecv.selectedValue = data.emailRecvYn;
       vSmsRecv.selectedValue = data.smsRecvYn;
       $("#vMembrOrgnCd").val(data.membrOrgnCd);
-      $("#membrNoNm").text(data.membrNo + "/" + data.membrNm);
+      $("#membrNoNm").text("<s:message code='regist.membr.info'/>" + " [" + data.membrNo + "/" + data.membrNm + "]");
       vMembrNo.isReadOnly = true;
+
+      $("#noDataArea").hide();
+      $("#basicInfrm").show();
+
     },
     function(result){
       s_alert.pop(result.message);
@@ -249,9 +252,8 @@ $(document).ready(function(){
 
   <%--초기화--%>
   function init() {
-<<<<<<< HEAD
-    $("#basicInfrm").show();
-    $("#membrNoNm").text("/");
+    $("#basicInfrm").hide();
+    $("#membrNoNm").text("<s:message code='regist.membr.info'/>");
   }
 
   <%--조회 버튼--%>
@@ -279,14 +281,17 @@ $(document).ready(function(){
     param.anvStartDt = getDate(anvrsStartDt);
     param.anvEndDt = getDate(anvrsEndDt);
 
-    $.postJSON("/membr/info/regist/regist/list.sb", param, function(result) {
+    $.postJSON("/membr/info/view/view/list.sb", param, function(result) {
       var list = result.data.list;
       if(list.length == 0) {
         s_alert.pop(result.message);
       }
       grid.itemsSource = list;
       infoInit();
-      $("#membrNoNm").text("/");
+      $("#membrNoNm").text("<s:message code='webMenu.new'/>");
+      $("#noDataArea").show();
+      $("#basicInfrm").hide();
+      $("#membrCardInfo").hide();
     },
     function(result){
       s_alert.pop(result.message);
@@ -317,8 +322,14 @@ $(document).ready(function(){
     var vUseYn       = wcombo.genCommonBox("#vUseYn", useDataEx);
     var vSmsRecv     = wcombo.genCommonBox("#vSmsRecv", recvDataEx);
 
-    <%--기본정보 탭 초기화--%>
+    vMembrNo.isReadOnly = true;
+
+  <%--기본정보 탭 초기화--%>
     function infoInit() {
+      $("#noDataArea").hide();
+      $("#membrCardInfo").hide();
+      $("#basicInfrm").show();
+
       var inputArr = [
         vMembrNo, vMembrNm, vMembrNmEng, vMembrCardNo, vTel, vEmail, vAddr1, vAddr2, vRemark
       ].forEach(function(element){element.value="";});
@@ -330,7 +341,6 @@ $(document).ready(function(){
       vGender.selectedValue = 'N';
       vWedding.selectedValue = 'N';
       vUseYn.selectedValue = 'Y';
-      vMembrNo.isReadOnly = false;
     }
 
     <%--삭제 버튼--%>
@@ -341,7 +351,7 @@ $(document).ready(function(){
         param.membrNo = vMembrNo.value;
         param.membrOrgnCd = $("#vMembrOrgnCd").val();
 
-        $.postJSON("/membr/info/regist/basic/remove.sb", param, function(result) {
+        $.postJSON("/membr/info/view/base/remove.sb", param, function(result) {
           var msg = "<s:message code='cmm.deleteSucc' />";
           s_alert.popOk(msg, function() {
             searchMembrs();
@@ -367,7 +377,7 @@ $(document).ready(function(){
         var param = {};
         param.membrNo = vMembrNo.value;
         param.membrNm = vMembrNm.value;
-        param.membrNicknm = vMembrNmEng.value;
+        param.memberEngNm = vMembrNmEng.value;
         param.regStoreCd = vRegStore.selectedValue;
         param.membrCardNo = vMembrCardNo.value;
         param.gendrFg = vGender.selectedValue;
@@ -382,7 +392,7 @@ $(document).ready(function(){
         param.smsRecvYn = vSmsRecv.selectedValue;
         param.remark = vRemark.value;
 
-        $.postJSON("/membr/info/regist/basic/regist.sb", param, function(result) {
+        $.postJSONSave("/membr/info/view/base/regist.sb", param, function(result) {
           var msg = "<s:message code='cmm.registSucc'/>";
           s_alert.popOk(msg, function() {
             infoInit();
@@ -476,6 +486,7 @@ $(document).ready(function(){
 
     <%--기본정보 탭--%>
     $("#btnInfo").click(function(){
+      $("#noDataArea").hide();
       $("#membrCardInfo").hide();
       $("#basicInfrm").show();
       $("#btnInfo").attr("class", "on");
@@ -484,244 +495,8 @@ $(document).ready(function(){
 
     <%--회원카드 탭--%>
     $("#btnCard").click(function(){
+      $("#noDataArea").hide();
       $("#basicInfrm").hide();
-=======
-    $("#baseInfrm").show();
-    $("#membrNoNm").text("/");
-  }
-
-  <%--조회 버튼--%>
-  $("#btnSearch").click(function(){
-    searchMembrs();
-  });
-
-  <%--회원정보 조회--%>
-  function searchMembrs() {
-    var param = {};
-    param.membrNo = memberNo.value;
-    param.membrNm = memberNm.value;
-    param.membrCardNo = membrCardNo.value;
-    param.telNo = telNo.value;
-    param.emailAddr = membrEmail.value;
-    param.regStoreCd = regStore.selectedValue;
-    <%--param.membrClassCd = classCd.selectedValue;--%>
-    param.gendrFg = gender.selectedValue;
-    param.emailRecvYn = emailRecvYn.selectedValue;
-    param.smsRecvYn = smsRecvYn.selectedValue;
-    param.periodType = periodDate.selectedValue;
-    param.periodStartDt = getDate(startDt);
-    param.periodEndDt = getDate(endDt);
-    param.anvType = anvrsDate.selectedValue;
-    param.anvStartDt = getDate(anvrsStartDt);
-    param.anvEndDt = getDate(anvrsEndDt);
-
-    $.postJSON("/membr/info/regist/regist/list.sb", param, function(result) {
-      var list = result.data.list;
-      if(list.length == 0) {
-        s_alert.pop(result.message);
-      }
-      grid.itemsSource = list;
-      infoInit();
-      $("#membrNoNm").text("/");
-    },
-    function(result){
-      s_alert.pop(result.message);
-    });
-  }
-
-  init();
-<%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
-<%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
-<%--base.jsp 관련 부분--%>
-
-  <%--기본정보 탭 생성--%>
-    var vMembrNo     = genInputText("#vMembrNo", "10");
-    var vMembrNm     = genInputText("#vMembrNm", "15");
-    var vMembrNmEng  = genInputText("#vMembrNmEng", "15");
-    var vTel         = genInputText("#vTel", "15");
-    var vEmail       = genInputText("#vEmail", "180");
-    var vAddr1       = genInputText("#vAddr1", "60");
-    var vAddr2       = genInputText("#vAddr2", "60");
-    var vMembrCardNo = genInputText("#vMembrCardNo", "40");
-    var vRemark      = genInputText("#vRemark", "160");
-    var vBrthdDt     = wcombo.genDate("#vBrthdDt");
-    var vRegStore    = wcombo.genCommonBox("#vRegStore", ${regstrStoreListAll});
-    <%--var vClassCd     = wcombo.genCommonBox("#vClassCd", ${comboData});--%>
-    var vGender      = wcombo.genCommonBox("#vGender", genderDataEx);
-    var vWedding     = wcombo.genCommonBox("#vWedding", ${weddingData});
-    var vEmailRecv   = wcombo.genCommonBox("#vEmailRecv", recvDataEx);
-    var vUseYn       = wcombo.genCommonBox("#vUseYn", useDataEx);
-    var vSmsRecv     = wcombo.genCommonBox("#vSmsRecv", recvDataEx);
-
-    <%--기본정보 탭 초기화--%>
-    function infoInit() {
-      var inputArr = [
-        vMembrNo, vMembrNm, vMembrNmEng, vMembrCardNo, vTel, vEmail, vAddr1, vAddr2, vRemark
-      ].forEach(function(element){element.value="";});
-      var selectArr = [
-        vRegStore, vGender, vWedding, vEmailRecv, vUseYn, vSmsRecv
-      ].forEach(function(element){element.selectedIndex=0;});
-      $("#membrNoNm").text("<s:message code='webMenu.new'/>");
-      vRegStore.selectedValue = '${orgnCd}'; <%--등록매장 세팅--%>
-      vGender.selectedValue = 'N';
-      vWedding.selectedValue = 'N';
-      vUseYn.selectedValue = 'Y';
-      vMembrNo.isReadOnly = false;
-    }
-
-    <%--삭제 버튼--%>
-    $("#btnDel").click(function(){
-      var msg = "<s:message code='cmm.choo.delete'/>";
-      s_alert.popConf(msg, function(){
-        var param = {};
-        param.membrNo = vMembrNo.value;
-        param.membrOrgnCd = $("#vMembrOrgnCd").val();
-
-        $.postJSON("/membr/info/regist/base/remove.sb", param, function(result) {
-          var msg = "<s:message code='cmm.deleteSucc' />";
-          s_alert.popOk(msg, function() {
-            searchMembrs();
-          });
-        },
-        function(result){
-          if(result.message != undefined || result.message == "") {
-            s_alert.pop(result.message);
-            return;
-          }
-          var data = result.data;
-          var keys = Object.keys(data);
-          s_alert.popOk(data[keys[0]]);
-        });
-      });
-    });
-
-    <%--저장 버튼--%>
-    $("#btnSave").click(function(){
-      var msg = "<s:message code='cmm.choo.save'/>";
-      s_alert.popConf(msg, function(){
-
-        var param = {};
-        param.membrNo = vMembrNo.value;
-        param.membrNm = vMembrNm.value;
-        param.membrNicknm = vMembrNmEng.value;
-        param.regStoreCd = vRegStore.selectedValue;
-        param.membrCardNo = vMembrCardNo.value;
-        param.gendrFg = vGender.selectedValue;
-        param.weddingYn = vWedding.selectedValue;
-        param.birthday = getDate(vBrthdDt);
-        param.telNo = vTel.value;
-        param.useYn = vUseYn.selectedValue;
-        param.emailAddr = vEmail.value;
-        param.postNo = vAddr1.value;
-        param.addr = vAddr2.value;
-        param.emailRecvYn = vEmailRecv.selectedValue;
-        param.smsRecvYn = vSmsRecv.selectedValue;
-        param.remark = vRemark.value;
-
-        $.postJSON("/membr/info/regist/base/regist.sb", param, function(result) {
-          var msg = "<s:message code='cmm.registSucc'/>";
-          s_alert.popOk(msg, function() {
-            infoInit();
-            searchMembrs();
-          });
-        },
-        function(result){
-          if(result.message != undefined || result.message == "") {
-            s_alert.pop(result.message);
-            return;
-          }
-          var data = result.data;
-          var keys = Object.keys(data);
-          if(keys.length > 0) {
-            infoFocus(data, keys);
-          }
-        });
-      });
-    });
-
-    <%--포커스 이동--%>
-    function infoFocus(data, keys) {
-      var focusTarget;
-      var msg = "";
-      keys.forEach(function(key){
-        if(key == "membrNo") {
-          focusTarget = vMembrNo;
-          msg = "membrNo";
-        }
-        else if(key == "membrNm") {
-          focusTarget = vMembrNm;
-          msg = "membrNm";
-        }
-        else if(key == "regStoreCd") {
-          focusTarget = vRegStore;
-          msg = "regStoreCd";
-        }
-        else if(key == "emailRecvYn") {
-          focusTarget = vEmailRecv;
-          msg = "emailRecvYn";
-        }
-        else if(key == "smsRecvYn") {
-          focusTarget = vSmsRecv;
-          msg = "smsRecvYn";
-        }
-        else if(key == "useYn") {
-          focusTarget = vUseYn;
-          msg = "useYn";
-        }
-        else if(key == "membrCardNo") {
-          focusTarget = vMembrCardNo;
-          msg = "membrCardNo";
-        }
-        else if(key == "gendrFg") {
-          focusTarget = vGender;
-          msg = "gendrFg";
-        }
-        else if(key == "telNo") {
-          focusTarget = vTel;
-          msg = "telNo";
-        }
-        else if(key == "weddingYn") {
-          focusTarget = vWedding;
-          msg = "weddingYn";
-        }
-        else if(key == "emailRecvYn") {
-          focusTarget = vEmailRecv;
-          msg = "emailRecvYn";
-        }
-        else if(key == "smsRecvYn") {
-          focusTarget = vSmsRecv;
-          msg = "smsRecvYn";
-        }
-        else if(key == "useYn") {
-          focusTarget = vUseYn;
-          msg = "useYn";
-        }
-      });
-      s_alert.popConf(data[msg], function(){
-        focusTarget.focus();
-      });
-    }
-
-    <%--신규등록 버튼--%>
-    $("#btnNew").click(function(){
-      var msg = "<s:message code='regist.new.msg'/>";
-      s_alert.popConf(msg, function(){
-        infoInit();
-      });
-    });
-
-    <%--기본정보 탭--%>
-    $("#btnInfo").click(function(){
-      $("#membrCardInfo").hide();
-      $("#baseInfrm").show();
-      $("#btnInfo").attr("class", "on");
-      $("#btnCard").attr("class", "");
-    });
-
-    <%--회원카드 탭--%>
-    $("#btnCard").click(function(){
-      $("#baseInfrm").hide();
->>>>>>> refs/heads/master
       $("#membrCardInfo").show();
       $("#btnCard").attr("class", "on");
       $("#btnInfo").attr("class", "");

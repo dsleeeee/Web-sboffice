@@ -45,6 +45,7 @@ public class HqManageServiceImpl implements HqManageService{
 
     private final String DEFAULT_POS_EMPNO = "0000";
     private final String DEFAULT_POS_PASSWORD = "1234";
+    private final String SYS_CLOSURE_DATE = "99991231";
 
 
     @Autowired
@@ -95,9 +96,9 @@ public class HqManageServiceImpl implements HqManageService{
         hqManage.setModId(sessionInfoVO.getUserId());
 
         if(SysStatFg.CLOSE == hqManage.getSysStatFg() ) {
-            hqManage.setSysClosureDate("99991231");
+            hqManage.setSysClosureDate(SYS_CLOSURE_DATE);
         } else  if(SysStatFg.DEMO == hqManage.getSysStatFg() ) {
-            hqManage.setSysClosureDate("99991231");
+            hqManage.setSysClosureDate(SYS_CLOSURE_DATE);
         } else {
             hqManage.setSysClosureDate(currentDateString());
         }

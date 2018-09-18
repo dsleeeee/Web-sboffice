@@ -516,6 +516,11 @@
 
   <%--신규등록 탭 초기화--%>
   function infoInit() {
+
+    $("#noDataArea").hide();
+    $("#membrCardInfo").hide();
+    $("#basicInfrm").show();
+
     var inputArr = [
       rVendrCd, rVendrNm, rOwnerNm, rBizNo1, rBizNo2, rBizNo3, rTelNo, rEmailAddr, rFaxNo, rPostNo, rAddr, rAddrDtl, rRemark
     ].forEach(function(element){element.value="";});
@@ -527,7 +532,6 @@
 
   <%-- 취급상품 탭 클릭 --%>
   $("#layerVendr #trtMntTab").click(function(e){
-    console.log(vendr);
     if(vendr === undefined || vendr === null || vendr === "") {
       s_alert.pop("<s:message code='vendr.request.regist.vendr'/>");
       return;
