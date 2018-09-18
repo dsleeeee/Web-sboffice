@@ -1,13 +1,11 @@
-package kr.co.solbipos.base.pay.coupon.service;
+package kr.co.solbipos.base.pay.mCoupon.service;
 
 import kr.co.common.data.enums.UseYn;
 import kr.co.solbipos.application.common.service.CmmVO;
-import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.pay.coupon.service.enums.CoupnEnvFg;
-import kr.co.solbipos.base.pay.coupon.service.enums.PayTypeFg;
 
 /**
- * @Class Name : PayMethodClassVO.java
+ * @Class Name : CouponVO.java
  * @Description : 기초관리 > 결제수단 > 쿠폰등록
  * @Modification Information
  * @
@@ -21,22 +19,28 @@ import kr.co.solbipos.base.pay.coupon.service.enums.PayTypeFg;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-public class PayMethodClassVO extends CmmVO {
+public class MobileCouponVO extends CmmVO {
 
-    /** 소속구분 */
-    private OrgnFg orgnFg;
-    /** 본사브랜드코드 */
+    /** 본사코드 */
     private String hqOfficeCd;
     /** 매장코드 */
     private String storeCd;
+    /** 쿠폰등록구분 */
+    private String coupnRegFg;
     /** 권종분류코드 */
     private String payClassCd;
-    /** 권종유형구분 */
-    private PayTypeFg payTypeFg;
-    /** 권종분류명 */
-    private String payClassNm;
-    /** 일련번호여부 */
-    private UseYn serNoYn;
+    /** 쿠폰코드 */
+    private String coupnCd;
+    /** 쿠폰명 */
+    private String coupnNm;
+    /** 쿠폰할인구분 */
+    private String coupnDcFg;
+    /** 쿠폰할인율 */
+    private double coupnDcRate;
+    /** 쿠폰할인금액 */
+    private double coupnDcAmt;
+    /** 쿠폰적용구분 */
+    private String coupnApplyFg;
     /** 사용여부 */
     private UseYn useYn;
     /** 쿠폰등록 본사 통제여부 */
@@ -45,23 +49,9 @@ public class PayMethodClassVO extends CmmVO {
     private String result;
 
     /**
-     * @return the orgnFg
-     */
-
-    public OrgnFg getOrgnFg() {
-        return orgnFg;
-    }
-
-    /**
-     * @param orgnFg the orgnFg to set
-     */
-    public void setOrgnFg(OrgnFg orgnFg) {
-        this.orgnFg = orgnFg;
-    }
-
-    /**
      * @return the hqOfficeCd
      */
+
     public String getHqOfficeCd() {
         return hqOfficeCd;
     }
@@ -89,6 +79,51 @@ public class PayMethodClassVO extends CmmVO {
     }
 
     /**
+     * @return the coupnRegFg
+     */
+
+    public String getCoupnRegFg() {
+        return coupnRegFg;
+    }
+
+    /**
+     * @param coupnRegFg the coupnRegFg to set
+     */
+    public void setCoupnRegFg(String coupnRegFg) {
+        this.coupnRegFg = coupnRegFg;
+    }
+
+    /**
+     * @return the coupnCd
+     */
+
+    public String getCoupnCd() {
+        return coupnCd;
+    }
+
+    /**
+     * @param coupnCd the coupnCd to set
+     */
+    public void setCoupnCd(String coupnCd) {
+        this.coupnCd = coupnCd;
+    }
+
+    /**
+     * @return the coupnNm
+     */
+
+    public String getCoupnNm() {
+        return coupnNm;
+    }
+
+    /**
+     * @param coupnNm the coupnNm to set
+     */
+    public void setCoupnNm(String coupnNm) {
+        this.coupnNm = coupnNm;
+    }
+
+    /**
      * @return the payClassCd
      */
 
@@ -104,51 +139,66 @@ public class PayMethodClassVO extends CmmVO {
     }
 
     /**
-     * @return the payTypeFg
+     * @return the coupnDcFg
      */
 
-    public PayTypeFg getPayTypeFg() {
-        return payTypeFg;
+    public String getCoupnDcFg() {
+        return coupnDcFg;
     }
 
     /**
-     * @param payTypeFg the payTypeFg to set
+     * @param coupnDcFg the coupnDcFg to set
      */
-    public void setPayTypeFg(PayTypeFg payTypeFg) {
-        this.payTypeFg = payTypeFg;
+    public void setCoupnDcFg(String coupnDcFg) {
+        this.coupnDcFg = coupnDcFg;
     }
 
     /**
-     * @return the payClassNm
+     * @return the coupnDcRate
      */
 
-    public String getPayClassNm() {
-        return payClassNm;
+    public double getCoupnDcRate() {
+        return coupnDcRate;
     }
 
     /**
-     * @param payClassNm the payClassNm to set
+     * @param coupnDcRate the coupnDcRate to set
      */
-    public void setPayClassNm(String payClassNm) {
-        this.payClassNm = payClassNm;
+    public void setCoupnDcRate(double coupnDcRate) {
+        this.coupnDcRate = coupnDcRate;
     }
 
     /**
-     * @return the serNoYn
+     * @return the coupnDcAmt
      */
 
-    public UseYn getSerNoYn() {
-        return serNoYn;
+    public double getCoupnDcAmt() {
+        return coupnDcAmt;
     }
 
     /**
-     * @param serNoYn the serNoYn to set
+     * @param coupnDcAmt the coupnDcAmt to set
      */
-    public void setSerNoYn(UseYn serNoYn) {
-        this.serNoYn = serNoYn;
+    public void setCoupnDcAmt(double coupnDcAmt) {
+        this.coupnDcAmt = coupnDcAmt;
     }
 
-    /**채
+    /**
+     * @return the coupnApplyFg
+     */
+
+    public String getCoupnApplyFg() {
+        return coupnApplyFg;
+    }
+
+    /**
+     * @param coupnApplyFg the coupnApplyFg to set
+     */
+    public void setCoupnApplyFg(String coupnApplyFg) {
+        this.coupnApplyFg = coupnApplyFg;
+    }
+
+    /**
      * @return the useYn
      */
 
@@ -166,6 +216,7 @@ public class PayMethodClassVO extends CmmVO {
     /**
      * @return the coupnEnvstVal
      */
+
     public CoupnEnvFg getCoupnEnvstVal() { return coupnEnvstVal; }
 
     /**
