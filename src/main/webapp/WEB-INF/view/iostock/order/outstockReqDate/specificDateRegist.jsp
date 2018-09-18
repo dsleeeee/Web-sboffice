@@ -156,7 +156,7 @@
 
         <%-- 설명의 길이가 너무 깁니다. --%>
         var msg = "<s:message code='outstockReqDate.specificDateRemark'/> <s:message code='outstockReqDate.textOver'/>";
-        if($("#specificDateRemark").val().getKr3ByteLength() > 18) {
+        if($("#specificDateRemark").val().getByteLengthForOracle() > 18) {
             s_alert.popOk(msg, function(){ $("#specificDateRemark").select(); });
             return false;
         }

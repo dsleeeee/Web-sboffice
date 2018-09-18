@@ -6,9 +6,8 @@ Graph.prototype.initProdArea = function (group, sidebar) {
   var graph = this;
   this.group = group;
   this.sidebar = sidebar;
-
-  // 상품 버튼영역은 버튼 높이 다름
-  graph.tKeySize.height = 74;
+  // 상품키 정보 (Custom 변수)
+  graph.touchKeyInfo = {width: 99, height: 74, x: 100, y: 75};
 
   var theGrid = this.sidebar.grid;
 
@@ -66,8 +65,8 @@ Graph.prototype.initProdArea = function (group, sidebar) {
   /**
    * 페이징 버튼
    */
-    //페이지 이동 위치 셀의크기 * 페이지에 컬럼 수
-  var scrollWidth = graph.tKeySize.width * graph.COL_PER_PAGE;
+  //페이지 이동 위치 셀의크기 * 페이지에 컬럼 수
+  var scrollWidth = graph.touchKeyInfo.x * graph.COL_PER_PAGE;
   var div = document.getElementById('prodNav');
   var wrap = document.getElementById('prodWrap');
   addClickHandler(document.getElementById('prp'), function () {

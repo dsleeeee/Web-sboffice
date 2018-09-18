@@ -308,7 +308,7 @@
 
 }( "undefined" != typeof window ? window : this, jQuery );
 
-//트리 생성
+//트리 생성용 변수
 var pNode;
 var allMenu = "";
 var bkmkMenu = "";
@@ -437,14 +437,16 @@ function getCurDate(seperator)
 
 
 String.prototype.getByteLength = function() {
+    var i, c;
     for(var size=i=0;c=this.charCodeAt(i++);size+=c>>11?2:c>>7?2:1);
     return size;
 };
 
 /** 오라클에서 한글을 3바이트로 인식해서 한글인 경우 3바이트로 byte length 함수가 필요하여 추가 */
-String.prototype.getKr3ByteLength = function() {
-    for(var size=i=0;c=this.charCodeAt(i++);size+=c>>11?3:c>>7?2:1);
-    return size;
+String.prototype.getByteLengthForOracle = function() {
+  var i, c;
+  for(var size=i=0;c=this.charCodeAt(i++);size+=c>>11?3:c>>7?2:1);
+  return size;
 };
 
 String.prototype.centerPad = function(padStr, padLen) {
@@ -456,7 +458,7 @@ String.prototype.centerPad = function(padStr, padLen) {
         var leftPad = calcLen - rightPad + 1;
         return Array(leftPad).join(padStr).concat(this,Array(rightPad+1).join(padStr));
     }
-}
+};
 
 String.prototype.leftPad = function(padStr, padLen) {
     if ( parseInt(padLen) + 1 <= this.getByteLength() ) {
@@ -465,7 +467,7 @@ String.prototype.leftPad = function(padStr, padLen) {
         var rightPad = padLen - this.getByteLength() + 1;
         return this.concat(Array(rightPad).join(padStr));
     }
-}
+};
 
 String.prototype.rightPad = function(padStr, padLen) {
     if ( parseInt(padLen) + 1 <= this.getByteLength() ) {
@@ -474,7 +476,7 @@ String.prototype.rightPad = function(padStr, padLen) {
         var leftPad = padLen - this.getByteLength() + 1;
         return Array(leftPad).join(padStr).concat(this);
     }
-}
+};
 
 String.prototype.setPadding = function(padType, padStr, padLen) {
     if ( padType === "C" ) {
@@ -484,7 +486,7 @@ String.prototype.setPadding = function(padType, padStr, padLen) {
     } else if ( padType === "R" ) {
         return this.rightPad(padStr, padLen);
     }
-}
+};
 
 String.prototype.splitByteLen = function(byteLen) {
     var resultArr = new Array();
@@ -509,4 +511,9 @@ String.prototype.splitByteLen = function(byteLen) {
         }
         return resultArr;
     }
-}
+};
+
+function addComma(str) {
+  var regexp = /\B(?=(\d{3})+(?!\d))/g;
+  return str.toString().replace(regexp, ',');
+};

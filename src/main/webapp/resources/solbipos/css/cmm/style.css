@@ -1088,10 +1088,12 @@ a.btn_underline, a.btn_underline:hover, a.btn_underline.on {background-position:
 .tableImg li {margin-bottom:20px;}
 .tableImg li img {width:60%;}
 
-.h120 {height:120px;} .h180 {height:180px;}
+.h120 {height:121px;} .h180 {height:182px;}
 
-.touchGroupWrap {width: 495px; overflow: hidden; position: relative; margin: auto;}
-.touchGroup {width:1000%; background:url(../img/bg_touchkey_group.png) repeat; background-size: 99px 60px;}
+/*.touchGroupWrap {width: 495px; overflow: hidden; position: relative; margin: auto;}*/
+/*.touchGroup {width:1000%; background:url(../img/bg_touchkey_group.png) repeat; background-size: 99px 60px;}*/
+.touchGroupWrap {width: 502px; height: 124px; overflow: hidden; position: relative; border: 1px solid #ccc; margin-bottom: 3px; border-collapse: collapse;}
+.touchGroup {width:1000%; height: 121px; background:url(../img/bg_touchkey_group_line_2.png); background-size: 500px 121px;}
 
 div.h120+.hPo1 {top:60px;}
 div.h180+.hPo1 {top:120px;}
@@ -1108,8 +1110,10 @@ p.touchBtn a:last-child:hover:before {content:''; position:absolute; margin:17px
 p.touchBtn a:first-child:before {content:''; position:absolute; margin:17px 0 0 11px; background:url(../img/menu_bullet_blue.png) no-repeat; width:6px; height:10px; transform:rotate(180deg);}
 p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17px 0 0 11px; background:url(../img/menu_bullet.png) no-repeat; width:6px; height:10px;}
 
-.touchProdsWrap {width: 495px; height: 444px; overflow: hidden; position: relative; margin: auto;}
-.touchProds {width: 1000%; height: 444px; background: url(../img/bg_touchkey_resize.png) repeat; background-size: 99px 74px;}
+/*.touchProdsWrap {width: 495px; height: 444px; overflow: hidden; position: relative; margin: auto;}*/
+/*.touchProds {width: 1000%; height: 444px; background: url(../img/bg_touchkey_resize.png) repeat; background-size: 99px 74px;}*/
+.touchProdsWrap {width: 502px; height: 452px; overflow: hidden; position: relative; border: 1px solid #ccc;}
+.touchProds {width: 1000%; height: 449px; background: url(../img/bg_touchkey_prod_group_line_6.png); background-size: 500px 449px;}
 
 /* **************************************** *
  * layer

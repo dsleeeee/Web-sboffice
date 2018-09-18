@@ -111,7 +111,7 @@ function valueCheck(sendUrl) {
 
     <%-- 회원명의 길이가 너무 깁니다. --%>
     var msg = "<s:message code='application.pos.simpleMemberJoin.membrNm'/> <s:message code='application.pos.simpleMemberJoin.textOver'/>";
-    if($("#membrNm").val().getKr3ByteLength() > 50) {
+    if($("#membrNm").val().getByteLengthForOracle() > 50) {
         s_alert.popOk(msg, function(){ $("#membrNm").select(); });
         return;
     }
