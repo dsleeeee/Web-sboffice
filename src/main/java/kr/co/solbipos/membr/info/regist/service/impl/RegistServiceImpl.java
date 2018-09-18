@@ -5,6 +5,7 @@ import kr.co.common.utils.spring.ObjectUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.membr.info.grade.service.MembrClassVO;
 import kr.co.solbipos.membr.info.regist.service.RegistService;
 import kr.co.solbipos.membr.info.regist.service.RegistVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;
@@ -25,6 +26,8 @@ public class RegistServiceImpl implements RegistService {
     @Autowired
     RegistMapper mapper;
 
+
+    /** 등록매장 리스트 조회 */
     @Override
     public List<DefaultMap<String>> selectRgstrStore(SessionInfoVO sessionInfoVO) {
 
@@ -36,6 +39,23 @@ public class RegistServiceImpl implements RegistService {
         hqVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         return mapper.selectRgstrStore(hqVO);
+    }
+
+    /** 회원등급 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> selectMembrClassList(SessionInfoVO sessionInfoVO) {
+
+        MembrClassVO membrClassVO = new MembrClassVO();
+
+        membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
+
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            membrClassVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        }else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            membrClassVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
+        }
+
+        return mapper.selectMemberClassList(membrClassVO);
     }
 
     @Override

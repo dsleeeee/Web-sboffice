@@ -15,6 +15,13 @@ public interface RegistService {
     List<DefaultMap<String>> selectRgstrStore(SessionInfoVO sessionInfoVO);
 
     /**
+     * 회원 등급 리스트 조회
+     * @param sessionInfoVO
+     * @return
+     */
+    List<DefaultMap<String>> selectMembrClassList(SessionInfoVO sessionInfoVO);
+
+    /**
      * 회원정보 리스트 조회
      *
      * @param registVO

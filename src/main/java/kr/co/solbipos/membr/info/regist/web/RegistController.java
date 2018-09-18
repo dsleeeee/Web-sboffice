@@ -81,9 +81,15 @@ public class RegistController {
         // 등록 매장 전체 포함
         String regstrStoreListAll = cmmCodeUtil.assmblObj(regstrStoreList, "name", "value", UseYn.ALL);
 
+        // 회원등급 리스트 조회
+        List membrClassList = registService.selectMembrClassList(sessionInfoVO);
+
+        String membrClassListAll = cmmCodeUtil.assmblObj(membrClassList, "name", "value", UseYn.N);
+
         model.addAttribute("regstrStoreListAll", regstrStoreListAll);
-        model.addAttribute("periodDate", getPeriodList());
-        model.addAttribute("weddingData", getWedding());
+        model.addAttribute("comboData", membrClassListAll);
+        model.addAttribute("periodDate", getPeriodList());  //TODO 공통코드로 변경
+        model.addAttribute("weddingData", getWedding());    //TODO 공통코드로 변경
 
         return "membr/info/view/view";
     }
