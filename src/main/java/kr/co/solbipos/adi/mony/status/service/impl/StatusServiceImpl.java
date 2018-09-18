@@ -23,7 +23,6 @@ import java.util.List;
  * @author NHN한국사이버결제 KCP 김태수
  * @since 2018.09.09
  * @version 1.0
- * @see
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
@@ -37,7 +36,7 @@ public class StatusServiceImpl implements StatusService {
     @Override
 
     public List<StatusVO> selectStatus(StatusVO statusVO, SessionInfoVO sessionInfoVO) {
-    	
+
         statusVO.setOrgnFg(sessionInfoVO.getOrgnFg());
 
         // 본사
@@ -55,7 +54,7 @@ public class StatusServiceImpl implements StatusService {
 
     @Override
     public List<DefaultMap<String>> selectAccntList(StatusVO StatusVO) {
-    	
+
         return StatusMapper.selectAccntList(StatusVO);
     }
 }

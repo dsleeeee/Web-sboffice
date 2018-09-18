@@ -305,8 +305,6 @@ $(document).ready(function(){
 <%--base.jsp 관련 부분--%>
 
 
-  console.log(${comboData});
-
   <%--기본정보 탭 생성--%>
     var vMembrNo     = genInputText("#vMembrNo", "10");
     var vMembrNm     = genInputText("#vMembrNm", "15");

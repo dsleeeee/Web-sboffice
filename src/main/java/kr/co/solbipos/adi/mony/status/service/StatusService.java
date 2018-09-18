@@ -17,7 +17,6 @@ import java.util.List;
 * @author NHN한국사이버결제 KCP 김태수
 * @since 2018.09.09
 * @version 1.0
-* @see
 *
 *  Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
@@ -25,7 +24,7 @@ public interface StatusService {
 
     // 본사(HQ) 조회
     List<StatusVO> selectStatus(StatusVO statusVO, SessionInfoVO sessionInfoVO);
-    
+
     // 입출금(accntFg)에 따른 계정 조회
     List<DefaultMap<String>> selectAccntList(StatusVO statusVO);
 
