@@ -93,7 +93,7 @@
             <wj-flex-grid-column header="<s:message code="cd.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="cd.nmcodeGrpCd"/>" binding="nmcodeGrpCd" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="cd.nmcodeCd"/>" binding="nmcodeCd" width="50"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="cd.nmcodeNm"/>" binding="nmcodeNm" width="*"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="cd.nmcodeNm"/>" binding="nmcodeNm" width="150"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="cd.nmcodeItem1"/>" binding="nmcodeItem1" width="100"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="cd.nmcodeItem2"/>" binding="nmcodeItem2" width="100"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="cd.useYnFg"/>" binding="useYn" data-map="useYnFgDataMap" width="100"></wj-flex-grid-column>

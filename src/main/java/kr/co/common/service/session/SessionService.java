@@ -92,7 +92,4 @@ public interface SessionService {
      */
     void deleteSessionInfo(SessionInfoVO sessionInfoVO);
 
-
-    SessionInfoVO getVirtualLoginInfo(String sessionId, SessionInfoVO sessionInfoVO);
-
 }

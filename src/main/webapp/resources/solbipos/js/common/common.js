@@ -89,11 +89,10 @@
     // succ 펑션, fail 펑션 각각 개별적으로 움직인다.
     // 실제 HTTP Request 오류(통신오류)는 .fail 부분의 함수 수행
     , postJSON: function( url, data, succ, fail ){
-
+      // 가상로그인시 세션활용
       if (document.getElementsByName("sessionId")[0]) {
         data['sid'] = document.getElementsByName("sessionId")[0].value;
       }
-
       return $.ajax({
         type: "POST",
         url: url,
@@ -137,11 +136,10 @@
 //      return $.post( url, data, func, "json" );
     }
     , postJSONSave: function( url, data, succ, fail ){
-
+      // 가상로그인시 세션활용
       if (document.getElementsByName("sessionId")[0]) {
         data['sid'] = document.getElementsByName("sessionId")[0].value;
       }
-
       return $.ajax({
         type: "POST",
         url: url,
@@ -186,11 +184,10 @@
 //      return $.post( url, data, func, "json" );
     }
     , postJSONArray: function( url, data, succ, fail ){
-
+      // 가상로그인시 세션활용
       if (document.getElementsByName("sessionId")[0]) {
         data['sid'] = document.getElementsByName("sessionId")[0].value;
       }
-
       return $.ajax({
         type: "POST",
         url: url,

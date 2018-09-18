@@ -117,6 +117,7 @@ app.controller('gridCtrl',  ['$scope', '$http', function ($scope, $http, $rootSc
           window.clearInterval(crono);
           var param = {};
           param.vUserId = value;
+          param.sid = popup.document.getElementsByName("sessionId")[0].value;
           $.postJSON("/store/manage/virtualLogin/virtualLogin/vLogout.sb", param,
             function (result) {
 
