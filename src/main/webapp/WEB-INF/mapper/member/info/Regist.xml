@@ -30,6 +30,7 @@
              tmm.MEMBR_ORGN_CD
         FROM TB_MB_MEMBER tmm
        WHERE MEMBR_ORGN_CD = #{hqOfficeCd}
+         AND USE_YN = 'Y'
         <if test='storeCd != null and storeCd.toString() != ""'>
          AND REG_STORE_CD = #{storeCd}
         </if>

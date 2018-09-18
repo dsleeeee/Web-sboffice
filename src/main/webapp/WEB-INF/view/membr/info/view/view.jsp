@@ -8,7 +8,7 @@
 <c:set var="orgnCd">${sessionScope.sessionInfo.orgnCd}</c:set>
 
 
-<%--<div class="subCon">--%>
+<div class="subCon">
   <div class="searchBar">
     <a href="javascript:;" class="open">${menuNm}</a>
   </div>
@@ -151,7 +151,7 @@
     <c:import url="/WEB-INF/view/membr/info/view/base.jsp">
     </c:import>
   </div>
-<%--</div>--%>
+</div>
 
 <script>
 $(document).ready(function(){
