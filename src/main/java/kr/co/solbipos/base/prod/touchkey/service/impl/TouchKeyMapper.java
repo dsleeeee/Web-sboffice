@@ -15,7 +15,8 @@ import java.util.List;
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2015.05.01  조병준      최초생성
+ * @ 2018.05.01  조병준      최초생성
+ * @ 2018.09.19  노현수      메소드정리/분리
  *
  * @author NHN한국사이버결제 KCP 조병준
  * @since 2018. 05.01
@@ -28,39 +29,29 @@ import java.util.List;
 @Repository
 public interface TouchKeyMapper {
 
-    /**
-     * 상품 조회
-     * @param touchVO
-     * @return DefaultMap
-     */
-    List<DefaultMap<String>> selectProdByStore(TouchVO touchVO);
+    /** 상품목록 조회 : 판매터치키에서 사용 */
+    List<DefaultMap<String>> getProductListForTouchKey(TouchVO touchVO);
 
-    /**
-     * 상품 터치키 그룹 삭제
-     * @param storeCd 매장코드
-     * @return
-     */
-    int deleteTouchClassByStore(String storeCd);
+    /** 판매터치키 XML 정보 조회 */
+    String getTouchKeyXml(DefaultMap<String> param);
 
-    /**
-     * 상품 터치키 그룹 등록
-     * @param touchClassVO
-     * @return
-     */
-    int insertTouchClassByStore(TouchClassVO touchClassVO);
+    /** 판매터치키 XML 정보 생성 */
+    int insertTouchKeyConfgXml(DefaultMap<String> param);
 
-    /**
-     * 상품 터치키 삭제
-     * @param storeCd 매장코드
-     * @return
-     */
-    int deleteTouchByStore(String storeCd);
+    /** 판매터치키 XML 정보 수정 */
+    int updateTouchKeyConfgXml(DefaultMap<String> param);
 
-    /**
-     * 상품 터치키 등록
-     * @param touchVO
-     * @return
-     */
-    int insertTouchByStore(TouchVO touchVO);
+    /** 판매터치키 그룹 생성 */
+    int insertTouchClass(TouchClassVO touchClassVO);
+
+    /** 판매터치키 그룹 삭제 */
+    int deleteTouchClass(TouchClassVO touchClassVO);
+
+    /** 판매터치키 생성 */
+    int insertTouchKey(TouchVO touchVO);
+
+    /** 판매터치키 삭제 */
+    int deleteTouchKey(TouchVO touchVO);
+
 
 }

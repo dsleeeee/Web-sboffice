@@ -63,10 +63,10 @@ Graph.prototype.initGroupArea = function (prod) {
   //상품 그룹 영역에 새로운 그룹 생성
   var createGroup = function (x, y) {
     var parent = graph.getDefaultParent();
-    var grpId = graph.groupPrefix + graph.nextGrpId;
-    //console.log(grpId);
+    var grpId =  + graph.nextGrpId;
+    grpId = "000" + grpId;
+    grpId = graph.groupPrefix + grpId.slice(-4);
     if (graph.isEnabled()) {
-
       var cell;
       graph.model.beginUpdate();
       try {
@@ -107,10 +107,6 @@ Graph.prototype.initGroupArea = function (prod) {
         //선택된 상품그룹 영역이 셀이 아닌 경우에는 해당 영역에 새로운 그룹생성
         var x = parseInt(me.getGraphX() / graph.touchKeyInfo.x) * graph.touchKeyInfo.x;
         var y = parseInt(me.getGraphY() / graph.touchKeyInfo.y) * graph.touchKeyInfo.y;
-
-        console.log(x);
-        console.log(y);
-
         var currId = createGroup(x, y);
         var layer = createLayer(currId);
         prod.switchLayer(layer);

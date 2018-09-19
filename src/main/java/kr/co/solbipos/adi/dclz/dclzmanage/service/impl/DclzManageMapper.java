@@ -1,9 +1,10 @@
 package kr.co.solbipos.adi.dclz.dclzmanage.service.impl;
 
-import java.util.List;
-import org.apache.ibatis.annotations.Mapper;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.adi.dclz.dclzmanage.service.DclzManageVO;
+import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
  * @Class Name : DclzManageMapper.java
@@ -12,7 +13,7 @@ import kr.co.solbipos.adi.dclz.dclzmanage.service.DclzManageVO;
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2015.05.01  정용길      최초생성
+ * @ 2018.05.01  정용길      최초생성
  *
  * @author NHN한국사이버결제 KCP 정용길
  * @since 2018. 05.01

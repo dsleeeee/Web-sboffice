@@ -24,10 +24,19 @@ import java.util.List;
  */
 public class TouchClassVO extends CmmVO {
 
-    private static final long serialVersionUID = 1163205565875003414L;
+    private static final long serialVersionUID = 7011385347444892190L;
+
+    /** 소속구분
+     * M : 시스템
+     * A : 대리점
+     * H : 본사
+     * S : 매장, 가맹점 */
+    private String orgnFg;
+    /** 본사코드 */
+    private String hqOfficeCd;
     /** 매장코드 */
     private String storeCd;
-    /** 터치키분류코드 */
+    /** 터치키그룹코드 : 시즌,행사별 등 일종의 템플릿 */
     private String tukeyGrpCd;
     /** 터치키분류코드 */
     private String tukeyClassCd;
@@ -58,6 +67,33 @@ public class TouchClassVO extends CmmVO {
     /** 테이블들 */
     private List<TouchVO> touchs;
 
+    /**
+     * @return the orgnFg
+     */
+    public String getOrgnFg() {
+        return orgnFg;
+    }
+
+    /**
+     * @param orgnFg the orgnFg to set
+     */
+    public void setOrgnFg(String orgnFg) {
+        this.orgnFg = orgnFg;
+    }
+
+    /**
+     * @return the hqOfficeCd
+     */
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
+
+    /**
+     * @param hqOfficeCd the hqOfficeCd to set
+     */
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
+    }
 
     /**
      * @return the storeCd

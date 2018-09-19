@@ -1,11 +1,12 @@
 package kr.co.solbipos.application.session.user.service;
 
-import javax.validation.constraints.Size;
-import org.hibernate.validator.constraints.NotBlank;
 import kr.co.common.validate.Login;
 import kr.co.common.validate.PwChange;
 import kr.co.common.validate.UserPwChange;
 import kr.co.solbipos.application.common.service.CmmVO;
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.Size;
 
 /**
  * @Class Name : PwdChgVO.java
@@ -14,7 +15,7 @@ import kr.co.solbipos.application.common.service.CmmVO;
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2015.05.01  정용길      최초생성
+ * @ 2018.05.01  정용길      최초생성
  *
  * @author NHN한국사이버결제 KCP 정용길
  * @since 2018. 05.01

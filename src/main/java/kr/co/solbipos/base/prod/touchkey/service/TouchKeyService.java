@@ -13,7 +13,8 @@ import java.util.List;
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2015.05.01  조병준      최초생성
+ * @ 2018.05.01  조병준      최초생성
+ * @ 2018.09.19  노현수      메소드정리/분리
  *
  * @author NHN한국사이버결제 KCP 조병준
  * @since 2018. 05.01
@@ -24,26 +25,13 @@ import java.util.List;
  */
 public interface TouchKeyService {
 
-    /**
-     * 세션의 가맹점코드로 해당 가맹점의 상품정보 조회
-     * @param touchVO
-     * @return XML_String
-     */
-    List<DefaultMap<String>> selectProdByStore(TouchVO touchVO);
+    /** 상품목록 조회 : 판매터치키에서 사용 */
+    List<DefaultMap<String>> getProductListForTouchKey(TouchVO touchVO);
 
-    /**
-     * 세션의 가맹점코드로 해당 가맹점의 판매터치키 조회
-     * @param sessionInfoVO 세션정보
-     * @return XML_String
-     */
-    String selectTouchkeyByStore(SessionInfoVO sessionInfoVO);
+    /** 판매터치키 XML 정보 조회 */
+    String getTouchKeyXml(SessionInfoVO sessionInfoVO);
 
-    /**
-     * 세션의 가맹점코드에 판매터치키 저장
-     * @param sessionInfoVO 세션정보
-     * @param xml 클라이언트로 부터 받은 xml 문자열
-     * @return Result
-     */
-    Result setTouchkey(SessionInfoVO sessionInfoVO, String xml);
+    /** 판매터치키 저장 */
+    Result saveTouchkey(SessionInfoVO sessionInfoVO, String xml);
 
 }

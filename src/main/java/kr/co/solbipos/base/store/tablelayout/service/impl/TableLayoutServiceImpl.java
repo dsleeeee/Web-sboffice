@@ -1,15 +1,5 @@
 package kr.co.solbipos.base.store.tablelayout.service.impl;
 
-import static kr.co.common.utils.DateUtil.*;
-import java.util.ArrayList;
-import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import com.mxgraph.io.mxCodec;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGeometry;
@@ -23,13 +13,25 @@ import kr.co.common.exception.BizException;
 import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.common.enums.ConfgFg;
-import kr.co.solbipos.base.store.tableattr.enums.Style;
 import kr.co.solbipos.base.store.tableattr.enums.TblGrpFg;
 import kr.co.solbipos.base.store.tableattr.enums.TblTypeFg;
+import kr.co.solbipos.base.store.tableattr.enums.TouchKeyStyle;
 import kr.co.solbipos.base.store.tableattr.service.impl.TableAttrMapper;
 import kr.co.solbipos.base.store.tablelayout.service.TableGroupVO;
 import kr.co.solbipos.base.store.tablelayout.service.TableLayoutService;
 import kr.co.solbipos.base.store.tablelayout.service.TableVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
  * @Class Name : TableLayoutServiceImpl.java
@@ -38,7 +40,7 @@ import kr.co.solbipos.base.store.tablelayout.service.TableVO;
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2015.05.01  조병준      최초생성
+ * @ 2018.05.01  조병준      최초생성
  *
  * @author NHN한국사이버결제 KCP 조병준
  * @since 2018. 05.01
@@ -168,7 +170,7 @@ public class TableLayoutServiceImpl implements TableLayoutService {
                             continue;
                         }
                         //LOGGER.debug(styleKeyValue[0]);
-                        switch(Style.getEnum(styleKeyValue[0])) {
+                        switch(TouchKeyStyle.getEnum(styleKeyValue[0])) {
                             case TBL_GRP_FG:
                                 tableGroupVO.setTblGrpFg(TblGrpFg.getEnum(styleKeyValue[1]));
                                 break;
@@ -236,7 +238,7 @@ public class TableLayoutServiceImpl implements TableLayoutService {
                     if(styleKeyValue.length < 2) {
                         continue;
                     }
-                    switch(Style.getEnum(styleKeyValue[0])) {
+                    switch(TouchKeyStyle.getEnum(styleKeyValue[0])) {
                         case TBL_SEAT_CNT: tableVO.setTblSeatCnt(Long.parseLong(styleKeyValue[1]));
                             break;
                         case TBL_TYPE_FG: tableVO.setTblTypeFg(TblTypeFg.getEnum(styleKeyValue[1]));

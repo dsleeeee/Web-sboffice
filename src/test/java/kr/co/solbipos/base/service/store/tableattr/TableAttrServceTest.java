@@ -148,7 +148,7 @@ public class TableAttrServceTest extends AbstractApplicationContextTest {
                             continue;
                         }
                         //log.debug(styleKeyValue[0]);
-                        switch(Style.getEnum(styleKeyValue[0])) {
+                        switch(TouchKeyStyle.getEnum(styleKeyValue[0])) {
                             case FONT_COLOR:
                                 tableAttrVO.setFontColor(styleKeyValue[1]);
                                 break;
@@ -215,12 +215,12 @@ public class TableAttrServceTest extends AbstractApplicationContextTest {
 
                 //스타일 셋팅
                 styleStr = "tableAttr";
-                styleStr += tableAttrVO.getFontNm() != null ? (SM + Style.FONT_NM.getCode() +EQ+ tableAttrVO.getFontNm()):"";
-                styleStr += tableAttrVO.getFontStyleFg() != null ? (SM + Style.FONT_STYLE_FG.getCode() +EQ+ tableAttrVO.getFontStyleFg()):"";
-                styleStr += tableAttrVO.getFontSize() != null ? (SM + Style.FONT_SIZE.getCode() +EQ+ tableAttrVO.getFontSize()):"";
-                styleStr += tableAttrVO.getFontColor() != null ? (SM + Style.FONT_COLOR.getCode() +EQ+ tableAttrVO.getFontColor()):"";
-                styleStr += tableAttrVO.getTextalignFg() != null ? (SM + Style.TEXTALIGN_FG.getCode() +EQ+ tableAttrVO.getTextalignFg().getDesc()):"";
-                styleStr += tableAttrVO.getTextvalignFg() != null ? (SM + Style.TEXTVALIGN_FG.getCode() +EQ+ tableAttrVO.getTextvalignFg().getDesc()):"";
+                styleStr += tableAttrVO.getFontNm() != null ? (SM + TouchKeyStyle.FONT_NM.getCode() +EQ+ tableAttrVO.getFontNm()):"";
+                styleStr += tableAttrVO.getFontStyleFg() != null ? (SM + TouchKeyStyle.FONT_STYLE_FG.getCode() +EQ+ tableAttrVO.getFontStyleFg()):"";
+                styleStr += tableAttrVO.getFontSize() != null ? (SM + TouchKeyStyle.FONT_SIZE.getCode() +EQ+ tableAttrVO.getFontSize()):"";
+                styleStr += tableAttrVO.getFontColor() != null ? (SM + TouchKeyStyle.FONT_COLOR.getCode() +EQ+ tableAttrVO.getFontColor()):"";
+                styleStr += tableAttrVO.getTextalignFg() != null ? (SM + TouchKeyStyle.TEXTALIGN_FG.getCode() +EQ+ tableAttrVO.getTextalignFg().getDesc()):"";
+                styleStr += tableAttrVO.getTextvalignFg() != null ? (SM + TouchKeyStyle.TEXTVALIGN_FG.getCode() +EQ+ tableAttrVO.getTextvalignFg().getDesc()):"";
                 cell.setStyle(styleStr);
             }
             mxCodec codec = new mxCodec();
