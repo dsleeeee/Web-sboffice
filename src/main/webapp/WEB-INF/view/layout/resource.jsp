@@ -33,10 +33,10 @@
 <script type="text/javascript" src="/resource/vendor/wijmo/js/wijmo.angular.min.js?ver=5.20182.500" charset="utf-8"></script>
 <%-- solbi plug-in --%>
 <%-- <script type="text/javascript" src="/resource/vendor/spin/spin.js" charset="utf-8"></script> --%>
-<script type="text/javascript" src="/resource/solbipos/js/common/common.js?ver=20180801.00" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/solbipos/js/common/grid.comm.js?ver=20180824.00" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/solbipos/js/common/grid.comm.angular.js?ver=20180915.00" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/solbipos/js/common/gen.comm.js?ver=20180824.00" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/common/common.js?ver=20180918.00" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/common/grid.comm.js?ver=20180918.00" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/common/grid.comm.angular.js?ver=20180918.00" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/common/gen.comm.js?ver=20180918.00" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/common/alert.min.js?ver=20180915.00" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/common/paging.min.js?ver=20180915.00" charset="utf-8"></script>
 <%-- wijmo DragAndDrop ColumnPicker --%>

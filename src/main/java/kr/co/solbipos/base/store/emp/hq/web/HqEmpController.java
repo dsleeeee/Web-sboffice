@@ -39,14 +39,13 @@ import static kr.co.common.utils.grid.ReturnUtil.*;
  * @author NHN한국사이버결제 KCP 정상화
  * @since 2018. 08.14
  * @version 1.0
- * @see
  *
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Controller
 @RequestMapping(value = "/base/store/emp/hq")
 public class HqEmpController {
-    
+
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     @Autowired

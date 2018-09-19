@@ -63,20 +63,17 @@
     <button class="btn_skyblue fr" id="regVendr">
       <s:message code="vendr.reg" />
     </button>
-    
+
   </div>
 
   <%--위즈모 테이블--%>
   <div class="wj-TblWrapBr mt10" style="height: 400px;">
-    <%-- 개발시 높이 조절해서 사용--%>
-    <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
     <div id="theGrid" style="height:393px;"></div>
   </div>
   <%--//위즈모 테이블--%>
 
   <%-- 페이지 리스트 --%>
   <div class="pageNum mt20">
-    <%-- id --%>
     <ul id="page1" data-size="10">
     </ul>
   </div>
@@ -86,19 +83,22 @@
 
 <script>
 
+  <%-- 선택된 거래처 --%>
+  var vendr;
+
   <%-- 검색조건 및 dataMap 조회 --%>
   var vendrCd  = wcombo.genInput("#vendrCd");
   var vendrNm  = wcombo.genInput("#vendrNm");
-  var cdata    = ${ccu.getCommCodeSelect("013")};
+  var cdata    = ${ccu.getCommCodeSelect("011")};
   var vendorFg = wcombo.genCommonBox("#vendorFg", cdata);
   var ldata    = ${ccu.getListScale()};
   var listScaleBox = wcombo.genCommonBox("#listScaleBox", ldata);
-  var vendorFgNm = ${ccu.getCommCodeExcpAll("013")};
-  var useYn      = ${ccu.getCommCodeExcpAll("904")};
+  var vendorFgNm = ${ccu.getCommCodeExcpAll("011")};
+  var useYn      = ${ccu.getCommCodeExcpAll("067")};
   var vendorFgDataMap = new wijmo.grid.DataMap(vendorFgNm, 'value', 'name');
   var useYnDataMap    = new wijmo.grid.DataMap(useYn, 'value', 'name');
-  
-  var rdata = 
+
+  var rdata =
   [
     {binding:"rnum",header:"No",width:"*"},
     {binding:"vendrCd",header:"<s:message code='vendr.vendrCd' />",width:"*"},
@@ -110,9 +110,9 @@
     {binding:"addr",header:"<s:message code='vendr.addr' />",width:"*"},
     {binding:"useYn",header:"<s:message code='vendr.useYn' />",dataMap:useYnDataMap,width:"*"}
   ];
-  
-  var grid = wgrid.genGrid( "#theGrid", rdata, "${menuCd}", 1, ${clo.getColumnLayout(1)} );
-  
+
+  var grid = wgrid.genGrid( "#theGrid", rdata);
+
   function search(index) {
     var param = {};
 
@@ -121,14 +121,14 @@
     param.vendorFg = vendorFg.selectedValue;
     param.listScale = listScaleBox.selectedValue;
     param.curr = index;
-    
+
     $.postJSON("/base/prod/vendr/vendr/list.sb", param, function(result) {
       var list = result.data.list;
-      
+
       if(list.length == 0) {
         s_alert.pop(result.message);
       }
-    
+
       grid.itemsSource = list;
       page.make("#page1", result.data.page.curr, result.data.page.totalPage);
       },
@@ -139,7 +139,7 @@
         s_alert.pop("Ajax Fail");
     });
   }
-  
+
   <%-- 그리드 포맷 --%>
   grid.formatItem.addHandler(function(s, e) {
     if (e.panel == s.cells) {
@@ -150,7 +150,7 @@
       }
     }
   });
-  
+
   <%-- 그리드 선택 이벤트 --%>
   grid.addEventListener(grid.hostElement, 'click', function(e) {
     var ht = grid.hitTest(e);
@@ -160,31 +160,31 @@
         if( col.binding == "vendrCd" ) {
             vendr = grid.rows[ht.row].dataItem;
             openDtlLayer(vendr);
-          
         }
       }
   });
-  
+
   <%-- 리스트 조회 --%>
   $("#searchBtn").click(function( e ){
     search(1);
   });
-  
+
   <%-- 페이징 --%>
   $(document).on("click", ".page1", function() {
     search($(this).data("value"));
   });
-  
+
   <%-- 거래처등록 --%>
   $("#regVendr").bind("click", function() {
-      openRegistLayer("reg");
+    vendr = null;
+    openRegistLayer("reg");
   });
-  
+
   function hideVendr(){
     $("#layerVendr").hide();
     $("#dimVendr").hide();
   }
-  
+
 </script>
 <c:import url="/WEB-INF/view/base/prod/vendr/regist.jsp">
   <c:param name="menuCd" value="${menuCd}"/>

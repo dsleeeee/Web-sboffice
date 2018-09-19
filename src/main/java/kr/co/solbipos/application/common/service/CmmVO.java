@@ -1,9 +1,10 @@
 package kr.co.solbipos.application.common.service;
 
-import java.io.Serializable;
+import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
+
+import java.io.Serializable;
 
 /**
  * @Class Name : CmmVO.java
@@ -34,8 +35,6 @@ public class CmmVO implements Serializable {
     private String modId;
     /** 상태 (IUD) */
     private GridDataFg status;
-    /** 가상로그인 ID */
-    private String vLoginId;
     /** 그리드 공통 체크박스 */
     private Boolean gChk = false;
     
@@ -104,18 +103,6 @@ public class CmmVO implements Serializable {
      */
     public void setStatus(GridDataFg status) {
         this.status = status;
-    }
-    /**
-     * @return the vLoginId
-     */
-    public String getvLoginId() {
-        return vLoginId;
-    }
-    /**
-     * @param vLoginId the vLoginId to set
-     */
-    public void setvLoginId(String vLoginId) {
-        this.vLoginId = vLoginId;
     }
     /**
      * @return the gChk

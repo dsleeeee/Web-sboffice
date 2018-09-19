@@ -1,8 +1,9 @@
 package kr.co.common.service.session;
 
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 
 /**
  * 세션 관리 서비스
@@ -87,7 +88,7 @@ public interface SessionService {
     /**
      * 세션 삭제
      *
-     * @param sessionInfo {@link SessionInfoVO}
+     * @param sessionInfoVO {@link SessionInfoVO}
      */
     void deleteSessionInfo(SessionInfoVO sessionInfoVO);
 

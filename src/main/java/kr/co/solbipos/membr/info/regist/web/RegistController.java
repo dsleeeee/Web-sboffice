@@ -21,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,13 +35,22 @@ import java.util.List;
 import static kr.co.common.utils.grid.ReturnUtil.returnJsonBindingFieldError;
 
 /**
+ * @Class Name : RegistController.java
+ * @Description : 회원관리 > 회원정보 > 회원정보관리
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2018.05.01  정용길      최초생성
+ *
  * @author NHN한국사이버결제 KCP 정용길
+ * @since 2018.05.01
  * @version 1.0
- * @see Copyright (C) by SOLBIPOS CORP. All right reserved.
- * @since 2018. 05.01
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Controller
-@RequestMapping(value = "/membr/info/regist/")
+@RequestMapping(value = "/membr/info/view/")
 public class RegistController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
@@ -61,19 +71,27 @@ public class RegistController {
      * @param response
      * @param model
      * */
-    @RequestMapping(value = "regist/list.sb", method = RequestMethod.GET)
+    @RequestMapping(value = "view/list.sb", method = RequestMethod.GET)
     public String registList(HttpServletRequest request, HttpServletResponse response, Model model) {
 
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
         // 등록 매장 조회
-        List regstrStoreList = registService.selectRgstrStore();
+        List regstrStoreList = registService.selectRgstrStore(sessionInfoVO);
         // 등록 매장 전체 포함
         String regstrStoreListAll = cmmCodeUtil.assmblObj(regstrStoreList, "name", "value", UseYn.ALL);
 
-        model.addAttribute("regstrStoreListAll", regstrStoreListAll);
-        model.addAttribute("periodDate", getPeriodList());
-        model.addAttribute("weddingData", getWedding());
+        // 회원등급 리스트 조회
+        List membrClassList = registService.selectMembrClassList(sessionInfoVO);
 
-        return "membr/info/regist/regist";
+        String membrClassListAll = cmmCodeUtil.assmblObj(membrClassList, "name", "value", UseYn.N);
+
+        model.addAttribute("regstrStoreListAll", regstrStoreListAll);
+        model.addAttribute("comboData", membrClassListAll);
+        model.addAttribute("periodDate", getPeriodList());  //TODO 공통코드로 변경
+        model.addAttribute("weddingData", getWedding());    //TODO 공통코드로 변경
+
+        return "membr/info/view/view";
     }
 
     /**
@@ -85,12 +103,14 @@ public class RegistController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "regist/list.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "view/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result registListPost(RegistVO registVO, HttpServletRequest request, HttpServletResponse response, Model
             model) {
 
-        List<DefaultMap<Object>> result = registService.selectMembers(registVO);
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = registService.selectMembers(registVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, registVO);
     }
@@ -123,7 +143,7 @@ public class RegistController {
      */
     @RequestMapping(value = "base/regist.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result baseRegist(@Validated(Regist.class) RegistVO registVO, BindingResult bindingResult,
+    public Result baseRegist(@Validated(Regist.class) @RequestBody RegistVO registVO, BindingResult bindingResult,
                               HttpServletRequest request, HttpServletResponse response, Model model) {
 
         // 입력값 에러 처리

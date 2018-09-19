@@ -104,10 +104,12 @@
             USER_PWD,
             AUTH_GRP_CD,
             LOGIN_FAIL_CNT,
-            LOCK_CD,
+            /*LOCK_CD,*/
             USE_YN,
             REG_DT,
-            REG_ID
+            REG_ID,
+            MOD_DT,
+            MOD_ID
         )
         VALUES
         (
@@ -115,10 +117,12 @@
             #{userPwd},
             #{authGrpCd},
             0,
-            'N',
+            /*'N',*/
             #{webUseYn},
             #{regDt},
-            #{regId}
+            #{regId},
+            #{modDt},
+            #{modId}
         )
     </insert>
     <select id="selectHqEmpDtlInfo" parameterType="hqEmpVO" resultType="DefaultMap">
@@ -126,12 +130,12 @@
         SELECT THE.EMP_NO,
                THE.EMP_NM,
                THE.SMS_RECV_YN,
-               (SELECT TCN.NMCODE_NM FROM TB_CM_NMCODE TCN WHERE TCN.NMCODE_GRP_CD ='105' AND TCN.NMCODE_CD = THE.SMS_RECV_YN ) AS SMS_RECV_YN_NM,
+               (SELECT TCN.NMCODE_NM FROM TB_CM_NMCODE TCN WHERE TCN.NMCODE_GRP_CD ='072' AND TCN.NMCODE_CD = THE.SMS_RECV_YN ) AS SMS_RECV_YN_NM,
                TWUI.USER_ID,
                THE.WEB_USE_YN,
-               (SELECT TCN.NMCODE_NM FROM TB_CM_NMCODE TCN WHERE TCN.NMCODE_GRP_CD ='904' AND TCN.NMCODE_CD = THE.WEB_USE_YN ) AS WEB_USE_YN_NM,
+               (SELECT TCN.NMCODE_NM FROM TB_CM_NMCODE TCN WHERE TCN.NMCODE_GRP_CD ='067' AND TCN.NMCODE_CD = THE.WEB_USE_YN ) AS WEB_USE_YN_NM,
                THE.SERVICE_FG,
-               (SELECT TCN.NMCODE_NM FROM TB_CM_NMCODE TCN WHERE TCN.NMCODE_GRP_CD ='008' AND TCN.NMCODE_CD = THE.SERVICE_FG ) AS SERVICE_FG_NM,
+               (SELECT TCN.NMCODE_NM FROM TB_CM_NMCODE TCN WHERE TCN.NMCODE_GRP_CD ='007' AND TCN.NMCODE_CD = THE.SERVICE_FG ) AS SERVICE_FG_NM,
                THE.MP_NO
           FROM TB_HQ_EMPLOYEE THE, TB_WB_USER_INFO TWUI
          WHERE THE.USER_ID = TWUI.USER_ID(+)
@@ -179,10 +183,12 @@
            TWUI.USER_PWD,
            TWUI.AUTH_GRP_CD,
            TWUI.LOGIN_FAIL_CNT,
-           TWUI.LOCK_CD,
+           /*TWUI.LOCK_CD,*/
            TWUI.USE_YN,
            TWUI.REG_DT,
-           TWUI.REG_ID
+           TWUI.REG_ID,
+           TWUI.MOD_DT,
+           TWUI.MOD_ID
        )
        VALUES
        (
@@ -190,10 +196,12 @@
            #{userPwd},
            #{authGrpCd},
            '0',
-           'N',
+           /*'N',*/
            #{webUseYn},
            #{regDt},
-           #{regId}
+           #{regId},
+           #{modDt},
+           #{modId}
        )
     </update>
     <insert id="insertPasswordHistory" parameterType="hqEmpVO">

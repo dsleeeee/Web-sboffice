@@ -112,8 +112,8 @@ public class CouponController {
         HttpServletResponse response, Model model) {
 
         LOGGER.debug(payMethodClassVO.getProperties());
-
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+        LOGGER.debug(sessionInfoVO.getProperties());
 
         List<DefaultMap<String>> list = service.getCouponClassList(payMethodClassVO, sessionInfoVO);
 

@@ -42,6 +42,10 @@
 
     <%-- 메인 영역 --%>
     <div class="contents">
+      <c:set var="sessionId" value="${param.sid}" />
+      <c:if test="${sessionId ne null}">
+        <input type="hidden" name="sessionId" value="${sessionId}"/>
+      </c:if>
       <tiles:insertAttribute name="content" />
     </div>
     <%-- 오른쪽 부분 --%>

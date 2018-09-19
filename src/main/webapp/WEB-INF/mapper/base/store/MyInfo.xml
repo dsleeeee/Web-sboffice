@@ -12,7 +12,11 @@
   <!-- 본사코드 조회 -->
   <select id="findAllHqNmcodeByHqOfficeCdAndNmcodeGrpCd" parameterType="hqNmcodeVO" resultType="hqNmcodeVO">
     /* MyInfoMapper.findAllHqNmcodeByHqOfficeCdAndNmcodeGrpCd */
-    SELECT NMCODE_GRP_CD, NMCODE_CD, NMCODE_NM, NMCODE_ITEM_1, NMCODE_ITEM_2
+    SELECT NMCODE_GRP_CD,
+           NMCODE_CD,
+           NMCODE_NM,
+           NMCODE_ITEM_1,
+           NMCODE_ITEM_2
       FROM TB_HQ_NMCODE
      WHERE HQ_OFFICE_CD = #{hqOfficeCd}
        AND NMCODE_GRP_CD = #{nmcodeGrpCd}
@@ -21,12 +25,48 @@
   <!-- 본사정보 조회 -->
   <select id="findById" parameterType="String" resultType="myInfoVO">
     /* MyInfoMapper.findById */
-    SELECT * FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+    SELECT HQ_OFFICE_CD,
+           HQ_OFFICE_NM,
+           OWNER_NM,
+           BIZ_NO,
+           BIZ_TYPE_CD,
+           BIZ_ITEM_CD,
+           BIZ_STORE_NM,
+           TEL_NO,
+           FAX_NO,
+           EMAIL_ADDR,
+           HMPG_ADDR,
+           POST_NO,
+           ADDR,
+           ADDR_DTL,
+           AREA_CD,
+           SYS_STAT_FG,
+           SYS_OPEN_DATE,
+           SYS_CLOSURE_DATE,
+           AGENCY_CD,
+           REMARK,
+           REG_DT,
+           REG_ID,
+           MOD_DT,
+           MOD_ID,
+           CLS_FG
+      FROM TB_HQ_OFFICE
+     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
   </select>
   <!-- 본사코드 등록여부 조회 -->
   <select id="findHqNmcodeByHqOfficeCdAndNmcodeGrpCdAndNmcodeCd" parameterType="hqNmcodeVO" resultType="hqNmcodeVO">
     /* MyInfoMapper.findHqNmcodeByHqOfficeCdAndNmcodeGrpCdAndNmcodeCd */
-    SELECT *
+    SELECT HQ_OFFICE_CD,
+           NMCODE_GRP_CD,
+           NMCODE_CD,
+           NMCODE_NM,
+           NMCODE_ITEM_1,
+           NMCODE_ITEM_2,
+           USE_YN,
+           REG_DT,
+           REG_ID,
+           MOD_DT,
+           MOD_ID
       FROM TB_HQ_NMCODE
      WHERE HQ_OFFICE_CD = #{hqOfficeCd}
        AND NMCODE_GRP_CD = #{nmcodeGrpCd}
@@ -113,5 +153,5 @@
        AND NMCODE_CD = #{nmcodeCd}
        AND USE_YN = 'Y'
   </update>
-  
+
 </mapper>

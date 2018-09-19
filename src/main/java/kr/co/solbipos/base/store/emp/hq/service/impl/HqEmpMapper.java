@@ -3,6 +3,7 @@ package kr.co.solbipos.base.store.emp.hq.service.impl;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.base.store.emp.hq.service.HqEmpVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -18,11 +19,11 @@ import java.util.List;
  * @author NHN한국사이버결제 KCP 정상화
  * @since 2018. 08.14
  * @version 1.0
- * @see
  *
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Mapper
+@Repository
 public interface HqEmpMapper {
 
     /** 본사 사원정보 리스트 조회*/

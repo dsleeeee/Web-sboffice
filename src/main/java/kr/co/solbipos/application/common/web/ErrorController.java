@@ -54,10 +54,10 @@ public class ErrorController {
     private void setSessionInfo(HttpServletRequest request) {
 
         SessionInfoVO sessionInfoVO = new SessionInfoVO();
-        // 가상로그인 사용시에는 파라미터로 vLoginId를 달고 다니기 때문에 별도 체크로직 추가 : 20180817 노현수
-        if ( request.getParameter("vLoginId") != null && request.getParameter("vLoginId").length() > 0 ) {
+        // 가상로그인 사용시에는 파라미터로 세션ID 달고 다니기 때문에 별도 체크로직 추가 : 20180817 노현수
+        if ( request.getParameter("sid") != null && request.getParameter("sid").length() > 0 ) {
             // 세션 가져오기
-            sessionInfoVO = SessionUtil.getEnv(request.getSession(), request.getParameter("vLoginId"));
+            sessionInfoVO = SessionUtil.getEnv(request.getSession(), request.getParameter("sid"));
         } else {
             // 세션 가져오기
             sessionInfoVO = sessionService.getSessionInfo(request);

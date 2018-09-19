@@ -31,7 +31,6 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 * @author nhn kcp 개발2팀 김영근
 * @since 2018. 08.07
 * @version 1.0
-* @see
 *
 *  Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
@@ -44,7 +43,7 @@ public class StoreViewController {
 
     @Autowired
     SessionService sessionService;
-    
+
     /**
      * 매장정보조회 화면 이동
      *
@@ -56,7 +55,7 @@ public class StoreViewController {
     @RequestMapping(value = "/storeView/list.sb", method = RequestMethod.GET)
     public String list(HttpServletRequest request, HttpServletResponse response,
             Model model) {
-        return "store/manage/storeView/storeView"; 
+        return "store/manage/storeView/storeView";
     }
 
     /**

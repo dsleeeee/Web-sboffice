@@ -94,9 +94,9 @@ public class ContentController {
 
         model.addAttribute("noticeList", noticeList);
 
-        /** 가상로그인시 ID 설정 */
-        if ( request.getParameter("vLoginId") != null && request.getParameter("vLoginId").length() > 0 ) {
-            model.addAttribute("vLoginId", request.getParameter("vLoginId"));
+        /** 가상로그인시 세션ID 설정 */
+        if ( request.getParameter("sid") != null && request.getParameter("sid").length() > 0 ) {
+            model.addAttribute("sid", request.getParameter("sid"));
         }
 
         return "application/main/agencyMain";
@@ -132,9 +132,9 @@ public class ContentController {
         model.addAttribute("dateSelList2", dateSelList2);
         model.addAttribute("noticeList", noticeList);
 
-        /** 가상로그인시 ID 설정 */
-        if ( request.getParameter("vLoginId") != null && request.getParameter("vLoginId").length() > 0 ) {
-            model.addAttribute("vLoginId", request.getParameter("vLoginId"));
+        /** 가상로그인시 세션ID 설정 */
+        if ( request.getParameter("sid") != null && request.getParameter("sid").length() > 0 ) {
+            model.addAttribute("sid", request.getParameter("sid"));
         }
 
         return "application/main/hedofcMain";
@@ -168,9 +168,9 @@ public class ContentController {
         model.addAttribute("dateSelList2", dateSelList2);
         model.addAttribute("noticeList", noticeList);
 
-        /** 가상로그인시 ID 설정 */
-        if ( request.getParameter("vLoginId") != null && request.getParameter("vLoginId").length() > 0 ) {
-            model.addAttribute("vLoginId", request.getParameter("vLoginId"));
+        /** 가상로그인시 세션ID 설정 */
+        if ( request.getParameter("sid") != null && request.getParameter("sid").length() > 0 ) {
+            model.addAttribute("sid", request.getParameter("sid"));
         }
 
         return "application/main/mrhstMain";

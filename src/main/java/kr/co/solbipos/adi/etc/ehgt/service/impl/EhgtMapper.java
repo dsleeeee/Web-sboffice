@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.adi.etc.ehgt.service.EhgtVO;
 import kr.co.solbipos.adi.etc.ehgt.service.CrncyCdVO;
+import org.springframework.stereotype.Repository;
 
 /**
  * @Class Name : EhgtMapper.java
@@ -18,11 +19,11 @@ import kr.co.solbipos.adi.etc.ehgt.service.CrncyCdVO;
  * @author NHN한국사이버결제 조병준
  * @since 2018. 08.09
  * @version 1.0
- * @see
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Mapper
+@Repository
 public interface EhgtMapper {
 
     /**
@@ -73,7 +74,7 @@ public interface EhgtMapper {
      */
     int updateMsEhgt(EhgtVO ehgtVO);
 
-    
+
 
     /**
      * 프랜차이즈 본사/매장 공통 코드 조회

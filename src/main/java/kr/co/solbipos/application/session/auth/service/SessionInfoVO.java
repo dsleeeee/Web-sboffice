@@ -7,6 +7,7 @@ import kr.co.solbipos.application.common.service.ResrceInfoVO;
 import kr.co.solbipos.application.session.auth.enums.LoginResult;
 import kr.co.solbipos.application.session.auth.enums.UserStatFg;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.store.manage.virtuallogin.service.VirtualLoginInfoVO;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Size;
@@ -145,8 +146,11 @@ public class SessionInfoVO extends CmmVO {
     private List<ResrceInfoBaseVO> fixMenu;
     /** 가상로그인ID */
     private String vUserId;
+    /** 가상로그인정보 */
+    private List<VirtualLoginInfoVO> vLogindIds;
     /** POS 로그인을 위한 하드웨어인증키 */
     private String hwAuthKey;
+
 
 
     /**
@@ -586,6 +590,20 @@ public class SessionInfoVO extends CmmVO {
      */
     public void setvUserId(String vUserId) {
         this.vUserId = vUserId;
+    }
+
+    /**
+     * @return the vLogindIds
+     */
+    public List<VirtualLoginInfoVO> getvLogindIds() {
+        return vLogindIds;
+    }
+
+    /**
+     * @param vLogindIds the vLogindIds to set
+     */
+    public void setvLogindIds(List<VirtualLoginInfoVO> vLogindIds) {
+        this.vLogindIds = vLogindIds;
     }
 
     /**

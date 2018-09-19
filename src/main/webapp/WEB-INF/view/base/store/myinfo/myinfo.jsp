@@ -109,7 +109,7 @@
           <th><s:message code="myInfo.myInfo.addr" /></th>
           <td colspan="3">
             <input type="text" class="sb-input w30 mb5" />
-            <a href="#" class="btn_grayS ml5"><s:message code="myInfo.myInfo.addrSearch" /></a>
+            <a href="javascript:;" class="btn_grayS ml5"><s:message code="myInfo.myInfo.addrSearch" /></a>
             <br>
             <%-- 주소상세 --%>
             <div class="sb-select">
@@ -126,7 +126,7 @@
               <s:message code="myInfo.myInfo.image.height" /><br />
               <s:message code="myInfo.myInfo.image.types" /><br />
               <s:message code="myInfo.myInfo.image.size" /><br />
-              <a href="#" class="btn_grayS mt5"><s:message code="myInfo.myInfo.image.button" /></a>
+              <a href="javascript:;" class="btn_grayS mt5"><s:message code="myInfo.myInfo.image.button" /></a>
             </p>
             <div class="preImg fr">
               <span class="yes"><img src="/resource/solbipos/css/img/logo_main.png" alt="" /></span><!--등록한 이미지가 있는 경우-->
@@ -140,7 +140,7 @@
               <s:message code="myInfo.myInfo.image.height" /><br />
               <s:message code="myInfo.myInfo.image.types" /><br />
               <s:message code="myInfo.myInfo.image.size" /><br />
-              <a href="#" class="btn_grayS mt5"><s:message code="myInfo.myInfo.image.button" /></a>
+              <a href="javascript:;" class="btn_grayS mt5"><s:message code="myInfo.myInfo.image.button" /></a>
             </p>
             <div class="preImg fr">
               <span class="no">IMAGE</span><!--등록한 이미지가 없는 경우-->
@@ -276,7 +276,7 @@ gridIds.forEach(function( gridId ){
       saveURL = "/base/store/myInfo/" + gridId + "/save.sb";
 
   $.getJSON( listURL ).then(function( gridInfo ){
-    var grid = wgrid.genGrid( gridSelector, gridInfo.columns, gridInfo.name, gridInfo.saveIndex, gridInfo.saveColumn ),
+    var grid = wgrid.genGrid( gridSelector, gridInfo.columns),
         view = new wijmo.collections.CollectionView( gridInfo.rows ),
         rowsCount = gridInfo.rows.length;
 

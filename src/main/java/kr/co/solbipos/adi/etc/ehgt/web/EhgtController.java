@@ -73,12 +73,12 @@ public class EhgtController {
             Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        
+
         List<DefaultMap<String>> hqCrncys = ehgtService.getCdListByGrpCd(UseYn.Y, sessionInfoVO);
-        
+
         //입력 table과 grid의 헤더를 위한 데이터
         model.addAttribute("hqCrncys", hqCrncys);
-        
+
         return "adi/etc/ehgt/regist";
     }
 
@@ -101,9 +101,9 @@ public class EhgtController {
         }
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        
+
         List<DefaultMap<Object>> list = ehgtService.getEhgtListBySaleDt(ehgtVO, sessionInfoVO);
-        
+
         return returnListJson(Status.OK, list);
     }
 
@@ -122,9 +122,9 @@ public class EhgtController {
             HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        
+
         List<DefaultMap<String>> list = ehgtService.getEhgtDetailBySaleDt(ehgtVO, sessionInfoVO);
-        
+
         return returnListJson(Status.OK, list);
     }
 
@@ -162,7 +162,6 @@ public class EhgtController {
     /**
      * 통화구분 팝업 조회
      *
-     * @param ehgtVO
      * @param request
      * @param response
      * @param model
@@ -174,7 +173,7 @@ public class EhgtController {
             HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        
+
         List<DefaultMap<String>> list = ehgtService.getCdListByGrpCd(UseYn.ALL, sessionInfoVO);
         return returnListJson(Status.OK, list);
     }
@@ -182,7 +181,7 @@ public class EhgtController {
     /**
      * 통화구분 저장
      *
-     * @param ehgt
+     * @param crncyCdVOs
      * @param request
      * @param response
      * @param model
@@ -200,7 +199,7 @@ public class EhgtController {
             return returnJson(Status.FAIL, "msg", messageService.get("ehgt.krwAmt")
                     + messageService.get("cmm.input.fail"));
         }
-        
+
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = ehgtService.updateCrncyCd(crncyCdVOs, sessionInfoVO);

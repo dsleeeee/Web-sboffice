@@ -2,7 +2,7 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-  
+
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
 
@@ -23,7 +23,7 @@
             <li><a id="trtMntTab" href="javascript:;" class="on"><s:message code="vendr.trtMnt" /></a></li>
           </ul>
         </div>
-        
+
         <table class="tblType01">
           <colgroup>
             <col class="w15" />
@@ -87,7 +87,7 @@
             </div>
           </div>
           <!--//left-->
-        
+
           <!--right-->
           <div class="w50 fr">
             <div class="wj-TblWrapBr ml10 pd10" style="height:200px;">
@@ -115,7 +115,7 @@
   var sProdCd        = wcombo.genInput("#sProdCd");
   var sProdNm        = wcombo.genInput("#sProdNm");
   var sProductClass  = wcombo.genInput("#sProductClass");
-  
+
   <%-- CollectionView --%>
   var hData =
     [
@@ -124,14 +124,14 @@
       {binding:"prodNm", header:"<s:message code='vendr.prodNm' />",width:"*"},
       {binding:"splyUprc", header:"<s:message code='vendr.splyUprc' />",width:"*"}
     ];
-  
-  var grid1 = wgrid.genGrid("#theGrid1", hData, "${menuCd}", 1, ${clo.getColumnLayout(1)});
-  var grid2 = wgrid.genGrid("#theGrid2", hData, "${menuCd}", 2, ${clo.getColumnLayout(1)});
-  
+
+  var grid1 = wgrid.genGrid("#theGrid1", hData);
+  var grid2 = wgrid.genGrid("#theGrid2", hData);
+
   grid1.isReadOnly    = false;
   grid2.isReadOnly    = false;
-  
-  
+
+
   <%-- 조회버튼 --%>
   function searchTrtMnt() {
     var param = {};
@@ -139,25 +139,25 @@
     param.vendrCd = sVendrCd;
     param.prodCd  = sProdCd.text;
     param.prodNm  = sProdNm.text;
-    
+
     $.postJSON("/base/prod/vendr/trtMnt/list.sb", param, function(result) {
         var list1 = result.data.dateSelList1;
         var list2 = result.data.dateSelList2;
-        
+
         grid1.itemsSource = list1;
         grid2.itemsSource = list2;
     });
   }
   <%-- 등록버튼 --%>
   $("#btnRegist").click(function( e ){
-      
+
     <%-- 거래처코드를 확인해주세요. --%>
     var msg = "<s:message code='vendr.vendrCd'/> <s:message code='cmm.require.check'/>";
     if(sVendrCd == "") {
       s_alert.pop(msg);
       return;
     }
-      
+
     var paramArr = new Array();
     for(var i = 0; i < grid2.collectionView.itemCount; i++ ){
       var item = grid2.collectionView.items[i];
@@ -166,12 +166,12 @@
         paramArr.push(item);
       }
     }
-    
+
     if(paramArr.length <= 0) {
       s_alert.pop("<s:message code='cmm.not.select'/>");
       return;
     }
-    
+
     $.postJSONArray("/base/prod/vendr/trtMnt/save.sb", paramArr, function(result) {
         s_alert.pop("<s:message code='cmm.saveSucc' />");
         $("#searchTrt").click();
@@ -180,18 +180,18 @@
         s_alert.pop(result.message);
       });
   });
-  
-  
+
+
   <%-- 삭제버튼 --%>
   $("#btnDelete").click(function( e ){
-      
+
     <%-- 거래처코드를 확인해주세요. --%>
     var msg = "<s:message code='vendr.vendrCd'/> <s:message code='cmm.require.check'/>";
     if(sVendrCd == "") {
       s_alert.pop(msg);
       return;
     }
-      
+
     var paramArr = new Array();
     for(var i = 0; i < grid1.collectionView.itemCount; i++ ){
       var item = grid1.collectionView.items[i];
@@ -200,12 +200,12 @@
         paramArr.push(item);
       }
     }
-    
+
     if(paramArr.length <= 0) {
       s_alert.pop("<s:message code='cmm.not.select'/>");
       return;
     }
-    
+
     $.postJSONArray("/base/prod/vendr/trtMnt/delete.sb", paramArr, function(result) {
         s_alert.pop("<s:message code='cmm.saveSucc' />");
         $("#searchTrt").click();
@@ -214,27 +214,27 @@
         s_alert.pop(result.message);
       });
   });
-  
+
   <%-- 리스트 조회 --%>
   $("#searchTrt").click(function( e ){
       searchTrtMnt();
   });
-  
-  <%-- 거래처등록 탭 클릭 --%>  
+
+  <%-- 거래처등록 탭 클릭 --%>
   $("#layerTrtMnt #vendrTab").click(function(e){
     openRegistLayer(sVendrCd);
     hideTrtMnt();
     prodInit();
   });
-  
+
   <%-- 취급상품 노출 셋팅 --%>
   function showTrtMntSet(item){
     sVendrCd = item;
     hideVendr();
     searchTrtMnt();
-    
+
     $("#layerTrtMnt #popTitle").text("<s:message code='vendr.layer.trtmnt.title' />");
-    
+
     $("#dimTrtMnt").show();
     $("#layerTrtMnt").show();
   }
@@ -250,12 +250,12 @@
     $("#dimTrtMnt").hide();
     $("#layerTrtMnt").hide();
   }
-  
+
   <%--취급상품 탭 초기화--%>
   function prodInit() {
     var inputArr = [
-        sProdCd, sProdNm, sProductClass 
+        sProdCd, sProdNm, sProductClass
     ].forEach(function(element){element.text="";});
   }
-  
+
 </script>

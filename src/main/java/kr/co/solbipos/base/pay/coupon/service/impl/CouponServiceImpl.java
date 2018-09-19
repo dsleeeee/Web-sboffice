@@ -63,7 +63,11 @@ public class CouponServiceImpl implements CouponService {
         // 본사 통제
         if(payMethodClassVO.getCoupnEnvstVal() == CoupnEnvFg.HQ) {
 
-            payMethodClassVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
+            LOGGER.info(">>>>>> sessionInfoVO.getHqOfficeCd() : " + sessionInfoVO.getHqOfficeCd());
+
+            payMethodClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+            LOGGER.info(">>>> payMethodClassVO.getHqOfficeCd : "+ payMethodClassVO.getHqOfficeCd());
 
             returnList = mapper.getHqCouponClassList(payMethodClassVO);
 

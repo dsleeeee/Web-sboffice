@@ -296,9 +296,6 @@ public class CmmMenuServiceImpl implements CmmMenuService {
             menu.setUrl(item.getStr("url"));
             menu.setIcon(item.getStr("icon"));
             menu.setItems(new ArrayList<MenuVO>());
-            if ( item.getStr("vLoginId") != null && !"".equals(item.getStr("vLoginId")) ) {
-                menu.setvLoginId(item.getStr("vLoginId"));
-            }
             menuVOs.add(menu);
         }
         // 권한이 있는 기능에서 상위 리소스 정보 생성

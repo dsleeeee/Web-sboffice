@@ -43,13 +43,17 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 public class AuthServiceImpl implements AuthService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    private final AuthMapper authMapper;
+    private final SessionService sessionService;
+    private final MessageService messageService;
 
+    /** Constrcutor Injection */
     @Autowired
-    AuthMapper authMapper;
-    @Autowired
-    SessionService sessionService;
-    @Autowired
-    MessageService messageService;
+    public AuthServiceImpl(SessionService sessionService, AuthMapper authMapper, MessageService messageService) {
+        this.sessionService = sessionService;
+        this.authMapper = authMapper;
+        this.messageService = messageService;
+    }
 
     @Override
     public SessionInfoVO selectWebUser(SessionInfoVO sessionInfoVO) {

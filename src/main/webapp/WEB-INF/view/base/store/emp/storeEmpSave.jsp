@@ -137,11 +137,8 @@
         <div class="btnSet">
           <%-- 저장 --%>
           <span><a href="javascript:;" class="btn_blue" id="btnSave"><s:message code="cmm.save" /></a></span>
-<<<<<<< HEAD
-=======
           <%-- 닫기 --%>
           <span><a href="javascript:;" class="btn_gray btnClose"><s:message code="cmm.close" /></a></span>
->>>>>>> refs/heads/master
         </div>
       </div>
     </div>
@@ -149,8 +146,8 @@
 </div>
 
 <script>
-var serviceFgExcpAll = ${ccu.getCommCodeExcpAll("008")};
-var useYnExcpAll = ${ccu.getCommCodeExcpAll("904")};
-var RecvYnExcpAll = ${ccu.getCommCodeExcpAll("105")};
+var serviceFgExcpAll = ${ccu.getCommCodeExcpAll("007")};
+var useYnExcpAll = ${ccu.getCommCodeExcpAll("067")};
+var RecvYnExcpAll = ${ccu.getCommCodeExcpAll("072")};
 </script>
 

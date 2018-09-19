@@ -7,7 +7,7 @@
      /* USE : VendrMapper.getHqVendrList */
      <include refid="CmmSQL.PagingTemplateHeader"/>
      SELECT
-            A.HQ_BRAND_CD,
+            A.HQ_OFFICE_CD,
             A.VENDR_CD,
             A.VENDR_NM,
             A.OWNER_NM,
@@ -32,6 +32,9 @@
      <include refid="CmmSQL.PagingTemplateCount"/>
        FROM TB_HQ_VENDOR A
      <where>
+         <if test="hqOfficeCd != null and hqOfficeCd != ''">
+           AND A.HQ_OFFICE_CD = #{hqOfficeCd} --본사코드
+         </if>
          <if test="vendrCd != null and vendrCd != ''">
            AND A.VENDR_CD = #{vendrCd} --거래처코드
          </if>
@@ -44,7 +47,7 @@
      </where>
      <include refid="CmmSQL.PagingTemplateBottom"/>
   </select>
-  
+
   <select id="getMsVendrList" parameterType="vendrVO" resultType="DefaultMap">
      /* USE : VendrMapper.getMsVendrList */
      <include refid="CmmSQL.PagingTemplateHeader"/>
@@ -74,6 +77,9 @@
      <include refid="CmmSQL.PagingTemplateCount"/>
        FROM TB_MS_VENDOR A
      <where>
+         <if test="storeCd != null and storeCd != ''">
+           AND A.STORE_CD = #{storeCd} --매장코드
+         </if>
          <if test="vendrCd != null and vendrCd != ''">
            AND A.VENDR_CD = #{vendrCd} --거래처코드
          </if>
@@ -91,23 +97,25 @@
     TABLE    : TB_HQ_BRAND
     COMMENTS : 브랜드 코드 조회
   -->
+  <!--
   <select id="getHqBrandCd" parameterType="vendrVO" resultType="String">
     /* USE : VendrMapper.getHqBrandCd */
     SELECT HQ_BRAND_CD
       FROM TB_HQ_BRAND
      WHERE HQ_OFFICE_CD = #{hqOfficeCd}
   </select>
+  -->
 
   <!-- 거래처 등록 -->
   <!--
     TABLE    : TB_HQ_VENDOR
-    COMMENTS : 거래처(본사) 등록 
+    COMMENTS : 거래처(본사) 등록
   -->
   <insert id="insertHqVendr" parameterType="vendrVO">
     /* USE : VendrMapper.insertHqVendr */
     INSERT INTO TB_HQ_VENDOR
     (
-       HQ_BRAND_CD,
+       HQ_OFFICE_CD,
        VENDR_CD,
        VENDR_NM,
        OWNER_NM,
@@ -130,7 +138,7 @@
        MOD_ID,
        VENDOR_FG
       ) VALUES (
-         #{hqBrandCd},
+         #{hqOfficeCd},
          #{vendrCd},
          #{vendrNm},
          #{ownerNm},
@@ -158,7 +166,7 @@
   <!-- 거래처 등록 -->
   <!--
     TABLE    : TB_MS_VENDOR
-    COMMENTS : 거래처(매장) 등록 
+    COMMENTS : 거래처(매장) 등록
   -->
   <insert id="insertMsVendr" parameterType="vendrVO">
     /* USE : VendrMapper.insertMsVendr */
@@ -211,7 +219,7 @@
         #{vendorFg}
     )
   </insert>
-    
+
   <!-- 거래처(본사) 상세정보 조회  -->
   <!--
       TABLE    : TB_HQ_VENDOR
@@ -221,7 +229,7 @@
   <select id="getHqDtlInfo" parameterType="vendrVO" resultType="DefaultMap">
     /* USE : VendrMapper.getHqDtlInfo */
     SELECT
-      HQ_BRAND_CD,
+      HQ_OFFICE_CD,
       VENDR_CD,
       VENDR_NM,
       OWNER_NM,
@@ -246,15 +254,15 @@
       MOD_DT,
       MOD_ID,
       VENDOR_FG,
-      (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '074' AND NMCODE_CD = thv.SHIP_FG) AS SHIP_FG_NM,
-      (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '013' AND NMCODE_CD = thv.VENDOR_FG) AS VENDOR_FG_NM,
-      (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '904' AND NMCODE_CD = thv.USE_YN) AS USE_YN_NM,
-      (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '904' AND NMCODE_CD = thv.VAT_INCLD_YN) AS VAT_INCLD_YN_NM
+      (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '074' AND NMCODE_CD = thv.SHIP_FG) AS SHIP_FG_NM, --TODO 코드 변경 필요
+      (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '011' AND NMCODE_CD = thv.VENDOR_FG) AS VENDOR_FG_NM,
+      (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '067' AND NMCODE_CD = thv.USE_YN) AS USE_YN_NM,
+      (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '067' AND NMCODE_CD = thv.VAT_INCLD_YN) AS VAT_INCLD_YN_NM
     FROM TB_HQ_VENDOR thv
     WHERE VENDR_CD = #{vendrCd}
-      AND HQ_BRAND_CD = #{hqBrandCd}
+      AND HQ_OFFICE_CD = #{hqOfficeCd}
   </select>
-    
+
   <!-- 거래처(매장) 상세정보 조회  -->
   <!--
       TABLE    : TB_MS_VENDOR
@@ -289,15 +297,15 @@
       MOD_DT,
       MOD_ID,
       VENDOR_FG,
-      (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '074' AND NMCODE_CD = tmv.SHIP_FG) AS SHIP_FG_NM,
-      (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '013' AND NMCODE_CD = tmv.VENDOR_FG) AS VENDOR_FG_NM,
-      (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '904' AND NMCODE_CD = tmv.USE_YN) AS USE_YN_NM,
-      (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '904' AND NMCODE_CD = tmv.VAT_INCLD_YN) AS VAT_INCLD_YN_NM
+      (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '074' AND NMCODE_CD = tmv.SHIP_FG) AS SHIP_FG_NM, --TODO 코드 변경 필요
+      (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '011' AND NMCODE_CD = tmv.VENDOR_FG) AS VENDOR_FG_NM,
+      (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '067' AND NMCODE_CD = tmv.USE_YN) AS USE_YN_NM,
+      (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '067' AND NMCODE_CD = tmv.VAT_INCLD_YN) AS VAT_INCLD_YN_NM
     FROM TB_MS_VENDOR tmv
     WHERE VENDR_CD = #{vendrCd}
       AND STORE_CD = #{storeCd}
     </select>
-    
+
   <!-- 거래처(본사) 수정 -->
   <!--
       TABLE    : TB_HQ_VENDOR
@@ -325,10 +333,10 @@
            MOD_DT        = #{modDt},
            MOD_ID        = #{modId},
            VENDOR_FG     = #{vendorFg}
-     WHERE HQ_BRAND_CD   = #{hqBrandCd}
+     WHERE HQ_OFFICE_CD  = #{hqOfficeCd}
        AND VENDR_CD      = #{vendrCd}
   </update>
-  
+
   <!-- 거래처(매장) 수정 -->
   <!--
       TABLE    : TB_MS_VENDOR
@@ -359,7 +367,7 @@
      WHERE STORE_CD      = #{storeCd}
        AND VENDR_CD      = #{vendrCd}
   </update>
-  
+
   <!-- 취급상품(본사) -->
   <!--
       TABLE    : TB_HQ_VENDOR_PROD
@@ -368,14 +376,15 @@
   -->
   <select id="getHqVendrProdList" parameterType="vendrVO" resultType="DefaultMap">
    /* USE : VendrMapper.getHqVendrProdList */
-   SELECT 
+   SELECT
         ROWNUM AS RNUM,
         thvp.PROD_CD,
         thp.PROD_NM,
         thp.SPLY_UPRC
-       FROM TB_HQ_VENDOR_PROD thvp, TB_HQ_PRODUCT thp
+       FROM TB_HQ_VENDOR_PROD thvp,
+            TB_HQ_PRODUCT thp
       WHERE thvp.PROD_CD = thp.PROD_CD
-        AND thvp.HQ_BRAND_CD = #{hqBrandCd}
+        AND thvp.HQ_OFFICE_CD = #{hqOfficeCd}
         AND thvp.VENDR_CD    = #{vendrCd}
         AND thvp.USE_YN      = 'Y'
       <if test="prodCd != null and prodCd != ''">
@@ -385,7 +394,7 @@
         AND thp.PROD_NM = #{prodNm}
       </if>
   </select>
-  
+
   <!-- 취급상품(매장) -->
   <!--
       TABLE    : TB_MS_VENDOR_PROD, TB_MS_PRODUCT
@@ -394,12 +403,13 @@
   -->
   <select id="getMsVendrProdList" parameterType="vendrVO" resultType="DefaultMap">
      /* USE : VendrMapper.getMsVendrProdList */
-     SELECT 
+     SELECT
         ROWNUM AS RNUM,
         tmvp.PROD_CD,
         tmp.PROD_NM,
         tmp.SPLY_UPRC
-       FROM TB_MS_VENDOR_PROD tmvp, TB_MS_PRODUCT tmp
+       FROM TB_MS_VENDOR_PROD tmvp,
+            TB_MS_PRODUCT tmp
       WHERE tmvp.PROD_CD  = tmp.PROD_CD
         AND tmvp.STORE_CD = tmp.STORE_CD
         AND tmvp.VENDR_CD = #{vendrCd}
@@ -408,10 +418,10 @@
         AND tmvp.PROD_CD = #{prodCd}
       </if>
       <if test="prodNm != null and prodNm != ''">
-        AND tmp.PROD_NM = #{prodNm} 
+        AND tmp.PROD_NM = #{prodNm}
       </if>
   </select>
-  
+
   <!-- 미취급상품(본사) -->
   <!--
       TABLE    : TB_HQ_PRODUCT
@@ -420,7 +430,7 @@
   -->
   <select id="getHqProdList" parameterType="vendrVO" resultType="DefaultMap">
      /* USE : VendrMapper.getHqProdList */
-     SELECT 
+     SELECT
         ROWNUM AS RNUM,
         PROD_CD,
         PROD_NM,
@@ -434,15 +444,16 @@
       <if test="prodNm != null and prodNm != ''">
         AND thp.PROD_NM = #{prodNm} -- 상품명
       </if>
-        AND NOT EXISTS 
-          ( SELECT 1 
-          FROM TB_HQ_VENDOR_PROD thvp 
-         WHERE thvp.PROD_CD  = thp.PROD_CD 
+        AND NOT EXISTS
+          ( SELECT 1
+          FROM TB_HQ_VENDOR_PROD thvp
+         --WHERE thvp.HQ_OFFICE_CD  = thp.HQ_OFFICE_CD --TODO 테스트 후 추가
+           AND thvp.PROD_CD  = thp.PROD_CD
            AND thvp.VENDR_CD = #{vendrCd}
            AND thvp.USE_YN   = 'Y'
           )
   </select>
-  
+
   <!-- 미취급상품(매장) -->
   <!--
       TABLE    : TB_MS_PRODUCT
@@ -465,42 +476,42 @@
       <if test="prodNm != null and prodNm != ''">
         AND tmp.PROD_NM = #{prodNm} -- 상품명
       </if>
-        AND NOT EXISTS 
-          ( SELECT 1 
-          FROM TB_MS_VENDOR_PROD tmvp 
-         WHERE tmvp.PROD_CD  = tmp.PROD_CD 
+        AND NOT EXISTS
+          ( SELECT 1
+          FROM TB_MS_VENDOR_PROD tmvp
+         WHERE tmvp.PROD_CD  = tmp.PROD_CD
            AND tmvp.VENDR_CD = #{vendrCd}
            AND tmvp.USE_YN   = 'Y'
           )
   </select>
-  
-  
+
+
   <!-- 미취급 상품 수정 (취급상품으로 변경) / 본사  -->
   <!--
       TABLE    : TB_HQ_VENDOR_PROD
-      COMMENTS : 미취급상품을 취급상품으로 등록, 
+      COMMENTS : 미취급상품을 취급상품으로 등록,
                  데이터가 존재하면 UPDATE, 존재하지 않으면 INSERT
   -->
   <update id="mergeHqVendrProd" parameterType="vendrVO">
     /* USE : VendrMapper.mergeHqVendrProd */
     MERGE INTO TB_HQ_VENDOR_PROD thvp
     USING (
-          SELECT #{hqBrandCd} AS HQ_BRAND_CD,
-                 #{vendrCd}   AS VENDR_CD,
-                 #{prodCd}    AS PROD_CD,
-                 #{splyUprc}  AS SPLY_UPRC,
-                 #{useYn}     AS USE_YN,
-                 #{regDt}     AS REG_DT,
-                 #{regId}     AS REG_ID,
-                 #{modDt}     AS MOD_DT,
-                 #{modId}     AS MOD_ID
+          SELECT #{hqOfficeCd} AS HQ_OFFICE_CD,
+                 #{vendrCd}    AS VENDR_CD,
+                 #{prodCd}     AS PROD_CD,
+                 #{splyUprc}   AS SPLY_UPRC,
+                 #{useYn}      AS USE_YN,
+                 #{regDt}      AS REG_DT,
+                 #{regId}      AS REG_ID,
+                 #{modDt}      AS MOD_DT,
+                 #{modId}      AS MOD_ID
             FROM DUAL
           ) thvpc
        ON
         (
-          thvpc.HQ_BRAND_CD = thvp.HQ_BRAND_CD
-      AND thvpc.VENDR_CD    = thvp.VENDR_CD
-      AND thvpc.PROD_CD     = thvp.PROD_CD
+          thvpc.HQ_OFFICE_CD = thvp.HQ_OFFICE_CD
+      AND thvpc.VENDR_CD     = thvp.VENDR_CD
+      AND thvpc.PROD_CD      = thvp.PROD_CD
         )
      WHEN MATCHED THEN
           UPDATE SET
@@ -510,7 +521,7 @@
      WHEN NOT MATCHED THEN
           INSERT
           (
-            thvp.HQ_BRAND_CD,
+            thvp.HQ_OFFICE_CD,
             thvp.VENDR_CD,
             thvp.PROD_CD,
             thvp.SPLY_UPRC,
@@ -522,7 +533,7 @@
           )
           VALUES
           (
-            thvpc.HQ_BRAND_CD,
+            thvpc.HQ_OFFICE_CD,
             thvpc.VENDR_CD,
             thvpc.PROD_CD,
             thvpc.SPLY_UPRC,
@@ -534,18 +545,18 @@
           )
   </update>
 
-  
+
   <!-- 미취급 상품 수정 (취급상품으로 변경) / 매장  -->
   <!--
       TABLE    : TB_MS_VENDOR_PROD
-      COMMENTS : 미취급상품을 취급상품으로 등록, 
+      COMMENTS : 미취급상품을 취급상품으로 등록,
                  데이터가 존재하면 UPDATE, 존재하지 않으면 INSERT
   -->
   <update id="mergeMsVendrProd" parameterType="vendrVO">
     /* USE : VendrMapper.mergeMsVendrProd */
     MERGE INTO TB_MS_VENDOR_PROD tmvp
     USING (
-          SELECT #{storeCd}   AS STORE_CD, 
+          SELECT #{storeCd}   AS STORE_CD,
                  #{prodCd}    AS PROD_CD,
                  #{vendrCd}   AS VENDR_CD,
                  #{splyUprc}  AS SPLY_UPRC,
