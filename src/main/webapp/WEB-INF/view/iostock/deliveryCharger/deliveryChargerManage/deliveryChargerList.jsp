@@ -54,7 +54,7 @@
         </div>
 
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap mt10" style="height: 400px;" >
+        <div class="wj-gridWrap mt10" style="height: 350px;" >
             <wj-flex-grid
                 autoGenerateColumns="false"
                 selection-mode="Row"
@@ -83,7 +83,7 @@
     <%-- 페이지 리스트 --%>
     <div class="pageNum mt20">
         <%-- id --%>
-        <ul id="gridCtrlPager" data-size="10">
+        <ul id="dlvrChgrCtrlPager" data-size="10">
         </ul>
     </div>
     <%--//페이지 리스트--%>
@@ -116,7 +116,7 @@
     /** 배송기사 그리드 controller */
     app.controller('dlvrChgrCtrl', ['$scope', '$http', 'dlvrVO', function ($scope, $http, dlvrVO) {
         // 상위 객체 상속 : T/F 는 picker
-        angular.extend(this, new RootController('dlvrInfoCtrl', $scope, $http, true));
+        angular.extend(this, new RootController('dlvrChgrCtrl', $scope, $http, true));
         // grid 초기화 : 생성되기전 초기화되면서 생성된다
         $scope.initGrid = function (s, e) {
             // picker 사용시 호출 : 미사용시 호출안함
@@ -168,9 +168,9 @@
         $scope.searchDlvrList = function() {
             // 파라미터
             var params = {};
-            // params.listScale = 15;
+            // params.listScale = 2;
             params.listScale = listScaleBoxDlvrChgr.selectedValue;
-            params.curr = 1;
+
             // 조회 수행 : 조회URL, 파라미터, 콜백함수
             $scope._inquiryMain("/iostock/deliveryCharger/deliveryChargerManage/deliveryChargerList/list.sb", params);
         }

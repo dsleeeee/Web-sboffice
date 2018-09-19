@@ -29,7 +29,7 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
-      if (e.panel == s.cells) {
+      if (e.panel === s.cells) {
         var col = s.columns[e.col];
         var item = s.rows[e.row].dataItem;
         if (col.binding === "payClassCd") {
@@ -44,10 +44,10 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
       if( ht.cellType === wijmo.grid.CellType.Cell) {
         var col = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
-        if ( col.binding === "payClassCd" && selectedRow.status != "I") {
-          if(selectedRow.status == "I") {
+        if ( col.binding === "payClassCd" && selectedRow.status !== "I") {
+          if(selectedRow.status === "I") {
             e.cancel = false;
-          } else if(selectedRow.useYn == "N") {
+          } else if(selectedRow.useYn === "N") {
             s_alert.pop(messages["coupon.not.use.payClassCd"]);
             var couponGrid = agrid.getScope('couponCtrl');
             couponGrid._gridDataInit();
@@ -165,7 +165,7 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
-      if (e.panel == s.cells) {
+      if (e.panel === s.cells) {
         var col = s.columns[e.col];
         if (col.binding === "coupnCd") {
           wijmo.addClass(e.cell, 'wj-custom-readonly');
@@ -193,16 +193,16 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
         e.cancel = true;
       }
       // 할인구분 => 금액 관련이면, 할인율은 입력못함
-      if(e.col == 6) {
-        if(dataItem.coupnDcFg == "3" || dataItem.coupnDcFg == "4" || dataItem.coupnDcFg == "6") {
+      if(e.col === 6) {
+        if(dataItem.coupnDcFg === "3" || dataItem.coupnDcFg === "4" || dataItem.coupnDcFg === "6") {
           e.cancel = true;
         } else {
           e.cancel = false;
         }
       }
       // 할인구분 => % 관련이면, 할인금액 입력못함
-      if(e.col == 7) {
-        if(dataItem.coupnDcFg == "1" || dataItem.coupnDcFg == "2") {
+      if(e.col === 7) {
+        if(dataItem.coupnDcFg === "1" || dataItem.coupnDcFg === "2") {
           e.cancel = true;
         } else {
           e.cancel = false;
@@ -215,13 +215,13 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
       var col = s.columns[e.col];
       var dataItem = s.rows[e.row].dataItem;
 
-      if(col.binding == "coupnDcFg") {
+      if(col.binding === "coupnDcFg") {
         // 할인구분 => 금액 관련이면, 할인율은 입력못함
-        if(dataItem.coupnDcFg == "3" || dataItem.coupnDcFg == "4" || dataItem.coupnDcFg == "6") {
+        if(dataItem.coupnDcFg === "3" || dataItem.coupnDcFg === "4" || dataItem.coupnDcFg === "6") {
           dataItem.coupnDcRate = "";
         }
         // 할인구분 => % 관련이면, 할인금액 입력못함
-        else if(dataItem.coupnDcFg == "1" || dataItem.coupnDcFg == "2") {
+        else if(dataItem.coupnDcFg === "1" || dataItem.coupnDcFg === "2") {
           dataItem.coupnDcAmt = "";
         }
       }
@@ -234,7 +234,7 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
         var col = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
 
-        if ( col.binding === "prodCnt" && selectedRow.status != "I") {
+        if ( col.binding === "prodCnt" && selectedRow.status !== "I") {
           // 상품 등록 팝업
           var popup = $scope.couponPordLayer;
           popup.show(true, function (s) {
@@ -244,7 +244,7 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
             noRegProdGrid._gridDataInit();
           });
         }
-        else if ( col.binding === "storeCnt" && selectedRow.status != "I") {
+        else if ( col.binding === "storeCnt" && selectedRow.status !== "I") {
           // 매장 등록 팝업
           var popup = $scope.couponStoreLayer;
           popup.show(true, function (s) {
@@ -308,7 +308,7 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
           s_alert.pop("쿠폰이 등록된 상품이 존재합니다. 쿠폰 삭제 전에 등록 상품을 먼저 삭제해주세요.");
           return;
         }
-        if(orgnFg == "HQ") {
+        if(orgnFg === "HQ") {
           if(item.storeCd > 0 ) {
             // s_alert.pop("<s:message code='coupon.exists.store' />");
             s_alert.pop("쿠폰이 등록된 매장이 존재합니다. 쿠폰 삭제 전에 등록 매장을 먼저 삭제해주세요.");

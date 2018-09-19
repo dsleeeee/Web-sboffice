@@ -1,0 +1,247 @@
+package kr.co.solbipos.membr.info.grade.service;
+
+import kr.co.solbipos.application.common.service.CmmVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import org.aspectj.weaver.ast.Or;
+
+/**
+ * @Class Name : MembrClassVO.java
+ * @Description :
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2018.09.18  김지은      최초생성
+ *
+ * @author 솔비포스 차세대개발실 김지은
+ * @since 2018. 09.18
+ * @version 1.0
+ *
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
+ */
+public class MembrClassVO extends CmmVO {
+
+
+    /** [회원소속구분] */
+    private OrgnFg membrOrgnFg;
+    /** [회원소속코드] */
+    private String membrOrgnCd;
+    /** [회원분류코드] */
+    private String membrClassCd;
+    /** [회원분류명] */
+    private String membrClassNm;
+    /** [할인율] */
+    private Integer dcRate;
+    /** [포인트적립구분] TB_CM_NMCODE(NMCODE_GRP_CD='054') */
+    private String pointSaveFg;
+    /** [기본여부] Y:기본 N:기본아님 */
+    private String defltYn;
+    /** [신규가입적립포인트] */
+    private Integer newJoinSavePoint;
+    /** [첫거래적립포인트] */
+    private Integer firstSaleSavePoint;
+    /** [최소사용포인트] */
+    private Integer minUsePoint;
+    /** [기념일포인트적립구분] TB_CM_NMCODE(NMCODE_GRP_CD='032') */
+    private String anvsrPointSaveFg;
+    /** [기념일적립포인트] */
+    private Integer anvsrSavePoint;
+    /** [사용여부] Y:사용 N:사용안함 */
+    private String useYn;
+
+
+    /**
+     * @return the membrOrgnFg
+     */
+
+    public OrgnFg getMembrOrgnFg() {
+        return membrOrgnFg;
+    }
+
+    /**
+     * @param membrOrgnFg the membrOrgnFg to set
+     */
+    public void setMembrOrgnFg(OrgnFg membrOrgnFg) {
+        this.membrOrgnFg = membrOrgnFg;
+    }
+
+    /**
+     * @return the membrOrgnCd
+     */
+
+    public String getMembrOrgnCd() {
+        return membrOrgnCd;
+    }
+
+    /**
+     * @param membrOrgnCd the membrOrgnCd to set
+     */
+    public void setMembrOrgnCd(String membrOrgnCd) {
+        this.membrOrgnCd = membrOrgnCd;
+    }
+
+    /**
+     * @return the membrClassCd
+     */
+
+    public String getMembrClassCd() {
+        return membrClassCd;
+    }
+
+    /**
+     * @param membrClassCd the membrClassCd to set
+     */
+    public void setMembrClassCd(String membrClassCd) {
+        this.membrClassCd = membrClassCd;
+    }
+
+    /**
+     * @return the membrClassNm
+     */
+
+    public String getMembrClassNm() {
+        return membrClassNm;
+    }
+
+    /**
+     * @param membrClassNm the membrClassNm to set
+     */
+    public void setMembrClassNm(String membrClassNm) {
+        this.membrClassNm = membrClassNm;
+    }
+
+    /**
+     * @return the dcRate
+     */
+
+    public Integer getDcRate() {
+        return dcRate;
+    }
+
+    /**
+     * @param dcRate the dcRate to set
+     */
+    public void setDcRate(Integer dcRate) {
+        this.dcRate = dcRate;
+    }
+
+    /**
+     * @return the pointSaveFg
+     */
+
+    public String getPointSaveFg() {
+        return pointSaveFg;
+    }
+
+    /**
+     * @param pointSaveFg the pointSaveFg to set
+     */
+    public void setPointSaveFg(String pointSaveFg) {
+        this.pointSaveFg = pointSaveFg;
+    }
+
+    /**
+     * @return the defltYn
+     */
+
+    public String getDefltYn() {
+        return defltYn;
+    }
+
+    /**
+     * @param defltYn the defltYn to set
+     */
+    public void setDefltYn(String defltYn) {
+        this.defltYn = defltYn;
+    }
+
+    /**
+     * @return the newJoinSavePoint
+     */
+
+    public Integer getNewJoinSavePoint() {
+        return newJoinSavePoint;
+    }
+
+    /**
+     * @param newJoinSavePoint the newJoinSavePoint to set
+     */
+    public void setNewJoinSavePoint(Integer newJoinSavePoint) {
+        this.newJoinSavePoint = newJoinSavePoint;
+    }
+
+    /**
+     * @return the firstSaleSavePoint
+     */
+
+    public Integer getFirstSaleSavePoint() {
+        return firstSaleSavePoint;
+    }
+
+    /**
+     * @param firstSaleSavePoint the firstSaleSavePoint to set
+     */
+    public void setFirstSaleSavePoint(Integer firstSaleSavePoint) {
+        this.firstSaleSavePoint = firstSaleSavePoint;
+    }
+
+    /**
+     * @return the minUsePoint
+     */
+
+    public Integer getMinUsePoint() {
+        return minUsePoint;
+    }
+
+    /**
+     * @param minUsePoint the minUsePoint to set
+     */
+    public void setMinUsePoint(Integer minUsePoint) {
+        this.minUsePoint = minUsePoint;
+    }
+
+    /**
+     * @return the anvsrPointSaveFg
+     */
+
+    public String getAnvsrPointSaveFg() {
+        return anvsrPointSaveFg;
+    }
+
+    /**
+     * @param anvsrPointSaveFg the anvsrPointSaveFg to set
+     */
+    public void setAnvsrPointSaveFg(String anvsrPointSaveFg) {
+        this.anvsrPointSaveFg = anvsrPointSaveFg;
+    }
+
+    /**
+     * @return the anvsrSavePoint
+     */
+
+    public Integer getAnvsrSavePoint() {
+        return anvsrSavePoint;
+    }
+
+    /**
+     * @param anvsrSavePoint the anvsrSavePoint to set
+     */
+    public void setAnvsrSavePoint(Integer anvsrSavePoint) {
+        this.anvsrSavePoint = anvsrSavePoint;
+    }
+
+    /**
+     * @return the useYn
+     */
+
+    public String getUseYn() {
+        return useYn;
+    }
+
+    /**
+     * @param useYn the useYn to set
+     */
+    public void setUseYn(String useYn) {
+        this.useYn = useYn;
+    }
+}

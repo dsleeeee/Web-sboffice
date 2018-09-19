@@ -6,6 +6,7 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.code.CmmEnvService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.iostock.order.storeOrder.service.StoreOrderDtlVO;
 import kr.co.solbipos.iostock.order.storeOrder.service.StoreOrderService;
@@ -69,18 +70,27 @@ public class StoreOrderController {
     public String storeCloseView(HttpServletRequest request, HttpServletResponse response, Model model) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
+        // 본사 환경설정 173 조회
         HqEnvstVO hqEnvstVO = new HqEnvstVO();
         hqEnvstVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         hqEnvstVO.setEnvstCd("173");
         String envst173 = cmmEnvService.getHqEnvst(hqEnvstVO);
 
+        // 매장 환경설정 594 조회
         StoreEnvVO storeEnvVO = new StoreEnvVO();
         storeEnvVO.setStoreCd(sessionInfoVO.getStoreCd());
         storeEnvVO.setEnvstCd("594");
         String envst594 = cmmEnvService.getStoreEnvst(storeEnvVO);
 
+        // 출고요청가능일 조회
+        StoreOrderVO storeOrderVO = new StoreOrderVO();
+        storeOrderVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        storeOrderVO.setStoreCd(sessionInfoVO.getStoreCd());
+        String reqDate = storeOrderService.getReqDate(storeOrderVO);
+
         model.addAttribute("envst173", envst173);
         model.addAttribute("envst594", envst594);
+        model.addAttribute("reqDate" , reqDate);
 
         return "iostock/order/storeOrder/storeOrder";
     }
@@ -197,9 +207,9 @@ public class StoreOrderController {
         storeOrderVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         storeOrderVO.setStoreCd(sessionInfoVO.getStoreCd());
 
-        List<DefaultMap<String>> list = storeOrderService.getStoreCloseCheck(storeOrderVO);
+        DefaultMap<String> result = storeOrderService.getStoreCloseCheck(storeOrderVO);
 
-        return ReturnUtil.returnJson(Status.OK, list);
+        return ReturnUtil.returnJson(Status.OK, result);
     }
 
     /**
@@ -219,11 +229,14 @@ public class StoreOrderController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         storeOrderVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        storeOrderVO.setStoreCd(sessionInfoVO.getStoreCd());
+        // 넘어오는 매장코드가 없으면 session 값의 매장코드로 세팅한다.
+        if(StringUtil.getOrBlank(storeOrderVO.getStoreCd()).equals("")) {
+            storeOrderVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
 
-        List<DefaultMap<String>> list = storeOrderService.getOrderProcFgCheck(storeOrderVO);
+        DefaultMap<String> result = storeOrderService.getOrderProcFgCheck(storeOrderVO);
 
-        return ReturnUtil.returnJson(Status.OK, list);
+        return ReturnUtil.returnJson(Status.OK, result);
     }
 
     /**
@@ -243,12 +256,62 @@ public class StoreOrderController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         storeOrderVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        storeOrderVO.setStoreCd(sessionInfoVO.getStoreCd());
 
-        List<DefaultMap<String>> list = storeOrderService.getStoreLoan(storeOrderVO);
+        // 넘어오는 매장코드가 없으면 session 값의 매장코드로 세팅한다.
+        if(StringUtil.getOrBlank(storeOrderVO.getStoreCd()).equals("")) {
+            storeOrderVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
 
-        return ReturnUtil.returnJson(Status.OK, list);
+        DefaultMap<String> result = storeOrderService.getStoreLoan(storeOrderVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
     }
 
+    /**
+     * 주문등록 - 출고요청가능일인지 여부 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   storeOrderVO
+     * @return  String
+     * @author  안동관
+     * @since   2018. 09. 14.
+     */
+    @RequestMapping(value = "/storeOrderRegist/orderDateCheck.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreOrderDateCheck(HttpServletRequest request, HttpServletResponse response,
+        Model model, StoreOrderVO storeOrderVO) {
 
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        storeOrderVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        storeOrderVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        DefaultMap<String> result = storeOrderService.getStoreOrderDateCheck(storeOrderVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+    /**
+     * 주문등록 - 주문등록 확정
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   storeOrderVO
+     * @return  String
+     * @author  안동관
+     * @since   2018. 09. 17.
+     */
+    @RequestMapping(value = "/storeOrderDtl/confirm.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveStoreOrderConfirm(HttpServletRequest request, HttpServletResponse response,
+        Model model, StoreOrderVO storeOrderVO) {
+
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = storeOrderService.saveStoreOrderConfirm(storeOrderVO, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+
+    }
 }

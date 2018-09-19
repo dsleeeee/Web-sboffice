@@ -217,6 +217,8 @@
     <typeAlias alias="couponVO" type="kr.co.solbipos.base.pay.coupon.service.CouponVO"/>
     <typeAlias alias="couponProdVO" type="kr.co.solbipos.base.pay.coupon.service.CouponProdVO"/>
     <typeAlias alias="couponStoreVO" type="kr.co.solbipos.base.pay.coupon.service.CouponStoreVO"/>
+    <typeAlias alias="giftVO" type="kr.co.solbipos.base.pay.gift.service.GiftVO"/>
+    <typeAlias alias="mobileCouponVO" type="kr.co.solbipos.base.pay.mCoupon.service.MobileCouponVO"/>
     <!--
     <typeAlias alias="coprtnCardVO" type="kr.co.solbipos.base.pay.coprtncard.service.CoprtnCardVO"/>
     <typeAlias alias="giftcardLedgrVO" type="kr.co.solbipos.base.pay.giftcardledgr.service.GiftcardLedgrVO"/>
@@ -265,6 +267,7 @@
     <typeAlias alias="viewVO" type="kr.co.solbipos.membr.info.view.service.ViewVO"/>
 -->
     <typeAlias alias="registVO" type="kr.co.solbipos.membr.info.regist.service.RegistVO"/>
+    <typeAlias alias="membrClassVO" type="kr.co.solbipos.membr.info.grade.service.MembrClassVO"/>
 <!--
     <typeAlias alias="gradeVO" type="kr.co.solbipos.membr.info.grade.service.GradeVO"/>
     <typeAlias alias="uploadVO" type="kr.co.solbipos.membr.info.upload.service.UploadVO"/>
@@ -413,6 +416,7 @@
     <typeAlias alias="storeCloseVO" type="kr.co.solbipos.iostock.order.storeClose.service.StoreCloseVO"/>
     <typeAlias alias="storeOrderVO" type="kr.co.solbipos.iostock.order.storeOrder.service.StoreOrderVO"/>
     <typeAlias alias="storeOrderDtlVO" type="kr.co.solbipos.iostock.order.storeOrder.service.StoreOrderDtlVO"/>
+    <typeAlias alias="dstbReqVO" type="kr.co.solbipos.iostock.order.distribute.service.DstbReqVO"/>
 
     <typeAlias alias="excpForwardProductVO" type="kr.co.solbipos.application.pos.exceptForward.service.ExcpForwardProductVO"/>
     <typeAlias alias="productionVO" type="kr.co.solbipos.application.pos.production.service.ProductionVO"/>

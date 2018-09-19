@@ -144,7 +144,7 @@
 
     ];
 
-  var grid           = wgrid.genGrid("#theGrid", hdata);
+  var grid           = wgrid.genGrid("#theGrid", hdata,"${menuCd}", 1, ${clo.getColumnLayout(1)});
   var ldata          = ${ccu.getListScale()};
   var fireFgData     = ${ccu.getCommCode("007")};
   var webUseYnData   = ${ccu.getCommCode("067")};
