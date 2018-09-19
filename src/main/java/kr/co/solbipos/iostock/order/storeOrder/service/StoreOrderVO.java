@@ -30,7 +30,7 @@ public class StoreOrderVO extends PageVO {
     private Integer orderTot;
     /** 상세건수 */
     private Integer dtlCnt;
-    /** 처리구분 ( CCD_CODEM_T : 110 ) 0:등록, 1:등록완료, 2:분배완료 */
+    /** 처리구분 ( CCD_CODEM_T : 110 ) 00:등록, 10:등록완료, 20:분배완료 */
     private String procFg;
     /** MD수량(주문단위) */
     private Integer mdUnitQty;

@@ -77,9 +77,9 @@
             // 그리드 링크 효과
             s.formatItem.addHandler(function (s, e) {
                 if (e.panel == s.cells) {
-                    let col = s.columns[e.col];
+                    var col = s.columns[e.col];
                     if (col.binding === "storeCd") {
-                        let item = s.rows[e.row].dataItem;
+                        var item = s.rows[e.row].dataItem;
                         wijmo.addClass(e.cell, 'wijLink');
                         wijmo.addClass(e.cell, 'wj-custom-readonly');
                     }
