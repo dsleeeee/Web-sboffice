@@ -343,7 +343,7 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._save(baseUrl + "class/saveCouponList.sb", params, function(){ $scope.allSearch() });
-  }
+  };
 
   // 저장 완료 후처리 (쿠폰분류, 쿠폰 재조회)
   $scope.allSearch = function () {

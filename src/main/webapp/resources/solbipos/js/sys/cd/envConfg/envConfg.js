@@ -138,8 +138,14 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save("/sys/cd/envConfg/envConfg/envst/save.sb", params);
-  }
+    $scope._save("/sys/cd/envConfg/envConfg/envst/save.sb", params, function(){ $scope.allSearch() } );
+  };
+
+  // 저장 완료 후처리
+  $scope.allSearch = function(){
+    $scope._broadcast('representCtrl', true);
+    $scope._broadcast('detailCtrl', true);
+  };
 }]);
 
 /**
@@ -228,6 +234,11 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save("/sys/cd/envConfg/envConfg/envstDtl/save.sb", params);
-  }
+    $scope._save("/sys/cd/envConfg/envConfg/envstDtl/save.sb", params, function(){ $scope.allSearch() });
+  };
+
+  // 저장 후 처리
+  $scope.allSearch = function (){
+    $scope._broadcast('detailCtrl', true);
+  };
 }]);
