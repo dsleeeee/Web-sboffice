@@ -4,11 +4,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <%--right--%>
-<div class="w50 fr">
+
+
+<div class="w50 fr" id="membrInfoArea" >
   <div class="wj-TblWrapBr ml10 pd20" style="height:700px;">
     <%-- 선택 정보 --%>
     <h3 class="h3_tbl2 lh30">
-      <label id="membrNoNm"></label>
+      <spam><label id="membrNoNm"><s:message code="regist.membr.info"/></label></spam>
       <%-- 버튼 --%>
       <span class="fr">
         <a href="javascript:;" class="btn_grayS" id="btnNew"><s:message code="webMenu.new"/></a>
@@ -24,11 +26,15 @@
     </ul>
   <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
   <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
-<<<<<<< HEAD
-    <table class="searchTbl2" id="basicInfrm" style="display:none;">
-=======
-    <table class="searchTbl2" id="baseInfrm" style="display:none;">
->>>>>>> refs/heads/master
+
+      <%-- 회원 선택 전 --%>
+      <div class="w100 fr" id="noDataArea">
+        <div class="wj-TblWrapBr" style="height:550px;">
+          <p class="tc s18 mt200 bk"><s:message code="regist.require.select.store" /></p>
+        </div>
+      </div>
+
+      <table class="searchTbl2" id="basicInfrm" style="display:none;">
       <colgroup>
         <col class="w15" />
         <col class="w35" />
@@ -41,10 +47,11 @@
           <%-- 회원번호 --%>
           <th><s:message code="regist.membr.no"/><em class="imp">*</em></th>
           <td colspan="3">
-            <div class="sb-select">
+            <div class="sb-select w100">
               <div id="vMembrNo"></div>
             </div>
           </td>
+
         </tr>
         <tr>
           <%-- 회원명 --%>
@@ -54,13 +61,13 @@
               <div id="vMembrNm"></div>
             </div>
           </td>
-          <%-- 회원명(영문) --%>
-          <th><s:message code="regist.membr.nm.eng"/></th>
-          <td>
-            <div class="sb-select">
-              <div id="vMembrNmEng"></div>
-            </div>
-          </td>
+            <%-- 회원명 --%>
+            <th><s:message code="regist.membr.nm.eng"/><em class="imp">*</em></th>
+            <td>
+              <div class="sb-select">
+                <div id="vMembrNmEng"></div>
+              </div>
+            </td>
         </tr>
         <tr>
           <%-- 등록매장 --%>
@@ -71,13 +78,12 @@
             </div>
           </td>
           <%-- 회원등급분류 --%>
-          <%--<th><s:message code="regist.membr.class"/><em class="imp">*</em></th>
+          <th><s:message code="regist.membr.class"/><em class="imp">*</em></th>
           <td>
             <div class="sb-select">
               <div id="vClassCd"></div>
             </div>
-          </td>--%>
-          <th></th><td></td>
+          </td>
         </tr>
         <tr>
           <%-- 회원카드번호 --%>
@@ -116,7 +122,7 @@
         </tr>
         <tr>
           <%-- 전화번호 --%>
-          <th><s:message code="regist.tel"/></th>
+          <th><s:message code="regist.tel"/><em class="imp">*</em></th>
           <td>
             <div class="sb-select">
               <div id="vTel"></div>

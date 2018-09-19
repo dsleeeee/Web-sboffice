@@ -15,7 +15,6 @@ import kr.co.solbipos.application.session.user.enums.OrgnFg;
 * @author NHN한국사이버결제 KCP 김태수
 * @since 2018.09.09
 * @version 1.0
-* @see
 *
 *  Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
@@ -31,7 +30,7 @@ public class StatusVO extends CmmVO{
     private String arrStoreCd[];
     private String accntFg;
     private String accntCd;
-    
+
     public OrgnFg getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(OrgnFg orgnFg) { this.orgnFg = orgnFg; }
@@ -55,7 +54,7 @@ public class StatusVO extends CmmVO{
     public void setEndDt(String endDt) {
         this.endDt = endDt;
     }
-    
+
     public String getStoreCd() {
         return storeCd;
     }
@@ -70,14 +69,14 @@ public class StatusVO extends CmmVO{
     public void setArrStoreCd(String[] arrStoreCd) {
         this.arrStoreCd = arrStoreCd;
     }
-    
+
     public String getAccntFg() {
         return accntFg;
     }
     public void setAccntFg(String accntFg) {
         this.accntFg = accntFg;
     }
-    
+
     public String getAccntCd() {
         return accntCd;
     }

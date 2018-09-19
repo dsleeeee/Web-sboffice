@@ -167,6 +167,7 @@
       return $.postJSON(url, param, function (result) {
           var list = result.data.list;
           if (list.length === undefined || list.length == 0) {
+            target.itemsSource = new wijmo.collections.CollectionView([]);
             s_alert.pop(result.message);
             return;
           }

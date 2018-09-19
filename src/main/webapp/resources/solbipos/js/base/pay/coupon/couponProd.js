@@ -65,7 +65,7 @@ app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.allSearch()
     }, function errorCallback(response) {
       s_alert.pop(response.data.message);
-      return;
+      return false;
     });
   };
 
@@ -134,7 +134,7 @@ app.controller('noRegProdCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.allSearch()
     }, function errorCallback(response) {
       s_alert.pop(response.data.message);
-      return;
+      return false;
     });
 
   };

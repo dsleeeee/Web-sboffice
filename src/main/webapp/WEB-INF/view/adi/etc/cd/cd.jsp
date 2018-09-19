@@ -80,20 +80,20 @@
       <div class="wj-gridWrap" style="height:315px">
         <div class="row">
           <wj-flex-grid
-              autoGenerateColumns="false"
-              control="flex"
-              initialized="initGrid(s,e)"
-              sticky-headers="true"
-              selection-mode="Row"
-              items-source="data"
-              frozen-columns="3"
-              item-formatter="_itemFormatter">
+            autoGenerateColumns="false"
+            control="flex"
+            initialized="initGrid(s,e)"
+            sticky-headers="true"
+            selection-mode="Row"
+            items-source="data"
+            frozen-columns="3"
+            item-formatter="_itemFormatter">
 
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="cd.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="cd.nmcodeGrpCd"/>" binding="nmcodeGrpCd" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="cd.nmcodeCd"/>" binding="nmcodeCd" width="50"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="cd.nmcodeNm"/>" binding="nmcodeNm" width="*"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="cd.nmcodeNm"/>" binding="nmcodeNm" width="150"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="cd.nmcodeItem1"/>" binding="nmcodeItem1" width="100"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="cd.nmcodeItem2"/>" binding="nmcodeItem2" width="100"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="cd.useYnFg"/>" binding="useYn" data-map="useYnFgDataMap" width="100"></wj-flex-grid-column>
@@ -129,15 +129,15 @@
       <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
       <div class="wj-gridWrap" style="height:310px">
         <wj-flex-grid
-                autoGenerateColumns="false"
-                control="flex"
-                initialized="initGrid(s,e)"
-                sticky-headers="true"
-                selection-mode="Row"
-                items-source="data"
-                item-formatter="_itemFormatter"
-                frozen-columns="2"
-                sorted-column="toggleFreeze(false)">
+          autoGenerateColumns="false"
+          control="flex"
+          initialized="initGrid(s,e)"
+          sticky-headers="true"
+          selection-mode="Row"
+          items-source="data"
+          item-formatter="_itemFormatter"
+          frozen-columns="2"
+          sorted-column="toggleFreeze(false)">
 
           <!-- define columns -->
           <wj-flex-grid-column header="<s:message code="cd.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>

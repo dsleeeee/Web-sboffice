@@ -3,6 +3,7 @@ package kr.co.solbipos.base.store.myinfo.service.impl;
 import kr.co.solbipos.base.store.myinfo.service.MyInfoVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqNmcodeVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ import java.util.List;
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Mapper
+@Repository
 public interface MyInfoMapper{
     List< HqNmcodeVO > findAllHqNmcodeByHqOfficeCdAndNmcodeGrpCd(HqNmcodeVO hqNmcode);
 

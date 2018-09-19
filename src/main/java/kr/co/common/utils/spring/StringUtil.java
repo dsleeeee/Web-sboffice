@@ -18,7 +18,7 @@ import kr.co.common.utils.MD5Utils;
  *
  */
 public class StringUtil extends StringUtils {
-    
+
     private final static Logger LOGGER = LoggerFactory.getLogger(StringUtil.class);
     private final static char UNDER_SCORE = '_';
 
@@ -28,12 +28,12 @@ public class StringUtil extends StringUtils {
 
     /**
      * CamelCase 문자열로 변환
-     * 
+     *
      * <pre>
      * ex1) SOME_TEXT &gt; someText
      * ex2) some_text &gt; someText
      * </pre>
-     * 
+     *
      * @param str String
      * @return A camelcase string type name.
      */
@@ -64,7 +64,7 @@ public class StringUtil extends StringUtils {
 
     /**
      * 정해진 길이만큼 0으로 채움
-     * 
+     *
      * @param str String
      * @param len int
      * @return String
@@ -75,7 +75,7 @@ public class StringUtil extends StringUtils {
 
     /**
      * 정해진 길이만큼 입력받은 문자료 채움
-     * 
+     *
      * @param str String
      * @param len int
      * @param pad String
@@ -100,7 +100,7 @@ public class StringUtil extends StringUtils {
 
     /**
      * byteSize 이상 문자는 ...로 줄임
-     * 
+     *
      * @param str String
      * @param byteSize int
      * @return String
@@ -111,7 +111,7 @@ public class StringUtil extends StringUtils {
 
     /**
      * byteSize 이상 문자는 입력받은 문자로 줄임
-     * 
+     *
      * @param str String
      * @param byteSize int
      * @param ellipsis String
@@ -136,7 +136,7 @@ public class StringUtil extends StringUtils {
 
     /**
      * 금액 형태로 바꾼다. ex)23232323.3 -&gt; 23,232,323.3
-     * 
+     *
      * @param num String 문자열 숫자
      * @return 금액 형태의 숫자값 String
      */
@@ -154,7 +154,7 @@ public class StringUtil extends StringUtils {
 
     /**
      * 문자열을 입력한 포맷에 따라 변환 후 반환
-     * 
+     *
      * @param string String
      * @param mask String
      * @return String
@@ -176,7 +176,7 @@ public class StringUtil extends StringUtils {
 
     /**
      * 문자열의 길이를 바이트 수로 반환(UTF-8)
-     * 
+     *
      * @param str String
      * @return byteSize int
      */
@@ -186,7 +186,7 @@ public class StringUtil extends StringUtils {
 
     /**
      * 문자열의 길이를 입력받은 인코딩 타입의 바이트 수로 반환
-     * 
+     *
      * @param str String
      * @param charset String
      * @return byteSize int
@@ -201,7 +201,7 @@ public class StringUtil extends StringUtils {
 
     /**
      * 문자열이 비어있을경우 first 아닐경우 second
-     * 
+     *
      * @param str String
      * @param first String
      * @param second String
@@ -213,7 +213,7 @@ public class StringUtil extends StringUtils {
 
     /**
      * Object 가 Null 인 경우 value, 아닐 경우 String 으로 변환
-     * 
+     *
      * @param object Object
      * @param value String
      * @return String
@@ -224,7 +224,7 @@ public class StringUtil extends StringUtils {
 
     /**
      * Object 가 Null 인 경우 "", 아닐 경우 String 으로 변환
-     * 
+     *
      * @param object Object
      * @return String
      */
@@ -234,7 +234,7 @@ public class StringUtil extends StringUtils {
 
     /**
      * 문자열 체크
-     * 
+     *
      * @param str String...
      * @return boolean
      */
@@ -248,7 +248,7 @@ public class StringUtil extends StringUtils {
 
     /**
      * 문자열 체크(한개라도 있는지 체크)
-     * 
+     *
      * @param str String...
      * @return boolean
      */
@@ -262,7 +262,7 @@ public class StringUtil extends StringUtils {
 
     /**
      * 문자열 중복 체크(중복된 문자열이 한개라도 있는지 체크)
-     * 
+     *
      * @param str String...
      * @return boolean
      */
@@ -310,7 +310,7 @@ public class StringUtil extends StringUtils {
 
     /**
      * path 마지막의 / 또는 \를 삭제함
-     * 
+     *
      * @param path
      * @return String
      */
@@ -337,7 +337,7 @@ public class StringUtil extends StringUtils {
 
     /**
      * object 를 json 형태로 변경 key=value > "key"="value"
-     * 
+     *
      * @param obj
      * @return
      */
@@ -365,7 +365,7 @@ public class StringUtil extends StringUtils {
         }
         return s.replaceAll(t, m);
     }
-    
+
     /**
       * size 에 맞는 랜덤 숫자를 리턴
       * @param size
@@ -375,13 +375,13 @@ public class StringUtil extends StringUtils {
         Random rnd =new Random();
         StringBuffer buf =new StringBuffer();
         for(int i=0;i<size;i++){
-            buf.append((rnd.nextInt(9))); 
+            buf.append((rnd.nextInt(9)));
         }
         return buf.toString();
     }
-    
+
     /**
-      * 
+      *
       * @param param1
       * @param param2
       * @return

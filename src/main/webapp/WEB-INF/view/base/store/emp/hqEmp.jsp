@@ -27,8 +27,9 @@
             <span class="rg">~</span>
             <span class="txtIn"><input id="endDt" name="endDt" class="w200" /></span>
             <span class="chk ml10"><input type="checkbox" id="chkDt" />
-            <label for="chk"><s:message code="cmm.all.day" /></label>
+            <label for="chkDt"><s:message code="cmm.all.day" /></label>
             </span>
+          </div>
         </td>
       </tr>
       <tr>
@@ -106,8 +107,8 @@
       <button class="btn_skyblue" id="btnRegist"><s:message code="hqEmp.hqEmpReg" /></button>
       <%-- sms 전송 //TODO --%>
       <button class="btn_skyblue" id="btnSMS"><s:message code="hqEmp.sendSMS" /></button>
-      <%-- 엑셀다운로드 --%>
-      <button class="btn_skyblue" id="btnExcel"><s:message code="cmm.excel.down" /></button>
+      <%-- 엑셀다운로드 //TODO --%>
+      <%--<button class="btn_skyblue" id="btnExcel"><s:message code="cmm.excel.down" /></button>--%>
     </div>
   </div>
 
@@ -139,15 +140,15 @@
       {"binding":"userId","header":"<s:message code='hqEmp.userId' />", width: '*'},
       {"binding":"serviceFgNm","header":"<s:message code='hqEmp.serviceFg' />", width: '*'},
       {"binding":"mpNo","header":"<s:message code='hqEmp.mpNo' />", width: '*'},
-      {"binding":"smsRecvYn","header":"<s:message code='hqEmp.smsChk' />", dataType:wijmo.DataType.Boolean, width: '*'}
+      {"binding":"smsRecvYn","header":"<s:message code='hqEmp.smsChk' />", dataType:wijmo.DataType.Boolean, width: '*', visible:false}
 
     ];
 
-  var grid           = wgrid.genGrid("#theGrid", hdata, "${menuCd}", 1, ${clo.getColumnLayout(1)});
+  var grid           = wgrid.genGrid("#theGrid", hdata,"${menuCd}", 1, ${clo.getColumnLayout(1)});
   var ldata          = ${ccu.getListScale()};
-  var fireFgData     = ${ccu.getCommCode("008")};
-  var webUseYnData   = ${ccu.getCommCode("904")};
-  var smsRecvYnData  = ${ccu.getCommCode("105")};
+  var fireFgData     = ${ccu.getCommCode("007")};
+  var webUseYnData   = ${ccu.getCommCode("067")};
+  var smsRecvYnData  = ${ccu.getCommCode("072")};
   var listScaleBox   = wcombo.genCommonBox("#listScaleBox", ldata);
   var startDt        = wcombo.genDateVal("#startDt", "${sessionScope.sessionInfo.startDt}");
   var endDt          = wcombo.genDateVal("#endDt", "${sessionScope.sessionInfo.endDt}");

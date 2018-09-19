@@ -7,24 +7,29 @@
       TABLE    : TB_HQ_OFFICE, TB_HQ_BRAND, TB_MS_STORE
       COMMENTS : 회원정보 등록시 등록매장 콤보박스 내용 조회
   -->
-    <select id="selectRgstrStore" resultType="DefaultMap">
+    <select id="selectRgstrStore"  parameterType="hqManageVO" resultType="DefaultMap">
       /* RegistMapper.selectRgstrStore */
-      SELECT
-              tho.HQ_OFFICE_CD AS VALUE,
-              tho.HQ_OFFICE_NM AS NAME
-         FROM TB_HQ_OFFICE tho
-      UNION ALL
-      SELECT
-              thb.HQ_BRAND_CD AS VALUE,
-              thb.HQ_BRAND_NM AS NAME
-         FROM TB_HQ_BRAND thb
-        WHERE thb.USE_YN = 'Y'
-      UNION ALL
-      SELECT
-              tms.STORE_CD AS VALUE,
-              tms.STORE_NM AS NAME
-         FROM TB_MS_STORE tms
+      SELECT tms.STORE_CD AS VALUE,
+             tms.STORE_NM AS NAME
+        FROM TB_MS_STORE tms
+       WHERE tms.HQ_OFFICE_CD = #{hqOfficeCd}
     </select>
+
+  <!-- 회원등급 리스트 조회-->
+  <!--
+      TABLE    : TB_HQ_OFFICE, TB_HQ_BRAND, TB_MS_STORE
+      COMMENTS : 회원정보 등록시 등록매장 콤보박스 내용 조회
+  -->
+  <select id="selectMemberClassList"  parameterType="membrClassVO" resultType="DefaultMap">
+      /* RegistMapper.selectMemberClassList */
+      SELECT MEMBR_CLASS_CD AS VALUE,
+             MEMBR_CLASS_NM AS NAME
+        FROM TB_MB_MEMBER_CLASS
+       WHERE USE_YN = 'Y'
+         AND MEMBR_ORGN_CD = #{membrOrgnCd}
+       ORDER BY DEFLT_YN DESC
+    </select>
+
 
   <!-- 회원정보 조회 -->
   <!--
@@ -37,10 +42,20 @@
              tmm.MEMBR_NO,
              tmm.MEMBR_NM,
              tmm.MEMBR_CLASS_CD,
-             tmm.MEMBR_CARD_NO,
+      <if test='orgnFg != null and orgnFg.toString() == "HQ"'>
+             (SELECT MEMBR_CLASS_NM FROM TB_MB_MEMBER_CLASS WHERE MEMBR_ORGN_CD = #{hqOfficeCd} AND MEMBR_CLASS_CD = tmm.MEMBR_CLASS_CD) AS MEMBR_CLASS_NM,
+      </if>
+      <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+             (SELECT MEMBR_CLASS_NM FROM TB_MB_MEMBER_CLASS WHERE MEMBR_ORGN_CD = #{storeCd} AND MEMBR_CLASS_CD = tmm.MEMBR_CLASS_CD) AS MEMBR_CLASS_NM,
+      </if>
+      tmm.MEMBR_CARD_NO,
              tmm.MEMBR_ORGN_CD
         FROM TB_MB_MEMBER tmm
-      <where>
+       WHERE MEMBR_ORGN_CD = #{hqOfficeCd}
+         AND USE_YN = 'Y'
+        <if test='storeCd != null and storeCd.toString() != ""'>
+         AND REG_STORE_CD = #{storeCd}
+        </if>
         <if test='membrCardNo != null and membrCardNo.toString() != ""'>
           AND tmm.MEMBR_CARD_NO = #{membrCardNo}
         </if>
@@ -83,8 +98,8 @@
             AND tmm.BIRTHDAY BETWEEN #{anvStartDt} AND #{anvEndDt}
           </if>
         </if>
-      </where>
-      ORDER BY tmm.MOD_DT DESC
+
+      ORDER BY tmm.REG_DT DESC
     </select>
 
   <!-- 회원정보 조회 -->
@@ -162,7 +177,7 @@
         tmm.WEDDINGDAY,
         tmm.WEDDING_YN
         ) VALUES (
-        #{membrNo},
+        (SELECT LPAD( NVL(MAX(MEMBR_NO), 0) + 1, 10, '0') FROM TB_MB_MEMBER WHERE MEMBR_ORGN_CD = #{membrOrgnCd}),
         #{membrOrgnCd},
         #{addr},
         #{addrDtl},

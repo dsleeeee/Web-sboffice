@@ -34,7 +34,6 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
  * @author NHN한국사이버결제 KCP 장혁수
  * @since 2018. 08.06
  * @version 1.0
- * @see
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
@@ -68,9 +67,8 @@ public class ProdController {
     /**
      * 상품조회
      *
+     * @param prodVO HttpServletRequest
      * @param request HttpServletRequest
-     * @param session HttpSession
-     * @param model Model
      * @return
      */
     @RequestMapping(value = "/list.sb", method = RequestMethod.POST)

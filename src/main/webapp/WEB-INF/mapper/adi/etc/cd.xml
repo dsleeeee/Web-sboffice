@@ -89,7 +89,8 @@
                     thn.NMCODE_CD,
                     thn.NMCODE_NM,
                     thn.NMCODE_ITEM_1,
-                    thn.NMCODE_ITEM_2
+                    thn.NMCODE_ITEM_2,
+                    thn.USE_YN
                 FROM
                     TB_HQ_NMCODE thn
                 WHERE
@@ -107,7 +108,8 @@
                     tmsn.NMCODE_CD,
                     tmsn.NMCODE_NM,
                     tmsn.NMCODE_ITEM_1,
-                    tmsn.NMCODE_ITEM_2
+                    tmsn.NMCODE_ITEM_2,
+                    tmsn.USE_YN
                 FROM
                     TB_MS_STORE_NMCODE tmsn
                 WHERE

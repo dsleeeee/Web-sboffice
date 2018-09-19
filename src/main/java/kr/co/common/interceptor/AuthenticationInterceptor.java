@@ -7,7 +7,6 @@ import kr.co.common.service.cmm.CmmMenuService;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.CmmUtil;
-import kr.co.common.utils.SessionUtil;
 import kr.co.common.utils.spring.WebUtil;
 import kr.co.solbipos.application.common.enums.ResrceFg;
 import kr.co.solbipos.application.common.service.ResrceInfoVO;
@@ -43,19 +42,12 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    private final SessionService sessionService;
-    private final CmmMenuService cmmMenuService;
-    private final MessageService messageService;
-
-    /**
-     * Constructor Injection
-     */
-    @Autowired public AuthenticationInterceptor(SessionService sessionService,
-        CmmMenuService cmmMenuService, MessageService messageService) {
-        this.sessionService = sessionService;
-        this.cmmMenuService = cmmMenuService;
-        this.messageService = messageService;
-    }
+    @Autowired
+    private SessionService sessionService;
+    @Autowired
+    private CmmMenuService cmmMenuService;
+    @Autowired
+    private MessageService messageService;
 
     /**
      * preHandler : Interceptor 진입시 수행
@@ -65,7 +57,8 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
      * @param handler
      * @Return boolean
      */
-    @Override public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
         Object handler) throws Exception {
 
         String requestURL = request.getRequestURI().toString();
@@ -91,31 +84,23 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                 return false;
             }
         }
-        SessionInfoVO sessionInfoVO = new SessionInfoVO();
-        // 가상로그인 사용시 vLoginId 파라미터로 체크하여 메인세션정보를 무엇으로 할지 지정한다 : 20180904 노현수
-        if (request.getParameter("vLoginId") != null
-            && request.getParameter("vLoginId").length() > 0) {
-            // 세션 가져오기
-            sessionInfoVO =
-                SessionUtil.getEnv(request.getSession(), request.getParameter("vLoginId"));
-        } else {
-            // 세션 가져오기
-            sessionInfoVO = sessionService.getSessionInfo(request);
-        }
+        // 세션 가져오기
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         // 권한 메뉴
         List<ResrceInfoVO> auth = auth = sessionInfoVO.getAuthMenu();
         // 유져 조회 날짜 저장
         sessionInfoVO = setUserSelectDate(request, sessionInfoVO);
 
         // 본사, 가맹점 만 storeCd 에 대해서 체크한다.
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            checkStoreCd(request, sessionInfoVO);
-        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+//        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+//            checkStoreCd(request, sessionInfoVO);
+//        } else
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             String storeCd = request.getParameter("storeCd");
             if (!isEmpty(storeCd)) {
                 if (!storeCd.equals(sessionInfoVO.getOrgnCd())) {
                     // 유효하지 않는 매장코드 입니다.
-                    String msg = messageService.get("cmm.not.storecd");
+                    String msg = messageService.get("cmm.not.storecd") + ">";
                     // 로그 기록
                     LOGGER.info("AuthenticationInterceptor :: " + storeCd + " :: " + msg);
                     throw new AuthenticationException(msg, "/error/403.sb");
@@ -160,14 +145,14 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             if (storeCd.indexOf(",") > -1) {
                 if (!CmmUtil.listIndexOf(sessionInfoVO.getArrStoreCdList(), storeCd.split(","))) {
                     // 유효하지 않는 매장코드 입니다.
-                    String msg = messageService.get("cmm.not.storecd");
+                    String msg = messageService.get("cmm.not.storecd") + ">>";
                     throw new AuthenticationException(msg, "/error/403.sb");
                 }
 
             } else {
                 if (!CmmUtil.listIndexOf(sessionInfoVO.getArrStoreCdList(), storeCd)) {
                     // 유효하지 않는 매장코드 입니다.
-                    String msg = messageService.get("cmm.not.storecd");
+                    String msg = messageService.get("cmm.not.storecd") + ">>>";
                     throw new AuthenticationException(msg, "/error/403.sb");
                 }
             }

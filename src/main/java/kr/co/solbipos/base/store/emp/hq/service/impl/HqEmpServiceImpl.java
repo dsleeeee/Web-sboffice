@@ -9,6 +9,7 @@ import kr.co.solbipos.base.store.emp.hq.service.enums.HqEmpResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,14 +32,13 @@ import static org.springframework.util.StringUtils.isEmpty;
  * @author NHN한국사이버결제 KCP 정상화
  * @since 2018. 08.14
  * @version 1.0
- * @see
  *
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Service("HqEmpService")
 @Transactional
 public class HqEmpServiceImpl implements HqEmpService {
-    
+
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
     private final String HQ_AUTH_GRP_CD = "000001";
     private final String DEFAULT_POS_PASSWORD = "1234";
@@ -49,10 +49,12 @@ public class HqEmpServiceImpl implements HqEmpService {
     @Autowired
     private HqEmpMapper mapper;
 
+    /** 본사 사원 리스트 조회 */
     public <E> List<E> selectHqEmpList(HqEmpVO hqEmpVO){
         return mapper.selectHqEmpList(hqEmpVO);
     }
 
+    /** 본사 사원정보 등록 */
     @Override
     public HqEmpResult insertHqEmpInfo(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO) {
 
@@ -103,6 +105,7 @@ public class HqEmpServiceImpl implements HqEmpService {
         return HqEmpResult.SUCCESS;
     }
 
+    /** 본사 사원정보 수정 */
     @Override
     public HqEmpResult saveHqEmpInfo(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO) {
 
@@ -120,9 +123,10 @@ public class HqEmpServiceImpl implements HqEmpService {
         if( "Y".equals(hqEmpVO.getWebUseYn()) ) {
             hqEmpVO.setAuthGrpCd(HQ_AUTH_GRP_CD);
 
-            if( !userIdPolicyCheck(hqEmpVO.getUserId()) ) {
-                return HqEmpResult.USER_ID_REGEXP;
-            }
+            // 수정시 웹 사용자 아이디는 수정불가 => 유효성 체크 필요 없음
+//            if( !userIdPolicyCheck(hqEmpVO.getUserId()) ) {
+//                return HqEmpResult.USER_ID_REGEXP;
+//            }
 
             if(!isEmpty(hqEmpVO.getNewUserPwd())) {
                 HqEmpResult pwdChgResult = passwordPolicy(hqEmpVO);
@@ -130,12 +134,12 @@ public class HqEmpServiceImpl implements HqEmpService {
                     return pwdChgResult;
                 }
             }
-
-            if( !hqEmpVO.getUserId().equals(hqEmpDtlInfo.getStr("userId")) ) {
-                if( selectHqUserIdCnt(hqEmpVO) != HqEmpResult.SUCCESS ){
-                    return HqEmpResult.USER_ID_DUPLICATE;
-                }
-            }
+            // 수정시 웹 사용자 아이디는 수정불가 => 유효성 체크 필요 없음
+//            if( !hqEmpVO.getUserId().equals(hqEmpDtlInfo.getStr("userId")) ) {
+//                if( selectHqUserIdCnt(hqEmpVO) != HqEmpResult.SUCCESS ){
+//                    return HqEmpResult.USER_ID_DUPLICATE;
+//                }
+//            }
         }
 
         if( mapper.updateHqEmpInfo(hqEmpVO) != 1 ) {

@@ -28,7 +28,7 @@
   <div class="searchBar flddUnfld">
     <a href="javascript:void(0);" class="open">${menuNm}</a>
   </div>
-  
+
   <table class="searchTbl">
     <colgroup>
       <col class="w15" />
@@ -141,9 +141,9 @@
 <script>
 
   $(document).ready(function() {
-    
+
     <%-- 환율관리 일자별 환율 --%>
-    var rdata = 
+    var rdata =
       [
         {binding: "saleDate", header: "<s:message code='ehgt.date' />", allowMerging: true, format: 'yyyy-MM-dd', width: "*", align: 'center'}
 
@@ -152,14 +152,14 @@
       </c:forEach>
 
       ];
-    
+
     var grid         = wgrid.genGrid("#theGrid", rdata, false);
     var startDt      = wcombo.genDateVal("#startDt", "${sessionScope.sessionInfo.startDt}");
     var endDt        = wcombo.genDateVal("#endDt", "${sessionScope.sessionInfo.endDt}");
-    
+
     <%-- Row Header 없애기 --%>
     grid.rowHeaders.columns.splice(0, 1);
-    
+
     <%-- 그리드 포맷 --%>
     grid.formatItem.addHandler(function(s, e) {
       if (e.panel == s.cells) {
@@ -175,9 +175,9 @@
     });
 
 <c:if test="${isManager}">
-    
+
     var saleDate     = wcombo.genDate("#saleDate");
-    
+
     <%-- 그리드 포맷 --%>
     grid.formatItem.addHandler(function(s, e) {
       if (e.panel == s.cells) {
@@ -188,7 +188,7 @@
         }
       }
     });
-    
+
     <%-- 그리드 선택 이벤트 --%>
     grid.addEventListener(grid.hostElement, 'click', function(e) {
       var ht = grid.hitTest(e);
@@ -198,7 +198,7 @@
           var selectedRow = grid.rows[ht.row].dataItem;
           var param = {};
           param.saleDate = wijmo.Globalize.format(selectedRow.saleDate, 'yyyyMMdd');
-          
+
           if(param.saleDate != '') {
             $.postJSON("${baseUrl}/detail.sb", param, function(result) {
               var list = result.data.list;
@@ -215,7 +215,7 @@
         }
       }
     });
-    
+
     <%-- 환율 저장 --%>
     $("#btnSave").click(function(e){
       var paramArr = new Array();
@@ -232,8 +232,8 @@
         s_alert.pop("<s:message code='cmm.input.fail'/>");
         return;
       }
-      
-      
+
+
       $(".crncy-item").each(function(index, element) {
         paramArr.push({
           saleDate:getDate(saleDate),
@@ -241,9 +241,9 @@
           crncyAmt:$(this).data("unit"),
           krwAmt:$(this).val()
         });
-        
+
       });
-      
+
       $.postJSONArray("${baseUrl}/save.sb", paramArr, function(result) {
         s_alert.pop("<s:message code='cmm.saveSucc' />");
       },
@@ -251,7 +251,7 @@
         s_alert.pop(result.data.msg);
       });
     });
-    
+
     <%-- 통화 구분 등록 팝업 --%>
     $("#btnRegist").click(function(e){
       _showCrncyRegistLayer();
@@ -264,10 +264,10 @@
     <c:forEach var="item" items="${hqCrncys}">
     headerCols.push("${item.nmcodeItem2}");
     </c:forEach>
-    
+
     var hr = new wijmo.grid.Row();
     grid.columnHeaders.rows.push(hr);
-    
+
     var idx = 0;
     grid.allowMerging = wijmo.grid.AllowMerging.ColumnHeaders;
     for (var row = 0; row < grid.columnHeaders.rows.length; row++) {
@@ -276,13 +276,13 @@
         if(col == 0) {
           grid.columnHeaders.setCellData(row, col, "<s:message code='ehgt.date'/>");
         }
-        
+
         if(col != 0 && row == 0) {
           grid.columnHeaders.setCellData(row, col, headerCols[idx++]);
         }
       }
     }
-    
+
     <%-- 리스트 조회 --%>
     $("#btnSearch").click(function(e){
       search();

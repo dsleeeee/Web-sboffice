@@ -28,11 +28,13 @@ import java.util.List;
 public enum PayTypeFg implements CodeEnum {
 
     /** 상품권 */
-    GIFT("0"),
+    GIFT("1"),
     /** 식권 */
-    FOOD_TICKET("1"),
+    FOOD_TICKET("2"),
     /** 쿠폰 */
-    COUPON("3");
+    COUPON("3"),
+    /** 모바일 쿠폰 */
+    MCOUPON("4");
 
     private String code;
     private PayTypeFg[] values;

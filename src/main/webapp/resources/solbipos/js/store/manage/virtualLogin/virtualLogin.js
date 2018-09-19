@@ -102,7 +102,7 @@ app.controller('gridCtrl',  ['$scope', '$http', function ($scope, $http, $rootSc
       var form = document.createElement("form");
       form.setAttribute("method", "POST");
       form.setAttribute("action", "/store/manage/virtualLogin/virtualLogin/vLogin.sb");
-      form.setAttribute("target", "vLogin" + $scope.popupCnt);
+      form.setAttribute("target", value);
 
       var formField = document.createElement("input");
       formField.setAttribute("type", "hidden");
@@ -111,12 +111,13 @@ app.controller('gridCtrl',  ['$scope', '$http', function ($scope, $http, $rootSc
       form.appendChild(formField);
       document.body.appendChild(form);
 
-      var popup = window.open("", "vLogin" + $scope.popupCnt, "width=1024, height=768");
+      var popup = window.open("", value, "width=1024, height=768");
       var crono = window.setInterval(function () {
         if (popup.closed !== false) { // !== opera compatibility reasons
           window.clearInterval(crono);
           var param = {};
           param.vUserId = value;
+          param.sid = popup.document.getElementsByName("sessionId")[0].value;
           $.postJSON("/store/manage/virtualLogin/virtualLogin/vLogout.sb", param,
             function (result) {
 

@@ -10,6 +10,8 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.store.view.service.VanConfigVO;
 import kr.co.solbipos.base.store.view.service.ViewService;
 import kr.co.solbipos.base.store.view.service.ViewVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,7 +38,6 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 * @author nhn kcp 개발2팀 김영근
 * @since 2018. 08.13
 * @version 1.0
-* @see
 *
 *  Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
@@ -44,19 +45,21 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 @RequestMapping(value = "/base/store/view")
 public class ViewController {
 
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     ViewService service;
-    
+
     @Autowired
     MessageService messageService;
-    
+
     @Autowired
     SessionService sessionService;
-    
+
     @Autowired
     CmmCodeUtil cmmCodeUtil;
-    
-    
+
+
     /**
      * 매장정보조회 화면 이동
      *
@@ -68,7 +71,7 @@ public class ViewController {
     @RequestMapping(value = "/view/list.sb", method = RequestMethod.GET)
     public String list(HttpServletRequest request, HttpServletResponse response,
             Model model) {
-        return "base/store/view/view"; 
+        return "base/store/view/view";
     }
 
     /**
@@ -84,17 +87,17 @@ public class ViewController {
     @ResponseBody
     public Result list(ViewVO viewVO, HttpServletRequest request,
             HttpServletResponse response, Model model) {
-        
+
         //기본정보
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
         viewVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
         List<DefaultMap<String>> list = service.getViewList(viewVO);
 
         return returnListJson(Status.OK, list, viewVO);
-        
+
     }
-    
-    
+
+
     /**
      * 매장정보 상세조회
      *
@@ -111,16 +114,16 @@ public class ViewController {
 
         //매장 상세정보
         DefaultMap<String> storeInfo = service.getViewDetail(viewVO);
-        
+
         //VAN사설정정보
         VanConfigVO vanConfigVO = new VanConfigVO();
         vanConfigVO.setStoreCd(viewVO.getStoreCd());
         List<DefaultMap<String>> vanConfigList = service.getVanconfgList(vanConfigVO);
-        
+
         DefaultMap<Object> resultMap = new DefaultMap<Object>();
         resultMap.put("storeInfo", storeInfo);
         resultMap.put("vanConfigList", vanConfigList);
-        
+
         //매장코너정보
         //2:코너개별승인
         if( "2".equals(storeInfo.getStr("cornerUseYn")) ) {
@@ -132,14 +135,14 @@ public class ViewController {
             List<DefaultMap<String>> posApproveList = service.getPosApproveList(storeInfo.getStr("storeCd"));
             resultMap.put("posApproveList", posApproveList);
         }
-        
+
         return returnJson(Status.OK, resultMap);
     }
 
     /**
      * VAN사설정정보 조회
      *
-     * @param verInfo
+     * @param vanConfgVO
      * @param request
      * @param response
      * @param model
@@ -150,9 +153,10 @@ public class ViewController {
     public Result vanconfgList(VanConfigVO vanConfgVO, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
+
       List<DefaultMap<String>> list = service.getVanconfgList(vanConfgVO);
 
       return returnListJson(Status.OK, list, vanConfgVO);
-        
+
     }
 }

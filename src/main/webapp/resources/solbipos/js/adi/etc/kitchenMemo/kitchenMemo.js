@@ -29,7 +29,7 @@ app.controller('kitchenMemoCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 주방메모코드 ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
-      if (e.panel == s.cells) {
+      if (e.panel === s.cells) {
         var col = s.columns[e.col];
         if (col.binding === "kitchnMemoCd") {
           wijmo.addClass(e.cell, 'wj-custom-readonly');
@@ -48,14 +48,14 @@ app.controller('kitchenMemoCtrl', ['$scope', '$http', function ($scope, $http) {
       }
 
       if(col.binding !== "gChk") {
-        if(orgnFg == 'STORE') {
+        if(orgnFg === 'STORE') {
           // 본사통제시 => 본사에서 등록한 메모만 조회 가능 / 수정 불가
-          if(envstVal == '1') {
+          if(envstVal === '1') {
             e.cancel = true;
           }
           // 매장통제시 => 본사+매장에서 등록한 메모 조회 가능 / 매장에서 등록한 메모만 수정 가능
-          else if(envstVal == '2') {
-            if(dataItem.regFg == "H") {
+          else if(envstVal === '2') {
+            if(dataItem.regFg === "H") {
               e.cancel = true;
             }else {
               e.cancel = false;
@@ -87,9 +87,9 @@ app.controller('kitchenMemoCtrl', ['$scope', '$http', function ($scope, $http) {
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquirySub(baseUrl + "getKitchenMemoList.sb", params, function(){}, false);
 
-    if(orgnFg =="HQ") {
+    if(orgnFg ==="HQ") {
       $("button").show();
-    } else if(orgnFg == "STORE" && envstVal == "2"){
+    } else if(orgnFg === "STORE" && envstVal === "2"){
       $("button").show();
     } else {
       $("button").hide();
@@ -104,10 +104,10 @@ app.controller('kitchenMemoCtrl', ['$scope', '$http', function ($scope, $http) {
     params.kitchnMemoCd="자동채번"
     params.memoFg = "1";
     params.useYn = "Y";
-    if(orgnFg == "STORE") {
+    if(orgnFg === "STORE") {
       params.regFg = "S";
     }
-    $scope._addRow(params);
+    $scope._addRow(params, 2);
   };
 
   // 주방메모 그리드 행 삭제
@@ -116,7 +116,7 @@ app.controller('kitchenMemoCtrl', ['$scope', '$http', function ($scope, $http) {
       var item = $scope.flex.collectionView.items[i];
       if(item.gChk){
         // 매장통제시, 본사에서 등록한 것 삭제 불가능
-        if(orgnFg == 'STORE' && envstVal == '2' && item.regFg == "H"){
+        if(orgnFg === 'STORE' && envstVal === '2' && item.regFg === "H"){
           s_alert.pop(messages['kitchenMemo.disable.delete']);
         } else {
           $scope.flex.collectionView.removeAt(i);

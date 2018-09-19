@@ -19,16 +19,16 @@
             --%>
             <div class="wj-dialog-content" style="height:393px;">
                 <wj-flex-grid
-                        autoGenerateColumns="false"
-                        control="flex"
-                        initialized="initGrid(s,e)"
-                        sticky-headers="true"
-                        selection-mode="Row"
-                        items-source="data"
-                        item-formatter="_itemFormatter">
+                    autoGenerateColumns="false"
+                    control="flex"
+                    initialized="initGrid(s,e)"
+                    sticky-headers="true"
+                    selection-mode="Row"
+                    items-source="data"
+                    item-formatter="_itemFormatter">
 
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="item.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="item.prtCd"/>" binding="prtCd" width="100" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="item.prtNm"/>" binding="prtNm" width="100" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="item.samplYn"/>" binding="samplYn" width="60" is-read-only="true"></wj-flex-grid-column>

@@ -27,7 +27,7 @@
       TABLE    : TB_HQ_PAY_METHOD_CLASS
       COMMENTS : 본사의 쿠폰 분류를 조회한다.
   -->
-  <select id="getHqCouponClassList" parameterType="DefaultMap" resultType="DefaultMap">
+  <select id="getHqCouponClassList" parameterType="payMethodClassVO" resultType="DefaultMap">
     /* USE : CouponMapper.getHqCouponClassList */
     SELECT thpmc.HQ_OFFICE_CD,
            thpmc.PAY_CLASS_CD,

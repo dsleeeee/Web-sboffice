@@ -56,6 +56,10 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.flex.collectionView.items[i].payClassCd = selectedClassRow.payClassCd;
         $scope.flex.collectionView.items[i].coupnCd = selectedCouponRow.coupnCd;
         params.push($scope.flex.collectionView.items[i]);
+
+
+        console.log("del:::: ");
+        console.log(params);
       }
     }
     $http({
@@ -67,7 +71,7 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.allSearch()
     }, function errorCallback(response) {
       s_alert.pop(response.data.message);
-      return;
+      return false;
     });
   };
 
@@ -126,6 +130,7 @@ app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
         params.push($scope.flex.collectionView.items[i]);
       }
     }
+
     $http({
       method: 'POST', //방식
       url: baseUrl + "store/registCouponStore.sb",
@@ -135,7 +140,7 @@ app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.allSearch()
     }, function errorCallback(response) {
       s_alert.pop(response.data.message);
-      return;
+      return false;
     });
   };
 

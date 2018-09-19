@@ -21,7 +21,6 @@ import java.util.List;
 * @author nhn kcp 개발2팀 김영근
 * @since 2018. 08.07
 * @version 1.0
-* @see
 *
 *  Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
@@ -29,7 +28,7 @@ import java.util.List;
 public class StoreViewServiceImpl implements StoreViewService {
 
     @Autowired
-    StoreViewMapper mapper; 
+    StoreViewMapper mapper;
 
     @Autowired
     MessageService messageService;

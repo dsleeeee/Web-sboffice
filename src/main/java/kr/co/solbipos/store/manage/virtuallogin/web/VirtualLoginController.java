@@ -6,7 +6,6 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.cmm.CmmMenuService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.system.BaseEnv;
-import kr.co.common.utils.SessionUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.enums.LoginResult;
 import kr.co.solbipos.application.session.auth.service.AuthService;
@@ -121,19 +120,19 @@ public class VirtualLoginController {
             ) {
         
         String returnUrl = "/main.sb";
-        
+        // 기존 세션 조회
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
-        // 권한조회
+        // 기존세션 이용하여 권한조회
         int authResult = virtualLoginService.checkVirtualLoginAuth(sessionInfoVO.getUserId());
-        
+        // 권한 있는 경우 가상로그인 진행, 가상로그인 시 신규세션ID 생성하여 redis 에 저장한다 : 20180918 노현수
         if ( authResult > 0 ) {
-            
+
             BaseEnv.VIRTUAL_LOGIN_ID = virtualLoginVO.getvUserId();
             
             StopWatch sw = new StopWatch();
             sw.start();
             LOGGER.info("가상로그인 시작 : {} ", sessionInfoVO.getUserId());
-            
+            // 신규 세션 생성을 위해 VO 재사용
             sessionInfoVO = new SessionInfoVO();
             sessionInfoVO.setLoginIp(getClientIp(request));
             sessionInfoVO.setBrwsrInfo(request.getHeader("User-Agent"));
@@ -164,16 +163,15 @@ public class VirtualLoginController {
                         cmmMenuService.selectStoreCdList( sessionInfoVO.getOrgnCd() );
                 sessionInfoVO.setArrStoreCdList( storeCdList );
             }
-            // 세선유틸에 담아두기
-            SessionUtil.setEnv(request.getSession(), BaseEnv.VIRTUAL_LOGIN_ID, sessionInfoVO);
-            
+            // 레디스에 세션 Set
+            sessionService.setSessionInfo(sessionInfoVO);
             sw.stop();
             LOGGER.info("가상로그인 성공 처리 시간 : {}", sw.getTotalTimeSeconds());
             
             // 로그인이력 생성
             virtualLoginService.insertLoginHistory(sessionInfoVO);
-            
-            redirectAttributes.addAttribute("vLoginId", BaseEnv.VIRTUAL_LOGIN_ID);
+
+            redirectAttributes.addAttribute("sid", sessionInfoVO.getSessionId());
             return "redirect:" + returnUrl;
             
         } else {
@@ -203,12 +201,10 @@ public class VirtualLoginController {
     @RequestMapping(value = "/virtualLogin/vLogout.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result vLogout(HttpServletRequest request, HttpServletResponse response, VirtualLoginVO virtualLoginVO) {
-        
-        // 세선유틸에 담겨진 가상로그인 정보 삭제
-        SessionUtil.removeEnv(request.getSession(), virtualLoginVO.getvUserId());
-        
+        // 레디스에 담겨진 가상로그인 정보'만' 삭제
+        sessionService.deleteSessionInfo(request.getParameter("sid"));
+
         return ReturnUtil.returnJson(Status.OK);
-        
     }
 
 }

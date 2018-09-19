@@ -38,7 +38,6 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
  * @author NHN한국사이버결제 KCP 노해민
  * @since 2018. 08.06
  * @version 1.0
- * @see
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
@@ -60,12 +59,12 @@ public class VendrController {
      * 거래처 조회 페이지 이동
      *
      * @param request HttpServletRequest
-     * @param session HttpSession
+     * @param response HttpSession
      * @param model Model
      * @return
      */
     @RequestMapping(value = "/vendr/list.sb", method = RequestMethod.GET)
-    public String list(HttpServletRequest request, HttpServletResponse response, Model model) 
+    public String list(HttpServletRequest request, HttpServletResponse response, Model model)
     {
         return RESULT_URI + "/vendr";
     }
@@ -83,7 +82,7 @@ public class VendrController {
     public Result list(VendrVO vendrVO, HttpServletRequest request, HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
-        
+
         List<DefaultMap<String>> result =  vendrService.list(vendrVO, sessionInfoVO);
 
         return returnListJson(Status.OK, result, vendrVO);
@@ -91,7 +90,7 @@ public class VendrController {
 
     /**
      * 거래처 등록 - 거래처 저장
-     * 
+     *
      * @param request
      * @param response
      * @param vendrVO
@@ -104,19 +103,18 @@ public class VendrController {
     @ResponseBody
     public Result save(@RequestBody VendrVO vendrVO, HttpServletRequest request,
             HttpServletResponse response, Model model) {
-        
+
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
-        
+
         int result = vendrService.save(vendrVO, sessionInfoVO);
 
         return returnJson(Status.OK, result);
-        
     }
-    
+
     /**
      * 거래처 상세조회
-     * 
-     * @param   vendr
+     *
+     * @param   vendrVO
      * @param   request
      * @param   response
      * @param   model
@@ -130,16 +128,16 @@ public class VendrController {
             HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
-        
+
         DefaultMap<String> result = vendrService.dtlInfo(vendrVO, sessionInfoVO);
-        
+
         return returnJson(Status.OK, result);
     }
-    
+
     /**
      * 본사 수정
-     * 
-     * @param   vendr
+     *
+     * @param   vendrVO
      * @param   request
      * @param   response
      * @param   model
@@ -158,7 +156,7 @@ public class VendrController {
 
         return returnJson(Status.OK, cnt);
     }
-    
+
     /**
      * 취급상품 조회 ( 취급상품, 미취급상품 )
      *
@@ -170,24 +168,24 @@ public class VendrController {
     @RequestMapping(value = "/trtMnt/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result listTrtMnt(VendrVO vendrVO, HttpServletRequest request, HttpServletResponse response, Model model) {
-        
+
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         Map<String, Object> resultMap = new HashMap<String, Object>();
-        
+
         /** 취급/미취급 상품 리스트 */
         List<DefaultMap<String>> dateSelList1 = vendrService.vendrProdList(vendrVO, sessionInfoVO);
         List<DefaultMap<String>> dateSelList2 = vendrService.prodList(vendrVO, sessionInfoVO);
-        
+
         resultMap.put("dateSelList1", dateSelList1);
         resultMap.put("dateSelList2", dateSelList2);
-        
+
         return returnJson(Status.OK, resultMap);
     }
-    
+
     /**
      * 미취급상품 수정
-     * 
-     * @param   vendr
+     *
+     * @param   vendrVO
      * @param   request
      * @param   response
      * @param   model
@@ -206,11 +204,11 @@ public class VendrController {
 
         return returnJson(Status.OK, cnt);
     }
-    
+
     /**
     * 취급상품 삭제
-    * 
-    * @param   vendr
+    *
+    * @param   vendrVO
     * @param   request
     * @param   response
     * @param   model

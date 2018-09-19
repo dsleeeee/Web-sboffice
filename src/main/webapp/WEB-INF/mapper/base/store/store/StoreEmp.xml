@@ -41,10 +41,10 @@
             TB_MS_EMPLOYEE tme
         LEFT OUTER JOIN TB_CM_NMCODE tcn_service_fg ON
             tme.SERVICE_FG = tcn_service_fg.NMCODE_CD
-            AND tcn_service_fg.NMCODE_GRP_CD = '008'
+            AND tcn_service_fg.NMCODE_GRP_CD = '007'
         LEFT OUTER JOIN TB_CM_NMCODE tcn_web_use_yn ON
             tme.WEB_USE_YN = tcn_web_use_yn.NMCODE_CD
-            AND tcn_web_use_yn.NMCODE_GRP_CD = '904'
+            AND tcn_web_use_yn.NMCODE_GRP_CD = '067'
         <where>
             <if test="storeCd != null and storeCd != ''">
                 AND tme.STORE_CD = #{storeCd}
@@ -107,13 +107,13 @@
         TB_MS_EMPLOYEE tme
         LEFT OUTER JOIN TB_CM_NMCODE tcn_service_fg ON
         tme.SERVICE_FG = tcn_service_fg.NMCODE_CD
-        AND tcn_service_fg.NMCODE_GRP_CD = '008'
+        AND tcn_service_fg.NMCODE_GRP_CD = '007'
         LEFT OUTER JOIN TB_CM_NMCODE tcn_web_use_yn ON
         tme.WEB_USE_YN = tcn_web_use_yn.NMCODE_CD
-        AND tcn_web_use_yn.NMCODE_GRP_CD = '904'
+        AND tcn_web_use_yn.NMCODE_GRP_CD = '067'
         LEFT OUTER JOIN TB_CM_NMCODE tcn_sms_recv_yn ON
         tme.SMS_RECV_YN = tcn_sms_recv_yn.NMCODE_CD
-        AND tcn_sms_recv_yn.NMCODE_GRP_CD = '105'
+        AND tcn_sms_recv_yn.NMCODE_GRP_CD = '072'
         WHERE
         tme.STORE_CD = #{storeCd}
         AND tme.EMP_NO = #{empNo}
@@ -256,7 +256,7 @@
             USER_PWD,
             AUTH_GRP_CD,
             LOGIN_FAIL_CNT,
-            LOCK_CD,
+            /*LOCK_CD,*/
             USE_YN,
             REG_DT,
             REG_ID,
@@ -269,7 +269,7 @@
             #{userPwd},
             '000004',
             0,
-            'N',
+            /*'N',*/
             #{useYn.code},
             #{regDt},
             #{regId},

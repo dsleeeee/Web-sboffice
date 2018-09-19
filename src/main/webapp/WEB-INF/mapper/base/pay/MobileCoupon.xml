@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MobileCoupon.xml
+    모바일쿠폰 등록
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김지은     2018.08.10     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.base.pay.mCoupon.service.impl.MobileCouponMapper">
+
+  <resultMap id="classListMap" type="DefaultMap">
+    <result column="USE_YN" property="useYn" typeHandler="CustomBooleanTypeHandler"/>
+    <result column="SER_NO_YN" property="serNoYn" typeHandler="CustomBooleanTypeHandler"/>
+  </resultMap>
+
+  <resultMap id="giftListMap" type="DefaultMap">
+    <result column="USE_YN" property="useYn" typeHandler="CustomBooleanTypeHandler"/>
+  </resultMap>
+
+
+  <!-- 본사 모바일쿠폰 분류 조회 -->
+  <!--
+      TABLE    : TB_HQ_PAY_METHOD_CLASS
+      COMMENTS : 본사의 모바일쿠폰 분류를 조회한다.
+  -->
+  <select id="getHqMobileCouponClassList" parameterType="payMethodClassVO" resultType="DefaultMap">
+    /* USE : GiftMapper.getHqMobileCouponClassList */
+    SELECT thpmc.HQ_OFFICE_CD,
+           thpmc.PAY_CLASS_CD,
+           thpmc.PAY_TYPE_FG,
+           thpmc.PAY_CLASS_NM,
+           thpmc.SER_NO_YN,
+           thpmc.USE_YN,
+           thpmc.REG_ID,
+           (SELECT COUNT(thc.GIFT_CD) FROM TB_HQ_GIFT thc WHERE thc.HQ_OFFICE_CD =thpmc.HQ_OFFICE_CD AND thc.PAY_CLASS_CD = thpmc.PAY_CLASS_CD) GIFT_CNT
+      FROM TB_HQ_PAY_METHOD_CLASS thpmc
+     WHERE thpmc.HQ_OFFICE_CD = #{hqOfficeCd}
+       AND thpmc.PAY_TYPE_FG = #{payTypeFg}
+  </select>
+
+  <!-- 매장 모바일쿠폰 분류 조회 -->
+  <!--
+      TABLE    : TB_MS_PAY_METHOD_CLASS
+      COMMENTS : 매장의 모바일쿠폰 분류를 조회한다.
+  -->
+  <select id="getStoreMobileCouponClassList" parameterType="DefaultMap" resultType="DefaultMap">
+    /* USE : GiftMapper.getStoreMobileCouponClassList */
+    SELECT tmpmc.STORE_CD,
+           tmpmc.PAY_TYPE_FG,
+           tmpmc.PAY_CLASS_CD,
+           tmpmc.PAY_CLASS_NM,
+           tmpmc.SER_NO_YN,
+           tmpmc.USE_YN,
+           tmpmc.REG_ID,
+           (SELECT COUNT(tmc.GIFT_CD) FROM TB_MS_GIFT tmc WHERE tmc.STORE_CD = tmpmc.STORE_CD AND tmc.PAY_CLASS_CD = tmpmc.PAY_CLASS_CD) GIFT_CNT
+      FROM TB_MS_PAY_METHOD_CLASS tmpmc
+     WHERE tmpmc.STORE_CD = #{storeCd}
+       AND tmpmc.PAY_TYPE_FG = #{payTypeFg}
+  </select>
+
+  <!-- 모바일쿠폰 분류 코드 조회 -->
+  <!--
+      TABLE    : TB_HQ_PAY_METHOD_CLASS, TB_MS_PAY_METHOD_CLASS
+      COMMENTS : 모바일쿠폰 분류 코드를 조회한다.
+  -->
+  <select id="getPayMethodClassCd" parameterType="DefaultMap" resultType="String">
+    /* USE : GiftMapper.getPayMethodClassCd */
+    <if test="orgnFg != null and orgnFg.toString() == 'HQ'">
+    SELECT LPAD( NVL(MAX(PAY_CLASS_CD), 0) + 1, 3, '0')
+      FROM TB_HQ_PAY_METHOD_CLASS
+     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+       AND PAY_TYPE_FG = #{payTypeFg}
+    </if>
+    <if test="orgnFg != null and orgnFg.toString() == 'STORE'">
+    SELECT LPAD( NVL(MAX(PAY_CLASS_CD), 0) + 1, 3, '0')
+      FROM TB_MS_PAY_METHOD_CLASS
+     WHERE STORE_CD = #{storeCd}
+       AND PAY_TYPE_FG = #{payTypeFg}
+    </if>
+  </select>
+
+  <!-- 본사 모바일쿠폰 분류 등록 -->
+  <!--
+      TABLE    : TB_HQ_PAY_METHOD_CLASS
+      COMMENTS : 분류를 등록한다.
+  -->
+  <insert id="insertHqMobileCouponClass" parameterType="DefaultMap">
+    /* USE : GiftMapper.insertHqMobileCouponClass */
+    INSERT INTO TB_HQ_PAY_METHOD_CLASS
+    (
+      HQ_OFFICE_CD,
+      PAY_CLASS_CD,
+      PAY_TYPE_FG,
+      PAY_CLASS_NM,
+      SER_NO_YN,
+      USE_YN,
+      REG_DT,
+      REG_ID,
+      MOD_DT,
+      MOD_ID
+    )
+    VALUES
+    (
+      #{hqOfficeCd},
+      #{payClassCd},
+      #{payTypeFg},
+      #{payClassNm},
+      #{serNoYn},
+      #{useYn},
+      #{regDt},
+      #{regId},
+      #{modDt},
+      #{modId}
+    )
+  </insert>
+
+  <!-- 본사 모바일쿠폰 분류 수정 -->
+  <!--
+      TABLE    : TB_HQ_PAY_METHOD_CLASS
+      COMMENTS : 분류를 수정한다.
+  -->
+  <update id="updateHqMobileCouponClass" parameterType="DefaultMap">
+    /* USE : GiftMapper.updateHqMobileCouponClass */
+    UPDATE TB_HQ_PAY_METHOD_CLASS
+       SET PAY_CLASS_NM = #{payClassNm},
+           SER_NO_YN = #{serNoYn},
+           USE_YN = #{useYn},
+           MOD_DT = #{modDt},
+           MOD_ID = #{modId}
+     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+       AND PAY_CLASS_CD = #{payClassCd}
+       AND PAY_TYPE_FG =  #{payTypeFg}
+  </update>
+
+  <!-- 본사 모바일쿠폰 분류 삭제 -->
+  <!--
+      TABLE    : TB_HQ_PAY_METHOD_CLASS
+      COMMENTS : 분류를 삭제한다.
+  -->
+  <update id="deleteHqMobileCouponClass" parameterType="DefaultMap">
+    /* USE : GiftMapper.deleteHqMobileCouponClass */
+    UPDATE TB_HQ_PAY_METHOD_CLASS
+       SET USE_YN = 'N',
+           MOD_DT = #{modDt},
+           MOD_ID = #{modId}
+     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+       AND PAY_CLASS_CD = #{payClassCd}
+       AND PAY_TYPE_FG =  #{payTypeFg}
+  </update>
+
+  <!-- 매장 모바일쿠폰 분류 등록 -->
+  <!--
+      TABLE    : TB_HQ_PAY_METHOD_CLASS
+      COMMENTS : 분류를 등록한다.
+  -->
+  <insert id="insertStoreMobileCouponClass" parameterType="DefaultMap">
+    /* USE : GiftMapper.insertStoreMobileCouponClass */
+    INSERT INTO TB_MS_PAY_METHOD_CLASS
+    (
+      STORE_CD,
+      PAY_CLASS_CD,
+      PAY_TYPE_FG,
+      PAY_CLASS_NM,
+      SER_NO_YN,
+      USE_YN,
+      REG_DT,
+      REG_ID,
+      MOD_DT,
+      MOD_ID
+    )
+    VALUES
+    (
+      #{storeCd},
+      #{payClassCd},
+      #{payTypeFg},
+      #{payClassNm},
+      #{serNoYn},
+      #{useYn},
+      #{regDt},
+      #{regId},
+      #{modDt},
+      #{modId}
+    )
+  </insert>
+
+  <!-- 매장 모바일쿠폰 분류 수정 -->
+  <!--
+      TABLE    : TB_HQ_PAY_METHOD_CLASS
+      COMMENTS : 분류를 수정한다.
+  -->
+  <update id="updateStoreMobileCouponClass" parameterType="DefaultMap">
+    /* USE : GiftMapper.updateStoreMobileCouponClass */
+    UPDATE TB_MS_PAY_METHOD_CLASS
+       SET PAY_CLASS_NM = #{payClassNm},
+           SER_NO_YN = #{serNoYn},
+           USE_YN = #{useYn},
+           MOD_DT = #{modDt},
+           MOD_ID = #{modId}
+     WHERE STORE_CD = #{storeCd}
+       AND PAY_CLASS_CD = #{payClassCd}
+       AND PAY_TYPE_FG =  #{payTypeFg}
+  </update>
+
+  <!-- 매장 모바일쿠폰 분류 삭제 -->
+  <!--
+      TABLE    : TB_HQ_PAY_METHOD_CLASS
+      COMMENTS : 분류를 삭제한다.
+  -->
+  <update id="deleteStoreMobileCouponClass" parameterType="DefaultMap">
+    /* USE : GiftMapper.deleteStoreMobileCouponClass */
+    UPDATE TB_MS_PAY_METHOD_CLASS
+       SET USE_YN = 'N',
+           MOD_DT = #{modDt},
+           MOD_ID = #{modId}
+     WHERE STORE_CD = #{storeCd}
+       AND PAY_TYPE_FG = #{payTypeFg}
+       AND PAY_CLASS_CD = #{payClassCd}
+  </update>
+
+</mapper>
+
+
+

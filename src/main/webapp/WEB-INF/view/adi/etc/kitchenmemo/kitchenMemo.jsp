@@ -23,31 +23,41 @@
       </button>
     </div>
   </div>
-  <div class="wj-TblWrapBr mt10" style="height: 400px;">
-    <div id="theGrid" class="mt10">
-      <wj-flex-grid
-              autoGenerateColumns="false"
-              control="flex"
-              initialized="initGrid(s,e)"
-              sticky-headers="true"
-              selection-mode="Row"
-              items-source="data"
-              item-formatter="_itemFormatter">
 
-        <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="kitchenMemo.kitchnMemoCd"/>" binding="kitchnMemoCd" maxLength="3" width="90" isReadOnly="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="kitchenMemo.kitchnMemoNm"/>" binding="kitchnMemoNm" maxLength="30" width="*"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="kitchenMemo.memoFg"/>" binding="memoFg" data-map="memoFgDataMap" width="60"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="kitchenMemo.useYn"/>" binding="useYn" data-map="useYnDataMap" width="60" ></wj-flex-grid-column>
-        <c:if test="${orgnFg == 'STORE'}">
-          <wj-flex-grid-column header="<s:message code="kitchenMemo.regFg"/>" binding="regFg" data-map="regFgDataMap" width="80"></wj-flex-grid-column>
-        </c:if>
+  <div id="grid" class="w100">
+    <div class="wj-gridWrap mt10" style="height:315px">
+      <div class="row">
+        <wj-flex-grid
+          autoGenerateColumns="false"
+          control="flex"
+          initialized="initGrid(s,e)"
+          sticky-headers="true"
+          selection-mode="Row"
+          items-source="data"
+          item-formatter="_itemFormatter">
 
-      </wj-flex-grid>
+          <!-- define columns -->
+          <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="kitchenMemo.kitchnMemoCd"/>" binding="kitchnMemoCd" maxLength="3" width="90"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="kitchenMemo.kitchnMemoNm"/>" binding="kitchnMemoNm" maxLength="30" width="*"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="kitchenMemo.memoFg"/>" binding="memoFg" data-map="memoFgDataMap" width="60"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="kitchenMemo.useYn"/>" binding="useYn" data-map="useYnDataMap" width="60" ></wj-flex-grid-column>
+          <c:if test="${orgnFg == 'STORE'}">
+            <wj-flex-grid-column header="<s:message code="kitchenMemo.regFg"/>" binding="regFg" data-map="regFgDataMap" width="80"></wj-flex-grid-column>
+          </c:if>
 
+        </wj-flex-grid>
+      </div>
     </div>
   </div>
+
+  <%--<div class="wj-TblWrapBr mt10" style="height: 400px;">--%>
+    <%--<div class="wj-gridWrap" style="height:310px">--%>
+      <%--<div id="theGrid" class="mt10">--%>
+        <%----%>
+      <%--</div>--%>
+    <%--</div>--%>
+  <%--</div>--%>
 </div>
 
 <script type="text/javascript">

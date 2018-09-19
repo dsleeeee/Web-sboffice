@@ -37,12 +37,17 @@
 
     <%-- 그리드 생성 --%>
     var vcGrid = wgrid.genGrid("#vcGrid", vcData, false);
-    
+
     <%--  밴사 설정정보 조회 --%>
     function getVanConfigDetail(obj) {
+      console.log(">>>>>> getVanConfigDetail")
+
+      console.log(obj)
       var param = obj;
-      wgrid.getGridData("/base/store/view/vanconfg/list.sb",    param, vcGrid, 
+      wgrid.getGridData("/base/store/view/vanconfg/list.sb",    param, vcGrid,
             function(result){
+        console.log(result)
+
                 $("#${layerName}Mask, #${layerName}Layer").show();
               var storeTitle = param.storeCd+ " " + param.storeNm;
               $("#vstoreTitle").text(storeTitle);
