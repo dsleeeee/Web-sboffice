@@ -67,14 +67,14 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>"           binding="gChk"     width="40"  align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="dstbReq.reqDate"/>"   binding="reqDate"  width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dstbReq.reqDate"/>"   binding="reqDate"  width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dstbReq.storeCd"/>"   binding="storeCd"  width="70"  align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dstbReq.storeNm"/>"   binding="storeNm"  width="150" align="left"   is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dstbReq.procFg"/>"    binding="procFg"   width="70"  align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dstbReq.dtlCnt"/>"    binding="dtlCnt"   width="70"  align="right"  is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dstbReq.orderTot"/>"  binding="orderTot" width="70"  align="right"  is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dstbReq.mdTot"/>"     binding="mdTot"    width="70"  align="right"  is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="dstbReq.modDt"/>"     binding="modDt"    width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dstbReq.modDt"/>"     binding="modDt"    width="120" align="center" is-read-only="true" format="dateTime"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dstbReq.remark"/>"    binding="remark"   width="200" align="left"   is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dstbReq.slipFg"/>"    binding="slipFg"   width="70"  align="left"   is-read-only="true" visible="false"></wj-flex-grid-column>
 
@@ -129,6 +129,13 @@
                             wijmo.addClass(e.cell, 'wj-custom-readonly');
                             s.rows[e.row].isReadOnly = true;
                         }
+                    }
+
+                    if(col.format === "date") {
+                        e.cell.innerHTML = getFormatDate(e.cell.innerText);
+                    }
+                    if(col.format === "dateTime") {
+                        e.cell.innerHTML = getFormatDateTime(e.cell.innerText);
                     }
                 }
             });
