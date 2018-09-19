@@ -222,11 +222,11 @@
         COMMENTS : 복사할 매장의 이전 출고요청일관리 특정일을 삭제한다.
     -->
     <delete id="deleteCopySpecificDate" parameterType="outstockReqDateVO">
-    /* USE : outstockReqDateMapper.deleteCopySpecificDate */
-    DELETE  TB_PO_HQ_STORE_ORDER_SPECIFIC
-    WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
-    AND     STORE_CD      = #{copyStoreCd}
-    AND     SPECIFIC_DATE = #{specificDate}
+        /* USE : outstockReqDateMapper.deleteCopySpecificDate */
+        DELETE  TB_PO_HQ_STORE_ORDER_SPECIFIC
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     STORE_CD      = #{copyStoreCd}
+        AND     SPECIFIC_DATE = #{specificDate}
     </delete>
 
 

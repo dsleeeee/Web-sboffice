@@ -39,8 +39,10 @@
                     <jsp:include page="/WEB-INF/view/iostock/order/outstockReqDate/selectShopM.jsp" flush="true">
                         <jsp:param name="targetId" value="copySelectStore"/>
                     </jsp:include>
-                    <%--// 매장선택 모듈 멀티 선택 사용시 include --%>                <%-- 조회 --%>
-                    <button class="btn_blue" id="btnSave" ng-click="reqDateCopy();"><s:message code="cmm.save" /></button>
+                    <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+                    <%-- 복사 --%>
+                    <a href="javascript:;" class="btn_grayS" ng-click="reqDateCopy()"><s:message code="cmm.save" /></a>
+                    <%--<button class="btn_blue" id="btnSave" ng-click="reqDateCopy();"><s:message code="cmm.save" /></button>--%>
                 </td>
             </tr>
             </tbody>

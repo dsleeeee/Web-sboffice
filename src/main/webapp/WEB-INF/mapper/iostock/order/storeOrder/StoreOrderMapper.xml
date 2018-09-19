@@ -53,9 +53,10 @@
         <![CDATA[
         SELECT  tphso.PROD_CD, tmp.PROD_NM, tphso.PO_UNIT_FG, tphso.PO_UNIT_QTY, tmp.PO_UNIT_ALLOW_FG
         ,       tphso.SLIP_FG, tphso.REMARK, tphso.ORDER_SPLY_UPRC, tmp.PO_MIN_QTY
-        ,       DECODE(tphso.ORDER_TOT_QTY,  0, NULL, tphso.ORDER_TOT_QTY*tphso.SLIP_FG ) AS PREV_ORDER_TOT_QTY
-        ,       DECODE(tphso.ORDER_UNIT_QTY, 0, NULL, tphso.ORDER_UNIT_QTY*tphso.SLIP_FG) AS ORDER_UNIT_QTY
-        ,       DECODE(tphso.ORDER_ETC_QTY , 0, NULL, tphso.ORDER_ETC_QTY*tphso.SLIP_FG)  AS ORDER_ETC_QTY
+        ,       TO_NUMBER(DECODE(tphso.ORDER_TOT_QTY , 0, NULL, tphso.ORDER_TOT_QTY *tphso.SLIP_FG)) AS PREV_ORDER_TOT_QTY
+        ,       TO_NUMBER(DECODE(tphso.ORDER_UNIT_QTY, 0, NULL, tphso.ORDER_UNIT_QTY*tphso.SLIP_FG)) AS ORDER_UNIT_QTY
+        ,       TO_NUMBER(DECODE(tphso.ORDER_ETC_QTY , 0, NULL, tphso.ORDER_ETC_QTY *tphso.SLIP_FG)) AS ORDER_ETC_QTY
+        ,       TO_NUMBER(DECODE(tphso.ORDER_TOT_QTY , 0, NULL, tphso.ORDER_TOT_QTY *tphso.SLIP_FG)) AS ORDER_TOT_QTY
         ,       tphso.ORDER_AMT*tphso.SLIP_FG AS ORDER_AMT
         ,       tphso.ORDER_VAT*tphso.SLIP_FG AS ORDER_VAT
         ,       tphso.ORDER_TOT*tphso.SLIP_FG AS ORDER_TOT
@@ -91,10 +92,10 @@
         ,       tmp.PROD_CD
         ,       tmp.PROD_NM
         ,       DECODE(tmp.VAT_FG,'Y',1,0) AS VAT_FG01
-        ,       TRUNC(DECODE(SIGN(tshsc.CURR_QTY),-1,0,tshsc.CURR_QTY) / tmp.PO_UNIT_QTY) AS HD_CUR_QTY1
-        ,       MOD  (DECODE(SIGN(tshsc.CURR_QTY),-1,0,tshsc.CURR_QTY) , tmp.PO_UNIT_QTY) AS HD_CUR_QTY2
-        ,       TRUNC(NVL(tsssc.CURR_QTY,0)                            / tmp.PO_UNIT_QTY) AS CUR_QTY1
-        ,       MOD  (NVL(tsssc.CURR_QTY,0)                            , tmp.PO_UNIT_QTY) AS CUR_QTY2
+        ,       TRUNC(DECODE(SIGN(tshsc.CURR_QTY),-1,0,tshsc.CURR_QTY) / tmp.PO_UNIT_QTY) AS HD_CUR_UNIT_QTY
+        ,       MOD  (DECODE(SIGN(tshsc.CURR_QTY),-1,0,tshsc.CURR_QTY) , tmp.PO_UNIT_QTY) AS HD_CUR_ETC_QTY
+        ,       TRUNC(NVL(tsssc.CURR_QTY,0)                            / tmp.PO_UNIT_QTY) AS STORE_CUR_UNIT_QTY
+        ,       MOD  (NVL(tsssc.CURR_QTY,0)                            , tmp.PO_UNIT_QTY) AS STORE_CUR_ETC_QTY
         ,		NVL((SELECT MAX(SALE_UPRC) KEEP(DENSE_RANK FIRST ORDER BY REG_DT DESC)
                               FROM TB_MS_PRODUCT_SALE_PRICE
                              WHERE STORE_CD = tmp.STORE_CD
@@ -110,14 +111,14 @@
         ,       tmp.PO_UNIT_QTY
         ,       0 AS ENVST0011
         ,       tmp.SAFE_STOCK_QTY
-        ,       TRUNC(DECODE(SIGN(tmp.SAFE_STOCK_QTY),-1,0,tmp.SAFE_STOCK_QTY) / tmp.PO_UNIT_QTY) AS SAFE_STOCK_QTY1
-        ,       MOD  (DECODE(SIGN(tmp.SAFE_STOCK_QTY),-1,0,tmp.SAFE_STOCK_QTY) , tmp.PO_UNIT_QTY) AS SAFE_STOCK_QTY2
-        ,       DECODE(tphso.ORDER_UNIT_QTY, 0, NULL, tphso.ORDER_UNIT_QTY*tphso.SLIP_FG) AS PREV_ORDER_UNIT_QTY
-        ,       DECODE(tphso.ORDER_ETC_QTY,  0, NULL, tphso.ORDER_ETC_QTY*tphso.SLIP_FG ) AS PREV_ORDER_ETC_QTY
-        ,       DECODE(tphso.ORDER_TOT_QTY,  0, NULL, tphso.ORDER_TOT_QTY*tphso.SLIP_FG ) AS PREV_ORDER_TOT_QTY
-        ,       DECODE(tphso.ORDER_AMT,  0, NULL, tphso.ORDER_AMT*tphso.SLIP_FG ) AS ORDER_AMT
-        ,       DECODE(tphso.ORDER_VAT,  0, NULL, tphso.ORDER_VAT*tphso.SLIP_FG ) AS ORDER_VAT
-        ,       DECODE(tphso.ORDER_TOT,  0, NULL, tphso.ORDER_TOT*tphso.SLIP_FG ) AS ORDER_TOT
+        ,       TRUNC(DECODE(SIGN(tmp.SAFE_STOCK_QTY),-1,0,tmp.SAFE_STOCK_QTY) / tmp.PO_UNIT_QTY) AS SAFE_STOCK_UNIT_QTY
+        ,       MOD  (DECODE(SIGN(tmp.SAFE_STOCK_QTY),-1,0,tmp.SAFE_STOCK_QTY) , tmp.PO_UNIT_QTY) AS SAFE_STOCK_ETC_QTY
+        ,       TO_NUMBER(DECODE(tphso.ORDER_UNIT_QTY, 0, NULL, tphso.ORDER_UNIT_QTY*tphso.SLIP_FG)) AS PREV_ORDER_UNIT_QTY
+        ,       TO_NUMBER(DECODE(tphso.ORDER_ETC_QTY,  0, NULL, tphso.ORDER_ETC_QTY*tphso.SLIP_FG )) AS PREV_ORDER_ETC_QTY
+        ,       TO_NUMBER(DECODE(tphso.ORDER_TOT_QTY,  0, NULL, tphso.ORDER_TOT_QTY*tphso.SLIP_FG )) AS PREV_ORDER_TOT_QTY
+        ,       TO_NUMBER(DECODE(tphso.ORDER_AMT    ,  0, NULL, tphso.ORDER_AMT*tphso.SLIP_FG     )) AS ORDER_AMT
+        ,       TO_NUMBER(DECODE(tphso.ORDER_VAT    ,  0, NULL, tphso.ORDER_VAT*tphso.SLIP_FG     )) AS ORDER_VAT
+        ,       TO_NUMBER(DECODE(tphso.ORDER_TOT    ,  0, NULL, tphso.ORDER_TOT*tphso.SLIP_FG     )) AS ORDER_TOT
         ]]>
         <include refid="CmmSQL.PagingTemplateCount"/>
         <![CDATA[
@@ -144,6 +145,7 @@
         <if test='prodNm != null and prodNm != ""'>
             AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
         </if>
+        ORDER BY tmp.PROD_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
@@ -155,11 +157,13 @@
     -->
     <select id="getDtlCnt" parameterType="storeOrderVO" resultType="Integer">
         /* USE : storeOrderMapper.getDtlCnt */
+        <![CDATA[
         SELECT  COUNT(tphsod.PROD_CD) AS DTL_CNT
         FROM    TB_PO_HQ_STORE_ORDER_DTL tphsod
         WHERE   tphsod.REQ_DATE    = #{reqDate}
         AND     tphsod.STORE_CD    = #{storeCd}
         AND     tphsod.SLIP_FG     = #{slipFg}
+        ]]>
     </select>
 
     <!-- 주문등록 요청일의 HD 내용이 존재하는지 여부 조회 -->
@@ -170,11 +174,38 @@
     -->
     <select id="getHdExist" parameterType="storeOrderVO" resultType="String">
         /* USE : storeOrderMapper.getHdExist */
+        <![CDATA[
         SELECT  DECODE(COUNT(*), 0, 'N', 'Y') AS IS_EXIST
         FROM    TB_PO_HQ_STORE_ORDER tphso
         WHERE   tphso.REQ_DATE    = #{reqDate}
         AND     tphso.STORE_CD    = #{storeCd}
         AND     tphso.SLIP_FG     = #{slipFg}
+        ]]>
+    </select>
+
+    <!-- 주문등록 출고요청가능일인지 여부 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_ORDER_SPECIFIC, TB_PO_HQ_STORE_ORDER_DAYS
+        PARAM    : storeOrderVO
+        COMMENTS : 주문등록 출고요청가능일인지 여부를 조회한다.
+    -->
+    <select id="getStoreOrderDateCheck" parameterType="storeOrderVO" resultType="DefaultMap">
+        /* USE : storeOrderMapper.getStoreOrderDateCheck */
+        <![CDATA[
+        SELECT  SUM(ORDER_FG) AS ORDER_FG
+        FROM    (   SELECT  DECODE(NVL(tphsos.OUTSTOCK_REQ_YN, 'N'), 'Y', 1, 0) AS ORDER_FG
+                    FROM    TB_PO_HQ_STORE_ORDER_SPECIFIC tphsos
+                    WHERE   tphsos.HQ_OFFICE_CD     = #{hqOfficeCd}
+                    AND     tphsos.STORE_CD         = #{storeCd}
+                    AND     tphsos.SPECIFIC_DATE    = #{reqDate}
+                    UNION
+                    SELECT  COUNT(STORE_CD) AS ORDER_FG
+                    FROM    TB_PO_HQ_STORE_ORDER_DAYS tphsod
+                    WHERE   tphsod.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND     tphsod.STORE_CD     = #{storeCd}
+                    AND     tphsod.REQ_NO_DAY   LIKE    '%'||(SELECT TO_CHAR(TO_DATE(#{reqDate}, 'YYYYMMDD'), 'D') FROM DUAL)||'%'
+                )
+        ]]>
     </select>
 
     <!-- 주문등록 매장마감 여부 조회 -->
@@ -185,10 +216,12 @@
     -->
     <select id="getStoreCloseCheck" parameterType="storeOrderVO" resultType="DefaultMap">
         /* USE : storeOrderMapper.getStoreCloseCheck */
+        <![CDATA[
         SELECT  tphsc.ORDER_CLOSE_FG
         FROM    TB_PO_HQ_STORE_CLOSE tphsc
         WHERE   tphsc.HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     tphsc.CLOSE_DATE    = #{reqDate}
+        ]]>
     </select>
 
     <!-- 주문등록 주문진행구분 조회 -->
@@ -199,11 +232,13 @@
     -->
     <select id="getOrderProcFgCheck" parameterType="storeOrderVO" resultType="DefaultMap">
         /* USE : storeOrderMapper.getOrderProcFgCheck */
-        SELECT  PROC_FG
+        <![CDATA[
+        SELECT  PROC_FG, REMARK
         FROM    TB_PO_HQ_STORE_ORDER tphso
         WHERE   tphso.REQ_DATE    = #{reqDate}
         AND     tphso.STORE_CD    = #{storeCd}
         AND     tphso.SLIP_FG     = #{slipFg}
+        ]]>
     </select>
 
     <!-- 매장여신 조회 -->
@@ -267,6 +302,51 @@
                     WHERE   tphsl.HQ_OFFICE_CD  =   #{hqOfficeCd}
                     AND     tphsl.STORE_CD      =   #{storeCd}
                 ) tphsl
+        ]]>
+    </select>
+
+    <!-- 주문등록 출고요청가능일 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_ORDER_DAYS, TB_PO_HQ_STORE_ORDER_SPECIFIC, TB_PO_HQ_STORE_CLOSE
+        PARAM    : storeOrderVO
+        COMMENTS : 주문등록 출고요청가능일 조회한다.
+    -->
+    <select id="getReqDate" parameterType="storeOrderVO" resultType="String">
+        /* USE : storeOrderMapper.getReqDate */
+        <![CDATA[
+        SELECT	*
+        FROM	(	SELECT  A.DAY AS ORDER_DATE
+                    FROM    (   SELECT  TO_CHAR(SYSDATE + LEVEL - 1,'YYYYMMDD') AS DAY
+						        ,       TO_CHAR(SYSDATE + LEVEL - 1,'D')    	AS WEEK
+                                FROM    DUAL
+                                CONNECT
+                                BY      LEVEL <= 30
+                            )   A
+                    ,       TB_PO_HQ_STORE_ORDER_DAYS tphsod
+                    WHERE   tphsod.STORE_CD    (+) =       #{storeCd}
+                    AND     tphsod.REQ_NO_DAY  (+) LIKE    '%'||A.WEEK||'%'
+                    AND     tphsod.REQ_NO_DAY      IS      NULL
+                    AND     A.DAY                   NOT IN  (   SELECT  SPECIFIC_DATE
+                                                                FROM    TB_PO_HQ_STORE_ORDER_SPECIFIC tphsos
+                                                                WHERE   STORE_CD        =   #{storeCd}
+                                                                AND     OUTSTOCK_REQ_YN =   'N'
+                                                            )
+                    UNION
+                    SELECT  SPECIFIC_DATE    ORDER_DATE
+                    FROM    TB_PO_HQ_STORE_ORDER_SPECIFIC tphsos
+                    WHERE   STORE_CD          =   #{storeCd}
+                    AND     SPECIFIC_DATE     >=  TO_CHAR(SYSDATE,'YYYYMMDD')
+                    AND     OUTSTOCK_REQ_YN   =   'Y'
+                    MINUS
+                    SELECT  tphsc.CLOSE_DATE  ORDER_DATE
+                    FROM    TB_PO_HQ_STORE_CLOSE tphsc
+                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+                    AND     CLOSE_DATE      >=  TO_CHAR(SYSDATE,'YYYYMMDD')
+                    AND     ORDER_CLOSE_FG  =   '1'
+                    ORDER
+                    BY      ORDER_DATE
+                )
+        WHERE	ROWNUM	=	1
         ]]>
     </select>
 
@@ -402,7 +482,7 @@
         )
         SELECT  tphsod.REQ_DATE
         ,       tphsod.STORE_CD
-        ,       '0000'
+        ,       #{empNo}
         ,       tphsod.SLIP_FG
         ,       SUM(tphsod.ORDER_UNIT_QTY)
         ,       SUM(tphsod.ORDER_ETC_QTY)
@@ -411,7 +491,7 @@
         ,       SUM(tphsod.ORDER_VAT)
         ,       SUM(tphsod.ORDER_TOT)
         ,       COUNT(tphsod.PROD_CD)
-        ,       '0'
+        ,       #{procFg}
         ,       0
         ,       0
         ,       0
@@ -448,9 +528,9 @@
                 ,MD_AMT, MD_VAT, MD_TOT
                 ,DTL_CNT)
             =   (SELECT  NVL(SUM(tphsod.ORDER_UNIT_QTY), 0), NVL(SUM(tphsod.ORDER_ETC_QTY), 0), NVL(SUM(tphsod.ORDER_TOT_QTY), 0)
-                ,        NVL(SUM(tphsod.ORDER_AMT), 0), NVL(SUM(tphsod.ORDER_VAT), 0), NVL(SUM(tphsod.ORDER_TOT), 0)
-                ,        NVL(SUM(tphsod.MD_UNIT_QTY), 0), NVL(SUM(tphsod.MD_ETC_QTY), 0), NVL(SUM(tphsod.MD_TOT_QTY), 0)
-                ,        NVL(SUM(tphsod.MD_AMT), 0), NVL(SUM(tphsod.MD_VAT), 0), NVL(SUM(tphsod.MD_TOT), 0)
+                ,        NVL(SUM(tphsod.ORDER_AMT), 0)     , NVL(SUM(tphsod.ORDER_VAT), 0)    , NVL(SUM(tphsod.ORDER_TOT), 0)
+                ,        NVL(SUM(tphsod.MD_UNIT_QTY), 0)   , NVL(SUM(tphsod.MD_ETC_QTY), 0)   , NVL(SUM(tphsod.MD_TOT_QTY), 0)
+                ,        NVL(SUM(tphsod.MD_AMT), 0)        , NVL(SUM(tphsod.MD_VAT), 0)       , NVL(SUM(tphsod.MD_TOT), 0)
                 ,        COUNT(tphsod.PROD_CD)
                 FROM    TB_PO_HQ_STORE_ORDER_DTL tphsod
                 WHERE   tphsod.REQ_DATE  = #{reqDate}
@@ -479,5 +559,52 @@
         AND     STORE_CD    = #{storeCd}
         AND     SLIP_FG     = #{slipFg}
     </delete>
+
+    <!-- 매장 주문마감 및 발주중지 여부 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_CLOSE, TB_PO_HQ_STORE_LOAN
+        PARAM    : storeOrderVO
+        COMMENTS : 매장 주문마감 및 발주중지 여부를 조회한다.
+    -->
+    <select id="getOrderCloseCheck" parameterType="storeOrderVO" resultType="DefaultMap">
+        /* USE : storeOrderMapper.getOrderCloseCheck */
+        <![CDATA[
+        SELECT	DECODE(SUM(ORDER_CLOSE_FG), 0, 'N', 'Y') AS ORDER_CLOSE_FG
+        FROM	(	SELECT  DECODE(tphsc.ORDER_CLOSE_FG, 'N', 0, 1) AS ORDER_CLOSE_FG
+                    FROM    TB_PO_HQ_STORE_CLOSE tphsc
+                    WHERE   tphsc.HQ_OFFICE_CD  = #{hqOfficeCd}
+                    AND     tphsc.CLOSE_DATE    = #{reqDate}
+                    UNION
+                    SELECT  DECODE(tphsl.ORDER_CLOSE_YN, 'N', 0, 1) AS ORDER_CLOSE_FG
+                    FROM	TB_PO_HQ_STORE_LOAN tphsl
+                    WHERE   tphsl.HQ_OFFICE_CD  = #{hqOfficeCd}
+                    AND     tphsl.STORE_CD		= #{storeCd}
+                )
+        ]]>
+    </select>
+
+    <!-- 주문등록 확정 - 주문수량을 MD수량으로 수정 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_ORDER_DTL
+        PARAM    : storeOrderVO
+        COMMENTS : 주문등록 확정 - 주문수량을 MD수량으로 수정한다.
+    -->
+    <update id="updateOrderQtyMdQty" parameterType="storeOrderVO">
+        /* USE : storeOrderMapper.updateOrderQtyMdQty */
+        UPDATE  TB_PO_HQ_STORE_ORDER_DTL
+        SET     MD_SPLY_UPRC    =   ORDER_SPLY_UPRC
+        ,       MD_UNIT_QTY     =   ORDER_UNIT_QTY
+        ,       MD_ETC_QTY      =   ORDER_ETC_QTY
+        ,       MD_TOT_QTY      =   ORDER_TOT_QTY
+        ,       MD_AMT          =   ORDER_AMT
+        ,       MD_VAT          =   ORDER_VAT
+        ,       MD_TOT          =   ORDER_TOT
+        ,       MOD_DT          =   #{modDt}
+        ,       MOD_ID          =   #{modId}
+        WHERE   REQ_DATE  = #{reqDate}
+        AND     STORE_CD  = #{storeCd}
+        AND     SLIP_FG   = #{slipFg}
+    </update>
+
 
 </mapper>

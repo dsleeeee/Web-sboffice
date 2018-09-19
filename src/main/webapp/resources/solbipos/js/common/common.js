@@ -422,6 +422,22 @@ function getCurDate(seperator)
     }
 }
 
+// 날짜 포맷
+function getFormatDate(date, seperator)
+{
+    try
+    {
+        var seperator = ((seperator == undefined || seperator == '') ? '-' : seperator);
+        var year  = date.substr(0,4);
+        var month = date.substr(4,2);
+        var day   = date.substr(6,2);
+        return (year + seperator + month + seperator + day );
+    }
+    catch(e)
+    {
+        //alert('udfMainFrm.js : '+e);
+    }
+}
 
 String.prototype.getByteLength = function() {
     for(var size=i=0;c=this.charCodeAt(i++);size+=c>>11?2:c>>7?2:1);

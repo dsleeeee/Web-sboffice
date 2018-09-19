@@ -45,12 +45,25 @@ public interface StoreOrderMapper {
     String getHdExist(StoreOrderVO storeOrderVO);
 
     /** 주문등록 매장마감여부 조회 */
-    List<DefaultMap<String>> getStoreCloseCheck(StoreOrderVO storeOrderVO);
+    DefaultMap<String> getStoreCloseCheck(StoreOrderVO storeOrderVO);
 
     /** 주문등록 주문진행구분 조회 */
-    List<DefaultMap<String>> getOrderProcFgCheck(StoreOrderVO storeOrderVO);
+    DefaultMap<String> getOrderProcFgCheck(StoreOrderVO storeOrderVO);
 
     /** 주문등록 매장여신 조회 */
-    List<DefaultMap<String>> getStoreLoan(StoreOrderVO storeOrderVO);
+    DefaultMap<String> getStoreLoan(StoreOrderVO storeOrderVO);
+
+    /** 주문등록 출고요청가능일인지 여부 조회 */
+    DefaultMap<String> getStoreOrderDateCheck(StoreOrderVO storeOrderVO);
+
+    /** 주문등록 출고요청가능일 조회 */
+    String getReqDate(StoreOrderVO storeOrderVO);
+
+    /** 매장 주문마감 및 발주중지 여부 조회 */
+    String getOrderCloseCheck(StoreOrderVO storeOrderVO);
+
+    /** MD 수량을 주문수량으로 수정 */
+    int updateOrderQtyMdQty(StoreOrderVO storeOrderVO);
+
 
 }
