@@ -5,7 +5,6 @@ import kr.co.common.service.code.CmmCodeService;
 import kr.co.common.service.redis.RedisConnService;
 import kr.co.common.template.RedisCustomTemplate;
 import kr.co.solbipos.application.common.service.impl.CmmCodeMapper;
-import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -124,11 +123,4 @@ public class CmmCodeServiceImpl implements CmmCodeService {
     @Override public <E> List<E> getHqOfficeList() {
         return cmmCodeMapper.selectHqOfficeList();
     }
-
-    /** 회원 등급 조회*/
-    @Override
-    public <E> List<E> getMemberClassList(SessionInfoVO sessionInfoVO) {
-        return cmmCodeMapper.selectMemberClassList(sessionInfoVO);
-    }
-
 }
