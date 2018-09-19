@@ -282,9 +282,9 @@ public class StringUtil extends StringUtils {
 
     /**
      * @기능 : checkObjectDiff ()
-     * @param Object
-     * @param Object
-     * @param String[]
+     * @param o1
+     * @param o2
+     * @param compare
      * @return String
      */
     public static String checkObjectDiff(DefaultMap<Object> o1, DefaultMap<Object> o2,

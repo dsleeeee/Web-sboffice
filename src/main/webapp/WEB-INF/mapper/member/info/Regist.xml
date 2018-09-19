@@ -291,4 +291,20 @@
        WHERE tmmc.MEMBR_ORGN_CD = #{membrOrgnCd}
          AND tmmc.MEMBR_NO = #{membrNo}
     </update>
+
+
+  <!-- 후불회원 적용매장 조회 -->
+  <!--
+      TABLE    : TB_MB_MEMBER_CREDIT_STORE
+      COMMENTS : 후불회원 적용매장 조회
+  -->
+  <select id="getCurrentCreditStore" parameterType="registVO" resultType="DefaultMap">
+    /* RegistMapper.getCurrentCreditStore */
+    SELECT CREDIT_STORE_CD
+       FROM TB_MB_MEMBER_CREDIT_STORE
+      WHERE HQ_OFFICE_CD = #{membrOrgnCd}
+        AND MEMBER_NO = #{membrNo}
+    </select>
+
+
 </mapper>

@@ -187,6 +187,15 @@
             </div>
           </td>
         </tr>
+        <tr id="creditStore" style="display: none;">
+          <%-- 후불회원 적용매장 --%>
+          <th><s:message code="regist.credit.store"/></th>
+          <td colspan="3">
+            <div id="storeCd" style="display: none;"></div>
+            <input type="text" id="storeCdText" class="sb-input w80" readonly="readonly"/>
+            <a href="javascript:;" id="store" class="btn_grayS ml5"><s:message code="cmm.store.select" /></a>
+          </td>
+        </tr>
       </tbody>
     </table>
   <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>

@@ -8,8 +8,10 @@ import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.DateUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.membr.info.regist.service.RegistService;
 import kr.co.solbipos.membr.info.regist.service.RegistVO;
 import kr.co.solbipos.membr.info.regist.validate.Regist;
@@ -64,6 +66,10 @@ public class RegistController {
     @Autowired
     CmmCodeUtil cmmCodeUtil;
 
+    @Autowired
+    CmmEnvUtil cmmEnvUtil;
+
+
     /**
      * 페이지 이동
      *
@@ -86,8 +92,17 @@ public class RegistController {
 
         String membrClassListAll = cmmCodeUtil.assmblObj(membrClassList, "name", "value", UseYn.N);
 
+        // 본사일 경우 해당 본사의 기본매장(코드)을 조회 해야 함.
+        // [보나비]의 경우 기본매장코드를 사용하여
+        // 회원등록 매장이 기본매장일 경우 후불회원 적용매장을 등록한다.
+        String defaultStoreCd = "";
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            defaultStoreCd =  StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0025"));
+        }
+
         model.addAttribute("regstrStoreListAll", regstrStoreListAll);
         model.addAttribute("comboData", membrClassListAll);
+        model.addAttribute("defaultStoreCd", defaultStoreCd);
         model.addAttribute("periodDate", getPeriodList());  //TODO 공통코드로 변경
         model.addAttribute("weddingData", getWedding());    //TODO 공통코드로 변경
 
@@ -124,7 +139,7 @@ public class RegistController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "base/list.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "base/getMemberInfo.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result baseListPost(RegistVO registVO, HttpServletRequest request, HttpServletResponse response, Model
             model) {
@@ -162,6 +177,20 @@ public class RegistController {
         registVO.setModDt(DateUtil.currentDateTimeString());
 
         int result = registService.saveRegistMember(registVO);
+
+        LOGGER.info(">>>>>>>>> getMembrNo : "+ registVO.getMembrNo());
+        LOGGER.info(">>>>>>>>> getMembrOrgnCd : "+ registVO.getMembrOrgnCd());
+        LOGGER.info(">>>>>>>>> creditStore : "+ registVO.getCreditStore());
+
+        // 본사에서 등록시
+        if(si.getOrgnFg() == OrgnFg.HQ) {
+
+            // 후불회원 적용매장 등록
+            if( !StringUtil.isEmpties(registVO.getCreditStore()) ) {
+                result += registService.saveCreditStores(registVO);
+            }
+
+        }
 
         return ReturnUtil.returnJson(Status.OK, result);
     }

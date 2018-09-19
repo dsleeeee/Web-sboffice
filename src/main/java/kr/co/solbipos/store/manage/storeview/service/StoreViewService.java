@@ -1,6 +1,7 @@
 package kr.co.solbipos.store.manage.storeview.service;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 
 import java.util.List;
 
@@ -16,12 +17,11 @@ import java.util.List;
 * @author nhn kcp 개발2팀 김영근
 * @since 2018. 08.07
 * @version 1.0
-* @see
 *
 *  Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
-public interface StoreViewService { 
+public interface StoreViewService {
 
     /** 매장정보 목록 조회 */
-    List<DefaultMap<String>> getStoreViewList(StoreViewVO storeViewVO);
+    List<DefaultMap<String>> getStoreViewList(StoreViewVO storeViewVO, SessionInfoVO sessionInfoVO);
 }

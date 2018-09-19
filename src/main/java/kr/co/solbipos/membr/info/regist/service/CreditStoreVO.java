@@ -8,7 +8,7 @@ import kr.co.solbipos.membr.info.regist.validate.Regist;
 import kr.co.solbipos.membr.info.regist.validate.RegistDelete;
 import org.hibernate.validator.constraints.NotBlank;
 
-public class RegistVO extends PageVO {
+public class CreditStoreVO extends PageVO {
 
     private static final long serialVersionUID = 1L;
 
@@ -22,6 +22,7 @@ public class RegistVO extends PageVO {
     @NotBlank(groups = {RegistDelete.class}, message = "{regist.membr.org.cd}{cmm.not.find}")
     private String membrOrgnCd;
     /** 회원번호 */
+//    @NotBlank(groups = {Regist.class, RegistDelete.class}, message = "{regist.membr.no}{cmm.require.text}")
     private String membrNo;
     /** 회원명 */
     @NotBlank(groups = {Regist.class}, message = "{regist.membr.nm}{cmm.require.text}")
@@ -33,6 +34,7 @@ public class RegistVO extends PageVO {
     /** 회원분류코드 */
     private String membrClassCd;
     /** 회원카드번호 */
+//    @NotBlank(groups = {Regist.class}, message = "{regist.membr.card.no}{cmm.require.text}")
     private String membrCardNo;
     /** 등록매장코드 */
     @NotBlank(groups = {Regist.class}, message = "{regist.reg.store.cd}{cmm.require.text}")

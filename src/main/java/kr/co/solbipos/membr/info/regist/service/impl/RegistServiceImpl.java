@@ -8,6 +8,7 @@ import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.membr.info.grade.service.MembrClassVO;
 import kr.co.solbipos.membr.info.regist.service.RegistService;
 import kr.co.solbipos.membr.info.regist.service.RegistVO;
+import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("registService")
@@ -57,6 +59,7 @@ public class RegistServiceImpl implements RegistService {
 
         return mapper.selectMemberClassList(membrClassVO);
     }
+
 
     @Override
     public int insertRegistMember(RegistVO registVO) {
@@ -121,6 +124,52 @@ public class RegistServiceImpl implements RegistService {
                 // 회원카드 수정
                 updateMembrCard(registVO);
             }
+        }
+        return result;
+    }
+
+    /** 후불회원 매장 등록 */
+    @Override
+    public int saveCreditStores(RegistVO registVO) {
+
+        int result = 0;
+
+        // 삭제매장
+        List<String> delStore = new ArrayList<String>();
+
+        String creditStores[] = registVO.getCreditStore().split(",");
+
+        if(creditStores.length > 0){
+
+            // 현재 등록된 후불회원 매장
+            List<DefaultMap<String>> currentCreditStores = mapper.getCurrentCreditStore(registVO);
+
+LOGGER.info("<<<<<<<<<<<<<<<<<<<< currentCreditStores.size() : " + currentCreditStores.size()); // 현재매장
+
+            // TODO 수정
+            for(int i=0; i<creditStores.length; i++){
+                if(currentCreditStores.size() > 0) {
+                    boolean isChk = false;
+
+                    for(int j=0; j<currentCreditStores.size(); j++ ){
+                        DefaultMap<String> storeInfo = currentCreditStores.get(j);
+
+                        LOGGER.info(">>>> creditStoreCd : " + storeInfo.getStr("creditStoreCd"));
+
+                        if(storeInfo.getStr("creditStoreCd").equals(creditStores[i])){
+                            isChk = true;
+                        } else {
+
+                        }
+                    }
+
+                    if(!isChk) {
+                        delStore.add(creditStores[i]);
+                    }
+
+                }
+            }
+LOGGER.info(">>>>>>>>>>>>>>>>>>>>>>>>> delStore.size() : " + delStore.size()); // 삭제할 매장
         }
         return result;
     }

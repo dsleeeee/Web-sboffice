@@ -83,4 +83,19 @@ public interface RegistMapper {
      * @return
      */
     int updateMembrCard(RegistVO registVO);
+
+
+    /**
+     * 등록된 후불회원 적용매장 조회
+     * @param registVO
+     * @return
+     */
+    List<DefaultMap<String>> getCurrentCreditStore(RegistVO registVO);
+
+    /**
+     * 후불회원 적용매장 등록
+     * @param creditStore
+     * @return
+     */
+//    int saveCreditStores(String creditStore);
 }

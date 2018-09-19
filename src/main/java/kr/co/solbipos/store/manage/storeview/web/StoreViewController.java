@@ -4,6 +4,7 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.store.manage.storeview.service.StoreViewService;
 import kr.co.solbipos.store.manage.storeview.service.StoreViewVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +73,9 @@ public class StoreViewController {
     public Result list(StoreViewVO storeViewVO, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
-        List<DefaultMap<String>> list = service.getStoreViewList(storeViewVO);
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        List<DefaultMap<String>> list = service.getStoreViewList(storeViewVO, sessionInfoVO);
 
         return returnListJson(Status.OK, list, storeViewVO);
     }

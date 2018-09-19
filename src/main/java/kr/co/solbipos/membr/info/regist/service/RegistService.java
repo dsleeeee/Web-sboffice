@@ -85,4 +85,11 @@ public interface RegistService {
      * @return
      */
     int updateMembrCard(RegistVO registVO);
+
+    /**
+     * 후불회원 매장등록
+     * @param registVO
+     * @return
+     */
+    int saveCreditStores(RegistVO registVO);
 }
