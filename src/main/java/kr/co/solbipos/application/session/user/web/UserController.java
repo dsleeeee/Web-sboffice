@@ -51,7 +51,7 @@ import static org.springframework.util.StringUtils.isEmpty;
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2015.05.01  정용길      최초생성
+ * @ 2018.05.01  정용길      최초생성
  *
  * @author NHN한국사이버결제 KCP 정용길
  * @since 2018. 05.01

@@ -71,10 +71,11 @@
       popup = win.open( "about:blank", target, popOptions );
 
       if( popup ) {
+        var $form;
         try {
-          var $form = $( urlOrSelector );
+          $form = $( urlOrSelector );
         } catch( e ) {
-          var $form = {};
+          $form = {};
         }
 
         if( $form.length ) {
@@ -181,7 +182,6 @@
       .fail(function(){
         s_alert.pop("Ajax Fail By HTTP Request");
       });
-//      return $.post( url, data, func, "json" );
     }
     , postJSONArray: function( url, data, succ, fail ){
       // 가상로그인시 세션활용
@@ -230,7 +230,6 @@
       .fail(function(){
         s_alert.pop("Ajax Fail By HTTP Request");
       });
-//      return $.post( url, data, func, "json" );
     }
     , postJSONAsync: function( url, data, func ){
       return $.ajax({
@@ -283,9 +282,6 @@
       },function(){
         s_alert.pop("Ajax Fail By HTTP Request");
       });
-//      return $.post( url, data, func, "json" );
-
-      return false;
     }
     , countUtf8Bytes: function( s ){
       for( var b = 0, i = 0, c; c = s.charCodeAt(i++); b += c >> 11 ? 3 : (c >> 7 ? 2 : 1) );
@@ -306,7 +302,7 @@
   });
 
 
-}( "undefined" != typeof window ? window : this, jQuery );
+}( "undefined" !== typeof window ? window : this, jQuery );
 
 //트리 생성용 변수
 var pNode;
@@ -324,36 +320,38 @@ function makeTree(div, data, initMenu) {
 
   // 트리의 아이템이 load 완료 되었을 때 이벤트
   tree.loadedItems.addHandler(function(s, e) {
-      // 아이콘 Class 추가
-      for (var node = s.getFirstNode(); node; node = node.nextSibling()) {
-        if(!isEmpty(node)){
-          wijmo.addClass(node.element, node.dataItem.icon);
-        }
+    var node;
+    // 아이콘 Class 추가
+    for (node = s.getFirstNode(); node; node = node.nextSibling()) {
+      if(!isEmpty(node)){
+        wijmo.addClass(node.element, node.dataItem.icon);
       }
-      s.collapseToLevel(0);
+    }
+    s.collapseToLevel(0);
 
-      // 초기 메뉴(현재 메뉴) 설정
-      if(initMenu) {
-        for (var node = s.getFirstNode(); node; node = node.next()) {
-          if(isEmpty(node.nodes)) {
-            if(!isEmpty(node.dataItem) && node.dataItem.cd == initMenu) {
-              s.selectedItem = node.dataItem;
-            }
+    // 초기 메뉴(현재 메뉴) 설정
+    if(initMenu) {
+      for (node = s.getFirstNode(); node; node = node.next()) {
+        if(isEmpty(node.nodes)) {
+          if(!isEmpty(node.dataItem) && node.dataItem.cd === initMenu) {
+            s.selectedItem = node.dataItem;
           }
         }
       }
+    }
   });
 
   // 선택된 메뉴가 변경 되었을 때 이벤트
   tree.selectedItemChanged.addHandler(function(s, e) {
+    var node;
     // 이전 메뉴의 클래스 제거
     if(pNode) {
-      for (var node = pNode; node; node = node.parentNode) {
+      for (node = pNode; node; node = node.parentNode) {
         wijmo.removeClass(node.element, "on");
       }
     }
     // 선택된 메뉴에 클래스 추가
-    for (var node = s.selectedNode; node; node = node.parentNode) {
+    for (node = s.selectedNode; node; node = node.parentNode) {
       wijmo.addClass(node.element, "on");
     }
     pNode = s.selectedNode;
@@ -371,7 +369,7 @@ function makeTree(div, data, initMenu) {
       }
     }
     // 같은 메뉴를 다시 선택 했을 때 메뉴 닫기 기능
-    if( pNode == s.selectedNode) {
+    if( pNode === s.selectedNode) {
       s.selectedNode.isCollapsed = !s.selectedNode.isCollapsed;
     }
     else {
@@ -410,29 +408,26 @@ function getParam(name){
     }
   }
   return result;
-};
+}
 
 /** 현재 날짜 가져오기 */
-function getCurDate(seperator)
-{
-    try
-    {
-        if(seperator == undefined)  seperator = "";
+function getCurDate(seperator) {
+  try {
+    if (seperator === undefined) seperator = "";
 
-        var date = new Date();
-        var year  = date.getFullYear();
-        var month = date.getMonth() + 1;
-        var day   = date.getDate();
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
 
-        if( (""+month).length == 1 ) month = "0"+month;
-        if( (""+day).length   == 1 ) day   = "0"+day;
+    if (("" + month).length === 1) month = "0" + month;
+    if (("" + day).length === 1) day = "0" + day;
 
-        return (year + seperator + month + seperator + day );
-    }
-    catch(e)
-    {
-        //alert('udfMainFrm.js : '+e);
-    }
+    return (year + seperator + month + seperator + day);
+  }
+  catch (e) {
+    //alert('udfMainFrm.js : '+e);
+  }
 }
 
 
@@ -505,7 +500,7 @@ String.prototype.splitByteLen = function(byteLen) {
                 resultArr[rIndex++] = str;
                 str = "";
             }
-            if (i == bIndex) {
+            if (i === bIndex) {
                 resultArr[rIndex++] = str;
             }
         }
@@ -516,4 +511,4 @@ String.prototype.splitByteLen = function(byteLen) {
 function addComma(str) {
   var regexp = /\B(?=(\d{3})+(?!\d))/g;
   return str.toString().replace(regexp, ',');
-};
+}

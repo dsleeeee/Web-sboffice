@@ -367,26 +367,33 @@ Sidebar.prototype.makeDragSource = function () {
       var rows = grid.selectedRows[selected];
       var item = rows.dataItem;
       model.beginUpdate();
+      // 현재 graph 영역의 전체 버튼 갯수를 tukeyCd(키값)으로 활용
+      var tukeyCd = graph.getChildCells(graph.getDefaultParent(), true, true).length + 1;
+      tukeyCd = "00" + tukeyCd;
+      tukeyCd = tukeyCd.slice(-3);
+
+      console.log(tukeyCd);
+
       try {
         // 버튼
-        var btn = graph.insertVertex(parent, 'background',
-          '',
+        var btn = graph.insertVertex(parent, null,
+          null,
           pos.x, pos.y,
           graph.touchKeyInfo.width, graph.touchKeyInfo.height,
-          "prodCd=" + item.prodCd + ";saleUprc=" + item.saleUprc + ";rounded=0;");
+          "tukeyCd=" + tukeyCd + ";tukeyFg=01;prodCd=" + item.prodCd + ";rounded=0;");
         // 버튼에 품목명 추가
-        var prodTag = graph.insertVertex(btn, 'prodCd',
+        var prodTag = graph.insertVertex(btn, null,
           item.prodNm,
           5, 5,
           0, 0,
-          "prodCd=" + item.prodCd + ";align=left;verticalAlign=top;strokeColor=none;rounded=0;resizable=0;"
+          "tukeyCd=" + tukeyCd + ";tukeyFg=02;prodCd=" + item.prodCd + ";align=left;verticalAlign=top;strokeColor=none;rounded=0;resizable=0;"
         );
         // 버튼에 금액 추가
-        var priceTag = graph.insertVertex(btn, 'saleUprc',
+        var priceTag = graph.insertVertex(btn, null,
           addComma(item.saleUprc),
           5, graph.touchKeyInfo.y / 2 + 10,
           0, 0,
-          "prodCd=" + item.prodCd + ";align=right;strokeColor=none;rounded=0;resizable=0;"
+          "tukeyCd=" + tukeyCd + ";tukeyFg=03;prodCd=" + item.prodCd + ";align=right;strokeColor=none;rounded=0;resizable=0;"
         );
         // 하위 셀의 사이즈 자동조정
         graph.updateCellSize(prodTag, false);
@@ -464,9 +471,9 @@ Graph.prototype.ROW_PER_PAGE = 2;
 Graph.prototype.textEditing = false;
 Graph.prototype.defaultThemeName = 'touchKey';
 //상품 그룹 영역 셀의 prefix
-Graph.prototype.groupPrefix = 'g';
+Graph.prototype.groupPrefix = 'G';
 //상품 영역 셀의 prefix
-Graph.prototype.prodPrefix = 'p';
+Graph.prototype.prodPrefix = 'T';
 //상품그룹 영역에 index 변수
 //그룹, 상품영역의 셀과 레이어의 아이디를 맞추기 위해 사용
 Graph.prototype.nextGrpId = 1;
@@ -495,7 +502,7 @@ Graph.prototype.init = function () {
   graph.graphHandler.moveCells = function (cells, dx, dy, clone, target, evt) {
 
     // 하위 셀 ( 상품명/금액 ) 인 경우 무시
-    if ( cells[0].id === "prodCd" || cells[0].id === "saleUprc" ) {
+    if ( cells[0].id === "prd" || cells[0].id === "prc" ) {
       mxGraphHandlerMoveCells.apply(this, arguments);
     }
 
@@ -628,16 +635,24 @@ Graph.prototype.init = function () {
       for (var r = 0; r < child.length; r++) {
         var cell = child[r];
         // 하위셀 크기 자동 조정
-        graph.updateCellSize(cell, false);
-        // 상품명 태그 위치 조정
-        if (cell.id === "prodCd") {
-          cell.geometry.x = 5;
-        // 금액태그 위치 조정
-        } else if (cell.id === "saleUprc") {
-          var movedX = bounds.width - cell.geometry.width - 5;
-          var movedY = bounds.height - cell.geometry.height - 5;
-          cell.geometry.x = movedX;
-          cell.geometry.y = movedY;
+        graph.updateCellSize(cell, true);
+        // 스타일 custom 에서 하위속성 타입 가져온다
+        var styles = cell.getStyle().split(";");
+        for(var i = 0; i < styles.length; i++) {
+          var styleKeyValue = styles[i].split("=");
+          if (styleKeyValue[0] === "tukeyFg") {
+            // 상품명 태그 위치 조정
+            if (styleKeyValue[1] === "02") {
+              cell.geometry.x = 5;
+              cell.geometry.y = 5;
+              // 금액태그 위치 조정
+            } else if (styleKeyValue[1] === "03") {
+              var movedX = bounds.width - cell.geometry.width - 5;
+              var movedY = bounds.height - cell.geometry.height - 5;
+              cell.geometry.x = movedX;
+              cell.geometry.y = movedY;
+            }
+          }
         }
       }
     }

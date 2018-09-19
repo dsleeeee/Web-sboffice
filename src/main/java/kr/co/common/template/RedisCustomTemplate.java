@@ -1,9 +1,10 @@
 package kr.co.common.template;
 
+import org.springframework.data.redis.core.RedisTemplate;
+
 import java.util.Collection;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import org.springframework.data.redis.core.RedisTemplate;
 
 /**
  * @Class Name : RedisCustomTemplate.java
@@ -12,7 +13,7 @@ import org.springframework.data.redis.core.RedisTemplate;
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2015.05.01  정용길      최초생성
+ * @ 2018.05.01  정용길      최초생성
  *
  * @author NHN한국사이버결제 KCP 정용길
  * @since 2018. 05.01

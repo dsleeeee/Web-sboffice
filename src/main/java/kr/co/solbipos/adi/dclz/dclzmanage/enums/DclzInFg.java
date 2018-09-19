@@ -1,9 +1,9 @@
 package kr.co.solbipos.adi.dclz.dclzmanage.enums;
 
-import org.apache.ibatis.type.MappedTypes;
 import com.fasterxml.jackson.annotation.JsonValue;
 import kr.co.common.data.enums.CodeEnum;
 import kr.co.common.data.handler.CodeEnumTypeHandler;
+import org.apache.ibatis.type.MappedTypes;
 
 /**
  * {@link kr.co.solbipos.adi.dclz.dclzmanage.service.DclzManageVO}<br>
@@ -14,7 +14,7 @@ import kr.co.common.data.handler.CodeEnumTypeHandler;
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2015.05.01  정용길      최초생성
+ * @ 2018.05.01  정용길      최초생성
  *
  * @author NHN한국사이버결제 KCP 정용길
  * @since 2018. 05.01

@@ -1,9 +1,16 @@
 package kr.co.solbipos.base.service.store.tablelayout;
 
-import static kr.co.common.utils.DateUtil.currentDateTimeString;
-import static org.junit.Assert.*;
-import java.util.ArrayList;
-import java.util.List;
+import com.mxgraph.io.mxCodec;
+import com.mxgraph.model.mxCell;
+import com.mxgraph.model.mxGeometry;
+import com.mxgraph.model.mxIGraphModel;
+import com.mxgraph.util.mxXmlUtils;
+import com.mxgraph.view.mxGraph;
+import kr.co.solbipos.base.store.tableattr.enums.TblGrpFg;
+import kr.co.solbipos.base.store.tableattr.enums.TblTypeFg;
+import kr.co.solbipos.base.store.tableattr.enums.TouchKeyStyle;
+import kr.co.solbipos.base.store.tablelayout.service.TableGroupVO;
+import kr.co.solbipos.base.store.tablelayout.service.TableVO;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -13,17 +20,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import com.mxgraph.io.mxCodec;
-import com.mxgraph.model.mxCell;
-import com.mxgraph.model.mxGeometry;
-import com.mxgraph.model.mxIGraphModel;
-import com.mxgraph.util.mxXmlUtils;
-import com.mxgraph.view.mxGraph;
-import kr.co.solbipos.base.store.tableattr.enums.Style;
-import kr.co.solbipos.base.store.tableattr.enums.TblGrpFg;
-import kr.co.solbipos.base.store.tableattr.enums.TblTypeFg;
-import kr.co.solbipos.base.store.tablelayout.service.TableGroupVO;
-import kr.co.solbipos.base.store.tablelayout.service.TableVO;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
+import static org.junit.Assert.assertTrue;
 
 @Transactional
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -146,7 +148,7 @@ public class TableLayoutServceTest {
                         }
                         LOGGER.debug(styleKeyValue[0]);
                         LOGGER.debug(styleKeyValue[1]);
-                        switch(Style.getEnum(styleKeyValue[0])) {
+                        switch(TouchKeyStyle.getEnum(styleKeyValue[0])) {
                             case TBL_GRP_FG:
                                 tableGroupVO.setTblGrpFg(TblGrpFg.getEnum(styleKeyValue[1]));
                                 break;
@@ -207,7 +209,7 @@ public class TableLayoutServceTest {
                     if(styleKeyValue.length < 2) {
                         continue;
                     }
-                    switch(Style.getEnum(styleKeyValue[0])) {
+                    switch(TouchKeyStyle.getEnum(styleKeyValue[0])) {
                         case TBL_SEAT_CNT: tableVO.setTblSeatCnt(Long.parseLong(styleKeyValue[1]));
                             break;
                         case TBL_TYPE_FG: tableVO.setTblTypeFg(TblTypeFg.getEnum(styleKeyValue[1]));

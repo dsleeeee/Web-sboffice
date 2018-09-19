@@ -1,7 +1,6 @@
 package kr.co.solbipos.base.prod.touchkey.service;
 
 import kr.co.solbipos.application.common.service.CmmVO;
-import kr.co.solbipos.base.common.enums.InFg;
 
 /**
  * @Class Name : TouchVO.java
@@ -10,7 +9,7 @@ import kr.co.solbipos.base.common.enums.InFg;
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2015.05.01  조병준      최초생성
+ * @ 2018.05.01  조병준      최초생성
  *
  * @author NHN한국사이버결제 KCP 조병준
  * @since 2018. 05.01
@@ -21,7 +20,7 @@ import kr.co.solbipos.base.common.enums.InFg;
  */
 public class TouchVO extends CmmVO {
 
-    private static final long serialVersionUID = -5156116686836619650L;
+    private static final long serialVersionUID = -3103530249114726049L;
 
     /** 소속구분
      * M : 시스템
@@ -37,6 +36,8 @@ public class TouchVO extends CmmVO {
     private String tukeyClassCd;
     /** 터치키코드 */
     private String tukeyCd;
+    /** 터치키구분 : 01:버튼, 02:상품명태그, 03:금액태그 */
+    private String tukeyFg;
     /** 상품코드 */
     private String prodCd;
     /** 페이지번호 */
@@ -49,8 +50,13 @@ public class TouchVO extends CmmVO {
     private Long width = 0L;
     /** 높이 */
     private Long height = 0L;
+    /** 스타일코드 */
+    private String styleCd;
+    /** 이미지명 */
+    private String imgNm;
     /** 입력구분 H:본사, S:매장 */
-    private InFg inFg;
+    private String inFg;
+
     /** 폰트크기 */
     private Long fontSize = 10L;
     /** 폰트색 */
@@ -119,6 +125,21 @@ public class TouchVO extends CmmVO {
     public void setTukeyCd(String tukeyCd) {
         this.tukeyCd = tukeyCd;
     }
+
+    /**
+     * @return the tukeyFg
+     */
+    public String getTukeyFg() {
+        return tukeyFg;
+    }
+
+    /**
+     * @param tukeyFg the tukeyFg to set
+     */
+    public void setTukeyFg(String tukeyFg) {
+        this.tukeyFg = tukeyFg;
+    }
+
     /**
      * @return the prodCd
      */
@@ -191,16 +212,45 @@ public class TouchVO extends CmmVO {
     public void setHeight(Long height) {
         this.height = height;
     }
+
+    /**
+     * @return the styleCd
+     */
+    public String getStyleCd() {
+        return styleCd;
+    }
+
+    /**
+     * @param styleCd the styleCd to set
+     */
+    public void setStyleCd(String styleCd) {
+        this.styleCd = styleCd;
+    }
+
+    /**
+     * @return the imgNm
+     */
+    public String getImgNm() {
+        return imgNm;
+    }
+
+    /**
+     * @param imgNm the imgNm to set
+     */
+    public void setImgNm(String imgNm) {
+        this.imgNm = imgNm;
+    }
+
     /**
      * @return the inFg
      */
-    public InFg getInFg() {
+    public String getInFg() {
         return inFg;
     }
     /**
      * @param inFg the inFg to set
      */
-    public void setInFg(InFg inFg) {
+    public void setInFg(String inFg) {
         this.inFg = inFg;
     }
     /**

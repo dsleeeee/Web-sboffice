@@ -1,18 +1,5 @@
 package kr.co.solbipos.base.service.prod.touchkey;
 
-import static kr.co.common.utils.DateUtil.currentDateTimeString;
-import static org.junit.Assert.*;
-import java.util.ArrayList;
-import java.util.List;
-import org.junit.Before;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.transaction.annotation.Transactional;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import com.mxgraph.io.mxCodec;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGeometry;
@@ -24,7 +11,22 @@ import com.nhncorp.lucy.security.xss.XssPreventer;
 import kr.co.solbipos.base.common.enums.InFg;
 import kr.co.solbipos.base.prod.touchkey.service.TouchClassVO;
 import kr.co.solbipos.base.prod.touchkey.service.TouchVO;
-import kr.co.solbipos.base.store.tableattr.enums.Style;
+import kr.co.solbipos.base.store.tableattr.enums.TouchKeyStyle;
+import org.junit.Before;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runners.MethodSorters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
+import static org.junit.Assert.assertTrue;
 
 @Transactional
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -174,7 +176,7 @@ public class TouchkeyServceTest {
                             continue;
                         }
                         //log.debug(styleKeyValue[0]);
-                        switch(Style.getEnum(styleKeyValue[0])) {
+                        switch(TouchKeyStyle.getEnum(styleKeyValue[0])) {
                             case FONT_COLOR:
                                 touchClassVO.setFontColor(styleKeyValue[1]);
                                 break;
@@ -191,11 +193,8 @@ public class TouchkeyServceTest {
                 }
 
                 touchClassVO.setRegDt(regDt);
-
                 touchVOs = getTouchs(graphTouch, cell.getId(), touchClassVO);
-
                 touchClassVO.setTouchs(touchVOs);
-
                 touchClassVOs.add(touchClassVO);
 
                 LOGGER.debug(touchClassVOs.toString());
@@ -206,7 +205,7 @@ public class TouchkeyServceTest {
             ex.printStackTrace();
         }
     }
-    private List<TouchVO> getTouchs(mxGraph graph, String layerId, TouchClassVO tableClass) {
+    private List<TouchVO> getTouchs(mxGraph graph, String layerId, TouchClassVO touchClassVO) {
 
         mxGraphModel model = (mxGraphModel) graph.getModel();
 
@@ -218,8 +217,8 @@ public class TouchkeyServceTest {
         for(Object c : cells) {
             mxCell cell = (mxCell) c;
             touchVO = new TouchVO();
-            touchVO.setStoreCd(tableClass.getStoreCd());
-            touchVO.setTukeyClassCd(tableClass.getTukeyClassCd());
+            touchVO.setStoreCd(touchClassVO.getStoreCd());
+            touchVO.setTukeyClassCd(touchClassVO.getTukeyClassCd());
             touchVO.setTukeyCd(cell.getId());
 
             //좌표, 크기
@@ -240,7 +239,7 @@ public class TouchkeyServceTest {
                         continue;
                     }
                     //log.debug(styleKeyValue[0]);
-                    switch(Style.getEnum(styleKeyValue[0])) {
+                    switch(TouchKeyStyle.getEnum(styleKeyValue[0])) {
                         case PROD_CD:
                             touchVO.setProdCd(styleKeyValue[1]);
                             break;
@@ -262,9 +261,8 @@ public class TouchkeyServceTest {
             //페이지 번호 계산 - 80*5
             long pageNo = (long)(touchVO.getX() / 400) + 1L;
             touchVO.setPageNo(pageNo);
-
-            touchVO.setInFg(InFg.STORE);
-            touchVO.setRegDt(tableClass.getRegDt());
+            touchVO.setInFg(touchClassVO.getOrgnFg());
+            touchVO.setRegDt(touchClassVO.getRegDt());
 
             touchVOs.add(touchVO);
         }

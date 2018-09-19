@@ -1,8 +1,9 @@
 package kr.co.solbipos.base.store.tableattr.service;
 
-import java.util.List;
 import kr.co.common.data.structure.Result;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+
+import java.util.List;
 
 /**
  * @Class Name : TableAttrService.java
@@ -11,7 +12,7 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2015.05.01  조병준      최초생성
+ * @ 2018.05.01  조병준      최초생성
  *
  * @author NHN한국사이버결제 KCP 조병준
  * @since 2018. 05.01

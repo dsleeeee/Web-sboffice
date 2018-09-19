@@ -1,17 +1,5 @@
 package kr.co.solbipos.base.store.tableattr.service.impl;
 
-import static kr.co.common.utils.DateUtil.*;
-import java.util.ArrayList;
-import java.util.List;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import com.mxgraph.io.mxCodec;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGeometry;
@@ -26,13 +14,23 @@ import kr.co.common.exception.BizException;
 import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.common.enums.ConfgFg;
-import kr.co.solbipos.base.store.tableattr.enums.AttrCd;
-import kr.co.solbipos.base.store.tableattr.enums.Style;
-import kr.co.solbipos.base.store.tableattr.enums.TblTypeFg;
-import kr.co.solbipos.base.store.tableattr.enums.TextalignFg;
-import kr.co.solbipos.base.store.tableattr.enums.TextvalignFg;
+import kr.co.solbipos.base.store.tableattr.enums.*;
 import kr.co.solbipos.base.store.tableattr.service.TableAttrService;
 import kr.co.solbipos.base.store.tableattr.service.TableAttrVO;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
  * @Class Name : TableAttrServiceImpl.java
@@ -41,7 +39,7 @@ import kr.co.solbipos.base.store.tableattr.service.TableAttrVO;
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2015.05.01  조병준      최초생성
+ * @ 2018.05.01  조병준      최초생성
  *
  * @author NHN한국사이버결제 KCP 조병준
  * @since 2018. 05.01
@@ -170,7 +168,7 @@ public class TableAttrServiceImpl implements TableAttrService {
                             continue;
                         }
                         //LOGGER.debug(styleKeyValue[0]);
-                        switch(Style.getEnum(styleKeyValue[0])) {
+                        switch(TouchKeyStyle.getEnum(styleKeyValue[0])) {
                             case FONT_COLOR:
                                 tableAttrVO.setFontColor(styleKeyValue[1]);
                                 break;
@@ -233,12 +231,12 @@ public class TableAttrServiceImpl implements TableAttrService {
 
                 //스타일 셋팅
                 styleStr = "tableAttr";
-                styleStr += tableAttrVO.getFontNm() != null ? (SM + Style.FONT_NM.getCode() +EQ+ tableAttrVO.getFontNm()):"";
-                styleStr += tableAttrVO.getFontStyleFg() != null ? (SM + Style.FONT_STYLE_FG.getCode() +EQ+ tableAttrVO.getFontStyleFg()):"";
-                styleStr += tableAttrVO.getFontSize() != null ? (SM + Style.FONT_SIZE.getCode() +EQ+ tableAttrVO.getFontSize()):"";
-                styleStr += tableAttrVO.getFontColor() != null ? (SM + Style.FONT_COLOR.getCode() +EQ+ tableAttrVO.getFontColor()):"";
-                styleStr += tableAttrVO.getTextalignFg() != null ? (SM + Style.TEXTALIGN_FG.getCode() +EQ+ tableAttrVO.getTextalignFg().getDesc()):"";
-                styleStr += tableAttrVO.getTextvalignFg() != null ? (SM + Style.TEXTVALIGN_FG.getCode() +EQ+ tableAttrVO.getTextvalignFg().getDesc()):"";
+                styleStr += tableAttrVO.getFontNm() != null ? (SM + TouchKeyStyle.FONT_NM.getCode() +EQ+ tableAttrVO.getFontNm()):"";
+                styleStr += tableAttrVO.getFontStyleFg() != null ? (SM + TouchKeyStyle.FONT_STYLE_FG.getCode() +EQ+ tableAttrVO.getFontStyleFg()):"";
+                styleStr += tableAttrVO.getFontSize() != null ? (SM + TouchKeyStyle.FONT_SIZE.getCode() +EQ+ tableAttrVO.getFontSize()):"";
+                styleStr += tableAttrVO.getFontColor() != null ? (SM + TouchKeyStyle.FONT_COLOR.getCode() +EQ+ tableAttrVO.getFontColor()):"";
+                styleStr += tableAttrVO.getTextalignFg() != null ? (SM + TouchKeyStyle.TEXTALIGN_FG.getCode() +EQ+ tableAttrVO.getTextalignFg().getDesc()):"";
+                styleStr += tableAttrVO.getTextvalignFg() != null ? (SM + TouchKeyStyle.TEXTVALIGN_FG.getCode() +EQ+ tableAttrVO.getTextvalignFg().getDesc()):"";
                 cell.setStyle(styleStr);
             }
             mxCodec codec = new mxCodec();
