@@ -12,7 +12,6 @@
  * get application
  */
 var app = agrid.getApp();
-var selectedMobileCouponClass;
 
 /**
  *  상품권분류등록 그리드 생성
@@ -84,4 +83,3 @@ app.controller('mCouponClassCtrl', ['$scope', '$http', function ($scope, $http) 
     $scope.searchMobileCouponClass();
   };
 }]);
-

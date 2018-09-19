@@ -29,7 +29,7 @@ app.controller('giftClassCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
-      if (e.panel == s.cells) {
+      if (e.panel === s.cells) {
         var col = s.columns[e.col];
         var item = s.rows[e.row].dataItem;
         if (col.binding === "payClassCd") {
@@ -44,10 +44,10 @@ app.controller('giftClassCtrl', ['$scope', '$http', function ($scope, $http) {
       if( ht.cellType === wijmo.grid.CellType.Cell) {
         var col = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
-        if ( col.binding === "payClassCd" && selectedRow.status != "I") {
-          if(selectedRow.status == "I") {
+        if ( col.binding === "payClassCd" && selectedRow.status !== "I") {
+          if(selectedRow.status === "I") {
             e.cancel = false;
-          } else if(selectedRow.useYn == "N") {
+          } else if(selectedRow.useYn === "N") {
             s_alert.pop(messages["gift.not.use.payClassCd"]);
             var giftGrid = agrid.getScope('giftCtrl');
             giftGrid._gridDataInit();
@@ -160,7 +160,7 @@ app.controller('giftCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
-      if (e.panel == s.cells) {
+      if (e.panel === s.cells) {
         var col = s.columns[e.col];
         if (col.binding === "giftCd") {
           wijmo.addClass(e.cell, 'wj-custom-readonly');
