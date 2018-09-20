@@ -71,10 +71,11 @@
       popup = win.open( "about:blank", target, popOptions );
 
       if( popup ) {
+        var $form;
         try {
-          var $form = $( urlOrSelector );
+          $form = $( urlOrSelector );
         } catch( e ) {
-          var $form = {};
+          $form = {};
         }
 
         if( $form.length ) {
@@ -181,7 +182,6 @@
       .fail(function(){
         s_alert.pop("Ajax Fail By HTTP Request");
       });
-//      return $.post( url, data, func, "json" );
     }
     , postJSONArray: function( url, data, succ, fail ){
       // 가상로그인시 세션활용
@@ -230,7 +230,6 @@
       .fail(function(){
         s_alert.pop("Ajax Fail By HTTP Request");
       });
-//      return $.post( url, data, func, "json" );
     }
     , postJSONAsync: function( url, data, func ){
       return $.ajax({
@@ -283,9 +282,6 @@
       },function(){
         s_alert.pop("Ajax Fail By HTTP Request");
       });
-//      return $.post( url, data, func, "json" );
-
-      return false;
     }
     , countUtf8Bytes: function( s ){
       for( var b = 0, i = 0, c; c = s.charCodeAt(i++); b += c >> 11 ? 3 : (c >> 7 ? 2 : 1) );
@@ -306,9 +302,9 @@
   });
 
 
-}( "undefined" != typeof window ? window : this, jQuery );
+}( "undefined" !== typeof window ? window : this, jQuery );
 
-//트리 생성
+//트리 생성용 변수
 var pNode;
 var allMenu = "";
 var bkmkMenu = "";
@@ -324,36 +320,38 @@ function makeTree(div, data, initMenu) {
 
   // 트리의 아이템이 load 완료 되었을 때 이벤트
   tree.loadedItems.addHandler(function(s, e) {
-      // 아이콘 Class 추가
-      for (var node = s.getFirstNode(); node; node = node.nextSibling()) {
-        if(!isEmpty(node)){
-          wijmo.addClass(node.element, node.dataItem.icon);
-        }
+    var node;
+    // 아이콘 Class 추가
+    for (node = s.getFirstNode(); node; node = node.nextSibling()) {
+      if(!isEmpty(node)){
+        wijmo.addClass(node.element, node.dataItem.icon);
       }
-      s.collapseToLevel(0);
+    }
+    s.collapseToLevel(0);
 
-      // 초기 메뉴(현재 메뉴) 설정
-      if(initMenu) {
-        for (var node = s.getFirstNode(); node; node = node.next()) {
-          if(isEmpty(node.nodes)) {
-            if(!isEmpty(node.dataItem) && node.dataItem.cd == initMenu) {
-              s.selectedItem = node.dataItem;
-            }
+    // 초기 메뉴(현재 메뉴) 설정
+    if(initMenu) {
+      for (node = s.getFirstNode(); node; node = node.next()) {
+        if(isEmpty(node.nodes)) {
+          if(!isEmpty(node.dataItem) && node.dataItem.cd === initMenu) {
+            s.selectedItem = node.dataItem;
           }
         }
       }
+    }
   });
 
   // 선택된 메뉴가 변경 되었을 때 이벤트
   tree.selectedItemChanged.addHandler(function(s, e) {
+    var node;
     // 이전 메뉴의 클래스 제거
     if(pNode) {
-      for (var node = pNode; node; node = node.parentNode) {
+      for (node = pNode; node; node = node.parentNode) {
         wijmo.removeClass(node.element, "on");
       }
     }
     // 선택된 메뉴에 클래스 추가
-    for (var node = s.selectedNode; node; node = node.parentNode) {
+    for (node = s.selectedNode; node; node = node.parentNode) {
       wijmo.addClass(node.element, "on");
     }
     pNode = s.selectedNode;
@@ -371,7 +369,7 @@ function makeTree(div, data, initMenu) {
       }
     }
     // 같은 메뉴를 다시 선택 했을 때 메뉴 닫기 기능
-    if( pNode == s.selectedNode) {
+    if( pNode === s.selectedNode) {
       s.selectedNode.isCollapsed = !s.selectedNode.isCollapsed;
     }
     else {
@@ -410,23 +408,38 @@ function getParam(name){
     }
   }
   return result;
-};
+}
 
 /** 현재 날짜 가져오기 */
-function getCurDate(seperator)
+function getCurDate(seperator) {
+  try {
+    if (seperator === undefined) seperator = "";
+
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+
+    if (("" + month).length === 1) month = "0" + month;
+    if (("" + day).length === 1) day = "0" + day;
+
+    return (year + seperator + month + seperator + day);
+  }
+  catch (e) {
+    //alert('udfMainFrm.js : '+e);
+  }
+}
+
+// 날짜 포맷
+function getFormatDate(date, seperator)
 {
     try
     {
-        if(seperator == undefined)  seperator = "";
-
-        var date = new Date();
-        var year  = date.getFullYear();
-        var month = date.getMonth() + 1;
-        var day   = date.getDate();
-
-        if( (""+month).length == 1 ) month = "0"+month;
-        if( (""+day).length   == 1 ) day   = "0"+day;
-
+        if(date.length < 8) return date;
+        var seperator = ((seperator == undefined || seperator == '') ? '-' : seperator);
+        var year  = date.substr(0,4);
+        var month = date.substr(4,2);
+        var day   = date.substr(6,2);
         return (year + seperator + month + seperator + day );
     }
     catch(e)
@@ -435,16 +448,39 @@ function getCurDate(seperator)
     }
 }
 
+// 날짜+시간 포맷
+function getFormatDateTime(date, seperator_date, seperator_time)
+{
+    try
+    {
+        if(date.length < 14) return date;
+        var seperator_date = ((seperator_date == undefined || seperator_date == '') ? '-' : seperator_date);
+        var seperator_time = ((seperator_time == undefined || seperator_time == '') ? ':' : seperator_time);
+        var year   = date.substr(0,4);
+        var month  = date.substr(4,2);
+        var day    = date.substr(6,2);
+        var hour   = date.substr(8,2);
+        var minute = date.substr(10,2);
+        var second = date.substr(12,2);
+        return (year + seperator_date + month + seperator_date + day + ' ' +hour + seperator_time + minute + seperator_time + second);
+    }
+    catch(e)
+    {
+        //alert('udfMainFrm.js : '+e);
+    }
+}
 
 String.prototype.getByteLength = function() {
+    var i, c;
     for(var size=i=0;c=this.charCodeAt(i++);size+=c>>11?2:c>>7?2:1);
     return size;
 };
 
 /** 오라클에서 한글을 3바이트로 인식해서 한글인 경우 3바이트로 byte length 함수가 필요하여 추가 */
-String.prototype.getKr3ByteLength = function() {
-    for(var size=i=0;c=this.charCodeAt(i++);size+=c>>11?3:c>>7?2:1);
-    return size;
+String.prototype.getByteLengthForOracle = function() {
+  var i, c;
+  for(var size=i=0;c=this.charCodeAt(i++);size+=c>>11?3:c>>7?2:1);
+  return size;
 };
 
 String.prototype.centerPad = function(padStr, padLen) {
@@ -456,7 +492,7 @@ String.prototype.centerPad = function(padStr, padLen) {
         var leftPad = calcLen - rightPad + 1;
         return Array(leftPad).join(padStr).concat(this,Array(rightPad+1).join(padStr));
     }
-}
+};
 
 String.prototype.leftPad = function(padStr, padLen) {
     if ( parseInt(padLen) + 1 <= this.getByteLength() ) {
@@ -465,7 +501,7 @@ String.prototype.leftPad = function(padStr, padLen) {
         var rightPad = padLen - this.getByteLength() + 1;
         return this.concat(Array(rightPad).join(padStr));
     }
-}
+};
 
 String.prototype.rightPad = function(padStr, padLen) {
     if ( parseInt(padLen) + 1 <= this.getByteLength() ) {
@@ -474,7 +510,7 @@ String.prototype.rightPad = function(padStr, padLen) {
         var leftPad = padLen - this.getByteLength() + 1;
         return Array(leftPad).join(padStr).concat(this);
     }
-}
+};
 
 String.prototype.setPadding = function(padType, padStr, padLen) {
     if ( padType === "C" ) {
@@ -484,7 +520,7 @@ String.prototype.setPadding = function(padType, padStr, padLen) {
     } else if ( padType === "R" ) {
         return this.rightPad(padStr, padLen);
     }
-}
+};
 
 String.prototype.splitByteLen = function(byteLen) {
     var resultArr = new Array();
@@ -503,10 +539,15 @@ String.prototype.splitByteLen = function(byteLen) {
                 resultArr[rIndex++] = str;
                 str = "";
             }
-            if (i == bIndex) {
+            if (i === bIndex) {
                 resultArr[rIndex++] = str;
             }
         }
         return resultArr;
     }
+};
+
+function addComma(str) {
+  var regexp = /\B(?=(\d{3})+(?!\d))/g;
+  return str.toString().replace(regexp, ',');
 }

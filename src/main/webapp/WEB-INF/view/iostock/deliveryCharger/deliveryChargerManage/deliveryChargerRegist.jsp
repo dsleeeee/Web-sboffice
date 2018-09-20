@@ -282,7 +282,7 @@
 
         <%-- 기사명의 길이가 너무 깁니다. --%>
         var msg = "<s:message code='deliveryCharger.dlvrNm'/> <s:message code='deliveryCharger.textOver'/>";
-        if($("#dlvrNm").val().getKr3ByteLength() > 18) {
+        if($("#dlvrNm").val().getByteLengthForOracle() > 18) {
             s_alert.popOk(msg, function(){ $("#dlvrNm").select(); });
             return false;
         }
@@ -296,7 +296,7 @@
 
         <%-- 차량번호의 길이가 너무 깁니다. --%>
         var msg = "<s:message code='deliveryCharger.carNo'/> <s:message code='deliveryCharger.textOver'/>";
-        if($("#carNo").val().getKr3ByteLength() > 14) {
+        if($("#carNo").val().getByteLengthForOracle() > 14) {
             s_alert.popOk(msg, function(){ $("#carNo").select(); });
             return false;
         }

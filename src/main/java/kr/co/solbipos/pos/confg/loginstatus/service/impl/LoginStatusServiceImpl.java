@@ -1,11 +1,12 @@
 package kr.co.solbipos.pos.confg.loginstatus.service.impl;
 
-import java.util.List;
+import kr.co.solbipos.pos.confg.loginstatus.service.LoginStatusService;
+import kr.co.solbipos.pos.confg.loginstatus.service.LoginStatusVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import kr.co.solbipos.pos.confg.loginstatus.service.LoginStatusService;
-import kr.co.solbipos.pos.confg.loginstatus.service.LoginStatusVO;
+
+import java.util.List;
 
 /**
  * @Class Name : LoginStatusServiceImpl.java
@@ -14,7 +15,7 @@ import kr.co.solbipos.pos.confg.loginstatus.service.LoginStatusVO;
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2015.05.01  정용길      최초생성
+ * @ 2018.05.01  정용길      최초생성
  *
  * @author NHN한국사이버결제 KCP 정용길
  * @since 2018. 05.01

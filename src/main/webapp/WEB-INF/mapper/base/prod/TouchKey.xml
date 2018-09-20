@@ -20,104 +20,208 @@
         PARAM    : touchVO
         COMMENTS : 판매터치키로 등록할 상품의 목록을 조회한다. ( 본사/매장 )
     -->
-    <select id="selectProdByStore" parameterType="touchVO" resultType="DefaultMap">
-        /* TouchKeyMapper.selectProdByStore */
+    <select id="getProductListForTouchKey" parameterType="touchVO" resultType="DefaultMap">
+        /* TouchKeyMapper.getProductListForTouchKey */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT
-                thp.PROD_CD,
-                thp.PROD_NM,
-                thpc.PROD_CLASS_NM,
-                NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC
+                    thp.PROD_CD,
+                    thp.PROD_NM,
+                    thpc.PROD_CLASS_NM,
+                    NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC
                 FROM
-                TB_HQ_PRODUCT thp
+                    TB_HQ_PRODUCT thp
                 LEFT OUTER JOIN TB_HQ_PRODUCT_CLASS thpc ON
-                thp.HQ_OFFICE_CD = thpc.HQ_OFFICE_CD
-                AND thp.PROD_CLASS_CD = thpc.PROD_CLASS_CD
+                    thp.HQ_OFFICE_CD = thpc.HQ_OFFICE_CD
+                    AND thp.PROD_CLASS_CD = thpc.PROD_CLASS_CD
                 LEFT OUTER JOIN (
-                SELECT
-                PROD_CD,
-                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
-                ORDER BY
-                START_DATE DESC ) AS SALE_UPRC
-                FROM
-                TB_HQ_PRODUCT_SALE_PRICE
-                WHERE
-                HQ_OFFICE_CD = #{hqOfficeCd}
-                <![CDATA[
+                    SELECT
+                        PROD_CD,
+                        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
+                        ORDER BY
+                        START_DATE DESC ) AS SALE_UPRC
+                    FROM
+                        TB_HQ_PRODUCT_SALE_PRICE
+                    WHERE
+                        HQ_OFFICE_CD = #{hqOfficeCd}
+                        <![CDATA[
                         AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         ]]>
-                GROUP BY
-                PROD_CD ) thpsp ON
-                thp.PROD_CD = thpsp.PROD_CD
+                    GROUP BY
+                    PROD_CD ) thpsp ON
+                    thp.PROD_CD = thpsp.PROD_CD
                 WHERE
-                thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    thp.HQ_OFFICE_CD = #{hqOfficeCd}
                 ORDER BY thp.PROD_CD
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 SELECT
-                tmp.PROD_CD,
-                tmp.PROD_NM,
-                tmpc.PROD_CLASS_NM,
-                NVL(tmpsp.SALE_UPRC, 0) AS SALE_UPRC
+                    tmp.PROD_CD,
+                    tmp.PROD_NM,
+                    tmpc.PROD_CLASS_NM,
+                    NVL(tmpsp.SALE_UPRC, 0) AS SALE_UPRC
                 FROM
-                TB_MS_PRODUCT tmp
+                    TB_MS_PRODUCT tmp
                 LEFT OUTER JOIN TB_MS_PRODUCT_CLASS tmpc ON
-                tmp.STORE_CD = tmpc.STORE_CD
-                AND tmp.PROD_CLASS_CD = tmpc.PROD_CLASS_CD
+                    tmp.STORE_CD = tmpc.STORE_CD
+                    AND tmp.PROD_CLASS_CD = tmpc.PROD_CLASS_CD
                 LEFT OUTER JOIN (
-                SELECT
-                PROD_CD,
-                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
-                ORDER BY
-                START_DATE DESC ) AS SALE_UPRC
-                FROM
-                TB_MS_PRODUCT_SALE_PRICE
-                WHERE
-                STORE_CD = #{storeCd}
-                <![CDATA[
+                    SELECT
+                        PROD_CD,
+                        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
+                        ORDER BY
+                        START_DATE DESC ) AS SALE_UPRC
+                    FROM
+                        TB_MS_PRODUCT_SALE_PRICE
+                    WHERE
+                        STORE_CD = #{storeCd}
+                        <![CDATA[
                         AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         ]]>
-                GROUP BY
-                PROD_CD ) tmpsp ON
-                tmp.PROD_CD = tmpsp.PROD_CD
+                    GROUP BY
+                        PROD_CD ) tmpsp ON
+                    tmp.PROD_CD = tmpsp.PROD_CD
                 WHERE
-                tmp.STORE_CD = #{storeCd}
+                    tmp.STORE_CD = #{storeCd}
                 ORDER BY tmp.PROD_CD
             </when>
         </choose>
     </select>
 
-    <delete id="deleteTouchClassByStore" parameterType="String">
-        /* TouchkeyMapper.deleteTouchClassByStore */
+    <!-- 판매터치키 XML 조회 -->
+    <!--
+        TABLE    : TB_WB_HQ_CONFG_XML, TB_WB_STORE_CONFG_XML
+        PARAM    : DefaultMap
+        COMMENTS : 판매터치키 구성 XML 정보를 조회한다.
+    -->
+    <select id="getTouchKeyXml" parameterType="DefaultMap" resultType="String">
+        /* TouchkeyMapper.getTouchKeyXml */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                DELETE
+                SELECT
+                    XML
                 FROM
-                TB_HQ_TOUCH_CLASS
+                    TB_WB_HQ_CONFG_XML twhcx
                 WHERE
-                HQ_OFFICE_CD = #{hqOfficeCd}
+                    twhcx.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND twhcx.CONFG_FG = #{confgFg}
+                    AND twhcx.USE_YN = 'Y'
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                DELETE
+                SELECT
+                    XML
                 FROM
-                TB_MS_TOUCH_CLASS
+                    TB_WB_STORE_CONFG_XML twscx
                 WHERE
-                STORE_CD = #{storeCd}
+                    twscx.STORE_CD = #{storeCd}
+                    AND twscx.CONFG_FG = #{confgFg}
+                    AND twscx.USE_YN = 'Y'
             </when>
         </choose>
+    </select>
 
+    <!-- 판매터치키 XML 생성 -->
+    <!--
+        TABLE    : TB_WB_HQ_CONFG_XML, TB_WB_STORE_CONFG_XML
+        PARAM    : DefaultMap
+        COMMENTS : 판매터치키 구성 XML 정보를 생성한다.
+    -->
+    <insert id="insertTouchKeyConfgXml" parameterType="DefaultMap">
+        /* TouchkeyMapper.insertTouchKeyConfgXml */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_WB_HQ_CONFG_XML twhcx
+                (
+                    twhcx.HQ_OFFICE_CD,
+                    twhcx.CONFG_FG,
+                    twhcx.XML,
+                    twhcx.USE_YN,
+                    twhcx.REG_DT,
+                    twhcx.REG_ID
+                ) VALUES (
+                    #{hqOfficeCd},
+                    #{confgFg},
+                    #{xml:CLOB},
+                    #{useYn},
+                    #{regDt},
+                    #{regId}
+                )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_WB_STORE_CONFG_XML twscx
+                (
+                    twscx.STORE_CD,
+                    twscx.CONFG_FG,
+                    twscx.XML,
+                    twscx.USE_YN,
+                    twscx.REG_DT,
+                    twscx.REG_ID
+                ) VALUES (
+                    #{storeCd},
+                    #{confgFg},
+                    #{xml:CLOB},
+                    #{useYn},
+                    #{regDt},
+                    #{regId}
+                )
+            </when>
+        </choose>
+    </insert>
 
-    </delete>
+    <!-- 판매터치키 XML 수정 -->
+    <!--
+        TABLE    : TB_WB_HQ_CONFG_XML, TB_WB_STORE_CONFG_XML
+        PARAM    : DefaultMap
+        COMMENTS : 판매터치키 구성 XML 정보를 수정한다.
+    -->
+    <update id="updateTouchKeyConfgXml" parameterType="DefaultMap">
+        /* TouchkeyMapper.updateTouchKeyConfgXml */
+        <choose>
+        <!-- 본사 -->
+        <when test='orgnFg != null and orgnFg == "H"'>
+            UPDATE
+                TB_WB_HQ_CONFG_XML twhcx
+            SET
+                twhcx.XML = #{xml:CLOB},
+                twhcx.USE_YN = #{useYn},
+                twhcx.MOD_DT = #{regDt},
+                twhcx.MOD_ID = #{regId}
+            WHERE
+                twhcx.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND twhcx.CONFG_FG = #{confgFg}
+        </when>
+        <!-- 매장 -->
+        <when test='orgnFg != null and orgnFg == "S"'>
+            UPDATE
+                TB_WB_STORE_CONFG_XML twscx
+            SET
+                twscx.XML = #{xml:CLOB},
+                twscx.USE_YN = #{useYn},
+                twscx.MOD_DT = #{regDt},
+                twscx.MOD_ID = #{regId}
+            WHERE
+                twscx.STORE_CD = #{storeCd}
+                AND twscx.CONFG_FG = #{confgFg}
+        </when>
+        </choose>
+    </update>
 
-    <insert id="insertTouchClassByStore" parameterType="touchClassVO">
-        /* TouchkeyMapper.mergeTableGroupByStore */
+    <!-- 판매터치키 그룹 생성 -->
+    <!--
+        TABLE    : TB_HQ_TOUCH_CLASS, TB_MS_TOUCH_CLASS
+        PARAM    : touchClassVO
+        COMMENTS : 판매터치키 그룹 정보를 생성한다.
+    -->
+    <insert id="insertTouchClass" parameterType="touchClassVO">
+        /* TouchkeyMapper.insertTouchClass */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
@@ -126,12 +230,12 @@
                 thtc.TUKEY_GRP_CD,
                 thtc.TUKEY_CLASS_CD,
                 thtc.TUKEY_CLASS_NM,
-                thtc.STYLE_CD,
                 thtc.PAGE_NO,
                 thtc.X,
                 thtc.Y,
                 thtc.WIDTH,
                 thtc.HEIGHT,
+                thtc.STYLE_CD,
                 thtc.IMG_NM,
                 thtc.REG_DT,
                 thtc.REG_ID,
@@ -142,12 +246,12 @@
                 #{tukeyGrpCd},
                 #{tukeyClassCd},
                 #{tukeyClassNm},
-                #{styleCd},
                 #{pageNo},
                 #{x},
                 #{y},
                 #{width},
                 #{height},
+                '00',
                 #{imgNm, jdbcType=VARCHAR},
                 #{regDt},
                 #{regId},
@@ -162,12 +266,12 @@
                 tmtc.TUKEY_GRP_CD,
                 tmtc.TUKEY_CLASS_CD,
                 tmtc.TUKEY_CLASS_NM,
-                tmtc.STYLE_CD,
                 tmtc.PAGE_NO,
                 tmtc.X,
                 tmtc.Y,
                 tmtc.WIDTH,
                 tmtc.HEIGHT,
+                tmtc.STYLE_CD,
                 tmtc.IMG_NM,
                 tmtc.IN_FG,
                 tmtc.REG_DT,
@@ -185,6 +289,7 @@
                 #{y},
                 #{width},
                 #{height},
+                '00',
                 #{imgNm, jdbcType=VARCHAR},
                 #{inFg},
                 #{regDt},
@@ -194,34 +299,84 @@
                 )
             </when>
         </choose>
-
     </insert>
 
-    <update id="deleteTouchByStore" parameterType="String">
-        /* TouchkeyMapper.deleteTouchByStore */
+    <!-- 판매터치키 그룹 삭제 -->
+    <!--
+        TABLE    : TB_HQ_TOUCH_CLASS, TB_MS_TOUCH_CLASS
+        PARAM    : touchClassVO
+        COMMENTS : 판매터치키 그룹 정보를 삭제한다.
+    -->
+    <delete id="deleteTouchClass" parameterType="touchClassVO">
+        /* TouchkeyMapper.deleteTouchClass */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-
+                DELETE
+                FROM
+                    TB_HQ_TOUCH_CLASS
+                WHERE
+                    HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND TUKEY_GRP_CD = '01'
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 DELETE
                 FROM
-                TB_MS_TOUCH
+                    TB_MS_TOUCH_CLASS
                 WHERE
-                STORE_CD = #{storeCd}
+                    STORE_CD = #{storeCd}
+                    AND TUKEY_GRP_CD = '01'
             </when>
         </choose>
+    </delete>
 
-    </update>
-
-    <insert id="insertTouchByStore" parameterType="touchVO">
-        /* TouchkeyMapper.insertTouchByStore */
+    <!-- 판매터치키 생성 -->
+    <!--
+        TABLE    : TB_HQ_TOUCH, TB_MS_TOUCH
+        PARAM    : touchClassVO
+        COMMENTS : 판매터치키 정보를 생성한다.
+    -->
+    <insert id="insertTouchKey" parameterType="touchVO">
+        /* TouchkeyMapper.insertTouchKey */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-
+                INSERT INTO TB_HQ_TOUCH tht (
+                tht.HQ_OFFICE_CD,
+                tht.TUKEY_CLASS_CD,
+                tht.TUKEY_CD,
+                tht.TUKEY_FG,
+                tht.PROD_CD,
+                tht.PAGE_NO,
+                tht.X,
+                tht.Y,
+                tht.WIDTH,
+                tht.HEIGHT,
+                tht.STYLE_CD,
+                tht.IMG_NM,
+                tht.REG_DT,
+                tht.REG_ID,
+                tht.MOD_DT,
+                tht.MOD_ID
+                ) VALUES (
+                #{storeCd},
+                #{tukeyClassCd},
+                #{tukeyCd},
+                #{tukeyFg},
+                #{prodCd},
+                #{pageNo},
+                #{x},
+                #{y},
+                #{width},
+                #{height},
+                '00',
+                #{imgNm, jdbcType=VARCHAR},
+                #{regDt},
+                #{regId},
+                #{regDt},
+                #{regId}
+                )
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -229,12 +384,15 @@
                 tmt.STORE_CD,
                 tmt.TUKEY_CLASS_CD,
                 tmt.TUKEY_CD,
+                tmt.TUKEY_FG,
                 tmt.PROD_CD,
                 tmt.PAGE_NO,
                 tmt.X,
                 tmt.Y,
                 tmt.WIDTH,
                 tmt.HEIGHT,
+                tmt.STYLE_CD,
+                tmt.IMG_NM,
                 tmt.IN_FG,
                 tmt.REG_DT,
                 tmt.REG_ID,
@@ -244,12 +402,15 @@
                 #{storeCd},
                 #{tukeyClassCd},
                 #{tukeyCd},
+                #{tukeyFg},
                 #{prodCd},
                 #{pageNo},
                 #{x},
                 #{y},
                 #{width},
                 #{height},
+                '00',
+                #{imgNm, jdbcType=VARCHAR},
                 #{inFg},
                 #{regDt},
                 #{regId},
@@ -259,5 +420,34 @@
             </when>
         </choose>
     </insert>
+
+    <!-- 판매터치키 삭제 -->
+    <!--
+        TABLE    : TB_HQ_TOUCH, TB_MS_TOUCH
+        PARAM    : touchClassVO
+        COMMENTS : 판매터치키 정보를 삭제한다.
+    -->
+    <delete id="deleteTouchKey" parameterType="touchClassVO">
+        /* TouchkeyMapper.deleteTouchKey */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE
+                FROM
+                    TB_HQ_TOUCH
+                WHERE
+                    HQ_OFFICE_CD = #{hqOfficeCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE
+                FROM
+                    TB_MS_TOUCH
+                WHERE
+                    STORE_CD = #{storeCd}
+            </when>
+        </choose>
+
+    </delete>
 
 </mapper>

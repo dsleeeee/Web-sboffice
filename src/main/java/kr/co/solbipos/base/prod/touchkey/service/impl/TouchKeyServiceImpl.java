@@ -19,8 +19,7 @@ import kr.co.solbipos.base.common.enums.InFg;
 import kr.co.solbipos.base.prod.touchkey.service.TouchClassVO;
 import kr.co.solbipos.base.prod.touchkey.service.TouchKeyService;
 import kr.co.solbipos.base.prod.touchkey.service.TouchVO;
-import kr.co.solbipos.base.store.tableattr.enums.Style;
-import kr.co.solbipos.base.store.tableattr.service.impl.TableAttrMapper;
+import kr.co.solbipos.base.store.tableattr.enums.TouchKeyStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +41,7 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
  * @ ----------  ---------   -------------------------------
  * @ 2018.05.01  조병준      최초생성
  * @ 2018.09.05  노현수      1차수정
+ * @ 2018.09.19  노현수      메소드정리/분리
  *
  * @author NHN한국사이버결제 KCP 조병준
  * @since 2018. 05.01
@@ -58,77 +58,95 @@ public class TouchKeyServiceImpl implements TouchKeyService {
     // Constructor Injection
     private final MessageService messageService;
     private final TouchKeyMapper keyMapper;
-    private final TableAttrMapper attrMapper;
 
     @Autowired
-    public TouchKeyServiceImpl(MessageService messageService, TouchKeyMapper keyMapper,
-        TableAttrMapper attrMapper) {
+    public TouchKeyServiceImpl(MessageService messageService, TouchKeyMapper keyMapper) {
         this.messageService = messageService;
         this.keyMapper = keyMapper;
-        this.attrMapper = attrMapper;
     }
 
-    /** 상품목록 조회 */
+    /** 상품목록 조회 : 판매터치키에서 사용 */
     @Override
-    public List<DefaultMap<String>> selectProdByStore(TouchVO touchVO) {
-        return keyMapper.selectProdByStore(touchVO);
+    public List<DefaultMap<String>> getProductListForTouchKey(TouchVO touchVO) {
+        return keyMapper.getProductListForTouchKey(touchVO);
     }
 
+    /** 판매터치키 XML 정보 조회 */
     @Override
-    public String selectTouchkeyByStore(SessionInfoVO sessionInfoVO) {
+    public String getTouchKeyXml(SessionInfoVO sessionInfoVO) {
         DefaultMap<String> param = new DefaultMap<String>();
-        param.put("storeCd", sessionInfoVO.getOrgnCd());
+        param.put("orgnFg", sessionInfoVO.getOrgnFg().getCode());
+        param.put("hqOfficeCd", sessionInfoVO.getHqOfficeCd());
+        param.put("storeCd", sessionInfoVO.getStoreCd());
         param.put("confgFg", ConfgFg.TOUCH_KEY.getCode());
-        String returnStr = attrMapper.selectXmlByStore(param);
-        return returnStr;
+        return keyMapper.getTouchKeyXml(param);
     }
 
+    /** 판매터치키 저장 */
     @Override
-    public Result setTouchkey(SessionInfoVO sessionInfoVO, String xml) {
+    public Result saveTouchkey(SessionInfoVO sessionInfoVO, String xml) {
 
-        //XML 저장
+        // XML 저장
         DefaultMap<String> param = new DefaultMap<String>();
-        param.put("storeCd", sessionInfoVO.getOrgnCd());
+        param.put("orgnFg", sessionInfoVO.getOrgnFg().getCode());
+        param.put("hqOfficeCd", sessionInfoVO.getHqOfficeCd());
+        param.put("storeCd", sessionInfoVO.getStoreCd());
         param.put("confgFg", ConfgFg.TOUCH_KEY.getCode());
         param.put("xml", xml);
         param.put("useYn", "Y");
         param.put("regDt", currentDateTimeString());
         param.put("regId", sessionInfoVO.getUserId());
 
-        if( attrMapper.selectXmlByStore(param) != null ) {
-            if( attrMapper.updateStoreConfgXml(param) != 1 ) {
+        if( keyMapper.getTouchKeyXml(param) != null ) {
+            if( keyMapper.updateTouchKeyConfgXml(param) != 1 ) {
                 throw new BizException( messageService.get("label.modifyFail") );
             }
         }
         else {
-            if( attrMapper.insertStoreConfgXml(param) != 1 ) {
+            if( keyMapper.insertTouchKeyConfgXml(param) != 1 ) {
                 throw new BizException( messageService.get("label.insertFail") );
             }
         }
 
         //XML 분석, TouchClass, Touch Domain 생성
         //터치키 분류 TABLE(TB_MS_TOUCH_CLASS)
-        List<TouchClassVO> touchClasssVOs = parseXML(xml);
+        List<TouchClassVO> touchClassVOs = parseXML(xml);
 
-        //매장의 현재 설정정보 삭제
-        keyMapper.deleteTouchClassByStore(sessionInfoVO.getOrgnCd());
+        // 매장/본사의 현재 설정정보 삭제
+        TouchClassVO tcParams = new TouchClassVO();
+        tcParams.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        tcParams.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        tcParams.setStoreCd(sessionInfoVO.getStoreCd());
+        // 매장/본사의 현재 설정정보 삭제
+        keyMapper.deleteTouchClass(tcParams);
 
-        keyMapper.deleteTouchByStore(sessionInfoVO.getOrgnCd());
+        TouchVO tParams = new TouchVO();
+        tParams.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        tParams.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        tParams.setStoreCd(sessionInfoVO.getStoreCd());
+        keyMapper.deleteTouchKey(tParams);
 
-        //리스트의 아이템을 DB에 Merge
-        for(TouchClassVO touchClassVO : touchClasssVOs) {
-            //터치 분류 저장
+        // 리스트의 아이템을 DB에 Merge
+        for(TouchClassVO touchClassVO : touchClassVOs) {
+
+            // 터치 분류(그룹) 저장 파라미터 설정
+            touchClassVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            touchClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             touchClassVO.setStoreCd(sessionInfoVO.getOrgnCd());
             touchClassVO.setRegId(sessionInfoVO.getUserId());
-
-            if( keyMapper.insertTouchClassByStore(touchClassVO) != 1 ) {
+            // 터치 분류(그룹) 저장
+            if( keyMapper.insertTouchClass(touchClassVO) != 1 ) {
                 throw new BizException( messageService.get("label.modifyFail") );
             }
-            //테이블 저장
+
             for(TouchVO touchVO : touchClassVO.getTouchs()) {
+                // 터치키 저장 파라미터 설정
+                touchVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+                touchVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
                 touchVO.setStoreCd(sessionInfoVO.getOrgnCd());
                 touchVO.setRegId(sessionInfoVO.getUserId());
-                if( keyMapper.insertTouchByStore(touchVO) != 1 ) {
+                // 터치키 저장
+                if( keyMapper.insertTouchKey(touchVO) != 1 ) {
                     throw new BizException( messageService.get("label.modifyFail") );
                 }
             }
@@ -145,9 +163,8 @@ public class TouchKeyServiceImpl implements TouchKeyService {
     private List<TouchClassVO> parseXML(String xml) {
 
         String[] xmls = xml.split("\\|");
-        LOGGER.info(XssPreventer.unescape(xmls[0]));
-        LOGGER.info(XssPreventer.unescape(xmls[1]));
-
+//        LOGGER.info(XssPreventer.unescape(xmls[0]));
+//        LOGGER.info(XssPreventer.unescape(xmls[1]));
 
         List<TouchClassVO> touchClassVOs = new ArrayList<TouchClassVO>();
         TouchClassVO touchClassVO = new TouchClassVO();
@@ -177,18 +194,16 @@ public class TouchKeyServiceImpl implements TouchKeyService {
             Object[] cells = graphClass.getChildVertices(graphClass.getDefaultParent());
             for(Object c : cells) {
                 cell = (mxCell) c;
-                LOGGER.debug(cell.toString());
 
                 touchClassVO = new TouchClassVO();
-
-                //TODO [터치키그룹코드] 신규 컬럼으로 임시로 분류코드와 같은 값으로 넣음
-                touchClassVO.setTukeyGrpCd(cell.getId());
-                
+                // 터치키 그룹은 시즌,행사별 등 일종의 템플릿.
+                // TODO : 터치키그룹 관리할 수 있는 화면 필요. ex.그룹키생성 : 20180919 노현수
+                touchClassVO.setTukeyGrpCd("01");
                 touchClassVO.setTukeyClassCd(cell.getId());
                 touchClassVO.setTukeyClassNm(String.valueOf(cell.getValue()));
 
-                //페이지 번호 계산 - 80*5
-               long pageNo = (long)(touchClassVO.getX() / 400) + 1L;
+                //페이지 번호 계산 - 100*5
+               long pageNo = (long)(touchClassVO.getX() / 500) + 1L;
                touchClassVO.setPageNo(pageNo);
 
                 //좌표, 크기
@@ -210,8 +225,7 @@ public class TouchKeyServiceImpl implements TouchKeyService {
                         if(styleKeyValue.length < 2) {
                             continue;
                         }
-                        //LOGGER.debug(styleKeyValue[0]);
-                        switch(Style.getEnum(styleKeyValue[0])) {
+                        switch(TouchKeyStyle.getEnum(styleKeyValue[0])) {
                             case FONT_COLOR:
                                 touchClassVO.setFontColor(styleKeyValue[1]);
                                 break;
@@ -226,16 +240,10 @@ public class TouchKeyServiceImpl implements TouchKeyService {
                         }
                     }
                 }
-
                 touchClassVO.setRegDt(regDt);
-
                 touchVOs = getTouchs(graphTouch, cell.getId(), touchClassVO);
-
                 touchClassVO.setTouchs(touchVOs);
-
                 touchClassVOs.add(touchClassVO);
-
-                LOGGER.debug(touchClassVOs.toString());
             }
         }
         catch (Exception ex) {
@@ -245,75 +253,105 @@ public class TouchKeyServiceImpl implements TouchKeyService {
     }
 
     /**
-     * 레이어 id로 해당 레이어에 있는 테이블 List 추출
+     * 레이어 id로 해당 레이어에 있는 터치키 List 추출
      * @param graph mxGraph
      * @param layerId String
-     * @param tableClassVO TouchClassVO
+     * @param touchClassVO TouchClassVO
      * @return List
      */
-    private List<TouchVO> getTouchs(mxGraph graph, String layerId, TouchClassVO tableClassVO) {
+    private List<TouchVO> getTouchs(mxGraph graph, String layerId, TouchClassVO touchClassVO) {
 
         mxGraphModel model = (mxGraphModel) graph.getModel();
 
         List<TouchVO> touchVOs = new ArrayList<TouchVO>();
-        TouchVO touchVO = null;
+        TouchVO bTouchVO = null;
+        TouchVO cTouchVO = null;
         mxCell layer = (mxCell)model.getCell(layerId);
 
         Object[] cells = graph.getChildVertices(layer);
-        for(Object c : cells) {
-            mxCell cell = (mxCell) c;
-            touchVO = new TouchVO();
-            touchVO.setStoreCd(tableClassVO.getStoreCd());
-            touchVO.setTukeyClassCd(tableClassVO.getTukeyClassCd());
-            touchVO.setTukeyCd(cell.getId());
-
-            //좌표, 크기
-            mxGeometry geo = cell.getGeometry();
-            touchVO.setX((long)geo.getX());
-            touchVO.setY((long)geo.getY());
-            touchVO.setWidth((long)geo.getWidth());
-            touchVO.setHeight((long)geo.getHeight());
-
-            //스타일
-            String styleStr = cell.getStyle();
-            if(styleStr != null) {
-                String[] styles = styleStr.split(";");
-                for(String style : styles) {
-
-                    String[] styleKeyValue = style.split("=");
-                    if(styleKeyValue.length < 2) {
-                        continue;
-                    }
-                    //LOGGER.debug(styleKeyValue[0]);
-                    switch(Style.getEnum(styleKeyValue[0])) {
-                        case PROD_CD:
-                            touchVO.setProdCd(styleKeyValue[1]);
-                            break;
-                        case FONT_COLOR:
-                            touchVO.setFontColor(styleKeyValue[1]);
-                            break;
-                        case FILL_COLOR:
-                            touchVO.setFillColor(styleKeyValue[1]);
-                            break;
-                        case FONT_SIZE:
-                            touchVO.setFontSize(Long.parseLong(styleKeyValue[1]));
-                            break;
-                        default:
-                            break;
-                    }
+        for(Object obj : cells) {
+            mxCell cell = (mxCell) obj;
+            bTouchVO = getTouchKeyInfo(cell, touchClassVO, true);
+            touchVOs.add(bTouchVO);
+            // 버튼 + 상품태그 + 금액태그 추가
+            if ( cell.getChildCount() > 0 ) {
+                for(int i = 0; i < cell.getChildCount(); i++ ) {
+                    mxCell child = (mxCell)cell.getChildAt(i);
+                    cTouchVO = getTouchKeyInfo(child, touchClassVO, false);
+                    // 하위속성은 상위버튼과 페이지번호 같다.
+                    cTouchVO.setPageNo(bTouchVO.getPageNo());
+                    touchVOs.add(cTouchVO);
                 }
             }
-            //페이지 번호 계산 - 80*5
-            long pageNo = (long)(touchVO.getX() / 400) + 1L;
-            touchVO.setPageNo(pageNo);
 
-            //TODO 본사/매장 구분값을 매장의 환경에 따르 설정-대리점,본사 값 애매..
-            touchVO.setInFg(InFg.STORE);
-
-            touchVO.setRegDt(tableClassVO.getRegDt());
-
-            touchVOs.add(touchVO);
         }
         return touchVOs;
+    }
+
+    /**
+     * 터치키 속성 설정 후 반환
+     * @param cell mxCell
+     * @param touchClassVO TouchClassVO
+     * @param isButton boolean
+     * @return TouchVO
+     */
+    private TouchVO getTouchKeyInfo(mxCell cell, TouchClassVO touchClassVO, boolean isButton) {
+
+        TouchVO result = new TouchVO();
+        result.setOrgnFg(touchClassVO.getOrgnFg());
+        result.setHqOfficeCd(touchClassVO.getHqOfficeCd());
+        result.setStoreCd(touchClassVO.getStoreCd());
+        result.setTukeyClassCd(touchClassVO.getTukeyClassCd());
+
+        //좌표, 크기
+        mxGeometry geo = cell.getGeometry();
+        result.setX((long)geo.getX());
+        result.setY((long)geo.getY());
+        result.setWidth((long)geo.getWidth());
+        result.setHeight((long)geo.getHeight());
+
+        //스타일
+        String styleStr = cell.getStyle();
+        if(styleStr != null) {
+            String[] styles = styleStr.split(";");
+            for(String style : styles) {
+
+                String[] styleKeyValue = style.split("=");
+                if(styleKeyValue.length < 2) {
+                    continue;
+                }
+                switch(TouchKeyStyle.getEnum(styleKeyValue[0])) {
+                    case TUKEY_CD:
+                        result.setTukeyCd(styleKeyValue[1]);
+                    case TUKEY_FG: // 터치키구분 - 01:버튼, 02:상품명태그, 03:금액태그
+                        result.setTukeyFg(styleKeyValue[1]);
+                    case PROD_CD:
+                        result.setProdCd(styleKeyValue[1]);
+                        break;
+                    case FONT_COLOR:
+                        result.setFontColor(styleKeyValue[1]);
+                        break;
+                    case FILL_COLOR:
+                        result.setFillColor(styleKeyValue[1]);
+                        break;
+                    case FONT_SIZE:
+                        result.setFontSize(Long.parseLong(styleKeyValue[1]));
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        // 하위속성은 페이지번호 계산하지 않는다.
+        if ( isButton ) {
+            //페이지 번호 계산 - 100*5
+            long pageNo = (long) (result.getX() / 500) + 1L;
+            result.setPageNo(pageNo);
+        }
+
+        result.setInFg(touchClassVO.getOrgnFg());
+        result.setRegDt(touchClassVO.getRegDt());
+
+        return result;
     }
 }

@@ -23,7 +23,7 @@
             <th><s:message code="cmm.search.date"/></th>
             <td>
                 <div class="sb-select">
-                    <span class="txtIn">
+                    <span class="txtIn w150">
                     <wj-combo-box
                             id="srchDateFg"
                             ng-model="dateFg"
@@ -44,10 +44,11 @@
             <%-- 출고요청일자 --%>
             <th><s:message code="storeOrder.reqDate"/></th>
             <td>
-                <div class="sb-select">
-                    <span class="txtIn"><input id="reqDate" class="w200"></span>
-                    <button type="button" class="btn_blue" id="btnSave" ng-click="newReqOrder()"><s:message code="storeOrder.reqRegist" /></button>
+                <div class="sb-select fl mr10">
+                    <span class="txtIn"><input id="reqDate" class="w150" ng-model="storeOrder.reqDate"></span>
                 </div>
+                <a href="javascript:;" class="btn_grayS" ng-click="newReqOrder()"><s:message code="storeOrder.reqRegist" /></a>
+                <%--<button type="button" class="btn_blue" id="btnReqRegist" ng-click="newReqOrder()"><s:message code="storeOrder.reqRegist" /></button>--%>
             </td>
         </tr>
         </tbody>
@@ -73,7 +74,7 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="storeOrder.reqDate"/>"  binding="reqDate"  width="100" align="center" ></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="storeOrder.slipFg"/>"   binding="slipFg"   width="70" align="center" isvisible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeOrder.slipFg"/>"   binding="slipFg"   width="70" align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeOrder.procFg"/>"   binding="procFg"   width="70" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeOrder.dtlCnt"/>"   binding="dtlCnt"   width="70" align="right" data-type="Number" format="n0"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeOrder.orderAmt"/>" binding="orderAmt" width="70" align="right" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
@@ -114,6 +115,13 @@
             {"name":"<s:message code='storeOrder.modDate'/>","value":"mod"}
         ]);
 
+        // 출고가능일자 세팅
+        reqDate.value = new Date(getFormatDate("${reqDate}", "-"));
+        // 출고요청일자 선택가능여부에 따라 출고요청일자 선택여부 처리
+        if("${envst594}" === "Y") {
+            reqDate.isReadOnly = true;
+        }
+
         // grid 초기화 : 생성되기전 초기화되면서 생성된다
         $scope.initGrid = function (s, e) {
             // picker 사용시 호출 : 미사용시 호출안함
@@ -121,7 +129,7 @@
 
             // 그리드 링크 효과
             s.formatItem.addHandler(function (s, e) {
-                if (e.panel == s.cells) {
+                if (e.panel === s.cells) {
                     var col = s.columns[e.col];
                     if (col.binding === "reqDate") { // 마감월 클릭
                         let item = s.rows[e.row].dataItem;
@@ -139,9 +147,10 @@
                     var selectedRow = s.rows[ht.row].dataItem;
                     if ( col.binding === "reqDate") {
                         var params = {};
-                        params.reqDate = selectedRow.reqDate;
-                        params.slipFg  = selectedRow.slipFg;
-                        params.procFg  = selectedRow.procFg;
+                        params.reqDate  = selectedRow.reqDate;
+                        params.slipFg   = selectedRow.slipFg;
+                        params.procFg   = selectedRow.procFg;
+                        params.hdRemark = selectedRow.remark;
                         $scope._broadcast('storeOrderDtlCtrl', params);
                     }
                 }
@@ -160,6 +169,7 @@
             event.preventDefault();
         });
 
+        // 주문 리스트 조회
         $scope.searchStoreOrderList = function() {
             // 파라미터
             var params = {};
@@ -171,11 +181,13 @@
             $scope._inquiryMain("/iostock/order/storeOrder/storeOrder/list.sb", params);
         };
 
+        // 신규 요청등록
         $scope.newReqOrder = function () {
             var params = {};
             params.callParent = "storeOrder";
-            params.reqDate = wijmo.Globalize.format(reqDate.value, 'yyyyMMdd');
-            params.slipFg = 1;
+            params.reqDate    = wijmo.Globalize.format(reqDate.value, 'yyyyMMdd');
+            params.slipFg     = 1;
+            params.hdRemark   = "";
             $scope._broadcast("storeOrderRegistCtrl", params);
         }
     }]);

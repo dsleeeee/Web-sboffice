@@ -1,8 +1,9 @@
 package kr.co.common.data.domain;
 
-import java.util.List;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.common.service.CmmVO;
+
+import java.util.List;
 
 /**
  * @Class Name : EnvCodeVO.java
@@ -11,7 +12,7 @@ import kr.co.solbipos.application.common.service.CmmVO;
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2015.05.01  정용길      최초생성
+ * @ 2018.05.01  정용길      최초생성
  *
  * @author NHN한국사이버결제 KCP 정용길
  * @since 2018. 05.01

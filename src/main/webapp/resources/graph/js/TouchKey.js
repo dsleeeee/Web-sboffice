@@ -1,7 +1,6 @@
 //지정된 영역에만 터치키를 넣을 수 있도록 처리
 mxGraph.prototype.allowNegativeCoordinates = false;
 
-
 /**
  * 메인 Class
  */
@@ -364,41 +363,46 @@ Sidebar.prototype.makeDragSource = function () {
         mxEvent.consume(evt);
         return;
       }
-
       //Drop 된 포지션과 다음 포지션에 터치키 생성
       var rows = grid.selectedRows[selected];
       var item = rows.dataItem;
       model.beginUpdate();
-      try {
-        // graph.insertVertex(parent,
-        //   null,
-        //   item.prodNm,
-        //   pos.x, pos.y,
-        //   graph.tKeySize.width, graph.tKeySize.height,
-        //   'prodCd=' + item.prodCd + ';saleUprc=' + item.saleUprc + ";");
+      // 현재 graph 영역의 전체 버튼 갯수를 tukeyCd(키값)으로 활용
+      var tukeyCd = graph.getChildCells(graph.getDefaultParent(), true, true).length + 1;
+      tukeyCd = "00" + tukeyCd;
+      tukeyCd = tukeyCd.slice(-3);
 
+      console.log(tukeyCd);
+
+      try {
         // 버튼
         var btn = graph.insertVertex(parent, null,
-          '',
+          null,
           pos.x, pos.y,
-          graph.tKeySize.width, graph.tKeySize.height,
-          "prodCd=" + item.prodCd + ";saleUprc=" + item.saleUprc + ";");
-
+          graph.touchKeyInfo.width, graph.touchKeyInfo.height,
+          "tukeyCd=" + tukeyCd + ";tukeyFg=01;prodCd=" + item.prodCd + ";rounded=0;");
         // 버튼에 품목명 추가
-        var prodTag = graph.insertVertex(btn, 'prodCd',
+        var prodTag = graph.insertVertex(btn, null,
           item.prodNm,
           5, 5,
-          graph.tKeySize.width - 10, graph.tKeySize.height / 2 - 5,
-          "prodCd=" + item.prodCd + ";align=left;verticalAlign=top;strokeColor=none;resizable=0;autosize=1;"
+          0, 0,
+          "tukeyCd=" + tukeyCd + ";tukeyFg=02;prodCd=" + item.prodCd + ";align=left;verticalAlign=top;strokeColor=none;rounded=0;resizable=0;"
         );
-
-        // // 버튼에 금액 추가
-        var priceTag = graph.insertVertex(btn, 'saleUprc',
-          item.saleUprc,
-          5, graph.tKeySize.height / 2,
-          graph.tKeySize.width - 10, graph.tKeySize.height / 2 - 5,
-          "prodCd=" + item.prodCd + ";align=right;strokeColor=none;resizable=0;autosize=1;"
+        // 버튼에 금액 추가
+        var priceTag = graph.insertVertex(btn, null,
+          addComma(item.saleUprc),
+          5, graph.touchKeyInfo.y / 2 + 10,
+          0, 0,
+          "tukeyCd=" + tukeyCd + ";tukeyFg=03;prodCd=" + item.prodCd + ";align=right;strokeColor=none;rounded=0;resizable=0;"
         );
+        // 하위 셀의 사이즈 자동조정
+        graph.updateCellSize(prodTag, false);
+        graph.updateCellSize(priceTag, false);
+        // 금액태그 위치 조정
+        var movedX = graph.touchKeyInfo.width - priceTag.geometry.width  - 5;
+        var movedY = graph.touchKeyInfo.height - priceTag.geometry.height - 5;
+        priceTag.geometry.x = movedX;
+        priceTag.geometry.y = movedY;
 
       }
       finally {
@@ -414,11 +418,11 @@ Sidebar.prototype.makeDragSource = function () {
   //드래그할 항목 생성
   var previewElt = document.createElement('div');
   previewElt.style.border = 'dashed black 1px';
-  previewElt.style.width = graph.tKeySize.width + 'px';
-  previewElt.style.height = graph.tKeySize.height + 'px';
+  previewElt.style.width = graph.touchKeyInfo.x + 'px';
+  previewElt.style.height = graph.touchKeyInfo.y + 'px';
 
   //DnD 처리
-  var ds = mxUtils.makeDraggable(grid.cells.hostElement, graph, dropEvent, previewElt, -(graph.tKeySize.width / 2), -(graph.tKeySize.height / 2));
+  var ds = mxUtils.makeDraggable(grid.cells.hostElement, graph, dropEvent, previewElt, -(graph.touchKeyInfo.x / 2), -(graph.touchKeyInfo.y / 2));
   ds.highlightDropTargets = true;
 
 };
@@ -453,22 +457,23 @@ mxUtils.extend(Graph, mxGraph);
 
 Graph.prototype.defaultThemes = {};
 Graph.prototype.defaultVertexStyle = {};
-//그룹키 사이즈 (Custom 변수)
-Graph.prototype.gKeySize = {width: 99, height: 60};
-//터치키 사이즈 (Custom 변수)
-Graph.prototype.tKeySize = {width: 99, height: 74};
+//키 사이 간격 두께 : px (Custom 변수)
+Graph.prototype.btnBorder = 1;
+//터치키 정보 (Custom 변수)
+Graph.prototype.touchKeyInfo = {width: 99, height: 74, x: 100, y: 75};
 //최대 페이지 갯수
 Graph.prototype.MAX_PAGE = 5;
 //한페이지에 컬럼 갯수
 Graph.prototype.COL_PER_PAGE = 5;
-//페이지당 줄 수
+// 페이지당 줄 수
 Graph.prototype.ROW_PER_PAGE = 2;
+// 텍스트 에디팅 방지
 Graph.prototype.textEditing = false;
 Graph.prototype.defaultThemeName = 'touchKey';
 //상품 그룹 영역 셀의 prefix
-Graph.prototype.groupPrefix = 'g';
+Graph.prototype.groupPrefix = 'G';
 //상품 영역 셀의 prefix
-Graph.prototype.prodPrefix = 'p';
+Graph.prototype.prodPrefix = 'T';
 //상품그룹 영역에 index 변수
 //그룹, 상품영역의 셀과 레이어의 아이디를 맞추기 위해 사용
 Graph.prototype.nextGrpId = 1;
@@ -495,12 +500,18 @@ Graph.prototype.init = function () {
   //대상 셀에 이미 상품이 있을 경우 이동 금지
   var mxGraphHandlerMoveCells = mxGraphHandler.prototype.moveCells;
   graph.graphHandler.moveCells = function (cells, dx, dy, clone, target, evt) {
+
+    // 하위 셀 ( 상품명/금액 ) 인 경우 무시
+    if ( cells[0].id === "prd" || cells[0].id === "prc" ) {
+      mxGraphHandlerMoveCells.apply(this, arguments);
+    }
+
     var pt = this.graph.getPointForEvent(evt);
 
     //박스 크기에 맞게 사이즈 조정
-    var newSize = this.graph.adjstCellSize(dx, dy);
-    dx = newSize.x;
-    dy = newSize.y;
+    var newPoint = this.graph.adjustCellPoint(dx, dy);
+    dx = newPoint.x;
+    dy = newPoint.y;
 
     //vertex 이동 시 이동될 위치에 vertex가 있는 경우 이동 금지
     var checkCollision = function (bounds, dx, dy, selectedCells) {
@@ -512,7 +523,7 @@ Graph.prototype.init = function () {
       var isMyself = function (cell) {
         var isMy = false;
         for (var i = 0; i < selectedCells.length; i++) {
-          if (selectedCells[i] == cell) {
+          if (selectedCells[i] === cell) {
             isMy = true;
             break;
           }
@@ -522,8 +533,8 @@ Graph.prototype.init = function () {
 
       //한칸씩 이동 하면서 해당 위치에 셀이 있는지 체크
       var isColl = false;
-      for (var x = 0; x < bounds.width; (x += graph.tKeySize.width)) {
-        for (var y = 0; y < bounds.height; (y += graph.tKeySize.height)) {
+      for (var x = 0; x < bounds.width; (x += graph.touchKeyInfo.x)) {
+        for (var y = 0; y < bounds.height; (y += graph.touchKeyInfo.y)) {
           var cell = graph.getCellAt(startX + x, startY + y);
           if (cell != null && !isMyself(cell)) {
             isColl = true;
@@ -553,6 +564,11 @@ Graph.prototype.init = function () {
     var maxBounds = this.graph.getMaximumGraphBounds();
     var startX = (maxBounds.width / this.graph.MAX_PAGE) * (this.graph.pageNo - 1);
     var endX = (maxBounds.width / this.graph.MAX_PAGE) * this.graph.pageNo;
+
+    console.log("maxBounds ", maxBounds);
+    console.log("dstX1 ", dstX1, startX);
+    console.log("dstX2 ", dstX2, endX);
+
     if (dstX1 < startX || dstX2 > endX) {
       mxEvent.consume(evt);
       return;
@@ -570,8 +586,8 @@ Graph.prototype.init = function () {
   //페이징 객체가 있는 영역인지 체크
   var checkPagingArea = function (x, y) {
     var isPagingArea = false;
-    var lastX = graph.tKeySize.width * graph.COL_PER_PAGE * graph.pageNo - graph.tKeySize.width;
-    var lastY = graph.tKeySize.height * graph.ROW_PER_PAGE - graph.tKeySize.height;
+    var lastX = graph.touchKeyInfo.x * graph.COL_PER_PAGE * graph.pageNo - graph.touchKeyInfo.x;
+    var lastY = graph.touchKeyInfo.y * graph.ROW_PER_PAGE - graph.touchKeyInfo.y;
     if (x > lastX && y > lastY) {
       isPagingArea = true;
     }
@@ -580,15 +596,17 @@ Graph.prototype.init = function () {
 
   //셀의 사이즈가 변경되었을 때 배경 크기에 맞게 보정
   graph.resizeCell = function (cell, bounds, recurse) {
-    var newPoint = this.adjstCellSize(bounds.x, bounds.y);
-    var newSize = this.adjstCellSize(bounds.width, bounds.height);
+    // 위치 재계산
+    var newPoint = this.adjustCellPoint(bounds.x, bounds.y);
+    // 사이즈 재계산
+    var newSize = this.adjustCellSize(bounds.width, bounds.height);
+    // 셀크기 설정
     bounds = new mxRectangle(newPoint.x, newPoint.y, newSize.x, newSize.y);
-
     //vertex 리사이즈 시 다른 vertex를 덮는 경우 리턴
     var checkCollision = function () {
       var isColl = false;
-      for (var x = 0; x < bounds.width; (x += graph.tKeySize.width)) {
-        for (var y = 0; y < bounds.height; (y += graph.tKeySize.height)) {
+      for (var x = 0; x < bounds.width; (x += graph.touchKeyInfo.x)) {
+        for (var y = 0; y < bounds.height; (y += graph.touchKeyInfo.y)) {
           var cellAt = graph.getCellAt(bounds.x + x, bounds.y + y);
           if (cellAt !== null && cell !== cellAt) {
             isColl = true;
@@ -611,25 +629,31 @@ Graph.prototype.init = function () {
     if (checkPagingArea(dstX2, dstY2)) {
       return;
     }
-
+  
+    // 하위속성 리사이징
     var resizeChild = function (child) {
       for (var r = 0; r < child.length; r++) {
         var cell = child[r];
-        if (cell.id === "prodCd") {
-          console.log("cell.geometry.x ", cell.geometry.x);
-          console.log("bounds.width ", bounds.width);
-          console.log("bounds.x ", bounds.x);
-
-          cell.geometry.x = parseInt(bounds.x);
-        } else if (cell.id === "saleUprc") {
-          if (bounds.height > graph.tKeySize.height) {
-            var division = bounds.height / graph.tKeySize.height - 1;
-            cell.geometry.y = bounds.height / 2 + division * (graph.tKeySize.height / 2);
-          } else {
-            cell.geometry.y = bounds.height / 2;
+        // 하위셀 크기 자동 조정
+        graph.updateCellSize(cell, true);
+        // 스타일 custom 에서 하위속성 타입 가져온다
+        var styles = cell.getStyle().split(";");
+        for(var i = 0; i < styles.length; i++) {
+          var styleKeyValue = styles[i].split("=");
+          if (styleKeyValue[0] === "tukeyFg") {
+            // 상품명 태그 위치 조정
+            if (styleKeyValue[1] === "02") {
+              cell.geometry.x = 5;
+              cell.geometry.y = 5;
+              // 금액태그 위치 조정
+            } else if (styleKeyValue[1] === "03") {
+              var movedX = bounds.width - cell.geometry.width - 5;
+              var movedY = bounds.height - cell.geometry.height - 5;
+              cell.geometry.x = movedX;
+              cell.geometry.y = movedY;
+            }
           }
         }
-        cell.geometry.width = bounds.width - 10;
       }
     }
     // 하위속성 존재시 금액표기부 Y좌표 조정
@@ -653,20 +677,42 @@ Graph.prototype.init = function () {
 
 };
 
+
 /**
- * 터치키의 사이즈에 따라 위치이동, 셀크기 변경 시 사이즈 보정
+ * 터치키의 사이즈에 따라 위치이동 보정
  */
-Graph.prototype.adjstCellSize = function (w, h) {
-  var kw = this.tKeySize.width;
-  var kh = this.tKeySize.height;
+Graph.prototype.adjustCellPoint = function (w, h) {
+  var kw = this.touchKeyInfo.x;
+  var kh = this.touchKeyInfo.y;
 
   var mw = w % kw;
   var mh = h % kh;
+  // 선택된 영역 count ( 가로/세로 )
   var dw = Math.round(w / kw);
   var dh = Math.round(h / kh);
   //터치키 크기(가로/세로) 절반을 넘으면 터치키(가로/세로) 만큼으로 크기 보정
   var dx = Math.abs(mw) <= (kw / 2) ? (kw * dw) : (kw * dw);
   var dy = Math.abs(mh) <= (kh / 2) ? (kh * dh) : (kh * dh);
+
+  return new mxPoint(dx, dy);
+};
+
+/**
+ * 터치키의 셀크기 변경 시 사이즈 보정
+ */
+Graph.prototype.adjustCellSize = function (w, h) {
+  var kw = this.touchKeyInfo.width;
+  var kh = this.touchKeyInfo.height;
+
+  var mw = w % kw;
+  var mh = h % kh;
+  // 선택된 영역 count ( 가로/세로 )
+  var dw = Math.round(w / kw);
+  var dh = Math.round(h / kh);
+  // 터치키 크기(가로/세로) 절반을 넘으면 터치키(가로/세로) 만큼으로 크기 보정
+  // 터치키 사이의 1px 간격 유지를 위해 해당 사이즈만큼 추가 계산 (btnBorder)
+  var dx = ( Math.abs(mw) <= (kw / 2) ? (kw * dw) : (kw * dw) ) + ( ( dw - 1 ) * this.btnBorder );
+  var dy = ( Math.abs(mh) <= (kh / 2) ? (kh * dh) : (kh * dh) ) + ( ( dh - 1 ) * this.btnBorder );
 
   return new mxPoint(dx, dy);
 };
@@ -713,7 +759,7 @@ Graph.prototype.setSelected = function (elt, name, selected) {
 
   if (selected) {
     var arr = elt.className.split(' ');
-    if (arr.indexOf('on') == -1) {
+    if (arr.indexOf('on') === -1) {
       elt.className += ' ' + name;
     }
   }
@@ -739,9 +785,18 @@ Graph.prototype.initValue = function (rowPerPage) {
 
   //xml에 설정했던 페이지당 줄 수 적용
   graph.ROW_PER_PAGE = parseInt(rowPerPage) || graph.ROW_PER_PAGE;
+  // graph 영역 크기 설정
+  var graphSizeX = graph.touchKeyInfo.width * graph.COL_PER_PAGE;
+  var graphSizeY = graph.touchKeyInfo.height * graph.ROW_PER_PAGE;
+  // 버튼사이의 간격 1px 적용
+  graphSizeX += ( graph.COL_PER_PAGE - 1 ) * this.btnBorder;
+  graphSizeY += ( graph.ROW_PER_PAGE - 1 ) * this.btnBorder;
+  // x축 길이 설정
+  graphSizeX =  graphSizeX * graph.MAX_PAGE;
 
-  graph.minimumGraphSize = new mxRectangle(0, 0, graph.tKeySize.width * graph.COL_PER_PAGE * graph.MAX_PAGE, graph.tKeySize.height * graph.ROW_PER_PAGE);
-  graph.maximumGraphBounds = new mxRectangle(0, 0, graph.tKeySize.width * graph.COL_PER_PAGE * graph.MAX_PAGE, graph.tKeySize.height * graph.ROW_PER_PAGE);
+  // graph 에 길이 설정
+  graph.minimumGraphSize = new mxRectangle(0, 0, graphSizeX, graphSizeY);
+  graph.maximumGraphBounds = new mxRectangle(0, 0, graphSizeX, graphSizeY);
 
   //그룹 영역이 2줄 or 3줄 인지에 따라 영역 크기 지정
   if (graph.isGroup) {
@@ -756,11 +811,11 @@ Graph.prototype.initValue = function (rowPerPage) {
     removeClass(graph.container, 'h180');
     removeClass(groupWrap, 'h120');
     removeClass(groupWrap, 'h180');
-    if (parseInt(rowPerPage) == 2) {
+    if (parseInt(rowPerPage) === 2) {
       addClass(graph.container, 'h120');
       addClass(groupWrap, 'h120');
     }
-    else if (parseInt(rowPerPage) == 3) {
+    else if (parseInt(rowPerPage) === 3) {
       addClass(graph.container, 'h180');
       addClass(groupWrap, 'h180');
     }
@@ -839,15 +894,15 @@ Graph.prototype.findPosition = function (pt) {
 
   //var cx = (graph.container.clientWidth) * graph.MAX_PAGE;
   //var cy = graph.container.clientHeight;
-  var cx = (graph.tKeySize.width * graph.COL_PER_PAGE * graph.pageNo);
-  var cy = (graph.tKeySize.height * graph.ROW_PER_PAGE);
-  var px = parseInt(pt.x / graph.tKeySize.width) * graph.tKeySize.width;
-  var py = parseInt(pt.y / graph.tKeySize.height) * graph.tKeySize.height;
-  var lastX = cx - graph.tKeySize.width;
-  var lastY = cy - graph.tKeySize.height;
+  var cx = (graph.touchKeyInfo.x * graph.COL_PER_PAGE * graph.pageNo);
+  var cy = (graph.touchKeyInfo.y * graph.ROW_PER_PAGE);
+  var px = parseInt(pt.x / graph.touchKeyInfo.x) * graph.touchKeyInfo.x;
+  var py = parseInt(pt.y / graph.touchKeyInfo.y) * graph.touchKeyInfo.y;
+  var lastX = cx - graph.touchKeyInfo.x;
+  var lastY = cy - graph.touchKeyInfo.y;
 
-  for (var posY = py; posY < cy; posY += graph.tKeySize.height) {
-    for (var posX = px; posX < cx; posX += graph.tKeySize.width) {
+  for (var posY = py; posY < cy; posY += graph.touchKeyInfo.y) {
+    for (var posX = px; posX < cx; posX += graph.touchKeyInfo.x) {
       //마지막 셀은 페이지 이동을 위해 미사용 처리 필요
       if (posX >= lastX && posY >= lastY) {
         //TODO 다음 페이지 이동하여 첫번째 셀에 위치하도록 수정
@@ -1014,7 +1069,7 @@ Format.prototype.open = function (isLoad) {
   var reqGroup = mxUtils.post(TOUCHKEY_OPEN_URL, '',
     mxUtils.bind(this, function (req) {
       //var enabled = req.getStatus() != 404;
-      if (req.getStatus() == 200) {
+      if (req.getStatus() === 200) {
         try {
           var jsonStr = JSON.parse(req.getText());
           var xmlStr = jsonStr.data;
@@ -1072,7 +1127,7 @@ Format.prototype.setGraphXml = function (graph, node) {
   if (node != null) {
     var dec = new mxCodec(node.ownerDocument);
     //console.log(dec);
-    if (node.nodeName == 'mxGraphModel') {
+    if (node.nodeName === 'mxGraphModel') {
       graph.model.beginUpdate();
       try {
         graph.model.clear();

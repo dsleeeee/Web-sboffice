@@ -10,7 +10,7 @@ import kr.co.solbipos.base.store.tableattr.enums.TblTypeFg;
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2015.05.01  조병준      최초생성
+ * @ 2018.05.01  조병준      최초생성
  *
  * @author NHN한국사이버결제 KCP 조병준
  * @since 2018. 05.01

@@ -54,21 +54,19 @@ Graph.prototype.createOverlay = function (prod, cell) {
 Graph.prototype.initGroupArea = function (prod) {
 
   var graph = this;
-
-  // 상품 그룹영역은 버튼 높이 다름
-  graph.tKeySize.height = 60;
-
-  //그룹영역은 2줄로 초기화
   graph.isGroup = true;
+  //그룹키 정보 (Custom 변수)
+  graph.touchKeyInfo = {width: 99, height: 60, x: 100, y: 61};
+  //그룹영역은 2줄로 초기화
   graph.initValue(MAX_GROUP_ROW);
 
   //상품 그룹 영역에 새로운 그룹 생성
   var createGroup = function (x, y) {
     var parent = graph.getDefaultParent();
-    var grpId = graph.groupPrefix + graph.nextGrpId;
-    //console.log(grpId);
+    var grpId =  + graph.nextGrpId;
+    grpId = "000" + grpId;
+    grpId = graph.groupPrefix + grpId.slice(-4);
     if (graph.isEnabled()) {
-
       var cell;
       graph.model.beginUpdate();
       try {
@@ -76,7 +74,8 @@ Graph.prototype.initGroupArea = function (prod) {
           grpId,
           mxResources.get('groupName'),
           x, y,
-          graph.tKeySize.width, graph.tKeySize.height);
+          graph.touchKeyInfo.width, graph.touchKeyInfo.height,
+          "rounded=0;");
       }
       finally {
         graph.model.endUpdate();
@@ -106,8 +105,8 @@ Graph.prototype.initGroupArea = function (prod) {
     mouseDown: function (sender, me) {
       if (me.state == null) {
         //선택된 상품그룹 영역이 셀이 아닌 경우에는 해당 영역에 새로운 그룹생성
-        var x = parseInt(me.getGraphX() / graph.tKeySize.width) * graph.tKeySize.width;
-        var y = parseInt(me.getGraphY() / graph.tKeySize.height) * graph.tKeySize.height;
+        var x = parseInt(me.getGraphX() / graph.touchKeyInfo.x) * graph.touchKeyInfo.x;
+        var y = parseInt(me.getGraphY() / graph.touchKeyInfo.y) * graph.touchKeyInfo.y;
         var currId = createGroup(x, y);
         var layer = createLayer(currId);
         prod.switchLayer(layer);
@@ -152,7 +151,7 @@ Graph.prototype.initGroupArea = function (prod) {
    * 페이징 버튼
    */
     //페이지 이동 위치 셀의크기 * 페이지에 컬럼 수
-  var scrollWidth = graph.tKeySize.width * graph.COL_PER_PAGE;
+  var scrollWidth = graph.touchKeyInfo.x * graph.COL_PER_PAGE;
   var div = document.getElementById('groupNav');
   var wrap = document.getElementById('groupWrap');
   addClickHandler(document.getElementById('grp'), function () {

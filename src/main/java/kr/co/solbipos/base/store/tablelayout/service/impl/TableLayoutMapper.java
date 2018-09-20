@@ -1,9 +1,9 @@
 package kr.co.solbipos.base.store.tablelayout.service.impl;
 
-import org.apache.ibatis.annotations.Mapper;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.base.store.tablelayout.service.TableGroupVO;
 import kr.co.solbipos.base.store.tablelayout.service.TableVO;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * @Class Name : TableLayoutMapper.java
@@ -12,7 +12,7 @@ import kr.co.solbipos.base.store.tablelayout.service.TableVO;
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2015.05.01  조병준      최초생성
+ * @ 2018.05.01  조병준      최초생성
  *
  * @author NHN한국사이버결제 KCP 조병준
  * @since 2018. 05.01
