@@ -143,7 +143,11 @@ public class RegistController {
     @ResponseBody
     public Result baseListPost(RegistVO registVO, HttpServletRequest request, HttpServletResponse response, Model
             model) {
-        RegistVO vo = registService.selectMember(registVO);
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        RegistVO vo = registService.selectMember(registVO, sessionInfoVO);
+
         return ReturnUtil.returnJson(Status.OK, vo);
     }
 
@@ -189,7 +193,6 @@ public class RegistController {
             if( !StringUtil.isEmpties(registVO.getCreditStore()) ) {
                 result += registService.saveCreditStores(registVO);
             }
-
         }
 
         return ReturnUtil.returnJson(Status.OK, result);

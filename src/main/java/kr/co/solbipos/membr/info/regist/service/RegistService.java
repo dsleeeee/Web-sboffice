@@ -5,6 +5,21 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 
 import java.util.List;
 
+/**
+ * @Class Name : RegistService.java
+ * @Description : 회원관리 > 회원정보 > 회원정보관리
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2018.05.01  정용길      최초생성
+ *
+ * @author NHN한국사이버결제 KCP 정용길
+ * @since 2018.05.01
+ * @version 1.0
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ */
 public interface RegistService {
 
     /**
@@ -36,7 +51,7 @@ public interface RegistService {
      * @param registVO
      * @return
      */
-    RegistVO selectMember(RegistVO registVO);
+    RegistVO selectMember(RegistVO registVO, SessionInfoVO sessionInfoVO);
 
     /**
      * 일치하는 회원정보가 있으면 수정, 없으면 추가

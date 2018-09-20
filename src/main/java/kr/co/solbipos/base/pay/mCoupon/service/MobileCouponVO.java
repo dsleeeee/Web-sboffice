@@ -5,8 +5,8 @@ import kr.co.solbipos.application.common.service.CmmVO;
 import kr.co.solbipos.base.pay.coupon.service.enums.CoupnEnvFg;
 
 /**
- * @Class Name : CouponVO.java
- * @Description : 기초관리 > 결제수단 > 쿠폰등록
+ * @Class Name : MobileCouponVO.java
+ * @Description : 기초관리 > 결제수단 > 모바일쿠폰등록
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용

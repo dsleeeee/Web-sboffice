@@ -8,6 +8,21 @@ import kr.co.solbipos.membr.info.regist.validate.Regist;
 import kr.co.solbipos.membr.info.regist.validate.RegistDelete;
 import org.hibernate.validator.constraints.NotBlank;
 
+/**
+ * @Class Name : RegistVO.java
+ * @Description : 회원관리 > 회원정보 > 회원정보관리
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2018.05.01  정용길      최초생성
+ *
+ * @author NHN한국사이버결제 KCP 정용길
+ * @since 2018.05.01
+ * @version 1.0
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ */
 public class RegistVO extends PageVO {
 
     private static final long serialVersionUID = 1L;

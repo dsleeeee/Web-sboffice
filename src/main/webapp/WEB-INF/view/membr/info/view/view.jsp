@@ -224,6 +224,8 @@ $(document).ready(function(){
       infoInit();
       var data = result.data;
 
+      console.log(data)
+
       vMembrNo.value     = data.membrNo;
       vMembrNm.value     = data.membrNm;
       vMembrNmEng.value  = data.memberEngNm;
@@ -241,6 +243,8 @@ $(document).ready(function(){
       vUseYn.selectedValue = data.useYn;
       vEmailRecv.selectedValue = data.emailRecvYn;
       vSmsRecv.selectedValue = data.smsRecvYn;
+
+      $("#storeCd").val(data.creditStore); //TODO text도
       $("#vMembrOrgnCd").val(data.membrOrgnCd);
       $("#membrNoNm").text("<s:message code='regist.membr.info'/>" + " [" + data.membrNo + "/" + data.membrNm + "]");
       vMembrNo.isReadOnly = true;
@@ -363,6 +367,10 @@ $(document).ready(function(){
     vGender.selectedValue = 'N';
     vWedding.selectedValue = 'N';
     vUseYn.selectedValue = 'Y';
+
+    $("#storeCd").val("");
+    $("#storeCdText").val("");
+
   }
 
   <%--삭제 버튼--%>
