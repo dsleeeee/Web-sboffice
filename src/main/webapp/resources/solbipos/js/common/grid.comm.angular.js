@@ -35,6 +35,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
     } else {
       params['curr'] = 1;
     }
+    // 가상로그인 대응한 session id 설정
     if (document.getElementsByName("sessionId")[0]) {
       params['sid'] = document.getElementsByName("sessionId")[0].value;
     }
@@ -126,6 +127,10 @@ function RootController(ctrlName, $scope, $http, isPicker) {
       return;
     } else {
       params = JSON.stringify(params);
+    }
+    // 가상로그인 대응한 session id 설정
+    if (document.getElementsByName("sessionId")[0]) {
+      params['sid'] = document.getElementsByName("sessionId")[0].value;
     }
     // ajax 통신 설정
     $http({
