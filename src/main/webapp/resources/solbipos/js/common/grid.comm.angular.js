@@ -121,22 +121,23 @@ function RootController(ctrlName, $scope, $http, isPicker) {
   };
   // 저장
   $scope._save = function (url, params, callback) {
+    var sParam = {};
     // 길이체크
     if (params.length <= 0) {
       $scope._popMsg(messages["cmm.not.modify"]);
       return;
     } else {
-      params = JSON.stringify(params);
-    }
-    // 가상로그인 대응한 session id 설정
-    if (document.getElementsByName("sessionId")[0]) {
-      params['sid'] = document.getElementsByName("sessionId")[0].value;
+      // 가상로그인 대응한 session id 설정
+      if (document.getElementsByName("sessionId")[0]) {
+        sParam['sid'] = document.getElementsByName("sessionId")[0].value;
+      }
     }
     // ajax 통신 설정
     $http({
       method: 'POST', //방식
       url: url, /* 통신할 URL */
-      data: params, /* 파라메터로 보낼 데이터 */
+      data: params, /* 파라메터로 보낼 데이터 : @requestBody */
+      params: sParam, /* 파라메터로 보낼 데이터 : request.getParameter */
       headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
     }).then(function successCallback(response) {
       if(response.data.status === "OK") {
