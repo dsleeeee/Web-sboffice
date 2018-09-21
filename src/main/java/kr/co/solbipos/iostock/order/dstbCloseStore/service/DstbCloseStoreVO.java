@@ -1,10 +1,10 @@
-package kr.co.solbipos.iostock.order.distribute.service;
+package kr.co.solbipos.iostock.order.dstbCloseStore.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
 
-public class DstbReqVO extends PageVO {
+public class DstbCloseStoreVO extends PageVO {
 
-    private static final long serialVersionUID = 6264807923226458551L;
+    private static final long serialVersionUID = -2463213696404804028L;
 
     /** 본사코드 */
     private String hqOfficeCd;
@@ -14,6 +14,8 @@ public class DstbReqVO extends PageVO {
     private Integer seq;
     /** 매장코드 */
     private String storeCd;
+    /** 매장명 */
+    private String storeNm;
     /** 사원번호 MD사원 */
     private String empNo;
     /** 전표구분 1:주문 -1:반품 */
@@ -64,6 +66,12 @@ public class DstbReqVO extends PageVO {
     private Long mdTot;
     /** 매니저공급단가 */
     private Integer mgrSplyUprc;
+    /** 이전 매니저수량 주문단위 */
+    private Integer prevMgrUnitQty;
+    /** 이전 매니저수량 나머지 */
+    private Integer prevMgrEtcQty;
+    /** 이전 매니저수량합계 낱개 */
+    private Integer prevMgrTotQty;
     /** 매니저수량 주문단위 */
     private Integer mgrUnitQty;
     /** 매니저수량 나머지 */
@@ -82,12 +90,12 @@ public class DstbReqVO extends PageVO {
     private String mgrId;
     /** 처리구분 TB_CM_NMCODE(NMCODE_GRP_CD='110') 00:등록, 10:MD확정, 20:분배마감, 30:전표수거 */
     private String procFg;
+    /** 수정할 처리구분 TB_CM_NMCODE(NMCODE_GRP_CD='110') 00:등록, 10:MD확정, 20:분배마감, 30:전표수거 */
+    private String updateProcFg;
     /** 주문전표번호 YYMM(4)+SEQ(6) */
     private String slipNo;
     /** 비고 */
     private String remark;
-    /** 주문HD 비고 */
-    private String hdRemark;
     /** 조회 시작일 */
     private String startDate;
     /** 조회 종료일 */
@@ -100,8 +108,8 @@ public class DstbReqVO extends PageVO {
     private String vatFg01;
     /** 출고가-부가세포함여부 */
     private String envst0011;
-    /** 분배완료여부 */
-    private String dstbConfirmFg;
+    /** 확정여부 */
+    private Boolean confirmYn;
 
     /**
      * @return the hqOfficeCd
@@ -157,6 +165,20 @@ public class DstbReqVO extends PageVO {
      */
     public void setStoreCd(String storeCd) {
         this.storeCd = storeCd;
+    }
+
+    /**
+     * @return the storeNm
+     */
+    public String getStoreNm() {
+        return storeNm;
+    }
+
+    /**
+     * @param storeNm the storeNm to set
+     */
+    public void setStoreNm(String storeNm) {
+        this.storeNm = storeNm;
     }
 
     /**
@@ -510,6 +532,48 @@ public class DstbReqVO extends PageVO {
     }
 
     /**
+     * @return the prevMgrUnitQty
+     */
+    public Integer getPrevMgrUnitQty() {
+        return prevMgrUnitQty;
+    }
+
+    /**
+     * @param prevMgrUnitQty the prevMgrUnitQty to set
+     */
+    public void setPrevMgrUnitQty(Integer prevMgrUnitQty) {
+        this.prevMgrUnitQty = prevMgrUnitQty;
+    }
+
+    /**
+     * @return the prevMgrEtcQty
+     */
+    public Integer getPrevMgrEtcQty() {
+        return prevMgrEtcQty;
+    }
+
+    /**
+     * @param prevMgrEtcQty the prevMgrEtcQty to set
+     */
+    public void setPrevMgrEtcQty(Integer prevMgrEtcQty) {
+        this.prevMgrEtcQty = prevMgrEtcQty;
+    }
+
+    /**
+     * @return the prevMgrTotQty
+     */
+    public Integer getPrevMgrTotQty() {
+        return prevMgrTotQty;
+    }
+
+    /**
+     * @param prevMgrTotQty the prevMgrTotQty to set
+     */
+    public void setPrevMgrTotQty(Integer prevMgrTotQty) {
+        this.prevMgrTotQty = prevMgrTotQty;
+    }
+
+    /**
      * @return the mgrUnitQty
      */
     public Integer getMgrUnitQty() {
@@ -636,6 +700,20 @@ public class DstbReqVO extends PageVO {
     }
 
     /**
+     * @return the updateProcFg
+     */
+    public String getUpdateProcFg() {
+        return updateProcFg;
+    }
+
+    /**
+     * @param updateProcFg the updateProcFg to set
+     */
+    public void setUpdateProcFg(String updateProcFg) {
+        this.updateProcFg = updateProcFg;
+    }
+
+    /**
      * @return the slipNo
      */
     public String getSlipNo() {
@@ -661,20 +739,6 @@ public class DstbReqVO extends PageVO {
      */
     public void setRemark(String remark) {
         this.remark = remark;
-    }
-
-    /**
-     * @return the hdRemark
-     */
-    public String getHdRemark() {
-        return hdRemark;
-    }
-
-    /**
-     * @param hdRemark the hdRemark to set
-     */
-    public void setHdRemark(String hdRemark) {
-        this.hdRemark = hdRemark;
     }
 
     /**
@@ -762,16 +826,16 @@ public class DstbReqVO extends PageVO {
     }
 
     /**
-     * @return the dstbConfirmFg
+     * @return the confirmYn
      */
-    public String getDstbConfirmFg() {
-        return dstbConfirmFg;
+    public Boolean getConfirmYn() {
+        return confirmYn;
     }
 
     /**
-     * @param dstbConfirmFg the dstbConfirmFg to set
+     * @param confirmYn the confirmYn to set
      */
-    public void setDstbConfirmFg(String dstbConfirmFg) {
-        this.dstbConfirmFg = dstbConfirmFg;
+    public void setConfirmYn(Boolean confirmYn) {
+        this.confirmYn = confirmYn;
     }
 }

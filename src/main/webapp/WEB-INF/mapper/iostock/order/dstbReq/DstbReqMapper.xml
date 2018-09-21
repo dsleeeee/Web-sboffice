@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="kr.co.solbipos.iostock.order.distribute.service.impl.DstbReqMapper">
+<mapper namespace="kr.co.solbipos.iostock.order.dstbReq.service.impl.DstbReqMapper">
 
     <!-- 분배등록 리스트 조회 -->
     <!--
@@ -11,7 +11,7 @@
         COMMENTS : 분배등록 리스트를 조회한다.
     -->
     <select id="getDstbReqList" parameterType="dstbReqVO" resultType="DefaultMap">
-        /* USE : dstbReqMapper.getDstbReqList */
+        /* USE : DstbReqMapper.getDstbReqList */
         <![CDATA[
         SELECT   tphso.REQ_DATE, tphso.STORE_CD, tms.STORE_NM
         ,        tphso.DTL_CNT, tphso.PROC_FG, tphso.REMARK
@@ -51,7 +51,7 @@
         COMMENTS : 분배등록 상세 상품 리스트를 조회한다.
     -->
     <select id="getDstbReqDtlList" parameterType="dstbReqVO" resultType="DefaultMap">
-        /* USE : dstbReqMapper.getDstbReqDtlList */
+        /* USE : DstbReqMapper.getDstbReqDtlList */
         <![CDATA[
         SELECT  tphsod.STORE_CD, tmp.PROD_CD, tmp.PROD_NM
         ,       DECODE(tmp.VAT_FG,'Y',1,0) AS VAT_FG01
@@ -99,12 +99,6 @@
         ]]>
     </select>
 
-
-
-
-
-
-
     <!--  분배자료 생성 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_DISTRIBUTE
@@ -112,7 +106,7 @@
         COMMENTS : 주문등록 정보를 바탕으로 분배자료를 생성한다.
     -->
     <insert id="insertDstbReqRegist" parameterType="dstbReqVO">
-        /* USE : dstbReqMapper.insertDstbReqRegist */
+        /* USE : DstbReqMapper.insertDstbReqRegist */
         <selectKey resultType="int" keyProperty="seq" order="BEFORE">
             SELECT  NVL(MAX(tphsd.SEQ), 0) AS SEQ
             FROM    TB_PO_HQ_STORE_DISTRIBUTE tphsd
@@ -217,78 +211,6 @@
                 )
     </insert>
 
-    <!--  분배등록 저장 -->
-    <!--
-        TABLE    : TB_PO_HQ_STORE_DISTRIBUTE
-        PARAM    : dstbReqVO
-        COMMENTS : 분배자료 상세를 등록한다.
-    -->
-    <insert id="insertDstbReqDtl" parameterType="dstbReqVO">
-        /* USE : dstbReqMapper.insertDstbReqDtl */
-        <selectKey resultType="String" keyProperty="maxSeq" order="BEFORE">
-            SELECT  NVL(MAX(tphsd.SEQ), 0) AS MAX_SEQ
-            FROM    TB_PO_HQ_STORE_DISTRIBUTE tphsd
-            WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
-            AND     REQ_DATE      = #{reqDate}
-        </selectKey>
-        INSERT INTO TB_PO_HQ_STORE_DISTRIBUTE
-        (
-            HQ_OFFICE_CD,
-            REQ_DATE,
-            SEQ,
-            STORE_CD,
-            EMP_NO,
-            SLIP_FG,
-            DSTB_FG,
-            STORAGE_CD,
-            HQ_BRAND_CD,
-            PROD_CD,
-            PO_UNIT_FG,
-            PO_UNIT_QTY,
-            MD_SPLY_UPRC,
-            MD_UNIT_QTY,
-            MD_ETC_QTY,
-            MD_TOT_QTY,
-            MD_AMT,
-            MD_VAT,
-            MD_TOT,
-            PROC_FG,
-            REMARK,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID
-        )
-        VALUES
-        (
-            #{hqOfficeCd},
-            #{reqDate},
-            #{maxSeq},
-            #{storeCd},
-            #{empNo},
-            #{slipFg},
-            #{dstbFg},
-            #{storageCd},
-            #{hqBrandCd},
-            #{prodCd},
-            #{poUnitFg},
-            #{poUnitQty},
-            #{mdSplyUprc},
-            #{mdUnitQty},
-            #{mdEtcQty},
-            #{mdTotQty},
-            #{mdAmt},
-            #{mdVat},
-            #{mdTot},
-            #{procFg},
-            #{remark},
-            #{regDt},
-            #{regId},
-            #{modDt},
-            #{modId}
-        )
-    </insert>
-
     <!-- 분배등록 - 분배완료시 MD수량 DTL 저장 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_ORDER_DTL
@@ -296,7 +218,7 @@
         COMMENTS : 분배등록 - 분배완료시 MD수량 관련 내용 DTL을 수정한다.
     -->
     <update id="updateDstbConfirm" parameterType="storeOrderDtlVO">
-        /* USE : dstbReqMapper.updateDistributeConfirm */
+        /* USE : DstbReqMapper.updateDistributeConfirm */
         UPDATE  TB_PO_HQ_STORE_ORDER_DTL
         SET     MD_SPLY_UPRC    = ORDER_SPLY_UPRC,
                 MD_UNIT_QTY     = ORDER_UNIT_QTY,
@@ -319,7 +241,7 @@
         COMMENTS : 분배등록 - MD수량 분배 DTL을 수정한다.
     -->
     <update id="updateDstbReqDtl" parameterType="dstbReqVO">
-        /* USE : dstbReqMapper.updateDstbReqDtl */
+        /* USE : DstbReqMapper.updateDstbReqDtl */
         UPDATE  TB_PO_HQ_STORE_ORDER_DTL
         SET     MD_SPLY_UPRC    = #{mdSplyUprc},
                 MD_UNIT_QTY     = #{mdUnitQty},

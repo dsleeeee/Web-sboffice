@@ -23,15 +23,15 @@
         <tr>
             <%-- 기사코드 --%>
             <th><s:message code="deliveryCharger.dlvrCd"/></th>
-            <td><input type="text" id="searchDlvrCd" name="searchDlvrCd" ng-model="dlvrCd" class="sb-input w100" maxlength="4"/></td>
+            <td><input type="text" id="srchDlvrCd" name="srchDlvrCd" ng-model="dlvrCd" class="sb-input w100" maxlength="4"/></td>
             <%-- 기사명 --%>
             <th><s:message code="deliveryCharger.dlvrNm"/></th>
-            <td><input type="text" id="searchDlvrNm" name="searchDlvrNm" ng-model="dlvrNm" class="sb-input w100" maxlength="12" /></td>
+            <td><input type="text" id="srchDlvrNm" name="srchDlvrNm" ng-model="dlvrNm" class="sb-input w100" maxlength="12" /></td>
         </tr>
         <tr>
             <%-- 차량번호 --%>
             <th><s:message code="deliveryCharger.carNo"/></th>
-            <td><input type="text" id="searchCarNo" name="searchCarNo" ng-model="carNo" class="sb-input w100" maxlength="14" /></td>
+            <td><input type="text" id="srchCarNo" name="srchCarNo" ng-model="carNo" class="sb-input w100" maxlength="14" /></td>
             <th></th>
             <td></td>
         </tr>
@@ -140,7 +140,7 @@
                 }
             });
 
-            // 기사코드 그리드 선택 이벤트
+            // 그리드 클릭 이벤트
             s.addEventListener(s.hostElement, 'mousedown', function(e) {
                 var ht = s.hitTest(e);
                 if( ht.cellType === wijmo.grid.CellType.Cell) {

@@ -1,4 +1,4 @@
-package kr.co.solbipos.iostock.order.distribute.service;
+package kr.co.solbipos.iostock.order.dstbReq.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;

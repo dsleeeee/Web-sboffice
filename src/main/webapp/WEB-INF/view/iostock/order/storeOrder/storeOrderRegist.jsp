@@ -13,7 +13,8 @@
             <a href="javascript:;" class="wj-hide btn_close"></a>
         </div>
         <div class="wj-dialog-body sc2" style="height: 600px;">
-            <p class="s14 bk mb5">[주문] 상품추가 (</p><p id="registTitle" class="s14 bk mb5"></p>
+            <p class="s14 bk mb5 fl">[<s:message code="storeOrder.dtl.order" />] <s:message code="storeOrder.dtl.addProd" /> </p> <p id="registSubTitle" class="s14 bk mb5 fl"></p>
+
             <table class="tblType01">
                 <colgroup>
                     <col class="w15" />
@@ -144,6 +145,24 @@
         // grid 초기화 : 생성되기전 초기화되면서 생성된다
         $scope.initGrid = function (s, e) {
             // s.allowMerging = wijmo.grid.AllowMerging.AllHeaders;
+            // 그리드 포맷 핸들러
+            s.formatItem.addHandler(function (s, e) {
+                if (e.panel === s.cells) {
+                    var col = s.columns[e.col];
+                    var item = s.rows[e.row].dataItem;
+                    if(col.binding === "orderEtcQty") { // 입수에 따라 주문수량 컬럼 readonly 컨트롤
+                        // console.log(item);
+                        if(item.poUnitQty === 1) {
+                            wijmo.addClass(e.cell, 'wj-custom-readonly');
+                            wijmo.setAttribute(e.cell, 'aria-readonly', true);
+
+                            // Attribute 의 변경사항을 적용.
+                            var html = e.cell.outerHTML;
+                            e.cell.outerHTML = html;
+                        }
+                    }
+                }
+            });
 
             s.cellEditEnded.addHandler(function (s, e) {
                 if (e.panel === s.cells) {
@@ -156,19 +175,18 @@
                         var vat01         = parseInt(item.vatFg01);
                         var envst0011     = parseInt(item.envst0011);
 
-                        var unitQty = (parseInt(nvl(item.prevOrderUnitQty,0)) + parseInt(nvl(item.orderUnitQty,0))) * parseInt(item.poUnitQty);
-                        var etcQty  = parseInt(nvl(item.prevOrderEtcQty,0)) + parseInt(nvl(item.orderEtcQty,0));
-                        var totQty  = parseInt(unitQty + etcQty);
+                        var unitQty      = (parseInt(nvl(item.prevOrderUnitQty,0)) + parseInt(nvl(item.orderUnitQty,0))) * parseInt(item.poUnitQty);
+                        var etcQty       = parseInt(nvl(item.prevOrderEtcQty,0)) + parseInt(nvl(item.orderEtcQty,0));
+                        var totQty       = parseInt(unitQty + etcQty);
                         var tempOrderAmt = Math.round(totQty * orderSplyUprc / poUnitQty);
-                        var orderAmt = tempOrderAmt - Math.round(tempOrderAmt * vat01 * envst0011 / 11);
-                        var orderVat = Math.round(tempOrderAmt * vat01 / (10 + envst0011));
-                        var orderTot = parseInt(orderAmt + orderVat);
+                        var orderAmt     = tempOrderAmt - Math.round(tempOrderAmt * vat01 * envst0011 / 11);
+                        var orderVat     = Math.round(tempOrderAmt * vat01 / (10 + envst0011));
+                        var orderTot     = parseInt(orderAmt + orderVat);
 
-                        item.orderTotQty = totQty;   // 총주문수량
+                        item.orderTotQty = totQty;   // 총수량
                         item.orderAmt    = orderAmt; // 금액
                         item.orderVat    = orderVat; // VAT
                         item.orderTot    = orderTot; // 합계
-
                     }
                 }
 
@@ -357,7 +375,7 @@
                                 }
                             }
 
-                            $("#registStoreLoanInfo").html("1회주문한도액 : "+comma($scope.maxOrderAmt)+" 여신잔액 : "+comma($scope.currLoanAmt)+" 미출고액 : "+comma($scope.prevOrderTot)+" 주문가능액 : "+comma($scope.availableOrderAmt));
+                            $("#registStoreLoanInfo").html("1회주문한도액 : "+addComma($scope.maxOrderAmt)+" 여신잔액 : "+addComma($scope.currLoanAmt)+" 미출고액 : "+addComma($scope.prevOrderTot)+" 주문가능액 : "+addComma($scope.availableOrderAmt));
                         }
                     }
                 }
@@ -370,7 +388,7 @@
                 // "complete" code here
                 if(popShowFg === "Y") {
                     $scope.wjStoreOrderRegistLayer.show(true);
-                    $("#registTitle").html('<s:message code="storeOrder.reqDate"/> : '+getFormatDate($scope.reqDate, '-'));
+                    $("#registSubTitle").html(' (<s:message code="storeOrder.reqDate"/> : '+getFormatDate($scope.reqDate, '-')+')');
                 }
             });
         };
@@ -384,35 +402,9 @@
             params.listScale = 500;
 
             // 조회 수행 : 조회URL, 파라미터, 콜백함수
-            $scope._inquiryMain("/iostock/order/storeOrder/storeOrderRegist/list.sb", params, function () {
-                $scope.prodOrderCheck();
-            });
+            $scope._inquiryMain("/iostock/order/storeOrder/storeOrderRegist/list.sb", params);
         };
 
-        // 입수에 따라 주문수량 컬럼 readonly 컨트롤
-        $scope.prodOrderCheck = function() {
-            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-                var item = $scope.flex.collectionView.items[i];
-                // console.log("==item==");
-                // console.log(item);
-                if(item.poUnitQty === 1) {
-                    // console.log("==$scope.flex==");
-                    // console.log($scope.flex);
-
-                    // 입수가 1인 경우 낱개 주문등록 컬럼 수정불가하도록 함.
-                    // 2018.09.11 안동관. 주석처리 해놓은 8(orderEtcQty)이라고 하드코딩하기 싫어서 for문 돌도록 해놨는데 느린듯 싶으면 걍 하드코딩으로 해야할듯...
-                    // $scope.flex.rows[i].grid.columns[7].isReadOnly = true;
-                    for(var k = 0; k < $scope.flex.rows[i].grid.columns.length; k++) {
-                        var columns = $scope.flex.rows[i].grid.columns[k];
-                        if(columns.binding === "orderEtcQty") {
-                            columns.isReadOnly = true;
-                            break;
-                        }
-                    }
-                }
-            }
-            // console.log($scope.flex.collectionView.items);
-        };
 
         // 주문 상품 저장
         $scope.saveStoreOrderRegist = function () {
@@ -434,9 +426,9 @@
                     return;
                 }
 
-                item.status  = "U";
-                item.reqDate = $scope.reqDate;
-                item.slipFg  = $scope.slipFg;
+                item.status    = "U";
+                item.reqDate   = $scope.reqDate;
+                item.slipFg    = $scope.slipFg;
                 item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
                 item.hdRemark  = $scope.regHdRemark;
                 orderTot += parseInt(item.orderTot);

@@ -4,7 +4,7 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
-<c:set var="baseUrl" value="/iostock/order/distribute/dstbReq/"/>
+<c:set var="baseUrl" value="/iostock/order/dstbReq/dstbReq/"/>
 
 <wj-popup id="wjDstbReqDtlLayer" control="wjDstbReqDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
     <div id="dstbReqDtlLayer" class="wj-dialog wj-dialog-columns" ng-controller="dstbReqDtlCtrl">
@@ -101,6 +101,24 @@
 
         // grid 초기화 : 생성되기전 초기화되면서 생성된다
         $scope.initGrid = function (s, e) {
+            // 그리드 포맷 핸들러
+            s.formatItem.addHandler(function (s, e) {
+                if (e.panel === s.cells) {
+                    var col = s.columns[e.col];
+                    var item = s.rows[e.row].dataItem;
+                    if(col.binding === "mdEtcQty") { // 입수에 따라 분배수량 컬럼 readonly 컨트롤
+                        // console.log(item);
+                        if(item.poUnitQty === 1) {
+                            wijmo.addClass(e.cell, 'wj-custom-readonly');
+                            wijmo.setAttribute(e.cell, 'aria-readonly', true);
+
+                            // Attribute 의 변경사항을 적용.
+                            e.cell.outerHTML = e.cell.outerHTML;
+                        }
+                    }
+                }
+            });
+
             s.cellEditEnded.addHandler(function (s, e) {
                 if (e.panel === s.cells) {
                     var col = s.columns[e.col];
@@ -221,7 +239,7 @@
                             }
                         }
 
-                        $("#dtlAvailableOrderAmt").html("주문가능액 : "+comma($scope.availableOrderAmt));
+                        $("#dtlAvailableOrderAmt").html("주문가능액 : "+addComma($scope.availableOrderAmt));
                     }
                 }
             }, function errorCallback(response) {
@@ -254,33 +272,8 @@
             params.storeCd = $scope.storeCd;
             params.slipFg  = $scope.slipFg;
             // 조회 수행 : 조회URL, 파라미터, 콜백함수
-            $scope._inquirySub("/iostock/order/distribute/dstbReqDtl/list.sb", params, function () {
-                $scope.prodOrderCheck();
+            $scope._inquirySub("/iostock/order/dstbReq/dstbReqDtl/list.sb", params, function () {
             });
-        };
-
-        // 입수에 따라 주문수량 컬럼 readonly 컨트롤
-        $scope.prodOrderCheck = function() {
-            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-                var item = $scope.flex.collectionView.items[i];
-                // console.log("==item==");
-                // console.log(item);
-                if(item.poUnitQty === 1) {
-                    // console.log("==$scope.flex==");
-                    // console.log($scope.flex);
-
-                    // 2018.09.11 안동관. 주석처리 해놓은 7이라고 하드코딩하기 싫어서 for문 돌도록 해놨는데 느린듯 싶으면 걍 하드코딩으로 해야할듯...
-                    // $scope.flex.rows[i].grid.columns[7].isReadOnly = true;
-                    for(var k = 0; k < $scope.flex.rows[i].grid.columns.length; k++) {
-                        var columns = $scope.flex.rows[i].grid.columns[k];
-                        if(columns.binding === "mdEtcQty") {
-                            columns.isReadOnly = true;
-                            break;
-                        }
-                    }
-                }
-            }
-            // console.log($scope.flex.collectionView.items);
         };
 
         // 공급가 및 수량적용
@@ -376,7 +369,7 @@
 
         // 분배 저장
         $scope.saveDstbReqDtl = function (params) {
-            $scope._save("/iostock/order/distribute/dstbReqDtl/save.sb", params, function() { $scope.saveDstbReqDtlCallback() });
+            $scope._save("/iostock/order/dstbReq/dstbReqDtl/save.sb", params, function() { $scope.saveDstbReqDtlCallback() });
         };
 
         // 저장 후 콜백 함수
