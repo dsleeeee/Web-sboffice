@@ -5,6 +5,7 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.prod.touchkey.service.TouchKeyService;
 import kr.co.solbipos.base.prod.touchkey.service.TouchVO;
@@ -50,14 +51,16 @@ public class TouchKeyController {
     private final SessionService sessionService;
     private final TouchKeyService touchkeyService;
     private final MessageService messageService;
+    private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
     public TouchKeyController(SessionService sessionService,
-        TouchKeyService touchkeyService, MessageService messageService) {
+        TouchKeyService touchkeyService, MessageService messageService, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
         this.touchkeyService = touchkeyService;
         this.messageService = messageService;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
 
@@ -82,7 +85,7 @@ public class TouchKeyController {
         //화면에 표시할 상점의 상품 정보 조회
         model.addAttribute("prods", convertToJson(touchkeyService.getProductListForTouchKey(params)));
         //TODO 매장의 터치키 환경 설정 값을 조회해서 셋팅
-        model.addAttribute("maxGroupRow", "2");
+        model.addAttribute("maxGroupRow", cmmEnvUtil.getHqEnvst(sessionInfoVO, "0018"));
 
         return RESULT_URI + "/touchKey";
     }

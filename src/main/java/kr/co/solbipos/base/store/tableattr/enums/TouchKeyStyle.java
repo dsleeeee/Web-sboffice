@@ -37,6 +37,8 @@ public enum TouchKeyStyle implements CodeEnum {
     /** 리사이즈여부 */
     RESIZABLE("resizable"),
 
+    /** CLASS_CD-custom */
+    CLASS_CD("classCd"),
     /** TUKEY_CD-custom */
     TUKEY_CD("tukeyCd"),
     /** TUKEY_CD-custom */

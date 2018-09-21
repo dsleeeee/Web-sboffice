@@ -13,6 +13,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.exception.BizException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.common.enums.ConfgFg;
 import kr.co.solbipos.base.common.enums.InFg;
@@ -58,11 +59,13 @@ public class TouchKeyServiceImpl implements TouchKeyService {
     // Constructor Injection
     private final MessageService messageService;
     private final TouchKeyMapper keyMapper;
+    private final CmmEnvUtil cmmEnvUtil;
 
     @Autowired
-    public TouchKeyServiceImpl(MessageService messageService, TouchKeyMapper keyMapper) {
+    public TouchKeyServiceImpl(MessageService messageService, TouchKeyMapper keyMapper, CmmEnvUtil cmmEnvUtil) {
         this.messageService = messageService;
         this.keyMapper = keyMapper;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /** 상품목록 조회 : 판매터치키에서 사용 */
@@ -110,7 +113,7 @@ public class TouchKeyServiceImpl implements TouchKeyService {
 
         //XML 분석, TouchClass, Touch Domain 생성
         //터치키 분류 TABLE(TB_MS_TOUCH_CLASS)
-        List<TouchClassVO> touchClassVOs = parseXML(xml);
+        List<TouchClassVO> touchClassVOs = parseXML(sessionInfoVO, xml);
 
         // 매장/본사의 현재 설정정보 삭제
         TouchClassVO tcParams = new TouchClassVO();
@@ -160,7 +163,7 @@ public class TouchKeyServiceImpl implements TouchKeyService {
      * @param xml 파싱대상XML
      * @return 테이블그룹객체
      */
-    private List<TouchClassVO> parseXML(String xml) {
+    private List<TouchClassVO> parseXML(SessionInfoVO sessionInfoVO, String xml) {
 
         String[] xmls = xml.split("\\|");
 //        LOGGER.info(XssPreventer.unescape(xmls[0]));
@@ -199,20 +202,21 @@ public class TouchKeyServiceImpl implements TouchKeyService {
                 // 터치키 그룹은 시즌,행사별 등 일종의 템플릿.
                 // TODO : 터치키그룹 관리할 수 있는 화면 필요. ex.그룹키생성 : 20180919 노현수
                 touchClassVO.setTukeyGrpCd("01");
-                touchClassVO.setTukeyClassCd(cell.getId());
                 touchClassVO.setTukeyClassNm(String.valueOf(cell.getValue()));
 
-                //페이지 번호 계산 - 100*5
-               long pageNo = (long)(touchClassVO.getX() / 500) + 1L;
-               touchClassVO.setPageNo(pageNo);
+                // 페이지 번호 계산 - 100*5
+                Double pageNo = (touchClassVO.getX() / 500) + 1;
+                touchClassVO.setPageNo(pageNo.intValue());
+                // 페이지당 Rows
+                String pageRows = cmmEnvUtil.getHqEnvst(sessionInfoVO, "0018");
+                touchClassVO.setPageRows(Integer.parseInt(pageRows));
 
-                //좌표, 크기
+                // 좌표, 크기
                 mxGeometry geo = cell.getGeometry();
-                touchClassVO.setX((long)geo.getX());
-                touchClassVO.setY((long)geo.getY());
-                touchClassVO.setWidth((long)geo.getWidth());
-                touchClassVO.setHeight((long)geo.getHeight());
-
+                touchClassVO.setX(geo.getX());
+                touchClassVO.setY(geo.getY());
+                touchClassVO.setWidth(geo.getWidth());
+                touchClassVO.setHeight(geo.getHeight());
                 touchClassVO.setInFg(InFg.STORE);
 
                 //스타일
@@ -226,6 +230,10 @@ public class TouchKeyServiceImpl implements TouchKeyService {
                             continue;
                         }
                         switch(TouchKeyStyle.getEnum(styleKeyValue[0])) {
+                            case CLASS_CD:
+                                // 그룹코드는 layer 처리 문제로 커스텀태그의 값 활용하여 설정한다. : 20180920 노현수
+                                touchClassVO.setTukeyClassCd(styleKeyValue[1]);
+                                break;
                             case FONT_COLOR:
                                 touchClassVO.setFontColor(styleKeyValue[1]);
                                 break;
@@ -233,7 +241,7 @@ public class TouchKeyServiceImpl implements TouchKeyService {
                                 touchClassVO.setFillColor(styleKeyValue[1]);
                                 break;
                             case FONT_SIZE:
-                                touchClassVO.setFontSize(Long.parseLong(styleKeyValue[1]));
+                                touchClassVO.setFontSize(Integer.parseInt(styleKeyValue[1]));
                                 break;
                             default:
                                 break;

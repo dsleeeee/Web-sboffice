@@ -154,14 +154,14 @@ public class TouchkeyServceTest {
 
                 //좌표, 크기
                 mxGeometry geo = cell.getGeometry();
-                touchClassVO.setX((long)geo.getX());
-                touchClassVO.setY((long)geo.getY());
-                touchClassVO.setWidth((long)geo.getWidth());
-                touchClassVO.setHeight((long)geo.getHeight());
+                touchClassVO.setX(geo.getX());
+                touchClassVO.setY(geo.getY());
+                touchClassVO.setWidth(geo.getWidth());
+                touchClassVO.setHeight(geo.getHeight());
 
                  //페이지 번호 계산 - 80*5
-                long pageNo = (long)(touchClassVO.getX() / 400) + 1L;
-                touchClassVO.setPageNo(pageNo);
+                Double pageNo = (touchClassVO.getX() / 400) + 1;
+                touchClassVO.setPageNo(pageNo.intValue());
 
                 touchClassVO.setInFg(InFg.STORE);
 
@@ -184,7 +184,7 @@ public class TouchkeyServceTest {
                                 touchClassVO.setFillColor(styleKeyValue[1]);
                                 break;
                             case FONT_SIZE:
-                                touchClassVO.setFontSize(Long.parseLong(styleKeyValue[1]));
+                                touchClassVO.setFontSize(Integer.parseInt(styleKeyValue[1]));
                                 break;
                             default:
                                 break;
