@@ -43,9 +43,9 @@ public class HqManageServiceImpl implements HqManageService{
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    private final String DEFAULT_POS_EMPNO = "0000";
-    private final String DEFAULT_POS_PASSWORD = "1234";
-    private final String SYS_CLOSURE_DATE = "99991231";
+    private final String DEFAULT_POS_EMPNO = "0000";    // 기본 포스 직원번호
+    private final String DEFAULT_POS_PASSWORD = "1234"; // 기본 포스 패스워드
+    private final String SYS_CLOSURE_DATE = "99991231"; // 시스템 종료일
 
 
     @Autowired
