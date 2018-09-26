@@ -86,7 +86,7 @@ public class StoreManageServiceImpl implements StoreManageService{
         // 설치 포스수 조회
         int instPosCnt = mapper.getInstPosCnt(storeManageVO);
 
-        // 코너별 승인
+        // TODO 코너별 승인
 //        List<DefaultMap<String>> cornrApproveList = mapper.getCornrApproveList(storeManageVO);
 
         // 포스별 승인
@@ -162,7 +162,7 @@ public class StoreManageServiceImpl implements StoreManageService{
         storeManageVO.setPosEmpNo(pEmpNo);
         storeManageVO.setPosUserPwd(pUserPwd);
 
-        // 본사의 포스 프로그램 구분
+        // TODO 본사의 포스 프로그램 구분
         // 20180821 환경변수 값 바꾸면서 매장환경으로 변경됨 -> 매장환경설정에서 변경해야하는 값.
         /*
         String posEnvValue = "";
@@ -292,6 +292,19 @@ public class StoreManageServiceImpl implements StoreManageService{
             // 프랜차이즈 설정 - 판매가 HD 복사
             // 프랜차이즈 설정 - 판매가 DT 복사
         }
+
+        StoreNmcodeVO nmcodeVO = new StoreNmcodeVO();
+        nmcodeVO.setStoreCd(storeCd);
+        nmcodeVO.setRegDt(dt);
+        nmcodeVO.setRegId(sessionInfoVO.getUserId());
+        nmcodeVO.setModDt(dt);
+        nmcodeVO.setModId(sessionInfoVO.getUserId());
+
+        // 공통코드 테이블에서 Tid 복사
+        StoreNmcodeVO tidResult = new StoreNmcodeVO();
+        tidResult.setResult(mapper.copyTid(nmcodeVO));
+
+
         return storeCd;
     }
 

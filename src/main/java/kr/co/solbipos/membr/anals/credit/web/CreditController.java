@@ -1,8 +1,13 @@
 package kr.co.solbipos.membr.anals.credit.web;
 
+import kr.co.common.data.enums.Status;
+import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.membr.anals.credit.service.CreditService;
+import kr.co.solbipos.membr.info.regist.service.CreditStoreVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +15,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * @Class Name : CreditController.java
@@ -62,26 +69,29 @@ public class CreditController {
         return "membr/anals/credit/creditView";
     }
 
-//    /**
-//     * 회원정보 리스트 조회
-//     *
-//     * @param registVO
-//     * @param request
-//     * @param response
-//     * @param model
-//     * @return
-//     */
-//    @RequestMapping(value = "view/list.sb", method = RequestMethod.POST)
-//    @ResponseBody
-//    public Result registListPost(RegistVO registVO, HttpServletRequest request, HttpServletResponse response, Model
-//            model) {
-//
-//        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-//
-//        List<DefaultMap<Object>> result = registService.selectMembers(registVO, sessionInfoVO);
-//
-//        return ReturnUtil.returnListJson(Status.OK, result, registVO);
-//    }
+    /**
+     * 후불 회원 외상, 입금 내역
+     *
+     * @param creditStoreVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "credit/getCreditMemberList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getCreditMemberList(CreditStoreVO creditStoreVO, HttpServletRequest request, HttpServletResponse response, Model
+            model) {
+
+        LOGGER.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = service.getCreditMemberList(creditStoreVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, creditStoreVO);
+    }
 //
 //    /**
 //     * 회원정보 등록

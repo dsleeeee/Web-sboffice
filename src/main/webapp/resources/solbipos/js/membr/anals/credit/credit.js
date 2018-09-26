@@ -28,10 +28,11 @@ app.controller('creditCtrl', ['$scope', '$http', function ($scope, $http) {
     // $scope.mobileCouponDcFgDataMap = new wijmo.grid.DataMap(mobileCouponDcFg, 'value', 'name');
     // $scope.mobileCouponApplyFgDataMap = new wijmo.grid.DataMap(mobileCouponApplyFg, 'value', 'name');
 
-    $scope.searchCredit();
+    //$scope.searchCredit();
   };
 
   $scope.$on("creditCtrl", function(event, data) {
+    alert('creditCtrl');
     $scope.searchCredit();
     event.preventDefault();
   });
@@ -44,4 +45,12 @@ app.controller('creditCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._inquirySub(baseUrl + "credit/getCreditMemberList.sb", params, function() {}, false);
   };
 
+  // 외상입금 팝업
+  $scope.deposit = function(){
+    var popup = $scope.depositLayer;
+    popup.show(true, function (s) {
+      // var depositGrid = agrid.getScope('depositCtrl');
+      // depositGrid._gridDataInit();
+    });
+  };
 }]);

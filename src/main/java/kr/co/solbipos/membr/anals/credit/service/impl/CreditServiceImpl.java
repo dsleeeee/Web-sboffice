@@ -1,11 +1,17 @@
 package kr.co.solbipos.membr.anals.credit.service.impl;
 
+import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.membr.anals.credit.service.CreditService;
+import kr.co.solbipos.membr.info.regist.service.CreditStoreVO;
+import kr.co.solbipos.membr.info.regist.service.RegistVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @Class Name : CreditServiceImpl.java
@@ -31,6 +37,13 @@ public class CreditServiceImpl implements CreditService {
     @Autowired
     CreditMapper mapper;
 
+    /** 후불 회원 외상, 입금 내역 */
+    @Override
+    public List<DefaultMap<Object>> getCreditMemberList(CreditStoreVO creditStoreVO,
+        SessionInfoVO sessionInfoVO) {
 
+        creditStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
+        return mapper.getCreditMemberList(creditStoreVO);
+    }
 }

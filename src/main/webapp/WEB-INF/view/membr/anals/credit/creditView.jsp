@@ -7,7 +7,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/membr/anals/credit/" />
 
-<div class="subCon">
+<div class="subCon" ng-controller="creditCtrl">
 
   <%-- 조회조건 --%>
   <div class="searchBar flddUnfld">
@@ -75,14 +75,12 @@
     <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('creditCtrl')"><s:message code="cmm.search" /></button>
   </div>
 
-
-
   <%--위즈모 테이블--%>
   <div class="wj-TblWrapBr mr10 pd20" style="height: 400px;">
     <div class="updownSet oh mb10">
 
-      <button class="btn_skyblue" id="btnAddRepresent" style="display: none;" ng-click="addRow()">
-        <s:message code="cmm.add" />
+      <button class="btn_skyblue" id="btnDeposit" style=";" ng-click="deposit()">
+        <s:message code="credit.deposit" />
       </button>
       <button class="btn_skyblue" id="btnDelRepresent" style="display: none;" ng-click="del()">
         <s:message code="cmm.delete" />
@@ -111,7 +109,7 @@
           <wj-flex-grid-column header="<s:message code="credit.saleDate"/>" binding="saleDate" width="100"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="credit.membrNo"/>" binding="membrNo" width="70"  ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="credit.membrNm"/>" binding="membrNm" width="100" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="credit.creditNo"/>" binding="creditNo" width="70"</wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="credit.creditNo"/>" binding="creditNo" width="70"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="credit.creditDt"/>" binding="creditDt"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="credit.creditInFg"/>" binding="creditInFg" width="*" data-map="creditInFgDataMap"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="credit.saleAmt"/>" binding="saleAmt" width="*"></wj-flex-grid-column>
@@ -137,9 +135,13 @@
 
 <script type="text/javascript">
   var sysStatFgComboData = ${ccu.getCommCodeExcpAll("003")};
+  var baseUrl = "${baseUrl}";
 
   console.log(sysStatFgComboData);
+  console.log(baseUrl);
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/membr/anals/credit/credit.js?ver=2018090301" charset="utf-8"></script>
 
-
+<%-- 외상입금 팝업 --%>
+<c:import url="/WEB-INF/view/membr/anals/credit/deposit.jsp">
+</c:import>

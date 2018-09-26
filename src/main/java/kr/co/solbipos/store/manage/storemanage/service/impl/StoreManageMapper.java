@@ -153,7 +153,8 @@ public interface StoreManageMapper {
     /** 테이블 명칭설정정보 저장 */
     int updatePosNm(StorePosEnvVO storePosEnvVO);
 
-    // 여기부터 =========================================================
+    /** TID 복사 프로시저 */
+    String copyTid(StoreNmcodeVO nmcodeVO);
 
     /** 매장 포스 환경 삭제 */
     int deletePosEnvTarget(StorePosEnvVO storePosEnvVO);

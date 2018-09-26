@@ -440,7 +440,7 @@
   <!-- TID 복사  -->
   <!--
       TABLE    : TB_HQ_NMCODE
-      PARAM    : hqManageVO
+      PARAM    : hqNmcodeVO
       COMMENTS : 공통코드 테이블에서 TID 복사하여 본사 공통코드 테이블에 넣음
   -->
   <select id="copyTid" statementType="CALLABLE"  parameterType="hqNmcodeVO" resultType="String">
