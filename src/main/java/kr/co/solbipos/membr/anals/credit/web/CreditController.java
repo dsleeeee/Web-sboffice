@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 
 /**
  * @Class Name : CreditController.java
@@ -48,12 +51,6 @@ public class CreditController {
     @Autowired
     SessionService sessionService;
 
-//    @Autowired
-//    CmmCodeUtil cmmCodeUtil;
-
-//    @Autowired
-//    CmmEnvUtil cmmEnvUtil;
-
     /**
      * 페이지 이동
      *
@@ -80,11 +77,8 @@ public class CreditController {
      */
     @RequestMapping(value = "credit/getCreditMemberList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getCreditMemberList(CreditStoreVO creditStoreVO, HttpServletRequest request, HttpServletResponse response, Model
-            model) {
-
-        LOGGER.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-
+    public Result getCreditMemberList( CreditStoreVO creditStoreVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
@@ -92,51 +86,55 @@ public class CreditController {
 
         return ReturnUtil.returnListJson(Status.OK, result, creditStoreVO);
     }
-//
-//    /**
-//     * 회원정보 등록
-//     *
-//     * @param registVO
-//     * @param request
-//     * @param response
-//     * @param model
-//     * @return
-//     */
-//    @RequestMapping(value = "base/regist.sb", method = RequestMethod.POST)
-//    @ResponseBody
-//    public Result baseRegist(@Validated(Regist.class) @RequestBody RegistVO registVO, BindingResult bindingResult,
-//                              HttpServletRequest request, HttpServletResponse response, Model model) {
-//
-//        // 입력값 에러 처리
-//        if (bindingResult.hasErrors()) {
-//            return returnJsonBindingFieldError(bindingResult);
-//        }
-//
-//        SessionInfoVO si = sessionService.getSessionInfo(request);
-//        // 기본값 세팅
-//        registVO.setMembrClassCd("000");
-//        registVO.setLunarYn("N");
-//        registVO.setMembrOrgnCd(si.getOrgnCd());
-//        registVO.setRegId(si.getUserId());
-//        registVO.setRegDt(DateUtil.currentDateTimeString());
-//        registVO.setModId(si.getUserId());
-//        registVO.setModDt(DateUtil.currentDateTimeString());
-//
-//        int result = registService.saveRegistMember(registVO);
-//
-//        LOGGER.info(">>>>>>>>> getMembrNo : "+ registVO.getMembrNo());
-//        LOGGER.info(">>>>>>>>> getMembrOrgnCd : "+ registVO.getMembrOrgnCd());
-//        LOGGER.info(">>>>>>>>> creditStore : "+ registVO.getCreditStore());
-//
-//        // 본사에서 등록시
-//        if(si.getOrgnFg() == OrgnFg.HQ) {
-//
-//            // 후불회원 적용매장 등록
-//            if( !StringUtil.isEmpties(registVO.getCreditStore()) ) {
-//                result += registService.saveCreditStores(registVO);
-//            }
-//        }
-//
-//        return ReturnUtil.returnJson(Status.OK, result);
-//    }
+
+    /**
+     * 후불 대상 회원 조회
+     *
+     * @param creditStoreVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "deposit/getDepositMemberList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDepositMemberList(CreditStoreVO creditStoreVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        LOGGER.info(">>>>> getMemberNo : " + creditStoreVO.getMemberNo());
+        LOGGER.info(">>>>> getMemberNm : " + creditStoreVO.getMemberNm());
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = service.getDepositMemberList(creditStoreVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, creditStoreVO);
+    }
+
+    /**
+     * 외상입금
+     * @param creditStoreVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "deposit/saveDeposit.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveDeposit(@RequestBody CreditStoreVO creditStoreVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = 0;
+
+        try{
+            result = service.saveDeposit(creditStoreVO, sessionInfoVO);
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+
+        return returnJson(Status.OK, result);
+    }
+
 }

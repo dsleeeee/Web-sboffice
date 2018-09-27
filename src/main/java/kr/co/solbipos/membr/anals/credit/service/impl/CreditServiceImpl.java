@@ -1,10 +1,12 @@
 package kr.co.solbipos.membr.anals.credit.service.impl;
 
+import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.membr.anals.credit.service.CreditService;
 import kr.co.solbipos.membr.info.regist.service.CreditStoreVO;
-import kr.co.solbipos.membr.info.regist.service.RegistVO;
+import kr.co.solbipos.membr.info.regist.service.enums.CreditInFg;
+import kr.co.solbipos.membr.info.regist.service.enums.CreditPayFg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static kr.co.common.utils.DateUtil.currentDateString;
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
  * @Class Name : CreditServiceImpl.java
@@ -42,8 +47,44 @@ public class CreditServiceImpl implements CreditService {
     public List<DefaultMap<Object>> getCreditMemberList(CreditStoreVO creditStoreVO,
         SessionInfoVO sessionInfoVO) {
 
+        String[] storeCds = creditStoreVO.getStoreCds().split(",");
         creditStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        creditStoreVO.setStoreCdList(storeCds);
 
         return mapper.getCreditMemberList(creditStoreVO);
+    }
+
+    /** 후불 대상 회원 조회 */
+    @Override
+    public List<DefaultMap<Object>> getDepositMemberList(CreditStoreVO creditStoreVO,
+        SessionInfoVO sessionInfoVO) {
+
+        creditStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return mapper.getDepositMemberList(creditStoreVO);
+    }
+
+    /** 외상 입금 */
+    @Override
+    public int saveDeposit(CreditStoreVO creditStoreVO, SessionInfoVO sessionInfoVO) {
+
+        String dt = currentDateTimeString();
+
+
+        creditStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        creditStoreVO.setSaleDate(currentDateString());
+        creditStoreVO.setCreditDt(dt);
+        creditStoreVO.setCreditInFg(CreditInFg.DEPOSIT); // 입금
+        creditStoreVO.setCreditPayFg(CreditPayFg.CASH); // 현금
+        creditStoreVO.setNonsaleBillNo("  ");// 비매출 영수증번호
+        creditStoreVO.setSendYn(UseYn.Y);  // TODO 전송여부 YN갑 체크 필요
+        creditStoreVO.setSendDt(dt);
+
+        creditStoreVO.setRegId(sessionInfoVO.getUserId());
+        creditStoreVO.setRegDt(dt);
+        creditStoreVO.setModId(sessionInfoVO.getUserId());
+        creditStoreVO.setModDt(dt);
+
+        return mapper.saveDeposit(creditStoreVO);
     }
 }

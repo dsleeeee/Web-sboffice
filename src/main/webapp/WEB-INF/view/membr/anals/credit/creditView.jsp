@@ -22,49 +22,38 @@
     </colgroup>
     <tbody>
     <tr>
-      <%-- 조회일자 --%>
-      <%--
-      <th><s:message code="credit.srchDate" /></th>
-      <td colspan="3">
-        <div class="sb-select">
-          <span class="txtIn"> <input id="startDt" name="startDt"/></span>
-          <span class="rg">~</span>
-          <span class="txtIn"> <input id="endDt" name="endDt" /></span>
-          </span>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      --%>
       <%-- 매장 --%>
-      <th><s:message code="credit.srchStore" /></th>
+      <th><s:message code="credit.srchStore" /></th> <!--  //TODO -->
       <td colspan="3">
-        <input type="text" class="sb-input " id="srchStore" ng-model="storeCds" readonly="readonly" />
+        <div id="storeCd" style="display: none;"></div>
+        <input type="text" class="sb-input w100" id="storeCdText" ng-model="storeCds" readonly="readonly" ng-click="searchStore()" />
       </td>
       <%-- 회원번호 --%>
       <th><s:message code="credit.membrNo" /></th>
       <td>
-        <input type="text" class="sb-input w100" id="srcgMembrNo" ng-model="membrNo" />
+        <input type="text" class="sb-input w100" id="srcgMembrNo" ng-model="memberNo" />
       </td>
     </tr>
     <tr>
       <%-- 회원명 --%>
       <th><s:message code="credit.membrNm" /></th>
       <td colspan="3">
-        <input type="text" class="sb-input w100" id="srchMembrNm" ng-model="membrNm" />
+        <input type="text" class="sb-input w100" id="srchMembrNm" ng-model="memberNm" />
       </td>
       <%-- 정렬 --%>
       <th><s:message code="credit.array" /></th>
       <td>
-        <wj-combo-box
-                id="srchArrayCombo"
-                ng-model="array"
-                items-source="_getComboData('srchArrayCombo')"
-                display-member-path="name"
-                selected-value-path="value"
-                is-editable="false"
-                initialized="_initComboBox(s)">
-        </wj-combo-box>
+        <div class="sb-select">
+          <wj-combo-box
+                  id="srchArrayCombo"
+                  ng-model="array"
+                  items-source="_getComboData('srchArrayCombo')"
+                  display-member-path="name"
+                  selected-value-path="value"
+                  is-editable="false"
+                  initialized="_initComboBox(s)">
+          </wj-combo-box>
+        </div>
       </td>
     </tr>
     </tbody>
@@ -103,7 +92,7 @@
                 item-formatter="_itemFormatter">
 
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+          <%--<wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>--%>
           <wj-flex-grid-column header="<s:message code="credit.storeCd"/>" binding="storeCd" width="70"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="credit.storeNm"/>" binding="storeNm" width="100"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="credit.saleDate"/>" binding="saleDate" width="100"></wj-flex-grid-column>
@@ -134,14 +123,17 @@
 </div>
 
 <script type="text/javascript">
-  var sysStatFgComboData = ${ccu.getCommCodeExcpAll("003")};
+  var arrayData = ${ccu.getCommCodeExcpAll("075")};
+  var creditInFgData = ${ccu.getCommCodeExcpAll("073")};
+  var creditPayFgData = ${ccu.getCommCodeExcpAll("074")};
   var baseUrl = "${baseUrl}";
-
-  console.log(sysStatFgComboData);
-  console.log(baseUrl);
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/membr/anals/credit/credit.js?ver=2018090301" charset="utf-8"></script>
 
 <%-- 외상입금 팝업 --%>
 <c:import url="/WEB-INF/view/membr/anals/credit/deposit.jsp">
+</c:import>
+
+<%-- 매장 선택 --%>
+<c:import url="/WEB-INF/view/application/layer/store.jsp">
 </c:import>

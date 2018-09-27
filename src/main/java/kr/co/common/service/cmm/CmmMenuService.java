@@ -35,14 +35,14 @@ public interface CmmMenuService {
      * @return
      */
     List<HqVO> selectHq(HqVO hqVO);
-    
+
     /**
      * 레이어 팝업 업체 조회
-     * @param hqVO
+     * @param caVO
      * @return
      */
     List<CmAgencyVO> selectCmAgency(CmAgencyVO caVO);
-    
+
     /**
      *
      * 메뉴 디비 작업 관련
@@ -135,7 +135,7 @@ public interface CmmMenuService {
      *
      * 메인 메뉴 관련
      *
-     * @param sessionInfoVO
+     * @param sessionInfo
      * @param menuType 메뉴 타입 (A : 전체메뉴, F : 즐겨찾기)
      */
     List<MenuVO> makeMenu(SessionInfoVO sessionInfo, String menuType);

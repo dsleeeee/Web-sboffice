@@ -4,7 +4,6 @@ package kr.co.solbipos.membr.anals.credit.service;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.membr.info.regist.service.CreditStoreVO;
-import kr.co.solbipos.membr.info.regist.service.RegistVO;
 
 import java.util.List;
 
@@ -28,12 +27,10 @@ public interface CreditService {
     /** 후불 회원 외상, 입금 내역 */
     List<DefaultMap<Object>> getCreditMemberList(CreditStoreVO creditStoreVO, SessionInfoVO sessionInfoVO);
 
+    /** 후불 대상 회원 조회 */
+    List<DefaultMap<Object>> getDepositMemberList(CreditStoreVO creditStoreVO, SessionInfoVO sessionInfoVO);
 
-    //    /**
-//     * 등록 매장 리스트 조회
-//     *
-//     * @return
-//     */
-//    List<DefaultMap<String>> selectRgstrStore(SessionInfoVO sessionInfoVO);
+    /** 외상 입금 */
+    int saveDeposit(CreditStoreVO creditStoreVO, SessionInfoVO sessionInfoVO);
 
 }
