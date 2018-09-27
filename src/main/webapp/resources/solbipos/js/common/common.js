@@ -362,9 +362,9 @@ function makeTree(div, data, initMenu) {
     // URL 이 있을 경우 페이지 이동
     if(!isEmpty(s.selectedNode.dataItem.url)) {
       location.href = s.selectedNode.dataItem.url;
-      var vSessionId = document.getElementsByName("sessionId")[0].value;
       // 가상로그인시 파라미터인 SessionID 설정
-      if ( !isEmpty(vSessionId) ) {
+      if( document.getElementsByName("sessionId").length > 0 ) {
+        var vSessionId = document.getElementsByName("sessionId")[0].value;
         location.href = s.selectedNode.dataItem.url + "?sid=" + vSessionId;
       }
     }
@@ -390,15 +390,15 @@ function getParam(name){
   var result = "";
   var queryString = window.location.search;
   var paramMap = {}
-  if (queryString == "") {
+  if (queryString === "") {
     result = undefined;
   }
-  if (typeof result != "undefined") {
+  if (typeof result !== "undefined") {
     var params = queryString.split("?")[1];
-    if (params == "") {
+    if (params === "") {
       result = undefined;
     }
-    if (typeof result != "undefined") {
+    if (typeof result !== "undefined") {
       var paramObj = params.split("&");
       for (var i=0; i<paramObj.length; i++){
         var datas = paramObj[i].split("=");
@@ -436,7 +436,7 @@ function getFormatDate(date, seperator)
     try
     {
         if(date.length < 8) return date;
-        var seperator = ((seperator == undefined || seperator == '') ? '-' : seperator);
+        var seperator = ((seperator === undefined || seperator === '') ? '-' : seperator);
         var year  = date.substr(0,4);
         var month = date.substr(4,2);
         var day   = date.substr(6,2);
@@ -454,8 +454,8 @@ function getFormatDateTime(date, seperator_date, seperator_time)
     try
     {
         if(date.length < 14) return date;
-        var seperator_date = ((seperator_date == undefined || seperator_date == '') ? '-' : seperator_date);
-        var seperator_time = ((seperator_time == undefined || seperator_time == '') ? ':' : seperator_time);
+        var seperator_date = ((seperator_date === undefined || seperator_date === '') ? '-' : seperator_date);
+        var seperator_time = ((seperator_time === undefined || seperator_time === '') ? ':' : seperator_time);
         var year   = date.substr(0,4);
         var month  = date.substr(4,2);
         var day    = date.substr(6,2);

@@ -45,21 +45,23 @@ public class TouchClassVO extends CmmVO {
     /** 스타일코드 */
     private String styleCd;
     /** 페이지번호 */
-    private Long pageNo;
+    private Integer pageNo = 0;
+    /** 페이지줄수 */
+    private Integer pageRows = 0;
     /** X */
-    private Long x = 0L;
+    private Double x = 0d;
     /** Y */
-    private Long y = 0L;
+    private Double y = 0d;
     /** 폭 */
-    private Long width = 0L;
+    private Double width = 0d;
     /** 높이 */
-    private Long height = 0L;
+    private Double height = 0d;
     /** 이미지명 */
     private String imgNm;
     /** 입력구분 H:본사, S:매장 */
     private InFg inFg;
     /** 폰트크기 */
-    private Long fontSize = 10L;
+    private Integer fontSize = 0;
     /** 폰트색 */
     private String fontColor = "#000000";
     /** 채움색 */
@@ -168,70 +170,84 @@ public class TouchClassVO extends CmmVO {
     /**
      * @return the pageNo
      */
-    public Long getPageNo() {
+    public Integer getPageNo() {
         return pageNo;
     }
 
     /**
      * @param pageNo the pageNo to set
      */
-    public void setPageNo(Long pageNo) {
+    public void setPageNo(Integer pageNo) {
         this.pageNo = pageNo;
+    }
+
+    /**
+     * @return the pageRows
+     */
+    public Integer getPageRows() {
+        return pageRows;
+    }
+
+    /**
+     * @param pageRows the pageRows to set
+     */
+    public void setPageRows(Integer pageRows) {
+        this.pageRows = pageRows;
     }
 
     /**
      * @return the x
      */
-    public Long getX() {
+    public Double getX() {
         return x;
     }
 
     /**
      * @param x the x to set
      */
-    public void setX(Long x) {
+    public void setX(Double x) {
         this.x = x;
     }
 
     /**
      * @return the y
      */
-    public Long getY() {
+    public Double getY() {
         return y;
     }
 
     /**
      * @param y the y to set
      */
-    public void setY(Long y) {
+    public void setY(Double y) {
         this.y = y;
     }
 
     /**
      * @return the width
      */
-    public Long getWidth() {
+    public Double getWidth() {
         return width;
     }
 
     /**
      * @param width the width to set
      */
-    public void setWidth(Long width) {
+    public void setWidth(Double width) {
         this.width = width;
     }
 
     /**
      * @return the height
      */
-    public Long getHeight() {
+    public Double getHeight() {
         return height;
     }
 
     /**
      * @param height the height to set
      */
-    public void setHeight(Long height) {
+    public void setHeight(Double height) {
         this.height = height;
     }
 
@@ -266,14 +282,14 @@ public class TouchClassVO extends CmmVO {
     /**
      * @return the fontSize
      */
-    public Long getFontSize() {
+    public Integer getFontSize() {
         return fontSize;
     }
 
     /**
      * @param fontSize the fontSize to set
      */
-    public void setFontSize(Long fontSize) {
+    public void setFontSize(Integer fontSize) {
         this.fontSize = fontSize;
     }
 

@@ -87,7 +87,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         // 세션 가져오기
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         // 권한 메뉴
-        List<ResrceInfoVO> auth = auth = sessionInfoVO.getAuthMenu();
+        List<ResrceInfoVO> auth = sessionInfoVO.getAuthMenu();
         // 유져 조회 날짜 저장
         sessionInfoVO = setUserSelectDate(request, sessionInfoVO);
 
