@@ -3,11 +3,11 @@
 /* **************************************** *
  * WEBFONT
  * **************************************** */
+@import url('KoPubDotum.css');
 @font-face {
     font-family: 'NotoR';
-    src: url('NotoSansCJKkr-Regular.woff') format('woff');
+    src: url('./fonts/NotoSansCJKkr-Regular.woff') format('woff');
 }
-
 
 /* **************************************** *
  * RESET
@@ -1092,6 +1092,7 @@ a.btn_underline, a.btn_underline:hover, a.btn_underline.on {background-position:
 .hGroupLine3 {height:185px;}
 
 .touchGroupWrap {width: 502px; overflow: hidden; position: relative; border: 1px solid #ccc; margin-bottom: 3px; border-collapse: collapse;}
+#group div { font-family:inherit; font-weight:inherit; font-size:inherit; color:inherit; }
 .touchGroupLine2 {width:1000%; height: 123px; background:url(../img/bg_touchKey_group_line_2.png); background-size: 500px 123px;}
 .touchGroupLine3 {width:1000%; height: 184px; background:url(../img/bg_touchKey_group_line_3.png); background-size: 500px 184px;}
 
@@ -1099,6 +1100,7 @@ a.btn_underline, a.btn_underline:hover, a.btn_underline.on {background-position:
 .hProdsLine6 {height:452px;}
 
 .touchProdsWrap {width: 502px; overflow: hidden; position: relative; border: 1px solid #ccc;}
+#prod div { font-family:inherit; font-weight:inherit; font-size:inherit; color:inherit; }
 .touchProdsLine6 {width: 1000%; height: 451px; background: url(../img/bg_touchKey_prod_line_6.png); background-size: 500px 451px;}
 .touchProdsLine5 {width: 1000%; height: 376px; background: url(../img/bg_touchKey_prod_line_5.png); background-size: 500px 376px;}
 
@@ -1224,7 +1226,7 @@ p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17p
 
 .tabType1 ul {overflow:hidden; border-bottom:1px solid #2e333f; height:31px;}
 .tabType1 ul li {float:left; margin-right:1px;}
-.tabType1 ul li:last-chid {margin-right:0x;}
+.tabType1 ul li:last-child {margin-right:0px;}
 .tabType1 ul li a {font-size:0.875em; display:inline-block; background:#e8e8e8; height:30px; line-height:30px; padding:0 20px; transition:all 0.3s;}
 .tabType1 ul li a.on {background:#2e333f; color:#fff;}
 .tabType1 ul li a:hover {background:RGBA(0,0,0,0.2); color:#fff; transition:all 0.3s;}
@@ -1362,7 +1364,7 @@ p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17p
 .type_Green .smallMenu li.menu_system.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-80px -66px; transition:all 0.3s;}
 
 .type_Green .smallMenu li.menu_base a:after {background-position:-100px -66px;}
-.type_Green .smallMenu li.menu_base.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-100px -66px-100px -66px; opacity:1; transition:all 0.3s;}
+.type_Green .smallMenu li.menu_base.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-100px -66px; opacity:1; transition:all 0.3s;}
 .type_Green .smallMenu li.menu_base.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-100px -66px; transition:all 0.3s;}
 
 .type_Green .smallMenu li.menu_sales a:after {background-position:-120px -66px;}
@@ -1722,7 +1724,6 @@ p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17p
     word-wrap: break-word;
     white-space: pre-wrap;
     white-space: -moz-pre-wrap;
-    white-space: -pre-wrap;
     white-space: -o-pre-wrap;
     word-break: break-all;
 }

@@ -26,10 +26,22 @@ import java.util.List;
 public interface TouchKeyService {
 
     /** 상품목록 조회 : 판매터치키에서 사용 */
-    List<DefaultMap<String>> getProductListForTouchKey(TouchVO touchVO);
+    List<DefaultMap<String>> getProductListForTouchKey(TouchKeyVO touchKeyVO);
+
+    /** 터치키 스타일코드 목록 조회 */
+    List<DefaultMap<String>> getTouchKeyStyleCdList();
+
+    /** 터치키 스타일 목록 조회 */
+    List<DefaultMap<String>> getTouchKeyStyleList(TouchKeyStyleVO touchKeyStyleVO);
+
+    /** 터치키 분류 페이지별 스타일 코드 조회 */
+    String getTouchKeyPageStyleCd(TouchKeyClassVO touchKeyClassVO);
 
     /** 판매터치키 XML 정보 조회 */
     String getTouchKeyXml(SessionInfoVO sessionInfoVO);
+
+    /** 판매터치키 상품금액 조회 */
+    String getTouchKeyProdPrice(TouchKeyVO touchKeyVO);
 
     /** 판매터치키 저장 */
     Result saveTouchkey(SessionInfoVO sessionInfoVO, String xml);

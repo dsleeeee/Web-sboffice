@@ -1,6 +1,7 @@
+@import url('../../solbipos/css/cmm/KoPubDotum.css');
 @font-face {
      font-family: 'NotoR';
-     src: url('../../solbipos/css/cmm/NotoSansCJKkr-Regular.woff') format('woff');
+     src: url('../../solbipos/css/cmm/fonts/NotoSansCJKkr-Regular.woff') format('woff');
 }
 
 .container {
