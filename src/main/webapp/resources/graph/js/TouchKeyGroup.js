@@ -52,6 +52,9 @@ Graph.prototype.switchLayer = function (layer) {
  */
 Graph.prototype.initGroupArea = function (prod) {
 
+  // Fixes ignored clipping if foreignObject used in Webkit
+  mxClient.NO_FO = mxClient.NO_FO || mxClient.IS_SF || mxClient.IS_GC;
+
   //영역변수 설정
   var graph = this;
   //스타일코드콤보 변수 설정
@@ -152,21 +155,25 @@ Graph.prototype.initGroupArea = function (prod) {
       document.getElementById('keyStyle').classList.remove("hideNav");
     },
     mouseMove: function (sender, me) {
-      if (this.currentState != null && me.getState() === this.currentState) {
-        return;
-      }
-      var tmp = graph.view.getState(me.getCell());
-      // Ignores everything but vertices
-      if (graph.isMouseDown || (tmp !== null && !graph.getModel().isVertex(tmp.cell))) {
-        tmp = null;
-      }
-      if (tmp !== this.currentState) {
-        if (this.currentState != null) {
-          this.dragLeave(me.getEvent(), this.currentState);
+      // 에디팅모드(더블클릭) 이후 마우스커서 이동시 라벨에 잔상남는 현상으로
+      // graph.cellEditor.getEditingCell() 으로 에디팅 셀 있는지 판단해서 이벤트 적용 설정 : 20180929 노현수
+      if (graph.cellEditor.getEditingCell() == null) {
+        if (this.currentState != null && me.getState() === this.currentState) {
+          return;
         }
-        this.currentState = tmp;
-        if (this.currentState != null) {
-          this.dragEnter(me.getEvent(), this.currentState);
+        var tmp = graph.view.getState(me.getCell());
+        // Ignores everything but vertices
+        if (graph.isMouseDown || (tmp !== null && !graph.getModel().isVertex(tmp.cell))) {
+          tmp = null;
+        }
+        if (tmp !== this.currentState) {
+          if (this.currentState != null  ) {
+            this.dragLeave(me.getEvent(), this.currentState);
+          }
+          this.currentState = tmp;
+          if (this.currentState != null) {
+            this.dragEnter(me.getEvent(), this.currentState);
+          }
         }
       }
     },

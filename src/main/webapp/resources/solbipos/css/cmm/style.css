@@ -1093,16 +1093,16 @@ a.btn_underline, a.btn_underline:hover, a.btn_underline.on {background-position:
 
 .touchGroupWrap {width: 502px; overflow: hidden; position: relative; border: 1px solid #ccc; margin-bottom: 3px; border-collapse: collapse;}
 #group div { font-family:inherit; font-weight:inherit; font-size:inherit; color:inherit; }
-.touchGroupLine2 {width:1000%; height: 123px; background:url(../img/bg_touchKey_group_line_2.png); background-size: 500px 123px;}
-.touchGroupLine3 {width:1000%; height: 184px; background:url(../img/bg_touchKey_group_line_3.png); background-size: 500px 184px;}
+.touchGroupLine2 {width:1000%; height: 123px; background:url(../img/touchKey/bg_touchKey_class_line_2.png); background-size: 500px 123px;}
+.touchGroupLine3 {width:1000%; height: 184px; background:url(../img/touchKey/bg_touchKey_class_line_3.png); background-size: 500px 184px;}
 
 .hProdsLine5 {height:377px;}
 .hProdsLine6 {height:452px;}
 
 .touchProdsWrap {width: 502px; overflow: hidden; position: relative; border: 1px solid #ccc;}
 #prod div { font-family:inherit; font-weight:inherit; font-size:inherit; color:inherit; }
-.touchProdsLine6 {width: 1000%; height: 451px; background: url(../img/bg_touchKey_prod_line_6.png); background-size: 500px 451px;}
-.touchProdsLine5 {width: 1000%; height: 376px; background: url(../img/bg_touchKey_prod_line_5.png); background-size: 500px 376px;}
+.touchProdsLine6 {width: 1000%; height: 451px; background: url(../img/touchKey/bg_touchKey_prod_line_6.png); background-size: 500px 451px;}
+.touchProdsLine5 {width: 1000%; height: 376px; background: url(../img/touchKey/bg_touchKey_prod_line_5.png); background-size: 500px 376px;}
 
 .navPage { left: -101px; }
 .hideNav {
@@ -1112,18 +1112,18 @@ a.btn_underline, a.btn_underline:hover, a.btn_underline.on {background-position:
 
 .groupNavWrap { width:125px; display: inline-block; margin-bottom: 3px; }
 .groupPageNoWrap { width:103px; position: relative; }
-.groupNav { width: 100px; height: 60px; position: relative; left: 0px;  }
+.groupNav { width: 101px; height: 62px; position: relative; left: 0px; border: 1px solid #ccc; }
 
 .hGroupLine2 .groupNav { top: 46px; }
 .hGroupLine2 .groupPageNoWrap { top: 42px; }
 .hGroupLine3 .groupNav { top: 108px; }
 .hGroupLine3 .groupPageNoWrap { top: 105px; }
 
-.groupNavPrev { background: url(../img/touchKey_group_arrL.png) no-repeat;}
+.groupNavPrev { background: url(../img/touchKey/touchKey_class_arrL_color01.png) no-repeat;}
 .groupNavPrev { width: 49px; height: 60px; background-position: 0 0;}
 .groupNavPrev:hover { width: 49px; height: 60px; background-position: -49px 0;}
 
-.groupNavNext { background: url(../img/touchKey_group_arrR.png) no-repeat;}
+.groupNavNext { background: url(../img/touchKey/touchKey_class_arrR_color01.png) no-repeat;}
 .groupNavNext { width: 49px; height: 60px; background-position: 0 0; margin-left:1px; }
 .groupNavNext:hover { width: 49px; height: 60px; background-position: -49px 0;}
 
@@ -1131,18 +1131,18 @@ a.btn_underline, a.btn_underline:hover, a.btn_underline.on {background-position:
 
 .prodNavWrap { width:125px; display: inline-block; }
 .prodPageNoWrap { width:103px; position: relative; }
-.prodNav { width: 100px; height: 74px; position: relative; left: 0px; }
+.prodNav { width: 101px; height: 76px; position: relative; left: 0px; border: 1px solid #ccc; }
 
 .hProdsLine5 .prodNav { top: 286px; }
 .hProdsLine5 .prodPageNoWrap { top: 282px; }
 .hProdsLine6 .prodNav { top: 359px; }
 .hProdsLine6 .prodPageNoWrap { top: 356px; }
 
-.prodNavPrev { background: url(../img/touchKey_prod_arrL.png) no-repeat;}
+.prodNavPrev { background: url(../img/touchKey/touchKey_prod_arrL_color01.png) no-repeat;}
 .prodNavPrev { width: 49px; height: 74px; background-position: 0 0;}
 .prodNavPrev:hover { width: 49px; height: 74px; background-position: -49px 0;}
 
-.prodNavNext { background: url(../img/touchKey_prod_arrR.png) no-repeat;}
+.prodNavNext { background: url(../img/touchKey/touchKey_prod_arrR_color01.png) no-repeat;}
 .prodNavNext { width: 49px; height: 74px; background-position: 0 0; margin-left:1px; }
 .prodNavNext:hover { width: 49px; height: 74px; background-position: -49px 0;}
 

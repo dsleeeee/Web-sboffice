@@ -45,8 +45,8 @@ public interface TouchKeyMapper {
     /** 판매터치키 XML 정보 조회 */
     String getTouchKeyXml(DefaultMap<String> param);
 
-    /** 판매터치키 상품금액 조회 */
-    String getTouchKeyProdPrice(TouchKeyVO touchKeyVO);
+    /** 판매터치키 저장 상품정보 조회 */
+    List<DefaultMap<String>> getTouchKeyProdInfoList(TouchKeyVO touchKeyVO);
 
     /** 판매터치키 XML 정보 생성 */
     int insertTouchKeyConfgXml(DefaultMap<String> param);

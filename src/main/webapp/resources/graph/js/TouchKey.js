@@ -157,11 +157,14 @@ Sidebar.prototype.initUsed = function (layer) {
   //각 상품의 상품코드로 그리드에서 체크 표시
   var model = graph.getModel();
   var childCount = model.getChildCount(layer);
-  var cell, prodCd;
-  var regex = /prodCd=[0-9]+/;
+  var cell, match, regex, prodCd;
   for (var i = 0; i < childCount; i++) {
     cell = model.getChildAt(layer, i);
-    prodCd = regex.exec(cell.getStyle())[0].split("=")[1];
+    regex = /prodCd=([^=]*.(?=;))/gm;
+    match = regex.exec(cell.getStyle());
+    if (match) {
+      prodCd = match[1];
+    }
     var id = getIdByProdCd(prodCd);
     if (id >= 0) {
       theGrid.setCellData(id, 'used', true);
@@ -363,6 +366,7 @@ Sidebar.prototype.makeDragSource = function () {
       tukeyCd = tukeyCd.slice(-3);
       // 스타일코드
       var styleCd = graph.selectStyle.selectedValue;
+
       try {
         // 버튼
         var btn = graph.insertVertex(parent, null,
@@ -380,7 +384,7 @@ Sidebar.prototype.makeDragSource = function () {
           item.prodNm,
           5, 5,
           0, 0,
-          "tukeyCd=" + tukeyCd + ";tukeyFg=02;prodCd=" + item.prodCd + ";styleCd=" + styleCd + ";align=left;verticalAlign=top;strokeColor=none;rounded=0;resizable=0;"
+          "tukeyCd=" + tukeyCd + ";tukeyFg=02;prodCd=" + item.prodCd + ";styleCd=" + styleCd + ";strokeColor=none;rounded=0;resizable=0;"
         );
         graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles["02"].off, new Array(prodTag));
         graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles["02"].off, new Array(prodTag));
@@ -391,7 +395,7 @@ Sidebar.prototype.makeDragSource = function () {
           addComma(item.saleUprc),
           5, graph.touchKeyInfo.y / 2 + 10,
           0, 0,
-          "tukeyCd=" + tukeyCd + ";tukeyFg=03;prodCd=" + item.prodCd + ";styleCd=" + styleCd + ";align=right;strokeColor=none;rounded=0;resizable=0;"
+          "tukeyCd=" + tukeyCd + ";tukeyFg=03;prodCd=" + item.prodCd + ";styleCd=" + styleCd + ";strokeColor=none;rounded=0;resizable=0;"
         );
         graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles["03"].off, new Array(priceTag));
         graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles["03"].off, new Array(priceTag));
@@ -517,9 +521,14 @@ Graph.prototype.init = function () {
   //분류/상품 이동 시 처리
   //대상 셀에 이미 상품이 있을 경우 이동 금지
   var mxGraphHandlerMoveCells = mxGraphHandler.prototype.moveCells;
+  var tukeyFg, match, regex;
   graph.graphHandler.moveCells = function (cells, dx, dy, clone, target, evt) {
-
-    var tukeyFg = cells[0].getStyle().match(/tukeyFg=([\S]{2})/i)[1];
+    // 정규식으로 tukeyFg 찾기
+    regex = /tuketFg=([^=]*.(?=;))/gm;
+    match = regex.exec(cells[0].getStyle());
+    if (match) {
+      tukeyFg = match[1];
+    }
     // 하위 셀 ( 상품명/금액 ) 인 경우 무시
     if (tukeyFg === "02" || tukeyFg === "03") {
       mxGraphHandlerMoveCells.apply(this, arguments);
@@ -645,12 +654,17 @@ Graph.prototype.init = function () {
   
     // 하위속성 리사이징
     var resizeChild = function (child) {
-      var tukeyFg, movedX, movedY;
+      var movedX, movedY;
       for (var r = 0; r < child.length; r++) {
         var cell = child[r];
         // 하위셀 크기 자동 조정
         graph.updateCellSize(cell, true);
-        tukeyFg = cell.getStyle().match(/tukeyFg=([\S]{2})/i)[1];
+        // 정규식으로 tukeyFg 추출
+        regex = /tuketFg=([^=]*.(?=;))/gm;
+        match = regex.exec(cell.getStyle());
+        if (match) {
+          tukeyFg = match[1];
+        }
         // 상품명 태그 위치 조정
         if (tukeyFg === "02") {
           cell.geometry.x = 5;
@@ -1107,10 +1121,15 @@ Format.prototype.refresh = function () {
  * @param cell
  */
 Format.prototype.initChildCell = function(cell) {
-  var childCell, tukeyFg, movedX, movedY;
+  var childCell, tukeyFg, regex, match, movedX, movedY;
   for (var r = 0; r < cell.children.length; r++) {
     childCell = cell.children[r];
-    tukeyFg = childCell.getStyle().match(/tukeyFg=([\S]{2})/i)[1];
+    // 정규식으로 tukeyFg 추출
+    regex = /tukeyFg=([^=]*.(?=;))/gm;
+    match = regex.exec(childCell.getStyle());
+    if (match) {
+      tukeyFg = match[1];
+    }
     // 상품명 태그 위치 조정
     if ( tukeyFg === "02" ) {
       childCell.geometry.x = 5;
@@ -1291,14 +1310,39 @@ Format.prototype.initElements = function () {
           }
         }
       }
+      // 버튼 색상 스타일 적용
+      format.setBtnStyle();
       // 색상 스타일 적용 : 분류/상품 영역
       format.setGraphStyle(group);
       format.setGraphStyle(prod);
     }
   });
+  // 초기 버튼 색상 스타일 적용
+  format.setBtnStyle();
   // 그래프에서 접근하도록 설정
   format.touchkey.group.selectStyle = this.selectStyle;
   format.touchkey.prod.selectStyle = this.selectStyle;
+
+};
+
+/**
+ * 버튼 스타일 테마 적용
+ */
+Format.prototype.setBtnStyle = function() {
+  // 현재 선택된 스타일코드
+  var styleCd = this.selectStyle.selectedValue;
+  var path = "/resource/solbipos/css/img/touchKey/";
+  var ext = ".png";
+
+  var grpNavPrev = document.getElementById("grpNavPrev");
+  grpNavPrev.style.backgroundImage = "url('" + path + "/touchKey_class_arrL_color" + styleCd + ext + "')";
+  var grpNavNext = document.getElementById("grpNavNext");
+  grpNavNext.style.backgroundImage = "url('" + path + "/touchKey_class_arrR_color" + styleCd + ext + "')";
+  var prodNavPrev = document.getElementById("prodNavPrev");
+  prodNavPrev.style.backgroundImage = "url('" + path + "/touchKey_prod_arrL_color" + styleCd + ext + "')";
+  var prodNavNext = document.getElementById("prodNavNext");
+  prodNavNext.style.backgroundImage = "url('" + path + "/touchKey_prod_arrR_color" + styleCd + ext + "')";
+
 
 };
 
@@ -1307,6 +1351,7 @@ Format.prototype.initElements = function () {
  */
 Format.prototype.setGraphStyle = function (graph) {
 
+  var styleCdRegex = /styleCd=([^=]*.(?=;))/gm;
   // 현재 선택된 스타일코드
   var styleCd = this.selectStyle.selectedValue;
   // 해당영역의 전체 셀
@@ -1321,7 +1366,8 @@ Format.prototype.setGraphStyle = function (graph) {
     var gnStyles = "", gCell;
     for (var g = 0; g < cells.length; g++) {
       gCell = cells[g];
-      gnStyles = gCell.getStyle().replace(/styleCd=([\S][\S])/i, "styleCd=" + styleCd);
+      // 정규식으로 styleCd 변경
+      gnStyles = gCell.getStyle().replace(styleCdRegex, "styleCd="+styleCd);
       gCell.setStyle(gnStyles);
     }
   } else {
@@ -1332,21 +1378,28 @@ Format.prototype.setGraphStyle = function (graph) {
     var pnStyles, pCell, cnStyles, childCell;
     for (var p = 0; p < cells.length; p++) {
       pCell = cells[p];
-      pnStyles = pCell.getStyle().replace(/styleCd=([\S][\S])/i, "styleCd=" + styleCd);
+      // 정규식으로 styleCd 변경
+      pnStyles = pCell.getStyle().replace(styleCdRegex, "styleCd="+styleCd);
       pCell.setStyle(pnStyles);
       // 자식속성 존재시 같이 변경
       if (pCell.children) {
-        var tukeyFg = "";
+        var tukeyFg, tukeyFgRegex, match;
         for (var c = 0; c < pCell.children.length; c++) {
           childCell = pCell.children[c];
-          tukeyFg = childCell.getStyle().match(/tukeyFg=([\S]{2})/i)[1];
+          // 정규식으로 tukeyFg 추출
+          tukeyFgRegex = /tukeyFg=([^=]*.(?=;))/gm;
+          match = tukeyFgRegex.exec(childCell.getStyle());
+          if (match) {
+            tukeyFg = match[1];
+          }
           // 상품명 태그 색상 조정
           if (tukeyFg === "02" || tukeyFg === "03") {
             graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles[tukeyFg].off, new Array(childCell));
             graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles[tukeyFg].off, new Array(childCell));
             graph.setCellStyles(mxConstants.STYLE_FONTSIZE, graph.fontStyles[tukeyFg].size, new Array(childCell));
           }
-          cnStyles = childCell.getStyle().replace(/styleCd=([\S]{2})/i, "styleCd=" + styleCd)
+          // 정규식으로 styleCd 변경
+          cnStyles = childCell.getStyle().replace(styleCdRegex, "styleCd="+styleCd);
           childCell.setStyle(cnStyles);
         }
       }
@@ -1432,11 +1485,16 @@ Graph.prototype.updateHoverStyle = function(state, hover) {
  */
 Graph.prototype.updateStyleChildren = function (state, hover) {
 
+  var tukeyFg, match, regex;
   for(var i = 0; i < state.cell.children.length; i++) {
     var childCell = state.cell.children[i];
     var childState = this.view.getState(childCell);
     if (childState != null) {
-      var tukeyFg = childCell.getStyle().match(/tukeyFg=([\S]{2})/i)[1];
+      regex = /tukeyFg=([^=]*.(?=;))/gm;
+      match = regex.exec(childCell.getStyle());
+      if (match) {
+        tukeyFg = match[1];
+      }
       // 상품/금액 태그 색상 조정
       if (tukeyFg === "02" || tukeyFg === "03") {
         if (hover) {

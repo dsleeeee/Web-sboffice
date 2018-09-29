@@ -223,50 +223,82 @@
         </choose>
     </select>
 
-    <!-- 판매터치키 상품금액 조회 -->
+    <!-- 판매터치키 저장 상품정보 조회 -->
     <!--
         TABLE    : TB_HQ_PRODUCT_SALE_PRICE, TB_MS_PRODUCT_SALE_PRICE
         PARAM    : touchKeyVO
-        COMMENTS : 판매터치키 구성 XML에 존재하는 상품금액 정보를 조회한다.
+        COMMENTS : 판매터치키 구성에 존재하는 상품정보를 조회한다.
     -->
-    <select id="getTouchKeyProdPrice" parameterType="touchKeyVO" resultType="java.lang.String">
-        /* TouchKeyMapper.getTouchKeyProdPrice */
+    <select id="getTouchKeyProdInfoList" parameterType="touchKeyVO" resultType="DefaultMap">
+        /* TouchKeyMapper.getTouchKeyProdInfoList */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT
-                    TO_CHAR(
-                        MIN(thpsp.SALE_UPRC) KEEP( DENSE_RANK FIRST
-                            ORDER BY
-                        thpsp.START_DATE DESC ),
-                    'FM9,999,999') AS SALE_UPRC
+                    thtk.PROD_CD,
+                    thp.PROD_NM,
+                    TO_CHAR(NVL(thpsp.SALE_UPRC, 0), 'FM9,999,999') AS SALE_UPRC
                 FROM
-                    TB_HQ_PRODUCT_SALE_PRICE thpsp
+                    TB_HQ_TOUCH_KEY thtk
+                LEFT OUTER JOIN TB_HQ_PRODUCT thp ON
+                    thtk.PROD_CD = thp.PROD_CD
+                LEFT OUTER JOIN (
+                    SELECT
+                        PROD_CD,
+                        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
+                            ORDER BY
+                        START_DATE DESC ) AS SALE_UPRC
+                    FROM
+                        TB_HQ_PRODUCT_SALE_PRICE
+                    WHERE
+                        HQ_OFFICE_CD = #{hqOfficeCd}
+                        <![CDATA[
+                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        ]]>
+                    GROUP BY
+                        PROD_CD ) thpsp ON
+                    thtk.PROD_CD = thpsp.PROD_CD
                 WHERE
-                    thpsp.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND thpsp.PROD_CD = #{prodCd}
-                    <![CDATA[
-                    AND thpsp.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    AND thpsp.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    ]]>
+                    thtk.HQ_OFFICE_CD = #{hqOfficeCd}
+                GROUP BY
+                    thtk.PROD_CD, thp.PROD_NM, thpsp.SALE_UPRC
+                ORDER BY
+                    thtk.PROD_CD
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 SELECT
-                    TO_CHAR(
-                        MIN(tmpsp.SALE_UPRC) KEEP( DENSE_RANK FIRST
-                            ORDER BY
-                        tmpsp.START_DATE DESC ),
-                    'FM9,999,999') AS SALE_UPRC
+                    tmtk.PROD_CD,
+                    tmp.PROD_NM,
+                    NVL(tmpsp.SALE_UPRC, 0) AS SALE_UPRC
                 FROM
-                    TB_MS_PRODUCT_SALE_PRICE tmpsp
+                    TB_MS_TOUCH_KEY tmtk
+                LEFT OUTER JOIN TB_MS_PRODUCT tmp ON
+                    tmtk.PROD_CD = tmp.PROD_CD
+                LEFT OUTER JOIN (
+                    SELECT
+                        PROD_CD,
+                        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
+                            ORDER BY
+                        START_DATE DESC ) AS SALE_UPRC
+                    FROM
+                        TB_MS_PRODUCT_SALE_PRICE
+                    WHERE
+                        STORE_CD = #{storeCd}
+                        <![CDATA[
+                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        ]]>
+                    GROUP BY
+                        PROD_CD ) tmpsp ON
+                    tmtk.PROD_CD = tmpsp.PROD_CD
                 WHERE
-                    tmpsp.STORE_CD = #{storeCd}
-                    AND tmpsp.PROD_CD = #{prodCd}
-                    <![CDATA[
-                    AND tmpsp.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    AND tmpsp.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    ]]>
+                    tmtk.STORE_CD = #{storeCd}
+                GROUP BY
+                    tmtk.PROD_CD, tmp.PROD_NM, tmpsp.SALE_UPRC
+                ORDER BY
+                    tmtk.PROD_CD
             </when>
         </choose>
     </select>
