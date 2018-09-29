@@ -654,14 +654,14 @@ Graph.prototype.init = function () {
   
     // 하위속성 리사이징
     var resizeChild = function (child) {
-      var movedX, movedY;
+      var tukeyFg, childRegex, movedX, movedY;
       for (var r = 0; r < child.length; r++) {
         var cell = child[r];
         // 하위셀 크기 자동 조정
         graph.updateCellSize(cell, true);
         // 정규식으로 tukeyFg 추출
-        regex = /tuketFg=([^=]*.(?=;))/gm;
-        match = regex.exec(cell.getStyle());
+        childRegex = /tukeyFg=([^=]*.(?=;))/gm;
+        match = childRegex.exec(cell.getStyle());
         if (match) {
           tukeyFg = match[1];
         }
