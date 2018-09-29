@@ -132,8 +132,7 @@ window.MAX_GROUP_ROW = '${maxGroupRow}' || '2';
           </div>
           <%-- 상품페이지 버튼 --%>
           <div id="divProdNavWrap" class="prodNavWrap">
-            <%--<div id="keyStyle" class="oh keyStyleWrap hideNav">--%>
-            <div id="keyStyle" class="oh keyStyleWrap">
+            <div id="keyStyle" class="oh keyStyleWrap hideNav">
               <div id="fontStyleWrap">
                 <span class="s12 fl lh30 bk"><s:message code="touchKey.font"/></span>
                 <div class="sb-select txtIn fl w100 mb5">

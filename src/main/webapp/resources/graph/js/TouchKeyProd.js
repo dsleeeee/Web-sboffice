@@ -86,7 +86,13 @@ Graph.prototype.initProdArea = function (group, sidebar) {
         document.getElementById('keyStyle').classList.remove("hideNav");
         //선택된 레이어를 기본값으로 설정
         var cell = me.state.cell;
-        var tukeyFg = cell.getStyle().match(/tukeyFg=([\S][\S])/i)[1];
+        //정규식으로 tukeyFg 추출
+        var tukeyFg;
+        var regex = /tukeyFg=([^=]*.(?=;))/gm;
+        var match = regex.exec(cell.getStyle());
+        if (match) {
+          tukeyFg = match[1];
+        }
         var colorStyleWrap = document.getElementById('colorStyleWrap');
         // 하위 셀 ( 상품명/금액 ) 인 경우 채우기 기능 제한
         if (tukeyFg === "02" || tukeyFg === "03") {

@@ -102,8 +102,12 @@ public class TouchKeyController {
         // 터치키 스타일 목록 조회
         model.addAttribute("touchKeyStyleList", convertToJson(touchkeyService.getTouchKeyStyleList(
             touchKeyStyleVO)));
-        // 매장의 터치키 환경 설정 값을 조회해서 셋팅
-        model.addAttribute("maxGroupRow", cmmEnvUtil.getHqEnvst(sessionInfoVO, "0018"));
+        // 본사or매장의 터치키 환경 설정 값을 조회해서 셋팅
+        if ( "H".equals(sessionInfoVO.getOrgnFg().getCode()) ) {
+            model.addAttribute("maxGroupRow", cmmEnvUtil.getHqEnvst(sessionInfoVO, "0018"));
+        } else {
+            model.addAttribute("maxGroupRow", cmmEnvUtil.getStoreEnvst(sessionInfoVO, "0023"));
+        }
 
         return RESULT_URI + "/touchKey";
     }

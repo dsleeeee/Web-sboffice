@@ -1,7 +1,18 @@
-@import url('../../solbipos/css/cmm/KoPubDotum.css');
+/*@import url('../../solbipos/css/cmm/KoPubDotum.css');*/
+/*@font-face {*/
+     /*font-family: 'NotoR';*/
+     /*src: url('../../solbipos/css/cmm/fonts/NotoSansCJKkr-Regular.woff') format('woff');*/
+/*}*/
+
 @font-face {
-     font-family: 'NotoR';
-     src: url('../../solbipos/css/cmm/fonts/NotoSansCJKkr-Regular.woff') format('woff');
+  font-family: 'KoPub Dotum';
+  font-style: normal;
+  src: url('../../solbipos/css/cmm/fonts/KoPubDotumMedium.eot'); /* IE9 Compat Modes */
+  src: url('../../solbipos/css/cmm/fonts/KoPubDotumMedium.woff2') format('woff2'), /* Super Modern Browsers */
+    url('../../solbipos/css/cmm/fonts/KoPubDotumMedium.woff') format('woff'), /* Pretty Modern Browsers */
+    url('../../solbipos/css/cmm/fonts/KoPubDotumMedium.ttf') format('truetype'), /* Safari, Android, iOS */
+    url('../../solbipos/css/cmm/fonts/KoPubDotumMedium.svg#KoPubDotumMedium') format('svg'), /* Legacy iOS */
+    url('../../solbipos/css/cmm/fonts/KoPubDotumMedium.eot?#iefix') format('embedded-opentype'); /* IE6-IE8 */
 }
 
 .container {
