@@ -73,6 +73,12 @@ Graph.prototype.initProdArea = function (group, sidebar) {
     previousStyle: null,
     // 상품버튼 클릭시 버튼/상품명/금액 구분하여 속성설정 예외처리
     mouseDown: function (sender, me) {
+      // 분류영역 선택 초기화
+      graph.group.getSelectionModel().clear();
+      // 분류영역 에디팅 판단하여 에디팅 취소 처리
+      if (graph.group.cellEditor.getEditingCell() != null) {
+        graph.group.cellEditor.stopEditing(true);
+      }
       // 마우스오버를 위해 초기화
       if (this.currentState != null) {
         this.dragLeave(me.getEvent(), this.currentState);
@@ -80,8 +86,6 @@ Graph.prototype.initProdArea = function (group, sidebar) {
       }
       // 클릭 영역에 셀이 있는 경우에만...
       if (me.state != null) {
-        // 그룹영역 선택 초기화
-        graph.group.getSelectionModel().clear();
         // 버튼속성 뷰 활성화
         document.getElementById('keyStyle').classList.remove("hideNav");
         //선택된 레이어를 기본값으로 설정

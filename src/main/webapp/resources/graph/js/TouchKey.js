@@ -19,6 +19,22 @@ Touchkey = function (themes) {
   //오른쪽 설정 영역 생성
   this.format = new Format(this);
   this.init();
+
+  var gGraph = this.group;
+  var pGraph = this.prod;
+  // 영역 외부 클릭시 이벤트
+  $(document).click(function (e) {
+    if(!$(event.target).closest('#groupWrap').length && !$(event.target).closest('#prodWrap').length) {
+      // 그래프영역 선택 초기화
+      // gGraph.getSelectionModel().clear();
+      // pGraph.getSelectionModel().clear();
+      // 분류영역 에디팅 판단하여 에디팅 취소 처리
+      if (gGraph.cellEditor.getEditingCell() != null) {
+        gGraph.cellEditor.stopEditing(true);
+      }
+    }
+  });
+
 };
 
 //Extends mxEditor
@@ -256,6 +272,7 @@ Sidebar.prototype.makeGrid = function () {
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
+
   }, true);
 
   // show checkboxes on row headers
@@ -654,14 +671,14 @@ Graph.prototype.init = function () {
   
     // 하위속성 리사이징
     var resizeChild = function (child) {
-      var movedX, movedY;
+      var tukeyFg, childRegex, movedX, movedY;
       for (var r = 0; r < child.length; r++) {
         var cell = child[r];
         // 하위셀 크기 자동 조정
         graph.updateCellSize(cell, true);
         // 정규식으로 tukeyFg 추출
-        regex = /tuketFg=([^=]*.(?=;))/gm;
-        match = regex.exec(cell.getStyle());
+        childRegex = /tukeyFg=([^=]*.(?=;))/gm;
+        match = childRegex.exec(cell.getStyle());
         if (match) {
           tukeyFg = match[1];
         }
@@ -1358,14 +1375,15 @@ Format.prototype.setGraphStyle = function (graph) {
   var cells = graph.getChildCells(graph.getDefaultParent(), true, true);
   // 분류영역/상품영역 색상 별도 지정
   if (graph.isGroup) {
-    graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles.off, cells);
-    graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles.off, cells);
-    graph.setCellStyles(mxConstants.STYLE_FONTSIZE, graph.fontStyles.size, cells);
+    // 분류영역은 선택된 분류만 변경
+    var gCells = graph.getSelectionCells();
+    graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles.off, gCells);
+    graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles.off, gCells);
+    graph.setCellStyles(mxConstants.STYLE_FONTSIZE, graph.fontStyles.size, gCells);
     // 선택된 분류의 StyleCd 변경
-    // var gCells = graph.getSelectionCells();
     var gnStyles = "", gCell;
-    for (var g = 0; g < cells.length; g++) {
-      gCell = cells[g];
+    for (var g = 0; g < gCells.length; g++) {
+      gCell = gCells[g];
       // 정규식으로 styleCd 변경
       gnStyles = gCell.getStyle().replace(styleCdRegex, "styleCd="+styleCd);
       gCell.setStyle(gnStyles);
@@ -1418,10 +1436,14 @@ Graph.prototype.updateHoverStyle = function(state, hover) {
   var parentState;
   if (hover) {
     if (this.isGroup) {
+      // TODO : 마우스 오버시 스타일코드 비교하여 변경처리
+
+      console.log(state);
       // 분류영역에는 자식속성이 없음
       state.style[mxConstants.STYLE_FILLCOLOR] = this.buttonStyles.on;
       state.style[mxConstants.STYLE_FONTCOLOR] = this.fontStyles.on;
       state.style[mxConstants.STYLE_FONTSIZE] = this.fontStyles.size;
+
     } else {
       state.style[mxConstants.STYLE_FILLCOLOR] = this.buttonStyles["01"].on;
       state.style[mxConstants.STYLE_FONTCOLOR] = this.fontStyles["01"].on;
