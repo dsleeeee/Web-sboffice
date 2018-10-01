@@ -269,7 +269,8 @@
 -->
     <typeAlias alias="registVO" type="kr.co.solbipos.membr.info.regist.service.RegistVO"/>
     <typeAlias alias="membrClassVO" type="kr.co.solbipos.membr.info.grade.service.MembrClassVO"/>
-    <typeAlias alias="creditStoreVO" type="kr.co.solbipos.membr.info.regist.service.CreditStoreVO"/>
+    <typeAlias alias="creditStoreVO" type="kr.co.solbipos.membr.anals.credit.service.CreditStoreVO"/>
+    <typeAlias alias="prepaidStoreVO" type="kr.co.solbipos.membr.anals.prepaid.service.PrepaidStoreVO"/>
 <!--
     <typeAlias alias="gradeVO" type="kr.co.solbipos.membr.info.grade.service.GradeVO"/>
     <typeAlias alias="uploadVO" type="kr.co.solbipos.membr.info.upload.service.UploadVO"/>
