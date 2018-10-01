@@ -62,6 +62,12 @@ public interface HqManageMapper {
     /** 본사 공통코드 등록 */
     int cmmCodeReg(HqNmcodeVO nmcodeVO);
 
+    /** TID 복사 프로시져 */
+    String copyTid(HqNmcodeVO nmcodeVO);
+
+    /** 공통코드 복사 */
+    int copyCmmCode(HqNmcodeVO nmcodeVO);
+
     /** 본사 포스 출력물 등록 */
     int hqPrintTempReg(HqPrintTemplVO printTempVO);
 
@@ -103,4 +109,5 @@ public interface HqManageMapper {
 
     /** 환경설정 수정 - 매장 */
     int updateConfigStore(HqEnvstVO hqEnvst);
+
 }

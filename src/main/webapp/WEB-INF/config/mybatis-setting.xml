@@ -188,8 +188,9 @@
 -->
     <typeAlias alias="vendrVO" type="kr.co.solbipos.base.prod.vendr.service.VendrVO"/>
 
-    <typeAlias alias="touchVO" type="kr.co.solbipos.base.prod.touchkey.service.TouchVO"/>
-    <typeAlias alias="touchClassVO" type="kr.co.solbipos.base.prod.touchkey.service.TouchClassVO"/>
+    <typeAlias alias="touchKeyVO" type="kr.co.solbipos.base.prod.touchkey.service.TouchKeyVO"/>
+    <typeAlias alias="touchKeyClassVO" type="kr.co.solbipos.base.prod.touchkey.service.TouchKeyClassVO"/>
+    <typeAlias alias="touchKeyStyleVO" type="kr.co.solbipos.base.prod.touchkey.service.TouchKeyStyleVO"/>
 <!--
     <typeAlias alias="sideMenuVO" type="kr.co.solbipos.base.prod.sidemenu.service.SideMenuVO"/>
     <typeAlias alias="chgBatchVO" type="kr.co.solbipos.base.prod.chgbatch.service.ChgBatchVO"/>
@@ -268,6 +269,7 @@
 -->
     <typeAlias alias="registVO" type="kr.co.solbipos.membr.info.regist.service.RegistVO"/>
     <typeAlias alias="membrClassVO" type="kr.co.solbipos.membr.info.grade.service.MembrClassVO"/>
+    <typeAlias alias="creditStoreVO" type="kr.co.solbipos.membr.info.regist.service.CreditStoreVO"/>
 <!--
     <typeAlias alias="gradeVO" type="kr.co.solbipos.membr.info.grade.service.GradeVO"/>
     <typeAlias alias="uploadVO" type="kr.co.solbipos.membr.info.upload.service.UploadVO"/>

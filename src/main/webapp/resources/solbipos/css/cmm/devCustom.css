@@ -22,3 +22,9 @@ select.sb-select {display:block!important; border:1px solid #e8e8e8; height:28px
  * elseCon 중간 글씨체 추가
  */
 .elseCon .mdTxt {font-size:1.450em; line-height:1.5em; color:#222; font-weight:bold;}
+
+/**
+ * 20180927 추가
+ * 테이블이 아닌 div 에서도 sb-input 스타일 적용
+ */
+div input.sb-input {border:1px solid #e8e8e8; padding:0 10px; height:30px; line-height:30px; font-size:1em;}

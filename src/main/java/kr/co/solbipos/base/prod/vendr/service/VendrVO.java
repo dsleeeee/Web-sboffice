@@ -5,7 +5,7 @@ import kr.co.solbipos.application.common.service.PageVO;
 import kr.co.solbipos.base.prod.vendr.enums.VendorFg;
 
 /**
- * @Class Name : TouchVO.java
+ * @Class Name : TouchKeyVO.java
  * @Description : 기초관리 - 상품관리 - 판매터치키등록
  * @Modification Information
  * @

@@ -237,7 +237,6 @@ $(document).ready(function(){
 
     <%-- 매장선택 --%>
     $("#store").click(function(e){
-      alert('매장선택')
 
       c_store.init(function(arr){
 

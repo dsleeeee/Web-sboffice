@@ -143,7 +143,7 @@
   <div class="wj-TblWrap mt10">
     <%-- left --%>
     <div class="w50 fl">
-      <div class="wj-TblWrapBr mr10 pd20" style="height:700px;">
+      <div class="wj-TblWㅣrapBr mr10 pd20" style="height:700px;">
         <div id="theGrid"></div>
       </div>
     </div>
@@ -188,6 +188,9 @@ $(document).ready(function(){
   var membrEmail   = genInputText("#membrEmail", "180");
   var telNo        = genInputText("#telNo", "15");
 
+  <%-- 기본매장코드 --%>
+  var defaultStoreCd = "${defaultStoreCd}";
+
   <%--그리드 링크 이벤트 등록--%>
   grid.formatItem.addHandler(function(s, e) {
     if (e.panel == s.cells) {
@@ -217,9 +220,11 @@ $(document).ready(function(){
     param.membrNo = data.membrNo;
     param.membrOrgnCd = data.membrOrgnCd;
 
-    $.postJSON("/membr/info/view/base/list.sb", param, function(result) {
+    $.postJSON("/membr/info/view/base/getMemberInfo.sb", param, function(result) {
       infoInit();
       var data = result.data;
+
+      console.log(data)
 
       vMembrNo.value     = data.membrNo;
       vMembrNm.value     = data.membrNm;
@@ -238,6 +243,8 @@ $(document).ready(function(){
       vUseYn.selectedValue = data.useYn;
       vEmailRecv.selectedValue = data.emailRecvYn;
       vSmsRecv.selectedValue = data.smsRecvYn;
+
+      $("#storeCd").val(data.creditStore); //TODO text도
       $("#vMembrOrgnCd").val(data.membrOrgnCd);
       $("#membrNoNm").text("<s:message code='regist.membr.info'/>" + " [" + data.membrNo + "/" + data.membrNm + "]");
       vMembrNo.isReadOnly = true;
@@ -245,6 +252,8 @@ $(document).ready(function(){
       $("#noDataArea").hide();
       $("#basicInfrm").show();
 
+      // 회원의 등록매장이 본사의 기본매장코드와 같으면 후불회원 적용매장 가능
+      editCreditStore();
     },
     function(result){
       s_alert.pop(result.message);
@@ -306,206 +315,262 @@ $(document).ready(function(){
 
 
   <%--기본정보 탭 생성--%>
-    var vMembrNo     = genInputText("#vMembrNo", "10");
-    var vMembrNm     = genInputText("#vMembrNm", "15");
-    var vMembrNmEng  = genInputText("#vMembrNmEng", "15");
-    var vTel         = genInputText("#vTel", "15");
-    var vEmail       = genInputText("#vEmail", "180");
-    var vAddr1       = genInputText("#vAddr1", "60");
-    var vAddr2       = genInputText("#vAddr2", "60");
-    var vMembrCardNo = genInputText("#vMembrCardNo", "40");
-    var vRemark      = genInputText("#vRemark", "160");
-    var vBrthdDt     = wcombo.genDate("#vBrthdDt");
-    var vRegStore    = wcombo.genCommonBox("#vRegStore", ${regstrStoreListAll});
-    var vClassCd     = wcombo.genCommonBox("#vClassCd", ${comboData});
-    var vGender      = wcombo.genCommonBox("#vGender", genderDataEx);
-    var vWedding     = wcombo.genCommonBox("#vWedding", ${weddingData});
-    var vEmailRecv   = wcombo.genCommonBox("#vEmailRecv", recvDataEx);
-    var vUseYn       = wcombo.genCommonBox("#vUseYn", useDataEx);
-    var vSmsRecv     = wcombo.genCommonBox("#vSmsRecv", recvDataEx);
+  var vMembrNo     = genInputText("#vMembrNo", "10");
+  var vMembrNm     = genInputText("#vMembrNm", "15");
+  var vMembrNmEng  = genInputText("#vMembrNmEng", "15");
+  var vTel         = genInputText("#vTel", "15");
+  var vEmail       = genInputText("#vEmail", "180");
+  var vAddr1       = genInputText("#vAddr1", "60");
+  var vAddr2       = genInputText("#vAddr2", "60");
+  var vMembrCardNo = genInputText("#vMembrCardNo", "40");
+  var vRemark      = genInputText("#vRemark", "160");
+  var vBrthdDt     = wcombo.genDate("#vBrthdDt");
+  var vRegStore    = wcombo.genCommonBox("#vRegStore", ${regstrStoreListAll});
+  var vClassCd     = wcombo.genCommonBox("#vClassCd", ${comboData});
+  var vGender      = wcombo.genCommonBox("#vGender", genderDataEx);
+  var vWedding     = wcombo.genCommonBox("#vWedding", ${weddingData});
+  var vEmailRecv   = wcombo.genCommonBox("#vEmailRecv", recvDataEx);
+  var vUseYn       = wcombo.genCommonBox("#vUseYn", useDataEx);
+  var vSmsRecv     = wcombo.genCommonBox("#vSmsRecv", recvDataEx);
 
-    vMembrNo.isReadOnly = true;
+  vMembrNo.isReadOnly = true;
+
+  vRegStore.selectedIndexChanged.addHandler(function(s, e){
+    editCreditStore();
+
+  });
+
+  // 후불회원 적용매장
+  function editCreditStore(){
+    // 회원의 등록매장이 본사의 기본매장코드와 같으면 후불회원 적용매장 가능
+    if(vRegStore.selectedValue === defaultStoreCd ) {
+      $("#creditStore").show();
+    } else {
+      $("#creditStore").hide();
+    }
+  }
 
   <%--기본정보 탭 초기화--%>
-    function infoInit() {
-      $("#noDataArea").hide();
-      $("#membrCardInfo").hide();
-      $("#basicInfrm").show();
+  function infoInit() {
+    $("#noDataArea").hide();
+    $("#membrCardInfo").hide();
+    $("#basicInfrm").show();
 
-      var inputArr = [
-        vMembrNo, vMembrNm, vMembrNmEng, vMembrCardNo, vTel, vEmail, vAddr1, vAddr2, vRemark
-      ].forEach(function(element){element.value="";});
-      var selectArr = [
-        vRegStore, vGender, vWedding, vEmailRecv, vUseYn, vSmsRecv
-      ].forEach(function(element){element.selectedIndex=0;});
-      $("#membrNoNm").text("<s:message code='webMenu.new'/>");
-      vRegStore.selectedValue = '${orgnCd}'; <%--등록매장 세팅--%>
-      vGender.selectedValue = 'N';
-      vWedding.selectedValue = 'N';
-      vUseYn.selectedValue = 'Y';
-    }
+    var inputArr = [
+      vMembrNo, vMembrNm, vMembrNmEng, vMembrCardNo, vTel, vEmail, vAddr1, vAddr2, vRemark
+    ].forEach(function(element){element.value="";});
+    var selectArr = [
+      vRegStore, vGender, vWedding, vEmailRecv, vUseYn, vSmsRecv
+    ].forEach(function(element){element.selectedIndex=0;});
+    $("#membrNoNm").text("<s:message code='webMenu.new'/>");
+    vRegStore.selectedValue = '${orgnCd}'; <%--등록매장 세팅--%>
+    vGender.selectedValue = 'N';
+    vWedding.selectedValue = 'N';
+    vUseYn.selectedValue = 'Y';
 
-    <%--삭제 버튼--%>
-    $("#btnDel").click(function(){
-      var msg = "<s:message code='cmm.choo.delete'/>";
-      s_alert.popConf(msg, function(){
-        var param = {};
-        param.membrNo = vMembrNo.value;
-        param.membrOrgnCd = $("#vMembrOrgnCd").val();
+    $("#storeCd").val("");
+    $("#storeCdText").val("");
 
-        $.postJSON("/membr/info/view/base/remove.sb", param, function(result) {
-          var msg = "<s:message code='cmm.deleteSucc' />";
-          s_alert.popOk(msg, function() {
-            searchMembrs();
-          });
-        },
-        function(result){
-          if(result.message != undefined || result.message == "") {
-            s_alert.pop(result.message);
-            return;
-          }
-          var data = result.data;
-          var keys = Object.keys(data);
-          s_alert.popOk(data[keys[0]]);
+  }
+
+  <%--삭제 버튼--%>
+  $("#btnDel").click(function(){
+    var msg = "<s:message code='cmm.choo.delete'/>";
+    s_alert.popConf(msg, function(){
+      var param = {};
+      param.membrNo = vMembrNo.value;
+      param.membrOrgnCd = $("#vMembrOrgnCd").val();
+
+      $.postJSON("/membr/info/view/base/remove.sb", param, function(result) {
+        var msg = "<s:message code='cmm.deleteSucc' />";
+        s_alert.popOk(msg, function() {
+          searchMembrs();
         });
+      },
+      function(result){
+        if(result.message != undefined || result.message == "") {
+          s_alert.pop(result.message);
+          return;
+        }
+        var data = result.data;
+        var keys = Object.keys(data);
+        s_alert.popOk(data[keys[0]]);
       });
     });
+  });
 
-    <%--저장 버튼--%>
-    $("#btnSave").click(function(){
-      var msg = "<s:message code='cmm.choo.save'/>";
-      s_alert.popConf(msg, function(){
+  <%-- 회원 저장 버튼--%>
+  $("#btnSave").click(function(){
+    var msg = "<s:message code='cmm.choo.save'/>";
+    s_alert.popConf(msg, function(){
 
-        var param = {};
-        param.membrNo = vMembrNo.value;
-        param.membrNm = vMembrNm.value;
-        param.memberEngNm = vMembrNmEng.value;
-        param.regStoreCd = vRegStore.selectedValue;
-        param.membrCardNo = vMembrCardNo.value;
-        param.gendrFg = vGender.selectedValue;
-        param.weddingYn = vWedding.selectedValue;
-        param.birthday = getDate(vBrthdDt);
-        param.telNo = vTel.value;
-        param.useYn = vUseYn.selectedValue;
-        param.emailAddr = vEmail.value;
-        param.postNo = vAddr1.value;
-        param.addr = vAddr2.value;
-        param.emailRecvYn = vEmailRecv.selectedValue;
-        param.smsRecvYn = vSmsRecv.selectedValue;
-        param.remark = vRemark.value;
+      var param = {};
+      param.membrNo = vMembrNo.value;
+      param.membrNm = vMembrNm.value;
+      param.memberEngNm = vMembrNmEng.value;
+      param.regStoreCd = vRegStore.selectedValue;
+      param.membrCardNo = vMembrCardNo.value;
+      param.gendrFg = vGender.selectedValue;
+      param.weddingYn = vWedding.selectedValue;
+      param.birthday = getDate(vBrthdDt);
+      param.telNo = vTel.value;
+      param.useYn = vUseYn.selectedValue;
+      param.emailAddr = vEmail.value;
+      param.postNo = vAddr1.value;
+      param.addr = vAddr2.value;
+      param.emailRecvYn = vEmailRecv.selectedValue;
+      param.smsRecvYn = vSmsRecv.selectedValue;
+      param.remark = vRemark.value;
+      param.creditStore = $("#storeCd").val(); // 후불회원 적용매장
 
-        $.postJSONSave("/membr/info/view/base/regist.sb", param, function(result) {
-          var msg = "<s:message code='cmm.registSucc'/>";
-          s_alert.popOk(msg, function() {
-            infoInit();
-            searchMembrs();
-          });
-        },
-        function(result){
-          if(result.message != undefined || result.message == "") {
-            s_alert.pop(result.message);
-            return;
-          }
-          var data = result.data;
-          var keys = Object.keys(data);
-          if(keys.length > 0) {
-            infoFocus(data, keys);
-          }
+      $.postJSONSave("/membr/info/view/base/regist.sb", param, function(result) {
+        var msg = "<s:message code='cmm.registSucc'/>";
+        s_alert.popOk(msg, function() { //succss
+          infoInit();
+          searchMembrs();
         });
-      });
-    });
-
-    <%--포커스 이동--%>
-    function infoFocus(data, keys) {
-      var focusTarget;
-      var msg = "";
-      keys.forEach(function(key){
-        if(key == "membrNo") {
-          focusTarget = vMembrNo;
-          msg = "membrNo";
+      },
+      function(result){ // fail
+        if(result.message != undefined || result.message == "") {
+          s_alert.pop(result.message);
+          return;
         }
-        else if(key == "membrNm") {
-          focusTarget = vMembrNm;
-          msg = "membrNm";
-        }
-        else if(key == "regStoreCd") {
-          focusTarget = vRegStore;
-          msg = "regStoreCd";
-        }
-        else if(key == "emailRecvYn") {
-          focusTarget = vEmailRecv;
-          msg = "emailRecvYn";
-        }
-        else if(key == "smsRecvYn") {
-          focusTarget = vSmsRecv;
-          msg = "smsRecvYn";
-        }
-        else if(key == "useYn") {
-          focusTarget = vUseYn;
-          msg = "useYn";
-        }
-        else if(key == "membrCardNo") {
-          focusTarget = vMembrCardNo;
-          msg = "membrCardNo";
-        }
-        else if(key == "gendrFg") {
-          focusTarget = vGender;
-          msg = "gendrFg";
-        }
-        else if(key == "telNo") {
-          focusTarget = vTel;
-          msg = "telNo";
-        }
-        else if(key == "weddingYn") {
-          focusTarget = vWedding;
-          msg = "weddingYn";
-        }
-        else if(key == "emailRecvYn") {
-          focusTarget = vEmailRecv;
-          msg = "emailRecvYn";
-        }
-        else if(key == "smsRecvYn") {
-          focusTarget = vSmsRecv;
-          msg = "smsRecvYn";
-        }
-        else if(key == "useYn") {
-          focusTarget = vUseYn;
-          msg = "useYn";
+        var data = result.data;
+        var keys = Object.keys(data);
+        if(keys.length > 0) {
+          infoFocus(data, keys);
         }
       });
-      s_alert.popConf(data[msg], function(){
-        focusTarget.focus();
-      });
-    }
-
-    <%--신규등록 버튼--%>
-    $("#btnNew").click(function(){
-      var msg = "<s:message code='regist.new.msg'/>";
-      s_alert.popConf(msg, function(){
-        infoInit();
-      });
     });
+  });
 
-    <%--기본정보 탭--%>
-    $("#btnInfo").click(function(){
-      $("#noDataArea").hide();
-      $("#membrCardInfo").hide();
-      $("#basicInfrm").show();
-      $("#btnInfo").attr("class", "on");
-      $("#btnCard").attr("class", "");
+  <%--포커스 이동--%>
+  function infoFocus(data, keys) {
+    var focusTarget;
+    var msg = "";
+    keys.forEach(function(key){
+      if(key == "membrNo") {
+        focusTarget = vMembrNo;
+        msg = "membrNo";
+      }
+      else if(key == "membrNm") {
+        focusTarget = vMembrNm;
+        msg = "membrNm";
+      }
+      else if(key == "regStoreCd") {
+        focusTarget = vRegStore;
+        msg = "regStoreCd";
+      }
+      else if(key == "emailRecvYn") {
+        focusTarget = vEmailRecv;
+        msg = "emailRecvYn";
+      }
+      else if(key == "smsRecvYn") {
+        focusTarget = vSmsRecv;
+        msg = "smsRecvYn";
+      }
+      else if(key == "useYn") {
+        focusTarget = vUseYn;
+        msg = "useYn";
+      }
+      else if(key == "membrCardNo") {
+        focusTarget = vMembrCardNo;
+        msg = "membrCardNo";
+      }
+      else if(key == "gendrFg") {
+        focusTarget = vGender;
+        msg = "gendrFg";
+      }
+      else if(key == "telNo") {
+        focusTarget = vTel;
+        msg = "telNo";
+      }
+      else if(key == "weddingYn") {
+        focusTarget = vWedding;
+        msg = "weddingYn";
+      }
+      else if(key == "emailRecvYn") {
+        focusTarget = vEmailRecv;
+        msg = "emailRecvYn";
+      }
+      else if(key == "smsRecvYn") {
+        focusTarget = vSmsRecv;
+        msg = "smsRecvYn";
+      }
+      else if(key == "useYn") {
+        focusTarget = vUseYn;
+        msg = "1";
+      }
     });
-
-    <%--회원카드 탭--%>
-    $("#btnCard").click(function(){
-      $("#noDataArea").hide();
-      $("#basicInfrm").hide();
-      $("#membrCardInfo").show();
-      $("#btnCard").attr("class", "on");
-      $("#btnInfo").attr("class", "");
+    s_alert.popConf(data[msg], function(){
+      focusTarget.focus();
     });
+  }
 
-    function genInputText(div, length) {
-      return wcombo.genInputText(div, length, "", null);
-    }
+  <%-- 후불회원 적용매장 버튼 클릭시 --%>
+  $("#store").click(function(){
+    c_store.init(function(arr){
+      $("#storeCdText").val("");
+      $("#storeCd").val("");
+
+      if(arr.length > 1) {
+        var str = "";
+        var a = arr.length -1;
+
+        if(arr[0].nm !== "ALL") { str = (arr[0].nm + "외 " + a.toString() + " 선택"); }
+        else                    { str = (arr[1].nm + "외 " + a.toString() + " 선택"); }
+
+        $("#storeCdText").val(str);
+
+      } else if(arr.length == 1){
+        $("#storeCdText").val(arr[0].nm);
+      }
+
+      var storeText = "";
+      for(var i=0; i<arr.length; i++) {
+        if(i == arr.length - 1) {
+          storeText += arr[i].cd.toString();
+          $("#storeCd").val(storeText);
+        } else {
+          storeText += arr[i].cd.toString() + ",";
+          $("#storeCd").val(storeText);
+        }
+      }
+    });
+  });
+
+  <%--신규등록 버튼--%>
+  $("#btnNew").click(function(){
+    var msg = "<s:message code='regist.new.msg'/>";
+    s_alert.popConf(msg, function(){
+      infoInit();
+    });
+  });
+
+  <%--기본정보 탭--%>
+  $("#btnInfo").click(function(){
+    $("#noDataArea").hide();
+    $("#membrCardInfo").hide();
+    $("#basicInfrm").show();
+    $("#btnInfo").attr("class", "on");
+    $("#btnCard").attr("class", "");
+  });
+
+  <%--회원카드 탭--%>
+  $("#btnCard").click(function(){
+    $("#noDataArea").hide();
+    $("#basicInfrm").hide();
+    $("#membrCardInfo").show();
+    $("#btnCard").attr("class", "on");
+    $("#btnInfo").attr("class", "");
+  });
+
+  function genInputText(div, length) {
+    return wcombo.genInputText(div, length, "", null);
+  }
 });
 </script>
+
+<%-- 매장 선택 --%>
+<c:import url="/WEB-INF/view/application/layer/store.jsp">
+</c:import>

@@ -2,6 +2,8 @@ package kr.co.solbipos.store.manage.storeview.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.store.manage.storeview.service.StoreViewService;
 import kr.co.solbipos.store.manage.storeview.service.StoreViewVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +37,14 @@ public class StoreViewServiceImpl implements StoreViewService {
 
     /** 매장정보 목록 조회 */
     @Override
-    public List<DefaultMap<String>> getStoreViewList(StoreViewVO storeViewVO) {
+    public List<DefaultMap<String>> getStoreViewList(StoreViewVO storeViewVO, SessionInfoVO sessionInfoVO) {
+
+        storeViewVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            storeViewVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
         return mapper.getStoreViewList(storeViewVO);
     }
 }

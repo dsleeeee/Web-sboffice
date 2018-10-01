@@ -35,86 +35,108 @@ public class HqNmcodeVO extends CmmVO {
     private String nmcodeItem2;
     /** 사용여부 (사용:Y 사용안함:N) */
     private UseYn useYn;
+    /** 프로시져 실행 결과 */
+    private String result;
 
 
     /**
      * @return the hqOfficeCd
      */
+
     public String getHqOfficeCd() {
         return hqOfficeCd;
     }
+
     /**
      * @param hqOfficeCd the hqOfficeCd to set
      */
     public void setHqOfficeCd(String hqOfficeCd) {
         this.hqOfficeCd = hqOfficeCd;
     }
+
     /**
      * @return the nmcodeGrpCd
      */
+
     public String getNmcodeGrpCd() {
         return nmcodeGrpCd;
     }
+
     /**
      * @param nmcodeGrpCd the nmcodeGrpCd to set
      */
     public void setNmcodeGrpCd(String nmcodeGrpCd) {
         this.nmcodeGrpCd = nmcodeGrpCd;
     }
+
     /**
      * @return the nmcodeCd
      */
+
     public String getNmcodeCd() {
         return nmcodeCd;
     }
+
     /**
      * @param nmcodeCd the nmcodeCd to set
      */
     public void setNmcodeCd(String nmcodeCd) {
         this.nmcodeCd = nmcodeCd;
     }
+
     /**
      * @return the nmcodeNm
      */
+
     public String getNmcodeNm() {
         return nmcodeNm;
     }
+
     /**
      * @param nmcodeNm the nmcodeNm to set
      */
     public void setNmcodeNm(String nmcodeNm) {
         this.nmcodeNm = nmcodeNm;
     }
+
     /**
      * @return the nmcodeItem1
      */
+
     public String getNmcodeItem1() {
         return nmcodeItem1;
     }
+
     /**
      * @param nmcodeItem1 the nmcodeItem1 to set
      */
     public void setNmcodeItem1(String nmcodeItem1) {
         this.nmcodeItem1 = nmcodeItem1;
     }
+
     /**
      * @return the nmcodeItem2
      */
+
     public String getNmcodeItem2() {
         return nmcodeItem2;
     }
+
     /**
      * @param nmcodeItem2 the nmcodeItem2 to set
      */
     public void setNmcodeItem2(String nmcodeItem2) {
         this.nmcodeItem2 = nmcodeItem2;
     }
+
     /**
      * @return the useYn
      */
+
     public UseYn getUseYn() {
         return useYn;
     }
+
     /**
      * @param useYn the useYn to set
      */
@@ -122,4 +144,18 @@ public class HqNmcodeVO extends CmmVO {
         this.useYn = useYn;
     }
 
+    /**
+     * @return the result
+     */
+
+    public String getResult() {
+        return result;
+    }
+
+    /**
+     * @param result the result to set
+     */
+    public void setResult(String result) {
+        this.result = result;
+    }
 }

@@ -4,10 +4,13 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.cmm.CmmMenuService;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.jsp.CmmEnvUtil;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.common.service.CmAgencyVO;
 import kr.co.solbipos.application.common.service.HqVO;
 import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,6 +34,9 @@ public class MenuController {
 
     private final SessionService sessionService;
     private final CmmMenuService cmmMenuService;
+
+    @Autowired
+    CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
@@ -83,8 +89,15 @@ public class MenuController {
     @ResponseBody
     public Result selectStore(StoreVO storeVO, HttpServletRequest request, Model model) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        // 로그인한 유저의 본사 코드를 세팅한다.
-        storeVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
+
+        // 본사일 경우 해당 본사의 기본매장(코드)가 있는지 체크 후, 기본매장은 빼고 조회 해야 함.
+        String defaultStoreCd = "";
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            defaultStoreCd =  StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0025"));
+        }
+        storeVO.setDefaultStoreCd(defaultStoreCd);
+        storeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
         List<StoreVO> list = cmmMenuService.selectStore(storeVO);
         return returnJson(Status.OK, list);
     }
@@ -103,8 +116,8 @@ public class MenuController {
         List<HqVO> list = cmmMenuService.selectHq(hqVO);
         return returnJson(Status.OK, list);
     }
-    
-    
+
+
     /**
      * 레이어 팝업 업체 조회
      *

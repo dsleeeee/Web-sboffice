@@ -3,17 +3,19 @@ package kr.co.common.utils.jsp;
 import kr.co.common.data.domain.EnvCodeVO;
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
-
 import kr.co.common.service.code.CmmEnvService;
 import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
+import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;
 import kr.co.solbipos.sys.cd.envconfg.service.EnvstVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import java.util.List;
+
 import static org.springframework.util.StringUtils.isEmpty;
 
 /**
@@ -114,6 +116,21 @@ public class CmmEnvUtil {
         hqEnvstVO.setEnvstCd(envstCd);
 
         return cmmEnvService.getHqEnvst(hqEnvstVO);
+    }
+
+    /**
+     * 매장 환경변수 테이블에 등록된 값 조회
+     *
+     * @param sessionInfoVO, envstCd
+     * @return String (TB_MS_STORE_ENVST)
+     */
+    public String getStoreEnvst(SessionInfoVO sessionInfoVO, String envstCd) {
+
+        StoreEnvVO storeEnvVO = new StoreEnvVO();
+        storeEnvVO.setStoreCd(sessionInfoVO.getStoreCd());
+        storeEnvVO.setEnvstCd(envstCd);
+
+        return cmmEnvService.getStoreEnvst(storeEnvVO);
     }
 
     /** 환경변수명 조회 */

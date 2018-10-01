@@ -8,6 +8,21 @@ import kr.co.solbipos.membr.info.regist.validate.Regist;
 import kr.co.solbipos.membr.info.regist.validate.RegistDelete;
 import org.hibernate.validator.constraints.NotBlank;
 
+/**
+ * @Class Name : RegistVO.java
+ * @Description : 회원관리 > 회원정보 > 회원정보관리
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2018.05.01  정용길      최초생성
+ *
+ * @author NHN한국사이버결제 KCP 정용길
+ * @since 2018.05.01
+ * @version 1.0
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ */
 public class RegistVO extends PageVO {
 
     private static final long serialVersionUID = 1L;
@@ -22,7 +37,6 @@ public class RegistVO extends PageVO {
     @NotBlank(groups = {RegistDelete.class}, message = "{regist.membr.org.cd}{cmm.not.find}")
     private String membrOrgnCd;
     /** 회원번호 */
-//    @NotBlank(groups = {Regist.class, RegistDelete.class}, message = "{regist.membr.no}{cmm.require.text}")
     private String membrNo;
     /** 회원명 */
     @NotBlank(groups = {Regist.class}, message = "{regist.membr.nm}{cmm.require.text}")
@@ -34,7 +48,6 @@ public class RegistVO extends PageVO {
     /** 회원분류코드 */
     private String membrClassCd;
     /** 회원카드번호 */
-//    @NotBlank(groups = {Regist.class}, message = "{regist.membr.card.no}{cmm.require.text}")
     private String membrCardNo;
     /** 등록매장코드 */
     @NotBlank(groups = {Regist.class}, message = "{regist.reg.store.cd}{cmm.require.text}")
@@ -87,6 +100,9 @@ public class RegistVO extends PageVO {
     private String periodStartDt;
     /** 조회기간 타입 date end */
     private String periodEndDt;
+    /** 후불회원 적용매장 */
+    private String creditStore;
+
 
     /**
      * @return the orgnFg
@@ -566,5 +582,20 @@ public class RegistVO extends PageVO {
      */
     public void setPeriodEndDt(String periodEndDt) {
         this.periodEndDt = periodEndDt;
+    }
+
+    /**
+     * @return the creditStore
+     */
+
+    public String getCreditStore() {
+        return creditStore;
+    }
+
+    /**
+     * @param creditStore the creditStore to set
+     */
+    public void setCreditStore(String creditStore) {
+        this.creditStore = creditStore;
     }
 }

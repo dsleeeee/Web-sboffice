@@ -41,6 +41,25 @@ public class StoreManageServiceImpl implements StoreManageService{
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
+    private final String DEFAULT_POS_NO = "01";         // 기본 포스 번호
+    private final String DEFAULT_POS_EMPNO = "0000";    // 기본 포스 직원번호
+    private final String DEFAULT_POS_PASSWORD = "1234"; // 기본 포스 패스워드
+    private final String DEFAULT_WEB_PASSWORD = "1234"; // 기본 웹 패스워드
+
+    private final String ENVST_FG_POS = "03";           // 환경설정구분 (포스)
+
+    private final String EXCLUSIVE_HQ_OFFICE = "00000"; // 단독매장 등록 본사
+
+    private final String CORNER_USE_YN = "2028";        // 환경변수 : 코너 사용여부
+    private final String TABLE_ENVST_CD = "1003";       // 테이블 기본 그룹설정 정보
+    private final String MAIN_POS_YN  = "3021";         // 메인포스여부
+    private final String MAIN_POS_YN_DEFAULT = "0";     // 메인포스여부 - 'Y'
+
+    private final String DEFAULT_PRODUCT_CLASS = "0000";// 상품 기본 분류
+
+    private final String SYS_CLOSURE_DATE = "99991231"; // 시스템 종료일
+
+
     @Autowired
     StoreManageMapper mapper;
     @Autowired
@@ -67,7 +86,7 @@ public class StoreManageServiceImpl implements StoreManageService{
         // 설치 포스수 조회
         int instPosCnt = mapper.getInstPosCnt(storeManageVO);
 
-        // 코너별 승인
+        // TODO 코너별 승인
 //        List<DefaultMap<String>> cornrApproveList = mapper.getCornrApproveList(storeManageVO);
 
         // 포스별 승인
@@ -122,9 +141,9 @@ public class StoreManageServiceImpl implements StoreManageService{
         storeManageVO.setModId(sessionInfoVO.getUserId());
 
         if(SysStatFg.CLOSE == storeManageVO.getSysStatFg()) {
-            storeManageVO.setSysClosureDate("99991231");
+            storeManageVO.setSysClosureDate(SYS_CLOSURE_DATE);
         } else  if(SysStatFg.DEMO == storeManageVO.getSysStatFg() ) {
-            storeManageVO.setSysClosureDate("99991231");
+            storeManageVO.setSysClosureDate(SYS_CLOSURE_DATE);
         } else {
             storeManageVO.setSysClosureDate(currentDateString());
         }
@@ -133,9 +152,9 @@ public class StoreManageServiceImpl implements StoreManageService{
         String storeCd = mapper.getStoreCd(storeManageVO);
 
         String wUuserId = storeCd.toLowerCase(); // 웹 사용자 아이디
-        String wUserPwd = EncUtil.setEncSHA256(wUuserId+"0000");    // 웹 패스워드
-        String pEmpNo = "0000"; // 포스 기본 사용자 사원번호
-        String pUserPwd = EncUtil.setEncSHA256(pEmpNo+"1234");  // 포스 패스워드
+        String wUserPwd = EncUtil.setEncSHA256(wUuserId + DEFAULT_WEB_PASSWORD);    // 웹 패스워드
+        String pEmpNo = DEFAULT_POS_EMPNO; // 포스 기본 사용자 사원번호
+        String pUserPwd = EncUtil.setEncSHA256(pEmpNo + DEFAULT_POS_PASSWORD);  // 포스 패스워드
 
         storeManageVO.setStoreCd(storeCd);
         storeManageVO.setUserId(wUuserId);
@@ -143,12 +162,12 @@ public class StoreManageServiceImpl implements StoreManageService{
         storeManageVO.setPosEmpNo(pEmpNo);
         storeManageVO.setPosUserPwd(pUserPwd);
 
-        // 본사의 포스 프로그램 구분
+        // TODO 본사의 포스 프로그램 구분
         // 20180821 환경변수 값 바꾸면서 매장환경으로 변경됨 -> 매장환경설정에서 변경해야하는 값.
         /*
         String posEnvValue = "";
 
-        if(!"00000".equals(storeManageVO.getHqOfficeCd())) { // 프랜차이즈의 경우
+        if(!EXCLUSIVE_HQ_OFFICE.equals(storeManageVO.getHqOfficeCd())) { // 프랜차이즈의 경우
 
             // 본사의 포스 프로그램 구분 조회
             posEnvValue = mapper.getPosEnvValue(storeManageVO);
@@ -175,10 +194,10 @@ public class StoreManageServiceImpl implements StoreManageService{
         // 웹 사용자 등록
         procCnt += mapper.insertStoreWebUser(storeManageVO);
 
-        // 포스 출력물 마스터 등록
-        if("00000".equals(storeManageVO.getHqOfficeCd())) { // 단독매장
+        // 포스 출력물 마스터 등록 (단독, 프랜차이즈)
+        if(EXCLUSIVE_HQ_OFFICE.equals(storeManageVO.getHqOfficeCd())) {
             procCnt += mapper.insertDefaultPrintTemplete(storeManageVO);
-        } else {    // 프랜차이즈
+        } else {
             procCnt += mapper.insertHqPrintTemplete(storeManageVO);
         }
 
@@ -259,7 +278,7 @@ public class StoreManageServiceImpl implements StoreManageService{
         // 코너사용여부 환경변수 등록
         StoreEnvVO storeEnvVO = new StoreEnvVO();
         storeEnvVO.setStoreCd(storeCd);
-        storeEnvVO.setEnvstCd("2028");
+        storeEnvVO.setEnvstCd(CORNER_USE_YN);
         storeEnvVO.setEnvstVal(storeManageVO.getCornerUseYn());
         storeEnvVO.setRegDt(dt);
         storeEnvVO.setRegId(sessionInfoVO.getUserId());
@@ -269,10 +288,23 @@ public class StoreManageServiceImpl implements StoreManageService{
         procCnt += mapper.updateStoreEnvst(storeEnvVO);
 
         //TODO 판매가 테이블 생성시 추가
-        if(!"00000".equals(storeManageVO.getHqOfficeCd())) { // 프랜차이즈
+        if(!EXCLUSIVE_HQ_OFFICE.equals(storeManageVO.getHqOfficeCd())) { // 프랜차이즈
             // 프랜차이즈 설정 - 판매가 HD 복사
             // 프랜차이즈 설정 - 판매가 DT 복사
         }
+
+        StoreNmcodeVO nmcodeVO = new StoreNmcodeVO();
+        nmcodeVO.setStoreCd(storeCd);
+        nmcodeVO.setRegDt(dt);
+        nmcodeVO.setRegId(sessionInfoVO.getUserId());
+        nmcodeVO.setModDt(dt);
+        nmcodeVO.setModId(sessionInfoVO.getUserId());
+
+        // 공통코드 테이블에서 Tid 복사
+        StoreNmcodeVO tidResult = new StoreNmcodeVO();
+        tidResult.setResult(mapper.copyTid(nmcodeVO));
+
+
         return storeCd;
     }
 
@@ -286,9 +318,9 @@ public class StoreManageServiceImpl implements StoreManageService{
         storeManageVO.setModId(sessionInfoVO.getUserId());
 
         if(SysStatFg.CLOSE == storeManageVO.getSysStatFg()) {
-            storeManageVO.setSysClosureDate("99991231");
+            storeManageVO.setSysClosureDate(SYS_CLOSURE_DATE);
         } else  if(SysStatFg.DEMO == storeManageVO.getSysStatFg() ) {
-            storeManageVO.setSysClosureDate("99991231");
+            storeManageVO.setSysClosureDate(SYS_CLOSURE_DATE);
         } else {
             storeManageVO.setSysClosureDate(currentDateString());
         }
@@ -299,7 +331,7 @@ public class StoreManageServiceImpl implements StoreManageService{
         // 코너사용여부 환경변수 등록
         StoreEnvVO storeEnvVO = new StoreEnvVO();
         storeEnvVO.setStoreCd(storeManageVO.getStoreCd());
-        storeEnvVO.setEnvstCd("2028");
+        storeEnvVO.setEnvstCd(CORNER_USE_YN);
         storeEnvVO.setEnvstVal(storeManageVO.getCornerUseYn());
         storeEnvVO.setRegDt(dt);
         storeEnvVO.setRegId(sessionInfoVO.getUserId());
@@ -367,9 +399,9 @@ public class StoreManageServiceImpl implements StoreManageService{
 
         // 포스환경정보 조회시, 포스번호 없으면 기본 포스번호 넣어줌.
         if("".equals(storePosEnvVO.getPosNo()) || storePosEnvVO.getPosNo() == null){
-            storePosEnvVO.setPosNo("01");
+            storePosEnvVO.setPosNo(DEFAULT_POS_NO);
         }
-        storePosEnvVO.setEnvstFg("03");
+        storePosEnvVO.setEnvstFg(ENVST_FG_POS);
 
         return mapper.getPosEnvGroupList(storePosEnvVO);
     }
@@ -382,7 +414,7 @@ public class StoreManageServiceImpl implements StoreManageService{
         String dt = currentDateTimeString();
 
         for(StorePosEnvVO storePosEnvVO : storePosEnvVOs) {
-            storePosEnvVO.setPosFg("W");    // WEB
+            storePosEnvVO.setPosFg("W"); // WEB
             storePosEnvVO.setRegDt(dt);
             storePosEnvVO.setRegId(sessionInfoVO.getUserId());
             storePosEnvVO.setModDt(dt);
@@ -394,8 +426,7 @@ public class StoreManageServiceImpl implements StoreManageService{
                 // 환경정보 저장
                 procCnt += mapper.insertPosConfig(storePosEnvVO);
 
-                // 기능키 복사
-
+                // TODO 기능키 복사
 
             }
             else if(storePosEnvVO.getStatus() == GridDataFg.UPDATE) {
@@ -428,7 +459,7 @@ public class StoreManageServiceImpl implements StoreManageService{
 
         for(StorePosEnvVO storePosEnvVO : storePosEnvVOs) {
 
-            storePosEnvVO.setEnvstCd("540");
+            storePosEnvVO.setEnvstCd(TABLE_ENVST_CD);
             storePosEnvVO.setRegDt(dt);
             storePosEnvVO.setRegId(sessionInfoVO.getUserId());
             storePosEnvVO.setModDt(dt);
@@ -475,8 +506,8 @@ public class StoreManageServiceImpl implements StoreManageService{
         procCnt += mapper.copyPosEnvInfo(storePosEnvVO);
 
         // 1-3) 메인포스는 하나여야 하므로 복사하는 대상포스는 서브포스가 되어야 함
-        storePosEnvVO.setEnvstCd("205");
-        storePosEnvVO.setEnvstVal("0");
+        storePosEnvVO.setEnvstCd(MAIN_POS_YN);
+        storePosEnvVO.setEnvstVal(MAIN_POS_YN_DEFAULT);
         procCnt += mapper.updatePosEnv(storePosEnvVO);
 
         // 2-1) TB_MS_POS 타겟 포스 데이터 삭제
@@ -615,7 +646,7 @@ public class StoreManageServiceImpl implements StoreManageService{
             }
 
             child = hm.get(storeProductVO.getProdClassCd());
-            if( child != null && !"".equals( storeProductVO.getpProdClassCd() ) && !"0000".equals( storeProductVO.getpProdClassCd() )) {
+            if( child != null && !"".equals( storeProductVO.getpProdClassCd() ) && !DEFAULT_PRODUCT_CLASS.equals( storeProductVO.getpProdClassCd() )) {
                 if(hm.containsKey( storeProductVO.getpProdClassCd() )) {
                     parent = hm.get(storeProductVO.getpProdClassCd());
                     parent.getItems().add(child);
@@ -638,7 +669,7 @@ public class StoreManageServiceImpl implements StoreManageService{
 
         List<StoreProductVO> returnData = new ArrayList<StoreProductVO>();
         for(StoreProductVO storeProductVO : hm.values()) {
-            if(storeProductVO.getpProdClassCd() == null || "".equals(storeProductVO.getpProdClassCd()) || "00000".equals(storeProductVO.getpProdClassCd())) {
+            if(storeProductVO.getpProdClassCd() == null || "".equals(storeProductVO.getpProdClassCd()) || EXCLUSIVE_HQ_OFFICE.equals(storeProductVO.getpProdClassCd())) {
                 returnData.add(storeProductVO);
             }
         }

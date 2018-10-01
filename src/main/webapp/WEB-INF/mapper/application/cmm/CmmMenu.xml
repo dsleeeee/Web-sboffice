@@ -23,6 +23,9 @@
      <if test="storeNm != null and storeNm != ''">
        AND STORE_NM LIKE '%'||#{storeNm}||'%'
      </if>
+     <if test="defaultStoreCd != null and defaultStoreCd != ''">
+       AND STORE_CD != #{defaultStoreCd}
+     </if>
      ORDER BY REG_DT, MOD_DT DESC
   </select>
 
@@ -46,10 +49,10 @@
    </if>
      ORDER BY REG_DT, MOD_DT DESC
   </select>
-  
+
   <select id="selectCmAgency" parameterType="cmAgencyVO" resultType="cmAgencyVO">
     /* CmmMenuMapper.selectCmAgency */
-    SELECT AGENCY_CD, 
+    SELECT AGENCY_CD,
            AGENCY_NM
       FROM TB_CM_AGENCY
    <where>

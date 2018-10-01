@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    Credit.xml
+    외상발생/입금내역
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김지은     2018.05.01     최초작성
+-->
+<mapper namespace="kr.co.solbipos.membr.anals.credit.service.impl.CreditMapper">
+
+  <!-- 후불 회원 외상, 입금 내역 -->
+  <!--
+      TABLE    : TB_SL_SALE_PAY_CREDIT, TB_MB_MEMBER_CREDIT
+      COMMENTS : 후불 외상내역과 입금내역을 조회
+  -->
+  <select id="getCreditMemberList"  parameterType="creditStoreVO" resultType="DefaultMap">
+    /* CreditMapper.getCreditMemberList */
+    SELECT *
+      FROM (
+       SELECT tsspc.STORE_CD,
+              (SELECT STORE_NM FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_CD = tsspc.STORE_CD) AS STORE_NM,
+              tsspc.SALE_DATE,
+              tsspc.MEMBR_NO,
+              (SELECT MEMBR_NM FROM TB_MB_MEMBER WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND MEMBR_NO = tsspc.MEMBR_NO) AS MEMBR_NM,
+              tsspc.SALE_AMT,
+              0 AS CREDIT_AMT,
+              '' AS CREDIT_IN_FG,
+              '' AS CREDIT_PAY_FG
+         FROM TB_SL_SALE_PAY_CREDIT tsspc
+        UNION
+       SELECT tmmc.STORE_CD,
+              (SELECT STORE_NM FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_CD = tmmc.STORE_CD) AS STORE_CD,
+              tmmc.SALE_DATE,
+              tmmc.MEMBR_NO,
+              (SELECT MEMBR_NM FROM TB_MB_MEMBER WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND MEMBR_NO = tmmc.MEMBR_NO) AS MEMBR_NM,
+              0 AS SALE_AMT,
+              tmmc.CREDIT_AMT,
+              tmmc.CREDIT_IN_FG,
+              tmmc.CREDIT_PAY_FG
+         FROM TB_MB_MEMBER_CREDIT tmmc
+           ) tmmc
+    <where>
+      <if test='storeCds != null and storeCds != ""'>
+        AND tmmc.STORE_CD IN
+        <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
+           #{item}
+        </foreach>
+      </if>
+      <if test='memberNo != null and memberNo != ""'>
+        AND tmmc.MEMBR_NO = #{memberNo}
+      </if>
+      <if test='memberNm != null and memberNm != ""'>
+        AND tmmc.MEMBR_NM = #{memberNm}
+      </if>
+    </where>
+    <if test='array != null and array.toString == "1"'>
+      ORDER BY tmmc.STORE_CD, tmmc.SALE_DATE, tmmc.MEMBR_NO
+    </if>
+    <if test='array != null and array.toString == "2"'>
+      ORDER BY tmmc.STORE_CD, tmmc.MEMBR_NO, tmmc.SALE_DATE
+    </if>
+    <if test='array != null and array.toString == "3"'>
+      ORDER BY tmmc.MEMBR_NO, tmmc.SALE_DATE, tmmc.STORE_CD
+    </if>
+    <if test='array != null and array.toString == "4"'>
+      ORDER BY tmmc.MEMBR_NO, tmmc.STORE_CD, tmmc.SALE_DATE
+    </if>
+    <if test='array != null and array.toString == "5"'>
+      ORDER BY tmmc.SALE_DATE, tmmc.STORE_CD, tmmc.MEMBR_NO
+    </if>
+    <if test='array != null and array.toString == "6"'>
+      ORDER BY tmmc.SALE_DATE, tmmc.MEMBR_NO, tmmc.STORE_CD
+    </if>
+  </select>
+
+  <!-- 후불 대상 회원 조회 -->
+  <!--
+      TABLE    : TB_MB_MEMBER_CREDIT_STORE
+      COMMENTS : 후불(외상) 대상인 회원을 조회한다.
+  -->
+  <select id="getDepositMemberList" parameterType="creditStoreVO" resultType="DefaultMap">
+    /* CreditMapper.getDepositMemberList */
+    SELECT *
+      FROM (
+      SELECT tmmcs.HQ_OFFICE_CD,
+             tmmcs.MEMBER_NO AS MEMBR_NO,
+             (SELECT MEMBR_NM FROM TB_MB_MEMBER WHERE HQ_OFFICE_CD = tmmcs.HQ_OFFICE_CD AND MEMBR_NO = tmmcs.MEMBER_NO) AS MEMBR_NM,
+             tmmcs.CREDIT_STORE_CD,
+             (SELECT STORE_NM FROM TB_MS_STORE WHERE HQ_OFFICE_CD = tmmcs.HQ_OFFICE_CD AND STORE_CD = tmmcs.CREDIT_STORE_CD) AS CREDIT_STORE_NM
+        FROM TB_MB_MEMBER_CREDIT_STORE tmmcs
+       WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           ) tmmcs
+    <where>
+      <if test='creditStoreCd != null and creditStoreCd != ""'>
+        AND tmmcs.CREDIT_STORE_CD = #{creditStoreCd}
+      </if>
+      <if test='creditStoreNm != null and creditStoreNm != ""'>
+        AND tmmcs.CREDIT_STORE_NM = #{creditStoreNm}
+      </if>
+      <if test='memberNo != null and memberNo != ""'>
+        AND tmmcs.MEMBR_NO = #{memberNo}
+      </if>
+      <if test='memberNm != null and memberNm != ""'>
+        AND tmmcs.MEMBR_NM = #{memberNm}
+      </if>
+    </where>
+  </select>
+
+  <!-- 외상입금 -->
+  <!--
+      TABLE    :
+      COMMENTS : 외상금액을 입금처리한다.
+  -->
+  <insert id="saveDeposit" parameterType="creditStoreVO">
+    /* CreditMapper.saveDeposit */
+    INSERT INTO TB_MB_MEMBER_CREDIT
+    (
+      HQ_OFFICE_CD,
+      STORE_CD,
+      SALE_DATE,
+      MEMBR_NO,
+      CREDIT_NO,
+      CREDIT_DT,
+      CREDIT_IN_FG,
+      CREDIT_PAY_FG,
+      CREDIT_AMT,
+      NONSALE_BILL_NO,
+      ORG_CREDIT_NO,
+      SEND_YN,
+      SEND_DT,
+      REG_DT,
+      REG_ID,
+      MOD_DT,
+      MOD_ID
+    )
+    VALUES
+    (
+      #{hqOfficeCd},
+      #{creditStoreCd},
+      #{saleDate},
+      #{memberNo},
+      (SELECT LPAD(NVL(MAX(CREDIT_NO), '0')+1, 4, '0')
+         FROM TB_MB_MEMBER_CREDIT
+        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+          AND STORE_CD = #{creditStoreCd}
+          AND SALE_DATE = #{saleDate} ),
+      #{creditDt},
+      #{creditInFg, jdbcType=VARCHAR},
+      #{creditPayFg, jdbcType=VARCHAR},
+      #{creditAmt},
+      #{nonsaleBillNo},
+      #{orgPrepaidNo},
+      #{sendYn, jdbcType=VARCHAR},
+      #{sendDt},
+      #{regDt},
+      #{regId},
+      #{modDt},
+      #{modId}
+    )
+  </insert>
+
+</mapper>

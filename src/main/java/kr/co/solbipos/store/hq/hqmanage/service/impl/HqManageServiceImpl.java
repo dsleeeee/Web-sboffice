@@ -43,9 +43,9 @@ public class HqManageServiceImpl implements HqManageService{
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    private final String DEFAULT_POS_EMPNO = "0000";
-    private final String DEFAULT_POS_PASSWORD = "1234";
-    private final String SYS_CLOSURE_DATE = "99991231";
+    private final String DEFAULT_POS_EMPNO = "0000";    // 기본 포스 직원번호
+    private final String DEFAULT_POS_PASSWORD = "1234"; // 기본 포스 패스워드
+    private final String SYS_CLOSURE_DATE = "99991231"; // 시스템 종료일
 
 
     @Autowired
@@ -146,102 +146,66 @@ public class HqManageServiceImpl implements HqManageService{
         nmcodeVO.setModDt(dt);
         nmcodeVO.setModId(sessionInfoVO.getUserId());
 
-        //TODO 로직 수정 필요 - 템플릿 코드나 테이블 만들어서 변경하기
-        // 주문단위 등록
-        nmcodeVO.setNmcodeGrpCd("000");
-        nmcodeVO.setNmcodeCd("097");
-        nmcodeVO.setNmcodeNm("주문단위");
+        // 본사 등록시, 초기 등록 공통 코드
+        String registCmmCode[][] = {
+            {"000", "097", "주문단위"}, // 주문단위
+            {"097", "0", "낱개"},
+            {"097", "1", "세트"},
+            {"000", "098", "판매형태"}, // 판매형태
+            {"098", "0", "정상"},
+            {"000", "099", "입금계정"}, // 입금계정
+            {"099", "00", "입금"},
+            {"000", "100", "매장형태"}, // 매장형태
+            {"100", "1", "직영"},
+            {"100", "2", "가맹"},
+            {"000", "101", "매장그룹"}, // 매장그룹
+            {"101", "100", "일반"},
+            {"000", "102", "고객분류"}, // 고객분류
+            {"102", "01", "남"},
+            {"102", "02", "여"},
+            {"000", "096", "기본매출시간대"} // 기본 매출 시간대
+        };
 
-        cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
+        for(int i=0; i<registCmmCode.length; i++) {
+            String cmmCode[] = registCmmCode[i];
+            nmcodeVO.setNmcodeGrpCd(cmmCode[0]);
+            nmcodeVO.setNmcodeCd(cmmCode[1]);
+            nmcodeVO.setNmcodeNm(cmmCode[2]);
 
-        nmcodeVO.setNmcodeGrpCd("097");
-        nmcodeVO.setNmcodeCd("0");
-        nmcodeVO.setNmcodeNm("낱개");
+            cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
+        }
 
-        cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
+        // 기본 매출 시간대
+        for(int i=0; i<24; i++){
 
-        nmcodeVO.setNmcodeGrpCd("097");
-        nmcodeVO.setNmcodeCd("1");
-        nmcodeVO.setNmcodeNm("낱개");
+            String nmcodeNm = "";
 
-        cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
+            if(i<=5)                nmcodeNm = "심야";
+            else if(i>=6  && i<=10) nmcodeNm = "아침";
+            else if(i>=11 && i<=15) nmcodeNm = "점심";
+            else if(i>=16 && i<=23) nmcodeNm = "저녁";
 
-        // 판매형태
-        nmcodeVO.setNmcodeGrpCd("000");
-        nmcodeVO.setNmcodeCd("098");
-        nmcodeVO.setNmcodeNm("판매형태");
+            nmcodeVO.setNmcodeGrpCd("096");
+            nmcodeVO.setNmcodeCd(StringUtil.lpad(String.valueOf(i), 2));
+            nmcodeVO.setNmcodeNm(nmcodeNm);
 
-        cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
+            int saleTimeReg = mapper.cmmCodeReg(nmcodeVO);
 
-        nmcodeVO.setNmcodeGrpCd("098");
-        nmcodeVO.setNmcodeCd("0");
-        nmcodeVO.setNmcodeNm("정상");
+            cmmCodeReg += saleTimeReg;
+        }
 
-        cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
+        // 필요 공통코드 복사
+        String copyCmmCode[] = {"062"};
 
-        // 입금계정 기본 등록
-        nmcodeVO.setNmcodeGrpCd("000");
-        nmcodeVO.setNmcodeCd("099");
-        nmcodeVO.setNmcodeNm("입금계정");
+        for(int i=0; i<copyCmmCode.length; i++) {
+            String copyCode = copyCmmCode[i];
+            nmcodeVO.setNmcodeGrpCd(copyCode);
+            cmmCodeReg += mapper.copyCmmCode(nmcodeVO);
+        }
 
-        cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
-
-        nmcodeVO.setNmcodeGrpCd("099");
-        nmcodeVO.setNmcodeCd("00");
-        nmcodeVO.setNmcodeNm("입금");
-
-        cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
-
-        // 매장형태 - 직영
-        nmcodeVO.setNmcodeGrpCd("000");
-        nmcodeVO.setNmcodeCd("100");
-        nmcodeVO.setNmcodeNm("매장형태");
-
-        cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
-
-        nmcodeVO.setNmcodeGrpCd("100");
-        nmcodeVO.setNmcodeCd("1");
-        nmcodeVO.setNmcodeNm("직영");
-
-        cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
-
-        nmcodeVO.setNmcodeGrpCd("100");
-        nmcodeVO.setNmcodeCd("2");
-        nmcodeVO.setNmcodeNm("가맹");
-
-        cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
-
-        // 매장그룹
-        nmcodeVO.setNmcodeGrpCd("000");
-        nmcodeVO.setNmcodeCd("101");
-        nmcodeVO.setNmcodeNm("매장그룹");
-
-        cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
-
-        nmcodeVO.setNmcodeGrpCd("101");
-        nmcodeVO.setNmcodeCd("100");
-        nmcodeVO.setNmcodeNm("일반");
-
-        cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
-
-        // 고객분류
-        nmcodeVO.setNmcodeGrpCd("000");
-        nmcodeVO.setNmcodeCd("102");
-        nmcodeVO.setNmcodeNm("고객분류");
-
-        cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
-
-        nmcodeVO.setNmcodeGrpCd("102");
-        nmcodeVO.setNmcodeCd("01");
-        nmcodeVO.setNmcodeNm("남");
-
-        cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
-
-        nmcodeVO.setNmcodeGrpCd("102");
-        nmcodeVO.setNmcodeCd("02");
-        nmcodeVO.setNmcodeNm("여");
-
-        cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
+        // 공통코드 테이블에서 Tid 복사
+        HqNmcodeVO tidResult = new HqNmcodeVO();
+        tidResult.setResult(mapper.copyTid(nmcodeVO));
 
         // 포스 출력물 등록
         HqPrintTemplVO printTempVO = new HqPrintTemplVO();
@@ -255,31 +219,6 @@ public class HqManageServiceImpl implements HqManageService{
         //TODO
         //int printTempReg = mapper.hqPrintTempReg(printTempVO);
         //procCnt += printTempReg;
-
-        // 기본 매출 시간대 등록 (심야:00시-05시, 아침:06시-10시, 점심:11시-15시, 저녁:16시-23시)
-        nmcodeVO.setNmcodeGrpCd("000");
-        nmcodeVO.setNmcodeCd("096");
-        nmcodeVO.setNmcodeNm("기본매출시간대");
-
-        cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
-
-        for(int i=0; i<24; i++){
-
-            String nmcodeNm = "";
-
-            if(i<=5)                nmcodeNm = "심야";
-            else if(i>=6  && i<=10) nmcodeNm = "아침";
-            else if(i>=11 && i<=15) nmcodeNm = "점심";
-            else if(i>=16 && i<=23) nmcodeNm = "저녁";
-
-            nmcodeVO.setNmcodeGrpCd("096"); // 기본 매출 시간대
-            nmcodeVO.setNmcodeCd(StringUtil.lpad(String.valueOf(i), 2));
-            nmcodeVO.setNmcodeNm(nmcodeNm);
-
-            int saleTimeReg = mapper.cmmCodeReg(nmcodeVO);
-
-            cmmCodeReg += saleTimeReg;
-        }
 
         procCnt += cmmCodeReg;
 

@@ -1,8 +1,9 @@
 package kr.co.solbipos.base.prod.touchkey.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.base.prod.touchkey.service.TouchClassVO;
-import kr.co.solbipos.base.prod.touchkey.service.TouchVO;
+import kr.co.solbipos.base.prod.touchkey.service.TouchKeyClassVO;
+import kr.co.solbipos.base.prod.touchkey.service.TouchKeyStyleVO;
+import kr.co.solbipos.base.prod.touchkey.service.TouchKeyVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -30,10 +31,22 @@ import java.util.List;
 public interface TouchKeyMapper {
 
     /** 상품목록 조회 : 판매터치키에서 사용 */
-    List<DefaultMap<String>> getProductListForTouchKey(TouchVO touchVO);
+    List<DefaultMap<String>> getProductListForTouchKey(TouchKeyVO touchKeyVO);
+
+    /** 터치키 스타일코드 목록 조회 */
+    List<DefaultMap<String>> getTouchKeyStyleCdList();
+
+    /** 터치키 스타일 목록 조회 */
+    List<DefaultMap<String>> getTouchKeyStyleList(TouchKeyStyleVO touchKeyStyleVO);
+
+    /** 터치키 분류 페이지별 스타일 코드 조회 */
+    String getTouchKeyPageStyleCd(TouchKeyClassVO touchKeyClassVO);
 
     /** 판매터치키 XML 정보 조회 */
     String getTouchKeyXml(DefaultMap<String> param);
+
+    /** 판매터치키 저장 상품정보 조회 */
+    List<DefaultMap<String>> getTouchKeyProdInfoList(TouchKeyVO touchKeyVO);
 
     /** 판매터치키 XML 정보 생성 */
     int insertTouchKeyConfgXml(DefaultMap<String> param);
@@ -42,16 +55,16 @@ public interface TouchKeyMapper {
     int updateTouchKeyConfgXml(DefaultMap<String> param);
 
     /** 판매터치키 그룹 생성 */
-    int insertTouchClass(TouchClassVO touchClassVO);
+    int insertTouchKeyClass(TouchKeyClassVO touchKeyClassVO);
 
     /** 판매터치키 그룹 삭제 */
-    int deleteTouchClass(TouchClassVO touchClassVO);
+    int deleteTouchKeyClass(TouchKeyClassVO touchKeyClassVO);
 
     /** 판매터치키 생성 */
-    int insertTouchKey(TouchVO touchVO);
+    int insertTouchKey(TouchKeyVO touchKeyVO);
 
     /** 판매터치키 삭제 */
-    int deleteTouchKey(TouchVO touchVO);
+    int deleteTouchKey(TouchKeyVO touchKeyVO);
 
 
 }

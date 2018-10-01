@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!--
+    Regist.xml
+    회원관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       정용길     2018.05.01     최초작성
+-->
 <mapper namespace="kr.co.solbipos.membr.info.regist.service.impl.RegistMapper">
   <!-- 등록매장 조회 -->
   <!--
@@ -290,5 +298,81 @@
              tmmc.MOD_DT = #{modDt}
        WHERE tmmc.MEMBR_ORGN_CD = #{membrOrgnCd}
          AND tmmc.MEMBR_NO = #{membrNo}
-    </update>
+</update>
+
+
+  <!-- 후불회원 적용매장 조회 -->
+  <!--
+      TABLE    : TB_MB_MEMBER_CREDIT_STORE
+      COMMENTS : 후불회원 적용매장 조회
+  -->
+  <select id="getCurrentCreditStore" parameterType="registVO" resultType="String">
+    /* RegistMapper.getCurrentCreditStore */
+    SELECT LISTAGG(CREDIT_STORE_CD, ',') WITHIN GROUP (ORDER BY CREDIT_STORE_CD) AS CREDIT_STORE_CD
+      FROM TB_MB_MEMBER_CREDIT_STORE
+     WHERE HQ_OFFICE_CD = #{membrOrgnCd}
+       AND MEMBER_NO = #{membrNo}
+  </select>
+
+
+  <!-- 후불회원 적용매장 삭제 -->
+  <!--
+      TABLE    : TB_MB_MEMBER_CREDIT_STORE
+      COMMENTS : 후불회원 적용매장 삭제
+  -->
+  <delete id="deleteCreditStore" parameterType="creditStoreVO">
+    /* RegistMapper.deleteCreditStore */
+    DELETE TB_MB_MEMBER_CREDIT_STORE
+     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+       AND MEMBER_NO = #{memberNo}
+       AND CREDIT_STORE_CD = #{creditStoreCd}
+  </delete>
+
+  <!-- 후불회원 적용매장 등록 및 수정 -->
+  <!--
+      TABLE    : TB_MB_MEMBER_CREDIT_STORE
+      COMMENTS : 후불회원 적용매장 등록 및 수정
+  -->
+  <insert id="registCreditStore" parameterType="creditStoreVO">
+    /* RegistMapper.registCreditStore */
+    MERGE INTO TB_MB_MEMBER_CREDIT_STORE tmmcs
+    USING (
+      SELECT #{hqOfficeCd} AS HQ_OFFICE_CD,
+             #{memberNo} AS MEMBER_NO,
+             #{creditStoreCd} AS CREDIT_STORE_CD,
+             #{regDt} AS REG_DT,
+             #{regId} AS REG_ID,
+             #{modDt} AS MOD_DT,
+             #{modId} AS MOD_ID
+        FROM DUAL
+    ) tmp
+    ON
+    (
+          tmmcs.HQ_OFFICE_CD = tmp.HQ_OFFICE_CD
+      AND tmmcs.MEMBER_NO = tmp.MEMBER_NO
+      AND tmmcs.CREDIT_STORE_CD = tmp.CREDIT_STORE_CD
+    )
+    WHEN MATCHED THEN
+         UPDATE SET
+            tmmcs.MOD_DT = tmp.MOD_DT,
+            tmmcs.MOD_ID = tmp.MOD_ID
+    WHEN NOT MATCHED THEN
+         INSERT (
+            tmmcs.HQ_OFFICE_CD,
+            tmmcs.MEMBER_NO,
+            tmmcs.CREDIT_STORE_CD,
+            tmmcs.REG_DT,
+            tmmcs.REG_ID,
+            tmmcs.MOD_DT,
+            tmmcs.MOD_ID
+         ) VALUES (
+            tmp.HQ_OFFICE_CD,
+            tmp.MEMBER_NO,
+            tmp.CREDIT_STORE_CD,
+            tmp.REG_DT,
+            tmp.REG_ID,
+            tmp.MOD_DT,
+            tmp.MOD_ID
+         )
+  </insert>
 </mapper>

@@ -72,8 +72,8 @@
             <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="envConfg.envstCd"/>" binding="envstCd" width="70"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="envConfg.envstNm"/>" binding="envstNm" width="100"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="envConfg.envstFgNm"/>" binding="envstFgNm" width="140" data-map="envstFgNmDataMap" ></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="envConfg.envstGrpCdNm"/>" binding="envstGrpCdNm" width="100" data-map="envstGrpCdNmDataMap"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="envConfg.envstFgNm"/>" binding="envstFg" width="140" data-map="envstFgNmDataMap" ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="envConfg.envstGrpCdNm"/>" binding="envstGrpCd" width="100" data-map="envstGrpCdNmDataMap"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="envConfg.dirctInYn"/>" binding="dirctInYn" width="70" data-map="dirctInYnDataMap"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="envConfg.targtFgNm"/>" binding="targtFg" data-map="targtFgDataMap"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="envConfg.useYn"/>" binding="useYn" width="80" data-map="useYnDataMap"></wj-flex-grid-column>

@@ -2,20 +2,6 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<style>
-#group div {
-    font-family:inherit;
-    font-weight:inherit;
-    font-size:inherit;
-    color:inherit;
-}
-#prod div {
-    font-family:inherit;
-    font-weight:inherit;
-    font-size:inherit;
-    color:inherit;
-}
-</style>
 <script>
 var urlParams = (function(url) {
   var result = new Object();
@@ -54,6 +40,10 @@ window.IMAGE_PATH = window.IMAGE_PATH || '/resource/graph/images';
 window.TOUCHKEY_OPEN_URL = window.TOUCHKEY_OPEN_URL || '/base/prod/touchKey/touchKey/list.sb';
 window.TOUCHKEY_SAVE_URL = window.TOUCHKEY_SAVE_URL || '/base/prod/touchKey/touchKey/save.sb';
 
+window.TOUCHKEY_STYLE_CD = ${touchKeyStyleCd};
+window.TOUCHKEY_STYLE_CDS = ${touchKeyStyleCdList};
+window.TOUCHKEY_STYLES = ${touchKeyStyleList};
+
 window.mxBasePath = window.mxBasePath || '/resource/vendor/mxgraph/src';
 window.mxLanguage = window.mxLanguage || urlParams['lang'];
 window.mxLanguages = window.mxLanguages || ['ko'];
@@ -63,8 +53,7 @@ window.PRODS = ${prods};
 window.MAX_GROUP_ROW = '${maxGroupRow}' || '2';
 
 </script>
-<script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.js" charset="utf-8"></script>
-<!--script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.min.js"></script-->
+<script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/graph/sanitizer/sanitizer.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/graph/js/TouchKey.js" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/graph/js/TouchKeyGroup.js" charset="utf-8"></script>
@@ -94,61 +83,88 @@ window.MAX_GROUP_ROW = '${maxGroupRow}' || '2';
         </div>
         <%--//left--%>
         <%--right--%>
-        <div class="w45 fl ml20">
-          <%--미리보기--%>
+        <div class="fl ml10" style="width: 502px;">
+          <%--미리보기 영역 시작--%>
           <div class="updownSet oh mb10">
             <span class="fl bk lh30"><s:message code="touchKey.preview"/></span>
-            <button class="btn_skyblue" id="btnInit"><s:message code="cmm.init"/></button>
-            <button class="btn_skyblue" id="btnSave"><s:message code="cmm.save"/></button>
+            <div class="txtIn">
+              <div class="sb-select dkbr fl w120 mr5">
+                <div id="selectStyle"></div>
+              </div>
+              <button class="btn_skyblue" id="btnInit"><s:message code="touchKey.reload"/></button>
+              <button class="btn_skyblue" id="btnSave"><s:message code="cmm.save"/></button>
+            </div>
           </div>
-          <div class="prev2">
-            <%--그룹 영역 시작--%>
-            <div class="touchGroupWrap h180" id="groupWrap">
-              <%--2줄 "h120", 3줄 "h180" 사용 --%>
-              <div class="touchGroup h180" id="group" tabindex="-1">
-                <%--터치키가 들어가는 위치 --%>
+          <div class="prev2 fl">
+            <%--그룹버튼 영역 시작--%>
+            <div class="touchGroupWrap" id="groupWrap">
+              <%--2줄 "hGroupLine2", 3줄 "hGroupLine3" 사용 --%>
+              <%--터치키가 들어가는 위치 --%>
+              <div class="" id="group" tabindex="-1">
               </div>
             </div>
-            <%--//그룹 영역 끝--%>
-            <%--상품 영역 시작--%>
+            <%--//그룹버튼 영역 끝--%>
+            <%--상품버튼 영역 시작--%>
             <div class="touchProdsWrap" id="prodWrap">
-              <div class="touchProds" id="prod" tabindex="-1">
-                <%--터치키가 들어가는 위치 --%>
+              <%--2줄 "hGroupLine2", 3줄 "hGroupLine3" 사용 --%>
+              <%--터치키가 들어가는 위치 --%>
+              <div class="" id="prod" tabindex="-1">
               </div>
             </div>
-            <%--//상품 영역 끝--%>
+            <%--//상품버튼 영역 끝 --%>
           </div>
-          <%--//미리보기--%>
+          <%--//미리보기 영역 끝 --%>
         </div>
         <%--//right--%>
-        <div class="w25 fl ml10" style="width: 120px;">
-          <%-- 상단 그룹 페이지 버튼 영역 시작 --%>
-          <div id="divGroupBtn" style="height: 150px;">
-            <p class="touchBtn hPo1" id="groupNav">
-              <a href="javascript:void(0);" class="fl" id="grp"><s:message code="cmm.pre"/></a>
-              <a href="javascript:void(0);" class="fl" id="grn"><s:message code="cmm.next"/></a>
-            </p>
+        <div class="fl ml5" style="width: 125px;">
+          <div class="updownSet oh mb10">
           </div>
-          <%--//상단 그룹 페이지 버튼 영역 끝 --%>
-          <div class="oh mt10" id="keyStyle" style="display:none;">
-            <span class="s12 fl lh30 bk"><s:message code="touchKey.font"/></span>
-            <div class="sb-select txtIn fl w100">
-              <div id="fontColor"></div>
+          <%-- 페이지 버튼 영역 시작 --%>
+          <%-- 그룹페이지 버튼 --%>
+          <div id="divGroupNavWrap" class="groupNavWrap">
+            <div class="groupPageNoWrap">
+              <span id="groupPageNoText" class="s16"></span>
             </div>
-            <div class="sb-select txtIn fl w100 mt5">
-              <div id="fontSize"></div>
-            </div>
-            <span class="s12 fl lh30 bk mt5"><s:message code="touchKey.fill"/></span>
-            <div class="sb-select txtIn w100">
-              <div id="fillColor"></div>
+            <div class="groupNav">
+              <div class="groupNavPrev fl" id="grpNavPrev"></div>
+              <div class="groupNavNext fl" id="grpNavNext"></div>
             </div>
           </div>
-          <div id="divProdBtn" class="fl">
-            <p class="touchBtn hPo2" id="prodNav">
-              <a href="javascript:void(0);" class="fl" id="prp"><s:message code="cmm.pre"/></a>
-              <a href="javascript:void(0);" class="fl" id="prn"><s:message code="cmm.next"/></a>
-            </p>
+          <%-- 상품페이지 버튼 --%>
+          <div id="divProdNavWrap" class="prodNavWrap">
+            <div id="keyStyle" class="oh keyStyleWrap hideNav">
+              <div id="fontStyleWrap">
+                <span class="s12 fl lh30 bk"><s:message code="touchKey.font"/></span>
+                <div class="sb-select txtIn fl w100 mb5">
+                  <%-- 폰트컬러 --%>
+                  <div id="fontColor"></div>
+                </div>
+                <div class="sb-select txtIn fl w100 mb5">
+                  <%-- 폰트사이즈 --%>
+                  <div id="fontSize"></div>
+                </div>
+              </div>
+              <div id="colorStyleWrap" class="mb5">
+                <span class="s12 fl lh30 bk mt5"><s:message code="touchKey.fill"/></span>
+                <div class="sb-select txtIn w100">
+                  <%-- 채우기 --%>
+                  <div id="fillColor"></div>
+                </div>
+              </div>
+              <div class="fl">
+                <button class="btn_skyblue mb5" id="btnReset"><s:message code="touchKey.reset"/></button>
+                <button class="btn_skyblue" id="btnDelete"><s:message code="touchKey.delete"/></button>
+              </div>
+            </div>
+            <div class="prodPageNoWrap">
+              <span id="prodPageNoText" class="s16"></span>
+            </div>
+            <div class="prodNav">
+              <div class="prodNavPrev fl" id="prodNavPrev"></div>
+              <div class="prodNavNext fl" id="prodNavNext"></div>
+            </div>
           </div>
+          <%--// 페이지 버튼 영역 끝 --%>
         </div>
       </div>
 

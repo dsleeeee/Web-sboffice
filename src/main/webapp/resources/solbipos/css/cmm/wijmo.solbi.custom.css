@@ -65,7 +65,9 @@
 }
 
 .wj-control .wj-template {
-    display: initial;
+    /*display: initial;*/
+    /* 색상팔레트 드랍박스 표시문제로 block 처리, 드랍박스에도 영향있음. : 20180920 노현수 */
+    display: block;
 }
 
 .wj-control .wj-input-group {

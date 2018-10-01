@@ -437,6 +437,47 @@
     )
   </insert>
 
+  <!-- TID 복사  -->
+  <!--
+      TABLE    : TB_HQ_NMCODE
+      PARAM    : hqNmcodeVO
+      COMMENTS : 공통코드 테이블에서 TID 복사하여 본사 공통코드 테이블에 넣음
+  -->
+  <select id="copyTid" statementType="CALLABLE"  parameterType="hqNmcodeVO" resultType="String">
+    /* USE : HqManageMapper.copyTid */
+    {
+      CALL PKG_CM_NMCODE_TID.SP_HQ_NMCODE_TID_I
+      (
+        #{hqOfficeCd},
+        #{result, mode=OUT, jdbcType=VARCHAR}
+      )
+    }
+  </select>
+
+  <!-- 공통코드 복사  -->
+  <!--
+      TABLE    : TB_HQ_NMCODE
+      PARAM    : hqManageVO
+      COMMENTS : 공통코드 테이블에서 복사하여 본사 공통코드 테이블에 넣음
+  -->
+  <insert id="copyCmmCode" parameterType="DefaultMap">
+    /* USE : HqManageMapper.copyCmmCode */
+    INSERT INTO TB_HQ_NMCODE
+    SELECT #{hqOfficeCd},
+           NMCODE_GRP_CD,
+           NMCODE_CD,
+           NMCODE_NM,
+           NMCODE_ITEM_1,
+           NMCODE_ITEM_2,
+           'Y',
+           #{regDt},
+           #{regId},
+           #{modDt},
+           #{modId}
+      FROM TB_CM_NMCODE
+     WHERE NMCODE_GRP_CD = #{nmcodeGrpCd}
+  </insert>
+
   <!-- 본사 수정 -->
   <!--
       TABLE    : TB_WB_USER_INFO

@@ -41,14 +41,14 @@
                         <td>
                             <div class="sb-select">
                                 <wj-combo-box
-                                        id="srchSysStatFgCombo"
-                                        ng-model="sysStatFg"
-                                        items-source="_getComboData('srchSysStatFgCombo')"
-                                        display-member-path="name"
-                                        selected-value-path="value"
-                                        is-editable="false"
-                                        initialized="_initComboBox(s)">
-                                </wj-combo-box>
+                                    id="srchSysStatFgCombo"
+                                    ng-model="sysStatFg"
+                                    items-source="_getComboData('srchSysStatFgCombo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)">
+                            </wj-combo-box>
                             </div>
                         </td>
                         <th><s:message code="template.layer.clsFg" /></th>

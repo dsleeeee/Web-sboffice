@@ -9,8 +9,8 @@ import com.mxgraph.util.mxXmlUtils;
 import com.mxgraph.view.mxGraph;
 import com.nhncorp.lucy.security.xss.XssPreventer;
 import kr.co.solbipos.base.common.enums.InFg;
-import kr.co.solbipos.base.prod.touchkey.service.TouchClassVO;
-import kr.co.solbipos.base.prod.touchkey.service.TouchVO;
+import kr.co.solbipos.base.prod.touchkey.service.TouchKeyClassVO;
+import kr.co.solbipos.base.prod.touchkey.service.TouchKeyVO;
 import kr.co.solbipos.base.store.tableattr.enums.TouchKeyStyle;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -119,10 +119,10 @@ public class TouchkeyServceTest {
             LOGGER.info(XssPreventer.unescape(xmls[1]));
 
 
-            List<TouchClassVO> touchClassVOs = new ArrayList<TouchClassVO>();
-            TouchClassVO touchClassVO = new TouchClassVO();
+            List<TouchKeyClassVO> touchKeyClassVOS = new ArrayList<TouchKeyClassVO>();
+            TouchKeyClassVO touchKeyClassVO = new TouchKeyClassVO();
 
-            List<TouchVO> touchVOs = new ArrayList<TouchVO>();
+            List<TouchKeyVO> touchKeyVOS = new ArrayList<TouchKeyVO>();
 
             //터치키분류 파싱
             mxGraph graphClass = new mxGraph();
@@ -147,23 +147,23 @@ public class TouchkeyServceTest {
                 cell = (mxCell) c;
                 LOGGER.debug(cell.toString());
 
-                touchClassVO = new TouchClassVO();
+                touchKeyClassVO = new TouchKeyClassVO();
 
-                touchClassVO.setTukeyClassCd(cell.getId());
-                touchClassVO.setTukeyClassNm(String.valueOf(cell.getValue()));
+                touchKeyClassVO.setTukeyClassCd(cell.getId());
+                touchKeyClassVO.setTukeyClassNm(String.valueOf(cell.getValue()));
 
                 //좌표, 크기
                 mxGeometry geo = cell.getGeometry();
-                touchClassVO.setX((long)geo.getX());
-                touchClassVO.setY((long)geo.getY());
-                touchClassVO.setWidth((long)geo.getWidth());
-                touchClassVO.setHeight((long)geo.getHeight());
+                touchKeyClassVO.setX(geo.getX());
+                touchKeyClassVO.setY(geo.getY());
+                touchKeyClassVO.setWidth(geo.getWidth());
+                touchKeyClassVO.setHeight(geo.getHeight());
 
                  //페이지 번호 계산 - 80*5
-                long pageNo = (long)(touchClassVO.getX() / 400) + 1L;
-                touchClassVO.setPageNo(pageNo);
+                Double pageNo = (touchKeyClassVO.getX() / 400) + 1;
+                touchKeyClassVO.setPageNo(pageNo.intValue());
 
-                touchClassVO.setInFg(InFg.STORE);
+                touchKeyClassVO.setInFg(InFg.STORE);
 
                 //스타일
                 String styleStr = cell.getStyle();
@@ -178,13 +178,13 @@ public class TouchkeyServceTest {
                         //log.debug(styleKeyValue[0]);
                         switch(TouchKeyStyle.getEnum(styleKeyValue[0])) {
                             case FONT_COLOR:
-                                touchClassVO.setFontColor(styleKeyValue[1]);
+                                touchKeyClassVO.setFontColor(styleKeyValue[1]);
                                 break;
                             case FILL_COLOR:
-                                touchClassVO.setFillColor(styleKeyValue[1]);
+                                touchKeyClassVO.setFillColor(styleKeyValue[1]);
                                 break;
                             case FONT_SIZE:
-                                touchClassVO.setFontSize(Long.parseLong(styleKeyValue[1]));
+                                touchKeyClassVO.setFontSize(Integer.parseInt(styleKeyValue[1]));
                                 break;
                             default:
                                 break;
@@ -192,12 +192,12 @@ public class TouchkeyServceTest {
                     }
                 }
 
-                touchClassVO.setRegDt(regDt);
-                touchVOs = getTouchs(graphTouch, cell.getId(), touchClassVO);
-                touchClassVO.setTouchs(touchVOs);
-                touchClassVOs.add(touchClassVO);
+                touchKeyClassVO.setRegDt(regDt);
+                touchKeyVOS = getTouchs(graphTouch, cell.getId(), touchKeyClassVO);
+                touchKeyClassVO.setTouchs(touchKeyVOS);
+                touchKeyClassVOS.add(touchKeyClassVO);
 
-                LOGGER.debug(touchClassVOs.toString());
+                LOGGER.debug(touchKeyClassVOS.toString());
             }
             assertTrue(true);
         }
@@ -205,28 +205,28 @@ public class TouchkeyServceTest {
             ex.printStackTrace();
         }
     }
-    private List<TouchVO> getTouchs(mxGraph graph, String layerId, TouchClassVO touchClassVO) {
+    private List<TouchKeyVO> getTouchs(mxGraph graph, String layerId, TouchKeyClassVO touchKeyClassVO) {
 
         mxGraphModel model = (mxGraphModel) graph.getModel();
 
-        List<TouchVO> touchVOs = new ArrayList<TouchVO>();
-        TouchVO touchVO = null;
+        List<TouchKeyVO> touchKeyVOS = new ArrayList<TouchKeyVO>();
+        TouchKeyVO touchKeyVO = null;
         mxCell layer = (mxCell)model.getCell(layerId);
 
         Object[] cells = graph.getChildVertices(layer);
         for(Object c : cells) {
             mxCell cell = (mxCell) c;
-            touchVO = new TouchVO();
-            touchVO.setStoreCd(touchClassVO.getStoreCd());
-            touchVO.setTukeyClassCd(touchClassVO.getTukeyClassCd());
-            touchVO.setTukeyCd(cell.getId());
+            touchKeyVO = new TouchKeyVO();
+            touchKeyVO.setStoreCd(touchKeyClassVO.getStoreCd());
+            touchKeyVO.setTukeyClassCd(touchKeyClassVO.getTukeyClassCd());
+            touchKeyVO.setTukeyCd(cell.getId());
 
             //좌표, 크기
             mxGeometry geo = cell.getGeometry();
-            touchVO.setX((long)geo.getX());
-            touchVO.setY((long)geo.getY());
-            touchVO.setWidth((long)geo.getWidth());
-            touchVO.setHeight((long)geo.getHeight());
+            touchKeyVO.setX((long)geo.getX());
+            touchKeyVO.setY((long)geo.getY());
+            touchKeyVO.setWidth((long)geo.getWidth());
+            touchKeyVO.setHeight((long)geo.getHeight());
 
             //스타일
             String styleStr = cell.getStyle();
@@ -241,16 +241,16 @@ public class TouchkeyServceTest {
                     //log.debug(styleKeyValue[0]);
                     switch(TouchKeyStyle.getEnum(styleKeyValue[0])) {
                         case PROD_CD:
-                            touchVO.setProdCd(styleKeyValue[1]);
+                            touchKeyVO.setProdCd(styleKeyValue[1]);
                             break;
                         case FONT_COLOR:
-                            touchVO.setFontColor(styleKeyValue[1]);
+                            touchKeyVO.setFontColor(styleKeyValue[1]);
                             break;
                         case FILL_COLOR:
-                            touchVO.setFillColor(styleKeyValue[1]);
+                            touchKeyVO.setFillColor(styleKeyValue[1]);
                             break;
                         case FONT_SIZE:
-                            touchVO.setFontSize(Long.parseLong(styleKeyValue[1]));
+                            touchKeyVO.setFontSize(Long.parseLong(styleKeyValue[1]));
                             break;
                         default:
                             break;
@@ -259,14 +259,14 @@ public class TouchkeyServceTest {
             }
 
             //페이지 번호 계산 - 80*5
-            long pageNo = (long)(touchVO.getX() / 400) + 1L;
-            touchVO.setPageNo(pageNo);
-            touchVO.setInFg(touchClassVO.getOrgnFg());
-            touchVO.setRegDt(touchClassVO.getRegDt());
+            long pageNo = (long)(touchKeyVO.getX() / 400) + 1L;
+            touchKeyVO.setPageNo(pageNo);
+            touchKeyVO.setInFg(touchKeyClassVO.getInFg());
+            touchKeyVO.setRegDt(touchKeyClassVO.getRegDt());
 
-            touchVOs.add(touchVO);
+            touchKeyVOS.add(touchKeyVO);
         }
-        return touchVOs;
+        return touchKeyVOS;
     }
 
 }
