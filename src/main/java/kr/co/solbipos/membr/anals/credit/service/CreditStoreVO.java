@@ -1,4 +1,4 @@
-package kr.co.solbipos.membr.info.regist.service;
+package kr.co.solbipos.membr.anals.credit.service;
 
 import kr.co.common.data.enums.UseYn;
 import kr.co.solbipos.application.common.service.CmmVO;

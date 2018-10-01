@@ -293,6 +293,7 @@ public class StoreManageServiceImpl implements StoreManageService{
             // 프랜차이즈 설정 - 판매가 DT 복사
         }
 
+        // 시스템 공통코드 복사 // TODO
         StoreNmcodeVO nmcodeVO = new StoreNmcodeVO();
         nmcodeVO.setStoreCd(storeCd);
         nmcodeVO.setRegDt(dt);
@@ -300,9 +301,19 @@ public class StoreManageServiceImpl implements StoreManageService{
         nmcodeVO.setModDt(dt);
         nmcodeVO.setModId(sessionInfoVO.getUserId());
 
-        // 공통코드 테이블에서 Tid 복사
-        StoreNmcodeVO tidResult = new StoreNmcodeVO();
-        tidResult.setResult(mapper.copyTid(nmcodeVO));
+        StoreNmcodeVO result = new StoreNmcodeVO();
+        result.setResult(mapper.copyCmmNameCode(nmcodeVO));
+
+//        StoreNmcodeVO nmcodeVO = new StoreNmcodeVO();
+//        nmcodeVO.setStoreCd(storeCd);
+//        nmcodeVO.setRegDt(dt);
+//        nmcodeVO.setRegId(sessionInfoVO.getUserId());
+//        nmcodeVO.setModDt(dt);
+//        nmcodeVO.setModId(sessionInfoVO.getUserId());
+//
+//        // 공통코드 테이블에서 Tid 복사
+//        StoreNmcodeVO tidResult = new StoreNmcodeVO();
+//        tidResult.setResult(mapper.copyTid(nmcodeVO));
 
 
         return storeCd;

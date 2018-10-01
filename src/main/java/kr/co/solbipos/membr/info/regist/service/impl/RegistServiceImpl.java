@@ -7,7 +7,7 @@ import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.membr.info.grade.service.MembrClassVO;
-import kr.co.solbipos.membr.info.regist.service.CreditStoreVO;
+import kr.co.solbipos.membr.anals.credit.service.CreditStoreVO;
 import kr.co.solbipos.membr.info.regist.service.RegistService;
 import kr.co.solbipos.membr.info.regist.service.RegistVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;

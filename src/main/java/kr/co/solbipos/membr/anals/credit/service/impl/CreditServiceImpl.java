@@ -4,7 +4,7 @@ import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.membr.anals.credit.service.CreditService;
-import kr.co.solbipos.membr.info.regist.service.CreditStoreVO;
+import kr.co.solbipos.membr.anals.credit.service.CreditStoreVO;
 import kr.co.solbipos.membr.info.regist.service.enums.CreditInFg;
 import kr.co.solbipos.membr.info.regist.service.enums.CreditPayFg;
 import org.slf4j.Logger;

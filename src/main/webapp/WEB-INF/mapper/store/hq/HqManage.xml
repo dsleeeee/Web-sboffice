@@ -460,6 +460,7 @@
       PARAM    : hqManageVO
       COMMENTS : 공통코드 테이블에서 복사하여 본사 공통코드 테이블에 넣음
   -->
+  <!--
   <insert id="copyCmmCode" parameterType="DefaultMap">
     /* USE : HqManageMapper.copyCmmCode */
     INSERT INTO TB_HQ_NMCODE
@@ -477,6 +478,7 @@
       FROM TB_CM_NMCODE
      WHERE NMCODE_GRP_CD = #{nmcodeGrpCd}
   </insert>
+  -->
 
   <!-- 본사 수정 -->
   <!--

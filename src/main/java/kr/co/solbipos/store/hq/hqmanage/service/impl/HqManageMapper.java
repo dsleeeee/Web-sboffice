@@ -1,10 +1,9 @@
 package kr.co.solbipos.store.hq.hqmanage.service.impl;
 
 import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.store.hq.brand.service.HqBrandVO;
 import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqMenuVO;
@@ -62,11 +61,14 @@ public interface HqManageMapper {
     /** 본사 공통코드 등록 */
     int cmmCodeReg(HqNmcodeVO nmcodeVO);
 
+    /** 시스템 공통코드 내려받기 */
+    String copyCmmNameCode(HqNmcodeVO nmcodeVO);
+
     /** TID 복사 프로시져 */
-    String copyTid(HqNmcodeVO nmcodeVO);
+//    String copyNmcode(HqNmcodeVO nmcodeVO);
 
     /** 공통코드 복사 */
-    int copyCmmCode(HqNmcodeVO nmcodeVO);
+//    int copyCmmCode(HqNmcodeVO nmcodeVO);
 
     /** 본사 포스 출력물 등록 */
     int hqPrintTempReg(HqPrintTemplVO printTempVO);

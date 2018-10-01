@@ -7,7 +7,7 @@ import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.membr.anals.credit.service.CreditService;
-import kr.co.solbipos.membr.info.regist.service.CreditStoreVO;
+import kr.co.solbipos.membr.anals.credit.service.CreditStoreVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -424,6 +424,9 @@ $(document).ready(function(){
       param.remark = vRemark.value;
       param.creditStoreCds = $("#storeCd").val(); // 후불회원 적용매장
 
+      console.log("param >>>>> ");
+      console.log(param);
+
       $.postJSONSave("/membr/info/view/base/regist.sb", param, function(result) {
         var msg = "<s:message code='cmm.registSucc'/>";
         s_alert.popOk(msg, function() { //succss
