@@ -7,8 +7,10 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.prod.touchkey.service.TouchKeyClassVO;
 import kr.co.solbipos.base.prod.touchkey.service.TouchKeyService;
-import kr.co.solbipos.base.prod.touchkey.service.TouchVO;
+import kr.co.solbipos.base.prod.touchkey.service.TouchKeyStyleVO;
+import kr.co.solbipos.base.prod.touchkey.service.TouchKeyVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,15 +79,35 @@ public class TouchKeyController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        TouchVO params = new TouchVO();
+        TouchKeyVO params = new TouchKeyVO();
         params.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         params.setStoreCd(sessionInfoVO.getStoreCd());
         params.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        //화면에 표시할 상점의 상품 정보 조회
+        TouchKeyClassVO touchKeyClassVO = new TouchKeyClassVO();
+        touchKeyClassVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        touchKeyClassVO.setStoreCd(sessionInfoVO.getStoreCd());
+        touchKeyClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        touchKeyClassVO.setPageNo(1);
+
+        TouchKeyStyleVO touchKeyStyleVO = new TouchKeyStyleVO();
+        touchKeyStyleVO.setStyleCd("");
+
+        // 화면에 표시할 상점의 상품 정보 조회
         model.addAttribute("prods", convertToJson(touchkeyService.getProductListForTouchKey(params)));
-        //TODO 매장의 터치키 환경 설정 값을 조회해서 셋팅
-        model.addAttribute("maxGroupRow", cmmEnvUtil.getHqEnvst(sessionInfoVO, "0018"));
+        // 터치키 분류 페이지별 스타일 코드 조회
+        model.addAttribute("touchKeyStyleCd", convertToJson(touchkeyService.getTouchKeyPageStyleCd(touchKeyClassVO)));
+        // 터치키 스타일 코드 목록 조회
+        model.addAttribute("touchKeyStyleCdList", convertToJson(touchkeyService.getTouchKeyStyleCdList()));
+        // 터치키 스타일 목록 조회
+        model.addAttribute("touchKeyStyleList", convertToJson(touchkeyService.getTouchKeyStyleList(
+            touchKeyStyleVO)));
+        // 본사or매장의 터치키 환경 설정 값을 조회해서 셋팅
+        if ( "H".equals(sessionInfoVO.getOrgnFg().getCode()) ) {
+            model.addAttribute("maxGroupRow", cmmEnvUtil.getHqEnvst(sessionInfoVO, "0041"));
+        } else {
+            model.addAttribute("maxGroupRow", cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1041"));
+        }
 
         return RESULT_URI + "/touchKey";
     }

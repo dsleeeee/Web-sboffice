@@ -2,20 +2,6 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<style>
-#group div {
-    font-family:inherit;
-    font-weight:inherit;
-    font-size:inherit;
-    color:inherit;
-}
-#prod div {
-    font-family:inherit;
-    font-weight:inherit;
-    font-size:inherit;
-    color:inherit;
-}
-</style>
 <script>
 var urlParams = (function(url) {
   var result = new Object();
@@ -54,6 +40,10 @@ window.IMAGE_PATH = window.IMAGE_PATH || '/resource/graph/images';
 window.TOUCHKEY_OPEN_URL = window.TOUCHKEY_OPEN_URL || '/base/prod/touchKey/touchKey/list.sb';
 window.TOUCHKEY_SAVE_URL = window.TOUCHKEY_SAVE_URL || '/base/prod/touchKey/touchKey/save.sb';
 
+window.TOUCHKEY_STYLE_CD = ${touchKeyStyleCd};
+window.TOUCHKEY_STYLE_CDS = ${touchKeyStyleCdList};
+window.TOUCHKEY_STYLES = ${touchKeyStyleList};
+
 window.mxBasePath = window.mxBasePath || '/resource/vendor/mxgraph/src';
 window.mxLanguage = window.mxLanguage || urlParams['lang'];
 window.mxLanguages = window.mxLanguages || ['ko'];
@@ -63,8 +53,7 @@ window.PRODS = ${prods};
 window.MAX_GROUP_ROW = '${maxGroupRow}' || '2';
 
 </script>
-<script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.js" charset="utf-8"></script>
-<!--script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.min.js"></script-->
+<script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/graph/sanitizer/sanitizer.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/graph/js/TouchKey.js" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/graph/js/TouchKeyGroup.js" charset="utf-8"></script>
@@ -98,8 +87,13 @@ window.MAX_GROUP_ROW = '${maxGroupRow}' || '2';
           <%--미리보기 영역 시작--%>
           <div class="updownSet oh mb10">
             <span class="fl bk lh30"><s:message code="touchKey.preview"/></span>
-            <button class="btn_skyblue" id="btnInit"><s:message code="touchKey.reload"/></button>
-            <button class="btn_skyblue" id="btnSave"><s:message code="cmm.save"/></button>
+            <div class="txtIn">
+              <div class="sb-select dkbr fl w120 mr5">
+                <div id="selectStyle"></div>
+              </div>
+              <button class="btn_skyblue" id="btnInit"><s:message code="touchKey.reload"/></button>
+              <button class="btn_skyblue" id="btnSave"><s:message code="cmm.save"/></button>
+            </div>
           </div>
           <div class="prev2 fl">
             <%--그룹버튼 영역 시작--%>

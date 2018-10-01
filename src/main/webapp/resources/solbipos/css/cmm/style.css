@@ -3,11 +3,11 @@
 /* **************************************** *
  * WEBFONT
  * **************************************** */
+@import url('KoPubDotum.css');
 @font-face {
     font-family: 'NotoR';
-    src: url('NotoSansCJKkr-Regular.woff') format('woff');
+    src: url('./fonts/NotoSansCJKkr-Regular.woff') format('woff');
 }
-
 
 /* **************************************** *
  * RESET
@@ -1092,15 +1092,17 @@ a.btn_underline, a.btn_underline:hover, a.btn_underline.on {background-position:
 .hGroupLine3 {height:185px;}
 
 .touchGroupWrap {width: 502px; overflow: hidden; position: relative; border: 1px solid #ccc; margin-bottom: 3px; border-collapse: collapse;}
-.touchGroupLine2 {width:1000%; height: 123px; background:url(../img/bg_touchKey_group_line_2.png); background-size: 500px 123px;}
-.touchGroupLine3 {width:1000%; height: 184px; background:url(../img/bg_touchKey_group_line_3.png); background-size: 500px 184px;}
+#group div { font-family:inherit; font-weight:inherit; font-size:inherit; color:inherit; }
+.touchGroupLine2 {width:1000%; height: 123px; background:url(../img/touchKey/bg_touchKey_class_line_2.png); background-size: 500px 123px;}
+.touchGroupLine3 {width:1000%; height: 184px; background:url(../img/touchKey/bg_touchKey_class_line_3.png); background-size: 500px 184px;}
 
 .hProdsLine5 {height:377px;}
 .hProdsLine6 {height:452px;}
 
 .touchProdsWrap {width: 502px; overflow: hidden; position: relative; border: 1px solid #ccc;}
-.touchProdsLine6 {width: 1000%; height: 451px; background: url(../img/bg_touchKey_prod_line_6.png); background-size: 500px 451px;}
-.touchProdsLine5 {width: 1000%; height: 376px; background: url(../img/bg_touchKey_prod_line_5.png); background-size: 500px 376px;}
+#prod div { font-family:inherit; font-weight:inherit; font-size:inherit; color:inherit; }
+.touchProdsLine6 {width: 1000%; height: 451px; background: url(../img/touchKey/bg_touchKey_prod_line_6.png); background-size: 500px 451px;}
+.touchProdsLine5 {width: 1000%; height: 376px; background: url(../img/touchKey/bg_touchKey_prod_line_5.png); background-size: 500px 376px;}
 
 .navPage { left: -101px; }
 .hideNav {
@@ -1110,18 +1112,18 @@ a.btn_underline, a.btn_underline:hover, a.btn_underline.on {background-position:
 
 .groupNavWrap { width:125px; display: inline-block; margin-bottom: 3px; }
 .groupPageNoWrap { width:103px; position: relative; }
-.groupNav { width: 100px; height: 60px; position: relative; left: 0px;  }
+.groupNav { width: 101px; height: 62px; position: relative; left: 0px; border: 1px solid #ccc; }
 
 .hGroupLine2 .groupNav { top: 46px; }
 .hGroupLine2 .groupPageNoWrap { top: 42px; }
 .hGroupLine3 .groupNav { top: 108px; }
 .hGroupLine3 .groupPageNoWrap { top: 105px; }
 
-.groupNavPrev { background: url(../img/touchKey_group_arrL.png) no-repeat;}
+.groupNavPrev { background: url(../img/touchKey/touchKey_class_arrL_color01.png) no-repeat;}
 .groupNavPrev { width: 49px; height: 60px; background-position: 0 0;}
 .groupNavPrev:hover { width: 49px; height: 60px; background-position: -49px 0;}
 
-.groupNavNext { background: url(../img/touchKey_group_arrR.png) no-repeat;}
+.groupNavNext { background: url(../img/touchKey/touchKey_class_arrR_color01.png) no-repeat;}
 .groupNavNext { width: 49px; height: 60px; background-position: 0 0; margin-left:1px; }
 .groupNavNext:hover { width: 49px; height: 60px; background-position: -49px 0;}
 
@@ -1129,18 +1131,18 @@ a.btn_underline, a.btn_underline:hover, a.btn_underline.on {background-position:
 
 .prodNavWrap { width:125px; display: inline-block; }
 .prodPageNoWrap { width:103px; position: relative; }
-.prodNav { width: 100px; height: 74px; position: relative; left: 0px; }
+.prodNav { width: 101px; height: 76px; position: relative; left: 0px; border: 1px solid #ccc; }
 
 .hProdsLine5 .prodNav { top: 286px; }
 .hProdsLine5 .prodPageNoWrap { top: 282px; }
 .hProdsLine6 .prodNav { top: 359px; }
 .hProdsLine6 .prodPageNoWrap { top: 356px; }
 
-.prodNavPrev { background: url(../img/touchKey_prod_arrL.png) no-repeat;}
+.prodNavPrev { background: url(../img/touchKey/touchKey_prod_arrL_color01.png) no-repeat;}
 .prodNavPrev { width: 49px; height: 74px; background-position: 0 0;}
 .prodNavPrev:hover { width: 49px; height: 74px; background-position: -49px 0;}
 
-.prodNavNext { background: url(../img/touchKey_prod_arrR.png) no-repeat;}
+.prodNavNext { background: url(../img/touchKey/touchKey_prod_arrR_color01.png) no-repeat;}
 .prodNavNext { width: 49px; height: 74px; background-position: 0 0; margin-left:1px; }
 .prodNavNext:hover { width: 49px; height: 74px; background-position: -49px 0;}
 
@@ -1224,7 +1226,7 @@ p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17p
 
 .tabType1 ul {overflow:hidden; border-bottom:1px solid #2e333f; height:31px;}
 .tabType1 ul li {float:left; margin-right:1px;}
-.tabType1 ul li:last-chid {margin-right:0x;}
+.tabType1 ul li:last-child {margin-right:0px;}
 .tabType1 ul li a {font-size:0.875em; display:inline-block; background:#e8e8e8; height:30px; line-height:30px; padding:0 20px; transition:all 0.3s;}
 .tabType1 ul li a.on {background:#2e333f; color:#fff;}
 .tabType1 ul li a:hover {background:RGBA(0,0,0,0.2); color:#fff; transition:all 0.3s;}
@@ -1362,7 +1364,7 @@ p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17p
 .type_Green .smallMenu li.menu_system.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-80px -66px; transition:all 0.3s;}
 
 .type_Green .smallMenu li.menu_base a:after {background-position:-100px -66px;}
-.type_Green .smallMenu li.menu_base.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-100px -66px-100px -66px; opacity:1; transition:all 0.3s;}
+.type_Green .smallMenu li.menu_base.on a:after {background:url(../img/menu.png) #2e333f no-repeat; background-position:-100px -66px; opacity:1; transition:all 0.3s;}
 .type_Green .smallMenu li.menu_base.on a:hover:after {background:url(../img/menu.png) #1b202b no-repeat; background-position:-100px -66px; transition:all 0.3s;}
 
 .type_Green .smallMenu li.menu_sales a:after {background-position:-120px -66px;}
@@ -1722,7 +1724,6 @@ p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17p
     word-wrap: break-word;
     white-space: pre-wrap;
     white-space: -moz-pre-wrap;
-    white-space: -pre-wrap;
     white-space: -o-pre-wrap;
     word-break: break-all;
 }
