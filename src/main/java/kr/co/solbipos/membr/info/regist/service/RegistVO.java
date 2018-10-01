@@ -100,8 +100,10 @@ public class RegistVO extends PageVO {
     private String periodStartDt;
     /** 조회기간 타입 date end */
     private String periodEndDt;
-    /** 후불회원 적용매장 */
-    private String creditStore;
+    /** 후불회원 적용매장코드 */
+    private String creditStoreCds;
+    /** 후불회원 적용매장명 */
+    private String creditStoreNms;
 
 
     /**
@@ -584,18 +586,34 @@ public class RegistVO extends PageVO {
         this.periodEndDt = periodEndDt;
     }
 
+
     /**
-     * @return the creditStore
+     * @return the creditStoreCds
      */
 
-    public String getCreditStore() {
-        return creditStore;
+    public String getCreditStoreCds() {
+        return creditStoreCds;
     }
 
     /**
-     * @param creditStore the creditStore to set
+     * @param creditStoreCds the creditStoreCds to set
      */
-    public void setCreditStore(String creditStore) {
-        this.creditStore = creditStore;
+    public void setCreditStoreCds(String creditStoreCds) {
+        this.creditStoreCds = creditStoreCds;
+    }
+
+    /**
+     * @return the creditStoreNms
+     */
+
+    public String getCreditStoreNms() {
+        return creditStoreNms;
+    }
+
+    /**
+     * @param creditStoreNms the creditStoreNms to set
+     */
+    public void setCreditStoreNms(String creditStoreNms) {
+        this.creditStoreNms = creditStoreNms;
     }
 }

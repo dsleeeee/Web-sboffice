@@ -47,11 +47,11 @@
           <%-- 회원번호 --%>
           <th><s:message code="regist.membr.no"/><em class="imp">*</em></th>
           <td colspan="3">
-            <div class="sb-select w100">
+            <div class="sb-select w30">
               <div id="vMembrNo"></div>
             </div>
+            <%--<input type="text" class="sb-input w100" id="vMembrNo" />--%>
           </td>
-
         </tr>
         <tr>
           <%-- 회원명 --%>

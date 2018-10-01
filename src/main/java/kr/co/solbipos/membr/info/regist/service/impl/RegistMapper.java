@@ -106,7 +106,7 @@ public interface RegistMapper {
      * @param registVO
      * @return
      */
-    String getCurrentCreditStore(RegistVO registVO);
+    List<DefaultMap<String>> getCurrentCreditStore(RegistVO registVO);
 
     /**
      * 후불회원 적용매장 삭제

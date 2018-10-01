@@ -41,8 +41,8 @@
         <%-- 매장 --%>
         <th><s:message code="cmm.store" /></th>
         <td>
-          <div class="sb-select fl w70">
-            <div id="storeCdText" class="sb-input w80"></div>
+          <div class="sb-select fl w80" class='wj-content'>
+            <div id="storeCdText"></div>
           </div>
           <a href="javascript:;" id="store" class="btn_grayS ml5"><s:message code="cmm.store.select" /></a>
         </td>
@@ -143,7 +143,8 @@ $(document).ready(function(){
 
       <c:if test="${orgnFg == 'HQ'}">
           var storeCdText  = wcombo.genInput("#storeCdText");
-      </c:if>
+          storeCdText.isReadOnly = true;
+  </c:if>
 
       <c:if test="${orgnFg != 'HQ'}">
           storeCd.text = "${sessionScope.sessionInfo.orgnCd}";
@@ -238,7 +239,11 @@ $(document).ready(function(){
     <%-- 매장선택 --%>
     $("#store").click(function(e){
 
-      c_store.init(function(arr){
+      var chked = "";
+
+      c_store.init(chked, function(arr){
+
+        console.log(arr);
 
         storeCdText.text = "";
         storeCd.text = "";
@@ -250,7 +255,12 @@ $(document).ready(function(){
 
         if(arr.length > 1) {
           var a = arr.length -1;
-          storeCdText.text = arr[0].nm + "외 " + a.toString() + " 선택";
+          // if(arr[0].nm == "ALL") {
+          //   storeCdText.text = arr[0].nm ;
+          // } else {
+            storeCdText.text = arr[0].nm + "외 " + a.toString() + " 선택";
+          // }
+
         }
         else if(arr.length == 1){
           storeCdText.text = arr[0].nm;

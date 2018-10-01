@@ -99,9 +99,32 @@ public class RegistServiceImpl implements RegistService {
 
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ && !StringUtil.isEmpties(envstVal)){
 
-            String currentCreditStore = mapper.getCurrentCreditStore(registVO);
+            List<DefaultMap<String>> currentCreditStores = mapper.getCurrentCreditStore(registVO);
 
-            resultVO.setCreditStore(currentCreditStore);
+            String creditStoreCds = "";
+            String creditStoreNms = "";
+            int creditStoreNmsCnt = 0;
+
+            for(DefaultMap<String> creditStoreInfo : currentCreditStores) {
+                if(!"".equals(creditStoreCds)) {
+                    creditStoreCds += ("," + creditStoreInfo.getStr("cd"));
+                } else {
+                    creditStoreCds = creditStoreInfo.getStr("cd");
+                }
+
+                if("".equals(creditStoreNms)) {
+                    creditStoreNms = creditStoreInfo.getStr("nm");
+                } else {
+                    creditStoreNmsCnt++;
+                }
+            }
+
+            if(creditStoreNmsCnt > 0) {
+                creditStoreNms += ("외 "+ creditStoreNmsCnt +" 선택");
+            }
+
+            resultVO.setCreditStoreCds(creditStoreCds);
+            resultVO.setCreditStoreNms(creditStoreNms);
         }
 
         return resultVO;
@@ -180,15 +203,24 @@ public class RegistServiceImpl implements RegistService {
 
         int result = 0;
 
-        String creditStores[] = registVO.getCreditStore().split(",");
+        String creditStores[] = registVO.getCreditStoreCds().split(",");
 
         if(creditStores.length > 0){
 
             // 현재 등록된 후불회원 매장
-            String currentCreditStores = mapper.getCurrentCreditStore(registVO);
-            String currentCreditStore[] = currentCreditStores.split(",");
+            List<DefaultMap<String>> currentCreditStores = mapper.getCurrentCreditStore(registVO);
 
-LOGGER.info("currentCreditStore.length : "+ currentCreditStore.length);
+            String cds = "";
+
+            for(DefaultMap<String> currentCreditStore : currentCreditStores) {
+                if("".equals(cds)) {
+                    cds = currentCreditStore.getStr("cd");
+                } else {
+                    cds += (","+currentCreditStore.getStr("cd"));
+                }
+            }
+
+            String[] currentCreditStore = cds.split(",");
 
             // 삭제할 매장
             List<String> delStore = new ArrayList<String>();
@@ -241,6 +273,7 @@ LOGGER.info("currentCreditStore.length : "+ currentCreditStore.length);
                 }
             }
         }
+
         return result;
     }
 }
