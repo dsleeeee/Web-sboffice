@@ -236,9 +236,18 @@ var authCombo;
 
   <%-- 권한 복사 버튼 클릭 --%>
   $("#btnCopyAuth").click(function(e){
+    s_alert.pop("준비중인 서비스입니다.");
+    return false;
+
+
+    //TODO 테스트
+
+    
     var param = {};
     param.hqOfficeCd      = selectedHq.hqOfficeCd;
     param.copyHqOfficeCd  = authCombo.selectedValue;
+
+    console.log(param);
 
     $.postJSONSave("/store/hq/hqManage/authorExcept/copyAuth.sb", param, function(result) {
       var res = result.data;
