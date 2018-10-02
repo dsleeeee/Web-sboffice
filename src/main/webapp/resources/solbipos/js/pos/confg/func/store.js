@@ -9,13 +9,6 @@
  *
  * **************************************************************/
 
-function showStoreLayer() {
-  $("#storeDim").show();
-  $("#storeLayer").show();
-
-  $("#storeLayerSubTitle").text("[" + selectedFnkey.fnkeyNo + "]  " + selectedFnkey.fnkeyNm);
-
-}
 $(document).ready(function(){
 
   var srchClsFgCb     = wcombo.genCommonBox("#srchClsFg", clsFg);
@@ -30,7 +23,7 @@ $(document).ready(function(){
       {binding:"hqOfficeCd", header:messages["func.hqOfficeCd"], width:"*", isReadOnly:true, visible:false},
       {binding:"hqOfficeNm", header:messages["func.hqOfficeNm"], width:"*", isReadOnly:true, visible:false},
       {binding:"storeCd", header:messages["func.storeCd"], maxLength:3, width:"*", isReadOnly:true},
-      {binding:"storeNm", header:messages["func.storeNm"], maxLength:20, width:"*", isReadOnly:true},
+      {binding:"storeNm", header:messages["func.storeNm"], maxLength:20, width:"*", isReadOnly:true}
       // {binding:"clsFg", header:messages["func.clsFg"], dataMap:clsFgDataMap, width:"*", isReadOnly:true},
       // {binding:"sysStatFg", header:messages["func.sysStatFg"], dataMap:sysStatFgDataMap, width:"*", isReadOnly:true}
     ];
@@ -41,7 +34,7 @@ $(document).ready(function(){
         {binding:"hqOfficeCd", header:messages["func.hqOfficeCd"], width:"*", isReadOnly:true, visible:false},
         {binding:"hqOfficeNm", header:messages["func.hqOfficeNm"], width:"*", isReadOnly:true, visible:false},
         {binding:"storeCd", header:messages["func.storeCd"], maxLength:3, width:"*", isReadOnly:true},
-        {binding:"storeNm", header:messages["func.storeNm"], maxLength:20, width:"*", isReadOnly:true},
+        {binding:"storeNm", header:messages["func.storeNm"], maxLength:20, width:"*", isReadOnly:true}
         // {binding:"clsFg", header:messages["func.clsFg"], dataMap:clsFgDataMap, width:"*", isReadOnly:true},
         // {binding:"sysStatFg", header:messages["func.sysStatFg"], dataMap:sysStatFgDataMap, width:"*", isReadOnly:true}
       ];
@@ -49,8 +42,8 @@ $(document).ready(function(){
   var regStoreGrid = wgrid.genGrid("#regStoreGrid", regStoreGridHeader);
   var noRegStoreGrid = wgrid.genGrid("#noRegStoreGrid", noRegStoreGridHeader);
 
-  regStoreGrid.itemsSource =  new wijmo.collections.CollectionView();
-  noRegStoreGrid.itemsSource = new wijmo.collections.CollectionView();
+  regStoreGrid.itemsSource =  new wijmo.collections.CollectionView([]);
+  noRegStoreGrid.itemsSource = new wijmo.collections.CollectionView([]);
 
   regStoreGrid.isReadOnly = false;
   noRegStoreGrid.isReadOnly = false;
@@ -72,7 +65,7 @@ $(document).ready(function(){
 
     $.postJSON(baseUrl+"getFuncStoreList.sb", param,
       function(result) {
-        console.log(result);
+        // console.log(result);
 
         if(result.status === "FAIL") {
           s_alert.pop(result.message);
@@ -113,7 +106,7 @@ $(document).ready(function(){
       s_alert.pop(messages["cmm.not.modify"]);
       return;
     }
-    console.log(paramArr);
+    // console.log(paramArr);
 
     $.postJSONArray(baseUrl + "saveFuncStore.sb", paramArr,
         function(result) {
@@ -157,15 +150,19 @@ $(document).ready(function(){
     );
   });
 
-
   $("#storeLayer .btn_close").click(function(){
     $("#storeDim").hide();
     $("#storeLayer").hide();
 
     regStoreGrid.itemsSource =  new wijmo.collections.CollectionView([]);
     noRegStoreGrid.itemsSource = new wijmo.collections.CollectionView([]);
-
   });
-
-
 });
+
+
+function showStoreLayer() {
+  $("#storeDim").show();
+  $("#storeLayer").show();
+
+  $("#storeLayerSubTitle").text("[" + selectedFnkey.fnkeyNo + "]  " + selectedFnkey.fnkeyNm);
+}

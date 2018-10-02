@@ -13,6 +13,8 @@
       <a href="javascript:;" class="btn_close"></a>
       <div class="con">
         <div>
+
+          <%-- 검색조건--%>
           <table class="tblType01">
             <colgroup>
               <col class="w15" />
@@ -49,11 +51,13 @@
             </tr>
             </tbody>
           </table>
+          <%-- 조회버튼 --%>
           <div class="mt10 tr">
             <button class="btn_skyblue" id="btnStoreSearch"><s:message code="cmm.search" /></button>
           </div>
         </div>
 
+        <%-- 등록 매장 그리드 --%>
         <div class="oh mt40">
           <div class="w50 fl">
             <div class="wj-TblWrap mr10" style="height:270px;">
@@ -72,6 +76,8 @@
               --%>
             </div>
           </div>
+
+          <%-- 미등록매장 그리드 --%>
           <div class="w50 fr">
             <div class="wj-TblWrap ml10" style="height:270px;">
               <div class="oh mb10">
