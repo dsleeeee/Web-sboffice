@@ -142,7 +142,8 @@ public class ContentController {
             model.addAttribute("sid", request.getParameter("sid"));
         }
 
-        return "application/main/hedofcMain";
+//        return "application/main/hedofcMain";
+        return "application/main/hedofcMain_test";
     }
 
 
