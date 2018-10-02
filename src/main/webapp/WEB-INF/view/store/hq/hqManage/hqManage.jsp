@@ -70,9 +70,9 @@
       <%-- 본사신규등록 --%>
       <button class="btn_skyblue" id="btnRegist"><s:message code="hqManage.newHq" /></button>
       <%-- sms 전송 //TODO --%>
-      <button class="btn_skyblue" id="btnSMS"><s:message code="hqManage.sendSMS" /></button>
-      <%-- 엑셀다운로드 --%>
-      <button class="btn_skyblue" id="btnExcel"><s:message code="cmm.excel.down" /></button>
+      <%--<button class="btn_skyblue" id="btnSMS"><s:message code="hqManage.sendSMS" /></button>--%>
+      <%-- 엑셀다운로드 //TODO--%>
+      <%--<button class="btn_skyblue" id="btnExcel"><s:message code="cmm.excel.down" /></button>--%>
     </div>
   </div>
 

@@ -26,7 +26,7 @@
         <%-- 메뉴명 --%>
         <th><s:message code="webMenu.nm" /></th>
         <td colspan="3">
-          <div class="sb-select">
+          <div class="sb-select w40">
             <div id="searchResrceNm"></div>
           </div>
         </td>
@@ -64,13 +64,12 @@
 
         <div class="tr mb10">
           <%-- 삭제 버튼 --%>
-          <button id="deleteBtn" class="btn_blk">
+          <button id="deleteBtn" class="btn_skyblue">
             <s:message code="cmm.del" />
           </button>
           <%-- 신규 등록 버튼 --%>
-          <button id="regBtn" class="btn_blk">
+          <button id="regBtn" class="btn_skyblue">
             <s:message code="webMenu.new" />
-            +
           </button>
         </div>
 
@@ -188,7 +187,7 @@
       }
     });
 
-    var gdata = ${ccu.getCommCodeExcpAll("901")};
+    var gdata = ${ccu.getCommCodeExcpAll("998")};
     var mFuncFg = new wijmo.grid.DataMap(gdata, "value", "name");
 
     var rdata2 =
@@ -197,7 +196,7 @@
         {binding:"resrceNm", header:"<s:message code='webMenu.fun.nm' />"},
         {binding:"url", header:"URL"}
       ];
-    var grid2         = wgrid.genGrid("#theGrid2", rdata2, "${menuCd}", 2, ${clo.getColumnLayout(2)});
+    var grid2         = wgrid.genGrid("#theGrid2", rdata2);
 
     grid2.rowHeaders.columns.splice(0, 1);
     grid2.isReadOnly      = false;
@@ -283,7 +282,7 @@
       });
     });
 
-    <%-- 신규등록+ 버튼 --%>
+    <%-- 신규등록 버튼 --%>
     $("#regBtn").click(function(e){
       var item = grid.selectedItem;
       <%-- 현재 메뉴 레벨에서는 하위 메뉴를 등록 할 수 없습니다. --%>

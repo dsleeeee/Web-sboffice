@@ -19,7 +19,7 @@
           </ul>
         </div>
         <%-- 상세 --%>
-        <div id="dtlArea" class="mt20 sc" style="display:none;">
+        <div id="dtlArea" class="" style="display:none;">
           <table class="tblType01">
             <colgroup>
               <col class="w15" />

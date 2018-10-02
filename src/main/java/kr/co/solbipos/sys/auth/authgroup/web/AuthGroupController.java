@@ -57,7 +57,7 @@ public class AuthGroupController {
     /**
      * 그룹 조회
      *
-     * @param authGroup
+     * @param authGroupVO
      * @param request
      * @param response
      * @param model
@@ -79,7 +79,7 @@ public class AuthGroupController {
     /**
      * 저장
      *
-     * @param authGroup
+     * @param authGroupVOs
      * @param request
      * @param response
      * @param model
@@ -100,7 +100,7 @@ public class AuthGroupController {
     /**
      * 리소스 정보 조회
      *
-     * @param authGroup
+     * @param authGroupVO
      * @param request
      * @param response
      * @param model
@@ -121,7 +121,7 @@ public class AuthGroupController {
     /**
      * 리소스 정보 저장
      *
-     * @param authGroup
+     * @param authorGrpResrceVOs
      * @param request
      * @param response
      * @param model
@@ -164,7 +164,7 @@ public class AuthGroupController {
     /**
      * 아이디 기준 리소스 정보 저장 - for 임의 권한 부여 팝업
      *
-     * @param authGroup
+     * @param authorExceptVOs
      * @param request
      * @param response
      * @param model

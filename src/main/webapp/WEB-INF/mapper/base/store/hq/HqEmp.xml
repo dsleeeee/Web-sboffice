@@ -140,6 +140,7 @@
           FROM TB_HQ_EMPLOYEE THE, TB_WB_USER_INFO TWUI
          WHERE THE.USER_ID = TWUI.USER_ID(+)
            AND THE.EMP_NO = #{empNo}
+           AND THE.USER_ID = #{userId}
     </select>
     <select id="selectHqEmpPassword" parameterType="hqEmpVO" resultType="java.lang.String">
         /* HqEmpMapper.selectHqEmpPassword */

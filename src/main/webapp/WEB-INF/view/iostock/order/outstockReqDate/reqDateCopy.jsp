@@ -9,7 +9,7 @@
 
 <div id="reqDateCopyView" class="subCon" style="display: none;">
     <div ng-controller="reqDateCopyCtrl">
-        <div class="searchBar">
+        <div class="searchBar flddUnfld">
             <a href="javascript:;" class="open">${menuNm}</a>
         </div>
         <table class="searchTbl">

@@ -6,9 +6,9 @@
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
 
 <div class="subCon">
-  <div class="searchBar">
+  <div class="searchBar flddUnfld">
     <a href="javascript:;" class="open">${menuNm}</a>
-  </div> 
+  </div>
   <table class="searchTbl">
     <colgroup>
       <col class="w15" />
@@ -71,7 +71,7 @@
       <s:message code="cmm.search" />
     </button>
   </div>
-  
+
   <div class="mt20 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
     <div id="listScaleBox" class="w150 fl"></div>
@@ -80,13 +80,13 @@
       <s:message code="cmm.excel.down" />
     </button>
   </div>
-  
+
   <%--위즈모 테이블--%>
   <div class="wj-TblWrapBr mt10" style="height: 400px;">
     <div id="theGrid"></div>
   </div>
   <%--//위즈모 테이블--%>
-  
+
   <%-- 페이지 리스트 --%>
   <div class="pageNum mt20">
     <%-- id --%>
@@ -94,7 +94,7 @@
     </ul>
   </div>
   <%--//페이지 리스트--%>
-  
+
 </div>
 
 <script>
@@ -108,9 +108,9 @@
     var clsFg                   = wcombo.genCommonBox("#sClsFg", ${ccu.getCommCode("003")});
     var sysStatFg       = wcombo.genCommonBox("#sSysStatFg", ${ccu.getCommCode("009")});
     var listScaleBox    = wcombo.genCommonBox("#listScaleBox", ${ccu.getListScale()});
-    
+
     <%-- 조회결과 --%>
-    var svData = 
+    var svData =
       [
         {binding:"storeCd", header:"<s:message code='storeView.storeCd' />",width:"*"},
         {binding:"storeNm", header:"<s:message code='storeView.storeNm' />",width:"*"},
@@ -128,9 +128,9 @@
         {binding:"sysOpenDate", header:"<s:message code='storeView.sysOpenDate' />",width:"*"},
         {binding:"sysClosureDate", header:"<s:message code='storeView.sysClosureDate' />",width:"*"}
       ];
-    
+
     var grid  = wgrid.genGrid("#theGrid", svData, "${menuCd}", 1, ${clo.getColumnLayout(1)});
-    
+
     <%-- 그리드 링크 --%>
     grid.formatItem.addHandler(function(s, e) {
       if (e.panel == s.cells) {
@@ -143,7 +143,7 @@
         }
       }
     });
-    
+
     <%-- 그리드 선택 이벤트 --%>
     grid.addEventListener(grid.hostElement, 'click', function(e) {
       var ht = grid.hitTest(e);
@@ -163,28 +163,28 @@
         }
       }
     });
-    
+
     <%-- 리스트 조회 --%>
     $("#searchBtn").click(function(e){
       search(1);
     });
-    
+
     <%-- 페이징 --%>
     $(document).on("click", ".page", function() {
       search($(this).data("value"));
     });
-    
+
     <%-- 엑셀 다운로드 --%>
     $("#excelBtn").click(function( e ){
       var name = "${menuNm}";
       wexcel.down(grid, name, name + ".xlsx");
     });
-    
-    <%-- 리스트 조회 --%>    
+
+    <%-- 리스트 조회 --%>
     function search(index) {
-    
+
       var param = {};
-      
+
       param.storeCd = storeCd.text;
       param.storeNm = storeNm.text;
       param.storeType = storeType.selectedValue;
@@ -192,7 +192,7 @@
       param.sysStatFg = sysStatFg.selectedValue;
       param.listScale = listScaleBox.selectedValue;
       param.curr = index;
-          
+
       wgrid.getGridData("/base/store/view/view/list.sb", param, grid,
         function(result){
           page.make("#page", result.data.page.curr, result.data.page.totalPage);
@@ -206,7 +206,7 @@
 </script>
 
 <%-- 매장 상세정보 --%>
-<c:import url="/WEB-INF/view/base/store/view/dtl.jsp"> 
+<c:import url="/WEB-INF/view/base/store/view/dtl.jsp">
 </c:import>
 <%-- 밴사 설정정보 --%>
 <c:import url="/WEB-INF/view/base/store/view/vanConfg.jsp">

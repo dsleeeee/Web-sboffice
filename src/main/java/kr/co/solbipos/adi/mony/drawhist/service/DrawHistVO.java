@@ -15,7 +15,6 @@ import kr.co.solbipos.application.session.user.enums.OrgnFg;
 * @author NHN한국사이버결제 KCP 김태수
 * @since 2018.08.03
 * @version 1.0
-* @see
 *
 *  Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
@@ -27,18 +26,18 @@ public class DrawHistVO extends CmmVO{
     private String storeCd;
     private String startDt;
     private String endDt;
-    
+
     public OrgnFg getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(OrgnFg orgnFg) { this.orgnFg = orgnFg; }
-    
+
     public String getStoreCd() {
         return storeCd;
     }
     public void setStoreCd(String storeCd) {
         this.storeCd = storeCd;
     }
-    
+
     public String getStartDt() {
         return startDt;
     }

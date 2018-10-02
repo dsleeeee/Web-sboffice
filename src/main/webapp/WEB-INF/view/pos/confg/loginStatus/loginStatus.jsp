@@ -7,7 +7,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
 <div class="subCon">
-  <%--searchTbl--%>
+  <%-- 조회조건 --%>
   <div class="searchBar flddUnfld">
     <a href="javascript:void(0);" class="open">${menuNm}</a>
   </div>
@@ -28,7 +28,7 @@
             <span class="rg">~</span>
             <span class="txtIn"> <input id="endDt" name="endDt" class="w200" /></span>
             <span class="chk ml10"> <input type="checkbox" id="chkDt" />
-            <label for="chk"><s:message code="cmm.all.day" /></label>
+            <label for="chkDt"><s:message code="cmm.all.day" /></label>
             </span>
           </div>
         </td>
@@ -78,19 +78,20 @@
       </tr>
     </tbody>
   </table>
-  <%--//searchTbl--%>
 
+  <%-- 조회 --%>
   <div class="mt10 pdb20 oh bb">
     <button class="btn_blue fr" id="searchBtn">
       <s:message code="cmm.search" />
     </button>
   </div>
 
+
   <div class="mt20 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
     <div id="listScaleBox" class="w150 fl"></div>
 
-    <%-- 엑셀 다운로드 --%>
+    <%-- 엑셀 다운로드 //TODO --%>
     <%--
     <button class="btn_skyblue fr" id="excelBtn">
       <s:message code="cmm.excel.down" />
@@ -98,13 +99,10 @@
     --%>
   </div>
 
-  <%--위즈모 테이블--%>
+  <%-- 위즈모 테이블--%>
   <div class="wj-TblWrapBr mt10" style="height: 400px;">
-    <%-- 개발시 높이 조절해서 사용--%>
-    <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
     <div id="theGrid" style="height:393px;"></div>
   </div>
-  <%--//위즈모 테이블--%>
 
   <%-- 페이지 리스트 --%>
   <div class="pageNum mt20">
@@ -112,7 +110,6 @@
     <ul id="page1" data-size="10">
     </ul>
   </div>
-  <%--//페이지 리스트--%>
 
 </div>
 
@@ -121,21 +118,21 @@ $(document).ready(function(){
 
   var rdata =
     [
-      {"binding":"rnum","header":"No"},
-      {"binding":"hqOfficeCd","header":"<s:message code='loginStatus.hqOfficeCd' />"},
-      {"binding":"hqOfficeNm","header":"<s:message code='loginStatus.hqOfficeNm' />"},
-      {"binding":"storeCd","header":"<s:message code='loginStatus.storeCd' />"},
-      {"binding":"storeNm","header":"<s:message code='loginStatus.storeNm' />"},
-      {"binding":"posNo","header":"<s:message code='loginStatus.posNo' />"},
-      {"binding":"loginDate","header":"<s:message code='loginStatus.loginDate' />"},
-      {"binding":"hwAuthKey","header":"<s:message code='loginStatus.hwAuthKey' />"},
-      {"binding":"loginIp","header":"<s:message code='loginStatus.loginIp' />"},
-      {"binding":"loginDt","header":"<s:message code='loginStatus.loginDt' />"},
-      {"binding":"posVerNo","header":"<s:message code='loginStatus.posVerNo' />"},
-      {"binding":"sysStatFgNm","header":"<s:message code='loginStatus.sysStatFgNm' />"}
+      {binding:"rnum",header:"No"},
+      {binding:"hqOfficeCd",header:"<s:message code='loginStatus.hqOfficeCd' />"},
+      {binding:"hqOfficeNm",header:"<s:message code='loginStatus.hqOfficeNm' />"},
+      {binding:"storeCd",header:"<s:message code='loginStatus.storeCd' />"},
+      {binding:"storeNm",header:"<s:message code='loginStatus.storeNm' />"},
+      {binding:"posNo",header:"<s:message code='loginStatus.posNo' />"},
+      {binding:"loginDate",header:"<s:message code='loginStatus.loginDate' />"},
+      {binding:"hwAuthKey",header:"<s:message code='loginStatus.hwAuthKey' />"},
+      {binding:"loginIp",header:"<s:message code='loginStatus.loginIp' />"},
+      {binding:"loginDt",header:"<s:message code='loginStatus.loginDt' />"},
+      {binding:"posVerNo",header:"<s:message code='loginStatus.posVerNo' />"},
+      {binding:"sysStatFgNm",header:"<s:message code='loginStatus.sysStatFgNm' />"}
     ];
 
-  var grid         = wgrid.genGrid("#theGrid", rdata, "${menuCd}", 1, ${clo.getColumnLayout(1)});
+  var grid         = wgrid.genGrid("#theGrid", rdata);
   var hqOfficeCd   = wcombo.genInput("#hqOfficeCd");
   var hqOfficeNm   = wcombo.genInput("#hqOfficeNm");
   var storeCd      = wcombo.genInput("#storeCd");
@@ -144,7 +141,7 @@ $(document).ready(function(){
   var endDt        = wcombo.genDateVal("#endDt", "${sessionScope.sessionInfo.endDt}");
   var ldata        = ${ccu.getListScale()};
   var listScaleBox = wcombo.genCommonBox("#listScaleBox", ldata);
-  var cdata        = ${ccu.getCommCode("009")};
+  var cdata        = ${ccu.getCommCode("005")};
   var sysStatFg    = wcombo.genCommonBox("#sysStatFg", cdata);
 
   function search(index) {
@@ -181,14 +178,6 @@ $(document).ready(function(){
   $("#searchBtn").click(function( e ){
     search(1);
   });
-
-  <%-- 엑셀 다운로드 --%>
-  /*
-  $("#excelBtn").click(function( e ){
-    var name = "${menuNm}";
-    wexcel.down(grid, name, name + ".xlsx");
-  });
-  */
 
   <%-- 페이징 --%>
   $(document).on("click", ".page1", function() {
