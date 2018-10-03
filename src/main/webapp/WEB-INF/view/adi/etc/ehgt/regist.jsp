@@ -202,8 +202,10 @@
           if(param.saleDate != '') {
             $.postJSON("${baseUrl}/detail.sb", param, function(result) {
               var list = result.data.list;
+
               saleDate.value = selectedRow.saleDate;
               $.each(list, function(key, value){
+
                 $("#krwAmt_" + value.crncyCd).val(value.krwAmt);
               });
             },
@@ -246,6 +248,7 @@
 
       $.postJSONArray("${baseUrl}/save.sb", paramArr, function(result) {
         s_alert.pop("<s:message code='cmm.saveSucc' />");
+        search();
       },
       function(result) {
         s_alert.pop(result.data.msg);

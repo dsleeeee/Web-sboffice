@@ -17,7 +17,6 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
  * @author NHN한국사이버결제 조병준
  * @since 2018. 08.09
  * @version 1.0
- * @see
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
@@ -64,7 +63,7 @@ public interface EhgtService {
      * 본사/가맹점 통화 코드 저장
      *
      * @param crncyCdVOs
-     * @param sessionInfo
+     * @param sessionInfoVO
      * @return
      */
     int updateCrncyCd(List<CrncyCdVO> crncyCdVOs, SessionInfoVO sessionInfoVO);

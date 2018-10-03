@@ -18,7 +18,6 @@ import kr.co.solbipos.application.common.service.CmmVO;
  * @author NHN한국사이버결제 조병준
  * @since 2018. 08.09
  * @version 1.0
- * @see
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
@@ -35,8 +34,8 @@ public class EhgtVO extends CmmVO {
     /** 통화금액 */
     private long crncyAmt;
     /** 한화금액 */
-    @Min(groups = {Save.class}, value=100, message = "{ehgt.krwAmt}{cmm.input.fail}")
-    @Max(groups = {Save.class}, value=10000, message = "{ehgt.krwAmt}{cmm.input.fail}")
+    @Min(groups = {Save.class}, value=0, message = "{ehgt.krwAmt}{cmm.input.fail}")
+    @Max(groups = {Save.class}, value=100000, message = "{ehgt.krwAmt}{cmm.input.fail}")
     private float krwAmt;
 
     /** 검색조건-시작일자 */
@@ -45,7 +44,7 @@ public class EhgtVO extends CmmVO {
     /** 검색조건-종료일자 */
     @DateTimeFormat(pattern="yyyyMMdd")
     private String endDt;
-    
+
     /**
      * @return the orgnCd
      */
@@ -130,6 +129,6 @@ public class EhgtVO extends CmmVO {
     public void setEndDt(String endDt) {
         this.endDt = endDt;
     }
-    
+
 
 }

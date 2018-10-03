@@ -129,7 +129,7 @@
     </if>
       ORDER BY thn.NMCODE_CD DESC
     </select>
-    
+
     <select id="getMsCdListByGrpCd" parameterType="crncyCdVO" resultType="DefaultMap">
     /* EhgtMapper.getMsCdListByGrpCd */
      SELECT tmsn.NMCODE_GRP_CD,
