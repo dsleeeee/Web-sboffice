@@ -44,6 +44,9 @@ public class EhgtVO extends CmmVO {
     /** 검색조건-종료일자 */
     @DateTimeFormat(pattern="yyyyMMdd")
     private String endDt;
+    /** 기능키 관련 프로시져 실행 결과 */
+    private String result;
+
 
     /**
      * @return the orgnCd
@@ -130,5 +133,18 @@ public class EhgtVO extends CmmVO {
         this.endDt = endDt;
     }
 
+    /**
+     * @return the result
+     */
 
+    public String getResult() {
+        return result;
+    }
+
+    /**
+     * @param result the result to set
+     */
+    public void setResult(String result) {
+        this.result = result;
+    }
 }

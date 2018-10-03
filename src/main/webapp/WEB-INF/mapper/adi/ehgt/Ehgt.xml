@@ -4,170 +4,218 @@
 <mapper namespace="kr.co.solbipos.adi.etc.ehgt.service.impl.EhgtMapper">
 
     <select id="getHqEhgtListBySaleDt" parameterType="ehgtVO" resultType="DefaultMap">
-    /* EhgtMapper.getHqEhgtListBySaleDt */
-     SELECT thc.SALE_DATE,
-            thc.CRNCY_CD,
-            thc.KRW_AMT
-       FROM TB_HQ_CURRENCY thc
-      WHERE thc.HQ_OFFICE_CD = #{orgnCd}
-        AND thc.SALE_DATE BETWEEN #{startDt} AND #{endDt}
-    <if test='crncyCd != null and crncyCd != ""'>
-        AND thc.CRNCY_CD = #{crncyCd}
-    </if>
-      ORDER BY SALE_DATE
+        /* EhgtMapper.getHqEhgtListBySaleDt */
+         SELECT thc.SALE_DATE,
+                thc.CRNCY_CD,
+                thc.KRW_AMT
+           FROM TB_HQ_CURRENCY thc
+          WHERE thc.HQ_OFFICE_CD = #{orgnCd}
+            AND thc.SALE_DATE BETWEEN #{startDt} AND #{endDt}
+        <if test='crncyCd != null and crncyCd != ""'>
+            AND thc.CRNCY_CD = #{crncyCd}
+        </if>
+          ORDER BY SALE_DATE
     </select>
 
     <insert id="insertHqEhgt" parameterType="ehgtVO">
-    /* EhgtMapper.insertHqEhgt */
-    INSERT INTO TB_HQ_CURRENCY
-    (
-      HQ_OFFICE_CD,
-      SALE_DATE,
-      CRNCY_CD,
-      CRNCY_AMT,
-      KRW_AMT,
-      REG_DT,
-      REG_ID,
-      MOD_DT,
-      MOD_ID
-    )
-    VALUES
-    (
-      #{orgnCd},
-      #{saleDate},
-      #{crncyCd},
-      #{crncyAmt},
-      #{krwAmt},
-      #{regDt},
-      #{regId},
-      #{modDt},
-      #{modId}
-    )
+        /* EhgtMapper.insertHqEhgt */
+        INSERT INTO TB_HQ_CURRENCY
+        (
+            HQ_OFFICE_CD,
+            SALE_DATE,
+            CRNCY_CD,
+            CRNCY_AMT,
+            KRW_AMT,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        VALUES
+        (
+            #{orgnCd},
+            #{saleDate},
+            #{crncyCd},
+            #{crncyAmt},
+            #{krwAmt},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
     </insert>
 
     <update id="updateHqEhgt" parameterType="ehgtVO">
-    /* EhgtMapper.updateHqEhgt */
-     UPDATE TB_HQ_CURRENCY
-        SET KRW_AMT = #{krwAmt},
-            MOD_DT = #{modDt},
-            MOD_ID = #{modId}
-      WHERE HQ_OFFICE_CD = #{orgnCd}
-        AND SALE_DATE = #{saleDate}
-        AND CRNCY_CD = #{crncyCd}
+        /* EhgtMapper.updateHqEhgt */
+        UPDATE TB_HQ_CURRENCY
+           SET KRW_AMT = #{krwAmt},
+               MOD_DT = #{modDt},
+               MOD_ID = #{modId}
+         WHERE HQ_OFFICE_CD = #{orgnCd}
+           AND SALE_DATE = #{saleDate}
+           AND CRNCY_CD = #{crncyCd}
     </update>
 
 
     <select id="getMsEhgtListBySaleDt" parameterType="ehgtVO" resultType="DefaultMap">
-    /* EhgtMapper.getMsEhgtListBySaleDt */
-     SELECT thc.SALE_DATE,
-            thc.CRNCY_CD,
-            thc.KRW_AMT
-       FROM TB_MS_CURRENCY thc
-      WHERE thc.STORE_CD = #{orgnCd}
-        AND thc.SALE_DATE BETWEEN #{startDt} AND #{endDt}
-    <if test='crncyCd != null and crncyCd != ""'>
-        AND thc.CRNCY_CD = #{crncyCd}
-    </if>
-      ORDER BY SALE_DATE
+        /* EhgtMapper.getMsEhgtListBySaleDt */
+        SELECT thc.SALE_DATE,
+               thc.CRNCY_CD,
+               thc.KRW_AMT
+          FROM TB_MS_CURRENCY thc
+         WHERE thc.STORE_CD = #{orgnCd}
+           AND thc.SALE_DATE BETWEEN #{startDt} AND #{endDt}
+        <if test='crncyCd != null and crncyCd != ""'>
+           AND thc.CRNCY_CD = #{crncyCd}
+        </if>
+          ORDER BY SALE_DATE
     </select>
 
     <insert id="insertMsEhgt" parameterType="ehgtVO">
-    /* EhgtMapper.insertMsEhgt */
-    INSERT INTO TB_MS_CURRENCY
-    (
-      STORE_CD,
-      SALE_DATE,
-      CRNCY_CD,
-      CRNCY_AMT,
-      KRW_AMT,
-      REG_DT,
-      REG_ID,
-      MOD_DT,
-      MOD_ID
-    )
-    VALUES
-    (
-      #{orgnCd},
-      #{saleDate},
-      #{crncyCd},
-      #{crncyAmt},
-      #{krwAmt},
-      #{regDt},
-      #{regId},
-      #{modDt},
-      #{modId}
-    )
+        /* EhgtMapper.insertMsEhgt */
+        INSERT INTO TB_MS_CURRENCY
+        (
+            STORE_CD,
+            SALE_DATE,
+            CRNCY_CD,
+            CRNCY_AMT,
+            KRW_AMT,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        VALUES
+        (
+            #{orgnCd},
+            #{saleDate},
+            #{crncyCd},
+            #{crncyAmt},
+            #{krwAmt},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
     </insert>
 
     <update id="updateMsEhgt" parameterType="ehgtVO">
-    /* EhgtMapper.updateMsEhgt */
-     UPDATE TB_MS_CURRENCY
-        SET KRW_AMT = #{krwAmt},
-            MOD_DT = #{modDt},
-            MOD_ID = #{modId}
-      WHERE STORE_CD = #{orgnCd}
-        AND SALE_DATE = #{saleDate}
-        AND CRNCY_CD = #{crncyCd}
+        /* EhgtMapper.updateMsEhgt */
+        UPDATE TB_MS_CURRENCY
+           SET KRW_AMT = #{krwAmt},
+               MOD_DT = #{modDt},
+               MOD_ID = #{modId}
+         WHERE STORE_CD = #{orgnCd}
+           AND SALE_DATE = #{saleDate}
+           AND CRNCY_CD = #{crncyCd}
     </update>
 
 
 
     <select id="getHqCdListByGrpCd" parameterType="crncyCdVO" resultType="DefaultMap">
-    /* EhgtMapper.getHqCdListByGrpCd */
-     SELECT thn.HQ_OFFICE_CD,
-            thn.NMCODE_GRP_CD,
-            thn.NMCODE_CD,
-            thn.NMCODE_NM,
-            thn.NMCODE_ITEM_1,
-            thn.NMCODE_ITEM_2,
-            thn.USE_YN
-       FROM TB_HQ_NMCODE thn
-      WHERE thn.HQ_OFFICE_CD = #{orgnCd}
-        AND thn.NMCODE_GRP_CD = #{nmcodeGrpCd}
-    <if test='useYn != null and useYn.toString() != "ALL"'>
-        AND thn.USE_YN = #{useYn}
-    </if>
-      ORDER BY thn.NMCODE_CD DESC
+        /* EhgtMapper.getHqCdListByGrpCd */
+         SELECT thn.HQ_OFFICE_CD,
+                thn.NMCODE_GRP_CD,
+                thn.NMCODE_CD,
+                thn.NMCODE_NM,
+                thn.NMCODE_ITEM_1,
+                thn.NMCODE_ITEM_2,
+                thn.USE_YN
+           FROM TB_HQ_NMCODE thn
+          WHERE thn.HQ_OFFICE_CD = #{orgnCd}
+            AND thn.NMCODE_GRP_CD = #{nmcodeGrpCd}
+        <if test='useYn != null and useYn.toString() != "ALL"'>
+            AND thn.USE_YN = #{useYn}
+        </if>
+          ORDER BY thn.NMCODE_CD DESC
     </select>
 
     <select id="getMsCdListByGrpCd" parameterType="crncyCdVO" resultType="DefaultMap">
-    /* EhgtMapper.getMsCdListByGrpCd */
-     SELECT tmsn.NMCODE_GRP_CD,
-            tmsn.NMCODE_CD,
-            tmsn.NMCODE_NM,
-            tmsn.NMCODE_ITEM_1,
-            tmsn.NMCODE_ITEM_2,
-            tmsn.USE_YN
-       FROM TB_MS_STORE_NMCODE tmsn
-      WHERE tmsn.STORE_CD = #{orgnCd}
-        AND tmsn.NMCODE_GRP_CD = #{nmcodeGrpCd}
-    <if test='useYn != null and useYn.toString() != "ALL"'>
-        AND tmsn.USE_YN = #{useYn}
-    </if>
-      ORDER BY tmsn.NMCODE_CD DESC
+        /* EhgtMapper.getMsCdListByGrpCd */
+         SELECT tmsn.NMCODE_GRP_CD,
+                tmsn.NMCODE_CD,
+                tmsn.NMCODE_NM,
+                tmsn.NMCODE_ITEM_1,
+                tmsn.NMCODE_ITEM_2,
+                tmsn.USE_YN
+           FROM TB_MS_STORE_NMCODE tmsn
+          WHERE tmsn.STORE_CD = #{orgnCd}
+            AND tmsn.NMCODE_GRP_CD = #{nmcodeGrpCd}
+        <if test='useYn != null and useYn.toString() != "ALL"'>
+            AND tmsn.USE_YN = #{useYn}
+        </if>
+          ORDER BY tmsn.NMCODE_CD DESC
     </select>
 
     <update id="updateHqCdUseYn" parameterType="crncyCdVO">
-    /* EhgtMapper.updateHqCdUseYn */
-     UPDATE TB_HQ_NMCODE
-        SET USE_YN = #{useYn},
-            MOD_DT = #{modDt},
-            MOD_ID = #{modId}
-      WHERE HQ_OFFICE_CD = #{orgnCd}
-        AND NMCODE_GRP_CD = #{nmcodeGrpCd}
-        AND NMCODE_CD = #{nmcodeCd}
+        /* EhgtMapper.updateHqCdUseYn */
+         UPDATE TB_HQ_NMCODE
+            SET USE_YN = #{useYn},
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+          WHERE HQ_OFFICE_CD = #{orgnCd}
+            AND NMCODE_GRP_CD = #{nmcodeGrpCd}
+            AND NMCODE_CD = #{nmcodeCd}
     </update>
 
     <update id="updateMsCdUseYn" parameterType="crncyCdVO">
-    /* EhgtMapper.updateMsCdUseYn */
-     UPDATE TB_MS_STORE_NMCODE
-        SET USE_YN = #{useYn},
-            MOD_DT = #{modDt},
-            MOD_ID = #{modId}
-      WHERE STORE_CD = #{orgnCd}
-        AND NMCODE_GRP_CD = #{nmcodeGrpCd}
-        AND NMCODE_CD = #{nmcodeCd}
+        /* EhgtMapper.updateMsCdUseYn */
+         UPDATE TB_MS_STORE_NMCODE
+            SET USE_YN = #{useYn},
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+          WHERE STORE_CD = #{orgnCd}
+            AND NMCODE_GRP_CD = #{nmcodeGrpCd}
+            AND NMCODE_CD = #{nmcodeCd}
     </update>
+
+    <!-- 매장환율 등록하는 프로시저 호출 -->
+    <!--
+        TABLE    : TB_HQ_CURRENCY, SP_MS_CURRENCY
+        PARAM    : ehgtVO
+        COMMENTS : 본사 환율 등록시 매장에도 등록하는 프로시저 호출
+    -->
+    <select id="insertHqEgtProc" statementType="CALLABLE"  parameterType="ehgtVO" resultType="DefaultMap">
+        /* EhgtMapper.insertHqEgtProc */
+        {
+            CALL PKG_HQ_CURRENCY.SP_HQ_CURRENCY_I
+            (
+                #{orgnCd},
+                #{saleDate},
+                #{crncyCd},
+                #{crncyAmt},
+                #{krwAmt},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
+
+    <!-- 매장환율 수정하는 프로시저 호출 -->
+    <!--
+        TABLE    : TB_HQ_CURRENCY, SP_MS_CURRENCY
+        PARAM    : funcStoreVO
+        COMMENTS : 본사 환율 수정시 매장에도 수정하는 프로시저 호출
+    -->
+    <select id="updateHqEgtProc" statementType="CALLABLE"  parameterType="ehgtVO" resultType="DefaultMap">
+        /* EhgtMapper.updateHqEgtProc */
+        {
+            CALL PKG_HQ_CURRENCY.SP_HQ_CURRENCY_U
+            (
+                #{orgnCd},
+                #{saleDate},
+                #{crncyCd},
+                #{crncyAmt},
+                #{krwAmt},
+                #{modDt},
+                #{modId},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
 
 </mapper>
 

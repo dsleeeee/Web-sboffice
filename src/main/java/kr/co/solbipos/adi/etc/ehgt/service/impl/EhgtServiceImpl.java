@@ -175,9 +175,15 @@ public class EhgtServiceImpl implements EhgtService {
 
                 if(chkList == null || chkList.size() < 1 ) {
                     procCnt += mapper.insertHqEhgt(ehgtVO);
+
+                    // 매장에도 등록하는 프로시저 호출
+                    String result = mapper.insertHqEgtProc(ehgtVO);
                 }
                 else {
                     procCnt += mapper.updateHqEhgt(ehgtVO);
+
+                    // 매장에도 수정하는 프로시저 호출
+                    String result = mapper.updateHqEgtProc(ehgtVO);
                 }
             }
             // 단독 가맹점일 경우 등록/수정
