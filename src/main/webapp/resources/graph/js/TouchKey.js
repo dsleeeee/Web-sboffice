@@ -113,7 +113,7 @@ Touchkey.prototype.destroy = function () {
  * DOM element 클릭 이벤트 추가
  */
 function addClickHandler(elt, funct) {
-  if (funct != null) {
+  if (funct) {
     mxEvent.addListener(elt, 'click', function (evt) {
       funct(evt);
       mxEvent.consume(evt);
@@ -161,7 +161,7 @@ Sidebar.prototype.initUsed = function (layer) {
   //상품코드로 wijmo 그리드에서 해당 인덱스 추출
   var getIdByProdCd = function (prodCd) {
     var id = -1;
-    for (g = 0; g < theGrid.rows.length; g++) {
+    for (var g = 0; g < theGrid.rows.length; g++) {
       if (theGrid.rows[g].dataItem.prodCd === prodCd) {
         id = theGrid.rows[g].index;
         break;
@@ -1359,8 +1359,6 @@ Format.prototype.setBtnStyle = function() {
   prodNavPrev.style.backgroundImage = "url('" + path + "/touchKey_prod_arrL_color" + styleCd + ext + "')";
   var prodNavNext = document.getElementById("prodNavNext");
   prodNavNext.style.backgroundImage = "url('" + path + "/touchKey_prod_arrR_color" + styleCd + ext + "')";
-
-
 };
 
 /**

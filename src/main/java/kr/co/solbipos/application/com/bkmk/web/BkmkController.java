@@ -1,18 +1,5 @@
 package kr.co.solbipos.application.com.bkmk.web;
 
-import static kr.co.common.utils.grid.ReturnUtil.returnJson;
-import static kr.co.common.utils.spring.StringUtil.convertToJson;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.cmm.CmmMenuService;
@@ -22,6 +9,21 @@ import kr.co.solbipos.application.com.bkmk.service.BkmkVO;
 import kr.co.solbipos.application.com.fixing.service.FixingService;
 import kr.co.solbipos.application.com.fixing.service.FixingVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
 * @Class Name : BizNoServiceImpl.java
@@ -43,19 +45,23 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 @RequestMapping(value = "/application/com")
 public class BkmkController {
 
+    private final BkmkService bkmkService;
+    private final FixingService fixingService;
+    private final SessionService sessionService;
+    private final CmmMenuService cmmMenuService;
+
+    /** Constructor Injection */
     @Autowired
-    BkmkService bkmkService;
-    @Autowired
-    FixingService fixingService;
-    @Autowired
-    SessionService sessionService;
-    @Autowired
-    CmmMenuService cmmMenuService;
+    public BkmkController(BkmkService bkmkService, FixingService fixingService, SessionService sessionService, CmmMenuService cmmMenuService) {
+        this.bkmkService = bkmkService;
+        this.fixingService = fixingService;
+        this.sessionService = sessionService;
+        this.cmmMenuService = cmmMenuService;
+    }
 
     /**
      * 즐겨찾기 관리 조회
      *
-     * @param menuType
      * @param request
      * @param response
      * @return
@@ -82,9 +88,9 @@ public class BkmkController {
      * @param response
      * @return
      */
-    @RequestMapping(value = "//bkmk/save.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/bkmk/save.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result bkmkSave(@RequestParam HashMap<String, Object> params, HttpServletRequest request,
+    public Result saveBkmk(@RequestParam HashMap<String, Object> params, HttpServletRequest request,
             HttpServletResponse response) {
         List<String> result = new ArrayList<String>();
 

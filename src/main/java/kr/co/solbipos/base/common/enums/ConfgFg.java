@@ -1,9 +1,9 @@
 package kr.co.solbipos.base.common.enums;
 
-import org.apache.ibatis.type.MappedTypes;
 import com.fasterxml.jackson.annotation.JsonValue;
 import kr.co.common.data.enums.CodeEnum;
 import kr.co.common.data.handler.CodeEnumTypeHandler;
+import org.apache.ibatis.type.MappedTypes;
 
 /**
  * 설정 구분 enum type<br>
@@ -15,11 +15,15 @@ import kr.co.common.data.handler.CodeEnumTypeHandler;
 public enum ConfgFg implements CodeEnum {
     
     /** 터치키 */
-    TOUCH_KEY("1"),
+    TOUCH_KEY("10"),
     /** 테이블 구성 */
-    TABLE_LAYOUT("2"),
+    TABLE_LAYOUT("20"),
     /** 테이블 속성 */
-    TABLE_ATTR("3");
+    TABLE_ATTR("30"),
+    /** 포스기능키 : 좌측 */
+    FUNC_KEY_LEFT("6020"),
+    /** 포스기능키 : 우측 */
+    FUNC_KEY_RIGHT("6021");
     
     private String code;
   

@@ -39,12 +39,12 @@
   </table>
 
   <%-- 조회 --%>
-  <div class="mt10 pdb20 oh bb">
+  <div class="mt10 oh">
     <button class="btn_blue fr" id="btnSearch"><s:message code="cmm.search" /></button>
   </div>
 
-  <div class="wj-TblWrap mt20">
-    <div class="w25 fl">
+  <div class="wj-TblWrap mt40">
+    <div class="w30 fl">
       <div class="wj-TblWrapBr mr10 pd20" style="height:700px;">
         <div class="sb-select dkbr mb10 oh">
           <%-- 페이지스케일 --%>
@@ -56,7 +56,7 @@
             <%--<button class="btn_skyblue" id="btnFold"><s:message code="cmm.all.fold" /></button>--%>
           </div>
         </div>
-        <div id="storeGrid" style="height:550px; width:280px;"></div>
+        <div id="storeGrid" style="height: 550px;"></div>
 
         <%-- 페이지리스트 --%>
         <div class="pageNum mt20">
@@ -68,25 +68,30 @@
       </div>
     </div>
 
-    <%-- 포스기능 사용관리--%>
-    <c:import url="/WEB-INF/view/base/store/posFunc/posFuncUseManage.jsp">
-      <c:param name="menuCd" value="${menuCd}"/>
-      <c:param name="menuNm" value="${menuNm}"/>
-      <c:param name="baseUrl" value="${baseUrl}"/>
-    </c:import>
+    <div class="w70 fr">
+      <div class="wj-TblWrapBr ml10 pd20" style="height:700px;">
+      <%-- 포스기능 사용관리--%>
+      <c:import url="/WEB-INF/view/base/store/posFunc/posFuncUseManage.jsp">
+        <c:param name="menuCd" value="${menuCd}"/>
+        <c:param name="menuNm" value="${menuNm}"/>
+        <c:param name="baseUrl" value="${baseUrl}"/>
+      </c:import>
 
-    <%-- 포스기능 사용관리--%>
-    <c:import url="/WEB-INF/view/base/store/posFunc/posFuncAuth.jsp">
-      <c:param name="menuCd" value="${menuCd}"/>
-      <c:param name="menuNm" value="${menuNm}"/>
-      <c:param name="baseUrl" value="${baseUrl}"/>
-    </c:import>
+      <%-- 포스기능 사용관리--%>
+      <c:import url="/WEB-INF/view/base/store/posFunc/posFuncAuth.jsp">
+        <c:param name="menuCd" value="${menuCd}"/>
+        <c:param name="menuNm" value="${menuNm}"/>
+        <c:param name="baseUrl" value="${baseUrl}"/>
+      </c:import>
 
+      </div>
+    </div>
 
   </div>
 </div>
 
 <script>
+
   var posList;
   var selectedStore;
 
@@ -105,9 +110,9 @@
           {binding:"hqOfficeCd", header:"<s:message code='posFunc.hqOfficeCd' />", visible:false},
           {binding:"hqOfficeNm", header:"<s:message code='posFunc.hqOfficeNm' />", visible:false},
           {binding:"storeCd", header:"<s:message code='posFunc.storeCd' />", width:80},
-          {binding:"storeNm", header:"<s:message code='posFunc.storeNm' />", width:80},
-          {binding:"clsFg", header:"<s:message code='posFunc.clsFg' />", dataMap:clsFgDataMap, width:"*"},
-          {binding:"sysStatFg", header:"<s:message code='posFunc.sysStatFg' />", dataMap:sysStatFgDataMap, width:"*"}
+          {binding:"storeNm", header:"<s:message code='posFunc.storeNm' />", width:"*"},
+          {binding:"clsFg", header:"<s:message code='posFunc.clsFg' />", dataMap:clsFgDataMap, width:60},
+          {binding:"sysStatFg", header:"<s:message code='posFunc.sysStatFg' />", dataMap:sysStatFgDataMap, width:60}
           //{binding:"sysOpenDate", header:"<s:message code='posFunc.sysOpenDate' />", width:"*"}
         ];
 
@@ -120,10 +125,10 @@
 
     <%-- 그리드 포맷 --%>
     storeGrid.formatItem.addHandler(function(s, e) {
-      if (e.panel == s.cells) {
+      if (e.panel === s.cells) {
         var col = s.columns[e.col];
         var item = s.rows[e.row].dataItem;
-        if( (col.binding == "storeCd" || col.binding == "storeNm" ) && item.storeCd != null) {
+        if( (col.binding === "storeCd" || col.binding === "storeNm" ) && item.storeCd != null) {
           wijmo.addClass(e.cell, 'wijLink');
         }
       }
@@ -175,7 +180,7 @@
 
             var list = result.data.list;
 
-            if(list.length === undefined || list.length == 0) {
+            if(list.length === undefined || list.length === 0) {
               s_alert.pop(result.message);
               storeGrid.itemsSource = new wijmo.collections.CollectionView([]);
               return;
@@ -206,11 +211,11 @@
             <%-- 그리드 선택 이벤트 --%>
             storeGrid.addEventListener(storeGrid.hostElement, 'mousedown', function(e) {
               var ht = storeGrid.hitTest(e);
-              if(ht.panel == storeGrid.cells) {
+              if(ht.panel === storeGrid.cells) {
                 if(!(storeGrid.rows[ht.row] instanceof wijmo.grid.GroupRow)) {
                   var col = ht.panel.columns[ht.col];
-                  if( col.binding == "storeCd" || col.binding == "storeNm") {
-                    if(storeGrid.rows[ht.row].dataItem.storeCd != "<s:message code='posFunc.no.regist.store'/>") {
+                  if( col.binding === "storeCd" || col.binding === "storeNm") {
+                    if(storeGrid.rows[ht.row].dataItem.storeCd !== "<s:message code='posFunc.no.regist.store'/>") {
                       selectedStore = storeGrid.rows[ht.row].dataItem;
                       showPosFuncList();
                     }
@@ -227,6 +232,7 @@
       );
     }
   });
+
 </script>
 
 <%-- 인증허용대상 설정 팝업 --%>
