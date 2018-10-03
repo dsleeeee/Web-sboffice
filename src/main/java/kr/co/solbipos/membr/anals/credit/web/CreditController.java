@@ -101,9 +101,6 @@ public class CreditController {
     public Result getDepositMemberList(CreditStoreVO creditStoreVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
-        LOGGER.info(">>>>> getMemberNo : " + creditStoreVO.getMemberNo());
-        LOGGER.info(">>>>> getMemberNm : " + creditStoreVO.getMemberNm());
-
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<Object>> result = service.getDepositMemberList(creditStoreVO, sessionInfoVO);

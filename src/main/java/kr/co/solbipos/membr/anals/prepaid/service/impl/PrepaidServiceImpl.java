@@ -2,14 +2,13 @@ package kr.co.solbipos.membr.anals.prepaid.service.impl;
 
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.utils.jsp.CmmEnvUtil;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.membr.anals.credit.service.CreditService;
-import kr.co.solbipos.membr.anals.credit.service.impl.CreditMapper;
 import kr.co.solbipos.membr.anals.prepaid.service.PrepaidService;
 import kr.co.solbipos.membr.anals.prepaid.service.PrepaidStoreVO;
-import kr.co.solbipos.membr.anals.credit.service.CreditStoreVO;
-import kr.co.solbipos.membr.info.regist.service.enums.CreditInFg;
-import kr.co.solbipos.membr.info.regist.service.enums.CreditPayFg;
+import kr.co.solbipos.membr.anals.prepaid.service.enums.PrepaidInFg;
+import kr.co.solbipos.membr.anals.prepaid.service.enums.PrepaidPayFg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +44,9 @@ public class PrepaidServiceImpl implements PrepaidService {
     @Autowired
     PrepaidMapper mapper;
 
+    @Autowired
+    CmmEnvUtil cmmEnvUtil;
+
     /** 선불 회원 충전, 사용 내역 */
     @Override
     public List<DefaultMap<Object>> getPrepaidMemberList(PrepaidStoreVO prepaidStoreVO,
@@ -57,37 +59,43 @@ public class PrepaidServiceImpl implements PrepaidService {
         return mapper.getPrepaidMemberList(prepaidStoreVO);
     }
 
-//    /** 후불 대상 회원 조회 */
-//    @Override
-//    public List<DefaultMap<Object>> getDepositMemberList(CreditStoreVO creditStoreVO,
-//        SessionInfoVO sessionInfoVO) {
-//
-//        creditStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-//
-//        return mapper.getDepositMemberList(creditStoreVO);
-//    }
-//
-//    /** 외상 입금 */
-//    @Override
-//    public int saveDeposit(CreditStoreVO creditStoreVO, SessionInfoVO sessionInfoVO) {
-//
-//        String dt = currentDateTimeString();
-//
-//
-//        creditStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-//        creditStoreVO.setSaleDate(currentDateString());
-//        creditStoreVO.setCreditDt(dt);
-//        creditStoreVO.setCreditInFg(CreditInFg.DEPOSIT); // 입금
-//        creditStoreVO.setCreditPayFg(CreditPayFg.CASH); // 현금
-//        creditStoreVO.setNonsaleBillNo("  ");// 비매출 영수증번호
-//        creditStoreVO.setSendYn(UseYn.Y);  // TODO 전송여부 YN갑 체크 필요
-//        creditStoreVO.setSendDt(dt);
-//
-//        creditStoreVO.setRegId(sessionInfoVO.getUserId());
-//        creditStoreVO.setRegDt(dt);
-//        creditStoreVO.setModId(sessionInfoVO.getUserId());
-//        creditStoreVO.setModDt(dt);
-//
-//        return mapper.saveDeposit(creditStoreVO);
-//    }
+    /** 선불금 등록 대상 회원 조회 */
+    @Override
+    public List<DefaultMap<Object>> getChargeMemberList(PrepaidStoreVO prepaidStoreVO,
+        SessionInfoVO sessionInfoVO) {
+
+        // 선불은 기본 자점 회원을 대상을 한다.
+        // 하지만, 본사가 보나비(아티제)의 경우에는 후불 결제를 위한 회원 구분을 위해
+        // 회원 테이블에 본사의 '기본매장'을 사용하고 있어서 그런 경우 REG_STORE_CD가 기본매장인 회원은 제외해야한다.
+        String defaultStoreCd = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0025"));
+
+        prepaidStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prepaidStoreVO.setDefaultStoreCd(defaultStoreCd);
+
+        return mapper.getChargeMemberList(prepaidStoreVO);
+    }
+
+    /** 선불충전 */
+    @Override
+    public int saveChargeAmt(PrepaidStoreVO prepaidStoreVO, SessionInfoVO sessionInfoVO) {
+
+        String dt = currentDateTimeString();
+
+        prepaidStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prepaidStoreVO.setSaleDate(currentDateString());
+        prepaidStoreVO.setPrepaidDt(dt);
+        prepaidStoreVO.setPrepaidInFg(PrepaidInFg.CHARGE); // 입금
+        prepaidStoreVO.setPrepaidPayFg(PrepaidPayFg.CASH); // 현금
+        prepaidStoreVO.setNonsaleBillNo(" ");// 비매출 영수증번호
+        prepaidStoreVO.setOrgPrepaidNo(" "); // 원거래 충전번호
+        prepaidStoreVO.setSendYn(UseYn.Y);  // TODO 전송여부 YN갑 체크 필요
+        prepaidStoreVO.setSendDt(dt);
+
+        prepaidStoreVO.setRegId(sessionInfoVO.getUserId());
+        prepaidStoreVO.setRegDt(dt);
+        prepaidStoreVO.setModId(sessionInfoVO.getUserId());
+        prepaidStoreVO.setModDt(dt);
+
+        return mapper.saveChargeAmt(prepaidStoreVO);
+    }
 }

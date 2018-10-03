@@ -30,10 +30,10 @@ public interface PrepaidMapper {
 
     /** 선불 회원 충전, 사용 내역 */
     List<DefaultMap<Object>> getPrepaidMemberList(PrepaidStoreVO prepaidStoreVO);
-//
-//    /** 후불 대상 회원 조회 */
-//    List<DefaultMap<Object>> getDepositMemberList(CreditStoreVO creditStoreVO);
-//
-//    /** 외상 입금 */
-//    int saveDeposit(CreditStoreVO creditStoreVO);
+
+    /** 후불 대상 회원 조회 */
+    List<DefaultMap<Object>> getChargeMemberList(PrepaidStoreVO prepaidStoreVO);
+
+    /** 선불충전 */
+    int saveChargeAmt(PrepaidStoreVO prepaidStoreVO);
 }

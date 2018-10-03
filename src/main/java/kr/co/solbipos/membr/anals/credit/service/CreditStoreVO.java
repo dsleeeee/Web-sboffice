@@ -2,8 +2,8 @@ package kr.co.solbipos.membr.anals.credit.service;
 
 import kr.co.common.data.enums.UseYn;
 import kr.co.solbipos.application.common.service.CmmVO;
-import kr.co.solbipos.membr.info.regist.service.enums.CreditInFg;
-import kr.co.solbipos.membr.info.regist.service.enums.CreditPayFg;
+import kr.co.solbipos.membr.anals.credit.service.enums.CreditInFg;
+import kr.co.solbipos.membr.anals.credit.service.enums.CreditPayFg;
 
 /**
  * @Class Name : CreditStoreVO.java

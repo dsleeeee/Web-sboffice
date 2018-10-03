@@ -44,9 +44,9 @@ app.controller('prepaidCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._inquiryMain(baseUrl + "prepaid/getPrepaidMemberList.sb", params, function() {}, false);
   };
 
-  // 외상입금 팝업
-  $scope.deposit = function(){
-    var popup = $scope.depositLayer;
+  // 선불금 충전 팝업
+  $scope.charge = function(){
+    var popup = $scope.chargeLayer;
     popup.show(true, function (s) {
     });
   };

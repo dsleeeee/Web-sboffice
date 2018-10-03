@@ -2,8 +2,8 @@ package kr.co.solbipos.membr.anals.prepaid.service;
 
 import kr.co.common.data.enums.UseYn;
 import kr.co.solbipos.application.common.service.CmmVO;
-import kr.co.solbipos.membr.info.regist.service.enums.CreditInFg;
-import kr.co.solbipos.membr.info.regist.service.enums.CreditPayFg;
+import kr.co.solbipos.membr.anals.prepaid.service.enums.PrepaidInFg;
+import kr.co.solbipos.membr.anals.prepaid.service.enums.PrepaidPayFg;
 
 /**
  * @Class Name : PrepaidStoreVO.java
@@ -37,9 +37,9 @@ public class PrepaidStoreVO extends CmmVO {
     /** 외상 입금 일시 */
     private String prepaidDt;
     /** 외상 입금 구분 */
-    private CreditInFg prepaidInFg;
+    private PrepaidInFg prepaidInFg;
     /** 외상 입금 구분 */
-    private CreditPayFg prepaidPayFg;
+    private PrepaidPayFg prepaidPayFg;
     /** 외상 입금 금액 */
     private String prepaidAmt;
     /** 비매출 영수증번호 */
@@ -56,7 +56,8 @@ public class PrepaidStoreVO extends CmmVO {
     private String storeCds;
     /** 조회매장 */
     private String[] storeCdList;
-
+    /** 기본매장  */
+    private String defaultStoreCd;
 
     /**
      * @return the hqOfficeCd
@@ -167,14 +168,14 @@ public class PrepaidStoreVO extends CmmVO {
      * @return the prepaidInFg
      */
 
-    public CreditInFg getPrepaidInFg() {
+    public PrepaidInFg getPrepaidInFg() {
         return prepaidInFg;
     }
 
     /**
      * @param prepaidInFg the prepaidInFg to set
      */
-    public void setPrepaidInFg(CreditInFg prepaidInFg) {
+    public void setPrepaidInFg(PrepaidInFg prepaidInFg) {
         this.prepaidInFg = prepaidInFg;
     }
 
@@ -182,14 +183,14 @@ public class PrepaidStoreVO extends CmmVO {
      * @return the prepaidPayFg
      */
 
-    public CreditPayFg getPrepaidPayFg() {
+    public PrepaidPayFg getPrepaidPayFg() {
         return prepaidPayFg;
     }
 
     /**
      * @param prepaidPayFg the prepaidPayFg to set
      */
-    public void setPrepaidPayFg(CreditPayFg prepaidPayFg) {
+    public void setPrepaidPayFg(PrepaidPayFg prepaidPayFg) {
         this.prepaidPayFg = prepaidPayFg;
     }
 
@@ -311,5 +312,20 @@ public class PrepaidStoreVO extends CmmVO {
      */
     public void setStoreCdList(String[] storeCdList) {
         this.storeCdList = storeCdList;
+    }
+
+    /**
+     * @return the defaultStoreCd
+     */
+
+    public String getDefaultStoreCd() {
+        return defaultStoreCd;
+    }
+
+    /**
+     * @param defaultStoreCd the defaultStoreCd to set
+     */
+    public void setDefaultStoreCd(String defaultStoreCd) {
+        this.defaultStoreCd = defaultStoreCd;
     }
 }

@@ -26,12 +26,12 @@ public interface PrepaidService {
     /** 선불 회원 입금, 사용 내역 */
     List<DefaultMap<Object>> getPrepaidMemberList(PrepaidStoreVO creditStoreVO,
         SessionInfoVO sessionInfoVO);
-//
-//    /** 후불 대상 회원 조회 */
-//    List<DefaultMap<Object>> getDepositMemberList(CreditStoreVO creditStoreVO,
-//        SessionInfoVO sessionInfoVO);
-//
-//    /** 외상 입금 */
-//    int saveDeposit(CreditStoreVO creditStoreVO, SessionInfoVO sessionInfoVO);
+
+    /** 후불 대상 회원 조회 */
+    List<DefaultMap<Object>> getChargeMemberList(PrepaidStoreVO prepaidStoreVO,
+        SessionInfoVO sessionInfoVO);
+
+    /** 선불충전 */
+    int saveChargeAmt(PrepaidStoreVO prepaidStoreVO, SessionInfoVO sessionInfoVO);
 
 }

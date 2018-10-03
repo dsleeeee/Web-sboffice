@@ -67,15 +67,8 @@
   <%--위즈모 테이블--%>
   <div class="wj-TblWrapBr mr10 pd20" style="height: 400px;">
     <div class="updownSet oh mb10">
-
-      <button class="btn_skyblue" id="btnDeposit" style=";" ng-click="deposit()">
-        <s:message code="prepaid.deposit" />
-      </button>
-      <button class="btn_skyblue" id="btnDelRepresent" style="display: none;" ng-click="del()">
-        <s:message code="cmm.delete" />
-      </button>
-      <button class="btn_skyblue" id="btnSaveRepresent" style="display: none;" ng-click="save()">
-        <s:message code="cmm.save" />
+      <button class="btn_skyblue" id="btnDeposit" style=";" ng-click="charge()">
+        <s:message code="prepaid.charge" />
       </button>
     </div>
     <%-- 개발시 높이 조절해서 사용--%>
@@ -101,20 +94,14 @@
           <wj-flex-grid-column header="<s:message code="prepaid.prepaidNo"/>" binding="prepaidNo" width="70"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prepaid.prepaidDt"/>" binding="prepaidDt"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prepaid.prepaidInFg"/>" binding="prepaidInFg" width="*" data-map="prepaidInFgDataMap"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prepaid.saleAmt"/>" binding="saleAmt" width="*"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prepaid.prepaidAmt"/>" binding="prepaidAmt" width="*"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prepaid.prepaidPayFg"/>" binding="prepaidPayFg" width="*" data-map="prepaidPayFgDataMap"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prepaid.saleAmt"/>" binding="saleAmt" width="*"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prepaid.nonsaleBillNo"/>" binding="nonsaleBillNo" width="*" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prepaid.orgPrepaidNo"/>" binding="orgPrepaidNo" width="*" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prepaid.sendYn"/>" binding="sendYn" width="*" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prepaid.sendDt"/>" binding="sendDt" width="*" visible="false"></wj-flex-grid-column>
-
         </wj-flex-grid>
-        <%-- ColumnPicker 사용시 include --%>
-        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-          <jsp:param name="pickerTarget" value="representCtrl"/>
-        </jsp:include>
-        <%--// ColumnPicker 사용시 include --%>
       </div>
     </div>
 
@@ -129,3 +116,11 @@
   var baseUrl = "${baseUrl}";
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/membr/anals/prepaid/prepaid.js?ver=2018090301" charset="utf-8"></script>
+
+<%-- 선불금충전 팝업 --%>
+<c:import url="/WEB-INF/view/membr/anals/prepaid/charge.jsp">
+</c:import>
+
+<%-- 매장 선택 --%>
+<c:import url="/WEB-INF/view/application/layer/store.jsp">
+</c:import>

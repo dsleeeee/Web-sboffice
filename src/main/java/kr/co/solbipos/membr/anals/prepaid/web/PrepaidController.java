@@ -61,15 +61,13 @@ public class PrepaidController {
     @RequestMapping(value = "prepaid/prepaidView.sb", method = RequestMethod.GET)
     public String registList(HttpServletRequest request, HttpServletResponse response, Model model) {
 
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
         return "membr/anals/prepaid/prepaidView";
     }
 
     /**
      * 선불 회원 충전, 사용 내역
      *
-     * @param creditStoreVO
+     * @param prepaidStoreVO
      * @param request
      * @param response
      * @param model
@@ -77,64 +75,61 @@ public class PrepaidController {
      */
     @RequestMapping(value = "prepaid/getPrepaidMemberList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getPrepaidMemberList( PrepaidStoreVO creditStoreVO, HttpServletRequest request,
+    public Result getPrepaidMemberList( PrepaidStoreVO prepaidStoreVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<Object>> result = service.getPrepaidMemberList(creditStoreVO, sessionInfoVO);
+        List<DefaultMap<Object>> result = service.getPrepaidMemberList(prepaidStoreVO, sessionInfoVO);
 
-        return ReturnUtil.returnListJson(Status.OK, result, creditStoreVO);
+        return ReturnUtil.returnListJson(Status.OK, result, prepaidStoreVO);
     }
 
-//    /**
-//     * 후불 대상 회원 조회
-//     *
-//     * @param creditStoreVO
-//     * @param request
-//     * @param response
-//     * @param model
-//     * @return
-//     */
-//    @RequestMapping(value = "deposit/getDepositMemberList.sb", method = RequestMethod.POST)
-//    @ResponseBody
-//    public Result getDepositMemberList(CreditStoreVO creditStoreVO, HttpServletRequest request,
-//        HttpServletResponse response, Model model) {
-//
-//        LOGGER.info(">>>>> getMemberNo : " + creditStoreVO.getMemberNo());
-//        LOGGER.info(">>>>> getMemberNm : " + creditStoreVO.getMemberNm());
-//
-//        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-//
-//        List<DefaultMap<Object>> result = service.getDepositMemberList(creditStoreVO, sessionInfoVO);
-//
-//        return ReturnUtil.returnListJson(Status.OK, result, creditStoreVO);
-//    }
-//
-//    /**
-//     * 외상입금
-//     * @param creditStoreVO
-//     * @param request
-//     * @param response
-//     * @param model
-//     * @return
-//     */
-//    @RequestMapping(value = "deposit/saveDeposit.sb", method = RequestMethod.POST)
-//    @ResponseBody
-//    public Result saveDeposit(@RequestBody CreditStoreVO creditStoreVO, HttpServletRequest request,
-//        HttpServletResponse response, Model model) {
-//
-//        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-//
-//        int result = 0;
-//
-//        try{
-//            result = service.saveDeposit(creditStoreVO, sessionInfoVO);
-//        }catch (Exception ex){
-//            ex.printStackTrace();
-//        }
-//
-//        return returnJson(Status.OK, result);
-//    }
+    /**
+     * 후불 대상 회원 조회
+     *
+     * @param prepaidStoreVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "charge/getChargeMemberList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getChargeMemberList(PrepaidStoreVO prepaidStoreVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = service.getChargeMemberList(prepaidStoreVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, prepaidStoreVO);
+    }
+
+    /**
+     * 선불충전
+     * @param prepaidStoreVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "charge/saveChargeAmt.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveChargeAmt(@RequestBody PrepaidStoreVO prepaidStoreVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = 0;
+
+        try{
+            result = service.saveChargeAmt(prepaidStoreVO, sessionInfoVO);
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+
+        return returnJson(Status.OK, result);
+    }
 
 }
