@@ -1641,6 +1641,10 @@ Format.prototype.open = function (isLoad) {
             group.selectCellForEvent(firstCell);
             var layer = prod.model.getCell(firstCell.getId());
             prod.switchLayer(layer);
+          } else {
+            // xml이 없는경우 초기화
+            this.setGraphXml(group, null);
+            this.setGraphXml(prod, null);
           }
         }
         catch (e) {

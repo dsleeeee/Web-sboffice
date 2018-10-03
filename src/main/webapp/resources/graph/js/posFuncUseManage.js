@@ -979,17 +979,11 @@ Format.prototype.open = function (isLoad) {
           var jsonStr = JSON.parse(req.getText());
           var xmlStr = jsonStr.data;
           if (xmlStr != null) {
-
             var funcKeyXml = mxUtils.parseXml(xmlStr);
             this.setGraphXml(funcKey, funcKeyXml.documentElement);
-
-            var model = funcKey.getModel();
-            var parent = funcKey.getDefaultParent();
-
-            //분류 영역에서 첫번째(무엇이될지는모름) 셀을 선택하고 상품영역에서도 해당 레이어 활성화
-            var firstCell = model.getChildAt(parent, 0);
-            funcKey.selectCellForEvent(firstCell);
-
+          } else {
+            // xml이 없는경우 초기화
+            this.setGraphXml(funcKey, null);
           }
         }
         catch (e) {

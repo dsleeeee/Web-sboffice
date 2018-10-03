@@ -31,37 +31,14 @@
     -->
     <select id="getPosList" parameterType="posFuncVO" resultType="DefaultMap">
         /* USE : PosFuncMapper.getPosList */
-        SELECT tmp.POS_NO value ,
-        '['|| tmp.POS_NO || '] ' || tmp.POS_NM AS name
-        FROM TB_MS_POS tmp
-        WHERE tmp.STORE_CD = #{storeCd}
-        AND tmp.USE_YN = 'Y'
-        <!--
-        SELECT tmp.POS_NO,
-               '['|| tmp.POS_NO || '] ' || tmp.POS_NM AS POS_NM,
-               tme1.ENVST_VAL,
-               tme2.ENVST_VAL,
-               tcd1.ENVST_VAL_NM AS POS_USAGE,
-               tcd2.ENVST_VAL_NM AS POS_TYPE,
-               'POS'|| tmp.POS_NO || ' : ' || tcd1.ENVST_VAL_NM || '/' || tcd2.ENVST_VAL_NM AS POS_TOT_NM
-          FROM TB_MS_POS tmp,
-               TB_MS_POS_ENVST tme1,
-               TB_MS_POS_ENVST tme2,
-               TB_CM_ENVST_DTL tcd1,
-               TB_CM_ENVST_DTL tcd2
-         WHERE tmp.STORE_CD = #{storeCd}
-           AND tmp.USE_YN = 'Y'
-           AND tme1.ENVST_CD = '4019'
-           AND tme1.STORE_CD = tmp.STORE_CD
-           AND tme1.POS_NO = tmp.POS_NO
-           AND tme2.ENVST_CD = '4020'
-           AND tme2.STORE_CD = tmp.STORE_CD
-           AND tme2.POS_NO = tmp.POS_NO
-           AND tcd1.ENVST_CD = '4019'
-           AND tcd1.ENVST_VAL_CD = tme1.ENVST_VAL
-           AND tcd2.ENVST_CD = '4020'
-           AND tcd2.ENVST_VAL_CD = tme2.ENVST_VAL
-        -->
+        SELECT
+            tmp.POS_NO AS value,
+            '['|| tmp.POS_NO || '] ' || tmp.POS_NM AS name
+        FROM
+            TB_MS_POS tmp
+        WHERE
+            tmp.STORE_CD = #{storeCd}
+            AND tmp.USE_YN = 'Y'
     </select>
 
     <!-- 포스기능목록 조회 -->
@@ -72,41 +49,63 @@
     -->
     <select id="getPosFuncList" parameterType="posFuncVO" resultType="DefaultMap">
         /* USE : PosFuncMapper.getPosFuncList */
-        SELECT tmp.STORE_CD,
-               tmpe1.POS_NO,
-               tmpe1.ENVST_VAL AS ENV202,
-               tmpe2.ENVST_VAL AS ENV204,
-               tmp.FNKEY_FG,
-               tcn.NMCODE_NM AS FNKEY_NM,
-               COUNT(*) TOT_CNT,
-               SUM(DECODE(tmpf.USE_YN, 'N', 0, 1)) REG_CNT
-          FROM (
-          SELECT tmp.STORE_CD, tmp.POS_NO, tmsf.POS_FG, tmsf.FNKEY_FG, tmsf.FNKEY_NO
-            FROM TB_MS_POS tmp,
-                 TB_MS_STORE_FNKEY tmsf
-           WHERE tmsf.STORE_CD = tmp.STORE_CD
-           GROUP
-              BY tmp.STORE_CD, tmp.POS_NO, tmsf.POS_FG, tmsf.FNKEY_FG, tmsf.FNKEY_NO
-            ) tmp,
-            TB_MS_POS_ENVST tmpe1,
-            TB_MS_POS_ENVST tmpe2,
-            TB_MS_POS_FNKEY tmpf,
-            TB_CM_NMCODE tcn
-         WHERE tmp.STORE_CD = #{storeCd}
-           AND tmp.POS_NO = #{posNo}
-           AND tmpe1.STORE_CD = tmp.STORE_CD
-           AND tmpe1.POS_NO = tmp.POS_NO
-           AND tmpe1.ENVST_CD = '4019'
-           AND tmpe2.STORE_CD = tmp.STORE_CD
-           AND tmpe2.POS_NO = tmp.POS_NO
-           AND tmpe2.ENVST_CD = '4020'
-           AND tmpf.STORE_CD (+)= tmp.STORE_CD
-           AND tmpf.POS_NO (+)= tmp.POS_NO
-           AND tmpf.FNKEY_NO (+)= tmp.FNKEY_NO
-           AND tcn.NMCODE_GRP_CD = '026'
-           AND tcn.NMCODE_CD = tmp.FNKEY_FG
-         GROUP BY tmp.STORE_CD, tmpe1.POS_NO, tmpe1.ENVST_VAL, tmpe2.ENVST_VAL, tmp.FNKEY_FG, tcn.NMCODE_NM
-         ORDER BY tmp.STORE_CD, tmpe1.POS_NO, tmp.FNKEY_FG
+        SELECT
+            tmp.STORE_CD,
+            tmpe1.POS_NO,
+            tmpe1.ENVST_VAL AS ENV202,
+            tmpe2.ENVST_VAL AS ENV204,
+            tmp.FNKEY_FG,
+            tcn.NMCODE_NM AS FNKEY_NM,
+            COUNT(*) AS TOT_CNT,
+            SUM(DECODE(tmpf.USE_YN, 'N', 0, 1)) AS REG_CNT
+        FROM
+            (
+            SELECT
+                tmp.STORE_CD,
+                tmp.POS_NO,
+                tmsf.POS_FG,
+                tmsf.FNKEY_FG,
+                tmsf.FNKEY_NO
+            FROM
+                TB_MS_POS tmp,
+                TB_MS_STORE_FNKEY tmsf
+            WHERE
+                tmsf.STORE_CD = tmp.STORE_CD
+            GROUP BY
+                tmp.STORE_CD,
+                tmp.POS_NO,
+                tmsf.POS_FG,
+                tmsf.FNKEY_FG,
+                tmsf.FNKEY_NO ) tmp
+        INNER JOIN TB_MS_POS_ENVST tmpe1 ON
+            tmp.STORE_CD = tmpe1.STORE_CD
+            AND tmp.POS_NO = tmpe1.POS_NO
+            AND tmpe1.ENVST_CD = '4019'
+        INNER JOIN TB_MS_POS_ENVST tmpe2 ON
+            tmp.STORE_CD = tmpe2.STORE_CD
+            AND tmp.POS_NO = tmpe2.POS_NO
+            AND tmpe2.ENVST_CD = '4020'
+        LEFT OUTER JOIN TB_MS_POS_FNKEY tmpf ON
+            tmp.STORE_CD = tmpf.STORE_CD
+            AND tmp.POS_NO = tmpf.POS_NO
+            AND tmp.FNKEY_NO = tmpf.FNKEY_NO
+        INNER JOIN TB_CM_NMCODE tcn ON
+            tmp.FNKEY_FG = tcn.NMCODE_CD
+            AND tcn.NMCODE_GRP_CD = '026'
+        WHERE
+            tmp.STORE_CD = #{storeCd}
+            AND tmp.POS_NO = #{posNo}
+        GROUP BY
+            tmp.STORE_CD,
+            tmpe1.POS_NO,
+            tmpe1.ENVST_VAL,
+            tmpe2.ENVST_VAL,
+            tmp.FNKEY_FG,
+            tcn.NMCODE_NM
+        ORDER BY
+            tmp.STORE_CD,
+            tmpe1.POS_NO,
+            tmp.FNKEY_FG
 
     </select>
 
@@ -119,34 +118,48 @@
     -->
     <select id="getPosConfDetail" parameterType="posFuncVO" resultMap="posFuncMap">
         /* USE : PosFuncMapper.getPosConfDetail */
-        SELECT tms.FNKEY_FG,
-               tms.FNKEY_NO,
-               tms.FNKEY_NM,
-               DECODE(tmp.DISP_SEQ, NULL, '0', '1') AS EXIST_FG_BEFORE,
-               DECODE(tmp.DISP_SEQ, NULL, '0', '1') AS EXIST_FG,
-               tms.POSI_ADJ_YN,
-               tmp.DISP_SEQ,
-               tmp.X,
-               tmp.Y,
-               tmp.WIDTH,
-               tmp.HEIGHT,
-               tmp.USE_YN
-          FROM (
-          SELECT tms.STORE_CD, tmp.POS_NO,
-                 tms.DISP_SEQ, tms.POSI_ADJ_YN, tms.FNKEY_FG, tms.FNKEY_NO, tms.FNKEY_NM, tms.USE_YN
-            FROM TB_MS_STORE_FNKEY tms,
-                 TB_MS_POS_ENVST tmp
-           WHERE tmp.STORE_CD = tms.STORE_CD
-             AND tmp.ENVST_CD = '4019'
-               ) tms,
-               TB_MS_POS_FNKEY tmp
-         WHERE tms.STORE_CD = #{storeCd}
-           AND tms.POS_NO = #{posNo}
-           AND tms.FNKEY_FG = #{fnkeyFg}
-           AND tmp.STORE_CD = tms.STORE_CD
-           AND tmp.POS_NO = tms.POS_NO
-           AND tmp.FNKEY_NO = tms.FNKEY_NO
-         ORDER BY tms.USE_YN DESC,tms.FNKEY_NO, tms.DISP_SEQ, tmp.DISP_SEQ
+        SELECT
+            tms.FNKEY_FG,
+            tms.FNKEY_NO,
+            tms.FNKEY_NM,
+            DECODE(tmp.DISP_SEQ, NULL, '0', '1') AS EXIST_FG_BEFORE,
+            DECODE(tmp.DISP_SEQ, NULL, '0', '1') AS EXIST_FG,
+            tms.POSI_ADJ_YN,
+            tmp.DISP_SEQ,
+            tmp.X,
+            tmp.Y,
+            tmp.WIDTH,
+            tmp.HEIGHT,
+            tmp.USE_YN
+        FROM
+            (
+            SELECT
+                tms.STORE_CD,
+                tmp.POS_NO,
+                tms.DISP_SEQ,
+                tms.POSI_ADJ_YN,
+                tms.FNKEY_FG,
+                tms.FNKEY_NO,
+                tms.FNKEY_NM,
+                tms.USE_YN
+            FROM
+                TB_MS_POS_ENVST tmp
+            LEFT OUTER JOIN TB_MS_STORE_FNKEY tms ON
+                tmp.STORE_CD = tms.STORE_CD
+            WHERE
+                tmp.ENVST_CD = '4019' ) tms
+        LEFT OUTER JOIN TB_MS_POS_FNKEY tmp ON
+            tms.STORE_CD = tmp.STORE_CD
+            AND tms.POS_NO = tmp.POS_NO
+            AND tms.FNKEY_NO = tmp.FNKEY_NO
+            AND tms.FNKEY_FG = tmp.FNKEY_FG
+        WHERE
+            tms.STORE_CD = #{storeCd}
+            AND tms.POS_NO = #{posNo}
+            AND tms.FNKEY_FG = #{fnkeyFg}
+        ORDER BY
+            tmp.DISP_SEQ,
+            tms.USE_YN DESC
     </select>
 
     <!-- 포스기능상세 저장 -->
@@ -381,17 +394,17 @@
         COMMENTS : 포스기능 인증목록을 조회한다.
     -->
     <select id="getPosConfAuthDetail" parameterType="posFuncVO" resultMap="posFuncMap">
-    /* USE : PosFuncMapper.getPosConfAuthDetail */
-    SELECT STORE_CD,
-           FNKEY_FG,
-           FNKEY_NO,
-           FNKEY_NM,
-           AUTH_YN,
-           USE_YN
-      FROM TB_MS_STORE_FNKEY
-     WHERE STORE_CD = #{storeCd}
-       AND FNKEY_FG = #{fnkeyFg}
-  </select>
+        /* USE : PosFuncMapper.getPosConfAuthDetail */
+        SELECT STORE_CD,
+               FNKEY_FG,
+               FNKEY_NO,
+               FNKEY_NM,
+               AUTH_YN,
+               USE_YN
+          FROM TB_MS_STORE_FNKEY
+         WHERE STORE_CD = #{storeCd}
+           AND FNKEY_FG = #{fnkeyFg}
+    </select>
 
     <!-- 포스기능 인증허용대상 조회 -->
     <!--
@@ -400,17 +413,20 @@
         COMMENTS : 포스기능 인증허용대상을 조회한다.
     -->
     <select id="getAuthEmpList" parameterType="posFuncVO" resultType="DefaultMap">
-    /* USE : PosFuncMapper.getAuthEmpList */
-    SELECT tme.STORE_CD, tme.EMP_NO, tme.EMP_NM,
-           tmf.EMP_NO,
-           DECODE(tmf.EMP_NO, NULL, 0, 1) AS USE_YN
-      FROM TB_MS_EMPLOYEE tme,
-           TB_MS_EMPLOYEE_FNKEY tmf
-     WHERE tme.STORE_CD = #{storeCd}
-       AND tmf.STORE_CD (+)= tme.STORE_CD
-       AND tmf.EMP_NO (+)= tme.EMP_NO
-       AND tmf.FNKEY_NO (+)= #{fnkeyNo}
-  </select>
+        /* USE : PosFuncMapper.getAuthEmpList */
+        SELECT
+            tme.STORE_CD, tme.EMP_NO, tme.EMP_NM,
+            tmf.EMP_NO,
+            DECODE(tmf.EMP_NO, NULL, 0, 1) AS USE_YN
+        FROM
+            TB_MS_EMPLOYEE tme
+        LEFT OUTER JOIN TB_MS_EMPLOYEE_FNKEY tmf ON
+            AND tme.STORE_CD = tmf.STORE_CD
+            AND tme.EMP_NO = tmf.EMP_NO
+            AND tmf.FNKEY_NO = #{fnkeyNo}
+        WHERE
+            tme.STORE_CD = #{storeCd}
+    </select>
 
     <!-- 포스기능 인증허용대상 저장 -->
     <!--
@@ -419,40 +435,40 @@
       COMMENTS : 포스기능 상세 목록을 저장한다.
     -->
     <update id="saveAuthEmp" parameterType="posFuncVO">
-    /* USE : PosFuncMapper.saveAuthEmp */
-    MERGE INTO TB_MS_EMPLOYEE_FNKEY tmf
-    USING (SELECT #{storeCd} AS STORE_CD,
-                  #{empNo} AS EMP_NO,
-                  #{fnkeyNo} AS FNKEY_NO
-             FROM DUAL
-          ) tmp
-       ON (tmf.STORE_CD = tmp.STORE_CD AND tmf.EMP_NO = tmp.EMP_NO AND tmf.FNKEY_NO = tmp.FNKEY_NO)
-     WHEN MATCHED THEN
-     UPDATE
-        SET tmf.USE_YN = #{useYn},
-            tmf.MOD_DT = #{modDt},
-            tmf.MOD_ID = #{modId}
-     WHEN NOT MATCHED THEN
-     INSERT (
-            tmf.STORE_CD,
-            tmf.EMP_NO,
-            tmf.FNKEY_NO,
-            tmf.USE_YN,
-            tmf.REG_DT,
-            tmf.REG_ID,
-            tmf.MOD_DT,
-            tmf.MOD_ID
-     )
-     VALUES(
-            #{storeCd},
-            #{empNo},
-            #{fnkeyNo},
-            #{useYn},
-            #{regDt},
-            #{regId},
-            #{modDt},
-            #{modId}
-     )
-  </update>
+        /* USE : PosFuncMapper.saveAuthEmp */
+        MERGE INTO TB_MS_EMPLOYEE_FNKEY tmf
+        USING (SELECT #{storeCd} AS STORE_CD,
+                      #{empNo} AS EMP_NO,
+                      #{fnkeyNo} AS FNKEY_NO
+                 FROM DUAL
+              ) tmp
+           ON (tmf.STORE_CD = tmp.STORE_CD AND tmf.EMP_NO = tmp.EMP_NO AND tmf.FNKEY_NO = tmp.FNKEY_NO)
+         WHEN MATCHED THEN
+         UPDATE
+            SET tmf.USE_YN = #{useYn},
+                tmf.MOD_DT = #{modDt},
+                tmf.MOD_ID = #{modId}
+         WHEN NOT MATCHED THEN
+         INSERT (
+                tmf.STORE_CD,
+                tmf.EMP_NO,
+                tmf.FNKEY_NO,
+                tmf.USE_YN,
+                tmf.REG_DT,
+                tmf.REG_ID,
+                tmf.MOD_DT,
+                tmf.MOD_ID
+         )
+         VALUES(
+                #{storeCd},
+                #{empNo},
+                #{fnkeyNo},
+                #{useYn},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+         )
+    </update>
 
 </mapper>
