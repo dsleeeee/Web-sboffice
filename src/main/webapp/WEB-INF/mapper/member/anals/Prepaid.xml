@@ -18,6 +18,7 @@
   -->
   <select id="getPrepaidMemberList"  parameterType="prepaidStoreVO" resultType="DefaultMap">
       /* PrepaidMapper.getPrepaidMemberList */
+
       SELECT *
         FROM (
          SELECT tsspp.STORE_CD,
