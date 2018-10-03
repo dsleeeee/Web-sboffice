@@ -140,7 +140,10 @@ app.controller('printCodeCtrl', ['$scope', '$http', function ($scope, $http) {
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save("/sys/bill/item/item/save.sb", params);
+    $scope._save("/sys/bill/item/item/save.sb", params, function() {
+      // 저장기능 수행 후 재조회
+      $scope._broadcast("printCodeCtrl");
+    });
   }
 }]);
 

@@ -68,11 +68,11 @@ app.controller('printCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#btnDelPrint").show();
       $("#btnSavePrint").show();
 
-      var selectedRow = $scope.flex.selectedRows[0]._data;
-      params.prtClassCd = selectedRow.prtClassCd;
-      $("#prtClassCd").val(selectedRow.prtClassCd);
+      // var selectedRow = $scope.flex.selectedRows[0]._data;
+      // params.prtClassCd = selectedRow.prtClassCd;
+      // $("#prtClassCd").val(selectedRow.prtClassCd);
       // 출력물매핑 그리드 조회
-      $scope._broadcast('mapngCtrl', selectedRow.prtClassCd);
+      // $scope._broadcast('mapngCtrl', selectedRow.prtClassCd);
     });
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
@@ -108,7 +108,7 @@ app.controller('printCtrl', ['$scope', '$http', function ($scope, $http) {
 /**
  * 출력물매핑 그리드 생성
  */
-app.controller('mapngCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('mapngCtrl', ['$scope', '$http', 'prtClassCd', function ($scope, $http, prtClassCd) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('mapngCtrl', $scope, $http, false));
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -151,17 +151,17 @@ app.controller('mapngCtrl', ['$scope', '$http', function ($scope, $http) {
     });
   };
   // prtClassCd Data Setter
-  $scope.setPrtClassCd = function (data) {
+  $scope.setKindPrtClassCd = function (data) {
     prtClassCd.set(data);
   };
   // prtClassCd Data Getter
-  $scope.getPrtClassCd = function () {
+  $scope.getKindPrtClassCd = function () {
     return prtClassCd.get();
   };
   // 출력물매핑 그리드 조회
   $scope.$on("mapngCtrl", function(event, data) {
     // scope 영역에 변수 Set
-    $scope.setPrtClassCd(data);
+    $scope.setKindPrtClassCd(data);
     // 파라미터
     var params = {};
     params.prtClassCd = data;
@@ -213,7 +213,7 @@ app.controller('mapngCtrl', ['$scope', '$http', function ($scope, $http) {
               $scope.flex.collectionView.trackChanges = true;
               var newRow = $scope.flex.collectionView.addNew();
               newRow.status = "I";
-              newRow.prtClassCd = $scope.getPrtClassCd();
+              newRow.prtClassCd = $scope.getKindPrtClassCd();
               newRow.prtCd = item.prtCd;
               newRow.gChk = false;
 
@@ -231,7 +231,7 @@ app.controller('mapngCtrl', ['$scope', '$http', function ($scope, $http) {
     // dispSeq 재설정
     for (var i = 0; i < $scope.flex.collectionView.itemCount; i++) {
       $scope.flex.collectionView.editItem($scope.flex.collectionView.items[i]);
-      $scope.flex.collectionView.items[i].prtClassCd = $scope.getPrtClassCd();
+      $scope.flex.collectionView.items[i].prtClassCd = $scope.getKindPrtClassCd();
       $scope.flex.collectionView.items[i].dispSeq = (i + 1);
       $scope.flex.collectionView.commitEdit();
     }
@@ -287,7 +287,7 @@ app.controller('mapngCtrl', ['$scope', '$http', function ($scope, $http) {
   };
 }]);
 /** 출력물매핑 그리드 의 변수 값 영역 */
-app.factory('kindPrtClassCd', function () {
+app.factory('prtClassCd', function () {
   var prtClassCd = {};
   prtClassCd.set = function (data) {
     prtClassCd.value = data;

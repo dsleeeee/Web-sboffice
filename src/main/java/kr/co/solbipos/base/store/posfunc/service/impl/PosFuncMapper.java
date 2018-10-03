@@ -1,10 +1,11 @@
 package kr.co.solbipos.base.store.posfunc.service.impl;
 
-import java.util.List;
-import org.apache.ibatis.annotations.Mapper;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.base.store.posfunc.service.PosFuncVO;
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @Class Name : PosFuncMapper.java
@@ -42,6 +43,24 @@ public interface PosFuncMapper {
 
     /** 포스기능 복사 */
     int copyPosFunc(PosFuncVO posFuncVO);
+
+    /** 포스기능키 목록 조회 */
+    List<DefaultMap<String>> getPosFuncKeyList(PosFuncVO posFuncVO);
+
+    /** 포스기능키 기존설정 조회 */
+    String getFuncKeyXml(DefaultMap<String> param);
+
+    /** 포스기능키 XML 정보 생성 */
+    int insertFuncKeyConfgXml(DefaultMap<String> param);
+
+    /** 포스기능키 XML 정보 수정 */
+    int updateFuncKeyConfgXml(DefaultMap<String> param);
+
+    /** 포스기능키 생성 */
+    int insertPosFuncKey(PosFuncVO posFuncVO);
+
+    /** 포스기능키 삭제 */
+    int deletePosFuncKey(PosFuncVO posFuncVO);
 
     /** 포스기능 인증목록 조회 */
     List<DefaultMap<String>> getPosConfAuthDetail(PosFuncVO posFuncVO);
