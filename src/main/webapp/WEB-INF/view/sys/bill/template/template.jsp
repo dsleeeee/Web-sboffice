@@ -23,7 +23,7 @@
       <tr>
         <th><s:message code="template.srchNm" /></th>
         <td colspan="2" class="oh">
-          <div class="sb-select fl w200 mr10">
+          <div class="sb-select fl w200">
             <wj-combo-box
                     id="srchPrtClassCdCombo"
                     ng-model="prtClassCd"
@@ -35,12 +35,6 @@
             </wj-combo-box>
             <input type="hidden" id="srchPrtClassCdVal" value={{prtClassCd}} />
           </div>
-          <button class="btn_blue" id="btnSrchTemplate" ng-click="_broadcast('templateCtrl')">
-            <s:message code="template.srchBtnNm" />
-          </button>
-          <button class="btn_blk" id="btnApplyTemplate" ng-click="$broadcast('showPopUp')">
-            <s:message code="template.layerBtnNm" />
-          </button>
         </td>
         <td>
         </td>
@@ -48,8 +42,18 @@
     </tbody>
   </table>
 
-  <div class="wj-TblWrap mt20">
+  <%-- 조회 --%>
+  <div class="mt10 oh">
+    <button class="btn_blk fl" id="btnApplyTemplate" ng-click="$broadcast('showPopUp')">
+      <s:message code="template.layerBtnNm" />
+    </button>
+    <button class="btn_blue fr" id="btnSrchTemplate" ng-click="_broadcast('templateCtrl')">
+      <s:message code="template.srchBtnNm" />
+    </button>
+  </div>
 
+
+  <div class="wj-TblWrap mt40">
     <%-- 템플릿 --%>
     <div class="w25 fl">
       <%--위즈모 테이블--%>

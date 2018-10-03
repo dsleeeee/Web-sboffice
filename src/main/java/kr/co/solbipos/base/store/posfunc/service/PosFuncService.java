@@ -1,8 +1,10 @@
 package kr.co.solbipos.base.store.posfunc.service;
 
-import java.util.List;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.data.structure.Result;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+
+import java.util.List;
 
 /**
  * @Class Name : PosFuncService.java
@@ -35,6 +37,15 @@ public interface PosFuncService {
 
     /** 포스기능 복사 */
     int copyPosFunc(PosFuncVO posFuncVO, SessionInfoVO sessionInfoVO);
+
+    /** 포스기능 키 목록 조회 */
+    List<DefaultMap<String>> getPosFuncKeyList(PosFuncVO posFuncVO);
+
+    /** 포스기능 키 기존설정 조회 */
+    String getFuncKeyXml(PosFuncVO posFuncVO);
+
+    /** 포스기능 키 저장 */
+    Result saveFunckey(PosFuncVO posFuncVO, SessionInfoVO sessionInfoVO);
 
     /** 포스기능 인증목록 조회 */
     List<DefaultMap<String>> getPosConfAuthDetail(PosFuncVO posFuncVO);

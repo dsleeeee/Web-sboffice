@@ -14,11 +14,11 @@
   </div>
   
   <%-- 조회 --%>
-  <div class="mt10 pdb10 oh">
+  <div class="mt10 oh">
     <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('printCtrl')"><s:message code="cmm.search" /></button>
   </div>
 
-  <div class="wj-TblWrap">
+  <div class="wj-TblWrap mt40">
     <div class="w50 fl" style="width: 40%">
       <%--위즈모 테이블--%>
       <div id="gridPrint" class="wj-TblWrapBr mr10 pd20" style="height: 480px;" ng-controller="printCtrl">
@@ -105,7 +105,7 @@
     <input type="hidden" id="prtClassCd" />
   </div>
   <!-- -->
-  <script type="text/javascript" src="/resource/solbipos/js/sys/bill/kind/kind.js?ver=2018090301" charset="utf-8"></script>
+  <script type="text/javascript" src="/resource/solbipos/js/sys/bill/kind/kind.js?ver=2018100201" charset="utf-8"></script>
 
   <%-- 레이어 팝업 --%>
   <c:import url="/WEB-INF/view/sys/bill/kind/popUpKind.jsp">
