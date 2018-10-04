@@ -92,7 +92,7 @@
         // 특정일 저장
         $scope.submitForm = function() {
             //값체크
-            if (!valueCheck()) return;
+            if (!valueCheck()) return false;
 
             // 특정일값 넘길 파라미터에 세팅
             $scope.speDate.specificDate = wijmo.Globalize.format(specificDate.value, 'yyyyMMdd');
@@ -125,7 +125,7 @@
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
                 s_alert.pop(response.data.message);
-                return;
+                return false;
             });
         };
 

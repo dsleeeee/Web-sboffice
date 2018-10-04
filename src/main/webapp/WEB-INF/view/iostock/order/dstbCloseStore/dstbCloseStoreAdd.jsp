@@ -10,7 +10,7 @@
     <div id="dstbCloseStoreAddLayer" class="wj-dialog wj-dialog-columns" ng-controller="dstbCloseStoreAddCtrl">
         <div class="wj-dialog-header wj-dialog-header-font">
             <s:message code="dstbCloseStore.add.title" />
-            <a href="javascript:;" class="wj-hide btn_close"></a>
+            <a href="#" class="wj-hide btn_close"></a>
         </div>
         <div class="wj-dialog-body sc2" style="height: 600px;">
             <p class="s14 bk mb5 fl"><s:message code="dstbCloseStore.add.addProdSubTitle" /></p><p id="addProdSubTitle" class="s14 bk ml5 mb5 fl"></p><p id="orderFgSubTitle" class="s14 bk ml5 mb5 fl"></p>
@@ -60,11 +60,11 @@
                 </tr>
                 <tr>
                     <td colspan="4">
-                        <a href="javascript:;" class="btn_grayS" ng-click=""><s:message code="dstbCloseStore.add.excelFormDownload" /></a>
-                        <a href="javascript:;" class="btn_grayS" ng-click=""><s:message code="dstbCloseStore.add.excelFormUpload" /></a>
-                        <a href="javascript:;" class="btn_grayS" ng-click=""><s:message code="dstbCloseStore.add.textFormUpload" /></a>
-                        <a href="javascript:;" class="btn_grayS" ng-click=""><s:message code="cmm.excel.down" /></a>
-                        <a href="javascript:;" class="btn_grayS" ng-click=""><s:message code="dstbCloseStore.add.excelFormUploadErrorInfo" /></a>
+                        <a href="#" class="btn_grayS" ng-click=""><s:message code="dstbCloseStore.add.excelFormDownload" /></a>
+                        <a href="#" class="btn_grayS" ng-click=""><s:message code="dstbCloseStore.add.excelFormUpload" /></a>
+                        <a href="#" class="btn_grayS" ng-click=""><s:message code="dstbCloseStore.add.textFormUpload" /></a>
+                        <a href="#" class="btn_grayS" ng-click=""><s:message code="cmm.excel.down" /></a>
+                        <a href="#" class="btn_grayS" ng-click=""><s:message code="dstbCloseStore.add.excelFormUploadErrorInfo" /></a>
                     </td>
                 </tr>
                 </tbody>
@@ -235,7 +235,7 @@
         $scope.search = function() {
             if($("#dstbCloseStoreAddSelectStoreCd").val() === "") {
                 $scope._popMsg(messages["dstbCloseStore.add.require.selectStore"]); // 매장을 선택해 주세요.
-                return;
+                return false;
             }
             $scope.dstbCloseStoreDateCheck();
         };
@@ -268,7 +268,7 @@
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
                 $scope._popMsg(messages["cmm.saveFail"]);
-                return;
+                return false;
             }).then(function () {
                 // "complete" code here
             });
@@ -295,15 +295,15 @@
 
                 if(item.mgrTotQty !== null && item.mgrTotQty !== "0" && (parseInt(item.mgrTotQty) < parseInt(item.poMinQty))) {
                     $scope._popMsg(messages["dstbCloseStore.add.not.minMgrQty"]); // 분배수량은 최소주문수량 이상 입력하셔야 합니다.
-                    return;
+                    return false;
                 }
                 if(item.mgrEtcQty !== null && (parseInt(item.mgrEtcQty) >= parseInt(item.poUnitQty))) {
                     $scope._popMsg(messages["dstbCloseStore.add.not.mgrEtcQty"]); // 낱개수량은 입수량보다 작아야 합니다.
-                    return;
+                    return false;
                 }
                 if(item.mgrTot !== null && (parseInt(item.mgrTot) > 9999999999)) {
                     $scope._popMsg(messages["dstbCloseStore.add.not.overMgrTot"]); // 분배금액이 너무 큽니다.
-                    return;
+                    return false;
                 }
 
                 item.status    = "U";

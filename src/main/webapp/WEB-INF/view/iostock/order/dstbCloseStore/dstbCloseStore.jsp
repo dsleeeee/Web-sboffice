@@ -8,7 +8,7 @@
 
 <div class="subCon" ng-controller="dstbCloseStoreCtrl">
     <div class="searchBar">
-        <a href="javascript:;" class="open">${menuNm}</a>
+        <a href="#" class="open">${menuNm}</a>
     </div>
     <table class="searchTbl">
         <colgroup>
@@ -54,7 +54,7 @@
             <div class="sb-select fl mr10">
                 <span class="txtIn"><input id="reqDate" class="w150"></span>
             </div>
-            <a href="javascript:;" class="btn_grayS" ng-click="add()"><s:message code="dstbCloseStore.addRegist" /></a>
+            <a href="#" class="btn_grayS" ng-click="add()"><s:message code="dstbCloseStore.addRegist" /></a>
         </td>
         </tbody>
     </table>
