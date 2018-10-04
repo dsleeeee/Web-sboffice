@@ -194,9 +194,9 @@ public class HqManageServiceImpl implements HqManageService{
             cmmCodeReg += saleTimeReg;
         }
 
-        // 시스템 공통코드 복사
-        HqNmcodeVO result = new HqNmcodeVO();
-        result.setResult(mapper.copyCmmNameCode(nmcodeVO));
+        // 시스템 공통코드 복사 //TODO
+//        HqNmcodeVO result = new HqNmcodeVO();
+//        result.setResult(mapper.copyCmmNameCode(nmcodeVO));
 
         // 필요 공통코드 복사
 //        String copyCmmCode[] = {"062"};
@@ -206,9 +206,9 @@ public class HqManageServiceImpl implements HqManageService{
 //            cmmCodeReg += mapper.copyCmmCode(nmcodeVO);
 //        }
 //
-//        // 공통코드 테이블에서 Tid 복사
-//        HqNmcodeVO tidResult = new HqNmcodeVO();
-//        tidResult.setResult(mapper.copyTid(nmcodeVO));
+        // 공통코드 테이블에서 Tid 복사
+        HqNmcodeVO tidResult = new HqNmcodeVO();
+        tidResult.setResult(mapper.copyTid(nmcodeVO));
 
         // 포스 출력물 등록
         HqPrintTemplVO printTempVO = new HqPrintTemplVO();

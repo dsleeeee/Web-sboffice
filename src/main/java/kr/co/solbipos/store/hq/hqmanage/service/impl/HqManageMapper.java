@@ -61,11 +61,11 @@ public interface HqManageMapper {
     /** 본사 공통코드 등록 */
     int cmmCodeReg(HqNmcodeVO nmcodeVO);
 
-    /** 시스템 공통코드 내려받기 */
+    /** 시스템 공통코드 내려받기 TODO */
     String copyCmmNameCode(HqNmcodeVO nmcodeVO);
 
     /** TID 복사 프로시져 */
-//    String copyNmcode(HqNmcodeVO nmcodeVO);
+    String copyTid(HqNmcodeVO nmcodeVO);
 
     /** 공통코드 복사 */
 //    int copyCmmCode(HqNmcodeVO nmcodeVO);

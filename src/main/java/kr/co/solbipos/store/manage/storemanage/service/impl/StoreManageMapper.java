@@ -147,11 +147,11 @@ public interface StoreManageMapper {
     /** 테이블 명칭설정정보 저장 */
     int updatePosNm(StorePosEnvVO storePosEnvVO);
 
-    /** 시스템 공통코드 복사 */
+    /** 시스템 공통코드 복사 TODO */
     String copyCmmNameCode(StoreNmcodeVO nmcodeVO);
 
-//    /** TID 복사 프로시저 */
-//    String copyTid(StoreNmcodeVO nmcodeVO);
+    /** TID 복사 프로시저 */
+    String copyTid(StoreNmcodeVO nmcodeVO);
 
     /** 매장 포스 환경 삭제 */
     int deletePosEnvTarget(StorePosEnvVO storePosEnvVO);

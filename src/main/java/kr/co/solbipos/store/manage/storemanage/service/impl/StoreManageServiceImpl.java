@@ -44,7 +44,7 @@ public class StoreManageServiceImpl implements StoreManageService{
     private final String DEFAULT_POS_NO = "01";         // 기본 포스 번호
     private final String DEFAULT_POS_EMPNO = "0000";    // 기본 포스 직원번호
     private final String DEFAULT_POS_PASSWORD = "1234"; // 기본 포스 패스워드
-    private final String DEFAULT_WEB_PASSWORD = "1234"; // 기본 웹 패스워드
+    private final String DEFAULT_WEB_PASSWORD = "0000"; // 기본 웹 패스워드
 
     private final String ENVST_FG_POS = "03";           // 환경설정구분 (포스)
 
@@ -294,6 +294,16 @@ public class StoreManageServiceImpl implements StoreManageService{
         }
 
         // 시스템 공통코드 복사 // TODO
+//        StoreNmcodeVO nmcodeVO = new StoreNmcodeVO();
+//        nmcodeVO.setStoreCd(storeCd);
+//        nmcodeVO.setRegDt(dt);
+//        nmcodeVO.setRegId(sessionInfoVO.getUserId());
+//        nmcodeVO.setModDt(dt);
+//        nmcodeVO.setModId(sessionInfoVO.getUserId());
+
+//        StoreNmcodeVO result = new StoreNmcodeVO();
+//        result.setResult(mapper.copyCmmNameCode(nmcodeVO));
+
         StoreNmcodeVO nmcodeVO = new StoreNmcodeVO();
         nmcodeVO.setStoreCd(storeCd);
         nmcodeVO.setRegDt(dt);
@@ -301,19 +311,9 @@ public class StoreManageServiceImpl implements StoreManageService{
         nmcodeVO.setModDt(dt);
         nmcodeVO.setModId(sessionInfoVO.getUserId());
 
-        StoreNmcodeVO result = new StoreNmcodeVO();
-        result.setResult(mapper.copyCmmNameCode(nmcodeVO));
-
-//        StoreNmcodeVO nmcodeVO = new StoreNmcodeVO();
-//        nmcodeVO.setStoreCd(storeCd);
-//        nmcodeVO.setRegDt(dt);
-//        nmcodeVO.setRegId(sessionInfoVO.getUserId());
-//        nmcodeVO.setModDt(dt);
-//        nmcodeVO.setModId(sessionInfoVO.getUserId());
-//
-//        // 공통코드 테이블에서 Tid 복사
-//        StoreNmcodeVO tidResult = new StoreNmcodeVO();
-//        tidResult.setResult(mapper.copyTid(nmcodeVO));
+        // 공통코드 테이블에서 Tid 복사
+        StoreNmcodeVO tidResult = new StoreNmcodeVO();
+        tidResult.setResult(mapper.copyTid(nmcodeVO));
 
 
         return storeCd;
