@@ -50,16 +50,18 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
     // 템플릿 그리드 선택 이벤트
     s.selectionChanged.addHandler(function(s, e) {
       var col = s.columns[e.col];
-      var selectedRow = s.rows[e.row].dataItem;
-      if (col.binding === "templtNm" && selectedRow.status !== "I") {
-        if (selectedRow.prtForm != null) {
-          theTarget.value = selectedRow.prtForm;
-          makePreview();
-        } else {
-          theTarget.value = "";
-          thePreview.innerHTML = "";
+      if (s.rows[e.row]) {
+        var selectedRow = s.rows[e.row].dataItem;
+        if (col.binding === "templtNm" && selectedRow.status !== "I") {
+          if (selectedRow.prtForm != null) {
+            theTarget.value = selectedRow.prtForm;
+            makePreview();
+          } else {
+            theTarget.value = "";
+            thePreview.innerHTML = "";
+          }
+          $("#btnSaveTemplate").show();
         }
-        $("#btnSaveTemplate").show();
       }
     });
   };
@@ -79,9 +81,9 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
         // 편집/미리보기 폼 초기화
         theTarget.value = "";
         thePreview.innerHTML = "";
-      } else {
-        searchPrintCodeList(params);
       }
+
+      searchPrintCodeList(params);
 
     });
 
