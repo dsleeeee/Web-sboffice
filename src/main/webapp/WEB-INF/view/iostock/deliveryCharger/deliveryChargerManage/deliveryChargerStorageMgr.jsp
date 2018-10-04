@@ -95,7 +95,6 @@
                 params.push($scope.flex.collectionView.itemsEdited[i]);
             }
 
-            // return;
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $scope._save("/iostock/deliveryCharger/deliveryChargerManage/deliveryChargerRegist/addStorage.sb", params, function() { $scope.allSearch(); });
         };

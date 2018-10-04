@@ -10,7 +10,7 @@
     <div id="dstbCloseProdDtlLayer" class="wj-dialog wj-dialog-columns" ng-controller="dstbCloseProdDtlCtrl">
         <div class="wj-dialog-header wj-dialog-header-font">
             <span id="spanDtlTitle"></span>
-            <a href="javascript:;" class="wj-hide btn_close"></a>
+            <a href="#" class="wj-hide btn_close"></a>
         </div>
         <div class="wj-dialog-body sc2" style="height: 600px;">
 
@@ -190,15 +190,15 @@
 
                 if(item.mgrUnitQty === null && item.mgrEtcQty === null) {
                     $scope._popMsg(messages["dstbCloseProd.dtl.require.mgrQty"]); // 분배수량을 입력해주세요.
-                    return;
+                    return false;
                 }
                 if(item.mgrEtcQty !== null && (parseInt(item.mgrEtcQty) >= parseInt(item.poUnitQty))) {
                     $scope._popMsg(messages["dstbCloseProd.dtl.not.mgrEtcQty"]); // 낱개수량은 입수량보다 작아야 합니다.
-                    return;
+                    return false;
                 }
                 if(item.mgrTot !== null && (parseInt(item.mgrTot) > 9999999999)) {
                     $scope._popMsg(messages["dstbCloseProd.dtl.not.overMgrTot"]); // 분배금액이 너무 큽니다.
-                    return;
+                    return false;
                 }
 
                 item.status  = "U";

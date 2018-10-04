@@ -10,7 +10,7 @@
     <div id="dstbCloseProdAddProdLayer" class="wj-dialog wj-dialog-columns" ng-controller="dstbCloseProdAddProdCtrl">
         <div class="wj-dialog-header wj-dialog-header-font">
             <s:message code="dstbCloseProd.add.title" />
-            <a href="javascript:;" class="wj-hide btn_close"></a>
+            <a href="#" class="wj-hide btn_close"></a>
         </div>
         <div class="wj-dialog-body sc2" style="height: 600px;">
             <p class="s14 bk mb5 fl"><s:message code="dstbCloseProd.add.addProdSubTitle" /></p><p id="addProdSubTitle" class="s14 bk ml5 mb5 fl"></p><p id="orderFgSubTitle" class="s14 bk ml5 mb5 fl"></p>

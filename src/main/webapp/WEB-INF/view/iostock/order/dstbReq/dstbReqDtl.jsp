@@ -198,7 +198,7 @@
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
                 $scope._popMsg(messages["cmm.saveFail"]);
-                return;
+                return false;
             }).then(function () {
                 // "complete" code here
             });
@@ -246,7 +246,7 @@
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
                 $scope._popMsg(messages["cmm.saveFail"]);
-                return;
+                return false;
             }).then(function () {
                 // "complete" code here
                 $scope.wjDstbReqDtlLayer.show(true);
@@ -300,7 +300,7 @@
             // 분배완료여부가 체크 되어있으면서 그리드의 수정된 내역은 없는 경우 저장로직 태우기 위해 값 하나를 강제로 수정으로 변경한다.
             if($("#dstbConfirmFg").is(":checked") && $scope.flex.collectionView.itemsEdited.length <= 0) {
                 var item = $scope.flex.collectionView.items[0];
-                if(item === null) return;
+                if(item === null) return false;
 
                 $scope.flex.collectionView.editItem(item);
                 item.status = "U";
@@ -312,15 +312,15 @@
 
                 if(item.mdUnitQty === null && item.mdEtcQty === null) {
                     $scope._popMsg(messages["dstbReq.dtl.require.mdQty"]); // 분배수량을 입력해주세요.
-                    return;
+                    return false;
                 }
                 if(item.mdEtcQty !== null && (parseInt(item.mdEtcQty) >= parseInt(item.poUnitQty))) {
                     $scope._popMsg(messages["dstbReq.dtl.not.mdEtcQty"]); // 낱개수량은 입수량보다 작아야 합니다.
-                    return;
+                    return false;
                 }
                 if(item.mdTot !== null && (parseInt(item.mdTot) > 9999999999)) {
                     $scope._popMsg(messages["dstbReq.dtl.not.overMdTot"]); // 분배금액이 너무 큽니다.
-                    return;
+                    return false;
                 }
 
                 item.status = "U";
@@ -356,7 +356,7 @@
                     var cv = new wijmo.collections.CollectionView([]);
                     cv.trackChanges = true;
                     $scope.data = cv;
-                    return;
+                    return false;
                 });
 
                 $("#_alertTent").show();

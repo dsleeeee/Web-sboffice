@@ -212,28 +212,28 @@
                 }
                 else if(response.data.status === "FAIL") {
                     $scope._popMsg("Ajax Fail By HTTP Request");
-                    return;
+                    return false;
                 }
                 else if(response.data.status === "SESSION_EXFIRE") {
                     $scope._popMsg(response.data.message, function() {
                         location.href = response.data.url;
                     });
-                    return;
+                    return false;
                 }
                 else if(response.data.status === "SERVER_ERROR") {
                     $scope._popMsg(response.data.message);
-                    return;
+                    return false;
                 }
                 else {
                     var msg = response.data.status + " : " + response.data.message;
                     $scope._popMsg(msg);
-                    return;
+                    return false;
                 }
             }, function errorCallback(response) {
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
                 $scope._popMsg(messages["cmm.saveFail"]);
-                return;
+                return false;
             }).then(function () {
                 // "complete" code here
                 if(popShowFg === "Y") {
@@ -271,7 +271,7 @@
             // 길이체크
             if (params.length <= 0) {
                 $scope._popMsg(messages["cmm.not.modify"]);
-                return;
+                return false;
             } else {
                 params = JSON.stringify(params);
             }
@@ -280,7 +280,7 @@
                 // console.log("orderTot = "+orderTot);
                 if(parseInt($scope.availableOrderAmt) < parseInt(orderTot)) {
                     $scope._popMsg('<s:message code="storeOrder.dtl.orderTotOver"/>');
-                    return;
+                    return false;
                 }
             }
 
@@ -305,7 +305,7 @@
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
                 $scope._popMsg(messages["cmm.saveFail"]);
-                return;
+                return false;
             }).then(function () {
                 // "complete" code here
             });
@@ -319,7 +319,7 @@
             params.remark  = $scope.dtlHdRemark;
 
             // TODO 테이블 및 VO 등이 전혀 생성되어 있지 않아 분배등록 및 출고자료 생성까지 진행 후 확정 로직 처리하는게 좋을듯. 2018-09-17 안동관
-            return;
+            return false;
 
             $scope._save("/iostock/order/storeOrder/storeOrderDtl/confirm.sb", params, function() { $scope.saveOrderDtlCallback() });
         };

@@ -84,7 +84,7 @@ function valueCheck(sendUrl) {
     var msg = "<s:message code='application.pos.simpleMemberJoin.telNo'/> <s:message code='cmm.require.text'/>";
     if($("#telNo").val() === "") {
         s_alert.popOk(msg, function(){ $("#telNo").focus(); });
-        return;
+        return false;
     }
 
     <%-- 연락처는 숫자만 입력할 수 있습니다. --%>
@@ -92,49 +92,49 @@ function valueCheck(sendUrl) {
     var numChkregexp = /[^0-9]/g;
     if(numChkregexp.test($("#telNo").val())) {
         s_alert.popOk(msg, function(){ $("#telNo").select(); });
-        return;
+        return false;
     }
 
     <%-- 연락처를 정확히 입력해주세요. --%>
     var msg = "<s:message code='application.pos.simpleMemberJoin.telNo'/> <s:message code='application.pos.simpleMemberJoin.validCheck'/>";
     if($("#telNo").val().length < 10) {
         s_alert.popOk(msg, function(){ $("#telNo").select(); });
-        return;
+        return false;
     }
 
     <%-- 회원명을 입력해주세요. --%>
     var msg = "<s:message code='application.pos.simpleMemberJoin.membrNm'/> <s:message code='cmm.require.text'/>";
     if($("#membrNm").val() === "") {
         s_alert.popOk(msg, function(){ $("#membrNm").focus(); });
-        return;
+        return false;
     }
 
     <%-- 회원명의 길이가 너무 깁니다. --%>
     var msg = "<s:message code='application.pos.simpleMemberJoin.membrNm'/> <s:message code='application.pos.simpleMemberJoin.textOver'/>";
     if($("#membrNm").val().getByteLengthForOracle() > 50) {
         s_alert.popOk(msg, function(){ $("#membrNm").select(); });
-        return;
+        return false;
     }
 
     <%-- 생년월일을 입력해주세요. --%>
     var msg = "<s:message code='application.pos.simpleMemberJoin.birthday'/> <s:message code='cmm.require.text'/>";
     if($("#birthday").val() === "") {
         s_alert.popOk(msg, function(){ $("#birthday").focus(); });
-        return;
+        return false;
     }
 
     <%-- 생년월일은 숫자만 입력할 수 있습니다. --%>
     var msg = "<s:message code='application.pos.simpleMemberJoin.birthday'/> <s:message code='cmm.require.number'/>";
     if(numChkregexp.test($("#birthday").val())) {
         s_alert.popOk(msg, function(){ $("#birthday").select(); });
-        return;
+        return false;
     }
 
     <%-- 생년월일을 정확히 입력해주세요. --%>
     var msg = "<s:message code='application.pos.simpleMemberJoin.birthday'/> <s:message code='application.pos.simpleMemberJoin.validCheck'/>";
     if($("#birthday").val().length < 8) {
         s_alert.popOk(msg, function(){ $("#birthday").select(); });
-        return;
+        return false;
     }
     save(sendUrl);
 }
@@ -150,7 +150,7 @@ function save(sendUrl) {
     $.postJSONSave(sendUrl, param, function (result) {
         if (result.status === "FAIL") {
             s_alert.pop(result.message);
-            return;
+            return false;
         }
         s_alert.pop("<s:message code='cmm.saveSucc'/>");
         resetVal();

@@ -125,14 +125,14 @@
                 if (list.length === undefined || list.length === 0) {
                     gridStoreLoanInfo.itemsSource = new wijmo.collections.CollectionView([]);
                     s_alert.pop(result.message);
-                    return;
+                    return false;
                 }
 
                 gridStoreLoanInfo.itemsSource = new wijmo.collections.CollectionView(list, {trackChanges: true});
             },
             function (result) {
                 s_alert.pop(result.message);
-                return;
+                return false;
             }
         );
     }

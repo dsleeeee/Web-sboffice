@@ -135,7 +135,7 @@
             // 매장을 선택해주세요.
             if($("#targetSelectStoreCd").val() == "") {
                 s_alert.pop("<s:message code='outstockReqDate.require.selectStore'/>");
-                return;
+                return false;
             }
             // 요일별 그리드 조회
             $scope._broadcast('reqDateCopyDaysCtrl', {proc:"search"});
@@ -147,12 +147,12 @@
             // 매장을 선택해주세요.
             if($("#targetSelectStoreCd").val() == "") {
                 s_alert.pop("<s:message code='outstockReqDate.require.selectStore'/>");
-                return;
+                return false;
             }
             // 복사할 매장을 선택해주세요.
             if($("#copySelectStoreCd").val() == "") {
                 s_alert.pop("<s:message code='outstockReqDate.require.selectCopyStore'/>");
-                return;
+                return false;
             }
 
             // 특정일 복사 요청
@@ -291,7 +291,7 @@
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
                 $scope._popMsg(messages["cmm.saveFail"]);
-                return;
+                return false;
             }).then(function () {
                 // "complete" code here
             });
@@ -360,7 +360,7 @@
                     // 타겟매장과 복사할 매장이 동일합니다.
                     if(flex.rows[i]._data.storeCd == $("#copySelectStoreCd").val()) {
                         s_alert.pop("<s:message code='outstockReqDate.duplicate.targetSelectStore'/>");
-                        return;
+                        return false;
                     }
                     flex.rows[i]._data.copyStoreCd = $("#copySelectStoreCd").val();
                     params.push(flex.rows[i]._data);
@@ -377,7 +377,7 @@
 
                 <%--// 저장할 내용이 없습니다.--%>
                 <%--s_alert.pop("<s:message code='outstockReqDate.not.save'/>");--%>
-                return;
+                return false;
             }
 
             // ajax 통신 설정
@@ -409,7 +409,7 @@
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
                 $scope._popMsg(messages["cmm.saveFail"]);
-                return;
+                return false;
             }).then(function () {
             });
         }

@@ -219,7 +219,7 @@
                     var today = getCurDate();
                     if(parseInt(today) > parseInt($scope.reqDate)) {
                         $scope._popMsg('<s:message code="storeOrder.dtl.not.prevDateOrder"/>');
-                        return;
+                        return false;
                     }
                     $scope.storeOrderDateCheck(); // 출고요청가능일인지 여부 체크
                 }
@@ -253,7 +253,7 @@
                     if(!$.isEmptyObject(response.data.data)) {
                         if(response.data.data.orderFg > 0) {
                             $scope._popMsg('<s:message code="storeOrder.dtl.not.orderDate"/>');
-                            return;
+                            return false;
                         }
                     }
                     $scope.storeCloseCheck();
@@ -262,7 +262,7 @@
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
                 $scope._popMsg(messages["cmm.saveFail"]);
-                return;
+                return false;
             }).then(function () {
                 // "complete" code here
             });
@@ -285,7 +285,7 @@
                     if(!$.isEmptyObject(response.data.data)) {
                         if(response.data.data.orderCloseFg === "Y") {
                             $scope._popMsg('<s:message code="storeOrder.dtl.orderClose"/>');
-                            return;
+                            return false;
                         }
                     }
                     $scope.orderProcFgCheck(); // 주문진행구분 체크
@@ -294,7 +294,7 @@
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
                 $scope._popMsg(messages["cmm.saveFail"]);
-                return;
+                return false;
             }).then(function () {
                 // "complete" code here
             });
@@ -318,7 +318,7 @@
                     if(!$.isEmptyObject(response.data.data)) {
                         if(response.data.data.procFg != "00") {
                             $scope._popMsg('<s:message code="storeOrder.dtl.not.orderProcEnd"/>');
-                            return;
+                            return false;
                         }
                         $scope.regHdRemark = response.data.data.remark;
                     }
@@ -329,7 +329,7 @@
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
                 $scope._popMsg(messages["cmm.saveFail"]);
-                return;
+                return false;
             }).then(function () {
                 // "complete" code here
             });
@@ -353,7 +353,7 @@
                         // 발주중지 상태이면 상품추가/변경 불가
                         if(response.data.data.orderCloseYn === "Y") {
                             $scope._popMsg('<s:message code="storeOrder.dtl.orderClose"/>');
-                            return;
+                            return false;
                         }
                         else {
                             $scope.prevOrderTot      = response.data.data.prevOrderTot;      //이전 주문금액
@@ -383,7 +383,7 @@
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
                 $scope._popMsg(messages["cmm.saveFail"]);
-                return;
+                return false;
             }).then(function () {
                 // "complete" code here
                 if(popShowFg === "Y") {
@@ -415,15 +415,15 @@
 
                 if(item.orderTotQty !== null && item.orderTotQty !== "0" && (parseInt(item.orderTotQty) < parseInt(item.poMinQty))) {
                     $scope._popMsg(messages["storeOrder.dtl.not.minOrderQty"]); // 주문수량은 최소주문수량 이상 입력하셔야 합니다.
-                    return;
+                    return false;
                 }
                 if(item.orderEtcQty !== null && (parseInt(item.orderEtcQty) >= parseInt(item.poUnitQty))) {
                     $scope._popMsg(messages["storeOrder.dtl.not.orderEtcQty"]); // 낱개수량은 입수량보다 작아야 합니다.
-                    return;
+                    return false;
                 }
                 if(item.orderTot !== null && (parseInt(item.orderTot) > 9999999999)) {
                     $scope._popMsg(messages["storeOrder.dtl.not.overOrderTot"]); // 주문금액이 너무 큽니다.
-                    return;
+                    return false;
                 }
 
                 item.status    = "U";
@@ -440,7 +440,7 @@
                 // console.log("orderTot = "+orderTot);
                 if(parseInt($scope.availableOrderAmt) < parseInt(orderTot)) {
                     $scope._popMsg('<s:message code="storeOrder.dtl.orderTotOver"/>');
-                    return;
+                    return false;
                 }
             }
 
