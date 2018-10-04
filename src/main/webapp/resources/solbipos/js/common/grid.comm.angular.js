@@ -245,11 +245,11 @@ function RootController(ctrlName, $scope, $http, isPicker) {
     if (flex) {
       flex.beginningEdit.addHandler(function (s, e) {
         if (s.columns[e.col].binding !== 'gChk') {
-          // 선택(gChk) 되어있지 않으면 수정 불가
-          if (!s.rows[e.row].dataItem.gChk) {
-            e.cancel = true;
-            flex.endUpdate();
-          } else {
+          // 선택(gChk) 되어있지 않으면 수정 불가 : 20181004 노현수 > 주석처리 일단 사용안함
+          // if (!s.rows[e.row].dataItem.gChk) {
+          //   e.cancel = true;
+          //   flex.endUpdate();
+          // } else {
             if (s.columns[e.col].dataType !== wijmo.DataType.Boolean) {
               setTimeout(function () {
                 var _cellData = s.getCellData(e.row, e.col, true);
@@ -258,7 +258,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
                 }
               }, 0);
             }
-          }
+          // }
         }
       });
       flex.cellEditEnded.addHandler(function (s, e) {
