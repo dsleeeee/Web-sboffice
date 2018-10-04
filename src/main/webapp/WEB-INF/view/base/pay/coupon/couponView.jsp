@@ -19,12 +19,12 @@
   <%-- 탭  --%>
   <ul class="subTab mb20" style="display: none;">
     <%-- 쿠폰등록 --%>
-    <li><a href="javascript:;" id="couponRegTab" class="on" ng-click="_broadcast('couponClassCtrl', true)"><s:message code='coupon.regist.coupon' /></a></li>
+    <li><a href="#" id="couponRegTab" class="on" ng-click="_broadcast('couponClassCtrl', true)"><s:message code='coupon.regist.coupon' /></a></li>
     <%-- 쿠폰적용상품 등록 --%>
-    <li><a href="javascript:;" id="couponProdTab"><s:message code='coupon.regist.product' /></a></li>
+    <li><a href="#" id="couponProdTab"><s:message code='coupon.regist.product' /></a></li>
     <%-- 쿠폰적용매장 등록 (본사에서만 보임) --%>
     <c:if test="${orgnFg == 'HQ'}">
-      <li><a href="javascript:;" id="couponStoreTab"><s:message code='coupon.regist.store' /></a></li>
+      <li><a href="#" id="couponStoreTab"><s:message code='coupon.regist.store' /></a></li>
     </c:if>
   </ul>
 

@@ -8,11 +8,11 @@
   <div class="layer_inner">
     <div class="title w870">
       <p id="popTitle" class="tit"><s:message code="storeEmp.layer.empDetail" /></p>
-      <a href="javascript:;" class="btn_close"></a>
+      <a href="#" class="btn_close"></a>
       <div class="con">
         <div class="tabType1">
           <ul>
-            <li><a id="empBasicInfoTab" href="javascript:;" class="on"><s:message code="storeEmp.layer.empBasicInfo" /></a></li>
+            <li><a id="empBasicInfoTab" href="#" class="on"><s:message code="storeEmp.layer.empBasicInfo" /></a></li>
           </ul>
         </div>
 
@@ -55,7 +55,7 @@
                   <div class="impWrap"><s:message code="storeEmp.pwd" /></div>
                 </th>
                 <td>
-                  <a class="btn_grayS2" id="btnChangePwd" href="javascript:;"><s:message code="storeEmp.layer.changeBtn" /></a>
+                  <a class="btn_grayS2" id="btnChangePwd" href="#"><s:message code="storeEmp.layer.changeBtn" /></a>
                 </td>
                 <%-- 웹사용여부 --%>
                 <th>
@@ -82,9 +82,9 @@
         <%-- 버튼 영역 --%>
         <div class="btnSet">
           <%-- 수정 --%>
-          <span><a href="javascript:;" class="btn_blue" id="btnEdit"><s:message code="cmm.edit" /></a></span>
+          <span><a href="#" class="btn_blue" id="btnEdit"><s:message code="cmm.edit" /></a></span>
           <%-- 닫기 --%>
-          <span><a href="javascript:;" class="btn_gray btnClose"><s:message code="cmm.close" /></a></span>
+          <span><a href="#" class="btn_gray btnClose"><s:message code="cmm.close" /></a></span>
         </div>
       </div>
     </div>

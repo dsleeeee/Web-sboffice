@@ -11,11 +11,11 @@
     <div class="tabType1" ng-controller="outstockReqDateTabCtrl" ng-init="init()">
         <ul>
             <%-- 출고요청일관리 요일별 탭 --%>
-            <li><a id="daysTab" href="javascript:;" class="on" ng-click="daysShow()"><s:message code="outstockReqDate.days" /></a></li>
+            <li><a id="daysTab" href="#" class="on" ng-click="daysShow()"><s:message code="outstockReqDate.days" /></a></li>
             <%-- 출고요청일관리 특정일 탭 --%>
-            <li><a id="specificTab" href="javascript:;" ng-click="specificShow()"><s:message code="outstockReqDate.specificDate" /></a></li>
+            <li><a id="specificTab" href="#" ng-click="specificShow()"><s:message code="outstockReqDate.specificDate" /></a></li>
             <%-- 출고요청일관리 요청일복사 탭 --%>
-            <li><a id="reqDateCopyTab" href="javascript:;" ng-click="reqDateCopyShow()"><s:message code="outstockReqDate.reqDateCopy" /></a></li>
+            <li><a id="reqDateCopyTab" href="#" ng-click="reqDateCopyShow()"><s:message code="outstockReqDate.reqDateCopy" /></a></li>
         </ul>
     </div>
 </div>

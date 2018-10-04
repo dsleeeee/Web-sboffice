@@ -8,7 +8,7 @@
   <div class="layer_inner">
     <div class="title w600">
       <p class="tit"><s:message code="storeManage.setting.tableGroup" /></p>
-      <a href="javascript:;" class="btn_close"></a>
+      <a href="#" class="btn_close"></a>
       <div class="con">
         <div>
           <table class="tblType01 moreDark">
@@ -31,9 +31,9 @@
       </div>
       <div class="btnSet">
         <%-- 저장 --%>
-        <span><a id="btnSaveTabGrp" href="javascript:;" class="btn_blue"><s:message code="cmm.save" /></a></span>
+        <span><a id="btnSaveTabGrp" href="#" class="btn_blue"><s:message code="cmm.save" /></a></span>
         <%-- 닫기 --%>
-        <span><a id="btnCloseTabGrp" href="javascript:;" class="btn_gray"><s:message code="cmm.close" /></a></span>
+        <span><a id="btnCloseTabGrp" href="#" class="btn_gray"><s:message code="cmm.close" /></a></span>
       </div>
     </div>
   </div>

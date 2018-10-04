@@ -10,7 +10,7 @@
     <div id="storeOrderRegistLayer" class="wj-dialog wj-dialog-columns" ng-controller="storeOrderRegistCtrl">
         <div class="wj-dialog-header wj-dialog-header-font">
             <s:message code="storeOrder.dtl.registTitle" />
-            <a href="javascript:;" class="wj-hide btn_close"></a>
+            <a href="#" class="wj-hide btn_close"></a>
         </div>
         <div class="wj-dialog-body sc2" style="height: 600px;">
             <p class="s14 bk mb5">[주문] 상품추가 (</p><p id="registTitle" class="s14 bk mb5"></p>
@@ -38,7 +38,7 @@
                 </tr>
                 <tr>
                     <th><s:message code="storeOrder.dtl.option1"/></th>
-                    <td><a href="javascript:;" class="btn_grayS" ng-click=""><s:message code="storeOrder.dtl.safeStockApply" /></a></td>
+                    <td><a href="#" class="btn_grayS" ng-click=""><s:message code="storeOrder.dtl.safeStockApply" /></a></td>
                     <th><s:message code="storeOrder.dtl.option2"/></th>
                     <td></td>
                 </tr>
@@ -48,11 +48,11 @@
                 </tr>
                 <tr>
                     <td colspan="4">
-                        <a href="javascript:;" class="btn_grayS" ng-click=""><s:message code="storeOrder.dtl.excelFormDownload" /></a>
-                        <a href="javascript:;" class="btn_grayS" ng-click=""><s:message code="storeOrder.dtl.excelFormUpload" /></a>
-                        <a href="javascript:;" class="btn_grayS" ng-click=""><s:message code="storeOrder.dtl.textFormUpload" /></a>
-                        <a href="javascript:;" class="btn_grayS" ng-click=""><s:message code="cmm.excel.down" /></a>
-                        <a href="javascript:;" class="btn_grayS" ng-click=""><s:message code="storeOrder.dtl.excelFormUploadErrorInfo" /></a>
+                        <a href="#" class="btn_grayS" ng-click=""><s:message code="storeOrder.dtl.excelFormDownload" /></a>
+                        <a href="#" class="btn_grayS" ng-click=""><s:message code="storeOrder.dtl.excelFormUpload" /></a>
+                        <a href="#" class="btn_grayS" ng-click=""><s:message code="storeOrder.dtl.textFormUpload" /></a>
+                        <a href="#" class="btn_grayS" ng-click=""><s:message code="cmm.excel.down" /></a>
+                        <a href="#" class="btn_grayS" ng-click=""><s:message code="storeOrder.dtl.excelFormUploadErrorInfo" /></a>
                     </td>
                 </tr>
                 </tbody>

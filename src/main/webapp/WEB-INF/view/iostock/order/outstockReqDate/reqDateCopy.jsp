@@ -10,7 +10,7 @@
 <div id="reqDateCopyView" class="subCon" style="display: none;">
     <div ng-controller="reqDateCopyCtrl">
         <div class="searchBar flddUnfld">
-            <a href="javascript:;" class="open">${menuNm}</a>
+            <a href="#" class="open">${menuNm}</a>
         </div>
         <table class="searchTbl">
             <colgroup>
@@ -41,7 +41,7 @@
                     </jsp:include>
                     <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
                     <%-- 복사 --%>
-                    <a href="javascript:;" class="btn_grayS" ng-click="reqDateCopy()"><s:message code="cmm.save" /></a>
+                    <a href="#" class="btn_grayS" ng-click="reqDateCopy()"><s:message code="cmm.save" /></a>
                     <%--<button class="btn_blue" id="btnSave" ng-click="reqDateCopy();"><s:message code="cmm.save" /></button>--%>
                 </td>
             </tr>

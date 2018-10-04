@@ -16,12 +16,12 @@
         <%-- 상품분류 없을 경우 --%>
         <div class="title w600">
             <p id="codeTitle" class="tit"></p>
-            <a href="javascript:;" class="btn_close"></a>
+            <a href="#" class="btn_close"></a>
             <div class="con">
                 <div class="tabType1">
                     <ul>
-                        <li><a href="javascript:;" id="codeSettingTab" class="on"><s:message code="hqBrand.codeSetting" /></a></li>
-                        <li><a href="javascript:;" id="envSettingTab" ><s:message code="hqBrand.envSetting" /></a></li>
+                        <li><a href="#" id="codeSettingTab" class="on"><s:message code="hqBrand.codeSetting" /></a></li>
+                        <li><a href="#" id="envSettingTab" ><s:message code="hqBrand.envSetting" /></a></li>
                     </ul>
                 </div>
                 <div class="bgGray s14 mt20 pd30 lh30 tc">
@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div class="btnSet">
-                <span><a href="javascript:;" class="btn_blue" id="settingProdClass"><s:message code="hqBrand.setting.prodClass" /></a></span>
+                <span><a href="#" class="btn_blue" id="settingProdClass"><s:message code="hqBrand.setting.prodClass" /></a></span>
             </div>
         </div>
         <%-- 상품분류 있을 경우 --%>

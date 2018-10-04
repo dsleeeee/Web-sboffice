@@ -10,7 +10,7 @@
 
 <div class="subCon">
   <div class="searchBar flddUnfld">
-    <a href="javascript:;" class="open">${menuNm}</a>
+    <a href="#" class="open">${menuNm}</a>
   </div>
 
   <%-- TABLE1 (프렌차이즈 권한 노출내용) --%>
@@ -44,7 +44,7 @@
           <div class="sb-select fl w80" class='wj-content'>
             <div id="storeCdText"></div>
           </div>
-          <a href="javascript:;" id="store" class="btn_grayS ml5"><s:message code="cmm.store.select" /></a>
+          <a href="#" id="store" class="btn_grayS ml5"><s:message code="cmm.store.select" /></a>
         </td>
 
         <%-- 입출구분 --%>

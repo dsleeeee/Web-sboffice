@@ -8,15 +8,15 @@
     <%--layerContent--%>
     <div class="title w500">
       <p class="tit"><s:message code="authGroup.authGive" />[<span id="_title"></span>]</p>
-      <a href="javascript:;" class="btn_close _btnAuthClose"></a>
+      <a href="#" class="btn_close _btnAuthClose"></a>
       <div class="con" style="height:300px;">
         <div class="sc" style="height:270px;">
           <div id="_authTree" class="mt10"></div>
         </div>
       </div>
       <div class="btnSet">
-        <span><a href="javascript:;" class="btn_blue" id="_btnAuthSave"><s:message code="cmm.edit" /></a></span>
-        <span><a href="javascript:;" class="btn_gray _btnAuthClose"><s:message code="cmm.close" /></a></span>
+        <span><a href="#" class="btn_blue" id="_btnAuthSave"><s:message code="cmm.edit" /></a></span>
+        <span><a href="#" class="btn_gray _btnAuthClose"><s:message code="cmm.close" /></a></span>
       </div>
     </div>
     <%--//layerContent--%>

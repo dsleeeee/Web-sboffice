@@ -16,7 +16,7 @@ $(document).ready(function() {
 
     // 단축 메뉴 생성--%>
     $(menus).each(function(index) {
-        $("#_smallMenuUl").append(wijmo.format('<li class="{icon}"><a href="javascript:void(0);"></a></li>', this));
+        $("#_smallMenuUl").append(wijmo.format('<li class="{icon}"><a href="#"></a></li>', this));
     });
 
     // 전체메뉴 클릭

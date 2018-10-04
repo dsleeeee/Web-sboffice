@@ -10,7 +10,7 @@
     <div id="storeOrderDtlLayer" class="wj-dialog wj-dialog-columns" ng-controller="storeOrderDtlCtrl">
         <div class="wj-dialog-header wj-dialog-header-font">
             <span id="spanDtlTitle"></span>
-            <a href="javascript:;" class="wj-hide btn_close"></a>
+            <a href="#" class="wj-hide btn_close"></a>
         </div>
         <div class="wj-dialog-body sc2" style="height: 600px;">
             <table class="tblType01">

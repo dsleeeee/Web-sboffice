@@ -8,7 +8,7 @@
   <div class="layer_inner">
     <div class="title w56">
       <p id="bizInfoLayerTitle" class="tit"></p>
-      <a href="javascript:;" class="btn_close"></a>
+      <a href="#" class="btn_close"></a>
       <div class="con sc2">
         <%-- 위즈모 그리드  --%>
         <div>

@@ -13,9 +13,9 @@
     </div>
 
     <%-- 기본값으로 설정 --%>
-    <a href="javascript:;" id="btnDefault" class="btn_grayS"><s:message code="storeManage.setting.default.env" /></a>
+    <a href="#" id="btnDefault" class="btn_grayS"><s:message code="storeManage.setting.default.env" /></a>
     <%-- 저장 --%>
-    <%-- <a href="javascript:;" id="btnSavePos" class="btn_grayS"><s:message code="cmm.save" /></a> --%>
+    <%-- <a href="#" id="btnSavePos" class="btn_grayS"><s:message code="cmm.save" /></a> --%>
   </div>
 
   <div class="mt20 mb20">
