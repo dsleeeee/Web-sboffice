@@ -26,7 +26,7 @@
             <span class="txtIn"><input id="startDt" name="startDt" class="w200" /></span>
             <span class="rg">~</span>
             <span class="txtIn"><input id="endDt" name="endDt" class="w200" /></span>
-            <span class="chk ml10"><input type="checkbox" id="chkDt" />
+            <span class="chk ml10"><input type="checkbox" id="chkDt" checked/>
             <label for="chkDt"><s:message code="cmm.all.day" /></label>
             </span>
           </div>

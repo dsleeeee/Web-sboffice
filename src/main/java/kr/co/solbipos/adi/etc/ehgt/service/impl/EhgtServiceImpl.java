@@ -61,26 +61,26 @@ public class EhgtServiceImpl implements EhgtService {
         boolean isSoloStore = false;
         if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE
                 && sessionInfoVO.getStoreCd() != null
-                && sessionInfoVO.getStoreCd().equals(SoloHq.SOLO.getCode())) {
+                && sessionInfoVO.getHqOfficeCd().equals(SoloHq.SOLO.getCode())) {
             isSoloStore = true;
         }
 
         // 본사일 경우
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             //세션의 본사코드를 조회에 사용
-            ehgtVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+            ehgtVO.setOrgnCd(sessionInfoVO.getHqOfficeCd());
             list = mapper.getHqEhgtListBySaleDt(ehgtVO);
         }
         //프랜차이즈 매장일 경우에는 본사 환율 조회
         else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE && !isSoloStore) {
             //가맹점일때 상위 조직코드 이용
-            ehgtVO.setOrgnCd(sessionInfoVO.getStoreCd());
+            ehgtVO.setOrgnCd(sessionInfoVO.getHqOfficeCd());
             list = mapper.getHqEhgtListBySaleDt(ehgtVO);
         }
         // 단독매장일 때 매장 환율 조회
         else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE && isSoloStore) {
             //세션의 본사코드를 조회에 사용
-            ehgtVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+            ehgtVO.setOrgnCd(sessionInfoVO.getStoreCd());
 
             list = mapper.getMsEhgtListBySaleDt(ehgtVO);
         }

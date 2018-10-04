@@ -18,7 +18,7 @@
 
   <%-- 쿠폰분류등록 --%>
   <div class="mb40" ng-controller="couponClassCtrl">
-    <div class="wj-TblWrapBr mr10 pd20" style="height:240px;">
+    <div class="wj-TblWrapBr mr10 pd20" style="height:270px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='coupon.regist.class' /></span>
         <button class="btn_skyblue" id="btnClassAdd" ng-click="searchCouponClass()"><s:message code='cmm.search' /></button>
@@ -28,7 +28,7 @@
      </c:if>
       </div>
       <%-- 쿠폰분류등록 그리드 --%>
-      <div id="couponClassGrid" class="wj-gridWrap" style="height:180px">
+      <div id="couponClassGrid" class="wj-gridWrap" style="height:180px;overflow-y: hidden;">
         <wj-flex-grid
                 autoGenerateColumns="false"
                 control="flex"
@@ -66,7 +66,7 @@
       </c:if>
       </div>
       <%-- 쿠폰등록 그리드 --%>
-      <div id="couponGrid" class="wj-gridWrap" style="height:190px">
+      <div id="couponGrid" class="wj-gridWrap" style="height:190px;overflow-y: hidden;">
         <wj-flex-grid
                 autoGenerateColumns="false"
                 control="flex"
@@ -109,14 +109,12 @@ var coupnDcFg    = ${ccu.getCommCodeExcpAll("013")};
 var coupnApplyFg = ${ccu.getCommCodeExcpAll("043")};
 var baseUrl      = "${baseUrl}";
 var coupnEnvstVal = "${coupnEnvstVal}";
-
-console.log(coupnDcFg)
-
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/coupon.js?ver=20180813" charset="utf-8"></script>
 
 <%-- 쿠폰별 상품 등록 레이어 팝업 --%>
 <c:import url="/WEB-INF/view/base/pay/coupon/couponProdView.jsp">
+  <c:param name="coupnEnvstVal" value="${coupnEnvstVal}"/>
 </c:import>
 
 

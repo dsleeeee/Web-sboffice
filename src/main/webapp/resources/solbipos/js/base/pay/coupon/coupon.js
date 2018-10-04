@@ -50,10 +50,13 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
           } else if(selectedRow.useYn === "N") {
             s_alert.pop(messages["coupon.not.use.payClassCd"]);
             var couponGrid = agrid.getScope('couponCtrl');
+            console.log(couponGrid)
             couponGrid._gridDataInit();
-            return;
+            e.cancel = true;
+            return false;
           } else {
             $("#couponSubTitle").text(" [" + selectedRow.payClassNm+ "]");
+            e.cancel = true;
             $scope._broadcast('couponCtrl', selectedRow);
           }
         }
@@ -69,9 +72,9 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
     });
 
     // 조회 이벤트 발생
-    setTimeout(function() {
-      $scope._broadcast('couponClassCtrl', true);
-    }, 100)
+    // setTimeout(function() {
+    //   $scope._broadcast('couponClassCtrl', true);
+    // }, 100)
   };
 
   $scope.$on("couponClassCtrl", function(event, data) {
@@ -234,7 +237,7 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
         var col = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
 
-        if ( col.binding === "prodCnt" && selectedRow.status !== "I") {
+        if (col.binding === "prodCnt" && selectedRow.status !== "I") {
           // 상품 등록 팝업
           var popup = $scope.couponPordLayer;
           popup.show(true, function (s) {

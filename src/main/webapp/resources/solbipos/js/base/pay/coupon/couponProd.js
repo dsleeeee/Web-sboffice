@@ -17,7 +17,13 @@ app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('regProdCtrl', $scope, $http, true));
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
-  $scope.initGrid = function (s, e) {};
+  $scope.initGrid = function (s, e) {
+    if(coupnEnvstVal === "2" && orgnFg === "STORE") { // 본사통제인데 매장으로 접근시
+      $("#couponPordLayer .btn_grayS2").hide();
+    } else {
+      $("#couponPordLayer .btn_grayS2").show();
+    }
+  };
 
   // 쿠폰등록 상품 그리드 조회
   $scope.$on("regProdCtrl", function(event, data) {
@@ -31,12 +37,15 @@ app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 등록된 상품 조회
   $scope.searchRegProd = function(){
+    var couponClassGrid = agrid.getScope("couponClassCtrl");
     var couponGrid = agrid.getScope("couponCtrl");
     if(couponGrid.flex.selectedItems.length > 0 ){
       var params = {};
+      params.payClassCd = couponClassGrid.flex.selectedItems[0].payClassCd;
       params.coupnCd = couponGrid.flex.selectedItems[0].coupnCd;
       params.coupnEnvstVal = coupnEnvstVal;
       params.prodRegFg = "Y";
+
       // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
       $scope._inquirySub(baseUrl + "prod/getProdList.sb", params, function() {}, false);
     }
@@ -99,14 +108,16 @@ app.controller('noRegProdCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 미등록 상품
   $scope.searchNoRegProd = function(){
+    var couponClassGrid = agrid.getScope("couponClassCtrl");
     var couponGrid = agrid.getScope("couponCtrl");
     if(couponGrid.flex.selectedItems.length > 0) {
-      var selectedCoupnCd = couponGrid.flex.selectedItems[0].coupnCd;
       // 파라미터
       var params = {};
-      params.coupnCd = selectedCoupnCd;
+      params.payClassCd = couponClassGrid.flex.selectedItems[0].payClassCd;
+      params.coupnCd = couponGrid.flex.selectedItems[0].coupnCd;
       params.coupnEnvstVal = coupnEnvstVal;
       params.prodRegFg = "N";
+
       // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
       $scope._inquirySub(baseUrl + "prod/getProdList.sb", params, function() {}, false);
     }

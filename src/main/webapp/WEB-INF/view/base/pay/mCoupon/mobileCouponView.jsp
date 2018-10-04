@@ -23,7 +23,7 @@
         <button class="btn_skyblue" id="btnClassSave" ng-click="save()"><s:message code='cmm.save' /></button>
       </div>
       <%-- 상품권분류등록 그리드 --%>
-      <div id="mCouponClassGrid" class="wj-gridWrap" style="height:380px">
+      <div id="mCouponClassGrid" class="wj-gridWrap" style="height:380px; overflow-y: hidden;">
         <wj-flex-grid
                 autoGenerateColumns="false"
                 control="flex"

@@ -41,7 +41,7 @@
         <%-- 매장 --%>
         <th><s:message code="cmm.store" /></th>
         <td>
-          <div class="sb-select fl w80" class='wj-content'>
+          <div class="sb-select fl w60" class='wj-content'>
             <div id="storeCdText"></div>
           </div>
           <a href="#" id="store" class="btn_grayS ml5"><s:message code="cmm.store.select" /></a>
@@ -78,13 +78,13 @@
     </tbody>
   </table>
 
-  <div class="mt10 pdb20 oh bb">
+  <div class="mt10 pdb20 oh">
     <%-- 조회 --%>
     <button class="btn_blue fr" id="searchBtn"><s:message code="cmm.search" /></button>
   </div>
 
 
-  <div class="mt20 oh sb-select dkbr">
+  <div class="mt40 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
     <div id="listScaleBox" class="w150 fl"></div>
     <div id="listScaleBox" class="fr">

@@ -118,12 +118,14 @@
       </tr>
       <tr>
         <%-- 회원등급 --%>
+        <%--
         <th><s:message code="regist.class.cd"/></th>
         <td>
           <div class="sb-select">
             <div id="classCd"></div>
           </div>
         </td>
+        --%>
         <%-- 성별 --%>
         <th><s:message code="regist.gender"/></th>
         <td>
@@ -131,16 +133,18 @@
             <div id="gender"></div>
           </div>
         </td>
+        <th></th>
+        <td></td>
       </tr>
     </tbody>
   </table>
 
   <%-- 조회버튼 --%>
-  <div class="mt10 pdb20 oh bb">
+  <div class="mt10 pdb20 oh">
     <button class="btn_blue fr" id="btnSearch"><s:message code="cmm.search"/></button>
   </div>
 
-  <div class="wj-TblWrap mt10">
+  <div class="wj-TblWrap mt40">
     <%-- left --%>
     <div class="w50 fl">
       <div class="wj-TblWㅣrapBr mr10 pd20" style="height:700px;">
@@ -177,7 +181,7 @@ $(document).ready(function(){
   var endDt        = wcombo.genDateVal("#endDt", "${sessionScope.sessionInfo.endDt}");
   var anvrsStartDt = wcombo.genDateVal("#anvrsStartDt", "${sessionScope.sessionInfo.startDt}");
   var anvrsEndDt   = wcombo.genDateVal("#anvrsEndDt", "${sessionScope.sessionInfo.endDt}");
-  var classCd      = wcombo.genCommonBox("#classCd", ${comboData});
+  <%--var classCd      = wcombo.genCommonBox("#classCd", ${comboData}); //TODO 회원등급 추가 후 작업 예정 --%>
   var periodDate   = wcombo.genCommonBox("#periodDate", periodDate);
   var anvrsDate    = wcombo.genCommonBox("#anvrsDate", ${ccu.getCommCode("032")});
   var gender       = wcombo.genCommonBox("#gender", genderData);
@@ -237,7 +241,7 @@ $(document).ready(function(){
       vAddr2.value       = data.addr;
       vRemark.value      = data.remark;
       vRegStore.selectedValue = data.regStoreCd;
-      vClassCd.selectedValue = data.membrClassCd;
+      // vClassCd.selectedValue = data.membrClassCd;
       vGender.selectedValue = data.gendrFg;
       vWedding.selectedValue = data.weddingYn;
       vUseYn.selectedValue = data.useYn;
@@ -281,7 +285,7 @@ $(document).ready(function(){
     param.telNo = telNo.value;
     param.emailAddr = membrEmail.value;
     param.regStoreCd = regStore.selectedValue;
-    param.membrClassCd = classCd.selectedValue;
+    // param.membrClassCd = classCd.selectedValue;
     param.gendrFg = gender.selectedValue;
     param.emailRecvYn = emailRecvYn.selectedValue;
     param.smsRecvYn = smsRecvYn.selectedValue;
@@ -327,7 +331,7 @@ $(document).ready(function(){
   var vRemark      = genInputText("#vRemark", "160");
   var vBrthdDt     = wcombo.genDate("#vBrthdDt");
   var vRegStore    = wcombo.genCommonBox("#vRegStore", ${regstrStoreListAll});
-  var vClassCd     = wcombo.genCommonBox("#vClassCd", ${comboData});
+  <%--var vClassCd     = wcombo.genCommonBox("#vClassCd", ${comboData});--%>
   var vGender      = wcombo.genCommonBox("#vGender", genderDataEx);
   var vWedding     = wcombo.genCommonBox("#vWedding", weddingData);
   var vEmailRecv   = wcombo.genCommonBox("#vEmailRecv", recvDataEx);

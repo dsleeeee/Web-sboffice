@@ -23,7 +23,7 @@
         <button class="btn_skyblue" id="btnClassSave" ng-click="save()"><s:message code='cmm.save' /></button>
       </div>
       <%-- 상품권분류등록 그리드 --%>
-      <div id="giftClassGrid" class="wj-gridWrap" style="height:190px">
+      <div id="giftClassGrid" class="wj-gridWrap" style="height:190px; overflow-y: hidden;">
         <wj-flex-grid
                 autoGenerateColumns="false"
                 control="flex"
@@ -58,7 +58,7 @@
         <button class="btn_skyblue" id="btnGiftSave" ng-click="save()"><s:message code='cmm.save' /></button>
       </div>
       <%-- 상품권등록 그리드 --%>
-      <div id="giftGrid" class="wj-gridWrap" style="height:190px">
+      <div id="giftGrid" class="wj-gridWrap" style="height:190px;overflow-y: hidden;">
         <wj-flex-grid
                 autoGenerateColumns="false"
                 control="flex"

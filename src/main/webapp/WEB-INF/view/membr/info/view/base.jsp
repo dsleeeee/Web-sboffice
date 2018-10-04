@@ -78,12 +78,16 @@
             </div>
           </td>
           <%-- 회원등급분류 --%>
+          <%--
           <th><s:message code="regist.membr.class"/><em class="imp">*</em></th>
           <td>
             <div class="sb-select">
               <div id="vClassCd"></div>
             </div>
           </td>
+          --%>
+          <th></th>
+          <td></td>
         </tr>
         <tr>
           <%-- 회원카드번호 --%>
