@@ -12,15 +12,15 @@
     <%--layerContent--%>
     <div class="title w500">
       <p class="tit"><s:message code="ehgt.crncyFgRegist" /></p>
-      <a href="javascript:;" class="btn_close ${layerName}Close"></a>
+      <a href="#" class="btn_close ${layerName}Close"></a>
       <div class="con" style="height:300px;">
         <div class="sc" style="height:270px;">
           <div id="_codeGrid" class="mt10"></div>
         </div>
       </div>
       <div class="btnSet">
-        <span><a href="javascript:;" class="btn_blue" id="${layerName}Save"><s:message code="cmm.edit" /></a></span>
-        <span><a href="javascript:;" class="btn_gray ${layerName}Close"><s:message code="cmm.close" /></a></span>
+        <span><a href="#" class="btn_blue" id="${layerName}Save"><s:message code="cmm.edit" /></a></span>
+        <span><a href="#" class="btn_gray ${layerName}Close"><s:message code="cmm.close" /></a></span>
       </div>
     </div>
     <%--//layerContent--%>

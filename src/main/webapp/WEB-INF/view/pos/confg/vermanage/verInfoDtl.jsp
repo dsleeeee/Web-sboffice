@@ -9,14 +9,14 @@
     <div class="title w700">
       <%-- 레이어 타이틀 : 버전정보 --%>
       <p class="tit"><s:message code="verManage.verInfo" /></p>
-      <a href="javascript:;" class="btn_close"></a>
+      <a href="#" class="btn_close"></a>
       <div class="con">
         <div class="tabType1">
           <ul>
             <%-- 버전정보 --%>
-            <li><a href="javascript:;" id="verInfoTab" class="on"><s:message code="verManage.verInfo" /></a></li>
+            <li><a href="#" id="verInfoTab" class="on"><s:message code="verManage.verInfo" /></a></li>
             <%-- 적용매장 --%>
-            <li><a href="javascript:;" id="storeInfoTab" ><s:message code="verManage.store.registed" /></a></li>
+            <li><a href="#" id="storeInfoTab" ><s:message code="verManage.store.registed" /></a></li>
           </ul>
         </div>
         <div id="verInfoArea">
@@ -119,7 +119,7 @@
                     </div>
                      -->
                     <input type="file" id="fileNm" name="file" class="sb-input w80">
-                    <%-- <a href="javascript:;" id="btnFileUpload" class="btn_grayS"><s:message code="verManage.file.upload" /></a> --%>
+                    <%-- <a href="#" id="btnFileUpload" class="btn_grayS"><s:message code="verManage.file.upload" /></a> --%>
                   </td>
                 </tr>
                 <tr>
@@ -184,13 +184,13 @@
         <div id="storeInfoArea" class="con sc2" style="height:500px; display:none;"><!--높이는 style로 조정-->
           <div class="tr">
             <%-- 매장추가 --%>
-            <a href="javascript:;" id="btnAddStore" class="btn_grayS2"><s:message code="verManage.add.store" /></a>
+            <a href="#" id="btnAddStore" class="btn_grayS2"><s:message code="verManage.add.store" /></a>
 
             <%-- 매장추가 --%>
-            <a href="javascript:;" id="btnDelStore" class="btn_grayS2"><s:message code="verManage.delete.store" /></a>
+            <a href="#" id="btnDelStore" class="btn_grayS2"><s:message code="verManage.delete.store" /></a>
 
             <%-- 엑셀 다운로드 --%>
-            <a href="javascript:;" id="btnExcel2" class="btn_grayS2"><s:message code="cmm.excel.down" /></a>
+            <a href="#" id="btnExcel2" class="btn_grayS2"><s:message code="cmm.excel.down" /></a>
           </div>
           <!--위즈모 테이블-->
           <div>

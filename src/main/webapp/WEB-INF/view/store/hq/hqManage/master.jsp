@@ -16,17 +16,17 @@
   <div class="layer_inner">
     <div class="title w870">
       <p id="popTitle" class="tit"></p>
-      <a href="javascript:;" class="btn_close"></a>
+      <a href="#" class="btn_close"></a>
       <div class="con">
         <%-- 본사정보, 메뉴권한, 코드자리수, 환경설정 탭 --%>
         <div class="tabType1">
           <ul>
             <%-- 상세정보 탭 --%>
-            <li><a id="hqInfoTab" href="javascript:;" class="on"><s:message code="hqManage.hqInfo" /></a></li>
+            <li><a id="hqInfoTab" href="#" class="on"><s:message code="hqManage.hqInfo" /></a></li>
             <%-- 환경설정 탭 --%>
-            <li><a id="envSettingTab" href="javascript:;" ><s:message code="hqManage.envSetting" /></a></li>
+            <li><a id="envSettingTab" href="#" ><s:message code="hqManage.envSetting" /></a></li>
             <%-- 메뉴관리 탭  --%>
-            <li><a id="menuSettingTab" href="javascript:;"><s:message code="hqManage.menuSetting" /></a></li>
+            <li><a id="menuSettingTab" href="#"><s:message code="hqManage.menuSetting" /></a></li>
           </ul>
         </div>
 
@@ -180,7 +180,7 @@
                     <input type="text" id="rBizNo1" maxlength="3" style="width:50px;"/>
                     <input type="text" id="rBizNo2" maxlength="2" style="width:40px;"/>
                     <input type="text" id="rBizNo3" maxlength="5" style="width:110px;"/>
-                    <a href="javascript:;" class="btn_grayS" id="btnChkBizNo"><s:message code="hqManage.chk.duplicate.bizNo" /></a>
+                    <a href="#" class="btn_grayS" id="btnChkBizNo"><s:message code="hqManage.chk.duplicate.bizNo" /></a>
                   </td>
                 </tr>
                 <tr>
@@ -242,7 +242,7 @@
                   </th>
                   <td colspan="3">
                     <input type="text" id="rPostNo" style="width:60px"/>
-                    <a href="javascript:;" class="btn_grayS" id="btnFindAddr"><s:message code="hqManage.findAddr" /></a>
+                    <a href="#" class="btn_grayS" id="btnFindAddr"><s:message code="hqManage.findAddr" /></a>
                     <br/>
                     <input type="text" id="rAddr" />
                     <input type="text" id="rAddrDtl" />
@@ -297,13 +297,13 @@
 
       <div class="btnSet">
         <%-- 등록 --%>
-        <span><a href="javascript:;" class="btn_blue" id="btnReg" style="display:none;"><s:message code="cmm.new.add" /></a></span>
+        <span><a href="#" class="btn_blue" id="btnReg" style="display:none;"><s:message code="cmm.new.add" /></a></span>
         <%-- 저장 --%>
-        <span><a href="javascript:;" class="btn_blue" id="btnSave" style="display:none;"><s:message code="cmm.save" /></a></span>
+        <span><a href="#" class="btn_blue" id="btnSave" style="display:none;"><s:message code="cmm.save" /></a></span>
         <%-- 수정 --%>
-        <span><a href="javascript:;" class="btn_blue" id="btnEdit"><s:message code="cmm.edit" /></a></span>
+        <span><a href="#" class="btn_blue" id="btnEdit"><s:message code="cmm.edit" /></a></span>
         <%-- 닫기 --%>
-        <span><a href="javascript:;" class="btn_gray" id="btnClose"><s:message code="cmm.close" /></a></span>
+        <span><a href="#" class="btn_gray" id="btnClose"><s:message code="cmm.close" /></a></span>
       </div>
     </div>
   </div>

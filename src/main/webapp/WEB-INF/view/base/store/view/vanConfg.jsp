@@ -9,14 +9,14 @@
   <div class="layer_inner">
     <div class="title w700">
       <p class="tit" id="vstoreTitle"></p>
-      <a href="javascript:;" class="btn_close ${layerName}Close"></a>
+      <a href="#" class="btn_close ${layerName}Close"></a>
       <div class="con" style="height:300px;">
           <p class="s14 bk mb5"><s:message code="storeView.vanConfig.title" /></p>
         <div id="vcGrid" class="mt10" style="height:270px;"></div>
       </div>
       <div class="btnSet">
         <span>
-          <a href="javascript:;" class="btn_gray  ${layerName}Close">
+          <a href="#" class="btn_gray  ${layerName}Close">
             <s:message code="cmm.close" />
           </a>
         </span>

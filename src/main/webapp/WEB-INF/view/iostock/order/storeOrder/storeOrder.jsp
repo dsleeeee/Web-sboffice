@@ -8,7 +8,7 @@
 
 <div class="subCon" ng-controller="storeOrderCtrl">
     <div class="searchBar flddUnfld">
-        <a href="javascript:;" class="open">${menuNm}</a>
+        <a href="#" class="open">${menuNm}</a>
     </div>
     <table class="searchTbl">
         <colgroup>
@@ -47,7 +47,7 @@
                 <div class="sb-select fl mr10">
                     <span class="txtIn"><input id="reqDate" class="w150" ng-model="storeOrder.reqDate"></span>
                 </div>
-                <a href="javascript:;" class="btn_grayS" ng-click="newReqOrder()"><s:message code="storeOrder.reqRegist" /></a>
+                <a href="#" class="btn_grayS" ng-click="newReqOrder()"><s:message code="storeOrder.reqRegist" /></a>
                 <%--<button type="button" class="btn_blue" id="btnReqRegist" ng-click="newReqOrder()"><s:message code="storeOrder.reqRegist" /></button>--%>
             </td>
         </tr>

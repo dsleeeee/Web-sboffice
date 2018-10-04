@@ -12,15 +12,15 @@
     <div class="title w800">
       <%-- 타이틀 --%>
       <p id="popTitle" class="tit"></p>
-      <a href="javascript:;" class="btn_close"></a>
+      <a href="#" class="btn_close"></a>
       <div class="con">
         <%-- 거래처등록, 취급상품 탭 --%>
         <div class="tabType1">
           <ul>
             <%-- 거래처등록 탭 --%>
-            <li><a id="vendrTab" href="javascript:;"><s:message code="vendr.regst" /></a></li>
+            <li><a id="vendrTab" href="#"><s:message code="vendr.regst" /></a></li>
             <%-- 취급상품 탭 --%>
-            <li><a id="trtMntTab" href="javascript:;" class="on"><s:message code="vendr.trtMnt" /></a></li>
+            <li><a id="trtMntTab" href="#" class="on"><s:message code="vendr.trtMnt" /></a></li>
           </ul>
         </div>
 
@@ -80,7 +80,7 @@
               <h3 class="lh30" style="font-size:0.75em; border:1px solid #ccc; background:#e8e8e8; padding:5px 15px; color:#222; min-width:300px; position:relative;">
                 <s:message code="vendr.trtmnt.yes" />
                 <span class="fr" style="font-size:1em;" id="btnDelete">
-                  <a href="javascript:;" class="btn_grayS"><s:message code="cmm.delete" /></a>
+                  <a href="#" class="btn_grayS"><s:message code="cmm.delete" /></a>
                 </span>
               </h3>
               <div style="height:410px;" id="theGrid1"></div>
@@ -94,7 +94,7 @@
               <h3 class="lh30" style="font-size:0.75em; border:1px solid #ccc; background:#e8e8e8; padding:5px 15px; color:#222; min-width:300px; position:relative;">
                 <s:message code="vendr.trtmnt.no" />
                 <span class="fr" style="font-size:1em;" id="btnRegist" >
-                  <a href="javascript:;" class="btn_grayS"><s:message code="vendr.regist" /></a>
+                  <a href="#" class="btn_grayS"><s:message code="vendr.regist" /></a>
                 </span>
               </h3>
               <div style="height:350px;" id="theGrid2"></div>

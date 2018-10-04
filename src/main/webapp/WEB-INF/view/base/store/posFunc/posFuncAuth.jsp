@@ -8,9 +8,9 @@
     <%--============================================= 탭 =============================================--%>
     <ul class="subTab">
       <%-- 포스기능 사용관리 --%>
-      <li><a id="posUseManage" href="javascript:;"><s:message code="posFunc.manage.posFunc" /></a></li>
+      <li><a id="posUseManage" href="#"><s:message code="posFunc.manage.posFunc" /></a></li>
       <%-- 포스기능 인증관리 --%>
-      <li><a id="posAuthManage"  href="javascript:;" class="on"><s:message code="posFunc.auth.posFunc" /></a></li>
+      <li><a id="posAuthManage"  href="#" class="on"><s:message code="posFunc.auth.posFunc" /></a></li>
     </ul>
 
     <%-- 왼쪽  --%>
