@@ -175,7 +175,7 @@ public class CouponServiceImpl implements CouponService {
 
         // 본사 통제
         if(couponVO.getCoupnEnvstVal() == CoupnEnvFg.HQ) {
-            couponVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
+            couponVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             returnList = mapper.getHqCouponList(couponVO);
         }
         // 매장 통제

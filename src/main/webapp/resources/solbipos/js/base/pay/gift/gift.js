@@ -51,7 +51,7 @@ app.controller('giftClassCtrl', ['$scope', '$http', function ($scope, $http) {
             s_alert.pop(messages["gift.not.use.payClassCd"]);
             var giftGrid = agrid.getScope('giftCtrl');
             giftGrid._gridDataInit();
-            return;
+            return false;
           } else {
             $("#giftSubTitle").text(" [" + selectedRow.payClassNm+ "]");
             $scope._broadcast('giftCtrl', selectedRow);

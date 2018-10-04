@@ -398,7 +398,7 @@
       },
         function (result) {
           s_alert.pop(result.message);
-          return;
+          return false;
         }
       );
     }
@@ -428,7 +428,7 @@
     },
     function (result) {
         s_alert.pop(result.message);
-        return;
+        return false;
       }
     );
   }
@@ -473,42 +473,42 @@
     var msg = "<s:message code='vendr.vendrCd'/> <s:message code='cmm.require.text'/>";
     if(rVendrCd.value === "") {
       s_alert.pop(msg);
-      return;
+      return false;
     }
 
     <%-- 거래처명을 입력해주세요. --%>
     var msg = "<s:message code='vendr.vendrNm'/> <s:message code='cmm.require.text'/>";
     if(rVendrNm.value === "") {
       s_alert.pop(msg);
-      return;
+      return false;
     }
 
     <%-- 대표자명을 입력해주세요. --%>
     var msg = "<s:message code='vendr.ownerNm'/> <s:message code='cmm.require.text'/>";
     if(rOwnerNm.value === "") {
       s_alert.pop(msg);
-      return;
+      return false;
     }
 
     <%-- 거래처 구분 여부를 선택 해주세요. --%>
     var msg = "<s:message code='vendr.vendorFg'/> <s:message code='cmm.require.select'/>";
     if(rVendorFg.value === "") {
       s_alert.pop(msg);
-      return;
+      return false;
     }
 
     <%-- 부가세 포함여부를 선택 해주세요. --%>
     var msg = "<s:message code='vendr.vatIncldYn'/> <s:message code='cmm.require.select'/>";
     if(rVatIncldYn.value === "") {
       s_alert.pop(msg);
-      return;
+      return false;
     }
 
     <%-- 사용여부를 선택 해주세요. --%>
     var msg = "<s:message code='vendr.useYn'/> <s:message code='cmm.require.select'/>";
     if(rUseYn.value === "") {
       s_alert.pop(msg);
-      return;
+      return false;
     }
 
     saveHqOffice(sendUrl);
@@ -534,7 +534,7 @@
   $("#layerVendr #trtMntTab").click(function(e){
     if(vendr === undefined || vendr === null || vendr === "") {
       s_alert.pop("<s:message code='vendr.request.regist.vendr'/>");
-      return;
+      return false;
     }
     showTrtMntSet($('#vVendrCd').text());
   });

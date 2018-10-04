@@ -52,18 +52,20 @@
       <tr>
         <%-- 바코드 --%>
         <th><s:message code="prod.barCd" /></th>
-        <td>
+        <td colspan="3">
           <div class="sb-select">
             <div id="barCd"></div>
           </div>
         </td>
         <%-- 분류조회 --%>
+          <%--
         <th><s:message code="prod.class.search" /></th>
         <td>
           <div class="sb-select">
             <div id="prodClassCd"></div>
           </div>
         </td>
+        --%>
       </tr>
     </tbody>
   </table>
@@ -352,7 +354,7 @@ $(document).ready(function(){
   var prodCd       = wcombo.genInput("#prodCd");
   var prodNm       = wcombo.genInput("#prodNm");
   var barCd        = wcombo.genInput("#barCd");
-  var prodClassCd  = wcombo.genInput("#prodClassCd");
+  // var prodClassCd  = wcombo.genInput("#prodClassCd");
   var startDt      = wcombo.genDateVal("#startDt", "${sessionScope.sessionInfo.startDt}");
   var endDt        = wcombo.genDateVal("#endDt", "${sessionScope.sessionInfo.endDt}");
   var ldata        = ${ccu.getListScale()};
@@ -367,7 +369,7 @@ $(document).ready(function(){
     param.prodCd = prodCd.text;
     param.prodNm = prodNm.text;
     param.barCd = barCd.text;
-    param.prodClassCd = prodClassCd.text;
+    // param.prodClassCd = prodClassCd.text;
     param.listScale = listScaleBox.selectedValue;
     param.curr = index;
 

@@ -16,7 +16,8 @@
   <div class="mb40" ng-controller="mCouponClassCtrl">
     <div class="wj-TblWrapBr mr10 pd20" style="height:500px;">
       <div class="updownSet oh mb10">
-        <span class="fl bk lh30"><s:message code='mobileCoupon.regist.class' /></span>
+        <span class="fl bk lh30"><s:message code='mobileCoupon.regist.coupon' /></span>
+        <button class="btn_skyblue" id="btnClassAdd" ng-click="searchMobileCouponClass()"><s:message code='cmm.search' /></button>
         <button class="btn_skyblue" id="btnClassAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
         <%--<button class="btn_skyblue" id="btnClassDel" ng-click="del()"><s:message code='cmm.del' /></button>--%>
         <button class="btn_skyblue" id="btnClassSave" ng-click="save()"><s:message code='cmm.save' /></button>

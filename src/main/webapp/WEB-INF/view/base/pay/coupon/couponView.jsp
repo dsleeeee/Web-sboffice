@@ -16,29 +16,19 @@
 
 <div class="subCon">
 
-  <%-- 탭  --%>
-  <ul class="subTab mb20" style="display: none;">
-    <%-- 쿠폰등록 --%>
-    <li><a href="javascript:;" id="couponRegTab" class="on" ng-click="_broadcast('couponClassCtrl', true)"><s:message code='coupon.regist.coupon' /></a></li>
-    <%-- 쿠폰적용상품 등록 --%>
-    <li><a href="javascript:;" id="couponProdTab"><s:message code='coupon.regist.product' /></a></li>
-    <%-- 쿠폰적용매장 등록 (본사에서만 보임) --%>
-    <c:if test="${orgnFg == 'HQ'}">
-      <li><a href="javascript:;" id="couponStoreTab"><s:message code='coupon.regist.store' /></a></li>
-    </c:if>
-  </ul>
-
   <%-- 쿠폰분류등록 --%>
   <div class="mb40" ng-controller="couponClassCtrl">
-    <div class="wj-TblWrapBr mr10 pd20" style="height:260px;">
+    <div class="wj-TblWrapBr mr10 pd20" style="height:240px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='coupon.regist.class' /></span>
+        <button class="btn_skyblue" id="btnClassAdd" ng-click="searchCouponClass()"><s:message code='cmm.search' /></button>
+     <c:if test="${orgnFg == 'HQ'}">
         <button class="btn_skyblue" id="btnClassAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
-        <%--<button class="btn_skyblue" id="btnClassDel" ng-click="del()"><s:message code='cmm.del' /></button>--%>
         <button class="btn_skyblue" id="btnClassSave" ng-click="save()"><s:message code='cmm.save' /></button>
+     </c:if>
       </div>
       <%-- 쿠폰분류등록 그리드 --%>
-      <div id="couponClassGrid" class="wj-gridWrap" style="height:190px">
+      <div id="couponClassGrid" class="wj-gridWrap" style="height:180px">
         <wj-flex-grid
                 autoGenerateColumns="false"
                 control="flex"
@@ -69,9 +59,11 @@
     <div class="wj-TblWrapBr mr10 pd20" style="height:260px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='coupon.regist.coupon' /> <span id="couponSubTitle"></span> </span>
+      <c:if test="${orgnFg == 'HQ'}">
         <button class="btn_skyblue" id="btnCouponAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
         <button class="btn_skyblue" id="btnCouponDel" ng-click="del()"><s:message code='cmm.del' /></button>
         <button class="btn_skyblue" id="btnCouponSave" ng-click="save()"><s:message code='cmm.save' /></button>
+      </c:if>
       </div>
       <%-- 쿠폰등록 그리드 --%>
       <div id="couponGrid" class="wj-gridWrap" style="height:190px">

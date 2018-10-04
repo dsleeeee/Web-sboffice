@@ -391,7 +391,7 @@ $(document).ready(function(){
       function(result){
         if(result.message != undefined || result.message == "") {
           s_alert.pop(result.message);
-          return;
+          return false;
         }
         var data = result.data;
         var keys = Object.keys(data);

@@ -17,6 +17,7 @@
     <div class="wj-TblWrapBr mr10 pd20" style="height:260px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='gift.regist.class' /></span>
+        <button class="btn_skyblue" id="btnClassAdd" ng-click="searchGiftClass()"><s:message code='cmm.search' /></button>
         <button class="btn_skyblue" id="btnClassAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
         <%--<button class="btn_skyblue" id="btnClassDel" ng-click="del()"><s:message code='cmm.del' /></button>--%>
         <button class="btn_skyblue" id="btnClassSave" ng-click="save()"><s:message code='cmm.save' /></button>

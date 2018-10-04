@@ -26,24 +26,24 @@
       <th><s:message code="credit.srchStore" /></th>
       <td colspan="3">
         <div id="storeCd" style="display: none;"></div>
-        <input type="text" class="sb-input w100" id="storeCdText" ng-model="storeCds" readonly="readonly" ng-click="searchStore()" />
+        <input type="text" class="sb-input" id="storeCdText" ng-model="storeCds" readonly="readonly" ng-click="searchStore()" />
       </td>
       <%-- 회원번호 --%>
       <th><s:message code="credit.membrNo" /></th>
       <td>
-        <input type="text" class="sb-input w100" id="srcgMembrNo" ng-model="memberNo" />
+        <input type="text" class="sb-input" id="srcgMembrNo" ng-model="memberNo" />
       </td>
     </tr>
     <tr>
       <%-- 회원명 --%>
       <th><s:message code="credit.membrNm" /></th>
       <td colspan="3">
-        <input type="text" class="sb-input w100" id="srchMembrNm" ng-model="memberNm" />
+        <input type="text" class="sb-input" id="srchMembrNm" ng-model="memberNm" />
       </td>
       <%-- 정렬 --%>
       <th><s:message code="credit.array" /></th>
       <td>
-        <div class="sb-select">
+        <div class="sb-select w80">
           <wj-combo-box
                   id="srchArrayCombo"
                   ng-model="array"
@@ -111,9 +111,11 @@
 
         </wj-flex-grid>
         <%-- ColumnPicker 사용시 include --%>
+        <%--
         <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
           <jsp:param name="pickerTarget" value="representCtrl"/>
         </jsp:include>
+        --%>
         <%--// ColumnPicker 사용시 include --%>
       </div>
     </div>
