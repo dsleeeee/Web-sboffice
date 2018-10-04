@@ -7,7 +7,7 @@
   <div class="wj-dialog wj-dialog-columns">
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="coupon.regist.store" />
-      <a href="javascript:;" class="wj-hide btn_close"></a>
+      <a href="#" class="wj-hide btn_close"></a>
     </div>
     <div class="wj-dialog-body">
 
@@ -43,7 +43,7 @@
           <div class="wj-TblWrap mr10" style="height:350px;" ng-controller="regStoreCtrl">
             <div class="oh mb10">
               <span class="fl bk lh20 s14"><s:message code="coupon.regStore"/></span>
-              <span class="fr"><a href="javascript:;" class="btn_grayS2" ng-click="delete()"><s:message code="cmm.del" /></a></span>
+              <span class="fr"><a href="#" class="btn_grayS2" ng-click="delete()"><s:message code="cmm.del" /></a></span>
             </div>
             <div id="regStoreGrid" style="height: 270px;">
               <wj-flex-grid
@@ -72,7 +72,7 @@
           <div class="wj-TblWrap ml10" style="height:350px;" ng-controller="noRegStoreCtrl">
             <div class="oh mb10">
               <span class="fl bk lh20 s14"><s:message code="coupon.noRegStore"/></span>
-              <span class="fr"><a href="javascript:;" class="btn_grayS2" ng-click="regist()" ><s:message code="coupon.regist"/></a></span>
+              <span class="fr"><a href="#" class="btn_grayS2" ng-click="regist()" ><s:message code="coupon.regist"/></a></span>
             </div>
             <div id="noRegStoreGrid" style="height: 270px;">
               <wj-flex-grid

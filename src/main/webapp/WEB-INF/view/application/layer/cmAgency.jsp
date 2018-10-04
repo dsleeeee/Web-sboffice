@@ -12,7 +12,7 @@
       <p class="tit">
         <s:message code="cmm.cmagency.select" />
       </p>
-      <a href="javascript:;" class="btn_close ca_close"></a>
+      <a href="#" class="btn_close ca_close"></a>
       <div class="con">
         <div>
           <table class="tblType01">
@@ -60,12 +60,12 @@
       </div>
       <div class="btnSet">
         <span> 
-          <a id="_caok" href="javascript:;" class="btn_blue">
+          <a id="_caok" href="#" class="btn_blue">
             <s:message code="cmm.select" />
           </a>
         </span>
         <span>
-          <a href="javascript:;" class="btn_gray  ca_close">
+          <a href="#" class="btn_gray  ca_close">
             <s:message code="cmm.close" />
           </a>
         </span>

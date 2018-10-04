@@ -67,10 +67,10 @@ window.mxLanguages = window.mxLanguages || ['ko'];
         <%--그룹--%>
         <div class="w15 fl">
           <h2 class="h2_tit2 mr20 oh"><s:message code="tableLayout.group"/>
-            <a href="javascript:;" class="ftTit" id="btnLayerConfig"><s:message code="tableLayout.tableLayout"/></a>
+            <a href="#" class="ftTit" id="btnLayerConfig"><s:message code="tableLayout.tableLayout"/></a>
           </h2>
           <div class="frGroupWrap mr20" id="divLayers">
-            <%--<span><a href="javascript:;" class="on">2층</a></span>--%>
+            <%--<span><a href="#" class="on">2층</a></span>--%>
           </div>
 
         </div>
@@ -81,7 +81,7 @@ window.mxLanguages = window.mxLanguages || ['ko'];
           <h2 class="h2_tit2"><s:message code="tableLayout.component"/></h2>
           <div class="cfgWrap">
             <ul class="tableImg" id="divCompos">
-              <%--<li><a href="javascript:;"><img src="img/img_table2.png" alt="" /></a></li>--%>
+              <%--<li><a href="#"><img src="img/img_table2.png" alt="" /></a></li>--%>
             </ul>
           </div>
           <%--//구성요소--%>
@@ -113,20 +113,20 @@ window.mxLanguages = window.mxLanguages || ['ko'];
                 <span class="s12 fl lh30 bk mr10"><s:message code="tableLayout.bgImg"/></span>
                 <div class="txtIn fl bgfile oh"  style="width:250px;">
                   <input type="file" class="fl" id="btnBgFile" accept="image/x-png, image/gif, image/jpeg"/>
-                  <a href="javascript:;" class="btn_grayS" id="btnDelBgImg"><s:message code="cmm.delete"/></a>
+                  <a href="#" class="btn_grayS" id="btnDelBgImg"><s:message code="cmm.delete"/></a>
                 </div>
               </div>
               <div class="mt10 oh" id="tableAlign" style="display:none;">
                 <span class="s12 fl lh30 bk mr20"><s:message code="tableLayout.align"/></span>
                 <span class="align">
-                <a href="javascript:;" class="btn_objleft" id="btnLeft"></a>
-                <a href="javascript:;" class="btn_objcenter" id="btnCenter"></a>
-                <a href="javascript:;" class="btn_objright" id="btnRight"></a>
+                <a href="#" class="btn_objleft" id="btnLeft"></a>
+                <a href="#" class="btn_objcenter" id="btnCenter"></a>
+                <a href="#" class="btn_objright" id="btnRight"></a>
                 </span>
                 <span class="align ml10">
-                <a href="javascript:;" class="btn_objtop" id="btnTop"></a>
-                <a href="javascript:;" class="btn_objmiddle" id="btnMiddle"></a>
-                <a href="javascript:;" class="btn_objbottom" id="btnBottom"></a>
+                <a href="#" class="btn_objtop" id="btnTop"></a>
+                <a href="#" class="btn_objmiddle" id="btnMiddle"></a>
+                <a href="#" class="btn_objbottom" id="btnBottom"></a>
                 </span>
               </div>
             </div>
@@ -147,7 +147,7 @@ window.mxLanguages = window.mxLanguages || ['ko'];
     <%--layerContent--%>
     <div class="title w400">
       <p class="tit"><s:message code="tableLayout.tableLayout"/></p>
-      <a href="javascript:;" class="btn_close _btnClose"></a>
+      <a href="#" class="btn_close _btnClose"></a>
       <div class="con sc" style="height:300px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code="tableLayout.tableLayout"/></span>
@@ -160,8 +160,8 @@ window.mxLanguages = window.mxLanguages || ['ko'];
         <%--//위즈모 테이블--%>
       </div>
       <div class="btnSet">
-        <span><a href="javascript:;" class="btn_blue _btnClose" id="btnApply"><s:message code="cmm.apply"/></a></span>
-        <span><a href="javascript:;" class="btn_gray _btnClose"><s:message code="cmm.close"/></a></span>
+        <span><a href="#" class="btn_blue _btnClose" id="btnApply"><s:message code="cmm.apply"/></a></span>
+        <span><a href="#" class="btn_gray _btnClose"><s:message code="cmm.close"/></a></span>
       </div>
     </div>
     <%--//layerContent--%>

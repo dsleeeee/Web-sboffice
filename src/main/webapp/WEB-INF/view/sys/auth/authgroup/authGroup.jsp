@@ -10,7 +10,7 @@
 
 <div class="subCon">
   <div class="searchBar flddUnfld">
-    <a href="javascript:void(0);" class="open">${menuNm}</a>
+    <a href="#" class="open">${menuNm}</a>
   </div>
 
   <table class="searchTbl">
@@ -51,7 +51,7 @@
           <div class="sb-select fl">
             <div id="userId" class="sb-input"></div>
           </div>
-          <a href="javascript:;" class="btn_grayS ml5" id="btnExceptMng"><s:message code="authGroup.exceptMng"/></a>
+          <a href="#" class="btn_grayS ml5" id="btnExceptMng"><s:message code="authGroup.exceptMng"/></a>
         </td>
       </tr>
     </tbody>

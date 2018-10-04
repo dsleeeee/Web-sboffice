@@ -11,7 +11,7 @@
 
 <div class="subCon">
   <div class="searchBar flddUnfld">
-    <a href="javascript:void(0);" class="open">${menuNm}</a>
+    <a href="#" class="open">${menuNm}</a>
   </div>
 
   <table class="searchTbl">
@@ -137,11 +137,11 @@
           <s:message code="webMenu.fun.info" />
           <span class="fr">
             <%-- 추가버튼 --%>
-            <a id="funcReg" href="javascript:;" class="btn_grayS">
+            <a id="funcReg" href="#" class="btn_grayS">
               <s:message code="cmm.add" />
             </a>
             <%-- 삭제버튼 --%>
-            <a id="funcDel" href="javascript:;" class="btn_grayS">
+            <a id="funcDel" href="#" class="btn_grayS">
               <s:message code="cmm.del" />
             </a>
           </span>

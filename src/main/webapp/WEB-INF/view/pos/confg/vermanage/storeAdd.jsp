@@ -8,7 +8,7 @@
   <div class="layer_inner">
     <div class="title w600">
       <p class="tit"><s:message code="verManage.add.store" /></p>
-      <a href="javascript:;" id="btnCloseSLayer" class="btn_close"></a>
+      <a href="#" id="btnCloseSLayer" class="btn_close"></a>
       <div class="con">
         <div>
           <table class="tblType01">
@@ -109,7 +109,7 @@
       </div>
       <%-- 저장 --%>
       <div class="btnSet">
-        <span><a href="javascript:;" id="btnSaveStore" class="btn_blue"><s:message code="cmm.save" /></a></span>
+        <span><a href="#" id="btnSaveStore" class="btn_blue"><s:message code="cmm.save" /></a></span>
       </div>
     </div>
   </div>

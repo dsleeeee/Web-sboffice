@@ -7,13 +7,13 @@
   <div class="layer_inner">
     <div class="title w800">
       <p id="popTitle" class="tit"></p>
-      <a href="javascript:;" class="btn_close"></a>
+      <a href="#" class="btn_close"></a>
       <div class="con">
         <%-- 사원기초정보 탭 --%>
         <div class="tabType1">
           <ul>
             <%-- 사원기초정보 탭 --%>
-            <li><a id="hqEmpInfoTab" href="javascript:;" class="on"><s:message code="hqEmp.hqEmpInfo" /></a></li>
+            <li><a id="hqEmpInfoTab" href="#" class="on"><s:message code="hqEmp.hqEmpInfo" /></a></li>
             <%-- 메뉴권한 탭 --%>
             <%-- --%>
           </ul>
@@ -42,7 +42,7 @@
                     </span>
                     <%-- 중복체크 --%>
                     <span>
-                      <a href="javascript:;" class="btn_grayS" id="btnChkHqEmpNo"><s:message code="hqEmp.chk.duplicate" /></a>
+                      <a href="#" class="btn_grayS" id="btnChkHqEmpNo"><s:message code="hqEmp.chk.duplicate" /></a>
                     </span>
                   </td>
                   <%-- 사원명 --%>
@@ -77,7 +77,7 @@
                     </span>
                     <%-- 중복체크 --%>
                     <span class="txtIn">
-                      <a href="javascript:;" class="btn_grayS" id="btnChkHqUserId"><s:message code="hqEmp.chk.duplicate" /></a>
+                      <a href="#" class="btn_grayS" id="btnChkHqUserId"><s:message code="hqEmp.chk.duplicate" /></a>
                     </span>
                   </td>
                 </tr>
@@ -142,11 +142,11 @@
 
       <div class="btnSet">
         <%-- 등록 --%>
-        <span><a href="javascript:;" class="btn_blue" id="btnReg" style="display:none;"><s:message code="cmm.new.add" /></a></span>
+        <span><a href="#" class="btn_blue" id="btnReg" style="display:none;"><s:message code="cmm.new.add" /></a></span>
         <%-- 수정 --%>
-        <span><a href="javascript:;" class="btn_blue" id="btnSave" style="display:none;"><s:message code="cmm.save" /></a></span>
+        <span><a href="#" class="btn_blue" id="btnSave" style="display:none;"><s:message code="cmm.save" /></a></span>
         <%-- 닫기 --%>
-        <span><a href="javascript:;" class="btn_gray" id="btnClose"><s:message code="cmm.close" /></a></span>
+        <span><a href="#" class="btn_gray" id="btnClose"><s:message code="cmm.close" /></a></span>
       </div>
     </div>
   </div>

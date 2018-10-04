@@ -13,16 +13,16 @@
       <spam><label id="membrNoNm"><s:message code="regist.membr.info"/></label></spam>
       <%-- 버튼 --%>
       <span class="fr">
-        <a href="javascript:;" class="btn_grayS" id="btnNew"><s:message code="webMenu.new"/></a>
-        <a href="javascript:;" class="btn_grayS" id="btnDel"><s:message code="cmm.delete"/></a>
-        <a href="javascript:;" class="btn_grayS" id="btnSave"><s:message code="cmm.save"/></a>
+        <a href="#" class="btn_grayS" id="btnNew"><s:message code="webMenu.new"/></a>
+        <a href="#" class="btn_grayS" id="btnDel"><s:message code="cmm.delete"/></a>
+        <a href="#" class="btn_grayS" id="btnSave"><s:message code="cmm.save"/></a>
       </span>
     </h3>
     </br>
     <%-- tab --%>
     <ul class="subTab">
-      <li><a href="javascript:;" id="btnInfo" class="on"><s:message code="regist.info"/></a></li>
-      <%--<li><a href="javascript:;" id="btnCard"><s:message code="regist.membr.card"/></a></li>--%>
+      <li><a href="#" id="btnInfo" class="on"><s:message code="regist.info"/></a></li>
+      <%--<li><a href="#" id="btnCard"><s:message code="regist.membr.card"/></a></li>--%>
     </ul>
   <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
   <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
@@ -150,7 +150,7 @@
           <th><s:message code="cmm.addr"/></th>
           <td colspan="3">
             <%--우편번호찾기 버튼--%>
-            <a href="javascript:;" class="btn_grayS ml5 fl">
+            <a href="#" class="btn_grayS ml5 fl">
               <s:message code="cmm.zip.find"/>
             </a>
             <div class="sb-select w50">
@@ -193,7 +193,7 @@
           <td colspan="3">
             <div id="storeCd" style="display: none;"></div>
             <input type="text" id="storeCdText" class="sb-input w80" readonly="readonly"/>
-            <a href="javascript:;" id="store" class="btn_grayS ml5"><s:message code="cmm.store.select" /></a>
+            <a href="#" id="store" class="btn_grayS ml5"><s:message code="cmm.store.select" /></a>
           </td>
         </tr>
       </tbody>

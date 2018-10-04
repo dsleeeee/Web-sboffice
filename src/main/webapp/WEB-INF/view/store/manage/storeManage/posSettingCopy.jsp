@@ -24,7 +24,7 @@
       </div>
       <%--복사하기 버튼 --%>
       <div class="btnSet">
-        <span><a href="javascript:;" id="btnCopyPosSetting" class="btn_blue"><s:message code="storeManage.copy" /></a></span>
+        <span><a href="#" id="btnCopyPosSetting" class="btn_blue"><s:message code="storeManage.copy" /></a></span>
       </div>
     </div>
   </div>

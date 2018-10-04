@@ -7,7 +7,7 @@
     <div id="dlvrRegistLayer" class="wj-dialog wj-dialog-columns" ng-controller="dlvrInfoCtrl">
         <div class="wj-dialog-header wj-dialog-header-font">
             <s:message code="deliveryCharger.registPopTitle" /> <span id="registTitleDlvrNm" class="ml5"></span>
-            <a href="javascript:;" class="wj-hide btn_close"></a>
+            <a href="#" class="wj-hide btn_close"></a>
         </div>
         <div class="wj-dialog-body">
             <form id="dlvrForm" ng-submit="submitForm()">

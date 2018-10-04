@@ -8,9 +8,9 @@
     <%--============================================= 탭 =============================================--%>
     <ul class="subTab">
       <%-- 포스기능 사용관리 --%>
-      <li><a id="posUseManage" href="javascript:;" class="on"><s:message code="posFunc.manage.posFunc" /></a></li>
+      <li><a id="posUseManage" href="#" class="on"><s:message code="posFunc.manage.posFunc" /></a></li>
       <%-- 포스기능 인증관리 --%>
-      <li><a id="posAuthManage"  href="javascript:;"><s:message code="posFunc.auth.posFunc" /></a></li>
+      <li><a id="posAuthManage"  href="#"><s:message code="posFunc.auth.posFunc" /></a></li>
     </ul>
 
     <%-- 왼쪽  --%>
@@ -41,13 +41,12 @@
           <button class="btn_skyblue" id="btnAutoPosition" style="display:none;"><s:message code="posFunc.autoSet.position" /></button>
           <%-- 저장버튼 --%>
           <button class="btn_skyblue" id="btnSave"><s:message code="cmm.save" /></button>
-          <button class="btn_skyblue" id="btnFuncSave"><s:message code="cmm.save" /></button>
         </div>
         <%-- 그리드 --%>
         <div id="useFuncGrid"></div>
         <%-- 기능키영역 --%>
         <div id="funcKeyDiv" style="display:none">
-          <div style="height: 330px;">
+          <div style="height: 290px;">
             <wj-flex-grid
                     autoGenerateColumns="false"
                     control="flex"
@@ -62,11 +61,15 @@
               <wj-flex-grid-column header="<s:message code="posFunc.grid.fnkeyNo"/>" binding="fnkeyNo" width="100" isReadOnly="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="posFunc.grid.fnkeyNm"/>" binding="fnkeyNm" width="*" isReadOnly="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="posFunc.grid.imgFileNm"/>" binding="imgFileNm" visible="false"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="posFunc.grid.useYn"/>" binding="fnkeyUsed" width="70" isReadOnly="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="posFunc.grid.useYn"/>" binding="fnkeyUsed" width="70" isReadOnly="true" visible="false"></wj-flex-grid-column>
 
             </wj-flex-grid>
           </div>
-          <div id="funcKeyGraph" class="funcKeyWrap funcKeyLine2 mt20"></div>
+          <div class="updownSet oh mt10">
+            <button class="btn_skyblue" id="btnFuncDelete"><s:message code="cmm.delete" /></button>
+            <button class="btn_skyblue" id="btnFuncSave"><s:message code="cmm.save" /></button>
+          </div>
+          <div id="funcKeyGraph" class="funcKeyWrap funcKeyLine2 mt10"></div>
         </div>
       </div>
     </div>
@@ -211,7 +214,6 @@
           $("#btnFuncSave").show();
           $("#funcKeyDiv").show();
 
-          // TODO : 그래프 데이터 포스기능키 좌/우 적용 변경..
           funckeyGraph.format.openByGrid(true);
 
         } else {
@@ -433,4 +435,5 @@
 </script>
 <script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/graph/sanitizer/sanitizer.min.js" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/posFuncUseManage.js?ver=2018100201" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/vendor/wijmo/js/grid/wijmo.grid.filter.min.js?ver=5.20182.500" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/graph/js/posFuncUseManage.js?ver=20181004.00" charset="utf-8"></script>

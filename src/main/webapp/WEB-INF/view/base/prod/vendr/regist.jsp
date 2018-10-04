@@ -12,15 +12,15 @@
     <div class="title w800">
       <%-- 타이틀 --%>
       <p id="popTitle" class="tit"></p>
-      <a href="javascript:;" class="btn_close"></a>
+      <a href="#" class="btn_close"></a>
       <div class="con">
         <%-- 거래처등록, 취급상품 탭 --%>
         <div class="tabType1">
           <ul>
             <%-- 거래처등록 탭 --%>
-            <li><a id="vendrTab" href="javascript:;" class="on"><s:message code="vendr.regst" /></a></li>
+            <li><a id="vendrTab" href="#" class="on"><s:message code="vendr.regst" /></a></li>
             <%-- 취급상품 탭 --%>
-            <li><a id="trtMntTab" href="javascript:;"><s:message code="vendr.trtMnt" /></a></li>
+            <li><a id="trtMntTab" href="#"><s:message code="vendr.trtMnt" /></a></li>
           </ul>
         </div>
 
@@ -214,7 +214,7 @@
                   </span>
                   <%-- 주소찾기 버튼 --%>
                   <span class="w20 pdb10">
-                    <a href="javascript:;" class="btn_grayS" id="btnFindAddr"><s:message code="hqManage.findAddr" /></a>
+                    <a href="#" class="btn_grayS" id="btnFindAddr"><s:message code="hqManage.findAddr" /></a>
                   </span>
                 </td>
               </tr>
@@ -249,13 +249,13 @@
       <%-- 공통 버튼 영역 --%>
       <div class="btnSet">
         <%-- 등록 --%>
-        <span><a href="javascript:;" class="btn_blue" id="btnReg" style="display:none;"><s:message code="cmm.new.add" /></a></span>
+        <span><a href="#" class="btn_blue" id="btnReg" style="display:none;"><s:message code="cmm.new.add" /></a></span>
         <%-- 저장 --%>
-        <span><a href="javascript:;" class="btn_blue" id="btnSave" style="display:none;"><s:message code="cmm.save" /></a></span>
+        <span><a href="#" class="btn_blue" id="btnSave" style="display:none;"><s:message code="cmm.save" /></a></span>
         <%-- 수정 --%>
-        <span><a href="javascript:;" class="btn_blue" id="btnEdit"><s:message code="cmm.edit" /></a></span>
+        <span><a href="#" class="btn_blue" id="btnEdit"><s:message code="cmm.edit" /></a></span>
         <%-- 닫기 --%>
-        <span><a href="javascript:;" class="btn_gray" id="btnClose"><s:message code="cmm.close" /></a></span>
+        <span><a href="#" class="btn_gray" id="btnClose"><s:message code="cmm.close" /></a></span>
       </div>
 
     </div>

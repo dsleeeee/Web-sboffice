@@ -19,11 +19,11 @@
     <%--============================================= 탭 =============================================--%>
     <ul class="subTab">
       <%-- 매장정보 --%>
-      <li><a id="storeInfo" href="javascript:;" class="on"><s:message code="storeManage.storeInfo" /></a></li>
+      <li><a id="storeInfo" href="#" class="on"><s:message code="storeManage.storeInfo" /></a></li>
       <%-- 메뉴권한 --%>
-      <%-- <li><a id="storeMenuAuth" href="javascript:;"><s:message code="storeManage.storeMenuAuth" /></a></li> --%>
+      <%-- <li><a id="storeMenuAuth" href="#"><s:message code="storeManage.storeMenuAuth" /></a></li> --%>
       <%-- 매장환경 --%>
-      <li><a id="storeEnv"  href="javascript:;"><s:message code="storeManage.storeEnv" /></a></li>
+      <li><a id="storeEnv"  href="#"><s:message code="storeManage.storeEnv" /></a></li>
     </ul>
 
     <%--============================================= 기본정보 =============================================--%>
@@ -113,7 +113,7 @@
               <input type="text" id="rBizNo1" class="sb-input w10" maxlength="3"/>-
               <input type="text" id="rBizNo2" class="sb-input w10" maxlength="2"/>-
               <input type="text" id="rBizNo3" class="sb-input w15" maxlength="5"/>
-              <a id="btnChkBizNo" href="javascript:;" class="btn_grayS ml5"><s:message code="storeManage.chk.duplicate" /></a><Br />
+              <a id="btnChkBizNo" href="#" class="btn_grayS ml5"><s:message code="storeManage.chk.duplicate" /></a><Br />
             </td>
           </tr>
           <tr>
@@ -139,7 +139,7 @@
             <th><s:message code="storeManage.addr" /><em class="imp">*</em></th>
             <td colspan="3">
               <input type="text" id="rPostNo" class="sb-input w30" />
-              <a id="btnSrchAddr" href="javascript:;" class="btn_grayS ml5"><s:message code="storeManage.srchAddr" /></a><Br />
+              <a id="btnSrchAddr" href="#" class="btn_grayS ml5"><s:message code="storeManage.srchAddr" /></a><Br />
               <input type="text" id="rAddr" class="sb-input w100" />
               <input type="text" id="rAddrDtl" class="sb-input w100" />
             </td>
@@ -212,7 +212,7 @@
                   <div id="rEnvStore" class="w100"></div>
                 </div>
                 <%-- 매장환경조회 버튼 --%>
-                <a id="btnStoreSetting" href="javascript:;" class="btn_grayS mt35 mb15"><s:message code="storeManage.srchStoreSetting" /></a><br />
+                <a id="btnStoreSetting" href="#" class="btn_grayS mt35 mb15"><s:message code="storeManage.srchStoreSetting" /></a><br />
                 <%-- 매장환경 체크박스  --%>
                 <span class="chk mr10 pdb5 txtIn"><input type="checkbox" name="copyChk" id="storeEnvChk" value="storeEnv"/><%-- 매장환경 --%>
                   <label for="storeEnvChk" ><s:message code="storeManage.storeEnv" /></label>

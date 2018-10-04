@@ -8,11 +8,11 @@
   <div class="layer_inner">
     <div class="title w870">
       <p id="popTitle" class="tit"><s:message code="storeEmp.layer.empRegist" /></p>
-      <a href="javascript:;" class="btn_close"></a>
+      <a href="#" class="btn_close"></a>
       <div class="con">
         <div class="tabType1">
           <ul>
-            <li><a id="empBasicInfoTab" href="javascript:;" class="on"><s:message code="storeEmp.layer.empBasicInfo" /></a></li>
+            <li><a id="empBasicInfoTab" href="#" class="on"><s:message code="storeEmp.layer.empBasicInfo" /></a></li>
           </ul>
         </div>
 
@@ -75,7 +75,7 @@
                         </div>
                         <span id="userIdErrorMsg" class="errorMsg" style="display:none; font-size:12px;"></span>
                       </div>
-                      <a class="btn_grayS2 regist" id="btnCheckDup" href="javascript:;"><s:message code="storeEmp.layer.chk.dup" /></a>
+                      <a class="btn_grayS2 regist" id="btnCheckDup" href="#"><s:message code="storeEmp.layer.chk.dup" /></a>
                     </div>
                     <div id="webUserModifyView">
                       <span id="userId" class="s12"></span>
@@ -136,9 +136,9 @@
         <%-- 버튼 영역 --%>
         <div class="btnSet">
           <%-- 저장 --%>
-          <span><a href="javascript:;" class="btn_blue" id="btnSave"><s:message code="cmm.save" /></a></span>
+          <span><a href="#" class="btn_blue" id="btnSave"><s:message code="cmm.save" /></a></span>
           <%-- 닫기 --%>
-          <span><a href="javascript:;" class="btn_gray btnClose"><s:message code="cmm.close" /></a></span>
+          <span><a href="#" class="btn_gray btnClose"><s:message code="cmm.close" /></a></span>
         </div>
       </div>
     </div>

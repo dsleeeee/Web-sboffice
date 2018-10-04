@@ -10,7 +10,7 @@
 <div class="subCon">
 
   <div class="searchBar flddUnfld">
-    <a href="javascript:void(0);" class="open">${menuNm}</a>
+    <a href="#" class="open">${menuNm}</a>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -108,7 +108,7 @@
     <div class="title w350">
       <%-- 비밀번호 변경 --%>
       <p class="tit"><s:message code="pwdManage.layer.modify" /></p>
-      <a href="javascript:;" class="btn_close pwdModifyClose"></a>
+      <a href="#" class="btn_close pwdModifyClose"></a>
       <input id="pwdModifyUserId" style="display: none;" />
       <input id="pwdModifyEmpNo" style="display: none;" />
       <div class="con">

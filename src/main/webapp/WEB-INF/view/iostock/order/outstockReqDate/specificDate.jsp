@@ -9,7 +9,7 @@
 
 <div id="specificView" class="subCon" style="display: none;" ng-controller="specificCtrl">
     <div class="searchBar flddUnfld">
-        <a href="javascript:;" class="open">${menuNm}</a>
+        <a href="#" class="open">${menuNm}</a>
     </div>
     <table class="searchTbl">
         <colgroup>

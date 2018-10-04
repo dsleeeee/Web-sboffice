@@ -10,13 +10,13 @@
 <div class="subCon">
   <%-- 탭 --%>
   <ul class="subTab mb20">
-    <li><a href="javascript:;" id="verrecv"><s:message code="verRecv.verrecv" /></a></li>
-    <li><a href="javascript:;" id="storerecv"><s:message code="verRecv.storerecv" /></a></li>
-    <li><a href="javascript:;" id="verstore" class="on"><s:message code="verRecv.verstore" /></a></li>
+    <li><a href="#" id="verrecv"><s:message code="verRecv.verrecv" /></a></li>
+    <li><a href="#" id="storerecv"><s:message code="verRecv.storerecv" /></a></li>
+    <li><a href="#" id="verstore" class="on"><s:message code="verRecv.verstore" /></a></li>
   </ul>
 
   <div class="searchBar flddUnfld">
-    <a href="javascript:void(0);" class="open">${menuNm}</a>
+    <a href="#" class="open">${menuNm}</a>
   </div>
   <table class="searchTbl">
     <colgroup>

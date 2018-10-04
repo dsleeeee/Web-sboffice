@@ -9,7 +9,7 @@
 <div class="subCon">
   <%-- 조회조건 --%>
   <div class="searchBar flddUnfld">
-    <a href="javascript:void(0);" class="open">${menuNm}</a>
+    <a href="#" class="open">${menuNm}</a>
   </div>
   <table class="searchTbl">
     <colgroup>

@@ -13,7 +13,7 @@
       <p class="tit">
         <s:message code="cmm.store.select" />
       </p>
-      <a href="javascript:;" class="btn_close store_close"></a>
+      <a href="#" class="btn_close store_close"></a>
       <div class="con">
         <div>
           <table class="tblType01">
@@ -63,12 +63,12 @@
       </div>
       <div class="btnSet">
         <span> 
-          <a id="_storeok" href="javascript:;" class="btn_blue">
+          <a id="_storeok" href="#" class="btn_blue">
             <s:message code="cmm.select" />
           </a>
         </span> 
         <span>
-          <a href="javascript:;" class="btn_gray  store_close">
+          <a href="#" class="btn_gray  store_close">
             <s:message code="cmm.close" />
           </a>
         </span>

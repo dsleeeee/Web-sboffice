@@ -10,13 +10,13 @@
 <div class="subCon">
   <%-- 탭 --%>
   <ul class="subTab mb20">
-    <li><a href="javascript:;" id="verrecv"><s:message code="verRecv.verrecv" /></a></li>
-    <li><a href="javascript:;" id="storerecv" class="on"><s:message code="verRecv.storerecv" /></a></li>
-    <li><a href="javascript:;" id="verstore"><s:message code="verRecv.verstore" /></a></li>
+    <li><a href="#" id="verrecv"><s:message code="verRecv.verrecv" /></a></li>
+    <li><a href="#" id="storerecv" class="on"><s:message code="verRecv.storerecv" /></a></li>
+    <li><a href="#" id="verstore"><s:message code="verRecv.verstore" /></a></li>
   </ul>
 
   <div class="searchBar flddUnfld">
-    <a href="javascript:void(0);" class="open">${menuNm}</a>
+    <a href="#" class="open">${menuNm}</a>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -240,7 +240,7 @@
   <div class="layer_inner">
     <div class="title w800">
       <p class="tit"><s:message code="verRecv.storerecv"/></p>
-      <a href="javascript:;" class="btn_close"></a>
+      <a href="#" class="btn_close"></a>
       <div class="con">
         <p class="s14 bk mb5" id="storeTit"></p>
         <%-- 위즈모테이블 --%>
@@ -249,7 +249,7 @@
         </div>
       </div>
       <div class="btnSet">
-        <span><a href="javascript:;" id="btnClose" class="btn_gray">닫기</a></span> <%--//TODO  여기 버튼 --%>
+        <span><a href="#" id="btnClose" class="btn_gray">닫기</a></span> <%--//TODO  여기 버튼 --%>
       </div>
     </div>
   </div>
