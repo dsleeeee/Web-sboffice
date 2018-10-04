@@ -197,13 +197,9 @@ FuncKey = function (themes) {
     //로드 후 생성되는 셀의 인덱스 초기화
     var childCount = model.getChildCount(parent);
     var cell, state;
-      console.log(funcKey.view);
     for (var i = 0; i < childCount; i++) {
       cell = model.getChildAt(parent, i);
       var state = funcKey.view.getState(cell);
-
-      console.log(cell);
-      console.log(state);
 
       state.style[mxConstants.STYLE_FILLCOLOR] = funcKey.buttonStyles.off;
       state.style[mxConstants.STYLE_FONTCOLOR] = funcKey.fontStyles.off;
@@ -216,8 +212,9 @@ FuncKey = function (themes) {
         state.text.redraw();
       }
     }
-    // this.currentState = null;
-    e.preventDefault();
+
+    funcKey.currentState = null;
+
   });
 };
 
@@ -535,6 +532,9 @@ Graph.prototype.pageNo = 1;
 //스타일색상
 Graph.prototype.buttonStyles = {};
 Graph.prototype.fontStyles = {};
+//마우스오버시 사용
+Graph.prototype.currentState = null;
+Graph.prototype.previousStyle = null;
 
 
 /**
@@ -1184,7 +1184,10 @@ Graph.prototype.initFuncKeyArea = function (funcKeyList) {
   graph.undoManager = graph.createUndoManager(graph);
   var rubberband = new mxRubberband(graph);
   graph.keyHandler = graph.createKeyHandler(graph);
-
+  // 마우스오버시 사용
+  graph.currentState = null;
+  graph.previousStyle = null;
+  
   //셀 삭제 시 그리드에 반영
   var cellsRemoved = graph.cellsRemoved;
   graph.cellsRemoved = function (cells) {
@@ -1221,25 +1224,18 @@ Graph.prototype.initFuncKeyArea = function (funcKeyList) {
 
   //override 마우스 이벤트
   graph.addMouseListener({
-    currentState: null,
-    previousStyle: null,
     mouseDown: function (sender, me) {
       // 마우스오버를 위해 초기화
-      if (this.currentState != null) {
-        this.dragLeave(me.getEvent(), this.currentState);
-        this.currentState = null;
+      if (graph.currentState != null) {
+        this.dragLeave(me.getEvent(), graph.currentState);
+        graph.currentState = null;
       }
     },
     mouseMove: function (sender, me) {
-
-      console.log("me.getState()) ", me.getState());
-      console.log("this.currentState ", this.currentState);
-
-
       // 에디팅모드(더블클릭) 이후 마우스커서 이동시 라벨에 잔상남는 현상으로
       // graph.cellEditor.getEditingCell() 으로 에디팅 셀 있는지 판단해서 이벤트 적용 설정 : 20180929 노현수
       if (graph.cellEditor.getEditingCell() == null) {
-        if (this.currentState != null && me.getState() === this.currentState) {
+        if (graph.currentState != null && me.getState() === graph.currentState) {
           return;
         }
         var tmp = graph.view.getState(me.getCell());
@@ -1247,16 +1243,13 @@ Graph.prototype.initFuncKeyArea = function (funcKeyList) {
         if (graph.isMouseDown || (tmp !== null && !graph.getModel().isVertex(tmp.cell))) {
           tmp = null;
         }
-
-        console.log("tmp", tmp);
-
-        if (tmp !== this.currentState) {
-          if (this.currentState != null  ) {
-            this.dragLeave(me.getEvent(), this.currentState);
+        if (tmp !== graph.currentState) {
+          if (graph.currentState != null  ) {
+            this.dragLeave(me.getEvent(), graph.currentState);
           }
-          this.currentState = tmp;
-          if (this.currentState != null) {
-            this.dragEnter(me.getEvent(), this.currentState);
+          graph.currentState = tmp;
+          if (graph.currentState != null) {
+            this.dragEnter(me.getEvent(), graph.currentState);
           }
         }
       }
@@ -1265,14 +1258,14 @@ Graph.prototype.initFuncKeyArea = function (funcKeyList) {
     },
     dragEnter: function (evt, state) {
       if (state != null) {
-        this.previousStyle = state.style;
+        graph.previousStyle = state.style;
         state.style = mxUtils.clone(state.style);
         graph.updateHoverStyle(state, true);
       }
     },
     dragLeave: function (evt, state) {
       if (state != null && !state.invalid) {
-        state.style = this.previousStyle;
+        state.style = graph.previousStyle;
         graph.updateHoverStyle(state, false);
       }
     }

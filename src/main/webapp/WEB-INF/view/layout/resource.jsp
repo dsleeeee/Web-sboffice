@@ -35,7 +35,7 @@
 <%-- <script type="text/javascript" src="/resource/vendor/spin/spin.js" charset="utf-8"></script> --%>
 <script type="text/javascript" src="/resource/solbipos/js/common/common.js?ver=20181004.01" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/common/grid.comm.js?ver=20181004.00" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/solbipos/js/common/grid.comm.angular.js?ver=20181004.00" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/common/grid.comm.angular.js?ver=20181004.01" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/common/gen.comm.js?ver=20181004.00" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/common/alert.min.js?ver=20181004.00" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/common/paging.min.js?ver=20181004.00" charset="utf-8"></script>

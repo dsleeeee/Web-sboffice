@@ -300,8 +300,8 @@ function RootController(ctrlName, $scope, $http, isPicker) {
 !function (win, $) {
   var app = angular.module('rootApp', ['wj', 'ngSanitize']);
   // main-controller
-  app.controller('rootCtrl', ['$scope', '$http', '$compile', 'comboData', 'pagingData',
-    function ($scope, $http, $compile, comboData, pagingData) {
+  app.controller('rootCtrl', ['$scope', '$http', '$compile', '$sce', 'comboData', 'pagingData',
+    function ($scope, $http, $compile, $sce, comboData, pagingData) {
       // 로딩 메시지 팝업 열기
       $scope.$on('loadingPopupActive', function () {
         $scope._loadingPopup.show(true);
@@ -369,13 +369,28 @@ function RootController(ctrlName, $scope, $http, isPicker) {
       };
       // 메시지 팝업
       $scope._popMsg = function (msg, callback) {
-        $scope.s_alert_msg = msg;
+        $scope.s_alert_msg = $sce.trustAsHtml(msg);
         setTimeout(function () {
           $scope._alertPopup.show(true, function () {
             if (typeof callback === 'function') {
               setTimeout(function () {
                 callback();
               }, 50);
+            }
+          });
+        }, 100);
+      };
+      // 메시지 컨펌
+      $scope._popConfirm = function (msg, callback) {
+        $scope.s_confirm_msg = $sce.trustAsHtml(msg);
+        setTimeout(function () {
+          $scope._alertConfirm.show(true, function (e) {
+            if (e.dialogResult === "wj-hide-apply") {
+              if (typeof callback === 'function') {
+                setTimeout(function () {
+                  callback();
+                }, 50);
+              }
             }
           });
         }, 100);

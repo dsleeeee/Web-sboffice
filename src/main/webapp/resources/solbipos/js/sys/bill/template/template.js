@@ -128,12 +128,36 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
     }
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._save("/sys/bill/template/item/save.sb", params);
-  }
+  };
+  // 편집 저장버튼
+  $scope.$on("saveEditTemplate", function(event, data) {
+    $scope._popConfirm("저장시 전체 본사 및 매장의 해당 템플릿이 같이 수정 됩니다.<br>저장 하시겠습니까?",
+      function() {
+        var selectedRow = $scope.flex.selectedRows[0]._data;
+        var param = {};
+        param.prtClassCd = document.getElementById("srchPrtClassCdVal").value;
+        param.templtCd = selectedRow.templtCd;
+        param.templtNm = selectedRow.templtNm;
+        param.prtForm = theTarget.value;
+
+        $.postJSONSave("/sys/bill/template/bill/save.sb", param, function (result) {
+            s_alert.pop(messages["cmm.saveSucc"]);
+            $scope.flex.collectionView.clearChanges();
+          },
+          function (result) {
+            s_alert.pop(result.message);
+            return false;
+          });
+      }
+    );
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
   // 미적용 본사/단독매장 팝업 보기
   $scope.$on("showPopUp", function(event, data) {
     if ($scope.flex.itemsSource && $scope.flex.itemsSource.itemCount > 0) {
       // 팝업의 콤보데이터 설정
-      $scope._setComboData("srchTemplateTypeCombo", JSON.parse(JSON.stringify($scope.flex.itemsSource._src)));
+      $scope._setComboData("srchTempltCdCombo", JSON.parse(JSON.stringify($scope.flex.itemsSource._src)));
       var popup = $scope.popUpSelLayer;
       popup.shown.addHandler(function (s) {
         // 팝업 열린 뒤. 딜레이줘서 열리고 나서 실행되도록 함
@@ -151,8 +175,10 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
           var paramArr = new Array();
           for (var i = 0; i < scopeLayer.flex.collectionView.itemsEdited.length; i++) {
             scopeLayer.flex.collectionView.itemsEdited[i].status = "U";
-            scopeLayer.flex.collectionView.itemsEdited[i].prtClassCd = scopeLayer.srchTemplateTypeCombo.selectedItem.prtClassCd;
-            scopeLayer.flex.collectionView.itemsEdited[i].prtForm = scopeLayer.srchTemplateTypeCombo.selectedItem.prtForm;
+            scopeLayer.flex.collectionView.itemsEdited[i].prtClassCd = document.getElementById("srchPrtClassCdVal").value;
+            scopeLayer.flex.collectionView.itemsEdited[i].templtCd = scopeLayer.srchTempltCdCombo.templtCd;
+            scopeLayer.flex.collectionView.itemsEdited[i].templtNm = scopeLayer.srchTempltCdCombo.templtNm;
+            scopeLayer.flex.collectionView.itemsEdited[i].prtForm = scopeLayer.srchTempltCdCombo.prtForm;
             paramArr.push(scopeLayer.flex.collectionView.itemsEdited[i]);
           }
   
@@ -160,7 +186,7 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
             s_alert.pop(messages["template.msg.select"]);
             return;
           }
-  
+          // 미적용 본사/단독매장 템플릿 적용
           $.postJSONArray("/sys/bill/template/unUsed/save.sb", paramArr, function (result) {
               s_alert.pop(messages["cmm.saveSucc"]);
               scopeLayer.flex.collectionView.clearChanges();
@@ -177,7 +203,7 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
 
     } else {
       $scope._popMsg(messages['template.msg.fail']);
-      return;
+      return false;
     }
   });
 
@@ -312,28 +338,6 @@ theTarget.addEventListener('drop', function (e) {
 theTarget.addEventListener('keyup', function (e) {
   makePreview();
 })
-
-// 편집 저장버튼 클릭
-$("#btnSaveEditTemplate").click(function (e) {
-
-  var scope = agrid.getScope("templateCtrl");
-  var selectedRow = scope.flex.selectedRows[0]._data;
-  var param = {};
-  param.prtClassCd = document.getElementById("srchPrtClassCdVal").value;
-  param.templtCd = selectedRow.templtCd;
-  param.templtNm = selectedRow.templtNm;
-  param.prtForm = theTarget.value;
-
-  $.postJSONSave("/sys/bill/template/bill/save.sb", param, function (result) {
-      s_alert.pop(messages["cmm.saveSucc"]);
-      scope.flex.collectionView.clearChanges();
-    },
-    function (result) {
-      s_alert.pop(result.message);
-      return;
-    });
-
-});
 
 // 미리보기 적용
 function makePreview() {

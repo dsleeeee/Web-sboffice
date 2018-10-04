@@ -20,7 +20,7 @@ import kr.co.solbipos.application.common.service.CmmVO;
  */
 public class TemplateVO extends CmmVO {
 
-    private static final long serialVersionUID = -4652244117741649825L;
+    private static final long serialVersionUID = -5753294807795491551L;
     /** 출력물분류코드 */
     private String prtClassCd;
     /** 템플릿코드 */
@@ -50,6 +50,9 @@ public class TemplateVO extends CmmVO {
     private String clsFg;
     /** 매장 용도명 */
     private String clsFgNm;
+    /** 출력물 관련 프로시져 실행 결과 */
+    private String result;
+
 
     /**
      * @return the prtClassCd
@@ -245,5 +248,19 @@ public class TemplateVO extends CmmVO {
      */
     public void setClsFgNm(String clsFgNm) {
         this.clsFgNm = clsFgNm;
+    }
+
+    /**
+     * @return the result
+     */
+    public String getResult() {
+        return result;
+    }
+
+    /**
+     * @param result the result to set
+     */
+    public void setResult(String result) {
+        this.result = result;
     }
 }

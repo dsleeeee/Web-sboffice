@@ -110,7 +110,7 @@
       <div class="wj-TblWrapBr ml10 pd20 templateEdit" style="height:485px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='template.editNm' /></span>
-          <button class="btn_skyblue" id="btnSaveEditTemplate" style="display: none;">
+          <button class="btn_skyblue" id="btnSaveEditTemplate" style="display: none;" ng-click="$broadcast('saveEditTemplate')">
             <s:message code="cmm.save" />
           </button>
         </div>

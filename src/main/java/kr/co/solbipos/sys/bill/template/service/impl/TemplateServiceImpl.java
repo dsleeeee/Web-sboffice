@@ -1,17 +1,17 @@
 package kr.co.solbipos.sys.bill.template.service.impl;
 
-import java.util.List;
-
 import kr.co.common.data.enums.Status;
+import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.sys.bill.template.service.TemplateService;
 import kr.co.solbipos.sys.bill.template.service.TemplateVO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
@@ -106,6 +106,10 @@ public class TemplateServiceImpl implements TemplateService {
         result = templateMapper.saveTemplate(templateVO);
 
         if ( result >= 0 ) {
+            // 본사/매장에 존재하는 템플릿도 동시에 업데이트 처리한다.
+            templateMapper.updateTemplateForHq(templateVO);
+            templateMapper.updateTemplateForStore(templateVO);
+
             return result;
         } else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
