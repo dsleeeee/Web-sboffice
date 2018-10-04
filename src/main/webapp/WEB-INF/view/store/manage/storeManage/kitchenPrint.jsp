@@ -7,9 +7,9 @@
   <div class="wj-TblWrap mr10">
     <div class="oh mb10">
       <%-- 삭제 --%>
-      <span class="fr ml5"><a id="btnkitchenPrintDel" href="javascript:;" class="btn_grayS2"><s:message code="cmm.delete" /></a></span>
+      <span class="fr ml5"><a id="btnkitchenPrintDel" href="#" class="btn_grayS2"><s:message code="cmm.delete" /></a></span>
       <%-- 추가 --%>
-      <span class="fr"><a id="btnkitchenPrintAdd" href="javascript:;" class="btn_grayS2"><s:message code="cmm.add" /></a></span>
+      <span class="fr"><a id="btnkitchenPrintAdd" href="#" class="btn_grayS2"><s:message code="cmm.add" /></a></span>
     </div>
   </div>
 

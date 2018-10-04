@@ -8,11 +8,11 @@
   <div class="layer_inner">
     <div class="title w800">
       <p class="tit" id="popTitle"></p>
-      <a href="javascript:;" class="btn_close"></a>
+      <a href="#" class="btn_close"></a>
       <div class="con sc2" style="height:500px;">
         <div class="tr">
           <%-- 저장버튼 --%>
-          <a id="btnSave" href="javascript:;" class="btn_grayS2"><s:message code="cmm.save" /></a>
+          <a id="btnSave" href="#" class="btn_grayS2"><s:message code="cmm.save" /></a>
         </div>
         <%-- 위즈모 그리드 --%>
         <div>

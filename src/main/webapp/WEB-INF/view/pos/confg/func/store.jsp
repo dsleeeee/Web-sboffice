@@ -10,7 +10,7 @@
 
     <div class="title w800">
       <p class="tit" id="storeLayerTitle"><span id="storeLayerSubTitle"></span><s:message code="func.regStore" /></p>
-      <a href="javascript:;" class="btn_close"></a>
+      <a href="#" class="btn_close"></a>
       <div class="con">
         <div>
 

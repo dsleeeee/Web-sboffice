@@ -7,13 +7,13 @@
   <div class="layer_inner">
     <div class="title w800">
       <p id="popTitle" class="tit"></p>
-      <a href="javascript:;" class="btn_close"></a>
+      <a href="#" class="btn_close"></a>
       <div class="con">
         <%-- 사원기초정보 탭 --%>
         <div class="tabType1">
           <ul>
             <%-- 사원기초정보 탭 --%>
-            <li><a id="hqEmpInfoTab" href="javascript:;" class="on"><s:message code="hqEmp.hqEmpInfo" /></a></li>
+            <li><a id="hqEmpInfoTab" href="#" class="on"><s:message code="hqEmp.hqEmpInfo" /></a></li>
             <%-- 메뉴권한 탭 --%>
             <%-- --%>
           </ul>
@@ -59,7 +59,7 @@
                 </th>
                 <td>
                   <span>
-                    <a href="javascript:;" class="btn_grayS" id="btnModifyPassword" style="display:none;"><s:message code="hqEmp.modifyBtn" /></a>
+                    <a href="#" class="btn_grayS" id="btnModifyPassword" style="display:none;"><s:message code="hqEmp.modifyBtn" /></a>
                   </span>
                 </td>
                 <%-- 웹사용여부 --%>
@@ -88,11 +88,11 @@
       <%-- 공통 버튼 영역 --%>
       <div class="btnSet">
         <%-- 수정 --%>
-        <span><a href="javascript:;" class="btn_blue" id="btnEdit" style="display:none;"><s:message code="cmm.edit" /></a></span>
+        <span><a href="#" class="btn_blue" id="btnEdit" style="display:none;"><s:message code="cmm.edit" /></a></span>
         <%-- 저장 --%>
-        <span><a href="javascript:;" class="btn_blue" id="btnSave" style="display:none;"><s:message code="cmm.save" /></a></span>
+        <span><a href="#" class="btn_blue" id="btnSave" style="display:none;"><s:message code="cmm.save" /></a></span>
         <%-- 닫기 --%>
-        <span><a href="javascript:;" class="btn_gray" id="btnClose"><s:message code="cmm.close" /></a></span>
+        <span><a href="#" class="btn_gray" id="btnClose"><s:message code="cmm.close" /></a></span>
       </div>
     </div>
   </div>
@@ -105,7 +105,7 @@
     <div class="title w350">
       <%-- 비밀번호 변경 --%>
       <p class="tit"><s:message code="hqEmp.password.modify" /></p>
-      <a href="javascript:;" class="btn_close pwdModifyClose"></a>
+      <a href="#" class="btn_close pwdModifyClose"></a>
       <input id="pwdModifyUserId" style="display: none;" />
       <input id="pwdModifyEmpNo" style="display: none;" />
       <div class="con">

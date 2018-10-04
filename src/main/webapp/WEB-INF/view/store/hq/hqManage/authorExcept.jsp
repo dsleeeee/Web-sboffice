@@ -10,26 +10,26 @@
   <div class="layer_inner">
     <div class="title w600">
       <p id="popTitle" class="tit"></p>
-      <a href="javascript:;" class="btn_close"></a>
+      <a href="#" class="btn_close"></a>
       <div class="con">
         <%-- 본사정보, 메뉴권한, 코드자리수, 환경설정, 브랜드관리 탭 --%>
         <div class="tabType1">
           <ul>
             <%-- 상세정보 탭 --%>
-            <li><a id="hqInfoTab" href="javascript:;"><s:message code="hqManage.hqInfo" /></a></li>
+            <li><a id="hqInfoTab" href="#"><s:message code="hqManage.hqInfo" /></a></li>
             <%-- 환경설정 탭 --%>
-            <li><a id="envSettingTab" href="javascript:;"><s:message code="hqManage.envSetting" /></a></li>
+            <li><a id="envSettingTab" href="#"><s:message code="hqManage.envSetting" /></a></li>
             <%-- 메뉴관리 탭  --%>
-            <li><a id="menuSettingTab" href="javascript:;" class="on"><s:message code="hqManage.menuSetting" /></a></li>
+            <li><a id="menuSettingTab" href="#" class="on"><s:message code="hqManage.menuSetting" /></a></li>
           </ul>
         </div>
 
         <div class="tabType2 mt20">
           <ul>
             <%-- 웹사이트 메뉴 --%>
-            <li><a id="webMenu" href="javascript:;" class="on"><s:message code="hqManage.webMenu" /></a></li>
+            <li><a id="webMenu" href="#" class="on"><s:message code="hqManage.webMenu" /></a></li>
             <%-- 모바일 메뉴 --%>
-            <li><a id="mobMenu" href="javascript:;"><s:message code="hqManage.mobMenu" /></a></li>
+            <li><a id="mobMenu" href="#"><s:message code="hqManage.mobMenu" /></a></li>
           </ul>
         </div>
 
@@ -50,7 +50,7 @@
                   </div>
                   <%-- 메뉴권한복사 버튼  --%>
                   <div class="fl">
-                    <a href="javascript:;" class="btn_grayS" id="btnCopyAuth"><s:message code="hqManage.copy.auth" /></a>
+                    <a href="#" class="btn_grayS" id="btnCopyAuth"><s:message code="hqManage.copy.auth" /></a>
                   </div>
                 </td>
               </tr>
@@ -62,7 +62,7 @@
               <div class="oh mb10">
                 <span class="fl bk lh20 s14"><s:message code="hqManage.usable.menu" /> </span>
                 <%-- 추가버튼 --%>
-                <span class="fr"><a id="btnAddMenu" href="javascript:;" class="btn_grayS2"><s:message code="cmm.add" /></a></span>
+                <span class="fr"><a id="btnAddMenu" href="#" class="btn_grayS2"><s:message code="cmm.add" /></a></span>
               </div>
               <%-- 위즈모 --%>
               <div id="avlblMenuGrid" style="height:160px;"></div>
@@ -75,7 +75,7 @@
               <div class="oh mb10">
                 <span class="fl bk lh20 s14"><s:message code="hqManage.inUse.menu" /> </span>
                 <%-- 삭제버튼 --%>
-                <span class="fr"><a id="btnRemoveMenu" href="javascript:;" class="btn_grayS2"><s:message code="cmm.delete" /></a></span>
+                <span class="fr"><a id="btnRemoveMenu" href="#" class="btn_grayS2"><s:message code="cmm.delete" /></a></span>
               </div>
               <%-- 위즈모 --%>
               <div id="beUseMenuGrid" style="height:160px;"></div>

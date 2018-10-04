@@ -9,7 +9,7 @@
 
 <div class="subCon">
   <div class="searchBar flddUnfld">
-    <a href="javascript:;" class="open">${menuNm}</a>
+    <a href="#" class="open">${menuNm}</a>
   </div>
 
   <table class="searchTbl">
@@ -43,7 +43,7 @@
             <div class="sb-select fl w70">
               <div id="storeCdText" class="sb-input w80"></div>
             </div>
-            <a href="javascript:;" id="store" class="btn_grayS ml5"><s:message code="cmm.store.select" /></a>
+            <a href="#" id="store" class="btn_grayS ml5"><s:message code="cmm.store.select" /></a>
           </td>
         </c:if>
 
@@ -109,7 +109,7 @@
     <div class="title w600">
       <%-- 근태등록 --%>
       <p class="tit"><s:message code="dclzManage.reg.nm" /></p>
-      <a href="javascript:;" class="btn_close dclzRegClose"></a>
+      <a href="#" class="btn_close dclzRegClose"></a>
       <input id="dclzStoreCd" style="display: none;" />
       <div class="con">
         <div>
@@ -173,15 +173,15 @@
       <div class="btnSet">
         <%-- 수정 --%>
         <span id="dclzLayerEdit" style="display: none;">
-          <a href="javascript:;" class="btn_blue"><s:message code="cmm.edit" /></a>
+          <a href="#" class="btn_blue"><s:message code="cmm.edit" /></a>
         </span>
         <%-- 삭제 --%>
         <span id="dclzLayerDel" style="display: none;">
-          <a href="javascript:;" class="btn_blue"><s:message code="cmm.del" /></a>
+          <a href="#" class="btn_blue"><s:message code="cmm.del" /></a>
         </span>
         <%-- 등록 --%>
         <span id="dclzLayerReg" style="display: none;">
-          <a id="dclzReg" href="javascript:;" class="btn_blue"><s:message code="cmm.add" /></a>
+          <a id="dclzReg" href="#" class="btn_blue"><s:message code="cmm.add" /></a>
         </span>
       </div>
     </div>

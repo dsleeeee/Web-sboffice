@@ -8,7 +8,7 @@
   <div class="layer_inner">
     <div class="title w800" style="overflow:auto; height:700px;">
       <p class="tit" id="storeTitle"></p>
-      <a href="javascript:;" class="btn_close ${layerName}Close"></a>
+      <a href="#" class="btn_close ${layerName}Close"></a>
       <div class="con">
         <div class="tabType1">
           <ul>
@@ -182,7 +182,7 @@
         
         <div class="btnSet">
         <span>
-          <a href="javascript:;" class="btn_gray  ${layerName}Close">
+          <a href="#" class="btn_gray  ${layerName}Close">
             <s:message code="cmm.close" />
           </a>
         </span>

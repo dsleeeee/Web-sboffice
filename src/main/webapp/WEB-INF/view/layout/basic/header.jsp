@@ -10,17 +10,17 @@
 <%-- 사용자정보영역 --%>
 <div class="topBar">
   <div class="menuControl">
-    <a href="javascript:void(0);" id="_arrow" class="arrowOpen">
+    <a href="#" id="_arrow" class="arrowOpen">
       <span></span>
     </a>
   </div>
   <div class="userInfo">
     <%--새로운 공지 있는경우 span추가--%>
-    <a href="javascript:void(0);" class="userNotice">
-      <span>777</span>
-    </a>
+    <%--<a href="#" class="userNotice">--%>
+      <%--<span>777</span>--%>
+    <%--</a>--%>
 
-    <a href="javascript:void(0);" class="userId">
+    <a href="#" class="userId">
       <span>${sessionScope.sessionInfo.userId}</span>
     </a>
 
@@ -34,8 +34,8 @@
         <span>${sessionScope.sessionInfo.userNm}</span>
       </p>
       <ul>
-        <li><a href="javascript:void(0);">내 정보 변경</a></li>
-        <li><a id="pwchg">비밀번호 변경</a></li>
+        <li><a href="#">내 정보 변경</a></li>
+        <li><a href="#" id="pwchg">비밀번호 변경</a></li>
         <li><a href="/auth/logout.sb">로그아웃</a></li>
       </ul>
     </div>
@@ -58,7 +58,7 @@
       <c:forEach var="item" items="${fix}" varStatus="status">
         <li id="${item.resrceCd}">
           <a href="${item.url}" class="${item.activation == true ? 'on' : ''}">${item.resrceNm}</a> 
-          <a href="javascript:;" class="btn_close favClose" data-value="${item.resrceCd}" ></a>
+          <a href="#" class="btn_close favClose" data-value="${item.resrceCd}" ></a>
         </li>
       </c:forEach>
 
@@ -66,14 +66,14 @@
       <c:forEach var="item" items="${hist}" varStatus="status">
         <li id="${item.resrceCd}">
           <a href="${item.url}" class="${item.activation == true ? 'on' : ''}">${item.resrceNm}</a>
-          <a href="javascript:;" class="btn_close histClose" data-value="${item.resrceCd}"></a>
+          <a href="#" class="btn_close histClose" data-value="${item.resrceCd}"></a>
         </li>
       </c:forEach>
     </ul>
 
     <div class="moveBtn">
-      <a href="javascript:;" class="mL" title="왼쪽으로 메뉴 이동"></a>
-      <a href="javascript:;" class="mR" title="오른쪽으로 메뉴 이동"></a>
+      <a href="#" class="mL" title="왼쪽으로 메뉴 이동"></a>
+      <a href="#" class="mR" title="오른쪽으로 메뉴 이동"></a>
     </div>
 
   </nav>

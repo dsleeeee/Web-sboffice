@@ -9,7 +9,7 @@
 <div class="subCon">
   <%--searchTbl--%>
   <div class="searchBar flddUnfld">
-    <a href="javascript:;" class="open">${menuNm}</a>
+    <a href="#" class="open">${menuNm}</a>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -112,7 +112,7 @@
   <div class="layer_inner">
     <div class="title w600">
       <p class="tit"><s:message code="prod.info" /></p>
-      <a href="javascript:;" class="btn_close"></a>
+      <a href="#" class="btn_close"></a>
       <div class="con sc2" style="height: 500px;">
         <p class="s14 bk mb5"><s:message code="prod.basicInfo" /></p>
         <table class="tblType01">
@@ -322,7 +322,7 @@
         </table>
       </div>
       <div class="btnSet">
-        <span><a href="javascript:;" id="btnClose" class="btn_blue">닫기</a></span>
+        <span><a href="#" id="btnClose" class="btn_blue">닫기</a></span>
       </div>
     </div>
     <!--//layerContent-->

@@ -8,7 +8,7 @@
   <div class="layer_inner">
     <div class="title w500">
       <p class="tit"><s:message code="storeManage.storeEnv" /></p>
-      <a href="javascript:;" class="btn_close"></a>
+      <a href="#" class="btn_close"></a>
       <div class="con">
         <div class="mt20">
           <%-- 매장정보 --%>
@@ -66,8 +66,8 @@
         </div>
       </div>
       <div class="btnSet">
-        <span><a id="btnCopy" href="javascript:;" class="btn_gray"><s:message code="storeManage.copy.storeEnv" /></a></span>
-        <span><a id="btnClose" href="javascript:;" class="btn_gray"><s:message code="cmm.close" /></a></span>
+        <span><a id="btnCopy" href="#" class="btn_gray"><s:message code="storeManage.copy.storeEnv" /></a></span>
+        <span><a id="btnClose" href="#" class="btn_gray"><s:message code="cmm.close" /></a></span>
       </div>
     </div>
   </div>

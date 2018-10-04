@@ -10,7 +10,7 @@
             <!--layerContent-->
             <div class="title w870">
                 <p class="tit">즐겨찾기 관리</p>
-                <a href="javascript:javascript:void(0);" class="btn_close bkmk_close"></a>
+                <a href="#" class="btn_close bkmk_close"></a>
                 <div class="con sc2" style="height:500px;"><!--높이는 style로 조정-->
                     <p class="s14">즐겨찾기 할 메뉴의 <span class="txtIcFav"></span>을 선택하시면 즐겨찾기 탭에 저장되어 편리하게 이용할 수 있습니다.</p>
                     <p class="s14 mt10">고정메뉴를 설정해 놓으면 로그인시 고정메뉴가 상단에 표시됩니다. 아이콘을 클릭해서 고정메뉴를 선택해보세요. (최대 3개까지 선택)</p>
@@ -18,7 +18,7 @@
                     </div>
                 </div>
                 <div class="btnSet">
-                    <span><a href="javascript:void(0);" class="btn_blue bkmk_save">저장</a></span>
+                    <span><a href="#" class="btn_blue bkmk_save">저장</a></span>
                 </div>
             </div>
             <!--//layerContent-->

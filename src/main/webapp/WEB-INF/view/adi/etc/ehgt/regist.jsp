@@ -20,13 +20,13 @@
 <div class="subCon">
   <%--tab---%>
   <ul class="subTab mb20">
-    <li><a href="javascript:;" class="on"><s:message code="ehgt.tabRegist" /></a></li>
+    <li><a href="#" class="on"><s:message code="ehgt.tabRegist" /></a></li>
     <%--<li><a href="#"><s:message code="ehgt.tabGoodsPrice" /></a></li> --%>
   </ul>
   <%--//tab---%>
 
   <div class="searchBar flddUnfld">
-    <a href="javascript:void(0);" class="open">${menuNm}</a>
+    <a href="#" class="open">${menuNm}</a>
   </div>
 
   <table class="searchTbl">
@@ -71,7 +71,7 @@
       <div class="wj-TblWrapBr mr10" style="height:400px;">
         <h3 class="h3_tbl2 pdt5 lh30 mt20">
             <s:message code="ehgt.labelCrncyNew" />
-            <span class="fr"><a id="btnSave" href="javascript:;" class="btn_grayS"><s:message code="cmm.save"/></a></span>
+            <span class="fr"><a id="btnSave" href="#" class="btn_grayS"><s:message code="cmm.save"/></a></span>
         </h3>
         <table class="searchTbl2">
         <colgroup>

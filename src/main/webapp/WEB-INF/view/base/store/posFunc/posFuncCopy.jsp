@@ -10,7 +10,7 @@
     <!--layerContent-->
     <div class="title w500">
       <p class="tit"><s:message  code="posFunc.copy.pos.func"/> </p>
-      <a href="javascript:;" class="btn_close"></a>
+      <a href="#" class="btn_close"></a>
       <div class="con">
         <div>
           <div class="sb-select fl w30">
@@ -28,8 +28,8 @@
 
       </div>
       <div class="btnSet fl">
-        <span><a href="javascript:;" class="btn_blue" id="btnFuncCopy"><s:message code="posFunc.copy" /></a></span>
-        <span><a href="javascript:;" class="btn_blue" id="btnCancel"><s:message code="cmm.cancel" /></a></span>
+        <span><a href="#" class="btn_blue" id="btnFuncCopy"><s:message code="posFunc.copy" /></a></span>
+        <span><a href="#" class="btn_blue" id="btnCancel"><s:message code="cmm.cancel" /></a></span>
       </div>
 
     </div>

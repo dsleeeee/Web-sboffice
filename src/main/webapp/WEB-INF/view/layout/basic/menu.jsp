@@ -13,8 +13,8 @@
 
   <%--전체,즐겨찾기--%>
   <div class="menuTab">
-    <p class="all"><a id="_all" href="javascript:void(0);" class="on"><span>전체</span></a></p><%-- 활성화 : class="on" --%>
-    <p class="favorite"><a id="_favorite" href="javascript:void(0);"><span>즐겨찾기</span></a></p>
+    <p class="all"><a id="_all" href="#" class="on"><span>전체</span></a></p><%-- 활성화 : class="on" --%>
+    <p class="favorite"><a id="_favorite" href="#"><span>즐겨찾기</span></a></p>
   </div>
   <%--//전체,즐겨찾기--%>
 
@@ -22,7 +22,7 @@
 
     <%--open : 즐겨찾기 메뉴--%>
     <div id="_faMenu" class="faMenu" style="display:none;">
-      <p class="btn_faManage"><a href="javascript:void(0);">즐겨찾기 관리</a></p>
+      <p class="btn_faManage"><a href="#">즐겨찾기 관리</a></p>
       <p id= "_bkmkTxt" class="txt" style="display:none;">즐겨찾기한 메뉴가 없습니다.<br /><br />‘즐겨찾기 관리’ 버튼을 클릭하시면<br />즐겨찾기 메뉴와 고정메뉴를<br />설정할 수 있습니다.</p>
     </div>
     <%--open : 즐겨찾기 메뉴--%>
