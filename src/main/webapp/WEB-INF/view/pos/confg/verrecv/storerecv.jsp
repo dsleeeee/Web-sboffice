@@ -103,15 +103,18 @@
 <script>
 
   <%-- 탭 클릭 --%>
-  $("#verrecv").click(function(){
+  $("#verrecv").click(function(e){
+    e.preventDefault();
     location.href = "/pos/confg/verRecv/verRecv/list.sb";
   });
 
-  $("#storerecv").click(function(){
+  $("#storerecv").click(function(e){
+    e.preventDefault();
     location.href = "/pos/confg/verRecv/storeRecv/list.sb";
   });
 
-  $("#verstore").click(function(){
+  $("#verstore").click(function(e){
+    e.preventDefault();
     location.href = "/pos/confg/verRecv/verStore/list.sb";
   });
 

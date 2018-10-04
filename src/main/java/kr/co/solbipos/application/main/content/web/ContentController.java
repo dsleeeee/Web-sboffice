@@ -5,6 +5,8 @@ import kr.co.common.service.main.ContentService;
 import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.common.enums.MainSrchFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,6 +37,9 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "/application/main/content")
 public class ContentController {
+
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
 
     @Autowired
     ContentService contentService;
@@ -137,7 +142,8 @@ public class ContentController {
             model.addAttribute("sid", request.getParameter("sid"));
         }
 
-        return "application/main/hedofcMain";
+//        return "application/main/hedofcMain";
+        return "application/main/hedofcMain_test";
     }
 
 
@@ -173,7 +179,8 @@ public class ContentController {
             model.addAttribute("sid", request.getParameter("sid"));
         }
 
-        return "application/main/mrhstMain";
+        //return "application/main/mrhstMain";
+        return "application/main/mrhstMain_test";
     }
 
 }

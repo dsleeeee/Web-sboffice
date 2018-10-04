@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    Prepaid.xml
+    선불금 충전/사용내역
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김지은     2018.05.01     최초작성
+-->
+<mapper namespace="kr.co.solbipos.membr.anals.prepaid.service.impl.PrepaidMapper">
+
+  <!-- 선불 회원 충전, 사용 내역 -->
+  <!--
+      TABLE    : TB_SL_SALE_PAY_PREPAID, TB_MB_MEMBER_PREPAID
+      COMMENTS : 선불 충전내역과 사용내역을 조회
+  -->
+  <select id="getPrepaidMemberList"  parameterType="prepaidStoreVO" resultType="DefaultMap">
+      /* PrepaidMapper.getPrepaidMemberList */
+
+      SELECT *
+        FROM (
+         SELECT tsspp.STORE_CD,
+                (SELECT STORE_NM FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_CD = tsspp.STORE_CD) AS STORE_NM,
+                tsspp.SALE_DATE,
+                tsspp.MEMBR_NO,
+                (SELECT MEMBR_NM FROM TB_MB_MEMBER WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND MEMBR_NO = tsspp.MEMBR_NO) AS MEMBR_NM,
+                tsspp.SALE_AMT,
+                0 AS PREPAID_AMT,
+                '' AS PREPAID_IN_FG,
+                '' AS PREPAID_PAY_FG
+           FROM TB_SL_SALE_PAY_PREPAID tsspp
+          UNION
+         SELECT tmmp.STORE_CD,
+                (SELECT STORE_NM FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_CD = tmmp.STORE_CD) AS STORE_CD,
+                tmmp.SALE_DATE,
+                tmmp.MEMBR_NO,
+                (SELECT MEMBR_NM FROM TB_MB_MEMBER WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND MEMBR_NO = tmmp.MEMBR_NO) AS MEMBR_NM,
+                0 AS SALE_AMT,
+                tmmp.PREPAID_AMT,
+                tmmp.PREPAID_IN_FG,
+                tmmp.PREPAID_PAY_FG
+           FROM TB_MB_MEMBER_PREPAID tmmp
+             ) tmmp
+      <where>
+          <if test='storeCds != null and storeCds != ""'>
+            AND tmmp.STORE_CD IN
+              <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
+                 #{item}
+              </foreach>
+          </if>
+          <if test='memberNo != null and memberNo != ""'>
+            AND tmmp.MEMBR_NO = #{memberNo}
+          </if>
+          <if test='memberNm != null and memberNm != ""'>
+            AND tmmp.MEMBR_NM = #{memberNm}
+          </if>
+      </where>
+      <if test='array != null and array.toString == "1"'>
+        ORDER BY tmmp.STORE_CD, tmmp.SALE_DATE, tmmp.MEMBR_NO
+      </if>
+      <if test='array != null and array.toString == "2"'>
+        ORDER BY tmmp.STORE_CD, tmmp.MEMBR_NO, tmmp.SALE_DATE
+      </if>
+      <if test='array != null and array.toString == "3"'>
+        ORDER BY tmmp.MEMBR_NO, tmmp.SALE_DATE, tmmp.STORE_CD
+      </if>
+      <if test='array != null and array.toString == "4"'>
+        ORDER BY tmmp.MEMBR_NO, tmmp.STORE_CD, tmmp.SALE_DATE
+      </if>
+      <if test='array != null and array.toString == "5"'>
+        ORDER BY tmmp.SALE_DATE, tmmp.STORE_CD, tmmp.MEMBR_NO
+      </if>
+      <if test='array != null and array.toString == "6"'>
+        ORDER BY tmmp.SALE_DATE, tmmp.MEMBR_NO, tmmp.STORE_CD
+      </if>
+  </select>
+
+
+  <!-- 선불금 충전 회원 조회 -->
+  <!--
+      TABLE    : TB_MB_MEMBER
+      COMMENTS : 해당 본사의 회원을 조회한다.
+  -->
+  <select id="getChargeMemberList" parameterType="prepaidStoreVO" resultType="DefaultMap">
+      /* PrepaidMapper.getChargeMemberList */
+      SELECT tmm.REG_STORE_CD AS STORE_CD,
+             (SELECT STORE_NM FROM TB_MS_STORE WHERE HQ_OFFICE_CD = tmm.MEMBR_ORGN_CD AND STORE_CD = tmm.REG_STORE_CD) AS STORE_NM,
+             tmm.MEMBR_NO,
+             tmm.MEMBR_NM
+      FROM TB_MB_MEMBER tmm
+      WHERE MEMBR_ORGN_CD = 'DS001'
+      <if test='defaultStoreCd != null and defaultStoreCd != ""'>
+        AND tmm.REG_STORE_CD = #{defaultStoreCd}
+      </if>
+  </select>
+
+  <!-- 충전입금 -->
+  <!--
+      TABLE    : TB_MB_MEMBER_PREPAID
+      COMMENTS : 선불금을 충전한다.
+  -->
+  <insert id="saveChargeAmt" parameterType="prepaidStoreVO">
+    /* PrepaidMapper.saveChargeAmt */
+    INSERT INTO TB_MB_MEMBER_PREPAID
+    (
+      HQ_OFFICE_CD,
+      STORE_CD,
+      SALE_DATE,
+      MEMBR_NO,
+      PREPAID_NO,
+      PREPAID_DT,
+      PREPAID_IN_FG,
+      PREPAID_PAY_FG,
+      PREPAID_AMT,
+      NONSALE_BILL_NO,
+      ORG_PREPAID_NO,
+      SEND_YN,
+      SEND_DT,
+      REG_DT,
+      REG_ID,
+      MOD_DT,
+      MOD_ID
+    )
+    VALUES
+    (
+      #{hqOfficeCd},
+      #{prepaidStoreCd},
+      #{saleDate},
+      #{memberNo},
+      (SELECT LPAD(NVL(MAX(PREPAID_NO), '0')+1, 4, '0')
+         FROM TB_MB_MEMBER_PREPAID
+        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+          AND STORE_CD = #{prepaidStoreCd}
+          AND SALE_DATE = #{saleDate} ),
+      #{prepaidDt},
+      #{prepaidInFg, jdbcType=VARCHAR},
+      #{prepaidPayFg, jdbcType=VARCHAR},
+      #{prepaidAmt},
+      #{nonsaleBillNo},
+      #{orgPrepaidNo},
+      #{sendYn, jdbcType=VARCHAR},
+      #{sendDt},
+      #{regDt},
+      #{regId},
+      #{modDt},
+      #{modId}
+    )
+  </insert>
+
+</mapper>

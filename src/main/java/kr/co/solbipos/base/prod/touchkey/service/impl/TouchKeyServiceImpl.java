@@ -368,7 +368,12 @@ public class TouchKeyServiceImpl implements TouchKeyService {
                 Double pageNo = (touchKeyClassVO.getX() / 500) + 1;
                 touchKeyClassVO.setPageNo(pageNo.intValue());
                 // 페이지당 Rows
-                String pageRows = cmmEnvUtil.getHqEnvst(sessionInfoVO, "0018");
+                String pageRows;
+                if ( "H".equals(sessionInfoVO.getOrgnFg().getCode()) ) {
+                    pageRows = cmmEnvUtil.getHqEnvst(sessionInfoVO, "0041");
+                } else {
+                    pageRows = cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1041");
+                }
                 touchKeyClassVO.setPageRows(Integer.parseInt(pageRows));
 
                 // 좌표, 크기

@@ -195,8 +195,9 @@ grid2.addEventListener(grid2.hostElement, 'mousedown', function(e) {
     var col = ht.panel.columns[ht.col];
     if( col.binding == "fnkeyNo") {
       selectedFnkey = grid2.rows[ht.row].dataItem;
-      console.log(grid2.rows[ht.row].dataItem);
+      // console.log(grid2.rows[ht.row].dataItem);
       showStoreLayer();
+      wijmo.grid.FlexGrid.refreshAll();
     }
   }
 });

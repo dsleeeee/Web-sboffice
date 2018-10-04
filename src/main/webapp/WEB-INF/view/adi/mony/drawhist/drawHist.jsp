@@ -8,7 +8,7 @@
 
 <div class="subCon">
   <%--searchTbl--%>
-  <div class="searchBar">
+  <div class="searchBar flddUnfld">
     <a href="javascript:;" class="open">${menuNm}</a>
   </div>
   <table class="searchTbl">
@@ -67,7 +67,7 @@ $(document).ready(function(){
 
   var cashDrawOpenFg = ${ccu.getCommCodeExcpAll("103")};
   var cashDrawOpenFgDataMap = new wijmo.grid.DataMap(cashDrawOpenFg, 'value', 'name');
-  var rdata = 
+  var rdata =
     [
       {"binding":"saleDate","header":"<s:message code='drawHist.sale.date' />",width:"*"},                  // 일자
       {"binding":"posNo","header":"<s:message code='drawHist.pos.no' />",width:"*"},                        // 포스번호
@@ -80,14 +80,14 @@ $(document).ready(function(){
       {"binding":"totDcAmt","header":"<s:message code='drawHist.total.discount'/>",width:"*"},
       {"binding":"realSaleAmt","header":"<s:message code='drawHist.real.sale'/>",width:"*"}
    ];
-  
+
   var grid         = wgrid.genGrid("#theGrid", rdata, "${menuCd}", 1, ${clo.getColumnLayout(1)});
   var startDt      = wcombo.genDateVal("#startDt", "${sessionScope.sessionInfo.startDt}");
   var endDt        = wcombo.genDateVal("#endDt", "${sessionScope.sessionInfo.endDt}");
   var ldata        = ${ccu.getListScale()};
   var listScaleBox = wcombo.genCommonBox("#listScaleBox", ldata);
   var cdata        = ${ccu.getCommCode("009")};
-  
+
   function search(index) {
     var param = {};
 
@@ -96,14 +96,14 @@ $(document).ready(function(){
     param.chkDt = $('#chkDt').is(":checked");
     param.listScale = listScaleBox.selectedValue;
     param.curr = index;
-    
+
     $.postJSON("/adi/mony/drawhist/drawhist/list.sb", param, function(result) {
       var list = result.data.list;
-      
+
       if(list.length == 0) {
         s_alert.pop(result.message);
       }
-    
+
       grid.itemsSource = list;
       page.make("#page1", result.data.page.curr, result.data.page.totalPage);
       },
@@ -114,12 +114,12 @@ $(document).ready(function(){
         s_alert.pop("Ajax Fail");
     });
   }
-  
+
   <%-- 리스트 조회 --%>
   $("#searchBtn").click(function( e ){
     search(1);
   });
-  
+
   <%-- 페이징 --%>
   $(document).on("click", ".page1", function() {
     search($(this).data("value"));

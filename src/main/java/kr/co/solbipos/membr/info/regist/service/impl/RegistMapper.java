@@ -2,7 +2,7 @@ package kr.co.solbipos.membr.info.regist.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.membr.info.grade.service.MembrClassVO;
-import kr.co.solbipos.membr.info.regist.service.CreditStoreVO;
+import kr.co.solbipos.membr.anals.credit.service.CreditStoreVO;
 import kr.co.solbipos.membr.info.regist.service.RegistVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -106,7 +106,7 @@ public interface RegistMapper {
      * @param registVO
      * @return
      */
-    String getCurrentCreditStore(RegistVO registVO);
+    List<DefaultMap<String>> getCurrentCreditStore(RegistVO registVO);
 
     /**
      * 후불회원 적용매장 삭제

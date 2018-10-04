@@ -17,7 +17,7 @@
 <div class="cusWrap">
     <div class="contents-middle">
         <div class="subCon">
-            <div class="searchBar">
+            <div class="searchBar flddUnfld">
                 <span class="cusTitle"><s:message code="application.pos.production"/></span>
             </div>
             <%-- 예외출고 상품 목록 --%>

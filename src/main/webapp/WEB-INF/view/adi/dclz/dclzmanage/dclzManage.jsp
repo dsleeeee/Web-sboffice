@@ -8,7 +8,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 
 <div class="subCon">
-  <div class="searchBar">
+  <div class="searchBar flddUnfld">
     <a href="javascript:;" class="open">${menuNm}</a>
   </div>
 
@@ -253,7 +253,9 @@
 
     <%-- 매장선택 --%>
     $("#store").click(function(e){
-      c_store.init(function(arr){
+
+      var checked = "";
+      c_store.init(checked, function(arr){
         storeCdText.text = "";
         storeCd.text = "";
 

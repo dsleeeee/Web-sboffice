@@ -16,7 +16,7 @@
           </ul>
         </div>
 
-        <div id="regArea" class="mt20 sc" style="height:220px;">
+        <div id="regArea"  style="height:210px;">
           <form id="regForm">
             <table class="tblType01">
               <colgroup>

@@ -32,16 +32,16 @@
         <%-- 사용여부 --%>
         <th><s:message code="cmm.useYn" /></th>
         <td>
-          <div class="sb-select">
+          <div class="sb-select w40">
             <div id="useYn"></div>
           </div>
         </td>
       </tr>
       <tr>
-        <%-- 예외 관리 --%>
+        <%-- 예외 관리 // TODO 검색조건에 누락됨 --%>
         <th><s:message code="authGroup.exceptMng" /></th>
         <td>
-          <div class="sb-select fl">
+          <div class="sb-select fl w40">
             <div id="availCombo"></div>
           </div>
         </td>

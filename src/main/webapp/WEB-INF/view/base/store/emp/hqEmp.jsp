@@ -7,7 +7,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
 <div class="subCon">
-  <div class="searchBar">
+  <div class="searchBar flddUnfld">
     <a href="javascript:;" class="open">${menuNm}</a>
   </div>
   <table class="searchTbl">
@@ -94,17 +94,19 @@
     </tbody>
   </table>
 
-  <div class="mt10 pdb20 oh bb">
+  <div class="mt10 pdb20 oh">
     <%-- 조회 --%>
     <button class="btn_blue fr" id="btnSearch"><s:message code="cmm.search" /></button>
   </div>
 
-  <div class="mt20 oh sb-select dkbr">
+  <div class="mt40 oh sb-select dkbr">
     <%--페이지 스케일 --%>
     <div id="listScaleBox" class="w130 fl"></div>
     <div class="tr">
       <%-- 본사신규등록 --%>
+<c:if test="${orgnFg == 'HQ'}">
       <button class="btn_skyblue" id="btnRegist"><s:message code="hqEmp.hqEmpReg" /></button>
+</c:if>
       <%-- sms 전송 //TODO --%>
       <button class="btn_skyblue" id="btnSMS"><s:message code="hqEmp.sendSMS" /></button>
       <%-- 엑셀다운로드 //TODO --%>

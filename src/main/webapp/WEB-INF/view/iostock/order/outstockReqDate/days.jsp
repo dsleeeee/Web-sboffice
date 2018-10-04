@@ -8,7 +8,7 @@
 
 
 <div id="daysView" class="subCon" style="display: none;" ng-controller="daysCtrl">
-    <div class="searchBar">
+    <div class="searchBar flddUnfld">
         <a href="javascript:;" class="open">${menuNm}</a>
     </div>
     <table class="searchTbl">

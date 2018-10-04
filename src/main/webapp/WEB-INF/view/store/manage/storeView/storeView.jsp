@@ -7,7 +7,7 @@
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
 
 <div class="subCon">
-  <div class="searchBar">
+  <div class="searchBar flddUnfld">
     <a href="javascript:;" class="open">${menuNm}</a>
   </div>
   <table class="searchTbl">

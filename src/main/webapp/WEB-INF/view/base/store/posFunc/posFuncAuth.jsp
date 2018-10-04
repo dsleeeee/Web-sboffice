@@ -2,8 +2,7 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
-<div class="w75 fr" id="posFuncAuthArea" style="display:none;">
-  <div class="wj-TblWrapBr ml10 pd20" style="height:700px;">
+  <div id="posFuncAuthArea" style="display:none;">
     <h2 class="h2_tit" id="posFuncAuthTitle"></h2>
 
     <%--============================================= 탭 =============================================--%>
@@ -15,9 +14,9 @@
     </ul>
 
     <%-- 왼쪽  --%>
-    <div class="w30 fl">
-      <div class="wj-TblWrapBr oh mr10 pd20" style="height:500px;">
-        <div class="updownSet oh mt20">
+    <div class="w30 fl mt20">
+      <div class="wj-TblWrapBr oh mr10 pd20" style="height:560px;">
+        <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code="posFunc.fnkeyFg" /></span>
         </div>
         <%-- 그리드 --%>
@@ -26,9 +25,9 @@
     </div>
 
     <%-- 오른쪽 --%>
-    <div class="w70 fr">
-      <div class="wj-TblWrapBr oh ml10 pd20" style="height:500px;">
-        <div class="fr mb10">
+    <div class="w70 fr mt20">
+      <div class="wj-TblWrapBr oh ml20 pd20" style="height:560px;">
+        <div class="updownSet oh mb10">
           <%-- up 버튼 --%>
           <button class="btn_up" id="btnUp"><s:message code="cmm.up" /></button>
           <%-- down 버튼 --%>
@@ -44,7 +43,6 @@
       </div>
     </div>
   </div>
-</div>
 
 <%-- grid button --%>
 <div id="tplBtnEditMode" style="display:none">
@@ -85,21 +83,21 @@
 
   <%-- 그리드 포맷 --%>
   funcListGrid.formatItem.addHandler(function(s, e) {
-    if (e.panel == s.cells) {
+    if (e.panel === s.cells) {
       var col = s.columns[e.col];
       var item = s.rows[e.row].dataItem;
-      if( col.binding == "nmcodeNm" ) {
+      if( col.binding === "nmcodeNm" ) {
         wijmo.addClass(e.cell, 'wijLink');
       }
     }
   });
 
   funcAuthGrid.formatItem.addHandler(function(s, e) {
-    if (e.panel == s.cells) {
+    if (e.panel === s.cells) {
       var col = s.columns[e.col];
       var item = s.rows[e.row].dataItem;
 
-      if( col.binding == "buttons"){
+      if( col.binding === "buttons"){
         e.cell.innerHTML = document.getElementById('tplBtnEditMode').innerHTML;
         e.cell.dataItem = item;
       }
@@ -110,9 +108,9 @@
   <%-- 그리드 선택 이벤트 --%>
   funcListGrid.addEventListener(funcListGrid.hostElement, 'click', function(e) {
     var ht = funcListGrid.hitTest(e);
-    if ( ht.cellType == wijmo.grid.CellType.Cell ) {
+    if ( ht.cellType === wijmo.grid.CellType.Cell ) {
       var col = ht.panel.columns[ht.col];
-      if( col.binding == "nmcodeNm" ) {
+      if( col.binding === "nmcodeNm" ) {
         selectedRow = funcListGrid.rows[ht.row].dataItem;
         getPosFuncAuthDetail();
       }
@@ -123,9 +121,9 @@
   funcAuthGrid.addEventListener(funcAuthGrid.hostElement, 'click', function(e) {
     var ht = funcAuthGrid.hitTest(e);
     var row = ht.row;
-    if( ht.cellType == wijmo.grid.CellType.Cell) {
+    if( ht.cellType === wijmo.grid.CellType.Cell) {
       var col = ht.panel.columns[ht.col];
-      if( col.binding == "buttons") {
+      if( col.binding === "buttons") {
         selectedFnkey = funcAuthGrid.rows[ht.row].dataItem;
         openSetAuthLayer();
       }
@@ -136,6 +134,8 @@
   function showPosFuncAuth(){
     $("#posFuncAuthArea").show();
     getPosAuthList();
+    // 선택매장 표시
+    $("#posFuncAuthTitle").text("[" + selectedStore.storeCd + "] " + selectedStore.storeNm);
   }
 
   <%-- 포스기능 인증 목록 조회 --%>
@@ -221,8 +221,8 @@
   <%-- up 버튼 클릭 --%>
   $("#posFuncAuthArea #btnUp").click(function(e){
     for(var i = 0; i < funcAuthGrid.collectionView.itemCount; i++ ){
-      if(i > 0 && (funcAuthGrid.collectionView.items[i].gChk == true)){
-        if(funcAuthGrid.collectionView.items[i-1].gChk != true){
+      if(i > 0 && (funcAuthGrid.collectionView.items[i].gChk === true)){
+        if(funcAuthGrid.collectionView.items[i-1].gChk !== true){
           var tmpItem = funcAuthGrid.collectionView.items[i-1];
           funcAuthGrid.collectionView.items[i-1] = funcAuthGrid.collectionView.items[i];
           funcAuthGrid.collectionView.items[i] = tmpItem;
@@ -236,8 +236,8 @@
   <%-- down 버튼 클릭 --%>
   $("#posFuncAuthArea #btnDown").click(function(e){
     for(var i = funcAuthGrid.itemsSource.itemCount-1; i >= 0; i-- ){
-      if((i < funcAuthGrid.itemsSource.itemCount-1) && (funcAuthGrid.collectionView.items[i].gChk == true)){
-        if(funcAuthGrid.collectionView.items[i+1].gChk != true){
+      if((i < funcAuthGrid.itemsSource.itemCount-1) && (funcAuthGrid.collectionView.items[i].gChk === true)){
+        if(funcAuthGrid.collectionView.items[i+1].gChk !== true){
           var tmpItem = funcAuthGrid.collectionView.items[i+1];
           funcAuthGrid.collectionView.items[i+1] = funcAuthGrid.collectionView.items[i];
           funcAuthGrid.collectionView.items[i] = tmpItem;

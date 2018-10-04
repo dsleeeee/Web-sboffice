@@ -306,12 +306,19 @@
       TABLE    : TB_MB_MEMBER_CREDIT_STORE
       COMMENTS : 후불회원 적용매장 조회
   -->
-  <select id="getCurrentCreditStore" parameterType="registVO" resultType="String">
+  <select id="getCurrentCreditStore" parameterType="registVO" resultType="DefaultMap">
     /* RegistMapper.getCurrentCreditStore */
+    SELECT tmmcs.CREDIT_STORE_CD AS CD,
+           (SELECT STORE_NM FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{membrOrgnCd} AND STORE_CD = tmmcs.CREDIT_STORE_CD) AS NM
+      FROM TB_MB_MEMBER_CREDIT_STORE tmmcs
+     WHERE tmmcs.HQ_OFFICE_CD = #{membrOrgnCd}
+       AND tmmcs.MEMBER_NO = #{membrNo}
+    <!--
     SELECT LISTAGG(CREDIT_STORE_CD, ',') WITHIN GROUP (ORDER BY CREDIT_STORE_CD) AS CREDIT_STORE_CD
       FROM TB_MB_MEMBER_CREDIT_STORE
      WHERE HQ_OFFICE_CD = #{membrOrgnCd}
        AND MEMBER_NO = #{membrNo}
+    -->
   </select>
 
 
