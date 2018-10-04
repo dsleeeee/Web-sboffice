@@ -162,7 +162,7 @@ public class DstbCloseStoreController {
      * @author  안동관
      * @since   2018. 09. 21.
      */
-    @RequestMapping(value = "/dstbAddProd/getOrderFg.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/dstbCloseStoreAdd/getOrderFg.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getOrderFg(HttpServletRequest request, HttpServletResponse response,
         Model model, DstbCloseStoreVO dstbCloseStoreVO) {
@@ -185,15 +185,15 @@ public class DstbCloseStoreController {
      * @author  안동관
      * @since   2018. 09. 21.
      */
-    @RequestMapping(value = "/dstbAddProd/list.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/dstbCloseStoreAdd/list.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getDstbAddProdList(HttpServletRequest request, HttpServletResponse response,
+    public Result getDstbAddList(HttpServletRequest request, HttpServletResponse response,
         Model model, DstbCloseStoreVO dstbCloseStoreVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         dstbCloseStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        List<DefaultMap<String>> list = dstbCloseStoreService.getDstbAddProdList(dstbCloseStoreVO);
+        List<DefaultMap<String>> list = dstbCloseStoreService.getDstbAddList(dstbCloseStoreVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, dstbCloseStoreVO);
     }
@@ -208,14 +208,14 @@ public class DstbCloseStoreController {
      * @author  안동관
      * @since   2018. 09. 21.
      */
-    @RequestMapping(value = "/dstbAddProd/save.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/dstbCloseStoreAdd/save.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result saveDstbAddProd(HttpServletRequest request, HttpServletResponse response,
+    public Result saveDstbAdd(HttpServletRequest request, HttpServletResponse response,
         Model model, @RequestBody DstbCloseStoreVO[] dstbCloseStoreVOs) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = dstbCloseStoreService.saveDstbAddProd(dstbCloseStoreVOs, sessionInfoVO);
+        int result = dstbCloseStoreService.saveDstbAdd(dstbCloseStoreVOs, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }

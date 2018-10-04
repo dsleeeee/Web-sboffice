@@ -1,10 +1,10 @@
-package kr.co.solbipos.iostock.order.dstbCloseStore.service;
+package kr.co.solbipos.iostock.order.dstbCloseProd.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
 
-public class DstbCloseStoreVO extends PageVO {
+public class DstbCloseProdVO extends PageVO {
 
-    private static final long serialVersionUID = -2463213696404804028L;
+    private static final long serialVersionUID = -2791699164703244233L;
 
     /** 본사코드 */
     private String hqOfficeCd;
@@ -12,6 +12,8 @@ public class DstbCloseStoreVO extends PageVO {
     private String reqDate;
     /** 순번 본사코드_출고예약일자에 따른 순번 */
     private Integer seq;
+    /** 다중 매장코드 */
+    private String[] arrStoreCd;
     /** 매장코드 */
     private String storeCd;
     /** 매장명 */
@@ -153,6 +155,20 @@ public class DstbCloseStoreVO extends PageVO {
      */
     public void setSeq(Integer seq) {
         this.seq = seq;
+    }
+
+    /**
+     * @return the arrStoreCd
+     */
+    public String[] getArrStoreCd() {
+        return arrStoreCd;
+    }
+
+    /**
+     * @param arrStoreCd the arrStoreCd to set
+     */
+    public void setArrStoreCd(String[] arrStoreCd) {
+        this.arrStoreCd = arrStoreCd;
     }
 
     /**

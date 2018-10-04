@@ -163,7 +163,7 @@
             event.preventDefault();
         });
 
-        // 주문등록 상세내역 리스트 조회
+        // 분배마감 상세내역 리스트 조회
         $scope.searchDstbCloseStoreDtlList = function() {
             // 파라미터
             var params = {};
@@ -212,32 +212,5 @@
 
             $scope.wjDstbCloseStoreDtlLayer.hide(true);
         };
-
-        // http 조회 후 status 체크
-        $scope.httpStatusCheck = function (res) {
-            if(res.data.status === "OK") {
-                return true;
-            }
-            else if(res.data.status === "FAIL") {
-                $scope._popMsg("Ajax Fail By HTTP Request");
-                return false;
-            }
-            else if(res.data.status === "SESSION_EXFIRE") {
-                $scope._popMsg(res.data.message, function() {
-                    location.href = res.data.url;
-                });
-                return false;
-            }
-            else if(res.data.status === "SERVER_ERROR") {
-                $scope._popMsg(res.data.message);
-                return false;
-            }
-            else {
-                var msg = res.data.status + " : " + res.data.message;
-                $scope._popMsg(msg);
-                return false;
-            }
-        };
-
     }]);
 </script>

@@ -32,8 +32,8 @@
                     <td><input type="text" id="srchProdNm" name="srchProdNm" ng-model="prodNm" class="sb-input w100" maxlength="50"/></td>
                 </tr>
                 <tr>
-                    <th><s:message code="storeOrder.dtl.barCode"/></th>
-                    <td><input type="text" id="srchBarCode" name="srchBarCode" ng-model="barCode" class="sb-input w100" maxlength="40"/></td>
+                    <th><s:message code="storeOrder.dtl.barcd"/></th>
+                    <td><input type="text" id="srchBarcdCd" name="srchBarcdCd" ng-model="barcdCd" class="sb-input w100" maxlength="40"/></td>
                     <th><s:message code="storeOrder.dtl.prodClass"/></th>
                     <td><input type="text" id="srchProdClass" name="prodClass" ng-model="prodClass" class="sb-input w100" maxlength="40"/></td>
                 </tr>

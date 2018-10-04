@@ -87,94 +87,72 @@ public class DstbCloseStoreServiceImpl implements DstbCloseStoreService {
             dstbCloseStoreVO.setModId(sessionInfoVO.getUserId());
             dstbCloseStoreVO.setModDt(currentDt);
 
-            result = dstbCloseStoreMapper.updateDstbCloseDtl(dstbCloseStoreVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
-            if(dstbCloseStoreVO.getConfirmYn()) {
-                dstbCloseStoreVO.setProcFg("20");
-                result = dstbCloseStoreMapper.updateDstbCloseDtlConfirm(dstbCloseStoreVO);
+            // 분배수량이 0 이나 null 인 경우 삭제
+            if(dstbCloseStoreVO.getMgrTotQty() == 0 || dstbCloseStoreVO.getMgrTotQty() == null) {
+                result = dstbCloseStoreMapper.deleteDstbCloseDtl(dstbCloseStoreVO);
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
             }
+            else {
+                result = dstbCloseStoreMapper.updateDstbCloseDtl(dstbCloseStoreVO);
+                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                if(dstbCloseStoreVO.getConfirmYn()) {
+                    dstbCloseStoreVO.setProcFg("20");
+                    result = dstbCloseStoreMapper.updateDstbCloseDtlConfirm(dstbCloseStoreVO);
+                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                }
+            }
+
             returnResult += result;
         }
 
         return returnResult;
     }
 
-    /** 추가분배시 주문가능여부 조회 */
+    /** 추가등록시 주문가능여부 조회 */
     @Override
     public DefaultMap<String> getOrderFg(DstbCloseStoreVO dstbCloseStoreVO) {
         return dstbCloseStoreMapper.getOrderFg(dstbCloseStoreVO);
     }
 
-    /** 분배마감 - 추가분배 상세 리스트 조회 */
+    /** 분배마감 - 추가등록 상세 리스트 조회 */
     @Override
-    public List<DefaultMap<String>> getDstbAddProdList(DstbCloseStoreVO dstbCloseStoreVO) {
-        return dstbCloseStoreMapper.getDstbAddProdList(dstbCloseStoreVO);
+    public List<DefaultMap<String>> getDstbAddList(DstbCloseStoreVO dstbCloseStoreVO) {
+        return dstbCloseStoreMapper.getDstbAddList(dstbCloseStoreVO);
     }
 
-    /** 분배마감 - 추가분배 상세 리스트 저장 */
+    /** 분배마감 - 추가등록 상세 리스트 저장 */
     @Override
-    public int saveDstbAddProd(DstbCloseStoreVO[] dstbCloseStoreVOs, SessionInfoVO sessionInfoVO) {
+    public int saveDstbAdd(DstbCloseStoreVO[] dstbCloseStoreVOs, SessionInfoVO sessionInfoVO) {
         int returnResult = 0;
         int result = 0;
         String currentDt = currentDateTimeString();
 
         for (DstbCloseStoreVO dstbCloseStoreVO : dstbCloseStoreVOs) {
-            String insFg = "";
-            // 기분배수량이 있는 경우 수정
-            if(dstbCloseStoreVO.getPrevMgrTotQty() != null) {
-                insFg = "U";
-                // 기분배수량이 있으면서 분배수량이 0 이나 null 인 경우 삭제
-                if(dstbCloseStoreVO.getMgrTotQty() == 0 || dstbCloseStoreVO.getMgrTotQty() == null) {
-                    insFg = "D";
-                }
-            }
-            else {
-                insFg = "I";
-            }
+            int slipFg       = dstbCloseStoreVO.getSlipFg();
+            int mgrUnitQty   = (dstbCloseStoreVO.getMgrUnitQty() == null ? 0 : dstbCloseStoreVO.getMgrUnitQty()) * slipFg;
+            int mgrEtcQty    = (dstbCloseStoreVO.getMgrEtcQty()  == null ? 0 : dstbCloseStoreVO.getMgrEtcQty())  * slipFg;
+            int mgrTotQty    = (dstbCloseStoreVO.getMgrTotQty()  == null ? 0 : dstbCloseStoreVO.getMgrTotQty())  * slipFg;
+            Long mgrAmt      = (dstbCloseStoreVO.getMgrAmt()     == null ? 0 : dstbCloseStoreVO.getMgrAmt())     * slipFg;
+            Long mgrVat      = (dstbCloseStoreVO.getMgrVat()     == null ? 0 : dstbCloseStoreVO.getMgrVat())     * slipFg;
+            Long mgrTot      = (dstbCloseStoreVO.getMgrTot()     == null ? 0 : dstbCloseStoreVO.getMgrTot())     * slipFg;
 
-            if(!insFg.equals("D")) {
-                int slipFg       = dstbCloseStoreVO.getSlipFg();
-                int poUnitQty    = dstbCloseStoreVO.getPoUnitQty();
-                int prevUnitQty  = (dstbCloseStoreVO.getPrevMgrUnitQty() == null ? 0 : dstbCloseStoreVO.getPrevMgrUnitQty());
-                int prevEtcQty   = (dstbCloseStoreVO.getPrevMgrEtcQty()  == null ? 0 : dstbCloseStoreVO.getPrevMgrEtcQty());
-                int unitQty      = (dstbCloseStoreVO.getMgrUnitQty()     == null ? 0 : dstbCloseStoreVO.getMgrUnitQty());
-                int etcQty       = (dstbCloseStoreVO.getMgrEtcQty()      == null ? 0 : dstbCloseStoreVO.getMgrEtcQty());
-                int mgrUnitQty = ((prevUnitQty + unitQty) + Integer.valueOf((prevEtcQty + etcQty) / poUnitQty)) * slipFg;
-                int mgrEtcQty  = Integer.valueOf((prevEtcQty + etcQty) % poUnitQty) * slipFg;
-                int mgrTotQty  = (dstbCloseStoreVO.getMgrTotQty()  == null ? 0 : dstbCloseStoreVO.getMgrTotQty())  * slipFg;
-                Long mgrAmt    = (dstbCloseStoreVO.getMgrAmt()     == null ? 0 : dstbCloseStoreVO.getMgrAmt())     * slipFg;
-                Long mgrVat    = (dstbCloseStoreVO.getMgrVat()     == null ? 0 : dstbCloseStoreVO.getMgrVat())     * slipFg;
-                Long mgrTot    = (dstbCloseStoreVO.getMgrTot()     == null ? 0 : dstbCloseStoreVO.getMgrTot())     * slipFg;
-
-                dstbCloseStoreVO.setMgrUnitQty(mgrUnitQty);
-                dstbCloseStoreVO.setMgrEtcQty(mgrEtcQty);
-                dstbCloseStoreVO.setMgrTotQty(mgrTotQty);
-                dstbCloseStoreVO.setMgrAmt(mgrAmt);
-                dstbCloseStoreVO.setMgrVat(mgrVat);
-                dstbCloseStoreVO.setMgrTot(mgrTot);
-                dstbCloseStoreVO.setProcFg("10");
-                dstbCloseStoreVO.setDstbFg("0");
-                dstbCloseStoreVO.setRegId(sessionInfoVO.getUserId());
-                dstbCloseStoreVO.setRegDt(currentDt);
-                dstbCloseStoreVO.setModId(sessionInfoVO.getUserId());
-                dstbCloseStoreVO.setModDt(currentDt);
-            }
+            dstbCloseStoreVO.setMgrUnitQty(mgrUnitQty);
+            dstbCloseStoreVO.setMgrEtcQty(mgrEtcQty);
+            dstbCloseStoreVO.setMgrTotQty(mgrTotQty);
+            dstbCloseStoreVO.setMgrAmt(mgrAmt);
+            dstbCloseStoreVO.setMgrVat(mgrVat);
+            dstbCloseStoreVO.setMgrTot(mgrTot);
+            dstbCloseStoreVO.setProcFg("10");
+            dstbCloseStoreVO.setDstbFg("0");
+            dstbCloseStoreVO.setRegId(sessionInfoVO.getUserId());
+            dstbCloseStoreVO.setRegDt(currentDt);
+            dstbCloseStoreVO.setModId(sessionInfoVO.getUserId());
+            dstbCloseStoreVO.setModDt(currentDt);
             dstbCloseStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-            if(insFg.equals("I")) {
-                result = dstbCloseStoreMapper.insertDstbAddProd(dstbCloseStoreVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-            }
-            else if(insFg.equals("U")) {
-                result = dstbCloseStoreMapper.updateDstbAddProd(dstbCloseStoreVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-            }
-            else if(insFg.equals("D")) {
-                result = dstbCloseStoreMapper.deleteDstbAddProd(dstbCloseStoreVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-            }
+            result = dstbCloseStoreMapper.insertDstbAdd(dstbCloseStoreVO);
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
             returnResult += result;
         }

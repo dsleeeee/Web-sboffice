@@ -72,6 +72,9 @@
         // 상위 객체 상속 : T/F 는 picker
         angular.extend(this, new RootController(targetId+'Ctrl', $scope, $http, true));
 
+        //페이지 스케일 콤보박스 데이터 Set
+        $scope._setComboData("listScaleBox", gvListScaleBoxData);
+
         // grid 초기화 : 생성되기전 초기화되면서 생성된다
         $scope.initGrid = function (s, e) {
             // 그리드 링크 효과
@@ -106,6 +109,12 @@
         $scope.$on(targetId+'Ctrl', function(event, paramObj) {
             // 매장선택 팝업 오픈
             eval('$scope.wj'+targetId+'LayerS.show(true)');
+            // 팝업 닫힐시 이벤트
+            eval('$scope.wj'+targetId+'LayerS').hidden.addHandler(function () {
+                if('<c:out value="${param.closeFunc}"/>' !== '') {
+                    eval('$scope.<c:out value="${param.closeFunc}"/>()');
+                }
+            });
 
             if(searchFg == "N") {
                 $scope.searchStore();
@@ -122,7 +131,6 @@
             });
         };
     }]);
-
     $(document).ready(function () {
         <%-- 선택취소 버튼 클릭 --%>
         $("#<c:out value='${param.targetId}'/>SelectCancelBtn").click(function(){

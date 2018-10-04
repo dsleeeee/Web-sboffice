@@ -26,19 +26,22 @@ public interface DstbCloseStoreMapper {
     /** 분배마감 상세 리스트 확정 */
     int updateDstbCloseDtlConfirm(DstbCloseStoreVO dstbCloseStoreVO);
 
+    /** 분배마감 상세 리스트 삭제 */
+    int deleteDstbCloseDtl(DstbCloseStoreVO dstbCloseStoreVO);
+
     /** 분배마감 - 추가분배시 주문가능여부 조회 */
     DefaultMap<String> getOrderFg(DstbCloseStoreVO dstbCloseStoreVO);
 
     /** 분배마감 - 추가분배 상세 리스트 조회 */
-    List<DefaultMap<String>> getDstbAddProdList(DstbCloseStoreVO dstbCloseStoreVO);
+    List<DefaultMap<String>> getDstbAddList(DstbCloseStoreVO dstbCloseStoreVO);
 
     /** 분배마감 - 추가분배 등록 */
-    int insertDstbAddProd(DstbCloseStoreVO dstbCloseStoreVO);
+    int insertDstbAdd(DstbCloseStoreVO dstbCloseStoreVO);
 
     /** 분배마감 - 추가분배 수정 */
-    int updateDstbAddProd(DstbCloseStoreVO dstbCloseStoreVO);
+    int updateDstbAdd(DstbCloseStoreVO dstbCloseStoreVO);
 
     /** 분배마감 - 추가분배 삭제 */
-    int deleteDstbAddProd(DstbCloseStoreVO dstbCloseStoreVO);
+    int deleteDstbAdd(DstbCloseStoreVO dstbCloseStoreVO);
 
 }

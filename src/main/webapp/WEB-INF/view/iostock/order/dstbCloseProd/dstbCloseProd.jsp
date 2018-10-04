@@ -4,9 +4,9 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
-<c:set var="baseUrl" value="/iostock/order/dstbCloseStore/dstbCloseStore/"/>
+<c:set var="baseUrl" value="/iostock/order/dstbCloseProd/dstbCloseProd/"/>
 
-<div class="subCon" ng-controller="dstbCloseStoreCtrl">
+<div class="subCon" ng-controller="dstbCloseProdCtrl">
     <div class="searchBar">
         <a href="javascript:;" class="open">${menuNm}</a>
     </div>
@@ -40,34 +40,27 @@
                 </div>
             </td>
         </tr>
-        <tr>
-            <%-- 매장코드 --%>
-            <th><s:message code="dstbCloseStore.storeCd"/></th>
-            <td><input type="text" id="srchStoreCd" name="srchStoreCd" ng-model="storeCd" class="sb-input w100" maxlength="7"/></td>
-            <%-- 매장명 --%>
-            <th><s:message code="dstbCloseStore.storeNm"/></th>
-            <td><input type="text" id="srchStoreNm" name="srchStoreNm" ng-model="storeNm" class="sb-input w100" maxlength="16"/></td>
-        </tr>
         <%-- 출고요청일자 --%>
-        <th><s:message code="dstbCloseStore.reqDate"/></th>
+        <th><s:message code="storeOrder.reqDate"/></th>
         <td colspan="3">
             <div class="sb-select fl mr10">
                 <span class="txtIn"><input id="reqDate" class="w150"></span>
             </div>
-            <a href="javascript:;" class="btn_grayS" ng-click="add()"><s:message code="dstbCloseStore.addRegist" /></a>
+            <a href="javascript:;" class="btn_grayS" ng-click="add()"><s:message code="dstbCloseProd.addRegist" /></a>
         </td>
         </tbody>
     </table>
 
     <div class="mt10 pdb20 oh bb">
         <%-- 조회 --%>
-        <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('dstbCloseStoreCtrl')"><s:message code="cmm.search" /></button>
+        <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('dstbCloseProdCtrl')"><s:message code="cmm.search" /></button>
     </div>
 
     <div class="tr mt10">
         <%-- 확정 --%>
-        <button type="button" id="btnConfirm" class="btn_skyblue ml5" ng-click="saveConfirm()"><s:message code="dstbCloseStore.confirm" /></button>
+        <button type="button" id="btnConfirm" class="btn_skyblue ml5" ng-click="saveConfirm()"><s:message code="dstbCloseProd.confirm" /></button>
     </div>
+
 
     <div class="w100 mt10" >
         <%--위즈모 테이블--%>
@@ -83,26 +76,25 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>"                       binding="gChk"          width="40"  align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="dstbCloseStore.reqDate"/>"        binding="reqDate"       width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="dstbCloseStore.storeCd"/>"        binding="storeCd"       width="70"  align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="dstbCloseStore.storeNm"/>"        binding="storeNm"       width="150" align="left"   is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="dstbCloseStore.procFg"/>"         binding="procFg"        width="70"  align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="dstbCloseStore.orderAmt"/>"       binding="orderAmt"      width="70"  align="right"  is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="dstbCloseStore.orderVat"/>"       binding="orderVat"      width="70"  align="right"  is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="dstbCloseStore.orderTot"/>"       binding="orderTot"      width="70"  align="right"  is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="dstbCloseStore.mgrAmt"/>"         binding="mgrAmt"        width="70"  align="right"  is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="dstbCloseStore.mgrVat"/>"         binding="mgrVat"        width="70"  align="right"  is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="dstbCloseStore.mgrTot"/>"         binding="mgrTot"        width="70"  align="right"  is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtlCntOrder"/>"    binding="dtlCntOrder"   width="70"  align="right"  is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtlCntAdd"/>"      binding="dtlCntAdd"     width="70"  align="right"  is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtlCntTot"/>"      binding="dtlCntTot"     width="70"  align="right"  is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="dstbCloseStore.modDt"/>"          binding="modDt"         width="130" align="center" is-read-only="true" format="dateTime"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="dstbCloseStore.slipFg"/>"         binding="slipFg"        width="70"  align="left"   is-read-only="true" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dstbCloseProd.reqDate"/>"         binding="reqDate"       width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dstbCloseProd.prodCd"/>"          binding="prodCd"        width="70"  align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dstbCloseProd.prodNm"/>"          binding="prodNm"        width="150" align="left"   is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dstbCloseProd.procFg"/>"          binding="procFg"        width="70"  align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dstbCloseProd.poUnitFg"/>"        binding="poUnitFg"      width="70"  align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dstbCloseProd.poUnitQty"/>"       binding="poUnitQty"     width="70"  align="right"  is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dstbCloseProd.mgrUnitQty"/>"      binding="mgrUnitQty"    width="70"  align="right"  is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dstbCloseProd.mgrEtcQty"/>"       binding="mgrEtcQty"     width="70"  align="right"  is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dstbCloseProd.mgrTotQty"/>"       binding="mgrTotQty"     width="70"  align="right"  is-read-only="true" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dstbCloseProd.mgrAmt"/>"          binding="mgrAmt"        width="70"  align="right"  is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dstbCloseProd.mgrVat"/>"          binding="mgrVat"        width="70"  align="right"  is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dstbCloseProd.mgrTot"/>"          binding="mgrTot"        width="70"  align="right"  is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dstbCloseProd.dtlCnt"/>"          binding="dtlCnt"        width="70"  align="right"  is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dstbCloseProd.slipFg"/>"          binding="slipFg"        width="70"  align="left"   is-read-only="true" visible="false"></wj-flex-grid-column>
 
             </wj-flex-grid>
             <%-- ColumnPicker 사용시 include --%>
             <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-                <jsp:param name="pickerTarget" value="dstbCloseStoreCtrl"/>
+                <jsp:param name="pickerTarget" value="dstbCloseProdCtrl"/>
             </jsp:include>
             <%--// ColumnPicker 사용시 include --%>
         </div>
@@ -119,17 +111,17 @@
     var app = agrid.getApp();
 
     /** 주문등록 그리드 controller */
-    app.controller('dstbCloseStoreCtrl', ['$scope', '$http', function ($scope, $http) {
+    app.controller('dstbCloseProdCtrl', ['$scope', '$http', function ($scope, $http) {
         // 상위 객체 상속 : T/F 는 picker
-        angular.extend(this, new RootController('dstbCloseStoreCtrl', $scope, $http, true));
+        angular.extend(this, new RootController('dstbCloseProdCtrl', $scope, $http, true));
 
         var srchStartDate = wcombo.genDateVal("#srchStartDate", "${sessionScope.sessionInfo.startDt}");
         var srchEndDate   = wcombo.genDateVal("#srchEndDate"  , "${sessionScope.sessionInfo.startDt}");
         var reqDate       = wcombo.genDateVal("#reqDate"      , "${sessionScope.sessionInfo.startDt}");
         $scope._setComboData("srchDateFg", [
-            {"name":"<s:message code='dstbCloseStore.reqDate'/>","value":"req"},
-            {"name":"<s:message code='dstbCloseStore.regDate'/>","value":"reg"},
-            {"name":"<s:message code='dstbCloseStore.modDate'/>","value":"mod"}
+            {"name":"<s:message code='dstbCloseProd.reqDate'/>","value":"req"},
+            {"name":"<s:message code='dstbCloseProd.regDate'/>","value":"reg"},
+            {"name":"<s:message code='dstbCloseProd.modDate'/>","value":"mod"}
         ]);
 
         // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -137,13 +129,13 @@
             $scope.slipFg = 1;
 
             // picker 사용시 호출 : 미사용시 호출안함
-            $scope._makePickColumns("dstbCloseStoreCtrl");
+            $scope._makePickColumns("dstbCloseProdCtrl");
 
             // 그리드 링크 효과
             s.formatItem.addHandler(function (s, e) {
                 if (e.panel === s.cells) {
                     var col = s.columns[e.col];
-                    if (col.binding === "storeCd") { // 매장코드
+                    if (col.binding === "prodCd") { // 상품코드
                         wijmo.addClass(e.cell, 'wijLink');
                         wijmo.addClass(e.cell, 'wj-custom-readonly');
                     }
@@ -170,14 +162,14 @@
                 if( ht.cellType === wijmo.grid.CellType.Cell) {
                     var col = ht.panel.columns[ht.col];
                     var selectedRow = s.rows[ht.row].dataItem;
-                    if ( col.binding === "storeCd") { // 매장코드 클릭
+                    if ( col.binding === "prodCd") { // 상품코드 클릭
                         var params = {};
                         params.reqDate  = selectedRow.reqDate;
-                        params.storeCd  = selectedRow.storeCd;
-                        params.storeNm  = selectedRow.storeNm;
+                        params.prodCd   = selectedRow.prodCd;
+                        params.prodNm   = selectedRow.prodNm;
                         params.slipFg   = selectedRow.slipFg;
                         params.procFg   = selectedRow.procFg;
-                        $scope._broadcast('dstbCloseStoreDtlCtrl', params);
+                        $scope._broadcast('dstbCloseProdDtlCtrl', params);
                     }
                 }
             });
@@ -189,14 +181,14 @@
         };
 
         // 다른 컨트롤러의 broadcast 받기
-        $scope.$on("dstbCloseStoreCtrl", function(event, data) {
-            $scope.searchDstbCloseStoreList();
+        $scope.$on("dstbCloseProdCtrl", function(event, data) {
+            $scope.searchDstbCloseProdList();
             // 기능수행 종료 : 반드시 추가
             event.preventDefault();
         });
 
         // 주문 리스트 조회
-        $scope.searchDstbCloseStoreList = function() {
+        $scope.searchDstbCloseProdList = function() {
             // 파라미터
             var params = {};
             params.dateFg    = $scope.dateFg;
@@ -205,7 +197,7 @@
             params.endDate   = wijmo.Globalize.format(srchEndDate.value  , 'yyyyMMdd');
 
             // 조회 수행 : 조회URL, 파라미터, 콜백함수
-            $scope._inquiryMain("/iostock/order/dstbCloseStore/dstbCloseStore/list.sb", params);
+            $scope._inquiryMain("/iostock/order/dstbCloseProd/dstbCloseProd/list.sb", params);
         };
 
         $scope.saveConfirm = function () {
@@ -219,26 +211,32 @@
                 item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
                 params.push(item);
             }
-            $scope._save("/iostock/order/dstbCloseStore/dstbCloseStore/saveConfirm.sb", params, function() { $scope.searchDstbCloseStoreList() });
+            $scope._save("/iostock/order/dstbCloseProd/dstbCloseProd/saveConfirm.sb", params, function() { $scope.searchDstbCloseProdList() });
         };
 
         $scope.add = function () {
             var params = {};
             params.reqDate  = wijmo.Globalize.format(reqDate.value, 'yyyyMMdd');
             params.slipFg   = $scope.slipFg;
-            $scope._broadcast('dstbCloseStoreAddCtrl', params);
+            $scope._broadcast('dstbCloseProdAddProdCtrl', params);
         };
     }]);
 </script>
 
 <%-- 분배마감 상세 레이어 --%>
-<c:import url="/WEB-INF/view/iostock/order/dstbCloseStore/dstbCloseStoreDtl.jsp">
+<c:import url="/WEB-INF/view/iostock/order/dstbCloseProd/dstbCloseProdDtl.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
-<%-- 분배마감 추가등록 레이어 --%>
-<c:import url="/WEB-INF/view/iostock/order/dstbCloseStore/dstbCloseStoreAdd.jsp">
+<%-- 분배마감 추가등록 상품조회 레이어 --%>
+<c:import url="/WEB-INF/view/iostock/order/dstbCloseProd/dstbCloseProdAddProd.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 분배마감 추가등록 분배등록 레이어 --%>
+<c:import url="/WEB-INF/view/iostock/order/dstbCloseProd/dstbCloseProdAddRegist.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

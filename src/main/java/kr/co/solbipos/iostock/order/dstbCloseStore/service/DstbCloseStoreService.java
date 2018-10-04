@@ -23,9 +23,9 @@ public interface DstbCloseStoreService {
     DefaultMap<String> getOrderFg(DstbCloseStoreVO dstbCloseStoreVO);
 
     /** 분배마감 - 추가분배 상세 리스트 조회 */
-    List<DefaultMap<String>> getDstbAddProdList(DstbCloseStoreVO dstbCloseStoreVO);
+    List<DefaultMap<String>> getDstbAddList(DstbCloseStoreVO dstbCloseStoreVO);
 
     /** 분배마감 - 추가분배 상세 리스트 저장 */
-    int saveDstbAddProd(DstbCloseStoreVO[] dstbCloseStoreVOs, SessionInfoVO sessionInfoVO);
+    int saveDstbAdd(DstbCloseStoreVO[] dstbCloseStoreVOs, SessionInfoVO sessionInfoVO);
 
 }
