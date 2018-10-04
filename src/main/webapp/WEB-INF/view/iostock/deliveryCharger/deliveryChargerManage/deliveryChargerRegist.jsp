@@ -7,7 +7,7 @@
     <div id="dlvrRegistLayer" class="wj-dialog wj-dialog-columns" ng-controller="dlvrInfoCtrl">
         <div class="wj-dialog-header wj-dialog-header-font">
             <s:message code="deliveryCharger.registPopTitle" /> <span id="registTitleDlvrNm" class="ml5"></span>
-            <a href="javascript:;" class="wj-hide btn_close"></a>
+            <a href="#" class="wj-hide btn_close"></a>
         </div>
         <div class="wj-dialog-body">
             <form id="dlvrForm" ng-submit="submitForm()">
@@ -151,7 +151,7 @@
                     // 팝업 닫기 및 값 초기화
                     $scope.popupClose();
                     s_alert.pop(response.data.message);
-                    return;
+                    return false;
                 }
 
                 $scope.dlvr = data;
@@ -159,7 +159,7 @@
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
                 s_alert.pop(response.data.message);
-                return;
+                return false;
             }).then(function() {
                 // "complete" code here
             });
@@ -168,7 +168,7 @@
         // 배송기사 저장
         $scope.submitForm = function() {
             //값체크
-            if (!valueCheck()) return;
+            if (!valueCheck()) return false;
 
             $http({
                 method: 'POST', //방식
@@ -193,7 +193,7 @@
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
                 s_alert.pop(response.data.message);
-                return;
+                return false;
             });
         };
 

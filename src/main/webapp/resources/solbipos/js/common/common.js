@@ -551,3 +551,9 @@ function addComma(str) {
   var regexp = /\B(?=(\d{3})+(?!\d))/g;
   return str.toString().replace(regexp, ',');
 }
+
+// 링크 태그 IE 팝업 방지( 이 웹사이트가 컴퓨터에서 앱을 열도록허용하시겠습니까? )
+$(document).on('click', 'a[href="#"]', function (e) {
+  e.preventDefault();
+  return false;
+});

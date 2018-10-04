@@ -1,4 +1,4 @@
-package kr.co.solbipos.iostock.order.distribute.web;
+package kr.co.solbipos.iostock.order.dstbReq.web;
 /**
  * @Class Name : dstbReqController.java
  * @Description : 수불관리 > 수주관리 > 분배등록
@@ -21,8 +21,8 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.iostock.order.distribute.service.DstbReqService;
-import kr.co.solbipos.iostock.order.distribute.service.DstbReqVO;
+import kr.co.solbipos.iostock.order.dstbReq.service.DstbReqService;
+import kr.co.solbipos.iostock.order.dstbReq.service.DstbReqVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,7 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Controller
-@RequestMapping("/iostock/order/distribute")
+@RequestMapping("/iostock/order/dstbReq")
 public class DstbReqController {
     private final SessionService sessionService;
     private final DstbReqService dstbReqService;
@@ -57,8 +57,8 @@ public class DstbReqController {
      * @since   2018. 09. 17.
      */
     @RequestMapping(value = "/dstbReq/view.sb", method = RequestMethod.GET)
-    public String storeCloseView(HttpServletRequest request, HttpServletResponse response, Model model) {
-        return "iostock/order/distribute/dstbReq";
+    public String dstbReqView(HttpServletRequest request, HttpServletResponse response, Model model) {
+        return "iostock/order/dstbReq/dstbReq";
     }
 
 
@@ -79,7 +79,6 @@ public class DstbReqController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         dstbReqVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        dstbReqVO.setStoreCd(sessionInfoVO.getStoreCd());
 
         List<DefaultMap<String>> list = dstbReqService.getDstbReqList(dstbReqVO);
 

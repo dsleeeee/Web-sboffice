@@ -7,7 +7,7 @@
     <div id="dlvrStorageMgrLayer" class="wj-dialog wj-dialog-columns" ng-controller="dlvrStorageMgrCtrl">
         <div class="wj-dialog-header wj-dialog-header-font">
             <s:message code="deliveryCharger.storageMgrPopTitle" /> <span id="storageMgrTitleDlvrNm" class="ml5"></span>
-            <a href="javascript:;" class="wj-hide btn_close"></a>
+            <a href="#" class="wj-hide btn_close"></a>
         </div>
 
         <div id="grid" class="w100 pdl20 pdr20 pdb20">
@@ -95,7 +95,6 @@
                 params.push($scope.flex.collectionView.itemsEdited[i]);
             }
 
-            // return;
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $scope._save("/iostock/deliveryCharger/deliveryChargerManage/deliveryChargerRegist/addStorage.sb", params, function() { $scope.allSearch(); });
         };

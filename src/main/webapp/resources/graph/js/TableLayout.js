@@ -167,7 +167,7 @@ Sidebar.prototype.addIcon = function(type, style, icon, w, h) {
   }
 
   //영역에 이미지를 넣고 DnD 처리
-  var template = '<li><a href="javascript:;"><img src="{icon}" alt="{alt}" /></a></li>';
+  var template = '<li><a href="#"><img src="{icon}" alt="{alt}" /></a></li>';
   var tag = wijmo.format(template, {
     icon: icon,
     alt: mxResources.get(type)
@@ -243,7 +243,7 @@ Floor.prototype.init = function() {
         var item = s.rows[e.row].dataItem;
         //삭제 버튼 생성
         if( item && col.binding == "btnDel" && e.row != 0 ) {
-          e.cell.innerHTML = '<a href="javascript:;" class="btn_grayS2">' + mxResources.get('del') + '</a>';
+          e.cell.innerHTML = '<a href="#" class="btn_grayS2">' + mxResources.get('del') + '</a>';
         }
       }
     }
@@ -422,7 +422,7 @@ Floor.prototype.refresh = function() {
   };
   //visibleLayer
   
-  var template = '<span><a href="javascript:;" class="{on}">{name}</a></span>';
+  var template = '<span><a href="#" class="{on}">{name}</a></span>';
   var divFloor = document.getElementById('divLayers');
   divFloor.innerHTML = '';
   

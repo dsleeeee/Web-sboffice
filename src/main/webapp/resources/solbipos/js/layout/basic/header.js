@@ -11,18 +11,22 @@
 $("#pwchg").bind("click", function () {
   $("#fullDimmedPw").show();
   $("#layerpw").show();
+  return false;
 });
 
 $(".userId").click(function () {
   $(".userLayer").toggle();
+  return false;
 });
 
 $(".favClose").click(function () {
   callPostJson("/menu/delFixMenu.sb", $(this).data("value"));
+  return false;
 });
 
 $(".histClose").click(function () {
   callPostJson("/menu/delHistMenu.sb", $(this).data("value"));
+  return false;
 });
 
 function callPostJson(url, menuId) {
@@ -36,7 +40,7 @@ function callPostJson(url, menuId) {
     },
     function (result) {
       s_alert.pop(result.message);
-      return;
+      return false;
     });
 }
 
@@ -50,23 +54,24 @@ $(".moveBtn .mR").click(function () {
   if (width > basePos) {
     $("#_fixMenu li:visible").first().hide();
   }
+  return false;
 });
 // 고정메뉴영역 왼쪽 스크롤
 $(".moveBtn .mL").click(function () {
   $("#_fixMenu li:hidden").last().show();
+  return false;
 });
 
 //  메뉴 열고 닫기
 $(".menuControl").click(function () {
-  if ($("#_nav").attr("class") == "menuOpen") {
+  if ($("#_nav").attr("class") === "menuOpen") {
     $("#_faMenu").hide();
     $("#theTreeAll").hide();
     $("#smallMenu").show();
     $("#_favorite").removeClass("on");
     $("#_nav").removeClass("menuOpen").addClass("menuClose");
     $("#_arrow").removeClass("arrowOpen").addClass("arrowClose");
-  }
-  else {
+  } else {
     $(".menuTab .all").trigger("click");
     $("#theTreeAll").show();
     $("#smallMenu").hide();

@@ -10,7 +10,7 @@
 <div class="subCon">
 
     <div class="searchBar flddUnfld">
-        <a href="javascript:void(0);" class="open">${menuNm}</a>
+        <a href="#" class="open">${menuNm}</a>
     </div>
     <table class="searchTbl">
         <colgroup>
@@ -125,14 +125,14 @@
                 if (list.length === undefined || list.length === 0) {
                     gridStoreLoanInfo.itemsSource = new wijmo.collections.CollectionView([]);
                     s_alert.pop(result.message);
-                    return;
+                    return false;
                 }
 
                 gridStoreLoanInfo.itemsSource = new wijmo.collections.CollectionView(list, {trackChanges: true});
             },
             function (result) {
                 s_alert.pop(result.message);
-                return;
+                return false;
             }
         );
     }

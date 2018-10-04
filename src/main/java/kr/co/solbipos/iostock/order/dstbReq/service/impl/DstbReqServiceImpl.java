@@ -1,4 +1,4 @@
-package kr.co.solbipos.iostock.order.distribute.service.impl;
+package kr.co.solbipos.iostock.order.dstbReq.service.impl;
 
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
@@ -6,8 +6,8 @@ import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.iostock.order.distribute.service.DstbReqService;
-import kr.co.solbipos.iostock.order.distribute.service.DstbReqVO;
+import kr.co.solbipos.iostock.order.dstbReq.service.DstbReqService;
+import kr.co.solbipos.iostock.order.dstbReq.service.DstbReqVO;
 import kr.co.solbipos.iostock.order.storeOrder.service.StoreOrderService;
 import kr.co.solbipos.iostock.order.storeOrder.service.StoreOrderVO;
 import kr.co.solbipos.iostock.order.storeOrder.service.impl.StoreOrderMapper;
@@ -62,10 +62,12 @@ public class DstbReqServiceImpl implements DstbReqService {
                 dstbReqVO.setModId(sessionInfoVO.getUserId());
                 dstbReqVO.setModDt(currentDt);
 
-                // MD수량 관련 내용을 주문내역으로 수정
-                result = dstbReqMapper.updateDstbConfirm(dstbReqVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-                returnResult += result;
+                if(orderProcFg.get("procFg").equals("00")) {
+                    // MD수량 관련 내용을 주문내역으로 수정
+                    result = dstbReqMapper.updateDstbConfirm(dstbReqVO);
+                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                    returnResult += result;
+                }
 
                 // 주문등록 HD 내용 수정
                 storeOrderVO.setProcFg("20");

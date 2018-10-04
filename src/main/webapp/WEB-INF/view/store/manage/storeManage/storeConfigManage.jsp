@@ -11,30 +11,30 @@
     <%-- 탭 --%>
     <ul class="subTab">
       <%-- 매장정보 --%>
-      <li><a id="storeInfo" href="javascript:;" ><s:message code="storeManage.storeInfo" /></a></li>
+      <li><a id="storeInfo" href="#" ><s:message code="storeManage.storeInfo" /></a></li>
       <%-- 메뉴권한 (권한 관련 메뉴 : [시스템관리 > 권한관리] 로 분리 --%>
-      <%-- <li><a id="storeMenuAuth" href="javascript:;"><s:message code="storeManage.storeMenuAuth" /></a></li> --%>
+      <%-- <li><a id="storeMenuAuth" href="#"><s:message code="storeManage.storeMenuAuth" /></a></li> --%>
       <%-- 매장환경 --%>
-      <li><a id="storeEnv"  href="javascript:;" class="on"><s:message code="storeManage.storeEnv" /></a></li>
+      <li><a id="storeEnv"  href="#" class="on"><s:message code="storeManage.storeEnv" /></a></li>
     </ul>
 
     <%-- 매장환경 분류 탭 --%>
     <div class="subTab2 mt20 mb10">
       <ul id="envGroupTab">
         <%-- 매장환경 --%>
-        <li><a href="javascript:;" id="storeEnvFg" envstFg="00" class="on"><s:message code="storeManage.storeEnv" /></a></li>
+        <li><a href="#" id="storeEnvFg" envstFg="00" class="on"><s:message code="storeManage.storeEnv" /></a></li>
         <%-- 외식환경 --%>
-        <li><a href="javascript:;" id="foodEnvFg" envstFg="01"><s:message code="storeManage.foodEnv" /></a></li>
+        <li><a href="#" id="foodEnvFg" envstFg="01"><s:message code="storeManage.foodEnv" /></a></li>
         <%-- 유통환경  //TODO 추후 추가 -%>
-        <%-- <li><a href="javascript:;" id="distributionEnvFg" envstFg="2"><s:message code="storeManage.distributionEnv" /></a></li> --%>
+        <%-- <li><a href="#" id="distributionEnvFg" envstFg="2"><s:message code="storeManage.distributionEnv" /></a></li> --%>
         <%-- 포스환경 --%>
-        <li><a href="javascript:;" id="posEnvFg" envstFg="03"><s:message code="storeManage.posEnv" /></a></li>
+        <li><a href="#" id="posEnvFg" envstFg="03"><s:message code="storeManage.posEnv" /></a></li>
         <%-- 주방프린터 --%>
-        <li><a href="javascript:;" id="printEnvFg" envstFg="98"><s:message code="storeManage.kitchenPrint" /></a></li>
+        <li><a href="#" id="printEnvFg" envstFg="98"><s:message code="storeManage.kitchenPrint" /></a></li>
         <%-- 주방프린터 상품연결--%>
-        <li><a href="javascript:;" id="printProductEnvFg" envstFg="99"><s:message code="storeManage.kitchenPrintProduct" /></a></li>
+        <li><a href="#" id="printProductEnvFg" envstFg="99"><s:message code="storeManage.kitchenPrintProduct" /></a></li>
         <%-- 터치키복사 --%>
-        <%-- <li><a href="javascript:;" id="touchkeyEnvFg" envstFg="6"><s:message code="storeManage.copy.touchKey" /></a></li> --%>
+        <%-- <li><a href="#" id="touchkeyEnvFg" envstFg="6"><s:message code="storeManage.copy.touchKey" /></a></li> --%>
       </ul>
     </div>
 

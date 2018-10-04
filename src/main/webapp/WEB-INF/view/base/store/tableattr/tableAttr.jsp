@@ -123,22 +123,22 @@ window.TABLE_ATTR_DEFAULTS = defaults;
                   <div id="fontSize"></div>
                 </div>
                 <span class="align">
-                <a href="javascript:;" class="btn_bold" id="btnBold"></a>
-                <a href="javascript:;" class="btn_italic" id="btnItalic"></a>
-                <a href="javascript:;" class="btn_underline" id="btnUnderline"></a>
+                <a href="#" class="btn_bold" id="btnBold"></a>
+                <a href="#" class="btn_italic" id="btnItalic"></a>
+                <a href="#" class="btn_underline" id="btnUnderline"></a>
                 </span>
               </div>
               <div class="mt10 oh" id="textAlign" style="display:none;">
                 <span class="s12 fl lh30 bk mr10"><s:message code="tableAttr.align"/></span>
                 <span class="align">
-                <a href="javascript:;" class="btn_left" id="btnLeft"></a>
-                <a href="javascript:;" class="btn_center" id="btnCenter"></a>
-                <a href="javascript:;" class="btn_right" id="btnRight"></a>
+                <a href="#" class="btn_left" id="btnLeft"></a>
+                <a href="#" class="btn_center" id="btnCenter"></a>
+                <a href="#" class="btn_right" id="btnRight"></a>
                 </span>
                 <span class="align ml10">
-                <a href="javascript:;" class="btn_top" id="btnTop"></a>
-                <a href="javascript:;" class="btn_middle" id="btnMiddle"></a>
-                <a href="javascript:;" class="btn_bottom" id="btnBottom"></a>
+                <a href="#" class="btn_top" id="btnTop"></a>
+                <a href="#" class="btn_middle" id="btnMiddle"></a>
+                <a href="#" class="btn_bottom" id="btnBottom"></a>
                 </span>
               </div>
             </div>

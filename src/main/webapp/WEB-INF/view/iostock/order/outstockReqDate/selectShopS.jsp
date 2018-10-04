@@ -10,7 +10,7 @@
     <div class="wj-dialog wj-dialog-columns" ng-controller="<c:out value="${param.targetId}"/>Ctrl">
         <div class="wj-dialog-header wj-dialog-header-font">
             <s:message code="cmm.store.select"/>
-            <a href="javascript:;" class="wj-hide btn_close"></a>
+            <a href="#" class="wj-hide btn_close"></a>
         </div>
         <div class="wj-dialog-body">
             <div class="w100">
@@ -72,6 +72,9 @@
         // 상위 객체 상속 : T/F 는 picker
         angular.extend(this, new RootController(targetId+'Ctrl', $scope, $http, true));
 
+        //페이지 스케일 콤보박스 데이터 Set
+        $scope._setComboData("listScaleBox", gvListScaleBoxData);
+
         // grid 초기화 : 생성되기전 초기화되면서 생성된다
         $scope.initGrid = function (s, e) {
             // 그리드 링크 효과
@@ -86,7 +89,7 @@
                 }
             });
 
-            // 그리드 매장코드 클릭 이벤트
+            // 그리드 클릭 이벤트
             s.addEventListener(s.hostElement, 'mousedown', function(e) {
                 var ht = s.hitTest(e);
                 if( ht.cellType === wijmo.grid.CellType.Cell) {
@@ -106,6 +109,12 @@
         $scope.$on(targetId+'Ctrl', function(event, paramObj) {
             // 매장선택 팝업 오픈
             eval('$scope.wj'+targetId+'LayerS.show(true)');
+            // 팝업 닫힐시 이벤트
+            eval('$scope.wj'+targetId+'LayerS').hidden.addHandler(function () {
+                if('<c:out value="${param.closeFunc}"/>' !== '') {
+                    eval('$scope.<c:out value="${param.closeFunc}"/>()');
+                }
+            });
 
             if(searchFg == "N") {
                 $scope.searchStore();
@@ -122,7 +131,6 @@
             });
         };
     }]);
-
     $(document).ready(function () {
         <%-- 선택취소 버튼 클릭 --%>
         $("#<c:out value='${param.targetId}'/>SelectCancelBtn").click(function(){

@@ -10,7 +10,7 @@
     <div id="storeOrderDtlLayer" class="wj-dialog wj-dialog-columns" ng-controller="storeOrderDtlCtrl">
         <div class="wj-dialog-header wj-dialog-header-font">
             <span id="spanDtlTitle"></span>
-            <a href="javascript:;" class="wj-hide btn_close"></a>
+            <a href="#" class="wj-hide btn_close"></a>
         </div>
         <div class="wj-dialog-body sc2" style="height: 600px;">
             <table class="tblType01">
@@ -23,7 +23,7 @@
                 <tbody>
                 <tr>
                     <th><s:message code="storeOrder.remark"/></th>
-                    <td colspan="3"><input type="text" id="dtlHdRemark" name="dtlHdRemark" ng-model="dtlHdRemark" class="sb-input w100" readonly/></td>
+                    <td colspan="3"><input type="text" id="dtlHdRemark" name="dtlHdRemark" ng-model="dtlHdRemark" class="sb-input w100"/></td>
                 </tr>
                 </tbody>
             </table>
@@ -37,6 +37,7 @@
                 <%-- 확정 --%>
                 <button type="button" id="btnConfirm" class="btn_skyblue ml5" ng-click="saveStoreOrderDtl('confirm')" style="display:none"><s:message code="cmm.save" /></button>
             </div>
+            <div style="clear: both;"></div>
 
             <div class="w100 mt10 mb20">
                 <%--위즈모 테이블--%>
@@ -93,15 +94,14 @@
                 if (e.panel === s.cells) {
                     var col = s.columns[e.col];
                     var item = s.rows[e.row].dataItem;
-                    console.log("===========");
                     if(col.binding === "orderEtcQty") { // 입수에 따라 주문수량 컬럼 readonly 컨트롤
-                        console.log(item);
+                        // console.log(item);
                         if(item.poUnitQty === 1) {
-                            // wijmo.addClass(e.cell, 'wj-custom-readonly');
-                            console.log("==s.rows[e.row]==");
-                            console.log(s.rows[e.row]);
-                            s.rows[e.row].isReadOnly = true;
-                            // col.isReadOnly = false;
+                            wijmo.addClass(e.cell, 'wj-custom-readonly');
+                            wijmo.setAttribute(e.cell, 'aria-readonly', true);
+
+                            // Attribute 의 변경사항을 적용
+                            e.cell.outerHTML = e.cell.outerHTML;
                         }
                     }
                 }
@@ -143,6 +143,7 @@
             $scope.procFg      = data.procFg;
             $scope.dtlHdRemark = data.hdRemark;
 
+            $scope.wjStoreOrderDtlLayer.show(true);
             if($scope.procFg === "00") {
                 $("#btnAddProd").show();
                 $("#btnDtlSave").show();
@@ -158,10 +159,8 @@
                 $("#btnConfirm").hide();
             }
 
-            $scope.wjStoreOrderDtlLayer.show(true);
             $("#spanDtlTitle").html('<s:message code="storeOrder.reqDate"/> : '+getFormatDate($scope.reqDate, '-'));
             $scope.searchStoreLoan("Y");
-            // $scope.searchStoreOrderDtlList();
             // 기능수행 종료 : 반드시 추가
             event.preventDefault();
         });
@@ -208,33 +207,33 @@
                             }
                         }
 
-                        $("#dtlStoreLoanInfo").html("1회주문한도액 : "+comma($scope.maxOrderAmt)+" 여신잔액 : "+comma($scope.currLoanAmt)+" 미출고액 : "+comma($scope.prevOrderTot)+" 주문가능액 : "+comma($scope.availableOrderAmt));
+                        $("#dtlStoreLoanInfo").html("1회주문한도액 : "+addComma($scope.maxOrderAmt)+" 여신잔액 : "+addComma($scope.currLoanAmt)+" 미출고액 : "+addComma($scope.prevOrderTot)+" 주문가능액 : "+addComma($scope.availableOrderAmt));
                     }
                 }
                 else if(response.data.status === "FAIL") {
                     $scope._popMsg("Ajax Fail By HTTP Request");
-                    return;
+                    return false;
                 }
                 else if(response.data.status === "SESSION_EXFIRE") {
                     $scope._popMsg(response.data.message, function() {
                         location.href = response.data.url;
                     });
-                    return;
+                    return false;
                 }
                 else if(response.data.status === "SERVER_ERROR") {
                     $scope._popMsg(response.data.message);
-                    return;
+                    return false;
                 }
                 else {
                     var msg = response.data.status + " : " + response.data.message;
                     $scope._popMsg(msg);
-                    return;
+                    return false;
                 }
             }, function errorCallback(response) {
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
                 $scope._popMsg(messages["cmm.saveFail"]);
-                return;
+                return false;
             }).then(function () {
                 // "complete" code here
                 if(popShowFg === "Y") {
@@ -251,9 +250,7 @@
             params.reqDate = $scope.reqDate;
             params.slipFg  = $scope.slipFg;
             // 조회 수행 : 조회URL, 파라미터, 콜백함수
-            $scope._inquirySub("/iostock/order/storeOrder/storeOrderDtl/list.sb", params, function () {
-                // $scope.prodOrderCheck();
-            });
+            $scope._inquirySub("/iostock/order/storeOrder/storeOrderDtl/list.sb", params);
         };
 
         // 주문 상세 저장
@@ -266,6 +263,7 @@
                 item.reqDate = $scope.reqDate;
                 item.slipFg  = $scope.slipFg;
                 item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리.
+                item.hdRemark  = $scope.dtlHdRemark;
                 orderTot += parseInt(item.orderTot);
                 params.push(item);
             }
@@ -273,7 +271,7 @@
             // 길이체크
             if (params.length <= 0) {
                 $scope._popMsg(messages["cmm.not.modify"]);
-                return;
+                return false;
             } else {
                 params = JSON.stringify(params);
             }
@@ -282,7 +280,7 @@
                 // console.log("orderTot = "+orderTot);
                 if(parseInt($scope.availableOrderAmt) < parseInt(orderTot)) {
                     $scope._popMsg('<s:message code="storeOrder.dtl.orderTotOver"/>');
-                    return;
+                    return false;
                 }
             }
 
@@ -307,7 +305,7 @@
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
                 $scope._popMsg(messages["cmm.saveFail"]);
-                return;
+                return false;
             }).then(function () {
                 // "complete" code here
             });
@@ -318,10 +316,10 @@
             var params = {};
             params.reqDate = $scope.reqDate;
             params.slipFg  = $scope.slipFg;
-            params.remark  = $("#dtlHdRemark").val();
+            params.remark  = $scope.dtlHdRemark;
 
             // TODO 테이블 및 VO 등이 전혀 생성되어 있지 않아 분배등록 및 출고자료 생성까지 진행 후 확정 로직 처리하는게 좋을듯. 2018-09-17 안동관
-            return;
+            return false;
 
             $scope._save("/iostock/order/storeOrder/storeOrderDtl/confirm.sb", params, function() { $scope.saveOrderDtlCallback() });
         };

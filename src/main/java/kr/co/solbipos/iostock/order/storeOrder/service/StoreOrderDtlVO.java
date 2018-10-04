@@ -32,11 +32,11 @@ public class StoreOrderDtlVO extends PageVO {
     private Integer poUnitAllowFg;
     /** 주문공급단가 */
     private Integer orderSplyUprc;
-    /** 이전주문수량(주문단위) */
+    /** 이전 주문수량(주문단위) */
     private Integer prevOrderUnitQty;
-    /** 이전주문수량(나머지) */
+    /** 이전 주문수량(나머지) */
     private Integer prevOrderEtcQty;
-    /** 이전주문수량합계(낱개) */
+    /** 이전 주문수량합계(낱개) */
     private Integer prevOrderTotQty;
     /** 주문수량(주문단위) */
     private Integer orderUnitQty;
@@ -45,11 +45,11 @@ public class StoreOrderDtlVO extends PageVO {
     /** 주문수량합계(낱개) */
     private Integer orderTotQty;
     /** 주문금액(ORDER_SPLY_UPRC * ORDER_TOT_QTY / PO_UNIT_QTY) */
-    private Integer orderAmt;
+    private Long orderAmt;
     /** 주문금액VAT */
-    private Integer orderVat;
+    private Long orderVat;
     /** 주문금액합계 */
-    private Integer orderTot;
+    private Long orderTot;
     /** MD공급단가 */
     private Integer mdSplyUprc;
     /** MD수량(주문단위) */
@@ -59,11 +59,11 @@ public class StoreOrderDtlVO extends PageVO {
     /** MD수량합계(낱개) */
     private Integer mdTotQty;
     /** MD금액(MD_SPLY_UPRC * MD_TOT_QTY / PO_UNIT_QTY) */
-    private Integer mdAmt;
+    private Long mdAmt;
     /** MD금액VAT */
-    private Integer mdVat;
+    private Long mdVat;
     /** MD금액합계 */
-    private Integer mdTot;
+    private Long mdTot;
     /** 비고 */
     private String remark;
     /** HD 비고 */
@@ -350,42 +350,42 @@ public class StoreOrderDtlVO extends PageVO {
     /**
      * @return the orderAmt
      */
-    public Integer getOrderAmt() {
+    public Long getOrderAmt() {
         return orderAmt;
     }
 
     /**
      * @param orderAmt the orderAmt to set
      */
-    public void setOrderAmt(Integer orderAmt) {
+    public void setOrderAmt(Long orderAmt) {
         this.orderAmt = orderAmt;
     }
 
     /**
      * @return the orderVat
      */
-    public Integer getOrderVat() {
+    public Long getOrderVat() {
         return orderVat;
     }
 
     /**
      * @param orderVat the orderVat to set
      */
-    public void setOrderVat(Integer orderVat) {
+    public void setOrderVat(Long orderVat) {
         this.orderVat = orderVat;
     }
 
     /**
      * @return the orderTot
      */
-    public Integer getOrderTot() {
+    public Long getOrderTot() {
         return orderTot;
     }
 
     /**
      * @param orderTot the orderTot to set
      */
-    public void setOrderTot(Integer orderTot) {
+    public void setOrderTot(Long orderTot) {
         this.orderTot = orderTot;
     }
 
@@ -448,42 +448,42 @@ public class StoreOrderDtlVO extends PageVO {
     /**
      * @return the mdAmt
      */
-    public Integer getMdAmt() {
+    public Long getMdAmt() {
         return mdAmt;
     }
 
     /**
      * @param mdAmt the mdAmt to set
      */
-    public void setMdAmt(Integer mdAmt) {
+    public void setMdAmt(Long mdAmt) {
         this.mdAmt = mdAmt;
     }
 
     /**
      * @return the mdVat
      */
-    public Integer getMdVat() {
+    public Long getMdVat() {
         return mdVat;
     }
 
     /**
      * @param mdVat the mdVat to set
      */
-    public void setMdVat(Integer mdVat) {
+    public void setMdVat(Long mdVat) {
         this.mdVat = mdVat;
     }
 
     /**
      * @return the mdTot
      */
-    public Integer getMdTot() {
+    public Long getMdTot() {
         return mdTot;
     }
 
     /**
      * @param mdTot the mdTot to set
      */
-    public void setMdTot(Integer mdTot) {
+    public void setMdTot(Long mdTot) {
         this.mdTot = mdTot;
     }
 

@@ -10,7 +10,7 @@
 <div id="reqDateCopyView" class="subCon" style="display: none;">
     <div ng-controller="reqDateCopyCtrl">
         <div class="searchBar flddUnfld">
-            <a href="javascript:;" class="open">${menuNm}</a>
+            <a href="#" class="open">${menuNm}</a>
         </div>
         <table class="searchTbl">
             <colgroup>
@@ -41,7 +41,7 @@
                     </jsp:include>
                     <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
                     <%-- 복사 --%>
-                    <a href="javascript:;" class="btn_grayS" ng-click="reqDateCopy()"><s:message code="cmm.save" /></a>
+                    <a href="#" class="btn_grayS" ng-click="reqDateCopy()"><s:message code="cmm.save" /></a>
                     <%--<button class="btn_blue" id="btnSave" ng-click="reqDateCopy();"><s:message code="cmm.save" /></button>--%>
                 </td>
             </tr>
@@ -135,7 +135,7 @@
             // 매장을 선택해주세요.
             if($("#targetSelectStoreCd").val() == "") {
                 s_alert.pop("<s:message code='outstockReqDate.require.selectStore'/>");
-                return;
+                return false;
             }
             // 요일별 그리드 조회
             $scope._broadcast('reqDateCopyDaysCtrl', {proc:"search"});
@@ -147,12 +147,12 @@
             // 매장을 선택해주세요.
             if($("#targetSelectStoreCd").val() == "") {
                 s_alert.pop("<s:message code='outstockReqDate.require.selectStore'/>");
-                return;
+                return false;
             }
             // 복사할 매장을 선택해주세요.
             if($("#copySelectStoreCd").val() == "") {
                 s_alert.pop("<s:message code='outstockReqDate.require.selectCopyStore'/>");
-                return;
+                return false;
             }
 
             // 특정일 복사 요청
@@ -212,7 +212,7 @@
                 }
             });
 
-            // 그리드 매장코드 클릭 이벤트
+            // 그리드 클릭 이벤트
             s.addEventListener(s.hostElement, 'mousedown', function(e) {
                 var ht = s.hitTest(e);
                 if( ht.cellType === wijmo.grid.CellType.Cell) {
@@ -291,7 +291,7 @@
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
                 $scope._popMsg(messages["cmm.saveFail"]);
-                return;
+                return false;
             }).then(function () {
                 // "complete" code here
             });
@@ -360,7 +360,7 @@
                     // 타겟매장과 복사할 매장이 동일합니다.
                     if(flex.rows[i]._data.storeCd == $("#copySelectStoreCd").val()) {
                         s_alert.pop("<s:message code='outstockReqDate.duplicate.targetSelectStore'/>");
-                        return;
+                        return false;
                     }
                     flex.rows[i]._data.copyStoreCd = $("#copySelectStoreCd").val();
                     params.push(flex.rows[i]._data);
@@ -377,7 +377,7 @@
 
                 <%--// 저장할 내용이 없습니다.--%>
                 <%--s_alert.pop("<s:message code='outstockReqDate.not.save'/>");--%>
-                return;
+                return false;
             }
 
             // ajax 통신 설정
@@ -409,7 +409,7 @@
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
                 $scope._popMsg(messages["cmm.saveFail"]);
-                return;
+                return false;
             }).then(function () {
             });
         }

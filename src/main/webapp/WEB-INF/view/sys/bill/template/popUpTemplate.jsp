@@ -7,7 +7,7 @@
     <div class="wj-dialog wj-dialog-columns">
         <div class="wj-dialog-header wj-dialog-header-font">
             <s:message code="template.layer.nm" />
-            <a href="javascript:void(0);" class="wj-hide btn_close"></a>
+            <a href="#" class="wj-hide btn_close"></a>
         </div>
         <div class="wj-dialog-body" ng-controller="popUpApplyTemplateCtrl">
             <div>

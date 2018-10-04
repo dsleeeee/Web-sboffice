@@ -54,8 +54,12 @@ app.controller('funcKeyCtrl', ['$scope', '$http', 'saveInfo', function ($scope, 
       e.preventDefault();
       e.stopPropagation();
       e.stopImmediatePropagation();
-
     }, true);
+    // 필터생성
+    $scope.filter = new wijmo.grid.filter.FlexGridFilter(s);
+    $scope.filter.showFilterIcons = false;
+    $scope.fnkeyUsedFilterType = wijmo.grid.filter.FilterType.value;
+    $scope.$apply();
 
   };
   // 출력코드구성 그리드 조회
@@ -69,9 +73,16 @@ app.controller('funcKeyCtrl', ['$scope', '$http', 'saveInfo', function ($scope, 
       // 조회내용 없을 경우 팝업메시지 별도 처리
       if ($scope.flex.collectionView.items.length < 1) {
         $scope._popMsg(messages["posFunc.grid.noFuncKeyData"]);
+      } else {
+        if (funckeyGraph) {
+          funckeyGraph.funcKeyList.initUsed();
+        }
       }
       // row 선택 클리어
       $scope.flex.select(-1, -1);
+      // 필터적용
+      $scope.filter.filterDefinition = '{"defaultFilterType":3,"filters":[{"binding":"fnkeyUsed","type":"value","filterText":"","showValues":{"false":true}}]}';
+      $scope.filter.apply();
     }, false);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
@@ -84,6 +95,15 @@ app.controller('funcKeyCtrl', ['$scope', '$http', 'saveInfo', function ($scope, 
   $scope.getSaveInfo = function (id) {
     return saveInfo.get(id);
   };
+  // update filter type for "fnkeyUsed" column
+  $scope.$watch('fnkeyUsedFilterType', function () {
+    var f = $scope.filter;
+    if (f) {
+      var col = f.grid.columns.getColumn('fnkeyUsed'),
+      cf = f.getColumnFilter(col, true);
+      cf.filterType = $scope.fnkeyUsedFilterType;
+    }
+  });
 }]);
 app.factory('saveInfo', function () {
   var saveInfo = [];
@@ -161,17 +181,44 @@ FuncKey = function (themes) {
   var funcKey = this.funcKey;
   // 영역 외부 클릭시 이벤트
   $(document).click(function (e) {
-    // if(!$(event.target).closest('#groupWrap').length && !$(event.target).closest('#prodWrap').length) {
-    //   // 그래프영역 선택 초기화
-    //   // gGraph.getSelectionModel().clear();
-    //   // pGraph.getSelectionModel().clear();
-    //   // 분류영역 에디팅 판단하여 에디팅 취소 처리
-    //   if (funcKey.cellEditor.getEditingCell() != null) {
-    //     funcKey.cellEditor.stopEditing(true);
-    //   }
-    // }
+    if(!$(event.target).closest('#funcKeyDiv').length) {
+      // 그래프영역 선택 초기화
+      funcKey.getSelectionModel().clear();
+      // 분류영역 에디팅 판단하여 에디팅 취소 처리
+      if (funcKey.cellEditor.getEditingCell() != null) {
+        funcKey.cellEditor.stopEditing(true);
+      }
+    }
   });
+  // 영역 외부 마우스 이동시.
+  $('#funcKeyGraph').mouseleave(function(e){
+    var model = funcKey.getModel();
+    var parent = funcKey.getDefaultParent();
+    //로드 후 생성되는 셀의 인덱스 초기화
+    var childCount = model.getChildCount(parent);
+    var cell, state;
+      console.log(funcKey.view);
+    for (var i = 0; i < childCount; i++) {
+      cell = model.getChildAt(parent, i);
+      var state = funcKey.view.getState(cell);
 
+      console.log(cell);
+      console.log(state);
+
+      state.style[mxConstants.STYLE_FILLCOLOR] = funcKey.buttonStyles.off;
+      state.style[mxConstants.STYLE_FONTCOLOR] = funcKey.fontStyles.off;
+      state.style[mxConstants.STYLE_FONTSIZE] = funcKey.fontStyles.size;
+      state.shape.apply(state);
+      state.shape.redraw();
+
+      if (state.text != null) {
+        state.text.apply(state);
+        state.text.redraw();
+      }
+    }
+    // this.currentState = null;
+    e.preventDefault();
+  });
 };
 
 //Extends mxEditor
@@ -278,6 +325,8 @@ FuncKeyList.prototype.initUsed = function (layer) {
 
   var graph = this.graph;
   var theGrid = this.grid;
+  var scope = agrid.getScope("funcKeyCtrl");
+
   var layer = layer || graph.getDefaultParent();
   //그리드의 모든 항목 사용여부 false로 셋팅
   for (i = 0; i < theGrid.rows.length; i++) {
@@ -312,7 +361,46 @@ FuncKeyList.prototype.initUsed = function (layer) {
     }
   }
 
+  // 필터적용
+  if (scope.filter) {
+    scope.filter.filterDefinition = '{"defaultFilterType":3,"filters":[{"binding":"fnkeyUsed","type":"value","filterText":"","showValues":{"false":true}}]}';
+    scope.filter.apply();
+  }
+
 };
+
+/**
+ * 사용여부 초기화
+ */
+FuncKeyList.prototype.undoFilter = function (cell) {
+
+  var theGrid = this.grid;
+  var scope = agrid.getScope("funcKeyCtrl");
+
+  var fnkeyNo;
+  var regex = /fnkeyNo=([^=]*.(?=;))/gm;
+  var match = regex.exec(cell.getStyle());
+  if (match) {
+    fnkeyNo = match[1];
+  }
+
+  for (var e = 0; e < theGrid.itemsSource.itemsEdited.length; e++) {
+    if (theGrid.itemsSource.itemsEdited[e].fnkeyNo === fnkeyNo) {
+      var id = theGrid.itemsSource.itemsEdited[e].dispSeq;
+      var row = theGrid.itemsSource.itemsEdited[e];
+      row.fnkeyUsed = false;
+      theGrid.rows.insert(id, row);
+      break;
+    }
+  }
+
+  // 필터적용
+  if (scope.filter) {
+    scope.filter.filterDefinition = '{"defaultFilterType":3,"filters":[{"binding":"fnkeyUsed","type":"value","filterText":"","showValues":{"false":true}}]}';
+    scope.filter.apply();
+  }
+};
+
 
 /**
  * 생성된 angularJS 그리드를 가져온다.
@@ -372,8 +460,7 @@ FuncKeyList.prototype.makeDragSource = function () {
         graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles.off, new Array(btn));
         graph.setCellStyles(mxConstants.STYLE_FONTSIZE, graph.fontStyles.size, new Array(btn));
 
-      }
-      finally {
+      } finally {
         model.endUpdate();
         funcKeyList.initUsed();
         // 그리드 선택 Clear
@@ -735,16 +822,17 @@ Graph.prototype.createKeyHandler = function (graph) {
         graph.setSelectionCells(select);
       }
     }
+    graph.funcKeyList.undoFilter(cells[0]);
   });
 
   //TODO 상품분류에서 상품레이어 처리 시 2개의 트랜잭션 처리되는 문제. 일단 주석 처리
   //Ctrl + z
   keyHandler.bindControlKey(90, function (evt) {
-    graph.undoManager.undo()
+    graph.undoManager.undo();
   });
   //Ctrl + Shift + z
   keyHandler.bindControlShiftKey(90, function (evt) {
-    graph.undoManager.redo()
+    graph.undoManager.redo();
   });
 
   return keyHandler;
@@ -800,7 +888,7 @@ Graph.prototype.initStyle = function() {
  * @param cell
  */
 function deleteFnkey(format) {
-  var graph = format.touchkey.fnkey;
+  var graph = format.touchkey.funcKey;
   var dCells = graph.getDeletableCells(graph.getSelectionCells());
   if (dCells != null && dCells.length > 0) {
     var parents = graph.model.getParents(dCells);
@@ -814,14 +902,8 @@ function deleteFnkey(format) {
           select.push(parents[i]);
         }
       }
-      if (select.length > 0) {
-        graph.setSelectionCells(select);
-        document.getElementById('keyStyle').classList.remove("hideNav");
-        document.getElementById('colorStyleWrap').classList.remove("hideNav");
-      } else {
-        document.getElementById('keyStyle').classList.add("hideNav");
-      }
     }
+    graph.funcKeyList.undoFilter(dCells[0]);
   }
 }
 
@@ -887,9 +969,9 @@ Format.prototype.initElements = function () {
   // });
   //
   // // 삭제 버튼
-  // addClickHandler(document.getElementById('btnFuncDelete'), function () {
-  //   deleteFnkey(format);
-  // });
+  addClickHandler(document.getElementById('btnFuncDelete'), function () {
+    deleteFnkey(format);
+  });
 
   // 저장 버튼
   addClickHandler(document.getElementById('btnFuncSave'), function () {
@@ -952,11 +1034,8 @@ Format.prototype.setElementsValue = function () {
  * 기존 구성 조회 : 그리드 클릭시
  */
 Format.prototype.openByGrid = function (isLoad) {
-  var funcKeyList = this.touchkey.funcKeyList;
-
   this.open(isLoad);
-  funcKeyList.initUsed();
-}
+};
 
 /**
  * 기존 구성 조회
@@ -1152,6 +1231,11 @@ Graph.prototype.initFuncKeyArea = function (funcKeyList) {
       }
     },
     mouseMove: function (sender, me) {
+
+      console.log("me.getState()) ", me.getState());
+      console.log("this.currentState ", this.currentState);
+
+
       // 에디팅모드(더블클릭) 이후 마우스커서 이동시 라벨에 잔상남는 현상으로
       // graph.cellEditor.getEditingCell() 으로 에디팅 셀 있는지 판단해서 이벤트 적용 설정 : 20180929 노현수
       if (graph.cellEditor.getEditingCell() == null) {
@@ -1163,6 +1247,9 @@ Graph.prototype.initFuncKeyArea = function (funcKeyList) {
         if (graph.isMouseDown || (tmp !== null && !graph.getModel().isVertex(tmp.cell))) {
           tmp = null;
         }
+
+        console.log("tmp", tmp);
+
         if (tmp !== this.currentState) {
           if (this.currentState != null  ) {
             this.dragLeave(me.getEvent(), this.currentState);

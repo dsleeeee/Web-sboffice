@@ -9,7 +9,7 @@
 
 <div id="specificView" class="subCon" style="display: none;" ng-controller="specificCtrl">
     <div class="searchBar flddUnfld">
-        <a href="javascript:;" class="open">${menuNm}</a>
+        <a href="#" class="open">${menuNm}</a>
     </div>
     <table class="searchTbl">
         <colgroup>
@@ -148,7 +148,7 @@
                 }
             });
 
-            // 그리드 매장코드 클릭 이벤트
+            // 그리드 클릭 이벤트
             s.addEventListener(s.hostElement, 'mousedown', function(e) {
                 var ht = s.hitTest(e);
                 if( ht.cellType === wijmo.grid.CellType.Cell) {

@@ -4,13 +4,13 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
-<c:set var="baseUrl" value="/iostock/order/distribute/dstbReq/"/>
+<c:set var="baseUrl" value="/iostock/order/dstbReq/dstbReq/"/>
 
 <wj-popup id="wjDstbReqDtlLayer" control="wjDstbReqDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
     <div id="dstbReqDtlLayer" class="wj-dialog wj-dialog-columns" ng-controller="dstbReqDtlCtrl">
         <div class="wj-dialog-header wj-dialog-header-font">
             <span id="spanDtlTitle"></span>
-            <a href="javascript:;" class="wj-hide btn_close"></a>
+            <a href="#" class="wj-hide btn_close"></a>
         </div>
         <div class="wj-dialog-body sc2" style="height: 600px;">
             <table class="tblType01">
@@ -101,6 +101,24 @@
 
         // grid 초기화 : 생성되기전 초기화되면서 생성된다
         $scope.initGrid = function (s, e) {
+            // 그리드 포맷 핸들러
+            s.formatItem.addHandler(function (s, e) {
+                if (e.panel === s.cells) {
+                    var col = s.columns[e.col];
+                    var item = s.rows[e.row].dataItem;
+                    if(col.binding === "mdEtcQty") { // 입수에 따라 분배수량 컬럼 readonly 컨트롤
+                        // console.log(item);
+                        if(item.poUnitQty === 1) {
+                            wijmo.addClass(e.cell, 'wj-custom-readonly');
+                            wijmo.setAttribute(e.cell, 'aria-readonly', true);
+
+                            // Attribute 의 변경사항을 적용.
+                            e.cell.outerHTML = e.cell.outerHTML;
+                        }
+                    }
+                }
+            });
+
             s.cellEditEnded.addHandler(function (s, e) {
                 if (e.panel === s.cells) {
                     var col = s.columns[e.col];
@@ -180,7 +198,7 @@
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
                 $scope._popMsg(messages["cmm.saveFail"]);
-                return;
+                return false;
             }).then(function () {
                 // "complete" code here
             });
@@ -221,14 +239,14 @@
                             }
                         }
 
-                        $("#dtlAvailableOrderAmt").html("주문가능액 : "+comma($scope.availableOrderAmt));
+                        $("#dtlAvailableOrderAmt").html("주문가능액 : "+addComma($scope.availableOrderAmt));
                     }
                 }
             }, function errorCallback(response) {
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
                 $scope._popMsg(messages["cmm.saveFail"]);
-                return;
+                return false;
             }).then(function () {
                 // "complete" code here
                 $scope.wjDstbReqDtlLayer.show(true);
@@ -254,33 +272,8 @@
             params.storeCd = $scope.storeCd;
             params.slipFg  = $scope.slipFg;
             // 조회 수행 : 조회URL, 파라미터, 콜백함수
-            $scope._inquirySub("/iostock/order/distribute/dstbReqDtl/list.sb", params, function () {
-                $scope.prodOrderCheck();
+            $scope._inquirySub("/iostock/order/dstbReq/dstbReqDtl/list.sb", params, function () {
             });
-        };
-
-        // 입수에 따라 주문수량 컬럼 readonly 컨트롤
-        $scope.prodOrderCheck = function() {
-            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-                var item = $scope.flex.collectionView.items[i];
-                // console.log("==item==");
-                // console.log(item);
-                if(item.poUnitQty === 1) {
-                    // console.log("==$scope.flex==");
-                    // console.log($scope.flex);
-
-                    // 2018.09.11 안동관. 주석처리 해놓은 7이라고 하드코딩하기 싫어서 for문 돌도록 해놨는데 느린듯 싶으면 걍 하드코딩으로 해야할듯...
-                    // $scope.flex.rows[i].grid.columns[7].isReadOnly = true;
-                    for(var k = 0; k < $scope.flex.rows[i].grid.columns.length; k++) {
-                        var columns = $scope.flex.rows[i].grid.columns[k];
-                        if(columns.binding === "mdEtcQty") {
-                            columns.isReadOnly = true;
-                            break;
-                        }
-                    }
-                }
-            }
-            // console.log($scope.flex.collectionView.items);
         };
 
         // 공급가 및 수량적용
@@ -307,7 +300,7 @@
             // 분배완료여부가 체크 되어있으면서 그리드의 수정된 내역은 없는 경우 저장로직 태우기 위해 값 하나를 강제로 수정으로 변경한다.
             if($("#dstbConfirmFg").is(":checked") && $scope.flex.collectionView.itemsEdited.length <= 0) {
                 var item = $scope.flex.collectionView.items[0];
-                if(item === null) return;
+                if(item === null) return false;
 
                 $scope.flex.collectionView.editItem(item);
                 item.status = "U";
@@ -319,15 +312,15 @@
 
                 if(item.mdUnitQty === null && item.mdEtcQty === null) {
                     $scope._popMsg(messages["dstbReq.dtl.require.mdQty"]); // 분배수량을 입력해주세요.
-                    return;
+                    return false;
                 }
                 if(item.mdEtcQty !== null && (parseInt(item.mdEtcQty) >= parseInt(item.poUnitQty))) {
                     $scope._popMsg(messages["dstbReq.dtl.not.mdEtcQty"]); // 낱개수량은 입수량보다 작아야 합니다.
-                    return;
+                    return false;
                 }
                 if(item.mdTot !== null && (parseInt(item.mdTot) > 9999999999)) {
                     $scope._popMsg(messages["dstbReq.dtl.not.overMdTot"]); // 분배금액이 너무 큽니다.
-                    return;
+                    return false;
                 }
 
                 item.status = "U";
@@ -363,7 +356,7 @@
                     var cv = new wijmo.collections.CollectionView([]);
                     cv.trackChanges = true;
                     $scope.data = cv;
-                    return;
+                    return false;
                 });
 
                 $("#_alertTent").show();
@@ -376,7 +369,7 @@
 
         // 분배 저장
         $scope.saveDstbReqDtl = function (params) {
-            $scope._save("/iostock/order/distribute/dstbReqDtl/save.sb", params, function() { $scope.saveDstbReqDtlCallback() });
+            $scope._save("/iostock/order/dstbReq/dstbReqDtl/save.sb", params, function() { $scope.saveDstbReqDtlCallback() });
         };
 
         // 저장 후 콜백 함수

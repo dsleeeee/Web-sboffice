@@ -6,8 +6,8 @@ import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.iostock.order.distribute.service.DstbReqVO;
-import kr.co.solbipos.iostock.order.distribute.service.impl.DstbReqMapper;
+import kr.co.solbipos.iostock.order.dstbReq.service.DstbReqVO;
+import kr.co.solbipos.iostock.order.dstbReq.service.impl.DstbReqMapper;
 import kr.co.solbipos.iostock.order.storeOrder.service.StoreOrderDtlVO;
 import kr.co.solbipos.iostock.order.storeOrder.service.StoreOrderService;
 import kr.co.solbipos.iostock.order.storeOrder.service.StoreOrderVO;
@@ -73,7 +73,6 @@ public class StoreOrderServiceImpl implements StoreOrderService {
                 storeOrderVO.setModDt(currentDt);
             }
 
-            // DTL 파라미터 세팅
             String insFg = "";
             // 기주문수량이 있는 경우 수정
             if(storeOrderDtlVO.getPrevOrderTotQty() != null) {
@@ -87,23 +86,33 @@ public class StoreOrderServiceImpl implements StoreOrderService {
                 insFg = "I";
             }
 
-            int slipFg       = storeOrderDtlVO.getSlipFg();
-            int poUnitQty    = storeOrderDtlVO.getPoUnitQty();
-            int prevUnitQty  = (storeOrderDtlVO.getPrevOrderUnitQty() == null ? 0 : storeOrderDtlVO.getPrevOrderUnitQty());
-            int prevEtcQty   = (storeOrderDtlVO.getPrevOrderEtcQty()  == null ? 0 : storeOrderDtlVO.getPrevOrderEtcQty());
-            int unitQty      = (storeOrderDtlVO.getOrderUnitQty()     == null ? 0 : storeOrderDtlVO.getOrderUnitQty());
-            int etcQty       = (storeOrderDtlVO.getOrderEtcQty()      == null ? 0 : storeOrderDtlVO.getOrderEtcQty());
-            int orderUnitQty = ((prevUnitQty + unitQty) + Integer.valueOf((prevEtcQty + etcQty) / poUnitQty)) * slipFg;
-            int orderEtcQty  = Integer.valueOf((prevEtcQty + etcQty) % poUnitQty) * slipFg;
+            if(!insFg.equals("D")) {
+                int slipFg       = storeOrderDtlVO.getSlipFg();
+                int poUnitQty    = storeOrderDtlVO.getPoUnitQty();
+                int prevUnitQty  = (storeOrderDtlVO.getPrevOrderUnitQty() == null ? 0 : storeOrderDtlVO.getPrevOrderUnitQty());
+                int prevEtcQty   = (storeOrderDtlVO.getPrevOrderEtcQty()  == null ? 0 : storeOrderDtlVO.getPrevOrderEtcQty());
+                int unitQty      = (storeOrderDtlVO.getOrderUnitQty()     == null ? 0 : storeOrderDtlVO.getOrderUnitQty());
+                int etcQty       = (storeOrderDtlVO.getOrderEtcQty()      == null ? 0 : storeOrderDtlVO.getOrderEtcQty());
+                int orderUnitQty = ((prevUnitQty + unitQty) + Integer.valueOf((prevEtcQty + etcQty) / poUnitQty)) * slipFg;
+                int orderEtcQty  = Integer.valueOf((prevEtcQty + etcQty) % poUnitQty) * slipFg;
+                int orderTotQty  = (storeOrderDtlVO.getOrderTotQty()   == null ? 0 : storeOrderDtlVO.getOrderTotQty()) * slipFg;
+                Long orderAmt    = (storeOrderDtlVO.getOrderAmt()      == null ? 0 : storeOrderDtlVO.getOrderAmt())    * slipFg;
+                Long orderVat    = (storeOrderDtlVO.getOrderVat()      == null ? 0 : storeOrderDtlVO.getOrderVat())    * slipFg;
+                Long orderTot    = (storeOrderDtlVO.getOrderTot()      == null ? 0 : storeOrderDtlVO.getOrderTot())    * slipFg;
 
+                storeOrderDtlVO.setStoreCd(sessionInfoVO.getStoreCd());
+                storeOrderDtlVO.setOrderUnitQty(orderUnitQty);
+                storeOrderDtlVO.setOrderEtcQty(orderEtcQty);
+                storeOrderDtlVO.setOrderTotQty(orderTotQty);
+                storeOrderDtlVO.setOrderAmt(orderAmt);
+                storeOrderDtlVO.setOrderVat(orderVat);
+                storeOrderDtlVO.setOrderTot(orderTot);
+                storeOrderDtlVO.setRegId(sessionInfoVO.getUserId());
+                storeOrderDtlVO.setRegDt(currentDt);
+                storeOrderDtlVO.setModId(sessionInfoVO.getUserId());
+                storeOrderDtlVO.setModDt(currentDt);
+            }
             storeOrderDtlVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            storeOrderDtlVO.setStoreCd(sessionInfoVO.getStoreCd());
-            storeOrderDtlVO.setOrderUnitQty(orderUnitQty);
-            storeOrderDtlVO.setOrderEtcQty(orderEtcQty);
-            storeOrderDtlVO.setRegId(sessionInfoVO.getUserId());
-            storeOrderDtlVO.setRegDt(currentDt);
-            storeOrderDtlVO.setModId(sessionInfoVO.getUserId());
-            storeOrderDtlVO.setModDt(currentDt);
 
             // 추가
             if(insFg.equals("I")) {

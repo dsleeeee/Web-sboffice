@@ -4,11 +4,11 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
-<c:set var="baseUrl" value="/iostock/order/distribute/dstbReq/"/>
+<c:set var="baseUrl" value="/iostock/order/dstbReq/dstbReq/"/>
 
 <div class="subCon" ng-controller="dstbReqCtrl">
     <div class="searchBar flddUnfld">
-        <a href="javascript:;" class="open">${menuNm}</a>
+        <a href="#" class="open">${menuNm}</a>
     </div>
     <table class="searchTbl">
         <colgroup>
@@ -74,7 +74,7 @@
                 <wj-flex-grid-column header="<s:message code="dstbReq.dtlCnt"/>"    binding="dtlCnt"   width="70"  align="right"  is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dstbReq.orderTot"/>"  binding="orderTot" width="70"  align="right"  is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dstbReq.mdTot"/>"     binding="mdTot"    width="70"  align="right"  is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="dstbReq.modDt"/>"     binding="modDt"    width="120" align="center" is-read-only="true" format="dateTime"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dstbReq.modDt"/>"     binding="modDt"    width="130" align="center" is-read-only="true" format="dateTime"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dstbReq.remark"/>"    binding="remark"   width="200" align="left"   is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dstbReq.slipFg"/>"    binding="slipFg"   width="70"  align="left"   is-read-only="true" visible="false"></wj-flex-grid-column>
 
@@ -134,13 +134,13 @@
                     if(col.format === "date") {
                         e.cell.innerHTML = getFormatDate(e.cell.innerText);
                     }
-                    if(col.format === "dateTime") {
+                    else if(col.format === "dateTime") {
                         e.cell.innerHTML = getFormatDateTime(e.cell.innerText);
                     }
                 }
             });
 
-            // 그리드 출고요청일자 클릭 이벤트
+            // 그리드 클릭 이벤트
             s.addEventListener(s.hostElement, 'mousedown', function(e) {
                 var ht = s.hitTest(e);
                 if( ht.cellType === wijmo.grid.CellType.Cell) {
@@ -181,7 +181,7 @@
             params.endDate   = wijmo.Globalize.format(srchEndDate.value  , 'yyyyMMdd');
 
             // 조회 수행 : 조회URL, 파라미터, 콜백함수
-            $scope._inquiryMain("/iostock/order/distribute/dstbReq/list.sb", params);
+            $scope._inquiryMain("/iostock/order/dstbReq/dstbReq/list.sb", params);
         };
 
         $scope.saveDstbConfirm = function () {
@@ -195,13 +195,13 @@
                 item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
                 params.push(item);
             }
-            $scope._save("/iostock/order/distribute/dstbReq/saveDstbConfirm.sb", params, function() { $scope.searchDstbReqList() });
+            $scope._save("/iostock/order/dstbReq/dstbReq/saveDstbConfirm.sb", params, function() { $scope.searchDstbReqList() });
         };
     }]);
 </script>
 
-<%-- 분배등록 상품 상세 레이어 --%>
-<c:import url="/WEB-INF/view/iostock/order/distribute/dstbReqDtl.jsp">
+<%-- 분배등록 상세 레이어 --%>
+<c:import url="/WEB-INF/view/iostock/order/dstbReq/dstbReqDtl.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

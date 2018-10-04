@@ -10,7 +10,7 @@
 <div class="subCon">
 
     <div class="searchBar flddUnfld">
-        <a href="javascript:void(0);" class="open">${menuNm}</a>
+        <a href="#" class="open">${menuNm}</a>
     </div>
     <table class="searchTbl">
         <colgroup>
@@ -153,7 +153,7 @@
                 if (list.length === undefined || list.length === 0) {
                     gridStoreLoan.itemsSource = new wijmo.collections.CollectionView([]);
                     s_alert.pop(result.message);
-                    return;
+                    return false;
                 }
 
                 gridStoreLoan.itemsSource = new wijmo.collections.CollectionView(list, {trackChanges: true});
@@ -162,7 +162,7 @@
             },
             function (result) {
                 s_alert.pop(result.message);
-                return;
+                return false;
             }
         );
     }
@@ -172,7 +172,7 @@
 
         for (var i = 0; i < gridStoreLoan.collectionView.itemsEdited.length; i++) {
             if(!valueCheck(gridStoreLoan.collectionView.itemsEdited[i])) {
-                return;
+                return false;
             }
             gridStoreLoan.collectionView.itemsEdited[i].status = "U";
             paramArr.push(gridStoreLoan.collectionView.itemsEdited[i]);
@@ -180,7 +180,7 @@
 
         if (paramArr.length <= 0) {
             s_alert.pop(messages["cmm.not.modify"]);
-            return;
+            return false;
         }
 
         $.postJSONArray("/iostock/loan/storeLoanManage/storeLoanManage/save.sb", paramArr, function (result) {

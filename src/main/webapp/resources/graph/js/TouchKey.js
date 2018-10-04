@@ -26,8 +26,8 @@ Touchkey = function (themes) {
   $(document).click(function (e) {
     if(!$(event.target).closest('#groupWrap').length && !$(event.target).closest('#prodWrap').length) {
       // 그래프영역 선택 초기화
-      // gGraph.getSelectionModel().clear();
-      // pGraph.getSelectionModel().clear();
+      gGraph.getSelectionModel().clear();
+      pGraph.getSelectionModel().clear();
       // 분류영역 에디팅 판단하여 에디팅 취소 처리
       if (gGraph.cellEditor.getEditingCell() != null) {
         gGraph.cellEditor.stopEditing(true);

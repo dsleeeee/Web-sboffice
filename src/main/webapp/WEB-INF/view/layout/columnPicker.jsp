@@ -6,7 +6,7 @@
     <div class="wj-dialog wj-dialog-columns">
       <div class="wj-dialog-header wj-dialog-header-font">
         컬럼을 선택하세요.
-        <a href="javascript:;" class="wj-hide btn_close"></a>
+        <a href="#" class="wj-hide btn_close"></a>
       </div>
       <div class="wj-dialog-body">
         <div class="text-info mb10">

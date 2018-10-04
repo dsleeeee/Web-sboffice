@@ -1,7 +1,7 @@
-package kr.co.solbipos.iostock.order.distribute.service.impl;
+package kr.co.solbipos.iostock.order.dstbReq.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.iostock.order.distribute.service.DstbReqVO;
+import kr.co.solbipos.iostock.order.dstbReq.service.DstbReqVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -15,9 +15,6 @@ public interface DstbReqMapper {
 
     /** 분배등록 상세 리스트 조회 */
     List<DefaultMap<String>> getDstbReqDtlList(DstbReqVO dstbReqVO);
-
-    /** 분배등록 상세 리스트 등록 */
-    int insertDstbReqDtl(DstbReqVO dstbReqVO);
 
     /** 분배등록 상세 리스트 수정 */
     int updateDstbReqDtl(DstbReqVO dstbReqVO);

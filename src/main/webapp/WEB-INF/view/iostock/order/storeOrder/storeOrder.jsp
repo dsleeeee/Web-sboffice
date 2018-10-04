@@ -8,7 +8,7 @@
 
 <div class="subCon" ng-controller="storeOrderCtrl">
     <div class="searchBar flddUnfld">
-        <a href="javascript:;" class="open">${menuNm}</a>
+        <a href="#" class="open">${menuNm}</a>
     </div>
     <table class="searchTbl">
         <colgroup>
@@ -47,7 +47,7 @@
                 <div class="sb-select fl mr10">
                     <span class="txtIn"><input id="reqDate" class="w150" ng-model="storeOrder.reqDate"></span>
                 </div>
-                <a href="javascript:;" class="btn_grayS" ng-click="newReqOrder()"><s:message code="storeOrder.reqRegist" /></a>
+                <a href="#" class="btn_grayS" ng-click="newReqOrder()"><s:message code="storeOrder.reqRegist" /></a>
                 <%--<button type="button" class="btn_blue" id="btnReqRegist" ng-click="newReqOrder()"><s:message code="storeOrder.reqRegist" /></button>--%>
             </td>
         </tr>
@@ -73,7 +73,7 @@
                     item-formatter="_itemFormatter">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="storeOrder.reqDate"/>"  binding="reqDate"  width="100" align="center" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeOrder.reqDate"/>"  binding="reqDate"  width="100" align="center" format="date"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeOrder.slipFg"/>"   binding="slipFg"   width="70" align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeOrder.procFg"/>"   binding="procFg"   width="70" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeOrder.dtlCnt"/>"   binding="dtlCnt"   width="70" align="right" data-type="Number" format="n0"></wj-flex-grid-column>
@@ -131,21 +131,24 @@
             s.formatItem.addHandler(function (s, e) {
                 if (e.panel === s.cells) {
                     var col = s.columns[e.col];
-                    if (col.binding === "reqDate") { // 마감월 클릭
-                        let item = s.rows[e.row].dataItem;
+                    if (col.binding === "reqDate") { // 출고요청일자
                         wijmo.addClass(e.cell, 'wijLink');
                         wijmo.addClass(e.cell, 'wj-custom-readonly');
+                    }
+
+                    if(col.format === "date") {
+                        e.cell.innerHTML = getFormatDate(e.cell.innerText);
                     }
                 }
             });
 
-            // 그리드 출고요청일자 클릭 이벤트
+            // 그리드 클릭 이벤트
             s.addEventListener(s.hostElement, 'mousedown', function(e) {
                 var ht = s.hitTest(e);
                 if( ht.cellType === wijmo.grid.CellType.Cell) {
                     var col = ht.panel.columns[ht.col];
                     var selectedRow = s.rows[ht.row].dataItem;
-                    if ( col.binding === "reqDate") {
+                    if ( col.binding === "reqDate") { // 출고요청일자 클릭
                         var params = {};
                         params.reqDate  = selectedRow.reqDate;
                         params.slipFg   = selectedRow.slipFg;

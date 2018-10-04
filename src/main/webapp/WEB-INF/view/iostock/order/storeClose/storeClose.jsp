@@ -8,7 +8,7 @@
 
 <div class="subCon">
     <div class="searchBar flddUnfld">
-        <a href="javascript:;" class="open">${menuNm}</a>
+        <a href="#" class="open">${menuNm}</a>
     </div>
     <table class="searchTbl">
         <colgroup>
@@ -147,7 +147,7 @@
                 }
             });
 
-            // 그리드 마감월 클릭 이벤트
+            // 그리드 클릭 이벤트
             s.addEventListener(s.hostElement, 'mousedown', function(e) {
                 var ht = s.hitTest(e);
                 if( ht.cellType === wijmo.grid.CellType.Cell) {

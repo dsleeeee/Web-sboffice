@@ -9,7 +9,7 @@
 
 <div id="daysView" class="subCon" style="display: none;" ng-controller="daysCtrl">
     <div class="searchBar flddUnfld">
-        <a href="javascript:;" class="open">${menuNm}</a>
+        <a href="#" class="open">${menuNm}</a>
     </div>
     <table class="searchTbl">
         <colgroup>
@@ -23,11 +23,11 @@
             <%-- 매장코드 --%>
             <th><s:message code="outstockReqDate.store"/></th>
             <td>
-                <%-- 매장선택 모듈 싱글 선택 사용시 include --%>
+                <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
                 <jsp:include page="/WEB-INF/view/iostock/order/outstockReqDate/selectShopM.jsp" flush="true">
                     <jsp:param name="targetId" value="daysSelectStore"/>
                 </jsp:include>
-                <%--// 매장선택 모듈 싱글 선택 사용시 include --%>
+                <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
             </td>
             <%--<td><input type="text" id="daysSearchStoreCd" name="daysSearchStoreCd" ng-model="storeCd" class="sb-input w100" maxlength="7"/></td>--%>
             <%--&lt;%&ndash; 매장명 &ndash;%&gt;--%>
@@ -172,7 +172,7 @@
                 }
             });
 
-            // 그리드 매장코드 클릭 이벤트
+            // 그리드 클릭 이벤트
             s.addEventListener(s.hostElement, 'mousedown', function(e) {
                 var ht = s.hitTest(e);
                 if( ht.cellType === wijmo.grid.CellType.Cell) {

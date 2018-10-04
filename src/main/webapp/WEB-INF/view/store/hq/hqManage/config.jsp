@@ -8,29 +8,29 @@
   <div class="layer_inner">
     <div class="title w65">
       <p id="popTitle" class="tit"></p>
-      <a href="javascript:;" class="btn_close"></a>
+      <a href="#" class="btn_close"></a>
       <div class="con">
         <div class="tabType1">
           <ul>
             <%-- 상세정보 탭 --%>
-            <li><a id="hqInfoTab" href="javascript:;" ><s:message code="hqManage.hqInfo" /></a></li>
+            <li><a id="hqInfoTab" href="#" ><s:message code="hqManage.hqInfo" /></a></li>
             <%-- 환경설정 탭 --%>
-            <li><a id="envSettingTab" href="javascript:;" class="on"><s:message code="hqManage.envSetting" /></a></li>
+            <li><a id="envSettingTab" href="#" class="on"><s:message code="hqManage.envSetting" /></a></li>
             <%-- 메뉴관리 탭  --%>
-            <li><a id="menuSettingTab" href="javascript:;"><s:message code="hqManage.menuSetting" /></a></li>
+            <li><a id="menuSettingTab" href="#"><s:message code="hqManage.menuSetting" /></a></li>
           </ul>
         </div>
         <%-- 환경설정 컨텐츠 --%>
         <form id="envForm" name="envForm">
           <div class="oh mt20 mb15">
-            <span class="fr"><a href="javascript:;" class="btn_grayS2" id="btnDefault"><s:message code="hqManage.setting.default.env" /></a></span>
+            <span class="fr"><a href="#" class="btn_grayS2" id="btnDefault"><s:message code="hqManage.setting.default.env" /></a></span>
           </div>
           <div class="mt20 sc" style="height:450px;border:0px;" id="contents"></div>
         </form>
       </div>
       <div class="btnSet">
         <%-- 저장 --%>
-        <span><a href="javascript:;" class="btn_blue" id="btnSave" ><s:message code="cmm.save" /></a></span>
+        <span><a href="#" class="btn_blue" id="btnSave" ><s:message code="cmm.save" /></a></span>
       </div>
     </div>
   </div>

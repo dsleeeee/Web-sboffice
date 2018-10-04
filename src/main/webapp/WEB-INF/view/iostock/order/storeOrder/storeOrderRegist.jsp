@@ -10,10 +10,11 @@
     <div id="storeOrderRegistLayer" class="wj-dialog wj-dialog-columns" ng-controller="storeOrderRegistCtrl">
         <div class="wj-dialog-header wj-dialog-header-font">
             <s:message code="storeOrder.dtl.registTitle" />
-            <a href="javascript:;" class="wj-hide btn_close"></a>
+            <a href="#" class="wj-hide btn_close"></a>
         </div>
         <div class="wj-dialog-body sc2" style="height: 600px;">
-            <p class="s14 bk mb5">[주문] 상품추가 (</p><p id="registTitle" class="s14 bk mb5"></p>
+            <p class="s14 bk mb5 fl">[<s:message code="storeOrder.dtl.order" />] <s:message code="storeOrder.dtl.addProd" /> </p> <p id="registSubTitle" class="s14 bk mb5 fl"></p>
+
             <table class="tblType01">
                 <colgroup>
                     <col class="w15" />
@@ -31,14 +32,14 @@
                     <td><input type="text" id="srchProdNm" name="srchProdNm" ng-model="prodNm" class="sb-input w100" maxlength="50"/></td>
                 </tr>
                 <tr>
-                    <th><s:message code="storeOrder.dtl.barCode"/></th>
-                    <td><input type="text" id="srchBarCode" name="srchBarCode" ng-model="barCode" class="sb-input w100" maxlength="40"/></td>
+                    <th><s:message code="storeOrder.dtl.barcd"/></th>
+                    <td><input type="text" id="srchBarcdCd" name="srchBarcdCd" ng-model="barcdCd" class="sb-input w100" maxlength="40"/></td>
                     <th><s:message code="storeOrder.dtl.prodClass"/></th>
                     <td><input type="text" id="srchProdClass" name="prodClass" ng-model="prodClass" class="sb-input w100" maxlength="40"/></td>
                 </tr>
                 <tr>
                     <th><s:message code="storeOrder.dtl.option1"/></th>
-                    <td><a href="javascript:;" class="btn_grayS" ng-click=""><s:message code="storeOrder.dtl.safeStockApply" /></a></td>
+                    <td><a href="#" class="btn_grayS" ng-click=""><s:message code="storeOrder.dtl.safeStockApply" /></a></td>
                     <th><s:message code="storeOrder.dtl.option2"/></th>
                     <td></td>
                 </tr>
@@ -48,11 +49,11 @@
                 </tr>
                 <tr>
                     <td colspan="4">
-                        <a href="javascript:;" class="btn_grayS" ng-click=""><s:message code="storeOrder.dtl.excelFormDownload" /></a>
-                        <a href="javascript:;" class="btn_grayS" ng-click=""><s:message code="storeOrder.dtl.excelFormUpload" /></a>
-                        <a href="javascript:;" class="btn_grayS" ng-click=""><s:message code="storeOrder.dtl.textFormUpload" /></a>
-                        <a href="javascript:;" class="btn_grayS" ng-click=""><s:message code="cmm.excel.down" /></a>
-                        <a href="javascript:;" class="btn_grayS" ng-click=""><s:message code="storeOrder.dtl.excelFormUploadErrorInfo" /></a>
+                        <a href="#" class="btn_grayS" ng-click=""><s:message code="storeOrder.dtl.excelFormDownload" /></a>
+                        <a href="#" class="btn_grayS" ng-click=""><s:message code="storeOrder.dtl.excelFormUpload" /></a>
+                        <a href="#" class="btn_grayS" ng-click=""><s:message code="storeOrder.dtl.textFormUpload" /></a>
+                        <a href="#" class="btn_grayS" ng-click=""><s:message code="cmm.excel.down" /></a>
+                        <a href="#" class="btn_grayS" ng-click=""><s:message code="storeOrder.dtl.excelFormUploadErrorInfo" /></a>
                     </td>
                 </tr>
                 </tbody>
@@ -144,6 +145,24 @@
         // grid 초기화 : 생성되기전 초기화되면서 생성된다
         $scope.initGrid = function (s, e) {
             // s.allowMerging = wijmo.grid.AllowMerging.AllHeaders;
+            // 그리드 포맷 핸들러
+            s.formatItem.addHandler(function (s, e) {
+                if (e.panel === s.cells) {
+                    var col = s.columns[e.col];
+                    var item = s.rows[e.row].dataItem;
+                    if(col.binding === "orderEtcQty") { // 입수에 따라 주문수량 컬럼 readonly 컨트롤
+                        // console.log(item);
+                        if(item.poUnitQty === 1) {
+                            wijmo.addClass(e.cell, 'wj-custom-readonly');
+                            wijmo.setAttribute(e.cell, 'aria-readonly', true);
+
+                            // Attribute 의 변경사항을 적용.
+                            var html = e.cell.outerHTML;
+                            e.cell.outerHTML = html;
+                        }
+                    }
+                }
+            });
 
             s.cellEditEnded.addHandler(function (s, e) {
                 if (e.panel === s.cells) {
@@ -156,19 +175,18 @@
                         var vat01         = parseInt(item.vatFg01);
                         var envst0011     = parseInt(item.envst0011);
 
-                        var unitQty = (parseInt(nvl(item.prevOrderUnitQty,0)) + parseInt(nvl(item.orderUnitQty,0))) * parseInt(item.poUnitQty);
-                        var etcQty  = parseInt(nvl(item.prevOrderEtcQty,0)) + parseInt(nvl(item.orderEtcQty,0));
-                        var totQty  = parseInt(unitQty + etcQty);
+                        var unitQty      = (parseInt(nvl(item.prevOrderUnitQty,0)) + parseInt(nvl(item.orderUnitQty,0))) * parseInt(item.poUnitQty);
+                        var etcQty       = parseInt(nvl(item.prevOrderEtcQty,0)) + parseInt(nvl(item.orderEtcQty,0));
+                        var totQty       = parseInt(unitQty + etcQty);
                         var tempOrderAmt = Math.round(totQty * orderSplyUprc / poUnitQty);
-                        var orderAmt = tempOrderAmt - Math.round(tempOrderAmt * vat01 * envst0011 / 11);
-                        var orderVat = Math.round(tempOrderAmt * vat01 / (10 + envst0011));
-                        var orderTot = parseInt(orderAmt + orderVat);
+                        var orderAmt     = tempOrderAmt - Math.round(tempOrderAmt * vat01 * envst0011 / 11);
+                        var orderVat     = Math.round(tempOrderAmt * vat01 / (10 + envst0011));
+                        var orderTot     = parseInt(orderAmt + orderVat);
 
-                        item.orderTotQty = totQty;   // 총주문수량
+                        item.orderTotQty = totQty;   // 총수량
                         item.orderAmt    = orderAmt; // 금액
                         item.orderVat    = orderVat; // VAT
                         item.orderTot    = orderTot; // 합계
-
                     }
                 }
 
@@ -201,7 +219,7 @@
                     var today = getCurDate();
                     if(parseInt(today) > parseInt($scope.reqDate)) {
                         $scope._popMsg('<s:message code="storeOrder.dtl.not.prevDateOrder"/>');
-                        return;
+                        return false;
                     }
                     $scope.storeOrderDateCheck(); // 출고요청가능일인지 여부 체크
                 }
@@ -235,7 +253,7 @@
                     if(!$.isEmptyObject(response.data.data)) {
                         if(response.data.data.orderFg > 0) {
                             $scope._popMsg('<s:message code="storeOrder.dtl.not.orderDate"/>');
-                            return;
+                            return false;
                         }
                     }
                     $scope.storeCloseCheck();
@@ -244,7 +262,7 @@
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
                 $scope._popMsg(messages["cmm.saveFail"]);
-                return;
+                return false;
             }).then(function () {
                 // "complete" code here
             });
@@ -267,7 +285,7 @@
                     if(!$.isEmptyObject(response.data.data)) {
                         if(response.data.data.orderCloseFg === "Y") {
                             $scope._popMsg('<s:message code="storeOrder.dtl.orderClose"/>');
-                            return;
+                            return false;
                         }
                     }
                     $scope.orderProcFgCheck(); // 주문진행구분 체크
@@ -276,7 +294,7 @@
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
                 $scope._popMsg(messages["cmm.saveFail"]);
-                return;
+                return false;
             }).then(function () {
                 // "complete" code here
             });
@@ -300,7 +318,7 @@
                     if(!$.isEmptyObject(response.data.data)) {
                         if(response.data.data.procFg != "00") {
                             $scope._popMsg('<s:message code="storeOrder.dtl.not.orderProcEnd"/>');
-                            return;
+                            return false;
                         }
                         $scope.regHdRemark = response.data.data.remark;
                     }
@@ -311,7 +329,7 @@
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
                 $scope._popMsg(messages["cmm.saveFail"]);
-                return;
+                return false;
             }).then(function () {
                 // "complete" code here
             });
@@ -335,7 +353,7 @@
                         // 발주중지 상태이면 상품추가/변경 불가
                         if(response.data.data.orderCloseYn === "Y") {
                             $scope._popMsg('<s:message code="storeOrder.dtl.orderClose"/>');
-                            return;
+                            return false;
                         }
                         else {
                             $scope.prevOrderTot      = response.data.data.prevOrderTot;      //이전 주문금액
@@ -357,7 +375,7 @@
                                 }
                             }
 
-                            $("#registStoreLoanInfo").html("1회주문한도액 : "+comma($scope.maxOrderAmt)+" 여신잔액 : "+comma($scope.currLoanAmt)+" 미출고액 : "+comma($scope.prevOrderTot)+" 주문가능액 : "+comma($scope.availableOrderAmt));
+                            $("#registStoreLoanInfo").html("1회주문한도액 : "+addComma($scope.maxOrderAmt)+" 여신잔액 : "+addComma($scope.currLoanAmt)+" 미출고액 : "+addComma($scope.prevOrderTot)+" 주문가능액 : "+addComma($scope.availableOrderAmt));
                         }
                     }
                 }
@@ -365,12 +383,12 @@
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
                 $scope._popMsg(messages["cmm.saveFail"]);
-                return;
+                return false;
             }).then(function () {
                 // "complete" code here
                 if(popShowFg === "Y") {
                     $scope.wjStoreOrderRegistLayer.show(true);
-                    $("#registTitle").html('<s:message code="storeOrder.reqDate"/> : '+getFormatDate($scope.reqDate, '-'));
+                    $("#registSubTitle").html(' (<s:message code="storeOrder.reqDate"/> : '+getFormatDate($scope.reqDate, '-')+')');
                 }
             });
         };
@@ -384,35 +402,9 @@
             params.listScale = 500;
 
             // 조회 수행 : 조회URL, 파라미터, 콜백함수
-            $scope._inquiryMain("/iostock/order/storeOrder/storeOrderRegist/list.sb", params, function () {
-                $scope.prodOrderCheck();
-            });
+            $scope._inquiryMain("/iostock/order/storeOrder/storeOrderRegist/list.sb", params);
         };
 
-        // 입수에 따라 주문수량 컬럼 readonly 컨트롤
-        $scope.prodOrderCheck = function() {
-            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-                var item = $scope.flex.collectionView.items[i];
-                // console.log("==item==");
-                // console.log(item);
-                if(item.poUnitQty === 1) {
-                    // console.log("==$scope.flex==");
-                    // console.log($scope.flex);
-
-                    // 입수가 1인 경우 낱개 주문등록 컬럼 수정불가하도록 함.
-                    // 2018.09.11 안동관. 주석처리 해놓은 8(orderEtcQty)이라고 하드코딩하기 싫어서 for문 돌도록 해놨는데 느린듯 싶으면 걍 하드코딩으로 해야할듯...
-                    // $scope.flex.rows[i].grid.columns[7].isReadOnly = true;
-                    for(var k = 0; k < $scope.flex.rows[i].grid.columns.length; k++) {
-                        var columns = $scope.flex.rows[i].grid.columns[k];
-                        if(columns.binding === "orderEtcQty") {
-                            columns.isReadOnly = true;
-                            break;
-                        }
-                    }
-                }
-            }
-            // console.log($scope.flex.collectionView.items);
-        };
 
         // 주문 상품 저장
         $scope.saveStoreOrderRegist = function () {
@@ -423,20 +415,20 @@
 
                 if(item.orderTotQty !== null && item.orderTotQty !== "0" && (parseInt(item.orderTotQty) < parseInt(item.poMinQty))) {
                     $scope._popMsg(messages["storeOrder.dtl.not.minOrderQty"]); // 주문수량은 최소주문수량 이상 입력하셔야 합니다.
-                    return;
+                    return false;
                 }
                 if(item.orderEtcQty !== null && (parseInt(item.orderEtcQty) >= parseInt(item.poUnitQty))) {
                     $scope._popMsg(messages["storeOrder.dtl.not.orderEtcQty"]); // 낱개수량은 입수량보다 작아야 합니다.
-                    return;
+                    return false;
                 }
                 if(item.orderTot !== null && (parseInt(item.orderTot) > 9999999999)) {
                     $scope._popMsg(messages["storeOrder.dtl.not.overOrderTot"]); // 주문금액이 너무 큽니다.
-                    return;
+                    return false;
                 }
 
-                item.status  = "U";
-                item.reqDate = $scope.reqDate;
-                item.slipFg  = $scope.slipFg;
+                item.status    = "U";
+                item.reqDate   = $scope.reqDate;
+                item.slipFg    = $scope.slipFg;
                 item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
                 item.hdRemark  = $scope.regHdRemark;
                 orderTot += parseInt(item.orderTot);
@@ -448,7 +440,7 @@
                 // console.log("orderTot = "+orderTot);
                 if(parseInt($scope.availableOrderAmt) < parseInt(orderTot)) {
                     $scope._popMsg('<s:message code="storeOrder.dtl.orderTotOver"/>');
-                    return;
+                    return false;
                 }
             }
 
