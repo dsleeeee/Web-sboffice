@@ -54,7 +54,8 @@ app.controller('creditCtrl', ['$scope', '$http', function ($scope, $http) {
   // 매장찾기
   $scope.searchStore = function(){
     var storeTxt = "";
-    c_store.init(function(arr){
+    var checked = "";
+    c_store.init(checked, function(arr){
 
       $("#storeCdText").val("");
       $("#storeCd").val("");

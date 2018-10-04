@@ -9,7 +9,7 @@
 
 
 <div class="subCon">
-  <div class="searchBar">
+  <div class="searchBar flddUnfld">
     <a href="javascript:;" class="open">${menuNm}</a>
   </div>
 
@@ -169,6 +169,8 @@ $(document).ready(function(){
   var genderData   = ${ccu.getCommCode("055")}; <%--여자, 남자, 사용안함--%>
   var genderDataEx = ${ccu.getCommCodeExcpAll("055")}; <%--여자, 남자, 사용안함--%>
   var useDataEx    = ${ccu.getCommCodeExcpAll("067")}; <%--사용, 미사용--%>
+  var periodDate    = ${ccu.getCommCodeExcpAll("077")}; <%--조회기간--%>
+  var weddingData   = ${ccu.getCommCodeExcpAll("076")}; <%--결혼유무--%>
 
   <%--조회 조건 생성--%>
   var startDt      = wcombo.genDateVal("#startDt", "${sessionScope.sessionInfo.startDt}");
@@ -176,7 +178,7 @@ $(document).ready(function(){
   var anvrsStartDt = wcombo.genDateVal("#anvrsStartDt", "${sessionScope.sessionInfo.startDt}");
   var anvrsEndDt   = wcombo.genDateVal("#anvrsEndDt", "${sessionScope.sessionInfo.endDt}");
   var classCd      = wcombo.genCommonBox("#classCd", ${comboData});
-  var periodDate   = wcombo.genCommonBox("#periodDate", ${periodDate});
+  var periodDate   = wcombo.genCommonBox("#periodDate", periodDate);
   var anvrsDate    = wcombo.genCommonBox("#anvrsDate", ${ccu.getCommCode("032")});
   var gender       = wcombo.genCommonBox("#gender", genderData);
   var emailRecvYn  = wcombo.genCommonBox("#emailRecvYn", recvData);
@@ -224,8 +226,6 @@ $(document).ready(function(){
       infoInit();
       var data = result.data;
 
-      console.log(data)
-
       vMembrNo.value     = data.membrNo;
       vMembrNm.value     = data.membrNm;
       vMembrNmEng.value  = data.memberEngNm;
@@ -244,7 +244,8 @@ $(document).ready(function(){
       vEmailRecv.selectedValue = data.emailRecvYn;
       vSmsRecv.selectedValue = data.smsRecvYn;
 
-      $("#storeCd").val(data.creditStore); //TODO text도
+      $("#storeCd").val(data.creditStoreCds)
+      $("#storeCdText").val(data.creditStoreNms);
       $("#vMembrOrgnCd").val(data.membrOrgnCd);
       $("#membrNoNm").text("<s:message code='regist.membr.info'/>" + " [" + data.membrNo + "/" + data.membrNm + "]");
       vMembrNo.isReadOnly = true;
@@ -328,7 +329,7 @@ $(document).ready(function(){
   var vRegStore    = wcombo.genCommonBox("#vRegStore", ${regstrStoreListAll});
   var vClassCd     = wcombo.genCommonBox("#vClassCd", ${comboData});
   var vGender      = wcombo.genCommonBox("#vGender", genderDataEx);
-  var vWedding     = wcombo.genCommonBox("#vWedding", ${weddingData});
+  var vWedding     = wcombo.genCommonBox("#vWedding", weddingData);
   var vEmailRecv   = wcombo.genCommonBox("#vEmailRecv", recvDataEx);
   var vUseYn       = wcombo.genCommonBox("#vUseYn", useDataEx);
   var vSmsRecv     = wcombo.genCommonBox("#vSmsRecv", recvDataEx);
@@ -421,7 +422,10 @@ $(document).ready(function(){
       param.emailRecvYn = vEmailRecv.selectedValue;
       param.smsRecvYn = vSmsRecv.selectedValue;
       param.remark = vRemark.value;
-      param.creditStore = $("#storeCd").val(); // 후불회원 적용매장
+      param.creditStoreCds = $("#storeCd").val(); // 후불회원 적용매장
+
+      console.log("param >>>>> ");
+      console.log(param);
 
       $.postJSONSave("/membr/info/view/base/regist.sb", param, function(result) {
         var msg = "<s:message code='cmm.registSucc'/>";
@@ -509,7 +513,10 @@ $(document).ready(function(){
 
   <%-- 후불회원 적용매장 버튼 클릭시 --%>
   $("#store").click(function(){
-    c_store.init(function(arr){
+    var chked = $("#storeCd").val();
+
+    c_store.init(chked, function(arr){
+
       $("#storeCdText").val("");
       $("#storeCd").val("");
 
@@ -525,6 +532,7 @@ $(document).ready(function(){
       } else if(arr.length == 1){
         $("#storeCdText").val(arr[0].nm);
       }
+      $("#storeCd").val(arr);
 
       var storeText = "";
       for(var i=0; i<arr.length; i++) {
@@ -536,6 +544,7 @@ $(document).ready(function(){
           $("#storeCd").val(storeText);
         }
       }
+
     });
   });
 

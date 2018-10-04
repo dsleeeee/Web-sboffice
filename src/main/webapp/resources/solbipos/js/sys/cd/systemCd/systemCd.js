@@ -95,6 +95,15 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
   };
   // 대표명칭 그리드 조회
   $scope.$on("representCtrl", function(event, data) {
+
+    $scope.searchRepresent();
+
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
+
+  // 조회
+  $scope.searchRepresent = function(){
     // 파라미터
     var params = {};
     params.nmcodeGrpCd = "000";
@@ -105,9 +114,8 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#btnDelRepresent").show();
       $("#btnSaveRepresent").show();
     });
-    // 기능수행 종료 : 반드시 추가
-    event.preventDefault();
-  });
+  };
+
   // 대표명칭 그리드 행 추가
   $scope.addRow = function() {
     // 파라미터 설정
@@ -132,8 +140,13 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save("/sys/cd/systemCd/systemCd/save.sb", params);
+    $scope._save("/sys/cd/systemCd/systemCd/save.sb", params, function(){ $scope.refreshRepresent();});
   }
+  // 화면 리프레시
+  $scope.refreshRepresent = function(){
+    $scope.searchRepresent();
+  };
+
 }]);
 
 /**
@@ -170,6 +183,15 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
   });
   // 세부명칭 그리드 조회
   $scope.$on("detailCtrl", function(event, data) {
+
+    $scope.searchDetail();
+
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
+
+  // 조회
+  $scope.searchDetail = function(){
     // 파라미터
     var params = {};
     params.nmcodeGrpCd = data;
@@ -180,9 +202,8 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#btnDelDetail").show();
       $("#btnSaveDetail").show();
     });
-    // 기능수행 종료 : 반드시 추가
-    event.preventDefault();
-  });
+  };
+
   // 세부명칭 그리드 행 추가
   $scope.addRow = function() {
     var gridRepresent = agrid.getScope('representCtrl');
@@ -208,7 +229,12 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save("/sys/cd/systemCd/systemCd/save.sb", params);
-  }
+    $scope._save("/sys/cd/systemCd/systemCd/save.sb", params, function(){ $scope.refreshDetail();});
+  };
+
+  // 세부명칭 리프레시
+  $scope.refreshDetail = function(){
+    $scope.refreshDetail();
+  };
 
 }]);

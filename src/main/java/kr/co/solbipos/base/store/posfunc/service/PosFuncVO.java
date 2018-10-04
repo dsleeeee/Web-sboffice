@@ -10,6 +10,7 @@ import kr.co.solbipos.application.common.service.CmmVO;
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2018.07.31  김지은      최초생성
+ * @ 2018.10.01  노현수      기능키관련 수정 외
  *
  * @author 솔비포스 차세대개발실 김지은
  * @since 2018.07.31
@@ -19,10 +20,13 @@ import kr.co.solbipos.application.common.service.CmmVO;
  */
 public class PosFuncVO extends CmmVO {
 
+    private static final long serialVersionUID = 3967533176391929481L;
     /** 매장코드 */
     private String storeCd;
     /** 포스번호 */
     private String posNo;
+    /** 포스구분 */
+    private String posFg;
     /** 기능키구분 */
     private String fnkeyFg;
     /** 기능키명 */
@@ -33,16 +37,15 @@ public class PosFuncVO extends CmmVO {
     private Boolean posiAdjYn = false;
     /** 표기순번 */
     private String dispSeq;
-    /** 열위치 */
-    private String colPosi;
-    /** 줄위치 */
-    private String rowPosi;
+    /** X 좌표 */
+    private Double x = 0d;
+    /** Y 좌표*/
+    private Double y = 0d;
     /** 폭 */
-    private String width;
+    private Double width = 0d;
     /** 넓이 */
-    private String height;
+    private Double height = 0d;
     /** 사용여부 */
-    //    private String useYn = "0";
     private Boolean useYn = false;
     /** 인증여부 */
     private Boolean authYn = false;
@@ -53,6 +56,15 @@ public class PosFuncVO extends CmmVO {
     private String copyPos;
     /** 복사 타겟이 되는 포스 */
     private String targetPos;
+
+    /** 설정구분 */
+    private String confgFg;
+    /** 스타일코드 */
+    private String styleCd;
+    /** 이미지명 */
+    private String imgNm;
+    /** XML */
+    private String xml;
 
 
     /**
@@ -79,6 +91,21 @@ public class PosFuncVO extends CmmVO {
     public void setPosNo(String posNo) {
         this.posNo = posNo;
     }
+
+    /**
+     * @return the posFg
+     */
+    public String getPosFg() {
+        return posFg;
+    }
+
+    /**
+     * @param posFg the posFg to set
+     */
+    public void setPosFg(String posFg) {
+        this.posFg = posFg;
+    }
+
     /**
      * @return the fnkeyFg
      */
@@ -139,52 +166,54 @@ public class PosFuncVO extends CmmVO {
     public void setDispSeq(String dispSeq) {
         this.dispSeq = dispSeq;
     }
+
     /**
-     * @return the colPosi
+     * @return the x
      */
-    public String getColPosi() {
-        return colPosi;
+    public Double getX() {
+        return x;
     }
+
     /**
-     * @param colPosi the colPosi to set
+     * @param x the x to set
      */
-    public void setColPosi(String colPosi) {
-        this.colPosi = colPosi;
+    public void setX(Double x) {
+        this.x = x;
     }
+
     /**
-     * @return the rowPosi
+     * @return the y
      */
-    public String getRowPosi() {
-        return rowPosi;
+    public Double getY() {
+        return y;
     }
+
     /**
-     * @param rowPosi the rowPosi to set
+     * @param y the y to set
      */
-    public void setRowPosi(String rowPosi) {
-        this.rowPosi = rowPosi;
+    public void setY(Double y) {
+        this.y = y;
     }
-    /**
-     * @return the width
-     */
-    public String getWidth() {
+
+    public Double getWidth() {
         return width;
     }
     /**
      * @param width the width to set
      */
-    public void setWidth(String width) {
+    public void setWidth(Double width) {
         this.width = width;
     }
     /**
      * @return the height
      */
-    public String getHeight() {
+    public Double getHeight() {
         return height;
     }
     /**
      * @param height the height to set
      */
-    public void setHeight(String height) {
+    public void setHeight(Double height) {
         this.height = height;
     }
     /**
@@ -195,13 +224,6 @@ public class PosFuncVO extends CmmVO {
      * @param authYn the authYn to set
      */
     public void setAuthYn(Boolean authYn) {
-        /*
-        if(authYn == "true") {
-            this.authYn = "Y";
-        } else {
-            this.authYn = "N";
-        }
-        */
         this.authYn = authYn;
     }
     /**
@@ -212,13 +234,6 @@ public class PosFuncVO extends CmmVO {
      * @param useYn the useYn to set
      */
     public void setUseYn(Boolean useYn) {
-        /*
-        if(useYn == "true") {
-            this.useYn = "Y";
-        } else {
-            this.useYn = "N";
-        }
-        */
         this.useYn = useYn;
     }
     /**
@@ -246,4 +261,60 @@ public class PosFuncVO extends CmmVO {
      * @param targetPos the useYn to targetPos
      */
     public void setTargetPos(String targetPos) { this.targetPos = targetPos; }
+
+    /**
+     * @return the confgFg
+     */
+    public String getConfgFg() {
+        return confgFg;
+    }
+
+    /**
+     * @param confgFg the confgFg to set
+     */
+    public void setConfgFg(String confgFg) {
+        this.confgFg = confgFg;
+    }
+
+    /**
+     * @return the styleCd
+     */
+    public String getStyleCd() {
+        return styleCd;
+    }
+
+    /**
+     * @param styleCd the styleCd to set
+     */
+    public void setStyleCd(String styleCd) {
+        this.styleCd = styleCd;
+    }
+
+    /**
+     * @return the imgNm
+     */
+    public String getImgNm() {
+        return imgNm;
+    }
+
+    /**
+     * @param imgNm the imgNm to set
+     */
+    public void setImgNm(String imgNm) {
+        this.imgNm = imgNm;
+    }
+
+    /**
+     * @return the xml
+     */
+    public String getXml() {
+        return xml;
+    }
+
+    /**
+     * @param xml the xml to set
+     */
+    public void setXml(String xml) {
+        this.xml = xml;
+    }
 }

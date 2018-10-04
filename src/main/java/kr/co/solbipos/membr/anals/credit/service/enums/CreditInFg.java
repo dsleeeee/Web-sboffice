@@ -1,4 +1,4 @@
-package kr.co.solbipos.membr.info.regist.service.enums;
+package kr.co.solbipos.membr.anals.credit.service.enums;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import kr.co.common.data.enums.CodeEnum;

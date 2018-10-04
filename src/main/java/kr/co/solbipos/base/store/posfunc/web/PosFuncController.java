@@ -1,11 +1,16 @@
 package kr.co.solbipos.base.store.posfunc.web;
 
-import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.nhncorp.lucy.security.xss.XssPreventer;
 import kr.co.common.data.domain.CommonCodeVO;
+import kr.co.common.data.enums.Status;
+import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.data.structure.Result;
+import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.grid.ReturnUtil;
+import kr.co.common.utils.jsp.CmmCodeUtil;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.store.posfunc.service.PosFuncService;
+import kr.co.solbipos.base.store.posfunc.service.PosFuncVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreManageService;
 import kr.co.solbipos.store.manage.storemanage.service.StoreManageVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,15 +20,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import kr.co.common.data.enums.Status;
-import kr.co.common.data.enums.UseYn;
-import kr.co.common.data.structure.DefaultMap;
-import kr.co.common.data.structure.Result;
-import kr.co.common.service.session.SessionService;
-import kr.co.common.utils.jsp.CmmCodeUtil;
-import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.base.store.posfunc.service.PosFuncService;
-import kr.co.solbipos.base.store.posfunc.service.PosFuncVO;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.List;
+
+import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 
 /**
  * @Class Name : PosFuncController.java
@@ -45,15 +50,19 @@ import kr.co.solbipos.base.store.posfunc.service.PosFuncVO;
 public class PosFuncController {
 
     /** service */
-    @Autowired
-    PosFuncService service;
-    @Autowired
-    StoreManageService storeService;
+    private final PosFuncService service;
+    private final StoreManageService storeService;
+    private final SessionService sessionService;
+    private final CmmCodeUtil cmmCodeUtil;
 
+    /** Constructor Injection*/
     @Autowired
-    SessionService sessionService;
-    @Autowired
-    CmmCodeUtil cmmCodeUtil;
+    public PosFuncController(PosFuncService service, StoreManageService storeService, SessionService sessionService, CmmCodeUtil cmmCodeUtil) {
+        this.service = service;
+        this.storeService = storeService;
+        this.sessionService = sessionService;
+        this.cmmCodeUtil = cmmCodeUtil;
+    }
 
     /**
      * 포스기능정의 화면
@@ -65,8 +74,7 @@ public class PosFuncController {
      * @since   2018. 07. 26.
      */
     @RequestMapping(value = "/use/view.sb", method = RequestMethod.GET)
-    public String list(HttpServletRequest request, HttpServletResponse response,
-        Model model) {
+    public String list(HttpServletRequest request, HttpServletResponse response, Model model) {
         return "base/store/posFunc/posFunc";
     }
 
@@ -203,6 +211,87 @@ public class PosFuncController {
         int result = service.copyPosFunc(posFuncVO, sessionInfoVO);
 
         return returnListJson(Status.OK, result);
+    }
+
+    /**
+     * 포스기능키 목록 조회
+     * @param   posFuncVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  노현수
+     * @since   2018. 10. 01.
+     */
+    @RequestMapping(value = "/use/getPosFuncKeyList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getPosFuncKeyList(PosFuncVO posFuncVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        // 포스 기능키 목록 조회
+        List<DefaultMap<String>> list = service.getPosFuncKeyList(posFuncVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, posFuncVO);
+    }
+
+    /**
+     * 포스기능키 기존 설정 조회
+     *
+     * @param posFuncVO PosFuncVO
+     * @param request HttpServletRequest
+     * @param session HttpSession
+     * @param model   Model
+     * @return
+     */
+    @RequestMapping(value = "/use/getFuncKeyXml.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getFuncKeyXml(PosFuncVO posFuncVO, HttpServletRequest request,
+        HttpSession session, Model model) {
+        String xml = service.getFuncKeyXml(posFuncVO);
+        return new Result(Status.OK, xml);
+    }
+
+    /**
+     * 포스기능키 저장
+     *
+     * @param request HttpServletRequest
+     * @param session HttpSession
+     * @param model   Model
+     * @return
+     */
+    @RequestMapping(value = "/use/saveFuncKey.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveFuncKey(HttpServletRequest request, HttpSession session, Model model) {
+
+        Result result = new Result(Status.FAIL);
+        try {
+
+            SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+            // xml 파일 처리
+            String xml =
+                URLDecoder.decode(request.getParameter("xml"), "UTF-8").replace("\n", "&#xa;");
+            // 매장코드 설정
+            String storeCd = request.getParameter("storeCd");
+            // 포스번호 설정
+            String posNo = request.getParameter("posNo");
+            // 설정구분 설정
+            String fnKeyFg = request.getParameter("fnkeyFg");
+            // 설정구분 설정
+            String confgFg = request.getParameter("fnkeyFg");
+            // 파라미터 셋팅
+            PosFuncVO posFuncVO = new PosFuncVO();
+            posFuncVO.setStoreCd(storeCd);
+            posFuncVO.setPosNo(posNo);
+            posFuncVO.setFnkeyFg(fnKeyFg);
+            posFuncVO.setConfgFg(confgFg);
+            posFuncVO.setXml(XssPreventer.unescape(xml));
+            // 저장 수행
+            result = service.saveFunckey(posFuncVO, sessionInfoVO);
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     /**

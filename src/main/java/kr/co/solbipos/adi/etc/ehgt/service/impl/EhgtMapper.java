@@ -107,4 +107,10 @@ public interface EhgtMapper {
      * @return
      */
     int updateMsCdUseYn(CrncyCdVO crncyCdVO);
+
+    /** 본사 환율 등록시 매장에도 등록하는 프로시저 호출 */
+    String insertHqEgtProc(EhgtVO ehgtVO);
+
+    /** 본사 환율 수정시 매장에도 수정하는 프로시저 호출 */
+    String updateHqEgtProc(EhgtVO ehgtVO);
 }

@@ -1,0 +1,17 @@
+<!--
+  포스기능키의 vertex 기본설정
+-->
+<mxStylesheet>
+  <add as="defaultVertex">
+    <add as="shape" value="rectangle"/>
+    <add as="perimeter">mxPerimeter.RectanglePerimeter</add>
+    <add as="fontSize" value="15"/>
+    <add as="fontFamily" value="KoPub Dotum"/>
+    <add as="align" value="center"/>
+    <add as="verticalAlign" value="middle"/>
+    <add as="fillColor" value="#ffffff"/>
+    <add as="strokeColor" value="#808080"/>
+    <add as="fontColor" value="#000000"/>
+    <add as="rounded" value="1"/>
+  </add>
+</mxStylesheet>

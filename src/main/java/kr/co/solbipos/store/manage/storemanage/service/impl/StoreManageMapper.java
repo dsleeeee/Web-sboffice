@@ -9,12 +9,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * 가맹점관리 > 매장관리 > 매장정보관리
- *
- * @author 김지은
- */
-
-/**
  * @Class Name : StoreManageMapper.java
  * @Description : 가맹점관리 > 매장관리 > 매장정보관리
  * @Modification Information
@@ -152,6 +146,9 @@ public interface StoreManageMapper {
 
     /** 테이블 명칭설정정보 저장 */
     int updatePosNm(StorePosEnvVO storePosEnvVO);
+
+    /** 시스템 공통코드 복사 TODO */
+    String copyCmmNameCode(StoreNmcodeVO nmcodeVO);
 
     /** TID 복사 프로시저 */
     String copyTid(StoreNmcodeVO nmcodeVO);

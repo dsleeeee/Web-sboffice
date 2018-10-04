@@ -23,7 +23,7 @@
     <tbody>
     <tr>
       <%-- 매장 --%>
-      <th><s:message code="credit.srchStore" /></th> <!--  //TODO -->
+      <th><s:message code="credit.srchStore" /></th>
       <td colspan="3">
         <div id="storeCd" style="display: none;"></div>
         <input type="text" class="sb-input w100" id="storeCdText" ng-model="storeCds" readonly="readonly" ng-click="searchStore()" />

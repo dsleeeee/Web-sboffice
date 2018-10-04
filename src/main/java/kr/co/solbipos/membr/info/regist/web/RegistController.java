@@ -103,8 +103,6 @@ public class RegistController {
         model.addAttribute("regstrStoreListAll", regstrStoreListAll);
         model.addAttribute("comboData", membrClassListAll);
         model.addAttribute("defaultStoreCd", defaultStoreCd);
-        model.addAttribute("periodDate", getPeriodList());  //TODO 공통코드로 변경
-        model.addAttribute("weddingData", getWedding());    //TODO 공통코드로 변경
 
         return "membr/info/view/view";
     }
@@ -120,8 +118,8 @@ public class RegistController {
      */
     @RequestMapping(value = "view/list.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result registListPost(RegistVO registVO, HttpServletRequest request, HttpServletResponse response, Model
-            model) {
+    public Result registListPost(RegistVO registVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
@@ -141,8 +139,8 @@ public class RegistController {
      */
     @RequestMapping(value = "base/getMemberInfo.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result baseListPost(RegistVO registVO, HttpServletRequest request, HttpServletResponse response, Model
-            model) {
+    public Result baseListPost(RegistVO registVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
@@ -172,7 +170,7 @@ public class RegistController {
 
         SessionInfoVO si = sessionService.getSessionInfo(request);
         // 기본값 세팅
-        registVO.setMembrClassCd("000");
+        registVO.setMembrClassCd("000");    // TODO 추후 회원등급 개발되면 수정
         registVO.setLunarYn("N");
         registVO.setMembrOrgnCd(si.getOrgnCd());
         registVO.setRegId(si.getUserId());
@@ -182,15 +180,11 @@ public class RegistController {
 
         int result = registService.saveRegistMember(registVO);
 
-        LOGGER.info(">>>>>>>>> getMembrNo : "+ registVO.getMembrNo());
-        LOGGER.info(">>>>>>>>> getMembrOrgnCd : "+ registVO.getMembrOrgnCd());
-        LOGGER.info(">>>>>>>>> creditStore : "+ registVO.getCreditStore());
-
         // 본사에서 등록시
         if(si.getOrgnFg() == OrgnFg.HQ) {
 
             // 후불회원 적용매장 등록
-            if( !StringUtil.isEmpties(registVO.getCreditStore()) ) {
+            if( !StringUtil.isEmpties(registVO.getCreditStoreCds()) ) {
                 result += registService.saveCreditStores(registVO);
             }
         }
@@ -222,49 +216,5 @@ public class RegistController {
 
         int result = registService.deleteMember(registVO);
         return ReturnUtil.returnJson(Status.OK, result);
-    }
-
-    /**
-     * 조회 기간 콤보 박스 내용
-     *
-     * @return
-     */
-    public String getPeriodList() {
-        List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-        HashMap<String, String> c = new HashMap<>();
-        c.put("name", "기간 미사용");
-        c.put("value", "all");
-        list.add(c);
-        c = new HashMap<>();
-        c.put("name", "가입일");
-        c.put("value", "reg");
-        list.add(c);
-        /*
-        // 최종 방문일은 TB_MB_MEMBER_POINT 테이블 LAST_SALE_DATE 을 기준으로 기간 조회하는데
-        // 현시점에서는 TB_MB_MEMBER_POINT 을 구현하지 않음
-        c = new HashMap<>();
-        c.put("name", "최종 방문일");
-        c.put("value", "last");
-        list.add(c);
-        */
-        return StringUtil.convertToJson(list);
-    }
-
-    /**
-     * 결혼 유무 콤보박스 내용 테스트
-     *
-     * @return
-     */
-    public String getWedding() {
-        List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-        HashMap<String, String> c = new HashMap<>();
-        c.put("name", "미혼");
-        c.put("value", "N");
-        list.add(c);
-        c = new HashMap<>();
-        c.put("name", "기혼");
-        c.put("value", "Y");
-        list.add(c);
-        return StringUtil.convertToJson(list);
     }
 }

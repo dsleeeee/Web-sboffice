@@ -51,6 +51,7 @@ public class EhgtServiceImpl implements EhgtService {
     @Autowired
     MessageService messageService;
 
+    /** 환율 관리 리스트 조회 */
     @Override
     public List<DefaultMap<Object>> getEhgtListBySaleDt(EhgtVO ehgtVO, SessionInfoVO sessionInfoVO) {
 
@@ -118,6 +119,7 @@ public class EhgtServiceImpl implements EhgtService {
         return result;
     }
 
+    /** 환율 관리 해당일의 환율 조회 */
     @Override
     public List<DefaultMap<String>> getEhgtDetailBySaleDt(EhgtVO ehgtVO, SessionInfoVO sessionInfoVO) {
 
@@ -170,11 +172,18 @@ public class EhgtServiceImpl implements EhgtService {
             // 프랜차이즈 본사 의 경우 등록/수정
             if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
                 List<DefaultMap<String>> chkList = mapper.getHqEhgtListBySaleDt(ehgtVO);
-                if(chkList == null || chkList.size() < 1) {
+
+                if(chkList == null || chkList.size() < 1 ) {
                     procCnt += mapper.insertHqEhgt(ehgtVO);
+
+                    // 매장에도 등록하는 프로시저 호출
+                    String result = mapper.insertHqEgtProc(ehgtVO);
                 }
                 else {
                     procCnt += mapper.updateHqEhgt(ehgtVO);
+
+                    // 매장에도 수정하는 프로시저 호출
+                    String result = mapper.updateHqEgtProc(ehgtVO);
                 }
             }
             // 단독 가맹점일 경우 등록/수정
@@ -206,8 +215,6 @@ public class EhgtServiceImpl implements EhgtService {
         CrncyCdVO crncyCdVO = new CrncyCdVO();
         crncyCdVO.setNmcodeGrpCd("062");
         crncyCdVO.setUseYn(useYn);
-
-        LOGGER.info(">>>>>> sessionInfoVO.getOrgnFg() : " + sessionInfoVO.getOrgnFg());
 
         // 본사일 경우에는 본사 환율 조회
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {

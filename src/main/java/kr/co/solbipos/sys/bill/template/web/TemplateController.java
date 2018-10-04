@@ -1,31 +1,28 @@
 package kr.co.solbipos.sys.bill.template.web;
 
-import static kr.co.common.utils.grid.ReturnUtil.returnJson;
-import static kr.co.common.utils.spring.StringUtil.convertToJson;
-import java.util.ArrayList;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import kr.co.common.service.message.MessageResolveService;
+import kr.co.common.data.enums.Status;
+import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.data.structure.Result;
+import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.sys.bill.template.service.TemplateService;
+import kr.co.solbipos.sys.bill.template.service.TemplateVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import kr.co.common.data.enums.Status;
-import kr.co.common.data.structure.DefaultMap;
-import kr.co.common.data.structure.Result;
-import kr.co.common.service.session.SessionService;
-import kr.co.common.utils.grid.ReturnUtil;
-import kr.co.solbipos.sys.bill.template.service.TemplateService;
-import kr.co.solbipos.sys.bill.template.service.TemplateVO;
-import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
+
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
  * @Class Name : TemplateController.java
@@ -46,10 +43,15 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping(value = "/sys/bill/template")
 public class TemplateController {
     
+    private final TemplateService templateService;
+    private final SessionService sessionService;
+
+    /** Constructor Injection */
     @Autowired
-    TemplateService templateService;
-    @Autowired
-    SessionService sessionService;
+    public TemplateController(TemplateService templateService, SessionService sessionService) {
+        this.templateService = templateService;
+        this.sessionService = sessionService;
+    }
 
     /**
      * 출력물 샘플 - 페이지 이동

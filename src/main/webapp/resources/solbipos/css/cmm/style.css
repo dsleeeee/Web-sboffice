@@ -1155,6 +1155,14 @@ p.touchBtn a:last-child:hover:before {content:''; position:absolute; margin:17px
 p.touchBtn a:first-child:before {content:''; position:absolute; margin:17px 0 0 11px; background:url(../img/menu_bullet_blue.png) no-repeat; width:6px; height:10px; transform:rotate(180deg);}
 p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17px 0 0 11px; background:url(../img/menu_bullet.png) no-repeat; width:6px; height:10px;}
 
+
+.funcKeyWrap {width: 502px; height: 124px; overflow: hidden; position: relative; border: 1px solid #ccc; border-collapse: collapse;}
+.funcKeyLine2 { background:url(../img/touchKey/bg_touchKey_class_line_2.png); background-size: 500px 123px;}
+.funcKeyHide {
+    pointer-events: none;
+    display: none;
+}
+
 /* **************************************** *
  * layer
  * **************************************** */

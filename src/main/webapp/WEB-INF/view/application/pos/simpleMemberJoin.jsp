@@ -16,7 +16,7 @@
 <div class="cusWrap">
     <div class="content-middle">
         <div class="subCon">
-            <div class="searchBar">
+            <div class="searchBar flddUnfld">
                 <span class="cusTitle"><s:message code="application.pos.simpleMemberJoin.title"/></span>
             </div>
             <table class="searchTbl">

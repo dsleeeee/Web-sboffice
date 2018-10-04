@@ -1,13 +1,11 @@
+<!--
+  판매터치키의 vertex 기본설정
+-->
 <mxStylesheet>
   <add as="defaultVertex">
-    <!--
-    <add as="shape" value="label"/>
-    <add as="perimeter" value="rectanglePerimeter"/>
-    -->
     <add as="shape" value="rectangle"/>
     <add as="perimeter">mxPerimeter.RectanglePerimeter</add>
     <add as="fontSize" value="15"/>
-    <!--<add as="fontFamily" value="NotoR"/>-->
     <add as="fontFamily" value="KoPub Dotum"/>
     <add as="align" value="center"/>
     <add as="verticalAlign" value="middle"/>
@@ -16,35 +14,4 @@
     <add as="fontColor" value="#000000"/>
     <add as="rounded" value="1"/>
   </add>
-  <add as="prevBtn">
-    <add as="shape" value="label"/>
-    <add as="align" value="center"/>
-    <add as="verticalAlign" value="top"/>
-    <add as="fillColor" value="none"/>
-    <add as="strokeColor" value="none"/>
-    <add as="fontColor" value="#000000"/>
-    <add as="fontSize" value="15"/>
-    <!--<add as="fontFamily" value="NotoR"/>-->
-    <add as="fontFamily" value="KoPub Dotum"/>
-    <add as="verticalLabelPosition" value="bottom"/>
-    <add as="image" value="/resource/graph/images/triangle-left.png"/>
-    <add as="imageWidth" value="20"/>
-    <add as="imageVerticalAlign" value="middle"/>
-  </add>
-  <add as="nextBtn">
-    <add as="shape" value="label"/>
-    <add as="align" value="center"/>
-    <add as="verticalAlign" value="top"/>
-    <add as="fillColor" value="none"/>
-    <add as="strokeColor" value="none"/>
-    <add as="fontColor" value="#000000"/>
-    <add as="fontSize" value="15"/>
-    <!--<add as="fontFamily" value="NotoR"/>-->
-    <add as="fontFamily" value="KoPub Dotum"/>
-    <add as="verticalLabelPosition" value="bottom"/>
-    <add as="image" value="/resource/graph/images/triangle-right.png"/>
-    <add as="imageWidth" value="20"/>
-    <add as="imageVerticalAlign" value="middle"/>
-  </add>
-
 </mxStylesheet>
