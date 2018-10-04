@@ -40,7 +40,7 @@ import static org.springframework.util.StringUtils.isEmpty;
 public class HqEmpServiceImpl implements HqEmpService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    private final String HQ_AUTH_GRP_CD = "000001";
+    private final String HQ_AUTH_GRP_CD = "000005"; // TODO 보나비용 사용자 그룹코드 (화면에서 사용자 그룹 선택 필요)
     private final String DEFAULT_POS_PASSWORD = "1234";
     private final String EMP_NO_REGEX = "^[\\d]{4}$";
     private final String PASSWORD_REGEX =

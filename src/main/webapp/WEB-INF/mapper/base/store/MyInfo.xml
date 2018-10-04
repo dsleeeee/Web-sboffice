@@ -105,25 +105,70 @@
                           NMCODE_ITEM_1 = TCN.NMCODE_ITEM_1,
                           NMCODE_ITEM_2 = TCN.NMCODE_ITEM_2
     WHEN NOT MATCHED THEN
-                   INSERT ( HQ_OFFICE_CD, NMCODE_GRP_CD, NMCODE_CD, NMCODE_NM, NMCODE_ITEM_1,
-                            NMCODE_ITEM_2, USE_YN, REG_DT, REG_ID, MOD_DT, MOD_ID )
-                   VALUES ( #{hqOfficeCd}, TCN.NMCODE_GRP_CD, TCN.NMCODE_CD, TCN.NMCODE_NM, TCN.NMCODE_ITEM_1,
-                            TCN.NMCODE_ITEM_2, 'Y', TCN.REG_DT, TCN.REG_ID, TCN.MOD_DT, TCN.MOD_ID )
+                   INSERT ( HQ_OFFICE_CD,
+                            NMCODE_GRP_CD,
+                            NMCODE_CD,
+                            PARENT_CD,
+                            NMCODE_NM,
+                            NMCODE_ITEM_1,
+                            NMCODE_ITEM_2,
+                            USE_YN,
+                            REG_DT,
+                            REG_ID,
+                            MOD_DT,
+                            MOD_ID )
+                   VALUES ( #{hqOfficeCd},
+                            TCN.NMCODE_GRP_CD,
+                            TCN.NMCODE_CD,
+                            TCN.PARENT_CD,
+                            TCN.NMCODE_NM,
+                            TCN.NMCODE_ITEM_1,
+                            TCN.NMCODE_ITEM_2,
+                            'Y',
+                            TCN.REG_DT,
+                            TCN.REG_ID,
+                            TCN.MOD_DT,
+                            TCN.MOD_ID )
   </insert>
   <!-- 본사코드 삽입 -->
   <insert id="insertHqNmcode" parameterType="hqNmcodeVO">
-    /* MyInfoMapper.insertHqNmcode */
-    <selectKey keyProperty="nmcodeCd" resultType="String" order="BEFORE">
-      SELECT DECODE( #{nmcodeCd},
-                              '',
-                     TO_CHAR( NVL( MAX( NMCODE_CD ), 0 ) + 1 ),
-                     #{nmcodeCd} )
-        FROM TB_HQ_NMCODE
-       WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-         AND NMCODE_GRP_CD = #{nmcodeGrpCd}
-    </selectKey>
-    INSERT INTO TB_HQ_NMCODE ( HQ_OFFICE_CD, NMCODE_GRP_CD, NMCODE_CD, NMCODE_NM, NMCODE_ITEM_1, NMCODE_ITEM_2, USE_YN, REG_DT, REG_ID, MOD_DT, MOD_ID )
-         VALUES ( #{hqOfficeCd}, #{nmcodeGrpCd}, #{nmcodeCd}, #{nmcodeNm}, #{nmcodeItem1}, #{nmcodeItem2}, #{useYn}, #{regDt}, #{regId}, #{modDt}, #{modId} )
+      /* MyInfoMapper.insertHqNmcode */
+      <selectKey keyProperty="nmcodeCd" resultType="String" order="BEFORE">
+        SELECT DECODE( #{nmcodeCd},
+                                '',
+                       TO_CHAR( NVL( MAX( NMCODE_CD ), 0 ) + 1 ),
+                       #{nmcodeCd} )
+          FROM TB_HQ_NMCODE
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND NMCODE_GRP_CD = #{nmcodeGrpCd}
+      </selectKey>
+      INSERT INTO TB_HQ_NMCODE(
+          HQ_OFFICE_CD,
+          NMCODE_GRP_CD,
+          NMCODE_CD,
+          PARENT_CD
+          NMCODE_NM,
+          NMCODE_ITEM_1,
+          NMCODE_ITEM_2,
+          USE_YN,
+          REG_DT,
+          REG_ID,
+          MOD_DT,
+          MOD_ID
+      ) VALUES (
+          #{hqOfficeCd},
+          #{nmcodeGrpCd},
+          #{nmcodeCd},
+          #{nmcodeCd},
+          #{nmcodeNm},
+          #{nmcodeItem1},
+          #{nmcodeItem2},
+          #{useYn},
+          #{regDt},
+          #{regId},
+          #{modDt},
+          #{modId}
+      )
   </insert>
   <!-- 본사코드 갱신 -->
   <update id="updateHqNmcode" parameterType="hqNmcodeVO">
