@@ -53,11 +53,15 @@ app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 등록 상품 삭제
   $scope.delete = function(){
+    var couponClassGrid = agrid.getScope("couponClassCtrl");
     var couponGrid = agrid.getScope("couponCtrl");
     var selectedRow = couponGrid.flex.selectedRows[0]._data;
+
     var params = new Array();
+
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
       if($scope.flex.collectionView.items[i].gChk) {
+        $scope.flex.collectionView.items[i].payClassCd = couponClassGrid.flex.selectedItems[0].payClassCd;
         $scope.flex.collectionView.items[i].coupnCd = selectedRow.coupnCd;
         $scope.flex.collectionView.items[i].coupnEnvstVal = coupnEnvstVal;
         params.push($scope.flex.collectionView.items[i]);
@@ -125,16 +129,21 @@ app.controller('noRegProdCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 상품 등록
   $scope.regist = function() {
+    var couponClassGrid = agrid.getScope("couponClassCtrl");
     var couponGrid = agrid.getScope("couponCtrl");
     var selectedRow = couponGrid.flex.selectedRows[0]._data;
+
     var params = new Array();
+
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+      $scope.flex.collectionView.items[i].payClassCd = couponClassGrid.flex.selectedItems[0].payClassCd;
       if($scope.flex.collectionView.items[i].gChk) {
         $scope.flex.collectionView.items[i].coupnCd = selectedRow.coupnCd;
         $scope.flex.collectionView.items[i].coupnEnvstVal = coupnEnvstVal;
         params.push($scope.flex.collectionView.items[i]);
       }
     }
+
     // 저장
     $http({
       method: 'POST', //방식
