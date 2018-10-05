@@ -58,13 +58,14 @@
                     sticky-headers="true"
                     selection-mode="Row"
                     items-source="data"
-                    item-formatter="_itemFormatter">
+                    item-formatter="_itemFormatter"
+                    is-read-only="true">
 
               <!-- define columns -->
-              <wj-flex-grid-column header="<s:message code="credit.deposit.storeCd"/>" binding="creditStoreCd" width="*" isReadOnly="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="credit.deposit.storeNm"/>" binding="creditStoreNm" width="*" isReadOnly="true" ></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="credit.membrNo"/>" binding="membrNo" width="*" isReadOnly="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="credit.membrNm"/>" binding="membrNm" width="*" isReadOnly="true" ></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="credit.deposit.storeCd"/>" binding="creditStoreCd" width="*" ></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="credit.deposit.storeNm"/>" binding="creditStoreNm" width="*" ></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="credit.membrNo"/>" binding="membrNo" width="*" ></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="credit.membrNm"/>" binding="membrNm" width="*" ></wj-flex-grid-column>
             </wj-flex-grid>
           </div>
           <!--페이지 리스트-->

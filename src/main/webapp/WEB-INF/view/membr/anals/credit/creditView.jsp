@@ -87,11 +87,12 @@
               sticky-headers="true"
               selection-mode="Row"
               items-source="data"
-              item-formatter="_itemFormatter">
+              item-formatter="_itemFormatter"
+              is-read-only="true">
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="credit.storeCd"/>" binding="storeCd" width="70"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="credit.storeNm"/>" binding="storeNm" width="100" isReadOnly="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="credit.storeNm"/>" binding="storeNm" width="100" ></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="credit.saleDate"/>" binding="saleDate" width="100"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="credit.membrNo"/>" binding="membrNo" width="70"  ></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="credit.membrNm"/>" binding="membrNm" width="100" ></wj-flex-grid-column>

@@ -56,11 +56,11 @@
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="coupon.hqOfficeCd"/>" binding="hqOfficeCd" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="coupon.storeCd"/>" binding="storeCd" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="coupon.prodClassCd"/>" binding="prodClassCd" width="*" isReadOnly="true" ></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="coupon.prodClassNm"/>" binding="prodClassNm" width="*" isReadOnly="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="coupon.prodCd"/>" binding="prodCd" width="*" isReadOnly="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="coupon.prodNm"/>" binding="prodNm" width="*" isReadOnly="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="coupon.costUprc"/>" binding="costUprc" width="*" isReadOnly="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.prodClassCd"/>" binding="prodClassCd" width="*" is-read-only="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.prodClassNm"/>" binding="prodClassNm" width="*" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.prodCd"/>" binding="prodCd" width="*" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.prodNm"/>" binding="prodNm" width="*" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.costUprc"/>" binding="costUprc" width="*" is-read-only="true"></wj-flex-grid-column>
               </wj-flex-grid>
             </div>
             <!--페이지 리스트-->
@@ -90,11 +90,11 @@
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="coupon.hqOfficeCd"/>" binding="hqOfficeCd" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="coupon.storeCd"/>" binding="storeCd" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="coupon.prodClassCd"/>" binding="prodClassCd" width="*"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="coupon.prodClassNm"/>" binding="prodClassNm" width="*"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="coupon.prodCd"/>" binding="prodCd" width="*"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="coupon.prodNm"/>" binding="prodNm" width="*"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="coupon.costUprc"/>" binding="costUprc" width="*"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.prodClassCd"/>" binding="prodClassCd" width="*" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.prodClassNm"/>" binding="prodClassNm" width="*" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.prodCd"/>" binding="prodCd" width="*" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.prodNm"/>" binding="prodNm" width="*" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.costUprc"/>" binding="costUprc" width="*" is-read-only="true"></wj-flex-grid-column>
               </wj-flex-grid>
             </div>
             <!--페이지 리스트-->
