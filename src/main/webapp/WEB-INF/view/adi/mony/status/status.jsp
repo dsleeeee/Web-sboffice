@@ -243,8 +243,6 @@ $(document).ready(function(){
 
       c_store.init(chked, function(arr){
 
-        console.log(arr);
-
         storeCdText.text = "";
         storeCd.text = "";
 

@@ -26,19 +26,19 @@
       <div id="storeCd" style="display: none;"></div>
       <th><s:message code="credit.srchStore" /></th>
       <td>
-        <input type="text" class="sb-input" id="storeCdText" ng-model="storeCds" readonly="readonly" ng-click="searchStore()" />
+        <input type="text" class="sb-input w100" id="storeCdText" ng-model="storeCds" readonly="readonly" ng-click="searchStore()" />
       </td>
       <%-- 회원번호 --%>
       <th><s:message code="credit.membrNo" /></th>
       <td>
-        <input type="text" class="sb-input" id="srcgMembrNo" ng-model="memberNo" />
+        <input type="text" class="sb-input w100" id="srcgMembrNo" ng-model="memberNo" />
       </td>
     </tr>
     <tr>
       <%-- 회원명 --%>
       <th><s:message code="credit.membrNm" /></th>
       <td>
-        <input type="text" class="sb-input" id="srchMembrNm" ng-model="memberNm" />
+        <input type="text" class="sb-input w100" id="srchMembrNm" ng-model="memberNm" />
       </td>
       <%-- 정렬 --%>
       <th><s:message code="credit.array" /></th>
@@ -91,7 +91,7 @@
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="credit.storeCd"/>" binding="storeCd" width="70"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="credit.storeNm"/>" binding="storeNm" width="100"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="credit.storeNm"/>" binding="storeNm" width="100" isReadOnly="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="credit.saleDate"/>" binding="saleDate" width="100"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="credit.membrNo"/>" binding="membrNo" width="70"  ></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="credit.membrNm"/>" binding="membrNm" width="100" ></wj-flex-grid-column>

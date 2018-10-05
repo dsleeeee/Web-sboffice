@@ -56,6 +56,8 @@ public class CreditStoreVO extends CmmVO {
     private String storeCds;
     /** 조회매장 */
     private String[] storeCdList;
+    /** 기본매장  */
+    private String defaultStoreCd;
 
 
     /**
@@ -311,5 +313,20 @@ public class CreditStoreVO extends CmmVO {
      */
     public void setStoreCdList(String[] storeCdList) {
         this.storeCdList = storeCdList;
+    }
+
+    /**
+     * @return the defaultStoreCd
+     */
+
+    public String getDefaultStoreCd() {
+        return defaultStoreCd;
+    }
+
+    /**
+     * @param defaultStoreCd the defaultStoreCd to set
+     */
+    public void setDefaultStoreCd(String defaultStoreCd) {
+        this.defaultStoreCd = defaultStoreCd;
     }
 }

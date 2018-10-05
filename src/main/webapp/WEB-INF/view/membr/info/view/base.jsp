@@ -62,7 +62,7 @@
             </div>
           </td>
             <%-- 회원명 --%>
-            <th><s:message code="regist.membr.nm.eng"/><em class="imp">*</em></th>
+            <th><s:message code="regist.membr.nm.eng"/></th>
             <td>
               <div class="sb-select">
                 <div id="vMembrNmEng"></div>
@@ -195,8 +195,6 @@
           <%-- 후불회원 적용매장 --%>
           <th><s:message code="regist.credit.store"/></th>
           <td colspan="3">
-            <div id="storeCd" style="display: none;"></div>
-            <input type="text" id="storeCdText" class="sb-input w80" readonly="readonly"/>
             <a href="#" id="store" class="btn_grayS ml5"><s:message code="cmm.store.select" /></a>
           </td>
         </tr>

@@ -68,6 +68,7 @@ public class PrepaidServiceImpl implements PrepaidService {
         // 하지만, 본사가 보나비(아티제)의 경우에는 후불 결제를 위한 회원 구분을 위해
         // 회원 테이블에 본사의 '기본매장'을 사용하고 있어서 그런 경우 REG_STORE_CD가 기본매장인 회원은 제외해야한다.
         String defaultStoreCd = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0025"));
+        defaultStoreCd = defaultStoreCd.replace("*", "");
 
         prepaidStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         prepaidStoreVO.setDefaultStoreCd(defaultStoreCd);

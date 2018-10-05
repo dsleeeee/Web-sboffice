@@ -50,16 +50,22 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
           } else if(selectedRow.useYn === "N") {
             s_alert.pop(messages["coupon.not.use.payClassCd"]);
             var couponGrid = agrid.getScope('couponCtrl');
-            console.log(couponGrid)
             couponGrid._gridDataInit();
-            e.cancel = true;
-            return false;
+            // $scope._gridDataInit();
+            return;
           } else {
             $("#couponSubTitle").text(" [" + selectedRow.payClassNm+ "]");
-            e.cancel = true;
             $scope._broadcast('couponCtrl', selectedRow);
           }
         }
+      }
+    });
+
+    // 쿠폰 분류 그리드 분류코드 reod only 풀리는 오류 수정
+    s.beginningEdit.addHandler(function (s, e) {
+      var col = s.columns[e.col];
+      if (col.binding === "payClassCd" ) {
+        e.cancel = true;
       }
     });
 
@@ -89,7 +95,10 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
     params.coupnEnvstVal = coupnEnvstVal;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
-    $scope._inquirySub(baseUrl + "class/getCouponClassList.sb", params, function() {}, false);
+    $scope._inquirySub(baseUrl + "class/getCouponClassList.sb", params, function() {
+      var couponScope = agrid.getScope('couponCtrl');
+      couponScope._gridDataInit();
+    }, false);
   };
 
   // 쿠폰 분류 그리드 행 추가
@@ -239,7 +248,7 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
 
         if (col.binding === "prodCnt" && selectedRow.status !== "I") {
           // 상품 등록 팝업
-          var popup = $scope.couponPordLayer;
+          var popup = $scope.couponProdLayer;
           popup.show(true, function (s) {
             var regProdGrid = agrid.getScope('regProdCtrl');
             regProdGrid._gridDataInit();

@@ -155,7 +155,11 @@ function showStoreConfigLayout(envstFg){
         }
 
       } else {
-        $("#env"+list[i].envstCd).val(list[i].selEnvstVal);
+        if(list[i].selEnvstVal === "" || list[i].selEnvstVal == null ) {
+          $("#env"+list[i].envstCd).val("*");
+        } else{
+          $("#env"+list[i].envstCd).val(list[i].selEnvstVal);
+        }
       }
     }
 

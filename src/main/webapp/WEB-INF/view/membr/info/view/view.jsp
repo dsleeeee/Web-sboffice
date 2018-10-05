@@ -248,8 +248,8 @@ $(document).ready(function(){
       vEmailRecv.selectedValue = data.emailRecvYn;
       vSmsRecv.selectedValue = data.smsRecvYn;
 
-      $("#storeCd").val(data.creditStoreCds)
-      $("#storeCdText").val(data.creditStoreNms);
+      // $("#storeCd").val(data.creditStoreCds)
+      // $("#storeCdText").val(data.creditStoreNms);
       $("#vMembrOrgnCd").val(data.membrOrgnCd);
       $("#membrNoNm").text("<s:message code='regist.membr.info'/>" + " [" + data.membrNo + "/" + data.membrNm + "]");
       vMembrNo.isReadOnly = true;
@@ -342,7 +342,6 @@ $(document).ready(function(){
 
   vRegStore.selectedIndexChanged.addHandler(function(s, e){
     editCreditStore();
-
   });
 
   // 후불회원 적용매장
@@ -373,8 +372,8 @@ $(document).ready(function(){
     vWedding.selectedValue = 'N';
     vUseYn.selectedValue = 'Y';
 
-    $("#storeCd").val("");
-    $("#storeCdText").val("");
+    // $("#storeCd").val("");
+    // $("#storeCdText").val("");
 
   }
 
@@ -426,10 +425,7 @@ $(document).ready(function(){
       param.emailRecvYn = vEmailRecv.selectedValue;
       param.smsRecvYn = vSmsRecv.selectedValue;
       param.remark = vRemark.value;
-      param.creditStoreCds = $("#storeCd").val(); // 후불회원 적용매장
-
-      console.log("param >>>>> ");
-      console.log(param);
+      // param.creditStoreCds = $("#storeCd").val(); // 후불회원 적용매장
 
       $.postJSONSave("/membr/info/view/base/regist.sb", param, function(result) {
         var msg = "<s:message code='cmm.registSucc'/>";
@@ -517,39 +513,9 @@ $(document).ready(function(){
 
   <%-- 후불회원 적용매장 버튼 클릭시 --%>
   $("#store").click(function(){
-    var chked = $("#storeCd").val();
-
-    c_store.init(chked, function(arr){
-
-      $("#storeCdText").val("");
-      $("#storeCd").val("");
-
-      if(arr.length > 1) {
-        var str = "";
-        var a = arr.length -1;
-
-        if(arr[0].nm !== "ALL") { str = (arr[0].nm + "외 " + a.toString() + " 선택"); }
-        else                    { str = (arr[1].nm + "외 " + a.toString() + " 선택"); }
-
-        $("#storeCdText").val(str);
-
-      } else if(arr.length == 1){
-        $("#storeCdText").val(arr[0].nm);
-      }
-      $("#storeCd").val(arr);
-
-      var storeText = "";
-      for(var i=0; i<arr.length; i++) {
-        if(i == arr.length - 1) {
-          storeText += arr[i].cd.toString();
-          $("#storeCd").val(storeText);
-        } else {
-          storeText += arr[i].cd.toString() + ",";
-          $("#storeCd").val(storeText);
-        }
-      }
-
-    });
+    console.log(selectData); //TODO 여기부터 >>>>>>>>>>>>>>>>>>>>>>>
+    showStoreLayer();
+    wijmo.grid.FlexGrid.refreshAll();
   });
 
   <%--신규등록 버튼--%>
@@ -585,5 +551,9 @@ $(document).ready(function(){
 </script>
 
 <%-- 매장 선택 --%>
-<c:import url="/WEB-INF/view/application/layer/store.jsp">
+<c:import url="/WEB-INF/view/membr/info/view/store.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+  <c:param name="baseUrl" value="ㅁㅇㄷㅎ"/>
 </c:import>
+

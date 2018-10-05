@@ -19,9 +19,9 @@ app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     if(coupnEnvstVal === "2" && orgnFg === "STORE") { // 본사통제인데 매장으로 접근시
-      $("#couponPordLayer .btn_grayS2").hide();
+      $("#couponProdLayer .btn_grayS2").hide();
     } else {
-      $("#couponPordLayer .btn_grayS2").show();
+      $("#couponProdLayer .btn_grayS2").show();
     }
   };
 

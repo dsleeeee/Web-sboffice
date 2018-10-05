@@ -61,8 +61,8 @@
                     item-formatter="_itemFormatter">
 
               <!-- define columns -->
-              <wj-flex-grid-column header="<s:message code="credit.storeCd"/>" binding="creditStoreCd" width="*" isReadOnly="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="credit.storeNm"/>" binding="creditStoreNm" width="*" isReadOnly="true" ></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="credit.deposit.storeCd"/>" binding="creditStoreCd" width="*" isReadOnly="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="credit.deposit.storeNm"/>" binding="creditStoreNm" width="*" isReadOnly="true" ></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="credit.membrNo"/>" binding="membrNo" width="*" isReadOnly="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="credit.membrNm"/>" binding="membrNm" width="*" isReadOnly="true" ></wj-flex-grid-column>
             </wj-flex-grid>
