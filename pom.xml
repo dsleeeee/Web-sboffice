@@ -365,7 +365,7 @@
 
     <!-- 운영 -->
     <profile>
-      <id>realv</id>
+      <id>real</id>
       <properties>
         <env>real</env>
       </properties>
