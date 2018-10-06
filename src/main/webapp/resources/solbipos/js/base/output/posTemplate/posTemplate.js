@@ -1,11 +1,11 @@
 /****************************************************************
  *
- * 파일명 : template.js
- * 설  명 : 출력물샘플 JavaScript
+ * 파일명 : postemplate.js
+ * 설  명 : 포스출력물관리 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
- * 2018.07.30     노현수      1.0
+ * 2018.10.04     노현수      1.0
  *
  * **************************************************************/
 /**
@@ -27,8 +27,16 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
     s.formatItem.addHandler(function (s, e) {
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
+        var item = s.rows[e.row].dataItem;
+        // 본사등록 외 수정/삭제 불가
+        if (col.binding === "gChk") {
+          if (item.templtRegFg !== gvOrgnFg) {
+            wijmo.addClass(e.cell, 'wj-custom-readonly');
+            e.cell.children[0].disabled = true;
+          }
+        }
+        // 템플릿명 ReadOnly 효과
         if (col.binding === "templtNm") {
-          var item = s.rows[e.row].dataItem;
           if (item.status !== "I") {
             wijmo.addClass(e.cell, 'wj-custom-readonly');
           } else {
@@ -51,17 +59,19 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
     s.selectionChanged.addHandler(function(s, e) {
       var col = s.columns[e.col];
       if (s.rows[e.row]) {
-        var selectedRow = s.rows[e.row].dataItem;
-        if (col.binding === "templtNm" && selectedRow.status !== "I") {
-          if (selectedRow.prtForm != null) {
-            theTarget.value = selectedRow.prtForm;
-            makePreview();
-          } else {
-            theTarget.value = "";
-            thePreview.innerHTML = "";
+        setTimeout(function () {
+          var selectedRow = s.rows[e.row].dataItem;
+          if (col.binding === "templtNm" && selectedRow.status !== "I") {
+            if (selectedRow.prtForm != null) {
+              theTarget.value = selectedRow.prtForm;
+              makePreview();
+            } else {
+              theTarget.value = "";
+              thePreview.innerHTML = "";
+            }
+            $("#btnSaveTemplate").show();
           }
-          $("#btnSaveTemplate").show();
-        }
+        }, 10);
       }
     });
   };
@@ -71,20 +81,22 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
     var params = {};
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
-    $scope._inquiryMain("/sys/bill/template/item/list.sb", params, function() {
-      $("#btnAddTemplate").show();
-      $("#btnDelTemplate").show();
-      $("#btnSaveTemplate").show();
-      $("#btnSaveEditTemplate").show();
+    $scope._inquiryMain("/base/output/posTemplate/template/list.sb", params, function() {
 
-      if ( $scope.flex.itemsSource.itemCount < 1 ) {
-        // 편집/미리보기 폼 초기화
-        theTarget.value = "";
-        thePreview.innerHTML = "";
+      // 편집/미리보기 폼 초기화
+      theTarget.value = "";
+      thePreview.innerHTML = "";
+      // 템플릿에 자료가 있는 경우에만.
+      if ( $scope.flex.rows.length > 0 ) {
+        // 버튼보이기
+        $("#btnAddTemplate").show();
+        $("#btnDelTemplate").show();
+        $("#btnSaveTemplate").show();
+        $("#btnSaveEditTemplate").show();
+        // 코드리스트 조회
+        searchPrintCodeList(params);
+
       }
-
-      searchPrintCodeList(params);
-
     });
 
     // 기능수행 종료 : 반드시 추가
@@ -92,10 +104,16 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
   });
   // 템플릿 그리드 행 추가
   $scope.addRow = function() {
+
+    // 편집/미리보기 폼 초기화
+    theTarget.value = "";
+    thePreview.innerHTML = "";
+
     // 파라미터 설정
     var params = {};
     params.status = "I";
     params.prtClassCd = document.getElementById("srchPrtClassCdVal").value;
+    params.templtRegFg = gvOrgnFg;
     params.gChk = true;
     // 추가기능 수행 : 파라미터
     $scope._addRow(params);
@@ -127,11 +145,14 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
       paramArr.push($scope.flex.collectionView.itemsRemoved[i]);
     }
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save("/sys/bill/template/item/save.sb", params);
+    $scope._save("/base/output/posTemplate/template/saveList.sb", params, function(){
+      // 저장 후 재조회
+      $scope._broadcast('templateCtrl');
+    });
   };
   // 편집 저장버튼
   $scope.$on("saveEditTemplate", function(event, data) {
-    $scope._popConfirm("저장시 전체 본사 및 매장의 해당 템플릿이 같이 수정 됩니다.<br>저장 하시겠습니까?",
+    $scope._popConfirm("저장시 전체 매장의 해당 템플릿이 같이 수정 됩니다.<br>저장 하시겠습니까?",
       function() {
         var selectedRow = $scope.flex.selectedRows[0]._data;
         var param = {};
@@ -140,69 +161,19 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
         param.templtNm = selectedRow.templtNm;
         param.prtForm = theTarget.value;
 
-        $.postJSONSave("/sys/bill/template/bill/save.sb", param, function (result) {
-            s_alert.pop(messages["cmm.saveSucc"]);
-            $scope.flex.collectionView.clearChanges();
+        $.postJSONSave("/base/output/posTemplate/template/save.sb", param, function (result) {
+            $scope._popMsg(messages["cmm.saveSucc"], function () {
+              $scope.flex.collectionView.clearChanges();
+            });
           },
           function (result) {
-            s_alert.pop(result.message);
+            $scope._popMsg(result.message);
             return false;
           });
       }
     );
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
-  });
-  // 미적용 본사/단독매장 팝업 보기
-  $scope.$on("showPopUp", function(event, data) {
-    if ($scope.flex.itemsSource && $scope.flex.itemsSource.itemCount > 0) {
-      // 팝업의 콤보데이터 설정
-      $scope._setComboData("srchTempltCdCombo", JSON.parse(JSON.stringify($scope.flex.itemsSource._src)));
-      var popup = $scope.popUpSelLayer;
-      popup.shown.addHandler(function (s) {
-        // 팝업 열린 뒤. 딜레이줘서 열리고 나서 실행되도록 함
-        setTimeout(function() {
-          $scope._broadcast('popUpApplyTemplateCtrl');
-        }, 50)
-      });
-      // 팝업 닫을때
-      popup.show(true, function (s) {
-        // 적용 버튼 눌렀을때만
-        if (popup.dialogResult === "wj-hide-apply") {
-          // 팝업 컨트롤러 Get
-          var scopeLayer = agrid.getScope("popUpApplyTemplateCtrl");
-          // 저장 파라미터 설정
-          var paramArr = new Array();
-          for (var i = 0; i < scopeLayer.flex.collectionView.itemsEdited.length; i++) {
-            scopeLayer.flex.collectionView.itemsEdited[i].status = "U";
-            scopeLayer.flex.collectionView.itemsEdited[i].prtClassCd = document.getElementById("srchPrtClassCdVal").value;
-            scopeLayer.flex.collectionView.itemsEdited[i].templtCd = scopeLayer.srchTempltCdCombo.templtCd;
-            scopeLayer.flex.collectionView.itemsEdited[i].templtNm = scopeLayer.srchTempltCdCombo.templtNm;
-            scopeLayer.flex.collectionView.itemsEdited[i].prtForm = scopeLayer.srchTempltCdCombo.prtForm;
-            paramArr.push(scopeLayer.flex.collectionView.itemsEdited[i]);
-          }
-  
-          if (paramArr.length <= 0) {
-            s_alert.pop(messages["template.msg.select"]);
-            return;
-          }
-          // 미적용 본사/단독매장 템플릿 적용
-          $.postJSONArray("/sys/bill/template/unUsed/save.sb", paramArr, function (result) {
-              s_alert.pop(messages["cmm.saveSucc"]);
-              scopeLayer.flex.collectionView.clearChanges();
-            },
-            function (result) {
-              s_alert.pop(result.message);
-            }
-          );
-        }
-
-      });
-
-    } else {
-      $scope._popMsg(messages['template.msg.fail']);
-      return false;
-    }
   });
 
 }]);
@@ -230,7 +201,7 @@ function searchPrintCodeList(params) {
     cache: false,
     async:true,
     dataType: "json",
-    url: "/sys/bill/template/code/list.sb",
+    url: "/base/output/posTemplate/code/list.sb",
     data: params,
     success: function(result) {
       if(result.status === "OK") {

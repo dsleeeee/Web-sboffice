@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd" >
+<properties>
+
+  <comment>Solbipos Office Real Config Properties</comment>
+
+  <!-- =====================================--> 
+  <!--  MAIN Properties--> 
+  <!-- =====================================-->
+  <entry key="profile">real</entry>
+  <entry key="domain">http://neo.solbipos.com</entry>
+  <entry key="encoding">UTF-8</entry>
+  <entry key="welcome.url">/auth/login.sb</entry>
+  
+  <!-- =====================================--> 
+  <!--  JDBC Properties--> 
+  <!-- =====================================-->
+  <entry key="jndi.main.jdbc.name">jdbc/oracle/sb</entry>
+
+
+  <!-- =====================================--> 
+  <!--  tiles Properties--> 
+  <!-- =====================================-->
+  <entry key="tiles.path">/WEB-INF/config/tiles-layout.xml</entry>
+  
+  
+  <!-- ====================================--> 
+  <!--  Redis Properties--> 
+  <!-- ====================================-->
+  <entry key="redis.hostName">121.170.176.188</entry>
+  <entry key="redis.port">6379</entry>
+  <entry key="redis.password"></entry>
+  <entry key="redis.usePool">true</entry>
+<!--   web session  -->
+  <entry key="redis.web.prefix">sbp:web:real:</entry>
+<!--   web 공통 코드  -->
+  <entry key="redis.code.prefix">sbp:cmm:real:</entry>
+<!-- pool config -->
+  <entry key="redis.pool.maxTotal">50</entry>
+  <entry key="redis.pool.minIdle">50</entry>
+  <entry key="redis.pool.maxIdle">50</entry>
+
+
+  <!-- ====================================--> 
+  <!--  login Properties--> 
+  <!-- ====================================-->
+<!--   패스워드 변경 유효기간 -->
+  <entry key="login.pwd.chg.days">90</entry>
+  <entry key="login.check.id.save">saveid</entry>
+  <entry key="login.otp.limit.minute">3</entry>
+  <entry key="login.otp.size">4</entry>
+  <entry key="login.fail.check.cnt">3</entry>
+
+  <!-- ====================================--> 
+  <!--  session Properties--> 
+  <!-- ====================================-->
+<!--   세션 타임 타웃 분단위 -->
+  <entry key="session.timeout.min">30</entry>
+  <entry key="session.hist.menu.size">20</entry>
+  
+  
+  <!-- 아래는 기존에 treepay 에서 쓰던것 -->
+  <entry key="excel.font">돋움</entry>
+  <entry key="excel.tempDir">/temp_excel</entry>
+  <entry key="email.host">192.168.0.1</entry>
+  <entry key="email.port">31901</entry>
+  
+  <!-- 파일업로드 관련 -->
+  <entry key="file.upload.dir">/FileRoot/</entry>
+  
+  <!-- 공통 변수 저장소 명칭 관련 -->
+  <entry key ="baseEnv.prop.env">env</entry>
+  
+</properties>

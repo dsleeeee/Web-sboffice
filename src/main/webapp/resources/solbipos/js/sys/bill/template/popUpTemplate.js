@@ -16,9 +16,9 @@ app.controller('popUpApplyTemplateCtrl', ['$scope', '$http', function ($scope, $
   $scope._setComboData("srchSysStatFgCombo", sysStatFgComboData);
   $scope._setComboData("srchClsFgCombo", clsFgComboData);
   // 팝업의 템플릿 값을 리턴받기 위한 설정
-  $scope.srchTemplateTypeCombo = "";
+  $scope.srchTempltCdCombo = "";
   $scope.setSelectedCombo = function(s) {
-    $scope.srchTemplateTypeCombo = s.selectedItem;
+    $scope.srchTempltCdCombo = s.selectedItem;
   };
   // 그리드 DataMap 설정
   $scope.storeFgDataMap = new wijmo.grid.DataMap([
