@@ -55,7 +55,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
           if (isView) {
             $scope._popMsg(response.data.message);
           }
-          return;
+          return false;
         }
         var data = new wijmo.collections.CollectionView(list);
         data.trackChanges = true;
@@ -125,7 +125,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
     // 길이체크
     if (params.length <= 0) {
       $scope._popMsg(messages["cmm.not.modify"]);
-      return;
+      return false;
     } else {
       // 가상로그인 대응한 session id 설정
       if (document.getElementsByName("sessionId")[0]) {
@@ -193,7 +193,9 @@ function RootController(ctrlName, $scope, $http, isPicker) {
         // count true values to initialize checkbox
         var cnt = 0;
         for (var i = 0; i < flex.rows.length; i++) {
-          if (flex.getCellData(i, c) === true) cnt++;
+          if (flex.getCellData(i, c) === true) {
+            cnt++;
+          }
         }
         // create and initialize checkbox
         if (col.format === "checkBoxText") {
@@ -208,8 +210,21 @@ function RootController(ctrlName, $scope, $http, isPicker) {
         // apply checkbox value to cells
         cb.addEventListener('click', function (e) {
           flex.beginUpdate();
+
+          console.log("cb ", cb);
+
           for (var i = 0; i < flex.rows.length; i++) {
-            flex.setCellData(i, c, cb.checked);
+            var childCell = flex.cells.hostElement;
+            console.log("childCell ", flex.columns[i]);
+            console.log("childCell ", flex.cells);
+            console.log("childCell ", childCell);
+            // console.log(c.children[0].disabled);
+
+            // 활성화 및 readOnly 아닌 경우에만 체크되도록
+            if (!cell.children[0].disabled) {
+              flex.setCellData(i, c, cb.checked);
+
+            }
           }
           flex.endUpdate();
         });
@@ -474,4 +489,4 @@ function RootController(ctrlName, $scope, $http, isPicker) {
 
   win.agrid = agrid;
 
-}("undefined" != typeof window ? window : this, angular);
+}("undefined" !== typeof window ? window : this, angular);

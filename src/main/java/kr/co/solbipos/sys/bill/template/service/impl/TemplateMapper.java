@@ -59,4 +59,7 @@ public interface TemplateMapper {
     /** 미적용 본사/단독매장 저장 */
     int insertUnUsedList(TemplateVO templateVO);
 
+    /** 미적용 본사/단독매장 실제출력물코드 생성 */
+    int insertUnUsedPrintCode(TemplateVO templateVO);
+
 }

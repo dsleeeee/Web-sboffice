@@ -133,8 +133,10 @@ public class TemplateServiceImpl implements TemplateService {
             templateVO.setRegId(sessionInfoVO.getUserId());
             templateVO.setModDt(currentDt);
             templateVO.setModId(sessionInfoVO.getUserId());
-
+            // 미적용 본사/단독매장 적용
             result = templateMapper.insertUnUsedList(templateVO);
+            // 실제출력물코드 생성
+            result += templateMapper.insertUnUsedPrintCode(templateVO);
         }
 
         if ( result >= 0 ) {
