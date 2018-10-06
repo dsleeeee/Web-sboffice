@@ -279,7 +279,6 @@
 
 <script>
 
-
 var selectedHq = "";
 
 var vanList        = ${ccu.getVanList()};
@@ -419,8 +418,6 @@ function setStoreData(data){
   $("#storeInfoViewArea").show();
   $("#additionalArea").hide();
 
-  // console.log(data);
-
   var storeDtlInfo = data.storeDtlInfo;
   var instPosCnt = data.instPosCnt;
   var posApproveList = data.posApproveList;
@@ -430,7 +427,6 @@ function setStoreData(data){
   // 조회한 데이터 셋팅
   $("#rStoreCd").val(storeDtlInfo.storeCd);
   $("#rStoreNm").val(storeDtlInfo.storeNm);
-  //$("#rOpenPosDate").val();
   $("#rInstallPosCnt").val(instPosCnt);
   $("#rOwnerNm").val(storeDtlInfo.ownerNm);
   $("#rBizStoreNm").val(storeDtlInfo.bizStoreNm);
@@ -453,7 +449,11 @@ function setStoreData(data){
   rArea.selectedValue = storeDtlInfo.areaCd;
   rManageVan.selectedValue = storeDtlInfo.vanCd;
   rAgency.selectedValue = storeDtlInfo.agencyCd;
-  rOpenPosDate.value = storeDtlInfo.sysOpenDate;
+
+  var sysOpenDate = storeDtlInfo.sysOpenDate;
+  sysOpenDateStr = sysOpenDate.split(".");
+  var sysOpenDateType = new Date(sysOpenDateStr[0], sysOpenDateStr[1], sysOpenDateStr[2]);
+  rOpenPosDate.value = sysOpenDateType;
 
   rClsFg.isReadOnly = true;
   $("#rInstallPosCnt").attr("readonly", "readonly");
@@ -473,14 +473,14 @@ function setStoreData(data){
 
 <%-- 매장유형선택 이벤트 --%>
 $("input[name=rStoreCdRadio]").change(function(){
- var thisVal = $(this).val();
- if(thisVal == "<s:message code='storeManage.storeType.demo' />") {
-   rSysStatFg.selectedValue = "9";
-   rSysStatFg.isReadOnly = true;
- } else {
-   rSysStatFg.selectedValue = "";
-   rSysStatFg.isReadOnly = false;
- }
+  var thisVal = $(this).val();
+  if(thisVal == "<s:message code='storeManage.storeType.demo' />") {
+    rSysStatFg.selectedValue = "9";
+    rSysStatFg.isReadOnly = true;
+  } else {
+    rSysStatFg.selectedValue = "";
+    rSysStatFg.isReadOnly = false;
+  }
 });
 
 <%-- 설치포스수 변경시 포스별 벤사 설정 그리드 변경--%>
@@ -809,14 +809,10 @@ function saveOtherInfo() {
 
   var paramArr = new Array();
 
-  // console.log(selectedStore);
-
   for(var i=0; i<thePosGrid.itemsSource.items.length; i++) {
     thePosGrid.itemsSource.items[i].storeCd = selectedStore.storeCd;
     paramArr.push(thePosGrid.itemsSource.items[i]);
   }
-
-  // console.log(paramArr);
 
   $.postJSONArray("/store/manage/storeManage/storeManage/saveStorePosInfo.sb", paramArr, function(result) {
     s_alert.pop("<s:message code='cmm.saveSucc' />");
