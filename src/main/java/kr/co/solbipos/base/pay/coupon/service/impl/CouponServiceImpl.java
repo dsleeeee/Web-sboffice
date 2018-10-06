@@ -358,12 +358,21 @@ public class CouponServiceImpl implements CouponService {
             procCnt += mapper.insertCouponStore(couponStoreVO);
         }
 
-        // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분에도 본사의 쿠폰 적용. //TODO
+        // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분에도 본사의 쿠폰 적용.
         // 적용매장 등록 완료된 후, 첫번째 매장의 등록정보로 등록
+        String couponResult = mapper.insertHqCouponToStore(couponStoreVOs[0]);
 
-        CouponStoreVO resultVO = couponStoreVOs[0];
-        String couponResult = mapper.insertHqCouponToStore(resultVO);
-        resultVO.setResult(couponResult);
+        // 상품정보도 함께 등록
+        CouponVO resultVO = new CouponVO();
+        resultVO.setHqOfficeCd(couponStoreVOs[0].getHqOfficeCd());
+        resultVO.setPayClassCd(couponStoreVOs[0].getPayClassCd());
+        resultVO.setCoupnCd(couponStoreVOs[0].getCoupnCd());
+        resultVO.setRegDt(dt);
+        resultVO.setRegId(sessionInfoVO.getUserId());
+        resultVO.setModDt(dt);
+        resultVO.setModId(sessionInfoVO.getUserId());
+
+        String storeResult = mapper.insertHqCouponProdToStoreProd(resultVO);
 
         return procCnt;
     }
@@ -385,8 +394,6 @@ public class CouponServiceImpl implements CouponService {
 
         }
 
-
-        //TODO
         CouponVO resultVO = new CouponVO();
         resultVO.setHqOfficeCd(couponStoreVOs[0].getHqOfficeCd());
         resultVO.setPayClassCd(couponStoreVOs[0].getPayClassCd());
@@ -395,6 +402,8 @@ public class CouponServiceImpl implements CouponService {
         // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분에도 본사의 쿠폰 적용.
         String couponResult = mapper.deleteHqCouponToStore(resultVO);
 
+        // 상품정보도 함께 삭제
+        String prodResult = mapper.deleteHqCouponToStoreProd(resultVO);
 
         return procCnt;
     }

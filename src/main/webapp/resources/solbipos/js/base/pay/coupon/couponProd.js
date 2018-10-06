@@ -37,12 +37,13 @@ app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 등록된 상품 조회
   $scope.searchRegProd = function(){
-    var couponClassGrid = agrid.getScope("couponClassCtrl");
-    var couponGrid = agrid.getScope("couponCtrl");
-    if(couponGrid.flex.selectedItems.length > 0 ){
+    if(selectedCoupon != null && selectedCoupon != ""){
       var params = {};
-      params.payClassCd = couponClassGrid.flex.selectedItems[0].payClassCd;
-      params.coupnCd = couponGrid.flex.selectedItems[0].coupnCd;
+      params.prodCd = $("#srchProdCd").val();
+      params.prodNm = $("#srchProdNm").val();
+
+      params.payClassCd = selectedCouponClass.payClassCd;
+      params.coupnCd = selectedCoupon.coupnCd;
       params.coupnEnvstVal = coupnEnvstVal;
       params.prodRegFg = "Y";
 
@@ -90,6 +91,7 @@ app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
     // 쿠폰그리드 조회
     var couponGrid = agrid.getScope("couponCtrl");
     couponGrid.searchCoupon(selectedCouponClass);
+    event.preventDefault();
   };
 }]);
 
@@ -112,13 +114,14 @@ app.controller('noRegProdCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 미등록 상품
   $scope.searchNoRegProd = function(){
-    var couponClassGrid = agrid.getScope("couponClassCtrl");
-    var couponGrid = agrid.getScope("couponCtrl");
-    if(couponGrid.flex.selectedItems.length > 0) {
-      // 파라미터
+    if(selectedCoupon != null && selectedCoupon != ""){
+        // 파라미터
       var params = {};
-      params.payClassCd = couponClassGrid.flex.selectedItems[0].payClassCd;
-      params.coupnCd = couponGrid.flex.selectedItems[0].coupnCd;
+
+      params.prodCd = $("#srchProdCd").val();
+      params.prodNm = $("#srchProdNm").val();
+      params.payClassCd = selectedCouponClass.payClassCd;
+      params.coupnCd = selectedCoupon.coupnCd;
       params.coupnEnvstVal = coupnEnvstVal;
       params.prodRegFg = "N";
 
@@ -156,7 +159,6 @@ app.controller('noRegProdCtrl', ['$scope', '$http', function ($scope, $http) {
       s_alert.pop(response.data.message);
       return false;
     });
-
   };
 
   // 상품 등록 완료 후처리 (상품수량 변화)
@@ -167,6 +169,7 @@ app.controller('noRegProdCtrl', ['$scope', '$http', function ($scope, $http) {
     // 쿠폰그리드 조회
     var couponGrid = agrid.getScope("couponCtrl");
     couponGrid.searchCoupon(selectedCouponClass);
+    event.preventDefault();
   };
 }]);
 

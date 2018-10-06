@@ -13,6 +13,7 @@
  */
 var app = agrid.getApp();
 var selectedCouponClass;
+var selectedCoupon;
 
 /**
  *  쿠폰분류등록 그리드 생성
@@ -96,6 +97,8 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquirySub(baseUrl + "class/getCouponClassList.sb", params, function() {
+      selectedCouponClass = null;
+      selectedCoupon = null;
       var couponScope = agrid.getScope('couponCtrl');
       couponScope._gridDataInit();
     }, false);
@@ -245,6 +248,7 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
       if( ht.cellType === wijmo.grid.CellType.Cell) {
         var col = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
+        selectedCoupon = selectedRow;
 
         if (col.binding === "prodCnt" && selectedRow.status !== "I") {
           // 상품 등록 팝업
@@ -285,7 +289,9 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
     params.coupnEnvstVal = coupnEnvstVal;
     params.payClassCd = data.payClassCd;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
-    $scope._inquirySub(baseUrl + "class/getCouponList.sb", params, function(){}, false);
+    $scope._inquirySub(baseUrl + "class/getCouponList.sb", params, function(){
+      selectedCoupon = null;
+    }, false);
   };
 
   // 쿠폰 그리드 행 추가

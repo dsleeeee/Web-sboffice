@@ -26,24 +26,24 @@
       <th><s:message code="prepaid.srchStore" /></th>
       <td>
         <div id="storeCd" style="display: none;"></div>
-        <input type="text" class="sb-input " id="storeCdText" ng-model="storeCds" readonly="readonly" ng-click="searchStore()" />
+        <input type="text" class="sb-input w100" id="storeCdText" ng-model="storeCds" readonly="readonly" ng-click="searchStore()" />
       </td>
       <%-- 회원번호 --%>
       <th><s:message code="prepaid.membrNo" /></th>
       <td>
-        <input type="text" class="sb-input " id="srcgMembrNo" ng-model="memberNo" />
+        <input type="text" class="sb-input w100" id="srcgMembrNo" ng-model="memberNo" />
       </td>
     </tr>
     <tr>
       <%-- 회원명 --%>
       <th><s:message code="prepaid.membrNm" /></th>
       <td>
-        <input type="text" class="sb-input " id="srchMembrNm" ng-model="memberNm" />
+        <input type="text" class="sb-input w100" id="srchMembrNm" ng-model="memberNm" />
       </td>
       <%-- 정렬 --%>
       <th><s:message code="prepaid.array" /></th>
       <td>
-        <div class="sb-select">
+        <div class="sb-select w100">
           <wj-combo-box
                   id="srchArrayCombo"
                   ng-model="array"

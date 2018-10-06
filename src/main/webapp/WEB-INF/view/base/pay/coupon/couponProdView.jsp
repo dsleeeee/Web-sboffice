@@ -39,7 +39,7 @@
             <div class="oh mb10">
               <span class="fl bk lh20 s14"><s:message code="coupon.regProd"/></span>
             <%--<c:if test="${coupnEnvstVal == 1}">--%>
-              <span class="fr" style="display: none;"><a href="#" class="btn_grayS2" ng-click="delete()"><s:message code="cmm.del" /></a></span>
+              <span class="fr"><a href="#" class="btn_grayS2" ng-click="delete()"><s:message code="cmm.del" /></a></span>
             <%--</c:if>--%>
             </div>
             <div id="regProdGrid" style="height: 270px;">

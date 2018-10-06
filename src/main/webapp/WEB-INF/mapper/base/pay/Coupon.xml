@@ -444,6 +444,10 @@
         #{hqOfficeCd},
         #{payClassCd},
         #{coupnCd},
+        #{regDt},
+        #{regId},
+        #{modDt},
+        #{modId},
         #{result, mode=OUT, jdbcType=VARCHAR}
       )
     }
@@ -594,10 +598,10 @@
        AND thcp.PAY_CLASS_CD (+)=  #{payClassCd}
        AND thcp.COUPN_CD (+)= #{coupnCd}
        AND thcp.PROD_CD (+)= thp.PROD_CD
-    <if test='prodCd != null and prodCd.toString() != "null"'>
+    <if test='prodCd != null and prodCd.toString() != ""'>
       AND thp.PROD_CD = #{prodCd}
     </if>
-    <if test='prodNm != null and prodNm.toString() != "null"'>
+    <if test='prodNm != null and prodNm.toString() != ""'>
       AND thp.PROD_NM LIKE '%'||#{prodCd}||'%'
     </if>
     <if test='prodRegFg != null and prodRegFg.toString() == "Y"'>
@@ -859,6 +863,50 @@
          AND STORE_CD = #{storeCd}
   </delete>
 
+
+
+
+  <!-- 본사 쿠폰 적용 매장 등록시, 해당 매장의 적용상품 등록 프로시져 -->
+  <!--
+      TABLE    : TB_HQ_COUPON_PROD, TB_MS_COUPON_PROD
+      PARAM    :
+      COMMENTS : 본사 쿠폰 적용 매장 등록시, 해당 매장의 적용상품 등록
+  -->
+  <select id="insertHqCouponProdToStoreProd" statementType="CALLABLE"  parameterType="couponStoreVO" resultType="String">
+    /* USE : CouponMapper.insertHqCouponProdToStoreProd */
+    {
+      CALL PKG_HQ_COUPON_STORE.SP_HQ_COUPON_STORE_I
+      (
+        #{hqOfficeCd},
+        #{payClassCd},
+        #{coupnCd},
+        #{regDt},
+        #{regId},
+        #{modDt},
+        #{modId},
+        #{result, mode=OUT, jdbcType=VARCHAR}
+      )
+    }
+  </select>
+
+  <!-- 본사 쿠폰 적용 상품 삭제시, 해당 매장의 적용상품 삭제 프로시져 -->
+  <!--
+      TABLE    : TB_HQ_COUPON_PROD, TB_MS_COUPON_PROD
+      PARAM    :
+      COMMENTS : 본사 쿠폰 적용 상품 삭제시, 해당 매장의 적용상품 삭제
+  -->
+  <select id="deleteHqCouponToStoreProd" statementType="CALLABLE"  parameterType="couponVO" resultType="String">
+    /* USE : CouponMapper.deleteHqCouponToStoreProd */
+    {
+      CALL PKG_HQ_COUPON_STORE.SP_HQ_COUPON_STORE_D
+      (
+        #{hqOfficeCd},
+        #{payClassCd},
+        #{coupnCd},
+        #{result, mode=OUT, jdbcType=VARCHAR}
+      )
+    }
+  </select>
 
 </mapper>
 
