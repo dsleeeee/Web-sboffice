@@ -21,7 +21,7 @@
     </colgroup>
     <tbody>
       <tr>
-        <th><s:message code="postemplate.srchNm" /></th>
+        <th><s:message code="posTemplate.srchNm" /></th>
         <td colspan="2" class="oh">
           <div class="sb-select fl w200">
             <wj-combo-box
@@ -45,7 +45,7 @@
   <%-- 조회 --%>
   <div class="mt10 oh">
     <button class="btn_blue fr" id="btnSrchTemplate" ng-click="_broadcast('templateCtrl')">
-      <s:message code="postemplate.srchBtnNm" />
+      <s:message code="posTemplate.srchBtnNm" />
     </button>
   </div>
 
@@ -56,7 +56,7 @@
       <%--위즈모 테이블--%>
       <div id="gridTemplate" class="wj-TblWrapBr pd20" style="height:485px;" ng-controller="templateCtrl">
         <div class="updownSet oh mb10">
-          <span class="fl bk lh30"><s:message code='postemplate.gridNm' /></span>
+          <span class="fl bk lh30"><s:message code='posTemplate.gridNm' /></span>
           <button class="btn_skyblue" id="btnAddTemplate" style="display: none;" ng-click="addRow()">
             <s:message code="cmm.add" />
           </button>
@@ -80,10 +80,10 @@
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="postemplate.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="postemplate.templtNm"/>" binding="templtNm" width="*"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="postemplate.prtForm"/>" binding="prtForm" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="postemplate.templtRegFg"/>" binding="templtRegFg" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="posTemplate.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="posTemplate.templtNm"/>" binding="templtNm" width="*"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="posTemplate.prtForm"/>" binding="prtForm" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="posTemplate.templtRegFg"/>" binding="templtRegFg" visible="false"></wj-flex-grid-column>
 
           </wj-flex-grid>
 
@@ -96,7 +96,7 @@
     <div class="w15 fl">
       <div class="wj-TblWrapBr ml10 pd20" style="height:485px;">
         <div class="updownSet oh mb10">
-          <span class="fl bk lh30"><s:message code='postemplate.listNm' /></span>
+          <span class="fl bk lh30"><s:message code='posTemplate.listNm' /></span>
         </div>
         <div class="app-input-group">
           <div id="listBoxCode" style="width: 100%;height: 410px;"></div>
@@ -107,7 +107,7 @@
     <div class="w30 fl">
       <div class="wj-TblWrapBr ml10 pd20 templateEdit" style="height:485px;">
         <div class="updownSet oh mb10">
-          <span class="fl bk lh30"><s:message code='postemplate.editNm' /></span>
+          <span class="fl bk lh30"><s:message code='posTemplate.editNm' /></span>
           <button class="btn_skyblue" id="btnSaveEditTemplate" style="display: none;" ng-click="$broadcast('saveEditTemplate')">
             <s:message code="cmm.save" />
           </button>
@@ -121,7 +121,7 @@
     <div class="w30 fl">
       <div class="wj-TblWrapBr ml10 pd20 templateEdit" style="height:485px;">
         <div class="updownSet oh mb10">
-          <span class="fl bk lh30"><s:message code='postemplate.viewNm' /></span>
+          <span class="fl bk lh30"><s:message code='posTemplate.viewNm' /></span>
         </div>
         <div id="preview" class="s12 lh15" style="height:410px;">
         </div>

@@ -44,12 +44,17 @@ import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 public class PwdManageController {
 
     /** service */
+    private final PwdManageService pwdManageService;
+    private final MessageService messageService;
+    private final SessionService sessionService;
+
+    /** Constructor Injection */
     @Autowired
-    PwdManageService pwdManageService;
-    @Autowired
-    MessageService messageService;
-    @Autowired
-    SessionService sessionService;
+    public PwdManageController(PwdManageService pwdManageService, MessageService messageService, SessionService sessionService) {
+        this.pwdManageService = pwdManageService;
+        this.messageService = messageService;
+        this.sessionService = sessionService;
+    }
 
     /**
      * 비밀번호 임의변경 - 페이지 이동
@@ -63,7 +68,6 @@ public class PwdManageController {
     @RequestMapping(value = "/pwdManage/view.sb", method = RequestMethod.GET)
     public String pwdManageView(HttpServletRequest request, HttpServletResponse response,
             Model model) {
-
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         return "store/manage/pwdManage/pwdManage";
     }
