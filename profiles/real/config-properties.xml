@@ -27,7 +27,7 @@
   <!-- ====================================--> 
   <!--  Redis Properties--> 
   <!-- ====================================-->
-  <entry key="redis.hostName">121.170.176.188</entry>
+  <entry key="redis.hostName">127.0.0.1</entry>
   <entry key="redis.port">6379</entry>
   <entry key="redis.password"></entry>
   <entry key="redis.usePool">true</entry>
