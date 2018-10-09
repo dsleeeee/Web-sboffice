@@ -106,6 +106,7 @@
         // 상위 객체 상속 : T/F 는 picker
         angular.extend(this, new RootController('storeOrderCtrl', $scope, $http, true));
 
+      $scope.slipFg = 1;
         var srchStartDate = wcombo.genDateVal("#srchStartDate", "${sessionScope.sessionInfo.startDt}");
         var srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.startDt}");
         var reqDate       = wcombo.genDate("#reqDate");
@@ -176,7 +177,8 @@
         $scope.searchStoreOrderList = function() {
             // 파라미터
             var params = {};
-            params.dateFg = $scope.dateFg;
+            params.slipFg    = $scope.slipFg;
+            params.dateFg    = $scope.dateFg;
             params.startDate = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
             params.endDate   = wijmo.Globalize.format(srchEndDate.value  , 'yyyyMMdd');
 
@@ -189,7 +191,7 @@
             var params = {};
             params.callParent = "storeOrder";
             params.reqDate    = wijmo.Globalize.format(reqDate.value, 'yyyyMMdd');
-            params.slipFg     = 1;
+            params.slipFg     = $scope.slipFg;
             params.hdRemark   = "";
             $scope._broadcast("storeOrderRegistCtrl", params);
         }

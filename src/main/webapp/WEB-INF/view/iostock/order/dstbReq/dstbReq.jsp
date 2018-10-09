@@ -102,6 +102,7 @@
         // 상위 객체 상속 : T/F 는 picker
         angular.extend(this, new RootController('dstbReqCtrl', $scope, $http, true));
 
+      $scope.slipFg = 1;
         var srchStartDate = wcombo.genDateVal("#srchStartDate", "${sessionScope.sessionInfo.startDt}");
         var srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.startDt}");
         $scope._setComboData("srchDateFg", [
@@ -176,6 +177,7 @@
         $scope.searchDstbReqList = function() {
             // 파라미터
             var params = {};
+            params.slipFg    = $scope.slipFg;
             params.dateFg    = $scope.dateFg;
             params.startDate = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
             params.endDate   = wijmo.Globalize.format(srchEndDate.value  , 'yyyyMMdd');
@@ -189,11 +191,13 @@
             for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
                 var item = $scope.flex.collectionView.itemsEdited[i];
 
+              if(item.gChk === true) {
                 item.status = "U";
-                item.empNo  = "0000";
+                item.empNo = "0000";
                 item.storageCd = "001";
                 item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
                 params.push(item);
+              }
             }
             $scope._save("/iostock/order/dstbReq/dstbReq/saveDstbConfirm.sb", params, function() { $scope.searchDstbReqList() });
         };

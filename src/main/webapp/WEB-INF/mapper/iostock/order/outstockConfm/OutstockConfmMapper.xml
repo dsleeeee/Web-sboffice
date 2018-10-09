@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.iostock.order.outstockConfm.service.impl.OutstockConfmMapper">
+    <!-- 출고확정 - 매장요청 미확정건, 출고자료 미생성건 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE, TB_PO_HQ_STORE_ORDER, TB_PO_HQ_STORE_DISTRIBUTE
+        PARAM    : outstockDataVO
+        COMMENTS : 출고확정 - 매장요청 미확정건, 출고자료 미생성건을 조회한다.
+    -->
+    <select id="getReqNoConfirmCnt" parameterType="outstockConfmVO" resultType="DefaultMap">
+        /* USE : OutstockConfmMapper.getReqNoConfirmCnt */
+        <![CDATA[
+        SELECT	tphso.REQ_NO_CONFIRM_CNT, tphsd.OUTSTOCK_NO_CREATE_CNT
+        FROM	(	SELECT  COUNT(*) AS REQ_NO_CONFIRM_CNT
+                    FROM    TB_MS_STORE tms
+                    ,       TB_PO_HQ_STORE_ORDER tphso
+                    WHERE   tms.HQ_OFFICE_CD    =   #{hqOfficeCd}
+                    AND     tphso.STORE_CD      =   tms.STORE_CD
+                    AND     REQ_DATE    BETWEEN #{startDate} AND #{endDate}
+                    AND     PROC_FG     IN      ('00','10')
+                ) tphso
+        ,		(	SELECT  COUNT(*) AS OUTSTOCK_NO_CREATE_CNT
+                    FROM    (   SELECT  tphso.STORE_CD
+                                FROM    TB_PO_HQ_STORE_DISTRIBUTE tphso
+                                WHERE   tphso.HQ_OFFICE_CD	=       #{hqOfficeCd}
+                                AND     tphso.REQ_DATE      BETWEEN #{startDate} AND #{endDate}
+                                AND     tphso.SLIP_FG       =       #{slipFg}
+                                AND     tphso.PROC_FG       IN      ('00','10','20')
+                                GROUP
+                                BY      tphso.STORE_CD
+                            )
+                ) tphsd
+        ]]>
+    </select>
+
+    <!-- 출고확정 - 출고확정 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK, TB_MS_STORE, TB_MS_EMPLOYEE
+        PARAM    : outstockDataVO
+        COMMENTS : 출고확정 - 출고확정 리스트를 조회한다.
+    -->
+    <select id="getOutstockConfmList" parameterType="outstockConfmVO" resultType="DefaultMap">
+        /* USE : OutstockConfmMapper.getOutstockConfmList */
+        <![CDATA[
+        SELECT   tphso.SLIP_NO, tphso.VENDR_CD, tphso.SLIP_FG, tphso.SLIP_KIND, tphso.PROC_FG, tphso.STORE_CD, tms.STORE_NM
+        ,        tphso.ORDER_TOT_QTY*tphso.SLIP_FG AS ORDER_TOT_QTY, tphso.ORDER_AMT*tphso.SLIP_FG AS ORDER_AMT
+        ,        tphso.ORDER_TOT_QTY*tphso.SLIP_FG AS ORDER_TOT_QTY, tphso.ORDER_VAT*tphso.SLIP_FG AS ORDER_VAT
+        ,        tphso.ORDER_TOT_QTY*tphso.SLIP_FG AS ORDER_TOT_QTY, tphso.ORDER_TOT*tphso.SLIP_FG AS ORDER_TOT
+        ,        tphso.MGR_TOT_QTY  *tphso.SLIP_FG AS MGR_TOT_QTY  , tphso.MGR_AMT  *tphso.SLIP_FG AS MGR_AMT
+        ,        tphso.MGR_TOT_QTY  *tphso.SLIP_FG AS MGR_TOT_QTY  , tphso.MGR_VAT  *tphso.SLIP_FG AS MGR_VAT
+        ,        tphso.MGR_TOT_QTY  *tphso.SLIP_FG AS MGR_TOT_QTY  , tphso.MGR_TOT  *tphso.SLIP_FG AS MGR_TOT
+        ,        (CASE WHEN tphso.PROC_FG <  '20' THEN tphso.OUT_DATE                  ELSE NULL END) AS REQ_DATE
+        ,        (CASE WHEN tphso.PROC_FG >= '20' THEN tphso.OUT_DATE                  ELSE NULL END) AS OUT_DATE
+        ,        (CASE WHEN tphso.PROC_FG >= '20' THEN tphso.OUT_TOT_QTY*tphso.SLIP_FG ELSE NULL END) AS OUT_TOT_QTY
+        ,        (CASE WHEN tphso.PROC_FG >= '20' THEN tphso.OUT_AMT*tphso.SLIP_FG     ELSE NULL END) AS OUT_AMT
+        ,        (CASE WHEN tphso.PROC_FG >= '20' THEN tphso.OUT_VAT*tphso.SLIP_FG     ELSE NULL END) AS OUT_VAT
+        ,        (CASE WHEN tphso.PROC_FG >= '20' THEN tphso.OUT_TOT*tphso.SLIP_FG     ELSE NULL END) AS OUT_TOT
+        ,        (CASE WHEN tphso.PROC_FG >= '30' THEN tphso.IN_DATE                   ELSE NULL END) AS IN_DATE
+        ,        (CASE WHEN tphso.PROC_FG >= '30' THEN tphso.IN_TOT_QTY *tphso.SLIP_FG ELSE NULL END) AS IN_TOT_QTY
+        ,        (CASE WHEN tphso.PROC_FG >= '30' THEN tphso.IN_AMT *tphso.SLIP_FG     ELSE NULL END) AS IN_AMT
+        ,        (CASE WHEN tphso.PROC_FG >= '30' THEN tphso.IN_VAT *tphso.SLIP_FG     ELSE NULL END) AS IN_VAT
+        ,        (CASE WHEN tphso.PROC_FG >= '30' THEN tphso.IN_TOT *tphso.SLIP_FG     ELSE NULL END) AS IN_TOT
+        ,        (CASE WHEN tphso.PROC_FG >= '20' THEN tphso.OUT_DT                    ELSE NULL END) AS OUT_DT
+        ,        (CASE WHEN tphso.PROC_FG >= '20' THEN userInfo.EMP_NM                 ELSE NULL END) AS OUT_NM
+        ,        tphso.REMARK, tphso.HQ_REMARK, tphso.DLVR_CD
+        FROM     TB_PO_HQ_STORE_OUTSTOCK tphso
+        ,        TB_MS_STORE tms
+        ,        (  SELECT  tme.USER_ID, tme.EMP_NM
+                    FROM    TB_MS_STORE tms
+                    ,       TB_MS_EMPLOYEE tme
+                    WHERE   tms.HQ_OFFICE_CD    =   #{hqOfficeCd}
+                    AND     tme.STORE_CD        =   tms.STORE_CD
+                    UNION
+                    SELECT  the.USER_ID, the.EMP_NM
+                    FROM    TB_HQ_EMPLOYEE the
+                    WHERE   the.HQ_OFFICE_CD    =   #{hqOfficeCd}
+                 ) userInfo
+        WHERE    tphso.HQ_OFFICE_CD     =       #{hqOfficeCd}
+        AND      tphso.OUT_DATE         BETWEEN #{startDate} AND #{endDate}
+        AND      tms.STORE_CD           =   tphso.STORE_CD
+        AND      userInfo.USER_ID   (+) =   tphso.MOD_ID
+        ]]>
+        <if test='slipFg != null and slipFg != ""'>
+            AND tphso.SLIP_FG = #{slipFg}
+        </if>
+        <if test='slipKind != null and slipKind != ""'>
+            AND tphso.SLIP_KIND = #{slipKind}
+        </if>
+        <if test='procFg != null and procFg != ""'>
+            AND tphso.PROC_FG = #{procFg}
+        </if>
+        <if test='vendrCd != null and vendrCd != ""'>
+            AND tphso.VENDR_CD = #{vendrCd}
+        </if>
+        <if test='dlvrCd != null and dlvrCd != ""'>
+            AND tphso.DLVR_CD = #{dlvrCd}
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+            AND tms.STORE_CD = #{storeCd}
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        ORDER BY tphso.SLIP_NO
+    </select>
+
+    <!-- 출고확정 - 전표상세 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK, TB_MS_STORE, TB_CM_NMCODE, TB_PO_HQ_DELIVERY_CHARGER
+        PARAM    : outstockDataVO
+        COMMENTS : 출고확정 - 전표상세 내역을 조회한다.
+    -->
+    <select id="getSlipNoInfo" parameterType="outstockConfmVO" resultType="DefaultMap">
+        /* USE : OutstockConfmMapper.getSlipNoInfo */
+        <![CDATA[
+        SELECT  tphso.*
+        ,       tms.SHOP_NM
+        ,       tcn.COM_CD_NM AS SLIP_KIND_NM
+        ,       tphdc.DRIVER_NM
+        FROM    TB_PO_HQ_STORE_OUTSTOCK tphso
+        ,       TB_MS_STORE tms
+        ,       TB_CM_NMCODE tcn
+        ,       TB_PO_HQ_DELIVERY_CHARGER tphdc
+        WHERE   tphso.HQ_OFFICE_CD      =   #{hqOfficeCd}
+        AND     tphso.SLIP_NO           =   #{slipNo}
+        AND     tms.STORE_CD            =   tphso.STORE_CD
+        AND     tcn.NMCODE_GRP_CD       =   '114'
+        AND     tcn.NMCODE_CD           =   tphso.SLIP_KIND
+        AND     tphdc.HQ_OFFICE_CD  (+) =   tphso.HQ_OFFICE_CD
+        AND     tphdc.DLVR_CD       (+) =   tphso.DLVR_CD
+        ]]>
+    </select>
+
+    <!-- 출고확정 - 출고확정 DTL 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK, TB_MS_STORE, TB_CM_NMCODE, TB_PO_HQ_DELIVERY_CHARGER
+        PARAM    : outstockDataVO
+        COMMENTS : 출고확정 - 출고확정 DTL 리스트를 조회한다.
+    -->
+    <select id="getOutstockConfmDtlList" parameterType="outstockConfmVO" resultType="DefaultMap">
+        /* USE : OutstockConfmMapper.getOutstockConfmDtlList */
+        <![CDATA[
+        SELECT   tphsod.PROD_CD, thp.PROD_NM, tphsod.SEQ
+        ,        tphsod.PO_UNIT_FG, tphsod.PO_UNIT_QTY, thp.PO_UNIT_ALLOW_FG
+        ,        DECODE(thp.VAT_FG,'Y',1,0) VAT_FG01
+        ,        tphsod.ORDER_SPLY_UPRC                                                    AS ORDER_SPLY_UPRC
+        ,        DECODE(tphsod.ORDER_UNIT_QTY,0,NULL,tphsod.ORDER_UNIT_QTY*tphsod.SLIP_FG) AS ORDER_UNIT_QTY
+        ,        DECODE(tphsod.ORDER_ETC_QTY ,0,NULL,tphsod.ORDER_ETC_QTY *tphsod.SLIP_FG) AS ORDER_ETC_QTY
+        ,        tphsod.ORDER_AMT *tphsod.SLIP_FG                                          AS ORDER_AMT
+        ,        tphsod.ORDER_VAT *tphsod.SLIP_FG                                          AS ORDER_VAT
+        ,        tphsod.ORDER_TOT *tphsod.SLIP_FG                                          AS ORDER_TOT
+        ,        tphsod.MGR_SPLY_UPRC                                                      AS MGR_SPLY_UPRC
+        ,        DECODE(tphsod.MGR_UNIT_QTY,0,NULL,tphsod.MGR_UNIT_QTY*tphsod.SLIP_FG)     AS MGR_UNIT_QTY
+        ,        DECODE(tphsod.MGR_ETC_QTY ,0,NULL,tphsod.MGR_ETC_QTY *tphsod.SLIP_FG)     AS MGR_ETC_QTY
+        ,        tphsod.MGR_AMT *tphsod.SLIP_FG                                            AS MGR_AMT
+        ,        tphsod.MGR_VAT *tphsod.SLIP_FG                                            AS MGR_VAT
+        ,        tphsod.MGR_TOT *tphsod.SLIP_FG                                            AS MGR_TOT
+        ,        tphsod.OUT_SPLY_UPRC                                                      AS OUT_SPLY_UPRC
+        ,        DECODE(tphsod.OUT_UNIT_QTY,0,NULL,tphsod.OUT_UNIT_QTY*tphsod.SLIP_FG)     AS OUT_UNIT_QTY
+        ,        DECODE(tphsod.OUT_ETC_QTY ,0,NULL,tphsod.OUT_ETC_QTY *tphsod.SLIP_FG)     AS OUT_ETC_QTY
+        ,        DECODE(tphsod.OUT_TOT_QTY ,0,NULL,tphsod.OUT_TOT_QTY *tphsod.SLIP_FG)     AS OUT_TOT_QTY
+        ,        tphsod.OUT_AMT *tphsod.SLIP_FG                                            AS OUT_AMT
+        ,        tphsod.OUT_VAT *tphsod.SLIP_FG                                            AS OUT_VAT
+        ,        tphsod.OUT_TOT *tphsod.SLIP_FG                                            AS OUT_TOT
+        ,        tphsod.IN_SPLY_UPRC                                                       AS IN_SPLY_UPRC
+        ,        DECODE(tphsod.IN_UNIT_QTY ,0,NULL,tphsod.IN_UNIT_QTY*tphsod.SLIP_FG)      AS IN_UNIT_QTY
+        ,        DECODE(tphsod.IN_ETC_QTY  ,0,NULL,tphsod.IN_ETC_QTY *tphsod.SLIP_FG)      AS IN_ETC_QTY
+        ,        tphsod.IN_AMT  *tphsod.SLIP_FG                                            AS IN_AMT
+        ,        tphsod.IN_VAT  *tphsod.SLIP_FG                                            AS IN_VAT
+        ,        tphsod.IN_TOT  *tphsod.SLIP_FG                                            AS IN_TOT
+        ,        tphsod.REMARK
+        ,        0 AS ENVST0011
+        ,        thpb.BARCD_CD
+        FROM     TB_PO_HQ_STORE_OUTSTOCK_DTL tphsod
+        ,        TB_HQ_PRODUCT thp
+        ,        TB_HQ_PRODUCT_BARCD thpb
+        WHERE    tphsod.HQ_OFFICE_CD    =   #{hqOfficeCd}
+        AND      tphsod.SLIP_NO         =   #{slipNo}
+        AND      thp.HQ_OFFICE_CD       =   tphsod.HQ_OFFICE_CD
+        AND      thp.PROD_CD            =   tphsod.PROD_CD
+        AND      thpb.HQ_OFFICE_CD  (+) =   tphsod.HQ_OFFICE_CD
+        AND      thpb.PROD_CD       (+) =   tphsod.PROD_CD
+        ORDER
+        BY       tphsod.PROD_CD, tphsod.SEQ
+        ]]>
+    </select>
+
+    <!-- 출고확정 - 출고확정시 자동입고 환경변수 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE, TB_PO_HQ_STORE_ORDER, TB_PO_HQ_STORE_DISTRIBUTE
+        PARAM    : outstockDataVO
+        COMMENTS : 출고확정 - 출고확정시 자동입고 환경변수를 조회한다.
+    -->
+    <select id="getEnv176" parameterType="outstockConfmVO" resultType="String">
+        /* USE : OutstockConfmMapper.getEnv176 */
+        <![CDATA[
+        SELECT	ENVST_VAL
+        FROM    TB_HQ_ENVST
+        WHERE   ENVST_CD  = '176'
+        ]]>
+    </select>
+
+    <!-- 출고확정 - 출고확정 DTL 수정 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK_DTL
+        PARAM    : outstockConfmVO
+        COMMENTS : 출고확정 - 출고확정시 DTL의 진행구분을 수정한다.
+    -->
+    <update id="updateOutstockDtlConfirm" parameterType="outstockConfmVO">
+        /* USE : OutstockConfmMapper.updateOutstockConfirm */
+        UPDATE  TB_PO_HQ_STORE_OUTSTOCK_DTL
+        SET     PROC_FG         = #{updateProcFg},
+                MOD_DT          = #{modDt},
+                MOD_ID          = #{modId}
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+    </update>
+
+    <!-- 출고확정 - 출고확정 HD 수정-->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK
+        PARAM    : outstockConfmVO
+        COMMENTS : 출고확정 - 출고확정시 HD의 진행구분을 수정한다.
+    -->
+    <update id="updateOutstockConfirm" parameterType="outstockConfmVO">
+        /* USE : OutstockConfmMapper.updateOutstockConfirm */
+        UPDATE  TB_PO_HQ_STORE_OUTSTOCK
+        SET     PROC_FG         = #{updateProcFg},
+                OUT_DATE        = #{outDate},
+                OUT_DT          = #{modDt},
+                OUT_ID          = #{modId},
+                MOD_DT          = #{modDt},
+                MOD_ID          = #{modId}
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+    </update>
+
+    <!-- 출고확정 - 출고확정 자동입고 DTL 수정 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK_DTL
+        PARAM    : outstockConfmVO
+        COMMENTS : 출고확정 - 출고확정시 자동입고 처리 DTL 수정한다.
+    -->
+    <update id="updateAutoInstockDtl" parameterType="outstockConfmVO">
+        /* USE : OutstockConfmMapper.updateAutoInstockDtl */
+        UPDATE  TB_PO_HQ_STORE_OUTSTOCK_DTL
+        SET     PROC_FG         = #{updateProcFg},
+                IN_SPLY_UPRC    = OUT_SPLY_UPRC,
+                IN_UNIT_QTY     = OUT_UNIT_QTY,
+                IN_ETC_QTY      = OUT_ETC_QTY,
+                IN_TOT_QTY      = OUT_TOT_QTY,
+                IN_AMT          = OUT_AMT,
+                IN_VAT          = OUT_VAT,
+                IN_TOT          = OUT_TOT,
+                MOD_DT          = #{modDt},
+                MOD_ID          = #{modId}
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+    </update>
+
+    <!-- 출고확정 - 출고확정 자동입고 HD 수정 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK
+        PARAM    : outstockConfmVO
+        COMMENTS : 출고확정 - 출고확정시 자동입고 처리 HD 수정한다.
+    -->
+    <update id="updateAutoInstock" parameterType="outstockConfmVO">
+        /* USE : OutstockConfmMapper.updateAutoInstock */
+        UPDATE  TB_PO_HQ_STORE_OUTSTOCK
+        SET     PROC_FG         = #{updateProcFg},
+                IN_DATE         = #{outDate},
+                IN_DT           = #{outDt},
+                IN_ID           = #{outId},
+                IN_UNIT_QTY     = OUT_UNIT_QTY,
+                IN_ETC_QTY      = OUT_ETC_QTY,
+                IN_TOT_QTY      = OUT_TOT_QTY,
+                IN_AMT          = OUT_AMT,
+                IN_VAT          = OUT_VAT,
+                IN_TOT          = OUT_TOT,
+                MOD_DT          = #{modDt},
+                MOD_ID          = #{modId}
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+    </update>
+
+</mapper>

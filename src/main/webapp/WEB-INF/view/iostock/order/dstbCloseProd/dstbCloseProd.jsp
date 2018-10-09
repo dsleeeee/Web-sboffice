@@ -115,6 +115,7 @@
         // 상위 객체 상속 : T/F 는 picker
         angular.extend(this, new RootController('dstbCloseProdCtrl', $scope, $http, true));
 
+        $scope.slipFg = 1;
         var srchStartDate = wcombo.genDateVal("#srchStartDate", "${sessionScope.sessionInfo.startDt}");
         var srchEndDate   = wcombo.genDateVal("#srchEndDate"  , "${sessionScope.sessionInfo.startDt}");
         var reqDate       = wcombo.genDateVal("#reqDate"      , "${sessionScope.sessionInfo.startDt}");
@@ -126,7 +127,6 @@
 
         // grid 초기화 : 생성되기전 초기화되면서 생성된다
         $scope.initGrid = function (s, e) {
-            $scope.slipFg = 1;
 
             // picker 사용시 호출 : 미사용시 호출안함
             $scope._makePickColumns("dstbCloseProdCtrl");
@@ -205,11 +205,13 @@
             for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
                 var item = $scope.flex.collectionView.itemsEdited[i];
 
+              if(item.gChk === true) {
                 item.status = "U";
-                item.empNo  = "0000";
+                item.empNo = "0000";
                 item.storageCd = "001";
                 item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
                 params.push(item);
+              }
             }
             $scope._save("/iostock/order/dstbCloseProd/dstbCloseProd/saveConfirm.sb", params, function() { $scope.searchDstbCloseProdList() });
         };
