@@ -55,7 +55,7 @@
 </script>
 <script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/graph/sanitizer/sanitizer.min.js" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20181009.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20181010.01" charset="utf-8"></script>
 
 <%--서브컨텐츠--%>
 <div class="subCon2">
