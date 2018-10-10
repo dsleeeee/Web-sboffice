@@ -67,12 +67,12 @@
                         <wj-flex-grid-column header="<s:message code="dstbReq.dtl.poUnitFg"/>"         binding="poUnitFg"         width="70"  align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dstbReq.dtl.poUnitQty"/>"        binding="poUnitQty"        width="70"  align="right"  is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dstbReq.dtl.splyUprc"/>"         binding="splyUprc"         width="70"  align="right"  is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dstbReq.dtl.orderUnitQty"/>"     binding="orderUnitQty"     width="70"  align="right"  is-read-only="true" data-type="Number" format="n0" aggregate="Sum" allow-merging="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dstbReq.dtl.orderEtcQty"/>"      binding="orderEtcQty"      width="70"  align="right"  is-read-only="true" data-type="Number" format="n0" aggregate="Sum" allow-merging="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dstbReq.dtl.orderUnitQty"/>"     binding="orderUnitQty"     width="70"  align="right"  is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dstbReq.dtl.orderEtcQty"/>"      binding="orderEtcQty"      width="70"  align="right"  is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dstbReq.dtl.orderTotQty"/>"      binding="orderTotQty"      width="70"  align="right"  is-read-only="true" visible="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dstbReq.dtl.mdSplyUprc"/>"       binding="mdSplyUprc"       width="70"  align="right"  is-read-only="false" max-length=10 data-type="Number" format="n0" allow-merging="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dstbReq.dtl.mdUnitQty"/>"        binding="mdUnitQty"        width="70"  align="right"  is-read-only="false" max-length=8  data-type="Number" format="n0" aggregate="Sum" allow-merging="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dstbReq.dtl.mdEtcQty"/>"         binding="mdEtcQty"         width="70"  align="right"  is-read-only="false" max-length=8  data-type="Number" format="n0" aggregate="Sum" allow-merging="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dstbReq.dtl.mdSplyUprc"/>"       binding="mdSplyUprc"       width="70"  align="right"  is-read-only="false" max-length=10 data-type="Number" format="n0"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dstbReq.dtl.mdUnitQty"/>"        binding="mdUnitQty"        width="70"  align="right"  is-read-only="false" max-length=8  data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dstbReq.dtl.mdEtcQty"/>"         binding="mdEtcQty"         width="70"  align="right"  is-read-only="false" max-length=8  data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dstbReq.dtl.mdTotQty"/>"         binding="mdTotQty"         width="70"  align="right"  is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dstbReq.dtl.prevMdTotQty"/>"     binding="prevMdTotQty"     width="70"  align="right"  is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dstbReq.dtl.mdAmt"/>"            binding="mdAmt"            width="70"  align="right"  is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
@@ -166,7 +166,7 @@
             $scope.slipFg      = data.slipFg;
             $scope.procFg      = data.procFg;
 
-            $("#spanDtlTitle").html(($scope.slipFg === 1 ? '[<s:message code="dstbReq.dtl.order"/>] ' : '[<s:message code="dstbReq.dtl.orderReturn"/>] ')+'['+$scope.storeCd+'] '+$scope.storeNm);
+            $("#spanDtlTitle").html('[<s:message code="dstbReq.dtl.order"/>] '+'['+$scope.storeCd+'] '+$scope.storeNm);
             $scope.orderProcFgCheck();
             // 기능수행 종료 : 반드시 추가
             event.preventDefault();

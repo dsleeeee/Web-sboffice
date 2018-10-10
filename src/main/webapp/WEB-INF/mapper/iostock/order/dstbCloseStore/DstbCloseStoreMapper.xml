@@ -54,7 +54,7 @@
             AND tms.STORE_CD = #{storeCd}
         </if>
         <if test='storeNm != null and storeNm != ""'>
-            AND tho.STORE_NM LIKE '%'||#{storeNm}||'%'
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
         </if>
         GROUP
         BY       tphsd.REQ_DATE, tphsd.SLIP_FG, tphsd.PROC_FG

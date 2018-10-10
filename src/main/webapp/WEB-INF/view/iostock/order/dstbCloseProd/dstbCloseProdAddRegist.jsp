@@ -49,8 +49,8 @@
                         <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.mgrSplyUprc"/>"      binding="mgrSplyUprc"      width="70"  align="right"  is-read-only="false" max-length=10 data-type="Number" format="n0"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.prevMgrUnitQty"/>"   binding="prevMgrUnitQty"   width="70"  align="right"  is-read-only="true"  data-type="Number" format="n0" ></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.prevMgrEtcQty"/>"    binding="prevMgrEtcQty"    width="70"  align="right"  is-read-only="true"  data-type="Number" format="n0" ></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.mgrUnitQty"/>"       binding="mgrUnitQty"       width="70"  align="right"  is-read-only="false" max-length=8  data-type="Number" format="n0" aggregate="Sum" allow-merging="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.mgrEtcQty"/>"        binding="mgrEtcQty"        width="70"  align="right"  is-read-only="false" max-length=8  data-type="Number" format="n0" aggregate="Sum" allow-merging="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.mgrUnitQty"/>"       binding="mgrUnitQty"       width="70"  align="right"  is-read-only="false" max-length=8  data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.mgrEtcQty"/>"        binding="mgrEtcQty"        width="70"  align="right"  is-read-only="false" max-length=8  data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.mgrTotQty"/>"        binding="mgrTotQty"        width="70"  align="right"  is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.mgrAmt"/>"           binding="mgrAmt"           width="70"  align="right"  is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.mgrVat"/>"           binding="mgrVat"           width="70"  align="right"  is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
@@ -164,7 +164,7 @@
             $scope.storeCds = data.storeCds;
 
             $scope.wjDstbCloseProdAddRegistLayer.show(true);
-            $("#spanAddRegistTitle").html(($scope.slipFg === 1 ? '[<s:message code="dstbCloseProd.addRegist.order"/>] ' : '[<s:message code="dstbCloseProd.addRegist.orderReturn"/>] ')+'['+$scope.prodCd+'] '+$scope.prodNm);
+            $("#spanAddRegistTitle").html('[<s:message code="dstbCloseProd.addRegist.order"/>] '+'['+$scope.prodCd+'] '+$scope.prodNm);
 
             $scope.searchDstbCloseProdAddRegistList();
             // 기능수행 종료 : 반드시 추가

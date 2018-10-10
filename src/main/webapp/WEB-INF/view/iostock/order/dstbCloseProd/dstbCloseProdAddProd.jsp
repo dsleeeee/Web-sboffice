@@ -170,8 +170,8 @@
             $scope.data = cv;
 
             if(!$.isEmptyObject(data)) {
-                $scope.reqDate     = data.reqDate;
-                $scope.slipFg      = data.slipFg;
+                $scope.reqDate = data.reqDate;
+                $scope.slipFg  = data.slipFg;
                 $scope.wjDstbCloseProdAddProdLayer.show(true);
                 $("#addProdSubTitle").html(' (<s:message code="dstbCloseProd.add.reqDate"/> : '+getFormatDate($scope.reqDate, '-')+')');
             }

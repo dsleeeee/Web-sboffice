@@ -46,8 +46,8 @@
                         <wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.storeNm"/>"          binding="storeNm"          width="150" align="left"   is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.orderFg"/>"          binding="orderFg"          width="80"  align="center" is-read-only="true" data-map="orderFgMap"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.mgrSplyUprc"/>"      binding="mgrSplyUprc"      width="70"  align="right"  is-read-only="false" max-length=10 data-type="Number" format="n0"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.mgrUnitQty"/>"       binding="mgrUnitQty"       width="70"  align="right"  is-read-only="false" max-length=8  data-type="Number" format="n0" aggregate="Sum" allow-merging="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.mgrEtcQty"/>"        binding="mgrEtcQty"        width="70"  align="right"  is-read-only="false" max-length=8  data-type="Number" format="n0" aggregate="Sum" allow-merging="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.mgrUnitQty"/>"       binding="mgrUnitQty"       width="70"  align="right"  is-read-only="false" max-length=8  data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.mgrEtcQty"/>"        binding="mgrEtcQty"        width="70"  align="right"  is-read-only="false" max-length=8  data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.mgrTotQty"/>"        binding="mgrTotQty"        width="70"  align="right"  is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.mgrAmt"/>"           binding="mgrAmt"           width="70"  align="right"  is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.mgrVat"/>"           binding="mgrVat"           width="70"  align="right"  is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
@@ -155,7 +155,7 @@
             $scope.procFg  = data.procFg;
 
             $scope.wjDstbCloseProdDtlLayer.show(true);
-            $("#spanDtlTitle").html(($scope.slipFg === 1 ? '[<s:message code="dstbCloseProd.dtl.order"/>] ' : '[<s:message code="dstbCloseProd.dtl.orderReturn"/>] ')+'['+$scope.prodCd+'] '+$scope.prodNm);
+            $("#spanDtlTitle").html('[<s:message code="dstbCloseProd.dtl.order"/>] '+'['+$scope.prodCd+'] '+$scope.prodNm);
 
             if(parseInt($scope.procFg) < 20 ) {
                 $("#btnDtlSave").show();
