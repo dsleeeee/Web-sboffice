@@ -8,4 +8,5 @@ var menuNm = "${sessionScope.sessionInfo.currentMenu.resrceNm}";
 var gvListScaleBoxData = ${ccu.getListScale()};
 var gvStartDt = "${sessionScope.sessionInfo.startDt}";
 var gvEndDt = "${sessionScope.sessionInfo.endDt}";
+var gvOrgnFg = "${sessionScope.sessionInfo.orgnFg.getCode()}";
 

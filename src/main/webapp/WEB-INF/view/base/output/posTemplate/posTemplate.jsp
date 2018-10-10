@@ -5,7 +5,7 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
-<c:set var="baseUrl" value="/sys/bill/template/" />
+<c:set var="baseUrl" value="/base/output/pos/" />
 
 <div class="subCon">
 
@@ -21,7 +21,7 @@
     </colgroup>
     <tbody>
       <tr>
-        <th><s:message code="template.srchNm" /></th>
+        <th><s:message code="posTemplate.srchNm" /></th>
         <td colspan="2" class="oh">
           <div class="sb-select fl w200">
             <wj-combo-box
@@ -44,11 +44,8 @@
 
   <%-- 조회 --%>
   <div class="mt10 oh">
-    <button class="btn_blk fl" id="btnApplyTemplate" ng-click="$broadcast('showPopUp')">
-      <s:message code="template.layerBtnNm" />
-    </button>
     <button class="btn_blue fr" id="btnSrchTemplate" ng-click="_broadcast('templateCtrl')">
-      <s:message code="template.srchBtnNm" />
+      <s:message code="posTemplate.srchBtnNm" />
     </button>
   </div>
 
@@ -59,7 +56,7 @@
       <%--위즈모 테이블--%>
       <div id="gridTemplate" class="wj-TblWrapBr pd20" style="height:485px;" ng-controller="templateCtrl">
         <div class="updownSet oh mb10">
-          <span class="fl bk lh30"><s:message code='template.gridNm' /></span>
+          <span class="fl bk lh30"><s:message code='posTemplate.gridNm' /></span>
           <button class="btn_skyblue" id="btnAddTemplate" style="display: none;" ng-click="addRow()">
             <s:message code="cmm.add" />
           </button>
@@ -83,9 +80,10 @@
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="template.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="template.templtNm"/>" binding="templtNm" width="*"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="template.prtForm"/>" binding="prtForm" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="posTemplate.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="posTemplate.templtNm"/>" binding="templtNm" width="*"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="posTemplate.prtForm"/>" binding="prtForm" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="posTemplate.templtRegFg"/>" binding="templtRegFg" visible="false"></wj-flex-grid-column>
 
           </wj-flex-grid>
 
@@ -98,7 +96,7 @@
     <div class="w15 fl">
       <div class="wj-TblWrapBr ml10 pd20" style="height:485px;">
         <div class="updownSet oh mb10">
-          <span class="fl bk lh30"><s:message code='template.listNm' /></span>
+          <span class="fl bk lh30"><s:message code='posTemplate.listNm' /></span>
         </div>
         <div class="app-input-group">
           <div id="listBoxCode" style="width: 100%;height: 410px;"></div>
@@ -109,7 +107,7 @@
     <div class="w30 fl">
       <div class="wj-TblWrapBr ml10 pd20 templateEdit" style="height:485px;">
         <div class="updownSet oh mb10">
-          <span class="fl bk lh30"><s:message code='template.editNm' /></span>
+          <span class="fl bk lh30"><s:message code='posTemplate.editNm' /></span>
           <button class="btn_skyblue" id="btnSaveEditTemplate" style="display: none;" ng-click="$broadcast('saveEditTemplate')">
             <s:message code="cmm.save" />
           </button>
@@ -123,7 +121,7 @@
     <div class="w30 fl">
       <div class="wj-TblWrapBr ml10 pd20 templateEdit" style="height:485px;">
         <div class="updownSet oh mb10">
-          <span class="fl bk lh30"><s:message code='template.viewNm' /></span>
+          <span class="fl bk lh30"><s:message code='posTemplate.viewNm' /></span>
         </div>
         <div id="preview" class="s12 lh15" style="height:410px;">
         </div>
@@ -135,12 +133,6 @@
   <script type="text/javascript">
   var prtClassComboData = ${listPrintType};
   </script>
-  <script type="text/javascript" src="/resource/solbipos/js/sys/bill/template/template.js?ver=20181005.01" charset="utf-8"></script>
-
-  <%-- 레이어 팝업 --%>
-  <c:import url="/WEB-INF/view/sys/bill/template/popUpTemplate.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-  </c:import>
+  <script type="text/javascript" src="/resource/solbipos/js/base/output/posTemplate/posTemplate.js?ver=20181004.01" charset="utf-8"></script>
 
 </div>

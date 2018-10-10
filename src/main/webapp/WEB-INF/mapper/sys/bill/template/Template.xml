@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    Template.xml
+    출력물 샘플 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       노현수     2018.06.15      최초작성
+-->
+<mapper namespace="kr.co.solbipos.sys.bill.template.service.impl.TemplateMapper">
+
+    <!-- 출력물종류 목록 조회 -->
+    <!--
+        TABLE    : TB_CM_PRINT
+        PARAM    : templateVO
+        COMMENTS : 출력물종류 목록을 조회한다.
+    -->
+    <select id="getPrintTypeList" parameterType="templateVO" resultType="defaultMap">
+        /* USE : TemplateMapper.getPrintTypeList */
+        SELECT
+            tcp.PRT_CLASS_CD AS VALUE,
+            tcp.PRT_CLASS_NM AS NAME
+        FROM
+            TB_CM_PRINT tcp
+        ORDER BY
+            tcp.PRT_CLASS_CD
+    </select>
+
+    <!-- 출력물코드 목록 조회 -->
+    <!--
+        TABLE    : TB_CM_PRINT_DTL
+        PARAM    : templateVO
+        COMMENTS : 출력물코드 목록을 조회한다.
+    -->
+    <select id="getPrintCodeList" parameterType="templateVO" resultType="defaultMap">
+        /* USE : TemplateMapper.getPrintCodeList */
+        SELECT
+            tcpd.PRT_CD,
+            tcpc.CONTENT,
+            tcpc.SAMPL_YN
+        FROM
+            TB_CM_PRINT_DTL tcpd
+        LEFT OUTER JOIN TB_CM_PRINT_CODE tcpc ON
+            tcpd.PRT_CD = tcpc.PRT_CD
+        WHERE
+            tcpd.PRT_CLASS_CD = #{prtClassCd}
+        ORDER BY
+            tcpd.DISP_SEQ
+    </select>
+
+    <!-- 출력물템플릿 목록 조회 -->
+    <!--
+        TABLE    : TB_CM_PRINT_TEMPL
+        PARAM    : templateVO
+        COMMENTS : 출력물코드 목록을 조회한다.
+    -->
+    <select id="getTemplateList" parameterType="templateVO" resultType="defaultMap">
+        /* USE : TemplateMapper.getTemplateList */
+        SELECT
+            tcpt.PRT_CLASS_CD,
+            tcpt.TEMPLT_CD,
+            tcpt.TEMPLT_NM,
+            tcpt.PRT_FORM
+        FROM
+            TB_CM_PRINT_TEMPL tcpt
+        WHERE
+            tcpt.PRT_CLASS_CD = #{prtClassCd}
+        ORDER BY tcpt.TEMPLT_CD
+    </select>
+
+    <!-- 출력물템플릿 생성 -->
+    <!--
+        TABLE    : TB_CM_PRINT_TEMPL
+        PARAM    : templateVO
+        COMMENTS : 출력물템플릿을 생성한다.
+    -->
+    <insert id="insertTemplateList" parameterType="templateVO">
+        /* USE : TemplateMapper.insertTemplateList */
+        INSERT INTO TB_CM_PRINT_TEMPL
+        (
+            PRT_CLASS_CD,
+            TEMPLT_CD,
+            TEMPLT_NM,
+            PRT_FORM,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{prtClassCd},
+            (
+                SELECT
+                    NVL(TRIM(TO_CHAR(MAX(tcpt.TEMPLT_CD) + 1, '000')), '001')
+                FROM
+                    TB_CM_PRINT_TEMPL tcpt
+                WHERE
+                    tcpt.PRT_CLASS_CD = #{prtClassCd}
+            ),
+            #{templtNm},
+            #{prtForm, jdbcType=VARCHAR},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 출력물템플릿 수정 -->
+    <!--
+        TABLE    : TB_CM_PRINT_TEMPL
+        PARAM    : templateVO
+        COMMENTS : 출력물템플릿을 수정한다.
+    -->
+    <update id="updateTemplateList" parameterType="templateVO">
+        /* USE : TemplateMapper.updateTemplateList */
+        UPDATE
+            TB_CM_PRINT_TEMPL
+        SET
+            TEMPLT_NM = #{templtNm},
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId}
+        WHERE
+            PRT_CLASS_CD = #{prtClassCd}
+            AND TEMPLT_CD = #{templtCd}
+    </update>
+
+    <!-- 출력물템플릿 삭제 -->
+    <!--
+        TABLE    : TB_CM_PRINT_TEMPL
+        PARAM    : templateVO
+        COMMENTS : 출력물템플릿을 삭제한다.
+    -->
+    <delete id="deleteTemplateList" parameterType="templateVO">
+        /* USE : TemplateMapper.deleteTemplateList */
+        DELETE FROM 
+            TB_CM_PRINT_TEMPL
+        WHERE
+            PRT_CLASS_CD = #{prtClassCd}
+            AND TEMPLT_CD = #{templtCd}
+    </delete>
+
+    <!-- 출력물템플릿 저장 -->
+    <!--
+        TABLE    : TB_CM_PRINT_TEMPL
+        PARAM    : templateVO
+        COMMENTS : 출력물템플릿을 저장/수정한다.
+    -->
+    <insert id="saveTemplate" parameterType="templateVO">
+        /* USE : TemplateMapper.saveTemplate */
+        MERGE INTO TB_CM_PRINT_TEMPL tcpt
+        USING DUAL
+        ON (
+          tcpt.PRT_CLASS_CD = #{prtClassCd}
+          AND tcpt.TEMPLT_CD = #{templtCd}
+        )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+                tcpt.TEMPLT_NM = #{templtNm},
+                tcpt.PRT_FORM = #{prtForm},
+                tcpt.MOD_DT = #{modDt},
+                tcpt.MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+            INSERT
+            (
+                PRT_CLASS_CD,
+                TEMPLT_CD,
+                TEMPLT_NM,
+                PRT_FORM,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+            ) VALUES (
+                #{prtClassCd},
+                (
+                    SELECT
+                        NVL(TRIM(TO_CHAR(MAX(TEMPLT_CD) + 1, '000')), '001')
+                    FROM
+                        TB_CM_PRINT_TEMPL
+                    WHERE
+                        PRT_CLASS_CD = #{prtClassCd}
+                ),
+                #{templtNm},
+                #{prtForm},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+            )
+    </insert>
+
+    <!-- 본사 출력물템플릿 수정 : 프로시저 호출 -->
+    <!--
+        TABLE    : TB_HQ_PRINT_TEMPL
+        PARAM    : templateVO
+        COMMENTS : 본사 출력물템플릿을 저장/수정한다.
+    -->
+    <select id="updateTemplateForHq" statementType="CALLABLE"  parameterType="templateVO" resultType="DefaultMap">
+        /* USE : TemplateMapper.updateTemplateForHq */
+        {
+          CALL PKG_CM_PRINT_TEMPL.SP_HQ_PRINT_TEMPL_U
+          (
+            #{prtClassCd},
+            #{templtCd},
+            #{result, mode=OUT, jdbcType=VARCHAR}
+          )
+        }
+    </select>
+
+    <!-- 매장 출력물템플릿 수정 : 프로시저 호출 -->
+    <!--
+        TABLE    : TB_MS_PRINT_TEMPL
+        PARAM    : templateVO
+        COMMENTS : 매장 출력물템플릿을 저장/수정한다.
+    -->
+    <select id="updateTemplateForStore" statementType="CALLABLE"  parameterType="templateVO" resultType="DefaultMap">
+        /* USE : TemplateMapper.updateTemplateForStore */
+        {
+          CALL PKG_CM_PRINT_TEMPL.SP_STORE_PRINT_TEMPL_U
+          (
+            #{prtClassCd},
+            #{templtCd},
+            #{result, mode=OUT, jdbcType=VARCHAR}
+          )
+        }
+    </select>
+
+    <!-- 미적용 본사/단독매장 조회 -->
+    <!--
+        TABLE    : TB_HQ_OFFICE, TB_HQ_PRINT_TEMPL, TB_MS_STORE, TB_MS_PRINT_TEMPL
+        PARAM    : templateVO
+        COMMENTS : 미적용 본사/단독매장을 조회한다.
+    -->
+    <select id="getUnUsedList" parameterType="templateVO" resultType="defaultMap">
+        /* USE : TemplateMapper.getUnUsedList */
+        SELECT
+            unused.STORE_FG,
+            unused.STORE_CD,
+            unused.STORE_NM,
+            tcm_sys_stat_fg.NMCODE_NM AS sys_stat_fg_nm,
+            tcm_cls_stat_fg.NMCODE_NM AS cls_fg_nm
+        FROM
+            (
+            SELECT
+                'HQ' AS STORE_FG,
+                tho.HQ_OFFICE_CD AS STORE_CD,
+                tho.HQ_OFFICE_NM AS STORE_NM,
+                tho.SYS_STAT_FG,
+                tho.CLS_FG,
+                thpt.PRT_CLASS_CD
+            FROM
+                TB_HQ_OFFICE tho
+            LEFT OUTER JOIN TB_HQ_PRINT_TEMPL thpt ON
+                tho.HQ_OFFICE_CD = thpt.HQ_OFFICE_CD
+                AND thpt.PRT_CLASS_CD = #{prtClassCd}
+                AND thpt.TEMPLT_REG_FG = 'C'
+                AND thpt.TEMPLT_CD = #{templtCd}
+            UNION ALL
+            SELECT
+                'MS' AS STORE_FG,
+                tms.STORE_CD,
+                tms.STORE_NM,
+                tms.SYS_STAT_FG,
+                tms.CLS_FG,
+                tmpt.PRT_CLASS_CD
+            FROM
+                TB_MS_STORE tms
+            LEFT OUTER JOIN TB_MS_PRINT_TEMPL tmpt ON
+                tms.STORE_CD = tmpt.STORE_CD
+                AND tmpt.PRT_CLASS_CD = #{prtClassCd}
+                AND tmpt.TEMPLT_REG_FG = 'C'
+                AND tmpt.TEMPLT_CD = #{templtCd}
+            WHERE
+                /* 단독매장만 조회 */
+                tms.HQ_OFFICE_CD = '00000' ) unused
+        LEFT OUTER JOIN TB_CM_NMCODE tcm_sys_stat_fg ON
+            unused.SYS_STAT_FG = tcm_sys_stat_fg.NMCODE_CD
+            AND tcm_sys_stat_fg.NMCODE_GRP_CD = '005'
+        LEFT OUTER JOIN TB_CM_NMCODE tcm_cls_stat_fg ON
+            unused.CLS_FG = tcm_cls_stat_fg.NMCODE_CD
+            AND tcm_cls_stat_fg.NMCODE_GRP_CD = '001'
+        WHERE
+            unused.PRT_CLASS_CD IS NULL
+        <if test='sysStatFg != null and sysStatFg != ""'>
+            AND unused.SYS_STAT_FG = #{sysStatFg}
+        </if>
+        <if test='clsFg != null and clsFg != ""'>
+            AND unused.CLS_FG = #{clsFg}
+        </if>
+        ORDER BY
+            unused.STORE_FG,
+            unused.SYS_STAT_FG,
+            unused.STORE_CD
+
+    </select>
+
+    <!-- 미적용 본사/단독매장 저장 -->
+    <!--
+        TABLE    : TB_HQ_PRINT_TEMPL, TB_MS_PRINT_TEMPL
+        PARAM    : templateVO
+        COMMENTS : 미적용 본사/단독매장을 저장한다.
+    -->
+    <insert id="insertUnUsedList" parameterType="templateVO">
+        /* USE : TemplateMapper.insertUnUsedList */
+        <choose>
+            <when test="storeFg == 'HQ'">
+                INSERT INTO TB_HQ_PRINT_TEMPL
+                (
+                    HQ_OFFICE_CD,
+                    PRT_CLASS_CD,
+                    TEMPLT_REG_FG,
+                    TEMPLT_CD,
+                    TEMPLT_NM,
+                    PRT_FORM,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                ) VALUES (
+                    #{storeCd},
+                    #{prtClassCd},
+                    'C',
+                    #{templtCd},
+                    #{templtNm},
+                    #{prtForm, jdbcType=VARCHAR},
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
+            </when>
+            <otherwise>
+                INSERT INTO TB_MS_PRINT_TEMPL
+                (
+                    STORE_CD,
+                    PRT_CLASS_CD,
+                    TEMPLT_REG_FG,
+                    TEMPLT_CD,
+                    TEMPLT_NM,
+                    PRT_FORM,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                ) VALUES (
+                    #{storeCd},
+                    #{prtClassCd},
+                    'C',
+                    #{templtCd},
+                    #{templtNm},
+                    #{prtForm, jdbcType=VARCHAR},
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
+            </otherwise>
+        </choose>
+
+    </insert>
+
+    <!-- 미적용 본사/단독매장 실제출력물코드 생성 -->
+    <!--
+        TABLE    : TB_HQ_PRINT, TB_MS_PRINT
+        PARAM    : templateVO
+        COMMENTS : 미적용 본사/단독매장을 저장한다.
+    -->
+    <insert id="insertUnUsedPrintCode" parameterType="templateVO">
+        /* USE : TemplateMapper.insertUnUsedPrintCode */
+        <choose>
+            <when test="storeFg == 'HQ'">
+                MERGE INTO TB_HQ_PRINT thp
+                USING DUAL
+                ON (
+                    thp.HQ_OFFICE_CD = #{storeCd}
+                    AND thp.PRT_CLASS_CD = #{prtClassCd}
+                )
+                WHEN NOT MATCHED THEN
+                    INSERT
+                    (
+                        HQ_OFFICE_CD,
+                        PRT_CLASS_CD,
+                        PRT_FORM,
+                        REG_DT,
+                        REG_ID,
+                        MOD_DT,
+                        MOD_ID
+                    ) VALUES (
+                        #{storeCd},
+                        #{prtClassCd},
+                        #{prtForm, jdbcType=VARCHAR},
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId}
+                    )
+            </when>
+            <otherwise>
+                MERGE INTO TB_MS_PRINT tmp
+                USING DUAL
+                ON (
+                    tmp.STORE_CD = #{storeCd}
+                    AND tmp.PRT_CLASS_CD = #{prtClassCd}
+                )
+                WHEN NOT MATCHED THEN
+                    INSERT
+                    (
+                        STORE_CD,
+                        PRT_CLASS_CD,
+                        PRT_FORM,
+                        REG_DT,
+                        REG_ID,
+                        MOD_DT,
+                        MOD_ID
+                    ) VALUES (
+                        #{storeCd},
+                        #{prtClassCd},
+                        #{prtForm, jdbcType=VARCHAR},
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId}
+                    )
+            </otherwise>
+        </choose>
+
+    </insert>
+
+
+</mapper>

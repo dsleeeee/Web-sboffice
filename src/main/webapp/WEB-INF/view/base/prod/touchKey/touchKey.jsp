@@ -55,9 +55,7 @@ window.MAX_GROUP_ROW = '${maxGroupRow}' || '2';
 </script>
 <script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/graph/sanitizer/sanitizer.min.js" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKey.js" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKeyGroup.js" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKeyProd.js" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20181004.01" charset="utf-8"></script>
 
     <%--서브컨텐츠--%>
     <div class="subCon2">
@@ -95,7 +93,7 @@ window.MAX_GROUP_ROW = '${maxGroupRow}' || '2';
               <button class="btn_skyblue" id="btnSave"><s:message code="cmm.save"/></button>
             </div>
           </div>
-          <div class="prev2 fl">
+          <div id="touchArea" class="prev2 fl">
             <%--그룹버튼 영역 시작--%>
             <div class="touchGroupWrap" id="groupWrap">
               <%--2줄 "hGroupLine2", 3줄 "hGroupLine3" 사용 --%>
