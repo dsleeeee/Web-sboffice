@@ -144,6 +144,16 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
         }
       }
     });
+    // 대표명칭 그리드 에디팅 방지
+    s.beginningEdit.addHandler(function (sender, elements) {
+      var col = sender.columns[elements.col];
+      if (col.binding === "nmcodeCd") {
+        var dataItem = s.rows[elements.row].dataItem;
+        if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
+          elements.cancel = true;
+        }
+      }
+    });
   };
   // 세부명칭 그리드 초기화
   $scope.$on("init", function() {

@@ -23,9 +23,9 @@
     <tbody>
     <tr>
       <%-- 매장 --%>
+      <div id="storeCd" style="display: none;"></div>
       <th><s:message code="credit.srchStore" /></th>
-      <td colspan="3">
-        <div id="storeCd" style="display: none;"></div>
+      <td>
         <input type="text" class="sb-input w100" id="storeCdText" ng-model="storeCds" readonly="readonly" ng-click="searchStore()" />
       </td>
       <%-- 회원번호 --%>
@@ -37,13 +37,13 @@
     <tr>
       <%-- 회원명 --%>
       <th><s:message code="credit.membrNm" /></th>
-      <td colspan="3">
+      <td>
         <input type="text" class="sb-input w100" id="srchMembrNm" ng-model="memberNm" />
       </td>
       <%-- 정렬 --%>
       <th><s:message code="credit.array" /></th>
       <td>
-        <div class="sb-select">
+        <div class="sb-select w100">
           <wj-combo-box
                   id="srchArrayCombo"
                   ng-model="array"
@@ -65,60 +65,50 @@
   </div>
 
   <%--위즈모 테이블--%>
-  <div class="wj-TblWrapBr mr10 pd20" style="height: 400px;">
-    <div class="updownSet oh mb10">
+  <div class="updownSet oh mb10 mt40">
+    <button class="btn_skyblue" id="btnDeposit" style=";" ng-click="deposit()">
+      <s:message code="credit.deposit" />
+    </button>
+    <button class="btn_skyblue" id="btnDelRepresent" style="display: none;" ng-click="del()">
+      <s:message code="cmm.delete" />
+    </button>
+    <button class="btn_skyblue" id="btnSaveRepresent" style="display: none;" ng-click="save()">
+      <s:message code="cmm.save" />
+    </button>
+  </div>
+  <%-- 개발시 높이 조절해서 사용--%>
+  <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
+  <div class="wj-gridWrap" style="height:315px; overflow-y: hidden;">
+    <div class="row">
+      <wj-flex-grid
+              autoGenerateColumns="false"
+              control="flex"
+              initialized="initGrid(s,e)"
+              sticky-headers="true"
+              selection-mode="Row"
+              items-source="data"
+              item-formatter="_itemFormatter"
+              is-read-only="true">
 
-      <button class="btn_skyblue" id="btnDeposit" style=";" ng-click="deposit()">
-        <s:message code="credit.deposit" />
-      </button>
-      <button class="btn_skyblue" id="btnDelRepresent" style="display: none;" ng-click="del()">
-        <s:message code="cmm.delete" />
-      </button>
-      <button class="btn_skyblue" id="btnSaveRepresent" style="display: none;" ng-click="save()">
-        <s:message code="cmm.save" />
-      </button>
+        <!-- define columns -->
+        <wj-flex-grid-column header="<s:message code="credit.storeCd"/>" binding="storeCd" width="70"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="credit.storeNm"/>" binding="storeNm" width="100" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="credit.saleDate"/>" binding="saleDate" width="100"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="credit.membrNo"/>" binding="membrNo" width="70"  ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="credit.membrNm"/>" binding="membrNm" width="100" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="credit.creditNo"/>" binding="creditNo" width="70"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="credit.creditDt"/>" binding="creditDt" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="credit.creditInFg"/>" binding="creditInFg" data-map="creditInFgDataMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="credit.saleAmt"/>" binding="saleAmt" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="credit.creditAmt"/>" binding="creditAmt" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="credit.creditPayFg"/>" binding="creditPayFg" data-map="creditPayFgDataMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="credit.nonsaleBillNo"/>" binding="nonsaleBillNo" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="credit.orgPrepaidNo"/>" binding="orgPrepaidNo" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="credit.sendYn"/>" binding="sendYn" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="credit.sendDt"/>" binding="sendDt" visible="false"></wj-flex-grid-column>
+
+      </wj-flex-grid>
     </div>
-    <%-- 개발시 높이 조절해서 사용--%>
-    <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
-    <div class="wj-gridWrap" style="height:315px">
-      <div class="row">
-        <wj-flex-grid
-                autoGenerateColumns="false"
-                control="flex"
-                initialized="initGrid(s,e)"
-                sticky-headers="true"
-                selection-mode="Row"
-                items-source="data"
-                item-formatter="_itemFormatter">
-
-          <!-- define columns -->
-          <%--<wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>--%>
-          <wj-flex-grid-column header="<s:message code="credit.storeCd"/>" binding="storeCd" width="70"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="credit.storeNm"/>" binding="storeNm" width="100"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="credit.saleDate"/>" binding="saleDate" width="100"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="credit.membrNo"/>" binding="membrNo" width="70"  ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="credit.membrNm"/>" binding="membrNm" width="100" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="credit.creditNo"/>" binding="creditNo" width="70"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="credit.creditDt"/>" binding="creditDt"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="credit.creditInFg"/>" binding="creditInFg" width="*" data-map="creditInFgDataMap"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="credit.saleAmt"/>" binding="saleAmt" width="*"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="credit.creditAmt"/>" binding="creditAmt" width="*"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="credit.creditPayFg"/>" binding="creditPayFg" width="*" data-map="creditPayFgDataMap"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="credit.nonsaleBillNo"/>" binding="nonsaleBillNo" width="*" visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="credit.orgPrepaidNo"/>" binding="orgPrepaidNo" width="*" visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="credit.sendYn"/>" binding="sendYn" width="*" visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="credit.sendDt"/>" binding="sendDt" width="*" visible="false"></wj-flex-grid-column>
-
-        </wj-flex-grid>
-        <%-- ColumnPicker 사용시 include --%>
-        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-          <jsp:param name="pickerTarget" value="representCtrl"/>
-        </jsp:include>
-        <%--// ColumnPicker 사용시 include --%>
-      </div>
-    </div>
-
-    <%--//위즈모 테이블--%>
   </div>
 </div>
 

@@ -100,13 +100,20 @@ public interface RegistMapper {
      */
     int updateMembrCard(RegistVO registVO);
 
-
     /**
-     * 등록된 후불회원 적용매장 조회
-     * @param registVO
+     * 후불 회원 등록 매장 조회
+     * @param creditStoreVO
      * @return
      */
-    List<DefaultMap<String>> getCurrentCreditStore(RegistVO registVO);
+    List<DefaultMap<String>> getRegStoreList(CreditStoreVO creditStoreVO);
+
+    /**
+     * 후불 회원 미등록 매장 조회
+     * @param creditStoreVO
+     * @return
+     */
+    List<DefaultMap<String>> getNoRegStoreList(CreditStoreVO creditStoreVO);
+
 
     /**
      * 후불회원 적용매장 삭제
@@ -121,4 +128,5 @@ public interface RegistMapper {
      * @return
      */
     int registCreditStore(CreditStoreVO creditStoreVO);
+
 }

@@ -12,6 +12,7 @@ import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.membr.anals.credit.service.CreditStoreVO;
 import kr.co.solbipos.membr.info.regist.service.RegistService;
 import kr.co.solbipos.membr.info.regist.service.RegistVO;
 import kr.co.solbipos.membr.info.regist.validate.Regist;
@@ -33,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJsonBindingFieldError;
 
@@ -57,17 +59,13 @@ public class RegistController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    RegistService registService;
+    @Autowired RegistService registService;
 
-    @Autowired
-    SessionService sessionService;
+    @Autowired SessionService sessionService;
 
-    @Autowired
-    CmmCodeUtil cmmCodeUtil;
+    @Autowired CmmCodeUtil cmmCodeUtil;
 
-    @Autowired
-    CmmEnvUtil cmmEnvUtil;
+    @Autowired CmmEnvUtil cmmEnvUtil;
 
 
     /**
@@ -76,9 +74,9 @@ public class RegistController {
      * @param request
      * @param response
      * @param model
-     * */
-    @RequestMapping(value = "view/list.sb", method = RequestMethod.GET)
-    public String registList(HttpServletRequest request, HttpServletResponse response, Model model) {
+     */
+    @RequestMapping(value = "view/list.sb", method = RequestMethod.GET) public String registList(
+        HttpServletRequest request, HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
@@ -96,10 +94,10 @@ public class RegistController {
         // [보나비]의 경우 기본매장코드를 사용하여
         // 회원등록 매장이 기본매장일 경우 후불회원 적용매장을 등록한다.
         String defaultStoreCd = "";
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            defaultStoreCd =  StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0025"));
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            defaultStoreCd = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0025"));
+            defaultStoreCd.replace("*", "");
         }
-
         model.addAttribute("regstrStoreListAll", regstrStoreListAll);
         model.addAttribute("comboData", membrClassListAll);
         model.addAttribute("defaultStoreCd", defaultStoreCd);
@@ -116,8 +114,7 @@ public class RegistController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "view/list.sb", method = RequestMethod.POST)
-    @ResponseBody
+    @RequestMapping(value = "view/list.sb", method = RequestMethod.POST) @ResponseBody
     public Result registListPost(RegistVO registVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
@@ -137,8 +134,7 @@ public class RegistController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "base/getMemberInfo.sb", method = RequestMethod.POST)
-    @ResponseBody
+    @RequestMapping(value = "base/getMemberInfo.sb", method = RequestMethod.POST) @ResponseBody
     public Result baseListPost(RegistVO registVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
@@ -158,10 +154,9 @@ public class RegistController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "base/regist.sb", method = RequestMethod.POST)
-    @ResponseBody
+    @RequestMapping(value = "base/regist.sb", method = RequestMethod.POST) @ResponseBody
     public Result baseRegist(@Validated(Regist.class) @RequestBody RegistVO registVO, BindingResult bindingResult,
-                              HttpServletRequest request, HttpServletResponse response, Model model) {
+        HttpServletRequest request, HttpServletResponse response, Model model) {
 
         // 입력값 에러 처리
         if (bindingResult.hasErrors()) {
@@ -180,15 +175,6 @@ public class RegistController {
 
         int result = registService.saveRegistMember(registVO);
 
-        // 본사에서 등록시
-        if(si.getOrgnFg() == OrgnFg.HQ) {
-
-            // 후불회원 적용매장 등록
-            if( !StringUtil.isEmpties(registVO.getCreditStoreCds()) ) {
-                result += registService.saveCreditStores(registVO);
-            }
-        }
-
         return ReturnUtil.returnJson(Status.OK, result);
     }
 
@@ -201,10 +187,9 @@ public class RegistController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "base/remove.sb", method = RequestMethod.POST)
-    @ResponseBody
+    @RequestMapping(value = "base/remove.sb", method = RequestMethod.POST) @ResponseBody
     public Result baseRemove(@Validated(RegistDelete.class) RegistVO registVO, BindingResult bindingResult,
-                              HttpServletRequest request, HttpServletResponse response, Model model) {
+        HttpServletRequest request, HttpServletResponse response, Model model) {
         // 입력값 에러 처리
         if (bindingResult.hasErrors()) {
             return returnJsonBindingFieldError(bindingResult);
@@ -215,6 +200,46 @@ public class RegistController {
         registVO.setModDt(DateUtil.currentDateTimeString());
 
         int result = registService.deleteMember(registVO);
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+    /**
+     * 후불 회원 등록 매장 조회
+     * @param creditStoreVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "credit/getCreditStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getCreditStoreList(CreditStoreVO creditStoreVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO si = sessionService.getSessionInfo(request);
+
+        Map<String, Object> result = registService.getCreditStoreLists(creditStoreVO, si);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+    /***
+     * 후불매장 등록
+     * @param creditStoreVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "credit/saveCreditStore.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveCreditStore(@RequestBody CreditStoreVO[] creditStoreVOs, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO si = sessionService.getSessionInfo(request);
+
+        int result = registService.saveCreditStore(creditStoreVOs, si);
+
         return ReturnUtil.returnJson(Status.OK, result);
     }
 }

@@ -90,9 +90,6 @@ public class ExecptForwardController {
     @RequestMapping(value = "excpForwardView.sb", method = RequestMethod.GET)
     public String excpForwardView(HttpServletRequest request, HttpServletResponse response,
                        Model model) {
-
-        LOGGER.info(">>>>>>>>>>>>>>>>>>>>>>>> excpForwardView");
-
         return "application/pos/excpForward/excpForwardView";
 
     }
@@ -129,8 +126,6 @@ public class ExecptForwardController {
             sessionService.setSessionInfo(request, response, posSi);
 
             returnUrl = "application/pos/excpForward/"+request.getParameter("url");
-
-            LOGGER.info(">>>> returnUrl : "+ returnUrl);
         }
         else {
             throw new AuthenticationException(messageService.get("login.pos.error"), "/error/application/pos/403.sb");
@@ -156,11 +151,7 @@ public class ExecptForwardController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        LOGGER.info(">>>>>>>>>>>>> getExcpForwardProduct");
-
         List<DefaultMap<String>> list = service.getExcpForwardProduct(productVO, sessionInfoVO);
-
-        LOGGER.info(">>>>>>> list.size() : " + list.size());
 
         return returnListJson(Status.OK, list);
     }

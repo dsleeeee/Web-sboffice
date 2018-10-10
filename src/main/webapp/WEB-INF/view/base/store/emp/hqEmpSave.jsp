@@ -246,8 +246,6 @@
     if(chkType == "btnReg") {
       <%-- 사원번호 입력해주세요. --%>
       var msg = "<s:message code='hqEmp.empNo'/> <s:message code='cmm.require.text'/>";
-      console.log("rEmpNo.value  : "+ rEmpNo.value );
-      console.log(rEmpNo );
       if(rEmpNo.value == "") {
         s_alert.pop(msg);
         return;

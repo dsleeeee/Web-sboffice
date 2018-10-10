@@ -57,8 +57,8 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="coupon.storeCd"/>" binding="storeCd" width="*" isReadOnly="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="coupon.storeNm"/>" binding="storeNm" width="*" isReadOnly="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.storeCd"/>" binding="storeCd" width="*" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.storeNm"/>" binding="storeNm" width="*" is-read-only="true" ></wj-flex-grid-column>
               </wj-flex-grid>
             </div>
             <!--페이지 리스트-->
@@ -86,8 +86,8 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="coupon.storeCd"/>" binding="storeCd" width="*" isReadOnly="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="coupon.storeNm"/>" binding="storeNm" width="*" isReadOnly="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.storeCd"/>" binding="storeCd" width="*" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.storeNm"/>" binding="storeNm" width="*" is-read-only="true" ></wj-flex-grid-column>
               </wj-flex-grid>
             </div>
             <!--페이지 리스트-->

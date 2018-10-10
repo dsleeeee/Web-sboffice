@@ -17,7 +17,6 @@ import java.util.List;
  * @author NHN한국사이버결제 KCP 노해민
  * @since 2018. 08.08
  * @version 1.0
- * @see
  *
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
@@ -34,41 +33,41 @@ public interface VendrService {
      * @return DefaultMap
      */
     DefaultMap<String> dtlInfo(VendrVO vendrVO, SessionInfoVO sessionInfoVO);
-    
+
     /*
     * @param VendrVO
     * @return int
     * */
     int save(VendrVO vendrVO, SessionInfoVO sessionInfoVO);
-    
+
     /*
     * @param VendrVO
     * @return int
     * */
     int modify(VendrVO vendrVO, SessionInfoVO sessionInfoVO);
-    
+
     /**
      * @param VendrVO
      * @return List
      */
     List<DefaultMap<String>> vendrProdList(VendrVO vendrVO, SessionInfoVO sessionInfoVO);
-    
+
     /**
      * @param VendrVO
      * @return List
      */
     List<DefaultMap<String>> prodList(VendrVO vendrVO, SessionInfoVO sessionInfoVO);
-    
+
     /*
     * @param VendrVO
     * @return int
     * */
     int modifyProd(VendrVO[] vendrVO, SessionInfoVO sessionInfoVO);
-    
+
     /*
     * @param VendrVO
     * @return int
     * */
     int deleteProd(VendrVO[] vendrVO, SessionInfoVO sessionInfoVO);
-    
+
 }

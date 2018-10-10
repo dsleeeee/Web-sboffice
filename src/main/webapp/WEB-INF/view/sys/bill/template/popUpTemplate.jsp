@@ -26,11 +26,11 @@
                         <td>
                             <div class="sb-select">
                                 <wj-combo-box
-                                        id="srchTemplateTypeCombo"
-                                        ng-model="applyTemplateCd"
-                                        items-source="_getComboData('srchTemplateTypeCombo')"
+                                        id="srchTempltCdCombo"
+                                        ng-model="templtCd"
+                                        items-source="_getComboData('srchTempltCdCombo')"
                                         display-member-path="templtNm"
-                                        selected-value-path="prtClassCd"
+                                        selected-value-path="templtCd"
                                         is-editable="false"
                                         initialized="_initComboBox(s)"
                                         selected-index-changed="setSelectedCombo(s)">

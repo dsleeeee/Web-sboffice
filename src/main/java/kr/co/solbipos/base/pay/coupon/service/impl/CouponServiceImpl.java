@@ -63,11 +63,7 @@ public class CouponServiceImpl implements CouponService {
         // 본사 통제
         if(payMethodClassVO.getCoupnEnvstVal() == CoupnEnvFg.HQ) {
 
-            LOGGER.info(">>>>>> sessionInfoVO.getHqOfficeCd() : " + sessionInfoVO.getHqOfficeCd());
-
             payMethodClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-
-            LOGGER.info(">>>> payMethodClassVO.getHqOfficeCd : "+ payMethodClassVO.getHqOfficeCd());
 
             returnList = mapper.getHqCouponClassList(payMethodClassVO);
 
@@ -175,7 +171,7 @@ public class CouponServiceImpl implements CouponService {
 
         // 본사 통제
         if(couponVO.getCoupnEnvstVal() == CoupnEnvFg.HQ) {
-            couponVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
+            couponVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             returnList = mapper.getHqCouponList(couponVO);
         }
         // 매장 통제
@@ -234,8 +230,6 @@ public class CouponServiceImpl implements CouponService {
 
                 couponVO.setStoreCd(sessionInfoVO.getStoreCd());
                 couponVO.setCoupnRegFg(CoupnRegFg.STORE.getCode());
-
-//                LOGGER.info("CoupnRegFg.STORE.getCode() : "+ CoupnRegFg.STORE.getCode());
 
                 if(couponVO.getStatus() == GridDataFg.INSERT) {
 
@@ -364,18 +358,21 @@ public class CouponServiceImpl implements CouponService {
             procCnt += mapper.insertCouponStore(couponStoreVO);
         }
 
-        // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분에도 본사의 쿠폰 적용. //TODO
+        // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분에도 본사의 쿠폰 적용.
         // 적용매장 등록 완료된 후, 첫번째 매장의 등록정보로 등록
+        String couponResult = mapper.insertHqCouponToStore(couponStoreVOs[0]);
 
-        LOGGER.info(">>>>>>>>>>>>>>>>>여기다아아아");
+        // 상품정보도 함께 등록
+        CouponVO resultVO = new CouponVO();
+        resultVO.setHqOfficeCd(couponStoreVOs[0].getHqOfficeCd());
+        resultVO.setPayClassCd(couponStoreVOs[0].getPayClassCd());
+        resultVO.setCoupnCd(couponStoreVOs[0].getCoupnCd());
+        resultVO.setRegDt(dt);
+        resultVO.setRegId(sessionInfoVO.getUserId());
+        resultVO.setModDt(dt);
+        resultVO.setModId(sessionInfoVO.getUserId());
 
-        LOGGER.info(couponStoreVOs[0].getHqOfficeCd());
-        LOGGER.info(couponStoreVOs[0].getPayClassCd());
-        LOGGER.info(couponStoreVOs[0].getCoupnCd());
-
-        CouponStoreVO resultVO = couponStoreVOs[0];
-        String couponResult = mapper.insertHqCouponToStore(resultVO);
-        resultVO.setResult(couponResult);
+        String storeResult = mapper.insertHqCouponProdToStoreProd(resultVO);
 
         return procCnt;
     }
@@ -397,8 +394,6 @@ public class CouponServiceImpl implements CouponService {
 
         }
 
-
-        //TODO
         CouponVO resultVO = new CouponVO();
         resultVO.setHqOfficeCd(couponStoreVOs[0].getHqOfficeCd());
         resultVO.setPayClassCd(couponStoreVOs[0].getPayClassCd());
@@ -407,6 +402,8 @@ public class CouponServiceImpl implements CouponService {
         // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분에도 본사의 쿠폰 적용.
         String couponResult = mapper.deleteHqCouponToStore(resultVO);
 
+        // 상품정보도 함께 삭제
+        String prodResult = mapper.deleteHqCouponToStoreProd(resultVO);
 
         return procCnt;
     }

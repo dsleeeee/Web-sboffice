@@ -83,11 +83,6 @@ public class KitchenMemoController {
         String envstVal = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, envstCd));
         String orgnFg = String.valueOf(sessionInfoVO.getOrgnFg());
 
-//                LOGGER.info("======================> envstVal : "+ envstVal);
-//                LOGGER.info("======================> KitchenMemoEnvFg enum : "+ KitchenMemoEnvFg.getEnum(envstVal));
-//                LOGGER.info("======================> KitchenMemoEnvFg enum : "+ KitchenMemoEnvFg.getEnum(envstVal).toString());
-//                LOGGER.info("======================> orgnFg : "+ sessionInfoVO.getOrgnFg());
-
         // 환경설정값 체크 : [0024] 본사통제구분-주방메모 확인 ( 1: 본사통제, 2:매장통제 )
         // 매장통제, 본사통제 둘다 메뉴 사용 가능하지만 null인 경우는 사용 불가능.
         // 해당 환경설정값이 없는 경우, 본사환경설정에서 환경설정 필요.

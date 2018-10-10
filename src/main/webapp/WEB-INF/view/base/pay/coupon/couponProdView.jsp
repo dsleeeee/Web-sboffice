@@ -2,7 +2,7 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
-<wj-popup control="couponPordLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:900px;">
+<wj-popup id="couponProdLayer" control="couponProdLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:900px;">
 
   <div class="wj-dialog wj-dialog-columns">
     <div class="wj-dialog-header wj-dialog-header-font">
@@ -38,7 +38,9 @@
           <div class="wj-TblWrap mr10" style="height:350px;" ng-controller="regProdCtrl">
             <div class="oh mb10">
               <span class="fl bk lh20 s14"><s:message code="coupon.regProd"/></span>
+            <%--<c:if test="${coupnEnvstVal == 1}">--%>
               <span class="fr"><a href="#" class="btn_grayS2" ng-click="delete()"><s:message code="cmm.del" /></a></span>
+            <%--</c:if>--%>
             </div>
             <div id="regProdGrid" style="height: 270px;">
               <wj-flex-grid
@@ -54,11 +56,11 @@
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="coupon.hqOfficeCd"/>" binding="hqOfficeCd" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="coupon.storeCd"/>" binding="storeCd" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="coupon.prodClassCd"/>" binding="prodClassCd" width="*" isReadOnly="true" ></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="coupon.prodClassNm"/>" binding="prodClassNm" width="*" isReadOnly="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="coupon.prodCd"/>" binding="prodCd" width="*" isReadOnly="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="coupon.prodNm"/>" binding="prodNm" width="*" isReadOnly="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="coupon.costUprc"/>" binding="costUprc" width="*" isReadOnly="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.prodClassCd"/>" binding="prodClassCd" width="*" is-read-only="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.prodClassNm"/>" binding="prodClassNm" width="*" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.prodCd"/>" binding="prodCd" width="*" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.prodNm"/>" binding="prodNm" width="*" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.costUprc"/>" binding="costUprc" width="*" is-read-only="true"></wj-flex-grid-column>
               </wj-flex-grid>
             </div>
             <!--페이지 리스트-->
@@ -88,11 +90,11 @@
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="coupon.hqOfficeCd"/>" binding="hqOfficeCd" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="coupon.storeCd"/>" binding="storeCd" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="coupon.prodClassCd"/>" binding="prodClassCd" width="*"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="coupon.prodClassNm"/>" binding="prodClassNm" width="*"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="coupon.prodCd"/>" binding="prodCd" width="*"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="coupon.prodNm"/>" binding="prodNm" width="*"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="coupon.costUprc"/>" binding="costUprc" width="*"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.prodClassCd"/>" binding="prodClassCd" width="*" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.prodClassNm"/>" binding="prodClassNm" width="*" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.prodCd"/>" binding="prodCd" width="*" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.prodNm"/>" binding="prodNm" width="*" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.costUprc"/>" binding="costUprc" width="*" is-read-only="true"></wj-flex-grid-column>
               </wj-flex-grid>
             </div>
             <!--페이지 리스트-->
@@ -105,4 +107,8 @@
   </div>
 </wj-popup>
 
+
+<script type="text/javascript">
+  var coupnEnvstVal = "${coupnEnvstVal}";
+</script>
 <script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/couponProd.js?ver=20180817" charset="utf-8"></script>

@@ -73,11 +73,11 @@
   </table>
 
   <%-- 조회 --%>
-  <div class="mt10 pdb20 oh bb">
+  <div class="mt10 pdb20 oh">
     <button class="btn_blue fr" id="btnSearch"><s:message code="cmm.search" /></button>
   </div>
 
-  <div class="wj-TblWrap mt20">
+  <div class="wj-TblWrap mt40">
     <div class="w35 fl">
       <div class="wj-TblWrapBr mr10 pd20" style="height:700px;">
         <div class="sb-select dkbr mb10 oh">

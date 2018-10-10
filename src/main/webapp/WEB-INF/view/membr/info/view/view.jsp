@@ -118,12 +118,14 @@
       </tr>
       <tr>
         <%-- 회원등급 --%>
+        <%--
         <th><s:message code="regist.class.cd"/></th>
         <td>
           <div class="sb-select">
             <div id="classCd"></div>
           </div>
         </td>
+        --%>
         <%-- 성별 --%>
         <th><s:message code="regist.gender"/></th>
         <td>
@@ -131,16 +133,18 @@
             <div id="gender"></div>
           </div>
         </td>
+        <th></th>
+        <td></td>
       </tr>
     </tbody>
   </table>
 
   <%-- 조회버튼 --%>
-  <div class="mt10 pdb20 oh bb">
+  <div class="mt10 pdb20 oh">
     <button class="btn_blue fr" id="btnSearch"><s:message code="cmm.search"/></button>
   </div>
 
-  <div class="wj-TblWrap mt10">
+  <div class="wj-TblWrap mt40">
     <%-- left --%>
     <div class="w50 fl">
       <div class="wj-TblWㅣrapBr mr10 pd20" style="height:700px;">
@@ -177,7 +181,7 @@ $(document).ready(function(){
   var endDt        = wcombo.genDateVal("#endDt", "${sessionScope.sessionInfo.endDt}");
   var anvrsStartDt = wcombo.genDateVal("#anvrsStartDt", "${sessionScope.sessionInfo.startDt}");
   var anvrsEndDt   = wcombo.genDateVal("#anvrsEndDt", "${sessionScope.sessionInfo.endDt}");
-  var classCd      = wcombo.genCommonBox("#classCd", ${comboData});
+  <%--var classCd      = wcombo.genCommonBox("#classCd", ${comboData}); //TODO 회원등급 추가 후 작업 예정 --%>
   var periodDate   = wcombo.genCommonBox("#periodDate", periodDate);
   var anvrsDate    = wcombo.genCommonBox("#anvrsDate", ${ccu.getCommCode("032")});
   var gender       = wcombo.genCommonBox("#gender", genderData);
@@ -237,15 +241,15 @@ $(document).ready(function(){
       vAddr2.value       = data.addr;
       vRemark.value      = data.remark;
       vRegStore.selectedValue = data.regStoreCd;
-      vClassCd.selectedValue = data.membrClassCd;
+      // vClassCd.selectedValue = data.membrClassCd;
       vGender.selectedValue = data.gendrFg;
       vWedding.selectedValue = data.weddingYn;
       vUseYn.selectedValue = data.useYn;
       vEmailRecv.selectedValue = data.emailRecvYn;
       vSmsRecv.selectedValue = data.smsRecvYn;
 
-      $("#storeCd").val(data.creditStoreCds)
-      $("#storeCdText").val(data.creditStoreNms);
+      // $("#storeCd").val(data.creditStoreCds)
+      // $("#storeCdText").val(data.creditStoreNms);
       $("#vMembrOrgnCd").val(data.membrOrgnCd);
       $("#membrNoNm").text("<s:message code='regist.membr.info'/>" + " [" + data.membrNo + "/" + data.membrNm + "]");
       vMembrNo.isReadOnly = true;
@@ -281,7 +285,7 @@ $(document).ready(function(){
     param.telNo = telNo.value;
     param.emailAddr = membrEmail.value;
     param.regStoreCd = regStore.selectedValue;
-    param.membrClassCd = classCd.selectedValue;
+    // param.membrClassCd = classCd.selectedValue;
     param.gendrFg = gender.selectedValue;
     param.emailRecvYn = emailRecvYn.selectedValue;
     param.smsRecvYn = smsRecvYn.selectedValue;
@@ -327,7 +331,7 @@ $(document).ready(function(){
   var vRemark      = genInputText("#vRemark", "160");
   var vBrthdDt     = wcombo.genDate("#vBrthdDt");
   var vRegStore    = wcombo.genCommonBox("#vRegStore", ${regstrStoreListAll});
-  var vClassCd     = wcombo.genCommonBox("#vClassCd", ${comboData});
+  <%--var vClassCd     = wcombo.genCommonBox("#vClassCd", ${comboData});--%>
   var vGender      = wcombo.genCommonBox("#vGender", genderDataEx);
   var vWedding     = wcombo.genCommonBox("#vWedding", weddingData);
   var vEmailRecv   = wcombo.genCommonBox("#vEmailRecv", recvDataEx);
@@ -338,7 +342,6 @@ $(document).ready(function(){
 
   vRegStore.selectedIndexChanged.addHandler(function(s, e){
     editCreditStore();
-
   });
 
   // 후불회원 적용매장
@@ -369,8 +372,8 @@ $(document).ready(function(){
     vWedding.selectedValue = 'N';
     vUseYn.selectedValue = 'Y';
 
-    $("#storeCd").val("");
-    $("#storeCdText").val("");
+    // $("#storeCd").val("");
+    // $("#storeCdText").val("");
 
   }
 
@@ -391,7 +394,7 @@ $(document).ready(function(){
       function(result){
         if(result.message != undefined || result.message == "") {
           s_alert.pop(result.message);
-          return;
+          return false;
         }
         var data = result.data;
         var keys = Object.keys(data);
@@ -422,10 +425,7 @@ $(document).ready(function(){
       param.emailRecvYn = vEmailRecv.selectedValue;
       param.smsRecvYn = vSmsRecv.selectedValue;
       param.remark = vRemark.value;
-      param.creditStoreCds = $("#storeCd").val(); // 후불회원 적용매장
-
-      console.log("param >>>>> ");
-      console.log(param);
+      // param.creditStoreCds = $("#storeCd").val(); // 후불회원 적용매장
 
       $.postJSONSave("/membr/info/view/base/regist.sb", param, function(result) {
         var msg = "<s:message code='cmm.registSucc'/>";
@@ -513,39 +513,9 @@ $(document).ready(function(){
 
   <%-- 후불회원 적용매장 버튼 클릭시 --%>
   $("#store").click(function(){
-    var chked = $("#storeCd").val();
-
-    c_store.init(chked, function(arr){
-
-      $("#storeCdText").val("");
-      $("#storeCd").val("");
-
-      if(arr.length > 1) {
-        var str = "";
-        var a = arr.length -1;
-
-        if(arr[0].nm !== "ALL") { str = (arr[0].nm + "외 " + a.toString() + " 선택"); }
-        else                    { str = (arr[1].nm + "외 " + a.toString() + " 선택"); }
-
-        $("#storeCdText").val(str);
-
-      } else if(arr.length == 1){
-        $("#storeCdText").val(arr[0].nm);
-      }
-      $("#storeCd").val(arr);
-
-      var storeText = "";
-      for(var i=0; i<arr.length; i++) {
-        if(i == arr.length - 1) {
-          storeText += arr[i].cd.toString();
-          $("#storeCd").val(storeText);
-        } else {
-          storeText += arr[i].cd.toString() + ",";
-          $("#storeCd").val(storeText);
-        }
-      }
-
-    });
+    console.log(selectData); //TODO 여기부터 >>>>>>>>>>>>>>>>>>>>>>>
+    showStoreLayer();
+    wijmo.grid.FlexGrid.refreshAll();
   });
 
   <%--신규등록 버튼--%>
@@ -581,5 +551,9 @@ $(document).ready(function(){
 </script>
 
 <%-- 매장 선택 --%>
-<c:import url="/WEB-INF/view/application/layer/store.jsp">
+<c:import url="/WEB-INF/view/membr/info/view/store.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+  <c:param name="baseUrl" value="ㅁㅇㄷㅎ"/>
 </c:import>
+

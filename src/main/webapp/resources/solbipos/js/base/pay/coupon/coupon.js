@@ -13,6 +13,7 @@
  */
 var app = agrid.getApp();
 var selectedCouponClass;
+var selectedCoupon;
 
 /**
  *  쿠폰분류등록 그리드 생성
@@ -51,12 +52,21 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
             s_alert.pop(messages["coupon.not.use.payClassCd"]);
             var couponGrid = agrid.getScope('couponCtrl');
             couponGrid._gridDataInit();
+            // $scope._gridDataInit();
             return;
           } else {
             $("#couponSubTitle").text(" [" + selectedRow.payClassNm+ "]");
             $scope._broadcast('couponCtrl', selectedRow);
           }
         }
+      }
+    });
+
+    // 쿠폰 분류 그리드 분류코드 reod only 풀리는 오류 수정
+    s.beginningEdit.addHandler(function (s, e) {
+      var col = s.columns[e.col];
+      if (col.binding === "payClassCd" ) {
+        e.cancel = true;
       }
     });
 
@@ -69,9 +79,9 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
     });
 
     // 조회 이벤트 발생
-    setTimeout(function() {
-      $scope._broadcast('couponClassCtrl', true);
-    }, 100)
+    // setTimeout(function() {
+    //   $scope._broadcast('couponClassCtrl', true);
+    // }, 100)
   };
 
   $scope.$on("couponClassCtrl", function(event, data) {
@@ -86,7 +96,12 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
     params.coupnEnvstVal = coupnEnvstVal;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
-    $scope._inquirySub(baseUrl + "class/getCouponClassList.sb", params, function() {}, false);
+    $scope._inquirySub(baseUrl + "class/getCouponClassList.sb", params, function() {
+      selectedCouponClass = null;
+      selectedCoupon = null;
+      var couponScope = agrid.getScope('couponCtrl');
+      couponScope._gridDataInit();
+    }, false);
   };
 
   // 쿠폰 분류 그리드 행 추가
@@ -233,10 +248,11 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
       if( ht.cellType === wijmo.grid.CellType.Cell) {
         var col = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
+        selectedCoupon = selectedRow;
 
-        if ( col.binding === "prodCnt" && selectedRow.status !== "I") {
+        if (col.binding === "prodCnt" && selectedRow.status !== "I") {
           // 상품 등록 팝업
-          var popup = $scope.couponPordLayer;
+          var popup = $scope.couponProdLayer;
           popup.show(true, function (s) {
             var regProdGrid = agrid.getScope('regProdCtrl');
             regProdGrid._gridDataInit();
@@ -273,7 +289,9 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
     params.coupnEnvstVal = coupnEnvstVal;
     params.payClassCd = data.payClassCd;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
-    $scope._inquirySub(baseUrl + "class/getCouponList.sb", params, function(){}, false);
+    $scope._inquirySub(baseUrl + "class/getCouponList.sb", params, function(){
+      selectedCoupon = null;
+    }, false);
   };
 
   // 쿠폰 그리드 행 추가

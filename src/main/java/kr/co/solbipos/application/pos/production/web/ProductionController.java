@@ -86,8 +86,6 @@ public class ProductionController {
     public String productionView(HttpServletRequest request, HttpServletResponse response,
                        Model model) {
 
-        LOGGER.info(">>>>>>>>>>>>>>>>>>>>>>>> productionView");
-
         return "application/pos/production/productionView";
     }
 
@@ -146,11 +144,7 @@ public class ProductionController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        LOGGER.info(">>>>>>>>>>>>> getProductList");
-
         List<DefaultMap<String>> list = service.getProductList(productionVO, sessionInfoVO);
-
-        LOGGER.info(">>>>>>> list.size() : " + list.size());
 
         return returnListJson(Status.OK, list);
     }

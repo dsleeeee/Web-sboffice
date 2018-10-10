@@ -2,7 +2,10 @@ package kr.co.solbipos.membr.anals.credit.service.impl;
 
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.utils.jsp.CmmEnvUtil;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.membr.anals.credit.service.CreditService;
 import kr.co.solbipos.membr.anals.credit.service.CreditStoreVO;
 import kr.co.solbipos.membr.anals.credit.service.enums.CreditInFg;
@@ -42,6 +45,9 @@ public class CreditServiceImpl implements CreditService {
     @Autowired
     CreditMapper mapper;
 
+    @Autowired
+    CmmEnvUtil cmmEnvUtil;
+
     /** 후불 회원 외상, 입금 내역 */
     @Override
     public List<DefaultMap<Object>> getCreditMemberList(CreditStoreVO creditStoreVO,
@@ -59,6 +65,14 @@ public class CreditServiceImpl implements CreditService {
     public List<DefaultMap<Object>> getDepositMemberList(CreditStoreVO creditStoreVO,
         SessionInfoVO sessionInfoVO) {
 
+        // 기본매장이 있는 경우, 매장 조회시 기본매장은 제외하고 검색한다.
+        String defaultStoreCd = "";
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            defaultStoreCd = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0025"));
+            defaultStoreCd.replace("*", "");
+        }
+
+        creditStoreVO.setDefaultStoreCd(defaultStoreCd);
         creditStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         return mapper.getDepositMemberList(creditStoreVO);

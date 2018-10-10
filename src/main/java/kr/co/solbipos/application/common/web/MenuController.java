@@ -94,6 +94,7 @@ public class MenuController {
         String defaultStoreCd = "";
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             defaultStoreCd =  StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0025"));
+            defaultStoreCd = defaultStoreCd.replace("*", "");
         }
         storeVO.setDefaultStoreCd(defaultStoreCd);
         storeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());

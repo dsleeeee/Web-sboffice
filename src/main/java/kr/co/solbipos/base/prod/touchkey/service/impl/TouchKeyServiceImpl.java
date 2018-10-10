@@ -326,9 +326,6 @@ public class TouchKeyServiceImpl implements TouchKeyService {
     private List<TouchKeyClassVO> parseXML(SessionInfoVO sessionInfoVO, String xml) {
 
         String[] xmls = xml.split("\\|");
-//        LOGGER.info(XssPreventer.unescape(xmls[0]));
-//        LOGGER.info(XssPreventer.unescape(xmls[1]));
-
         List<TouchKeyClassVO> touchKeyClassVOS = new ArrayList<TouchKeyClassVO>();
         TouchKeyClassVO touchKeyClassVO = new TouchKeyClassVO();
 
@@ -367,7 +364,7 @@ public class TouchKeyServiceImpl implements TouchKeyService {
                 // 페이지 번호 계산 - 100*5
                 Double pageNo = (touchKeyClassVO.getX() / 500) + 1;
                 touchKeyClassVO.setPageNo(pageNo.intValue());
-                // 페이지당 Rows
+                // 분류의 페이지당 Rows ( 2 or 3 )
                 String pageRows;
                 if ( "H".equals(sessionInfoVO.getOrgnFg().getCode()) ) {
                     pageRows = cmmEnvUtil.getHqEnvst(sessionInfoVO, "0041");

@@ -62,13 +62,14 @@
                     sticky-headers="true"
                     selection-mode="Row"
                     items-source="data"
-                    item-formatter="_itemFormatter">
+                    item-formatter="_itemFormatter"
+                    is-read-only="true">
 
               <!-- define columns -->
-              <wj-flex-grid-column header="<s:message code="prepaid.storeCd"/>" binding="storeCd" width="*" isReadOnly="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="prepaid.storeNm"/>" binding="storeNm" width="*" isReadOnly="true" ></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="prepaid.membrNo"/>" binding="membrNo" width="*" isReadOnly="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="prepaid.membrNm"/>" binding="membrNm" width="*" isReadOnly="true" ></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="prepaid.storeCd"/>" binding="storeCd" width="*"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="prepaid.storeNm"/>" binding="storeNm" width="*" ></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="prepaid.membrNo"/>" binding="membrNo" width="*"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="prepaid.membrNm"/>" binding="membrNm" width="*" ></wj-flex-grid-column>
             </wj-flex-grid>
           </div>
           <!--페이지 리스트-->

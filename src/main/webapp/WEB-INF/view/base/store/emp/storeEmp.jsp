@@ -29,7 +29,7 @@
             <span class="rg">~</span>
             <span class="txtIn"><div id="srchEndDt" class="w200"></div></span>
             <span class="chk ml10">
-              <input type="checkbox" name="chkDt" id="chkDt" value="Y"/>
+              <input type="checkbox" name="chkDt" id="chkDt" checked/>
               <label for="chkDt" ><s:message code="cmm.all.day" /></label>
             </span>
           </div>
