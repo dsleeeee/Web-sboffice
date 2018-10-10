@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<!-- https://github.com/sonegy/how-to-use-logback 참고 -->
+
+<configuration scan="true" scanPeriod="30 seconds"><!-- scanPeriod 마다 설정 파일의 변경을 확인하여 로딩 -->
+
+  <property name="ROOT_LEVEL" value="DEBUG"/>
+  <property name="LOG_LEVEL" value="DEBUG"/>
+  <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"/>
+  <property name="FILE_EXT" value="log"/>
+
+  <!-- log.path 는 구분자를 '/' 로 해야 로그 생성이 된다. -->
+  <property name="FILE_PATH_NAME" value="/etc/usr/local/logs/solbipos/solbipos.${FILE_EXT}"/>
+  <property name="FILE_ROLLING_PATTERN" value="/etc/usr/local/logs/solbipos/solbipos_%d{yyyy-MM-dd}_%i.${FILE_EXT}.zip"/>
+
+
+  <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>${LOG_PATTERN}</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${FILE_PATH_NAME}</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${FILE_ROLLING_PATTERN}</fileNamePattern><!-- 매일 생성 -->
+      <maxHistory>30</maxHistory><!-- maxHistory 일이 지나면 삭제 -->
+      <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        <maxFileSize>100MB</maxFileSize><!-- maxFileSize 초과시 생성 -->
+      </timeBasedFileNamingAndTriggeringPolicy>
+    </rollingPolicy>
+    <encoder>
+      <pattern>${LOG_PATTERN}</pattern>
+    </encoder>
+  </appender>
+
+  <!-- 기본적으로 <root> 에서 참조를 하되, ref 를 따로 설정하고 싶으면 <logger> 마다 <appender-ref> 를 추가한다. -->
+  <logger name="org.springframework" level="${LOG_LEVEL}"/>
+
+  <logger name="org.mybatis" level="${LOG_LEVEL}"/>
+
+  <logger name="kr.co" level="${LOG_LEVEL}"/>
+
+  <root level="${ROOT_LEVEL}">
+    <appender-ref ref="console"/>
+    <appender-ref ref="file"/>
+  </root>
+
+</configuration>

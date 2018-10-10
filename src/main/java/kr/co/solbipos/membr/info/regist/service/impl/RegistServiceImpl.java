@@ -1,9 +1,11 @@
 package kr.co.solbipos.membr.info.regist.service.impl;
 
+import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.ObjectUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.membr.info.grade.service.MembrClassVO;
@@ -18,7 +20,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
  * @Class Name : RegistServiceImpl.java
@@ -93,40 +99,6 @@ public class RegistServiceImpl implements RegistService {
         // 회원 정보 조회
         resultVO = selectMember(registVO);
 
-        // 본사 && 기본매장 관리하는 본사일 경우
-        // 후불회원 적용 매장정보도 조회 필요
-        String envstVal = cmmEnvUtil.getHqEnvst(sessionInfoVO, "0025");
-
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ && !StringUtil.isEmpties(envstVal)){
-
-            List<DefaultMap<String>> currentCreditStores = mapper.getCurrentCreditStore(registVO);
-
-            String creditStoreCds = "";
-            String creditStoreNms = "";
-            int creditStoreNmsCnt = 0;
-
-            for(DefaultMap<String> creditStoreInfo : currentCreditStores) {
-                if(!"".equals(creditStoreCds)) {
-                    creditStoreCds += ("," + creditStoreInfo.getStr("cd"));
-                } else {
-                    creditStoreCds = creditStoreInfo.getStr("cd");
-                }
-
-                if("".equals(creditStoreNms)) {
-                    creditStoreNms = creditStoreInfo.getStr("nm");
-                } else {
-                    creditStoreNmsCnt++;
-                }
-            }
-
-            if(creditStoreNmsCnt > 0) {
-                creditStoreNms += ("외 "+ creditStoreNmsCnt +" 선택");
-            }
-
-            resultVO.setCreditStoreCds(creditStoreCds);
-            resultVO.setCreditStoreNms(creditStoreNms);
-        }
-
         return resultVO;
     }
 
@@ -197,83 +169,58 @@ public class RegistServiceImpl implements RegistService {
         return result;
     }
 
-    /** 후불회원 매장 등록 */
+    /***
+     * 후불 회원 등록 매장 조회
+     * @param creditStoreVO
+     * @return
+     */
     @Override
-    public int saveCreditStores(RegistVO registVO) {
+    public Map<String,Object> getCreditStoreLists(CreditStoreVO creditStoreVO, SessionInfoVO sessionInfoVO) {
 
-        int result = 0;
+        Map<String,Object> resultMap = new HashMap<String, Object>();
 
-        String creditStores[] = registVO.getCreditStoreCds().split(",");
-
-        if(creditStores.length > 0){
-
-            // 현재 등록된 후불회원 매장
-            List<DefaultMap<String>> currentCreditStores = mapper.getCurrentCreditStore(registVO);
-
-            String cds = "";
-
-            for(DefaultMap<String> currentCreditStore : currentCreditStores) {
-                if("".equals(cds)) {
-                    cds = currentCreditStore.getStr("cd");
-                } else {
-                    cds += (","+currentCreditStore.getStr("cd"));
-                }
-            }
-
-            String[] currentCreditStore = cds.split(",");
-
-            // 삭제할 매장
-            List<String> delStore = new ArrayList<String>();
-
-            if(currentCreditStore.length > 0) {
-
-                for(int i=0; i<currentCreditStore.length; i++) {
-                    boolean isChk = false;
-
-                    String storeCd = currentCreditStore[i];
-
-                    for(int j=0; j<creditStores.length; j++){
-                        if(storeCd.equals(creditStores[j]))  {
-                            isChk = true;
-                        }
-                    }
-                    if(!isChk){
-                        delStore.add(storeCd);
-                    }
-                }
-            }
-
-            // 삭제할 매장 삭제
-            if(delStore.size() > 0) {
-                for(String delStoreCd : delStore) {
-                    CreditStoreVO creditStoreVO = new CreditStoreVO();
-
-                    creditStoreVO.setHqOfficeCd(registVO.getMembrOrgnCd());
-                    creditStoreVO.setMemberNo(registVO.getMembrNo());
-                    creditStoreVO.setCreditStoreCd(delStoreCd);
-
-                    result += mapper.deleteCreditStore(creditStoreVO);
-                }
-            }
-
-            // 저장 또는 수정
-            if(creditStores.length> 0 ){
-                for(String regStoreCd : creditStores){
-                    CreditStoreVO creditStoreVO = new CreditStoreVO();
-
-                    creditStoreVO.setHqOfficeCd(registVO.getMembrOrgnCd());
-                    creditStoreVO.setMemberNo(registVO.getMembrNo());
-                    creditStoreVO.setCreditStoreCd(regStoreCd);
-                    creditStoreVO.setRegDt(registVO.getRegDt());
-                    creditStoreVO.setRegId(registVO.getRegId());
-                    creditStoreVO.setModDt(registVO.getModDt());
-                    creditStoreVO.setModId(registVO.getModId());
-
-                    result += mapper.registCreditStore(creditStoreVO);
-                }
-            }
+        // 기본매장이 있는 경우, 매장 조회시 기본매장은 제외하고 검색한다.
+        String defaultStoreCd = "";
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            defaultStoreCd = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0025"));
+            defaultStoreCd.replace("*", "");
         }
 
+        creditStoreVO.setDefaultStoreCd(defaultStoreCd);
+
+        // 등록매장 조회
+        List<DefaultMap<String>> regStoreList = mapper.getRegStoreList(creditStoreVO);
+
+        // 미등록매장 조회
+        List<DefaultMap<String>> noRegStoreList = mapper.getNoRegStoreList(creditStoreVO);
+
+        resultMap.put("regStoreList", regStoreList);
+        resultMap.put("noRegStoreList", noRegStoreList);
+
+        return resultMap;
+    }
+
+    /** 후불회원 매장 등록 */
+    @Override
+    public int saveCreditStore(CreditStoreVO[] creditStoreVOs, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+        String dt = currentDateTimeString();
+
+
+        for(CreditStoreVO creditStoreVO : creditStoreVOs) {
+
+            creditStoreVO.setRegDt(dt);
+            creditStoreVO.setRegId(sessionInfoVO.getUserId());
+            creditStoreVO.setModDt(dt);
+            creditStoreVO.setModId(sessionInfoVO.getUserId());
+
+            if(creditStoreVO.getStatus() == GridDataFg.INSERT) {
+                result += mapper.registCreditStore(creditStoreVO);
+            } else {
+                result += mapper.deleteCreditStore(creditStoreVO);
+            }
+        }
         return result;
     }
 }

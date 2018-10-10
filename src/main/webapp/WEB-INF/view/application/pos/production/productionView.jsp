@@ -36,12 +36,12 @@
 
                             <!-- define columns -->
                             <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="application.pos.production.storeCd"/>" binding="storeCd" width="*" isReadOnly="true" visible="false"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="application.pos.production.prodClassCd"/>" binding="prodClassCd" width="*" isReadOnly="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="application.pos.production.prodClassNm"/>" binding="prodClassNm" width="*" isReadOnly="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="application.pos.production.prodCd"/>" binding="prodCd" width="*" isReadOnly="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="application.pos.production.prodNm"/>" binding="prodNm" width="*" isReadOnly="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="application.pos.production.regProd"/>" binding="regProd" width="100" isReadOnly="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="application.pos.production.storeCd"/>" binding="storeCd" width="*" is-read-only="true" visible="false"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="application.pos.production.prodClassCd"/>" binding="prodClassCd" width="*" is-read-only="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="application.pos.production.prodClassNm"/>" binding="prodClassNm" width="*" is-read-only="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="application.pos.production.prodCd"/>" binding="prodCd" width="*" is-read-only="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="application.pos.production.prodNm"/>" binding="prodNm" width="*" is-read-only="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="application.pos.production.regProd"/>" binding="regProd" width="100" is-read-only="true"></wj-flex-grid-column>
                         </wj-flex-grid>
 
                     </div>

@@ -16,13 +16,14 @@
   <div class="mb40" ng-controller="mCouponClassCtrl">
     <div class="wj-TblWrapBr mr10 pd20" style="height:500px;">
       <div class="updownSet oh mb10">
-        <span class="fl bk lh30"><s:message code='mobileCoupon.regist.class' /></span>
+        <span class="fl bk lh30"><s:message code='mobileCoupon.regist.coupon' /></span>
+        <button class="btn_skyblue" id="btnClassAdd" ng-click="searchMobileCouponClass()"><s:message code='cmm.search' /></button>
         <button class="btn_skyblue" id="btnClassAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
         <%--<button class="btn_skyblue" id="btnClassDel" ng-click="del()"><s:message code='cmm.del' /></button>--%>
         <button class="btn_skyblue" id="btnClassSave" ng-click="save()"><s:message code='cmm.save' /></button>
       </div>
       <%-- 상품권분류등록 그리드 --%>
-      <div id="mCouponClassGrid" class="wj-gridWrap" style="height:380px">
+      <div id="mCouponClassGrid" class="wj-gridWrap" style="height:380px; overflow-y: hidden;">
         <wj-flex-grid
                 autoGenerateColumns="false"
                 control="flex"
@@ -36,7 +37,7 @@
           <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="mobileCoupon.hqOfficeCd"/>" binding="hqOfficeCd" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="mobileCoupon.payTypeFg"/>" binding="payTypeFg" visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="mobileCoupon.payClassCd"/>" binding="payClassCd" width="200" maxLength="3" isReadOnly="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="mobileCoupon.payClassCd"/>" binding="payClassCd" width="200" maxLength="3" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="mobileCoupon.payClassNm"/>" binding="payClassNm" width="*" maxLength="20"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="mobileCoupon.serNoYn"/>" binding="serNoYn" width="150" data-map="useYnDataMap" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="cmm.useYn"/>" binding="useYn" width="150" data-map="useYnDataMap"></wj-flex-grid-column>

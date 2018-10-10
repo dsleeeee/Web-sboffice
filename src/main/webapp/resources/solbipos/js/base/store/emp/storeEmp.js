@@ -93,7 +93,8 @@ $(document).ready(function () {
 
         if (list.length === undefined || list.length == 0) {
           s_alert.pop(messages["cmm.empty.data"]);
-          return;
+          grid.itemsSource = new wijmo.collections.CollectionView([]);
+          return false;
         }
 
         grid.itemsSource = list;

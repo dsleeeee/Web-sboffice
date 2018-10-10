@@ -58,12 +58,12 @@
     </tbody>
   </table>
 
-  <div class="mt10 pdb20 oh bb">
+  <div class="mt10 pdb20 oh">
     <%-- 조회 --%>
     <button class="btn_blue fr" id="btnSearch"><s:message code="cmm.search" /></button>
   </div>
 
-  <div class="mt20 oh sb-select dkbr">
+  <div class="mt40 oh sb-select dkbr">
     <%--페이지 스케일 --%>
     <div id="listScaleBox" class="w130 fl"></div>
     <div class="tr">

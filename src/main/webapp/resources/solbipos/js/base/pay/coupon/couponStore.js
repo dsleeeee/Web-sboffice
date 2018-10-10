@@ -56,10 +56,6 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.flex.collectionView.items[i].payClassCd = selectedClassRow.payClassCd;
         $scope.flex.collectionView.items[i].coupnCd = selectedCouponRow.coupnCd;
         params.push($scope.flex.collectionView.items[i]);
-
-
-        console.log("del:::: ");
-        console.log(params);
       }
     }
     $http({

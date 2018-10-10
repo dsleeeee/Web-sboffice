@@ -195,7 +195,6 @@ grid2.addEventListener(grid2.hostElement, 'mousedown', function(e) {
     var col = ht.panel.columns[ht.col];
     if( col.binding == "fnkeyNo") {
       selectedFnkey = grid2.rows[ht.row].dataItem;
-      // console.log(grid2.rows[ht.row].dataItem);
       showStoreLayer();
       wijmo.grid.FlexGrid.refreshAll();
     }
@@ -370,8 +369,6 @@ $("#btnSave").click(function(e){
     return;
   }
 
-  console.log(paramArr)
-
   $.postJSONArray("${baseUrl}" + "save.sb", paramArr, function(result) {
     s_alert.pop("<s:message code='cmm.saveSucc' />");
     grid2.collectionView.clearChanges();
@@ -379,11 +376,6 @@ $("#btnSave").click(function(e){
   function(result) {
     s_alert.pop(result.message);
   });
-  // for(var i=0; i<paramArr.length; i++){
-  //   paramArr[i].posiAdjYn   = (paramArr[i].posiAdjYn   == true ? "Y":"N");
-  //   paramArr[i].fnkeyUseYn0 = (paramArr[i].fnkeyUseYn0 == true ? "Y":"N");
-  //   paramArr[i].fnkeyUseYn1 = (paramArr[i].fnkeyUseYn1 == true ? "Y":"N");
-  // }
 
 });
 </script>

@@ -169,7 +169,9 @@
     <typeAlias alias="empBrandVO" type="kr.co.solbipos.base.store.empbrand.service.EmpBrandVO"/>
     <typeAlias alias="empZoneVO" type="kr.co.solbipos.base.store.empzone.service.EmpZoneVO"/>
     <typeAlias alias="vanConerVO" type="kr.co.solbipos.base.store.vanconer.service.VanConerVO"/>
-    <typeAlias alias="posVO" type="kr.co.solbipos.base.output.pos.service.PosVO"/>
+-->
+    <typeAlias alias="posTemplateVO" type="kr.co.solbipos.base.output.postemplate.service.PosTemplateVO"/>
+<!--
     <typeAlias alias="barcdConfgVO" type="kr.co.solbipos.base.output.barcdconfg.service.BarcdConfgVO"/>
     <typeAlias alias="barcdPrtVO" type="kr.co.solbipos.base.output.barcdprt.service.BarcdPrtVO"/>
     <typeAlias alias="priceTagVO" type="kr.co.solbipos.base.output.pricetag.service.PriceTagVO"/>

@@ -27,7 +27,7 @@
             <span class="txtIn"> <input id="startDt" name="startDt" class="w200" /></span>
             <span class="rg">~</span>
             <span class="txtIn"> <input id="endDt" name="endDt" class="w200" /></span>
-            <span class="chk ml10"> <input type="checkbox" id="chkDt" />
+            <span class="chk ml10"> <input type="checkbox" id="chkDt" checked/>
             <label for="chkDt"><s:message code="cmm.all.day" /></label>
             </span>
           </div>
@@ -52,30 +52,32 @@
       <tr>
         <%-- 바코드 --%>
         <th><s:message code="prod.barCd" /></th>
-        <td>
+        <td colspan="3">
           <div class="sb-select">
             <div id="barCd"></div>
           </div>
         </td>
         <%-- 분류조회 --%>
+          <%--
         <th><s:message code="prod.class.search" /></th>
         <td>
           <div class="sb-select">
             <div id="prodClassCd"></div>
           </div>
         </td>
+        --%>
       </tr>
     </tbody>
   </table>
   <%--//searchTbl--%>
 
-  <div class="mt10 pdb20 oh bb">
+  <div class="mt10 pdb20 oh">
     <button class="btn_blue fr" id="searchBtn">
       <s:message code="cmm.search" />
     </button>
   </div>
 
-  <div class="mt20 oh sb-select dkbr">
+  <div class="mt40 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
     <div id="listScaleBox" class="w150 fl"></div>
 
@@ -352,7 +354,7 @@ $(document).ready(function(){
   var prodCd       = wcombo.genInput("#prodCd");
   var prodNm       = wcombo.genInput("#prodNm");
   var barCd        = wcombo.genInput("#barCd");
-  var prodClassCd  = wcombo.genInput("#prodClassCd");
+  // var prodClassCd  = wcombo.genInput("#prodClassCd");
   var startDt      = wcombo.genDateVal("#startDt", "${sessionScope.sessionInfo.startDt}");
   var endDt        = wcombo.genDateVal("#endDt", "${sessionScope.sessionInfo.endDt}");
   var ldata        = ${ccu.getListScale()};
@@ -367,7 +369,7 @@ $(document).ready(function(){
     param.prodCd = prodCd.text;
     param.prodNm = prodNm.text;
     param.barCd = barCd.text;
-    param.prodClassCd = prodClassCd.text;
+    // param.prodClassCd = prodClassCd.text;
     param.listScale = listScaleBox.selectedValue;
     param.curr = index;
 

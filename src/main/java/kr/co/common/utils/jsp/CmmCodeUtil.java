@@ -337,7 +337,7 @@ import static org.springframework.util.StringUtils.isEmpty;
         List<DefaultMap<String>> hqOfficeList = cmmCodeService.getHqOfficeList();
 
         // 결과 형태를 만들어서 json 으로 리턴
-        return assmblObj(hqOfficeList, "vanNm", "vanCd", UseYn.ALL);
+        return assmblObj(hqOfficeList, "hqOfficeNm", "hqOfficeCd", UseYn.ALL);
     }
 
 }

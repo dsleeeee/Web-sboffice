@@ -51,7 +51,7 @@ app.controller('giftClassCtrl', ['$scope', '$http', function ($scope, $http) {
             s_alert.pop(messages["gift.not.use.payClassCd"]);
             var giftGrid = agrid.getScope('giftCtrl');
             giftGrid._gridDataInit();
-            return;
+            return false;
           } else {
             $("#giftSubTitle").text(" [" + selectedRow.payClassNm+ "]");
             $scope._broadcast('giftCtrl', selectedRow);
@@ -69,9 +69,9 @@ app.controller('giftClassCtrl', ['$scope', '$http', function ($scope, $http) {
     // });
 
     // 조회 이벤트 발생
-    setTimeout(function() {
-      $scope._broadcast('giftClassCtrl', true);
-    }, 100)
+    // setTimeout(function() {
+    //   $scope._broadcast('giftClassCtrl', true);
+    // }, 100)
   };
 
   $scope.$on("giftClassCtrl", function(event, data) {

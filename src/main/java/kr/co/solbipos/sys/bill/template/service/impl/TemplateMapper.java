@@ -47,10 +47,19 @@ public interface TemplateMapper {
     /** 출력물템플릿 수정 */
     int saveTemplate(TemplateVO templateVO);
 
+    /** 본사 출력물템플릿 수정 : 프로시저 호출 */
+    String updateTemplateForHq(TemplateVO templateVO);
+
+    /** 매장 출력물템플릿 수정 : 프로시저 호출  */
+    String updateTemplateForStore(TemplateVO templateVO);
+
     /** 미사용 본사/단독매장 조회 */
     List<DefaultMap<String>> getUnUsedList(TemplateVO templateVO);
 
     /** 미적용 본사/단독매장 저장 */
     int insertUnUsedList(TemplateVO templateVO);
+
+    /** 미적용 본사/단독매장 실제출력물코드 생성 */
+    int insertUnUsedPrintCode(TemplateVO templateVO);
 
 }

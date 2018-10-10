@@ -418,6 +418,7 @@
       HQ_OFFICE_CD,
       NMCODE_GRP_CD,
       NMCODE_CD,
+      PARENT_CD,
       NMCODE_NM,
       REG_DT,
       REG_ID,
@@ -428,6 +429,7 @@
     (
       #{hqOfficeCd},
       #{nmcodeGrpCd},
+      #{nmcodeCd},
       #{nmcodeCd},
       #{nmcodeNm},
       #{regDt},

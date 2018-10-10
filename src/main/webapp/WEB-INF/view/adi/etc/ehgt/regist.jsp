@@ -53,19 +53,19 @@
     </tbody>
   </table>
 
-  <div class="mt10 oh pdb20 bb">
+  <div class="mt10 oh pdb20">
     <button id="btnSearch" class="btn_blue fr"><s:message code="cmm.search" /><%--조회--%></button>
   </div>
 
 <c:if test="${isManager}">
-  <div class="mt20 tr">
+  <div class="mt40 tr">
     <button id="btnRegist" class="btn_skyblue"><s:message code="ehgt.btnCrncyRegist" /><%--통화구분등록--%></button>
   </div>
 </c:if>
 
 <c:if test="${isManager}">
   <%--2단--%>
-  <div class="wj-TblWrap mt20 oh">
+  <div class="wj-TblWrap mt40 oh">
     <%--left--%>
     <div class="w50 fl">
       <div class="wj-TblWrapBr mr10" style="height:400px;">

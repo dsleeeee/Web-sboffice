@@ -18,7 +18,7 @@
       <col class="w35" />
     </colgroup>
     <tbody>
-      <tr>
+      <tr style="display: none">
         <%-- 본사코드 --%>
         <th><s:message code="storeView.hqOfficeCd" /></th>
         <td>
@@ -83,7 +83,7 @@
           </div>
         </td>
       </tr>
-      <tr>
+      <tr style="display: none;">
         <th>
           <s:message code="cmm.search.date" />
         </th>
@@ -100,13 +100,13 @@
       </tbody>
   </table>
 
-  <div class="mt10 pdb20 oh bb">
+  <div class="mt10 pdb20 oh">
     <button id="searchBtn" class="btn_blue fr" >
       <s:message code="cmm.search" />
     </button>
   </div>
 
-  <div class="mt20 oh sb-select dkbr">
+  <div class="mt40 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
     <div id="listScaleBox" class="w150 fl"></div>
 
@@ -158,25 +158,25 @@
     <%-- 조회결과 --%>
     var svData =
       [
-        {binding:"hqOfficeCd", header:"<s:message code='storeView.hqOfficeCd' />",width:"*"},
-        {binding:"hqOfficeNm", header:"<s:message code='storeView.hqOfficeNm' />",width:"*"},
-        {binding:"storeCd", header:"<s:message code='storeView.storeCd' />",width:"*"},
-        {binding:"storeNm", header:"<s:message code='storeView.storeNm' />",width:"*"},
-        {binding:"bizNo", header:"<s:message code='storeView.bizNo' />",width:"*"},
-        {binding:"ownerNm", header:"<s:message code='storeView.ownerNm' />",width:"*"},
-        {binding:"telNo", header:"<s:message code='storeView.telNo' />",width:"*"},
-        {binding:"sms", header:"<s:message code='storeView.sms' />",width:"*", visible:false},
-        {binding:"sysStatFgNm", header:"<s:message code='storeView.sysStatFgNm' />",width:"*"},
-        {binding:"clsFgNm", header:"<s:message code='storeView.clsFgNm' />",width:"*"},
-        {binding:"posCnt", header:"<s:message code='storeView.posCnt' />",width:"*"},
-        {binding:"agencyCd", header:"<s:message code='storeView.agencyCd' />",width:"*", visible:false},
-        {binding:"agencyNm", header:"<s:message code='storeView.agencyNm' />",width:"*"},
-        {binding:"vanNm", header:"<s:message code='storeView.vanNm' />",width:"*"},
-        {binding:"", header:"<s:message code='storeView.goods' />",width:"*", visible:false},
-        {binding:"cornerUseYnNm", header:"<s:message code='storeView.cornerUseYnNm' />", width:"*", visible:false},
-        {binding:"posLastLoginDt", header:"<s:message code='storeView.posLastLoginDt' />",width:"*"},
-        {binding:"sysOpenDate", header:"<s:message code='storeView.sysOpenDate' />",width:"*"},
-        {binding:"sysClosureDate", header:"<s:message code='storeView.sysClosureDate' />",width:"*"}
+        {binding:"hqOfficeCd", header:"<s:message code='storeView.hqOfficeCd' />"},
+        {binding:"hqOfficeNm", header:"<s:message code='storeView.hqOfficeNm' />"},
+        {binding:"storeCd", header:"<s:message code='storeView.storeCd' />"},
+        {binding:"storeNm", header:"<s:message code='storeView.storeNm' />"},
+        {binding:"bizNo", header:"<s:message code='storeView.bizNo' />"},
+        {binding:"ownerNm", header:"<s:message code='storeView.ownerNm' />"},
+        {binding:"telNo", header:"<s:message code='storeView.telNo' />"},
+        {binding:"sms", header:"<s:message code='storeView.sms' />", visible:false},
+        {binding:"sysStatFgNm", header:"<s:message code='storeView.sysStatFgNm' />"},
+        {binding:"clsFgNm", header:"<s:message code='storeView.clsFgNm' />"},
+        {binding:"posCnt", header:"<s:message code='storeView.posCnt' />"},
+        {binding:"agencyCd", header:"<s:message code='storeView.agencyCd' />", visible:false},
+        {binding:"agencyNm", header:"<s:message code='storeView.agencyNm' />"},
+        {binding:"vanNm", header:"<s:message code='storeView.vanNm' />"},
+        {binding:"", header:"<s:message code='storeView.goods' />", visible:false},
+        {binding:"cornerUseYnNm", header:"<s:message code='storeView.cornerUseYnNm' />", visible:false},
+        {binding:"posLastLoginDt", header:"<s:message code='storeView.posLastLoginDt' />"},
+        {binding:"sysOpenDate", header:"<s:message code='storeView.sysOpenDate' />"},
+        {binding:"sysClosureDate", header:"<s:message code='storeView.sysClosureDate' />"}
       ];
 
     var grid  = wgrid.genGrid("#theGrid", svData, "${menuCd}", 1, ${clo.getColumnLayout(1)});

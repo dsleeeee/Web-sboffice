@@ -26,8 +26,7 @@ app.controller('mCouponClassCtrl', ['$scope', '$http', function ($scope, $http) 
     $scope.mobileCouponDcFgDataMap = new wijmo.grid.DataMap(mobileCouponDcFg, 'value', 'name');
     $scope.mobileCouponApplyFgDataMap = new wijmo.grid.DataMap(mobileCouponApplyFg, 'value', 'name');
 
-    $scope.searchMobileCouponClass();
-
+    // $scope.searchMobileCouponClass();
   };
 
   $scope.$on("mCouponClassCtrl", function(event, data) {

@@ -2,8 +2,10 @@ package kr.co.solbipos.membr.info.regist.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.membr.anals.credit.service.CreditStoreVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Class Name : RegistService.java
@@ -102,9 +104,17 @@ public interface RegistService {
     int updateMembrCard(RegistVO registVO);
 
     /**
-     * 후불회원 매장등록
-     * @param registVO
+     * 후불 회원 등록 매장 조회
+     * @param creditStoreVO
      * @return
      */
-    int saveCreditStores(RegistVO registVO);
+    Map<String,Object> getCreditStoreLists(CreditStoreVO creditStoreVO, SessionInfoVO sessionInfoVO);
+
+    /**
+     * 후불회원 매장등록
+     * @param creditStoreVOs
+     * @return
+     */
+    int saveCreditStore(CreditStoreVO[] creditStoreVOs, SessionInfoVO sessionInfoVO);
+
 }

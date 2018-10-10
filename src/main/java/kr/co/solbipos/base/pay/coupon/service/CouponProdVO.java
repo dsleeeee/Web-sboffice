@@ -25,6 +25,8 @@ public class CouponProdVO extends CmmVO {
     private String hqOfficeCd;
     /** 매장코드 */
     private String storeCd;
+    /** 쿠폰분류코드 */
+    private String payClassCd;
     /** 쿠폰코드 */
     private String coupnCd;
     /** 상품코드 */
@@ -69,6 +71,21 @@ public class CouponProdVO extends CmmVO {
      */
     public void setStoreCd(String storeCd) {
         this.storeCd = storeCd;
+    }
+
+    /**
+     * @return the payClassCd
+     */
+
+    public String getPayClassCd() {
+        return payClassCd;
+    }
+
+    /**
+     * @param payClassCd the payClassCd to set
+     */
+    public void setPayClassCd(String payClassCd) {
+        this.payClassCd = payClassCd;
     }
 
     /**

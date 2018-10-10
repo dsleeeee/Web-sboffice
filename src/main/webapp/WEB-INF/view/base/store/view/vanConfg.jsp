@@ -40,9 +40,6 @@
 
     <%--  밴사 설정정보 조회 --%>
     function getVanConfigDetail(obj) {
-      console.log(">>>>>> getVanConfigDetail")
-
-      console.log(obj)
       var param = obj;
       wgrid.getGridData("/base/store/view/vanconfg/list.sb",    param, vcGrid,
             function(result){

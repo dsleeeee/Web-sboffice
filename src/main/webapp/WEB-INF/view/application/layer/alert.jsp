@@ -41,13 +41,25 @@
 <wj-popup control="_alertPopup" class="wj-dialog-index" fade-in="false" fade-out="false" show-trigger="Click" hide-trigger="Click" style="display: none;width: 500px;">
   <div class="wj-dialog-body">
     <div class="wj-popup-alert">
-      <p class="bk">
-        {{ s_alert_msg }}
+      <p class="bk" ng-bind-html="s_alert_msg">
       </p>
     </div>
   </div>
   <div class="wj-dialog-footer wj-popup-alert-footer">
     <button class="btn wj-hide-apply btn_blue"><s:message code="cmm.confirm" /></button>
+  </div>
+</wj-popup>
+
+<wj-popup control="_alertConfirm" class="wj-dialog-index" fade-in="false" fade-out="false" show-trigger="Click" hide-trigger="Click" style="display: none;width: 500px;">
+  <div class="wj-dialog-body">
+    <div class="wj-popup-alert">
+      <p class="bk" ng-bind-html="s_confirm_msg">
+      </p>
+    </div>
+  </div>
+  <div class="wj-dialog-footer wj-popup-alert-footer">
+    <button class="btn wj-hide-apply btn_blue"><s:message code="cmm.confirm" /></button>
+    <button class="btn wj-hide-cancel btn_gray"><s:message code="cmm.cancel" /></button>
   </div>
 </wj-popup>
 
