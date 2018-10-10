@@ -77,7 +77,7 @@
         <c:param name="baseUrl" value="${baseUrl}"/>
       </c:import>
 
-      <%-- 포스기능 사용관리--%>
+      <%-- 포스기능 인증관리--%>
       <c:import url="/WEB-INF/view/base/store/posFunc/posFuncAuth.jsp">
         <c:param name="menuCd" value="${menuCd}"/>
         <c:param name="menuNm" value="${menuNm}"/>
