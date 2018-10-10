@@ -24,7 +24,8 @@ Touchkey = function (themes) {
   var pGraph = this.prod;
   // 영역 외부 클릭시 이벤트
   $(document).click(function (event) {
-    if(!$(event.target).closest('#groupWrap').length && !$(event.target).closest('#prodWrap').length) {
+    if(!$(event.target).closest('#groupWrap').length && !$(event.target).closest('#prodWrap').length
+      && !$(event.target).closest('#fontSize') && !$(event.target).closest('#fontColor') && !$(event.target).closest('#fillColor') ) {
       // 그래프영역 선택 초기화
       gGraph.getSelectionModel().clear();
       pGraph.getSelectionModel().clear();
@@ -48,11 +49,9 @@ Touchkey = function (themes) {
       if (currentArea.isGroup) {
         state.style[mxConstants.STYLE_FILLCOLOR] = currentArea.buttonStyles.off;
         state.style[mxConstants.STYLE_FONTCOLOR] = currentArea.fontStyles.off;
-        state.style[mxConstants.STYLE_FONTSIZE] = currentArea.fontStyles.size;
       } else {
         state.style[mxConstants.STYLE_FILLCOLOR] = currentArea.buttonStyles["01"].off;
         state.style[mxConstants.STYLE_FONTCOLOR] = currentArea.fontStyles["01"].off;
-        state.style[mxConstants.STYLE_FONTSIZE] = currentArea.fontStyles["01"].size;
 
         // 상품영역일때만 자식속성 존재 하므로 자식속성도 동일하게 변경
         if (state.cell.children) {
@@ -65,7 +64,6 @@ Touchkey = function (themes) {
           if(parentState != null) {
             parentState.style[mxConstants.STYLE_FILLCOLOR] = currentArea.buttonStyles["01"].off;
             parentState.style[mxConstants.STYLE_FONTCOLOR] = currentArea.fontStyles["01"].off;
-            parentState.style[mxConstants.STYLE_FONTSIZE] = currentArea.fontStyles["01"].size;
             parentState.shape.apply(parentState);
             parentState.shape.redraw();
             currentArea.updateStyleChildren(parentState, false);
@@ -465,7 +463,7 @@ Sidebar.prototype.makeDragSource = function () {
           item.prodNm,
           5, 5,
           0, 0,
-          "tukeyCd=" + tukeyCd + ";tukeyFg=02;prodCd=" + item.prodCd + ";styleCd=" + styleCd + ";strokeColor=none;rounded=0;resizable=0;"
+          "tukeyCd=" + tukeyCd + ";tukeyFg=02;prodCd=" + item.prodCd + ";styleCd=" + styleCd + ";strokeColor=none;rounded=0;resizable=0;whiteSpace=wrap;verticalAlign=top;align=left;"
         );
         graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles["02"].off, new Array(prodTag));
         graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles["02"].off, new Array(prodTag));
@@ -485,6 +483,16 @@ Sidebar.prototype.makeDragSource = function () {
         // 하위 셀의 사이즈 자동조정
         graph.updateCellSize(prodTag, false);
         graph.updateCellSize(priceTag, false);
+
+        // 버튼 길이 조정
+        if ( btn.geometry.width > 99 ) {
+          btn.geometry.width = 99;
+        }
+
+        // 상품태그 길이조정
+        var tagWidth = prodTag.geometry.width > 99 ? 89 : prodTag.geometry.width;
+        prodTag.geometry.width = tagWidth;
+
         // 금액태그 위치 조정
         var movedX = graph.touchKeyInfo.width - priceTag.geometry.width  - 5;
         var movedY = graph.touchKeyInfo.height - priceTag.geometry.height - 5;
@@ -743,7 +751,7 @@ Graph.prototype.init = function () {
       for (var r = 0; r < child.length; r++) {
         var cell = child[r];
         // 하위셀 크기 자동 조정
-        graph.updateCellSize(cell, true);
+        graph.updateCellSize(cell, false);
         // 정규식으로 tukeyFg 추출
         childRegex = /tukeyFg=([^=]*.(?=;))/gm;
         match = childRegex.exec(cell.getStyle());
@@ -754,6 +762,17 @@ Graph.prototype.init = function () {
         if (tukeyFg === "02") {
           cell.geometry.x = 5;
           cell.geometry.y = 5;
+          if ( cell.geometry.width > 88 ) {
+            if (bounds.width > 99) {
+              cell.geometry.width = bounds.width - 10;
+              cell.geometry.height = cell.geometry.height * 2;
+            } else {
+              cell.geometry.width = 88;
+            }
+          } else {
+            cell.geometry.width = 88;
+          }
+
         // 금액태그 위치 조정
         } else if (tukeyFg === "03") {
           movedX = bounds.width - cell.geometry.width - 5;
@@ -1329,12 +1348,12 @@ Format.prototype.initElements = function () {
     valueChanged: function (s, e) {
       // cell 영역 선택시에만
       if (s.graph) {
-        s.graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, s.value, null);
         var cell = s.graph.getSelectionCells()[0];
         // 하위속성 존재시 하위속성 색상도 같이 변경
         if (cell.children) {
           s.graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, s.value, cell.children);
         }
+        s.graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, s.value, null);
       }
     }
   });
@@ -1348,12 +1367,12 @@ Format.prototype.initElements = function () {
     valueChanged: function (s, e) {
       // cell 영역 선택시에만
       if (s.graph) {
-        s.graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, s.value, null);
         var cell = s.graph.getSelectionCells()[0];
         // 하위속성 존재시 하위속성 색상도 같이 변경
         if (cell.children) {
           s.graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, s.value, cell.children);
         }
+        s.graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, s.value, null);
       }
     }
   });
@@ -1370,12 +1389,12 @@ Format.prototype.initElements = function () {
     valueChanged: function (s, e) {
       // cell 영역 선택시에만
       if (s.graph) {
-        s.graph.setCellStyles(mxConstants.STYLE_FONTSIZE, s.value, null);
         var cell = s.graph.getSelectionCells()[0];
         // 하위속성 존재시 하위속성 크기도 같이 변경
         if (cell.children) {
           s.graph.setCellStyles(mxConstants.STYLE_FONTSIZE, s.value, cell.children);
         }
+        s.graph.setCellStyles(mxConstants.STYLE_FONTSIZE, s.value, null);
       }
     }
   });
@@ -1524,6 +1543,13 @@ Format.prototype.setGraphStyle = function (graph) {
  */
 Graph.prototype.updateHoverStyle = function(state, hover) {
 
+  var hoverFontSize, hoverFontColor, hoverFillColr;
+  if (state != null) {
+    hoverFontSize =  parseInt(mxUtils.getValue(state.style, mxConstants.STYLE_FONTSIZE, null));
+    hoverFontColor = mxUtils.getValue(state.style, mxConstants.STYLE_FONTCOLOR, null);
+    hoverFillColr = mxUtils.getValue(state.style, mxConstants.STYLE_FILLCOLOR, null);
+  }
+
   var parentState;
   if (hover) {
     if (this.isGroup) {
@@ -1536,7 +1562,7 @@ Graph.prototype.updateHoverStyle = function(state, hover) {
     } else {
       state.style[mxConstants.STYLE_FILLCOLOR] = this.buttonStyles["01"].on;
       state.style[mxConstants.STYLE_FONTCOLOR] = this.fontStyles["01"].on;
-      state.style[mxConstants.STYLE_FONTSIZE] = this.fontStyles["01"].size;
+      state.style[mxConstants.STYLE_FONTSIZE] = hoverFontSize;
       // 상품영역일때만 자식속성 존재 하므로 자식속성도 동일하게 변경
       if (state.cell.children) {
         this.updateStyleChildren(state, hover);
@@ -1547,7 +1573,7 @@ Graph.prototype.updateHoverStyle = function(state, hover) {
         if(parentState != null) {
           parentState.style[mxConstants.STYLE_FILLCOLOR] = this.buttonStyles["01"].on;
           parentState.style[mxConstants.STYLE_FONTCOLOR] = this.fontStyles["01"].on;
-          parentState.style[mxConstants.STYLE_FONTSIZE] = this.fontStyles["01"].size;
+          parentState.style[mxConstants.STYLE_FONTSIZE] = hoverFontSize;
           parentState.shape.apply(parentState);
           parentState.shape.redraw();
           this.updateStyleChildren(parentState, hover);
@@ -1563,7 +1589,7 @@ Graph.prototype.updateHoverStyle = function(state, hover) {
     } else {
       state.style[mxConstants.STYLE_FILLCOLOR] = this.buttonStyles["01"].off;
       state.style[mxConstants.STYLE_FONTCOLOR] = this.fontStyles["01"].off;
-      state.style[mxConstants.STYLE_FONTSIZE] = this.fontStyles["01"].size;
+      state.style[mxConstants.STYLE_FONTSIZE] = hoverFontSize;
       // 상품영역일때만 자식속성 존재 하므로 자식속성도 동일하게 변경
       if (state.cell.children) {
         this.updateStyleChildren(state, hover);
@@ -1574,7 +1600,7 @@ Graph.prototype.updateHoverStyle = function(state, hover) {
         if(parentState != null) {
           parentState.style[mxConstants.STYLE_FILLCOLOR] = this.buttonStyles["01"].off;
           parentState.style[mxConstants.STYLE_FONTCOLOR] = this.fontStyles["01"].off;
-          parentState.style[mxConstants.STYLE_FONTSIZE] = this.fontStyles["01"].size;
+          parentState.style[mxConstants.STYLE_FONTSIZE] = hoverFontSize;
           parentState.shape.apply(parentState);
           parentState.shape.redraw();
           this.updateStyleChildren(parentState, hover);
@@ -1596,6 +1622,12 @@ Graph.prototype.updateHoverStyle = function(state, hover) {
  */
 Graph.prototype.updateStyleChildren = function (state, hover) {
 
+  var hoverFontSize, hoverFontColor, hoverFillColr;
+  if (state != null) {
+    hoverFontSize =  parseInt(mxUtils.getValue(state.style, mxConstants.STYLE_FONTSIZE, null));
+    hoverFontColor = mxUtils.getValue(state.style, mxConstants.STYLE_FONTCOLOR, null);
+    hoverFillColr = mxUtils.getValue(state.style, mxConstants.STYLE_FILLCOLOR, null);
+  }
   var tukeyFg, match, regex;
   for(var i = 0; i < state.cell.children.length; i++) {
     var childCell = state.cell.children[i];
@@ -1611,11 +1643,11 @@ Graph.prototype.updateStyleChildren = function (state, hover) {
         if (hover) {
           childState.style[mxConstants.STYLE_FILLCOLOR] = this.buttonStyles[tukeyFg].on;
           childState.style[mxConstants.STYLE_FONTCOLOR] = this.fontStyles[tukeyFg].on;
-          childState.style[mxConstants.STYLE_FONTSIZE] = this.fontStyles[tukeyFg].size;
+          childState.style[mxConstants.STYLE_FONTSIZE] = hoverFontSize;
         } else {
           childState.style[mxConstants.STYLE_FILLCOLOR] = this.buttonStyles[tukeyFg].off;
           childState.style[mxConstants.STYLE_FONTCOLOR] = this.fontStyles[tukeyFg].off;
-          childState.style[mxConstants.STYLE_FONTSIZE] = this.fontStyles[tukeyFg].size;
+          childState.style[mxConstants.STYLE_FONTSIZE] = hoverFontSize;
         }
       }
       childState.shape.apply(childState);
@@ -1644,7 +1676,7 @@ Format.prototype.setElementsValue = function () {
     var cell = cells[i];
     var state = graph.view.getState(cell);
     if (state != null) {
-      initFontSize = Math.max(0, parseInt(mxUtils.getValue(state.style, mxConstants.STYLE_FONTSIZE, null)));
+      initFontSize =  parseInt(mxUtils.getValue(state.style, mxConstants.STYLE_FONTSIZE, null));
       initFontColor = mxUtils.getValue(state.style, mxConstants.STYLE_FONTCOLOR, null);
       initFillColor = mxUtils.getValue(state.style, mxConstants.STYLE_FILLCOLOR, null);
     }
@@ -1653,33 +1685,33 @@ Format.prototype.setElementsValue = function () {
 
     // 자식속성은 상품영역에만 존재한다.
     } else {
-      // 자식속성
-      if (cell.children) {
-        // 다른버튼 선택시에만 변경되도록
-        if (graph.orgChildren.id !== cell.getId()) {
-          graph.orgChildren.id = cell.getId();
-          graph.orgChildren.parent = cell;
-          var childCell = new Array();
-          for(var c = 0; c < cell.children.length; c++) {
-            childCell.push(cell.children[c]);
-          }
-          graph.orgChildren.cell = childCell;
-        }
-      }
-      // 부모속성 : 상품/금액태그
-      if (!cell.parent.value) {
-        var parent = cell.parent;
-        // 다른속성 선택시에만 변경되도록
-        if (graph.orgChildren.id !== parent.getId()) {
-          graph.orgChildren.id = parent.getId();
-          graph.orgChildren.parent = parent;
-          var parentCell = new Array();
-          for(var p = 0; p < parent.children.length; p++) {
-            parentCell.push(parent.children[p]);
-          }
-          graph.orgChildren.cell = parentCell;
-        }
-      }
+      // // 자식속성
+      // if (cell.children) {
+      //   // 다른버튼 선택시에만 변경되도록
+      //   if (graph.orgChildren.id !== cell.getId()) {
+      //     graph.orgChildren.id = cell.getId();
+      //     graph.orgChildren.parent = cell;
+      //     var childCell = new Array();
+      //     for(var c = 0; c < cell.children.length; c++) {
+      //       childCell.push(cell.children[c]);
+      //     }
+      //     graph.orgChildren.cell = childCell;
+      //   }
+      // }
+      // // 부모속성 : 상품/금액태그
+      // if (!cell.parent.value) {
+      //   var parent = cell.parent;
+      //   // 다른속성 선택시에만 변경되도록
+      //   if (graph.orgChildren.id !== parent.getId()) {
+      //     graph.orgChildren.id = parent.getId();
+      //     graph.orgChildren.parent = parent;
+      //     var parentCell = new Array();
+      //     for(var p = 0; p < parent.children.length; p++) {
+      //       parentCell.push(parent.children[p]);
+      //     }
+      //     graph.orgChildren.cell = parentCell;
+      //   }
+      // }
     }
   }
 
@@ -2115,7 +2147,9 @@ Graph.prototype.initProdArea = function (group, sidebar) {
   // 마우스오버시 사용
   graph.currentState = null;
   graph.previousStyle = null;
-
+  // html라벨 사용
+  graph.setHtmlLabels(true);
+  graph.autoSizeCellsOnAdd = true;
 
   //셀 삭제 시 그리드에 반영
   var cellsRemoved = graph.cellsRemoved;

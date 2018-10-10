@@ -133,6 +133,6 @@
   <script type="text/javascript">
   var prtClassComboData = ${listPrintType};
   </script>
-  <script type="text/javascript" src="/resource/solbipos/js/base/output/posTemplate/posTemplate.js?ver=20181004.01" charset="utf-8"></script>
+  <script type="text/javascript" src="/resource/solbipos/js/base/output/posTemplate/posTemplate.js?ver=20181010.01" charset="utf-8"></script>
 
 </div>
