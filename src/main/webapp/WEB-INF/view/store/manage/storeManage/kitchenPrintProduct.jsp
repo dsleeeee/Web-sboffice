@@ -129,6 +129,9 @@ productTree2.checkedItemsChanged.addHandler(function(s, e) {
 <%-- 주방프린터-상품등록 영역 보여줌 --%>
 function showKitchenPrintProductLayout(){
   $("#kitchenPrintProductArea").show();
+
+  productTree1.itemsSource = new Array();
+  productTree2.itemsSource = new Array();
   getPrintList();
 }
 
@@ -139,7 +142,6 @@ function getPrintList(){
 
   var param = {};
   param.hqOfficeCd  = selectedStore.hqOfficeCd;
-//  param.hqBrandCd   = selectedStore.hqBrandCd;
   param.storeCd     = selectedStore.storeCd;
 
   $.postJSON("/store/manage/storeManage/storeManage/getKitchenPrintInfo.sb", param, function(result) {
@@ -148,6 +150,9 @@ function getPrintList(){
 
     kpProductGrid.itemsSource = new wijmo.collections.CollectionView(list);
     kpProductGrid.itemsSource.trackChanges = true;
+
+    productTree1.itemsSource = new Array();
+    productTree2.itemsSource = new Array();
   },
     function (result) {
       s_alert.pop(result.message);
@@ -163,10 +168,8 @@ function getProductList(){
   param.storeCd     = selectedDataItem.storeCd;
   param.prterNo     = selectedDataItem.prterNo;
 
-  productTree1.itemsSource = new wijmo.collections.CollectionView([]);
-  productTree2.itemsSource = new wijmo.collections.CollectionView([]);
-
   $.postJSON("/store/manage/storeManage/storeManage/getKitchenPrintProductInfo.sb", param, function(result) {
+
     productTree1.itemsSource = result.data.list.printProductList;
     productTree2.itemsSource = result.data.list.noPrintProductList;
   },
