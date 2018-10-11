@@ -40,7 +40,7 @@
                             item-formatter="_itemFormatter">
 
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="cmm.chk"/>"                                  binding="gChk"             width="40"  align="center" ></wj-flex-grid-column>
+                        <%--<wj-flex-grid-column header="<s:message code="cmm.chk"/>"                                  binding="gChk"             width="40"  align="center" ></wj-flex-grid-column>--%>
                         <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.seq"/>"              binding="seq"              width="0"   align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.prodCd"/>"           binding="prodCd"           width="0"   align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.storeCd"/>"          binding="storeCd"          width="80"  align="center" is-read-only="true"></wj-flex-grid-column>

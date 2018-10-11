@@ -23,11 +23,11 @@
             <tbody>
             <tr>
               <th><s:message code="outstockConfm.dtl.hdRemark"/></th>
-              <td colspan="3"><input type="text" id="hdRemark" name="hdRemark" ng-model="hdRemark" class="sb-input w100"/></td>
+              <td colspan="3"><input type="text" id="hdRemark" name="hdRemark" ng-model="hdRemark" class="sb-input w100" maxlength="300"/></td>
             </tr>
             <tr>
               <th><s:message code="outstockConfm.dtl.hqRemark"/></th>
-              <td colspan="3"><input type="text" id="hqRemark" name="hqRemark" ng-model="hdRemark" class="sb-input w100"/></td>
+              <td colspan="3"><input type="text" id="hqRemark" name="hqRemark" ng-model="hqRemark" class="sb-input w100" maxlength="300"/></td>
             </tr>
             <tr>
               <th><s:message code="outstockConfm.dtl.dlvrNm"/></th>
@@ -55,8 +55,8 @@
                 <button type="button" id="btnDtlSave" class="btn_skyblue ml5 fl" ng-click="save()"><s:message code="cmm.save" /></button>
               </div>
               <div id="outstockAfterBtnLayer" style="display: none;">
-                <%-- 저장 --%>
-                <button type="button" id="btnDtlSave" class="btn_skyblue ml5 fl" ng-click="outstockAfterSave()"><s:message code="cmm.save" /></button>
+                <%-- 출고 후 저장 --%>
+                <button type="button" id="btnDtlSave" class="btn_skyblue ml5 fl" ng-click="saveOutstockAfter()"><s:message code="cmm.save" /></button>
               </div>
             </div>
             <div style="clear: both;"></div>
@@ -74,11 +74,13 @@
                             item-formatter="_itemFormatter">
 
                         <!-- define columns -->
+                        <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.slipNo"/>"           binding="slipNo"           width="0"   align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.slipFg"/>"           binding="slipFg"           width="0"   align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.seq"/>"              binding="seq"              width="0"   align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.storeCd"/>"          binding="storeCd"          width="0"   align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.prodCd"/>"           binding="prodCd"           width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.prodNm"/>"           binding="prodNm"           width="150" align="left"   is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.barcdCd"/>"          binding="barcdCd"           width="150" align="left"   is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.barcdCd"/>"          binding="barcdCd"          width="150" align="left"   is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.poUnitFg"/>"         binding="poUnitFg"         width="70"  align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.poUnitQty"/>"        binding="poUnitQty"        width="70"  align="right"  is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.outSplyUprc"/>"      binding="outSplyUprc"      width="70"  align="right"  is-read-only="false" max-length=10 data-type="Number" format="n0"></wj-flex-grid-column>
@@ -214,20 +216,23 @@
                   $("#spanOutstockConfirmFg").show();
                   $("#outstockBtnLayer").show();
                   $("#outstockAfterBtnLayer").hide();
+                  $scope.flex.isReadOnly = false;
                 }
-                // 출고확정
-                else if($scope.procFg === "20") {
-                  $("#spanDtlTitle").html('<s:message code="outstockConfm.dtl.slipNo"/> : '+$scope.slipNo+' <s:message code="outstockConfm.dtl.store"/> : '+$scope.storeNm+' <s:message code="outstockConfm.dtl.outDate"/> : '+getFormatDate($scope.outDate));
+                // 출고확정 또는 입고확정
+                else if($scope.procFg === "20" || $scope.procFg === "30") {
                   $("#spanOutstockConfirmFg").hide();
                   $("#outstockBtnLayer").hide();
                   $("#outstockAfterBtnLayer").show();
-                }
-                // 입고확정
-                else if($scope.procFg === "30") {
-                  $("#spanDtlTitle").html('<s:message code="outstockConfm.dtl.slipNo"/> : '+$scope.slipNo+' <s:message code="outstockConfm.dtl.store"/> : '+$scope.storeNm+' <s:message code="outstockConfm.dtl.outDate"/> : '+getFormatDate($scope.outDate)+' <s:message code="outstockConfm.dtl.inDate"/> : '+getFormatDate($scope.inDate));
-                  $("#spanOutstockConfirmFg").hide();
-                  $("#outstockBtnLayer").hide();
-                  $("#outstockAfterBtnLayer").show();
+                  $scope.flex.isReadOnly = true;
+
+                  // 출고확정
+                  if($scope.procFg === "20") {
+                    $("#spanDtlTitle").html('<s:message code="outstockConfm.dtl.slipNo"/> : ' + $scope.slipNo + ' <s:message code="outstockConfm.dtl.store"/> : ' + $scope.storeNm + ' <s:message code="outstockConfm.dtl.outDate"/> : ' + getFormatDate($scope.outDate));
+                  }
+                  // 입고확정
+                  else if($scope.procFg === "30") {
+                    $("#spanDtlTitle").html('<s:message code="outstockConfm.dtl.slipNo"/> : ' + $scope.slipNo + ' <s:message code="outstockConfm.dtl.store"/> : ' + $scope.storeNm + ' <s:message code="outstockConfm.dtl.outDate"/> : ' + getFormatDate($scope.outDate) + ' <s:message code="outstockConfm.dtl.inDate"/> : ' + getFormatDate($scope.inDate));
+                  }
                 }
 
                 $scope.searchOutstockConfmDtlList();
@@ -257,7 +262,17 @@
         $scope.save = function () {
             var params = new Array();
 
-            for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+          // 확정처리가 체크 되어있으면서 그리드의 수정된 내역은 없는 경우 저장로직 태우기 위해 값 하나를 강제로 수정으로 변경한다.
+          if($("#outstockConfirmFg").is(":checked") && $scope.flex.collectionView.itemsEdited.length <= 0) {
+            var item = $scope.flex.collectionView.items[0];
+            if(item === null) return false;
+
+            $scope.flex.collectionView.editItem(item);
+            item.status = "U";
+            $scope.flex.collectionView.commitEdit();
+          }
+
+          for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
                 var item = $scope.flex.collectionView.itemsEdited[i];
 
                 if(item.outUnitQty === null && item.outEtcQty === null) {
@@ -269,13 +284,17 @@
                     return false;
                 }
                 if(item.outTot !== null && (parseInt(item.outTot) > 9999999999)) {
-                    $scope._popMsg(messages["outstockConfm.dtl.not.overMgrTot"]); // 출고금액이 너무 큽니다.
+                    $scope._popMsg(messages["outstockConfm.dtl.not.overOutTot"]); // 출고금액이 너무 큽니다.
                     return false;
                 }
 
-                item.status  = "U";
-                item.reqDate = $scope.reqDate;
-                item.slipFg  = $scope.slipFg;
+                item.status    = "U";
+                item.outDate   = wijmo.Globalize.format($scope.dtlOutDate.value, 'yyyyMMdd');
+                item.hdRemark  = $scope.hdRemark;
+                item.hqRemark  = $scope.hqRemark;
+                item.dlvrCd    = $scope.dlvrCd;
+                item.confirmFg = ($("#outstockConfirmFg").is(":checked") ? $("#outstockConfirmFg").val() : "");
+
                 params.push(item);
             }
 
@@ -290,8 +309,35 @@
             $scope.wjOutstockConfmDtlLayer.hide(true);
         };
 
-        $scope.outstockAfterSave = function () {
+        // 출고확정 이후 저장. 비고, 본사비고, 배송기사를 저장한다.
+        $scope.saveOutstockAfter = function () {
+          // 파라미터
+          var params = {};
+          params.slipNo   = $scope.slipNo;
+          params.hdRemark = $scope.hdRemark;
+          params.hqRemark = $scope.hqRemark;
+          params.dlvrCd   = $scope.dlvrCd;
 
+          // ajax 통신 설정
+          $http({
+            method: 'POST', //방식
+            url: '/iostock/order/outstockConfm/outstockConfm/saveOutstockAfter.sb', /* 통신할 URL */
+            params: params, /* 파라메터로 보낼 데이터 */
+            headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+          }).then(function successCallback(response) {
+            if($scope.httpStatusCheck(response)) {
+              $scope._popMsg(messages["cmm.saveSucc"]);
+              $scope.flex.collectionView.clearChanges();
+              $scope.saveOutstockConfmDtlCallback();
+            }
+          }, function errorCallback(response) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+            $scope._popMsg(messages["cmm.saveFail"]);
+            return false;
+          }).then(function () {
+            // "complete" code here
+          });
         };
 
         $scope.fnConfirm = function () {

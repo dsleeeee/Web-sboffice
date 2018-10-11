@@ -118,7 +118,30 @@ public class StoreLoanManageController {
         int result = storeLoanManageService.saveLoanManageList(storeLoanManageVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
-
     }
 
+    /**
+     * 매장여신관리 - 상세현황 조회
+     * @param   request
+     * @param   response
+     * @param   storeLoanManageVO
+     * @param   model
+     * @return  Result
+     * @author  안동관
+     * @since   2018. 08. 20.
+     */
+
+    @RequestMapping(value = "/storeLoanManageDtl/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreLoanManageDtlList(HttpServletRequest request, HttpServletResponse response,
+        StoreLoanManageVO storeLoanManageVO, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        storeLoanManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        List<DefaultMap<String>> list = storeLoanManageService.getStoreLoanManageDtlList(storeLoanManageVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, storeLoanManageVO);
+
+    }
 }

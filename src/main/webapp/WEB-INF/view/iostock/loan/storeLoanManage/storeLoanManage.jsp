@@ -7,8 +7,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/iostock/loan/storeLoanManage/storeLoanManage/"/>
 
-<div class="subCon">
-
+<div class="subCon" ng-controller="storeLoanManageCtrl">
     <div class="searchBar flddUnfld">
         <a href="#" class="open">${menuNm}</a>
     </div>
@@ -23,48 +22,77 @@
         <tr>
             <%-- 매장코드 --%>
             <th><s:message code="loan.storeCd"/></th>
-            <td>
-                <div class="sb-select">
-                    <div id="srchStoreCd"></div>
-                </div>
-            </td>
+            <td><input type="text" id="srchStoreCd" name="srchStoreCd" ng-model="storeCd" class="sb-input w100" maxlength="7"/></td>
             <%-- 매장명 --%>
             <th><s:message code="loan.storeNm"/></th>
-            <td>
-                <div class="sb-select">
-                    <div id="srchStoreNm"></div>
-                </div>
-            </td>
+            <td><input type="text" id="srchStoreNm" name="srchStoreNm" ng-model="storeNm" class="sb-input w100" maxlength="15"/></td>
         </tr>
         </tbody>
     </table>
 
     <%-- 조회 --%>
     <div class="mt10 pdb20 oh bb">
-        <button class="btn_blue fr" id="btnSearch"><s:message code="cmm.search"/></button>
+        <button class="btn_blue fr" id="btnSearch" ng-click="searchStoreLoanManage()"><s:message code="cmm.search"/></button>
     </div>
 
     <div class="mt20 oh sb-select dkbr">
         <%-- 페이지 스케일  --%>
-        <div id="listScaleBox" class="w150 fl"></div>
+        <wj-combo-box
+          class="w150 fl"
+          id="listScaleBox"
+          ng-model="listScale"
+          items-source="_getComboData('listScaleBox')"
+          display-member-path="name"
+          selected-value-path="value"
+          is-editable="false"
+          initialized="initComboBox(s)">
+        </wj-combo-box>
+        <%--// 페이지 스케일  --%>
         <%-- 엑셀 다운로드 --%>
-        <button id="btnExcel" class="btn_skyblue fr"><s:message code="cmm.excel.down"/></button>
+        <button id="btnExcel" class="btn_skyblue fr" ng-click="excelDown()"><s:message code="cmm.excel.down"/></button>
         <%-- 저장 --%>
-        <button id="btnSave" class="btn_skyblue fr mr5"><s:message code="cmm.save"/></button>
+        <button id="btnSave" class="btn_skyblue fr mr5" ng-click="save()"><s:message code="cmm.save"/></button>
     </div>
 
-    <%--위즈모 테이블--%>
-    <div class="wj-TblWrapBr mt10" style="height: 400px;">
-        <%-- 개발시 높이 조절해서 사용--%>
-        <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
-        <div id="gridStoreLoan" style="width:100%;height:393px;"></div>
+    <div class="w100 mt10" >
+        <%--위즈모 테이블--%>
+        <div class="wj-gridWrap" style="height: 350px;">
+            <wj-flex-grid
+              autoGenerateColumns="false"
+              selection-mode="Row"
+              items-source="data"
+              control="flex"
+              initialized="initGrid(s,e)"
+              is-read-only="false"
+              item-formatter="_itemFormatter">
+
+                <!-- define columns -->
+                <wj-flex-grid-column header="<s:message code="loan.storeCd"/>"           binding="storeCd"           width="70"  align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="loan.storeNm"/>"           binding="storeNm"           width="150" align="left"   is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="loan.limitLoanAmt"/>"      binding="limitLoanAmt"      width="70"  align="right"  is-read-only="false" max-length=10 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="loan.useLoanAmt"/>"        binding="useLoanAmt"        width="70"  align="right"  is-read-only="true"  data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="loan.currLoanAmt"/>"       binding="currLoanAmt"       width="70"  align="right"  is-read-only="true"  data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="loan.maxOrderAmt"/>"       binding="maxOrderAmt"       width="70"  align="right"  is-read-only="false" max-length=10 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="loan.orderFg"/>"           binding="orderFg"           width="70"  align="center" is-read-only="false" data-map="orderFg"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="loan.availableOrderAmt"/>" binding="availableOrderAmt" width="70"  align="right"  is-read-only="true"  data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="loan.noOutstockAmtFg"/>"   binding="noOutstockAmtFg"   width="70"  align="center" is-read-only="false" data-map="noOutstockAmtFg"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="loan.orderCloseYn"/>"      binding="orderCloseYn"      width="70"  align="center" is-read-only="false" format="checkBoxText"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="loan.remark"/>"            binding="remark"            width="150" align="left"   is-read-only="false"></wj-flex-grid-column>
+
+            </wj-flex-grid>
+            <%-- ColumnPicker 사용시 include --%>
+            <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+                <jsp:param name="pickerTarget" value="storeLoanManageCtrl"/>
+            </jsp:include>
+            <%--// ColumnPicker 사용시 include --%>
+        </div>
+        <%--//위즈모 테이블--%>
     </div>
-    <%--//위즈모 테이블--%>
 
     <%-- 페이지 리스트 --%>
     <div class="pageNum mt20">
         <%-- id --%>
-        <ul id="page" data-size="10">
+        <ul id="storeLoanManageCtrlPager" data-size="10">
         </ul>
     </div>
     <%--//페이지 리스트--%>
@@ -72,146 +100,117 @@
 </div>
 
 <script type="text/javascript">
-    //그리드 전역 변수 선언
-    var gridStoreLoan;
-    // 조회 변수 선언
-    var srchStoreCd  = wcombo.genInputText("#srchStoreCd", 7, "");
-    var srchStoreNm  = wcombo.genInputText("#srchStoreNm", 50, "");
-    var listScaleBox = wcombo.genCommonBox("#listScaleBox", gvListScaleBoxData); //listScaleBoxData 는 공통으로 빼둠. (commonVariables.jsp)
+  /**
+   * get application
+   */
+  var app = agrid.getApp();
 
-    $(document).ready(function () {
-        gridInit();
+  /** 매장여신관리 그리드 controller */
+  app.controller('storeLoanManageCtrl', ['$scope', '$http', function ($scope, $http) {
+    // 상위 객체 상속 : T/F 는 picker
+    angular.extend(this, new RootController('storeLoanManageCtrl', $scope, $http, true));
 
-        // 조회버튼 클릭 --%>
-        $("#btnSearch").click(function (e) {
-            search(1);
-        });
+    //페이지 스케일 콤보박스 데이터 Set
+    $scope._setComboData("listScaleBox", gvListScaleBoxData);
 
-        // 저장버튼 클릭 --%>
-        $("#btnSave").click(function (e) {
-            save();
-        });
+    // 그리드 DataMap 설정
+    $scope.orderFg = new wijmo.grid.DataMap([
+      {id: "1", name: "<s:message code='loan.orderFg1'/>"},
+      {id: "2", name: "<s:message code='loan.orderFg2'/>"},
+      {id: "3", name: "<s:message code='loan.orderFg3'/>"}
+    ], 'id', 'name');
 
-        <%-- 엑셀 다운로드 버튼 클릭 --%>
-        $("#btnExcel").click(function(){
-            var name = "${menuNm}";
-            name = name+" 테스트";
-            wexcel.down(gridStoreLoan, name, name + ".xlsx");
-        });
+    $scope.noOutstockAmtFg = new wijmo.grid.DataMap([
+      {id: "N", name: "<s:message code='loan.noOutstockAmtFgN'/>"},
+      {id: "Y", name: "<s:message code='loan.noOutstockAmtFgY'/>"}
+    ], 'id', 'name');
 
-        // 페이징
-        $(document).on("click", ".page", function () {
-            search($(this).data("value"));
-        });
-    });
+    // grid 초기화 : 생성되기전 초기화되면서 생성된다
+    $scope.initGrid = function (s, e) {
+      // picker 사용시 호출 : 미사용시 호출안함
+      $scope._makePickColumns("storeLoanManageCtrl");
 
-    function gridInit() {
-        var orderFg  = new wijmo.grid.DataMap([
-            {id: "1", name: "<s:message code='loan.orderFg1'/>"},
-            {id: "2", name: "<s:message code='loan.orderFg2'/>"},
-            {id: "3", name: "<s:message code='loan.orderFg3'/>"}
-        ], 'id', 'name');
-        var noOutstockAmtFg  = new wijmo.grid.DataMap([
-            {id: "N", name: "<s:message code='loan.noOutstockAmtFgN'/>"},
-            {id: "Y", name: "<s:message code='loan.noOutstockAmtFgY'/>"},
-        ], 'id', 'name');
-        var gridDataStoreLoan =
-            [
-                {binding: "storeCd", header: messages["loan.storeCd"], width:  70, align: "center", isReadOnly: true},
-                {binding: "storeNm", header: messages["loan.storeNm"], width: 120, align: "left", isReadOnly: true},
-                {binding: "limitLoanAmt", header: messages["loan.limitLoanAmt"], width: 100, align: "right", dataType: "Number", format: "n0", maxLength: 10, aggregate: 'Sum'},
-                {binding: "useLoanAmt", header: messages["loan.useLoanAmt"], width: 100, align: "right", dataType: "Number", format: "n0", isReadOnly: true, aggregate: 'Sum'},
-                {binding: "currLoanAmt", header: messages["loan.currLoanAmt"], width: 100, align: "right", dataType: "Number", format: "n0", isReadOnly: true, aggregate: 'Sum'},
-                {binding: "maxOrderAmt", header: messages["loan.maxOrderAmt"], width: 100, align: "right", dataType: "Number", format: "n0", aggregate: 'Sum'},
-                {binding: "orderFg", header: messages["loan.orderFg"], width: 100, align: "center", dataMap:orderFg},
-                {binding: "availableOrderAmt", header: messages["loan.availableOrderAmt"], width: 100, align: "right", dataType: "Number", format: "n0", isReadOnly: true, aggregate: 'Sum'},
-                {binding: "noOutstockAmtFg", header: messages["loan.noOutstockAmtFg"], width: 120, align: "center", dataMap:noOutstockAmtFg},
-                {binding: "orderCloseYn", header: messages["loan.orderCloseYn"], width: 60, align: "center"},
-                {binding: "remark", header: messages["loan.remark"], width: "*", align: "left"}
-            ];
-        gridStoreLoan = wgrid.genGrid("#gridStoreLoan", gridDataStoreLoan);
-        gridStoreLoan.isReadOnly = false;
+      // 그리드 링크 효과
+      s.formatItem.addHandler(function (s, e) {
+        if (e.panel === s.cells) {
+          var col = s.columns[e.col];
+          if (col.binding === "storeCd") { // 매장코드
+            wijmo.addClass(e.cell, 'wijLink');
+            wijmo.addClass(e.cell, 'wj-custom-readonly');
+          }
 
-        // footer에 합계 생성
-        gridStoreLoan.columnFooters.rows.push(new wijmo.grid.GroupRow());
-        gridStoreLoan.bottomLeftCells.setCellData(0, 0, '합계');
+          if(col.format === "date") {
+            e.cell.innerHTML = getFormatDate(e.cell.innerText);
+          }
+        }
+      });
 
-    }
+      // 그리드 클릭 이벤트
+      s.addEventListener(s.hostElement, 'mousedown', function(e) {
+        var ht = s.hitTest(e);
+        if( ht.cellType === wijmo.grid.CellType.Cell) {
+          var col = ht.panel.columns[ht.col];
+          var selectedRow = s.rows[ht.row].dataItem;
+          if ( col.binding === "storeCd") { // 매장코드 클릭
+            var params = {};
+            params.storeCd  = selectedRow.storeCd;
+            params.storeNm  = selectedRow.storeNm;
+            $scope._broadcast('storeLoanManageDtlCtrl', params);
+          }
+        }
+      });
 
-    // 매장여신 목록 조회
-    function search(index) {
-        // validation 추가
-        var param = {};
-        param.storeCd = srchStoreCd.value;
-        param.storeNm = srchStoreNm.value;
-        param.listScale = listScaleBox.selectedValue;
-        param.curr = index;
+      // add the new GroupRow to the grid's 'columnFooters' panel
+      s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+      // add a sigma to the header to show that this is a summary row
+      s.bottomLeftCells.setCellData(0, 0, '합계');
+    };
 
-        $.postJSON("/iostock/loan/storeLoanManage/storeLoanManage/list.sb", param,
-            function (result) {
-                var list = result.data.list;
-                if (list.length === undefined || list.length === 0) {
-                    gridStoreLoan.itemsSource = new wijmo.collections.CollectionView([]);
-                    s_alert.pop(result.message);
-                    return false;
-                }
+    // 리스트 조회
+    $scope.searchStoreLoanManage = function() {
+      // 파라미터
+      var params = {};
+      // param.storeCd = $("#srchStoreCd").val();
+      // param.storeNm = $("#srchStoreNm").val();
 
-                gridStoreLoan.itemsSource = new wijmo.collections.CollectionView(list, {trackChanges: true});
+      // 조회 수행 : 조회URL, 파라미터, 콜백함수
+      $scope._inquiryMain("/iostock/loan/storeLoanManage/storeLoanManage/list.sb", params);
+    };
 
-                page.make("#page", result.data.page.curr, result.data.page.totalPage);
-            },
-            function (result) {
-                s_alert.pop(result.message);
-                return false;
-            }
-        );
-    }
+    // 저장
+    $scope.save = function () {
+      var params = new Array();
 
-    function save() {
-        var paramArr = new Array();
+      for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+        var item = $scope.flex.collectionView.itemsEdited[i];
 
-        for (var i = 0; i < gridStoreLoan.collectionView.itemsEdited.length; i++) {
-            if(!valueCheck(gridStoreLoan.collectionView.itemsEdited[i])) {
-                return false;
-            }
-            gridStoreLoan.collectionView.itemsEdited[i].status = "U";
-            paramArr.push(gridStoreLoan.collectionView.itemsEdited[i]);
+        if(item.limitLoanAmt !== null && item.maxOrderAmt == null) {
+          $scope._popMsg("<s:message code='loan.maxOrderAmt'/> <s:message code='cmm.require.text'/>"); // 1회주문한도액을 입력해주세요.
+          return false;
+        }
+        if(item.maxOrderAmt !== null && item.limitLoanAmt === null) {
+          $scope._popMsg("<s:message code='loan.limitLoanAmt'/> <s:message code='cmm.require.text'/>"); // 여신한도액을 입력해주세요.
+          return false;
         }
 
-        if (paramArr.length <= 0) {
-            s_alert.pop(messages["cmm.not.modify"]);
-            return false;
-        }
+        item.status = "U";
+        params.push(item);
+      }
 
-        $.postJSONArray("/iostock/loan/storeLoanManage/storeLoanManage/save.sb", paramArr, function (result) {
-                s_alert.pop(messages["cmm.saveSucc"]);
-                gridStoreLoan.collectionView.clearChanges();
-            },
-            function (result) {
-                s_alert.pop(result.message);
-            }
-        );
-    }
+      $scope._save("/iostock/loan/storeLoanManage/storeLoanManage/save.sb", params, function() { $scope.searchStoreLoanManage() });
+    };
 
-    function valueCheck(rowItem) {
-        console.log("====rowItem====");
-        console.log(rowItem);
-
-        if(rowItem.limitLoanAmt != "" && (rowItem.maxOrderAmt == "" || rowItem.maxOrderAmt == null)) {
-            // if(rowItem.maxOrderAmt == "" || rowItem.maxOrderAmt == null) {
-                s_alert.pop("<s:message code='loan.maxOrderAmt'/> <s:message code='cmm.require.text'/>");
-                return false;
-            // }
-        }
-
-        if(rowItem.maxOrderAmt != "" && (rowItem.limitLoanAmt == "" || rowItem.limitLoanAmt == null)) {
-            // if(rowItem.limitLoanAmt == "" || rowItem.limitLoanAmt == null) {
-                s_alert.pop("<s:message code='loan.limitLoanAmt'/> <s:message code='cmm.require.text'/>");
-                return false;
-            // }
-        }
-
-        return true;
-    }
+    $scope.excelDown = function () {
+      var name = "${menuNm}";
+      name = name+" 테스트";
+      wexcel.down($scope.flex, name, name + ".xlsx");
+    };
+  }]);
 </script>
 <%--<script type="text/javascript" src="/resource/solbipos/js/iostock/loan/storeLoan.js?ver=2018082101" charset="utf-8"></script>--%>
+
+<%-- 매장여신관리 상세 레이어 --%>
+<c:import url="/WEB-INF/view/iostock/loan/storeLoanManage/storeLoanManageDtl.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>

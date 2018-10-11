@@ -52,7 +52,7 @@
                             item-formatter="_itemFormatter">
 
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="cmm.chk"/>"                         binding="gChk"             width="40"  align="center" ></wj-flex-grid-column>
+                        <%--<wj-flex-grid-column header="<s:message code="cmm.chk"/>"                         binding="gChk"             width="40"  align="center" ></wj-flex-grid-column>--%>
                         <wj-flex-grid-column header="<s:message code="storeOrder.dtl.prodCd"/>"           binding="prodCd"           width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeOrder.dtl.prodNm"/>"           binding="prodNm"           width="150" align="left"   is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeOrder.dtl.orderSplyUprc"/>"    binding="orderSplyUprc"    width="70"  align="right"  is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
@@ -198,6 +198,7 @@
                         //미출고금액 고려여부 사용인 경우
                         if($scope.noOutstockAmtFg === "Y") {
                             if($scope.availableOrderAmt <= ($scope.currLoanAmt - $scope.prevOrderTot)) {
+                              // 해당 조건에는 조회해 온 주문가능액 그대로 사용
                             }
                             else if($scope.availableOrderAmt >= ($scope.currLoanAmt - $scope.prevOrderTot) && $scope.maxOrderAmt != 0) {
                                 $scope.availableOrderAmt = $scope.currLoanAmt - $scope.prevOrderTot;
@@ -294,7 +295,10 @@
                 var storeOrderRegistCtrlScope = agrid.getScope('storeOrderRegistCtrl');
 
                 if(storeOrderRegistCtrlScope.httpStatusCheck(response)) {
-                    if(saveFg === "confirm") {
+                  $scope._popMsg(messages["cmm.saveSucc"]);
+                  $scope.flex.collectionView.clearChanges();
+
+                  if(saveFg === "confirm") {
                         $scope.confirm();
                     }
                     else if(saveFg === "save") {
