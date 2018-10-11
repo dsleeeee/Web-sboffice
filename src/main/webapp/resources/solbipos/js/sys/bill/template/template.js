@@ -48,10 +48,11 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     });
     // 템플릿 그리드 선택 이벤트
-    s.selectionChanged.addHandler(function(s, e) {
-      var col = s.columns[e.col];
-      if (s.rows[e.row]) {
-        var selectedRow = s.rows[e.row].dataItem;
+    s.hostElement.addEventListener('mousedown', function(e) {
+      var ht = s.hitTest(e);
+      if( ht.cellType === wijmo.grid.CellType.Cell) {
+        var selectedRow = s.rows[ht.row].dataItem;
+        var col = ht.panel.columns[ht.col];
         if (col.binding === "templtNm" && selectedRow.status !== "I") {
           if (selectedRow.prtForm != null) {
             theTarget.value = selectedRow.prtForm;
@@ -72,19 +73,8 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquiryMain("/sys/bill/template/item/list.sb", params, function() {
-      $("#btnAddTemplate").show();
-      $("#btnDelTemplate").show();
-      $("#btnSaveTemplate").show();
-      $("#btnSaveEditTemplate").show();
-
-      if ( $scope.flex.itemsSource.itemCount < 1 ) {
-        // 편집/미리보기 폼 초기화
-        theTarget.value = "";
-        thePreview.innerHTML = "";
-      }
-
+      // 코드리스트 조회
       searchPrintCodeList(params);
-
     });
 
     // 기능수행 종료 : 반드시 추가
@@ -228,7 +218,7 @@ function searchPrintCodeList(params) {
   $.ajax({
     type: "POST",
     cache: false,
-    async:true,
+    async: true,
     dataType: "json",
     url: "/sys/bill/template/code/list.sb",
     data: params,
@@ -245,7 +235,13 @@ function searchPrintCodeList(params) {
           theTarget.value = "";
           thePreview.innerHTML = "";
         } else {
+          $("#btnAddTemplate").show();
+          $("#btnDelTemplate").show();
+          $("#btnSaveTemplate").show();
+          $("#btnSaveEditTemplate").show();
           scope.flex.select(0,1);
+          theTarget.value = scope.flex.rows[0]._data.prtForm;
+          makePreview();
         }
 
       }
