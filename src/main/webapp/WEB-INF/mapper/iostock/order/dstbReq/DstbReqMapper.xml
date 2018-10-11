@@ -83,6 +83,7 @@
         ,       TO_NUMBER(DECODE(tphsod.MD_VAT       ,  0, NULL, tphsod.MD_VAT*tphsod.SLIP_FG     )) AS MD_VAT
         ,       TO_NUMBER(DECODE(tphsod.MD_TOT       ,  0, NULL, tphsod.MD_TOT*tphsod.SLIP_FG     )) AS MD_TOT
         ,       NVL(tphsod.MD_SPLY_UPRC, 0) AS MD_SPLY_UPRC
+        ,       tphsod.REMARK
         FROM    TB_PO_HQ_STORE_ORDER_DTL tphsod
         ,       TB_MS_PRODUCT tmp
         ,       (   SELECT  PROD_CD, CURR_QTY

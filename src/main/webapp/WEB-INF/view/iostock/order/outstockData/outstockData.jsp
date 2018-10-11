@@ -118,11 +118,11 @@
         // 그리드 DataMap 설정
         $scope.sysStatFgMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
 
-        $scope._setComboData("srchDateFg", [
-            {"name":"<s:message code='outstockData.reqDate'/>","value":"req"},
-            {"name":"<s:message code='outstockData.regDate'/>","value":"reg"},
-            {"name":"<s:message code='outstockData.modDate'/>","value":"mod"}
-        ]);
+      $scope._setComboData("srchDateFg", [
+        {"name":"<s:message code='outstockData.reqDate'/>","value":"req"},
+        {"name":"<s:message code='outstockData.regDate'/>","value":"reg"},
+        {"name":"<s:message code='outstockData.modDate'/>","value":"mod"}
+      ]);
 
         // grid 초기화 : 생성되기전 초기화되면서 생성된다
         $scope.initGrid = function (s, e) {

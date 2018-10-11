@@ -7,8 +7,14 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/iostock/loan/storeLoanInfo/storeLoanInfo/"/>
 
-<div class="subCon">
+<script type="text/javascript">
+  /**
+   * get application
+   */
+  var app = agrid.getApp();
+</script>
 
+<div class="subCon" ng-controller="storeLoanInfoCtrl">
     <div class="searchBar flddUnfld">
         <a href="#" class="open">${menuNm}</a>
     </div>
@@ -22,29 +28,24 @@
         <tbody>
         <tr>
             <%-- 조회일자 --%>
-            <th><s:message code="loanDtl.srearchDate"/></th>
+            <th><s:message code="loanDtl.searchDate"/></th>
             <td colspan="3">
                 <div class="sb-select">
-                    <span class="txtIn"><input id="srchStartDate" class="w200"></span>
+                    <span class="txtIn"><input id="srchStartDate" class="w120"></span>
                     <span class="rg">~</span>
-                    <span class="txtIn"><input id="srchEndDate" class="w200"></span>
+                    <span class="txtIn"><input id="srchEndDate" class="w120"></span>
                 </div>
             </td>
         </tr>
         <tr>
             <%-- 매장코드 --%>
-            <th><s:message code="loanDtl.storeCd"/></th>
-            <td>
-                <div class="sb-select">
-                    <div id="srchStoreCd"></div>
-                </div>
-            </td>
-            <%-- 매장명 --%>
-            <th><s:message code="loanDtl.storeNm"/></th>
-            <td>
-                <div class="sb-select">
-                    <div id="srchStoreNm"></div>
-                </div>
+            <th><s:message code="loanDtl.store"/></th>
+            <td colspan="3">
+              <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
+              <jsp:include page="/WEB-INF/view/iostock/order/outstockReqDate/selectShopM.jsp" flush="true">
+                <jsp:param name="targetId" value="storeLoanInfoSelectStore"/>
+              </jsp:include>
+              <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
             </td>
         </tr>
         </tbody>
@@ -52,90 +53,99 @@
 
     <%-- 조회 --%>
     <div class="mt10 pdb20 oh bb">
-        <button class="btn_blue fr" id="btnSearch"><s:message code="cmm.search"/></button>
+        <button class="btn_blue fr" id="btnSearch" ng-click="searchStoreLoanInfo()"><s:message code="cmm.search"/></button>
     </div>
 
     <div class="mt20 oh sb-select dkbr">
         <%-- 엑셀 다운로드 --%>
-        <button id="btnExcel" class="btn_skyblue fr"><s:message code="cmm.excel.down"/></button>
+        <button id="btnExcel" class="btn_skyblue fr" ng-click="excelDown()"><s:message code="cmm.excel.down"/></button>
     </div>
 
-    <%--위즈모 테이블--%>
-    <div class="wj-TblWrapBr mt10" style="height: 400px;">
-        <%-- 개발시 높이 조절해서 사용--%>
-        <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
-        <div id="gridStoreLoanInfo" style="width:100%;height:393px;"></div>
-    </div>
-    <%--//위즈모 테이블--%>
+    <div class="w100 mt10" >
+        <%--위즈모 테이블--%>
+        <div class="wj-gridWrap" style="height: 350px;">
+            <wj-flex-grid
+              autoGenerateColumns="false"
+              selection-mode="Row"
+              items-source="data"
+              control="flex"
+              initialized="initGrid(s,e)"
+              is-read-only="true"
+              item-formatter="_itemFormatter">
 
+                <!-- define columns -->
+                <wj-flex-grid-column header="<s:message code="loanDtl.storeCd"/>"     binding="storeCd"     width="70"  align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="loanDtl.storeNm"/>"     binding="storeNm"     width="150" align="left"  ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="loanDtl.loanDate"/>"    binding="loanDate"    width="80"  align="center" format="date"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="loanDtl.outAmt"/>"      binding="outAmt"      width="70"  align="right" data-type="Number" format="n0"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="loanDtl.inAmt"/>"       binding="inAmt"       width="70"  align="right" data-type="Number" format="n0"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="loanDtl.currLoanAmt"/>" binding="currLoanAmt" width="70"  align="right" data-type="Number" format="n0"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="loanDtl.remark"/>"      binding="remark"      width="*"   align="left"></wj-flex-grid-column>
+
+            </wj-flex-grid>
+            <%-- ColumnPicker 사용시 include --%>
+            <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+                <jsp:param name="pickerTarget" value="storeLoanInfoCtrl"/>
+            </jsp:include>
+            <%--// ColumnPicker 사용시 include --%>
+        </div>
+        <%--//위즈모 테이블--%>
+    </div>
 </div>
 
 <script type="text/javascript">
-    //그리드 전역 변수 선언
-    var gridStoreLoanInfo;
-    // 조회 변수 선언
+
+  /** 여신상세현황 그리드 controller */
+  app.controller('storeLoanInfoCtrl', ['$scope', '$http', function ($scope, $http) {
+    // 상위 객체 상속 : T/F 는 picker
+    angular.extend(this, new RootController('storeLoanInfoCtrl', $scope, $http, true));
+
     var srchStartDate = wcombo.genDateVal("#srchStartDate", "${sessionScope.sessionInfo.startDt}");
-    var srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.endDt}");
-    var srchStoreCd  = wcombo.genInputText("#srchStoreCd", 7, "");
-    var srchStoreNm  = wcombo.genInputText("#srchStoreNm", 50, "");
+    var srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.startDt}");
 
-    $(document).ready(function () {
-        gridInit();
+    // grid 초기화 : 생성되기전 초기화되면서 생성된다
+    $scope.initGrid = function (s, e) {
+      // picker 사용시 호출 : 미사용시 호출안함
+      $scope._makePickColumns("storeLoanInfoCtrl");
 
-        // 조회버튼 클릭 --%>
-        $("#btnSearch").click(function (e) {
-            search(1);
-        });
+      // 그리드 링크 효과
+      s.formatItem.addHandler(function (s, e) {
+        if (e.panel === s.cells) {
+          var col = s.columns[e.col];
 
-        <%-- 엑셀 다운로드 버튼 클릭 --%>
-        $("#btnExcel").click(function(){
-            var name = "${menuNm}";
-            name = name+" 테스트";
-            wexcel.down(gridStoreLoan, name, name + ".xlsx");
-        });
-    });
+          if(col.format === "date") {
+            e.cell.innerHTML = getFormatDate(e.cell.innerText);
+          }
+        }
+      });
+    };
 
-    function gridInit() {
-        var gridDataStoreLoanInfo =
-            [
-                {binding: "storeCd", header: messages["loanDtl.storeCd"], width:  70, align: "center"},
-                {binding: "storeNm", header: messages["loanDtl.storeNm"], width: 120, align: "left"},
-                {binding: "loanDate", header: messages["loanDtl.loanDate"], width: 100, align: "center"},
-                {binding: "outAmt", header: messages["loanDtl.outAmt"], width: 100, align: "right", dataType: "Number", format: "n0"},
-                {binding: "inAmt", header: messages["loanDtl.inAmt"], width: 100, align: "right", dataType: "Number", format: "n0"},
-                {binding: "currLoanAmt", header: messages["loanDtl.currLoanAmt"], width: 100, align: "right", dataType: "Number", format: "n0"},
-                {binding: "remark", header: messages["loan.remark"], width: "*", align: "left"}
-            ];
-        gridStoreLoanInfo = wgrid.genGrid("#gridStoreLoanInfo", gridDataStoreLoanInfo);
-    }
+    // 리스트 조회
+    $scope.searchStoreLoanInfo = function() {
+      // 파라미터
+      var params = {};
+      params.startDate = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
+      params.endDate   = wijmo.Globalize.format(srchEndDate.value  , 'yyyyMMdd');
+      params.storeCd   = $("#storeLoanInfoSelectStoreCd").val();
 
-    // 목록 조회
-    function search(index) {
-        // validation 추가
-        var param = {};
-        //TODO wijmo calendar의 값을 원하는 포맷으로 변경하는 함수 필요
-        param.startDate = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
-        param.endDate   = wijmo.Globalize.format(srchEndDate.value, 'yyyyMMdd');
-        param.storeCd   = srchStoreCd.value;
-        param.storeNm   = srchStoreNm.value;
+      // 조회 수행 : 조회URL, 파라미터, 콜백함수
+      $scope._inquiryMain("/iostock/loan/storeLoanInfo/storeLoanInfo/list.sb", params);
+    };
 
-        $.postJSON("/iostock/loan/storeLoanInfo/storeLoanInfo/list.sb", param,
-            function (result) {
-                var list = result.data.list;
-                if (list.length === undefined || list.length === 0) {
-                    gridStoreLoanInfo.itemsSource = new wijmo.collections.CollectionView([]);
-                    s_alert.pop(result.message);
-                    return false;
-                }
+    // 매장선택 모듈 팝업 사용시 정의
+    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+    $scope.storeLoanInfoSelectStoreShow = function () {
+      $scope._broadcast('storeLoanInfoSelectStoreCtrl');
+    };
 
-                gridStoreLoanInfo.itemsSource = new wijmo.collections.CollectionView(list, {trackChanges: true});
-            },
-            function (result) {
-                s_alert.pop(result.message);
-                return false;
-            }
-        );
-    }
+    $scope.excelDown = function () {
+      var name = "${menuNm}";
+      name = name+" 테스트";
+      wexcel.down($scope.flex, name, name + ".xlsx");
+    };
+
+  }]);
 
 </script>
 <%--<script type="text/javascript" src="/resource/solbipos/js/iostock/loan/storeLoan.js?ver=2018082101" charset="utf-8"></script>--%>

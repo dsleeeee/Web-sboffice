@@ -100,7 +100,7 @@
                             item-formatter="_itemFormatter">
 
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="cmm.chk"/>"                             binding="gChk"                width="40"  align="center" ></wj-flex-grid-column>
+                        <%--<wj-flex-grid-column header="<s:message code="cmm.chk"/>"                             binding="gChk"                width="40"  align="center" ></wj-flex-grid-column>--%>
                         <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.seq"/>"              binding="seq"                 width="0"   align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.prodClassNm"/>"      binding="prodClassNm"         width="100" align="left"   is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.prodCd"/>"           binding="prodCd"              width="100" align="center" is-read-only="true"></wj-flex-grid-column>

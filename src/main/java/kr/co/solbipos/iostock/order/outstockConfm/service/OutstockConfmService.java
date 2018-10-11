@@ -18,4 +18,13 @@ public interface OutstockConfmService {
     /** 출고확정 - 전표상세 조회 */
     DefaultMap<String> getSlipNoInfo(OutstockConfmVO outstockConfmVO);
 
+    /** 출고확정 상세 리스트 조회 */
+    List<DefaultMap<String>> getOutstockConfmDtlList(OutstockConfmVO outstockConfmVO);
+
+    /** 출고확정 - 출고확정 상세 리스트 저장 */
+    int saveOutstockConfmDtl(OutstockConfmVO[] outstockConfmVOs, SessionInfoVO sessionInfoVO);
+
+    /** 출고확정 - 출고확정 이후 저장 */
+    int saveOutstockAfter(OutstockConfmVO outstockConfmVO, SessionInfoVO sessionInfoVO);
+
 }

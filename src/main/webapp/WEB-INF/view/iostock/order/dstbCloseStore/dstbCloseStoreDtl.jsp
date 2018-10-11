@@ -40,7 +40,7 @@
                             item-formatter="_itemFormatter">
 
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="cmm.chk"/>"                             binding="gChk"             width="40"  align="center" ></wj-flex-grid-column>
+                        <%--<wj-flex-grid-column header="<s:message code="cmm.chk"/>"                             binding="gChk"             width="40"  align="center" ></wj-flex-grid-column>--%>
                         <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtl.seq"/>"              binding="seq"              width="0"   align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtl.storeCd"/>"          binding="storeCd"          width="0"   align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtl.prodCd"/>"           binding="prodCd"           width="100" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -176,7 +176,7 @@
             });
         };
 
-        // 저장 전 값 체크
+        // 저장
         $scope.save = function () {
             var params = new Array();
 

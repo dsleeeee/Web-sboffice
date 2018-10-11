@@ -2,6 +2,7 @@ package kr.co.solbipos.iostock.loan.storeLoanInfo.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.iostock.loan.storeLoanInfo.service.StoreLoanInfoService;
 import kr.co.solbipos.iostock.loan.storeLoanInfo.service.StoreLoanInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,10 @@ public class StoreLoanInfoServiceImpl implements StoreLoanInfoService {
     /** 매장여신관리 목록 조회 */
     @Override
     public List<DefaultMap<String>> getStoreLoanInfoList(StoreLoanInfoVO storeLoanInfoVO) {
+        if(!StringUtil.getOrBlank(storeLoanInfoVO.getStoreCd()).equals("")) {
+            storeLoanInfoVO.setArrStoreCd(storeLoanInfoVO.getStoreCd().split(","));
+        }
+
         return storeLoanInfoMapper.getStoreLoanInfoList(storeLoanInfoVO);
     }
 }

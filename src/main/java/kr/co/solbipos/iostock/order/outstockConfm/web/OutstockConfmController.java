@@ -153,4 +153,71 @@ public class OutstockConfmController {
 
         return ReturnUtil.returnJson(Status.OK, result);
     }
+
+    /**
+     * 출고확정 - 출고확정 상세 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   outstockConfmVO
+     * @return  String
+     * @author  안동관
+     * @since   2018. 10. 10.
+     */
+    @RequestMapping(value = "/outstockConfmDtl/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getOutstockConfmDtlList(HttpServletRequest request, HttpServletResponse response,
+        Model model, OutstockConfmVO outstockConfmVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        outstockConfmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        List<DefaultMap<String>> list = outstockConfmService.getOutstockConfmDtlList(outstockConfmVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, outstockConfmVO);
+    }
+
+    /**
+     * 출고확정 - 출고확정 상세 리스트 저장
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   outstockConfmVOs
+     * @return  String
+     * @author  안동관
+     * @since   2018. 10. 10.
+     */
+    @RequestMapping(value = "/outstockConfmDtl/save", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveOutstockConfmDtl(HttpServletRequest request, HttpServletResponse response,
+        Model model, @RequestBody OutstockConfmVO[] outstockConfmVOs) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = outstockConfmService.saveOutstockConfmDtl(outstockConfmVOs, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+    /**
+     * 출고확정 - 출고확정 이후 저장
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   outstockConfmVO
+     * @return  String
+     * @author  안동관
+     * @since   2018. 10. 10.
+     */
+    @RequestMapping(value = "/outstockConfm/saveOutstockAfter.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveOutstockAfter(HttpServletRequest request, HttpServletResponse response,
+        Model model, OutstockConfmVO outstockConfmVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = outstockConfmService.saveOutstockAfter(outstockConfmVO, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
 }

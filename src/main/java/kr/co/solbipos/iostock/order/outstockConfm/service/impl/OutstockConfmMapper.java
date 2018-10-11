@@ -34,4 +34,16 @@ public interface OutstockConfmMapper {
     /** 출고확정 - 전표상세 조회 */
     DefaultMap<String> getSlipNoInfo(OutstockConfmVO outstockConfmVO);
 
+    /** 출고확정 상세 리스트 조회 */
+    List<DefaultMap<String>> getOutstockConfmDtlList(OutstockConfmVO outstockConfmVO);
+
+    /** 출고확정 - 출고확정 DTL 수정 */
+    int updateOutstockConfmDtl(OutstockConfmVO outstockConfmVO);
+
+    /** 출고확정 - 출고확정 HD 수정 */
+    int updateOutstockConfmHd(OutstockConfmVO outstockConfmVO);
+
+    /** 출고확정 - 출고확정 이후 저장시 HD 수정 */
+    int updateOutstockAfterHd(OutstockConfmVO outstockConfmVO);
+
 }

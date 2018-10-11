@@ -366,6 +366,7 @@
                             //미출고금액 고려여부 사용인 경우
                             if($scope.noOutstockAmtFg === "Y") {
                                 if($scope.availableOrderAmt <= ($scope.currLoanAmt - $scope.prevOrderTot)) {
+                                  // 해당 조건에는 조회해 온 주문가능액 그대로 사용
                                 }
                                 else if($scope.availableOrderAmt >= ($scope.currLoanAmt - $scope.prevOrderTot) && $scope.maxOrderAmt != 0) {
                                     $scope.availableOrderAmt = $scope.currLoanAmt - $scope.prevOrderTot;

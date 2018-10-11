@@ -28,6 +28,8 @@ public class OutstockConfmVO extends PageVO {
     private Integer dtlCnt;
     /** 주문수량 주문단위 */
     private Integer orderUnitQty;
+    /** 주문 공급단가 */
+    private Integer orderSplyUprc;
     /** 주문수량 나머지 */
     private Integer orderEtcQty;
     /** 주문수량합계 낱개 */
@@ -38,6 +40,8 @@ public class OutstockConfmVO extends PageVO {
     private Integer orderVat;
     /** 주문금액합계 */
     private Integer orderTot;
+    /** MD 공급단가 */
+    private Integer mdSplyUprc;
     /** MD수량1 주문단위 */
     private Integer mdUnitQty;
     /** MD수량2 나머지 */
@@ -50,6 +54,8 @@ public class OutstockConfmVO extends PageVO {
     private Integer mdVat;
     /** MD금액합계 */
     private Integer mdTot;
+    /** 매니저 공급단가 */
+    private Integer mgrSplyUprc;
     /** 매니저수량 주문단위 */
     private Integer mgrUnitQty;
     /** 매니저수량 나머지 */
@@ -64,6 +70,8 @@ public class OutstockConfmVO extends PageVO {
     private Integer mgrTot;
     /** 출고일자 수불기준일자 */
     private String outDate;
+    /** 출고 공급단가 */
+    private Integer outSplyUprc;
     /** 출고수량 주문단위 */
     private Integer outUnitQty;
     /** 출고수량 나머지 */
@@ -71,17 +79,19 @@ public class OutstockConfmVO extends PageVO {
     /** 출고수량합계 낱개 */
     private Integer outTotQty;
     /** 출고금액 */
-    private Integer outAmt;
+    private Long outAmt;
     /** 출고금액VAT */
-    private Integer outVat;
+    private Long outVat;
     /** 출고금액합계 */
-    private Integer outTot;
+    private Long outTot;
     /** 출고일시 */
     private String outDt;
     /** 출고자 */
     private String outId;
     /** 입고일자 수불기준일자 */
     private String inDate;
+    /** 입고 공급단가 */
+    private Integer inSplyUprc;
     /** 입고수량 주문단위 */
     private Integer inUnitQty;
     /** 입고수량 나머지 */
@@ -89,11 +99,11 @@ public class OutstockConfmVO extends PageVO {
     /** 입고수량합계 낱개 */
     private Integer inTotQty;
     /** 입고금액 */
-    private Integer inAmt;
+    private Long inAmt;
     /** 입고금액VAT */
-    private Integer inVat;
+    private Long inVat;
     /** 입고금액합계 */
-    private Integer inTot;
+    private Long inTot;
     /** 입고일시 */
     private String inDt;
     /** 입고자 */
@@ -102,6 +112,8 @@ public class OutstockConfmVO extends PageVO {
     private String penaltyFg;
     /** 비고 */
     private String remark;
+    /** HD 비고 */
+    private String HdRemark;
     /** 세금계산서발행일자 */
     private String billIssueDate;
     /** 세금계산서발행일시 */
@@ -118,6 +130,26 @@ public class OutstockConfmVO extends PageVO {
     private String startDate;
     /** 조회 종료일 */
     private String endDate;
+    /** 출고확정여부 */
+    private String confirmFg;
+    /** 순번 본사코드_전표번호에 따른 순번 */
+    private Integer seq;
+    /** 분배구분 TB_CM_NMCODE(NMCODE_GRP_CD='111') 0:일반 1:증정 2:전시용 9:기타 */
+    private String dstbFg;
+    /** 창고코드 */
+    private String storageCd;
+    /** 브랜드코드 */
+    private String hqBrandCd;
+    /** 상품코드 */
+    private String prodCd;
+    /** 상품명 */
+    private String prodNm;
+    /** 출고요청일자 */
+    private String reqDate;
+    /** 패널티 사유 */
+    private String penaltyCd;
+    /** 패널티금액 반품시 */
+    private Integer penaltyAmt;
 
     /**
      * @return the hqOfficeCd
@@ -274,6 +306,20 @@ public class OutstockConfmVO extends PageVO {
     }
 
     /**
+     * @return the orderSplyUprc
+     */
+    public Integer getOrderSplyUprc() {
+        return orderSplyUprc;
+    }
+
+    /**
+     * @param orderSplyUprc the orderSplyUprc to set
+     */
+    public void setOrderSplyUprc(Integer orderSplyUprc) {
+        this.orderSplyUprc = orderSplyUprc;
+    }
+
+    /**
      * @return the orderEtcQty
      */
     public Integer getOrderEtcQty() {
@@ -341,6 +387,20 @@ public class OutstockConfmVO extends PageVO {
      */
     public void setOrderTot(Integer orderTot) {
         this.orderTot = orderTot;
+    }
+
+    /**
+     * @return the mdSplyUprc
+     */
+    public Integer getMdSplyUprc() {
+        return mdSplyUprc;
+    }
+
+    /**
+     * @param mdSplyUprc the mdSplyUprc to set
+     */
+    public void setMdSplyUprc(Integer mdSplyUprc) {
+        this.mdSplyUprc = mdSplyUprc;
     }
 
     /**
@@ -425,6 +485,20 @@ public class OutstockConfmVO extends PageVO {
      */
     public void setMdTot(Integer mdTot) {
         this.mdTot = mdTot;
+    }
+
+    /**
+     * @return the mgrSplyUprc
+     */
+    public Integer getMgrSplyUprc() {
+        return mgrSplyUprc;
+    }
+
+    /**
+     * @param mgrSplyUprc the mgrSplyUprc to set
+     */
+    public void setMgrSplyUprc(Integer mgrSplyUprc) {
+        this.mgrSplyUprc = mgrSplyUprc;
     }
 
     /**
@@ -526,6 +600,20 @@ public class OutstockConfmVO extends PageVO {
     }
 
     /**
+     * @return the outSplyUprc
+     */
+    public Integer getOutSplyUprc() {
+        return outSplyUprc;
+    }
+
+    /**
+     * @param outSplyUprc the outSplyUprc to set
+     */
+    public void setOutSplyUprc(Integer outSplyUprc) {
+        this.outSplyUprc = outSplyUprc;
+    }
+
+    /**
      * @return the outUnitQty
      */
     public Integer getOutUnitQty() {
@@ -570,42 +658,42 @@ public class OutstockConfmVO extends PageVO {
     /**
      * @return the outAmt
      */
-    public Integer getOutAmt() {
+    public Long getOutAmt() {
         return outAmt;
     }
 
     /**
      * @param outAmt the outAmt to set
      */
-    public void setOutAmt(Integer outAmt) {
+    public void setOutAmt(Long outAmt) {
         this.outAmt = outAmt;
     }
 
     /**
      * @return the outVat
      */
-    public Integer getOutVat() {
+    public Long getOutVat() {
         return outVat;
     }
 
     /**
      * @param outVat the outVat to set
      */
-    public void setOutVat(Integer outVat) {
+    public void setOutVat(Long outVat) {
         this.outVat = outVat;
     }
 
     /**
      * @return the outTot
      */
-    public Integer getOutTot() {
+    public Long getOutTot() {
         return outTot;
     }
 
     /**
      * @param outTot the outTot to set
      */
-    public void setOutTot(Integer outTot) {
+    public void setOutTot(Long outTot) {
         this.outTot = outTot;
     }
 
@@ -649,6 +737,20 @@ public class OutstockConfmVO extends PageVO {
      */
     public void setInDate(String inDate) {
         this.inDate = inDate;
+    }
+
+    /**
+     * @return the inSplyUprc
+     */
+    public Integer getInSplyUprc() {
+        return inSplyUprc;
+    }
+
+    /**
+     * @param inSplyUprc the inSplyUprc to set
+     */
+    public void setInSplyUprc(Integer inSplyUprc) {
+        this.inSplyUprc = inSplyUprc;
     }
 
     /**
@@ -696,42 +798,42 @@ public class OutstockConfmVO extends PageVO {
     /**
      * @return the inAmt
      */
-    public Integer getInAmt() {
+    public Long getInAmt() {
         return inAmt;
     }
 
     /**
      * @param inAmt the inAmt to set
      */
-    public void setInAmt(Integer inAmt) {
+    public void setInAmt(Long inAmt) {
         this.inAmt = inAmt;
     }
 
     /**
      * @return the inVat
      */
-    public Integer getInVat() {
+    public Long getInVat() {
         return inVat;
     }
 
     /**
      * @param inVat the inVat to set
      */
-    public void setInVat(Integer inVat) {
+    public void setInVat(Long inVat) {
         this.inVat = inVat;
     }
 
     /**
      * @return the inTot
      */
-    public Integer getInTot() {
+    public Long getInTot() {
         return inTot;
     }
 
     /**
      * @param inTot the inTot to set
      */
-    public void setInTot(Integer inTot) {
+    public void setInTot(Long inTot) {
         this.inTot = inTot;
     }
 
@@ -789,6 +891,20 @@ public class OutstockConfmVO extends PageVO {
      */
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    /**
+     * @return the HdRemark
+     */
+    public String getHdRemark() {
+        return HdRemark;
+    }
+
+    /**
+     * @param hdRemark the HdRemark to set
+     */
+    public void setHdRemark(String hdRemark) {
+        HdRemark = hdRemark;
     }
 
     /**
@@ -901,5 +1017,145 @@ public class OutstockConfmVO extends PageVO {
      */
     public void setEndDate(String endDate) {
         this.endDate = endDate;
+    }
+
+    /**
+     * @return the confirmFg
+     */
+    public String getConfirmFg() {
+        return confirmFg;
+    }
+
+    /**
+     * @param confirmFg the confirmFg to set
+     */
+    public void setConfirmFg(String confirmFg) {
+        this.confirmFg = confirmFg;
+    }
+
+    /**
+     * @return the seq
+     */
+    public Integer getSeq() {
+        return seq;
+    }
+
+    /**
+     * @param seq the seq to set
+     */
+    public void setSeq(Integer seq) {
+        this.seq = seq;
+    }
+
+    /**
+     * @return the dstbFg
+     */
+    public String getDstbFg() {
+        return dstbFg;
+    }
+
+    /**
+     * @param dstbFg the dstbFg to set
+     */
+    public void setDstbFg(String dstbFg) {
+        this.dstbFg = dstbFg;
+    }
+
+    /**
+     * @return the storageCd
+     */
+    public String getStorageCd() {
+        return storageCd;
+    }
+
+    /**
+     * @param storageCd the storageCd to set
+     */
+    public void setStorageCd(String storageCd) {
+        this.storageCd = storageCd;
+    }
+
+    /**
+     * @return the hqBrandCd
+     */
+    public String getHqBrandCd() {
+        return hqBrandCd;
+    }
+
+    /**
+     * @param hqBrandCd the hqBrandCd to set
+     */
+    public void setHqBrandCd(String hqBrandCd) {
+        this.hqBrandCd = hqBrandCd;
+    }
+
+    /**
+     * @return the prodCd
+     */
+    public String getProdCd() {
+        return prodCd;
+    }
+
+    /**
+     * @param prodCd the prodCd to set
+     */
+    public void setProdCd(String prodCd) {
+        this.prodCd = prodCd;
+    }
+
+    /**
+     * @return the prodNm
+     */
+    public String getProdNm() {
+        return prodNm;
+    }
+
+    /**
+     * @param prodNm the prodNm to set
+     */
+    public void setProdNm(String prodNm) {
+        this.prodNm = prodNm;
+    }
+
+    /**
+     * @return the reqDate
+     */
+    public String getReqDate() {
+        return reqDate;
+    }
+
+    /**
+     * @param reqDate the reqDate to set
+     */
+    public void setReqDate(String reqDate) {
+        this.reqDate = reqDate;
+    }
+
+    /**
+     * @return the penaltyCd
+     */
+    public String getPenaltyCd() {
+        return penaltyCd;
+    }
+
+    /**
+     * @param penaltyCd the penaltyCd to set
+     */
+    public void setPenaltyCd(String penaltyCd) {
+        this.penaltyCd = penaltyCd;
+    }
+
+    /**
+     * @return the penaltyAmt
+     */
+    public Integer getPenaltyAmt() {
+        return penaltyAmt;
+    }
+
+    /**
+     * @param penaltyAmt the penaltyAmt to set
+     */
+    public void setPenaltyAmt(Integer penaltyAmt) {
+        this.penaltyAmt = penaltyAmt;
     }
 }

@@ -64,6 +64,11 @@ public class StoreLoanManageServiceImpl implements StoreLoanManageService {
         } else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
+    }
 
+    /** 매장여신관리 상세 현황 조회 */
+    @Override
+    public List<DefaultMap<String>> getStoreLoanManageDtlList(StoreLoanManageVO storeLoanManageVO) {
+        return storeLoanManageMapper.getStoreLoanManageDtlList(storeLoanManageVO);
     }
 }

@@ -116,9 +116,9 @@
         /* USE : OutstockConfmMapper.getSlipNoInfo */
         <![CDATA[
         SELECT  tphso.*
-        ,       tms.SHOP_NM
-        ,       tcn.COM_CD_NM AS SLIP_KIND_NM
-        ,       tphdc.DRIVER_NM
+        ,       tms.STORE_NM
+        ,       tcn.NMCODE_NM AS SLIP_KIND_NM
+        ,       tphdc.DLVR_NM
         FROM    TB_PO_HQ_STORE_OUTSTOCK tphso
         ,       TB_MS_STORE tms
         ,       TB_CM_NMCODE tcn
@@ -126,8 +126,8 @@
         WHERE   tphso.HQ_OFFICE_CD      =   #{hqOfficeCd}
         AND     tphso.SLIP_NO           =   #{slipNo}
         AND     tms.STORE_CD            =   tphso.STORE_CD
-        AND     tcn.NMCODE_GRP_CD       =   '114'
-        AND     tcn.NMCODE_CD           =   tphso.SLIP_KIND
+        AND     tcn.NMCODE_GRP_CD   (+) =   '114'
+        AND     tcn.NMCODE_CD       (+) =   tphso.SLIP_KIND
         AND     tphdc.HQ_OFFICE_CD  (+) =   tphso.HQ_OFFICE_CD
         AND     tphdc.DLVR_CD       (+) =   tphso.DLVR_CD
         ]]>
@@ -142,34 +142,34 @@
     <select id="getOutstockConfmDtlList" parameterType="outstockConfmVO" resultType="DefaultMap">
         /* USE : OutstockConfmMapper.getOutstockConfmDtlList */
         <![CDATA[
-        SELECT   tphsod.PROD_CD, thp.PROD_NM, tphsod.SEQ
+        SELECT   tphsod.SLIP_NO, tphsod.SLIP_FG, tphsod.PROD_CD, thp.PROD_NM, tphsod.SEQ
         ,        tphsod.PO_UNIT_FG, tphsod.PO_UNIT_QTY, thp.PO_UNIT_ALLOW_FG
         ,        DECODE(thp.VAT_FG,'Y',1,0) VAT_FG01
-        ,        tphsod.ORDER_SPLY_UPRC                                                    AS ORDER_SPLY_UPRC
-        ,        DECODE(tphsod.ORDER_UNIT_QTY,0,NULL,tphsod.ORDER_UNIT_QTY*tphsod.SLIP_FG) AS ORDER_UNIT_QTY
-        ,        DECODE(tphsod.ORDER_ETC_QTY ,0,NULL,tphsod.ORDER_ETC_QTY *tphsod.SLIP_FG) AS ORDER_ETC_QTY
-        ,        tphsod.ORDER_AMT *tphsod.SLIP_FG                                          AS ORDER_AMT
-        ,        tphsod.ORDER_VAT *tphsod.SLIP_FG                                          AS ORDER_VAT
-        ,        tphsod.ORDER_TOT *tphsod.SLIP_FG                                          AS ORDER_TOT
-        ,        tphsod.MGR_SPLY_UPRC                                                      AS MGR_SPLY_UPRC
-        ,        DECODE(tphsod.MGR_UNIT_QTY,0,NULL,tphsod.MGR_UNIT_QTY*tphsod.SLIP_FG)     AS MGR_UNIT_QTY
-        ,        DECODE(tphsod.MGR_ETC_QTY ,0,NULL,tphsod.MGR_ETC_QTY *tphsod.SLIP_FG)     AS MGR_ETC_QTY
-        ,        tphsod.MGR_AMT *tphsod.SLIP_FG                                            AS MGR_AMT
-        ,        tphsod.MGR_VAT *tphsod.SLIP_FG                                            AS MGR_VAT
-        ,        tphsod.MGR_TOT *tphsod.SLIP_FG                                            AS MGR_TOT
-        ,        tphsod.OUT_SPLY_UPRC                                                      AS OUT_SPLY_UPRC
-        ,        DECODE(tphsod.OUT_UNIT_QTY,0,NULL,tphsod.OUT_UNIT_QTY*tphsod.SLIP_FG)     AS OUT_UNIT_QTY
-        ,        DECODE(tphsod.OUT_ETC_QTY ,0,NULL,tphsod.OUT_ETC_QTY *tphsod.SLIP_FG)     AS OUT_ETC_QTY
-        ,        DECODE(tphsod.OUT_TOT_QTY ,0,NULL,tphsod.OUT_TOT_QTY *tphsod.SLIP_FG)     AS OUT_TOT_QTY
-        ,        tphsod.OUT_AMT *tphsod.SLIP_FG                                            AS OUT_AMT
-        ,        tphsod.OUT_VAT *tphsod.SLIP_FG                                            AS OUT_VAT
-        ,        tphsod.OUT_TOT *tphsod.SLIP_FG                                            AS OUT_TOT
-        ,        tphsod.IN_SPLY_UPRC                                                       AS IN_SPLY_UPRC
-        ,        DECODE(tphsod.IN_UNIT_QTY ,0,NULL,tphsod.IN_UNIT_QTY*tphsod.SLIP_FG)      AS IN_UNIT_QTY
-        ,        DECODE(tphsod.IN_ETC_QTY  ,0,NULL,tphsod.IN_ETC_QTY *tphsod.SLIP_FG)      AS IN_ETC_QTY
-        ,        tphsod.IN_AMT  *tphsod.SLIP_FG                                            AS IN_AMT
-        ,        tphsod.IN_VAT  *tphsod.SLIP_FG                                            AS IN_VAT
-        ,        tphsod.IN_TOT  *tphsod.SLIP_FG                                            AS IN_TOT
+        ,        tphsod.ORDER_SPLY_UPRC                                                               AS ORDER_SPLY_UPRC
+        ,        TO_NUMBER(DECODE(tphsod.ORDER_UNIT_QTY,0,NULL,tphsod.ORDER_UNIT_QTY*tphsod.SLIP_FG)) AS ORDER_UNIT_QTY
+        ,        TO_NUMBER(DECODE(tphsod.ORDER_ETC_QTY ,0,NULL,tphsod.ORDER_ETC_QTY *tphsod.SLIP_FG)) AS ORDER_ETC_QTY
+        ,        tphsod.ORDER_AMT *tphsod.SLIP_FG                                                     AS ORDER_AMT
+        ,        tphsod.ORDER_VAT *tphsod.SLIP_FG                                                     AS ORDER_VAT
+        ,        tphsod.ORDER_TOT *tphsod.SLIP_FG                                                     AS ORDER_TOT
+        ,        tphsod.MGR_SPLY_UPRC                                                                 AS MGR_SPLY_UPRC
+        ,        TO_NUMBER(DECODE(tphsod.MGR_UNIT_QTY,0,NULL,tphsod.MGR_UNIT_QTY*tphsod.SLIP_FG))     AS MGR_UNIT_QTY
+        ,        TO_NUMBER(DECODE(tphsod.MGR_ETC_QTY ,0,NULL,tphsod.MGR_ETC_QTY *tphsod.SLIP_FG))     AS MGR_ETC_QTY
+        ,        tphsod.MGR_AMT *tphsod.SLIP_FG                                                       AS MGR_AMT
+        ,        tphsod.MGR_VAT *tphsod.SLIP_FG                                                       AS MGR_VAT
+        ,        tphsod.MGR_TOT *tphsod.SLIP_FG                                                       AS MGR_TOT
+        ,        tphsod.OUT_SPLY_UPRC                                                                 AS OUT_SPLY_UPRC
+        ,        TO_NUMBER(DECODE(tphsod.OUT_UNIT_QTY,0,NULL,tphsod.OUT_UNIT_QTY*tphsod.SLIP_FG))     AS OUT_UNIT_QTY
+        ,        TO_NUMBER(DECODE(tphsod.OUT_ETC_QTY ,0,NULL,tphsod.OUT_ETC_QTY *tphsod.SLIP_FG))     AS OUT_ETC_QTY
+        ,        TO_NUMBER(DECODE(tphsod.OUT_TOT_QTY ,0,NULL,tphsod.OUT_TOT_QTY *tphsod.SLIP_FG))     AS OUT_TOT_QTY
+        ,        tphsod.OUT_AMT *tphsod.SLIP_FG                                                       AS OUT_AMT
+        ,        tphsod.OUT_VAT *tphsod.SLIP_FG                                                       AS OUT_VAT
+        ,        tphsod.OUT_TOT *tphsod.SLIP_FG                                                       AS OUT_TOT
+        ,        tphsod.IN_SPLY_UPRC                                                                  AS IN_SPLY_UPRC
+        ,        TO_NUMBER(DECODE(tphsod.IN_UNIT_QTY ,0,NULL,tphsod.IN_UNIT_QTY*tphsod.SLIP_FG))      AS IN_UNIT_QTY
+        ,        TO_NUMBER(DECODE(tphsod.IN_ETC_QTY  ,0,NULL,tphsod.IN_ETC_QTY *tphsod.SLIP_FG))      AS IN_ETC_QTY
+        ,        tphsod.IN_AMT  *tphsod.SLIP_FG                                                       AS IN_AMT
+        ,        tphsod.IN_VAT  *tphsod.SLIP_FG                                                       AS IN_VAT
+        ,        tphsod.IN_TOT  *tphsod.SLIP_FG                                                       AS IN_TOT
         ,        tphsod.REMARK
         ,        0 AS ENVST0011
         ,        thpb.BARCD_CD
@@ -285,4 +285,69 @@
         AND     SLIP_NO       = #{slipNo}
     </update>
 
+    <!-- 출고확정 - 출고확정 상세 리스트 DTL 수정 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK_DTL
+        PARAM    : outstockConfmVO
+        COMMENTS : 출고확정 - 출고확정 상세 리스트 DTL을 수정한다.
+    -->
+    <update id="updateOutstockConfmDtl" parameterType="outstockConfmVO">
+        /* USE : OutstockConfmMapper.updateOutstockConfmDtl */
+        UPDATE  TB_PO_HQ_STORE_OUTSTOCK_DTL
+        SET     OUT_SPLY_UPRC   = #{outSplyUprc},
+                OUT_UNIT_QTY    = #{outUnitQty},
+                OUT_ETC_QTY     = #{outEtcQty},
+                OUT_TOT_QTY     = #{outTotQty},
+                OUT_AMT         = #{outAmt},
+                OUT_VAT         = #{outVat},
+                OUT_TOT         = #{outTot},
+                REMARK          = #{remark},
+                MOD_DT          = #{modDt},
+                MOD_ID          = #{modId}
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+        AND     SEQ           = #{seq}
+    </update>
+
+    <!-- 출고확정 - 출고확정 상세 리스트 HD 수정-->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK
+        PARAM    : outstockConfmVO
+        COMMENTS : 출고확정 - 출고확정 상세 리스트 HD의 집계를 수정한다.
+    -->
+    <update id="updateOutstockConfmHd" parameterType="outstockConfmVO">
+        /* USE : OutstockConfmMapper.updateOutstockConfmHd */
+        UPDATE  TB_PO_HQ_STORE_OUTSTOCK
+        SET     (   OUT_UNIT_QTY, OUT_ETC_QTY, OUT_TOT_QTY, OUT_AMT, OUT_VAT, OUT_TOT)
+            =   (   SELECT  SUM(OUT_UNIT_QTY), SUM(OUT_ETC_QTY), SUM(OUT_TOT_QTY), SUM(OUT_AMT), SUM(OUT_VAT), SUM(OUT_TOT)
+                    FROM    TB_PO_HQ_STORE_OUTSTOCK_DTL
+                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+                    AND     SLIP_NO         =   #{slipNo}
+                ),
+                REMARK      = #{hdRemark},
+                HQ_REMARK   = #{hqRemark},
+                DLVR_CD     = #{dlvrCd},
+                MOD_DT      = #{modDt},
+                MOD_ID      = #{modId}
+        WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
+        AND     SLIP_NO       =   #{slipNo}
+    </update>
+
+    <!-- 출고확정 - 출고확정 이후 저장시 HD 수정 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK
+        PARAM    : outstockConfmVO
+        COMMENTS : 출고확정 - 출고확정 이후 저장시 HD의 비고, 본사비고, 배송기사를 수정한다.
+    -->
+    <update id="updateOutstockAfterHd" parameterType="outstockConfmVO">
+        /* USE : OutstockConfmMapper.updateOutstockAfterHd */
+        UPDATE  TB_PO_HQ_STORE_OUTSTOCK
+        SET     REMARK      = #{hdRemark},
+                HQ_REMARK   = #{hqRemark},
+                DLVR_CD     = #{dlvrCd},
+                MOD_DT      = #{modDt},
+                MOD_ID      = #{modId}
+        WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
+        AND     SLIP_NO       =   #{slipNo}
+    </update>
 </mapper>
