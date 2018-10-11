@@ -524,7 +524,7 @@ public class StoreManageServiceImpl implements StoreManageService{
         // 2-1) TB_MS_POS 타겟 포스 데이터 삭제
         procCnt += mapper.deletePosTarget(storePosEnvVO);
 
-        // 2-2) TB_MS_POS 데이터 insert
+        // 2-2) TB_MS_POS 데이터 insert (//TODO 삭제검토)
         procCnt += mapper.copyPosInfo(storePosEnvVO);
 
         // 기능키 복사

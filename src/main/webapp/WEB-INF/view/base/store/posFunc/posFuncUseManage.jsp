@@ -1,6 +1,9 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 
   <div id="posFuncManageArea" style="display:none;" ng-controller="funcKeyCtrl">
     <h2 class="h2_tit" id="posFuncManageTitle"></h2>
@@ -242,8 +245,16 @@
   function showPosFuncList() {
     $("#posFuncManageArea").show();
     getPosList();
-    // 선택매장 표시
-    $("#posFuncManageTitle").text("[" + selectedStore.storeCd + "] " + selectedStore.storeNm);
+
+    <c:if test="${orgnFg != 'STORE'}">
+      // 선택매장 표시
+      $("#posFuncManageTitle").text("[" + selectedStore.storeCd + "] " + selectedStore.storeNm);
+      $(".subTab").show();
+    </c:if>
+    <c:if test="${orgnFg == 'STORE'}">
+      $(".subTab").hide();
+    </c:if>
+
     // angular 그리드 hide 시 깨지므로 refresh()
     var scope = agrid.getScope("funcKeyCtrl");
     scope.flex.refresh();

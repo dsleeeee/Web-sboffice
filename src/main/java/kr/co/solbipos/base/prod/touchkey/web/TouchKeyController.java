@@ -28,8 +28,6 @@ import java.net.URLDecoder;
 import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
- * @author NHN한국사이버결제 KCP 조병준
- * @version 1.0
  * @Class Name : TouchKeyController.java
  * @Description : 기초관리 - 상품관리 - 판매터치키등록
  * @Modification Information
@@ -39,9 +37,12 @@ import static kr.co.common.utils.spring.StringUtil.convertToJson;
  * @ 2018.05.01  조병준      최초생성
  * @ 2018.09.19  노현수      메소드정리/분리
  *
+ * @author NHN한국사이버결제 KCP 조병준
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
- * @see
  * @since 2018. 05.01
+ * @version 1.0
+ *
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Controller
 @RequestMapping(value = "/base/prod/touchKey/touchKey")

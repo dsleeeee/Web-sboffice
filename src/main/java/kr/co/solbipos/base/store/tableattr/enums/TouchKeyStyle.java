@@ -36,6 +36,12 @@ public enum TouchKeyStyle implements CodeEnum {
     STROKE_COLOR("strokeColor"),
     /** 리사이즈여부 */
     RESIZABLE("resizable"),
+    /** 줄바꿈 */
+    WHITE_SPACE("whiteSpace"),
+    /** 수직정렬 */
+    VERTICAL_ALIGN("verticalAlign"),
+    /** 좌우정렬 */
+    ALIGN("align"),
 
     /** CLASS_CD-custom */
     CLASS_CD("classCd"),
@@ -62,9 +68,8 @@ public enum TouchKeyStyle implements CodeEnum {
     /** 백그라운드이미지-custom */
     IMG_WIDTH("imageWidth"),
     /** 백그라운드이미지-custom */
-    IMG_HEIGHT("imageHeight")
-    ;
-    
+    IMG_HEIGHT("imageHeight");
+
     
     private String code;
   
