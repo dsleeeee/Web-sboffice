@@ -1,6 +1,11 @@
 //지정된 영역에만 터치키를 넣을 수 있도록 처리
 mxGraph.prototype.allowNegativeCoordinates = false;
 
+// Overrides check for valid roots
+mxGraph.prototype.isValidRoot = function() {
+  return false;
+};
+
 /**
  * 메인 Class
  */
@@ -463,7 +468,7 @@ Sidebar.prototype.makeDragSource = function () {
           item.prodNm,
           5, 5,
           0, 0,
-          "tukeyCd=" + tukeyCd + ";tukeyFg=02;prodCd=" + item.prodCd + ";styleCd=" + styleCd + ";strokeColor=none;rounded=0;resizable=0;whiteSpace=wrap;verticalAlign=top;align=left;"
+          "tukeyCd=" + tukeyCd + ";tukeyFg=02;prodCd=" + item.prodCd + ";styleCd=" + styleCd + ";strokeColor=none;rounded=0;resizable=0;whiteSpace=wrap;verticalAlign=top;align=left;selectable=0;movable=0;"
         );
         graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles["02"].off, new Array(prodTag));
         graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles["02"].off, new Array(prodTag));
@@ -474,23 +479,22 @@ Sidebar.prototype.makeDragSource = function () {
           addComma(item.saleUprc),
           5, graph.touchKeyInfo.y / 2 + 10,
           0, 0,
-          "tukeyCd=" + tukeyCd + ";tukeyFg=03;prodCd=" + item.prodCd + ";styleCd=" + styleCd + ";strokeColor=none;rounded=0;resizable=0;"
+          "tukeyCd=" + tukeyCd + ";tukeyFg=03;prodCd=" + item.prodCd + ";styleCd=" + styleCd + ";strokeColor=none;rounded=0;resizable=0;selectable=0;movable=0;"
         );
         graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles["03"].off, new Array(priceTag));
         graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles["03"].off, new Array(priceTag));
         graph.setCellStyles(mxConstants.STYLE_FONTSIZE, graph.fontStyles["03"].size, new Array(priceTag));
 
         // 하위 셀의 사이즈 자동조정
-        graph.updateCellSize(prodTag, false);
+        // graph.updateCellSize(prodTag, false);
         graph.updateCellSize(priceTag, false);
 
         // 버튼 길이 조정
         if ( btn.geometry.width > 99 ) {
           btn.geometry.width = 99;
         }
-
         // 상품태그 길이조정
-        var tagWidth = prodTag.geometry.width > 99 ? 89 : prodTag.geometry.width;
+        var tagWidth = graph.touchKeyInfo.width - 10;
         prodTag.geometry.width = tagWidth;
 
         // 금액태그 위치 조정
@@ -589,7 +593,6 @@ Graph.prototype.selectStyle = null;
 Graph.prototype.currentState = null;
 Graph.prototype.previousStyle = null;
 
-
 /**
  * 분류/상품 영역 초기화
  */
@@ -605,11 +608,15 @@ Graph.prototype.init = function () {
   //strictHTML 일때는 shape redraw 가 안먹는다.
   //로직으로 우겨넣으려면 cell.getState()의 dialect 값 조정(DIALECT_SVG) 해서 사용하여야 한다.
   //그래서 일단은 주석처리 해둠 : 20180928 노현수
-  // graph.setHtmlLabels(true);
+  graph.setHtmlLabels(true);
 
   //셀을 이동했을 때 스크롤 금지
   graph.graphHandler.scrollOnMove = false;
   graph.autoScroll = false;
+
+  graph.constrainChildren = false;
+  graph.extendParents = false;
+  graph.extendParentsOnAdd = false;
 
   //분류/상품 이동 시 처리
   //대상 셀에 이미 상품이 있을 경우 이동 금지
@@ -812,10 +819,12 @@ Graph.prototype.adjustCellPoint = function (w, h) {
 
   var mw = w % kw;
   var mh = h % kh;
+
   // 선택된 영역 count ( 가로/세로 )
   var dw = Math.round(w / kw);
   var dh = Math.round(h / kh);
-  //터치키 크기(가로/세로) 절반을 넘으면 터치키(가로/세로) 만큼으로 크기 보정
+
+  // 터치키 크기(가로/세로) 절반을 넘으면 터치키(가로/세로) 만큼으로 크기 보정
   var dx = Math.abs(mw) <= (kw / 2) ? (kw * dw) : (kw * dw);
   var dy = Math.abs(mh) <= (kh / 2) ? (kh * dh) : (kh * dh);
 
@@ -832,12 +841,14 @@ Graph.prototype.adjustCellSize = function (w, h) {
   var mw = w % kw;
   var mh = h % kh;
   // 선택된 영역 count ( 가로/세로 )
-  var dw = Math.round(w / kw);
-  var dh = Math.round(h / kh);
+  var dw = Math.round(w / kw) <= 0 ? 1 : Math.round(w / kw);
+  var dh = Math.round(h / kh) <= 0 ? 1 : Math.round(h / kh);
   // 터치키 크기(가로/세로) 절반을 넘으면 터치키(가로/세로) 만큼으로 크기 보정
   // 터치키 사이의 1px 간격 유지를 위해 해당 사이즈만큼 추가 계산 (btnBorder)
-  var dx = ( Math.abs(mw) <= (kw / 2) ? (kw * dw) : (kw * dw) ) + ( ( dw - 1 ) * this.btnBorder );
-  var dy = ( Math.abs(mh) <= (kh / 2) ? (kh * dh) : (kh * dh) ) + ( ( dh - 1 ) * this.btnBorder );
+  var dx = Math.abs(mw) <= (kw / 2) ? (kw * dw) : (kw * dw);
+  var dy = Math.abs(mh) <= (kh / 2) ? (kh * dh) : (kh * dh);
+  dx += ( dw - 1 ) * this.btnBorder;
+  dy += ( dh - 1 ) * this.btnBorder;
 
   return new mxPoint(dx, dy);
 };
@@ -895,6 +906,28 @@ Graph.prototype.setSelected = function (elt, name, selected) {
   else {
     elt.className = elt.className.replace(new RegExp(name, 'g'), '').trim();
   }
+};
+
+/**
+ * 셀 이동 금지
+ * cell 추가시 style 에 movable=0; 추가하여 사용
+ */
+Graph.prototype.isCellMovable = function(cell) {
+  var state = this.view.getState(cell);
+  var style = (state != null) ? state.style : this.getCellStyle(cell);
+
+  return this.isCellsMovable() && !this.isCellLocked(cell) && style['movable'] !== 0;
+};
+
+/**
+ * 셀 선택표시 감추기
+ * cell 추가시 style 에 selectable=0; 추가하여 사용
+ */
+Graph.prototype.isCellSelectable = function(cell) {
+  var state = this.view.getState(cell);
+  var style = (state != null) ? state.style : this.getCellStyle(cell);
+
+  return this.isCellsSelectable() && !this.isCellLocked(cell) && style['selectable'] !== 0;
 };
 
 /**
@@ -1524,7 +1557,7 @@ Format.prototype.setGraphStyle = function (graph) {
           if (tukeyFg === "02" || tukeyFg === "03") {
             graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles[tukeyFg].off, new Array(childCell));
             graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles[tukeyFg].off, new Array(childCell));
-            graph.setCellStyles(mxConstants.STYLE_FONTSIZE, graph.fontStyles[tukeyFg].size, new Array(childCell));
+            // graph.setCellStyles(mxConstants.STYLE_FONTSIZE, graph.fontStyles[tukeyFg].size, new Array(childCell));
           }
           // 정규식으로 styleCd 변경
           cnStyles = childCell.getStyle().replace(styleCdRegex, "styleCd="+styleCd);
@@ -1532,7 +1565,7 @@ Format.prototype.setGraphStyle = function (graph) {
         }
       }
       // 하위속성 크기 조정
-      graph.resizeCell(pCell, pCell.geometry, false);
+      // graph.resizeCell(pCell, pCell.geometry, false);
     }
   }
 
@@ -1575,7 +1608,7 @@ Graph.prototype.updateHoverStyle = function(state, hover) {
           parentState.style[mxConstants.STYLE_FONTCOLOR] = this.fontStyles["01"].on;
           parentState.style[mxConstants.STYLE_FONTSIZE] = hoverFontSize;
           parentState.shape.apply(parentState);
-          parentState.shape.redraw();
+          parentState.shape.redrawHtmlShape();
           this.updateStyleChildren(parentState, hover);
         }
       }
@@ -1602,18 +1635,18 @@ Graph.prototype.updateHoverStyle = function(state, hover) {
           parentState.style[mxConstants.STYLE_FONTCOLOR] = this.fontStyles["01"].off;
           parentState.style[mxConstants.STYLE_FONTSIZE] = hoverFontSize;
           parentState.shape.apply(parentState);
-          parentState.shape.redraw();
+          parentState.shape.redrawHtmlShape();
           this.updateStyleChildren(parentState, hover);
         }
       }
     }
   }
   state.shape.apply(state);
-  state.shape.redraw();
+  state.shape.redrawHtmlShape();
 
   if (state.text != null) {
     state.text.apply(state);
-    state.text.redraw();
+    state.shape.redrawHtmlShape();
   }
 };
 
@@ -1651,10 +1684,10 @@ Graph.prototype.updateStyleChildren = function (state, hover) {
         }
       }
       childState.shape.apply(childState);
-      childState.shape.redraw();
+      childState.shape.redrawHtmlShape();
       if (childState.text != null) {
         childState.text.apply(childState);
-        childState.text.redraw();
+        childState.shape.redrawHtmlShape();
       }
     }
   }
@@ -2147,9 +2180,6 @@ Graph.prototype.initProdArea = function (group, sidebar) {
   // 마우스오버시 사용
   graph.currentState = null;
   graph.previousStyle = null;
-  // html라벨 사용
-  graph.setHtmlLabels(true);
-  graph.autoSizeCellsOnAdd = true;
 
   //셀 삭제 시 그리드에 반영
   var cellsRemoved = graph.cellsRemoved;
@@ -2185,6 +2215,18 @@ Graph.prototype.initProdArea = function (group, sidebar) {
   graph.undoManager.addListener(mxEvent.UNDO, undoHandler);
   graph.undoManager.addListener(mxEvent.REDO, undoHandler);
 
+  // 셀 선택변경시 이전 셀 가져오기
+  graph.getSelectionModel().addListener(mxEvent.CHANGE, function(sender, evt) {
+    var sCell = sender.cells[0];
+    if ( sCell ) {
+      console.log("selected Cell ", sCell.children[0].value);
+    }
+    var cell = evt.getProperty('added')[0];
+    if ( cell ) {
+      console.log("before cell? ", cell.children[0].value);
+    }
+  });
+
   //override 마우스 이벤트 - 상품영역
   graph.addMouseListener({
     // 상품버튼 클릭시 버튼/상품명/금액 구분하여 속성설정 예외처리
@@ -2196,74 +2238,64 @@ Graph.prototype.initProdArea = function (group, sidebar) {
         graph.group.cellEditor.stopEditing(true);
       }
       // 마우스오버를 위해 초기화
-      // if (graph.currentState != null) {
-      //   this.dragLeave(me.getEvent(), graph.currentState);
-      //   graph.currentState = null;
-      // }
+      if (graph.currentState != null) {
+        this.dragLeave(me.getEvent(), graph.currentState);
+        graph.currentState = null;
+      }
       // 클릭 영역에 셀이 있는 경우에만...
       if (me.state != null) {
+
+        // var preCell = graph.getSelectionCell([graph.selectPreviousCell()]);
+        // graph.selectCellsForEvent(me.state.cell, me.getEvent());
+        // console.log(preCell);
+
         // 버튼속성 뷰 활성화
         document.getElementById('keyStyle').classList.remove("hideNav");
-        //선택된 레이어를 기본값으로 설정
-        var cell = me.state.cell;
-        //정규식으로 tukeyFg 추출
-        var tukeyFg;
-        var regex = /tukeyFg=([^=]*.(?=;))/gm;
-        var match = regex.exec(cell.getStyle());
-        if (match) {
-          tukeyFg = match[1];
-        }
-        var colorStyleWrap = document.getElementById('colorStyleWrap');
-        // 하위 셀 ( 상품명/금액 ) 인 경우 채우기 기능 제한
-        if (tukeyFg === "02" || tukeyFg === "03") {
-          colorStyleWrap.classList.add("hideNav");
-        } else {
-          colorStyleWrap.classList.remove("hideNav");
-        }
       } else {
         document.getElementById('keyStyle').classList.add("hideNav");
       }
     },
     mouseMove: function (sender, me) {
-      // if (graph.currentState != null && me.getState() === graph.currentState) {
-      //   return;
-      // }
-      // var tmp = graph.view.getState(me.getCell());
-      // // Ignores everything but vertices
-      // if (graph.isMouseDown || (tmp !== null && !graph.getModel().isVertex(tmp.cell))) {
-      //   tmp = null;
-      // }
-      // if (tmp !== graph.currentState) {
-      //   if (graph.currentState != null) {
-      //     this.dragLeave(me.getEvent(), graph.currentState);
-      //   }
-      //   graph.currentState = tmp;
-      //   if (graph.currentState != null) {
-      //     this.dragEnter(me.getEvent(), graph.currentState);
-      //   }
-      // }
+      if (graph.currentState != null && me.getState() === graph.currentState) {
+        return;
+      }
+      var tmp = graph.view.getState(me.getCell());
+      // Ignores everything but vertices
+      if (graph.isMouseDown || (tmp !== null && !graph.getModel().isVertex(tmp.cell))) {
+        tmp = null;
+      }
+      if (tmp !== graph.currentState) {
+        if (graph.currentState != null) {
+          this.dragLeave(me.getEvent(), graph.currentState);
+        }
+        graph.currentState = tmp;
+        if (graph.currentState != null) {
+          this.dragEnter(me.getEvent(), graph.currentState);
+        }
+      }
     },
     mouseUp: function (sender, me) {
     },
     dragEnter: function (evt, state) {
-      // if (state != null) {
-      //   graph.previousStyle = state.style;
-      //   state.style = mxUtils.clone(state.style);
-      //   graph.updateHoverStyle(state, true);
-      // }
+      if (state != null) {
+        graph.previousStyle = state.style;
+        state.style = mxUtils.clone(state.style);
+        graph.updateHoverStyle(state, true);
+      }
     },
     dragLeave: function (evt, state) {
-      // if (state != null && !state.invalid) {
-      //   state.style = graph.previousStyle;
-      //   graph.updateHoverStyle(state, false);
-      // }
+      if (state != null && !state.invalid) {
+        state.style = graph.previousStyle;
+        graph.updateHoverStyle(state, false);
+      }
     }
   });
 
   /**
    * 페이징 버튼
+   *
+   * 페이지 이동 위치 셀의크기 * 페이지에 컬럼 수
    */
-    //페이지 이동 위치 셀의크기 * 페이지에 컬럼 수
   var scrollWidth = graph.touchKeyInfo.x * graph.COL_PER_PAGE;
   var prodWrap = document.getElementById('prodWrap');
   var pageNoWrap = document.getElementById('prodPageNoText');
@@ -2281,6 +2313,36 @@ Graph.prototype.initProdArea = function (group, sidebar) {
       pageNoWrap.textContent = "PAGE : " + graph.pageNo;
     }
   });
+
+  // 셀 커서 속성
+  graph.getCursorForCell = function(cell) {
+    var sCell = graph.getSelectionCell();
+    if (cell != null && ( cell === sCell || cell.parent === sCell ) ) {
+      return "all-scroll";
+    } else {
+      return "default";
+    }
+  };
+
+  // 자식속성 선택시에도 이동 가능하게 하기 위하여...
+  var graphHandlerGetInitialCellForEvent = mxGraphHandler.prototype.getInitialCellForEvent;
+  graph.graphHandler.getInitialCellForEvent = function (me) {
+    this.graph.getSelectionModel().clear();
+    var model = this.graph.getModel();
+    var psel = model.getParent(this.graph.getSelectionCell());
+    var cell = graphHandlerGetInitialCellForEvent.apply(this, arguments);
+    var parent = model.getParent(cell);
+
+    if (psel == null || (psel !== cell && psel !== parent)) {
+      while (!this.graph.isCellSelected(cell) && !this.graph.isCellSelected(parent) &&
+      model.isVertex(parent) && !this.graph.isValidRoot(parent)) {
+        cell = parent;
+        parent = this.graph.getModel().getParent(cell);
+      }
+    }
+
+    return cell;
+  };
 
 };
 
