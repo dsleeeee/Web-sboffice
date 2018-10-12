@@ -99,7 +99,7 @@
         </div>
 
         <%-- 포스 설정 --%>
-        <div id="posGrid" class="wj-gridWrap" style="height:430px; overflow-y: hidden;" ng-controller="posCtrl" id="posArea">
+        <div class="wj-gridWrap" style="height:430px; overflow-y: hidden;" ng-controller="posCtrl" id="posArea">
           <wj-flex-grid
                   autoGenerateColumns="false"
                   control="flex"
@@ -121,7 +121,7 @@
         </div>
 
         <%-- 코너 설정 --%>
-        <div id="cornerGrid" class="wj-gridWrap" style="height:430px; overflow-y: hidden;" ng-controller="cornerCtrl" id="cornerArea" style="display: none;">
+        <div class="wj-gridWrap" style="height:430px; overflow-y: hidden;" ng-controller="cornerCtrl" id="cornerArea" style="display: none;">
           <wj-flex-grid
                   autoGenerateColumns="false"
                   control="flex"
@@ -132,15 +132,12 @@
                   item-formatter="_itemFormatter">
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="terminalManage.cornrCd"/>" binding="cornrCd" width="*"  is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="terminalManage.cornrNm"/>" binding="cornrNm" width="*"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="terminalManage.owner"/>" binding="owner" width="*"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="terminalManage.bizNo"/>" binding="bizNo" width="*"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="terminalManage.telNo"/>" binding="telNo" width="*"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="terminalManage.vanCd"/>" binding="vanCd" data-map="vanCdDataMap" width="*"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="terminalManage.vanTermnlNo"/>" binding="vanTermnlNo" width="*"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="terminalManage.vanSerNo"/>" binding="vanSerNo" width="*"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="terminalManage.useYn"/>" binding="useYn" data-map="useYnFgDataMap" width="*"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="terminalManage.cornrCd"/>" binding="cornrCd" width="*" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="terminalManage.vendorFg"/>" binding="vendorFg" data-map="vendorFgDataMap" width="*"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="terminalManage.vendorCd"/>" binding="vendorCd" data-map="vanCdDataMap" width="*"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="terminalManage.vendorNm"/>" binding="vendorNm" width="*"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="terminalManage.vendorTermnlNo"/>" binding="vendorTermnlNo" width="*"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="terminalManage.vendorSerNo"/>" binding="vendorSerNo" width="*"></wj-flex-grid-column>
           </wj-flex-grid>
         </div>
       </div>

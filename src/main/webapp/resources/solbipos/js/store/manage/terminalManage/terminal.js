@@ -50,15 +50,15 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 콤보박스 생성
   $scope._setComboData("terminalFg", terminalFg);
-  $scope._setComboData("posFg", []);
-  $scope._setComboData("cornerFg", []);
+  // $scope._setComboData("posFg", []);
+  // $scope._setComboData("cornerFg", []);
 
   // 매장찾기 팝업 오픈
   $scope.searchStore = function(){
     var popup = $scope.storeLayer;
     popup.show(true, function (s) {
       var storeData = agrid.getScope('storeCtrl');
-      storeData._gridDataInit();
+      storeData._gridDataInit(); //TODO 초기화가 잘 안됨
       var data = storeData.getSelectedStore();
 
       $("#storeInfo").val("["+data.storeCd+"] "+data.storeNm);
@@ -73,7 +73,7 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
   });
 
   // 매장별 터미널 조회시, 먼저 환경변수 조회 수행
-  // 환경변수값에 따라 코너목록과 포스목록도 조회
+  // 해당 매장의 코너목록과 포스목록도 함께 조회
   $scope.getEnvInfo = function (){
 
     if($("#storeCd").val() === null || $("#storeCd").val() === "") {
@@ -93,8 +93,6 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
       data: params,
       success: function(result) {
 
-        console.log(result);
-
         var terminalEnvVal = result.data.envstVal;
         var posList = result.data.posList;
         var cornerList = result.data.cornerList;
@@ -110,21 +108,16 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope._setComboData("posFg", posList);
         $scope._setComboData("cornerFg", cornerList);
 
-        console.log(">>>>>>>>>>>>>>>>>>>>>>>>>> $scope.getPosFgVal() : "+ $scope.getPosFgVal());
-
         $("#posFgVal").val($scope.getPosFgVal());
-        console.log(">>>>>>>>>>>>>>>>>>>>>>>>>> $scope.getCornerFgVal() : "+ $scope.getCornerFgVal());
-
         $("#cornerFgVal").val($scope.getCornerFgVal());
 
         // 코너별 승인
-        if(terminalFg.selectedValue === "2") {
-          // cornerFg.itemsSource = new wijmo.grid.DataMap(cornerList, 'value', 'name');
+        if($scope.getTerminalEnvVal() === "2") {
           var cornerScope = agrid.getScope('cornerCtrl');
           cornerScope.getCornerSetting();
         }
         // 포스별 승인
-        else if(terminalFg.selectedValue === "0" || terminalFg.selectedValue === "3"){
+        else if($scope.getTerminalEnvVal() === "0" || $scope.getTerminalEnvVal() === "3"){
           var posScope = agrid.getScope('posCtrl');
           posScope.getPosSetting();
         }
@@ -167,6 +160,19 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
     var posScope = agrid.getScope('posCtrl');
     posScope.save();
   };
+
+  // 코너 터미널 그리드 행 추가
+  $scope.cornerAddRow = function(){
+    var cornerScope = agrid.getScope('cornerCtrl');
+    cornerScope.addRow();
+  };
+
+  // 코너 터미널 그리드 행 추가
+  $scope.cornerSave = function(){
+    var cornerScope = agrid.getScope('cornerCtrl');
+    cornerScope.save();
+  };
+
 }]);
 
 // 매장 클릭 (매장찾기)
@@ -200,6 +206,7 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 포스설정 터미널 데이터 조회
   $scope.getPosSetting = function(){
+
     if($("#storeCd").val() == null || $("#storeCd").val() == "") {
       // 매장 필수 선택
       $scope._popMsg(messages["terminalManage.request.select.store"]);
@@ -355,8 +362,6 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
   // 코너설정 데이터 조회
   $scope.getCornerSetting = function(){
 
-    alert("getCornerFgVal::::")
-
     if($("#storeCd").val() == null || $("#storeCd").val() == "") {
       // 매장 필수 선택
       $scope._popMsg(messages["terminalManage.request.select.store"]);
@@ -364,21 +369,20 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
     }
 
     var terminalScope = agrid.getScope('terminalCtrl');
-    console.log("getTerminalEnvVal : " + terminalScope.getTerminalEnvVal());
-    console.log("getCornerFgVal : " + terminalScope.getCornerFgVal());
-    console.log(terminalScope.getCornerFgVal());
 
     var params = {};
     params.storeCd = $("#storeCd").val();
-    params.cornrCd = $("#storeCd").val();
+    params.cornrCd = terminalScope.getCornerFgVal();
 
-    console.log(params)
+    console.log(params);
 
     $scope._inquirySub(baseUrl + "corner/getCornerTerminalList.sb", params, function() {
 
+      $("#posListArea").hide();
       $("#posArea").hide();
       $("#posBtnArea").hide();
 
+      $("#cornerListArea").show();
       $("#cornerArea").show();
       $("#cornerBtnArea").show();
 
@@ -390,9 +394,8 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
 
     var params = {};
     params.status = "I";
-    params.cornrCd = "자동채번";
-    params.vanCd = "001";
-    params.useYn = "Y";
+    params.vendorFg = "01";
+    params.vendorCd = "001";
     params.gChk = true;
 
     // 추가기능 수행 : 파라미터
@@ -406,20 +409,23 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
     for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
       $scope.flex.collectionView.itemsEdited[i].status = "U";
       $scope.flex.collectionView.itemsEdited[i].storeCd = $("#storeCd").val();
+      $scope.flex.collectionView.itemsEdited[i].cornrCd = $("#cornerFgVal").val();
       params.push($scope.flex.collectionView.itemsEdited[i]);
     }
     for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
       $scope.flex.collectionView.itemsAdded[i].status = "I";
       $scope.flex.collectionView.itemsAdded[i].storeCd = $("#storeCd").val();
+      $scope.flex.collectionView.itemsAdded[i].cornrCd = $("#cornerFgVal").val();
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
 
     //TODO 필수값 체크
     console.log(params);
-    console.log(" $scope.getTerminalCornerEnvVal() : "+  $scope.getTerminalCornerEnvVal());
+
+    var terminalScope = agrid.getScope('terminalCtrl');
 
     var chkChanged = false;
-    if($("#terminalCornerFgVal").val() !== $scope.getTerminalCornerEnvVal()) {
+    if($("#terminalFgVal").val() !== terminalScope.getTerminalEnvVal()) {
       chkChanged = true;
     }
 
@@ -433,7 +439,7 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
     // 코너사용여부 환경변수
     var sParam = {};
     sParam['storeCd'] = $("#storeCd").val();
-    sParam['terminalFgVal'] = $("#terminalCornerFgVal").val();
+    sParam['terminalFgVal'] = terminalScope.getTerminalEnvVal();
 
     console.log('sParam');
     console.log(sParam);
@@ -441,9 +447,9 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
     // ajax 통신 설정
     $http({
       method: 'POST', //방식
-      url: baseUrl + "corner/saveCornerInfo.sb", /* 통신할 URL */
+      url: baseUrl + "corner/saveCornerTerminalInfo.sb", /* 통신할 URL */
       data: params, /* 파라메터로 보낼 데이터 */
-      // params: sParam,
+      params: sParam,
       headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
     }).then(function successCallback(response) {
       $scope._popMsg(messages["cmm.saveSucc"]);

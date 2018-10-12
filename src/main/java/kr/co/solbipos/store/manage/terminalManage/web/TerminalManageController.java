@@ -251,8 +251,10 @@ public class TerminalManageController {
             storeEnvVO.setStoreCd(request.getParameter("storeCd"));
             storeEnvVO.setEnvstVal(request.getParameter("terminalFgVal"));
 
-            int envstSaveResult = service.updateTerminalEnvst(storeEnvVO, sessionInfoVO);
+            // 환경변수 값 저장
+            result += service.updateTerminalEnvst(storeEnvVO, sessionInfoVO);
 
+            // 코너 터미널 정보 저장
             result = service.saveCornerTerminalInfo(storeTerminalVOs, sessionInfoVO);
 
         }catch(Exception ex){
@@ -260,6 +262,4 @@ public class TerminalManageController {
         }
         return returnListJson(Status.OK, result);
     }
-
-
 }

@@ -35,15 +35,22 @@ public interface TerminalManageService {
     /** 포스 목록 조회 */
     List<DefaultMap<String>> getPosList(StorePosVO storePosVO);
 
-    /** 터미널 환경변수 값 저장 */
-    int updateTerminalEnvst(StoreEnvVO storeEnvVO, SessionInfoVO sessionInfoVO);
-
-    /** 포스 van 정보 저장 */
-    int savePosInfo(StorePosVO[] storePosVOs, SessionInfoVO sessionInfoVO);
-
     /** 코너 목록 조회 */
     List<DefaultMap<String>> getCornerList(StoreCornerVO storeCornerVO);
 
-    /** 코너 정보 저장 */
-    int saveCornerInfo(StoreCornerVO[] storeCornerVOs, SessionInfoVO sessionInfoVO);
+    /** 터미널 환경변수 값 저장 */
+    int updateTerminalEnvst(StoreEnvVO storeEnvVO, SessionInfoVO sessionInfoVO);
+
+    /** 포스 터미널 목록 조회 */
+    List<DefaultMap<String>> getPosTerminalList(StoreTerminalVO storeTerminalVO);
+
+    /** 포스 터미널 정보 저장 */
+    int savePosTerminalInfo(StoreTerminalVO[] storeTerminalVOs, SessionInfoVO sessionInfoVO);
+
+    /** 코너 터미널 정보 조회 */
+    List<DefaultMap<String>> getCornerTerminalList(StoreTerminalVO storeTerminalVO);
+
+    /** 코너 터미널 정보 저장 */
+    int saveCornerTerminalInfo(StoreTerminalVO[] storeTerminalVOs, SessionInfoVO sessionInfoVO);
+
 }

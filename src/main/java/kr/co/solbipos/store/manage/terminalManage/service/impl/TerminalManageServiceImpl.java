@@ -89,6 +89,8 @@ public class TerminalManageServiceImpl implements TerminalManageService{
         String dt = currentDateTimeString();
 
         storeEnvVO.setEnvstCd(POS_ENVST_CD);
+        storeEnvVO.setRegDt(dt);
+        storeEnvVO.setRegId(sessionInfoVO.getUserId());
         storeEnvVO.setModDt(dt);
         storeEnvVO.setModId(sessionInfoVO.getUserId());
 
