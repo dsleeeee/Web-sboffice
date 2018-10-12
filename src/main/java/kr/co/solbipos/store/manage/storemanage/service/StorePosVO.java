@@ -19,7 +19,6 @@ import kr.co.solbipos.application.common.service.CmmVO;
  */
 public class StorePosVO extends CmmVO {
 
-
     /** [매장코드] */
     private String storeCd;
     /** [포스번호] */

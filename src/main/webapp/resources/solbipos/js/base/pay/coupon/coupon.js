@@ -53,7 +53,7 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
             var couponGrid = agrid.getScope('couponCtrl');
             couponGrid._gridDataInit();
             // $scope._gridDataInit();
-            return;
+            return false;
           } else {
             $("#couponSubTitle").text(" [" + selectedRow.payClassNm+ "]");
             $scope._broadcast('couponCtrl', selectedRow);
@@ -117,22 +117,6 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
     // 추가기능 수행 : 파라미터
     $scope._addRow(params);
   };
-
-  // 쿠폰 분류 그리드 행 삭제
-  // $scope.del = function(){
-  //   for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-  //     var item = $scope.flex.collectionView.items[i];
-  //
-  //     if(item.gChk) {
-  //       if(item.couponCnt > 0) {
-  //         // s_alert.pop("<s:message code='coupon.exists.coupon' />");
-  //         s_alert.pop("해당분류에 등록된 쿠폰이 존재합니다. 분류 삭제 전에 등록 쿠폰을 먼저 삭제해주세요.");
-  //         return;
-  //       }
-  //       $scope.flex.collectionView.removeAt(i);
-  //     }
-  //   }
-  // };
 
   // 쿠폰분류 그리드 저장
   $scope.save = function() {
@@ -322,14 +306,12 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
 
       if(item.gChk) {
         if(item.prodCnt > 0 ) {
-          // s_alert.pop("<s:message code='coupon.exists.prod' />");
-          s_alert.pop("쿠폰이 등록된 상품이 존재합니다. 쿠폰 삭제 전에 등록 상품을 먼저 삭제해주세요.");
+          s_alert.pop(messages["coupon.exists.prod"]);
           return;
         }
         if(orgnFg === "HQ") {
           if(item.storeCd > 0 ) {
-            // s_alert.pop("<s:message code='coupon.exists.store' />");
-            s_alert.pop("쿠폰이 등록된 매장이 존재합니다. 쿠폰 삭제 전에 등록 매장을 먼저 삭제해주세요.");
+            s_alert.pop(messages["coupon.exists.store"]);
             return;
           }
         }
