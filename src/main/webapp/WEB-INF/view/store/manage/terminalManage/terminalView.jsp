@@ -35,93 +35,93 @@
 
     <%-- 조회 --%>
     <div class="mt10 oh">
-      <button class="btn_blue fr" id="btnSearch" ng-click="$broadcast('posCtrl')">
+      <button class="btn_blue fr" id="btnSearch" ng-click="$broadcast('terminalCtrl')">
         <s:message code="cmm.search" />
       </button>
     </div>
 
-    <%-- POS 설정 --%>
-    <div class="wj-TblWrap mt40" ng-controller="posCtrl" id="posArea">
-        <div class="wj-TblWrapBr pd20" style="height:470px; overflow-y: hidden;">
-          <div class="updownSet oh mb10">
-
-            <div class="sb-select w30 fl">
-              <wj-combo-box
-                      id="terminalPosFg"
-                      ng-model="terminalFg"
-                      items-source="_getComboData('terminalPosFg')"
-                      display-member-path="name"
-                      selected-value-path="value"
-                      is-editable="false"
-                      initialized="_initComboBox(s)"
-                      selected-index-changed="changeTerminalPosFg(s,e)">
-              </wj-combo-box>
-              <input type="hidden" id="terminalPosFgVal" value={{terminalPosFg}} />
-              <a href="#" class="btn_grayS"><s:message code="cmm.save"/></a>
-            </div>
-            <div class="fr mb10" id="posBtnArea" style="display:none">
-              <button class="btn_skyblue" ng-click="copyEnv()"><s:message code="terminalManage.copy.posEnvst"/></button>
-              <button class="btn_skyblue" ng-click="addRow()"><s:message code="cmm.add"/></button>
-              <button class="btn_skyblue" ng-click="save()"><s:message code="cmm.save"/></button>
-            </div>
-          </div>
-
-          <div id="posGrid" class="wj-gridWrap" style="height:430px; overflow-y: hidden;">
-            <wj-flex-grid
-                    autoGenerateColumns="false"
-                    control="flex"
-                    initialized="initGrid(s,e)"
-                    sticky-headers="true"
-                    selection-mode="Row"
-                    items-source="data"
-                    item-formatter="_itemFormatter">
-              <!-- define columns -->
-              <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="terminalManage.posNo"/>" binding="posNo" width="*"  is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="terminalManage.posNm"/>" binding="posNm" width="*"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="terminalManage.hwAuthKey"/>" binding="hwAuthKey" width="*"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="terminalManage.vanCertYn"/>" binding="vanCertYn" data-map="useYnFgDataMap" width="*"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="terminalManage.vanCd"/>" binding="vanCd" data-map="vanCdDataMap" width="*"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="terminalManage.vanTermnlNo"/>" binding="vanTermnlNo" width="*"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="terminalManage.vanSerNo"/>" binding="vanSerNo" width="*"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="terminalManage.vanCertStartDate"/>" binding="vanCertStartDate" is-read-only="true" width="*"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="terminalManage.vanCertEndDate"/>" binding="vanCertEndDate" is-read-only="true" width="*"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="terminalManage.vanCertCnt"/>" binding="vanCertCnt" is-read-only="true"  width="*"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="terminalManage.remark"/>" binding="remark" width="120"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="terminalManage.useYn"/>" binding="useYn" data-map="useYnFgDataMap" width="*"></wj-flex-grid-column>
-            </wj-flex-grid>
-          </div>
-
-        </div>
-    </div>
-
-
-    <%-- 코너 설정 --%>
-    <div class="wj-TblWrap mt40" ng-controller="cornerCtrl" id="cornerArea" style="display: none;">
+    <div class="wj-TblWrap mt40" >
       <div class="wj-TblWrapBr pd20" style="height:470px; overflow-y: hidden;">
-        <div class="updownSet oh mb10">
 
+        <%-- 터미널 선택 --%>
+        <div class="updownSet oh mb10" ng-controller="terminalCtrl">
+          <%-- 터미널 선택 --%>
           <div class="sb-select w30 fl">
             <wj-combo-box
-                    id="terminalCornerFg"
+                    id="terminalFg"
                     ng-model="terminalFg"
-                    items-source="_getComboData('terminalCornerFg')"
+                    items-source="_getComboData('terminalFg')"
                     display-member-path="name"
                     selected-value-path="value"
                     is-editable="false"
                     initialized="_initComboBox(s)"
-                    selected-index-changed="changeTerminalCornerFg(s,e)">
+                    selected-index-changed="changeTerminalFg(s,e)">
             </wj-combo-box>
-            <input type="hidden" id="terminalCornerFgVal" value={{terminalCornerFg}} />
-            <a href="#" class="btn_grayS"><s:message code="cmm.save"/></a>
+            <input type="hidden" id="terminalFgVal" value={{terminalFg}} />
+          </div>
+          <%-- 포스 선택 --%>
+          <div class="sb-select w10 fl" id="posListArea" style="display: none;">
+            <wj-combo-box
+                    id="posFg"
+                    ng-model="posFg"
+                    <%--items-source="_getComboData('posFg')"--%>
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="_initComboBox(s)"
+                    selected-index-changed="setPosFgVal(s,e)">
+            </wj-combo-box>
+            <input type="hidden" id="posFgVal" value={{posFg}} />
+          </div>
+          <%-- 코너 선택 --%>
+          <div class="sb-select w10 fl" id="cornerListArea" style="display: none;">
+            <wj-combo-box
+                    id="cornerFg"
+                    ng-model="cornerFg"
+                    items-source="_getComboData('cornerFg')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="_initComboBox(s)"
+                    selected-index-changed="setCornerFgVal(s,e)">
+            </wj-combo-box>
+            <input type="hidden" id="cornerFgVal" value={{cornerFg}} />
+          </div>
+          <div class="fr mb10" id="posBtnArea" style="display:none">
+            <button class="btn_skyblue" ng-click="copyEnv()"><s:message code="terminalManage.copy.posEnvst"/></button>
+            <button class="btn_skyblue" ng-click="posAddRow()"><s:message code="cmm.add"/></button>
+            <button class="btn_skyblue" ng-click="posSave()"><s:message code="cmm.save"/></button>
           </div>
           <div class="fr mb10" id="cornerBtnArea" style="display:none">
-            <button class="btn_skyblue" ng-click="addRow()"><s:message code="cmm.add"/></button>
-            <button class="btn_skyblue" ng-click="save()"><s:message code="cmm.save"/></button>
+            <button class="btn_skyblue" ng-click="cornerAddRow()"><s:message code="cmm.add"/></button>
+            <button class="btn_skyblue" ng-click="cornerSave()"><s:message code="cmm.save"/></button>
           </div>
         </div>
 
-        <div id="cornerGrid" class="wj-gridWrap" style="height:430px; overflow-y: hidden;">
+        <%-- 포스 설정 --%>
+        <div id="posGrid" class="wj-gridWrap" style="height:430px; overflow-y: hidden;" ng-controller="posCtrl" id="posArea">
+          <wj-flex-grid
+                  autoGenerateColumns="false"
+                  control="flex"
+                  initialized="initGrid(s,e)"
+                  sticky-headers="true"
+                  selection-mode="Row"
+                  items-source="data"
+                  item-formatter="_itemFormatter">
+            <!-- define columns -->
+            <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="terminalManage.storeCd"/>" binding="storeCd" width="*" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="terminalManage.posNo"/>" binding="posNo" width="*" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="terminalManage.vendorFg"/>" binding="vendorFg" data-map="vendorFgDataMap" width="*"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="terminalManage.vendorCd"/>" binding="vendorCd" data-map="vanCdDataMap" width="*"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="terminalManage.vendorNm"/>" binding="vendorNm" width="*"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="terminalManage.vendorTermnlNo"/>" binding="vendorTermnlNo" width="*"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="terminalManage.vendorSerNo"/>" binding="vendorSerNo" width="*"></wj-flex-grid-column>
+          </wj-flex-grid>
+        </div>
+
+        <%-- 코너 설정 --%>
+        <div id="cornerGrid" class="wj-gridWrap" style="height:430px; overflow-y: hidden;" ng-controller="cornerCtrl" id="cornerArea" style="display: none;">
           <wj-flex-grid
                   autoGenerateColumns="false"
                   control="flex"
@@ -143,12 +143,8 @@
             <wj-flex-grid-column header="<s:message code="terminalManage.useYn"/>" binding="useYn" data-map="useYnFgDataMap" width="*"></wj-flex-grid-column>
           </wj-flex-grid>
         </div>
-
       </div>
     </div>
-
-
-
   </div>
 </div>
 
@@ -158,6 +154,9 @@ var baseUrl = "${baseUrl}";
 var vanCdFg = ${ccu.getVanList()};
 var terminalFg = ${cnv.getEnvCodeExcpAll("2028")};
 var useYnFg    = ${ccu.getCommCodeExcpAll("067")};
+
+console.log(terminalFg)
+
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/terminal.js?ver=2018100601" charset="utf-8"></script>
 

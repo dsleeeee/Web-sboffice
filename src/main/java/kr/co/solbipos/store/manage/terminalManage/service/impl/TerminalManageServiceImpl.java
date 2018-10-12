@@ -7,6 +7,7 @@ import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreManageVO;
 import kr.co.solbipos.store.manage.storemanage.service.StorePosVO;
 import kr.co.solbipos.store.manage.terminalManage.service.StoreCornerVO;
+import kr.co.solbipos.store.manage.terminalManage.service.StoreTerminalVO;
 import kr.co.solbipos.store.manage.terminalManage.service.TerminalManageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,6 +64,24 @@ public class TerminalManageServiceImpl implements TerminalManageService{
         return mapper.getPosList(storePosVO);
     }
 
+    /** 코너 목록 조회 */
+    @Override
+    public List<DefaultMap<String>> getCornerList(StoreCornerVO storeCornerVO) {
+        return mapper.getCornerList(storeCornerVO);
+    }
+
+    /** 포스 터미널 목록 조회 */
+    @Override
+    public List<DefaultMap<String>> getPosTerminalList(StoreTerminalVO storeTerminalVO) {
+        return mapper.getPosTerminalList(storeTerminalVO);
+    }
+
+    /** 코너 터미널 목록 조회 */
+    @Override
+    public List<DefaultMap<String>> getCornerTerminalList(StoreTerminalVO storeTerminalVO) {
+        return mapper.getCornerTerminalList(storeTerminalVO);
+    }
+
     /** 터미널 환경변수 값 저장*/
     @Override
     public int updateTerminalEnvst(StoreEnvVO storeEnvVO, SessionInfoVO sessionInfoVO) {
@@ -76,63 +95,59 @@ public class TerminalManageServiceImpl implements TerminalManageService{
         return mapper.updateTerminalEnvst(storeEnvVO);
     }
 
-    /** 포스 van 정보 저장 */
+    /** 포스 터미널 정보 저장 */
     @Override
-    public int savePosInfo(StorePosVO[] storePosVOs, SessionInfoVO sessionInfoVO) {
+    public int savePosTerminalInfo(StoreTerminalVO[] storeTerminalVOs, SessionInfoVO sessionInfoVO) {
 
         int result = 0;
         String dt = currentDateTimeString();
 
-        for(StorePosVO storePosVO :  storePosVOs) {
+        for(StoreTerminalVO storeTerminalVO :  storeTerminalVOs) {
 
-            storePosVO.setRegDt(dt);
-            storePosVO.setRegId(sessionInfoVO.getUserId());
-            storePosVO.setModDt(dt);
-            storePosVO.setModId(sessionInfoVO.getUserId());
+            storeTerminalVO.setRegDt(dt);
+            storeTerminalVO.setRegId(sessionInfoVO.getUserId());
+            storeTerminalVO.setModDt(dt);
+            storeTerminalVO.setModId(sessionInfoVO.getUserId());
 
-            if(storePosVO.getStatus() == GridDataFg.INSERT) {
+            if(storeTerminalVO.getStatus() == GridDataFg.INSERT) {
 
-                result += mapper.insertPosInfo(storePosVO);
+                result += mapper.insertPosTerminalInfo(storeTerminalVO);
 
-            } else if(storePosVO.getStatus() == GridDataFg.UPDATE) {
+            } else if(storeTerminalVO.getStatus() == GridDataFg.UPDATE) {
 
-                result += mapper.updatePosInfo(storePosVO);
+                result += mapper.updatePosTerminalInfo(storeTerminalVO);
             }
         }
         return result;
     }
 
-    /** 코너 목록 조회 */
-    @Override
-    public List<DefaultMap<String>> getCornerList(StoreCornerVO storeCornerVO) {
-        return mapper.getCornerList(storeCornerVO);
-    }
 
-    /** 코너 정보 저장 */
+    /** 코너 터미널 정보 저장 */
     @Override
-    public int saveCornerInfo(StoreCornerVO[] storeCornerVOs, SessionInfoVO sessionInfoVO) {
+    public int saveCornerTerminalInfo(StoreTerminalVO[] storeTerminalVOs, SessionInfoVO sessionInfoVO) {
 
 
         int result = 0;
         String dt = currentDateTimeString();
 
-        for(StoreCornerVO storeCornerVO : storeCornerVOs) {
+        for(StoreTerminalVO storeTerminalVO : storeTerminalVOs) {
 
-            storeCornerVO.setRegDt(dt);
-            storeCornerVO.setRegId(sessionInfoVO.getUserId());
-            storeCornerVO.setModDt(dt);
-            storeCornerVO.setModId(sessionInfoVO.getUserId());
+            storeTerminalVO.setRegDt(dt);
+            storeTerminalVO.setRegId(sessionInfoVO.getUserId());
+            storeTerminalVO.setModDt(dt);
+            storeTerminalVO.setModId(sessionInfoVO.getUserId());
 
-            if(storeCornerVO.getStatus() == GridDataFg.INSERT) {
+            if(storeTerminalVO.getStatus() == GridDataFg.INSERT) {
 
-                result += mapper.insertCornerInfo(storeCornerVO);
+                result += mapper.insertCornerTerminalInfo(storeTerminalVO);
 
-            } else if (storeCornerVO.getStatus() == GridDataFg.UPDATE) {
+            } else if (storeTerminalVO.getStatus() == GridDataFg.UPDATE) {
 
-                result += mapper.updateCornerInfo(storeCornerVO);
+                result += mapper.updateCornerTerminalInfo(storeTerminalVO);
             }
         }
 
         return result;
     }
+
 }

@@ -5,6 +5,7 @@ import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreManageVO;
 import kr.co.solbipos.store.manage.storemanage.service.StorePosVO;
 import kr.co.solbipos.store.manage.terminalManage.service.StoreCornerVO;
+import kr.co.solbipos.store.manage.terminalManage.service.StoreTerminalVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -38,22 +39,29 @@ public interface TerminalManageMapper {
     /** 포스 목록 조회 */
     List<DefaultMap<String>> getPosList(StorePosVO storePosVO);
 
-    /** 터미널 환경변수 값 저장 */
-    int updateTerminalEnvst(StoreEnvVO storeEnvVO);
-
-    /** 포스 등록 */
-    int insertPosInfo(StorePosVO storePosVO);
-
-    /** 포스정보 수정 */
-    int updatePosInfo(StorePosVO storePosVO);
-
     /** 코너 목록 조회 */
     List<DefaultMap<String>> getCornerList(StoreCornerVO storeCornerVO);
 
-    /** 코너 등록 */
-    int insertCornerInfo(StoreCornerVO storeCornerVO);
+    /** 포스 터미널 목록 조회 */
+    List<DefaultMap<String>> getPosTerminalList(StoreTerminalVO storeTerminalVO);
 
-    /** 코너 수정 */
-    int updateCornerInfo(StoreCornerVO storeCornerVO);
+    /** 코너 터미널 정보 조회 */
+    List<DefaultMap<String>> getCornerTerminalList(StoreTerminalVO storeTerminalVO);
+
+    /** 터미널 환경변수 값 저장 */
+    int updateTerminalEnvst(StoreEnvVO storeEnvVO);
+
+    /** 포스 터미널 정보 등록 */
+    int insertPosTerminalInfo(StoreTerminalVO storeTerminalVO);
+
+    /** 포스 터미널 정보 수정 */
+    int updatePosTerminalInfo(StoreTerminalVO storeTerminalVO);
+
+    /** 코너 터미널 정보 등록 */
+    int insertCornerTerminalInfo(StoreTerminalVO storeTerminalVO);
+
+    /** 코너 터미널 정보 수정 */
+    int updateCornerTerminalInfo(StoreTerminalVO storeTerminalVO);
+
 }
 

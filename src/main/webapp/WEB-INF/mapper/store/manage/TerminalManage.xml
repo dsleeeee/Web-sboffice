@@ -64,12 +64,13 @@
     -->
     <select id="getTerminalEnv" parameterType="storeEnvVO" resultType="String">
         /* TerminalManageMapper.getTerminalEnv */
-        SELECT ENVST_VAL
+        SELECT NVL(ENVST_VAL, '0') AS ENVST_VAL
           FROM TB_MS_STORE_ENVST
          WHERE STORE_CD = #{storeCd}
            AND ENVST_CD = #{envstCd}
            AND USE_YN = 'Y'
     </select>
+
 
     <!-- 매장 포스목록 조회 -->
     <!--
@@ -78,19 +79,71 @@
     -->
     <select id="getPosList" parameterType="storePosVO" resultType="DefaultMap">
         /* TerminalManageMapper.getPosList */
-        SELECT STORE_CD,
-               POS_NO,
-               POS_NM,
-               HW_AUTH_KEY,
-               POS_VER_NO,
-               VAN_TERMNL_NO,
-               VAN_CERT_YN,
-               VAN_CD,
-               VAN_SER_NO,
-               USE_YN,
-               REMARK
+        SELECT POS_NO AS VALUE,
+               POS_NM AS NAME
           FROM TB_MS_POS
          WHERE STORE_CD = #{storeCd}
+           AND USE_YN = 'Y'
+    </select>
+
+
+    <!-- 매장 코너 목록 조회 -->
+    <!--
+        TABLE    : TB_MS_CORNER
+        COMMENTS : 매장에 등록된 코너를 조회한다.
+    -->
+    <select id="getCornerList" parameterType="storeCornerVO" resultType="DefaultMap">
+        /* TerminalManageMapper.getCornerList */
+        SELECT STORE_CD,
+               CORNR_CD,
+               CORNR_NM,
+               OWNER_NM,
+               BIZ_NO,
+               TEL_NO,
+               VAN_CD,
+               VAN_TERMNL_NO,
+               VAN_SER_NO,
+               USE_YN
+          FROM TB_MS_CORNER
+         WHERE STORE_CD = #{storeCd}
+    </select>
+
+    <!-- 매장 터미널 목록 조회 -->
+    <!--
+        TABLE    : TB_MS_POS_TERMNL
+        COMMENTS : 매장에 등록된 포스 터미널을 조회한다.
+    -->
+    <select id="getPosTerminalList" parameterType="storeTerminalVO" resultType="DefaultMap">
+        /* TerminalManageMapper.getPosTerminalList */
+        SELECT STORE_CD,
+               POS_NO,
+               VENDOR_FG,
+               VENDOR_CD,
+               VENDOR_NM,
+               VENDOR_TERMNL_NO,
+               VENDOR_SER_NO
+          FROM TB_MS_POS_TERMNL
+         WHERE STORE_CD = #{storeCd}
+           AND POS_NO = #{posNo}
+    </select>
+
+    <!-- 코너 터미널 목록 조회 -->
+    <!--
+        TABLE    : TB_MS_CORNER_TERMNL
+        COMMENTS : 매장에 등록된 포스 터미널을 조회한다.
+    -->
+    <select id="getCornerTerminalList" parameterType="storeTerminalVO" resultType="DefaultMap">
+        /* TerminalManageMapper.getCornerTerminalList */
+        SELECT STORE_CD,
+               CORNR_CD,
+               VENDOR_FG,
+               VENDOR_CD,
+               VENDOR_NM,
+               VENDOR_TERMNL_NO,
+               VENDOR_SER_NO
+          FROM TB_MS_CORNER_TERMNL
+         WHERE STORE_CD = #{storeCd}
+           AND CORNR_CD = #{cornrCd}
     </select>
 
     <!-- 매장 환경변수 값 변경 -->
@@ -134,169 +187,95 @@
                    #{modDt},
                    #{modId}
                )
-
-
     </update>
 
-    <!-- 포스정보 등록 -->
+    <!-- 포스 터미널 정보 등록 -->
     <!--
-        TABLE    : TB_MS_POS
-        COMMENTS : 포스의 정보를 등록한다.
+        TABLE    : TB_MS_POS_TERMNL
+        COMMENTS : 포스의 터미널 정보를 등록한다.
     -->
-    <insert id="insertPosInfo" parameterType="storePosVO">
-        /* TerminalManageMapper.insertPosInfo */
-        <selectKey keyProperty="posNo" resultType="String" order="BEFORE">
-        SELECT LPAD( NVL(MAX(POS_NO), 0) + 1, 2, '0') AS POS_NO
-          FROM TB_MS_POS tmp
-         WHERE STORE_CD = #{storeCd}
-        </selectKey>
-        INSERT INTO TB_MS_POS
+    <insert id="insertPosTerminalInfo" parameterType="storeTerminalVO">
+        /* TerminalManageMapper.insertPosTerminalInfo */
+        INSERT INTO TB_MS_POS_TERMNL
         (   STORE_CD,
             POS_NO,
-            POS_NM,
-            HW_AUTH_KEY,
-            POS_VER_NO,
-            VAN_TERMNL_NO,
-            VAN_CERT_YN,
-            VAN_CD,
-            VAN_SER_NO,
-            USE_YN,
-            REMARK,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID
+            VENDOR_FG,
+            VENDOR_CD,
+            VENDOR_NM,
+            VENDOR_TERMNL_NO,
+            VENDOR_SER_NO
         )
         VALUES
         (
             #{storeCd},
             #{posNo},
-            #{posNm},
-            #{hwAuthKey},
-            #{posVerNo},
-            #{vanTermnlNo},
-            #{vanCertYn,jdbcType=VARCHAR},
-            #{vanCd},
-            #{vanSerNo},
-            #{useYn,jdbcType=VARCHAR},
-            #{remark},
-            #{regDt},
-            #{regId},
-            #{modDt},
-            #{modId}
+            #{vendorFg},
+            #{vendorCd},
+            #{vendorNm},
+            #{vendorTermnlNo},
+            #{vendorSerNo}
         )
     </insert>
 
-    <!-- 포스정보 수정 -->
+    <!-- 포스 터미널 정보 수정 -->
     <!--
-        TABLE    : TB_MS_POS
-        COMMENTS : 포스의 정보를 수정한다.
+        TABLE    : TB_MS_POS_TERMNL
+        COMMENTS : 포스 터미널의 정보를 수정한다.
     -->
-    <update id="updatePosInfo" parameterType="storePosVO">
-        /* TerminalManageMapper.updatePosInfo */
-        UPDATE TB_MS_POS
-           SET POS_NM = #{posNm},
-               HW_AUTH_KEY = #{hwAuthKey},
-               POS_VER_NO = #{posVerNo},
-               VAN_TERMNL_NO = #{vanTermnlNo},
-               VAN_CERT_YN = #{vanCertYn},
-               VAN_CD = #{vanCd},
-               VAN_SER_NO = #{vanSerNo},
-               USE_YN = #{useYn},
-               REMARK = #{remark},
-               MOD_DT = #{modDt},
-               MOD_ID = #{modId}
+    <update id="updatePosTerminalInfo" parameterType="storeTerminalVO">
+        /* TerminalManageMapper.updatePosTerminalInfo */
+        UPDATE TB_MS_POS_TERMNL
+           SET VENDOR_FG = #{vendorFg},
+               VENDOR_CD = #{vendorCd},
+               VENDOR_NM  #{vendorNm},
+               VENDOR_TERMNL_NO = #{vendorTermnlNo},
+               VENDOR_SER_NO = #{vendorSerNo}
          WHERE STORE_CD = #{storeCd}
            AND POS_NO = #{posNo}
     </update>
 
-    <!-- 매장 코너 목록 조회 -->
-    <!--
-        TABLE    : TB_MS_CORNER
-        COMMENTS : 매장에 등록된 코너를 조회한다.
-    -->
-    <select id="getCornerList" parameterType="storeCornerVO" resultType="DefaultMap">
-        /* TerminalManageMapper.getPosList */
-        SELECT STORE_CD,
-               CORNR_CD,
-               CORNR_NM,
-               OWNER_NM,
-               BIZ_NO,
-               TEL_NO,
-               VAN_CD,
-               VAN_TERMNL_NO,
-               VAN_SER_NO,
-               USE_YN
-          FROM TB_MS_CORNER
-         WHERE STORE_CD = #{storeCd}
-    </select>
 
-
-    <!-- 코너 등록 -->
+    <!-- 코너 터미널 정보 등록 -->
     <!--
-        TABLE    : TB_MS_POS
-        COMMENTS : 코너 정보를 등록한다.
+        TABLE    : TB_MS_CORNER_TERMNL
+        COMMENTS : 코너 터미널 정보를 등록한다.
     -->
-    <insert id="insertCornerInfo" parameterType="storeCornerVO">
-        /* TerminalManageMapper.insertCornerInfo */
-        <selectKey keyProperty="cornrCd" resultType="String" order="BEFORE">
-            SELECT LPAD( NVL(MAX(CORNR_CD), 0) + 1, 2, '0') AS CORNR_CD
-              FROM TB_MS_CORNER tmc
-             WHERE STORE_CD = #{storeCd}
-        </selectKey>
-        INSERT INTO TB_MS_CORNER
+    <insert id="insertCornerTerminalInfo" parameterType="storeTerminalVO">
+        /* TerminalManageMapper.insertCornerTerminalInfo */
+        INSERT INTO TB_MS_CORNER_TERMNL
         (   STORE_CD,
             CORNR_CD,
-            CORNR_NM,
-            OWNER_NM,
-            BIZ_NO,
-            TEL_NO,
-            VAN_CD,
-            VAN_TERMNL_NO,
-            VAN_SER_NO,
-            USE_YN,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID
+            VENDOR_FG,
+            VENDOR_CD,
+            VENDOR_NM,
+            VENDOR_TERMNL_NO,
+            VENDOR_SER_NO
         )
         VALUES
         (
             #{storeCd},
             #{cornrCd},
-            #{cornrNm},
-            #{ownerNm},
-            #{bizNo},
-            #{telNo},
-            #{vanCd},
-            #{vanTermnlNo},
-            #{vanSerNo},
-            #{useYn,jdbcType=VARCHAR},
-            #{regDt},
-            #{regId},
-            #{modDt},
-            #{modId}
+            #{vendorFg},
+            #{vendorCd},
+            #{vendorNm},
+            #{vendorTermnlNo},
+            #{vendorSerNo}
         )
     </insert>
 
-    <!-- 포스정보 수정 -->
+    <!-- 코너 터미널 정보 수정 -->
     <!--
-        TABLE    : TB_MS_POS
-        COMMENTS : 포스의 정보를 수정한다.
+        TABLE    : TB_MS_CORNER_TERMNL
+        COMMENTS : 코너 터미널의 정보를 수정한다.
     -->
-    <update id="updateCornerInfo" parameterType="storeCornerVO">
-        /* TerminalManageMapper.updateCornerInfo */
+    <update id="updateCornerTerminalInfo" parameterType="storeTerminalVO">
+        /* TerminalManageMapper.updateCornerTerminalInfo */
         UPDATE TB_MS_CORNER
-           SET CORNR_NM = #{cornrNm},
-               OWNER_NM = #{ownerNm},
-               BIZ_NO = #{bizNo},
-               TEL_NO = #{telNo},
-               VAN_CD = #{vanCd},
-               VAN_TERMNL_NO = #{vanTermnlNo},
-               VAN_SER_NO = #{verSerNo},
-               USE_YN = #{useYn},
-               MOD_DT =  #{modDt},
-               MOD_ID = #{modId}
+           SET VENDOR_FG = #{vendorFg},
+               VENDOR_CD = #{vendorCd},
+               VENDOR_NM = #{vendorNm},
+               VENDOR_TERMNL_NO = #{vendorTermnlNo},
+               VENDOR_SER_NO = #{vendorSerNo}
          WHERE STORE_CD = #{storeCd}
            AND CORNR_CD = #{cornrCd}
     </update>

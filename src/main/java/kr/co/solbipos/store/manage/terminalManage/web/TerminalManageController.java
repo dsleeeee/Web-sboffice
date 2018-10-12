@@ -5,12 +5,13 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.base.pay.coupon.service.CouponStoreVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreManageVO;
 import kr.co.solbipos.store.manage.storemanage.service.StorePosVO;
 import kr.co.solbipos.store.manage.terminalManage.service.StoreCornerVO;
+import kr.co.solbipos.store.manage.terminalManage.service.StoreTerminalVO;
 import kr.co.solbipos.store.manage.terminalManage.service.TerminalManageService;
+import kr.co.solbipos.store.manage.terminalManage.service.enums.TerminalEnvFg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ import java.util.Map;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
  * @Class Name : TerminalManageController.java
@@ -77,6 +79,25 @@ public class TerminalManageController {
     }
 
     /**
+     * 포스목록 조회
+     * @param storePosVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "terminalManage/getPosList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getPosList(StorePosVO storePosVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        List<DefaultMap<String>> storeList = service.getPosList(storePosVO);
+
+        return returnListJson(Status.OK, storeList, storePosVO);
+    }
+
+
+    /**
      * 매장 조회
      * @param storeManageVO
      * @param request
@@ -107,40 +128,66 @@ public class TerminalManageController {
     public Result getTerminalEnv(StoreEnvVO storeEnvVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
-        String envstVal = service.getTerminalEnv(storeEnvVO);
+        Map<String, Object> resultMap = new HashMap<String, Object>();
 
-        return returnJson(Status.OK, envstVal);
+        List<DefaultMap<String>> posList = null;
+        List<DefaultMap<String>> cornerList = null;
+
+        TerminalEnvFg envstVal = TerminalEnvFg.getEnum(service.getTerminalEnv(storeEnvVO));
+
+        // 포스 목록 조회
+//        if(envstVal == TerminalEnvFg.NO_CORNER || envstVal == TerminalEnvFg.USE_POS ) {
+
+            StorePosVO storePosVO = new StorePosVO();
+            storePosVO.setStoreCd(storeEnvVO.getStoreCd());
+
+            posList  = service.getPosList(storePosVO);
+//        }
+        // 코너 목록 조회
+//        else if(envstVal == TerminalEnvFg.USE_CORNER) {
+
+            StoreCornerVO storeCornerVO = new StoreCornerVO();
+            storeCornerVO.setStoreCd(storeEnvVO.getStoreCd());
+
+            posList  = service.getCornerList(storeCornerVO);
+//        }
+
+        resultMap.put("envstVal", envstVal);
+        resultMap.put("posList", posList);
+        resultMap.put("cornerList", cornerList);
+
+        return returnJson(Status.OK, resultMap);
     }
 
     /**
      * 매장터미널관리 - 포스 목록 조회
-     * @param storePosVO
+     * @param storeTerminalVO
      * @param request
      * @param response
      * @param model
      * @return
      */
-    @RequestMapping(value = "pos/getPosList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "pos/getPosTerminalList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getPosList(StorePosVO storePosVO, HttpServletRequest request,
+    public Result getPosTerminalList(StoreTerminalVO storeTerminalVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
-        List<DefaultMap<String>> posList = service.getPosList(storePosVO);
+        List<DefaultMap<String>> posList = service.getPosTerminalList(storeTerminalVO);
 
-        return returnListJson(Status.OK, posList, storePosVO);
+        return returnListJson(Status.OK, posList, storeTerminalVO);
     }
 
     /**
-     * POS VAN 정보 저장
-     * @param storePosVOs
+     * POS VAN 터미널 정보 저장
+     * @param storeTerminalVOs
      * @param request
      * @param response
      * @param model
      * @return
      */
-    @RequestMapping(value = "pos/savePosInfo.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "pos/savePosTerminalInfo.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result savePosInfo(@RequestBody StorePosVO[] storePosVOs, HttpServletRequest request,
+    public Result savePosTerminalInfo(@RequestBody StoreTerminalVO[] storeTerminalVOs, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
@@ -152,9 +199,11 @@ public class TerminalManageController {
             storeEnvVO.setStoreCd(request.getParameter("storeCd"));
             storeEnvVO.setEnvstVal(request.getParameter("terminalFgVal"));
 
-            int envstSaveResult = service.updateTerminalEnvst(storeEnvVO, sessionInfoVO);
+            // 환경변수 값 저장
+            result += service.updateTerminalEnvst(storeEnvVO, sessionInfoVO);
 
-            result = service.savePosInfo(storePosVOs, sessionInfoVO);
+            // 터미널정보 저장
+            result += service.savePosTerminalInfo(storeTerminalVOs, sessionInfoVO);
 
         }catch(Exception ex){
             ex.printStackTrace();
@@ -163,35 +212,34 @@ public class TerminalManageController {
     }
 
     /**
-     * 매장터미널관리 - 코너 목록 조회
-     * @param storeCornerVO
+     * 매장터미널관리 - 코너 터미널 목록 조회
+     * @param storeTerminalVO
      * @param request
      * @param response
      * @param model
      * @return
      */
-    @RequestMapping(value = "corner/getCornerList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "corner/getCornerTerminalList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getCornerList(StoreCornerVO storeCornerVO, HttpServletRequest request,
+    public Result getCornerTerminalList(StoreTerminalVO storeTerminalVO , HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
-        List<DefaultMap<String>> posList = service.getCornerList(storeCornerVO);
+        List<DefaultMap<String>> posList = service.getCornerTerminalList(storeTerminalVO);
 
-        return returnListJson(Status.OK, posList, storeCornerVO);
+        return returnListJson(Status.OK, posList, storeTerminalVO);
     }
-
 
     /**
      * 코너 정보 저장
-     * @param storeCornerVOs
+     * @param storeTerminalVOs
      * @param request
      * @param response
      * @param model
      * @return
      */
-    @RequestMapping(value = "corner/saveCornerInfo.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "corner/saveCornerTerminalInfo.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result saveCornerInfo(@RequestBody StoreCornerVO[] storeCornerVOs, HttpServletRequest request,
+    public Result saveCornerInfo(@RequestBody StoreTerminalVO[] storeTerminalVOs, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
@@ -205,7 +253,7 @@ public class TerminalManageController {
 
             int envstSaveResult = service.updateTerminalEnvst(storeEnvVO, sessionInfoVO);
 
-            result = service.saveCornerInfo(storeCornerVOs, sessionInfoVO);
+            result = service.saveCornerTerminalInfo(storeTerminalVOs, sessionInfoVO);
 
         }catch(Exception ex){
             ex.printStackTrace();
