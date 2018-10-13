@@ -68,13 +68,13 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 조회
   $scope.$on("terminalCtrl", function(event, data) {
-    $scope.getEnvInfo();
+    $scope.search();
     event.preventDefault();
   });
 
   // 매장별 터미널 조회시, 먼저 환경변수 조회 수행
   // 해당 매장의 코너목록과 포스목록도 함께 조회
-  $scope.getEnvInfo = function (){
+  $scope.search = function (){
 
     if($("#storeCd").val() === null || $("#storeCd").val() === "") {
       $scope._popMsg(messages["terminalManage.request.select.store"]);
@@ -101,8 +101,10 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
         console.log(cornerList);
 
         $("#terminalFgVal").val(terminalEnvVal);
-        // terminalFg.selectedValue = terminalEnvVal;
+
         $scope.setTerminalEnvVal(terminalEnvVal);
+
+        terminalFg.selectedValue = terminalEnvVal;
 
         // 콤보박스 왜 안생겨 TODO
         $scope._setComboData("posFg", posList);
@@ -309,34 +311,34 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
   angular.extend(this, new RootController('cornerCtrl', $scope, $http, true));
 
   // 원본 [2028] ENVST_VAL
-  $scope.terminalCornerEnvVal;
-  $scope.setTerminalCornerEnvVal = function(s){
-    $scope.terminalCornerEnvVal = s;
-  };
-  $scope.getTerminalCornerEnvVal = function(){
-    return $scope.terminalCornerEnvVal;
-  };
+  // $scope.terminalCornerEnvVal;
+  // $scope.setTerminalCornerEnvVal = function(s){
+  //   $scope.terminalCornerEnvVal = s;
+  // };
+  // $scope.getTerminalCornerEnvVal = function(){
+  //   return $scope.terminalCornerEnvVal;
+  // };
 
   // 콤보박스 생성
-  $scope._setComboData("terminalCornerFg", terminalFg);
+  // $scope._setComboData("terminalCornerFg", terminalFg);
 
   // 콤보박스 값 변경 이벤트
-  $scope.changeTerminalCornerFg = function(s,e) {
-
-    // 원래 코너별 승인인데 포스별 승인으로 변경하는 경우
-    if((s.selectedValue === "0" || s.selectedValue === "3") && $scope.terminalCornerEnvVal === "2") {
-
-      var alertMsg = messages["terminalManage.confirm.change.terminal"];
-      alertMsg += "<br>";
-      alertMsg += messages["terminalManage.confirm.delete.cornerSetting"];
-
-      $scope._popConfirm(alertMsg,
-        function(){
-          $scope.changeToPosList();
-        }
-      );
-    }
-  };
+  // $scope.changeTerminalCornerFg = function(s,e) {
+  //
+  //   // 원래 코너별 승인인데 포스별 승인으로 변경하는 경우
+  //   if((s.selectedValue === "0" || s.selectedValue === "3") && $scope.terminalCornerEnvVal === "2") {
+  //
+  //     var alertMsg = messages["terminalManage.confirm.change.terminal"];
+  //     alertMsg += "<br>";
+  //     alertMsg += messages["terminalManage.confirm.delete.cornerSetting"];
+  //
+  //     $scope._popConfirm(alertMsg,
+  //       function(){
+  //         $scope.changeToPosList();
+  //       }
+  //     );
+  //   }
+  // };
 
   // 포스리스트로 변경
   // $scope.changeToPosList = function(){
