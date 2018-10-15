@@ -78,6 +78,22 @@ public class PosFuncController {
         return "base/store/posFunc/posFunc";
     }
 
+
+    /**
+     * 포스기능정의 화면 (매장)
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  String
+     * @author  김지은
+     * @since   2018. 07. 26.
+     */
+    @RequestMapping( value = "/use/storeView.sb", method = RequestMethod.GET)
+    public String storeView(HttpServletRequest request, HttpServletResponse response, Model model) {
+        return "base/store/posFunc/posFuncStore";
+    }
+
+
     /**
      * 매장목록 조회
      * @param   storeManageVO

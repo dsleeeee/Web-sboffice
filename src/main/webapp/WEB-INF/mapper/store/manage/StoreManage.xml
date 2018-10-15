@@ -1654,30 +1654,29 @@
       COMMENTS : 주방프린터 목록을 조회
   -->
   <select id="getKitchenPrintInfo" parameterType="storeEnvVO" resultType="DefaultMap">
-    /* USE : StoreManageMapper.getKitchenPrintInfo */
-    SELECT ROWNUM AS NO,
-           tmt.STORE_CD,
-           tmt.PRTER_NO,
-           tmt.PRTER_NM,
-           tmt.POS_NO,
-           tmt.PRTER_KIND_FG,
-           tmt.PRTER_PORT_FG,
-           tmt.PRTER_SPEED_FG,
-           tmt.PRTER_NET_IP,
-           tmt.PRTER_NET_PORT,
-           tmt.PRTER_OUTPUT_QTY,
-           tmp.CNT
-      FROM TB_MS_PRINTER tmt,
-           (
-      SELECT STORE_CD, COUNT(PROD_CD) AS CNT
-        FROM TB_MS_PRODUCT
-       WHERE STORE_CD = #{storeCd}
-         AND USE_YN = 'Y'
-       GROUP BY STORE_CD
-           ) tmp
-     WHERE tmt.STORE_CD =  #{storeCd}
-       AND tmt.USE_YN = 'Y'
-       AND tmp.STORE_CD (+)= tmt.STORE_CD
+      /* USE : StoreManageMapper.getKitchenPrintInfo */
+      SELECT ROWNUM AS NO,
+             tmp.STORE_CD,
+             tmp.PRTER_NO,
+             tmp.PRTER_NM,
+             tmp.POS_NO,
+             tmp.PRTER_KIND_FG,
+             tmp.PRTER_PORT_FG,
+             tmp.PRTER_SPEED_FG,
+             tmp.PRTER_NET_IP,
+             tmp.PRTER_NET_PORT,
+             tmp.PRTER_OUTPUT_QTY,
+             tmp.USE_YN,
+             NVL(tmpr.CNT, 0) AS CNT
+        FROM TB_MS_PRINTER tmp,
+             (SELECT STORE_CD, PRTER_NO, COUNT(PROD_CD) AS CNT
+                FROM TB_MS_PRINTER_PROD
+               WHERE STORE_CD = #{storeCd}
+               GROUP BY STORE_CD, PRTER_NO
+                 ) tmpr
+       WHERE tmp.STORE_CD = #{storeCd}
+         AND tmpr.STORE_CD (+)= tmp.STORE_CD
+         AND tmpr.PRTER_NO (+)= tmp.PRTER_NO
   </select>
 
   <!-- 주방프린터 등록 -->
@@ -1773,7 +1772,7 @@
     SELECT STORE_CD,
            PROD_CLASS_CD,
            PROD_CLASS_NM,
-           P_PROD_CLASS_CD,
+           P_PROD_CLASS_CD
       FROM TB_MS_PRODUCT_CLASS
      WHERE STORE_CD = #{storeCd}
   </select>

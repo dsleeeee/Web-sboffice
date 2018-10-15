@@ -171,5 +171,6 @@ app.controller('noRegProdCtrl', ['$scope', '$http', function ($scope, $http) {
     couponGrid.searchCoupon(selectedCouponClass);
     event.preventDefault();
   };
+
 }]);
 

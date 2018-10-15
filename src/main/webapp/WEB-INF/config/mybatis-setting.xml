@@ -162,6 +162,9 @@
     <typeAlias alias="tableVO" type="kr.co.solbipos.base.store.tablelayout.service.TableVO"/>
     <typeAlias alias="tableGroupVO" type="kr.co.solbipos.base.store.tablelayout.service.TableGroupVO"/>
     <typeAlias alias="infoVO" type="kr.co.solbipos.base.prod.info.service.ProductClassVO"/>
+    <typeAlias alias="storePosVO" type="kr.co.solbipos.store.manage.storemanage.service.StorePosVO"/>
+    <typeAlias alias="storeTerminalVO" type="kr.co.solbipos.store.manage.terminalManage.service.StoreTerminalVO"/>
+    <typeAlias alias="storeCornerVO" type="kr.co.solbipos.store.manage.terminalManage.service.StoreCornerVO"/>
 <!--
     <typeAlias alias="posFuncVO" type="kr.co.solbipos.base.store.posfunc.service.PosFuncVO"/>
     <typeAlias alias="empStoreVO" type="kr.co.solbipos.base.store.empstore.service.EmpStoreVO"/>
@@ -374,6 +377,7 @@
     <typeAlias alias="bilclctVO" type="kr.co.solbipos.excclc.bilclct.bilclct.service.BilclctVO"/>
     <typeAlias alias="accntManageVO" type="kr.co.solbipos.adi.mony.accntmanage.service.AccntManageVO"/>
 -->
+    <typeAlias alias="accntVO" type="kr.co.solbipos.adi.mony.accntManage.service.impl.AccntVO"/>
     <typeAlias alias="statusVO" type="kr.co.solbipos.adi.mony.status.service.StatusVO"/>
     <typeAlias alias="drawHistVO" type="kr.co.solbipos.adi.mony.drawhist.service.DrawHistVO"/>
     <typeAlias alias="dclzManageVO" type="kr.co.solbipos.adi.dclz.dclzmanage.service.DclzManageVO"/>
