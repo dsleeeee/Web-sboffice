@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    Deposit.xml
+    계정관리 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김지은     2018.10.12      최초작성
+-->
+<mapper namespace="kr.co.solbipos.adi.mony.accntManage.service.impl.DepositMapper">
+
+
+    <!-- 계정 조회 -->
+    <!--
+        TABLE    : TB_HQ_ACCOUNT, TB_MS_ACCOUNT
+        COMMENTS : 입출금 계정을 조회한다.
+    -->
+    <select id="getDepositAccntList" parameterType="accntVO" resultType="DefaultMap">
+      /* USE : DepositMapper.getDepositAccntList */
+      <if test="orgnFg != null and orgnFg.toString() == 'HQ'">
+          SELECT HQ_OFFICE_CD,
+                 ACCNT_CD,
+                 ACCNT_NM,
+                 ACCNT_FG,
+                 USE_YN
+            FROM TB_HQ_ACCOUNT
+           WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+             AND ACCNT_FG = #{accntFg, jdbcType=VARCHAR}
+      </if>
+      <if test="orgnFg != null and orgnFg.toString() == 'STORE'">
+          SELECT (SELECT HQ_OFFICE_CD FROM TB_MS_STORE WHERE STORE_CD = #{storeCd}) AS HQ_OFFICE_CD,
+                 STORE_CD,
+                 ACCNT_CD,
+                 ACCNT_NM,
+                 ACCNT_FG,
+                 USE_YN
+            FROM TB_MS_ACCOUNT
+           WHERE STORE_CD = #{storeCd}
+             AND ACCNT_FG = #{accntFg, jdbcType=VARCHAR}
+      </if>
+
+    </select>
+
+
+
+
+</mapper>

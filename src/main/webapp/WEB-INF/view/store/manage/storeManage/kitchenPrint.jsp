@@ -69,7 +69,6 @@ function showkitchenPrintLayout(){
 
   var param = {};
   param.hqOfficeCd  = selectedStore.hqOfficeCd;
-//  param.hqBrandCd   = selectedStore.hqBrandCd;
   param.storeCd     = selectedStore.storeCd;
 
   <%-- 주방프린터 목록 조회 --%>
@@ -113,8 +112,7 @@ $("#btnSaveKitchenPrint").click(function(){
 
   var paramArr = new Array();
 
-  // validateion Check
-  // 우선은 저장하고 val 체크하자
+  // 필수값 체크 TODO
 
   for(var i=0; i<kitchenPrintGrid.itemsSource.itemsEdited.length; i++){
     kitchenPrintGrid.itemsSource.itemsEdited[i].storeCd = selectedStore.storeCd;
@@ -134,8 +132,6 @@ $("#btnSaveKitchenPrint").click(function(){
     paramArr.push(kitchenPrintGrid.itemsSource.itemsRemoved[i]);
   }
 
-  console.log(paramArr);
-
   $.postJSONArray("/store/manage/storeManage/storeManage/saveKitchenPrintInfo.sb", paramArr, function(result) {
     console.log(result);
     s_alert.pop("<s:message code='cmm.saveSucc' />");
@@ -147,11 +143,9 @@ $("#btnSaveKitchenPrint").click(function(){
   });
 });
 
-
 <%-- 주방프린터 설정 레이아웃 보이지 않기--%>
 function hideKitchenPrintLayout() {
   $("#kitchenPrintArea").hide();
 }
-
 
 </script>

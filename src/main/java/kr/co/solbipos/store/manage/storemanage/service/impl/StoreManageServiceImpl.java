@@ -261,17 +261,17 @@ public class StoreManageServiceImpl implements StoreManageService{
                     procCnt += mapper.updateSplyUprc(storeManageVO);
                 }
 
-                // 터치키 복사
-                if( "touchKey".equals(copyEnv[i]) ) {
-
-                    storeManageVO.setInFg("S");
-                    procCnt += mapper.copyTouchkeyCls(storeManageVO);
-                    procCnt += mapper.copyTouchkey(storeManageVO);
-
-                    storeManageVO.setInFg("T");
-                    procCnt += mapper.copyTouchkeyCls(storeManageVO);
-                    procCnt += mapper.copyTouchkey(storeManageVO);
-                }
+                // 터치키 복사 //TODO
+//                if( "touchKey".equals(copyEnv[i]) ) {
+//
+//                    storeManageVO.setInFg("S");
+//                    procCnt += mapper.copyTouchkeyCls(storeManageVO);
+//                    procCnt += mapper.copyTouchkey(storeManageVO);
+//
+//                    storeManageVO.setInFg("T");
+//                    procCnt += mapper.copyTouchkeyCls(storeManageVO);
+//                    procCnt += mapper.copyTouchkey(storeManageVO);
+//                }
             }
         }
 
