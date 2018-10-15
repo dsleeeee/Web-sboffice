@@ -1271,8 +1271,8 @@ Format.prototype.initElements = function () {
     var styleNm = item.styleNm;
 
     var cell = group.getSelectionCells()[0];
+    var scope = agrid.getScope("touchKeyCtrl");
     if (cell) {
-      var scope = agrid.getScope("touchKeyCtrl");
       scope.$apply(function(){
         scope._popConfirm("선택하신 분류키 [ " + cell.value + " ] 의 스타일을<br>[ " + styleNm + " ] (으)로 변경하시겠습니까?<br><br>스타일은 선택된 분류의 모든 하위터치키에 적용됩니다.", function() {
           // 버튼 색상 스타일 적용

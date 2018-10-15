@@ -17,6 +17,7 @@ var app = agrid.getApp();
 app.controller('funcKeyCtrl', ['$scope', '$http', 'saveInfo', function ($scope, $http, saveInfo) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('funcKeyCtrl', $scope, $http, false));
+  $scope.filterDefinition = '{"defaultFilterType":3,"filters":[{"binding":"fnkeyUsed","type":"value","filterText":"","showValues":{"false":true}}]}';
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     $scope.areAllRowsSelected = function(flex) {
@@ -81,7 +82,7 @@ app.controller('funcKeyCtrl', ['$scope', '$http', 'saveInfo', function ($scope, 
       // row 선택 클리어
       $scope.flex.select(-1, -1);
       // 필터적용
-      $scope.filter.filterDefinition = '{"defaultFilterType":3,"filters":[{"binding":"fnkeyUsed","type":"value","filterText":"","showValues":{"false":true}}]}';
+      $scope.filter.filterDefinition = $scope.filterDefinition;
       $scope.filter.apply();
     }, false);
     // 기능수행 종료 : 반드시 추가
@@ -355,7 +356,7 @@ FuncKeyList.prototype.initUsed = function (layer) {
 
   // 필터적용
   if (scope.filter) {
-    scope.filter.filterDefinition = '{"defaultFilterType":3,"filters":[{"binding":"fnkeyUsed","type":"value","filterText":"","showValues":{"false":true}}]}';
+    scope.filter.filterDefinition = scope.filterDefinition;
     scope.filter.apply();
   }
 
@@ -388,7 +389,7 @@ FuncKeyList.prototype.undoFilter = function (cell) {
 
   // 필터적용
   if (scope.filter) {
-    scope.filter.filterDefinition = '{"defaultFilterType":3,"filters":[{"binding":"fnkeyUsed","type":"value","filterText":"","showValues":{"false":true}}]}';
+    scope.filter.filterDefinition = scope.filterDefinition;
     scope.filter.apply();
   }
 };
@@ -960,12 +961,7 @@ Format.prototype.initElements = function () {
   var graph = this.graph;
   var format = this;
 
-  // 구성초기화 버튼
-  // addClickHandler(document.getElementById('btnFuncInit'), function () {
-  //   format.open(false);
-  // });
-  //
-  // // 삭제 버튼
+  // 삭제 버튼
   addClickHandler(document.getElementById('btnFuncDelete'), function () {
     deleteFnkey(format);
   });
@@ -1045,7 +1041,7 @@ Format.prototype.open = function (isLoad) {
   var posNo = scope.getSaveInfo("posNo");
   var fnkeyFg = scope.getSaveInfo("fnkeyFg");
   var params = 'storeCd=' + storeCd + "&posNo=" + posNo + "&fnkeyFg=" + fnkeyFg;
-
+  ``
   //open
   var reqFuncKey = mxUtils.post(FUNCKEY_OPEN_URL, params,
     mxUtils.bind(this, function (req) {
@@ -1063,14 +1059,20 @@ Format.prototype.open = function (isLoad) {
           }
         }
         catch (e) {
-          mxUtils.alert(mxResources.get('errorOpeningFile'));
+          scope.$apply(function(){
+            scope._popMsg(mxResources.get('errorOpeningFile'));
+          });
         }
         if (!isLoad) {
-          mxUtils.alert(mxResources.get('opened'));
+          scope.$apply(function(){
+            scope._popMsg(mxResources.get('opened'));
+          });
         }
       }
       else {
-        mxUtils.alert(mxResources.get('errorOpeningFile'));
+        scope.$apply(function(){
+          scope._popMsg(mxResources.get('errorOpeningFile'));
+        });
       }
     })
   );
@@ -1137,20 +1139,28 @@ Format.prototype.save = function () {
   try {
     if (xml.length < MAX_REQUEST_SIZE) {
       var onload = function (req) {
-        mxUtils.alert(mxResources.get('saved'));
+        scope.$apply(function(){
+          scope._popMsg(mxResources.get('saved'));
+        });
       }
       var onerror = function (req) {
-        mxUtils.alert('Error');
+        scope.$apply(function(){
+          scope._popMsg("저장 중 오류가 발생하였습니다.");
+        });
       }
       new mxXmlRequest(FUNCKEY_SAVE_URL, 'xml=' + xml + params).send(onload, onerror);
     }
     else {
-      mxUtils.alert(mxResources.get('drawingTooLarge'));
-      return;
+      scope.$apply(function(){
+        scope._popMsg(mxResources.get('drawingTooLarge'));
+      });
+      return false;
     }
   }
   catch (e) {
-    mxUtils.alert(mxResources.get('errorSavingFile'));
+    scope.$apply(function(){
+      scope._popMsg(mxResources.get('errorSavingFile'));
+    });
   }
 
 };
