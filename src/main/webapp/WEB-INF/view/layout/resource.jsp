@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/style.css?ver=20181004.00" media="all"/>
+<link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/style.css?ver=20181015.00" media="all"/>
 <link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/devCustom.css?ver=20181004.00" media="all"/>
 <link rel="stylesheet" type="text/css" href="/resource/vendor/wijmo/css/wijmo.css?ver=5.20182.500"/>
 <link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/wijmo.solbi.custom.css?ver=20181004.00"/>
