@@ -17,9 +17,10 @@ import java.util.List;
  */
 public enum TouchKeyStyle implements CodeEnum {
     
-    /** 텍스트 정렬 구분 */
-    TEXTALIGN_FG("align"),
-    TEXTVALIGN_FG("verticalAlign"),
+    /** 좌우정렬 */
+    ALIGN("align"),
+    /** 수직정렬 */
+    VERTICAL_ALIGN("verticalAlign"),
     /** 폰트명 */
     FONT_NM("fontFamily"),
     /** 폰트크기 */
@@ -38,21 +39,25 @@ public enum TouchKeyStyle implements CodeEnum {
     RESIZABLE("resizable"),
     /** 줄바꿈 */
     WHITE_SPACE("whiteSpace"),
-    /** 수직정렬 */
-    VERTICAL_ALIGN("verticalAlign"),
-    /** 좌우정렬 */
-    ALIGN("align"),
+    /** WHITESPACE */
+    WHITESPACE("whiteSpace"),
+    /** OVERFLOW */
+    OVERFLOW("overflow"),
 
-    /** CLASS_CD-custom */
-    CLASS_CD("classCd"),
     /** TUKEY_CD-custom */
     TUKEY_CD("tukeyCd"),
-    /** TUKEY_CD-custom */
+    /** TUKEY_FG-custom */
     TUKEY_FG("tukeyFg"),
-    /** TUKEY_CD-custom */
-    STYLE_CD("styleCd"),
     /** 상품코드-custom */
     PROD_CD("prodCd"),
+    /** STYLE_CD-custom */
+    STYLE_CD("styleCd"),
+    /**SELECTABLE-custom */
+    SELECTABLE("selectable"),
+    /**SELECTABLE-custom */
+    MOVABLE("movable"),
+    /** CLASS_CD-custom */
+    CLASS_CD("classCd"),
     /** 금액태그-custom */
     SALE_UPRC("saleUprc"),
     /** 테이블좌석수-custom */

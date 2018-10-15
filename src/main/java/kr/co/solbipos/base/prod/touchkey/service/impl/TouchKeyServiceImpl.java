@@ -507,6 +507,9 @@ public class TouchKeyServiceImpl implements TouchKeyService {
                     case PROD_CD:
                         result.setProdCd(styleKeyValue[1]);
                         break;
+                    case STYLE_CD:
+                        result.setStyleCd(styleKeyValue[1]);
+                        break;
                     case FONT_COLOR:
                         result.setFontColor(styleKeyValue[1]);
                         break;
@@ -515,9 +518,6 @@ public class TouchKeyServiceImpl implements TouchKeyService {
                         break;
                     case FONT_SIZE:
                         result.setFontSize(Long.parseLong(styleKeyValue[1]));
-                        break;
-                    case STYLE_CD:
-                        result.setStyleCd(styleKeyValue[1]);
                         break;
                     default:
                         break;
