@@ -109,10 +109,10 @@ app.factory('saveInfo', function () {
   var saveInfo = [];
   saveInfo.set = function (id, data) {
     saveInfo[id] = data;
-  }
+  };
   saveInfo.get = function (id) {
     return saveInfo[id];
-  }
+  };
   return saveInfo;
 });
 
@@ -253,11 +253,6 @@ FuncKey.prototype.init = function () {
   this.format.open(true);
 
 };
-
-FuncKey.prototype.getFuncKeyFormat = function() {
-  return this.format;
-}
-
 
 /**
  * 메모리 삭제
@@ -706,8 +701,10 @@ Graph.prototype.adjustCellSize = function (w, h) {
   var dh = Math.round(h / kh);
   // 터치키 크기(가로/세로) 절반을 넘으면 터치키(가로/세로) 만큼으로 크기 보정
   // 터치키 사이의 1px 간격 유지를 위해 해당 사이즈만큼 추가 계산 (btnBorder)
-  var dx = ( Math.abs(mw) <= (kw / 2) ? (kw * dw) : (kw * dw) ) + ( ( dw - 1 ) * this.btnBorder );
-  var dy = ( Math.abs(mh) <= (kh / 2) ? (kh * dh) : (kh * dh) ) + ( ( dh - 1 ) * this.btnBorder );
+  var dx = Math.abs(mw) <= (kw / 2) ? (kw * dw) : (kw * dw);
+  var dy = Math.abs(mh) <= (kh / 2) ? (kh * dh) : (kh * dh);
+  dx += ( dw - 1 ) * this.btnBorder;
+  dy += ( dh - 1 ) * this.btnBorder;
 
   return new mxPoint(dx, dy);
 };

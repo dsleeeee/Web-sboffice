@@ -1040,7 +1040,7 @@ div.commtWrap .btn_skyblue {width:140px; position:absolute; top:0px; right:0px; 
 .cfgWrap {overflow-y:auto; height:605px; border:1px solid #dbdbdb;}
 .cfgWrap > div.wj-flexgrid {margin-top:-1px; margin-bottom:10px;}
 
-.cfgWrap2 {overflow-y:auto; height:565px; border:1px solid #dbdbdb;}
+.cfgWrap2 { height:565px; border:1px solid #dbdbdb;}
 .cfgWrap2 > div.wj-flexgrid {margin-top:-1px; margin-bottom:10px;}
 
 .shopSetting {border:1px solid #dbdbdb; border-top:0px; width:510px; height:95px; padding:10px 0 10px 10px; position:relative;}
@@ -1127,7 +1127,7 @@ a.btn_underline, a.btn_underline:hover, a.btn_underline.on {background-position:
 .groupNavNext { width: 49px; height: 60px; background-position: 0 0; margin-left:1px; }
 .groupNavNext:hover { width: 49px; height: 60px; background-position: -49px 0;}
 
-.keyStyleWrap { width:120px; height:240px; position: absolute; }
+.keyStyleWrap { width:120px; height:300px; position: absolute; }
 
 .prodNavWrap { width:125px; display: inline-block; }
 .prodPageNoWrap { width:103px; position: relative; }

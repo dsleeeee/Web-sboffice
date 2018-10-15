@@ -90,6 +90,12 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         return keyMapper.getProductListForTouchKey(touchKeyVO);
     }
 
+    /** 상품분류 조회 : 판매터치키에서 사용 */
+    @Override
+    public List<DefaultMap<String>> getProductClassListForTouchKey(TouchKeyVO touchKeyVO) {
+        return keyMapper.getProductClassListForTouchKey(touchKeyVO);
+    }
+
     /** 터치키 스타일코드 목록 조회 */
     @Override
     public List<DefaultMap<String>> getTouchKeyStyleCdList() {
