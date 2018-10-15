@@ -23,55 +23,56 @@
             <th><s:message code="cmm.search.month"/></th>
             <td>
                 <div class="sb-select">
-                    <span class="txtIn"><input id="srchMonth" class="w200"></span>
+                    <span class="txtIn"><input id="srchMonth" class="w120"></span>
                 </div>
             </td>
         </tr>
         </tbody>
     </table>
 
-    <div class="mt10 pdb20 oh">
-        <%-- 조회 --%>
-        <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('storeCloseCtrl')"><s:message code="cmm.search" /></button>
+    <div ng-controller="storeCloseCtrl">
+      <div class="mt10 pdb20 oh">
+          <%-- 조회 --%>
+          <button class="btn_blue fr" id="btnSearch" ng-click="searchParam();"><s:message code="cmm.search" /></button>
+      </div>
+
+      <div class="w40 fl" style="width: 40%">
+          <div class="wj-TblWrapBr mr10 pd10" style="height: 400px;">
+              <div class="oh sb-select mb10">
+                  <span class="fl bk lh30"><s:message code='storeClose.closeMonthSubTitle' /></span>
+              </div>
+
+              <%--위즈모 테이블--%>
+              <div class="wj-gridWrap" style="height: 335px;" >
+                  <wj-flex-grid
+                      autoGenerateColumns="false"
+                      selection-mode="Row"
+                      items-source="data"
+                      control="flex"
+                      initialized="initGrid(s,e)"
+                      is-read-only="true"
+                      item-formatter="_itemFormatter">
+
+                      <!-- define columns -->
+                      <wj-flex-grid-column header="<s:message code="storeClose.closeMonth"/>"   binding="closeMonth"   width="0"  align="center" visible="false"></wj-flex-grid-column>
+                      <wj-flex-grid-column header="<s:message code="storeClose.closeMonthNm"/>" binding="closeMonthNm" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
+                      <wj-flex-grid-column header="<s:message code="storeClose.dateCnt"/>"      binding="dateCnt"      width="70" align="right"  is-read-only="true"></wj-flex-grid-column>
+                      <wj-flex-grid-column header="<s:message code="storeClose.closeDateCnt"/>" binding="closeDateCnt" width="*"  align="right"  is-read-only="true"></wj-flex-grid-column>
+
+                  </wj-flex-grid>
+                  <%-- ColumnPicker 사용시 include --%>
+                  <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+                      <jsp:param name="pickerTarget" value="storeCloseCtrl"/>
+                  </jsp:include>
+                  <%--// ColumnPicker 사용시 include --%>
+              </div>
+              <%--//위즈모 테이블--%>
+          </div>
+      </div>
     </div>
 
-    <div class="w40 fl" style="width: 35%" ng-controller="storeCloseCtrl">
-        <div class="wj-TblWrapBr mr10 pd20" style="height: 400px;">
-            <div class="oh sb-select mb10">
-                <span class="fl bk lh30"><s:message code='storeClose.closeMonthSubTitle' /></span>
-            </div>
-
-            <%--위즈모 테이블--%>
-            <div class="wj-gridWrap" style="height: 315px;" >
-                <wj-flex-grid
-                    autoGenerateColumns="false"
-                    selection-mode="Row"
-                    items-source="data"
-                    control="flex"
-                    initialized="initGrid(s,e)"
-                    is-read-only="true"
-                    item-formatter="_itemFormatter">
-
-                    <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="storeClose.closeMonth"/>"   binding="closeMonth"   width="0"  align="center" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="storeClose.closeMonthNm"/>" binding="closeMonthNm" width="70" align="center" ></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="storeClose.dateCnt"/>"      binding="dateCnt"      width="70" align="right"  ></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="storeClose.closeDateCnt"/>" binding="closeDateCnt" width="*"  align="right"  ></wj-flex-grid-column>
-
-                </wj-flex-grid>
-                <%-- ColumnPicker 사용시 include --%>
-                <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-                    <jsp:param name="pickerTarget" value="storeCloseCtrl"/>
-                </jsp:include>
-                <%--// ColumnPicker 사용시 include --%>
-            </div>
-            <%--//위즈모 테이블--%>
-        </div>
-    </div>
-
-
-    <div class="w60 fr" style="width: 65%" ng-controller="storeCloseDtlCtrl">
-        <div class="wj-TblWrapBr ml10 pd20" style="height: 400px;">
+    <div class="w60 fr" style="width: 60%" ng-controller="storeCloseDtlCtrl">
+        <div class="wj-TblWrapBr pd10" style="height: 400px;">
 
             <div class="oh sb-select mb10">
                 <span class="fl bk lh30"><s:message code='storeClose.closeDateSubTitle' /></span>
@@ -82,7 +83,7 @@
             </div>
 
             <%--위즈모 테이블--%>
-            <div class="wj-gridWrap" style="height: 315px;" >
+            <div class="wj-gridWrap" style="height: 335px;" >
                 <wj-flex-grid
                         autoGenerateColumns="false"
                         selection-mode="Row"
@@ -93,12 +94,13 @@
                         item-formatter="_itemFormatter">
 
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="cmm.chk"/>"                 binding="gChk"          width="40" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="storeClose.closeDate"/>"    binding="closeDate"     width="0"  align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="storeClose.closeDateNm"/>"  binding="closeDateNm"   width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="storeClose.orderCloseFg"/>"  binding="orderCloseFg" width="80"  align="center" format="checkbox" is-read-only="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="storeClose.orderCloseDt"/>"  binding="orderCloseDt" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="storeClose.orderCloseNm"/>"  binding="orderCloseNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <%--<wj-flex-grid-column header="<s:message code="cmm.chk"/>"                  binding="gChk"         width="40" align="center"></wj-flex-grid-column>--%>
+                    <wj-flex-grid-column header="<s:message code="storeClose.closeDate"/>"          binding="closeDate"         width="0"   align="center" is-read-only="true"  visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeClose.closeDateNm"/>"        binding="closeDateNm"       width="60"  align="center" is-read-only="true"  format="userFormat"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeClose.orderCloseFg"/>"       binding="prevOrderCloseFg"  width="0"   align="center" is-read-only="true"  visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeClose.orderCloseFg"/>"       binding="orderCloseFg"      width="80"  align="center" is-read-only="false" format="checkBoxText"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeClose.orderCloseDt"/>"       binding="orderCloseDt"      width="*"   align="center" is-read-only="true"  format="dateTime"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeClose.orderCloseNm"/>"       binding="orderCloseNm"      width="80"  align="center" is-read-only="true"></wj-flex-grid-column>
 
                 </wj-flex-grid>
                 <%-- ColumnPicker 사용시 include --%>
@@ -125,9 +127,9 @@
         // 상위 객체 상속 : T/F 는 picker
         angular.extend(this, new RootController('storeCloseCtrl', $scope, $http, true));
 
-        // $scope._setComboData("listScaleBox", gvListScaleBoxData);
-        var searchMonth = new wijmo.input.InputDate('#srchMonth', {
-            format: "yyyy-MM"
+        $scope.srchMonth = new wijmo.input.InputDate('#srchMonth', {
+          format: "yyyy-MM",
+          selectionMode: "2" // 달력 선택 모드(1:day 2:month)
         });
 
         // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -137,13 +139,20 @@
 
             // 그리드 링크 효과
             s.formatItem.addHandler(function (s, e) {
-                if (e.panel == s.cells) {
+                if (e.panel === s.cells) {
                     var col = s.columns[e.col];
-                    if (col.binding === "closeMonthNm") { // 마감월 클릭
+                    if (col.binding === "closeMonthNm") { // 마감월
                         let item = s.rows[e.row].dataItem;
                         wijmo.addClass(e.cell, 'wijLink');
                         wijmo.addClass(e.cell, 'wj-custom-readonly');
                     }
+
+                  if(col.format === "date") {
+                    e.cell.innerHTML = getFormatDate(e.cell.innerText);
+                  }
+                  else if(col.format === "dateTime") {
+                    e.cell.innerHTML = getFormatDateTime(e.cell.innerText);
+                  }
                 }
             });
 
@@ -153,31 +162,33 @@
                 if( ht.cellType === wijmo.grid.CellType.Cell) {
                     var col = ht.panel.columns[ht.col];
                     var selectedRow = s.rows[ht.row].dataItem;
-                    if ( col.binding === "closeMonthNm") {
-                        $scope._broadcast('storeCloseDtlCtrl', selectedRow.closeMonth);
+                    if ( col.binding === "closeMonthNm") { // 마감월
+                      $scope.searchMonth = selectedRow.closeMonth;
+                      $scope._broadcast('storeCloseDtlCtrl', selectedRow.closeMonth);
                     }
                 }
             });
+
+          $scope.searchParam(); // 그리드 초기화 후 자동 조회
         };
 
-        // 다른 컨트롤러의 broadcast 받기
-        $scope.$on("storeCloseCtrl", function(event, data) {
-            $scope.searchStoreCloseList();
-            // 기능수행 종료 : 반드시 추가
-            event.preventDefault();
+        // 조회버튼 클릭시 조회월 값 세팅. 마감일자에서 마감여부 저장 후 마감월 그리드 조회해주기 위해 조회월 파라미터 세팅 분리함.
+        $scope.searchParam = function() {
+          $scope.searchMonth = wijmo.Globalize.format($scope.srchMonth.value, 'yyyyMM');
+          $scope.searchStoreCloseList();
+        };
+
+      // 마감월 조회
+      $scope.searchStoreCloseList = function() {
+        // 파라미터
+        var params = {};
+        params.closeMonth = $scope.searchMonth;
+        // 조회 수행 : 조회URL, 파라미터, 콜백함수
+        $scope._inquiryMain("/iostock/order/storeClose/storeClose/list.sb", params, function () {
+          $scope._broadcast("storeCloseDtlCtrl", $scope.searchMonth);
         });
-
-        $scope.searchStoreCloseList = function() {
-            // 파라미터
-            var params = {};
-            params.closeMonth = wijmo.Globalize.format(searchMonth.value, 'yyyyMM');
-            // 조회 수행 : 조회URL, 파라미터, 콜백함수
-            $scope._inquiryMain("/iostock/order/storeClose/storeClose/list.sb", params, function () {
-                $scope._broadcast("storeCloseDtlCtrl", wijmo.Globalize.format(searchMonth.value, 'yyyyMM'));
-            });
-        };
+      };
     }]);
-
 
     /** 마감월 상세 그리드 controller */
     app.controller('storeCloseDtlCtrl', ['$scope', '$http', function ($scope, $http) {
@@ -191,62 +202,56 @@
 
             // 그리드 링크 효과
             s.formatItem.addHandler(function (s, e) {
-                if (e.panel.cellType === wijmo.grid.CellType.ColumnHeader) {
-                    var flex = e.panel.grid;
-                    var col = s.columns[e.col];
+                if (e.panel === s.cells) {
+                  var col = s.columns[e.col];
+                  if(col.format === "date") {
+                    e.cell.innerHTML = getFormatDate(e.cell.innerText);
+                  }
+                  else if(col.format === "dateTime") {
+                    e.cell.innerHTML = getFormatDateTime(e.cell.innerText);
+                  }
+                  else if(col.format === "userFormat") {
+                    var date = e.cell.innerText;
+                    var month  = date.substr(0,2);
+                    var day = date.substr(2,2);
 
-                    // check that this is a boolean column
-                    if (col.format === "checkbox") { // 여기에 해당하는 컬럼명 바인딩 바꿔줄 것.
-                        // prevent sorting on click
-                        col.allowSorting = false;
-                        // count true values to initialize checkbox
-                        var cnt = 0;
-                        for (var i = 0; i < flex.rows.length; i++) {
-                            if (flex.getCellData(i, col._idx) == true) cnt++;
-                        }
-                        // create and initialize checkbox
-                        e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check" />'+col.header;
-                        var cb = e.cell.firstChild;
-                        cb.checked = cnt > 0;
-                        cb.indeterminate = cnt > 0 && cnt < flex.rows.length;
-                        // apply checkbox value to cells
-                        cb.addEventListener('click', function (e) {
-                            flex.beginUpdate();
-                            for (var i = 0; i < flex.rows.length; i++) {
-                                flex.setCellData(i, col._idx, cb.checked);
-                            }
-                            flex.endUpdate();
-                        });
-                    }
+                    e.cell.innerHTML = (month + "-" + day );
+                  }
                 }
-            });
+              });
         };
 
         // 다른 컨트롤러의 broadcast 받기
         $scope.$on("storeCloseDtlCtrl", function(event, data) {
-            $scope.searchStoreCloseDtlList(data);
+          $scope.searchDtlMonth = data; // DTL 조회월
+            $scope.searchStoreCloseDtlList();
             // 기능수행 종료 : 반드시 추가
             event.preventDefault();
         });
 
-        var searchDtlMonth = ""; // DTL 조회월
-        $scope.searchStoreCloseDtlList = function(month) {
-            searchDtlMonth = month;
+        // 마감일자 조회
+        $scope.searchStoreCloseDtlList = function() {
             // 파라미터
             var params = {};
-            params.closeMonth = month;
+            params.closeMonth = $scope.searchDtlMonth;
             // 조회 수행 : 조회URL, 파라미터, 콜백함수
             $scope._inquirySub("/iostock/order/storeClose/storeClose/dtlList.sb", params);
         };
 
+        // 저장
         $scope.saveStoreClose = function () {
             var params = new Array();
             for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
                 $scope.flex.collectionView.itemsEdited[i].status = "U";
                 params.push($scope.flex.collectionView.itemsEdited[i]);
             }
-            $scope._save("/iostock/order/storeClose/storeClose/save.sb", params, function() { $scope.searchStoreCloseDtlList(searchDtlMonth) });
+            $scope._save("/iostock/order/storeClose/storeClose/save.sb", params, function() { $scope.saveStoreCloseCallback(); });
+        };
 
+        // 저장 후 콜백
+        $scope.saveStoreCloseCallback = function () {
+          var storeCloseScope = agrid.getScope('storeCloseCtrl');
+          storeCloseScope.searchStoreCloseList();
         };
 
     }]);

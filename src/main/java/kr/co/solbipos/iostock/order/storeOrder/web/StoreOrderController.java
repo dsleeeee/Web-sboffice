@@ -70,13 +70,13 @@ public class StoreOrderController {
     public String storeCloseView(HttpServletRequest request, HttpServletResponse response, Model model) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        // 본사 환경설정 173 조회
+        // 본사 환경설정 173(수발주옵션) 조회
         HqEnvstVO hqEnvstVO = new HqEnvstVO();
         hqEnvstVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         hqEnvstVO.setEnvstCd("173");
         String envst173 = cmmEnvService.getHqEnvst(hqEnvstVO);
 
-        // 매장 환경설정 594 조회
+        // 매장 환경설정 594(출고요청일자선택) 조회
         StoreEnvVO storeEnvVO = new StoreEnvVO();
         storeEnvVO.setStoreCd(sessionInfoVO.getStoreCd());
         storeEnvVO.setEnvstCd("594");

@@ -2,15 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="kr.co.solbipos.iostock.order.outstockConfm.service.impl.OutstockConfmMapper">
-    <!-- 출고확정 - 매장요청 미확정건, 출고자료 미생성건 조회 -->
+<mapper namespace="kr.co.solbipos.iostock.order.dstmn.service.impl.DstmnMapper">
+    <!-- 거래명세표 - 매장요청 미확정건, 출고자료 미생성건 조회 -->
     <!--
         TABLE    : TB_MS_STORE, TB_PO_HQ_STORE_ORDER, TB_PO_HQ_STORE_DISTRIBUTE
-        PARAM    : outstockConfmVO
-        COMMENTS : 출고확정 - 매장요청 미확정건, 출고자료 미생성건을 조회한다.
+        PARAM    : dstmnVO
+        COMMENTS : 거래명세표 - 매장요청 미확정건, 출고자료 미생성건을 조회한다.
     -->
-    <select id="getReqNoConfirmCnt" parameterType="outstockConfmVO" resultType="DefaultMap">
-        /* USE : OutstockConfmMapper.getReqNoConfirmCnt */
+    <select id="getReqNoConfirmCnt" parameterType="dstmnVO" resultType="DefaultMap">
+        /* USE : DstmnMapper.getReqNoConfirmCnt */
         <![CDATA[
         SELECT	tphso.REQ_NO_CONFIRM_CNT, tphsd.OUTSTOCK_NO_CREATE_CNT
         FROM	(	SELECT  COUNT(*) AS REQ_NO_CONFIRM_CNT
@@ -35,14 +35,14 @@
         ]]>
     </select>
 
-    <!-- 출고확정 - 출고확정 리스트 조회 -->
+    <!-- 거래명세표 - 거래명세표 리스트 조회 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_OUTSTOCK, TB_MS_STORE, TB_MS_EMPLOYEE
-        PARAM    : outstockConfmVO
-        COMMENTS : 출고확정 - 출고확정 리스트를 조회한다.
+        PARAM    : dstmnVO
+        COMMENTS : 거래명세표 - 거래명세표 리스트를 조회한다.
     -->
-    <select id="getOutstockConfmList" parameterType="outstockConfmVO" resultType="DefaultMap">
-        /* USE : OutstockConfmMapper.getOutstockConfmList */
+    <select id="getDstmnList" parameterType="dstmnVO" resultType="DefaultMap">
+        /* USE : DstmnMapper.getDstmnList */
         <![CDATA[
         SELECT   tphso.SLIP_NO, tphso.VENDR_CD, tphso.SLIP_FG, tphso.SLIP_KIND, tphso.PROC_FG, tphso.STORE_CD, tms.STORE_NM
         ,        tphso.ORDER_TOT_QTY*tphso.SLIP_FG AS ORDER_TOT_QTY, tphso.ORDER_AMT*tphso.SLIP_FG AS ORDER_AMT
@@ -106,14 +106,14 @@
         ORDER BY tphso.SLIP_NO
     </select>
 
-    <!-- 출고확정 - 전표상세 조회 -->
+    <!-- 거래명세표 - 전표상세 조회 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_OUTSTOCK, TB_MS_STORE, TB_CM_NMCODE, TB_PO_HQ_DELIVERY_CHARGER
-        PARAM    : outstockConfmVO
-        COMMENTS : 출고확정 - 전표상세 내역을 조회한다.
+        PARAM    : dstmnVO
+        COMMENTS : 거래명세표 - 전표상세 내역을 조회한다.
     -->
-    <select id="getSlipNoInfo" parameterType="outstockConfmVO" resultType="DefaultMap">
-        /* USE : OutstockConfmMapper.getSlipNoInfo */
+    <select id="getSlipNoInfo" parameterType="dstmnVO" resultType="DefaultMap">
+        /* USE : DstmnMapper.getSlipNoInfo */
         <![CDATA[
         SELECT  tphso.*
         ,       tms.STORE_NM
@@ -133,14 +133,14 @@
         ]]>
     </select>
 
-    <!-- 출고확정 - 출고확정 DTL 리스트 조회 -->
+    <!-- 거래명세표 - 거래명세표 DTL 리스트 조회 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_OUTSTOCK, TB_MS_STORE, TB_CM_NMCODE, TB_PO_HQ_DELIVERY_CHARGER
-        PARAM    : outstockConfmVO
-        COMMENTS : 출고확정 - 출고확정 DTL 리스트를 조회한다.
+        PARAM    : dstmnVO
+        COMMENTS : 거래명세표 - 거래명세표 DTL 리스트를 조회한다.
     -->
-    <select id="getOutstockConfmDtlList" parameterType="outstockConfmVO" resultType="DefaultMap">
-        /* USE : OutstockConfmMapper.getOutstockConfmDtlList */
+    <select id="getDstmnDtlList" parameterType="dstmnVO" resultType="DefaultMap">
+        /* USE : DstmnMapper.getDstmnDtlList */
         <![CDATA[
         SELECT   tphsod.SLIP_NO, tphsod.SLIP_FG, tphsod.PROD_CD, thp.PROD_NM, tphsod.SEQ
         ,        tphsod.PO_UNIT_FG, tphsod.PO_UNIT_QTY, thp.PO_UNIT_ALLOW_FG
@@ -187,14 +187,29 @@
         ]]>
     </select>
 
-    <!-- 출고확정 - 출고확정 DTL 수정 -->
+    <!-- 거래명세표 - 출고확정시 자동입고 환경변수 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE, TB_PO_HQ_STORE_ORDER, TB_PO_HQ_STORE_DISTRIBUTE
+        PARAM    : dstmnVO
+        COMMENTS : 거래명세표 - 출고확정시 자동입고 환경변수를 조회한다.
+    -->
+    <select id="getEnv176" parameterType="dstmnVO" resultType="String">
+        /* USE : DstmnMapper.getEnv176 */
+        <![CDATA[
+        SELECT	ENVST_VAL
+        FROM    TB_HQ_ENVST
+        WHERE   ENVST_CD  = '176'
+        ]]>
+    </select>
+
+    <!-- 거래명세표 - 출고확정 DTL 수정 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_OUTSTOCK_DTL
-        PARAM    : outstockConfmVO
-        COMMENTS : 출고확정 - 출고확정시 DTL의 진행구분을 수정한다.
+        PARAM    : dstmnVO
+        COMMENTS : 거래명세표 - 출고확정시 DTL의 진행구분을 수정한다.
     -->
-    <update id="updateOutstockDtlConfirm" parameterType="outstockConfmVO">
-        /* USE : OutstockConfmMapper.updateOutstockConfirm */
+    <update id="updateOutstockDtlConfirm" parameterType="dstmnVO">
+        /* USE : DstmnMapper.updateOutstockConfirm */
         UPDATE  TB_PO_HQ_STORE_OUTSTOCK_DTL
         SET     PROC_FG         = #{updateProcFg},
                 MOD_DT          = #{modDt},
@@ -203,14 +218,14 @@
         AND     SLIP_NO       = #{slipNo}
     </update>
 
-    <!-- 출고확정 - 출고확정 HD 수정-->
+    <!-- 거래명세표 - 출고확정 HD 수정-->
     <!--
         TABLE    : TB_PO_HQ_STORE_OUTSTOCK
-        PARAM    : outstockConfmVO
-        COMMENTS : 출고확정 - 출고확정시 HD의 진행구분을 수정한다.
+        PARAM    : dstmnVO
+        COMMENTS : 거래명세표 - 출고확정시 HD의 진행구분을 수정한다.
     -->
-    <update id="updateOutstockConfirm" parameterType="outstockConfmVO">
-        /* USE : OutstockConfmMapper.updateOutstockConfirm */
+    <update id="updateOutstockConfirm" parameterType="dstmnVO">
+        /* USE : DstmnMapper.updateOutstockConfirm */
         UPDATE  TB_PO_HQ_STORE_OUTSTOCK
         SET     PROC_FG         = #{updateProcFg},
                 OUT_DATE        = #{outDate},
@@ -222,14 +237,14 @@
         AND     SLIP_NO       = #{slipNo}
     </update>
 
-    <!-- 출고확정 - 출고확정 자동입고 DTL 수정 -->
+    <!-- 거래명세표 - 출고확정 자동입고 DTL 수정 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_OUTSTOCK_DTL
-        PARAM    : outstockConfmVO
-        COMMENTS : 출고확정 - 출고확정시 자동입고 처리 DTL 수정한다.
+        PARAM    : dstmnVO
+        COMMENTS : 거래명세표 - 출고확정시 자동입고 처리 DTL 수정한다.
     -->
-    <update id="updateAutoInstockDtl" parameterType="outstockConfmVO">
-        /* USE : OutstockConfmMapper.updateAutoInstockDtl */
+    <update id="updateAutoInstockDtl" parameterType="dstmnVO">
+        /* USE : DstmnMapper.updateAutoInstockDtl */
         UPDATE  TB_PO_HQ_STORE_OUTSTOCK_DTL
         SET     PROC_FG         = #{updateProcFg},
                 IN_SPLY_UPRC    = OUT_SPLY_UPRC,
@@ -245,14 +260,14 @@
         AND     SLIP_NO       = #{slipNo}
     </update>
 
-    <!-- 출고확정 - 출고확정 자동입고 HD 수정 -->
+    <!-- 거래명세표 - 출고확정 자동입고 HD 수정 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_OUTSTOCK
-        PARAM    : outstockConfmVO
-        COMMENTS : 출고확정 - 출고확정시 자동입고 처리 HD 수정한다.
+        PARAM    : dstmnVO
+        COMMENTS : 거래명세표 - 출고확정시 자동입고 처리 HD 수정한다.
     -->
-    <update id="updateAutoInstock" parameterType="outstockConfmVO">
-        /* USE : OutstockConfmMapper.updateAutoInstock */
+    <update id="updateAutoInstock" parameterType="dstmnVO">
+        /* USE : DstmnMapper.updateAutoInstock */
         UPDATE  TB_PO_HQ_STORE_OUTSTOCK
         SET     PROC_FG         = #{updateProcFg},
                 IN_DATE         = #{outDate},
@@ -270,14 +285,14 @@
         AND     SLIP_NO       = #{slipNo}
     </update>
 
-    <!-- 출고확정 - 출고확정 상세 리스트 DTL 수정 -->
+    <!-- 거래명세표 - 출고확정 상세 리스트 DTL 수정 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_OUTSTOCK_DTL
-        PARAM    : outstockConfmVO
-        COMMENTS : 출고확정 - 출고확정 상세 리스트 DTL을 수정한다.
+        PARAM    : dstmnVO
+        COMMENTS : 거래명세표 - 출고확정 상세 리스트 DTL을 수정한다.
     -->
-    <update id="updateOutstockConfmDtl" parameterType="outstockConfmVO">
-        /* USE : OutstockConfmMapper.updateOutstockConfmDtl */
+    <update id="updateOutstockDtl" parameterType="dstmnVO">
+        /* USE : DstmnMapper.updateOutstockDtl */
         UPDATE  TB_PO_HQ_STORE_OUTSTOCK_DTL
         SET     OUT_SPLY_UPRC   = #{outSplyUprc},
                 OUT_UNIT_QTY    = #{outUnitQty},
@@ -294,14 +309,14 @@
         AND     SEQ           = #{seq}
     </update>
 
-    <!-- 출고확정 - 출고확정 상세 리스트 HD 수정-->
+    <!-- 거래명세표 - 출고확정 상세 리스트 HD 수정-->
     <!--
         TABLE    : TB_PO_HQ_STORE_OUTSTOCK
-        PARAM    : outstockConfmVO
-        COMMENTS : 출고확정 - 출고확정 상세 리스트 HD의 집계를 수정한다.
+        PARAM    : dstmnVO
+        COMMENTS : 거래명세표 - 출고확정 상세 리스트 HD의 집계를 수정한다.
     -->
-    <update id="updateOutstockConfmHd" parameterType="outstockConfmVO">
-        /* USE : OutstockConfmMapper.updateOutstockConfmHd */
+    <update id="updateOutstockHd" parameterType="dstmnVO">
+        /* USE : DstmnMapper.updateOutstockHd */
         UPDATE  TB_PO_HQ_STORE_OUTSTOCK
         SET     (   OUT_UNIT_QTY, OUT_ETC_QTY, OUT_TOT_QTY, OUT_AMT, OUT_VAT, OUT_TOT)
             =   (   SELECT  SUM(OUT_UNIT_QTY), SUM(OUT_ETC_QTY), SUM(OUT_TOT_QTY), SUM(OUT_AMT), SUM(OUT_VAT), SUM(OUT_TOT)
@@ -318,14 +333,14 @@
         AND     SLIP_NO       =   #{slipNo}
     </update>
 
-    <!-- 출고확정 - 출고확정 이후 저장시 HD 수정 -->
+    <!-- 거래명세표 - 출고확정 이후 저장시 HD 수정 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_OUTSTOCK
-        PARAM    : outstockConfmVO
-        COMMENTS : 출고확정 - 출고확정 이후 저장시 HD의 비고, 본사비고, 배송기사를 수정한다.
+        PARAM    : dstmnVO
+        COMMENTS : 거래명세표 - 출고확정 이후 저장시 HD의 비고, 본사비고, 배송기사를 수정한다.
     -->
-    <update id="updateOutstockAfterHd" parameterType="outstockConfmVO">
-        /* USE : OutstockConfmMapper.updateOutstockAfterHd */
+    <update id="updateOutstockAfterHd" parameterType="dstmnVO">
+        /* USE : DstmnMapper.updateOutstockAfterHd */
         UPDATE  TB_PO_HQ_STORE_OUTSTOCK
         SET     REMARK      = #{hdRemark},
                 HQ_REMARK   = #{hqRemark},

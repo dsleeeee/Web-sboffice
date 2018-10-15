@@ -147,10 +147,12 @@
             if($scope.procFg === "00") {
                 $("#btnAddProd").show();
                 $("#btnDtlSave").show();
+                $scope.flex.isReadOnly = false;
             }
             else {
                 $("#btnAddProd").hide();
                 $("#btnDtlSave").hide();
+                $scope.flex.isReadOnly = true;
             }
             if("${envst173}" === "1" || "${envst173}" === "2") {
                 $("#btnConfirm").show();
@@ -269,10 +271,16 @@
                 params.push(item);
             }
 
-            // 길이체크
+            // 파라미터 길이체크
             if (params.length <= 0) {
+              // 수정된 파라미터가 없더라도 확정은 진행되어야함.
+              if(saveFg === "confirm") {
+                $scope.confirm();
+              }
+              else {
                 $scope._popMsg(messages["cmm.not.modify"]);
-                return false;
+              }
+              return false;
             } else {
                 params = JSON.stringify(params);
             }
@@ -292,12 +300,13 @@
                 data: params, /* 파라메터로 보낼 데이터 */
                 headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
             }).then(function successCallback(response) {
-                var storeOrderRegistCtrlScope = agrid.getScope('storeOrderRegistCtrl');
+                var storeOrderRegistCtrlScope = agrid.getScope('storeOrderRegistCtrl'); // storeOrderRegistCtrl 에 정의해놓은 함수 사용하기위해 scope가져옴.
 
                 if(storeOrderRegistCtrlScope.httpStatusCheck(response)) {
                   $scope._popMsg(messages["cmm.saveSucc"]);
                   $scope.flex.collectionView.clearChanges();
 
+                  // 확정버튼 클릭시에도 변경사항 저장 후에 확정 로직을 진행해야하므로 저장 후에 확정로직 다시 실행.
                   if(saveFg === "confirm") {
                         $scope.confirm();
                     }
@@ -321,9 +330,6 @@
             params.reqDate = $scope.reqDate;
             params.slipFg  = $scope.slipFg;
             params.remark  = $scope.dtlHdRemark;
-
-            // TODO 테이블 및 VO 등이 전혀 생성되어 있지 않아 분배등록 및 출고자료 생성까지 진행 후 확정 로직 처리하는게 좋을듯. 2018-09-17 안동관
-            return false;
 
             $scope._save("/iostock/order/storeOrder/storeOrderDtl/confirm.sb", params, function() { $scope.saveOrderDtlCallback() });
         };

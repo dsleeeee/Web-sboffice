@@ -118,7 +118,7 @@
      */
     var app = agrid.getApp();
 
-    /** 주문등록 그리드 controller */
+    /** 분배마감 그리드 controller */
     app.controller('dstbCloseStoreCtrl', ['$scope', '$http', function ($scope, $http) {
         // 상위 객체 상속 : T/F 는 picker
         angular.extend(this, new RootController('dstbCloseStoreCtrl', $scope, $http, true));

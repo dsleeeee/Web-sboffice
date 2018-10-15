@@ -426,6 +426,7 @@
     <typeAlias alias="dstbCloseProdVO" type="kr.co.solbipos.iostock.order.dstbCloseProd.service.DstbCloseProdVO"/>
     <typeAlias alias="outstockDataVO" type="kr.co.solbipos.iostock.order.outstockData.service.OutstockDataVO"/>
     <typeAlias alias="outstockConfmVO" type="kr.co.solbipos.iostock.order.outstockConfm.service.OutstockConfmVO"/>
+    <typeAlias alias="dstmnVO" type="kr.co.solbipos.iostock.order.dstmn.service.DstmnVO"/>
 
     <typeAlias alias="excpForwardProductVO" type="kr.co.solbipos.application.pos.exceptForward.service.ExcpForwardProductVO"/>
     <typeAlias alias="productionVO" type="kr.co.solbipos.application.pos.production.service.ProductionVO"/>

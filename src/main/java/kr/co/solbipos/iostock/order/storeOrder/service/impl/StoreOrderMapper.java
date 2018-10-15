@@ -1,6 +1,7 @@
 package kr.co.solbipos.iostock.order.storeOrder.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.iostock.order.dstbReq.service.DstbReqVO;
 import kr.co.solbipos.iostock.order.storeOrder.service.StoreOrderDtlVO;
 import kr.co.solbipos.iostock.order.storeOrder.service.StoreOrderVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -62,8 +63,10 @@ public interface StoreOrderMapper {
     /** 매장 주문마감 및 발주중지 여부 조회 */
     String getOrderCloseCheck(StoreOrderVO storeOrderVO);
 
-    /** MD 수량을 주문수량으로 수정 */
+    /** 주문등록 확정 - MD 수량을 주문수량으로 수정 */
     int updateOrderQtyMdQty(StoreOrderVO storeOrderVO);
 
+    /** 주문등록 확정 - 분배자료 생성 */
+    int insertDstbRegist(DstbReqVO dstbReqVO);
 
 }

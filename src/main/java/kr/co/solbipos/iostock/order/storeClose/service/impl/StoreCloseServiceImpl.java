@@ -48,25 +48,24 @@ public class StoreCloseServiceImpl implements StoreCloseService {
             storeCloseVO.setModId(sessionInfoVO.getUserId());
             storeCloseVO.setModDt(currentDt);
 
-            // 마감여부가 체크 되어있는 경우 isnert, 아닌 경우 delete
-            if(storeCloseVO.getOrderCloseFg()) {
-                // 등록
-                result = storeCloseMapper.insertStoreClose(storeCloseVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-            }
-            else {
-                // 삭제
-                result = storeCloseMapper.deleteStoreClose(storeCloseVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-            }
+            // 이전마감여부와 마감여부가 같지 않은 경우 수정
+            if(storeCloseVO.getOrderCloseFg() != storeCloseVO.getPrevOrderCloseFg()) {
+                // 마감여부가 체크 되어있는 경우 isnert, 아닌 경우 delete
+                if (storeCloseVO.getOrderCloseFg()) {
+                    // 등록
+                    result = storeCloseMapper.insertStoreClose(storeCloseVO);
+                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                }
+                else {
+                    // 삭제
+                    result = storeCloseMapper.deleteStoreClose(storeCloseVO);
+                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                }
 
-            returnResult += result;
+                returnResult += result;
+            }
         }
 
-        if ( returnResult == storeCloseVOs.length) {
-            return returnResult;
-        } else {
-            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-        }
+        return returnResult;
     }
 }

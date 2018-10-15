@@ -94,7 +94,7 @@
 
 <script type="text/javascript">
 
-    /** 주문등록 상세 그리드 controller */
+    /** 분배요청 상세 그리드 controller */
     app.controller('dstbReqDtlCtrl', ['$scope', '$http', function ($scope, $http) {
         // 상위 객체 상속 : T/F 는 picker
         angular.extend(this, new RootController('dstbReqDtlCtrl', $scope, $http, true));
@@ -187,7 +187,6 @@
                 headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
             }).then(function successCallback(response) {
                 if($scope.httpStatusCheck(response)) {
-                    // 진행구분이 주문등록이 아니면 상품추가/변경 불가
                     if(!$.isEmptyObject(response.data.data)) {
                         $scope.procFg   = response.data.data.procFg;
                         $scope.hdRemark = response.data.data.remark;
@@ -265,7 +264,7 @@
             });
         };
 
-        // 주문등록 상세내역 리스트 조회
+        // 분배요청 상세내역 리스트 조회
         $scope.searchDstbReqDtlList = function() {
             // 파라미터
             var params = {};

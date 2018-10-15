@@ -14,7 +14,7 @@
         </div>
         <div class="wj-dialog-body sc2" style="height: 600px;">
 
-            <ul class="txtSty3 mt10">
+            <ul class="txtSty3">
                 <li class="red">공급가는 주문단위 단가입니다.</li>
                 <li class="red">분배수량에서 앞뒤의 수량은 각각 주문단위별수량, 낱개수량입니다.</li>
             </ul>
@@ -56,7 +56,7 @@
 
 <script type="text/javascript">
 
-    /** 주문등록 상세 그리드 controller */
+    /** 출고자료생성 상세 그리드 controller */
     app.controller('outstockDataDtlCtrl', ['$scope', '$http', function ($scope, $http) {
         // 상위 객체 상속 : T/F 는 picker
         angular.extend(this, new RootController('outstockDataDtlCtrl', $scope, $http, true));

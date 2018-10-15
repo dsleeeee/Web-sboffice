@@ -126,7 +126,7 @@
      */
     var app = agrid.getApp();
 
-    /** 주문등록 그리드 controller */
+    /** 출고확정 그리드 controller */
     app.controller('outstockConfmCtrl', ['$scope', '$http', function ($scope, $http) {
         // 상위 객체 상속 : T/F 는 picker
         angular.extend(this, new RootController('outstockConfmCtrl', $scope, $http, true));
