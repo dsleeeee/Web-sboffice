@@ -243,6 +243,7 @@
 
   <%-- 포스기능 사용관리 화면 보여주기 --%>
   function showPosFuncList() {
+    $("#posFuncAuthArea").hide();
     $("#posFuncManageArea").show();
     getPosList();
 
