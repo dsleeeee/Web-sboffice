@@ -141,7 +141,7 @@ public class OutstockConfmController {
      * @author  안동관
      * @since   2018. 10. 08.
      */
-    @RequestMapping(value = "/outstockConfm/getSlipNoInfo.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/outstockConfmDtl/getSlipNoInfo.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getSlipNoInfo(HttpServletRequest request, HttpServletResponse response,
         Model model, OutstockConfmVO outstockConfmVO) {
@@ -209,7 +209,7 @@ public class OutstockConfmController {
      * @author  안동관
      * @since   2018. 10. 10.
      */
-    @RequestMapping(value = "/outstockConfm/saveOutstockAfter.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/outstockConfmDtl/saveOutstockAfter.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result saveOutstockAfter(HttpServletRequest request, HttpServletResponse response,
         Model model, OutstockConfmVO outstockConfmVO) {

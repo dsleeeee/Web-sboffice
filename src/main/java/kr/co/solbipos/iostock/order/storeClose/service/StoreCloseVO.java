@@ -14,6 +14,8 @@ public class StoreCloseVO extends CmmVO {
     private String closeDate;
     /** 마감일자 display용 */
     private String closeDateNm;
+    /** 이전주문구분 0:주문허용 1:주문마감 */
+    private Boolean prevOrderCloseFg;
     /** 주문구분 0:주문허용 1:주문마감 */
     private Boolean orderCloseFg;
     /** 주문구분 등록일시 */
@@ -81,6 +83,20 @@ public class StoreCloseVO extends CmmVO {
      */
     public void setCloseDateNm(String closeDateNm) {
         this.closeDateNm = closeDateNm;
+    }
+
+    /**
+     * @return the prevOrderCloseFg
+     */
+    public Boolean getPrevOrderCloseFg() {
+        return prevOrderCloseFg;
+    }
+
+    /**
+     * @param prevOrderCloseFg the prevOrderCloseFg to set
+     */
+    public void setPrevOrderCloseFg(Boolean prevOrderCloseFg) {
+        this.prevOrderCloseFg = prevOrderCloseFg;
     }
 
     /**

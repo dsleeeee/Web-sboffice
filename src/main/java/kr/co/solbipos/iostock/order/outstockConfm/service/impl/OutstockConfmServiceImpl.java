@@ -5,9 +5,11 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.impl.CmmEnvMapper;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.iostock.order.outstockConfm.service.OutstockConfmService;
 import kr.co.solbipos.iostock.order.outstockConfm.service.OutstockConfmVO;
+import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,10 +19,12 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Service("OutstockConfmService")
 public class OutstockConfmServiceImpl implements OutstockConfmService {
     private final OutstockConfmMapper outstockConfmMapper;
+    private final CmmEnvMapper cmmEnvMapper;
     private final MessageService messageService;
 
-    public OutstockConfmServiceImpl(OutstockConfmMapper outstockConfmMapper, MessageService messageService) {
+    public OutstockConfmServiceImpl(OutstockConfmMapper outstockConfmMapper, CmmEnvMapper cmmEnvMapper, MessageService messageService) {
         this.outstockConfmMapper = outstockConfmMapper;
+        this.cmmEnvMapper = cmmEnvMapper;
         this.messageService = messageService;
     }
 
@@ -44,9 +48,10 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
         String currentDt = currentDateTimeString();
 
         // 자동입고 환경변수 조회
-        OutstockConfmVO env176VO = new OutstockConfmVO();
-        env176VO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        String env176 = outstockConfmMapper.getEnv176(env176VO);
+        HqEnvstVO hqEnvstVO = new HqEnvstVO();
+        hqEnvstVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        hqEnvstVO.setEnvstCd("176");
+        String envst176 = cmmEnvMapper.getHqEnvst(hqEnvstVO);
 
         for (OutstockConfmVO outstockConfmVO : outstockConfmVOs) {
             outstockConfmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
@@ -67,7 +72,7 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
             // 자동입고인 경우 입고로 수정
-            if(StringUtil.getOrBlank(env176).equals("Y")) {
+            if(StringUtil.getOrBlank(envst176).equals("Y")) {
                 outstockConfmVO.setProcFg("20");
                 outstockConfmVO.setUpdateProcFg("30");
 
@@ -108,9 +113,10 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
         String confirmFg = "N";
 
         // 자동입고 환경변수 조회
-        OutstockConfmVO env176VO = new OutstockConfmVO();
-        env176VO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        String env176 = outstockConfmMapper.getEnv176(env176VO);
+        HqEnvstVO hqEnvstVO = new HqEnvstVO();
+        hqEnvstVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        hqEnvstVO.setEnvstCd("176");
+        String envst176 = cmmEnvMapper.getHqEnvst(hqEnvstVO);
 
         OutstockConfmVO OutstockConfmHdVO = new OutstockConfmVO();
 
@@ -176,7 +182,7 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
             // 자동입고인 경우 입고로 수정
-            if(StringUtil.getOrBlank(env176).equals("Y")) {
+            if(StringUtil.getOrBlank(envst176).equals("Y")) {
                 OutstockConfmHdVO.setProcFg("20");
                 OutstockConfmHdVO.setUpdateProcFg("30");
 

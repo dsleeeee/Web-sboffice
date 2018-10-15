@@ -106,10 +106,10 @@
         // 상위 객체 상속 : T/F 는 picker
         angular.extend(this, new RootController('storeOrderCtrl', $scope, $http, true));
 
-      $scope.slipFg = 1;
-        var srchStartDate = wcombo.genDateVal("#srchStartDate", "${sessionScope.sessionInfo.startDt}");
-        var srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.startDt}");
-        var reqDate       = wcombo.genDate("#reqDate");
+        $scope.slipFg = 1;
+        $scope.srchStartDate = wcombo.genDateVal("#srchStartDate", "${sessionScope.sessionInfo.startDt}");
+        $scope.srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.startDt}");
+        $scope.reqDate       = wcombo.genDate("#reqDate");
         $scope._setComboData("srchDateFg", [
             {"name":"<s:message code='storeOrder.reqDate'/>","value":"req"},
             {"name":"<s:message code='storeOrder.regDate'/>","value":"reg"},
@@ -117,10 +117,10 @@
         ]);
 
         // 출고가능일자 세팅
-        reqDate.value = new Date(getFormatDate("${reqDate}", "-"));
+        $scope.reqDate.value = new Date(getFormatDate("${reqDate}", "-"));
         // 출고요청일자 선택가능여부에 따라 출고요청일자 선택여부 처리
         if("${envst594}" === "Y") {
-            reqDate.isReadOnly = true;
+          $scope.reqDate.isReadOnly = true;
         }
 
         // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -179,8 +179,8 @@
             var params = {};
             params.slipFg    = $scope.slipFg;
             params.dateFg    = $scope.dateFg;
-            params.startDate = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
-            params.endDate   = wijmo.Globalize.format(srchEndDate.value  , 'yyyyMMdd');
+            params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+            params.endDate   = wijmo.Globalize.format($scope.srchEndDate.value  , 'yyyyMMdd');
 
             // 조회 수행 : 조회URL, 파라미터, 콜백함수
             $scope._inquiryMain("/iostock/order/storeOrder/storeOrder/list.sb", params);
@@ -190,7 +190,7 @@
         $scope.newReqOrder = function () {
             var params = {};
             params.callParent = "storeOrder";
-            params.reqDate    = wijmo.Globalize.format(reqDate.value, 'yyyyMMdd');
+            params.reqDate    = wijmo.Globalize.format($scope.reqDate.value, 'yyyyMMdd');
             params.slipFg     = $scope.slipFg;
             params.hdRemark   = "";
             $scope._broadcast("storeOrderRegistCtrl", params);

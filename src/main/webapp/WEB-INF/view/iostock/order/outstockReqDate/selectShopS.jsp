@@ -65,6 +65,10 @@
 
 
 <script type="text/javascript">
+  /**
+   * get application
+   */
+  var app = agrid.getApp();
 
     /** 매장선택 controller */
     app.controller('<c:out value="${param.targetId}"/>Ctrl', ['$scope', '$http', function($scope, $http) {

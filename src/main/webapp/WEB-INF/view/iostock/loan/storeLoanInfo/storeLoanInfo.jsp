@@ -7,13 +7,6 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/iostock/loan/storeLoanInfo/storeLoanInfo/"/>
 
-<script type="text/javascript">
-  /**
-   * get application
-   */
-  var app = agrid.getApp();
-</script>
-
 <div class="subCon" ng-controller="storeLoanInfoCtrl">
     <div class="searchBar flddUnfld">
         <a href="#" class="open">${menuNm}</a>

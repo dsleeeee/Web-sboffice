@@ -148,7 +148,7 @@
 
 <script type="text/javascript">
 
-    /** 주문등록 상세 그리드 controller */
+    /** 분배마감 추가등록 그리드 controller */
     app.controller('dstbCloseStoreAddCtrl', ['$scope', '$http', function ($scope, $http) {
         // 상위 객체 상속 : T/F 는 picker
         angular.extend(this, new RootController('dstbCloseStoreAddCtrl', $scope, $http, true));

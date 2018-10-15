@@ -16,9 +16,6 @@ public interface OutstockConfmMapper {
     /** 출고확정 리스트 조회 */
     List<DefaultMap<String>> getOutstockConfmList(OutstockConfmVO outstockConfmVO);
 
-    /** 출고확정 - 출고확정시 자동입고 환경변수 조회 */
-    String getEnv176(OutstockConfmVO outstockConfmVO);
-
     /** 출고확정 - 출고확정 DTL 수정 */
     int updateOutstockDtlConfirm(OutstockConfmVO outstockConfmVO);
 

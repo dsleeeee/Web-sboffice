@@ -38,10 +38,50 @@
                     <td><input type="text" id="srchProdClass" name="prodClass" ng-model="prodClass" class="sb-input w100" maxlength="40"/></td>
                 </tr>
                 <tr>
-                    <th><s:message code="storeOrder.dtl.option1"/></th>
-                    <td><a href="#" class="btn_grayS" ng-click=""><s:message code="storeOrder.dtl.safeStockApply" /></a></td>
-                    <th><s:message code="storeOrder.dtl.option2"/></th>
-                    <td></td>
+                  <th><s:message code="storeOrder.dtl.option1"/></th>
+                  <td colspan="3">
+                      <span class="txtIn w150 sb-select fl mr5">
+                        <wj-combo-box
+                          id="option1"
+                          ng-model="option1"
+                          items-source="_getComboData('option1')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false"
+                          initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                      </span>
+                    <a href="#" class="btn_grayS" ng-click=""><s:message code="storeOrder.dtl.safeStockApply" /></a>
+                  </td>
+                </tr>
+                <tr>
+                  <th><s:message code="storeOrder.dtl.option2"/></th>
+                  <td colspan="3">
+                      <span class="txtIn w150 sb-select fl mr5">
+                        <wj-combo-box
+                          id="option2"
+                          ng-model="option2"
+                          items-source="_getComboData('option2')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false"
+                          initialized="_initComboBox(s)"
+                          selected-index-changed="selectedIndexChanged(s, e)"
+                        >
+                        </wj-combo-box>
+                      </span>
+                    <p id="option2OrdLayer" class="s14 bk lh30 fl ml10" style="display: none;"><s:message code="storeOrder.dtl.reqDate" /></p>
+                    <p id="option2OutLayer" class="s14 bk lh30 fl ml10" style="display: none;"><s:message code="storeOrder.dtl.outDate" /></p>
+                    <p id="option2SaleLayer" class="s14 bk lh30 fl ml10" style="display: none;"><s:message code="storeOrder.dtl.saleDate" /></p>
+                    <div id="option2DateLayer" class="sb-select fl ml10" style="display: none;">
+                      <span class="txtIn"><input id="srchRegStartDate" class="w120"></span>
+                      <span class="rg">~</span>
+                      <span class="txtIn"><input id="srchRegEndDate" class="w120"></span>
+                    </div>
+                    <p id="option2OrdLayer2" class="s14 bk lh30 fl ml10" style="display: none;"><s:message code="storeOrder.dtl.txtOption2Ord" /></p>
+                    <p id="option2OutLayer2" class="s14 bk lh30 fl ml10" style="display: none;"><s:message code="storeOrder.dtl.txtOption2Out" /></p>
+                    <p id="option2SaleLayer2" class="s14 bk lh30 fl ml10" style="display: none;"><s:message code="storeOrder.dtl.txtOption2Sale" /></p>
+                  </td>
                 </tr>
                 <tr>
                     <th><s:message code="storeOrder.dtl.remark"/></th>
@@ -94,7 +134,7 @@
                             item-formatter="_itemFormatter">
 
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="cmm.chk"/>"                         binding="gChk"             width="40"  align="center" ></wj-flex-grid-column>
+                        <%--<wj-flex-grid-column header="<s:message code="cmm.chk"/>"                         binding="gChk"             width="40"  align="center" ></wj-flex-grid-column>--%>
                         <wj-flex-grid-column header="<s:message code="storeOrder.dtl.prodCd"/>"           binding="prodCd"           width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeOrder.dtl.prodNm"/>"           binding="prodNm"           width="150" align="left"   is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeOrder.dtl.orderSplyUprc"/>"    binding="orderSplyUprc"    width="70"  align="right"  is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
@@ -141,6 +181,21 @@
     app.controller('storeOrderRegistCtrl', ['$scope', '$http', function ($scope, $http) {
         // 상위 객체 상속 : T/F 는 picker
         angular.extend(this, new RootController('storeOrderRegistCtrl', $scope, $http, true));
+
+        $scope._setComboData("option1", [
+          {"name":"<s:message code='storeOrder.dtl.option1All'/>","value":""},
+          {"name":"<s:message code='storeOrder.dtl.option1SafeStock'/>","value":"S"}
+        ]);
+
+        $scope._setComboData("option2", [
+          {"name":"<s:message code='storeOrder.dtl.option2All'/>","value":""},
+          {"name":"<s:message code='storeOrder.dtl.option2Order'/>","value":"ORD"},
+          {"name":"<s:message code='storeOrder.dtl.option2Outstock'/>","value":"OUT"},
+          {"name":"<s:message code='storeOrder.dtl.option2Sale'/>","value":"SALE"}
+        ]);
+
+        $scope.srchRegStartDate = wcombo.genDateVal("#srchRegStartDate", "${sessionScope.sessionInfo.startDt}");
+        $scope.srchRegEndDate   = wcombo.genDateVal("#srchRegEndDate", "${sessionScope.sessionInfo.startDt}");
 
         // grid 초기화 : 생성되기전 초기화되면서 생성된다
         $scope.initGrid = function (s, e) {
@@ -400,6 +455,8 @@
             var params = {};
             params.reqDate = $scope.reqDate;
             params.slipFg  = $scope.slipFg;
+            params.startDate = wijmo.Globalize.format($scope.srchRegStartDate.value, 'yyyyMMdd');
+            params.endDate   = wijmo.Globalize.format($scope.srchRegEndDate.value, 'yyyyMMdd');
             params.listScale = 500;
 
             // 조회 수행 : 조회URL, 파라미터, 콜백함수
@@ -466,8 +523,41 @@
                 var storeOrderDtlScope = agrid.getScope('storeOrderDtlCtrl');
                 storeOrderDtlScope.searchStoreOrderDtlList();
             }
-
         };
+
+        // 옵션2 값 변경 이벤트 함수
+      $scope.selectedIndexChanged = function(s, e) {
+        if(s.selectedValue === "") {
+          $scope.option2LayerHide();
+        }
+        else {
+          $scope.option2LayerHide();
+          $("#option2DateLayer").show();
+
+          if(s.selectedValue === "ORD") {
+            $("#option2OrdLayer").show();
+            $("#option2OrdLayer2").show();
+          }
+          else if(s.selectedValue === "OUT") {
+            $("#option2OutLayer").show();
+            $("#option2OutLayer2").show();
+          }
+          else if(s.selectedValue === "SALE") {
+            $("#option2SaleLayer").show();
+            $("#option2SaleLayer2").show();
+          }
+        }
+      };
+
+      $scope.option2LayerHide = function () {
+        $("#option2DateLayer").hide();
+        $("#option2OrdLayer").hide();
+        $("#option2OrdLayer2").hide();
+        $("#option2OutLayer").hide();
+        $("#option2OutLayer2").hide();
+        $("#option2SaleLayer").hide();
+        $("#option2SaleLayer2").hide();
+      };
 
         // http 조회 후 status 체크
         $scope.httpStatusCheck = function (res) {
