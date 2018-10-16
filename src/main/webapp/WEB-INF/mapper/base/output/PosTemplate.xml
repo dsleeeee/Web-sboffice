@@ -72,14 +72,13 @@
                     SELECT
                         thp.PRT_CLASS_CD,
                         '000' AS TEMPLT_CD,
-                        'R' AS TEMPLT_REG_FG,
+                        'H' AS TEMPLT_REG_FG,
                         '실제출력물' AS TEMPLT_NM,
                         thp.PRT_FORM
                     FROM
                         TB_HQ_PRINT thp
                     WHERE
                         thp.HQ_OFFICE_CD = #{hqOfficeCd}
-                        AND thp.PRT_CLASS_CD = #{prtClassCd}
                     UNION ALL
                     SELECT
                         thpt.PRT_CLASS_CD,
@@ -109,14 +108,13 @@
                     SELECT
                         tmp.PRT_CLASS_CD,
                         '000' AS TEMPLT_CD,
-                        '' AS TEMPLT_REG_FG,
+                        'S' AS TEMPLT_REG_FG,
                         '실제출력물' AS TEMPLT_NM,
                         tmp.PRT_FORM
                     FROM
                         TB_MS_PRINT tmp
                     WHERE
                         tmp.STORE_CD = #{storeCd}
-                        AND tmp.PRT_CLASS_CD = #{prtClassCd}
                     UNION ALL
                     SELECT
                         tmpt.PRT_CLASS_CD,
@@ -396,7 +394,6 @@
                     MOD_ID = #{modId}
                 WHERE
                     HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND PRT_CLASS_CD = #{prtClassCd}
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -408,7 +405,6 @@
                     MOD_ID = #{modId}
                 WHERE
                     STORE_CD = #{storeCd}
-                    AND PRT_CLASS_CD = #{prtClassCd}
             </when>
         </choose>
     </update>
@@ -419,14 +415,16 @@
         PARAM    : posTemplateVO
         COMMENTS : 매장 출력물템플릿을 저장/수정한다.
     -->
-    <select id="updatePosTemplateForStoreFromHq" statementType="CALLABLE"  parameterType="posTemplateVO" resultType="DefaultMap">
+    <select id="updatePosTemplateForStoreFromHq" statementType="CALLABLE"  parameterType="posTemplateVO">
         /* USE : PosServiceMapper.updatePosTemplateForStoreFromHq */
         {
           CALL PKG_HQ_PRINT_TEMPL.SP_STORE_PRINT_TEMPL_FROM_HQ_U
           (
             #{hqOfficeCd},
             #{prtClassCd},
+            #{templtRegFg},
             #{templtCd},
+            #{modId},
             #{result, mode=OUT, jdbcType=VARCHAR}
           )
         }

@@ -21,6 +21,17 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
   angular.extend(this, new RootController('templateCtrl', $scope, $http, false));
   // 조회조건 콤보박스 데이터 Set
   $scope._setComboData("srchPrtClassCdCombo", prtClassComboData);
+  $scope.isCombo = false;
+  // 조회조건 콤보박스 change event
+  $scope.setPrtClassCdCombo = function(s) {
+    if($scope.isCombo) {
+      $scope._broadcast("templateCtrl");
+    }
+  };
+  // 조회조건 콤보박스 처음 로딩시 조회되지 않도록.
+  $scope.prtClassCdComboFocus = function(s,e) {
+    $scope.isCombo = true;
+  };
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // ReadOnly 효과설정
@@ -30,7 +41,7 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
         var item = s.rows[e.row].dataItem;
         // 본사등록 외 수정/삭제 불가
         if (col.binding === "gChk") {
-          if (item.templtRegFg !== gvOrgnFg) {
+          if (item.templtRegFg !== gvOrgnFg || item.templtCd === "000") {
             wijmo.addClass(e.cell, 'wj-custom-readonly');
             e.cell.children[0].disabled = true;
           }
@@ -136,13 +147,39 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope._broadcast('templateCtrl');
     });
   };
-  // 편집 저장버튼
-  $scope.$on("saveEditTemplate", function(event, data) {
-    $scope._popConfirm("저장시 전체 매장의 해당 템플릿이 같이 수정 됩니다.<br>저장 하시겠습니까?",
+  // 매장 적용 버튼
+  $scope.$on("applyStoreTemplate", function(event, data) {
+    $scope._popConfirm("전체 매장에 해당 템플릿을 적용하시겠습니까?<br>매장에 템플릿이 존재하는 경우, 업데이트 처리됩니다.",
       function() {
         var selectedRow = $scope.flex.selectedRows[0]._data;
         var param = {};
         param.prtClassCd = document.getElementById("srchPrtClassCdVal").value;
+        param.templtRegFg = selectedRow.templtRegFg;
+        param.templtCd = selectedRow.templtCd;
+
+        $.postJSONSave("/base/output/posTemplate/template/apply.sb", param, function (result) {
+            $scope._popMsg(messages["cmm.saveSucc"], function () {
+              $scope.flex.collectionView.clearChanges();
+              $scope._broadcast('templateCtrl');
+            });
+          },
+          function (result) {
+            $scope._popMsg(result.message);
+            return false;
+          });
+      }
+    );
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
+  // 템플릿 편집 저장버튼
+  $scope.$on("saveEditTemplate", function(event, data) {
+    $scope._popConfirm("저장시 해당 템플릿이 실제출력물로 업데이트 처리 됩니다.<br>저장 하시겠습니까?",
+      function() {
+        var selectedRow = $scope.flex.selectedRows[0]._data;
+        var param = {};
+        param.prtClassCd = document.getElementById("srchPrtClassCdVal").value;
+        param.templtRegFg = selectedRow.templtRegFg;
         param.templtCd = selectedRow.templtCd;
         param.templtNm = selectedRow.templtNm;
         param.prtForm = theTarget.value;
@@ -150,6 +187,7 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
         $.postJSONSave("/base/output/posTemplate/template/save.sb", param, function (result) {
             $scope._popMsg(messages["cmm.saveSucc"], function () {
               $scope.flex.collectionView.clearChanges();
+              $scope._broadcast('templateCtrl');
             });
           },
           function (result) {
@@ -205,6 +243,10 @@ function searchPrintCodeList(params) {
           $("#btnAddTemplate").show();
           $("#btnDelTemplate").show();
           $("#btnSaveTemplate").show();
+          // 매장적용 버튼은 본사만
+          if ( gvOrgnFg === "H" ) {
+            $("#btnApplyStoreTemplate").show();
+          }
           $("#btnSaveEditTemplate").show();
           scope.flex.select(0,1);
           theTarget.value = scope.flex.rows[0]._data.prtForm;

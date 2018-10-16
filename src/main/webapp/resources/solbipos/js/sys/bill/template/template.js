@@ -21,6 +21,17 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
   angular.extend(this, new RootController('templateCtrl', $scope, $http, false));
   // 조회조건 콤보박스 데이터 Set
   $scope._setComboData("srchPrtClassCdCombo", prtClassComboData);
+  $scope.isCombo = false;
+  // 조회조건 콤보박스 change event
+  $scope.setPrtClassCdCombo = function(s) {
+    if($scope.isCombo) {
+      $scope._broadcast("templateCtrl");
+    }
+  };
+  // 조회조건 콤보박스 처음 로딩시 조회되지 않도록.
+  $scope.prtClassCdComboFocus = function(s,e) {
+    $scope.isCombo = true;
+  };
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // ReadOnly 효과설정
@@ -226,7 +237,6 @@ function searchPrintCodeList(params) {
       if(result.status === "OK") {
 
         var list = result.data.list;
-        listBoxCodeList.itemsSource = list;
 
         if (list.length === undefined || list.length === 0) {
           // 코드리스트 초기화
@@ -235,15 +245,24 @@ function searchPrintCodeList(params) {
           theTarget.value = "";
           thePreview.innerHTML = "";
         } else {
+
+          listBoxCodeList.itemsSource = list;
+
           $("#btnAddTemplate").show();
           $("#btnDelTemplate").show();
           $("#btnSaveTemplate").show();
           $("#btnSaveEditTemplate").show();
-          scope.flex.select(0,1);
-          theTarget.value = scope.flex.rows[0]._data.prtForm;
-          makePreview();
-        }
 
+          if(scope.flex.rows.length > 0) {
+            scope.flex.select(0,1);
+            theTarget.value = scope.flex.rows[0]._data.prtForm;
+            makePreview();
+          } else {
+            // 편집/미리보기 폼 초기화
+            theTarget.value = "";
+            thePreview.innerHTML = "";
+          }
+        }
       }
       else if(result.status === "FAIL") {
         return fail(result);
@@ -358,7 +377,7 @@ function makePreview() {
   var exceptMatches = value.match(/\{:([LRC])\d{2}\}.*?\{\/:\1\}?/g);
   if (exceptMatches != null) {
     for (var i = 0; i < exceptMatches.length; i++) {
-      // 추출된 특수태그를 정규식에 의해 분리 ( 추출퇸태그/첫문자/바이트길이/내용 )
+      // 추출된 특수태그를 정규식에 의해 분리 ( 추출된태그/첫문자/바이트길이/내용 )
       var textSplit = exceptMatches[i].match(/\{:([LRC])(\d{2})\}(.*?)\{\/:\1\}/);
       codeLen = parseInt(textSplit[2]);
       if (codeLen <= 42) {

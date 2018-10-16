@@ -25,7 +25,7 @@
         COMMENTS : 판매터치키로 등록할 상품의 목록을 조회한다. ( 본사/매장 )
     -->
     <select id="getProductListForTouchKey" parameterType="touchKeyVO" resultMap="touchKeyMap">
-        /* TouchKeyMapper.getProductListForTouchKey */
+        /* USE : TouchKeyMapper.getProductListForTouchKey */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
@@ -107,7 +107,7 @@
         COMMENTS : 상품분류 콤보박스를 만들기 위한 조회
     -->
     <select id="getProductClassListForTouchKey" parameterType="touchKeyClassVO" resultType="DefaultMap">
-        /* TouchKeyMapper.getProductClassListForTouchKey */
+        /* USE : TouchKeyMapper.getProductClassListForTouchKey */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
@@ -139,7 +139,7 @@
         COMMENTS : 터치키 분류 페이지별로 적용되어 있는 스타일코드를 조회한다.
     -->
     <select id="getTouchKeyPageStyleCd" parameterType="touchKeyClassVO" resultType="java.lang.String">
-        /* TouchKeyMapper.getTouchKeyPageStyleCd */
+        /* USE : TouchKeyMapper.getTouchKeyPageStyleCd */
         <choose>
         <!-- 본사 -->
         <when test='orgnFg != null and orgnFg == "H"'>
@@ -189,7 +189,7 @@
         COMMENTS : 터치키에 적용할 스타일코드를 조회한다.
     -->
     <select id="getTouchKeyStyleCdList" resultType="DefaultMap">
-        /* TouchkeyMapper.getTouchKeyStyleCdList */
+        /* USE : TouchkeyMapper.getTouchKeyStyleCdList */
         SELECT
             tctks.STYLE_CD,
             tctks.STYLE_NM
@@ -208,7 +208,7 @@
         COMMENTS : 터치키에 적용할 스타일을 조회한다.
     -->
     <select id="getTouchKeyStyleList" parameterType="touchKeyStyleVO" resultType="DefaultMap">
-        /* TouchkeyMapper.getTouchKeyStyleList */
+        /* USE : TouchkeyMapper.getTouchKeyStyleList */
         SELECT
             tctksd.STYLE_CD,
             tctksd.BUTTON_FG,
@@ -236,7 +236,7 @@
         COMMENTS : 터치키 자료 입력시 비교할 스타일코드 값을 조회한다
     -->
     <select id="getTouchKeyStyleForCompare" parameterType="touchKeyStyleVO" resultType="DefaultMap">
-        /* TouchkeyMapper.getTouchKeyStyleForCompare */
+        /* USE : TouchkeyMapper.getTouchKeyStyleForCompare */
         SELECT
             FONT_SIZE,
             FONT_OFF_COLOR,
@@ -255,7 +255,7 @@
         COMMENTS : 판매터치키 구성 XML 정보를 조회한다.
     -->
     <select id="getTouchKeyXml" parameterType="DefaultMap" resultType="String">
-        /* TouchkeyMapper.getTouchKeyXml */
+        /* USE : TouchkeyMapper.getTouchKeyXml */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
@@ -289,7 +289,7 @@
         COMMENTS : 판매터치키 구성에 존재하는 상품정보를 조회한다.
     -->
     <select id="getTouchKeyProdInfoList" parameterType="touchKeyVO" resultType="DefaultMap">
-        /* TouchKeyMapper.getTouchKeyProdInfoList */
+        /* USE : TouchKeyMapper.getTouchKeyProdInfoList */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
@@ -369,7 +369,7 @@
         COMMENTS : 판매터치키 구성 XML 정보를 생성한다.
     -->
     <insert id="insertTouchKeyConfgXml" parameterType="DefaultMap">
-        /* TouchkeyMapper.insertTouchKeyConfgXml */
+        /* USE : TouchkeyMapper.insertTouchKeyConfgXml */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
@@ -419,7 +419,7 @@
         COMMENTS : 판매터치키 구성 XML 정보를 수정한다.
     -->
     <update id="updateTouchKeyConfgXml" parameterType="DefaultMap">
-        /* TouchkeyMapper.updateTouchKeyConfgXml */
+        /* USE : TouchkeyMapper.updateTouchKeyConfgXml */
         <choose>
         <!-- 본사 -->
         <when test='orgnFg != null and orgnFg == "H"'>
@@ -457,7 +457,7 @@
         COMMENTS : 판매터치키 그룹 정보를 생성한다.
     -->
     <insert id="insertTouchKeyClass" parameterType="touchKeyClassVO">
-        /* TouchkeyMapper.insertTouchKeyClass */
+        /* USE : TouchkeyMapper.insertTouchKeyClass */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
@@ -559,7 +559,7 @@
         COMMENTS : 판매터치키 그룹 정보를 삭제한다.
     -->
     <delete id="deleteTouchKeyClass" parameterType="touchKeyClassVO">
-        /* TouchkeyMapper.deleteTouchKeyClass */
+        /* USE : TouchkeyMapper.deleteTouchKeyClass */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
@@ -589,7 +589,7 @@
         COMMENTS : 판매터치키 정보를 생성한다.
     -->
     <insert id="insertTouchKey" parameterType="touchKeyVO">
-        /* TouchkeyMapper.insertTouchKey */
+        /* USE : TouchkeyMapper.insertTouchKey */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
@@ -691,7 +691,7 @@
         COMMENTS : 판매터치키 정보를 삭제한다.
     -->
     <delete id="deleteTouchKey" parameterType="touchKeyClassVO">
-        /* TouchkeyMapper.deleteTouchKey */
+        /* USE : TouchkeyMapper.deleteTouchKey */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
