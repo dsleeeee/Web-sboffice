@@ -173,11 +173,12 @@ public class TouchKeyController {
     @ResponseBody
     public Result saveTouchKey(HttpServletRequest request, HttpSession session, Model model) {
 
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
         Result result = new Result(Status.FAIL);
         try {
             String xml =
                 URLDecoder.decode(request.getParameter("xml"), "UTF-8").replace("\n", "&#xa;");
-            SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
             result = touchkeyService.saveTouchkey(sessionInfoVO, XssPreventer.unescape(xml));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();

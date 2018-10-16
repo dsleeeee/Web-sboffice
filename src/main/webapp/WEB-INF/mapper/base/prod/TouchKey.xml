@@ -229,6 +229,25 @@
             tctksd.STYLE_CD, tctksd.BUTTON_FG
     </select>
 
+    <!-- 터치키 스타일 비교값 조회 -->
+    <!--
+        TABLE    : TB_CM_TOUCH_KEY_STYLE_DTL
+        PARAM    :
+        COMMENTS : 터치키 자료 입력시 비교할 스타일코드 값을 조회한다
+    -->
+    <select id="getTouchKeyStyleForCompare" parameterType="touchKeyStyleVO" resultType="DefaultMap">
+        /* TouchkeyMapper.getTouchKeyStyleForCompare */
+        SELECT
+            FONT_SIZE,
+            FONT_OFF_COLOR,
+            BUTTON_OFF_COLOR
+        FROM TB_CM_TOUCH_KEY_STYLE_DTL
+        WHERE STYLE_CD = #{styleCd}
+            AND BUTTON_FG = #{buttonFg}
+            AND BUTTON_TAG_FG = #{buttonTagFg}
+
+    </select>
+
     <!-- 판매터치키 XML 조회 -->
     <!--
         TABLE    : TB_WB_HQ_CONFG_XML, TB_WB_STORE_CONFG_XML
@@ -454,6 +473,9 @@
                     thtkc.WIDTH,
                     thtkc.HEIGHT,
                     thtkc.STYLE_CD,
+                    thtkc.FONT_SIZE,
+                    thtkc.FONT_COLOR,
+                    thtkc.FILL_COLOR,
                     thtkc.IMG_NM,
                     thtkc.REG_DT,
                     thtkc.REG_ID,
@@ -471,6 +493,9 @@
                     #{width},
                     #{height},
                     #{styleCd},
+                    #{fontSize, jdbcType=NUMERIC},
+                    #{fontColor, jdbcType=VARCHAR},
+                    #{fillColor, jdbcType=VARCHAR},
                     #{imgNm, jdbcType=VARCHAR},
                     #{regDt},
                     #{regId},
@@ -492,6 +517,9 @@
                     tmtkc.WIDTH,
                     tmtkc.HEIGHT,
                     tmtkc.STYLE_CD,
+                    tmtkc.FONT_SIZE,
+                    tmtkc.FONT_COLOR,
+                    tmtkc.FILL_COLOR,
                     tmtkc.IMG_NM,
                     tmtkc.IN_FG,
                     tmtkc.REG_DT,
@@ -510,6 +538,9 @@
                     #{width},
                     #{height},
                     #{styleCd},
+                    #{fontSize, jdbcType=NUMERIC},
+                    #{fontColor, jdbcType=VARCHAR},
+                    #{fillColor, jdbcType=VARCHAR},
                     #{imgNm, jdbcType=VARCHAR},
                     #{inFg},
                     #{regDt},
@@ -574,6 +605,9 @@
                     thtk.WIDTH,
                     thtk.HEIGHT,
                     thtk.STYLE_CD,
+                    thtk.FONT_SIZE,
+                    thtk.FONT_COLOR,
+                    thtk.FILL_COLOR,
                     thtk.IMG_NM,
                     thtk.REG_DT,
                     thtk.REG_ID,
@@ -591,6 +625,9 @@
                     #{width},
                     #{height},
                     #{styleCd},
+                    #{fontSize, jdbcType=NUMERIC},
+                    #{fontColor, jdbcType=VARCHAR},
+                    #{fillColor, jdbcType=VARCHAR},
                     #{imgNm, jdbcType=VARCHAR},
                     #{regDt},
                     #{regId},
@@ -612,6 +649,9 @@
                     tmtk.WIDTH,
                     tmtk.HEIGHT,
                     tmtk.STYLE_CD,
+                    tmtk.FONT_SIZE,
+                    tmtk.FONT_COLOR,
+                    tmtk.FILL_COLOR,
                     tmtk.IMG_NM,
                     tmtk.IN_FG,
                     tmtk.REG_DT,
@@ -630,6 +670,9 @@
                     #{width},
                     #{height},
                     #{styleCd},
+                    #{fontSize, jdbcType=NUMERIC},
+                    #{fontColor, jdbcType=VARCHAR},
+                    #{fillColor, jdbcType=VARCHAR},
                     #{imgNm, jdbcType=VARCHAR},
                     #{inFg},
                     #{regDt},

@@ -1127,7 +1127,7 @@ a.btn_underline, a.btn_underline:hover, a.btn_underline.on {background-position:
 .groupNavNext { width: 49px; height: 60px; background-position: 0 0; margin-left:1px; }
 .groupNavNext:hover { width: 49px; height: 60px; background-position: -49px 0;}
 
-.keyStyleWrap { width:120px; height:300px; position: absolute; }
+.keyStyleWrap { width:120px; height:310px; position: absolute; }
 
 .prodNavWrap { width:125px; display: inline-block; }
 .prodPageNoWrap { width:103px; position: relative; }
