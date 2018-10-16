@@ -24,15 +24,15 @@
             <td>
                 <div class="sb-select">
                     <span class="txtIn w150">
-                    <wj-combo-box
-                            id="srchDateFg"
-                            ng-model="dateFg"
-                            items-source="_getComboData('srchDateFg')"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            initialized="_initComboBox(s)">
-                    </wj-combo-box>
+                        <wj-combo-box
+                                id="srchDateFg"
+                                ng-model="dateFg"
+                                items-source="_getComboData('srchDateFg')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
                     </span>
                     <span class="txtIn"><input id="srchStartDate" class="w150"></span>
                     <span class="rg">~</span>
@@ -102,7 +102,7 @@
         // 상위 객체 상속 : T/F 는 picker
         angular.extend(this, new RootController('dstbReqCtrl', $scope, $http, true));
 
-      $scope.slipFg = 1;
+        $scope.slipFg = 1;
         var srchStartDate = wcombo.genDateVal("#srchStartDate", "${sessionScope.sessionInfo.startDt}");
         var srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.startDt}");
         $scope._setComboData("srchDateFg", [

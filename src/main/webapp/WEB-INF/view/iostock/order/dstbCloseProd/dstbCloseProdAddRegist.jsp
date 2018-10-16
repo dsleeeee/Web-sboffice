@@ -144,9 +144,9 @@
             var unitQty = parseInt(nvl(item.mgrUnitQty,0)) * parseInt(item.poUnitQty);
             var etcQty  = parseInt(nvl(item.mgrEtcQty,0));
             var totQty  = parseInt(unitQty + etcQty);
-            var tempOrderAmt = Math.round(totQty * mgrSplyUprc / poUnitQty);
-            var mgrAmt = tempOrderAmt - Math.round(tempOrderAmt * vat01 * envst0011 / 11);
-            var mgrVat = Math.round(tempOrderAmt * vat01 / (10 + envst0011));
+            var tempAmt = Math.round(totQty * mgrSplyUprc / poUnitQty);
+            var mgrAmt = tempAmt - Math.round(tempAmt * vat01 * envst0011 / 11);
+            var mgrVat = Math.round(tempAmt * vat01 / (10 + envst0011));
             var mgrTot = parseInt(mgrAmt + mgrVat);
 
             item.mgrTotQty = totQty; // 총분배수량

@@ -21,7 +21,7 @@
         <tbody>
         <tr>
             <%-- 조회일자 --%>
-            <th><s:message code="loanDtl.searchDate"/></th>
+            <th><s:message code="storeLoanInfo.searchDate"/></th>
             <td colspan="3">
                 <div class="sb-select">
                     <span class="txtIn"><input id="srchStartDate" class="w120"></span>
@@ -32,7 +32,7 @@
         </tr>
         <tr>
             <%-- 매장코드 --%>
-            <th><s:message code="loanDtl.store"/></th>
+            <th><s:message code="storeLoanInfo.store"/></th>
             <td colspan="3">
               <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
               <jsp:include page="/WEB-INF/view/iostock/order/outstockReqDate/selectShopM.jsp" flush="true">
@@ -67,13 +67,13 @@
               item-formatter="_itemFormatter">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="loanDtl.storeCd"/>"     binding="storeCd"     width="70"  align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="loanDtl.storeNm"/>"     binding="storeNm"     width="150" align="left"  ></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="loanDtl.loanDate"/>"    binding="loanDate"    width="80"  align="center" format="date"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="loanDtl.outAmt"/>"      binding="outAmt"      width="70"  align="right" data-type="Number" format="n0"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="loanDtl.inAmt"/>"       binding="inAmt"       width="70"  align="right" data-type="Number" format="n0"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="loanDtl.currLoanAmt"/>" binding="currLoanAmt" width="70"  align="right" data-type="Number" format="n0"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="loanDtl.remark"/>"      binding="remark"      width="*"   align="left"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeLoanInfo.storeCd"/>"     binding="storeCd"     width="70"  align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeLoanInfo.storeNm"/>"     binding="storeNm"     width="150" align="left"  ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeLoanInfo.loanDate"/>"    binding="loanDate"    width="80"  align="center" format="date"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeLoanInfo.outAmt"/>"      binding="outAmt"      width="70"  align="right" data-type="Number" format="n0"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeLoanInfo.inAmt"/>"       binding="inAmt"       width="70"  align="right" data-type="Number" format="n0"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeLoanInfo.currLoanAmt"/>" binding="currLoanAmt" width="70"  align="right" data-type="Number" format="n0"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeLoanInfo.remark"/>"      binding="remark"      width="*"   align="left"></wj-flex-grid-column>
 
             </wj-flex-grid>
             <%-- ColumnPicker 사용시 include --%>

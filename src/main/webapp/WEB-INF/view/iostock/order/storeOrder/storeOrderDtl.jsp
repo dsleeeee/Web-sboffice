@@ -35,7 +35,7 @@
                 <%-- 저장 --%>
                 <button type="button" id="btnDtlSave" class="btn_skyblue ml5" ng-click="saveStoreOrderDtl('save')" style="display:none"><s:message code="cmm.save" /></button>
                 <%-- 확정 --%>
-                <button type="button" id="btnConfirm" class="btn_skyblue ml5" ng-click="saveStoreOrderDtl('confirm')" style="display:none"><s:message code="cmm.save" /></button>
+                <button type="button" id="btnConfirm" class="btn_skyblue ml5" ng-click="saveStoreOrderDtl('confirm')" style="display:none"><s:message code="storeOrder.dtl.confirm" /></button>
             </div>
             <div style="clear: both;"></div>
 
@@ -120,9 +120,9 @@
                         var unitQty = parseInt(nvl(item.orderUnitQty,0)) * parseInt(item.poUnitQty);
                         var etcQty  = parseInt(nvl(item.orderEtcQty,0));
                         var totQty  = parseInt(unitQty + etcQty);
-                        var tempOrderAmt = Math.round(totQty * orderSplyUprc / poUnitQty);
-                        var orderAmt = tempOrderAmt - Math.round(tempOrderAmt * vat01 * envst0011 / 11);
-                        var orderVat = Math.round(tempOrderAmt * vat01 / (10 + envst0011));
+                        var tempAmt = Math.round(totQty * orderSplyUprc / poUnitQty);
+                        var orderAmt = tempAmt - Math.round(tempAmt * vat01 * envst0011 / 11);
+                        var orderVat = Math.round(tempAmt * vat01 / (10 + envst0011));
                         var orderTot = parseInt(orderAmt + orderVat);
 
                         item.orderTotQty = totQty;   // 총주문수량
@@ -134,6 +134,11 @@
 
                 s.collectionView.commitEdit();
             });
+
+          // add the new GroupRow to the grid's 'columnFooters' panel
+          s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+          // add a sigma to the header to show that this is a summary row
+          s.bottomLeftCells.setCellData(0, 0, '합계');
         };
 
         // 다른 컨트롤러의 broadcast 받기
@@ -148,17 +153,19 @@
                 $("#btnAddProd").show();
                 $("#btnDtlSave").show();
                 $scope.flex.isReadOnly = false;
+
+              if("${envst173}" === "1" || "${envst173}" === "2") {
+                $("#btnConfirm").show();
+              }
+              else {
+                $("#btnConfirm").hide();
+              }
             }
             else {
                 $("#btnAddProd").hide();
                 $("#btnDtlSave").hide();
-                $scope.flex.isReadOnly = true;
-            }
-            if("${envst173}" === "1" || "${envst173}" === "2") {
-                $("#btnConfirm").show();
-            }
-            else {
                 $("#btnConfirm").hide();
+                $scope.flex.isReadOnly = true;
             }
 
             $("#spanDtlTitle").html('<s:message code="storeOrder.reqDate"/> : '+getFormatDate($scope.reqDate, '-'));

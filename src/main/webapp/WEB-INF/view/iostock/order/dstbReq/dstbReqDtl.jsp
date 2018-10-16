@@ -4,7 +4,7 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
-<c:set var="baseUrl" value="/iostock/order/dstbReq/dstbReq/"/>
+<c:set var="baseUrl" value="/iostock/order/dstbReq/dstbReqDtl/"/>
 
 <wj-popup id="wjDstbReqDtlLayer" control="wjDstbReqDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
     <div id="dstbReqDtlLayer" class="wj-dialog wj-dialog-columns" ng-controller="dstbReqDtlCtrl">
@@ -147,9 +147,9 @@
             var unitQty = parseInt(nvl(item.mdUnitQty,0)) * parseInt(item.poUnitQty);
             var etcQty  = parseInt(nvl(item.mdEtcQty,0));
             var totQty  = parseInt(unitQty + etcQty);
-            var tempOrderAmt = Math.round(totQty * mdSplyUprc / poUnitQty);
-            var mdAmt = tempOrderAmt - Math.round(tempOrderAmt * vat01 * envst0011 / 11);
-            var mdVat = Math.round(tempOrderAmt * vat01 / (10 + envst0011));
+            var tempAmt = Math.round(totQty * mdSplyUprc / poUnitQty);
+            var mdAmt = tempAmt - Math.round(tempAmt * vat01 * envst0011 / 11);
+            var mdVat = Math.round(tempAmt * vat01 / (10 + envst0011));
             var mdTot = parseInt(mdAmt + mdVat);
 
             item.mdTotQty = totQty;// 총분배수량
@@ -285,7 +285,6 @@
                 item.mdSplyUprc = item.splyUprc;
                 item.mdUnitQty  = item.orderUnitQty;
                 item.mdEtcQty   = item.orderEtcQty;
-                item.mdTotQty   = item.splyUprc;
                 $scope.calcAmt(item);
 
                 $scope.flex.collectionView.commitEdit();

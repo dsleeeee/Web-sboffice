@@ -148,7 +148,7 @@
     <!--
         TABLE    : TB_PO_HQ_STORE_DISTRIBUTE
         PARAM    : dstbCloseProdVO
-        COMMENTS : 분매마감 - 분배마감 리스트를 확정으로 수정한다.
+        COMMENTS : 분배마감 - 분배마감 리스트를 확정으로 수정한다.
     -->
     <update id="updateDstbCloseProdConfirm" parameterType="dstbCloseProdVO">
         /* USE : DstbCloseProdMapper.updateDstbCloseProdConfirm */
@@ -167,7 +167,7 @@
     <!--
         TABLE    : TB_PO_HQ_STORE_DISTRIBUTE
         PARAM    : dstbCloseProdVO
-        COMMENTS : 분매마감 - 분배마감 MGR 관련 수량을 수정한다.
+        COMMENTS : 분배마감 - 분배마감 MGR 관련 수량을 수정한다.
     -->
     <update id="updateDstbCloseProdDtl" parameterType="dstbCloseProdVO">
         /* USE : DstbCloseProdMapper.updateDstbCloseProdDtl */
@@ -191,7 +191,7 @@
     <!--
         TABLE    : TB_PO_HQ_STORE_DISTRIBUTE
         PARAM    : dstbCloseProdVO
-        COMMENTS : 분매마감 - 분배마감 상세 리스트 저장시 확정인 경우 진행구분을 수정한다.
+        COMMENTS : 분배마감 - 분배마감 상세 리스트 저장시 확정인 경우 진행구분을 수정한다.
     -->
     <update id="updateDstbCloseProdDtlConfirm" parameterType="dstbCloseProdVO">
         /* USE : DstbCloseProdMapper.updateDstbCloseProdDtlConfirm */

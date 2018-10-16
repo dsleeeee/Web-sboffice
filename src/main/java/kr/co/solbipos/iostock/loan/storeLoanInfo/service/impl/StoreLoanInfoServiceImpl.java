@@ -5,7 +5,6 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.iostock.loan.storeLoanInfo.service.StoreLoanInfoService;
 import kr.co.solbipos.iostock.loan.storeLoanInfo.service.StoreLoanInfoVO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,9 +12,13 @@ import java.util.List;
 @Service("StoreLoanInfoService")
 public class StoreLoanInfoServiceImpl implements StoreLoanInfoService {
 
-    @Autowired StoreLoanInfoMapper storeLoanInfoMapper;
-    @Autowired
-    MessageService messageService;
+    private final StoreLoanInfoMapper storeLoanInfoMapper;
+    private final MessageService messageService;
+
+    public StoreLoanInfoServiceImpl(StoreLoanInfoMapper storeLoanInfoMapper, MessageService messageService) {
+        this.storeLoanInfoMapper = storeLoanInfoMapper;
+        this.messageService = messageService;
+    }
 
     /** 매장여신관리 목록 조회 */
     @Override

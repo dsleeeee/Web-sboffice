@@ -186,9 +186,9 @@
             var unitQty = parseInt(nvl(item.outUnitQty,0)) * parseInt(item.poUnitQty);
             var etcQty  = parseInt(nvl(item.outEtcQty,0));
             var totQty  = parseInt(unitQty + etcQty);
-            var tempOrderAmt = Math.round(totQty * outSplyUprc / poUnitQty);
-            var outAmt = tempOrderAmt - Math.round(tempOrderAmt * vat01 * envst0011 / 11);
-            var outVat = Math.round(tempOrderAmt * vat01 / (10 + envst0011));
+            var tempAmt = Math.round(totQty * outSplyUprc / poUnitQty);
+            var outAmt = tempAmt - Math.round(tempAmt * vat01 * envst0011 / 11);
+            var outVat = Math.round(tempAmt * vat01 / (10 + envst0011));
             var outTot = parseInt(outAmt + outVat);
 
             item.outTotQty = totQty; // 총출고수량

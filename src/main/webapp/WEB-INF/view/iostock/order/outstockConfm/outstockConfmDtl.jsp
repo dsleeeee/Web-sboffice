@@ -63,10 +63,12 @@
 
             <div class="tr mt20 fr">
               <div id="outstockBtnLayer" style="display: none;">
+                <%-- 출고확정 체크박스 --%>
                 <span id="spanOutstockConfirmFg" class="chk pdb5 txtIn fl" style="top: 0px;">
-                  <input type="checkbox" name="outstockConfirmFg" id="outstockConfirmFg" value="Y" ng-click="fnConfirm()"/>
+                  <input type="checkbox" name="outstockConfirmFg" id="outstockConfirmFg" value="Y" ng-click="fnConfirmChk()"/>
                   <label for="outstockConfirmFg"><s:message code="outstockConfm.dtl.confirmFg" /></label>
                 </span>
+                <%-- 출고일자 --%>
                 <div id="divDtlOutDate" class="sb-select ml10 fl" style="display: none;">
                   <span class="txtIn"><input id="dtlOutDate" class="w120"></span>
                 </div>
@@ -186,9 +188,9 @@
             var unitQty = parseInt(nvl(item.outUnitQty,0)) * parseInt(item.poUnitQty);
             var etcQty  = parseInt(nvl(item.outEtcQty,0));
             var totQty  = parseInt(unitQty + etcQty);
-            var tempOrderAmt = Math.round(totQty * outSplyUprc / poUnitQty);
-            var outAmt = tempOrderAmt - Math.round(tempOrderAmt * vat01 * envst0011 / 11);
-            var outVat = Math.round(tempOrderAmt * vat01 / (10 + envst0011));
+            var tempAmt = Math.round(totQty * outSplyUprc / poUnitQty);
+            var outAmt = tempAmt - Math.round(tempAmt * vat01 * envst0011 / 11);
+            var outVat = Math.round(tempAmt * vat01 / (10 + envst0011));
             var outTot = parseInt(outAmt + outVat);
 
             item.outTotQty = totQty; // 총출고수량
@@ -207,6 +209,7 @@
           event.preventDefault();
         });
 
+        // 전표상세 조회
         $scope.getSlipNoInfo = function() {
           var params = {};
           params.slipNo = $scope.slipNo;
@@ -365,7 +368,7 @@
           });
         };
 
-        $scope.fnConfirm = function () {
+        $scope.fnConfirmChk = function () {
           if($("#outstockConfirmFg").prop("checked")) {
             $("#divDtlOutDate").show();
           }

@@ -47,7 +47,7 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
         int result = 0;
         String currentDt = currentDateTimeString();
 
-        // 자동입고 환경변수 조회
+        // 매장입고 환경변수 조회
         HqEnvstVO hqEnvstVO = new HqEnvstVO();
         hqEnvstVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         hqEnvstVO.setEnvstCd("176");
@@ -72,7 +72,7 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
             // 자동입고인 경우 입고로 수정
-            if(StringUtil.getOrBlank(envst176).equals("Y")) {
+            if(StringUtil.getOrBlank(envst176).equals("A")) {
                 outstockConfmVO.setProcFg("20");
                 outstockConfmVO.setUpdateProcFg("30");
 
@@ -112,7 +112,7 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
         String currentDt = currentDateTimeString();
         String confirmFg = "N";
 
-        // 자동입고 환경변수 조회
+        // 매장입고 환경변수 조회
         HqEnvstVO hqEnvstVO = new HqEnvstVO();
         hqEnvstVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         hqEnvstVO.setEnvstCd("176");
@@ -141,9 +141,9 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
             int outUnitQty = (outstockConfmVO.getOutUnitQty() == null ? 0 : outstockConfmVO.getOutUnitQty()) * slipFg;
             int outEtcQty  = (outstockConfmVO.getOutEtcQty()  == null ? 0 : outstockConfmVO.getOutEtcQty()) * slipFg;
             int outTotQty  = (outstockConfmVO.getOutTotQty()  == null ? 0 : outstockConfmVO.getOutTotQty()) * slipFg;
-            Long outAmt    = (outstockConfmVO.getOutAmt() == null ? 0 : outstockConfmVO.getOutAmt()) * slipFg;
-            Long outVat    = (outstockConfmVO.getOutVat() == null ? 0 : outstockConfmVO.getOutVat()) * slipFg;
-            Long outTot    = (outstockConfmVO.getOutTot() == null ? 0 : outstockConfmVO.getOutTot()) * slipFg;
+            Long outAmt    = (outstockConfmVO.getOutAmt()     == null ? 0 : outstockConfmVO.getOutAmt()) * slipFg;
+            Long outVat    = (outstockConfmVO.getOutVat()     == null ? 0 : outstockConfmVO.getOutVat()) * slipFg;
+            Long outTot    = (outstockConfmVO.getOutTot()     == null ? 0 : outstockConfmVO.getOutTot()) * slipFg;
 
             outstockConfmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             outstockConfmVO.setOutUnitQty(outUnitQty);
@@ -182,7 +182,7 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
             // 자동입고인 경우 입고로 수정
-            if(StringUtil.getOrBlank(envst176).equals("Y")) {
+            if(StringUtil.getOrBlank(envst176).equals("A")) {
                 OutstockConfmHdVO.setProcFg("20");
                 OutstockConfmHdVO.setUpdateProcFg("30");
 

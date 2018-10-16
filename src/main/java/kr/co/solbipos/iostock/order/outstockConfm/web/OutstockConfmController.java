@@ -59,7 +59,7 @@ public class OutstockConfmController {
      * @since   2018. 10. 05.
      */
     @RequestMapping(value = "/outstockConfm/view.sb", method = RequestMethod.GET)
-    public String outstockDataView(HttpServletRequest request, HttpServletResponse response, Model model) {
+    public String outstockConfmView(HttpServletRequest request, HttpServletResponse response, Model model) {
         return "iostock/order/outstockConfm/outstockConfm";
     }
 
