@@ -43,7 +43,101 @@
 
     </select>
 
+    <!-- 계정 추가 -->
+    <!--
+        TABLE    : TB_HQ_ACCOUNT, TB_MS_ACCOUNT
+        COMMENTS : 입출금 계정을 추가한다.
+    -->
+    <insert id="insertDepositAccntList" parameterType="accntVO">
+      /* USE : DepositMapper.insertDepositAccntList */
+      <selectKey resultType="String" keyProperty="accntCd" order="BEFORE">
+        SELECT LPAD( NVL(MAX(ACCNT_CD), 0) + 1, 3, '0') AS ACCNT_CD
+        <if test="orgnFg != null and orgnFg.toString() == 'HQ'">
+          FROM TB_HQ_ACCOUNT
+         WHERE HQ_OFFICE_CD  = #{hqOfficeCd}
+        </if>
+        <if test="orgnFg != null and orgnFg.toString() == 'STORE'">
+          FROM TB_MS_ACCOUNT
+         WHERE STORE_CD  = #{storeCd}
+        </if>
+      </selectKey>
 
+      <if test="orgnFg != null and orgnFg.toString() == 'HQ'">
+        INSERT INTO TB_HQ_ACCOUNT(
+            HQ_OFFICE_CD,
+      </if>
+      <if test="orgnFg != null and orgnFg.toString() == 'STORE'">
+        INSERT INTO TB_MS_ACCOUNT(
+            STORE_CD,
+      </if>
+            ACCNT_CD,
+            ACCNT_NM,
+            ACCNT_FG,
+            USE_YN,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+      <if test="orgnFg != null and orgnFg.toString() == 'HQ'">
+            #{hqOfficeCd},
+      </if>
+      <if test="orgnFg != null and orgnFg.toString() == 'STORE'">
+            #{storeCd},
+      </if>
+            #{accntCd},
+            #{accntNm},
+            #{accntFg},
+            #{useYn},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
 
+    <!-- 계정 수정 -->
+    <!--
+          TABLE    : TB_HQ_ACCOUNT, TB_MS_ACCOUNT
+          COMMENTS : 입출금 계정을 수정한다.
+      -->
+    <update id="updateDepositAccntList" parameterType="accntVO">
+        /* USE : DepositMapper.updateDepositAccntList */
+      <if test="orgnFg != null and orgnFg.toString() == 'HQ'">
+        UPDATE TB_HQ_ACCOUNT
+           SET ACCNT_NM = #{accntNm},
+               MOD_DT = #{modDt},
+               MOD_ID = #{modId}
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND ACCNT_CD = #{accntCd}
+      </if>
+      <if test="orgnFg != null and orgnFg.toString() == 'STORE'">
+        UPDATE TB_MS_ACCOUNT
+           SET ACCNT_NM = #{accntNm},
+               MOD_DT = #{modDt},
+               MOD_ID = #{modId}
+         WHERE STORE_CD = #{storeCd}
+           AND ACCNT_CD = #{accntCd}
+      </if>
+    </update>
+
+    <!-- 계정 삭제 -->
+    <!--
+          TABLE    : TB_HQ_ACCOUNT, TB_MS_ACCOUNT
+          COMMENTS : 입출금 계정을 삭제한다.
+      -->
+    <delete id="deleteDepositAccntList" parameterType="accntVO">
+        /* USE : DepositMapper.deleteDepositAccntList */
+      <if test="orgnFg != null and orgnFg.toString() == 'HQ'">
+        DELETE TB_HQ_ACCOUNT
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND ACCNT_CD = #{accntCd}
+      </if>
+      <if test="orgnFg != null and orgnFg.toString() == 'STORE'">
+        DELETE TB_MS_ACCOUNT
+         WHERE STORE_CD = #{storeCd}
+           AND ACCNT_CD = #{accntCd}
+      </if>
+    </delete>
 
 </mapper>

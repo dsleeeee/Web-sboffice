@@ -41,7 +41,10 @@ app.controller('depositCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._inquirySub(baseUrl + "deposit/getDepositAccntList.sb", params, function() {
       // 입금계정 조회 완료 후, 출금계정 조회
       var withdrawScope = agrid.getScope('withdrawCtrl');
-      // withdrawScope.getWithdrawAccntList();
+      withdrawScope.searchWithdrawAccntList();
+
+      $("#depositBtnArea").show();
+
     }, false);
   };
 
@@ -114,12 +117,14 @@ app.controller('withdrawCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 출금계정 조회
   $scope.searchWithdrawAccntList = function(){
-    // 파라미터
     var params = {};
     params.accntFg="2"; // 출금
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquirySub(baseUrl + "deposit/getDepositAccntList.sb", params, function() {
+
+      $("#withdrawBtnArea").show();
+
     }, false);
   };
 
