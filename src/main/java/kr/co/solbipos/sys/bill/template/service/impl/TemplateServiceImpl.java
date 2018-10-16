@@ -129,6 +129,7 @@ public class TemplateServiceImpl implements TemplateService {
         String currentDt = currentDateTimeString();
 
         for ( TemplateVO templateVO : templateVOs ) {
+
             templateVO.setRegDt(currentDt);
             templateVO.setRegId(sessionInfoVO.getUserId());
             templateVO.setModDt(currentDt);

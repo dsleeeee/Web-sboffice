@@ -175,4 +175,27 @@ public class PosTemplateController {
 
     }
 
+    /**
+     * 포스출력물관리 - 출력물템플릿 매장적용
+     *
+     * @param request
+     * @param response
+     * @param posTemplateVO
+     * @param model
+     * @return Result
+     * @author 노현수
+     * @since 2018. 10. 04.
+     */
+    @RequestMapping(value = "/template/apply.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result applyStoreTemplate(@RequestBody PosTemplateVO posTemplateVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        int result = posTemplateService.applyStoreTemplate(posTemplateVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+
+    }
+
 }
