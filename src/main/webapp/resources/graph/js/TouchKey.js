@@ -1594,14 +1594,19 @@ Format.prototype.setElementsValue = function () {
   for (var i = 0; i < cells.length; i++) {
     var cell = cells[i];
     if (graph.isGroup) {
+      // 분류영역
       style = graph.getCellStyle(cell);
       initFontSize = style['fontSize'];
       initFontColor = style['fontColor'];
       initFillColor = style['fillColor'];
+      // 스타일코드 Set
       var styleCd = style['styleCd'].toString().leftPad("0", 2);
       this.selectStyle.selectedValue = styleCd;
+      // 페이지버튼 색상변경
+      this.setBtnStyle();
+
     } else {
-    // 자식속성은 상품영역에만 존재한다.
+      // 자식속성은 상품영역에만 존재한다.
       if ( cellType === "02" ) {
         style = graph.getCellStyle(cell.children[0]);
         initFontSize = style['fontSize'];
