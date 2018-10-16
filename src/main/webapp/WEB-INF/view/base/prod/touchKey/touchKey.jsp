@@ -2,63 +2,9 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<script>
-  var urlParams = (function(url) {
-    var result = new Object();
-    var idx = url.lastIndexOf('?');
-
-    if (idx > 0) {
-      var params = url.substring(idx + 1).split('&');
-
-      for (var i = 0; i < params.length; i++) {
-        idx = params[i].indexOf('=');
-
-        if (idx > 0) {
-          result[params[i].substring(0, idx)] = params[i].substring(idx + 1);
-        }
-      }
-    }
-
-    return result;
-  })(window.location.href);
-
-  // Default resources are included in grapheditor resources
-  mxLoadResources = false;
-
-  // urlParams is null when used for embedding
-  window.urlParams = window.urlParams || {};
-
-  window.MAX_REQUEST_SIZE = window.MAX_REQUEST_SIZE  || 10485760;
-
-  window.RESOURCES_PATH = window.RESOURCES_PATH || '/resource/graph/resources';
-  window.RESOURCE_BASE = window.RESOURCE_BASE || window.RESOURCES_PATH + '/message';
-  window.STYLE_PATH = window.STYLE_PATH || '/resource/graph/styles';
-  window.CSS_PATH = window.CSS_PATH || '/resource/graph/styles';
-  window.IMAGE_PATH = window.IMAGE_PATH || '/resource/graph/images';
-  //window.CONFIG_PATH = window.CONFIG_PATH || '/resource/graph/config';
-
-  window.TOUCHKEY_OPEN_URL = window.TOUCHKEY_OPEN_URL || '/base/prod/touchKey/touchKey/list.sb';
-  window.TOUCHKEY_SAVE_URL = window.TOUCHKEY_SAVE_URL || '/base/prod/touchKey/touchKey/save.sb';
-
-  window.TOUCHKEY_STYLE_CD = ${touchKeyStyleCd};
-  window.TOUCHKEY_STYLE_CDS = ${touchKeyStyleCdList};
-  window.TOUCHKEY_STYLES = ${touchKeyStyleList};
-
-  window.mxBasePath = window.mxBasePath || '/resource/vendor/mxgraph/src';
-  window.mxLanguage = window.mxLanguage || urlParams['lang'];
-  window.mxLanguages = window.mxLanguages || ['ko'];
-
-  window.PRODS = ${prods};
-
-  window.MAX_GROUP_ROW = '${maxGroupRow}' || '2';
-
-</script>
-<script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.min.js" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/sanitizer/sanitizer.min.js" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20181010.01" charset="utf-8"></script>
 
 <%--서브컨텐츠--%>
-<div class="subCon2">
+<div class="subCon2" ng-controller="touchKeyCtrl">
     <%--테이블속성, 테이블관리, 판매터치키 page에만 쓰임--%>
     <div class="touchKeyWrap oh">
         <%--left--%>
@@ -67,12 +13,55 @@
             <div class="updownSet oh mb10">
                 <span class="fl bk lh30"><s:message code="touchKey.class"/></span>
                 <div class="txtIn">
-                    <div class="sb-select dkbr fl w120">
-                        <div id="selectClass"></div>
+                    <div class="sb-select dkbr fl w98px">
+                        <wj-combo-box
+                            id="touchKeyFilterCombo"
+                            ng-model="touchKeyFilter"
+                            items-source="_getComboData('touchKeyFilterCombo')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)"
+                            selected-index-changed="setTouchKeyFilter(s)">
+                        </wj-combo-box>
+                    </div>
+                    <div class="sb-select dkbr fl w120 ml5">
+                        <wj-combo-box
+                            id="prodClassCdFilterCombo"
+                            ng-model="prodClassCdFilter"
+                            items-source="_getComboData('prodClassCdFilterCombo')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)"
+                            selected-index-changed="setProdClassFilter(s)">
+                        </wj-combo-box>
                     </div>
                 </div>
             </div>
             <div class="cfgWrap2">
+                <wj-flex-grid
+                    autoGenerateColumns="false"
+                    control="flex"
+                    initialized="initGrid(s,e)"
+                    sticky-headers="true"
+                    selection-mode="ListBox"
+                    items-source="data"
+                    item-formatter="_itemFormatter"
+                    allow-dragging="None"
+                    is-read-only="true">
+
+                    <!-- define columns -->
+                    <wj-flex-grid-column header="<s:message code="touchKey.grid.touchKeyUsed"/>" binding="touchKeyUsed" width="50"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="touchKey.grid.prodCd"/>" binding="prodCd" width="*" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="touchKey.grid.prodNm"/>" binding="prodNm" width="*"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="touchKey.grid.prodClass"/>" binding="prodClassCd" width="*" visible="false" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="touchKey.grid.prodClassNm"/>" binding="prodClassNm" width="70" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="touchKey.grid.saleUprc"/>" binding="saleUprc" width="*" visible="false"></wj-flex-grid-column>
+
+                </wj-flex-grid>
+
+
                 <%--위즈모 테이블--%>
                 <div id="theGrid"></div>
                 <%--//위즈모 테이블--%>
@@ -85,12 +74,13 @@
             <%--미리보기 영역 시작--%>
             <div class="updownSet oh mb10">
                 <span class="fl bk lh30"><s:message code="touchKey.preview"/></span>
+                <button class="btn_skyblue fl ml5" id="btnInit"><s:message code="touchKey.reload"/></button>
                 <div class="txtIn">
-                    <div class="sb-select dkbr fl w120 mr5">
+                    <div class="sb-select dkbr fl w120">
                         <div id="selectStyle"></div>
                     </div>
-                    <button class="btn_skyblue" id="btnInit"><s:message code="touchKey.reload"/></button>
-                    <button class="btn_skyblue" id="btnSave"><s:message code="cmm.save"/></button>
+                    <button class="btn_skyblue fl ml5" id="btnApplyStyle"><s:message code="touchKey.applyStyle"/></button>
+                    <button class="btn_skyblue fl ml20" id="btnSave"><s:message code="cmm.save"/></button>
                 </div>
             </div>
             <div id="touchArea" class="prev2 fl">
@@ -132,6 +122,10 @@
             <div id="divProdNavWrap" class="prodNavWrap">
                 <div id="keyStyle" class="oh keyStyleWrap hideNav">
                     <div id="fontStyleWrap">
+                        <span class="s12 fl lh30 bk"><s:message code="touchKey.cellType"/></span>
+                        <div class="sb-select txtIn fl w100 mb5">
+                            <div id="cellTypeCombo"></div>
+                        </div>
                         <span class="s12 fl lh30 bk"><s:message code="touchKey.font"/></span>
                         <div class="sb-select txtIn fl w100 mb5">
                             <%-- 폰트컬러 --%>
@@ -150,8 +144,8 @@
                         </div>
                     </div>
                     <div class="fl">
-                        <button class="btn_skyblue mb5" id="btnReset"><s:message code="touchKey.reset"/></button>
-                        <button class="btn_skyblue" id="btnDelete"><s:message code="touchKey.delete"/></button>
+                        <button class="btn_skyblue mb5" id="btnReset" ng-click="$broadcast('btnReset')"><s:message code="touchKey.reset"/></button>
+                        <button class="btn_skyblue" id="btnDelete" ng-click="$broadcast('btnDelete')"><s:message code="touchKey.delete"/></button>
                     </div>
                 </div>
                 <div class="prodPageNoWrap">
@@ -170,40 +164,55 @@
 <%--//서브컨텐츠--%>
 
 <script>
-  (function() {
-    var touchkeyInit = Touchkey.prototype.init;
-    Touchkey.prototype.init = function() {
-      touchkeyInit.apply(this, arguments);
-    };
+  var urlParams = (function(url) {
+    var result = new Object();
+    var idx = url.lastIndexOf('?');
 
-    if (!mxClient.isBrowserSupported()) {
-      // Displays an error message if the browser is not supported.
-      mxUtils.error('Browser is not supported!', 200, false);
+    if (idx > 0) {
+      var params = url.substring(idx + 1).split('&');
+
+      for (var i = 0; i < params.length; i++) {
+        idx = params[i].indexOf('=');
+
+        if (idx > 0) {
+          result[params[i].substring(0, idx)] = params[i].substring(idx + 1);
+        }
+      }
     }
-    else {
-      // Adds required resources (disables loading of fallback properties, this can only
-      // be used if we know that all keys are defined in the language specific file)
-      mxResources.loadDefaultBundle = false;
-      var bundle = mxResources.getDefaultBundle(RESOURCE_BASE, mxLanguage)
-        || mxResources.getSpecialBundle(RESOURCE_BASE, mxLanguage);
 
-      // Fixes possible asynchronous requests
-      mxUtils.getAll(
-        [ bundle, STYLE_PATH + '/touchKey.xml' ],
-        function(xhr) {
-          // Adds bundle text to resources
-          mxResources.parse(xhr[0].getText());
+    return result;
+  })(window.location.href);
 
-          // Configures the default graph theme
-          var themes = new Object();
-          themes[Graph.prototype.defaultThemeName] = xhr[1].getDocumentElement();
+  // Default resources are included in grapheditor resources
+  mxLoadResources = false;
 
-          // Main
-          var touchkey = new Touchkey(themes);
-        },
-        function() {
-          document.body.innerHTML = '<center style="margin-top:10%;">Error loading resource files. Please check browser console.</center>';
-        });
-    }
-  })();
+  // urlParams is null when used for embedding
+  window.urlParams = window.urlParams || {};
+
+  window.MAX_REQUEST_SIZE = window.MAX_REQUEST_SIZE  || 10485760;
+
+  window.RESOURCES_PATH = window.RESOURCES_PATH || '/resource/graph/resources';
+  window.RESOURCE_BASE = window.RESOURCE_BASE || window.RESOURCES_PATH + '/message';
+  window.STYLE_PATH = window.STYLE_PATH || '/resource/graph/styles';
+  window.CSS_PATH = window.CSS_PATH || '/resource/graph/styles';
+  window.IMAGE_PATH = window.IMAGE_PATH || '/resource/graph/images';
+
+  window.TOUCHKEY_OPEN_URL = window.TOUCHKEY_OPEN_URL || '/base/prod/touchKey/touchKey/touchKeyList.sb';
+  window.TOUCHKEY_SAVE_URL = window.TOUCHKEY_SAVE_URL || '/base/prod/touchKey/touchKey/save.sb';
+
+  window.PROD_CLASSES = ${srchClsFgCombo};
+  window.TOUCHKEY_STYLE_CD = ${touchKeyStyleCd};
+  window.TOUCHKEY_STYLE_CDS = ${touchKeyStyleCdList};
+  window.TOUCHKEY_STYLES = ${touchKeyStyleList};
+
+  window.mxBasePath = window.mxBasePath || '/resource/vendor/mxgraph/src';
+  window.mxLanguage = window.mxLanguage || urlParams['lang'];
+  window.mxLanguages = window.mxLanguages || ['ko'];
+
+  window.MAX_GROUP_ROW = '${maxGroupRow}' || '2';
+
 </script>
+<script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/graph/sanitizer/sanitizer.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/vendor/wijmo/js/grid/wijmo.grid.filter.min.js?ver=5.20182.500" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20181015.01" charset="utf-8"></script>

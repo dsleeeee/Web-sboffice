@@ -28,6 +28,9 @@ public interface TouchKeyService {
     /** 상품목록 조회 : 판매터치키에서 사용 */
     List<DefaultMap<String>> getProductListForTouchKey(TouchKeyVO touchKeyVO);
 
+    /** 상품분류 조회 : 판매터치키에서 사용 */
+    List<DefaultMap<String>> getProductClassListForTouchKey(TouchKeyVO touchKeyVO);
+
     /** 터치키 스타일코드 목록 조회 */
     List<DefaultMap<String>> getTouchKeyStyleCdList();
 

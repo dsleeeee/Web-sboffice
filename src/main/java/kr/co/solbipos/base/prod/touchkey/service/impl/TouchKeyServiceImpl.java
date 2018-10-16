@@ -90,6 +90,12 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         return keyMapper.getProductListForTouchKey(touchKeyVO);
     }
 
+    /** 상품분류 조회 : 판매터치키에서 사용 */
+    @Override
+    public List<DefaultMap<String>> getProductClassListForTouchKey(TouchKeyVO touchKeyVO) {
+        return keyMapper.getProductClassListForTouchKey(touchKeyVO);
+    }
+
     /** 터치키 스타일코드 목록 조회 */
     @Override
     public List<DefaultMap<String>> getTouchKeyStyleCdList() {
@@ -501,6 +507,9 @@ public class TouchKeyServiceImpl implements TouchKeyService {
                     case PROD_CD:
                         result.setProdCd(styleKeyValue[1]);
                         break;
+                    case STYLE_CD:
+                        result.setStyleCd(styleKeyValue[1]);
+                        break;
                     case FONT_COLOR:
                         result.setFontColor(styleKeyValue[1]);
                         break;
@@ -509,9 +518,6 @@ public class TouchKeyServiceImpl implements TouchKeyService {
                         break;
                     case FONT_SIZE:
                         result.setFontSize(Long.parseLong(styleKeyValue[1]));
-                        break;
-                    case STYLE_CD:
-                        result.setStyleCd(styleKeyValue[1]);
                         break;
                     default:
                         break;

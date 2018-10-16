@@ -2,9 +2,12 @@ package kr.co.solbipos.base.prod.touchkey.web;
 
 import com.nhncorp.lucy.security.xss.XssPreventer;
 import kr.co.common.data.enums.Status;
+import kr.co.common.data.enums.UseYn;
+import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.prod.touchkey.service.TouchKeyClassVO;
@@ -21,10 +24,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.List;
 
+import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
@@ -55,15 +61,17 @@ public class TouchKeyController {
     private final TouchKeyService touchkeyService;
     private final MessageService messageService;
     private final CmmEnvUtil cmmEnvUtil;
+    private final CmmCodeUtil cmmCodeUtil;
 
     /** Constructor Injection */
     @Autowired
     public TouchKeyController(SessionService sessionService,
-        TouchKeyService touchkeyService, MessageService messageService, CmmEnvUtil cmmEnvUtil) {
+        TouchKeyService touchkeyService, MessageService messageService, CmmEnvUtil cmmEnvUtil, CmmCodeUtil cmmCodeUtil) {
         this.sessionService = sessionService;
         this.touchkeyService = touchkeyService;
         this.messageService = messageService;
         this.cmmEnvUtil = cmmEnvUtil;
+        this.cmmCodeUtil = cmmCodeUtil;
     }
 
 
@@ -75,7 +83,7 @@ public class TouchKeyController {
      * @param model   Model
      * @return
      */
-    @RequestMapping(value = "/list.sb", method = RequestMethod.GET)
+    @RequestMapping(value = "/view.sb", method = RequestMethod.GET)
     public String touchKeyView(HttpServletRequest request, HttpSession session, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
@@ -94,8 +102,8 @@ public class TouchKeyController {
         TouchKeyStyleVO touchKeyStyleVO = new TouchKeyStyleVO();
         touchKeyStyleVO.setStyleCd("");
 
-        // 화면에 표시할 상점의 상품 정보 조회
-        model.addAttribute("prods", convertToJson(touchkeyService.getProductListForTouchKey(params)));
+        // 상품분류 콤보
+        model.addAttribute("srchClsFgCombo", cmmCodeUtil.assmblObj(touchkeyService.getProductClassListForTouchKey(params), "prodClassNm", "prodClassCd", UseYn.ALL));
         // 터치키 분류 페이지별 스타일 코드 조회
         model.addAttribute("touchKeyStyleCd", convertToJson(touchkeyService.getTouchKeyPageStyleCd(touchKeyClassVO)));
         // 터치키 스타일 코드 목록 조회
@@ -114,6 +122,30 @@ public class TouchKeyController {
     }
 
     /**
+     * 판매 터치키 목록 조회 (상품정보 목록)
+     *
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param model   Model
+     * @return
+     */
+    @RequestMapping(value = "/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProductListForTouchKey(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        TouchKeyVO params = new TouchKeyVO();
+        params.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        params.setStoreCd(sessionInfoVO.getStoreCd());
+        params.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        List<DefaultMap<String>> list = touchkeyService.getProductListForTouchKey(params);
+
+        return returnListJson(Status.OK, list);
+    }
+
+    /**
      * 판매 터치키 기존 설정 조회
      *
      * @param request HttpServletRequest
@@ -121,7 +153,7 @@ public class TouchKeyController {
      * @param model   Model
      * @return
      */
-    @RequestMapping(value = "/list.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/touchKeyList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getTouchKeyXml(HttpServletRequest request, HttpSession session, Model model) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);

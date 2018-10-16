@@ -181,10 +181,10 @@ public class TableAttrServiceImpl implements TableAttrService {
                             case FONT_STYLE_FG:
                                 tableAttrVO.setFontStyleFg(StringUtils.leftPad(Integer.toBinaryString(Integer.parseInt(styleKeyValue[1])), 3, "0"));
                                 break;
-                            case TEXTALIGN_FG:
+                            case ALIGN:
                                 tableAttrVO.setTextalignFg(TextalignFg.getEnum(styleKeyValue[1]));
                                 break;
-                            case TEXTVALIGN_FG:
+                            case VERTICAL_ALIGN:
                                 tableAttrVO.setTextvalignFg(TextvalignFg.getEnum(styleKeyValue[1]));
                                 break;
                             default:
@@ -206,7 +206,7 @@ public class TableAttrServiceImpl implements TableAttrService {
 
     /**
      * XML 파싱하여 테이블 속성 항목 추출
-     * @param xml 파싱대상XML
+     * @param tableAttrVOs List<TableAttrVO>
      * @return 테이블속성객체
      */
     @SuppressWarnings("deprecation")
@@ -235,8 +235,8 @@ public class TableAttrServiceImpl implements TableAttrService {
                 styleStr += tableAttrVO.getFontStyleFg() != null ? (SM + TouchKeyStyle.FONT_STYLE_FG.getCode() +EQ+ tableAttrVO.getFontStyleFg()):"";
                 styleStr += tableAttrVO.getFontSize() != null ? (SM + TouchKeyStyle.FONT_SIZE.getCode() +EQ+ tableAttrVO.getFontSize()):"";
                 styleStr += tableAttrVO.getFontColor() != null ? (SM + TouchKeyStyle.FONT_COLOR.getCode() +EQ+ tableAttrVO.getFontColor()):"";
-                styleStr += tableAttrVO.getTextalignFg() != null ? (SM + TouchKeyStyle.TEXTALIGN_FG.getCode() +EQ+ tableAttrVO.getTextalignFg().getDesc()):"";
-                styleStr += tableAttrVO.getTextvalignFg() != null ? (SM + TouchKeyStyle.TEXTVALIGN_FG.getCode() +EQ+ tableAttrVO.getTextvalignFg().getDesc()):"";
+                styleStr += tableAttrVO.getTextalignFg() != null ? (SM + TouchKeyStyle.ALIGN.getCode() +EQ+ tableAttrVO.getTextalignFg().getDesc()):"";
+                styleStr += tableAttrVO.getTextvalignFg() != null ? (SM + TouchKeyStyle.VERTICAL_ALIGN.getCode() +EQ+ tableAttrVO.getTextvalignFg().getDesc()):"";
                 cell.setStyle(styleStr);
             }
             mxCodec codec = new mxCodec();
