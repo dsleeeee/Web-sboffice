@@ -42,12 +42,18 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
+    private final SessionService sessionService;
+    private final CmmMenuService cmmMenuService;
+    private final MessageService messageService;
+
+    /** Constructor Injection */
     @Autowired
-    private SessionService sessionService;
-    @Autowired
-    private CmmMenuService cmmMenuService;
-    @Autowired
-    private MessageService messageService;
+    public AuthenticationInterceptor(SessionService sessionService, CmmMenuService cmmMenuService, MessageService messageService) {
+        this.sessionService = sessionService;
+        this.cmmMenuService = cmmMenuService;
+        this.messageService = messageService;
+    }
 
     /**
      * preHandler : Interceptor 진입시 수행
