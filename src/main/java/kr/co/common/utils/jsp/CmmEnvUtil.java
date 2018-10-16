@@ -38,12 +38,17 @@ public class CmmEnvUtil {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
+    private final CmmCodeUtil cmmCodeUtil;
+    private final CmmEnvService cmmEnvService;
+    private final SessionService sessionService;
+
+    /** Constructor Injection */
     @Autowired
-    CmmCodeUtil cmmCodeUtil;
-    @Autowired
-    CmmEnvService cmmEnvService;
-    @Autowired
-    SessionService sessionService;
+    public CmmEnvUtil(CmmCodeUtil cmmCodeUtil, CmmEnvService cmmEnvService, SessionService sessionService) {
+        this.cmmCodeUtil = cmmCodeUtil;
+        this.cmmEnvService = cmmEnvService;
+        this.sessionService = sessionService;
+    }
 
     /**
      * 환경변수 공통코드 조회 (TB_CM_ENVST_DTL)
