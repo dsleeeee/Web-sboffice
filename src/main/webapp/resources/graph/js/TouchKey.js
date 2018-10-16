@@ -15,7 +15,7 @@ var app = agrid.getApp();
 
 // 버튼사용 필터 DropBoxDataMap
 var touchKeyFilterData = [
-  {"name":"전체","value":""},
+  {"name":"전체","value":"A"},
   {"name":"사용","value":"T"},
   {"name":"미사용","value":"F"}
 ];
@@ -75,13 +75,19 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
   var toFilter = null;
   $scope.updateFilter = function(part, value) {
     if (value) {
-      value = value === "T";
+      if (value === "A") {
+        value = "";
+      } else {
+        value = value === "T";
+      }
       // update filter
       $scope.filter[part] = value;
       // reschedule update
       if (toFilter) clearTimeout(toFilter);
       toFilter = setTimeout(function () {
-        $scope.data.refresh();
+        if ($scope.data) {
+          $scope.data.refresh();
+        }
       }, 100);
     }
   };
@@ -411,27 +417,23 @@ Sidebar.prototype.makeDragSource = function () {
     var parent = graph.getDefaultParent();
     var model = graph.getModel();
 
-    //Drop 할 때 오브젝트 생성
+    // Drop 할 때 오브젝트 생성
     var pt = graph.getPointForEvent(evt);
 
-    //Grid에서 선택된 데이터 대상
+    // Grid에서 선택된 데이터 대상
     for (var selected = 0; selected < grid.selectedItems.length; selected++) {
 
-      //마우스 포인터 위치를 기준으로 Drop 가능한 위치 찾기
+      // 마우스 포인터 위치를 기준으로 Drop 가능한 위치 찾기
       var pos = graph.findPosition(pt);
       if (pos == null) {
         mxEvent.consume(evt);
         return;
       }
-      //Drop 된 포지션과 다음 포지션에 터치키 생성
+      // Drop 된 포지션과 다음 포지션에 터치키 생성
       var rows = grid.selectedRows[selected];
       var item = rows.dataItem;
+      // 업데이트 시작
       model.beginUpdate();
-
-      // 현재 graph 영역의 전체 버튼 갯수를 tukeyCd(키값)으로 활용
-      var tukeyCd = graph.getChildCells(graph.getDefaultParent(), true, true).length + 1;
-      tukeyCd = "00" + tukeyCd;
-      tukeyCd = tukeyCd.slice(-3);
       // 스타일코드
       var styleCd = graph.selectStyle.selectedValue;
 
@@ -441,7 +443,7 @@ Sidebar.prototype.makeDragSource = function () {
           null,
           pos.x, pos.y,
           graph.touchKeyInfo.width, graph.touchKeyInfo.height,
-          "tukeyCd=" + tukeyCd + ";tukeyFg=01;prodCd=" + item.prodCd + ";styleCd=" + styleCd + ";rounded=0;"
+          "prodCd=" + item.prodCd + ";styleCd=" + styleCd + ";tukeyFg=01;rounded=0;"
         );
         graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles["01"].off, new Array(btn));
         graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles["01"].off, new Array(btn));
@@ -452,7 +454,7 @@ Sidebar.prototype.makeDragSource = function () {
           item.prodNm,
           5, 5,
           0, 0,
-          "tukeyCd=" + tukeyCd + ";tukeyFg=02;prodCd=" + item.prodCd + ";styleCd=" + styleCd + ";strokeColor=none;rounded=0;resizable=0;selectable=1;movable=0;whiteSpace=wrap;overflow=hidden;align=left;verticalAlign=top;"
+          "prodCd=" + item.prodCd + ";styleCd=" + styleCd + ";tukeyFg=02;rounded=0;strokeColor=none;resizable=0;selectable=1;movable=0;align=left;verticalAlign=top;whiteSpace=wrap;overflow=hidden;"
         );
         graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles["02"].off, new Array(prodTag));
         graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles["02"].off, new Array(prodTag));
@@ -463,7 +465,7 @@ Sidebar.prototype.makeDragSource = function () {
           addComma(item.saleUprc),
           5, graph.touchKeyInfo.y / 2 + 10,
           0, 0,
-          "tukeyCd=" + tukeyCd + ";tukeyFg=03;prodCd=" + item.prodCd + ";styleCd=" + styleCd + ";strokeColor=none;rounded=0;resizable=0;selectable=1;movable=0;align:right;"
+          "prodCd=" + item.prodCd + ";styleCd=" + styleCd + ";tukeyFg=03;rounded=0;strokeColor=none;resizable=0;selectable=1;movable=0;align:right;"
         );
         graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles["03"].off, new Array(priceTag));
         graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles["03"].off, new Array(priceTag));
@@ -607,10 +609,12 @@ Graph.prototype.init = function () {
   graph.graphHandler.moveCells = function (cells, dx, dy, clone, target, evt) {
     // style 에서 tukeyFg 값 추출
     var style = graph.getCellStyle(cells[0]);
-    var tukeyFg = style['tukeyFg'].toString().leftPad("0", 2);
-    // 하위 셀 ( 상품명/금액 ) 인 경우 무시
-    if (tukeyFg === "02" || tukeyFg === "03") {
-      mxGraphHandlerMoveCells.apply(this, arguments);
+    if (style['tukeyFg']) {
+      var tukeyFg = style['tukeyFg'].toString().leftPad("0", 2);
+      // 하위 셀 ( 상품명/금액 ) 인 경우 무시
+      if (tukeyFg === "02" || tukeyFg === "03") {
+        mxGraphHandlerMoveCells.apply(this, arguments);
+      }
     }
 
     var pt = this.graph.getPointForEvent(evt);
@@ -1640,6 +1644,10 @@ Format.prototype.open = function (isLoad) {
   var prod = this.touchkey.prod;
   var scope = this.scope;
 
+  scope.$apply(function() {
+    scope._loadingPopup.show(true);
+  });
+
   //open
   var reqGroup = mxUtils.post(TOUCHKEY_OPEN_URL, '',
     mxUtils.bind(this, function (req) {
@@ -1677,17 +1685,20 @@ Format.prototype.open = function (isLoad) {
         }
         catch (e) {
           scope.$apply(function(){
+            scope._loadingPopup.hide();
             scope._popMsg(mxResources.get('errorOpeningFile'));
           });
         }
         if (!isLoad) {
           scope.$apply(function(){
+            scope._loadingPopup.hide();
             scope._popMsg(mxResources.get('opened'));
           });
         }
       }
       else {
         scope.$apply(function(){
+          scope._loadingPopup.hide();
           scope._popMsg(mxResources.get('errorOpeningFile'));
         });
       }
@@ -1733,6 +1744,7 @@ Format.prototype.setGraphXml = function (graph, node) {
  * 화면구성 XML을 서버에 저장
  */
 Format.prototype.save = function () {
+
   var group = this.touchkey.group;
   var prod = this.touchkey.prod;
   var scope = agrid.getScope("touchKeyCtrl");
@@ -1760,18 +1772,24 @@ Format.prototype.save = function () {
     if (xml.length < MAX_REQUEST_SIZE) {
       var onload = function (req) {
         scope.$apply(function(){
+          scope._loadingPopup.hide();
           scope._popMsg(mxResources.get('saved'));
         });
       };
       var onerror = function (req) {
         scope.$apply(function(){
+          scope._loadingPopup.hide();
           scope._popMsg("저장 중 오류가 발생하였습니다.");
         });
       };
+      scope.$apply(function() {
+        scope._loadingPopup.show(true);
+      });
       new mxXmlRequest(TOUCHKEY_SAVE_URL, 'xml=' + xml).send(onload, onerror);
     }
     else {
       scope.$apply(function(){
+        scope._loadingPopup.hide();
         scope._popMsg(mxResources.get('drawingTooLarge'));
       });
       return false;
@@ -1779,6 +1797,7 @@ Format.prototype.save = function () {
   }
   catch (e) {
     scope.$apply(function(){
+      scope._loadingPopup.hide();
       scope._popMsg(mxResources.get('errorSavingFile'));
     });
   }

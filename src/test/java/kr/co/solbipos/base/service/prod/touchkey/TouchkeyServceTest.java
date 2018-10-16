@@ -250,7 +250,7 @@ public class TouchkeyServceTest {
                             touchKeyVO.setFillColor(styleKeyValue[1]);
                             break;
                         case FONT_SIZE:
-                            touchKeyVO.setFontSize(Long.parseLong(styleKeyValue[1]));
+                            touchKeyVO.setFontSize(Integer.parseInt(styleKeyValue[1]));
                             break;
                         default:
                             break;
