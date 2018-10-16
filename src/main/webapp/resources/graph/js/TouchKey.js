@@ -1282,8 +1282,8 @@ Format.prototype.initElements = function () {
           // 버튼 색상 스타일 적용
           format.setBtnStyle();
           // 색상 스타일 적용 : 분류/상품 영역
-          format.setGraphStyle(group, true);
           format.setGraphStyle(prod, true);
+          format.setGraphStyle(group, true);
         });
       });
     } else {
@@ -1306,7 +1306,7 @@ Format.prototype.initElements = function () {
 
     var scope = agrid.getScope("touchKeyCtrl");
     scope.$apply(function(){
-      scope._popConfirm("버튼 초기화시 현재 선택되어있는 [ "+ styleNm +" ] (으)로 초기화 됩니다.<br>계속하시겠습니까?", function() {
+      scope._popConfirm("버튼 초기화시 현재 선택되어있는 [ "+ styleNm +" ]<br>(으)로 초기화 됩니다. 계속하시겠습니까?", function() {
         // 선택된 스타일로 초기화
         format.setGraphStyle(format.graph, false);
         // 그래프 새로고침 하여 변경내용 화면에 적용
@@ -1527,9 +1527,9 @@ Format.prototype.setGraphStyle = function (graph, type) {
   if (graph.isGroup) {
     // 분류영역은 선택된 분류만 변경
     var gCells = graph.getSelectionCells();
-    graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles.off, gCells);
-    graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles.off, gCells);
     graph.setCellStyles(mxConstants.STYLE_FONTSIZE, graph.buttonStyles.size, gCells);
+    graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles.off, gCells);
+    graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles.off, gCells);
     // 선택된 분류의 StyleCd 변경
     var gnStyles = "", gCell;
     for (var g = 0; g < gCells.length; g++) {
@@ -1538,6 +1538,9 @@ Format.prototype.setGraphStyle = function (graph, type) {
       gnStyles = gCell.getStyle().replace(styleCdRegex, "styleCd="+styleCd);
       gCell.setStyle(gnStyles);
     }
+    this.fontSize.value = graph.fontStyles.size;
+    this.fontColor.value = graph.fontStyles.off;
+    this.fillColor.value = graph.buttonStyles.off;
   } else {
     graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles["01"].off, cells);
     graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles["01"].off, cells);
@@ -1559,20 +1562,20 @@ Format.prototype.setGraphStyle = function (graph, type) {
           tukeyFg = style['tukeyFg'].toString().leftPad("0", 2);
           // 상품명 태그 색상 조정
           if (tukeyFg === "02" || tukeyFg === "03") {
-            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles[tukeyFg].off, new Array(childCell));
-            graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles[tukeyFg].off, new Array(childCell));
             graph.setCellStyles(mxConstants.STYLE_FONTSIZE, graph.fontStyles[tukeyFg].size, new Array(childCell));
+            graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles[tukeyFg].off, new Array(childCell));
+            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles[tukeyFg].off, new Array(childCell));
           }
           // 정규식으로 styleCd 변경
           cnStyles = childCell.getStyle().replace(styleCdRegex, "styleCd="+styleCd);
           childCell.setStyle(cnStyles);
         }
       }
-      var cellType = this.cellTypeCombo.selectedValue;
-      this.fontSize.value = graph.fontStyles[cellType].size;
-      this.fontColor.value = graph.fontStyles[cellType].off;
-      this.fillColor.value = graph.buttonStyles[cellType].off;
     }
+    var cellType = this.cellTypeCombo.selectedValue;
+    this.fontSize.value = graph.fontStyles[cellType].size;
+    this.fontColor.value = graph.fontStyles[cellType].off;
+    this.fillColor.value = graph.buttonStyles[cellType].off;
   }
 
 };
