@@ -44,8 +44,6 @@ public enum TouchKeyStyle implements CodeEnum {
     /** OVERFLOW */
     OVERFLOW("overflow"),
 
-    /** TUKEY_CD-custom */
-    TUKEY_CD("tukeyCd"),
     /** TUKEY_FG-custom */
     TUKEY_FG("tukeyFg"),
     /** 상품코드-custom */

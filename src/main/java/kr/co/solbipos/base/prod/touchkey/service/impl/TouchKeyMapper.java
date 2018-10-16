@@ -45,6 +45,9 @@ public interface TouchKeyMapper {
     /** 터치키 분류 페이지별 스타일 코드 조회 */
     String getTouchKeyPageStyleCd(TouchKeyClassVO touchKeyClassVO);
 
+    /** 터치키 스타일 비교값 조회 */
+    DefaultMap<String> getTouchKeyStyleForCompare(TouchKeyStyleVO touchKeyStyleVO);
+
     /** 판매터치키 XML 정보 조회 */
     String getTouchKeyXml(DefaultMap<String> param);
 

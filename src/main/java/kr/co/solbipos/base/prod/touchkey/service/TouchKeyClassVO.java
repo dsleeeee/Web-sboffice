@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class TouchKeyClassVO extends CmmVO {
 
-    private static final long serialVersionUID = 7011385347444892190L;
+    private static final long serialVersionUID = -3699216234626892457L;
 
     /** 소속구분
      * M : 시스템
@@ -61,11 +61,12 @@ public class TouchKeyClassVO extends CmmVO {
     /** 입력구분 H:본사, S:매장 */
     private InFg inFg;
     /** 폰트크기 */
-    private Integer fontSize = 0;
+    private Integer fontSize;
     /** 폰트색 */
-    private String fontColor = "#000000";
+    private String fontColor;
     /** 채움색 */
-    private String fillColor = "#000000";
+    private String fillColor;
+
     /** 테이블들 */
     private List<TouchKeyVO> touchs;
 

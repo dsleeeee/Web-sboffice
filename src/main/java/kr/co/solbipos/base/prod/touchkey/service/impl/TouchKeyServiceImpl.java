@@ -390,6 +390,14 @@ public class TouchKeyServiceImpl implements TouchKeyService {
                 //스타일
                 String styleStr = cell.getStyle();
                 if(styleStr != null) {
+
+                    //스타일 비교값 조회
+                    TouchKeyStyleVO params = new TouchKeyStyleVO();
+                    params.setStyleCd(getStyleCd(styleStr));
+                    params.setButtonFg("G");
+                    params.setButtonTagFg("01");
+                    DefaultMap<String> styleInfo = keyMapper.getTouchKeyStyleForCompare(params);
+
                     String[] styles = styleStr.split(";");
                     for(String style : styles) {
 
@@ -402,17 +410,23 @@ public class TouchKeyServiceImpl implements TouchKeyService {
                                 // 그룹코드는 layer 처리 문제로 커스텀태그의 값 활용하여 설정한다. : 20180920 노현수
                                 touchKeyClassVO.setTukeyClassCd(styleKeyValue[1]);
                                 break;
-                            case FONT_COLOR:
-                                touchKeyClassVO.setFontColor(styleKeyValue[1]);
-                                break;
-                            case FILL_COLOR:
-                                touchKeyClassVO.setFillColor(styleKeyValue[1]);
-                                break;
-                            case FONT_SIZE:
-                                touchKeyClassVO.setFontSize(Integer.parseInt(styleKeyValue[1]));
-                                break;
                             case STYLE_CD:
                                 touchKeyClassVO.setStyleCd(styleKeyValue[1]);
+                                break;
+                            case FONT_SIZE:
+                                if( Integer.valueOf(String.valueOf(styleInfo.get("fontSize"))) != Integer.parseInt(styleKeyValue[1])) {
+                                    touchKeyClassVO.setFontSize(Integer.parseInt(styleKeyValue[1]));
+                                }
+                                break;
+                            case FONT_COLOR:
+                                if(!styleKeyValue[1].equals(styleInfo.get("fontOffColor"))) {
+                                    touchKeyClassVO.setFontColor(styleKeyValue[1]);
+                                }
+                                break;
+                            case FILL_COLOR:
+                                if(!styleKeyValue[1].equals(styleInfo.get("buttonOffColor"))) {
+                                    touchKeyClassVO.setFillColor(styleKeyValue[1]);
+                                }
                                 break;
                             default:
                                 break;
@@ -420,7 +434,9 @@ public class TouchKeyServiceImpl implements TouchKeyService {
                     }
                 }
                 touchKeyClassVO.setRegDt(regDt);
+                //해당 분류의 터치키 추출
                 touchKeyVOS = getTouchKeyList(graphTouch, cell.getId(), touchKeyClassVO);
+
                 touchKeyClassVO.setTouchs(touchKeyVOS);
                 touchKeyClassVOS.add(touchKeyClassVO);
             }
@@ -440,30 +456,40 @@ public class TouchKeyServiceImpl implements TouchKeyService {
      */
     private List<TouchKeyVO> getTouchKeyList(mxGraph graph, String layerId, TouchKeyClassVO touchKeyClassVO) {
 
+        //터치키코드
+        Integer tukeySeq = 1;
+
         mxGraphModel model = (mxGraphModel) graph.getModel();
 
         List<TouchKeyVO> touchKeyVOS = new ArrayList<TouchKeyVO>();
-        TouchKeyVO bTouchKeyVO = new TouchKeyVO();
+        TouchKeyVO pTouchKeyVO = new TouchKeyVO();
         TouchKeyVO cTouchKeyVO = new TouchKeyVO();
         mxCell layer = (mxCell)model.getCell(layerId);
 
         Object[] cells = graph.getChildVertices(layer);
         for(Object obj : cells) {
+
             mxCell cell = (mxCell) obj;
-            bTouchKeyVO = getTouchKeyInfo(cell, touchKeyClassVO, true);
-            touchKeyVOS.add(bTouchKeyVO);
+            // 터치키정보 반환
+            pTouchKeyVO = getTouchKeyInfo(cell, touchKeyClassVO, true);
+            // 터치키코드 생성 : sequential 처리
+            pTouchKeyVO.setTukeyCd(String.format("%03d", tukeySeq++));
+
+            touchKeyVOS.add(pTouchKeyVO);
             // 버튼 + 상품태그 + 금액태그 추가
             if ( cell.getChildCount() > 0 ) {
                 for(int i = 0; i < cell.getChildCount(); i++ ) {
                     mxCell child = (mxCell)cell.getChildAt(i);
                     cTouchKeyVO = getTouchKeyInfo(child, touchKeyClassVO, false);
+                    // 하위속성의 터치키코드 set
+                    cTouchKeyVO.setTukeyCd(pTouchKeyVO.getTukeyCd());
                     // 하위속성은 상위버튼과 페이지번호 같다.
-                    cTouchKeyVO.setPageNo(bTouchKeyVO.getPageNo());
+                    cTouchKeyVO.setPageNo(pTouchKeyVO.getPageNo());
                     touchKeyVOS.add(cTouchKeyVO);
                 }
             }
-
         }
+
         return touchKeyVOS;
     }
 
@@ -492,32 +518,46 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         //스타일
         String styleStr = cell.getStyle();
         if(styleStr != null) {
+
+            //스타일 비교값 조회
+            TouchKeyStyleVO params = new TouchKeyStyleVO();
+            params.setStyleCd(getStyleCd(styleStr));
+            params.setButtonFg("P");
+            params.setButtonTagFg(getTukeyFg(styleStr));
+            DefaultMap<String> styleInfo = keyMapper.getTouchKeyStyleForCompare(params);
+
+            // 스타일코드 파싱
             String[] styles = styleStr.split(";");
             for(String style : styles) {
-
+                // style 코드로 부가정보 생성
                 String[] styleKeyValue = style.split("=");
                 if(styleKeyValue.length < 2) {
                     continue;
                 }
                 switch(TouchKeyStyle.getEnum(styleKeyValue[0])) {
-                    case TUKEY_CD:
-                        result.setTukeyCd(styleKeyValue[1]);
                     case TUKEY_FG: // 터치키구분 - 01:버튼, 02:상품명태그, 03:금액태그
                         result.setTukeyFg(styleKeyValue[1]);
+                        break;
                     case PROD_CD:
                         result.setProdCd(styleKeyValue[1]);
                         break;
                     case STYLE_CD:
                         result.setStyleCd(styleKeyValue[1]);
                         break;
+                    case FONT_SIZE:
+                        if(Integer.valueOf(String.valueOf(styleInfo.get("fontSize"))) != Integer.parseInt(styleKeyValue[1])) {
+                            result.setFontSize(Integer.parseInt(styleKeyValue[1]));
+                        }
+                        break;
                     case FONT_COLOR:
-                        result.setFontColor(styleKeyValue[1]);
+                        if(!styleKeyValue[1].equals(styleInfo.get("fontOffColor"))) {
+                            result.setFontColor(styleKeyValue[1]);
+                        }
                         break;
                     case FILL_COLOR:
-                        result.setFillColor(styleKeyValue[1]);
-                        break;
-                    case FONT_SIZE:
-                        result.setFontSize(Long.parseLong(styleKeyValue[1]));
+                        if(!styleKeyValue[1].equals(styleInfo.get("buttonOffColor"))) {
+                            result.setFillColor(styleKeyValue[1]);
+                        }
                         break;
                     default:
                         break;
@@ -536,4 +576,45 @@ public class TouchKeyServiceImpl implements TouchKeyService {
 
         return result;
     }
+
+    /**
+     * 스타일코드 추출
+     *
+     * @param styleStr
+     * @return
+     */
+    private String getStyleCd(String styleStr) {
+
+        String result = "00";
+        //정규식 패턴 설정
+        Pattern styleCdPattern = Pattern.compile("styleCd=([^=]*.(?=;))", Pattern.MULTILINE);
+        Matcher styleCdMatcher = styleCdPattern.matcher(styleStr);
+        // 정규식으로 스타일코드 추출
+        if (styleCdMatcher.find()) {
+            result = styleCdMatcher.group(1);
+        }
+
+        return result;
+    }
+
+    /**
+     * 터치키구분 추출
+     *
+     * @param styleStr
+     * @return
+     */
+    private String getTukeyFg(String styleStr) {
+
+        String result = "00";
+        //정규식 패턴 설정
+        Pattern tukeyFgPattern = Pattern.compile("tukeyFg=([^=]*.(?=;))", Pattern.MULTILINE);
+        Matcher tukeyFgMatcher = tukeyFgPattern.matcher(styleStr);
+        // 정규식으로 터치키구분 추출
+        if (tukeyFgMatcher.find()) {
+            result = tukeyFgMatcher.group(1);
+        }
+
+        return result;
+    }
+
 }
