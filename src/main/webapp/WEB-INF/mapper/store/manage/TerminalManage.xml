@@ -94,16 +94,8 @@
     -->
     <select id="getCornerList" parameterType="storeCornerVO" resultType="DefaultMap">
         /* TerminalManageMapper.getCornerList */
-        SELECT STORE_CD,
-               CORNR_CD,
-               CORNR_NM,
-               OWNER_NM,
-               BIZ_NO,
-               TEL_NO,
-               VAN_CD,
-               VAN_TERMNL_NO,
-               VAN_SER_NO,
-               USE_YN
+        SELECT CORNR_CD AS VALUE,
+               CORNR_NM AS NAME
           FROM TB_MS_CORNER
          WHERE STORE_CD = #{storeCd}
     </select>

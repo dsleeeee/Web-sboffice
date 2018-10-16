@@ -48,7 +48,7 @@
           <%-- 터미널 선택 --%>
           <div class="sb-select w30 fl">
             <wj-combo-box
-                    id="terminalFg"
+                    id="sTerminalFg"
                     ng-model="terminalFg"
                     items-source="_getComboData('terminalFg')"
                     display-member-path="name"
@@ -62,31 +62,31 @@
           <%-- 포스 선택 --%>
           <div class="sb-select w10 fl" id="posListArea" style="display: none;">
             <wj-combo-box
-                    id="posFg"
+                    id="sPosFg"
                     ng-model="posFg"
-                    <%--items-source="_getComboData('posFg')"--%>
+                    items-source="posFgArr"
                     display-member-path="name"
                     selected-value-path="value"
                     is-editable="false"
-                    initialized="_initComboBox(s)"
+                    control="comboDt.posCombo"
                     selected-index-changed="setPosFgVal(s,e)">
             </wj-combo-box>
-            <input type="hidden" id="posFgVal" value={{posFg}} />
           </div>
+
           <%-- 코너 선택 --%>
           <div class="sb-select w10 fl" id="cornerListArea" style="display: none;">
             <wj-combo-box
-                    id="cornerFg"
+                    id="sCornerFg"
                     ng-model="cornerFg"
-                    items-source="_getComboData('cornerFg')"
+                    items-source="cornerFgArr"
                     display-member-path="name"
                     selected-value-path="value"
                     is-editable="false"
-                    initialized="_initComboBox(s)"
+                    control="comboDt.cornerCombo"
                     selected-index-changed="setCornerFgVal(s,e)">
             </wj-combo-box>
-            <input type="hidden" id="cornerFgVal" value={{cornerFg}} />
           </div>
+
           <div class="fr mb10" id="posBtnArea" style="display:none">
             <button class="btn_skyblue" ng-click="copyEnv()"><s:message code="terminalManage.copy.posEnvst"/></button>
             <button class="btn_skyblue" ng-click="posAddRow()"><s:message code="cmm.add"/></button>
@@ -151,8 +151,6 @@ var baseUrl = "${baseUrl}";
 var vanCdFg = ${ccu.getVanList()};
 var terminalFg = ${cnv.getEnvCodeExcpAll("2028")};
 var useYnFg    = ${ccu.getCommCodeExcpAll("067")};
-
-console.log(terminalFg)
 
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/terminal.js?ver=2018100601" charset="utf-8"></script>
