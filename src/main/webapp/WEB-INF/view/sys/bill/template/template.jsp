@@ -95,7 +95,7 @@
     </div>
 
     <%-- 코드리스트 --%>
-    <div class="w15 fl">
+    <div class="w20 fl">
       <div class="wj-TblWrapBr ml10 pd20" style="height:485px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='template.listNm' /></span>
@@ -106,7 +106,7 @@
       </div>
     </div>
 
-    <div class="w30 fl">
+    <div class="fl" style="width:325px;">
       <div class="wj-TblWrapBr ml10 pd20 templateEdit" style="height:485px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='template.editNm' /></span>
@@ -120,7 +120,7 @@
       </div>
     </div>
 
-    <div class="w30 fl">
+    <div class="fl" style="width:325px;">
       <div class="wj-TblWrapBr ml10 pd20 templateEdit" style="height:485px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='template.viewNm' /></span>

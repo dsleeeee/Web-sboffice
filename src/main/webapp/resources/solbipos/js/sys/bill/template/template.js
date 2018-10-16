@@ -358,7 +358,7 @@ function makePreview() {
   var exceptMatches = value.match(/\{:([LRC])\d{2}\}.*?\{\/:\1\}?/g);
   if (exceptMatches != null) {
     for (var i = 0; i < exceptMatches.length; i++) {
-      // 추출된 특수태그를 정규식에 의해 분리 ( 추출퇸태그/첫문자/바이트길이/내용 )
+      // 추출된 특수태그를 정규식에 의해 분리 ( 추출된태그/첫문자/바이트길이/내용 )
       var textSplit = exceptMatches[i].match(/\{:([LRC])(\d{2})\}(.*?)\{\/:\1\}/);
       codeLen = parseInt(textSplit[2]);
       if (codeLen <= 42) {
