@@ -31,8 +31,8 @@
       </table>
 
       <ul class="txtSty3 mt10">
-        <li class="red">기준 공급가 : 마스터상의 출고단가.</li>
-        <li class="red">분배완료여부를 체크한 후 저장하시면 분배 자료를 생성하며, 더이상 수정이 불가능합니다.</li>
+        <li class="red"><s:message code="rtnDstbReq.dtl.txt1"/></li>
+        <li class="red"><s:message code="rtnDstbReq.dtl.txt2"/></li>
       </ul>
 
       <div class="tr mt20">
@@ -184,7 +184,7 @@
       // ajax 통신 설정
       $http({
         method : 'POST', //방식
-        url    : '/iostock/orderReturn/storeOrder/storeOrderRegist/orderProcFgCheck.sb', /* 통신할 URL */
+        url    : '/iostock/orderReturn/rtnStoreOrder/rtnStoreOrderRegist/orderProcFgCheck.sb', /* 통신할 URL */
         params : params, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
@@ -193,6 +193,7 @@
             $scope.procFg   = response.data.data.procFg;
             $scope.hdRemark = response.data.data.remark;
           }
+          $scope.wjRtnDstbReqDtlLayer.show(true);
           $scope.searchRtnDstbReqDtlList();
         }
       }, function errorCallback(response) {
@@ -214,6 +215,15 @@
       params.slipFg  = $scope.slipFg;
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
       $scope._inquirySub("/iostock/orderReturn/rtnDstbReq/rtnDstbReqDtl/list.sb", params, function () {
+        $("#dstbConfirmFg").prop("checked", false);
+
+        // 주문내역이 분배완료가 아닌 경우 분배 저장버튼 show
+        if($scope.procFg !== "20") {
+          $("#dstbBtnLayer").show();
+        }
+        else {
+          $("#dstbBtnLayer").hide();
+        }
       });
     };
 
@@ -234,9 +244,21 @@
 
     // 저장 전 값 체크
     $scope.saveValueCheck = function () {
-      var params = new Array();
-      var mdTot  = 0;
+      if ($("#dstbConfirmFg").is(":checked")) {
+        // 분배완료를 체크하셨습니다. 분배자료를 생성하므로 주문내역의 자료를 수정하실 수 없습니다. 계속 하시겠습니까?
+        var msg = "<s:message code='rtnDstbReq.dtl.confirmText'/>";
+        s_alert.popConf(msg, function () {
+          $scope.saveRtnDstbReqDtl();
+        });
+      }
+      else {
+        $scope.saveRtnDstbReqDtl();
+      }
+    };
 
+    // 분배 저장
+    $scope.saveRtnDstbReqDtl = function () {
+      var params = new Array();
       // 분배완료여부가 체크 되어있으면서 그리드의 수정된 내역은 없는 경우 저장로직 태우기 위해 값 하나를 강제로 수정으로 변경한다.
       if ($("#dstbConfirmFg").is(":checked") && $scope.flex.collectionView.itemsEdited.length <= 0) {
         var item = $scope.flex.collectionView.items[0];
@@ -271,44 +293,9 @@
         item.hqBrandCd     = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
         item.dstbConfirmFg = ($("#dstbConfirmFg").is(":checked") ? $("#dstbConfirmFg").val() : "");
         item.hdRemark      = $scope.hdRemark;
-        mdTot += parseInt(item.mdTot);
         params.push(item);
       }
 
-      if ($scope.availableOrderAmt != null && parseInt($scope.availableOrderAmt) < parseInt(mdTot)) {
-        var msg = "<s:message code='rtnDstbReq.dtl.mdTotOver'/>"; //분배금액이 주문가능액을 초과하였습니다. 계속 진행 하시겠습니까?
-        var id  = s_alert.randomString(5);
-        var pop = $("#_layerConf").clone(true).attr("id", id).appendTo(document.body);
-        pop.find("p").text(msg);
-
-        // 확인 클릭
-        pop.find("a.btn_blue.conf").bind("click", function () {
-          $("#_alertTent").hide();
-          pop.remove();
-          $scope.saveRtnDstbReqDtl(params);
-        });
-
-        // 취소 클릭
-        pop.find("a.btn_gray.conf").bind("click", function () {
-          $("#_alertTent").hide();
-          pop.remove();
-          // 그리드 초기화
-          var cv          = new wijmo.collections.CollectionView([]);
-          cv.trackChanges = true;
-          $scope.data     = cv;
-          return false;
-        });
-
-        $("#_alertTent").show();
-        pop.show();
-      }
-      else {
-        $scope.saveRtnDstbReqDtl(params);
-      }
-    };
-
-    // 분배 저장
-    $scope.saveRtnDstbReqDtl = function (params) {
       $scope._save("/iostock/orderReturn/rtnDstbReq/rtnDstbReqDtl/save.sb", params, function () {
         $scope.saveRtnDstbReqDtlCallback()
       });

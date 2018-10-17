@@ -164,7 +164,7 @@
       $scope.storeCds = data.storeCds;
 
       $scope.wjRtnDstbCloseProdAddRegistLayer.show(true);
-      $("#spanAddRegistTitle").html('[<s:message code="rtnDstbCloseProd.addRegist.order"/>] ' + '[' + $scope.prodCd + '] ' + $scope.prodNm);
+      $("#spanAddRegistTitle").html('[<s:message code="rtnDstbCloseProd.addRegist.orderReturn"/>] ' + '[' + $scope.prodCd + '] ' + $scope.prodNm);
 
       $scope.searchRtnDstbCloseProdAddRegistList();
       // 기능수행 종료 : 반드시 추가

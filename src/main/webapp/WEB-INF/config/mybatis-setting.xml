@@ -438,6 +438,10 @@
     <typeAlias alias="rtnDstbReqVO" type="kr.co.solbipos.iostock.orderReturn.rtnDstbReq.service.RtnDstbReqVO"/>
     <typeAlias alias="rtnDstbCloseStoreVO" type="kr.co.solbipos.iostock.orderReturn.rtnDstbCloseStore.service.RtnDstbCloseStoreVO"/>
     <typeAlias alias="rtnDstbCloseProdVO" type="kr.co.solbipos.iostock.orderReturn.rtnDstbCloseProd.service.RtnDstbCloseProdVO"/>
+    <typeAlias alias="rtnOutstockDataVO" type="kr.co.solbipos.iostock.orderReturn.rtnOutstockData.service.RtnOutstockDataVO"/>
+    <typeAlias alias="rtnOutstockConfmVO" type="kr.co.solbipos.iostock.orderReturn.rtnOutstockConfm.service.RtnOutstockConfmVO"/>
+    <typeAlias alias="rtnDstmnVO" type="kr.co.solbipos.iostock.orderReturn.rtnDstmn.service.RtnDstmnVO"/>
+    <typeAlias alias="rtnInstockConfmVO" type="kr.co.solbipos.iostock.orderReturn.rtnInstockConfm.service.RtnInstockConfmVO"/>
 
     <typeAlias alias="excpForwardProductVO" type="kr.co.solbipos.application.pos.exceptForward.service.ExcpForwardProductVO"/>
     <typeAlias alias="productionVO" type="kr.co.solbipos.application.pos.production.service.ProductionVO"/>

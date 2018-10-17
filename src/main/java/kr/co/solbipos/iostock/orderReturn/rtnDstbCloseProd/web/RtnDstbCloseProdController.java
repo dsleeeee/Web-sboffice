@@ -22,7 +22,7 @@ import java.util.List;
 
 /**
  * @Class Name : RtnDstbCloseProdController.java
- * @Description : 수불관리 > 반품관리 > 반품마감(상품별)
+ * @Description : 수불관리 > 매장반품관리 > 반품마감(상품별)
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
@@ -59,7 +59,7 @@ public class RtnDstbCloseProdController {
      */
     @RequestMapping(value = "/rtnDstbCloseProd/view.sb", method = RequestMethod.GET)
     public String rtnDstbCloseProdView(HttpServletRequest request, HttpServletResponse response, Model model) {
-        return "iostock/order/rtnDstbCloseProd/rtnDstbCloseProd";
+        return "iostock/orderReturn/rtnDstbCloseProd/rtnDstbCloseProd";
     }
 
     /**

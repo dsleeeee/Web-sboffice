@@ -118,23 +118,23 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
         hqEnvstVO.setEnvstCd("176");
         String envst176 = cmmEnvMapper.getHqEnvst(hqEnvstVO);
 
-        OutstockConfmVO OutstockConfmHdVO = new OutstockConfmVO();
+        OutstockConfmVO outstockConfmHdVO = new OutstockConfmVO();
 
         for (OutstockConfmVO outstockConfmVO : outstockConfmVOs) {
             // HD 저장을 위한 파라미터 세팅
             if(i == 0) {
                 confirmFg = StringUtil.getOrBlank(outstockConfmVO.getConfirmFg());
 
-                OutstockConfmHdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-                OutstockConfmHdVO.setSlipNo(outstockConfmVO.getSlipNo());
-                OutstockConfmHdVO.setHdRemark(outstockConfmVO.getHdRemark());
-                OutstockConfmHdVO.setHqRemark(outstockConfmVO.getHqRemark());
-                OutstockConfmHdVO.setDlvrCd(outstockConfmVO.getDlvrCd());
-                OutstockConfmHdVO.setOutDate(outstockConfmVO.getOutDate());
-                OutstockConfmHdVO.setRegId(sessionInfoVO.getUserId());
-                OutstockConfmHdVO.setRegDt(currentDt);
-                OutstockConfmHdVO.setModId(sessionInfoVO.getUserId());
-                OutstockConfmHdVO.setModDt(currentDt);
+                outstockConfmHdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+                outstockConfmHdVO.setSlipNo(outstockConfmVO.getSlipNo());
+                outstockConfmHdVO.setHdRemark(outstockConfmVO.getHdRemark());
+                outstockConfmHdVO.setHqRemark(outstockConfmVO.getHqRemark());
+                outstockConfmHdVO.setDlvrCd(outstockConfmVO.getDlvrCd());
+                outstockConfmHdVO.setOutDate(outstockConfmVO.getOutDate());
+                outstockConfmHdVO.setRegId(sessionInfoVO.getUserId());
+                outstockConfmHdVO.setRegDt(currentDt);
+                outstockConfmHdVO.setModId(sessionInfoVO.getUserId());
+                outstockConfmHdVO.setModDt(currentDt);
             }
 
             int slipFg     = outstockConfmVO.getSlipFg();
@@ -162,7 +162,7 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
             // HD 수정
-            result = outstockConfmMapper.updateOutstockConfmHd(OutstockConfmHdVO);
+            result = outstockConfmMapper.updateOutstockConfmHd(outstockConfmHdVO);
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
             returnResult += result;
@@ -170,28 +170,28 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
 
         // 출고확정여부를 체크한 경우
         if(confirmFg.equals("Y")) {
-            OutstockConfmHdVO.setProcFg("10");
-            OutstockConfmHdVO.setUpdateProcFg("20");
+            outstockConfmHdVO.setProcFg("10");
+            outstockConfmHdVO.setUpdateProcFg("20");
 
             // DTL의 진행구분 수정. 수주확정 -> 출고확정
-            result = outstockConfmMapper.updateOutstockDtlConfirm(OutstockConfmHdVO);
+            result = outstockConfmMapper.updateOutstockDtlConfirm(outstockConfmHdVO);
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
             // HD의 진행구분 수정. 수주확정 -> 출고확정
-            result = outstockConfmMapper.updateOutstockConfirm(OutstockConfmHdVO);
+            result = outstockConfmMapper.updateOutstockConfirm(outstockConfmHdVO);
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
             // 자동입고인 경우 입고로 수정
             if(StringUtil.getOrBlank(envst176).equals("A")) {
-                OutstockConfmHdVO.setProcFg("20");
-                OutstockConfmHdVO.setUpdateProcFg("30");
+                outstockConfmHdVO.setProcFg("20");
+                outstockConfmHdVO.setUpdateProcFg("30");
 
                 // DTL의 진행구분 수정. 출고확정 -> 입고확정
-                result = outstockConfmMapper.updateAutoInstockDtl(OutstockConfmHdVO);
+                result = outstockConfmMapper.updateAutoInstockDtl(outstockConfmHdVO);
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
                 // HD의 진행구분 수정. 출고확정 -> 입고확정
-                result = outstockConfmMapper.updateAutoInstock(OutstockConfmHdVO);
+                result = outstockConfmMapper.updateAutoInstock(outstockConfmHdVO);
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
             }
         }

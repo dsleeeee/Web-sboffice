@@ -24,7 +24,7 @@
         <tbody>
         <tr>
             <%-- 조회일자 --%>
-            <th><s:message code="loanDtl.searchDate"/></th>
+            <th><s:message code="loan.dtl.searchDate"/></th>
             <td colspan="3">
                 <div class="sb-select">
                     <span class="txtIn"><input id="srchStartDate" class="w120"></span>

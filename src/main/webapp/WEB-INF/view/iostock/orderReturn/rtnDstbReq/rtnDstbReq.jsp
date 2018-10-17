@@ -45,13 +45,12 @@
 
   <div class="mt10 pdb20 oh bb">
     <%-- 조회 --%>
-    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('rtnDstbReqCtrl')">
-      <s:message code="cmm.search"/></button>
+    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('rtnDstbReqCtrl')"><s:message code="cmm.search"/></button>
   </div>
 
   <div class="tr mt10">
     <%-- 분배완료 --%>
-    <button type="button" id="btnDstbConfirm" class="btn_skyblue ml5" ng-click="saveDstbConfirm()"><s:message code="rtnDstbReq.dstbConfirm"/></button>
+    <button type="button" id="btnDstbConfirm" class="btn_skyblue ml5" ng-click="saveRtnDstbConfirm()"><s:message code="rtnDstbReq.dstbConfirm"/></button>
   </div>
 
   <div class="w100 mt10">
@@ -186,23 +185,28 @@
       $scope._inquiryMain("/iostock/orderReturn/rtnDstbReq/rtnDstbReq/list.sb", params);
     };
 
-    $scope.saveReturnConfirm = function () {
-      var params = new Array();
-      for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-        var item = $scope.flex.collectionView.itemsEdited[i];
+    $scope.saveRtnDstbConfirm = function () {
+      // 진행구분이 등록인 자료는 매장에서 등록한 수량으로, 분배중인 자료는 기분배된 수량으로 처리됩니다. 공급가 및 분배수량을 확인하시기 바랍니다. 분배완료 하시겠습니까?
+      var msg = "<s:message code='rtnDstbReq.confirmText'/>";
+      s_alert.popConf(msg, function () {
+        var params = new Array();
+        for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+          var item = $scope.flex.collectionView.itemsEdited[i];
 
-        if (item.gChk === true) {
-          item.status    = "U";
-          item.empNo     = "0000";
-          item.storageCd = "001";
-          item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
-          params.push(item);
+          if (item.gChk === true) {
+            item.status    = "U";
+            item.empNo     = "0000";
+            item.storageCd = "001";
+            item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
+            params.push(item);
+          }
         }
-      }
-      $scope._save("/iostock/orderReturn/rtnDstbReq/rtnDstbReq/saveDstbConfirm.sb", params, function () {
-        $scope.searchRtnDstbReqList()
+        $scope._save("/iostock/orderReturn/rtnDstbReq/rtnDstbReq/saveDstbConfirm.sb", params, function () {
+          $scope.searchRtnDstbReqList();
+        });
       });
     };
+
   }]);
 </script>
 

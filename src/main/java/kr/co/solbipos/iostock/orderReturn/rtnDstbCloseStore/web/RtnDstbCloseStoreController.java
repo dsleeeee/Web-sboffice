@@ -22,7 +22,7 @@ import java.util.List;
 
 /**
  * @Class Name : RtnDstbCloseStoreController.java
- * @Description : 수불관리 > 반품관리 > 반품마감(매장별)
+ * @Description : 수불관리 > 매장반품관리 > 반품마감(매장별)
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
