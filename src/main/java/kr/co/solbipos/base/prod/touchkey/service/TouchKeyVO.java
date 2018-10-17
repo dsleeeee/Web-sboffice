@@ -59,11 +59,11 @@ public class TouchKeyVO extends CmmVO {
     private InFg inFg;
 
     /** 폰트크기 */
-    private Long fontSize = 10L;
+    private Integer fontSize;
     /** 폰트색 */
-    private String fontColor = "#000000";
+    private String fontColor;
     /** 채움색 */
-    private String fillColor = "#000000";
+    private String fillColor;
 
 
     /**
@@ -257,13 +257,13 @@ public class TouchKeyVO extends CmmVO {
     /**
      * @return the fontSize
      */
-    public Long getFontSize() {
+    public Integer getFontSize() {
         return fontSize;
     }
     /**
      * @param fontSize the fontSize to set
      */
-    public void setFontSize(Long fontSize) {
+    public void setFontSize(Integer fontSize) {
         this.fontSize = fontSize;
     }
     /**

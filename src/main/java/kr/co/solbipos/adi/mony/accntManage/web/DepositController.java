@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -84,125 +85,32 @@ public class DepositController {
 
         return returnListJson(Status.OK, storeList, accntVO);
     }
-//
-//    /**
-//     * 매장터미널관리 - 포스/터미널 설정 환경변수 조회
-//     * @param storeEnvVO
-//     * @param request
-//     * @param response
-//     * @param model
-//     * @return
-//     */
-//    @RequestMapping(value = "terminalManage/getTerminalEnv.sb", method = RequestMethod.POST)
-//    @ResponseBody
-//    public Result getTerminalEnv(StoreEnvVO storeEnvVO, HttpServletRequest request,
-//        HttpServletResponse response, Model model) {
-//
-//        String envstVal = service.getTerminalEnv(storeEnvVO);
-//
-//        return returnJson(Status.OK, envstVal);
-//    }
-//
-//    /**
-//     * 매장터미널관리 - 포스 목록 조회
-//     * @param storePosVO
-//     * @param request
-//     * @param response
-//     * @param model
-//     * @return
-//     */
-//    @RequestMapping(value = "pos/getPosList.sb", method = RequestMethod.POST)
-//    @ResponseBody
-//    public Result getPosList(StorePosVO storePosVO, HttpServletRequest request,
-//        HttpServletResponse response, Model model) {
-//
-//        List<DefaultMap<String>> posList = service.getPosList(storePosVO);
-//
-//        return returnListJson(Status.OK, posList, storePosVO);
-//    }
-//
-//    /**
-//     * POS VAN 정보 저장
-//     * @param storePosVOs
-//     * @param request
-//     * @param response
-//     * @param model
-//     * @return
-//     */
-//    @RequestMapping(value = "pos/savePosInfo.sb", method = RequestMethod.POST)
-//    @ResponseBody
-//    public Result savePosInfo(@RequestBody StorePosVO[] storePosVOs, HttpServletRequest request,
-//        HttpServletResponse response, Model model) {
-//
-//        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-//
-//        int result = 0;
-//
-//        try{
-//            StoreEnvVO storeEnvVO = new StoreEnvVO();
-//            storeEnvVO.setStoreCd(request.getParameter("storeCd"));
-//            storeEnvVO.setEnvstVal(request.getParameter("terminalFgVal"));
-//
-//            int envstSaveResult = service.updateTerminalEnvst(storeEnvVO, sessionInfoVO);
-//
-//            result = service.savePosInfo(storePosVOs, sessionInfoVO);
-//
-//        }catch(Exception ex){
-//            ex.printStackTrace();
-//        }
-//        return returnListJson(Status.OK, result);
-//    }
-//
-//    /**
-//     * 매장터미널관리 - 코너 목록 조회
-//     * @param storeCornerVO
-//     * @param request
-//     * @param response
-//     * @param model
-//     * @return
-//     */
-//    @RequestMapping(value = "corner/getCornerList.sb", method = RequestMethod.POST)
-//    @ResponseBody
-//    public Result getCornerList(StoreCornerVO storeCornerVO, HttpServletRequest request,
-//        HttpServletResponse response, Model model) {
-//
-//        List<DefaultMap<String>> posList = service.getCornerList(storeCornerVO);
-//
-//        return returnListJson(Status.OK, posList, storeCornerVO);
-//    }
-//
-//
-//    /**
-//     * 코너 정보 저장
-//     * @param storeCornerVOs
-//     * @param request
-//     * @param response
-//     * @param model
-//     * @return
-//     */
-//    @RequestMapping(value = "corner/saveCornerInfo.sb", method = RequestMethod.POST)
-//    @ResponseBody
-//    public Result saveCornerInfo(@RequestBody StoreCornerVO[] storeCornerVOs, HttpServletRequest request,
-//        HttpServletResponse response, Model model) {
-//
-//        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-//
-//        int result = 0;
-//
-//        try{
-//            StoreEnvVO storeEnvVO = new StoreEnvVO();
-//            storeEnvVO.setStoreCd(request.getParameter("storeCd"));
-//            storeEnvVO.setEnvstVal(request.getParameter("terminalFgVal"));
-//
-//            int envstSaveResult = service.updateTerminalEnvst(storeEnvVO, sessionInfoVO);
-//
-//            result = service.saveCornerInfo(storeCornerVOs, sessionInfoVO);
-//
-//        }catch(Exception ex){
-//            ex.printStackTrace();
-//        }
-//        return returnListJson(Status.OK, result);
-//    }
 
+    /**
+      * 계정 정보 저장
+      * @param accntVOs
+      * @param request
+      * @param response
+      * @param model
+      * @return
+      */
+    @RequestMapping(value = "deposit/saveDepositAccntList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveDepositAccntList(@RequestBody AccntVO[] accntVOs, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = 0;
+
+        try{
+
+            result = service.saveDepositAccntList(accntVOs, sessionInfoVO);
+
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+        return returnListJson(Status.OK, result);
+    }
 
 }

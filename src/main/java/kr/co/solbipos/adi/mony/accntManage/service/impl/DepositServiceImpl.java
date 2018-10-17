@@ -42,8 +42,52 @@ public class DepositServiceImpl implements DepositService{
     @Override
     public List<DefaultMap<String>> getDepositAccntList(AccntVO accntVO, SessionInfoVO sessionInfoVO) {
 
-        accntVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+        OrgnFg userOrgnFg = sessionInfoVO.getOrgnFg();
+
+        accntVO.setOrgnFg(userOrgnFg);
+
+        if(userOrgnFg == OrgnFg.HQ) { // 본사
+            accntVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        } else if(userOrgnFg == OrgnFg.STORE) { // 매장
+            accntVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
 
         return mapper.getDepositAccntList(accntVO);
+    }
+
+    /** 계정 정보 저장 */
+    @Override
+    public int saveDepositAccntList(AccntVO[] accntVOs, SessionInfoVO sessionInfoVO) {
+
+        int resultCnt = 0;
+        String dt = currentDateTimeString();
+
+        for(AccntVO accntVO : accntVOs) {
+
+            accntVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+
+            OrgnFg userOrgnFg = sessionInfoVO.getOrgnFg();
+
+            if(userOrgnFg == OrgnFg.HQ) {
+                accntVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            } else if(userOrgnFg == OrgnFg.STORE) {
+                accntVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+
+            accntVO.setRegDt(dt);
+            accntVO.setRegId(sessionInfoVO.getUserId());
+            accntVO.setModDt(dt);
+            accntVO.setModId(sessionInfoVO.getUserId());
+
+            if(accntVO.getStatus() == GridDataFg.INSERT) {
+                resultCnt += mapper.insertDepositAccntList(accntVO);
+            } else if (accntVO.getStatus() == GridDataFg.UPDATE) {
+                resultCnt += mapper.updateDepositAccntList(accntVO);
+            } else if (accntVO.getStatus() == GridDataFg.DELETE) {
+                resultCnt += mapper.deleteDepositAccntList(accntVO);
+            }
+        }
+
+        return resultCnt;
     }
 }

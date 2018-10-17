@@ -94,16 +94,8 @@
     -->
     <select id="getCornerList" parameterType="storeCornerVO" resultType="DefaultMap">
         /* TerminalManageMapper.getCornerList */
-        SELECT STORE_CD,
-               CORNR_CD,
-               CORNR_NM,
-               OWNER_NM,
-               BIZ_NO,
-               TEL_NO,
-               VAN_CD,
-               VAN_TERMNL_NO,
-               VAN_SER_NO,
-               USE_YN
+        SELECT CORNR_CD AS VALUE,
+               CORNR_NM AS NAME
           FROM TB_MS_CORNER
          WHERE STORE_CD = #{storeCd}
     </select>
@@ -203,7 +195,11 @@
             VENDOR_CD,
             VENDOR_NM,
             VENDOR_TERMNL_NO,
-            VENDOR_SER_NO
+            VENDOR_SER_NO,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
         )
         VALUES
         (
@@ -213,7 +209,11 @@
             #{vendorCd},
             #{vendorNm},
             #{vendorTermnlNo},
-            #{vendorSerNo}
+            #{vendorSerNo},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
         )
     </insert>
 
@@ -229,7 +229,9 @@
                VENDOR_CD = #{vendorCd},
                VENDOR_NM  #{vendorNm},
                VENDOR_TERMNL_NO = #{vendorTermnlNo},
-               VENDOR_SER_NO = #{vendorSerNo}
+               VENDOR_SER_NO = #{vendorSerNo},
+               MOD_DT = #{modDt},
+               MOD_ID = #{modId}
          WHERE STORE_CD = #{storeCd}
            AND POS_NO = #{posNo}
     </update>
@@ -249,7 +251,11 @@
             VENDOR_CD,
             VENDOR_NM,
             VENDOR_TERMNL_NO,
-            VENDOR_SER_NO
+            VENDOR_SER_NO,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
         )
         VALUES
         (
@@ -259,7 +265,11 @@
             #{vendorCd},
             #{vendorNm},
             #{vendorTermnlNo},
-            #{vendorSerNo}
+            #{vendorSerNo},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
         )
     </insert>
 
@@ -275,7 +285,9 @@
                VENDOR_CD = #{vendorCd},
                VENDOR_NM = #{vendorNm},
                VENDOR_TERMNL_NO = #{vendorTermnlNo},
-               VENDOR_SER_NO = #{vendorSerNo}
+               VENDOR_SER_NO = #{vendorSerNo},
+               MOD_DT = #{modDt},
+               MOD_ID = #{modId}
          WHERE STORE_CD = #{storeCd}
            AND CORNR_CD = #{cornrCd}
     </update>

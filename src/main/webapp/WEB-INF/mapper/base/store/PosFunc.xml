@@ -263,8 +263,8 @@
         PARAM    : DefaultMap
         COMMENTS : 포스기능키 구성 XML 정보를 조회한다.
     -->
-    <select id="getFuncKeyXml" parameterType="DefaultMap" resultType="String">
-        /* PosFuncMapper.getFuncKeyXml */
+    <select id="getFuncKeyXml" parameterType="DefaultMap" resultType="java.lang.String">
+        /* USE : PosFuncMapper.getFuncKeyXml */
         SELECT
             XML
         FROM
@@ -283,7 +283,7 @@
         COMMENTS : 포스기능키키 구성 XML 정보를 생성한다.
     -->
     <insert id="insertFuncKeyConfgXml" parameterType="DefaultMap">
-        /* PosFuncMapper.insertFuncKeyConfgXml */
+        /* USE : PosFuncMapper.insertFuncKeyConfgXml */
         INSERT INTO TB_WB_POS_CONFG_XML twpcx
         (
             twpcx.STORE_CD,
@@ -311,7 +311,7 @@
         COMMENTS : 포스기능키 구성 XML 정보를 수정한다.
     -->
     <update id="updateFuncKeyConfgXml" parameterType="DefaultMap">
-        /* PosFuncMapper.updateFuncKeyConfgXml */
+        /* USE : PosFuncMapper.updateFuncKeyConfgXml */
         UPDATE
             TB_WB_POS_CONFG_XML twpcx
         SET
@@ -332,7 +332,7 @@
         COMMENTS : 포스기능키 정보를 생성한다.
     -->
     <insert id="insertPosFuncKey" parameterType="posFuncVO">
-        /* PosFuncMapper.insertPosFuncKey */
+        /* USE : PosFuncMapper.insertPosFuncKey */
         INSERT INTO TB_MS_POS_FNKEY (
             STORE_CD,
             POS_NO,
@@ -377,7 +377,7 @@
         COMMENTS : 포스기능키 정보를 삭제한다.
     -->
     <delete id="deletePosFuncKey" parameterType="posFuncVO">
-        /* TouchkeyMapper.deleteTouchKeyClass */
+        /* USE : PosFuncMapper.deletePosFuncKey */
         DELETE
         FROM
             TB_MS_POS_FNKEY

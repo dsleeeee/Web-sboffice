@@ -26,4 +26,7 @@ public interface DepositService {
 
     /** 계정 조회 */
     List<DefaultMap<String>> getDepositAccntList(AccntVO accntVO, SessionInfoVO sessionInfoVO);
+
+    /** 계정 정보 저장 */
+    int saveDepositAccntList(AccntVO[] accntVOs, SessionInfoVO sessionInfoVO);
 }

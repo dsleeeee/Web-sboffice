@@ -33,6 +33,9 @@ public interface TouchKeyMapper {
     /** 상품목록 조회 : 판매터치키에서 사용 */
     List<DefaultMap<String>> getProductListForTouchKey(TouchKeyVO touchKeyVO);
 
+    /** 상품분류 조회 : 판매터치키에서 사용 */
+    List<DefaultMap<String>> getProductClassListForTouchKey(TouchKeyVO touchKeyVO);
+
     /** 터치키 스타일코드 목록 조회 */
     List<DefaultMap<String>> getTouchKeyStyleCdList();
 
@@ -41,6 +44,9 @@ public interface TouchKeyMapper {
 
     /** 터치키 분류 페이지별 스타일 코드 조회 */
     String getTouchKeyPageStyleCd(TouchKeyClassVO touchKeyClassVO);
+
+    /** 터치키 스타일 비교값 조회 */
+    DefaultMap<String> getTouchKeyStyleForCompare(TouchKeyStyleVO touchKeyStyleVO);
 
     /** 판매터치키 XML 정보 조회 */
     String getTouchKeyXml(DefaultMap<String> param);

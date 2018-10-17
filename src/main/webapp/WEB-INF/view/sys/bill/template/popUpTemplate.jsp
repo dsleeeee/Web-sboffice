@@ -26,14 +26,14 @@
                         <td>
                             <div class="sb-select">
                                 <wj-combo-box
-                                        id="srchTempltCdCombo"
-                                        ng-model="templtCd"
-                                        items-source="_getComboData('srchTempltCdCombo')"
-                                        display-member-path="templtNm"
-                                        selected-value-path="templtCd"
-                                        is-editable="false"
-                                        initialized="_initComboBox(s)"
-                                        selected-index-changed="setSelectedCombo(s)">
+                                    id="srchTempltCdCombo"
+                                    ng-model="templtCd"
+                                    items-source="_getComboData('srchTempltCdCombo')"
+                                    display-member-path="templtNm"
+                                    selected-value-path="templtCd"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    selected-index-changed="setSelectedCombo(s)">
                                 </wj-combo-box>
                             </div>
                         </td>
@@ -55,13 +55,13 @@
                         <td>
                             <div class="sb-select">
                                 <wj-combo-box
-                                        id="srchClsFgCombo"
-                                        ng-model="clsFg"
-                                        items-source="_getComboData('srchClsFgCombo')"
-                                        display-member-path="name"
-                                        selected-value-path="value"
-                                        is-editable="false"
-                                        initialized="_initComboBox(s)">
+                                    id="srchClsFgCombo"
+                                    ng-model="clsFg"
+                                    items-source="_getComboData('srchClsFgCombo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)">
                                 </wj-combo-box>
                             </div>
                         </td>

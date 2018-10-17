@@ -28,5 +28,14 @@ public interface DepositMapper {
 
     /** 계정 조회 */
     List<DefaultMap<String>> getDepositAccntList(AccntVO accntVO);
+
+    /** 계정 추가 */
+    int insertDepositAccntList(AccntVO accntVO);
+
+    /** 계정 수정 */
+    int updateDepositAccntList(AccntVO accntVO);
+
+    /** 계정 삭제 */
+    int deleteDepositAccntList(AccntVO accntVO);
 }
 
