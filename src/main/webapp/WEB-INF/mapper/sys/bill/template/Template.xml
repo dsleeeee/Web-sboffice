@@ -376,7 +376,6 @@
                 USING DUAL
                 ON (
                     thp.HQ_OFFICE_CD = #{storeCd}
-                    AND thp.PRT_CLASS_CD = #{prtClassCd}
                 )
                 WHEN NOT MATCHED THEN
                     INSERT
@@ -403,7 +402,6 @@
                 USING DUAL
                 ON (
                     tmp.STORE_CD = #{storeCd}
-                    AND tmp.PRT_CLASS_CD = #{prtClassCd}
                 )
                 WHEN NOT MATCHED THEN
                     INSERT

@@ -17,15 +17,15 @@
   <%-- 입금계정 --%>
   <div id="depositGrid" class="w50 fl mt40" style="width: 50%" ng-controller="depositCtrl">
     <div class="wj-TblWrapBr mr10 pd20" style="height: 400px;">
-      <div class="updownSet oh mb10">
+      <div class="updownSet oh mb10" id="depositBtnArea" style="display: none;">
         <span class="fl bk lh30"><s:message code='accntManage.deposit' /></span>
-        <button class="btn_skyblue" style="display: none;" ng-click="addRow()">
+        <button class="btn_skyblue"  ng-click="addRow()">
           <s:message code="cmm.add" />
         </button>
-        <button class="btn_skyblue" style="display: none;" ng-click="del()">
+        <button class="btn_skyblue" ng-click="delete()">
           <s:message code="cmm.delete" />
         </button>
-        <button class="btn_skyblue" style="display: none;" ng-click="save()">
+        <button class="btn_skyblue" ng-click="save()">
           <s:message code="cmm.save" />
         </button>
       </div>
@@ -45,29 +45,28 @@
             <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="accntManage.hqOfficeCd"/>" binding="hqOfficeCd" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="accntManage.storeCd"/>" binding="storeCd" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="accntManage.accntCd"/>" binding="accntCd" ></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="accntManage.accntNm"/>" binding="accntNm" ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="accntManage.accntCd"/>" binding="accntCd" width="*"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="accntManage.accntNm"/>" binding="accntNm" width="*"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="accntManage.accntFg"/>" binding="accntFg" visible="false" ></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="accntManage.useYn"/>" binding="useYn" data-map="useYnDataMap"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="accntManage.useYn"/>" binding="useYn" data-map="useYnDataMap" width="*"></wj-flex-grid-column>
           </wj-flex-grid>
         </div>
       </div>
     </div>
   </div>
 
-
   <%-- 출금계정 --%>
   <div id="withdrawGrid" class="w50 fr mt40" style="width: 50%" ng-controller="withdrawCtrl">
     <div class="wj-TblWrapBr ml10 pd20" style="height: 400px;">
-      <div class="updownSet oh mb10">
+      <div class="updownSet oh mb10" id="withdrawBtnArea" style="display: none;">
         <span class="fl bk lh30"><s:message code='accntManage.withdraw' /></span>
-        <button class="btn_skyblue" style="display: none;" ng-click="addRow()">
+        <button class="btn_skyblue" ng-click="addRow()">
           <s:message code="cmm.add" />
         </button>
-        <button class="btn_skyblue" style="display: none;" ng-click="del()">
+        <button class="btn_skyblue" ng-click="delete()">
           <s:message code="cmm.delete" />
         </button>
-        <button class="btn_skyblue" style="display: none;" ng-click="save()">
+        <button class="btn_skyblue" ng-click="save()">
           <s:message code="cmm.save" />
         </button>
       </div>
@@ -87,10 +86,10 @@
           <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="accntManage.hqOfficeCd"/>" binding="hqOfficeCd" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="accntManage.storeCd"/>" binding="storeCd" visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="accntManage.accntCd"/>" binding="accntCd" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="accntManage.accntNm"/>" binding="accntNm" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="accntManage.accntCd"/>" binding="accntCd" width="*"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="accntManage.accntNm"/>" binding="accntNm" width="*"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="accntManage.accntFg"/>" binding="accntFg" visible="false" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="accntManage.useYn"/>" binding="useYn" data-map="useYnDataMap"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="accntManage.useYn"/>" binding="useYn" data-map="useYnDataMap" width="*"></wj-flex-grid-column>
         </wj-flex-grid>
       </div>
     </div>

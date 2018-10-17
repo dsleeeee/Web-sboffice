@@ -488,27 +488,27 @@ String.prototype.centerPad = function(padStr, padLen) {
         return this;
     } else {
         var calcLen = padLen - this.getByteLength();
-        var rightPad = Math.ceil(calcLen / 2);
-        var leftPad = calcLen - rightPad + 1;
+        var leftPad = Math.ceil(calcLen / 2);
+        var rightPad = calcLen - rightPad + 1;
         return Array(leftPad).join(padStr).concat(this,Array(rightPad+1).join(padStr));
     }
 };
 
 String.prototype.leftPad = function(padStr, padLen) {
-    if ( parseInt(padLen) + 1 <= this.getByteLength() ) {
-        return this;
-    } else {
-        var rightPad = padLen - this.getByteLength() + 1;
-        return this.concat(Array(rightPad).join(padStr));
-    }
+  if ( parseInt(padLen) + 1 <= this.getByteLength() ) {
+    return this;
+  } else {
+    var leftPad = padLen - this.getByteLength() + 1;
+    return Array(leftPad).join(padStr).concat(this);
+  }
 };
 
 String.prototype.rightPad = function(padStr, padLen) {
     if ( parseInt(padLen) + 1 <= this.getByteLength() ) {
         return this;
     } else {
-        var leftPad = padLen - this.getByteLength() + 1;
-        return Array(leftPad).join(padStr).concat(this);
+        var rightPad = padLen - this.getByteLength() + 1;
+        return this.concat(Array(rightPad).join(padStr));
     }
 };
 

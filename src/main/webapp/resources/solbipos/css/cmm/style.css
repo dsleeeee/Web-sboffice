@@ -1040,7 +1040,7 @@ div.commtWrap .btn_skyblue {width:140px; position:absolute; top:0px; right:0px; 
 .cfgWrap {overflow-y:auto; height:605px; border:1px solid #dbdbdb;}
 .cfgWrap > div.wj-flexgrid {margin-top:-1px; margin-bottom:10px;}
 
-.cfgWrap2 {overflow-y:auto; height:565px; border:1px solid #dbdbdb;}
+.cfgWrap2 { height:565px; border:1px solid #dbdbdb;}
 .cfgWrap2 > div.wj-flexgrid {margin-top:-1px; margin-bottom:10px;}
 
 .shopSetting {border:1px solid #dbdbdb; border-top:0px; width:510px; height:95px; padding:10px 0 10px 10px; position:relative;}
@@ -1127,7 +1127,7 @@ a.btn_underline, a.btn_underline:hover, a.btn_underline.on {background-position:
 .groupNavNext { width: 49px; height: 60px; background-position: 0 0; margin-left:1px; }
 .groupNavNext:hover { width: 49px; height: 60px; background-position: -49px 0;}
 
-.keyStyleWrap { width:120px; height:240px; position: absolute; }
+.keyStyleWrap { width:120px; height:310px; position: absolute; }
 
 .prodNavWrap { width:125px; display: inline-block; }
 .prodPageNoWrap { width:103px; position: relative; }
@@ -1712,20 +1712,24 @@ p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17p
 }
 
 .templateEdit textarea {
-    width:100%;
-    height:100%;
+    width: 100%;
+    height: 100%;
     font-family: '굴림체', 'sans-serif';
-    font-size:12px;
-    line-height:1.5em;
-    resize:none;
-    overflow-y:scroll;
+    font-size: 12px;
+    line-height: 1.5em;
+    resize: none;
+    overflow-y: scroll;
     background: #fff;
 }
 
 .templateEdit #preview {
     overflow-y: scroll;
 }
+
 .templateEdit #preview pre {
+    width: 100%;
+    height: 100%;
+    padding-top: 1px;
     font-family: '굴림체', 'sans-serif';
     font-size: 12px;
     text-align: left;
@@ -1735,12 +1739,14 @@ p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17p
     white-space: -o-pre-wrap;
     word-break: break-all;
 }
+
 .templateEdit #preview pre p {
     margin-top: 0px;
     margin-bottom: 3px;
     font-family: '굴림체', 'sans-serif';
     font-size: 12px;
 }
+
 .state-invalid div {
     color: red !important;
 }

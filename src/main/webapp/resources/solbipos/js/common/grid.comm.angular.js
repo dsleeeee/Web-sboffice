@@ -62,7 +62,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
         $scope.data = data;
 
         // 페이징 처리
-        if (response.data.data.page.curr) {
+        if (response.data.data.page && response.data.data.page.curr) {
           $scope.pagingInfo = response.data.data.page;
           $scope.pagingInfo.ctrlName = $scope.name;
           $scope._broadcast('drawPaging', $scope.pagingInfo);
@@ -210,20 +210,11 @@ function RootController(ctrlName, $scope, $http, isPicker) {
         // apply checkbox value to cells
         cb.addEventListener('click', function (e) {
           flex.beginUpdate();
-
-          console.log("cb ", cb);
-
           for (var i = 0; i < flex.rows.length; i++) {
-            var childCell = flex.cells.hostElement;
-            console.log("childCell ", flex.columns[i]);
-            console.log("childCell ", flex.cells);
-            console.log("childCell ", childCell);
-            // console.log(c.children[0].disabled);
-
+            var cell = flex.cells.getCellElement(i,0);
             // 활성화 및 readOnly 아닌 경우에만 체크되도록
             if (!cell.children[0].disabled) {
               flex.setCellData(i, c, cb.checked);
-
             }
           }
           flex.endUpdate();

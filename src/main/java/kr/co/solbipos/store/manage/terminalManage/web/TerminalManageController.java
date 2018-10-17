@@ -136,21 +136,16 @@ public class TerminalManageController {
         TerminalEnvFg envstVal = TerminalEnvFg.getEnum(service.getTerminalEnv(storeEnvVO));
 
         // 포스 목록 조회
-//        if(envstVal == TerminalEnvFg.NO_CORNER || envstVal == TerminalEnvFg.USE_POS ) {
+        StorePosVO storePosVO = new StorePosVO();
+        storePosVO.setStoreCd(storeEnvVO.getStoreCd());
 
-            StorePosVO storePosVO = new StorePosVO();
-            storePosVO.setStoreCd(storeEnvVO.getStoreCd());
+        posList  = service.getPosList(storePosVO);
 
-            posList  = service.getPosList(storePosVO);
-//        }
         // 코너 목록 조회
-//        else if(envstVal == TerminalEnvFg.USE_CORNER) {
+        StoreCornerVO storeCornerVO = new StoreCornerVO();
+        storeCornerVO.setStoreCd(storeEnvVO.getStoreCd());
 
-            StoreCornerVO storeCornerVO = new StoreCornerVO();
-            storeCornerVO.setStoreCd(storeEnvVO.getStoreCd());
-
-            posList  = service.getCornerList(storeCornerVO);
-//        }
+        cornerList  = service.getCornerList(storeCornerVO);
 
         resultMap.put("envstVal", envstVal);
         resultMap.put("posList", posList);

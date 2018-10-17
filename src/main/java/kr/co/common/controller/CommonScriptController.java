@@ -30,11 +30,17 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(value = "/resource/solbipos/js/variables")
 public class CommonScriptController {
 
-    @Autowired
-    SessionService sessionService;
-    @Autowired
+    private final SessionService sessionService;
     @Qualifier("messageResolveService")
-    private MessageResolveService messageResolveService;
+    private final MessageResolveService messageResolveService;
+
+    /** Constructor Injection */
+    @Autowired
+    public CommonScriptController(SessionService sessionService, MessageResolveService messageResolveService) {
+        this.sessionService = sessionService;
+        this.messageResolveService = messageResolveService;
+    }
+
 
     /**
      * 언어 프로퍼티 : JSP에 코딩하여 JS처럼 사용

@@ -127,10 +127,23 @@ public class PosTemplateServiceImpl implements PosTemplateService {
         if ( result >= 0 ) {
             // 실제 출력물에도 선택된 템플릿 내용으로 업데이트
             posTemplateMapper.updatePosTemplatePrint(posTemplateVO);
-            // 매장에 존재하는 템플릿도 동시에 업데이트 처리한다.
-            posTemplateMapper.updatePosTemplateForStoreFromHq(posTemplateVO);
-
             return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+    }
+
+    /** 출력물템플릿 매장적용 */
+    @Override
+    public int applyStoreTemplate(PosTemplateVO posTemplateVO, SessionInfoVO sessionInfoVO) {
+
+        posTemplateVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        posTemplateVO.setModId(sessionInfoVO.getUserId());
+        // 프로시저호출 : 호출하면서 VO에 결과값 담겨있다.
+        posTemplateMapper.updatePosTemplateForStoreFromHq(posTemplateVO);
+        // 결과값 판단.
+        if ( "0000".equals(posTemplateVO.getResult()) ) {
+            return 1;
         } else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }

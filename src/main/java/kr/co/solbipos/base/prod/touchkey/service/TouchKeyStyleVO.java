@@ -20,18 +20,22 @@ import kr.co.solbipos.application.common.service.CmmVO;
  */
 public class TouchKeyStyleVO extends CmmVO {
 
-    private static final long serialVersionUID = 4669068485254747743L;
+    private static final long serialVersionUID = -6010694897967742075L;
 
     /** 스타일코드 */
     private String styleCd;
-    /** 스타일명 */
-    private String styleNm;
     /** 버튼구분 */
     private String buttonFg;
-    /** 버튼상태 */
-    private String buttonStat;
-    /** 버튼색상 */
-    private String buttonColor;
+    /** 사용여부 */
+    private String useYn;
+    /** 비고 */
+    private String remark;
+    /** 버튼태그구분 */
+    private String buttonTagFg;
+    /** 배경색 : 마우스오버시 */
+    private String buttonOnColor;
+    /** 배경색 */
+    private String buttonOffColor;
     /** 텍스트정렬 */
     private String textAlign;
     /** 텍스트수직정렬 */
@@ -39,15 +43,20 @@ public class TouchKeyStyleVO extends CmmVO {
     /** 폰트명 */
     private String fontNm;
     /** 폰트사이즈 */
-    private String fontSize;
+    private Integer fontSize;
+    /** 폰트색상 : 마우스오버시 */
+    private String fontOnColor;
     /** 폰트색상 */
-    private String fontColor;
+    private String fontOffColor;
     /** 폰트스타일:Bold 여부 */
     private String fontStyleBold;
     /** 폰트스타일:Italic 여부 */
     private String fontStyleItalic;
     /** 폰트스타일:Underline 여부 */
     private String fontStyleUnderline;
+
+    /** 스타일명 */
+    private String styleNm;
 
 
     /**
@@ -65,20 +74,6 @@ public class TouchKeyStyleVO extends CmmVO {
     }
 
     /**
-     * @return the styleNm
-     */
-    public String getStyleNm() {
-        return styleNm;
-    }
-
-    /**
-     * @param styleNm the styleNm to set
-     */
-    public void setStyleNm(String styleNm) {
-        this.styleNm = styleNm;
-    }
-
-    /**
      * @return the buttonFg
      */
     public String getButtonFg() {
@@ -93,31 +88,73 @@ public class TouchKeyStyleVO extends CmmVO {
     }
 
     /**
-     * @return the buttonStat
+     * @return the useYn
      */
-    public String getButtonStat() {
-        return buttonStat;
+    public String getUseYn() {
+        return useYn;
     }
 
     /**
-     * @param buttonStat the buttonStat to set
+     * @param useYn the useYn to set
      */
-    public void setButtonStat(String buttonStat) {
-        this.buttonStat = buttonStat;
+    public void setUseYn(String useYn) {
+        this.useYn = useYn;
     }
 
     /**
-     * @return the buttonColor
+     * @return the remark
      */
-    public String getButtonColor() {
-        return buttonColor;
+    public String getRemark() {
+        return remark;
     }
 
     /**
-     * @param buttonColor the buttonColor to set
+     * @param remark the remark to set
      */
-    public void setButtonColor(String buttonColor) {
-        this.buttonColor = buttonColor;
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    /**
+     * @return the buttonTagFg
+     */
+    public String getButtonTagFg() {
+        return buttonTagFg;
+    }
+
+    /**
+     * @param buttonTagFg the buttonTagFg to set
+     */
+    public void setButtonTagFg(String buttonTagFg) {
+        this.buttonTagFg = buttonTagFg;
+    }
+
+    /**
+     * @return the buttonOnColor
+     */
+    public String getButtonOnColor() {
+        return buttonOnColor;
+    }
+
+    /**
+     * @param buttonOnColor the buttonOnColor to set
+     */
+    public void setButtonOnColor(String buttonOnColor) {
+        this.buttonOnColor = buttonOnColor;
+    }
+
+    /**
+     * @return the buttonOffColor
+     */
+    public String getButtonOffColor() {
+        return buttonOffColor;
+    }
+
+    /**
+     * @param buttonOffColor the buttonOffColor to set
+     */
+    public void setButtonOffColor(String buttonOffColor) {
+        this.buttonOffColor = buttonOffColor;
     }
 
     /**
@@ -165,29 +202,43 @@ public class TouchKeyStyleVO extends CmmVO {
     /**
      * @return the fontSize
      */
-    public String getFontSize() {
+    public Integer getFontSize() {
         return fontSize;
     }
 
     /**
      * @param fontSize the fontSize to set
      */
-    public void setFontSize(String fontSize) {
+    public void setFontSize(Integer fontSize) {
         this.fontSize = fontSize;
     }
 
     /**
-     * @return the fontColor
+     * @return the fontOnColor
      */
-    public String getFontColor() {
-        return fontColor;
+    public String getFontOnColor() {
+        return fontOnColor;
     }
 
     /**
-     * @param fontColor the fontColor to set
+     * @param fontOnColor the fontOnColor to set
      */
-    public void setFontColor(String fontColor) {
-        this.fontColor = fontColor;
+    public void setFontOnColor(String fontOnColor) {
+        this.fontOnColor = fontOnColor;
+    }
+
+    /**
+     * @return the fontOffColor
+     */
+    public String getFontOffColor() {
+        return fontOffColor;
+    }
+
+    /**
+     * @param fontOffColor the fontOffColor to set
+     */
+    public void setFontOffColor(String fontOffColor) {
+        this.fontOffColor = fontOffColor;
     }
 
     /**
@@ -230,5 +281,19 @@ public class TouchKeyStyleVO extends CmmVO {
      */
     public void setFontStyleUnderline(String fontStyleUnderline) {
         this.fontStyleUnderline = fontStyleUnderline;
+    }
+
+    /**
+     * @return the styleNm
+     */
+    public String getStyleNm() {
+        return styleNm;
+    }
+
+    /**
+     * @param styleNm the styleNm to set
+     */
+    public void setStyleNm(String styleNm) {
+        this.styleNm = styleNm;
     }
 }

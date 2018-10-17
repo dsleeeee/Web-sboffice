@@ -18,6 +18,7 @@ var app = agrid.getApp();
  *  터미널 Ctrl
  **********************************************************************/
 app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
+
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('terminalCtrl', $scope, $http, true));
 
@@ -30,28 +31,59 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
     return $scope.terminalEnvVal;
   };
 
-  // 포스 선택값
+  // 포스 콥보박스 선택값 (포스 콤보박스 선택시, 해당 포스의 터미널 정보 조회)
   $scope.posFgVal = "01";
   $scope.setPosFgVal = function(s,e){
+
+    if(s.selectedValue === undefined || s.selectedValue === "") {
+      return false;
+    }
+
     $scope.posFgVal = s.selectedValue;
+
+    var posScope = agrid.getScope('posCtrl');
+
+    posScope.getPosSetting();
   };
   $scope.getPosFgVal = function(){
     return $scope.posFgVal;
   };
 
-  // 코너 선택값
+  // 코너 콤보박스 선택값 (코너 콤보박스 선택시, 해당 코너의 터미널 정보 조회)
   $scope.cornerFgVal = "01";
   $scope.setCornerFgVal = function(s,e){
+
+    if(s.selectedValue === undefined || s.selectedValue === "") {
+      return false;
+    }
+
     $scope.cornerFgVal = s.selectedValue;
+
+    var cornerScope = agrid.getScope('cornerCtrl');
+
+    cornerScope.getCornerSetting();
   };
   $scope.getCornerFgVal = function(){
     return $scope.cornerFgVal;
   };
 
-  // 콤보박스 생성
+  // 콤보박스 생성 및 데이터 초기화
+  $scope.comboDt = { posCombo:null, cornerCombo:null }
+
+  $scope.posFgArr = [
+    {value:"", name:"POS 선택"}
+  ];
+
+  $scope.cornerFgArr = [
+    {value:"", name:"코너 선택"}
+  ];
+
+  $scope.addComboData = function(){
+    $scope.comboDt.posCombo.itemsSource = new wijmo.collections.CollectionView( $scope.posFgArr);
+    $scope.comboDt.cornerCombo.itemsSource = new wijmo.collections.CollectionView( $scope.cornerFgArr);
+  };
+
   $scope._setComboData("terminalFg", terminalFg);
-  // $scope._setComboData("posFg", []);
-  // $scope._setComboData("cornerFg", []);
 
   // 매장찾기 팝업 오픈
   $scope.searchStore = function(){
@@ -66,7 +98,7 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
     });
   };
 
-  // 조회
+  // 매장 선택 후, 조회 (환경변수, 포스목록, 코너목록)
   $scope.$on("terminalCtrl", function(event, data) {
     $scope.search();
     event.preventDefault();
@@ -87,7 +119,7 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
     $.ajax({
       type: "POST",
       cache: false,
-      async:true,
+      async:false,
       dataType: "json",
       url: baseUrl + "terminalManage/getTerminalEnv.sb",
       data: params,
@@ -97,34 +129,56 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
         var posList = result.data.posList;
         var cornerList = result.data.cornerList;
 
-        console.log(posList);
-        console.log(cornerList);
-
-        $("#terminalFgVal").val(terminalEnvVal);
+        // console.log(posList);
+        // console.log(cornerList);
 
         $scope.setTerminalEnvVal(terminalEnvVal);
+        $scope.terminalFg = terminalEnvVal;
 
-        terminalFg.selectedValue = terminalEnvVal;
+        for(var i in posList){
+          $scope.posFgArr.push(posList[i]);
+        }
+        $scope.comboDt.posCombo.itemsSource = new wijmo.collections.CollectionView( $scope.posFgArr);
 
-        // 콤보박스 왜 안생겨 TODO
-        $scope._setComboData("posFg", posList);
-        $scope._setComboData("cornerFg", cornerList);
-
-        $("#posFgVal").val($scope.getPosFgVal());
-        $("#cornerFgVal").val($scope.getCornerFgVal());
+        for(var j in cornerList){
+          $scope.cornerFgArr.push(cornerList[j]);
+        }
+        $scope.comboDt.cornerCombo.itemsSource = new wijmo.collections.CollectionView( $scope.cornerFgArr);
 
         // 코너별 승인
-        if($scope.getTerminalEnvVal() === "2") {
-          var cornerScope = agrid.getScope('cornerCtrl');
-          cornerScope.getCornerSetting();
+        if($scope.terminalFg  === "2") {
+         $scope.showCorner();
         }
         // 포스별 승인
-        else if($scope.getTerminalEnvVal() === "0" || $scope.getTerminalEnvVal() === "3"){
-          var posScope = agrid.getScope('posCtrl');
-          posScope.getPosSetting();
+        else if($scope.terminalFg  === "0" || $scope.terminalFg  === "3"){
+          $scope.showPos();
         }
       }
     });
+  };
+
+  // 코너 보여주기
+  $scope.showCorner = function(){
+    $("#cornerListArea").show();
+    $("#cornerArea").show();
+    $("#cornerBtnArea").show();
+
+    $("#posListArea").hide();
+    $("#posArea").hide();
+    $("#posBtnArea").hide();
+  };
+
+  // 포스 보여주기
+  $scope.showPos = function(){
+
+    $("#cornerListArea").hide();
+    $("#cornerArea").hide();
+    $("#cornerBtnArea").hide();
+
+    $("#posListArea").show();
+    $("#posArea").show();
+    $("#posBtnArea").show();
+
   };
 
   // 콤보박스 값 변경 이벤트
@@ -134,21 +188,23 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
       return false;
     }
 
-    // 선택한 터미널 콤보값
     $scope.setTerminalEnvVal(s.selectedValue);
-
-    var terminalFgVal = $scope.getTerminalEnvVal();
+    var selectedTerminalFgVal = $scope.getTerminalEnvVal();
 
     // 포스 목록 조회
-    if(terminalFgVal == "0" || terminalFgVal == "3" ) {
-      var posScope = agrid.getScope('posCtrl');
-      posScope.getPosSetting();
+    if(selectedTerminalFgVal == "0" || selectedTerminalFgVal == "3" ) {
+      $scope.showPos();
     }
     // 코너 목록 조회
-    else if(terminalFgVal === "2") {
-      var cornerScope = agrid.getScope('cornerCtrl');
-      cornerScope.getCornerSetting();
+    else if(selectedTerminalFgVal === "2") {
+      $scope.showCorner();
     }
+  };
+
+  // 포스 환경변수 복사 //TODO
+  $scope.copyEnv = function(){
+    $scope._popMsg(messages["terminalManage.no.open"]);
+    return false;
   };
 
   // 포스 터미널 그리드 행 추가
@@ -183,7 +239,6 @@ $("#storeInfo").click(function(){
   terminalScope.searchStore();
 });
 
-
 /**********************************************************************
  *  POS 설정 그리드
  **********************************************************************/
@@ -200,7 +255,7 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.useYnFgDataMap = new wijmo.grid.DataMap(useYnFg, 'value', 'name');
   };
 
-  // 조회
+  // 포스설정 터미널 데이터 조회
   $scope.$on("posCtrl", function(event, data) {
     $scope.getPosSetting();
     event.preventDefault();
@@ -210,26 +265,17 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.getPosSetting = function(){
 
     if($("#storeCd").val() == null || $("#storeCd").val() == "") {
-      // 매장 필수 선택
       $scope._popMsg(messages["terminalManage.request.select.store"]);
       return false;
     }
 
+    var terminalScope = agrid.getScope('terminalCtrl');
+
     var params = {};
     params.storeCd = $("#storeCd").val();
-    params.posNo = $("#posFgVal").val();
+    params.posNo = terminalScope.getPosFgVal();
 
-    $scope._inquirySub(baseUrl + "pos/getPosTerminalList.sb", params, function() {
-
-      $("#cornerListArea").hide();
-      $("#cornerArea").hide();
-      $("#cornerBtnArea").hide();
-
-      $("#posListArea").show();
-      $("#posArea").show();
-      $("#posBtnArea").show();
-
-    }, false);
+    $scope._inquirySub(baseUrl + "pos/getPosTerminalList.sb", params, function() {}, false);
   };
 
   // 행 추가
@@ -247,25 +293,68 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 포스 정보 저장
   $scope.save = function(){
+    var terminalScope = agrid.getScope('terminalCtrl');
 
     // 파라미터 설정
     var params = new Array();
     for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
       $scope.flex.collectionView.itemsEdited[i].status = "U";
       $scope.flex.collectionView.itemsEdited[i].storeCd = $("#storeCd").val();
-      $scope.flex.collectionView.itemsEdited[i].posNo = $("#posFgVal").val();
+      $scope.flex.collectionView.itemsEdited[i].posNo = terminalScope.getPosFgVal();
       params.push($scope.flex.collectionView.itemsEdited[i]);
     }
     for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
       $scope.flex.collectionView.itemsAdded[i].status = "I";
       $scope.flex.collectionView.itemsAdded[i].storeCd = $("#storeCd").val();
-      $scope.flex.collectionView.itemsAdded[i].posNo = $("#posFgVal").val();
+      $scope.flex.collectionView.itemsAdded[i].posNo = terminalScope.getPosFgVal();
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
 
     var terminalScope = agrid.getScope('terminalCtrl');
 
-    //TODO 필수값 체크
+    // 필수값 체크
+    for(var i in params) {
+
+      if(params[i].vendorFg == "") {
+        $scope._popMsg(messages["terminalManage.vendorFg"] + messages["terminalManage.require.select"]);
+        return false;
+      }
+
+      if(params[i].vendorCd == "") {
+        $scope._popMsg(messages["terminalManage.vendorCd"] + messages["terminalManage.require.select"]);
+        return false;
+      }
+
+      if(params[i].vendorNm == "") {
+        $scope._popMsg(messages["terminalManage.vendorNm"] + messages["terminalManage.require.input"]);
+        return false;
+      }
+
+      if(params[i].vendorNm.length > 6) {
+        $scope._popMsg(messages["terminalManage.vendorNm"] + messages["terminalManage.require.exact.data"]);
+        return false;
+      }
+
+      if(params[i].vendorTermnlNo == "") {
+        $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + messages["terminalManage.require.input"]);
+        return false;
+      }
+
+      if(params[i].vendorTermnlNo.length > 20) {
+        $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + messages["terminalManage.require.exact.data"]);
+        return false;
+      }
+
+      if(params[i].vendorSerNo == "") {
+        $scope._popMsg(messages["terminalManage.vendorSerNo"] + messages["terminalManage.require.input"]);
+        return false;
+      }
+
+      if(params[i].vendorSerNo.length > 20) {
+        $scope._popMsg(messages["terminalManage.vendorSerNo"] + messages["terminalManage.require.exact.data"]);
+        return false;
+      }
+    }
 
     var chkChanged = false;
     if($("#terminalFgVal").val() !== terminalScope.getTerminalEnvVal()) {
@@ -310,42 +399,6 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('cornerCtrl', $scope, $http, true));
 
-  // 원본 [2028] ENVST_VAL
-  // $scope.terminalCornerEnvVal;
-  // $scope.setTerminalCornerEnvVal = function(s){
-  //   $scope.terminalCornerEnvVal = s;
-  // };
-  // $scope.getTerminalCornerEnvVal = function(){
-  //   return $scope.terminalCornerEnvVal;
-  // };
-
-  // 콤보박스 생성
-  // $scope._setComboData("terminalCornerFg", terminalFg);
-
-  // 콤보박스 값 변경 이벤트
-  // $scope.changeTerminalCornerFg = function(s,e) {
-  //
-  //   // 원래 코너별 승인인데 포스별 승인으로 변경하는 경우
-  //   if((s.selectedValue === "0" || s.selectedValue === "3") && $scope.terminalCornerEnvVal === "2") {
-  //
-  //     var alertMsg = messages["terminalManage.confirm.change.terminal"];
-  //     alertMsg += "<br>";
-  //     alertMsg += messages["terminalManage.confirm.delete.cornerSetting"];
-  //
-  //     $scope._popConfirm(alertMsg,
-  //       function(){
-  //         $scope.changeToPosList();
-  //       }
-  //     );
-  //   }
-  // };
-
-  // 포스리스트로 변경
-  // $scope.changeToPosList = function(){
-  //   var posGrid = agrid.getScope('posCtrl');
-  //   posGrid.getPosSetting();
-  // };
-
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     $scope.vendorFgDataMap = new wijmo.grid.DataMap(
@@ -365,7 +418,6 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.getCornerSetting = function(){
 
     if($("#storeCd").val() == null || $("#storeCd").val() == "") {
-      // 매장 필수 선택
       $scope._popMsg(messages["terminalManage.request.select.store"]);
       return false;
     }
@@ -376,19 +428,9 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
     params.storeCd = $("#storeCd").val();
     params.cornrCd = terminalScope.getCornerFgVal();
 
-    console.log(params);
+    // console.log(params);
 
-    $scope._inquirySub(baseUrl + "corner/getCornerTerminalList.sb", params, function() {
-
-      $("#posListArea").hide();
-      $("#posArea").hide();
-      $("#posBtnArea").hide();
-
-      $("#cornerListArea").show();
-      $("#cornerArea").show();
-      $("#cornerBtnArea").show();
-
-    }, false);
+    $scope._inquirySub(baseUrl + "corner/getCornerTerminalList.sb", params, function() {}, false);
   };
 
   // 행 추가
@@ -406,23 +448,68 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 코너 정보 저장
   $scope.save = function(){
+
+    var terminalScope = agrid.getScope('terminalCtrl');
+
+
     // 파라미터 설정
     var params = new Array();
     for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
       $scope.flex.collectionView.itemsEdited[i].status = "U";
       $scope.flex.collectionView.itemsEdited[i].storeCd = $("#storeCd").val();
-      $scope.flex.collectionView.itemsEdited[i].cornrCd = $("#cornerFgVal").val();
+      $scope.flex.collectionView.itemsEdited[i].cornrCd = terminalScope.getCornerFgVal();
       params.push($scope.flex.collectionView.itemsEdited[i]);
     }
     for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
       $scope.flex.collectionView.itemsAdded[i].status = "I";
       $scope.flex.collectionView.itemsAdded[i].storeCd = $("#storeCd").val();
-      $scope.flex.collectionView.itemsAdded[i].cornrCd = $("#cornerFgVal").val();
+      $scope.flex.collectionView.itemsAdded[i].cornrCd = terminalScope.getCornerFgVal();
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
 
-    //TODO 필수값 체크
-    console.log(params);
+    //필수값 체크
+    for(var i in params) {
+
+      if(params[i].vendorFg == "") {
+        $scope._popMsg(messages["terminalManage.vendorFg"] + messages["terminalManage.require.select"]);
+        return false;
+      }
+
+      if(params[i].vendorCd == "") {
+        $scope._popMsg(messages["terminalManage.vendorCd"] + messages["terminalManage.require.select"]);
+        return false;
+      }
+
+      if(params[i].vendorNm == "") {
+        $scope._popMsg(messages["terminalManage.vendorNm"] + messages["terminalManage.require.input"]);
+        return false;
+      }
+
+      if(params[i].vendorNm.length > 6) {
+        $scope._popMsg(messages["terminalManage.vendorNm"] + messages["terminalManage.require.exact.data"]);
+        return false;
+      }
+
+      if(params[i].vendorTermnlNo == "") {
+        $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + messages["terminalManage.require.input"]);
+        return false;
+      }
+
+      if(params[i].vendorTermnlNo.length > 20) {
+        $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + messages["terminalManage.require.exact.data"]);
+        return false;
+      }
+
+      if(params[i].vendorSerNo == "") {
+        $scope._popMsg(messages["terminalManage.vendorSerNo"] + messages["terminalManage.require.input"]);
+        return false;
+      }
+
+      if(params[i].vendorSerNo.length > 20) {
+        $scope._popMsg(messages["terminalManage.vendorSerNo"] + messages["terminalManage.require.exact.data"]);
+        return false;
+      }
+    }
 
     var terminalScope = agrid.getScope('terminalCtrl');
 
@@ -442,9 +529,6 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
     var sParam = {};
     sParam['storeCd'] = $("#storeCd").val();
     sParam['terminalFgVal'] = terminalScope.getTerminalEnvVal();
-
-    console.log('sParam');
-    console.log(sParam);
 
     // ajax 통신 설정
     $http({

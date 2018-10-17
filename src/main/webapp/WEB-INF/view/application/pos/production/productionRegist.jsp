@@ -2,7 +2,7 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
-<wj-popup control="excpForwardRegistLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:500px;">
+<wj-popup control="productionRegistLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:500px;">
   <div class="wj-dialog wj-dialog-columns">
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="application.pos.production" />
