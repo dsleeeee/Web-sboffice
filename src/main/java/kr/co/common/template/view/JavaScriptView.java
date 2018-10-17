@@ -1,15 +1,16 @@
 package kr.co.common.template.view;
 
-import java.io.PrintWriter;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.view.AbstractView;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.JavaScriptResult;
 import kr.co.common.service.message.MessageService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.view.AbstractView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
+import java.util.Map;
 
 /**
  * Javascript 용 View 처리
@@ -20,10 +21,12 @@ import kr.co.common.service.message.MessageService;
 public class JavaScriptView extends AbstractView {
 
     /** 메세지 서비스 */
-    @Autowired
-    MessageService messageService;
+    private final MessageService messageService;
 
-    public JavaScriptView() {
+    /** Constructor Injection */
+    @Autowired
+    public JavaScriptView(MessageService messageService) {
+        this.messageService = messageService;
         setContentType("text/html;charset=UTF-8");
     }
 

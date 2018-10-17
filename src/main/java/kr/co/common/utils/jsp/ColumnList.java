@@ -1,9 +1,9 @@
 package kr.co.common.utils.jsp;
 
 
+import kr.co.common.service.grid.GridSupportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import kr.co.common.service.grid.GridSupportService;
 
 /**
  * {@code JSP} 에서 호출 하는 그리드 컬럼 관련 Util
@@ -14,8 +14,13 @@ import kr.co.common.service.grid.GridSupportService;
 @Component("columnList")
 public class ColumnList {
 
+    private final GridSupportService gsService;
+
+    /** Constructor Injection */
     @Autowired
-    GridSupportService gsService;
+    public ColumnList(GridSupportService gsService) {
+        this.gsService = gsService;
+    }
 
     /**
       * 그리드의 header 정보를 다국어 처리한 string 형태로 돌려줌 <br>
