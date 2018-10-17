@@ -1712,20 +1712,24 @@ p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17p
 }
 
 .templateEdit textarea {
-    width:100%;
-    height:100%;
+    width: 100%;
+    height: 100%;
     font-family: '굴림체', 'sans-serif';
-    font-size:12px;
-    line-height:1.5em;
-    resize:none;
-    overflow-y:scroll;
+    font-size: 12px;
+    line-height: 1.5em;
+    resize: none;
+    overflow-y: scroll;
     background: #fff;
 }
 
 .templateEdit #preview {
     overflow-y: scroll;
 }
+
 .templateEdit #preview pre {
+    width: 100%;
+    height: 100%;
+    padding-top: 1px;
     font-family: '굴림체', 'sans-serif';
     font-size: 12px;
     text-align: left;
@@ -1735,12 +1739,14 @@ p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17p
     white-space: -o-pre-wrap;
     word-break: break-all;
 }
+
 .templateEdit #preview pre p {
     margin-top: 0px;
     margin-bottom: 3px;
     font-family: '굴림체', 'sans-serif';
     font-size: 12px;
 }
+
 .state-invalid div {
     color: red !important;
 }

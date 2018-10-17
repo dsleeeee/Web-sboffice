@@ -5,9 +5,10 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="baseUrl" value="/base/output/pos/" />
 
-<div class="subCon">
+<div class="subCon" ng-controller="templateCtrl">
 
   <div class="searchBar flddUnfld">
     <a href="#" class="open">${menuNm}</a>
@@ -25,13 +26,15 @@
         <td colspan="2" class="oh">
           <div class="sb-select fl w200">
             <wj-combo-box
-                    id="srchPrtClassCdCombo"
-                    ng-model="prtClassCd"
-                    items-source="_getComboData('srchPrtClassCdCombo')"
-                    display-member-path="name"
-                    selected-value-path="value"
-                    is-editable="false"
-                    initialized="_initComboBox(s)">
+                id="srchPrtClassCdCombo"
+                ng-model="prtClassCd"
+                items-source="_getComboData('srchPrtClassCdCombo')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="_initComboBox(s)"
+                selected-index-changed="setPrtClassCdCombo(s)"
+                got-focus="prtClassCdComboFocus(s,e)">
             </wj-combo-box>
             <input type="hidden" id="srchPrtClassCdVal" value={{prtClassCd}} />
           </div>
@@ -54,7 +57,7 @@
     <%-- 템플릿 --%>
     <div class="w25 fl">
       <%--위즈모 테이블--%>
-      <div id="gridTemplate" class="wj-TblWrapBr pd20" style="height:485px;" ng-controller="templateCtrl">
+      <div id="gridTemplate" class="wj-TblWrapBr pd20" style="height:485px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='posTemplate.gridNm' /></span>
           <button class="btn_skyblue" id="btnAddTemplate" style="display: none;" ng-click="addRow()">
@@ -84,6 +87,7 @@
             <wj-flex-grid-column header="<s:message code="posTemplate.templtNm"/>" binding="templtNm" width="*"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="posTemplate.prtForm"/>" binding="prtForm" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="posTemplate.templtRegFg"/>" binding="templtRegFg" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="posTemplate.templtCd"/>" binding="templtCd" visible="false"></wj-flex-grid-column>
 
           </wj-flex-grid>
 
@@ -93,7 +97,7 @@
     </div>
 
     <%-- 코드리스트 --%>
-    <div class="w15 fl">
+    <div class="w20 fl">
       <div class="wj-TblWrapBr ml10 pd20" style="height:485px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='posTemplate.listNm' /></span>
@@ -104,10 +108,15 @@
       </div>
     </div>
 
-    <div class="w30 fl">
+    <div class="fl" style="width: 325px;">
       <div class="wj-TblWrapBr ml10 pd20 templateEdit" style="height:485px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='posTemplate.editNm' /></span>
+          <c:if test="${orgnFg == 'HQ'}">
+          <button class="btn_skyblue" id="btnApplyStoreTemplate" style="display: none;" ng-click="$broadcast('applyStoreTemplate')">
+            <s:message code="posTemplate.applyStore" />
+          </button>
+          </c:if>
           <button class="btn_skyblue" id="btnSaveEditTemplate" style="display: none;" ng-click="$broadcast('saveEditTemplate')">
             <s:message code="cmm.save" />
           </button>
@@ -118,7 +127,7 @@
       </div>
     </div>
 
-    <div class="w30 fl">
+    <div class="fl" style="width: 325px;">
       <div class="wj-TblWrapBr ml10 pd20 templateEdit" style="height:485px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='posTemplate.viewNm' /></span>
@@ -133,6 +142,6 @@
   <script type="text/javascript">
   var prtClassComboData = ${listPrintType};
   </script>
-  <script type="text/javascript" src="/resource/solbipos/js/base/output/posTemplate/posTemplate.js?ver=20181010.01" charset="utf-8"></script>
+  <script type="text/javascript" src="/resource/solbipos/js/base/output/posTemplate/posTemplate.js?ver=20181016.01" charset="utf-8"></script>
 
 </div>

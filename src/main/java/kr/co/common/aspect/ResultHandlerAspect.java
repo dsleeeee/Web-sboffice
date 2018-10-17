@@ -1,17 +1,19 @@
 package kr.co.common.aspect;
 
-import static org.springframework.util.ObjectUtils.isEmpty;
-import java.util.HashMap;
+import kr.co.common.data.enums.Status;
+import kr.co.common.data.structure.JavaScriptResult;
+import kr.co.common.data.structure.Result;
+import kr.co.common.service.message.MessageService;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
-import kr.co.common.data.enums.Status;
-import kr.co.common.data.structure.JavaScriptResult;
-import kr.co.common.data.structure.Result;
-import kr.co.common.service.message.MessageService;
+
+import java.util.HashMap;
+
+import static org.springframework.util.ObjectUtils.isEmpty;
 
 /**
  * Return 되는 객체를 받아 Handling 해주는 Class
@@ -23,8 +25,13 @@ import kr.co.common.service.message.MessageService;
 public class ResultHandlerAspect {
 
     /** 메세지 서비스 */
+    private final MessageService messageService;
+
+    /** Constructor Injection */
     @Autowired
-    MessageService messageService;
+    public ResultHandlerAspect(MessageService messageService) {
+        this.messageService = messageService;
+    }
 
     /**
      * 결과 처리
