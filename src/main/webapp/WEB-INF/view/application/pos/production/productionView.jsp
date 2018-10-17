@@ -18,9 +18,9 @@
             </div>
             <%-- 예외출고 상품 목록 --%>
             <div class="mb40" ng-controller="productCtrl">
-                <div class="wj-TblWrapBr mr10 pd20" style="height:260px;">
+                <div class="wj-TblWrapBr mr10 pd20" style="height:350px;">
                     <%-- 예외출고 상품 그리드 --%>
-                    <div id="productGrid" class="wj-gridWrap" style="height:190px; overflow-y: hidden;">
+                    <div id="productGrid" class="wj-gridWrap" style="height:310px; overflow-y: hidden;">
                         <wj-flex-grid
                                 autoGenerateColumns="false"
                                 control="flex"
@@ -31,7 +31,7 @@
                                 item-formatter="_itemFormatter">
 
                             <!-- define columns -->
-                            <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="application.pos.production.storeCd"/>" binding="storeCd" width="*" is-read-only="true" visible="false"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="application.pos.production.prodClassCd"/>" binding="prodClassCd" width="*" is-read-only="true"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="application.pos.production.prodClassNm"/>" binding="prodClassNm" width="*" is-read-only="true"></wj-flex-grid-column>
