@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <input type="hidden" id="<c:out value="${param.targetId}Cd"/>"/>
-<input type="text"   id="<c:out value="${param.targetId}Nm"/>" class="sb-input" style="cursor:pointer; width:200px;" value="전체" ng-click="<c:out value="${param.targetId}"/>Show()" readonly/>
+<input type="text"   id="<c:out value="${param.targetId}Nm"/>" class="sb-input fl mr5" style="cursor:pointer; width:200px;" value="전체" ng-click="<c:out value="${param.targetId}"/>Show()" readonly/>
 
 <wj-popup id="wj<c:out value="${param.targetId}"/>LayerM" control="wj<c:out value="${param.targetId}"/>LayerM" show-trigger="Click" hide-trigger="Click" style="display:none;width:500px;">
     <div class="wj-dialog wj-dialog-columns" >

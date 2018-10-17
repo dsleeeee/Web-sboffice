@@ -16,10 +16,10 @@ public interface OutstockConfmMapper {
     /** 출고확정 리스트 조회 */
     List<DefaultMap<String>> getOutstockConfmList(OutstockConfmVO outstockConfmVO);
 
-    /** 출고확정 - 출고확정 DTL 수정 */
+    /** 출고확정 - 출고확정시 DTL 수정 */
     int updateOutstockDtlConfirm(OutstockConfmVO outstockConfmVO);
 
-    /** 출고확정 - 출고확정 HD 수정 */
+    /** 출고확정 - 출고확정시 HD 수정 */
     int updateOutstockConfirm(OutstockConfmVO outstockConfmVO);
 
     /** 출고확정 - 출고확정 자동입고 DTL 수정*/
@@ -34,10 +34,10 @@ public interface OutstockConfmMapper {
     /** 출고확정 상세 리스트 조회 */
     List<DefaultMap<String>> getOutstockConfmDtlList(OutstockConfmVO outstockConfmVO);
 
-    /** 출고확정 - 출고확정 DTL 수정 */
+    /** 출고확정 - 출고확정 상세 DTL 수정 */
     int updateOutstockConfmDtl(OutstockConfmVO outstockConfmVO);
 
-    /** 출고확정 - 출고확정 HD 수정 */
+    /** 출고확정 - 출고확정 상세 HD 수정 */
     int updateOutstockConfmHd(OutstockConfmVO outstockConfmVO);
 
     /** 출고확정 - 출고확정 이후 저장시 HD 수정 */

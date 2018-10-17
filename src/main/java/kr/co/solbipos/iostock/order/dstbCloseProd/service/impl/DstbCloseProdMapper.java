@@ -11,13 +11,13 @@ import java.util.List;
 @Repository
 public interface DstbCloseProdMapper {
     /** 분배마감 리스트 조회 */
-    List<DefaultMap<String>> getDstbCloseProdList(DstbCloseProdVO dstbCloseStProd);
+    List<DefaultMap<String>> getDstbCloseProdList(DstbCloseProdVO dstbCloseProdVO);
 
     /** 분배마감 리스트 확정 */
-    int updateDstbCloseProdConfirm(DstbCloseProdVO dstbCloseStProd);
+    int updateDstbCloseProdConfirm(DstbCloseProdVO dstbCloseProdVO);
 
     /** 분배마감 상세 리스트 조회 */
-    List<DefaultMap<String>> getDstbCloseProdDtlList(DstbCloseProdVO dstbCloseStProd);
+    List<DefaultMap<String>> getDstbCloseProdDtlList(DstbCloseProdVO dstbCloseProdVO);
 
     /** 분배마감 상세 리스트 수정 */
     int updateDstbCloseProdDtl(DstbCloseProdVO dstbCloseProdVO);
@@ -29,10 +29,10 @@ public interface DstbCloseProdMapper {
     int deleteDstbCloseProdDtl(DstbCloseProdVO dstbCloseProdVO);
 
     /** 분배마감 추가등록 상품 리스트 조회 */
-    List<DefaultMap<String>> getDstbCloseProdAddProdList(DstbCloseProdVO dstbCloseStProd);
+    List<DefaultMap<String>> getDstbCloseProdAddProdList(DstbCloseProdVO dstbCloseProdVO);
 
     /** 분배마감 추가등록 분배등록 리스트 조회 */
-    List<DefaultMap<String>> getDstbCloseProdAddRegistList(DstbCloseProdVO dstbCloseStProd);
+    List<DefaultMap<String>> getDstbCloseProdAddRegistList(DstbCloseProdVO dstbCloseProdVO);
 
     /** 분배마감 추가등록 분배등록 리스트 등록 */
     int insertDstbCloseProdAddRegist(DstbCloseProdVO dstbCloseProdVO);

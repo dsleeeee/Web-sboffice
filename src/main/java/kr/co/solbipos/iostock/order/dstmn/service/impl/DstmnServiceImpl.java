@@ -57,7 +57,7 @@ public class DstmnServiceImpl implements DstmnService {
         String currentDt = currentDateTimeString();
         String confirmFg = "N";
 
-        // 자동입고 환경변수 조회
+        // 매장입고 환경변수 조회
         DstmnVO env176VO = new DstmnVO();
         env176VO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         String env176 = dstmnMapper.getEnv176(env176VO);
@@ -126,7 +126,7 @@ public class DstmnServiceImpl implements DstmnService {
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
             // 자동입고인 경우 입고로 수정
-            if(StringUtil.getOrBlank(env176).equals("Y")) {
+            if(StringUtil.getOrBlank(env176).equals("A")) {
                 dstmnHdVO.setProcFg("20");
                 dstmnHdVO.setUpdateProcFg("30");
 

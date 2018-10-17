@@ -17,7 +17,7 @@ import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
-@Service("dstbReqService")
+@Service("DstbReqService")
 public class DstbReqServiceImpl implements DstbReqService {
     private final DstbReqMapper dstbReqMapper;
     private final StoreOrderMapper storeOrderMapper;

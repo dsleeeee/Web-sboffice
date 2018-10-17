@@ -210,7 +210,7 @@ public class StoreOrderServiceImpl implements StoreOrderService {
 
         // 매장 주문마감 및 발주중지 여부 체크
         String orderCloseFg = "N";
-        orderCloseFg = getOrderCloseCheck(storeOrderVO);
+        orderCloseFg = storeOrderMapper.getOrderCloseCheck(storeOrderVO);
 
         if(orderCloseFg.equals("Y")) {
             throw new JsonException(Status.FAIL, messageService.get("storeOrder.dtl.orderClose")); //주문등록이 마감 되었습니다.
@@ -311,11 +311,6 @@ public class StoreOrderServiceImpl implements StoreOrderService {
         }
 
         return result;
-    }
-
-    /** 매장 주문마감 및 발주중지 여부 체크 */
-    public String getOrderCloseCheck(StoreOrderVO storeOrderVO) {
-        return storeOrderMapper.getOrderCloseCheck(storeOrderVO);
     }
 
 }

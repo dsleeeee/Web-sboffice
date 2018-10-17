@@ -3,15 +3,11 @@ package kr.co.solbipos.iostock.loan.storeLoanInfo.web;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
-import kr.co.common.service.cmm.CmmMenuService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
-import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.iostock.loan.storeLoanInfo.service.StoreLoanInfoService;
 import kr.co.solbipos.iostock.loan.storeLoanInfo.service.StoreLoanInfoVO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,16 +39,14 @@ import java.util.List;
 @RequestMapping(value = "/iostock/loan/storeLoanInfo")
 public class StoreLoanInfoController {
     
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    
-    /** service */
-    @Autowired StoreLoanInfoService storeLoanInfoService;
+    private final SessionService sessionService;
+    private final StoreLoanInfoService storeLoanInfoService;
+
     @Autowired
-    SessionService sessionService;
-    @Autowired
-    AuthService authService;
-    @Autowired
-    CmmMenuService cmmMenuService;
+    public StoreLoanInfoController(SessionService sessionService, StoreLoanInfoService storeLoanInfoService) {
+        this.sessionService = sessionService;
+        this.storeLoanInfoService = storeLoanInfoService;
+    }
 
     /**
      * 매장별여신상세현황 - 페이지 이동
@@ -92,11 +86,4 @@ public class StoreLoanInfoController {
 
         return ReturnUtil.returnListJson(Status.OK, list, storeLoanInfoVO);
     }
-
-    @RequestMapping(value = "/storeLoanInfo/anTest.sb", method = RequestMethod.GET)
-    public String anTest(HttpServletRequest request, HttpServletResponse response,
-        Model model) {
-        return "iostock/loan/storeLoanInfo/anTest";
-    }
-
 }

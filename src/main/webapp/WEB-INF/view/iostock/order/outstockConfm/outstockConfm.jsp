@@ -233,6 +233,7 @@
             // 파라미터
             var params = {};
             params.slipFg    = $scope.slipFg;
+            // params.procFg    = "10";
             params.startDate = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
             params.endDate   = wijmo.Globalize.format(srchEndDate.value  , 'yyyyMMdd');
 
