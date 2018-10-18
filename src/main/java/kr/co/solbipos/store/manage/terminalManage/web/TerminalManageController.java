@@ -57,11 +57,15 @@ public class TerminalManageController {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     /** service */
-    @Autowired
-    TerminalManageService service;
+    private final TerminalManageService service;
+    private final SessionService sessionService;
 
+    /** Constructor Injection */
     @Autowired
-    SessionService sessionService;
+    public TerminalManageController(TerminalManageService service, SessionService sessionService) {
+        this.service = service;
+        this.sessionService = sessionService;
+    }
 
     /**
      * 매장터미널관리 - 화면 이동

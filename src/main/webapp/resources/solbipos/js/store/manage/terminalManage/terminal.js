@@ -323,15 +323,15 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
         return false;
       }
 
-      if(params[i].vendorNm == "") {
-        $scope._popMsg(messages["terminalManage.vendorNm"] + messages["terminalManage.require.input"]);
-        return false;
-      }
+      // if(params[i].vendorNm == "") {
+      //   $scope._popMsg(messages["terminalManage.vendorNm"] + messages["terminalManage.require.input"]);
+      //   return false;
+      // }
 
-      if(params[i].vendorNm.length > 6) {
-        $scope._popMsg(messages["terminalManage.vendorNm"] + messages["terminalManage.require.exact.data"]);
-        return false;
-      }
+      // if(params[i].vendorNm.length > 6) {
+      //   $scope._popMsg(messages["terminalManage.vendorNm"] + messages["terminalManage.require.exact.data"]);
+      //   return false;
+      // }
 
       if(params[i].vendorTermnlNo == "") {
         $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + messages["terminalManage.require.input"]);
@@ -476,15 +476,15 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
         return false;
       }
 
-      if(params[i].vendorNm == "") {
-        $scope._popMsg(messages["terminalManage.vendorNm"] + messages["terminalManage.require.input"]);
-        return false;
-      }
+      // if(params[i].vendorNm == "") {
+      //   $scope._popMsg(messages["terminalManage.vendorNm"] + messages["terminalManage.require.input"]);
+      //   return false;
+      // }
 
-      if(params[i].vendorNm.length > 6) {
-        $scope._popMsg(messages["terminalManage.vendorNm"] + messages["terminalManage.require.exact.data"]);
-        return false;
-      }
+      // if(params[i].vendorNm.length > 6) {
+      //   $scope._popMsg(messages["terminalManage.vendorNm"] + messages["terminalManage.require.exact.data"]);
+      //   return false;
+      // }
 
       if(params[i].vendorTermnlNo == "") {
         $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + messages["terminalManage.require.input"]);

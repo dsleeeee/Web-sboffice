@@ -114,7 +114,7 @@
             <wj-flex-grid-column header="<s:message code="terminalManage.posNo"/>" binding="posNo" width="*" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="terminalManage.vendorFg"/>" binding="vendorFg" data-map="vendorFgDataMap" width="*"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="terminalManage.vendorCd"/>" binding="vendorCd" data-map="vanCdDataMap" width="*"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="terminalManage.vendorNm"/>" binding="vendorNm" width="*"></wj-flex-grid-column>
+            <%--<wj-flex-grid-column header="<s:message code="terminalManage.vendorNm"/>" binding="vendorNm" width="*"></wj-flex-grid-column>--%>
             <wj-flex-grid-column header="<s:message code="terminalManage.vendorTermnlNo"/>" binding="vendorTermnlNo" width="*"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="terminalManage.vendorSerNo"/>" binding="vendorSerNo" width="*"></wj-flex-grid-column>
           </wj-flex-grid>
@@ -135,7 +135,7 @@
             <wj-flex-grid-column header="<s:message code="terminalManage.cornrCd"/>" binding="cornrCd" width="*" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="terminalManage.vendorFg"/>" binding="vendorFg" data-map="vendorFgDataMap" width="*"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="terminalManage.vendorCd"/>" binding="vendorCd" data-map="vanCdDataMap" width="*"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="terminalManage.vendorNm"/>" binding="vendorNm" width="*"></wj-flex-grid-column>
+            <%--<wj-flex-grid-column header="<s:message code="terminalManage.vendorNm"/>" binding="vendorNm" width="*"></wj-flex-grid-column>--%>
             <wj-flex-grid-column header="<s:message code="terminalManage.vendorTermnlNo"/>" binding="vendorTermnlNo" width="*"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="terminalManage.vendorSerNo"/>" binding="vendorSerNo" width="*"></wj-flex-grid-column>
           </wj-flex-grid>

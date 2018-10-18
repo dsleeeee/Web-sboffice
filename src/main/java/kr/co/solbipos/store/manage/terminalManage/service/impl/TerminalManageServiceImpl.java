@@ -36,12 +36,15 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Service
 public class TerminalManageServiceImpl implements TerminalManageService{
 
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-
     private final String POS_ENVST_CD = "2028"; // 코너, VAN 설정 환경변수
 
+    private final TerminalManageMapper mapper;
+
+    /** Constructor Injection */
     @Autowired
-    TerminalManageMapper mapper;
+    public TerminalManageServiceImpl(TerminalManageMapper mapper) {
+        this.mapper = mapper;
+    }
 
     /** 매장 조회 */
     @Override
