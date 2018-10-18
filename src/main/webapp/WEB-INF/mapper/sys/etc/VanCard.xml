@@ -20,6 +20,7 @@
     <select id="getVanCmpnyList" parameterType="vanCmpnyVO" resultType="defaultMap">
         /* USE : VanCardMapper.getVanCmpnyList */
         SELECT
+            tcvc.VAN_FG,
             tcvc.VAN_CD,
             tcvc.VAN_NM,
             tcvc.TEL_NO,
@@ -30,6 +31,8 @@
             tcvc.SUB_PORT
         FROM
             TB_CM_VAN_CMPNY tcvc
+        WHERE
+            tcvc.VAN_FG = '01'
         ORDER BY
             tcvc.VAN_CD
     </select>
@@ -55,7 +58,8 @@
             MOD_DT = #{modDt},
             MOD_ID = #{modId}
         WHERE
-            VAN_CD = #{vanCd}
+            VAN_FG = #{vanFg}
+            AND VAN_CD = #{vanCd}
 
     </update>
 
@@ -69,6 +73,7 @@
         /* USE : VanCardMapper.insertVanCmpnyList */
         INSERT INTO TB_CM_VAN_CMPNY
         (
+            VAN_FG,
             VAN_CD,
             VAN_NM,
             TEL_NO,
@@ -82,6 +87,7 @@
             MOD_DT,
             MOD_ID
         ) VALUES (
+            '01',
             #{vanCd},
             #{vanNm},
             #{telNo},
@@ -194,7 +200,8 @@
         FROM
             TB_CM_VAN_CARD tcvc
         LEFT OUTER JOIN TB_CM_VAN_CMPNY tcvcy ON
-            tcvc.VAN_CD = tcvcy.VAN_CD
+            tcvcy.VAN_FG = '01'
+            AND tcvc.VAN_CD = tcvcy.VAN_CD
         WHERE
             tcvc.VAN_CD = #{vanCd}
         ORDER BY
