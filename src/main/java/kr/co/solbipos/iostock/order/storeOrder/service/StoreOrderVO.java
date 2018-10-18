@@ -54,6 +54,8 @@ public class StoreOrderVO extends PageVO {
     private String dateFg;
     /** 수발주옵션 */
     private String envst173;
+    /** 공통코드 */
+    private String nmcodeGrpCd;
 
     /**
      * @return the reqDate
