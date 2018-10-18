@@ -33,10 +33,16 @@ import java.util.List;
 public class CmmEnvServiceImpl implements CmmEnvService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
+    private final CmmEnvMapper cmmEnvMapper;
+    private final RedisCustomTemplate<String, CommonCodeVO> redisCustomTemplate;
+
+    /** Constructor Injection */
     @Autowired
-    CmmEnvMapper cmmEnvMapper;
-    @Autowired
-    private RedisCustomTemplate<String, CommonCodeVO> redisCustomTemplate;
+    public CmmEnvServiceImpl(CmmEnvMapper cmmEnvMapper, RedisCustomTemplate<String, CommonCodeVO> redisCustomTemplate) {
+        this.cmmEnvMapper = cmmEnvMapper;
+        this.redisCustomTemplate = redisCustomTemplate;
+    }
 
     /** 환경변수 코드 조회 */
     @Override

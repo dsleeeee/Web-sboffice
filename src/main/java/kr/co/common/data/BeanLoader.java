@@ -1,15 +1,15 @@
 package kr.co.common.data;
 
-import javax.annotation.PostConstruct;
-import javax.servlet.ServletContext;
-
+import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
+import kr.co.common.utils.jsp.ColumnLayout;
+import kr.co.common.utils.jsp.ColumnList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.ServletContextAware;
-import kr.co.common.utils.jsp.CmmCodeUtil;
-import kr.co.common.utils.jsp.ColumnLayout;
-import kr.co.common.utils.jsp.ColumnList;
+
+import javax.annotation.PostConstruct;
+import javax.servlet.ServletContext;
 
 /**
  * {@code JSP} 에서 사용 {@code bean} 등록
@@ -19,19 +19,21 @@ import kr.co.common.utils.jsp.ColumnList;
 @Component
 public class BeanLoader implements ServletContextAware {
 
-    @Autowired
-    CmmCodeUtil cmmCodeUtil;
-
-    @Autowired
-    CmmEnvUtil cmmEnvUtil;
-
-    @Autowired
-    ColumnList columnList;
-
-    @Autowired
-    ColumnLayout columnLayout;
+    private final CmmCodeUtil cmmCodeUtil;
+    private final CmmEnvUtil cmmEnvUtil;
+    private final ColumnList columnList;
+    private final ColumnLayout columnLayout;
 
     private ServletContext servletContext;
+
+    /** Constructor Injection */
+    @Autowired
+    public BeanLoader(CmmCodeUtil cmmCodeUtil, CmmEnvUtil cmmEnvUtil, ColumnList columnList, ColumnLayout columnLayout) {
+        this.cmmCodeUtil = cmmCodeUtil;
+        this.cmmEnvUtil = cmmEnvUtil;
+        this.columnList = columnList;
+        this.columnLayout = columnLayout;
+    }
 
     @Override
     public void setServletContext(ServletContext servletContext) {

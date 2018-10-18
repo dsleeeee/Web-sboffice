@@ -27,7 +27,7 @@ public interface AuthService {
     /**
      * web user 조회
      *
-     * @param sessionInfoVO
+     * @param sessionInfoVO SessionInfoVO
      * @return
      */
     SessionInfoVO selectWebUser(SessionInfoVO sessionInfoVO);
@@ -35,9 +35,7 @@ public interface AuthService {
     /**
      * 로그인
      *
-     * @param request
-     * @param response
-     * @param sessionInfoVO
+     * @param sessionInfoVO SessionInfoVO
      * @return
      */
     SessionInfoVO login(SessionInfoVO sessionInfoVO);
@@ -45,9 +43,7 @@ public interface AuthService {
     /**
      * POS 로그인
      *
-     * @param request
-     * @param response
-     * @param sessionInfoVO
+     * @param sessionInfoVO SessionInfoVO
      * @return
      */
     SessionInfoVO posLogin(SessionInfoVO sessionInfoVO);
@@ -55,8 +51,8 @@ public interface AuthService {
     /**
      * 로그아웃
      *
-     * @param request
-     * @param response
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
      * @return
      */
     boolean logout(HttpServletRequest request, HttpServletResponse response);
@@ -64,7 +60,7 @@ public interface AuthService {
     /**
      * 로그인 시도 결과를 히스토리 저장
      *
-     * @param sessionInfoVO
+     * @param sessionInfoVO SessionInfoVO
      * @return
      */
     public int loginHist(SessionInfoVO sessionInfoVO);
@@ -72,14 +68,14 @@ public interface AuthService {
     /**
       * 로그인 히스토리 저장
       *
-      * @param loginHistVO
+      * @param loginHistVO LoginHistVO
       * @return
       */
     int loginHist(LoginHistVO loginHistVO);
 
     /**
       * 로그인 히스토리 조회
-      * @param loginHistVO
+      * @param loginHistVO LoginHistVO
       * @return
       */
     <E> List<E> selectLoginHist(LoginHistVO loginHistVO);
@@ -87,7 +83,7 @@ public interface AuthService {
     /**
       * 권한 있는 메뉴
       *
-      * @param sessionInfoVO
+      * @param sessionInfoVO SessionInfoVO
       * @return
       */
     List<ResrceInfoVO> selectAuthMenu(SessionInfoVO sessionInfoVO);
