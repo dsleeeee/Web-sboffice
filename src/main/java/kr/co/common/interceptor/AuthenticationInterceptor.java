@@ -106,7 +106,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             if (!isEmpty(storeCd)) {
                 if (!storeCd.equals(sessionInfoVO.getOrgnCd())) {
                     // 유효하지 않는 매장코드 입니다.
-                    String msg = messageService.get("cmm.not.storecd") + ">";
+                    String msg = messageService.get("cmm.not.storecd");
                     // 로그 기록
                     LOGGER.info("AuthenticationInterceptor :: " + storeCd + " :: " + msg);
                     throw new AuthenticationException(msg, "/error/403.sb");

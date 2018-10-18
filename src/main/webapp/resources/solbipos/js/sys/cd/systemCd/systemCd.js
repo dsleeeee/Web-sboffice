@@ -184,14 +184,14 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
   // 세부명칭 그리드 조회
   $scope.$on("detailCtrl", function(event, data) {
 
-    $scope.searchDetail();
+    $scope.searchDetail(data);
 
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
 
   // 조회
-  $scope.searchDetail = function(){
+  $scope.searchDetail = function(data){
     // 파라미터
     var params = {};
     params.nmcodeGrpCd = data;

@@ -1,16 +1,17 @@
 package kr.co.common.utils.jsp;
 
 
-import java.util.Optional;
-import javax.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import kr.co.common.service.grid.GridSupportService;
 import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.common.service.GridDispItemVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 
 /**
  * @author 정용길
@@ -19,11 +20,15 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 @Component("columnLayout")
 public class ColumnLayout {
 
-    @Autowired
-    GridSupportService gsService;
+    private final GridSupportService gsService;
+    private final SessionService sessionService;
 
+    /** Constructor Injection */
     @Autowired
-    SessionService sessionService;
+    public ColumnLayout(GridSupportService gsService, SessionService sessionService) {
+        this.gsService = gsService;
+        this.sessionService = sessionService;
+    }
 
     /**
      * 그리드의 컬럼 레이아웃을 가져온다.

@@ -45,7 +45,7 @@
         </if>
         ORDER BY tcn.NMCODE_GRP_CD, tcn.NMCODE_CD
     </select>
-    
+
     <!-- 세부명칭 코드목록 조회 -->
     <!--
         TABLE    : TB_CM_NMCODE
@@ -71,7 +71,7 @@
         </if>
         ORDER BY tcn.NMCODE_CD
     </select>
-    
+
     <!-- 코드목록 업데이트 -->
     <!--
         TABLE    : TB_CM_NMCODE
@@ -94,9 +94,9 @@
         WHERE
             NMCODE_GRP_CD = #{nmcodeGrpCd}
             AND NMCODE_CD = #{nmcodeCd}
-    
+
     </update>
-    
+
     <!-- 코드목록 생성 -->
     <!--
         TABLE    : TB_CM_NMCODE
@@ -109,6 +109,7 @@
         (
             NMCODE_GRP_CD,
             NMCODE_CD,
+            PARENT_CD,
             NMCODE_NM,
             NMCODE_ITEM_1,
             NMCODE_ITEM_2,
@@ -122,6 +123,7 @@
         ) VALUES (
             #{nmcodeGrpCd},
             #{nmcodeCd},
+            #{nmcodeCd},
             #{nmcodeNm},
             #{nmcodeItem1,jdbcType=VARCHAR},
             #{nmcodeItem2,jdbcType=VARCHAR},
@@ -133,7 +135,7 @@
             #{modDt},
             #{modId}
         )
-        
+
     </insert>
-    
+
 </mapper>
