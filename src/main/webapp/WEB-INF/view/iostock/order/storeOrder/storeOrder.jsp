@@ -48,6 +48,7 @@
           <span class="txtIn"><input id="reqDate" class="w150" ng-model="storeOrder.reqDate"></span>
         </div>
         <a href="#" class="btn_grayS" ng-click="newReqOrder()"><s:message code="storeOrder.reqRegist"/></a>
+        <a href="#" class="btn_grayS ml10" ng-click="getComboSearch()">콤보가져오기</a>
         <%--<button type="button" class="btn_blue" id="btnReqRegist" ng-click="newReqOrder()"><s:message code="storeOrder.reqRegist" /></button>--%>
       </td>
     </tr>
@@ -133,18 +134,18 @@
       {"name": "<s:message code='storeOrder.modDate'/>", "value": "mod"}
     ]);
 
-    $scope._setComboData("srchProcFg", [
-      {"name": "<s:message code='storeOrder.procFgAll'/>", "value": ""},
-      {"name": "<s:message code='storeOrder.procFgReg'/>", "value": "10"},
-      {"name": "<s:message code='storeOrder.procFgDstb'/>", "value": "20"},
-      {"name": "<s:message code='storeOrder.procFgDstbCompt'/>", "value": "30"}
-    ]);
+    <%--$scope._setComboData("srchProcFg", [--%>
+      <%--{"name": "<s:message code='storeOrder.procFgAll'/>", "value": ""},--%>
+      <%--{"name": "<s:message code='storeOrder.procFgReg'/>", "value": "10"},--%>
+      <%--{"name": "<s:message code='storeOrder.procFgDstb'/>", "value": "20"},--%>
+      <%--{"name": "<s:message code='storeOrder.procFgDstbCompt'/>", "value": "30"}--%>
+    <%--]);--%>
 
-    $scope.procFgMap = new wijmo.grid.DataMap([
-      {id: "10", name: "<s:message code='storeOrder.procFgReg'/>"},
-      {id: "20", name: "<s:message code='storeOrder.procFgDstb'/>"},
-      {id: "30", name: "<s:message code='storeOrder.procFgDstbCompt'/>"}
-    ], 'id', 'name');
+    <%--$scope.procFgMap = new wijmo.grid.DataMap([--%>
+      <%--{id: "10", name: "<s:message code='storeOrder.procFgReg'/>"},--%>
+      <%--{id: "20", name: "<s:message code='storeOrder.procFgDstb'/>"},--%>
+      <%--{id: "30", name: "<s:message code='storeOrder.procFgDstbCompt'/>"}--%>
+    <%--], 'id', 'name');--%>
 
     // 출고가능일자 세팅
     $scope.reqDate.value = new Date(getFormatDate("${reqDate}", "-"));
@@ -157,6 +158,11 @@
     $scope.initGrid = function (s, e) {
       // picker 사용시 호출 : 미사용시 호출안함
       $scope._makePickColumns("storeOrderCtrl");
+
+      var comboParams         = {};
+      comboParams.nmcodeGrpCd = "083";
+      $scope._queryComboBox("srchProcFg", null, comboParams, "A");
+      $scope._queryComboMap("procFgMap", "/iostock/order/storeOrder/storeOrder/getCombo.sb", comboParams);
 
       // 그리드 링크 효과
       s.formatItem.addHandler(function (s, e) {
@@ -224,7 +230,131 @@
       params.slipFg     = $scope.slipFg;
       params.hdRemark   = "";
       $scope._broadcast("storeOrderRegistCtrl", params);
-    }
+    };
+
+
+    // DB 데이터를 조회해와서 Combo를 생성한다.
+    $scope._queryComboBox = function (id, url, params, option) {
+      var comboUrl = "/iostock/order/storeOrder/storeOrder/getCombo.sb";
+      if(url) {
+        comboUrl = url;
+      }
+
+      // ajax 통신 설정
+      $http({
+        method: 'POST', //방식
+        url: comboUrl, /* 통신할 URL */
+        params: params, /* 파라메터로 보낼 데이터 */
+        headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+      }).then(function successCallback(response) {
+        if(response.data.status === "OK") {
+          // this callback will be called asynchronously
+          // when the response is available
+          if(!$.isEmptyObject(response.data.data.list)) {
+            var list = response.data.data.list;
+            var comboArray = new Array();
+            var comboData = {};
+
+            if(option === "A") {
+              comboData.name = messages["cmm.all"];
+              comboData.value = "";
+              comboArray.push(comboData);
+            }
+            else if(option === "S") {
+              comboData.name = messages["cmm.select"];
+              comboData.value = "";
+              comboArray.push(comboData);
+            }
+
+            for(var i=0; i < list.length; i++) {
+              comboData = {};
+              comboData.name = list[i].nmcodeNm;
+              comboData.value = list[i].nmcodeCd;
+              comboArray.push(comboData);
+            }
+            $scope._setComboData(id, comboArray);
+          }
+        }
+        else if(response.data.status === "FAIL") {
+          $scope._popMsg("Ajax Fail By HTTP Request");
+        }
+        else if(response.data.status === "SESSION_EXFIRE") {
+          $scope._popMsg(response.data.message, function() {
+            location.href = response.data.url;
+          });
+        }
+        else if(response.data.status === "SERVER_ERROR") {
+          $scope._popMsg(response.data.message);
+        }
+        else {
+          var msg = response.data.status + " : " + response.data.message;
+          $scope._popMsg(msg);
+        }
+      }, function errorCallback(response) {
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+        $scope._popMsg(messages["cmm.error"]);
+        return false;
+      }).then(function () {
+      });
+    };
+
+
+    //DB 데이터를 조회해와서 그리드에서 사용할 Map을 생성한다.
+    $scope._queryComboMap = function (id, url, params) {
+      var comboUrl = "/iostock/order/storeOrder/storeOrder/getCombo.sb";
+      if(url) {
+        comboUrl = url;
+      }
+
+      // ajax 통신 설정
+      $http({
+        method: 'POST', //방식
+        url: comboUrl, /* 통신할 URL */
+        params: params, /* 파라메터로 보낼 데이터 */
+        headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+      }).then(function successCallback(response) {
+        if(response.data.status === "OK") {
+          // this callback will be called asynchronously
+          // when the response is available
+          if(!$.isEmptyObject(response.data.data.list)) {
+            var list = response.data.data.list;
+            var comboArray = new Array();
+            var comboData = {};
+
+            for(var i=0; i < list.length; i++) {
+              comboData = {};
+              comboData.id = list[i].nmcodeCd;
+              comboData.name = list[i].nmcodeNm;
+              comboArray.push(comboData);
+            }
+            $scope[id] = new wijmo.grid.DataMap(comboArray, 'id', 'name');
+          }
+        }
+        else if(response.data.status === "FAIL") {
+          $scope._popMsg("Ajax Fail By HTTP Request");
+        }
+        else if(response.data.status === "SESSION_EXFIRE") {
+          $scope._popMsg(response.data.message, function() {
+            location.href = response.data.url;
+          });
+        }
+        else if(response.data.status === "SERVER_ERROR") {
+          $scope._popMsg(response.data.message);
+        }
+        else {
+          var msg = response.data.status + " : " + response.data.message;
+          $scope._popMsg(msg);
+        }
+      }, function errorCallback(response) {
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+        $scope._popMsg(messages["cmm.error"]);
+        return false;
+      }).then(function () {
+      });
+    };
+
   }]);
 </script>
 

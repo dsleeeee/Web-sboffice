@@ -3,6 +3,7 @@ package kr.co.solbipos.iostock.order.storeOrder.web;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
+import kr.co.common.service.code.CmmCodeService;
 import kr.co.common.service.code.CmmEnvService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
@@ -49,12 +50,14 @@ public class StoreOrderController {
     private final SessionService sessionService;
     private final CmmEnvService cmmEnvService;
     private final StoreOrderService storeOrderService;
+    private final CmmCodeService cmmCodeService;
 
     @Autowired
-    public StoreOrderController(SessionService sessionService, CmmEnvService cmmEnvService, StoreOrderService storeOrderService) {
+    public StoreOrderController(SessionService sessionService, CmmEnvService cmmEnvService, StoreOrderService storeOrderService, CmmCodeService cmmCodeService) {
         this.sessionService = sessionService;
         this.cmmEnvService = cmmEnvService;
         this.storeOrderService = storeOrderService;
+        this.cmmCodeService = cmmCodeService;
     }
 
     /**
@@ -312,6 +315,31 @@ public class StoreOrderController {
         int result = storeOrderService.saveStoreOrderConfirm(storeOrderVO, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
+    }
 
+
+
+
+
+
+
+    /**
+     * 주문등록 - 주문 HD 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   storeOrderVO
+     * @return  String
+     * @author  안동관
+     * @since   2018. 09. 10.
+     */
+    @RequestMapping(value = "/storeOrder/getCombo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getCombo(HttpServletRequest request, HttpServletResponse response,
+        Model model, StoreOrderVO storeOrderVO) {
+
+        List<DefaultMap<String>> list = cmmCodeService.selectCmmCodeList(request.getParameter("nmcodeGrpCd"));
+
+        return ReturnUtil.returnListJson(Status.OK, list, storeOrderVO);
     }
 }
