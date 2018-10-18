@@ -148,7 +148,8 @@
 <script type="text/javascript">
 var orgnFg = "${orgnFg}";
 var baseUrl = "${baseUrl}";
-var vanCdFg = ${ccu.getVanList()};
+var vendorFg = ${ccu.getCommCodeExcpAll("078")};
+var vanCdFg = ${ccu.getCommCodeExcpAll("079")};
 var terminalFg = ${cnv.getEnvCodeExcpAll("2028")};
 var useYnFg    = ${ccu.getCommCodeExcpAll("067")};
 

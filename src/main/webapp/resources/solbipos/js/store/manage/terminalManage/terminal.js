@@ -248,9 +248,7 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-    $scope.vendorFgDataMap = new wijmo.grid.DataMap(
-        [{id: "01", name: "VAN"}, {id: "02",name: "PAYCO"}, {id: "03",name: "MPAY"},{id: "04",name: "MCOUPN"}]
-        , 'id', 'name');
+    $scope.vendorFgDataMap = new wijmo.grid.DataMap(vendorFg, 'value', 'name');
     $scope.vanCdDataMap = new wijmo.grid.DataMap(vanCdFg, 'value', 'name');
     $scope.useYnFgDataMap = new wijmo.grid.DataMap(useYnFg, 'value', 'name');
   };
@@ -401,9 +399,7 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-    $scope.vendorFgDataMap = new wijmo.grid.DataMap(
-        [{id: "01", name: "VAN"}, {id: "02",name: "PAYCO"}, {id: "03",name: "MPAY"},{id: "04",name: "MCOUPN"}]
-        , 'id', 'name');
+    $scope.vendorFgDataMap = new wijmo.grid.DataMap(vendorFg, 'value', 'name');
     $scope.vanCdDataMap = new wijmo.grid.DataMap(vanCdFg, 'value', 'name');
     $scope.useYnFgDataMap = new wijmo.grid.DataMap(useYnFg, 'value', 'name');
   };
