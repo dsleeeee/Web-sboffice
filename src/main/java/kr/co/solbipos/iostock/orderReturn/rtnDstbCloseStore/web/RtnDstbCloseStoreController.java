@@ -153,29 +153,6 @@ public class RtnDstbCloseStoreController {
     }
 
     /**
-     * 반품마감 - 추가분배시 주문가능여부 조회
-     * @param   request
-     * @param   response
-     * @param   model
-     * @param   rtnDstbCloseStoreVO
-     * @return  String
-     * @author  안동관
-     * @since   2018. 10. 16.
-     */
-    @RequestMapping(value = "/rtnDstbCloseStoreAdd/getOrderFg.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result getOrderFg(HttpServletRequest request, HttpServletResponse response,
-        Model model, RtnDstbCloseStoreVO rtnDstbCloseStoreVO) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        rtnDstbCloseStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-
-        DefaultMap<String> result = rtnDstbCloseStoreService.getOrderFg(rtnDstbCloseStoreVO);
-
-        return ReturnUtil.returnJson(Status.OK, result);
-    }
-
-    /**
      * 반품마감 - 추가분배 상세 리스트 조회
      * @param   request
      * @param   response

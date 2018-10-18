@@ -52,6 +52,24 @@
         <input type="text" id="srchStoreNm" name="srchStoreNm" ng-model="storeNm" class="sb-input w100" maxlength="16"/>
       </td>
     </tr>
+    <tr>
+      <%-- 진행구분 --%>
+      <th><s:message code="rtnDstbCloseStore.procFg"/></th>
+      <td colspan="3">
+        <span class="txtIn w150 sb-select fl mr5">
+          <wj-combo-box
+            id="srchProcFg"
+            ng-model="procFg"
+            items-source="_getComboData('srchProcFg')"
+            display-member-path="name"
+            selected-value-path="value"
+            is-editable="false"
+            initialized="_initComboBox(s)">
+          </wj-combo-box>
+        </span>
+      </td>
+    </tr>
+    <tr>
     <%-- 출고요청일자 --%>
     <th><s:message code="rtnDstbCloseStore.reqDate"/></th>
     <td colspan="3">
@@ -60,6 +78,7 @@
       </div>
       <a href="#" class="btn_grayS" ng-click="add()"><s:message code="rtnDstbCloseStore.addRegist"/></a>
     </td>
+    </tr>
     </tbody>
   </table>
 
@@ -91,7 +110,7 @@
         <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.reqDate"/>" binding="reqDate" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.storeNm"/>" binding="storeNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.procFg"/>" binding="procFg" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.procFg"/>" binding="procFg" width="70" align="center" is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.orderAmt"/>" binding="orderAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.orderVat"/>" binding="orderVat" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.orderTot"/>" binding="orderTot" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
@@ -122,20 +141,37 @@
    */
   var app = agrid.getApp();
 
-  /** 분배마감 그리드 controller */
+  /** 반품마감 그리드 controller */
   app.controller('rtnDstbCloseStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('rtnDstbCloseStoreCtrl', $scope, $http, true));
 
-    $scope.slipFg     = 1;
+    $scope.slipFg     = -1;
     var srchStartDate = wcombo.genDateVal("#srchStartDate", "${sessionScope.sessionInfo.startDt}");
     var srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.startDt}");
     var reqDate       = wcombo.genDateVal("#reqDate", "${sessionScope.sessionInfo.startDt}");
+
     $scope._setComboData("srchDateFg", [
       {"name": "<s:message code='rtnDstbCloseStore.reqDate'/>", "value": "req"},
       {"name": "<s:message code='rtnDstbCloseStore.regDate'/>", "value": "reg"},
       {"name": "<s:message code='rtnDstbCloseStore.modDate'/>", "value": "mod"}
     ]);
+
+    $scope._setComboData("srchProcFg", [
+      {"name": "<s:message code='rtnDstbCloseStore.procFgAll'/>", "value": ""},
+      {"name": "<s:message code='rtnDstbCloseStore.procFgReg'/>", "value": "00"},
+      {"name": "<s:message code='rtnDstbCloseStore.procFgMd'/>", "value": "10"},
+      {"name": "<s:message code='rtnDstbCloseStore.procFgDstbClose'/>", "value": "20"},
+      {"name": "<s:message code='rtnDstbCloseStore.procFgSlip'/>", "value": "30"}
+    ]);
+    $scope.procFg = "10"; // 진행구분 기본값 세팅
+
+    $scope.procFgMap = new wijmo.grid.DataMap([
+      {id: "00", name: "<s:message code='rtnDstbCloseStore.procFgReg'/>"},
+      {id: "10", name: "<s:message code='rtnDstbCloseStore.procFgMd'/>"},
+      {id: "20", name: "<s:message code='rtnDstbCloseStore.procFgDstbClose'/>"},
+      {id: "30", name: "<s:message code='rtnDstbCloseStore.procFgSlip'/>"}
+    ], 'id', 'name');
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -213,20 +249,24 @@
     };
 
     $scope.saveConfirm = function () {
-      var params = new Array();
-      for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-        var item = $scope.flex.collectionView.itemsEdited[i];
+      // 선택하신 자료를 반품마감으로 확정합니다. 확정하시겠습니까?
+      var msg = "<s:message code='rtnDstbCloseStore.confirmText'/>";
+      s_alert.popConf(msg, function () {
+        var params = new Array();
+        for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+          var item = $scope.flex.collectionView.itemsEdited[i];
 
-        if (item.gChk === true) {
-          item.status    = "U";
-          item.empNo     = "0000";
-          item.storageCd = "001";
-          item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
-          params.push(item);
+          if (item.gChk === true) {
+            item.status    = "U";
+            item.empNo     = "0000";
+            item.storageCd = "001";
+            item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
+            params.push(item);
+          }
         }
-      }
-      $scope._save("/iostock/orderReturn/rtnDstbCloseStore/rtnDstbCloseStore/saveConfirm.sb", params, function () {
-        $scope.searchRtnDstbCloseStoreList()
+        $scope._save("/iostock/orderReturn/rtnDstbCloseStore/rtnDstbCloseStore/saveConfirm.sb", params, function () {
+          $scope.searchRtnDstbCloseStoreList()
+        });
       });
     };
 
@@ -239,13 +279,13 @@
   }]);
 </script>
 
-<%-- 분배마감 상세 레이어 --%>
+<%-- 반품마감 상세 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/orderReturn/rtnDstbCloseStore/rtnDstbCloseStoreDtl.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
-<%-- 분배마감 추가등록 레이어 --%>
+<%-- 반품마감 추가등록 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/orderReturn/rtnDstbCloseStore/rtnDstbCloseStoreAdd.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>

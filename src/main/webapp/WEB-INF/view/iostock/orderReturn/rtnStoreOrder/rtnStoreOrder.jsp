@@ -60,6 +60,23 @@
         <a href="#" class="btn_grayS" ng-click="newReqOrder()"><s:message code="rtnStoreOrder.reqRegist"/></a>
       </td>
     </tr>
+    <tr>
+      <%-- 진행구분 --%>
+      <th><s:message code="storeOrder.procFg"/></th>
+      <td>
+        <span class="txtIn w150 sb-select fl mr5">
+          <wj-combo-box
+            id="srchProcFg"
+            ng-model="procFg"
+            items-source="_getComboData('srchProcFg')"
+            display-member-path="name"
+            selected-value-path="value"
+            is-editable="false"
+            initialized="_initComboBox(s)">
+          </wj-combo-box>
+        </span>
+      </td>
+    </tr>
     </tbody>
   </table>
 
@@ -84,7 +101,7 @@
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="rtnStoreOrder.reqDate"/>" binding="reqDate" width="100" align="center" format="date"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnStoreOrder.slipFg"/>" binding="slipFg" width="70" align="center" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.procFg"/>" binding="procFg" width="70" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.procFg"/>" binding="procFg" width="70" align="center" data-map="procFgMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnStoreOrder.dtlCnt"/>" binding="dtlCnt" width="70" align="right" data-type="Number" format="n0"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnStoreOrder.orderAmt"/>" binding="orderAmt" width="70" align="right" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnStoreOrder.orderVat"/>" binding="orderVat" width="70" align="right" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
@@ -118,11 +135,25 @@
     $scope.srchStartDate = wcombo.genDateVal("#srchStartDate", "${sessionScope.sessionInfo.startDt}");
     $scope.srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.startDt}");
     $scope.reqDate       = wcombo.genDate("#reqDate");
+
     $scope._setComboData("srchDateFg", [
       {"name": "<s:message code='rtnStoreOrder.reqDate'/>", "value": "req"},
       {"name": "<s:message code='rtnStoreOrder.regDate'/>", "value": "reg"},
       {"name": "<s:message code='rtnStoreOrder.modDate'/>", "value": "mod"}
     ]);
+
+    $scope._setComboData("srchProcFg", [
+      {"name": "<s:message code='rtnStoreOrder.procFgAll'/>", "value": ""},
+      {"name": "<s:message code='rtnStoreOrder.procFgReg'/>", "value": "10"},
+      {"name": "<s:message code='rtnStoreOrder.procFgDstb'/>", "value": "20"},
+      {"name": "<s:message code='rtnStoreOrder.procFgDstbCompt'/>", "value": "30"}
+    ]);
+
+    $scope.procFgMap = new wijmo.grid.DataMap([
+      {id: "10", name: "<s:message code='rtnStoreOrder.procFgReg'/>"},
+      {id: "20", name: "<s:message code='rtnStoreOrder.procFgDstb'/>"},
+      {id: "30", name: "<s:message code='rtnStoreOrder.procFgDstbCompt'/>"}
+    ], 'id', 'name');
 
     // 출고가능일자 세팅
     $scope.reqDate.value = new Date(getFormatDate("${reqDate}", "-"));

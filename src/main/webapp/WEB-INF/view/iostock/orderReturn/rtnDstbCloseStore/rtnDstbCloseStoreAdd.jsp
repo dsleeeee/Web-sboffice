@@ -159,7 +159,7 @@
 
 <script type="text/javascript">
 
-  /** 분배마감 추가등록 그리드 controller */
+  /** 반품마감 추가등록 그리드 controller */
   app.controller('rtnDstbCloseStoreAddCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('rtnDstbCloseStoreAddCtrl', $scope, $http, true));
@@ -248,45 +248,12 @@
         $scope._popMsg(messages["rtnDstbCloseStore.add.require.selectStore"]); // 매장을 선택해 주세요.
         return false;
       }
-      $scope.rtnDstbCloseStoreDateCheck();
+      $scope.searchRtnDstbCloseStoreAddList();
     };
 
-    // 주문가능 여부 체크
-    $scope.rtnDstbCloseStoreDateCheck = function () {
-      $scope.storeCd = $("#rtnDstbCloseStoreAddSelectStoreCd").val();
-      var params     = {};
-      params.reqDate = $scope.reqDate;
-      params.storeCd = $scope.storeCd;
-
-      // ajax 통신 설정
-      $http({
-        method : 'POST', //방식
-        url    : '/iostock/orderReturn/rtnDstbCloseStore/rtnDstbCloseStoreAdd/getOrderFg.sb', /* 통신할 URL */
-        params : params, /* 파라메터로 보낼 데이터 */
-        headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
-      }).then(function successCallback(response) {
-        if ($scope.httpStatusCheck(response)) {
-          if (!$.isEmptyObject(response.data.data)) {
-            $scope.orderFg  = response.data.data.orderFg;
-            var orderFgText = '<s:message code="rtnDstbCloseStore.add.orderPossibleFg"/> : ';
-            if ($scope.orderFg === 0) orderFgText += '<s:message code="rtnDstbCloseStore.add.possible"/>'
-            else orderFgText += '<s:message code="rtnDstbCloseStore.add.impossible"/>'
-            $("#orderFgSubTitle").html(orderFgText);
-          }
-          $scope.searchRtnDstbCloseStoreAddList();
-        }
-      }, function errorCallback(response) {
-        // called asynchronously if an error occurs
-        // or server returns response with an error status.
-        $scope._popMsg(messages["cmm.saveFail"]);
-        return false;
-      }).then(function () {
-        // "complete" code here
-      });
-    };
-
-    // 분배가능상품 리스트 조회
+    // 반품가능상품 리스트 조회
     $scope.searchRtnDstbCloseStoreAddList = function () {
+      $scope.storeCd = $("#rtnDstbCloseStoreAddSelectStoreCd").val();
       // 파라미터
       var params       = {};
       params.reqDate   = $scope.reqDate;
@@ -298,14 +265,14 @@
       $scope._inquiryMain("/iostock/orderReturn/rtnDstbCloseStore/rtnDstbCloseStoreAdd/list.sb", params);
     };
 
-    // 분배 상품 저장
+    // 반품 상품 저장
     $scope.saveRtnDstbCloseStoreAdd = function () {
       var params = new Array();
       for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
         var item = $scope.flex.collectionView.itemsEdited[i];
 
         if (item.mgrTotQty !== null && item.mgrTotQty !== "0" && (parseInt(item.mgrTotQty) < parseInt(item.poMinQty))) {
-          $scope._popMsg(messages["rtnDstbCloseStore.add.not.minMgrQty"]); // 분배수량은 최소주문수량 이상 입력하셔야 합니다.
+          $scope._popMsg(messages["rtnDstbCloseStore.add.not.minMgrQty"]); // 반품수량은 최소주문수량 이상 입력하셔야 합니다.
           return false;
         }
         if (item.mgrEtcQty !== null && (parseInt(item.mgrEtcQty) >= parseInt(item.poUnitQty))) {
@@ -313,7 +280,7 @@
           return false;
         }
         if (item.mgrTot !== null && (parseInt(item.mgrTot) > 9999999999)) {
-          $scope._popMsg(messages["rtnDstbCloseStore.add.not.overMgrTot"]); // 분배금액이 너무 큽니다.
+          $scope._popMsg(messages["rtnDstbCloseStore.add.not.overMgrTot"]); // 반품금액이 너무 큽니다.
           return false;
         }
 

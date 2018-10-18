@@ -19,7 +19,7 @@
     </colgroup>
     <tbody>
     <tr>
-      <%-- 출고일자 --%>
+      <%-- 반품일자 --%>
       <th><s:message code="rtnOutstockConfm.outDate"/></th>
       <td colspan="3">
         <div class="sb-select">
@@ -65,20 +65,6 @@
     <%-- 조회 --%>
     <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('rtnOutstockConfmCtrl')"><s:message code="cmm.search"/></button>
   </div>
-
-  <div class="tr mt10 fr">
-    <p class="s14 bk fl mr10 lh30"><s:message code="rtnOutstockConfm.reqNoConfirm"/> : </p>
-    <p class="s14 bk fl mr10 lh30 red" id="reqNoConfirmCnt"></p>
-    <p class="s14 bk fl mr10 lh30"><s:message code="rtnOutstockConfm.outstockNoCreate"/> : </p>
-    <p class="s14 bk fl mr20 lh30 red" id="outstockNoCreateCnt"></p>
-    <%-- 출고일자 --%>
-    <p class="s14 bk fl mr5 lh30"><s:message code="rtnOutstockConfm.outDate"/></p>
-    <div class="sb-select fl">
-      <span class="txtIn"><input id="outDate" class="w120"></span>
-    </div>
-    <%-- 출고자료생성 --%>
-    <button type="button" id="btnConfirm" class="btn_skyblue ml5 fl" ng-click="saveRtnOutstockConfm()"><s:message code="rtnOutstockConfm.outstockConfirm"/></button>
-  </div>
   <div style="clear: both;"></div>
 
   <div class="w100 mt10">
@@ -94,7 +80,7 @@
         item-formatter="_itemFormatter">
 
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center" is-read-only="false"></wj-flex-grid-column>
+        <%--<wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center" is-read-only="false"></wj-flex-grid-column>--%>
         <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.slipNo"/>" binding="slipNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.slipFg"/>" binding="slipFg" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.vendrNm"/>" binding="vendrNm" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -110,6 +96,7 @@
         <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.mgrTot"/>" binding="mgrTot" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.outTot"/>" binding="outTot" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.inTot"/>" binding="inTot" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.penaltyAmt"/>" binding="penaltyAmt" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.remark"/>" binding="remark" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.hqRemark"/>" binding="hqRemark" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.outDt"/>" binding="outDt" width="150" align="center" is-read-only="true" format="dateTime"></wj-flex-grid-column>
@@ -132,7 +119,7 @@
    */
   var app = agrid.getApp();
 
-  /** 출고확정 그리드 controller */
+  /** 반품매장출고 그리드 controller */
   app.controller('rtnOutstockConfmCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('rtnOutstockConfmCtrl', $scope, $http, true));
@@ -140,12 +127,9 @@
 
     var srchStartDate = wcombo.genDateVal("#srchStartDate", "${sessionScope.sessionInfo.startDt}");
     var srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.startDt}");
-    var outDate       = wcombo.genDateVal("#outDate", "${sessionScope.sessionInfo.startDt}");
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
-      $("#reqNoConfirmCnt").html("0");
-      $("#outstockNoCreateCnt").html("0");
 
       // picker 사용시 호출 : 미사용시 호출안함
       $scope._makePickColumns("rtnOutstockConfmCtrl");
@@ -158,13 +142,13 @@
             wijmo.addClass(e.cell, 'wijLink');
             wijmo.addClass(e.cell, 'wj-custom-readonly');
           }
-          else if (col.binding === "gChk") { // 진행구분 따라 체크박스 컬럼 readonly 컨트롤
-            var item = s.rows[e.row].dataItem;
-            if (item.procFg !== "10") {
-              wijmo.addClass(e.cell, 'wj-custom-readonly');
-              s.rows[e.row].isReadOnly = true;
-            }
-          }
+          // else if (col.binding === "gChk") { // 진행구분 따라 체크박스 컬럼 readonly 컨트롤
+          //   var item = s.rows[e.row].dataItem;
+          //   if (item.procFg !== "10") {
+          //     wijmo.addClass(e.cell, 'wj-custom-readonly');
+          //     s.rows[e.row].isReadOnly = true;
+          //   }
+          // }
 
           if (col.format === "date") {
             e.cell.innerHTML = getFormatDate(e.cell.innerText);
@@ -197,45 +181,13 @@
 
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("rtnOutstockConfmCtrl", function (event, data) {
-      $scope.getReqNoConfirmCnt();
+      $scope.searchRtnOutstockConfmList();
       // 기능수행 종료 : 반드시 추가
       event.preventDefault();
     });
 
-
-    // 매장요청 미확정건, 출고자료 미생성건 조회
-    $scope.getReqNoConfirmCnt = function () {
-      var params       = {};
-      params.slipFg    = $scope.slipFg;
-      params.startDate = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
-      params.endDate   = wijmo.Globalize.format(srchEndDate.value, 'yyyyMMdd');
-
-      // ajax 통신 설정
-      $http({
-        method : 'POST', //방식
-        url    : '/iostock/orderReturn/rtnOutstockConfm/rtnOutstockConfm/reqNoConfirmCnt.sb', /* 통신할 URL */
-        params : params, /* 파라메터로 보낼 데이터 */
-        headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
-      }).then(function successCallback(response) {
-        if ($scope.httpStatusCheck(response)) {
-          if (!$.isEmptyObject(response.data.data)) {
-            $("#reqNoConfirmCnt").html(response.data.data.reqNoConfirmCnt); //매장요청 미확정건
-            $("#outstockNoCreateCnt").html(response.data.data.outstockNoCreateCnt); //출고자료 미생성건
-            $scope.searchOutstockConfmList();
-          }
-        }
-      }, function errorCallback(response) {
-        // called asynchronously if an error occurs
-        // or server returns response with an error status.
-        $scope._popMsg(messages["cmm.saveFail"]);
-        return false;
-      }).then(function () {
-        // "complete" code here
-      });
-    };
-
-    // 출고확정 리스트 조회
-    $scope.searchOutstockConfmList = function () {
+    // 반품매장출고 리스트 조회
+    $scope.searchRtnOutstockConfmList = function () {
       // 파라미터
       var params       = {};
       params.slipFg    = $scope.slipFg;
@@ -247,61 +199,10 @@
       $scope._inquiryMain("/iostock/orderReturn/rtnOutstockConfm/rtnOutstockConfm/list.sb", params);
     };
 
-    $scope.saveRtnOutstockConfm = function () {
-      var params = new Array();
-
-      if ($scope.flex.collectionView.itemsEdited.length <= 0) {
-        $scope._popMsg(messages["cmm.not.modify"]);
-        return false;
-      }
-
-      for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-        var item = $scope.flex.collectionView.itemsEdited[i];
-
-        if (item.gChk === true) {
-          item.status    = "U";
-          item.outDate   = wijmo.Globalize.format(outDate.value, 'yyyyMMdd');
-          item.empNo     = "0000";
-          item.storageCd = "001";
-          item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
-          params.push(item);
-        }
-      }
-
-      $scope._save("/iostock/orderReturn/rtnOutstockConfm/rtnOutstockConfm/saveRtnOutstockConfm.sb", params, function () {
-        $scope.getReqNoConfirmCnt()
-      });
-    };
-
-    // http 조회 후 status 체크
-    $scope.httpStatusCheck = function (res) {
-      if (res.data.status === "OK") {
-        return true;
-      }
-      else if (res.data.status === "FAIL") {
-        $scope._popMsg("Ajax Fail By HTTP Request");
-        return false;
-      }
-      else if (res.data.status === "SESSION_EXFIRE") {
-        $scope._popMsg(res.data.message, function () {
-          location.href = res.data.url;
-        });
-        return false;
-      }
-      else if (res.data.status === "SERVER_ERROR") {
-        $scope._popMsg(res.data.message);
-        return false;
-      }
-      else {
-        var msg = res.data.status + " : " + res.data.message;
-        $scope._popMsg(msg);
-        return false;
-      }
-    };
   }]);
 </script>
 
-<%-- 출고자료생성 상세 레이어 --%>
+<%-- 반품매장출고 상세 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/orderReturn/rtnOutstockConfm/rtnOutstockConfmDtl.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>

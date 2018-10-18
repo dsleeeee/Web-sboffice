@@ -49,12 +49,12 @@
   </div>
 
   <div class="tr mt10 fr">
-    <%-- 출고일자 --%>
+    <%-- 반품일자 --%>
     <p class="s14 bk fl mr10 lh30"><s:message code="rtnOutstockData.outDate"/></p>
     <div class="sb-select mr10 fl">
       <span class="txtIn"><input id="outDate" class="w150"></span>
     </div>
-    <%-- 출고자료생성 --%>
+    <%-- 반품자료생성 --%>
     <button type="button" id="btnDataCreate" class="btn_skyblue ml5 fl" ng-click="saveValueCheck()"><s:message code="rtnOutstockData.dataCreate"/></button>
   </div>
   <div style="clear: both;"></div>
@@ -103,7 +103,7 @@
    */
   var app = agrid.getApp();
 
-  /** 출고자료생성 그리드 controller */
+  /** 반품자료생성 그리드 controller */
   app.controller('rtnOutstockDataCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('rtnOutstockDataCtrl', $scope, $http, true));
@@ -214,9 +214,6 @@
           if (sysStatFgCheck && item.sysStatFg !== "1") {
             sysStatFgCheck = false;
           }
-          if (loanCheck && item.availableOrderAmt !== null && (parseInt(item.dstbTot) > parseInt(item.availableOrderAmt))) {
-            loanCheck = false;
-          }
           item.status    = "U";
           item.dateFg    = $scope.searchedDateFg;
           item.startDate = $scope.searchedStartDate;
@@ -233,21 +230,6 @@
         <%-- 선택하신 자료 중 매장상태가 오픈이 아닌 매장이 있습니다. 계속하시겠습니까? --%>
         var msg = "<s:message code='rtnOutstockData.sysStatFgCheck'/>";
         s_alert.popConf(msg, function () {
-          $scope.loanCheckConfirm(loanCheck, params);
-        });
-        return false;
-      }
-      else {
-        $scope.loanCheckConfirm(loanCheck, params);
-      }
-    };
-
-    // 주문가능액 confirm
-    $scope.loanCheckConfirm = function (loanCheck, params) {
-      if (!loanCheck) {
-        <%-- 선택하신 자료중 출고합계금액이 주문가능액보다 큰 매장이 있습니다. 계속하시겠습니까? --%>
-        var msg = "<s:message code='rtnOutstockData.loanCheck'/>";
-        s_alert.popConf(msg, function () {
           $scope.slipNoCreateConfirm(params);
         });
         return false;
@@ -260,14 +242,14 @@
     // 전표생성 confirm
     $scope.slipNoCreateConfirm = function (params) {
       <%-- 선택하신 자료를 주문전표로 생성합니다. 계속하시겠습니까? --%>
-      var msg = "<s:message code='rtnOutstockData.orderSlipNoCreate'/>";
+      var msg = "<s:message code='rtnOutstockData.orderReturnSlipNoCreate'/>";
       s_alert.popConf(msg, function () {
         $scope.saveDataCreate(params);
       });
       return false;
     };
 
-    // 출고자료생성
+    // 반품자료생성
     $scope.saveDataCreate = function (params) {
       $scope._save("/iostock/orderReturn/rtnOutstockData/rtnOutstockData/saveDataCreate.sb", params, function () {
         $scope.searchRtnOutstockDataList()
@@ -276,7 +258,7 @@
   }]);
 </script>
 
-<%-- 출고자료생성 상세 레이어 --%>
+<%-- 반품자료생성 상세 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/orderReturn/rtnOutstockData/rtnOutstockDataDtl.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>

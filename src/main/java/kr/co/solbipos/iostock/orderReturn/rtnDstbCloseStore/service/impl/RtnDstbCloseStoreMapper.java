@@ -28,9 +28,6 @@ public interface RtnDstbCloseStoreMapper {
     /** 반품마감 상세 리스트 삭제 */
     int deleteDstbCloseDtl(RtnDstbCloseStoreVO rtnDstbCloseStoreVO);
 
-    /** 반품마감 - 추가분배시 주문가능여부 조회 */
-    DefaultMap<String> getOrderFg(RtnDstbCloseStoreVO rtnDstbCloseStoreVO);
-
     /** 반품마감 - 추가분배 상세 리스트 조회 */
     List<DefaultMap<String>> getDstbAddList(RtnDstbCloseStoreVO rtnDstbCloseStoreVO);
 
