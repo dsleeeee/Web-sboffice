@@ -59,7 +59,7 @@
             <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtl.mgrAmt"/>" binding="mgrAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtl.mgrVat"/>" binding="mgrVat" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtl.mgrTot"/>" binding="mgrTot" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtl.procFg"/>" binding="procFg" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtl.procFg"/>" binding="procFg" width="70" align="center" is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtl.confirmYn"/>" binding="confirmYn" width="60" align="center" is-read-only="false" format="checkBoxText"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtl.remark"/>" binding="remark" width="200" align="left" is-read-only="false" max-length=300></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtl.vatFg"/>" binding="vatFg01" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -81,6 +81,13 @@
   app.controller('dstbCloseStoreDtlCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('dstbCloseStoreDtlCtrl', $scope, $http, true));
+
+    $scope.procFgMap = new wijmo.grid.DataMap([
+      {id: "00", name: "<s:message code='rtnDstbCloseStore.dtl.procFgReg'/>"},
+      {id: "10", name: "<s:message code='rtnDstbCloseStore.dtl.procFgMd'/>"},
+      {id: "20", name: "<s:message code='rtnDstbCloseStore.dtl.procFgDstbClose'/>"},
+      {id: "30", name: "<s:message code='rtnDstbCloseStore.dtl.procFgSlip'/>"}
+    ], 'id', 'name');
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {

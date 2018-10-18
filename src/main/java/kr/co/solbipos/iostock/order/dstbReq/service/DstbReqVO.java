@@ -82,6 +82,8 @@ public class DstbReqVO extends PageVO {
     private String mgrId;
     /** 처리구분 TB_CM_NMCODE(NMCODE_GRP_CD='110') 00:등록, 10:MD확정, 20:분배마감, 30:전표수거 */
     private String procFg;
+    /** 다중 처리구분 */
+    private String[] arrProcFg;
     /** 주문전표번호 YYMM(4)+SEQ(6) */
     private String slipNo;
     /** 비고 */
@@ -633,6 +635,20 @@ public class DstbReqVO extends PageVO {
      */
     public void setProcFg(String procFg) {
         this.procFg = procFg;
+    }
+
+    /**
+     * @return the arrProcFg
+     */
+    public String[] getArrProcFg() {
+        return arrProcFg;
+    }
+
+    /**
+     * @param arrProcFg the arrProcFg to set
+     */
+    public void setArrProcFg(String[] arrProcFg) {
+        this.arrProcFg = arrProcFg;
     }
 
     /**

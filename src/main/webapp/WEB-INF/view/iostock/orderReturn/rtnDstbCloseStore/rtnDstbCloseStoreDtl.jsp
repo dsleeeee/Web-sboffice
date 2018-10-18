@@ -59,7 +59,7 @@
             <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.dtl.mgrAmt"/>" binding="mgrAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.dtl.mgrVat"/>" binding="mgrVat" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.dtl.mgrTot"/>" binding="mgrTot" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.dtl.procFg"/>" binding="procFg" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.dtl.procFg"/>" binding="procFg" width="70" align="center" is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.dtl.confirmYn"/>" binding="confirmYn" width="60" align="center" is-read-only="false" format="checkBoxText"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.dtl.remark"/>" binding="remark" width="200" align="left" is-read-only="false" max-length=300></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.dtl.vatFg"/>" binding="vatFg01" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -77,10 +77,17 @@
 
 <script type="text/javascript">
 
-  /** 분배마감 상세 그리드 controller */
+  /** 반품마감 상세 그리드 controller */
   app.controller('rtnDstbCloseStoreDtlCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('rtnDstbCloseStoreDtlCtrl', $scope, $http, true));
+
+    $scope.procFgMap = new wijmo.grid.DataMap([
+      {id: "00", name: "<s:message code='rtnDstbCloseStore.dtl.procFgReg'/>"},
+      {id: "10", name: "<s:message code='rtnDstbCloseStore.dtl.procFgMd'/>"},
+      {id: "20", name: "<s:message code='rtnDstbCloseStore.dtl.procFgDstbClose'/>"},
+      {id: "30", name: "<s:message code='rtnDstbCloseStore.dtl.procFgSlip'/>"}
+    ], 'id', 'name');
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -89,7 +96,7 @@
         if (e.panel === s.cells) {
           var col  = s.columns[e.col];
           var item = s.rows[e.row].dataItem;
-          if (col.binding === "mgrEtcQty") { // 입수에 따라 분배수량 컬럼 readonly 컨트롤
+          if (col.binding === "mgrEtcQty") { // 입수에 따라 반품수량 컬럼 readonly 컨트롤
             // console.log(item);
             if (item.poUnitQty === 1) {
               wijmo.addClass(e.cell, 'wj-custom-readonly');
@@ -105,7 +112,7 @@
       s.cellEditEnded.addHandler(function (s, e) {
         if (e.panel === s.cells) {
           var col = s.columns[e.col];
-          if (col.binding === "mgrSplyUprc" || col.binding === "mgrUnitQty" || col.binding === "mgrEtcQty") { // 분배수량 수정시
+          if (col.binding === "mgrSplyUprc" || col.binding === "mgrUnitQty" || col.binding === "mgrEtcQty") { // 반품수량 수정시
             var item = s.rows[e.row].dataItem;
             $scope.calcAmt(item);
           }
@@ -135,7 +142,7 @@
       var mgrVat  = Math.round(tempAmt * vat01 / (10 + envst0011));
       var mgrTot  = parseInt(mgrAmt + mgrVat);
 
-      item.mgrTotQty = totQty; // 총분배수량
+      item.mgrTotQty = totQty; // 총반품수량
       item.mgrAmt    = mgrAmt; // 금액
       item.mgrVat    = mgrVat; // VAT
       item.mgrTot    = mgrTot; // 합계
@@ -163,7 +170,7 @@
       event.preventDefault();
     });
 
-    // 분배마감 상세내역 리스트 조회
+    // 반품마감 상세내역 리스트 조회
     $scope.searchRtnDstbCloseStoreDtlList = function () {
       // 파라미터
       var params     = {};
@@ -184,7 +191,7 @@
         var item = $scope.flex.collectionView.itemsEdited[i];
 
         if (item.mgrUnitQty === null && item.mgrEtcQty === null) {
-          $scope._popMsg(messages["rtnDstbCloseStore.dtl.require.mgrQty"]); // 분배수량을 입력해주세요.
+          $scope._popMsg(messages["rtnDstbCloseStore.dtl.require.mgrQty"]); // 반품수량을 입력해주세요.
           return false;
         }
         if (item.mgrEtcQty !== null && (parseInt(item.mgrEtcQty) >= parseInt(item.poUnitQty))) {
@@ -192,7 +199,7 @@
           return false;
         }
         if (item.mgrTot !== null && (parseInt(item.mgrTot) > 9999999999)) {
-          $scope._popMsg(messages["rtnDstbCloseStore.dtl.not.overMgrTot"]); // 분배금액이 너무 큽니다.
+          $scope._popMsg(messages["rtnDstbCloseStore.dtl.not.overMgrTot"]); // 반품금액이 너무 큽니다.
           return false;
         }
 

@@ -34,6 +34,9 @@ public class RtnDstbReqServiceImpl implements RtnDstbReqService {
     /** 분배등록 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getRtnDstbReqList(RtnDstbReqVO rtnDstbReqVO) {
+        if(!StringUtil.getOrBlank(rtnDstbReqVO.getProcFg()).equals("")) {
+            rtnDstbReqVO.setArrProcFg(rtnDstbReqVO.getProcFg().split(","));
+        }
         return rtnDstbReqMapper.getRtnDstbReqList(rtnDstbReqVO);
     }
 

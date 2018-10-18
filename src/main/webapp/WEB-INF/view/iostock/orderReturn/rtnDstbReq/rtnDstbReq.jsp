@@ -40,6 +40,23 @@
         </div>
       </td>
     </tr>
+    <tr>
+      <%-- 진행구분 --%>
+      <th><s:message code="storeOrder.procFg"/></th>
+      <td>
+        <span class="txtIn w150 sb-select fl mr5">
+          <wj-combo-box
+            id="srchProcFg"
+            ng-model="procFg"
+            items-source="_getComboData('srchProcFg')"
+            display-member-path="name"
+            selected-value-path="value"
+            is-editable="false"
+            initialized="_initComboBox(s)">
+          </wj-combo-box>
+        </span>
+      </td>
+    </tr>
     </tbody>
   </table>
 
@@ -70,7 +87,7 @@
         <wj-flex-grid-column header="<s:message code="rtnDstbReq.reqDate"/>" binding="reqDate" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnDstbReq.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnDstbReq.storeNm"/>" binding="storeNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnDstbReq.procFg"/>" binding="procFg" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnDstbReq.procFg"/>" binding="procFg" width="70" align="center" is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnDstbReq.dtlCnt"/>" binding="dtlCnt" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnDstbReq.orderTot"/>" binding="orderTot" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnDstbReq.mdTot"/>" binding="mdTot" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
@@ -104,11 +121,27 @@
     $scope.slipFg     = -1;
     var srchStartDate = wcombo.genDateVal("#srchStartDate", "${sessionScope.sessionInfo.startDt}");
     var srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.startDt}");
+
     $scope._setComboData("srchDateFg", [
       {"name": "<s:message code='rtnDstbReq.reqDate'/>", "value": "req"},
       {"name": "<s:message code='rtnDstbReq.regDate'/>", "value": "reg"},
       {"name": "<s:message code='rtnDstbReq.modDate'/>", "value": "mod"}
     ]);
+
+    $scope._setComboData("srchProcFg", [
+      {"name": "<s:message code='rtnDstbReq.procFgAll'/>", "value": ""},
+      {"name": "<s:message code='rtnDstbReq.procFgRegDstb'/>", "value": "10,20"},
+      {"name": "<s:message code='rtnDstbReq.procFgReg'/>", "value": "10"},
+      {"name": "<s:message code='rtnDstbReq.procFgDstb'/>", "value": "20"},
+      {"name": "<s:message code='rtnDstbReq.procFgDstbCompt'/>", "value": "30"}
+    ]);
+    $scope.procFg = "10,20"; // 진행구분 기본값 세팅
+
+    $scope.procFgMap = new wijmo.grid.DataMap([
+      {id: "10", name: "<s:message code='rtnDstbReq.procFgReg'/>"},
+      {id: "20", name: "<s:message code='rtnDstbReq.procFgDstb'/>"},
+      {id: "30", name: "<s:message code='rtnDstbReq.procFgDstbCompt'/>"}
+    ], 'id', 'name');
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {

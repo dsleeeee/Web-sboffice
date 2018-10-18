@@ -69,9 +69,9 @@
         <div id="outstockBtnLayer" style="display: none;">
           <%-- 출고확정 체크박스 --%>
           <span id="spanOutstockConfirmFg" class="chk pdb5 txtIn fl" style="top: 0px;">
-                  <input type="checkbox" name="outstockConfirmFg" id="outstockConfirmFg" value="Y" ng-click="fnConfirmChk()"/>
-                  <label for="outstockConfirmFg"><s:message code="rtnOutstockConfm.dtl.confirmFg"/></label>
-                </span>
+            <input type="checkbox" name="outstockConfirmFg" id="outstockConfirmFg" value="Y" ng-click="fnConfirmChk()"/>
+            <label for="outstockConfirmFg"><s:message code="rtnOutstockConfm.dtl.confirmFg"/></label>
+          </span>
           <%-- 출고일자 --%>
           <div id="divDtlOutDate" class="sb-select ml10 fl" style="display: none;">
             <span class="txtIn"><input id="dtlOutDate" class="w120"></span>

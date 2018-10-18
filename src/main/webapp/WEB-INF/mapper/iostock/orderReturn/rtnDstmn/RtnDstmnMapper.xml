@@ -65,7 +65,41 @@
         ,        (CASE WHEN tphso.PROC_FG >= '20' THEN tphso.OUT_DT                    ELSE NULL END) AS OUT_DT
         ,        (CASE WHEN tphso.PROC_FG >= '20' THEN userInfo.EMP_NM                 ELSE NULL END) AS OUT_NM
         ,        tphso.REMARK, tphso.HQ_REMARK, tphso.DLVR_CD
+        ,        tphsod.PENALTY_AMT
         FROM     TB_PO_HQ_STORE_OUTSTOCK tphso
+        ,        (  SELECT  tphsod.HQ_OFFICE_CD, tphsod.SLIP_NO, SUM(tphsod.PENALTY_AMT) AS PENALTY_AMT
+                    FROM    TB_PO_HQ_STORE_OUTSTOCK tphso
+                    ,       TB_PO_HQ_STORE_OUTSTOCK_DTL tphsod
+                    WHERE   tphso.HQ_OFFICE_CD  =       #{hqOfficeCd}
+                    AND     tphso.OUT_DATE      BETWEEN #{startDate} AND #{endDate}
+                    AND     tphsod.HQ_OFFICE_CD = tphso.HQ_OFFICE_CD
+                    AND     tphsod.SLIP_NO      = tphso.SLIP_NO
+        ]]>
+                    <if test='slipFg != null and slipFg != ""'>
+                        AND tphso.SLIP_FG = #{slipFg}
+                    </if>
+                    <if test='slipKind != null and slipKind != ""'>
+                        AND tphso.SLIP_KIND = #{slipKind}
+                    </if>
+                    <if test='procFg != null and procFg != ""'>
+                        AND tphso.PROC_FG = #{procFg}
+                    </if>
+                    <if test='vendrCd != null and vendrCd != ""'>
+                        AND tphso.VENDR_CD = #{vendrCd}
+                    </if>
+                    <if test='dlvrCd != null and dlvrCd != ""'>
+                        AND tphso.DLVR_CD = #{dlvrCd}
+                    </if>
+                    <if test='storeCd != null and storeCd != ""'>
+                        AND tms.STORE_CD = #{storeCd}
+                    </if>
+                    <if test='storeNm != null and storeNm != ""'>
+                        AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+                    </if>
+        <![CDATA[
+                    GROUP
+                    BY      tphsod.HQ_OFFICE_CD, tphsod.SLIP_NO
+                 ) tphsod
         ,        TB_MS_STORE tms
         ,        (  SELECT  tme.USER_ID, tme.EMP_NM
                     FROM    TB_MS_STORE tms
@@ -79,6 +113,8 @@
                  ) userInfo
         WHERE    tphso.HQ_OFFICE_CD     =       #{hqOfficeCd}
         AND      tphso.OUT_DATE         BETWEEN #{startDate} AND #{endDate}
+        AND      tphsod.HQ_OFFICE_CD    =   tphso.HQ_OFFICE_CD
+        AND      tphsod.SLIP_NO         =   tphso.SLIP_NO
         AND      tms.STORE_CD           =   tphso.STORE_CD
         AND      userInfo.USER_ID   (+) =   tphso.MOD_ID
         ]]>

@@ -39,6 +39,9 @@
         <if test='slipFg != null and slipFg != ""'>
             AND tphso.SLIP_FG = #{slipFg}
         </if>
+        <if test='procFg != null and procFg != ""'>
+            AND tphso.PROC_FG = #{procFg}
+        </if>
         ORDER BY tphso.REQ_DATE DESC
     </select>
 

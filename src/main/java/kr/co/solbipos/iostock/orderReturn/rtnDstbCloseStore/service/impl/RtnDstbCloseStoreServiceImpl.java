@@ -109,12 +109,6 @@ public class RtnDstbCloseStoreServiceImpl implements RtnDstbCloseStoreService {
         return returnResult;
     }
 
-    /** 추가등록시 주문가능여부 조회 */
-    @Override
-    public DefaultMap<String> getOrderFg(RtnDstbCloseStoreVO rtnDstbCloseStoreVO) {
-        return rtnDstbCloseStoreMapper.getOrderFg(rtnDstbCloseStoreVO);
-    }
-
     /** 반품마감 - 추가등록 상세 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getDstbAddList(RtnDstbCloseStoreVO rtnDstbCloseStoreVO) {
