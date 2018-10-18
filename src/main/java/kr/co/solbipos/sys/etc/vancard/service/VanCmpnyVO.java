@@ -21,6 +21,8 @@ import kr.co.solbipos.application.common.service.CmmVO;
 public class VanCmpnyVO extends CmmVO {
 
     private static final long serialVersionUID = -2340647114412075524L;
+    /** 벤사구분 */
+    private String vanFg;
     /** 밴사코드 */
     private String vanCd;
     /** 밴사명 */
@@ -37,8 +39,20 @@ public class VanCmpnyVO extends CmmVO {
     private String subIp;
     /** 서브PORT */
     private String subPort;
-    
-    
+
+
+    /**
+     * @return the vanFg
+     */
+    public String getVanFg() {
+        return vanFg;
+    }
+    /**
+     * @param vanFg the vanFg to set
+     */
+    public void setVanFg(String vanFg) {
+        this.vanFg = vanFg;
+    }
     /**
      * @return the vanCd
      */
