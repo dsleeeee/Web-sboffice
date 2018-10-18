@@ -248,9 +248,7 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-    $scope.vendorFgDataMap = new wijmo.grid.DataMap(
-        [{id: "01", name: "VAN"}, {id: "02",name: "PAYCO"}, {id: "03",name: "MPAY"},{id: "04",name: "MCOUPN"}]
-        , 'id', 'name');
+    $scope.vendorFgDataMap = new wijmo.grid.DataMap(vendorFg, 'value', 'name');
     $scope.vanCdDataMap = new wijmo.grid.DataMap(vanCdFg, 'value', 'name');
     $scope.useYnFgDataMap = new wijmo.grid.DataMap(useYnFg, 'value', 'name');
   };
@@ -325,15 +323,15 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
         return false;
       }
 
-      if(params[i].vendorNm == "") {
-        $scope._popMsg(messages["terminalManage.vendorNm"] + messages["terminalManage.require.input"]);
-        return false;
-      }
+      // if(params[i].vendorNm == "") {
+      //   $scope._popMsg(messages["terminalManage.vendorNm"] + messages["terminalManage.require.input"]);
+      //   return false;
+      // }
 
-      if(params[i].vendorNm.length > 6) {
-        $scope._popMsg(messages["terminalManage.vendorNm"] + messages["terminalManage.require.exact.data"]);
-        return false;
-      }
+      // if(params[i].vendorNm.length > 6) {
+      //   $scope._popMsg(messages["terminalManage.vendorNm"] + messages["terminalManage.require.exact.data"]);
+      //   return false;
+      // }
 
       if(params[i].vendorTermnlNo == "") {
         $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + messages["terminalManage.require.input"]);
@@ -401,9 +399,7 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-    $scope.vendorFgDataMap = new wijmo.grid.DataMap(
-        [{id: "01", name: "VAN"}, {id: "02",name: "PAYCO"}, {id: "03",name: "MPAY"},{id: "04",name: "MCOUPN"}]
-        , 'id', 'name');
+    $scope.vendorFgDataMap = new wijmo.grid.DataMap(vendorFg, 'value', 'name');
     $scope.vanCdDataMap = new wijmo.grid.DataMap(vanCdFg, 'value', 'name');
     $scope.useYnFgDataMap = new wijmo.grid.DataMap(useYnFg, 'value', 'name');
   };
@@ -480,15 +476,15 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
         return false;
       }
 
-      if(params[i].vendorNm == "") {
-        $scope._popMsg(messages["terminalManage.vendorNm"] + messages["terminalManage.require.input"]);
-        return false;
-      }
+      // if(params[i].vendorNm == "") {
+      //   $scope._popMsg(messages["terminalManage.vendorNm"] + messages["terminalManage.require.input"]);
+      //   return false;
+      // }
 
-      if(params[i].vendorNm.length > 6) {
-        $scope._popMsg(messages["terminalManage.vendorNm"] + messages["terminalManage.require.exact.data"]);
-        return false;
-      }
+      // if(params[i].vendorNm.length > 6) {
+      //   $scope._popMsg(messages["terminalManage.vendorNm"] + messages["terminalManage.require.exact.data"]);
+      //   return false;
+      // }
 
       if(params[i].vendorTermnlNo == "") {
         $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + messages["terminalManage.require.input"]);

@@ -28,8 +28,13 @@ import java.util.List;
 @Transactional
 public class LoginStatusServiceImpl implements LoginStatusService {
 
+    private final LoginStatusMapper loginStatusMapper;
+
+    /** Constructor Injection */
     @Autowired
-    LoginStatusMapper loginStatusMapper;
+    public LoginStatusServiceImpl(LoginStatusMapper loginStatusMapper) {
+        this.loginStatusMapper = loginStatusMapper;
+    }
 
     @Override
     public <E> List<E> selectLoginStatus(LoginStatusVO loginStatusVO) {

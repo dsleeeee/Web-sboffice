@@ -2,6 +2,7 @@ package kr.co.solbipos.pos.confg.loginstatus.service.impl;
 
 import kr.co.solbipos.pos.confg.loginstatus.service.LoginStatusVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -22,6 +23,9 @@ import java.util.List;
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Mapper
+@Repository
 public interface LoginStatusMapper {
+
     public <E> List<E> selectLoginStatus(LoginStatusVO loginStatusVO);
+
 }

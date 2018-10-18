@@ -1034,48 +1034,53 @@ Format.prototype.openByGrid = function (isLoad) {
  * 기존 구성 조회
  */
 Format.prototype.open = function (isLoad) {
-  var funcKey = this.touchkey.funcKey;
 
+  var funcKey = this.touchkey.funcKey;
   var scope = agrid.getScope("funcKeyCtrl");
+
   var storeCd = scope.getSaveInfo("storeCd");
   var posNo = scope.getSaveInfo("posNo");
   var fnkeyFg = scope.getSaveInfo("fnkeyFg");
-  var params = 'storeCd=' + storeCd + "&posNo=" + posNo + "&fnkeyFg=" + fnkeyFg;
-  ``
-  //open
-  var reqFuncKey = mxUtils.post(FUNCKEY_OPEN_URL, params,
-    mxUtils.bind(this, function (req) {
-      //var enabled = req.getStatus() != 404;
-      if (req.getStatus() === 200) {
-        try {
-          var jsonStr = JSON.parse(req.getText());
-          var xmlStr = jsonStr.data;
-          if (xmlStr != null) {
-            var funcKeyXml = mxUtils.parseXml(xmlStr);
-            this.setGraphXml(funcKey, funcKeyXml.documentElement);
-          } else {
-            // xml이 없는경우 초기화
-            this.setGraphXml(funcKey, null);
+  // 최초 로딩시 값 없는경우 존재하기 떄문에 에러 방지를 위함
+  if ( !isEmpty(storeCd) && !isEmpty(posNo) && !isEmpty(fnkeyFg) ) {
+    var params = 'storeCd=' + storeCd + "&posNo=" + posNo + "&fnkeyFg=" + fnkeyFg;
+
+    //open
+    var reqFuncKey = mxUtils.post(FUNCKEY_OPEN_URL, params,
+      mxUtils.bind(this, function (req) {
+        //var enabled = req.getStatus() != 404;
+        if (req.getStatus() === 200) {
+          try {
+            var jsonStr = JSON.parse(req.getText());
+            var xmlStr = jsonStr.data;
+            if (xmlStr != null) {
+              var funcKeyXml = mxUtils.parseXml(xmlStr);
+              this.setGraphXml(funcKey, funcKeyXml.documentElement);
+            } else {
+              // xml이 없는경우 초기화
+              this.setGraphXml(funcKey, null);
+            }
+          }
+          catch (e) {
+            scope.$apply(function(){
+              scope._popMsg(mxResources.get('errorOpeningFile'));
+            });
+          }
+          if (!isLoad) {
+            scope.$apply(function(){
+              scope._popMsg(mxResources.get('opened'));
+            });
           }
         }
-        catch (e) {
+        else {
           scope.$apply(function(){
             scope._popMsg(mxResources.get('errorOpeningFile'));
           });
         }
-        if (!isLoad) {
-          scope.$apply(function(){
-            scope._popMsg(mxResources.get('opened'));
-          });
-        }
-      }
-      else {
-        scope.$apply(function(){
-          scope._popMsg(mxResources.get('errorOpeningFile'));
-        });
-      }
-    })
-  );
+      })
+    );
+  }
+
 };
 
 /**

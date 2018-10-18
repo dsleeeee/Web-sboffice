@@ -24,14 +24,24 @@ import static org.springframework.util.StringUtils.isEmpty;
  *
  * @author 정용길
  */
-@Component("cmmCodeUtil") public class CmmCodeUtil {
+@Component("cmmCodeUtil")
+public class CmmCodeUtil {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    @Autowired CmmCodeService cmmCodeService;
-    @Autowired SessionService sessionService;
+
+    private final CmmCodeService cmmCodeService;
+    private final SessionService sessionService;
 
     public static final String COMBO_NAME = "name";
     public static final String COMBO_VALUE = "value";
+
+    /** Constructor Injection */
+    @Autowired
+    public CmmCodeUtil(CmmCodeService cmmCodeService, SessionService sessionService) {
+        this.cmmCodeService = cmmCodeService;
+        this.sessionService = sessionService;
+    }
+
 
     /**
      * 조회 건수 리스트
