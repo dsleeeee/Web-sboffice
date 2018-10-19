@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.iostock.orderReturn.rtnOutstockData.service.impl.RtnOutstockDataMapper">
+    <!-- 반품자료생성 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_DISTRIBUTE, TB_MS_STORE, TB_PO_HQ_STORE_LOAN
+        PARAM    : rtnOutstockDataVO
+        COMMENTS : 반품자료생성 리스트를 조회한다.
+    -->
+    <select id="getRtnOutstockDataList" parameterType="rtnOutstockDataVO" resultType="DefaultMap">
+        /* USE : RtnOutstockDataMapper.getRtnOutstockDataList */
+        <![CDATA[
+        SELECT  tphsd.SLIP_FG, tphsd.STORE_CD, tms.STORE_NM, tms.SYS_STAT_FG
+        ,       tphsl.CURR_LOAN_AMT
+        ,       tphsl.AVAILABLE_ORDER_AMT
+        ,       SUM(DECODE(tphsd.PROC_FG, '00', tphsd.MD_UNIT_QTY, tphsd.MGR_UNIT_QTY) * tphsd.SLIP_FG) AS DSTB_UNIT_QTY
+        ,       SUM(DECODE(tphsd.PROC_FG, '00', tphsd.MD_ETC_QTY , tphsd.MGR_ETC_QTY)  * tphsd.SLIP_FG) AS DSTB_ETC_QTY
+        ,       SUM(DECODE(tphsd.PROC_FG, '00', tphsd.MD_TOT_QTY , tphsd.MGR_TOT_QTY)  * tphsd.SLIP_FG) AS DSTB_TOT_QTY
+        ,       SUM(DECODE(tphsd.PROC_FG, '00', tphsd.MD_AMT     , tphsd.MGR_AMT)      * tphsd.SLIP_FG) AS DSTB_AMT
+        ,       SUM(DECODE(tphsd.PROC_FG, '00', tphsd.MD_VAT     , tphsd.MGR_VAT)      * tphsd.SLIP_FG) AS DSTB_VAT
+        ,       SUM(DECODE(tphsd.PROC_FG, '00', tphsd.MD_TOT     , tphsd.MGR_TOT)      * tphsd.SLIP_FG) AS DSTB_TOT
+        ,       COUNT(*) AS DTL_CNT
+        FROM    TB_PO_HQ_STORE_DISTRIBUTE tphsd
+        ,       TB_MS_STORE tms
+        ,       (  SELECT   tphsl.STORE_CD, tphsl.CURR_LOAN_AMT
+                   ,        DECODE(tphsl.ORDER_FG,'1',DECODE(SIGN(tphsl.CURR_LOAN_AMT),1,DECODE(SIGN(tphsl.CURR_LOAN_AMT-tphsl.MAX_ORDER_AMT),1,tphsl.MAX_ORDER_AMT,tphsl.CURR_LOAN_AMT) ,0)
+                                                 ,'2',DECODE(SIGN(tphsl.CURR_LOAN_AMT),1,tphsl.MAX_ORDER_AMT,0)) AS AVAILABLE_ORDER_AMT
+                    FROM    TB_PO_HQ_STORE_LOAN tphsl
+                    WHERE   tphsl.HQ_OFFICE_CD = #{hqOfficeCd}
+                )   tphsl
+        WHERE   tphsd.HQ_OFFICE_CD  =   #{hqOfficeCd}
+        AND     tphsd.SLIP_FG       =   #{slipFg}
+        AND     tphsd.PROC_FG       =   '20'
+        AND     tms.STORE_CD        =   tphsd.STORE_CD
+        AND     tphsl.STORE_CD  (+) =   tphsd.STORE_CD
+        ]]>
+        <if test='dateFg == "req"'>
+            AND tphsd.REQ_DATE BETWEEN #{startDate} AND #{endDate}
+        </if>
+        <if test='dateFg == "reg"'>
+            AND tphsd.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+        </if>
+        <if test='dateFg == "mod"'>
+            AND tphsd.MOD_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+        </if>
+        GROUP
+        BY      tphsd.SLIP_FG, tphsd.STORE_CD, tms.STORE_NM, tms.SYS_STAT_FG, tphsl.CURR_LOAN_AMT, tphsl.AVAILABLE_ORDER_AMT
+        ORDER
+        BY      tphsd.STORE_CD
+    </select>
+
+    <!-- 반품자료생성 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_DISTRIBUTE, TB_MS_PRODUCT
+        PARAM    : rtnOutstockDataVO
+        COMMENTS : 반품자료생성 상세 리스트를 조회한다.
+    -->
+    <select id="getRtnOutstockDataDtlList" parameterType="rtnOutstockDataVO" resultType="DefaultMap">
+        /* USE : RtnOutstockDataMapper.getRtnOutstockDataDtlList */
+        <![CDATA[
+        SELECT  tphsd.STORE_CD, tphsd.PROD_CD , tmp.PROD_NM
+        ,       tmp.PO_UNIT_FG, tmp.PO_UNIT_QTY
+        ,       tphsd.SEQ, tphsd.SLIP_FG, tphsd.DSTB_FG, tphsd.PROC_FG, tphsd.REMARK
+        ,       DECODE(tphsd.PROC_FG,'00',tphsd.MD_SPLY_UPRC,tphsd.MGR_SPLY_UPRC) AS DSTB_SPLY_UPRC
+        ,       DECODE(DECODE(tphsd.PROC_FG,'00',tphsd.MD_UNIT_QTY,tphsd.MGR_UNIT_QTY),0,NULL,DECODE(tphsd.PROC_FG,'00',tphsd.MD_UNIT_QTY,tphsd.MGR_UNIT_QTY)*tphsd.SLIP_FG) AS DSTB_UNIT_QTY
+        ,       DECODE(DECODE(tphsd.PROC_FG,'00',tphsd.MD_ETC_QTY ,tphsd.MGR_ETC_QTY ),0,NULL,DECODE(tphsd.PROC_FG,'00',tphsd.MD_ETC_QTY ,tphsd.MGR_ETC_QTY )*tphsd.SLIP_FG) AS DSTB_ETC_QTY
+        ,       DECODE(DECODE(tphsd.PROC_FG,'00',tphsd.MD_TOT_QTY ,tphsd.MGR_TOT_QTY ),0,NULL,DECODE(tphsd.PROC_FG,'00',tphsd.MD_TOT_QTY ,tphsd.MGR_TOT_QTY )*tphsd.SLIP_FG) AS DSTB_TOT_QTY
+        ,       DECODE(tphsd.PROC_FG,'00',tphsd.MD_AMT ,tphsd.MGR_AMT )*tphsd.SLIP_FG AS DSTB_AMT
+        ,       DECODE(tphsd.PROC_FG,'00',tphsd.MD_VAT ,tphsd.MGR_VAT )*tphsd.SLIP_FG AS DSTB_VAT
+        ,       DECODE(tphsd.PROC_FG,'00',tphsd.MD_TOT ,tphsd.MGR_TOT )*tphsd.SLIP_FG AS DSTB_TOT
+        FROM    TB_PO_HQ_STORE_DISTRIBUTE tphsd
+        ,       TB_MS_PRODUCT tmp
+        WHERE   tphsd.HQ_OFFICE_CD  =   #{hqOfficeCd}
+        AND     tphsd.STORE_CD      =   #{storeCd}
+        AND     tphsd.SLIP_FG       =   #{slipFg}
+        AND     tphsd.PROC_FG       =   '20'
+        AND     tmp.STORE_CD        =   tphsd.STORE_CD
+        AND     tmp.PROD_CD         =   tphsd.PROD_CD
+        ]]>
+        <if test='dateFg == "req"'>
+            AND tphsd.REQ_DATE BETWEEN #{startDate} AND #{endDate}
+        </if>
+        <if test='dateFg == "reg"'>
+            AND tphsd.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+        </if>
+        <if test='dateFg == "mod"'>
+            AND tphsd.MOD_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+        </if>
+        ORDER
+        BY      tphsd.STORE_CD, tphsd.PROD_CD, DSTB_SPLY_UPRC DESC, tphsd.SEQ
+    </select>
+
+    <!-- 반품자료생성 전표번호 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK
+        PARAM    : rtnOutstockDataVO
+        COMMENTS : 반품자료생성 MAX 전표번호를 조회한다.
+    -->
+    <select id="getMaxSlipNo" parameterType="rtnOutstockDataVO" resultType="String">
+        /* USE : RtnOutstockDataMapper.getMaxSlipNo */
+        <![CDATA[
+        SELECT  NVL(MAX(tphso.SLIP_NO), #{yymm}||'000000') AS SLIP_NO
+        FROM    TB_PO_HQ_STORE_OUTSTOCK tphso
+        WHERE   tphso.HQ_OFFICE_CD  =     #{hqOfficeCd}
+        AND     tphso.SLIP_NO       LIKE  #{yymm}||'%'
+        ]]>
+    </select>
+
+    <!-- 반품자료생성 직배송거래처 및 배송기사 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK
+        PARAM    : rtnOutstockDataVO
+        COMMENTS : 반품자료생성 직배송거래처 및 배송기사 조회를 조회한다.
+    -->
+    <select id="getStoreVendrDlvr" parameterType="rtnOutstockDataVO" resultType="DefaultMap">
+        /* USE : RtnOutstockDataMapper.getStoreVendrDlvr */
+        <![CDATA[
+        SELECT  tphsd.STORE_CD, tphdcs.DLVR_CD, tphsd.SLIP_FG, thvp.VENDR_CD
+        FROM    TB_PO_HQ_STORE_DISTRIBUTE tphsd
+        ,       (   SELECT  thvp.HQ_BRAND_CD, thvp.PROD_CD
+                    ,       MIN(thvp.VENDR_CD) AS VENDR_CD
+                    FROM    TB_HQ_VENDOR_PROD thvp
+                    ,       TB_HQ_BRAND thb
+                    WHERE   thb.HQ_OFFICE_CD   =   #{hqOfficeCd}
+                    AND     thb.HQ_BRAND_CD    =   thvp.HQ_BRAND_CD
+                    AND     thvp.VENDR_CD   IN  (   SELECT  thv.VENDR_CD
+                                                    FROM    TB_HQ_VENDOR thv
+                                                    ,       TB_HQ_BRAND thb
+                                                    WHERE   thb.HQ_OFFICE_CD   =   #{hqOfficeCd}
+                                                    AND     thb.HQ_BRAND_CD    =   thv.HQ_BRAND_CD
+                                                    AND     thv.USE_YN         =   'Y'
+                                                    AND     thv.SHIP_FG        =   'Y'
+                                                )
+                    GROUP
+                    BY      thvp.HQ_BRAND_CD, thvp.PROD_CD
+                )   thvp
+        ,       TB_PO_HQ_DELIVERY_CHARGER_STORAGE tphdcs
+        WHERE   tphsd.HQ_OFFICE_CD      =   #{hqOfficeCd}
+        AND     tphsd.PROC_FG           =   '20'
+        AND     tphsd.STORE_CD          =   #{storeCd}
+        AND     tphsd.SLIP_FG           =   #{slipFg}
+        AND     thvp.HQ_BRAND_CD    (+) =   tphsd.HQ_BRAND_CD
+        AND     thvp.PROD_CD        (+) =   tphsd.PROD_CD
+        AND     tphdcs.HQ_OFFICE_CD (+) =   tphsd.HQ_OFFICE_CD
+        AND     tphdcs.STORAGE_CD   (+) =   tphsd.STORAGE_CD
+        ]]>
+        <if test='dateFg == "req"'>
+            AND tphsd.REQ_DATE BETWEEN #{startDate} AND #{endDate}
+        </if>
+        <if test='dateFg == "reg"'>
+            AND tphsd.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+        </if>
+        <if test='dateFg == "mod"'>
+            AND tphsd.MOD_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+        </if>
+        <![CDATA[
+        GROUP
+        BY      tphsd.STORE_CD, tphdcs.DLVR_CD, tphsd.SLIP_FG, thvp.VENDR_CD
+        ORDER
+        BY      tphsd.STORE_CD, tphsd.SLIP_FG, thvp.VENDR_CD
+        ]]>
+    </select>
+
+    <!-- 반품자료생성 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_DISTRIBUTE
+        PARAM    : rtnOutstockDataVO
+        COMMENTS : 반품자료생성
+    -->
+    <update id="updateDstbDataCreate" parameterType="rtnOutstockDataVO">
+        /* USE : RtnOutstockDataMapper.updateDstbDataCreate */
+        UPDATE  TB_PO_HQ_STORE_DISTRIBUTE
+        SET     PROC_FG         = #{updateProcFg},
+                SLIP_NO         = #{slipNo},
+                MOD_DT          = #{modDt},
+                MOD_ID          = #{modId}
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_FG       = #{slipFg}
+        AND     STORE_CD      = #{storeCd}
+        AND     PROC_FG       = #{procFg}
+        <if test='dateFg == "req"'>
+            AND REQ_DATE BETWEEN #{startDate} AND #{endDate}
+        </if>
+        <if test='dateFg == "reg"'>
+            AND REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+        </if>
+        <if test='dateFg == "mod"'>
+            AND MOD_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+        </if>
+        <if test='vendrCd != null and vendrCd != ""'>
+            AND PROD_CD IN  (   SELECT  PROD_CD
+                                FROM    TB_MS_PRODUCT
+                                WHERE   STORE_CD   = #{storeCd}
+                                AND     PROD_CD   IN  (   SELECT  PROD_CD
+                                                          FROM    TB_HQ_VENDOR_PROD thvp
+                                                          ,       TB_HQ_BRAND thb
+                                                          WHERE   thvp.VENDR_CD     =   #{vendrCd}
+                                                          AND     thb.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                                                          AND     thb.HQ_BRAND_CD   =   thvp.HQ_BRAND_CD
+                                                      )
+                            )
+        </if>
+    </update>
+
+    <!-- 반품자료생성 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK_DTL
+        PARAM    : rtnOutstockDataVO
+        COMMENTS : 반품자료생성
+    -->
+    <insert id="insertOutstockDtlDataCreate" parameterType="rtnOutstockDataVO">
+        /* USE : RtnOutstockDataMapper.insertOutstockDtlDataCreate */
+        INSERT INTO TB_PO_HQ_STORE_OUTSTOCK_DTL
+        (       HQ_OFFICE_CD    ,       SLIP_NO         ,       SEQ             ,       STORE_CD        ,       SLIP_FG
+        ,       PROC_FG         ,       DSTB_FG         ,       STORAGE_CD      ,       HQ_BRAND_CD     ,       PROD_CD         ,       PO_UNIT_FG      ,       PO_UNIT_QTY
+        ,       REMARK          ,       REQ_DATE
+        ,       ORDER_SPLY_UPRC ,       ORDER_UNIT_QTY  ,       ORDER_ETC_QTY   ,       ORDER_TOT_QTY   ,       ORDER_AMT       ,       ORDER_VAT       ,       ORDER_TOT
+        ,       MD_SPLY_UPRC    ,       MD_UNIT_QTY     ,       MD_ETC_QTY      ,       MD_TOT_QTY      ,       MD_AMT          ,       MD_VAT          ,       MD_TOT
+        ,       MGR_SPLY_UPRC   ,       MGR_UNIT_QTY    ,       MGR_ETC_QTY     ,       MGR_TOT_QTY     ,       MGR_AMT         ,       MGR_VAT         ,       MGR_TOT
+        ,       OUT_SPLY_UPRC   ,       OUT_UNIT_QTY    ,       OUT_ETC_QTY     ,       OUT_TOT_QTY     ,       OUT_AMT         ,       OUT_VAT         ,       OUT_TOT
+        ,       REG_DT          ,       REG_ID
+        ,       MOD_DT          ,       MOD_ID
+        )
+        SELECT  #{hqOfficeCd}   ,       #{slipNo}       ,       ROWNUM          ,       STORE_CD        ,       SLIP_FG
+        ,       '10'            ,       DSTB_FG         ,       STORAGE_CD      ,       HQ_BRAND_CD     ,       PROD_CD         ,       PO_UNIT_FG      ,       PO_UNIT_QTY
+        ,       REMARK          ,       REQ_DATE
+        ,       ORDER_SPLY_UPRC ,       ORDER_UNIT_QTY  ,       ORDER_ETC_QTY   ,       ORDER_TOT_QTY   ,       ORDER_AMT       ,       ORDER_VAT       ,       ORDER_TOT
+        ,       MD_SPLY_UPRC    ,       MD_UNIT_QTY     ,       MD_ETC_QTY      ,       MD_TOT_QTY      ,       MD_AMT          ,       MD_VAT          ,       MD_TOT
+        ,       MGR_SPLY_UPRC   ,       MGR_UNIT_QTY    ,       MGR_ETC_QTY     ,       MGR_TOT_QTY     ,       MGR_AMT         ,       MGR_VAT         ,       MGR_TOT
+        ,       MGR_SPLY_UPRC   ,       MGR_UNIT_QTY    ,       MGR_ETC_QTY     ,       MGR_TOT_QTY     ,       MGR_AMT         ,       MGR_VAT         ,       MGR_TOT
+        ,       #{regDt}        ,       #{regId}
+        ,       #{modDt}        ,       #{modId}
+        FROM    (   SELECT  #{hqOfficeCd}   ,       #{slipNo}       ,       STORE_CD        ,       SLIP_FG
+                    ,       DSTB_FG         ,       STORAGE_CD      ,       HQ_BRAND_CD     ,       PROD_CD         ,       PO_UNIT_FG      ,       PO_UNIT_QTY
+                    ,       REMARK          ,       REQ_DATE
+                    ,       ORDER_SPLY_UPRC ,       ORDER_UNIT_QTY  ,       ORDER_ETC_QTY   ,       ORDER_TOT_QTY   ,       ORDER_AMT       ,       ORDER_VAT       ,       ORDER_TOT
+                    ,       MD_SPLY_UPRC    ,       MD_UNIT_QTY     ,       MD_ETC_QTY      ,       MD_TOT_QTY      ,       MD_AMT          ,       MD_VAT          ,       MD_TOT
+                    ,       MGR_SPLY_UPRC   ,       MGR_UNIT_QTY    ,       MGR_ETC_QTY     ,       MGR_TOT_QTY     ,       MGR_AMT         ,       MGR_VAT         ,       MGR_TOT
+                    FROM    TB_PO_HQ_STORE_DISTRIBUTE
+                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+                    AND     SLIP_FG         =   #{slipFg}
+                    AND     SLIP_NO         =   #{slipNo}
+                    AND     PROC_FG         =   '30'
+                    ORDER
+                    BY      PROD_CD, DSTB_FG, MGR_SPLY_UPRC DESC, SEQ
+                )
+    </insert>
+
+    <!-- 반품자료생성 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK
+        PARAM    : rtnOutstockDataVO
+        COMMENTS : 반품자료생성
+    -->
+    <insert id="insertRtnOutstockDataCreate" parameterType="rtnOutstockDataVO">
+        /* USE : RtnOutstockDataMapper.insertRtnOutstockDataCreate */
+        INSERT INTO TB_PO_HQ_STORE_OUTSTOCK
+        (       HQ_OFFICE_CD            ,       SLIP_NO             ,       STORE_CD            ,       EMP_NO          ,       SLIP_FG
+        ,       SLIP_KIND               ,       PROC_FG             ,       DTL_CNT             ,       OUT_DATE
+        ,       ORDER_UNIT_QTY          ,       ORDER_ETC_QTY       ,       ORDER_TOT_QTY       ,       ORDER_AMT       ,       ORDER_VAT       ,       ORDER_TOT
+        ,       MD_UNIT_QTY             ,       MD_ETC_QTY          ,       MD_TOT_QTY          ,       MD_AMT          ,       MD_VAT          ,       MD_TOT
+        ,       MGR_UNIT_QTY            ,       MGR_ETC_QTY         ,       MGR_TOT_QTY         ,       MGR_AMT         ,       MGR_VAT         ,       MGR_TOT
+        ,       OUT_UNIT_QTY            ,       OUT_ETC_QTY         ,       OUT_TOT_QTY         ,       OUT_AMT         ,       OUT_VAT         ,       OUT_TOT
+        ,       REMARK                  ,       VENDR_CD            ,       HQ_REMARK           ,       DLVR_CD
+        ,       REG_DT                  ,       REG_ID
+        ,       MOD_DT                  ,       MOD_ID
+        )
+        SELECT  #{hqOfficeCd}           ,       #{slipNo}           ,       #{storeCd}          ,       #{empNo}        ,       SLIP_FG
+        ,       #{slipKind}             ,       '10'                ,       COUNT(*)            ,       #{outDate}
+        ,       SUM(ORDER_UNIT_QTY)     ,       SUM(ORDER_ETC_QTY)  ,       SUM(ORDER_TOT_QTY ) ,       SUM(ORDER_AMT ) ,       SUM(ORDER_VAT ) ,       SUM(ORDER_TOT )
+        ,       SUM(MD_UNIT_QTY )       ,       SUM(MD_ETC_QTY )    ,       SUM(MD_TOT_QTY  )   ,       SUM(MD_AMT  )   ,       SUM(MD_VAT  )   ,       SUM(MD_TOT  )
+        ,       SUM(MGR_UNIT_QTY)       ,       SUM(MGR_ETC_QTY)    ,       SUM(MGR_TOT_QTY )   ,       SUM(MGR_AMT )   ,       SUM(MGR_VAT )   ,       SUM(MGR_TOT )
+        ,       SUM(OUT_UNIT_QTY)       ,       SUM(OUT_ETC_QTY)    ,       SUM(OUT_TOT_QTY )   ,       SUM(OUT_AMT )   ,       SUM(OUT_VAT )   ,       SUM(OUT_TOT )
+        ,       #{remark}               ,       #{vendrCd}          ,       #{hqRemark}         ,       #{dlvrCd}
+        ,       #{regDt}                ,       #{regId}
+        ,       #{modDt}                ,       #{modId}
+        FROM    TB_PO_HQ_STORE_OUTSTOCK_DTL
+        WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+        AND     SLIP_NO         =   #{slipNo}
+        GROUP
+        BY      SLIP_FG
+    </insert>
+</mapper>

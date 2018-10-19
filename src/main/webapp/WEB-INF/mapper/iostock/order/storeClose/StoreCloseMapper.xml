@@ -6,7 +6,8 @@
 
     <!-- 마감여부 ListMap -->
     <resultMap id="closeListMap" type="DefaultMap">
-        <result column="ORDER_CLOSE_FG" property="orderCloseFg" typeHandler="CustomBooleanTypeHandler"/>
+        <result column="PREV_ORDER_CLOSE_FG" property="prevOrderCloseFg" typeHandler="CustomBooleanTypeHandler"/>
+        <result column="ORDER_CLOSE_FG"      property="orderCloseFg"     typeHandler="CustomBooleanTypeHandler"/>
     </resultMap>
 
     <!-- 매장요청마감 마감월 조회 -->
@@ -45,6 +46,7 @@
         <![CDATA[
         SELECT	cal.DATE1 AS CLOSE_DATE
         ,		SUBSTR(cal.DATE1,5,8) AS CLOSE_DATE_NM
+        , 		NVL(tphsc.ORDER_CLOSE_FG, 'N') AS PREV_ORDER_CLOSE_FG
         , 		NVL(tphsc.ORDER_CLOSE_FG, 'N') AS ORDER_CLOSE_FG
         , 		tphsc.ORDER_CLOSE_DT
         , 		(SELECT them.EMP_NM FROM TB_HQ_EMPLOYEE them WHERE tphsc.ORDER_CLOSE_ID = them.USER_ID) AS ORDER_CLOSE_NM

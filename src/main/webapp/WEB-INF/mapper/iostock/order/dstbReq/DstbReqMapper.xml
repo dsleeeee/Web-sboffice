@@ -41,6 +41,12 @@
         <if test='slipFg != null and slipFg != ""'>
             AND tphso.SLIP_FG = #{slipFg}
         </if>
+        <if test='arrProcFg != null and arrProcFg != ""'>
+            AND tphso.PROC_FG IN
+            <foreach collection="arrProcFg" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         ORDER BY tphso.REQ_DATE DESC, tms.STORE_CD
     </select>
 
@@ -83,6 +89,7 @@
         ,       TO_NUMBER(DECODE(tphsod.MD_VAT       ,  0, NULL, tphsod.MD_VAT*tphsod.SLIP_FG     )) AS MD_VAT
         ,       TO_NUMBER(DECODE(tphsod.MD_TOT       ,  0, NULL, tphsod.MD_TOT*tphsod.SLIP_FG     )) AS MD_TOT
         ,       NVL(tphsod.MD_SPLY_UPRC, 0) AS MD_SPLY_UPRC
+        ,       tphsod.REMARK
         FROM    TB_PO_HQ_STORE_ORDER_DTL tphsod
         ,       TB_MS_PRODUCT tmp
         ,       (   SELECT  PROD_CD, CURR_QTY

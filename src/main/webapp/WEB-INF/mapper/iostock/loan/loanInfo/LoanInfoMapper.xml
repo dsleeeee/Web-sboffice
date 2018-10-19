@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    LoanInfoMapper.xml
+    매장여신관리 리스트 조회
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       안동관     2018.10.15     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.iostock.loan.loanInfo.service.impl.LoanInfoMapper">
+
+    <!-- 여신현황 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_LOAN, TB_PO_HQ_STORE_OUTSTOCK, TB_PO_HQ_STORE_OUTSTOCK_DTL, TB_MS_STORE
+        PARAM    : loanInfoVO
+        COMMENTS : 여신현황 리스트를 조회한다.
+    -->
+    <select id="getLoanInfoList" parameterType="loanInfoVO" resultType="DefaultMap">
+        /* USE : LoanInfoMapper.getLoanInfoList */
+        <if test='dateFg != null and dateFg != ""'>
+        <![CDATA[
+        SELECT  '조회기간 후' AS LOAN_DATE, '' AS SLIP_NO, SUM(OUT_AMT) AS OUT_AMT, SUM(IN_AMT) AS IN_AMT, '' AS REMARK, '1' AS ORDER_RANK
+        FROM    (
+                    SELECT  OUT_DATE AS LOAN_DATE, SLIP_NO, OUT_TOT AS OUT_AMT, 0 AS IN_AMT, REMARK
+                    FROM    TB_PO_HQ_STORE_OUTSTOCK
+                    WHERE   STORE_CD    =   #{storeCd}
+                    AND     OUT_DATE    >   #{endDate}
+                    AND     SLIP_FG     =   1
+                    AND     PROC_FG     IN  ('20', '30')
+                    UNION ALL
+                    SELECT  tphso.IN_DATE AS LOAN_DATE, tphso.SLIP_NO, (tphso.IN_TOT + SUM(tphsod.PENALTY_AMT)) AS OUT_AMT, 0 AS IN_AMT, tphso.REMARK
+                    FROM    TB_PO_HQ_STORE_OUTSTOCK tphso
+                    ,       TB_PO_HQ_STORE_OUTSTOCK_DTL tphsod
+                    WHERE   tphso.STORE_CD    =   #{storeCd}
+                    AND     tphso.IN_DATE     >   #{startDate}
+                    AND     tphso.SLIP_FG     =   -1
+                    AND     tphso.PROC_FG     =   '30'
+                    AND     tphsod.HQ_OFFICE_CD    =   tphso.HQ_OFFICE_CD
+                    AND     tphsod.SLIP_NO         =   tphso.SLIP_NO
+                    GROUP
+                    BY      tphso.IN_DATE, tphso.SLIP_NO, tphso.IN_TOT, tphso.REMARK
+                )
+        HAVING  COUNT(*) > 0
+        UNION ALL
+        ]]>
+        </if>
+        <![CDATA[
+        SELECT  LOAN_DATE, SLIP_NO, OUT_AMT, IN_AMT, REMARK, '2' AS ORDER_RANK
+        FROM    (
+                    SELECT  OUT_DATE AS LOAN_DATE, SLIP_NO,  OUT_TOT AS OUT_AMT, 0 AS IN_AMT, REMARK
+                    FROM    TB_PO_HQ_STORE_OUTSTOCK
+                    WHERE   STORE_CD    =   #{storeCd}
+        ]]>
+                    <if test='dateFg != null and dateFg != ""'>
+                    AND     OUT_DATE    BETWEEN #{startDate} AND #{endDate}
+                    </if>
+        <![CDATA[
+                    AND     SLIP_FG     =   1
+                    AND     PROC_FG     IN  ('20', '30')
+                    UNION ALL
+                    SELECT  tphso.IN_DATE AS LOAN_DATE, tphso.SLIP_NO, (tphso.IN_TOT + SUM(tphsod.PENALTY_AMT)) AS OUT_AMT, 0 AS IN_AMT, tphso.REMARK
+                    FROM    TB_PO_HQ_STORE_OUTSTOCK tphso
+                    ,       TB_PO_HQ_STORE_OUTSTOCK_DTL tphsod
+                    WHERE   tphso.STORE_CD    =   #{storeCd}
+        ]]>
+                    <if test='dateFg != null and dateFg != ""'>
+                    AND     tphso.IN_DATE     BETWEEN #{startDate} AND #{endDate}
+                    </if>
+        <![CDATA[
+                    AND     tphso.SLIP_FG     =   -1
+                    AND     tphso.PROC_FG     =   '30'
+                    AND     tphsod.HQ_OFFICE_CD    =   tphso.HQ_OFFICE_CD
+                    AND     tphsod.SLIP_NO         =   tphso.SLIP_NO
+                    GROUP
+                    BY      tphso.IN_DATE, tphso.SLIP_NO, tphso.IN_TOT, tphso.REMARK
+                )
+        ]]>
+        <if test='dateFg != null and dateFg != ""'>
+        <![CDATA[
+        UNION ALL
+        SELECT  '조회기간 전' AS LOAN_DATE, '' AS SLIP_NO, SUM(OUT_AMT) AS OUT_AMT, SUM(IN_AMT) AS IN_AMT, '' AS REMARK, '3' AS ORDER_RANK
+        FROM    (
+                    SELECT  OUT_DATE AS LOAN_DATE, SLIP_NO, OUT_TOT AS OUT_AMT, 0 AS IN_AMT, REMARK
+                    FROM    TB_PO_HQ_STORE_OUTSTOCK
+                    WHERE   STORE_CD    =   #{storeCd}
+                    AND     OUT_DATE    <   #{startDate}
+                    AND     SLIP_FG     =   1
+                    AND     PROC_FG     IN  ('20', '30')
+                    UNION ALL
+                    SELECT  tphso.IN_DATE AS LOAN_DATE, tphso.SLIP_NO, (tphso.IN_TOT + SUM(tphsod.PENALTY_AMT)) AS OUT_AMT, 0 AS IN_AMT, tphso.REMARK
+                    FROM    TB_PO_HQ_STORE_OUTSTOCK tphso
+                    ,       TB_PO_HQ_STORE_OUTSTOCK_DTL tphsod
+                    WHERE   tphso.STORE_CD    =   #{storeCd}
+                    AND     tphso.IN_DATE     <   #{startDate}
+                    AND     tphso.SLIP_FG     =   -1
+                    AND     tphso.PROC_FG     =   '30'
+                    AND     tphsod.HQ_OFFICE_CD    =   tphso.HQ_OFFICE_CD
+                    AND     tphsod.SLIP_NO         =   tphso.SLIP_NO
+                    GROUP
+                    BY      tphso.IN_DATE, tphso.SLIP_NO, tphso.IN_TOT, tphso.REMARK
+                )
+        HAVING  COUNT(*) > 0
+        ]]>
+        </if>
+        <![CDATA[
+        ORDER
+        BY      ORDER_RANK, LOAN_DATE DESC, SLIP_NO DESC
+        ]]>
+    </select>
+
+</mapper>

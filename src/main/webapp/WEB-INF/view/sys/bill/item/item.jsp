@@ -7,7 +7,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/sys/bill/item/item/" />
 
-<div class="subCon">
+<div class="subCon" ng-controller="printCodeCtrl">
 
   <div class="searchBar flddUnfld">
     <a href="#" class="open">${menuNm}</a>
@@ -43,7 +43,7 @@
     
   <div class="w50 fl mt40" style="width: 100%">
     <%--위즈모 테이블--%>
-    <div id="gridPrintCode" class="wj-TblWrapBr mr10 pd20" style="height: 480px;" ng-controller="printCodeCtrl">
+    <div id="gridPrintCode" class="wj-TblWrapBr mr10 pd20" style="height: 480px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='item.gridNm' /></span>
         <button class="btn_skyblue" id="btnAdd" style="display: none;" ng-click="addRow()">
@@ -60,13 +60,13 @@
       <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
       <div style="height:400px">
         <wj-flex-grid
-                autoGenerateColumns="false"
-                control="flex"
-                initialized="initGrid(s,e)"
-                sticky-headers="true"
-                selection-mode="Row"
-                items-source="data"
-                item-formatter="_itemFormatter">
+          autoGenerateColumns="false"
+          control="flex"
+          initialized="initGrid(s,e)"
+          sticky-headers="true"
+          selection-mode="Row"
+          items-source="data"
+          item-formatter="_itemFormatter">
 
           <!-- define columns -->
           <wj-flex-grid-column header="<s:message code="item.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
@@ -82,4 +82,4 @@
   </div>
   
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/sys/bill/item/item.js?ver=2018100201" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/bill/item/item.js?ver=20181018.01" charset="utf-8"></script>

@@ -428,6 +428,20 @@
     <typeAlias alias="dstbReqVO" type="kr.co.solbipos.iostock.order.dstbReq.service.DstbReqVO"/>
     <typeAlias alias="dstbCloseStoreVO" type="kr.co.solbipos.iostock.order.dstbCloseStore.service.DstbCloseStoreVO"/>
     <typeAlias alias="dstbCloseProdVO" type="kr.co.solbipos.iostock.order.dstbCloseProd.service.DstbCloseProdVO"/>
+    <typeAlias alias="outstockDataVO" type="kr.co.solbipos.iostock.order.outstockData.service.OutstockDataVO"/>
+    <typeAlias alias="outstockConfmVO" type="kr.co.solbipos.iostock.order.outstockConfm.service.OutstockConfmVO"/>
+    <typeAlias alias="dstmnVO" type="kr.co.solbipos.iostock.order.dstmn.service.DstmnVO"/>
+    <typeAlias alias="instockConfmVO" type="kr.co.solbipos.iostock.order.instockConfm.service.InstockConfmVO"/>
+    <typeAlias alias="loanInfoVO" type="kr.co.solbipos.iostock.loan.loanInfo.service.LoanInfoVO"/>
+    <typeAlias alias="rtnStoreOrderVO" type="kr.co.solbipos.iostock.orderReturn.rtnStoreOrder.service.RtnStoreOrderVO"/>
+    <typeAlias alias="rtnStoreOrderDtlVO" type="kr.co.solbipos.iostock.orderReturn.rtnStoreOrder.service.RtnStoreOrderDtlVO"/>
+    <typeAlias alias="rtnDstbReqVO" type="kr.co.solbipos.iostock.orderReturn.rtnDstbReq.service.RtnDstbReqVO"/>
+    <typeAlias alias="rtnDstbCloseStoreVO" type="kr.co.solbipos.iostock.orderReturn.rtnDstbCloseStore.service.RtnDstbCloseStoreVO"/>
+    <typeAlias alias="rtnDstbCloseProdVO" type="kr.co.solbipos.iostock.orderReturn.rtnDstbCloseProd.service.RtnDstbCloseProdVO"/>
+    <typeAlias alias="rtnOutstockDataVO" type="kr.co.solbipos.iostock.orderReturn.rtnOutstockData.service.RtnOutstockDataVO"/>
+    <typeAlias alias="rtnOutstockConfmVO" type="kr.co.solbipos.iostock.orderReturn.rtnOutstockConfm.service.RtnOutstockConfmVO"/>
+    <typeAlias alias="rtnDstmnVO" type="kr.co.solbipos.iostock.orderReturn.rtnDstmn.service.RtnDstmnVO"/>
+    <typeAlias alias="rtnInstockConfmVO" type="kr.co.solbipos.iostock.orderReturn.rtnInstockConfm.service.RtnInstockConfmVO"/>
 
     <typeAlias alias="excpForwardProductVO" type="kr.co.solbipos.application.pos.exceptForward.service.ExcpForwardProductVO"/>
     <typeAlias alias="productionVO" type="kr.co.solbipos.application.pos.production.service.ProductionVO"/>

@@ -39,6 +39,9 @@
         <if test='slipFg != null and slipFg != ""'>
             AND tphso.SLIP_FG = #{slipFg}
         </if>
+        <if test='procFg != null and procFg != ""'>
+            AND tphso.PROC_FG = #{procFg}
+        </if>
         ORDER BY tphso.REQ_DATE DESC
     </select>
 
@@ -84,12 +87,7 @@
         /* USE : storeOrderMapper.getStoreOrderRegistList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         <![CDATA[
-        SELECT  NVL((SELECT SUBSTR(MAX(SYS_CONNECT_BY_PATH( PROD_CLASS_NM,  '|')), 2)
-                       FROM TB_MS_PRODUCT_CLASS
-                      WHERE STORE_CD = tmp.STORE_CD
-                      START WITH PROD_CLASS_CD = tmp.PROD_CLASS_CD
-                      CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD ),' ') AS PROD_CLASS_NM
-        ,       tmp.PROD_CD
+        SELECT  tmp.PROD_CD
         ,       tmp.PROD_NM
         ,       DECODE(tmp.VAT_FG,'Y',1,0) AS VAT_FG01
         ,       TRUNC(DECODE(SIGN(tshsc.CURR_QTY),-1,0,tshsc.CURR_QTY) / tmp.PO_UNIT_QTY) AS HD_CUR_UNIT_QTY
@@ -120,6 +118,9 @@
         ,       TO_NUMBER(DECODE(tphso.ORDER_VAT    ,  0, NULL, tphso.ORDER_VAT*tphso.SLIP_FG     )) AS ORDER_VAT
         ,       TO_NUMBER(DECODE(tphso.ORDER_TOT    ,  0, NULL, tphso.ORDER_TOT*tphso.SLIP_FG     )) AS ORDER_TOT
         ]]>
+        <if test='option2 != null and option2 != ""'>
+            , optionTb.ORDER_UNIT_QTY, optionTb.ORDER_ETC_QTY, optionTb.ORDER_TOT_QTY
+        </if>
         <include refid="CmmSQL.PagingTemplateCount"/>
         <![CDATA[
         FROM    TB_MS_PRODUCT tmp
@@ -129,6 +130,50 @@
                     WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
                 )   tshsc
         ,       TB_PO_HQ_STORE_ORDER_DTL tphso
+        ]]>
+        <if test='option2 == "ORD"'>
+            ,   (   SELECT  tphsod.PROD_CD
+                    ,       TRUNC(SUM(tphsod.ORDER_TOT_QTY) / tphsod.PO_UNIT_QTY) AS ORDER_UNIT_QTY
+                    ,       MOD  (SUM(tphsod.ORDER_TOT_QTY) , tphsod.PO_UNIT_QTY) AS ORDER_ETC_QTY
+                    ,       SUM(tphsod.ORDER_TOT_QTY) AS ORDER_TOT_QTY
+                    FROM    TB_PO_HQ_STORE_ORDER_DTL tphsod
+                    WHERE   tphsod.STORE_CD = #{storeCd}
+                    AND     tphsod.REQ_DATE BETWEEN #{startDate} AND #{endDate}
+                    GROUP
+                    BY      tphsod.PROD_CD, tphsod.PO_UNIT_QTY
+                ) optionTb
+        </if>
+        <if test='option2 == "OUT"'>
+            ,   (   SELECT  tphsod.PROD_CD
+                    ,       TRUNC(SUM(tphsod.ORDER_TOT_QTY) / tphsod.PO_UNIT_QTY) AS ORDER_UNIT_QTY
+                    ,       MOD  (SUM(tphsod.ORDER_TOT_QTY) , tphsod.PO_UNIT_QTY) AS ORDER_ETC_QTY
+                    ,       SUM(tphsod.ORDER_TOT_QTY) AS ORDER_TOT_QTY
+                    FROM    TB_PO_HQ_STORE_OUTSTOCK tphso
+                    ,       TB_PO_HQ_STORE_OUTSTOCK_DTL tphsod
+                    WHERE   tphso.STORE_CD = #{storeCd}
+                    AND     tphso.OUT_DATE      BETWEEN #{startDate} AND #{endDate}
+                    AND     tphso.PROC_FG       IN ('20', '30')
+                    AND     tphsod.HQ_OFFICE_CD = tphso.HQ_OFFICE_CD
+                    AND     tphsod.SLIP_NO      = tphso.SLIP_NO
+                    GROUP
+                    BY      tphsod.PROD_CD, tphsod.PO_UNIT_QTY
+                ) optionTb
+        </if>
+        <if test='option2 == "SALE"'>
+            ,   (   SELECT  tsdp.PROD_CD
+                    ,       TRUNC(SUM(tsdp.TOT_SALE_QTY) / tmp.PO_UNIT_QTY) AS ORDER_UNIT_QTY
+                    ,       MOD  (SUM(tsdp.TOT_SALE_QTY) , tmp.PO_UNIT_QTY) AS ORDER_ETC_QTY
+                    ,       SUM(tsdp.TOT_SALE_QTY) AS ORDER_TOT_QTY
+                    FROM    TB_SL_DAILY_PROD tsdp
+                    ,       TB_MS_PRODUCT tmp
+                    WHERE   tsdp.STORE_CD   = #{storeCd}
+                    AND     tsdp.SALE_DATE  BETWEEN #{startDate} AND #{endDate}
+                    AND     tmp.PROD_CD  = tsdp.PROD_CD
+                    GROUP
+                    BY      tsdp.PROD_CD, tmp.PO_UNIT_QTY
+                ) optionTb
+        </if>
+        <![CDATA[
         WHERE   tmp.STORE_CD          =   #{storeCd}
         AND     tmp.USE_YN            =   'Y'
         AND     tsssc.STORE_CD    (+) =   tmp.STORE_CD
@@ -144,6 +189,15 @@
         </if>
         <if test='prodNm != null and prodNm != ""'>
             AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='option1 == "S"'>
+            <![CDATA[
+            AND NVL(tsssc.CURR_QTY, 0) < NVL(tmp.SAFE_STOCK_QTY, 0)
+            AND NVL(tmp.SAFE_STOCK_QTY,0) > 0
+            ]]>
+        </if>
+        <if test='option2 != null and option2 != ""'>
+            AND optionTb.PROD_CD  = tmp.PROD_CD
         </if>
         ORDER BY tmp.PROD_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -522,20 +576,20 @@
     <update id="updateStoreOrder" parameterType="storeOrderVO">
         /* USE : storeOrderMapper.updateStoreOrder */
         UPDATE  TB_PO_HQ_STORE_ORDER
-        SET     (ORDER_UNIT_QTY, ORDER_ETC_QTY, ORDER_TOT_QTY
-                ,ORDER_AMT, ORDER_VAT, ORDER_TOT
-                ,MD_UNIT_QTY, MD_ETC_QTY, MD_TOT_QTY
-                ,MD_AMT, MD_VAT, MD_TOT
-                ,DTL_CNT)
-            =   (SELECT  NVL(SUM(tphsod.ORDER_UNIT_QTY), 0), NVL(SUM(tphsod.ORDER_ETC_QTY), 0), NVL(SUM(tphsod.ORDER_TOT_QTY), 0)
-                ,        NVL(SUM(tphsod.ORDER_AMT), 0)     , NVL(SUM(tphsod.ORDER_VAT), 0)    , NVL(SUM(tphsod.ORDER_TOT), 0)
-                ,        NVL(SUM(tphsod.MD_UNIT_QTY), 0)   , NVL(SUM(tphsod.MD_ETC_QTY), 0)   , NVL(SUM(tphsod.MD_TOT_QTY), 0)
-                ,        NVL(SUM(tphsod.MD_AMT), 0)        , NVL(SUM(tphsod.MD_VAT), 0)       , NVL(SUM(tphsod.MD_TOT), 0)
-                ,        COUNT(tphsod.PROD_CD)
-                FROM    TB_PO_HQ_STORE_ORDER_DTL tphsod
-                WHERE   tphsod.REQ_DATE  = #{reqDate}
-                AND     tphsod.STORE_CD  = #{storeCd}
-                AND     tphsod.SLIP_FG   = #{slipFg}
+        SET     ( ORDER_UNIT_QTY, ORDER_ETC_QTY, ORDER_TOT_QTY
+                , ORDER_AMT, ORDER_VAT, ORDER_TOT
+                , MD_UNIT_QTY, MD_ETC_QTY, MD_TOT_QTY
+                , MD_AMT, MD_VAT, MD_TOT
+                , DTL_CNT)
+            =   ( SELECT  NVL(SUM(tphsod.ORDER_UNIT_QTY), 0), NVL(SUM(tphsod.ORDER_ETC_QTY), 0), NVL(SUM(tphsod.ORDER_TOT_QTY), 0)
+                  ,       NVL(SUM(tphsod.ORDER_AMT), 0)     , NVL(SUM(tphsod.ORDER_VAT), 0)    , NVL(SUM(tphsod.ORDER_TOT), 0)
+                  ,       NVL(SUM(tphsod.MD_UNIT_QTY), 0)   , NVL(SUM(tphsod.MD_ETC_QTY), 0)   , NVL(SUM(tphsod.MD_TOT_QTY), 0)
+                  ,       NVL(SUM(tphsod.MD_AMT), 0)        , NVL(SUM(tphsod.MD_VAT), 0)       , NVL(SUM(tphsod.MD_TOT), 0)
+                  ,       COUNT(tphsod.PROD_CD)
+                  FROM    TB_PO_HQ_STORE_ORDER_DTL tphsod
+                  WHERE   tphsod.REQ_DATE  = #{reqDate}
+                  AND     tphsod.STORE_CD  = #{storeCd}
+                  AND     tphsod.SLIP_FG   = #{slipFg}
                 )
         ,       PROC_FG = #{procFg}
         ,       REMARK  = #{remark}
@@ -606,5 +660,135 @@
         AND     SLIP_FG   = #{slipFg}
     </update>
 
+    <!--  주문등록 확정 - 분배자료 생성 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_DISTRIBUTE
+        PARAM    : dstbReqVO
+        COMMENTS : 주문등록 확정 - 주문등록 정보를 바탕으로 분배자료를 생성한다.
+    -->
+    <insert id="insertDstbRegist" parameterType="dstbReqVO">
+        /* USE : storeOrderMapper.insertDstbRegist */
+        <selectKey resultType="int" keyProperty="seq" order="BEFORE">
+            SELECT  NVL(MAX(tphsd.SEQ), 0) AS SEQ
+            FROM    TB_PO_HQ_STORE_DISTRIBUTE tphsd
+            WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+            AND     REQ_DATE      = #{reqDate}
+        </selectKey>
+        INSERT INTO TB_PO_HQ_STORE_DISTRIBUTE
+        (
+        HQ_OFFICE_CD,
+        REQ_DATE,
+        SEQ,
+        STORE_CD,
+        EMP_NO,
+        SLIP_FG,
+        DSTB_FG,
+        STORAGE_CD,
+        HQ_BRAND_CD,
+        PROD_CD,
+        PO_UNIT_FG,
+        PO_UNIT_QTY,
+        ORDER_SPLY_UPRC,
+        ORDER_UNIT_QTY,
+        ORDER_ETC_QTY,
+        ORDER_TOT_QTY,
+        ORDER_AMT,
+        ORDER_VAT,
+        ORDER_TOT,
+        MD_SPLY_UPRC,
+        MD_UNIT_QTY,
+        MD_ETC_QTY,
+        MD_TOT_QTY,
+        MD_AMT,
+        MD_VAT,
+        MD_TOT,
+        MGR_SPLY_UPRC,
+        MGR_UNIT_QTY,
+        MGR_ETC_QTY,
+        MGR_TOT_QTY,
+        MGR_AMT,
+        MGR_VAT,
+        MGR_TOT,
+        MGR_DT,
+        MGR_ID,
+        PROC_FG,
+        REMARK,
+        REG_DT,
+        REG_ID,
+        MOD_DT,
+        MOD_ID
+        )
+        SELECT  #{hqOfficeCd}
+        ,       #{reqDate}
+        ,       #{seq}+ROWNUM
+        ,       #{storeCd}
+        ,       #{empNo}
+        ,       #{slipFg}
+        ,       #{dstbFg}
+        ,       #{storageCd}
+        ,       #{hqBrandCd}
+        ,       PROD_CD
+        ,       PO_UNIT_FG
+        ,       PO_UNIT_QTY
+        ,       ORDER_SPLY_UPRC
+        ,       ORDER_UNIT_QTY
+        ,       ORDER_ETC_QTY
+        ,       ORDER_TOT_QTY
+        ,       ORDER_AMT
+        ,       ORDER_VAT
+        ,       ORDER_TOT
+        ,       MD_SPLY_UPRC
+        ,       MD_UNIT_QTY
+        ,       MD_ETC_QTY
+        ,       MD_TOT_QTY
+        ,       MD_AMT
+        ,       MD_VAT
+        ,       MD_TOT
+        ,       MD_SPLY_UPRC
+        ,       MD_UNIT_QTY
+        ,       MD_ETC_QTY
+        ,       MD_TOT_QTY
+        ,       MD_AMT
+        ,       MD_VAT
+        ,       MD_TOT
+        ,       #{modDt}
+        ,       #{modId}
+        ,       #{procFg}
+        ,       REMARK
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        FROM    (   SELECT  PROD_CD         ,   PO_UNIT_FG     ,   PO_UNIT_QTY
+                    ,       REMARK
+                    ,       ORDER_SPLY_UPRC ,   ORDER_UNIT_QTY ,   ORDER_ETC_QTY      ,   ORDER_TOT_QTY       ,   ORDER_AMT       ,   ORDER_VAT       ,   ORDER_TOT
+                    ,       MD_SPLY_UPRC    ,   MD_UNIT_QTY    ,   MD_ETC_QTY         ,   MD_TOT_QTY          ,   MD_AMT          ,   MD_VAT          ,   MD_TOT
+                    FROM    TB_PO_HQ_STORE_ORDER_DTL
+                    WHERE   REQ_DATE    =   #{reqDate}
+                    AND     STORE_CD    =   #{storeCd}
+                    AND     SLIP_FG     =   #{slipFg}
+                    ORDER
+                    BY      PROD_CD
+                )
+    </insert>
+
+    <!-- 주문등록 확정 - 분배자료 진행구분 변경 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_DISTRIBUTE
+        PARAM    : dstbCloseStoreVO
+        COMMENTS : 주문등록 확정 - 분배자료 진행구분을 변경한다.
+    -->
+    <update id="updateDstbProcFg" parameterType="dstbCloseStoreVO">
+        /* USE : storeOrderMapper.updateDstbProcFg */
+        UPDATE  TB_PO_HQ_STORE_DISTRIBUTE
+        SET     PROC_FG         = #{updateProcFg},
+                MGR_DT          = #{modDt},
+                MGR_ID          = #{modId}
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     REQ_DATE      = #{reqDate}
+        AND     SLIP_FG       = #{slipFg}
+        AND     STORE_CD      = #{storeCd}
+        AND     PROC_FG       = #{procFg}
+    </update>
 
 </mapper>

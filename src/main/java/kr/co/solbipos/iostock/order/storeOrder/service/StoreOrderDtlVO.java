@@ -80,6 +80,10 @@ public class StoreOrderDtlVO extends PageVO {
     private String option2;
     /** 판매금액 */
     private String saleUprc;
+    /** 조회 시작일 */
+    private String startDate;
+    /** 조회 종료일 */
+    private String endDate;
 
     /**
      * @return the reqDate
@@ -597,5 +601,33 @@ public class StoreOrderDtlVO extends PageVO {
      */
     public void setSaleUprc(String saleUprc) {
         this.saleUprc = saleUprc;
+    }
+
+    /**
+     * @return the startDate
+     */
+    public String getStartDate() {
+        return startDate;
+    }
+
+    /**
+     * @param startDate the startDate to set
+     */
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    /**
+     * @return the endDate
+     */
+    public String getEndDate() {
+        return endDate;
+    }
+
+    /**
+     * @param endDate the endDate to set
+     */
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 }

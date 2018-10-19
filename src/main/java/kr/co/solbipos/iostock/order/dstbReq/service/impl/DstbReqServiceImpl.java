@@ -17,7 +17,7 @@ import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
-@Service("dstbReqService")
+@Service("DstbReqService")
 public class DstbReqServiceImpl implements DstbReqService {
     private final DstbReqMapper dstbReqMapper;
     private final StoreOrderMapper storeOrderMapper;
@@ -34,6 +34,9 @@ public class DstbReqServiceImpl implements DstbReqService {
     /** 분배등록 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getDstbReqList(DstbReqVO dstbReqVO) {
+        if(!StringUtil.getOrBlank(dstbReqVO.getProcFg()).equals("")) {
+            dstbReqVO.setArrProcFg(dstbReqVO.getProcFg().split(","));
+        }
         return dstbReqMapper.getDstbReqList(dstbReqVO);
     }
 

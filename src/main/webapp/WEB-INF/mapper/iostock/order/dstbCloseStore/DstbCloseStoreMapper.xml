@@ -54,7 +54,7 @@
             AND tms.STORE_CD = #{storeCd}
         </if>
         <if test='storeNm != null and storeNm != ""'>
-            AND tho.STORE_NM LIKE '%'||#{storeNm}||'%'
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
         </if>
         GROUP
         BY       tphsd.REQ_DATE, tphsd.SLIP_FG, tphsd.PROC_FG
@@ -121,7 +121,7 @@
     <!--
         TABLE    : TB_PO_HQ_STORE_DISTRIBUTE
         PARAM    : dstbCloseStoreVO
-        COMMENTS : 분매마감 - 분배마감 리스트를 확정으로 수정한다.
+        COMMENTS : 분배마감 - 분배마감 리스트를 확정으로 수정한다.
     -->
     <update id="updateDstbCloseConfirm" parameterType="dstbCloseStoreVO">
         /* USE : DstbCloseStoreMapper.updateDstbCloseConfirm */
@@ -140,7 +140,7 @@
     <!--
         TABLE    : TB_PO_HQ_STORE_DISTRIBUTE
         PARAM    : dstbCloseStoreVO
-        COMMENTS : 분매마감 - 분배마감 MGR 관련 수량을 수정한다.
+        COMMENTS : 분배마감 - 분배마감 MGR 관련 수량을 수정한다.
     -->
     <update id="updateDstbCloseDtl" parameterType="dstbCloseStoreVO">
         /* USE : DstbCloseStoreMapper.updateDstbCloseDtl */
@@ -164,7 +164,7 @@
     <!--
         TABLE    : TB_PO_HQ_STORE_DISTRIBUTE
         PARAM    : dstbCloseStoreVO
-        COMMENTS : 분매마감 - 분배마감 상세 리스트 저장시 확정인 경우 진행구분을 수정한다.
+        COMMENTS : 분배마감 - 분배마감 상세 리스트 저장시 확정인 경우 진행구분을 수정한다.
     -->
     <update id="updateDstbCloseDtlConfirm" parameterType="dstbCloseStoreVO">
         /* USE : DstbCloseStoreMapper.updateDstbCloseDtlConfirm */
@@ -236,11 +236,12 @@
         /* USE : DstbCloseStoreMapper.getDstbAddList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         <![CDATA[
-        SELECT  NVL((SELECT SUBSTR(MAX(SYS_CONNECT_BY_PATH( PROD_CLASS_NM,  '|')), 2)
+        SELECT  NVL((SELECT SUBSTR(MAX(SYS_CONNECT_BY_PATH( PROD_CLASS_NM,  '>')), 2)
                        FROM TB_MS_PRODUCT_CLASS
                       WHERE STORE_CD = tmp.STORE_CD
                       START WITH PROD_CLASS_CD = tmp.PROD_CLASS_CD
-                      CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD ),' ') AS PROD_CLASS_NM
+                      CONNECT BY PRIOR P_PROD_CLASS_CD = PROD_CLASS_CD
+                      GROUP BY tmp.PROD_CLASS_CD),' ') AS PROD_CLASS_NM
         ,       tmp.PROD_CD
         ,       tmp.PROD_NM
         ,       DECODE(tmp.VAT_FG,'Y',1,0) AS VAT_FG01

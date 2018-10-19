@@ -14,7 +14,7 @@
         </div>
         <div class="wj-dialog-body sc2" style="height: 600px;">
 
-            <ul class="txtSty3 mt10">
+            <ul class="txtSty3">
                 <li class="red">기준 공급가 : 마스터상의 출고단가.</li>
                 <li class="red">공급가는 주문단위 단가입니다.</li>
                 <li class="red">분배수량에서 앞뒤의 수량은 각각 주문단위별수량, 낱개수량입니다.</li>
@@ -40,7 +40,7 @@
                             item-formatter="_itemFormatter">
 
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="cmm.chk"/>"                                  binding="gChk"             width="40"  align="center" ></wj-flex-grid-column>
+                        <%--<wj-flex-grid-column header="<s:message code="cmm.chk"/>"                                  binding="gChk"             width="40"  align="center" ></wj-flex-grid-column>--%>
                         <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.seq"/>"              binding="seq"              width="0"   align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.prodCd"/>"           binding="prodCd"           width="0"   align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.storeCd"/>"          binding="storeCd"          width="80"  align="center" is-read-only="true"></wj-flex-grid-column>
@@ -49,8 +49,8 @@
                         <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.mgrSplyUprc"/>"      binding="mgrSplyUprc"      width="70"  align="right"  is-read-only="false" max-length=10 data-type="Number" format="n0"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.prevMgrUnitQty"/>"   binding="prevMgrUnitQty"   width="70"  align="right"  is-read-only="true"  data-type="Number" format="n0" ></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.prevMgrEtcQty"/>"    binding="prevMgrEtcQty"    width="70"  align="right"  is-read-only="true"  data-type="Number" format="n0" ></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.mgrUnitQty"/>"       binding="mgrUnitQty"       width="70"  align="right"  is-read-only="false" max-length=8  data-type="Number" format="n0" aggregate="Sum" allow-merging="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.mgrEtcQty"/>"        binding="mgrEtcQty"        width="70"  align="right"  is-read-only="false" max-length=8  data-type="Number" format="n0" aggregate="Sum" allow-merging="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.mgrUnitQty"/>"       binding="mgrUnitQty"       width="70"  align="right"  is-read-only="false" max-length=8  data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.mgrEtcQty"/>"        binding="mgrEtcQty"        width="70"  align="right"  is-read-only="false" max-length=8  data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.mgrTotQty"/>"        binding="mgrTotQty"        width="70"  align="right"  is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.mgrAmt"/>"           binding="mgrAmt"           width="70"  align="right"  is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.mgrVat"/>"           binding="mgrVat"           width="70"  align="right"  is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
@@ -86,7 +86,7 @@
 
 <script type="text/javascript">
 
-    /** 주문등록 상세 그리드 controller */
+    /** 분배마감 추가등록 그리드 controller */
     app.controller('dstbCloseProdAddRegistCtrl', ['$scope', '$http', function ($scope, $http) {
         // 상위 객체 상속 : T/F 는 picker
         angular.extend(this, new RootController('dstbCloseProdAddRegistCtrl', $scope, $http, true));
@@ -144,9 +144,9 @@
             var unitQty = parseInt(nvl(item.mgrUnitQty,0)) * parseInt(item.poUnitQty);
             var etcQty  = parseInt(nvl(item.mgrEtcQty,0));
             var totQty  = parseInt(unitQty + etcQty);
-            var tempOrderAmt = Math.round(totQty * mgrSplyUprc / poUnitQty);
-            var mgrAmt = tempOrderAmt - Math.round(tempOrderAmt * vat01 * envst0011 / 11);
-            var mgrVat = Math.round(tempOrderAmt * vat01 / (10 + envst0011));
+            var tempAmt = Math.round(totQty * mgrSplyUprc / poUnitQty);
+            var mgrAmt = tempAmt - Math.round(tempAmt * vat01 * envst0011 / 11);
+            var mgrVat = Math.round(tempAmt * vat01 / (10 + envst0011));
             var mgrTot = parseInt(mgrAmt + mgrVat);
 
             item.mgrTotQty = totQty; // 총분배수량
@@ -164,7 +164,7 @@
             $scope.storeCds = data.storeCds;
 
             $scope.wjDstbCloseProdAddRegistLayer.show(true);
-            $("#spanAddRegistTitle").html(($scope.slipFg === 1 ? '[<s:message code="dstbCloseProd.addRegist.order"/>] ' : '[<s:message code="dstbCloseProd.addRegist.orderReturn"/>] ')+'['+$scope.prodCd+'] '+$scope.prodNm);
+            $("#spanAddRegistTitle").html('[<s:message code="dstbCloseProd.addRegist.order"/>] '+'['+$scope.prodCd+'] '+$scope.prodNm);
 
             $scope.searchDstbCloseProdAddRegistList();
             // 기능수행 종료 : 반드시 추가

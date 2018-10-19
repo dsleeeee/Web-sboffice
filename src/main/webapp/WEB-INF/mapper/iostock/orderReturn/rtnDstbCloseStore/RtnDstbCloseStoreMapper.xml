@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.iostock.orderReturn.rtnDstbCloseStore.service.impl.RtnDstbCloseStoreMapper">
+
+    <!-- 확정여부 ListMap -->
+    <resultMap id="confirmListMap" type="DefaultMap">
+        <result column="CONFIRM_YN" property="confirmYn" typeHandler="CustomBooleanTypeHandler"/>
+    </resultMap>
+
+    <!-- 분배마감 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_DISTRIBUTE, TB_MS_STORE
+        PARAM    : rtnDstbCloseStoreVO
+        COMMENTS : 분배마감 리스트를 조회한다.
+    -->
+    <select id="getRtnDstbCloseStoreList" parameterType="rtnDstbCloseStoreVO" resultType="DefaultMap">
+        /* USE : RtnDstbCloseStoreMapper.getRtnDstbCloseStoreList */
+        <![CDATA[
+        SELECT  tphsd.REQ_DATE, tphsd.SLIP_FG, tphsd.PROC_FG, tphsd.STORE_CD, tms.STORE_NM
+        ,       SUM(DECODE(tphsd.ORDER_TOT_QTY,0,0,1)) AS DTL_CNT_ORDER
+        ,       SUM(DECODE(tphsd.ORDER_TOT_QTY,0,1,0)) AS DTL_CNT_ADD
+        ,       COUNT(*)                               AS DTL_CNT_TOT
+        ,       SUM(tphsd.ORDER_AMT*tphsd.SLIP_FG) AS ORDER_AMT
+        ,       SUM(tphsd.ORDER_VAT*tphsd.SLIP_FG) AS ORDER_VAT
+        ,       SUM(tphsd.ORDER_TOT*tphsd.SLIP_FG) AS ORDER_TOT
+        ,       SUM(DECODE(tphsd.PROC_FG,'00',tphsd.MD_UNIT_QTY,tphsd.MGR_UNIT_QTY)*tphsd.SLIP_FG) AS MGR_UNIT_QTY
+        ,       SUM(DECODE(tphsd.PROC_FG,'00',tphsd.MD_ETC_QTY ,tphsd.MGR_ETC_QTY) *tphsd.SLIP_FG) AS MGR_ETC_QTY
+        ,       SUM(DECODE(tphsd.PROC_FG,'00',tphsd.MD_TOT_QTY ,tphsd.MGR_TOT_QTY) *tphsd.SLIP_FG) AS MGR_TOT_QTY
+        ,       SUM(DECODE(tphsd.PROC_FG,'00',tphsd.MD_AMT     ,tphsd.MGR_AMT)     *tphsd.SLIP_FG) AS MGR_AMT
+        ,       SUM(DECODE(tphsd.PROC_FG,'00',tphsd.MD_VAT     ,tphsd.MGR_VAT)     *tphsd.SLIP_FG) AS MGR_VAT
+        ,       SUM(DECODE(tphsd.PROC_FG,'00',tphsd.MD_TOT     ,tphsd.MGR_TOT)     *tphsd.SLIP_FG) AS MGR_TOT
+        ,       MAX(tphsd.MOD_DT) AS MOD_DT
+        FROM    TB_PO_HQ_STORE_DISTRIBUTE tphsd
+        ,       TB_MS_STORE tms
+        WHERE   tphsd.HQ_OFFICE_CD =   #{hqOfficeCd}
+        AND     tphsd.SLIP_FG      =   #{slipFg}
+        AND     tms.STORE_CD       =   tphsd.STORE_CD
+        ]]>
+        <if test='dateFg == "req"'>
+            AND tphsd.REQ_DATE BETWEEN #{startDate} AND #{endDate}
+        </if>
+        <if test='dateFg == "reg"'>
+            AND tphsd.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+        </if>
+        <if test='dateFg == "mod"'>
+            AND tphsd.MOD_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+        </if>
+        <if test='procFg != null and procFg != ""'>
+            AND tphsd.PROC_FG = #{procFg}
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+            AND tms.STORE_CD = #{storeCd}
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        GROUP
+        BY       tphsd.REQ_DATE, tphsd.SLIP_FG, tphsd.PROC_FG
+        ,        tphsd.STORE_CD, tms.STORE_NM
+        ORDER
+        BY       tphsd.REQ_DATE, tphsd.STORE_CD, tphsd.PROC_FG
+    </select>
+
+    <!-- 분배마감 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_DISTRIBUTE, TB_MS_PRODUCT, TB_ST_HQ_STOCK_CUR, TB_ST_STORE_STOCK_CUR
+        PARAM    : rtnDstbCloseStoreVO
+        COMMENTS : 분배등록 상세 상품 리스트를 조회한다.
+    -->
+    <select id="getRtnDstbCloseStoreDtlList" parameterType="rtnDstbCloseStoreVO" resultMap="confirmListMap">
+        /* USE : RtnDstbCloseStoreMapper.getRtnDstbCloseStoreDtlList */
+        <![CDATA[
+        SELECT  tphsd.STORE_CD, tmp.PROD_CD, tmp.PROD_NM
+        ,       DECODE(tmp.VAT_FG,'Y',1,0) AS VAT_FG01
+        ,       tphsd.SEQ
+        ,       TRUNC(DECODE(SIGN(tshsc.CURR_QTY),-1,0,tshsc.CURR_QTY) / tmp.PO_UNIT_QTY) AS HD_CUR_UNIT_QTY
+        ,       MOD  (DECODE(SIGN(tshsc.CURR_QTY),-1,0,tshsc.CURR_QTY) , tmp.PO_UNIT_QTY) AS HD_CUR_ETC_QTY
+        ,       TRUNC(DECODE(SIGN(tsssc.CURR_QTY),-1,0,tsssc.CURR_QTY) / tmp.PO_UNIT_QTY) AS STORE_CUR_UNIT_QTY
+        ,       MOD  (DECODE(SIGN(tsssc.CURR_QTY),-1,0,tsssc.CURR_QTY) , tmp.PO_UNIT_QTY) AS STORE_CUR_ETC_QTY
+        , 		tmp.SPLY_UPRC
+        ,       tmp.PO_UNIT_ALLOW_FG
+        ,       tmp.PO_PROD_FG
+        ,       tmp.PO_UNIT_FG
+        ,       tmp.PO_UNIT_QTY
+        ,       0 AS ENVST0011
+        ,       TO_NUMBER(DECODE(DECODE(tphsd.PROC_FG,'00',tphsd.MD_UNIT_QTY,tphsd.MGR_UNIT_QTY), 0, NULL, DECODE(tphsd.PROC_FG,'00',tphsd.MD_UNIT_QTY,tphsd.MGR_UNIT_QTY)*tphsd.SLIP_FG)) AS MGR_UNIT_QTY
+        ,       TO_NUMBER(DECODE(DECODE(tphsd.PROC_FG,'00',tphsd.MD_ETC_QTY ,tphsd.MGR_ETC_QTY ), 0, NULL, DECODE(tphsd.PROC_FG,'00',tphsd.MD_ETC_QTY ,tphsd.MGR_ETC_QTY )*tphsd.SLIP_FG)) AS MGR_ETC_QTY
+        ,       TO_NUMBER(DECODE(DECODE(tphsd.PROC_FG,'00',tphsd.MD_TOT_QTY ,tphsd.MGR_TOT_QTY ), 0, NULL, DECODE(tphsd.PROC_FG,'00',tphsd.MD_TOT_QTY ,tphsd.MGR_TOT_QTY )*tphsd.SLIP_FG)) AS MGR_TOT_QTY
+        ,       TO_NUMBER(DECODE(DECODE(tphsd.PROC_FG,'00',tphsd.MD_AMT     ,tphsd.MGR_AMT     ), 0, NULL, DECODE(tphsd.PROC_FG,'00',tphsd.MD_AMT     ,tphsd.MGR_AMT     )*tphsd.SLIP_FG)) AS MGR_AMT
+        ,       TO_NUMBER(DECODE(DECODE(tphsd.PROC_FG,'00',tphsd.MD_VAT     ,tphsd.MGR_VAT     ), 0, NULL, DECODE(tphsd.PROC_FG,'00',tphsd.MD_VAT     ,tphsd.MGR_VAT     )*tphsd.SLIP_FG)) AS MGR_VAT
+        ,       TO_NUMBER(DECODE(DECODE(tphsd.PROC_FG,'00',tphsd.MD_TOT     ,tphsd.MGR_TOT     ), 0, NULL, DECODE(tphsd.PROC_FG,'00',tphsd.MD_TOT     ,tphsd.MGR_TOT     )*tphsd.SLIP_FG)) AS MGR_TOT
+        ,       NVL(tphsd.MGR_SPLY_UPRC, 0) AS MGR_SPLY_UPRC
+        ,       'N' AS CONFIRM_YN
+        ,       tphsd.PROC_FG
+        ,       tphsd.REMARK
+        FROM    TB_PO_HQ_STORE_DISTRIBUTE tphsd
+        ,       TB_MS_PRODUCT tmp
+        ,       (   SELECT  PROD_CD, CURR_QTY
+                    FROM    TB_ST_HQ_STOCK_CUR
+                    WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
+                )   tshsc
+        ,       (   SELECT  PROD_CD, CURR_QTY
+                    FROM    TB_ST_STORE_STOCK_CUR
+                    WHERE   STORE_CD  =   #{storeCd}
+                )   tsssc
+        WHERE   tphsd.HQ_OFFICE_CD   =   #{hqOfficeCd}
+        AND     tphsd.REQ_DATE       =   #{reqDate}
+        AND     tphsd.SLIP_FG        =   #{slipFg}
+        AND     tphsd.PROC_FG        =   #{procFg}
+        AND     tphsd.STORE_CD       =   tmp.STORE_CD
+        AND     tphsd.PROD_CD        =   tmp.PROD_CD
+        AND     tshsc.PROD_CD    (+) =   tphsd.PROD_CD
+        AND     tsssc.PROD_CD    (+) =   tphsd.PROD_CD
+        ORDER BY tphsd.PROD_CD
+        ]]>
+    </select>
+
+    <!-- 분배마감 - 분배마감 리스트 확정 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_DISTRIBUTE
+        PARAM    : rtnDstbCloseStoreVO
+        COMMENTS : 분배마감 - 분배마감 리스트를 확정으로 수정한다.
+    -->
+    <update id="updateDstbCloseConfirm" parameterType="rtnDstbCloseStoreVO">
+        /* USE : RtnDstbCloseStoreMapper.updateDstbCloseConfirm */
+        UPDATE  TB_PO_HQ_STORE_DISTRIBUTE
+        SET     PROC_FG         = #{updateProcFg},
+                MGR_DT          = #{modDt},
+                MGR_ID          = #{modId}
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     REQ_DATE      = #{reqDate}
+        AND     SLIP_FG       = #{slipFg}
+        AND     STORE_CD      = #{storeCd}
+        AND     PROC_FG       = #{procFg}
+    </update>
+
+    <!-- 분배마감 - 분배마감 상세 리스트 저장 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_DISTRIBUTE
+        PARAM    : rtnDstbCloseStoreVO
+        COMMENTS : 분배마감 - 분배마감 MGR 관련 수량을 수정한다.
+    -->
+    <update id="updateDstbCloseDtl" parameterType="rtnDstbCloseStoreVO">
+        /* USE : RtnDstbCloseStoreMapper.updateDstbCloseDtl */
+        UPDATE  TB_PO_HQ_STORE_DISTRIBUTE
+        SET     MGR_SPLY_UPRC   = #{mgrSplyUprc},
+                MGR_UNIT_QTY    = #{mgrUnitQty},
+                MGR_ETC_QTY     = #{mgrEtcQty},
+                MGR_TOT_QTY     = #{mgrTotQty},
+                MGR_AMT         = #{mgrAmt},
+                MGR_VAT         = #{mgrVat},
+                MGR_TOT         = #{mgrTot},
+                REMARK          = #{remark},
+                MOD_DT          = #{modDt},
+                MOD_ID          = #{modId}
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     REQ_DATE      = #{reqDate}
+        AND     SEQ           = #{seq}
+    </update>
+
+    <!-- 분배마감 - 분배마감 상세 리스트 확정 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_DISTRIBUTE
+        PARAM    : rtnDstbCloseStoreVO
+        COMMENTS : 분배마감 - 분배마감 상세 리스트 저장시 확정인 경우 진행구분을 수정한다.
+    -->
+    <update id="updateDstbCloseDtlConfirm" parameterType="rtnDstbCloseStoreVO">
+        /* USE : RtnDstbCloseStoreMapper.updateDstbCloseDtlConfirm */
+        UPDATE  TB_PO_HQ_STORE_DISTRIBUTE
+        SET     PROC_FG         = #{procFg},
+                MGR_DT          = #{modDt},
+                MGR_ID          = #{modId}
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     REQ_DATE      = #{reqDate}
+        AND     SEQ           = #{seq}
+    </update>
+
+    <!-- 분배마감 - 분배마감 상세 리스트 저장 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_DISTRIBUTE
+        PARAM    : rtnDstbCloseStoreVO
+        COMMENTS : 분배마감 - 상품을 삭제한다.
+    -->
+    <delete id="deleteDstbCloseDtl" parameterType="rtnDstbCloseStoreVO">
+        /* USE : RtnDstbCloseStoreMapper.deleteDstbCloseDtl */
+        DELETE  TB_PO_HQ_STORE_DISTRIBUTE
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     REQ_DATE      = #{reqDate}
+        AND     SEQ           = #{seq}
+    </delete>
+
+    <!-- 분배마감 상품추가 주문가능여부 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_ORDER_SPECIFIC, TB_PO_HQ_STORE_ORDER_DAYS, TB_PO_HQ_STORE_CLOSE, TB_PO_HQ_STORE_LOAN
+        PARAM    : rtnDstbCloseStoreVO
+        COMMENTS : 분배마감 상품추가시 주문가능여부를 조회한다.
+    -->
+    <select id="getOrderFg" parameterType="rtnDstbCloseStoreVO" resultType="DefaultMap">
+        /* USE : RtnDstbCloseStoreMapper.getOrderFg */
+        <![CDATA[
+        SELECT  SUM(ORDER_FG) AS ORDER_FG
+        FROM    (   SELECT  DECODE(NVL(tphsos.OUTSTOCK_REQ_YN, 'N'), 'Y', 1, 0) AS ORDER_FG
+                    FROM    TB_PO_HQ_STORE_ORDER_SPECIFIC tphsos
+                    WHERE   tphsos.HQ_OFFICE_CD     = #{hqOfficeCd}
+                    AND     tphsos.STORE_CD         = #{storeCd}
+                    AND     tphsos.SPECIFIC_DATE    = #{reqDate}
+                    UNION
+                    SELECT  COUNT(STORE_CD) AS ORDER_FG
+                    FROM    TB_PO_HQ_STORE_ORDER_DAYS tphsod
+                    WHERE   tphsod.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND     tphsod.STORE_CD     = #{storeCd}
+                    AND     tphsod.REQ_NO_DAY   LIKE    '%'||(SELECT TO_CHAR(TO_DATE(#{reqDate}, 'YYYYMMDD'), 'D') FROM DUAL)||'%'
+                    UNION
+                    SELECT  DECODE(NVL(tphsc.ORDER_CLOSE_FG, 'N'), 'Y', 1, 0) AS ORDER_FG
+                    FROM    TB_PO_HQ_STORE_CLOSE tphsc
+                    WHERE   tphsc.HQ_OFFICE_CD  = #{hqOfficeCd}
+                    AND     tphsc.CLOSE_DATE    = #{reqDate}
+                    UNION
+                    SELECT	DECODE(NVL(tphsl.ORDER_CLOSE_YN, 'N'), 'Y', 1, 0) AS ORDER_FG
+                    FROM	TB_PO_HQ_STORE_LOAN tphsl
+                    WHERE   tphsl.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                    AND     tphsl.STORE_CD      =   #{storeCd}
+                )
+        ]]>
+    </select>
+
+    <!-- 분배마감 상품추가 리스트 조회 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT, TB_ST_STORE_STOCK_CUR, TB_ST_HQ_STOCK_CUR, TB_PO_HQ_STORE_DISTRIBUTE, TB_HQ_PRODUCT
+        PARAM    : rtnDstbCloseStoreVO
+        COMMENTS : 주문등록 상품추가 리스트를 조회한다.
+    -->
+    <select id="getDstbAddList" parameterType="rtnDstbCloseStoreVO" resultType="DefaultMap">
+        /* USE : RtnDstbCloseStoreMapper.getDstbAddList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        <![CDATA[
+        SELECT  NVL((SELECT SUBSTR(MAX(SYS_CONNECT_BY_PATH( PROD_CLASS_NM,  '>')), 2)
+                       FROM TB_MS_PRODUCT_CLASS
+                      WHERE STORE_CD = tmp.STORE_CD
+                      START WITH PROD_CLASS_CD = tmp.PROD_CLASS_CD
+                      CONNECT BY PRIOR P_PROD_CLASS_CD = PROD_CLASS_CD
+                      GROUP BY tmp.PROD_CLASS_CD),' ') AS PROD_CLASS_NM
+        ,       tmp.PROD_CD
+        ,       tmp.PROD_NM
+        ,       DECODE(tmp.VAT_FG,'Y',1,0) AS VAT_FG01
+        ,       TRUNC(DECODE(SIGN(tshsc.CURR_QTY),-1,0,tshsc.CURR_QTY) / tmp.PO_UNIT_QTY) AS HD_CUR_UNIT_QTY
+        ,       MOD  (DECODE(SIGN(tshsc.CURR_QTY),-1,0,tshsc.CURR_QTY) , tmp.PO_UNIT_QTY) AS HD_CUR_ETC_QTY
+        ,       TRUNC(NVL(tsssc.CURR_QTY,0)                            / tmp.PO_UNIT_QTY) AS STORE_CUR_UNIT_QTY
+        ,       MOD  (NVL(tsssc.CURR_QTY,0)                            , tmp.PO_UNIT_QTY) AS STORE_CUR_ETC_QTY
+        ,       NVL((SELECT MAX(SALE_UPRC) KEEP(DENSE_RANK FIRST ORDER BY REG_DT DESC)
+                              FROM TB_MS_PRODUCT_SALE_PRICE
+                             WHERE STORE_CD = tmp.STORE_CD
+                               AND PROD_CD = tmp.PROD_CD
+                               AND TO_CHAR(SYSDATE, 'YYYYMMDD') BETWEEN START_DATE AND END_DATE
+                            ), 0) AS SALE_UPRC
+        ,       tmp.SPLY_UPRC
+        ,       tmp.SPLY_UPRC AS MGR_SPLY_UPRC
+        ,       TRUNC(tphsd.PREV_MGR_UNIT_QTY / tphsd.PO_UNIT_QTY) * tphsd.SLIP_FG AS PREV_MGR_UNIT_QTY
+        ,       MOD  (tphsd.PREV_MGR_ETC_QTY  , tphsd.PO_UNIT_QTY) * tphsd.SLIP_FG AS PREV_MGR_ETC_QTY
+        ,       tmp.PO_MIN_QTY
+        ,       tmp.PO_UNIT_ALLOW_FG
+        ,       tmp.PO_PROD_FG
+        ,       tmp.USE_YN
+        ,       tmp.PO_UNIT_FG
+        ,       tmp.PO_UNIT_QTY
+        ,       0 AS ENVST0011
+        ,       tmp.SAFE_STOCK_QTY
+        ,       TRUNC(DECODE(SIGN(thp.SAFE_STOCK_QTY),-1,0,thp.SAFE_STOCK_QTY) / thp.PO_UNIT_QTY) AS HQ_SAFE_STOCK_UNIT_QTY
+        ,       MOD  (DECODE(SIGN(thp.SAFE_STOCK_QTY),-1,0,thp.SAFE_STOCK_QTY) , thp.PO_UNIT_QTY) AS HQ_SAFE_STOCK_ETC_QTY
+        ]]>
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        <![CDATA[
+        FROM    TB_MS_PRODUCT tmp
+        ,       TB_ST_STORE_STOCK_CUR tsssc
+        ,       (   SELECT  PROD_CD, CURR_QTY
+                    FROM    TB_ST_HQ_STOCK_CUR
+                    WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
+                )   tshsc
+        ,       (   SELECT  tphsd.STORE_CD, tphsd.PROD_CD, tphsd.SLIP_FG, tphsd.PO_UNIT_QTY
+                    ,       SUM(DECODE(tphsd.MGR_TOT_QTY, 0, tphsd.MD_TOT_QTY, tphsd.MGR_TOT_QTY)) AS PREV_MGR_UNIT_QTY
+                    ,       SUM(DECODE(tphsd.MGR_TOT_QTY, 0, tphsd.MD_TOT_QTY, tphsd.MGR_TOT_QTY)) AS PREV_MGR_ETC_QTY
+                    FROM    TB_PO_HQ_STORE_DISTRIBUTE tphsd
+                    WHERE   tphsd.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                    AND     tphsd.REQ_DATE      =   #{reqDate}
+                    AND     tphsd.SLIP_FG       =   #{slipFg}
+                    GROUP
+                    BY      tphsd.STORE_CD, tphsd.PROD_CD, tphsd.SLIP_FG, tphsd.PO_UNIT_QTY
+                ) tphsd
+        ,       TB_HQ_PRODUCT thp
+        ,       TB_MS_PRODUCT_BARCD tmpb
+        WHERE   tmp.STORE_CD          =   #{storeCd}
+        AND     tmp.USE_YN            =   'Y'
+        AND     tsssc.STORE_CD    (+) =   tmp.STORE_CD
+        AND     tsssc.PROD_CD     (+) =   tmp.PROD_CD
+        AND     tshsc.PROD_CD     (+) =   tmp.PROD_CD
+        AND     tphsd.STORE_CD    (+) =   tmp.STORE_CD
+        AND     tphsd.PROD_CD     (+) =   tmp.PROD_CD
+        AND     thp.HQ_OFFICE_CD      =   #{hqOfficeCd}
+        AND     thp.PROD_CD           =   tmp.PROD_CD
+        AND     tmpb.STORE_CD     (+) =   tmp.STORE_CD
+        AND     tmpb.PROD_CD      (+) =   tmp.PROD_CD
+        ]]>
+        <if test='prodCd != null and prodCd != ""'>
+            AND tmp.PROD_CD = #{prodCd}
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='barcdCd != null and barcdCd != ""'>
+            AND tmpb.BARCD_CD = #{barcdCd}
+        </if>
+        ORDER BY tmp.PROD_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!--  분배마감 추가등록 저장 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_DISTRIBUTE
+        PARAM    : rtnDstbCloseStoreVO
+        COMMENTS : 분배마감 추가등록 상품을 등록한다.
+    -->
+    <insert id="insertDstbAdd" parameterType="rtnDstbCloseStoreVO">
+        /* USE : RtnDstbCloseStoreMapper.insertDstbAdd */
+        <selectKey resultType="int" keyProperty="seq" order="BEFORE">
+            SELECT  NVL(MAX(tphsd.SEQ), 0)+1 AS SEQ
+            FROM    TB_PO_HQ_STORE_DISTRIBUTE tphsd
+            WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+            AND     REQ_DATE      = #{reqDate}
+        </selectKey>
+        INSERT INTO TB_PO_HQ_STORE_DISTRIBUTE
+        (
+        HQ_OFFICE_CD,
+        REQ_DATE,
+        SEQ,
+        STORE_CD,
+        EMP_NO,
+        SLIP_FG,
+        DSTB_FG,
+        STORAGE_CD,
+        HQ_BRAND_CD,
+        PROD_CD,
+        PO_UNIT_FG,
+        PO_UNIT_QTY,
+        MGR_SPLY_UPRC,
+        MGR_UNIT_QTY,
+        MGR_ETC_QTY,
+        MGR_TOT_QTY,
+        MGR_AMT,
+        MGR_VAT,
+        MGR_TOT,
+        PROC_FG,
+        REMARK,
+        REG_DT,
+        REG_ID,
+        MOD_DT,
+        MOD_ID
+        )
+        VALUES
+        (
+        #{hqOfficeCd},
+        #{reqDate},
+        #{seq},
+        #{storeCd},
+        #{empNo},
+        #{slipFg},
+        #{dstbFg},
+        #{storageCd},
+        #{hqBrandCd},
+        #{prodCd},
+        #{poUnitFg},
+        #{poUnitQty},
+        #{mgrSplyUprc},
+        #{mgrUnitQty},
+        #{mgrEtcQty},
+        #{mgrTotQty},
+        #{mgrAmt},
+        #{mgrVat},
+        #{mgrTot},
+        #{procFg},
+        #{remark},
+        #{regDt},
+        #{regId},
+        #{modDt},
+        #{modId}
+        )
+    </insert>
+
+    <!-- 분배마감 추가등록 저장 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_DISTRIBUTE
+        PARAM    : rtnDstbCloseStoreVO
+        COMMENTS : 분배마감 추가등록 상품을 수정한다.
+    -->
+    <update id="updateDstbAdd" parameterType="rtnDstbCloseStoreVO">
+        /* USE : RtnDstbCloseStoreMapper.updateDstbAdd */
+        UPDATE  TB_PO_HQ_STORE_DISTRIBUTE
+        SET     PROC_FG         = #{procFg},
+                MGR_SPLY_UPRC   = #{mgrSplyUprc},
+                MGR_UNIT_QTY    = #{mgrUnitQty},
+                MGR_ETC_QTY     = #{mgrEtcQty},
+                MGR_TOT_QTY     = #{mgrTotQty},
+                MGR_AMT         = #{mgrAmt},
+                MGR_VAT         = #{mgrVat},
+                MGR_TOT         = #{mgrTot},
+                REMARK          = #{remark},
+                MOD_DT          = #{modDt},
+                MOD_ID          = #{modId}
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     REQ_DATE      = #{reqDate}
+        AND     SEQ           = #{seq}
+    </update>
+
+    <!-- 분배마감 추가등록 저장 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_DISTRIBUTE
+        PARAM    : rtnDstbCloseStoreVO
+        COMMENTS : 분배마감 추가등록 상품을 삭제한다.
+    -->
+    <delete id="deleteDstbAdd" parameterType="rtnDstbCloseStoreVO">
+        /* USE : RtnDstbCloseStoreMapper.deleteDstbAdd */
+        DELETE  TB_PO_HQ_STORE_DISTRIBUTE
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     REQ_DATE      = #{reqDate}
+        AND     SEQ           = #{seq}
+    </delete>
+</mapper>

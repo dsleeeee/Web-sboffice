@@ -25,6 +25,8 @@ public class StoreLoanInfoVO extends PageVO {
     private String hqOfficeCd;
     /** 매장코드 */
     private String storeCd;
+    /** 다중 매장코드 */
+    private String[] arrStoreCd;
     /** 매장명 */
     private String storeNm;
     /** 조회 시작일 */
@@ -70,6 +72,20 @@ public class StoreLoanInfoVO extends PageVO {
      */
     public void setStoreCd(String storeCd) {
         this.storeCd = storeCd;
+    }
+
+    /**
+     * @return the arrStoreCd
+     */
+    public String[] getArrStoreCd() {
+        return arrStoreCd;
+    }
+
+    /**
+     * @param arrStoreCd the arrStoreCd to set
+     */
+    public void setArrStoreCd(String[] arrStoreCd) {
+        this.arrStoreCd = arrStoreCd;
     }
 
     /**

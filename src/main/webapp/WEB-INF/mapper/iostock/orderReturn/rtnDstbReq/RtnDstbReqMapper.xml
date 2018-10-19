@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.iostock.orderReturn.rtnDstbReq.service.impl.RtnDstbReqMapper">
+
+    <!-- 분배등록 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_ORDER
+        PARAM    : rtnDstbReqVO
+        COMMENTS : 분배등록 리스트를 조회한다.
+    -->
+    <select id="getRtnDstbReqList" parameterType="rtnDstbReqVO" resultType="DefaultMap">
+        /* USE : RtnDstbReqMapper.getRtnDstbReqList */
+        <![CDATA[
+        SELECT   tphso.REQ_DATE, tphso.STORE_CD, tms.STORE_NM
+        ,        tphso.DTL_CNT, tphso.PROC_FG, tphso.REMARK
+        ,        tphso.SLIP_FG, tphso.MOD_DT
+        ,        tphso.ORDER_TOT_QTY*tphso.SLIP_FG AS ORDER_TOT_QTY
+        ,        tphso.ORDER_AMT*tphso.SLIP_FG     AS ORDER_AMT
+        ,        tphso.ORDER_VAT*tphso.SLIP_FG     AS ORDER_VAT
+        ,        tphso.ORDER_TOT*tphso.SLIP_FG     AS ORDER_TOT
+        ,        tphso.MD_TOT_QTY*tphso.SLIP_FG    AS MD_TOT_QTY
+        ,        tphso.MD_AMT*tphso.SLIP_FG        AS MD_AMT
+        ,        tphso.MD_VAT*tphso.SLIP_FG        AS MD_VAT
+        ,        tphso.MD_TOT*tphso.SLIP_FG        AS MD_TOT
+        FROM     TB_PO_HQ_STORE_ORDER tphso
+        ,        TB_MS_STORE tms
+        WHERE    tms.HQ_OFFICE_CD =   #{hqOfficeCd}
+        AND      tphso.STORE_CD   =   tms.STORE_CD
+        ]]>
+        <if test='dateFg == "req"'>
+            AND tphso.REQ_DATE BETWEEN #{startDate} AND #{endDate}
+        </if>
+        <if test='dateFg == "reg"'>
+            AND tphso.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+        </if>
+        <if test='dateFg == "mod"'>
+            AND tphso.MOD_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+        </if>
+        <if test='slipFg != null and slipFg != ""'>
+            AND tphso.SLIP_FG = #{slipFg}
+        </if>
+        <if test='arrProcFg != null and arrProcFg != ""'>
+            AND tphso.PROC_FG IN
+            <foreach collection="arrProcFg" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        ORDER BY tphso.REQ_DATE DESC, tms.STORE_CD
+    </select>
+
+    <!-- 분배등록 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_ORDER_DTL, TB_MS_PRODUCT, TB_HQ_ENVST
+        PARAM    : rtnDstbReqVO
+        COMMENTS : 분배등록 상세 상품 리스트를 조회한다.
+    -->
+    <select id="getRtnDstbReqDtlList" parameterType="rtnDstbReqVO" resultType="DefaultMap">
+        /* USE : RtnDstbReqMapper.getRtnDstbReqDtlList */
+        <![CDATA[
+        SELECT  tphsod.STORE_CD, tmp.PROD_CD, tmp.PROD_NM
+        ,       DECODE(tmp.VAT_FG,'Y',1,0) AS VAT_FG01
+        ,       TRUNC(DECODE(SIGN(tshsc.CURR_QTY),-1,0,tshsc.CURR_QTY) / tmp.PO_UNIT_QTY) AS HD_CUR_UNIT_QTY
+        ,       MOD  (DECODE(SIGN(tshsc.CURR_QTY),-1,0,tshsc.CURR_QTY) , tmp.PO_UNIT_QTY) AS HD_CUR_ETC_QTY
+        ,		NVL((SELECT MAX(SALE_UPRC) KEEP(DENSE_RANK FIRST ORDER BY REG_DT DESC)
+                       FROM TB_MS_PRODUCT_SALE_PRICE
+                      WHERE STORE_CD = tmp.STORE_CD
+                        AND PROD_CD = tmp.PROD_CD
+                        AND TO_CHAR(SYSDATE, 'YYYYMMDD') BETWEEN START_DATE AND END_DATE
+                    ), 0) AS SALE_UPRC
+        , 		tmp.SPLY_UPRC
+        ,       tmp.PO_UNIT_ALLOW_FG
+        ,       tmp.PO_PROD_FG
+        ,       tmp.USE_YN
+        ,       tmp.PO_UNIT_FG
+        ,       tmp.PO_UNIT_QTY
+        ,       0 AS ENVST0011
+        ,       tmp.SAFE_STOCK_QTY
+        ,       TRUNC(DECODE(SIGN(tmp.SAFE_STOCK_QTY),-1,0,tmp.SAFE_STOCK_QTY) / tmp.PO_UNIT_QTY) AS SAFE_STOCK_UNIT_QTY
+        ,       MOD  (DECODE(SIGN(tmp.SAFE_STOCK_QTY),-1,0,tmp.SAFE_STOCK_QTY) , tmp.PO_UNIT_QTY) AS SAFE_STOCK_ETC_QTY
+        ,       TO_NUMBER(DECODE(tphsod.ORDER_UNIT_QTY, 0, NULL, tphsod.ORDER_UNIT_QTY*tphsod.SLIP_FG)) AS ORDER_UNIT_QTY
+        ,       TO_NUMBER(DECODE(tphsod.ORDER_ETC_QTY,  0, NULL, tphsod.ORDER_ETC_QTY*tphsod.SLIP_FG )) AS ORDER_ETC_QTY
+        ,       TO_NUMBER(DECODE(tphsod.ORDER_TOT_QTY,  0, NULL, tphsod.ORDER_TOT_QTY*tphsod.SLIP_FG )) AS ORDER_TOT_QTY
+        ,       TO_NUMBER(DECODE(tphsod.MD_UNIT_QTY  ,  0, NULL, tphsod.MD_UNIT_QTY*tphsod.SLIP_FG)) AS MD_UNIT_QTY
+        ,       TO_NUMBER(DECODE(tphsod.MD_ETC_QTY   ,  0, NULL, tphsod.MD_ETC_QTY*tphsod.SLIP_FG )) AS MD_ETC_QTY
+        ,       TO_NUMBER(DECODE(tphsod.MD_TOT_QTY   ,  0, NULL, tphsod.MD_TOT_QTY*tphsod.SLIP_FG )) AS MD_TOT_QTY
+        ,       TO_NUMBER(DECODE(tphsod.MD_AMT       ,  0, NULL, tphsod.MD_AMT*tphsod.SLIP_FG     )) AS MD_AMT
+        ,       TO_NUMBER(DECODE(tphsod.MD_VAT       ,  0, NULL, tphsod.MD_VAT*tphsod.SLIP_FG     )) AS MD_VAT
+        ,       TO_NUMBER(DECODE(tphsod.MD_TOT       ,  0, NULL, tphsod.MD_TOT*tphsod.SLIP_FG     )) AS MD_TOT
+        ,       NVL(tphsod.MD_SPLY_UPRC, 0) AS MD_SPLY_UPRC
+        ,       tphsod.REMARK
+        FROM    TB_PO_HQ_STORE_ORDER_DTL tphsod
+        ,       TB_MS_PRODUCT tmp
+        ,       (   SELECT  PROD_CD, CURR_QTY
+                    FROM    TB_ST_HQ_STOCK_CUR
+                    WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
+                )   tshsc
+        WHERE   tphsod.STORE_CD       =   #{storeCd}
+        AND     tphsod.REQ_DATE       =   #{reqDate}
+        AND     tphsod.SLIP_FG        =   #{slipFg}
+        AND     tphsod.STORE_CD       =   tmp.STORE_CD
+        AND     tphsod.PROD_CD        =   tmp.PROD_CD
+        AND     tshsc.PROD_CD     (+) =   tphsod.PROD_CD
+        ORDER BY tphsod.PROD_CD
+        ]]>
+    </select>
+
+    <!--  분배자료 생성 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_DISTRIBUTE
+        PARAM    : rtnDstbReqVO
+        COMMENTS : 주문등록 정보를 바탕으로 분배자료를 생성한다.
+    -->
+    <insert id="insertRtnDstbReqRegist" parameterType="rtnDstbReqVO">
+        /* USE : RtnDstbReqMapper.insertRtnDstbReqRegist */
+        <selectKey resultType="int" keyProperty="seq" order="BEFORE">
+            SELECT  NVL(MAX(tphsd.SEQ), 0) AS SEQ
+            FROM    TB_PO_HQ_STORE_DISTRIBUTE tphsd
+            WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+            AND     REQ_DATE      = #{reqDate}
+        </selectKey>
+        INSERT INTO TB_PO_HQ_STORE_DISTRIBUTE
+        (
+            HQ_OFFICE_CD,
+            REQ_DATE,
+            SEQ,
+            STORE_CD,
+            EMP_NO,
+            SLIP_FG,
+            DSTB_FG,
+            STORAGE_CD,
+            HQ_BRAND_CD,
+            PROD_CD,
+            PO_UNIT_FG,
+            PO_UNIT_QTY,
+            ORDER_SPLY_UPRC,
+            ORDER_UNIT_QTY,
+            ORDER_ETC_QTY,
+            ORDER_TOT_QTY,
+            ORDER_AMT,
+            ORDER_VAT,
+            ORDER_TOT,
+            MD_SPLY_UPRC,
+            MD_UNIT_QTY,
+            MD_ETC_QTY,
+            MD_TOT_QTY,
+            MD_AMT,
+            MD_VAT,
+            MD_TOT,
+            MGR_SPLY_UPRC,
+            MGR_UNIT_QTY,
+            MGR_ETC_QTY,
+            MGR_TOT_QTY,
+            MGR_AMT,
+            MGR_VAT,
+            MGR_TOT,
+            MGR_DT,
+            MGR_ID,
+            PROC_FG,
+            REMARK,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        SELECT  #{hqOfficeCd}
+        ,       #{reqDate}
+        ,       #{seq}+ROWNUM
+        ,       #{storeCd}
+        ,       #{empNo}
+        ,       #{slipFg}
+        ,       #{dstbFg}
+        ,       '000'
+        ,       '00'
+        ,       PROD_CD
+        ,       PO_UNIT_FG
+        ,       PO_UNIT_QTY
+        ,       ORDER_SPLY_UPRC
+        ,       ORDER_UNIT_QTY
+        ,       ORDER_ETC_QTY
+        ,       ORDER_TOT_QTY
+        ,       ORDER_AMT
+        ,       ORDER_VAT
+        ,       ORDER_TOT
+        ,       MD_SPLY_UPRC
+        ,       MD_UNIT_QTY
+        ,       MD_ETC_QTY
+        ,       MD_TOT_QTY
+        ,       MD_AMT
+        ,       MD_VAT
+        ,       MD_TOT
+        ,       MD_SPLY_UPRC
+        ,       MD_UNIT_QTY
+        ,       MD_ETC_QTY
+        ,       MD_TOT_QTY
+        ,       MD_AMT
+        ,       MD_VAT
+        ,       MD_TOT
+        ,       #{modDt}
+        ,       #{modId}
+        ,       #{procFg}
+        ,       REMARK
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        FROM    (   SELECT  PROD_CD         ,   PO_UNIT_FG     ,   PO_UNIT_QTY
+                    ,       REMARK
+                    ,       ORDER_SPLY_UPRC ,   ORDER_UNIT_QTY ,   ORDER_ETC_QTY      ,   ORDER_TOT_QTY       ,   ORDER_AMT       ,   ORDER_VAT       ,   ORDER_TOT
+                    ,       MD_SPLY_UPRC    ,   MD_UNIT_QTY    ,   MD_ETC_QTY         ,   MD_TOT_QTY          ,   MD_AMT          ,   MD_VAT          ,   MD_TOT
+                    FROM    TB_PO_HQ_STORE_ORDER_DTL
+                    WHERE   REQ_DATE    =   #{reqDate}
+                    AND     STORE_CD    =   #{storeCd}
+                    AND     SLIP_FG     =   #{slipFg}
+                    ORDER
+                    BY      PROD_CD
+                )
+    </insert>
+
+    <!-- 분배등록 - 분배완료시 MD수량 DTL 저장 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_ORDER_DTL
+        PARAM    : storeOrderDtlVO
+        COMMENTS : 분배등록 - 분배완료시 MD수량 관련 내용 DTL을 수정한다.
+    -->
+    <update id="updateDstbConfirm" parameterType="storeOrderDtlVO">
+        /* USE : RtnDstbReqMapper.updateDistributeConfirm */
+        UPDATE  TB_PO_HQ_STORE_ORDER_DTL
+        SET     MD_SPLY_UPRC    = ORDER_SPLY_UPRC,
+                MD_UNIT_QTY     = ORDER_UNIT_QTY,
+                MD_ETC_QTY      = ORDER_ETC_QTY,
+                MD_TOT_QTY      = ORDER_TOT_QTY,
+                MD_AMT          = ORDER_AMT,
+                MD_VAT          = ORDER_VAT,
+                MD_TOT          = ORDER_TOT,
+                MOD_DT          = #{modDt},
+                MOD_ID          = #{modId}
+        WHERE   REQ_DATE    = #{reqDate}
+        AND     STORE_CD    = #{storeCd}
+        AND     SLIP_FG     = #{slipFg}
+    </update>
+
+    <!-- 분배등록 상세 리스트 저장 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_ORDER_DTL
+        PARAM    : storeOrderDtlVO
+        COMMENTS : 분배등록 - MD수량 분배 DTL을 수정한다.
+    -->
+    <update id="updateRtnDstbReqDtl" parameterType="rtnDstbReqVO">
+        /* USE : RtnDstbReqMapper.updateRtnDstbReqDtl */
+        UPDATE  TB_PO_HQ_STORE_ORDER_DTL
+        SET     MD_SPLY_UPRC    = #{mdSplyUprc},
+                MD_UNIT_QTY     = #{mdUnitQty},
+                MD_ETC_QTY      = #{mdEtcQty},
+                MD_TOT_QTY      = #{mdTotQty},
+                MD_AMT          = #{mdAmt},
+                MD_VAT          = #{mdVat},
+                MD_TOT          = #{mdTot},
+                REMARK          = #{remark},
+                MOD_DT          = #{modDt},
+                MOD_ID          = #{modId}
+        WHERE   REQ_DATE    = #{reqDate}
+        AND     STORE_CD    = #{storeCd}
+        AND     SLIP_FG     = #{slipFg}
+        AND     PROD_CD     = #{prodCd}
+    </update>
+
+</mapper>

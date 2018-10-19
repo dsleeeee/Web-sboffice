@@ -52,6 +52,10 @@ public class StoreOrderVO extends PageVO {
     private String endDate;
     /** 조회 구분 */
     private String dateFg;
+    /** 수발주옵션 */
+    private String envst173;
+    /** 공통코드 */
+    private String nmcodeGrpCd;
 
     /**
      * @return the reqDate
@@ -373,5 +377,19 @@ public class StoreOrderVO extends PageVO {
      */
     public void setDateFg(String dateFg) {
         this.dateFg = dateFg;
+    }
+
+    /**
+     * @return the envst173
+     */
+    public String getEnvst173() {
+        return envst173;
+    }
+
+    /**
+     * @param envst173 the envst173 to set
+     */
+    public void setEnvst173(String envst173) {
+        this.envst173 = envst173;
     }
 }
