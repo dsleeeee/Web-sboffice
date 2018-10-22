@@ -1,20 +1,22 @@
 package kr.co.solbipos.base.prod.prod.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
-import kr.co.solbipos.application.session.user.enums.OrgnFg;
 
 /**
- * @author NHN한국사이버결제 KCP 장혁수
- * @version 1.0
  * @Class Name : ProdVO.java
  * @Description : 기초관리 - 상품관리 - 상품조회
  * @Modification Information
  * @
  * @ 수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2018.08.06  장혁수      최초생성
- * @see Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @ 2018.08.06  장혁수       최초생성
+ * @ 2018.10.19  노현수       소속구분 타입 변경
+ *
+ * @author NHN한국사이버결제 KCP 장혁수
  * @since 2018. 08.06
+ * @version 1.0
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 public class ProdVO extends PageVO {
 
@@ -58,7 +60,7 @@ public class ProdVO extends PageVO {
      * H : 본사<br>
      * S : 매장, 가맹점
      */
-    private OrgnFg orgnFg;
+    private String orgnFg;
 
     /**
      * @return the hqOfficeCd
@@ -169,14 +171,14 @@ public class ProdVO extends PageVO {
     /**
      * @return the orgnFg
      */
-    public OrgnFg getOrgnFg() {
+    public String getOrgnFg() {
         return orgnFg;
     }
 
     /**
      * @param orgnFg the orgnFg to set
      */
-    public void setOrgnFg(OrgnFg orgnFg) {
+    public void setOrgnFg(String orgnFg) {
         this.orgnFg = orgnFg;
     }
 }

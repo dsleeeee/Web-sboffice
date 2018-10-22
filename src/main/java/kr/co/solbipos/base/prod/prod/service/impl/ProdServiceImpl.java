@@ -1,11 +1,8 @@
 package kr.co.solbipos.base.prod.prod.service.impl;
 
-import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.prod.service.ProdService;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import org.slf4j.Logger;
@@ -13,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,7 +19,8 @@ import java.util.List;
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2018.08.06  장혁수      최초생성
+ * @ 2018.08.06  장혁수       최초생성
+ * @ 2018.10.19  노현수       생성자 주입, 상품조회 관련 변경
  *
  * @author NHN한국사이버결제 KCP 장혁수
  * @since 2018. 08.06
@@ -36,61 +33,43 @@ public class ProdServiceImpl implements ProdService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    private ProdMapper mapper;
+    private final ProdMapper prodMapper;
+    private final MessageService messageService;
 
     @Autowired
-    private MessageService messageService;
+    public ProdServiceImpl(ProdMapper prodMapper, MessageService messageService) {
+        this.prodMapper = prodMapper;
+        this.messageService = messageService;
+    }
 
     @Override
     public List<DefaultMap<String>> list(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
-        // 매장인 경우
-        if( sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
-            prodVO.setStoreCd(sessionInfoVO.getStoreCd());
-            return mapper.getProdList(prodVO);
-        }
-        // 본사인 경우
-        else if( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
-            prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            return mapper.getHqProdList(prodVO);
-        }
-        else {
-            throw new JsonException(Status.FAIL, messageService.get("cmm.invalid.access"));
-        }
+        // 소속구분 설정
+        prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        return prodMapper.getProdList(prodVO);
     }
 
     @Override
     public DefaultMap<String> detail(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
-        // 매장인 경우
-        if( sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
-            prodVO.setStoreCd(sessionInfoVO.getStoreCd());
-            return mapper.getProdDetail(prodVO);
-        }
-        // 본사인 경우
-        else if( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
-            prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            return mapper.getHqProdDetail(prodVO);
-        }
-        else {
-            throw new JsonException(Status.FAIL, messageService.get("cmm.invalid.access"));
-        }
+        // 소속구분 설정
+        prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        return prodMapper.getProdDetail(prodVO);
     }
 
     @Override
     public List<DefaultMap<String>> unitstProdList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
-        // 매장인 경우
-        if( sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
-            prodVO.setStoreCd(sessionInfoVO.getStoreCd());
-            return mapper.getUnitstProdList(prodVO);
-        }
-        // 본사인 경우
-        else if( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
-            prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            return mapper.getHqUnitstProdList(prodVO);
-        }
-        else {
-            return new ArrayList<>();
-        }
+        // 소속구분 설정
+        prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        return prodMapper.getUnitstProdList(prodVO);
     }
 
 }
