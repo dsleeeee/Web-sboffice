@@ -10,8 +10,6 @@ import kr.co.solbipos.membr.anals.credit.service.CreditService;
 import kr.co.solbipos.membr.anals.credit.service.CreditStoreVO;
 import kr.co.solbipos.membr.anals.credit.service.enums.CreditInFg;
 import kr.co.solbipos.membr.anals.credit.service.enums.CreditPayFg;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,13 +38,15 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Transactional
 public class CreditServiceImpl implements CreditService {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    private final CreditMapper mapper;
+    private final CmmEnvUtil cmmEnvUtil;
 
+    /** Constructor Injection */
     @Autowired
-    CreditMapper mapper;
-
-    @Autowired
-    CmmEnvUtil cmmEnvUtil;
+    public CreditServiceImpl(CreditMapper mapper, CmmEnvUtil cmmEnvUtil) {
+        this.mapper = mapper;
+        this.cmmEnvUtil = cmmEnvUtil;
+    }
 
     /** 후불 회원 외상, 입금 내역 */
     @Override

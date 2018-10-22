@@ -37,10 +37,15 @@ import kr.co.solbipos.pos.confg.func.service.FuncVO;
 @Service("funcService")
 public class FuncServiceImpl implements FuncService {
 
+    private final FuncMapper mapper;
+    private final MessageService messageService;
+
+    /** Constructor Injection */
     @Autowired
-    FuncMapper mapper;
-    @Autowired
-    MessageService messageService;
+    public FuncServiceImpl(FuncMapper mapper, MessageService messageService) {
+        this.mapper = mapper;
+        this.messageService = messageService;
+    }
 
     /** 기능구분상세 조회 */
     @Override

@@ -42,11 +42,15 @@ public class PrepaidServiceImpl implements PrepaidService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    PrepaidMapper mapper;
+    private final PrepaidMapper mapper;
+    private final CmmEnvUtil cmmEnvUtil;
 
+    /** Constructor Injection */
     @Autowired
-    CmmEnvUtil cmmEnvUtil;
+    public PrepaidServiceImpl(PrepaidMapper mapper, CmmEnvUtil cmmEnvUtil) {
+        this.mapper = mapper;
+        this.cmmEnvUtil = cmmEnvUtil;
+    }
 
     /** 선불 회원 충전, 사용 내역 */
     @Override

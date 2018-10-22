@@ -43,14 +43,18 @@ import kr.co.solbipos.pos.confg.func.service.FuncVO;
 @RequestMapping(value = "/pos/confg/func/func")
 public class FuncController {
 
-    @Autowired
-    FuncService service;
+    private final FuncService service;
+    private final SessionService sessionService;
+    private final CmmCodeUtil cmmCodeUtil;
 
+    /** Constructor Injection */
     @Autowired
-    SessionService sessionService;
-
-    @Autowired
-    CmmCodeUtil cmmCodeUtil;
+    public FuncController(FuncService service, SessionService sessionService,
+        CmmCodeUtil cmmCodeUtil) {
+        this.service = service;
+        this.sessionService = sessionService;
+        this.cmmCodeUtil = cmmCodeUtil;
+    }
 
     /**
      * 페이지 이동

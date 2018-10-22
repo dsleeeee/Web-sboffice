@@ -15,9 +15,12 @@
 <c:set var="baseUrl" value="/base/pay/coupon/" />
 
 <div class="subCon">
+  <div class="searchBar flddUnfld">
+    <a href="#" class="open">${menuNm}</a>
+  </div>
 
   <%-- 쿠폰분류등록 --%>
-  <div class="mb40" ng-controller="couponClassCtrl">
+  <div class="mb20 mt20" ng-controller="couponClassCtrl">
     <div class="wj-TblWrapBr mr10 pd20" style="height:270px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='coupon.regist.class' /></span>

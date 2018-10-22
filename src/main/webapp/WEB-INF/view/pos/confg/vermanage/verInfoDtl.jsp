@@ -189,8 +189,8 @@
             <%-- 매장추가 --%>
             <a href="#" id="btnDelStore" class="btn_grayS2"><s:message code="verManage.delete.store" /></a>
 
-            <%-- 엑셀 다운로드 --%>
-            <a href="#" id="btnExcel2" class="btn_grayS2"><s:message code="cmm.excel.down" /></a>
+            <%-- 엑셀 다운로드 //todo --%>
+            <%--<a href="#" id="btnExcel2" class="btn_grayS2"><s:message code="cmm.excel.down" /></a>--%>
           </div>
           <!--위즈모 테이블-->
           <div>
@@ -198,7 +198,6 @@
           </div>
           <!--//위즈모 테이블-->
         </div>
-
 
       </div>
     </div>
@@ -214,7 +213,7 @@
 
     <%-- dataMap 조회 --%>
     var clsFg     = ${ccu.getCommCodeExcpAll("001")};
-    var sysStatFg = ${ccu.getCommCode("009")};
+    var sysStatFg = ${ccu.getCommCode("005")};
     var verRecvFg = ${ccu.getCommCodeExcpAll("060")};
 
     var clsFgDataMap     = new wijmo.grid.DataMap(clsFg, 'value', 'name');
@@ -225,12 +224,12 @@
     var hData2 =
       [
         {binding:"gChk", header:"<s:message code='cmm.chk' />", dataType:wijmo.DataType.Boolean, width:40},
-        {binding:"storeCd", header:"<s:message code='verManage.store.storeCd' />", isReadOnly:true},
+        {binding:"storeCd", header:"<s:message code='verManage.store.storeCd' />", isReadOnly:true, width:100},
         {binding:"storeNm", header:"<s:message code='verManage.store.storeNm' />", isReadOnly:true},
-        {binding:"verRecvFg", header:"<s:message code='verManage.store.verRecvFg' />", isReadOnly:true},
+        {binding:"verRecvFg", header:"<s:message code='verManage.store.verRecvFg' />", dataMap:verRecvFgDataMap, isReadOnly:true, width:80},
         {binding:"verRecvDt", header:"<s:message code='verManage.store.verRecvDt' />", isReadOnly:true},
-        {binding:"clsFg", header:"<s:message code='verManage.store.clsFg' />", dataMap:clsFgDataMap, isReadOnly:true},
-        {binding:"sysStatFg", header:"<s:message code='verManage.store.sysStatFg' />",dataMap:sysStatFgDataMap, isReadOnly:true},
+        {binding:"clsFg", header:"<s:message code='verManage.store.clsFg' />", dataMap:clsFgDataMap, isReadOnly:true, width:50},
+        {binding:"sysStatFg", header:"<s:message code='verManage.store.sysStatFg' />",dataMap:sysStatFgDataMap, isReadOnly:true, width:60},
         {binding:"regDt", header:"<s:message code='verManage.regDt' />", isReadOnly:true},
         {binding:"regId", header:"<s:message code='verManage.regId' />", isReadOnly:true}
       ];

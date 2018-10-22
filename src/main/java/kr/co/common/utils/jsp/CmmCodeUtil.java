@@ -49,7 +49,8 @@ public class CmmCodeUtil {
      * @return
      */
     public String getListScale() {
-        String listScale[] = {"15", "20", "50", "100", "200", "300"};
+//        String listScale[] = {"15", "20", "50", "100", "200", "300"};
+        String listScale[] = {"10", "30", "50"};
 
         List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
         for (int i = 0; i < listScale.length; i++) {

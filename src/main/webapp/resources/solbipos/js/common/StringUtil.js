@@ -229,6 +229,17 @@ function removeComma(str){
 }
 
 /************************* S : CHECK VALUE *************************/
+
+function isNull(str) {
+  var returnVal = false;
+  if(str === null || str === undefined || str === "") {
+    return true;
+  }
+  return returnVal;
+}
+
+
+
 /**
  * chkByte(str)
  * - 문자열바이트체크
