@@ -96,9 +96,9 @@ var hData1 =
     {binding:"fileSize", header:"<s:message code='verManage.fileSize' />", allowMerging:true, width:70},
     {binding:"regCnt", header:"<s:message code='verManage.regCnt' />", allowMerging:true, width:55},
     {binding:"recvCnt", header:"<s:message code='verManage.recvCnt' />", allowMerging:true, width:55},
-    {binding:"regDt", header:"<s:message code='verManage.regDt' />", allowMerging:true, width:"*"},
+    {binding:"regDt", header:"<s:message code='verManage.regDt' />", allowMerging:true, width:100},
     {binding:"regId", header:"<s:message code='verManage.regId' />", allowMerging:true, width:60},
-    {binding:"useYn", header:"<s:message code='verManage.useYn' />", allowMerging:true, dataMap:useYnDataMap, width:50}
+    {binding:"useYn", header:"<s:message code='verManage.useYn' />", allowMerging:true, dataMap:useYnDataMap, width:60}
   ];
 
 <%-- 그리드 생성 --%>
