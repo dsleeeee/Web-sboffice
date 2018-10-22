@@ -8,11 +8,10 @@
 <c:set var="baseUrl" value="/pos/confg/func/func/" />
 
 <div class="subCon">
-
-  <div class="wj-TblWrap mb40">
+  <div class="wj-TblWrap">
     <!--left-->
     <div class="w50 fl" style="width: 30%">
-      <div class="wj-TblWrapBr mr10 pd20" style="height: 580px;">
+      <div class="wj-TblWrapBr mr10 pd20" >
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='func.funFg' /></span>
       </div>
@@ -20,8 +19,8 @@
         <div id="theGrid1"></div>
       </div>
     </div>
-    <div class="w50 fr" style="width: 70%">
-      <div class="wj-TblWrapBr ml10 pd20" style="height: 580px;">
+    <div class="w50 fr" style="width: 70%;">
+      <div class="wj-TblWrapBr ml10 pd20" style="height: 560px; overflow-y: hidden; overflow-x: hidden;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30">기능 <span id="funcName"></span></span>
           <%--버튼 --%>
@@ -42,7 +41,7 @@
           </button>
         </div>
         <%-- 기능구분 상세 --%>
-        <div id="theGrid2" style="height: 495px;"></div>
+        <div id="theGrid2" style="height: 485px;"></div>
       </div>
     </div>
   </div>
