@@ -118,6 +118,60 @@
        AND A.USE_YN = 'Y'
   </select>
 
+    <!-- 권한 있는 리소스 가져오기 -->
+    <select id="selectAuthMenu" parameterType="sessionInfoVO" resultType="resrceInfoVO">
+        /* AuthMapper.selectAuthMenu */
+         SELECT *
+           FROM (
+             SELECT DISTINCT RESRCE_CD,
+                    P_RESRCE,
+                    RESRCE_FG,
+                    FUNC_FG,
+                    RESRCE_NM,
+                    URL,
+                    SPCL_AUTHOR,
+                    DISP_LEVEL,
+                    DISP_IDX,
+                    USE_YN,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+               FROM TB_WB_RESRCE_INFO
+              START WITH RESRCE_CD IN (
+                    SELECT RESRCE_CD
+                      FROM TB_WB_RESRCE_INFO
+                     WHERE RESRCE_CD IN (
+                      SELECT RESRCE_CD
+                        FROM TB_WB_AUTHOR_GRP_RESRCE
+                       WHERE AUTH_GRP_CD = (
+                        SELECT AUTH_GRP_CD
+                          FROM TB_WB_USER_INFO
+                         WHERE USER_ID = #{userId}
+                        ) AND USE_YN = 'Y'
+                     UNION ALL
+                    SELECT RESRCE_CD
+                      FROM TB_WB_AUTHOR_EXCEPT
+                     WHERE USER_ID = #{userId}
+                       AND INCLD_EXCLD_FG = 'I'
+                       AND USE_YN = 'Y'
+                      )
+              AND RESRCE_CD NOT IN (
+                    SELECT RESRCE_CD
+                      FROM TB_WB_AUTHOR_EXCEPT
+                     WHERE USER_ID = #{userId}
+                       AND INCLD_EXCLD_FG = 'E'
+                       AND USE_YN = 'Y')
+              /*AND RESRCE_FG = 'F'*/
+              )
+          CONNECT BY PRIOR P_RESRCE = RESRCE_CD
+        <![CDATA[
+              AND LEVEL < 3
+        ]]>
+         )
+         ORDER BY URL ASC
+      </select>
+
   <select id="selectAllResrce" parameterType="DefaultMap" resultType="DefaultMap">
     /* CmmMenuMapper.selectAllResrce */
      SELECT A.P_RESRCE PCD,

@@ -146,7 +146,7 @@ public class VirtualLoginController {
             // sessionId 세팅
             sessionInfoVO.setSessionId( generateUUID() );
             // 권한 있는 메뉴 저장
-            sessionInfoVO.setAuthMenu( authService.selectAuthMenu( sessionInfoVO ) );
+            sessionInfoVO.setAuthMenu( cmmMenuService.selectAuthMenu( sessionInfoVO ) );
             // 고정 메뉴 리스트 저장
             sessionInfoVO.setFixMenu( cmmMenuService.selectFixingMenu( sessionInfoVO ) );
             // 즐겨찾기 메뉴 리스트 저장

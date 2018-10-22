@@ -31,7 +31,8 @@ public class RedisConnServiceImpl implements RedisConnService {
     /**
      * Constructor Injection
      */
-    @Autowired public RedisConnServiceImpl(JedisConnectionFactory jedisConnectionFactory) {
+    @Autowired
+    public RedisConnServiceImpl(JedisConnectionFactory jedisConnectionFactory) {
         this.jedisConnectionFactory = jedisConnectionFactory;
     }
 
@@ -39,7 +40,8 @@ public class RedisConnServiceImpl implements RedisConnService {
         this.healthCheckDelaySeconds = healthCheckDelaySeconds;
     }
 
-    @Override public void enable() {
+    @Override
+    public void enable() {
 
         LOGGER.error(
             "\n■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n"
@@ -49,7 +51,8 @@ public class RedisConnServiceImpl implements RedisConnService {
         this.available = true;
     }
 
-    @Override public void disable() {
+    @Override
+    public void disable() {
 
         LOGGER.error(
             "\n■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n"
@@ -66,15 +69,19 @@ public class RedisConnServiceImpl implements RedisConnService {
         this.healthCheck();
     }
 
-    @Override public boolean isAvailable() {
+    @Override
+    public boolean isAvailable() {
         return available;
     }
 
-    @Override public boolean isNotAvailable() {
+    @Override
+    public boolean isNotAvailable() {
         return !available;
     }
 
-    @Override @Async public void healthCheck() {
+    @Override
+    @Async
+    public void healthCheck() {
 
         LOGGER.debug("Redis server to reconnect after {} seconds.", healthCheckDelaySeconds);
 
@@ -115,7 +122,9 @@ public class RedisConnServiceImpl implements RedisConnService {
         }
     }
 
-    @Override @Async public String ping() {
+    @Override
+    @Async
+    public String ping() {
         return jedisConnectionFactory.getConnection().ping();
     }
 

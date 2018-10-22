@@ -7,7 +7,6 @@ import kr.co.common.system.BaseEnv;
 import kr.co.common.template.RedisCustomTemplate;
 import kr.co.common.utils.SessionUtil;
 import kr.co.common.utils.spring.WebUtil;
-import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import org.slf4j.Logger;
@@ -33,17 +32,24 @@ import static org.springframework.util.StringUtils.isEmpty;
 @Service("sessionService")
 public class SessionServiceImpl implements SessionService {
     
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    @Autowired
-    RedisConnService redisConnService;
-    @Autowired
-    AuthService authService;
-    @Autowired
-    CmmMenuService cmmMenuService;
-    @Autowired
-    private RedisCustomTemplate<String, SessionInfoVO> redisCustomTemplate;
-
     private static final String SESSION_KEY = "SBSESSIONID";
+
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
+    private final RedisConnService redisConnService;
+    private final CmmMenuService cmmMenuService;
+    private final RedisCustomTemplate<String, SessionInfoVO> redisCustomTemplate;
+
+    /** Constructor Injection */
+    @Autowired
+    public SessionServiceImpl(RedisConnService redisConnService,
+        CmmMenuService cmmMenuService,
+        RedisCustomTemplate<String, SessionInfoVO> redisCustomTemplate) {
+        this.redisConnService = redisConnService;
+        this.cmmMenuService = cmmMenuService;
+        this.redisCustomTemplate = redisCustomTemplate;
+    }
+
 
     @Override
     public String setSessionInfo( HttpServletRequest request, HttpServletResponse response,
@@ -53,7 +59,7 @@ public class SessionServiceImpl implements SessionService {
         // sessionId 세팅
         sessionInfoVO.setSessionId( sessionId );
         // 권한 있는 메뉴 저장
-        sessionInfoVO.setAuthMenu( authService.selectAuthMenu( sessionInfoVO ) );
+        sessionInfoVO.setAuthMenu( cmmMenuService.selectAuthMenu( sessionInfoVO ) );
         // 고정 메뉴 리스트 저장
         sessionInfoVO.setFixMenu( cmmMenuService.selectFixingMenu( sessionInfoVO ) );
         // 즐겨찾기 메뉴 리스트 저장

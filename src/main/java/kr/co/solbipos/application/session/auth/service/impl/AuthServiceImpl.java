@@ -4,7 +4,6 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.security.EncUtil;
-import kr.co.solbipos.application.common.service.ResrceInfoVO;
 import kr.co.solbipos.application.session.auth.enums.LoginOrigin;
 import kr.co.solbipos.application.session.auth.enums.LoginResult;
 import kr.co.solbipos.application.session.auth.enums.UserStatFg;
@@ -273,11 +272,6 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public <E> List<E> selectLoginHist(LoginHistVO loginHistVO) {
         return authMapper.selectLoginHist(loginHistVO);
-    }
-
-    @Override
-    public List<ResrceInfoVO> selectAuthMenu(SessionInfoVO sessionInfoVO) {
-        return authMapper.selectAuthMenu(sessionInfoVO);
     }
 
 }

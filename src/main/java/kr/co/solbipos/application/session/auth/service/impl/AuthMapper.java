@@ -1,6 +1,5 @@
 package kr.co.solbipos.application.session.auth.service.impl;
 
-import kr.co.solbipos.application.common.service.ResrceInfoVO;
 import kr.co.solbipos.application.session.auth.service.LoginHistVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -52,14 +51,6 @@ public interface AuthMapper {
      * @return
      */
     <E> List<E> selectLoginHist(LoginHistVO loginHistVO);
-
-
-    /**
-      * 권한 있는 메뉴 리스트 조회
-      * @param sessionInfoVO
-      * @return
-      */
-    List<ResrceInfoVO> selectAuthMenu(SessionInfoVO sessionInfoVO);
 
     /**
      * POS 로그인시 하드웨어인증키 체크
