@@ -330,8 +330,8 @@ public class CmmCodeUtil {
      *
      * @return
      */
-    public String getVanList() {
-        List<DefaultMap<String>> agencyList = cmmCodeService.getVanList();
+    public String getVanList(String vanFg) {
+        List<DefaultMap<String>> agencyList = cmmCodeService.getVanList(vanFg);
 
         // 결과 형태를 만들어서 json 으로 리턴
         return assmblObj(agencyList, "vanNm", "vanCd", UseYn.ALL);

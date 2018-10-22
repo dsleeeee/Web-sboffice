@@ -70,7 +70,7 @@ public interface CmmCodeService {
     /**
      * 벤사 목록 조회
      */
-    <E> List<E> getVanList();
+    <E> List<E> getVanList(String vanFg);
 
     /**
      * 본사 목록 조회

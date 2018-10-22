@@ -10,6 +10,7 @@ import kr.co.sample.application.domain.TestTableVO;
 import kr.co.sample.application.domain.TmpBoardTVO;
 import kr.co.sample.application.domain.TmpDragtTVO;
 import kr.co.solbipos.application.common.service.ResrceInfoVO;
+import org.springframework.stereotype.Repository;
 
 /**
  * 샘플
@@ -17,6 +18,7 @@ import kr.co.solbipos.application.common.service.ResrceInfoVO;
  * @author 정용길
  *
  */
+@Repository
 public interface SampleMapper {
 
     <E> List<E> selectSample(String param);
