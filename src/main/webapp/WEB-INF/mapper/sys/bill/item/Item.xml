@@ -40,18 +40,18 @@
         FROM
             TB_CM_PRINT_CODE tcpc
         <where>
+            <!--
             <if test='prtCd != null and prtCd != ""'>
             <![CDATA[
                 tcpc.PRT_CD = #{prtCd}
             ]]>
             </if>
-            <!--
+            -->
             <if test='prtNm != null and prtNm != ""'>
                 <![CDATA[
                 AND tcpc.PRT_NM LIKE '%'||#{prtNm}||'%'
                 ]]>
             </if>
-            -->
         </where>
         ORDER BY tcpc.PRT_CD
     </select>

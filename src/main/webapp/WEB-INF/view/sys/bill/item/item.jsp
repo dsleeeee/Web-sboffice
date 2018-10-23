@@ -22,19 +22,19 @@
     <tbody>
       <tr>
         <%-- 코드 --%>
+        <%--
         <th><s:message code="item.prtCd" /></th>
         <td>
           <input type="text" class="sb-input w100" id="srchPrtCd" ng-model="prtCd" />
         </td>
-        <th></th>
-        <td></td>
+        --%>
         <%-- 코드명 --%>
-        <%--
         <th><s:message code="item.prtNm" /></th>
         <td>
           <input type="text" class="sb-input w100" id="srchPrtNm" ng-model="prtNm" />
         </td>
-        --%>
+        <th></th>
+        <td></td>
       </tr>
       <tr>
     </tbody>
