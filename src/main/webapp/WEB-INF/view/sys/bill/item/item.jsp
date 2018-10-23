@@ -22,25 +22,29 @@
     <tbody>
       <tr>
         <%-- 코드 --%>
+        <%--
         <th><s:message code="item.prtCd" /></th>
         <td>
           <input type="text" class="sb-input w100" id="srchPrtCd" ng-model="prtCd" />
         </td>
+        --%>
         <%-- 코드명 --%>
         <th><s:message code="item.prtNm" /></th>
         <td>
           <input type="text" class="sb-input w100" id="srchPrtNm" ng-model="prtNm" />
         </td>
+        <th></th>
+        <td></td>
       </tr>
       <tr>
     </tbody>
   </table>
-  
+
   <%-- 조회 --%>
   <div class="mt10 oh">
       <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('printCodeCtrl')"><s:message code="cmm.search" /></button>
   </div>
-    
+
   <div class="w50 fl mt40" style="width: 100%">
     <%--위즈모 테이블--%>
     <div id="gridPrintCode" class="wj-TblWrapBr mr10 pd20" style="height: 480px;">
@@ -80,6 +84,6 @@
     </div>
     <%--//위즈모 테이블--%>
   </div>
-  
+
 </div>
 <script type="text/javascript" src="/resource/solbipos/js/sys/bill/item/item.js?ver=20181018.01" charset="utf-8"></script>

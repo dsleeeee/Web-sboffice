@@ -40,11 +40,13 @@
         FROM
             TB_CM_PRINT_CODE tcpc
         <where>
+            <!--
             <if test='prtCd != null and prtCd != ""'>
             <![CDATA[
                 tcpc.PRT_CD = #{prtCd}
             ]]>
             </if>
+            -->
             <if test='prtNm != null and prtNm != ""'>
                 <![CDATA[
                 AND tcpc.PRT_NM LIKE '%'||#{prtNm}||'%'
@@ -53,7 +55,7 @@
         </where>
         ORDER BY tcpc.PRT_CD
     </select>
-    
+
     <!-- 출력코드 수정 -->
     <!--
         TABLE    : TB_CM_PRINT_CODE
@@ -77,7 +79,7 @@
             PRT_CD = #{prtCd}
         ]]>
     </update>
-    
+
     <!-- 출력코드 생성 -->
     <!--
         TABLE    : TB_CM_PRINT_CODE
@@ -111,5 +113,5 @@
             #{modId}
         )
     </insert>
-    
+
 </mapper>

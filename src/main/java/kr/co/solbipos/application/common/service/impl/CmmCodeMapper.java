@@ -1,5 +1,6 @@
 package kr.co.solbipos.application.common.service.impl;
 
+import kr.co.solbipos.sys.etc.vancard.service.VanCmpnyVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -41,7 +42,7 @@ public interface CmmCodeMapper {
      * 벤사 목록 조회
      * @return
      */
-    <E> List<E> selectVanList();
+    <E> List<E> selectVanList(VanCmpnyVO vanCmpnyVO);
 
     /**
      * 본사 목록 조회

@@ -144,6 +144,10 @@
       return $.ajax({
         type: "POST",
         url: url,
+        cache: false,
+        async: true,
+        dataType: "json",
+        contentType : 'application/json',
         data: JSON.stringify(data),
         success: function(result) {
           if(result.status === "OK") {
@@ -165,10 +169,6 @@
             alert(msg);
           }
         },
-        cache: false,
-        async:true,
-        dataType: "json",
-        contentType : 'application/json',
         beforeSend: function() {
           $("#_saveTent, #_saving").show();
         },
@@ -304,88 +304,6 @@
 
 }( "undefined" !== typeof window ? window : this, jQuery );
 
-//트리 생성용 변수
-var pNode;
-var allMenu = "";
-var bkmkMenu = "";
-// 트리 생성
-function makeTree(div, data, initMenu) {
-
-  var tree = new wijmo.nav.TreeView(div, {
-    displayMemberPath: 'nm',
-    childItemsPath: 'items',
-    autoCollapse: true,
-    expandOnClick: false
-  });
-
-  // 트리의 아이템이 load 완료 되었을 때 이벤트
-  tree.loadedItems.addHandler(function(s, e) {
-    var node;
-    // 아이콘 Class 추가
-    for (node = s.getFirstNode(); node; node = node.nextSibling()) {
-      if(!isEmpty(node)){
-        wijmo.addClass(node.element, node.dataItem.icon);
-      }
-    }
-    s.collapseToLevel(0);
-
-    // 초기 메뉴(현재 메뉴) 설정
-    if(initMenu) {
-      for (node = s.getFirstNode(); node; node = node.next()) {
-        if(isEmpty(node.nodes)) {
-          if(!isEmpty(node.dataItem) && node.dataItem.cd === initMenu) {
-            s.selectedItem = node.dataItem;
-          }
-        }
-      }
-    }
-  });
-
-  // 선택된 메뉴가 변경 되었을 때 이벤트
-  tree.selectedItemChanged.addHandler(function(s, e) {
-    var node;
-    // 이전 메뉴의 클래스 제거
-    if(pNode) {
-      for (node = pNode; node; node = node.parentNode) {
-        wijmo.removeClass(node.element, "on");
-      }
-    }
-    // 선택된 메뉴에 클래스 추가
-    for (node = s.selectedNode; node; node = node.parentNode) {
-      wijmo.addClass(node.element, "on");
-    }
-    pNode = s.selectedNode;
-  });
-
-  // 아이템 클릭 시 이벤트
-  tree.itemClicked.addHandler(function(s, e) {
-    // URL 이 있을 경우 페이지 이동
-    if(!isEmpty(s.selectedNode.dataItem.url)) {
-      location.href = s.selectedNode.dataItem.url;
-      // 가상로그인시 파라미터인 SessionID 설정
-      if( document.getElementsByName("sessionId").length > 0 ) {
-        var vSessionId = document.getElementsByName("sessionId")[0].value;
-        location.href = s.selectedNode.dataItem.url + "?sid=" + vSessionId;
-      }
-    }
-    // 같은 메뉴를 다시 선택 했을 때 메뉴 닫기 기능
-    if( pNode === s.selectedNode) {
-      s.selectedNode.isCollapsed = !s.selectedNode.isCollapsed;
-    }
-    else {
-      s.selectedNode.isCollapsed = false;
-    }
-  });
-
-  /* Tree 생성자에서 데이터를 넣는 경우에는 이벤트 핸들러를 생성자에 넣을 수 있다.
-  데이터를 생성자에서 넣으면서 이벤트를 나중에 선언하면 생성 시 이벤트 처리 안됨
-  아래 처럼 이벤트를 다 선언한 후에 데이터를 넣어야 한다.
-  */
-  tree.itemsSource = data;
-
-  return tree;
-}
-
 function getParam(name){
   var result = "";
   var queryString = window.location.search;
@@ -408,148 +326,6 @@ function getParam(name){
     }
   }
   return result;
-}
-
-/** 현재 날짜 가져오기 */
-function getCurDate(seperator) {
-  try {
-    if (seperator === undefined) seperator = "";
-
-    var date = new Date();
-    var year = date.getFullYear();
-    var month = date.getMonth() + 1;
-    var day = date.getDate();
-
-    if (("" + month).length === 1) month = "0" + month;
-    if (("" + day).length === 1) day = "0" + day;
-
-    return (year + seperator + month + seperator + day);
-  }
-  catch (e) {
-    //alert('udfMainFrm.js : '+e);
-  }
-}
-
-// 날짜 포맷
-function getFormatDate(date, seperator)
-{
-    try
-    {
-        if(date.length < 8) return date;
-        var seperator = ((seperator === undefined || seperator === '') ? '-' : seperator);
-        var year  = date.substr(0,4);
-        var month = date.substr(4,2);
-        var day   = date.substr(6,2);
-        return (year + seperator + month + seperator + day );
-    }
-    catch(e)
-    {
-        //alert('udfMainFrm.js : '+e);
-    }
-}
-
-// 날짜+시간 포맷
-function getFormatDateTime(date, seperator_date, seperator_time)
-{
-    try
-    {
-        if(date.length < 14) return date;
-        var seperator_date = ((seperator_date === undefined || seperator_date === '') ? '-' : seperator_date);
-        var seperator_time = ((seperator_time === undefined || seperator_time === '') ? ':' : seperator_time);
-        var year   = date.substr(0,4);
-        var month  = date.substr(4,2);
-        var day    = date.substr(6,2);
-        var hour   = date.substr(8,2);
-        var minute = date.substr(10,2);
-        var second = date.substr(12,2);
-        return (year + seperator_date + month + seperator_date + day + ' ' +hour + seperator_time + minute + seperator_time + second);
-    }
-    catch(e)
-    {
-        //alert('udfMainFrm.js : '+e);
-    }
-}
-
-String.prototype.getByteLength = function() {
-    var i, c;
-    for(var size=i=0;c=this.charCodeAt(i++);size+=c>>11?2:c>>7?2:1);
-    return size;
-};
-
-/** 오라클에서 한글을 3바이트로 인식해서 한글인 경우 3바이트로 byte length 함수가 필요하여 추가 */
-String.prototype.getByteLengthForOracle = function() {
-  var i, c;
-  for(var size=i=0;c=this.charCodeAt(i++);size+=c>>11?3:c>>7?2:1);
-  return size;
-};
-
-String.prototype.centerPad = function(padStr, padLen) {
-    if ( parseInt(padLen) + 1 <= this.getByteLength() ) {
-        return this;
-    } else {
-        var calcLen = padLen - this.getByteLength();
-        var leftPad = Math.ceil(calcLen / 2);
-        var rightPad = calcLen - rightPad + 1;
-        return Array(leftPad).join(padStr).concat(this,Array(rightPad+1).join(padStr));
-    }
-};
-
-String.prototype.leftPad = function(padStr, padLen) {
-  if ( parseInt(padLen) + 1 <= this.getByteLength() ) {
-    return this;
-  } else {
-    var leftPad = padLen - this.getByteLength() + 1;
-    return Array(leftPad).join(padStr).concat(this);
-  }
-};
-
-String.prototype.rightPad = function(padStr, padLen) {
-    if ( parseInt(padLen) + 1 <= this.getByteLength() ) {
-        return this;
-    } else {
-        var rightPad = padLen - this.getByteLength() + 1;
-        return this.concat(Array(rightPad).join(padStr));
-    }
-};
-
-String.prototype.setPadding = function(padType, padStr, padLen) {
-    if ( padType === "C" ) {
-        return this.centerPad(padStr, padLen);
-    } else if ( padType === "L" ) {
-        return this.leftPad(padStr, padLen);
-    } else if ( padType === "R" ) {
-        return this.rightPad(padStr, padLen);
-    }
-};
-
-String.prototype.splitByteLen = function(byteLen) {
-    var resultArr = new Array();
-    var rIndex = 0;
-    var valueByteLen = this.getByteLength();
-    var valueLen = this.length;
-    var bIndex = valueLen - 1;
-    var str = "";
-
-    if (valueByteLen <= byteLen) {
-        return resultArr[0] = this;
-    } else {
-        for (var i = 0; i < valueLen; i++) {
-            str += this.charAt(i);
-            if ((str + this.charAt(i + 1)).getByteLength() > byteLen) {
-                resultArr[rIndex++] = str;
-                str = "";
-            }
-            if (i === bIndex) {
-                resultArr[rIndex++] = str;
-            }
-        }
-        return resultArr;
-    }
-};
-
-function addComma(str) {
-  var regexp = /\B(?=(\d{3})+(?!\d))/g;
-  return str.toString().replace(regexp, ',');
 }
 
 // 링크 태그 IE 팝업 방지( 이 웹사이트가 컴퓨터에서 앱을 열도록허용하시겠습니까? )

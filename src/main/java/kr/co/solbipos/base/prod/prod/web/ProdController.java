@@ -29,7 +29,8 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2018.08.06  장혁수      최초생성
+ * @ 2018.08.06  장혁수       최초생성
+ * @ 2018.10.19  노현수       생성자 주입, 상품조회 관련 변경
  *
  * @author NHN한국사이버결제 KCP 장혁수
  * @since 2018. 08.06
@@ -41,14 +42,17 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 @RequestMapping(value = "/base/prod/prod/prod")
 public class ProdController {
 
-    private final String RESULT_URI = "base/prod/prod";
+    private final SessionService sessionService;
+    private final MessageService messageService;
+    private final ProdService prodService;
 
+    /** Constructor Injection */
     @Autowired
-    SessionService sessionService;
-    @Autowired
-    MessageService messageService;
-    @Autowired
-    ProdService prodService;
+    public ProdController(SessionService sessionService, MessageService messageService, ProdService prodService) {
+        this.sessionService = sessionService;
+        this.messageService = messageService;
+        this.prodService = prodService;
+    }
 
     /**
      * 상품조회
@@ -61,7 +65,7 @@ public class ProdController {
 
     @RequestMapping(value = "/list.sb", method = RequestMethod.GET)
     public String view(HttpServletRequest request, HttpServletResponse response, Model model) {
-        return RESULT_URI + "/prod";
+        return "base/prod/prod/prod";
     }
 
     /**
@@ -82,8 +86,8 @@ public class ProdController {
 
     /**
      * 상품상세조회
-     * @param prodVO
-     * @param request
+     * @param prodVO ProdVO
+     * @param request HttpServletRequest
      * @return
      */
     @RequestMapping(value = "/view.sb", method = RequestMethod.POST)

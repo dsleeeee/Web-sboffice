@@ -36,9 +36,11 @@
 <script type="text/javascript" src="/resource/vendor/wijmo/js/wijmo.angular.min.js?ver=5.20182.500" charset="utf-8"></script>
 <%-- solbi plug-in --%>
 <%-- <script type="text/javascript" src="/resource/vendor/spin/spin.js" charset="utf-8"></script> --%>
-<script type="text/javascript" src="/resource/solbipos/js/common/common.js?ver=20181004.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/common/common.js?ver=20181023.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/common/StringUtil.js?ver=20181004.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/common/DateUtil.js?ver=20181004.01" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/common/grid.comm.js?ver=20181004.01" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/solbipos/js/common/grid.comm.angular.js?ver=20181016.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/common/grid.comm.angular.js?ver=20181023.01" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/common/gen.comm.js?ver=20181004.01" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/common/alert.min.js?ver=20181004.01" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/common/paging.min.js?ver=20181004.01" charset="utf-8"></script>

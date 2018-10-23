@@ -1,19 +1,18 @@
 package kr.co.solbipos.adi.etc.kitchenmemo.service.impl;
 
-import static kr.co.common.utils.DateUtil.currentDateTimeString;
-import java.util.List;
-
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.application.session.user.enums.OrgnFg;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.adi.etc.kitchenmemo.service.KitchenMemoService;
 import kr.co.solbipos.adi.etc.kitchenmemo.service.KitchenMemoVO;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
 * @Class Name : KitchenMemoServiceImpl.java
@@ -33,13 +32,15 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 @Service("kitchenMemoService")
 public class KitchenMemoServiceImpl implements KitchenMemoService {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    private final SessionService sessionService;
+    private final KitchenMemoMapper mapper;
 
+    /** Constructor Injection */
     @Autowired
-    SessionService sessionService;
-
-    @Autowired
-    KitchenMemoMapper mapper;
+    public KitchenMemoServiceImpl(SessionService sessionService, KitchenMemoMapper mapper) {
+        this.sessionService = sessionService;
+        this.mapper = mapper;
+    }
 
     /** 주방메모 목록 조회 */
     @Override

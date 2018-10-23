@@ -24,7 +24,6 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 @Component
 public class ResultHandlerAspect {
 
-    /** 메세지 서비스 */
     private final MessageService messageService;
 
     /** Constructor Injection */

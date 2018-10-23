@@ -45,7 +45,7 @@ app.controller('productCtrl', ['$scope', '$http', function ($scope, $http) {
         var col = ht.panel.columns[ht.col];
         prod = s.rows[ht.row].dataItem;
         if ( col.binding === "regProd") {
-          var popup = $scope.excpForwardRegistLayer;
+          var popup = $scope.productionRegistLayer;
           popup.show(true, function (s) {
           });
         }

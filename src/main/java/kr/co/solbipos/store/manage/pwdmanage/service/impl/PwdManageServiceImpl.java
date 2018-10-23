@@ -37,10 +37,15 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Service("pwdManageService")
 public class PwdManageServiceImpl implements PwdManageService {
 
+    private final MessageService messageService;
+    private final PwdManageMapper pwdManageMapper;
+
+    /** Constructor Injection */
     @Autowired
-    MessageService messageService;
-    @Autowired
-    PwdManageMapper pwdManageMapper;
+    public PwdManageServiceImpl(PwdManageMapper pwdManageMapper, MessageService messageService) {
+        this.pwdManageMapper = pwdManageMapper;
+        this.messageService = messageService;
+    }
 
     /** 비밀번호 임의변경 대상 조회 */
     @Override

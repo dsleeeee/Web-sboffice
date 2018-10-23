@@ -30,6 +30,9 @@ import java.util.List;
 @Repository
 public interface TerminalManageMapper {
 
+    /** 벤더 목록 조회 */
+    List<DefaultMap<String>> getVendorList();
+
     /** 매장 조회 */
     List<DefaultMap<String>> getStoreList(StoreManageVO storeManageVO);
 
@@ -62,6 +65,7 @@ public interface TerminalManageMapper {
 
     /** 코너 터미널 정보 수정 */
     int updateCornerTerminalInfo(StoreTerminalVO storeTerminalVO);
+
 
 }
 

@@ -149,7 +149,7 @@
     var agencyCd        = wcombo.genInput("#sAgencyCd");
     var agencyNm        = wcombo.genInput("#sAgencyNm");
     agencyNm.isReadOnly = true;
-    var vanCd           = wcombo.genCommonBox("#sVanCd", ${ccu.getVanList()});
+    var vanCd           = wcombo.genCommonBox("#sVanCd", ${ccu.getVanList("01")});
     var dateType        = wcombo.genCommonBox("#sDateType",  [{"name":"<s:message code='cmm.all.day' />","value":""},{"name":"<s:message code='storeView.lastLogin' />","value":"1"},{"name":"<s:message code='storeView.sysOpen' />","value":"2"},{"name":"<s:message code='storeView.sysClose' />","value":"3"}]);
     var startDt         = wcombo.genDateVal("#startDt", "${ufn:addDaysString( ufn:currentDateString() , -7)}");
     var endDt           = wcombo.genDateVal("#endDt", "${ufn:currentDateString()}");

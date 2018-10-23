@@ -5,6 +5,7 @@ import kr.co.common.service.code.CmmCodeService;
 import kr.co.common.service.redis.RedisConnService;
 import kr.co.common.template.RedisCustomTemplate;
 import kr.co.solbipos.application.common.service.impl.CmmCodeMapper;
+import kr.co.solbipos.sys.etc.vancard.service.VanCmpnyVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,8 +116,11 @@ public class CmmCodeServiceImpl implements CmmCodeService {
     }
 
     @Override
-    public <E> List<E> getVanList() {
-        return cmmCodeMapper.selectVanList();
+    public <E> List<E> getVanList(String vanFg) {
+        VanCmpnyVO vanCmpnyVO = new VanCmpnyVO();
+        vanCmpnyVO.setVanFg(vanFg);
+
+        return cmmCodeMapper.selectVanList(vanCmpnyVO);
     }
 
     /** 본사 목록 조회*/

@@ -15,6 +15,7 @@ import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -26,8 +27,6 @@ import java.util.List;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 /**
- * @author 솔비포스 차세대개발실 노현수
- * @version 1.0
  * @Class Name : AuthenticationInterceptor.java
  * @Description : 권한관련 Interceptor
  * @Modification Information
@@ -35,9 +34,13 @@ import static org.springframework.util.ObjectUtils.isEmpty;
  * @ 수정일       수정자      수정내용
  * @ ----------  ---------  -------------------------------
  * @ 2018.09.04  노현수      부분수정
- * @Copyright (C) by SOLBIPOS CORP. All right reserved.
- * @see
+ *
+ * @author 솔비포스 차세대개발실 노현수
  * @since 2018. 05.01
+ * @version 1.0
+ * @see
+ *
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
@@ -58,9 +61,9 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
     /**
      * preHandler : Interceptor 진입시 수행
      *
-     * @param request
-     * @param response
-     * @param handler
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param handler Object
      * @Return boolean
      */
     @Override
@@ -70,10 +73,22 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         String requestURL = request.getRequestURI().toString();
         LOGGER.info("url : {}, accept : {}, ", requestURL, request.getHeader("accept"));
 
-        /**
-         * 세션 종료 처리
-         */
-        if (!sessionService.isValidSession(request)) {
+        // 세션 가져오기
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        // 세션 상태
+        boolean isSessionValid = true;
+        // 세션 객체가 없는 경우
+        if ( StringUtils.isEmpty( sessionInfoVO ) ) {
+            isSessionValid = false;
+        } else {
+            // 세션 객체는 있지만 필수값들이 없는 경우
+            if ( StringUtils.isEmpty( sessionInfoVO.getUserId() ) && StringUtils.isEmpty( sessionInfoVO.getAuthMenu() ) ) {
+                isSessionValid = false;
+            }
+        }
+
+        // 세션 종료 처리
+        if (!isSessionValid) {
             // 로그 기록. inValidation 처리시 쉽게 알아보기 위함.
             LOGGER.info("AuthenticationInterceptor :: isValidSession :: deleteSessionInfo");
             // 세션 삭제
@@ -90,10 +105,8 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                 return false;
             }
         }
-        // 세션 가져오기
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         // 권한 메뉴
-        List<ResrceInfoVO> auth = sessionInfoVO.getAuthMenu();
+        List<ResrceInfoVO> authMenus = sessionInfoVO.getAuthMenu();
         // 유져 조회 날짜 저장
         sessionInfoVO = setUserSelectDate(request, sessionInfoVO);
 
@@ -117,7 +130,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
         // TODO :: 권한체크는 재작성 예정. 현재 로직은 굉장히 비효율적. 메뉴 단위로 변경하는 것이 좋을듯? : 20180904 노현수
         // 권한 체크
-        if (!checkUrl(request, auth, requestURL, sessionInfoVO)) {
+        if (!checkUrl(request, authMenus, requestURL, sessionInfoVO)) {
             LOGGER.error(
                 "\n■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n"
                     + "not auth : id : {},  url : {}, accept : {}", sessionInfoVO.getUserId(),
@@ -154,7 +167,6 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                     String msg = messageService.get("cmm.not.storecd") + ">>";
                     throw new AuthenticationException(msg, "/error/403.sb");
                 }
-
             } else {
                 if (!CmmUtil.listIndexOf(sessionInfoVO.getArrStoreCdList(), storeCd)) {
                     // 유효하지 않는 매장코드 입니다.
@@ -168,50 +180,53 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
     /**
      * 유져가 조회한 조회 날짜를 세션에 저장
      *
-     * @param request
-     * @param sessionInfoVO
+     * @param request HttpServletRequest
+     * @param sessionInfoVO SessionInfoVO
      */
-    private SessionInfoVO setUserSelectDate(HttpServletRequest request,
-        SessionInfoVO sessionInfoVO) {
+    private SessionInfoVO setUserSelectDate(HttpServletRequest request, SessionInfoVO sessionInfoVO) {
         String startDt = request.getParameter("startDt");
         String endDt = request.getParameter("endDt");
-        if (!isEmpty(startDt)) {
+        if ( !isEmpty(startDt) ) {
             sessionInfoVO.setStartDt(startDt);
         }
-        if (!isEmpty(endDt)) {
+        if ( !isEmpty(endDt) ) {
             sessionInfoVO.setEndDt(endDt);
         }
-        sessionService.setSessionInfo(sessionInfoVO);
+        // 값이 있는 경우에만 session 에 넣는다
+        if ( !isEmpty(startDt) || !isEmpty(endDt) ) {
+            sessionService.setSessionInfo(sessionInfoVO);
+        }
         return sessionInfoVO;
     }
 
     /**
      * 유효 URL 체크
      *
-     * @param request
-     * @param auth
-     * @param url
-     * @param sessionInfoVO
+     * @param request HttpServletRequest
+     * @param authList List<ResrceInfoVO>
+     * @param url String
+     * @param sessionInfoVO SessionInfoVO
      * @return boolean
      */
-    private boolean checkUrl(HttpServletRequest request, List<ResrceInfoVO> auth, String url,
+    private boolean checkUrl(HttpServletRequest request, List<ResrceInfoVO> authList, String url,
         SessionInfoVO sessionInfoVO) {
-
+        // main 주소는 제외
         if (url.equals("/main.sb")) {
             return true;
         }
-
-        int n = auth.size();
+        // url 파라미터 제거
+        if (url.indexOf("?") > -1) {
+            url = url.substring(0, url.indexOf("?"));
+        }
+        // url값 찾기
         boolean resultCheck = false;
-        for (int i = 0; i < n; i++) {
-            ResrceInfoVO resrceInfoVO = auth.get(i);
+        for (ResrceInfoVO resrceInfoVO : authList) {
             String authUrl = resrceInfoVO.getUrl();
             if (!isEmpty(authUrl)) {
                 // 등록된 URL 에 파라미터가 있는 경우 파라미터 제거
                 if (authUrl.indexOf("?") > -1) {
                     authUrl = authUrl.substring(0, authUrl.indexOf("?"));
                 }
-
                 if (authUrl.equals(url)) {
                     if (RequestMethod.GET.toString().equals(request.getMethod())
                         && resrceInfoVO.getResrceFg() == ResrceFg.FUNC) {
@@ -219,7 +234,6 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                     } else if (RequestMethod.POST.toString().equals(request.getMethod())) {
                         return true;
                     }
-
                     // 메뉴 일때만 사용 등록과 메뉴 히스토리에 추가함
                     if (resrceInfoVO.getResrceFg() == ResrceFg.MENU && RequestMethod.GET.toString()
                         .equals(request.getMethod())) {

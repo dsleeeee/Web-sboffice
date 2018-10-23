@@ -7,7 +7,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/sys/cd/systemCd/systemCd/" />
 
-<div class="subCon">
+<div class="subCon" ng-controller="representCtrl">
 
   <div class="searchBar flddUnfld">
     <a href="#" class="open">${menuNm}</a>
@@ -71,7 +71,7 @@
       <button class="btn_blue fr" ng-click="_broadcast('representCtrl')"><s:message code="cmm.search" /></button>
   </div>
 
-  <div id="gridRepresent" class="w50 fl mt40" style="width: 60%" ng-controller="representCtrl">
+  <div id="gridRepresent" class="w50 fl mt40" style="width: 60%">
     <%--위즈모 테이블--%>
     <div class="wj-TblWrapBr mr10 pd20" style="height: 400px;">
       <div class="updownSet oh mb10">

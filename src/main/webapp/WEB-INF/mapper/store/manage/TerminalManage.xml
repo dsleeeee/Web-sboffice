@@ -11,6 +11,24 @@
 -->
 <mapper namespace="kr.co.solbipos.store.manage.terminalManage.service.impl.TerminalManageMapper">
 
+
+
+    <!-- 벤더 목록 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE, TB_HQ_OFFICE
+        PARAM    : storeManageVO
+        COMMENTS : 매장목록을 조회한다.
+    -->
+    <select id="getVendorList" resultType="DefaultMap">
+        /* USE : TerminalManageMapper.getVendorList */
+        SELECT VAN_FG,
+               VAN_CD AS VALUE,
+               VAN_NM AS NAME
+          FROM TB_CM_VAN_CMPNY
+         ORDER BY VAN_FG, VAN_CD
+    </select>
+
+
     <!-- 매장목록 조회 -->
     <!--
         TABLE    : TB_MS_STORE, TB_HQ_OFFICE
@@ -225,15 +243,14 @@
     <update id="updatePosTerminalInfo" parameterType="storeTerminalVO">
         /* TerminalManageMapper.updatePosTerminalInfo */
         UPDATE TB_MS_POS_TERMNL
-           SET VENDOR_FG = #{vendorFg},
-               VENDOR_CD = #{vendorCd},
-               VENDOR_NM = (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '079' AND NMCODE_CD = #{vendorCd}),
-               VENDOR_TERMNL_NO = #{vendorTermnlNo},
+           SET VENDOR_TERMNL_NO = #{vendorTermnlNo},
                VENDOR_SER_NO = #{vendorSerNo},
                MOD_DT = #{modDt},
                MOD_ID = #{modId}
          WHERE STORE_CD = #{storeCd}
            AND POS_NO = #{posNo}
+           AND VENDOR_FG = #{vendorFg}
+           AND VENDOR_CD = #{vendorCd}
     </update>
 
 
@@ -280,16 +297,15 @@
     -->
     <update id="updateCornerTerminalInfo" parameterType="storeTerminalVO">
         /* TerminalManageMapper.updateCornerTerminalInfo */
-        UPDATE TB_MS_CORNER
-           SET VENDOR_FG = #{vendorFg},
-               VENDOR_CD = #{vendorCd},
-               VENDOR_NM = (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '079' AND NMCODE_CD = #{vendorCd}),
-               VENDOR_TERMNL_NO = #{vendorTermnlNo},
+        UPDATE TB_MS_CORNER_TERMNL
+           SET VENDOR_TERMNL_NO = #{vendorTermnlNo},
                VENDOR_SER_NO = #{vendorSerNo},
                MOD_DT = #{modDt},
                MOD_ID = #{modId}
          WHERE STORE_CD = #{storeCd}
            AND CORNR_CD = #{cornrCd}
+           AND VENDOR_FG = #{vendorFg}
+           AND VENDOR_CD = #{vendorCd}
     </update>
 
 </mapper>

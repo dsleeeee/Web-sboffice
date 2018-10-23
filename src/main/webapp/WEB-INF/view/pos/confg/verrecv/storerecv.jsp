@@ -30,60 +30,48 @@
         <%-- 본사코드 --%>
         <th><s:message code="verRecv.hqOfficeCd" /></th>
         <td>
-          <div class="sb-select">
-            <div id="hqOfficeCd"></div>
-          </div>
+          <input type="text" id="hqOfficeCd" name="hqOfficeCd" class="sb-input" maxlength="7" size="50">
         </td>
         <%-- 본사명 --%>
         <th><s:message code="verRecv.hqOfficeNm" /></th>
         <td>
-          <div class="sb-select">
-            <div id="hqOfficeNm"></div>
-          </div>
+          <input type="text" id="hqOfficeNm" name="hqOfficeNm" class="sb-input" maxlength="16" size="50">
         </td>
       </tr>
       <tr>
         <%-- 매장코드 --%>
         <th><s:message code="verRecv.storeCd" /></th>
         <td>
-          <div class="sb-select">
-            <div id="storeCd"></div>
-          </div>
+          <input type="text" id="storeCd" name="storeCd" class="sb-input" maxlength="5" size="50">
         </td>
         <%-- 매장명 --%>
         <th><s:message code="verRecv.storeNm" /></th>
         <td>
-          <div class="sb-select">
-            <div id="storeNm"></div>
-          </div>
+          <input type="text" id="storeNm" name="storeNm" class="sb-input" maxlength="16" size="50">
         </td>
       </tr>
       <tr>
         <%--최종버전 --%>
         <th><s:message code="verRecv.lastVer" /></th>
         <td>
-          <div class="sb-select">
-            <div id="lastVer"></div>
-          </div>
+          <input type="text" id="lastVer" name="lastVer" class="sb-input" maxlength="30" size="50">
         </td>
-        <%--빈공간 --%>
         <th></th>
         <td></td>
       </tr>
     </tbody>
   </table>
   <%-- 조회 --%>
-  <div class="mt10 pdb20 oh bb">
+  <div class="mt10 pdb20 oh">
     <button id="btnSearch" class="btn_blue fr"><s:message code="cmm.search" /></button>
   </div>
 
   <div class="mt20 oh sb-select dkbr">
-    <%--페이지 스케일 --%>
-    <div id="listScaleBox" class="w130 fl"></div>
-
-    <%-- 엑셀다운로드 버튼 --%>
+    <%-- 엑셀다운로드 버튼 //TODO --%>
+    <%--
     <div class="w150 fl"></div>
     <button id="btnExcel" class="btn_skyblue fr"><s:message code="cmm.excel.down" /></button>
+    --%>
   </div>
 
   <%-- 위즈모 테이블 --%>
@@ -93,11 +81,9 @@
 
   <%-- 페이지 리스트 --%>
   <div class="pageNum mt20">
-    <%-- id --%>
     <ul id="page" data-size="10">
     </ul>
   </div>
-  <%--// 페이지 리스트 --%>
 </div>
 
 <script>
@@ -118,23 +104,12 @@
     location.href = "/pos/confg/verRecv/verStore/list.sb";
   });
 
-  <%-- 검색조건 --%>
-  var hqOfficeCd    = wcombo.genInput("#hqOfficeCd");
-  var hqOfficeNm    = wcombo.genInput("#hqOfficeNm");
-  var storeCd       = wcombo.genInput("#storeCd");
-  var storeNm       = wcombo.genInput("#storeNm");
-  var lastVer       = wcombo.genInput("#lastVer");
-  var ldata         = ${ccu.getListScale()};
-  var listScaleBox  = wcombo.genCommonBox("#listScaleBox", ldata);
-
   <%-- 공통코드 --%>
   var mainYn  = ${cnv.getEnvCodeExcpAll("4021")};
   var posFg   = ${cnv.getEnvCodeExcpAll("4020")};
-  var payFg   = ${cnv.getEnvCodeExcpAll("204")};//TODO
 
-  var mainYnDataMap   = new wijmo.grid.DataMap(mainYn, 'value', 'name');  //TODO name, value가 바뀜
+  var mainYnDataMap   = new wijmo.grid.DataMap(mainYn, 'value', 'name');
   var posFgDataMap    = new wijmo.grid.DataMap(posFg, 'value', 'name');
-  var payFgDataMap    = new wijmo.grid.DataMap(payFg, 'value', 'name');
 
   <%-- header --%>
   var hData1 =
@@ -145,14 +120,13 @@
       {binding:"storeNm", header:"<s:message code='verRecv.storeNm' />"},
       {binding:"mainYn", header:"<s:message code='verRecv.mainYn' />", dataMap:mainYnDataMap},
       {binding:"posFg", header:"<s:message code='verRecv.posFg' />", dataMap:posFgDataMap},
-      {binding:"payFg", header:"<s:message code='verRecv.payFg' />", dataMap:payFgDataMap},
       {binding:"lastVer", header:"<s:message code='verRecv.lastVer' />"},
       {binding:"lastLoginDt", header:"<s:message code='verRecv.lastLoginDt' />"},
       {binding:"lastLoginIp", header:"<s:message code='verRecv.lastLoginIp' />"}
     ];
 
   <%-- 그리드 생성 --%>
-  var grid1 = wgrid.genGrid("#theGrid1", hData1, "${menuCd}", 1, ${clo.getColumnLayout(1)});
+  var grid1 = wgrid.genGrid("#theGrid1", hData1);
 
   <%-- 그리드 포맷 --%>
   grid1.formatItem.addHandler(function(s, e) {
@@ -188,12 +162,12 @@
     //TODO 조회조건 validation
 
     var param = {};
-    param.hqOfficeCd  = hqOfficeCd.text;
-    param.hqOfficeNm  = hqOfficeNm.text;
-    param.storeCd     = storeCd.text;
-    param.storeNm     = storeNm.text;
-    param.lastVer     = lastVer.text;
-    param.listScale   = listScaleBox.selectedValue;
+    param.hqOfficeCd  = $("#hqOfficeCd").val();
+    param.hqOfficeNm  = $("#hqOfficeNm").val();
+    param.storeCd     = $("#storeCd").val();
+    param.storeNm     = $("#storeNm").val();
+    param.lastVer     = $("#lastVer").val();
+    param.listScale   = "10";
     param.curr        = index;
 
     $.postJSON("${baseUrl}" + "list.sb", param, function(result) {
@@ -249,7 +223,7 @@
         </div>
       </div>
       <div class="btnSet">
-        <span><a href="#" id="btnClose" class="btn_gray">닫기</a></span> <%--//TODO  여기 버튼 --%>
+        <span><a href="#" id="btnClose" class="btn_gray"><s:message code="cmm.close"/></a></span>
       </div>
     </div>
   </div>

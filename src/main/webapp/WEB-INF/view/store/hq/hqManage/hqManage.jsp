@@ -222,7 +222,7 @@
   });
 </script>
 
-<%-- 버전 상세정보 레이어 --%>
+<%-- 본사 상세정보 레이어 --%>
 <c:import url="/WEB-INF/view/store/hq/hqManage/master.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>

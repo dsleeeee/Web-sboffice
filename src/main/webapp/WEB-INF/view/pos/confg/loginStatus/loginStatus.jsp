@@ -2,6 +2,7 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="ufn" uri="solbipos/function" %>
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
@@ -37,32 +38,24 @@
         <%-- 본사코드 --%>
         <th><s:message code="cmm.hedofc.cd" /></th>
         <td>
-          <div class="sb-select">
-            <div id="hqOfficeCd"></div>
-          </div>
+          <input type="text" id="hqOfficeCd" name="hqOfficeCd" class="sb-input" maxlength="7" size="50">
         </td>
         <%-- 본사명 --%>
         <th><s:message code="cmm.hedofc.nm" /></th>
         <td>
-          <div class="sb-select">
-            <div id="hqOfficeNm"></div>
-          </div>
+          <input type="text" id="hqOfficeNm" name="hqOfficeNm" class="sb-input" maxlength="16" size="50">
         </td>
       </tr>
       <tr>
         <%-- 매장 코드 --%>
         <th><s:message code="cmm.mrhst.cd" /></th>
         <td>
-          <div class="sb-select">
-            <div id="storeCd"></div>
-          </div>
+          <input type="text" id="storeCd" name="storeCd" class="sb-input" maxlength="5" size="50">
         </td>
         <%-- 매장명 --%>
         <th><s:message code="cmm.mrhst.nm" /></th>
         <td>
-          <div class="sb-select">
-            <div id="storeNm"></div>
-          </div>
+          <input type="text" id="storeNm" name="storeNm" class="sb-input" maxlength="16" size="50">
         </td>
       </tr>
       <tr>
@@ -80,17 +73,15 @@
   </table>
 
   <%-- 조회 --%>
-  <div class="mt10 pdb20 oh bb">
+  <div class="mt5 pdb20 oh">
     <button class="btn_blue fr" id="searchBtn">
       <s:message code="cmm.search" />
     </button>
   </div>
 
-
-  <div class="mt20 oh sb-select dkbr">
+  <div class="mt5 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
     <div id="listScaleBox" class="w150 fl"></div>
-
     <%-- 엑셀 다운로드 //TODO --%>
     <%--
     <button class="btn_skyblue fr" id="excelBtn">
@@ -106,7 +97,6 @@
 
   <%-- 페이지 리스트 --%>
   <div class="pageNum mt20">
-    <%-- id --%>
     <ul id="page1" data-size="10">
     </ul>
   </div>
@@ -118,30 +108,26 @@ $(document).ready(function(){
 
   var rdata =
     [
-      {binding:"rnum",header:"No"},
-      {binding:"hqOfficeCd",header:"<s:message code='loginStatus.hqOfficeCd' />"},
-      {binding:"hqOfficeNm",header:"<s:message code='loginStatus.hqOfficeNm' />"},
-      {binding:"storeCd",header:"<s:message code='loginStatus.storeCd' />"},
-      {binding:"storeNm",header:"<s:message code='loginStatus.storeNm' />"},
-      {binding:"posNo",header:"<s:message code='loginStatus.posNo' />"},
-      {binding:"loginDate",header:"<s:message code='loginStatus.loginDate' />"},
-      {binding:"hwAuthKey",header:"<s:message code='loginStatus.hwAuthKey' />"},
-      {binding:"loginIp",header:"<s:message code='loginStatus.loginIp' />"},
-      {binding:"loginDt",header:"<s:message code='loginStatus.loginDt' />"},
-      {binding:"posVerNo",header:"<s:message code='loginStatus.posVerNo' />"},
-      {binding:"sysStatFgNm",header:"<s:message code='loginStatus.sysStatFgNm' />"}
+      {binding:"rnum",header:"No", visible:false},
+      {binding:"hqOfficeCd",header:"<s:message code='loginStatus.hqOfficeCd' />", width:90, align:"center"},
+      {binding:"hqOfficeNm",header:"<s:message code='loginStatus.hqOfficeNm' />", width:120, align:"center"},
+      {binding:"storeCd",header:"<s:message code='loginStatus.storeCd' />", width:80, align:"center"},
+      {binding:"storeNm",header:"<s:message code='loginStatus.storeNm' />", width:"*", align:"center"},
+      {binding:"posNo",header:"<s:message code='loginStatus.posNo' />", width:60, align:"center"},
+      {binding:"loginDate",header:"<s:message code='loginStatus.loginDate' />", width:80, align:"center"},
+      {binding:"hwAuthKey",header:"<s:message code='loginStatus.hwAuthKey' />", width:130, align:"center"},
+      {binding:"loginIp",header:"<s:message code='loginStatus.loginIp' />", width:90, align:"center"},
+      {binding:"loginDt",header:"<s:message code='loginStatus.loginDt' />", width:120, align:"center"},
+      {binding:"posVerNo",header:"<s:message code='loginStatus.posVerNo' />", width:100, align:"center"},
+      {binding:"sysStatFgNm",header:"<s:message code='loginStatus.sysStatFgNm' />", width:75, align:"center"}
     ];
 
   var grid         = wgrid.genGrid("#theGrid", rdata);
-  var hqOfficeCd   = wcombo.genInput("#hqOfficeCd");
-  var hqOfficeNm   = wcombo.genInput("#hqOfficeNm");
-  var storeCd      = wcombo.genInput("#storeCd");
-  var storeNm      = wcombo.genInput("#storeNm");
-  var startDt      = wcombo.genDateVal("#startDt", "${sessionScope.sessionInfo.startDt}");
+  var startDt       = wcombo.genDateVal("#startDt", "${ufn:addDaysString( ufn:currentDateString() , -7)}");
   var endDt        = wcombo.genDateVal("#endDt", "${sessionScope.sessionInfo.endDt}");
   var ldata        = ${ccu.getListScale()};
-  var listScaleBox = wcombo.genCommonBox("#listScaleBox", ldata);
   var cdata        = ${ccu.getCommCode("005")};
+  var listScaleBox = wcombo.genCommonBox("#listScaleBox", ldata);
   var sysStatFg    = wcombo.genCommonBox("#sysStatFg", cdata);
 
   function search(index) {
@@ -150,10 +136,10 @@ $(document).ready(function(){
     param.startDt = getDate(startDt);
     param.endDt = getDate(endDt);
     param.chkDt = $('#chkDt').is(":checked");
-    param.hqOfficeCd = hqOfficeCd.text;
-    param.hqOfficeNm = hqOfficeNm.text;
-    param.storeCd = storeCd.text;
-    param.storeNm = storeNm.text;
+    param.hqOfficeCd = $("#hqOfficeCd").val();
+    param.hqOfficeNm = $("#hqOfficeNm").val();
+    param.storeCd = $("#storeCd").val();
+    param.storeNm = $("#storeNm").val();
     param.sysStatFg = sysStatFg.selectedValue;
     param.listScale = listScaleBox.selectedValue;
     param.curr = index;
@@ -163,6 +149,9 @@ $(document).ready(function(){
 
       if(list.length == 0) {
         s_alert.pop(result.message);
+        grid.itemsSource = [];
+
+        return false;
       }
 
       grid.itemsSource = list;

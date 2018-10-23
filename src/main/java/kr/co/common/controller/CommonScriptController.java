@@ -57,19 +57,6 @@ public class CommonScriptController {
     }
 
     /**
-     * 메뉴 생성용 변수 : JSP에 코딩하여 JS처럼 사용
-     *
-     * @param request
-     * @return String
-     * @author 노현수
-     * @since 2018. 08. 03.
-     */
-    @RequestMapping(value = "/menu.js")
-    public ModelAndView menuVariables(HttpServletRequest request) {
-        return new ModelAndView("application/variables/menuVariable");
-    }
-
-    /**
      * 공통 변수 : JSP에 코딩하여 JS처럼 사용
      *
      * @param request

@@ -87,8 +87,8 @@
       </if>
             #{accntCd},
             #{accntNm},
-            #{accntFg},
-            #{useYn},
+            #{accntFg, jdbcType=VARCHAR},
+            #{useYn, jdbcType=VARCHAR},
             #{regDt},
             #{regId},
             #{modDt},
@@ -106,6 +106,7 @@
       <if test="orgnFg != null and orgnFg.toString() == 'HQ'">
         UPDATE TB_HQ_ACCOUNT
            SET ACCNT_NM = #{accntNm},
+               USE_YN = #{useYn, jdbcType=VARCHAR},
                MOD_DT = #{modDt},
                MOD_ID = #{modId}
          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
@@ -114,6 +115,7 @@
       <if test="orgnFg != null and orgnFg.toString() == 'STORE'">
         UPDATE TB_MS_ACCOUNT
            SET ACCNT_NM = #{accntNm},
+               USE_YN = #{useYn, jdbcType=VARCHAR},
                MOD_DT = #{modDt},
                MOD_ID = #{modId}
          WHERE STORE_CD = #{storeCd}

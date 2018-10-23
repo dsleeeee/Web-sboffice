@@ -34,15 +34,13 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
   // 포스 콥보박스 선택값 (포스 콤보박스 선택시, 해당 포스의 터미널 정보 조회)
   $scope.posFgVal = "01";
   $scope.setPosFgVal = function(s,e){
-
-    if(s.selectedValue === undefined || s.selectedValue === "") {
+    if(isNull(s.selectedValue)) {
       return false;
     }
 
     $scope.posFgVal = s.selectedValue;
 
     var posScope = agrid.getScope('posCtrl');
-
     posScope.getPosSetting();
   };
   $scope.getPosFgVal = function(){
@@ -53,14 +51,13 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.cornerFgVal = "01";
   $scope.setCornerFgVal = function(s,e){
 
-    if(s.selectedValue === undefined || s.selectedValue === "") {
+    if(isNull(s.selectedValue)){
       return false;
     }
 
     $scope.cornerFgVal = s.selectedValue;
 
     var cornerScope = agrid.getScope('cornerCtrl');
-
     cornerScope.getCornerSetting();
   };
   $scope.getCornerFgVal = function(){
@@ -70,17 +67,16 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
   // 콤보박스 생성 및 데이터 초기화
   $scope.comboDt = { posCombo:null, cornerCombo:null }
 
-  $scope.posFgArr = [
-    {value:"", name:"POS 선택"}
-  ];
+  $scope.posFgArr = [];
+  $scope.cornerFgArr = [];
 
-  $scope.cornerFgArr = [
-    {value:"", name:"코너 선택"}
-  ];
+  $scope.resetCombobox = function(){
 
-  $scope.addComboData = function(){
-    $scope.comboDt.posCombo.itemsSource = new wijmo.collections.CollectionView( $scope.posFgArr);
-    $scope.comboDt.cornerCombo.itemsSource = new wijmo.collections.CollectionView( $scope.cornerFgArr);
+    $scope.posFgArr = [];
+    $scope.cornerFgArr = [];
+
+    $scope.posFgArr.push({value:"", name:"POS 선택"});
+    $scope.cornerFgArr.push({value:"", name:"코너 선택"})
   };
 
   $scope._setComboData("terminalFg", terminalFg);
@@ -90,7 +86,9 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
     var popup = $scope.storeLayer;
     popup.show(true, function (s) {
       var storeData = agrid.getScope('storeCtrl');
-      storeData._gridDataInit(); //TODO 초기화가 잘 안됨
+      storeData.$apply(function(){
+        storeData._gridDataInit();
+      });
       var data = storeData.getSelectedStore();
 
       $("#storeInfo").val("["+data.storeCd+"] "+data.storeNm);
@@ -108,7 +106,7 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
   // 해당 매장의 코너목록과 포스목록도 함께 조회
   $scope.search = function (){
 
-    if($("#storeCd").val() === null || $("#storeCd").val() === "") {
+    if(isNull($("#storeCd").val())) {
       $scope._popMsg(messages["terminalManage.request.select.store"]);
       return false;
     }
@@ -129,18 +127,19 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
         var posList = result.data.posList;
         var cornerList = result.data.cornerList;
 
-        // console.log(posList);
-        // console.log(cornerList);
-
         $scope.setTerminalEnvVal(terminalEnvVal);
         $scope.terminalFg = terminalEnvVal;
 
-        for(var i in posList){
+        // 다시 초기화해주고
+        $scope.resetCombobox();
+
+        // 조회한 데이터 붙이기
+        for(var i=0; i<=posList.length; i++){
           $scope.posFgArr.push(posList[i]);
         }
         $scope.comboDt.posCombo.itemsSource = new wijmo.collections.CollectionView( $scope.posFgArr);
 
-        for(var j in cornerList){
+        for(var j=0; j<=cornerList.length; j++){
           $scope.cornerFgArr.push(cornerList[j]);
         }
         $scope.comboDt.cornerCombo.itemsSource = new wijmo.collections.CollectionView( $scope.cornerFgArr);
@@ -153,6 +152,14 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
         else if($scope.terminalFg  === "0" || $scope.terminalFg  === "3"){
           $scope.showPos();
         }
+
+        // 그리드 초기화
+        var posScope = agrid.getScope('posCtrl');
+        posScope._gridDataInit();
+
+        var cornerScope = agrid.getScope('cornerCtrl');
+        cornerScope._gridDataInit();
+
       }
     });
   };
@@ -190,6 +197,13 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
 
     $scope.setTerminalEnvVal(s.selectedValue);
     var selectedTerminalFgVal = $scope.getTerminalEnvVal();
+
+    // 리스트 초기화
+    var posScope = agrid.getScope('posCtrl');
+    posScope._gridDataInit();
+
+    var cornerScope = agrid.getScope('cornerCtrl');
+    cornerScope._gridDataInit();
 
     // 포스 목록 조회
     if(selectedTerminalFgVal == "0" || selectedTerminalFgVal == "3" ) {
@@ -249,8 +263,51 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     $scope.vendorFgDataMap = new wijmo.grid.DataMap(vendorFg, 'value', 'name');
-    $scope.vanCdDataMap = new wijmo.grid.DataMap(vanCdFg, 'value', 'name');
+    $scope.vanCdDataMap = new wijmo.grid.DataMap(vandorList, 'value', 'name');
     $scope.useYnFgDataMap = new wijmo.grid.DataMap(useYnFg, 'value', 'name');
+
+    // ReadOnly 효과설정
+    s.formatItem.addHandler(function (s, e) {
+      if (e.panel === s.cells) {
+        var col = s.columns[e.col];
+        if (col.binding === "vendorFg" || col.binding === "vendorCd") {
+          var item = s.rows[e.row].dataItem;
+          if (item.status !== "I") {
+            wijmo.addClass(e.cell, 'wijLink');
+            wijmo.addClass(e.cell, 'wj-custom-readonly');
+          } else {
+            wijmo.removeClass(e.cell, 'wj-custom-readonly');
+          }
+        }
+      }
+    });
+
+    // 벤더구분, 벤더코드 그리드 에디팅 방지
+    s.beginningEdit.addHandler(function (sender, elements) {
+      var col = sender.columns[elements.col];
+      if (col.binding === "vendorFg" || col.binding === "vendorCd") {
+        var dataItem = s.rows[elements.row].dataItem;
+        if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
+          elements.cancel = true;
+        }
+      }
+    });
+
+  };
+
+  // 벤더구분 변경시 벤더 dataMap 변경
+  $scope.changeVendorFg = function(s, e){
+
+    if (e.panel === s.cells) {
+      var col = s.columns[e.col];
+      if (col.binding === "vendorFg") {
+        var changeVendorFg = s.rows[e.row].dataItem.vendorFg;
+        $scope.vanCdDataMap.collectionView.filter = function(item) {
+          return item.vanFg == changeVendorFg;
+        };
+        s.rows[e.row].dataItem.vendorCd = ""; // 벤더구분 변경시에는 값 벤더코드 변경하도록 ""으로!
+      }
+    }
   };
 
   // 포스설정 터미널 데이터 조회
@@ -262,7 +319,7 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
   // 포스설정 터미널 데이터 조회
   $scope.getPosSetting = function(){
 
-    if($("#storeCd").val() == null || $("#storeCd").val() == "") {
+    if(isNull($("#storeCd").val())) {
       $scope._popMsg(messages["terminalManage.request.select.store"]);
       return false;
     }
@@ -308,10 +365,8 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
 
-    var terminalScope = agrid.getScope('terminalCtrl');
-
     // 필수값 체크
-    for(var i in params) {
+    for(var i=0; i<params.length; i++) {
 
       if(params[i].vendorFg == "") {
         $scope._popMsg(messages["terminalManage.vendorFg"] + messages["terminalManage.require.select"]);
@@ -322,16 +377,6 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope._popMsg(messages["terminalManage.vendorCd"] + messages["terminalManage.require.select"]);
         return false;
       }
-
-      // if(params[i].vendorNm == "") {
-      //   $scope._popMsg(messages["terminalManage.vendorNm"] + messages["terminalManage.require.input"]);
-      //   return false;
-      // }
-
-      // if(params[i].vendorNm.length > 6) {
-      //   $scope._popMsg(messages["terminalManage.vendorNm"] + messages["terminalManage.require.exact.data"]);
-      //   return false;
-      // }
 
       if(params[i].vendorTermnlNo == "") {
         $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + messages["terminalManage.require.input"]);
@@ -366,16 +411,11 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
       params = JSON.stringify(params);
     }
 
-    var sParam = {};
-    sParam['storeCd'] = $("#storeCd").val();
-    sParam['terminalFgVal'] = terminalScope.getTerminalEnvVal();
-
     // ajax 통신 설정
     $http({
       method: 'POST', //방식
       url: baseUrl + "pos/savePosTerminalInfo.sb", /* 통신할 URL */
       data: params, /* 파라메터로 보낼 데이터 */
-      params: sParam,
       headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
     }).then(function successCallback(response) {
       $scope._popMsg(messages["cmm.saveSucc"]);
@@ -400,8 +440,53 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     $scope.vendorFgDataMap = new wijmo.grid.DataMap(vendorFg, 'value', 'name');
-    $scope.vanCdDataMap = new wijmo.grid.DataMap(vanCdFg, 'value', 'name');
+    $scope.vanCdDataMap = new wijmo.grid.DataMap(vandorList, 'value', 'name');
     $scope.useYnFgDataMap = new wijmo.grid.DataMap(useYnFg, 'value', 'name');
+
+
+    // ReadOnly 효과설정
+    s.formatItem.addHandler(function (s, e) {
+      if (e.panel === s.cells) {
+        var col = s.columns[e.col];
+        if (col.binding === "vendorFg" || col.binding === "vendorCd") {
+          var item = s.rows[e.row].dataItem;
+          if (item.status !== "I") {
+            wijmo.addClass(e.cell, 'wijLink');
+            wijmo.addClass(e.cell, 'wj-custom-readonly');
+          } else {
+            wijmo.removeClass(e.cell, 'wj-custom-readonly');
+          }
+        }
+      }
+    });
+
+    // 벤더구분, 벤더코드 그리드 에디팅 방지
+    s.beginningEdit.addHandler(function (sender, elements) {
+      var col = sender.columns[elements.col];
+      if (col.binding === "vendorFg" || col.binding === "vendorCd") {
+        var dataItem = s.rows[elements.row].dataItem;
+        if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
+          elements.cancel = true;
+        }
+      }
+    });
+
+
+  };
+
+  // 벤더구분 변경시 벤더 dataMap 변경
+  $scope.changeVendorFg = function(s, e){
+
+    if (e.panel === s.cells) {
+      var col = s.columns[e.col];
+      if (col.binding === "vendorFg") {
+        var changeVendorFg = s.rows[e.row].dataItem.vendorFg;
+        $scope.vanCdDataMap.collectionView.filter = function(item) {
+          return item.vanFg == changeVendorFg;
+        };
+        s.rows[e.row].dataItem.vendorCd = "";
+      }
+    }
   };
 
   // 조회
@@ -413,7 +498,7 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
   // 코너설정 데이터 조회
   $scope.getCornerSetting = function(){
 
-    if($("#storeCd").val() == null || $("#storeCd").val() == "") {
+    if(isNull($("#storeCd").val())){
       $scope._popMsg(messages["terminalManage.request.select.store"]);
       return false;
     }
@@ -423,8 +508,6 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
     var params = {};
     params.storeCd = $("#storeCd").val();
     params.cornrCd = terminalScope.getCornerFgVal();
-
-    // console.log(params);
 
     $scope._inquirySub(baseUrl + "corner/getCornerTerminalList.sb", params, function() {}, false);
   };
@@ -463,8 +546,10 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
 
+    // console.log(params);
+
     //필수값 체크
-    for(var i in params) {
+    for(var i=0; i<params.length; i++) {
 
       if(params[i].vendorFg == "") {
         $scope._popMsg(messages["terminalManage.vendorFg"] + messages["terminalManage.require.select"]);
@@ -475,16 +560,6 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope._popMsg(messages["terminalManage.vendorCd"] + messages["terminalManage.require.select"]);
         return false;
       }
-
-      // if(params[i].vendorNm == "") {
-      //   $scope._popMsg(messages["terminalManage.vendorNm"] + messages["terminalManage.require.input"]);
-      //   return false;
-      // }
-
-      // if(params[i].vendorNm.length > 6) {
-      //   $scope._popMsg(messages["terminalManage.vendorNm"] + messages["terminalManage.require.exact.data"]);
-      //   return false;
-      // }
 
       if(params[i].vendorTermnlNo == "") {
         $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + messages["terminalManage.require.input"]);
@@ -521,17 +596,11 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
       params = JSON.stringify(params);
     }
 
-    // 코너사용여부 환경변수
-    var sParam = {};
-    sParam['storeCd'] = $("#storeCd").val();
-    sParam['terminalFgVal'] = terminalScope.getTerminalEnvVal();
-
     // ajax 통신 설정
     $http({
       method: 'POST', //방식
       url: baseUrl + "corner/saveCornerTerminalInfo.sb", /* 통신할 URL */
       data: params, /* 파라메터로 보낼 데이터 */
-      params: sParam,
       headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
     }).then(function successCallback(response) {
       $scope._popMsg(messages["cmm.saveSucc"]);

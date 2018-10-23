@@ -45,11 +45,15 @@ public class EhgtServiceImpl implements EhgtService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    EhgtMapper mapper;
+    private final EhgtMapper mapper;
+    private final MessageService messageService;
 
+    /** Constructor Injection */
     @Autowired
-    MessageService messageService;
+    public EhgtServiceImpl(EhgtMapper mapper, MessageService messageService) {
+        this.mapper = mapper;
+        this.messageService = messageService;
+    }
 
     /** 환율 관리 리스트 조회 */
     @Override

@@ -1,7 +1,5 @@
 package kr.co.solbipos.application.session.auth.service;
 
-import kr.co.solbipos.application.common.service.ResrceInfoVO;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -79,13 +77,5 @@ public interface AuthService {
       * @return
       */
     <E> List<E> selectLoginHist(LoginHistVO loginHistVO);
-
-    /**
-      * 권한 있는 메뉴
-      *
-      * @param sessionInfoVO SessionInfoVO
-      * @return
-      */
-    List<ResrceInfoVO> selectAuthMenu(SessionInfoVO sessionInfoVO);
 
 }

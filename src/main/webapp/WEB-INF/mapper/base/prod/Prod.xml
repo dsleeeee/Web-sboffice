@@ -1,239 +1,353 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!--
+    Prod.xml
+    상품관리 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       노현수     2018.10.19     쿼리수정
+-->
 <mapper namespace="kr.co.solbipos.base.prod.prod.service.impl.ProdMapper">
 
+    <!-- 상품 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE,
+                   TB_MS_PRODUCT, TB_MS_PRODUCT_SALE_PRICE
+        PARAM    : prodVO
+        COMMENTS : 상품의 목록을 조회한다. ( 본사/매장 )
+    -->
     <select id="getProdList" parameterType="prodVO" resultType="DefaultMap">
-        /* ProdMapper.getProdList */
-        <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT
-        pl.*
-        FROM
-        (
-        SELECT
-               tmp.STORE_CD,
-               tmp.PROD_CD,
-               tmp.PROD_NM,
-               tmp.PROD_CLASS_CD,
-               NVL((SELECT SUBSTR(MAX(SYS_CONNECT_BY_PATH( PROD_CLASS_NM,  '|')), 2)
-                      FROM TB_MS_PRODUCT_CLASS
-                     START WITH PROD_CLASS_CD = tmp.PROD_CLASS_CD
-                   CONNECT BY PRIOR P_PROD_CLASS_CD = PROD_CLASS_CD
-                       AND STORE_CD = tmp.STORE_CD),' ') as PROD_CLASS_NM,
-               NVL(tmp.COST_UPRC, 0) COST_UPRC,
-               NVL(tmp.SPLY_UPRC, 0) SPLY_UPRC,
-               NVL((SELECT MAX(SALE_UPRC) KEEP(DENSE_RANK FIRST ORDER BY REG_DT DESC)
-                      FROM TB_MS_PRODUCT_SALE_PRICE
-                     WHERE STORE_CD = tmp.STORE_CD
-                       AND PROD_CD = tmp.PROD_CD
-                       AND TO_CHAR(SYSDATE, 'YYYYMMDD') BETWEEN START_DATE AND END_DATE
-                       AND SALE_PRC_FG = '2'     -- 본사, 매장 상품 구분이 필요한지 확인 무시면 조건 제거
-                    ), 0) SALE_UPRC,   -- 판매단가
-               tmp.ORGPLCE_CD,
-               tmp.PO_UNIT_FG,
-               tmp.REG_DT
-               <include refid="CmmSQL.PagingTemplateCount"/>
-          FROM TB_MS_PRODUCT tmp
-        <where>
-            <if test="chkDt == false">
-                <if test="startDt != null and startDt != '' and endDt != null and endDt != ''">
-                    AND tmp.REG_DT BETWEEN #{startDt} AND #{endDt} --조회일자
+        /* USE : ProdMapper.getProdList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT
+                    thp.HQ_OFFICE_CD,
+                    thp.PROD_CD,
+                    thp.PROD_NM,
+                    thp.PROD_CLASS_CD,
+                    ( SELECT SF_GET_PROD_CLASSES('H', thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
+                    NVL(thp.COST_UPRC, 0) COST_UPRC,
+                    NVL(thp.SPLY_UPRC, 0) SPLY_UPRC,
+                    NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC, -- 판매단가
+                    thp.ORGPLCE_CD, -- TODO 원산지명 조회 필요
+                    thp.PO_UNIT_FG,
+                    thp.REG_DT
+                    <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM
+                    TB_HQ_PRODUCT thp
+                LEFT OUTER JOIN (
+                    SELECT
+                        PROD_CD,
+                        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
+                            ORDER BY
+                            START_DATE DESC ) AS SALE_UPRC
+                    FROM
+                        TB_HQ_PRODUCT_SALE_PRICE
+                    WHERE
+                        HQ_OFFICE_CD = #{hqOfficeCd}
+                        <![CDATA[
+                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        ]]>
+                        AND SALE_PRC_FG = '1' -- 본사, 매장 구분이 필요한지 확인. 무시면 조건 제거
+                    GROUP BY
+                        PROD_CD
+                    ) thpsp ON
+                    thp.PROD_CD = thpsp.PROD_CD
+                WHERE
+                    thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test="chkDt == false">
+                    <if test="startDt != null and startDt != '' and endDt != null and endDt != ''">
+                        <![CDATA[
+                        AND thp.REG_DT >= #{startDt}
+                        AND tho.REG_DT <= #{endDt} --조회일자
+                        ]]>
+                    </if>
                 </if>
-            </if>
-            <if test="storeCd != null and storeCd != ''">
-                AND tmp.STORE_CD = #{storeCd} --매장코드
-            </if>
-            <if test="prodCd != null and prodCd != ''">
-                AND tmp.PROD_CD = #{prodCd} --상품코드
-            </if>
-            <if test="prodNm != null and prodNm != ''">
-                AND tmp.PROD_NM = #{prodNm} --상품명
-            </if>
-            <if test="barCd != null and barCd != ''">
-                AND EXISTS ( SELECT 1
-                               FROM TB_MS_PRODUCT_BARCD
-                              WHERE STORE_CD = tmp.STORE_CD
-                                AND PROD_CD = tmp.PROD_CD
-                                AND BARCD_CD = #{barCd} ) --바코드
-            </if>
-            <if test="prodClassCd != null and prodClassCd != ''">
-                AND tmp.PROD_CLASS_CD = #{prodClassCd} --상품분류코드
-            </if>
-        </where>
-        ) pl
-        <include refid="CmmSQL.PagingTemplateBottom"/>
+                <if test="prodCd != null and prodCd != ''">
+                    AND thp.PROD_CD = #{prodCd} --상품코드
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                    AND thp.PROD_NM LIKIE #{prodNm}||'%' --상품명
+                </if>
+                <if test="barCd != null and barCd != ''">
+                    AND EXISTS (
+                                SELECT 1
+                                FROM
+                                    TB_HQ_PRODUCT_BARCD
+                                WHERE
+                                    HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                                    AND PROD_CD = thp.PROD_CD
+                                    AND BARCD_CD = #{barCd}
+                                ) --바코드
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND thp.PROD_CLASS_CD = #{prodClassCd} --상품분류코드
+                </if>
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT
+                    tmp.STORE_CD,
+                    tmp.PROD_CD,
+                    tmp.PROD_NM,
+                    tmp.PROD_CLASS_CD,
+                    ( SELECT SF_GET_PROD_CLASSES('S', tmp.STORE_CD, tmp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
+                    NVL(tmp.COST_UPRC, 0) COST_UPRC,
+                    NVL(tmp.SPLY_UPRC, 0) SPLY_UPRC,
+                    NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC, -- 판매단가
+                    tmp.ORGPLCE_CD, -- TODO 원산지명 조회 필요
+                    tmp.PO_UNIT_FG,
+                    tmp.REG_DT
+                    <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM
+                    TB_MS_PRODUCT tmp
+                LEFT OUTER JOIN (
+                    SELECT
+                        PROD_CD,
+                        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
+                            ORDER BY
+                            START_DATE DESC ) AS SALE_UPRC
+                    FROM
+                        TB_MS_PRODUCT_SALE_PRICE
+                    WHERE
+                        STORE_CD = #{storeCd}
+                        <![CDATA[
+                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        ]]>
+                        AND SALE_PRC_FG = '1' -- 본사, 매장 구분이 필요한지 확인. 무시면 조건 제거
+                    GROUP BY
+                        PROD_CD
+                    ) thpsp ON
+                    tmp.PROD_CD = thpsp.PROD_CD
+                WHERE
+                    tmp.STORE_CD = #{storeCd}
+                <if test="chkDt == false">
+                    <if test="startDt != null and startDt != '' and endDt != null and endDt != ''">
+                        <![CDATA[
+                        AND tmp.REG_DT >= #{startDt}
+                        AND tmp.REG_DT <= #{endDt} --조회일자
+                        ]]>
+                    </if>
+                </if>
+                <if test="prodCd != null and prodCd != ''">
+                    AND tmp.PROD_CD = #{prodCd} --상품코드
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                    AND tmp.PROD_NM LIKIE #{prodNm}||'%' --상품명
+                </if>
+                <if test="barCd != null and barCd != ''">
+                    AND EXISTS (
+                                SELECT 1
+                                FROM
+                                    TB_MS_PRODUCT_BARCD
+                                WHERE
+                                    STORE_CD = tmp.STORE_CD
+                                    AND PROD_CD = tmp.PROD_CD
+                                    AND BARCD_CD = #{barCd}
+                                ) --바코드
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND tmp.PROD_CLASS_CD = #{prodClassCd} --상품분류코드
+                </if>
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+        </choose>
     </select>
 
+    <!-- 상품 상세 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE,
+                   TB_MS_PRODUCT, TB_MS_PRODUCT_SALE_PRICE
+        PARAM    : prodVO
+        COMMENTS : 상품의 상세정보를 조회한다. ( 본사/매장 )
+    -->
     <select id="getProdDetail" parameterType="prodVO" resultType="DefaultMap">
-        /* ProdMapper.getProdDetail */
-        SELECT pl.*
-          FROM (
-                SELECT tmp.STORE_CD,        -- 매장코드
-                       tmp.PROD_CD,         -- 상품코드
-                       tmp.PROD_NM,         -- 상품명
-                       tmp.PROD_CLASS_CD,   -- 상품분류코드
-                       NVL((SELECT SUBSTR(MAX(SYS_CONNECT_BY_PATH( PROD_CLASS_NM,  '>')), 2)
-                              FROM TB_MS_PRODUCT_CLASS
-                             START WITH PROD_CLASS_CD = tmp.PROD_CLASS_CD
-                           CONNECT BY PRIOR P_PROD_CLASS_CD = PROD_CLASS_CD
-                               AND STORE_CD = tmp.STORE_CD),' ') as PROD_CLASS_NM,
-                       NVL(tmp.COST_UPRC, 0) COST_UPRC,            -- 원가단가
-                       NVL(tmp.LAST_COST_UPRC, 0) LAST_COST_UPRC,  -- 최종원가단가
-                       NVL(tmp.SPLY_UPRC, 0) SPLY_UPRC,            -- 판매단가
-                       NVL((SELECT MAX(SALE_UPRC) KEEP(DENSE_RANK FIRST ORDER BY REG_DT ASC)
-                              FROM TB_MS_PRODUCT_SALE_PRICE
-                             WHERE STORE_CD = tmp.STORE_CD
-                               AND PROD_CD = tmp.PROD_CD
-                               AND TO_CHAR(SYSDATE, 'YYYYMMDD') BETWEEN START_DATE AND END_DATE
-                               AND SALE_PRC_FG = '2'     -- 본사, 매장 구분이 필요한지 확인 무시면 조건 제거
-                           ), 0) SALE_UPRC,   -- 최초판매단가
-                       tmp.ORGPLCE_CD,      -- 원산지 구분 -- TODO 원산지명 조회 필요
-                       (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '067' AND NMCODE_CD = tmp.SALE_PROD_YN) AS SALE_PROD_YN,    -- 판매상품여부
-                       tmp.PO_PROD_FG,      -- 주문상품구분 --TODO 주문상품구분명 조회 필요
-                       tmp.PO_UNIT_FG,      -- 주문단위 --TODO 주문단위명 조회 필요
-                       tmp.PO_MIN_QTY,      -- 최소주문
-                       (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '039' AND NMCODE_CD = tmp.VAT_FG) AS VAT_FG ,          -- 과세여부
-                       (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '067' AND NMCODE_CD = tmp.STOCK_PROD_YN) AS STOCK_PROD_YN,   -- 재고관리여부
-                       (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '067' AND NMCODE_CD = tmp.USE_YN) AS USE_YN,          -- 사용여부
-                       tmp.SAFE_STOCK_QTY,  -- 안전재고
-                       (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '009' AND NMCODE_CD = tmp.SET_PROD_FG) AS SET_PROD_FG,     -- 세트상품구분
-                       tmp.REMARK,          -- 비고
-                       tmp.REG_DT
-                  FROM TB_MS_PRODUCT tmp
-                 WHERE tmp.STORE_CD = #{storeCd}
-                   AND tmp.PROD_CD = #{prodCd}
-               ) pl
+        /* USE : ProdMapper.getProdDetail */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                    thp.HQ_OFFICE_CD,   -- 본사코드
+                    thp.PROD_CD,        -- 상품코드
+                    thp.PROD_NM,        -- 상품명
+                    thp.PROD_CLASS_CD,  -- 상품분류코드
+                    ( SELECT SF_GET_PROD_CLASSES('H', thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
+                    NVL(thp.COST_UPRC, 0) AS COST_UPRC,             -- 원가단가
+                    NVL(thp.LAST_COST_UPRC, 0) AS LAST_COST_UPRC,   -- 최종원가단가
+                    NVL(thp.SPLY_UPRC, 0) AS SPLY_UPRC,             -- 판매단가
+                    NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC,           -- 최초판매단가
+                    thp.ORGPLCE_CD,                                 -- 원산지 구분 -- TODO 원산지명 조회 필요
+                    sale_prod_yn.NMCODE_NM AS SALE_PROD_YN,         -- 판매상품여부
+                    thp.PO_PROD_FG,     -- 주문상품구분 --TODO 주문상품구분명 조회 필요
+                    thp.PO_UNIT_FG,     -- 주문단위 --TODO 주문단위명 조회 필요
+                    thp.PO_MIN_QTY,     -- 최소주문
+                    vat_fg.NMCODE_NM AS VAT_FG,                 -- 과세여부
+                    stock_prod_yn.NMCODE_NM AS STOCK_PROD_YN,   -- 재고관리여부
+                    use_yn.NMCODE_NM AS USE_YN,                 -- 사용여부
+                    thp.SAFE_STOCK_QTY,                         -- 안전재고
+                    set_prod_fg.NMCODE_NM AS SET_PROD_FG,       -- 세트상품구분
+                    thp.REMARK,                                 -- 비고
+                    thp.REG_DT
+                FROM
+                    TB_HQ_PRODUCT thp
+                LEFT OUTER JOIN (
+                    SELECT
+                        PROD_CD,
+                        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
+                            ORDER BY
+                            START_DATE DESC ) AS SALE_UPRC
+                    FROM
+                        TB_HQ_PRODUCT_SALE_PRICE
+                    WHERE
+                        HQ_OFFICE_CD = #{hqOfficeCd}
+                        <![CDATA[
+                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        ]]>
+                        AND SALE_PRC_FG = '1' -- 본사, 매장 구분이 필요한지 확인. 무시면 조건 제거
+                    GROUP BY
+                        PROD_CD
+                    ) thpsp ON thp.PROD_CD = thpsp.PROD_CD
+                LEFT OUTER JOIN TB_CM_NMCODE sale_prod_yn ON
+                    sale_prod_yn.NMCODE_GRP_CD = '067'
+                    AND thp.SALE_PROD_YN = sale_prod_yn.NMCODE_CD
+                LEFT OUTER JOIN TB_CM_NMCODE vat_fg ON
+                    vat_fg.NMCODE_GRP_CD = '039'
+                    AND thp.VAT_FG = vat_fg.NMCODE_CD
+                LEFT OUTER JOIN TB_CM_NMCODE stock_prod_yn ON
+                    stock_prod_yn.NMCODE_GRP_CD = '067'
+                    AND thp.STOCK_PROD_YN = stock_prod_yn.NMCODE_CD
+                LEFT OUTER JOIN TB_CM_NMCODE use_yn ON
+                    use_yn.NMCODE_GRP_CD = '067'
+                    AND thp.USE_YN = use_yn.NMCODE_CD
+                LEFT OUTER JOIN TB_CM_NMCODE set_prod_fg ON
+                    set_prod_fg.NMCODE_GRP_CD = '009'
+                    AND thp.SET_PROD_FG = set_prod_fg.NMCODE_CD
+                WHERE
+                    thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND thp.PROD_CD = #{prodCd}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                    tmp.STORE_CD,       -- 매장코드
+                    tmp.PROD_CD,        -- 상품코드
+                    tmp.PROD_NM,        -- 상품명
+                    tmp.PROD_CLASS_CD,  -- 상품분류코드
+                    ( SELECT SF_GET_PROD_CLASSES('S', tmp.STORE_CD, tmp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
+                    NVL(tmp.COST_UPRC, 0) AS COST_UPRC,             -- 원가단가
+                    NVL(tmp.LAST_COST_UPRC, 0) AS LAST_COST_UPRC,   -- 최종원가단가
+                    NVL(tmp.SPLY_UPRC, 0) AS SPLY_UPRC,             -- 판매단가
+                    NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC,           -- 최초판매단가
+                    tmp.ORGPLCE_CD,                                 -- 원산지 구분 -- TODO 원산지명 조회 필요
+                    sale_prod_yn.NMCODE_NM AS SALE_PROD_YN,         -- 판매상품여부
+                    tmp.PO_PROD_FG,     -- 주문상품구분 --TODO 주문상품구분명 조회 필요
+                    tmp.PO_UNIT_FG,     -- 주문단위 --TODO 주문단위명 조회 필요
+                    tmp.PO_MIN_QTY,     -- 최소주문
+                    vat_fg.NMCODE_NM AS VAT_FG,                 -- 과세여부
+                    stock_prod_yn.NMCODE_NM AS STOCK_PROD_YN,   -- 재고관리여부
+                    use_yn.NMCODE_NM AS USE_YN,                 -- 사용여부
+                    tmp.SAFE_STOCK_QTY,                         -- 안전재고
+                    set_prod_fg.NMCODE_NM AS SET_PROD_FG,       -- 세트상품구분
+                    tmp.REMARK,                                 -- 비고
+                    tmp.REG_DT
+                FROM
+                    TB_MS_PRODUCT tmp
+                LEFT OUTER JOIN (
+                    SELECT
+                        PROD_CD,
+                        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
+                            ORDER BY
+                            START_DATE DESC ) AS SALE_UPRC
+                    FROM
+                        TB_MS_PRODUCT_SALE_PRICE
+                    WHERE
+                        STORE_CD = #{storeCd}
+                        <![CDATA[
+                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        ]]>
+                        AND SALE_PRC_FG = '2' -- 본사, 매장 구분이 필요한지 확인. 무시면 조건 제거
+                    GROUP BY
+                        PROD_CD
+                    ) thpsp ON tmp.PROD_CD = thpsp.PROD_CD
+                LEFT OUTER JOIN TB_CM_NMCODE sale_prod_yn ON
+                    sale_prod_yn.NMCODE_GRP_CD = '067'
+                    AND tmp.SALE_PROD_YN = sale_prod_yn.NMCODE_CD
+                LEFT OUTER JOIN TB_CM_NMCODE vat_fg ON
+                    vat_fg.NMCODE_GRP_CD = '039'
+                    AND tmp.VAT_FG = vat_fg.NMCODE_CD
+                LEFT OUTER JOIN TB_CM_NMCODE stock_prod_yn ON
+                    stock_prod_yn.NMCODE_GRP_CD = '067'
+                    AND tmp.STOCK_PROD_YN = stock_prod_yn.NMCODE_CD
+                LEFT OUTER JOIN TB_CM_NMCODE use_yn ON
+                    use_yn.NMCODE_GRP_CD = '067'
+                    AND tmp.USE_YN = use_yn.NMCODE_CD
+                LEFT OUTER JOIN TB_CM_NMCODE set_prod_fg ON
+                    set_prod_fg.NMCODE_GRP_CD = '009'
+                    AND tmp.SET_PROD_FG = set_prod_fg.NMCODE_CD
+                WHERE
+                    tmp.STORE_CD = #{storeCd}
+                    AND tmp.PROD_CD = #{prodCd}
+        </when>
+        </choose>
     </select>
 
+    <!-- 연결 상품 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_UNITST_PROD, TB_MS_PRODUCT_UNITST_PROD,
+        PARAM    : prodVO
+        COMMENTS : 상품의 연결상품을 조회한다. ( 본사/매장 )
+    -->
     <select id="getUnitstProdList" parameterType="prodVO" resultType="DefaultMap">
-        /* ProdMapper.getUnitstProdList */
-        SELECT STORE_CD,
-               PROD_CD,
-               UNIT_PROD_CD,
-               SET_PROD_FG,
-               UNIT_PROD_QTY,
-               DISP_SEQ
-          FROM TB_MS_PRODUCT_UNITST_PROD
-         WHERE STORE_CD = #{storeCd}
-           AND PROD_CD = #{prodCd}
-        ORDER BY DISP_SEQ
+        /* USE : ProdMapper.getUnitstProdList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                    thpup.HQ_OFFICE_CD,
+                    thpup.PROD_CD,
+                    thpup.UNIT_PROD_CD,
+                    thpup.SET_PROD_FG,
+                    thpup.UNIT_PROD_QTY,
+                    thpup.DISP_SEQ
+                FROM
+                    TB_HQ_PRODUCT_UNITST_PROD thpup
+                WHERE
+                    thpup.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND thpup.PROD_CD = #{prodCd}
+                ORDER BY
+                    thpup.DISP_SEQ
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                    tmpup.STORE_CD,
+                    tmpup.PROD_CD,
+                    tmpup.UNIT_PROD_CD,
+                    tmpup.SET_PROD_FG,
+                    tmpup.UNIT_PROD_QTY,
+                    tmpup.DISP_SEQ
+                FROM
+                    TB_MS_PRODUCT_UNITST_PROD tmpup
+                WHERE
+                    tmpup.STORE_CD = #{storeCd}
+                    AND tmpup.PROD_CD = #{prodCd}
+                ORDER BY
+                    tmpup.DISP_SEQ
+            </when>
+        </choose>
     </select>
 
-    <select id="getHqProdList" parameterType="prodVO" resultType="DefaultMap">
-        /* ProdMapper.getHqProdList */
-        <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT
-        pl.*
-        FROM
-        (
-        SELECT
-               thp.HQ_OFFICE_CD,
-               thp.PROD_CD,
-               thp.PROD_NM,
-               thp.PROD_CLASS_CD,
-               NVL((SELECT SUBSTR(MAX(SYS_CONNECT_BY_PATH( PROD_CLASS_NM,  '>')), 2)
-                      FROM TB_HQ_PRODUCT_CLASS
-                     START WITH PROD_CLASS_CD = thp.PROD_CLASS_CD
-                   CONNECT BY PRIOR P_PROD_CLASS_CD = PROD_CLASS_CD
-                       AND HQ_OFFICE_CD = thp.HQ_OFFICE_CD),' ') as PROD_CLASS_NM,
-               NVL(thp.COST_UPRC, 0) COST_UPRC,
-               NVL(thp.SPLY_UPRC, 0) SPLY_UPRC,
-               NVL((SELECT MAX(SALE_UPRC) KEEP(DENSE_RANK FIRST ORDER BY REG_DT DESC)
-                      FROM TB_HQ_PRODUCT_SALE_PRICE
-                     WHERE HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                       AND PROD_CD = thp.PROD_CD
-                       AND TO_CHAR(SYSDATE, 'YYYYMMDD') BETWEEN START_DATE AND END_DATE
-                       AND SALE_PRC_FG = '1'     -- 본사, 매장 상품 구분이 필요한지 확인 무시면 조건 제거
-                   ), 0) SALE_UPRC,   -- 판매단가
-               thp.ORGPLCE_CD, -- TODO 원산지명 조회 필요
-               thp.PO_UNIT_FG,
-               thp.REG_DT
-               <include refid="CmmSQL.PagingTemplateCount"/>
-          FROM TB_HQ_PRODUCT thp
-        <where>
-            <if test="chkDt == false">
-                <if test="startDt != null and startDt != '' and endDt != null and endDt != ''">
-                    AND thp.REG_DT BETWEEN #{startDt} AND #{endDt} --조회일자
-                </if>
-            </if>
-            <if test="hqOfficeCd != null and hqOfficeCd != ''">
-                AND thp.HQ_OFFICE_CD = #{hqOfficeCd} --본사코드
-            </if>
-            <if test="prodCd != null and prodCd != ''">
-                AND thp.PROD_CD = #{prodCd} --상품코드
-            </if>
-            <if test="prodNm != null and prodNm != ''">
-                AND thp.PROD_NM = #{prodNm} --상품명
-            </if>
-            <if test="barCd != null and barCd != ''">
-                AND EXISTS ( SELECT 1
-                               FROM TB_HQ_PRODUCT_BARCD
-                              WHERE HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                                AND PROD_CD = thp.PROD_CD
-                                AND BARCD_CD = #{barCd} ) --바코드
-            </if>
-            <if test="prodClassCd != null and prodClassCd != ''">
-                AND thp.PROD_CLASS_CD = #{prodClassCd} --상품분류코드
-            </if>
-        </where>
-        ) pl
-        <include refid="CmmSQL.PagingTemplateBottom"/>
-    </select>
-
-    <select id="getHqProdDetail" parameterType="prodVO" resultType="DefaultMap">
-        /* ProdMapper.getHqProdDetail */
-        SELECT pl.*
-          FROM (
-                SELECT thp.HQ_OFFICE_CD,    -- 본사코드
-                       thp.PROD_CD,         -- 상품코드
-                       thp.PROD_NM,         -- 상품명
-                       thp.PROD_CLASS_CD,   -- 상품분류코드
-                       NVL((SELECT SUBSTR(MAX(SYS_CONNECT_BY_PATH( PROD_CLASS_NM,  '>')), 2)
-                             FROM TB_HQ_PRODUCT_CLASS
-                            START WITH PROD_CLASS_CD = thp.PROD_CLASS_CD
-                          CONNECT BY PRIOR P_PROD_CLASS_CD = PROD_CLASS_CD
-                              AND HQ_OFFICE_CD = thp.HQ_OFFICE_CD),' ') as PROD_CLASS_NM,
-                       NVL(thp.COST_UPRC, 0) COST_UPRC,            -- 원가단가
-                       NVL(thp.LAST_COST_UPRC, 0) LAST_COST_UPRC,  -- 최종원가단가
-                       NVL(thp.SPLY_UPRC, 0) SPLY_UPRC,            -- 판매단가
-                       NVL((SELECT MAX(SALE_UPRC) KEEP(DENSE_RANK FIRST ORDER BY REG_DT ASC)
-                              FROM TB_HQ_PRODUCT_SALE_PRICE
-                             WHERE HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                               AND PROD_CD = thp.PROD_CD
-                               AND TO_CHAR(SYSDATE, 'YYYYMMDD') BETWEEN START_DATE AND END_DATE
-                               AND SALE_PRC_FG = '1'   -- 본사, 매장 상품 구분이 필요한지 확인. 무시면 조건 제거
-                            ), 0) SALE_UPRC,   -- 최초판매단가
-                       thp.ORGPLCE_CD,      -- 원산지 구분 -- TODO 원산지명 추가 필요
-                       (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '067' AND NMCODE_CD = thp.SALE_PROD_YN) AS SALE_PROD_YN,    -- 판매상품여부
-                       thp.PO_PROD_FG,      -- 주문상품구분 --TODO 주문상품구분명 추가 필요
-                       thp.PO_UNIT_FG,      -- 주문단위 --TODO 주문단위명 추가 필요
-                       thp.PO_MIN_QTY,      -- 최소주문
-                       (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '039' AND NMCODE_CD = thp.VAT_FG) AS VAT_FG ,          -- 과세여부
-                       (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '067' AND NMCODE_CD = thp.STOCK_PROD_YN) AS STOCK_PROD_YN,   -- 재고관리여부
-                       (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '067' AND NMCODE_CD = thp.USE_YN) AS USE_YN,          -- 사용여부
-                       thp.SAFE_STOCK_QTY,  -- 안전재고
-                       (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '009' AND NMCODE_CD = thp.SET_PROD_FG) AS SET_PROD_FG,     -- 세트상품구분
-                       thp.REMARK,          -- 비고
-                       thp.REG_DT
-                  FROM TB_HQ_PRODUCT thp
-                 WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
-                   AND thp.PROD_CD = #{prodCd}
-               ) pl
-    </select>
-
-    <select id="getHqUnitstProdList" parameterType="prodVO" resultType="DefaultMap">
-        /* ProdMapper.getHqUnitstProdList */
-        SELECT HQ_OFFICE_CD,
-               PROD_CD,
-               UNIT_PROD_CD,
-               SET_PROD_FG,
-               UNIT_PROD_QTY,
-               DISP_SEQ
-          FROM TB_HQ_PRODUCT_UNITST_PROD
-         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-           AND PROD_CD = #{prodCd}
-        ORDER BY DISP_SEQ
-    </select>
 </mapper>
 
 

@@ -50,22 +50,20 @@
         </td>
       </tr>
       <tr>
-        <%-- 바코드 --%>
-        <th><s:message code="prod.barCd" /></th>
-        <td colspan="3">
-          <div class="sb-select">
-            <div id="barCd"></div>
-          </div>
-        </td>
         <%-- 분류조회 --%>
-          <%--
-        <th><s:message code="prod.class.search" /></th>
+        <th><s:message code="prod.prodClass" /></th>
         <td>
           <div class="sb-select">
             <div id="prodClassCd"></div>
           </div>
         </td>
-        --%>
+        <%-- 바코드 --%>
+        <th><s:message code="prod.barCd" /></th>
+        <td>
+          <div class="sb-select">
+            <div id="barCd"></div>
+          </div>
+        </td>
       </tr>
     </tbody>
   </table>
@@ -158,7 +156,7 @@
             </tr>
             <tr>
               <%--상품분류--%>
-              <th><s:message code="prod.class" /></th>
+              <th><s:message code="prod.prodClass" /></th>
               <td id="_prodClassNm"></td>
               <%--거래처 //TODO --%>
               <th>
@@ -337,10 +335,7 @@
 $(document).ready(function(){
   var rdata =
     [
-      <%--{"binding":"lProdClass","header":"<s:message code='prod.lClass' />","width":"*"},--%>
-      <%--{"binding":"mProdClass","header":"<s:message code='prod.mClass' />","width":"*"},--%>
-      <%--{"binding":"sProdClass","header":"<s:message code='prod.sClass' />","width":"*"},--%>
-      {"binding":"prodClassNm","header":"<s:message code='prod.prodClassNm' />","width":"*"},
+      {"binding":"prodClassNm","header":"<s:message code='prod.prodClass' />","width":"*"},
       {"binding":"prodCd","header":"<s:message code='prod.prodCd' />","width":"*"},
       {"binding":"prodNm","header":"<s:message code='prod.prodNm' />","width":"*"},
       {"binding":"costUprc","header":"<s:message code='prod.costUprc' />","width":"*"},
@@ -376,7 +371,7 @@ $(document).ready(function(){
     $.postJSON("/base/prod/prod/prod/list.sb", param, function(result) {
       var list = result.data.list;
 
-      if(list.length === undefined || list.length == 0) {
+      if(list.length === undefined || list.length === 0) {
         s_alert.pop(result.message);
       }
 
@@ -390,10 +385,10 @@ $(document).ready(function(){
 
   <%-- 그리드 포맷 --%>
   grid.formatItem.addHandler(function(s, e) {
-    if (e.panel == s.cells) {
+    if (e.panel === s.cells) {
       var col = s.columns[e.col];
       var item = s.rows[e.row].dataItem;
-      if( col.binding == "prodCd") {
+      if( col.binding === "prodCd") {
         wijmo.addClass(e.cell, 'wijLink');
       }
     }
@@ -402,9 +397,9 @@ $(document).ready(function(){
   <%-- 그리드 선택 이벤트 --%>
   grid.addEventListener(grid.hostElement, 'mousedown', function(e) {
     var ht = grid.hitTest(e);
-    if( ht.cellType == wijmo.grid.CellType.Cell) {
+    if( ht.cellType === wijmo.grid.CellType.Cell) {
       var col = ht.panel.columns[ht.col];
-      if( col.binding == "prodCd") {
+      if( col.binding === "prodCd") {
         searchProdDetail(grid.rows[ht.row].dataItem);
       }
     }

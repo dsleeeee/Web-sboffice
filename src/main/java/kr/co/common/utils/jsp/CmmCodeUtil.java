@@ -49,7 +49,8 @@ public class CmmCodeUtil {
      * @return
      */
     public String getListScale() {
-        String listScale[] = {"15", "20", "50", "100", "200", "300"};
+//        String listScale[] = {"15", "20", "50", "100", "200", "300"};
+        String listScale[] = {"10", "30", "50"};
 
         List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
         for (int i = 0; i < listScale.length; i++) {
@@ -325,13 +326,26 @@ public class CmmCodeUtil {
         return assmblObj(agencyList, "agencyNm", "agencyCd", UseYn.ALL);
     }
 
+
+    /**
+     * 벤사 코드 조회 //TODO 추후 삭제 후 아래것으로 대체할 것
+     *
+     * @return
+     */
+    public String getVanList() {
+        List<DefaultMap<String>> agencyList = cmmCodeService.getVanList("");
+
+        // 결과 형태를 만들어서 json 으로 리턴
+        return assmblObj(agencyList, "vanNm", "vanCd", UseYn.ALL);
+    }
+
     /**
      * 벤사 코드 조회
      *
      * @return
      */
-    public String getVanList() {
-        List<DefaultMap<String>> agencyList = cmmCodeService.getVanList();
+    public String getVanList(String vanFg) {
+        List<DefaultMap<String>> agencyList = cmmCodeService.getVanList(vanFg);
 
         // 결과 형태를 만들어서 json 으로 리턴
         return assmblObj(agencyList, "vanNm", "vanCd", UseYn.ALL);

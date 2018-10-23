@@ -26,8 +26,6 @@ app.controller('storeCtrl', ['$scope', '$http', function ($scope, $http) {
     return $scope.selectStore;
   };
 
-  // $scope._setComboData("clsFg", clsFg);
-  // $scope._setComboData("sysStatFg", sysStatFg);
   $scope._setComboData("#srchClsFg", clsFg);
   $scope._setComboData("sysStatFg", sysStatFg);
 

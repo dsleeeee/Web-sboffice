@@ -48,17 +48,20 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 @RequestMapping(value = "/adi/etc/ehgt/")
 public class EhgtController {
 
-    @Autowired
-    EhgtService ehgtService;
+    private final EhgtService ehgtService;
+    private final SessionService sessionService;
+    private final MessageService messageService;
+    private final CustomCollectionValidator customCollectionValidator;
 
+    /** Constructor Injection */
     @Autowired
-    SessionService sessionService;
-
-    @Autowired
-    CustomCollectionValidator customCollectionValidator;
-
-    @Autowired
-    MessageService messageService;
+    public EhgtController(EhgtService ehgtService, SessionService sessionService,
+        MessageService messageService, CustomCollectionValidator customCollectionValidator) {
+        this.ehgtService = ehgtService;
+        this.sessionService = sessionService;
+        this.messageService = messageService;
+        this.customCollectionValidator = customCollectionValidator;
+    }
 
     /**
      * 환율 관리 페이지 이동

@@ -12,13 +12,14 @@
            A.STORE_CD,
            B.STORE_NM,
            A.POS_NO,
-           A.LOGIN_DATE,
+--            A.LOGIN_DATE,
+           SUBSTR(A.LOGIN_DATE,0,4) || '-' || SUBSTR(A.LOGIN_DATE, 5,2) || '-' || SUBSTR(A.LOGIN_DATE, 7,2) AS LOGIN_DATE,
            A.HW_AUTH_KEY,
            A.LOGIN_IP,
            A.LOGIN_DT,
            A.POS_VER_NO,
            B.SYS_STAT_FG,
-           (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '009' AND NMCODE_CD = B.SYS_STAT_FG) AS SYS_STAT_FG_NM,
+           (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '005' AND NMCODE_CD = B.SYS_STAT_FG) AS SYS_STAT_FG_NM,
            A.LOGIN_SEQ
            <include refid="CmmSQL.PagingTemplateCount"/>
       FROM TB_MS_POS_LOGIN_LOG A,

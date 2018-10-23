@@ -17,6 +17,10 @@ var app = agrid.getApp();
  * 대표명칭 그리드 생성
  */
 app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
+
+  $scope._setComboData("envstFg", envstFgNm);
+  $scope._setComboData("envstGrpCd", envstGrpCdNm);
+
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('representCtrl', $scope, $http, true));
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -102,8 +106,10 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
   };
   // 대표명칭 그리드 조회
   $scope.$on("representCtrl", function(event, data) {
+
     // 파라미터
     var params = {};
+
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sys/cd/envConfg/envConfg/envst/list.sb", params, function() {
       // 대표명칭 그리드 버튼 show

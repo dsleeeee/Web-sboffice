@@ -79,6 +79,11 @@ public class TerminalManageController {
     @RequestMapping(value = "terminalManage/terminalView.sb", method = RequestMethod.GET)
     public String list(HttpServletRequest request, HttpServletResponse response,
             Model model) {
+
+        List<DefaultMap<String>> vendorList = service.getVendorList();
+
+        model.addAttribute("vendorList", convertToJson(vendorList) );
+
         return "store/manage/terminalManage/terminalView";
     }
 
@@ -194,12 +199,12 @@ public class TerminalManageController {
         int result = 0;
 
         try{
-            StoreEnvVO storeEnvVO = new StoreEnvVO();
-            storeEnvVO.setStoreCd(request.getParameter("storeCd"));
-            storeEnvVO.setEnvstVal(request.getParameter("terminalFgVal"));
-
-            // 환경변수 값 저장
-            result += service.updateTerminalEnvst(storeEnvVO, sessionInfoVO);
+//            StoreEnvVO storeEnvVO = new StoreEnvVO();
+//            storeEnvVO.setStoreCd(request.getParameter("storeCd"));
+//            storeEnvVO.setEnvstVal(request.getParameter("terminalFgVal"));
+//
+//            // 환경변수 값 저장
+//            result += service.updateTerminalEnvst(storeEnvVO, sessionInfoVO);
 
             // 터미널정보 저장
             result += service.savePosTerminalInfo(storeTerminalVOs, sessionInfoVO);
@@ -246,12 +251,12 @@ public class TerminalManageController {
         int result = 0;
 
         try{
-            StoreEnvVO storeEnvVO = new StoreEnvVO();
-            storeEnvVO.setStoreCd(request.getParameter("storeCd"));
-            storeEnvVO.setEnvstVal(request.getParameter("terminalFgVal"));
-
-            // 환경변수 값 저장
-            result += service.updateTerminalEnvst(storeEnvVO, sessionInfoVO);
+//            StoreEnvVO storeEnvVO = new StoreEnvVO();
+//            storeEnvVO.setStoreCd(request.getParameter("storeCd"));
+//            storeEnvVO.setEnvstVal(request.getParameter("terminalFgVal"));
+//
+//            // 환경변수 값 저장
+//            result += service.updateTerminalEnvst(storeEnvVO, sessionInfoVO);
 
             // 코너 터미널 정보 저장
             result = service.saveCornerTerminalInfo(storeTerminalVOs, sessionInfoVO);

@@ -17,8 +17,13 @@ import kr.co.solbipos.application.common.service.ResrceInfoVO;
 @Service
 public class SampleServiceImpl implements SampleService {
 
+    private final SampleMapper sampleMapper;
+
+    /** Constructor Injection */
     @Autowired
-    SampleMapper sampleMapper;
+    public SampleServiceImpl(SampleMapper sampleMapper) {
+        this.sampleMapper = sampleMapper;
+    }
 
     @Override
     public <E> List<E> selectSample(String param) {

@@ -17,21 +17,17 @@ import org.springframework.stereotype.Service;
 public class RedisConnServiceImpl implements RedisConnService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    /**
-     * Redis server 장애 여부 판단
-     */
+
+    /** Redis server 장애 여부 판단 */
     private boolean available = true;
-    /**
-     * health check delay seconds (defalut 5 seconds)
-     */
+    /** health check delay seconds (defalut 5 seconds) */
     private int healthCheckDelaySeconds = 5;
 
     private JedisConnectionFactory jedisConnectionFactory;
 
-    /**
-     * Constructor Injection
-     */
-    @Autowired public RedisConnServiceImpl(JedisConnectionFactory jedisConnectionFactory) {
+    /** Constructor Injection */
+    @Autowired
+    public RedisConnServiceImpl(JedisConnectionFactory jedisConnectionFactory) {
         this.jedisConnectionFactory = jedisConnectionFactory;
     }
 
@@ -39,7 +35,8 @@ public class RedisConnServiceImpl implements RedisConnService {
         this.healthCheckDelaySeconds = healthCheckDelaySeconds;
     }
 
-    @Override public void enable() {
+    @Override
+    public void enable() {
 
         LOGGER.error(
             "\n■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n"
@@ -49,7 +46,8 @@ public class RedisConnServiceImpl implements RedisConnService {
         this.available = true;
     }
 
-    @Override public void disable() {
+    @Override
+    public void disable() {
 
         LOGGER.error(
             "\n■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n"
@@ -66,15 +64,19 @@ public class RedisConnServiceImpl implements RedisConnService {
         this.healthCheck();
     }
 
-    @Override public boolean isAvailable() {
+    @Override
+    public boolean isAvailable() {
         return available;
     }
 
-    @Override public boolean isNotAvailable() {
+    @Override
+    public boolean isNotAvailable() {
         return !available;
     }
 
-    @Override @Async public void healthCheck() {
+    @Override
+    @Async
+    public void healthCheck() {
 
         LOGGER.debug("Redis server to reconnect after {} seconds.", healthCheckDelaySeconds);
 
@@ -115,7 +117,9 @@ public class RedisConnServiceImpl implements RedisConnService {
         }
     }
 
-    @Override @Async public String ping() {
+    @Override
+    @Async
+    public String ping() {
         return jedisConnectionFactory.getConnection().ping();
     }
 
