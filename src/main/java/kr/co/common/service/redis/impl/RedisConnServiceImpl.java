@@ -17,20 +17,15 @@ import org.springframework.stereotype.Service;
 public class RedisConnServiceImpl implements RedisConnService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    /**
-     * Redis server 장애 여부 판단
-     */
+
+    /** Redis server 장애 여부 판단 */
     private boolean available = true;
-    /**
-     * health check delay seconds (defalut 5 seconds)
-     */
+    /** health check delay seconds (defalut 5 seconds) */
     private int healthCheckDelaySeconds = 5;
 
     private JedisConnectionFactory jedisConnectionFactory;
 
-    /**
-     * Constructor Injection
-     */
+    /** Constructor Injection */
     @Autowired
     public RedisConnServiceImpl(JedisConnectionFactory jedisConnectionFactory) {
         this.jedisConnectionFactory = jedisConnectionFactory;
