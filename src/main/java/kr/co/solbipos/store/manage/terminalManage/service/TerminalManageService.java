@@ -26,6 +26,9 @@ import java.util.List;
  */
 public interface TerminalManageService {
 
+    /** 벤더 목록 */
+    List<DefaultMap<String>> getVendorList();
+
     /** 매장 조회 */
     List<DefaultMap<String>> getStoreList(StoreManageVO storeManageVO);
 
@@ -52,5 +55,6 @@ public interface TerminalManageService {
 
     /** 코너 터미널 정보 저장 */
     int saveCornerTerminalInfo(StoreTerminalVO[] storeTerminalVOs, SessionInfoVO sessionInfoVO);
+
 
 }

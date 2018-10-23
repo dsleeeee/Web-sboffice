@@ -12,8 +12,12 @@
 
 <div class="subCon">
 
+  <div class="searchBar flddUnfld">
+    <a href="#" class="open">${menuNm}</a>
+  </div>
+
   <%-- 상품권분류등록 --%>
-  <div class="mb40" ng-controller="giftClassCtrl">
+  <div class="mb20 mt20" ng-controller="giftClassCtrl">
     <div class="wj-TblWrapBr mr10 pd20" style="height:260px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='gift.regist.class' /></span>
@@ -37,10 +41,10 @@
           <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="gift.hqOfficeCd"/>" binding="hqOfficeCd" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="gift.payTypeFg"/>" binding="payTypeFg" visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="gift.payClassCd"/>" binding="payClassCd" width="200" maxLength="3" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="gift.payClassCd"/>" binding="payClassCd" width="100" maxLength="3" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="gift.payClassNm"/>" binding="payClassNm" width="*" maxLength="20"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="gift.serNoYn"/>" binding="serNoYn" width="150" data-map="useYnDataMap" visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="cmm.useYn"/>" binding="useYn" width="150" data-map="useYnDataMap"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="gift.serNoYn"/>" binding="serNoYn" data-map="useYnDataMap" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="cmm.useYn"/>" binding="useYn" width="100" data-map="useYnDataMap"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="cmm.regId"/>" binding="regId" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="gift.giftCnt"/>" binding="giftCnt" visible="false"></wj-flex-grid-column>
         </wj-flex-grid>

@@ -23,15 +23,18 @@ import kr.co.sample.application.service.SampleService;
 
 @Controller
 public class TuiEditorSampleController {
-    
+
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    
-    @Autowired
-    SampleService  sampleService;
 
-    @Autowired
-    MessageService messageService;
+    private final SampleService  sampleService;
+    private final MessageService messageService;
 
+    /** Constructor Injection */
+    @Autowired
+    public TuiEditorSampleController(SampleService sampleService, MessageService messageService) {
+        this.sampleService = sampleService;
+        this.messageService = messageService;
+    }
 
     @RequestMapping(value = "editorSampleMain.sb")
     public String editorSampleMain(HttpSession session, Model model) {

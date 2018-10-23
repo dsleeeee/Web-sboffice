@@ -59,14 +59,20 @@ public class RegistController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired RegistService registService;
+    private final RegistService registService;
+    private final SessionService sessionService;
+    private final CmmCodeUtil cmmCodeUtil;
+    private final CmmEnvUtil cmmEnvUtil;
 
-    @Autowired SessionService sessionService;
-
-    @Autowired CmmCodeUtil cmmCodeUtil;
-
-    @Autowired CmmEnvUtil cmmEnvUtil;
-
+    /** Constructor Injection */
+    @Autowired
+    public RegistController(RegistService registService, SessionService sessionService,
+        CmmCodeUtil cmmCodeUtil, CmmEnvUtil cmmEnvUtil) {
+        this.registService = registService;
+        this.sessionService = sessionService;
+        this.cmmCodeUtil = cmmCodeUtil;
+        this.cmmEnvUtil = cmmEnvUtil;
+    }
 
     /**
      * 페이지 이동

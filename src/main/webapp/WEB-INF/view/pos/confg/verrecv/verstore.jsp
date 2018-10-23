@@ -30,77 +30,68 @@
         <%-- 버전일련번호 --%>
         <th><s:message code="verRecv.verSerNo" /></th>
         <td>
-          <div class="sb-select">
-            <div id="verSerNo"></div>
-          </div>
+          <input type="text" id="verSerNo" name="verSerNo" class="sb-input" maxlength="50" size="50">
         </td>
         <%-- 버전적용명 --%>
         <th><s:message code="verRecv.verSerNm" /></th>
         <td>
-          <div class="sb-select">
-            <div id="verSerNm"></div>
-          </div>
+          <input type="text" id="verSerNm" name="verSerNm" class="sb-input" maxlength="50" size="50">
         </td>
       </tr>
     </tbody>
   </table>
 
   <%-- 조회 --%>
-  <div class="mt10 pdb20 oh bb">
+  <div class="mt10 pdb20 oh">
       <button class="btn_blue fr" id="btnSearch"><s:message code="cmm.search" /></button>
   </div>
 
-  <!--2단-->
-  <div class="wj-TblWrap mt20">
-   <!--left-->
-    <div class="w50 fl">
-      <div class="wj-TblWrapBr mr10 pd20" style="height:500px;">
+  <%-- 2단 --%>
+  <div class="wj-TblWrap mt10" style="overflow-y: hidden;">
+    <%--- left --%>
+    <div class="w40 fl">
+      <div class="wj-TblWrapBr mr10 pd20" style="height:460px;">
+        <span><s:message code="verRecv.verInfo" /></span>
         <div class="sb-select dkbr mb10 oh">
-          <%--페이지 스케일 --%>
-          <div id="listScaleBox1" class="w130 fl"></div>
-          <%-- 엑셀 다운로드 --%>
+          <%-- 엑셀 다운로드//todo --%>
+          <%--
           <div class="fr">
             <button id="btnExcel1" class="btn_skyblue"><s:message code="cmm.excel.down" /></button>
           </div>
+          --%>
         </div>
         <%--위즈모 테이블 --%>
-        <div style="height:410px;" id="theGrid1"></div>
+        <div id="theGrid1" style="height:390px;"></div>
       </div>
       <%-- 페이지 리스트 --%>
       <div class="pageNum mt20">
-        <%-- id --%>
         <ul id="page1" data-size="10">
         </ul>
       </div>
-      <%--//페이지 리스트--%>
     </div>
-    <!--//left-->
 
-    <!--right-->
-    <div class="w50 fr">
-      <div class="wj-TblWrapBr ml10 pd20" style="height:500px;">
+    <%-- right --%>
+    <div class="w60 fr">
+      <div class="wj-TblWrapBr ml10 pd20" style="height:460px;">
+        <span><s:message code="verRecv.recvStore"/></span>
         <div class="sb-select dkbr mb10 oh">
-          <%--페이지 스케일 --%>
-          <div id="listScaleBox2" class="w130 fl"></div>
-          <%-- 엑셀 다운로드 --%>
+          <%-- 엑셀 다운로드//todo--%>
+          <%--
           <div class="tr">
-              <button id="btnExcel2" class="btn_skyblue"><s:message code="cmm.excel.down" /></button>
+            <button id="btnExcel2" class="btn_skyblue"><s:message code="cmm.excel.down" /></button>
           </div>
+          --%>
         </div>
         <p class="s12 bk tl mb10 mt10" id="storeTit"></p>
-        <div style="height:350px;" id="theGrid2"></div>
+        <div id="theGrid2" style="height:390px;"></div>
       </div>
       <%-- 페이지 리스트 --%>
       <div class="pageNum mt20">
-        <%-- id --%>
         <ul id="page2" data-size="10">
         </ul>
       </div>
-      <%--//페이지 리스트--%>
     </div>
-    <!--//right-->
   </div>
-  <!--//2단-->
 </div>
 
 <script>
@@ -121,39 +112,33 @@
     location.href = "/pos/confg/verRecv/verStore/list.sb";
   });
 
-  <%-- 검색조건 --%>
-  var verSerNo = wcombo.genInput("#verSerNo");
-  var verSerNm = wcombo.genInput("#verSerNm");
 
   <%-- 공통코드 --%>
-  var progFg    = ${ccu.getCommCodeExcpAll("059")};
-  var progFgDataMap     = new wijmo.grid.DataMap(progFg, 'value', 'name');
+  var progFg = ${ccu.getCommCodeExcpAll("059")};
+  var progFgDataMap = new wijmo.grid.DataMap(progFg, 'value', 'name');
 
   <%-- Header --%>
   var hData1 =
     [
-      {binding:"verSerNo", header:"<s:message code='verRecv.verSerNo' />"},
-      {binding:"verSerNm", header:"<s:message code='verRecv.verSerNm' />"},
-      {binding:"progFg", header:"<s:message code='verRecv.progFg' />", dataMap:progFgDataMap},
-      {binding:"posCnt", header:"<s:message code='verRecv.posCnt' />"}
+      {binding:"verSerNo", header:"<s:message code='verRecv.verSerNo' />", width:100},
+      {binding:"verSerNm", header:"<s:message code='verRecv.verSerNm' />", width:"*"},
+      {binding:"progFg", header:"<s:message code='verRecv.progFg' />", dataMap:progFgDataMap, width:85},
+      {binding:"posCnt", header:"<s:message code='verRecv.posCnt' />", width:60}
     ];
 
   var hData2 =
     [
-      {binding:"verSerNo", header:"<s:message code='verRecv.verSerNo' />"},
-      {binding:"storeCd", header:"<s:message code='verRecv.storeCd' />"},
-      {binding:"storeNm", header:"<s:message code='verRecv.storeNm' />"},
-      {binding:"posNo", header:"<s:message code='verRecv.posNo' />"},
-      {binding:"verRecvDt", header:"<s:message code='verRecv.verRecvDt' />"},
-      {binding:"posIp", header:"<s:message code='verRecv.posIp' />"}
+      {binding:"verSerNo", header:"<s:message code='verRecv.verSerNo' />", width:90},
+      {binding:"storeCd", header:"<s:message code='verRecv.storeCd' />", width:"*"},
+      {binding:"storeNm", header:"<s:message code='verRecv.storeNm' />", width:60},
+      {binding:"posNo", header:"<s:message code='verRecv.posNo' />", width:100},
+      {binding:"verRecvDt", header:"<s:message code='verRecv.verRecvDt' />", width:"*"},
+      {binding:"posIp", header:"<s:message code='verRecv.posIp' />", width:110}
     ];
 
   <%-- 그리드 생성 --%>
-  var grid1         = wgrid.genGrid("#theGrid1", hData1, "${menuCd}", 1, ${clo.getColumnLayout(1)});
-  var grid2         = wgrid.genGrid("#theGrid2", hData2, "${menuCd}", 2, ${clo.getColumnLayout(1)});
-  var ldata         = ${ccu.getListScale()};
-  var listScaleBox1 = wcombo.genCommonBox("#listScaleBox1", ldata);
-  var listScaleBox2 = wcombo.genCommonBox("#listScaleBox2", ldata);
+  var grid1 = wgrid.genGrid("#theGrid1", hData1);
+  var grid2 = wgrid.genGrid("#theGrid2", hData2);
 
   <%-- 그리드 포맷 --%>
   grid1.formatItem.addHandler(function(s, e) {
@@ -188,7 +173,7 @@
 
     var param = {};
     param.verSerNo = selValue;
-    param.listScale = listScaleBox2.selectedValue;
+    param.listScale = "10";
     param.curr      = index;
 
     $.postJSON("${baseUrl}" + "storeList.sb", param, function(result) {
@@ -213,9 +198,9 @@
     //TODO 조회조건 validation
 
     var param = {};
-    param.verSerNo  = verSerNo.text;
-    param.verSerNm  = verSerNm.text;
-    param.listScale = listScaleBox1.selectedValue;
+    param.verSerNo  = $("#verSerNo").val();
+    param.verSerNm  = $("#verSerNm").val();
+    param.listScale = "10";
     param.curr      = index;
 
     $.postJSON("${baseUrl}" + "list.sb", param, function(result) {

@@ -50,7 +50,9 @@ app.controller('giftClassCtrl', ['$scope', '$http', function ($scope, $http) {
           } else if(selectedRow.useYn === "N") {
             s_alert.pop(messages["gift.not.use.payClassCd"]);
             var giftGrid = agrid.getScope('giftCtrl');
-            giftGrid._gridDataInit();
+            giftGrid.$apply(function(){
+              giftGrid._gridDataInit();
+            });
             return false;
           } else {
             $("#giftSubTitle").text(" [" + selectedRow.payClassNm+ "]");

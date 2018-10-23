@@ -395,9 +395,14 @@
       $("#rEmailAddr").val(data.emailAddr);
       $("#rHmpgAddr").val(data.hmpgAddr);
 
+      // date 형변환
+      var sysOpenDate = data.sysOpenDate;
+      sysOpenDateStr = sysOpenDate.split(".");
+      var sysOpenDateType = new Date(sysOpenDateStr[0], sysOpenDateStr[1], sysOpenDateStr[2]);
+
       rWeatherArea.selectedValue = data.areaCd;
       rSysStatFg.selectedValue   = data.sysStatFg;
-      rSysOpenDate.value         = data.sysOpenDate;
+      rSysOpenDate.value         = sysOpenDateType;
       rAgency.selectedValue      = data.agencyCd;
       rClsFg.selectedValue       = data.clsFg;
     },

@@ -51,8 +51,10 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
           } else if(selectedRow.useYn === "N") {
             s_alert.pop(messages["coupon.not.use.payClassCd"]);
             var couponGrid = agrid.getScope('couponCtrl');
-            couponGrid._gridDataInit();
-            // $scope._gridDataInit();
+            couponGrid.$apply(function(){
+              couponGrid._gridDataInit();
+            });
+
             return false;
           } else {
             $("#couponSubTitle").text(" [" + selectedRow.payClassNm+ "]");
@@ -100,7 +102,9 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
       selectedCouponClass = null;
       selectedCoupon = null;
       var couponScope = agrid.getScope('couponCtrl');
-      couponScope._gridDataInit();
+      couponScope.$apply(function(){
+        couponScope._gridDataInit();
+      });
     }, false);
   };
 
@@ -239,9 +243,13 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
           var popup = $scope.couponProdLayer;
           popup.show(true, function (s) {
             var regProdGrid = agrid.getScope('regProdCtrl');
-            regProdGrid._gridDataInit();
+            regProdGrid.$apply(function(){
+              regProdGrid._gridDataInit();
+            });
             var noRegProdGrid = agrid.getScope('noRegProdCtrl');
-            noRegProdGrid._gridDataInit();
+            noRegProdGrid.$apply(function(){
+              noRegProdGrid._gridDataInit();
+            });
           });
         }
         else if ( col.binding === "storeCnt" && selectedRow.status !== "I") {
@@ -249,9 +257,13 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
           var popup = $scope.couponStoreLayer;
           popup.show(true, function (s) {
             var regStoreGrid = agrid.getScope('regStoreCtrl');
-            regStoreGrid._gridDataInit();
+            regStoreGrid.$apply(function(){
+              regStoreGrid._gridDataInit();
+            });
             var noRegStoreGrid = agrid.getScope('noRegStoreCtrl');
-            noRegStoreGrid._gridDataInit();
+            noRegStoreGrid.$apply(function(){
+              noRegStoreGrid._gridDataInit();
+            });
           });
 
         }

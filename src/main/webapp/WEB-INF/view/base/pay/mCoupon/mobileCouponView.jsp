@@ -12,8 +12,12 @@
 
 <div class="subCon">
 
+  <div class="searchBar flddUnfld">
+   <a href="#" class="open">${menuNm}</a>
+  </div>
+
   <%-- 상품권분류등록 --%>
-  <div class="mb40" ng-controller="mCouponClassCtrl">
+  <div class="mb20 mt20" ng-controller="mCouponClassCtrl">
     <div class="wj-TblWrapBr mr10 pd20" style="height:500px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='mobileCoupon.regist.coupon' /></span>

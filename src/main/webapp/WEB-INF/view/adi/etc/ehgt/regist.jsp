@@ -205,8 +205,8 @@
 
               saleDate.value = selectedRow.saleDate;
               $.each(list, function(key, value){
-
-                $("#krwAmt_" + value.crncyCd).val(value.krwAmt);
+                var amt = addComma(value.krwAmt);
+                $("#krwAmt_" + value.crncyCd).val(amt);
               });
             },
             function(result) {
@@ -224,6 +224,7 @@
       var validParam = true;
       $(".crncy-item").each(function(index, element) {
         var val = $(this).val();
+        val = removeComma(val);
         if(isEmpty(val) || (parseFloat(val) < 1 && parseFloat(val) > 10000)) {
           validParam = false;
           $(this).focus();
@@ -241,7 +242,7 @@
           saleDate:getDate(saleDate),
           crncyCd:$(this).data("cd"),
           crncyAmt:$(this).data("unit"),
-          krwAmt:$(this).val()
+          krwAmt:removeComma($(this).val())
         });
 
       });

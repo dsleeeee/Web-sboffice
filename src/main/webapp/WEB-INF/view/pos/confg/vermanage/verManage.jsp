@@ -38,28 +38,28 @@
   </table>
 
   <%-- 조회 --%>
-  <div class="mt10 pdb20 oh bb">
+  <div class="mt10 pdb20 oh">
     <button class="btn_blue fr" id="btnSearch"><s:message code="cmm.search" /></button>
   </div>
 
-  <div class="mt20 oh sb-select dkbr">
+  <div class="mt10 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
     <div id="listScaleBox" class="w150 fl"></div>
     <div class="fr">
       <%-- 신규버전등록 --%>
       <button id="btnRegist" class="btn_skyblue"><s:message code="verManage.regist.new" /></button>
-      <%-- 엑셀 다운로드 --%>
-      <button id="btnExcel" class="btn_skyblue" ><s:message code="cmm.excel.down" /></button>
+      <%-- 엑셀 다운로드 //TODO --%>
+      <%--<button id="btnExcel" class="btn_skyblue" ><s:message code="cmm.excel.down" /></button>--%>
     </div>
   </div>
 
   <%-- 위즈모 테이블 --%>
-  <div class="wj-TblWrap mt10">
-    <div id="theGrid1" style="height:450px;"></div>
+  <div class="wj-TblWrap mt10" style="overflow-y: hidden">
+    <div id="theGrid1" style="height:320px;"></div>
   </div>
 
   <%-- 페이지 리스트 --%>
-  <div class="pageNum mt20">
+  <div class="pageNum mt5">
     <%-- id --%>
     <ul id="page" data-size="10">
     </ul>
@@ -87,18 +87,18 @@ var progFgDataMap    = new wijmo.grid.DataMap(progFg, 'value', 'name');
 <%-- Header --%>
 var hData1 =
   [
-    {binding:"verSerNo", header:"<s:message code='verManage.verSerNo' />", allowMerging:true},
-    {binding:"verSerNm", header:"<s:message code='verManage.verSerNm' />", allowMerging:true},
-    {binding:"progFg", header:"<s:message code='verManage.progFg' />", allowMerging:true, dataMap:progFgDataMap},
-    {binding:"pgmYn", header:"<s:message code='verManage.pgm' />", allowMerging:true, dataMap:containYnDataMap},
-    {binding:"dbYn", header:"<s:message code='verManage.db' />", allowMerging:true, dataMap:containYnDataMap},
-    {binding:"imgYn", header:"<s:message code='verManage.img' />", allowMerging:true, dataMap:containYnDataMap},
-    {binding:"fileSize", header:"<s:message code='verManage.fileSize' />", allowMerging:true},
-    {binding:"regCnt", header:"<s:message code='verManage.regCnt' />", allowMerging:true},
-    {binding:"recvCnt", header:"<s:message code='verManage.recvCnt' />", allowMerging:true},
-    {binding:"regDt", header:"<s:message code='verManage.regDt' />", allowMerging:true},
-    {binding:"regId", header:"<s:message code='verManage.regId' />", allowMerging:true},
-    {binding:"useYn", header:"<s:message code='verManage.useYn' />", allowMerging:true, dataMap:useYnDataMap}
+    {binding:"verSerNo", header:"<s:message code='verManage.verSerNo' />", allowMerging:true, width:90},
+    {binding:"verSerNm", header:"<s:message code='verManage.verSerNm' />", allowMerging:true, width:"*"},
+    {binding:"progFg", header:"<s:message code='verManage.progFg' />", allowMerging:true, dataMap:progFgDataMap, width:"*"},
+    {binding:"pgmYn", header:"<s:message code='verManage.pgm' />", allowMerging:true, dataMap:containYnDataMap, width:50},
+    {binding:"dbYn", header:"<s:message code='verManage.db' />", allowMerging:true, dataMap:containYnDataMap, width:50},
+    {binding:"imgYn", header:"<s:message code='verManage.img' />", allowMerging:true, dataMap:containYnDataMap, width:50},
+    {binding:"fileSize", header:"<s:message code='verManage.fileSize' />", allowMerging:true, width:70},
+    {binding:"regCnt", header:"<s:message code='verManage.regCnt' />", allowMerging:true, width:55},
+    {binding:"recvCnt", header:"<s:message code='verManage.recvCnt' />", allowMerging:true, width:55},
+    {binding:"regDt", header:"<s:message code='verManage.regDt' />", allowMerging:true, width:100},
+    {binding:"regId", header:"<s:message code='verManage.regId' />", allowMerging:true, width:60},
+    {binding:"useYn", header:"<s:message code='verManage.useYn' />", allowMerging:true, dataMap:useYnDataMap, width:60}
   ];
 
 <%-- 그리드 생성 --%>

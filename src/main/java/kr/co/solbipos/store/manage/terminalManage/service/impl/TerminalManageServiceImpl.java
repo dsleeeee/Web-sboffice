@@ -46,6 +46,12 @@ public class TerminalManageServiceImpl implements TerminalManageService{
         this.mapper = mapper;
     }
 
+    /** 벤더 조회 */
+    @Override
+    public List<DefaultMap<String>> getVendorList() {
+        return mapper.getVendorList();
+    }
+
     /** 매장 조회 */
     @Override
     public List<DefaultMap<String>> getStoreList(StoreManageVO storeManageVO) {

@@ -49,6 +49,12 @@
             <if test='envstNm != null and envstNm != ""'>
                 AND tce.ENVST_NM LIKE #{envstNm}||'%'
             </if>
+            <if test='envstFg != null and envstFg != ""'>
+                AND tce.ENVST_FG = #{envstFg}
+            </if>
+            <if test='envstGrpCd != null and envstGrpCd != ""'>
+                AND tce.ENVST_GRP_CD = #{envstGrpCd}
+            </if>
         </where>
         ORDER BY
             tce.ENVST_CD,

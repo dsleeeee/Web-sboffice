@@ -1,18 +1,18 @@
 package kr.co.solbipos.adi.etc.kitchenmemo.web;
 
-import static kr.co.common.utils.grid.ReturnUtil.returnJson;
-import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import kr.co.common.data.enums.CodeType;
+import kr.co.common.data.enums.Status;
+import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.data.structure.Result;
 import kr.co.common.exception.CodeException;
+import kr.co.common.service.message.MessageService;
+import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.adi.etc.kitchenmemo.service.KitchenMemoService;
+import kr.co.solbipos.adi.etc.kitchenmemo.service.KitchenMemoVO;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,14 +20,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import kr.co.common.data.enums.Status;
-import kr.co.common.data.structure.DefaultMap;
-import kr.co.common.data.structure.Result;
-import kr.co.common.service.message.MessageService;
-import kr.co.common.service.session.SessionService;
-import kr.co.solbipos.adi.etc.kitchenmemo.service.KitchenMemoService;
-import kr.co.solbipos.adi.etc.kitchenmemo.service.KitchenMemoVO;
-import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
+import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 
 
 /**
@@ -49,21 +48,20 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 @RequestMapping(value = "/adi/etc/kitchenMemo/kitchenMemo/")
 public class KitchenMemoController {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    private final KitchenMemoService service;
+    private final SessionService sessionService;
+    private final MessageService messageService;
+    private final CmmEnvUtil cmmEnvUtil;
 
-    /** service */
+    /** Constructor Injection */
     @Autowired
-    KitchenMemoService service;
-
-    @Autowired
-    SessionService sessionService;
-
-    @Autowired
-    MessageService messageService;
-
-    /** util */
-    @Autowired
-    CmmEnvUtil cmmEnvUtil;
+    public KitchenMemoController(KitchenMemoService service, SessionService sessionService,
+        MessageService messageService, CmmEnvUtil cmmEnvUtil) {
+        this.service = service;
+        this.sessionService = sessionService;
+        this.messageService = messageService;
+        this.cmmEnvUtil = cmmEnvUtil;
+    }
 
     /**
      * 부가서비스 > 주방메모관리

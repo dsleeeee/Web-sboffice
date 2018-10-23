@@ -45,13 +45,15 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Transactional
 public class RegistServiceImpl implements RegistService {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    private final RegistMapper mapper;
+    private final CmmEnvUtil cmmEnvUtil;
 
+    /** Constructor Injection */
     @Autowired
-    RegistMapper mapper;
-
-    @Autowired
-    CmmEnvUtil cmmEnvUtil;
+    public RegistServiceImpl(RegistMapper mapper, CmmEnvUtil cmmEnvUtil) {
+        this.mapper = mapper;
+        this.cmmEnvUtil = cmmEnvUtil;
+    }
 
     /** 등록매장 리스트 조회 */
     @Override

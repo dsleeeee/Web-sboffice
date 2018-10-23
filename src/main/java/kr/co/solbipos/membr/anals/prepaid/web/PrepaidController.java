@@ -45,11 +45,15 @@ public class PrepaidController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    PrepaidService service;
+    private final PrepaidService service;
+    private final SessionService sessionService;
 
+    /** Constructor Injection */
     @Autowired
-    SessionService sessionService;
+    public PrepaidController(PrepaidService service, SessionService sessionService) {
+        this.service = service;
+        this.sessionService = sessionService;
+    }
 
     /**
      * 페이지 이동

@@ -10,7 +10,7 @@
 <c:set var="baseUrl" value="/store/manage/terminalManage/" />
 
 <div class="subCon">
-  <div >
+  <div>
     <%-- 터미널 사용 설정 --%>
     <div class="searchBar flddUnfld">
       <a href="#" class="open">${menuNm}</a>
@@ -107,14 +107,14 @@
                   sticky-headers="true"
                   selection-mode="Row"
                   items-source="data"
-                  item-formatter="_itemFormatter">
+                  item-formatter="_itemFormatter"
+                  cell-edit-ended="changeVendorFg(s,e)">
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="terminalManage.storeCd"/>" binding="storeCd" width="*" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="terminalManage.posNo"/>" binding="posNo" width="*" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="terminalManage.vendorFg"/>" binding="vendorFg" data-map="vendorFgDataMap" width="*"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="terminalManage.vendorCd"/>" binding="vendorCd" data-map="vanCdDataMap" width="*"></wj-flex-grid-column>
-            <%--<wj-flex-grid-column header="<s:message code="terminalManage.vendorNm"/>" binding="vendorNm" width="*"></wj-flex-grid-column>--%>
             <wj-flex-grid-column header="<s:message code="terminalManage.vendorTermnlNo"/>" binding="vendorTermnlNo" width="*"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="terminalManage.vendorSerNo"/>" binding="vendorSerNo" width="*"></wj-flex-grid-column>
           </wj-flex-grid>
@@ -129,13 +129,13 @@
                   sticky-headers="true"
                   selection-mode="Row"
                   items-source="data"
-                  item-formatter="_itemFormatter">
+                  item-formatter="_itemFormatter"
+                  cell-edit-ended="changeVendorFg(s,e)">
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="terminalManage.cornrCd"/>" binding="cornrCd" width="*" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="terminalManage.vendorFg"/>" binding="vendorFg" data-map="vendorFgDataMap" width="*"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="terminalManage.vendorCd"/>" binding="vendorCd" data-map="vanCdDataMap" width="*"></wj-flex-grid-column>
-            <%--<wj-flex-grid-column header="<s:message code="terminalManage.vendorNm"/>" binding="vendorNm" width="*"></wj-flex-grid-column>--%>
             <wj-flex-grid-column header="<s:message code="terminalManage.vendorTermnlNo"/>" binding="vendorTermnlNo" width="*"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="terminalManage.vendorSerNo"/>" binding="vendorSerNo" width="*"></wj-flex-grid-column>
           </wj-flex-grid>
@@ -149,10 +149,9 @@
 var orgnFg = "${orgnFg}";
 var baseUrl = "${baseUrl}";
 var vendorFg = ${ccu.getCommCodeExcpAll("078")};
-var vanCdFg = ${ccu.getCommCodeExcpAll("079")};
+var vandorList = ${vendorList};
 var terminalFg = ${cnv.getEnvCodeExcpAll("2028")};
 var useYnFg    = ${ccu.getCommCodeExcpAll("067")};
-
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/terminal.js?ver=2018100601" charset="utf-8"></script>
 
