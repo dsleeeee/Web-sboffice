@@ -1,10 +1,17 @@
 package kr.co.solbipos.application.common.web;
 
-import static org.springframework.util.ObjectUtils.*;
-
 import kr.co.common.data.enums.CodeType;
+import kr.co.common.data.enums.Status;
+import kr.co.common.data.structure.JavaScriptResult;
+import kr.co.common.data.structure.Result;
+import kr.co.common.exception.AuthenticationException;
+import kr.co.common.exception.BizException;
 import kr.co.common.exception.CodeException;
-import kr.co.common.system.BaseEnv;
+import kr.co.common.service.message.MessageService;
+import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.common.utils.spring.WebUtil;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,18 +20,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import kr.co.common.data.enums.Status;
-import kr.co.common.data.structure.JavaScriptResult;
-import kr.co.common.data.structure.Result;
-import kr.co.common.exception.AuthenticationException;
-import kr.co.common.exception.BizException;
-import kr.co.common.service.message.MessageService;
-import kr.co.common.service.session.SessionService;
-import kr.co.common.utils.spring.StringUtil;
-import kr.co.common.utils.spring.WebUtil;
-import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
+
+import static org.springframework.util.ObjectUtils.isEmpty;
 
 /**
  * @author 정용길
@@ -36,11 +34,15 @@ public class ExceptionController {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     /** 메세지 서비스 */
-    @Autowired
-    MessageService messageService;
+    private final MessageService messageService;
+    private final SessionService sessionService;
 
+    /** Constructor Injection */
     @Autowired
-    SessionService sessionService;
+    public ExceptionController(MessageService messageService, SessionService sessionService) {
+        this.messageService = messageService;
+        this.sessionService = sessionService;
+    }
 
     /**
      * 업무관련 예외 처리<br>

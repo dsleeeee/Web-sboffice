@@ -1,7 +1,8 @@
 package kr.co.solbipos.application.com.bkmk.service.impl;
 
-import org.apache.ibatis.annotations.Mapper;
 import kr.co.solbipos.application.com.bkmk.service.BkmkVO;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 /**
 * @Class Name : BkmkMapper.java
@@ -20,6 +21,7 @@ import kr.co.solbipos.application.com.bkmk.service.BkmkVO;
 * @Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
 @Mapper
+@Repository
 public interface BkmkMapper {
 
     /** 즐겨찾기 메뉴 등록 */

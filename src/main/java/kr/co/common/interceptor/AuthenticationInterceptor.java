@@ -87,9 +87,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             }
         }
 
-        /**
-         * 세션 종료 처리
-         */
+        // 세션 종료 처리
         if (!isSessionValid) {
             // 로그 기록. inValidation 처리시 쉽게 알아보기 위함.
             LOGGER.info("AuthenticationInterceptor :: isValidSession :: deleteSessionInfo");
@@ -169,7 +167,6 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                     String msg = messageService.get("cmm.not.storecd") + ">>";
                     throw new AuthenticationException(msg, "/error/403.sb");
                 }
-
             } else {
                 if (!CmmUtil.listIndexOf(sessionInfoVO.getArrStoreCdList(), storeCd)) {
                     // 유효하지 않는 매장코드 입니다.
@@ -189,17 +186,16 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
     private SessionInfoVO setUserSelectDate(HttpServletRequest request, SessionInfoVO sessionInfoVO) {
         String startDt = request.getParameter("startDt");
         String endDt = request.getParameter("endDt");
-
         if ( !isEmpty(startDt) ) {
             sessionInfoVO.setStartDt(startDt);
         }
         if ( !isEmpty(endDt) ) {
             sessionInfoVO.setEndDt(endDt);
         }
+        // 값이 있는 경우에만 session 에 넣는다
         if ( !isEmpty(startDt) || !isEmpty(endDt) ) {
             sessionService.setSessionInfo(sessionInfoVO);
         }
-
         return sessionInfoVO;
     }
 
@@ -214,77 +210,43 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
      */
     private boolean checkUrl(HttpServletRequest request, List<ResrceInfoVO> authList, String url,
         SessionInfoVO sessionInfoVO) {
-
-        boolean resultCheck = false;
-
+        // main 주소는 제외
         if (url.equals("/main.sb")) {
             return true;
         }
-
         // url 파라미터 제거
         if (url.indexOf("?") > -1) {
             url = url.substring(0, url.indexOf("?"));
         }
-        // vo 값 찾기
-        ResrceInfoVO searchVO = new ResrceInfoVO();
-        searchVO.setUrl(url);
-        int index = authList.indexOf(searchVO);
+        // url값 찾기
+        boolean resultCheck = false;
+        for (ResrceInfoVO resrceInfoVO : authList) {
+            String authUrl = resrceInfoVO.getUrl();
+            if (!isEmpty(authUrl)) {
+                // 등록된 URL 에 파라미터가 있는 경우 파라미터 제거
+                if (authUrl.indexOf("?") > -1) {
+                    authUrl = authUrl.substring(0, authUrl.indexOf("?"));
+                }
+                if (authUrl.equals(url)) {
+                    if (RequestMethod.GET.toString().equals(request.getMethod())
+                        && resrceInfoVO.getResrceFg() == ResrceFg.FUNC) {
+                        resultCheck = true;
+                    } else if (RequestMethod.POST.toString().equals(request.getMethod())) {
+                        return true;
+                    }
+                    // 메뉴 일때만 사용 등록과 메뉴 히스토리에 추가함
+                    if (resrceInfoVO.getResrceFg() == ResrceFg.MENU && RequestMethod.GET.toString()
+                        .equals(request.getMethod())) {
 
-        if ( index >= 0 ) {
-            ResrceInfoVO resrceInfoVO = authList.get(index);
-
-            if (RequestMethod.GET.toString().equals(request.getMethod())
-                && resrceInfoVO.getResrceFg() == ResrceFg.FUNC) {
-                resultCheck = true;
-            } else if (RequestMethod.POST.toString().equals(request.getMethod())) {
-                return true;
+                        // 세션에 사용 메뉴 넣기
+                        cmmMenuService.addHistMenu(resrceInfoVO, sessionInfoVO);
+                        // 사용 히스토리 등록
+                        cmmMenuService.insertMenuUseHist(resrceInfoVO, sessionInfoVO);
+                        return true;
+                    }
+                }
             }
-
-            // 메뉴 일때만 사용 등록과 메뉴 히스토리에 추가함
-            if (resrceInfoVO.getResrceFg() == ResrceFg.MENU && RequestMethod.GET.toString()
-                .equals(request.getMethod())) {
-
-                // 세션에 사용 메뉴 넣기
-                cmmMenuService.addHistMenu(resrceInfoVO, sessionInfoVO);
-                // 사용 히스토리 등록
-                cmmMenuService.insertMenuUseHist(resrceInfoVO, sessionInfoVO);
-                return true;
-            }
-
         }
-
-//        int n = authList.size();
-//        boolean resultCheck = false;
-//        for (int i = 0; i < n; i++) {
-//            ResrceInfoVO resrceInfoVO = authList.get(i);
-//            String authUrl = resrceInfoVO.getUrl();
-//            if (!isEmpty(authUrl)) {
-//                // 등록된 URL 에 파라미터가 있는 경우 파라미터 제거
-//                if (authUrl.indexOf("?") > -1) {
-//                    authUrl = authUrl.substring(0, authUrl.indexOf("?"));
-//                }
-//
-//                if (authUrl.equals(url)) {
-//                    if (RequestMethod.GET.toString().equals(request.getMethod())
-//                        && resrceInfoVO.getResrceFg() == ResrceFg.FUNC) {
-//                        resultCheck = true;
-//                    } else if (RequestMethod.POST.toString().equals(request.getMethod())) {
-//                        return true;
-//                    }
-//
-//                    // 메뉴 일때만 사용 등록과 메뉴 히스토리에 추가함
-//                    if (resrceInfoVO.getResrceFg() == ResrceFg.MENU && RequestMethod.GET.toString()
-//                        .equals(request.getMethod())) {
-//
-//                        // 세션에 사용 메뉴 넣기
-//                        cmmMenuService.addHistMenu(resrceInfoVO, sessionInfoVO);
-//                        // 사용 히스토리 등록
-//                        cmmMenuService.insertMenuUseHist(resrceInfoVO, sessionInfoVO);
-//                        return true;
-//                    }
-//                }
-//            }
-//        }
         return resultCheck;
     }
 

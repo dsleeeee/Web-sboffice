@@ -11,10 +11,17 @@
 <div class="subCon" ng-controller="templateCtrl">
 
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="close fl">${menuNm}
+    </a>
+    <%-- 조회 --%>
+    <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+      <button class="btn_blue" id="btnSrchTemplate" ng-click="_broadcast('templateCtrl')">
+        <s:message code="posTemplate.srchBtnNm" />
+      </button>
+    </div>
   </div>
 
-  <table class="searchTbl">
+  <table class="searchTbl" style="display: none;">
     <colgroup>
       <col class="w10" />
       <col class="w20" />
@@ -45,17 +52,9 @@
     </tbody>
   </table>
 
-  <%-- 조회 --%>
-  <div class="mt10 oh">
-    <button class="btn_blue fr" id="btnSrchTemplate" ng-click="_broadcast('templateCtrl')">
-      <s:message code="posTemplate.srchBtnNm" />
-    </button>
-  </div>
-
-
-  <div class="wj-TblWrap mt40">
+  <div class="wj-TblWrap mt20">
     <%-- 템플릿 --%>
-    <div class="w25 fl">
+    <div class="w25 fl mt10 mr10">
       <%--위즈모 테이블--%>
       <div id="gridTemplate" class="wj-TblWrapBr pd20" style="height:485px;">
         <div class="updownSet oh mb10">
@@ -97,8 +96,8 @@
     </div>
 
     <%-- 코드리스트 --%>
-    <div class="w20 fl">
-      <div class="wj-TblWrapBr ml10 pd20" style="height:485px;">
+    <div class="w20 fl mt10 mr10">
+      <div class="wj-TblWrapBr pd20" style="height:485px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='posTemplate.listNm' /></span>
         </div>
@@ -108,8 +107,9 @@
       </div>
     </div>
 
-    <div class="fl" style="width: 325px;">
-      <div class="wj-TblWrapBr ml10 pd20 templateEdit" style="height:485px;">
+    <%-- 편집 영역 --%>
+    <div class="fl mt10 mr10" style="width: 325px;">
+      <div class="wj-TblWrapBr pd20 templateEdit" style="height:485px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='posTemplate.editNm' /></span>
           <c:if test="${orgnFg == 'HQ'}">
@@ -127,8 +127,9 @@
       </div>
     </div>
 
-    <div class="fl" style="width: 325px;">
-      <div class="wj-TblWrapBr ml10 pd20 templateEdit" style="height:485px;">
+    <%-- 미리보기 영역 --%>
+    <div class="fl mt10" style="width: 325px;">
+      <div class="wj-TblWrapBr pd20 templateEdit" style="height:485px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='posTemplate.viewNm' /></span>
         </div>

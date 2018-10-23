@@ -19,6 +19,9 @@ function RootController(ctrlName, $scope, $http, isPicker) {
   };
   // 그리드 조회
   $scope._inquiry = function (url, params, callback, isView, isMaster) {
+    // 로딩바 show
+    $scope.$broadcast('loadingPopupActive');
+    // 마스터그리드 여부
     if (isMaster) {
       var el = angular.element('input');
       var name = '';
@@ -46,6 +49,8 @@ function RootController(ctrlName, $scope, $http, isPicker) {
       params: params, /* 파라메터로 보낼 데이터 */
       headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
     }).then(function successCallback(response) {
+      // 로딩바 hide
+      $scope.$broadcast('loadingPopupInactive');
       if(response.data.status === "OK") {
         // this callback will be called asynchronously
         // when the response is available
@@ -84,6 +89,8 @@ function RootController(ctrlName, $scope, $http, isPicker) {
         $scope._popMsg(msg);
       }
     }, function errorCallback(response) {
+      // 로딩바 hide
+      $scope.$broadcast('loadingPopupInactive');
       // called asynchronously if an error occurs
       // or server returns response with an error status.
       $scope._popMsg(messages["cmm.error"]);
@@ -301,21 +308,120 @@ function RootController(ctrlName, $scope, $http, isPicker) {
       });
     }
   };
-};
+  // 로딩 메시지 팝업 열기
+  $scope.$on('loadingPopupActive', function () {
+    $scope._loadingPopup.show(true);
+  });
+  // 로딩 메시지 팝업 닫기
+  $scope.$on('loadingPopupInactive', function () {
+    $scope._loadingPopup.hide();
+  });
+}
+
+// 메뉴 트리뷰 생성
+function MenuController(ctrlName, menuUrl, $scope, $http) {
+
+  // 메뉴목록 조회 및 트리Data Set
+  $scope._searchTree = function(menuUrl) {
+    $http({
+      method: 'POST', //방식
+      url: menuUrl, /* 통신할 URL */
+      params: {}, /* 파라메터로 보낼 데이터 */
+      headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+    }).then(function successCallback(response) {
+      if(response.data.status === "OK") {
+        $scope.items = JSON.parse(response.data.data);
+      }
+    }, function errorCallback(response) {
+      $scope._popMsg("메뉴를 불러오는데 실패하였습니다.");
+      return false;
+    });
+  };
+  // 메뉴목록 조회
+  $scope._searchTree(menuUrl);
+  // 현재선택한 메뉴 가져오기
+  $http({
+    method: 'POST', //방식
+    url: "/menu/currentMenu.sb", /* 통신할 URL */
+    params: {}, /* 파라메터로 보낼 데이터 */
+    headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+  }).then(function successCallback(response) {
+    if(response.data.status === "OK") {
+      var data = response.data.data;
+      if ( data ) {
+        $scope.setInitMenu(data.resrceCd);
+      }
+    }
+  }, function errorCallback(response) {
+    $scope._popMsg("선택된 메뉴를 불러오는데 실패하였습니다.");
+    return false;
+  });
+
+  // 트리의 아이템이 load 완료 되었을 때 이벤트
+  $scope.loadedItems = function(s, e) {
+    var node;
+    // 아이콘 Class 추가
+    for (node = s.getFirstNode(); node; node = node.nextSibling()) {
+      if(!isEmpty(node)){
+        wijmo.addClass(node.element, node.dataItem.icon);
+      }
+    }
+    s.collapseToLevel(0);
+
+    var initMenu = $scope.getInitMenu();
+    // 초기 메뉴(현재 메뉴) 설정
+    if (initMenu) {
+      for (node = s.getFirstNode(); node; node = node.next()) {
+        if (isEmpty(node.nodes)) {
+          if (!isEmpty(node.dataItem) && node.dataItem.cd === initMenu) {
+            s.selectedItem = node.dataItem;
+          }
+        }
+      }
+    }
+  };
+
+  // 선택된 메뉴가 변경 되었을 때 이벤트
+  $scope.selectedItemChanged = function(s, e) {
+    var node, pNode = $scope.getPNode();
+    // 이전 메뉴의 클래스 제거
+    if(pNode) {
+      for (node = pNode; node; node = node.parentNode) {
+        wijmo.removeClass(node.element, "on");
+      }
+    }
+    // 선택된 메뉴에 클래스 추가
+    for (node = s.selectedNode; node; node = node.parentNode) {
+      wijmo.addClass(node.element, "on");
+    }
+    $scope.setPNode(s.selectedNode);
+  };
+
+  // 아이템 클릭 시 이벤트
+  $scope.itemClicked = function(s, e) {
+    // URL 이 있을 경우 페이지 이동
+    if(!isEmpty(s.selectedNode.dataItem.url)) {
+      location.href = s.selectedNode.dataItem.url;
+      // 가상로그인시 파라미터인 SessionID 설정
+      if( document.getElementsByName("sessionId").length > 0 ) {
+        var vSessionId = document.getElementsByName("sessionId")[0].value;
+        location.href = s.selectedNode.dataItem.url + "?sid=" + vSessionId;
+      }
+    }
+    // 같은 메뉴를 다시 선택 했을 때 메뉴 닫기 기능
+    if( $scope.getPNode() === s.selectedNode) {
+      s.selectedNode.isCollapsed = !s.selectedNode.isCollapsed;
+    } else {
+      s.selectedNode.isCollapsed = false;
+    }
+  };
+}
 
 !function (win, $) {
   var app = angular.module('rootApp', ['wj', 'ngSanitize']);
   // main-controller
-  app.controller('rootCtrl', ['$scope', '$http', '$compile', '$sce', 'comboData', 'pagingData',
-    function ($scope, $http, $compile, $sce, comboData, pagingData) {
-      // 로딩 메시지 팝업 열기
-      $scope.$on('loadingPopupActive', function () {
-        $scope._loadingPopup.show(true);
-      });
-      // 로딩 메시지 팝업 닫기
-      $scope.$on('loadingPopupInactive', function () {
-        $scope._loadingPopup.hide();
-      });
+  app.controller('rootCtrl', ['$scope', '$http', '$compile', '$sce', 'comboData', 'pagingData', 'pNode', 'initMenu',
+    function ($scope, $http, $compile, $sce, comboData, pagingData, pNode, initMenu) {
       // 페이징바 동적 생성
       $scope.$on('drawPaging', function (event, pagingInfo) {
         // 페이징바 갯수
@@ -423,49 +529,64 @@ function RootController(ctrlName, $scope, $http, isPicker) {
       $scope._getComboData = function (id) {
         return comboData.get(id);
       };
+      // initMenu Data Setter
+      $scope.setInitMenu = function (data) {
+        initMenu.set(data);
+      };
+      // initMenu Data Getter
+      $scope.getInitMenu = function () {
+        return initMenu.get();
+      };
+      // pNode Data Setter
+      $scope.setPNode = function (data) {
+        pNode.set(data);
+      };
+      // pNode Data Getter
+      $scope.getPNode = function () {
+        return pNode.get();
+      };
     }]);
-  app.factory('myHttpInterceptor', function ($timeout, $q, $rootScope) {
-    return {
-      'request': function (config) {
-        $rootScope.$broadcast('loadingPopupActive');
-        return config;
-      },
-      'requestError': function (rejectionRequest) {
-        console.log("from REQUEST ERROR");
-        $rootScope.$broadcast('loadingPopupInactive');
-        return $q.reject("Couldnot have a successfull request, Sorry :(");
-      },
-      'response': function (response) {
-        $rootScope.$broadcast('loadingPopupInactive');
-        return response;
-      },
-      'responseError': function (rejectionRequest) {
-        console.log("from RESPONSE ERROR");
-        $rootScope.$broadcast('loadingPopupInactive');
-        return $q.reject(rejectionRequest)
-      }
-    }
-  }).factory('comboData', function () {
+  app.factory('comboData', function () {
     var comboDataMap = [];
     comboDataMap.set = function (id, data) {
       comboDataMap[id] = data;
-    }
+    };
     comboDataMap.get = function (id) {
       return comboDataMap[id];
-    }
+    };
     return comboDataMap;
   }).factory('pagingData', function () {
     var currentPage = {};
     currentPage.set = function (idx) {
       currentPage.value = idx;
-    }
+    };
     currentPage.get = function () {
       return currentPage.value;
-    }
+    };
     return currentPage;
+  }).factory('pNode', function () {
+    // 상위node Get/Set
+    var pNode = {};
+    pNode.set = function (data) {
+      pNode.value = data;
+    };
+    pNode.get = function () {
+      return pNode.value;
+    };
+    return pNode;
+  }).factory('initMenu', function () {
+    // 현재메뉴 Get/Set
+    var initMenu = {};
+    initMenu.set = function (data) {
+      initMenu.value = data;
+    };
+    initMenu.get = function () {
+      return initMenu.value;
+    };
+    return initMenu;
   });
   app.config(function ($httpProvider) {
-    $httpProvider.interceptors.push('myHttpInterceptor');
+    // $httpProvider.interceptors.push('myHttpInterceptor');
   });
   // angular Grid 생성
   var agrid = {

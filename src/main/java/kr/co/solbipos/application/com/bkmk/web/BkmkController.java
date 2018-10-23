@@ -11,9 +11,9 @@ import kr.co.solbipos.application.com.fixing.service.FixingVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -83,28 +83,31 @@ public class BkmkController {
     /**
      * 즐겨찾기 관리 저장
      *
-     * @param params
-     * @param request
-     * @param response
+     * @param params HashMap<String, Object>
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
      * @return
      */
     @RequestMapping(value = "/bkmk/save.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result saveBkmk(@RequestParam HashMap<String, Object> params, HttpServletRequest request,
+    public Result saveBkmk(@RequestBody HashMap<String, Object> params, HttpServletRequest request,
             HttpServletResponse response) {
         List<String> result = new ArrayList<String>();
 
         // 세션 가져오기
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
         // 즐겨찾기 데이터
         BkmkVO bkmkVO = new BkmkVO();
-        bkmkVO.setResrceCds(params.get("favorMenuCodes").toString().split(","));
+        if ( params.get("favorMenuCodes") != null ) {
+            bkmkVO.setResrceCds(params.get("favorMenuCodes").toString().split(","));
+        }
         // 즐겨찾기 저장
         bkmkService.saveBkmk(bkmkVO, sessionInfoVO.getUserId());
         // 고정메뉴 데이터
         FixingVO fixingVO = new FixingVO();
-        fixingVO.setResrceCds(params.get("fixMenuCodes").toString().split(","));
+        if ( params.get("fixMenuCodes") != null ) {
+            fixingVO.setResrceCds(params.get("fixMenuCodes").toString().split(","));
+        }
         // 고정메뉴 저장
         fixingService.saveFixing(fixingVO, sessionInfoVO.getUserId());
 

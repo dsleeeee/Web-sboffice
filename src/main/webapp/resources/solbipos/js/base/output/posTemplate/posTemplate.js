@@ -39,8 +39,8 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
         var item = s.rows[e.row].dataItem;
-        // 본사등록 외 수정/삭제 불가
         if (col.binding === "gChk") {
+          // 자신이 등록한것만 수정/삭제 가능 ( 본사/매장 )
           if (item.templtRegFg !== gvOrgnFg || item.templtCd === "000") {
             wijmo.addClass(e.cell, 'wj-custom-readonly');
             e.cell.children[0].disabled = true;
@@ -48,10 +48,9 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
         }
         // 템플릿명 ReadOnly 효과
         if (col.binding === "templtNm") {
-          if (item.status !== "I") {
+          // 자신이 등록한것만 수정 가능 ( 본사/매장 )
+          if (item.templtRegFg !== gvOrgnFg || item.templtCd === "000") {
             wijmo.addClass(e.cell, 'wj-custom-readonly');
-          } else {
-            wijmo.removeClass(e.cell, 'wj-custom-readonly');
           }
         }
       }
@@ -60,8 +59,9 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
     s.beginningEdit.addHandler(function (s, e) {
       var col = s.columns[e.col];
       if (col.binding === "templtNm") {
-        var dataItem = s.rows[e.row].dataItem;
-        if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
+        var item = s.rows[e.row].dataItem;
+        // 자신이 등록한것만 수정 가능 ( 본사/매장 )
+        if (item.templtRegFg !== gvOrgnFg || item.templtCd === "000") {
           e.cancel = true;
         }
       }

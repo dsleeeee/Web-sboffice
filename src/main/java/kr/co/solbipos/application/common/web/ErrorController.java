@@ -43,12 +43,17 @@ public class ErrorController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
+    private final SessionService sessionService;
+    private final MessageService messageService;
+    private final CmmEnvUtil cmmEnvUtil;
+
+    /** Constructor Injection */
     @Autowired
-    SessionService sessionService;
-    @Autowired
-    MessageService messageService;
-    @Autowired
-    CmmEnvUtil cmmEnvUtil;
+    public ErrorController(SessionService sessionService, MessageService messageService, CmmEnvUtil cmmEnvUtil) {
+        this.sessionService = sessionService;
+        this.messageService = messageService;
+        this.cmmEnvUtil = cmmEnvUtil;
+    }
 
     /** 에러페이지는 인터셉터를 수행하지 않으므로, 세션처리를 별도로 하여 가상로그인 사용시 에러를 방지한다. */
     private void setSessionInfo(HttpServletRequest request) {
