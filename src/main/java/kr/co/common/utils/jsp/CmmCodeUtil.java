@@ -326,6 +326,19 @@ public class CmmCodeUtil {
         return assmblObj(agencyList, "agencyNm", "agencyCd", UseYn.ALL);
     }
 
+
+    /**
+     * 벤사 코드 조회 //TODO 추후 삭제 후 아래것으로 대체할 것
+     *
+     * @return
+     */
+    public String getVanList() {
+        List<DefaultMap<String>> agencyList = cmmCodeService.getVanList("");
+
+        // 결과 형태를 만들어서 json 으로 리턴
+        return assmblObj(agencyList, "vanNm", "vanCd", UseYn.ALL);
+    }
+
     /**
      * 벤사 코드 조회
      *
