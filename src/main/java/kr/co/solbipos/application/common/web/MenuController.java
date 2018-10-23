@@ -34,15 +34,56 @@ public class MenuController {
 
     private final SessionService sessionService;
     private final CmmMenuService cmmMenuService;
-
-    @Autowired
-    CmmEnvUtil cmmEnvUtil;
+    private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
-    public MenuController(SessionService sessionService, CmmMenuService cmmMenuService) {
+    public MenuController(SessionService sessionService, CmmMenuService cmmMenuService, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
         this.cmmMenuService = cmmMenuService;
+        this.cmmEnvUtil = cmmEnvUtil;
+    }
+
+    /**
+     * 메뉴목록 조회 : 세션에 저장된 메뉴목록
+     *
+     * @param request HttpServletRequest
+     * @param model Model
+     * @return
+     */
+    @RequestMapping(value = "/menuList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMenuList(HttpServletRequest request, Model model) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        return returnJson(Status.OK, sessionInfoVO.getMenuData());
+    }
+
+    /**
+     * 즐겨찾기 메뉴목록 조회 : 세션에 저장된 즐겨찾기 메뉴목록
+     *
+     * @param request HttpServletRequest
+     * @param model Model
+     * @return
+     */
+    @RequestMapping(value = "/bkmkList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getBkmkList(HttpServletRequest request, Model model) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        return returnJson(Status.OK, sessionInfoVO.getBkmkData());
+    }
+
+    /**
+     * 선택메뉴 가져오기 : 세션의 현재 선택한 메뉴 정보 반환
+     *
+     * @param request HttpServletRequest
+     * @param model Model
+     * @return
+     */
+    @RequestMapping(value = "/currentMenu.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getCurrentMenu(HttpServletRequest request, Model model) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        return returnJson(Status.OK, sessionInfoVO.getCurrentMenu());
     }
 
     /**

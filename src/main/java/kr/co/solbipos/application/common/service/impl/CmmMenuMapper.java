@@ -72,6 +72,14 @@ public interface CmmMenuMapper {
     List<ResrceInfoBaseVO> selectFixingMenu(SessionInfoVO sessionInfoVO);
 
     /**
+     * 권한 있는 메뉴 리스트 조회
+     *
+     * @param sessionInfoVO
+     * @return
+     */
+    List<ResrceInfoVO> selectAuthMenu(SessionInfoVO sessionInfoVO);
+
+    /**
      * 메뉴 조회
      *
      * @return List

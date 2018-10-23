@@ -1,10 +1,11 @@
 package kr.co.solbipos.application.com.bkmk.service.impl;
 
-import static kr.co.common.utils.DateUtil.currentDateTimeString;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import kr.co.solbipos.application.com.bkmk.service.BkmkService;
 import kr.co.solbipos.application.com.bkmk.service.BkmkVO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
 * @Class Name : BkmkServiceImpl.java
@@ -25,8 +26,12 @@ import kr.co.solbipos.application.com.bkmk.service.BkmkVO;
 @Service("bkmkService")
 public class BkmkServiceImpl implements BkmkService {
 
+    private final BkmkMapper bkmkMapper;
+
     @Autowired
-    BkmkMapper bkmkMapper;
+    public BkmkServiceImpl(BkmkMapper bkmkMapper) {
+        this.bkmkMapper = bkmkMapper;
+    }
 
     @Override
     public int saveBkmk( BkmkVO bkmkVO, String userId ) {

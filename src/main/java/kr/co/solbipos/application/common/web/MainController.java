@@ -20,16 +20,22 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class MainController {
 
+    private final SessionService sessionService;
+
+    /** Constructor Injection */
     @Autowired
-    SessionService sessionService;
+    public MainController(SessionService sessionService) {
+        this.sessionService = sessionService;
+    }
 
     /**
       * 로그인 후 메인 페이지로 이동
       *
-      * @param request
-      * @param response
-      * @param model
-      * @return
+      * @param request HttpServletRequest
+      * @param response HttpServletResponse
+      * @param redirectAttributes RedirectAttributes
+      * @param model Model
+      * @return String
       */
     @RequestMapping(value = "/main.sb", method = RequestMethod.GET)
     public String main(HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes, Model model) {
@@ -67,6 +73,7 @@ public class MainController {
 
         return "application/main/mrhstMain";
     }
+
 }
 
 
