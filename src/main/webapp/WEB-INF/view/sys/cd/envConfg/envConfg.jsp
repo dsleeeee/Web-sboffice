@@ -36,11 +36,17 @@
   </table>
 
   <%-- 조회 --%>
-  <div class="mt10 oh">
+  <div class="ml10 mt10 oh">
+    <div class="mt10"><span style="color:#ff0000;"><b><s:message code="systemCd.prefixInfo"/></b></span></div>
+    <div class="mt10"><span><s:message code="systemCd.prefix.0"/></span></div>
+    <div class="mt5"><span><s:message code="systemCd.prefix.1"/></span></div>
+    <div class="mt5"><span><s:message code="systemCd.prefix.2"/></span></div>
+    <div class="mt5"><span><s:message code="systemCd.prefix.3"/></span>
       <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('representCtrl')"><s:message code="cmm.search" /></button>
+    </div>
   </div>
 
-  <div id="gridRepresent" class="w60 fl mt40" style="width: 60%" ng-controller="representCtrl">
+  <div id="gridRepresent" class="w60 fl mt10" style="width: 60%" ng-controller="representCtrl">
     <%--위즈모 테이블--%>
     <div class="wj-TblWrapBr mr10 pd20" style="height: 400px;">
       <div class="updownSet oh mb10">
@@ -70,8 +76,8 @@
 
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="envConfg.envstCd"/>" binding="envstCd" width="70"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="envConfg.envstNm"/>" binding="envstNm" width="100"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="envConfg.envstCd"/>" binding="envstCd" width="70" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="envConfg.envstNm"/>" binding="envstNm" width="130"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="envConfg.envstFgNm"/>" binding="envstFg" width="140" data-map="envstFgNmDataMap" ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="envConfg.envstGrpCdNm"/>" binding="envstGrpCd" width="100" data-map="envstGrpCdNmDataMap"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="envConfg.dirctInYn"/>" binding="dirctInYn" width="70" data-map="dirctInYnDataMap"></wj-flex-grid-column>
@@ -91,7 +97,7 @@
     <%--//위즈모 테이블--%>
   </div>
 
-  <div id="gridDetail" class="w40 fr mt40" style="width: 40%" ng-controller="detailCtrl">
+  <div id="gridDetail" class="w40 fr mt10" style="width: 40%" ng-controller="detailCtrl">
     <%--위즈모 테이블--%>
     <div class="wj-TblWrapBr ml10 pd20" style="height: 400px;">
       <div class="updownSet oh mb10">
