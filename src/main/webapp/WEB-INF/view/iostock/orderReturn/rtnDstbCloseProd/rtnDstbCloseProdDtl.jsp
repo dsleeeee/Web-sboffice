@@ -156,7 +156,7 @@
       $scope.procFg  = data.procFg;
 
       $scope.wjRtnDstbCloseProdDtlLayer.show(true);
-      $("#spanDtlTitle").html('[<s:message code="rtnDstbCloseProd.dtl.orderReturn"/>] ' + '[' + $scope.prodCd + '] ' + $scope.prodNm);
+      $("#spanDtlTitle").html('['+messages["rtnDstbCloseProd.dtl.orderReturn"]+'] ' + '[' + $scope.prodCd + '] ' + $scope.prodNm);
 
       if (parseInt($scope.procFg) < 20) {
         $("#btnDtlSave").show();

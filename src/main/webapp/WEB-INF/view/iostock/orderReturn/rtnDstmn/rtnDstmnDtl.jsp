@@ -137,9 +137,9 @@
     $scope.dtlOutDate = wcombo.genDateVal("#dtlOutDate", "${sessionScope.sessionInfo.startDt}");
 
     $scope._setComboData("stmtAcctFg", [
-      {"name": "<s:message code='rtnDstmn.dtl.stmtAcctAll'/>", "value": ""},
-      {"name": "<s:message code='rtnDstmn.dtl.stmtAcctSplr'/>", "value": "1"},
-      {"name": "<s:message code='rtnDstmn.dtl.stmtAcctSplrRcpnt'/>", "value": "2"}
+      {"name": messages["rtnDstmn.dtl.stmtAcctAll"], "value": ""},
+      {"name": messages["rtnDstmn.dtl.stmtAcctSplr"], "value": "1"},
+      {"name": messages["rtnDstmn.dtl.stmtAcctSplrRcpnt"], "value": "2"}
     ]);
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -241,7 +241,7 @@
 
             // 수주확정
             if ($scope.procFg === "10") {
-              $("#spanDtlTitle").html('<s:message code="rtnDstmn.dtl.slipNo"/> : ' + $scope.slipNo + ' <s:message code="rtnDstmn.dtl.store"/> : ' + $scope.storeNm + ' <s:message code="rtnDstmn.dtl.reqDate"/> : ' + getFormatDate($scope.outDate));
+              $("#spanDtlTitle").html(messages["rtnDstmn.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["rtnDstmn.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["rtnDstmn.dtl.reqDate"]+' : ' + getFormatDate($scope.outDate));
               $("#spanOutstockConfirmFg").show();
               $("#outstockBtnLayer").show();
               $("#outstockAfterBtnLayer").hide();
@@ -256,11 +256,11 @@
 
               // 출고확정
               if ($scope.procFg === "20") {
-                $("#spanDtlTitle").html('<s:message code="rtnDstmn.dtl.slipNo"/> : ' + $scope.slipNo + ' <s:message code="rtnDstmn.dtl.store"/> : ' + $scope.storeNm + ' <s:message code="rtnDstmn.dtl.outDate"/> : ' + getFormatDate($scope.outDate));
+                $("#spanDtlTitle").html(messages["rtnDstmn.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["rtnDstmn.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["rtnDstmn.dtl.outDate"]+' : ' + getFormatDate($scope.outDate));
               }
               // 입고확정
               else if ($scope.procFg === "30") {
-                $("#spanDtlTitle").html('<s:message code="rtnDstmn.dtl.slipNo"/> : ' + $scope.slipNo + ' <s:message code="rtnDstmn.dtl.store"/> : ' + $scope.storeNm + ' <s:message code="rtnDstmn.dtl.outDate"/> : ' + getFormatDate($scope.outDate) + ' <s:message code="rtnDstmn.dtl.inDate"/> : ' + getFormatDate($scope.inDate));
+                $("#spanDtlTitle").html(messages["rtnDstmn.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["rtnDstmn.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["rtnDstmn.dtl.outDate"]+' : ' + getFormatDate($scope.outDate) + ', '+messages["rtnDstmn.dtl.inDate"]+' : ' + getFormatDate($scope.inDate));
               }
             }
 

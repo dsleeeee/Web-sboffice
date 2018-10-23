@@ -183,7 +183,7 @@
         $scope.reqDate = data.reqDate;
         $scope.slipFg  = data.slipFg;
         $scope.wjRtnDstbCloseProdAddProdLayer.show(true);
-        $("#addProdSubTitle").html(' (<s:message code="rtnDstbCloseProd.add.reqDate"/> : ' + getFormatDate($scope.reqDate, '-') + ')');
+        $("#addProdSubTitle").html(' ('+messages["rtnDstbCloseProd.add.reqDate"]+' : ' + getFormatDate($scope.reqDate, '-') + ')');
       }
       else { // 페이징처리에서 broadcast 호출시
         $scope.searchRtnDstbCloseProdAddProdList();

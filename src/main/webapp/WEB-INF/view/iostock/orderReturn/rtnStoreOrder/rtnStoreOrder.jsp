@@ -23,17 +23,17 @@
       <th><s:message code="cmm.search.date"/></th>
       <td>
         <div class="sb-select">
-                    <span class="txtIn w150">
-                    <wj-combo-box
-                      id="srchDateFg"
-                      ng-model="dateFg"
-                      items-source="_getComboData('srchDateFg')"
-                      display-member-path="name"
-                      selected-value-path="value"
-                      is-editable="false"
-                      initialized="_initComboBox(s)">
-                    </wj-combo-box>
-                    </span>
+          <span class="txtIn w150">
+          <wj-combo-box
+            id="srchDateFg"
+            ng-model="dateFg"
+            items-source="_getComboData('srchDateFg')"
+            display-member-path="name"
+            selected-value-path="value"
+            is-editable="false"
+            initialized="_initComboBox(s)">
+          </wj-combo-box>
+          </span>
           <span class="txtIn"><input id="srchStartDate" class="w150"></span>
           <span class="rg">~</span>
           <span class="txtIn"><input id="srchEndDate" class="w150"></span>
@@ -81,9 +81,10 @@
   </table>
 
   <div class="mt10 pdb20 oh bb">
-    envst173 : ${envst173} &nbsp;&nbsp;envst594 : ${envst594}
+    envst1042 : ${envst1042} &nbsp;&nbsp;envst1044 : ${envst1044}
     <%-- 조회 --%>
-    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('rtnStoreOrderCtrl')"><s:message code="cmm.search"/></button>
+    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('rtnStoreOrderCtrl')">
+      <s:message code="cmm.search"/></button>
   </div>
 
   <div class="w100 mt10">
@@ -137,9 +138,9 @@
     $scope.reqDate       = wcombo.genDate("#reqDate");
 
     $scope._setComboData("srchDateFg", [
-      {"name": "<s:message code='rtnStoreOrder.reqDate'/>", "value": "req"},
-      {"name": "<s:message code='rtnStoreOrder.regDate'/>", "value": "reg"},
-      {"name": "<s:message code='rtnStoreOrder.modDate'/>", "value": "mod"}
+      {"name": messages["rtnStoreOrder.reqDate"], "value": "req"},
+      {"name": messages["rtnStoreOrder.regDate"], "value": "reg"},
+      {"name": messages["rtnStoreOrder.modDate"], "value": "mod"}
     ]);
 
     $scope._setComboData("srchProcFg", [
@@ -158,7 +159,7 @@
     // 출고가능일자 세팅
     $scope.reqDate.value = new Date(getFormatDate("${reqDate}", "-"));
     // 출고요청일자 선택가능여부에 따라 출고요청일자 선택여부 처리
-    if ("${envst594}" === "Y") {
+    if ("${envst1044}" === "Y") {
       $scope.reqDate.isReadOnly = true;
     }
 
@@ -216,7 +217,7 @@
     // 반품 리스트 조회
     $scope.searchRtnStoreOrderList = function () {
       if ($("#rtnStoreOrderSelectStoreCd").val() === "") {
-        $scope._popMsg('<s:message code="rtnStoreOrder.dtl.require.selectStore"/>'); // 매장을 선택해 주세요.
+        $scope._popMsg(messages["rtnStoreOrder.dtl.require.selectStore"]); // 매장을 선택해 주세요.
         return false;
       }
       $scope.searchedStoreCd = $("#rtnStoreOrderSelectStoreCd").val(); // 반품요청일자를 클릭하여 상세내역을 봐야하므로 조회할 당시 매장코드를 담아둔다.
@@ -235,7 +236,7 @@
     // 신규 요청등록
     $scope.newReqOrder = function () {
       if ($("#rtnStoreOrderSelectStoreCd").val() === "") {
-        $scope._popMsg('<s:message code="rtnStoreOrder.dtl.require.selectStore"/>'); // 매장을 선택해 주세요.
+        $scope._popMsg(messages["rtnStoreOrder.dtl.require.selectStore"]); // 매장을 선택해 주세요.
         return false;
       }
       var params        = {};

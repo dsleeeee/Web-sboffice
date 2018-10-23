@@ -42,7 +42,7 @@ public class InstockConfmServiceImpl implements InstockConfmService {
         return instockConfmMapper.getInstockConfmDtlList(instockConfmVO);
     }
 
-    /** 출고확정 - 출고확정 상세 리스트 저장 */
+    /** 입고확정 - 입고확정 상세 리스트 저장 */
     @Override
     public int saveInstockConfmDtl(InstockConfmVO[] instockConfmVOs, SessionInfoVO sessionInfoVO) {
         int returnResult = 0;
@@ -50,6 +50,7 @@ public class InstockConfmServiceImpl implements InstockConfmService {
         int i = 0;
         String currentDt = currentDateTimeString();
         String confirmFg = "N";
+        int instockErrCnt = 0;
 
         InstockConfmVO InstockConfmHdVO = new InstockConfmVO();
 
@@ -72,9 +73,13 @@ public class InstockConfmServiceImpl implements InstockConfmService {
             int inUnitQty = (instockConfmVO.getInUnitQty() == null ? 0 : instockConfmVO.getInUnitQty()) * slipFg;
             int inEtcQty  = (instockConfmVO.getInEtcQty()  == null ? 0 : instockConfmVO.getInEtcQty()) * slipFg;
             int inTotQty  = (instockConfmVO.getInTotQty()  == null ? 0 : instockConfmVO.getInTotQty()) * slipFg;
+            int outTotQty = (instockConfmVO.getOutTotQty() == null ? 0 : instockConfmVO.getOutTotQty()) * slipFg;
             Long inAmt    = (instockConfmVO.getInAmt()     == null ? 0 : instockConfmVO.getInAmt()) * slipFg;
             Long inVat    = (instockConfmVO.getInVat()     == null ? 0 : instockConfmVO.getInVat()) * slipFg;
             Long inTot    = (instockConfmVO.getInTot()     == null ? 0 : instockConfmVO.getInTot()) * slipFg;
+
+            // 출고수량과 입고수량이 다르면 카운트
+            if(inTotQty != outTotQty) instockErrCnt++;
 
             instockConfmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             instockConfmVO.setInUnitQty(inUnitQty);
@@ -92,12 +97,12 @@ public class InstockConfmServiceImpl implements InstockConfmService {
             result = instockConfmMapper.updateInstockConfmDtl(instockConfmVO);
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-            // HD 수정
-            result = instockConfmMapper.updateInstockConfmHd(InstockConfmHdVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
             returnResult += result;
         }
+
+        // HD 수정
+        result = instockConfmMapper.updateInstockConfmHd(InstockConfmHdVO);
+        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
         // 입고확정여부를 체크한 경우
         if(confirmFg.equals("Y")) {
@@ -111,6 +116,18 @@ public class InstockConfmServiceImpl implements InstockConfmService {
             // HD의 진행구분 수정. 출고확정 -> 입고확정
             result = instockConfmMapper.updateInstockConfirm(InstockConfmHdVO);
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+            // 출고수량과 입고수량이 다른 상품이 있는 경우 물량오류로 등록
+            if(instockErrCnt > 0) {
+                // 물량오류 DTL 등록
+                result = instockConfmMapper.insertInstockErrDtl(InstockConfmHdVO);
+                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                // 물량오류 HD 등록
+                result = instockConfmMapper.insertInstockErrHd(InstockConfmHdVO);
+                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            }
+
         }
 
         return returnResult;

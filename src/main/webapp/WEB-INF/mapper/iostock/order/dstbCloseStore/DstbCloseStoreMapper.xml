@@ -84,7 +84,7 @@
         ,       tmp.PO_PROD_FG
         ,       tmp.PO_UNIT_FG
         ,       tmp.PO_UNIT_QTY
-        ,       0 AS ENVST0011
+        ,       the.ENVST_VAL AS ENVST0011
         ,       TO_NUMBER(DECODE(DECODE(tphsd.PROC_FG,'00',tphsd.MD_UNIT_QTY,tphsd.MGR_UNIT_QTY), 0, NULL, DECODE(tphsd.PROC_FG,'00',tphsd.MD_UNIT_QTY,tphsd.MGR_UNIT_QTY)*tphsd.SLIP_FG)) AS MGR_UNIT_QTY
         ,       TO_NUMBER(DECODE(DECODE(tphsd.PROC_FG,'00',tphsd.MD_ETC_QTY ,tphsd.MGR_ETC_QTY ), 0, NULL, DECODE(tphsd.PROC_FG,'00',tphsd.MD_ETC_QTY ,tphsd.MGR_ETC_QTY )*tphsd.SLIP_FG)) AS MGR_ETC_QTY
         ,       TO_NUMBER(DECODE(DECODE(tphsd.PROC_FG,'00',tphsd.MD_TOT_QTY ,tphsd.MGR_TOT_QTY ), 0, NULL, DECODE(tphsd.PROC_FG,'00',tphsd.MD_TOT_QTY ,tphsd.MGR_TOT_QTY )*tphsd.SLIP_FG)) AS MGR_TOT_QTY
@@ -105,6 +105,7 @@
                     FROM    TB_ST_STORE_STOCK_CUR
                     WHERE   STORE_CD  =   #{storeCd}
                 )   tsssc
+        ,       TB_HQ_ENVST the
         WHERE   tphsd.HQ_OFFICE_CD   =   #{hqOfficeCd}
         AND     tphsd.REQ_DATE       =   #{reqDate}
         AND     tphsd.SLIP_FG        =   #{slipFg}
@@ -113,6 +114,8 @@
         AND     tphsd.PROD_CD        =   tmp.PROD_CD
         AND     tshsc.PROD_CD    (+) =   tphsd.PROD_CD
         AND     tsssc.PROD_CD    (+) =   tphsd.PROD_CD
+        AND     the.HQ_OFFICE_CD     =   #{hqOfficeCd}
+        AND     the.ENVST_CD         =   '0011'
         ORDER BY tphsd.PROD_CD
         ]]>
     </select>
@@ -265,7 +268,7 @@
         ,       tmp.USE_YN
         ,       tmp.PO_UNIT_FG
         ,       tmp.PO_UNIT_QTY
-        ,       0 AS ENVST0011
+        ,       the.ENVST_VAL AS ENVST0011
         ,       tmp.SAFE_STOCK_QTY
         ,       TRUNC(DECODE(SIGN(thp.SAFE_STOCK_QTY),-1,0,thp.SAFE_STOCK_QTY) / thp.PO_UNIT_QTY) AS HQ_SAFE_STOCK_UNIT_QTY
         ,       MOD  (DECODE(SIGN(thp.SAFE_STOCK_QTY),-1,0,thp.SAFE_STOCK_QTY) , thp.PO_UNIT_QTY) AS HQ_SAFE_STOCK_ETC_QTY
@@ -290,6 +293,7 @@
                 ) tphsd
         ,       TB_HQ_PRODUCT thp
         ,       TB_MS_PRODUCT_BARCD tmpb
+        ,       TB_HQ_ENVST the
         WHERE   tmp.STORE_CD          =   #{storeCd}
         AND     tmp.USE_YN            =   'Y'
         AND     tsssc.STORE_CD    (+) =   tmp.STORE_CD
@@ -301,6 +305,8 @@
         AND     thp.PROD_CD           =   tmp.PROD_CD
         AND     tmpb.STORE_CD     (+) =   tmp.STORE_CD
         AND     tmpb.PROD_CD      (+) =   tmp.PROD_CD
+        AND     the.HQ_OFFICE_CD      =   #{hqOfficeCd}
+        AND     the.ENVST_CD          =   '0011'
         ]]>
         <if test='prodCd != null and prodCd != ""'>
             AND tmp.PROD_CD = #{prodCd}

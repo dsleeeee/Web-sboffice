@@ -63,9 +63,9 @@
         <div id="instockBtnLayer" style="display: none;">
           <%-- 입고확정 체크박스 --%>
           <span id="spanInstockConfirmFg" class="chk pdb5 txtIn fl" style="top: 0px;">
-                  <input type="checkbox" name="instockConfirmFg" id="instockConfirmFg" value="Y" ng-click="fnConfirmChk()"/>
-                  <label for="instockConfirmFg"><s:message code="instockConfm.dtl.confirmFg"/></label>
-                </span>
+            <input type="checkbox" name="instockConfirmFg" id="instockConfirmFg" value="Y" ng-click="fnConfirmChk()"/>
+            <label for="instockConfirmFg"><s:message code="instockConfm.dtl.confirmFg"/></label>
+          </span>
           <%-- 입고일자 --%>
           <div id="divDtlInDate" class="sb-select ml10 fl" style="display: none;">
             <span class="txtIn"><input id="dtlInDate" class="w120"></span>
@@ -133,9 +133,9 @@
     $scope.dtlInDate = wcombo.genDateVal("#dtlInDate", "${sessionScope.sessionInfo.startDt}");
 
     $scope._setComboData("stmtAcctFg", [
-      {"name": "<s:message code='instockConfm.dtl.stmtAcctAll'/>", "value": ""},
-      {"name": "<s:message code='instockConfm.dtl.stmtAcctSplr'/>", "value": "1"},
-      {"name": "<s:message code='instockConfm.dtl.stmtAcctSplrRcpnt'/>", "value": "2"}
+      {"name": messages["instockConfm.dtl.stmtAcctAll"], "value": ""},
+      {"name": messages["instockConfm.dtl.stmtAcctSplr"], "value": "1"},
+      {"name": messages["instockConfm.dtl.stmtAcctSplrRcpnt"], "value": "2"}
     ]);
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -237,10 +237,10 @@
 
             // 출고확정
             if ($scope.procFg === "20") {
-              $("#spanDtlTitle").html('<s:message code="instockConfm.dtl.slipNo"/> : ' + $scope.slipNo + ', <s:message code="instockConfm.dtl.store"/> : ' + $scope.storeNm + ', <s:message code="instockConfm.dtl.outDate"/> : ' + getFormatDate($scope.outDate));
+              $("#spanDtlTitle").html(messages["instockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["instockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["instockConfm.dtl.outDate"]+' : ' + getFormatDate($scope.outDate));
               $("#instockBtnLayer").show();
 
-              if ("${envst176}" === "N") {
+              if ("${envst1043}" === "N") {
                 $scope.flex.isReadOnly = true;
               }
               else {
@@ -254,11 +254,11 @@
 
               // 수주확정
               if ($scope.procFg === "10") {
-                $("#spanDtlTitle").html('<s:message code="instockConfm.dtl.slipNo"/> : ' + $scope.slipNo + ', <s:message code="instockConfm.dtl.store"/> : ' + $scope.storeNm + ', <s:message code="instockConfm.dtl.reqDate"/> : ' + getFormatDate($scope.outDate));
+                $("#spanDtlTitle").html(messages["instockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["instockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["instockConfm.dtl.reqDate"]+' : ' + getFormatDate($scope.outDate));
               }
               // 입고확정
               else if ($scope.procFg === "30") {
-                $("#spanDtlTitle").html('<s:message code="instockConfm.dtl.slipNo"/> : ' + $scope.slipNo + ', <s:message code="instockConfm.dtl.store"/> : ' + $scope.storeNm + ', <s:message code="instockConfm.dtl.outDate"/> : ' + getFormatDate($scope.outDate) + ', <s:message code="instockConfm.dtl.inDate"/> : ' + getFormatDate($scope.inDate));
+                $("#spanDtlTitle").html(messages["instockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["instockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["instockConfm.dtl.outDate"]+' : ' + getFormatDate($scope.outDate) + ', '+messages["instockConfm.dtl.inDate"]+' : ' + getFormatDate($scope.inDate));
               }
             }
 

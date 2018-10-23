@@ -168,7 +168,7 @@
       $scope.slipFg  = data.slipFg;
       $scope.procFg  = data.procFg;
 
-      $("#spanDtlTitle").html('[<s:message code="dstbReq.dtl.order"/>] ' + '[' + $scope.storeCd + '] ' + $scope.storeNm);
+      $("#spanDtlTitle").html('['+messages["dstbReq.dtl.order"]+'] ' + '[' + $scope.storeCd + '] ' + $scope.storeNm);
       $scope.orderProcFgCheck();
       // 기능수행 종료 : 반드시 추가
       event.preventDefault();
@@ -337,7 +337,7 @@
       }
 
       if ($scope.availableOrderAmt != null && parseInt($scope.availableOrderAmt) < parseInt(mdTot)) {
-        var msg = "<s:message code='dstbReq.dtl.mdTotOver'/>"; //분배금액이 주문가능액을 초과하였습니다. 계속 진행 하시겠습니까?
+        var msg = messages["dstbReq.dtl.mdTotOver"]; //분배금액이 주문가능액을 초과하였습니다. 계속 진행 하시겠습니까?
         var id  = s_alert.randomString(5);
         var pop = $("#_layerConf").clone(true).attr("id", id).appendTo(document.body);
         pop.find("p").text(msg);
@@ -373,7 +373,7 @@
       // 분배완료여부를 체크하고 저장하는 경우
       if($("#dstbConfirmFg").is(":checked")) {
         // 분배완료를 체크하셨습니다. 분배자료를 생성하므로 주문내역의 자료를 수정하실 수 없습니다. 계속 하시겠습니까?
-        var msg = "<s:message code='dstbReq.dtl.confirmText'/>";
+        var msg = messages["dstbReq.dtl.confirmText"];
         s_alert.popConf(msg, function () {
           $scope._save("/iostock/order/dstbReq/dstbReqDtl/save.sb", params, function () {
             $scope.saveDstbReqDtlCallback()

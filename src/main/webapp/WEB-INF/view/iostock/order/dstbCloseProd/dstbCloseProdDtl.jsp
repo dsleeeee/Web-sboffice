@@ -83,8 +83,8 @@
     angular.extend(this, new RootController('dstbCloseProdDtlCtrl', $scope, $http, true));
 
     $scope.orderFgMap = new wijmo.grid.DataMap([
-      {id: "Y", name: "<s:message code='dstbCloseProd.dtl.orderFgY'/>"},
-      {id: "N", name: "<s:message code='dstbCloseProd.dtl.orderFgN'/>"},
+      {id: "Y", name: messages["dstbCloseProd.dtl.orderFgY"]},
+      {id: "N", name: messages["dstbCloseProd.dtl.orderFgN"]},
     ], 'id', 'name');
 
     $scope.procFgMap = new wijmo.grid.DataMap([
@@ -162,7 +162,7 @@
       $scope.procFg  = data.procFg;
 
       $scope.wjDstbCloseProdDtlLayer.show(true);
-      $("#spanDtlTitle").html('[<s:message code="dstbCloseProd.dtl.order"/>] ' + '[' + $scope.prodCd + '] ' + $scope.prodNm);
+      $("#spanDtlTitle").html('['+messages["dstbCloseProd.dtl.order"]+'] ' + '[' + $scope.prodCd + '] ' + $scope.prodNm);
 
       if (parseInt($scope.procFg) < 20) {
         $("#btnDtlSave").show();

@@ -139,7 +139,7 @@
   // 값 체크
   function valueCheck() {
     <%-- 매장을 선택해주세요. --%>
-    var msg = "<s:message code='outstockReqDate.require.selectStore'/>";
+    var msg = messages["outstockReqDate.require.selectStore"];
     if ($("#speDateRegistStoreCd").val() === "") {
       s_alert.popOk(msg, function () {
       });
@@ -147,7 +147,7 @@
     }
 
     <%-- 설명(을)를 입력하세요. --%>
-    var msg = "<s:message code='outstockReqDate.specificDateRemark'/> <s:message code='cmm.require.text'/>";
+    var msg = messages["outstockReqDate.specificDateRemark"]+" "+messages["cmm.require.text"];
     if ($("#specificDateRemark").val() === "") {
       s_alert.popOk(msg, function () {
         $("#specificDateRemark").select();
@@ -156,7 +156,7 @@
     }
 
     <%-- 설명의 길이가 너무 깁니다. --%>
-    var msg = "<s:message code='outstockReqDate.specificDateRemark'/> <s:message code='outstockReqDate.textOver'/>";
+    var msg = messages["outstockReqDate.specificDateRemark"]+" "+messages["outstockReqDate.textOver"];
     if ($("#specificDateRemark").val().getByteLengthForOracle() > 18) {
       s_alert.popOk(msg, function () {
         $("#specificDateRemark").select();

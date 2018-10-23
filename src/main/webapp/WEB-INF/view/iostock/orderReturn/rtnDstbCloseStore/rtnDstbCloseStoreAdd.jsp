@@ -232,7 +232,7 @@
         $scope.reqDate = data.reqDate;
         $scope.slipFg  = data.slipFg;
         $scope.wjRtnDstbCloseStoreAddLayer.show(true);
-        $("#addProdSubTitle").html(' (<s:message code="rtnDstbCloseStore.add.reqDate"/> : ' + getFormatDate($scope.reqDate, '-') + ')');
+        $("#addProdSubTitle").html(' ('+messages["rtnDstbCloseStore.add.reqDate"]+' : ' + getFormatDate($scope.reqDate, '-') + ')');
       }
       else { // 페이징처리에서 broadcast 호출시
         $scope.searchRtnDstbCloseStoreAddList();

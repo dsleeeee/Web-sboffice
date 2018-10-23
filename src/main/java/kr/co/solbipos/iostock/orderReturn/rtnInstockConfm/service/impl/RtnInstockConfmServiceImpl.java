@@ -6,7 +6,6 @@ import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.iostock.order.instockConfm.service.InstockConfmVO;
 import kr.co.solbipos.iostock.orderReturn.rtnInstockConfm.service.RtnInstockConfmService;
 import kr.co.solbipos.iostock.orderReturn.rtnInstockConfm.service.RtnInstockConfmVO;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,7 @@ public class RtnInstockConfmServiceImpl implements RtnInstockConfmService {
         this.messageService = messageService;
     }
 
-    /** 입고확정 리스트 조회 */
+    /** 반품본사입고 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getRtnInstockConfmList(RtnInstockConfmVO rtnInstockConfmVO) {
         return rtnInstockConfmMapper.getRtnInstockConfmList(rtnInstockConfmVO);
@@ -37,13 +36,13 @@ public class RtnInstockConfmServiceImpl implements RtnInstockConfmService {
         return rtnInstockConfmMapper.getSlipNoInfo(rtnInstockConfmVO);
     }
 
-    /** 입고확정 상세 리스트 조회 */
+    /** 반품본사입고 상세 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getRtnInstockConfmDtlList(RtnInstockConfmVO rtnInstockConfmVO) {
         return rtnInstockConfmMapper.getRtnInstockConfmDtlList(rtnInstockConfmVO);
     }
 
-    /** 출고확정 - 출고확정 상세 리스트 저장 */
+    /** 반품본사입고 - 반품본사입고 상세 리스트 저장 */
     @Override
     public int saveRtnInstockConfmDtl(RtnInstockConfmVO[] rtnInstockConfmVOs, SessionInfoVO sessionInfoVO) {
         int returnResult = 0;
@@ -51,6 +50,7 @@ public class RtnInstockConfmServiceImpl implements RtnInstockConfmService {
         int i = 0;
         String currentDt = currentDateTimeString();
         String confirmFg = "N";
+        String penaltyFg = "";
 
         RtnInstockConfmVO rtnInstockConfmHdVO = new RtnInstockConfmVO();
 
@@ -69,13 +69,17 @@ public class RtnInstockConfmServiceImpl implements RtnInstockConfmService {
                 rtnInstockConfmHdVO.setModDt(currentDt);
             }
 
-            int slipFg    = rtnInstockConfmVO.getSlipFg();
-            int inUnitQty = (rtnInstockConfmVO.getInUnitQty() == null ? 0 : rtnInstockConfmVO.getInUnitQty()) * slipFg;
-            int inEtcQty  = (rtnInstockConfmVO.getInEtcQty()  == null ? 0 : rtnInstockConfmVO.getInEtcQty()) * slipFg;
-            int inTotQty  = (rtnInstockConfmVO.getInTotQty()  == null ? 0 : rtnInstockConfmVO.getInTotQty()) * slipFg;
-            Long inAmt    = (rtnInstockConfmVO.getInAmt()     == null ? 0 : rtnInstockConfmVO.getInAmt()) * slipFg;
-            Long inVat    = (rtnInstockConfmVO.getInVat()     == null ? 0 : rtnInstockConfmVO.getInVat()) * slipFg;
-            Long inTot    = (rtnInstockConfmVO.getInTot()     == null ? 0 : rtnInstockConfmVO.getInTot()) * slipFg;
+            int slipFg      = rtnInstockConfmVO.getSlipFg();
+            int inUnitQty   = (rtnInstockConfmVO.getInUnitQty()  == null ? 0 : rtnInstockConfmVO.getInUnitQty()) * slipFg;
+            int inEtcQty    = (rtnInstockConfmVO.getInEtcQty()   == null ? 0 : rtnInstockConfmVO.getInEtcQty()) * slipFg;
+            int inTotQty    = (rtnInstockConfmVO.getInTotQty()   == null ? 0 : rtnInstockConfmVO.getInTotQty()) * slipFg;
+            Long inAmt      = (rtnInstockConfmVO.getInAmt()      == null ? 0 : rtnInstockConfmVO.getInAmt()) * slipFg;
+            Long inVat      = (rtnInstockConfmVO.getInVat()      == null ? 0 : rtnInstockConfmVO.getInVat()) * slipFg;
+            Long inTot      = (rtnInstockConfmVO.getInTot()      == null ? 0 : rtnInstockConfmVO.getInTot()) * slipFg;
+            int penaltyAmt  = (rtnInstockConfmVO.getPenaltyAmt() == null ? 0 : rtnInstockConfmVO.getPenaltyAmt());
+            if(penaltyAmt > 0 && !penaltyFg.equals("Y")) {
+                penaltyFg = "Y";
+            }
 
             rtnInstockConfmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             rtnInstockConfmVO.setInUnitQty(inUnitQty);
@@ -93,12 +97,13 @@ public class RtnInstockConfmServiceImpl implements RtnInstockConfmService {
             result = rtnInstockConfmMapper.updateRtnInstockConfmDtl(rtnInstockConfmVO);
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-            // HD 수정
-            result = rtnInstockConfmMapper.updateRtnInstockConfmHd(rtnInstockConfmHdVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
             returnResult += result;
         }
+
+        // HD 수정
+        rtnInstockConfmHdVO.setPenaltyFg(penaltyFg);
+        result = rtnInstockConfmMapper.updateRtnInstockConfmHd(rtnInstockConfmHdVO);
+        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
         // 입고확정여부를 체크한 경우
         if(confirmFg.equals("Y")) {

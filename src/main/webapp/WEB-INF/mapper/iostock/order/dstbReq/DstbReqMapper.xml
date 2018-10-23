@@ -75,7 +75,7 @@
         ,       tmp.USE_YN
         ,       tmp.PO_UNIT_FG
         ,       tmp.PO_UNIT_QTY
-        ,       0 AS ENVST0011
+        ,       the.ENVST_VAL AS ENVST0011
         ,       tmp.SAFE_STOCK_QTY
         ,       TRUNC(DECODE(SIGN(tmp.SAFE_STOCK_QTY),-1,0,tmp.SAFE_STOCK_QTY) / tmp.PO_UNIT_QTY) AS SAFE_STOCK_UNIT_QTY
         ,       MOD  (DECODE(SIGN(tmp.SAFE_STOCK_QTY),-1,0,tmp.SAFE_STOCK_QTY) , tmp.PO_UNIT_QTY) AS SAFE_STOCK_ETC_QTY
@@ -96,12 +96,15 @@
                     FROM    TB_ST_HQ_STOCK_CUR
                     WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
                 )   tshsc
+        ,       TB_HQ_ENVST the
         WHERE   tphsod.STORE_CD       =   #{storeCd}
         AND     tphsod.REQ_DATE       =   #{reqDate}
         AND     tphsod.SLIP_FG        =   #{slipFg}
         AND     tphsod.STORE_CD       =   tmp.STORE_CD
         AND     tphsod.PROD_CD        =   tmp.PROD_CD
         AND     tshsc.PROD_CD     (+) =   tphsod.PROD_CD
+        AND     the.HQ_OFFICE_CD      =   #{hqOfficeCd}
+        AND     the.ENVST_CD          =   '0011'
         ORDER BY tphsod.PROD_CD
         ]]>
     </select>

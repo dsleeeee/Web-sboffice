@@ -139,17 +139,20 @@
         ,        tphsod.IN_VAT  *tphsod.SLIP_FG                                                       AS IN_VAT
         ,        tphsod.IN_TOT  *tphsod.SLIP_FG                                                       AS IN_TOT
         ,        tphsod.REMARK
-        ,        0 AS ENVST0011
+        ,        the.ENVST_VAL AS ENVST0011
         ,        thpb.BARCD_CD
         FROM     TB_PO_HQ_STORE_OUTSTOCK_DTL tphsod
         ,        TB_HQ_PRODUCT thp
         ,        TB_HQ_PRODUCT_BARCD thpb
+        ,        TB_HQ_ENVST the
         WHERE    tphsod.HQ_OFFICE_CD    =   #{hqOfficeCd}
         AND      tphsod.SLIP_NO         =   #{slipNo}
         AND      thp.HQ_OFFICE_CD       =   tphsod.HQ_OFFICE_CD
         AND      thp.PROD_CD            =   tphsod.PROD_CD
         AND      thpb.HQ_OFFICE_CD  (+) =   tphsod.HQ_OFFICE_CD
         AND      thpb.PROD_CD       (+) =   tphsod.PROD_CD
+        AND      the.HQ_OFFICE_CD       =   #{hqOfficeCd}
+        AND      the.ENVST_CD           =   '0011'
         ORDER
         BY       tphsod.PROD_CD, tphsod.SEQ
         ]]>
@@ -235,4 +238,88 @@
         WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     SLIP_NO       = #{slipNo}
     </update>
+
+    <!-- 입고확정 - 물량오류 DTL 등록 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK
+        PARAM    : instockConfmVO
+        COMMENTS : 입고확정 - 입고확정시 출고수량과 입고수량의 차이가 발생하는 경우 물량오류 DTL 등록한다.
+    -->
+    <insert id="insertInstockErrDtl" parameterType="instockConfmVO">
+        /* USE : InstockConfmMapper.insertInstockErrDtl */
+        <![CDATA[
+        INSERT INTO TB_PO_STORE_INSTOCK_ERROR_DTL
+        (       HQ_OFFICE_CD    ,       SLIP_NO         ,       SEQ             ,       SLIP_FG
+        ,       DSTB_FG         ,       STORAGE_CD      ,       HQ_BRAND_CD     ,       PROD_CD         ,       PROD_SEQ        ,       PO_UNIT_FG      ,       PO_UNIT_QTY
+        ,       OUT_SPLY_UPRC   ,       OUT_UNIT_QTY    ,       OUT_ETC_QTY     ,       OUT_TOT_QTY     ,       OUT_AMT         ,       OUT_VAT         ,       OUT_TOT
+        ,       IN_SPLY_UPRC    ,       IN_UNIT_QTY     ,       IN_ETC_QTY      ,       IN_TOT_QTY      ,       IN_AMT          ,       IN_VAT          ,       IN_TOT
+        ,       REG_DT
+        ,       REG_ID
+        ,       MOD_DT
+        ,       MOD_ID
+        )
+        SELECT  HQ_OFFICE_CD    ,       SLIP_NO         ,       SEQ             ,       SLIP_FG
+        ,       DSTB_FG         ,       STORAGE_CD      ,       HQ_BRAND_CD     ,       PROD_CD         ,       ROWNUM          ,       PO_UNIT_FG      ,       PO_UNIT_QTY
+        ,       OUT_SPLY_UPRC   ,       OUT_UNIT_QTY    ,       OUT_ETC_QTY     ,       OUT_TOT_QTY     ,       OUT_AMT         ,       OUT_VAT         ,       OUT_TOT
+        ,       IN_SPLY_UPRC    ,       IN_UNIT_QTY     ,       IN_ETC_QTY      ,       IN_TOT_QTY      ,       IN_AMT          ,       IN_VAT          ,       IN_TOT
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        FROM    TB_PO_HQ_STORE_OUTSTOCK_DTL
+        WHERE   HQ_OFFICE_CD =   #{hqOfficeCd}
+        AND     SLIP_NO      =   #{slipNo}
+        AND     (OUT_UNIT_QTY <> IN_UNIT_QTY OR OUT_ETC_QTY <> IN_ETC_QTY)
+        ]]>
+    </insert>
+
+    <!-- 입고확정 - 물량오류 HD 등록 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK
+        PARAM    : instockConfmVO
+        COMMENTS : 입고확정 - 입고확정시 출고수량과 입고수량의 차이가 발생하는 경우 물량오류 HD 등록한다.
+    -->
+    <insert id="insertInstockErrHd" parameterType="instockConfmVO">
+        /* USE : InstockConfmMapper.insertInstockErrHd */
+        INSERT INTO TB_PO_STORE_INSTOCK_ERROR
+        (       HQ_OFFICE_CD        ,       SLIP_NO         ,       STORE_CD        ,       EMP_NO          ,       SLIP_FG
+        ,       PROC_FG             ,       OUT_DATE        ,       IN_DATE
+        ,       DTL_CNT
+        ,       OUT_UNIT_QTY        ,       OUT_ETC_QTY     ,       OUT_TOT_QTY     ,       OUT_AMT         ,       OUT_VAT         ,       OUT_TOT
+        ,       IN_UNIT_QTY         ,       IN_ETC_QTY      ,       IN_TOT_QTY      ,       IN_AMT          ,       IN_VAT          ,       IN_TOT
+        ,       REG_DT
+        ,       REG_ID
+        ,       MOD_DT
+        ,       MOD_ID
+        )
+        SELECT  tphso.HQ_OFFICE_CD  ,       tphso.SLIP_NO       ,       tphso.STORE_CD        ,       tphso.EMP_NO      ,       tphso.SLIP_FG
+        ,       '0'                 ,       tphso.OUT_DATE      ,       tphso.IN_DATE
+        ,       tpsied.DTL_CNT
+        ,       tpsied.OUT_UNIT_QTY ,       tpsied.OUT_ETC_QTY  ,       tpsied.OUT_TOT_QTY    ,       tpsied.OUT_AMT    ,       tpsied.OUT_VAT      ,       tpsied.OUT_TOT
+        ,       tpsied.IN_UNIT_QTY  ,       tpsied.IN_ETC_QTY   ,       tpsied.IN_TOT_QTY     ,       tpsied.IN_AMT     ,       tpsied.IN_VAT       ,       tpsied.IN_TOT
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        FROM    TB_PO_HQ_STORE_OUTSTOCK tphso
+        ,       (   SELECT  COUNT(*)          AS DTL_CNT
+                    ,       SUM(OUT_UNIT_QTY) AS OUT_UNIT_QTY
+                    ,       SUM(OUT_ETC_QTY)  AS OUT_ETC_QTY
+                    ,       SUM(OUT_TOT_QTY)  AS OUT_TOT_QTY
+                    ,       SUM(OUT_AMT)      AS OUT_AMT
+                    ,       SUM(OUT_VAT)      AS OUT_VAT
+                    ,       SUM(OUT_TOT)      AS OUT_TOT
+                    ,       SUM(IN_UNIT_QTY)  AS IN_UNIT_QTY
+                    ,       SUM(IN_ETC_QTY)   AS IN_ETC_QTY
+                    ,       SUM(IN_TOT_QTY)   AS IN_TOT_QTY
+                    ,       SUM(IN_AMT)       AS IN_AMT
+                    ,       SUM(IN_VAT)       AS IN_VAT
+                    ,       SUM(IN_TOT)       AS IN_TOT
+                    FROM    TB_PO_STORE_INSTOCK_ERROR_DTL
+                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+                    AND     SLIP_NO         =   #{slipNo}
+                )   tpsied
+        WHERE   tphso.HQ_OFFICE_CD  =   #{hqOfficeCd}
+        AND     tphso.SLIP_NO       =   #{slipNo}
+    </insert>
 </mapper>

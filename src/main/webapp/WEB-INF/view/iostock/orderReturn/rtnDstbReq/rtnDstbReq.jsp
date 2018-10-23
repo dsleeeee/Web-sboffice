@@ -123,9 +123,9 @@
     var srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.startDt}");
 
     $scope._setComboData("srchDateFg", [
-      {"name": "<s:message code='rtnDstbReq.reqDate'/>", "value": "req"},
-      {"name": "<s:message code='rtnDstbReq.regDate'/>", "value": "reg"},
-      {"name": "<s:message code='rtnDstbReq.modDate'/>", "value": "mod"}
+      {"name": messages["rtnDstbReq.reqDate"], "value": "req"},
+      {"name": messages["rtnDstbReq.regDate"], "value": "reg"},
+      {"name": messages["rtnDstbReq.modDate"], "value": "mod"}
     ]);
 
     $scope._setComboData("srchProcFg", [
@@ -220,7 +220,7 @@
 
     $scope.saveRtnDstbConfirm = function () {
       // 진행구분이 등록인 자료는 매장에서 등록한 수량으로, 분배중인 자료는 기분배된 수량으로 처리됩니다. 공급가 및 분배수량을 확인하시기 바랍니다. 분배완료 하시겠습니까?
-      var msg = "<s:message code='rtnDstbReq.confirmText'/>";
+      var msg = messages["rtnDstbReq.confirmText"];
       s_alert.popConf(msg, function () {
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
