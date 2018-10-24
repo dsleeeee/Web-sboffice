@@ -231,7 +231,7 @@
         $scope.reqDate = data.reqDate;
         $scope.slipFg  = data.slipFg;
         $scope.wjDstbCloseStoreAddLayer.show(true);
-        $("#addProdSubTitle").html(' (<s:message code="dstbCloseStore.add.reqDate"/> : ' + getFormatDate($scope.reqDate, '-') + ')');
+        $("#addProdSubTitle").html(' ('+messages["dstbCloseStore.add.reqDate"]+' : ' + getFormatDate($scope.reqDate, '-') + ')');
       }
       else { // 페이징처리에서 broadcast 호출시
         $scope.searchDstbCloseStoreAddList();
@@ -267,9 +267,9 @@
         if ($scope.httpStatusCheck(response)) {
           if (!$.isEmptyObject(response.data.data)) {
             $scope.orderFg  = response.data.data.orderFg;
-            var orderFgText = '<s:message code="dstbCloseStore.add.orderPossibleFg"/> : ';
-            if ($scope.orderFg === 0) orderFgText += '<s:message code="dstbCloseStore.add.possible"/>'
-            else orderFgText += '<s:message code="dstbCloseStore.add.impossible"/>'
+            var orderFgText = messages["dstbCloseStore.add.orderPossibleFg"]+' : ';
+            if ($scope.orderFg === 0) orderFgText += messages["dstbCloseStore.add.possible"];
+            else orderFgText += messages["dstbCloseStore.add.impossible"];
             $("#orderFgSubTitle").html(orderFgText);
           }
           $scope.searchDstbCloseStoreAddList();

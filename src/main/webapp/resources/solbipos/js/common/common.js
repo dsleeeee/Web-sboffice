@@ -144,6 +144,10 @@
       return $.ajax({
         type: "POST",
         url: url,
+        cache: false,
+        async: true,
+        dataType: "json",
+        contentType : 'application/json',
         data: JSON.stringify(data),
         success: function(result) {
           if(result.status === "OK") {
@@ -165,10 +169,6 @@
             alert(msg);
           }
         },
-        cache: false,
-        async:true,
-        dataType: "json",
-        contentType : 'application/json',
         beforeSend: function() {
           $("#_saveTent, #_saving").show();
         },
@@ -303,88 +303,6 @@
 
 
 }( "undefined" !== typeof window ? window : this, jQuery );
-
-//트리 생성용 변수
-var pNode;
-var allMenu = "";
-var bkmkMenu = "";
-// 트리 생성
-function makeTree(div, data, initMenu) {
-
-  var tree = new wijmo.nav.TreeView(div, {
-    displayMemberPath: 'nm',
-    childItemsPath: 'items',
-    autoCollapse: true,
-    expandOnClick: false
-  });
-
-  // 트리의 아이템이 load 완료 되었을 때 이벤트
-  tree.loadedItems.addHandler(function(s, e) {
-    var node;
-    // 아이콘 Class 추가
-    for (node = s.getFirstNode(); node; node = node.nextSibling()) {
-      if(!isEmpty(node)){
-        wijmo.addClass(node.element, node.dataItem.icon);
-      }
-    }
-    s.collapseToLevel(0);
-
-    // 초기 메뉴(현재 메뉴) 설정
-    if(initMenu) {
-      for (node = s.getFirstNode(); node; node = node.next()) {
-        if(isEmpty(node.nodes)) {
-          if(!isEmpty(node.dataItem) && node.dataItem.cd === initMenu) {
-            s.selectedItem = node.dataItem;
-          }
-        }
-      }
-    }
-  });
-
-  // 선택된 메뉴가 변경 되었을 때 이벤트
-  tree.selectedItemChanged.addHandler(function(s, e) {
-    var node;
-    // 이전 메뉴의 클래스 제거
-    if(pNode) {
-      for (node = pNode; node; node = node.parentNode) {
-        wijmo.removeClass(node.element, "on");
-      }
-    }
-    // 선택된 메뉴에 클래스 추가
-    for (node = s.selectedNode; node; node = node.parentNode) {
-      wijmo.addClass(node.element, "on");
-    }
-    pNode = s.selectedNode;
-  });
-
-  // 아이템 클릭 시 이벤트
-  tree.itemClicked.addHandler(function(s, e) {
-    // URL 이 있을 경우 페이지 이동
-    if(!isEmpty(s.selectedNode.dataItem.url)) {
-      location.href = s.selectedNode.dataItem.url;
-      // 가상로그인시 파라미터인 SessionID 설정
-      if( document.getElementsByName("sessionId").length > 0 ) {
-        var vSessionId = document.getElementsByName("sessionId")[0].value;
-        location.href = s.selectedNode.dataItem.url + "?sid=" + vSessionId;
-      }
-    }
-    // 같은 메뉴를 다시 선택 했을 때 메뉴 닫기 기능
-    if( pNode === s.selectedNode) {
-      s.selectedNode.isCollapsed = !s.selectedNode.isCollapsed;
-    }
-    else {
-      s.selectedNode.isCollapsed = false;
-    }
-  });
-
-  /* Tree 생성자에서 데이터를 넣는 경우에는 이벤트 핸들러를 생성자에 넣을 수 있다.
-  데이터를 생성자에서 넣으면서 이벤트를 나중에 선언하면 생성 시 이벤트 처리 안됨
-  아래 처럼 이벤트를 다 선언한 후에 데이터를 넣어야 한다.
-  */
-  tree.itemsSource = data;
-
-  return tree;
-}
 
 function getParam(name){
   var result = "";

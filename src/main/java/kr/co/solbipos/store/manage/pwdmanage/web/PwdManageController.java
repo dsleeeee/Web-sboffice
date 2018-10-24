@@ -43,14 +43,13 @@ import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 @RequestMapping(value = "/store/manage/pwdManage")
 public class PwdManageController {
 
-    /** service */
     private final PwdManageService pwdManageService;
     private final MessageService messageService;
     private final SessionService sessionService;
 
     /** Constructor Injection */
-    @Autowired
-    public PwdManageController(PwdManageService pwdManageService, MessageService messageService, SessionService sessionService) {
+    @Autowired public PwdManageController(PwdManageService pwdManageService,
+        MessageService messageService, SessionService sessionService) {
         this.pwdManageService = pwdManageService;
         this.messageService = messageService;
         this.sessionService = sessionService;

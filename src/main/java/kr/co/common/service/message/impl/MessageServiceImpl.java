@@ -1,10 +1,10 @@
 package kr.co.common.service.message.impl;
 
+import kr.co.common.service.message.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
-import kr.co.common.service.message.MessageService;
 
 /**
  * @author 정용길
@@ -12,11 +12,14 @@ import kr.co.common.service.message.MessageService;
  */
 @Service("messageService")
 public class MessageServiceImpl implements MessageService {
-    /**
-     * 메세지 처리
-     */
+
+    private final MessageSource messageSource;
+
+    /** Constructor Injection */
     @Autowired
-    MessageSource message;
+    public MessageServiceImpl(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
 
     /**
      * 가져오기
@@ -50,6 +53,6 @@ public class MessageServiceImpl implements MessageService {
      * @return {@code String} 내용
      */
     public String get(String code, Object[] args, String defaultMessage) {
-        return message.getMessage(code, args, defaultMessage, LocaleContextHolder.getLocale());
+        return messageSource.getMessage(code, args, defaultMessage, LocaleContextHolder.getLocale());
     }
 }

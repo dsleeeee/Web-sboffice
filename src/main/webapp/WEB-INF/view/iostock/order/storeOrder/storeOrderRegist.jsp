@@ -61,25 +61,25 @@
                 initialized="_initComboBox(s)">
               </wj-combo-box>
             </span>
-            <a href="#" class="btn_grayS" ng-click=""><s:message code="storeOrder.dtl.safeStockApply"/></a>
+            <a href="#" class="btn_grayS" ng-click="setSafeToOrder()"><s:message code="storeOrder.dtl.safeStockApply"/></a>
           </td>
         </tr>
         <tr>
           <th><s:message code="storeOrder.dtl.option2"/></th>
           <td colspan="3">
-                      <span class="txtIn w150 sb-select fl mr5">
-                        <wj-combo-box
-                          id="option2"
-                          ng-model="option2"
-                          items-source="_getComboData('option2')"
-                          display-member-path="name"
-                          selected-value-path="value"
-                          is-editable="false"
-                          initialized="_initComboBox(s)"
-                          selected-index-changed="selectedIndexChanged(s, e)"
-                        >
-                        </wj-combo-box>
-                      </span>
+            <span class="txtIn w150 sb-select fl mr5">
+              <wj-combo-box
+                id="option2"
+                ng-model="option2"
+                items-source="_getComboData('option2')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="_initComboBox(s)"
+                selected-index-changed="selectedIndexChanged(s, e)"
+              >
+              </wj-combo-box>
+            </span>
             <p id="option2OrdLayer" class="s14 bk lh30 fl ml10" style="display: none;"><s:message code="storeOrder.dtl.reqDate"/></p>
             <p id="option2OutLayer" class="s14 bk lh30 fl ml10" style="display: none;"><s:message code="storeOrder.dtl.outDate"/></p>
             <p id="option2SaleLayer" class="s14 bk lh30 fl ml10" style="display: none;"><s:message code="storeOrder.dtl.saleDate"/></p>
@@ -113,8 +113,7 @@
 
       <div class="mt10 oh">
         <%-- 조회 --%>
-        <button type="button" class="btn_blue fr" id="btnSearch" ng-click="searchStoreOrderRegistList();">
-          <s:message code="cmm.search"/></button>
+        <button type="button" class="btn_blue fr" id="btnSearch" ng-click="searchStoreOrderRegistList();"><s:message code="cmm.search"/></button>
       </div>
 
       <ul class="txtSty3 mt10">
@@ -191,20 +190,20 @@
 <script type="text/javascript">
 
   /** 주문등록 상세 그리드 controller */
-  app.controller('storeOrderRegistCtrl', ['$scope', '$http', function ($scope, $http) {
+  app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('storeOrderRegistCtrl', $scope, $http, true));
 
     $scope._setComboData("option1", [
-      {"name": "<s:message code='storeOrder.dtl.option1All'/>", "value": ""},
-      {"name": "<s:message code='storeOrder.dtl.option1SafeStock'/>", "value": "S"}
+      {"name": messages["storeOrder.dtl.option1All"], "value": ""},
+      {"name": messages["storeOrder.dtl.option1SafeStock"], "value": "S"}
     ]);
 
     $scope._setComboData("option2", [
-      {"name": "<s:message code='storeOrder.dtl.option2All'/>", "value": ""},
-      {"name": "<s:message code='storeOrder.dtl.option2Order'/>", "value": "ORD"},
-      {"name": "<s:message code='storeOrder.dtl.option2Outstock'/>", "value": "OUT"},
-      {"name": "<s:message code='storeOrder.dtl.option2Sale'/>", "value": "SALE"}
+      {"name": messages["storeOrder.dtl.option2All"], "value": ""},
+      {"name": messages["storeOrder.dtl.option2Order"], "value": "ORD"},
+      {"name": messages["storeOrder.dtl.option2Outstock"], "value": "OUT"},
+      {"name": messages["storeOrder.dtl.option2Sale"], "value": "SALE"}
     ]);
 
     $scope.srchRegStartDate = wcombo.genDateVal("#srchRegStartDate", "${sessionScope.sessionInfo.startDt}");
@@ -237,24 +236,8 @@
           var col = s.columns[e.col];
           // 주문수량 수정시 금액,VAT,합계 계산하여 보여준다.
           if (col.binding === "orderUnitQty" || col.binding === "orderEtcQty") {
-            var item          = s.rows[e.row].dataItem;
-            var orderSplyUprc = parseInt(item.orderSplyUprc);
-            var poUnitQty     = parseInt(item.poUnitQty);
-            var vat01         = parseInt(item.vatFg01);
-            var envst0011     = parseInt(item.envst0011);
-
-            var unitQty  = (parseInt(nvl(item.prevOrderUnitQty, 0)) + parseInt(nvl(item.orderUnitQty, 0))) * parseInt(item.poUnitQty);
-            var etcQty   = parseInt(nvl(item.prevOrderEtcQty, 0)) + parseInt(nvl(item.orderEtcQty, 0));
-            var totQty   = parseInt(unitQty + etcQty);
-            var tempAmt  = Math.round(totQty * orderSplyUprc / poUnitQty);
-            var orderAmt = tempAmt - Math.round(tempAmt * vat01 * envst0011 / 11);
-            var orderVat = Math.round(tempAmt * vat01 / (10 + envst0011));
-            var orderTot = parseInt(orderAmt + orderVat);
-
-            item.orderTotQty = totQty;   // 총수량
-            item.orderAmt    = orderAmt; // 금액
-            item.orderVat    = orderVat; // VAT
-            item.orderTot    = orderTot; // 합계
+            var item = s.rows[e.row].dataItem;
+            $scope.calcAmt(item);
           }
         }
 
@@ -266,6 +249,27 @@
       // add a sigma to the header to show that this is a summary row
       // s.bottomLeftCells.setCellData(0, 0, '합계');
     };
+
+    $scope.calcAmt = function (item) {
+      var orderSplyUprc = parseInt(item.orderSplyUprc);
+      var poUnitQty     = parseInt(item.poUnitQty);
+      var vat01         = parseInt(item.vatFg01);
+      var envst0011     = parseInt(item.envst0011);
+
+      var unitQty  = (parseInt(nvl(item.prevOrderUnitQty, 0)) + parseInt(nvl(item.orderUnitQty, 0))) * parseInt(item.poUnitQty);
+      var etcQty   = parseInt(nvl(item.prevOrderEtcQty, 0)) + parseInt(nvl(item.orderEtcQty, 0));
+      var totQty   = parseInt(unitQty + etcQty);
+      var tempAmt  = Math.round(totQty * orderSplyUprc / poUnitQty);
+      var orderAmt = tempAmt - Math.round(tempAmt * vat01 * envst0011 / 11);
+      var orderVat = Math.round(tempAmt * vat01 / (10 + envst0011));
+      var orderTot = parseInt(orderAmt + orderVat);
+
+      item.orderTotQty = totQty;   // 총수량
+      item.orderAmt    = orderAmt; // 금액
+      item.orderVat    = orderVat; // VAT
+      item.orderTot    = orderTot; // 합계
+    };
+
 
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("storeOrderRegistCtrl", function (event, data) {
@@ -286,7 +290,7 @@
           // 당일보다 이전일자 요청등록 불가
           var today = getCurDate();
           if (parseInt(today) > parseInt($scope.reqDate)) {
-            $scope._popMsg('<s:message code="storeOrder.dtl.not.prevDateOrder"/>');
+            $scope._popMsg(messages["storeOrder.dtl.not.prevDateOrder"]);
             return false;
           }
           $scope.storeOrderDateCheck(); // 출고요청가능일인지 여부 체크
@@ -320,7 +324,7 @@
         if ($scope.httpStatusCheck(response)) {
           if (!$.isEmptyObject(response.data.data)) {
             if (response.data.data.orderFg > 0) {
-              $scope._popMsg('<s:message code="storeOrder.dtl.not.orderDate"/>');
+              $scope._popMsg(messages["storeOrder.dtl.not.orderDate"]);
               return false;
             }
           }
@@ -352,7 +356,7 @@
         if ($scope.httpStatusCheck(response)) {
           if (!$.isEmptyObject(response.data.data)) {
             if (response.data.data.orderCloseFg === "Y") {
-              $scope._popMsg('<s:message code="storeOrder.dtl.orderClose"/>');
+              $scope._popMsg(messages["storeOrder.dtl.orderClose"]);
               return false;
             }
           }
@@ -385,7 +389,7 @@
           // 진행구분이 주문등록이 아니면 상품추가/변경 불가
           if (!$.isEmptyObject(response.data.data)) {
             if (response.data.data.procFg != "00") {
-              $scope._popMsg('<s:message code="storeOrder.dtl.not.orderProcEnd"/>');
+              $scope._popMsg(messages["storeOrder.dtl.not.orderProcEnd"]);
               return false;
             }
             $scope.regHdRemark = response.data.data.remark;
@@ -420,7 +424,7 @@
           if (!$.isEmptyObject(response.data.data)) {
             // 발주중지 상태이면 상품추가/변경 불가
             if (response.data.data.orderCloseYn === "Y") {
-              $scope._popMsg('<s:message code="storeOrder.dtl.orderClose"/>');
+              $scope._popMsg(messages["storeOrder.dtl.orderClose"]);
               return false;
             }
             else {
@@ -457,7 +461,7 @@
         // "complete" code here
         if (popShowFg === "Y") {
           $scope.wjStoreOrderRegistLayer.show(true);
-          $("#registSubTitle").html(' (<s:message code="storeOrder.reqDate"/> : ' + getFormatDate($scope.reqDate, '-') + ')');
+          $("#registSubTitle").html(' ('+messages["storeOrder.reqDate"]+' : ' + getFormatDate($scope.reqDate, '-') + ')');
         }
       });
     };
@@ -510,7 +514,7 @@
       if ($scope.availableOrderAmt != null) {
         // console.log("orderTot = "+orderTot);
         if (parseInt($scope.availableOrderAmt) < parseInt(orderTot)) {
-          $scope._popMsg('<s:message code="storeOrder.dtl.orderTotOver"/>');
+          $scope._popMsg(messages["storeOrder.dtl.orderTotOver"]);
           return false;
         }
       }
@@ -519,6 +523,7 @@
         $scope.saveRegistCallback()
       });
     };
+
 
     // 저장 후 콜백 서치 함수
     $scope.saveRegistCallback = function () {
@@ -538,6 +543,31 @@
         var storeOrderDtlScope = agrid.getScope('storeOrderDtlCtrl');
         storeOrderDtlScope.searchStoreOrderDtlList();
       }
+    };
+
+
+    // 안전재고 수량적용.
+    $scope.setSafeToOrder = function () {
+      $rootScope.$broadcast('loadingPopupActive');
+      // 데이터 처리중 팝업 띄우기위해 setTimeout 사용.
+      setTimeout(function() {
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+          var item = $scope.flex.collectionView.items[i];
+          if(item.safeStockUnitQty !== null || item.safeStockEtcQty !== null) {
+            $scope.flex.collectionView.editItem(item);
+
+            if(nvl(item.safeStockUnitQty, 0) > 0) {
+              item.orderUnitQty = parseInt(item.safeStockUnitQty) - parseInt(nvl(item.storeCurrUnitQty, 0));
+            }
+            if(nvl(item.safeStockEtcQty, 0) > 0) {
+              item.orderEtcQty = parseInt(item.safeStockEtcQty) - parseInt(nvl(item.storeCurrEtcQty, 0));
+            }
+            $scope.calcAmt(item);
+            $scope.flex.collectionView.commitEdit();
+          }
+        }
+        $rootScope.$broadcast('loadingPopupInactive');
+      }, 100);
     };
 
     // 옵션2 값 변경 이벤트 함수
@@ -563,6 +593,7 @@
         }
       }
     };
+
 
     $scope.option2LayerHide = function () {
       $("#option2DateLayer").hide();

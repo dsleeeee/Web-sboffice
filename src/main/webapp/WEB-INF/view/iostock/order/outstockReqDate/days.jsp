@@ -127,8 +127,8 @@
       // 그리드 DataMap 설정
       $scope.sysStatFgMap    = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
       $scope.orderCloseYnMap = new wijmo.grid.DataMap([
-        {id: "Y", name: "<s:message code='outstockReqDate.orderCloseYnY'/>"},
-        {id: "N", name: "<s:message code='outstockReqDate.orderCloseYnN'/>"},
+        {id: "Y", name: messages["outstockReqDate.orderCloseYnY"]},
+        {id: "N", name: messages["outstockReqDate.orderCloseYnN"]},
       ], 'id', 'name');
 
       // 그리드 링크 효과

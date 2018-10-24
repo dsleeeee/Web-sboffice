@@ -7,7 +7,6 @@ import kr.co.common.system.BaseEnv;
 import kr.co.common.template.RedisCustomTemplate;
 import kr.co.common.utils.SessionUtil;
 import kr.co.common.utils.spring.WebUtil;
-import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import org.slf4j.Logger;
@@ -27,24 +26,49 @@ import static kr.co.common.utils.spring.StringUtil.convertToJson;
 import static org.springframework.util.StringUtils.isEmpty;
 
 /**
- * @author 정용길
+ * @Class Name : SessionServiceImpl.java
+ * @Description : 세션관련
+ * @Modification Information
+ * @
+ * @ 수정일       수정자      수정내용
+ * @ ----------  ---------  -------------------------------
+ * @ 2018.10.23  노현수      부분수정 : 로직개선...
  *
+ * @author 솔비포스 차세대개발실 노현수
+ * @since 2018. 05.01
+ * @version 1.0
+ * @see
+ *
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Service("sessionService")
 public class SessionServiceImpl implements SessionService {
     
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    @Autowired
-    RedisConnService redisConnService;
-    @Autowired
-    AuthService authService;
-    @Autowired
-    CmmMenuService cmmMenuService;
-    @Autowired
-    private RedisCustomTemplate<String, SessionInfoVO> redisCustomTemplate;
-
     private static final String SESSION_KEY = "SBSESSIONID";
 
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
+    private final RedisConnService redisConnService;
+    private final CmmMenuService cmmMenuService;
+    private final RedisCustomTemplate<String, SessionInfoVO> redisCustomTemplate;
+
+    /** Constructor Injection */
+    @Autowired
+    public SessionServiceImpl(RedisConnService redisConnService,
+        CmmMenuService cmmMenuService,
+        RedisCustomTemplate<String, SessionInfoVO> redisCustomTemplate) {
+        this.redisConnService = redisConnService;
+        this.cmmMenuService = cmmMenuService;
+        this.redisCustomTemplate = redisCustomTemplate;
+    }
+
+    /**
+     * 레디스에 sessionInfo 객체 저장
+     *
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param sessionInfoVO SessionInfoVO
+     */
     @Override
     public String setSessionInfo( HttpServletRequest request, HttpServletResponse response,
             SessionInfoVO sessionInfoVO ) {
@@ -53,7 +77,7 @@ public class SessionServiceImpl implements SessionService {
         // sessionId 세팅
         sessionInfoVO.setSessionId( sessionId );
         // 권한 있는 메뉴 저장
-        sessionInfoVO.setAuthMenu( authService.selectAuthMenu( sessionInfoVO ) );
+        sessionInfoVO.setAuthMenu( cmmMenuService.selectAuthMenu( sessionInfoVO ) );
         // 고정 메뉴 리스트 저장
         sessionInfoVO.setFixMenu( cmmMenuService.selectFixingMenu( sessionInfoVO ) );
         // 즐겨찾기 메뉴 리스트 저장
@@ -81,6 +105,11 @@ public class SessionServiceImpl implements SessionService {
         return sessionId;
     }
 
+    /**
+     * 레디스에 sessionInfo 객체 저장
+     *
+     * @param sessionInfoVO SessionInfoVO
+     */
     @Override
     public String setSessionInfo( SessionInfoVO sessionInfoVO ) {
         String sessionId = sessionInfoVO.getSessionId();
@@ -107,6 +136,11 @@ public class SessionServiceImpl implements SessionService {
         }
     }
 
+    /**
+     * 세션정보 가져오기 : 레디스에서 sessionId 로 가져온다.
+     *
+     * @param sessionId String : 세션 ID
+     */
     @Override
     public SessionInfoVO getSessionInfo( String sessionId ) {
         SessionInfoVO sessionInfoVO = new SessionInfoVO();
@@ -126,6 +160,11 @@ public class SessionServiceImpl implements SessionService {
         return sessionInfoVO;
     }
 
+    /**
+     * 세션정보 가져오기 : 레디스에서 HttpServletRequest 로 가져온다.
+     *
+     * @param request HttpServletRequest : 세션 ID
+     */
     @Override
     public SessionInfoVO getSessionInfo( HttpServletRequest request ) {
         Cookie cookie = WebUtils.getCookie( request, SESSION_KEY );
@@ -140,21 +179,29 @@ public class SessionServiceImpl implements SessionService {
         return sessionInfoVO;
     }
 
+    /**
+     * 세션정보 가져오기 : HttpServletRequest 취득 하여 레디스에서 가져온다.
+     *
+     */
     @Override
     public SessionInfoVO getSessionInfo() {
         return getSessionInfo( WebUtil.getRequest() );
     }
 
+    /**
+     * 세션정보 유효 여부 확인 : 세션 존재하는지 판단하여 true/false 반환
+     *
+     * @param request HttpServletRequest
+     */
     @Override
     public boolean isValidSession( HttpServletRequest request ) {
-        SessionInfoVO sessionInfoVO = getSessionInfo( request );
+        SessionInfoVO sessionInfoVO = getSessionInfo(request);
 
         // 세션 객체가 없는 경우
         if ( isEmpty( sessionInfoVO ) ) {
             return false;
-        }
-        // 세션 객체는 있지만 필수값들이 없는 경우
-        else {
+        } else {
+            // 세션 객체는 있지만 필수값들이 없는 경우
             if ( isEmpty( sessionInfoVO.getUserId() ) && isEmpty( sessionInfoVO.getAuthMenu() ) ) {
                 return false;
             }
@@ -163,11 +210,21 @@ public class SessionServiceImpl implements SessionService {
         return true;
     }
 
+    /**
+     * 세션정보 유효 여부 확인 : 세션 존재하는지 판단하여 true/false 반환
+     *
+     * @param sessionId String
+     */
     @Override
     public boolean isValidSession( String sessionId ) {
         return getSessionInfo( sessionId ) != null;
     }
 
+    /**
+     * 세션정보 삭제 : sessionId 이용하여 redis에서 삭제처리
+     *
+     * @param sessionId String
+     */
     @Override
     public void deleteSessionInfo( String sessionId ) {
         if ( redisConnService.isAvailable() ) {
@@ -180,6 +237,11 @@ public class SessionServiceImpl implements SessionService {
         }
     }
 
+    /**
+     * 세션정보 삭제 : HttpServletRequest 이용하여 redis에서 삭제처리
+     *
+     * @param request HttpServletRequest
+     */
     @Override
     public void deleteSessionInfo( HttpServletRequest request ) {
         if ( !ObjectUtils.isEmpty( request ) ) {
@@ -194,6 +256,11 @@ public class SessionServiceImpl implements SessionService {
         }
     }
 
+    /**
+     * 세션정보 삭제 : sessionInfoVO 이용하여 redis에서 삭제처리
+     *
+     * @param sessionInfoVO SessionInfoVO
+     */
     @Override
     public void deleteSessionInfo( SessionInfoVO sessionInfoVO ) {
         if ( !ObjectUtils.isEmpty( sessionInfoVO ) ) {
@@ -205,7 +272,7 @@ public class SessionServiceImpl implements SessionService {
     /**
      * 쿠키에 session id 삭제
      *
-     * @param request {@link HttpServletRequest}
+     * @param request HttpServletRequest
      */
     private void deleteCookie( HttpServletRequest request ) {
         Cookie cookie = WebUtils.getCookie( request, SESSION_KEY );
@@ -215,7 +282,7 @@ public class SessionServiceImpl implements SessionService {
     /**
      * 쿠키 session id 생성
      *
-     * @param sessionId {@link String} 세션 ID
+     * @param sessionId String : 세션 ID
      */
     private void makeCookie( String sessionId ) {
         WebUtil.setCookie( SESSION_KEY, sessionId, -1 );

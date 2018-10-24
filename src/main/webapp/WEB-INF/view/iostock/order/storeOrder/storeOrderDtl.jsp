@@ -156,7 +156,7 @@
         $("#btnDtlSave").show();
         $scope.flex.isReadOnly = false;
 
-        if ("${envst173}" === "1" || "${envst173}" === "2") {
+        if ("${envst1042}" === "1" || "${envst1042}" === "2") {
           $("#btnConfirm").show();
         }
         else {
@@ -170,7 +170,7 @@
         $scope.flex.isReadOnly = true;
       }
 
-      $("#spanDtlTitle").html('<s:message code="storeOrder.reqDate"/> : ' + getFormatDate($scope.reqDate, '-'));
+      $("#spanDtlTitle").html(messages["storeOrder.reqDate"]+' : ' + getFormatDate($scope.reqDate, '-'));
       $scope.searchStoreLoan("Y");
       // 기능수행 종료 : 반드시 추가
       event.preventDefault();
@@ -193,7 +193,7 @@
           if (!$.isEmptyObject(response.data.data)) {
             if (response.data.data.orderCloseYn === "Y") {
               $scope.flex.isReadOnly = true;
-              $scope._popMsg('<s:message code="storeOrder.dtl.orderClose"/>');
+              $scope._popMsg(messages["storeOrder.dtl.orderClose"]);
             }
             else {
               $scope.flex.isReadOnly = false;
@@ -297,7 +297,7 @@
       if ($scope.availableOrderAmt != null) {
         // console.log("orderTot = "+orderTot);
         if (parseInt($scope.availableOrderAmt) < parseInt(orderTot)) {
-          $scope._popMsg('<s:message code="storeOrder.dtl.orderTotOver"/>');
+          $scope._popMsg(messages["storeOrder.dtl.orderTotOver"]);
           return false;
         }
       }

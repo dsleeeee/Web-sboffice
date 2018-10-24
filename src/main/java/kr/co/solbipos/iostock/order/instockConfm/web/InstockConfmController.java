@@ -68,9 +68,9 @@ public class InstockConfmController {
         // 매장입고 환경변수 조회
         HqEnvstVO hqEnvstVO = new HqEnvstVO();
         hqEnvstVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        hqEnvstVO.setEnvstCd("176");
-        String envst176 = cmmEnvService.getHqEnvst(hqEnvstVO);
-        model.addAttribute("envst176", envst176);
+        hqEnvstVO.setEnvstCd("1043");
+        String envst1043 = cmmEnvService.getHqEnvst(hqEnvstVO);
+        model.addAttribute("envst1043", envst1043);
 
         return "iostock/order/instockConfm/instockConfm";
     }

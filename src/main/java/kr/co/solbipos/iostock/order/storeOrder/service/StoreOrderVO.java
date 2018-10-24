@@ -53,7 +53,7 @@ public class StoreOrderVO extends PageVO {
     /** 조회 구분 */
     private String dateFg;
     /** 수발주옵션 */
-    private String envst173;
+    private String envst1042;
     /** 공통코드 */
     private String nmcodeGrpCd;
 
@@ -380,16 +380,30 @@ public class StoreOrderVO extends PageVO {
     }
 
     /**
-     * @return the envst173
+     * @return the envst1042
      */
-    public String getEnvst173() {
-        return envst173;
+    public String getEnvst1042() {
+        return envst1042;
     }
 
     /**
-     * @param envst173 the envst173 to set
+     * @param envst1042 the envst1042 to set
      */
-    public void setEnvst173(String envst173) {
-        this.envst173 = envst173;
+    public void setEnvst1042(String envst1042) {
+        this.envst1042 = envst1042;
+    }
+
+    /**
+     * @return the nmcodeGrpCd
+     */
+    public String getNmcodeGrpCd() {
+        return nmcodeGrpCd;
+    }
+
+    /**
+     * @param nmcodeGrpCd the nmcodeGrpCd to set
+     */
+    public void setNmcodeGrpCd(String nmcodeGrpCd) {
+        this.nmcodeGrpCd = nmcodeGrpCd;
     }
 }

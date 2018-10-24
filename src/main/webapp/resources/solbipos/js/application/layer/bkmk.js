@@ -1,7 +1,7 @@
 /****************************************************************
  *
  * 파일명 : bkmk.js
- * 설  명 : 북마크 JavaScript
+ * 설  명 : 즐겨찾기 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
@@ -38,31 +38,42 @@ $(document).ready(function () {
     }
     $("#_brmkLayer, #_brmkFullDimmed").hide();
     $.postJSONSave("/application/com/bkmk/save.sb", param, function (result) {
-        var data = isEmpty(result.data[0]) ? '' : JSON.parse(result.data[0]);
-        if (data === '') {
-          $("#_bkmkTxt").show();
-        } else {
-          $("#_bkmkTxt").hide();
-        }
-        bkmkMenu.itemsSource = data;
-        var sFixes = $(".btn_close.favClose");
-        for (var i = 0; i < sFixes.length; i++) {
-          $(sFixes[i]).parents("li").remove();
-        }
-        var fixMenus = isEmpty(result.data[1]) ? '' : JSON.parse(result.data[1]);
-        if (fixMenus) {
-          var fixMenu = "";
-          fixMenus.forEach(function (item) {
-            fixMenu = '<li id="' + item.resrceCd + '">';
-            fixMenu += '<a href="' + item.url + '" class="">' + item.resrceNm + '</a>';
-            fixMenu += '<a href="#" class="btn_close favClose" data-value="' + item.resrceCd + '" ></a>';
-            fixMenu += '</li>';
-            $("#_fixMenu").prepend(fixMenu);
+        var scope = agrid.getScope("bkmkCtrl");
+        // 저장 후 팝업메시지
+        scope.$apply(function(){
+          scope._popMsg(messages["cmm.saveSucc"], function () {
+            // 즐겨찾기메뉴 재조회
+            scope._searchTree("/menu/bkmkList.sb");
+            var data = isEmpty(result.data[0]) ? '' : JSON.parse(result.data[0]);
+            if (data.length < 1) {
+              $("#_bkmkTxt").show();
+            } else {
+              $("#_bkmkTxt").hide();
+            }
+
+            var sFixes = $(".btn_close.favClose");
+            for (var i = 0; i < sFixes.length; i++) {
+              $(sFixes[i]).parents("li").remove();
+            }
+            var fixMenus = isEmpty(result.data[1]) ? '' : JSON.parse(result.data[1]);
+            if (fixMenus) {
+              var fixMenu = "";
+              fixMenus.forEach(function (item) {
+                fixMenu = '<li id="' + item.resrceCd + '">';
+                fixMenu += '<a href="' + item.url + '" class="">' + item.resrceNm + '</a>';
+                fixMenu += '<a href="#" class="btn_close favClose" data-value="' + item.resrceCd + '" ></a>';
+                fixMenu += '</li>';
+                $("#_fixMenu").prepend(fixMenu);
+              });
+            }
           });
-        }
+        });
       },
       function (result) {
-        s_alert.pop(result.message);
+        var scope = agrid.getScope("bkmkCtrl");
+        scope.$apply(function(){
+          scope._popMsg(result.message);
+        });
         return false;
       });
   });
@@ -142,7 +153,7 @@ $(document).ready(function () {
         $(".ic_fix").click(function (event) {
           if ($(this).hasClass("ic_fix off")) {
             var fixedCnt = $(".ic_fix.on").length;
-            if (fixedCnt >= 3) {
+            if (fixedCnt > 3) {
               s_alert.pop("고정메뉴는 최대 3개까지 선택 가능합니다.");
             } else {
               $(this).removeClass("ic_fix off").addClass("ic_fix on");

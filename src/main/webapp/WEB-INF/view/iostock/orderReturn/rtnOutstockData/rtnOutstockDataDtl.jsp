@@ -79,7 +79,7 @@
       $scope.slipFg    = data.slipFg;
 
       $scope.wjRtnOutstockDataDtlLayer.show(true);
-      $("#spanDtlTitle").html('[<s:message code="rtnOutstockData.dtl.orderReturn"/>] ' + '[' + $scope.storeCd + '] ' + $scope.storeNm);
+      $("#spanDtlTitle").html('['+messages["rtnOutstockData.dtl.orderReturn"]+'] ' + '[' + $scope.storeCd + '] ' + $scope.storeNm);
 
       $scope.searchRtnOutstockDataDtlList();
       // 기능수행 종료 : 반드시 추가

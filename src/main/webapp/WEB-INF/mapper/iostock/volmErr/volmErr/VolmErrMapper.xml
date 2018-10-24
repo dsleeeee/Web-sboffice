@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.iostock.volmErr.volmErr.service.impl.VolmErrMapper">
+
+    <!-- 콤보조회 -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        PARAM    : volmErrVO
+        COMMENTS : 콤보조회
+    -->
+    <select id="selectCmmCodeList" parameterType="volmErrVO" resultType="DefaultMap">
+        /* USE : VolmErrMapper.selectCmmCodeList */
+        <![CDATA[
+        SELECT  tcn.*
+        FROM    TB_CM_NMCODE tcn
+        WHERE   NMCODE_GRP_CD = #{nmcodeGrpCd}
+        ]]>
+        <if test='nmcodeItem1 != null and nmcodeItem1 != ""'>
+            AND tcn.NMCODE_ITEM_1 = #{nmcodeItem1}
+        </if>
+        ORDER BY tcn.NMCODE_CD
+    </select>
+
+
+
+
+
+
+    <!-- 물량오류관리 - 물량오류관리 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_STORE_INSTOCK_ERROR, TB_MS_STORE
+        PARAM    : volmErrVO
+        COMMENTS : 물량오류관리 - 물량오류관리 리스트를 조회한다.
+    -->
+    <select id="getVolmErrList" parameterType="volmErrVO" resultType="DefaultMap">
+        /* USE : VolmErrMapper.getVolmErrList */
+        <![CDATA[
+        SELECT   tpsie.SLIP_NO, tpsie.SLIP_FG, tpsie.PROC_FG, tpsie.STORE_CD, tms.STORE_NM
+        ,        tpsie.OUT_DATE, tpsie.IN_DATE, tpsie.NEW_SLIP_NO
+        ,        tpsie.OUT_UNIT_QTY*tpsie.SLIP_FG AS OUT_UNIT_QTY
+        ,        tpsie.OUT_ETC_QTY*tpsie.SLIP_FG  AS OUT_ETC_QTY
+        ,        tpsie.OUT_TOT_QTY*tpsie.SLIP_FG  AS OUT_TOT_QTY
+        ,        tpsie.IN_UNIT_QTY*tpsie.SLIP_FG  AS IN_UNIT_QTY
+        ,        tpsie.IN_ETC_QTY*tpsie.SLIP_FG   AS IN_ETC_QTY
+        ,        tpsie.IN_TOT_QTY*tpsie.SLIP_FG   AS IN_TOT_QTY
+        ,        tpsie.REMARK
+        FROM     TB_PO_STORE_INSTOCK_ERROR tpsie
+        ,        TB_MS_STORE tms
+        WHERE    tpsie.HQ_OFFICE_CD =   #{hqOfficeCd}
+        AND      tms.STORE_CD       =   tpsie.STORE_CD
+        ]]>
+        <if test='dateFg == "out"'>
+            AND tpsie.OUT_DATE BETWEEN #{startDate} AND #{endDate}
+        </if>
+        <if test='dateFg == "in"'>
+            AND tpsie.IN_DATE BETWEEN #{startDate} AND #{endDate}
+        </if>
+        <if test='slipFg != null and slipFg != ""'>
+            AND tpsie.SLIP_FG = #{slipFg}
+        </if>
+        <if test='procFg != null and procFg != ""'>
+            AND tpsie.PROC_FG = #{procFg}
+        </if>
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tms.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        ORDER BY tpsie.SLIP_NO
+    </select>
+
+    <!-- 물량오류관리 - 물량오류관리 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_STORE_INSTOCK_ERROR_DTL, TB_HQ_PRODUCT
+        PARAM    : volmErrVO
+        COMMENTS : 물량오류관리 - 물량오류관리 상세 리스트를 조회한다.
+    -->
+    <select id="getVolmErrDtlList" parameterType="volmErrVO" resultType="DefaultMap">
+        /* USE : VolmErrMapper.getVolmErrDtlList */
+        <![CDATA[
+        SELECT   tpsied.SEQ, tpsied.PROD_CD, thp.PROD_NM, tpsied.DSTB_FG, tpsied.ERR_FG
+        ,        tpsied.PO_UNIT_FG, tpsied.PO_UNIT_QTY
+        ,        tpsied.OUT_SPLY_UPRC                AS OUT_SPLY_UPRC
+        ,        tpsied.OUT_UNIT_QTY*tpsied.SLIP_FG  AS OUT_UNIT_QTY
+        ,        tpsied.OUT_ETC_QTY*tpsied.SLIP_FG   AS OUT_ETC_QTY
+        ,        tpsied.OUT_TOT_QTY *tpsied.SLIP_FG  AS OUT_TOT_QTY
+        ,        tpsied.OUT_AMT *tpsied.SLIP_FG      AS OUT_AMT
+        ,        tpsied.IN_SPLY_UPRC                 AS IN_SPLY_UPRC
+        ,        tpsied.IN_UNIT_QTY *tpsied.SLIP_FG  AS IN_UNIT_QTY
+        ,        tpsied.IN_ETC_QTY *tpsied.SLIP_FG   AS IN_ETC_QTY
+        ,        tpsied.IN_TOT_QTY  *tpsied.SLIP_FG  AS IN_TOT_QTY
+        ,        tpsied.IN_AMT  *tpsied.SLIP_FG      AS IN_AMT
+        ,        tpsied.REMARK
+        FROM     TB_PO_STORE_INSTOCK_ERROR_DTL tpsied
+        ,        TB_HQ_PRODUCT thp
+        WHERE    tpsied.HQ_OFFICE_CD  =   #{hqOfficeCd}
+        AND      tpsied.SLIP_NO       =   #{slipNo}
+        AND      thp.HQ_OFFICE_CD     =   tpsied.HQ_OFFICE_CD
+        AND      thp.PROD_CD          =   tpsied.PROD_CD
+        ORDER
+        BY       tpsied.PROD_CD
+        ]]>
+    </select>
+
+    <!-- 물량오류관리 - 물량오류관리 상세 리스트 DTL 수정 -->
+    <!--
+        TABLE    : TB_PO_STORE_INSTOCK_ERROR_DTL
+        PARAM    : volmErrVO
+        COMMENTS : 물량오류관리 - 물량오류관리 상세 리스트 DTL을 수정한다.
+    -->
+    <update id="updateVolmErrDtl" parameterType="volmErrVO">
+        /* USE : VolmErrMapper.updateVolmErrDtl */
+        UPDATE  TB_PO_STORE_INSTOCK_ERROR_DTL
+        SET     ERR_FG          = #{errFg},
+                REMARK          = #{remark},
+                MOD_DT          = #{modDt},
+                MOD_ID          = #{modId}
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+        AND     SEQ           = #{seq}
+    </update>
+
+    <!-- 물량오류관리 - 물량오류관리 상세 리스트 HD 수정-->
+    <!--
+        TABLE    : TB_PO_STORE_INSTOCK_ERROR
+        PARAM    : volmErrVO
+        COMMENTS : 물량오류관리 - 물량오류관리 HD를 수정한다.
+    -->
+    <update id="updateVolmErrHd" parameterType="volmErrVO">
+        /* USE : VolmErrMapper.updateVolmErrHd */
+        UPDATE  TB_PO_STORE_INSTOCK_ERROR
+        SET     REMARK          = #{hdRemark},
+                MOD_DT          = #{modDt},
+                MOD_ID          = #{modId}
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+    </update>
+
+    <!-- 물량오류관리 - 신규전표번호 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK
+        PARAM    : volmErrVO
+        COMMENTS : 물량오류관리 신규전표번호를 조회한다.
+    -->
+    <select id="getNewSlipNo" parameterType="volmErrVO" resultType="String">
+        /* USE : VolmErrMapper.getMaxSlipNo */
+        <![CDATA[
+        SELECT  NVL(MAX(tphso.SLIP_NO), #{yymm}||'000000')+1 AS SLIP_NO
+        FROM    TB_PO_HQ_STORE_OUTSTOCK tphso
+        WHERE   tphso.HQ_OFFICE_CD  =     #{hqOfficeCd}
+        AND     tphso.SLIP_NO       LIKE  #{yymm}||'%'
+        ]]>
+    </select>
+
+    <!-- 물량오류관리 - 물량오류관리 신규생성전표번호 수정 -->
+    <!--
+        TABLE    : TB_PO_STORE_INSTOCK_ERROR
+        PARAM    : volmErrVO
+        COMMENTS : 물량오류관리 - 물량오류관리 신규생성전표번호를 수정한다.
+    -->
+    <update id="updateVolmErrNewSlipNo" parameterType="volmErrVO">
+        /* USE : VolmErrMapper.updateVolmErrNewSlipNo */
+        UPDATE  TB_PO_STORE_INSTOCK_ERROR
+        SET     NEW_SLIP_NO     = #{newSlipNo},
+                PROC_FG         = #{updateProcFg},
+                MOD_DT          = #{modDt},
+                MOD_ID          = #{modId}
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+        AND     PROC_FG       = #{procFg}
+    </update>
+
+    <!-- 물량오류관리 - 출고수량을 입고수량으로 수정 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK_DTL, TB_PO_STORE_INSTOCK_ERROR_DTL
+        PARAM    : volmErrVO
+        COMMENTS : 물량오류관리 - 출고수량을 입고수량으로 수정한다.
+    -->
+    <update id="updateOutToIn" parameterType="volmErrVO">
+        /* USE : VolmErrMapper.updateOutToIn */
+        UPDATE  TB_PO_HQ_STORE_OUTSTOCK_DTL
+        SET     OUT_UNIT_QTY = IN_UNIT_QTY,
+                OUT_ETC_QTY  = IN_ETC_QTY,
+                OUT_TOT_QTY  = IN_TOT_QTY,
+                OUT_AMT      = IN_AMT,
+                OUT_VAT      = IN_VAT,
+                OUT_TOT      = IN_TOT,
+                MOD_DT       = #{modDt},
+                MOD_ID       = #{modId}
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+        AND     SEQ           IN (  SELECT  tpsied.SEQ
+                                    FROM    TB_PO_STORE_INSTOCK_ERROR_DTL tpsied
+                                    WHERE   tpsied.HQ_OFFICE_CD = #{hqOfficeCd}
+                                    AND     tpsied.SLIP_NO      = #{slipNo}
+                                    AND     tpsied.ERR_FG       IN  ('O2','O3','O4','O5','R2','R3','R5')
+                                 )
+    </update>
+
+    <!-- 물량오류관리 - 입고수량을 출고수량으로 수정 -->
+    <!--
+        TABLE    : TB_PO_STORE_INSTOCK_ERROR, TB_PO_STORE_INSTOCK_ERROR_DTL
+        PARAM    : volmErrVO
+        COMMENTS : 물량오류관리 - 입고수량을 출고수량으로 수정한다.
+    -->
+    <update id="updateInToOut" parameterType="volmErrVO">
+        /* USE : VolmErrMapper.updateInToOut */
+        UPDATE  TB_PO_HQ_STORE_OUTSTOCK_DTL
+        SET     IN_UNIT_QTY  = OUT_UNIT_QTY,
+                IN_ETC_QTY   = OUT_ETC_QTY,
+                IN_TOT_QTY   = OUT_TOT_QTY,
+                IN_AMT       = OUT_AMT,
+                IN_VAT       = OUT_VAT,
+                IN_TOT       = OUT_TOT,
+                MOD_DT       = #{modDt},
+                MOD_ID       = #{modId}
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+        AND     SEQ           IN (  SELECT  tpsied.SEQ
+                                    FROM    TB_PO_STORE_INSTOCK_ERROR_DTL tpsied
+                                    WHERE   tpsied.HQ_OFFICE_CD = #{hqOfficeCd}
+                                    AND     tpsied.SLIP_NO      = #{slipNo}
+                                    AND     tpsied.ERR_FG       IN  ('O1','R1','R4')
+                                 )
+    </update>
+
+    <!-- 물량오류관리 - 출고정보 HD 집계 수정 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK, TB_PO_HQ_STORE_OUTSTOCK_DTL
+        PARAM    : volmErrVO
+        COMMENTS : 물량오류관리 - 출고정보 HD 집계 수정한다.
+    -->
+    <update id="updateVolmErrHdSum" parameterType="volmErrVO">
+        /* USE : VolmErrMapper.updateVolmErrHdSum */
+        UPDATE  TB_PO_HQ_STORE_OUTSTOCK
+        SET     (   OUT_UNIT_QTY, OUT_ETC_QTY, OUT_TOT_QTY, OUT_AMT, OUT_VAT, OUT_TOT
+                ,   IN_UNIT_QTY , IN_ETC_QTY , IN_TOT_QTY , IN_AMT , IN_VAT , IN_TOT , PENALTY_FG )
+            =   (   SELECT  SUM(OUT_UNIT_QTY), SUM(OUT_ETC_QTY), SUM(OUT_TOT_QTY), SUM(OUT_AMT), SUM(OUT_VAT), SUM(OUT_TOT)
+                    ,       SUM(IN_UNIT_QTY) , SUM(IN_ETC_QTY) , SUM(IN_TOT_QTY) , SUM(IN_AMT) , SUM(IN_VAT) , SUM(IN_TOT) , DECODE(SUM(PENALTY_AMT), 0, 'N', 'Y')
+                    FROM    TB_PO_HQ_STORE_OUTSTOCK_DTL
+                    WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
+                    AND     SLIP_NO       =   #{slipNo}
+                )
+        ,       MOD_DT        =   #{modDt}
+        ,       MOD_ID        =   #{modId}
+        WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
+        AND     SLIP_NO       =   #{slipNo}
+    </update>
+
+    <!-- 물량오류관리 - 출고정보 DTL 등록 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK_DTL, TB_PO_STORE_INSTOCK_ERROR_DTL
+        PARAM    : volmErrVO
+        COMMENTS : 물량오류관리 - 출고정보 DTL 등록한다.
+    -->
+    <insert id="insertVolmErrOutstockDtl" parameterType="volmErrVO">
+        /* USE : VolmErrMapper.insertVolmErrOutstockDtl */
+        INSERT INTO TB_PO_HQ_STORE_OUTSTOCK_DTL
+        (       HQ_OFFICE_CD    ,       SLIP_NO         ,       SEQ           ,       STORE_CD
+        ,       SLIP_FG         ,       PROC_FG         ,       DSTB_FG
+        ,       STORAGE_CD      ,       HQ_BRAND_CD     ,       PROD_CD       ,       PO_UNIT_FG      ,       PO_UNIT_QTY
+        ,       REMARK          ,       REQ_DATE
+        ,       MGR_SPLY_UPRC   ,       MGR_UNIT_QTY    ,       MGR_ETC_QTY   ,       MGR_TOT_QTY     ,       MGR_AMT        ,       MGR_VAT        ,       MGR_TOT
+        ,       OUT_SPLY_UPRC   ,       OUT_UNIT_QTY    ,       OUT_ETC_QTY   ,       OUT_TOT_QTY     ,       OUT_AMT        ,       OUT_VAT        ,       OUT_TOT
+        ,       REG_DT
+        ,       REG_ID
+        ,       MOD_DT
+        ,       MOD_ID
+        )
+        SELECT  #{hqOfficeCd}   ,       #{newSlipNo }   ,       SEQ           ,       #{storeCd}
+        ,       SLIP_FG         ,       '1'             ,       DSTB_FG
+        ,       STORAGE_CD      ,       HQ_BRAND_CD     ,       PROD_CD       ,       PO_UNIT_FG      ,       PO_UNIT_QTY
+        ,       REMARK          ,       #{outDate}
+        ,       OUT_SPLY_UPRC
+        ,       TRUNC((OUT_TOT_QTY - IN_TOT_QTY) / PO_UNIT_QTY)
+        ,       MOD  ((OUT_TOT_QTY - IN_TOT_QTY) , PO_UNIT_QTY)
+        ,       (OUT_TOT_QTY - IN_TOT_QTY)
+        ,       DECODE(OUT_VAT,0,ROUND(OUT_TOT / OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY)),CEIL (ROUND(OUT_TOT / OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY)) / 11 * 10))
+        ,       DECODE(OUT_VAT,0,                                                        0,FLOOR(ROUND(OUT_TOT / OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY)) / 11     ))
+        ,       ROUND(OUT_TOT / OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY))
+        ,       OUT_SPLY_UPRC
+        ,       TRUNC((OUT_TOT_QTY - IN_TOT_QTY) / PO_UNIT_QTY)
+        ,       MOD  ((OUT_TOT_QTY - IN_TOT_QTY) , PO_UNIT_QTY)
+        ,       (OUT_TOT_QTY - IN_TOT_QTY)
+        ,       DECODE(OUT_VAT,0,ROUND(OUT_TOT / OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY)),CEIL (ROUND(OUT_TOT / OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY)) / 11 * 10))
+        ,       DECODE(OUT_VAT,0,                                                        0,FLOOR(ROUND(OUT_TOT / OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY)) / 11     ))
+        ,       ROUND(OUT_TOT / OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY))
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        FROM    TB_PO_STORE_INSTOCK_ERROR_DTL
+        WHERE   HQ_OFFICE_CD =   #{hqOfficeCd}
+        AND     SLIP_NO      =   #{slipNo}
+        AND     ERR_FG       IN  ('O2','O4','R2')
+    </insert>
+
+    <!-- 물량오류관리 - 출고정보 HD 등록 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK, TB_PO_STORE_INSTOCK_ERROR_DTL
+        PARAM    : volmErrVO
+        COMMENTS : 물량오류관리 - 출고정보 HD 등록한다.
+    -->
+    <insert id="insertVolmErrOutstockHd" parameterType="volmErrVO">
+        /* USE : VolmErrMapper.insertVolmErrOutstockHd */
+        INSERT INTO TB_PO_HQ_STORE_OUTSTOCK
+        (       HQ_OFFICE_CD        ,   SLIP_NO             ,   STORE_CD            ,   EMP_NO          ,   SLIP_FG
+        ,       SLIP_KIND           ,   PROC_FG             ,   OUT_DATE
+        ,       REMARK              ,   DTL_CNT
+        ,       MGR_UNIT_QTY        ,   MGR_ETC_QTY         ,   MGR_TOT_QTY         ,   MGR_AMT         ,   MGR_VAT         ,       MGR_TOT
+        ,       OUT_UNIT_QTY        ,   OUT_ETC_QTY         ,   OUT_TOT_QTY         ,   OUT_AMT         ,   OUT_VAT         ,       OUT_TOT
+        ,       REG_DT
+        ,       REG_ID
+        ,       MOD_DT
+        ,       MOD_ID
+        )
+        SELECT  #{hqOfficeCd}       ,   #{newSlipNo}        ,   tpsie.STORE_CD       ,  EMP_NO          ,   tpsie.SLIP_FG
+        ,       '1'                 ,   '10'                ,   #{outDate}
+        ,       tpsie.REMARK        ,   tphsod.DTL_CNT
+        ,       tphsod.MGR_UNIT_QTY ,   tphsod.MGR_ETC_QTY  ,   tphsod.MGR_TOT_QTY   ,  tphsod.MGR_AMT  ,   tphsod.MGR_VAT  ,   tphsod.MGR_TOT
+        ,       tphsod.OUT_UNIT_QTY ,   tphsod.OUT_ETC_QTY  ,   tphsod.OUT_TOT_QTY   ,  tphsod.OUT_AMT  ,   tphsod.OUT_VAT  ,   tphsod.OUT_TOT
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        FROM    TB_PO_STORE_INSTOCK_ERROR tpsie
+        ,       (   SELECT  COUNT(*)          AS DTL_CNT
+                    ,       SUM(MGR_UNIT_QTY) AS MGR_UNIT_QTY
+                    ,       SUM(MGR_ETC_QTY)  AS MGR_ETC_QTY
+                    ,       SUM(MGR_TOT_QTY)  AS MGR_TOT_QTY
+                    ,       SUM(MGR_AMT)      AS MGR_AMT
+                    ,       SUM(MGR_VAT)      AS MGR_VAT
+                    ,       SUM(MGR_TOT)      AS MGR_TOT
+                    ,       SUM(OUT_UNIT_QTY) AS OUT_UNIT_QTY
+                    ,       SUM(OUT_ETC_QTY)  AS OUT_ETC_QTY
+                    ,       SUM(OUT_TOT_QTY)  AS OUT_TOT_QTY
+                    ,       SUM(OUT_AMT)      AS OUT_AMT
+                    ,       SUM(OUT_VAT)      AS OUT_VAT
+                    ,       SUM(OUT_TOT)      AS OUT_TOT
+                    FROM    TB_PO_HQ_STORE_OUTSTOCK_DTL
+                    WHERE   HQ_OFFICE_CD =   #{hqOfficeCd}
+                    AND     SLIP_NO      =   #{newSlipNo}
+                ) tphsod
+        WHERE   tpsie.HQ_OFFICE_CD =   #{hqOfficeCd}
+        AND     tpsie.SLIP_NO      =   #{slipNo}
+    </insert>
+
+
+</mapper>

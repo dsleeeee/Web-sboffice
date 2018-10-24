@@ -50,8 +50,8 @@ public class RtnOutstockConfmServiceImpl implements RtnOutstockConfmService {
         // 매장입고 환경변수 조회
         HqEnvstVO hqEnvstVO = new HqEnvstVO();
         hqEnvstVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        hqEnvstVO.setEnvstCd("176");
-        String envst176 = cmmEnvMapper.getHqEnvst(hqEnvstVO);
+        hqEnvstVO.setEnvstCd("1043");
+        String envst1043 = cmmEnvMapper.getHqEnvst(hqEnvstVO);
 
         for (RtnOutstockConfmVO rtnOutstockConfmVO : rtnOutstockConfmVOs) {
             rtnOutstockConfmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
@@ -72,7 +72,7 @@ public class RtnOutstockConfmServiceImpl implements RtnOutstockConfmService {
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
             // 자동입고인 경우 입고로 수정
-            if(StringUtil.getOrBlank(envst176).equals("A")) {
+            if(StringUtil.getOrBlank(envst1043).equals("A")) {
                 rtnOutstockConfmVO.setProcFg("20");
                 rtnOutstockConfmVO.setUpdateProcFg("30");
 
@@ -115,8 +115,8 @@ public class RtnOutstockConfmServiceImpl implements RtnOutstockConfmService {
         // 매장입고 환경변수 조회
         HqEnvstVO hqEnvstVO = new HqEnvstVO();
         hqEnvstVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        hqEnvstVO.setEnvstCd("176");
-        String envst176 = cmmEnvMapper.getHqEnvst(hqEnvstVO);
+        hqEnvstVO.setEnvstCd("1043");
+        String envst1043 = cmmEnvMapper.getHqEnvst(hqEnvstVO);
 
         RtnOutstockConfmVO rtnOutstockConfmHdVO = new RtnOutstockConfmVO();
 
@@ -161,12 +161,12 @@ public class RtnOutstockConfmServiceImpl implements RtnOutstockConfmService {
             result = rtnOutstockConfmMapper.updateRtnOutstockConfmDtl(rtnOutstockConfmVO);
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-            // HD 수정
-            result = rtnOutstockConfmMapper.updateRtnOutstockConfmHd(rtnOutstockConfmHdVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
             returnResult += result;
         }
+
+        // HD 수정
+        result = rtnOutstockConfmMapper.updateRtnOutstockConfmHd(rtnOutstockConfmHdVO);
+        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
         // 출고확정여부를 체크한 경우
         if(confirmFg.equals("Y")) {
@@ -182,7 +182,7 @@ public class RtnOutstockConfmServiceImpl implements RtnOutstockConfmService {
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
             // 자동입고인 경우 입고로 수정
-            if(StringUtil.getOrBlank(envst176).equals("A")) {
+            if(StringUtil.getOrBlank(envst1043).equals("A")) {
                 rtnOutstockConfmHdVO.setProcFg("20");
                 rtnOutstockConfmHdVO.setUpdateProcFg("30");
 

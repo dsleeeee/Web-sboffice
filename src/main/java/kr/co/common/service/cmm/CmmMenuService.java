@@ -75,6 +75,14 @@ public interface CmmMenuService {
     List<ResrceInfoBaseVO> selectFixingMenu(SessionInfoVO sessionInfoVO);
 
     /**
+     * 권한 있는 메뉴
+     *
+     * @param sessionInfoVO SessionInfoVO
+     * @return
+     */
+    List<ResrceInfoVO> selectAuthMenu(SessionInfoVO sessionInfoVO);
+
+    /**
      *
      * 즐겨 찾기 메뉴 관리
      *

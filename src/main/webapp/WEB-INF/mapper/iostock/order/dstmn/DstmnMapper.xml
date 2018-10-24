@@ -171,17 +171,20 @@
         ,        tphsod.IN_VAT  *tphsod.SLIP_FG                                                       AS IN_VAT
         ,        tphsod.IN_TOT  *tphsod.SLIP_FG                                                       AS IN_TOT
         ,        tphsod.REMARK
-        ,        0 AS ENVST0011
+        ,        the.ENVST_VAL AS ENVST0011
         ,        thpb.BARCD_CD
         FROM     TB_PO_HQ_STORE_OUTSTOCK_DTL tphsod
         ,        TB_HQ_PRODUCT thp
         ,        TB_HQ_PRODUCT_BARCD thpb
+        ,        TB_HQ_ENVST the
         WHERE    tphsod.HQ_OFFICE_CD    =   #{hqOfficeCd}
         AND      tphsod.SLIP_NO         =   #{slipNo}
         AND      thp.HQ_OFFICE_CD       =   tphsod.HQ_OFFICE_CD
         AND      thp.PROD_CD            =   tphsod.PROD_CD
         AND      thpb.HQ_OFFICE_CD  (+) =   tphsod.HQ_OFFICE_CD
         AND      thpb.PROD_CD       (+) =   tphsod.PROD_CD
+        AND      the.HQ_OFFICE_CD       =   #{hqOfficeCd}
+        AND      the.ENVST_CD           =   '0011'
         ORDER
         BY       tphsod.PROD_CD, tphsod.SEQ
         ]]>

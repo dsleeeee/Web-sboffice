@@ -17,7 +17,8 @@ public class MessageResolverServiceImpl implements MessageResolveService {
 
     private MessageSource messageSource;
 
-    @Override public void setMessageSource(MessageSource messageSource) {
+    @Override
+    public void setMessageSource(MessageSource messageSource) {
         this.messageSource = messageSource;
     }
 

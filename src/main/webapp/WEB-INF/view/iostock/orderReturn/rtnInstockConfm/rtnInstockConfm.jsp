@@ -32,7 +32,19 @@
     <tr>
       <%-- 진행 --%>
       <th><s:message code="rtnInstockConfm.procFg"/></th>
-      <td></td>
+      <td>
+        <span class="txtIn w150 sb-select fl mr5">
+          <wj-combo-box
+            id="srchProcFg"
+            ng-model="procFg"
+            items-source="_getComboData('srchProcFg')"
+            display-member-path="name"
+            selected-value-path="value"
+            is-editable="false"
+            initialized="_initComboBox(s)">
+          </wj-combo-box>
+        </span>
+      </td>
       <%-- 종류 --%>
       <th><s:message code="rtnInstockConfm.slipKind"/></th>
       <td></td>
@@ -67,7 +79,8 @@
         <wj-flex-grid-column header="<s:message code="rtnInstockConfm.slipNo"/>" binding="slipNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnInstockConfm.slipFg"/>" binding="slipFg" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnInstockConfm.slipKind"/>" binding="slipKind" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnInstockConfm.procFg"/>" binding="procFg" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnInstockConfm.procFg"/>" binding="procFg" width="70" align="center" is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnInstockConfm.storeNm"/>" binding="storeNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dlvrNm"/>" binding="dlvrNm" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnInstockConfm.reqDate"/>" binding="reqDate" width="90" align="center" is-read-only="true" format="date" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnInstockConfm.outDate"/>" binding="outDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
@@ -76,6 +89,7 @@
         <wj-flex-grid-column header="<s:message code="rtnInstockConfm.mgrTot"/>" binding="mgrTot" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnInstockConfm.outTot"/>" binding="outTot" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnInstockConfm.inTot"/>" binding="inTot" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnInstockConfm.penaltyAmt"/>" binding="penaltyAmt" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnInstockConfm.remark"/>" binding="remark" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
 
       </wj-flex-grid>
@@ -103,6 +117,20 @@
 
     var srchStartDate = wcombo.genDateVal("#srchStartDate", "${sessionScope.sessionInfo.startDt}");
     var srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.startDt}");
+
+    $scope._setComboData("srchProcFg", [
+      {"name": "<s:message code='instockConfm.procFgAll'/>", "value": ""},
+      {"name": "<s:message code='instockConfm.procFgDstbConfm'/>", "value": "10"},
+      {"name": "<s:message code='instockConfm.procFgOutConfm'/>", "value": "20"},
+      {"name": "<s:message code='instockConfm.procFgInConfm'/>", "value": "30"}
+    ]);
+    $scope.procFg = "20"; // 진행구분 기본값 세팅
+
+    $scope.procFgMap = new wijmo.grid.DataMap([
+      {id: "10", name: "<s:message code='instockConfm.procFgDstbConfm'/>"},
+      {id: "20", name: "<s:message code='instockConfm.procFgOutConfm'/>"},
+      {id: "30", name: "<s:message code='instockConfm.procFgInConfm'/>"}
+    ], 'id', 'name');
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -153,7 +181,6 @@
       // 파라미터
       var params       = {};
       params.slipFg    = $scope.slipFg;
-      // params.procFg    = "20";
       params.startDate = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
       params.endDate   = wijmo.Globalize.format(srchEndDate.value, 'yyyyMMdd');
 

@@ -64,14 +64,17 @@
         ,       tphso.ORDER_VAT*tphso.SLIP_FG AS ORDER_VAT
         ,       tphso.ORDER_TOT*tphso.SLIP_FG AS ORDER_TOT
         ,       DECODE(tmp.VAT_FG, 'Y', 1, 0) AS VAT_FG01
-        ,       0 AS ENVST0011
+        ,       the.ENVST_VAL AS ENVST0011
         FROM    TB_PO_HQ_STORE_ORDER_DTL tphso
         ,       TB_MS_PRODUCT tmp
-        WHERE   tphso.REQ_DATE           =   #{reqDate}
-        AND     tphso.STORE_CD           =   #{storeCd}
-        AND     tphso.SLIP_FG            =   #{slipFg}
-        AND     tmp.STORE_CD             =   tphso.STORE_CD
-        AND     tmp.PROD_CD              =   tphso.PROD_CD
+        ,       TB_HQ_ENVST the
+        WHERE   tphso.REQ_DATE      =   #{reqDate}
+        AND     tphso.STORE_CD      =   #{storeCd}
+        AND     tphso.SLIP_FG       =   #{slipFg}
+        AND     tmp.STORE_CD        =   tphso.STORE_CD
+        AND     tmp.PROD_CD         =   tphso.PROD_CD
+        AND     the.HQ_OFFICE_CD    =   #{hqOfficeCd}
+        AND     the.ENVST_CD        =   '0011'
         ORDER
         BY      tphso.PROD_CD
         ]]>
@@ -107,7 +110,7 @@
         ,       tmp.USE_YN
         ,       tmp.PO_UNIT_FG
         ,       tmp.PO_UNIT_QTY
-        ,       0 AS ENVST0011
+        ,       the.ENVST_VAL AS ENVST0011
         ,       tmp.SAFE_STOCK_QTY
         ,       TRUNC(DECODE(SIGN(tmp.SAFE_STOCK_QTY),-1,0,tmp.SAFE_STOCK_QTY) / tmp.PO_UNIT_QTY) AS SAFE_STOCK_UNIT_QTY
         ,       MOD  (DECODE(SIGN(tmp.SAFE_STOCK_QTY),-1,0,tmp.SAFE_STOCK_QTY) , tmp.PO_UNIT_QTY) AS SAFE_STOCK_ETC_QTY
@@ -130,6 +133,7 @@
                     WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
                 )   tshsc
         ,       TB_PO_HQ_STORE_ORDER_DTL tphso
+        ,       TB_HQ_ENVST the
         ]]>
         <if test='option2 == "ORD"'>
             ,   (   SELECT  tphsod.PROD_CD
@@ -183,6 +187,8 @@
         AND     tphso.STORE_CD    (+) =   tmp.STORE_CD
         AND     tphso.PROD_CD     (+) =   tmp.PROD_CD
         AND     tphso.SLIP_FG     (+) =   #{slipFg}
+        AND     the.HQ_OFFICE_CD      =   #{hqOfficeCd}
+        AND     the.ENVST_CD          =   '0011'
         ]]>
         <if test='prodCd != null and prodCd != ""'>
             AND tmp.PROD_CD = #{prodCd}

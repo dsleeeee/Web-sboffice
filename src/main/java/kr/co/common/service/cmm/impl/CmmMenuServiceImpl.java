@@ -2,8 +2,9 @@ package kr.co.common.service.cmm.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.cmm.CmmMenuService;
-import kr.co.common.service.session.SessionService;
+import kr.co.common.service.redis.RedisConnService;
 import kr.co.common.system.BaseEnv;
+import kr.co.common.template.RedisCustomTemplate;
 import kr.co.solbipos.application.common.service.*;
 import kr.co.solbipos.application.common.service.impl.CmmCodeMapper;
 import kr.co.solbipos.application.common.service.impl.CmmMenuMapper;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static kr.co.common.utils.DateUtil.currentDateString;
 import static kr.co.common.utils.DateUtil.currentTimeMsString;
@@ -26,16 +28,20 @@ import static org.springframework.util.StringUtils.isEmpty;
 public class CmmMenuServiceImpl implements CmmMenuService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    private final SessionService sessionService;
+
+    private final RedisConnService redisConnService;
     private final CmmMenuMapper cmmMenuMapper;
     private final CmmCodeMapper cmmCodeMapper;
+    private final RedisCustomTemplate<String, SessionInfoVO> redisCustomTemplate;
 
     /** Constructor Injection */
     @Autowired
-    public CmmMenuServiceImpl(SessionService sessionService, CmmMenuMapper cmmMenuMapper, CmmCodeMapper cmmCodeMapper) {
-        this.sessionService = sessionService;
+    public CmmMenuServiceImpl(RedisConnService redisConnService, CmmMenuMapper cmmMenuMapper, CmmCodeMapper cmmCodeMapper,
+        RedisCustomTemplate<String, SessionInfoVO> redisCustomTemplate) {
+        this.redisConnService = redisConnService;
         this.cmmMenuMapper = cmmMenuMapper;
         this.cmmCodeMapper = cmmCodeMapper;
+        this.redisCustomTemplate = redisCustomTemplate;
     }
 
     /**
@@ -65,15 +71,6 @@ public class CmmMenuServiceImpl implements CmmMenuService {
     	return cmmMenuMapper.selectCmAgency(caVO);
     }
     
-
-
-    /**
-     *
-     * 메뉴 디비 작업 관련
-     *
-     */
-
-
     @Override
     public int insertMenuUseHist(MenuUseHistVO menuUseHistVO) {
         return cmmMenuMapper.insertMenuUseHist(menuUseHistVO);
@@ -89,13 +86,10 @@ public class CmmMenuServiceImpl implements CmmMenuService {
         return cmmMenuMapper.selectFixingMenu(sessionInfoVO);
     }
 
-
-    /**
-     *
-     * 즐겨 찾기 메뉴 관리
-     *
-     */
-
+    @Override
+    public List<ResrceInfoVO> selectAuthMenu(SessionInfoVO sessionInfoVO) {
+        return cmmMenuMapper.selectAuthMenu(sessionInfoVO);
+    }
 
     @Override
     public int insertMenuUseHist(ResrceInfoVO resrceInfoVO, SessionInfoVO sessionInfoVO) {
@@ -207,7 +201,15 @@ public class CmmMenuServiceImpl implements CmmMenuService {
         sessionInfoVO.setHistMenu(histMenu);
 
         // 레디스에 수정한 세션정보를 저장
-        sessionService.setSessionInfo(sessionInfoVO);
+        if ( redisConnService.isAvailable() ) {
+            try {
+                redisCustomTemplate.set( redisCustomTemplate.makeKey(sessionInfoVO.getSessionId()), sessionInfoVO,
+                    BaseEnv.SESSION_TIMEOUT_MIN, TimeUnit.MINUTES );
+            } catch ( Exception e ) {
+                LOGGER.error( "Redis server not available!! setSessionInfo {}", e );
+                redisConnService.disable();
+            }
+        }
 
         return sessionInfoVO;
     }

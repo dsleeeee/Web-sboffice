@@ -57,14 +57,20 @@ public class VirtualLoginController {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
     
     /** service */
+    private final VirtualLoginService virtualLoginService;
+    private final SessionService sessionService;
+    private final AuthService authService;
+    private final CmmMenuService cmmMenuService;
+
+    /** Constructor Injection */
     @Autowired
-    VirtualLoginService virtualLoginService;
-    @Autowired
-    SessionService sessionService;
-    @Autowired
-    AuthService authService;
-    @Autowired
-    CmmMenuService cmmMenuService;
+    public VirtualLoginController(VirtualLoginService virtualLoginService,
+        SessionService sessionService, AuthService authService, CmmMenuService cmmMenuService) {
+        this.virtualLoginService = virtualLoginService;
+        this.sessionService = sessionService;
+        this.authService = authService;
+        this.cmmMenuService = cmmMenuService;
+    }
 
     /**
      * 가상로그인 - 페이지 이동
@@ -146,7 +152,7 @@ public class VirtualLoginController {
             // sessionId 세팅
             sessionInfoVO.setSessionId( generateUUID() );
             // 권한 있는 메뉴 저장
-            sessionInfoVO.setAuthMenu( authService.selectAuthMenu( sessionInfoVO ) );
+            sessionInfoVO.setAuthMenu( cmmMenuService.selectAuthMenu( sessionInfoVO ) );
             // 고정 메뉴 리스트 저장
             sessionInfoVO.setFixMenu( cmmMenuService.selectFixingMenu( sessionInfoVO ) );
             // 즐겨찾기 메뉴 리스트 저장

@@ -3,9 +3,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
-  <script type="text/javascript" src="/resource/solbipos/js/variables/menu.js?ver=20181004.00" charset="utf-8"></script>
-  <script type="text/javascript" src="/resource/solbipos/js/layout/basic/menu.js?ver=20181004.00" charset="utf-8"></script>
-
   <%--로고영역--%>
   <h1><a href="/main.sb" class="on">
   <span><img src="/resource/solbipos/css/img/logo_main.png" alt="" /></span></a></h1><%-- 활성화 : class="on" --%>
@@ -28,8 +25,39 @@
     <%--open : 즐겨찾기 메뉴--%>
 
     <%--위즈모 메뉴--%>
-    <div id="_theTreeAll" class="theTreeAll"></div>
-    <div id="_theTreeBkmk" class="theTreeAll" style="display:none;"></div>
+    <div id="_theTreeAll" ng-controller="menuCtrl">
+      <wj-tree-view control="flex"
+        class="theTreeAll"
+        items-source="items"
+        display-member-path="'nm'"
+        child-items-path="'items'"
+        is-animated="false"
+        auto-collapse="false"
+        expand-on-click="false"
+        initialized="initTreeView(s,e)"
+        selection-mode="ListBox"
+        selected-item-changed="selectedItemChanged(s,e)"
+        item-clicked="itemClicked(s,e)"
+        loaded-items="loadedItems(s,e)">
+      </wj-tree-view>
+    </div>
+
+    <div id="_theTreeBkmk" style="display:none;" ng-controller="bkmkCtrl">
+      <wj-tree-view control="flex"
+        class="theTreeAll"
+        items-source="items"
+        display-member-path="'nm'"
+        child-items-path="'items'"
+        is-animated="false"
+        auto-collapse="false"
+        expand-on-click="false"
+        initialized="initTreeView(s,e)"
+        selection-mode="ListBox"
+        selected-item-changed="selectedItemChanged(s,e)"
+        item-clicked="itemClicked(s,e)"
+        loaded-items="loadedItems(s,e)">
+      </wj-tree-view>
+    </div>
     <%--//위즈모 메뉴--%>
 
     <%--접혔을때 : 클릭시 열린메뉴로 변경--%>
@@ -39,3 +67,4 @@
     <%--//접혔을때--%>
   </div>
 
+<script type="text/javascript" src="/resource/solbipos/js/layout/basic/menu.js?ver=20181023.01" charset="utf-8"></script>

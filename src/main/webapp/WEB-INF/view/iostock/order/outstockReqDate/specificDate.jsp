@@ -29,11 +29,6 @@
         </jsp:include>
         <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
       </td>
-
-      <%--<td><input type="text" id="specificSearchStoreCd" name="specificSearchStoreCd" ng-model="storeCd" class="sb-input w100" maxlength="7"/></td>--%>
-      <%--&lt;%&ndash; 매장명 &ndash;%&gt;--%>
-      <%--<th><s:message code="outstockReqDate.storeNm"/></th>--%>
-      <%--<td><input type="text" id="specificSearchStoreNm" name="specificSearchStoreNm" ng-model="storeNm" class="sb-input w100" maxlength="16" /></td>--%>
     </tr>
     </tbody>
   </table>
@@ -132,8 +127,8 @@
       // 그리드 DataMap 설정
       $scope.sysStatFgMap     = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
       $scope.outstockReqYnMap = new wijmo.grid.DataMap([
-        {id: "Y", name: "<s:message code='outstockReqDate.outstockReqYnY'/>"},
-        {id: "N", name: "<s:message code='outstockReqDate.outstockReqYnN'/>"},
+        {id: "Y", name: messages["outstockReqDate.outstockReqYnY"]},
+        {id: "N", name: messages["outstockReqDate.outstockReqYnN"]},
       ], 'id', 'name');
 
       // 그리드 링크 효과
@@ -195,7 +190,7 @@
     // 특정일 삭제
     $scope.deleteSpecificDate = function () {
       // 삭제 하시겠습니까?
-      var msg = "<s:message code='cmm.choo.delete'/>";
+      var msg = messages["cmm.choo.delete"];
       s_alert.popConf(msg, function () {
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {

@@ -42,9 +42,9 @@ public class PwdManageServiceImpl implements PwdManageService {
 
     /** Constructor Injection */
     @Autowired
-    public PwdManageServiceImpl(MessageService messageService, PwdManageMapper pwdManageMapper) {
-        this.messageService = messageService;
+    public PwdManageServiceImpl(PwdManageMapper pwdManageMapper, MessageService messageService) {
         this.pwdManageMapper = pwdManageMapper;
+        this.messageService = messageService;
     }
 
     /** 비밀번호 임의변경 대상 조회 */

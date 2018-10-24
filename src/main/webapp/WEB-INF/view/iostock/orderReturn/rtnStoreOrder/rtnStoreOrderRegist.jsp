@@ -193,16 +193,17 @@
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('rtnStoreOrderRegistCtrl', $scope, $http, true));
 
+
     $scope._setComboData("option1", [
-      {"name": "<s:message code='rtnStoreOrder.dtl.option1All'/>", "value": ""},
-      {"name": "<s:message code='rtnStoreOrder.dtl.option1SafeStock'/>", "value": "S"}
+      {"name": messages["rtnStoreOrder.dtl.option1All"], "value": ""},
+      {"name": messages["rtnStoreOrder.dtl.option1SafeStock"], "value": "S"}
     ]);
 
     $scope._setComboData("option2", [
-      {"name": "<s:message code='rtnStoreOrder.dtl.option2All'/>", "value": ""},
-      {"name": "<s:message code='rtnStoreOrder.dtl.option2Order'/>", "value": "ORD"},
-      {"name": "<s:message code='rtnStoreOrder.dtl.option2Outstock'/>", "value": "OUT"},
-      {"name": "<s:message code='rtnStoreOrder.dtl.option2Sale'/>", "value": "SALE"}
+      {"name": messages["rtnStoreOrder.dtl.option2All"], "value": ""},
+      {"name": messages["rtnStoreOrder.dtl.option2Order"], "value": "ORD"},
+      {"name": messages["rtnStoreOrder.dtl.option2Outstock"], "value": "OUT"},
+      {"name": messages["rtnStoreOrder.dtl.option2Sale"], "value": "SALE"}
     ]);
 
     $scope.srchRegStartDate = wcombo.genDateVal("#srchRegStartDate", "${sessionScope.sessionInfo.startDt}");
@@ -285,7 +286,7 @@
           // 당일보다 이전일자 요청등록 불가
           var today = getCurDate();
           if (parseInt(today) > parseInt($scope.reqDate)) {
-            $scope._popMsg('<s:message code="rtnStoreOrder.dtl.not.prevDateOrder"/>');
+            $scope._popMsg(messages["rtnStoreOrder.dtl.not.prevDateOrder"]);
             return false;
           }
         }
@@ -317,7 +318,7 @@
           // 진행구분이 반품등록이 아니면 상품추가/변경 불가
           if (!$.isEmptyObject(response.data.data)) {
             if (response.data.data.procFg != "00") {
-              $scope._popMsg('<s:message code="rtnStoreOrder.dtl.not.orderProcEnd"/>');
+              $scope._popMsg(messages["rtnStoreOrder.dtl.not.orderProcEnd"]);
               return false;
             }
             $scope.regHdRemark = response.data.data.remark;
@@ -331,7 +332,7 @@
       }).then(function () {
         // "complete" code here
         $scope.wjRtnStoreOrderRegistLayer.show(true);
-        $("#registSubTitle").html(' (<s:message code="rtnStoreOrder.reqDate"/> : ' + getFormatDate($scope.reqDate, '-') + ')');
+        $("#registSubTitle").html(' ('+messages["rtnStoreOrder.reqDate"]+' : ' + getFormatDate($scope.reqDate, '-') + ')');
       });
     };
 

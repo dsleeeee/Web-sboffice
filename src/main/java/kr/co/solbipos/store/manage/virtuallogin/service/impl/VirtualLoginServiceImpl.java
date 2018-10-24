@@ -32,11 +32,16 @@ import java.util.List;
 @Service("virtualLoginService")
 public class VirtualLoginServiceImpl implements VirtualLoginService {
 
+    private final VirtualLoginMapper virtualLoginMapper;
+    private final AuthMapper authMapper;
+
+    /** Constructor Injection */
     @Autowired
-    VirtualLoginMapper virtualLoginMapper;
-    @Autowired
-    AuthMapper authMapper;
-    
+    public VirtualLoginServiceImpl(VirtualLoginMapper virtualLoginMapper, AuthMapper authMapper) {
+        this.virtualLoginMapper = virtualLoginMapper;
+        this.authMapper = authMapper;
+    }
+
     /** 가상로그인 목록 조회 */
     @Override
     public List<DefaultMap<String>> getVirtualLoginList(VirtualLoginVO virtualLoginVO) {
