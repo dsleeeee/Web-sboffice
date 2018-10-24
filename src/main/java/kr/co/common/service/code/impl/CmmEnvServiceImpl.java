@@ -3,7 +3,6 @@ package kr.co.common.service.code.impl;
 import kr.co.common.data.domain.CommonCodeVO;
 import kr.co.common.service.code.CmmEnvService;
 import kr.co.common.template.RedisCustomTemplate;
-import kr.co.solbipos.application.common.service.impl.CmmEnvMapper;
 import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;
 import kr.co.solbipos.sys.cd.envconfg.service.EnvstVO;

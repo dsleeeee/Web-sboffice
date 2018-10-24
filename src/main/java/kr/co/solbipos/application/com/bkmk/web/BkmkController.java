@@ -4,6 +4,7 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.cmm.CmmMenuService;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.com.bkmk.service.BkmkService;
 import kr.co.solbipos.application.com.bkmk.service.BkmkVO;
 import kr.co.solbipos.application.com.fixing.service.FixingService;
@@ -21,9 +22,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
-import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
 * @Class Name : BizNoServiceImpl.java
@@ -51,8 +52,8 @@ public class BkmkController {
     private final CmmMenuService cmmMenuService;
 
     /** Constructor Injection */
-    @Autowired
-    public BkmkController(BkmkService bkmkService, FixingService fixingService, SessionService sessionService, CmmMenuService cmmMenuService) {
+    @Autowired public BkmkController(BkmkService bkmkService, FixingService fixingService,
+        SessionService sessionService, CmmMenuService cmmMenuService) {
         this.bkmkService = bkmkService;
         this.fixingService = fixingService;
         this.sessionService = sessionService;
@@ -69,13 +70,13 @@ public class BkmkController {
     @RequestMapping(value = "/bkmk/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result bkmkList(HttpServletRequest request, HttpServletResponse response) {
-        List<String> menuData = new ArrayList<String>();
+        Map<String, Object> menuData = new HashMap<String, Object>();
         // 세션 가져오기
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         // 전체메뉴, 즐겨찾기, 고정메뉴 순서로 로드하여 List 에 Add
-        menuData.add(sessionInfoVO.getMenuData());
-        menuData.add(sessionInfoVO.getBkmkData());
-        menuData.add(sessionInfoVO.getFixData());
+        menuData.put("menuData", sessionInfoVO.getMenuData());
+        menuData.put("bkmkData", sessionInfoVO.getBkmkMenuData());
+        menuData.put("fixData", sessionInfoVO.getFixedMenuData());
 
         return returnJson(Status.OK, menuData);
     }
@@ -112,19 +113,18 @@ public class BkmkController {
         fixingService.saveFixing(fixingVO, sessionInfoVO.getUserId());
 
         // 즐겨찾기&고정메뉴 저장 후 해당 내용 세션에 갱신
-        // 고정 메뉴 리스트 조회후 set
-        sessionInfoVO.setFixMenu(cmmMenuService.selectFixingMenu(sessionInfoVO));
-        // 즐겨찾기 메뉴 리스트 조회후 set
-        sessionInfoVO.setBkmkMenu(cmmMenuService.selectBkmkMenu(sessionInfoVO));
-        // 즐겨찾기메뉴 json 형태로 set
-        sessionInfoVO.setBkmkData(convertToJson(cmmMenuService.makeMenu(sessionInfoVO, "F")));
-        // 고정 메뉴 json 형태로 set
-        sessionInfoVO.setFixData(convertToJson(sessionInfoVO.getFixMenu()));
+        // 사용자의 메뉴 리스트 Set : 권한포함
+        sessionInfoVO.setMenuData(cmmMenuService.getUserMenuList(sessionInfoVO));
+        // 즐겨찾기 메뉴 리스트 Set
+        sessionInfoVO.setBkmkMenuData(cmmMenuService.getBkmkMenuList(sessionInfoVO));
+        // 고정 메뉴 리스트 Set
+        sessionInfoVO.setFixedMenuData(cmmMenuService.getFixedMenuList(sessionInfoVO));
+
         // redis에 세션 세팅
         sessionService.setSessionInfo(sessionInfoVO);
         // 메뉴Data Return
-        result.add(sessionInfoVO.getBkmkData());
-        result.add(sessionInfoVO.getFixData());
+        result.add(StringUtil.convertToJson(sessionInfoVO.getBkmkMenuData()));
+        result.add(StringUtil.convertToJson(sessionInfoVO.getFixedMenuData()));
 
         return returnJson(Status.OK, result);
     }

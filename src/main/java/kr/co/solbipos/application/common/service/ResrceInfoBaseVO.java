@@ -18,7 +18,7 @@ package kr.co.solbipos.application.common.service;
  */
 public class ResrceInfoBaseVO extends CmmVO {
 
-    private static final long serialVersionUID = -2275247334709474543L;
+    private static final long serialVersionUID = 3198051418095524045L;
 
     /** 리소스 코드 */
     private String resrceCd;
@@ -28,6 +28,8 @@ public class ResrceInfoBaseVO extends CmmVO {
     private String resrceNm;
     /** URL */
     private String url;
+    /** ICON */
+    private String iconNm;
     /** 활성화 여부 */
     private boolean activation = false;
     
@@ -80,9 +82,25 @@ public class ResrceInfoBaseVO extends CmmVO {
     public void setUrl(String url) {
         this.url = url;
     }
+
+    /**
+     * @return the iconNm
+     */
+    public String getIconNm() {
+        return iconNm;
+    }
+
+    /**
+     * @param iconNm the iconNm to set
+     */
+    public void setIconNm(String iconNm) {
+        this.iconNm = iconNm;
+    }
+
     /**
      * @return the activation
      */
+
     public boolean isActivation() {
         return activation;
     }

@@ -1,4 +1,4 @@
-package kr.co.solbipos.application.common.service.impl;
+package kr.co.common.service.code.impl;
 
 import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;

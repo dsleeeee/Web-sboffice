@@ -69,7 +69,7 @@ public class MenuController {
     @ResponseBody
     public Result getBkmkList(HttpServletRequest request, Model model) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        return returnJson(Status.OK, sessionInfoVO.getBkmkData());
+        return returnJson(Status.OK, sessionInfoVO.getBkmkMenuData());
     }
 
     /**
@@ -140,7 +140,7 @@ public class MenuController {
         storeVO.setDefaultStoreCd(defaultStoreCd);
         storeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        List<StoreVO> list = cmmMenuService.selectStore(storeVO);
+        List<StoreVO> list = cmmMenuService.getStoreInfo(storeVO);
         return returnJson(Status.OK, list);
     }
 
@@ -154,8 +154,8 @@ public class MenuController {
      */
     @RequestMapping(value = "/selectHq.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result selectHq(HqVO hqVO, HttpServletRequest request, Model model) {
-        List<HqVO> list = cmmMenuService.selectHq(hqVO);
+    public Result getHqInfo(HqVO hqVO, HttpServletRequest request, Model model) {
+        List<HqVO> list = cmmMenuService.getHqInfo(hqVO);
         return returnJson(Status.OK, list);
     }
 
@@ -170,8 +170,8 @@ public class MenuController {
      */
     @RequestMapping(value = "/selectCmAgency.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result selectCmAgency(CmAgencyVO caVO, HttpServletRequest request, Model model) {
-        List<CmAgencyVO> list = cmmMenuService.selectCmAgency(caVO);
+    public Result getCmAgencyInfo(CmAgencyVO caVO, HttpServletRequest request, Model model) {
+        List<CmAgencyVO> list = cmmMenuService.getCmAgencyInfo(caVO);
         return returnJson(Status.OK, list);
    }
 }

@@ -88,41 +88,40 @@
         PARAM    : virtualLoginVO
         COMMENTS : 가상로그인 수행시 해당 권한을 체크한다.
     -->
-    <select id="checkVirtualLoginAuth" parameterType="virtualLoginVO" resultType="java.lang.Integer">
+    <select id="checkVirtualLoginAuth" parameterType="java.lang.String" resultType="java.lang.Integer">
         /* USE : VirtualLoginMapper.checkVirtualLoginAuth */
         SELECT
-            COUNT(RESRCE_CD) AS CNT
+            COUNT(twri.RESRCE_CD) AS CNT
         FROM
-            TB_WB_RESRCE_INFO
+            TB_WB_RESRCE_INFO twri
         WHERE
-            RESRCE_CD IN (
+            twri.RESRCE_CD IN (
                 SELECT
-                    RESRCE_CD
+                    twagr.RESRCE_CD
                 FROM
-                    TB_WB_AUTHOR_GRP_RESRCE
+                    TB_WB_AUTHOR_GRP_RESRCE twagr
                 WHERE
-                    AUTH_GRP_CD = (
+                    twagr.AUTH_GRP_CD = (
                         SELECT
-                            AUTH_GRP_CD
+                            twui.AUTH_GRP_CD
                         FROM
-                            TB_WB_USER_INFO
+                            TB_WB_USER_INFO twui
                         WHERE
-                            USER_ID = #{userId}
+                            twui.USER_ID = #{0}
                     )
-                    AND RESRCE_CD = '000419'
-                    AND USE_YN = 'Y'
-            UNION ALL
+                    AND twagr.RESRCE_CD = '000102'
+                    AND twagr.USE_YN = 'Y'
+                UNION ALL
                 SELECT
-                    RESRCE_CD
+                    twae.RESRCE_CD
                 FROM
-                    TB_WB_AUTHOR_EXCEPT
+                    TB_WB_AUTHOR_EXCEPT twae
                 WHERE
-                    USER_ID = #{userId}
-                    /* 가상로그인 화면에 대한 권한 체크 */
-                    AND RESRCE_CD = '000419'
-                    AND INCLD_EXCLD_FG = 'I'
-                    AND USE_YN = 'Y'
-            )
+                    twae.USER_ID = #{0}
+                    AND twae.RESRCE_CD = '000102'
+                    AND twae.INCLD_EXCLD_FG = 'I'
+                    AND twae.USE_YN = 'Y'
+                )
     </select>
     
 </mapper>
