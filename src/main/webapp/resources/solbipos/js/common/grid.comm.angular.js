@@ -131,9 +131,12 @@ function RootController(ctrlName, $scope, $http, isPicker) {
     var sParam = {};
     // 길이체크
     if (params.length <= 0) {
+      // 변경사항이 없습니다.
       $scope._popMsg(messages["cmm.not.modify"]);
       return false;
     } else {
+      // 로딩바 show
+      $scope.$broadcast('loadingPopupActive', messages["cmm.saving"]);
       // 가상로그인 대응한 session id 설정
       if (document.getElementsByName("sessionId")[0]) {
         sParam['sid'] = document.getElementsByName("sessionId")[0].value;
@@ -147,6 +150,8 @@ function RootController(ctrlName, $scope, $http, isPicker) {
       params: sParam, /* 파라메터로 보낼 데이터 : request.getParameter */
       headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
     }).then(function successCallback(response) {
+      // 로딩바 hide
+      $scope.$broadcast('loadingPopupInactive');
       if(response.data.status === "OK") {
         // this callback will be called asynchronously
         // when the response is available
@@ -169,6 +174,8 @@ function RootController(ctrlName, $scope, $http, isPicker) {
         $scope._popMsg(msg);
       }
     }, function errorCallback(response) {
+      // 로딩바 hide
+      $scope.$broadcast('loadingPopupInactive');
       // called asynchronously if an error occurs
       // or server returns response with an error status.
       $scope._popMsg(messages["cmm.saveFail"]);
@@ -309,7 +316,18 @@ function RootController(ctrlName, $scope, $http, isPicker) {
     }
   };
   // 로딩 메시지 팝업 열기
-  $scope.$on('loadingPopupActive', function () {
+  $scope.$on('loadingPopupActive', function (event, data) {
+    // 팝업내용 동적 생성
+    var innerHtml = "<div class=\"wj-popup-loading\"><p class=\"bk\">";
+    if (isEmpty(data)) {
+      innerHtml += messages["cmm.loading"];
+    } else {
+      innerHtml += data;
+    }
+    innerHtml += "</p><p class=\"mt20\"><img src=\"/resource/solbipos/css/img/loading.gif\" alt=\"\" /></p></div>";
+    // html 적용
+    $scope._loadingPopup.content.innerHTML = innerHtml;
+    // 팝업 show
     $scope._loadingPopup.show(true);
   });
   // 로딩 메시지 팝업 닫기
