@@ -108,7 +108,7 @@ $(document).ready(function(){
 
   var rdata =
     [
-      {binding:"rnum",header:"No", visible:false},
+      {binding:"gChk",header:"No", visible:false},
       {binding:"hqOfficeCd",header:"<s:message code='loginStatus.hqOfficeCd' />", width:90, align:"center"},
       {binding:"hqOfficeNm",header:"<s:message code='loginStatus.hqOfficeNm' />", width:120, align:"center"},
       {binding:"storeCd",header:"<s:message code='loginStatus.storeCd' />", width:80, align:"center"},

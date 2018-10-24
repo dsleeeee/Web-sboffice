@@ -7,6 +7,7 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.store.hq.brand.service.HqBrandVO;
+import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;
 import kr.co.solbipos.store.manage.storemanage.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -47,11 +48,15 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 public class StoreManageController {
 
     /** service */
-    @Autowired
-    StoreManageService service;
+    private final StoreManageService service;
+    private final SessionService sessionService;
 
+    /** Constructor Injection */
     @Autowired
-    SessionService sessionService;
+    public StoreManageController(StoreManageService service, SessionService sessionService) {
+        this.service = service;
+        this.sessionService = sessionService;
+    }
 
     /**
      * 매장정보관리 - 화면 이동
@@ -180,26 +185,6 @@ public class StoreManageController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
         int cnt = service.updateStoreInfo(storeManageVO, sessionInfoVO);
-
-        return returnJson(Status.OK, cnt);
-    }
-
-    /**
-     * 매장 포스승인정보 저장
-     * @param storePosVOs
-     * @param request
-     * @param response
-     * @param model
-     * @return
-     */
-    @RequestMapping(value = "storeManage/saveStorePosInfo.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result saveStorePosInfo(@RequestBody StorePosVO[] storePosVOs, HttpServletRequest request,
-        HttpServletResponse response, Model model) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
-
-        int cnt = service.saveStorePosVanInfo(storePosVOs, sessionInfoVO);
 
         return returnJson(Status.OK, cnt);
     }
@@ -362,7 +347,6 @@ public class StoreManageController {
 
        return returnJson(Status.OK, result);
    }
-
 
    /**
     * 포스 셋팅 복사
@@ -535,21 +519,21 @@ public class StoreManageController {
     * @author 김지은
     * @since 2018.07.17
     */
-   @RequestMapping(value = "storeManage/getHqBrandList.sb", method = RequestMethod.POST)
-   @ResponseBody
-   public Result getHqBrandList(HqBrandVO hqBrandVO, HttpServletRequest request,
-           HttpServletResponse response, Model model) {
+//   @RequestMapping(value = "storeManage/getHqBrandList.sb", method = RequestMethod.POST)
+//   @ResponseBody
+//   public Result getHqBrandList(HqBrandVO hqBrandVO, HttpServletRequest request,
+//           HttpServletResponse response, Model model) {
+//
+//       // 터치키 복사할 브랜드 조회
+//       List<DefaultMap<String>> hqList = service.getHqBrandList(hqBrandVO);
+//
+//       return returnListJson(Status.OK, hqList);
+//   }
 
-       // 터치키 복사할 브랜드 조회
-       List<DefaultMap<String>> hqList = service.getHqBrandList(hqBrandVO);
-
-       return returnListJson(Status.OK, hqList);
-   }
-   // getTouchKeyStoreList
 
    /**
     * 터치키 복사할 매장 목록 조회
-    * @param hqBrandVO
+    * @param hqManageVO
     * @param request
     * @param response
     * @param model
@@ -559,11 +543,11 @@ public class StoreManageController {
     */
    @RequestMapping(value = "storeManage/getTouchKeyStoreList.sb", method = RequestMethod.POST)
    @ResponseBody
-   public Result getTouchKeyStoreList(HqBrandVO hqBrandVO, HttpServletRequest request,
+   public Result getTouchKeyStoreList(HqManageVO hqManageVO, HttpServletRequest request,
            HttpServletResponse response, Model model) {
 
        // 터치키 복사할 브랜드 조회
-       List<DefaultMap<String>> hqList = service.getTouchKeyStoreList(hqBrandVO);
+       List<DefaultMap<String>> hqList = service.getTouchKeyStoreList(hqManageVO);
 
        return returnListJson(Status.OK, hqList);
    }

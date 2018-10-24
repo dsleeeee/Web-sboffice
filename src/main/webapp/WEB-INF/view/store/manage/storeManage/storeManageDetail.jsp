@@ -244,27 +244,6 @@
         </table>
       </div>
 
-      <%--============================================= 매장 코너 승인 설정 =============================================--%>
-      <h3 class="h3_tbl pdt5 lh30"><s:message code="storeManage.vanSetting" /></h3>
-      <table class="searchTbl2">
-        <tbody>
-          <tr>
-            <%-- 코너 사용여부 --%>
-            <th class="tc"><s:message code="storeManage.cornerUseYn" /></th>
-            <td class="tc" colspan="3">
-              <div class="sb-select w100">
-                <div id="rCornerUseYn"></div>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <%--============================================= 포스별 승인 (매장 코너 승인 설정이 '포스별승인'일때 사용) ============================================= --%>
-      <div id="posApproveArea">
-        <h3 class="h3_tbl"><s:message code="storeManage.posApprove" /></h3>
-        <div id="thePosGrid" style="height:150px;"></div>
-      </div>
     </f:form>
 
     <%--============================================= 버튼 =============================================--%>
@@ -281,13 +260,12 @@
 
 var selectedHq = "";
 
-var vanList        = ${ccu.getVanList()};
+var vanList        = ${ccu.getVanList("10")};
 var agencyList     = ${ccu.getAgencyList()};
 var hqList         = ${ccu.getHqOfficeList()};
 var clsFg          = ${ccu.getCommCodeSelect("001")};
 var sysStatFg      = ${ccu.getCommCodeSelect("005")};
 var areaCd         = ${ccu.getCommCodeSelect("061")};
-var cornerUseYn    = ${cnv.getEnvCodeExcpAll("2028")};
 var useYn          = ${ccu.getCommCodeExcpAll("067")};
 
 <%-- ============================================= 그리드, 위즈모 관련 =========================================== --%>
@@ -300,28 +278,7 @@ var rManageVan     = wcombo.genCommonBox("#rManageVan", vanList);
 var rAgency        = wcombo.genCommonBox("#rAgency", agencyList);
 var rEnvHqOffice   = wcombo.genCommonBox("#rEnvHqOffice", hqList);
 var rEnvStore      = wcombo.genCommonBox("#rEnvStore", []);
-var rCornerUseYn   = wcombo.genCommonBox("#rCornerUseYn", cornerUseYn);
 var vanDataMap     = new wijmo.grid.DataMap(vanList, 'value', 'name');
-
-rCornerUseYn.selectedValue = "3";
-rCornerUseYn.isReadOnly = true; // TODO 추후 코너 추가시 readonly 해제 후 기능개발
-
-<%-- 포스별 승인 그리드 헤더 --%>
-var posHeaderData =
-  [
-    {binding:"posNo", header:"<s:message code='storeManage.posNo' />", width:"*", isReadOnly:true},
-    {binding:"vanCertYn", header:"<s:message code='storeManage.vanCertYn' />", dataType:wijmo.DataType.Boolean, width:40},
-    {binding:"vanCd", header:"<s:message code='storeManage.vanCd' />",dataMap:vanDataMap, width:"*"},
-    {binding:"vanTermnlNo", header:"<s:message code='storeManage.vanTermnlNo' />", width:"*"},
-    {binding:"vanSerNo", header:"<s:message code='storeManage.vanSerNo' />", width:"*"},
-    {binding:"vanCertStartDate", header:"<s:message code='storeManage.vanCertStartDate' />", isReadOnly:true, width:"*"},
-    {binding:"vanCertEndDate", header:"<s:message code='storeManage.vanCertEndDate' />", isReadOnly:true, width:"*"},
-    {binding:"vanCertCnt", header:"<s:message code='storeManage.vanCertCnt' />", isReadOnly:true, width:"*"}
-  ];
-
-var thePosGrid    = wgrid.genGrid("#thePosGrid", posHeaderData);
-
-thePosGrid.isReadOnly = false;
 
 <%-- 추가설정에서 본사 클릭시, 해당 본사의 매장 목록 조회 --%>
 rEnvHqOffice.selectedIndexChanged.addHandler(function(s, e){
@@ -367,13 +324,6 @@ function resetForm() {
     rSysStatFg.selectedValue = "";
     rSysStatFg.isReadOnly = false;
   }
-
-  // 포스별승인 그리드 데이터 초기화
-
-  rCornerUseYn.selectedValue = "3";
-  rCornerUseYn.selectedIndex = 3;
-  thePosGrid.itemsSource = new wijmo.collections.CollectionView([]);
-
 }
 
 <%-- 매장 신규등록 --%>
@@ -420,7 +370,6 @@ function setStoreData(data){
 
   var storeDtlInfo = data.storeDtlInfo;
   var instPosCnt = data.instPosCnt;
-  var posApproveList = data.posApproveList;
 
   $("#storeInfoTitle").text("[" + selectedStore.storeCd + "] " + selectedStore.storeNm);
 
@@ -458,9 +407,6 @@ function setStoreData(data){
   rClsFg.isReadOnly = true;
   $("#rInstallPosCnt").attr("readonly", "readonly");
 
-  thePosGrid.itemsSource = new wijmo.collections.CollectionView(posApproveList);
-  thePosGrid.itemsSource.trackChanges = true;
-
   $("#rStoreCdTxt").show();
   $("#rStoreCdRadio").hide();
 
@@ -482,21 +428,6 @@ $("input[name=rStoreCdRadio]").change(function(){
     rSysStatFg.isReadOnly = false;
   }
 });
-
-<%-- 설치포스수 변경시 포스별 벤사 설정 그리드 변경--%>
-$("#rInstallPosCnt").change(function(){
-  thePosGrid.itemsSource = new wijmo.collections.CollectionView([]);
-
-  var posCnt = $("#rInstallPosCnt").val();
-  for(var i=1; i<=posCnt; i++){
-    var newItem = thePosGrid.collectionView.addNew();
-    newItem.posNo  = (i < 10 ? "0"+i : i);
-    newItem.vanCd  = "001"; // 기본벤사 KCP
-    newItem.vanCertYn  = "N";
-    thePosGrid.collectionView.commitNew();
-  }
-});
-
 
 <%-- 사업자번호 중복 체크 버튼 클릭--%>
 var isBizChk = false;
@@ -653,15 +584,6 @@ function chkVal(sendUrl) {
     return;
   }
 
-  <%-- 이메일주소를 입력해주세요. --%>
-  <%--
-  var msg = "<s:message code='storeManage.emailAddr'/> <s:message code='cmm.require.text'/>";
-  if($("#rEmailAddr").val() === "") {
-    s_alert.pop(msg);
-    return;
-  }
-  --%>
-
   <%-- 주소를 입력해주세요. --%>
   var msg = "<s:message code='storeManage.addr'/> <s:message code='cmm.require.text'/>";
   if($("#rPostNo").val() === "" || $("#rAddr").val() === "" || $("#rAddrDtl").val() === "") {
@@ -714,28 +636,6 @@ function chkVal(sendUrl) {
     }
   }
 
-
-  <%-- 포스별 승인 정보 --%>
-  for(var i=0; i<thePosGrid.itemsSource.items.length; i++) {
-    var msg = "<s:message code='storeManage.vanCd'/> <s:message code='cmm.require.select'/>";
-    if(thePosGrid.itemsSource.items[i].vanCd == ""){
-      s_alert.pop(msg);
-      return;
-    }
-
-    var msg = "<s:message code='storeManage.vanTermnlNo'/> <s:message code='cmm.require.text'/>";
-    if(thePosGrid.itemsSource.items[i].vanTermnlNo == null || thePosGrid.itemsSource.items[i].vanTermnlNo == ""){
-      s_alert.pop(msg);
-      return;
-    }
-
-    var msg = "<s:message code='storeManage.vanSerNo'/> <s:message code='cmm.require.text'/>";
-    if(thePosGrid.itemsSource.items[i].vanSerNo == null  || thePosGrid.itemsSource.items[i].vanSerNo == ""){
-      s_alert.pop(msg);
-      return;
-    }
-  }
-
   saveStore(sendUrl);
 }
 
@@ -778,7 +678,6 @@ function saveStore(sendUrl){
 
   param.copyHqOfficeCd  = rEnvHqOffice.selectedValue;
   param.copyStoreCd     = rEnvStore.selectedValue;
-  param.cornerUseYn     = rCornerUseYn.selectedValue; // 코너 사용여부에 따라 포스별, 코너별 그리드 구분
 
   var copyChkVal = "";
 
@@ -794,8 +693,7 @@ function saveStore(sendUrl){
     if(selectedStore.storeCd == undefined) {
       selectedStore.storeCd = result.data;
     }
-    //포스 데이터 저장 (//TODO 추후 코너 개발시 추가개발)
-    saveOtherInfo();
+    search(1);
   },
     function (result) {
       s_alert.pop(result.message);
@@ -803,25 +701,5 @@ function saveStore(sendUrl){
     }
   );
 }
-
-<%-- 기본정보 이외 정보 저장 --%>
-function saveOtherInfo() {
-
-  var paramArr = new Array();
-
-  for(var i=0; i<thePosGrid.itemsSource.items.length; i++) {
-    thePosGrid.itemsSource.items[i].storeCd = selectedStore.storeCd;
-    paramArr.push(thePosGrid.itemsSource.items[i]);
-  }
-
-  $.postJSONArray("/store/manage/storeManage/storeManage/saveStorePosInfo.sb", paramArr, function(result) {
-    s_alert.pop("<s:message code='cmm.saveSucc' />");
-    search(1);
-  },
-  function(result) {
-    s_alert.pop(result.data.msg);
-  });
-}
-
 
 </script>

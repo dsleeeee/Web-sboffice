@@ -106,8 +106,10 @@
     <typeAlias alias="kitchenPrintVO" type="kr.co.solbipos.store.manage.storemanage.service.KitchenPrintVO"/>
     <typeAlias alias="storeProductVO" type="kr.co.solbipos.store.manage.storemanage.service.StoreProductVO"/>
     <typeAlias alias="storeViewVO" type="kr.co.solbipos.store.manage.storeview.service.StoreViewVO"/>
-
-
+    <typeAlias alias="memberClassVO" type="kr.co.solbipos.store.manage.storemanage.service.MemberClassVO"/>
+    <typeAlias alias="storeNmcodeVO" type="kr.co.solbipos.store.manage.storemanage.service.StoreNmcodeVO"/>
+    <typeAlias alias="confgXmlVO" type="kr.co.solbipos.store.manage.storemanage.service.ConfgXmlVO"/>
+    
     <!-- 기초관리 -->
     <typeAlias alias="posFuncVO" type="kr.co.solbipos.base.store.posfunc.service.PosFuncVO"/>
     <typeAlias alias="hqEmpVO" type="kr.co.solbipos.base.store.emp.hq.service.HqEmpVO"/>

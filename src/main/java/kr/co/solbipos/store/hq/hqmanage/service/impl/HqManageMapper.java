@@ -32,7 +32,7 @@ import org.springframework.stereotype.Repository;
 public interface HqManageMapper {
 
     /** 본사 목록 조회 */
-    List<DefaultMap<String>> list(HqManageVO hqManage);
+    List<DefaultMap<String>> getHqOfficeList(HqManageVO hqManage);
 
     /** 본사 상세정보조회 */
     DefaultMap<String> dtlInfo(HqManageVO hqManage);
@@ -61,13 +61,13 @@ public interface HqManageMapper {
     /** 본사 공통코드 등록 */
     int cmmCodeReg(HqNmcodeVO nmcodeVO);
 
-    /** 시스템 공통코드 내려받기 TODO */
-    String copyCmmNameCode(HqNmcodeVO nmcodeVO);
+    /** 공통코드 내려받기 */
+    String copyCmmNameCode(HqNmcodeVO hqNmcodeVO);
 
-    /** TID 복사 프로시져 */
-    String copyTid(HqNmcodeVO nmcodeVO);
+//    /** TID 복사 프로시져 */
+//    String copyTid(HqNmcodeVO nmcodeVO);
 
-    /** 공통코드 복사 */
+//    /** 공통코드 복사 */
 //    int copyCmmCode(HqNmcodeVO nmcodeVO);
 
     /** 본사 포스 출력물 등록 */

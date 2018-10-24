@@ -6,6 +6,7 @@ import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.store.hq.brand.service.HqBrandVO;
+import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;
 
 /**
  * @Class Name : StoreManageService.java
@@ -90,10 +91,10 @@ public interface StoreManageService {
     /** 터치키 복사할 본사 목록 조회 */
     List<DefaultMap<String>> getHqList();
 
-    /** 터치키 복사할 브랜드 목록 조회 */
-    List<DefaultMap<String>> getHqBrandList(HqBrandVO hqBrandVO);
+//    /** 터치키 복사할 브랜드 목록 조회 */
+//    List<DefaultMap<String>> getHqBrandList(HqBrandVO hqBrandVO);
 
     /** 터치키 복사할 매장 목록 조회 */
-    List<DefaultMap<String>> getTouchKeyStoreList(HqBrandVO hqBrandVO);
+    List<DefaultMap<String>> getTouchKeyStoreList(HqManageVO hqManageVO);
 
 }

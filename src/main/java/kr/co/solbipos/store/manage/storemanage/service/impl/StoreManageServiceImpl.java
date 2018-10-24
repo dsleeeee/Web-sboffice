@@ -8,9 +8,14 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.security.EncUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.prod.touchkey.service.TouchKeyClassVO;
+import kr.co.solbipos.base.prod.touchkey.service.TouchKeyVO;
 import kr.co.solbipos.pos.confg.loginstatus.enums.SysStatFg;
+import kr.co.solbipos.store.common.enums.ConfgFg;
 import kr.co.solbipos.store.hq.brand.service.HqBrandVO;
+import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;
 import kr.co.solbipos.store.manage.storemanage.service.*;
+import kr.co.solbipos.store.manage.terminalManage.service.StoreCornerVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,10 +65,15 @@ public class StoreManageServiceImpl implements StoreManageService{
     private final String SYS_CLOSURE_DATE = "99991231"; // 시스템 종료일
 
 
+    private final StoreManageMapper mapper;
+    private final MessageService messageService;
+
+    /** Constructor Injection */
     @Autowired
-    StoreManageMapper mapper;
-    @Autowired
-    MessageService messageService;
+    public StoreManageServiceImpl(StoreManageMapper mapper, MessageService messageService) {
+        this.mapper = mapper;
+        this.messageService = messageService;
+    }
 
     /** 매장 목록 조회 */
     @Override
@@ -86,17 +96,9 @@ public class StoreManageServiceImpl implements StoreManageService{
         // 설치 포스수 조회
         int instPosCnt = mapper.getInstPosCnt(storeManageVO);
 
-        // TODO 코너별 승인
-//        List<DefaultMap<String>> cornrApproveList = mapper.getCornrApproveList(storeManageVO);
-
-        // 포스별 승인
-        List<DefaultMap<String>> posApproveList = mapper.getPosApproveList(storeManageVO);
-
         result.put("storeDtlInfo", storeDtlInfo);
         result.put("vanCornrList", vanCornrList);
         result.put("instPosCnt", instPosCnt);
-//        result.put("cornrApproveList", cornrApproveList);
-        result.put("posApproveList", posApproveList);
 
         return result;
     }
@@ -211,11 +213,54 @@ public class StoreManageServiceImpl implements StoreManageService{
             }
         }
 
+        // 기본 코너 등록
+        StoreCornerVO storeCornerVO = new StoreCornerVO();
+        storeCornerVO.setStoreCd(storeCd);
+        storeCornerVO.setCornrCd("01");
+        storeCornerVO.setCornrNm("기본코너");
+        storeCornerVO.setBizNo(" ");// 사업자번호
+        storeCornerVO.setUseYn("Y");
+        storeCornerVO.setRegDt(dt);
+        storeCornerVO.setRegId(sessionInfoVO.getUserId());
+        storeCornerVO.setModDt(dt);
+        storeCornerVO.setModId(sessionInfoVO.getUserId());
+
+        procCnt += mapper.insertStoreCorner(storeCornerVO);
+
         // 회원등급 생성
-        procCnt += mapper.insertMemberClass(storeManageVO);
+        MemberClassVO memberClassVO = new MemberClassVO();
+        memberClassVO.setMembrOrgnCd(storeCd);
+        memberClassVO.setMembrClassCd("000");
+        memberClassVO.setMembrClassNm("기본");
+        memberClassVO.setDcRate(0);
+        memberClassVO.setPointSaveFg("1");
+        memberClassVO.setDefltYn("Y");
+        memberClassVO.setNewJoinSavePoint(0);
+        memberClassVO.setFirstSaleSavePoint(0);
+        memberClassVO.setMinUsePoint(0);
+        memberClassVO.setAnvsrPointSaveFg("1");
+        memberClassVO.setAnvsrSavePoint(0);
+        memberClassVO.setUseYn(UseYn.Y);
+        memberClassVO.setRegDt(dt);
+        memberClassVO.setRegId(sessionInfoVO.getUserId());
+        memberClassVO.setModDt(dt);
+        memberClassVO.setModId(sessionInfoVO.getUserId());
+
+        procCnt += mapper.insertMemberClass(memberClassVO);
 
         // 테이블 그룹 생성
-        procCnt += mapper.insertTabGroup(storeManageVO);
+        TableGroupVO tableGroupVO = new TableGroupVO();
+        tableGroupVO.setStoreCd(storeCd);
+        tableGroupVO.setTblGrpNm("기본그룹1");
+        tableGroupVO.setTblGrpFg("1");
+        tableGroupVO.setDispSeq(1);
+        tableGroupVO.setUseYn(UseYn.Y);
+        tableGroupVO.setRegDt(dt);
+        tableGroupVO.setRegId(sessionInfoVO.getUserId());
+        tableGroupVO.setModDt(dt);
+        tableGroupVO.setModId(sessionInfoVO.getUserId());
+
+        procCnt += mapper.insertTabGroup(tableGroupVO);
 
         // 매장환경 복사 ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
@@ -262,30 +307,50 @@ public class StoreManageServiceImpl implements StoreManageService{
                 }
 
                 // 터치키 복사 //TODO
-//                if( "touchKey".equals(copyEnv[i]) ) {
-//
-//                    storeManageVO.setInFg("S");
-//                    procCnt += mapper.copyTouchkeyCls(storeManageVO);
-//                    procCnt += mapper.copyTouchkey(storeManageVO);
-//
-//                    storeManageVO.setInFg("T");
-//                    procCnt += mapper.copyTouchkeyCls(storeManageVO);
-//                    procCnt += mapper.copyTouchkey(storeManageVO);
-//                }
+                if( "touchKey".equals(copyEnv[i]) ) {
+
+                    ConfgXmlVO confgXmlVO = new ConfgXmlVO();
+                    confgXmlVO.setStoreCd(storeCd);
+                    confgXmlVO.setCopyStoreCd(storeManageVO.getCopyStoreCd());
+
+                    // 매장 XML 복사
+                    confgXmlVO.setConfgFg(ConfgFg.TOUCH_KEY);
+                    procCnt += mapper.copyConfXml(confgXmlVO);
+
+                    // 포스기능키 XML 복사(좌)
+                    confgXmlVO.setConfgFg(ConfgFg.POS_FN_LEFT);
+                    procCnt += mapper.copyConfXml(confgXmlVO);
+
+                    // 포스기능키 XML 복사(우)
+                    confgXmlVO.setConfgFg(ConfgFg.POS_FN_RIGHT);
+                    procCnt += mapper.copyConfXml(confgXmlVO);
+
+                    // 기능키 분류 복사 //TODO 여기부터 쿼리 추가
+                    TouchKeyClassVO touchkeyClassVO = new TouchKeyClassVO();
+                    touchkeyClassVO.setStoreCd(storeCd);
+                    touchkeyClassVO.setCopyStoreCd(storeManageVO.getCopyStoreCd());
+                    procCnt += mapper.copyFnkeyClassCopy(touchkeyClassVO);
+
+                    // 기능키 복사
+                    TouchKeyVO touchkeyVO = new TouchKeyVO();
+                    touchkeyVO.setStoreCd(storeCd);
+                    touchkeyVO.setCopyStoreCd(storeManageVO.getCopyStoreCd());
+                    procCnt += mapper.copyFnkeyCopy(touchkeyVO);
+                }
             }
         }
 
         // 코너사용여부 환경변수 등록
-        StoreEnvVO storeEnvVO = new StoreEnvVO();
-        storeEnvVO.setStoreCd(storeCd);
-        storeEnvVO.setEnvstCd(CORNER_USE_YN);
-        storeEnvVO.setEnvstVal(storeManageVO.getCornerUseYn());
-        storeEnvVO.setRegDt(dt);
-        storeEnvVO.setRegId(sessionInfoVO.getUserId());
-        storeEnvVO.setModDt(dt);
-        storeEnvVO.setModId(sessionInfoVO.getUserId());
-
-        procCnt += mapper.updateStoreEnvst(storeEnvVO);
+//        StoreEnvVO storeEnvVO = new StoreEnvVO();
+//        storeEnvVO.setStoreCd(storeCd);
+//        storeEnvVO.setEnvstCd(CORNER_USE_YN);
+//        storeEnvVO.setEnvstVal(storeManageVO.getCornerUseYn());
+//        storeEnvVO.setRegDt(dt);
+//        storeEnvVO.setRegId(sessionInfoVO.getUserId());
+//        storeEnvVO.setModDt(dt);
+//        storeEnvVO.setModId(sessionInfoVO.getUserId());
+//
+//        procCnt += mapper.updateStoreEnvst(storeEnvVO);
 
         //TODO 판매가 테이블 생성시 추가
         if(!EXCLUSIVE_HQ_OFFICE.equals(storeManageVO.getHqOfficeCd())) { // 프랜차이즈
@@ -293,28 +358,11 @@ public class StoreManageServiceImpl implements StoreManageService{
             // 프랜차이즈 설정 - 판매가 DT 복사
         }
 
-        // 시스템 공통코드 복사 // TODO
-//        StoreNmcodeVO nmcodeVO = new StoreNmcodeVO();
-//        nmcodeVO.setStoreCd(storeCd);
-//        nmcodeVO.setRegDt(dt);
-//        nmcodeVO.setRegId(sessionInfoVO.getUserId());
-//        nmcodeVO.setModDt(dt);
-//        nmcodeVO.setModId(sessionInfoVO.getUserId());
-
-//        StoreNmcodeVO result = new StoreNmcodeVO();
-//        result.setResult(mapper.copyCmmNameCode(nmcodeVO));
-
-        StoreNmcodeVO nmcodeVO = new StoreNmcodeVO();
-        nmcodeVO.setStoreCd(storeCd);
-        nmcodeVO.setRegDt(dt);
-        nmcodeVO.setRegId(sessionInfoVO.getUserId());
-        nmcodeVO.setModDt(dt);
-        nmcodeVO.setModId(sessionInfoVO.getUserId());
-
-        // 공통코드 테이블에서 Tid 복사
-        StoreNmcodeVO tidResult = new StoreNmcodeVO();
-        tidResult.setResult(mapper.copyTid(nmcodeVO));
-
+        // 공통코드 복사
+        StoreNmcodeVO storeNmcodeVO = new StoreNmcodeVO();
+        storeNmcodeVO.setStoreCd(storeCd);
+        String copyNmCode = mapper.copyCmmNameCode(storeNmcodeVO);
+//        tidResult.setResult(mapper.copyTid(nmcodeVO));
 
         return storeCd;
     }
@@ -521,17 +569,14 @@ public class StoreManageServiceImpl implements StoreManageService{
         storePosEnvVO.setEnvstVal(MAIN_POS_YN_DEFAULT);
         procCnt += mapper.updatePosEnv(storePosEnvVO);
 
-        // 2-1) TB_MS_POS 타겟 포스 데이터 삭제
+        // 2) TB_MS_POS 타겟 포스 데이터 삭제
         procCnt += mapper.deletePosTarget(storePosEnvVO);
 
-        // 2-2) TB_MS_POS 데이터 insert (//TODO 삭제검토)
-        procCnt += mapper.copyPosInfo(storePosEnvVO);
-
-        // 기능키 복사
-        // 1-1) TB_MS_POS_FNKEY 기존 데이터 삭제
+        // 기능키 복사 //TODO
+        // 3-1) TB_MS_POS_FNKEY 기존 데이터 삭제
         procCnt += mapper.deletePosFunkeyTarget(storePosEnvVO);
 
-        // 1-2) TB_MS_POS_FNKEY select insert
+        // 3-2) TB_MS_POS_FNKEY select insert
         procCnt += mapper.copyPosFunKeyInfo(storePosEnvVO);
 
         return procCnt;
@@ -723,15 +768,15 @@ public class StoreManageServiceImpl implements StoreManageService{
         return mapper.getHqList();
     }
 
-    /** 터치키 복사할 브랜드 목록 조회 */
-    @Override
-    public List<DefaultMap<String>> getHqBrandList(HqBrandVO hqBrandVO) {
-        return mapper.getHqBrandList(hqBrandVO);
-    }
+//    /** 터치키 복사할 브랜드 목록 조회 */
+//    @Override
+//    public List<DefaultMap<String>> getHqBrandList(HqBrandVO hqBrandVO) {
+//        return mapper.getHqBrandList(hqBrandVO);
+//    }
 
     /** 터치키 복사할 매장 목록 조회 */
     @Override
-    public List<DefaultMap<String>> getTouchKeyStoreList(HqBrandVO hqBrandVO) {
-        return mapper.getTouchKeyStoreList(hqBrandVO);
+    public List<DefaultMap<String>> getTouchKeyStoreList(HqManageVO hqManageVO) {
+        return mapper.getTouchKeyStoreList(hqManageVO);
     }
 }

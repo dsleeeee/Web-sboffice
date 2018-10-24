@@ -46,12 +46,15 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 @RequestMapping(value="/store/hq/hqManage/")
 public class HqManageController {
 
-    @Autowired
-    HqManageService service;
+    private final HqManageService service;
+    private final SessionService sessionService;
 
+    /** Constructor Injection */
     @Autowired
-    SessionService sessionService;
-
+    public HqManageController(HqManageService service, SessionService sessionService) {
+        this.service = service;
+        this.sessionService = sessionService;
+    }
 
     /**
      * 본사정보관리 화면 이동

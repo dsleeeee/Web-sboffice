@@ -63,7 +63,11 @@
             <div class="wj-TblWrap mr10" style="height:270px;">
               <div class="oh mb10">
                 <span class="fl bk lh20 s14"><s:message code="func.regStore" /></span>
-                <span class="fr"><a href="#" class="btn_grayS2" id="btnStoreDel"><s:message code="cmm.del" /></a></span>
+
+                  <c:if test="${orgnFg == 'MASTER'}">
+                    <span class="fr"><a href="#" class="btn_grayS2" id="btnStoreDel"><s:message code="cmm.del" /></a></span>
+                  </c:if>
+
               </div>
               <div id="regStoreGrid"></div>
 
@@ -82,7 +86,9 @@
             <div class="wj-TblWrap ml10" style="height:270px;">
               <div class="oh mb10">
                 <span class="fl bk lh20 s14"><s:message code="func.noRegStore" /></span>
-                <span class="fr"><a href="#" class="btn_grayS2" id="btnStoreReg"><s:message code="func.regist" /></a></span>
+                  <c:if test="${orgnFg == 'MASTER'}">
+                    <span class="fr"><a href="#" class="btn_grayS2" id="btnStoreReg"><s:message code="func.regist" /></a></span>
+                  </c:if>
               </div>
               <div id="noRegStoreGrid"></div>
 

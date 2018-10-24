@@ -1,8 +1,12 @@
 package kr.co.solbipos.store.manage.storemanage.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.base.prod.touchkey.service.TouchKeyClassVO;
+import kr.co.solbipos.base.prod.touchkey.service.TouchKeyVO;
 import kr.co.solbipos.store.hq.brand.service.HqBrandVO;
+import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;
 import kr.co.solbipos.store.manage.storemanage.service.*;
+import kr.co.solbipos.store.manage.terminalManage.service.StoreCornerVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -48,8 +52,8 @@ public interface StoreManageMapper {
     /** 신규매장 등록을 위한 매장 코드 조회 */
     String getStoreCd(StoreManageVO storeManageVO);
 
-    /** 포스 프로그램 구분 조회 */
-    //String getPosEnvValue(StoreManageVO storeManageVO);
+//    /** 포스 프로그램 구분 조회 */
+//    String getPosEnvValue(StoreManageVO storeManageVO);
 
     /** 신규 매장정보 저장 */
     int saveStoreInfo(StoreManageVO storeManageVO);
@@ -60,8 +64,8 @@ public interface StoreManageMapper {
     /** 매장포스승인정보 저장 */
     int updateStorePosVanInfo(StorePosVO storePosVO);
 
-    /** 해당 브랜드의 분류 복사하여 매장 분류 등록하기 */
-    int copyClsInfo(StoreManageVO storeManageVO);
+//    /** 해당 브랜드의 분류 복사하여 매장 분류 등록하기 */
+//    int copyClsInfo(StoreManageVO storeManageVO);
 
     /** 매장 기본 사용자 등록 */
     int insertStoreDefaultUser(StoreManageVO storeManageVO);
@@ -78,11 +82,14 @@ public interface StoreManageMapper {
     /** 포스 마스터 등록*/
     int insertPosInfo(StoreManageVO storeManageVO);
 
+    /** 매장 기본 코너 등록 */
+    int insertStoreCorner(StoreCornerVO storeCornerVO);
+
     /** 회원 기본등급 등록 */
-    int insertMemberClass(StoreManageVO storeManageVO);
+    int insertMemberClass(MemberClassVO memberClassVO);
 
     /** 테이블 기본 그룹 생성 */
-    int insertTabGroup(StoreManageVO storeManageVO);
+    int insertTabGroup(TableGroupVO tableGroupVO);
 
     /** 매장환경 등록  */
     int insertStoreEnvInfo(StoreManageVO storeManageVO);
@@ -108,11 +115,14 @@ public interface StoreManageMapper {
     /** 공급가 복사  */
     int updateSplyUprc(StoreManageVO storeManageVO);
 
-    /** 터치분류  복사  */
-    int copyTouchkeyCls(StoreManageVO storeManageVO);
+    /** 매장설정 XML정보 복사 */
+    int copyConfXml(ConfgXmlVO confgXmlVO);
 
-    /** 터치키 복사 */
-    int copyTouchkey(StoreManageVO storeManageVO);
+    /** 터치키 분류 복사 TODO */
+    int copyFnkeyClassCopy(TouchKeyClassVO touchkeyClassVO);
+
+    /** 터치키 복사 TODO */
+    int copyFnkeyCopy(TouchKeyVO touchkeyVO);
 
     /** 매장환경 정보 조회 */
     List<DefaultMap<String>> getEnvGroupList(StoreEnvVO storeEnvVO);
@@ -132,7 +142,7 @@ public interface StoreManageMapper {
     /** 매장 포스 환경 정보 수정 */
     int updatePosConfig(StorePosEnvVO storePosEnvVO);
 
-    /** 포스가 메인서버로 변경되면, 나머지 포스는 서브포스로 변경 */
+    /** 포스가 메인서버로 변경되면, 나머지 포스는 서브포스로 변경 TODO */
     int updateToSubPos(StorePosEnvVO storePosEnvVO);
 
     /** 포스 목록 조회  */
@@ -147,11 +157,11 @@ public interface StoreManageMapper {
     /** 테이블 명칭설정정보 저장 */
     int updatePosNm(StorePosEnvVO storePosEnvVO);
 
-    /** 시스템 공통코드 복사 TODO */
+    /** 공통코드 복사 TODO */
     String copyCmmNameCode(StoreNmcodeVO nmcodeVO);
 
     /** TID 복사 프로시저 */
-    String copyTid(StoreNmcodeVO nmcodeVO);
+//    String copyTid(StoreNmcodeVO nmcodeVO);
 
     /** 매장 포스 환경 삭제 */
     int deletePosEnvTarget(StorePosEnvVO storePosEnvVO);
@@ -216,24 +226,27 @@ public interface StoreManageMapper {
     /** 터치키 복사할 본사 목록 조회 */
     List<DefaultMap<String>> getHqList();
 
-    /** 터치키 복사할 브랜드 목록 조회 */
-    List<DefaultMap<String>> getHqBrandList(HqBrandVO hqBrandVO);
+//    /** 터치키 복사할 브랜드 목록 조회 */
+//    List<DefaultMap<String>> getHqBrandList(HqBrandVO hqBrandVO);
 
     /** 터치키 복사할 매장 목록 조회 */
-    List<DefaultMap<String>> getTouchKeyStoreList(HqBrandVO hqBrandVO);
+    List<DefaultMap<String>> getTouchKeyStoreList(HqManageVO hqManageVO);
 
     ///////////////////////////////////////////////////////매장조회
     /** 벤사, 코너 정보 조회 */
     List<DefaultMap<String>> getVanCornrList(StoreManageVO storeManageVO);
 
     /** 설치 포스수 조회 */
-    int getInstPosCnt(StoreManageVO storeManageVO); //TODO
+    int getInstPosCnt(StoreManageVO storeManageVO);
 
-    /** 코너별 승인 목록 조회 */
-    List<DefaultMap<String>> getCornrApproveList(StoreManageVO storeManageVO);
 
-    /** 포스별 승인 목록 조회*/
-    List<DefaultMap<String>> getPosApproveList(StoreManageVO storeManageVO);
+
+    //    /** 코너별 승인 목록 조회 */
+//    List<DefaultMap<String>> getCornrApproveList(StoreManageVO storeManageVO);
+
+//    /** 포스별 승인 목록 조회*/
+//    List<DefaultMap<String>> getPosApproveList(StoreManageVO storeManageVO);
+
 
 }
 

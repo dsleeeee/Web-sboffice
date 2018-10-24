@@ -99,6 +99,7 @@ public class StoreManageVO extends PageVO {
     private String cornerUseYn;
 
 
+
     /**
      * @return the storeCd
      */
