@@ -109,6 +109,7 @@
             <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.inAmt"/>" binding="inAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.inVat"/>" binding="inVat" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.inTot"/>" binding="inTot" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.penaltyAmt"/>" binding="penaltyAmt" width="70" align="right" is-read-only="false" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.remark"/>" binding="remark" width="200" align="left" is-read-only="false" max-length=300></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.vatFg"/>" binding="vatFg01" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.envst0011"/>" binding="envst0011" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -133,9 +134,9 @@
     $scope.dtlInDate = wcombo.genDateVal("#dtlInDate", "${sessionScope.sessionInfo.startDate}");
 
     $scope._setComboData("stmtAcctFg", [
-      {"name": "<s:message code='rtnInstockConfm.dtl.stmtAcctAll'/>", "value": ""},
-      {"name": "<s:message code='rtnInstockConfm.dtl.stmtAcctSplr'/>", "value": "1"},
-      {"name": "<s:message code='rtnInstockConfm.dtl.stmtAcctSplrRcpnt'/>", "value": "2"}
+      {"name": messages["rtnInstockConfm.dtl.stmtAcctAll"], "value": ""},
+      {"name": messages["rtnInstockConfm.dtl.stmtAcctSplr"], "value": "1"},
+      {"name": messages["rtnInstockConfm.dtl.stmtAcctSplrRcpnt"], "value": "2"}
     ]);
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -237,15 +238,8 @@
 
             // 출고확정
             if ($scope.procFg === "20") {
-              $("#spanDtlTitle").html('<s:message code="rtnInstockConfm.dtl.slipNo"/> : ' + $scope.slipNo + ', <s:message code="rtnInstockConfm.dtl.store"/> : ' + $scope.storeNm + ', <s:message code="rtnInstockConfm.dtl.outDate"/> : ' + getFormatDate($scope.outDate));
+              $("#spanDtlTitle").html(messages["rtnInstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["rtnInstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["rtnInstockConfm.dtl.outDate"]+' : ' + getFormatDate($scope.outDate));
               $("#instockBtnLayer").show();
-
-              if ("${envst176}" === "N") {
-                $scope.flex.isReadOnly = true;
-              }
-              else {
-                $scope.flex.isReadOnly = false;
-              }
             }
             // 수주확정 또는 입고확정
             else if ($scope.procFg === "10" || $scope.procFg === "30") {
@@ -254,11 +248,11 @@
 
               // 수주확정
               if ($scope.procFg === "10") {
-                $("#spanDtlTitle").html('<s:message code="rtnInstockConfm.dtl.slipNo"/> : ' + $scope.slipNo + ', <s:message code="rtnInstockConfm.dtl.store"/> : ' + $scope.storeNm + ', <s:message code="rtnInstockConfm.dtl.reqDate"/> : ' + getFormatDate($scope.outDate));
+                $("#spanDtlTitle").html(messages["rtnInstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["rtnInstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["rtnInstockConfm.dtl.reqDate"]+' : ' + getFormatDate($scope.outDate));
               }
               // 입고확정
               else if ($scope.procFg === "30") {
-                $("#spanDtlTitle").html('<s:message code="rtnInstockConfm.dtl.slipNo"/> : ' + $scope.slipNo + ', <s:message code="rtnInstockConfm.dtl.store"/> : ' + $scope.storeNm + ', <s:message code="rtnInstockConfm.dtl.outDate"/> : ' + getFormatDate($scope.outDate) + ', <s:message code="rtnInstockConfm.dtl.inDate"/> : ' + getFormatDate($scope.inDate));
+                $("#spanDtlTitle").html(messages["rtnInstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["rtnInstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["rtnInstockConfm.dtl.outDate"]+' : ' + getFormatDate($scope.outDate) + ', '+messages["rtnInstockConfm.dtl.inDate"]+' : ' + getFormatDate($scope.inDate));
               }
             }
 

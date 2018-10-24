@@ -152,9 +152,9 @@
     var reqDate       = wcombo.genDateVal("#reqDate", "${sessionScope.sessionInfo.startDate}");
 
     $scope._setComboData("srchDateFg", [
-      {"name": "<s:message code='rtnDstbCloseStore.reqDate'/>", "value": "req"},
-      {"name": "<s:message code='rtnDstbCloseStore.regDate'/>", "value": "reg"},
-      {"name": "<s:message code='rtnDstbCloseStore.modDate'/>", "value": "mod"}
+      {"name": messages["rtnDstbCloseStore.reqDate"], "value": "req"},
+      {"name": messages["rtnDstbCloseStore.regDate"], "value": "reg"},
+      {"name": messages["rtnDstbCloseStore.modDate"], "value": "mod"}
     ]);
 
     $scope._setComboData("srchProcFg", [
@@ -250,7 +250,7 @@
 
     $scope.saveConfirm = function () {
       // 선택하신 자료를 반품마감으로 확정합니다. 확정하시겠습니까?
-      var msg = "<s:message code='rtnDstbCloseStore.confirmText'/>";
+      var msg = messages["rtnDstbCloseStore.confirmText"];
       s_alert.popConf(msg, function () {
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {

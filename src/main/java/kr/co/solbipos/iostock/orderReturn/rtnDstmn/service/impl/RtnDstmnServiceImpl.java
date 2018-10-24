@@ -105,12 +105,12 @@ public class RtnDstmnServiceImpl implements RtnDstmnService {
             result = rtnDstmnMapper.updateOutstockDtl(rtnDstmnVO);
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-            // HD 수정
-            result = rtnDstmnMapper.updateOutstockHd(rtnDstmnHdVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
             returnResult += result;
         }
+
+        // HD 수정
+        result = rtnDstmnMapper.updateOutstockHd(rtnDstmnHdVO);
+        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
         // 출고확정여부를 체크한 경우
         if(confirmFg.equals("Y")) {

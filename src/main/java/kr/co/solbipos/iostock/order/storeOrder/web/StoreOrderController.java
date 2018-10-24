@@ -73,17 +73,17 @@ public class StoreOrderController {
     public String storeCloseView(HttpServletRequest request, HttpServletResponse response, Model model) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        // 본사 환경설정 173(수발주옵션) 조회
+        // 본사 환경설정 1042(수발주옵션) 조회
         HqEnvstVO hqEnvstVO = new HqEnvstVO();
         hqEnvstVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        hqEnvstVO.setEnvstCd("173");
-        String envst173 = cmmEnvService.getHqEnvst(hqEnvstVO);
+        hqEnvstVO.setEnvstCd("1042");
+        String envst1042 = cmmEnvService.getHqEnvst(hqEnvstVO);
 
-        // 매장 환경설정 594(출고요청일자선택) 조회
+        // 매장 환경설정 1044(출고요청일자선택) 조회
         StoreEnvVO storeEnvVO = new StoreEnvVO();
         storeEnvVO.setStoreCd(sessionInfoVO.getStoreCd());
-        storeEnvVO.setEnvstCd("594");
-        String envst594 = cmmEnvService.getStoreEnvst(storeEnvVO);
+        storeEnvVO.setEnvstCd("1044");
+        String envst1044 = cmmEnvService.getStoreEnvst(storeEnvVO);
 
         // 출고요청가능일 조회
         StoreOrderVO storeOrderVO = new StoreOrderVO();
@@ -91,8 +91,8 @@ public class StoreOrderController {
         storeOrderVO.setStoreCd(sessionInfoVO.getStoreCd());
         String reqDate = storeOrderService.getReqDate(storeOrderVO);
 
-        model.addAttribute("envst173", envst173);
-        model.addAttribute("envst594", envst594);
+        model.addAttribute("envst1042", envst1042);
+        model.addAttribute("envst1044", envst1044);
         model.addAttribute("reqDate" , reqDate);
 
         return "iostock/order/storeOrder/storeOrder";
@@ -324,7 +324,7 @@ public class StoreOrderController {
 
 
     /**
-     * 주문등록 - 주문 HD 리스트 조회
+     * 콤보조회
      * @param   request
      * @param   response
      * @param   model

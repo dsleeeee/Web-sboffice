@@ -79,7 +79,7 @@
       $scope.slipFg    = data.slipFg;
 
       $scope.wjOutstockDataDtlLayer.show(true);
-      $("#spanDtlTitle").html('[<s:message code="outstockData.dtl.order"/>] ' + '[' + $scope.storeCd + '] ' + $scope.storeNm);
+      $("#spanDtlTitle").html('['+messages["outstockData.dtl.order"]+'] ' + '[' + $scope.storeCd + '] ' + $scope.storeNm);
 
       $scope.searchOutstockDataDtlList();
       // 기능수행 종료 : 반드시 추가

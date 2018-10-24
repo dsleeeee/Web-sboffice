@@ -91,8 +91,8 @@
     angular.extend(this, new RootController('rtnDstbCloseProdAddRegistCtrl', $scope, $http, true));
 
     $scope.orderFgMap = new wijmo.grid.DataMap([
-      {id: "Y", name: "<s:message code='rtnDstbCloseProd.addRegist.orderFgY'/>"},
-      {id: "N", name: "<s:message code='rtnDstbCloseProd.addRegist.orderFgN'/>"},
+      {id: "Y", name: messages["rtnDstbCloseProd.addRegist.orderFgY"]},
+      {id: "N", name: messages["rtnDstbCloseProd.addRegist.orderFgN"]},
     ], 'id', 'name');
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -163,7 +163,7 @@
       $scope.storeCds = data.storeCds;
 
       $scope.wjRtnDstbCloseProdAddRegistLayer.show(true);
-      $("#spanAddRegistTitle").html('[<s:message code="rtnDstbCloseProd.addRegist.orderReturn"/>] ' + '[' + $scope.prodCd + '] ' + $scope.prodNm);
+      $("#spanAddRegistTitle").html('['+messages["rtnDstbCloseProd.addRegist.orderReturn"]+'] ' + '[' + $scope.prodCd + '] ' + $scope.prodNm);
 
       $scope.searchRtnDstbCloseProdAddRegistList();
       // 기능수행 종료 : 반드시 추가

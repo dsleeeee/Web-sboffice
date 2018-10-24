@@ -31,4 +31,10 @@ public interface InstockConfmMapper {
     /** 입고확정 - 입고확정시 HD 수정 */
     int updateInstockConfirm(InstockConfmVO instockConfmVO);
 
+    /** 입고확정 - 물량오류 DTL 등록 */
+    int insertInstockErrDtl(InstockConfmVO instockConfmVO);
+
+    /** 입고확정 - 물량오류 HD 등록 */
+    int insertInstockErrHd(InstockConfmVO instockConfmVO);
+
 }

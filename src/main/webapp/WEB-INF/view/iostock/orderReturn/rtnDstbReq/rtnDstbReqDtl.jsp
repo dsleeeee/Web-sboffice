@@ -168,7 +168,7 @@
       $scope.slipFg  = data.slipFg;
       $scope.procFg  = data.procFg;
 
-      $("#spanDtlTitle").html('[<s:message code="rtnDstbReq.dtl.orderReturn"/>] ' + '[' + $scope.storeCd + '] ' + $scope.storeNm);
+      $("#spanDtlTitle").html('['+messages["rtnDstbReq.dtl.orderReturn"]+'] ' + '[' + $scope.storeCd + '] ' + $scope.storeNm);
       $scope.orderProcFgCheck();
       // 기능수행 종료 : 반드시 추가
       event.preventDefault();
@@ -246,7 +246,7 @@
     $scope.saveValueCheck = function () {
       if ($("#dstbConfirmFg").is(":checked")) {
         // 분배완료를 체크하셨습니다. 분배자료를 생성하므로 주문내역의 자료를 수정하실 수 없습니다. 계속 하시겠습니까?
-        var msg = "<s:message code='rtnDstbReq.dtl.confirmText'/>";
+        var msg = messages["rtnDstbReq.dtl.confirmText"];
         s_alert.popConf(msg, function () {
           $scope.saveRtnDstbReqDtl();
         });

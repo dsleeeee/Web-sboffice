@@ -174,14 +174,14 @@
     var writtenDate   = wcombo.genDateVal("#writtenDate", "${sessionScope.sessionInfo.startDate}");
 
     $scope.slipFgMap = new wijmo.grid.DataMap([
-      {id: "1", name: "<s:message code='dstmn.orderSlipFg'/>"},
-      {id: "-1", name: "<s:message code='dstmn.rtnSlipFg'/>"},
+      {id: "1", name: messages["dstmn.orderSlipFg"]},
+      {id: "-1", name: messages["dstmn.rtnSlipFg"]},
     ], 'id', 'name');
 
     $scope._setComboData("stmtAcctFg", [
-      {"name": "<s:message code='dstmn.stmtAcctAll'/>", "value": ""},
-      {"name": "<s:message code='dstmn.stmtAcctSplr'/>", "value": "1"},
-      {"name": "<s:message code='dstmn.stmtAcctSplrRcpnt'/>", "value": "2"}
+      {"name": messages["dstmn.stmtAcctAll"], "value": ""},
+      {"name": messages["dstmn.stmtAcctSplr"], "value": "1"},
+      {"name": messages["dstmn.stmtAcctSplrRcpnt"], "value": "2"}
     ]);
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다

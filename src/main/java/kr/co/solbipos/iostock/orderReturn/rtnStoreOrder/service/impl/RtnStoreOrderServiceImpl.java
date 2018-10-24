@@ -239,10 +239,10 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
         if(result > 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
         // 수발주옵션 환경변수
-        String envst173 = rtnStoreOrderVO.getEnvst173();
+        String envst1042 = rtnStoreOrderVO.getEnvst1042();
 
         // 매장확정시 출고 환경변수가 출고자료생성인 경우 출고자료를 생성한다.
-        if(StringUtil.getOrBlank(envst173).equals("2")) {
+        if(StringUtil.getOrBlank(envst1042).equals("2")) {
             // 전표번호 조회
             String yymm = DateUtil.currentDateString().substring(2,6); // 새로운 전표번호 생성을 위한 년월(YYMM)
             OutstockDataVO maxSlipNoVO = new OutstockDataVO();

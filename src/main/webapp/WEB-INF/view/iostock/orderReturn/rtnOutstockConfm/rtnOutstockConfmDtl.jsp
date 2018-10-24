@@ -139,9 +139,9 @@
     $scope.dtlOutDate = wcombo.genDateVal("#dtlOutDate", "${sessionScope.sessionInfo.startDate}");
 
     $scope._setComboData("stmtAcctFg", [
-      {"name": "<s:message code='rtnOutstockConfm.dtl.stmtAcctAll'/>", "value": ""},
-      {"name": "<s:message code='rtnOutstockConfm.dtl.stmtAcctSplr'/>", "value": "1"},
-      {"name": "<s:message code='rtnOutstockConfm.dtl.stmtAcctSplrRcpnt'/>", "value": "2"}
+      {"name": messages["rtnOutstockConfm.dtl.stmtAcctAll"], "value": ""},
+      {"name": messages["rtnOutstockConfm.dtl.stmtAcctSplr"], "value": "1"},
+      {"name": messages["rtnOutstockConfm.dtl.stmtAcctSplrRcpnt"], "value": "2"}
     ]);
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -244,7 +244,7 @@
 
             // 수주확정
             if ($scope.procFg === "10") {
-              $("#spanDtlTitle").html('<s:message code="rtnOutstockConfm.dtl.slipNo"/> : ' + $scope.slipNo + ' <s:message code="rtnOutstockConfm.dtl.store"/> : ' + $scope.storeNm + ' <s:message code="rtnOutstockConfm.dtl.reqDate"/> : ' + getFormatDate($scope.outDate));
+              $("#spanDtlTitle").html(messages["rtnOutstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["rtnOutstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["rtnOutstockConfm.dtl.reqDate"]+' : ' + getFormatDate($scope.outDate));
               $("#spanOutstockConfirmFg").show();
               $("#outstockBtnLayer").show();
               $("#outstockAfterBtnLayer").hide();
@@ -259,11 +259,11 @@
 
               // 출고확정
               if ($scope.procFg === "20") {
-                $("#spanDtlTitle").html('<s:message code="rtnOutstockConfm.dtl.slipNo"/> : ' + $scope.slipNo + ' <s:message code="rtnOutstockConfm.dtl.store"/> : ' + $scope.storeNm + ' <s:message code="rtnOutstockConfm.dtl.outDate"/> : ' + getFormatDate($scope.outDate));
+                $("#spanDtlTitle").html(messages["rtnOutstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["rtnOutstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["rtnOutstockConfm.dtl.outDate"]+' : ' + getFormatDate($scope.outDate));
               }
               // 입고확정
               else if ($scope.procFg === "30") {
-                $("#spanDtlTitle").html('<s:message code="rtnOutstockConfm.dtl.slipNo"/> : ' + $scope.slipNo + ' <s:message code="rtnOutstockConfm.dtl.store"/> : ' + $scope.storeNm + ' <s:message code="rtnOutstockConfm.dtl.outDate"/> : ' + getFormatDate($scope.outDate) + ' <s:message code="rtnOutstockConfm.dtl.inDate"/> : ' + getFormatDate($scope.inDate));
+                $("#spanDtlTitle").html(messages["rtnOutstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["rtnOutstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["rtnOutstockConfm.dtl.outDate"]+' : ' + getFormatDate($scope.outDate) + ', '+messages["rtnOutstockConfm.dtl.inDate"]+' : ' + getFormatDate($scope.inDate));
               }
             }
 

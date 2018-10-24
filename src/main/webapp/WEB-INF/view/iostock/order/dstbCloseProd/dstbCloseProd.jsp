@@ -140,9 +140,9 @@
     var reqDate       = wcombo.genDateVal("#reqDate", "${sessionScope.sessionInfo.startDate}");
 
     $scope._setComboData("srchDateFg", [
-      {"name": "<s:message code='dstbCloseProd.reqDate'/>", "value": "req"},
-      {"name": "<s:message code='dstbCloseProd.regDate'/>", "value": "reg"},
-      {"name": "<s:message code='dstbCloseProd.modDate'/>", "value": "mod"}
+      {"name": messages["dstbCloseProd.reqDate"], "value": "req"},
+      {"name": messages["dstbCloseProd.regDate"], "value": "reg"},
+      {"name": messages["dstbCloseProd.modDate"], "value": "mod"}
     ]);
 
     $scope._setComboData("srchProcFg", [
@@ -238,7 +238,7 @@
 
     $scope.saveConfirm = function () {
       // 선택하신 자료를 분배마감으로 확정합니다. 확정하시겠습니까?
-      var msg = "<s:message code='dstbCloseProd.confirmText'/>";
+      var msg = messages["dstbCloseProd.confirmText"];
       s_alert.popConf(msg, function () {
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {

@@ -69,9 +69,9 @@
         <div id="outstockBtnLayer" style="display: none;">
           <%-- 출고확정 체크박스 --%>
           <span id="spanOutstockConfirmFg" class="chk pdb5 txtIn fl" style="top: 0px;">
-                  <input type="checkbox" name="outstockConfirmFg" id="outstockConfirmFg" value="Y" ng-click="fnConfirmChk()"/>
-                  <label for="outstockConfirmFg"><s:message code="outstockConfm.dtl.confirmFg"/></label>
-                </span>
+            <input type="checkbox" name="outstockConfirmFg" id="outstockConfirmFg" value="Y" ng-click="fnConfirmChk()"/>
+            <label for="outstockConfirmFg"><s:message code="outstockConfm.dtl.confirmFg"/></label>
+          </span>
           <%-- 출고일자 --%>
           <div id="divDtlOutDate" class="sb-select ml10 fl" style="display: none;">
             <span class="txtIn"><input id="dtlOutDate" class="w120"></span>
@@ -139,9 +139,9 @@
     $scope.dtlOutDate = wcombo.genDateVal("#dtlOutDate", "${sessionScope.sessionInfo.startDate}");
 
     $scope._setComboData("stmtAcctFg", [
-      {"name": "<s:message code='outstockConfm.dtl.stmtAcctAll'/>", "value": ""},
-      {"name": "<s:message code='outstockConfm.dtl.stmtAcctSplr'/>", "value": "1"},
-      {"name": "<s:message code='outstockConfm.dtl.stmtAcctSplrRcpnt'/>", "value": "2"}
+      {"name": messages["outstockConfm.dtl.stmtAcctAll"], "value": ""},
+      {"name": messages["outstockConfm.dtl.stmtAcctSplr"], "value": "1"},
+      {"name": messages["outstockConfm.dtl.stmtAcctSplrRcpnt"], "value": "2"}
     ]);
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -244,7 +244,7 @@
 
             // 수주확정
             if ($scope.procFg === "10") {
-              $("#spanDtlTitle").html('<s:message code="outstockConfm.dtl.slipNo"/> : ' + $scope.slipNo + ' <s:message code="outstockConfm.dtl.store"/> : ' + $scope.storeNm + ' <s:message code="outstockConfm.dtl.reqDate"/> : ' + getFormatDate($scope.outDate));
+              $("#spanDtlTitle").html(messages["outstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["outstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["outstockConfm.dtl.reqDate"]+' : ' + getFormatDate($scope.outDate));
               $("#spanOutstockConfirmFg").show();
               $("#outstockBtnLayer").show();
               $("#outstockAfterBtnLayer").hide();
@@ -259,11 +259,11 @@
 
               // 출고확정
               if ($scope.procFg === "20") {
-                $("#spanDtlTitle").html('<s:message code="outstockConfm.dtl.slipNo"/> : ' + $scope.slipNo + ' <s:message code="outstockConfm.dtl.store"/> : ' + $scope.storeNm + ' <s:message code="outstockConfm.dtl.outDate"/> : ' + getFormatDate($scope.outDate));
+                $("#spanDtlTitle").html(messages["outstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["outstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["outstockConfm.dtl.outDate"]+' : ' + getFormatDate($scope.outDate));
               }
               // 입고확정
               else if ($scope.procFg === "30") {
-                $("#spanDtlTitle").html('<s:message code="outstockConfm.dtl.slipNo"/> : ' + $scope.slipNo + ' <s:message code="outstockConfm.dtl.store"/> : ' + $scope.storeNm + ' <s:message code="outstockConfm.dtl.outDate"/> : ' + getFormatDate($scope.outDate) + ' <s:message code="outstockConfm.dtl.inDate"/> : ' + getFormatDate($scope.inDate));
+                $("#spanDtlTitle").html(messages["outstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["outstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["outstockConfm.dtl.outDate"]+' : ' + getFormatDate($scope.outDate) + ', '+messages["outstockConfm.dtl.inDate"]+' : ' + getFormatDate($scope.inDate));
               }
             }
 

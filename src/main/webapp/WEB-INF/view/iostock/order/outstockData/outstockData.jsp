@@ -118,9 +118,9 @@
     $scope.sysStatFgMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
 
     $scope._setComboData("srchDateFg", [
-      {"name": "<s:message code='outstockData.reqDate'/>", "value": "req"},
-      {"name": "<s:message code='outstockData.regDate'/>", "value": "reg"},
-      {"name": "<s:message code='outstockData.modDate'/>", "value": "mod"}
+      {"name": messages["outstockData.reqDate"], "value": "req"},
+      {"name": messages["outstockData.regDate"], "value": "reg"},
+      {"name": messages["outstockData.modDate"], "value": "mod"}
     ]);
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -231,7 +231,7 @@
 
       if (!sysStatFgCheck) {
         <%-- 선택하신 자료 중 매장상태가 오픈이 아닌 매장이 있습니다. 계속하시겠습니까? --%>
-        var msg = "<s:message code='outstockData.sysStatFgCheck'/>";
+        var msg = messages["outstockData.sysStatFgCheck"];
         s_alert.popConf(msg, function () {
           $scope.loanCheckConfirm(loanCheck, params);
         });
@@ -246,7 +246,7 @@
     $scope.loanCheckConfirm = function (loanCheck, params) {
       if (!loanCheck) {
         <%-- 선택하신 자료중 출고합계금액이 주문가능액보다 큰 매장이 있습니다. 계속하시겠습니까? --%>
-        var msg = "<s:message code='outstockData.loanCheck'/>";
+        var msg = messages["outstockData.loanCheck"];
         s_alert.popConf(msg, function () {
           $scope.slipNoCreateConfirm(params);
         });
@@ -260,7 +260,7 @@
     // 전표생성 confirm
     $scope.slipNoCreateConfirm = function (params) {
       <%-- 선택하신 자료를 주문전표로 생성합니다. 계속하시겠습니까? --%>
-      var msg = "<s:message code='outstockData.orderSlipNoCreate'/>";
+      var msg = messages["outstockData.orderSlipNoCreate"];
       s_alert.popConf(msg, function () {
         $scope.saveDataCreate(params);
       });

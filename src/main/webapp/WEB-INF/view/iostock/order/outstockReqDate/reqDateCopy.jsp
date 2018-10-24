@@ -135,7 +135,7 @@
     $scope.search      = function () {
       // 매장을 선택해주세요.
       if ($("#targetSelectStoreCd").val() == "") {
-        s_alert.pop("<s:message code='outstockReqDate.require.selectStore'/>");
+        s_alert.pop(messages["outstockReqDate.require.selectStore"]);
         return false;
       }
       // 요일별 그리드 조회
@@ -147,17 +147,17 @@
     $scope.reqDateCopy = function () {
       // 매장을 선택해주세요.
       if ($("#targetSelectStoreCd").val() == "") {
-        s_alert.pop("<s:message code='outstockReqDate.require.selectStore'/>");
+        s_alert.pop(messages["outstockReqDate.require.selectStore"]);
         return false;
       }
       // 복사할 매장을 선택해주세요.
       if ($("#copySelectStoreCd").val() == "") {
-        s_alert.pop("<s:message code='outstockReqDate.require.selectCopyStore'/>");
+        s_alert.pop(messages["outstockReqDate.require.selectCopyStore"]);
         return false;
       }
 
       // 특정일 복사 요청
-      var msg = "<s:message code='outstockReqDate.confirm.copyMsg'/>"; //출고가능요일과 선택한 특정일이 복사됩니다. 진행하시겠습니까?
+      var msg = messages["outstockReqDate.confirm.copyMsg"]; //출고가능요일과 선택한 특정일이 복사됩니다. 진행하시겠습니까?
       s_alert.popConf(msg, function () {
         $scope._broadcast('reqDateCopySpecificCtrl', {proc: "copy"});
       });
@@ -197,8 +197,8 @@
       // 그리드 DataMap 설정
       $scope.sysStatFgMap    = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
       $scope.orderCloseYnMap = new wijmo.grid.DataMap([
-        {id: "Y", name: "<s:message code='outstockReqDate.orderCloseYnY'/>"},
-        {id: "N", name: "<s:message code='outstockReqDate.orderCloseYnN'/>"},
+        {id: "Y", name: messages["outstockReqDate.orderCloseYnY"]},
+        {id: "N", name: messages["outstockReqDate.orderCloseYnN"]},
       ], 'id', 'name');
 
       // 그리드 링크 효과
@@ -298,8 +298,8 @@
       // 그리드 DataMap 설정
       $scope.sysStatFgMap     = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
       $scope.outstockReqYnMap = new wijmo.grid.DataMap([
-        {id: "Y", name: "<s:message code='outstockReqDate.outstockReqYnY'/>"},
-        {id: "N", name: "<s:message code='outstockReqDate.outstockReqYnN'/>"},
+        {id: "Y", name: messages["outstockReqDate.outstockReqYnY"]},
+        {id: "N", name: messages["outstockReqDate.outstockReqYnN"]},
       ], 'id', 'name');
 
       // 그리드 링크 효과
@@ -361,7 +361,7 @@
         if (flex.getCellData(i, 0)) {
           // 타겟매장과 복사할 매장이 동일합니다.
           if (flex.rows[i]._data.storeCd == $("#copySelectStoreCd").val()) {
-            s_alert.pop("<s:message code='outstockReqDate.duplicate.targetSelectStore'/>");
+            s_alert.pop(messages["outstockReqDate.duplicate.targetSelectStore"]);
             return false;
           }
           flex.rows[i]._data.copyStoreCd = $("#copySelectStoreCd").val();
@@ -372,7 +372,7 @@
       // 길이체크
       if (params.length <= 0) {
         // 특정일은 복사할 내용이 없습니다. 출고가능요일을 복사하시겠습니까?
-        var msg = "<s:message code='outstockReqDate.not.copySpecificDate'/> <s:message code='outstockReqDate.copyDays'/>";
+        var msg = messages["outstockReqDate.not.copySpecificDate"]+" "+messages["outstockReqDate.copyDays"];
         s_alert.popConf(msg, function () {
           $scope._broadcast('reqDateCopyDaysCtrl', {proc: "copy"});
         });

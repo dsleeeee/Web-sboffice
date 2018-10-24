@@ -77,7 +77,7 @@
         ,       tmp.PO_PROD_FG
         ,       tmp.PO_UNIT_FG
         ,       tmp.PO_UNIT_QTY
-        ,       0 AS ENVST0011
+        ,       the.ENVST_VAL AS ENVST0011
         ,       TO_NUMBER(DECODE(DECODE(tphsd.PROC_FG,'00',tphsd.MD_UNIT_QTY,tphsd.MGR_UNIT_QTY), 0, NULL, DECODE(tphsd.PROC_FG,'00',tphsd.MD_UNIT_QTY,tphsd.MGR_UNIT_QTY)*tphsd.SLIP_FG)) AS MGR_UNIT_QTY
         ,       TO_NUMBER(DECODE(DECODE(tphsd.PROC_FG,'00',tphsd.MD_ETC_QTY ,tphsd.MGR_ETC_QTY ), 0, NULL, DECODE(tphsd.PROC_FG,'00',tphsd.MD_ETC_QTY ,tphsd.MGR_ETC_QTY )*tphsd.SLIP_FG)) AS MGR_ETC_QTY
         ,       TO_NUMBER(DECODE(DECODE(tphsd.PROC_FG,'00',tphsd.MD_TOT_QTY ,tphsd.MGR_TOT_QTY ), 0, NULL, DECODE(tphsd.PROC_FG,'00',tphsd.MD_TOT_QTY ,tphsd.MGR_TOT_QTY )*tphsd.SLIP_FG)) AS MGR_TOT_QTY
@@ -128,6 +128,7 @@
                     GROUP
                     BY      STORE_CD
                 ) suborder
+        ,       TB_HQ_ENVST the
         WHERE   tphsd.HQ_OFFICE_CD   =   #{hqOfficeCd}
         AND     tphsd.REQ_DATE       =   #{reqDate}
         AND     tphsd.SLIP_FG        =   #{slipFg}
@@ -140,6 +141,8 @@
         AND     tsssc.STORE_CD   (+) =   tphsd.STORE_CD
         AND     tsssc.PROD_CD    (+) =   tphsd.PROD_CD
         AND     suborder.STORE_CD(+) =   tphsd.STORE_CD
+        AND     the.HQ_OFFICE_CD     =   #{hqOfficeCd}
+        AND     the.ENVST_CD         =   '0011'
         ORDER BY tphsd.PROD_CD
         ]]>
     </select>
@@ -280,7 +283,7 @@
         ,       tmp.PO_PROD_FG
         ,       tmp.PO_UNIT_FG
         ,       tmp.PO_UNIT_QTY
-        ,       0 AS ENVST0011
+        ,       the.ENVST_VAL AS ENVST0011
         ,       tmp.SPLY_UPRC AS MGR_SPLY_UPRC
         ,       TRUNC(tphsd.PREV_MGR_UNIT_QTY / tphsd.PO_UNIT_QTY) * tphsd.SLIP_FG AS PREV_MGR_UNIT_QTY
         ,       MOD  (tphsd.PREV_MGR_ETC_QTY  , tphsd.PO_UNIT_QTY) * tphsd.SLIP_FG AS PREV_MGR_ETC_QTY
@@ -338,6 +341,7 @@
                     GROUP
                     BY      STORE_CD
                 ) suborder
+        ,       TB_HQ_ENVST the
         WHERE   tms.HQ_OFFICE_CD        =   #{hqOfficeCd}
         AND     tmp.STORE_CD            =   tms.STORE_CD
         AND     tmp.PROD_CD             =   #{prodCd}
@@ -347,6 +351,8 @@
         AND     tsssc.STORE_CD      (+) =   tmp.STORE_CD
         AND     tsssc.PROD_CD       (+) =   tmp.PROD_CD
         AND     suborder.STORE_CD   (+) =   tms.STORE_CD
+        AND     the.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     the.ENVST_CD            =   '0011'
         ]]>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
             AND tms.STORE_CD IN
