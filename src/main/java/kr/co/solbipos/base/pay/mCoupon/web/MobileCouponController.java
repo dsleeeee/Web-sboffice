@@ -8,11 +8,8 @@ import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.base.pay.coupon.service.*;
+import kr.co.solbipos.base.pay.coupon.service.PayMethodClassVO;
 import kr.co.solbipos.base.pay.mCoupon.service.MobileCouponService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,19 +43,21 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 @RequestMapping(value = "/base/pay/mCoupon")
 public class MobileCouponController {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-
     /** service */
-    @Autowired
-    MobileCouponService service;
-    @Autowired
-    SessionService sessionService;
+    private final MobileCouponService service;
+    private final SessionService sessionService;
 
     /** util */
-    @Autowired
-    CmmCodeUtil cmmCodeUtil;
-    @Autowired
-    CmmEnvUtil cmmEnvUtil;
+    private final CmmCodeUtil cmmCodeUtil;
+    private final CmmEnvUtil cmmEnvUtil;
+
+    public MobileCouponController(MobileCouponService service, SessionService sessionService,
+        CmmCodeUtil cmmCodeUtil, CmmEnvUtil cmmEnvUtil) {
+        this.service = service;
+        this.sessionService = sessionService;
+        this.cmmCodeUtil = cmmCodeUtil;
+        this.cmmEnvUtil = cmmEnvUtil;
+    }
 
     /**
      * 모바일 쿠폰 등록 화면

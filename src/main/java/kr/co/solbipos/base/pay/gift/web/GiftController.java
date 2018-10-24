@@ -47,19 +47,24 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 @RequestMapping(value = "/base/pay/gift")
 public class GiftController {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-
     /** service */
-    @Autowired
-    GiftService service;
-    @Autowired
-    SessionService sessionService;
+    private final GiftService service;
+    private final SessionService sessionService;
 
     /** util */
+    private final CmmCodeUtil cmmCodeUtil;
+    private final CmmEnvUtil cmmEnvUtil;
+
+
+    /** Constructor Injection */
     @Autowired
-    CmmCodeUtil cmmCodeUtil;
-    @Autowired
-    CmmEnvUtil cmmEnvUtil;
+    public GiftController(GiftService service, SessionService sessionService,
+        CmmCodeUtil cmmCodeUtil, CmmEnvUtil cmmEnvUtil) {
+        this.service = service;
+        this.sessionService = sessionService;
+        this.cmmCodeUtil = cmmCodeUtil;
+        this.cmmEnvUtil = cmmEnvUtil;
+    }
 
     /**
      * 상품권 등록 화면

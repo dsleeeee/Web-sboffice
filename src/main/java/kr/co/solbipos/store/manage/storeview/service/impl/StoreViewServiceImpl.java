@@ -1,7 +1,6 @@
 package kr.co.solbipos.store.manage.storeview.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.store.manage.storeview.service.StoreViewService;
@@ -29,11 +28,13 @@ import java.util.List;
 @Service("storeViewService")
 public class StoreViewServiceImpl implements StoreViewService {
 
-    @Autowired
-    StoreViewMapper mapper;
+    private final StoreViewMapper mapper;
 
+    /** Constructor Injection */
     @Autowired
-    MessageService messageService;
+    public StoreViewServiceImpl(StoreViewMapper mapper) {
+        this.mapper = mapper;
+    }
 
     /** 매장정보 목록 조회 */
     @Override

@@ -41,14 +41,18 @@ public class GiftServiceImpl implements GiftService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    GiftMapper mapper;
+    private final GiftMapper mapper;
+    private final CmmCodeUtil cmmCodeUtil;
+    private final MessageService messageService;
 
+    /** Constructor Injection */
     @Autowired
-    CmmCodeUtil cmmCodeUtil;
-
-    @Autowired
-    MessageService messageService;
+    public GiftServiceImpl(GiftMapper mapper, CmmCodeUtil cmmCodeUtil,
+        MessageService messageService) {
+        this.mapper = mapper;
+        this.cmmCodeUtil = cmmCodeUtil;
+        this.messageService = messageService;
+    }
 
     /** 쿠폰분류 조회 */
     @Override

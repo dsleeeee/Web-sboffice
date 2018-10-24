@@ -29,11 +29,15 @@ import java.util.List;
 @Service("exceptForwardService")
 public class ExceptForwardServiceImpl implements ExceptForwardService{
 
-    @Autowired
-    ExceptForwardMapper mapper;
+    private final ExceptForwardMapper mapper;
+    private final MessageService messageService;
 
+    /** Constructor Injection */
     @Autowired
-    MessageService messageService;
+    public ExceptForwardServiceImpl(ExceptForwardMapper mapper, MessageService messageService) {
+        this.mapper = mapper;
+        this.messageService = messageService;
+    }
 
     /** 예외출고 대상상품 목록 조회*/
     @Override

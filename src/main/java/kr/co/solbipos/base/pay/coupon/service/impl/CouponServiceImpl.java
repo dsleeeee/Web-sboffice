@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
@@ -40,14 +41,15 @@ public class CouponServiceImpl implements CouponService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    CouponMapper mapper;
+    private final CouponMapper mapper;
+    private final MessageService messageService;
 
+    /** Constructor Injection */
     @Autowired
-    CmmCodeUtil cmmCodeUtil;
-
-    @Autowired
-    MessageService messageService;
+    public CouponServiceImpl(CouponMapper mapper, MessageService messageService) {
+        this.mapper = mapper;
+        this.messageService = messageService;
+    }
 
     /** 쿠폰분류 조회 */
     @Override
@@ -399,7 +401,7 @@ public class CouponServiceImpl implements CouponService {
         resultVO.setPayClassCd(couponStoreVOs[0].getPayClassCd());
         resultVO.setCoupnCd(couponStoreVOs[0].getCoupnCd());
 
-        // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분에도 본사의 쿠폰 적용.
+        // 본사통제여부가 'Y'일 경우, 매장의 쿠폰도 삭제
         String couponResult = mapper.deleteHqCouponToStore(resultVO);
 
         // 상품정보도 함께 삭제

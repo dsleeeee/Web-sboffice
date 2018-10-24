@@ -23,51 +23,51 @@ import java.util.List;
 public interface VendrService {
 
     /**
-     * @param VendrVO
+     * @param vendrVO
      * @return List
      */
     List<DefaultMap<String>> list(VendrVO vendrVO, SessionInfoVO sessionInfoVO);
 
     /**
-     * @param VendrVO
+     * @param vendrVO
      * @return DefaultMap
      */
     DefaultMap<String> dtlInfo(VendrVO vendrVO, SessionInfoVO sessionInfoVO);
 
-    /*
-    * @param VendrVO
+    /**
+    * @param vendrVO
     * @return int
-    * */
+    */
     int save(VendrVO vendrVO, SessionInfoVO sessionInfoVO);
 
-    /*
-    * @param VendrVO
+    /**
+    * @param vendrVO
     * @return int
-    * */
+    */
     int modify(VendrVO vendrVO, SessionInfoVO sessionInfoVO);
 
     /**
-     * @param VendrVO
+     * @param vendrVO
      * @return List
      */
     List<DefaultMap<String>> vendrProdList(VendrVO vendrVO, SessionInfoVO sessionInfoVO);
 
     /**
-     * @param VendrVO
+     * @param vendrVO
      * @return List
      */
     List<DefaultMap<String>> prodList(VendrVO vendrVO, SessionInfoVO sessionInfoVO);
 
-    /*
-    * @param VendrVO
+    /**
+    * @param vendrVO
     * @return int
-    * */
+    */
     int modifyProd(VendrVO[] vendrVO, SessionInfoVO sessionInfoVO);
 
-    /*
-    * @param VendrVO
+    /**
+    * @param vendrVO
     * @return int
-    * */
+    */
     int deleteProd(VendrVO[] vendrVO, SessionInfoVO sessionInfoVO);
 
 }

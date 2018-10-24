@@ -34,10 +34,15 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Service("vendrService")
 public class VendrServiceImpl implements VendrService {
 
+    private final MessageService messageService;
+    private final VendrMapper mapper;
+
+    /** Constructor Injection */
     @Autowired
-    MessageService messageService;
-    @Autowired
-    private VendrMapper mapper;
+    public VendrServiceImpl(MessageService messageService, VendrMapper mapper) {
+        this.messageService = messageService;
+        this.mapper = mapper;
+    }
 
     /** 거래처 목록 조회 */
     @Override

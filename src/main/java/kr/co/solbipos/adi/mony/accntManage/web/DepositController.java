@@ -44,12 +44,15 @@ public class DepositController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    /** service */
-    @Autowired
-    DepositService service;
+    private final DepositService service;
+    private final SessionService sessionService;
 
+    /** Constructor Injection */
     @Autowired
-    SessionService sessionService;
+    public DepositController(DepositService service, SessionService sessionService) {
+        this.service = service;
+        this.sessionService = sessionService;
+    }
 
     /**
      * 계정관리 - 화면 이동
@@ -112,5 +115,4 @@ public class DepositController {
         }
         return returnListJson(Status.OK, result);
     }
-
 }

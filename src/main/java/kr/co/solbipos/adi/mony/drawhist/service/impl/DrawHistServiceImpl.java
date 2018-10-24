@@ -22,7 +22,6 @@ import java.util.List;
  * @author NHN한국사이버결제 KCP 김태수
  * @since 2018.08.03
  * @version 1.0
- * @see
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
@@ -30,8 +29,14 @@ import java.util.List;
 @Transactional
 public class DrawHistServiceImpl implements DrawHistService {
 
+    private final DrawHistMapper DrawHistMapper;
+
+    /** Constructor Injection */
     @Autowired
-    DrawHistMapper DrawHistMapper;
+    public DrawHistServiceImpl(
+        kr.co.solbipos.adi.mony.drawhist.service.impl.DrawHistMapper drawHistMapper) {
+        DrawHistMapper = drawHistMapper;
+    }
 
     @Override
     public List<DrawHistVO> selectDrawHist(DrawHistVO DrawHistVO, SessionInfoVO sessionInfoVO) {

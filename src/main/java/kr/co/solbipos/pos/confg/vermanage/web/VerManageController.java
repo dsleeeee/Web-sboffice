@@ -44,11 +44,15 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 @RequestMapping(value = "/pos/confg/verManage")
 public class VerManageController {
 
-    @Autowired
-    VerManageService service;
+    private final VerManageService service;
+    private final SessionService sessionService;
 
+    /** Constructor Injection */
     @Autowired
-    SessionService sessionService;
+    public VerManageController(VerManageService service, SessionService sessionService) {
+        this.service = service;
+        this.sessionService = sessionService;
+    }
 
     /**
      * 버전정보 화면 이동

@@ -410,6 +410,19 @@ function getParam(name){
   return result;
 }
 
+/**
+ * object 가 비었는지 체크
+ * @param obj
+ */
+function isEmptyObject(obj) {
+  for(var key in obj) {
+    if(obj.hasOwnProperty(key))
+      return false;
+  }
+  return true;
+}
+
+
 // 링크 태그 IE 팝업 방지( 이 웹사이트가 컴퓨터에서 앱을 열도록허용하시겠습니까? )
 $(document).on('click', 'a[href="#"]', function (e) {
   e.preventDefault();

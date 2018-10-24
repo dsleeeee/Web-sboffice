@@ -30,11 +30,16 @@ import java.util.List;
 @Transactional
 public class StatusServiceImpl implements StatusService {
 
+    private final StatusMapper StatusMapper;
+
+    /** Constructor Injection */
     @Autowired
-    StatusMapper StatusMapper;
+    public StatusServiceImpl(
+        kr.co.solbipos.adi.mony.status.service.impl.StatusMapper statusMapper) {
+        StatusMapper = statusMapper;
+    }
 
     @Override
-
     public List<StatusVO> selectStatus(StatusVO statusVO, SessionInfoVO sessionInfoVO) {
 
         statusVO.setOrgnFg(sessionInfoVO.getOrgnFg());

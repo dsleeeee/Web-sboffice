@@ -26,8 +26,13 @@ import kr.co.common.data.structure.DefaultMap;
 @Service("verRecvService")
 public class VerRecvServiceImpl implements VerRecvService {
 
+    private final VerRecvMapper mapper;
+
+    /** Constructor Injection */
     @Autowired
-    VerRecvMapper mapper;
+    public VerRecvServiceImpl(VerRecvMapper mapper) {
+        this.mapper = mapper;
+    }
 
     @Override
     public List<DefaultMap<String>> selectVerList(VerRecvVO verRecv) {
@@ -53,7 +58,7 @@ public class VerRecvServiceImpl implements VerRecvService {
     public List<DefaultMap<String>> selectVerStoreList(VerRecvVO verRecv) {
         return mapper.selectVerStoreList(verRecv);
     }
-    
+
     @Override
     public List<DefaultMap<String>> selectVerStoreDtlList(VerRecvVO verRecv) {
         return mapper.selectVerStoreDtlList(verRecv);

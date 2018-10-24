@@ -47,14 +47,21 @@ public class VendrController {
 
     private final String RESULT_URI = "base/prod/vendr";
 
-    @Autowired
-    SessionService sessionService;
-    @Autowired
-    MessageService messageService;
-    @Autowired
-    VendrService vendrService;
+    private final SessionService sessionService;
+    private final MessageService messageService;
+    private final VendrService vendrService;
+    private final CmmCodeService cmmCodeService;
 
-    CmmCodeService cmmCodeService;
+    /** Constructor Injection */
+    @Autowired
+    public VendrController(SessionService sessionService, MessageService messageService,
+        VendrService vendrService, CmmCodeService cmmCodeService) {
+        this.sessionService = sessionService;
+        this.messageService = messageService;
+        this.vendrService = vendrService;
+        this.cmmCodeService = cmmCodeService;
+    }
+
     /**
      * 거래처 조회 페이지 이동
      *

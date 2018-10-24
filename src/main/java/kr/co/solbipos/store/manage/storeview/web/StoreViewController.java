@@ -39,11 +39,15 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 @RequestMapping(value = "/store/manage/storeView")
 public class StoreViewController {
 
-    @Autowired
-    StoreViewService service;
+    private final StoreViewService service;
+    private final SessionService sessionService;
 
+    /** Constructor Injection */
     @Autowired
-    SessionService sessionService;
+    public StoreViewController(StoreViewService service, SessionService sessionService) {
+        this.service = service;
+        this.sessionService = sessionService;
+    }
 
     /**
      * 매장정보조회 화면 이동

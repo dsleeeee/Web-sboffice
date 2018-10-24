@@ -38,11 +38,15 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Transactional
 public class DclzManageServiceImpl implements DclzManageService {
 
-    @Autowired
-    DclzManageMapper dclzManageMapper;
+    private final DclzManageMapper dclzManageMapper;
+    private final MessageService messageService;
 
+    /** Constructor Injection */
     @Autowired
-    MessageService messageService;
+    public DclzManageServiceImpl(DclzManageMapper dclzManageMapper, MessageService messageService) {
+        this.dclzManageMapper = dclzManageMapper;
+        this.messageService = messageService;
+    }
 
     @Override
     public List<DefaultMap<String>> selectDclzManage(DclzManageVO dclzManageVO) {

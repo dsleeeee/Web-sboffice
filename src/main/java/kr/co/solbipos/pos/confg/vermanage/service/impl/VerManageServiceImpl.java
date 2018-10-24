@@ -41,11 +41,15 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Service("verManageService")
 public class VerManageServiceImpl implements VerManageService {
 
-    @Autowired
-    VerManageMapper mapper;
+    private final VerManageMapper mapper;
+    private final MessageService messageService;
 
+    /** Constructor Injection */
     @Autowired
-    MessageService messageService;
+    public VerManageServiceImpl(VerManageMapper mapper, MessageService messageService) {
+        this.mapper = mapper;
+        this.messageService = messageService;
+    }
 
     /** 포스버전 목록 조회 */
     @Override

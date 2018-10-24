@@ -51,15 +51,20 @@ public class ProductionController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    ProductionService service;
-    @Autowired
-    SessionService sessionService;
-    @Autowired
-    AuthService authService;
-    @Autowired
-    MessageService messageService;
+    private final ProductionService service;
+    private final SessionService sessionService;
+    private final AuthService authService;
+    private final MessageService messageService;
 
+    /** Constructor Injection */
+    @Autowired
+    public ProductionController(ProductionService service, SessionService sessionService,
+        AuthService authService, MessageService messageService) {
+        this.service = service;
+        this.sessionService = sessionService;
+        this.authService = authService;
+        this.messageService = messageService;
+    }
 
     /**
      * 조회 화면 전,

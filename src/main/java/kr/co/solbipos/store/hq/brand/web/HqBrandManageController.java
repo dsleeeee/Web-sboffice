@@ -42,14 +42,18 @@ import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 @RequestMapping(value = "/store/hq/hqBrand/")
 public class HqBrandManageController {
 
-    @Autowired
-    HqBrandService service;
+    private final HqBrandService service;
+    private final SessionService sessionService;
+    private final CmmCodeUtil cmmCodeUtil;
 
+    /** Constructor Injection */
     @Autowired
-    SessionService sessionService;
-
-    @Autowired
-    CmmCodeUtil cmmCodeUtil;
+    public HqBrandManageController(HqBrandService service, SessionService sessionService,
+        CmmCodeUtil cmmCodeUtil) {
+        this.service = service;
+        this.sessionService = sessionService;
+        this.cmmCodeUtil = cmmCodeUtil;
+    }
 
     /**
      * 브랜드정보관리 화면 이동

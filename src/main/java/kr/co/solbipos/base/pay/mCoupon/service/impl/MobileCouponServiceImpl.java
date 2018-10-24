@@ -40,14 +40,22 @@ public class MobileCouponServiceImpl implements MobileCouponService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    MobileCouponMapper mapper;
 
-    @Autowired
-    CmmCodeUtil cmmCodeUtil;
+    /** service */
+    private final MobileCouponMapper mapper;
+    private final MessageService messageService;
 
+    /** utils */
+    private final CmmCodeUtil cmmCodeUtil;
+
+    /** Constructor Injection */
     @Autowired
-    MessageService messageService;
+    public MobileCouponServiceImpl(MobileCouponMapper mapper, MessageService messageService,
+        CmmCodeUtil cmmCodeUtil) {
+        this.mapper = mapper;
+        this.messageService = messageService;
+        this.cmmCodeUtil = cmmCodeUtil;
+    }
 
     /** 쿠폰분류 조회 */
     @Override

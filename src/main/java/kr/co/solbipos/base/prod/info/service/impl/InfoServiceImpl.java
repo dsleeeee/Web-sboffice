@@ -37,10 +37,15 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Service("infoService")
 public class InfoServiceImpl implements InfoService {
 
+    private final InfoMapper mapper;
+    private final MessageService messageService;
+
+    /** Constructor Injection */
     @Autowired
-    InfoMapper mapper;
-    @Autowired
-    MessageService messageService;
+    public InfoServiceImpl(InfoMapper mapper, MessageService messageService) {
+        this.mapper = mapper;
+        this.messageService = messageService;
+    }
 
     /** 분류 조회 */
     @Override

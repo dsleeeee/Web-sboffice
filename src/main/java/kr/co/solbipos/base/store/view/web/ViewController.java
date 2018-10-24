@@ -3,15 +3,11 @@ package kr.co.solbipos.base.store.view.web;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
-import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
-import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.store.view.service.VanConfigVO;
 import kr.co.solbipos.base.store.view.service.ViewService;
 import kr.co.solbipos.base.store.view.service.ViewVO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,20 +41,15 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 @RequestMapping(value = "/base/store/view")
 public class ViewController {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    private final ViewService service;
+    private final SessionService sessionService;
 
+    /** Constructor Injection */
     @Autowired
-    ViewService service;
-
-    @Autowired
-    MessageService messageService;
-
-    @Autowired
-    SessionService sessionService;
-
-    @Autowired
-    CmmCodeUtil cmmCodeUtil;
-
+    public ViewController(ViewService service, SessionService sessionService) {
+        this.service = service;
+        this.sessionService = sessionService;
+    }
 
     /**
      * 매장정보조회 화면 이동

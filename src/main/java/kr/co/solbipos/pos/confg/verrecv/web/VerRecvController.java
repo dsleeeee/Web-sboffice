@@ -35,25 +35,29 @@ import kr.co.solbipos.pos.confg.verrecv.service.VerRecvVO;
 @Controller
 @RequestMapping(value = "/pos/confg/verRecv/")
 public class VerRecvController {
-    
-    @Autowired 
-    VerRecvService service;
-    
-    
+
+    private final VerRecvService service;
+
+    /** Constructor Injection */
+    @Autowired
+    public VerRecvController(VerRecvService service) {
+        this.service = service;
+    }
+
     /**
      * 버전별수신현황 - 페이지 이동
-     * 
+     *
      * @param request
      * @param response
      * @param model
      * @return
      */
     @RequestMapping(value = "verRecv/list.sb", method = RequestMethod.GET)
-    public String verrecvlist(HttpServletRequest request, HttpServletResponse response, 
+    public String verrecvlist(HttpServletRequest request, HttpServletResponse response,
             Model model) {
         return "pos/confg/verrecv/verrecv";
     }
-    
+
     /**
      * 버전별수신현황 - 버전 리스트 조회
      * @param verRecv
@@ -68,10 +72,10 @@ public class VerRecvController {
             HttpServletResponse response, Model model) {
 
         List<DefaultMap<String>> list = service.selectVerList(verRecv);
-        
+
         return returnListJson(Status.OK, list, verRecv);
     }
-    
+
     /**
      * 버전별수신현황 - 매장 리스트 조회
      * @param verRecv
@@ -86,24 +90,24 @@ public class VerRecvController {
             HttpServletResponse response, Model model) {
 
         List<DefaultMap<String>> list = service.selectStoreList(verRecv);
-        
+
         return returnListJson(Status.OK, list, verRecv);
     }
-    
+
     /**
      * 매장별수신현황 - 페이지 이동
-     * 
+     *
      * @param request
      * @param response
      * @param model
      * @return
      */
     @RequestMapping(value = "storeRecv/list.sb", method = RequestMethod.GET)
-    public String storerecvList(HttpServletRequest request, HttpServletResponse response, 
+    public String storerecvList(HttpServletRequest request, HttpServletResponse response,
             Model model) {
         return "pos/confg/verrecv/storerecv";
     }
-    
+
     /**
      * 매장별수신현황 - 매장 리스트 조회
      * @param verRecv
@@ -118,13 +122,13 @@ public class VerRecvController {
             HttpServletResponse response, Model model) {
 
         List<DefaultMap<String>> list = service.selectStoreRecvList(verRecv);
-        
+
         return returnListJson(Status.OK, list, verRecv);
     }
-    
+
     /**
      * 매장별수신현황 - 매장 리스트 조회 - 매장상세
-     * 
+     *
      * @param verRecv
      * @param request
      * @param response
@@ -137,28 +141,28 @@ public class VerRecvController {
             HttpServletResponse response, Model model) {
 
         List<DefaultMap<String>> list = service.selectStoreDtl(verRecv);
-        
+
         return returnListJson(Status.OK, list);
     }
-    
+
 
     /**
      * 버전별매장현황 - 페이지 이동
-     * 
+     *
      * @param request
      * @param response
      * @param model
      * @return
      */
     @RequestMapping(value = "verStore/list.sb", method = RequestMethod.GET)
-    public String verstoreList(HttpServletRequest request, HttpServletResponse response, 
+    public String verstoreList(HttpServletRequest request, HttpServletResponse response,
             Model model) {
         return "pos/confg/verrecv/verstore";
     }
-    
+
     /**
      * 버전별매장현황 - 버전 리스트 조회
-     * 
+     *
      * @param verRecv
      * @param request
      * @param response
@@ -171,13 +175,13 @@ public class VerRecvController {
             HttpServletResponse response, Model model) {
 
         List<DefaultMap<String>> list = service.selectVerStoreList(verRecv);
-        
+
         return returnListJson(Status.OK, list, verRecv);
     }
-    
+
     /**
      * 버전별매장현황 - 매장 리스트 조회
-     * 
+     *
      * @param verRecv
      * @param request
      * @param response
@@ -190,8 +194,8 @@ public class VerRecvController {
             HttpServletResponse response, Model model) {
 
         List<DefaultMap<String>> list = service.selectVerStoreDtlList(verRecv);
-        
+
         return returnListJson(Status.OK, list, verRecv);
     }
-    
+
 }

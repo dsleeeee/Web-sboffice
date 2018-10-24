@@ -50,21 +50,29 @@ import static org.springframework.util.ObjectUtils.isEmpty;
  */
 @Controller
 @RequestMapping(value = "/application/pos/excpForward/")
-public class ExecptForwardController {
+public class ExceptForwardController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    ExceptForwardService service;
-    @Autowired
-    SessionService sessionService;
-    @Autowired
-    CmmCodeUtil cmmCodeUtil;
-    @Autowired
-    AuthService authService;
-    @Autowired
-    MessageService messageService;
+    /** service */
+    private final ExceptForwardService service;
+    private final SessionService sessionService;
+    private final AuthService authService;
+    private final MessageService messageService;
 
+    /** utils */
+    private final CmmCodeUtil cmmCodeUtil;
+
+    /** Constructor Injection */
+    @Autowired
+    public ExceptForwardController(ExceptForwardService service, SessionService sessionService,
+        AuthService authService, MessageService messageService, CmmCodeUtil cmmCodeUtil) {
+        this.service = service;
+        this.sessionService = sessionService;
+        this.authService = authService;
+        this.messageService = messageService;
+        this.cmmCodeUtil = cmmCodeUtil;
+    }
 
     /**
      * 상품 목록 조회 화면
