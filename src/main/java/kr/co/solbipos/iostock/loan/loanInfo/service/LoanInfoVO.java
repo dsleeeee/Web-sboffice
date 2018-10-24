@@ -14,10 +14,6 @@ public class LoanInfoVO extends PageVO {
     private String[] arrStoreCd;
     /** 매장명 */
     private String storeNm;
-    /** 조회 시작일 */
-    private String startDate;
-    /** 조회 종료일 */
-    private String endDate;
     /** 여신일자 */
     private String loanDate;
     /** 출고금액 */
@@ -87,34 +83,6 @@ public class LoanInfoVO extends PageVO {
      */
     public void setStoreNm(String storeNm) {
         this.storeNm = storeNm;
-    }
-
-    /**
-     * @return the startDate
-     */
-    public String getStartDate() {
-        return startDate;
-    }
-
-    /**
-     * @param startDate the startDate to set
-     */
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    /**
-     * @return the endDate
-     */
-    public String getEndDate() {
-        return endDate;
-    }
-
-    /**
-     * @param endDate the endDate to set
-     */
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
     }
 
     /**

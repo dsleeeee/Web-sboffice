@@ -170,8 +170,8 @@
     $scope.slipFg = 1;
 
     var srchStartDate = wcombo.genDateVal("#srchStartDate", "${sessionScope.sessionInfo.startDate}");
-    var srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.startDate}");
-    var writtenDate   = wcombo.genDateVal("#writtenDate", "${sessionScope.sessionInfo.startDate}");
+    var srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.endDate}");
+    var writtenDate   = wcombo.genDate("#writtenDate");
 
     $scope.slipFgMap = new wijmo.grid.DataMap([
       {id: "1", name: messages["dstmn.orderSlipFg"]},

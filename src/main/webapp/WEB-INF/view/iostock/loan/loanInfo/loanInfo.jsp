@@ -100,7 +100,7 @@
     angular.extend(this, new RootController('loanInfoCtrl', $scope, $http, true));
 
     var srchStartDate = wcombo.genDateVal("#srchStartDate", "${sessionScope.sessionInfo.startDate}");
-    var srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.startDate}");
+    var srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.endDate}");
 
     $scope._setComboData("srchDateFg", [
       {"name": messages["loanInfo.all"], "value": ""},

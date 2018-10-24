@@ -46,10 +46,6 @@ public class StoreLoanManageVO extends PageVO {
     private String availableOrderAmt;
     /** 주문중지구분 */
     private Boolean orderCloseYn;
-    /** 조회 시작일 */
-    private String startDate;
-    /** 조회 종료일 */
-    private String endDate;
 
     /**
      * @return the hqOfficeCd
@@ -219,31 +215,4 @@ public class StoreLoanManageVO extends PageVO {
         this.orderCloseYn = orderCloseYn;
     }
 
-    /**
-     * @return the startDate
-     */
-    public String getStartDate() {
-        return startDate;
-    }
-
-    /**
-     * @param startDate the startDate to set
-     */
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    /**
-     * @return the endDate
-     */
-    public String getEndDate() {
-        return endDate;
-    }
-
-    /**
-     * @param endDate the endDate to set
-     */
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
-    }
 }

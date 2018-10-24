@@ -110,8 +110,8 @@
 
     $scope.slipFg     = -1;
     var srchStartDate = wcombo.genDateVal("#srchStartDate", "${sessionScope.sessionInfo.startDate}");
-    var srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.startDate}");
-    var outDate       = wcombo.genDateVal("#outDate", "${sessionScope.sessionInfo.startDate}");
+    var srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.endDate}");
+    var outDate       = wcombo.genDate("#outDate");
     var sysStatFg     = ${ccu.getCommCode("005")};
 
     // 그리드 DataMap 설정

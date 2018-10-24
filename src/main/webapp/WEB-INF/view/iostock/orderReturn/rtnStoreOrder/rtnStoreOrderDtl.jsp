@@ -165,7 +165,7 @@
         $scope.flex.isReadOnly = true;
       }
 
-      $("#spanDtlTitle").html(messages["rtnStoreOrder.reqDate"]' : ' + getFormatDate($scope.reqDate, '-'));
+      $("#spanDtlTitle").html(messages["rtnStoreOrder.reqDate"]+' : ' + getFormatDate($scope.reqDate, '-'));
       $scope.wjRtnStoreOrderDtlLayer.show(true);
       $scope.searchRtnStoreOrderDtlList();
       // 기능수행 종료 : 반드시 추가
