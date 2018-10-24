@@ -169,9 +169,9 @@
     angular.extend(this, new RootController('dstmnCtrl', $scope, $http, true));
     $scope.slipFg = 1;
 
-    var srchStartDate = wcombo.genDateVal("#srchStartDate", "${sessionScope.sessionInfo.startDt}");
-    var srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.startDt}");
-    var writtenDate   = wcombo.genDateVal("#writtenDate", "${sessionScope.sessionInfo.startDt}");
+    var srchStartDate = wcombo.genDateVal("#srchStartDate", "${sessionScope.sessionInfo.startDate}");
+    var srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.startDate}");
+    var writtenDate   = wcombo.genDateVal("#writtenDate", "${sessionScope.sessionInfo.startDate}");
 
     $scope.slipFgMap = new wijmo.grid.DataMap([
       {id: "1", name: "<s:message code='dstmn.orderSlipFg'/>"},

@@ -20,34 +20,43 @@ import kr.co.solbipos.application.session.user.enums.OrgnFg;
 */
 public class DrawHistVO extends CmmVO{
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2737568284608605360L;
 
     private OrgnFg orgnFg;
     private String storeCd;
-    private String startDt;
-    private String endDt;
+    private String startDate;
+    private String endDate;
 
-    public OrgnFg getOrgnFg() { return orgnFg; }
 
-    public void setOrgnFg(OrgnFg orgnFg) { this.orgnFg = orgnFg; }
+    public OrgnFg getOrgnFg() {
+        return orgnFg;
+    }
+
+    public void setOrgnFg(OrgnFg orgnFg) {
+        this.orgnFg = orgnFg;
+    }
 
     public String getStoreCd() {
         return storeCd;
     }
+
     public void setStoreCd(String storeCd) {
         this.storeCd = storeCd;
     }
 
-    public String getStartDt() {
-        return startDt;
+    public String getStartDate() {
+        return startDate;
     }
-    public void setStartDt(String startDt) {
-        this.startDt = startDt;
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
     }
-    public String getEndDt() {
-        return endDt;
+
+    public String getEndDate() {
+        return endDate;
     }
-    public void setEndDt(String endDt) {
-        this.endDt = endDt;
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 }

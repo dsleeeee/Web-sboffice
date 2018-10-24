@@ -205,8 +205,8 @@
       {"name": "<s:message code='rtnStoreOrder.dtl.option2Sale'/>", "value": "SALE"}
     ]);
 
-    $scope.srchRegStartDate = wcombo.genDateVal("#srchRegStartDate", "${sessionScope.sessionInfo.startDt}");
-    $scope.srchRegEndDate   = wcombo.genDateVal("#srchRegEndDate", "${sessionScope.sessionInfo.startDt}");
+    $scope.srchRegStartDate = wcombo.genDateVal("#srchRegStartDate", "${sessionScope.sessionInfo.startDate}");
+    $scope.srchRegEndDate   = wcombo.genDateVal("#srchRegEndDate", "${sessionScope.sessionInfo.startDate}");
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {

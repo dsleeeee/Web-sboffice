@@ -87,7 +87,7 @@
     var startDate = ""+year+month+day;
 
     $scope.srchStartDate = wcombo.genDateVal("#srchStartDate", startDate);
-    $scope.srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.startDt}");
+    $scope.srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.startDate}");
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {

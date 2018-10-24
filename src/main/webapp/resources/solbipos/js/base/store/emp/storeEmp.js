@@ -11,8 +11,8 @@
 $(document).ready(function () {
   //<%-- ============================================= 조회 및 레이어 관련 =========================================== --%>
   //<%-- 조회관련 변수 --%>
-  var srchStartDt = wcombo.genDate("#srchStartDt"),
-      srchEndDt = wcombo.genDate("#srchEndDt"),
+  var srchStartDate = wcombo.genDate("#srchStartDate"),
+      srchEndDate = wcombo.genDate("#srchEndDate"),
       srchEmpNo = wcombo.genInputText("#srchEmpNo", "4", ""),
       srchEmpNm = wcombo.genInput("#srchEmpNm"),
       srchUserId = wcombo.genInput("#srchUserId"),
@@ -74,8 +74,8 @@ $(document).ready(function () {
   //<%-- 그리드 조회 --%>
   function srchGrid(index) {
     var param = {};
-    param.startDt = getDate(srchStartDt);
-    param.endDt = getDate(srchEndDt);
+    param.startDate = getDate(srchStartDae);
+    param.endDate = getDate(srchEndDate);
     param.empNo = srchEmpNo.value;
     param.empNm = srchEmpNm.text;
     param.userId = srchUserId.text;
@@ -382,8 +382,8 @@ $(document).ready(function () {
   //<%-- 전체기간 체크박스 --%>
   $("#chkDt").click(function() {
     var chkDt = $('#chkDt').is(":checked");
-    srchStartDt.isDisabled = chkDt;
-    srchEndDt.isDisabled = chkDt;
+    srchStartDate.isDisabled = chkDt;
+    srchEndDate.isDisabled = chkDt;
   });
 
   //<%-- 등록/수정 레이어 저장 버튼 클릭 --%>

@@ -6,7 +6,7 @@
 var menuCd = "${sessionScope.sessionInfo.currentMenu.resrceCd}";
 var menuNm = "${sessionScope.sessionInfo.currentMenu.resrceNm}";
 var gvListScaleBoxData = ${ccu.getListScale()};
-var gvStartDt = "${sessionScope.sessionInfo.startDt}";
-var gvEndDt = "${sessionScope.sessionInfo.endDt}";
+var gvStartDate = "${sessionScope.sessionInfo.startDate}";
+var gvEndDate = "${sessionScope.sessionInfo.endDate}";
 var gvOrgnFg = "${sessionScope.sessionInfo.orgnFg.getCode()}";
 

@@ -10,7 +10,7 @@
                 thc.KRW_AMT
            FROM TB_HQ_CURRENCY thc
           WHERE thc.HQ_OFFICE_CD = #{orgnCd}
-            AND thc.SALE_DATE BETWEEN #{startDt} AND #{endDt}
+            AND thc.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         <if test='crncyCd != null and crncyCd != ""'>
             AND thc.CRNCY_CD = #{crncyCd}
         </if>
@@ -64,7 +64,7 @@
                thc.KRW_AMT
           FROM TB_MS_CURRENCY thc
          WHERE thc.STORE_CD = #{orgnCd}
-           AND thc.SALE_DATE BETWEEN #{startDt} AND #{endDt}
+           AND thc.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         <if test='crncyCd != null and crncyCd != ""'>
            AND thc.CRNCY_CD = #{crncyCd}
         </if>

@@ -72,8 +72,8 @@
                 AND tme.SMS_RECV_YN = #{smsRecvYn.code}
             </if>
             <if test="chkDt == false">
-                <if test="startDt != null and startDt != '' and endDt != null and endDt != ''">
-                    AND tme.REG_DT BETWEEN #{startDt}||'000000' AND #{endDt}||'235959' --조회(등록)일자
+                <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+                    AND tme.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959' --조회(등록)일자
                 </if>
             </if>
         </where>

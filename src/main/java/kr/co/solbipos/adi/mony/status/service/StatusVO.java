@@ -20,44 +20,54 @@ import kr.co.solbipos.application.session.user.enums.OrgnFg;
 */
 public class StatusVO extends CmmVO{
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -7484938662440568127L;
 
     private OrgnFg orgnFg;
     private String hqOfficeCd;
-    private String startDt;
-    private String endDt;
+    private String startDate;
+    private String endDate;
     private String storeCd;
     private String arrStoreCd[];
     private String accntFg;
     private String accntCd;
 
-    public OrgnFg getOrgnFg() { return orgnFg; }
 
-    public void setOrgnFg(OrgnFg orgnFg) { this.orgnFg = orgnFg; }
+    public OrgnFg getOrgnFg() {
+        return orgnFg;
+    }
+
+    public void setOrgnFg(OrgnFg orgnFg) {
+        this.orgnFg = orgnFg;
+    }
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
     }
+
     public void setHqOfficeCd(String hqOfficeCd) {
         this.hqOfficeCd = hqOfficeCd;
     }
 
-    public String getStartDt() {
-        return startDt;
+    public String getStartDate() {
+        return startDate;
     }
-    public void setStartDt(String startDt) {
-        this.startDt = startDt;
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
     }
-    public String getEndDt() {
-        return endDt;
+
+    public String getEndDae() {
+        return endDate;
     }
-    public void setEndDt(String endDt) {
-        this.endDt = endDt;
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 
     public String getStoreCd() {
         return storeCd;
     }
+
     public void setStoreCd(String storeCd) {
         this.storeCd = storeCd;
     }
@@ -73,6 +83,7 @@ public class StatusVO extends CmmVO{
     public String getAccntFg() {
         return accntFg;
     }
+
     public void setAccntFg(String accntFg) {
         this.accntFg = accntFg;
     }
@@ -80,6 +91,7 @@ public class StatusVO extends CmmVO{
     public String getAccntCd() {
         return accntCd;
     }
+
     public void setAccntCd(String accntCd) {
         this.accntCd = accntCd;
     }

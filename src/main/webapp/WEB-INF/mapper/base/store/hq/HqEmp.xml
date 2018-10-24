@@ -15,8 +15,8 @@
           FROM TB_HQ_EMPLOYEE THE
          WHERE USE_YN = 'Y'
          <if test="chkDt == false">
-           <if test="startDt != null and startDt != '' and endDt != null and endDt != ''">
-           AND THE.REG_DT BETWEEN #{startDt}||'000000' AND #{endDt}||'235959'
+           <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+           AND THE.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
            </if>
          </if>
          <if test="empNo != null and empNo != ''">

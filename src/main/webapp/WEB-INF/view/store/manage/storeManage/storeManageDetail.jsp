@@ -71,7 +71,7 @@
             <td>
               <div class="sb-select">
                 <span class="txtIn">
-                  <input id="rOpenPosDate" name="startDt" class="w200" />
+                  <input id="rOpenPosDate" name="startDate" class="w200" />
                 </span>
               </div>
             </td>
@@ -292,7 +292,7 @@ var useYn          = ${ccu.getCommCodeExcpAll("067")};
 
 <%-- ============================================= 그리드, 위즈모 관련 =========================================== --%>
 
-var rOpenPosDate   = wcombo.genDateVal("#rOpenPosDate", "${sessionScope.sessionInfo.startDt}");
+var rOpenPosDate   = wcombo.genDateVal("#rOpenPosDate", "${sessionScope.sessionInfo.startDate}");
 var rClsFg         = wcombo.genCommonBox("#rClsFg", clsFg);
 var rSysStatFg     = wcombo.genCommonBox("#rSysStatFg", sysStatFg);
 var rArea          = wcombo.genCommonBox("#rArea", areaCd);

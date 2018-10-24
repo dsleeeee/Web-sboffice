@@ -23,9 +23,9 @@
         <th><s:message code="hqEmp.regDt" /></th>
         <td colspan="3">
           <div class="sb-select">
-            <span class="txtIn"><input id="startDt" name="startDt" class="w200" /></span>
+            <span class="txtIn"><input id="startDate" name="startDate" class="w200" /></span>
             <span class="rg">~</span>
-            <span class="txtIn"><input id="endDt" name="endDt" class="w200" /></span>
+            <span class="txtIn"><input id="endDate" name="endDate" class="w200" /></span>
             <span class="chk ml10"><input type="checkbox" id="chkDt" checked/>
             <label for="chkDt"><s:message code="cmm.all.day" /></label>
             </span>
@@ -152,8 +152,8 @@
   var webUseYnData   = ${ccu.getCommCode("067")};
   var smsRecvYnData  = ${ccu.getCommCode("072")};
   var listScaleBox   = wcombo.genCommonBox("#listScaleBox", ldata);
-  var startDt        = wcombo.genDateVal("#startDt", "${sessionScope.sessionInfo.startDt}");
-  var endDt          = wcombo.genDateVal("#endDt", "${sessionScope.sessionInfo.endDt}");
+  var startDate      = wcombo.genDateVal("#startDate", "${sessionScope.sessionInfo.startDate}");
+  var endDate        = wcombo.genDateVal("#endDate", "${sessionScope.sessionInfo.endDate}");
   var empNo          = wcombo.genInput("#empNo");
   var empNm          = wcombo.genInput("#empNm");
   var userId         = wcombo.genInput("#userId");
@@ -188,8 +188,8 @@
   function search(index) {
     var param = {};
 
-    param.startDt = getDate(startDt);
-    param.endDt = getDate(endDt);
+    param.startDate = getDate(startDate);
+    param.endDate = getDate(endDate);
     param.chkDt = $('#chkDt').is(":checked");
     param.empNo = empNo.text;
     param.empNm = empNm.text;
@@ -244,8 +244,8 @@
   <%-- 전체기간 체크박스 --%>
   $(document).on("click", "#chkDt", function() {
     var chkDt = $('#chkDt').is(":checked");
-    startDt.isDisabled = chkDt;
-    endDt.isDisabled = chkDt;
+    startDate.isDisabled = chkDt;
+    endDate.isDisabled = chkDt;
   });
 
   <%-- 본사신규등록 버튼 클릭--%>

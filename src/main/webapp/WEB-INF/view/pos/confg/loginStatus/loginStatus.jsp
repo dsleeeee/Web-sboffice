@@ -25,9 +25,9 @@
         <th><s:message code="cmm.search.date" /></th>
         <td colspan="3">
           <div class="sb-select">
-            <span class="txtIn"> <input id="startDt" name="startDt" class="w200" /></span>
+            <span class="txtIn"> <input id="startDate" name="startDate" class="w200" /></span>
             <span class="rg">~</span>
-            <span class="txtIn"> <input id="endDt" name="endDt" class="w200" /></span>
+            <span class="txtIn"> <input id="endDate" name="endDate" class="w200" /></span>
             <span class="chk ml10"> <input type="checkbox" id="chkDt" />
             <label for="chkDt"><s:message code="cmm.all.day" /></label>
             </span>
@@ -123,8 +123,8 @@ $(document).ready(function(){
     ];
 
   var grid         = wgrid.genGrid("#theGrid", rdata);
-  var startDt       = wcombo.genDateVal("#startDt", "${ufn:addDaysString( ufn:currentDateString() , -7)}");
-  var endDt        = wcombo.genDateVal("#endDt", "${sessionScope.sessionInfo.endDt}");
+  var startDate    = wcombo.genDateVal("#startDate", "${ufn:addDaysString( ufn:currentDateString() , -7)}");
+  var endDate      = wcombo.genDateVal("#endDate", "${sessionScope.sessionInfo.endDate}");
   var ldata        = ${ccu.getListScale()};
   var cdata        = ${ccu.getCommCode("005")};
   var listScaleBox = wcombo.genCommonBox("#listScaleBox", ldata);
@@ -133,8 +133,8 @@ $(document).ready(function(){
   function search(index) {
     var param = {};
 
-    param.startDt = getDate(startDt);
-    param.endDt = getDate(endDt);
+    param.startDate = getDate(startDate);
+    param.endDate = getDate(endDate);
     param.chkDt = $('#chkDt').is(":checked");
     param.hqOfficeCd = $("#hqOfficeCd").val();
     param.hqOfficeNm = $("#hqOfficeNm").val();
@@ -176,8 +176,8 @@ $(document).ready(function(){
   <%-- 전체기간 체크박스 --%>
   $(document).on("click", "#chkDt", function() {
     var chkDt = $('#chkDt').is(":checked");
-    startDt.isDisabled = chkDt;
-    endDt.isDisabled = chkDt;
+    startDate.isDisabled = chkDt;
+    endDate.isDisabled = chkDt;
   });
 
 });

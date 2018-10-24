@@ -101,8 +101,8 @@
         angular.extend(this, new RootController('instockConfmCtrl', $scope, $http, true));
         $scope.slipFg = 1;
 
-        var srchStartDate = wcombo.genDateVal("#srchStartDate", "${sessionScope.sessionInfo.startDt}");
-        var srchEndDate   = wcombo.genDateVal("#srchEndDate"  , "${sessionScope.sessionInfo.startDt}");
+        var srchStartDate = wcombo.genDateVal("#srchStartDate", "${sessionScope.sessionInfo.startDate}");
+        var srchEndDate   = wcombo.genDateVal("#srchEndDate"  , "${sessionScope.sessionInfo.startDate}");
 
         // grid 초기화 : 생성되기전 초기화되면서 생성된다
         $scope.initGrid = function (s, e) {

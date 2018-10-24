@@ -31,7 +31,7 @@ import java.util.List;
  */
 public class SessionInfoVO extends CmmVO {
 
-    private static final long serialVersionUID = -7358789950591364589L;
+    private static final long serialVersionUID = -3361957032791129136L;
     /** sessionId */
     private String sessionId;
     /** 사용자 아이디 */
@@ -124,9 +124,9 @@ public class SessionInfoVO extends CmmVO {
     /** 로그인 화면 : 아이디 저장 여부 */
     private boolean chk;
     /** 메뉴 관련 데이터 */
-    private String startDt;
+    private String startDate;
     /** 조회 종료 일자 */
-    private String endDt;
+    private String endDate;
     /** 메뉴 관련 데이터 */
     /** 전체메뉴 조회(JSON) */
     private String menuData;
@@ -460,28 +460,28 @@ public class SessionInfoVO extends CmmVO {
         this.chk = chk;
     }
     /**
-     * @return the startDt
+     * @return the startDate
      */
-    public String getStartDt() {
-        return startDt;
+    public String getStartDate() {
+        return startDate;
     }
     /**
-     * @param startDt the startDt to set
+     * @param startDate the startDate to set
      */
-    public void setStartDt(String startDt) {
-        this.startDt = startDt;
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
     }
     /**
-     * @return the endDt
+     * @return the endDate
      */
-    public String getEndDt() {
-        return endDt;
+    public String getEndDate() {
+        return endDate;
     }
     /**
-     * @param endDt the endDt to set
+     * @param endDate the endDate to set
      */
-    public void setEndDt(String endDt) {
-        this.endDt = endDt;
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
     /**
      * @return the menuData

@@ -91,9 +91,9 @@
           <%-- 조회 일자 --%>
           <div class="sb-select fl w15"><div id="sDateType"></div> </div>
           <div class="sb-select">
-            <span class="txtIn"> <input id="startDt" name="startDt" class="w200" /></span>
+            <span class="txtIn"> <input id="startDate" name="startDate" class="w200" /></span>
             <span class="rg">~</span>
-            <span class="txtIn"> <input id="endDt" name="endDt" class="w200" /></span>
+            <span class="txtIn"> <input id="endDate" name="endDate" class="w200" /></span>
           </div>
         </td>
       </tr>
@@ -151,8 +151,8 @@
     agencyNm.isReadOnly = true;
     var vanCd           = wcombo.genCommonBox("#sVanCd", ${ccu.getVanList("01")});
     var dateType        = wcombo.genCommonBox("#sDateType",  [{"name":"<s:message code='cmm.all.day' />","value":""},{"name":"<s:message code='storeView.lastLogin' />","value":"1"},{"name":"<s:message code='storeView.sysOpen' />","value":"2"},{"name":"<s:message code='storeView.sysClose' />","value":"3"}]);
-    var startDt         = wcombo.genDateVal("#startDt", "${ufn:addDaysString( ufn:currentDateString() , -7)}");
-    var endDt           = wcombo.genDateVal("#endDt", "${ufn:currentDateString()}");
+    var startDate       = wcombo.genDateVal("#startDate", "${ufn:addDaysString( ufn:currentDateString() , -7)}");
+    var endDate         = wcombo.genDateVal("#endDate", "${ufn:currentDateString()}");
     var listScaleBox    = wcombo.genCommonBox("#listScaleBox", ${ccu.getListScale()});
 
     <%-- 조회결과 --%>
@@ -245,8 +245,8 @@
       param.agencyCd = agencyCd.text;
       param.vanCd = vanCd.selectedValue;
       param.dateType = dateType.selectedValue;
-      param.startDt = getDate(startDt);
-      param.endDt = getDate(endDt);
+      param.startDate = getDate(startDate);
+      param.endDate = getDate(endDate);
       param.listScale = listScaleBox.selectedValue;
       param.curr = index;
 

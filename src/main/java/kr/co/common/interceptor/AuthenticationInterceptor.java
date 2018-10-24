@@ -184,16 +184,16 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
      * @param sessionInfoVO SessionInfoVO
      */
     private SessionInfoVO setUserSelectDate(HttpServletRequest request, SessionInfoVO sessionInfoVO) {
-        String startDt = request.getParameter("startDt");
-        String endDt = request.getParameter("endDt");
-        if ( !isEmpty(startDt) ) {
-            sessionInfoVO.setStartDt(startDt);
+        String startDate = request.getParameter("startDate");
+        String endDate = request.getParameter("endDate");
+        if ( !isEmpty(startDate) ) {
+            sessionInfoVO.setStartDate(startDate);
         }
-        if ( !isEmpty(endDt) ) {
-            sessionInfoVO.setEndDt(endDt);
+        if ( !isEmpty(endDate) ) {
+            sessionInfoVO.setEndDate(endDate);
         }
         // 값이 있는 경우에만 session 에 넣는다
-        if ( !isEmpty(startDt) || !isEmpty(endDt) ) {
+        if ( !isEmpty(startDate) || !isEmpty(endDate) ) {
             sessionService.setSessionInfo(sessionInfoVO);
         }
         return sessionInfoVO;

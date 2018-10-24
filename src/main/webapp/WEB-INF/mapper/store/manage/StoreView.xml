@@ -79,17 +79,17 @@
         </if>
         <if test='dateType != null and dateType != ""'>
           <if test='dateType == "2"'>
-           AND TMS.SYS_OPEN_DATE BETWEEN #{startDt} AND #{endDt}
+           AND TMS.SYS_OPEN_DATE BETWEEN #{startDate} AND #{endDate}
           </if>
           <if test='dateType == "3"'>
-           AND TMS.SYS_CLOSURE_DATE BETWEEN #{startDt} AND #{endDt}
+           AND TMS.SYS_CLOSURE_DATE BETWEEN #{startDate} AND #{endDate}
           </if>
         </if>
       ) X
      <where>
        <if test='dateType != null and dateType != ""'>
           <if test='dateType == "1"'>
-          AND X.POS_LAST_LOGIN_DT BETWEEN #{startDt} AND #{endDt}
+          AND X.POS_LAST_LOGIN_DT BETWEEN #{startDate} AND #{endDate}
           </if>
        </if>
      </where>

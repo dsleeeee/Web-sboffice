@@ -31,7 +31,7 @@
        AND A.SALE_DATE = C.SALE_DATE
        AND A.POS_NO = C.POS_NO
        AND A.BILL_NO = C.BILL_NO
-       AND A.SALE_DATE BETWEEN #{startDt} AND #{endDt}
+       AND A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
        AND A.STORE_CD = #{storeCd}
   </select>
 </mapper>

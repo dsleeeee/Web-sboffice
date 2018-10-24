@@ -91,15 +91,15 @@ public class RegistVO extends PageVO {
     /** 기념일 타입 */
     private AnvType anvType;
     /** 기념일 date start */
-    private String anvStartDt;
+    private String anvStartDate;
     /** 기념일 date end */
-    private String anvEndDt;
+    private String anvEndDate;
     /** 조회기간 타입 */
     private PeriodType periodType;
     /** 조회기간 타입 date start */
-    private String periodStartDt;
+    private String periodStartDate;
     /** 조회기간 타입 date end */
-    private String periodEndDt;
+    private String periodEndDate;
     /** 후불회원 적용매장코드 */
     private String creditStoreCds;
 //    /** 후불회원 적용매장명 */
@@ -512,33 +512,33 @@ public class RegistVO extends PageVO {
     }
 
     /**
-     * @return the anvStartDt
+     * @return the anvStartDate
      */
 
-    public String getAnvStartDt() {
-        return anvStartDt;
+    public String getAnvStartDate() {
+        return anvStartDate;
     }
 
     /**
-     * @param anvStartDt the anvStartDt to set
+     * @param anvStartDate the anvStartDate to set
      */
-    public void setAnvStartDt(String anvStartDt) {
-        this.anvStartDt = anvStartDt;
+    public void setAnvStartDate(String anvStartDate) {
+        this.anvStartDate = anvStartDate;
     }
 
     /**
-     * @return the anvEndDt
+     * @return the anvEndDate
      */
 
-    public String getAnvEndDt() {
-        return anvEndDt;
+    public String getAnvEndDate() {
+        return anvEndDate;
     }
 
     /**
-     * @param anvEndDt the anvEndDt to set
+     * @param anvEndDate the anvEndDate to set
      */
-    public void setAnvEndDt(String anvEndDt) {
-        this.anvEndDt = anvEndDt;
+    public void setAnvEndDate(String anvEndDate) {
+        this.anvEndDate = anvEndDate;
     }
 
     /**
@@ -557,33 +557,33 @@ public class RegistVO extends PageVO {
     }
 
     /**
-     * @return the periodStartDt
+     * @return the periodStartDate
      */
 
-    public String getPeriodStartDt() {
-        return periodStartDt;
+    public String getPeriodStartDate() {
+        return periodStartDate;
     }
 
     /**
-     * @param periodStartDt the periodStartDt to set
+     * @param periodStartDate the periodStartDate to set
      */
-    public void setPeriodStartDt(String periodStartDt) {
-        this.periodStartDt = periodStartDt;
+    public void setPeriodStartDate(String periodStartDate) {
+        this.periodStartDate = periodStartDate;
     }
 
     /**
-     * @return the periodEndDt
+     * @return the periodEndDate
      */
 
-    public String getPeriodEndDt() {
-        return periodEndDt;
+    public String getPeriodEndDate() {
+        return periodEndDate;
     }
 
     /**
-     * @param periodEndDt the periodEndDt to set
+     * @param periodEndDate the periodEndDate to set
      */
-    public void setPeriodEndDt(String periodEndDt) {
-        this.periodEndDt = periodEndDt;
+    public void setPeriodEndDate(String periodEndDate) {
+        this.periodEndDate = periodEndDate;
     }
 
 

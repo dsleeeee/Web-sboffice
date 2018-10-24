@@ -30,9 +30,9 @@
         </th>
         <td>
           <div class="sb-select">
-            <span class="txtIn"> <input id="startDt" name="startDt" class="w200" /></span>
+            <span class="txtIn"> <input id="startDate" name="startDate" class="w200" /></span>
             <span class="rg">~</span>
-            <span class="txtIn"> <input id="endDt" name="endDt" class="w200" /></span>
+            <span class="txtIn"> <input id="endDate" name="endDate" class="w200" /></span>
             </span>
           </div>
         </td>
@@ -44,9 +44,9 @@
         </th>
         <td>
           <div class="sb-select">
-            <span class="txtIn"> <input id="anvrsStartDt" name="anvrsStartDt" class="w200" /></span>
+            <span class="txtIn"> <input id="anvrsStartDate" name="anvrsStartDate" class="w200" /></span>
             <span class="rg">~</span>
-            <span class="txtIn"> <input id="anvrsEndDt" name="anvrsEndDt" class="w200" /></span>
+            <span class="txtIn"> <input id="anvrsEndDate" name="anvrsEndDate" class="w200" /></span>
             </span>
           </div>
         </td>
@@ -177,10 +177,10 @@ $(document).ready(function(){
   var weddingData   = ${ccu.getCommCodeExcpAll("076")}; <%--결혼유무--%>
 
   <%--조회 조건 생성--%>
-  var startDt      = wcombo.genDateVal("#startDt", "${sessionScope.sessionInfo.startDt}");
-  var endDt        = wcombo.genDateVal("#endDt", "${sessionScope.sessionInfo.endDt}");
-  var anvrsStartDt = wcombo.genDateVal("#anvrsStartDt", "${sessionScope.sessionInfo.startDt}");
-  var anvrsEndDt   = wcombo.genDateVal("#anvrsEndDt", "${sessionScope.sessionInfo.endDt}");
+  var startDate    = wcombo.genDateVal("#startDate", "${sessionScope.sessionInfo.startDate}");
+  var endDate      = wcombo.genDateVal("#endDate", "${sessionScope.sessionInfo.endDate}");
+  var anvrsStartDate = wcombo.genDateVal("#anvrsStartDate", "${sessionScope.sessionInfo.startDate}");
+  var anvrsEndDate   = wcombo.genDateVal("#anvrsEndDate", "${sessionScope.sessionInfo.endDate}");
   <%--var classCd      = wcombo.genCommonBox("#classCd", ${comboData}); //TODO 회원등급 추가 후 작업 예정 --%>
   var periodDate   = wcombo.genCommonBox("#periodDate", periodDate);
   var anvrsDate    = wcombo.genCommonBox("#anvrsDate", ${ccu.getCommCode("032")});
@@ -290,11 +290,11 @@ $(document).ready(function(){
     param.emailRecvYn = emailRecvYn.selectedValue;
     param.smsRecvYn = smsRecvYn.selectedValue;
     param.periodType = periodDate.selectedValue;
-    param.periodStartDt = getDate(startDt);
-    param.periodEndDt = getDate(endDt);
+    param.periodStartDate = getDate(startDate);
+    param.periodEndDate = getDate(endDate);
     param.anvType = anvrsDate.selectedValue;
-    param.anvStartDt = getDate(anvrsStartDt);
-    param.anvEndDt = getDate(anvrsEndDt);
+    param.anvStartDate = getDate(anvrsStartDate);
+    param.anvEndDate = getDate(anvrsEndDate);
 
     $.postJSON("/membr/info/view/view/list.sb", param, function(result) {
       var list = result.data.list;

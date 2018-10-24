@@ -1,28 +1,29 @@
 package kr.co.solbipos.adi.etc.ehgt.service.impl;
 
-import static kr.co.common.utils.DateUtil.currentDateTimeString;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import kr.co.common.data.enums.SoloHq;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.solbipos.adi.etc.ehgt.service.CrncyCdVO;
 import kr.co.solbipos.adi.etc.ehgt.service.EhgtService;
 import kr.co.solbipos.adi.etc.ehgt.service.EhgtVO;
-import kr.co.solbipos.adi.etc.ehgt.service.CrncyCdVO;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
  * @Class Name : EhgtServiceImpl.java
@@ -128,8 +129,8 @@ public class EhgtServiceImpl implements EhgtService {
     public List<DefaultMap<String>> getEhgtDetailBySaleDt(EhgtVO ehgtVO, SessionInfoVO sessionInfoVO) {
 
         //해당 일자의 데이터만 조회
-        ehgtVO.setStartDt(ehgtVO.getSaleDate());
-        ehgtVO.setEndDt(ehgtVO.getSaleDate());
+        ehgtVO.setStartDate(ehgtVO.getSaleDate());
+        ehgtVO.setEndDate(ehgtVO.getSaleDate());
 
         //단독매장 여부(단독매장일 때 true)
         boolean isSoloStore = false;
@@ -171,8 +172,8 @@ public class EhgtServiceImpl implements EhgtService {
             ehgtVO.setModId(sessionInfoVO.getUserId());
 
             //해당 영업일에 데이터가 없는 경우 INSERT, 있으면 UPDATE
-            ehgtVO.setStartDt(ehgtVO.getSaleDate());
-            ehgtVO.setEndDt(ehgtVO.getSaleDate());
+            ehgtVO.setStartDate(ehgtVO.getSaleDate());
+            ehgtVO.setEndDate(ehgtVO.getSaleDate());
             // 프랜차이즈 본사 의 경우 등록/수정
             if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
                 List<DefaultMap<String>> chkList = mapper.getHqEhgtListBySaleDt(ehgtVO);

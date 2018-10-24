@@ -134,7 +134,7 @@
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('rtnDstmnDtlCtrl', $scope, $http, true));
 
-    $scope.dtlOutDate = wcombo.genDateVal("#dtlOutDate", "${sessionScope.sessionInfo.startDt}");
+    $scope.dtlOutDate = wcombo.genDateVal("#dtlOutDate", "${sessionScope.sessionInfo.startDate}");
 
     $scope._setComboData("stmtAcctFg", [
       {"name": "<s:message code='rtnDstmn.dtl.stmtAcctAll'/>", "value": ""},

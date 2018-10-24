@@ -134,9 +134,9 @@
     angular.extend(this, new RootController('rtnDstbCloseProdCtrl', $scope, $http, true));
 
     $scope.slipFg     = -1;
-    var srchStartDate = wcombo.genDateVal("#srchStartDate", "${sessionScope.sessionInfo.startDt}");
-    var srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.startDt}");
-    var reqDate       = wcombo.genDateVal("#reqDate", "${sessionScope.sessionInfo.startDt}");
+    var srchStartDate = wcombo.genDateVal("#srchStartDate", "${sessionScope.sessionInfo.startDate}");
+    var srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.startDate}");
+    var reqDate       = wcombo.genDateVal("#reqDate", "${sessionScope.sessionInfo.startDate}");
 
     $scope._setComboData("srchDateFg", [
       {"name": "<s:message code='rtnDstbCloseProd.reqDate'/>", "value": "req"},
