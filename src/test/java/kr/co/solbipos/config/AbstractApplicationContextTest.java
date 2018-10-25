@@ -11,12 +11,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @WebAppConfiguration
 public abstract class AbstractApplicationContextTest {
 
-    protected ApplicationContext ctx;
-
-    /** Constructor Injection */
     @Autowired
-    public AbstractApplicationContextTest(ApplicationContext ctx) {
-        this.ctx = ctx;
-    }
+    protected ApplicationContext ctx;
 
 }
