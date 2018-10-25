@@ -43,11 +43,15 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 @RequestMapping(value = "/adi/dclz/dclzmanage/dclzmanage/")
 public class DclzManageController {
 
-    @Autowired
-    DclzManageService dclzManageService;
+    private final DclzManageService dclzManageService;
+    private final SessionService sessionService;
 
+    /** Constructor Injection */
     @Autowired
-    SessionService sessionService;
+    public DclzManageController(DclzManageService dclzManageService, SessionService sessionService) {
+        this.dclzManageService = dclzManageService;
+        this.sessionService = sessionService;
+    }
 
     /**
      * 근태 관리 페이지 이동
@@ -97,7 +101,7 @@ public class DclzManageController {
     /**
      * 근태 등록
      *
-     * @param dclzManage
+     * @param dclzManageVO
      * @param request
      * @param response
      * @param model

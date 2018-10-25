@@ -1,23 +1,5 @@
 package kr.co.sample.application.controller;
 
-import static kr.co.common.utils.spring.StringUtil.convertToJson;
-import static org.springframework.util.StringUtils.isEmpty;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.util.StopWatch;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
@@ -28,6 +10,26 @@ import kr.co.sample.application.domain.CcdCodemTVO;
 import kr.co.sample.application.domain.TmpDragtTVO;
 import kr.co.sample.application.service.SampleService;
 import kr.co.solbipos.application.common.service.ResrceInfoVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.StopWatch;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
+
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
+import static org.springframework.util.StringUtils.isEmpty;
 
 /**
  * 샘플 컨트롤러다.
@@ -40,17 +42,20 @@ public class SampleWijimoController {
     
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
     
-    @Autowired
-    SampleService sampleService;
+    private final SampleService sampleService;
+    private final MessageService messageService;
+    private final GridSupportService gridSupportService;
+    private final SessionService sessionService;
 
+    /** Constructor Injection */
     @Autowired
-    MessageService messageService;
-
-    @Autowired
-    GridSupportService gsService;
-
-    @Autowired
-    SessionService sessionService;
+    public SampleWijimoController(SampleService sampleService, MessageService messageService,
+        GridSupportService gridSupportService, SessionService sessionService) {
+        this.sampleService = sampleService;
+        this.messageService = messageService;
+        this.gridSupportService = gridSupportService;
+        this.sessionService = sessionService;
+    }
 
     @RequestMapping(value = "sampleGridMain.sb")
     public String sampleGridMain(HttpSession session, Model model) {
@@ -98,7 +103,7 @@ public class SampleWijimoController {
 
         // List<String> columns = Arrays.asList("dcmSaleAmt", "prodCd", "prmProcYn");
 
-        model.addAttribute("columnList", convertToJson(gsService.getGridColumns(data.get(0))));
+        model.addAttribute("columnList", convertToJson(gridSupportService.getGridColumns(data.get(0))));
         model.addAttribute("data", convertToJson(data));
 
         return "application/sampleWijmo/exGridHeader";

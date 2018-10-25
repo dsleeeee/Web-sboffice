@@ -41,24 +41,29 @@ import static org.springframework.http.HttpStatus.OK;
 public class MyInfoController{
     static final String PREFIX = "base/store/myInfo";
 
+    private final MyInfoService myInfoService;
+
+    /** Constructor Injection */
     @Autowired
-    private MyInfoService service;
+    public MyInfoController(MyInfoService myInfoService) {
+        this.myInfoService = myInfoService;
+    }
 
     @GetMapping( "/myInfo/list.sb" )
     public String myInfoList( Model model ){
-        model.addAttribute( "myInfo", service.getMyInfo() );
-        model.addAttribute( "areaCds", service.nmcodeList(AREA) );
+        model.addAttribute( "myInfo", myInfoService.getMyInfo() );
+        model.addAttribute( "areaCds", myInfoService.nmcodeList(AREA) );
         return PREFIX.toLowerCase() + "/myinfo";
     }
 
     @PostMapping( "/myInfo/save.sb" )
     public ResponseEntity< Result > modifyMyInfo( @RequestBody MyInfoVO myInfo ){
-        return new ResponseEntity<>( new Result(service.modifyMyInfo(myInfo)), OK );
+        return new ResponseEntity<>( new Result(myInfoService.modifyMyInfo(myInfo)), OK );
     }
 
     @GetMapping( "/storeType/list.sb" )
     public ResponseEntity< WijmoGridVO<HqNmcodeVO> > storeTypeList(){
-        return new ResponseEntity<>( service.getGridInfo(STORE_TYPE), OK );
+        return new ResponseEntity<>( myInfoService.getGridInfo(STORE_TYPE), OK );
     }
 
     @PostMapping( "/storeType/save.sb" )
@@ -68,12 +73,12 @@ public class MyInfoController{
                 modList = params.getOrDefault("modItems", emptyList ),
                 delList = params.getOrDefault("delItems", emptyList );
 
-        return new ResponseEntity<>( new Result(service.saveMultipleNmcode(addList, modList, delList, STORE_TYPE)), OK );
+        return new ResponseEntity<>( new Result(myInfoService.saveMultipleNmcode(addList, modList, delList, STORE_TYPE)), OK );
     }
 
     @GetMapping( "/grp/list.sb" )
     public ResponseEntity< WijmoGridVO<HqNmcodeVO> > grpList(){
-        return new ResponseEntity<>( service.getGridInfo(GRP), OK );
+        return new ResponseEntity<>( myInfoService.getGridInfo(GRP), OK );
     }
 
     @PostMapping( "/grp/save.sb" )
@@ -83,12 +88,12 @@ public class MyInfoController{
                 modList = params.getOrDefault("modItems", emptyList ),
                 delList = params.getOrDefault("delItems", emptyList );
 
-        return new ResponseEntity<>( new Result(service.saveMultipleNmcode(addList, modList, delList, GRP)), OK );
+        return new ResponseEntity<>( new Result(myInfoService.saveMultipleNmcode(addList, modList, delList, GRP)), OK );
     }
 
     @GetMapping( "/hour/list.sb" )
     public ResponseEntity< WijmoGridVO<HqNmcodeVO> > hourList(){
-        return new ResponseEntity<>( service.getGridInfo(HOUR), OK );
+        return new ResponseEntity<>( myInfoService.getGridInfo(HOUR), OK );
     }
 
     @PostMapping( "/hour/save.sb" )
@@ -98,12 +103,12 @@ public class MyInfoController{
                 modList = params.getOrDefault("modItems", emptyList ),
                 delList = params.getOrDefault("delItems", emptyList );
 
-        return new ResponseEntity<>( new Result(service.saveMultipleNmcode(addList, modList, delList, HOUR)), OK );
+        return new ResponseEntity<>( new Result(myInfoService.saveMultipleNmcode(addList, modList, delList, HOUR)), OK );
     }
 
     @GetMapping( "/guest/list.sb" )
     public ResponseEntity< WijmoGridVO<HqNmcodeVO> > guestList(){
-        return new ResponseEntity<>( service.getGridInfo(GUEST), OK );
+        return new ResponseEntity<>( myInfoService.getGridInfo(GUEST), OK );
     }
 
     @PostMapping( "/guest/save.sb" )
@@ -113,6 +118,6 @@ public class MyInfoController{
                 modList = params.getOrDefault("modItems", emptyList ),
                 delList = params.getOrDefault("delItems", emptyList );
 
-        return new ResponseEntity<>( new Result(service.saveMultipleNmcode(addList, modList, delList, GUEST)), OK );
+        return new ResponseEntity<>( new Result(myInfoService.saveMultipleNmcode(addList, modList, delList, GUEST)), OK );
     }
 }

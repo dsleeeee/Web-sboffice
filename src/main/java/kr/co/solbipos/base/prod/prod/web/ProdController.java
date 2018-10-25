@@ -3,7 +3,6 @@ package kr.co.solbipos.base.prod.prod.web;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
-import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.prod.prod.service.ProdService;
@@ -43,14 +42,12 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 public class ProdController {
 
     private final SessionService sessionService;
-    private final MessageService messageService;
     private final ProdService prodService;
 
     /** Constructor Injection */
     @Autowired
-    public ProdController(SessionService sessionService, MessageService messageService, ProdService prodService) {
+    public ProdController(SessionService sessionService, ProdService prodService) {
         this.sessionService = sessionService;
-        this.messageService = messageService;
         this.prodService = prodService;
     }
 

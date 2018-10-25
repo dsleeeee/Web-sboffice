@@ -3,6 +3,7 @@ package kr.co.solbipos.adi.dclz.dclzmanage.service.impl;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.adi.dclz.dclzmanage.service.DclzManageVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ import java.util.List;
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Mapper
+@Repository
 public interface DclzManageMapper {
 
     /**

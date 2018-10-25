@@ -16,9 +16,16 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 @Service("StoreCloseService")
 public class StoreCloseServiceImpl implements StoreCloseService {
-    @Autowired StoreCloseMapper storeCloseMapper;
 
-    @Autowired MessageService messageService;
+    private final StoreCloseMapper storeCloseMapper;
+    private final MessageService messageService;
+
+    /** Constructor Injection */
+    @Autowired
+    public StoreCloseServiceImpl(StoreCloseMapper storeCloseMapper, MessageService messageService) {
+        this.storeCloseMapper = storeCloseMapper;
+        this.messageService = messageService;
+    }
 
     /** 매장요청마감 마감월 리스트 조회 */
     @Override

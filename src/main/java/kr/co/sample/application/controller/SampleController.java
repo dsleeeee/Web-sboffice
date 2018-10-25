@@ -1,20 +1,5 @@
 package kr.co.sample.application.controller;
 
-import static kr.co.common.utils.grid.ReturnUtil.returnJson;
-import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
-import static kr.co.common.utils.spring.StringUtil.convertToJson;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.JavaScriptResult;
@@ -25,6 +10,23 @@ import kr.co.sample.application.domain.SslTrdtlTVO;
 import kr.co.sample.application.domain.SslTrhdrTVO;
 import kr.co.sample.application.domain.TbMsStoreVO;
 import kr.co.sample.application.service.SampleService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.List;
+
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
+import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
  * 샘플 컨트롤러다.
@@ -37,11 +39,15 @@ public class SampleController {
     
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
     
-    @Autowired
-    SampleService sampleService;
+    private final SampleService sampleService;
+    private final MessageService messageService;
 
+    /** Constructor Injection */
     @Autowired
-    MessageService messageService;
+    public SampleController(SampleService sampleService, MessageService messageService) {
+        this.sampleService = sampleService;
+        this.messageService = messageService;
+    }
 
     /**
      * 샘플 메인 페이지

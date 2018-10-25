@@ -45,8 +45,15 @@ public class StoreEmpServiceImpl implements StoreEmpService {
     private static String PASSWORD_REGEX =
                     "^(?=.*[a-z]+)(?=.*[A-Z]+)(?=.*\\d+)(?=.*[^\\w\\sㄱ-ㅎㅏ-ㅣ가-힣]).{6,20}$";
 
-    @Autowired StoreEmpMapper storeEmpMapper;
-    @Autowired MessageService messageService;
+    StoreEmpMapper storeEmpMapper;
+    MessageService messageService;
+
+    /** Constructor Injection */
+    @Autowired
+    public StoreEmpServiceImpl(StoreEmpMapper storeEmpMapper, MessageService messageService) {
+        this.storeEmpMapper = storeEmpMapper;
+        this.messageService = messageService;
+    }
 
     @Override
     public List<DefaultMap<String>> getStoreEmpList(StoreEmpVO storeEmpVO) {

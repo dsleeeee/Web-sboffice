@@ -20,13 +20,13 @@ import java.util.Optional;
 @Component("columnLayout")
 public class ColumnLayout {
 
-    private final GridSupportService gsService;
+    private final GridSupportService gridSupportService;
     private final SessionService sessionService;
 
     /** Constructor Injection */
     @Autowired
-    public ColumnLayout(GridSupportService gsService, SessionService sessionService) {
-        this.gsService = gsService;
+    public ColumnLayout(GridSupportService gridSupportService, SessionService sessionService) {
+        this.gridSupportService = gridSupportService;
         this.sessionService = sessionService;
     }
 
@@ -51,7 +51,7 @@ public class ColumnLayout {
         gridDispItemVO.setGridIdx(gridIdx);
 
         // 저장한 그리드 레이아웃을 조회한다.
-        GridDispItemVO result = gsService.selectGridItem(gridDispItemVO);
+        GridDispItemVO result = gridSupportService.selectGridItem(gridDispItemVO);
 
         // 저장된 레이아웃이 없으면 기본 레이아웃 조회
         return Optional.ofNullable(result).map(GridDispItemVO::getColumnItem).orElse("\"\"");

@@ -51,15 +51,20 @@ public class ProductionController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    ProductionService service;
-    @Autowired
-    SessionService sessionService;
-    @Autowired
-    AuthService authService;
-    @Autowired
-    MessageService messageService;
+    private final ProductionService productionService;
+    private final SessionService sessionService;
+    private final AuthService authService;
+    private final MessageService messageService;
 
+    /** Constructor Injection */
+    @Autowired
+    public ProductionController(ProductionService productionService, SessionService sessionService,
+        AuthService authService, MessageService messageService) {
+        this.productionService = productionService;
+        this.sessionService = sessionService;
+        this.authService = authService;
+        this.messageService = messageService;
+    }
 
     /**
      * 조회 화면 전,
@@ -144,7 +149,7 @@ public class ProductionController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<String>> list = service.getProductList(productionVO, sessionInfoVO);
+        List<DefaultMap<String>> list = productionService.getProductList(productionVO, sessionInfoVO);
 
         return returnListJson(Status.OK, list);
     }

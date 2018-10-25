@@ -41,40 +41,44 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Service("verManageService")
 public class VerManageServiceImpl implements VerManageService {
 
-    @Autowired
-    VerManageMapper mapper;
+    private final VerManageMapper verManageMapper;
+    private final MessageService messageService;
 
+    /** Constructor Injection */
     @Autowired
-    MessageService messageService;
+    public VerManageServiceImpl(VerManageMapper verManageMapper, MessageService messageService) {
+        this.verManageMapper = verManageMapper;
+        this.messageService = messageService;
+    }
 
     /** 포스버전 목록 조회 */
     @Override
     public List<DefaultMap<String>> list(VerInfoVO verInfo) {
-        return mapper.getList(verInfo);
+        return verManageMapper.getList(verInfo);
     }
 
     /** 포스버전정보 상세 조회 */
     @Override
     public DefaultMap<String> dtlInfo(VerInfoVO verInfo) {
-        return mapper.dtlInfo(verInfo);
+        return verManageMapper.dtlInfo(verInfo);
     }
 
     /** 매장목록 조회 */
     @Override
     public List<DefaultMap<String>> storeList(VerInfoVO verInfo) {
-        return mapper.storeList(verInfo);
+        return verManageMapper.storeList(verInfo);
     }
 
     /** 버전 삭제 */
     @Override
     public int verDelete(VerInfoVO verInfo) {
-        return mapper.verDelete(verInfo);
+        return verManageMapper.verDelete(verInfo);
     }
 
     /** 버전 시리얼넘버 중복 체크 */
     @Override
     public int chkVerSerNo(VerInfoVO verInfo) {
-        return mapper.chkVerSerNo(verInfo);
+        return verManageMapper.chkVerSerNo(verInfo);
     }
 
     /** 버전 등록 */
@@ -110,7 +114,7 @@ public class VerManageServiceImpl implements VerManageService {
             verInfo.setModDt(insertDt);
             verInfo.setModId(sessionInfo.getUserId());
 
-            mapper.verRegist(verInfo);
+            verManageMapper.verRegist(verInfo);
 
             isSuccess = true;
 
@@ -153,7 +157,7 @@ public class VerManageServiceImpl implements VerManageService {
             verInfo.setModDt(insertDt);
             verInfo.setModId(sessionInfo.getUserId());
 
-            mapper.verModify(verInfo);
+            verManageMapper.verModify(verInfo);
 
             isSuccess = true;
 
@@ -223,7 +227,7 @@ public class VerManageServiceImpl implements VerManageService {
     /** 매장검색 (매장추가용) */
     @Override
     public List<DefaultMap<String>> srchStoreList(ApplcStoreVO applcStore) {
-        return mapper.srchStoreList(applcStore);
+        return verManageMapper.srchStoreList(applcStore);
     }
 
     /** 버전 적용 매장 등록 */
@@ -242,7 +246,7 @@ public class VerManageServiceImpl implements VerManageService {
             applcStore.setVerRecvFg(VerRecvFg.REG);
             applcStore.setVerRecvDt(dt);;
 
-            procCnt += mapper.registStore(applcStore);
+            procCnt += verManageMapper.registStore(applcStore);
         }
 
         if(procCnt == applcStores.length) {
@@ -259,7 +263,7 @@ public class VerManageServiceImpl implements VerManageService {
         int procCnt = 0;
 
         for(ApplcStoreVO applcStore : applcStores) {
-            procCnt += mapper.removeStore(applcStore);
+            procCnt += verManageMapper.removeStore(applcStore);
         }
 
         if(procCnt == applcStores.length) {

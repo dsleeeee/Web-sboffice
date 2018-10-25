@@ -50,9 +50,18 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 public class StoreEmpController {
     static final String PREFIX = "base/store/emp/store";
 
-    @Autowired SessionService sessionService;
-    @Autowired MessageService messageService;
-    @Autowired StoreEmpService storeEmpService;
+    private final SessionService sessionService;
+    private final MessageService messageService;
+    private final StoreEmpService storeEmpService;
+
+    /** Constructor Injection */
+    @Autowired
+    public StoreEmpController(SessionService sessionService, MessageService messageService,
+        StoreEmpService storeEmpService) {
+        this.sessionService = sessionService;
+        this.messageService = messageService;
+        this.storeEmpService = storeEmpService;
+    }
 
     @GetMapping("/list.sb")
     public String list(Model model) { return PREFIX + "Emp"; }

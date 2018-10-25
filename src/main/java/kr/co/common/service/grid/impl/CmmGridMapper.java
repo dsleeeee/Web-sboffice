@@ -1,6 +1,8 @@
 package kr.co.common.service.grid.impl;
 
 import kr.co.solbipos.application.common.service.GridDispItemVO;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 /**
  * 샘플
@@ -8,6 +10,8 @@ import kr.co.solbipos.application.common.service.GridDispItemVO;
  * @author 정용길
  *
  */
+@Mapper
+@Repository
 public interface CmmGridMapper {
 
     /**

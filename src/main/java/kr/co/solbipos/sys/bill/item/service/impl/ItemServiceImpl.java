@@ -1,9 +1,5 @@
 package kr.co.solbipos.sys.bill.item.service.impl;
 
-import static kr.co.common.utils.DateUtil.currentDateTimeString;
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
@@ -12,6 +8,12 @@ import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sys.bill.item.service.ItemService;
 import kr.co.solbipos.sys.bill.item.service.ItemVO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
  * @Class Name : ItemServiceImpl.java
@@ -32,11 +34,16 @@ import kr.co.solbipos.sys.bill.item.service.ItemVO;
 @Service("itemService")
 public class ItemServiceImpl implements ItemService {
     
+    private final ItemMapper itemMapper;
+    private final MessageService messageService;
+
+    /** Constructor Injection */
     @Autowired
-    ItemMapper itemMapper;
-    @Autowired
-    MessageService messageService;
-    
+    public ItemServiceImpl(ItemMapper itemMapper, MessageService messageService) {
+        this.itemMapper = itemMapper;
+        this.messageService = messageService;
+    }
+
     /** 출력코드 목록 조회 */
     @Override
     public List<DefaultMap<String>> getItemList(ItemVO itemVO) {

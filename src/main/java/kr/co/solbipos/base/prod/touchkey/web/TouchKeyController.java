@@ -5,7 +5,6 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
-import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
@@ -59,17 +58,15 @@ public class TouchKeyController {
 
     private final SessionService sessionService;
     private final TouchKeyService touchkeyService;
-    private final MessageService messageService;
     private final CmmEnvUtil cmmEnvUtil;
     private final CmmCodeUtil cmmCodeUtil;
 
     /** Constructor Injection */
     @Autowired
     public TouchKeyController(SessionService sessionService,
-        TouchKeyService touchkeyService, MessageService messageService, CmmEnvUtil cmmEnvUtil, CmmCodeUtil cmmCodeUtil) {
+        TouchKeyService touchkeyService, CmmEnvUtil cmmEnvUtil, CmmCodeUtil cmmCodeUtil) {
         this.sessionService = sessionService;
         this.touchkeyService = touchkeyService;
-        this.messageService = messageService;
         this.cmmEnvUtil = cmmEnvUtil;
         this.cmmCodeUtil = cmmCodeUtil;
     }

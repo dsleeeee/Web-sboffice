@@ -36,7 +36,7 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 * @version 1.0
 * @see
 *
-*  Copyright (C) by SOLBIPOS CORP. All right reserved.
+* @Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
 @Controller
 @RequestMapping(value = "/adi/mony/drawhist/drawhist/")
@@ -44,10 +44,15 @@ public class DrawHistController {
      
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
     
+    private final DrawHistService drawHistService;
+    private final SessionService sessionService;
+
+    /** Constructor Injection */
     @Autowired
-    DrawHistService drawHistService;
-    @Autowired
-    SessionService sessionService;
+    public DrawHistController(DrawHistService drawHistService, SessionService sessionService) {
+        this.drawHistService = drawHistService;
+        this.sessionService = sessionService;
+    }
 
     /**
      * 부가서비스 > 금전처리 > 돈통오픈기록 화면 이동

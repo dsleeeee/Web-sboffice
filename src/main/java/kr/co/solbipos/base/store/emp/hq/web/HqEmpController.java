@@ -48,10 +48,15 @@ public class HqEmpController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
+    private final SessionService sessionService;
+    private final HqEmpService hqEmpService;
+
+    /** Constructor Injection */
     @Autowired
-    SessionService sessionService;
-    @Autowired
-    HqEmpService hqEmpService;
+    public HqEmpController(SessionService sessionService, HqEmpService hqEmpService) {
+        this.sessionService = sessionService;
+        this.hqEmpService = hqEmpService;
+    }
 
     /**
      * 본사사원 리스트 화면

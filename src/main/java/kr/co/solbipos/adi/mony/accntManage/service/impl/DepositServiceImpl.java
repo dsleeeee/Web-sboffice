@@ -35,8 +35,13 @@ public class DepositServiceImpl implements DepositService{
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
+    private final DepositMapper depositMapper;
+
+    /** Constructor Injection */
     @Autowired
-    DepositMapper mapper;
+    public DepositServiceImpl(DepositMapper depositMapper) {
+        this.depositMapper = depositMapper;
+    }
 
     /** 계정 조회 */
     @Override
@@ -52,7 +57,7 @@ public class DepositServiceImpl implements DepositService{
             accntVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
 
-        return mapper.getDepositAccntList(accntVO);
+        return depositMapper.getDepositAccntList(accntVO);
     }
 
     /** 계정 정보 저장 */
@@ -80,11 +85,11 @@ public class DepositServiceImpl implements DepositService{
             accntVO.setModId(sessionInfoVO.getUserId());
 
             if(accntVO.getStatus() == GridDataFg.INSERT) {
-                resultCnt += mapper.insertDepositAccntList(accntVO);
+                resultCnt += depositMapper.insertDepositAccntList(accntVO);
             } else if (accntVO.getStatus() == GridDataFg.UPDATE) {
-                resultCnt += mapper.updateDepositAccntList(accntVO);
+                resultCnt += depositMapper.updateDepositAccntList(accntVO);
             } else if (accntVO.getStatus() == GridDataFg.DELETE) {
-                resultCnt += mapper.deleteDepositAccntList(accntVO);
+                resultCnt += depositMapper.deleteDepositAccntList(accntVO);
             }
         }
 

@@ -6,7 +6,6 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.exception.AuthenticationException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
-import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.validate.Login;
 import kr.co.solbipos.application.pos.exceptForward.service.ExceptForwardService;
 import kr.co.solbipos.application.pos.exceptForward.service.ExcpForwardProductVO;
@@ -25,11 +24,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.util.List;
 
 import static kr.co.common.utils.HttpUtils.getClientIp;
-import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
@@ -54,17 +51,20 @@ public class ExecptForwardController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    ExceptForwardService service;
-    @Autowired
-    SessionService sessionService;
-    @Autowired
-    CmmCodeUtil cmmCodeUtil;
-    @Autowired
-    AuthService authService;
-    @Autowired
-    MessageService messageService;
+    private final ExceptForwardService exceptForwardService;
+    private final SessionService sessionService;
+    private final AuthService authService;
+    private final MessageService messageService;
 
+    /** Constructor Injection */
+    @Autowired
+    public ExecptForwardController(ExceptForwardService exceptForwardService,
+        SessionService sessionService, AuthService authService, MessageService messageService) {
+        this.exceptForwardService = exceptForwardService;
+        this.sessionService = sessionService;
+        this.authService = authService;
+        this.messageService = messageService;
+    }
 
     /**
      * 상품 목록 조회 화면
@@ -151,7 +151,7 @@ public class ExecptForwardController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<String>> list = service.getExcpForwardProduct(productVO, sessionInfoVO);
+        List<DefaultMap<String>> list = exceptForwardService.getExcpForwardProduct(productVO, sessionInfoVO);
 
         return returnListJson(Status.OK, list);
     }

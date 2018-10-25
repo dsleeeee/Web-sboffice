@@ -44,11 +44,15 @@ public class StatusController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
+    private final StatusService statusService;
+    private final SessionService sessionService;
+
+    /** Constructor Injection */
     @Autowired
-    StatusService statusService;
-    /** service */
-    @Autowired
-    SessionService sessionService;
+    public StatusController(StatusService statusService, SessionService sessionService) {
+        this.statusService = statusService;
+        this.sessionService = sessionService;
+    }
 
     /**
      * 부가서비스 > 금전처리 > 금전현황 화면 이동
