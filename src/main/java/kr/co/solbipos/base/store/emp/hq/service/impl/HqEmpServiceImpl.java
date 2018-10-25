@@ -9,7 +9,6 @@ import kr.co.solbipos.base.store.emp.hq.service.enums.HqEmpResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,15 +42,19 @@ public class HqEmpServiceImpl implements HqEmpService {
     private final String HQ_AUTH_GRP_CD = "000005"; // TODO 보나비용 사용자 그룹코드 (화면에서 사용자 그룹 선택 필요)
     private final String DEFAULT_POS_PASSWORD = "1234";
     private final String EMP_NO_REGEX = "^[\\d]{4}$";
-    private final String PASSWORD_REGEX =
-            "^(?=.*[a-z]+)(?=.*[A-Z]+)(?=.*\\d+)(?=.*[^\\w\\sㄱ-ㅎㅏ-ㅣ가-힣]).{6,20}$";
+    private final String PASSWORD_REGEX = "^(?=.*[a-z]+)(?=.*[A-Z]+)(?=.*\\d+)(?=.*[^\\w\\sㄱ-ㅎㅏ-ㅣ가-힣]).{6,20}$";
 
+    private final HqEmpMapper hqEmpMapper;
+
+    /** Constructor Injection */
     @Autowired
-    private HqEmpMapper mapper;
+    public HqEmpServiceImpl(HqEmpMapper hqEmpMapper) {
+        this.hqEmpMapper = hqEmpMapper;
+    }
 
     /** 본사 사원 리스트 조회 */
-    public <E> List<E> selectHqEmpList(HqEmpVO hqEmpVO){
-        return mapper.selectHqEmpList(hqEmpVO);
+    public <E> List<E> getHqEmpList(HqEmpVO hqEmpVO){
+        return hqEmpMapper.getHqEmpList(hqEmpVO);
     }
 
     /** 본사 사원정보 등록 */
@@ -67,9 +70,9 @@ public class HqEmpServiceImpl implements HqEmpService {
         hqEmpVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         hqEmpVO.setUseYn("Y");
         hqEmpVO.setEmpPwd(EncUtil.setEncSHA256(hqEmpVO.getEmpNo() + DEFAULT_POS_PASSWORD));
-        hqEmpVO.setPriorPwd(mapper.selectHqEmpPassword(hqEmpVO));
+        hqEmpVO.setPriorPwd(hqEmpMapper.getHqEmpPassword(hqEmpVO));
 
-        if( selectHqEmpNoCnt(hqEmpVO,sessionInfoVO) != HqEmpResult.SUCCESS ) {
+        if( getHqEmpNoCnt(hqEmpVO,sessionInfoVO) != HqEmpResult.SUCCESS ) {
             return HqEmpResult.EMP_NO_DUPLICATE;
         }
 
@@ -81,7 +84,7 @@ public class HqEmpServiceImpl implements HqEmpService {
                 return HqEmpResult.USER_ID_REGEXP;
             }
 
-            if( selectHqUserIdCnt(hqEmpVO) != HqEmpResult.SUCCESS ){
+            if( getHqUserIdCnt(hqEmpVO) != HqEmpResult.SUCCESS ){
                 return HqEmpResult.USER_ID_DUPLICATE;
             }
 
@@ -91,12 +94,12 @@ public class HqEmpServiceImpl implements HqEmpService {
             }
         }
 
-        if( mapper.insertHqEmpInfo(hqEmpVO) != 1 ) {
+        if( hqEmpMapper.insertHqEmpInfo(hqEmpVO) != 1 ) {
             return HqEmpResult.FAIL;
         }
         else{
             if( "Y".equals(hqEmpVO.getWebUseYn()) ) {
-                if( mapper.insertWbUserInfo(hqEmpVO) != 1 ) {
+                if( hqEmpMapper.insertWbUserInfo(hqEmpVO) != 1 ) {
                     return HqEmpResult.FAIL;
                 }
             }
@@ -109,14 +112,14 @@ public class HqEmpServiceImpl implements HqEmpService {
     @Override
     public HqEmpResult saveHqEmpInfo(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO) {
 
-        DefaultMap<String> hqEmpDtlInfo = selectHqEmpDtlInfo(hqEmpVO);
+        DefaultMap<String> hqEmpDtlInfo = getHqEmpDtlInfo(hqEmpVO);
         String dt = currentDateTimeString();
 
         hqEmpVO.setRegId(sessionInfoVO.getUserId());
         hqEmpVO.setRegDt(dt);
         hqEmpVO.setModId(sessionInfoVO.getUserId());
         hqEmpVO.setModDt(dt);
-        hqEmpVO.setPriorPwd(mapper.selectHqEmpPassword(hqEmpVO));
+        hqEmpVO.setPriorPwd(hqEmpMapper.getHqEmpPassword(hqEmpVO));
         hqEmpVO.setRegIp(sessionInfoVO.getLoginIp());
 
 
@@ -136,23 +139,23 @@ public class HqEmpServiceImpl implements HqEmpService {
             }
             // 수정시 웹 사용자 아이디는 수정불가 => 유효성 체크 필요 없음
 //            if( !hqEmpVO.getUserId().equals(hqEmpDtlInfo.getStr("userId")) ) {
-//                if( selectHqUserIdCnt(hqEmpVO) != HqEmpResult.SUCCESS ){
+//                if( getHqUserIdCnt(hqEmpVO) != HqEmpResult.SUCCESS ){
 //                    return HqEmpResult.USER_ID_DUPLICATE;
 //                }
 //            }
         }
 
-        if( mapper.updateHqEmpInfo(hqEmpVO) != 1 ) {
+        if( hqEmpMapper.updateHqEmpInfo(hqEmpVO) != 1 ) {
             return HqEmpResult.FAIL;
         }
         else{
             if( "Y".equals(hqEmpDtlInfo.getStr("webUseYn")) || "Y".equals(hqEmpVO.getWebUseYn())) {
-                if( mapper.saveWbUserInfo(hqEmpVO) != 1 ) {
+                if( hqEmpMapper.saveWbUserInfo(hqEmpVO) != 1 ) {
                     return HqEmpResult.FAIL;
                 }
                 else {
                     if(!isEmpty(hqEmpVO.getNewUserPwd()) && !isEmpty(hqEmpVO.getPriorPwd())) {
-                        if (mapper.insertPasswordHistory(hqEmpVO) != 1) {
+                        if (hqEmpMapper.insertPasswordHistory(hqEmpVO) != 1) {
                             return HqEmpResult.FAIL;
                         }
                     }
@@ -167,14 +170,14 @@ public class HqEmpServiceImpl implements HqEmpService {
     @Override
     public HqEmpResult modifyPassword(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO) {
 
-        DefaultMap<String> hqEmpDtlInfo = selectHqEmpDtlInfo(hqEmpVO);
+        DefaultMap<String> hqEmpDtlInfo = getHqEmpDtlInfo(hqEmpVO);
         String dt = currentDateTimeString();
 
         hqEmpVO.setRegId(sessionInfoVO.getUserId());
         hqEmpVO.setRegDt(dt);
         hqEmpVO.setModId(sessionInfoVO.getUserId());
         hqEmpVO.setModDt(dt);
-        hqEmpVO.setPriorPwd(mapper.selectHqEmpPassword(hqEmpVO));
+        hqEmpVO.setPriorPwd(hqEmpMapper.getHqEmpPassword(hqEmpVO));
         hqEmpVO.setRegIp(sessionInfoVO.getLoginIp());
         hqEmpVO.setWebUseYn(hqEmpDtlInfo.getStr("webUseYn"));
 
@@ -188,18 +191,18 @@ public class HqEmpServiceImpl implements HqEmpService {
             return pwdChgResult;
         }
 
-        if( mapper.updateUserPassword(hqEmpVO) != 1 ) {
+        if( hqEmpMapper.updateUserPassword(hqEmpVO) != 1 ) {
             return HqEmpResult.FAIL;
         }
         else {
-            if (mapper.insertPasswordHistory(hqEmpVO) != 1) {
+            if (hqEmpMapper.insertPasswordHistory(hqEmpVO) != 1) {
                 return HqEmpResult.FAIL;
             }
         }
         return HqEmpResult.SUCCESS;
     }
 
-    public HqEmpResult selectHqEmpNoCnt(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO){
+    public HqEmpResult getHqEmpNoCnt(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO){
 
         hqEmpVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
@@ -211,7 +214,7 @@ public class HqEmpServiceImpl implements HqEmpService {
             return HqEmpResult.FAIL;
         }
 
-        if( mapper.selectHqEmpNoCnt(hqEmpVO) == 0 ) {
+        if( hqEmpMapper.getHqEmpNoCnt(hqEmpVO) == 0 ) {
             return HqEmpResult.SUCCESS;
         }
         else {
@@ -219,13 +222,13 @@ public class HqEmpServiceImpl implements HqEmpService {
         }
     }
 
-    public HqEmpResult selectHqUserIdCnt(HqEmpVO hqEmpVO){
+    public HqEmpResult getHqUserIdCnt(HqEmpVO hqEmpVO){
 
         if( !userIdPolicyCheck(hqEmpVO.getUserId()) ) {
             return HqEmpResult.USER_ID_REGEXP;
         }
 
-        if( mapper.selectHqUserIdCnt(hqEmpVO) < 1) {
+        if( hqEmpMapper.getHqUserIdCnt(hqEmpVO) < 1) {
             return HqEmpResult.SUCCESS;
         }
         else {
@@ -234,8 +237,8 @@ public class HqEmpServiceImpl implements HqEmpService {
     }
 
 
-    public DefaultMap<String> selectHqEmpDtlInfo(HqEmpVO hqEmpVO) {
-        return mapper.selectHqEmpDtlInfo(hqEmpVO);
+    public DefaultMap<String> getHqEmpDtlInfo(HqEmpVO hqEmpVO) {
+        return hqEmpMapper.getHqEmpDtlInfo(hqEmpVO);
     }
 
     private HqEmpResult passwordPolicy(HqEmpVO hqEmpVO) {

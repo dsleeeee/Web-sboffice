@@ -7,7 +7,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/store/manage/virtualLogin/virtualLogin/"/>
 
-<div class="subCon">
+<div class="subCon" ng-controller="gridCtrl">
 
   <div class="searchBar flddUnfld">
     <a href="#" class="open">${menuNm}</a>
@@ -84,7 +84,7 @@
       <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('gridCtrl');"><s:message code="cmm.search" /></button>
   </div>
 
-  <div id="grid" class="w100" ng-controller="gridCtrl">
+  <div id="grid" class="w100">
 
     <div class="mt40 oh sb-select dkbr">
       <%-- 페이지 스케일  --%>
@@ -118,7 +118,7 @@
           item-formatter="_itemFormatter">
 
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="virtualLogin.hqOfficeCd"/>" binding="hqOfficeCd" width="*"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.hqOfficeCd"/>" binding="hqOfficeCd" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="virtualLogin.hqOfficeNm"/>" binding="hqOfficeNm" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="virtualLogin.hqUserId"/>" binding="hqUserId" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="virtualLogin.storeCd"/>" binding="storeCd" ></wj-flex-grid-column>

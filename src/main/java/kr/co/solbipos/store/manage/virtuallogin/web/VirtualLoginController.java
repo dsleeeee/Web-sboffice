@@ -6,6 +6,7 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.cmm.CmmMenuService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.system.BaseEnv;
+import kr.co.common.utils.SessionUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.enums.LoginResult;
 import kr.co.solbipos.application.session.auth.service.AuthService;
@@ -31,7 +32,6 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import static kr.co.common.utils.HttpUtils.getClientIp;
-import static kr.co.common.utils.spring.StringUtil.convertToJson;
 import static kr.co.common.utils.spring.StringUtil.generateUUID;
 
 /**
@@ -104,6 +104,9 @@ public class VirtualLoginController {
             VirtualLoginVO virtualLoginVO, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+
+        LOGGER.error(sessionInfoVO.getOrgnFg().getCode());
         virtualLoginVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 
         List<DefaultMap<String>> list = virtualLoginService.getVirtualLoginList(virtualLoginVO);
@@ -151,29 +154,25 @@ public class VirtualLoginController {
             sessionInfoVO.setLoginResult(LoginResult.SUCCESS);
             // sessionId 세팅
             sessionInfoVO.setSessionId( generateUUID() );
-            // 권한 있는 메뉴 저장
-            sessionInfoVO.setAuthMenu( cmmMenuService.selectAuthMenu( sessionInfoVO ) );
-            // 고정 메뉴 리스트 저장
-            sessionInfoVO.setFixMenu( cmmMenuService.selectFixingMenu( sessionInfoVO ) );
-            // 즐겨찾기 메뉴 리스트 저장
-            sessionInfoVO.setBkmkMenu( cmmMenuService.selectBkmkMenu( sessionInfoVO ) );
-            // 전체메뉴 조회(리스트)
-            sessionInfoVO.setMenuData( convertToJson( cmmMenuService.makeMenu( sessionInfoVO, "A" ) ) );
-            // 즐겨찾기메뉴 조회 (리스트)
-            sessionInfoVO.setBkmkData( convertToJson( cmmMenuService.makeMenu( sessionInfoVO, "F" ) ) );
-            // 고정 메뉴 조회 (리스트)
-            sessionInfoVO.setFixData( convertToJson(sessionInfoVO.getFixMenu()) );
+            // 사용자의 메뉴 리스트 Set : 권한포함
+            sessionInfoVO.setMenuData(cmmMenuService.getUserMenuList(sessionInfoVO));
+            // 즐겨찾기 메뉴 리스트 Set
+            sessionInfoVO.setBkmkMenuData(cmmMenuService.getBkmkMenuList(sessionInfoVO));
+            // 고정 메뉴 리스트 Set
+            sessionInfoVO.setFixedMenuData(cmmMenuService.getFixedMenuList(sessionInfoVO));
             // 본사는 소속된 가맹점을 세션에 저장
             if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
                 List<String> storeCdList =
-                        cmmMenuService.selectStoreCdList( sessionInfoVO.getOrgnCd() );
+                        cmmMenuService.getStoreCdList( sessionInfoVO.getOrgnCd() );
                 sessionInfoVO.setArrStoreCdList( storeCdList );
             }
             // 레디스에 세션 Set
             sessionService.setSessionInfo(sessionInfoVO);
+            // 세션 담기
+            SessionUtil.setEnv(request.getSession(), sessionInfoVO.getSessionId(), sessionInfoVO);
             sw.stop();
             LOGGER.info("가상로그인 성공 처리 시간 : {}", sw.getTotalTimeSeconds());
-            
+
             // 로그인이력 생성
             virtualLoginService.insertLoginHistory(sessionInfoVO);
 
@@ -197,9 +196,10 @@ public class VirtualLoginController {
     
     /**
      * 가상로그인 - 로그인 종료
-     * @param   request
-     * @param   response
-     * @param   virtualLoginVO
+     *
+     * @param   request HttpServletRequest
+     * @param   response HttpServletResponse
+     * @param   virtualLoginVO VirtualLoginVO
      * @return  Result
      * @author  노현수
      * @since   2018. 06. 08.
@@ -209,7 +209,6 @@ public class VirtualLoginController {
     public Result vLogout(HttpServletRequest request, HttpServletResponse response, VirtualLoginVO virtualLoginVO) {
         // 레디스에 담겨진 가상로그인 정보'만' 삭제
         sessionService.deleteSessionInfo(request.getParameter("sid"));
-
         return ReturnUtil.returnJson(Status.OK);
     }
 

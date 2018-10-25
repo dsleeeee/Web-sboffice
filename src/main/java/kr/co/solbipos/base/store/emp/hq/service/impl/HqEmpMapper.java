@@ -27,13 +27,13 @@ import java.util.List;
 public interface HqEmpMapper {
 
     /** 본사 사원정보 리스트 조회*/
-    <E>List<E> selectHqEmpList(HqEmpVO hqEmpVO);
+    <E>List<E> getHqEmpList(HqEmpVO hqEmpVO);
 
     /** 본사 사원번호 조회*/
-    int selectHqEmpNoCnt(HqEmpVO hqEmpVO);
+    int getHqEmpNoCnt(HqEmpVO hqEmpVO);
 
     /** 본사 웹유저아이디 조회*/
-    int selectHqUserIdCnt(HqEmpVO hqEmpVO);
+    int getHqUserIdCnt(HqEmpVO hqEmpVO);
 
     /** 본사 사원정보 등록*/
     int insertHqEmpInfo(HqEmpVO hqEmpVO);
@@ -54,8 +54,8 @@ public interface HqEmpMapper {
     int updateUserPassword(HqEmpVO hqEmpVO);
 
     /** 본사 사원정보 상세 */
-    DefaultMap<String> selectHqEmpDtlInfo(HqEmpVO hqEmpVO);
+    DefaultMap<String> getHqEmpDtlInfo(HqEmpVO hqEmpVO);
 
     /** 현재 패스워드 조회 */
-    String selectHqEmpPassword(HqEmpVO hqEmpVO);
+    String getHqEmpPassword(HqEmpVO hqEmpVO);
 }

@@ -47,7 +47,7 @@ public class ColumnLayout {
         GridDispItemVO gridDispItemVO = new GridDispItemVO();
 
         gridDispItemVO.setUserId(sessionInfoVO.getUserId());
-        gridDispItemVO.setResrceCd(sessionInfoVO.getCurrentMenu().getResrceCd());
+//        gridDispItemVO.setResrceCd(sessionInfoVO.getCurrentMenu().getResrceCd());
         gridDispItemVO.setGridIdx(gridIdx);
 
         // 저장한 그리드 레이아웃을 조회한다.

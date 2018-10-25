@@ -22,9 +22,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static kr.co.common.utils.spring.StringUtil.convertToJson;
-import static org.springframework.util.StringUtils.isEmpty;
-
 /**
  * @Class Name : SessionServiceImpl.java
  * @Description : 세션관련
@@ -75,24 +72,18 @@ public class SessionServiceImpl implements SessionService {
         String sessionId = request.getSession().getId();
 
         // sessionId 세팅
-        sessionInfoVO.setSessionId( sessionId );
-        // 권한 있는 메뉴 저장
-        sessionInfoVO.setAuthMenu( cmmMenuService.selectAuthMenu( sessionInfoVO ) );
-        // 고정 메뉴 리스트 저장
-        sessionInfoVO.setFixMenu( cmmMenuService.selectFixingMenu( sessionInfoVO ) );
-        // 즐겨찾기 메뉴 리스트 저장
-        sessionInfoVO.setBkmkMenu( cmmMenuService.selectBkmkMenu( sessionInfoVO ) );
-        // 전체메뉴 조회(리스트)
-        sessionInfoVO.setMenuData( convertToJson( cmmMenuService.makeMenu( sessionInfoVO, "A" ) ) );
-        // 즐겨찾기메뉴 조회 (리스트)
-        sessionInfoVO.setBkmkData( convertToJson( cmmMenuService.makeMenu( sessionInfoVO, "F" ) ) );
-        // 고정 메뉴 조회 (리스트)
-        sessionInfoVO.setFixData( convertToJson(sessionInfoVO.getFixMenu()) );
+        sessionInfoVO.setSessionId(sessionId);
+        // 사용자의 메뉴 리스트 Set : 권한포함
+        sessionInfoVO.setMenuData(cmmMenuService.getUserMenuList(sessionInfoVO));
+        // 즐겨찾기 메뉴 리스트 Set
+        sessionInfoVO.setBkmkMenuData(cmmMenuService.getBkmkMenuList(sessionInfoVO));
+        // 고정 메뉴 리스트 Set
+        sessionInfoVO.setFixedMenuData(cmmMenuService.getFixedMenuList(sessionInfoVO));
 
         // 본사는 소속된 가맹점을 세션에 저장
         if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
             List<String> storeCdList =
-                    cmmMenuService.selectStoreCdList( sessionInfoVO.getOrgnCd() );
+                    cmmMenuService.getStoreCdList( sessionInfoVO.getOrgnCd() );
             sessionInfoVO.setArrStoreCdList( storeCdList );
         }
         // redis에 세션 세팅
@@ -198,11 +189,11 @@ public class SessionServiceImpl implements SessionService {
         SessionInfoVO sessionInfoVO = getSessionInfo(request);
 
         // 세션 객체가 없는 경우
-        if ( isEmpty( sessionInfoVO ) ) {
+        if ( sessionInfoVO == null ) {
             return false;
         } else {
             // 세션 객체는 있지만 필수값들이 없는 경우
-            if ( isEmpty( sessionInfoVO.getUserId() ) && isEmpty( sessionInfoVO.getAuthMenu() ) ) {
+            if ( sessionInfoVO.getUserId() == null && sessionInfoVO.getMenuData() == null ) {
                 return false;
             }
         }

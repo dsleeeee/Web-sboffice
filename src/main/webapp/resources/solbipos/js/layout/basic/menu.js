@@ -40,9 +40,11 @@ $(document).ready(function () {
     url: "/menu/menuList.sb",
     data: {},
     success: function(result) {
-      var menus = JSON.parse(result.data);
+      var menus = JSON.parse(JSON.stringify(result.data));
       $(menus).each(function (index) {
-        $("#_smallMenuUl").append(wijmo.format('<li class="{icon}"><a href="#"></a></li>', this));
+        if ( menus[index].pResrce === "000000") {
+          $("#_smallMenuUl").append(wijmo.format('<li class="{iconNm}"><a href="#"></a></li>', this));
+        }
       });
     }
   });
@@ -63,10 +65,12 @@ $(document).ready(function () {
     $("#_faMenu").show();
     $("#_theTreeAll").hide();
 
-    var bkmks = agrid.getScope("bkmkCtrl");
-    if (bkmks.items.length < 1) {
-      $("#_bkmkTxt").show();
-    }
+    var scope = agrid.getScope("bkmkCtrl");
+    scope.$apply(function(){
+      if (scope.items.length <= 0) {
+        $("#_bkmkTxt").show();
+      }
+    });
     $("#_theTreeBkmk").show();
   });
 
@@ -75,13 +79,15 @@ $(document).ready(function () {
     $(".menuControl").trigger("click");
     var findClass = $(this).closest("li").attr("class");
     if (findClass != null) {
-      var allMenu = agrid.getScope("menuCtrl");
-      for (var node = allMenu.getFirstNode(); node; node = node.nextSibling()) {
-        if (node.dataItem.icon === findClass) {
-          allMenu.selectedItem = node.dataItem;
-          node.isCollapsed = false;
+      var tree = agrid.getScope("menuCtrl");
+      tree.$apply(function(){
+        for (var node = tree.getFirstNode(); node; node = node.nextSibling()) {
+          if (node.dataItem.iconNm === findClass) {
+            tree.selectedItem = node.dataItem;
+            node.isCollapsed = false;
+          }
         }
-      }
+      });
     }
   });
 

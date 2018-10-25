@@ -45,17 +45,20 @@ import static org.springframework.util.StringUtils.isEmpty;
 @Service
 @Transactional
 public class MyInfoServiceImpl implements MyInfoService{
-    @Autowired
-    private MyInfoMapper mapper;
 
-    @Autowired
-    private SessionService sessionService;
+    private final MyInfoMapper myInfoMapper;
+    private final SessionService sessionService;
+    private final MessageService messageService;
+    private final ColumnLayout layout;
 
+    /** Constructor Injection */
     @Autowired
-    private MessageService messageService;
-
-    @Autowired
-    private ColumnLayout layout;
+    public MyInfoServiceImpl(MyInfoMapper myInfoMapper, SessionService sessionService, MessageService messageService, ColumnLayout layout) {
+        this.myInfoMapper = myInfoMapper;
+        this.sessionService = sessionService;
+        this.messageService = messageService;
+        this.layout = layout;
+    }
 
     private String getHqOfficeCd( SessionInfoVO info ){
         return info.getOrgnCd();
@@ -67,8 +70,9 @@ public class MyInfoServiceImpl implements MyInfoService{
 
     @Override
     public WijmoGridVO< HqNmcodeVO > getGridInfo( NmcodeGrpCd nmcodeGrpCd ){
-        String id = "",
-                name = getSessionInfo().getCurrentMenu().getResrceCd();
+        String id = "";
+        String name = getSessionInfo().getCurrentMenu().getResrceCd();
+        
         Long index = -1L;
         List< WijmoGridColumnVO > columns = null;
         WijmoGridColumnVO checkColumn =
@@ -120,15 +124,15 @@ public class MyInfoServiceImpl implements MyInfoService{
         hqNmcode.setHqOfficeCd( getHqOfficeCd(getSessionInfo()) );
         hqNmcode.setNmcodeGrpCd( nmcodeGrpCd.getCode() );
 
-        List< HqNmcodeVO > hqNmcodes = mapper.findAllHqNmcodeByHqOfficeCdAndNmcodeGrpCd( hqNmcode );
+        List< HqNmcodeVO > hqNmcodes = myInfoMapper.findAllHqNmcodeByHqOfficeCdAndNmcodeGrpCd( hqNmcode );
 
         if( !hqNmcodes.isEmpty() ){
             return hqNmcodes;
         }
         //없는 경우 공통코드에서 본사코드로 insert 해야 함
-        mapper.saveHqNmcodeFromCmNmcode( hqNmcode );
+        myInfoMapper.saveHqNmcodeFromCmNmcode( hqNmcode );
 
-        return mapper.findAllHqNmcodeByHqOfficeCdAndNmcodeGrpCd( hqNmcode );
+        return myInfoMapper.findAllHqNmcodeByHqOfficeCdAndNmcodeGrpCd( hqNmcode );
     }
 
     @Override
@@ -148,8 +152,8 @@ public class MyInfoServiceImpl implements MyInfoService{
         HqNmcodeVO findHqNmcode = null;
         //코드를 직접 등록하는 경우에는 중복 체크해야 함
         if( isEmpty(hqNmcode.getNmcodeCd()) ||
-            isEmpty(findHqNmcode = mapper.findHqNmcodeByHqOfficeCdAndNmcodeGrpCdAndNmcodeCd(hqNmcode)) ){
-            return mapper.insertHqNmcode( hqNmcode ) == 1 ? OK : FAIL;
+            isEmpty(findHqNmcode = myInfoMapper.findHqNmcodeByHqOfficeCdAndNmcodeGrpCdAndNmcodeCd(hqNmcode)) ){
+            return myInfoMapper.insertHqNmcode( hqNmcode ) == 1 ? OK : FAIL;
         }
 
         if( UseYn.N == findHqNmcode.getUseYn() ){
@@ -166,7 +170,7 @@ public class MyInfoServiceImpl implements MyInfoService{
                 hqNmcode.setNmcodeItem2( "" );
             }
 
-            return mapper.updateHqNmcode( hqNmcode ) == 1 ? OK : FAIL;
+            return myInfoMapper.updateHqNmcode( hqNmcode ) == 1 ? OK : FAIL;
         }
 
         throw new BizException( FAIL, messageService.get("cmm.saveFail") );
@@ -183,7 +187,7 @@ public class MyInfoServiceImpl implements MyInfoService{
         hqNmcode.setModId( modId );
         hqNmcode.setModDt( modDt );
 
-        return mapper.updateHqNmcode( hqNmcode ) == 1 ? OK : FAIL;
+        return myInfoMapper.updateHqNmcode( hqNmcode ) == 1 ? OK : FAIL;
     }
 
     @Override
@@ -199,7 +203,7 @@ public class MyInfoServiceImpl implements MyInfoService{
         hqNmcode.setModId( modId );
         hqNmcode.setModDt( modDt );
 
-        return mapper.deleteHqNmcode( hqNmcode ) == 1 ? OK : FAIL;
+        return myInfoMapper.deleteHqNmcode( hqNmcode ) == 1 ? OK : FAIL;
     }
 
     @Override
@@ -224,7 +228,7 @@ public class MyInfoServiceImpl implements MyInfoService{
 
     @Override
     public MyInfoVO getMyInfo(){
-        return mapper.findById( getHqOfficeCd(getSessionInfo()) );
+        return myInfoMapper.findById( getHqOfficeCd(getSessionInfo()) );
     }
 
     @Override
@@ -238,6 +242,6 @@ public class MyInfoServiceImpl implements MyInfoService{
         myInfo.setModId( modId );
         myInfo.setModDt( modDt );
 
-        return mapper.updateHqOffice( myInfo ) == 1 ? OK : FAIL;
+        return myInfoMapper.updateHqOffice( myInfo ) == 1 ? OK : FAIL;
     }
 }

@@ -184,8 +184,6 @@
     param.listScale   = listScaleBox.selectedValue;
     param.curr        = index;
 
-    console.log(param)
-
     $.postJSON("/store/hq/hqManage/hqManage/list.sb", param, function(result) {
       var list = result.data.list;
 

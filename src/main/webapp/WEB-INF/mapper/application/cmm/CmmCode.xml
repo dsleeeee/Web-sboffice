@@ -1,94 +1,132 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="kr.co.solbipos.application.common.service.impl.CmmCodeMapper">
+<!--
+    CmmCode.xml
+    공통코드 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       노현수     2018.10.24     주석생성, 포멧정리
+-->
+<mapper namespace="kr.co.common.service.code.impl.CmmCodeMapper">
 
-  <select id="selectCmmCodeList" parameterType="String" resultType="DefaultMap">
-  /* CmmCodeMapper.selectCmmCodeList */
-  SELECT NMCODE_GRP_CD,
-         NMCODE_CD,
-         NMCODE_NM,
-         NMCODE_ITEM_1,
-         NMCODE_ITEM_2,
-         USE_COL_NM,
-         REG_DT,
-         REG_ID,
-         MOD_DT,
-         MOD_ID
-    FROM TB_CM_NMCODE
-   WHERE NMCODE_GRP_CD = #{nmcodeGrpCd}
-   ORDER BY NMCODE_CD ASC
-  </select>
+    <!-- 시스템 공통코드 조회 -->
+    <!--
+      TABLE    : TB_CM_NMCODE
+      COMMENTS : 공통코드 그룹을 조회한다.
+    -->
+    <select id="selectCmmCodeList" parameterType="String" resultType="DefaultMap">
+        /* USE : CmmCodeMapper.selectCmmCodeList */
+        SELECT
+            NMCODE_GRP_CD,
+            NMCODE_CD,
+            NMCODE_NM,
+            NMCODE_ITEM_1,
+            NMCODE_ITEM_2,
+            USE_COL_NM,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        FROM
+            TB_CM_NMCODE
+        WHERE
+            NMCODE_GRP_CD = #{nmcodeGrpCd}
+        ORDER BY NMCODE_CD ASC
+    </select>
 
-  <select id="selectEnvCodeList" parameterType="String" resultType="DefaultMap">
-  /* CmmCodeMapper.selectEnvCodeList */
-  SELECT ENVST_CD,
-         ENVST_VAL_CD,
-         ENVST_VAL_NM,
-         DEFLT_YN,
-         USE_YN,
-         REG_DT,
-         REG_ID,
-         MOD_DT,
-         MOD_ID
-    FROM TB_CM_ENVST_DTL
-   WHERE ENVST_CD = #{envstCd}
-     AND USE_YN = 'Y'
-   ORDER BY ENVST_VAL_CD ASC
-  </select>
+    <!-- 시스템 환경변수 상세조회 -->
+    <!--
+      TABLE    : TB_CM_ENVST_DTL
+      COMMENTS : 환경변수 상세내용을 조회한다.
+    -->
+    <select id="selectEnvCodeList" parameterType="String" resultType="DefaultMap">
+        /* USE : CmmCodeMapper.selectEnvCodeList */
+        SELECT
+            ENVST_CD,
+            ENVST_VAL_CD,
+            ENVST_VAL_NM,
+            DEFLT_YN,
+            USE_YN,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        FROM
+            TB_CM_ENVST_DTL
+        WHERE
+            ENVST_CD = #{envstCd}
+            AND USE_YN = 'Y'
+        ORDER BY ENVST_VAL_CD ASC
+    </select>
 
-  <!-- 대리점 목록 조회 -->
-  <!--
+    <!-- 대리점 목록 조회 -->
+    <!--
       TABLE    : TB_CM_AGENCY
       COMMENTS : 벤사 목록을 조회한다.
-  -->
-  <select id="selectAgencyList" resultType="DefaultMap">
-    /* CmmCodeMapper.selectAgencyList */
-    SELECT AGENCY_CD, AGENCY_NM
-      FROM TB_CM_AGENCY
-     ORDER BY AGENCY_CD ASC
-  </select>
+    -->
+    <select id="selectAgencyList" resultType="DefaultMap">
+        /* USE : CmmCodeMapper.selectAgencyList */
+        SELECT
+            AGENCY_CD,
+            AGENCY_NM
+        FROM
+            TB_CM_AGENCY
+        ORDER BY AGENCY_CD ASC
+    </select>
 
-  <!-- 벤사 목록 조회 -->
-  <!--
+    <!-- 벤사 목록 조회 -->
+    <!--
       TABLE    : TB_CM_VAN_CMPNY
       COMMENTS : 벤사 목록을 조회한다.
-  -->
-  <select id="selectVanList" parameterType="vanCmpnyVO" resultType="DefaultMap">
-    /* CmmCodeMapper.selectVanList */
-    SELECT VAN_CD, VAN_NM
-      FROM TB_CM_VAN_CMPNY
-    <if test='vanFg != null and vanFg.toString() != ""'>
-     WHERE VAN_FG = #{vanFg}
-    </if>
-     ORDER BY VAN_CD ASC
-  </select>
+    -->
+    <select id="selectVanList" parameterType="vanCmpnyVO" resultType="DefaultMap">
+        /* USE : CmmCodeMapper.selectVanList */
+        SELECT
+            VAN_CD,
+            VAN_NM
+        FROM
+            TB_CM_VAN_CMPNY
+        <where>
+            <if test='vanFg != null and vanFg.toString() != ""'>
+            AND VAN_FG = #{vanFg}
+            </if>
+        </where>
+        ORDER BY VAN_CD ASC
+    </select>
 
-  <!-- 본사 목록 조회 -->
-  <!--
+    <!-- 본사 목록 조회 -->
+    <!--
       TABLE    : TB_HQ_OFFICE
       COMMENTS : 벤사 목록을 조회한다.
-  -->
-  <select id="selectHqOfficeList" resultType="DefaultMap">
-    /* CmmCodeMapper.selectHqOfficeList */
-    SELECT HQ_OFFICE_CD, HQ_OFFICE_NM
-      FROM TB_HQ_OFFICE
-     ORDER BY HQ_OFFICE_CD NULLS FIRST
-  </select>
+    -->
+    <select id="getHqOfficeList" resultType="DefaultMap">
+        /* USE : CmmCodeMapper.getHqOfficeList */
+        SELECT
+            HQ_OFFICE_CD,
+            HQ_OFFICE_NM
+        FROM
+            TB_HQ_OFFICE
+        ORDER BY HQ_OFFICE_CD NULLS FIRST
+    </select>
 
-  <!-- 본사 환경변수 조회 -->
-  <!--
+    <!-- 본사 환경변수 조회 -->
+    <!--
       TABLE    : TB_HQ_ENVST
       COMMENTS : 본사 환경변수 테이블에 등록된 값을 조회한다.
-  -->
-  <select id="getHqEnvst" parameterType="hqEnvstVO" resultType="String">
-    /* CmmCodeMapper.getHqEnvst */
-    SELECT ENVST_VAL
-      FROM TB_HQ_ENVST
-     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-       AND ENVST_CD = #{envstCd}
-       AND USE_YN = 'Y'
-  </select>
+    -->
+    <select id="getHqEnvst" parameterType="hqEnvstVO" resultType="String">
+        /* USE : CmmCodeMapper.getHqEnvst */
+        SELECT
+            ENVST_VAL
+        FROM
+            TB_HQ_ENVST
+        WHERE
+            HQ_OFFICE_CD = #{hqOfficeCd}
+            AND ENVST_CD = #{envstCd}
+            AND USE_YN = 'Y'
+    </select>
 
 </mapper>
 

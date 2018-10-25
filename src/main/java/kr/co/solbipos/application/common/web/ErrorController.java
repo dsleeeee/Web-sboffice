@@ -1,11 +1,9 @@
 package kr.co.solbipos.application.common.web;
 
 import kr.co.common.data.enums.CodeType;
-import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.SessionUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
-import kr.co.solbipos.application.common.service.ResrceInfoVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sys.cd.envconfg.service.EnvstVO;
 import org.slf4j.Logger;
@@ -19,7 +17,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 /**
  * @Class Name : ErrorController.java
@@ -44,14 +41,12 @@ public class ErrorController {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private final SessionService sessionService;
-    private final MessageService messageService;
     private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
-    public ErrorController(SessionService sessionService, MessageService messageService, CmmEnvUtil cmmEnvUtil) {
+    public ErrorController(SessionService sessionService, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
-        this.messageService = messageService;
         this.cmmEnvUtil = cmmEnvUtil;
     }
 
@@ -68,9 +63,6 @@ public class ErrorController {
             sessionInfoVO = sessionService.getSessionInfo(request);
         }
         if ( sessionInfoVO != null && sessionInfoVO.getUserId() != null ) {
-            // 권한 메뉴
-            List<ResrceInfoVO> auth = auth = sessionInfoVO.getAuthMenu();
-
             // jsp > sessionscope 로 쓸수 있게 httpsession 에 세팅
             HttpSession session = request.getSession();
             session.setAttribute("sessionInfo", sessionInfoVO);

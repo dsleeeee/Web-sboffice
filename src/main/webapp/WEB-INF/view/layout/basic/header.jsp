@@ -3,9 +3,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
-<c:set var="hist" value="${sessionScope.sessionInfo.histMenu}" />
-<c:set var="fix" value="${sessionScope.sessionInfo.fixMenu}" />
-<c:set var="histSize" value="${fn:length(hist)}" />
+<c:set var="historyMenuData" value="${sessionScope.sessionInfo.historyMenuData}" />
+<c:set var="fixedMenuData" value="${sessionScope.sessionInfo.fixedMenuData}" />
+<c:set var="historyMenuSize" value="${fn:length(historyMenuData)}" />
 
 <%-- 사용자정보영역 --%>
 <div class="topBar">
@@ -55,7 +55,7 @@
   <nav>
     <ul id="_fixMenu">
       <%-- 즐겨찾기 메뉴 --%>
-      <c:forEach var="item" items="${fix}" varStatus="status">
+      <c:forEach var="item" items="${fixedMenuData}" varStatus="status">
         <li id="${item.resrceCd}">
           <a href="${item.url}" class="${item.activation == true ? 'on' : ''}">${item.resrceNm}</a> 
           <a href="#" class="btn_close favClose" data-value="${item.resrceCd}" ></a>
@@ -63,7 +63,7 @@
       </c:forEach>
 
       <%-- 히스토리 메뉴 --%>
-      <c:forEach var="item" items="${hist}" varStatus="status">
+      <c:forEach var="item" items="${historyMenuData}" varStatus="status">
         <li id="${item.resrceCd}">
           <a href="${item.url}" class="${item.activation == true ? 'on' : ''}">${item.resrceNm}</a>
           <a href="#" class="btn_close histClose" data-value="${item.resrceCd}"></a>

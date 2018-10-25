@@ -3,7 +3,6 @@ package kr.co.solbipos.application.session.auth.service;
 import kr.co.common.validate.Login;
 import kr.co.solbipos.application.common.service.CmmVO;
 import kr.co.solbipos.application.common.service.ResrceInfoBaseVO;
-import kr.co.solbipos.application.common.service.ResrceInfoVO;
 import kr.co.solbipos.application.session.auth.enums.LoginResult;
 import kr.co.solbipos.application.session.auth.enums.UserStatFg;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
@@ -31,7 +30,7 @@ import java.util.List;
  */
 public class SessionInfoVO extends CmmVO {
 
-    private static final long serialVersionUID = -3361957032791129136L;
+    private static final long serialVersionUID = -7682914174659365135L;
     /** sessionId */
     private String sessionId;
     /** 사용자 아이디 */
@@ -127,27 +126,27 @@ public class SessionInfoVO extends CmmVO {
     private String startDate;
     /** 조회 종료 일자 */
     private String endDate;
+
     /** 메뉴 관련 데이터 */
-    /** 전체메뉴 조회(JSON) */
-    private String menuData;
-    /** 즐겨찾기메뉴 조회 (JSON) */
-    private String bkmkData;
-    /** 고정 메뉴 (JSON) */
-    private String fixData;
+    /** 전체메뉴 */
+    private List<ResrceInfoBaseVO> menuData;
+    /** 전체메뉴 : 트리구조 */
+    private List<ResrceInfoBaseVO> menuTreeData;
+    /** 즐겨찾기메뉴 */
+    private List<ResrceInfoBaseVO> bkmkMenuData;
+    /** 즐겨찾기메뉴 : 트리구조 */
+    private List<ResrceInfoBaseVO> bkmkMenuTreeData;
+    /** 고정 메뉴 */
+    private List<ResrceInfoBaseVO> fixedMenuData;
+    /** 사용한 히스토리 메뉴 */
+    private List<ResrceInfoBaseVO> historyMenuData;
     /** 현재 선택한 메뉴 정보 */
     private ResrceInfoBaseVO currentMenu;
-    /** 권한 있는 메뉴 */
-    private List<ResrceInfoVO> authMenu;
-    /** 즐겨찾기 메뉴 */
-    private List<ResrceInfoBaseVO> bkmkMenu;
-    /** 사용한 히스토리 메뉴 */
-    private List<ResrceInfoBaseVO> histMenu;
-    /** 고정 메뉴 */
-    private List<ResrceInfoBaseVO> fixMenu;
     /** 가상로그인ID */
     private String vUserId;
     /** 가상로그인정보 */
     private List<VirtualLoginInfoVO> vLogindIds;
+
     /** POS 로그인을 위한 하드웨어인증키 */
     private String hwAuthKey;
 
@@ -486,38 +485,74 @@ public class SessionInfoVO extends CmmVO {
     /**
      * @return the menuData
      */
-    public String getMenuData() {
+    public List<ResrceInfoBaseVO> getMenuData() {
         return menuData;
     }
     /**
      * @param menuData the menuData to set
      */
-    public void setMenuData(String menuData) {
+    public void setMenuData(List<ResrceInfoBaseVO> menuData) {
         this.menuData = menuData;
     }
     /**
-     * @return the bkmkData
+     * @return the menuTreeData
      */
-    public String getBkmkData() {
-        return bkmkData;
+    public List<ResrceInfoBaseVO> getMenuTreeData() {
+        return menuTreeData;
     }
     /**
-     * @param bkmkData the bkmkData to set
+     * @param menuTreeData the menuTreeData to set
      */
-    public void setBkmkData(String bkmkData) {
-        this.bkmkData = bkmkData;
+    public void setMenuTreeData(List<ResrceInfoBaseVO> menuTreeData) {
+        this.menuTreeData = menuTreeData;
     }
     /**
-     * @return the fixData
+     * @return the bkmkMenuData
      */
-    public String getFixData() {
-        return fixData;
+    public List<ResrceInfoBaseVO> getBkmkMenuData() {
+        return bkmkMenuData;
     }
     /**
-     * @param fixData the fixData to set
+     * @param bkmkMenuData the bkmkMenuData to set
      */
-    public void setFixData(String fixData) {
-        this.fixData = fixData;
+    public void setBkmkMenuData(List<ResrceInfoBaseVO> bkmkMenuData) {
+        this.bkmkMenuData = bkmkMenuData;
+    }
+    /**
+     * @return the bkmkMenuTreeData
+     */
+    public List<ResrceInfoBaseVO> getBkmkMenuTreeData() {
+        return bkmkMenuTreeData;
+    }
+    /**
+     * @param bkmkMenuTreeData the bkmkMenuTreeData to set
+     */
+    public void setBkmkMenuTreeData(List<ResrceInfoBaseVO> bkmkMenuTreeData) {
+        this.bkmkMenuTreeData = bkmkMenuTreeData;
+    }
+    /**
+     * @return the fixedMenuData
+     */
+    public List<ResrceInfoBaseVO> getFixedMenuData() {
+        return fixedMenuData;
+    }
+    /**
+     * @param fixedMenuData the fixedMenuData to set
+     */
+    public void setFixedMenuData(List<ResrceInfoBaseVO> fixedMenuData) {
+        this.fixedMenuData = fixedMenuData;
+    }
+    /**
+     * @return the historyMenuData
+     */
+    public List<ResrceInfoBaseVO> getHistoryMenuData() {
+        return historyMenuData;
+    }
+    /**
+     * @param historyMenuData the historyMenuData to set
+     */
+    public void setHistoryMenuData(List<ResrceInfoBaseVO> historyMenuData) {
+        this.historyMenuData = historyMenuData;
     }
     /**
      * @return the currentMenu
@@ -530,54 +565,6 @@ public class SessionInfoVO extends CmmVO {
      */
     public void setCurrentMenu(ResrceInfoBaseVO currentMenu) {
         this.currentMenu = currentMenu;
-    }
-    /**
-     * @return the authMenu
-     */
-    public List<ResrceInfoVO> getAuthMenu() {
-        return authMenu;
-    }
-    /**
-     * @param authMenu the authMenu to set
-     */
-    public void setAuthMenu(List<ResrceInfoVO> authMenu) {
-        this.authMenu = authMenu;
-    }
-    /**
-     * @return the bkmkMenu
-     */
-    public List<ResrceInfoBaseVO> getBkmkMenu() {
-        return bkmkMenu;
-    }
-    /**
-     * @param bkmkMenu the bkmkMenu to set
-     */
-    public void setBkmkMenu(List<ResrceInfoBaseVO> bkmkMenu) {
-        this.bkmkMenu = bkmkMenu;
-    }
-    /**
-     * @return the histMenu
-     */
-    public List<ResrceInfoBaseVO> getHistMenu() {
-        return histMenu;
-    }
-    /**
-     * @param histMenu the histMenu to set
-     */
-    public void setHistMenu(List<ResrceInfoBaseVO> histMenu) {
-        this.histMenu = histMenu;
-    }
-    /**
-     * @return the fixMenu
-     */
-    public List<ResrceInfoBaseVO> getFixMenu() {
-        return fixMenu;
-    }
-    /**
-     * @param fixMenu the fixMenu to set
-     */
-    public void setFixMenu(List<ResrceInfoBaseVO> fixMenu) {
-        this.fixMenu = fixMenu;
     }
     /**
      * @return the vUserId

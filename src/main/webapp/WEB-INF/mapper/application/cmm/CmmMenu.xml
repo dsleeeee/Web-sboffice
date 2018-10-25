@@ -1,273 +1,275 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="kr.co.solbipos.application.common.service.impl.CmmMenuMapper">
+<!--
+    CmmMenu.xml
+    메뉴 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       노현수     2018.10.24     주석생성, 포멧정리
+-->
+<mapper namespace="kr.co.common.service.cmm.impl.CmmMenuMapper">
 
-  <select id="selectStoreCdList" parameterType="string" resultType="string">
-    /* CmmMenuMapper.selectStore */
-    SELECT STORE_CD
-      FROM TB_MS_STORE
-     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-  </select>
+    <!-- 가맹점 코드목록 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : String
+        COMMENTS : 본사에 속한 가맹점 코드 목록을 조회한다.
+    -->
+    <select id="getStoreCdList" parameterType="java.lang.String" resultType="java.lang.String">
+        /* USE : CmmMenuMapper.getStoreCdList */
+        SELECT
+            STORE_CD
+        FROM
+            TB_MS_STORE
+        WHERE
+            HQ_OFFICE_CD = #{hqOfficeCd}
+    </select>
 
-  <select id="selectStore" parameterType="storeVO" resultType="storeVO">
-  <![CDATA[
-    /* CmmMenuMapper.selectStore */
-    SELECT STORE_CD,
-           STORE_NM,
-           OWNER_NM,
-           HQ_OFFICE_CD
-      FROM TB_MS_STORE
-     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-  ]]>
-     <if test="storeNm != null and storeNm != ''">
-       AND STORE_NM LIKE '%'||#{storeNm}||'%'
-     </if>
-     <if test="defaultStoreCd != null and defaultStoreCd != ''">
-       AND STORE_CD != #{defaultStoreCd}
-     </if>
-     ORDER BY REG_DT, MOD_DT DESC
-  </select>
+    <!-- 가맹점 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : storeVO
+        COMMENTS : 본사에 속한 가맹점 정보를 조회한다.
+    -->
+    <select id="getStoreInfo" parameterType="storeVO" resultType="storeVO">
+        /* USE : CmmMenuMapper.getStoreInfo */
+        SELECT
+            STORE_CD,
+            STORE_NM,
+            OWNER_NM,
+            HQ_OFFICE_CD
+        FROM
+            TB_MS_STORE
+        WHERE
+            HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test="storeNm != null and storeNm != ''">
+            AND STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        <if test="defaultStoreCd != null and defaultStoreCd != ''">
+            AND STORE_CD != #{defaultStoreCd}
+        </if>
+        ORDER BY REG_DT, MOD_DT DESC
+    </select>
 
+    <!-- 본사 조회 -->
+    <!--
+        TABLE    : TB_HQ_OFFICE
+        PARAM    : hqVO
+        COMMENTS : 본사 정보를 조회한다.
+    -->
+    <select id="getHqInfo" parameterType="hqVO" resultType="hqVO">
+        /* USE : CmmMenuMapper.getHqInfo */
+        SELECT
+            HQ_OFFICE_CD,
+            HQ_OFFICE_NM,
+            OWNER_NM
+        FROM
+            TB_HQ_OFFICE
+        WHERE
+            SYS_STAT_FG != '9'
+            <![CDATA[
+            AND SYS_OPEN_DATE < SYSDATE
+            AND SYS_CLOSURE_DATE > SYSDATE
+            ]]>
+        <if test="hqOfficeCd != null and hqOfficeCd != ''">
+            AND HQ_OFFICE_CD LIKE '%'||#{hqOfficeCd}||'%'
+        </if>
+        <if test="hqOfficeNm != null and hqOfficeNm != ''">
+            AND HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'
+        </if>
+        ORDER BY REG_DT, MOD_DT DESC
+    </select>
 
-  <select id="selectHq" parameterType="hqVO" resultType="hqVO">
-  <![CDATA[
-    /* CmmMenuMapper.selectHq */
-    SELECT HQ_OFFICE_CD,
-           HQ_OFFICE_NM,
-           OWNER_NM
-      FROM TB_HQ_OFFICE
-     WHERE SYS_STAT_FG != '9'
-       AND SYS_OPEN_DATE < SYSDATE
-       AND SYS_CLOSURE_DATE > SYSDATE
-  ]]>
-   <if test="hqOfficeCd != null and hqOfficeCd != ''">
-       AND HQ_OFFICE_CD LIKE '%'||#{hqOfficeCd}||'%'
-   </if>
-   <if test="hqOfficeNm != null and hqOfficeNm != ''">
-       AND HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'
-   </if>
-     ORDER BY REG_DT, MOD_DT DESC
-  </select>
+    <!-- 대리점 조회 -->
+    <!--
+        TABLE    : TB_CM_AGENCY
+        PARAM    : cmAgencyVO
+        COMMENTS : 대리점 정보를 조회한다.
+    -->
+    <select id="getCmAgencyInfo" parameterType="cmAgencyVO" resultType="cmAgencyVO">
+        /* USE : CmmMenuMapper.getCmAgencyInfo */
+        SELECT
+            AGENCY_CD,
+            AGENCY_NM
+        FROM
+            TB_CM_AGENCY
+        <where>
+        <if test="agencyCd != null and agencyCd != ''">
+            AND ( AGENCY_CD = #{agencyCd} OR AGENCY_NM LIKE '%'||#{agencyCd}||'%' )
+        </if>
+        </where>
+        ORDER BY REG_DT, MOD_DT DESC
+    </select>
 
-  <select id="selectCmAgency" parameterType="cmAgencyVO" resultType="cmAgencyVO">
-    /* CmmMenuMapper.selectCmAgency */
-    SELECT AGENCY_CD,
-           AGENCY_NM
-      FROM TB_CM_AGENCY
-   <where>
-   <if test="agencyCd != null and agencyCd != ''">
-       AND ( AGENCY_CD = #{agencyCd} OR AGENCY_NM LIKE '%'||#{agencyCd}||'%' )
-   </if>
-   </where>
-     ORDER BY REG_DT, MOD_DT DESC
-  </select>
+    <!-- 메뉴 히스토리 생성 -->
+    <!--
+        TABLE    : TB_WB_MENU_USE_HIST
+        PARAM    : menuUseHistVO
+        COMMENTS : 사용자의 사용 메뉴 히스토리를 생성한다.
+    -->
+    <insert id="insertMenuUseHist" parameterType="menuUseHistVO">
+        /* USE : CmmMenuMapper.insertMenuHist */
+        INSERT INTO TB_WB_MENU_USE_HIST
+        (
+            SEQ,
+            USER_ID,
+            RESRCE_CD,
+            USE_DATE,
+            USE_DT
+        ) VALUES (
+            SQ_WB_MENU_HIST.NEXTVAL,
+            #{userId},
+            #{resrceCd},
+            #{useDate},
+            #{useDt}
+        )
+    </insert>
 
-  <insert id="insertMenuUseHist" parameterType="menuUseHistVO">
-  <![CDATA[
-    /* CmmMenuMapper.insertMenuHist */
-    INSERT INTO TB_WB_MENU_USE_HIST
-    (
-      SEQ,
-      USER_ID,
-      RESRCE_CD,
-      USE_DATE,
-      USE_DT
-    )
-    VALUES
-    (
-      SQ_WB_MENU_HIST.NEXTVAL,
-      #{userId},
-      #{resrceCd},
-      #{useDate},
-      #{useDt}
-    )
-  ]]>
-  </insert>
+    <!-- 메뉴목록 조회 -->
+    <!--
+        TABLE    : TB_WB_RESRCE_INFO, TB_WB_AUTHOR_GRP_INFO, TB_WB_AUTHOR_EXCEPT
+        PARAM    : sessionInfoVO
+        COMMENTS : 사용자의 권한있는 메뉴 목록을 조회한다.
+    -->
+    <select id="getUserMenuList" parameterType="sessionInfoVO" resultType="resrceInfoBaseVO">
+        /* USE : CmmMenuMapper.getUserMenuList */
+        SELECT
+            twri.P_RESRCE,
+            twri.RESRCE_CD,
+            twri.RESRCE_NM,
+            twri.URL,
+            tcn.NMCODE_ITEM_2 AS ICON_NM
+        FROM
+            TB_WB_RESRCE_INFO twri
+        INNER JOIN (
+            SELECT
+                twri.RESRCE_CD
+            FROM
+                TB_WB_RESRCE_INFO twri
+            START WITH
+                twri.RESRCE_CD IN
+                                (
+                                    SELECT
+                                        twagr.RESRCE_CD
+                                    FROM
+                                        TB_WB_AUTHOR_GRP_INFO twagi
+                                    LEFT OUTER JOIN TB_WB_AUTHOR_GRP_RESRCE twagr ON
+                                        twagi.AUTH_GRP_CD = twagr.AUTH_GRP_CD
+                                        AND twagr.USE_YN = 'Y'
+                                    WHERE
+                                        twagr.AUTH_GRP_CD = #{authGrpCd}
+                                        AND twagi.USE_YN = 'Y'
+                                    UNION ALL
+                                    SELECT
+                                        twae.RESRCE_CD
+                                    FROM
+                                        TB_WB_AUTHOR_EXCEPT twae
+                                    WHERE
+                                        twae.USER_ID = #{userId}
+                                        AND twae.INCLD_EXCLD_FG = 'I'
+                                        AND twae.USE_YN = 'Y'
+                                    MINUS
+                                    SELECT
+                                        twae.RESRCE_CD
+                                    FROM
+                                        TB_WB_AUTHOR_EXCEPT twae
+                                    WHERE
+                                        twae.USER_ID = #{userId}
+                                        AND twae.INCLD_EXCLD_FG = 'E'
+                                        AND twae.USE_YN = 'Y'
+                                )
+                AND twri.RESRCE_FG = 'M'
+                AND twri.USE_YN = 'Y'
+            CONNECT BY
+                twri.RESRCE_CD = PRIOR twri.P_RESRCE
+            GROUP BY
+                twri.RESRCE_CD ) auth ON
+            twri.RESRCE_CD = auth.RESRCE_CD
+        LEFT OUTER JOIN TB_CM_NMCODE tcn ON
+            tcn.NMCODE_GRP_CD = '056'
+            AND twri.RESRCE_CD = tcn.NMCODE_ITEM_1
+        START WITH
+            twri.P_RESRCE = '000000'
+            AND twri.RESRCE_FG = 'M'
+            AND twri.USE_YN = 'Y'
+        CONNECT BY
+            PRIOR twri.RESRCE_CD = twri.P_RESRCE
+        ORDER SIBLINGS BY twri.DISP_IDX ASC,
+            twri.FUNC_FG ASC
+    </select>
 
-  <!-- 즐겨찾기 가져오기 -->
-  <select id="selectBkmkMenu" parameterType="sessionInfoVO" resultType="resrceInfoBaseVO">
-    /* CmmMenuMapper.selectBkmkMenu */
-    SELECT B.RESRCE_CD,
-           B.P_RESRCE,
-           B.RESRCE_NM,
-           B.URL
-      FROM TB_WB_BKMK A
-      LEFT OUTER JOIN
-           TB_WB_RESRCE_INFO B
-        ON A.RESRCE_CD = B.RESRCE_CD
-     WHERE A.USER_ID = #{userId}
-       AND A.USE_YN = 'Y'
-  </select>
+    <!-- 즐겨찾기 메뉴목록 조회 -->
+    <!--
+        TABLE    : TB_WB_RESRCE_INFO, TB_WB_AUTHOR_GRP_INFO, TB_WB_AUTHOR_EXCEPT
+        PARAM    : sessionInfoVO
+        COMMENTS : 사용자의 권한있는 즐겨찾기 메뉴 목록을 조회한다.
+    -->
+    <select id="getBkmkMenuList" parameterType="sessionInfoVO" resultType="resrceInfoBaseVO">
+        /* USE : CmmMenuMapper.getBkmkMenuList */
+        SELECT
+            twri.P_RESRCE,
+            twri.RESRCE_CD,
+            twri.RESRCE_NM,
+            twri.URL,
+            tcn.NMCODE_ITEM_2 AS ICON_NM
+        FROM
+            TB_WB_RESRCE_INFO twri
+        INNER JOIN (
+            SELECT
+                twri.RESRCE_CD
+            FROM
+                TB_WB_RESRCE_INFO twri
+            START WITH
+                twri.RESRCE_CD IN
+                                (
+                                    SELECT
+                                        twri.RESRCE_CD
+                                    FROM
+                                        TB_WB_BKMK twb
+                                    LEFT OUTER JOIN TB_WB_RESRCE_INFO twri ON
+                                        twb.RESRCE_CD = twri.RESRCE_CD
+                                    WHERE
+                                        twb.USER_ID = #{userId}
+                                        AND twb.USE_YN = 'Y'
+                                )
+                AND twri.RESRCE_FG = 'M'
+                AND twri.USE_YN = 'Y'
+            CONNECT BY
+                twri.RESRCE_CD = PRIOR twri.P_RESRCE
+            GROUP BY
+                twri.RESRCE_CD ) auth ON
+            twri.RESRCE_CD = auth.RESRCE_CD
+        LEFT OUTER JOIN TB_CM_NMCODE tcn ON
+            tcn.NMCODE_GRP_CD = '056'
+            AND twri.RESRCE_CD = tcn.NMCODE_ITEM_1
+        START WITH
+            twri.P_RESRCE = '000000'
+            AND twri.RESRCE_FG = 'M'
+            AND twri.USE_YN = 'Y'
+        CONNECT BY
+            PRIOR twri.RESRCE_CD = twri.P_RESRCE
+        ORDER SIBLINGS BY twri.DISP_IDX ASC,
+            twri.FUNC_FG ASC
+    </select>
 
-  <!-- 즐겨찾기 조회 -->
-
-
-<!-- 고정 메뉴 가져오기 -->
-  <select id="selectFixingMenu" parameterType="sessionInfoVO" resultType="resrceInfoBaseVO">
-    /* CmmMenuMapper.selectFixingMenu */
-    SELECT B.RESRCE_CD,
-           B.P_RESRCE,
-           B.RESRCE_NM,
-           B.URL
-      FROM TB_WB_FIXING A
-      LEFT OUTER JOIN
-           TB_WB_RESRCE_INFO B
-        ON A.RESRCE_CD = B.RESRCE_CD
-     WHERE A.USER_ID = #{userId}
-       AND A.USE_YN = 'Y'
-  </select>
-
-    <!-- 권한 있는 리소스 가져오기 -->
-    <select id="selectAuthMenu" parameterType="sessionInfoVO" resultType="resrceInfoVO">
-        /* AuthMapper.selectAuthMenu */
-         SELECT *
-           FROM (
-             SELECT DISTINCT RESRCE_CD,
-                    P_RESRCE,
-                    RESRCE_FG,
-                    FUNC_FG,
-                    RESRCE_NM,
-                    URL,
-                    SPCL_AUTHOR,
-                    DISP_LEVEL,
-                    DISP_IDX,
-                    USE_YN,
-                    REG_DT,
-                    REG_ID,
-                    MOD_DT,
-                    MOD_ID
-               FROM TB_WB_RESRCE_INFO
-              START WITH RESRCE_CD IN (
-                    SELECT RESRCE_CD
-                      FROM TB_WB_RESRCE_INFO
-                     WHERE RESRCE_CD IN (
-                      SELECT RESRCE_CD
-                        FROM TB_WB_AUTHOR_GRP_RESRCE
-                       WHERE AUTH_GRP_CD = (
-                        SELECT AUTH_GRP_CD
-                          FROM TB_WB_USER_INFO
-                         WHERE USER_ID = #{userId}
-                        ) AND USE_YN = 'Y'
-                     UNION ALL
-                    SELECT RESRCE_CD
-                      FROM TB_WB_AUTHOR_EXCEPT
-                     WHERE USER_ID = #{userId}
-                       AND INCLD_EXCLD_FG = 'I'
-                       AND USE_YN = 'Y'
-                      )
-              AND RESRCE_CD NOT IN (
-                    SELECT RESRCE_CD
-                      FROM TB_WB_AUTHOR_EXCEPT
-                     WHERE USER_ID = #{userId}
-                       AND INCLD_EXCLD_FG = 'E'
-                       AND USE_YN = 'Y')
-              /*AND RESRCE_FG = 'F'*/
-              )
-          CONNECT BY PRIOR P_RESRCE = RESRCE_CD
-        <![CDATA[
-              AND LEVEL < 3
-        ]]>
-         )
-         ORDER BY URL ASC
-      </select>
-
-  <select id="selectAllResrce" parameterType="DefaultMap" resultType="DefaultMap">
-    /* CmmMenuMapper.selectAllResrce */
-     SELECT A.P_RESRCE PCD,
-            A.RESRCE_CD CD,
-            A.RESRCE_NM NM,
-            A.URL,
-            (SELECT NMCODE_ITEM_2
-               FROM TB_CM_NMCODE
-              WHERE NMCODE_GRP_CD = '056'
-                AND NMCODE_ITEM_1 = A.RESRCE_CD) ICON
-       FROM TB_WB_RESRCE_INFO A
-      WHERE A.USE_YN = 'Y'
-        AND A.RESRCE_FG = 'M'
-        AND (A.SPCL_AUTHOR IS NULL OR A.SPCL_AUTHOR NOT IN ('A01'))
-      START WITH A.P_RESRCE = '000000'
-    CONNECT BY PRIOR A.RESRCE_CD = A.P_RESRCE
-      ORDER SIBLINGS BY A.DISP_IDX ASC,
-            FUNC_FG ASC
-  </select>
-
-  <select id="selectAuthedResrce" parameterType="DefaultMap" resultType="DefaultMap">
-    /* CmmMenuMapper.selectAuthedResrce */
-     SELECT A.RESRCE_CD,
-            A.RESRCE_PATH
-       FROM (
-             SELECT A.RESRCE_CD,
-                    SYS_CONNECT_BY_PATH(RESRCE_CD, '/') RESRCE_PATH
-               FROM TB_WB_RESRCE_INFO A
-              WHERE A.USE_YN = 'Y'
-              START WITH A.P_RESRCE = '000000'
-            CONNECT BY PRIOR A.RESRCE_CD = A.P_RESRCE
-            ) A,
-            (
-             SELECT B.RESRCE_CD
-               FROM TB_WB_AUTHOR_GRP_INFO A,
-                    TB_WB_AUTHOR_GRP_RESRCE B
-              WHERE A.AUTH_GRP_CD = B.AUTH_GRP_CD
-                AND B.AUTH_GRP_CD = #{authGrpCd}
-                AND A.USE_YN = 'Y'
-                AND B.USE_YN = 'Y'
-              UNION ALL
-             SELECT A.RESRCE_CD
-               FROM TB_WB_AUTHOR_EXCEPT A
-              WHERE A.USER_ID = #{userId}
-                AND A.INCLD_EXCLD_FG = 'I'
-                AND A.USE_YN = 'Y'
-              MINUS
-             SELECT A.RESRCE_CD
-               FROM TB_WB_AUTHOR_EXCEPT A
-              WHERE A.USER_ID = #{userId}
-                AND A.INCLD_EXCLD_FG = 'E'
-                AND A.USE_YN = 'Y'
-            ) B
-      WHERE A.RESRCE_CD = B.RESRCE_CD
-  </select>
-
-  <select id="selectAuthedBkmk" parameterType="DefaultMap" resultType="DefaultMap">
-    /* CmmMenuMapper.selectAuthedBkmk */
-     SELECT A.RESRCE_CD,
-            A.RESRCE_PATH
-       FROM (
-             SELECT A.RESRCE_CD,
-                    SYS_CONNECT_BY_PATH(RESRCE_CD, '/') RESRCE_PATH
-               FROM TB_WB_RESRCE_INFO A
-              WHERE A.USE_YN = 'Y'
-              START WITH A.P_RESRCE = '000000'
-            CONNECT BY PRIOR A.RESRCE_CD = A.P_RESRCE
-            ) A,
-            (
-             SELECT B.RESRCE_CD
-               FROM TB_WB_AUTHOR_GRP_INFO A,
-                    TB_WB_AUTHOR_GRP_RESRCE B
-              WHERE A.AUTH_GRP_CD = B.AUTH_GRP_CD
-                AND B.AUTH_GRP_CD = #{authGrpCd}
-                AND A.USE_YN = 'Y'
-                AND B.USE_YN = 'Y'
-              UNION ALL
-             SELECT A.RESRCE_CD
-               FROM TB_WB_AUTHOR_EXCEPT A
-              WHERE A.USER_ID = #{userId}
-                AND A.INCLD_EXCLD_FG = 'I'
-                AND A.USE_YN = 'Y'
-              MINUS
-             SELECT A.RESRCE_CD
-               FROM TB_WB_AUTHOR_EXCEPT A
-              WHERE A.USER_ID = #{userId}
-                AND A.INCLD_EXCLD_FG = 'E'
-                AND A.USE_YN = 'Y'
-            ) B,
-            TB_WB_BKMK C
-      WHERE A.RESRCE_CD = B.RESRCE_CD
-        AND A.RESRCE_CD = C.RESRCE_CD
-        AND C.USER_ID = #{userId}
-        AND C.USE_YN = 'Y'
-
-  </select>
+    <!-- 고정 메뉴 가져오기 -->
+    <select id="getFixedMenuList" parameterType="sessionInfoVO" resultType="resrceInfoBaseVO">
+        /* USE : CmmMenuMapper.getFixedMenuList */
+        SELECT
+            twri.RESRCE_CD,
+            twri.P_RESRCE,
+            twri.RESRCE_NM,
+            twri.URL
+        FROM
+            TB_WB_FIXING twf
+        LEFT OUTER JOIN TB_WB_RESRCE_INFO twri ON
+            twf.RESRCE_CD = twri.RESRCE_CD
+        WHERE
+            twf.USER_ID = #{userId}
+            AND twf.USE_YN = 'Y'
+    </select>
 
 </mapper>
 

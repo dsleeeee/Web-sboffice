@@ -25,13 +25,13 @@ import java.util.List;
 public interface HqEmpService {
 
     /** 본사 사원정보 리스트 조회*/
-    <E> List<E> selectHqEmpList(HqEmpVO hqEmpVO);
+    <E> List<E> getHqEmpList(HqEmpVO hqEmpVO);
 
     /** 본사 사원번호 조회*/
-    HqEmpResult selectHqEmpNoCnt(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO);
+    HqEmpResult getHqEmpNoCnt(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO);
 
     /** 본사 웹유저아이디 조회*/
-    HqEmpResult selectHqUserIdCnt(HqEmpVO hqEmpVO);
+    HqEmpResult getHqUserIdCnt(HqEmpVO hqEmpVO);
 
     /** 본사 사원정보 등록*/
     HqEmpResult insertHqEmpInfo(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO);
@@ -43,6 +43,6 @@ public interface HqEmpService {
     HqEmpResult modifyPassword(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO);
 
     /** 본사 사원정보 상세*/
-    DefaultMap<String> selectHqEmpDtlInfo(HqEmpVO hqEmpVO);
+    DefaultMap<String> getHqEmpDtlInfo(HqEmpVO hqEmpVO);
 
 }
