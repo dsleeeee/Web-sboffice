@@ -1,7 +1,6 @@
 package kr.co.solbipos.base.prod.prod.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.prod.prod.service.ProdService;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
@@ -34,12 +33,10 @@ public class ProdServiceImpl implements ProdService {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private final ProdMapper prodMapper;
-    private final MessageService messageService;
 
     @Autowired
-    public ProdServiceImpl(ProdMapper prodMapper, MessageService messageService) {
+    public ProdServiceImpl(ProdMapper prodMapper) {
         this.prodMapper = prodMapper;
-        this.messageService = messageService;
     }
 
     @Override

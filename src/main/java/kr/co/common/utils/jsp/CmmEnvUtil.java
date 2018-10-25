@@ -4,7 +4,6 @@ import kr.co.common.data.domain.EnvCodeVO;
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.code.CmmEnvService;
-import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;
@@ -40,14 +39,12 @@ public class CmmEnvUtil {
 
     private final CmmCodeUtil cmmCodeUtil;
     private final CmmEnvService cmmEnvService;
-    private final SessionService sessionService;
 
     /** Constructor Injection */
     @Autowired
-    public CmmEnvUtil(CmmCodeUtil cmmCodeUtil, CmmEnvService cmmEnvService, SessionService sessionService) {
+    public CmmEnvUtil(CmmCodeUtil cmmCodeUtil, CmmEnvService cmmEnvService) {
         this.cmmCodeUtil = cmmCodeUtil;
         this.cmmEnvService = cmmEnvService;
-        this.sessionService = sessionService;
     }
 
     /**

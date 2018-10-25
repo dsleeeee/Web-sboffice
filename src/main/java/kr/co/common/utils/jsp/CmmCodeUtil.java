@@ -5,7 +5,6 @@ import kr.co.common.data.domain.EnvCodeVO;
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.code.CmmCodeService;
-import kr.co.common.service.session.SessionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,16 +29,14 @@ public class CmmCodeUtil {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private final CmmCodeService cmmCodeService;
-    private final SessionService sessionService;
 
     public static final String COMBO_NAME = "name";
     public static final String COMBO_VALUE = "value";
 
     /** Constructor Injection */
     @Autowired
-    public CmmCodeUtil(CmmCodeService cmmCodeService, SessionService sessionService) {
+    public CmmCodeUtil(CmmCodeService cmmCodeService) {
         this.cmmCodeService = cmmCodeService;
-        this.sessionService = sessionService;
     }
 
 

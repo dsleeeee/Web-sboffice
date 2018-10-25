@@ -1,7 +1,6 @@
 package kr.co.common.service.cmm.impl;
 
 import kr.co.common.service.cmm.CmmMenuService;
-import kr.co.common.service.code.impl.CmmCodeMapper;
 import kr.co.common.service.redis.RedisConnService;
 import kr.co.common.system.BaseEnv;
 import kr.co.common.template.RedisCustomTemplate;
@@ -42,16 +41,14 @@ public class CmmMenuServiceImpl implements CmmMenuService {
 
     private final RedisConnService redisConnService;
     private final CmmMenuMapper cmmMenuMapper;
-    private final CmmCodeMapper cmmCodeMapper;
     private final RedisCustomTemplate<String, SessionInfoVO> redisCustomTemplate;
 
     /** Constructor Injection */
     @Autowired
-    public CmmMenuServiceImpl(RedisConnService redisConnService, CmmMenuMapper cmmMenuMapper, CmmCodeMapper cmmCodeMapper,
+    public CmmMenuServiceImpl(RedisConnService redisConnService, CmmMenuMapper cmmMenuMapper,
         RedisCustomTemplate<String, SessionInfoVO> redisCustomTemplate) {
         this.redisConnService = redisConnService;
         this.cmmMenuMapper = cmmMenuMapper;
-        this.cmmCodeMapper = cmmCodeMapper;
         this.redisCustomTemplate = redisCustomTemplate;
     }
 

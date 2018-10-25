@@ -14,12 +14,12 @@ import org.springframework.stereotype.Component;
 @Component("columnList")
 public class ColumnList {
 
-    private final GridSupportService gsService;
+    private final GridSupportService gridSupportService;
 
     /** Constructor Injection */
     @Autowired
-    public ColumnList(GridSupportService gsService) {
-        this.gsService = gsService;
+    public ColumnList(GridSupportService gridSupportService) {
+        this.gridSupportService = gridSupportService;
     }
 
     /**
@@ -30,7 +30,7 @@ public class ColumnList {
       * @return {@code String} 형태의 그리드에 바로 사용 가능한 컬럼 데이터
       */
     public String getColumnList(String table) {
-        return gsService.getGridColumsTable(table);
+        return gridSupportService.getGridColumsTable(table);
     }
 }
 

@@ -43,11 +43,16 @@ import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 @RequestMapping(value = "/sys/cd/systemCd")
 public class SystemCdController {
     
+    private final SystemCdService systemCdService;
+    private final SessionService sessionService;
+
+    /** Constructor Injection */
     @Autowired
-    SystemCdService systemCdService;
-    @Autowired
-    SessionService sessionService;
-    
+    public SystemCdController(SystemCdService systemCdService, SessionService sessionService) {
+        this.systemCdService = systemCdService;
+        this.sessionService = sessionService;
+    }
+
     /**
      * 시스템 명칭관리 - 페이지 이동
      * @param   request

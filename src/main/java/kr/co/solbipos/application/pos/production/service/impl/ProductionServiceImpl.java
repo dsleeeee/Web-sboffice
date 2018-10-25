@@ -1,10 +1,6 @@
 package kr.co.solbipos.application.pos.production.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.common.service.message.MessageService;
-import kr.co.solbipos.application.pos.exceptForward.service.ExceptForwardService;
-import kr.co.solbipos.application.pos.exceptForward.service.ExcpForwardProductVO;
-import kr.co.solbipos.application.pos.exceptForward.service.impl.ExceptForwardMapper;
 import kr.co.solbipos.application.pos.production.service.ProductionService;
 import kr.co.solbipos.application.pos.production.service.ProductionVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -32,11 +28,13 @@ import java.util.List;
 @Service("productionService")
 public class ProductionServiceImpl implements ProductionService {
 
-    @Autowired
-    ProductionMapper mapper;
+    private final ProductionMapper productionMapper;
 
+    /** Constructor Injection */
     @Autowired
-    MessageService messageService;
+    public ProductionServiceImpl(ProductionMapper productionMapper) {
+        this.productionMapper = productionMapper;
+    }
 
     /** 생산량 등록 대상상품 목록 조회*/
     @Override
@@ -46,7 +44,7 @@ public class ProductionServiceImpl implements ProductionService {
         productionVO.setStoreCd(sessionInfoVO.getStoreCd());
 
         // 목록 조회
-        List<DefaultMap<String>> reultList = mapper.getProductList(productionVO);
+        List<DefaultMap<String>> reultList = productionMapper.getProductList(productionVO);
 
         return reultList;
     }

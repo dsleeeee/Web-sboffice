@@ -44,11 +44,15 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 @RequestMapping(value = "/pos/confg/verManage")
 public class VerManageController {
 
-    @Autowired
-    VerManageService service;
+    private final VerManageService verManageService;
+    private final SessionService sessionService;
 
+    /** Constructor Injection */
     @Autowired
-    SessionService sessionService;
+    public VerManageController(VerManageService verManageService, SessionService sessionService) {
+        this.verManageService = verManageService;
+        this.sessionService = sessionService;
+    }
 
     /**
      * 버전정보 화면 이동
@@ -78,7 +82,7 @@ public class VerManageController {
     public Result list(VerInfoVO verInfo, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
-        List<DefaultMap<String>> list = service.list(verInfo);
+        List<DefaultMap<String>> list = verManageService.list(verInfo);
 
         return returnListJson(Status.OK, list, verInfo);
     }
@@ -97,7 +101,7 @@ public class VerManageController {
     public Result dtlInfo(VerInfoVO verInfo, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
-        DefaultMap<String> result = service.dtlInfo(verInfo);
+        DefaultMap<String> result = verManageService.dtlInfo(verInfo);
 
         return returnJson(Status.OK, result);
     }
@@ -116,7 +120,7 @@ public class VerManageController {
     public Result delete(VerInfoVO verInfo, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
-        int result = service.verDelete(verInfo);
+        int result = verManageService.verDelete(verInfo);
 
         return returnJson(Status.OK, result);
     }
@@ -135,7 +139,7 @@ public class VerManageController {
     public Result chkSerNo(VerInfoVO verInfo, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
-        int cnt = service.chkVerSerNo(verInfo);
+        int cnt = verManageService.chkVerSerNo(verInfo);
 
         return returnJson(Status.OK, cnt);
     }
@@ -152,7 +156,7 @@ public class VerManageController {
 
         SessionInfoVO sessionInfo = sessionService.getSessionInfo(request);
 
-        if(service.regist(request, sessionInfo)) {
+        if(verManageService.regist(request, sessionInfo)) {
             return returnJson(Status.OK);
         } else {
             return returnJson(Status.FAIL);
@@ -171,7 +175,7 @@ public class VerManageController {
 
         SessionInfoVO sessionInfo = sessionService.getSessionInfo(request);
 
-        if(service.modify(request, sessionInfo)) {
+        if(verManageService.modify(request, sessionInfo)) {
             return returnJson(Status.OK);
         } else {
             return returnJson(Status.FAIL);
@@ -192,7 +196,7 @@ public class VerManageController {
     public Result storeList(VerInfoVO verInfo, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
-        List<DefaultMap<String>> result = service.storeList(verInfo);
+        List<DefaultMap<String>> result = verManageService.storeList(verInfo);
 
         return returnListJson(Status.OK, result);
     }
@@ -212,7 +216,7 @@ public class VerManageController {
             HttpServletResponse response, Model model) {
 
         // 포스가 설치된 매장만 조회
-        List<DefaultMap<String>> list = service.srchStoreList(applcStore);
+        List<DefaultMap<String>> list = verManageService.srchStoreList(applcStore);
 
         return returnListJson(Status.OK, list, applcStore);
     }
@@ -233,7 +237,7 @@ public class VerManageController {
 
         SessionInfoVO sessionInfo = sessionService.getSessionInfo(request);
 
-        int result = service.registStore(applcStore, sessionInfo);
+        int result = verManageService.registStore(applcStore, sessionInfo);
 
         return returnJson(Status.OK, result);
     }
@@ -254,7 +258,7 @@ public class VerManageController {
 
         SessionInfoVO sessionInfo = sessionService.getSessionInfo(request);
 
-        int result = service.removeStore(applcStore, sessionInfo);
+        int result = verManageService.removeStore(applcStore, sessionInfo);
 
         return returnJson(Status.OK, result);
     }

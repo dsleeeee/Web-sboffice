@@ -19,16 +19,23 @@ import static kr.co.common.utils.spring.StringUtil.toCamelCaseName;
 @Service("gridSupportService")
 public class GridSupportServiceImpl implements GridSupportService {
     
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    @Autowired
-    MessageService messageService;
-    @Autowired
-    SampleService sampleService;
-    @Autowired
-    CmmGridMapper cmmGridMapper;
-
     final static String COLUMN_BINDING = "binding";
     final static String COLUMN_NAME = "header";
+
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
+    private final CmmGridMapper cmmGridMapper;
+    private final MessageService messageService;
+    private final SampleService sampleService;
+
+    /** Constructor Injection */
+    @Autowired
+    public GridSupportServiceImpl(CmmGridMapper cmmGridMapper, MessageService messageService,
+        SampleService sampleService) {
+        this.cmmGridMapper = cmmGridMapper;
+        this.messageService = messageService;
+        this.sampleService = sampleService;
+    }
 
     /**
      *

@@ -24,14 +24,19 @@ import java.util.List;
  * @version 1.0
  * @see
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Service("DrawHistService")
 @Transactional
 public class DrawHistServiceImpl implements DrawHistService {
 
+    private final DrawHistMapper drawHistMapper;
+
+    /** Constructor Injection */
     @Autowired
-    DrawHistMapper DrawHistMapper;
+    public DrawHistServiceImpl(DrawHistMapper drawHistMapper) {
+        this.drawHistMapper = drawHistMapper;
+    }
 
     @Override
     public List<DrawHistVO> selectDrawHist(DrawHistVO DrawHistVO, SessionInfoVO sessionInfoVO) {
@@ -41,7 +46,7 @@ public class DrawHistServiceImpl implements DrawHistService {
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
         	DrawHistVO.setStoreCd(sessionInfoVO.getOrgnCd());
         }
-        return DrawHistMapper.selectDrawHist(DrawHistVO);
+        return drawHistMapper.selectDrawHist(DrawHistVO);
     }
 
 }

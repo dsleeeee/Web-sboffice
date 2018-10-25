@@ -1,18 +1,20 @@
 package kr.co.sample.application.controller;
 
-import static kr.co.common.utils.grid.ReturnUtil.returnJson;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import kr.co.common.data.enums.Status;
+import kr.co.common.data.structure.Result;
+import kr.co.common.service.session.SessionService;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import kr.co.common.data.enums.Status;
-import kr.co.common.data.structure.Result;
-import kr.co.common.service.session.SessionService;
-import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 
 /**
  * @author 정용길
@@ -20,8 +22,14 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 
 @Controller
 public class RedisTestController {
+
+    private final SessionService sessionService;
+
+    /** Constructor Injection */
     @Autowired
-    SessionService sessionService;
+    public RedisTestController(SessionService sessionService) {
+        this.sessionService = sessionService;
+    }
 
     /**
      *

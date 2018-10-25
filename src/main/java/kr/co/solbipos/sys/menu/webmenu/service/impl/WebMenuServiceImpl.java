@@ -1,15 +1,5 @@
 package kr.co.solbipos.sys.menu.webmenu.service.impl;
 
-import static kr.co.common.utils.DateUtil.*;
-import static kr.co.common.utils.spring.StringUtil.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.exception.JsonException;
@@ -20,6 +10,19 @@ import kr.co.solbipos.application.common.enums.ResrceFg;
 import kr.co.solbipos.application.common.service.ResrceInfoVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sys.menu.webmenu.service.WebMenuService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
+import static kr.co.common.utils.spring.StringUtil.equalsNull;
+import static kr.co.common.utils.spring.StringUtil.isEmpty;
 
 /**
  *
@@ -34,12 +37,17 @@ public class WebMenuServiceImpl implements WebMenuService {
     
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
     
+    private final WebMenuMapper webMenuMapper;
+    private final SessionService sessionService;
+    private final MessageService messageService;
+
+    /** Constructor Injection */
     @Autowired
-    WebMenuMapper webMenuMapper;
-    @Autowired
-    SessionService sessionService;
-    @Autowired
-    MessageService messageService;
+    public WebMenuServiceImpl(WebMenuMapper webMenuMapper, SessionService sessionService, MessageService messageService) {
+        this.webMenuMapper = webMenuMapper;
+        this.sessionService = sessionService;
+        this.messageService = messageService;
+    }
 
     @Override
     public List<String> selectWebMenu(ResrceInfoVO resrceInfoVO) {

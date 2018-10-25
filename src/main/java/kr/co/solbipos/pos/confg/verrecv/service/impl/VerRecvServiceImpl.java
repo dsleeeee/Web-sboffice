@@ -1,11 +1,12 @@
 package kr.co.solbipos.pos.confg.verrecv.service.impl;
 
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.pos.confg.verrecv.service.VerRecvService;
 import kr.co.solbipos.pos.confg.verrecv.service.VerRecvVO;
-import kr.co.common.data.structure.DefaultMap;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
 * @Class Name : VerRecvServiceImpl.java
@@ -26,36 +27,41 @@ import kr.co.common.data.structure.DefaultMap;
 @Service("verRecvService")
 public class VerRecvServiceImpl implements VerRecvService {
 
+    private final VerRecvMapper verRecvMapper;
+
+    /** Constructor Injection */
     @Autowired
-    VerRecvMapper mapper;
+    public VerRecvServiceImpl(VerRecvMapper verRecvMapper) {
+        this.verRecvMapper = verRecvMapper;
+    }
 
     @Override
     public List<DefaultMap<String>> selectVerList(VerRecvVO verRecv) {
-        return mapper.selectVerList(verRecv);
+        return verRecvMapper.selectVerList(verRecv);
     }
 
     @Override
     public List<DefaultMap<String>> selectStoreList(VerRecvVO verRecv) {
-        return mapper.selectStoreList(verRecv);
+        return verRecvMapper.selectStoreList(verRecv);
     }
 
     @Override
     public List<DefaultMap<String>> selectStoreRecvList(VerRecvVO verRecv) {
-        return mapper.selectStoreRecvList(verRecv);
+        return verRecvMapper.selectStoreRecvList(verRecv);
     }
 
     @Override
     public List<DefaultMap<String>> selectStoreDtl(VerRecvVO verRecv) {
-        return mapper.selectStoreDtl(verRecv);
+        return verRecvMapper.selectStoreDtl(verRecv);
     }
 
     @Override
     public List<DefaultMap<String>> selectVerStoreList(VerRecvVO verRecv) {
-        return mapper.selectVerStoreList(verRecv);
+        return verRecvMapper.selectVerStoreList(verRecv);
     }
     
     @Override
     public List<DefaultMap<String>> selectVerStoreDtlList(VerRecvVO verRecv) {
-        return mapper.selectVerStoreDtlList(verRecv);
+        return verRecvMapper.selectVerStoreDtlList(verRecv);
     }
 }

@@ -1,9 +1,11 @@
 package kr.co.solbipos.application.main.content.service.impl;
 
-import java.util.List;
-import org.apache.ibatis.annotations.Mapper;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
 * @Class Name : ContentMapper.java
@@ -22,6 +24,7 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 * @Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
 @Mapper
+@Repository
 public interface ContentMapper {
 
     /**

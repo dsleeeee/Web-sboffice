@@ -1,7 +1,6 @@
 package kr.co.solbipos.application.pos.exceptForward.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.pos.exceptForward.service.ExceptForwardService;
 import kr.co.solbipos.application.pos.exceptForward.service.ExcpForwardProductVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -29,11 +28,13 @@ import java.util.List;
 @Service("exceptForwardService")
 public class ExceptForwardServiceImpl implements ExceptForwardService{
 
-    @Autowired
-    ExceptForwardMapper mapper;
+    private final ExceptForwardMapper exceptForwardMapper;
 
+    /** Constructor Injection */
     @Autowired
-    MessageService messageService;
+    public ExceptForwardServiceImpl(ExceptForwardMapper exceptForwardMapper) {
+        this.exceptForwardMapper = exceptForwardMapper;
+    }
 
     /** 예외출고 대상상품 목록 조회*/
     @Override
@@ -43,7 +44,7 @@ public class ExceptForwardServiceImpl implements ExceptForwardService{
         productVO.setStoreCd(sessionInfoVO.getStoreCd());
 
         // 목록 조회
-        List<DefaultMap<String>> reultList = mapper.getExcpForwardProduct(productVO);
+        List<DefaultMap<String>> reultList = exceptForwardMapper.getExcpForwardProduct(productVO);
 
         return reultList;
     }

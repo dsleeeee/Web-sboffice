@@ -1,20 +1,22 @@
 package kr.co.solbipos.pos.confg.verrecv.web;
 
-import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import kr.co.common.data.enums.Status;
+import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.data.structure.Result;
+import kr.co.solbipos.pos.confg.verrecv.service.VerRecvService;
+import kr.co.solbipos.pos.confg.verrecv.service.VerRecvVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import kr.co.common.data.enums.Status;
-import kr.co.common.data.structure.DefaultMap;
-import kr.co.common.data.structure.Result;
-import kr.co.solbipos.pos.confg.verrecv.service.VerRecvService;
-import kr.co.solbipos.pos.confg.verrecv.service.VerRecvVO;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+
+import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 
 /**
 * @Class Name : VerRecvController.java
@@ -36,10 +38,14 @@ import kr.co.solbipos.pos.confg.verrecv.service.VerRecvVO;
 @RequestMapping(value = "/pos/confg/verRecv/")
 public class VerRecvController {
     
-    @Autowired 
-    VerRecvService service;
-    
-    
+    private final VerRecvService verRecvService;
+
+    /** Constructor Injection */
+    @Autowired
+    public VerRecvController(VerRecvService verRecvService) {
+        this.verRecvService = verRecvService;
+    }
+
     /**
      * 버전별수신현황 - 페이지 이동
      * 
@@ -67,7 +73,7 @@ public class VerRecvController {
     public Result verrecvlist(VerRecvVO verRecv, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
-        List<DefaultMap<String>> list = service.selectVerList(verRecv);
+        List<DefaultMap<String>> list = verRecvService.selectVerList(verRecv);
         
         return returnListJson(Status.OK, list, verRecv);
     }
@@ -85,7 +91,7 @@ public class VerRecvController {
     public Result verrecvStoreList(VerRecvVO verRecv, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
-        List<DefaultMap<String>> list = service.selectStoreList(verRecv);
+        List<DefaultMap<String>> list = verRecvService.selectStoreList(verRecv);
         
         return returnListJson(Status.OK, list, verRecv);
     }
@@ -117,7 +123,7 @@ public class VerRecvController {
     public Result storerecvList(VerRecvVO verRecv, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
-        List<DefaultMap<String>> list = service.selectStoreRecvList(verRecv);
+        List<DefaultMap<String>> list = verRecvService.selectStoreRecvList(verRecv);
         
         return returnListJson(Status.OK, list, verRecv);
     }
@@ -136,7 +142,7 @@ public class VerRecvController {
     public Result storerecvStoreDtl(VerRecvVO verRecv, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
-        List<DefaultMap<String>> list = service.selectStoreDtl(verRecv);
+        List<DefaultMap<String>> list = verRecvService.selectStoreDtl(verRecv);
         
         return returnListJson(Status.OK, list);
     }
@@ -170,7 +176,7 @@ public class VerRecvController {
     public Result verstoreList(VerRecvVO verRecv, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
-        List<DefaultMap<String>> list = service.selectVerStoreList(verRecv);
+        List<DefaultMap<String>> list = verRecvService.selectVerStoreList(verRecv);
         
         return returnListJson(Status.OK, list, verRecv);
     }
@@ -189,7 +195,7 @@ public class VerRecvController {
     public Result verstoreStoreList(VerRecvVO verRecv, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
-        List<DefaultMap<String>> list = service.selectVerStoreDtlList(verRecv);
+        List<DefaultMap<String>> list = verRecvService.selectVerStoreDtlList(verRecv);
         
         return returnListJson(Status.OK, list, verRecv);
     }

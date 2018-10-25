@@ -3,9 +3,7 @@ package kr.co.solbipos.base.store.view.web;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
-import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
-import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.store.view.service.VanConfigVO;
 import kr.co.solbipos.base.store.view.service.ViewService;
@@ -47,18 +45,15 @@ public class ViewController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    ViewService service;
+    private final ViewService viewService;
+    private final SessionService sessionService;
 
+    /** Constructor Injection */
     @Autowired
-    MessageService messageService;
-
-    @Autowired
-    SessionService sessionService;
-
-    @Autowired
-    CmmCodeUtil cmmCodeUtil;
-
+    public ViewController(ViewService viewService, SessionService sessionService) {
+        this.viewService = viewService;
+        this.sessionService = sessionService;
+    }
 
     /**
      * 매장정보조회 화면 이동
@@ -91,7 +86,7 @@ public class ViewController {
         //기본정보
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
         viewVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
-        List<DefaultMap<String>> list = service.getViewList(viewVO);
+        List<DefaultMap<String>> list = viewService.getViewList(viewVO);
 
         return returnListJson(Status.OK, list, viewVO);
 
@@ -113,12 +108,12 @@ public class ViewController {
             HttpServletResponse response, Model model) {
 
         //매장 상세정보
-        DefaultMap<String> storeInfo = service.getViewDetail(viewVO);
+        DefaultMap<String> storeInfo = viewService.getViewDetail(viewVO);
 
         //VAN사설정정보
         VanConfigVO vanConfigVO = new VanConfigVO();
         vanConfigVO.setStoreCd(viewVO.getStoreCd());
-        List<DefaultMap<String>> vanConfigList = service.getVanconfgList(vanConfigVO);
+        List<DefaultMap<String>> vanConfigList = viewService.getVanconfgList(vanConfigVO);
 
         DefaultMap<Object> resultMap = new DefaultMap<Object>();
         resultMap.put("storeInfo", storeInfo);
@@ -127,12 +122,12 @@ public class ViewController {
         //매장코너정보
         //2:코너개별승인
         if( "2".equals(storeInfo.getStr("cornerUseYn")) ) {
-            List<DefaultMap<String>> cornrApproveList = service.getCornrApproveList(storeInfo.getStr("storeCd"));
+            List<DefaultMap<String>> cornrApproveList = viewService.getCornrApproveList(storeInfo.getStr("storeCd"));
             resultMap.put("cornrApproveList", cornrApproveList);
         }
         //3:포스별승인
         else if( "3".equals(storeInfo.getStr("cornerUseYn")) ) {
-            List<DefaultMap<String>> posApproveList = service.getPosApproveList(storeInfo.getStr("storeCd"));
+            List<DefaultMap<String>> posApproveList = viewService.getPosApproveList(storeInfo.getStr("storeCd"));
             resultMap.put("posApproveList", posApproveList);
         }
 
@@ -153,8 +148,7 @@ public class ViewController {
     public Result vanconfgList(VanConfigVO vanConfgVO, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
-
-      List<DefaultMap<String>> list = service.getVanconfgList(vanConfgVO);
+      List<DefaultMap<String>> list = viewService.getVanconfgList(vanConfgVO);
 
       return returnListJson(Status.OK, list, vanConfgVO);
 

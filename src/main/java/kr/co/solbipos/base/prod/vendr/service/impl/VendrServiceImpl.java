@@ -34,10 +34,16 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Service("vendrService")
 public class VendrServiceImpl implements VendrService {
 
+    private final MessageService messageService;
+    private final VendrMapper vendrMapper;
+
+    /** Constructor Injection */
     @Autowired
-    MessageService messageService;
-    @Autowired
-    private VendrMapper mapper;
+    public VendrServiceImpl(MessageService messageService, VendrMapper vendrMapper) {
+        this.messageService = messageService;
+        this.vendrMapper = vendrMapper;
+    }
+
 
     /** 거래처 목록 조회 */
     @Override
@@ -49,13 +55,13 @@ public class VendrServiceImpl implements VendrService {
         {
             vendrVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-            list = mapper.getHqVendrList(vendrVO);
+            list = vendrMapper.getHqVendrList(vendrVO);
 
         }else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE)
         {
             vendrVO.setStoreCd(sessionInfoVO.getStoreCd());
 
-            list = mapper.getMsVendrList(vendrVO);
+            list = vendrMapper.getMsVendrList(vendrVO);
 
         }else
         {
@@ -74,12 +80,12 @@ public class VendrServiceImpl implements VendrService {
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ)
         {
             vendrVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            result = mapper.getHqDtlInfo(vendrVO);
+            result = vendrMapper.getHqDtlInfo(vendrVO);
 
         }else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE)
         {
             vendrVO.setStoreCd(sessionInfoVO.getStoreCd());
-            result = mapper.getMsDtlInfo(vendrVO);
+            result = vendrMapper.getMsDtlInfo(vendrVO);
         }else
         {
             throw new JsonException(Status.FAIL, messageService.get("cmm.invalid.access"));
@@ -114,14 +120,14 @@ public class VendrServiceImpl implements VendrService {
         {
             vendrVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-            result = mapper.insertHqVendr(vendrVO);
+            result = vendrMapper.insertHqVendr(vendrVO);
 
         }else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE)
         {
             //매장코드
             vendrVO.setStoreCd(sessionInfoVO.getStoreCd());
 
-            result = mapper.insertMsVendr(vendrVO);
+            result = vendrMapper.insertMsVendr(vendrVO);
         }else
         {
             throw new JsonException(Status.FAIL, messageService.get("cmm.invalid.access"));
@@ -152,14 +158,14 @@ public class VendrServiceImpl implements VendrService {
         {
             vendrVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-            result = mapper.modifyHqVendr(vendrVO);
+            result = vendrMapper.modifyHqVendr(vendrVO);
 
         }else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE)
         {
             //매장코드
             vendrVO.setStoreCd(sessionInfoVO.getStoreCd());
 
-            result = mapper.modifyMsVendr(vendrVO);
+            result = vendrMapper.modifyMsVendr(vendrVO);
         }else
         {
             throw new JsonException(Status.FAIL, messageService.get("cmm.invalid.access"));
@@ -191,13 +197,13 @@ public class VendrServiceImpl implements VendrService {
         {
             vendrVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-            list = mapper.getHqVendrProdList(vendrVO);
+            list = vendrMapper.getHqVendrProdList(vendrVO);
 
         }else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE)
         {
             //매장코드
             vendrVO.setStoreCd(sessionInfoVO.getStoreCd());
-            list = mapper.getMsVendrProdList(vendrVO);
+            list = vendrMapper.getMsVendrProdList(vendrVO);
         }else
         {
             throw new JsonException(Status.FAIL, messageService.get("cmm.invalid.access"));
@@ -217,13 +223,13 @@ public class VendrServiceImpl implements VendrService {
         {
             //본사코드
             vendrVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            list = mapper.getHqProdList(vendrVO);
+            list = vendrMapper.getHqProdList(vendrVO);
 
         }else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE)
         {
             //매장코드
             vendrVO.setStoreCd(sessionInfoVO.getStoreCd());
-            list = mapper.getMsProdList(vendrVO);
+            list = vendrMapper.getMsProdList(vendrVO);
         }else
         {
             throw new JsonException(Status.FAIL, messageService.get("cmm.invalid.access"));
@@ -253,7 +259,7 @@ public class VendrServiceImpl implements VendrService {
                 vendrVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
                 vendrVO.setUseYn(UseYn.Y);
 
-                procCnt += mapper.mergeHqVendrProd(vendrVO);
+                procCnt += vendrMapper.mergeHqVendrProd(vendrVO);
 
             }else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE)
             {
@@ -261,7 +267,7 @@ public class VendrServiceImpl implements VendrService {
                 vendrVO.setStoreCd(sessionInfoVO.getStoreCd());
                 vendrVO.setUseYn(UseYn.Y);
 
-                procCnt += mapper.mergeMsVendrProd(vendrVO);
+                procCnt += vendrMapper.mergeMsVendrProd(vendrVO);
             }else
             {
                 throw new JsonException(Status.FAIL, messageService.get("cmm.invalid.access"));
@@ -290,7 +296,7 @@ public class VendrServiceImpl implements VendrService {
                 vendrVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
                 vendrVO.setUseYn(UseYn.N);
 
-                procCnt += mapper.mergeHqVendrProd(vendrVO);
+                procCnt += vendrMapper.mergeHqVendrProd(vendrVO);
 
             }else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE)
             {
@@ -298,7 +304,7 @@ public class VendrServiceImpl implements VendrService {
                 vendrVO.setStoreCd(sessionInfoVO.getStoreCd());
                 vendrVO.setUseYn(UseYn.N);
 
-                procCnt += mapper.mergeMsVendrProd(vendrVO);
+                procCnt += vendrMapper.mergeMsVendrProd(vendrVO);
             }else
             {
                 throw new JsonException(Status.FAIL, messageService.get("cmm.invalid.access"));

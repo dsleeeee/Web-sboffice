@@ -1,9 +1,11 @@
 package kr.co.solbipos.sys.bill.item.service.impl;
 
-import java.util.List;
-import org.apache.ibatis.annotations.Mapper;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.sys.bill.item.service.ItemVO;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @Class Name : ItemMapper.java
@@ -22,6 +24,7 @@ import kr.co.solbipos.sys.bill.item.service.ItemVO;
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Mapper
+@Repository
 public interface ItemMapper {
     
     /** 출력코드 목록 조회 */

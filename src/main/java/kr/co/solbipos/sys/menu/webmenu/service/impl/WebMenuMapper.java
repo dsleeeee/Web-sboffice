@@ -1,8 +1,10 @@
 package kr.co.solbipos.sys.menu.webmenu.service.impl;
 
-import java.util.List;
-import org.apache.ibatis.annotations.Mapper;
 import kr.co.solbipos.application.common.service.ResrceInfoVO;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  *
@@ -12,6 +14,7 @@ import kr.co.solbipos.application.common.service.ResrceInfoVO;
  *
  */
 @Mapper
+@Repository
 public interface WebMenuMapper {
 
     /**
