@@ -145,8 +145,8 @@
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('volmErrCtrl', $scope, $http, true));
 
-    var srchStartDate = wcombo.genDateVal("#srchStartDate", "${sessionScope.sessionInfo.startDt}");
-    var srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.startDt}");
+    var srchStartDate = wcombo.genDateVal("#srchStartDate", "${sessionScope.sessionInfo.startDate}");
+    var srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.endDate}");
 
     $scope.slipFgMap = new wijmo.grid.DataMap([
       {id: "1", name: messages["volmErr.orderSlipFg"]},

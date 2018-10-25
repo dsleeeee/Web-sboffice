@@ -72,8 +72,8 @@
   var app = agrid.getApp();
 
   /** 매장선택 controller */
-  app.controller('<c:out value="${param.targetId}"/>Ctrl', ['$scope', '$http', function ($scope, $http) {
-    var targetId = '<c:out value="${param.targetId}"/>';
+  app.controller('${param.targetId}Ctrl', ['$scope', '$http', function ($scope, $http) {
+    var targetId = '${param.targetId}';
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController(targetId + 'Ctrl', $scope, $http, true));
 
@@ -84,13 +84,13 @@
     $scope.initGrid = function (s, e) {
     };
 
-    var searchFg = "N";
+    $scope.searchFg = "N";
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on(targetId + 'Ctrl', function (event, paramObj) {
       // 매장선택 팝업 오픈
       eval('$scope.wj' + targetId + 'LayerM.show(true)');
 
-      if (searchFg == "N") {
+      if ($scope.searchFg == "N") {
         $scope.searchStore();
       }
       // 기능수행 종료 : 반드시 추가
@@ -101,7 +101,7 @@
       // 파라미터
       var params = {};
       $scope._inquirySub("/iostock/order/outstockReqDate/days/selectStoreList.sb", params, function () {
-        searchFg = "Y";
+        $scope.searchFg = "Y";
       });
     };
 

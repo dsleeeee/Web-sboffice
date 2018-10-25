@@ -29,10 +29,6 @@
         </jsp:include>
         <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
       </td>
-      <%--<td><input type="text" id="daysSearchStoreCd" name="daysSearchStoreCd" ng-model="storeCd" class="sb-input w100" maxlength="7"/></td>--%>
-      <%--&lt;%&ndash; 매장명 &ndash;%&gt;--%>
-      <%--<th><s:message code="outstockReqDate.storeNm"/></th>--%>
-      <%--<td><input type="text" id="daysSearchStoreNm" name="daysSearchStoreNm" ng-model="storeNm" class="sb-input w100" maxlength="16" /></td>--%>
     </tr>
     </tbody>
   </table>

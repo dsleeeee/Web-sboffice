@@ -60,7 +60,7 @@ public class VolmErrController {
      * @since   2018. 10. 22.
      */
     @RequestMapping(value = "/volmErr/view.sb", method = RequestMethod.GET)
-    public String storeCloseView(HttpServletRequest request, HttpServletResponse response, Model model) {
+    public String volmErrView(HttpServletRequest request, HttpServletResponse response, Model model) {
         return "iostock/volmErr/volmErr/volmErr";
     }
 

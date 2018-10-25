@@ -140,7 +140,7 @@
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('volmErrDtlCtrl', $scope, $http, true));
 
-    $scope.outDate = wcombo.genDateVal("#dtlOutDate", "${sessionScope.sessionInfo.startDt}");
+    $scope.outDate = wcombo.genDate("#dtlOutDate");
 
     $scope.errFgMap = new wijmo.grid.DataMap([
       {id: "0", name: messages["volmErr.reg"]},

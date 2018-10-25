@@ -27,7 +27,14 @@
             </td>
             <th><s:message code="outstockReqDate.store"/><em class="imp">*</em></th>
             <td>
-              <%-- 매장선택 모듈 싱글 선택 사용시 include --%>
+              <%-- 매장선택 모듈 싱글 선택 사용시 include
+                   param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
+                                displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
+                                modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
+                                closeFunc - 팝업 닫기시 호출할 함수
+                                cd - 로딩시 세팅할 매장코드
+                                nm - 로딩시 세팅할 매장명
+              --%>
               <jsp:include page="/WEB-INF/view/iostock/order/outstockReqDate/selectShopS.jsp" flush="true">
                 <jsp:param name="targetId" value="speDateRegistStore"/>
               </jsp:include>
