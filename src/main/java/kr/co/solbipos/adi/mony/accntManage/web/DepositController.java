@@ -84,7 +84,7 @@ public class DepositController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<String>> storeList = service.getDepositAccntList(accntVO, sessionInfoVO);
+        List<DefaultMap<String>> storeList = depositService.getDepositAccntList(accntVO, sessionInfoVO);
 
         return returnListJson(Status.OK, storeList, accntVO);
     }
@@ -108,7 +108,7 @@ public class DepositController {
 
         try{
 
-            result = service.saveDepositAccntList(accntVOs, sessionInfoVO);
+            result = depositService.saveDepositAccntList(accntVOs, sessionInfoVO);
 
         }catch(Exception ex){
             ex.printStackTrace();
