@@ -114,7 +114,7 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
     var params = {};
     params.storeCd = $("#storeCd").val();
 
-    $.ajax({
+    $.ajax({ //TODO
       type: "POST",
       cache: false,
       async:false,

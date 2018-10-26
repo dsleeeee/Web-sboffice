@@ -9,6 +9,7 @@
       <s:message code="coupon.regist.product" />
       <a href="#" class="wj-hide btn_close"></a>
     </div>
+
     <div class="wj-dialog-body">
 
       <table class="tblType01 mt20">

@@ -267,15 +267,15 @@ public class StoreManageController {
        Map<String, Object> resultMap = new HashMap<String, Object>();
 
        // 포스 환경정보 조회
-       List<DefaultMap<String>> envGroupList = service.getPosEnvGroupList(storePosEnvVO);
+       List<DefaultMap<String>> list = service.getPosEnvGroupList(storePosEnvVO);
 
-       // 그룹설정 selectBox
+       // 테이블 그룹
        List<DefaultMap<String>> groupList = service.getGroupList(storePosEnvVO);
 
-       resultMap.put("envGroupList", envGroupList);
+       resultMap.put("list", list);
        resultMap.put("groupList", groupList);
 
-       return returnListJson(Status.OK, resultMap);
+       return returnJson(Status.OK, resultMap);
    }
 
    /**
@@ -316,14 +316,10 @@ public class StoreManageController {
    public Result getPosList(StorePosEnvVO storePosEnvVO, HttpServletRequest request,
            HttpServletResponse response, Model model) {
 
-       Map<String, Object> resultMap = new HashMap<String, Object>();
-
        // 포스 번호 목록 조회
        List<DefaultMap<String>> posList = service.getPosList(storePosEnvVO);
 
-       resultMap.put("posList", posList);
-
-       return returnListJson(Status.OK, resultMap);
+       return returnListJson(Status.OK, posList);
    }
 
    /**

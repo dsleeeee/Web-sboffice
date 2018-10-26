@@ -18,7 +18,7 @@ var app = agrid.getApp();
  **********************************************************************/
 app.controller('storeManageCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('storeManageCtrl', $scope, $http, false));
+  angular.extend(this, new RootController('storeManageCtrl', $scope, $http, true));
 
   // 조회조건 콤보박스 데이터 Set
   $scope._setComboData("clsFg", clsFg);
@@ -38,6 +38,7 @@ app.controller('storeManageCtrl', ['$scope', '$http', function ($scope, $http) {
 
     $scope.clsFgDataMap = new wijmo.grid.DataMap(clsFg, 'value', 'name');
     $scope.sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
+    $scope.areaFgDataMap = new wijmo.grid.DataMap(areaCd, 'value', 'name');
 
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
@@ -55,11 +56,9 @@ app.controller('storeManageCtrl', ['$scope', '$http', function ($scope, $http) {
       if( ht.cellType === wijmo.grid.CellType.Cell) {
         var col = ht.panel.columns[ht.col];
         // var selectedRow = s.rows[ht.row].dataItem;
-        $scope.setSelectedStore(s.rows[ht.row].dataItem);
         if ( col.binding === "storeCd" ||  col.binding === "storeNm") {
-
+          $scope.setSelectedStore(s.rows[ht.row].dataItem);
           var popup = $scope.storeInfoLayer;
-
           // 팝업 열린 뒤. 딜레이줘서 열리고 나서 실행되도록 함
           popup.shown.addHandler(function (s) {
             setTimeout(function() {
@@ -70,6 +69,8 @@ app.controller('storeManageCtrl', ['$scope', '$http', function ($scope, $http) {
           // 팝업 닫을때
           popup.show(true, function (s) {
           });
+
+          event.preventDefault();
         }
       }
     });
@@ -83,51 +84,14 @@ app.controller('storeManageCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 매장목록 조회
   $scope.getStoreList = function(){
-
     var params = {};
-
-    $.ajax({
-      type: "POST",
-      cache: false,
-      async: true,
-      dataType: "json",
-      url: "/store/manage/storeManage/storeManage/getStoreList.sb",
-      data: params,
-      success: function(result) {
-        if(result.status === "OK") {
-
-          // console.log(result);
-
-          $scope.list = result.data.list;
-          if(isEmptyObject($scope.list)){
-            $scope._popMsg(messages["cmm.empty.data"]);
-            $scope._gridDataInit();
-            return false;
-          }
-          $scope.data = new wijmo.collections.CollectionView($scope.list);
-        }
-        else if(result.status === "FAIL") {
-          return fail(result);
-        }
-        else if(result.status === "SESSION_EXFIRE") {
-          s_alert.popOk(result.message, function() {
-            location.href = result.url;
-          });
-        }
-        else if(result.status === "SERVER_ERROR") {
-          s_alert.pop(result.message);
-        }
-        else {
-          var msg = result.status + " : " + resultmessage;
-          alert(msg);
-        }
-      }
+    $scope._inquiryMain("/store/manage/storeManage/storeManage/getStoreList.sb", params, function() {
     });
   };
 
   // 매장 추가 팝업 오픈
   $scope.addStore = function(){
-
+    event.preventDefault();
   };
 
 }]);

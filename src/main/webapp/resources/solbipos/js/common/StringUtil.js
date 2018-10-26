@@ -238,8 +238,6 @@ function isNull(str) {
   return returnVal;
 }
 
-
-
 /**
  * chkByte(str)
  * - 문자열바이트체크
@@ -580,6 +578,7 @@ function chkJumin(num) {
 
   return true;
 }
+
 /**
  * chkCompNum(str)
  * - 사업자번호유효체크

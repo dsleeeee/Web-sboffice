@@ -148,7 +148,7 @@ public interface StoreManageMapper {
     /** 포스 목록 조회  */
     List<DefaultMap<String>> getPosList(StorePosEnvVO storePosEnvVO);
 
-    /** 포스그룹설정 selectBox 용 그룹목록 조회 */
+    /** 테이블 그룹 (selectBox 용) */
     List<DefaultMap<String>> getGroupList(StorePosEnvVO storePosEnvVO);
 
     /** 테이블 그룹설정 정보 저장 */

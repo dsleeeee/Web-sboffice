@@ -90,7 +90,7 @@
     </button>
   </div>
   <%-- 매장 그리드 --%>
-  <div class="wj-gridWrap" style="height:315px">
+  <div class="wj-gridWrap" style="height:315px; overflow-x: hidden;">
       <wj-flex-grid
               control="flex"
               autoGenerateColumns="false"
@@ -100,20 +100,18 @@
               is-read-only="true">
 
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="storeManage.hqOffice"/>" binding="hqOfficeCdNm" visible="false" ></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeManage.hqOfficeCd"/>" binding="hqOfficeCd" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeManage.hqOfficeNm"/>" binding="hqOfficeNm" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeManage.storeCd"/>" binding="storeCd" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeManage.storeNm"/>" binding="storeNm" ></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeManage.clsFg"/>" binding="clsFg" data-map="clsFgDataMap" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeManage.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeManage.sysOpenDate"/>" binding="sysOpenDate" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeManage.hqOffice"/>" binding="hqOfficeCdNm" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeManage.hqOfficeCd"/>" binding="hqOfficeCd" align="center" width="70"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeManage.hqOfficeNm"/>" binding="hqOfficeNm" align="center" width="*"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeManage.storeCd"/>" binding="storeCd" align="center" width="70"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeManage.storeNm"/>" binding="storeNm" width="*"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeManage.weatherArea"/>" binding="areaCd" data-map="areaFgDataMap" align="center" width="100"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeManage.clsFg"/>" binding="clsFg" data-map="clsFgDataMap" align="center" width="70"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeManage.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" align="center" width="90"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeManage.sysOpenDate"/>" binding="sysOpenDate" align="center" width="110"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeManage.van"/>" binding="vanNm" align="center" width="70"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeManage.agency"/>" binding="agencyNm" align="center" width="90"></wj-flex-grid-column>
       </wj-flex-grid>
-      <%-- ColumnPicker 사용시 include --%>
-      <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-        <jsp:param name="pickerTarget" value="representCtrl"/>
-      </jsp:include>
-      <%--// ColumnPicker 사용시 include --%>
   </div>
 </div>
 
@@ -124,9 +122,14 @@ var areaCd = ${ccu.getCommCodeSelect("061")};
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeManage.js?ver=2018102301" charset="utf-8"></script>
 
-<%-- 매장정보 조회 --%>
+<%-- 매장정보 --%>
 <c:import url="/WEB-INF/view/store/manage/storeManage/storeInfo.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
+<%-- 환경변수 --%>
+<c:import url="/WEB-INF/view/store/manage/storeManage/storeEnv.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>

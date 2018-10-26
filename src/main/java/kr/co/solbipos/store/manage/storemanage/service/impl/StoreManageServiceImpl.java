@@ -90,14 +90,10 @@ public class StoreManageServiceImpl implements StoreManageService{
         // 매장 상세정보
         DefaultMap<String> storeDtlInfo = mapper.getStoreDetail(storeManageVO);
 
-        // 벤사, 코너 조회
-        List<DefaultMap<String>> vanCornrList =mapper.getVanCornrList(storeManageVO);
-
         // 설치 포스수 조회
         int instPosCnt = mapper.getInstPosCnt(storeManageVO);
 
         result.put("storeDtlInfo", storeDtlInfo);
-        result.put("vanCornrList", vanCornrList);
         result.put("instPosCnt", instPosCnt);
 
         return result;
@@ -388,16 +384,16 @@ public class StoreManageServiceImpl implements StoreManageService{
         int procCnt = mapper.updateStoreInfo(storeManageVO);
 
         // 코너사용여부 환경변수 등록
-        StoreEnvVO storeEnvVO = new StoreEnvVO();
-        storeEnvVO.setStoreCd(storeManageVO.getStoreCd());
-        storeEnvVO.setEnvstCd(CORNER_USE_YN);
-        storeEnvVO.setEnvstVal(storeManageVO.getCornerUseYn());
-        storeEnvVO.setRegDt(dt);
-        storeEnvVO.setRegId(sessionInfoVO.getUserId());
-        storeEnvVO.setModDt(dt);
-        storeEnvVO.setModId(sessionInfoVO.getUserId());
-
-        procCnt += mapper.updateStoreEnvst(storeEnvVO);
+//        StoreEnvVO storeEnvVO = new StoreEnvVO();
+//        storeEnvVO.setStoreCd(storeManageVO.getStoreCd());
+//        storeEnvVO.setEnvstCd(CORNER_USE_YN);
+//        storeEnvVO.setEnvstVal(storeManageVO.getCornerUseYn());
+//        storeEnvVO.setRegDt(dt);
+//        storeEnvVO.setRegId(sessionInfoVO.getUserId());
+//        storeEnvVO.setModDt(dt);
+//        storeEnvVO.setModId(sessionInfoVO.getUserId());
+//
+//        procCnt += mapper.updateStoreEnvst(storeEnvVO);
 
         return procCnt;
     }
@@ -502,7 +498,7 @@ public class StoreManageServiceImpl implements StoreManageService{
         return mapper.getPosList(storePosEnvVO);
     }
 
-    /** 포스그룹설정 selectBox 용 그룹목록 조회 */
+    /** 테이블그룹 (selectBox 용) */
     @Override
     public List<DefaultMap<String>> getGroupList(StorePosEnvVO storePosEnvVO) {
         return mapper.getGroupList(storePosEnvVO);

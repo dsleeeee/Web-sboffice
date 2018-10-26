@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    Pupup.xml
+    공통 팝업 관련
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김지은     2018.06.08     최초작성
+-->
+
+<mapper namespace="kr.co.common.service.popup.impl.PopupMapper">
+
+    <!-- 벤사목록조회 -->
+    <!--
+        TABLE    : TB_CM_VAN_CMPNY
+        PARAM    : vanVO
+        COMMENTS : 벤사 목록을 조회한다.
+    -->
+    <select id="getVanList" parameterType="vanVO" resultType="DefaultMap">
+        /* USE : PopupMapper.getStoreList */
+        SELECT VAN_FG,
+               VAN_CD,
+               VAN_NM
+         FROM TB_CM_VAN_CMPNY
+      <where>
+        <if test='vanFg != null and vanFg != ""'>
+              VAN_FG = #{vanFg}
+        </if>
+        <if test='vanCd != null and vanCd != ""'>
+          AND VAN_CD = #{vanCd}
+        </if>
+        <if test='vanNm != null and vanNm != ""'>
+          AND VAN_NM LIKE '%'||#{vanNm}||'%'
+        </if>
+      </where>
+        ORDER BY VAN_FG, VAN_CD ASC
+    </select>
+
+    <!-- 대리점목록조회 -->
+    <!--
+        TABLE    : TB_CM_AGENCY
+        PARAM    : agencyVO
+        COMMENTS : 대리점 목록을 조회한다.
+    -->
+    <select id="getAgencyList" parameterType="agencyVO" resultType="DefaultMap">
+      /* USE : PopupMapper.getAgencyList */
+      SELECT AGENCY_CD,
+             AGENCY_NM
+        FROM TB_CM_AGENCY
+      <where>
+        <if test='agencyCd != null and agencyCd != ""'>
+             AGENCY_CD = #{agencyCd}
+        </if>
+        <if test='agencyNm != null and agencyNm != ""'>
+         AND AGENCY_NM LIKE '%'||#{agencyNm}||'%'
+        </if>
+      </where>
+       ORDER BY AGENCY_CD ASC
+    </select>
+
+</mapper>
