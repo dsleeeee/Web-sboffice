@@ -4,7 +4,6 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
-import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
@@ -41,16 +40,13 @@ public class GiftServiceImpl implements GiftService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    private final GiftMapper mapper;
-    private final CmmCodeUtil cmmCodeUtil;
+    private final GiftMapper giftMapper;
     private final MessageService messageService;
 
     /** Constructor Injection */
     @Autowired
-    public GiftServiceImpl(GiftMapper mapper, CmmCodeUtil cmmCodeUtil,
-        MessageService messageService) {
-        this.mapper = mapper;
-        this.cmmCodeUtil = cmmCodeUtil;
+    public GiftServiceImpl(GiftMapper giftMapper, MessageService messageService) {
+        this.giftMapper = giftMapper;
         this.messageService = messageService;
     }
 
@@ -67,12 +63,12 @@ public class GiftServiceImpl implements GiftService {
         // 본사
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             payMethodClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            returnList = mapper.getHqGiftClassList(payMethodClassVO);
+            returnList = giftMapper.getHqGiftClassList(payMethodClassVO);
         }
         // 매장
         else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             payMethodClassVO.setStoreCd(sessionInfoVO.getStoreCd());
-            returnList = mapper.getStoreGiftClassList(payMethodClassVO);
+            returnList = giftMapper.getStoreGiftClassList(payMethodClassVO);
         }
         // 권한 확인 필요
         else {
@@ -104,15 +100,15 @@ public class GiftServiceImpl implements GiftService {
                 payMethodClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
                 if(payMethodClassVO.getStatus() == GridDataFg.INSERT) {
-                    String payMethodClassCd = mapper.getPayMethodClassCd(payMethodClassVO);
+                    String payMethodClassCd = giftMapper.getPayMethodClassCd(payMethodClassVO);
                     payMethodClassVO.setPayClassCd(payMethodClassCd);
-                    procCnt += mapper.insertHqGiftClass(payMethodClassVO);
+                    procCnt += giftMapper.insertHqGiftClass(payMethodClassVO);
                 }
                 else if(payMethodClassVO.getStatus() == GridDataFg.UPDATE) {
-                    procCnt += mapper.updateHqGiftClass(payMethodClassVO);
+                    procCnt += giftMapper.updateHqGiftClass(payMethodClassVO);
                 }
                 else if(payMethodClassVO.getStatus() == GridDataFg.DELETE) {
-                    procCnt += mapper.deleteHqGiftClass(payMethodClassVO);
+                    procCnt += giftMapper.deleteHqGiftClass(payMethodClassVO);
                 }
             }
             // 매장
@@ -120,15 +116,15 @@ public class GiftServiceImpl implements GiftService {
                 payMethodClassVO.setStoreCd(sessionInfoVO.getStoreCd());
 
                 if(payMethodClassVO.getStatus() == GridDataFg.INSERT) {
-                    String payMethodClassCd = mapper.getPayMethodClassCd(payMethodClassVO);
+                    String payMethodClassCd = giftMapper.getPayMethodClassCd(payMethodClassVO);
                     payMethodClassVO.setPayClassCd(payMethodClassCd);
-                    procCnt += mapper.insertStoreGiftClass(payMethodClassVO);
+                    procCnt += giftMapper.insertStoreGiftClass(payMethodClassVO);
                 }
                 else if(payMethodClassVO.getStatus() == GridDataFg.UPDATE) {
-                    procCnt += mapper.updateStoreGiftClass(payMethodClassVO);
+                    procCnt += giftMapper.updateStoreGiftClass(payMethodClassVO);
                 }
                 else if(payMethodClassVO.getStatus() == GridDataFg.DELETE) {
-                    procCnt += mapper.deleteStoreGiftClass(payMethodClassVO);
+                    procCnt += giftMapper.deleteStoreGiftClass(payMethodClassVO);
                 }
             }
             // 권한 확인 필요
@@ -155,12 +151,12 @@ public class GiftServiceImpl implements GiftService {
         // 본사
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             giftVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            returnList = mapper.getHqGiftList(giftVO);
+            returnList = giftMapper.getHqGiftList(giftVO);
         }
         // 매장
         else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             giftVO.setStoreCd(sessionInfoVO.getStoreCd());
-            returnList = mapper.getStoreGiftList(giftVO);
+            returnList = giftMapper.getStoreGiftList(giftVO);
         }
         // 권한 확인 필요
         else {
@@ -193,16 +189,16 @@ public class GiftServiceImpl implements GiftService {
 
                 if(giftVO.getStatus() == GridDataFg.INSERT) {
 
-                    String coupnCd = mapper.getGiftCd(giftVO);
+                    String coupnCd = giftMapper.getGiftCd(giftVO);
                     giftVO.setGiftCd(coupnCd);
 
-                    procCnt += mapper.insertHqGift(giftVO);
+                    procCnt += giftMapper.insertHqGift(giftVO);
                 }
                 else if(giftVO.getStatus() == GridDataFg.UPDATE) {
-                    procCnt += mapper.updateHqGift(giftVO);
+                    procCnt += giftMapper.updateHqGift(giftVO);
                 }
                 else if(giftVO.getStatus() == GridDataFg.DELETE) {
-                    procCnt += mapper.deleteHqGift(giftVO);
+                    procCnt += giftMapper.deleteHqGift(giftVO);
                 }
             }
             // 매장 통제
@@ -212,16 +208,16 @@ public class GiftServiceImpl implements GiftService {
 
                 if(giftVO.getStatus() == GridDataFg.INSERT) {
 
-                    String coupnCd = mapper.getGiftCd(giftVO);
+                    String coupnCd = giftMapper.getGiftCd(giftVO);
                     giftVO.setGiftCd(coupnCd);
 
-                    procCnt += mapper.insertStoreGift(giftVO);
+                    procCnt += giftMapper.insertStoreGift(giftVO);
                 }
                 else if(giftVO.getStatus() == GridDataFg.UPDATE) {
-                    procCnt += mapper.updateStoreGift(giftVO);
+                    procCnt += giftMapper.updateStoreGift(giftVO);
                 }
                 else if(giftVO.getStatus() == GridDataFg.DELETE) {
-                    procCnt += mapper.deleteStoreGift(giftVO);
+                    procCnt += giftMapper.deleteStoreGift(giftVO);
                 }
             }
             // 권한 확인 필요

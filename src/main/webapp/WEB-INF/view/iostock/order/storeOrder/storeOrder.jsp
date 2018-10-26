@@ -121,8 +121,8 @@
     angular.extend(this, new RootController('storeOrderCtrl', $scope, $http, true));
 
     $scope.slipFg        = 1;
-    $scope.srchStartDate = wcombo.genDateVal("#srchStartDate", "${sessionScope.sessionInfo.startDt}");
-    $scope.srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.startDt}");
+    $scope.srchStartDate = wcombo.genDateVal("#srchStartDate", "${sessionScope.sessionInfo.startDate}");
+    $scope.srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.endDate}");
     $scope.reqDate       = wcombo.genDate("#reqDate");
 
     $scope._setComboData("srchDateFg", [

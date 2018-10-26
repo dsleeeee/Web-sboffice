@@ -1,37 +1,63 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!--
+    CmmSQL.xml
+    공통쿼리 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       노현수     2018.10.24     주석생성, 포멧정리
+-->
 <mapper namespace="CmmSQL">
-  
-  <sql id="PagingTemplateHeader">
-    <![CDATA[
-    SELECT
-        TEMP.*
-    FROM
-        (
-             SELECT
-                 ORG.*,
-                 ROWNUM AS RNUM
-             FROM
-                 (
-    ]]>
+
+    <!-- 공통 쿼리 헤더 -->
+    <!--
+        TABLE    :
+        PARAM    :
+        COMMENTS : 쿼리 페이징 처리시 최상단 헤더에 include 한다.
+    -->
+    <sql id="PagingTemplateHeader">
+        <![CDATA[
+        SELECT
+            TEMP.*
+        FROM
+            (
+                 SELECT
+                     ORG.*,
+                     ROWNUM AS RNUM
+                 FROM
+                     (
+        ]]>
     </sql>
 
+    <!-- 공통쿼리 : 데이터 Count  -->
+    <!--
+        TABLE    :
+        PARAM    :
+        COMMENTS : 쿼리 페이징 처리시 내용 From 절 직전에 include 한다.
+    -->
     <sql id="PagingTemplateCount">
-    <![CDATA[
-            , COUNT(*) OVER() AS TOT_CNT
-    ]]>
+        <![CDATA[
+                , COUNT(*) OVER() AS TOT_CNT
+        ]]>
     </sql>
 
+    <!-- 공통 쿼리 Bottom -->
+    <!--
+        TABLE    :
+        PARAM    :
+        COMMENTS : 쿼리 페이징 처리시 최하단에 include 한다.
+    -->
     <sql id="PagingTemplateBottom">
-    <![CDATA[
-                 ) ORG
-             WHERE
-                 ROWNUM <= #{limit}
-        ) TEMP
-    WHERE
-        TEMP.RNUM >= #{offset}
-    ]]>
+        <![CDATA[
+                     ) ORG
+                 WHERE
+                     ROWNUM <= #{limit}
+            ) TEMP
+        WHERE
+            TEMP.RNUM >= #{offset}
+        ]]>
     </sql>
   
 </mapper>

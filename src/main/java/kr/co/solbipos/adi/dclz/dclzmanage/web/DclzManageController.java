@@ -48,8 +48,7 @@ public class DclzManageController {
 
     /** Constructor Injection */
     @Autowired
-    public DclzManageController(DclzManageService dclzManageService,
-        SessionService sessionService) {
+    public DclzManageController(DclzManageService dclzManageService, SessionService sessionService) {
         this.dclzManageService = dclzManageService;
         this.sessionService = sessionService;
     }

@@ -1,9 +1,5 @@
 package kr.co.solbipos.sys.cd.envconfg.service.impl;
 
-import static kr.co.common.utils.DateUtil.currentDateTimeString;
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
@@ -13,6 +9,12 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sys.cd.envconfg.service.EnvConfgService;
 import kr.co.solbipos.sys.cd.envconfg.service.EnvstDtlVO;
 import kr.co.solbipos.sys.cd.envconfg.service.EnvstVO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
  * @Class Name : EnvConfgService.java
@@ -33,10 +35,16 @@ import kr.co.solbipos.sys.cd.envconfg.service.EnvstVO;
 @Service("envConfigService")
 public class EnvConfgServiceImpl implements EnvConfgService {
     
-    @Autowired EnvConfgMapper envConfgMapper;
+    private final EnvConfgMapper envConfgMapper;
+    private final MessageService messageService;
+
+    /** Constructor Injection */
     @Autowired
-    MessageService messageService;
-    
+    public EnvConfgServiceImpl(EnvConfgMapper envConfgMapper, MessageService messageService) {
+        this.envConfgMapper = envConfgMapper;
+        this.messageService = messageService;
+    }
+
     /** 대표명칭 코드목록 조회 */
     @Override
     public List<DefaultMap<String>> getEnvstList(EnvstVO envstVO) {

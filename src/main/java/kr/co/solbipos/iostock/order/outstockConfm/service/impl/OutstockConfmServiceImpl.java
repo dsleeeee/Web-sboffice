@@ -3,9 +3,9 @@ package kr.co.solbipos.iostock.order.outstockConfm.service.impl;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
+import kr.co.common.service.code.impl.CmmEnvMapper;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.spring.StringUtil;
-import kr.co.solbipos.application.common.service.impl.CmmEnvMapper;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.iostock.order.outstockConfm.service.OutstockConfmService;
 import kr.co.solbipos.iostock.order.outstockConfm.service.OutstockConfmVO;
@@ -162,6 +162,7 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
             returnResult += result;
+            i++;
         }
 
         // HD 수정

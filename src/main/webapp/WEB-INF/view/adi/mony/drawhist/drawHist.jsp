@@ -24,9 +24,9 @@
         <th><s:message code="cmm.search.date" /></th>
         <td colspan="3">
           <div class="sb-select">
-            <span class="txtIn"> <input id="startDt" name="startDt" class="w200" /></span>
+            <span class="txtIn"> <input id="startDate" name="startDate" class="w200" /></span>
             <span class="rg">~</span>
-            <span class="txtIn"> <input id="endDt" name="endDt" class="w200" /></span>
+            <span class="txtIn"> <input id="endDate" name="endDate" class="w200" /></span>
           </div>
         </td>
       </tr>
@@ -82,8 +82,8 @@ $(document).ready(function(){
    ];
 
   var grid         = wgrid.genGrid("#theGrid", rdata, "${menuCd}", 1, ${clo.getColumnLayout(1)});
-  var startDt      = wcombo.genDateVal("#startDt", "${sessionScope.sessionInfo.startDt}");
-  var endDt        = wcombo.genDateVal("#endDt", "${sessionScope.sessionInfo.endDt}");
+  var startDate    = wcombo.genDateVal("#startDate", "${sessionScope.sessionInfo.startDate}");
+  var endDate      = wcombo.genDateVal("#endDate", "${sessionScope.sessionInfo.endDate}");
   var ldata        = ${ccu.getListScale()};
   var listScaleBox = wcombo.genCommonBox("#listScaleBox", ldata);
   var cdata        = ${ccu.getCommCode("009")};
@@ -91,8 +91,8 @@ $(document).ready(function(){
   function search(index) {
     var param = {};
 
-    param.startDt = getDate(startDt);
-    param.endDt = getDate(endDt);
+    param.startDate = getDate(startDate);
+    param.endDate = getDate(endDate);
     param.chkDt = $('#chkDt').is(":checked");
     param.listScale = listScaleBox.selectedValue;
     param.curr = index;

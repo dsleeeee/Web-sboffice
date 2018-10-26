@@ -10,5 +10,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @ContextConfiguration(locations="file:src/test/java/resources/context-test.xml")
 @WebAppConfiguration
 public abstract class AbstractApplicationContextTest {
-  @Autowired protected ApplicationContext ctx;
+
+    @Autowired
+    protected ApplicationContext ctx;
+
 }

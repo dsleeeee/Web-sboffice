@@ -44,13 +44,13 @@ public class DepositController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    private final DepositService service;
+    private final DepositService depositService;
     private final SessionService sessionService;
 
     /** Constructor Injection */
     @Autowired
-    public DepositController(DepositService service, SessionService sessionService) {
-        this.service = service;
+    public DepositController(DepositService depositService, SessionService sessionService) {
+        this.depositService = depositService;
         this.sessionService = sessionService;
     }
 
@@ -115,4 +115,5 @@ public class DepositController {
         }
         return returnListJson(Status.OK, result);
     }
+
 }

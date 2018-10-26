@@ -28,11 +28,11 @@
           <%-- 매장코드 --%>
           <th><s:message code="dstbCloseProd.add.store"/></th>
           <td>
-            <%-- 매장선택 모듈 싱글 선택 사용시 include --%>
+            <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
             <jsp:include page="/WEB-INF/view/iostock/order/outstockReqDate/selectShopM.jsp" flush="true">
               <jsp:param name="targetId" value="dstbCloseProdAddProdSelectStore"/>
             </jsp:include>
-            <%--// 매장선택 모듈 싱글 선택 사용시 include --%>
+            <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
           </td>
           <td colspan="2"><p class="s14">등록하실 매장을 선택한 후 상품을 조회하십시오.</p></td>
         </tr>

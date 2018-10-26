@@ -3,8 +3,6 @@ package kr.co.solbipos.base.prod.vendr.web;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
-import kr.co.common.service.code.CmmCodeService;
-import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.prod.vendr.service.VendrService;
@@ -47,20 +45,16 @@ public class VendrController {
 
     private final String RESULT_URI = "base/prod/vendr";
 
-    private final SessionService sessionService;
-    private final MessageService messageService;
     private final VendrService vendrService;
-    private final CmmCodeService cmmCodeService;
+    private final SessionService sessionService;
 
     /** Constructor Injection */
     @Autowired
-    public VendrController(SessionService sessionService, MessageService messageService,
-        VendrService vendrService, CmmCodeService cmmCodeService) {
-        this.sessionService = sessionService;
-        this.messageService = messageService;
+    public VendrController(VendrService vendrService, SessionService sessionService) {
         this.vendrService = vendrService;
-        this.cmmCodeService = cmmCodeService;
+        this.sessionService = sessionService;
     }
+
 
     /**
      * 거래처 조회 페이지 이동

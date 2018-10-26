@@ -38,17 +38,22 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 @Controller
 public class GridController {
 
-    @Autowired
-    GridSupportService gsService;
+    private final GridSupportService gridSupportService;
+    private final SessionService sessionService;
 
+    /** Constructor Injection */
     @Autowired
-    SessionService sessionService;
+    public GridController(GridSupportService gridSupportService, SessionService sessionService) {
+        this.gridSupportService = gridSupportService;
+        this.sessionService = sessionService;
+    }
 
     /**
      * 그리드 컬럼 레이아웃 저장
      *
-     * @param gridDispItem
-     * @param model
+     * @param request HttpServletRequest
+     * @param gridDispItemVO GridDispItemVO
+     * @param model Model
      * @return
      */
     @RequestMapping(value = "setGridItem.sb", method = RequestMethod.POST)
@@ -59,7 +64,7 @@ public class GridController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         // 그리드 레이아웃 저장 정보 세팅
-        gridDispItemVO.setResrceCd(sessionInfoVO.getCurrentMenu().getResrceCd());
+//        gridDispItemVO.setResrceCd(sessionInfoVO.getCurrentMenu().getResrceCd());
         gridDispItemVO.setUserId(sessionInfoVO.getUserId());
         gridDispItemVO.setRegDt(currentDateTimeString());
         gridDispItemVO.setRegId(sessionInfoVO.getUserId());
@@ -67,16 +72,16 @@ public class GridController {
         gridDispItemVO.setModId(sessionInfoVO.getUserId());
 
         // 기존에 저장 내역 있는지 조회
-        GridDispItemVO gdItem = gsService.selectGridItem(gridDispItemVO);
+        GridDispItemVO gdItem = gridSupportService.selectGridItem(gridDispItemVO);
 
         int result = -1;
 
         // 해당 리소스 없음 > 신규 추가
         if (isEmpty(gdItem)) {
-            result = gsService.insertGridItem(gridDispItemVO);
+            result = gridSupportService.insertGridItem(gridDispItemVO);
         } else {
             // 해당 리소스 있음 > 업데이트
-            result = gsService.updateGridItem(gridDispItemVO);
+            result = gridSupportService.updateGridItem(gridDispItemVO);
         }
 
         return returnJson(Status.OK, result);

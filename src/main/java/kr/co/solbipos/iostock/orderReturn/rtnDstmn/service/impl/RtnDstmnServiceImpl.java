@@ -106,6 +106,7 @@ public class RtnDstmnServiceImpl implements RtnDstmnService {
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
             returnResult += result;
+            i++;
         }
 
         // HD 수정

@@ -48,10 +48,15 @@ public class HqEmpController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
+    private final SessionService sessionService;
+    private final HqEmpService hqEmpService;
+
+    /** Constructor Injection */
     @Autowired
-    SessionService sessionService;
-    @Autowired
-    HqEmpService hqEmpService;
+    public HqEmpController(SessionService sessionService, HqEmpService hqEmpService) {
+        this.sessionService = sessionService;
+        this.hqEmpService = hqEmpService;
+    }
 
     /**
      * 본사사원 리스트 화면
@@ -77,7 +82,7 @@ public class HqEmpController {
             return returnJsonBindingFieldError(bindingResult);
         }
 
-        List<DefaultMap<String>> list = hqEmpService.selectHqEmpList(hqEmpVO);
+        List<DefaultMap<String>> list = hqEmpService.getHqEmpList(hqEmpVO);
 
         return returnListJson(Status.OK, list,hqEmpVO);
     }
@@ -111,7 +116,7 @@ public class HqEmpController {
     public Result chkHqEmpNo(HqEmpVO hqEmpVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
-        HqEmpResult hqEmpResult = hqEmpService.selectHqEmpNoCnt(hqEmpVO, sessionInfoVO);
+        HqEmpResult hqEmpResult = hqEmpService.getHqEmpNoCnt(hqEmpVO, sessionInfoVO);
 
         return returnJson(Status.OK, hqEmpResult);
     }
@@ -125,7 +130,7 @@ public class HqEmpController {
     @RequestMapping(value = "/chkHqUserId.sb", method = RequestMethod.POST)
     public Result chkHqUserId(HqEmpVO hqEmpVO) {
 
-        HqEmpResult hqEmpResult= hqEmpService.selectHqUserIdCnt(hqEmpVO);
+        HqEmpResult hqEmpResult= hqEmpService.getHqUserIdCnt(hqEmpVO);
 
         return returnJson(Status.OK, hqEmpResult);
     }
@@ -144,7 +149,7 @@ public class HqEmpController {
             return returnJsonBindingFieldError(bindingResult);
         }
 
-        DefaultMap<String> result = hqEmpService.selectHqEmpDtlInfo(hqEmpVO);
+        DefaultMap<String> result = hqEmpService.getHqEmpDtlInfo(hqEmpVO);
 
         return returnJson(Status.OK, result);
     }

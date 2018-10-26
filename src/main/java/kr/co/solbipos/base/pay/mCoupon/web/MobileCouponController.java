@@ -5,11 +5,12 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
-import kr.co.common.utils.jsp.CmmCodeUtil;
-import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.pay.coupon.service.PayMethodClassVO;
 import kr.co.solbipos.base.pay.mCoupon.service.MobileCouponService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,20 +44,16 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 @RequestMapping(value = "/base/pay/mCoupon")
 public class MobileCouponController {
 
-    /** service */
-    private final MobileCouponService service;
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
+    private final MobileCouponService mobileCouponService;
     private final SessionService sessionService;
 
-    /** util */
-    private final CmmCodeUtil cmmCodeUtil;
-    private final CmmEnvUtil cmmEnvUtil;
-
-    public MobileCouponController(MobileCouponService service, SessionService sessionService,
-        CmmCodeUtil cmmCodeUtil, CmmEnvUtil cmmEnvUtil) {
-        this.service = service;
+    /** Constructor Injection */
+    @Autowired
+    public MobileCouponController(MobileCouponService mobileCouponService, SessionService sessionService) {
+        this.mobileCouponService = mobileCouponService;
         this.sessionService = sessionService;
-        this.cmmCodeUtil = cmmCodeUtil;
-        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /**
@@ -91,7 +88,7 @@ public class MobileCouponController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
-        List<DefaultMap<String>> list = service.getMobileCouponClassList(payMethodClassVO, sessionInfoVO);
+        List<DefaultMap<String>> list = mobileCouponService.getMobileCouponClassList(payMethodClassVO, sessionInfoVO);
 
         return returnListJson(Status.OK, list, payMethodClassVO);
     }
@@ -116,7 +113,7 @@ public class MobileCouponController {
         int result = 0;
 
         try{
-            result = service.saveMobileCouponClassList(payMethodClassVOs, sessionInfoVO);
+            result = mobileCouponService.saveMobileCouponClassList(payMethodClassVOs, sessionInfoVO);
         }catch(Exception ex){
             ex.printStackTrace();
         }

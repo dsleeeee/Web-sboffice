@@ -1,38 +1,41 @@
 package kr.co.common.service.grid.impl;
 
-import static kr.co.common.utils.spring.StringUtil.convertToJson;
-import static kr.co.common.utils.spring.StringUtil.toCamelCaseName;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.grid.GridSupportService;
 import kr.co.common.service.message.MessageService;
 import kr.co.sample.application.service.SampleService;
 import kr.co.solbipos.application.common.service.GridDispItemVO;
-import kr.co.solbipos.application.common.service.impl.CmmGridMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
+
+import java.util.*;
+
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
+import static kr.co.common.utils.spring.StringUtil.toCamelCaseName;
 
 @Service("gridSupportService")
 public class GridSupportServiceImpl implements GridSupportService {
     
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    @Autowired
-    MessageService messageService;
-    @Autowired
-    SampleService sampleService;
-    @Autowired
-    CmmGridMapper cmmGridMapper;
-
     final static String COLUMN_BINDING = "binding";
     final static String COLUMN_NAME = "header";
+
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
+    private final CmmGridMapper cmmGridMapper;
+    private final MessageService messageService;
+    private final SampleService sampleService;
+
+    /** Constructor Injection */
+    @Autowired
+    public GridSupportServiceImpl(CmmGridMapper cmmGridMapper, MessageService messageService,
+        SampleService sampleService) {
+        this.cmmGridMapper = cmmGridMapper;
+        this.messageService = messageService;
+        this.sampleService = sampleService;
+    }
 
     /**
      *

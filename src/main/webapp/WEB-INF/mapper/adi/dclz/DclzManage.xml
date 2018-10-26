@@ -36,8 +36,8 @@
           #{item}
         </foreach>
       </if>
-      <if test="startDt != null and startDt != '' and endDt != null and endDt != ''">
-        AND A.SALE_DATE BETWEEN #{startDt} AND #{endDt}
+      <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+        AND A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
       </if>
     </where>
     ORDER BY A.SALE_DATE DESC

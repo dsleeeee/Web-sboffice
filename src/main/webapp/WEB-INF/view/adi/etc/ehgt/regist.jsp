@@ -44,9 +44,9 @@
         <td colspan="3">
           <%-- 조회 일자 --%>
           <div class="sb-select">
-            <span class="txtIn"> <input id="startDt" name="startDt" class="w200" /></span>
+            <span class="txtIn"> <input id="startDate" name="startDate" class="w200" /></span>
             <span class="rg">~</span>
-            <span class="txtIn"> <input id="endDt" name="endDt" class="w200" /></span>
+            <span class="txtIn"> <input id="endDate" name="endDate" class="w200" /></span>
           </div>
         </td>
       </tr>
@@ -154,8 +154,8 @@
       ];
 
     var grid         = wgrid.genGrid("#theGrid", rdata, false);
-    var startDt      = wcombo.genDateVal("#startDt", "${sessionScope.sessionInfo.startDt}");
-    var endDt        = wcombo.genDateVal("#endDt", "${sessionScope.sessionInfo.endDt}");
+    var startDate    = wcombo.genDateVal("#startDate", "${sessionScope.sessionInfo.startDate}");
+    var endDate      = wcombo.genDateVal("#endDate", "${sessionScope.sessionInfo.endDate}");
 
     <%-- Row Header 없애기 --%>
     grid.rowHeaders.columns.splice(0, 1);
@@ -295,8 +295,8 @@
     <%-- 리스트 조회 --%>
     function search() {
       var param = {};
-      param.startDt = getDate(startDt);
-      param.endDt = getDate(endDt);
+      param.startDate = getDate(startDate);
+      param.endDate = getDate(endDate);
       wgrid.getGridData("${baseUrl}/list.sb", param, grid);
       //grid.refresh();
     }

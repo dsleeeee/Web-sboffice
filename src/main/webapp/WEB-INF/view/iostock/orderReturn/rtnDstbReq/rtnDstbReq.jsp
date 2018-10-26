@@ -119,8 +119,8 @@
     angular.extend(this, new RootController('rtnDstbReqCtrl', $scope, $http, true));
 
     $scope.slipFg     = -1;
-    var srchStartDate = wcombo.genDateVal("#srchStartDate", "${sessionScope.sessionInfo.startDt}");
-    var srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.startDt}");
+    var srchStartDate = wcombo.genDateVal("#srchStartDate", "${sessionScope.sessionInfo.startDate}");
+    var srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.endDate}");
 
     $scope._setComboData("srchDateFg", [
       {"name": messages["rtnDstbReq.reqDate"], "value": "req"},

@@ -4,11 +4,10 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
-import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
-import kr.co.solbipos.base.pay.coupon.service.*;
+import kr.co.solbipos.base.pay.coupon.service.PayMethodClassVO;
 import kr.co.solbipos.base.pay.coupon.service.enums.PayTypeFg;
 import kr.co.solbipos.base.pay.mCoupon.service.MobileCouponService;
 import org.slf4j.Logger;
@@ -40,22 +39,16 @@ public class MobileCouponServiceImpl implements MobileCouponService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-
-    /** service */
-    private final MobileCouponMapper mapper;
+    private final MobileCouponMapper mobileCouponMapper;
     private final MessageService messageService;
-
-    /** utils */
-    private final CmmCodeUtil cmmCodeUtil;
 
     /** Constructor Injection */
     @Autowired
-    public MobileCouponServiceImpl(MobileCouponMapper mapper, MessageService messageService,
-        CmmCodeUtil cmmCodeUtil) {
-        this.mapper = mapper;
+    public MobileCouponServiceImpl(MobileCouponMapper mobileCouponMapper, MessageService messageService) {
+        this.mobileCouponMapper = mobileCouponMapper;
         this.messageService = messageService;
-        this.cmmCodeUtil = cmmCodeUtil;
     }
+
 
     /** 쿠폰분류 조회 */
     @Override
@@ -70,12 +63,12 @@ public class MobileCouponServiceImpl implements MobileCouponService {
         // 본사
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             payMethodClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            returnList = mapper.getHqMobileCouponClassList(payMethodClassVO);
+            returnList = mobileCouponMapper.getHqMobileCouponClassList(payMethodClassVO);
         }
         // 매장
         else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             payMethodClassVO.setStoreCd(sessionInfoVO.getStoreCd());
-            returnList = mapper.getStoreMobileCouponClassList(payMethodClassVO);
+            returnList = mobileCouponMapper.getStoreMobileCouponClassList(payMethodClassVO);
         }
         // 권한 확인 필요
         else {
@@ -107,15 +100,15 @@ public class MobileCouponServiceImpl implements MobileCouponService {
                 payMethodClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
                 if(payMethodClassVO.getStatus() == GridDataFg.INSERT) {
-                    String payMethodClassCd = mapper.getPayMethodClassCd(payMethodClassVO);
+                    String payMethodClassCd = mobileCouponMapper.getPayMethodClassCd(payMethodClassVO);
                     payMethodClassVO.setPayClassCd(payMethodClassCd);
-                    procCnt += mapper.insertHqMobileCouponClass(payMethodClassVO);
+                    procCnt += mobileCouponMapper.insertHqMobileCouponClass(payMethodClassVO);
                 }
                 else if(payMethodClassVO.getStatus() == GridDataFg.UPDATE) {
-                    procCnt += mapper.updateHqMobileCouponClass(payMethodClassVO);
+                    procCnt += mobileCouponMapper.updateHqMobileCouponClass(payMethodClassVO);
                 }
                 else if(payMethodClassVO.getStatus() == GridDataFg.DELETE) {
-                    procCnt += mapper.deleteHqMobileCouponClass(payMethodClassVO);
+                    procCnt += mobileCouponMapper.deleteHqMobileCouponClass(payMethodClassVO);
                 }
             }
             // 매장
@@ -123,15 +116,15 @@ public class MobileCouponServiceImpl implements MobileCouponService {
                 payMethodClassVO.setStoreCd(sessionInfoVO.getStoreCd());
 
                 if(payMethodClassVO.getStatus() == GridDataFg.INSERT) {
-                    String payMethodClassCd = mapper.getPayMethodClassCd(payMethodClassVO);
+                    String payMethodClassCd = mobileCouponMapper.getPayMethodClassCd(payMethodClassVO);
                     payMethodClassVO.setPayClassCd(payMethodClassCd);
-                    procCnt += mapper.insertStoreMobileCouponClass(payMethodClassVO);
+                    procCnt += mobileCouponMapper.insertStoreMobileCouponClass(payMethodClassVO);
                 }
                 else if(payMethodClassVO.getStatus() == GridDataFg.UPDATE) {
-                    procCnt += mapper.updateStoreMobileCouponClass(payMethodClassVO);
+                    procCnt += mobileCouponMapper.updateStoreMobileCouponClass(payMethodClassVO);
                 }
                 else if(payMethodClassVO.getStatus() == GridDataFg.DELETE) {
-                    procCnt += mapper.deleteStoreMobileCouponClass(payMethodClassVO);
+                    procCnt += mobileCouponMapper.deleteStoreMobileCouponClass(payMethodClassVO);
                 }
             }
             // 권한 확인 필요

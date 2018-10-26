@@ -1,9 +1,6 @@
 package kr.co.common.service.code.impl;
 
-import kr.co.common.data.domain.CommonCodeVO;
 import kr.co.common.service.code.CmmEnvService;
-import kr.co.common.template.RedisCustomTemplate;
-import kr.co.solbipos.application.common.service.impl.CmmEnvMapper;
 import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;
 import kr.co.solbipos.sys.cd.envconfg.service.EnvstVO;
@@ -35,13 +32,11 @@ public class CmmEnvServiceImpl implements CmmEnvService {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private final CmmEnvMapper cmmEnvMapper;
-    private final RedisCustomTemplate<String, CommonCodeVO> redisCustomTemplate;
 
     /** Constructor Injection */
     @Autowired
-    public CmmEnvServiceImpl(CmmEnvMapper cmmEnvMapper, RedisCustomTemplate<String, CommonCodeVO> redisCustomTemplate) {
+    public CmmEnvServiceImpl(CmmEnvMapper cmmEnvMapper) {
         this.cmmEnvMapper = cmmEnvMapper;
-        this.redisCustomTemplate = redisCustomTemplate;
     }
 
     /** 환경변수 코드 조회 */

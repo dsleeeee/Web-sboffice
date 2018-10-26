@@ -312,7 +312,7 @@
 <script>
   var rWeatherArea  = wcombo.genCommonBox("#rWeatherArea", areaCd);
   var rSysStatFg    = wcombo.genCommonBox("#rSysStatFg", sysStatFg);
-  var rSysOpenDate  = wcombo.genDateVal("#rSysOpenDate", "${sessionScope.sessionInfo.startDt}");
+  var rSysOpenDate  = wcombo.genDateVal("#rSysOpenDate", "${sessionScope.sessionInfo.startDate}");
   var rAgency       = wcombo.genCommonBox("#rAgency", agencyList);
   var rClsFg        = wcombo.genCommonBox("#rClsFg", clsFg);
 

@@ -131,9 +131,12 @@ function RootController(ctrlName, $scope, $http, isPicker) {
     var sParam = {};
     // 길이체크
     if (params.length <= 0) {
+      // 변경사항이 없습니다.
       $scope._popMsg(messages["cmm.not.modify"]);
       return false;
     } else {
+      // 로딩바 show
+      $scope.$broadcast('loadingPopupActive', messages["cmm.saving"]);
       // 가상로그인 대응한 session id 설정
       if (document.getElementsByName("sessionId")[0]) {
         sParam['sid'] = document.getElementsByName("sessionId")[0].value;
@@ -147,6 +150,8 @@ function RootController(ctrlName, $scope, $http, isPicker) {
       params: sParam, /* 파라메터로 보낼 데이터 : request.getParameter */
       headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
     }).then(function successCallback(response) {
+      // 로딩바 hide
+      $scope.$broadcast('loadingPopupInactive');
       if(response.data.status === "OK") {
         // this callback will be called asynchronously
         // when the response is available
@@ -169,6 +174,8 @@ function RootController(ctrlName, $scope, $http, isPicker) {
         $scope._popMsg(msg);
       }
     }, function errorCallback(response) {
+      // 로딩바 hide
+      $scope.$broadcast('loadingPopupInactive');
       // called asynchronously if an error occurs
       // or server returns response with an error status.
       $scope._popMsg(messages["cmm.saveFail"]);
@@ -309,7 +316,18 @@ function RootController(ctrlName, $scope, $http, isPicker) {
     }
   };
   // 로딩 메시지 팝업 열기
-  $scope.$on('loadingPopupActive', function () {
+  $scope.$on('loadingPopupActive', function (event, data) {
+    // 팝업내용 동적 생성
+    var innerHtml = "<div class=\"wj-popup-loading\"><p class=\"bk\">";
+    if (isEmpty(data)) {
+      innerHtml += messages["cmm.loading"];
+    } else {
+      innerHtml += data;
+    }
+    innerHtml += "</p><p class=\"mt20\"><img src=\"/resource/solbipos/css/img/loading.gif\" alt=\"\" /></p></div>";
+    // html 적용
+    $scope._loadingPopup.content.innerHTML = innerHtml;
+    // 팝업 show
     $scope._loadingPopup.show(true);
   });
   // 로딩 메시지 팝업 닫기
@@ -320,21 +338,66 @@ function RootController(ctrlName, $scope, $http, isPicker) {
 
 // 메뉴 트리뷰 생성
 function MenuController(ctrlName, menuUrl, $scope, $http) {
+  // 파라미터
+  $scope.params = {};
+  // 가상로그인시 파라미터인 sid 설정
+  if( document.getElementsByName("sessionId").length > 0 ) {
+    $scope.params.sid = document.getElementsByName("sessionId")[0].value;
+  }
+
+  //트리 변환 메서드
+  $scope._convertTreeModel = function (arrayList, rootId) {
+    var rootNodes = [];
+    var traverse = function (nodes, item, index) {
+      if (nodes instanceof Array) {
+        return nodes.some(function (node) {
+          if (node.resrceCd === item.pResrce) {
+            node.children = node.children || [];
+            return node.children.push(arrayList.splice(index, 1)[0]);
+          }
+
+          return traverse(node.children, item, index);
+        });
+      }
+    };
+    while (arrayList.length > 0) {
+      arrayList.some(function (item, index) {
+        if (item.pResrce === rootId) {
+          return rootNodes.push(arrayList.splice(index, 1)[0]);
+        }
+        return traverse(rootNodes, item, index);
+      });
+    }
+
+    return rootNodes;
+  };
 
   // 메뉴목록 조회 및 트리Data Set
-  $scope._searchTree = function(menuUrl) {
+  $scope._searchTree = function(menuUrl, callback) {
     $http({
       method: 'POST', //방식
       url: menuUrl, /* 통신할 URL */
-      params: {}, /* 파라메터로 보낼 데이터 */
+      params: $scope.params, /* 파라메터로 보낼 데이터 */
       headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
     }).then(function successCallback(response) {
       if(response.data.status === "OK") {
-        $scope.items = JSON.parse(response.data.data);
+        if ( response.data.data.length > 0 ) {
+          var data = JSON.stringify($scope._convertTreeModel(response.data.data, "000000"), null, '');
+          $scope.items = JSON.parse(data);
+        } else {
+          $scope.items = [];
+        }
       }
     }, function errorCallback(response) {
       $scope._popMsg("메뉴를 불러오는데 실패하였습니다.");
       return false;
+    }).then(function () {
+      // "complete" code here
+      if (typeof callback === 'function') {
+        setTimeout(function () {
+          callback();
+        }, 10);
+      }
     });
   };
   // 메뉴목록 조회
@@ -343,13 +406,15 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
   $http({
     method: 'POST', //방식
     url: "/menu/currentMenu.sb", /* 통신할 URL */
-    params: {}, /* 파라메터로 보낼 데이터 */
+    params: $scope.params, /* 파라메터로 보낼 데이터 */
     headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
   }).then(function successCallback(response) {
     if(response.data.status === "OK") {
       var data = response.data.data;
       if ( data ) {
         $scope.setInitMenu(data.resrceCd);
+      } else {
+        $scope.setInitMenu("");
       }
     }
   }, function errorCallback(response) {
@@ -363,7 +428,7 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
     // 아이콘 Class 추가
     for (node = s.getFirstNode(); node; node = node.nextSibling()) {
       if(!isEmpty(node)){
-        wijmo.addClass(node.element, node.dataItem.icon);
+        wijmo.addClass(node.element, node.dataItem.iconNm);
       }
     }
     s.collapseToLevel(0);
@@ -373,7 +438,7 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
     if (initMenu) {
       for (node = s.getFirstNode(); node; node = node.next()) {
         if (isEmpty(node.nodes)) {
-          if (!isEmpty(node.dataItem) && node.dataItem.cd === initMenu) {
+          if (!isEmpty(node.dataItem) && node.dataItem.resrceCd === initMenu) {
             s.selectedItem = node.dataItem;
           }
         }
@@ -401,11 +466,12 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
   $scope.itemClicked = function(s, e) {
     // URL 이 있을 경우 페이지 이동
     if(!isEmpty(s.selectedNode.dataItem.url)) {
-      location.href = s.selectedNode.dataItem.url;
       // 가상로그인시 파라미터인 SessionID 설정
       if( document.getElementsByName("sessionId").length > 0 ) {
         var vSessionId = document.getElementsByName("sessionId")[0].value;
         location.href = s.selectedNode.dataItem.url + "?sid=" + vSessionId;
+      } else {
+        location.href = s.selectedNode.dataItem.url;
       }
     }
     // 같은 메뉴를 다시 선택 했을 때 메뉴 닫기 기능

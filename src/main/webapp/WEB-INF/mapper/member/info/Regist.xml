@@ -96,14 +96,14 @@
           </if>
           <if test='periodType != null and periodType.toString() != ""'>
             <if test='periodType.getCode() == "reg"'>
-              AND tmm.REG_DT BETWEEN #{periodStartDt}||'000000' AND #{periodEndDt}||'999999'
+              AND tmm.REG_DT BETWEEN #{periodStartDate}||'000000' AND #{periodEndDate}||'999999'
             </if>
             <if test='periodType.getCode() == "last"'>
             </if>
           </if>
           <if test='anvType != null and anvType.toString() != ""'>
             <if test='anvType.getCode() == "1"'>
-              AND tmm.BIRTHDAY BETWEEN #{anvStartDt} AND #{anvEndDt}
+              AND tmm.BIRTHDAY BETWEEN #{anvStartDate} AND #{anvEndDate}
             </if>
           </if>
 

@@ -126,10 +126,6 @@ public class InstockConfmVO extends PageVO {
     private String hqRemark;
     /** 배송기사코드 */
     private String dlvrCd;
-    /** 조회 시작일 */
-    private String startDate;
-    /** 조회 종료일 */
-    private String endDate;
     /** 출고확정여부 */
     private String confirmFg;
     /** 순번 본사코드_전표번호에 따른 순번 */
@@ -989,34 +985,6 @@ public class InstockConfmVO extends PageVO {
      */
     public void setDlvrCd(String dlvrCd) {
         this.dlvrCd = dlvrCd;
-    }
-
-    /**
-     * @return the startDate
-     */
-    public String getStartDate() {
-        return startDate;
-    }
-
-    /**
-     * @param startDate the startDate to set
-     */
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    /**
-     * @return the endDate
-     */
-    public String getEndDate() {
-        return endDate;
-    }
-
-    /**
-     * @param endDate the endDate to set
-     */
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
     }
 
     /**

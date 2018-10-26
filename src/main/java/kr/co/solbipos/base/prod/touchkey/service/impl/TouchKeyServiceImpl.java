@@ -72,11 +72,12 @@ public class TouchKeyServiceImpl implements TouchKeyService {
 
     // logger
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    // Constructor Injection
+
     private final MessageService messageService;
     private final TouchKeyMapper keyMapper;
     private final CmmEnvUtil cmmEnvUtil;
 
+    /** Constructor Injection */
     @Autowired
     public TouchKeyServiceImpl(MessageService messageService, TouchKeyMapper keyMapper, CmmEnvUtil cmmEnvUtil) {
         this.messageService = messageService;

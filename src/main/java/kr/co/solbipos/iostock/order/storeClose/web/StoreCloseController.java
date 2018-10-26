@@ -39,9 +39,16 @@ import java.util.List;
 @Controller
 @RequestMapping("/iostock/order/storeClose")
 public class StoreCloseController {
-    @Autowired SessionService sessionService;
 
-    @Autowired StoreCloseService storeCloseService;
+    private final SessionService sessionService;
+    private final StoreCloseService storeCloseService;
+
+    /** Constructor Injection */
+    @Autowired
+    public StoreCloseController(SessionService sessionService, StoreCloseService storeCloseService) {
+        this.sessionService = sessionService;
+        this.storeCloseService = storeCloseService;
+    }
 
     /**
      * 매장요청마감 - 페이지 이동

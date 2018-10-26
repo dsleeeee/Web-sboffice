@@ -62,10 +62,10 @@
                 WHERE
                     thp.HQ_OFFICE_CD = #{hqOfficeCd}
                 <if test="chkDt == false">
-                    <if test="startDt != null and startDt != '' and endDt != null and endDt != ''">
+                    <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
                         <![CDATA[
-                        AND thp.REG_DT >= #{startDt}
-                        AND tho.REG_DT <= #{endDt} --조회일자
+                        AND thp.REG_DT >= #{startDate}
+                        AND tho.REG_DT <= #{endDate} --조회일자
                         ]]>
                     </if>
                 </if>
@@ -131,10 +131,10 @@
                 WHERE
                     tmp.STORE_CD = #{storeCd}
                 <if test="chkDt == false">
-                    <if test="startDt != null and startDt != '' and endDt != null and endDt != ''">
+                    <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
                         <![CDATA[
-                        AND tmp.REG_DT >= #{startDt}
-                        AND tmp.REG_DT <= #{endDt} --조회일자
+                        AND tmp.REG_DT >= #{startDate}
+                        AND tmp.REG_DT <= #{endDate} --조회일자
                         ]]>
                     </if>
                 </if>

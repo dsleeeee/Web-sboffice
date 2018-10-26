@@ -25,9 +25,9 @@
         <th><s:message code="storeEmp.regDt" /></th>
         <td colspan="3">
           <div class="sb-select">
-            <span class="txtIn"><div id="srchStartDt" class="w200"></div></span>
+            <span class="txtIn"><div id="srchStartDate" class="w200"></div></span>
             <span class="rg">~</span>
-            <span class="txtIn"><div id="srchEndDt" class="w200"></div></span>
+            <span class="txtIn"><div id="srchEndDate" class="w200"></div></span>
             <span class="chk ml10">
               <input type="checkbox" name="chkDt" id="chkDt" checked/>
               <label for="chkDt" ><s:message code="cmm.all.day" /></label>

@@ -28,8 +28,8 @@
      WHERE A.STORE_CD = B.STORE_CD
        AND B.HQ_OFFICE_CD = C.HQ_OFFICE_CD
      <if test="chkDt == false">
-       <if test='startDt != null and startDt != "" and endDt != null and endDt != ""'>
-       AND A.LOGIN_DATE BETWEEN #{startDt} AND #{endDt} --조회(영업)일자
+       <if test='startDate != null and startDate != "" and endDate != null and endDate != ""'>
+       AND A.LOGIN_DATE BETWEEN #{startDate} AND #{endDate} --조회(영업)일자
        </if>
      </if>
      <if test='hqOfficeCd != null and hqOfficeCd != ""'>

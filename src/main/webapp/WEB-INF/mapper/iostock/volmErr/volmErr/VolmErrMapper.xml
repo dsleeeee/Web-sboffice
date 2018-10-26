@@ -146,7 +146,7 @@
         COMMENTS : 물량오류관리 신규전표번호를 조회한다.
     -->
     <select id="getNewSlipNo" parameterType="volmErrVO" resultType="String">
-        /* USE : VolmErrMapper.getMaxSlipNo */
+        /* USE : VolmErrMapper.getNewSlipNo */
         <![CDATA[
         SELECT  NVL(MAX(tphso.SLIP_NO), #{yymm}||'000000')+1 AS SLIP_NO
         FROM    TB_PO_HQ_STORE_OUTSTOCK tphso

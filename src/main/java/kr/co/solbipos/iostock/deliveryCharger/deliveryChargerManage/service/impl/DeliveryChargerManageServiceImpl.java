@@ -18,11 +18,16 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Service("DeliveryChargerManageService")
 public class DeliveryChargerManageServiceImpl implements DeliveryChargerManageService {
 
-    @Autowired
-    DeliveryChargerManageMapper deliveryChargerManageMapper;
+    private final DeliveryChargerManageMapper deliveryChargerManageMapper;
+    private final MessageService messageService;
 
+    /** Constructor Injection */
     @Autowired
-    MessageService messageService;
+    public DeliveryChargerManageServiceImpl(DeliveryChargerManageMapper deliveryChargerManageMapper,
+        MessageService messageService) {
+        this.deliveryChargerManageMapper = deliveryChargerManageMapper;
+        this.messageService = messageService;
+    }
 
     /** 배송기사 리스트 조회 */
     @Override

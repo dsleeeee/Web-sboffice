@@ -5,6 +5,8 @@ import kr.co.solbipos.adi.mony.accntManage.service.DepositService;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,12 +33,14 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Service
 public class DepositServiceImpl implements DepositService{
 
-    private final DepositMapper mapper;
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
+    private final DepositMapper depositMapper;
 
     /** Constructor Injection */
     @Autowired
-    public DepositServiceImpl(DepositMapper mapper) {
-        this.mapper = mapper;
+    public DepositServiceImpl(DepositMapper depositMapper) {
+        this.depositMapper = depositMapper;
     }
 
     /** 계정 조회 */
@@ -88,6 +92,7 @@ public class DepositServiceImpl implements DepositService{
                 resultCnt += mapper.deleteDepositAccntList(accntVO);
             }
         }
+
         return resultCnt;
     }
 }

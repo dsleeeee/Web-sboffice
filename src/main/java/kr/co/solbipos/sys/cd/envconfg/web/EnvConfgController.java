@@ -44,10 +44,15 @@ import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 @RequestMapping(value = "/sys/cd/envConfg")
 public class EnvConfgController {
 
+    private final EnvConfgService envConfgService;
+    private final SessionService sessionService;
+
+    /** Constructor Injection */
     @Autowired
-    EnvConfgService envConfgService;
-    @Autowired
-    SessionService sessionService;
+    public EnvConfgController(EnvConfgService envConfgService, SessionService sessionService) {
+        this.envConfgService = envConfgService;
+        this.sessionService = sessionService;
+    }
 
     /**
      * 환경설정관리 - 페이지 이동
@@ -84,6 +89,7 @@ public class EnvConfgController {
         list = envConfgService.getEnvstList(envstVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, envstVO);
+
     }
 
     /**

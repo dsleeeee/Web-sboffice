@@ -5,10 +5,8 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
-import kr.co.common.utils.jsp.CmmCodeUtil;
-import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.base.pay.coupon.service.*;
+import kr.co.solbipos.base.pay.coupon.service.PayMethodClassVO;
 import kr.co.solbipos.base.pay.gift.service.GiftService;
 import kr.co.solbipos.base.pay.gift.service.GiftVO;
 import org.slf4j.Logger;
@@ -47,23 +45,16 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 @RequestMapping(value = "/base/pay/gift")
 public class GiftController {
 
-    /** service */
-    private final GiftService service;
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
+    private final GiftService giftService;
     private final SessionService sessionService;
-
-    /** util */
-    private final CmmCodeUtil cmmCodeUtil;
-    private final CmmEnvUtil cmmEnvUtil;
-
 
     /** Constructor Injection */
     @Autowired
-    public GiftController(GiftService service, SessionService sessionService,
-        CmmCodeUtil cmmCodeUtil, CmmEnvUtil cmmEnvUtil) {
-        this.service = service;
+    public GiftController(GiftService giftService, SessionService sessionService) {
+        this.giftService = giftService;
         this.sessionService = sessionService;
-        this.cmmCodeUtil = cmmCodeUtil;
-        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /**
@@ -98,7 +89,7 @@ public class GiftController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
-        List<DefaultMap<String>> list = service.getGiftClassList(payMethodClassVO, sessionInfoVO);
+        List<DefaultMap<String>> list = giftService.getGiftClassList(payMethodClassVO, sessionInfoVO);
 
         return returnListJson(Status.OK, list, payMethodClassVO);
     }
@@ -123,7 +114,7 @@ public class GiftController {
         int result = 0;
 
         try{
-            result = service.saveGiftClassList(payMethodClassVOs, sessionInfoVO);
+            result = giftService.saveGiftClassList(payMethodClassVOs, sessionInfoVO);
         }catch(Exception ex){
             ex.printStackTrace();
         }
@@ -148,7 +139,7 @@ public class GiftController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
-        List<DefaultMap<String>> list = service.getGiftList( giftVO, sessionInfoVO);
+        List<DefaultMap<String>> list = giftService.getGiftList( giftVO, sessionInfoVO);
 
         return returnListJson(Status.OK, list, giftVO);
     }
@@ -173,7 +164,7 @@ public class GiftController {
         int result = 0;
 
         try{
-            result = service.saveGiftList(giftVOs, sessionInfoVO);
+            result = giftService.saveGiftList(giftVOs, sessionInfoVO);
         }catch(Exception ex){
             ex.printStackTrace();
         }

@@ -1,24 +1,29 @@
 package kr.co.common.service.main.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.main.ContentService;
 import kr.co.common.utils.DateUtil;
 import kr.co.solbipos.application.common.enums.MainSrchFg;
 import kr.co.solbipos.application.main.content.service.impl.ContentMapper;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service("contentService")
 public class ContentServiceImpl implements ContentService {
 
-    @Autowired
-    ContentMapper contentMapper;
+    private final ContentMapper contentMapper;
 
+    /** Constructor Injection */
+    @Autowired
+    public ContentServiceImpl(ContentMapper contentMapper) {
+        this.contentMapper = contentMapper;
+    }
 
     @Override
     public List<Map<String, String>> getDateSelList(MainSrchFg type) {

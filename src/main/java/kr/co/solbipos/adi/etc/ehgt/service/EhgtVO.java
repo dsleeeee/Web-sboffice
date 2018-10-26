@@ -1,10 +1,11 @@
 package kr.co.solbipos.adi.etc.ehgt.service;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import org.springframework.format.annotation.DateTimeFormat;
 import kr.co.common.validate.Save;
 import kr.co.solbipos.application.common.service.CmmVO;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 /**
  * @Class Name : EhgtVO.java
@@ -40,10 +41,10 @@ public class EhgtVO extends CmmVO {
 
     /** 검색조건-시작일자 */
     @DateTimeFormat(pattern="yyyyMMdd")
-    private String startDt;
+    private String startDate;
     /** 검색조건-종료일자 */
     @DateTimeFormat(pattern="yyyyMMdd")
-    private String endDt;
+    private String endDate;
     /** 기능키 관련 프로시져 실행 결과 */
     private String result;
 
@@ -109,28 +110,28 @@ public class EhgtVO extends CmmVO {
       this.krwAmt = krwAmt;
     }
     /**
-     * @return the startDt
+     * @return the startDate
      */
-    public String getStartDt() {
-        return startDt;
+    public String getStartDate() {
+        return startDate;
     }
     /**
-     * @param startDt the startDt to set
+     * @param startDate the startDate to set
      */
-    public void setStartDt(String startDt) {
-        this.startDt = startDt;
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
     }
     /**
-     * @return the endDt
+     * @return the endDate
      */
-    public String getEndDt() {
-        return endDt;
+    public String getEndDate() {
+        return endDate;
     }
     /**
-     * @param endDt the endDt to set
+     * @param endDate the endDate to set
      */
-    public void setEndDt(String endDt) {
-        this.endDt = endDt;
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 
     /**

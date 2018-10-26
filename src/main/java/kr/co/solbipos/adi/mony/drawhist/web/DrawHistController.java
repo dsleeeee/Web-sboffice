@@ -34,8 +34,9 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 * @author NHN한국사이버결제 KCP 김태수
 * @since 2018.08.03
 * @version 1.0
+* @see
 *
-*  Copyright (C) by SOLBIPOS CORP. All right reserved.
+* @Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
 @Controller
 @RequestMapping(value = "/adi/mony/drawhist/drawhist/")

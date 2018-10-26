@@ -96,10 +96,6 @@ public class DstbCloseStoreVO extends PageVO {
     private String slipNo;
     /** 비고 */
     private String remark;
-    /** 조회 시작일 */
-    private String startDate;
-    /** 조회 종료일 */
-    private String endDate;
     /** 조회 구분 */
     private String dateFg;
     /** 발주단위허용구분 */
@@ -741,34 +737,6 @@ public class DstbCloseStoreVO extends PageVO {
      */
     public void setRemark(String remark) {
         this.remark = remark;
-    }
-
-    /**
-     * @return the startDate
-     */
-    public String getStartDate() {
-        return startDate;
-    }
-
-    /**
-     * @param startDate the startDate to set
-     */
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    /**
-     * @return the endDate
-     */
-    public String getEndDate() {
-        return endDate;
-    }
-
-    /**
-     * @param endDate the endDate to set
-     */
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
     }
 
     /**

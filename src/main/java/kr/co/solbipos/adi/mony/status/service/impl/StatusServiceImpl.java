@@ -24,19 +24,18 @@ import java.util.List;
  * @since 2018.09.09
  * @version 1.0
  *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Service("StatusService")
 @Transactional
 public class StatusServiceImpl implements StatusService {
 
-    private final StatusMapper StatusMapper;
+    private final StatusMapper statusMapper;
 
     /** Constructor Injection */
     @Autowired
-    public StatusServiceImpl(
-        kr.co.solbipos.adi.mony.status.service.impl.StatusMapper statusMapper) {
-        StatusMapper = statusMapper;
+    public StatusServiceImpl(StatusMapper statusMapper) {
+        this.statusMapper = statusMapper;
     }
 
     @Override
@@ -47,12 +46,12 @@ public class StatusServiceImpl implements StatusService {
         // 본사
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             statusVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
-            return StatusMapper.selectStatus(statusVO);
+            return statusMapper.selectStatus(statusVO);
         }
         // 가맹점
         else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             statusVO.setStoreCd(sessionInfoVO.getOrgnCd());
-            return StatusMapper.selectStoreStatus(statusVO);
+            return statusMapper.selectStoreStatus(statusVO);
         }
         return null;
     }
@@ -60,7 +59,7 @@ public class StatusServiceImpl implements StatusService {
     @Override
     public List<DefaultMap<String>> selectAccntList(StatusVO StatusVO) {
 
-        return StatusMapper.selectAccntList(StatusVO);
+        return statusMapper.selectAccntList(StatusVO);
     }
 }
 

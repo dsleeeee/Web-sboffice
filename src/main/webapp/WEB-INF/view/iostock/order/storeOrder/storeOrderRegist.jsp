@@ -206,8 +206,8 @@
       {"name": messages["storeOrder.dtl.option2Sale"], "value": "SALE"}
     ]);
 
-    $scope.srchRegStartDate = wcombo.genDateVal("#srchRegStartDate", "${sessionScope.sessionInfo.startDt}");
-    $scope.srchRegEndDate   = wcombo.genDateVal("#srchRegEndDate", "${sessionScope.sessionInfo.startDt}");
+    $scope.srchRegStartDate = wcombo.genDate("#srchRegStartDate");
+    $scope.srchRegEndDate   = wcombo.genDate("#srchRegEndDate");
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {

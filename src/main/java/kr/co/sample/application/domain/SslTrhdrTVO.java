@@ -5,6 +5,7 @@ import kr.co.solbipos.application.common.service.PageVO;
 public class SslTrhdrTVO extends PageVO {
     
     private static final long serialVersionUID = -5113886961310669367L;
+
     private String shopCd;
     private String saleDate;
     private String posNo;

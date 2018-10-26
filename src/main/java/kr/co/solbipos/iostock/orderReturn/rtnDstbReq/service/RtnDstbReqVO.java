@@ -90,10 +90,6 @@ public class RtnDstbReqVO extends PageVO {
     private String remark;
     /** 주문HD 비고 */
     private String hdRemark;
-    /** 조회 시작일 */
-    private String startDate;
-    /** 조회 종료일 */
-    private String endDate;
     /** 조회 구분 */
     private String dateFg;
     /** 발주단위허용구분 */
@@ -691,34 +687,6 @@ public class RtnDstbReqVO extends PageVO {
      */
     public void setHdRemark(String hdRemark) {
         this.hdRemark = hdRemark;
-    }
-
-    /**
-     * @return the startDate
-     */
-    public String getStartDate() {
-        return startDate;
-    }
-
-    /**
-     * @param startDate the startDate to set
-     */
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    /**
-     * @return the endDate
-     */
-    public String getEndDate() {
-        return endDate;
-    }
-
-    /**
-     * @param endDate the endDate to set
-     */
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
     }
 
     /**

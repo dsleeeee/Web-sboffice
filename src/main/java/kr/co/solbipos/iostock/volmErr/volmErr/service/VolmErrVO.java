@@ -70,10 +70,6 @@ public class VolmErrVO extends PageVO {
     private String storeNm;
     /** 조회 구분 */
     private String dateFg;
-    /** 조회 시작일 */
-    private String startDate;
-    /** 조회 종료일 */
-    private String endDate;
     /** 처리구분 ( 0:입력, 1:확정 ) */
     private String procFg;
     /** 처리구분 ( 0:입력, 1:확정 ) */
@@ -558,34 +554,6 @@ public class VolmErrVO extends PageVO {
      */
     public void setDateFg(String dateFg) {
         this.dateFg = dateFg;
-    }
-
-    /**
-     * @return the startDate
-     */
-    public String getStartDate() {
-        return startDate;
-    }
-
-    /**
-     * @param startDate the startDate to set
-     */
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    /**
-     * @return the endDate
-     */
-    public String getEndDate() {
-        return endDate;
-    }
-
-    /**
-     * @param endDate the endDate to set
-     */
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
     }
 
     /**

@@ -51,16 +51,16 @@ public class ProductionController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    private final ProductionService service;
+    private final ProductionService productionService;
     private final SessionService sessionService;
     private final AuthService authService;
     private final MessageService messageService;
 
     /** Constructor Injection */
     @Autowired
-    public ProductionController(ProductionService service, SessionService sessionService,
+    public ProductionController(ProductionService productionService, SessionService sessionService,
         AuthService authService, MessageService messageService) {
-        this.service = service;
+        this.productionService = productionService;
         this.sessionService = sessionService;
         this.authService = authService;
         this.messageService = messageService;
@@ -149,7 +149,7 @@ public class ProductionController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<String>> list = service.getProductList(productionVO, sessionInfoVO);
+        List<DefaultMap<String>> list = productionService.getProductList(productionVO, sessionInfoVO);
 
         return returnListJson(Status.OK, list);
     }

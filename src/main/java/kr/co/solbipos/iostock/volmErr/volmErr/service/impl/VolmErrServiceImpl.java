@@ -91,6 +91,7 @@ public class VolmErrServiceImpl implements VolmErrService {
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
             returnResult += result;
+            i++;
         }
 
         // HD 수정

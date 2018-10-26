@@ -16,7 +16,7 @@ var app = agrid.getApp();
 /**
  * 가상로그인 그리드 생성
  */
-app.controller('gridCtrl',  ['$scope', '$http', function ($scope, $http, $rootScope) {
+app.controller('gridCtrl',  ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('gridCtrl', $scope, $http, true));
   // 가상로그인 개수
@@ -92,7 +92,9 @@ app.controller('gridCtrl',  ['$scope', '$http', function ($scope, $http, $rootSc
   $scope.vLoginProcess = function(value) {
 
     if (isEmpty(value)) {
-      alert(messages["virtualLogin.vLogin.fail"]);
+      $scope.$apply(function() {
+        $scope._popMsg(messages["virtualLogin.vLogin.fail"]);
+      });
       return false;
     } else {
 
@@ -117,14 +119,18 @@ app.controller('gridCtrl',  ['$scope', '$http', function ($scope, $http, $rootSc
           window.clearInterval(crono);
           var param = {};
           param.vUserId = value;
-          param.sid = popup.document.getElementsByName("sessionId")[0].value;
+          if ( popup.document.getElementsByName("sessionId") ) {
+            param.sid = popup.document.getElementsByName("sessionId")[0].value;
+          }
           $.postJSON("/store/manage/virtualLogin/virtualLogin/vLogout.sb", param,
             function (result) {
 
             },
             function (result) {
-              s_alert.pop(result.message);
-              return;
+              $scope.$apply(function() {
+                $scope._popMsg(result.message);
+              });
+              return false;
             }
           );
         }

@@ -28,12 +28,12 @@ import java.util.List;
 @Service("productionService")
 public class ProductionServiceImpl implements ProductionService {
 
-    private final ProductionMapper mapper;
+    private final ProductionMapper productionMapper;
 
     /** Constructor Injection */
     @Autowired
-    public ProductionServiceImpl(ProductionMapper mapper) {
-        this.mapper = mapper;
+    public ProductionServiceImpl(ProductionMapper productionMapper) {
+        this.productionMapper = productionMapper;
     }
 
     /** 생산량 등록 대상상품 목록 조회*/
@@ -44,7 +44,7 @@ public class ProductionServiceImpl implements ProductionService {
         productionVO.setStoreCd(sessionInfoVO.getStoreCd());
 
         // 목록 조회
-        List<DefaultMap<String>> reultList = mapper.getProductList(productionVO);
+        List<DefaultMap<String>> reultList = productionMapper.getProductList(productionVO);
 
         return reultList;
     }

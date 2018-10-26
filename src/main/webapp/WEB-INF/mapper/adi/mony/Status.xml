@@ -19,7 +19,7 @@
            TB_HQ_ACCOUNT C
      WHERE A.STORE_CD = B.STORE_CD
        AND B.ACCNT_CD = C.ACCNT_CD
-       AND B.SALE_DATE BETWEEN #{startDt} AND #{endDt}
+       AND B.SALE_DATE BETWEEN #{startDate} AND #{endDate}
        AND A.HQ_OFFICE_CD = #{hqOfficeCd}
        AND C.USE_YN = 'Y'
        <if test='storeCd != null and storeCd != ""'>
@@ -49,7 +49,7 @@
            TB_HQ_ACCOUNT C
      WHERE A.STORE_CD = B.STORE_CD
        AND B.ACCNT_CD = C.ACCNT_CD
-       AND B.SALE_DATE BETWEEN #{startDt} AND #{endDt}
+       AND B.SALE_DATE BETWEEN #{startDate} AND #{endDate}
        AND A.STORE_CD = #{storeCd}
        AND C.USE_YN = 'Y'
      <if test="accntFg != null and accntFg != ''">

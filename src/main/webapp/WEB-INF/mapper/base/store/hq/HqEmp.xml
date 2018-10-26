@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.solbipos.base.store.emp.hq.service.impl.HqEmpMapper">
 
-    <select id="selectHqEmpList" parameterType="hqEmpVO" resultType="DefaultMap">
-        /* HqEmpMapper.selectHqEmpList */
+    <select id="getHqEmpList" parameterType="hqEmpVO" resultType="DefaultMap">
+        /* HqEmpMapper.getHqEmpList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT THE.EMP_NO,
                THE.EMP_NM,
@@ -15,8 +15,8 @@
           FROM TB_HQ_EMPLOYEE THE
          WHERE USE_YN = 'Y'
          <if test="chkDt == false">
-           <if test="startDt != null and startDt != '' and endDt != null and endDt != ''">
-           AND THE.REG_DT BETWEEN #{startDt}||'000000' AND #{endDt}||'235959'
+           <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+           AND THE.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
            </if>
          </if>
          <if test="empNo != null and empNo != ''">
@@ -44,16 +44,16 @@
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
-    <select id="selectHqEmpNoCnt" parameterType="hqEmpVO" resultType="Integer">
-        /* HqEmpMapper.selectHqEmpNoCnt */
+    <select id="getHqEmpNoCnt" parameterType="hqEmpVO" resultType="Integer">
+        /* HqEmpMapper.getHqEmpNoCnt */
         SELECT COUNT(1) CNT
           FROM TB_HQ_EMPLOYEE
          WHERE EMP_NO = #{empNo}
           AND  HQ_OFFICE_CD = #{hqOfficeCd}
     </select>
 
-    <select id="selectHqUserIdCnt" parameterType="hqEmpVO" resultType="Integer">
-        /* HqEmpMapper.selectHqUserIdCnt */
+    <select id="getHqUserIdCnt" parameterType="hqEmpVO" resultType="Integer">
+        /* HqEmpMapper.getHqUserIdCnt */
         SELECT COUNT(1) CNT
           FROM TB_WB_USER_INFO
          WHERE USER_ID = #{userId}
@@ -125,8 +125,8 @@
             #{modId}
         )
     </insert>
-    <select id="selectHqEmpDtlInfo" parameterType="hqEmpVO" resultType="DefaultMap">
-        /* HqEmpMapper.selectHqEmpDtlInfo */
+    <select id="getHqEmpDtlInfo" parameterType="hqEmpVO" resultType="DefaultMap">
+        /* HqEmpMapper.getHqEmpDtlInfo */
         SELECT THE.EMP_NO,
                THE.EMP_NM,
                THE.SMS_RECV_YN,
@@ -142,8 +142,8 @@
            AND THE.EMP_NO = #{empNo}
            AND THE.USER_ID = #{userId}
     </select>
-    <select id="selectHqEmpPassword" parameterType="hqEmpVO" resultType="java.lang.String">
-        /* HqEmpMapper.selectHqEmpPassword */
+    <select id="getHqEmpPassword" parameterType="hqEmpVO" resultType="java.lang.String">
+        /* HqEmpMapper.getHqEmpPassword */
         SELECT TWUI.USER_PWD
           FROM TB_WB_USER_INFO TWUI
          WHERE TWUI.USER_ID = #{userId}

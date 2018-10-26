@@ -4,6 +4,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.base.store.emp.store.service.StoreEmpVO;
 import kr.co.solbipos.base.store.emp.store.service.WebUserVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -24,6 +25,7 @@ import java.util.List;
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Mapper
+@Repository
 public interface StoreEmpMapper {
 
     /** 매장사원목록 조회 */

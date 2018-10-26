@@ -29,10 +29,10 @@
       <wj-tree-view control="flex"
         class="theTreeAll"
         items-source="items"
-        display-member-path="'nm'"
-        child-items-path="'items'"
+        display-member-path="'resrceNm'"
+        child-items-path="'children'"
         is-animated="false"
-        auto-collapse="false"
+        auto-collapse="true"
         expand-on-click="false"
         initialized="initTreeView(s,e)"
         selection-mode="ListBox"
@@ -46,10 +46,10 @@
       <wj-tree-view control="flex"
         class="theTreeAll"
         items-source="items"
-        display-member-path="'nm'"
-        child-items-path="'items'"
+        display-member-path="'resrceNm'"
+        child-items-path="'children'"
         is-animated="false"
-        auto-collapse="false"
+        auto-collapse="true"
         expand-on-click="false"
         initialized="initTreeView(s,e)"
         selection-mode="ListBox"
@@ -67,4 +67,4 @@
     <%--//접혔을때--%>
   </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/layout/basic/menu.js?ver=20181023.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/layout/basic/menu.js?ver=20181024.01" charset="utf-8"></script>

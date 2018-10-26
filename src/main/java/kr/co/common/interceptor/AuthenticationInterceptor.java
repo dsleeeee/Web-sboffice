@@ -8,14 +8,12 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.WebUtil;
-import kr.co.solbipos.application.common.enums.ResrceFg;
-import kr.co.solbipos.application.common.service.ResrceInfoVO;
+import kr.co.solbipos.application.common.service.ResrceInfoBaseVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -70,7 +68,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
         Object handler) throws Exception {
 
-        String requestURL = request.getRequestURI().toString();
+        String requestURL = request.getRequestURI();
         LOGGER.info("url : {}, accept : {}, ", requestURL, request.getHeader("accept"));
 
         // 세션 가져오기
@@ -78,11 +76,11 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         // 세션 상태
         boolean isSessionValid = true;
         // 세션 객체가 없는 경우
-        if ( StringUtils.isEmpty( sessionInfoVO ) ) {
+        if ( sessionInfoVO == null ) {
             isSessionValid = false;
         } else {
             // 세션 객체는 있지만 필수값들이 없는 경우
-            if ( StringUtils.isEmpty( sessionInfoVO.getUserId() ) && StringUtils.isEmpty( sessionInfoVO.getAuthMenu() ) ) {
+            if ( sessionInfoVO.getUserId() == null && sessionInfoVO.getMenuData() == null ) {
                 isSessionValid = false;
             }
         }
@@ -105,8 +103,6 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                 return false;
             }
         }
-        // 권한 메뉴
-        List<ResrceInfoVO> authMenus = sessionInfoVO.getAuthMenu();
         // 유져 조회 날짜 저장
         sessionInfoVO = setUserSelectDate(request, sessionInfoVO);
 
@@ -127,18 +123,16 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             }
         }
 
-
-        // TODO :: 권한체크는 재작성 예정. 현재 로직은 굉장히 비효율적. 메뉴 단위로 변경하는 것이 좋을듯? : 20180904 노현수
-        // 권한 체크
-        if (!checkUrl(request, authMenus, requestURL, sessionInfoVO)) {
+        // 메뉴 권한 체크
+        if (!checkUrl(request, requestURL, sessionInfoVO)) {
             LOGGER.error(
                 "\n■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n"
                     + "not auth : id : {},  url : {}, accept : {}", sessionInfoVO.getUserId(),
                 requestURL, request.getHeader("accept")
                     + "\n■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
 
-            @SuppressWarnings("unused") String exceptionMsg =
-                messageService.get("cmm.access.denied");
+            @SuppressWarnings("unused")
+            String exceptionMsg = messageService.get("cmm.access.denied");
 
             // 권한 없음 처리
             //TODO 개발 진행중 주석처리
@@ -155,13 +149,13 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
     /**
      * storecd 의 유효성을 검증한다.<br>
      *
-     * @param request
-     * @param sessionInfoVO
+     * @param request HttpServletRequest
+     * @param sessionInfoVO SessionInfoVO
      */
     private void checkStoreCd(HttpServletRequest request, SessionInfoVO sessionInfoVO) {
         String storeCd = request.getParameter("storeCd");
         if (!isEmpty(storeCd)) {
-            if (storeCd.indexOf(",") > -1) {
+            if (storeCd.contains(",")) {
                 if (!CmmUtil.listIndexOf(sessionInfoVO.getArrStoreCdList(), storeCd.split(","))) {
                     // 유효하지 않는 매장코드 입니다.
                     String msg = messageService.get("cmm.not.storecd") + ">>";
@@ -184,70 +178,63 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
      * @param sessionInfoVO SessionInfoVO
      */
     private SessionInfoVO setUserSelectDate(HttpServletRequest request, SessionInfoVO sessionInfoVO) {
-        String startDt = request.getParameter("startDt");
-        String endDt = request.getParameter("endDt");
-        if ( !isEmpty(startDt) ) {
-            sessionInfoVO.setStartDt(startDt);
+        String startDate = request.getParameter("startDate");
+        String endDate = request.getParameter("endDate");
+        if ( !isEmpty(startDate) ) {
+            sessionInfoVO.setStartDate(startDate);
         }
-        if ( !isEmpty(endDt) ) {
-            sessionInfoVO.setEndDt(endDt);
+        if ( !isEmpty(endDate) ) {
+            sessionInfoVO.setEndDate(endDate);
         }
         // 값이 있는 경우에만 session 에 넣는다
-        if ( !isEmpty(startDt) || !isEmpty(endDt) ) {
+        if ( !isEmpty(startDate) || !isEmpty(endDate) ) {
             sessionService.setSessionInfo(sessionInfoVO);
         }
         return sessionInfoVO;
     }
 
     /**
-     * 유효 URL 체크
+     * 유효 URL 체크 : 메뉴Data에 존재하는 URL 인지 체크
      *
      * @param request HttpServletRequest
-     * @param authList List<ResrceInfoVO>
      * @param url String
      * @param sessionInfoVO SessionInfoVO
      * @return boolean
      */
-    private boolean checkUrl(HttpServletRequest request, List<ResrceInfoVO> authList, String url,
-        SessionInfoVO sessionInfoVO) {
+    private boolean checkUrl(HttpServletRequest request, String url, SessionInfoVO sessionInfoVO) {
         // main 주소는 제외
         if (url.equals("/main.sb")) {
             return true;
         }
         // url 파라미터 제거
-        if (url.indexOf("?") > -1) {
+        if ( url.contains("?") ) {
             url = url.substring(0, url.indexOf("?"));
         }
-        // url값 찾기
-        boolean resultCheck = false;
-        for (ResrceInfoVO resrceInfoVO : authList) {
-            String authUrl = resrceInfoVO.getUrl();
-            if (!isEmpty(authUrl)) {
+        // 메뉴 목록
+        List<ResrceInfoBaseVO> menuList = sessionInfoVO.getMenuData();
+        // url 값 비교
+        for (ResrceInfoBaseVO resrceInfoBaseVO : menuList) {
+            String authUrl = resrceInfoBaseVO.getUrl();
+            if ( !isEmpty(authUrl) ) {
                 // 등록된 URL 에 파라미터가 있는 경우 파라미터 제거
-                if (authUrl.indexOf("?") > -1) {
+                if ( authUrl.contains("?") ) {
                     authUrl = authUrl.substring(0, authUrl.indexOf("?"));
                 }
-                if (authUrl.equals(url)) {
-                    if (RequestMethod.GET.toString().equals(request.getMethod())
-                        && resrceInfoVO.getResrceFg() == ResrceFg.FUNC) {
-                        resultCheck = true;
-                    } else if (RequestMethod.POST.toString().equals(request.getMethod())) {
-                        return true;
-                    }
+                if ( authUrl.equals(url) ) {
                     // 메뉴 일때만 사용 등록과 메뉴 히스토리에 추가함
-                    if (resrceInfoVO.getResrceFg() == ResrceFg.MENU && RequestMethod.GET.toString()
-                        .equals(request.getMethod())) {
-
+                    if ( RequestMethod.GET.toString().equals(request.getMethod()) ) {
                         // 세션에 사용 메뉴 넣기
-                        cmmMenuService.addHistMenu(resrceInfoVO, sessionInfoVO);
+                        cmmMenuService.addHistMenu(resrceInfoBaseVO, sessionInfoVO);
                         // 사용 히스토리 등록
-                        cmmMenuService.insertMenuUseHist(resrceInfoVO, sessionInfoVO);
+                        cmmMenuService.insertMenuUseHist(resrceInfoBaseVO, sessionInfoVO);
+                        return true;
+                    } else if (RequestMethod.POST.toString().equals(request.getMethod())) {
                         return true;
                     }
                 }
             }
         }
-        return resultCheck;
+        return false;
     }
 
 }
