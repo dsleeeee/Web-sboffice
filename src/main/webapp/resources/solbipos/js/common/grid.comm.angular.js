@@ -604,7 +604,7 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
     for (node = s.selectedNode; node; node = node.parentNode) {
       wijmo.addClass(node.element, "on");
     }
-    $scope.setPNode(s.selectedNode);
+    $scope._setPNode(s.selectedNode);
   }
   // 아이템 클릭 시 이벤트
   $scope.itemClicked = function(s, e) {
