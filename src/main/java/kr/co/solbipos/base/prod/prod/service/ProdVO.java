@@ -21,37 +21,22 @@ import kr.co.solbipos.application.common.service.PageVO;
 public class ProdVO extends PageVO {
 
     private static final long serialVersionUID = 6100122429987446624L;
-    /**
-     * 본사코드
-     */
+
+    /** 본사코드 */
     private String hqOfficeCd;
-    /**
-     * 매장코드
-     */
+    /** 매장코드 */
     private String storeCd;
-    /**
-     * 상품코드
-     */
+    /** 상품코드 */
     private String prodCd;
-    /**
-     * 상품명
-     */
+    /** 상품명 */
     private String prodNm;
-    /**
-     * 상품분류코드
-     */
+    /** 상품분류코드 */
     private String prodClassCd;
-    /**
-     * 원산지코드
-     */
+    /** 원산지코드 */
     private String orgplceCd;
-    /**
-     * 바코드
-     */
+    /** 바코드 */
     private String barCd;
-    /**
-     * 사용여부
-     */
+    /** 사용여부 */
     private String useYn;
     /**
      * 소속구분<br>
@@ -61,6 +46,9 @@ public class ProdVO extends PageVO {
      * S : 매장, 가맹점
      */
     private String orgnFg;
+    /** 전체기간 여부 */
+    private boolean chkDt;
+
 
     /**
      * @return the hqOfficeCd
@@ -180,5 +168,19 @@ public class ProdVO extends PageVO {
      */
     public void setOrgnFg(String orgnFg) {
         this.orgnFg = orgnFg;
+    }
+
+    /**
+     * @return the chkDt
+     */
+    public boolean isChkDt() {
+        return chkDt;
+    }
+
+    /**
+     * @param chkDt the chkDt to set
+     */
+    public void setChkDt(boolean chkDt) {
+        this.chkDt = chkDt;
     }
 }
