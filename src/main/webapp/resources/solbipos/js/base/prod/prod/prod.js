@@ -19,19 +19,39 @@ var app = agrid.getApp();
 app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('prodCtrl', $scope, $http, true));
-
+  // 콤보박스 데이터 Set
+  $scope._setComboData("listScaleBox", gvListScaleBoxData);
+  // grid 초기화 : 생성되기전 초기화되면서 생성된다
+  $scope.initGrid = function (s, e) {
+    // picker 사용시 호출 : 미사용시 호출안함
+    $scope._makePickColumns("prodCtrl");
+    // 그리드 포맷
+    s.formatItem.addHandler(function (s, e) {
+      if (e.panel === s.cells) {
+        var col = s.columns[e.col];
+        if( col.binding === "prodCd") {
+          wijmo.addClass(e.cell, 'wijLink');
+        }
+      }
+    });
+    // 그리드 선택 이벤트
+    s.addEventListener(s.hostElement, 'mousedown', function(e) {
+      var ht = grid.hitTest(e);
+      if( ht.cellType === wijmo.grid.CellType.Cell) {
+        var col = ht.panel.columns[ht.col];
+        if( col.binding === "prodCd") {
+          searchProdDetail(grid.rows[ht.row].dataItem);
+        }
+      }
+    });
+  };
   // 상품정보관리 그리드 조회
   $scope.$on("prodCtrl", function(event, data) {
     // 파라미터
     var params = {};
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquiryMain("/base/prod/prod/prod/list.sb", params, function() {
-      // 버튼 Show
-      $("#btnAdd").show();
-      $("#btnDel").show();
-      $("#btnSave").show();
 
-      $scope.autoSizeVisibleRows($scope.flex);
     });
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
@@ -44,66 +64,6 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
 
 /*
 $(document).ready(function(){
-  var rdata =
-    [
-      {"binding":"prodClassNm","header":"<s:message code='prod.prodClass' />","width":"*"},
-      {"binding":"prodCd","header":"<s:message code='prod.prodCd' />","width":"*"},
-      {"binding":"prodNm","header":"<s:message code='prod.prodNm' />","width":"*"},
-      {"binding":"costUprc","header":"<s:message code='prod.costUprc' />","width":"*"},
-      {"binding":"splyUprc","header":"<s:message code='prod.splyUprc' />","width":"*"},
-      {"binding":"saleUprc","header":"<s:message code='prod.saleUprc' />","width":"*"},
-      {"binding":"orgplceCd","header":"<s:message code='prod.orgplceCd' />","width":"*"},
-      {"binding":"poUnitFg","header":"<s:message code='prod.poUnitFg' />","width":"*"}
-    ];
-
-  var grid         = wgrid.genGrid("#theGrid", rdata, "${menuCd}", 1, ${clo.getColumnLayout(1)});
-  var prodCd       = wcombo.genInput("#prodCd");
-  var prodNm       = wcombo.genInput("#prodNm");
-  var barCd        = wcombo.genInput("#barCd");
-  // var prodClassCd  = wcombo.genInput("#prodClassCd");
-  var startDate    = wcombo.genDateVal("#startDate", "${sessionScope.sessionInfo.startDate}");
-  var endDate      = wcombo.genDateVal("#endDate", "${sessionScope.sessionInfo.endDate}");
-  // var ldata        = ${ccu.getListScale()};
-  var listScaleBox = wcombo.genCommonBox("#listScaleBox", ldata);
-
-  function search(index) {
-    var param = {};
-
-    param.startDate = getDate(startDate);
-    param.endDate = getDate(endDate);
-    param.chkDt = $('#chkDt').is(":checked");
-    param.prodCd = prodCd.text;
-    param.prodNm = prodNm.text;
-    param.barCd = barCd.text;
-    // param.prodClassCd = prodClassCd.text;
-    param.listScale = listScaleBox.selectedValue;
-    param.curr = index;
-
-    $.postJSON("/base/prod/prod/prod/list.sb", param, function(result) {
-        var list = result.data.list;
-
-        if(list.length === undefined || list.length === 0) {
-          s_alert.pop(result.message);
-        }
-
-        grid.itemsSource = list;
-        page.make("#page1", result.data.page.curr, result.data.page.totalPage);
-      },
-      function(result) {
-        s_alert.pop(result.message);
-      });
-  }
-
-  // 그리드 포맷
-  grid.formatItem.addHandler(function(s, e) {
-    if (e.panel === s.cells) {
-      var col = s.columns[e.col];
-      var item = s.rows[e.row].dataItem;
-      if( col.binding === "prodCd") {
-        wijmo.addClass(e.cell, 'wijLink');
-      }
-    }
-  });
 
   // 그리드 선택 이벤트
   grid.addEventListener(grid.hostElement, 'mousedown', function(e) {

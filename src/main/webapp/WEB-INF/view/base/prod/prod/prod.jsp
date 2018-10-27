@@ -83,14 +83,25 @@
   <%--//searchTbl--%>
 
   <div class="mt10 oh">
-    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('printCodeCtrl')">
+    <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('prodCtrl', 1)">
       <s:message code="cmm.search" />
     </button>
   </div>
 
   <div class="mt40 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
-    <div id="listScaleBox" class="w150px fl"></div>
+    <wj-combo-box
+      class="w100px fl"
+      id="listScaleBox"
+      ng-model="listScale"
+      control="listScaleCombo"
+      items-source="_getComboData('listScaleBox')"
+      display-member-path="name"
+      selected-value-path="value"
+      is-editable="false"
+      initialized="_initComboBox(s)">
+    </wj-combo-box>
+
 
     <%-- 엑셀 다운로드 //TODO --%>
     <%--
@@ -106,24 +117,24 @@
     <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
     <div id="theGrid" style="height:393px;">
       <wj-flex-grid
-              autoGenerateColumns="false"
-              control="flex"
-              initialized="initGrid(s,e)"
-              sticky-headers="true"
-              selection-mode="Row"
-              items-source="data"
-              item-formatter="_itemFormatter">
+        autoGenerateColumns="false"
+        control="flex"
+        initialized="initGrid(s,e)"
+        sticky-headers="true"
+        selection-mode="Row"
+        items-source="data"
+        item-formatter="_itemFormatter">
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prod.prodClass"/>" binding="prodClassNm" width="*"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prod.prodCd"/>" binding="prodCd" width="200"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.prodClass"/>" binding="prodClassNm" width="150"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.prodCd"/>" binding="prodCd" width="100"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="prod.prodNm"/>" binding="prodNm" width="*"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prod.costUprc"/>" binding="costUprc" width="100"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prod.splyUprc"/>" binding="splyUprc" width="100"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prod.saleUprc"/>" binding="saleUprc" width="100"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prod.orgplceCd"/>" binding="orgplceCd" width="100"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prod.poUnitFg"/>" binding="poUnitFg" width="100"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.costUprc"/>" binding="costUprc" width="80"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.splyUprc"/>" binding="splyUprc" width="80"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.saleUprc"/>" binding="saleUprc" width="80"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.orgplceCd"/>" binding="orgplceCd" width="80"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.poUnitFg"/>" binding="poUnitFg" width="80"></wj-flex-grid-column>
 
       </wj-flex-grid>
       <%-- ColumnPicker 사용시 include --%>
@@ -137,13 +148,12 @@
   <%-- 페이지 리스트 --%>
   <div class="pageNum mt20">
     <%-- id --%>
-    <ul id="page1" data-size="10">
+    <ul id="prodCtrlPager" data-size="10">
     </ul>
   </div>
   <%--//페이지 리스트--%>
 
 </div>
-
 
 <%--//상품상세 정보--%>
 <div id="prodFullDimmed" class="fullDimmed" style="display: none;"></div>
