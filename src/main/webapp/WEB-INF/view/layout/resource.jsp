@@ -22,6 +22,7 @@
 <%-- wijmo plug-in --%>
 <script type="text/javascript" src="/resource/vendor/wijmo/js/wijmo.min.js?ver=5.20182.500" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/vendor/wijmo/js/wijmo.license.key.js?ver=5.20182.500" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/vendor/wijmo/js/cultures/wijmo.culture.ko.min.js?ver=5.20182.500" charset="utf-8"></script>
 <%-- wijmo-modules plug-in --%>
 <script type="text/javascript" src="/resource/vendor/wijmo/js/grid/wijmo.grid.min.js?ver=5.20182.500" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/vendor/wijmo/js/grid/wijmo.grid.xlsx.min.js?ver=5.20182.500" charset="utf-8"></script>

@@ -8,17 +8,17 @@ function RootController(ctrlName, $scope, $http, isPicker) {
   };
   // 조회 : 마스터 그리드
   $scope._inquiryMain = function (url, params, callback) {
-    $scope._inquiry(url, params, callback, true, true);
+    _inquiry(url, params, callback, true, true);
   };
   // 조회 : 서브 그리드
   $scope._inquirySub = function (url, params, callback, isView) {
     if (!isView) {
       isView = true;
     }
-    $scope._inquiry(url, params, callback, isView, false);
+    _inquiry(url, params, callback, isView, false);
   };
-  // 그리드 조회
-  $scope._inquiry = function (url, params, callback, isView, isMaster) {
+  // 그리드 조회 : private
+  function _inquiry(url, params, callback, isView, isMaster) {
     // 로딩바 show
     $scope.$broadcast('loadingPopupActive');
     // 마스터그리드 여부
@@ -51,7 +51,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
     }).then(function successCallback(response) {
       // 로딩바 hide
       $scope.$broadcast('loadingPopupInactive');
-      if(response.data.status === "OK") {
+      if (_httpStatusCheck(response)) {
         // this callback will be called asynchronously
         // when the response is available
         var list = response.data.data.list;
@@ -73,21 +73,6 @@ function RootController(ctrlName, $scope, $http, isPicker) {
           $scope._broadcast('drawPaging', $scope.pagingInfo);
         }
       }
-      else if(response.data.status === "FAIL") {
-        $scope._popMsg("Ajax Fail By HTTP Request");
-      }
-      else if(response.data.status === "SESSION_EXFIRE") {
-        $scope._popMsg(response.data.message, function() {
-          location.href = response.data.url;
-        });
-      }
-      else if(response.data.status === "SERVER_ERROR") {
-        $scope._popMsg(response.data.message);
-      }
-      else {
-        var msg = response.data.status + " : " + response.data.message;
-        $scope._popMsg(msg);
-      }
     }, function errorCallback(response) {
       // 로딩바 hide
       $scope.$broadcast('loadingPopupInactive');
@@ -103,9 +88,13 @@ function RootController(ctrlName, $scope, $http, isPicker) {
         }, 10);
       }
     });
-  };
+  }
   // 행 추가
   $scope._addRow = function (params, pos) {
+    _gridAddRow(params, pos);
+  };
+  // 행 추가 : private
+  function _gridAddRow(params, pos) {
     var flex = $scope.flex;
     if (!flex.collectionView) {
       flex.itemsSource = new wijmo.collections.CollectionView();
@@ -125,9 +114,13 @@ function RootController(ctrlName, $scope, $http, isPicker) {
       flex.focus();
       flex.startEditing(true, flex.rows.length - 1, (pos === null ? 0 : pos), true);
     }, 50);
-  };
-  // 저장
+  }
+  // 그리드 저장
   $scope._save = function (url, params, callback) {
+    return _gridSave(url, params, callback);
+  };
+  // 그리드 저장 : private
+  function _gridSave(url, params, callback) {
     var sParam = {};
     // 길이체크
     if (params.length <= 0) {
@@ -152,26 +145,9 @@ function RootController(ctrlName, $scope, $http, isPicker) {
     }).then(function successCallback(response) {
       // 로딩바 hide
       $scope.$broadcast('loadingPopupInactive');
-      if(response.data.status === "OK") {
-        // this callback will be called asynchronously
-        // when the response is available
+      if (_httpStatusCheck(response)) {
         $scope._popMsg(messages["cmm.saveSucc"]);
         $scope.flex.collectionView.clearChanges();
-      }
-      else if(response.data.status === "FAIL") {
-        $scope._popMsg("Ajax Fail By HTTP Request");
-      }
-      else if(response.data.status === "SESSION_EXFIRE") {
-        $scope._popMsg(response.data.message, function() {
-          location.href = response.data.url;
-        });
-      }
-      else if(response.data.status === "SERVER_ERROR") {
-        $scope._popMsg(response.data.message);
-      }
-      else {
-        var msg = response.data.status + " : " + response.data.message;
-        $scope._popMsg(msg);
       }
     }, function errorCallback(response) {
       // 로딩바 hide
@@ -188,9 +164,42 @@ function RootController(ctrlName, $scope, $http, isPicker) {
         }, 10);
       }
     });
+  }
+  // http 조회 후 status 체크
+  $scope._httpStatusCheck = function (res) {
+    return _httpStatusCheck(res);
   };
+  // private
+  function _httpStatusCheck(res) {
+    if (res.data.status === "OK") {
+      return true;
+    }
+    else if (res.data.status === "FAIL") {
+      $scope._popMsg("Ajax Fail By HTTP Request");
+      return false;
+    }
+    else if (res.data.status === "SESSION_EXFIRE") {
+      $scope._popMsg(res.data.message, function () {
+        location.href = res.data.url;
+      });
+      return false;
+    }
+    else if (res.data.status === "SERVER_ERROR") {
+      $scope._popMsg(res.data.message);
+      return false;
+    }
+    else {
+      var msg = res.data.status + " : " + res.data.message;
+      $scope._popMsg(msg);
+      return false;
+    }
+  }
   // itemFormatter 기본설정
   $scope._itemFormatter = function (panel, r, c, cell) {
+    _itemFormatter(panel, r, c, cell);
+  };
+  // itemFormatter 기본설정 : private
+  function _itemFormatter(panel, r, c, cell) {
     // 컬럼헤더 merged 의 헤더타이틀 중앙(vertical) 정렬
     if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
       var mRange = $scope.flex.getMergedRange(panel, r, c);
@@ -234,12 +243,12 @@ function RootController(ctrlName, $scope, $http, isPicker) {
           flex.endUpdate();
         });
       }
-    // picker 를 위한 설정
+      // picker 를 위한 설정
     } else if (panel.cellType === wijmo.grid.CellType.TopLeft) {
       if (!isPicker) {
         $(cell).css({"background": "none", "background-color": "#e8e8e8"});
       }
-    // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+      // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
     } else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
       // GroupRow 인 경우에는 표시하지 않는다.
       if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
@@ -251,14 +260,14 @@ function RootController(ctrlName, $scope, $http, isPicker) {
           cell.textContent = (r + 1).toString();
         }
       }
-    // readOnly 배경색 표시
+      // readOnly 배경색 표시
     } else if (panel.cellType === wijmo.grid.CellType.Cell) {
       var col = panel.columns[c];
       if (col.isReadOnly) {
         wijmo.addClass(cell, 'wj-custom-readonly');
       }
     }
-  };
+  }
   // 에디팅 관련 기본설정
   $scope.$watch('flex', function () {
     var flex = $scope.flex;
@@ -291,6 +300,10 @@ function RootController(ctrlName, $scope, $http, isPicker) {
   });
   // columnPicker 생성
   $scope._makePickColumns = function (ctrlName) {
+    _makePickColumns(ctrlName);
+  };
+  // columnPicker 생성 : private
+  function _makePickColumns(ctrlName) {
     var flex = $scope.flex;
     if (flex && isPicker) {
       flex.hostElement.addEventListener('mousedown', function (e) {
@@ -314,7 +327,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
         }
       });
     }
-  };
+  }
   // 로딩 메시지 팝업 열기
   $scope.$on('loadingPopupActive', function (event, data) {
     // 팝업내용 동적 생성
@@ -334,6 +347,115 @@ function RootController(ctrlName, $scope, $http, isPicker) {
   $scope.$on('loadingPopupInactive', function () {
     $scope._loadingPopup.hide();
   });
+  // 조회관련 공통로직
+  $scope._postJSONQuery = {
+    withPopUp: function() {
+      return _postJSON(arguments, true, "loading");
+    },
+    withOutPopUp: function() {
+      return _postJSON(arguments, false, "loading");
+    }
+  };
+  // 저장관련 공통로직
+  $scope._postJSONSave = {
+    withPopUp: function() {
+      return _postJSON(arguments, true, "saving");
+    },
+    withOutPopUp: function() {
+      return _postJSON(arguments, false, "saving");
+    }
+  };
+  // 조회/저장관련 공통로직 : private
+  function _postJSON(args, isMsg, type) {
+    var popMsg = type === "loading" ? messages["cmm.loading"] : messages["cmm.saving"];
+    var url, params, success, error, complete;
+    switch (args.length) {
+      case 3:
+        url = args[0];
+        params = args[1];
+        success = args[2];
+        break;
+      case 4:
+        url = args[0];
+        params = args[1];
+        success = args[2];
+        complete = args[3];
+        break;
+      case 5:
+        url = args[0];
+        params = args[1];
+        success = args[2];
+        error = args[3];
+        complete = args[4];
+        break;
+    }
+    var sParms = {};
+    // 가상로그인시 세션활용
+    if (document.getElementsByName("sessionId")[0]) {
+      if (type === "loading") {
+        params['sid'] = document.getElementsByName("sessionId")[0].value;
+      } else if (type === "saving") {
+        // 저장시에는 sid를 request 에 실어보내기 위해 추가 생성
+        sParms['sid'] = document.getElementsByName("sessionId")[0].value;
+      }
+    }
+    // 로딩바 show
+    if (isMsg) {
+      $scope.$broadcast('loadingPopupActive', popMsg);
+    }
+    // http 속성
+    var property = {
+      method: 'POST', //방식
+      url: url, /* 통신할 URL */
+      headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+    };
+    if(type === "loading") {
+      property.params = params;
+    } else if(type === "saving") {
+      // 저장시에는 sid를 request 에 실어보내기 위해 params 추가 생성
+      property.data = params;
+      property.params = sParams; /* 파라메터로 보낼 데이터 : request.getParameter */
+    }
+    // ajax 통신 설정
+    $http(property)
+      .then(function successCallback(response) {
+      if (isMsg) {
+        // 로딩바 hide
+        $scope.$broadcast('loadingPopupInactive');
+      }
+      if (_httpStatusCheck(response)) {
+        if(type === "saving") {
+          $scope._popMsg(messages["cmm.saveSucc"]);
+        }
+        if (typeof success === "function") {
+          success();
+        }
+      }
+    }, function errorCallback(response) {
+      if (isMsg) {
+        // 로딩바 hide
+        $scope.$broadcast('loadingPopupInactive');
+      }
+      // called asynchronously if an error occurs
+      // or server returns response with an error status.
+      if(type === "loading") {
+        $scope._popMsg(messages["cmm.error"]);
+      } else if(type === "saving") {
+        $scope._popMsg(messages["cmm.saveFail"]);
+      }
+      if (typeof error === "function") {
+        error();
+      }
+      return false;
+    }).then(function () {
+      // "complete" code here
+      if (typeof complete === "function") {
+        setTimeout(function () {
+          complete();
+        }, 10);
+      }
+    });
+  }
 }
 
 // 메뉴 트리뷰 생성
@@ -344,9 +466,12 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
   if( document.getElementsByName("sessionId").length > 0 ) {
     $scope.params.sid = document.getElementsByName("sessionId")[0].value;
   }
-
-  //트리 변환 메서드
+  // 트리 변환
   $scope._convertTreeModel = function (arrayList, rootId) {
+    return _convertTreeModel(arrayList, rootId);
+  };
+  // 트리 변환 : private
+  function _convertTreeModel(arrayList, rootId) {
     var rootNodes = [];
     var traverse = function (nodes, item, index) {
       if (nodes instanceof Array) {
@@ -368,12 +493,14 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
         return traverse(rootNodes, item, index);
       });
     }
-
     return rootNodes;
-  };
-
+  }
   // 메뉴목록 조회 및 트리Data Set
   $scope._searchTree = function(menuUrl, callback) {
+    _searchTree(menuUrl, callback);
+  };
+  // 메뉴목록 조회 및 트리Data Set : private
+  function _searchTree(menuUrl, callback) {
     $http({
       method: 'POST', //방식
       url: menuUrl, /* 통신할 URL */
@@ -399,31 +526,43 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
         }, 10);
       }
     });
+  }
+  // 현재선택한 메뉴 가져오기
+  $scope._getCurrentMenu = function() {
+    return _getCurrentMenu();
   };
+  // 현재선택한 메뉴 가져오기 : private
+  function _getCurrentMenu() {
+    $http({
+      method: 'POST', //방식
+      url: "/menu/currentMenu.sb", /* 통신할 URL */
+      params: $scope.params, /* 파라메터로 보낼 데이터 */
+      headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+    }).then(function successCallback(response) {
+      if(response.data.status === "OK") {
+        var data = response.data.data;
+        if ( data ) {
+          $scope._setInitMenu(data.resrceCd);
+        } else {
+          $scope._setInitMenu("");
+        }
+      }
+    }, function errorCallback(response) {
+      $scope._popMsg("선택된 메뉴를 불러오는데 실패하였습니다.");
+      return false;
+    });
+  }
   // 메뉴목록 조회
   $scope._searchTree(menuUrl);
   // 현재선택한 메뉴 가져오기
-  $http({
-    method: 'POST', //방식
-    url: "/menu/currentMenu.sb", /* 통신할 URL */
-    params: $scope.params, /* 파라메터로 보낼 데이터 */
-    headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
-  }).then(function successCallback(response) {
-    if(response.data.status === "OK") {
-      var data = response.data.data;
-      if ( data ) {
-        $scope.setInitMenu(data.resrceCd);
-      } else {
-        $scope.setInitMenu("");
-      }
-    }
-  }, function errorCallback(response) {
-    $scope._popMsg("선택된 메뉴를 불러오는데 실패하였습니다.");
-    return false;
-  });
+  $scope._getCurrentMenu();
 
   // 트리의 아이템이 load 완료 되었을 때 이벤트
   $scope.loadedItems = function(s, e) {
+    _loadedItems(s, e);
+  };
+  // 트리의 아이템이 load 완료 되었을 때 이벤트 : private
+  function _loadedItems(s, e) {
     var node;
     // 아이콘 Class 추가
     for (node = s.getFirstNode(); node; node = node.nextSibling()) {
@@ -433,7 +572,7 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
     }
     s.collapseToLevel(0);
 
-    var initMenu = $scope.getInitMenu();
+    var initMenu = $scope._getInitMenu();
     // 초기 메뉴(현재 메뉴) 설정
     if (initMenu) {
       for (node = s.getFirstNode(); node; node = node.next()) {
@@ -444,10 +583,13 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
         }
       }
     }
-  };
-
+  }
   // 선택된 메뉴가 변경 되었을 때 이벤트
   $scope.selectedItemChanged = function(s, e) {
+    _selectedItemChaged(s, e);
+  };
+  // 선택된 메뉴가 변경 되었을 때 이벤트 : private
+  function _selectedItemChaged(s, e) {
     var node, pNode = $scope.getPNode();
     // 이전 메뉴의 클래스 제거
     if(pNode) {
@@ -460,10 +602,13 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
       wijmo.addClass(node.element, "on");
     }
     $scope.setPNode(s.selectedNode);
-  };
-
+  }
   // 아이템 클릭 시 이벤트
   $scope.itemClicked = function(s, e) {
+    _itemClicked(s, e);
+  };
+  // 아이템 클릭 시 이벤트 : private
+  function _itemClicked(s, e) {
     // URL 이 있을 경우 페이지 이동
     if(!isEmpty(s.selectedNode.dataItem.url)) {
       // 가상로그인시 파라미터인 SessionID 설정
@@ -480,7 +625,7 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
     } else {
       s.selectedNode.isCollapsed = false;
     }
-  };
+  }
 }
 
 !function (win, $) {
@@ -579,6 +724,22 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
         s._tbx.setAttribute("ng-model", s._orgAtts['ng-model']);
         s._tbx.attributes['ng-model'].value = s._orgAtts['ng-model'].value;
       };
+      // 날짜입력박스 초기화..
+      $scope._initDateBox = function (s) {
+        console.log("s ", s);
+        s.itemFormatter = function(date, element) {
+          var day = date.getDay();
+          // console.log(element.style);
+
+          if (day === 0) {
+            element.style.color = 'red';
+          } else if (day === 6) {
+            element.style.color = '#1e88e5';
+          }
+          // element.style.backgroundColor = day == 0 || day == 6 ? 'yellow' : '';
+        };
+
+      };
       // 페이징바 Data Setter
       $scope._setCurrPage = function (idx) {
         pagingData.set(idx);
@@ -596,19 +757,19 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
         return comboData.get(id);
       };
       // initMenu Data Setter
-      $scope.setInitMenu = function (data) {
+      $scope._setInitMenu = function (data) {
         initMenu.set(data);
       };
       // initMenu Data Getter
-      $scope.getInitMenu = function () {
+      $scope._getInitMenu = function () {
         return initMenu.get();
       };
       // pNode Data Setter
-      $scope.setPNode = function (data) {
+      $scope._setPNode = function (data) {
         pNode.set(data);
       };
       // pNode Data Getter
-      $scope.getPNode = function () {
+      $scope._getPNode = function () {
         return pNode.get();
       };
     }]);
