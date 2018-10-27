@@ -36,19 +36,19 @@ app.controller('gridCtrl',  ['$scope', '$http', function ($scope, $http) {
         var item = s.rows[e.row].dataItem;
         // 본사
         if (col.binding === "hqOfficeCd" && item.hqOfficeCd !== "00000") {
-          if ( item.orgnfg === "M" ) {
+          if ( item.orgnFg === "M" ) {
             wijmo.addClass(e.cell, 'wijLink wj-custom-readonly');
           }
         }
         // 매장
         if (col.binding === "storeCd" && item.storeCd !== "00000") {
-          if ( item.orgnfg !== "S" ) {
+          if ( item.orgnFg !== "S" ) {
             wijmo.addClass(e.cell, 'wijLink wj-custom-readonly');
           }
         }
         // 대리점
         if (col.binding === "agencyNm") {
-          if ( item.orgnfg === "M" ) {
+          if ( item.orgnFg === "M" ) {
             wijmo.addClass(e.cell, 'wijLink wj-custom-readonly');
           }
         }
@@ -117,22 +117,24 @@ app.controller('gridCtrl',  ['$scope', '$http', function ($scope, $http) {
       var crono = window.setInterval(function () {
         if (popup.closed !== false) { // !== opera compatibility reasons
           window.clearInterval(crono);
-          var param = {};
-          param.vUserId = value;
+          var params = {};
+          params.vUserId = value;
           if ( popup.document.getElementsByName("sessionId") ) {
-            param.sid = popup.document.getElementsByName("sessionId")[0].value;
+            params.sid = popup.document.getElementsByName("sessionId")[0].value;
           }
-          $.postJSON("/store/manage/virtualLogin/virtualLogin/vLogout.sb", param,
-            function (result) {
 
-            },
-            function (result) {
-              $scope.$apply(function() {
-                $scope._popMsg(result.message);
-              });
-              return false;
-            }
-          );
+          $http({
+            method: 'POST',
+            url: "/store/manage/virtualLogin/virtualLogin/vLogout.sb",
+            params: params,
+            headers: {'Content-Type': 'application/json; charset=utf-8'}
+          }).then(function successCallback(response) {
+
+          }, function errorCallback(response) {
+            $scope._popMsg(response.message);
+            return false;
+          });
+
         }
       }, 250);
       form.submit();

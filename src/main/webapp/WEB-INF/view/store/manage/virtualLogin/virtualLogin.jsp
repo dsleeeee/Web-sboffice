@@ -50,13 +50,14 @@
         <td>
           <div class="sb-select">
             <wj-combo-box
-                    id="srchClsFg"
-                    ng-model="clsFg"
-                    items-source="_getComboData('srchClsFg')"
-                    display-member-path="name"
-                    selected-value-path="value"
-                    is-editable="false"
-                    initialized="_initComboBox(s)">
+              id="srchClsFg"
+              ng-model="clsFg"
+              control="clsFgCombo"
+              items-source="_getComboData('srchClsFg')"
+              display-member-path="name"
+              selected-value-path="value"
+              is-editable="false"
+              initialized="_initComboBox(s)">
             </wj-combo-box>
           </div>
         </td>
@@ -65,13 +66,14 @@
         <td>
           <div class="sb-select">
             <wj-combo-box
-                    id="srchStatFg"
-                    ng-model="statFg"
-                    items-source="_getComboData('srchStatFg')"
-                    display-member-path="name"
-                    selected-value-path="value"
-                    is-editable="false"
-                    initialized="_initComboBox(s)">
+              id="srchStatFg"
+              ng-model="statFg"
+              control="statFgCombo"
+              items-source="_getComboData('srchStatFg')"
+              display-member-path="name"
+              selected-value-path="value"
+              is-editable="false"
+              initialized="_initComboBox(s)">
             </wj-combo-box>
           </div>
         </td>
@@ -92,6 +94,7 @@
         class="w150 fl"
         id="listScaleBox"
         ng-model="listScale"
+        control="listScaleCombo"
         items-source="_getComboData('listScaleBox')"
         display-member-path="name"
         selected-value-path="value"
@@ -102,10 +105,6 @@
       <%--<button id="btnExcel" class="btn_skyblue fr"><s:message code="cmm.excel.down" /></button>--%>
     </div>
 
-    <%-- 위즈모 테이블 : 그리드가 2개 이상인 경우 감싸서 사용--%>
-    <%--<div class="wj-TblWrapBr mt10">--%>
-    <%-- 개발시 높이 조절해서 사용--%>
-    <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
     <div class="wj-gridWrap mt10" style="height:315px; overflow-y: hidden;">
       <div class="row">
         <wj-flex-grid
@@ -143,8 +142,6 @@
         <%--// ColumnPicker 사용시 include --%>
       </div>
     </div>
-    <%--</div>--%>
-    <%--//위즈모 테이블--%>
   </div>
 
   <%-- 페이지 리스트 --%>
@@ -161,4 +158,4 @@
   var clsFg = ${ccu.getCommCodeSelect("001")};
   var sysStatFg = ${ccu.getCommCodeSelect("005")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/virtualLogin/virtualLogin.js?ver=2018090401" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/virtualLogin/virtualLogin.js?ver=2018102701" charset="utf-8"></script>
