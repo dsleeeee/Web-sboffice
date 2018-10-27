@@ -225,8 +225,8 @@ function RootController(ctrlName, $scope, $http, isPicker) {
         }
         // create and initialize checkbox
         if (column.format === "checkBoxText") {
-          cell.innerHTML = "<input id=\"" + col.binding + "\" type=\"checkbox\" class=\"wj-cell-check\" />"
-            + "<label for=\"" + col.binding + "\" class=\"wj-header-label\">" + cell.innerHTML + "</label>";
+          cell.innerHTML = "<input id=\"" + column.binding + "\" type=\"checkbox\" class=\"wj-cell-check\" />"
+            + "<label for=\"" + column.binding + "\" class=\"wj-header-label\">" + cell.innerHTML + "</label>";
         } else {
           cell.innerHTML = "<input type=\"checkbox\" class=\"wj-cell-check\" />";
         }
