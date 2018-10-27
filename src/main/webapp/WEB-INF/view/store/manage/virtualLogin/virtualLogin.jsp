@@ -91,7 +91,7 @@
     <div class="mt40 oh sb-select dkbr">
       <%-- 페이지 스케일  --%>
       <wj-combo-box
-        class="w150px fl"
+        class="w100px fl"
         id="listScaleBox"
         ng-model="listScale"
         control="listScaleCombo"

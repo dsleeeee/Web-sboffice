@@ -101,7 +101,7 @@
 
   <div class="mt40 oh sb-select dkbr">
     <%--페이지 스케일 --%>
-    <div id="listScaleBox" class="w130px fl"></div>
+    <div id="listScaleBox" class="w100px fl"></div>
     <div class="tr">
       <%-- 본사신규등록 --%>
 <c:if test="${orgnFg == 'HQ'}">

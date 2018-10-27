@@ -86,7 +86,7 @@
 
   <div class="mt40 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
-    <div id="listScaleBox" class="w150px fl"></div>
+    <div id="listScaleBox" class="w100px fl"></div>
     <div id="listScaleBox" class="fr">
         <%-- 엑셀다운로드 //TODO --%>
         <%--<button class="btn_skyblue" id="btnExcel"><s:message code="cmm.excel.down" /></button>--%>

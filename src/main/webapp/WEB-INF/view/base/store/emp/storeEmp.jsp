@@ -104,7 +104,7 @@
 
   <div class="mt40 oh sb-select dkbr">
     <%--페이지 스케일 --%>
-    <div id="listScaleBox" class="w130px fl"></div>
+    <div id="listScaleBox" class="w100px fl"></div>
     <div class="tr">
       <%-- 사원신규등록 --%>
       <button class="btn_skyblue" id="btnRegist"><s:message code="storeEmp.empRegist" /></button>

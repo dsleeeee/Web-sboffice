@@ -65,7 +65,7 @@
 
   <div class="mt40 oh sb-select dkbr">
     <%--페이지 스케일 --%>
-    <div id="listScaleBox" class="w130px fl"></div>
+    <div id="listScaleBox" class="w100px fl"></div>
     <div class="tr">
       <%-- 본사신규등록 --%>
       <button class="btn_skyblue" id="btnRegist"><s:message code="hqManage.newHq" /></button>
