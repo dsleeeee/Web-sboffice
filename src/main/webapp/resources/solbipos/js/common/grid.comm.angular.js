@@ -33,8 +33,8 @@ function RootController(ctrlName, $scope, $http, isPicker) {
       }
     }
     // 페이징 처리
-    if ($scope._getCurrPage() > 0) {
-      params['curr'] = $scope._getCurrPage();
+    if ($scope._getPagingInfo("curr") > 0) {
+      params['curr'] = $scope._getPagingInfo("curr");
     } else {
       params['curr'] = 1;
     }
@@ -68,9 +68,14 @@ function RootController(ctrlName, $scope, $http, isPicker) {
 
         // 페이징 처리
         if (response.data.data.page && response.data.data.page.curr) {
-          $scope.pagingInfo = response.data.data.page;
-          $scope.pagingInfo.ctrlName = $scope.name;
-          $scope._broadcast('drawPaging', $scope.pagingInfo);
+          var pagingInfo = response.data.data.page;
+          $scope._setPagingInfo("ctrlName", $scope.name);
+          $scope._setPagingInfo("pageScale", pagingInfo.pageScale);
+          $scope._setPagingInfo("curr", pagingInfo.curr);
+          $scope._setPagingInfo("totCnt", pagingInfo.totCnt);
+          $scope._setPagingInfo("totalPage", pagingInfo.totalPage);
+
+          $scope._broadcast('drawPager');
         }
       }
     }, function errorCallback(response) {
@@ -634,65 +639,84 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
 !function (win, $) {
   var app = angular.module('rootApp', ['wj', 'ngSanitize']);
   // main-controller
-  app.controller('rootCtrl', ['$scope', '$http', '$compile', '$sce', 'comboData', 'pagingData', 'pNode', 'initMenu',
-    function ($scope, $http, $compile, $sce, comboData, pagingData, pNode, initMenu) {
+  app.controller('rootCtrl', ['$scope', '$http', '$compile', '$sce', 'comboData', 'pagingInfo', 'pNode', 'initMenu',
+    function ($scope, $http, $compile, $sce, comboData, pagingInfo, pNode, initMenu) {
       // 페이징바 동적 생성
-      $scope.$on('drawPaging', function (event, pagingInfo) {
+      $scope.$on('drawPager', function () {
         // 페이징바 갯수
-        var page_scale = pagingInfo.pageScale;
+        var page_scale = $scope._getPagingInfo("pageScale");
         var page_end = page_scale === 10 ? 9 : 4;
         // 버튼 태그 동적 생성
-        var prevBtnTag = "<li class=\"btn_previous\" data-tot={tot}><a href=\"javascript:;\"></a></li>";
-        var pageBtnTag = "<li><a href=\"javascript:;\" class=\"{cnm}\" data-value={i} ng-click=\"_pagingView('{ctrlName}', '{i}');\">{i}</a></li>";
-        var nextBtnTag = "<li class=\"btn_next\" data-curr={curr}><a href=\"javascript:;\"></a></li>";
+        var prevBtnTag = "<li class=\"btn_previous\"><a href=\"javascript:void(0);\" ng-click=\"_pagePrev($event, '{ctrlName}', '{prev}');\"></a></li>";
+        var pageBtnTag = "<li><a href=\"javascript:void(0);\" class=\"{cnm}\" ng-click=\"_pageView('{ctrlName}', '{i}');\">{i}</a></li>";
+        var nextBtnTag = "<li class=\"btn_next\"><a href=\"javascript:void(0);\" ng-click=\"_pageNext($event, '{ctrlName}', '{next}');\"></a></li>";
         var pagerTag = "";
 
         var item = {};
-        item.ctrlName = pagingInfo.ctrlName;
-        item.curr = pagingInfo.curr;
-        item.tot = pagingInfo.totCnt;
+        item.ctrlName = $scope._getPagingInfo("ctrlName");
+        item.curr = $scope._getPagingInfo("curr");
+        item.totCnt = $scope._getPagingInfo("totCnt");
+        item.totalPage = $scope._getPagingInfo("totalPage");
+        item.prev = 0;
+        item.next = 0;
         item.start = 0;
         item.end = 0;
         // 페이징 계산
-        var t = pagingInfo.curr / page_scale;
+        var t = $scope._getPagingInfo("curr") / page_scale;
         if (t.toString().indexOf(".") === -1) {
-          item.end = pagingInfo.curr;
+          item.end = $scope._getPagingInfo("curr");
           item.start = item.end - page_end;
         } else {
           item.start = (parseInt(t) * page_scale) + 1;
           item.end = item.start + page_end;
         }
-        if (item.end > pagingInfo.totalPage) {
-          item.end = pagingInfo.totalPage;
+        if (item.end > item.totalPage) {
+          item.end = item.totalPage;
         }
         // 페이징 제작
-        if (pagingInfo.totCnt > page_scale) {
+        if ( item.curr > page_scale) {
+          item.prev = item.start - 1;
           pagerTag += wijmo.format(prevBtnTag, item);
         }
         for (var i = item.start; i <= item.end; i++) {
           item.i = i;
-          item.cnm = i === pagingInfo.curr ? "on pagenav" : "pagenav";
+          item.cnm = i === item.curr ? "on pagenav" : "pagenav";
           pagerTag += wijmo.format(pageBtnTag, item);
         }
-        if (pagingInfo.totalPage > page_scale) {
+        if (item.end < item.totalPage) {
+          item.next = item.end + 1;
           pagerTag += wijmo.format(nextBtnTag, item);
         }
-
         var pager = $compile(pagerTag)($scope);
-        var pagerName = pagingInfo.ctrlName + 'Pager';
+        var pagerName = item.ctrlName + 'Pager';
         angular.element(document.getElementById(pagerName)).children().remove();
         angular.element(document.getElementById(pagerName)).append(pager);
       });
       // 조회
-      $scope._broadcast = function (controllerName, params) {
+      $scope._broadcast = function (ctrlName, params) {
         $scope.$broadcast('init');
-        $scope.$broadcast(controllerName, params);
+        $scope.$broadcast(ctrlName, params);
       };
-      // 페이징조회
-      $scope._pagingView = function (ctrlName, curr) {
-        $scope._setCurrPage(curr);
+      // 페이지 선택
+      $scope._pageView = function (ctrlName, curr) {
+        _pageView(ctrlName, curr);
+      };
+      // 이전 페이지
+      $scope._pagePrev = function (event, ctrlName, curr) {
+        event.stopPropagation();
+        _pageView(ctrlName, curr);
+      };
+      // 다음 페이지
+      $scope._pageNext = function (event, ctrlName, curr) {
+        event.stopPropagation();
+        _pageView(ctrlName, curr);
+      };
+      // 페이지 이동
+      function _pageView(ctrlName, curr) {
+        $scope._setPagingInfo("curr", curr);
         $scope.$broadcast(ctrlName);
-      };
+      }
+
       // 메시지 팝업
       $scope._popMsg = function (msg, callback) {
         $scope.s_alert_msg = $sce.trustAsHtml(msg);
@@ -721,35 +745,30 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
           });
         }, 100);
       };
-      // 콤보박스 초기화.. ng-model 사용하기 위한 설정 : 20180831 노현수
+      // 콤보박스 초기화 > ng-model 사용하기 위한 설정 : 20180831 노현수
       $scope._initComboBox = function (s) {
         s._tbx.id = s._orgAtts.id.value;
         s._tbx.setAttribute("ng-model", s._orgAtts['ng-model']);
         s._tbx.attributes['ng-model'].value = s._orgAtts['ng-model'].value;
       };
-      // 날짜입력박스 초기화..
+      // 날짜입력박스 초기화
       $scope._initDateBox = function (s) {
-        console.log("s ", s);
         s.itemFormatter = function(date, element) {
           var day = date.getDay();
-          // console.log(element.style);
-
           if (day === 0) {
             element.style.color = 'red';
           } else if (day === 6) {
             element.style.color = '#1e88e5';
           }
-          // element.style.backgroundColor = day == 0 || day == 6 ? 'yellow' : '';
         };
-
       };
       // 페이징바 Data Setter
-      $scope._setCurrPage = function (idx) {
-        pagingData.set(idx);
+      $scope._setPagingInfo = function (id, data) {
+        pagingInfo.set(id, data);
       };
       // 페이징바 Data Getter
-      $scope._getCurrPage = function () {
-        return pagingData.get();
+      $scope._getPagingInfo = function (id) {
+        return pagingInfo.get(id);
       };
       // 콤보박스 Data Setter
       $scope._setComboData = function (id, data) {
@@ -794,6 +813,15 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
       return currentPage.value;
     };
     return currentPage;
+  }).factory('pagingInfo', function () {
+    var pagingInfo = [];
+    pagingInfo.set = function (id, data) {
+      pagingInfo[id] = data;
+    };
+    pagingInfo.get = function (id) {
+      return pagingInfo[id];
+    };
+    return pagingInfo;
   }).factory('pNode', function () {
     // 상위node Get/Set
     var pNode = {};
