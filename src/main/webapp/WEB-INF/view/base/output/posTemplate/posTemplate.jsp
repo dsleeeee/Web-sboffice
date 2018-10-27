@@ -31,7 +31,7 @@
       <tr>
         <th><s:message code="posTemplate.srchNm" /></th>
         <td colspan="2" class="oh">
-          <div class="sb-select fl w200">
+          <div class="sb-select fl w200px">
             <wj-combo-box
                 id="srchPrtClassCdCombo"
                 ng-model="prtClassCd"

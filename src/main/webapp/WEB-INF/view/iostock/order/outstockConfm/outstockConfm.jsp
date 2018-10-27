@@ -23,9 +23,9 @@
       <th><s:message code="outstockConfm.outDate"/></th>
       <td colspan="3">
         <div class="sb-select">
-          <span class="txtIn"><input id="srchStartDate" class="w150"></span>
+          <span class="txtIn"><input id="srchStartDate" class="w150px"></span>
           <span class="rg">~</span>
-          <span class="txtIn"><input id="srchEndDate" class="w150"></span>
+          <span class="txtIn"><input id="srchEndDate" class="w150px"></span>
         </div>
       </td>
     </tr>
@@ -74,7 +74,7 @@
     <%-- 출고일자 --%>
     <p class="s14 bk fl mr5 lh30"><s:message code="outstockConfm.outDate"/></p>
     <div class="sb-select fl">
-      <span class="txtIn"><input id="outDate" class="w120"></span>
+      <span class="txtIn"><input id="outDate" class="w120px"></span>
     </div>
     <%-- 출고자료생성 --%>
     <button type="button" id="btnConfirm" class="btn_skyblue ml5 fl" ng-click="saveOutstockConfirm()">

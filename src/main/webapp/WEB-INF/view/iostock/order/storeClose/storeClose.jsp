@@ -23,7 +23,7 @@
       <th><s:message code="cmm.search.month"/></th>
       <td>
         <div class="sb-select">
-          <span class="txtIn"><input id="srchMonth" class="w120"></span>
+          <span class="txtIn"><input id="srchMonth" class="w120px"></span>
         </div>
       </td>
     </tr>
@@ -241,7 +241,7 @@
 
     // 저장
     $scope.saveStoreClose = function () {
-      var params = new Array();
+      var params = [];
       for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
         $scope.flex.collectionView.itemsEdited[i].status = "U";
         params.push($scope.flex.collectionView.itemsEdited[i]);

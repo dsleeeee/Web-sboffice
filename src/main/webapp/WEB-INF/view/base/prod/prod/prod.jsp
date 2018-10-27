@@ -24,24 +24,25 @@
         <th><s:message code="prod.regDate" /></th>
         <td colspan="3">
           <div class="sb-select">
-            <span class="txtIn w110">
+            <span class="txtIn w110px">
               <wj-input-date
                 value="startDate"
                 ng-model="startDate"
+                control="startDateCombo"
                 min="2000-01-01"
                 max="2099-12-31"
-                control="startDateCombo"
-                show-drop-down-button="true"
                 initialized="_initDateBox(s)">
               </wj-input-date>
             </span>
             <span class="rg">~</span>
-            <span class="txtIn w110">
+            <span class="txtIn w110px">
               <wj-input-date
                 value="endDate"
+                ng-model="endDate"
+                control="endDateCombo"
                 min="2000-01-01"
                 max="2099-12-31"
-                control="endDateCombo">
+                initialized="_initDateBox(s)">
               </wj-input-date>
             </span>
             <span class="chk ml10">
@@ -57,32 +58,24 @@
         <%-- 상품코드 --%>
         <th><s:message code="prod.prodCd" /></th>
         <td>
-          <div class="sb-select">
-            <div id="prodCd"></div>
-          </div>
+          <input type="text" class="sb-input w100" id="srchProdCd" ng-model="prodCd" />
         </td>
         <%-- 상품명 --%>
         <th><s:message code="prod.prodNm" /></th>
         <td>
-          <div class="sb-select">
-            <div id="prodNm"></div>
-          </div>
+          <input type="text" class="sb-input w100" id="srchProdNm" ng-model="prodNm" />
         </td>
       </tr>
       <tr>
         <%-- 분류조회 --%>
         <th><s:message code="prod.prodClass" /></th>
         <td>
-          <div class="sb-select">
-            <div id="prodClassCd"></div>
-          </div>
+          <input type="text" class="sb-input w100" id="srchProdClassCd" ng-model="prodClassCd" />
         </td>
         <%-- 바코드 --%>
         <th><s:message code="prod.barCd" /></th>
         <td>
-          <div class="sb-select">
-            <div id="barCd"></div>
-          </div>
+          <input type="text" class="sb-input w100" id="srchBarCd" ng-model="barCd" />
         </td>
       </tr>
     </tbody>
@@ -97,7 +90,7 @@
 
   <div class="mt40 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
-    <div id="listScaleBox" class="w150 fl"></div>
+    <div id="listScaleBox" class="w150px fl"></div>
 
     <%-- 엑셀 다운로드 //TODO --%>
     <%--
@@ -156,7 +149,7 @@
 <div id="prodFullDimmed" class="fullDimmed" style="display: none;"></div>
 <div id="prodDetailLayer" class="layer" style="display: none;">
   <div class="layer_inner">
-    <div class="title w600">
+    <div class="title w600px">
       <p class="tit"><s:message code="prod.info" /></p>
       <a href="#" class="btn_close"></a>
       <div class="con sc2" style="height: 500px;">

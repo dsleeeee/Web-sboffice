@@ -41,7 +41,7 @@
       <div class="wj-TblWrapBr mr10 pd20" style="height: 500px;">
 
         <div class="sb-select dkbr mb10 oh">
-          <div id="theComboBox3" class="w130 fl"></div>
+          <div id="theComboBox3" class="w130px fl"></div>
           <div class="fr">
             <%-- 전체펼치기 버튼 --%>
             <button id="expandBtn" class="btn_skyblue">
@@ -236,7 +236,7 @@
         searchMemberPath: "keywords",
         selectedIndexChanged: function(s, e) {
           if(s.selectedItem) {
-            grid.selectedItem = s.selectedItem.item
+            grid.selectedItem = s.selectedItem.item;
             selectItem(grid.selectedItem);
           }
         }

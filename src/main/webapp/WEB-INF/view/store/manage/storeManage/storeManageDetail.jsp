@@ -71,7 +71,7 @@
             <td>
               <div class="sb-select">
                 <span class="txtIn">
-                  <input id="rOpenPosDate" name="startDate" class="w200" />
+                  <input id="rOpenPosDate" name="startDate" class="w200px" />
                 </span>
               </div>
             </td>

@@ -5,7 +5,7 @@
 <div id="hqDtlDim" class="fullDimmed" style="display:none;"></div>
 <div id="hqDtlLayer" class="layer" style="display:none;">
   <div class="layer_inner">
-    <div class="title w800">
+    <div class="title w800px">
       <p id="popTitle" class="tit"></p>
       <a href="#" class="btn_close"></a>
       <div class="con">
@@ -230,7 +230,7 @@
     }
     ,function (result) {
       s_alert.pop("Ajax Fail");
-      return;
+
     });
   }
 
@@ -267,7 +267,7 @@
     $.postJSON(sendUrl, param, function(result) {
      if(result.status == "FAIL") {
          s_alert.pop(result);
-         return;
+
       }
       else {
         if(result.data == "SUCCESS") {

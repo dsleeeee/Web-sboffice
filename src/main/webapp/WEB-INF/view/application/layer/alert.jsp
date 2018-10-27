@@ -5,7 +5,7 @@
 <div id="_alertTent" class="fullDimmed" style="display: none;"></div>
 <div id="_layerOk" class="layer" style="display: none;">
   <div class="layer_inner">
-    <div class="noTitle w500">
+    <div class="noTitle w500px">
       <p class="bk"></p>
       <div class="btnSet">
         <span>
@@ -20,7 +20,7 @@
 
 <div id="_layerConf" class="layer" style="display: none;">
   <div class="layer_inner">
-    <div class="noTitle w500">
+    <div class="noTitle w500px">
       <p class="bk"></p>
       <div class="btnSet">
         <span>

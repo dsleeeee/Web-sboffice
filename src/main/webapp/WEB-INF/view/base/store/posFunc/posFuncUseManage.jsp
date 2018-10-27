@@ -20,7 +20,7 @@
     <div class="w40 fl mt20">
       <div class="wj-TblWrapBr oh mr10 pd20" style="height:560px;">
         <div class="updownSet oh mb10">
-          <div class="sb-select w150 fl">
+          <div class="sb-select w150px fl">
             <div id="posListBox"></div>
           </div>
           <div class="fr mb10">

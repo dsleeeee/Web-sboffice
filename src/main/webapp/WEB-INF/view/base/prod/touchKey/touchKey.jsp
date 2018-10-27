@@ -25,7 +25,7 @@
                             selected-index-changed="setTouchKeyFilter(s)">
                         </wj-combo-box>
                     </div>
-                    <div class="sb-select dkbr fl w120 ml5">
+                    <div class="sb-select dkbr fl w120px ml5">
                         <wj-combo-box
                             id="prodClassCdFilterCombo"
                             ng-model="prodClassCdFilter"
@@ -76,7 +76,7 @@
                 <span class="fl bk lh30"><s:message code="touchKey.preview"/></span>
                 <button class="btn_skyblue fl ml5" id="btnInit"><s:message code="touchKey.reload"/></button>
                 <div class="txtIn">
-                    <div class="sb-select dkbr fl w120">
+                    <div class="sb-select dkbr fl w120px">
                         <div id="selectStyle"></div>
                     </div>
                     <button class="btn_skyblue fl ml5" id="btnApplyStyle"><s:message code="touchKey.applyStyle"/></button>

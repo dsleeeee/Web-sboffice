@@ -6,7 +6,7 @@
 <div id="storeEnvDim" class="fullDimmed" style="display:none;"></div>
 <div id="storeEnvLayer" class="layer" style="display:none;">
   <div class="layer_inner">
-    <div class="title w500">
+    <div class="title w500px">
       <p class="tit"><s:message code="storeManage.storeEnv" /></p>
       <a href="#" class="btn_close"></a>
       <div class="con">

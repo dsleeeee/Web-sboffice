@@ -23,9 +23,9 @@
       <th><s:message code="instockConfm.outDate"/></th>
       <td colspan="3">
         <div class="sb-select">
-          <span class="txtIn"><input id="srchStartDate" class="w150"></span>
+          <span class="txtIn"><input id="srchStartDate" class="w150px"></span>
           <span class="rg">~</span>
-          <span class="txtIn"><input id="srchEndDate" class="w150"></span>
+          <span class="txtIn"><input id="srchEndDate" class="w150px"></span>
         </div>
       </td>
     </tr>
@@ -33,7 +33,7 @@
       <%-- 진행 --%>
       <th><s:message code="instockConfm.procFg"/></th>
       <td>
-        <span class="txtIn w150 sb-select fl mr5">
+        <span class="txtIn w150px sb-select fl mr5">
           <wj-combo-box
             id="srchProcFg"
             ng-model="procFg"

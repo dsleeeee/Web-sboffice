@@ -23,9 +23,9 @@
         <th><s:message code="hqEmp.regDt" /></th>
         <td colspan="3">
           <div class="sb-select">
-            <span class="txtIn"><input id="startDate" name="startDate" class="w200" /></span>
+            <span class="txtIn"><input id="startDate" name="startDate" class="w200px" /></span>
             <span class="rg">~</span>
-            <span class="txtIn"><input id="endDate" name="endDate" class="w200" /></span>
+            <span class="txtIn"><input id="endDate" name="endDate" class="w200px" /></span>
             <span class="chk ml10"><input type="checkbox" id="chkDt" checked/>
             <label for="chkDt"><s:message code="cmm.all.day" /></label>
             </span>
@@ -101,7 +101,7 @@
 
   <div class="mt40 oh sb-select dkbr">
     <%--페이지 스케일 --%>
-    <div id="listScaleBox" class="w130 fl"></div>
+    <div id="listScaleBox" class="w130px fl"></div>
     <div class="tr">
       <%-- 본사신규등록 --%>
 <c:if test="${orgnFg == 'HQ'}">

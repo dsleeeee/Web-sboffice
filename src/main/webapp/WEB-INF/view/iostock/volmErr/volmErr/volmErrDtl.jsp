@@ -91,7 +91,7 @@
           <%-- 출고일자 --%>
           <div id="divDtlOutDate" class="sb-select ml10 fl" style="display: none;">
             <p class="s12 fl mr5 lh30"><s:message code="volmErr.dtl.outDate"/> : </p>
-            <span class="txtIn"><input id="dtlOutDate" class="w120"></span>
+            <span class="txtIn"><input id="dtlOutDate" class="w120px"></span>
           </div>
           <%-- 저장 --%>
           <button type="button" id="btnDtlSave" class="btn_skyblue ml5 fl" ng-click="save()">
@@ -206,7 +206,7 @@
         return false;
       }
 
-      var params           = new Array();
+      var params           = [];
       var newSlipNoFg      = "N";
       var hqNewAdjustFg    = "N";
       var storeNewAdjustFg = "N";
@@ -302,7 +302,7 @@
           // when the response is available
           if (!$.isEmptyObject(response.data.data.list)) {
             var list       = response.data.data.list;
-            var comboArray = new Array();
+            var comboArray = [];
             var comboData  = {};
 
             if (comboFg === "combo") {

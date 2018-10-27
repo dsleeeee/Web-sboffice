@@ -4,7 +4,7 @@
 <div id="_loadTent" class="fullDimmed" style="display: none;"></div>
 <div id="_loading" class="layer" style="display: none;">
   <div class="layer_inner">
-    <div class="noTitle w500">
+    <div class="noTitle w500px">
       <p class="bk">
         <s:message code="cmm.loading" />
       </p>

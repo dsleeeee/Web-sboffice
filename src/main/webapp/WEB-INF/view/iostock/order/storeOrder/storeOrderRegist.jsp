@@ -84,9 +84,9 @@
             <p id="option2OutLayer" class="s14 bk lh30 fl ml10" style="display: none;"><s:message code="storeOrder.dtl.outDate"/></p>
             <p id="option2SaleLayer" class="s14 bk lh30 fl ml10" style="display: none;"><s:message code="storeOrder.dtl.saleDate"/></p>
             <div id="option2DateLayer" class="sb-select fl ml10" style="display: none;">
-              <span class="txtIn"><input id="srchRegStartDate" class="w120"></span>
+              <span class="txtIn"><input id="srchRegStartDate" class="w120px"></span>
               <span class="rg">~</span>
-              <span class="txtIn"><input id="srchRegEndDate" class="w120"></span>
+              <span class="txtIn"><input id="srchRegEndDate" class="w120px"></span>
             </div>
             <p id="option2OrdLayer2" class="s14 bk lh30 fl ml10" style="display: none;"><s:message code="storeOrder.dtl.txtOption2Ord"/></p>
             <p id="option2OutLayer2" class="s14 bk lh30 fl ml10" style="display: none;"><s:message code="storeOrder.dtl.txtOption2Out"/></p>
@@ -483,7 +483,7 @@
 
     // 주문 상품 저장
     $scope.saveStoreOrderRegist = function () {
-      var params   = new Array();
+      var params   = [];
       var orderTot = 0;
       for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
         var item = $scope.flex.collectionView.itemsEdited[i];

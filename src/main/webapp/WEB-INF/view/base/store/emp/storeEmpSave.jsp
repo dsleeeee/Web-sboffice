@@ -6,7 +6,7 @@
 <div id="storeSaveDim" class="fullDimmed" style="display:none;"></div>
 <div id="storeSaveLayer" class="layer" style="display:none;">
   <div class="layer_inner">
-    <div class="title w870">
+    <div class="title w870px">
       <p id="popTitle" class="tit"><s:message code="storeEmp.layer.empRegist" /></p>
       <a href="#" class="btn_close"></a>
       <div class="con">

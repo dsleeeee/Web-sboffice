@@ -23,7 +23,7 @@
       <th><s:message code="cmm.search.date"/></th>
       <td>
         <div class="sb-select">
-          <span class="txtIn w150">
+          <span class="txtIn w150px">
             <wj-combo-box
               id="srchDateFg"
               ng-model="dateFg"
@@ -34,9 +34,9 @@
               initialized="_initComboBox(s)">
             </wj-combo-box>
           </span>
-          <span class="txtIn"><input id="srchStartDate" class="w150"></span>
+          <span class="txtIn"><input id="srchStartDate" class="w150px"></span>
           <span class="rg">~</span>
-          <span class="txtIn"><input id="srchEndDate" class="w150"></span>
+          <span class="txtIn"><input id="srchEndDate" class="w150px"></span>
         </div>
       </td>
     </tr>
@@ -44,7 +44,7 @@
       <%-- 진행구분 --%>
       <th><s:message code="storeOrder.procFg"/></th>
       <td>
-        <span class="txtIn w150 sb-select fl mr5">
+        <span class="txtIn w150px sb-select fl mr5">
           <wj-combo-box
             id="srchProcFg"
             ng-model="procFg"

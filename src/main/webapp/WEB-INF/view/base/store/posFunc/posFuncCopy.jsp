@@ -8,7 +8,7 @@
 <div id="funCopyLayer" class="layer" style="display: none">
   <div class="layer_inner">
     <!--layerContent-->
-    <div class="title w500">
+    <div class="title w500px">
       <p class="tit"><s:message  code="posFunc.copy.pos.func"/> </p>
       <a href="#" class="btn_close"></a>
       <div class="con">
@@ -74,7 +74,7 @@ $("#btnFuncCopy").click(function(){
       },
       function (result) {
         s_alert.pop(result.message);
-        return;
+
       }
   );
 });

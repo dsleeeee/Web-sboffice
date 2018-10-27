@@ -82,7 +82,7 @@
       <div class="wj-TblWrapBr mr10 pd20" style="height:700px;">
         <div class="sb-select dkbr mb10 oh">
           <%-- 페이지스케일 --%>
-          <div id="listScaleBox" class="w130 fl"></div>
+          <div id="listScaleBox" class="w130px fl"></div>
           <div class="fr">
             <%-- 전체펼치기 --%>
             <%--<button class="btn_skyblue" id="btnExpand"><s:message code="cmm.all.expand" /></button>--%>

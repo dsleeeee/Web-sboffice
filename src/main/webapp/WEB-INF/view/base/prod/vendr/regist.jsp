@@ -9,7 +9,7 @@
 <div id="dimVendr" class="fullDimmed" style="display:none;"></div>
 <div id="layerVendr" class="layer" style="display:none;">
   <div class="layer_inner">
-    <div class="title w800">
+    <div class="title w800px">
       <%-- 타이틀 --%>
       <p id="popTitle" class="tit"></p>
       <a href="#" class="btn_close"></a>

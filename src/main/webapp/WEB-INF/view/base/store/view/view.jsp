@@ -74,7 +74,7 @@
 
   <div class="mt20 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
-    <div id="listScaleBox" class="w150 fl"></div>
+    <div id="listScaleBox" class="w150px fl"></div>
     <%-- 엑셀 다운로드 --%>
     <button class="btn_skyblue fr" id="excelBtn">
       <s:message code="cmm.excel.down" />

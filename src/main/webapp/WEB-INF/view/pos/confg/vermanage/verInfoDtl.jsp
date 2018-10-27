@@ -6,7 +6,7 @@
 <div id="dim1" class="fullDimmed" style="display:none;"></div>
 <div id="verInfoDtlLayer" class="layer" style="display:none;">
   <div class="layer_inner">
-    <div class="title w700">
+    <div class="title w700px">
       <%-- 레이어 타이틀 : 버전정보 --%>
       <p class="tit"><s:message code="verManage.verInfo" /></p>
       <a href="#" class="btn_close"></a>
@@ -135,7 +135,7 @@
                   <th><s:message code="verManage.progFg" /></th>
                   <td>
                     <div class="sb-select">
-                      <div id="progFg" class="w130"></div>
+                      <div id="progFg" class="w130px"></div>
                     </div>
                   </td>
                 </tr>
@@ -273,10 +273,10 @@
 
       if(grid2.itemsSource.itemsRemoved.length == 0) {
         s_alert.pop("<s:message code='verManage.no.delete.item' />");
-        return;
+
       }
       else {
-        var paramArr = new Array();
+        var paramArr = [];
         for(var i=0; i<grid2.collectionView.itemsRemoved.length; i++){
           grid2.collectionView.itemsRemoved[i].status = "D";
           paramArr.push(grid2.collectionView.itemsRemoved[i]);
@@ -353,7 +353,7 @@
         },
           function(result) {
             s_alert.pop(result.message);
-            return;
+
         });
       });
     });
@@ -382,7 +382,7 @@
       },
         function (result) {
           s_alert.pop(result.message);
-          return;
+
       });
     }
 
@@ -402,7 +402,7 @@
       },
         function (result) {
           s_alert.pop(result.message);
-          return;
+
         }
       );
     }
@@ -453,7 +453,7 @@
       },
         function (result) {
           s_alert.pop(result.message);
-          return;
+
         }
       );
       return false;

@@ -23,7 +23,7 @@
       <th><s:message code="cmm.search.date"/></th>
       <td>
         <div class="sb-select">
-          <span class="txtIn w150">
+          <span class="txtIn w150px">
             <wj-combo-box
               id="srchDateFg"
               ng-model="dateFg"
@@ -34,9 +34,9 @@
               initialized="_initComboBox(s)">
             </wj-combo-box>
           </span>
-          <span class="txtIn"><input id="srchStartDate" class="w150"></span>
+          <span class="txtIn"><input id="srchStartDate" class="w150px"></span>
           <span class="rg">~</span>
-          <span class="txtIn"><input id="srchEndDate" class="w150"></span>
+          <span class="txtIn"><input id="srchEndDate" class="w150px"></span>
         </div>
       </td>
     </tr>
@@ -44,7 +44,7 @@
       <%-- 진행구분 --%>
       <th><s:message code="storeOrder.procFg"/></th>
       <td>
-        <span class="txtIn w150 sb-select fl mr5">
+        <span class="txtIn w150px sb-select fl mr5">
           <wj-combo-box
             id="srchProcFg"
             ng-model="procFg"
@@ -222,7 +222,7 @@
       // 진행구분이 등록인 자료는 매장에서 등록한 수량으로, 분배중인 자료는 기분배된 수량으로 처리됩니다. 공급가 및 분배수량을 확인하시기 바랍니다. 분배완료 하시겠습니까?
       var msg = messages["rtnDstbReq.confirmText"];
       s_alert.popConf(msg, function () {
-        var params = new Array();
+        var params = [];
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
           var item = $scope.flex.collectionView.itemsEdited[i];
 
