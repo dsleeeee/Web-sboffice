@@ -74,6 +74,9 @@ function RootController(ctrlName, $scope, $http, isPicker) {
         }
       }
     }, function errorCallback(response) {
+
+      console.log("response ", response);
+
       // 로딩바 hide
       $scope.$broadcast('loadingPopupInactive');
       // called asynchronously if an error occurs
@@ -208,11 +211,11 @@ function RootController(ctrlName, $scope, $http, isPicker) {
       }
       // 헤더의 전체선택 클릭 로직
       var flex = panel.grid;
-      var col = flex.columns[c];
+      var column = flex.columns[c];
       // check that this is a boolean column
-      if (col.binding === "gChk" || col.format === "checkBox" || col.format === "checkBoxText") {
+      if (column.binding === "gChk" || column.format === "checkBox" || column.format === "checkBoxText") {
         // prevent sorting on click
-        col.allowSorting = false;
+        column.allowSorting = false;
         // count true values to initialize checkbox
         var cnt = 0;
         for (var i = 0; i < flex.rows.length; i++) {
@@ -221,7 +224,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
           }
         }
         // create and initialize checkbox
-        if (col.format === "checkBoxText") {
+        if (column.format === "checkBoxText") {
           cell.innerHTML = "<input id=\"" + col.binding + "\" type=\"checkbox\" class=\"wj-cell-check\" />"
             + "<label for=\"" + col.binding + "\" class=\"wj-header-label\">" + cell.innerHTML + "</label>";
         } else {
@@ -590,7 +593,7 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
   };
   // 선택된 메뉴가 변경 되었을 때 이벤트 : private
   function _selectedItemChaged(s, e) {
-    var node, pNode = $scope.getPNode();
+    var node, pNode = $scope._getPNode();
     // 이전 메뉴의 클래스 제거
     if(pNode) {
       for (node = pNode; node; node = node.parentNode) {
@@ -620,7 +623,7 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
       }
     }
     // 같은 메뉴를 다시 선택 했을 때 메뉴 닫기 기능
-    if( $scope.getPNode() === s.selectedNode) {
+    if( $scope._getPNode() === s.selectedNode) {
       s.selectedNode.isCollapsed = !s.selectedNode.isCollapsed;
     } else {
       s.selectedNode.isCollapsed = false;
