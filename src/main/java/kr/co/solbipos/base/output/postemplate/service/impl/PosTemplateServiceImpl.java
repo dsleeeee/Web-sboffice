@@ -59,6 +59,9 @@ public class PosTemplateServiceImpl implements PosTemplateService {
     /** 출력물템플릿 목록 조회 */
     @Override
     public List<DefaultMap<String>> getPosTemplateList(PosTemplateVO posTemplateVO) {
+        // 실제출력물 없는경우 대비해서 저장처리
+        posTemplateMapper.insertPosTemplatePrint(posTemplateVO);
+
         return posTemplateMapper.getPosTemplateList(posTemplateVO);
     }
 
@@ -125,8 +128,31 @@ public class PosTemplateServiceImpl implements PosTemplateService {
         }
 
         if ( result >= 0 ) {
-            // 실제 출력물에도 선택된 템플릿 내용으로 업데이트
-            posTemplateMapper.updatePosTemplatePrint(posTemplateVO);
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+    }
+
+    /** 출력물템플릿 실제출력물 적용 */
+    @Override
+    public int updatePosTemplatePrint(PosTemplateVO posTemplateVO, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        // 소속구분 설정
+        String orgnFg = sessionInfoVO.getOrgnFg().getCode();
+        posTemplateVO.setOrgnFg(orgnFg);
+        posTemplateVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        posTemplateVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        posTemplateVO.setModDt(currentDt);
+        posTemplateVO.setModId(sessionInfoVO.getUserId());
+
+        // 선택된 템플릿 내용으로 실제출력물에 적용
+        result = posTemplateMapper.updatePosTemplatePrint(posTemplateVO);
+
+        if ( result >= 0) {
             return result;
         } else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
@@ -135,7 +161,7 @@ public class PosTemplateServiceImpl implements PosTemplateService {
 
     /** 출력물템플릿 매장적용 */
     @Override
-    public int applyStoreTemplate(PosTemplateVO posTemplateVO, SessionInfoVO sessionInfoVO) {
+    public int applyToStoreTemplate(PosTemplateVO posTemplateVO, SessionInfoVO sessionInfoVO) {
 
         posTemplateVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         posTemplateVO.setModId(sessionInfoVO.getUserId());

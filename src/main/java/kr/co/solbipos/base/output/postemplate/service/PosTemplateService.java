@@ -38,7 +38,10 @@ public interface PosTemplateService {
     /** 출력물템플릿 저장 */
     int savePosTemplate(PosTemplateVO posTemplateVO, SessionInfoVO sessionInfoVO);
 
+    /** 출력물템플릿 실제출력물 적용 */
+    int updatePosTemplatePrint(PosTemplateVO posTemplateVO, SessionInfoVO sessionInfoVO);
+
     /** 출력물템플릿 매장적용 */
-    int applyStoreTemplate(PosTemplateVO posTemplateVO, SessionInfoVO sessionInfoVO);
+    int applyToStoreTemplate(PosTemplateVO posTemplateVO, SessionInfoVO sessionInfoVO);
 
 }
