@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 function RootController(ctrlName, $scope, $http, isPicker) {
   // set $scope Name
   $scope.name = ctrlName;
@@ -33,14 +33,14 @@ function RootController(ctrlName, $scope, $http, isPicker) {
       }
     }
     // 페이징 처리
-    if ($scope._getPagingInfo("curr") > 0) {
-      params['curr'] = $scope._getPagingInfo("curr");
+    if ($scope._getPagingInfo('curr') > 0) {
+      params['curr'] = $scope._getPagingInfo('curr');
     } else {
       params['curr'] = 1;
     }
     // 가상로그인 대응한 session id 설정
-    if (document.getElementsByName("sessionId")[0]) {
-      params['sid'] = document.getElementsByName("sessionId")[0].value;
+    if (document.getElementsByName('sessionId')[0]) {
+      params['sid'] = document.getElementsByName('sessionId')[0].value;
     }
     // ajax 통신 설정
     $http({
@@ -57,7 +57,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
         var list = response.data.data.list;
         if (list.length === undefined || list.length === 0) {
           $scope.data = new wijmo.collections.CollectionView([]);
-          if (isView) {
+          if (isView && response.data.message) {
             $scope._popMsg(response.data.message);
           }
           return false;
@@ -69,27 +69,28 @@ function RootController(ctrlName, $scope, $http, isPicker) {
         // 페이징 처리
         if (response.data.data.page && response.data.data.page.curr) {
           var pagingInfo = response.data.data.page;
-          $scope._setPagingInfo("ctrlName", $scope.name);
-          $scope._setPagingInfo("pageScale", pagingInfo.pageScale);
-          $scope._setPagingInfo("curr", pagingInfo.curr);
-          $scope._setPagingInfo("totCnt", pagingInfo.totCnt);
-          $scope._setPagingInfo("totalPage", pagingInfo.totalPage);
+          $scope._setPagingInfo('ctrlName', $scope.name);
+          $scope._setPagingInfo('pageScale', pagingInfo.pageScale);
+          $scope._setPagingInfo('curr', pagingInfo.curr);
+          $scope._setPagingInfo('totCnt', pagingInfo.totCnt);
+          $scope._setPagingInfo('totalPage', pagingInfo.totalPage);
 
           $scope._broadcast('drawPager');
         }
       }
     }, function errorCallback(response) {
-
-      console.log("response ", response);
-
       // 로딩바 hide
       $scope.$broadcast('loadingPopupInactive');
       // called asynchronously if an error occurs
       // or server returns response with an error status.
-      $scope._popMsg(messages["cmm.error"]);
+      if (response.data.message) {
+        $scope._popMsg(response.data.message);
+      } else {
+        $scope._popMsg(messages['cmm.error']);
+      }
       return false;
     }).then(function () {
-      // "complete" code here
+      // 'complete' code here
       if (typeof callback === 'function') {
         setTimeout(function () {
           callback();
@@ -108,7 +109,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
       flex.itemsSource = new wijmo.collections.CollectionView();
     }
     var newRow = flex.collectionView.addNew();
-    newRow.status = "I";
+    newRow.status = 'I';
     newRow.gChk = true;
     for (var prop in params) {
       newRow[prop] = params[prop];
@@ -133,14 +134,14 @@ function RootController(ctrlName, $scope, $http, isPicker) {
     // 길이체크
     if (params.length <= 0) {
       // 변경사항이 없습니다.
-      $scope._popMsg(messages["cmm.not.modify"]);
+      $scope._popMsg(messages['cmm.not.modify']);
       return false;
     } else {
       // 로딩바 show
-      $scope.$broadcast('loadingPopupActive', messages["cmm.saving"]);
+      $scope.$broadcast('loadingPopupActive', messages['cmm.saving']);
       // 가상로그인 대응한 session id 설정
-      if (document.getElementsByName("sessionId")[0]) {
-        sParam['sid'] = document.getElementsByName("sessionId")[0].value;
+      if (document.getElementsByName('sessionId')[0]) {
+        sParam['sid'] = document.getElementsByName('sessionId')[0].value;
       }
     }
     // ajax 통신 설정
@@ -154,7 +155,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
       // 로딩바 hide
       $scope.$broadcast('loadingPopupInactive');
       if (_httpStatusCheck(response)) {
-        $scope._popMsg(messages["cmm.saveSucc"]);
+        $scope._popMsg(messages['cmm.saveSucc']);
         $scope.flex.collectionView.clearChanges();
       }
     }, function errorCallback(response) {
@@ -162,10 +163,14 @@ function RootController(ctrlName, $scope, $http, isPicker) {
       $scope.$broadcast('loadingPopupInactive');
       // called asynchronously if an error occurs
       // or server returns response with an error status.
-      $scope._popMsg(messages["cmm.saveFail"]);
+      if (response.data.message) {
+        $scope._popMsg(response.data.message);
+      } else {
+        $scope._popMsg(messages['cmm.saveFail']);
+      }
       return false;
     }).then(function () {
-      // "complete" code here
+      // 'complete' code here
       if (typeof callback === 'function') {
         setTimeout(function () {
           callback();
@@ -179,25 +184,25 @@ function RootController(ctrlName, $scope, $http, isPicker) {
   };
   // private
   function _httpStatusCheck(res) {
-    if (res.data.status === "OK") {
+    if (res.data.status === 'OK') {
       return true;
     }
-    else if (res.data.status === "FAIL") {
-      $scope._popMsg("Ajax Fail By HTTP Request");
+    else if (res.data.status === 'FAIL') {
+      $scope._popMsg('Ajax Fail By HTTP Request');
       return false;
     }
-    else if (res.data.status === "SESSION_EXFIRE") {
+    else if (res.data.status === 'SESSION_EXFIRE') {
       $scope._popMsg(res.data.message, function () {
         location.href = res.data.url;
       });
       return false;
     }
-    else if (res.data.status === "SERVER_ERROR") {
+    else if (res.data.status === 'SERVER_ERROR') {
       $scope._popMsg(res.data.message);
       return false;
     }
     else {
-      var msg = res.data.status + " : " + res.data.message;
+      var msg = res.data.status + ' : ' + res.data.message;
       $scope._popMsg(msg);
       return false;
     }
@@ -212,13 +217,13 @@ function RootController(ctrlName, $scope, $http, isPicker) {
     if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
       var mRange = $scope.flex.getMergedRange(panel, r, c);
       if (mRange) {
-        cell.innerHTML = "<div class=\"wj-header merged-custom\">" + cell.innerHTML + "</div>";
+        cell.innerHTML = '<div class=\"wj-header merged-custom\">' + cell.innerHTML + '</div>';
       }
       // 헤더의 전체선택 클릭 로직
       var flex = panel.grid;
       var column = flex.columns[c];
       // check that this is a boolean column
-      if (column.binding === "gChk" || column.format === "checkBox" || column.format === "checkBoxText") {
+      if (column.binding === 'gChk' || column.format === 'checkBox' || column.format === 'checkBoxText') {
         // prevent sorting on click
         column.allowSorting = false;
         // count true values to initialize checkbox
@@ -229,11 +234,11 @@ function RootController(ctrlName, $scope, $http, isPicker) {
           }
         }
         // create and initialize checkbox
-        if (column.format === "checkBoxText") {
-          cell.innerHTML = "<input id=\"" + column.binding + "\" type=\"checkbox\" class=\"wj-cell-check\" />"
-            + "<label for=\"" + column.binding + "\" class=\"wj-header-label\">" + cell.innerHTML + "</label>";
+        if (column.format === 'checkBoxText') {
+          cell.innerHTML = '<input id=\"' + column.binding + '\" type=\"checkbox\" class=\"wj-cell-check\" />'
+            + '<label for=\"' + column.binding + '\" class=\"wj-header-label\">' + cell.innerHTML + '</label>';
         } else {
-          cell.innerHTML = "<input type=\"checkbox\" class=\"wj-cell-check\" />";
+          cell.innerHTML = '<input type=\"checkbox\" class=\"wj-cell-check\" />';
         }
         var cb = cell.firstChild;
         cb.checked = cnt > 0;
@@ -260,7 +265,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
     } else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
       // GroupRow 인 경우에는 표시하지 않는다.
       if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
-        cell.textContent = "";
+        cell.textContent = '';
       } else {
         if (!isEmpty(panel._rows[r]._data.rnum)) {
           cell.textContent = (panel._rows[r]._data.rnum).toString();
@@ -290,7 +295,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
             if (s.columns[e.col].dataType !== wijmo.DataType.Boolean) {
               setTimeout(function () {
                 var _cellData = s.getCellData(e.row, e.col, true);
-                if (!isEmpty(s.activeEditor) && s.activeEditor.value !== "") {
+                if (!isEmpty(s.activeEditor) && s.activeEditor.value !== '') {
                   wijmo.setSelectionRange(s.activeEditor, _cellData.length); // caret position
                 }
               }, 0);
@@ -339,13 +344,13 @@ function RootController(ctrlName, $scope, $http, isPicker) {
   // 로딩 메시지 팝업 열기
   $scope.$on('loadingPopupActive', function (event, data) {
     // 팝업내용 동적 생성
-    var innerHtml = "<div class=\"wj-popup-loading\"><p class=\"bk\">";
+    var innerHtml = '<div class=\"wj-popup-loading\"><p class=\"bk\">';
     if (isEmpty(data)) {
-      innerHtml += messages["cmm.loading"];
+      innerHtml += messages['cmm.loading'];
     } else {
       innerHtml += data;
     }
-    innerHtml += "</p><p class=\"mt20\"><img src=\"/resource/solbipos/css/img/loading.gif\" alt=\"\" /></p></div>";
+    innerHtml += '</p><p class=\"mt20\"><img src=\"/resource/solbipos/css/img/loading.gif\" alt=\"\" /></p></div>';
     // html 적용
     $scope._loadingPopup.content.innerHTML = innerHtml;
     // 팝업 show
@@ -358,24 +363,24 @@ function RootController(ctrlName, $scope, $http, isPicker) {
   // 조회관련 공통로직
   $scope._postJSONQuery = {
     withPopUp: function() {
-      return _postJSON(arguments, true, "loading");
+      return _postJSON(arguments, true, 'loading');
     },
     withOutPopUp: function() {
-      return _postJSON(arguments, false, "loading");
+      return _postJSON(arguments, false, 'loading');
     }
   };
   // 저장관련 공통로직
   $scope._postJSONSave = {
     withPopUp: function() {
-      return _postJSON(arguments, true, "saving");
+      return _postJSON(arguments, true, 'saving');
     },
     withOutPopUp: function() {
-      return _postJSON(arguments, false, "saving");
+      return _postJSON(arguments, false, 'saving');
     }
   };
   // 조회/저장관련 공통로직 : private
   function _postJSON(args, isMsg, type) {
-    var popMsg = type === "loading" ? messages["cmm.loading"] : messages["cmm.saving"];
+    var popMsg = type === 'loading' ? messages['cmm.loading'] : messages['cmm.saving'];
     var url, params, success, error, complete;
     switch (args.length) {
       case 3:
@@ -397,14 +402,31 @@ function RootController(ctrlName, $scope, $http, isPicker) {
         complete = args[4];
         break;
     }
-    var sParms = {};
+    var data = {};
+    var sParams = {};
+    // data 존재시
+    if (params.data && params.params) {
+      data = params.data;
+      sParams = params.params;
+    } else {
+      // 둘중하나만 있으면 오류
+      if (params.data || params.params) {
+        $scope.$apply(function() {
+          $scope._popMsg('파라미터가 올바르지 않습니다.');
+        });
+        return false;
+      // 둘다 없으면 기존대로 설정
+      } else {
+        data = params;
+      }
+    }
     // 가상로그인시 세션활용
-    if (document.getElementsByName("sessionId")[0]) {
-      if (type === "loading") {
-        params['sid'] = document.getElementsByName("sessionId")[0].value;
-      } else if (type === "saving") {
+    if (document.getElementsByName('sessionId')[0]) {
+      if (type === 'loading') {
+        params['sid'] = document.getElementsByName('sessionId')[0].value;
+      } else if (type === 'saving') {
         // 저장시에는 sid를 request 에 실어보내기 위해 추가 생성
-        sParms['sid'] = document.getElementsByName("sessionId")[0].value;
+        sParams['sid'] = document.getElementsByName('sessionId')[0].value;
       }
     }
     // 로딩바 show
@@ -417,11 +439,11 @@ function RootController(ctrlName, $scope, $http, isPicker) {
       url: url, /* 통신할 URL */
       headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
     };
-    if(type === "loading") {
+    if(type === 'loading') {
       property.params = params;
-    } else if(type === "saving") {
+    } else if(type === 'saving') {
       // 저장시에는 sid를 request 에 실어보내기 위해 params 추가 생성
-      property.data = params;
+      property.data = data;
       property.params = sParams; /* 파라메터로 보낼 데이터 : request.getParameter */
     }
     // ajax 통신 설정
@@ -432,11 +454,15 @@ function RootController(ctrlName, $scope, $http, isPicker) {
         $scope.$broadcast('loadingPopupInactive');
       }
       if (_httpStatusCheck(response)) {
-        if(type === "saving") {
-          $scope._popMsg(messages["cmm.saveSucc"]);
+        if (response.data.message) {
+          $scope._popMsg(response.data.message);
+        } else {
+          if(type === 'saving') {
+            $scope._popMsg(messages['cmm.saveSucc']);
+          }
         }
-        if (typeof success === "function") {
-          success();
+        if (typeof success === 'function') {
+          success(response);
         }
       }
     }, function errorCallback(response) {
@@ -446,18 +472,22 @@ function RootController(ctrlName, $scope, $http, isPicker) {
       }
       // called asynchronously if an error occurs
       // or server returns response with an error status.
-      if(type === "loading") {
-        $scope._popMsg(messages["cmm.error"]);
-      } else if(type === "saving") {
-        $scope._popMsg(messages["cmm.saveFail"]);
+      if(response.data.message) {
+        $scope._popMsg(response.data.message);
+      } else {
+        if(type === 'loading') {
+          $scope._popMsg(messages['cmm.error']);
+        } else if(type === 'saving') {
+          $scope._popMsg(messages['cmm.saveFail']);
+        }
       }
-      if (typeof error === "function") {
-        error();
+      if (typeof error === 'function') {
+        error(response);
       }
       return false;
     }).then(function () {
-      // "complete" code here
-      if (typeof complete === "function") {
+      // 'complete' code here
+      if (typeof complete === 'function') {
         setTimeout(function () {
           complete();
         }, 10);
@@ -471,8 +501,8 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
   // 파라미터
   $scope.params = {};
   // 가상로그인시 파라미터인 sid 설정
-  if( document.getElementsByName("sessionId").length > 0 ) {
-    $scope.params.sid = document.getElementsByName("sessionId")[0].value;
+  if( document.getElementsByName('sessionId').length > 0 ) {
+    $scope.params.sid = document.getElementsByName('sessionId')[0].value;
   }
   // 트리 변환
   $scope._convertTreeModel = function (arrayList, rootId) {
@@ -515,19 +545,19 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
       params: $scope.params, /* 파라메터로 보낼 데이터 */
       headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
     }).then(function successCallback(response) {
-      if(response.data.status === "OK") {
+      if(response.data.status === 'OK') {
         if ( response.data.data.length > 0 ) {
-          var data = JSON.stringify($scope._convertTreeModel(response.data.data, "000000"), null, '');
+          var data = JSON.stringify($scope._convertTreeModel(response.data.data, '000000'), null, '');
           $scope.items = JSON.parse(data);
         } else {
           $scope.items = [];
         }
       }
     }, function errorCallback(response) {
-      $scope._popMsg("메뉴를 불러오는데 실패하였습니다.");
+      $scope._popMsg('메뉴를 불러오는데 실패하였습니다.');
       return false;
     }).then(function () {
-      // "complete" code here
+      // 'complete' code here
       if (typeof callback === 'function') {
         setTimeout(function () {
           callback();
@@ -543,20 +573,20 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
   function _getCurrentMenu() {
     $http({
       method: 'POST', //방식
-      url: "/menu/currentMenu.sb", /* 통신할 URL */
+      url: '/menu/currentMenu.sb', /* 통신할 URL */
       params: $scope.params, /* 파라메터로 보낼 데이터 */
       headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
     }).then(function successCallback(response) {
-      if(response.data.status === "OK") {
+      if(response.data.status === 'OK') {
         var data = response.data.data;
         if ( data ) {
           $scope._setInitMenu(data.resrceCd);
         } else {
-          $scope._setInitMenu("");
+          $scope._setInitMenu('');
         }
       }
     }, function errorCallback(response) {
-      $scope._popMsg("선택된 메뉴를 불러오는데 실패하였습니다.");
+      $scope._popMsg('선택된 메뉴를 불러오는데 실패하였습니다.');
       return false;
     });
   }
@@ -620,9 +650,9 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
     // URL 이 있을 경우 페이지 이동
     if(!isEmpty(s.selectedNode.dataItem.url)) {
       // 가상로그인시 파라미터인 SessionID 설정
-      if( document.getElementsByName("sessionId").length > 0 ) {
-        var vSessionId = document.getElementsByName("sessionId")[0].value;
-        location.href = s.selectedNode.dataItem.url + "?sid=" + vSessionId;
+      if( document.getElementsByName('sessionId').length > 0 ) {
+        var vSessionId = document.getElementsByName('sessionId')[0].value;
+        location.href = s.selectedNode.dataItem.url + '?sid=' + vSessionId;
       } else {
         location.href = s.selectedNode.dataItem.url;
       }
@@ -644,27 +674,27 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
       // 페이징바 동적 생성
       $scope.$on('drawPager', function () {
         // 페이징바 갯수
-        var page_scale = $scope._getPagingInfo("pageScale");
+        var page_scale = $scope._getPagingInfo('pageScale');
         var page_end = page_scale === 10 ? 9 : 4;
         // 버튼 태그 동적 생성
-        var prevBtnTag = "<li class=\"btn_previous\"><a href=\"javascript:void(0);\" ng-click=\"_pagePrev($event, '{ctrlName}', '{prev}');\"></a></li>";
-        var pageBtnTag = "<li><a href=\"javascript:void(0);\" class=\"{cnm}\" ng-click=\"_pageView('{ctrlName}', '{i}');\">{i}</a></li>";
-        var nextBtnTag = "<li class=\"btn_next\"><a href=\"javascript:void(0);\" ng-click=\"_pageNext($event, '{ctrlName}', '{next}');\"></a></li>";
-        var pagerTag = "";
+        var prevBtnTag = '<li class=\"btn_previous\"><a href=\"javascript:void(0);\" ng-click=\"_pagePrev($event, \'{ctrlName}\', \'{prev}\');\"></a></li>';
+        var pageBtnTag = '<li><a href=\"javascript:void(0);\" class=\"{cnm}\" ng-click=\"_pageView(\'{ctrlName}\', \'{i}\');\">{i}</a></li>';
+        var nextBtnTag = '<li class=\"btn_next\"><a href=\"javascript:void(0);\" ng-click=\"_pageNext($event, \'{ctrlName}\', \'{next}\');\"></a></li>';
+        var pagerTag = '';
 
         var item = {};
-        item.ctrlName = $scope._getPagingInfo("ctrlName");
-        item.curr = $scope._getPagingInfo("curr");
-        item.totCnt = $scope._getPagingInfo("totCnt");
-        item.totalPage = $scope._getPagingInfo("totalPage");
+        item.ctrlName = $scope._getPagingInfo('ctrlName');
+        item.curr = $scope._getPagingInfo('curr');
+        item.totCnt = $scope._getPagingInfo('totCnt');
+        item.totalPage = $scope._getPagingInfo('totalPage');
         item.prev = 0;
         item.next = 0;
         item.start = 0;
         item.end = 0;
         // 페이징 계산
-        var t = $scope._getPagingInfo("curr") / page_scale;
-        if (t.toString().indexOf(".") === -1) {
-          item.end = $scope._getPagingInfo("curr");
+        var t = $scope._getPagingInfo('curr') / page_scale;
+        if (t.toString().indexOf('.') === -1) {
+          item.end = $scope._getPagingInfo('curr');
           item.start = item.end - page_end;
         } else {
           item.start = (parseInt(t) * page_scale) + 1;
@@ -680,7 +710,7 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
         }
         for (var i = item.start; i <= item.end; i++) {
           item.i = i;
-          item.cnm = i === item.curr ? "on pagenav" : "pagenav";
+          item.cnm = i === item.curr ? 'on pagenav' : 'pagenav';
           pagerTag += wijmo.format(pageBtnTag, item);
         }
         if (item.end < item.totalPage) {
@@ -713,7 +743,7 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
       };
       // 페이지 이동
       function _pageView(ctrlName, curr) {
-        $scope._setPagingInfo("curr", curr);
+        $scope._setPagingInfo('curr', curr);
         $scope.$broadcast(ctrlName);
       }
 
@@ -859,4 +889,4 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
 
   win.agrid = agrid;
 
-}("undefined" !== typeof window ? window : this, angular);
+}('undefined' !== typeof window ? window : this, angular);
