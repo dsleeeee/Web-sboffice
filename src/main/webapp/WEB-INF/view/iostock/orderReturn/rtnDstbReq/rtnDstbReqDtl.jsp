@@ -258,7 +258,7 @@
 
     // 분배 저장
     $scope.saveRtnDstbReqDtl = function () {
-      var params = new Array();
+      var params = [];
       // 분배완료여부가 체크 되어있으면서 그리드의 수정된 내역은 없는 경우 저장로직 태우기 위해 값 하나를 강제로 수정으로 변경한다.
       if ($("#dstbConfirmFg").is(":checked") && $scope.flex.collectionView.itemsEdited.length <= 0) {
         var item = $scope.flex.collectionView.items[0];

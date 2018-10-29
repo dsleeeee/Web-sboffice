@@ -222,7 +222,7 @@
       // 진행구분이 등록인 자료는 매장에서 등록한 수량으로, 분배중인 자료는 기분배된 수량으로 처리됩니다. 공급가 및 분배수량을 확인하시기 바랍니다. 분배완료 하시겠습니까?
       var msg = messages["dstbReq.confirmText"];
       s_alert.popConf(msg, function () {
-        var params = new Array();
+        var params = [];
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
           var item = $scope.flex.collectionView.itemsEdited[i];
 

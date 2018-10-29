@@ -265,7 +265,7 @@
 
     // 창고 삭제
     $scope.delStorage = function () {
-      var params = new Array();
+      var params = [];
       for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
         $scope.flex.collectionView.itemsEdited[i].status = "U";
         params.push($scope.flex.collectionView.itemsEdited[i]);

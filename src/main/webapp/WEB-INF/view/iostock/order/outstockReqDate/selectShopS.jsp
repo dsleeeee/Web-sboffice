@@ -26,7 +26,7 @@
             display-member-path="name"
             selected-value-path="value"
             is-editable="false"
-            initialized="initComboBox(s)">
+            initialized="_initComboBox(s)">
           </wj-combo-box>
           <%--// 페이지 스케일  --%>
         </div>

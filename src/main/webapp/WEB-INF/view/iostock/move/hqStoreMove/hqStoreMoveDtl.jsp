@@ -55,8 +55,6 @@
                               displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
                               modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
                               closeFunc - 팝업 닫기시 호출할 함수
-                              cd - 로딩시 세팅할 매장코드
-                              nm - 로딩시 세팅할 매장명
             --%>
             <jsp:include page="/WEB-INF/view/iostock/order/outstockReqDate/selectShopS.jsp" flush="true">
               <jsp:param name="targetId" value="hqStoreMoveDtlOutSelectStore"/>
@@ -74,8 +72,6 @@
                               displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
                               modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
                               closeFunc - 팝업 닫기시 호출할 함수
-                              cd - 로딩시 세팅할 매장코드
-                              nm - 로딩시 세팅할 매장명
             --%>
             <jsp:include page="/WEB-INF/view/iostock/order/outstockReqDate/selectShopS.jsp" flush="true">
               <jsp:param name="targetId" value="hqStoreMoveDtlInSelectStore"/>
@@ -368,7 +364,7 @@
 
     // 저장
     $scope.save = function (confirmFg) {
-      var params = new Array();
+      var params = [];
 
       // 본사확정이면서 그리드의 수정된 내역은 없는 경우 저장로직 태우기 위해 값 하나를 강제로 수정으로 변경한다.
       if (confirmFg === "Y" && $scope.flex.collectionView.itemsEdited.length <= 0) {

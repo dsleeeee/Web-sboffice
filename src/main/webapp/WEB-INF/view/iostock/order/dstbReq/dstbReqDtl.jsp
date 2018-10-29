@@ -295,7 +295,7 @@
 
     // 저장 전 값 체크
     $scope.saveValueCheck = function () {
-      var params = new Array();
+      var params = [];
       var mdTot  = 0;
 
       // 분배완료여부가 체크 되어있으면서 그리드의 수정된 내역은 없는 경우 저장로직 태우기 위해 값 하나를 강제로 수정으로 변경한다.

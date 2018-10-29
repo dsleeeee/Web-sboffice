@@ -35,7 +35,7 @@
 
   <div class="mt10 pdb20 oh bb">
     <%-- 조회 --%>
-    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('specificCtrl')"><s:message code="cmm.search"/></button>
+    <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('specificCtrl',1)"><s:message code="cmm.search"/></button>
   </div>
 
   <div class="w100">
@@ -49,7 +49,7 @@
         display-member-path="name"
         selected-value-path="value"
         is-editable="false"
-        initialized="initComboBox(s)">
+        initialized="_initComboBox(s)">
       </wj-combo-box>
       <%--// 페이지 스케일  --%>
       <div class="tr">
@@ -177,7 +177,7 @@
 
     // 특정일 저장
     $scope.saveSpecificDate = function () {
-      var params = new Array();
+      var params = [];
       for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
         $scope.flex.collectionView.itemsEdited[i].status = "U";
         params.push($scope.flex.collectionView.itemsEdited[i]);
@@ -192,7 +192,7 @@
       // 삭제 하시겠습니까?
       var msg = messages["cmm.choo.delete"];
       s_alert.popConf(msg, function () {
-        var params = new Array();
+        var params = [];
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
           $scope.flex.collectionView.itemsEdited[i].status = "U";
           params.push($scope.flex.collectionView.itemsEdited[i]);

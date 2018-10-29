@@ -46,13 +46,23 @@
 
   <div class="mt10 pdb20 oh bb">
     <%-- 조회 --%>
-    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('dlvrChgrCtrl')"><s:message code="cmm.search"/></button>
+    <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('dlvrChgrCtrl',1)"><s:message code="cmm.search"/></button>
   </div>
 
   <div id="grid" class="w100" ng-controller="dlvrChgrCtrl">
     <div class="mt20 oh sb-select dkbr">
-      <%--페이지 스케일 --%>
-      <div id="listScaleBoxDlvrChgr" class="w130px fl"></div>
+      <%-- 페이지 스케일  --%>
+      <wj-combo-box
+        class="w100px fl"
+        id="listScaleBox"
+        ng-model="listScale"
+        items-source="_getComboData('listScaleBox')"
+        display-member-path="name"
+        selected-value-path="value"
+        is-editable="false"
+        initialized="_initComboBox(s)">
+      </wj-combo-box>
+      <%--// 페이지 스케일  --%>
       <div class="tr">
         <%-- 신규등록 --%>
         <button class="btn_skyblue" ng-click="openPopNewRegist()"><s:message code="deliveryCharger.new"/></button>
@@ -96,8 +106,6 @@
 </div>
 
 <script type="text/javascript">
-  var listScaleBoxDlvrChgr;
-
   /**
    * get application
    */
@@ -123,6 +131,9 @@
   app.controller('dlvrChgrCtrl', ['$scope', '$http', 'dlvrVO', function ($scope, $http, dlvrVO) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('dlvrChgrCtrl', $scope, $http, true));
+
+    $scope._setComboData("listScaleBox", gvListScaleBoxData);
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
       // picker 사용시 호출 : 미사용시 호출안함
@@ -174,9 +185,6 @@
     $scope.searchDlvrList = function () {
       // 파라미터
       var params       = {};
-      // params.listScale = 2;
-      params.listScale = listScaleBoxDlvrChgr.selectedValue;
-
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
       $scope._inquiryMain("/iostock/deliveryCharger/deliveryChargerManage/deliveryChargerList/list.sb", params);
     };
@@ -190,8 +198,6 @@
   }]);
 
   $(document).ready(function () {
-    listScaleBoxDlvrChgr = wcombo.genCommonBox("#listScaleBoxDlvrChgr", gvListScaleBoxData); //listScaleBoxData 는 공통으로 빼둠. (commonVariables.jsp)
-
     <%-- 엑셀 다운로드 버튼 클릭 --%>
     $("#btnExcel").click(function () {
       var name = "${menuNm}";

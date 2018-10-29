@@ -29,8 +29,6 @@
                             displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
                             modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
                             closeFunc - 팝업 닫기시 호출할 함수
-                            cd - 로딩시 세팅할 매장코드
-                            nm - 로딩시 세팅할 매장명
           --%>
           <jsp:include page="/WEB-INF/view/iostock/order/outstockReqDate/selectShopS.jsp" flush="true">
             <jsp:param name="targetId" value="targetSelectStore"/>
@@ -239,7 +237,7 @@
       // 파라미터
       var params       = {};
       params.storeCd   = $("#targetSelectStoreCd").val();
-      params.listScale = 1000;
+      params.listScale = 5000; // 조회 쿼리를 요일별 리스트 조회와 공통으로 사용하기 때문에 해당 페이지에선 페이징처리가 필요없어 listScale을 크게 줌.
       params.curr      = 1;
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
       $scope._inquirySub("/iostock/order/outstockReqDate/days/list.sb", params);
@@ -341,7 +339,7 @@
       // 파라미터
       var params       = {};
       params.storeCd   = $("#targetSelectStoreCd").val();
-      params.listScale = 1000;
+      params.listScale = 5000; // 조회 쿼리를 요일별 리스트 조회와 공통으로 사용하기 때문에 해당 페이지에선 페이징처리가 필요없어 listScale을 크게 줌.
       params.curr      = 1;
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
       $scope._inquirySub("/iostock/order/outstockReqDate/specificDate/list.sb", params, function () {
@@ -362,7 +360,7 @@
 
     // 특정일 복사
     $scope.specificCopy = function () {
-      var params = new Array();
+      var params = [];
       var flex   = $scope.flex;
       for (var i = 0; i < flex.rows.length; i++) {
         if (flex.getCellData(i, 0)) {

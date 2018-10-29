@@ -249,7 +249,7 @@
     };
 
     $scope.saveOutstockConfirm = function () {
-      var params = new Array();
+      var params = [];
 
       if ($scope.flex.collectionView.itemsEdited.length <= 0) {
         $scope._popMsg(messages["cmm.not.modify"]);

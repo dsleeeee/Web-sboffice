@@ -35,7 +35,7 @@
 
   <div class="mt10 pdb20 oh bb">
     <%-- 조회 --%>
-    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('daysCtrl')"><s:message code="cmm.search"/></button>
+    <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('daysCtrl',1)"><s:message code="cmm.search"/></button>
   </div>
 
   <div class="w100">
@@ -49,7 +49,7 @@
         display-member-path="name"
         selected-value-path="value"
         is-editable="false"
-        initialized="initComboBox(s)">
+        initialized="_initComboBox(s)">
       </wj-combo-box>
       <%--// 페이지 스케일  --%>
       <div class="tr">
@@ -179,10 +179,6 @@
       // 파라미터
       var params     = {};
       params.storeCd = $("#daysSelectStoreCd").val();
-      // params.storeNm = $("#daysSelectStoreNm").val();
-      // params.listScale = 15;
-      // params.listScale = $scope.listScaleBoxDays.selectedValue;
-      // params.curr = 1;
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
       $scope._inquiryMain("/iostock/order/outstockReqDate/days/list.sb", params);
     };

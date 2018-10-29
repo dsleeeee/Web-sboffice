@@ -65,7 +65,7 @@
 
       <div class="mt10 oh">
         <%-- 조회 --%>
-        <button type="button" class="btn_blue fr" id="btnSearch" ng-click="search();">
+        <button type="button" class="btn_blue fr" id="btnSearch" ng-click="_pageView('dstbCloseProdAddProdCtrl',1);">
           <s:message code="cmm.search"/></button>
       </div>
 
@@ -79,7 +79,7 @@
           display-member-path="name"
           selected-value-path="value"
           is-editable="false"
-          initialized="initComboBox(s)">
+          initialized="_initComboBox(s)">
         </wj-combo-box>
         <%--// 페이지 스케일  --%>
         <%-- 저장 --%>
@@ -176,12 +176,12 @@
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("dstbCloseProdAddProdCtrl", function (event, data) {
 
-      // 그리드 초기화
-      var cv          = new wijmo.collections.CollectionView([]);
-      cv.trackChanges = true;
-      $scope.data     = cv;
-
       if (!$.isEmptyObject(data)) {
+        // 그리드 초기화
+        var cv          = new wijmo.collections.CollectionView([]);
+        cv.trackChanges = true;
+        $scope.data     = cv;
+
         $scope.reqDate = data.reqDate;
         $scope.slipFg  = data.slipFg;
         $scope.wjDstbCloseProdAddProdLayer.show(true);
@@ -196,9 +196,9 @@
     });
 
     // 조회
-    $scope.search = function () {
-      $scope.searchDstbCloseProdAddProdList();
-    };
+    // $scope.search = function () {
+    //   $scope.searchDstbCloseProdAddProdList();
+    // };
 
     // 분배가능상품 리스트 조회
     $scope.searchDstbCloseProdAddProdList = function () {

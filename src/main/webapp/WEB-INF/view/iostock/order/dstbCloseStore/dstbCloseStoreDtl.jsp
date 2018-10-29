@@ -185,7 +185,7 @@
 
     // 저장
     $scope.save = function () {
-      var params = new Array();
+      var params = [];
 
       for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
         var item = $scope.flex.collectionView.itemsEdited[i];

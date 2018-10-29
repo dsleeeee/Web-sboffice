@@ -87,7 +87,7 @@
     // 담당창고 추가 저장
     $scope.saveAddStore = function () {
       // 파라미터 설정
-      var params = new Array();
+      var params = [];
       for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
         $scope.flex.collectionView.itemsEdited[i].status = "U";
         $scope.flex.collectionView.itemsEdited[i].dlvrCd = dlvrVO.getDlvrCd();

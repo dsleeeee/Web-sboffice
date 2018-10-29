@@ -231,12 +231,7 @@
         /* USE : RtnDstbCloseProdMapper.getRtnDstbCloseProdAddProdList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         <![CDATA[
-        SELECT  NVL((SELECT SUBSTR(MAX(SYS_CONNECT_BY_PATH( PROD_CLASS_NM,  '>')), 2)
-                       FROM TB_HQ_PRODUCT_CLASS
-                      WHERE HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                      START WITH PROD_CLASS_CD = thp.PROD_CLASS_CD
-                      CONNECT BY PRIOR P_PROD_CLASS_CD = PROD_CLASS_CD
-                       GROUP BY thp.PROD_CLASS_CD),' ') AS PROD_CLASS_NM
+        SELECT  ( SELECT SF_GET_PROD_CLASSES('H', thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM
         ,       thp.PROD_CD
         ,       thp.PROD_NM
         , 		thp.SPLY_UPRC
