@@ -64,9 +64,6 @@ function getConfigList(){
     var existCnt = 0;
 
     var list = result.data.list;
-
-    console.log(list);
-
     for(var i=0; i<envstGrpCd.length; i++) {
 
       var envCnt    = 0;
@@ -208,7 +205,7 @@ $("#envLayer #btnSave").click(function(){
   var objEnvstValCd = document.getElementsByName("envstValCd");
   var objDirctInYn = document.getElementsByName("dirctInYn");
 
-  var paramArr = new Array();
+  var paramArr = [];
 
   for(var i=0; i<objEnvstCd.length; i++){
 

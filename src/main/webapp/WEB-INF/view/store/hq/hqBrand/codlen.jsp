@@ -46,7 +46,6 @@ function openCodeLayer(){
   var codeTitle = "[" + selectedBrand.hqBrandCd + "] "+ selectedBrand.hqBrandNm;
   
   $("#codeTitle").text(codeTitle);
-  console.log(selectedBrand)
 }
 
 $("#codeLayer #envSettingTab").click(function(){
