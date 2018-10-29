@@ -9,7 +9,7 @@
 <wj-popup id="wjHqStoreMoveRegistLayer" control="wjHqStoreMoveRegistLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
   <div id="hqStoreMoveRegistLayer" class="wj-dialog wj-dialog-columns" ng-controller="hqStoreMoveRegistCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
-      <s:message code="storeOrder.dtl.registTitle"/>
+      <s:message code="hqStoreMove.reg.registTitle"/>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
     <div class="wj-dialog-body sc2" style="height: 600px;">
@@ -25,7 +25,7 @@
           <th><s:message code="hqStoreMove.reg.moveDate"/></th>
           <td>
             <div class="sb-select">
-              <span class="txtIn"><input id="moveDate" class="w150" ng-model="moveDate"></span>
+              <span class="txtIn"><input id="regMoveDate" class="w150" ng-model="moveDate"></span>
             </div>
           </td>
           <%-- 배송구분 --%>
@@ -88,6 +88,18 @@
             <input type="text" id="hdRemark" name="hdRemark" ng-model="hdRemark" class="sb-input w100"/>
           </td>
         </tr>
+        <tr>
+          <%-- 상품코드 --%>
+          <th><s:message code="hqStoreMove.add.prodCd"/></th>
+          <td>
+            <input type="text" id="srchRegProdCd" name="srchRegProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13"/>
+          </td>
+          <%-- 상품명 --%>
+          <th><s:message code="hqStoreMove.add.prodNm"/></th>
+          <td>
+            <input type="text" id="srchRegProdNm" name="srchRegProdNm" ng-model="prodNm" class="sb-input w100" maxlength="50"/>
+          </td>
+        </tr>
         </tbody>
       </table>
 
@@ -141,9 +153,9 @@
             <wj-flex-grid-column header="<s:message code="hqStoreMove.reg.amt"/>" binding="inAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="hqStoreMove.reg.vat"/>" binding="inVat" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="hqStoreMove.reg.tot"/>" binding="inTot" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="hqStoreMove.reg.vatFg"/>" binding="vatFg01" width="70" align="right" is-read-only="true" visible="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="hqStoreMove.reg.envst0011"/>" binding="outEnvst0011" width="70" align="right" is-read-only="true" visible="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="hqStoreMove.reg.envst0011"/>" binding="inEnvst0011" width="70" align="right" is-read-only="true" visible="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqStoreMove.reg.vatFg"/>" binding="vatFg01" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqStoreMove.reg.envst0011"/>" binding="outEnvst0011" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqStoreMove.reg.envst0011"/>" binding="inEnvst0011" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
 
           </wj-flex-grid>
         </div>
@@ -162,7 +174,7 @@
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('hqStoreMoveRegistCtrl', $scope, $http, true));
 
-    $scope.moveDate = wcombo.genDate("#moveDate");
+    $scope.moveDate = wcombo.genDate("#regMoveDate");
 
     $scope._setComboData("srchRegDlvrFg", [
       {"name": messages["hqStoreMove.dlvrFg0"], "value": "0"},
@@ -235,18 +247,16 @@
       var inTot      = parseInt(inAmt + inVat);
 
       item.outTotQty = totQty; // 총수량
-      item.outAmt = outAmt; // 이출금액
-      item.outVat = outVat; // 이출VAT
-      item.outTot = outTot; // 이출합계
-      item.inAmt  = inAmt; // 이입금액
-      item.inVat  = inVat; // 이입VAT
-      item.inTot  = inTot; // 이입합계
+      item.outAmt    = outAmt; // 이출금액
+      item.outVat    = outVat; // 이출VAT
+      item.outTot    = outTot; // 이출합계
+      item.inAmt     = inAmt; // 이입금액
+      item.inVat     = inVat; // 이입VAT
+      item.inTot     = inTot; // 이입합계
     };
 
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("hqStoreMoveRegistCtrl", function (event, data) {
-      $scope.slipNo = data.slipNo;
-
       // 그리드 초기화
       var cv          = new wijmo.collections.CollectionView([]);
       cv.trackChanges = true;
@@ -282,6 +292,8 @@
       var params        = {};
       params.outStoreCd = $scope.outStoreCd;
       params.inStoreCd  = $scope.inStoreCd;
+      params.prodCd     = $scope.prodCd;
+      params.prodNm     = $scope.prodNm;
 
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
       $scope._inquirySub("/iostock/move/hqStoreMove/hqStoreMoveRegist/list.sb", params, function () {
@@ -290,7 +302,7 @@
 
 
     // 저장
-    $scope.save = function () {
+    $scope.save = function (confirmFg) {
       var params = new Array();
 
       for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
@@ -317,6 +329,7 @@
         item.remark     = $scope.hdRemark;
         item.storageCd  = "001";
         item.hqBrandCd  = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
+        item.confirmFg  = confirmFg;
 
         params.push(item);
       }
@@ -330,7 +343,7 @@
     $scope.confirm = function () {
       var msg = messages["hqStoreMove.reg.confirmMsg"]; // 현전표를 확정하시겠습니까?
       s_alert.popConf(msg, function () {
-        $scope.save();
+        $scope.save('Y');
       });
     };
 
@@ -340,33 +353,8 @@
 
       var hqStoreMoveScope = agrid.getScope('hqStoreMoveCtrl');
       hqStoreMoveScope.searchHqStoreMoveList();
-
     };
 
-    // 확정체크시 값 체크
-    $scope.fnConfirmChk = function () {
-      if ($("#hqStoreMoveConfirmFg").is(":checked")) {
-        var showDate = "N";
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-          var item = $scope.flex.collectionView.items[i];
-          if (item.errFg === null || item.errFg === "") {
-            $scope._popMsg(messages["hqStoreMove.reg.require.selectErrFg"]); // 처리구분을 선택해 주세요.
-            $("#hqStoreMoveConfirmFg").prop("checked", false);
-            return false;
-          }
-          if (showDate === "N" && (item.errFg === "O2" || item.errFg === "O4" || item.errFg === "R2")) {
-            showDate = "Y";
-          }
-        }
-
-        if (showDate === "Y") {
-          $("#divDtlOutDate").show();
-        }
-      }
-      else {
-        $("#divDtlOutDate").hide();
-      }
-    };
 
     // 매장선택 모듈 팝업 사용시 정의
     // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'

@@ -4,12 +4,12 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
-<c:set var="baseUrl" value="/iostock/move/hqStoreMove/hqStoreMoveDtl/"/>
+<c:set var="baseUrl" value="/iostock/move/storeMove/storeMoveDtl/"/>
 
-<wj-popup id="wjHqStoreMoveDtlLayer" control="wjHqStoreMoveDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
-  <div id="hqStoreMoveDtlLayer" class="wj-dialog wj-dialog-columns" ng-controller="hqStoreMoveDtlCtrl">
+<wj-popup id="wjStoreMoveDtlLayer" control="wjStoreMoveDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
+  <div id="storeMoveDtlLayer" class="wj-dialog wj-dialog-columns" ng-controller="storeMoveDtlCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
-      <s:message code="hqStoreMove.dtl.dtlTitle"/>
+      <s:message code="storeMove.dtl.dtlTitle"/>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
     <div class="wj-dialog-body sc2" style="height: 600px;">
@@ -22,14 +22,14 @@
         </colgroup>
         <tbody>
         <tr>
-          <th><s:message code="hqStoreMove.dtl.moveDate"/></th>
+          <th><s:message code="storeMove.dtl.moveDate"/></th>
           <td>
             <div class="sb-select">
               <span class="txtIn"><input id="dtlMoveDate" class="w150" ng-model="moveDate"></span>
             </div>
           </td>
           <%-- 배송구분 --%>
-          <th><s:message code="hqStoreMove.dtl.dlvrFg"/></th>
+          <th><s:message code="storeMove.dlvrFg"/></th>
           <td>
             <div class="sb-select">
               <span class="txtIn w150">
@@ -48,7 +48,7 @@
         </tr>
         <tr>
           <%-- 출고매장 --%>
-          <th><s:message code="hqStoreMove.dtl.outStoreCd"/></th>
+          <th><s:message code="storeMove.dtl.outStoreCd"/></th>
           <td colspan="3">
             <%-- 매장선택 모듈 멀티 선택 사용시 include
                  param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
@@ -59,7 +59,7 @@
                               nm - 로딩시 세팅할 매장명
             --%>
             <jsp:include page="/WEB-INF/view/iostock/order/outstockReqDate/selectShopS.jsp" flush="true">
-              <jsp:param name="targetId" value="hqStoreMoveDtlOutSelectStore"/>
+              <jsp:param name="targetId" value="storeMoveDtlOutSelectStore"/>
               <jsp:param name="modiFg" value="N"/>
             </jsp:include>
             <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
@@ -67,7 +67,7 @@
         </tr>
         <tr>
           <%-- 입고매장 --%>
-          <th><s:message code="hqStoreMove.dtl.inStoreCd"/></th>
+          <th><s:message code="storeMove.dtl.inStoreCd"/></th>
           <td colspan="3">
             <%-- 매장선택 모듈 싱글 선택 사용시 include
                  param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
@@ -78,14 +78,14 @@
                               nm - 로딩시 세팅할 매장명
             --%>
             <jsp:include page="/WEB-INF/view/iostock/order/outstockReqDate/selectShopS.jsp" flush="true">
-              <jsp:param name="targetId" value="hqStoreMoveDtlInSelectStore"/>
+              <jsp:param name="targetId" value="storeMoveDtlInSelectStore"/>
               <jsp:param name="modiFg" value="N"/>
             </jsp:include>
             <%--// 매장선택 모듈 싱글 선택 사용시 include --%>
           </td>
         </tr>
         <tr>
-          <th><s:message code="hqStoreMove.dtl.remark"/></th>
+          <th><s:message code="storeMove.dtl.remark"/></th>
           <td colspan="3">
             <input type="text" id="dtlHdRemark" name="dtlHdRemark" ng-model="dtlHdRemark" class="sb-input w100"/>
           </td>
@@ -104,40 +104,39 @@
         </colgroup>
         <tbody>
         <tr>
-          <th><s:message code="hqStoreMove.dtl.regDt"/></th>
+          <th><s:message code="storeMove.dtl.regDt"/></th>
           <td><p id="regDt" class="s12"></p></td>
-          <th><s:message code="hqStoreMove.dtl.outConfmDt"/></th>
+          <th><s:message code="storeMove.dtl.outConfmDt"/></th>
           <td><p id="outConfmDt" class="s12"></p></td>
-          <th><s:message code="hqStoreMove.dtl.inConfmDt"/></th>
+          <th><s:message code="storeMove.dtl.inConfmDt"/></th>
           <td><p id="inConfmDt" class="s12"></p></td>
         </tr>
         <tr>
-          <th><s:message code="hqStoreMove.dtl.hqConfmDt"/></th>
+          <th><s:message code="storeMove.dtl.hqConfmDt"/></th>
           <td><p id="hqConfmDt" class="s12"></p></td>
-          <th><s:message code="hqStoreMove.dtl.outSlipNo"/></th>
+          <th><s:message code="storeMove.dtl.outSlipNo"/></th>
           <td><p id="outSlipNo" class="s12"></p></td>
-          <th><s:message code="hqStoreMove.dtl.inSlipNo"/></th>
+          <th><s:message code="storeMove.dtl.inSlipNo"/></th>
           <td><p id="inSlipNo" class="s12"></p></td>
         </tr>
         </tbody>
       </table>
 
       <ul class="txtSty3 mt10">
-        <li class="red"><s:message code="hqStoreMove.dtl.txt2"/></li>
-        <li class="red"><s:message code="hqStoreMove.dtl.txt3"/></li>
+        <li class="red"><s:message code="storeMove.dtl.txt2"/></li>
+        <li class="red"><s:message code="storeMove.dtl.txt3"/></li>
       </ul>
 
       <div class="tr mt20 fr">
-        <div id="hqStoreMoveDtlBtnLayer" style="display: none;">
+        <div id="storeMoveDtlBtnLayer" style="display: none;">
           <%-- 상품추가 --%>
           <button type="button" id="btnAddProd" class="btn_skyblue ml5 fl" ng-click="addProd()">
-            <s:message code="hqStoreMove.dtl.addProdBtn"/></button>
+            <s:message code="storeMove.dtl.addProdBtn"/></button>
           <%-- 저장 --%>
           <button type="button" id="btnSave" class="btn_skyblue ml5 fl" ng-click="save()">
             <s:message code="cmm.save"/></button>
           <%-- 저장 및 본사확정 --%>
-          <button type="button" id="btnConfirm" class="btn_skyblue ml5 fl" ng-click="confirm()">
-            <s:message code="hqStoreMove.dtl.confirmBtn"/></button>
+          <button type="button" id="btnConfirm" class="btn_skyblue ml5 fl" ng-click="confirm()"></button>
           <%-- 저장 --%>
           <button type="button" id="btnDel" class="btn_skyblue ml5 fl" ng-click="delete()">
             <s:message code="cmm.delete"/></button>
@@ -158,24 +157,24 @@
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.prodNm"/>" binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.poUnitQty"/>" binding="poUnitQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.unitQty"/>" binding="outUnitQty" width="70" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.etcQty"/>" binding="outEtcQty" width="70" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.totQty"/>" binding="outTotQty" width="70" align="right" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.splyUprc"/>" binding="outSplyUprc" width="70" align="right" max-length=8 data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.amt"/>" binding="outAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.vat"/>" binding="outVat" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.tot"/>" binding="outTot" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.splyUprc"/>" binding="inSplyUprc" width="70" align="right" max-length=8 data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.amt"/>" binding="inAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.vat"/>" binding="inVat" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.tot"/>" binding="inTot" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.vatFg"/>" binding="vatFg01" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.envst0011"/>" binding="outEnvst0011" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.envst0011"/>" binding="inEnvst0011" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeMove.dtl.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeMove.dtl.prodNm"/>" binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeMove.dtl.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeMove.dtl.poUnitQty"/>" binding="poUnitQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeMove.dtl.unitQty"/>" binding="outUnitQty" width="70" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeMove.dtl.etcQty"/>" binding="outEtcQty" width="70" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeMove.dtl.totQty"/>" binding="outTotQty" width="70" align="right" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeMove.dtl.splyUprc"/>" binding="outSplyUprc" width="70" align="right" max-length=8 data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeMove.dtl.amt"/>" binding="outAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeMove.dtl.vat"/>" binding="outVat" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeMove.dtl.tot"/>" binding="outTot" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeMove.dtl.splyUprc"/>" binding="inSplyUprc" width="70" align="right" max-length=8 data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeMove.dtl.amt"/>" binding="inAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeMove.dtl.vat"/>" binding="inVat" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeMove.dtl.tot"/>" binding="inTot" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeMove.dtl.vatFg"/>" binding="vatFg01" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeMove.dtl.envst0011"/>" binding="outEnvst0011" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeMove.dtl.envst0011"/>" binding="inEnvst0011" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
 
           </wj-flex-grid>
         </div>
@@ -190,17 +189,18 @@
 <script type="text/javascript">
 
   /** 물량오류 상세 그리드 controller */
-  app.controller('hqStoreMoveDtlCtrl', ['$scope', '$http', function ($scope, $http) {
+  app.controller('storeMoveDtlCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('hqStoreMoveDtlCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('storeMoveDtlCtrl', $scope, $http, true));
 
     $scope.moveDate            = wcombo.genDate("#dtlMoveDate");
     $scope.moveDate.isReadOnly = true;
+    $scope.sessionStoreCd      = "${sessionInfo.storeCd}";
 
     $scope._setComboData("srchDtlDlvrFg", [
-      {"name": messages["hqStoreMove.dlvrFg0"], "value": "0"},
-      {"name": messages["hqStoreMove.dlvrFg1"], "value": "1"},
-      {"name": messages["hqStoreMove.dlvrFg2"], "value": "2"}
+      {"name": messages["storeMove.dlvrFg0"], "value": "0"},
+      {"name": messages["storeMove.dlvrFg1"], "value": "1"},
+      {"name": messages["storeMove.dlvrFg2"], "value": "2"}
     ]);
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -279,9 +279,9 @@
 
 
     // 다른 컨트롤러의 broadcast 받기
-    $scope.$on("hqStoreMoveDtlCtrl", function (event, data) {
+    $scope.$on("storeMoveDtlCtrl", function (event, data) {
       $scope.slipNo = data.slipNo;
-      $scope.wjHqStoreMoveDtlLayer.show(true);
+      $scope.wjStoreMoveDtlLayer.show(true);
 
       $scope.getSlipNoInfo();
       // 기능수행 종료 : 반드시 추가
@@ -297,7 +297,7 @@
       // ajax 통신 설정
       $http({
         method : 'POST', //방식
-        url    : '/iostock/move/hqStoreMove/hqStoreMoveDtl/getSlipNoInfo.sb', /* 통신할 URL */
+        url    : '/iostock/move/storeMove/storeMoveDtl/getSlipNoInfo.sb', /* 통신할 URL */
         params : params, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
@@ -313,10 +313,10 @@
             $scope.inStoreCd      = response.data.data.inStoreCd;
             $scope.inStoreNm      = response.data.data.inStoreNm;
 
-            $("#hqStoreMoveDtlOutSelectStoreCd").val($scope.outStoreCd);
-            $("#hqStoreMoveDtlOutSelectStoreNm").val($scope.outStoreNm);
-            $("#hqStoreMoveDtlInSelectStoreCd").val($scope.inStoreCd);
-            $("#hqStoreMoveDtlInSelectStoreNm").val($scope.inStoreNm);
+            $("#storeMoveDtlOutSelectStoreCd").val($scope.outStoreCd);
+            $("#storeMoveDtlOutSelectStoreNm").val($scope.outStoreNm);
+            $("#storeMoveDtlInSelectStoreCd").val($scope.inStoreCd);
+            $("#storeMoveDtlInSelectStoreNm").val($scope.inStoreNm);
 
             var regDt      = response.data.data.regDt;
             var outConfmDt = response.data.data.outConfmDt;
@@ -332,16 +332,23 @@
             $("#outSlipNo").html(outSlipNo);
             $("#inSlipNo").html(inSlipNo);
 
-            if ($scope.procFg === "3") {
-              $("#hqStoreMoveDtlBtnLayer").hide();
-              $scope.flex.isReadOnly = true;
+            if ($scope.procFg === "0") {
+              if ($scope.sessionStoreCd == $scope.outStoreCd) {
+                $("#btnConfirm").html(messages["storeMove.dtl.outConfirmBtn"]);
+                $("#storeMoveDtlBtnLayer").show();
+                $scope.flex.isReadOnly = false;
+              }
             }
             else {
-              $("#hqStoreMoveDtlBtnLayer").show();
-              $scope.flex.isReadOnly = false;
+              $("#storeMoveDtlBtnLayer").hide();
+              $scope.flex.isReadOnly = true;
+
+              if ($scope.procFg === "1" && $scope.sessionStoreCd == $scope.inStoreCd) {
+                $("#btnConfirm").html(messages["storeMove.dtl.inConfirmBtn"]);
+              }
             }
 
-            $scope.searchHqStoreMoveDtlList();
+            $scope.searchStoreMoveDtlList();
           }
         }
       }, function errorCallback(response) {
@@ -356,12 +363,12 @@
 
 
     // 매장이동관리 상세내역 리스트 조회
-    $scope.searchHqStoreMoveDtlList = function () {
+    $scope.searchStoreMoveDtlList = function () {
       // 파라미터
       var params    = {};
       params.slipNo = $scope.slipNo;
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
-      $scope._inquirySub("/iostock/move/hqStoreMove/hqStoreMoveDtl/list.sb", params, function () {
+      $scope._inquirySub("/iostock/move/storeMove/storeMoveDtl/list.sb", params, function () {
       });
     };
 
@@ -384,15 +391,15 @@
         var item = $scope.flex.collectionView.itemsEdited[i];
 
         if (item.etcQty !== null && (parseInt(item.etcQty) >= parseInt(item.poUnitQty))) {
-          $scope._popMsg(messages["hqStoreMove.dtl.not.etcQty"]); // 낱개수량은 입수량보다 작아야 합니다.
+          $scope._popMsg(messages["storeMove.dtl.not.etcQty"]); // 낱개수량은 입수량보다 작아야 합니다.
           return false;
         }
         if (item.outTot !== null && (parseInt(item.outTot) > 9999999999)) {
-          $scope._popMsg(messages["hqStoreMove.dtl.not.overOutTot"]); // 이출금액이 너무 큽니다.
+          $scope._popMsg(messages["storeMove.dtl.not.overOutTot"]); // 이출금액이 너무 큽니다.
           return false;
         }
         if (item.inTot !== null && (parseInt(item.inTot) > 9999999999)) {
-          $scope._popMsg(messages["hqStoreMove.dtl.not.overInTot"]); // 이입금액이 너무 큽니다.
+          $scope._popMsg(messages["storeMove.dtl.not.overInTot"]); // 이입금액이 너무 큽니다.
           return false;
         }
 
@@ -407,25 +414,25 @@
         params.push(item);
       }
 
-      $scope._save("/iostock/move/hqStoreMove/hqStoreMoveDtl/save.sb", params, function () {
-        $scope.saveHqStoreMoveDtlCallback()
+      $scope._save("/iostock/move/storeMove/storeMoveDtl/save.sb", params, function () {
+        $scope.saveStoreMoveDtlCallback()
       });
     };
 
 
     $scope.confirm = function () {
-      var msg = messages["hqStoreMove.dtl.confirmMsg"]; // 현전표를 확정하시겠습니까?
+      var msg = messages["storeMove.dtl.confirmMsg"]; // 현전표를 확정하시겠습니까?
       s_alert.popConf(msg, function () {
         $scope.save('Y');
       });
     };
 
 
-    $scope.saveHqStoreMoveDtlCallback = function () {
-      $scope.wjHqStoreMoveDtlLayer.hide(true);
+    $scope.saveStoreMoveDtlCallback = function () {
+      $scope.wjStoreMoveDtlLayer.hide(true);
 
-      var hqStoreMoveScope = agrid.getScope('hqStoreMoveCtrl');
-      hqStoreMoveScope.searchHqStoreMoveList();
+      var storeMoveScope = agrid.getScope('storeMoveCtrl');
+      storeMoveScope.searchStoreMoveList();
     };
 
 
@@ -435,12 +442,12 @@
       params.outStoreCd = $scope.outStoreCd;
       params.inStoreCd  = $scope.inStoreCd;
 
-      $scope._broadcast('hqStoreMoveAddProdCtrl', params);
+      $scope._broadcast('storeMoveAddProdCtrl', params);
     };
 
 
     $scope.delete = function () {
-      var msg = messages["hqStoreMove.dtl.delMsg"]; // 현전표를 삭제하시겠습니까?
+      var msg = messages["storeMove.dtl.delMsg"]; // 현전표를 삭제하시겠습니까?
       s_alert.popConf(msg, function () {
         var params    = {};
         params.slipNo = $scope.slipNo;
@@ -451,14 +458,14 @@
         // ajax 통신 설정
         $http({
           method : 'POST', //방식
-          url    : '/iostock/move/hqStoreMove/hqStoreMoveDtl/delete.sb', /* 통신할 URL */
+          url    : '/iostock/move/storeMove/storeMoveDtl/delete.sb', /* 통신할 URL */
           params : params, /* 파라메터로 보낼 데이터 */
           headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
         }).then(function successCallback(response) {
           if ($scope.httpStatusCheck(response)) {
             if (response.data.status === "OK") {
               $scope._popMsg(messages["cmm.saveSucc"]);
-              $scope.saveHqStoreMoveDtlCallback();
+              $scope.saveStoreMoveDtlCallback();
             }
           }
         }, function errorCallback(response) {
@@ -480,15 +487,15 @@
     // 매장선택 모듈 팝업 사용시 정의
     // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
     // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.hqStoreMoveDtlOutSelectStoreShow = function () {
-      $scope._broadcast('hqStoreMoveDtlOutSelectStoreCtrl');
+    $scope.storeMoveDtlOutSelectStoreShow = function () {
+      $scope._broadcast('storeMoveDtlOutSelectStoreCtrl');
     };
 
     // 매장선택 모듈 팝업 사용시 정의
     // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
     // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.hqStoreMoveDtlInSelectStoreShow = function () {
-      $scope._broadcast('hqStoreMoveDtlInSelectStoreCtrl');
+    $scope.storeMoveDtlInSelectStoreShow = function () {
+      $scope._broadcast('storeMoveDtlInSelectStoreCtrl');
     };
 
 

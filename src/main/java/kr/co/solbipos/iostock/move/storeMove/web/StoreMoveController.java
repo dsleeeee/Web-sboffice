@@ -1,4 +1,4 @@
-package kr.co.solbipos.iostock.move.hqStoreMove.web;
+package kr.co.solbipos.iostock.move.storeMove.web;
 
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
@@ -7,8 +7,9 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.iostock.move.hqStoreMove.service.HqStoreMoveService;
 import kr.co.solbipos.iostock.move.hqStoreMove.service.HqStoreMoveVO;
+import kr.co.solbipos.iostock.move.storeMove.service.StoreMoveService;
+import kr.co.solbipos.iostock.move.storeMove.service.StoreMoveVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,16 +23,16 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
- * @Class Name : HqStoreMoveController.java
+ * @Class Name : StoreMoveController.java
  * @Description : 수불관리 > 이동관리 > 매장이동관리
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2018.10.24  안동관      최초생성
+ * @ 2018.10.26  안동관      최초생성
  *
  * @author 솔비포스 차세대개발실 안동관
- * @since 2018. 10.24
+ * @since 2018. 10.26
  * @version 1.0
  * @see
  *
@@ -39,18 +40,19 @@ import java.util.List;
  */
 
 @Controller
-@RequestMapping("/iostock/move/hqStoreMove")
-public class HqStoreMoveController {
+@RequestMapping("/iostock/move/storeMove")
+public class StoreMoveController {
     private final SessionService sessionService;
-    private final HqStoreMoveService hqStoreMoveService;
+    private final StoreMoveService storeMoveService;
     private final MessageService messageService;
 
     @Autowired
-    public HqStoreMoveController(SessionService sessionService, HqStoreMoveService hqStoreMoveService, MessageService messageService) {
+    public StoreMoveController(SessionService sessionService, StoreMoveService storeMoveService, MessageService messageService) {
         this.sessionService = sessionService;
-        this.hqStoreMoveService = hqStoreMoveService;
+        this.storeMoveService = storeMoveService;
         this.messageService = messageService;
     }
+
 
     /**
      * 매장이동관리 - 페이지 이동
@@ -59,12 +61,12 @@ public class HqStoreMoveController {
      * @param   model
      * @return  String
      * @author  안동관
-     * @since   2018. 10. 24.
+     * @since   2018. 10. 26.
      */
-    @RequestMapping(value = "/hqStoreMove/view.sb", method = RequestMethod.GET)
-    public String hqStoreMoveView(HttpServletRequest request, HttpServletResponse response, Model model) {
+    @RequestMapping(value = "/storeMove/view.sb", method = RequestMethod.GET)
+    public String storeMoveView(HttpServletRequest request, HttpServletResponse response, Model model) {
         model.addAttribute("selectStoreDisplayNmAll", messageService.get("cmm.all"));
-        return "iostock/move/hqStoreMove/hqStoreMove";
+        return "iostock/move/storeMove/storeMove";
     }
 
     /**
@@ -72,22 +74,22 @@ public class HqStoreMoveController {
      * @param   request
      * @param   response
      * @param   model
-     * @param   hqStoreMoveVO
+     * @param   storeMoveVO
      * @return  String
      * @author  안동관
-     * @since   2018. 10. 24.
+     * @since   2018. 10. 26.
      */
-    @RequestMapping(value = "/hqStoreMove/list.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/storeMove/list.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getHqStoreMoveList(HttpServletRequest request, HttpServletResponse response,
-        Model model, HqStoreMoveVO hqStoreMoveVO) {
+    public Result getStoreMoveList(HttpServletRequest request, HttpServletResponse response,
+        Model model, StoreMoveVO storeMoveVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        hqStoreMoveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        storeMoveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        List<DefaultMap<String>> list = hqStoreMoveService.getHqStoreMoveList(hqStoreMoveVO);
+        List<DefaultMap<String>> list = storeMoveService.getStoreMoveList(storeMoveVO);
 
-        return ReturnUtil.returnListJson(Status.OK, list, hqStoreMoveVO);
+        return ReturnUtil.returnListJson(Status.OK, list, storeMoveVO);
     }
 
     /**
@@ -95,20 +97,20 @@ public class HqStoreMoveController {
      * @param   request
      * @param   response
      * @param   model
-     * @param   hqStoreMoveVO
+     * @param   storeMoveVO
      * @return  String
      * @author  안동관
-     * @since   2018. 10. 25.
+     * @since   2018. 10. 26.
      */
-    @RequestMapping(value = "/hqStoreMoveDtl/getSlipNoInfo.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/storeMoveDtl/getSlipNoInfo.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getSlipNoInfo(HttpServletRequest request, HttpServletResponse response,
-        Model model, HqStoreMoveVO hqStoreMoveVO) {
+        Model model, StoreMoveVO storeMoveVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        hqStoreMoveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        storeMoveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        DefaultMap<String> result = hqStoreMoveService.getSlipNoInfo(hqStoreMoveVO);
+        DefaultMap<String> result = storeMoveService.getSlipNoInfo(storeMoveVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }
@@ -118,22 +120,22 @@ public class HqStoreMoveController {
      * @param   request
      * @param   response
      * @param   model
-     * @param   hqStoreMoveVO
+     * @param   storeMoveVO
      * @return  String
      * @author  안동관
-     * @since   2018. 10. 24.
+     * @since   2018. 10. 26.
      */
-    @RequestMapping(value = "/hqStoreMoveDtl/list.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/storeMoveDtl/list.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getHqStoreMoveDtlList(HttpServletRequest request, HttpServletResponse response,
-        Model model, HqStoreMoveVO hqStoreMoveVO) {
+    public Result getStoreMoveDtlList(HttpServletRequest request, HttpServletResponse response,
+        Model model, StoreMoveVO storeMoveVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        hqStoreMoveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        storeMoveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        List<DefaultMap<String>> list = hqStoreMoveService.getHqStoreMoveDtlList(hqStoreMoveVO);
+        List<DefaultMap<String>> list = storeMoveService.getStoreMoveDtlList(storeMoveVO);
 
-        return ReturnUtil.returnListJson(Status.OK, list, hqStoreMoveVO);
+        return ReturnUtil.returnListJson(Status.OK, list, storeMoveVO);
     }
 
     /**
@@ -141,19 +143,19 @@ public class HqStoreMoveController {
      * @param   request
      * @param   response
      * @param   model
-     * @param   hqStoreMoveVOs
+     * @param   storeMoveVOs
      * @return  String
      * @author  안동관
-     * @since   2018. 10. 24.
+     * @since   2018. 10. 26.
      */
-    @RequestMapping(value = "/hqStoreMoveDtl/save.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/storeMoveDtl/save.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result saveHqStoreMoveDtl(HttpServletRequest request, HttpServletResponse response,
-        Model model, @RequestBody HqStoreMoveVO[] hqStoreMoveVOs) {
+    public Result saveStoreMoveDtl(HttpServletRequest request, HttpServletResponse response,
+        Model model, @RequestBody StoreMoveVO[] storeMoveVOs) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = hqStoreMoveService.saveHqStoreMoveDtl(hqStoreMoveVOs, sessionInfoVO);
+        int result = storeMoveService.saveStoreMoveDtl(storeMoveVOs, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }
@@ -164,19 +166,19 @@ public class HqStoreMoveController {
      * @param   request
      * @param   response
      * @param   model
-     * @param   hqStoreMoveVO
+     * @param   storeMoveVO
      * @return  String
      * @author  안동관
      * @since   2018. 10. 26.
      */
-    @RequestMapping(value = "/hqStoreMoveDtl/delete.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/storeMoveDtl/delete.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result deleteHqStoreMoveDtl(HttpServletRequest request, HttpServletResponse response,
-        Model model, HqStoreMoveVO hqStoreMoveVO) {
+    public Result deleteStoreMoveDtl(HttpServletRequest request, HttpServletResponse response,
+        Model model, StoreMoveVO storeMoveVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = hqStoreMoveService.deleteHqStoreMoveDtl(hqStoreMoveVO, sessionInfoVO);
+        int result = storeMoveService.deleteStoreMoveDtl(storeMoveVO, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }
@@ -187,22 +189,22 @@ public class HqStoreMoveController {
      * @param   request
      * @param   response
      * @param   model
-     * @param   hqStoreMoveVO
+     * @param   storeMoveVO
      * @return  String
      * @author  안동관
-     * @since   2018. 10. 24.
+     * @since   2018. 10. 26.
      */
-    @RequestMapping(value = "/hqStoreMoveRegist/list.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/storeMoveRegist/list.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getHqStoreMoveRegistList(HttpServletRequest request, HttpServletResponse response,
-        Model model, HqStoreMoveVO hqStoreMoveVO) {
+    public Result getStoreMoveRegistList(HttpServletRequest request, HttpServletResponse response,
+        Model model, StoreMoveVO storeMoveVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        hqStoreMoveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        storeMoveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        List<DefaultMap<String>> list = hqStoreMoveService.getHqStoreMoveRegistList(hqStoreMoveVO);
+        List<DefaultMap<String>> list = storeMoveService.getStoreMoveRegistList(storeMoveVO);
 
-        return ReturnUtil.returnListJson(Status.OK, list, hqStoreMoveVO);
+        return ReturnUtil.returnListJson(Status.OK, list, storeMoveVO);
     }
 
     /**
@@ -210,19 +212,19 @@ public class HqStoreMoveController {
      * @param   request
      * @param   response
      * @param   model
-     * @param   hqStoreMoveVOs
+     * @param   storeMoveVOs
      * @return  String
      * @author  안동관
-     * @since   2018. 10. 25.
+     * @since   2018. 10. 26.
      */
-    @RequestMapping(value = "/hqStoreMoveRegist/save.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/storeMoveRegist/save.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result saveHqStoreMoveRegist(HttpServletRequest request, HttpServletResponse response,
-        Model model, @RequestBody HqStoreMoveVO[] hqStoreMoveVOs) {
+    public Result saveStoreMoveRegist(HttpServletRequest request, HttpServletResponse response,
+        Model model, @RequestBody StoreMoveVO[] storeMoveVOs) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = hqStoreMoveService.saveHqStoreMoveRegist(hqStoreMoveVOs, sessionInfoVO);
+        int result = storeMoveService.saveStoreMoveRegist(storeMoveVOs, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }
@@ -232,22 +234,22 @@ public class HqStoreMoveController {
      * @param   request
      * @param   response
      * @param   model
-     * @param   hqStoreMoveVO
+     * @param   storeMoveVO
      * @return  String
      * @author  안동관
-     * @since   2018. 10. 25.
+     * @since   2018. 10. 26.
      */
-    @RequestMapping(value = "/hqStoreMoveAddProd/list.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/storeMoveAddProd/list.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getHqStoreMoveAddProdList(HttpServletRequest request, HttpServletResponse response,
-        Model model, HqStoreMoveVO hqStoreMoveVO) {
+    public Result getStoreMoveAddProdList(HttpServletRequest request, HttpServletResponse response,
+        Model model, StoreMoveVO storeMoveVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        hqStoreMoveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        storeMoveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        List<DefaultMap<String>> list = hqStoreMoveService.getHqStoreMoveAddProdList(hqStoreMoveVO);
+        List<DefaultMap<String>> list = storeMoveService.getStoreMoveAddProdList(storeMoveVO);
 
-        return ReturnUtil.returnListJson(Status.OK, list, hqStoreMoveVO);
+        return ReturnUtil.returnListJson(Status.OK, list, storeMoveVO);
     }
 
     /**
@@ -255,20 +257,21 @@ public class HqStoreMoveController {
      * @param   request
      * @param   response
      * @param   model
-     * @param   hqStoreMoveVOs
+     * @param   storeMoveVOs
      * @return  String
      * @author  안동관
-     * @since   2018. 10. 25.
+     * @since   2018. 10. 26.
      */
-    @RequestMapping(value = "/hqStoreMoveAddProd/save.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/storeMoveAddProd/save.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result saveHqStoreMoveAddProd(HttpServletRequest request, HttpServletResponse response,
-        Model model, @RequestBody HqStoreMoveVO[] hqStoreMoveVOs) {
+    public Result saveStoreMoveAddProd(HttpServletRequest request, HttpServletResponse response,
+        Model model, @RequestBody StoreMoveVO[] storeMoveVOs) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = hqStoreMoveService.saveHqStoreMoveAddProd(hqStoreMoveVOs, sessionInfoVO);
+        int result = storeMoveService.saveStoreMoveAddProd(storeMoveVOs, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }
+
 }

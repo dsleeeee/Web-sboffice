@@ -33,6 +33,12 @@ public class HqStoreMoveServiceImpl implements HqStoreMoveService {
         return hqStoreMoveMapper.getHqStoreMoveList(hqStoreMoveVO);
     }
 
+    /** 매장이동관리 - 전표상세 조회 */
+    @Override
+    public DefaultMap<String> getSlipNoInfo(HqStoreMoveVO hqStoreMoveVO) {
+        return hqStoreMoveMapper.getSlipNoInfo(hqStoreMoveVO);
+    }
+
     /** 매장이동관리 - 매장이동관리 상세 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getHqStoreMoveDtlList(HqStoreMoveVO hqStoreMoveVO) {
@@ -41,70 +47,73 @@ public class HqStoreMoveServiceImpl implements HqStoreMoveService {
 
     /** 매장이동관리 - 매장이동관리 상세 리스트 저장 */
     @Override
-    public int saveHqStoreMoveDtl(HqStoreMoveVO hqStoreMoveHdVO, HqStoreMoveVO[] hqStoreMoveVOs, SessionInfoVO sessionInfoVO) {
+    public int saveHqStoreMoveDtl(HqStoreMoveVO[] hqStoreMoveVOs, SessionInfoVO sessionInfoVO) {
         int returnResult = 0;
         int result = 0;
         int i = 0;
         String currentDt = currentDateTimeString();
         String confirmFg = "N";
 
-//        HqStoreMoveVO hqStoreMoveHdVO = new HqStoreMoveVO();
+        HqStoreMoveVO hqStoreMoveHdVO = new HqStoreMoveVO();
 
         for (HqStoreMoveVO hqStoreMoveVO : hqStoreMoveVOs) {
             // HD 저장을 위한 파라미터 세팅
             if(i == 0) {
-//                confirmFg = StringUtil.getOrBlank(hqStoreMoveVO.getConfirmFg());
+                confirmFg = StringUtil.getOrBlank(hqStoreMoveVO.getConfirmFg());
 
-//                hqStoreMoveHdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-//                hqStoreMoveHdVO.setMoveDate(hqStoreMoveVO.getMoveDate());
-//                hqStoreMoveHdVO.setOutStoreCd(hqStoreMoveVO.getOutStoreCd());
-//                hqStoreMoveHdVO.setInStoreCd(hqStoreMoveVO.getInStoreCd());
-//                hqStoreMoveHdVO.setSlipNo(hqStoreMoveVO.getSlipNo());
-//                hqStoreMoveHdVO.setDlvrFg(hqStoreMoveVO.getDlvrFg());
-//                hqStoreMoveHdVO.setRemark(hqStoreMoveVO.getRemark());
-//                hqStoreMoveHdVO.setRegId(sessionInfoVO.getUserId());
-//                hqStoreMoveHdVO.setRegDt(currentDt);
-//                hqStoreMoveHdVO.setModId(sessionInfoVO.getUserId());
-//                hqStoreMoveHdVO.setModDt(currentDt);
+                hqStoreMoveHdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+                hqStoreMoveHdVO.setSlipNo(hqStoreMoveVO.getSlipNo());
+                hqStoreMoveHdVO.setDlvrFg(hqStoreMoveVO.getDlvrFg());
+                hqStoreMoveHdVO.setRemark(hqStoreMoveVO.getRemark());
+                hqStoreMoveHdVO.setRegFg(sessionInfoVO.getOrgnFg());
+                hqStoreMoveHdVO.setRegId(sessionInfoVO.getUserId());
+                hqStoreMoveHdVO.setRegDt(currentDt);
+                hqStoreMoveHdVO.setModId(sessionInfoVO.getUserId());
+                hqStoreMoveHdVO.setModDt(currentDt);
             }
 
+            // 나머지수량은 null 이 들어올수 있으므로 null 인 경우 0으로 변환.
+            int outEtcQty = (hqStoreMoveVO.getOutEtcQty() == null ? 0 : hqStoreMoveVO.getOutEtcQty());
+
             hqStoreMoveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            hqStoreMoveVO.setSlipNo(hqStoreMoveHdVO.getSlipNo());
+            hqStoreMoveVO.setOutEtcQty(outEtcQty);
+            hqStoreMoveVO.setInUnitQty(hqStoreMoveVO.getOutUnitQty());
+            hqStoreMoveVO.setInEtcQty(outEtcQty);
+            hqStoreMoveVO.setInTotQty(hqStoreMoveVO.getOutTotQty());
             hqStoreMoveVO.setRegId(sessionInfoVO.getUserId());
             hqStoreMoveVO.setRegDt(currentDt);
             hqStoreMoveVO.setModId(sessionInfoVO.getUserId());
             hqStoreMoveVO.setModDt(currentDt);
 
-            if(StringUtil.getOrBlank(hqStoreMoveVO.getPrevOutTotQty()).equals("")) {
-                // DTL 수정
-                result = hqStoreMoveMapper.updateHqStoreMoveDtl(hqStoreMoveVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-            }
-            else {
-                // DTL 수정
-                result = hqStoreMoveMapper.insertHqStoreMoveDtl(hqStoreMoveVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-            }
+            // DTL 수정
+            result = hqStoreMoveMapper.updateHqStoreMoveDtl(hqStoreMoveVO);
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
             returnResult += result;
             i++;
         }
 
-        hqStoreMoveHdVO.setRegId(sessionInfoVO.getUserId());
-        hqStoreMoveHdVO.setRegDt(currentDt);
-        hqStoreMoveHdVO.setModId(sessionInfoVO.getUserId());
-        hqStoreMoveHdVO.setModDt(currentDt);
-
         // HD 수정
         result = hqStoreMoveMapper.updateHqStoreMoveHd(hqStoreMoveHdVO);
         if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-        // 출고확정여부를 체크한 경우
+        // 본사확정인 경우
         if(confirmFg.equals("Y")) {
-            hqStoreMoveHdVO.setProcFg("10");
-//            hqStoreMoveHdVO.setUpdateProcFg("20");
+            // 출고, 반품에 사용할 전표번호 생성
+            String yymm = DateUtil.currentDateString().substring(2,6); // 새로운 전표번호 생성을 위한 년월(YYMM)
+            HqStoreMoveVO iostockNewSlipNoVO = new HqStoreMoveVO();
+            iostockNewSlipNoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            iostockNewSlipNoVO.setYymm(yymm);
+            String iostockNewSlipNo = hqStoreMoveMapper.getIostockNewSlipNo(iostockNewSlipNoVO);
 
-            // DTL의 진행구분 수정. 수주확정 -> 출고확정
+            String outSlipNo = iostockNewSlipNo;
+            String inSlipNo = String.valueOf(Long.parseLong(iostockNewSlipNo) + 1);
+
+            hqStoreMoveHdVO.setProcFg("3");
+            hqStoreMoveHdVO.setOutSlipNo(outSlipNo);
+            hqStoreMoveHdVO.setInSlipNo(inSlipNo);
+
+            // HD의 수정
             result = hqStoreMoveMapper.updateHqStoreMoveConfirm(hqStoreMoveHdVO);
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
@@ -112,11 +121,32 @@ public class HqStoreMoveServiceImpl implements HqStoreMoveService {
         return returnResult;
     }
 
+
+    /** 매장이동관리 - 매장이동관리 상세 삭제 */
+    @Override
+    public int deleteHqStoreMoveDtl(HqStoreMoveVO hqStoreMoveVO, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+
+        hqStoreMoveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        // DTL 삭제
+        result = hqStoreMoveMapper.deleteAllHqStoreMoveDtl(hqStoreMoveVO);
+        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+        // HD 삭제
+        result = hqStoreMoveMapper.deleteHqStoreMoveHd(hqStoreMoveVO);
+        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+        return result;
+    }
+
+
     /** 매장이동관리 - 매장이동관리 신규등록 상품 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getHqStoreMoveRegistList(HqStoreMoveVO hqStoreMoveVO) {
         return hqStoreMoveMapper.getHqStoreMoveRegistList(hqStoreMoveVO);
     }
+
 
     /** 매장이동관리 - 매장이동관리 신규등록 리스트 저장 */
     @Override
@@ -185,12 +215,79 @@ public class HqStoreMoveServiceImpl implements HqStoreMoveService {
 
         // 본사확정인 경우
         if(confirmFg.equals("Y")) {
-            hqStoreMoveHdVO.setProcFg("3");
+            // 출고, 반품에 사용할 전표번호 생성
+            HqStoreMoveVO iostockNewSlipNoVO = new HqStoreMoveVO();
+            iostockNewSlipNoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            iostockNewSlipNoVO.setYymm(yymm);
+            String iostockNewSlipNo = hqStoreMoveMapper.getIostockNewSlipNo(iostockNewSlipNoVO);
 
-            // HD의 진행구분 수정.
+            String outSlipNo = iostockNewSlipNo;
+            String inSlipNo = String.valueOf(Long.parseLong(iostockNewSlipNo) + 1);
+
+            hqStoreMoveHdVO.setProcFg("3");
+            hqStoreMoveHdVO.setOutSlipNo(outSlipNo);
+            hqStoreMoveHdVO.setInSlipNo(inSlipNo);
+
+            // HD의 수정
             result = hqStoreMoveMapper.updateHqStoreMoveConfirm(hqStoreMoveHdVO);
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
+
+        return returnResult;
+    }
+
+    /** 매장이동관리 - 매장이동관리 상품추가 상품 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getHqStoreMoveAddProdList(HqStoreMoveVO hqStoreMoveVO) {
+        return hqStoreMoveMapper.getHqStoreMoveRegistList(hqStoreMoveVO);
+    }
+
+    /** 매장이동관리 - 매장이동관리 상품추가 리스트 저장 */
+    @Override
+    public int saveHqStoreMoveAddProd(HqStoreMoveVO[] hqStoreMoveVOs, SessionInfoVO sessionInfoVO) {
+        int returnResult = 0;
+        int result = 0;
+        int i = 0;
+        String currentDt = currentDateTimeString();
+
+        HqStoreMoveVO hqStoreMoveHdVO = new HqStoreMoveVO();
+
+        for (HqStoreMoveVO hqStoreMoveVO : hqStoreMoveVOs) {
+            // HD 저장을 위한 파라미터 세팅
+            if(i == 0) {
+                hqStoreMoveHdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+                hqStoreMoveHdVO.setSlipNo(hqStoreMoveVO.getSlipNo());
+                hqStoreMoveHdVO.setRegId(sessionInfoVO.getUserId());
+                hqStoreMoveHdVO.setRegDt(currentDt);
+                hqStoreMoveHdVO.setModId(sessionInfoVO.getUserId());
+                hqStoreMoveHdVO.setModDt(currentDt);
+            }
+
+            // 나머지수량은 null 이 들어올수 있으므로 null 인 경우 0으로 변환.
+            int outEtcQty = (hqStoreMoveVO.getOutEtcQty() == null ? 0 : hqStoreMoveVO.getOutEtcQty());
+
+            hqStoreMoveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            hqStoreMoveVO.setOutEtcQty(outEtcQty);
+            hqStoreMoveVO.setInUnitQty(hqStoreMoveVO.getOutUnitQty());
+            hqStoreMoveVO.setInEtcQty(outEtcQty);
+            hqStoreMoveVO.setInTotQty(hqStoreMoveVO.getOutTotQty());
+            hqStoreMoveVO.setRegFg(sessionInfoVO.getOrgnFg());
+            hqStoreMoveVO.setRegId(sessionInfoVO.getUserId());
+            hqStoreMoveVO.setRegDt(currentDt);
+            hqStoreMoveVO.setModId(sessionInfoVO.getUserId());
+            hqStoreMoveVO.setModDt(currentDt);
+
+            // DTL 등록
+            result = hqStoreMoveMapper.insertHqStoreMoveDtl(hqStoreMoveVO);
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+            returnResult += result;
+            i++;
+        }
+
+        // HD 수정
+        result = hqStoreMoveMapper.updateHqStoreMoveAddProdHd(hqStoreMoveHdVO);
+        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
         return returnResult;
     }
