@@ -1,11 +1,11 @@
-package kr.co.solbipos.iostock.move.hqStoreMove.service;
+package kr.co.solbipos.iostock.move.storeMove.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 
-public class HqStoreMoveVO extends PageVO {
+public class StoreMoveVO extends PageVO {
 
-    private static final long serialVersionUID = 8013623600434420897L;
+    private static final long serialVersionUID = -8971000261083200858L;
 
     /** 본사코드 */
     private String hqOfficeCd;
@@ -89,6 +89,8 @@ public class HqStoreMoveVO extends PageVO {
     private String confirmFg;
     /** 전표번호 생성을 위한 YYMM 포맷 날짜 */
     private String yymm;
+    /** 이출입구분 */
+    private String ioFg;
 
     /**
      * @return the hqOfficeCd
@@ -662,5 +664,19 @@ public class HqStoreMoveVO extends PageVO {
      */
     public void setYymm(String yymm) {
         this.yymm = yymm;
+    }
+
+    /**
+     * @return the ioFg
+     */
+    public String getIoFg() {
+        return ioFg;
+    }
+
+    /**
+     * @param ioFg the ioFg to set
+     */
+    public void setIoFg(String ioFg) {
+        this.ioFg = ioFg;
     }
 }
