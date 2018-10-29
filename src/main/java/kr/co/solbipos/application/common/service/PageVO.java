@@ -22,7 +22,7 @@ public class PageVO extends CmmVO {
     /** 기본페이징 사이즈 */
     private static final int DEFAULT_PAGE_SCALE = 10;
     /** 기본리스트 사이즈 */
-    private static final int DEFAULT_LIST_SCALE = 15;
+    private static final int DEFAULT_LIST_SCALE = 10;
     /** 레코드의 총 갯수 */
     private Integer totCnt = 0;
     /** 총 페이지 갯수 */
