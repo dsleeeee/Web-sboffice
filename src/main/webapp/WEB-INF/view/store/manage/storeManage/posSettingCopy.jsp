@@ -6,7 +6,7 @@
 <div id="posCopyDim" class="fullDimmed" style="display:none;"></div>
 <div id="posCopyLayer" class="layer" style="display:none;">
   <div class="layer_inner">
-    <div class="title w600">
+    <div class="title w600px">
       <p class="tit"><s:message code="storeManage.copy.posSetting" /></p>
       <a href="#" class="btn_close"></a>
       <div class="con">

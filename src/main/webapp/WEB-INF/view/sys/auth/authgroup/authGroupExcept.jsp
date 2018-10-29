@@ -6,7 +6,7 @@
 <div id="_authLayer" class="layer" style="display: none;">
   <div class="layer_inner">
     <%--layerContent--%>
-    <div class="title w500">
+    <div class="title w500px">
       <p class="tit"><s:message code="authGroup.authGive" />[<span id="_title"></span>]</p>
       <a href="#" class="btn_close _btnAuthClose"></a>
       <div class="con" style="height:300px;">
@@ -134,7 +134,7 @@ authTree.prototype.save = function() {
   }
   
   //console.log(view.itemsAdded, view.itemsRemoved);
-  var paramArr = new Array();
+  var paramArr = [];
   for(var i = 0; i < view.itemsAdded.length; i++) {
     view.itemsAdded[i].status = 'I';
     view.itemsAdded[i].userId = tree.currentUserId;

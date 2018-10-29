@@ -8,7 +8,7 @@
     <div id="_brmkLayer" class="layer" style="display: none;">
         <div class="layer_inner">
             <!--layerContent-->
-            <div class="title w870">
+            <div class="title w870px">
                 <p class="tit">즐겨찾기 관리</p>
                 <a href="#" class="btn_close bkmk_close"></a>
                 <div class="con sc2" style="height:500px;"><!--높이는 style로 조정-->

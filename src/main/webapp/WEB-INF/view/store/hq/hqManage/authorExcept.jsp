@@ -8,7 +8,7 @@
 <div id="munuAuthDim" class="fullDimmed" style="display:none;"></div>
 <div id="munuAuthLayer" class="layer" style="display:none;">
   <div class="layer_inner">
-    <div class="title w600">
+    <div class="title w600px">
       <p id="popTitle" class="tit"></p>
       <a href="#" class="btn_close"></a>
       <div class="con">
@@ -258,7 +258,7 @@ var authCombo;
     },
       function (result) {
         s_alert.pop(result.message);
-        return;
+
       }
     );
   });
@@ -266,7 +266,7 @@ var authCombo;
   <%-- 추가 버튼 클릭 --%>
   $("#btnAddMenu").click(function(e){
 
-    var paramArr = new Array();
+    var paramArr = [];
     for(var i=0; i<avlblMenuGrid.collectionView.items.length; i++){
       var avlblMenu = avlblMenuGrid.collectionView.items[i];
       /*
@@ -292,7 +292,7 @@ var authCombo;
     },
       function (result) {
         s_alert.pop(result.message);
-        return;
+
       }
     );
 
@@ -300,7 +300,7 @@ var authCombo;
 
   <%-- 삭제 버튼 클릭 --%>
   $("#btnRemoveMenu").click(function(e){
-    var paramArr = new Array();
+    var paramArr = [];
     for(var i=0; i<beUseMenuGrid.collectionView.items.length; i++){
       var beUseMenu = beUseMenuGrid.collectionView.items[i];
       /*
@@ -326,7 +326,7 @@ var authCombo;
     },
       function (result) {
         s_alert.pop(result.message);
-        return;
+
       }
     );
   });
@@ -350,7 +350,7 @@ var authCombo;
     },
       function (result) {
         s_alert.pop(result.message);
-        return;
+
       }
     );
   }

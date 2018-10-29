@@ -31,10 +31,11 @@
       <tr>
         <th><s:message code="posTemplate.srchNm" /></th>
         <td colspan="2" class="oh">
-          <div class="sb-select fl w200">
+          <div class="sb-select fl w200px">
             <wj-combo-box
                 id="srchPrtClassCdCombo"
                 ng-model="prtClassCd"
+                control="prtClassCdCombo"
                 items-source="_getComboData('srchPrtClassCdCombo')"
                 display-member-path="name"
                 selected-value-path="value"
@@ -82,7 +83,7 @@
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="posTemplate.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="posTemplate.templtNm"/>" binding="templtNm" width="*"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="posTemplate.prtForm"/>" binding="prtForm" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="posTemplate.templtRegFg"/>" binding="templtRegFg" visible="false"></wj-flex-grid-column>
@@ -137,12 +138,11 @@
         </div>
       </div>
     </div>
-
   </div>
 
-  <script type="text/javascript">
-  var prtClassComboData = ${listPrintType};
-  </script>
-  <script type="text/javascript" src="/resource/solbipos/js/base/output/posTemplate/posTemplate.js?ver=20181016.01" charset="utf-8"></script>
-
 </div>
+
+<script type="text/javascript">
+  var prtClassComboData = ${listPrintType};
+</script>
+<script type="text/javascript" src="/resource/solbipos/js/base/output/posTemplate/posTemplate.js?ver=20181027.01" charset="utf-8"></script>

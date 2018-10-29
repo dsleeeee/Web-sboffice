@@ -14,7 +14,7 @@
     <div class="layer_inner">
     
         <%-- 상품분류 없을 경우 --%>
-        <div class="title w600">
+        <div class="title w600px">
             <p id="codeTitle" class="tit"></p>
             <a href="#" class="btn_close"></a>
             <div class="con">

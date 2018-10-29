@@ -6,7 +6,7 @@
 <div id="dim2" class="fullDimmed" style="display:none;" ></div>
 <div id="addStorelLayer" class="layer"  style="display:none; z-index:9999;">
   <div class="layer_inner">
-    <div class="title w600">
+    <div class="title w600px">
       <p class="tit"><s:message code="verManage.add.store" /></p>
       <a href="#" id="btnCloseSLayer" class="btn_close"></a>
       <div class="con">
@@ -93,7 +93,7 @@
 
         <div class="mt20 oh sb-select dkbr">
           <%-- 페이지 스케일  --%>
-          <div id="listScaleBox2" class="w150 fl"></div>
+          <div id="listScaleBox2" class="w150px fl"></div>
         </div>
 
         <%-- 위즈모 테이블 --%>
@@ -221,14 +221,14 @@
     },
       function (result) {
         s_alert.pop(result.message);
-        return;
+
       }
     );
   }
 
   <%-- 저장버튼 클릭 --%>
   $("#btnSaveStore").click(function(){
-    var paramArr = new Array();
+    var paramArr = [];
     for(var i = 0; i < grid3.collectionView.itemCount; i++ ){
       var item = grid3.collectionView.items[i];
       if(item.gChk){

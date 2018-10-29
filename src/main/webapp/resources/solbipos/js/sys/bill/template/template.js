@@ -174,15 +174,16 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
           var scopeLayer = agrid.getScope("popUpApplyTemplateCtrl");
           // 저장 파라미터 설정
           var paramArr = new Array();
-          for (var i = 0; i < scopeLayer.flex.collectionView.itemsEdited.length; i++) {
-            scopeLayer.flex.collectionView.itemsEdited[i].status = "U";
-            scopeLayer.flex.collectionView.itemsEdited[i].prtClassCd = document.getElementById("srchPrtClassCdVal").value;
-            scopeLayer.flex.collectionView.itemsEdited[i].templtCd = scopeLayer.srchTempltCdCombo.templtCd;
-            scopeLayer.flex.collectionView.itemsEdited[i].templtNm = scopeLayer.srchTempltCdCombo.templtNm;
-            scopeLayer.flex.collectionView.itemsEdited[i].prtForm = scopeLayer.srchTempltCdCombo.prtForm;
-            paramArr.push(scopeLayer.flex.collectionView.itemsEdited[i]);
+
+          for (var i = 0; i < scopeLayer.flexLayer.collectionView.itemsEdited.length; i++) {
+            scopeLayer.flexLayer.collectionView.itemsEdited[i].status = "U";
+            scopeLayer.flexLayer.collectionView.itemsEdited[i].prtClassCd = document.getElementById("srchPrtClassCdVal").value;
+            scopeLayer.flexLayer.collectionView.itemsEdited[i].templtCd = scopeLayer.srchTempltCdCombo.templtCd;
+            scopeLayer.flexLayer.collectionView.itemsEdited[i].templtNm = scopeLayer.srchTempltCdCombo.templtNm;
+            scopeLayer.flexLayer.collectionView.itemsEdited[i].prtForm = scopeLayer.srchTempltCdCombo.prtForm;
+            paramArr.push(scopeLayer.flexLayer.collectionView.itemsEdited[i]);
           }
-  
+
           if (paramArr.length <= 0) {
             s_alert.pop(messages["template.msg.select"]);
             return;
@@ -190,7 +191,7 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
           // 미적용 본사/단독매장 템플릿 적용
           $.postJSONArray("/sys/bill/template/unUsed/save.sb", paramArr, function (result) {
               s_alert.pop(messages["cmm.saveSucc"]);
-              scopeLayer.flex.collectionView.clearChanges();
+              scopeLayer.flexLayer.collectionView.clearChanges();
             },
             function (result) {
               s_alert.pop(result.message);

@@ -16,7 +16,7 @@
 <div id="layerpw" class="layer" style="display: none;">
   <div class="layer_inner">
     <!--layerContent-->
-    <div class="title w400">
+    <div class="title w400px">
 
       <%-- 타이틀 --%>
       <p class="tit">

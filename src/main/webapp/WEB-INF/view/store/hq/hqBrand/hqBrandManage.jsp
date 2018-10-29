@@ -76,7 +76,7 @@
 
   <div class="mt20 oh sb-select dkbr">
     <%--페이지 스케일 --%>
-    <div id="listScaleBox" class="w130 fl"></div>
+    <div id="listScaleBox" class="w100px fl"></div>
     <div class="tr">
       <%-- 브랜드신규등록 --%>
       <button class="btn_skyblue" id="btnAdd"><s:message code="hqBrand.newBrand" /></button>

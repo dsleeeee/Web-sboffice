@@ -10,7 +10,7 @@
 <div id="${layerName}Layer" class="layer" style="display: none;">
   <div class="layer_inner">
     <%--layerContent--%>
-    <div class="title w500">
+    <div class="title w500px">
       <p class="tit"><s:message code="ehgt.crncyFgRegist" /></p>
       <a href="#" class="btn_close ${layerName}Close"></a>
       <div class="con" style="height:300px;">

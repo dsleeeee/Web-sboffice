@@ -69,7 +69,7 @@
   <div class="mt20 oh sb-select dkbr">
     <%-- 엑셀다운로드 버튼 //TODO --%>
     <%--
-    <div class="w150 fl"></div>
+    <div class="w150px fl"></div>
     <button id="btnExcel" class="btn_skyblue fr"><s:message code="cmm.excel.down" /></button>
     --%>
   </div>
@@ -212,7 +212,7 @@
 <div id="storeDtlDim" class="fullDimmed" style="display:none;"></div>
 <div id="storeDtlLayer" class="layer" style="display:none;">
   <div class="layer_inner">
-    <div class="title w800">
+    <div class="title w800px">
       <p class="tit"><s:message code="verRecv.storerecv"/></p>
       <a href="#" class="btn_close"></a>
       <div class="con">
@@ -267,12 +267,12 @@
     },
       function (result) {
         s_alert.pop(result.message);
-        return;
+
     });
 
     var storeTitle = "["+items.storeCd+"] " + items.storeNm;
 
-    $("#storeTit").text(storeTitle)
+    $("#storeTit").text(storeTitle);
     $("#storeDtlDim").show();
     $("#storeDtlLayer").show();
   }

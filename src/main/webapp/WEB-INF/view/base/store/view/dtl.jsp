@@ -6,7 +6,7 @@
 <div id="${layerName}Mask" class="fullDimmed" style="display: none;"></div>
 <div id="${layerName}Layer" class="layer" style="display: none;">
   <div class="layer_inner">
-    <div class="title w800" style="overflow:auto; height:700px;">
+    <div class="title w800px" style="overflow:auto; height:700px;">
       <p class="tit" id="storeTitle"></p>
       <a href="#" class="btn_close ${layerName}Close"></a>
       <div class="con">
@@ -228,7 +228,7 @@
     },
       function (result) {
         s_alert.pop(result.message);
-        return;
+
     });
   }
     

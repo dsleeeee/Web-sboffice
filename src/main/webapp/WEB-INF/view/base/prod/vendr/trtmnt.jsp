@@ -9,7 +9,7 @@
 <div id="dimTrtMnt" class="fullDimmed" style="display:none;"></div>
 <div id="layerTrtMnt" class="layer" style="display:none;">
   <div class="layer_inner">
-    <div class="title w800">
+    <div class="title w800px">
       <%-- 타이틀 --%>
       <p id="popTitle" class="tit"></p>
       <a href="#" class="btn_close"></a>
@@ -158,7 +158,7 @@
       return;
     }
 
-    var paramArr = new Array();
+    var paramArr = [];
     for(var i = 0; i < grid2.collectionView.itemCount; i++ ){
       var item = grid2.collectionView.items[i];
       if(item.gChk){
@@ -192,7 +192,7 @@
       return;
     }
 
-    var paramArr = new Array();
+    var paramArr = [];
     for(var i = 0; i < grid1.collectionView.itemCount; i++ ){
       var item = grid1.collectionView.items[i];
       if(item.gChk){

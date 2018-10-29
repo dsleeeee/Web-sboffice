@@ -24,7 +24,7 @@
       <th><s:message code="loanInfo.searchDate"/></th>
       <td colspan="3">
         <div class="sb-select">
-          <span class="txtIn w150 fl">
+          <span class="txtIn w150px fl">
               <wj-combo-box
                 id="srchDateFg"
                 ng-model="dateFg"
@@ -38,9 +38,9 @@
               </wj-combo-box>
           </span>
           <div id="dateLayer" class="sb-select fl ml5" style="display: none;">
-            <span class="txtIn"><input id="srchStartDate" class="w120"></span>
+            <span class="txtIn"><input id="srchStartDate" class="w120px"></span>
             <span class="rg">~</span>
-            <span class="txtIn"><input id="srchEndDate" class="w120"></span>
+            <span class="txtIn"><input id="srchEndDate" class="w120px"></span>
           </div>
         </div>
       </td>

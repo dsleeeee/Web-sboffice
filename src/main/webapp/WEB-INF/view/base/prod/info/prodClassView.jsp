@@ -23,7 +23,7 @@
     <div class="w50 fl">
       <div class="wj-TblWrapBr ml10 pd20" style="height:500px;">
         <div class="sb-select dkbr mb10 oh">
-          <div id="theComboBox3" class="w130 fl"></div>
+          <div id="theComboBox3" class="w130px fl"></div>
           <div class="fl">
             <%-- 전체펼치기 --%>
             <button class="btn_skyblue" id="btnExpand"><s:message code="cmm.all.expand" /></button>
@@ -143,7 +143,7 @@
                       prodClassNm : "상품분류" ,
                       prodClassCd : "00000" ,
                       pProdClassCd : null,
-                      level : 0 }
+                      level : 0 };
 
           tree.itemsSource = [root];
           tree.loadTree(true);
@@ -215,7 +215,7 @@
       <%-- 하위 분류 존재시, 하위분류부터 삭제 가능합니다. --%>
       if(tree.selectedNode.nodes != null) {
         s_alert.pop("<s:message code='info.require.delete.child' />");
-        return;
+
 
       } else {
 
@@ -237,7 +237,7 @@
     $("#btnSave").click(function(){
 
       var msg = "<s:message code='info.require.clsNm'/>";
-      var paramArr = new Array();
+      var paramArr = [];
 
       for(var i = 0; i < view.itemsAdded.length; i++) {
         if(view.itemsAdded[i].prodClassNm == "" || view.itemsAdded[i].prodClassNm == msg) {

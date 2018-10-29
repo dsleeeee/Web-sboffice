@@ -23,9 +23,9 @@
       <th><s:message code="rtnOutstockConfm.outDate"/></th>
       <td colspan="3">
         <div class="sb-select">
-          <span class="txtIn"><input id="srchStartDate" class="w150"></span>
+          <span class="txtIn"><input id="srchStartDate" class="w150px"></span>
           <span class="rg">~</span>
-          <span class="txtIn"><input id="srchEndDate" class="w150"></span>
+          <span class="txtIn"><input id="srchEndDate" class="w150px"></span>
         </div>
       </td>
     </tr>

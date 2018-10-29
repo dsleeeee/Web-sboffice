@@ -23,9 +23,9 @@
       <th><s:message code="dstmn.outDate"/></th>
       <td colspan="3">
         <div class="sb-select">
-          <span class="txtIn"><input id="srchStartDate" class="w150"></span>
+          <span class="txtIn"><input id="srchStartDate" class="w150px"></span>
           <span class="rg">~</span>
-          <span class="txtIn"><input id="srchEndDate" class="w150"></span>
+          <span class="txtIn"><input id="srchEndDate" class="w150px"></span>
         </div>
       </td>
     </tr>
@@ -72,7 +72,7 @@
       <%-- 거래명세표 --%>
       <th><s:message code="dstmn.stmtAcct"/></th>
       <td colspan="3">
-        <span class="txtIn w150 sb-select fl mr5">
+        <span class="txtIn w150px sb-select fl mr5">
           <wj-combo-box
             id="stmtAcctFg"
             ng-model="stmtAcctFg"
@@ -92,7 +92,7 @@
       <th><s:message code="dstmn.writtenDateMonth"/></th>
       <td colspan="3">
         <div class="sb-select fl mr5">
-          <span class="txtIn"><input id="writtenDate" class="w120"></span>
+          <span class="txtIn"><input id="writtenDate" class="w120px"></span>
         </div>
         <a href="#" class="btn_grayS" ng-click=""><s:message code="dstmn.taxBillIssue"/></a>
       </td>

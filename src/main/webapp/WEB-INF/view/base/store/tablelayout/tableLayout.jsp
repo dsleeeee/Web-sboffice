@@ -13,7 +13,7 @@
 </style>
 <script>
 var urlParams = (function(url) {
-  var result = new Object();
+  var result = {};
   var idx = url.lastIndexOf('?');
 
   if (idx > 0) {
@@ -107,7 +107,7 @@ window.mxLanguages = window.mxLanguages || ['ko'];
             <div>
               <div class="oh">
                 <span class="s12 fl lh30 bk mr10"><s:message code="tableLayout.bgColor"/></span>
-                <div class="sb-select fl txtIn w115 mr20">
+                <div class="sb-select fl txtIn w115px mr20">
                   <div id="bgColor"></div>
                 </div>
                 <span class="s12 fl lh30 bk mr10"><s:message code="tableLayout.bgImg"/></span>
@@ -145,7 +145,7 @@ window.mxLanguages = window.mxLanguages || ['ko'];
 <div class="layer floorLayer" id="floorLayer" style="display: none;">
   <div class="layer_inner">
     <%--layerContent--%>
-    <div class="title w400">
+    <div class="title w400px">
       <p class="tit"><s:message code="tableLayout.tableLayout"/></p>
       <a href="#" class="btn_close _btnClose"></a>
       <div class="con sc" style="height:300px;">
@@ -210,7 +210,7 @@ $("._btnClose").click(function(e) {
         mxResources.parse(xhr[0].getText());
 
         // Configures the default graph theme
-        var themes = new Object();
+        var themes = {};
         themes[Graph.prototype.defaultThemeName] = xhr[1].getDocumentElement();
 
         // Main

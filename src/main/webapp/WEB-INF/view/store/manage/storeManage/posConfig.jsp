@@ -8,7 +8,7 @@
     <span class="bk fl lh30 mr10">
       <s:message code="storeManage.posNm" /> :
     </span>
-    <div class="sb-select dkbr fl w150 mr10">
+    <div class="sb-select dkbr fl w150px mr10">
       <select id="sPosNm" class="wj-content"></select>
     </div>
 

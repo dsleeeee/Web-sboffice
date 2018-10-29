@@ -23,7 +23,7 @@
       <th><s:message code="cmm.search.date"/></th>
       <td colspan="3">
         <div class="sb-select">
-          <span class="txtIn w150">
+          <span class="txtIn w150px">
           <wj-combo-box
             id="srchDateFg"
             ng-model="dateFg"
@@ -34,9 +34,9 @@
             initialized="_initComboBox(s)">
           </wj-combo-box>
           </span>
-          <span class="txtIn"><input id="srchStartDate" class="w150"></span>
+          <span class="txtIn"><input id="srchStartDate" class="w150px"></span>
           <span class="rg">~</span>
-          <span class="txtIn"><input id="srchEndDate" class="w150"></span>
+          <span class="txtIn"><input id="srchEndDate" class="w150px"></span>
         </div>
       </td>
     </tr>
@@ -52,7 +52,7 @@
     <%-- 반품일자 --%>
     <p class="s14 bk fl mr10 lh30"><s:message code="rtnOutstockData.outDate"/></p>
     <div class="sb-select mr10 fl">
-      <span class="txtIn"><input id="outDate" class="w150"></span>
+      <span class="txtIn"><input id="outDate" class="w150px"></span>
     </div>
     <%-- 반품자료생성 --%>
     <button type="button" id="btnDataCreate" class="btn_skyblue ml5 fl" ng-click="saveValueCheck()"><s:message code="rtnOutstockData.dataCreate"/></button>
@@ -198,7 +198,7 @@
     };
 
     $scope.saveValueCheck = function () {
-      var params         = new Array();
+      var params         = [];
       var sysStatFgCheck = true;
       var loanCheck      = true;
 

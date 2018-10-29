@@ -49,7 +49,7 @@
         <tr>
           <th><s:message code="rtnStoreOrder.dtl.option1"/></th>
           <td colspan="3">
-            <span class="txtIn w150 sb-select fl mr5">
+            <span class="txtIn w150px sb-select fl mr5">
               <wj-combo-box
                 id="option1"
                 ng-model="option1"
@@ -66,7 +66,7 @@
         <tr>
           <th><s:message code="rtnStoreOrder.dtl.option2"/></th>
           <td colspan="3">
-            <span class="txtIn w150 sb-select fl mr5">
+            <span class="txtIn w150px sb-select fl mr5">
               <wj-combo-box
                 id="option2"
                 ng-model="option2"
@@ -83,9 +83,9 @@
             <p id="option2OutLayer" class="s14 bk lh30 fl ml10" style="display: none;"><s:message code="rtnStoreOrder.dtl.outDate"/></p>
             <p id="option2SaleLayer" class="s14 bk lh30 fl ml10" style="display: none;"><s:message code="rtnStoreOrder.dtl.saleDate"/></p>
             <div id="option2DateLayer" class="sb-select fl ml10" style="display: none;">
-              <span class="txtIn"><input id="srchRegStartDate" class="w120"></span>
+              <span class="txtIn"><input id="srchRegStartDate" class="w120px"></span>
               <span class="rg">~</span>
-              <span class="txtIn"><input id="srchRegEndDate" class="w120"></span>
+              <span class="txtIn"><input id="srchRegEndDate" class="w120px"></span>
             </div>
             <p id="option2OrdLayer2" class="s14 bk lh30 fl ml10" style="display: none;"><s:message code="rtnStoreOrder.dtl.txtOption2Ord"/></p>
             <p id="option2OutLayer2" class="s14 bk lh30 fl ml10" style="display: none;"><s:message code="rtnStoreOrder.dtl.txtOption2Out"/></p>
@@ -353,7 +353,7 @@
 
     // 반품 상품 저장
     $scope.saveRtnStoreOrderRegist = function () {
-      var params   = new Array();
+      var params   = [];
       var orderTot = 0;
       for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
         var item = $scope.flex.collectionView.itemsEdited[i];

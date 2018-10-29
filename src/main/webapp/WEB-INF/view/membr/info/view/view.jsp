@@ -30,9 +30,9 @@
         </th>
         <td>
           <div class="sb-select">
-            <span class="txtIn"> <input id="startDate" name="startDate" class="w200" /></span>
+            <span class="txtIn"> <input id="startDate" name="startDate" class="w200px" /></span>
             <span class="rg">~</span>
-            <span class="txtIn"> <input id="endDate" name="endDate" class="w200" /></span>
+            <span class="txtIn"> <input id="endDate" name="endDate" class="w200px" /></span>
             </span>
           </div>
         </td>
@@ -44,9 +44,9 @@
         </th>
         <td>
           <div class="sb-select">
-            <span class="txtIn"> <input id="anvrsStartDate" name="anvrsStartDate" class="w200" /></span>
+            <span class="txtIn"> <input id="anvrsStartDate" name="anvrsStartDate" class="w200px" /></span>
             <span class="rg">~</span>
-            <span class="txtIn"> <input id="anvrsEndDate" name="anvrsEndDate" class="w200" /></span>
+            <span class="txtIn"> <input id="anvrsEndDate" name="anvrsEndDate" class="w200px" /></span>
             </span>
           </div>
         </td>

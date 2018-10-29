@@ -6,7 +6,7 @@
 <div id="posAuthDim" class="fullDimmed" style="display:none;"></div>
 <div id="posAuthLayer" class="layer" style="display:none;">
   <div class="layer_inner">
-    <div class="title w800">
+    <div class="title w800px">
       <p class="tit" id="popTitle"></p>
       <a href="#" class="btn_close"></a>
       <div class="con sc2" style="height:500px;">
@@ -63,7 +63,7 @@
         },
         function (result) {
           s_alert.pop(result.message);
-          return;
+
         }
     );
   }
@@ -83,7 +83,7 @@
 
   <%-- 저장버튼 클릭 --%>
   $("#posAuthLayer #btnSave").click(function(){
-    var paramArr = new Array();
+    var paramArr = [];
 
     for(var i = 0; i < authSettingGrid.collectionView.itemCount; i ++) {
       authSettingGrid.collectionView.items[i].fnkeyNo = selectedFnkey.fnkeyNo;

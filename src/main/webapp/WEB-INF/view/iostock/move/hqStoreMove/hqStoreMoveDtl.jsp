@@ -25,14 +25,14 @@
           <th><s:message code="hqStoreMove.dtl.moveDate"/></th>
           <td>
             <div class="sb-select">
-              <span class="txtIn"><input id="dtlMoveDate" class="w150" ng-model="moveDate"></span>
+              <span class="txtIn"><input id="dtlMoveDate" class="w150px" ng-model="moveDate"></span>
             </div>
           </td>
           <%-- 배송구분 --%>
           <th><s:message code="hqStoreMove.dtl.dlvrFg"/></th>
           <td>
             <div class="sb-select">
-              <span class="txtIn w150">
+              <span class="txtIn w150px">
                 <wj-combo-box
                   id="srchDtlDlvrFg"
                   ng-model="dlvrFg"

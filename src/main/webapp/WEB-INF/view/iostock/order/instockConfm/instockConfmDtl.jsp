@@ -35,7 +35,7 @@
           <%-- 거래명세표 --%>
           <th><s:message code="instockConfm.dtl.stmtAcct"/></th>
           <td colspan="3">
-            <span class="txtIn w150 sb-select fl mr5">
+            <span class="txtIn w150px sb-select fl mr5">
               <wj-combo-box
                 id="stmtAcctFg"
                 ng-model="stmtAcctFg"
@@ -68,7 +68,7 @@
           </span>
           <%-- 입고일자 --%>
           <div id="divDtlInDate" class="sb-select ml10 fl" style="display: none;">
-            <span class="txtIn"><input id="dtlInDate" class="w120"></span>
+            <span class="txtIn"><input id="dtlInDate" class="w120px"></span>
           </div>
           <%-- 출고내역으로 입고내역 세팅 --%>
           <button type="button" id="btnSetOutToIn" class="btn_skyblue ml5 fl" ng-click="setOutToIn()"><s:message code="instockConfm.dtl.setOutToIn"/></button>

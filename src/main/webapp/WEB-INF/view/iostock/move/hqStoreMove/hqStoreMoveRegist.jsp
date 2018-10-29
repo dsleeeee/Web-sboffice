@@ -25,14 +25,14 @@
           <th><s:message code="hqStoreMove.reg.moveDate"/></th>
           <td>
             <div class="sb-select">
-              <span class="txtIn"><input id="regMoveDate" class="w150" ng-model="moveDate"></span>
+              <span class="txtIn"><input id="regMoveDate" class="w150px" ng-model="moveDate"></span>
             </div>
           </td>
           <%-- 배송구분 --%>
           <th><s:message code="hqStoreMove.reg.dlvrFg"/></th>
           <td>
             <div class="sb-select">
-              <span class="txtIn w150">
+              <span class="txtIn w150px">
                 <wj-combo-box
                   id="srchRegDlvrFg"
                   ng-model="regDlvrFg"
@@ -303,7 +303,7 @@
 
     // 저장
     $scope.save = function (confirmFg) {
-      var params = new Array();
+      var params = [];
 
       for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
         var item = $scope.flex.collectionView.itemsEdited[i];
