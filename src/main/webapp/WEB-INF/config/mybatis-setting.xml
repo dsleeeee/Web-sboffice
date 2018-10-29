@@ -443,6 +443,7 @@
     <typeAlias alias="rtnInstockConfmVO" type="kr.co.solbipos.iostock.orderReturn.rtnInstockConfm.service.RtnInstockConfmVO"/>
     <typeAlias alias="volmErrVO" type="kr.co.solbipos.iostock.volmErr.volmErr.service.VolmErrVO"/>
     <typeAlias alias="hqStoreMoveVO" type="kr.co.solbipos.iostock.move.hqStoreMove.service.HqStoreMoveVO"/>
+    <typeAlias alias="storeMoveVO" type="kr.co.solbipos.iostock.move.storeMove.service.StoreMoveVO"/>
 
     <typeAlias alias="excpForwardProductVO" type="kr.co.solbipos.application.pos.exceptForward.service.ExcpForwardProductVO"/>
     <typeAlias alias="productionVO" type="kr.co.solbipos.application.pos.production.service.ProductionVO"/>

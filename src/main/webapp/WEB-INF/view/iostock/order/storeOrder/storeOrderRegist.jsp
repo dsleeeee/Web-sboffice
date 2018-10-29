@@ -548,7 +548,7 @@
 
     // 안전재고 수량적용.
     $scope.setSafeToOrder = function () {
-      $rootScope.$broadcast('loadingPopupActive');
+      $rootScope.$broadcast('loadingPopupActive', messages["cmm.progress"]);
       // 데이터 처리중 팝업 띄우기위해 setTimeout 사용.
       setTimeout(function() {
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
