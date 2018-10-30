@@ -2,19 +2,43 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
-<div id="kitchenPrintArea" style="display:none;">
+<div id="kitchenPrintArea" style="display:none;" ng-controller="kitchenPrintCtrl">
 
   <div class="wj-TblWrap mr10">
     <div class="oh mb10">
       <%-- 삭제 --%>
-      <span class="fr ml5"><a id="btnkitchenPrintDel" href="#" class="btn_grayS2"><s:message code="cmm.delete" /></a></span>
+      <span class="fr ml5"><a id="btnkitchenPrintDel" href="#" class="btn_grayS2" ng-click="delete()"><s:message code="cmm.delete" /></a></span>
       <%-- 추가 --%>
-      <span class="fr"><a id="btnkitchenPrintAdd" href="#" class="btn_grayS2"><s:message code="cmm.add" /></a></span>
+      <span class="fr"><a id="btnkitchenPrintAdd" href="#" class="btn_grayS2" ng-click="addRow()"><s:message code="cmm.add" /></a></span>
     </div>
   </div>
 
   <%-- 주방프린터 그리드 --%>
-  <div id="kitchenPrintGrid" style="height:400px;"></div>
+  <%--<div id="kitchenPrintGrid" style="height:400px;"></div>--%>
+  <div id="kitchenPrintGrid" style="height: 400px;">
+    <wj-flex-grid
+            autoGenerateColumns="false"
+            control="flex"
+            initialized="initGrid(s,e)"
+            sticky-headers="true"
+            selection-mode="Row"
+            items-source="data"
+            item-formatter="_itemFormatter">
+
+      <!-- define columns -->
+      <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="storeManage.kitchenPrint.posNo"/>" binding="posNo" data-map="posDataMap" ></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="storeManage.prterNo"/>" binding="prterNo" ></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="storeManage.prterNm"/>" binding="prterNm" ></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="storeManage.prterKind"/>" binding="prterKind" data-map="prterKindDataMap"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="storeManage.prterPort"/>" binding="prterPort" data-map="prterPortDataMap"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="storeManage.prterSpeed"/>" binding="prterSpeed" width="*" data-map="prterSpeedDataMap" is-read-only="true" ></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="storeManage.prterOutputQty"/>" binding="prterOutputQty" width="*" is-read-only="true"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="storeManage.prterNetIp"/>" binding="prterNetIp" width="*" is-read-only="true"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="storeManage.prterNetPort"/>" binding="prterNetPort" width="*" is-read-only="true"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="storeManage.useYn"/>" binding="useYn" width="*" is-read-only="true" data-map="useYnFgDataMap"></wj-flex-grid-column>
+    </wj-flex-grid>
+  </div>
 
   <%-- 저장버튼 --%>
   <div class="tc">
@@ -23,89 +47,14 @@
 </div>
 
 <script>
-
 <%-- 공통코드 --%>
 var prterKind   = ${cnv.getEnvCodeExcpAll("4030")};
 var prterPort   = ${cnv.getEnvCodeExcpAll("4031")};
 var prterSpeed  = ${cnv.getEnvCodeExcpAll("4032")};
 var useYn       = ${ccu.getCommCodeExcpAll("067")};
 
-var posNoDM;
-var prterKindDM   = new wijmo.grid.DataMap(prterKind, 'value', 'name');
-var prterPortDM   = new wijmo.grid.DataMap(prterPort, 'value', 'name');
-var prterSpeedDM  = new wijmo.grid.DataMap(prterSpeed, 'value', 'name');
-var useYnDataMap  = new wijmo.grid.DataMap(useYn, 'value', 'name');
-
-<%-- 그리드  설정 --%>
-var kitchenPrintHeader =
-  [
-    {binding:"gChk", header:"<s:message code='cmm.chk' />", dataType:wijmo.DataType.Boolean, width:40},
-    {binding:"posNo", header:"<s:message code='storeManage.kitchenPrint.posNo' />", width:"*"},
-    {binding:"prterNo", header:"<s:message code='storeManage.prterNo' />", width:"*"},
-    {binding:"prterNm", header:"<s:message code='storeManage.prterNm' />", width:"*"},
-    {binding:"prterKindFg", header:"<s:message code='storeManage.prterKind' />", dataMap:prterKindDM, width:"*"},
-    {binding:"prterPortFg", header:"<s:message code='storeManage.prterPort' />", dataMap:prterPortDM, width:"*"},
-    {binding:"prterSpeedFg", header:"<s:message code='storeManage.prterSpeed' />", dataMap:prterSpeedDM, width:"*"},
-    {binding:"prterOutputQty", header:"<s:message code='storeManage.prterOutputQty' />", width:"*"},
-    {binding:"prterNetIp", header:"<s:message code='storeManage.prterNetIp' />", width:"*"},
-    {binding:"prterNetPort", header:"<s:message code='storeManage.prterNetPort' />", width:"*"},
-    {binding:"useYn", header:"<s:message code='storeManage.useYn' />", dataMap:useYnDataMap, width:"*"}
-  ];
-
-var kitchenPrintGrid = wgrid.genGrid("#kitchenPrintGrid", kitchenPrintHeader);
-kitchenPrintGrid.isReadOnly = false;
-
-<%-- 주방프린터 영역 보여줌 --%>
-function showkitchenPrintLayout(){
-
-  $("#kitchenPrintArea").show();
-  // TODO : kitchenPrintHeader 바인드 처리 시작
-  if(posNoDM == undefined) {
-    posNoDM = new wijmo.grid.DataMap(posList, 'posNo', 'posNm');
-  }
-
-  kitchenPrintGrid.columns[1].dataMap = posNoDM;  // posNo dataMap 설정
-  // TODO : kitchenPrintHeader 바인드 처리 끝
-
-  var param = {};
-  param.hqOfficeCd  = selectedStore.hqOfficeCd;
-  param.storeCd     = selectedStore.storeCd;
-
-  <%-- 주방프린터 목록 조회 --%>
-  $.postJSON("/store/manage/storeManage/storeManage/getKitchenPrintInfo.sb", param, function(result) {
-    var list = result.data.list;
-    kitchenPrintGrid.itemsSource = new wijmo.collections.CollectionView(list);
-    kitchenPrintGrid.itemsSource.trackChanges = true;
-  },
-    function (result) {
-      s_alert.pop(result.message);
-      return;
-    }
-  );
-}
-
-<%-- 추가 버튼 클릭 --%>
-$("#btnkitchenPrintAdd").click(function(){
-  kitchenPrintGrid.collectionView.newItemCreator = function() {
-    return {
-      prterKind: '0',
-      prterPort: '0',
-      prterSpeed: '0'
-    }
-  };
-  var newItem = kitchenPrintGrid.collectionView.addNew();
-  kitchenPrintGrid.collectionView.commitNew();
-});
-
-<%-- 삭제 버튼 클릭 --%>
-$("#btnkitchenPrintDel").click(function(){
-  for(var i = kitchenPrintGrid.itemsSource.itemCount-1; i >= 0; i-- ){
-    var item = kitchenPrintGrid.itemsSource.items[i];
-    if(item.gChk){
-      kitchenPrintGrid.itemsSource.removeAt(i);
-    }
-  }
-});
+</script>
+<script>
 
 <%-- 저장 버튼 클릭 --%>
 $("#btnSaveKitchenPrint").click(function(){
@@ -149,3 +98,4 @@ function hideKitchenPrintLayout() {
 }
 
 </script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/kitchenPrint.js?ver=2018102301" charset="utf-8"></script>

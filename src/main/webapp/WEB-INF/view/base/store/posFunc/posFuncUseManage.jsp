@@ -29,7 +29,7 @@
           </div>
         </div>
         <%-- 그리드 --%>
-        <div id="posFuncGrid"></div>
+        <div id="posFuncGrid" style="height:500px;"></div>
       </div>
     </div>
     <%-- 오른쪽 --%>
@@ -46,7 +46,7 @@
           <button class="btn_skyblue" id="btnSave"><s:message code="cmm.save" /></button>
         </div>
         <%-- 그리드 --%>
-        <div id="useFuncGrid"></div>
+        <div id="useFuncGrid" style="height:500px;"></div>
         <%-- 기능키영역 --%>
         <div id="funcKeyDiv" style="display:none">
           <div style="height: 290px;">

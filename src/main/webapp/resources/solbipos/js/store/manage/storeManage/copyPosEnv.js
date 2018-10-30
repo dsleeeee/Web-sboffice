@@ -1,43 +1,56 @@
 /****************************************************************
  *
- * 파일명 : setTableGroup.js
- * 설  명 : 테이블 그룹 관리 팝업 JavaScript
+ * 파일명 : copyPosEnvCtrl.js
+ * 설  명 : 포스 환경설정 복사 팝업 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
- * 2018.10.25     김지은      1.0
+ * 2018.10.26     김지은      1.0
  *
  * **************************************************************/
 
-app.controller('tableGroupCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('copyPosEnvCtrl', ['$scope', '$http', function ($scope, $http) {
 
-  angular.extend(this, new RootController('tableGroupCtrl', $scope, $http, false));
+  angular.extend(this, new RootController('copyPosEnvCtrl', $scope, $http, false));
+
+  // 기준포스
+  $scope.copyPos;
+  $scope.setPos = function(s) {
+    $scope.copyPos = s.selectedItem.posNo;
+  };
+  $scope.getPos = function(){
+    return $scope.copyPos;
+  };
+
+  // 타겟포스
+  $scope.targetPos;
+  $scope.setTargetPos = function(s){
+    $scope.targetPos = s.selectedItem.posNo;
+  };
+  $scope.getTargetPos = function(){
+    return $scope.targetPos;
+  };
 
   // 팝업 오픈시 테이블 그룹정보 조회
-  $scope.$on("tableGroupCtrl", function(event, data) {
-    $scope.getTableGroupList();
+  $scope.$on("copyPosEnvCtrl", function(event, data) {
+    $scope.getPosList();
     event.preventDefault();
   });
 
-  // 테이블 그룹 목록 조회
-  $scope.getTableGroupList = function(){
+  // 포스명칭 목록 조회
+  $scope.getPosList = function(){
 
     var params        = {};
     var storeScope    = agrid.getScope('storeManageCtrl');
-    var posEnvScope      = agrid.getScope('posEnvCtrl');
 
     params.hqOfficeCd = storeScope.getSelectedStore().hqOfficeCd;
     params.storeCd    = storeScope.getSelectedStore().storeCd;
-    params.posNo      = posEnvScope.getSelectedPosNo();
-    params.envstFg    = "03"; // 포스환경
-
-    console.log(params)
 
     $scope.$broadcast('loadingPopupActive');
 
     $http({
       method : 'POST',
-      url    : '/store/manage/storeManage/storeManage/getPosConfigList.sb',
+      url    : '/store/manage/storeManage/storeManage/getPosList.sb',
       params : params,
       headers: {'Content-Type': 'application/json; charset=utf-8'}
     }).then(function successCallback(response) {
@@ -47,28 +60,12 @@ app.controller('tableGroupCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.tableGroupLayer.hide();
         return false;
       }
-      var posList = posEnvScope.getPosList();
-      var grpList = response.data.data.groupList;
 
-      var innerHtml = "";
-      for(var i=0; i<posList.length; i++) {
+      var list = response.data.data.list;
 
-        innerHtml += "<tr>";
-        innerHtml += "<td class='tc'>"+posList[i].rownum+"</td>";
-        innerHtml += "<td class='tc'>"+posList[i].posNo+"</td>";
-        innerHtml += "<td class='tc'>";
-        innerHtml += "<select name='pos'id='pos"+posList[i].posNo+"'>";
-
-        for(var j=0; j<grpList.length; j++){
-          innerHtml += "<option value='"+grpList[j].tblGrpCd+"'>"+grpList[j].tblGrpNm+"</option>";
-        }
-
-        innerHtml += "</select>";
-        innerHtml += "</td>";
-        innerHtml += "</tr>";
-      }
-
-      $("#tabGrpContent").html(innerHtml);
+      console.log(list)
+      $scope._setComboData("posNo", list);
+      $scope._setComboData("tPosNo", list);
 
       $scope.$broadcast('loadingPopupInactive');
 
@@ -79,35 +76,35 @@ app.controller('tableGroupCtrl', ['$scope', '$http', function ($scope, $http) {
     });
   };
 
-  // 저장
-  $scope.save = function(){
 
-    var storeScope  = agrid.getScope('storeManageCtrl');
-    var posEnvScope = agrid.getScope('posEnvCtrl');
-    var posLength   = posEnvScope.getPosList().length;
+  // 복사
+  $scope.copy = function(){
 
-    var params      = new Array();
+    var originalPos = $scope.getPos();
+    var targetPos   = $scope.getTargetPos();
 
-    $("#tabGrpContent select").each(function(index){
+    // 기존 포스번호와 타겟 포스번호는 서로 다른 값이 되어야 합니다.
+    if(originalPos === targetPos){
+      $scope._popMsg(messages["storeManage.require.diff.posNo"]);
+      return false;
+    }
 
-      var id = $(this).attr("id");
+    var params          = new Array();
+    var storeScope      = agrid.getScope('storeManageCtrl');
 
-      var obj = {};
-      obj.storeCd   = storeScope.getSelectedStore().storeCd;
-      obj.posNo     = id.substring(3,id.length);
-      obj.envstVal  = $("#"+ id).val();
+    params.hqOfficeCd   = storeScope.getSelectedStore().hqOfficeCd;
+    params.storeCd      = storeScope.getSelectedStore().storeCd;
+    params.posNo        = originalPos;
+    params.targetPosNo  = targetPos;
 
-      params.push(obj);
-    });
-
-    // console.log(params);
+    console.log(params);
 
     $scope.$broadcast('loadingPopupActive');
 
     // ajax 통신 설정
     $http({
       method: 'POST', //방식
-      url: "/store/manage/storeManage/storeManage/savePosTabGrp.sb",
+      url: "/store/manage/storeManage/storeManage/copyPosSetting.sb",
       data: params,
       headers: {'Content-Type': 'application/json; charset=utf-8'}
     }).then(function successCallback(response) {
@@ -115,7 +112,7 @@ app.controller('tableGroupCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.$broadcast('loadingPopupInactive');
       if(response.data.status === "OK") {
         $scope._popMsg(messages["cmm.saveSucc"]);
-        $scope.tableGroupLayer.hide();
+        $scope.copyPosEnvLayer.hide();
       }
       else if(response.data.status === "FAIL") {
         $scope._popMsg("Ajax Fail By HTTP Request");
@@ -144,4 +141,5 @@ app.controller('tableGroupCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     });
   };
+
 }]);

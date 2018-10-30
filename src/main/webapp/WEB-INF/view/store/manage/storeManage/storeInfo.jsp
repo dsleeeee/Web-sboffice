@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="storeInfoLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:800px;height:600px;" fade-in="false" fade-out="false">
+<wj-popup control="storeInfoLayer" show-trigger="Click" hide-trigger="Click" style="width:800px;height:600px;" fade-in="false" fade-out="false">
   <div class="wj-dialog wj-dialog-columns title" ng-controller="storeInfoCtrl">
 
     <%-- header --%>
@@ -256,7 +256,7 @@
   </div>
 </wj-popup>
 <script>
-  var startDt = "${sessionScope.sessionInfo.startDt}";
+  var startDt = "${sessionScope.sessionInfo.startDate}";
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=2018102301" charset="utf-8"></script>

@@ -14,7 +14,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('storeInfoCtrl', $scope, $http, false));
 
-  // 조회조건 콤보박스 데이터 Set //todo
+  // 조회조건 콤보박스 데이터
   $scope._setComboData("clsFg", clsFg);
   $scope._setComboData("sysStatFg", sysStatFg);
   $scope._setComboData("areaCd", areaCd);
@@ -59,6 +59,9 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 매장정보 조회
   $scope.getStoreInfo = function(){
+
+    // var envScope = agrid.getScope('storeEnvCtrl');
+    // console.log(envScope)
 
     // 선택된 매장
     var storeScope = agrid.getScope('storeManageCtrl');
@@ -328,8 +331,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     envPopup.show(true, function (s) {
     });
 
-    var envScope = agrid.getScope('storeEnvCtrl');
-    envScope.changeEnvGroup("00");
+    // var envScope = agrid.getScope('storeEnvCtrl');
+    // envScope.setEnvGroupCd("00");
   };
 
 }]);
