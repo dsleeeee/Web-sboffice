@@ -14,7 +14,7 @@
 var app = agrid.getApp();
 
 /**
- * 출력코드구성 그리드 생성
+ * 상품정보관리 그리드 생성
  */
 app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker

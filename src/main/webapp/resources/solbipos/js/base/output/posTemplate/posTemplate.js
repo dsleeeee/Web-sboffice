@@ -81,6 +81,12 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
             thePreview.innerHTML = "";
           }
           $("#btnSaveTemplate").show();
+          // 실제출력물인경우 출력물적용 버튼 감춤
+          if (selectedRow.templtCd === '000') {
+            $("#btnApplyToPrint").hide();
+          } else {
+            $("#btnApplyToPrint").show();
+          }
         }
       }
     });
@@ -92,18 +98,47 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquiryMain("/base/output/posTemplate/template/list.sb", params, function() {
         // 코드리스트 조회
-        searchPrintCodeList(params);
+        $scope._postJSONQuery.withOutPopUp("/base/output/posTemplate/code/list.sb", params,
+          function(response) {
+            var list = response.data.data.list;
+            $scope.listBoxCodeList.itemsSource = list;
+
+            if (list.length === undefined || list.length === 0) {
+              // 코드리스트 초기화
+              listBoxCodeList.itemsSource = new wijmo.collections.CollectionView([]);
+              // 편집/미리보기 폼 초기화
+              theTarget.value = "";
+              thePreview.innerHTML = "";
+            } else {
+              $("#btnAddTemplate").show();
+              $("#btnDelTemplate").show();
+              $("#btnSaveTemplate").show();
+              // 매장적용 버튼은 본사만
+              if ( gvOrgnFg === "H" ) {
+                $("#btnApplyStoreTemplate").show();
+              }
+              $("#btnSaveEditTemplate").show();
+              if ($scope.flex.rows.length > 0) {
+                $scope.flex.select(0,1);
+                theTarget.value = $scope.flex.rows[0]._data.prtForm;
+                makePreview();
+              } else {
+                // 편집/미리보기 폼 초기화
+                theTarget.value = "";
+                thePreview.innerHTML = "";
+              }
+            }
+          }
+        );
     });
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
   // 템플릿 그리드 행 추가
   $scope.addRow = function() {
-
     // 편집/미리보기 폼 초기화
     theTarget.value = "";
     thePreview.innerHTML = "";
-
     // 파라미터 설정
     var params = {};
     params.status = "I";
@@ -124,20 +159,20 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
   // 템플릿 그리드 저장
   $scope.save = function() {
     // 파라미터 설정
-    var params = new Array();
-    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-      $scope.flex.collectionView.itemsEdited[i].status = "U";
-      $scope.flex.collectionView.itemsEdited[i].prtForm = theTarget.value;
-      params.push($scope.flex.collectionView.itemsEdited[i]);
+    var params = [];
+    for (var e = 0; e < $scope.flex.collectionView.itemsEdited.length; e++) {
+      $scope.flex.collectionView.itemsEdited[e].status = "U";
+      $scope.flex.collectionView.itemsEdited[e].prtForm = theTarget.value;
+      params.push($scope.flex.collectionView.itemsEdited[e]);
     }
     for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
       $scope.flex.collectionView.itemsAdded[i].status = "I";
       $scope.flex.collectionView.itemsAdded[i].prtForm = theTarget.value;
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
-    for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
-      $scope.flex.collectionView.itemsRemoved[i].status = "D";
-      paramArr.push($scope.flex.collectionView.itemsRemoved[i]);
+    for (var d = 0; d < $scope.flex.collectionView.itemsRemoved.length; d++) {
+      $scope.flex.collectionView.itemsRemoved[d].status = "D";
+      params.push($scope.flex.collectionView.itemsRemoved[d]);
     }
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._save("/base/output/posTemplate/template/saveList.sb", params, function(){
@@ -145,17 +180,15 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope._broadcast('templateCtrl');
     });
   };
-  // 매장 적용 버튼
-  $scope.$on("applyStoreTemplate", function(event, data) {
-    $scope._popConfirm("전체 매장에 해당 템플릿을 적용하시겠습니까?<br>매장에 템플릿이 존재하는 경우, 업데이트 처리됩니다.",
+  // 템플릿 실제출력물적용 버튼
+  $scope.$on("applyToPrint", function(event, data) {
+    $scope._popConfirm("저장시 해당 템플릿이 실제출력물로 업데이트 처리 됩니다.<br>저장 하시겠습니까?",
       function() {
-        var selectedRow = $scope.flex.selectedRows[0]._data;
         var params = {};
         params.prtClassCd = document.getElementById("srchPrtClassCdVal").value;
-        params.templtRegFg = selectedRow.templtRegFg;
-        params.templtCd = selectedRow.templtCd;
+        params.prtForm = theTarget.value;
 
-        $scope._postJSONSave.withPopUp("/base/output/posTemplate/template/apply.sb", params,
+        $scope._postJSONSave.withPopUp("/base/output/posTemplate/template/applyToPrint.sb", params,
           function (response) {
             $scope.flex.collectionView.clearChanges();
             $scope._broadcast('templateCtrl');
@@ -168,121 +201,67 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
   });
   // 템플릿 편집 저장버튼
   $scope.$on("saveEditTemplate", function(event, data) {
-    $scope._popConfirm("저장시 해당 템플릿이 실제출력물로 업데이트 처리 됩니다.<br>저장 하시겠습니까?",
+      var selectedRow = $scope.flex.selectedRows[0]._data;
+      var params = {};
+      params.prtClassCd = document.getElementById("srchPrtClassCdVal").value;
+      params.templtRegFg = selectedRow.templtRegFg;
+      params.templtCd = selectedRow.templtCd;
+      params.templtNm = selectedRow.templtNm;
+      params.prtForm = theTarget.value;
+
+      $scope._postJSONSave.withPopUp("/base/output/posTemplate/template/save.sb", params,
+        function (response) {
+          $scope.flex.collectionView.clearChanges();
+          $scope._broadcast('templateCtrl');
+        }
+      );
+
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
+  // 매장 적용 버튼
+  $scope.$on("applyToStoreTemplate", function(event, data) {
+    $scope._popConfirm("전체 매장에 해당 템플릿을 적용하시겠습니까?<br>매장에 템플릿이 존재하는 경우, 업데이트 처리됩니다.",
       function() {
         var selectedRow = $scope.flex.selectedRows[0]._data;
         var params = {};
         params.prtClassCd = document.getElementById("srchPrtClassCdVal").value;
         params.templtRegFg = selectedRow.templtRegFg;
         params.templtCd = selectedRow.templtCd;
-        params.templtNm = selectedRow.templtNm;
-        params.prtForm = theTarget.value;
 
-        $scope._postJSONSave.withPopUp("/base/output/posTemplate/template/save.sb", params,
+        $scope._postJSONSave.withPopUp("/base/output/posTemplate/template/applyToStore.sb", params,
           function (response) {
             $scope.flex.collectionView.clearChanges();
             $scope._broadcast('templateCtrl');
           }
         );
-
       }
     );
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
-
-}]);
-
-// 리스트박스 생성
-var listBoxCodeList = new wijmo.input.ListBox('#listBoxCode',
-  {
-    // 보여지는 데이터
-    displayMemberPath: 'prtCd',
-    // 선택시 데이터
-    selectedValuePath: 'prtCd',
+  // 리스트박스 초기화 : 드래그설정
+  $scope.initListBox = function(s, e) {
     // 드래그 사용하도록 설정
-    formatItem: function (s, e) {
+    s.formatItem.addHandler(function(s, e) {
       e.item.setAttribute('draggable', 'true');
-    }
-  });
-
-// 출력물코드 목록 조회
-function searchPrintCodeList(params) {
-
-  var scope = agrid.getScope("templateCtrl");
-
-  $.ajax({
-    type: "POST",
-    cache: false,
-    async: true,
-    dataType: "json",
-    url: "/base/output/posTemplate/code/list.sb",
-    data: params,
-    success: function(result) {
-      if(result.status === "OK") {
-
-        var list = result.data.list;
-        listBoxCodeList.itemsSource = list;
-
-        if (list.length === undefined || list.length === 0) {
-          // 코드리스트 초기화
-          listBoxCodeList.itemsSource = new wijmo.collections.CollectionView([]);
-          // 편집/미리보기 폼 초기화
-          theTarget.value = "";
-          thePreview.innerHTML = "";
-        } else {
-          $("#btnAddTemplate").show();
-          $("#btnDelTemplate").show();
-          $("#btnSaveTemplate").show();
-          // 매장적용 버튼은 본사만
-          if ( gvOrgnFg === "H" ) {
-            $("#btnApplyStoreTemplate").show();
-          }
-          $("#btnSaveEditTemplate").show();
-          scope.flex.select(0,1);
-          theTarget.value = scope.flex.rows[0]._data.prtForm;
-          makePreview();
-        }
-
-      }
-      else if(result.status === "FAIL") {
-        return fail(result);
-      }
-      else if(result.status === "SESSION_EXFIRE") {
-        s_alert.popOk(result.message, function() {
-          location.href = result.url;
-        });
-      }
-      else if(result.status === "SERVER_ERROR") {
-        s_alert.pop(result.message);
-      }
-      else {
-        var msg = result.status + " : " + result.message;
-        alert(msg);
-      }
-    }
-  });
-
-}
-
-// 클릭드래그시 선택이벤트 발생
-listBoxCodeList.hostElement.addEventListener("mousedown", function (e) {
-  listBoxCodeList.selectedValue = e.target.innerText;
-});
-
-// 드래그 시작 이벤트
-listBoxCodeList.hostElement.addEventListener('dragstart', function (e) {
-
-  var mData = {
-    prtCd: listBoxCodeList.selectedValue,
-    content: listBoxCodeList.itemsSource[listBoxCodeList.selectedIndex].content
+    });
+    // 클릭드래그시 선택이벤트 발생
+    s.hostElement.addEventListener("mousedown", function (e) {
+      s.selectedValue = e.target.innerText;
+    });
+    // 드래그 시작이벤트
+    s.hostElement.addEventListener('dragstart', function (e) {
+      var mData = {
+        prtCd: s.selectedValue,
+        content: s.itemsSource[s.selectedIndex].content
+      };
+      var dragRow = JSON.stringify(mData);
+      // 드래그 데이터 set
+      e.dataTransfer.setData("text", dragRow);
+    }, true);
   };
-
-  var dragRow = JSON.stringify(mData);
-  // 드래그 데이터 set
-  e.dataTransfer.setData("text", dragRow);
-
-}, true);
+}]);
 
 // 편집/미리보기 폼 element 할당
 var theTarget = document.getElementById('editTextArea');
@@ -301,29 +280,34 @@ theTarget.addEventListener('dragover', function (e) {
 // listBox 아이템 드랍이벤트
 theTarget.addEventListener('drop', function (e) {
 
-  var dragRow = JSON.parse(e.dataTransfer.getData("text"));
-  var prtCd = dragRow.prtCd;
-  var content = dragRow.content;
+  var scope = agrid.getScope("templateCtrl");
+  if (scope.flex.rows.length > 0) {
+    var dragRow = JSON.parse(e.dataTransfer.getData("text"));
+    var prtCd = dragRow.prtCd;
+    var content = dragRow.content;
 
-  // 출력물코드가 있는 경우에만 작동
-  if (prtCd != null) {
-    var strOriginal = theTarget.value;
-    var iStartPos = theTarget.selectionStart;
-    var iEndPos = theTarget.selectionEnd;
-    var strFront = "";
-    var strEnd = "";
-    // textarea 의 커서 위치 구해서 커서위치에 값 넣기
-    if (iStartPos === iEndPos) {
-      strFront = strOriginal.substring(0, iStartPos);
-      strEnd = strOriginal.substring(iStartPos, strOriginal.length);
-    } else {
-      return;
+    // 출력물코드가 있는 경우에만 작동
+    if (prtCd != null) {
+      var strOriginal = theTarget.value;
+      var iStartPos = theTarget.selectionStart;
+      var iEndPos = theTarget.selectionEnd;
+      var strFront = "";
+      var strEnd = "";
+      // textarea 의 커서 위치 구해서 커서위치에 값 넣기
+      if (iStartPos === iEndPos) {
+        strFront = strOriginal.substring(0, iStartPos);
+        strEnd = strOriginal.substring(iStartPos, strOriginal.length);
+      } else {
+        return;
+      }
+      theTarget.value = strFront + prtCd + strEnd;
+      // 미리보기 적용
+      makePreview();
     }
-
-    theTarget.value = strFront + prtCd + strEnd;
-    // 미리보기 적용
-    makePreview();
-
+  } else {
+    scope.$apply(function() {
+      scope._popMsg("템플릿을 먼저 등록해주세요.");
+    });
   }
   e.preventDefault();
 });
@@ -331,7 +315,7 @@ theTarget.addEventListener('drop', function (e) {
 // 키이벤트 (키보드수정시 이벤트발생)
 theTarget.addEventListener('keyup', function (e) {
   makePreview();
-})
+});
 
 // 미리보기 적용
 function makePreview() {
@@ -339,7 +323,8 @@ function makePreview() {
   var value = theTarget.value;
   var codeLen = 0;
   // 리스트박스 데이터 가져옴
-  var listBoxData = listBoxCodeList.itemsSource;
+  var scope = agrid.getScope('templateCtrl');
+  var listBoxData = scope.listBoxCodeList.itemsSource;
   // {} 코드값 정규식 처리
   var matches = value.match(/\{([^}]+)\}/gm);
   if (matches != null) {
@@ -377,7 +362,7 @@ function makePreview() {
   }
   // 라인별로 글자수 체킹
   var lineArray = ("<P>" + value + "</P>").match(/<P>.*?<\/P>?/g);
-  var newValues = new Array();
+  var newValues = [];
   var newLine = 0;
   var splitStr = "";
   if (lineArray != null) {

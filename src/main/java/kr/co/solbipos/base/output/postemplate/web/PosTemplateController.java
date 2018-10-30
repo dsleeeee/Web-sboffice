@@ -56,9 +56,9 @@ public class PosTemplateController {
     /**
      * 포스출력물관리 - 페이지 이동
      *
-     * @param request
-     * @param response
-     * @param model
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param model Model
      * @return String
      * @author 노현수
      * @since 2018. 10. 04.
@@ -78,10 +78,10 @@ public class PosTemplateController {
     /**
      * 포스출력물관리 - 출력물코드 목록 조회
      * 
-     * @param request
-     * @param response
-     * @param posTemplateVO
-     * @param model
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param posTemplateVO PosTemplateVO
+     * @param model Model
      * @return Result
      * @author 노현수
      * @since 2018. 10. 04.
@@ -102,10 +102,10 @@ public class PosTemplateController {
     /**
      * 포스출력물관리 - 출력물템플릿 목록 조회
      * 
-     * @param request
-     * @param response
-     * @param posTemplateVO
-     * @param model
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param posTemplateVO PosTemplateVO
+     * @param model Model
      * @return Result
      * @author 노현수
      * @since 2018. 10. 04.
@@ -122,9 +122,12 @@ public class PosTemplateController {
         posTemplateVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         posTemplateVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         posTemplateVO.setStoreCd(sessionInfoVO.getStoreCd());
-        // 출력물코드 목록 조회
+
+        // 실제출력물 없는경우 대비해서 저장처리
+        posTemplateService.insertPosTemplatePrint(posTemplateVO, sessionInfoVO);
+        // 출력물코드 목록 재조회
         list = posTemplateService.getPosTemplateList(posTemplateVO);
-        
+
         return ReturnUtil.returnListJson(Status.OK, list, posTemplateVO);
         
     }
@@ -132,10 +135,10 @@ public class PosTemplateController {
     /**
      * 포스출력물관리 - 출력물템플릿 목록 저장
      *
-     * @param request
-     * @param response
-     * @param posTemplateVOs
-     * @param model
+     * @param posTemplateVOs PosTemplateVO[]
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param model Model
      * @return Result
      * @author 노현수
      * @since 2018. 10. 04.
@@ -155,10 +158,10 @@ public class PosTemplateController {
     /**
      * 포스출력물관리 - 출력물템플릿 저장
      *
-     * @param request
-     * @param response
-     * @param posTemplateVO
-     * @param model
+     * @param posTemplateVO PosTemplateVO
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param model Model
      * @return Result
      * @author 노현수
      * @since 2018. 10. 04.
@@ -176,23 +179,46 @@ public class PosTemplateController {
     }
 
     /**
-     * 포스출력물관리 - 출력물템플릿 매장적용
+     * 포스출력물관리 - 출력물템플릿 실제출력물저장
      *
-     * @param request
-     * @param response
-     * @param posTemplateVO
-     * @param model
+     * @param posTemplateVO PosTemplateVO
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param model Model
      * @return Result
      * @author 노현수
      * @since 2018. 10. 04.
      */
-    @RequestMapping(value = "/template/apply.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/template/applyToPrint.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result applyStoreTemplate(@RequestBody PosTemplateVO posTemplateVO, HttpServletRequest request,
+    public Result updatePosTemplatePrint(@RequestBody PosTemplateVO posTemplateVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        int result = posTemplateService.applyStoreTemplate(posTemplateVO, sessionInfoVO);
+        int result = posTemplateService.updatePosTemplatePrint(posTemplateVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+
+    }
+
+    /**
+     * 포스출력물관리 - 출력물템플릿 매장적용
+     *
+     * @param posTemplateVO PosTemplateVO
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param model Model
+     * @return Result
+     * @author 노현수
+     * @since 2018. 10. 04.
+     */
+    @RequestMapping(value = "/template/applyToStore.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result applyToStoreTemplate(@RequestBody PosTemplateVO posTemplateVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        int result = posTemplateService.applyToStoreTemplate(posTemplateVO, sessionInfoVO);
 
         return returnJson(Status.OK, result);
 
