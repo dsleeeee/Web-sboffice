@@ -14,7 +14,7 @@
 <div id="hqDtlDim" class="fullDimmed" style="display:none;"></div>
 <div id="hqDtlLayer" class="layer" style="display:none;">
   <div class="layer_inner">
-    <div class="title w870">
+    <div class="title w870px">
       <p id="popTitle" class="tit"></p>
       <a href="#" class="btn_close"></a>
       <div class="con">
@@ -408,7 +408,7 @@
     },
       function (result) {
         s_alert.pop(result.message);
-        return;
+
       }
     );
   }
@@ -548,8 +548,6 @@
     param.agencyCd = rAgency.selectedValue;
     param.clsFg = rClsFg.selectedValue;
 
-    console.log(param);
-
     $.postJSONSave(sendUrl, param, function(result) {
       s_alert.pop("<s:message code='cmm.saveSucc'/>");
       $(".btn_close").click();
@@ -557,7 +555,7 @@
     },
       function (result) {
         s_alert.pop(result.message);
-        return;
+
       }
     );
   }
@@ -588,7 +586,7 @@
     },
       function (result) {
         s_alert.pop(result.message);
-        return;
+
       }
     );
   });

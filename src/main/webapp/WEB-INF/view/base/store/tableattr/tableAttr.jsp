@@ -10,7 +10,7 @@
 </style>
 <script>
 var urlParams = (function(url) {
-  var result = new Object();
+  var result = {};
   var idx = url.lastIndexOf('?');
 
   if (idx > 0) {
@@ -116,7 +116,7 @@ window.TABLE_ATTR_DEFAULTS = defaults;
                 <div class="sb-select txtIn w105 mr5">
                   <div id="fontFamily"></div>
                 </div>
-                <div class="sb-select txtIn w115 mr5">
+                <div class="sb-select txtIn w115px mr5">
                   <div id="fontColor"></div>
                 </div>
                 <div class="sb-select txtIn w98px mr5">
@@ -183,7 +183,7 @@ window.TABLE_ATTR_DEFAULTS = defaults;
         mxResources.parse(xhr[0].getText());
 
         // Configures the default graph theme
-        var themes = new Object();
+        var themes = {};
         themes[Graph.prototype.defaultThemeName] = xhr[1].getDocumentElement();
 
         // Main

@@ -52,7 +52,7 @@
   <div id="grid" class="w100" ng-controller="dlvrChgrCtrl">
     <div class="mt20 oh sb-select dkbr">
       <%--페이지 스케일 --%>
-      <div id="listScaleBoxDlvrChgr" class="w130 fl"></div>
+      <div id="listScaleBoxDlvrChgr" class="w130px fl"></div>
       <div class="tr">
         <%-- 신규등록 --%>
         <button class="btn_skyblue" ng-click="openPopNewRegist()"><s:message code="deliveryCharger.new"/></button>
@@ -179,7 +179,7 @@
 
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
       $scope._inquiryMain("/iostock/deliveryCharger/deliveryChargerManage/deliveryChargerList/list.sb", params);
-    }
+    };
 
     // 신규 등록
     $scope.openPopNewRegist = function () {

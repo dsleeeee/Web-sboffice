@@ -44,7 +44,7 @@
 
   <div class="mt10 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
-    <div id="listScaleBox" class="w150 fl"></div>
+    <div id="listScaleBox" class="w100px fl"></div>
     <div class="fr">
       <%-- 신규버전등록 --%>
       <button id="btnRegist" class="btn_skyblue"><s:message code="verManage.regist.new" /></button>
@@ -209,7 +209,7 @@ function search(index) {
   },
     function (result) {
       s_alert.pop(result.message);
-      return;
+
     }
   );
 }

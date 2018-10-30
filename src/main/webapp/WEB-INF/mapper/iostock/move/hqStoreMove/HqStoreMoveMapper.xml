@@ -13,7 +13,7 @@
         /* USE : HqStoreMoveMapper.getHqStoreMoveList */
         <![CDATA[
         SELECT   tpsm.HQ_OFFICE_CD, tpsm.SLIP_NO, tpsm.MOVE_DATE
-        ,        tpsm.DLVR_FG, tpsm.PROC_FG
+        ,        tpsm.DLVR_FG, tpsm.PROC_FG, tpsm.DTL_CNT
         ,        tpsm.OUT_STORE_CD, tmsout.STORE_NM AS OUT_STORE_NM
         ,        tpsm.IN_STORE_CD, tmsin.STORE_NM AS IN_STORE_NM
         ,        tpsm.OUT_TOT_QTY, tpsm.OUT_TOT, tpsm.IN_TOT
@@ -42,6 +42,39 @@
         ]]>
     </select>
 
+    <!-- 매장이동관리 - 전표상세 조회 -->
+    <!--
+        TABLE    : TB_PO_STORE_MOVE, TB_PO_STORE_MOVE_DTL, TB_HQ_PRODUCT, TB_MS_STORE_ENVST
+        PARAM    : hqStoreMoveVO
+        COMMENTS : 매장이동관리 - 전표상세 내역을 조회한다.
+    -->
+    <select id="getSlipNoInfo" parameterType="hqStoreMoveVO" resultType="DefaultMap">
+        /* USE : HqStoreMoveMapper.getSlipNoInfo */
+        <![CDATA[
+        SELECT	tpsm.MOVE_DATE
+        ,		tpsm.DLVR_FG
+        ,		tpsm.PROC_FG
+        ,		tpsm.OUT_STORE_CD
+        ,		tmsout.STORE_NM AS OUT_STORE_NM
+        ,		tpsm.IN_STORE_CD
+        ,		tmsin.STORE_NM AS IN_STORE_NM
+        ,		tpsm.REMARK
+        ,		tpsm.REG_DT
+        ,		tpsm.OUT_CONFM_DT
+        ,		tpsm.IN_CONFM_DT
+        ,		tpsm.HQ_CONFM_DT
+        ,		tpsm.OUT_SLIP_NO
+        ,		tpsm.IN_SLIP_NO
+        FROM    TB_PO_STORE_MOVE tpsm
+        ,       TB_MS_STORE tmsout
+        ,       TB_MS_STORE tmsin
+        WHERE   tpsm.HQ_OFFICE_CD =   #{hqOfficeCd}
+        AND     tpsm.SLIP_NO      =   #{slipNo}
+        AND		tmsout.STORE_CD   =   tpsm.OUT_STORE_CD
+        AND		tmsin.STORE_CD    =   tpsm.IN_STORE_CD
+        ]]>
+    </select>
+
     <!-- 매장이동관리 - 매장이동관리 상세 리스트 조회 -->
     <!--
         TABLE    : TB_PO_STORE_MOVE, TB_PO_STORE_MOVE_DTL, TB_HQ_PRODUCT, TB_MS_STORE_ENVST
@@ -62,6 +95,12 @@
         ,        tpsmd.OUT_UNIT_QTY
         ,        tpsmd.OUT_ETC_QTY
         ,        tpsmd.OUT_TOT_QTY
+        ,        tpsmd.OUT_AMT
+        ,        tpsmd.OUT_VAT
+        ,        tpsmd.OUT_TOT
+        ,        tpsmd.IN_AMT
+        ,        tpsmd.IN_VAT
+        ,        tpsmd.IN_TOT
         ,        tpsmd.OUT_TOT_QTY AS PREV_OUT_TOT_QTY
         FROM     TB_PO_STORE_MOVE tpsm
         ,        TB_PO_STORE_MOVE_DTL tpsmd
@@ -109,6 +148,12 @@
         AND      tmsein.STORE_CD  =   tmpin.STORE_CD
         AND      tmsein.ENVST_CD  =   '0011'
         ]]>
+        <if test='prodCd != null and prodCd != ""'>
+            AND tmpout.PROD_CD = #{prodCd}
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmpout.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
         <if test='slipNo != null and slipNo != ""'>
             AND tmpout.PROD_CD NOT IN (   SELECT  PROD_CD
                                           FROM    TB_PO_STORE_MOVE_DTL
@@ -116,9 +161,96 @@
                                           AND     SLIP_NO      = #{slipNo}
                                       )
         </if>
-
         ORDER BY tmpout.PROD_CD
     </select>
+
+    <!-- 매장이동관리 - 매장이동관리 상세 리스트 DTL 수정 -->
+    <!--
+        TABLE    : TB_PO_STORE_MOVE
+        PARAM    : hqStoreMoveVO
+        COMMENTS : 매장이동관리 상세 리스트 DTL을 수정한다.
+    -->
+    <update id="updateHqStoreMoveDtl" parameterType="hqStoreMoveVO">
+        /* USE : HqStoreMoveMapper.updateHqStoreMoveDtl */
+        UPDATE  TB_PO_STORE_MOVE_DTL
+        SET     OUT_SPLY_UPRC    = #{outSplyUprc},
+                OUT_UNIT_QTY     = #{outUnitQty},
+                OUT_ETC_QTY      = #{outEtcQty},
+                OUT_TOT_QTY      = #{outTotQty},
+                OUT_AMT          = #{outAmt},
+                OUT_VAT          = #{outVat},
+                OUT_TOT          = #{outTot},
+                IN_SPLY_UPRC     = #{inSplyUprc},
+                IN_UNIT_QTY      = #{inUnitQty},
+                IN_ETC_QTY       = #{inEtcQty},
+                IN_TOT_QTY       = #{inTotQty},
+                IN_AMT           = #{inAmt},
+                IN_VAT           = #{inVat},
+                IN_TOT           = #{inTot},
+                MOD_DT           = #{modDt},
+                MOD_ID           = #{modId}
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+        AND     PROD_CD       = #{prodCd}
+    </update>
+
+    <!-- 매장이동관리 - 매장이동관리 상세 리스트 HD 수정 -->
+    <!--
+        TABLE    : TB_PO_STORE_MOVE
+        PARAM    : hqStoreMoveVO
+        COMMENTS : 매장이동관리 상세 리스트 HD 수정한다.
+    -->
+    <update id="updateHqStoreMoveHd" parameterType="hqStoreMoveVO">
+        /* USE : HqStoreMoveMapper.updateHqStoreMoveHd */
+        UPDATE  TB_PO_STORE_MOVE
+        SET     (   DTL_CNT
+                ,   OUT_UNIT_QTY      ,   OUT_ETC_QTY       ,   OUT_TOT_QTY       ,   OUT_AMT         ,   OUT_VAT       ,   OUT_TOT
+                ,   IN_UNIT_QTY       ,   IN_ETC_QTY        ,   IN_TOT_QTY        ,   IN_AMT          ,   IN_VAT        ,   IN_TOT
+                ,   DLVR_FG
+                ,   REMARK            ,   REG_FG
+                ,   MOD_DT            ,   MOD_ID
+                )
+            =   (   SELECT  COUNT(*)
+                    ,       SUM(OUT_UNIT_QTY) ,   SUM(OUT_ETC_QTY)  ,   SUM(OUT_TOT_QTY)  ,   SUM(OUT_AMT)    ,   SUM(OUT_VAT)  ,   SUM(OUT_TOT)
+                    ,       SUM(IN_UNIT_QTY)  ,   SUM(IN_ETC_QTY)   ,   SUM(IN_TOT_QTY )  ,   SUM(IN_AMT )    ,   SUM(IN_VAT )  ,   SUM(IN_TOT )
+                    ,       #{dlvrFg}
+                    ,       #{remark}         ,   #{regFg}
+                    ,       #{modDt}          ,   #{modId}
+                    FROM    TB_PO_STORE_MOVE_DTL
+                    WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
+                    AND     SLIP_NO       =   #{slipNo}
+                )
+        WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
+        AND     SLIP_NO       =   #{slipNo}
+    </update>
+
+    <!-- 매장이동관리 - 매장이동관리 상세 DTL 삭제 -->
+    <!--
+        TABLE    : TB_PO_STORE_MOVE
+        PARAM    : hqStoreMoveVO
+        COMMENTS : 매장이동관리 상세 DTL 의 내용을 모두 삭제한다.
+    -->
+    <delete id="deleteAllHqStoreMoveDtl" parameterType="hqStoreMoveVO">
+        /* USE : HqStoreMoveMapper.deleteAllHqStoreMoveDtl */
+        DELETE  TB_PO_STORE_MOVE_DTL
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+    </delete>
+
+
+    <!-- 매장이동관리 - 매장이동관리 상세 HD 삭제 -->
+    <!--
+        TABLE    : TB_PO_STORE_MOVE
+        PARAM    : hqStoreMoveVO
+        COMMENTS : 매장이동관리 상세 HD를 삭제한다.
+    -->
+    <delete id="deleteHqStoreMoveHd" parameterType="hqStoreMoveVO">
+        /* USE : HqStoreMoveMapper.deleteHqStoreMoveHd */
+        DELETE  TB_PO_STORE_MOVE
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+    </delete>
+
 
     <!-- 매장이동관리 - 신규전표번호 조회 -->
     <!--
@@ -239,11 +371,63 @@
     -->
     <update id="updateHqStoreMoveConfirm" parameterType="hqStoreMoveVO">
         /* USE : HqStoreMoveMapper.updateHqStoreMoveConfirm */
-        UPDATE  TB_PO_HQ_STORE_ORDER
-        SET     PROC_FG = #{procFg},
-                MOD_DT  = #{modDt},
-                MOD_ID  = #{modId}
+        UPDATE  TB_PO_STORE_MOVE
+        SET     PROC_FG      = #{procFg},
+                OUT_CONFM_DT = #{modDt},
+                OUT_CONFM_ID = #{modId},
+                IN_CONFM_DT  = #{modDt},
+                IN_CONFM_ID  = #{modId},
+                HQ_CONFM_DT  = #{modDt},
+                HQ_CONFM_ID  = #{modId},
+                OUT_SLIP_NO  = #{outSlipNo},
+                IN_SLIP_NO   = #{inSlipNo},
+                MOD_DT       = #{modDt},
+                MOD_ID       = #{modId}
         WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     SLIP_NO       = #{slipNo}
+    </update>
+
+
+    <!-- 매장이동관리 - 출고, 반품 신규전표번호 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK
+        PARAM    : volmErrVO
+        COMMENTS : 매장이동관리 확정시 출고, 반품 신규전표번호를 조회한다.
+    -->
+    <select id="getIostockNewSlipNo" parameterType="hqStoreMoveVO" resultType="String">
+        /* USE : HqStoreMoveMapper.getIostockNewSlipNo */
+        <![CDATA[
+        SELECT  NVL(MAX(tphso.SLIP_NO), #{yymm}||'000000')+1 AS SLIP_NO
+        FROM    TB_PO_HQ_STORE_OUTSTOCK tphso
+        WHERE   tphso.HQ_OFFICE_CD  =     #{hqOfficeCd}
+        AND     tphso.SLIP_NO       LIKE  #{yymm}||'%'
+        ]]>
+    </select>
+
+
+    <!-- 매장이동관리 - 매장이동관리 상품추가 리스트 HD 수정 -->
+    <!--
+        TABLE    : TB_PO_STORE_MOVE
+        PARAM    : hqStoreMoveVO
+        COMMENTS : 매장이동관리 상품추가 리스트 HD 수정한다.
+    -->
+    <update id="updateHqStoreMoveAddProdHd" parameterType="hqStoreMoveVO">
+        /* USE : HqStoreMoveMapper.updateHqStoreMoveAddProdHd */
+        UPDATE  TB_PO_STORE_MOVE
+        SET     (   DTL_CNT
+                ,   OUT_UNIT_QTY      ,   OUT_ETC_QTY       ,   OUT_TOT_QTY       ,   OUT_AMT         ,   OUT_VAT       ,   OUT_TOT
+                ,   IN_UNIT_QTY       ,   IN_ETC_QTY        ,   IN_TOT_QTY        ,   IN_AMT          ,   IN_VAT        ,   IN_TOT
+                ,   MOD_DT            ,   MOD_ID
+                )
+            =   (   SELECT  COUNT(*)
+                    ,       SUM(OUT_UNIT_QTY) ,   SUM(OUT_ETC_QTY)  ,   SUM(OUT_TOT_QTY)  ,   SUM(OUT_AMT)    ,   SUM(OUT_VAT)  ,   SUM(OUT_TOT)
+                    ,       SUM(IN_UNIT_QTY)  ,   SUM(IN_ETC_QTY)   ,   SUM(IN_TOT_QTY )  ,   SUM(IN_AMT )    ,   SUM(IN_VAT )  ,   SUM(IN_TOT )
+                    ,       #{modDt}          ,   #{modId}
+                    FROM    TB_PO_STORE_MOVE_DTL
+                    WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
+                    AND     SLIP_NO       =   #{slipNo}
+                )
+        WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
+        AND     SLIP_NO       =   #{slipNo}
     </update>
 </mapper>

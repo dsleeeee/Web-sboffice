@@ -78,9 +78,9 @@
 
   <div class="mt20 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
-    <div id="listScaleBox" class="w150 fl"></div>
+    <div id="listScaleBox" class="w100px fl"></div>
     <%-- 엑셀 다운로드 --%>
-    <button id="btnExcel" class="btn_skyblue fr"><s:message code="cmm.excel.down" /></button>
+    <%--<button id="btnExcel" class="btn_skyblue fr"><s:message code="cmm.excel.down" /></button>--%>
   </div>
 
   <%--위즈모 테이블--%>

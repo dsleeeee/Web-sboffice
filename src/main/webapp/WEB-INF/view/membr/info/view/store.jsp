@@ -8,7 +8,7 @@
 <div id="storeLayer" class="layer" style="display: none;">
   <div class="layer_inner">
 
-    <div class="title w800">
+    <div class="title w800px">
       <p class="tit" id="storeLayerTitle">
         <s:message code="regist.membr.store" />
         <span id="storeLayerSubTitle"></span>

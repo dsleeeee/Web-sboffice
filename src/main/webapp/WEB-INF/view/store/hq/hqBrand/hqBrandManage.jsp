@@ -76,7 +76,7 @@
 
   <div class="mt20 oh sb-select dkbr">
     <%--페이지 스케일 --%>
-    <div id="listScaleBox" class="w130 fl"></div>
+    <div id="listScaleBox" class="w100px fl"></div>
     <div class="tr">
       <%-- 브랜드신규등록 --%>
       <button class="btn_skyblue" id="btnAdd"><s:message code="hqBrand.newBrand" /></button>
@@ -216,7 +216,7 @@
       },
         function (result) {
           s_alert.pop(result.message);
-          return;
+
         }
       );
     }
@@ -238,8 +238,6 @@
 
     <%-- 본사 코드 클릭시, 본사 선택 팝업 --%>
     function addHqOfficeLayer(row){
-      console.log(row);
-
       c_hq.init(function(arr){
         console.log(arr);
         if(arr.length > 0) {
@@ -268,7 +266,7 @@
 
     <%-- 브랜드 저장 --%>
     $("#btnSave").click(function(e){
-      var paramArr = new Array();
+      var paramArr = [];
 
       var gridView = grid.collectionView;
 

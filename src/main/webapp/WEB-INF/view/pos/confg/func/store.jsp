@@ -8,7 +8,7 @@
 <div id="storeLayer" class="layer" style="display: none;">
   <div class="layer_inner">
 
-    <div class="title w800">
+    <div class="title w800px">
       <p class="tit" id="storeLayerTitle"><span id="storeLayerSubTitle"></span><s:message code="func.regStore" /></p>
       <a href="#" class="btn_close"></a>
       <div class="con">

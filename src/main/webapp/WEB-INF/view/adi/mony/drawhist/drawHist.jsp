@@ -24,9 +24,9 @@
         <th><s:message code="cmm.search.date" /></th>
         <td colspan="3">
           <div class="sb-select">
-            <span class="txtIn"> <input id="startDate" name="startDate" class="w200" /></span>
+            <span class="txtIn"> <input id="startDate" name="startDate" class="w200px" /></span>
             <span class="rg">~</span>
-            <span class="txtIn"> <input id="endDate" name="endDate" class="w200" /></span>
+            <span class="txtIn"> <input id="endDate" name="endDate" class="w200px" /></span>
           </div>
         </td>
       </tr>
@@ -42,7 +42,7 @@
 
   <div class="mt20 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
-    <div id="listScaleBox" class="w150 fl"></div>
+    <div id="listScaleBox" class="w100px fl"></div>
   </div>
 
   <%--위즈모 테이블--%>

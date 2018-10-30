@@ -91,6 +91,29 @@ public class HqStoreMoveController {
     }
 
     /**
+     * 매장이동관리 - 전표상세 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   hqStoreMoveVO
+     * @return  String
+     * @author  안동관
+     * @since   2018. 10. 25.
+     */
+    @RequestMapping(value = "/hqStoreMoveDtl/getSlipNoInfo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSlipNoInfo(HttpServletRequest request, HttpServletResponse response,
+        Model model, HqStoreMoveVO hqStoreMoveVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        hqStoreMoveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        DefaultMap<String> result = hqStoreMoveService.getSlipNoInfo(hqStoreMoveVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+    /**
      * 매장이동관리 - 매장이동관리 상세 리스트 조회
      * @param   request
      * @param   response
@@ -126,14 +149,38 @@ public class HqStoreMoveController {
     @RequestMapping(value = "/hqStoreMoveDtl/save.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result saveHqStoreMoveDtl(HttpServletRequest request, HttpServletResponse response,
-        Model model, HqStoreMoveVO hqStoreMoveHdVO, @RequestBody HqStoreMoveVO[] hqStoreMoveVOs) {
+        Model model, @RequestBody HqStoreMoveVO[] hqStoreMoveVOs) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = hqStoreMoveService.saveHqStoreMoveDtl(hqStoreMoveHdVO, hqStoreMoveVOs, sessionInfoVO);
+        int result = hqStoreMoveService.saveHqStoreMoveDtl(hqStoreMoveVOs, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }
+
+
+    /**
+     * 매장이동관리 - 매장이동관리 상세 삭제
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   hqStoreMoveVO
+     * @return  String
+     * @author  안동관
+     * @since   2018. 10. 26.
+     */
+    @RequestMapping(value = "/hqStoreMoveDtl/delete.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result deleteHqStoreMoveDtl(HttpServletRequest request, HttpServletResponse response,
+        Model model, HqStoreMoveVO hqStoreMoveVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = hqStoreMoveService.deleteHqStoreMoveDtl(hqStoreMoveVO, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
 
     /**
      * 매장이동관리 - 매장이동관리 신규등록 상품 리스트 조회
@@ -176,6 +223,51 @@ public class HqStoreMoveController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = hqStoreMoveService.saveHqStoreMoveRegist(hqStoreMoveVOs, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+    /**
+     * 매장이동관리 - 매장이동관리 상품추가 상품 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   hqStoreMoveVO
+     * @return  String
+     * @author  안동관
+     * @since   2018. 10. 25.
+     */
+    @RequestMapping(value = "/hqStoreMoveAddProd/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getHqStoreMoveAddProdList(HttpServletRequest request, HttpServletResponse response,
+        Model model, HqStoreMoveVO hqStoreMoveVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        hqStoreMoveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        List<DefaultMap<String>> list = hqStoreMoveService.getHqStoreMoveAddProdList(hqStoreMoveVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, hqStoreMoveVO);
+    }
+
+    /**
+     * 매장이동관리 - 매장이동관리 상품추가 저장
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   hqStoreMoveVOs
+     * @return  String
+     * @author  안동관
+     * @since   2018. 10. 25.
+     */
+    @RequestMapping(value = "/hqStoreMoveAddProd/save.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveHqStoreMoveAddProd(HttpServletRequest request, HttpServletResponse response,
+        Model model, @RequestBody HqStoreMoveVO[] hqStoreMoveVOs) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = hqStoreMoveService.saveHqStoreMoveAddProd(hqStoreMoveVOs, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }

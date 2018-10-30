@@ -48,6 +48,9 @@ public interface PosTemplateMapper {
     /** 출력물템플릿 수정 */
     int savePosTemplate(PosTemplateVO posTemplateVO);
 
+    /** 실제출력물 템플릿 생성 */
+    int insertPosTemplatePrint(PosTemplateVO posTemplateVO);
+
     /** 실제출력물 템플릿 수정 */
     int updatePosTemplatePrint(PosTemplateVO posTemplateVO);
 

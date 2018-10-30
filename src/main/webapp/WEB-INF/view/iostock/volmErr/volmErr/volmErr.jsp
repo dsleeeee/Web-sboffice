@@ -23,7 +23,7 @@
       <th><s:message code="cmm.search.date"/></th>
       <td colspan="3">
         <div class="sb-select">
-          <span class="txtIn w150">
+          <span class="txtIn w150px">
             <wj-combo-box
               id="srchDateFg"
               ng-model="dateFg"

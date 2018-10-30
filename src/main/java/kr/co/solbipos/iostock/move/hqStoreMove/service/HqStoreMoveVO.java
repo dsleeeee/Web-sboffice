@@ -29,6 +29,8 @@ public class HqStoreMoveVO extends PageVO {
     private String hqBrandCd;
     /** 상품코드 */
     private String prodCd;
+    /** 상품명 */
+    private String prodNm;
     /** 발주단위구분 */
     private String poUnitFg;
     /** 발주단위수량 */
@@ -240,6 +242,20 @@ public class HqStoreMoveVO extends PageVO {
      */
     public void setProdCd(String prodCd) {
         this.prodCd = prodCd;
+    }
+
+    /**
+     * @return the prodNm
+     */
+    public String getProdNm() {
+        return prodNm;
+    }
+
+    /**
+     * @param prodNm the prodNm to set
+     */
+    public void setProdNm(String prodNm) {
+        this.prodNm = prodNm;
     }
 
     /**

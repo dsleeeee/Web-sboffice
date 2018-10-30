@@ -41,7 +41,7 @@
           <%-- 거래명세표 --%>
           <th><s:message code="rtnOutstockConfm.dtl.stmtAcct"/></th>
           <td colspan="3">
-            <span class="txtIn w150 sb-select fl mr5">
+            <span class="txtIn w150px sb-select fl mr5">
               <wj-combo-box
                 id="stmtAcctFg"
                 ng-model="stmtAcctFg"
@@ -74,7 +74,7 @@
           </span>
           <%-- 출고일자 --%>
           <div id="divDtlOutDate" class="sb-select ml10 fl" style="display: none;">
-            <span class="txtIn"><input id="dtlOutDate" class="w120"></span>
+            <span class="txtIn"><input id="dtlOutDate" class="w120px"></span>
           </div>
           <%-- 저장 --%>
           <button type="button" id="btnDtlSave" class="btn_skyblue ml5 fl" ng-click="save()"><s:message code="cmm.save"/></button>
@@ -292,7 +292,7 @@
 
     // 저장
     $scope.save = function () {
-      var params = new Array();
+      var params = [];
 
       // 확정처리가 체크 되어있으면서 그리드의 수정된 내역은 없는 경우 저장로직 태우기 위해 값 하나를 강제로 수정으로 변경한다.
       if ($("#outstockConfirmFg").is(":checked") && $scope.flex.collectionView.itemsEdited.length <= 0) {

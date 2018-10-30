@@ -8,7 +8,7 @@
 <div id="_storelayer" class="layer" style="display: none;">
   <div class="layer_inner">
     <!--layerContent-->
-    <div class="title w600">
+    <div class="title w600px">
       <%-- 매장선택 --%>
       <p class="tit">
         <s:message code="cmm.store.select" />

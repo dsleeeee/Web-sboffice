@@ -21,13 +21,6 @@
     </colgroup>
     <tbody>
       <tr>
-        <%-- 코드 --%>
-        <%--
-        <th><s:message code="item.prtCd" /></th>
-        <td>
-          <input type="text" class="sb-input w100" id="srchPrtCd" ng-model="prtCd" />
-        </td>
-        --%>
         <%-- 코드명 --%>
         <th><s:message code="item.prtNm" /></th>
         <td>
@@ -45,7 +38,7 @@
       <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('printCodeCtrl')"><s:message code="cmm.search" /></button>
   </div>
 
-  <div class="w50 fl mt40" style="width: 100%">
+  <div class="w100 fl mt40">
     <%--위즈모 테이블--%>
     <div id="gridPrintCode" class="wj-TblWrapBr mr10 pd20" style="height: 480px;">
       <div class="updownSet oh mb10">
@@ -73,7 +66,7 @@
           item-formatter="_itemFormatter">
 
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="item.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="item.prtCd"/>" binding="prtCd" width="200"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="item.prtNm"/>" binding="prtNm" width="200"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="item.samplYn"/>" binding="samplYn" width="60"></wj-flex-grid-column>
@@ -86,4 +79,5 @@
   </div>
 
 </div>
+
 <script type="text/javascript" src="/resource/solbipos/js/sys/bill/item/item.js?ver=20181018.01" charset="utf-8"></script>

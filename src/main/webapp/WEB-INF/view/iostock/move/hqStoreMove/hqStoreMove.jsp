@@ -23,9 +23,9 @@
       <th><s:message code="cmm.search.date"/></th>
       <td colspan="3">
         <div class="sb-select">
-          <span class="txtIn"><input id="srchStartDate" class="w150"></span>
+          <span class="txtIn"><input id="srchStartDate" class="w150px"></span>
           <span class="rg">~</span>
-          <span class="txtIn"><input id="srchEndDate" class="w150"></span>
+          <span class="txtIn"><input id="srchEndDate" class="w150px"></span>
         </div>
       </td>
     </tr>
@@ -34,7 +34,7 @@
       <th><s:message code="hqStoreMove.dlvrFg"/></th>
       <td>
         <div class="sb-select">
-          <span class="txtIn w150">
+          <span class="txtIn w150px">
             <wj-combo-box
               id="srchDlvrFg"
               ng-model="dlvrFg"
@@ -51,7 +51,7 @@
       <th><s:message code="hqStoreMove.procFg"/></th>
       <td>
         <div class="sb-select">
-          <span class="txtIn w150">
+          <span class="txtIn w150px">
             <wj-combo-box
               id="srchProcFg"
               ng-model="procFg"
@@ -126,7 +126,7 @@
         items-source="data"
         control="flex"
         initialized="initGrid(s,e)"
-        is-read-only="false"
+        is-read-only="true"
         item-formatter="_itemFormatter">
 
         <!-- define columns -->
@@ -134,7 +134,7 @@
         <wj-flex-grid-column header="<s:message code="hqStoreMove.slipNo"/>" binding="slipNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqStoreMove.dlvrFg"/>" binding="dlvrFg" width="60" align="center" is-read-only="true" data-map="dlvrFgMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqStoreMove.procFg"/>" binding="procFg" width="70" align="center" is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="hqStoreMove.totQty"/>" binding="outTotQty" width="80" align="right" is-read-only="true" data-type="Number" format="n0" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="hqStoreMove.dtlCnt"/>" binding="dtlCnt" width="60" align="right" is-read-only="true" data-type="Number" format="n0" ></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqStoreMove.storeCd"/>" binding="outStoreCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqStoreMove.storeNm"/>" binding="outStoreNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqStoreMove.totAmt"/>" binding="outTot" width="80" align="right" is-read-only="true" data-type="Number" format="n0" ></wj-flex-grid-column>
@@ -228,11 +228,6 @@
           if (col.binding === "slipNo") { // 전표번호 클릭
             var params    = {};
             params.slipNo = selectedRow.slipNo;
-            params.procFg = selectedRow.procFg;
-            params.outStoreCd = selectedRow.outStoreCd;
-            params.outStoreNm = selectedRow.outStoreNm;
-            params.inStoreCd = selectedRow.inStoreCd;
-            params.inStoreNm = selectedRow.inStoreNm;
             $scope._broadcast('hqStoreMoveDtlCtrl', params);
           }
         }
@@ -251,13 +246,10 @@
     $scope.searchHqStoreMoveList = function () {
       // 파라미터
       var params       = {};
-      params.dateFg     = $scope.dateFg;
       params.startDate  = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
       params.endDate    = wijmo.Globalize.format(srchEndDate.value, 'yyyyMMdd');
       params.outStoreCd = $("#hqStoreMoveOutSelectStoreCd").val();
       params.inStoreCd  = $("#hqStoreMoveInSelectStoreCd").val();
-      params.slipFg     = $scope.slipFg;
-      params.procFg     = $scope.procFg;
 
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
       $scope._inquiryMain("/iostock/move/hqStoreMove/hqStoreMove/list.sb", params);
@@ -266,7 +258,6 @@
     // 신규등록
     $scope.newRegist = function () {
       var params    = {};
-      params.slipNo = "";
       $scope._broadcast("hqStoreMoveRegistCtrl", params);
     };
 
@@ -288,13 +279,19 @@
 </script>
 
 <%-- 매장이동관리 상세 레이어 --%>
-<%--<c:import url="/WEB-INF/view/iostock/move/hqStoreMove/hqStoreMoveDtl.jsp">--%>
-  <%--<c:param name="menuCd" value="${menuCd}"/>--%>
-  <%--<c:param name="menuNm" value="${menuNm}"/>--%>
-<%--</c:import>--%>
+<c:import url="/WEB-INF/view/iostock/move/hqStoreMove/hqStoreMoveDtl.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
 
 <%-- 매장이동관리 신규등록 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/move/hqStoreMove/hqStoreMoveRegist.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 매장이동관리 상품추가 레이어 --%>
+<c:import url="/WEB-INF/view/iostock/move/hqStoreMove/hqStoreMoveAddProd.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

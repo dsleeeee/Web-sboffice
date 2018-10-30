@@ -22,7 +22,7 @@
             <th><s:message code="outstockReqDate.specificDate"/><em class="imp">*</em></th>
             <td>
               <div class="sb-select">
-                <span class="txtIn"><input id="specificDate" class="w200" ng-model="speDate.specificDate"></span>
+                <span class="txtIn"><input id="specificDate" class="w200px" ng-model="speDate.specificDate"></span>
               </div>
             </td>
             <th><s:message code="outstockReqDate.store"/><em class="imp">*</em></th>

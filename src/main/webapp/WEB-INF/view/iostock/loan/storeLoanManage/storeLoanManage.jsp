@@ -42,7 +42,7 @@
   <div class="mt20 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
     <wj-combo-box
-      class="w150 fl"
+      class="w100px fl"
       id="listScaleBox"
       ng-model="listScale"
       items-source="_getComboData('listScaleBox')"
@@ -183,7 +183,7 @@
 
     // 저장
     $scope.save = function () {
-      var params = new Array();
+      var params = [];
 
       for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
         var item = $scope.flex.collectionView.itemsEdited[i];

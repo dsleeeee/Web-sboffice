@@ -23,7 +23,7 @@
       <th><s:message code="cmm.search.date"/></th>
       <td colspan="3">
         <div class="sb-select">
-          <span class="txtIn w150">
+          <span class="txtIn w150px">
           <wj-combo-box
             id="srchDateFg"
             ng-model="dateFg"
@@ -34,9 +34,9 @@
             initialized="_initComboBox(s)">
           </wj-combo-box>
           </span>
-          <span class="txtIn"><input id="srchStartDate" class="w150"></span>
+          <span class="txtIn"><input id="srchStartDate" class="w150px"></span>
           <span class="rg">~</span>
-          <span class="txtIn"><input id="srchEndDate" class="w150"></span>
+          <span class="txtIn"><input id="srchEndDate" class="w150px"></span>
         </div>
       </td>
     </tr>
@@ -44,7 +44,7 @@
       <%-- 진행구분 --%>
       <th><s:message code="dstbCloseProd.procFg"/></th>
       <td colspan="3">
-        <span class="txtIn w150 sb-select fl mr5">
+        <span class="txtIn w150px sb-select fl mr5">
           <wj-combo-box
             id="srchProcFg"
             ng-model="procFg"
@@ -62,7 +62,7 @@
       <th><s:message code="dstbCloseProd.reqDate"/></th>
       <td colspan="3">
         <div class="sb-select fl mr10">
-          <span class="txtIn"><input id="reqDate" class="w150"></span>
+          <span class="txtIn"><input id="reqDate" class="w150px"></span>
         </div>
         <a href="#" class="btn_grayS" ng-click="add()"><s:message code="dstbCloseProd.addRegist"/></a>
       </td>
@@ -240,7 +240,7 @@
       // 선택하신 자료를 분배마감으로 확정합니다. 확정하시겠습니까?
       var msg = messages["dstbCloseProd.confirmText"];
       s_alert.popConf(msg, function () {
-        var params = new Array();
+        var params = [];
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
           var item = $scope.flex.collectionView.itemsEdited[i];
 

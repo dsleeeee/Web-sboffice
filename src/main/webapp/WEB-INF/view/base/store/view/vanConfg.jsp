@@ -7,7 +7,7 @@
 <div id="${layerName}Mask" class="fullDimmed" style="display: none;"></div>
 <div id="${layerName}Layer" class="layer" style="display: none;">
   <div class="layer_inner">
-    <div class="title w700">
+    <div class="title w700px">
       <p class="tit" id="vstoreTitle"></p>
       <a href="#" class="btn_close ${layerName}Close"></a>
       <div class="con" style="height:300px;">
@@ -43,7 +43,7 @@
       var param = obj;
       wgrid.getGridData("/base/store/view/vanconfg/list.sb",    param, vcGrid,
             function(result){
-        console.log(result)
+        console.log(result);
 
                 $("#${layerName}Mask, #${layerName}Layer").show();
               var storeTitle = param.storeCd+ " " + param.storeNm;

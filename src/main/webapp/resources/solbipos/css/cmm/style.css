@@ -85,7 +85,9 @@ button {outline:none; border:0; font-family:'NotoR', Malgun Gothic, '맑은 고�
  * **************************************** */
 .w4 {width:4%;} .w5 {width:5%;} .w7 {width:7%;} .w8 {width:8%;} .w10 {width:10%;} .w11 {width:11.111111%;} .w15 {width:15%;} .w20 {width:20%;} .w25 {width:25%;} .w28 {width:28%;} .w30 {width:30%;} .w33 {width:33.333333%;} .w35 {width:35%;} .w40 {width:40%;} .w45 {width:45%;} .w50 {width:50%;} .w55 {width:55%;} .w60 {width:60%;} .w65 {width:65%;} .w70 {width:70%;} .w75 {width:75%;} .w80 {width:80%;} .w85 {width:85%;} .w90 {width:90%;} .w100 {width:100%;}
 
-.w98px {width:98px;} .w105 {width:105px;} .w110 {width:110px;} .w115 {width:115px;} .w120 {width:120px;} .w130 {width:130px;} .w150 {width:150px;} .w180 {width:180px;} .w200 {width:200px;} .w210 {width:210px;} .w300 {width:300px;} w400 {width:400px;} .w500 {width:500px;} .w600 {width:600px;} .w700 {width:700px;} .w800 {width:800px;} .w870 {width:870px;}
+.w98px {width:98px;} .w100px {width:100px;}
+
+.w105px {width:105px;} .w110px {width:110px;} .w115px {width:115px;} .w120px {width:120px;} .w130px {width:130px;} .w150px {width:150px;} .w180px {width:180px;} .w200px {width:200px;} .w210px {width:210px;} .w300px {width:300px;} w400px {width:400px;} .w500px {width:500px;} .w600px {width:600px;} .w700px {width:700px;} .w800px {width:800px;} .w870px {width:870px;}
 
 .b4 {border:1px solid #dbdbdb;} .br {border-right:1px solid #dbdbdb;} .bl {border-left:1px solid #dbdbdb;} .bb {border-bottom:1px solid #dbdbdb;} .bt {border-top:1px solid #dbdbdb;}
 

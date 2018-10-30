@@ -27,9 +27,9 @@
         <td colspan="3">
           <%-- 조회 일자 --%>
           <div class="sb-select">
-            <span class="txtIn"> <input id="startDate" name="startDate" class="w200" /></span>
+            <span class="txtIn"> <input id="startDate" name="startDate" class="w200px" /></span>
             <span class="rg">~</span>
-            <span class="txtIn"> <input id="endDate" name="endDate" class="w200" /></span>
+            <span class="txtIn"> <input id="endDate" name="endDate" class="w200px" /></span>
           </div>
         </td>
       </tr>
@@ -74,7 +74,7 @@
 
   <div class="mt20 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
-    <div id="listScaleBox" class="w150 fl"></div>
+    <div id="listScaleBox" class="w100px fl"></div>
     <%-- 엑셀 다운로드 --%>
     <button class="btn_skyblue fr" id="excelBtn">
       <s:message code="cmm.excel.down" />
@@ -106,7 +106,7 @@
 <div id="dclzRegTent" class="fullDimmed" style="display: none;"></div>
 <div id="dclzRegLayer" class="layer" style="display: none;">
   <div class="layer_inner">
-    <div class="title w600">
+    <div class="title w600px">
       <%-- 근태등록 --%>
       <p class="tit"><s:message code="dclzManage.reg.nm" /></p>
       <a href="#" class="btn_close dclzRegClose"></a>
@@ -124,7 +124,7 @@
                 <th><s:message code="dclzManage.sale.date" /></th>
                 <td>
                   <div class="sb-select">
-                    <input id="saleDate" class="w200" />
+                    <input id="saleDate" class="w200px" />
                   </div>
                 </td>
               </tr>
@@ -142,8 +142,8 @@
                 <th><s:message code="dclzManage.empin" /></th>
                 <td>
                   <div class="sb-select">
-                    <input id="empInDtDate" class="w200" />
-                    <input id="empInDtTime" class="w200" />
+                    <input id="empInDtDate" class="w200px" />
+                    <input id="empInDtTime" class="w200px" />
                   </div>
                 </td>
               </tr>
@@ -152,8 +152,8 @@
                 <th><s:message code="dclzManage.empout" /></th>
                 <td>
                   <div class="sb-select">
-                    <input id="empOutDtDate" class="w200" />
-                    <input id="empOutDtTime" class="w200" />
+                    <input id="empOutDtDate" class="w200px" />
+                    <input id="empOutDtTime" class="w200px" />
                   </div>
                 </td>
               </tr>

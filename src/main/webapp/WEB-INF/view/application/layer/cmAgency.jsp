@@ -7,7 +7,7 @@
 <div id="_calayer" class="layer" style="display: none;">
   <div class="layer_inner">
     <!--layerContent-->
-    <div class="title w600">
+    <div class="title w600px">
       <%-- 업체선택 --%>
       <p class="tit">
         <s:message code="cmm.cmagency.select" />

@@ -44,9 +44,9 @@
         <td colspan="3">
           <%-- 조회 일자 --%>
           <div class="sb-select">
-            <span class="txtIn"> <input id="startDate" name="startDate" class="w200" /></span>
+            <span class="txtIn"> <input id="startDate" name="startDate" class="w200px" /></span>
             <span class="rg">~</span>
-            <span class="txtIn"> <input id="endDate" name="endDate" class="w200" /></span>
+            <span class="txtIn"> <input id="endDate" name="endDate" class="w200px" /></span>
           </div>
         </td>
       </tr>
@@ -86,7 +86,7 @@
         <tr>
           <th colspan="6">
             <s:message code="ehgt.date"/>
-            <input id="saleDate" class="w120 font" />
+            <input id="saleDate" class="w120px font" />
           </th>
         </tr>
         </thead>

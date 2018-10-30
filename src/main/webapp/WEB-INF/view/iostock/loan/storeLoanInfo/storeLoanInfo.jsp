@@ -24,9 +24,9 @@
       <th><s:message code="storeLoanInfo.searchDate"/></th>
       <td colspan="3">
         <div class="sb-select">
-          <span class="txtIn"><input id="srchStartDate" class="w120"></span>
+          <span class="txtIn"><input id="srchStartDate" class="w120px"></span>
           <span class="rg">~</span>
-          <span class="txtIn"><input id="srchEndDate" class="w120"></span>
+          <span class="txtIn"><input id="srchEndDate" class="w120px"></span>
         </div>
       </td>
     </tr>

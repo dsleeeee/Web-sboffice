@@ -40,20 +40,10 @@
 
 <%-- 환경설정 팝업 오픈 --%>
 function openEnvLayer(){
-
-  console.log('openEnvLayer');
-
-
   $("#envDim").show();
   $("#envLayer").show();
-
-
-  console.log(selectedBrand);
-
   var envTitle = "[" + selectedBrand.hqBrandCd + "] "+ selectedBrand.hqBrandNm;
-
   $("#popTitle").text(envTitle);
-
   getConfigList();
 }
 
@@ -112,15 +102,6 @@ function getConfigList(){
             envHtml += "      <td>";
 
             if(list[j].envstGrpCd == "Y"){
-
-              //list[j].selEnvstVal != null && (list[j].selEnvstVal == list[j].envstValCd)
-
-              if(list[j].selEnvstVal != null) {
-                console.log("선택선택 : "+ list[j].selEnvstVal);
-                console.log("디폴트디폴트 : "+ list[j].defltYn);
-                console.log("원래 밸류 : "+ list[j].envstCd);
-              }
-
               envHtml += "        <input type='text' name='envstValCd' id='env" + list[j].envstCd + "' >";
             } else {
               envHtml += "        <select name='envstValCd' id='env" + list[j].envstCd + "' />";
@@ -208,7 +189,7 @@ $("#envLayer #btnSave").click(function(){
   var objEnvstValCd = document.getElementsByName("envstValCd");
   var objDirctInYn = document.getElementsByName("dirctInYn");
 
-  var paramArr = new Array();
+  var paramArr = [];
 
   for(var i=0; i<objEnvstCd.length; i++){
 

@@ -57,7 +57,7 @@
 
   <div class="mt20 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
-    <div id="listScaleBox" class="w150 fl"></div>
+    <div id="listScaleBox" class="w100px fl"></div>
 
     <%-- 거래처 등록 --%>
     <button class="btn_skyblue fr" id="regVendr">
