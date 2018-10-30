@@ -119,12 +119,12 @@ public class PosTemplateServiceImpl implements PosTemplateService {
         posTemplateVO.setModDt(currentDt);
         posTemplateVO.setModId(sessionInfoVO.getUserId());
 
-        // 본사 또는 매장에서 등록한 템플릿 만 업데이트 처리
-        if (orgnFg.equals(posTemplateVO.getTempltRegFg())) {
-            // 실제출력물 구분하여 업데이트
-            if ("000".equals(posTemplateVO.getTempltCd())) {
-                result = posTemplateMapper.updatePosTemplatePrint(posTemplateVO);
-            } else {
+        // 실제출력물 구분하여 업데이트
+        if ("000".equals(posTemplateVO.getTempltCd())) {
+            result = posTemplateMapper.updatePosTemplatePrint(posTemplateVO);
+        } else {
+            // 본사 또는 매장에서 등록한 템플릿 만 업데이트 처리
+            if (orgnFg.equals(posTemplateVO.getTempltRegFg())) {
                 result = posTemplateMapper.savePosTemplate(posTemplateVO);
             }
         }
