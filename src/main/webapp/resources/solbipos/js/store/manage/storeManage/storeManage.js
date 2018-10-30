@@ -61,9 +61,6 @@ app.controller('storeManageCtrl', ['$scope', '$http', function ($scope, $http) {
       data: params,
       success: function(result) {
         if(result.status === "OK") {
-
-          console.log(result);
-
           $scope.list = result.data.list;
           if(isEmptyObject($scope.list)){
             $scope._popMsg(messages["cmm.empty.data"]);
@@ -100,7 +97,7 @@ app.controller('storeManageCtrl', ['$scope', '$http', function ($scope, $http) {
             }
           }
 
-          console.log(">> scope")
+          console.log(">> scope");
           console.log($scope)
 
         }

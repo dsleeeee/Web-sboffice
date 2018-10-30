@@ -79,6 +79,7 @@
                         TB_HQ_PRINT thp
                     WHERE
                         thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                        AND thp.PRT_CLASS_CD = #{prtClassCd}
                     UNION ALL
                     SELECT
                         thpt.PRT_CLASS_CD,
@@ -115,6 +116,7 @@
                         TB_MS_PRINT tmp
                     WHERE
                         tmp.STORE_CD = #{storeCd}
+                        AND tmp.PRT_CLASS_CD = #{prtClassCd}
                     UNION ALL
                     SELECT
                         tmpt.PRT_CLASS_CD,
@@ -258,6 +260,41 @@
         </choose>
     </update>
 
+    <!-- 출력물템플릿 삭제 -->
+    <!--
+        TABLE    : TB_HQ_PRINT_TEMPL, TB_MS_PRINT_TEMPL
+        PARAM    : posTemplateVO
+        COMMENTS : 출력물템플릿을 삭제한다.
+    -->
+    <delete id="deletePosTemplateList" parameterType="posTemplateVO">
+        /* USE : PosServiceMapper.deletePosTemplateList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE
+                FROM
+                    TB_HQ_PRINT_TEMPL
+                WHERE
+                    HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND PRT_CLASS_CD = #{prtClassCd}
+                    AND TEMPLT_REG_FG = 'H'
+                    AND TEMPLT_CD = #{templtCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE
+                FROM
+                    TB_MS_PRINT_TEMPL
+                WHERE
+                    STORE_CD = #{storeCd}
+                    AND PRT_CLASS_CD = #{prtClassCd}
+                    AND TEMPLT_REG_FG = 'S'
+                    AND TEMPLT_CD = #{templtCd}
+            </when>
+        </choose>
+
+    </delete>
+
     <!-- 출력물템플릿 저장 -->
     <!--
         TABLE    : TB_HQ_PRINT_TEMPL, TB_MS_PRINT_TEMPL
@@ -375,6 +412,74 @@
 
     </insert>
 
+    <!-- 실제출력물 템플릿 생성 -->
+    <!--
+        TABLE    : TB_HQ_PRINT, TB_MS_PRINT
+        PARAM    : posTemplateVO
+        COMMENTS : 실제출력물 템플릿을 생성한다.
+    -->
+    <insert id="insertPosTemplatePrint" parameterType="posTemplateVO">
+        /* USE : PosServiceMapper.insertPosTemplatePrint */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                MERGE INTO TB_HQ_PRINT thp
+                USING DUAL
+                ON (
+                    thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND thp.PRT_CLASS_CD = #{prtClassCd}
+                )
+                WHEN NOT MATCHED THEN
+                    INSERT
+                    (
+                        HQ_OFFICE_CD,
+                        PRT_CLASS_CD,
+                        PRT_FORM,
+                        REG_DT,
+                        REG_ID,
+                        MOD_DT,
+                        MOD_ID
+                    ) VALUES (
+                        #{hqOfficeCd},
+                        #{prtClassCd},
+                        '',
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId}
+                    )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                MERGE INTO TB_MS_PRINT tmp
+                USING DUAL
+                ON (
+                    tmp.STORE_CD = #{storeCd}
+                    AND tmp.PRT_CLASS_CD = #{prtClassCd}
+                )
+                WHEN NOT MATCHED THEN
+                    INSERT
+                    (
+                        STORE_CD,
+                        PRT_CLASS_CD,
+                        PRT_FORM,
+                        REG_DT,
+                        REG_ID,
+                        MOD_DT,
+                        MOD_ID
+                    ) VALUES (
+                        #{storeCd},
+                        #{prtClassCd},
+                        '',
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId}
+                    )
+            </when>
+        </choose>
+    </insert>
+
     <!-- 실제출력물 템플릿 수정 -->
     <!--
         TABLE    : TB_HQ_PRINT, TB_MS_PRINT
@@ -394,6 +499,7 @@
                     MOD_ID = #{modId}
                 WHERE
                     HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND PRT_CLASS_CD = #{prtClassCd}
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -405,6 +511,7 @@
                     MOD_ID = #{modId}
                 WHERE
                     STORE_CD = #{storeCd}
+                    AND PRT_CLASS_CD = #{prtClassCd}
             </when>
         </choose>
     </update>

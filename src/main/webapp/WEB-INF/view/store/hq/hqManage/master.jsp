@@ -408,7 +408,7 @@
     },
       function (result) {
         s_alert.pop(result.message);
-        return;
+
       }
     );
   }
@@ -548,8 +548,6 @@
     param.agencyCd = rAgency.selectedValue;
     param.clsFg = rClsFg.selectedValue;
 
-    console.log(param);
-
     $.postJSONSave(sendUrl, param, function(result) {
       s_alert.pop("<s:message code='cmm.saveSucc'/>");
       $(".btn_close").click();
@@ -557,7 +555,7 @@
     },
       function (result) {
         s_alert.pop(result.message);
-        return;
+
       }
     );
   }
@@ -588,7 +586,7 @@
     },
       function (result) {
         s_alert.pop(result.message);
-        return;
+
       }
     );
   });

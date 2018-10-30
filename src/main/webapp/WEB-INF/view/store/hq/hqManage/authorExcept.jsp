@@ -208,7 +208,6 @@ var authCombo;
           beUseMenuGrid.cells.setCellData(ht.row, ht.col, true);
         }
         beUseMenuGrid.endUpdate();
-        console.log(beUseMenuGrid.cells.getCellData(ht.row, ht.col, true))
       }
 
     }
@@ -342,8 +341,6 @@ var authCombo;
     var param = selectedHq;
 
     $.postJSON("/store/hq/hqManage/authorExcept/getAuthHqList.sb", param, function(result) {
-      console.log(result);
-
       authCombo.itemsSource = result.data.authHqList;
       avlblMenuGrid.itemsSource = result.data.avlblMenu;
       beUseMenuGrid.itemsSource = result.data.beUseMenu;

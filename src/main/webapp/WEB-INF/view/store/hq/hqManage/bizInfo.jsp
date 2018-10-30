@@ -142,7 +142,6 @@
   <%-- 그리드 선택 이벤트 --%>
   theGridBizInfo.addEventListener(theGridBizInfo.hostElement, 'mousedown', function(e) {
     var ht = theGridBizInfo.hitTest(e);
-    console.log(ht);
     if( ht.cellType == wijmo.grid.CellType.Cell) {
       var col = ht.panel.columns[ht.col];
       if( col.binding == "storeCd") {
@@ -175,7 +174,7 @@
     },
       function (result) {
         s_alert.pop(result.message);
-        return;
+
       }
     );
   }
@@ -201,7 +200,7 @@
     },
       function (result) {
         s_alert.pop(result.message);
-        return;
+
       }
     );
   }

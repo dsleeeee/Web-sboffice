@@ -11,7 +11,7 @@
 <div class="subCon" ng-controller="templateCtrl">
 
   <div class="searchBar flddUnfld">
-    <a href="#" class="close fl">${menuNm}
+    <a href="#" class="open fl">${menuNm}
     </a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
@@ -21,7 +21,7 @@
     </div>
   </div>
 
-  <table class="searchTbl" style="display: none;">
+  <table class="searchTbl">
     <colgroup>
       <col class="w10" />
       <col class="w20" />
@@ -33,16 +33,16 @@
         <td colspan="2" class="oh">
           <div class="sb-select fl w200px">
             <wj-combo-box
-                id="srchPrtClassCdCombo"
-                ng-model="prtClassCd"
-                control="prtClassCdCombo"
-                items-source="_getComboData('srchPrtClassCdCombo')"
-                display-member-path="name"
-                selected-value-path="value"
-                is-editable="false"
-                initialized="_initComboBox(s)"
-                selected-index-changed="setPrtClassCdCombo(s)"
-                got-focus="prtClassCdComboFocus(s,e)">
+              id="srchPrtClassCdCombo"
+              ng-model="prtClassCd"
+              control="prtClassCdCombo"
+              items-source="_getComboData('srchPrtClassCdCombo')"
+              display-member-path="name"
+              selected-value-path="value"
+              is-editable="false"
+              initialized="_initComboBox(s)"
+              selected-index-changed="setPrtClassCdCombo(s)"
+              got-focus="prtClassCdComboFocus(s,e)">
             </wj-combo-box>
             <input type="hidden" id="srchPrtClassCdVal" value={{prtClassCd}} />
           </div>
@@ -103,7 +103,14 @@
           <span class="fl bk lh30"><s:message code='posTemplate.listNm' /></span>
         </div>
         <div class="app-input-group">
-          <div id="listBoxCode" style="width: 100%;height: 410px;"></div>
+          <wj-list-box
+            style="width: 100%;height: 410px;"
+            control="listBoxCodeList"
+            initialized="initListBox(s,e)"
+            display-member-path="prtCd"
+            selected-value-path="prtCd"
+            is-editable="false">
+          </wj-list-box>
         </div>
       </div>
     </div>
@@ -113,11 +120,9 @@
       <div class="wj-TblWrapBr pd20 templateEdit" style="height:485px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='posTemplate.editNm' /></span>
-          <c:if test="${orgnFg == 'HQ'}">
-          <button class="btn_skyblue" id="btnApplyStoreTemplate" style="display: none;" ng-click="$broadcast('applyStoreTemplate')">
-            <s:message code="posTemplate.applyStore" />
+          <button class="btn_skyblue" id="btnApplyToPrint" style="display: none;" ng-click="$broadcast('applyToPrint')">
+            <s:message code="posTemplate.applyToPrint" />
           </button>
-          </c:if>
           <button class="btn_skyblue" id="btnSaveEditTemplate" style="display: none;" ng-click="$broadcast('saveEditTemplate')">
             <s:message code="cmm.save" />
           </button>
@@ -133,6 +138,11 @@
       <div class="wj-TblWrapBr pd20 templateEdit" style="height:485px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='posTemplate.viewNm' /></span>
+          <c:if test="${orgnFg == 'HQ'}">
+            <button class="btn_skyblue" id="btnApplyStoreTemplate" style="display: none;" ng-click="$broadcast('applyToStoreTemplate')">
+              <s:message code="posTemplate.applyToStore" />
+            </button>
+          </c:if>
         </div>
         <div id="preview" class="s12 lh15" style="height:410px;">
         </div>
@@ -145,4 +155,4 @@
 <script type="text/javascript">
   var prtClassComboData = ${listPrintType};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/output/posTemplate/posTemplate.js?ver=20181027.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/output/posTemplate/posTemplate.js?ver=20181030.01" charset="utf-8"></script>
