@@ -4,7 +4,6 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
-import kr.co.common.utils.DateUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.output.postemplate.service.PosTemplateService;
@@ -123,15 +122,12 @@ public class PosTemplateController {
         posTemplateVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         posTemplateVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         posTemplateVO.setStoreCd(sessionInfoVO.getStoreCd());
+
         // 실제출력물 없는경우 대비해서 저장처리
-        String currentDt = DateUtil.currentDateTimeString();
-        posTemplateVO.setRegDt(currentDt);
-        posTemplateVO.setRegId(sessionInfoVO.getUserId());
-        posTemplateVO.setModDt(currentDt);
-        posTemplateVO.setModId(sessionInfoVO.getUserId());
-        // 출력물코드 목록 조회
+        posTemplateService.insertPosTemplatePrint(posTemplateVO, sessionInfoVO);
+        // 출력물코드 목록 재조회
         list = posTemplateService.getPosTemplateList(posTemplateVO);
-        
+
         return ReturnUtil.returnListJson(Status.OK, list, posTemplateVO);
         
     }

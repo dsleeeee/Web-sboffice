@@ -59,9 +59,6 @@ public class PosTemplateServiceImpl implements PosTemplateService {
     /** 출력물템플릿 목록 조회 */
     @Override
     public List<DefaultMap<String>> getPosTemplateList(PosTemplateVO posTemplateVO) {
-        // 실제출력물 없는경우 대비해서 저장처리
-        posTemplateMapper.insertPosTemplatePrint(posTemplateVO);
-
         return posTemplateMapper.getPosTemplateList(posTemplateVO);
     }
 
@@ -124,8 +121,39 @@ public class PosTemplateServiceImpl implements PosTemplateService {
 
         // 본사 또는 매장에서 등록한 템플릿 만 업데이트 처리
         if (orgnFg.equals(posTemplateVO.getTempltRegFg())) {
-            result = posTemplateMapper.savePosTemplate(posTemplateVO);
+            // 실제출력물 구분하여 업데이트
+            if ("000".equals(posTemplateVO.getTempltCd())) {
+                result = posTemplateMapper.updatePosTemplatePrint(posTemplateVO);
+            } else {
+                result = posTemplateMapper.savePosTemplate(posTemplateVO);
+            }
         }
+
+        if ( result >= 0 ) {
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+    }
+
+    /** 실제출력물 템플릿 생성 */
+    @Override
+    public int insertPosTemplatePrint(PosTemplateVO posTemplateVO, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        // 소속구분 설정
+        String orgnFg = sessionInfoVO.getOrgnFg().getCode();
+        posTemplateVO.setOrgnFg(orgnFg);
+        posTemplateVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        posTemplateVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        posTemplateVO.setRegDt(currentDt);
+        posTemplateVO.setRegId(sessionInfoVO.getUserId());
+        posTemplateVO.setModDt(currentDt);
+        posTemplateVO.setModId(sessionInfoVO.getUserId());
+
+        result = posTemplateMapper.insertPosTemplatePrint(posTemplateVO);
 
         if ( result >= 0 ) {
             return result;
