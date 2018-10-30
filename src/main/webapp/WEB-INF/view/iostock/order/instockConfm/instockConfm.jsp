@@ -7,7 +7,7 @@
 <c:set var="baseUrl" value="/iostock/order/instockConfm/instockConfm/"/>
 
 <div class="subCon" ng-controller="instockConfmCtrl">
-  <div class="searchBar">
+  <div class="searchBar flddUnfld">
     <a href="#" class="open">${menuNm}</a>
   </div>
   <table class="searchTbl">

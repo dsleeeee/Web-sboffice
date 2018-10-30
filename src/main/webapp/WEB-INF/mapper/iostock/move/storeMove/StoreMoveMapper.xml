@@ -13,14 +13,13 @@
         /* USE : StoreMoveMapper.getStoreMoveList */
         <![CDATA[
         SELECT  tpsm.HQ_OFFICE_CD, tpsm.SLIP_NO, tpsm.MOVE_DATE, tpsm.DTL_CNT, tpsm.DLVR_FG, tpsm.PROC_FG
-        ,       DECODE(tpsm.OUT_STORE_CD, #{outStoreCd}, 'out'           , 'in'             ) IO_FG
-        ,       DECODE(tpsm.OUT_STORE_CD, #{outStoreCd}, tpsm.IN_STORE_CD, tpsm.OUT_STORE_CD) STORE_CD
-        ,       DECODE(tpsm.OUT_STORE_CD, #{outStoreCd}, tmsin.STORE_NM  , tmsout.STORE_NM) STORE_NM
-        ,       DECODE(tpsm.OUT_STORE_CD, #{outStoreCd}, tpsm.OUT_TOT_QTY, tpsm.IN_TOT_QTY) TOT_QTY
-        ,       DECODE(tpsm.OUT_STORE_CD, #{outStoreCd}, tpsm.OUT_AMT    , tpsm.IN_AMT    ) AMT
-        ,       DECODE(tpsm.OUT_STORE_CD, #{outStoreCd}, tpsm.OUT_VAT    , tpsm.IN_VAT    ) VAT
-        ,       DECODE(tpsm.OUT_STORE_CD, #{outStoreCd}, tpsm.OUT_TOT    , tpsm.IN_TOT    ) TOT
-        ,       tpsm.DTL_CNT
+        ,       DECODE(tpsm.OUT_STORE_CD, #{outStoreCd}, 'out'           , 'in'             ) AS IO_FG
+        ,       DECODE(tpsm.OUT_STORE_CD, #{outStoreCd}, tpsm.IN_STORE_CD, tpsm.OUT_STORE_CD) AS STORE_CD
+        ,       DECODE(tpsm.OUT_STORE_CD, #{outStoreCd}, tmsin.STORE_NM  , tmsout.STORE_NM  ) AS STORE_NM
+        ,       DECODE(tpsm.OUT_STORE_CD, #{outStoreCd}, tpsm.OUT_TOT_QTY, tpsm.IN_TOT_QTY  ) AS TOT_QTY
+        ,       DECODE(tpsm.OUT_STORE_CD, #{outStoreCd}, tpsm.OUT_AMT    , tpsm.IN_AMT      ) AS AMT
+        ,       DECODE(tpsm.OUT_STORE_CD, #{outStoreCd}, tpsm.OUT_VAT    , tpsm.IN_VAT      ) AS VAT
+        ,       DECODE(tpsm.OUT_STORE_CD, #{outStoreCd}, tpsm.OUT_TOT    , tpsm.IN_TOT      ) AS TOT
         FROM    TB_PO_STORE_MOVE tpsm
         ,       TB_MS_STORE tmsout
         ,       TB_MS_STORE tmsin
@@ -94,39 +93,35 @@
     <select id="getStoreMoveDtlList" parameterType="storeMoveVO" resultType="DefaultMap">
         /* USE : StoreMoveMapper.getStoreMoveDtlList */
         <![CDATA[
-        SELECT   tpsmd.PROD_CD, thp.PROD_NM
-        ,        DECODE(thp.VAT_FG,'Y',1,0) AS VAT_FG01
-        ,        thp.PO_UNIT_FG, thp.PO_UNIT_QTY
-        ,        thp.PO_PROD_FG
-        ,        tpsmd.OUT_SPLY_UPRC
-        ,        tmseout.ENVST_VAL AS OUT_ENVST0011
-        ,        tpsmd.IN_SPLY_UPRC
-        ,        tmsein.ENVST_VAL AS IN_ENVST0011
-        ,        tpsmd.OUT_UNIT_QTY
-        ,        tpsmd.OUT_ETC_QTY
-        ,        tpsmd.OUT_TOT_QTY
-        ,        tpsmd.OUT_AMT
-        ,        tpsmd.OUT_VAT
-        ,        tpsmd.OUT_TOT
-        ,        tpsmd.IN_AMT
-        ,        tpsmd.IN_VAT
-        ,        tpsmd.IN_TOT
-        ,        tpsmd.OUT_TOT_QTY AS PREV_OUT_TOT_QTY
-        FROM     TB_PO_STORE_MOVE tpsm
-        ,        TB_PO_STORE_MOVE_DTL tpsmd
-        ,        TB_HQ_PRODUCT thp
-        ,        TB_MS_STORE_ENVST tmseout
-        ,        TB_MS_STORE_ENVST tmsein
-        WHERE    tpsm.HQ_OFFICE_CD  =   #{hqOfficeCd}
-        AND      tpsm.SLIP_NO       =   #{slipNo}
-        AND      tpsmd.HQ_OFFICE_CD =   tpsm.HQ_OFFICE_CD
-        AND      tpsmd.SLIP_NO      =   tpsm.SLIP_NO
-        AND      thp.HQ_OFFICE_CD   =   tpsmd.HQ_OFFICE_CD
-        AND      thp.PROD_CD        =   tpsmd.PROD_CD
-        AND      tmseout.STORE_CD   =   tpsm.OUT_STORE_CD
-        AND      tmseout.ENVST_CD   =   '0011'
-        AND      tmsein.STORE_CD    =   tpsm.IN_STORE_CD
-        AND      tmsein.ENVST_CD    =   '0011'
+        SELECT  tpsmd.PROD_CD, thp.PROD_NM, thp.PO_UNIT_FG, thp.PO_UNIT_QTY
+        ,       DECODE(thp.VAT_FG,'Y',1,0) AS VAT_FG01
+        ,       TO_NUMBER(DECODE(tpsmd.OUT_UNIT_QTY, 0, NULL, tpsmd.OUT_UNIT_QTY)) AS OUT_UNIT_QTY
+        ,       TO_NUMBER(DECODE(tpsmd.OUT_ETC_QTY , 0, NULL, tpsmd.OUT_ETC_QTY )) AS OUT_ETC_QTY
+        ,       tpsmd.OUT_TOT_QTY
+        ,       tpsmd.OUT_TOT_QTY AS PREV_OUT_TOT_QTY
+        ,       tpsmd.OUT_SPLY_UPRC
+        ,       tpsmd.IN_SPLY_UPRC
+        ,       TO_NUMBER(DECODE(DECODE(tpsm.OUT_STORE_CD, #{sessionStoreCd}, tpsmd.OUT_SPLY_UPRC , tpsmd.IN_SPLY_UPRC ), 0, NULL, DECODE(tpsm.OUT_STORE_CD, #{sessionStoreCd}, tpsmd.OUT_SPLY_UPRC , tpsmd.IN_SPLY_UPRC ))) AS SPLY_UPRC
+        ,       TO_NUMBER(DECODE(DECODE(tpsm.OUT_STORE_CD, #{sessionStoreCd}, tpsmd.OUT_AMT , tpsmd.IN_AMT ), 0, NULL, DECODE(tpsm.OUT_STORE_CD, #{sessionStoreCd}, tpsmd.OUT_AMT , tpsmd.IN_AMT ))) AS AMT
+        ,       TO_NUMBER(DECODE(DECODE(tpsm.OUT_STORE_CD, #{sessionStoreCd}, tpsmd.OUT_VAT , tpsmd.IN_VAT ), 0, NULL, DECODE(tpsm.OUT_STORE_CD, #{sessionStoreCd}, tpsmd.OUT_VAT , tpsmd.IN_VAT ))) AS VAT
+        ,       TO_NUMBER(DECODE(DECODE(tpsm.OUT_STORE_CD, #{sessionStoreCd}, tpsmd.OUT_TOT , tpsmd.IN_TOT ), 0, NULL, DECODE(tpsm.OUT_STORE_CD, #{sessionStoreCd}, tpsmd.OUT_TOT , tpsmd.IN_TOT ))) AS TOT
+        ,       tmseout.ENVST_VAL AS OUT_ENVST0011
+        ,       tmsein.ENVST_VAL  AS IN_ENVST0011
+        FROM    TB_PO_STORE_MOVE tpsm
+        ,       TB_PO_STORE_MOVE_DTL tpsmd
+        ,       TB_HQ_PRODUCT thp
+        ,       TB_MS_STORE_ENVST tmseout
+        ,       TB_MS_STORE_ENVST tmsein
+        WHERE   tpsm.HQ_OFFICE_CD   =   #{hqOfficeCd}
+        AND     tpsm.SLIP_NO        =   #{slipNo}
+        AND     tpsmd.HQ_OFFICE_CD  =   tpsm.HQ_OFFICE_CD
+        AND     tpsmd.SLIP_NO       =   tpsm.SLIP_NO
+        AND     thp.HQ_OFFICE_CD    =   tpsmd.HQ_OFFICE_CD
+        AND     thp.PROD_CD         =   tpsmd.PROD_CD
+        AND     tmseout.STORE_CD    =   tpsm.OUT_STORE_CD
+        AND     tmseout.ENVST_CD    =   '0011'
+        AND     tmsein.STORE_CD     =   tpsm.IN_STORE_CD
+        AND     tmsein.ENVST_CD     =   '0011'
         ORDER BY tpsmd.PROD_CD
         ]]>
     </select>
@@ -383,12 +378,12 @@
         /* USE : StoreMoveMapper.updateStoreMoveConfirm */
         UPDATE  TB_PO_STORE_MOVE
         SET     PROC_FG      = #{procFg},
-                OUT_CONFM_DT = #{modDt},
-                OUT_CONFM_ID = #{modId},
-                IN_CONFM_DT  = #{modDt},
-                IN_CONFM_ID  = #{modId},
-                HQ_CONFM_DT  = #{modDt},
-                HQ_CONFM_ID  = #{modId},
+                OUT_CONFM_DT = DECODE(#{procFg}, '1', #{modDt}, OUT_CONFM_DT),
+                OUT_CONFM_ID = DECODE(#{procFg}, '1', #{modId}, OUT_CONFM_ID),
+                IN_CONFM_DT  = DECODE(#{procFg}, '2', #{modDt}, IN_CONFM_DT),
+                IN_CONFM_ID  = DECODE(#{procFg}, '2', #{modId}, IN_CONFM_ID),
+                HQ_CONFM_DT  = DECODE(#{procFg}, '3', #{modDt}, HQ_CONFM_DT),
+                HQ_CONFM_ID  = DECODE(#{procFg}, '3', #{modId}, HQ_CONFM_ID),
                 OUT_SLIP_NO  = #{outSlipNo},
                 IN_SLIP_NO   = #{inSlipNo},
                 MOD_DT       = #{modDt},

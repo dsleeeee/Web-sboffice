@@ -7,7 +7,7 @@
 <c:set var="baseUrl" value="/iostock/volmErr/volmErr/volmErr/"/>
 
 <div class="subCon" ng-controller="volmErrCtrl">
-  <div class="searchBar">
+  <div class="searchBar flddUnfld">
     <a href="#" class="open">${menuNm}</a>
   </div>
   <table class="searchTbl">

@@ -190,7 +190,7 @@
 <script type="text/javascript">
 
   /** 주문등록 상세 그리드 controller */
-  app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
+  app.controller('storeOrderRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('storeOrderRegistCtrl', $scope, $http, true));
 
@@ -548,7 +548,7 @@
 
     // 안전재고 수량적용.
     $scope.setSafeToOrder = function () {
-      $rootScope.$broadcast('loadingPopupActive', messages["cmm.progress"]);
+      $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]);
       // 데이터 처리중 팝업 띄우기위해 setTimeout 사용.
       setTimeout(function() {
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
@@ -566,7 +566,7 @@
             $scope.flex.collectionView.commitEdit();
           }
         }
-        $rootScope.$broadcast('loadingPopupInactive');
+        $scope.$broadcast('loadingPopupInactive');
       }, 100);
     };
 
