@@ -81,6 +81,12 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
             thePreview.innerHTML = "";
           }
           $("#btnSaveTemplate").show();
+          // 실제출력물인경우 출력물적용 버튼 감춤
+          if (selectedRow.templtCd === '000') {
+            $("#btnApplyToPrint").hide();
+          } else {
+            $("#btnApplyToPrint").show();
+          }
         }
       }
     });
@@ -107,7 +113,6 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
               $("#btnAddTemplate").show();
               $("#btnDelTemplate").show();
               $("#btnSaveTemplate").show();
-              $("#btnApplyToPrint").show();
               // 매장적용 버튼은 본사만
               if ( gvOrgnFg === "H" ) {
                 $("#btnApplyStoreTemplate").show();
