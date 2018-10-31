@@ -26,13 +26,6 @@
         </ul>
       </div>
 
-      <div>
-
-
-
-
-      </div>
-
       <%-- 매장환경, 외식환경, 유통환경 --%>
       <c:import url="/WEB-INF/view/store/manage/storeManage/storeCmmEnv.jsp">
       </c:import>
@@ -41,10 +34,13 @@
       <c:import url="/WEB-INF/view/store/manage/storeManage/storePoEnv.jsp">
       </c:import>
 
-      <%-- 주방프린터 // todo --%>
+      <%-- 주방프린터 --%>
       <c:import url="/WEB-INF/view/store/manage/storeManage/kitchenPrint.jsp">
       </c:import>
 
+      <%-- 주방프린터 상품연결 --%>
+      <c:import url="/WEB-INF/view/store/manage/storeManage/kitchenPrintProduct.jsp">
+      </c:import>
 
     </div>
   </div>

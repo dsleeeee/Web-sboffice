@@ -23,7 +23,6 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     return $scope.selectedPosNo;
   };
 
-
   // 조회한 포스 목록
   $scope.posList;
   $scope.setPosList = function(list) {
@@ -33,12 +32,10 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     return $scope.posList;
   };
 
-
   // 팝업 오픈시 매장정보 조회
   $scope.$on("posEnvCtrl", function(event, data) {
     event.preventDefault();
   });
-
 
   /*********************************************************
    * 매장환경 분류 탭 변경
@@ -50,8 +47,6 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     var storeNm       = storeScope.getSelectedStore().storeNm;
 
     $("#storeEnvTitle").text("[" + storeCd + "] " + storeNm);
-
-    // $scope.setEnvGroupCd(envGroupCd);
 
     // 환경변수 셋팅
     var envScope = agrid.getScope('storeEnvCtrl');
@@ -67,19 +62,27 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
 
     if(envGroupCd === '00' || envGroupCd === '01' || envGroupCd === '02') { // 매장환경, 외식환경 유통환경 환경변수
 
-      $("#cmmEnvArea").show();
-      $("#posEnvArea").hide();
-
       var cmmEnvScope = agrid.getScope('cmmEnvCtrl');
       cmmEnvScope.changeEnvGroup(envGroupCd);
 
-    } else if(envGroupCd === '03') {
+    } else if(envGroupCd === '03') { // 포스환경
 
       $("#cmmEnvArea").hide();
       $("#posEnvArea").show();
+      $("#kitchenPrintArea").hide();
+      $("#kitchenPrintProductArea").hide();
 
       $scope.getStorePosList();
 
+    } else if(envGroupCd === "98") { // 주방프린터
+
+      var kitchenPrintScope = agrid.getScope('kitchenPrintCtrl');
+      kitchenPrintScope.changeEnvGroup(envGroupCd);
+
+    } else if(envGroupCd === "99") { // 주방프린터 상품연결
+
+      var kitchenPrintProdScope = agrid.getScope('kitchenPrintProductCtrl');
+      kitchenPrintProdScope.changeEnvGroup(envGroupCd);
     }
   };
 

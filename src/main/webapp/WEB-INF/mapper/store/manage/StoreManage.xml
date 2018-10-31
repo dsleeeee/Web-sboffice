@@ -1690,6 +1690,7 @@
          WHERE tmp.STORE_CD = #{storeCd}
            AND tmpr.STORE_CD (+)= tmp.STORE_CD
            AND tmpr.PRTER_NO (+)= tmp.PRTER_NO
+         ORDER BY PRTER_NO ASC
     </select>
 
     <!-- 주방프린터 등록 -->

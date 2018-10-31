@@ -47,17 +47,29 @@ app.controller('cmmEnvCtrl', ['$scope', '$http', function ($scope, $http) {
 
       $("#cmmEnvArea").show();
       $("#posEnvArea").hide();
+      $("#kitchenPrintArea").hide();
+      $("#kitchenPrintProductArea").hide();
 
       $scope.searchCmmEnv(envGroupCd);
 
     } else if(envGroupCd === "03") { // 포스환경
 
-      $("#posEnvArea").show();
-      $("#cmmEnvArea").hide();
-
       var posEnvScope = agrid.getScope('posEnvCtrl');
       posEnvScope.changeEnvGroup(envGroupCd);
+
+    } else if(envGroupCd === "98"){ // 주방프린터
+
+      var kitchenPrintScope = agrid.getScope('kitchenPrintCtrl');
+      kitchenPrintScope.changeEnvGroup(envGroupCd);
+
+    } else if(envGroupCd === "99") { // 주방프린터 상품연결
+
+      var kitchenPrintProdScope = agrid.getScope('kitchenPrintProductCtrl');
+      console.log(kitchenPrintProdScope);
+
+      kitchenPrintProdScope.changeEnvGroup(envGroupCd);
     }
+
   };
 
   /*********************************************************

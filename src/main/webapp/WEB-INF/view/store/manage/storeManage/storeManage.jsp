@@ -84,6 +84,7 @@
     <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('storeManageCtrl')"><s:message code="cmm.search" /></button>
   </div>
 
+  <%-- 신규 매장 등록 --%>
   <div class="updownSet oh mb10">
     <button class="btn_skyblue" id="btnAddRepresent" ng-click="addStore()">
       <s:message code="storeManage.regist.new.store" />

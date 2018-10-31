@@ -4,232 +4,97 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 
-<div id="kitchenPrintProductArea" style="display:none;">
+<div id="kitchenPrintProductArea" style="display:none;" ng-controller="kitchenPrintProductCtrl">
+
+  <%-- 환경설정 분류 탭 --%>
+  <div class="subTab2 mt20 mb10">
+    <ul id="envGroupTab">
+      <%-- 매장환경 --%>
+      <li><a href="#" id="storeEnvFg" envstFg="00" class="on" ng-click="changeEnvGroup('00')"><s:message code="storeManage.storeEnv" /></a></li>
+      <%-- 외식환경 --%>
+      <li><a href="#" id="foodEnvFg" envstFg="01" ng-click="changeEnvGroup('01')"><s:message code="storeManage.foodEnv" /></a></li>
+      <%-- 유통환경  //TODO 추후 추가 -%>
+      <%-- <li><a href="#" id="distributionEnvFg" envstFg="02" ng-click="changeEnvGroup('02')"><s:message code="storeManage.distributionEnv" /></a></li> --%>
+      <%-- 포스환경 --%>
+      <li><a href="#" id="posEnvFg" envstFg="03" ng-click="changeEnvGroup('03')"><s:message code="storeManage.posEnv" /></a></li>
+      <%-- 주방프린터 --%>
+      <li><a href="#" id="printEnvFg" envstFg="98" ng-click="changeEnvGroup('98')"><s:message code="storeManage.kitchenPrint" /></a></li>
+      <%-- 주방프린터 상품연결--%>
+      <li><a href="#" id="printProductEnvFg" envstFg="99" ng-click="changeEnvGroup('99')"><s:message code="storeManage.kitchenPrintProduct" /></a></li>
+    </ul>
+  </div>
 
   <div class="wj-TblWrap mt20 mb40">
-
     <%-- 주방프린터 --%>
-    <div class="w33 fl">
-      <div class="wj-TblWrapBr mr10 pd20" style="height:500px;">
+    <div class="w25 fl">
+      <div class="wj-TblWrapBr pd20" style="height:380px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code="storeManage.kitchenPrint" /></span>
         </div>
-        <div id="kpProductGrid" style="height:400px;"></div>
+        <%--<div id="kpProductGrid" style="height:400px;"></div>--%>
+        <div id="kitchenProductGrid" style="height: 300px; ">
+          <wj-flex-grid
+                  autoGenerateColumns="false"
+                  control="flex"
+                  initialized="initGrid(s,e)"
+                  sticky-headers="true"
+                  selection-mode="Row"
+                  items-source="data"
+                  item-formatter="_itemFormatter"
+                  is-read-only="true">
+
+            <!-- define columns -->
+            <wj-flex-grid-column header="<s:message code="cmm.no"/>" binding="no" width="40" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeManage.storeCd"/>" binding="storeCd" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeManage.prterNo"/>" binding="prterNo" width="*" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeManage.prterNm"/>" binding="prterNm" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeManage.product.cnt"/>" binding="cnt" width="*"></wj-flex-grid-column>
+          </wj-flex-grid>
+        </div>
+
       </div>
     </div>
 
     <%-- 출력상품 --%>
-    <div class="w33 fl">
-      <div class="wj-TblWrapBr ml10 pd20" style="height:470px;">
+    <div class="w35 fl">
+      <div class="wj-TblWrapBr ml10 pd20" style="height:380px; overflow-y: auto;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code="storeManage.print.product" /></span>
           <!-- <button class="btn_skyblue">펼침</button> -->
           <%-- 삭제 --%>
-          <button type="button" id="btnProdDel" class="btn_skyblue"><s:message code="cmm.delete" /></button>
+          <button type="button" id="btnProdDel" class="btn_skyblue" ng-click="delete()">
+            <s:message code="cmm.delete" />
+          </button>
         </div>
-        <div id="productTree1"></div>
+        <wj-tree-view control="regProductTreeCtrl"
+                      items-source="items"
+                      display-member-path="'prodNm'"
+                      child-items-path="'items'"
+                      show-checkboxes="true"
+                      checked-items-changed="checkedItems(tvChk)">
+        </wj-tree-view>
       </div>
     </div>
 
     <%-- 미출력상품 --%>
-    <div class="w33 fl">
-      <div class="wj-TblWrapBr ml10 pd20" style="height:470px;">
+    <div class="w35 fl">
+      <div class="wj-TblWrapBr ml10 pd20" style="height:380px; overflow-y: auto;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code="storeManage.no.print.product" /></span>
           <%-- 추가 --%>
-          <button type="button" id="btnProdAdd" class="btn_skyblue"><s:message code="cmm.add" /></button>
+          <button type="button" id="btnProdAdd" class="btn_skyblue" ng-click="add()">
+            <s:message code="cmm.add" />
+          </button>
         </div>
-        <div id="productTree2"></div>
+        <wj-tree-view control="noRegProductTreeCtrl"
+                      items-source="items"
+                      display-member-path="'prodNm'"
+                      child-items-path="'items'"
+                      show-checkboxes="true"
+                      checked-items-changed="checkedItems(tvChk)">
+        </wj-tree-view>
       </div>
     </div>
   </div>
 </div>
-
-<script>
-
-var selectedDataItem;
-
-<%-- 그리드 설정 --%>
-var kpProductGridHeader =
-  [
-    {binding:"no", header:"<s:message code='cmm.no' />", width:"*"},
-    {binding:"prterNo", header:"<s:message code='storeManage.prterNo' />", width:"*"},
-    {binding:"prterNm", header:"<s:message code='storeManage.prterNm' />", width:"*"},
-    {binding:"cnt", header:"<s:message code='storeManage.product.cnt' />", width:"*"}
-  ];
-
-var kpProductGrid = wgrid.genGrid("#kpProductGrid", kpProductGridHeader, "${menuCd}", 3, ${clo.getColumnLayout(3)});
-
-kpProductGrid.isReadOnly = true;
-
-<%-- 그리드 포맷 --%>
-kpProductGrid.formatItem.addHandler(function(s, e) {
-  if (e.panel == s.cells) {
-    var col = s.columns[e.col];
-    var item = s.rows[e.row].dataItem;
-    if( col.binding == "prterNo") {
-      wijmo.addClass(e.cell, 'wijLink');
-    }
-  }
-});
-
-<%-- 그리드 선택 이벤트 --%>
-kpProductGrid.addEventListener(kpProductGrid.hostElement, 'mousedown', function(e) {
-  var ht = kpProductGrid.hitTest(e);
-  var row = ht.row;
-  if( ht.cellType == wijmo.grid.CellType.Cell) {
-    var col = ht.panel.columns[ht.col];
-    if( col.binding == "prterNo") {
-      selectedDataItem = kpProductGrid.rows[ht.row].dataItem;
-      getProductList();
-    }
-  }
-});
-
-<%-- 상품 트리 설정 --%>
-var productTree1 = new wijmo.nav.TreeView('#productTree1', {
-  displayMemberPath: 'prodNm',
-  childItemsPath: 'items',
-  expandOnClick : true,
-  isReadOnly: false,
-  showCheckboxes: true
-});
-
-var productTree2 = new wijmo.nav.TreeView('#productTree2', {
-  displayMemberPath: 'prodNm',
-  childItemsPath: 'items',
-  expandOnClick : true,
-  isReadOnly: false,
-  showCheckboxes: true
-});
-
-var delView = new wijmo.collections.CollectionView(); <%-- 데이터 삭제용 --%>
-var addView = new wijmo.collections.CollectionView(); <%-- 데이터 추가용 --%>
-
-<%-- 트리에 아이템 체그 상태 변경시 CollectionView에 반영 --%>
-productTree1.checkedItemsChanged.addHandler(function(s, e) {
-  delView.itemsAdded.clear();
-  for(var i = 0; i < productTree1.checkedItems.length; i++) {
-    if(!delView.contains(productTree1.checkedItems[i])) {
-      delView.itemsAdded.push(productTree1.checkedItems[i]);
-    }
-  }
-});
-
-productTree2.checkedItemsChanged.addHandler(function(s, e) {
-  addView.itemsAdded.clear();
-  for(var i = 0; i < productTree2.checkedItems.length; i++) {
-    if(!addView.contains(productTree2.checkedItems[i])) {
-      addView.itemsAdded.push(productTree2.checkedItems[i]);
-    }
-  }
-});
-
-
-<%-- 주방프린터-상품등록 영역 보여줌 --%>
-function showKitchenPrintProductLayout(){
-  $("#kitchenPrintProductArea").show();
-
-  productTree1.itemsSource = new Array();
-  productTree2.itemsSource = new Array();
-  getPrintList();
-}
-
-<%-- 주방프린터 목록 조회 --%>
-function getPrintList(){
-
-  kpProductGrid.itemsSource = new wijmo.collections.CollectionView([]);
-
-  var param = {};
-  param.hqOfficeCd  = selectedStore.hqOfficeCd;
-  param.storeCd     = selectedStore.storeCd;
-
-  $.postJSON("/store/manage/storeManage/storeManage/getKitchenPrintInfo.sb", param, function(result) {
-
-    var list = result.data.list;
-
-    kpProductGrid.itemsSource = new wijmo.collections.CollectionView(list);
-    kpProductGrid.itemsSource.trackChanges = true;
-
-    productTree1.itemsSource = new Array();
-    productTree2.itemsSource = new Array();
-  },
-    function (result) {
-      s_alert.pop(result.message);
-      return;
-    }
-  );
-}
-
-<%-- 주방프린터 출력상품 조회 --%>
-function getProductList(){
-
-  var param = {};
-  param.storeCd     = selectedDataItem.storeCd;
-  param.prterNo     = selectedDataItem.prterNo;
-
-  $.postJSON("/store/manage/storeManage/storeManage/getKitchenPrintProductInfo.sb", param, function(result) {
-
-    productTree1.itemsSource = result.data.list.printProductList;
-    productTree2.itemsSource = result.data.list.noPrintProductList;
-  },
-    function (result) {
-      s_alert.pop(result.message);
-      return;
-    }
-  );
-}
-
-<%-- 삭제버튼 클릭 --%>
-$("#btnProdDel").click(function(){
-  var paramArr = new Array();
-  for(var i = 0; i < delView.itemsAdded.length; i++) {
-    delView.itemsAdded[i].status = 'D';
-    paramArr.push(delView.itemsAdded[i]);
-  }
-
-  if(paramArr.length <= 0) {
-    s_alert.pop("<s:message code='cmm.not.modify'/>");
-    return;
-  }
-
-  $.postJSONArray("/store/manage/storeManage/storeManage/saveKitchenPrintProduct.sb", paramArr, function(result) {
-    s_alert.pop("<s:message code='cmm.saveSucc' />");
-    delView.clearChanges();
-    getProductList();
-  },
-  function(result) {
-    s_alert.pop(result.message);
-  });
-});
-
-<%-- 추가버튼 클릭 --%>
-$("#btnProdAdd").click(function(){
-  var paramArr = new Array();
-  for(var i = 0; i < addView.itemsAdded.length; i++) {
-    addView.itemsAdded[i].status = 'I';
-    paramArr.push(addView.itemsAdded[i]);
-  }
-
-  if(paramArr.length <= 0) {
-    s_alert.pop("<s:message code='cmm.not.modify'/>");
-    return;
-  }
-
-  $.postJSONArray("/store/manage/storeManage/storeManage/saveKitchenPrintProduct.sb", paramArr, function(result) {
-    s_alert.pop("<s:message code='cmm.saveSucc' />");
-    addView.clearChanges();
-    getProductList();
-  },
-  function(result) {
-    s_alert.pop(result.message);
-  });
-
-});
-
-<%-- 주방프린터-상품등록 레이아웃 보이지 않기--%>
-function hideKitchenPrintProductLayout() {
-  $("#kitchenPrintProductArea").hide();
-}
-
-</script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/kitchenPrintProduct.js?ver=2018102301" charset="utf-8"></script>

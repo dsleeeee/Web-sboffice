@@ -83,7 +83,7 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
       storeEnvHtml += "<h3 class='h3_tbl2 lh30'>" + storeEnvstGrp.name + " <button class='open'></button>";
 
       if (i == 0) { // 기본값으로 설정 버튼
-        storeEnvHtml += "<span class='fr'><a href='javascript:;' class='btn_grayS' id='btnDefault'>";
+        storeEnvHtml += "<span class='fr'><a href='javascript:;' class='btn_grayS' id='btnDefault' ng-click='setDefault()'>";
         storeEnvHtml += messages["storeManage.setting.default.env"];
         storeEnvHtml += "</a></span>";
       }
@@ -208,7 +208,26 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope._popMsg(msg);
 
     }
+
+    // 기본값 설정 클릭 이벤트 추가
+    $("#btnDefault").append(function(){
+      return $scope.setDefault();
+    });
+
   };
+
+  /*********************************************************
+   * 기본값으로 설정
+   * *******************************************************/
+  $scope.setDefault = function(){
+
+    alert('기본값')
+  };
+
+  // $("#btnDefault").click(function(){
+  //   alert("기기기ㅣ")
+  //   $scope.setDefault();
+  // });
 
 }]);
 
