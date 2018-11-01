@@ -62,15 +62,15 @@
 
   <div class="w100" ng-controller="reqDateCopyDaysCtrl">
     <%--위즈모 테이블--%>
-    <div class="wj-gridWrap mt10" style="height: 100px;">
+    <div class="theGrid mt10" style="height: 120px;">
       <wj-flex-grid
         autoGenerateColumns="false"
         selection-mode="Row"
         items-source="data"
         control="flex"
         initialized="initGrid(s,e)"
-        is-read-only="false"
-        item-formatter="_itemFormatter">
+        is-read-only="true"
+        item-formatter="itemFormatter">
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="outstockReqDate.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -78,14 +78,14 @@
         <wj-flex-grid-column header="<s:message code="cmm.owner.nm"/>" binding="ownerNm" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="outstockReqDate.sysStatFg"/>" binding="sysStatFg" width="50" align="center" data-map="sysStatFgMap" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="outstockReqDate.orderCloseYn"/>" binding="orderCloseYn" width="80" align="center" data-map="orderCloseYnMap" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="outstockReqDate.sun"/>" binding="sun" width="50" align="center" format="checkbox"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="outstockReqDate.mon"/>" binding="mon" width="50" align="center" format="checkbox"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="outstockReqDate.tue"/>" binding="tue" width="50" align="center" format="checkbox"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="outstockReqDate.wed"/>" binding="wed" width="50" align="center" format="checkbox"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="outstockReqDate.thu"/>" binding="thu" width="50" align="center" format="checkbox"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="outstockReqDate.fri"/>" binding="fri" width="50" align="center" format="checkbox"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="outstockReqDate.sat"/>" binding="sat" width="50" align="center" format="checkbox"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="outstockReqDate.remark"/>" binding="daysRemark" width="*" align="left" is-read-only="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.sun"/>" binding="sun" width="50" align="center" is-read-only="true" format="checkBoxText"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.mon"/>" binding="mon" width="50" align="center" is-read-only="true" format="checkBoxText"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.tue"/>" binding="tue" width="50" align="center" is-read-only="true" format="checkBoxText"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.wed"/>" binding="wed" width="50" align="center" is-read-only="true" format="checkBoxText"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.thu"/>" binding="thu" width="50" align="center" is-read-only="true" format="checkBoxText"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.fri"/>" binding="fri" width="50" align="center" is-read-only="true" format="checkBoxText"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.sat"/>" binding="sat" width="50" align="center" is-read-only="true" format="checkBoxText"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.remark"/>" binding="daysRemark" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
 
       </wj-flex-grid>
       <%-- ColumnPicker 사용시 include --%>
@@ -99,7 +99,7 @@
 
   <div class="w100" ng-controller="reqDateCopySpecificCtrl">
     <%--위즈모 테이블--%>
-    <div class="wj-gridWrap mt10" style="height: 300px;">
+    <div class="theGrid mt10" style="height: 300px;">
       <wj-flex-grid
         autoGenerateColumns="false"
         selection-mode="Row"
@@ -218,7 +218,110 @@
         }
       });
 
+
+      // 헤더머지
+      s.allowMerging = 2;
+      s.columnHeaders.rows.push(new wijmo.grid.Row());
+      s.columnHeaders.rows[0].dataItem = {
+        storeCd     : messages["outstockReqDate.storeCd"],
+        storeNm     : messages["outstockReqDate.storeNm"],
+        ownerNm     : messages["cmm.owner.nm"],
+        sysStatFg   : messages["outstockReqDate.sysStatFg"],
+        orderCloseYn: messages["outstockReqDate.orderCloseYn"],
+        sun         : messages["outstockReqDate.outstockReqDate"],
+        mon         : messages["outstockReqDate.outstockReqDate"],
+        tue         : messages["outstockReqDate.outstockReqDate"],
+        wed         : messages["outstockReqDate.outstockReqDate"],
+        thu         : messages["outstockReqDate.outstockReqDate"],
+        fri         : messages["outstockReqDate.outstockReqDate"],
+        sat         : messages["outstockReqDate.outstockReqDate"],
+        daysRemark  : messages["outstockReqDate.remark"],
+      };
     };
+
+
+    // 체크박스가 있는 헤더머지 때문에 itemFormatter 를 재정의함.
+    $scope.itemFormatter = function (panel, r, c, cell) {
+      if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+        //align in center horizontally and vertically
+        panel.rows[r].allowMerging    = true;
+        panel.columns[c].allowMerging = true;
+
+        wijmo.setCss(cell, {
+          display    : 'table',
+          tableLayout: 'fixed'
+        });
+        cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+        wijmo.setCss(cell.children[0], {
+          display      : 'table-cell',
+          verticalAlign: 'middle',
+          textAlign    : 'center'
+        });
+
+        if ((panel.grid.columnHeaders.rows.length - 1) === r) {
+          // 헤더의 전체선택 클릭 로직
+          var flex   = panel.grid;
+          var column = flex.columns[c];
+          // check that this is a boolean column
+          if (column.binding === 'gChk' || column.format === 'checkBox' || column.format === 'checkBoxText') {
+            // prevent sorting on click
+            column.allowSorting = false;
+            // count true values to initialize checkbox
+            var cnt             = 0;
+            for (var i = 0; i < flex.rows.length; i++) {
+              if (flex.getCellData(i, c) === true) {
+                cnt++;
+              }
+            }
+            // create and initialize checkbox
+            if (column.format === 'checkBoxText') {
+              cell.innerHTML = '<input id=\"' + column.binding + '\" type=\"checkbox\" class=\"wj-cell-check\" />'
+                + '<label for=\"' + column.binding + '\" class=\"wj-header-label\">' + cell.innerHTML + '</label>';
+            } else {
+              cell.innerHTML = '<input type=\"checkbox\" class=\"wj-cell-check\" />';
+            }
+            var cb           = cell.firstChild;
+            cb.checked       = cnt > 0;
+            cb.indeterminate = cnt > 0 && cnt < flex.rows.length;
+            // apply checkbox value to cells
+            cb.addEventListener('click', function (e) {
+              flex.beginUpdate();
+              for (var i = 0; i < flex.rows.length; i++) {
+                var cell = flex.cells.getCellElement(i, c);
+
+                // 활성화 및 readOnly 아닌 경우에만 체크되도록
+                // if (!cell.children[0].disabled) {
+                if (!cell.children[0].disabled) {
+                  flex.setCellData(i, c, cb.checked);
+                }
+              }
+              flex.endUpdate();
+            });
+          }
+        }
+      }
+      // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+      else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+        // GroupRow 인 경우에는 표시하지 않는다.
+        if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+          cell.textContent = '';
+        } else {
+          if (!isEmpty(panel._rows[r]._data.rnum)) {
+            cell.textContent = (panel._rows[r]._data.rnum).toString();
+          } else {
+            cell.textContent = (r + 1).toString();
+          }
+        }
+      }
+      // readOnly 배경색 표시
+      else if (panel.cellType === wijmo.grid.CellType.Cell) {
+        var col = panel.columns[c];
+        if (col.isReadOnly) {
+          wijmo.addClass(cell, 'wj-custom-readonly');
+        }
+      }
+    };
+
 
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("reqDateCopyDaysCtrl", function (event, data) {
@@ -377,7 +480,7 @@
       // 길이체크
       if (params.length <= 0) {
         // 특정일은 복사할 내용이 없습니다. 출고가능요일을 복사하시겠습니까?
-        var msg = messages["outstockReqDate.not.copySpecificDate"]+" "+messages["outstockReqDate.copyDays"];
+        var msg = messages["outstockReqDate.not.copySpecificDate"] + " " + messages["outstockReqDate.copyDays"];
         s_alert.popConf(msg, function () {
           $scope._broadcast('reqDateCopyDaysCtrl', {proc: "copy"});
         });

@@ -124,7 +124,7 @@
       </ul>
 
       <div class="tr mt20 fr">
-        <div id="hqStoreMoveDtlBtnLayer" style="display: none;">
+        <div id="hqStoreMoveDtlBtnLayer" ng-if="hqStoreMoveDtlBtnLayer">
           <%-- 상품추가 --%>
           <button type="button" id="btnAddProd" class="btn_skyblue ml5 fl" ng-click="addProd()">
             <s:message code="hqStoreMove.dtl.addProdBtn"/></button>
@@ -161,14 +161,14 @@
             <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.unitQty"/>" binding="outUnitQty" width="70" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.etcQty"/>" binding="outEtcQty" width="70" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.totQty"/>" binding="outTotQty" width="70" align="right" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.splyUprc"/>" binding="outSplyUprc" width="70" align="right" max-length=8 data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.amt"/>" binding="outAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.vat"/>" binding="outVat" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.tot"/>" binding="outTot" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.splyUprc"/>" binding="inSplyUprc" width="70" align="right" max-length=8 data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.amt"/>" binding="inAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.vat"/>" binding="inVat" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.tot"/>" binding="inTot" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.outSplyUprc"/>" binding="outSplyUprc" width="70" align="right" max-length=8 data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.outAmt"/>" binding="outAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.outVat"/>" binding="outVat" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.outTot"/>" binding="outTot" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.inSplyUprc"/>" binding="inSplyUprc" width="70" align="right" max-length=8 data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.inAmt"/>" binding="inAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.inVat"/>" binding="inVat" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.inTot"/>" binding="inTot" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.vatFg"/>" binding="vatFg01" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.envst0011"/>" binding="outEnvst0011" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.envst0011"/>" binding="inEnvst0011" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -237,6 +237,68 @@
       s.columnFooters.rows.push(new wijmo.grid.GroupRow());
       // add a sigma to the header to show that this is a summary row
       s.bottomLeftCells.setCellData(0, 0, '합계');
+
+      // 헤더머지
+      s.allowMerging = 2;
+      s.columnHeaders.rows.push(new wijmo.grid.Row());
+      s.columnHeaders.rows[0].dataItem = {
+        prodCd     : messages["hqStoreMove.dtl.prodCd"],
+        prodNm     : messages["hqStoreMove.dtl.prodNm"],
+        poUnitFg   : messages["hqStoreMove.dtl.poUnitFg"],
+        poUnitQty  : messages["hqStoreMove.dtl.poUnitQty"],
+        outUnitQty : messages["hqStoreMove.dtl.qty"],
+        outEtcQty  : messages["hqStoreMove.dtl.qty"],
+        outTotQty  : messages["hqStoreMove.dtl.totQty"],
+        outSplyUprc: messages["hqStoreMove.dtl.out"],
+        outAmt     : messages["hqStoreMove.dtl.out"],
+        outVat     : messages["hqStoreMove.dtl.out"],
+        outTot     : messages["hqStoreMove.dtl.out"],
+        inSplyUprc : messages["hqStoreMove.dtl.in"],
+        inAmt      : messages["hqStoreMove.dtl.in"],
+        inVat      : messages["hqStoreMove.dtl.in"],
+        inTot      : messages["hqStoreMove.dtl.in"],
+        vatFg      : messages["hqStoreMove.dtl.vatFg"],
+        envst0011  : messages["hqStoreMove.dtl.envst0011"],
+        envst0011  : messages["hqStoreMove.dtl.envst0011"],
+      };
+
+      s.itemFormatter = function(panel, r, c, cell) {
+        if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+          //align in center horizontally and vertically
+          panel.rows[r].allowMerging    = true;
+          panel.columns[c].allowMerging = true;
+          wijmo.setCss(cell, {
+            display    : 'table',
+            tableLayout: 'fixed'
+          });
+          cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+          wijmo.setCss(cell.children[0], {
+            display      : 'table-cell',
+            verticalAlign: 'middle',
+            textAlign    : 'center'
+          });
+        }
+        // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+        else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+          // GroupRow 인 경우에는 표시하지 않는다.
+          if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+            cell.textContent = '';
+          } else {
+            if (!isEmpty(panel._rows[r]._data.rnum)) {
+              cell.textContent = (panel._rows[r]._data.rnum).toString();
+            } else {
+              cell.textContent = (r + 1).toString();
+            }
+          }
+        }
+        // readOnly 배경색 표시
+        else if (panel.cellType === wijmo.grid.CellType.Cell) {
+          var col = panel.columns[c];
+          if (col.isReadOnly) {
+            wijmo.addClass(cell, 'wj-custom-readonly');
+          }
+        }
+      }
     };
 
 
@@ -329,11 +391,11 @@
             $("#inSlipNo").html(inSlipNo);
 
             if ($scope.procFg === "3") {
-              $("#hqStoreMoveDtlBtnLayer").hide();
+              $scope.hqStoreMoveDtlBtnLayer = false;
               $scope.flex.isReadOnly = true;
             }
             else {
-              $("#hqStoreMoveDtlBtnLayer").show();
+              $scope.hqStoreMoveDtlBtnLayer = true;
               $scope.flex.isReadOnly = false;
             }
 
@@ -392,13 +454,13 @@
           return false;
         }
 
-        item.status     = "U";
-        item.slipNo     = $scope.slipNo;
-        item.dlvrFg     = $scope.dlvrFg;
-        item.remark     = $scope.dtlHdRemark;
-        item.storageCd  = "001";
-        item.hqBrandCd  = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
-        item.confirmFg  = confirmFg;
+        item.status    = "U";
+        item.slipNo    = $scope.slipNo;
+        item.dlvrFg    = $scope.dlvrFg;
+        item.remark    = $scope.dtlHdRemark;
+        item.storageCd = "001";
+        item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
+        item.confirmFg = confirmFg;
 
         params.push(item);
       }

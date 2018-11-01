@@ -84,9 +84,9 @@
       </table>
 
       <ul class="txtSty3 mt10">
-        <li class="red"><s:message code="storeMove.reg.txt1"/></li>
-        <li class="red"><s:message code="storeMove.reg.txt2"/></li>
-        <li class="red"><s:message code="storeMove.reg.txt3"/></li>
+        <li><s:message code="storeMove.reg.txt1"/></li>
+        <li><s:message code="storeMove.reg.txt2"/></li>
+        <li><s:message code="storeMove.reg.txt3"/></li>
       </ul>
 
       <div class="mt10 pdb20 oh bb">

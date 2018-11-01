@@ -18,7 +18,7 @@ import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
-@Service("VolmErrService")
+@Service("volmErrService")
 public class VolmErrServiceImpl implements VolmErrService {
     private final VolmErrMapper volmErrMapper;
     private final MessageService messageService;

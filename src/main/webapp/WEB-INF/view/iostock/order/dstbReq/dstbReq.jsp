@@ -138,9 +138,9 @@
     $scope.procFg = "00,10"; // 진행구분 기본값 세팅
 
     $scope.procFgMap = new wijmo.grid.DataMap([
-      {id: "10", name: "<s:message code='dstbReq.procFgReg'/>"},
-      {id: "20", name: "<s:message code='dstbReq.procFgDstb'/>"},
-      {id: "30", name: "<s:message code='dstbReq.procFgDstbCompt'/>"}
+      {id: "00", name: "<s:message code='dstbReq.procFgReg'/>"},
+      {id: "10", name: "<s:message code='dstbReq.procFgDstb'/>"},
+      {id: "20", name: "<s:message code='dstbReq.procFgDstbCompt'/>"}
     ], 'id', 'name');
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다

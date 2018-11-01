@@ -26,6 +26,9 @@ public interface DeliveryChargerManageMapper {
     /** 배송기사 수정 */
     int updateDeliveryCharger(DeliveryChargerManageVO deliveryChargerManageVO);
 
+    /** 배송기사 삭제 */
+    int deleteDeliveryCharger(DeliveryChargerManageVO deliveryChargerManageVO);
+
     /** 배송기사 담당 창고 리스트 조회 */
     List<DefaultMap<String>> getDeliveryChargerStorageList(DeliveryChargerManageVO deliveryChargerManageVO);
 
@@ -37,5 +40,8 @@ public interface DeliveryChargerManageMapper {
 
     /** 배송기사 담당 창고 삭제 */
     int deleteDeliveryChargerStorage(DeliveryChargerManageVO deliveryChargerManageVO);
+
+    /** 배송기사 담당 창고 전체 삭제 */
+    int deleteAllDeliveryChargerStorage(DeliveryChargerManageVO deliveryChargerManageVO);
 
 }

@@ -25,14 +25,14 @@
           <th><s:message code="storeMove.dtl.moveDate"/></th>
           <td>
             <div class="sb-select">
-              <span class="txtIn"><input id="dtlMoveDate" class="w150" ng-model="moveDate"></span>
+              <span class="txtIn"><input id="dtlMoveDate" class="w150px" ng-model="moveDate"></span>
             </div>
           </td>
           <%-- 배송구분 --%>
           <th><s:message code="storeMove.dlvrFg"/></th>
           <td>
             <div class="sb-select">
-              <span class="txtIn w150">
+              <span class="txtIn w150px">
                 <wj-combo-box
                   id="srchDtlDlvrFg"
                   ng-model="dlvrFg"
@@ -125,15 +125,15 @@
 
       <div class="tr mt20 fr">
         <%-- 상품추가 --%>
-        <button type="button" id="btnDtlAddProd" class="btn_skyblue ml5 fl" ng-click="addProd()">
+        <button type="button" id="btnDtlAddProd" class="btn_skyblue ml5 fl" ng-click="addProd()" ng-if="btnDtlAddProd">
           <s:message code="storeMove.dtl.addProdBtn"/></button>
         <%-- 저장 --%>
-        <button type="button" id="btnDtlSave" class="btn_skyblue ml5 fl" ng-click="save()">
+        <button type="button" id="btnDtlSave" class="btn_skyblue ml5 fl" ng-click="save()" ng-if="btnDtlSave">
           <s:message code="cmm.save"/></button>
         <%-- 저장 및 출고,이입확정 --%>
-        <button type="button" id="btnDtlConfirm" class="btn_skyblue ml5 fl" ng-click="confirm()"></button>
+        <button type="button" id="btnDtlConfirm" class="btn_skyblue ml5 fl" ng-click="confirm()" ng-if="btnDtlConfirm"></button>
         <%-- 삭제 --%>
-        <button type="button" id="btnDtlDel" class="btn_skyblue ml5 fl" ng-click="delete()">
+        <button type="button" id="btnDtlDel" class="btn_skyblue ml5 fl" ng-click="delete()" ng-if="btnDtlDel">
           <s:message code="cmm.delete"/></button>
       </div>
       <div style="clear: both;"></div>
@@ -160,8 +160,8 @@
             <wj-flex-grid-column header="<s:message code="storeMove.dtl.totQty"/>" binding="outTotQty" width="70" align="right" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeMove.dtl.totQty"/>" binding="prevOutTotQty" width="70" align="right" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeMove.dtl.splyUprc"/>" binding="splyUprc" width="70" align="right" max-length=8 data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeMove.dtl.splyUprc"/>" binding="outSplyUprc" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeMove.dtl.splyUprc"/>" binding="inSplyUprc" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeMove.dtl.outSplyUprc"/>" binding="outSplyUprc" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeMove.dtl.inSplyUprc"/>" binding="inSplyUprc" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeMove.dtl.amt"/>" binding="amt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeMove.dtl.vat"/>" binding="vat" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeMove.dtl.tot"/>" binding="tot" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -233,6 +233,12 @@
       s.columnFooters.rows.push(new wijmo.grid.GroupRow());
       // add a sigma to the header to show that this is a summary row
       s.bottomLeftCells.setCellData(0, 0, '합계');
+
+      //s.allowMerging = wijmo.grid.AllowMerging.headers;
+
+
+
+
     };
 
 
@@ -321,8 +327,10 @@
 
             if ($scope.procFg === '0') {
               if ($scope.sessionStoreCd == $scope.outStoreCd) {
-                $("#btnDtlConfirm").text(messages["storeMove.dtl.outConfirmBtn"]);
                 $scope.fnBtnLayerDisplay(true);
+                setTimeout(function () {
+                  $("#btnDtlConfirm").html(messages["storeMove.dtl.outConfirmBtn"]);
+                }, 100);
                 $scope.flex.isReadOnly = false;
               }
             }
@@ -330,8 +338,10 @@
               $scope.flex.isReadOnly = true;
 
               if ($scope.procFg === '1' && $scope.sessionStoreCd == $scope.inStoreCd) {
-                $("#btnDtlConfirm").html(messages["storeMove.dtl.inConfirmBtn"]);
-                $("#btnDtlConfirm").show();
+                $scope.btnDtlConfirm = true;
+                setTimeout(function () {
+                  $("#btnDtlConfirm").html(messages["storeMove.dtl.inConfirmBtn"]);
+                }, 100);
               }
             }
 
@@ -357,17 +367,6 @@
       params.sessionStoreCd = $scope.sessionStoreCd;
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
       $scope._inquirySub("/iostock/move/storeMove/storeMoveDtl/list.sb", params, function () {
-        // $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]);
-        // // 데이터 처리중 팝업 띄우기위해 setTimeout 사용.
-        // setTimeout(function () {
-        //   for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-        //     var item = $scope.flex.collectionView.items[i];
-        //     $scope.flex.collectionView.editItem(item);
-        //     $scope.calcAmt(item);
-        //     $scope.flex.collectionView.commitEdit();
-        //   }
-        //   $scope.$broadcast('loadingPopupInactive');
-        // }, 100);
       });
     };
 
@@ -481,19 +480,11 @@
 
 
     // 버튼 display
-    $scope.fnBtnLayerDisplay = function (displayFg) {
-      if (displayFg) {
-        $("#btnDtlAddProd").show();
-        $("#btnDtlSave").show();
-        $("#btnDtlConfirm").show();
-        $("#btnDtlDel").show();
-      }
-      else {
-        $("#btnDtlAddProd").hide();
-        $("#btnDtlSave").hide();
-        $("#btnDtlConfirm").hide();
-        $("#btnDtlDel").hide();
-      }
+    $scope.fnBtnLayerDisplay = function (isVisible) {
+      $scope.btnDtlAddProd = isVisible;
+      $scope.btnDtlSave = isVisible;
+      $scope.btnDtlConfirm = isVisible;
+      $scope.btnDtlDel = isVisible;
     };
 
 
