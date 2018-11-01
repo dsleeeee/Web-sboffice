@@ -34,9 +34,9 @@
               initialized="_initComboBox(s)">
             </wj-combo-box>
           </span>
-          <span class="txtIn"><input id="srchStartDate" class="w150"></span>
+          <span class="txtIn"><input id="srchStartDate" class="w150px"></span>
           <span class="rg">~</span>
-          <span class="txtIn"><input id="srchEndDate" class="w150"></span>
+          <span class="txtIn"><input id="srchEndDate" class="w150px"></span>
         </div>
       </td>
     </tr>
@@ -56,7 +56,7 @@
       <th><s:message code="volmErr.slipFg"/></th>
       <td>
         <div class="sb-select">
-          <span class="txtIn w150">
+          <span class="txtIn w150px">
             <wj-combo-box
               id="srchSlipFg"
               ng-model="slipFg"
@@ -73,7 +73,7 @@
       <th><s:message code="volmErr.procFg"/></th>
       <td>
         <div class="sb-select">
-          <span class="txtIn w150">
+          <span class="txtIn w150px">
             <wj-combo-box
               id="srchProcFg"
               ng-model="procFg"

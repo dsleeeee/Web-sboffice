@@ -2,9 +2,12 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 
+<c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
+<c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="baseUrl" value="/iostock/deliveryCharger/deliveryChargerManage/deliveryChargerRegist/"/>
 
-<wj-popup id="wjDlvrRegistLayer" control="wjDlvrRegistLayer" show-trigger="Click" hide-trigger="Click" hiding="hiding(s,e)" style="display:none;width:800px;">
-  <div id="dlvrRegistLayer" class="wj-dialog wj-dialog-columns" ng-controller="dlvrInfoCtrl">
+<wj-popup id="wjDlvrRegistLayer" control="wjDlvrRegistLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:800px;">
+  <div id="dlvrRegistLayer" class="wj-dialog wj-dialog-columns" ng-controller="dlvrRegistCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="deliveryCharger.registPopTitle"/>
       <span id="registTitleDlvrNm" class="ml5"></span>
@@ -60,90 +63,121 @@
           </tr>
           </tbody>
         </table>
-        <div class="mt10 pdb20 oh bb">
-          <button type="submit" id="btnSave" class="btn_blue fr">저장</button>
-        </div>
       </form>
-    </div>
-  </div>
 
-  <div class="wj-TblWrap ml20 mr20 pdb20" ng-controller="dlvrChgrStorageCtrl">
-    <div class="mt20 oh sb-select dkbr">
-      <span class="fl bk lh30"><s:message code='deliveryCharger.chargeStorage'/></span>
-      <div class="tr">
-        <%-- 창고추가 --%>
-        <button type="button" id="addStorage" class="btn_skyblue ml5" ng-click="openPopAddStorage()" style="display:none"><s:message code="deliveryCharger.addStorage"/></button>
-        <%-- 창고삭제 --%>
-        <button type="button" id="delStorage" class="btn_skyblue ml5" ng-click="delStorage()" style="display:none"><s:message code="deliveryCharger.delStorage"/></button>
+      <div class="w100 mt10 pdb20 oh bb">
+        <div class="fr">
+        <%-- 저장 --%>
+        <button type="submit" id="btnSave" class="btn_blue mr5">
+          <s:message code="cmm.save"/></button>
+        <%-- 삭제 --%>
+        <button type="button" id="btnDel" class="btn_blue mr5" ng-click="fnDlvrDel()">
+          <s:message code="cmm.delete"/></button>
+        </div>
+      </div>
+      <div style="clear: both;"></div>
+
+      <div class="tr mt20 mr10">
+        <div class="mt20 oh sb-select dkbr">
+          <span class="fl bk lh30 ml10"><s:message code='deliveryCharger.chargeStorage'/></span>
+          <div class="tr fr">
+            <%-- 창고추가 --%>
+            <button type="button" id="btnAddStorage" class="btn_skyblue ml5" ng-click="openPopAddStorage()" ng-if="btnAddStorage">
+              <s:message code="deliveryCharger.addStorage"/></button>
+            <%-- 창고삭제 --%>
+            <button type="button" id="btnDelStorage" class="btn_skyblue ml5" ng-click="delStorage()" ng-if="btnDelStorage">
+              <s:message code="deliveryCharger.delStorage"/></button>
+          </div>
+        </div>
+      </div>
+      <div style="clear: both;"></div>
+
+      <div class="w100 mt10 mb20">
+        <!--위즈모 테이블-->
+        <div class="wj-gridWrap" style="height: 200px;">
+          <wj-flex-grid
+            autoGenerateColumns="false"
+            selection-mode="Row"
+            items-source="data"
+            control="flex"
+            initialized="initGrid(s,e)"
+            is-read-only="false"
+            item-formatter="_itemFormatter">
+
+            <!-- define columns -->
+            <wj-flex-grid-column header="<s:message code="deliveryCharger.chk"/>" binding="gChk" width="40" align="center" is-read-only="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="deliveryCharger.storageCd"/>" binding="storageCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="deliveryCharger.storageNm"/>" binding="storageNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+
+            <!-- enable column filtering-->
+            <wj-flex-grid-filter></wj-flex-grid-filter>
+          </wj-flex-grid>
+        </div>
+        <!--//위즈모 테이블-->
       </div>
     </div>
-
-    <!--위즈모 테이블-->
-    <div class="wj-gridWrap mt10" style="height: 200px;">
-      <wj-flex-grid
-        autoGenerateColumns="false"
-        selection-mode="Row"
-        items-source="data"
-        control="flex"
-        initialized="initGrid(s,e)"
-        is-read-only="false"
-        item-formatter="_itemFormatter">
-
-        <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="deliveryCharger.chk"/>" binding="gChk" width="40" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="deliveryCharger.storageCd"/>" binding="storageCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="deliveryCharger.storageNm"/>" binding="storageNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
-
-        <!-- enable column filtering-->
-        <wj-flex-grid-filter></wj-flex-grid-filter>
-      </wj-flex-grid>
-    </div>
-    <!--//위즈모 테이블-->
   </div>
 </wj-popup>
 
 
 <script type="text/javascript">
   /** 배송기사 관리 상세 controller */
-  app.controller('dlvrInfoCtrl', ['$scope', '$http', 'dlvrVO', function ($scope, $http, dlvrVO) {
+  app.controller('dlvrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
+    // 상위 객체 상속 : T/F 는 picker
+    angular.extend(this, new RootController('dlvrRegistCtrl', $scope, $http, true));
+
     $scope.default = {useYn: "Y"};
 
+    // grid 초기화 : 생성되기전 초기화되면서 생성된다
+    $scope.initGrid = function (s, e) {
+    };
+
     // 다른 컨트롤러의 broadcast 받기
-    $scope.$on('dlvrInfoCtrl', function (event, paramObj) {
+    $scope.$on('dlvrRegistCtrl', function (event, data) {
+      $scope.dlvrCd = data.dlvrCd;
+      $scope.dlvrNm = data.dlvrNm;
+
       // 배송기사 상세 팝업 오픈
       $scope.wjDlvrRegistLayer.show(true);
 
-      // paramObj 이 있는 경우 배송기사 상세 조회
-      if (!$.isEmptyObject(paramObj)) {
+      // 배송기사코드가 있는 경우 배송기사 상세 조회
+      if ($scope.dlvrCd !== '') {
         // 타이틀의 배송기사 명칭 세팅
-        $("#registTitleDlvrNm").html("[" + paramObj.dlvrNm + "]");
-        //배송기사 상세 조회
-        $scope.searchDlvrInfo(paramObj);
+        $("#registTitleDlvrNm").html("[" + $scope.dlvrNm + "]");
+        // 배송기사 상세 조회
+        $scope.searchDlvrInfo();
 
-        $("#addStorage").show();
-        $("#delStorage").show();
+        // 그리드 조회
+        $scope.searchDlvrChgrStorageList();
+
+        // 버튼 show
+        $scope.btnAddStorage = true;
+        $scope.btnDelStorage = true;
       }
       // 신규등록인 경우
       else {
         $("#registTitleDlvrNm").html("신규등록");
-        $scope.dlvr = angular.copy($scope.default);
+        $scope.dlvr = angular.copy($scope.default); // 기본값 세팅
 
-        $("#addStorage").hide();
-        $("#delStorage").hide();
+        // 그리드 초기화
+        var cv          = new wijmo.collections.CollectionView([]);
+        cv.trackChanges = true;
+        $scope.data     = cv;
+
+        // 버튼 hide
+        $scope.btnAddStorage = false;
+        $scope.btnDelStorage = false;
       }
 
-      //관리 창고 그리드에 대한 콘트롤러 호출. 기사코드가 있는경우 관리창고 조회하고 신규등록인 경우는 그리드 초기화
-      setTimeout(function () {
-        $scope._broadcast('dlvrChgrStorageCtrl', paramObj);
-      }, 10);
       // 기능수행 종료 : 반드시 추가
       event.preventDefault();
     });
 
+
     // 배송기사 상세 조회
-    $scope.searchDlvrInfo = function (paramObj) {
+    $scope.searchDlvrInfo = function () {
       var param    = {};
-      param.dlvrCd = paramObj.dlvrCd;
+      param.dlvrCd = $scope.dlvrCd;
 
       $http({
         method : 'POST', //방식
@@ -173,6 +207,7 @@
       });
     };
 
+
     // 배송기사 저장
     $scope.submitForm = function () {
       //값체크
@@ -184,18 +219,14 @@
         params : $scope.dlvr, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
-        // this callback will be called asynchronously
-        // when the response is available
+        if ($scope._httpStatusCheck(response)) {
+          s_alert.pop(messages["cmm.saveSucc"]);
 
-        // 등록된 배송기사 그리드 새로고침
-        $scope._broadcast('dlvrChgrCtrl');
-
-        s_alert.pop(messages["cmm.saveSucc"]);
-
-        if (dlvrVO.getDlvrCd() == "") {
-          // 팝업 닫기 및 값 초기화
-          $scope.popupClose();
-
+          // 신규등록인 경우
+          if ($scope.dlvrCd === '') {
+            // 팝업 닫기 및 값 초기화
+            $scope.popupClose();
+          }
         }
       }, function errorCallback(response) {
         // called asynchronously if an error occurs
@@ -205,63 +236,71 @@
       });
     };
 
-    // 팝업 닫기 및 값 초기화
+
+    // 배송기사 삭제
+    $scope.fnDlvrDel = function () {
+      var msg = messages["deliveryCharger.delConfirmMsg"]; // 배송기사와 등록된 관리창고가 모두 삭제됩니다. 삭제하시겠습니까?
+      s_alert.popConf(msg, function() {
+        var params    = {};
+        params.dlvrCd = $scope.dlvrCd;
+
+        // 로딩바 show
+        $scope.$broadcast('loadingPopupActive', messages['cmm.saving']);
+
+        // ajax 통신 설정
+        $http({
+          method : 'POST', //방식
+          url    : '/iostock/deliveryCharger/deliveryChargerManage/deliveryChargerRegist/dlvrDelete.sb', /* 통신할 URL */
+          params : params, /* 파라메터로 보낼 데이터 */
+          headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+        }).then(function successCallback(response) {
+          if ($scope._httpStatusCheck(response)) {
+            s_alert.pop(messages["cmm.saveSucc"]);
+            $scope.popupClose();
+          }
+        }, function errorCallback(response) {
+          // called asynchronously if an error occurs
+          // or server returns response with an error status.
+          $scope._popMsg(messages["cmm.saveFail"]);
+          return false;
+        }).then(function () {
+          // "complete" code here
+          // 로딩바 hide
+          $scope.$broadcast('loadingPopupInactive');
+        });
+
+        // var url       = "/iostock/deliveryCharger/deliveryChargerManage/deliveryChargerRegist/dlvrDelete.sb";
+        // var params    = {};
+        // params.dlvrCd = $scope.dlvrCd;
+        // $scope._postJSONSave.withPopUp(url, params, function (response) {
+        //   $scope.popupClose();
+        // });
+      });
+    };
+
+
+    // 팝업 닫기, 값 초기화, 배송기사 리스트 그리드 조회
     $scope.popupClose = function () {
       // 초기화
       $scope.dlvr = angular.copy($scope.default);
       $scope.wjDlvrRegistLayer.hide();
       $("#registTitleDlvrNm").html("");
-    }
-  }]);
 
-
-  /** 배송기사 관리 창고 그리드 controller */
-  app.controller('dlvrChgrStorageCtrl', ['$scope', '$http', 'dlvrVO', function ($scope, $http, dlvrVO) {
-    // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('dlvrChgrStorageCtrl', $scope, $http, true));
-    // grid 초기화 : 생성되기전 초기화되면서 생성된다
-    $scope.initGrid = function (s, e) {
-      // picker 사용시 호출 : 미사용시 호출안함
-      // $scope._makePickColumns("dlvrChgrStorageCtrl");
+      // 배송기사 리스트 그리드 조회
+      var dlvrChgrScope = agrid.getScope('dlvrChgrListCtrl');
+      dlvrChgrScope.searchDlvrChgrList();
     };
 
-    // 다른 컨트롤러의 broadcast 받기
-    $scope.$on("dlvrChgrStorageCtrl", function (event, data) {
-      //TODO : 그리드 초기화시 뭔가의 동작을 해줘야 그리드의 내용이 사라짐. 확인 필요.
-      if (dlvrVO.getDlvrCd() == "" || dlvrVO.getDlvrCd() == null) {
-        // console.log("==dlvrVO.getDlvrCd() 1==");
-        // var cv = new wijmo.collections.CollectionView();
-        // cv.refresh();
-        // $scope.flex.collectionView.itemsSource = cv;
-        // $scope.flex.collectionView.clearChanges();
-        // $scope.flex.collectionView.refresh();
-        // $scope.data = cv;
-
-        var cv          = new wijmo.collections.CollectionView([]);
-        cv.trackChanges = true;
-        $scope.data     = cv;
-
-        // $scope.searchDlvrChgrStorageList();
-      }
-      else {
-        // 그리드 조회
-        $scope.searchDlvrChgrStorageList();
-      }
-      // 기능수행 종료 : 반드시 추가
-      event.preventDefault();
-    });
 
     // 그리드 조회
     $scope.searchDlvrChgrStorageList = function () {
       // 파라미터
-      var params       = {};
-      params.listScale = 15;
-      params.curr      = 1;
-      params.dlvrCd    = dlvrVO.getDlvrCd();
-      // params.dlvrCd = data.dlvrCd;
+      var params    = {};
+      params.dlvrCd = $scope.dlvrCd;
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
-      $scope._inquiry("/iostock/deliveryCharger/deliveryChargerManage/deliveryChargerRegist/storageList.sb", params, "", false, false);
+      $scope._inquirySub("/iostock/deliveryCharger/deliveryChargerManage/deliveryChargerRegist/storageList.sb", params, "", false);
     };
+
 
     // 창고 삭제
     $scope.delStorage = function () {
@@ -275,16 +314,21 @@
       });
     };
 
+
     // 창고 추가 팝업 오픈
     $scope.openPopAddStorage = function () {
-      $scope._broadcast('dlvrStorageMgrCtrl');
+      var params    = {};
+      params.dlvrCd = $scope.dlvrCd;
+      params.dlvrNm = $scope.dlvrNm;
+      $scope._broadcast('dlvrStorageMgrCtrl', params);
     };
+
   }]);
 
   // 값 체크
   function valueCheck() {
     <%-- 기사명을 입력해주세요. --%>
-    var msg = messages["deliveryCharger.dlvrNm"]+" "+messages["cmm.require.text"];
+    var msg = messages["deliveryCharger.dlvrNm"] + " " + messages["cmm.require.text"];
     if ($("#dlvrNm").val() === "") {
       s_alert.popOk(msg, function () {
         $("#dlvrNm").focus();
@@ -293,7 +337,7 @@
     }
 
     <%-- 기사명의 길이가 너무 깁니다. --%>
-    var msg = messages["deliveryCharger.dlvrNm"]+" "+messages["deliveryCharger.textOver"];
+    var msg = messages["deliveryCharger.dlvrNm"] + " " + messages["deliveryCharger.textOver"];
     if ($("#dlvrNm").val().getByteLengthForOracle() > 18) {
       s_alert.popOk(msg, function () {
         $("#dlvrNm").select();
@@ -302,7 +346,7 @@
     }
 
     <%-- 차량번호를 입력해주세요. --%>
-    var msg = messages["deliveryCharger.carNo"]+" "+messages["cmm.require.text"];
+    var msg = messages["deliveryCharger.carNo"] + " " + messages["cmm.require.text"];
     if ($("#carNo").val() === "") {
       s_alert.popOk(msg, function () {
         $("#carNo").focus();
@@ -311,7 +355,7 @@
     }
 
     <%-- 차량번호의 길이가 너무 깁니다. --%>
-    var msg = messages["deliveryCharger.carNo"]+" "+messages["deliveryCharger.textOver"];
+    var msg = messages["deliveryCharger.carNo"] + " " + messages["deliveryCharger.textOver"];
     if ($("#carNo").val().getByteLengthForOracle() > 14) {
       s_alert.popOk(msg, function () {
         $("#carNo").select();
@@ -320,7 +364,7 @@
     }
 
     <%-- 전화번호는 숫자만 입력할 수 있습니다. --%>
-    var msg          = messages["deliveryCharger.telNo"]+" "+messages["cmm.require.number"];
+    var msg          = messages["deliveryCharger.telNo"] + " " + messages["cmm.require.number"];
     var numChkregexp = /[^0-9]/g;
     if (numChkregexp.test($("#telNo").val())) {
       s_alert.popOk(msg, function () {
@@ -330,7 +374,7 @@
     }
 
     <%-- 전화번호를 정확히 입력해주세요. --%>
-    var msg = messages["deliveryCharger.telNo"]+" "+messages["deliveryCharger.validCheck"];
+    var msg = messages["deliveryCharger.telNo"] + " " + messages["deliveryCharger.validCheck"];
     if ($("#telNo").val() !== "" && $("#telNo").val().length < 10) {
       s_alert.popOk(msg, function () {
         $("#telNo").select();
@@ -339,7 +383,7 @@
     }
 
     <%-- 핸드폰번호는 숫자만 입력할 수 있습니다. --%>
-    var msg = messages["deliveryCharger.hpNo"]+" "+messages["cmm.require.number"];
+    var msg = messages["deliveryCharger.hpNo"] + " " + messages["cmm.require.number"];
     if (numChkregexp.test($("#hpNo").val())) {
       s_alert.popOk(msg, function () {
         $("#hpNo").select();
@@ -348,7 +392,7 @@
     }
 
     <%-- 핸드폰번호를 정확히 입력해주세요. --%>
-    var msg = messages["deliveryCharger.hpNo"]+" "+messages["deliveryCharger.validCheck"];
+    var msg = messages["deliveryCharger.hpNo"] + " " + messages["deliveryCharger.validCheck"];
     if ($("#hpNo").val() !== "" && $("#hpNo").val().length < 10) {
       s_alert.popOk(msg, function () {
         $("#hpNo").select();

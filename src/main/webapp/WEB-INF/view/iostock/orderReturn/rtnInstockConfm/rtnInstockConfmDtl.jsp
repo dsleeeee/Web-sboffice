@@ -62,7 +62,7 @@
       <div class="tr mt20 fr">
         <div id="instockBtnLayer" style="display: none;">
           <%-- 입고확정 체크박스 --%>
-          <span id="spanInstockConfirmFg" class="chk pdb5 txtIn fl" style="top: 0px;">
+          <span id="spanInstockConfirmFg" class="chk pdb5 txtIn fl" style="top: 0px;" ng-if="spanInstockConfirmFg">
             <input type="checkbox" name="instockConfirmFg" id="instockConfirmFg" value="Y" ng-click="fnConfirmChk()"/>
             <label for="instockConfirmFg"><s:message code="rtnInstockConfm.dtl.confirmFg"/></label>
           </span>
@@ -71,9 +71,9 @@
             <span class="txtIn"><input id="dtlInDate" class="w120px"></span>
           </div>
           <%-- 출고내역으로 입고내역 세팅 --%>
-          <button type="button" id="btnSetOutToIn" class="btn_skyblue ml5 fl" ng-click="setOutToIn()"><s:message code="rtnInstockConfm.dtl.setOutToIn"/></button>
+          <button type="button" id="btnSetOutToIn" class="btn_skyblue ml5 fl" ng-click="setOutToIn()" ng-if="btnSetOutToIn"><s:message code="rtnInstockConfm.dtl.setOutToIn"/></button>
           <%-- 저장 --%>
-          <button type="button" id="btnDtlSave" class="btn_skyblue ml5 fl" ng-click="save()"><s:message code="cmm.save"/></button>
+          <button type="button" id="btnDtlSave" class="btn_skyblue ml5 fl" ng-click="save()" ng-if="btnDtlSave"><s:message code="cmm.save"/></button>
         </div>
       </div>
       <div style="clear: both;"></div>
@@ -239,11 +239,11 @@
             // 출고확정
             if ($scope.procFg === "20") {
               $("#spanDtlTitle").html(messages["rtnInstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["rtnInstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["rtnInstockConfm.dtl.outDate"]+' : ' + getFormatDate($scope.outDate));
-              $("#instockBtnLayer").show();
+              $scope.instockBtnLayerDisplay(true);
             }
             // 수주확정 또는 입고확정
             else if ($scope.procFg === "10" || $scope.procFg === "30") {
-              $("#instockBtnLayer").hide();
+              $scope.instockBtnLayerDisplay(false);
               $scope.flex.isReadOnly = true;
 
               // 수주확정
@@ -269,6 +269,7 @@
       });
     };
 
+
     // 입고확정 상세내역 리스트 조회
     $scope.searchRtnInstockConfmDtlList = function () {
       // 파라미터
@@ -278,6 +279,7 @@
       $scope._inquirySub("/iostock/orderReturn/rtnInstockConfm/rtnInstockConfmDtl/list.sb", params, function () {
       });
     };
+
 
     // 저장
     $scope.save = function () {
@@ -322,6 +324,7 @@
       });
     };
 
+
     // 저장 후 콜백 함수
     $scope.saveRtnInstockConfmDtlCallback = function () {
       var rtnInstockConfmScope = agrid.getScope('rtnInstockConfmCtrl');
@@ -329,6 +332,7 @@
 
       $scope.wjRtnInstockConfmDtlLayer.hide(true);
     };
+
 
     $scope.fnConfirmChk = function () {
       if ($("#instockConfirmFg").prop("checked")) {
@@ -338,6 +342,7 @@
         $("#divDtlInDate").hide();
       }
     };
+
 
     // 출고내역으로 입고내역 세팅
     $scope.setOutToIn = function () {
@@ -352,6 +357,21 @@
         $scope.flex.collectionView.commitEdit();
       }
     };
+
+
+    $scope.instockBtnLayerDisplay = function(isVisible) {
+      if(isVisible) {
+        $("#instockBtnLayer").show();
+      }
+      else {
+        $("#instockBtnLayer").hide();
+      }
+
+      $scope.spanInstockConfirmFg = isVisible;
+      $scope.btnSetOutToIn = isVisible;
+      $scope.btnDtlSave = isVisible;
+    };
+
 
     // http 조회 후 status 체크
     $scope.httpStatusCheck = function (res) {

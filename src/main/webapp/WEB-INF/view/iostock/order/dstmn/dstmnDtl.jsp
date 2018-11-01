@@ -67,7 +67,7 @@
 
       <div class="tr mt20 fr">
         <div id="outstockBtnLayer" style="display: none;">
-          <span id="spanOutstockConfirmFg" class="chk pdb5 txtIn fl" style="top: 0px;">
+          <span id="spanOutstockConfirmFg" class="chk pdb5 txtIn fl" style="top: 0px;" ng-if="spanOutstockConfirmFg">
             <input type="checkbox" name="outstockConfirmFg" id="outstockConfirmFg" value="Y" ng-click="fnConfirm()"/>
             <label for="outstockConfirmFg"><s:message code="dstmn.dtl.confirmFg"/></label>
           </span>
@@ -75,12 +75,10 @@
             <span class="txtIn"><input id="dtlOutDate" class="w120px"></span>
           </div>
           <%-- 저장 --%>
-          <button type="button" id="btnDtlSave" class="btn_skyblue ml5 fl" ng-click="save()"><s:message code="cmm.save"/></button>
+          <button type="button" id="btnDtlSave" class="btn_skyblue ml5 fl" ng-click="save()" ng-if="btnDtlSave"><s:message code="cmm.save"/></button>
         </div>
-        <div id="outstockAfterBtnLayer" style="display: none;">
-          <%-- 출고 후 저장 --%>
-          <button type="button" id="btnDtlSave" class="btn_skyblue ml5 fl" ng-click="saveOutstockAfter()"><s:message code="cmm.save"/></button>
-        </div>
+        <%-- 출고 후 저장 --%>
+        <button type="button" id="btnOutstockAfterDtlSave" class="btn_skyblue ml5 fl" ng-click="saveOutstockAfter()" ng-if="btnOutstockAfterDtlSave"><s:message code="cmm.save"/></button>
       </div>
       <div style="clear: both;"></div>
 
@@ -242,16 +240,18 @@
             // 수주확정
             if ($scope.procFg === "10") {
               $("#spanDtlTitle").html(messages["dstmn.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["dstmn.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["dstmn.dtl.reqDate"]+' : ' + getFormatDate($scope.outDate));
-              $("#spanOutstockConfirmFg").show();
               $("#outstockBtnLayer").show();
-              $("#outstockAfterBtnLayer").hide();
+              $scope.spanOutstockConfirmFg = true;
+              $scope.btnDtlSave = true;
+              $scope.btnOutstockAfterDtlSave = false;
               $scope.flex.isReadOnly = false;
             }
             // 출고확정 또는 입고확정
             else if ($scope.procFg === "20" || $scope.procFg === "30") {
-              $("#spanOutstockConfirmFg").hide();
               $("#outstockBtnLayer").hide();
-              $("#outstockAfterBtnLayer").show();
+              $scope.spanOutstockConfirmFg = false;
+              $scope.btnDtlSave = false;
+              $scope.btnOutstockAfterDtlSave = true;
               $scope.flex.isReadOnly = true;
 
               // 출고확정

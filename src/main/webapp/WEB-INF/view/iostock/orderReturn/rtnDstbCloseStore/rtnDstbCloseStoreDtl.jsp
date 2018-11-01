@@ -23,7 +23,7 @@
 
       <div class="tr mt20">
         <%-- 저장 --%>
-        <button type="button" id="btnDtlSave" class="btn_skyblue ml5" ng-click="save()"><s:message code="cmm.save"/></button>
+        <button type="button" id="btnDtlSave" class="btn_skyblue ml5" ng-click="save()" ng-if="btnDtlSave"><s:message code="cmm.save"/></button>
       </div>
       <div style="clear: both;"></div>
 
@@ -160,10 +160,10 @@
       $("#spanDtlTitle").html('['+messages["rtnDstbCloseStore.dtl.orderReturn"]+'] ' + '[' + $scope.storeCd + '] ' + $scope.storeNm);
 
       if (parseInt($scope.procFg) < 20) {
-        $("#btnDtlSave").show();
+        $scope.btnDtlSave = true;
       }
       else {
-        $("#btnDtlSave").hide();
+        $scope.btnDtlSave = false;
       }
       $scope.searchRtnDstbCloseStoreDtlList();
       // 기능수행 종료 : 반드시 추가

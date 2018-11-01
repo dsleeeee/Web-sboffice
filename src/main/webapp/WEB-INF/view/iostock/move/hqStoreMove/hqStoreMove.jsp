@@ -104,12 +104,14 @@
 
   <div class="mt10 pdb20 oh bb">
     <%-- 조회 --%>
-    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('hqStoreMoveCtrl')"><s:message code="cmm.search"/></button>
+    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('hqStoreMoveCtrl')">
+      <s:message code="cmm.search"/></button>
   </div>
 
   <div class="tr mt10">
     <%-- 신규 --%>
-    <button type="button" id="btnRegist" class="btn_skyblue ml5" ng-click="newRegist()"><s:message code="hqStoreMove.newRegist"/></button>
+    <button type="button" id="btnRegist" class="btn_skyblue ml5" ng-click="newRegist()">
+      <s:message code="hqStoreMove.newRegist"/></button>
   </div>
   <div style="clear: both;"></div>
 
@@ -130,13 +132,13 @@
         <wj-flex-grid-column header="<s:message code="hqStoreMove.slipNo"/>" binding="slipNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqStoreMove.dlvrFg"/>" binding="dlvrFg" width="60" align="center" is-read-only="true" data-map="dlvrFgMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqStoreMove.procFg"/>" binding="procFg" width="70" align="center" is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="hqStoreMove.dtlCnt"/>" binding="dtlCnt" width="60" align="right" is-read-only="true" data-type="Number" format="n0" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="hqStoreMove.dtlCnt"/>" binding="dtlCnt" width="60" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqStoreMove.storeCd"/>" binding="outStoreCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqStoreMove.storeNm"/>" binding="outStoreNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="hqStoreMove.totAmt"/>" binding="outTot" width="80" align="right" is-read-only="true" data-type="Number" format="n0" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="hqStoreMove.totAmt"/>" binding="outTot" width="80" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqStoreMove.storeCd"/>" binding="inStoreCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqStoreMove.storeNm"/>" binding="inStoreNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="hqStoreMove.totAmt"/>" binding="inTot" width="80" align="right" is-read-only="true" data-type="Number" format="n0" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="hqStoreMove.totAmt"/>" binding="inTot" width="80" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
 
       </wj-flex-grid>
       <%-- ColumnPicker 사용시 include --%>
@@ -229,6 +231,63 @@
         }
       });
 
+      // 헤더머지
+      s.allowMerging = 2;
+      s.columnHeaders.rows.push(new wijmo.grid.Row());
+      s.columnHeaders.rows[0].dataItem = {
+        moveDate  : messages["hqStoreMove.moveDate"],
+        slipNo    : messages["hqStoreMove.slipNo"],
+        ioFg      : messages["hqStoreMove.ioFg"],
+        dlvrFg    : messages["hqStoreMove.dlvrFg"],
+        procFg    : messages["hqStoreMove.procFg"],
+        dtlCnt    : messages["hqStoreMove.dtlCnt"],
+        outStoreCd: messages["hqStoreMove.out"],
+        outStoreNm: messages["hqStoreMove.out"],
+        outTot    : messages["hqStoreMove.out"],
+        inStoreCd : messages["hqStoreMove.in"],
+        inStoreNm : messages["hqStoreMove.in"],
+        inTot     : messages["hqStoreMove.in"],
+      };
+
+      s.itemFormatter = function(panel, r, c, cell) {
+        if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+          //align in center horizontally and vertically
+          panel.rows[r].allowMerging    = true;
+          panel.columns[c].allowMerging = true;
+          wijmo.setCss(cell, {
+            display    : 'table',
+            tableLayout: 'fixed'
+          });
+          cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+          wijmo.setCss(cell.children[0], {
+            display      : 'table-cell',
+            verticalAlign: 'middle',
+            textAlign    : 'center'
+          });
+        }
+        // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+        else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+          // GroupRow 인 경우에는 표시하지 않는다.
+          if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+            cell.textContent = '';
+          } else {
+            if (!isEmpty(panel._rows[r]._data.rnum)) {
+              cell.textContent = (panel._rows[r]._data.rnum).toString();
+            } else {
+              cell.textContent = (r + 1).toString();
+            }
+          }
+        }
+        // readOnly 배경색 표시
+        else if (panel.cellType === wijmo.grid.CellType.Cell) {
+          var col = panel.columns[c];
+          if (col.isReadOnly) {
+            wijmo.addClass(cell, 'wj-custom-readonly');
+          }
+        }
+      }
+
+
     };
 
     // 다른 컨트롤러의 broadcast 받기
@@ -241,7 +300,7 @@
     // 매장이동관리 리스트 조회
     $scope.searchHqStoreMoveList = function () {
       // 파라미터
-      var params       = {};
+      var params        = {};
       params.startDate  = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
       params.endDate    = wijmo.Globalize.format(srchEndDate.value, 'yyyyMMdd');
       params.outStoreCd = $("#hqStoreMoveOutSelectStoreCd").val();
@@ -253,7 +312,7 @@
 
     // 신규등록
     $scope.newRegist = function () {
-      var params    = {};
+      var params = {};
       $scope._broadcast("hqStoreMoveRegistCtrl", params);
     };
 

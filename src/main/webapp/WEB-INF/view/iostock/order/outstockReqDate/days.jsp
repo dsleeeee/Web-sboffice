@@ -59,7 +59,7 @@
     </div>
 
     <%--위즈모 테이블--%>
-    <div class="wj-gridWrap mt10" style="height: 400px;">
+    <div class="theGrid mt10" style="height: 400px;">
       <wj-flex-grid
         autoGenerateColumns="false"
         selection-mode="Row"
@@ -67,7 +67,7 @@
         control="flex"
         initialized="initGrid(s,e)"
         is-read-only="false"
-        item-formatter="_itemFormatter">
+        item-formatter="itemFormatter">
 
         <!-- define columns -->
         <%--<wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center"></wj-flex-grid-column>--%>
@@ -76,13 +76,13 @@
         <wj-flex-grid-column header="<s:message code="cmm.owner.nm"/>" binding="ownerNm" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="outstockReqDate.sysStatFg"/>" binding="sysStatFg" width="50" align="center" data-map="sysStatFgMap" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="outstockReqDate.orderCloseYn"/>" binding="orderCloseYn" width="80" align="center" data-map="orderCloseYnMap" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="outstockReqDate.sun"/>" binding="sun" width="50" align="center" format="checkbox"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="outstockReqDate.mon"/>" binding="mon" width="50" align="center" format="checkbox"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="outstockReqDate.tue"/>" binding="tue" width="50" align="center" format="checkbox"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="outstockReqDate.wed"/>" binding="wed" width="50" align="center" format="checkbox"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="outstockReqDate.thu"/>" binding="thu" width="50" align="center" format="checkbox"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="outstockReqDate.fri"/>" binding="fri" width="50" align="center" format="checkbox"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="outstockReqDate.sat"/>" binding="sat" width="50" align="center" format="checkbox"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.sun"/>" binding="sun" width="50" align="center" is-read-only="false" format="checkBoxText"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.mon"/>" binding="mon" width="50" align="center" is-read-only="false" format="checkBoxText"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.tue"/>" binding="tue" width="50" align="center" is-read-only="false" format="checkBoxText"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.wed"/>" binding="wed" width="50" align="center" is-read-only="false" format="checkBoxText"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.thu"/>" binding="thu" width="50" align="center" is-read-only="false" format="checkBoxText"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.fri"/>" binding="fri" width="50" align="center" is-read-only="false" format="checkBoxText"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.sat"/>" binding="sat" width="50" align="center" is-read-only="false" format="checkBoxText"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="outstockReqDate.remark"/>" binding="daysRemark" width="*" align="left" is-read-only="false"></wj-flex-grid-column>
 
       </wj-flex-grid>
@@ -136,37 +136,111 @@
           //   wijmo.addClass(e.cell, 'wj-custom-readonly');
           // }
         }
+      });
 
-        if (e.panel.cellType === wijmo.grid.CellType.ColumnHeader) {
-          var flex = e.panel.grid;
-          var col  = s.columns[e.col];
+      // 헤더머지
+      s.allowMerging = 2;
+      s.columnHeaders.rows.push(new wijmo.grid.Row());
+      s.columnHeaders.rows[0].dataItem = {
+        storeCd     : messages["outstockReqDate.storeCd"],
+        storeNm     : messages["outstockReqDate.storeNm"],
+        ownerNm     : messages["cmm.owner.nm"],
+        sysStatFg   : messages["outstockReqDate.sysStatFg"],
+        orderCloseYn: messages["outstockReqDate.orderCloseYn"],
+        sun         : messages["outstockReqDate.outstockReqDate"],
+        mon         : messages["outstockReqDate.outstockReqDate"],
+        tue         : messages["outstockReqDate.outstockReqDate"],
+        wed         : messages["outstockReqDate.outstockReqDate"],
+        thu         : messages["outstockReqDate.outstockReqDate"],
+        fri         : messages["outstockReqDate.outstockReqDate"],
+        sat         : messages["outstockReqDate.outstockReqDate"],
+        daysRemark  : messages["outstockReqDate.remark"],
+      };
+    };
 
+
+    // 체크박스가 있는 헤더머지 때문에 itemFormatter 를 재정의함.
+    $scope.itemFormatter = function (panel, r, c, cell) {
+      if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+        //align in center horizontally and vertically
+        panel.rows[r].allowMerging    = true;
+        panel.columns[c].allowMerging = true;
+
+        wijmo.setCss(cell, {
+          display    : 'table',
+          tableLayout: 'fixed'
+        });
+        cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+        wijmo.setCss(cell.children[0], {
+          display      : 'table-cell',
+          verticalAlign: 'middle',
+          textAlign    : 'center'
+        });
+
+        if ((panel.grid.columnHeaders.rows.length - 1) === r) {
+          // 헤더의 전체선택 클릭 로직
+          var flex   = panel.grid;
+          var column = flex.columns[c];
           // check that this is a boolean column
-          if (col.format === "checkbox") { // 여기에 해당하는 컬럼명 바인딩 바꿔줄 것.
+          if (column.binding === 'gChk' || column.format === 'checkBox' || column.format === 'checkBoxText') {
             // prevent sorting on click
-            col.allowSorting = false;
+            column.allowSorting = false;
             // count true values to initialize checkbox
-            var cnt          = 0;
+            var cnt             = 0;
             for (var i = 0; i < flex.rows.length; i++) {
-              if (flex.getCellData(i, col._idx) == true) cnt++;
+              if (flex.getCellData(i, c) === true) {
+                cnt++;
+              }
             }
             // create and initialize checkbox
-            e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check" />' + col.header;
-            var cb           = e.cell.firstChild;
+            if (column.format === 'checkBoxText') {
+              cell.innerHTML = '<input id=\"' + column.binding + '\" type=\"checkbox\" class=\"wj-cell-check\" />'
+                + '<label for=\"' + column.binding + '\" class=\"wj-header-label\">' + cell.innerHTML + '</label>';
+            } else {
+              cell.innerHTML = '<input type=\"checkbox\" class=\"wj-cell-check\" />';
+            }
+            var cb           = cell.firstChild;
             cb.checked       = cnt > 0;
             cb.indeterminate = cnt > 0 && cnt < flex.rows.length;
             // apply checkbox value to cells
             cb.addEventListener('click', function (e) {
               flex.beginUpdate();
               for (var i = 0; i < flex.rows.length; i++) {
-                flex.setCellData(i, col._idx, cb.checked);
+                var cell = flex.cells.getCellElement(i, c);
+
+                // 활성화 및 readOnly 아닌 경우에만 체크되도록
+                // if (!cell.children[0].disabled) {
+                if (!cell.children[0].disabled) {
+                  flex.setCellData(i, c, cb.checked);
+                }
               }
               flex.endUpdate();
             });
           }
         }
-      });
+      }
+      // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+      else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+        // GroupRow 인 경우에는 표시하지 않는다.
+        if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+          cell.textContent = '';
+        } else {
+          if (!isEmpty(panel._rows[r]._data.rnum)) {
+            cell.textContent = (panel._rows[r]._data.rnum).toString();
+          } else {
+            cell.textContent = (r + 1).toString();
+          }
+        }
+      }
+      // readOnly 배경색 표시
+      else if (panel.cellType === wijmo.grid.CellType.Cell) {
+        var col = panel.columns[c];
+        if (col.isReadOnly) {
+          wijmo.addClass(cell, 'wj-custom-readonly');
+        }
+      }
     };
+
 
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("daysCtrl", function (event, data) {

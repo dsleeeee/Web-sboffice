@@ -33,11 +33,11 @@
       <div class="tr mt10">
         <p id="dtlStoreLoanInfo" class="fl s14 bk lh30"></p>
         <%-- 상품추가/변경 --%>
-        <button type="button" id="btnAddProd" class="btn_skyblue ml5" ng-click="addProd()" style="display:none"><s:message code="storeOrder.addProd"/></button>
+        <button type="button" id="btnAddProd" class="btn_skyblue ml5" ng-click="addProd()" ng-if="btnAddProd"><s:message code="storeOrder.addProd"/></button>
         <%-- 저장 --%>
-        <button type="button" id="btnDtlSave" class="btn_skyblue ml5" ng-click="saveStoreOrderDtl('save')" style="display:none"><s:message code="cmm.save"/></button>
+        <button type="button" id="btnDtlSave" class="btn_skyblue ml5" ng-click="saveStoreOrderDtl('save')" ng-if="btnDtlSave"><s:message code="cmm.save"/></button>
         <%-- 확정 --%>
-        <button type="button" id="btnConfirm" class="btn_skyblue ml5" ng-click="saveStoreOrderDtl('confirm')" style="display:none"><s:message code="storeOrder.dtl.confirm"/></button>
+        <button type="button" id="btnConfirm" class="btn_skyblue ml5" ng-click="saveStoreOrderDtl('confirm')" ng-if="btnConfirm"><s:message code="storeOrder.dtl.confirm"/></button>
       </div>
       <div style="clear: both;"></div>
 
@@ -152,21 +152,21 @@
 
       $scope.wjStoreOrderDtlLayer.show(true);
       if ($scope.procFg === "00") {
-        $("#btnAddProd").show();
-        $("#btnDtlSave").show();
+        $scope.btnAddProd = true;
+        $scope.btnDtlSave = true;
         $scope.flex.isReadOnly = false;
 
         if ("${envst1042}" === "1" || "${envst1042}" === "2") {
-          $("#btnConfirm").show();
+          $scope.btnConfirm = true;
         }
         else {
-          $("#btnConfirm").hide();
+          $scope.btnConfirm = false;
         }
       }
       else {
-        $("#btnAddProd").hide();
-        $("#btnDtlSave").hide();
-        $("#btnConfirm").hide();
+        $scope.btnAddProd = false;
+        $scope.btnDtlSave = false;
+        $scope.btnConfirm = false;
         $scope.flex.isReadOnly = true;
       }
 

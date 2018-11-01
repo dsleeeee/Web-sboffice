@@ -37,7 +37,7 @@
               >
               </wj-combo-box>
           </span>
-          <div id="dateLayer" class="sb-select fl ml5" style="display: none;">
+          <div id="dateLayer" class="sb-select fl ml5" ng-show="dateLayer">
             <span class="txtIn"><input id="srchStartDate" class="w120px"></span>
             <span class="rg">~</span>
             <span class="txtIn"><input id="srchEndDate" class="w120px"></span>
@@ -71,11 +71,11 @@
         item-formatter="_itemFormatter">
 
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="loanInfo.loanDate"/>" binding="loanDate" width="100" align="center" format="date"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="loanInfo.outAmt"/>" binding="outAmt" width="100" align="right" data-type="Number" format="n0"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="loanInfo.inAmt"/>" binding="inAmt" width="100" align="right" data-type="Number" format="n0"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="loanInfo.currLoanAmt"/>" binding="currLoanAmt" width="100" align="right" data-type="Number" format="n0"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="loanInfo.remark"/>" binding="remark" width="*" align="left"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loanInfo.loanDate"/>" binding="loanDate" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loanInfo.outAmt"/>" binding="outAmt" width="100" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loanInfo.inAmt"/>" binding="inAmt" width="100" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loanInfo.currLoanAmt"/>" binding="currLoanAmt" width="100" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loanInfo.remark"/>" binding="remark" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
 
       </wj-flex-grid>
       <%-- ColumnPicker 사용시 include --%>
@@ -138,10 +138,10 @@
     // 조회일자 값 변경 이벤트 함수
     $scope.selectedIndexChanged = function (s, e) {
       if (s.selectedValue === "") {
-        $("#dateLayer").hide();
+        $scope.dateLayer = false;
       }
       else {
-        $("#dateLayer").show();
+        $scope.dateLayer = true;
       }
     };
 
