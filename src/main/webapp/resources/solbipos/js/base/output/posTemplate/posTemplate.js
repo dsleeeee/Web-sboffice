@@ -105,7 +105,7 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
 
             if (list.length === undefined || list.length === 0) {
               // 코드리스트 초기화
-              listBoxCodeList.itemsSource = new wijmo.collections.CollectionView([]);
+              $scope.listBoxCodeList.itemsSource = new wijmo.collections.CollectionView([]);
               // 편집/미리보기 폼 초기화
               theTarget.value = "";
               thePreview.innerHTML = "";
