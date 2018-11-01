@@ -12,7 +12,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
   };
   // 조회 : 서브 그리드
   $scope._inquirySub = function (url, params, callback, isView) {
-    if (!isView) {
+    if (isEmpty(isView)) {
       isView = true;
     }
     _inquiry(url, params, callback, isView, false);
