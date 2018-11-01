@@ -3,7 +3,7 @@ package kr.co.solbipos.store.manage.terminalManage.service;
 import kr.co.solbipos.application.common.service.CmmVO;
 
 /**
- * @Class Name : StorePosVO.java
+ * @Class Name : StoreTerminalVO.java
  * @Description :
  * @Modification Information
  * @
@@ -27,6 +27,8 @@ public class StoreTerminalVO extends CmmVO {
     private String cornrCd;
     /** [벤더구분] */
     private String vendorFg;
+    /** [벤더구분명] */
+    private String vendorFgNm;
     /** [벤더코드] */
     private String vendorCd;
     /** [벤더명] */
@@ -95,6 +97,22 @@ public class StoreTerminalVO extends CmmVO {
      */
     public void setVendorFg(String vendorFg) {
         this.vendorFg = vendorFg;
+    }
+
+
+    /**
+     * @return the vendorFgNm
+     */
+
+    public String getVendorFgNm() {
+        return vendorFgNm;
+    }
+
+    /**
+     * @param vendorFgNm the vendorFgNm to set
+     */
+    public void setVendorFgNm(String vendorFgNm) {
+        this.vendorFgNm = vendorFgNm;
     }
 
     /**
