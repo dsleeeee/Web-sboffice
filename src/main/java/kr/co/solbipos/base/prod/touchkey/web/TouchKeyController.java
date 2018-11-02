@@ -53,7 +53,6 @@ import static kr.co.common.utils.spring.StringUtil.convertToJson;
 @RequestMapping(value = "/base/prod/touchKey/touchKey")
 public class TouchKeyController {
 
-    private final String RESULT_URI = "base/prod/touchKey";
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private final SessionService sessionService;
@@ -115,7 +114,7 @@ public class TouchKeyController {
             model.addAttribute("maxClassRow", cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1041"));
         }
 
-        return RESULT_URI + "/touchKey";
+        return "base/prod/touchKey/touchKey";
     }
 
     /**
