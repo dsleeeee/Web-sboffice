@@ -221,7 +221,9 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
    * *******************************************************/
   $scope.setDefault = function(){
 
-    alert('기본값')
+    //todo
+    $scope._popMsg("준비중인 메뉴입니다.");
+    return false;
   };
 
   // $("#btnDefault").click(function(){
