@@ -96,7 +96,7 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
     // 파라미터 설정
     var params = {};
     params.status = "I";
-    params.prtClassCd = document.getElementById("srchPrtClassCdVal").value;
+    params.prtClassCd =  $scope.prtClassCdCombo.selectedValue;
     params.gChk = true;
     // 추가기능 수행 : 파라미터
     $scope._addRow(params);
@@ -136,7 +136,7 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
       function() {
         var selectedRow = $scope.flex.selectedRows[0]._data;
         var param = {};
-        param.prtClassCd = document.getElementById("srchPrtClassCdVal").value;
+        param.prtClassCd = $scope.prtClassCdCombo.selectedValue;
         param.templtCd = selectedRow.templtCd;
         param.templtNm = selectedRow.templtNm;
         param.prtForm = theTarget.value;
@@ -177,7 +177,7 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
 
           for (var i = 0; i < scopeLayer.flexLayer.collectionView.itemsEdited.length; i++) {
             scopeLayer.flexLayer.collectionView.itemsEdited[i].status = "U";
-            scopeLayer.flexLayer.collectionView.itemsEdited[i].prtClassCd = document.getElementById("srchPrtClassCdVal").value;
+            scopeLayer.flexLayer.collectionView.itemsEdited[i].prtClassCd = $scope.prtClassCdCombo.selectedValue;
             scopeLayer.flexLayer.collectionView.itemsEdited[i].templtCd = scopeLayer.srchTempltCdCombo.templtCd;
             scopeLayer.flexLayer.collectionView.itemsEdited[i].templtNm = scopeLayer.srchTempltCdCombo.templtNm;
             scopeLayer.flexLayer.collectionView.itemsEdited[i].prtForm = scopeLayer.srchTempltCdCombo.prtForm;

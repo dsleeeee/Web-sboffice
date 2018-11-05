@@ -27,6 +27,7 @@
             <wj-combo-box
                 id="srchPrtClassCdCombo"
                 ng-model="prtClassCd"
+                control="prtClassCdCombo"
                 items-source="_getComboData('srchPrtClassCdCombo')"
                 display-member-path="name"
                 selected-value-path="value"
@@ -35,7 +36,6 @@
                 selected-index-changed="setPrtClassCdCombo(s)"
                 got-focus="prtClassCdComboFocus(s,e)">
             </wj-combo-box>
-            <input type="hidden" id="srchPrtClassCdVal" value={{prtClassCd}} />
           </div>
         </td>
         <td>
