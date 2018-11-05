@@ -374,6 +374,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     var params         = $scope.store;
     params.sysOpenDate = dateToDaystring($scope.store.sysOpenDate);
 
+
     var storeScope = agrid.getScope('storeManageCtrl');
 
     // 매장 신규 등록시
@@ -387,14 +388,14 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
       params.copyChkVal = copyChkVal;
 
-      $scope._save("/store/manage/storeManage/storeManage/saveStoreInfo.sb", params, function () {
+      $scope._postJSONSave.withPopUp("/store/manage/storeManage/storeManage/saveStoreInfo.sb", params, function () {
         $scope._popMsg(messages["cmm.saveSucc"]);
         $scope.storeInfoLayer.hide();
       });
     }
     // 수정
     else {
-      $scope._save("/store/manage/storeManage/storeManage/updateStoreInfo.sb", params, function () {
+      $scope._postJSONSave.withPopUp("/store/manage/storeManage/storeManage/updateStoreInfo.sb", params, function () {
         $scope._popMsg(messages["cmm.saveSucc"]);
         $scope.storeInfoLayer.hide();
       });

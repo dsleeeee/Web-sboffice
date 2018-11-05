@@ -209,11 +209,11 @@ public class StoreManageController {
 
         // 오픈일자
         String sysOpenDate = storeManageVO.getSysOpenDate();
-        storeManageVO.setSysOpenDate(StringUtils.remove(sysOpenDate, "."));
+        storeManageVO.setSysOpenDate(StringUtils.remove(sysOpenDate, "-"));
 
         // 폐점일자
         String sysClosureDate = storeManageVO.getSysClosureDate();
-        storeManageVO.setSysClosureDate(StringUtils.remove(sysClosureDate, "."));
+        storeManageVO.setSysClosureDate(StringUtils.remove(sysClosureDate, "-"));
 
         int cnt = service.updateStoreInfo(storeManageVO, sessionInfoVO);
 
