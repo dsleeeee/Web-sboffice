@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 
 
-<wj-popup id="wjDlvrStorageMgrLayer" control="wjDlvrStorageMgrLayer" show-trigger="Click" hide-trigger="Click" hiding="hiding(s,e)" style="display: none;width:600px;">
+<wj-popup id="wjDlvrStorageMgrLayer" control="wjDlvrStorageMgrLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:600px;">
   <div id="dlvrStorageMgrLayer" class="wj-dialog wj-dialog-columns" ng-controller="dlvrStorageMgrCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="deliveryCharger.storageMgrPopTitle"/>
@@ -15,12 +15,13 @@
       <div class="mt20 oh sb-select dkbr">
         <div class="tr">
           <%-- 창고추가 --%>
-          <button type="button" class="btn_skyblue ml5" ng-click="saveAddStore()"><s:message code="deliveryCharger.addStorage"/></button>
+          <button type="button" class="btn_skyblue ml5" ng-click="saveAddStore()">
+            <s:message code="deliveryCharger.addStorage"/></button>
         </div>
       </div>
 
       <!--위즈모 테이블-->
-      <div class="wj-gridWrap mt10" style="height: 300px;">
+      <div class="theGrid mt10" style="height: 300px;">
         <wj-flex-grid
           autoGenerateColumns="false"
           selection-mode="Row"
@@ -47,7 +48,7 @@
 
 <script type="text/javascript">
   /** 배송기사 관리 창고 추가 그리드 controller */
-  app.controller('dlvrStorageMgrCtrl', ['$scope', '$http', 'dlvrVO', function ($scope, $http, dlvrVO) {
+  app.controller('dlvrStorageMgrCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('dlvrStorageMgrCtrl', $scope, $http, true));
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -57,11 +58,14 @@
     };
 
     // 다른 컨트롤러의 broadcast 받기
-    $scope.$on("dlvrStorageMgrCtrl", function (event, paramObj) {
+    $scope.$on("dlvrStorageMgrCtrl", function (event, data) {
+      $scope.dlvrCd = data.dlvrCd;
+      $scope.dlvrNm = data.dlvrNm;
+
       // 배송기사 창고 추가 팝업 오픈
       $scope.wjDlvrStorageMgrLayer.show(true);
       // 타이틀의 배송기사 명칭 세팅
-      $("#storageMgrTitleDlvrNm").html("[" + dlvrVO.getDlvrNm() + "]");
+      $("#storageMgrTitleDlvrNm").html("[" + $scope.dlvrNm + "]");
 
       $scope.searchStorageMgrList();
       // 기능수행 종료 : 반드시 추가
@@ -71,39 +75,36 @@
     // 배송기사 관리 창고 추가 그리드 조회
     $scope.searchStorageMgrList = function () {
       // 파라미터
-      var params       = {};
-      params.listScale = 15;
-      params.curr      = 1;
-      params.dlvrCd    = dlvrVO.getDlvrCd();
+      var params    = {};
+      params.dlvrCd = $scope.dlvrCd;
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
-      $scope._inquiry("/iostock/deliveryCharger/deliveryChargerManage/deliveryChargerRegist/storageAllList.sb", params, "", false, false);
-    };
-
-    // 부모 그리드 조회
-    $scope.parentSearch = function () {
-      $scope._broadcast('dlvrChgrStorageCtrl');
+      $scope._inquirySub("/iostock/deliveryCharger/deliveryChargerManage/deliveryChargerRegist/storageAllList.sb", params, "", false);
     };
 
     // 담당창고 추가 저장
     $scope.saveAddStore = function () {
       // 파라미터 설정
-      var params = new Array();
+      var params = [];
       for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
         $scope.flex.collectionView.itemsEdited[i].status = "U";
-        $scope.flex.collectionView.itemsEdited[i].dlvrCd = dlvrVO.getDlvrCd();
+        $scope.flex.collectionView.itemsEdited[i].dlvrCd = $scope.dlvrCd;
         params.push($scope.flex.collectionView.itemsEdited[i]);
       }
 
       // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
       $scope._save("/iostock/deliveryCharger/deliveryChargerManage/deliveryChargerRegist/addStorage.sb", params, function () {
-        $scope.allSearch();
+        $scope.callbackSearch();
       });
     };
 
     // 저장 후 그리드 재조회
-    $scope.allSearch = function () {
+    $scope.callbackSearch = function () {
       $scope.searchStorageMgrList();
-      $scope.parentSearch();
+
+      // 배송기사 상세페이지 담당창고 그리드 조회
+      var dlvrRegistScope = agrid.getScope('dlvrRegistCtrl');
+      dlvrRegistScope.searchDlvrChgrStorageList();
+
     };
   }]);
 </script>

@@ -65,6 +65,7 @@ public class StoreMoveServiceImpl implements StoreMoveService {
                 storeMoveHdVO.setSlipNo(storeMoveVO.getSlipNo());
                 storeMoveHdVO.setDlvrFg(storeMoveVO.getDlvrFg());
                 storeMoveHdVO.setRemark(storeMoveVO.getRemark());
+                storeMoveHdVO.setProcFg(storeMoveVO.getProcFg());
                 storeMoveHdVO.setRegFg(sessionInfoVO.getOrgnFg());
                 storeMoveHdVO.setRegId(sessionInfoVO.getUserId());
                 storeMoveHdVO.setRegDt(currentDt);
@@ -73,23 +74,56 @@ public class StoreMoveServiceImpl implements StoreMoveService {
             }
 
             // 나머지수량은 null 이 들어올수 있으므로 null 인 경우 0으로 변환.
-            int outEtcQty = (storeMoveVO.getOutEtcQty() == null ? 0 : storeMoveVO.getOutEtcQty());
+            int outUnitQty    = (storeMoveVO.getOutUnitQty()    == null ? 0 : storeMoveVO.getOutUnitQty());
+            int outEtcQty     = (storeMoveVO.getOutEtcQty()     == null ? 0 : storeMoveVO.getOutEtcQty());
+            int outTotQty     = (storeMoveVO.getOutTotQty()     == null ? 0 : storeMoveVO.getOutTotQty());
+            int prevOutTotQty = (storeMoveVO.getPrevOutTotQty() == null ? 0 : storeMoveVO.getPrevOutTotQty());
 
-            storeMoveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            storeMoveVO.setOutEtcQty(outEtcQty);
-            storeMoveVO.setInUnitQty(storeMoveVO.getOutUnitQty());
-            storeMoveVO.setInEtcQty(outEtcQty);
-            storeMoveVO.setInTotQty(storeMoveVO.getOutTotQty());
-            storeMoveVO.setRegId(sessionInfoVO.getUserId());
-            storeMoveVO.setRegDt(currentDt);
-            storeMoveVO.setModId(sessionInfoVO.getUserId());
-            storeMoveVO.setModDt(currentDt);
+            // 수량 변경이 있는 경우만 DTL 수정
+            if(prevOutTotQty != outTotQty) {
+                int outSplyUprc  = storeMoveVO.getOutSplyUprc();
+                int inSplyUprc   = storeMoveVO.getInSplyUprc();
+                int poUnitQty    = storeMoveVO.getPoUnitQty();
+                int vat01        = Integer.parseInt(storeMoveVO.getVatFg01());
+                int outEnvst0011 = Integer.parseInt(storeMoveVO.getOutEnvst0011());
+                int inEnvst0011  = Integer.parseInt(storeMoveVO.getInEnvst0011());
 
-            // DTL 수정
-            result = storeMoveMapper.updateStoreMoveDtl(storeMoveVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                int unitQty     = outUnitQty * poUnitQty;
+                int etcQty      = outEtcQty;
+                int totQty      = unitQty + etcQty;
+                Long tempOutAmt = Long.valueOf(totQty * outSplyUprc / poUnitQty);
+                Long tempInAmt  = Long.valueOf(totQty * inSplyUprc / poUnitQty);
+                Long outAmt     = tempOutAmt - (tempOutAmt * vat01 * outEnvst0011 / 11);
+                Long outVat     = tempOutAmt * vat01 / (10 + outEnvst0011);
+                Long outTot     = outAmt + outVat;
+                Long inAmt      = tempInAmt - (tempInAmt * vat01 * inEnvst0011 / 11);
+                Long inVat      = tempInAmt * vat01 / (10 + inEnvst0011);
+                Long inTot      = inAmt + inVat;
 
-            returnResult += result;
+                storeMoveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+                storeMoveVO.setOutUnitQty(unitQty);
+                storeMoveVO.setOutEtcQty(etcQty);
+                storeMoveVO.setOutTotQty(totQty);
+                storeMoveVO.setOutAmt(outAmt);
+                storeMoveVO.setOutVat(outVat);
+                storeMoveVO.setOutTot(outTot);
+                storeMoveVO.setInUnitQty(unitQty);
+                storeMoveVO.setInEtcQty(etcQty);
+                storeMoveVO.setInTotQty(totQty);
+                storeMoveVO.setInAmt(inAmt);
+                storeMoveVO.setInVat(inVat);
+                storeMoveVO.setInTot(inTot);
+                storeMoveVO.setRegId(sessionInfoVO.getUserId());
+                storeMoveVO.setRegDt(currentDt);
+                storeMoveVO.setModId(sessionInfoVO.getUserId());
+                storeMoveVO.setModDt(currentDt);
+
+                // DTL 수정
+                result = storeMoveMapper.updateStoreMoveDtl(storeMoveVO);
+                if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                returnResult += result;
+            }
             i++;
         }
 
@@ -99,7 +133,8 @@ public class StoreMoveServiceImpl implements StoreMoveService {
 
         // 확정인 경우
         if(confirmFg.equals("Y")) {
-            storeMoveHdVO.setProcFg("3");
+            String procFg = String.valueOf(Integer.parseInt(storeMoveHdVO.getProcFg())+1);
+            storeMoveHdVO.setProcFg(procFg);
 
             // HD의 수정
             result = storeMoveMapper.updateStoreMoveConfirm(storeMoveHdVO);
@@ -201,20 +236,10 @@ public class StoreMoveServiceImpl implements StoreMoveService {
         result = storeMoveMapper.insertStoreMoveHd(storeMoveHdVO);
         if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-        // 본사확정인 경우
+        // 확정인 경우
         if(confirmFg.equals("Y")) {
-            // 출고, 반품에 사용할 전표번호 생성
-            StoreMoveVO iostockNewSlipNoVO = new StoreMoveVO();
-            iostockNewSlipNoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            iostockNewSlipNoVO.setYymm(yymm);
-            String iostockNewSlipNo = storeMoveMapper.getIostockNewSlipNo(iostockNewSlipNoVO);
-
-            String outSlipNo = iostockNewSlipNo;
-            String inSlipNo = String.valueOf(Long.parseLong(iostockNewSlipNo) + 1);
-
-            storeMoveHdVO.setProcFg("3");
-            storeMoveHdVO.setOutSlipNo(outSlipNo);
-            storeMoveHdVO.setInSlipNo(inSlipNo);
+            String procFg = String.valueOf(Integer.parseInt(storeMoveHdVO.getProcFg())+1);
+            storeMoveHdVO.setProcFg(procFg);
 
             // HD의 수정
             result = storeMoveMapper.updateStoreMoveConfirm(storeMoveHdVO);
@@ -243,7 +268,6 @@ public class StoreMoveServiceImpl implements StoreMoveService {
         for (StoreMoveVO storeMoveVO : storeMoveVOs) {
             // HD 저장을 위한 파라미터 세팅
             if(i == 0) {
-
                 storeMoveHdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
                 storeMoveHdVO.setSlipNo(storeMoveVO.getSlipNo());
                 storeMoveHdVO.setRegId(sessionInfoVO.getUserId());

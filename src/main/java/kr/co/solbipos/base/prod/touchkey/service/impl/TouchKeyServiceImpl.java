@@ -287,13 +287,14 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         tcParams.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         tcParams.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         tcParams.setStoreCd(sessionInfoVO.getStoreCd());
-        // 매장/본사의 현재 설정정보 삭제
+        // 매장/본사의 현재 터치키분류 정보 삭제
         keyMapper.deleteTouchKeyClass(tcParams);
 
         TouchKeyVO tParams = new TouchKeyVO();
         tParams.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         tParams.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         tParams.setStoreCd(sessionInfoVO.getStoreCd());
+        // 매장/본사의 현재 터치키 정보 삭제
         keyMapper.deleteTouchKey(tParams);
 
         // 리스트의 아이템을 DB에 Merge
@@ -368,10 +369,7 @@ public class TouchKeyServiceImpl implements TouchKeyService {
                 touchKeyClassVO.setTukeyGrpCd("01");
                 touchKeyClassVO.setTukeyClassNm(String.valueOf(cell.getValue()));
 
-                // 페이지 번호 계산 - 100*5
-                Double pageNo = (touchKeyClassVO.getX() / 500) + 1;
-                touchKeyClassVO.setPageNo(pageNo.intValue());
-                // 분류의 페이지당 Rows ( 2 or 3 )
+                // 분류의 페이지당 Rows ( 1 or 2 or 3 )
                 String pageRows;
                 if ( "H".equals(sessionInfoVO.getOrgnFg().getCode()) ) {
                     pageRows = cmmEnvUtil.getHqEnvst(sessionInfoVO, "0041");
@@ -387,6 +385,17 @@ public class TouchKeyServiceImpl implements TouchKeyService {
                 touchKeyClassVO.setWidth(geo.getWidth());
                 touchKeyClassVO.setHeight(geo.getHeight());
                 touchKeyClassVO.setInFg(InFg.STORE);
+
+                // 페이지 번호 계산 - 100*5
+                Double pageNo = Math.floor(touchKeyClassVO.getX() / 500) + 1d;
+                if(pageNo < 1) {
+                    pageNo = 1d;
+                } else if(pageNo > 1) {
+                    // 1페이지 초과 인경우 x좌표 재계산 > 포스에서는 페이지단위로 움직인다. : 20181102 노현수
+                    Double posX = touchKeyClassVO.getX() - ( pageNo - 1 ) * 500 ;
+                    touchKeyClassVO.setX(posX);
+                }
+                touchKeyClassVO.setPageNo(pageNo.intValue());
 
                 //스타일
                 String styleStr = cell.getStyle();
@@ -567,8 +576,15 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         }
         // 하위속성은 페이지번호 계산하지 않는다.
         if ( isButton ) {
-            //페이지 번호 계산 - 100*5
-            long pageNo = (long) (result.getX() / 500) + 1L;
+            // 페이지 번호 계산 - 100*5
+            Long pageNo = (long)Math.floor(result.getX() / 500) + 1L;
+            if (pageNo < 1) {
+                pageNo = 1L;
+            } else if (pageNo > 1) {
+                // 1페이지 초과 인경우 x좌표 재계산 > 포스에서는 페이지단위로 움직인다. : 20181102 노현수
+                Long posX = result.getX() - ( pageNo - 1 ) * 500 ;
+                result.setX(posX);
+            }
             result.setPageNo(pageNo);
         }
 

@@ -134,6 +134,31 @@ public class DeliveryChargerManageController {
     }
 
     /**
+     * 배송기사관리 - 배송기사 삭제
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   deliveryChargerManageVO
+     * @return  String
+     * @author  안동관
+     * @since   2018. 11. 01.
+     */
+    @RequestMapping(value = "/deliveryChargerRegist/dlvrDelete.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result deleteDeliveryCharger(HttpServletRequest request, HttpServletResponse response,
+        Model model, DeliveryChargerManageVO deliveryChargerManageVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        deliveryChargerManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        deliveryChargerManageVO.setRegId(sessionInfoVO.getUserId());
+        deliveryChargerManageVO.setModId(sessionInfoVO.getUserId());
+
+        int result = deliveryChargerManageService.deleteDeliveryCharger(deliveryChargerManageVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+    /**
      * 배송기사관리 - 배송기사 담당 창고 리스트 조회
      * @param   request
      * @param   response

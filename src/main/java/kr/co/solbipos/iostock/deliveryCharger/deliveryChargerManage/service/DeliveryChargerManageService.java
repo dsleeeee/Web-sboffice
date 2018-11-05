@@ -31,6 +31,9 @@ public interface DeliveryChargerManageService {
     /** 배송기사 저장 */
     int saveDeliveryCharger(DeliveryChargerManageVO deliveryChargerManageVO, SessionInfoVO sessionInfoVO);
 
+    /** 배송기사 삭제 */
+    int deleteDeliveryCharger(DeliveryChargerManageVO deliveryChargerManageVO);
+
     /** 배송기사 담당창고 리스트 조회 */
     List<DefaultMap<String>> getDeliveryChargerStorageList(DeliveryChargerManageVO deliveryChargerManageVO);
 

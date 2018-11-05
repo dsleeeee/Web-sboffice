@@ -26,13 +26,13 @@
             display-member-path="name"
             selected-value-path="value"
             is-editable="false"
-            initialized="initComboBox(s)">
+            initialized="_initComboBox(s)">
           </wj-combo-box>
           <%--// 페이지 스케일  --%>
         </div>
 
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap mt10" style="height: 400px;">
+        <div class="theGrid mt10" style="height: 400px;">
           <wj-flex-grid
             autoGenerateColumns="false"
             selection-mode="Row"

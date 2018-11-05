@@ -72,6 +72,22 @@ public class DeliveryChargerManageServiceImpl implements DeliveryChargerManageSe
         }
     }
 
+    /** 배송기사 삭제 */
+    @Override
+    public int deleteDeliveryCharger(DeliveryChargerManageVO deliveryChargerManageVO) {
+        int result = 0;
+
+        // 배송기사 관리창고 삭제
+        result = deliveryChargerManageMapper.deleteAllDeliveryChargerStorage(deliveryChargerManageVO);
+        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+        // 배송기사 삭제
+        result = deliveryChargerManageMapper.deleteDeliveryCharger(deliveryChargerManageVO);
+        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+        return result;
+    }
+
     /** 배송기사 담당 창고 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getDeliveryChargerStorageList(DeliveryChargerManageVO deliveryChargerManageVO) {

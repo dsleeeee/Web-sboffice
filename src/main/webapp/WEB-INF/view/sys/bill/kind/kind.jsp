@@ -19,7 +19,7 @@
   </div>
 
   <div class="wj-TblWrap mt40">
-    <div class="w50 fl" style="width: 40%">
+    <div class="w50 fl">
       <%--위즈모 테이블--%>
       <div id="gridPrint" class="wj-TblWrapBr mr10 pd20" style="height: 480px;" ng-controller="printCtrl">
         <div class="updownSet oh mb10">
@@ -59,7 +59,7 @@
       <%--//위즈모 테이블--%>
     </div>
 
-    <div class="w50 fl" style="width: 60%">
+    <div class="w50 fl">
       <%--위즈모 테이블--%>
       <div id="gridMapng" class="wj-TblWrapBr ml10 pd20" style="height: 480px;" ng-controller="mapngCtrl">
         <div class="updownSet oh mb10">

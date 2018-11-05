@@ -37,7 +37,7 @@
 
       <div class="tr mt20">
         <p id="dtlAvailableOrderAmt" class="fl s14 bk lh30"></p>
-        <div id="dstbBtnLayer" style="display: none;">
+        <div id="dstbBtnLayer" ng-if="dstbBtnLayer">
           <span id="spanDstbConfirmFg" class="chk pdb5 txtIn" style="top: 0px;"><input type="checkbox" name="dstbConfirmFg" id="dstbConfirmFg" value="Y"/>
               <label for="dstbConfirmFg"><s:message code="dstbReq.dtl.dstbConfirmFg"/></label>
           </span>
@@ -256,10 +256,10 @@
 
         // 주문내역이 분배완료가 아닌 경우 분배 저장버튼 show
         if ($scope.procFg !== "20") {
-          $("#dstbBtnLayer").show();
+          $scope.dstbBtnLayer = true;
         }
         else {
-          $("#dstbBtnLayer").hide();
+          $scope.dstbBtnLayer = false;
         }
 
         $scope.searchDstbReqDtlList();
@@ -295,7 +295,7 @@
 
     // 저장 전 값 체크
     $scope.saveValueCheck = function () {
-      var params = new Array();
+      var params = [];
       var mdTot  = 0;
 
       // 분배완료여부가 체크 되어있으면서 그리드의 수정된 내역은 없는 경우 저장로직 태우기 위해 값 하나를 강제로 수정으로 변경한다.

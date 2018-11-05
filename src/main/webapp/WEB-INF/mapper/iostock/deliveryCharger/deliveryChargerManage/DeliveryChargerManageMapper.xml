@@ -133,6 +133,19 @@
     AND     DLVR_CD      = #{dlvrCd}
     </update>
 
+    <!-- 배송기사 삭제 -->
+    <!--
+        TABLE    : TB_PO_HQ_DELIVERY_CHARGER
+        PARAM    : deliveryChargerManageVO
+        COMMENTS : 배송기사를 삭제한다.
+    -->
+    <delete id="deleteDeliveryCharger" parameterType="deliveryChargerManageVO">
+    /* USE : DeliveryChargerManageMapper.deleteDeliveryCharger */
+    DELETE  TB_PO_HQ_DELIVERY_CHARGER
+    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+    AND     DLVR_CD      = #{dlvrCd}
+    </delete>
+
     <!-- 배송기사 담당 창고 리스트 조회 -->
     <!--
         TABLE    : TB_PO_HQ_DELIVERY_CHARGER_STORAGE, TB_MS_STORE
@@ -221,5 +234,16 @@
     AND     DLVR_CD      = #{dlvrCd}
     </delete>
 
-
+    <!-- 배송기사 담당 창고 전체 삭제 -->
+    <!--
+        TABLE    : TB_PO_HQ_DELIVERY_CHARGER_STORAGE
+        PARAM    : deliveryChargerManageVO
+        COMMENTS : 배송기사의 담당 창고를 전체 삭제한다.
+    -->
+    <delete id="deleteAllDeliveryChargerStorage" parameterType="deliveryChargerManageVO">
+    /* USE : DeliveryChargerManageMapper.deleteAllDeliveryChargerStorage */
+    DELETE  TB_PO_HQ_DELIVERY_CHARGER_STORAGE
+    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+    AND     DLVR_CD      = #{dlvrCd}
+    </delete>
 </mapper>

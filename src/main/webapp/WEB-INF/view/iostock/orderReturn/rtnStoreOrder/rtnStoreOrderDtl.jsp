@@ -33,11 +33,11 @@
       <div class="tr mt10">
         <p id="dtlStoreLoanInfo" class="fl s14 bk lh30"></p>
         <%-- 상품추가/변경 --%>
-        <button type="button" id="btnAddProd" class="btn_skyblue ml5" ng-click="addProd()" style="display:none"><s:message code="rtnStoreOrder.addProd"/></button>
+        <button type="button" id="btnAddProd" class="btn_skyblue ml5" ng-click="addProd()" ng-if="btnAddProd"><s:message code="rtnStoreOrder.addProd"/></button>
         <%-- 저장 --%>
-        <button type="button" id="btnDtlSave" class="btn_skyblue ml5" ng-click="saveRtnStoreOrderDtl('save')" style="display:none"><s:message code="cmm.save"/></button>
+        <button type="button" id="btnDtlSave" class="btn_skyblue ml5" ng-click="saveRtnStoreOrderDtl('save')" ng-if="btnDtlSave"><s:message code="cmm.save"/></button>
         <%-- 확정 --%>
-        <button type="button" id="btnConfirm" class="btn_skyblue ml5" ng-click="saveRtnStoreOrderDtl('confirm')" style="display:none"><s:message code="rtnStoreOrder.dtl.confirm"/></button>
+        <button type="button" id="btnConfirm" class="btn_skyblue ml5" ng-click="saveRtnStoreOrderDtl('confirm')" ng-if="btnConfirm"><s:message code="rtnStoreOrder.dtl.confirm"/></button>
       </div>
       <div style="clear: both;"></div>
 
@@ -153,15 +153,15 @@
 
       $scope.wjRtnStoreOrderDtlLayer.show(true);
       if ($scope.procFg === "00") {
-        $("#btnAddProd").show();
-        $("#btnDtlSave").show();
-        $("#btnConfirm").show();
+        $scope.btnAddProd = true;
+        $scope.btnDtlSave = true;
+        $scope.btnConfirm = true;
         $scope.flex.isReadOnly = false;
       }
       else {
-        $("#btnAddProd").hide();
-        $("#btnDtlSave").hide();
-        $("#btnConfirm").hide();
+        $scope.btnAddProd = false;
+        $scope.btnDtlSave = false;
+        $scope.btnConfirm = false;
         $scope.flex.isReadOnly = true;
       }
 

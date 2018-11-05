@@ -12,26 +12,6 @@
   <div class="searchBar flddUnfld">
     <a href="#" class="open">${menuNm}</a>
   </div>
-  <table class="searchTbl">
-    <colgroup>
-      <col class="w15" />
-      <col class="w35" />
-      <col class="w15" />
-      <col class="w35" />
-    </colgroup>
-    <tbody>
-      <tr>
-        <%-- 코드명 --%>
-        <th><s:message code="item.prtNm" /></th>
-        <td>
-          <input type="text" class="sb-input w100" id="srchPrtNm" ng-model="prtNm" />
-        </td>
-        <th></th>
-        <td></td>
-      </tr>
-      <tr>
-    </tbody>
-  </table>
 
   <%-- 조회 --%>
   <div class="mt10 oh">

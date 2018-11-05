@@ -59,11 +59,11 @@
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="loan.dtl.loanDate"/>" binding="loanDate" width="120" align="center" format="date"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="loan.dtl.outAmt"/>" binding="outAmt" width="120" align="right" data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="loan.dtl.inAmt"/>" binding="inAmt" width="120" align="right" data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="loan.dtl.currLoanAmt"/>" binding="currLoanAmt" width="120" align="right" data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="loan.dtl.remark"/>" binding="remark" width="*" align="left"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="loan.dtl.loanDate"/>" binding="loanDate" width="120" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="loan.dtl.outAmt"/>" binding="outAmt" width="120" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="loan.dtl.inAmt"/>" binding="inAmt" width="120" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="loan.dtl.currLoanAmt"/>" binding="currLoanAmt" width="120" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="loan.dtl.remark"/>" binding="remark" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
 
           </wj-flex-grid>
         </div>

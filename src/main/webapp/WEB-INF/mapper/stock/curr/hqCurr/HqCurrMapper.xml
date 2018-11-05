@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.stock.curr.hqCurr.service.impl.HqCurrMapper">
+
+    <!-- 현재고현황 - 현재고현황 리스트 조회 -->
+    <!--
+        TABLE    : TB_ST_HQ_STOCK_CUR, TB_HQ_PRODUCT, TB_HQ_PRODUCT_BARCD
+        PARAM    : hqCurrVO
+        COMMENTS : 현재고현황 - 현재고현황 리스트를 조회한다.
+    -->
+    <select id="getHqCurrList" parameterType="hqCurrVO" resultType="DefaultMap">
+        /* USE : HqCurrMapper.getHqCurrList */
+        SELECT  tshsc.PROD_CD             ,   thp.PROD_NM
+        ,       tshsc.FIRST_VENDR_IN_DATE ,   tshsc.LAST_VENDR_IN_DATE
+        ,       tshsc.FIRST_HQ_OUT_DATE   ,   tshsc.LAST_HQ_OUT_DATE
+        ,       tshsc.FIRST_SALE_DATE     ,   tshsc.LAST_SALE_DATE
+        ,       thp.COST_UPRC
+        ,       thv.VENDR_NM
+        ,       thpb.BARCD_CD
+        ,       thp.PO_UNIT_QTY
+        ,       ROUND(tshsc.CURR_QTY * thp.COST_UPRC / thp.PO_UNIT_QTY) AS CURR_AMT
+        <if test='unitFg == "order"'>
+            ,       thp.PO_UNIT_FG AS PO_UNIT_FG
+            ,       (thp.SAFE_STOCK_QTY / thp.PO_UNIT_QTY) AS SAFE_STOCK_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.CURR_QTY                               ) / thp.PO_UNIT_QTY) AS CURR_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_VENDR_IN_QTY                       ) / thp.PO_UNIT_QTY) AS ACC_VENDR_IN_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_VENDR_OUT_QTY                      ) / thp.PO_UNIT_QTY) AS ACC_VENDR_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_HQ_OUT_QTY                         ) / thp.PO_UNIT_QTY) AS ACC_HQ_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_HQ_IN_QTY                          ) / thp.PO_UNIT_QTY) AS ACC_HQ_IN_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_STORE_MOVE_IN_QTY                  ) / thp.PO_UNIT_QTY) AS ACC_STORE_MOVE_IN_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_STORE_MOVE_OUT_QTY                 ) / thp.PO_UNIT_QTY) AS ACC_STORE_MOVE_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_DISUSE_QTY                         ) / thp.PO_UNIT_QTY) AS ACC_DISUSE_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_ADJ_QTY                            ) / thp.PO_UNIT_QTY) AS ACC_ADJ_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_SET_IN_QTY + tshsc.ACC_SET_OUT_QTY ) / thp.PO_UNIT_QTY) AS ACC_SET_IN_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_SALE_VENDR_OUT_QTY                 ) / thp.PO_UNIT_QTY) AS ACC_SALE_VENDR_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_SALE_VENDR_IN_QTY                  ) / thp.PO_UNIT_QTY) AS ACC_SALE_VENDR_IN_QTY
+        </if>
+        <if test='unitFg == "stock"'>
+            ,       thp.STOCK_UNIT_FG AS PO_UNIT_FG
+            ,       thp.SAFE_STOCK_QTY AS SAFE_STOCK_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.CURR_QTY                               )) AS CURR_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_VENDR_IN_QTY                       )) AS ACC_VENDR_IN_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_VENDR_OUT_QTY                      )) AS ACC_VENDR_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_HQ_OUT_QTY                         )) AS ACC_HQ_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_HQ_IN_QTY                          )) AS ACC_HQ_IN_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_STORE_MOVE_IN_QTY                  )) AS ACC_STORE_MOVE_IN_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_STORE_MOVE_OUT_QTY                 )) AS ACC_STORE_MOVE_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_DISUSE_QTY                         )) AS ACC_DISUSE_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_ADJ_QTY                            )) AS ACC_ADJ_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_SET_IN_QTY + tshsc.ACC_SET_OUT_QTY )) AS ACC_SET_IN_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_SALE_VENDR_OUT_QTY                 )) AS ACC_SALE_VENDR_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_SALE_VENDR_IN_QTY                  )) AS ACC_SALE_VENDR_IN_QTY
+        </if>
+        FROM    TB_ST_HQ_STOCK_CUR tshsc
+        ,       TB_HQ_PRODUCT thp
+        ,       TB_HQ_PRODUCT_BARCD thpb
+        ,       (   SELECT	thvp.PROD_CD
+                    ,		LISTAGG(thv.VENDR_NM, ',') WITHIN GROUP (ORDER BY thv.VENDR_CD) AS VENDR_NM
+                    FROM	TB_HQ_BRAND thb
+                    ,		TB_HQ_VENDOR thv
+                    ,		TB_HQ_VENDOR_PROD thvp
+                    WHERE	thb.HQ_OFFICE_CD    =   #{hqOfficeCd}
+                    AND     thv.HQ_BRAND_CD     =   thb.HQ_BRAND_CD
+                    AND     thvp.HQ_BRAND_CD	=	thv.HQ_BRAND_CD
+                    AND		thvp.VENDR_CD	    =	thv.VENDR_CD
+                    GROUP
+                    BY      thvp.PROD_CD
+                ) thv
+        WHERE   tshsc.HQ_OFFICE_CD    =   #{hqOfficeCd}
+        AND     thp.HQ_OFFICE_CD      =   tshsc.HQ_OFFICE_CD
+        AND     thp.PROD_CD           =   tshsc.PROD_CD
+        AND     thp.STOCK_PROD_YN     =   'Y'
+        AND     thp.USE_YN            =   'Y'
+        AND     thpb.HQ_OFFICE_CD (+) =   tshsc.HQ_OFFICE_CD
+        AND     thpb.PROD_CD      (+) =   tshsc.PROD_CD
+        AND     thv.PROD_CD       (+) =   tshsc.PROD_CD
+        <if test='prodCd != null and prodCd != ""'>
+            AND tshsc.PROD_CD = #{prodCd}
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='barcdCd != null and barcdCd != ""'>
+            AND thpb.BARCD_CD = #{barcdCd}
+        </if>
+        <if test='safeStockFg == "0"'>
+            AND thp.SAFE_STOCK_QTY > 0 AND thp.SAFE_STOCK_QTY > tshsc.CURR_QTY
+        </if>
+        <if test='weightFg == "0"'>
+            AND thp.PROD_TYPE_FG IN ('1')
+        </if>
+        <if test='weightFg == "1"'>
+            AND thp.PROD_TYPE_FG IN ('2', '3')
+        </if>
+        ORDER BY tshsc.PROD_CD
+    </select>
+
+</mapper>

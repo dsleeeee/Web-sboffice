@@ -23,7 +23,7 @@
 
       <div class="tr mt20">
         <%-- 저장 --%>
-        <button type="button" id="btnDtlSave" class="btn_skyblue ml5" ng-click="save()"><s:message code="cmm.save"/></button>
+        <button type="button" id="btnDtlSave" class="btn_skyblue ml5" ng-click="save()" ng-if="btnDtlSave"><s:message code="cmm.save"/></button>
       </div>
       <div style="clear: both;"></div>
 
@@ -165,10 +165,10 @@
       $("#spanDtlTitle").html('['+messages["dstbCloseProd.dtl.order"]+'] ' + '[' + $scope.prodCd + '] ' + $scope.prodNm);
 
       if (parseInt($scope.procFg) < 20) {
-        $("#btnDtlSave").show();
+        $scope.btnDtlSave = true;
       }
       else {
-        $("#btnDtlSave").hide();
+        $scope.btnDtlSave = false;
       }
       $scope.searchDstbCloseProdDtlList();
       // 기능수행 종료 : 반드시 추가
@@ -190,7 +190,7 @@
 
     // 저장 전 값 체크
     $scope.save = function () {
-      var params = new Array();
+      var params = [];
 
       for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
         var item = $scope.flex.collectionView.itemsEdited[i];

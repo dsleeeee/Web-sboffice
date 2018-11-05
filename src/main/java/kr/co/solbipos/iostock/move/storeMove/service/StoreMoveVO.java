@@ -46,11 +46,11 @@ public class StoreMoveVO extends PageVO {
     /** 이전이출수량 */
     private Integer prevOutTotQty;
     /** 이출금액 */
-    private Integer outAmt;
+    private Long outAmt;
     /** 이출금액VAT */
-    private Integer outVat;
+    private Long outVat;
     /** 이출금액합계 */
-    private Integer outTot;
+    private Long outTot;
     /** 이출확정일시 */
     private String outConfmDt;
     /** 이출확정자 */
@@ -64,11 +64,11 @@ public class StoreMoveVO extends PageVO {
     /** 이입수량 */
     private Integer inTotQty;
     /** 이입금액 */
-    private Integer inAmt;
+    private Long inAmt;
     /** 이입금액VAT */
-    private Integer inVat;
+    private Long inVat;
     /** 이입금액합계 */
-    private Integer inTot;
+    private Long inTot;
     /** 이입확정일시 */
     private String inConfmDt;
     /** 이입확정자 */
@@ -91,6 +91,14 @@ public class StoreMoveVO extends PageVO {
     private String yymm;
     /** 이출입구분 */
     private String ioFg;
+    /** 세션매장코드 */
+    private String sessionStoreCd;
+    /** 상품부가세구분 */
+    private String vatFg01;
+    /** 출고가-부가세구분(이출매장) */
+    private String outEnvst0011;
+    /** 출고가-부가세구분(이입매장) */
+    private String inEnvst0011;
 
     /**
      * @return the hqOfficeCd
@@ -361,42 +369,42 @@ public class StoreMoveVO extends PageVO {
     /**
      * @return the outAmt
      */
-    public Integer getOutAmt() {
+    public Long getOutAmt() {
         return outAmt;
     }
 
     /**
      * @param outAmt the outAmt to set
      */
-    public void setOutAmt(Integer outAmt) {
+    public void setOutAmt(Long outAmt) {
         this.outAmt = outAmt;
     }
 
     /**
      * @return the outVat
      */
-    public Integer getOutVat() {
+    public Long getOutVat() {
         return outVat;
     }
 
     /**
      * @param outVat the outVat to set
      */
-    public void setOutVat(Integer outVat) {
+    public void setOutVat(Long outVat) {
         this.outVat = outVat;
     }
 
     /**
      * @return the outTot
      */
-    public Integer getOutTot() {
+    public Long getOutTot() {
         return outTot;
     }
 
     /**
      * @param outTot the outTot to set
      */
-    public void setOutTot(Integer outTot) {
+    public void setOutTot(Long outTot) {
         this.outTot = outTot;
     }
 
@@ -487,42 +495,42 @@ public class StoreMoveVO extends PageVO {
     /**
      * @return the inAmt
      */
-    public Integer getInAmt() {
+    public Long getInAmt() {
         return inAmt;
     }
 
     /**
      * @param inAmt the inAmt to set
      */
-    public void setInAmt(Integer inAmt) {
+    public void setInAmt(Long inAmt) {
         this.inAmt = inAmt;
     }
 
     /**
      * @return the inVat
      */
-    public Integer getInVat() {
+    public Long getInVat() {
         return inVat;
     }
 
     /**
      * @param inVat the inVat to set
      */
-    public void setInVat(Integer inVat) {
+    public void setInVat(Long inVat) {
         this.inVat = inVat;
     }
 
     /**
      * @return the inTot
      */
-    public Integer getInTot() {
+    public Long getInTot() {
         return inTot;
     }
 
     /**
      * @param inTot the inTot to set
      */
-    public void setInTot(Integer inTot) {
+    public void setInTot(Long inTot) {
         this.inTot = inTot;
     }
 
@@ -678,5 +686,61 @@ public class StoreMoveVO extends PageVO {
      */
     public void setIoFg(String ioFg) {
         this.ioFg = ioFg;
+    }
+
+    /**
+     * @return the sessionStoreCd
+     */
+    public String getSessionStoreCd() {
+        return sessionStoreCd;
+    }
+
+    /**
+     * @param sessionStoreCd the sessionStoreCd to set
+     */
+    public void setSessionStoreCd(String sessionStoreCd) {
+        this.sessionStoreCd = sessionStoreCd;
+    }
+
+    /**
+     * @return the vatFg01
+     */
+    public String getVatFg01() {
+        return vatFg01;
+    }
+
+    /**
+     * @param vatFg01 the vatFg01 to set
+     */
+    public void setVatFg01(String vatFg01) {
+        this.vatFg01 = vatFg01;
+    }
+
+    /**
+     * @return the outEnvst0011
+     */
+    public String getOutEnvst0011() {
+        return outEnvst0011;
+    }
+
+    /**
+     * @param outEnvst0011 the outEnvst0011 to set
+     */
+    public void setOutEnvst0011(String outEnvst0011) {
+        this.outEnvst0011 = outEnvst0011;
+    }
+
+    /**
+     * @return the inEnvst0011
+     */
+    public String getInEnvst0011() {
+        return inEnvst0011;
+    }
+
+    /**
+     * @param inEnvst0011 the inEnvst0011 to set
+     */
+    public void setInEnvst0011(String inEnvst0011) {
+        this.inEnvst0011 = inEnvst0011;
     }
 }

@@ -282,7 +282,7 @@
       },
       function (result) {
         s_alert.pop(result.message);
-        return;
+
       }
     );
   }
@@ -303,7 +303,7 @@
       },
       function (result) {
         s_alert.pop(result.message);
-        return;
+
       }
     );
   }
@@ -384,14 +384,14 @@
       },
       function (result) {
         s_alert.pop(result.message);
-        return;
+
       }
     );
   }
 
   <%-- 저장버튼 클릭 --%>
   $("#posFuncManageArea #btnSave").click(function () {
-    var paramArr = new Array();
+    var paramArr = [];
 
     for (var i = 0; i < useFuncGrid.collectionView.itemCount; i++) {  // dispSeq 재설정
       useFuncGrid.collectionView.editItem(useFuncGrid.collectionView.items[i]);
@@ -448,4 +448,4 @@
 <script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/graph/sanitizer/sanitizer.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/vendor/wijmo/js/grid/wijmo.grid.filter.min.js?ver=5.20182.500" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/posFuncUseManage.js?ver=20181017.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/graph/js/posFuncUseManage.js?ver=20181105.01" charset="utf-8"></script>

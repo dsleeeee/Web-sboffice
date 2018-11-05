@@ -67,13 +67,13 @@
         item-formatter="_itemFormatter">
 
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="storeLoanInfo.storeCd"/>" binding="storeCd" width="70" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeLoanInfo.storeNm"/>" binding="storeNm" width="150" align="left"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeLoanInfo.loanDate"/>" binding="loanDate" width="80" align="center" format="date"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeLoanInfo.outAmt"/>" binding="outAmt" width="70" align="right" data-type="Number" format="n0"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeLoanInfo.inAmt"/>" binding="inAmt" width="70" align="right" data-type="Number" format="n0"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeLoanInfo.currLoanAmt"/>" binding="currLoanAmt" width="70" align="right" data-type="Number" format="n0"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeLoanInfo.remark"/>" binding="remark" width="*" align="left"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeLoanInfo.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeLoanInfo.storeNm"/>" binding="storeNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeLoanInfo.loanDate"/>" binding="loanDate" width="80" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeLoanInfo.outAmt"/>" binding="outAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeLoanInfo.inAmt"/>" binding="inAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeLoanInfo.currLoanAmt"/>" binding="currLoanAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeLoanInfo.remark"/>" binding="remark" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
 
       </wj-flex-grid>
       <%-- ColumnPicker 사용시 include --%>

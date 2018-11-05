@@ -81,10 +81,9 @@
         </tbody>
       </table>
 
-
       <div class="tr mt20 fr">
         <div id="volmErrBtnLayer" style="display: none;">
-          <span class="chk txtIn fl lh30" style="top: -2px;">
+          <span class="chk txtIn fl lh30" style="top: -2px;" ng-if="volmErrConfirmFg">
             <input type="checkbox" name="volmErrConfirmFg" id="volmErrConfirmFg" value="Y" ng-click="fnConfirmChk()"/>
             <label for="volmErrConfirmFg"><s:message code="volmErr.dtl.confirm"/></label>
           </span>
@@ -94,7 +93,7 @@
             <span class="txtIn"><input id="dtlOutDate" class="w120px"></span>
           </div>
           <%-- 저장 --%>
-          <button type="button" id="btnDtlSave" class="btn_skyblue ml5 fl" ng-click="save()">
+          <button type="button" id="btnDtlSave" class="btn_skyblue ml5 fl" ng-click="save()" ng-if="btnDtlSave">
             <s:message code="cmm.save"/></button>
         </div>
       </div>
@@ -169,9 +168,13 @@
 
       if ($scope.procFg === "0") {
         $("#volmErrBtnLayer").show();
+        $scope.volmErrConfirmFg = true;
+        $scope.btnDtlSave = true;
       }
       else {
         $("#volmErrBtnLayer").hide();
+        $scope.volmErrConfirmFg = false;
+        $scope.btnDtlSave = false;
       }
 
       $("#volmErrConfirmFg").prop("checked", false);

@@ -7,7 +7,7 @@
 <c:set var="baseUrl" value="/iostock/order/outstockConfm/outstockConfm/"/>
 
 <div class="subCon" ng-controller="outstockConfmCtrl">
-  <div class="searchBar">
+  <div class="searchBar flddUnfld">
     <a href="#" class="open">${menuNm}</a>
   </div>
   <table class="searchTbl">
@@ -249,7 +249,7 @@
     };
 
     $scope.saveOutstockConfirm = function () {
-      var params = new Array();
+      var params = [];
 
       if ($scope.flex.collectionView.itemsEdited.length <= 0) {
         $scope._popMsg(messages["cmm.not.modify"]);

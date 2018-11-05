@@ -7,7 +7,7 @@
 <c:set var="baseUrl" value="/iostock/order/dstbCloseStore/dstbCloseStore/"/>
 
 <div class="subCon" ng-controller="dstbCloseStoreCtrl">
-  <div class="searchBar">
+  <div class="searchBar flddUnfld">
     <a href="#" class="open">${menuNm}</a>
   </div>
   <table class="searchTbl">
@@ -70,26 +70,28 @@
       </td>
     </tr>
     <tr>
-    <%-- 출고요청일자 --%>
-    <th><s:message code="dstbCloseStore.reqDate"/></th>
-    <td colspan="3">
-      <div class="sb-select fl mr10">
-        <span class="txtIn"><input id="reqDate" class="w150px"></span>
-      </div>
-      <a href="#" class="btn_grayS" ng-click="add()"><s:message code="dstbCloseStore.addRegist"/></a>
-    </td>
+      <%-- 출고요청일자 --%>
+      <th><s:message code="dstbCloseStore.reqDate"/></th>
+      <td colspan="3">
+        <div class="sb-select fl mr10">
+          <span class="txtIn"><input id="reqDate" class="w150px"></span>
+        </div>
+        <a href="#" class="btn_grayS" ng-click="add()"><s:message code="dstbCloseStore.addRegist"/></a>
+      </td>
     </tr>
     </tbody>
   </table>
 
   <div class="mt10 pdb20 oh bb">
     <%-- 조회 --%>
-    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('dstbCloseStoreCtrl')"><s:message code="cmm.search"/></button>
+    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('dstbCloseStoreCtrl')">
+      <s:message code="cmm.search"/></button>
   </div>
 
   <div class="tr mt10">
     <%-- 확정 --%>
-    <button type="button" id="btnConfirm" class="btn_skyblue ml5" ng-click="saveConfirm()"><s:message code="dstbCloseStore.confirm"/></button>
+    <button type="button" id="btnConfirm" class="btn_skyblue ml5" ng-click="saveConfirm()">
+      <s:message code="dstbCloseStore.confirm"/></button>
   </div>
 
   <div class="w100 mt10">
@@ -102,10 +104,10 @@
         control="flex"
         initialized="initGrid(s,e)"
         is-read-only="false"
-        item-formatter="_itemFormatter">
+        item-formatter="itemFormatter">
 
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="" binding="gChk" width="40" align="center"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="dstbCloseStore.reqDate"/>" binding="reqDate" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="dstbCloseStore.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="dstbCloseStore.storeNm"/>" binding="storeNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
@@ -225,7 +227,117 @@
       s.columnFooters.rows.push(new wijmo.grid.GroupRow());
       // add a sigma to the header to show that this is a summary row
       s.bottomLeftCells.setCellData(0, 0, '합계');
+
+      // 헤더머지
+      s.allowMerging = 2;
+      s.columnHeaders.rows.push(new wijmo.grid.Row());
+      s.columnHeaders.rows[0].dataItem = {
+        gChk       : messages["cmm.chk"],
+        reqDate    : messages["dstbCloseStore.reqDate"],
+        storeCd    : messages["dstbCloseStore.storeCd"],
+        storeNm    : messages["dstbCloseStore.storeNm"],
+        procFg     : messages["dstbCloseStore.procFg"],
+        orderAmt   : messages["dstbCloseStore.order"],
+        orderVat   : messages["dstbCloseStore.order"],
+        orderTot   : messages["dstbCloseStore.order"],
+        mgrAmt     : messages["dstbCloseStore.mgr"],
+        mgrVat     : messages["dstbCloseStore.mgr"],
+        mgrTot     : messages["dstbCloseStore.mgr"],
+        dtlCntOrder: messages["dstbCloseStore.dtlCnt"],
+        dtlCntAdd  : messages["dstbCloseStore.dtlCnt"],
+        dtlCntTot  : messages["dstbCloseStore.dtlCnt"],
+        modDt      : messages["dstbCloseStore.modDt"],
+        slipFg     : messages["dstbCloseStore.slipFg"],
+      };
+
     };
+
+    // 체크박스가 있는 헤더머지 때문에 itemFormatter 를 재정의함.
+    $scope.itemFormatter = function (panel, r, c, cell) {
+      if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+        //align in center horizontally and vertically
+        panel.rows[r].allowMerging    = true;
+        panel.columns[c].allowMerging = true;
+
+        wijmo.setCss(cell, {
+          display    : 'table',
+          tableLayout: 'fixed'
+        });
+        cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+        wijmo.setCss(cell.children[0], {
+          display      : 'table-cell',
+          verticalAlign: 'middle',
+          textAlign    : 'center'
+        });
+
+        if ((panel.grid.columnHeaders.rows.length - 1) === r) {
+          // 헤더의 전체선택 클릭 로직
+          var flex   = panel.grid;
+          var column = flex.columns[c];
+          // check that this is a boolean column
+          if (column.binding === 'gChk' || column.format === 'checkBox' || column.format === 'checkBoxText') {
+            // prevent sorting on click
+            column.allowSorting = false;
+            // count true values to initialize checkbox
+            var cnt             = 0;
+            for (var i = 0; i < flex.rows.length; i++) {
+              if (flex.getCellData(i, c) === true) {
+                cnt++;
+              }
+            }
+            // create and initialize checkbox
+            if (column.format === 'checkBoxText') {
+              cell.innerHTML = '<input id=\"' + column.binding + '\" type=\"checkbox\" class=\"wj-cell-check\" />'
+                + '<label for=\"' + column.binding + '\" class=\"wj-header-label\">' + cell.innerHTML + '</label>';
+            } else {
+              cell.innerHTML = '<input type=\"checkbox\" class=\"wj-cell-check\" />';
+            }
+            var cb           = cell.firstChild;
+            cb.checked       = cnt > 0;
+            cb.indeterminate = cnt > 0 && cnt < flex.rows.length;
+            // apply checkbox value to cells
+            cb.addEventListener('click', function (e) {
+              flex.beginUpdate();
+              for (var i = 0; i < flex.rows.length; i++) {
+                var cell = flex.cells.getCellElement(i, 0);
+
+                console.log(cell);
+                console.log(cell.children[0]);
+
+                // 활성화 및 readOnly 아닌 경우에만 체크되도록
+                if (!cell.children[0].disabled) {
+                  flex.setCellData(i, c, cb.checked);
+                }
+              }
+              flex.endUpdate();
+            });
+          }
+        }
+      }
+      // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+      else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+        // GroupRow 인 경우에는 표시하지 않는다.
+        if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+          cell.textContent = '';
+        } else {
+          if (!isEmpty(panel._rows[r]._data.rnum)) {
+            cell.textContent = (panel._rows[r]._data.rnum).toString();
+          } else {
+            cell.textContent = (r + 1).toString();
+          }
+        }
+      }
+      // readOnly 배경색 표시
+      else if (panel.cellType === wijmo.grid.CellType.Cell) {
+        var col = panel.columns[c];
+        if (col.isReadOnly) {
+          wijmo.addClass(cell, 'wj-custom-readonly');
+        }
+      }
+    };
+
+
+
 
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("dstbCloseStoreCtrl", function (event, data) {
