@@ -109,14 +109,26 @@ public interface StoreManageMapper {
     /** 주방 프린터 환경 등록 */
     int insertKitchenPrintEnvInfo(StoreManageVO storeManageVO);
 
+    /** 상품 복사 */
+    int insertStoreProduct(StoreManageVO storeManageVO);
+
     /** 판매가 복사 */
     int copySaleUprc(StoreManageVO storeManageVO);
 
     /** 공급가 복사  */
     int updateSplyUprc(StoreManageVO storeManageVO);
 
+    /** 매장 기능키 복사  */
+    int copyStoreFnkey(StoreFnkeyVO storeFnkeyVO);
+
+    /** 포스 기능키 복사  */
+    int copyPosFnkey(PosFnkeyVO posFnkeyVO);
+
     /** 매장설정 XML정보 복사 */
-    int copyConfXml(ConfgXmlVO confgXmlVO);
+    int copyStoreConfXml(ConfgXmlVO confgXmlVO);
+
+    /** 포스설정 XML정보 복사 */
+    int copyPosConfXml(ConfgXmlVO confgXmlVO);
 
     /** 터치키 분류 복사 TODO */
     int copyFnkeyClassCopy(TouchKeyClassVO touchkeyClassVO);

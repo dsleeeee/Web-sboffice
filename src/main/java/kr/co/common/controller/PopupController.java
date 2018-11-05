@@ -1,5 +1,6 @@
 package kr.co.common.controller;
 
+import kr.co.common.data.domain.HqOfficeVO;
 import kr.co.common.data.domain.VanVO;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
@@ -87,6 +88,28 @@ public class PopupController {
 
         return returnListJson(Status.OK, list, agencyVO);
     }
+
+    /**
+     * 본사 팝업 목록 조회
+     * @param hqOfficeVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author 김지은
+     * @since 2018.11.01
+     */
+    @RequestMapping(value = "getHqList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getHqList(HqOfficeVO hqOfficeVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        List<DefaultMap<String>> list = service.getHqList(hqOfficeVO);
+
+        return returnListJson(Status.OK, list, hqOfficeVO);
+    }
+
+
 
 
 

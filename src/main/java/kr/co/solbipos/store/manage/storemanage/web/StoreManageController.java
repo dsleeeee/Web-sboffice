@@ -9,6 +9,9 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.store.hq.brand.service.HqBrandVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;
 import kr.co.solbipos.store.manage.storemanage.service.*;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,6 +49,8 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 @Controller
 @RequestMapping(value = "/store/manage/storeManage/")
 public class StoreManageController {
+
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     /** service */
     private final StoreManageService service;
@@ -164,7 +169,21 @@ public class StoreManageController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
+        // 사업자번호 정리
+        String bizNo = storeManageVO.getBizNo1() + storeManageVO.getBizNo2() + storeManageVO.getBizNo3();
+        storeManageVO.setBizNo(bizNo);
+
+        // 오픈일자
+        String sysOpenDate = storeManageVO.getSysOpenDate();
+        storeManageVO.setSysOpenDate(StringUtils.remove(sysOpenDate, "-"));
+
+        // 폐점일자
+        String sysClosureDate = storeManageVO.getSysClosureDate();
+        storeManageVO.setSysClosureDate(StringUtils.remove(sysClosureDate, "-"));
+
         String storeCd = service.saveStoreInfo(storeManageVO, sessionInfoVO);
+
+//        String storeCd = "";
 
         return returnJson(Status.OK, storeCd);
     }
@@ -183,6 +202,18 @@ public class StoreManageController {
             HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        // 사업자번호 정리
+        String bizNo = storeManageVO.getBizNo1() + storeManageVO.getBizNo2() + storeManageVO.getBizNo3();
+        storeManageVO.setBizNo(bizNo);
+
+        // 오픈일자
+        String sysOpenDate = storeManageVO.getSysOpenDate();
+        storeManageVO.setSysOpenDate(StringUtils.remove(sysOpenDate, "."));
+
+        // 폐점일자
+        String sysClosureDate = storeManageVO.getSysClosureDate();
+        storeManageVO.setSysClosureDate(StringUtils.remove(sysClosureDate, "."));
 
         int cnt = service.updateStoreInfo(storeManageVO, sessionInfoVO);
 

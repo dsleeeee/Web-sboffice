@@ -1,6 +1,7 @@
 package kr.co.common.service.popup.impl;
 
 import kr.co.common.data.domain.AgencyVO;
+import kr.co.common.data.domain.HqOfficeVO;
 import kr.co.common.data.domain.VanVO;
 import kr.co.common.data.structure.DefaultMap;
 import org.apache.ibatis.annotations.Mapper;
@@ -32,5 +33,8 @@ public interface PopupMapper {
 
     /** 대리점 목록 조회 */
     List<DefaultMap<String>> getAgencyList(AgencyVO agencyVO);
+
+    /** 본사 목록 조회 */
+    List<DefaultMap<String>> getHqList(HqOfficeVO hqOfficeVO);
 }
 

@@ -72,3 +72,13 @@ function getFormatDateTime(date, seperator_date, seperator_time)
         //alert('udfMainFrm.js : '+e);
     }
 }
+
+/**
+ *
+ * @param date
+ * @returns {number}
+ */
+function dateToDaystring(date){
+  var date = new Date(date);
+  return(date.getFullYear() + "-"+ (date.getMonth() + 1)  + "-"+ date.getDate() );
+}

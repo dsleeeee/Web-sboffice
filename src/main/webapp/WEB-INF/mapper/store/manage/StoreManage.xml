@@ -20,7 +20,7 @@
     -->
     <select id="getStoreList" parameterType="storeManageVO" resultType="DefaultMap">
         /* USE : StoreManageMapper.getStoreList */
-        <!--<include refid="CmmSQL.PagingTemplateHeader"/>-->
+        <include refid="CmmSQL.PagingTemplateHeader"/>
             SELECT '[' || tho.HQ_OFFICE_CD || '] ' || tho.HQ_OFFICE_NM AS HQ_OFFICE_CD_NM,
                    tho.HQ_OFFICE_CD,
                    tho.HQ_OFFICE_NM,
@@ -36,7 +36,7 @@
                    tcvc.VAN_NM,
                    tms.AGENCY_CD,
                    tca.AGENCY_NM
-           <!--<include refid="CmmSQL.PagingTemplateCount"/>-->
+           <include refid="CmmSQL.PagingTemplateCount"/>
               FROM TB_HQ_OFFICE tho,
                    TB_MS_STORE tms,
                    TB_CM_VAN_CMPNY tcvc,
@@ -69,7 +69,7 @@
                AND tms.SYS_STAT_FG = #{sysStatFg, jdbcType=VARCHAR}
             </if>
              ORDER BY tho.HQ_OFFICE_CD, tms.STORE_CD, tms.SYS_OPEN_DATE ASC
-        <!--<include refid="CmmSQL.PagingTemplateBottom"/>-->
+        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
     <!-- 매장상세정보 조회 -->
@@ -585,34 +585,28 @@
     <!--
         TABLE    : TB_MS_CORNER
         PARAM    : storeManageVO
-        COMMENTS : 설치포스 개수만큼 포스 마스터를 생성한다.
+        COMMENTS : 매장의 기본 코너를 등록한다. (코너 기본 데이터 복사)
     -->
     <insert id="insertStoreCorner" parameterType="storeManageVO" >
         /* USE : StoreManageMapper.insertStoreCorner */
-        INSERT INTO TB_MS_POS
-        (
-            STORE_CD,
-            CORNR_CD,
-            CORNR_NM,
-            BIZ_NO,
-            USE_YN,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID
-        )
-        VALUES
-        (
-            #{storeCd},
-            #{cornrCd},
-            #{cornrNm},
-            #{bizNo},
-            #{useYn, jdbcType=VARCHAR},
-            #{regDt},
-            #{regId},
-            #{modDt},
-            #{modId}
-        )
+        INSERT INTO TB_MS_CORNER
+        SELECT #{storeCd},
+               CORNR_CD,
+               CORNR_NM,
+               OWNER_NM,
+               BIZ_NO,
+               TEL_NO,
+               VAN_CD,
+               VAN_TERMNL_NO,
+               VAN_SER_NO,
+               #{useYn, jdbcType=VARCHAR},
+               #{regDt},
+               #{regId},
+               #{modDt},
+               #{modId}
+          FROM TB_MS_CORNER
+         WHERE STORE_CD = '0000000'
+           AND CORNR_CD = '01'
     </insert>
 
 
@@ -625,43 +619,25 @@
     <insert id="insertMemberClass" parameterType="memberClassVO" >
         /* USE : StoreManageMapper.insertMemberClass */
         INSERT INTO TB_MB_MEMBER_CLASS
-        (
-            MEMBR_ORGN_CD,
-            MEMBR_CLASS_CD,
-            MEMBR_CLASS_NM,
-            DC_RATE,
-            POINT_SAVE_FG,
-            DEFLT_YN,
-            NEW_JOIN_SAVE_POINT,
-            FIRST_SALE_SAVE_POINT,
-            MIN_USE_POINT,
-            ANVSR_POINT_SAVE_FG,
-            ANVSR_SAVE_POINT,
-            USE_YN,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID
-        )
-        VALUES
-        (
-            #{membrOrgnCd},
-            #{membrClassCd},
-            #{membrClassNm},
-            #{dcRate},
-            #{pointSaveFg},
-            #{defltYn},
-            #{newJoinSavePoint},
-            #{firstSaleSavePoint},
-            #{minUsePoint},
-            #{anvsrPointSaveFg},
-            #{anvsrSavePoint},
-            #{useYn, jdbcType=VARCHAR},
-            #{regDt},
-            #{regId},
-            #{modDt},
-            #{modId}
-        )
+        SELECT #{membrOrgnCd},
+               MEMBR_CLASS_CD,
+               MEMBR_CLASS_NM,
+               DC_RATE,
+               POINT_SAVE_FG,
+               DEFLT_YN,
+               NEW_JOIN_SAVE_POINT,
+               FIRST_SALE_SAVE_POINT,
+               MIN_USE_POINT,
+               ANVSR_POINT_SAVE_FG,
+               ANVSR_SAVE_POINT,
+               USE_YN,
+               #{regDt},
+               #{regId},
+               #{modDt},
+               #{modId}
+          FROM TB_MB_MEMBER_CLASS
+         WHERE MEMBR_ORGN_CD = '0000000'
+           AND MEMBR_CLASS_CD = '000'
     </insert>
 
 
@@ -674,31 +650,19 @@
     <insert id="insertTabGroup" parameterType="tableGroupVO">
         /* USE : StoreManageMapper.insertTabGroup */
         INSERT INTO TB_MS_TABLE_GROUP
-        (
-            STORE_CD,
-            TBL_GRP_CD,
-            TBL_GRP_NM,
-            TBL_GRP_FG,
-            DISP_SEQ,
-            USE_YN,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID
-        )
-        VALUES
-        (
-            #{storeCd},
-            (SELECT NVL( MAX(TBL_GRP_CD) , 0 ) + 1 FROM TB_MS_TABLE_GROUP WHERE STORE_CD = #{storeCd}),
-            #{tblGrpNm},
-            #{tblGrpFg},
-            #{bgImgNm},
-            #{useYn, jdbcType=VARCHAR},
-            #{regDt},
-            #{regId},
-            #{modDt},
-            #{modId}
-        )
+        SELECT #{storeCd},
+               TBL_GRP_CD,
+               TBL_GRP_NM,
+               TBL_GRP_FG,
+               BG_IMG_NM,
+               DISP_SEQ,
+               USE_YN,
+               #{regDt},
+               #{regId},
+               #{modDt},
+               #{modId}
+          FROM TB_MS_TABLE_GROUP
+         WHERE STORE_CD = '0000000'
   </insert>
 
     <!-- 매장환경 등록 -->
@@ -862,6 +826,7 @@
             STORE_CD,
             POS_NO,
             FNKEY_NO,
+            FNKEY_FG,
             DISP_SEQ,
             X,
             Y,
@@ -877,6 +842,7 @@
         SELECT #{storeCd},
                POS_NO,
                FNKEY_NO,
+               FNKEY_FG,
                DISP_SEQ,
                X,
                Y,
@@ -939,6 +905,55 @@
            AND POS_NO IN (SELECT POS_NO FROM TB_MS_POS WHERE STORE_CD = #{storeCd})
     </insert>
 
+    <!-- 매장상품 복사 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT
+        PARAM    : storeManageVO
+        COMMENTS : 주방 프린터 환경값을 등록한다.
+    -->
+    <insert id="insertStoreProduct" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.insertStoreProduct */
+        INSERT INTO TB_MS_PRODUCT
+        SELECT #{storeCd},
+               PROD_CD,
+               PROD_NM,
+               PROD_CLASS_CD,
+               CORNR_CD,
+               ORGPLCE_CD,
+               SDATTR_CLASS_CD,
+               SDSEL_GRP_CD,
+               POINT_SAVE_YN,
+               PROD_DC_FG,
+               VAT_FG,
+               PROD_TIP_YN,
+               PROD_PACK_AMT,
+               PROD_DLVR_AMT,
+               PROD_TYPE_FG,
+               SALE_PROD_YN,
+               STOCK_PROD_YN,
+               SIDE_PROD_YN,
+               SET_PROD_FG,
+               PRC_CTRL_FG,
+               COST_UPRC,
+               LAST_COST_UPRC,
+               SPLY_UPRC,
+               SPLY_UPRC_USE_YN,
+               PO_PROD_FG,
+               PO_UNIT_FG,
+               PO_UNIT_QTY,
+               PO_UNIT_ALLOW_FG,
+               PO_MIN_QTY,
+               SAFE_STOCK_QTY,
+               STOCK_UNIT_FG,
+               USE_YN,
+               REMARK,
+               #{regDt},
+               #{regId},
+               #{modDt},
+               #{modId}
+          FROM TB_MS_PRODUCT
+         WHERE STORE_CD = #{copyStoreCd}
+    </insert>
 
     <!-- 판매가  복사 -->
     <!--
@@ -1000,17 +1015,80 @@
         ]]>
     </update>
 
+    <!-- 매장 기능키 복사 -->
+    <!--
+        TABLE    : TB_MS_STORE_FNKEY
+        PARAM    : storeFnkeyVO
+        COMMENTS : 매장의 기능키를 복사한다.
+    -->
+    <insert id="copyStoreFnkey" parameterType="storeFnkeyVO" >
+        /* USE : StoreManageMapper.copyStoreFnkey */
+        <![CDATA[
+        INSERT INTO TB_MS_STORE_FNKEY
+        SELECT #{storeCd} AS STORE_CD,
+               tmsf.FNKEY_NO,
+               tmsf.FNKEY_NM,
+               tmsf.FNKEY_FG,
+               tmsf.POS_FG,
+               tmsf.AUTH_YN,
+               tmsf.IMG_FILE_NM,
+               tmsf.DISP_SEQ,
+               tmsf.POSI_ADJ_YN,
+               tmsf.USE_YN,
+               #{regDt},
+               #{regId},
+               #{modDt},
+               #{modId}
+          FROM TB_MS_STORE_FNKEY tmsf
+         WHERE tmsf.STORE_CD  = #{copyStoreCd}
+        ]]>
+    </insert>
+
+
+    <!-- 포스 기능키 복사 -->
+    <!--
+        TABLE    : TB_MS_POS_FNKEY
+        PARAM    : posFnkeyVO
+        COMMENTS : 매장 포스의 기능키를 복사한다.
+    -->
+    <insert id="copyPosFnkey" parameterType="posFnkeyVO" >
+        /* USE : StoreManageMapper.copyPosFnkey */
+        INSERT INTO TB_MS_POS_FNKEY
+        SELECT #{storeCd} AS STORE_CD,
+               tmpf.POS_NO,
+               tmpf.FNKEY_NO,
+	             tmpf.FNKEY_FG,
+	             tmpf.DISP_SEQ,
+	             tmpf.X,
+	             tmpf.Y,
+	             tmpf.WIDTH,
+	             tmpf.HEIGHT,
+	             tmpf.STYLE_CD,
+	             tmpf.IMG_NM,
+	             tmpf.USE_YN,
+               #{regDt},
+               #{regId},
+               #{modDt},
+               #{modId}
+          FROM TB_MS_POS_FNKEY tmpf
+         WHERE tmpf.STORE_CD = #{copyStoreCd}
+           AND tmpf.POS_NO IN
+      <foreach collection="arrPosNo" item="item" open="(" close=")" separator=",">
+          LPAD(#{item}, 2, '0')
+      </foreach>
+    </insert>
+
     <!-- 매장설정 XML 복사 -->
     <!--
         TABLE    : TB_WB_STORE_CONFG_XML
         PARAM    : confgXmlVO
         COMMENTS : 매장의 설정 XML을 복사한다.
     -->
-    <insert id="copyConfXml" parameterType="confgXmlVO" >
-        /* USE : StoreManageMapper.copyConfXml */
+    <insert id="copyStoreConfXml" parameterType="confgXmlVO" >
+        /* USE : StoreManageMapper.copyStoreConfXml */
         <![CDATA[
         INSERT INTO TB_WB_STORE_CONFG_XML
-        SELECT #{storeCd}AS STORE_CD,
+        SELECT #{storeCd} AS STORE_CD,
                twscx.CONFG_FG,
                twscx.XML,
                twscx.USE_YN,
@@ -1019,18 +1097,107 @@
                #{modDt},
                #{modId}
           FROM TB_WB_STORE_CONFG_XML twscx
-         WHERE STORE_CD = #{copyStoreCd}
-           AND CONFG_FG = #{confgFg, jdbcType=VARCHAR}
+         WHERE twscx.STORE_CD = #{copyStoreCd}
+           AND twscx.CONFG_FG = #{confgFg, jdbcType=VARCHAR}
         ]]>
     </insert>
 
+    <!-- 포스기능 XML 복사 -->
+    <!--
+        TABLE    : TB_WB_POS_CONFG_XML
+        PARAM    : confgXmlVO
+        COMMENTS : 매장 포스의 설정 XML을 복사한다.
+    -->
+    <insert id="copyPosConfXml" parameterType="confgXmlVO" >
+        /* USE : StoreManageMapper.copyPosConfXml */
+        INSERT INTO TB_WB_POS_CONFG_XML
+        SELECT #{storeCd} AS STORE_CD,
+               twpcx.POS_NO,
+               twpcx.CONFG_FG,
+               twpcx.XML,
+               twpcx.USE_YN,
+               #{regDt},
+               #{regId},
+               #{modDt},
+               #{modId}
+          FROM TB_WB_POS_CONFG_XML twpcx
+         WHERE twpcx.STORE_CD = #{copyStoreCd}
+           AND twpcx.POS_NO IN
+            <foreach collection="arrPosNo" item="item" open="(" close=")" separator=",">
+               LPAD(#{item}, 2, '0')
+           </foreach>
+           AND twpcx.CONFG_FG = #{confgFg, jdbcType=VARCHAR}
+    </insert>
 
+    <!-- 터치키 분류 복사 -->
+    <!--
+        TABLE    : TB_WB_STORE_CONFG_XML
+        PARAM    : touchkeyClassVO
+        COMMENTS : 매장의 설정 XML을 복사한다.
+    -->
+    <insert id="copyFnkeyClassCopy" parameterType="touchkeyClassVO" >
+        /* USE : StoreManageMapper.copyFnkeyClassCopy */
+        <![CDATA[
+        INSERT INTO TB_MS_TOUCH_KEY_CLASS
+        SELECT #{storeCd} AS STORE_CD,
+               tmtkc.TUKEY_GRP_CD,
+               tmtkc.TUKEY_CLASS_CD,
+               tmtkc.TUKEY_CLASS_NM,
+               tmtkc.PAGE_NO,
+               tmtkc.PAGE_ROWS,
+               tmtkc.X,
+               tmtkc.Y,
+               tmtkc.WIDTH,
+               tmtkc.HEIGHT,
+               tmtkc.STYLE_CD,
+               tmtkc.FONT_SIZE,
+               tmtkc.FONT_COLOR,
+               tmtkc.FILL_COLOR,
+               tmtkc.IMG_NM,
+               tmtkc.IN_FG,
+               #{regDt},
+               #{regId},
+               #{modDt},
+               #{modId}
+          FROM TB_MS_TOUCH_KEY_CLASS tmtkc
+         WHERE tmtkc.STORE_CD = #{copyStoreCd}
+        ]]>
+    </insert>
 
-
-
-
-
-
+    <!-- 터치키 분류 복사 -->
+    <!--
+        TABLE    : TB_WB_STORE_CONFG_XML
+        PARAM    : touchkeyVO
+        COMMENTS : 매장의 설정 XML을 복사한다.
+    -->
+    <insert id="copyFnkeyCopy" parameterType="touchkeyVO" >
+        /* USE : StoreManageMapper.copyFnkeyCopy */
+        <![CDATA[
+        INSERT INTO TB_MS_TOUCH_KEY
+        SELECT #{storeCd} AS STORE_CD,
+               tmtk.TUKEY_CLASS_CD,
+               tmtk.TUKEY_CD,
+               tmtk.TUKEY_FG,
+               tmtk.PROD_CD,
+               tmtk.PAGE_NO,
+               tmtk.X,
+               tmtk.Y,
+               tmtk.WIDTH,
+               tmtk.HEIGHT,
+               tmtk.STYLE_CD,
+               tmtk.FONT_SIZE,
+               tmtk.FONT_COLOR,
+               tmtk.FILL_COLOR,
+               tmtk.IMG_NM,
+               tmtk.IN_FG,
+               #{regDt},
+               #{regId},
+               #{modDt},
+               #{modId}
+          FROM TB_MS_TOUCH_KEY tmtk
+         WHERE tmtk.STORE_CD = #{copyStoreCd}
+        ]]>
+    </insert>
 
     <!-- 공통코드 복사   -->
     <!--
@@ -1048,25 +1215,6 @@
             )
         }
     </select>
-
-    <!-- TID 복사  -->
-    <!--
-        TABLE    : TB_MS_NMCODE
-        PARAM    : storeNmcodeVO
-        COMMENTS : 공통코드 테이블에서 TID 복사하여 매장 공통코드 테이블에 넣음
-    -->
-    <!--
-    <select id="copyTid" statementType="CALLABLE"  parameterType="hqNmcodeVO" resultType="String">
-        /* USE : StoreManageMapper.copyTid */
-        {
-            CALL PKG_CM_NMCODE_TID.SP_STORE_NMCODE_TID_I
-            (
-                #{storeCd},
-                #{result, mode=OUT, jdbcType=VARCHAR}
-            )
-        }
-    </select>
-    -->
 
     <!-- 매장환경 정보 조회 -->
     <!--
@@ -1247,7 +1395,7 @@
         COMMENTS : 포스 환경변수를 등록한다.
     -->
     <insert id="insertPosConfig" parameterType="storePosEnvVO" >
-        /* USE : StoreManageMapper.insertPosEnvInfo */
+        /* USE : StoreManageMapper.insertPosConfig */
         INSERT INTO TB_MS_POS_ENVST
         (
             STORE_CD,
@@ -1550,6 +1698,7 @@
             STORE_CD,
             POS_NO,
             FNKEY_NO,
+            FNKEY_FG,
             DISP_SEQ,
             X,
             Y,
@@ -1565,6 +1714,7 @@
         SELECT #{storeCd},
                LPAD(#{targetPosNo}, 2, '0'),
                tpk.FNKEY_NO,
+               tpk.FNKEY_FG,
                tpk.DISP_SEQ,
                tpk.X,
                tpk.Y,

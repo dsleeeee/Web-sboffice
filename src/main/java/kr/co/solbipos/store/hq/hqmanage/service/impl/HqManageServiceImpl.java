@@ -197,7 +197,6 @@ public class HqManageServiceImpl implements HqManageService{
 
         procCnt += cmmCodeReg;
 
-
         // 공통코드 복사
         HqNmcodeVO hqNmcodeVO = new HqNmcodeVO();
         hqNmcodeVO.setHqOfficeCd(hqOfficeCd);

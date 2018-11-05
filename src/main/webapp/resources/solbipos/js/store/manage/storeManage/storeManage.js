@@ -91,6 +91,21 @@ app.controller('storeManageCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 매장 추가 팝업 오픈
   $scope.addStore = function(){
+
+    $scope.setSelectedStore(null);
+
+    var popup = $scope.storeInfoLayer;
+    // 팝업 열린 뒤. 딜레이줘서 열리고 나서 실행되도록 함
+    popup.shown.addHandler(function (s) {
+      setTimeout(function() {
+        $scope._broadcast('storeInfoCtrl');
+      }, 50)
+    });
+
+    // 팝업 닫을때
+    popup.show(true, function (s) {
+    });
+
     event.preventDefault();
   };
 

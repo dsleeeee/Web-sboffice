@@ -160,27 +160,6 @@ public class StoreManageServiceImpl implements StoreManageService{
         storeManageVO.setPosEmpNo(pEmpNo);
         storeManageVO.setPosUserPwd(pUserPwd);
 
-        // TODO 본사의 포스 프로그램 구분
-        // 20180821 환경변수 값 바꾸면서 매장환경으로 변경됨 -> 매장환경설정에서 변경해야하는 값.
-        /*
-        String posEnvValue = "";
-
-        if(!EXCLUSIVE_HQ_OFFICE.equals(storeManageVO.getHqOfficeCd())) { // 프랜차이즈의 경우
-
-            // 본사의 포스 프로그램 구분 조회
-            posEnvValue = mapper.getPosEnvValue(storeManageVO);
-
-            LOGGER.debug("posEnvValue : "+ posEnvValue);
-
-            if(posEnvValue == null ){
-                // 메세지 변경 필요 (본사의 환경[100]이 설정되지 않았습니다.)
-                throw new JsonException(Status.FAIL, messageService.get("storeManage.require.regist.env100"));
-            }
-        } else {
-            posEnvValue = "0";
-        }
-        */
-
         // 마스터 관련 ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
         // 신규 매장정보 저장
@@ -200,21 +179,26 @@ public class StoreManageServiceImpl implements StoreManageService{
         }
 
         // 포스 마스터 생성 (설치포수 개수만큼 포스 마스터 생성)
+
+        String posNoStr = "";
+
         if(!"".equals(storeManageVO.getInstallPosCnt())){
             int installPosCnt =  Integer.parseInt(storeManageVO.getInstallPosCnt());
 
             for(int i=0; i<installPosCnt; i++){
+                posNoStr += String.valueOf(i+1);
+                if(i != (installPosCnt-1)) {
+                    posNoStr += ",";
+                }
+
                 storeManageVO.setPosNo((i+1));
                 procCnt += mapper.insertPosInfo(storeManageVO);
             }
         }
 
-        // 기본 코너 등록
+        // 기본 코너 등록 (매장 기본코너)
         StoreCornerVO storeCornerVO = new StoreCornerVO();
         storeCornerVO.setStoreCd(storeCd);
-        storeCornerVO.setCornrCd("01");
-        storeCornerVO.setCornrNm("기본코너");
-        storeCornerVO.setBizNo(" ");// 사업자번호
         storeCornerVO.setUseYn("Y");
         storeCornerVO.setRegDt(dt);
         storeCornerVO.setRegId(sessionInfoVO.getUserId());
@@ -226,17 +210,6 @@ public class StoreManageServiceImpl implements StoreManageService{
         // 회원등급 생성
         MemberClassVO memberClassVO = new MemberClassVO();
         memberClassVO.setMembrOrgnCd(storeCd);
-        memberClassVO.setMembrClassCd("000");
-        memberClassVO.setMembrClassNm("기본");
-        memberClassVO.setDcRate(0);
-        memberClassVO.setPointSaveFg("1");
-        memberClassVO.setDefltYn("Y");
-        memberClassVO.setNewJoinSavePoint(0);
-        memberClassVO.setFirstSaleSavePoint(0);
-        memberClassVO.setMinUsePoint(0);
-        memberClassVO.setAnvsrPointSaveFg("1");
-        memberClassVO.setAnvsrSavePoint(0);
-        memberClassVO.setUseYn(UseYn.Y);
         memberClassVO.setRegDt(dt);
         memberClassVO.setRegId(sessionInfoVO.getUserId());
         memberClassVO.setModDt(dt);
@@ -244,13 +217,9 @@ public class StoreManageServiceImpl implements StoreManageService{
 
         procCnt += mapper.insertMemberClass(memberClassVO);
 
-        // 테이블 그룹 생성
+        // 기본 테이블 그룹 생성
         TableGroupVO tableGroupVO = new TableGroupVO();
         tableGroupVO.setStoreCd(storeCd);
-        tableGroupVO.setTblGrpNm("기본그룹1");
-        tableGroupVO.setTblGrpFg("1");
-        tableGroupVO.setDispSeq(1);
-        tableGroupVO.setUseYn(UseYn.Y);
         tableGroupVO.setRegDt(dt);
         tableGroupVO.setRegId(sessionInfoVO.getUserId());
         tableGroupVO.setModDt(dt);
@@ -274,7 +243,7 @@ public class StoreManageServiceImpl implements StoreManageService{
                 // 포스환경 복사
                 if( "posEnv".equals(copyEnv[i]) ) {
                     procCnt += mapper.insertPosEnvInfo(storeManageVO);
-                    procCnt += mapper.insertPosFunKeyInfo(storeManageVO);
+//                    procCnt += mapper.insertPosFunKeyInfo(storeManageVO);
                 }
 
                 // 외식환경 복사
@@ -287,9 +256,9 @@ public class StoreManageServiceImpl implements StoreManageService{
                     procCnt += mapper.insertKitchenPrintEnvInfo(storeManageVO);
                 }
 
-                //TODO 상품 복사
+                // 상품 복사
                 if( "product".equals(copyEnv[i]) ) {
-
+                    procCnt += mapper.insertStoreProduct(storeManageVO);
                 }
 
                 // 판매가 복사
@@ -302,51 +271,128 @@ public class StoreManageServiceImpl implements StoreManageService{
                     procCnt += mapper.updateSplyUprc(storeManageVO);
                 }
 
-                // 터치키 복사 //TODO
-                if( "touchKey".equals(copyEnv[i]) ) {
+                // 기능키 복사
+                if( "posFnkey".equals(copyEnv[i]) ) {
 
+                    // 매장 기능키 복사
+                    StoreFnkeyVO storeFnkeyVO = new StoreFnkeyVO();
+                    storeFnkeyVO.setStoreCd(storeCd);
+                    storeFnkeyVO.setCopyStoreCd(storeManageVO.getCopyStoreCd());
+                    storeFnkeyVO.setRegDt(dt);
+                    storeFnkeyVO.setRegId(sessionInfoVO.getUserId());
+                    storeFnkeyVO.setModDt(dt);
+                    storeFnkeyVO.setModId(sessionInfoVO.getUserId());
+
+                    procCnt += mapper.copyStoreFnkey(storeFnkeyVO);
+
+                    // 포스 기능키 복사 (포스 개수만큼)
+                    PosFnkeyVO posFnkeyVO = new PosFnkeyVO();
+                    posFnkeyVO.setStoreCd(storeCd);
+                    posFnkeyVO.setCopyStoreCd(storeManageVO.getCopyStoreCd());
+                    posFnkeyVO.setRegDt(dt);
+                    posFnkeyVO.setRegId(sessionInfoVO.getUserId());
+                    posFnkeyVO.setModDt(dt);
+                    posFnkeyVO.setModId(sessionInfoVO.getUserId());
+
+//                    int installPosCnt =  Integer.parseInt(storeManageVO.getInstallPosCnt());
+
+//                    String posNoStr = "";
+                    ////                    for(int p=0; p<installPosCnt; p++){
+                    ////                        posNoStr += String.valueOf(p+1);
+                    ////                        if(p != (installPosCnt-1)) {
+                    ////                            posNoStr += ",";
+                    ////                        }
+                    ////                    }
+
+                    posFnkeyVO.setArrPosNo(posNoStr.split(","));
+
+                    procCnt += mapper.copyPosFnkey(posFnkeyVO);
+
+
+                    // 매장설정 XML, 포스기능 XML  복사 (TB_WB_STORE_CONFG_XML, TB_WB_POS_CONFG_XML)
                     ConfgXmlVO confgXmlVO = new ConfgXmlVO();
                     confgXmlVO.setStoreCd(storeCd);
                     confgXmlVO.setCopyStoreCd(storeManageVO.getCopyStoreCd());
+                    confgXmlVO.setRegDt(dt);
+                    confgXmlVO.setRegId(sessionInfoVO.getUserId());
+                    confgXmlVO.setModDt(dt);
+                    confgXmlVO.setModId(sessionInfoVO.getUserId());
 
-                    // 매장 XML 복사
-                    confgXmlVO.setConfgFg(ConfgFg.TOUCH_KEY);
-                    procCnt += mapper.copyConfXml(confgXmlVO);
+                    confgXmlVO.setConfgFg(ConfgFg.POS_FN_RIGHT); // 포스 기능키 (우)
+                    procCnt += mapper.copyStoreConfXml(confgXmlVO);
 
-                    // 포스기능키 XML 복사(좌)
-                    confgXmlVO.setConfgFg(ConfgFg.POS_FN_LEFT);
-                    procCnt += mapper.copyConfXml(confgXmlVO);
+//                    for(int p=0; p<installPosCnt; p++){
+//                        confgXmlVO.setPosNo(String.valueOf(p+i));
+//                    }
 
-                    // 포스기능키 XML 복사(우)
-                    confgXmlVO.setConfgFg(ConfgFg.POS_FN_RIGHT);
-                    procCnt += mapper.copyConfXml(confgXmlVO);
+                    LOGGER.info(">>>>>>>>>>>>>>>>>> RIGIT >>>>>>>>>>>>>>>");
 
-                    // 기능키 분류 복사 //TODO 여기부터 쿼리 추가
+                    confgXmlVO.setArrPosNo(posNoStr.split(","));
+
+                    procCnt += mapper.copyPosConfXml(confgXmlVO); //todo
+
+                    confgXmlVO.setConfgFg(ConfgFg.POS_FN_LEFT); // 포스 기능키 (좌)
+                    procCnt += mapper.copyStoreConfXml(confgXmlVO);
+
+//                    for(int p=0; p<installPosCnt; p++){
+//                        confgXmlVO.setPosNo(String.valueOf(p+i));
+//                    }
+
+                    LOGGER.info(">>>>>>>>>>>>>>>>>> LEFT >>>>>>>>>>>>>>>");
+                    procCnt += mapper.copyPosConfXml(confgXmlVO); // todo
+
+                }
+
+                // 터치키 복사
+                if( "touchKey".equals(copyEnv[i]) ) {
+
+                    // 매장설정 XML, 포스기능 XML  복사 (TB_WB_STORE_CONFG_XML, TB_WB_POS_CONFG_XML)
+                    ConfgXmlVO confgXmlVO = new ConfgXmlVO();
+                    confgXmlVO.setStoreCd(storeCd);
+                    confgXmlVO.setCopyStoreCd(storeManageVO.getCopyStoreCd());
+                    confgXmlVO.setRegDt(dt);
+                    confgXmlVO.setRegId(sessionInfoVO.getUserId());
+                    confgXmlVO.setModDt(dt);
+                    confgXmlVO.setModId(sessionInfoVO.getUserId());
+
+                    confgXmlVO.setConfgFg(ConfgFg.TOUCH_KEY); // 터치키
+                    procCnt += mapper.copyStoreConfXml(confgXmlVO);
+
+                    // 포스기능 XML 복사 (TB_WB_POS_CONFG_XML) - 포스 수 만큼
+//                    int installPosCnt =  Integer.parseInt(storeManageVO.getInstallPosCnt());
+
+//                    for(int p=0; p<installPosCnt; p++){
+//                        confgXmlVO.setPosNo(String.valueOf(p+i));
+//                    }
+
+                    confgXmlVO.setArrPosNo(posNoStr.split(","));
+
+                    procCnt += mapper.copyPosConfXml(confgXmlVO);
+
+                    // 터치키 분류 복사
                     TouchKeyClassVO touchkeyClassVO = new TouchKeyClassVO();
                     touchkeyClassVO.setStoreCd(storeCd);
                     touchkeyClassVO.setCopyStoreCd(storeManageVO.getCopyStoreCd());
+                    touchkeyClassVO.setRegDt(dt);
+                    touchkeyClassVO.setRegId(sessionInfoVO.getUserId());
+                    touchkeyClassVO.setModDt(dt);
+                    touchkeyClassVO.setModId(sessionInfoVO.getUserId());
+
                     procCnt += mapper.copyFnkeyClassCopy(touchkeyClassVO);
 
-                    // 기능키 복사
+                    // 터치키 복사
                     TouchKeyVO touchkeyVO = new TouchKeyVO();
                     touchkeyVO.setStoreCd(storeCd);
+                    touchkeyVO.setRegDt(dt);
+                    touchkeyVO.setRegId(sessionInfoVO.getUserId());
+                    touchkeyVO.setModDt(dt);
+                    touchkeyVO.setModId(sessionInfoVO.getUserId());
+
                     touchkeyVO.setCopyStoreCd(storeManageVO.getCopyStoreCd());
                     procCnt += mapper.copyFnkeyCopy(touchkeyVO);
                 }
             }
         }
-
-        // 코너사용여부 환경변수 등록
-//        StoreEnvVO storeEnvVO = new StoreEnvVO();
-//        storeEnvVO.setStoreCd(storeCd);
-//        storeEnvVO.setEnvstCd(CORNER_USE_YN);
-//        storeEnvVO.setEnvstVal(storeManageVO.getCornerUseYn());
-//        storeEnvVO.setRegDt(dt);
-//        storeEnvVO.setRegId(sessionInfoVO.getUserId());
-//        storeEnvVO.setModDt(dt);
-//        storeEnvVO.setModId(sessionInfoVO.getUserId());
-//
-//        procCnt += mapper.updateStoreEnvst(storeEnvVO);
 
         //TODO 판매가 테이블 생성시 추가
         if(!EXCLUSIVE_HQ_OFFICE.equals(storeManageVO.getHqOfficeCd())) { // 프랜차이즈
@@ -358,7 +404,12 @@ public class StoreManageServiceImpl implements StoreManageService{
         StoreNmcodeVO storeNmcodeVO = new StoreNmcodeVO();
         storeNmcodeVO.setStoreCd(storeCd);
         String copyNmCode = mapper.copyCmmNameCode(storeNmcodeVO);
-//        tidResult.setResult(mapper.copyTid(nmcodeVO));
+
+        // todo 공통코드 중 CMM 코드 복사 (프로시져)
+
+
+        // todo 환경변수 중 본사통제여부 관련 변수 내려받기 (프로시져)
+
 
         return storeCd;
     }
@@ -382,18 +433,6 @@ public class StoreManageServiceImpl implements StoreManageService{
 
         // 매장 정보 수정
         int procCnt = mapper.updateStoreInfo(storeManageVO);
-
-        // 코너사용여부 환경변수 등록
-//        StoreEnvVO storeEnvVO = new StoreEnvVO();
-//        storeEnvVO.setStoreCd(storeManageVO.getStoreCd());
-//        storeEnvVO.setEnvstCd(CORNER_USE_YN);
-//        storeEnvVO.setEnvstVal(storeManageVO.getCornerUseYn());
-//        storeEnvVO.setRegDt(dt);
-//        storeEnvVO.setRegId(sessionInfoVO.getUserId());
-//        storeEnvVO.setModDt(dt);
-//        storeEnvVO.setModId(sessionInfoVO.getUserId());
-//
-//        procCnt += mapper.updateStoreEnvst(storeEnvVO);
 
         return procCnt;
     }

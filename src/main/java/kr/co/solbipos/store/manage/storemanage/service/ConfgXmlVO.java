@@ -36,6 +36,10 @@ public class ConfgXmlVO extends PageVO {
     /** 사용여부 */
     private UseYn useYn;
 
+    /** 여러 포스값 */
+    private String[] arrPosNo;
+
+
     /**
      * @return the hqOfficeCd
      */
@@ -139,5 +143,20 @@ public class ConfgXmlVO extends PageVO {
      */
     public void setUseYn(UseYn useYn) {
         this.useYn = useYn;
+    }
+
+    /**
+     * @return the arrPosNo
+     */
+
+    public String[] getArrPosNo() {
+        return arrPosNo;
+    }
+
+    /**
+     * @param arrPosNo the arrPosNo to set
+     */
+    public void setArrPosNo(String[] arrPosNo) {
+        this.arrPosNo = arrPosNo;
     }
 }

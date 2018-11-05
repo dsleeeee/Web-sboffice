@@ -60,4 +60,33 @@
        ORDER BY AGENCY_CD ASC
     </select>
 
+    <!-- 본사 목록조회 -->
+    <!--
+        TABLE    : TB_HQ_OFFICE
+        PARAM    : hqOfficeVO
+        COMMENTS : 본사 목록을 조회한다.
+    -->
+    <select id="getHqList" parameterType="hqOfficeVO" resultType="DefaultMap">
+        /* USE : PopupMapper.getHqList */
+      <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT HQ_OFFICE_CD,
+               HQ_OFFICE_NM,
+               OWNER_NM,
+               SYS_STAT_FG,
+               CLS_FG
+      <include refid="CmmSQL.PagingTemplateCount"/>
+          FROM TB_HQ_OFFICE
+        <where>
+            <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+               HQ_OFFICE_CD = #{hqOfficeCd}
+            </if>
+            <if test='hqOfficeNm != null and hqOfficeNm != ""'>
+           AND HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'
+            </if>
+        </where>
+         ORDER BY HQ_OFFICE_CD ASC
+      <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+
 </mapper>

@@ -179,7 +179,7 @@
                tho.OWNER_NM,
                tho.BIZ_NO,
                (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '005' AND NMCODE_CD = tho.SYS_STAT_FG) AS SYS_STAT_FG_NM,
-               (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '003' AND NMCODE_CD = tho.CLS_FG) AS CLS_FG_NM
+               (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '001' AND NMCODE_CD = tho.CLS_FG) AS CLS_FG_NM
           FROM TB_HQ_OFFICE tho
          WHERE tho.BIZ_NO = #{bizNo}
          UNION ALL
@@ -189,7 +189,7 @@
                 tms.OWNER_NM,
                 tms.BIZ_NO,
                 (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '005' AND NMCODE_CD = tms.SYS_STAT_FG) AS SYS_STAT_FG_NM,
-                (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '003' AND NMCODE_CD = tms.CLS_FG) AS CLS_FG_NM
+                (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '001' AND NMCODE_CD = tms.CLS_FG) AS CLS_FG_NM
            FROM TB_MS_STORE tms
           WHERE tms.BIZ_NO = #{bizNo}
     </select>
@@ -204,6 +204,9 @@
         /* USE : HqManageMapper.getBizInfoDtl */
         SELECT tho.OWNER_NM,
                tho.BIZ_NO,
+               SUBSTR(tho.BIZ_NO,0,3) AS BIZ_NO1,
+               SUBSTR(tho.BIZ_NO,4,2) AS BIZ_NO2,
+               SUBSTR(tho.BIZ_NO,6,5) AS BIZ_NO3,
                tho.BIZ_STORE_NM,
                tho.TEL_NO,
                tho.FAX_NO,
@@ -211,14 +214,14 @@
                tho.ADDR,
                tho.ADDR_DTL,
                tho.AREA_CD,
-               (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '092' AND NMCODE_CD = tho.AREA_CD) AS AREA_NM,
+               (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '061' AND NMCODE_CD = tho.AREA_CD) AS AREA_NM,
                tho.SYS_STAT_FG,
                (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '005' AND NMCODE_CD = tho.SYS_STAT_FG) AS SYS_STAT_FG_NM,
                tho.SYS_OPEN_DATE,
                tho.AGENCY_CD,
                tca.AGENCY_NM,
                tho.CLS_FG,
-               (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '003' AND NMCODE_CD = tho.CLS_FG) AS CLS_FG_NM,
+               (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '001' AND NMCODE_CD = tho.CLS_FG) AS CLS_FG_NM,
         <if test='storeFg == "H"'>
                tho.HQ_OFFICE_CD AS STORE_CD,
                tho.HQ_OFFICE_NM AS STORE_NM
@@ -230,7 +233,8 @@
         <if test='storeFg != "H"'>
                tho.STORE_CD,
                tho.STORE_NM
-          FROM TB_MS_STORE tho
+          FROM TB_MS_STORE tho,
+               TB_CM_AGENCY tca
          WHERE tho.STORE_CD = #{storeCd}
            AND tca.AGENCY_CD = tho.AGENCY_CD
         </if>

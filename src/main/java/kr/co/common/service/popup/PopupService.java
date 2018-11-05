@@ -1,6 +1,7 @@
 package kr.co.common.service.popup;
 
 import kr.co.common.data.domain.AgencyVO;
+import kr.co.common.data.domain.HqOfficeVO;
 import kr.co.common.data.domain.VanVO;
 import kr.co.common.data.structure.DefaultMap;
 
@@ -28,4 +29,7 @@ public interface PopupService {
 
     /** 대리점 목록 조회 */
     List<DefaultMap<String>> getAgencyList(AgencyVO agencyVO);
+
+    /** 대리점 목록 조회 */
+    List<DefaultMap<String>> getHqList(HqOfficeVO hqOfficeVO);
 }

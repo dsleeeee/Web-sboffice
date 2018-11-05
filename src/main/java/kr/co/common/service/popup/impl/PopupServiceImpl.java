@@ -1,6 +1,7 @@
 package kr.co.common.service.popup.impl;
 
 import kr.co.common.data.domain.AgencyVO;
+import kr.co.common.data.domain.HqOfficeVO;
 import kr.co.common.data.domain.VanVO;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
@@ -52,5 +53,11 @@ public class PopupServiceImpl implements PopupService{
     @Override
     public List<DefaultMap<String>> getAgencyList(AgencyVO agencyVO) {
         return mapper.getAgencyList(agencyVO);
+    }
+
+    /** 본사 목록 조회 */
+    @Override
+    public List<DefaultMap<String>> getHqList(HqOfficeVO hqOfficeVO) {
+        return mapper.getHqList(hqOfficeVO);
     }
 }
