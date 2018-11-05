@@ -111,4 +111,4 @@
 <script type="text/javascript">
   var coupnEnvstVal = "${coupnEnvstVal}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/couponProd.js?ver=20180817" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/couponProd.js?ver=20180817.01" charset="utf-8"></script>

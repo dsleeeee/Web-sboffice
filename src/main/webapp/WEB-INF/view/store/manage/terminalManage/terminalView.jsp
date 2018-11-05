@@ -153,7 +153,7 @@ var vandorList = ${vendorList};
 var terminalFg = ${cnv.getEnvCodeExcpAll("2028")};
 var useYnFg    = ${ccu.getCommCodeExcpAll("067")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/terminal.js?ver=2018100601" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/terminal.js?ver=20181006.01" charset="utf-8"></script>
 
 <%-- 매장선택 레이어 팝업 --%>
 <c:import url="/WEB-INF/view/store/manage/terminalManage/store.jsp">

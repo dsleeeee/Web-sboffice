@@ -177,7 +177,7 @@
 
     // 특정일 저장
     $scope.saveSpecificDate = function () {
-      var params = new Array();
+      var params = [];
       for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
         $scope.flex.collectionView.itemsEdited[i].status = "U";
         params.push($scope.flex.collectionView.itemsEdited[i]);
@@ -192,7 +192,7 @@
       // 삭제 하시겠습니까?
       var msg = messages["cmm.choo.delete"];
       s_alert.popConf(msg, function () {
-        var params = new Array();
+        var params = [];
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
           $scope.flex.collectionView.itemsEdited[i].status = "U";
           params.push($scope.flex.collectionView.itemsEdited[i]);
@@ -222,6 +222,6 @@
   });
 
 </script>
-<%--<script type="text/javascript" src="/resource/solbipos/js/iostock/loan/storeLoan.js?ver=2018082101" charset="utf-8"></script>--%>
+<%--<script type="text/javascript" src="/resource/solbipos/js/iostock/loan/storeLoan.js?ver=20180821.01" charset="utf-8"></script>--%>
 
 

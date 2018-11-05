@@ -107,5 +107,5 @@ var clsFg       = ${ccu.getCommCode("001")};
 var sysStatFg   = ${ccu.getCommCode("005")};
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/func/store.js?ver=20180829" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/func/store.js?ver=20180829.01" charset="utf-8"></script>
 

@@ -141,4 +141,4 @@
       }]);
 
     </script>
-    <%--<script type="text/javascript" src="/resource/solbipos/js/iostock/loan/storeLoan.js?ver=2018082101" charset="utf-8"></script>--%>
+    <%--<script type="text/javascript" src="/resource/solbipos/js/iostock/loan/storeLoan.js?ver=20180821.01" charset="utf-8"></script>--%>

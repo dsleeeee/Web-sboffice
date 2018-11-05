@@ -48,7 +48,7 @@
 </div>
 </body>
 
-<script type="text/javascript" src="/resource/solbipos/js/application/pos/excpForward/excpForward.js?ver=20180914" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/application/pos/excpForward/excpForward.js?ver=20180914.01" charset="utf-8"></script>
 
 <%-- 예외출고 수량 등록 팝업 --%>
 <c:import url="/WEB-INF/view/application/pos/excpForward/excpForwradRegist.jsp">
