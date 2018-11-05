@@ -151,4 +151,4 @@ var baseUrl = "${baseUrl}";
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/storeEmp.js?ver=20180829" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/storeEmp.js?ver=20180829.01" charset="utf-8"></script>

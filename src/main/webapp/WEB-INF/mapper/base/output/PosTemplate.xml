@@ -63,18 +63,22 @@
             <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT
                     sub.PRT_CLASS_CD,
-                    sub.TEMPLT_CD,
                     sub.TEMPLT_REG_FG,
+                    sub.TEMPLT_CD,
                     sub.TEMPLT_NM,
-                    sub.PRT_FORM
+                    sub.PRT_FORM,
+                    sub.APPLY_TEMPLT_CD,
+                    sub.APPLY_TEMPLT_REG_FG
                 FROM
                     (
                     SELECT
                         thp.PRT_CLASS_CD,
-                        '000' AS TEMPLT_CD,
                         'H' AS TEMPLT_REG_FG,
+                        '000' AS TEMPLT_CD,
                         '실제출력물' AS TEMPLT_NM,
-                        thp.PRT_FORM
+                        thp.PRT_FORM,
+                        thp.TEMPLT_CD AS APPLY_TEMPLT_CD,
+                        thp.TEMPLT_REG_FG AS APPLY_TEMPLT_REG_FG
                     FROM
                         TB_HQ_PRINT thp
                     WHERE
@@ -83,10 +87,12 @@
                     UNION ALL
                     SELECT
                         thpt.PRT_CLASS_CD,
-                        thpt.TEMPLT_CD,
                         thpt.TEMPLT_REG_FG,
+                        thpt.TEMPLT_CD,
                         thpt.TEMPLT_NM,
-                        thpt.PRT_FORM
+                        thpt.PRT_FORM,
+                        thpt.TEMPLT_CD AS APPLY_TEMPLT_CD,
+                        thpt.TEMPLT_REG_FG AS APPLY_TEMPLT_REG_FG
                     FROM
                         TB_HQ_PRINT_TEMPL thpt
                     WHERE
@@ -101,17 +107,22 @@
             <when test='orgnFg != null and orgnFg == "S"'>
                 SELECT
                     sub.PRT_CLASS_CD,
+                    sub.TEMPLT_REG_FG,
                     sub.TEMPLT_CD,
                     sub.TEMPLT_NM,
-                    sub.PRT_FORM
+                    sub.PRT_FORM,
+                    sub.APPLY_TEMPLT_CD,
+                    sub.APPLY_TEMPLT_REG_FG
                 FROM
                     (
                     SELECT
                         tmp.PRT_CLASS_CD,
-                        '000' AS TEMPLT_CD,
                         'S' AS TEMPLT_REG_FG,
+                        '000' AS TEMPLT_CD,
                         '실제출력물' AS TEMPLT_NM,
-                        tmp.PRT_FORM
+                        tmp.PRT_FORM,
+                        tmp.TEMPLT_CD AS APPLY_TEMPLT_CD,
+                        tmp.TEMPLT_REG_FG AS APPLY_TEMPLT_REG_FG
                     FROM
                         TB_MS_PRINT tmp
                     WHERE
@@ -120,10 +131,12 @@
                     UNION ALL
                     SELECT
                         tmpt.PRT_CLASS_CD,
-                        tmpt.TEMPLT_CD,
                         tmpt.TEMPLT_REG_FG,
+                        tmpt.TEMPLT_CD,
                         tmpt.TEMPLT_NM,
-                        tmpt.PRT_FORM
+                        tmpt.PRT_FORM,
+                        tmpt.TEMPLT_CD AS APPLY_TEMPLT_CD,
+                        tmpt.TEMPLT_REG_FG AS APPLY_TEMPLT_REG_FG
                     FROM
                         TB_MS_PRINT_TEMPL tmpt
                     WHERE
@@ -434,6 +447,8 @@
                     (
                         HQ_OFFICE_CD,
                         PRT_CLASS_CD,
+                        TEMPLT_REG_FG,
+                        TEMPLT_CD,
                         PRT_FORM,
                         REG_DT,
                         REG_ID,
@@ -442,6 +457,8 @@
                     ) VALUES (
                         #{hqOfficeCd},
                         #{prtClassCd},
+                        #{templtRegFg},
+                        #{templtCd},
                         '',
                         #{regDt},
                         #{regId},
@@ -462,6 +479,8 @@
                     (
                         STORE_CD,
                         PRT_CLASS_CD,
+                        TEMPLT_REG_FG,
+                        TEMPLT_CD,
                         PRT_FORM,
                         REG_DT,
                         REG_ID,
@@ -470,6 +489,8 @@
                     ) VALUES (
                         #{storeCd},
                         #{prtClassCd},
+                        #{templtRegFg},
+                        #{templtCd},
                         '',
                         #{regDt},
                         #{regId},
@@ -494,6 +515,10 @@
                 UPDATE
                     TB_HQ_PRINT
                 SET
+                <if test='templtCd != "000"'>
+                    TEMPLT_REG_FG = #{templtRegFg},
+                    TEMPLT_CD = #{templtCd},
+                </if>
                     PRT_FORM = #{prtForm},
                     MOD_DT = #{modDt},
                     MOD_ID = #{modId}
@@ -506,6 +531,10 @@
                 UPDATE
                     TB_MS_PRINT
                 SET
+                <if test='templtCd != "000"'>
+                    TEMPLT_REG_FG = #{templtRegFg},
+                    TEMPLT_CD = #{templtCd},
+                </if>
                     PRT_FORM = #{prtForm},
                     MOD_DT = #{modDt},
                     MOD_ID = #{modId}
