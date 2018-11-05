@@ -146,7 +146,7 @@ $(document).ready(function() {
         mxResources.parse(xhr[0].getText());
 
         // Configures the default graph theme
-        var themes = new Object();
+        var themes = {};
         themes[Graph.prototype.defaultThemeName] = xhr[1].getDocumentElement();
 
         // Main
@@ -517,7 +517,7 @@ Graph.prototype.MAX_PAGE = 1;
 //한페이지에 컬럼 갯수
 Graph.prototype.COL_PER_PAGE = 5;
 // 페이지당 줄 수
-Graph.prototype.ROW_PER_PAGE = window.MAX_GROUP_ROW;
+Graph.prototype.ROW_PER_PAGE = 2;
 // 텍스트 에디팅 방지
 Graph.prototype.textEditing = false;
 Graph.prototype.defaultThemeName = 'funcKey';
@@ -1147,12 +1147,12 @@ Format.prototype.save = function () {
         scope.$apply(function(){
           scope._popMsg(mxResources.get('saved'));
         });
-      }
+      };
       var onerror = function (req) {
         scope.$apply(function(){
           scope._popMsg("저장 중 오류가 발생하였습니다.");
         });
-      }
+      };
       new mxXmlRequest(FUNCKEY_SAVE_URL, 'xml=' + xml + params).send(onload, onerror);
     }
     else {
