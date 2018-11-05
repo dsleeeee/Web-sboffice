@@ -1969,6 +1969,14 @@ Graph.prototype.initClassArea = function (prodArea) {
     mouseDown: function (sender, me) {
       var layer;
       if (me.state == null) {
+        // 클릭 할 때 오브젝트 생성
+        var pt = graph.getPointForEvent(me);
+        // 마우스 포인터 위치를 기준으로 Drop 가능한 위치 찾기
+        var pos = graph.findPosition(pt);
+        if (pos == null) {
+          mxEvent.consume(me);
+          return false;
+        }
         //선택된 터치키분류 영역이 셀이 아닌 경우에는 해당 영역에 새로운 분류생성
         var x = parseInt(me.getGraphX() / graph.touchKeyInfo.x) * graph.touchKeyInfo.x;
         var y = parseInt(me.getGraphY() / graph.touchKeyInfo.y) * graph.touchKeyInfo.y;
@@ -2174,7 +2182,7 @@ Graph.prototype.initProdArea = function (classArea, sidebar) {
         graph.classArea.cellEditor.stopEditing(true);
       }
       // 클릭 영역에 셀이 있는 경우에만...
-      if (me.state != null) {
+      if (me.state !== null) {
         // 버튼속성 뷰 활성화
         document.getElementById('keyStyle').classList.remove("hideNav");
       } else {
