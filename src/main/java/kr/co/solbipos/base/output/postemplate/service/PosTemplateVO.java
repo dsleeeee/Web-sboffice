@@ -20,7 +20,7 @@ import kr.co.solbipos.application.common.service.CmmVO;
  */
 public class PosTemplateVO extends CmmVO {
 
-    private static final long serialVersionUID = -7255385044678624347L;
+    private static final long serialVersionUID = -5313540332914369004L;
 
     /** 소속구분
      * M : 시스템
@@ -42,6 +42,10 @@ public class PosTemplateVO extends CmmVO {
     private String templtNm;
     /** 출력물폼 */
     private String prtForm;
+    /** 적용등록구분 : 실제출력물에서 저장처리 위해 */
+    private String applyTempltRegFg;
+    /** 적용템플릿 : 실제출력물에서 저장처리 위해 */
+    private String applyTempltCd;
     /** 출력물분류코드명 */
     private String prtClassNm;
     /** 출력물코드 */
@@ -163,6 +167,34 @@ public class PosTemplateVO extends CmmVO {
      */
     public void setPrtForm(String prtForm) {
         this.prtForm = prtForm;
+    }
+
+    /**
+     * @return the applyTempltRegFg
+     */
+    public String getApplyTempltRegFg() {
+        return applyTempltRegFg;
+    }
+
+    /**
+     * @param applyTempltRegFg the applyTempltRegFg to set
+     */
+    public void setApplyTempltRegFg(String applyTempltRegFg) {
+        this.applyTempltRegFg = applyTempltRegFg;
+    }
+
+    /**
+     * @return the applyTempltCd
+     */
+    public String getApplyTempltCd() {
+        return applyTempltCd;
+    }
+
+    /**
+     * @param applyTempltCd the applyTempltCd to set
+     */
+    public void setApplyTempltCd(String applyTempltCd) {
+        this.applyTempltCd = applyTempltCd;
     }
 
     /**

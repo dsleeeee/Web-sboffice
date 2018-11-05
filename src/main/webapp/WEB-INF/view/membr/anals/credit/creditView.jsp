@@ -118,7 +118,7 @@
   var creditPayFgData = ${ccu.getCommCodeExcpAll("074")};
   var baseUrl = "${baseUrl}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/membr/anals/credit/credit.js?ver=2018090301" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/anals/credit/credit.js?ver=20180903.01" charset="utf-8"></script>
 
 <%-- 외상입금 팝업 --%>
 <c:import url="/WEB-INF/view/membr/anals/credit/deposit.jsp">

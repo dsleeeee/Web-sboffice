@@ -106,7 +106,7 @@ public class TemplateServiceImpl implements TemplateService {
         result = templateMapper.saveTemplate(templateVO);
 
         if ( result >= 0 ) {
-            // 본사/매장에 존재하는 템플릿도 동시에 업데이트 처리한다.
+            // 본사/단독매장에 존재하는 템플릿도 동시에 업데이트 처리한다.
             templateMapper.updateTemplateForHq(templateVO);
             templateMapper.updateTemplateForStore(templateVO);
 

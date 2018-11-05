@@ -457,7 +457,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
         if (response.data.message) {
           $scope._popMsg(response.data.message);
         } else {
-          if(type === 'saving') {
+          if(type === 'saving' && isMsg) {
             $scope._popMsg(messages['cmm.saveSucc']);
           }
         }
@@ -477,7 +477,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
       } else {
         if(type === 'loading') {
           $scope._popMsg(messages['cmm.error']);
-        } else if(type === 'saving') {
+        } else if(type === 'saving' && isMsg) {
           $scope._popMsg(messages['cmm.saveFail']);
         }
       }
