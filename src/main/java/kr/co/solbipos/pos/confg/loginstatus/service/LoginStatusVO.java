@@ -48,8 +48,9 @@ public class LoginStatusVO extends PageVO {
     private String sysStatFgNm;
     /** 로그인 순서 */
     private String loginSeq;
-    
-    
+    /** 전체 기간 체크 */
+    private boolean chkDt;
+
     /**
      * @return the hqOfficeCd
      */
@@ -206,5 +207,19 @@ public class LoginStatusVO extends PageVO {
     public void setLoginSeq(String loginSeq) {
         this.loginSeq = loginSeq;
     }
-    
+
+    /**
+     * @return the chkDt
+     */
+
+    public boolean isChkDt() {
+        return chkDt;
+    }
+
+    /**
+     * @param chkDt the chkDt to set
+     */
+    public void setChkDt(boolean chkDt) {
+        this.chkDt = chkDt;
+    }
 }
