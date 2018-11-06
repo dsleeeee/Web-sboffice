@@ -84,13 +84,12 @@ app.controller('cmmEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     params.storeCd    = storeScope.getSelectedStore().storeCd;
     params.envstFg    = envGroupCd;
 
+    console.log(params);
+
+
     $scope.$broadcast('loadingPopupActive');
-    $http({
-      method : 'POST',
-      url    : '/store/manage/storeManage/storeManage/getStoreConfigList.sb',
-      params : params,
-      headers: {'Content-Type': 'application/json; charset=utf-8'}
-    }).then(function successCallback(response) {
+
+    $scope._postJSONQuery.withPopUp( '/store/manage/storeManage/storeManage/getStoreConfigList.sb', params, function(response){
       if (!$.isEmptyObject(response.data)) {
         var list = response.data.data.list;
 
@@ -99,12 +98,7 @@ app.controller('cmmEnvCtrl', ['$scope', '$http', function ($scope, $http) {
 
         var envScope = agrid.getScope('storeEnvCtrl');
         envScope.setEnvContents("S", list);
-
       }
-    }, function errorCallback(response) {
-      $scope._popMsg(messages["cmm.saveFail"]);
-      return false;
-    }).then(function () {
     });
   };
 
@@ -137,9 +131,10 @@ app.controller('cmmEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     for(var i=0; i<objEnvstCd.length; i++){
 
       if(objDirctInYn[i].value == "Y" && objEnvstValCd[i].value == ""){
-        var msgStr = messages["hqManage.envSetting"] + " [" + objEnvstCd[i].value + "] "+ objEnvstNm[i].value
-            + messages["storeManage.require.regist.inputEnv"]
-        ;
+        var msgStr = messages["hqManage.envSetting"] + " ["
+            + objEnvstCd[i].value + "] "
+            + objEnvstNm[i].value
+            + messages["storeManage.require.regist.inputEnv"];
 
         $scope._popMsg(msgStr);
         return false;
@@ -176,12 +171,14 @@ app.controller('cmmEnvCtrl', ['$scope', '$http', function ($scope, $http) {
 
       $scope.$broadcast('loadingPopupActive', messages["cmm.saving"]);
 
-      $scope._save( "/store/manage/storeManage/storeManage/saveStoreConfig.sb", params, function () {
+      $scope._postJSONSave.withOutPopUp( "/store/manage/storeManage/storeManage/saveStoreConfig.sb", params, function () {
         $scope.$broadcast('loadingPopupInactive');
         $scope._popMsg(messages["cmm.saveSucc"]);
+
+        // 재조회
+        var envScope = agrid.getScope('storeEnvCtrl');
+        $scope.searchCmmEnv(envScope.getEnvGroupCd());
       });
-      // 재조회
-      // $scope.changeEnvGroup($scope.getEnvGroupCd());
     });
     event.preventDefault();
   };

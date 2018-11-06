@@ -100,12 +100,7 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
 
     $scope.$broadcast('loadingPopupActive');
 
-    $http({
-      method : 'POST',
-      url    : '/store/manage/storeManage/storeManage/getPosList.sb',
-      params : params,
-      headers: {'Content-Type': 'application/json; charset=utf-8'}
-    }).then(function successCallback(response) {
+    $scope._postJSONQuery.withPopUp( '/store/manage/storeManage/storeManage/getPosList.sb', params, function(response){
       if (!$.isEmptyObject(response.data)) {
 
         var posList = response.data.data.list;
@@ -116,11 +111,6 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.$broadcast('loadingPopupInactive');
         $scope.searchPosEnv();
       }
-    }, function errorCallback(response) {
-      $scope._popMsg(messages["cmm.saveFail"]);
-      return false;
-    }).then(function () {
-      // "complete" code here
     });
   };
 
@@ -149,13 +139,7 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     params.envstFg    = "03"; // 포스환경
 
     $scope.$broadcast('loadingPopupActive');
-
-    $http({
-      method : 'POST',
-      url    : '/store/manage/storeManage/storeManage/getPosConfigList.sb',
-      params : params,
-      headers: {'Content-Type': 'application/json; charset=utf-8'}
-    }).then(function successCallback(response) {
+    $scope._postJSONQuery.withPopUp( '/store/manage/storeManage/storeManage/getPosConfigList.sb', params, function(response){
       if (!$.isEmptyObject(response.data)) {
         var list = response.data.data.list;
 
@@ -163,13 +147,7 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
 
         var envScope = agrid.getScope('storeEnvCtrl');
         envScope.setEnvContents("P", list);
-
       }
-    }, function errorCallback(response) {
-      $scope._popMsg(messages["cmm.saveFail"]);
-      return false;
-    }).then(function () {
-      // "complete" code here
     });
   };
 
@@ -245,12 +223,13 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
 
       $scope.$broadcast('loadingPopupActive', messages["cmm.saving"]);
 
-      $scope._save("/store/manage/storeManage/storeManage/savePosConfig.sb", params, function () {
+      $scope._postJSONSave.withOutPopUp( "/store/manage/storeManage/storeManage/savePosConfig.sb", params, function () {
         $scope.$broadcast('loadingPopupInactive');
         $scope._popMsg(messages["cmm.saveSucc"]);
+        // 재조회
+        var envScope = agrid.getScope('storeEnvCtrl');
+        $scope.changeEnvGroup(envScope.getEnvGroupCd());
       });
-      // 재조회
-      $scope.changeEnvGroup($scope.getEnvGroupCd());
     });
     event.preventDefault();
   };
@@ -322,55 +301,22 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
       return false;
     }
 
-    var param = {};
     var storeScope    = agrid.getScope('storeManageCtrl');
+    var param         = {};
     params.hqOfficeCd = storeScope.getSelectedStore().hqOfficeCd;
     params.storeCd    = storeScope.getSelectedStore().storeCd;
     params.posNo      = $scope.getSelectedPosNo();
 
-    // console.log(param);
-
     $scope.$broadcast('loadingPopupActive');
+    $scope._postJSONSave.withOutPopUp( "/store/manage/storeManage/storeManage/deletePos.sb", params, function () {
+      $scope.$broadcast('loadingPopupInactive');
+      $scope._popMsg(messages["cmm.delSucc"]);
 
-    // ajax 통신 설정
-    $http({
-      method: 'POST', //방식
-      url: "/store/manage/storeManage/storeManage/deletePos.sb",
-      data: params,
-      headers: {'Content-Type': 'application/json; charset=utf-8'}
-    }).then(function successCallback(response) {
-      // 로딩바 hide
-      $scope.$broadcast('loadingPopupInactive');
-      if(response.data.status === "OK") {
-        $scope._popMsg(messages["cmm.delSucc"]);
-        // $scope.changeEnvGroup();
-      }
-      else if(response.data.status === "FAIL") {
-        $scope._popMsg("Ajax Fail By HTTP Request");
-      }
-      else if(response.data.status === "SESSION_EXFIRE") {
-        $scope._popMsg(response.data.message, function() {
-          location.href = response.data.url;
-        });
-      }
-      else if(response.data.status === "SERVER_ERROR") {
-        $scope._popMsg(response.data.message);
-      }
-      else {
-        var msg = response.data.status + " : " + response.data.message;
-        $scope._popMsg(msg);
-      }
-    }, function errorCallback(response) {
-      $scope.$broadcast('loadingPopupInactive');
-      $scope._popMsg(messages["cmm.saveFail"]);
-      return false;
-    }).then(function () {
-      if (typeof callback === 'function') {
-        setTimeout(function () {
-          callback();
-        }, 10);
-      }
+      // 재조회
+      var envScope = agrid.getScope('storeEnvCtrl');
+      $scope.searchCmmEnv(envScope.getEnvGroupCd());
     });
+
   };
 
 }]);
