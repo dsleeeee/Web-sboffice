@@ -142,9 +142,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     var storeScope = agrid.getScope('storeManageCtrl'); // 선택된 매장
     var params     = storeScope.getSelectedStore();
 
-
     // todo 데이터 메세지
-    $scope._postJSONQuery.withPopUp( '/store/manage/storeManage/storeManage/getStoreDetail.sb', params, function(response){
+    $scope._postJSONQuery.withOutPopUp( '/store/manage/storeManage/storeManage/getStoreDetail.sb', params, function(response){
       if($.isEmptyObject(response.data) ) {
         $scope._popMsg(messages["cmm.empty.data"]);
         $scope.storeInfoLayer.hide();
