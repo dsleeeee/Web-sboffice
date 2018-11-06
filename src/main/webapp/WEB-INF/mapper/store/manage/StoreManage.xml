@@ -905,11 +905,32 @@
            AND POS_NO IN (SELECT POS_NO FROM TB_MS_POS WHERE STORE_CD = #{storeCd})
     </insert>
 
+    <!-- 매장상품분류 복사 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_CLASS
+        PARAM    : storeManageVO
+        COMMENTS : 매장의 상품분류를 복사한다
+    -->
+    <insert id="insertStoreProductClass" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.insertStoreProductClass */
+        INSERT INTO TB_MS_PRODUCT_CLASS
+        SELECT #{storeCd},
+               PROD_CLASS_CD,
+               PROD_CLASS_NM,
+               P_PROD_CLASS_CD,
+               #{regDt},
+               #{regId},
+               #{modDt},
+               #{modId}
+          FROM TB_MS_PRODUCT_CLASS
+         WHERE STORE_CD = #{copyStoreCd}
+    </insert>
+
     <!-- 매장상품 복사 -->
     <!--
         TABLE    : TB_MS_PRODUCT
         PARAM    : storeManageVO
-        COMMENTS : 주방 프린터 환경값을 등록한다.
+        COMMENTS : 매장의 상품을 복사한다
     -->
     <insert id="insertStoreProduct" parameterType="storeManageVO" >
         /* USE : StoreManageMapper.insertStoreProduct */

@@ -37,6 +37,9 @@ public interface StoreManageMapper {
     /** 매장 상세 조회 */
     DefaultMap<String> getStoreDetail(StoreManageVO storeManageVO);
 
+    /** 설치 포스수 조회 */
+    int getInstPosCnt(StoreManageVO storeManageVO);
+
     /** 매장 콤보리스트 조회 */
     List<DefaultMap<String>> getStoreComboList(StoreManageVO storeManageVO);
 
@@ -108,6 +111,9 @@ public interface StoreManageMapper {
 
     /** 주방 프린터 환경 등록 */
     int insertKitchenPrintEnvInfo(StoreManageVO storeManageVO);
+
+    /** 상품 분류 복사 */
+    int insertStoreProductClass(StoreManageVO storeManageVO);
 
     /** 상품 복사 */
     int insertStoreProduct(StoreManageVO storeManageVO);
@@ -244,21 +250,8 @@ public interface StoreManageMapper {
     /** 터치키 복사할 매장 목록 조회 */
     List<DefaultMap<String>> getTouchKeyStoreList(HqManageVO hqManageVO);
 
-    ///////////////////////////////////////////////////////매장조회
-    /** 벤사, 코너 정보 조회 */
-    List<DefaultMap<String>> getVanCornrList(StoreManageVO storeManageVO);
-
-    /** 설치 포스수 조회 */
-    int getInstPosCnt(StoreManageVO storeManageVO);
-
-
-
-    //    /** 코너별 승인 목록 조회 */
-//    List<DefaultMap<String>> getCornrApproveList(StoreManageVO storeManageVO);
-
-//    /** 포스별 승인 목록 조회*/
-//    List<DefaultMap<String>> getPosApproveList(StoreManageVO storeManageVO);
-
+//    /** 벤사, 코너 정보 조회 */
+//    List<DefaultMap<String>> getVanCornrList(StoreManageVO storeManageVO);
 
 }
 

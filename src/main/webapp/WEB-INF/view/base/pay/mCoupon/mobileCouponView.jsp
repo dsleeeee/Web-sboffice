@@ -12,41 +12,74 @@
 
 <div class="subCon">
 
-  <div class="searchBar flddUnfld">
-   <a href="#" class="open">${menuNm}</a>
-  </div>
+  <div class="wj-dialog-body">
+    <div class="searchBar flddUnfld">
+     <a href="#" class="open">${menuNm}</a>
+    </div>
 
-  <%-- 상품권분류등록 --%>
-  <div class="mb20 mt20" ng-controller="mCouponClassCtrl">
-    <div class="wj-TblWrapBr mr10 pd20" style="height:500px;">
-      <div class="updownSet oh mb10">
-        <span class="fl bk lh30"><s:message code='mobileCoupon.regist.coupon' /></span>
-        <button class="btn_skyblue" id="btnClassAdd" ng-click="searchMobileCouponClass()"><s:message code='cmm.search' /></button>
-        <button class="btn_skyblue" id="btnClassAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
-        <%--<button class="btn_skyblue" id="btnClassDel" ng-click="del()"><s:message code='cmm.del' /></button>--%>
-        <button class="btn_skyblue" id="btnClassSave" ng-click="save()"><s:message code='cmm.save' /></button>
-      </div>
-      <%-- 상품권분류등록 그리드 --%>
-      <div id="mCouponClassGrid" class="wj-gridWrap" style="height:380px; overflow-y: hidden;">
-        <wj-flex-grid
-                autoGenerateColumns="false"
-                control="flex"
-                initialized="initGrid(s,e)"
-                sticky-headers="true"
-                selection-mode="Row"
-                items-source="data"
-                item-formatter="_itemFormatter">
+    <%-- 조회 --%>
+    <div class="mt10 oh">
+      <button class="btn_blue fr" id="btnSearch" ng-click="$broadcast('terminalCtrl')">
+        <s:message code="cmm.search" />
+      </button>
+    </div>
 
-          <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="mobileCoupon.hqOfficeCd"/>" binding="hqOfficeCd" visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="mobileCoupon.payTypeFg"/>" binding="payTypeFg" visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="mobileCoupon.payClassCd"/>" binding="payClassCd" width="200" maxLength="3" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="mobileCoupon.payClassNm"/>" binding="payClassNm" width="*" maxLength="20"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="mobileCoupon.serNoYn"/>" binding="serNoYn" width="150" data-map="useYnDataMap" visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="cmm.useYn"/>" binding="useYn" width="150" data-map="useYnDataMap"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="cmm.regId"/>" binding="regId" visible="false"></wj-flex-grid-column>
-        </wj-flex-grid>
+    <%-- 상품권분류등록 --%>
+    <div class="mb20 mt20" ng-controller="mCouponClassCtrl">
+      <div class="wj-TblWrapBr mr10 pd20" style="height:500px;">
+        <div class="updownSet oh mb10">
+          <span class="fl bk lh30"><s:message code='mobileCoupon.regist.coupon' /></span>
+
+          <%-- 페이지 스케일  --%>
+          <wj-combo-box
+                  class="w100px fl"
+                  id="listScaleBox"
+                  ng-model="listScale"
+                  items-source="_getComboData('listScaleBox')"
+                  display-member-path="name"
+                  selected-value-path="value"
+                  is-editable="false"
+                  initialized="initComboBox(s)"
+                  visible="false">
+          </wj-combo-box>
+          <%--// 페이지 스케일  --%>
+
+          <button class="btn_skyblue" id="btnClassAdd" ng-click="searchMobileCouponClass()"><s:message code='cmm.search' /></button>
+          <button class="btn_skyblue" id="btnClassAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
+          <%--<button class="btn_skyblue" id="btnClassDel" ng-click="del()"><s:message code='cmm.del' /></button>--%>
+          <button class="btn_skyblue" id="btnClassSave" ng-click="save()"><s:message code='cmm.save' /></button>
+        </div>
+        <%-- 상품권분류등록 그리드 --%>
+        <div id="mCouponClassGrid" class="wj-gridWrap" style="height:380px; overflow-y: hidden;">
+          <wj-flex-grid
+                  autoGenerateColumns="false"
+                  control="flex"
+                  initialized="initGrid(s,e)"
+                  sticky-headers="true"
+                  selection-mode="Row"
+                  items-source="data"
+                  item-formatter="_itemFormatter">
+
+            <!-- define columns -->
+            <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="mobileCoupon.hqOfficeCd"/>" binding="hqOfficeCd" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="mobileCoupon.payTypeFg"/>" binding="payTypeFg" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="mobileCoupon.payClassCd"/>" binding="payClassCd" width="200" maxLength="3" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="mobileCoupon.payClassNm"/>" binding="payClassNm" width="*" maxLength="20"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="mobileCoupon.serNoYn"/>" binding="serNoYn" width="150" data-map="useYnDataMap" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="cmm.useYn"/>" binding="useYn" width="150" data-map="useYnDataMap"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="cmm.regId"/>" binding="regId" visible="false"></wj-flex-grid-column>
+          </wj-flex-grid>
+        </div>
+
+        <%-- 페이지 리스트 --%>
+        <div class="pageNum mt20">
+          <%-- id --%>
+          <ul id="mCouponClassCtrlPager" data-size="10">
+          </ul>
+        </div>
+        <%--//페이지 리스트--%>
+
       </div>
     </div>
   </div>

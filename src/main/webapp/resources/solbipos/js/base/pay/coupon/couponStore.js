@@ -58,17 +58,9 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
         params.push($scope.flex.collectionView.items[i]);
       }
     }
-    $http({
-      method: 'POST', //방식
-      url: baseUrl + "store/deleteCouponStore.sb",
-      data: JSON.stringify(params), /* 파라메터로 보낼 데이터 */
-      headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
-    }).then(function successCallback(response) {
-      $scope.allSearch()
-    }, function errorCallback(response) {
-      s_alert.pop(response.data.message);
-      return false;
-    });
+
+    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+    $scope._save(baseUrl + "store/deleteCouponStore.sb", params, function(){ $scope.allSearch() });
   };
 
   // 매장 삭제 완료 후처리
@@ -76,9 +68,6 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.searchRegStore();
     var noRegCouponGrid = agrid.getScope("noRegStoreCtrl");
     noRegCouponGrid.searchNoRegStore();
-    // 쿠폰그리드 조회
-    var couponGrid = agrid.getScope("couponCtrl");
-    couponGrid.searchCoupon(selectedCouponClass);
   };
 
 }]);
@@ -127,17 +116,8 @@ app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     }
 
-    $http({
-      method: 'POST', //방식
-      url: baseUrl + "store/registCouponStore.sb",
-      data: JSON.stringify(params), /* 파라메터로 보낼 데이터 */
-      headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
-    }).then(function successCallback(response) {
-      $scope.allSearch()
-    }, function errorCallback(response) {
-      s_alert.pop(response.data.message);
-      return false;
-    });
+    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+    $scope._save(baseUrl + "store/registCouponStore.sb", params, function(){ $scope.allSearch() });
   };
 
   // 매장 등록 완료 후처리
@@ -145,9 +125,6 @@ app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.searchNoRegStore();
     var regCouponGrid = agrid.getScope("regStoreCtrl");
     regCouponGrid.searchRegStore();
-    // 쿠폰그리드 조회(적용매장 수량 변화)
-    var couponGrid = agrid.getScope("couponCtrl");
-    couponGrid.searchCoupon(selectedCouponClass);
   };
 }]);
 

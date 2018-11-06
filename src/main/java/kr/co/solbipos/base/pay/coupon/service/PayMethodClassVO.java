@@ -2,6 +2,7 @@ package kr.co.solbipos.base.pay.coupon.service;
 
 import kr.co.common.data.enums.UseYn;
 import kr.co.solbipos.application.common.service.CmmVO;
+import kr.co.solbipos.application.common.service.PageVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.pay.coupon.service.enums.CoupnEnvFg;
 import kr.co.solbipos.base.pay.coupon.service.enums.PayTypeFg;
@@ -21,7 +22,7 @@ import kr.co.solbipos.base.pay.coupon.service.enums.PayTypeFg;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-public class PayMethodClassVO extends CmmVO {
+public class PayMethodClassVO extends PageVO {
 
     /** 소속구분 */
     private OrgnFg orgnFg;
