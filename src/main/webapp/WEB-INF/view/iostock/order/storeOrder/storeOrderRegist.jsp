@@ -333,7 +333,11 @@
       }, function errorCallback(response) {
         // called asynchronously if an error occurs
         // or server returns response with an error status.
-        $scope._popMsg(messages["cmm.saveFail"]);
+        if (response.data.message) {
+          $scope._popMsg(response.data.message);
+        } else {
+          $scope._popMsg(messages['cmm.error']);
+        }
         return false;
       }).then(function () {
         // "complete" code here
@@ -365,7 +369,11 @@
       }, function errorCallback(response) {
         // called asynchronously if an error occurs
         // or server returns response with an error status.
-        $scope._popMsg(messages["cmm.saveFail"]);
+        if (response.data.message) {
+          $scope._popMsg(response.data.message);
+        } else {
+          $scope._popMsg(messages['cmm.error']);
+        }
         return false;
       }).then(function () {
         // "complete" code here
@@ -400,7 +408,11 @@
       }, function errorCallback(response) {
         // called asynchronously if an error occurs
         // or server returns response with an error status.
-        $scope._popMsg(messages["cmm.saveFail"]);
+        if (response.data.message) {
+          $scope._popMsg(response.data.message);
+        } else {
+          $scope._popMsg(messages['cmm.error']);
+        }
         return false;
       }).then(function () {
         // "complete" code here
@@ -455,7 +467,11 @@
       }, function errorCallback(response) {
         // called asynchronously if an error occurs
         // or server returns response with an error status.
-        $scope._popMsg(messages["cmm.saveFail"]);
+        if (response.data.message) {
+          $scope._popMsg(response.data.message);
+        } else {
+          $scope._popMsg(messages['cmm.error']);
+        }
         return false;
       }).then(function () {
         // "complete" code here
