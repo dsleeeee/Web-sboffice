@@ -85,9 +85,9 @@ public class WebMenuServiceImpl implements WebMenuService {
     @Override
     public List<HashMap<String, Object>> makeupTree() {
 
-        List<ResrceInfoVO> level_1 = selectWebMenuLevel(0);
-        List<ResrceInfoVO> level_2 = selectWebMenuLevel(1);
-        List<ResrceInfoVO> level_3 = selectWebMenuLevel(2);
+        List<ResrceInfoVO> level_1 = selectWebMenuLevel(1);
+        List<ResrceInfoVO> level_2 = selectWebMenuLevel(2);
+        List<ResrceInfoVO> level_3 = selectWebMenuLevel(3);
         List<HashMap<String, Object>> rList = new ArrayList<HashMap<String, Object>>();
         int l1 = level_1.size();
 
