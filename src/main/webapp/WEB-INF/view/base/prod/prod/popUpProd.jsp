@@ -251,7 +251,7 @@
             </table>
         </div>
         <div class="wj-dialog-footer">
-            <button class="btn wj-hide-apply btn_blue"><s:message code="cmm.chk" /></button>
+            <button class="btn wj-hide-apply btn_blue"><s:message code="cmm.close" /></button>
         </div>
     </div>
 </wj-popup>
