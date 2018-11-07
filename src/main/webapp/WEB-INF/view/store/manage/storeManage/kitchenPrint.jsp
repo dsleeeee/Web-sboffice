@@ -4,23 +4,9 @@
 
 <div id="kitchenPrintArea" style="display:none;" ng-controller="kitchenPrintCtrl">
 
-  <%-- 환경설정 분류 탭 --%>
-  <div class="subTab2 mt20 mb10">
-    <ul id="envGroupTab">
-      <%-- 매장환경 --%>
-      <li><a href="#" id="storeEnvFg" envstFg="00" class="on" ng-click="changeEnvGroup('00')"><s:message code="storeManage.storeEnv" /></a></li>
-      <%-- 외식환경 --%>
-      <li><a href="#" id="foodEnvFg" envstFg="01" ng-click="changeEnvGroup('01')"><s:message code="storeManage.foodEnv" /></a></li>
-      <%-- 유통환경  //TODO 추후 추가 -%>
-      <%-- <li><a href="#" id="distributionEnvFg" envstFg="02" ng-click="changeEnvGroup('02')"><s:message code="storeManage.distributionEnv" /></a></li> --%>
-      <%-- 포스환경 --%>
-      <li><a href="#" id="posEnvFg" envstFg="03" ng-click="changeEnvGroup('03')"><s:message code="storeManage.posEnv" /></a></li>
-      <%-- 주방프린터 --%>
-      <li><a href="#" id="printEnvFg" envstFg="98" ng-click="changeEnvGroup('98')"><s:message code="storeManage.kitchenPrint" /></a></li>
-      <%-- 주방프린터 상품연결--%>
-      <li><a href="#" id="printProductEnvFg" envstFg="99" ng-click="changeEnvGroup('99')"><s:message code="storeManage.kitchenPrintProduct" /></a></li>
-    </ul>
-  </div>
+  <%-- 매장환경 분류 탭 --%>
+  <c:import url="/WEB-INF/view/store/manage/storeManage/storeInfoTab.jsp">
+  </c:import>
 
   <div class="wj-TblWrap mr10">
     <div class="oh mb10">
@@ -34,13 +20,13 @@
   <%-- 주방프린터 그리드 --%>
   <div id="kitchenPrintGrid" style="height: 320px;">
     <wj-flex-grid
-            autoGenerateColumns="false"
-            control="flex"
-            initialized="initGrid(s,e)"
-            sticky-headers="true"
-            selection-mode="Row"
-            items-source="data"
-            item-formatter="_itemFormatter">
+      autoGenerateColumns="false"
+      control="flex"
+      initialized="initGrid(s,e)"
+      sticky-headers="true"
+      selection-mode="Row"
+      items-source="data"
+      item-formatter="_itemFormatter">
 
       <!-- define columns -->
       <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
@@ -68,4 +54,4 @@ var prterPort   = ${cnv.getEnvCodeExcpAll("4031")};
 var prterSpeed  = ${cnv.getEnvCodeExcpAll("4032")};
 var useYn       = ${ccu.getCommCodeExcpAll("067")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/kitchenPrint.js?ver=20181106.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/kitchenPrint.js?ver=20181107.01" charset="utf-8"></script>

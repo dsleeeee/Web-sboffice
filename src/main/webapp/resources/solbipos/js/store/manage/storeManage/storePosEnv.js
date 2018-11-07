@@ -74,6 +74,11 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
 
       $scope.getStorePosList();
 
+    } else if(envGroupCd === "10") { // 포스기능키
+
+      var posFuncKeyScope = agrid.getScope('funcKeyCtrl');
+      posFuncKeyScope.changeEnvGroup(envGroupCd);
+
     } else if(envGroupCd === "98") { // 주방프린터
 
       var kitchenPrintScope = agrid.getScope('kitchenPrintCtrl');

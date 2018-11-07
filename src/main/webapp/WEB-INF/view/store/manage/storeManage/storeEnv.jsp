@@ -31,7 +31,11 @@
       </c:import>
 
       <%-- 포스환경 --%>
-      <c:import url="/WEB-INF/view/store/manage/storeManage/storePoEnv.jsp">
+      <c:import url="/WEB-INF/view/store/manage/storeManage/storePosEnv.jsp">
+      </c:import>
+
+      <%-- 포스기능키 --%>
+      <c:import url="/WEB-INF/view/store/manage/storeManage/storePosFuncKey.jsp">
       </c:import>
 
       <%-- 주방프린터 --%>
@@ -45,5 +49,5 @@
     </div>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeEnv.js?ver=20181106.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeEnv.js?ver=20181107.01" charset="utf-8"></script>
 
