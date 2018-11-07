@@ -59,7 +59,7 @@ public class VerRecvServiceImpl implements VerRecvService {
     public List<DefaultMap<String>> selectVerStoreList(VerRecvVO verRecv) {
         return verRecvMapper.selectVerStoreList(verRecv);
     }
-    
+
     @Override
     public List<DefaultMap<String>> selectVerStoreDtlList(VerRecvVO verRecv) {
         return verRecvMapper.selectVerStoreDtlList(verRecv);

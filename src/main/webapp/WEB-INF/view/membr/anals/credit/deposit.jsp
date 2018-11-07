@@ -76,4 +76,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/anals/credit/deposit.js?ver=20180817" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/anals/credit/deposit.js?ver=20180817.01" charset="utf-8"></script>

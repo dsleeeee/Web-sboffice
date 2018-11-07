@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.util.List;
 
 import static kr.co.common.utils.HttpUtils.getClientIp;
@@ -47,7 +48,7 @@ import static org.springframework.util.ObjectUtils.isEmpty;
  */
 @Controller
 @RequestMapping(value = "/application/pos/excpForward/")
-public class ExecptForwardController {
+public class ExceptForwardController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
@@ -58,12 +59,13 @@ public class ExecptForwardController {
 
     /** Constructor Injection */
     @Autowired
-    public ExecptForwardController(ExceptForwardService exceptForwardService,
+    public ExceptForwardController(ExceptForwardService exceptForwardService,
         SessionService sessionService, AuthService authService, MessageService messageService) {
         this.exceptForwardService = exceptForwardService;
         this.sessionService = sessionService;
         this.authService = authService;
         this.messageService = messageService;
+
     }
 
     /**

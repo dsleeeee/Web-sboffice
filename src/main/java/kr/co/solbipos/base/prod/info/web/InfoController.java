@@ -41,13 +41,18 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 @RequestMapping(value = "/base/prod/info")
 public class InfoController {
 
-    /** service */
+    private final InfoService service;
+    private final SessionService sessionService;
+    private final CmmCodeUtil cmmCodeUtil;
+
+    /** Constructor Injection */
     @Autowired
-    InfoService service;
-    @Autowired
-    SessionService sessionService;
-    @Autowired
-    CmmCodeUtil cmmCodeUtil;
+    public InfoController(InfoService service, SessionService sessionService,
+        CmmCodeUtil cmmCodeUtil) {
+        this.service = service;
+        this.sessionService = sessionService;
+        this.cmmCodeUtil = cmmCodeUtil;
+    }
 
     /**
      * 분류코드 등록 화면

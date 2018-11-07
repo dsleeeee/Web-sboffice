@@ -65,6 +65,9 @@ public class TouchKeyVO extends CmmVO {
     /** 채움색 */
     private String fillColor;
 
+    /** 복사할 매장 코드 */
+    private String copyStoreCd;
+
 
     /**
      * @return the orgnFg
@@ -291,4 +294,18 @@ public class TouchKeyVO extends CmmVO {
         this.fillColor = fillColor;
     }
 
+    /**
+     * @return the copyStoreCd
+     */
+
+    public String getCopyStoreCd() {
+        return copyStoreCd;
+    }
+
+    /**
+     * @param copyStoreCd the copyStoreCd to set
+     */
+    public void setCopyStoreCd(String copyStoreCd) {
+        this.copyStoreCd = copyStoreCd;
+    }
 }

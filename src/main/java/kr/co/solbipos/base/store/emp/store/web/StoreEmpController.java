@@ -48,6 +48,7 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Controller
 @RequestMapping(StoreEmpController.PREFIX)
 public class StoreEmpController {
+
     static final String PREFIX = "base/store/emp/store";
 
     private final SessionService sessionService;

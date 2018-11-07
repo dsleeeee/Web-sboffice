@@ -39,11 +39,15 @@ import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 @Service("hqBrandService")
 public class HqBrandServiceImpl implements HqBrandService{
 
-    @Autowired
-    HqBrandMapper mapper;
+    private final HqBrandMapper mapper;
+    private final MessageService messageService;
 
+    /** Constructor Injection */
     @Autowired
-    MessageService messageService;
+    public HqBrandServiceImpl(HqBrandMapper mapper, MessageService messageService) {
+        this.mapper = mapper;
+        this.messageService = messageService;
+    }
 
     /**  브랜드 목록 조회 */
     @Override

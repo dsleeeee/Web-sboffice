@@ -70,6 +70,10 @@ public class TouchKeyClassVO extends CmmVO {
     /** 테이블들 */
     private List<TouchKeyVO> touchs;
 
+    /** 복사할 매장 코드 */
+    private String copyStoreCd;
+
+
     /**
      * @return the orgnFg
      */
@@ -336,4 +340,18 @@ public class TouchKeyClassVO extends CmmVO {
         this.touchs = touchs;
     }
 
+    /**
+     * @return the copyStoreCd
+     */
+
+    public String getCopyStoreCd() {
+        return copyStoreCd;
+    }
+
+    /**
+     * @param copyStoreCd the copyStoreCd to set
+     */
+    public void setCopyStoreCd(String copyStoreCd) {
+        this.copyStoreCd = copyStoreCd;
+    }
 }

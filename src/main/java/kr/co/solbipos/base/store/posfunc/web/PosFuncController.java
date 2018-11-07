@@ -114,7 +114,7 @@ public class PosFuncController {
         // 매장 목록 조회
         List<DefaultMap<String>> list = storeService.getStoreList(storeManageVO);
 
-        return returnListJson(Status.OK, list);
+        return returnListJson(Status.OK, list, storeManageVO);
     }
 
     /**

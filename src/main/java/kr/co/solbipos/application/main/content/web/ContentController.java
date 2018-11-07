@@ -3,6 +3,7 @@ package kr.co.solbipos.application.main.content.web;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.main.ContentService;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.security.EncUtil;
 import kr.co.solbipos.application.common.enums.MainSrchFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import org.slf4j.Logger;
@@ -40,12 +41,15 @@ public class ContentController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
+    private final ContentService contentService;
+    private final SessionService sessionService;
 
+    /** Constructor Injection */
     @Autowired
-    ContentService contentService;
-
-    @Autowired
-    SessionService sessionService;
+    public ContentController(ContentService contentService, SessionService sessionService) {
+        this.contentService = contentService;
+        this.sessionService = sessionService;
+    }
 
     /**
      * 메인페이지 (유저권한타입 : 시스템(SYSTEM))
@@ -70,6 +74,15 @@ public class ContentController {
         List<DefaultMap<String>> noticeList = contentService.getNotice(sessionInfoVO);
 
         model.addAttribute("noticeList", noticeList);
+
+
+
+
+
+        String pUserPwd = EncUtil.setEncSHA256("ckp" + "0000");  // 포스 패스워드
+
+        System.out.println(">>>>>>>>>>>>>>>>> pUserPwd : "+ pUserPwd);
+
 
         return "application/main/systemMain";
     }

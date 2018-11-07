@@ -9,6 +9,7 @@
       <s:message code="coupon.regist.product" />
       <a href="#" class="wj-hide btn_close"></a>
     </div>
+
     <div class="wj-dialog-body">
 
       <table class="tblType01 mt20">
@@ -111,4 +112,4 @@
 <script type="text/javascript">
   var coupnEnvstVal = "${coupnEnvstVal}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/couponProd.js?ver=20180817" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/couponProd.js?ver=20180817.01" charset="utf-8"></script>

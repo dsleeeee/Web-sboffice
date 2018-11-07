@@ -12,14 +12,13 @@ package kr.co.solbipos.application.common.service;
  * @author nhn kcp 김영근
  * @since 2018. 08.08
  * @version 1.0
- * @see
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 public class CmAgencyVO extends CmmVO {
 
 	private static final long serialVersionUID = -4697297982932829979L;
-	
+
 	/** 대리점코드 */
 	private String agencyCd;
 	/** 대리점명 */

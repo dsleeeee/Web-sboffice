@@ -101,7 +101,7 @@ public class DclzManageController {
     /**
      * 근태 등록
      *
-     * @param dclzManageVO
+     * @param dclzManage
      * @param request
      * @param response
      * @param model

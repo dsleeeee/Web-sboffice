@@ -68,7 +68,7 @@ public class EnvConfgController {
             Model model) {
         return "sys/cd/envConfg/envConfg";
     }
-    
+
     /**
      * 환경설정관리 - 대표명칭 조회
      * @param   request
@@ -83,15 +83,15 @@ public class EnvConfgController {
     @ResponseBody
     public Result getEnvstList(HttpServletRequest request, HttpServletResponse response,
             EnvstVO envstVO, Model model) {
-        
-        List<DefaultMap<String>> list = new ArrayList<DefaultMap<String>>(); 
+
+        List<DefaultMap<String>> list = new ArrayList<DefaultMap<String>>();
         // 대표명칭 코드목록 조회
         list = envConfgService.getEnvstList(envstVO);
-        
+
         return ReturnUtil.returnListJson(Status.OK, list, envstVO);
-        
+
     }
-    
+
     /**
      * 환경설정관리 - 대표명칭 저장
      * @param   request
@@ -108,12 +108,12 @@ public class EnvConfgController {
             HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        
+
         int result = envConfgService.saveEnvstList(envstVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }
-    
+
     /**
      * 환경설정관리 - 세부명칭 조회
      * @param   request
@@ -128,15 +128,15 @@ public class EnvConfgController {
     @ResponseBody
     public Result getEnvstDtlList(HttpServletRequest request, HttpServletResponse response,
             EnvstDtlVO envstDtlVO, Model model) {
-        
-        List<DefaultMap<String>> list = new ArrayList<DefaultMap<String>>(); 
+
+        List<DefaultMap<String>> list = new ArrayList<DefaultMap<String>>();
         // 세부명칭 코드목록 조회
         list = envConfgService.getEnvstDtlList(envstDtlVO);
-        
+
         return ReturnUtil.returnListJson(Status.OK, list, envstDtlVO);
-        
+
     }
-    
+
     /**
      * 환경설정관리 - 세부명칭 저장
      * @param   request
@@ -151,13 +151,13 @@ public class EnvConfgController {
     @ResponseBody
     public Result saveEnvstDtlList(@RequestBody EnvstDtlVO[] envstDtlVOs, HttpServletRequest request,
             HttpServletResponse response, Model model) {
-        
+
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        
+
         int result = envConfgService.saveEnvstDtlList(envstDtlVOs, sessionInfoVO);
-        
+
         return returnJson(Status.OK, result);
     }
-    
-    
+
+
 }

@@ -27,6 +27,7 @@
             <wj-combo-box
                 id="srchPrtClassCdCombo"
                 ng-model="prtClassCd"
+                control="prtClassCdCombo"
                 items-source="_getComboData('srchPrtClassCdCombo')"
                 display-member-path="name"
                 selected-value-path="value"
@@ -35,7 +36,6 @@
                 selected-index-changed="setPrtClassCdCombo(s)"
                 got-focus="prtClassCdComboFocus(s,e)">
             </wj-combo-box>
-            <input type="hidden" id="srchPrtClassCdVal" value={{prtClassCd}} />
           </div>
         </td>
         <td>
@@ -137,7 +137,7 @@
   <script type="text/javascript">
   var prtClassComboData = ${listPrintType};
   </script>
-  <script type="text/javascript" src="/resource/solbipos/js/sys/bill/template/template.js?ver=20181026.01" charset="utf-8"></script>
+  <script type="text/javascript" src="/resource/solbipos/js/sys/bill/template/template.js?ver=20181105.01" charset="utf-8"></script>
 
   <%-- 레이어 팝업 --%>
   <c:import url="/WEB-INF/view/sys/bill/template/popUpTemplate.jsp">

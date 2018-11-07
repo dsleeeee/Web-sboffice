@@ -41,23 +41,24 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Service
 public class HqManageServiceImpl implements HqManageService{
 
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-
     private final String DEFAULT_POS_EMPNO = "0000";    // 기본 포스 직원번호
     private final String DEFAULT_POS_PASSWORD = "1234"; // 기본 포스 패스워드
     private final String SYS_CLOSURE_DATE = "99991231"; // 시스템 종료일
 
+    private final HqManageMapper mapper;
+    private final MessageService messageService;
 
+    /** Constructor Injection */
     @Autowired
-    HqManageMapper mapper;
-
-    @Autowired
-    MessageService messageService;
+    public HqManageServiceImpl(HqManageMapper mapper, MessageService messageService) {
+        this.mapper = mapper;
+        this.messageService = messageService;
+    }
 
     /** 본사 목록 조회 */
     @Override
     public List<DefaultMap<String>> list(HqManageVO hqManage) {
-        return mapper.list(hqManage);
+        return mapper.getHqOfficeList(hqManage);
     }
 
     /** 본사 상세정보 조회 */
@@ -194,36 +195,24 @@ public class HqManageServiceImpl implements HqManageService{
             cmmCodeReg += saleTimeReg;
         }
 
-        // 시스템 공통코드 복사 //TODO
-//        HqNmcodeVO result = new HqNmcodeVO();
-//        result.setResult(mapper.copyCmmNameCode(nmcodeVO));
-
-        // 필요 공통코드 복사
-//        String copyCmmCode[] = {"062"};
-//        for(int i=0; i<copyCmmCode.length; i++) {
-//            String copyCode = copyCmmCode[i];
-//            nmcodeVO.setNmcodeGrpCd(copyCode);
-//            cmmCodeReg += mapper.copyCmmCode(nmcodeVO);
-//        }
-//
-        // 공통코드 테이블에서 Tid 복사
-        HqNmcodeVO tidResult = new HqNmcodeVO();
-        tidResult.setResult(mapper.copyTid(nmcodeVO));
-
-        // 포스 출력물 등록
-        HqPrintTemplVO printTempVO = new HqPrintTemplVO();
-
-        printTempVO.setHqOfficeCd(hqOfficeCd);
-        printTempVO.setRegDt(dt);
-        printTempVO.setRegId(sessionInfoVO.getUserId());
-        printTempVO.setModDt(dt);
-        printTempVO.setModId(sessionInfoVO.getUserId());
-
-        //TODO
-        //int printTempReg = mapper.hqPrintTempReg(printTempVO);
-        //procCnt += printTempReg;
-
         procCnt += cmmCodeReg;
+
+        // 공통코드 복사
+        HqNmcodeVO hqNmcodeVO = new HqNmcodeVO();
+        hqNmcodeVO.setHqOfficeCd(hqOfficeCd);
+        String copyNmcodeResult = mapper.copyCmmNameCode(nmcodeVO);
+
+        // 포스 출력물 등록 TODO
+//        HqPrintTemplVO printTempVO = new HqPrintTemplVO();
+//
+//        printTempVO.setHqOfficeCd(hqOfficeCd);
+//        printTempVO.setRegDt(dt);
+//        printTempVO.setRegId(sessionInfoVO.getUserId());
+//        printTempVO.setModDt(dt);
+//        printTempVO.setModId(sessionInfoVO.getUserId());
+
+//        int printTempReg = mapper.hqPrintTempReg(printTempVO);
+//        procCnt += printTempReg;
 
         return procCnt;
     }

@@ -123,7 +123,7 @@ public class PosTemplateServiceImpl implements PosTemplateService {
         if ("000".equals(posTemplateVO.getTempltCd())) {
             result = posTemplateMapper.updatePosTemplatePrint(posTemplateVO);
         } else {
-            // 본사 또는 매장에서 등록한 템플릿 만 업데이트 처리
+            // 각각의 레벨(본사/단독매장/매장) 에서 등록한 템플릿 만 업데이트 처리
             if (orgnFg.equals(posTemplateVO.getTempltRegFg())) {
                 result = posTemplateMapper.savePosTemplate(posTemplateVO);
             }

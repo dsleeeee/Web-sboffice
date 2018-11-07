@@ -8,7 +8,7 @@
   <div class="wj-dialog wj-dialog-columns">
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="prepaid.regist.charge" />
-      <a href="javascript:;" class="wj-hide btn_close"></a>
+      <a href="javascript:" class="wj-hide btn_close"></a>
     </div>
     <div class="wj-dialog-body">
 
@@ -80,4 +80,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/anals/prepaid/charge.js?ver=20180817" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/anals/prepaid/charge.js?ver=20180817.01" charset="utf-8"></script>

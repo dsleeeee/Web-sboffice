@@ -44,7 +44,6 @@
               selected-index-changed="setPrtClassCdCombo(s)"
               got-focus="prtClassCdComboFocus(s,e)">
             </wj-combo-box>
-            <input type="hidden" id="srchPrtClassCdVal" value={{prtClassCd}} />
           </div>
         </td>
         <td>
@@ -88,6 +87,8 @@
             <wj-flex-grid-column header="<s:message code="posTemplate.prtForm"/>" binding="prtForm" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="posTemplate.templtRegFg"/>" binding="templtRegFg" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="posTemplate.templtCd"/>" binding="templtCd" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="posTemplate.applyTempltCd"/>" binding="applyTempltCd" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="posTemplate.applyTempltRegFg"/>" binding="applyTempltRegFg" visible="false"></wj-flex-grid-column>
 
           </wj-flex-grid>
 
@@ -120,10 +121,8 @@
       <div class="wj-TblWrapBr pd20 templateEdit" style="height:485px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='posTemplate.editNm' /></span>
-          <button class="btn_skyblue" id="btnApplyToPrint" style="display: none;" ng-click="$broadcast('applyToPrint')">
-            <s:message code="posTemplate.applyToPrint" />
-          </button>
-          <button class="btn_skyblue" id="btnSaveEditTemplate" style="display: none;" ng-click="$broadcast('saveEditTemplate')">
+          <span class="fl bk lh30 s12" ng-if="showTempltRegFgNm">&nbsp;- {{templtRegFgNm}}등록 > {{templtEditableTxt}}</span>
+          <button class="btn_skyblue" id="btnSaveEditTemplate" ng-if="showBtnSaveEdit" ng-click="saveEditTemplate()">
             <s:message code="cmm.save" />
           </button>
         </div>
@@ -139,7 +138,7 @@
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='posTemplate.viewNm' /></span>
           <c:if test="${orgnFg == 'HQ'}">
-            <button class="btn_skyblue" id="btnApplyStoreTemplate" style="display: none;" ng-click="$broadcast('applyToStoreTemplate')">
+            <button class="btn_skyblue" id="btnApplyStoreTemplate" ng-if="showBtnApplyStore" ng-click="applyToStoreTemplate()">
               <s:message code="posTemplate.applyToStore" />
             </button>
           </c:if>
@@ -155,4 +154,4 @@
 <script type="text/javascript">
   var prtClassComboData = ${listPrintType};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/output/posTemplate/posTemplate.js?ver=20181030.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/output/posTemplate/posTemplate.js?ver=20181105.02" charset="utf-8"></script>

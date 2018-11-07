@@ -193,7 +193,7 @@
   });
 
 </script>
-<%--<script type="text/javascript" src="/resource/solbipos/js/iostock/loan/storeLoan.js?ver=2018082101" charset="utf-8"></script>--%>
+<%--<script type="text/javascript" src="/resource/solbipos/js/iostock/loan/storeLoan.js?ver=20180821.01" charset="utf-8"></script>--%>
 
 <%-- 배송기사 등록 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/deliveryCharger/deliveryChargerManage/deliveryChargerRegist.jsp">

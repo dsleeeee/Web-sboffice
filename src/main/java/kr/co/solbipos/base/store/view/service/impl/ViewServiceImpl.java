@@ -1,6 +1,7 @@
 package kr.co.solbipos.base.store.view.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.base.store.view.service.VanConfigVO;
 import kr.co.solbipos.base.store.view.service.ViewService;
 import kr.co.solbipos.base.store.view.service.ViewVO;
@@ -42,32 +43,32 @@ public class ViewServiceImpl implements ViewService {
     {
         return viewMapper.getViewList(viewVO);
     }
-    
+
     /** 매장정보 상세조회 */
     @Override
     public DefaultMap<String> getViewDetail(ViewVO viewVO)
     {
         return viewMapper.getViewDetail(viewVO);
     }
-    
-    
+
+
     /** 밴사설정 정보 조회 */
     @Override
     public List<DefaultMap<String>> getVanconfgList(VanConfigVO vo) {
         return viewMapper.getVanconfgList(vo);
     }
-    
-    
+
+
     /**  코너별 승인 목록 조회 */
     @Override
     public List<DefaultMap<String>> getCornrApproveList(String storeCd) {
         return viewMapper.getCornrApproveList(storeCd);
     }
-    
+
     /**  포스별 승인 목록 조회 */
     @Override
     public List<DefaultMap<String>> getPosApproveList(String storeCd) {
         return viewMapper.getPosApproveList(storeCd);
     }
-    
+
 }

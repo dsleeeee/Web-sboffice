@@ -19,6 +19,8 @@ var app = agrid.getApp();
 app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('prodCtrl', $scope, $http, true));
+  // 전체기간 체크박스
+  $scope.isChecked = true;
   // 콤보박스 데이터 Set
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -36,14 +38,18 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
     });
     // 그리드 선택 이벤트
     s.addEventListener(s.hostElement, 'mousedown', function(e) {
-      var ht = grid.hitTest(e);
+      var ht = s.hitTest(e);
       if( ht.cellType === wijmo.grid.CellType.Cell) {
         var col = ht.panel.columns[ht.col];
         if( col.binding === "prodCd") {
-          searchProdDetail(grid.rows[ht.row].dataItem);
+          $scope.searchProdDetail();
         }
       }
     });
+
+    // 전체기간 체크박스 선택에 따른 날짜선택 초기화
+    $scope.startDateCombo.isReadOnly = $scope.isChecked;
+    $scope.endDateCombo.isReadOnly = $scope.isChecked;
   };
   // 상품정보관리 그리드 조회
   $scope.$on("prodCtrl", function(event, data) {
@@ -56,6 +62,21 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
+  // 전체기간 체크박스 클릭이벤트
+  $scope.isChkDt = function() {
+    $scope.startDateCombo.isReadOnly = $scope.isChecked;
+    $scope.endDateCombo.isReadOnly = $scope.isChecked;
+  };
+  // 상세정보 팝업
+  $scope.searchProdDetail = function() {
+    var popup = $scope.prodDetailLayer;
+    popup.show(true, function (s) {
+      // 선택 버튼 눌렀을때만
+      if (popup.dialogResult === "wj-hide-apply") {
+
+      }
+    });
+  };
 
 }]);
 
@@ -143,27 +164,10 @@ $(document).ready(function(){
     $("#prodDetailLayer").hide();
   });
 
-  // 리스트 조회
-  $("#searchBtn").click(function( e ) {
-    search(1);
-  });
-
   // 엑셀 다운로드
   $("#excelBtn").click(function( e ) {
     var name = "${menuNm}";
     wexcel.down(grid, name, name + ".xlsx");
-  });
-
-  // 페이징
-  $(document).on("click", ".page1", function() {
-    search($(this).data("value"));
-  });
-
-  // 전체기간 체크박스
-  $(document).on("click", "#chkDt", function() {
-    var chkDt = $('#chkDt').is(":checked");
-    startDate.isDisabled = chkDt;
-    endDate.isDisabled = chkDt;
   });
 
 });
