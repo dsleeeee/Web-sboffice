@@ -83,16 +83,10 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
     var storeScope    = agrid.getScope('storeManageCtrl');
     params.hqOfficeCd = storeScope.getSelectedStore().hqOfficeCd;
     params.storeCd    = storeScope.getSelectedStore().storeCd;
-    // $scope.setPosList(null);
 
     $scope.$broadcast('loadingPopupActive');
 
-    $http({
-      method : 'POST',
-      url    : '/store/manage/storeManage/storeManage/getPosList.sb',
-      params : params,
-      headers: {'Content-Type': 'application/json; charset=utf-8'}
-    }).then(function successCallback(response) {
+    $scope._postJSONQuery.withPopUp( '/store/manage/storeManage/storeManage/getPosList.sb', params, function(response){
       if (!$.isEmptyObject(response.data)) {
 
         $scope.setPosList(response.data.data.list);
@@ -107,11 +101,6 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
 
         $scope.getKitchenPrintList();
       }
-    }, function errorCallback(response) {
-      $scope._popMsg(messages["cmm.saveFail"]); //todo
-      return false;
-    }).then(function () {
-      // "complete" code here
     });
   };
 

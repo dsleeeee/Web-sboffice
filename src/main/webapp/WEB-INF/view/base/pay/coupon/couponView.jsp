@@ -21,9 +21,22 @@
 
   <%-- 쿠폰분류등록 --%>
   <div class="mb20 mt20" ng-controller="couponClassCtrl">
-    <div class="wj-TblWrapBr mr10 pd20" style="height:270px;">
+    <div class="wj-TblWrapBr mr10 pd20" style="height:300px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='coupon.regist.class' /></span>
+        <%-- 페이지 스케일  --%>
+        <wj-combo-box
+                class="w100px fl"
+                id="listScaleBox"
+                ng-model="listScale"
+                items-source="_getComboData('listScaleBox')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="initComboBox(s)"
+                visible="false">
+        </wj-combo-box>
+        <%--// 페이지 스케일  --%>
         <button class="btn_skyblue" id="btnClassAdd" ng-click="searchCouponClass()"><s:message code='cmm.search' /></button>
      <c:if test="${orgnFg == 'HQ'}">
         <button class="btn_skyblue" id="btnClassAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
@@ -51,17 +64,39 @@
           <wj-flex-grid-column header="<s:message code="cmm.useYn"/>" binding="useYn" data-map="useYnDataMap"  width="*"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="cmm.regId"/>" binding="regId" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.couponCnt"/>" binding="couponCnt" visible="false"></wj-flex-grid-column>
-
         </wj-flex-grid>
       </div>
+
+      <%-- 페이지 리스트 --%>
+      <div class="pageNum mt20">
+        <%-- id --%>
+        <ul id="couponClassCtrlPager" data-size="10">
+        </ul>
+      </div>
+      <%--//페이지 리스트--%>
+
+
     </div>
   </div>
 
   <%-- 쿠폰등록  --%>
   <div class="mb40" ng-controller="couponCtrl">
-    <div class="wj-TblWrapBr mr10 pd20" style="height:260px;">
+    <div class="wj-TblWrapBr mr10 pd20" style="height:305px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='coupon.regist.coupon' /> <span id="couponSubTitle"></span> </span>
+        <%-- 페이지 스케일  --%>
+        <wj-combo-box
+                class="w100px fl"
+                id="listScaleBox"
+                ng-model="listScale"
+                items-source="_getComboData('listScaleBox')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="initComboBox(s)"
+                visible="false">
+        </wj-combo-box>
+        <%--// 페이지 스케일  --%>
       <c:if test="${orgnFg == 'HQ'}">
         <button class="btn_skyblue" id="btnCouponAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
         <button class="btn_skyblue" id="btnCouponDel" ng-click="del()"><s:message code='cmm.del' /></button>
@@ -99,8 +134,16 @@
           <wj-flex-grid-column header="<s:message code="cmm.regId"/>" binding="regId" visible="false"></wj-flex-grid-column>
 
         </wj-flex-grid>
-
       </div>
+
+      <%-- 페이지 리스트 --%>
+      <div class="pageNum mt20">
+        <%-- id --%>
+        <ul id="couponCtrlPager" data-size="10">
+        </ul>
+      </div>
+      <%--//페이지 리스트--%>
+
     </div>
   </div>
 </div>

@@ -35,48 +35,40 @@ app.controller('tableGroupCtrl', ['$scope', '$http', function ($scope, $http) {
 
     $scope.$broadcast('loadingPopupActive');
 
-    $http({
-      method : 'POST',
-      url    : '/store/manage/storeManage/storeManage/getPosConfigList.sb',
-      params : params,
-      headers: {'Content-Type': 'application/json; charset=utf-8'}
-    }).then(function successCallback(response) {
+    $scope._postJSONQuery.withOutPopUp( "/store/manage/storeManage/storeManage/getPosConfigList.sb", params,
+      function(response){
 
-      if($.isEmptyObject(response.data) ) {
-        $scope._popMsg(messages["cmm.empty.data"]);
-        $scope.tableGroupLayer.hide();
-        return false;
-      }
-      var posList = posEnvScope.getPosList();
-      var grpList = response.data.data.groupList;
+        if($.isEmptyObject(response.data) ) {
+          $scope._popMsg(messages["cmm.empty.data"]);
+          $scope.tableGroupLayer.hide();
+          return false;
+        }
+        $scope.$broadcast('loadingPopupInactive');
 
-      var innerHtml = "";
-      for(var i=0; i<posList.length; i++) {
+        var posList = posEnvScope.getPosList();
+        var grpList = response.data.data.groupList;
 
-        innerHtml += "<tr>";
-        innerHtml += "<td class='tc'>"+posList[i].rownum+"</td>";
-        innerHtml += "<td class='tc'>"+posList[i].posNo+"</td>";
-        innerHtml += "<td class='tc'>";
-        innerHtml += "<select name='pos'id='pos"+posList[i].posNo+"'>";
+        var innerHtml = "";
+        for(var i=0; i<posList.length; i++) {
 
-        for(var j=0; j<grpList.length; j++){
-          innerHtml += "<option value='"+grpList[j].tblGrpCd+"'>"+grpList[j].tblGrpNm+"</option>";
+          innerHtml += "<tr>";
+          innerHtml += "<td class='tc'>"+posList[i].rownum+"</td>";
+          innerHtml += "<td class='tc'>"+posList[i].posNo+"</td>";
+          innerHtml += "<td class='tc'>";
+          innerHtml += "<select name='pos'id='pos"+posList[i].posNo+"'>";
+
+          for(var j=0; j<grpList.length; j++){
+            innerHtml += "<option value='"+grpList[j].tblGrpCd+"'>"+grpList[j].tblGrpNm+"</option>";
+          }
+
+          innerHtml += "</select>";
+          innerHtml += "</td>";
+          innerHtml += "</tr>";
         }
 
-        innerHtml += "</select>";
-        innerHtml += "</td>";
-        innerHtml += "</tr>";
+        $("#tabGrpContent").html(innerHtml);
       }
-
-      $("#tabGrpContent").html(innerHtml);
-
-      $scope.$broadcast('loadingPopupInactive');
-
-    }, function errorCallback(response) {
-      $scope._popMsg(messages["cmm.saveFail"]);
-      return false;
-    }).then(function () {
-    });
+    );
   };
 
   // 저장
@@ -101,47 +93,10 @@ app.controller('tableGroupCtrl', ['$scope', '$http', function ($scope, $http) {
     });
 
     // console.log(params);
-
     $scope.$broadcast('loadingPopupActive');
-
-    // ajax 통신 설정
-    $http({
-      method: 'POST', //방식
-      url: "/store/manage/storeManage/storeManage/savePosTabGrp.sb",
-      data: params,
-      headers: {'Content-Type': 'application/json; charset=utf-8'}
-    }).then(function successCallback(response) {
-      // 로딩바 hide
-      $scope.$broadcast('loadingPopupInactive');
-      if(response.data.status === "OK") {
-        $scope._popMsg(messages["cmm.saveSucc"]);
-        $scope.tableGroupLayer.hide();
-      }
-      else if(response.data.status === "FAIL") {
-        $scope._popMsg("Ajax Fail By HTTP Request");
-      }
-      else if(response.data.status === "SESSION_EXFIRE") {
-        $scope._popMsg(response.data.message, function() {
-          location.href = response.data.url;
-        });
-      }
-      else if(response.data.status === "SERVER_ERROR") {
-        $scope._popMsg(response.data.message);
-      }
-      else {
-        var msg = response.data.status + " : " + response.data.message;
-        $scope._popMsg(msg);
-      }
-    }, function errorCallback(response) {
-      $scope.$broadcast('loadingPopupInactive');
-      $scope._popMsg(messages["cmm.saveFail"]);
-      return false;
-    }).then(function () {
-      if (typeof callback === 'function') {
-        setTimeout(function () {
-          callback();
-        }, 10);
-      }
+    $scope._postJSONSave.withPopUp("/store/manage/storeManage/storeManage/savePosTabGrp.sb", params, function () {
+      $scope._popMsg(messages["cmm.saveSucc"]);
+      $scope.tableGroupLayer.hide();
     });
   };
 }]);

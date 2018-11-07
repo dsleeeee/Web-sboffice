@@ -133,16 +133,10 @@ app.controller('kitchenPrintProductCtrl', ['$scope', '$http', function ($scope, 
     params.storeCd  = $scope.getSelectedPrter().storeCd;
     params.prterNo  = $scope.getSelectedPrter().prterNo;
 
-    console.log(params);
+    // console.log(params);
 
     $scope.$broadcast('loadingPopupActive');
-
-    $http({
-      method : 'POST',
-      url    : '/store/manage/storeManage/storeManage/getKitchenPrintProductInfo.sb',
-      params : params,
-      headers: {'Content-Type': 'application/json; charset=utf-8'}
-    }).then(function successCallback(response) {
+    $scope._postJSONQuery.withPopUp( '/store/manage/storeManage/storeManage/getKitchenPrintProductInfo.sb', params, function(response){
       if (!$.isEmptyObject(response.data)) {
 
         $scope.$broadcast('loadingPopupInactive');
@@ -153,11 +147,6 @@ app.controller('kitchenPrintProductCtrl', ['$scope', '$http', function ($scope, 
         $scope.regProductTreeCtrl.itemsSource   = printProductList;
         $scope.noRegProductTreeCtrl.itemsSource = noPrintProductList;
       }
-    }, function errorCallback(response) {
-      $scope._popMsg(messages["cmm.saveFail"]);
-      return false;
-    }).then(function () {
-      // "complete" code here
     });
   };
 
@@ -173,19 +162,16 @@ app.controller('kitchenPrintProductCtrl', ['$scope', '$http', function ($scope, 
       return false;
     }
 
-    console.log(params);
-
     for(var i in params) {
       params[i].status = 'D';
     }
 
-    console.log(params);
 
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._save("/store/manage/storeManage/storeManage/saveKitchenPrintProduct.sb", params,
         function(){
           $scope._popMsg(messages["cmm.saveSucc"]);
-          //todo 재로딩
+          //재로딩
           $scope.getProductList();
         }
     );
@@ -203,18 +189,15 @@ app.controller('kitchenPrintProductCtrl', ['$scope', '$http', function ($scope, 
       return false;
     }
 
-    console.log(params);
-
     for(var i in params) {
       params[i].status = 'I';
     }
 
-    console.log(params);
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._save("/store/manage/storeManage/storeManage/saveKitchenPrintProduct.sb", params,
       function(){
         $scope._popMsg(messages["cmm.saveSucc"]);
-        //todo 재로딩
+        //재로딩
         $scope.getProductList();
       }
     );

@@ -250,6 +250,7 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
             noRegProdGrid.$apply(function(){
               noRegProdGrid._gridDataInit();
             });
+            $scope.searchCoupon(selectedCouponClass);
           });
         }
         else if ( col.binding === "storeCnt" && selectedRow.status !== "I") {
@@ -264,6 +265,7 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
             noRegStoreGrid.$apply(function(){
               noRegStoreGrid._gridDataInit();
             });
+            $scope.searchCoupon(selectedCouponClass);
           });
 
         }
@@ -273,7 +275,6 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
 
   $scope.$on("couponCtrl", function(event, data) {
     selectedCouponClass = data;
-
     $scope.searchCoupon(data);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();

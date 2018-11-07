@@ -31,7 +31,6 @@
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code="storeManage.kitchenPrint" /></span>
         </div>
-        <%--<div id="kpProductGrid" style="height:400px;"></div>--%>
         <div id="kitchenProductGrid" style="height: 300px; ">
           <wj-flex-grid
                   autoGenerateColumns="false"
@@ -97,4 +96,4 @@
     </div>
   </div>
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/kitchenPrintProduct.js?ver=2018102301" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/kitchenPrintProduct.js?ver=20181106.01" charset="utf-8"></script>

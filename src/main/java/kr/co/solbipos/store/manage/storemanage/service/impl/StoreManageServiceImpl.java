@@ -258,6 +258,7 @@ public class StoreManageServiceImpl implements StoreManageService{
 
                 // 상품 복사
                 if( "product".equals(copyEnv[i]) ) {
+                    procCnt += mapper.insertStoreProductClass(storeManageVO);
                     procCnt += mapper.insertStoreProduct(storeManageVO);
                 }
 
@@ -687,7 +688,7 @@ public class StoreManageServiceImpl implements StoreManageService{
         return procCnt;
     }
 
-    /** 추방프린터 출력/미출력 상품 조회 */
+    /** 주방프린터 출력/미출력 상품 조회 */
     @Override
     public List<StoreProductVO> getPrintProductInfo(StoreProductVO storeProductVO, UseYn useYn) {
 

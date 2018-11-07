@@ -30,7 +30,7 @@
     <button type="button" id="btnSaveStore"class="btn_blue" ng-click="save()" ><s:message code="cmm.save" /></button>
   </div>
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeCmmEnv.js?ver=2018102301" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeCmmEnv.js?ver=20181106.01" charset="utf-8"></script>
 
 <script>
 var envstGrp = ${ccu.getCommCodeExcpAll("004")};

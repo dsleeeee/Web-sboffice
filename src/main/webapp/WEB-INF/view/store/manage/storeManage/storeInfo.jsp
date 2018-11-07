@@ -354,18 +354,15 @@
 <script>
   var startDate = "${sessionScope.sessionInfo.startDate}";
   var hqList = ${ccu.getHqOfficeList()};
-
-  console.log(hqList)
-
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=2018110501" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20181106.01" charset="utf-8"></script>
 
 <%-- 사업자번호 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/checkBizNo.jsp">
 </c:import>
 
-<%-- 관리업체 조회 --%>
+<%-- 본사 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/searchHq.jsp">
 </c:import>
 

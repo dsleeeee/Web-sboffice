@@ -32,18 +32,14 @@ app.controller('posNmCtrl', ['$scope', '$http', function ($scope, $http) {
 
     $scope.$broadcast('loadingPopupActive');
 
-    $http({
-      method : 'POST',
-      url    : '/store/manage/storeManage/storeManage/getPosList.sb',
-      params : params,
-      headers: {'Content-Type': 'application/json; charset=utf-8'}
-    }).then(function successCallback(response) {
+    $scope._postJSONQuery.withOutPopUp( '/store/manage/storeManage/storeManage/getPosList.sb', params, function(response){
 
       if($.isEmptyObject(response.data) ) {
         $scope._popMsg(messages["cmm.empty.data"]);
         $scope.tableGroupLayer.hide();
         return false;
       }
+      $scope.$broadcast('loadingPopupInactive');
 
       var list = response.data.data.list;
 
@@ -64,13 +60,6 @@ app.controller('posNmCtrl', ['$scope', '$http', function ($scope, $http) {
       }
 
       $("#posNmContent").html(innerHtml);
-
-      $scope.$broadcast('loadingPopupInactive');
-
-    }, function errorCallback(response) {
-      $scope._popMsg(messages["cmm.saveFail"]);
-      return false;
-    }).then(function () {
     });
   };
 
@@ -95,45 +84,10 @@ app.controller('posNmCtrl', ['$scope', '$http', function ($scope, $http) {
     // console.log(params);
 
     $scope.$broadcast('loadingPopupActive');
-
-    // ajax 통신 설정
-    $http({
-      method: 'POST', //방식
-      url: "/store/manage/storeManage/storeManage/savePosNm.sb",
-      data: params,
-      headers: {'Content-Type': 'application/json; charset=utf-8'}
-    }).then(function successCallback(response) {
-      // 로딩바 hide
+    $scope._postJSONSave.withOutPopUp( "/store/manage/storeManage/storeManage/savePosNm.sb", params, function(response){
       $scope.$broadcast('loadingPopupInactive');
-      if(response.data.status === "OK") {
         $scope._popMsg(messages["cmm.saveSucc"]);
         $scope.posNmLayer.hide();
-      }
-      else if(response.data.status === "FAIL") {
-        $scope._popMsg("Ajax Fail By HTTP Request");
-      }
-      else if(response.data.status === "SESSION_EXFIRE") {
-        $scope._popMsg(response.data.message, function() {
-          location.href = response.data.url;
-        });
-      }
-      else if(response.data.status === "SERVER_ERROR") {
-        $scope._popMsg(response.data.message);
-      }
-      else {
-        var msg = response.data.status + " : " + response.data.message;
-        $scope._popMsg(msg);
-      }
-    }, function errorCallback(response) {
-      $scope.$broadcast('loadingPopupInactive');
-      $scope._popMsg(messages["cmm.saveFail"]);
-      return false;
-    }).then(function () {
-      if (typeof callback === 'function') {
-        setTimeout(function () {
-          callback();
-        }, 10);
-      }
     });
   };
 

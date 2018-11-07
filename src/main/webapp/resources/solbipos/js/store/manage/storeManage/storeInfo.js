@@ -22,7 +22,6 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
   console.log($scope)
 
-
   // 사업자번호 중복체크 여부
   $scope.isBizChk = false;
   // readonly 값 체크 (조회인 경우 readonly : true)
@@ -143,13 +142,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     var storeScope = agrid.getScope('storeManageCtrl'); // 선택된 매장
     var params     = storeScope.getSelectedStore();
 
-    $http({
-      method : 'POST',
-      url    : '/store/manage/storeManage/storeManage/getStoreDetail.sb',
-      params : params,
-      headers: {'Content-Type': 'application/json; charset=utf-8'}
-    }).then(function successCallback(response) {
-
+    // todo 데이터 메세지
+    $scope._postJSONQuery.withOutPopUp( '/store/manage/storeManage/storeManage/getStoreDetail.sb', params, function(response){
       if($.isEmptyObject(response.data) ) {
         $scope._popMsg(messages["cmm.empty.data"]);
         $scope.storeInfoLayer.hide();
@@ -159,7 +153,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       var installPosCnt   = response.data.data.instPosCnt;
       var storeDetailInfo = response.data.data.storeDtlInfo;
 
-      // console.log(storeDetailInfo)
+      // console.log(storeDetailInfo);
 
       $("#storeInfoTitle").text("[" + storeDetailInfo.storeCd + "] " + storeDetailInfo.storeNm);
 
@@ -181,12 +175,6 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       } else {
         $scope.sysStatFgCombo.isReadOnly = false;
       }
-
-    }, function errorCallback(response) {
-      $scope._popMsg(messages["cmm.error"]);
-      return false;
-    }).then(function () {
-      // "complete" code here
     });
   };
 
