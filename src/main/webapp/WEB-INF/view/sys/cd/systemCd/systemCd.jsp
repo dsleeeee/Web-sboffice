@@ -122,7 +122,7 @@
     </div>
     <%--//위즈모 테이블--%>
   </div>
-  
+
   <div id="gridDetail" class="w50 fr mt40" style="width: 40%" ng-controller="detailCtrl">
     <%--위즈모 테이블--%>
     <div class="wj-TblWrapBr ml10 pd20" style="height: 400px;">
@@ -173,4 +173,4 @@
   </div>
 
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/sys/cd/systemCd/systemCd.js?ver=2018090301" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/cd/systemCd/systemCd.js?ver=20180903.01" charset="utf-8"></script>

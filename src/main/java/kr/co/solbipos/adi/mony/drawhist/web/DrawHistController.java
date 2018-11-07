@@ -41,9 +41,9 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 @Controller
 @RequestMapping(value = "/adi/mony/drawhist/drawhist/")
 public class DrawHistController {
-     
+
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    
+
     private final DrawHistService drawHistService;
     private final SessionService sessionService;
 
@@ -80,10 +80,10 @@ public class DrawHistController {
     @ResponseBody
     public Result drawhistListPost(DrawHistVO drawHistVO, HttpServletRequest request,
             HttpServletResponse response, Model model) {
-        
+
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         LOGGER.debug(drawHistVO.toString());
-        
+
         List<DrawHistVO> result = drawHistService.selectDrawHist(drawHistVO, sessionInfoVO);
 
         return returnListJson(Status.OK, result, drawHistVO);

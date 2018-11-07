@@ -96,7 +96,7 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
     // 파라미터 설정
     var params = {};
     params.status = "I";
-    params.prtClassCd = document.getElementById("srchPrtClassCdVal").value;
+    params.prtClassCd =  $scope.prtClassCdCombo.selectedValue;
     params.gChk = true;
     // 추가기능 수행 : 파라미터
     $scope._addRow(params);
@@ -112,31 +112,31 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
   // 템플릿 그리드 저장
   $scope.save = function() {
     // 파라미터 설정
-    var params = new Array();
-    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-      $scope.flex.collectionView.itemsEdited[i].status = "U";
-      $scope.flex.collectionView.itemsEdited[i].prtForm = theTarget.value;
-      params.push($scope.flex.collectionView.itemsEdited[i]);
+    var params = [];
+    for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
+      $scope.flex.collectionView.itemsEdited[u].status = "U";
+      $scope.flex.collectionView.itemsEdited[u].prtForm = theTarget.value;
+      params.push($scope.flex.collectionView.itemsEdited[u]);
     }
     for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
       $scope.flex.collectionView.itemsAdded[i].status = "I";
       $scope.flex.collectionView.itemsAdded[i].prtForm = theTarget.value;
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
-    for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
-      $scope.flex.collectionView.itemsRemoved[i].status = "D";
-      paramArr.push($scope.flex.collectionView.itemsRemoved[i]);
+    for (var d = 0; d < $scope.flex.collectionView.itemsRemoved.length; d++) {
+      $scope.flex.collectionView.itemsRemoved[d].status = "D";
+      paramArr.push($scope.flex.collectionView.itemsRemoved[d]);
     }
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._save("/sys/bill/template/item/save.sb", params);
   };
   // 편집 저장버튼
   $scope.$on("saveEditTemplate", function(event, data) {
-    $scope._popConfirm("저장시 전체 본사 및 매장의 해당 템플릿이 같이 수정 됩니다.<br>저장 하시겠습니까?",
+    $scope._popConfirm("저장시 전체 본사 및 단독매장의 해당 템플릿이 같이 수정 됩니다.<br>저장 하시겠습니까?",
       function() {
         var selectedRow = $scope.flex.selectedRows[0]._data;
         var param = {};
-        param.prtClassCd = document.getElementById("srchPrtClassCdVal").value;
+        param.prtClassCd = $scope.prtClassCdCombo.selectedValue;
         param.templtCd = selectedRow.templtCd;
         param.templtNm = selectedRow.templtNm;
         param.prtForm = theTarget.value;
@@ -173,11 +173,11 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
           // 팝업 컨트롤러 Get
           var scopeLayer = agrid.getScope("popUpApplyTemplateCtrl");
           // 저장 파라미터 설정
-          var paramArr = new Array();
+          var paramArr = [];
 
           for (var i = 0; i < scopeLayer.flexLayer.collectionView.itemsEdited.length; i++) {
             scopeLayer.flexLayer.collectionView.itemsEdited[i].status = "U";
-            scopeLayer.flexLayer.collectionView.itemsEdited[i].prtClassCd = document.getElementById("srchPrtClassCdVal").value;
+            scopeLayer.flexLayer.collectionView.itemsEdited[i].prtClassCd = $scope.prtClassCdCombo.selectedValue;
             scopeLayer.flexLayer.collectionView.itemsEdited[i].templtCd = scopeLayer.srchTempltCdCombo.templtCd;
             scopeLayer.flexLayer.collectionView.itemsEdited[i].templtNm = scopeLayer.srchTempltCdCombo.templtNm;
             scopeLayer.flexLayer.collectionView.itemsEdited[i].prtForm = scopeLayer.srchTempltCdCombo.prtForm;
@@ -351,7 +351,7 @@ theTarget.addEventListener('drop', function (e) {
 // 키이벤트 (키보드수정시 이벤트발생)
 theTarget.addEventListener('keyup', function (e) {
   makePreview();
-})
+});
 
 // 미리보기 적용
 function makePreview() {
@@ -397,7 +397,7 @@ function makePreview() {
   }
   // 라인별로 글자수 체킹
   var lineArray = ("<P>" + value + "</P>").match(/<P>.*?<\/P>?/g);
-  var newValues = new Array();
+  var newValues = [];
   var newLine = 0;
   var splitStr = "";
   if (lineArray != null) {

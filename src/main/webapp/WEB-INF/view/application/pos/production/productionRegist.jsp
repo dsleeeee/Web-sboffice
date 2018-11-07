@@ -32,4 +32,4 @@
 </wj-popup>
 
 
-<script type="text/javascript" src="/resource/solbipos/js/application/pos/production/productionRegist.js?ver=20180914" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/application/pos/production/productionRegist.js?ver=20180914.01" charset="utf-8"></script>

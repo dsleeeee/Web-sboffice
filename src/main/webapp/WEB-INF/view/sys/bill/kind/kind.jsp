@@ -105,7 +105,7 @@
     <input type="hidden" id="prtClassCd" />
   </div>
   <!-- -->
-  <script type="text/javascript" src="/resource/solbipos/js/sys/bill/kind/kind.js?ver=2018100201" charset="utf-8"></script>
+  <script type="text/javascript" src="/resource/solbipos/js/sys/bill/kind/kind.js?ver=20181002.01" charset="utf-8"></script>
 
   <%-- 레이어 팝업 --%>
   <c:import url="/WEB-INF/view/sys/bill/kind/popUpKind.jsp">

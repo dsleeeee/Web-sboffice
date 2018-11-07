@@ -1044,8 +1044,7 @@ div.commtWrap .btn_skyblue {width:140px; position:absolute; top:0px; right:0px; 
 .cfgWrap {overflow-y:auto; height:605px; border:1px solid #dbdbdb;}
 .cfgWrap > div.wj-flexgrid {margin-top:-1px; margin-bottom:10px;}
 
-.cfgWrap2 { height:565px; border:1px solid #dbdbdb;}
-.cfgWrap2 > div.wj-flexgrid {margin-top:-1px; margin-bottom:10px;}
+.cfgWrap2 { height:596px; border:1px solid #dbdbdb;}
 
 .shopSetting {border:1px solid #dbdbdb; border-top:0px; width:510px; height:95px; padding:10px 0 10px 10px; position:relative;}
 .shopSetting2 {border:1px solid #dbdbdb; width:726px; height:50px; padding:10px 0 10px 10px; position:absolute; left:0px; top:581px;}
@@ -1092,21 +1091,17 @@ a.btn_underline, a.btn_underline:hover, a.btn_underline.on {background-position:
 .tableImg li {margin-bottom:20px;}
 .tableImg li img {width:60%;}
 
-.hGroupLine2 {height:124px;}
-.hGroupLine3 {height:185px;}
-
-.touchGroupWrap {width: 502px; overflow: hidden; position: relative; border: 1px solid #ccc; margin-bottom: 3px; border-collapse: collapse;}
-#group div { font-family:inherit; font-weight:inherit; font-size:inherit; color:inherit; }
-.touchGroupLine2 {width:1000%; height: 123px; background:url(../img/touchKey/bg_touchKey_class_line_2.png); background-size: 500px 123px;}
-.touchGroupLine3 {width:1000%; height: 184px; background:url(../img/touchKey/bg_touchKey_class_line_3.png); background-size: 500px 184px;}
-
-.hProdsLine5 {height:377px;}
-.hProdsLine6 {height:452px;}
+.touchClassWrap {width: 502px; overflow: hidden; position: relative; border: 1px solid #ccc; margin-bottom: 3px; border-collapse: collapse;}
+#classArea div { font-family:inherit; font-weight:inherit; font-size:inherit; color:inherit; }
+.touchClassLine1 {width:1000%; height: 62px; background:url(../img/touchKey/bg_touchKey_class_line_1.png); background-size: 500px 62px;}
+.touchClassLine2 {width:1000%; height: 123px; background:url(../img/touchKey/bg_touchKey_class_line_2.png); background-size: 500px 123px;}
+.touchClassLine3 {width:1000%; height: 184px; background:url(../img/touchKey/bg_touchKey_class_line_3.png); background-size: 500px 184px;}
 
 .touchProdsWrap {width: 502px; overflow: hidden; position: relative; border: 1px solid #ccc;}
-#prod div { font-family:inherit; font-weight:inherit; font-size:inherit; color:inherit; }
-.touchProdsLine6 {width: 1000%; height: 451px; background: url(../img/touchKey/bg_touchKey_prod_line_6.png); background-size: 500px 451px;}
+#prodArea div { font-family:inherit; font-weight:inherit; font-size:inherit; color:inherit; }
 .touchProdsLine5 {width: 1000%; height: 376px; background: url(../img/touchKey/bg_touchKey_prod_line_5.png); background-size: 500px 376px;}
+.touchProdsLine6 {width: 1000%; height: 451px; background: url(../img/touchKey/bg_touchKey_prod_line_6.png); background-size: 500px 451px;}
+.touchProdsLine7 {width: 1000%; height: 526px; background: url(../img/touchKey/bg_touchKey_prod_line_7.png); background-size: 500px 526px;}
 
 .navPage { left: -101px; }
 .hideNav {
@@ -1114,22 +1109,28 @@ a.btn_underline, a.btn_underline:hover, a.btn_underline.on {background-position:
     display: none;
 }
 
-.groupNavWrap { width:125px; display: inline-block; margin-bottom: 3px; }
-.groupPageNoWrap { width:103px; position: relative; }
-.groupNav { width: 101px; height: 62px; position: relative; left: 0px; border: 1px solid #ccc; }
+.classNavWrap { width:125px; display: inline-block; margin-bottom: 3px; }
+.classPageNoWrap { width:103px; position: relative; }
+.classNav { width: 101px; height: 62px; position: relative; left: 0px; border: 1px solid #ccc; }
 
-.hGroupLine2 .groupNav { top: 46px; }
-.hGroupLine2 .groupPageNoWrap { top: 42px; }
-.hGroupLine3 .groupNav { top: 108px; }
-.hGroupLine3 .groupPageNoWrap { top: 105px; }
+.hClassLine1 {height:63px;}
+.hClassLine2 {height:124px;}
+.hClassLine3 {height:185px;}
 
-.groupNavPrev { background: url(../img/touchKey/touchKey_class_arrL_color01.png) no-repeat;}
-.groupNavPrev { width: 49px; height: 60px; background-position: 0 0;}
-.groupNavPrev:hover { width: 49px; height: 60px; background-position: -49px 0;}
+.hClassLine1 .classNav { top: -15px; }
+.hClassLine1 .classPageNoWrap { top: -18px; }
+.hClassLine2 .classNav { top: 46px; }
+.hClassLine2 .classPageNoWrap { top: 43px; }
+.hClassLine3 .classNav { top: 108px; }
+.hClassLine3 .classPageNoWrap { top: 105px; }
 
-.groupNavNext { background: url(../img/touchKey/touchKey_class_arrR_color01.png) no-repeat;}
-.groupNavNext { width: 49px; height: 60px; background-position: 0 0; margin-left:1px; }
-.groupNavNext:hover { width: 49px; height: 60px; background-position: -49px 0;}
+.classNavPrev { background: url(../img/touchKey/touchKey_class_arrL_color01.png) no-repeat;}
+.classNavPrev { width: 49px; height: 60px; background-position: 0 0;}
+.classNavPrev:hover { width: 49px; height: 60px; background-position: -49px 0;}
+
+.classNavNext { background: url(../img/touchKey/touchKey_class_arrR_color01.png) no-repeat;}
+.classNavNext { width: 49px; height: 60px; background-position: 0 0; margin-left:1px; }
+.classNavNext:hover { width: 49px; height: 60px; background-position: -49px 0;}
 
 .keyStyleWrap { width:120px; height:310px; position: absolute; }
 
@@ -1137,10 +1138,16 @@ a.btn_underline, a.btn_underline:hover, a.btn_underline.on {background-position:
 .prodPageNoWrap { width:103px; position: relative; }
 .prodNav { width: 101px; height: 76px; position: relative; left: 0px; border: 1px solid #ccc; }
 
+.hProdsLine5 {height:377px;}
+.hProdsLine6 {height:452px;}
+.hProdsLine7 {height:527px;}
+
 .hProdsLine5 .prodNav { top: 286px; }
 .hProdsLine5 .prodPageNoWrap { top: 282px; }
 .hProdsLine6 .prodNav { top: 359px; }
 .hProdsLine6 .prodPageNoWrap { top: 356px; }
+.hProdsLine7 .prodNav { top: 435px; }
+.hProdsLine7 .prodPageNoWrap { top: 432px; }
 
 .prodNavPrev { background: url(../img/touchKey/touchKey_prod_arrL_color01.png) no-repeat;}
 .prodNavPrev { width: 49px; height: 74px; background-position: 0 0;}

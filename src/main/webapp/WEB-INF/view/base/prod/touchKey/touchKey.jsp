@@ -84,19 +84,19 @@
                 </div>
             </div>
             <div id="touchArea" class="prev2 fl">
-                <%--그룹버튼 영역 시작--%>
-                <div class="touchGroupWrap" id="groupWrap">
-                    <%--2줄 "hGroupLine2", 3줄 "hGroupLine3" 사용 --%>
+                <%--분류버튼 영역 시작--%>
+                <div class="touchClassWrap" id="classWrap">
+                    <%--1줄 "hClassLine1", 2줄 "hClassLine2", 3줄 "hClassLine3" 사용 --%>
                     <%--터치키가 들어가는 위치 --%>
-                    <div class="" id="group" tabindex="-1">
+                    <div class="" id="classArea" tabindex="-1">
                     </div>
                 </div>
-                <%--//그룹버튼 영역 끝--%>
+                <%--//분류버튼 영역 끝--%>
                 <%--상품버튼 영역 시작--%>
                 <div class="touchProdsWrap" id="prodWrap">
-                    <%--2줄 "hGroupLine2", 3줄 "hGroupLine3" 사용 --%>
+                    <%--1줄 "hProdLine1", 2줄 "hProdLine2", 3줄 "hProdLine3" 사용 --%>
                     <%--터치키가 들어가는 위치 --%>
-                    <div class="" id="prod" tabindex="-1">
+                    <div class="" id="prodArea" tabindex="-1">
                     </div>
                 </div>
                 <%--//상품버튼 영역 끝 --%>
@@ -108,14 +108,14 @@
             <div class="updownSet oh mb10">
             </div>
             <%-- 페이지 버튼 영역 시작 --%>
-            <%-- 그룹페이지 버튼 --%>
-            <div id="divGroupNavWrap" class="groupNavWrap">
-                <div class="groupPageNoWrap">
-                    <span id="groupPageNoText" class="s16"></span>
+            <%-- 분류페이지 버튼 --%>
+            <div id="divClassNavWrap" class="classNavWrap">
+                <div class="classPageNoWrap">
+                    <span id="classPageNoText" class="s16"></span>
                 </div>
-                <div class="groupNav">
-                    <div class="groupNavPrev fl" id="grpNavPrev"></div>
-                    <div class="groupNavNext fl" id="grpNavNext"></div>
+                <div class="classNav">
+                    <div class="classNavPrev fl" id="grpNavPrev"></div>
+                    <div class="classNavNext fl" id="grpNavNext"></div>
                 </div>
             </div>
             <%-- 상품페이지 버튼 --%>
@@ -165,7 +165,7 @@
 
 <script>
   var urlParams = (function(url) {
-    var result = new Object();
+    var result = {};
     var idx = url.lastIndexOf('?');
 
     if (idx > 0) {
@@ -209,10 +209,10 @@
   window.mxLanguage = window.mxLanguage || urlParams['lang'];
   window.mxLanguages = window.mxLanguages || ['ko'];
 
-  window.MAX_GROUP_ROW = '${maxGroupRow}' || '2';
+  window.MAX_CLASS_ROW = '${maxClassRow}' || '2';
 
 </script>
 <script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/graph/sanitizer/sanitizer.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/vendor/wijmo/js/grid/wijmo.grid.filter.min.js?ver=5.20182.500" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20181015.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20181105.01" charset="utf-8"></script>

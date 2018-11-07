@@ -19,6 +19,12 @@ var app = agrid.getApp();
 app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('templateCtrl', $scope, $http, false));
+  // 텍스트 show 설정
+  $scope.showTempltRegFgNm = false;
+  $scope.templtEditableTxt = "수정불가";
+  // 버튼 show 설정
+  $scope.showBtnApplyStore = false;
+  $scope.showBtnSaveEdit = false;
   // 조회조건 콤보박스 데이터 Set
   $scope._setComboData("srchPrtClassCdCombo", prtClassComboData);
   $scope.isCombo = false;
@@ -80,13 +86,28 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
             theTarget.value = "";
             thePreview.innerHTML = "";
           }
+          // 그리드 저장버튼 show
           $("#btnSaveTemplate").show();
-          // 실제출력물인경우 출력물적용 버튼 감춤
-          if (selectedRow.templtCd === '000') {
-            $("#btnApplyToPrint").hide();
-          } else {
-            $("#btnApplyToPrint").show();
-          }
+
+          $scope.$apply(function() {
+            if (selectedRow.templtRegFg === "C") {
+              $scope.templtRegFgNm = "시스템";
+            } else if (selectedRow.templtRegFg === "H") {
+              $scope.templtRegFgNm = "본사";
+              // 매장적용 버튼은 본사만
+              $scope.showBtnApplyStore = true;
+            } else {
+              $scope.templtRegFgNm = "매장";
+              $scope.showBtnApplyStore = false;
+            }
+            $scope.showTempltRegFgNm = true;
+            // 자신이 등록한것만 수정 가능
+            if ( gvOrgnFg === selectedRow.templtRegFg ) {
+              $scope.templtEditableTxt = "수정가능";
+            } else {
+              $scope.templtEditableTxt = "수정불가";
+            }
+          });
         }
       }
     });
@@ -102,7 +123,6 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
           function(response) {
             var list = response.data.data.list;
             $scope.listBoxCodeList.itemsSource = list;
-
             if (list.length === undefined || list.length === 0) {
               // 코드리스트 초기화
               $scope.listBoxCodeList.itemsSource = new wijmo.collections.CollectionView([]);
@@ -113,16 +133,32 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
               $("#btnAddTemplate").show();
               $("#btnDelTemplate").show();
               $("#btnSaveTemplate").show();
-              // 매장적용 버튼은 본사만
-              if ( gvOrgnFg === "H" ) {
-                $("#btnApplyStoreTemplate").show();
-              }
-              $("#btnSaveEditTemplate").show();
+
               if ($scope.flex.rows.length > 0) {
                 $scope.flex.select(0,1);
-                theTarget.value = $scope.flex.rows[0]._data.prtForm;
+                var selectedRow = $scope.flex.rows[0].dataItem;
+                if (selectedRow.templtRegFg === "C") {
+                  $scope.templtRegFgNm = "시스템";
+                } else if (selectedRow.templtRegFg === "H") {
+                  $scope.templtRegFgNm = "본사";
+                  // 매장적용 버튼은 본사만
+                  $scope.showBtnApplyStore = true;
+                } else {
+                  $scope.templtRegFgNm = "매장";
+                }
+                $scope.showTempltRegFgNm = true;
+                // 자신이 등록한것만 수정 가능
+                if ( gvOrgnFg === selectedRow.templtRegFg ) {
+                  $scope.templtEditableTxt = "수정가능";
+                  $scope.showBtnSaveEdit = true;
+                } else {
+                  $scope.templtEditableTxt = "수정불가";
+                  $scope.showBtnSaveEdit = false;
+                }
+                theTarget.value = nvl($scope.flex.rows[0]._data.prtForm, '');
                 makePreview();
               } else {
+                $scope.showTempltRegFgNm = false;
                 // 편집/미리보기 폼 초기화
                 theTarget.value = "";
                 thePreview.innerHTML = "";
@@ -142,7 +178,7 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
     // 파라미터 설정
     var params = {};
     params.status = "I";
-    params.prtClassCd = document.getElementById("srchPrtClassCdVal").value;
+    params.prtClassCd = $scope.prtClassCdCombo.selectedValue;
     params.templtRegFg = gvOrgnFg;
     params.gChk = true;
     // 추가기능 수행 : 파라미터
@@ -160,10 +196,10 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.save = function() {
     // 파라미터 설정
     var params = [];
-    for (var e = 0; e < $scope.flex.collectionView.itemsEdited.length; e++) {
-      $scope.flex.collectionView.itemsEdited[e].status = "U";
-      $scope.flex.collectionView.itemsEdited[e].prtForm = theTarget.value;
-      params.push($scope.flex.collectionView.itemsEdited[e]);
+    for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
+      $scope.flex.collectionView.itemsEdited[u].status = "U";
+      $scope.flex.collectionView.itemsEdited[u].prtForm = theTarget.value;
+      params.push($scope.flex.collectionView.itemsEdited[u]);
     }
     for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
       $scope.flex.collectionView.itemsAdded[i].status = "I";
@@ -180,53 +216,75 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope._broadcast('templateCtrl');
     });
   };
-  // 템플릿 실제출력물적용 버튼
-  $scope.$on("applyToPrint", function(event, data) {
-    $scope._popConfirm("저장시 해당 템플릿이 실제출력물로 업데이트 처리 됩니다.<br>저장 하시겠습니까?",
-      function() {
-        var params = {};
-        params.prtClassCd = document.getElementById("srchPrtClassCdVal").value;
-        params.prtForm = theTarget.value;
-
-        $scope._postJSONSave.withPopUp("/base/output/posTemplate/template/applyToPrint.sb", params,
-          function (response) {
-            $scope.flex.collectionView.clearChanges();
-            $scope._broadcast('templateCtrl');
-          }
-        );
-      }
-    );
-    // 기능수행 종료 : 반드시 추가
-    event.preventDefault();
-  });
   // 템플릿 편집 저장버튼
-  $scope.$on("saveEditTemplate", function(event, data) {
-      var selectedRow = $scope.flex.selectedRows[0]._data;
-      var params = {};
-      params.prtClassCd = document.getElementById("srchPrtClassCdVal").value;
-      params.templtRegFg = selectedRow.templtRegFg;
-      params.templtCd = selectedRow.templtCd;
-      params.templtNm = selectedRow.templtNm;
-      params.prtForm = theTarget.value;
+  $scope.saveEditTemplate = function() {
+    var selectedRow = $scope.flex.selectedRows[0]._data;
+    var params = {};
+    params.prtClassCd = $scope.prtClassCdCombo.selectedValue;
+    params.templtRegFg = selectedRow.templtRegFg;
+    params.templtCd = selectedRow.templtCd;
+    params.templtNm = selectedRow.templtNm;
+    params.prtForm = theTarget.value;
 
-      $scope._postJSONSave.withPopUp("/base/output/posTemplate/template/save.sb", params,
+    // 자신이 등록한것만 수정 가능하므로 분기처리
+    if ( gvOrgnFg === selectedRow.templtRegFg ) {
+      $scope._postJSONSave.withOutPopUp("/base/output/posTemplate/template/save.sb", params,
         function (response) {
+          // 실제출력물인경우 패스
+          if ( selectedRow.templtCd !== "000" ) {
+            $scope._popConfirm(messages['cmm.saveSucc'] + "<br><br>해당 템플릿을 실제출력물에 업데이트 하시겠습니까?",
+              function() {
+                var nParams = {};
+                nParams.prtClassCd = params.prtClassCd;
+                nParams.templtRegFg = params.templtRegFg;
+                nParams.templtCd = params.templtCd;
+                nParams.prtForm = params.prtForm;
+
+                $scope._postJSONSave.withPopUp("/base/output/posTemplate/template/applyToPrint.sb", nParams,
+                  function (response) {
+
+                  }
+                );
+              }
+            );
+          } else {
+            // 실제출력물인경우 저장완료 팝업표시
+            $scope._popMsg(messages['cmm.saveSucc']);
+          }
           $scope.flex.collectionView.clearChanges();
           $scope._broadcast('templateCtrl');
         }
       );
+    } else {
+      // 자신이 등록하지 않은 템플릿은 수정할 수 없으므로 실제출력물에만 적용한다.
+      $scope._popConfirm("해당 템플릿을 실제출력물에 업데이트 하시겠습니까?",
+        function() {
+          var nParams = {};
+          nParams.prtClassCd = params.prtClassCd;
+          nParams.templtRegFg = params.templtRegFg;
+          nParams.templtCd = params.templtCd;
+          nParams.prtForm = params.prtForm;
 
+          $scope._postJSONSave.withPopUp("/base/output/posTemplate/template/applyToPrint.sb", nParams,
+            function (response) {
+              $scope.flex.collectionView.clearChanges();
+              $scope._broadcast('templateCtrl');
+            }
+          );
+        }
+      );
+    }
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
-  });
+  };
   // 매장 적용 버튼
-  $scope.$on("applyToStoreTemplate", function(event, data) {
+  $scope.applyToStoreTemplate = function() {
     $scope._popConfirm("전체 매장에 해당 템플릿을 적용하시겠습니까?<br>매장에 템플릿이 존재하는 경우, 업데이트 처리됩니다.",
       function() {
         var selectedRow = $scope.flex.selectedRows[0]._data;
         var params = {};
-        params.prtClassCd = document.getElementById("srchPrtClassCdVal").value;
-        params.templtRegFg = selectedRow.templtRegFg;
+        params.prtClassCd = $scope.prtClassCdCombo.selectedValue;
+        params.templtRegFg = selectedRow.applyTempltRegFg;
         params.templtCd = selectedRow.templtCd;
 
         $scope._postJSONSave.withPopUp("/base/output/posTemplate/template/applyToStore.sb", params,
@@ -239,7 +297,7 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
     );
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
-  });
+  };
   // 리스트박스 초기화 : 드래그설정
   $scope.initListBox = function(s, e) {
     // 드래그 사용하도록 설정

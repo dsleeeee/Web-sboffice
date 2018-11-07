@@ -23,11 +23,11 @@ ts4=4인사각테이블
 
 
 # touchkey
+className=분류명
 prodCd=상품코드
 prodNm=상품명
 prodClassNm=상품분류
 all=전체
-groupName=그룹명
 
 
 # msg

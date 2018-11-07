@@ -105,8 +105,8 @@
     var storeNm         = wcombo.genInput("#sStoreNm");
     //var storeType       = wcombo.genCommonBox("#sStoreType", ${ccu.getCommCode("100")});
     var storeType        = wcombo.genCommonBox("#sStoreType",  [{"name":"전체","value":""},{"name":"단독","value":"1"},{"name":"가맹","value":"2"}]);
-    var clsFg                   = wcombo.genCommonBox("#sClsFg", ${ccu.getCommCode("003")});
-    var sysStatFg       = wcombo.genCommonBox("#sSysStatFg", ${ccu.getCommCode("009")});
+    var clsFg                   = wcombo.genCommonBox("#sClsFg", ${ccu.getCommCode("001")});
+    var sysStatFg       = wcombo.genCommonBox("#sSysStatFg", ${ccu.getCommCode("005")});
     var listScaleBox    = wcombo.genCommonBox("#listScaleBox", ${ccu.getListScale()});
 
     <%-- 조회결과 --%>

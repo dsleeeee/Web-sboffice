@@ -114,7 +114,7 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
     var params = {};
     params.storeCd = $("#storeCd").val();
 
-    $.ajax({
+    $.ajax({ //TODO
       type: "POST",
       cache: false,
       async:false,
@@ -288,7 +288,7 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
       if (col.binding === "vendorFg" || col.binding === "vendorCd") {
         var dataItem = s.rows[elements.row].dataItem;
         if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
-          elements.cancel = true;
+          // elements.cancel = true;
         }
       }
     });
@@ -297,10 +297,11 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 벤더구분 변경시 벤더 dataMap 변경
   $scope.changeVendorFg = function(s, e){
-
     if (e.panel === s.cells) {
       var col = s.columns[e.col];
       if (col.binding === "vendorFg") {
+
+        alert('vendorFg : '+  s.rows[e.row].dataItem.vendorFg)
         var changeVendorFg = s.rows[e.row].dataItem.vendorFg;
         $scope.vanCdDataMap.collectionView.filter = function(item) {
           return item.vanFg == changeVendorFg;
@@ -330,7 +331,32 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
     params.storeCd = $("#storeCd").val();
     params.posNo = terminalScope.getPosFgVal();
 
-    $scope._inquirySub(baseUrl + "pos/getPosTerminalList.sb", params, function() {}, false);
+    $scope._inquirySub(baseUrl + "pos/getPosTerminalList.sb", params, function() {
+
+      var rows = $scope.flex.rows;
+      if(rows.length > 0) {
+        // todo edit 이벤트가 먹혀야 저거 무ㅓ냐 벤더코드가 수정되는데 이거 뭐냐진짜
+        for (var i = 0; i < rows.length; i++) {
+          // $scope.flex.setCellData(i,3, rows[i]._data.vendorFg);
+          // $scope.flex.setCellData(i,3, "2");
+          // console.log($scope.flex.getCellData(i,3));
+          // console.log($scope.flex.getCellData(i,4));
+
+
+          console.log($scope)
+          var changeVendorFg = rows[i]._data.vendorFg;
+          $scope.vanCdDataMap.collectionView.filter = function(item) {
+            return item.vanFg == changeVendorFg;
+          };
+
+
+        }
+
+      }
+
+      $scope.flex.collectionView.commitEdit();
+
+    }, false);
   };
 
   // 행 추가

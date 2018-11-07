@@ -159,4 +159,4 @@
   </div>
 
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/adi/etc/cd/cd.js?ver=2018091301" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/etc/cd/cd.js?ver=20180913.01" charset="utf-8"></script>

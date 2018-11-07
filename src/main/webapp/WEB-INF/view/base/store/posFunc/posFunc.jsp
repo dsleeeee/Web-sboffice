@@ -223,7 +223,8 @@
                 }
               }
             });
-            // page.make("#page", result.data.page.curr, result.data.page.totalPage);
+
+            page.make("#page", result.data.page.curr, result.data.page.totalPage);
           },
           function (result) {
             s_alert.pop(result.message);

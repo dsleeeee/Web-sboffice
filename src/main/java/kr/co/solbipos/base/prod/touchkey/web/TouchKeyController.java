@@ -53,7 +53,6 @@ import static kr.co.common.utils.spring.StringUtil.convertToJson;
 @RequestMapping(value = "/base/prod/touchKey/touchKey")
 public class TouchKeyController {
 
-    private final String RESULT_URI = "base/prod/touchKey";
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private final SessionService sessionService;
@@ -110,12 +109,12 @@ public class TouchKeyController {
             touchKeyStyleVO)));
         // 본사or매장의 터치키 환경 설정 값을 조회해서 셋팅
         if ( "H".equals(sessionInfoVO.getOrgnFg().getCode()) ) {
-            model.addAttribute("maxGroupRow", cmmEnvUtil.getHqEnvst(sessionInfoVO, "0041"));
+            model.addAttribute("maxClassRow", cmmEnvUtil.getHqEnvst(sessionInfoVO, "0041"));
         } else {
-            model.addAttribute("maxGroupRow", cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1041"));
+            model.addAttribute("maxClassRow", cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1041"));
         }
 
-        return RESULT_URI + "/touchKey";
+        return "base/prod/touchKey/touchKey";
     }
 
     /**
