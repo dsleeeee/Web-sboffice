@@ -51,7 +51,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
     }).then(function successCallback(response) {
       // 로딩바 hide
       $scope.$broadcast('loadingPopupInactive');
-      if (_httpStatusCheck(response)) {
+      if (_httpStatusCheck(response, true)) {
         // this callback will be called asynchronously
         // when the response is available
         var list = response.data.data.list;
@@ -154,7 +154,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
     }).then(function successCallback(response) {
       // 로딩바 hide
       $scope.$broadcast('loadingPopupInactive');
-      if (_httpStatusCheck(response)) {
+      if (_httpStatusCheck(response, true)) {
         $scope._popMsg(messages['cmm.saveSucc']);
         $scope.flex.collectionView.clearChanges();
       }
@@ -179,31 +179,39 @@ function RootController(ctrlName, $scope, $http, isPicker) {
     });
   }
   // http 조회 후 status 체크
-  $scope._httpStatusCheck = function (res) {
-    return _httpStatusCheck(res);
+  $scope._httpStatusCheck = function (res, isMsg) {
+    return _httpStatusCheck(res, isMsg);
   };
   // private
-  function _httpStatusCheck(res) {
+  function _httpStatusCheck(res, isMsg) {
     if (res.data.status === 'OK') {
       return true;
     }
     else if (res.data.status === 'FAIL') {
-      $scope._popMsg('Ajax Fail By HTTP Request');
+      if (isMsg) {
+        $scope._popMsg('Ajax Fail By HTTP Request');
+      }
       return false;
     }
     else if (res.data.status === 'SESSION_EXFIRE') {
-      $scope._popMsg(res.data.message, function () {
-        location.href = res.data.url;
-      });
+      if (isMsg) {
+        $scope._popMsg(res.data.message, function () {
+          location.href = res.data.url;
+        });
+      }
       return false;
     }
     else if (res.data.status === 'SERVER_ERROR') {
-      $scope._popMsg(res.data.message);
+      if (isMsg) {
+        $scope._popMsg(res.data.message);
+      }
       return false;
     }
     else {
-      var msg = res.data.status + ' : ' + res.data.message;
-      $scope._popMsg(msg);
+      if (isMsg) {
+        var msg = res.data.status + ' : ' + res.data.message;
+        $scope._popMsg(msg);
+      }
       return false;
     }
   }
@@ -453,12 +461,14 @@ function RootController(ctrlName, $scope, $http, isPicker) {
         // 로딩바 hide
         $scope.$broadcast('loadingPopupInactive');
       }
-      if (_httpStatusCheck(response)) {
-        if (response.data.message) {
-          $scope._popMsg(response.data.message);
-        } else {
-          if(type === 'saving' && isMsg) {
-            $scope._popMsg(messages['cmm.saveSucc']);
+      if (_httpStatusCheck(response, isMsg)) {
+        if (isMsg) {
+          if (response.data.message) {
+            $scope._popMsg(response.data.message);
+          } else {
+            if(type === 'saving') {
+              $scope._popMsg(messages['cmm.saveSucc']);
+            }
           }
         }
         if (typeof success === 'function') {
@@ -469,16 +479,16 @@ function RootController(ctrlName, $scope, $http, isPicker) {
       if (isMsg) {
         // 로딩바 hide
         $scope.$broadcast('loadingPopupInactive');
-      }
-      // called asynchronously if an error occurs
-      // or server returns response with an error status.
-      if(response.data.message) {
-        $scope._popMsg(response.data.message);
-      } else {
-        if(type === 'loading') {
-          $scope._popMsg(messages['cmm.error']);
-        } else if(type === 'saving' && isMsg) {
-          $scope._popMsg(messages['cmm.saveFail']);
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+        if(response.data.message) {
+          $scope._popMsg(response.data.message);
+        } else {
+          if(type === 'loading') {
+            $scope._popMsg(messages['cmm.error']);
+          } else if(type === 'saving') {
+            $scope._popMsg(messages['cmm.saveFail']);
+          }
         }
       }
       if (typeof error === 'function') {
@@ -746,7 +756,6 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
         $scope._setPagingInfo('curr', curr);
         $scope.$broadcast(ctrlName);
       }
-
       // 메시지 팝업
       $scope._popMsg = function (msg, callback) {
         $scope.s_alert_msg = $sce.trustAsHtml(msg);
