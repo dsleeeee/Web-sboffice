@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
 <%-- 팝업 부분 설정 - width 는 강제 해주어야함.. 해결방법? 확인 필요 : 20180829 노현수 --%>
-<wj-popup control="prodDetailLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:800px;">
+<wj-popup control="prodDetailLayer" show-trigger="Click" hide-trigger="Click" fade-in="false" fade-out="false" style="display: none;width:800px;">
     <div class="wj-dialog wj-dialog-columns" ng-controller="prodDetailCtrl">
         <div class="wj-dialog-header wj-dialog-header-font">
             <s:message code="prod.layer.info" />
@@ -41,19 +41,25 @@
                     <th>
                         <div class="impWrap"><s:message code="prod.prodCd" /><em class="imp">*</em></div>
                     </th>
-                    <td id="_prodCd"></td>
+                    <td id="_prodCd">
+                        {{prodDetail.prodCd}}
+                    </td>
                 </tr>
                 <tr>
                     <%--상품명--%>
                     <th>
                         <div class="impWrap"><s:message code="prod.prodNm" /></div>
                     </th>
-                    <td id="_prodNm"></td>
+                    <td id="_prodNm">
+                        {{prodDetail.prodNm}}
+                    </td>
                 </tr>
                 <tr>
                     <%--상품분류--%>
                     <th><s:message code="prod.prodClass" /></th>
-                    <td id="_prodClassNm"></td>
+                    <td id="_prodClassNm">
+                        {{prodDetail.prodClassNm}}
+                    </td>
                     <%--거래처 //TODO --%>
                     <th>
                         <div class="impWrap"><s:message code="prod.vendr" /></div>
@@ -63,43 +69,57 @@
                 <tr>
                     <%--판매상품여부--%>
                     <th><s:message code="prod.saleProdYn" /></th>
-                    <td id="_saleProdYn"></td>
+                    <td id="_saleProdYn">
+                        {{prodDetail.saleProdYn}}
+                    </td>
                     <%--원산지--%>
                     <th>
                         <div class="impWrap"><s:message code="prod.orgplceCd" /></div>
                     </th>
-                    <td id="_orgplceCd"></td>
+                    <td id="_orgplceCd">
+                        {{prodDetail.orgplceCd}}
+                    </td>
                 </tr>
                 <tr>
                     <%--최초판매단가--%>
                     <th>
                         <div class="impWrap"><s:message code="prod.firstSaleUprc" /></div>
                     </th>
-                    <td id="_saleUprc"></td>
+                    <td id="_saleUprc">
+                        {{prodDetail.saleUprc}}
+                    </td>
                     <%--원가단가--%>
                     <th>
                         <div class="impWrap"><s:message code="prod.costUprc" /></div>
                     </th>
-                    <td id="_costUprc"></td>
+                    <td id="_costUprc">
+                        {{prodDetail.costUprc}}
+                    </td>
                 </tr>
                 <tr>
                     <%--주문상품구분--%>
                     <th>
                         <div class="impWrap"><s:message code="prod.poProdFg" /></div>
                     </th>
-                    <td id="_poProdFg"></td>
+                    <td id="_poProdFg">
+                        {{prodDetail.poProdFg}}
+                    </td>
                     <%--주문단위--%>
                     <th>
                         <div class="impWrap"><s:message code="prod.poUnitFg" /></div>
                     </th>
-                    <td id="_poUnitFg"></td>
+                    <td id="_poUnitFg">
+                        {{prodDetail.poUnitFg}}
+                    </td>
                 </tr>
                 <tr>
                     <%--최소주문--%>
                     <th>
                         <div class="impWrap"><s:message code="prod.poMinQty" /></div>
                     </th>
-                    <td id="_poMinQty"></td>
+                    <td id="_poMinQty">
+                        {{prodDetail.poMinQty}}
+                    </td>
                     <th></th>
                     <td></td>
                 </tr>
@@ -119,31 +139,41 @@
                     <th>
                         <div class="impWrap"><s:message code="prod.vatFg" /><em class="imp">*</em></div>
                     </th>
-                    <td id="_vatFg"></td>
+                    <td id="_vatFg">
+                        {{prodDetail.vatFg}}
+                    </td>
                     <%--재고관리여부--%>
                     <th>
                         <div class="impWrap"><s:message code="prod.stockProdYn" /><em class="imp">*</em></div>
                     </th>
-                    <td id="_stockProdYn"></td>
+                    <td id="_stockProdYn">
+                        {{prodDetail.stockProdYn}}
+                    </td>
                 </tr>
                 <tr>
                     <%--사용여부--%>
                     <th>
                         <div class="impWrap"><s:message code="useYn" /><em class="imp">*</em></div>
                     </th>
-                    <td id="_useYn"></td>
+                    <td id="_useYn">
+                        {{prodDetail.useYn}}
+                    </td>
                     <%--안전재고--%>
                     <th>
                         <div class="impWrap"><s:message code="prod.safeStockQty" /><em class="imp">*</em></div>
                     </th>
-                    <td id="_safeStockQty"></td>
+                    <td id="_safeStockQty">
+                        {{prodDetail.safeStockQty}}
+                    </td>
                 </tr>
                 <tr>
                     <%--품절여부 //TODO --%>
                     <th>
                         <div class="impWrap"><s:message code="prod.soldOutYn" /><em class="imp">*</em></div>
                     </th>
-                    <td id="_soldOutYn"></td>
+                    <td id="_soldOutYn">
+
+                    </td>
                     <%--초기재고 //TODO --%>
                     <th>
                         <div class="impWrap"><s:message code="prod.defaultStock" /><em class="imp">*</em></div>
@@ -160,7 +190,9 @@
                     <th>
                         <div class="impWrap"><s:message code="prod.setProdFg" /><em class="imp">*</em></div>
                     </th>
-                    <td id="_setProdFg"></td>
+                    <td id="_setProdFg">
+                        {{prodDetail.setProdFg}}
+                    </td>
                 </tr>
                 <tr>
                     <%--환급적용여부--%>
@@ -182,6 +214,7 @@
                 <tbody>
                 <tr>
                     <th class="gr lh20" id="_remark">
+                        {{prodDetail.remark}}
                     </th>
                 </tr>
                 </tbody>
@@ -213,7 +246,7 @@
                     <col class="w15" />
                     <col class="w85" />
                 </colgroup>
-                <tbody id="_unitstData">
+                <tbody id="_linkedProdInfo">
                 </tbody>
             </table>
         </div>
@@ -222,4 +255,4 @@
         </div>
     </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/popUpProd.js?ver=20181030.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/popUpProd.js?ver=20181107.01" charset="utf-8"></script>

@@ -41,7 +41,7 @@ public class ProdServiceImpl implements ProdService {
     }
 
     @Override
-    public List<DefaultMap<String>> list(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+    public List<DefaultMap<String>> getProdList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
         // 소속구분 설정
         prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
@@ -51,7 +51,7 @@ public class ProdServiceImpl implements ProdService {
     }
 
     @Override
-    public DefaultMap<String> detail(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+    public DefaultMap<String> getProdDetail(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
         // 소속구분 설정
         prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
@@ -61,13 +61,13 @@ public class ProdServiceImpl implements ProdService {
     }
 
     @Override
-    public List<DefaultMap<String>> unitstProdList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+    public List<DefaultMap<String>> getLinkedProdList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
         // 소속구분 설정
         prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         prodVO.setStoreCd(sessionInfoVO.getStoreCd());
 
-        return prodMapper.getUnitstProdList(prodVO);
+        return prodMapper.getLinkedProdList(prodVO);
     }
 
 }

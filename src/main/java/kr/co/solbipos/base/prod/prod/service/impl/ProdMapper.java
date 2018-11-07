@@ -46,6 +46,6 @@ public interface ProdMapper {
      * @param prodVO
      * @return List
      */
-    List<DefaultMap<String>> getUnitstProdList(ProdVO prodVO);
+    List<DefaultMap<String>> getLinkedProdList(ProdVO prodVO);
 
 }
