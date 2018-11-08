@@ -25,47 +25,47 @@ import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 public interface HqManageService {
 
     /** 본사 목록 조회 */
-    List<DefaultMap<String>> list(HqManageVO hqManave);
+    List<DefaultMap<String>> list(HqManageVO hqManageVO);
 
     /** 본사 상세정보 조회 */
-    DefaultMap<String> dtlInfo(HqManageVO hqManage);
+    DefaultMap<String> getHqDetailInfo(HqManageVO hqManageVO);
 
     /** 사업자번호 중복 체크 */
     int chkBizNo(HqManageVO hqManage);
 
     /** 사업자번호 사용현황 목록 */
-    List<DefaultMap<String>>  getBizUseList(HqManageVO hqManage);
+    List<DefaultMap<String>>  getBizUseList(HqManageVO hqManageVO);
 
     /** 사업자번호 사용현황 상세 */
-    DefaultMap<String> getBizInfoDtl(HqManageVO hqManage);
+    DefaultMap<String> getBizInfoDtl(HqManageVO hqManageVO);
 
     /** 본사 신규 등록 */
-    int regist(HqManageVO hqManage, SessionInfoVO sessionInfoVO);
+    int regist(HqManageVO hqManageVO, SessionInfoVO sessionInfoVO);
 
     /** 본사 수정 */
-    int modify(HqManageVO hqManage, SessionInfoVO sessionInfoVO);
+    int modify(HqManageVO hqManageVO, SessionInfoVO sessionInfoVO);
 
     /** 권한그룹 목록 조회 */
-    List<DefaultMap<String>> authHqList(HqManageVO hqManage);
+    List<DefaultMap<String>> authHqList(HqManageVO hqManageVO);
 
     /** 사용가능한 메뉴 */
-    List<DefaultMap<String>> avlblMenu(HqManageVO hqManage);
+    List<DefaultMap<String>> avlblMenu(HqManageVO hqManageVO);
 
     /** 사용중인 메뉴 */
-    List<DefaultMap<String>> beUseMenu(HqManageVO hqManage);
+    List<DefaultMap<String>> beUseMenu(HqManageVO hqManageVO);
 
     /** 메뉴권한복사 */
-    int copyAuth(HqMenuVO hqMenu, SessionInfoVO sessionInfoVO);
+    int copyAuth(HqMenuVO hqMenuVO, SessionInfoVO sessionInfoVO);
 
     /** 메뉴 권한 추가 */
-    int addAuth(HqMenuVO[] hqMenu, SessionInfoVO sessionInfoVO);
+    int addAuth(HqMenuVO[] hqMenuVOs, SessionInfoVO sessionInfoVO);
 
     /** 메뉴 권한 삭제 */
-    int removeAuth(HqMenuVO[] hqMenu, SessionInfoVO sessionInfoVO);
+    int removeAuth(HqMenuVO[] hqMenuVOs, SessionInfoVO sessionInfoVO);
 
     /** 환경설정 조회 */
     List<DefaultMap<String>> getConfigList(HqManageVO hqManageVO);
 
     /** 환경설정 저장 */
-    int saveConfig(HqEnvstVO[] hqEnvsts, SessionInfoVO sessionInfoVO);
+    int saveConfig(HqEnvstVO[] hqEnvstsVOs, SessionInfoVO sessionInfoVO);
 }

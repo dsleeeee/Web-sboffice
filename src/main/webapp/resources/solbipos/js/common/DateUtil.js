@@ -74,20 +74,51 @@ function getFormatDateTime(date, seperator_date, seperator_time)
 }
 
 /**
- *
+ * 날짜를 문자열로 변환
  * @param date
  * @returns {number}
  */
 function dateToDaystring(date){
+  try
+  {
+    var date = new Date(date);
 
-  var date = new Date(date);
+    var year = date.getFullYear();
+    var month = (date.getMonth() + 1).toString();
+    var day = date.getDate().toString();
 
-  var year = date.getFullYear();
-  var month = (date.getMonth() + 1).toString();
-  var day = date.getDate().toString();
+    var monthStr = month.leftPad("0",2);
+    var dayStr = day.leftPad("0",2);
 
-  var monthStr = month.leftPad("0",2);
-  var dayStr = day.leftPad("0",2);
-
-  return(year + "-"+ monthStr  + "-"+ dayStr );
+    return(year + "-"+ monthStr  + "-"+ dayStr );
+  }
+  catch(e)
+  {
+    //alert('udfMainFrm.js : '+e);
+  }
 }
+
+/**
+ * 문자열을 날짜로 변환
+ * @param date
+ * @returns {string}
+ */
+function stringToDate(str){
+  try
+  {
+    var regExp = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
+
+    var dateStr = str.replace(regExp, "");
+
+    var y = dateStr.substr(0, 4);
+    var m = dateStr.substr(4, 2);
+    var d = dateStr.substr(6, 2);
+
+    return new Date(y,m-1,d);
+  }
+  catch(e)
+  {
+    //alert('udfMainFrm.js : '+e);
+  }
+}
+

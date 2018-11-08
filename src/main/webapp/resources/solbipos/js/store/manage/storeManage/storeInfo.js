@@ -20,7 +20,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._setComboData("areaCd", areaCd);
   $scope._setComboData("envHqOfficeCd", hqList);
 
-  console.log($scope)
+  // console.log($scope)
 
   // 사업자번호 중복체크 여부
   $scope.isBizChk = false;
@@ -143,7 +143,9 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     var params     = storeScope.getSelectedStore();
 
     // todo 데이터 메세지
+    // 데이터가 있는데 response.data.message 가 '"조회 데이터가 없습니다."' 라고 나오는 경우
     $scope._postJSONQuery.withOutPopUp( '/store/manage/storeManage/storeManage/getStoreDetail.sb', params, function(response){
+      // console.log(response.data)
       if($.isEmptyObject(response.data) ) {
         $scope._popMsg(messages["cmm.empty.data"]);
         $scope.storeInfoLayer.hide();
@@ -153,27 +155,25 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       var installPosCnt   = response.data.data.instPosCnt;
       var storeDetailInfo = response.data.data.storeDtlInfo;
 
-      // console.log(storeDetailInfo);
-
       $("#storeInfoTitle").text("[" + storeDetailInfo.storeCd + "] " + storeDetailInfo.storeNm);
 
       $scope.store                        = storeDetailInfo;
       $scope.store.hqOfficeNm             = storeDetailInfo.hqOfficeNm;
       $scope.store.installPosCnt          = installPosCnt;
       $scope.store.beforeBizNo            = storeDetailInfo.bizNo;
-      $scope.store.sysOpenDate.value      = storeDetailInfo.sysOpenDate;
+      $scope.store.sysOpenDate.value      = stringToDate(storeDetailInfo.sysOpenDate);
 
       $scope.areaCdCombo.selectedValue    = storeDetailInfo.areaCd;
       $scope.clsFgCombo.selectedValue     = storeDetailInfo.clsFg;
       $scope.sysStatFgCombo.selectedValue = storeDetailInfo.sysStatFg;
 
-      $scope.readOnlyStatus                  = true;
-      $scope.sysOpenDateCombo.isReadOnly     = true;
+      $scope.readOnlyStatus               = true;
+      $scope.sysOpenDateCombo.isReadOnly  = true;
 
       if(storeDetailInfo.sysStatFg === '9'){
-        $scope.sysStatFgCombo.isReadOnly = true;
+        $scope.sysStatFgCombo.isReadOnly  = true;
       } else {
-        $scope.sysStatFgCombo.isReadOnly = false;
+        $scope.sysStatFgCombo.isReadOnly  = false;
       }
     });
   };
@@ -444,7 +444,6 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         }
       });
     });
-    event.preventDefault();
   };
 
 
@@ -466,7 +465,6 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         }
       });
     });
-    event.preventDefault();
   };
 
   /*********************************************************
@@ -495,14 +493,12 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     popup.show(true, function (s) {
       $scope.isBizChk = true;
     });
-    event.preventDefault();
   };
 
   /*********************************************************
    * 주소검색 TODO
    * *******************************************************/
   $scope.searchAddr = function(){
-    event.preventDefault();
   };
 
   /*********************************************************

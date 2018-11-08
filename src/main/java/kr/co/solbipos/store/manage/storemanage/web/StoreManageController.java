@@ -183,8 +183,6 @@ public class StoreManageController {
 
         String storeCd = service.saveStoreInfo(storeManageVO, sessionInfoVO);
 
-//        String storeCd = "";
-
         return returnJson(Status.OK, storeCd);
     }
 
