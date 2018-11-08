@@ -156,7 +156,6 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     });
   };
 
-
   /*********************************************************
    * 환경변수 저장
    * *******************************************************/
@@ -166,7 +165,7 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     var objEnvstCd      = document.getElementsByName("envstCd");
     var objEnvstNm      = document.getElementsByName("envstNm");
     var objEnvstGrpCd   = document.getElementsByName("envstGrpCd");
-    var objDefault      = document.getElementsByName("defltYn");
+    // var objDefault      = document.getElementsByName("defltYn");
     var objEnvstValCd   = document.getElementsByName("envstValCd");
     var objDirctInYn    = document.getElementsByName("dirctInYn");
     var objOldEnvstVal  = document.getElementsByName("oldEnvstVal");
@@ -239,6 +238,26 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     event.preventDefault();
   };
 
+  /*********************************************************
+   * 기본값으로 설정
+   * *******************************************************/
+  $scope.setDefault = function(){
+
+    var objEnvstCd      = document.getElementsByName("envstCd");
+    var objDirctInYn    = document.getElementsByName("dirctInYn");
+
+    for(var i=0; i<objEnvstCd.length; i++){
+
+      var defaultVal = $("#env"+objEnvstCd[i].value).attr("defaultVal");
+
+      if(objDirctInYn[i].value == "Y") {
+        $("#env"+objEnvstCd[i].value).val(defaultVal);
+      } else {
+        $("#env"+objEnvstCd[i].value).val(defaultVal).prop("selected", true);
+      }
+    }
+
+  };
 
   /*********************************************************
    * 테이블 그룹설정

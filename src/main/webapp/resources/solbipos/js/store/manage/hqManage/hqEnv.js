@@ -144,7 +144,6 @@ app.controller('hqEnvCtrl', ['$scope', '$http', function ($scope, $http) {
       hqEnvHtml += '<br>';
 
       if (hqEnvCnt > 0) innerHtml += hqEnvHtml;
-
     }
 
     $('#configContent').html(innerHtml);
@@ -154,8 +153,11 @@ app.controller('hqEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     var sOption = false;
 
     for(var i=0; i<list.length; i++){
-      if(list[i].dirctInYn === 'N') {
+
+      if(list[i].dirctInYn === 'N') { // 직접 입력하지 않고 select box 생성
+
         $('#env'+list[i].envstCd).append('<option value=\''+ list[i].envstValCd +'\' >' + list[i].envstValNm +  '</option>');
+
         if(i === 0 || envstCd !== list[i].envstCd ) {
           envstCd = list[i].envstCd;
           if(list[i].selEnvstVal === list[i].envstValCd){
@@ -166,23 +168,28 @@ app.controller('hqEnvCtrl', ['$scope', '$http', function ($scope, $http) {
             sOption = false;
             $('#env'+list[i].envstCd).val(list[i].envstValCd).prop('selected', true);
           }
-        }else if(list[i].selEnvstVal === list[i].envstValCd){
+        }
+        else if(list[i].selEnvstVal === list[i].envstValCd){
           sOption = true;
           $('#env'+list[i].envstCd).val(list[i].envstValCd).prop('selected', true);
-        }else if(sOption === false && list[i].defltYn === 'Y') {
+        }
+        // 선택된 값이 없는데 기본값이면 기본값이 선택되도록
+        else if(sOption === false && list[i].defltYn === 'Y') {
           $('#env'+list[i].envstCd).val(list[i].envstValCd).prop('selected', true);
         }
-
-        if(list[i].defltYn === 'Y') {
-          $('#env'+list[i].envstCd).attr('defaultVal', list[i].envstValCd);
-        }
-
-      } else {
+      }
+      // 직접 입력하는 경우
+      else {
         if(list[i].selEnvstVal === '' || list[i].selEnvstVal === null ) {
           $('#env'+list[i].envstCd).val('*');
         } else{
           $('#env'+list[i].envstCd).val(list[i].selEnvstVal);
         }
+      }
+
+      // 기본값을 셋팅
+      if(list[i].defltYn === 'Y') {
+        $('#env'+list[i].envstCd).attr('defaultVal', list[i].envstValCd);
       }
     }
 
@@ -197,11 +204,6 @@ app.controller('hqEnvCtrl', ['$scope', '$http', function ($scope, $http) {
 
       $scope._popMsg(msg);
     }
-
-    // 기본값 설정 클릭 이벤트 추가 todo
-    $('#btnDefault').append(function(){
-      return $scope.setDefault();
-    });
   };
 
 
@@ -214,7 +216,7 @@ app.controller('hqEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     var objEnvstCd      = document.getElementsByName("envstCd");
     var objEnvstNm      = document.getElementsByName("envstNm");
     var objEnvstGrpCd   = document.getElementsByName("envstGrpCd");
-    var objDefault      = document.getElementsByName("defltYn");
+    // var objDefault      = document.getElementsByName("defltYn");
     var objEnvstValCd   = document.getElementsByName("envstValCd");
     var objDirctInYn    = document.getElementsByName("dirctInYn");
     var objOldEnvstVal  = document.getElementsByName("oldEnvstVal");
@@ -275,16 +277,6 @@ app.controller('hqEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     });
   };
 
-
-  /*********************************************************
-   * 기본값으로 설정
-   * *******************************************************/
-  $scope.setDefault = function(){
-    //todo
-    // $scope._popMsg("준비중인 메뉴입니다.");
-    // return false;
-  };
-
   /*********************************************************
    * 매장정보 탭 클릭
    * *******************************************************/
@@ -306,20 +298,19 @@ app.controller('hqEnvCtrl', ['$scope', '$http', function ($scope, $http) {
  * 기본값 설정버튼 클릭
  * *******************************************************/
 function setDefault(){
-  // alert('setDefault');
 
-  var objDefaultCd  = document.getElementsByName("defltYn");
-  var objEnvstValCd = document.getElementsByName("envstValCd");
+  var objEnvstCd      = document.getElementsByName("envstCd");
+  var objEnvstNm      = document.getElementsByName("envstNm");
+  var objDirctInYn    = document.getElementsByName("dirctInYn");
 
-  var loop_cnt = objEnvstValCd.length;
-  for(var i = 0; i < loop_cnt; i++)
-  {
-    console.log(objEnvstValCd[i])
-    console.log(objDefaultCd[i])
+  for(var i=0; i<objEnvstCd.length; i++){
 
-    if(objEnvstValCd[i].value !== '')
-    {
-      //objEnvstValCd[i].value = objDefaultCd[i].value;
+    var defaultVal = $("#env"+objEnvstCd[i].value).attr("defaultVal");
+
+    if(objDirctInYn[i].value == "Y") {
+      $("#env"+objEnvstCd[i].value).val(defaultVal);
+    } else {
+      $("#env"+objEnvstCd[i].value).val(defaultVal).prop("selected", true);
     }
   }
 }

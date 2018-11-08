@@ -69,7 +69,6 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.setEnvContents = function(envType, list){
 
     var innerHtml = "";
-    // var envCnt    = 0;
     var allCnt    = 0; // 전체 환경값 갯수
     var existCnt  = 0; // 현재 등록된 환경값 갯수
 
@@ -83,9 +82,10 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
       storeEnvHtml += '<h3 class=\"h3_tbl2 lh30\">' + storeEnvstGrp.name + ' <button class=\"open\" id=\"fldGrpBtn'+ i +'\" onclick=\"javascript:fldGrp(\''+ i +'\');\"></button>';
 
       if (i === 0) { // 기본값으로 설정 버튼
-        storeEnvHtml += '<span class=\"fr\"><a href=\"javascript:;\" class=\"btn_grayS\" id=\"btnDefault\" ng-click=\"setDefault()\">';
+        storeEnvHtml += '<span class=\"fr\"><a href=\"javascript:;\" class=\"btn_grayS\" id=\"btnDefault\" onclick=\"setDefault()\">';
         storeEnvHtml += messages["storeManage.setting.default.env"];
         storeEnvHtml += '</a></span>';
+
       }
 
       storeEnvHtml += '</h3>';
@@ -207,28 +207,7 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
 
       $scope._popMsg(msg);
     }
-
-    // 기본값 설정 클릭 이벤트 추가 todo
-    $("#btnDefault").append(function(){
-      return $scope.setDefault();
-    });
-
   };
-
-  /*********************************************************
-   * 기본값으로 설정
-   * *******************************************************/
-  $scope.setDefault = function(){
-    //todo
-    // $scope._popMsg("준비중인 메뉴입니다.");
-    // return false;
-  };
-
-  // $("#btnDefault").click(function(){
-  //   alert("기기기ㅣ")
-  //   $scope.setDefault();
-  // });
-
 }]);
 
 /*********************************************************
@@ -244,3 +223,22 @@ var fldGrp = function(idx) {
   }
 };
 
+/*********************************************************
+ * 기본값으로 설정
+ * *******************************************************/
+function setDefault(){
+
+  var objEnvstCd      = document.getElementsByName("envstCd");
+  var objDirctInYn    = document.getElementsByName("dirctInYn");
+
+  for(var i=0; i<objEnvstCd.length; i++){
+
+    var defaultVal = $("#env"+objEnvstCd[i].value).attr("defaultVal");
+
+    if(objDirctInYn[i].value == "Y") {
+      $("#env"+objEnvstCd[i].value).val(defaultVal);
+    } else {
+      $("#env"+objEnvstCd[i].value).val(defaultVal).prop("selected", true);
+    }
+  }
+}

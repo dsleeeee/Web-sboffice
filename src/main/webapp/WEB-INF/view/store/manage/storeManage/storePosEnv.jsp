@@ -29,7 +29,7 @@
       </wj-combo-box>
     </div>
     <%-- 기본값으로 설정 --%>
-    <a href="#" id="btnDefault" class="btn_grayS mr10"><s:message code="storeManage.setting.default.env" /></a>
+    <a href="#" id="btnDefault" class="btn_grayS mr10" ng-click="setDefault()"><s:message code="storeManage.setting.default.env" /></a>
     <%-- 테이블 그룹설정 --%>
     <button id="btnSetTabGrp" type="button" class="btn_skyblue" ng-click="settingTableGroup()"><s:message code="storeManage.setting.tableGroup" /></button>
     <%-- 포스 명칭설정 --%>
