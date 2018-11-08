@@ -91,10 +91,7 @@ public class ProdController {
     @ResponseBody
     public Result getProdDetail(ProdVO prodVO, HttpServletRequest request) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        DefaultMap result = prodService.getProdDetail(prodVO, sessionInfoVO);
-        List<DefaultMap<String>> linkedProdList = prodService.getLinkedProdList(prodVO, sessionInfoVO);
-        result.put("linkedProdList", linkedProdList);
 
-        return returnJson(Status.OK, "list", result);
+        return returnJson(Status.OK, "list", prodService.getProdDetail(prodVO, sessionInfoVO));
     }
 }

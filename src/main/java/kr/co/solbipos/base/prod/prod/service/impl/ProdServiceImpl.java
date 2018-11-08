@@ -52,22 +52,21 @@ public class ProdServiceImpl implements ProdService {
 
     @Override
     public DefaultMap<String> getProdDetail(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+
+        DefaultMap result = new DefaultMap<>();
+
         // 소속구분 설정
         prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+        // 상품상세정보 조회
+        result = prodMapper.getProdDetail(prodVO);
 
-        return prodMapper.getProdDetail(prodVO);
-    }
+        // 연결상품목록 조회
+        List<DefaultMap<String>> linkedProdList = prodMapper.getLinkedProdList(prodVO);
+        result.put("linkedProdList", linkedProdList);
 
-    @Override
-    public List<DefaultMap<String>> getLinkedProdList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
-        // 소속구분 설정
-        prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        prodVO.setStoreCd(sessionInfoVO.getStoreCd());
-
-        return prodMapper.getLinkedProdList(prodVO);
+        return result;
     }
 
 }

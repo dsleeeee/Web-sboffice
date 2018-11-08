@@ -36,11 +36,4 @@ public interface ProdService {
      */
     DefaultMap<String> getProdDetail(ProdVO prodVO, SessionInfoVO sessionInfoVO);
 
-    /**
-     * 세션의 가맹점코드로 해당 가맹점의 연결상품정보 조회
-     * @param prodVO
-     * @param sessionInfoVO
-     * @return
-     */
-    List<DefaultMap<String>> getLinkedProdList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
 }
