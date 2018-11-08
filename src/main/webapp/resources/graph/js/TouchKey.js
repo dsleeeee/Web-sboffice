@@ -1789,12 +1789,13 @@ Format.prototype.save = function () {
   }
 
   var node = null;
+  // 상품분류 영역
   var enc = new mxCodec(mxUtils.createXmlDocument());
   node = enc.encode(classArea.getModel());
   var xmlClass = mxUtils.getXml(node);
 
-  var node = null;
-  var enc = new mxCodec(mxUtils.createXmlDocument());
+  // 상품 영역
+  enc = new mxCodec(mxUtils.createXmlDocument());
   node = enc.encode(prodArea.getModel());
   var xmlProd = mxUtils.getXml(node);
 
@@ -1970,9 +1971,10 @@ Graph.prototype.initClassArea = function (prodArea) {
       var layer;
       if (me.state == null) {
         // 클릭 할 때 오브젝트 생성
-        var pt = graph.getPointForEvent(me);
-        // 마우스 포인터 위치를 기준으로 Drop 가능한 위치 찾기
+        var pt = graph.getPointForEvent(me.evt);
+        // 마우스 포인터 위치를 기준으로 생성 가능한 위치 찾기
         var pos = graph.findPosition(pt);
+        // 가능한 위치가 아닌경우...
         if (pos == null) {
           mxEvent.consume(me);
           return false;
@@ -2014,7 +2016,7 @@ Graph.prototype.initClassArea = function (prodArea) {
       var model = prodArea.getModel();
       //그래프가 생성될 때 id=1은 이미 생성되어 있으므로 해당 레이어 삭제 후 재 생성
       prodArea.removeCells([model.getCell(1)]);
-      layer = createLayer(currId);
+      var layer = createLayer(currId);
 
       prodArea.switchLayer(layer);
     }
