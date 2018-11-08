@@ -4,7 +4,7 @@
     var curr = $(".btn_next").data("curr");
     var page_scale = $(this).parent().data("size");
     if((curr - page_scale) < 0) {
-      return;
+      return false;
     }
     page.makePage($(this), curr - page_scale, $(".btn_previous").data("tot"));
   });
@@ -15,7 +15,7 @@
     var page_scale = $(this).parent().data("size");
     var r = curr.toString().length > 1 ? (parseInt(curr.toString()[0])+1) * page_scale : curr;
     if(r > tot) {
-      return;
+      return false;
     }
     page.makePage($(this), curr + page_scale, tot);
   });
@@ -44,7 +44,7 @@
         item.end = 0;
         // 페이징 계산
         var t = curr / page_scale;
-        if ( t.toString().indexOf(".") == -1 ) {
+        if ( t.toString().indexOf(".") === -1 ) {
           item.end = curr;
           item.start = item.end - page_end;
         } else {
@@ -69,4 +69,4 @@
       }
   };
   win.page = page;
-}( "undefined" != typeof window ? window : this, jQuery );
+}( "undefined" !== typeof window ? window : this, jQuery );

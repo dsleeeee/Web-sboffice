@@ -41,17 +41,27 @@
       <div class="mt10 tr">
         <button class="btn_skyblue" id="btnSearch" ng-click="_broadcast('storeCtrl')" ><s:message code="cmm.search" /></button>
       </div>
+
       <div class="oh mt40">
+
+        <%-- 페이지 스케일  --%>
+        <div class="mt10 oh sb-select dkbr" style="display: none;">
+          <wj-combo-box
+                  class="w100px fl"
+                  id="listScaleBox"
+                  ng-model="listScale"
+                  items-source="_getComboData('listScaleBox')"
+                  display-member-path="name"
+                  selected-value-path="value"
+                  is-editable="false"
+                  initialized="initComboBox(s)">
+          </wj-combo-box>
+        </div>
+        <%--// 페이지 스케일  --%>
 
         <%--- 매장 그리드 --%>
         <div class="fl">
-          <div class="wj-TblWrap mr10" style="height:350px;">
-            <%--
-            <div class="oh mb10">
-              <span class="fl bk lh20 s14"><s:message code="coupon.regProd"/></span>
-              <span class="fr"><a href="#" class="btn_grayS2" ng-click="delete()"><s:message code="cmm.del" /></a></span>
-            </div>
-            --%>
+          <div class="wj-TblWrap mr10" style="height:310px;">
             <div id="storeGrid" style="height: 270px;">
               <wj-flex-grid
                       autoGenerateColumns="false"
@@ -74,7 +84,15 @@
               </wj-flex-grid>
             </div>
           </div>
+
+          <%-- 페이지 리스트 --%>
+          <div class="pageNum mt5 mb5">
+            <ul id="storeCtrlPager" data-size="10">
+            </ul>
+          </div>
+          <%--//페이지 리스트--%>
         </div>
+
       </div>
     </div>
   </div>
@@ -85,4 +103,4 @@
   var clsFg        = ${ccu.getCommCodeExcpAll("001")};
   var sysStatFg    = ${ccu.getCommCodeExcpAll("005")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/store.js?ver=20181006.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/store.js?ver=2018110501" charset="utf-8"></script>

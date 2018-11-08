@@ -40,8 +40,13 @@ app.controller('hqEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     params.hqOfficeCd = hqScope.getSelectedHq().hqOfficeCd;
 
     $scope._postJSONQuery.withPopUp( '/store/hq/hqManage/config/getConfiglist.sb', params, function(response){
+
       if (!$.isEmptyObject(response.data)) {
+
+        $("#hqEnvTitle").text("[" + hqScope.getSelectedHq().hqOfficeCd + "] " + hqScope.getSelectedHq().hqOfficeNm);
+
         var list = response.data.data.list;
+
         $scope.$broadcast('loadingPopupInactive');
         $scope.setEnvContents(list);
       }
@@ -66,7 +71,7 @@ app.controller('hqEnvCtrl', ['$scope', '$http', function ($scope, $http) {
       hqEnvHtml += '<h3 class=\'h3_tbl2 lh30\'>' + hqEnvstGrp.name + '<button class=\'open\'></button>';
 
       if (i === 0) { // 기본사항에 기본값으로 설정 버튼 추가
-        hqEnvHtml += '<span class=\'fr\'><a href=\'javascript:;\' class=\'btn_grayS\' id=\'btnDefault\' ng-click=\'setDefault()\'>';
+        hqEnvHtml += '<span class=\'fr\'><a href=\'javascript:;\' class=\'btn_grayS\' id=\'btnDefault\' onclick=\'setDefault()\'>';
         hqEnvHtml += messages["hqManage.setting.default.env"];
         hqEnvHtml += '</a></span>';
       }
@@ -280,29 +285,12 @@ app.controller('hqEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     // return false;
   };
 
-  // $("#btnDefault").click(function(){
-  //   alert("기기기ㅣ")
-  //   $scope.setDefault();
-  // });
-
-
   /*********************************************************
    * 매장정보 탭 클릭
    * *******************************************************/
   $scope.showHqInfo = function(){
     $scope.hqEnvLayer.hide();
-
-    var hqInfoPopup = $scope.hqInfoLayer;
-
-    // 팝업 열린 뒤. 딜레이줘서 열리고 나서 실행되도록 함
-    hqInfoPopup.shown.addHandler(function (s) {
-      setTimeout(function() {
-        $scope._broadcast('hqInfoCtrl');
-      }, 50)
-    });
-
-    // 팝업 닫을때
-    hqInfoPopup.show(true, function (s) {
+    $scope.hqInfoLayer.show(true, function (s) {
     });
   };
 
@@ -310,20 +298,28 @@ app.controller('hqEnvCtrl', ['$scope', '$http', function ($scope, $http) {
    * 메뉴권한 탭 클릭
    * *******************************************************/
   $scope.showMenuSetting = function(){
-    // $scope.hqEnvLayer.hide();
-    //
-    // var hqInfoPopup = $scope.hqInfoLayer;
-    //
-    // // 팝업 열린 뒤. 딜레이줘서 열리고 나서 실행되도록 함
-    // hqInfoPopup.shown.addHandler(function (s) {
-    //   setTimeout(function() {
-    //     $scope._broadcast('hqInfoCtrl');
-    //   }, 50)
-    // });
-    //
-    // // 팝업 닫을때
-    // hqInfoPopup.show(true, function (s) {
-    // });
   };
+
 }]);
 
+/*********************************************************
+ * 기본값 설정버튼 클릭
+ * *******************************************************/
+function setDefault(){
+  alert('setDefault');
+
+  var objDefaultCd  = document.getElementsByName("defltYn");
+  var objEnvstValCd = document.getElementsByName("envstValCd");
+
+  var loop_cnt = objEnvstValCd.length;
+  for(var i = 0; i < loop_cnt; i++)
+  {
+    console.log(objEnvstValCd[i])
+    console.log(objDefaultCd[i])
+
+    if(objEnvstValCd[i].value !== '')
+    {
+      //objEnvstValCd[i].value = objDefaultCd[i].value;
+    }
+  }
+}

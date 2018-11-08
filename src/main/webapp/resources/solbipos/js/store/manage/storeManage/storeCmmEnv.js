@@ -36,7 +36,7 @@ app.controller('cmmEnvCtrl', ['$scope', '$http', function ($scope, $http) {
 
     $("#envGroupTab li a").each(function(index, item){
 
-      if($(this).attr("envstFg") == envGroupCd) {
+      if($(this).attr("envstFg") === envGroupCd) {
         $(this).attr("class", "on");
       } else {
         $(this).removeAttr("class");
@@ -47,6 +47,7 @@ app.controller('cmmEnvCtrl', ['$scope', '$http', function ($scope, $http) {
 
       $("#cmmEnvArea").show();
       $("#posEnvArea").hide();
+      $("#posFuncKeyArea").hide();
       $("#kitchenPrintArea").hide();
       $("#kitchenPrintProductArea").hide();
 
@@ -57,6 +58,11 @@ app.controller('cmmEnvCtrl', ['$scope', '$http', function ($scope, $http) {
       var posEnvScope = agrid.getScope('posEnvCtrl');
       posEnvScope.changeEnvGroup(envGroupCd);
 
+    } else if(envGroupCd === "10") { // 포스기능키
+
+      var posFuncKeyScope = agrid.getScope('funcKeyCtrl');
+      posFuncKeyScope.changeEnvGroup(envGroupCd);
+
     } else if(envGroupCd === "98"){ // 주방프린터
 
       var kitchenPrintScope = agrid.getScope('kitchenPrintCtrl');
@@ -65,9 +71,8 @@ app.controller('cmmEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     } else if(envGroupCd === "99") { // 주방프린터 상품연결
 
       var kitchenPrintProdScope = agrid.getScope('kitchenPrintProductCtrl');
-      console.log(kitchenPrintProdScope);
-
       kitchenPrintProdScope.changeEnvGroup(envGroupCd);
+
     }
 
   };
@@ -83,9 +88,6 @@ app.controller('cmmEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     params.hqOfficeCd = storeScope.getSelectedStore().hqOfficeCd;
     params.storeCd    = storeScope.getSelectedStore().storeCd;
     params.envstFg    = envGroupCd;
-
-    console.log(params);
-
 
     $scope.$broadcast('loadingPopupActive');
 
@@ -120,17 +122,17 @@ app.controller('cmmEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     var env2001 = $("#env2001").val();
     var env2002 = $("#env2002").val();
 
-    if(env2001 == '1' && (env2002 == null || env2002 == '')) {
+    if(env2001 === '1' && (env2002 == null || env2002 === '')) {
       $scope._popMsg(messages["storeManage.require.serviceRate"]);
       return false;
     }
 
     var chngCnt  = 0; // 변경된 건수
-    var params = new Array();
+    var params = [];
 
     for(var i=0; i<objEnvstCd.length; i++){
 
-      if(objDirctInYn[i].value == "Y" && objEnvstValCd[i].value == ""){
+      if(objDirctInYn[i].value === "Y" && objEnvstValCd[i].value === ""){
         var msgStr = messages["hqManage.envSetting"] + " ["
             + objEnvstCd[i].value + "] "
             + objEnvstNm[i].value
@@ -140,12 +142,12 @@ app.controller('cmmEnvCtrl', ['$scope', '$http', function ($scope, $http) {
         return false;
       }
 
-      if(objOldEnvstVal[i].value != $("#env"+objEnvstCd[i].value).val()) {
+      if(objOldEnvstVal[i].value !== $("#env"+objEnvstCd[i].value).val()) {
         chngCnt ++;
       }
     }
 
-    if(chngCnt == 0 ){
+    if(chngCnt === 0 ){
       $scope._popMsg(messages["cmm.not.modify"]);
       return false;
     }
@@ -182,7 +184,6 @@ app.controller('cmmEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     });
     event.preventDefault();
   };
-
 
 }]);
 

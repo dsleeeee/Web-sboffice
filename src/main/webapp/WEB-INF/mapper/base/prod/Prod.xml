@@ -308,8 +308,8 @@
         PARAM    : prodVO
         COMMENTS : 상품의 연결상품을 조회한다. ( 본사/매장 )
     -->
-    <select id="getUnitstProdList" parameterType="prodVO" resultType="DefaultMap">
-        /* USE : ProdMapper.getUnitstProdList */
+    <select id="getLinkedProdList" parameterType="prodVO" resultType="DefaultMap">
+        /* USE : ProdMapper.getLinkedProdList */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>

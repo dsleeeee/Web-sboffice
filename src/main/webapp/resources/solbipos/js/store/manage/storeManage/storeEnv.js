@@ -74,81 +74,81 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     var existCnt  = 0; // 현재 등록된 환경값 갯수
 
     // 환경변수 테이블 그리기
-    for(var i=0; i<envstGrp.length; i++) {
+    for (var i = 0; i < envstGrp.length; i++) {
 
       var storeEnvCnt = 0;
       var storeEnvHtml = "";
       var storeEnvstGrp = envstGrp[i];
 
-      storeEnvHtml += "<h3 class='h3_tbl2 lh30'>" + storeEnvstGrp.name + " <button class='open'></button>";
+      storeEnvHtml += '<h3 class=\"h3_tbl2 lh30\">' + storeEnvstGrp.name + ' <button class=\"open\" id=\"fldGrpBtn'+ i +'\" onclick=\"javascript:fldGrp(\''+ i +'\');\"></button>';
 
-      if (i == 0) { // 기본값으로 설정 버튼
-        storeEnvHtml += "<span class='fr'><a href='javascript:;' class='btn_grayS' id='btnDefault' ng-click='setDefault()'>";
+      if (i === 0) { // 기본값으로 설정 버튼
+        storeEnvHtml += '<span class=\"fr\"><a href=\"javascript:;\" class=\"btn_grayS\" id=\"btnDefault\" ng-click=\"setDefault()\">';
         storeEnvHtml += messages["storeManage.setting.default.env"];
-        storeEnvHtml += "</a></span>";
+        storeEnvHtml += '</a></span>';
       }
 
-      storeEnvHtml += "</h3>";
-      storeEnvHtml += "<table class='searchTbl'>";
-      storeEnvHtml += "  <colgroup>";
-      storeEnvHtml += "    <col class='w5' />";
-      storeEnvHtml += "    <col class='w25' />";
-      storeEnvHtml += "    <col class='w20' />";
-      storeEnvHtml += "    <col class='w5' />";
-      storeEnvHtml += "    <col class='w25' />";
-      storeEnvHtml += "    <col class='w20' />";
-      storeEnvHtml += "  </colgroup>";
-      storeEnvHtml += "<tbody>";
+      storeEnvHtml += '</h3>';
+      storeEnvHtml += '<table id=\"searchTbl' + i + '\" class=\"searchTbl\">';
+      storeEnvHtml += '  <colgroup>';
+      storeEnvHtml += '    <col class=\"w5\" />';
+      storeEnvHtml += '    <col class=\"w25\" />';
+      storeEnvHtml += '    <col class=\"w20\" />';
+      storeEnvHtml += '    <col class=\"w5\" />';
+      storeEnvHtml += '    <col class=\"w25\" />';
+      storeEnvHtml += '    <col class=\"w20\" />';
+      storeEnvHtml += '  </colgroup>';
+      storeEnvHtml += '<tbody>';
 
       var b_env = ""; // 변경전의 환경변수
 
       for (var j = 0; j < list.length; j++) {
 
-        if (storeEnvstGrp.value == list[j].envstGrpCd) {
-          if (b_env == "" || b_env != list[j].envstCd) {
-            if (storeEnvCnt == 0 || storeEnvCnt % 2 == 0) storeEnvHtml += "<tr>";
+        if (storeEnvstGrp.value === list[j].envstGrpCd) {
+          if (b_env === "" || b_env !== list[j].envstCd) {
+            if (storeEnvCnt === 0 || storeEnvCnt % 2 === 0) storeEnvHtml += '<tr>';
 
-            storeEnvHtml += "  <th class='tc'>" + list[j].envstCd + "</th>";
-            storeEnvHtml += "  <td>" + list[j].envstNm + "</td>";
-            storeEnvHtml += "  <td>";
+            storeEnvHtml += '  <th class=\"tc\">' + list[j].envstCd + '</th>';
+            storeEnvHtml += '  <td>' + list[j].envstNm + '</td>';
+            storeEnvHtml += '  <td>';
 
-            if (list[j].dirctInYn == "Y") { // 직접입력
-              storeEnvHtml += "    <input type='text' name='envstValCd' id='env" + list[j].envstCd + "' class='sb-input w100'>";
+            if (list[j].dirctInYn === "Y") { // 직접입력
+              storeEnvHtml += '    <input type=\"text\" name=\"envstValCd\" id=\"env' + list[j].envstCd + '\" class=\"sb-input w100\">';
             } else {  // 값 선택
-              storeEnvHtml += "    <select name='envstValCd' id='env" + list[j].envstCd + "' class='sb-select w100' />";
+              storeEnvHtml += '    <select name=\"envstValCd\" id=\"env' + list[j].envstCd + '\" class=\"sb-select w100\" />';
             }
 
-            storeEnvHtml += "    <input type='hidden' name='status'    value='" + (list[j].existFg == "N" ? "I" : "U") + "'>";
-            storeEnvHtml += "    <input type='hidden' name='envstCd'   value='" + list[j].envstCd + "'>";
-            storeEnvHtml += "    <input type='hidden' name='envstNm'   value='" + list[j].envstNm + "'>";
-            storeEnvHtml += "    <input type='hidden' name='envstGrpCd'value='" + list[j].envstGrpCd + "'>";
-            storeEnvHtml += "    <input type='hidden' name='defltYn'   value='" + list[j].defltYn + "'>";
-            storeEnvHtml += "    <input type='hidden' name='dirctInYn' value='" + list[j].dirctInYn + "'>";
-            storeEnvHtml += "    <input type='hidden' name='targtFg'   value='" + list[j].targtFg + "'>";
-            storeEnvHtml += "    <input type='hidden' name='oldEnvstVal'   value='" + list[j].selEnvstVal + "'>";
-            storeEnvHtml += "  </td>";
+            storeEnvHtml += '    <input type=\"hidden\" name=\"status\"      value=\"' + (list[j].existFg === "N" ? "I" : "U") + '\">';
+            storeEnvHtml += '    <input type=\"hidden\" name=\"envstCd\"     value=\"' + list[j].envstCd + '\">';
+            storeEnvHtml += '    <input type=\"hidden\" name=\"envstNm\"     value=\"' + list[j].envstNm + '\">';
+            storeEnvHtml += '    <input type=\"hidden\" name=\"envstGrpCd\"  value=\"' + list[j].envstGrpCd + '\">';
+            storeEnvHtml += '    <input type=\"hidden\" name=\"defltYn\"     value=\"' + list[j].defltYn + '\">';
+            storeEnvHtml += '    <input type=\"hidden\" name=\"dirctInYn\"   value=\"' + list[j].dirctInYn + '\">';
+            storeEnvHtml += '    <input type=\"hidden\" name=\"targtFg\"     value=\"' + list[j].targtFg + '\">';
+            storeEnvHtml += '    <input type=\"hidden\" name=\"oldEnvstVal\" value=\"' + list[j].selEnvstVal + '\">';
+            storeEnvHtml += '  </td>';
 
             b_env = list[j].envstCd;
             storeEnvCnt++;
             allCnt++;
 
-            if (list[j].existFg == "Y") existCnt++;
-            if (list[j].envstCdCnt == storeEnvCnt && (storeEnvCnt % 2 == 1)) {
-              storeEnvHtml += "  <td class='tc'></td>";
-              storeEnvHtml += "  <td></td>";
-              storeEnvHtml += "  <td></td>";
-              storeEnvHtml += "</tr>";
-            } else if (storeEnvCnt % 2 == 0) {
-              storeEnvHtml += "</tr>";
+            if (list[j].existFg === "Y") existCnt++;
+            if (list[j].envstCdCnt === storeEnvCnt && (storeEnvCnt % 2 === 1)) {
+              storeEnvHtml += '  <td class=\"tc\"></td>';
+              storeEnvHtml += '  <td></td>';
+              storeEnvHtml += '  <td></td>';
+              storeEnvHtml += '</tr>';
+            } else if (storeEnvCnt % 2 === 0) {
+              storeEnvHtml += '</tr>';
             }
           }
         }
       }
 
-      storeEnvHtml += "  </tbody>";
-      storeEnvHtml += "</table>";
-      storeEnvHtml += "</div>";
-      storeEnvHtml += "<br>";
+      storeEnvHtml += '  </tbody>';
+      storeEnvHtml += '</table>';
+      storeEnvHtml += '</div>';
+      storeEnvHtml += '<br>';
 
       if (storeEnvCnt > 0) innerHtml += storeEnvHtml;
     }
@@ -163,35 +163,35 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     var envstCd = "";
     var sOption = false;
 
-    for(var i=0; i<list.length; i++){
-      if(list[i].dirctInYn == "N") {
-        $("#env"+list[i].envstCd).append("<option value='"+ list[i].envstValCd +"' >" + list[i].envstValNm +  "</option>");
-        if(i == 0 || envstCd != list[i].envstCd ) {
-          envstCd = list[i].envstCd;
-          if(list[i].selEnvstVal == list[i].envstValCd){
+    for (var s = 0; s < list.length; s++) {
+      if(list[s].dirctInYn === "N") {
+        $("#env"+list[s].envstCd).append('<option value=\"'+ list[s].envstValCd +'\" >' + list[s].envstValNm +  '</option>');
+        if(i === 0 || envstCd !== list[s].envstCd ) {
+          envstCd = list[s].envstCd;
+          if(list[s].selEnvstVal === list[s].envstValCd){
             sOption = true;
-            $("#env"+list[i].envstCd).val(list[i].envstValCd).prop("selected", true);
+            $("#env"+list[s].envstCd).val(list[s].envstValCd).prop("selected", true);
           }
           else{
             sOption = false;
-            $("#env"+list[i].envstCd).val(list[i].envstValCd).prop("selected", true);
+            $("#env"+list[s].envstCd).val(list[s].envstValCd).prop("selected", true);
           }
-        }else if(list[i].selEnvstVal == list[i].envstValCd){
+        }else if(list[s].selEnvstVal === list[s].envstValCd){
           sOption = true;
-          $("#env"+list[i].envstCd).val(list[i].envstValCd).prop("selected", true);
-        }else if(sOption == false && list[i].defltYn == "Y") {
-          $("#env"+list[i].envstCd).val(list[i].envstValCd).prop("selected", true);
+          $("#env"+list[s].envstCd).val(list[s].envstValCd).prop("selected", true);
+        }else if(sOption === false && list[s].defltYn === "Y") {
+          $("#env"+list[s].envstCd).val(list[s].envstValCd).prop("selected", true);
         }
 
-        if(list[i].defltYn == "Y") {
-          $("#env"+list[i].envstCd).attr("defaultVal", list[i].envstValCd);
+        if(list[s].defltYn === "Y") {
+          $("#env"+list[s].envstCd).attr("defaultVal", list[s].envstValCd);
         }
 
       } else {
-        if(list[i].selEnvstVal === "" || list[i].selEnvstVal == null ) {
-          $("#env"+list[i].envstCd).val("*");
+        if(list[s].selEnvstVal === "" || list[s].selEnvstVal == null ) {
+          $("#env"+list[s].envstCd).val("*");
         } else{
-          $("#env"+list[i].envstCd).val(list[i].selEnvstVal);
+          $("#env"+list[s].envstCd).val(list[s].selEnvstVal);
         }
       }
     }
@@ -230,4 +230,17 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
   // });
 
 }]);
+
+/*********************************************************
+ * 그룹 접기
+ * *******************************************************/
+var fldGrp = function(idx) {
+  if ($('#fldGrpBtn' + idx).attr('class') === 'open') {
+    $('#searchTbl' + idx).hide();
+    $('#fldGrpBtn' + idx).removeClass("open").addClass("close");
+  } else {
+    $('#searchTbl' + idx).show();
+    $('#fldGrpBtn' + idx).removeClass("close").addClass("open");
+  }
+};
 

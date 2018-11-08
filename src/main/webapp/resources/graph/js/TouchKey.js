@@ -74,22 +74,26 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
   // 필터 적용
   var toFilter = null;
   $scope.updateFilter = function(part, value) {
-    if (value) {
+    if ( part === "touchKeyUsed" ) {
       if (value === "A") {
         value = "";
       } else {
         value = value === "T";
       }
-      // update filter
-      $scope.filter[part] = value;
-      // reschedule update
-      if (toFilter) clearTimeout(toFilter);
-      toFilter = setTimeout(function () {
-        if ($scope.data) {
-          $scope.data.refresh();
-        }
-      }, 100);
+    } else if ( part === "prodClassCd" ) {
+      if ( value === "" ) {
+        value = false;
+      }
     }
+    // update filter
+    $scope.filter[part] = value;
+    // reschedule update
+    if (toFilter) clearTimeout(toFilter);
+    toFilter = setTimeout(function () {
+      if ($scope.data) {
+        $scope.data.refresh();
+      }
+    }, 100);
   };
   // 버튼사용여부 필터 콤보
   $scope._setComboData("touchKeyFilterCombo", touchKeyFilterData);
@@ -120,7 +124,7 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
       // 필터 수행
       $scope.data.filter = function(item) {
         var prodClassCd = $scope.filter.prodClassCd;
-        if (prodClassCd && item.prodClassCd.toLowerCase().indexOf(prodClassCd.toLowerCase()) < 0) {
+        if (prodClassCd && item.prodClassCd.indexOf(prodClassCd) < 0) {
           return false;
         }
         var touchKeyUsed = $scope.filter.touchKeyUsed;

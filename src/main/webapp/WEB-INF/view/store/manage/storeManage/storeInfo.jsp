@@ -77,13 +77,13 @@
               <td>
                 <div class="sb-select" >
                   <wj-input-date
-                          value="sysOpenDate"
-                          ng-model="store.sysOpenDate"
-                          control="sysOpenDateCombo"
-                          format="yyyy/MM/dd"
-                          min="2000-01-01"
-                          max="2099-12-31"
-                          initialized="_initDateBox(s)">
+                    value="sysOpenDate"
+                    ng-model="store.sysOpenDate"
+                    control="sysOpenDateCombo"
+                    format="yyyy/MM/dd"
+                    min="2000-01-01"
+                    max="2099-12-31"
+                    initialized="_initDateBox(s)">
                   </wj-input-date>
                 </div>
               </td>
@@ -92,15 +92,15 @@
               <td>
                 <div class="sb-select">
                   <wj-combo-box
-                          id="sysStatFg"
-                          ng-model="store.sysStatFg"
-                          control="sysStatFgCombo"
-                          items-source="_getComboData('sysStatFg')"
-                          display-member-path="name"
-                          selected-value-path="value"
-                          is-editable="false"
-                          initialized="_initComboBox(s)"
-                          selected-index-changed="setSysStatFgVal(s,e)">
+                    id="sysStatFg"
+                    ng-model="store.sysStatFg"
+                    control="sysStatFgCombo"
+                    items-source="_getComboData('sysStatFg')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="_initComboBox(s)"
+                    selected-index-changed="setSysStatFgVal(s,e)">
                   </wj-combo-box>
                 </div>
               </td>
@@ -111,16 +111,16 @@
               <td>
                 <div class="sb-select">
                   <wj-combo-box
-                          id="clsFg"
-                          ng-model="store.clsFg"
-                          control="clsFgCombo"
-                          items-source="_getComboData('clsFg')"
-                          display-member-path="name"
-                          selected-value-path="value"
-                          is-editable="false"
-                          initialized="_initComboBox(s)"
-                          selected-index-changed="setClsFgVal(s,e)"
-                          is-read-only="true">
+                    id="clsFg"
+                    ng-model="store.clsFg"
+                    control="clsFgCombo"
+                    items-source="_getComboData('clsFg')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="_initComboBox(s)"
+                    selected-index-changed="setClsFgVal(s,e)"
+                    is-read-only="true">
                   </wj-combo-box>
                 </div>
               </td>
@@ -129,15 +129,15 @@
               <td>
                 <div class="sb-select">
                   <wj-combo-box
-                          id="areaCd"
-                          ng-model="store.areaCd"
-                          control="areaCdCombo"
-                          items-source="_getComboData('areaCd')"
-                          display-member-path="name"
-                          selected-value-path="value"
-                          is-editable="false"
-                          initialized="_initComboBox(s)"
-                          selected-index-changed="setAreaCdVal(s,e)">
+                    id="areaCd"
+                    ng-model="store.areaCd"
+                    control="areaCdCombo"
+                    items-source="_getComboData('areaCd')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="_initComboBox(s)"
+                    selected-index-changed="setAreaCdVal(s,e)">
                   </wj-combo-box>
                 </div>
               </td>
@@ -275,29 +275,29 @@
                     <%-- 본사 선택 --%>
                     <div class="sb-select">
                       <wj-combo-box
-                              id="envHqOfficeCd"
-                              ng-model="store.copyHqOfficeCd"
-                              control="envHqOfficeCdCombo"
-                              items-source="_getComboData('envHqOfficeCd')"
-                              display-member-path="name"
-                              selected-value-path="value"
-                              is-editable="false"
-                              initialized="_initComboBox(s)"
-                              selected-index-changed="setEnvHqOfficeCdVal(s,e)">
+                        id="envHqOfficeCd"
+                        ng-model="store.copyHqOfficeCd"
+                        control="envHqOfficeCdCombo"
+                        items-source="_getComboData('envHqOfficeCd')"
+                        display-member-path="name"
+                        selected-value-path="value"
+                        is-editable="false"
+                        initialized="_initComboBox(s)"
+                        selected-index-changed="setEnvHqOfficeCdVal(s,e)">
                       </wj-combo-box>
                     </div>
                     <%-- 매장선택 --%>
                     <div class="sb-select">
                       <wj-combo-box
-                              id="envStoreCd"
-                              ng-model="store.copyStoreCd"
-                              control="envStoreCdCombo"
-                              items-source="_getComboData('envStoreCd')"
-                              display-member-path="name"
-                              selected-value-path="value"
-                              is-editable="false"
-                              initialized="_initComboBox(s)"
-                              selected-index-changed="setEnvStoreCdVal(s,e)">
+                        id="envStoreCd"
+                        ng-model="store.copyStoreCd"
+                        control="envStoreCdCombo"
+                        items-source="_getComboData('envStoreCd')"
+                        display-member-path="name"
+                        selected-value-path="value"
+                        is-editable="false"
+                        initialized="_initComboBox(s)"
+                        selected-index-changed="setEnvStoreCdVal(s,e)">
                       </wj-combo-box>
                     </div>
                   </div>
@@ -355,7 +355,7 @@
   var hqList = ${ccu.getHqOfficeList()};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20181106.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20181107.01" charset="utf-8"></script>
 
 <%-- 사업자번호 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/checkBizNo.jsp">

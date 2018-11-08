@@ -27,14 +27,14 @@ public interface ProdService {
      * @param prodVO 세션정보
      * @return XML_String
      */
-    List<DefaultMap<String>> list(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+    List<DefaultMap<String>> getProdList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
 
     /**
      * 세션의 가맹점코드로 해당 가맹점의 상품정보 상세 조회
      * @param prodVO 세션정보
      * @return XML_String
      */
-    DefaultMap<String> detail(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+    DefaultMap<String> getProdDetail(ProdVO prodVO, SessionInfoVO sessionInfoVO);
 
     /**
      * 세션의 가맹점코드로 해당 가맹점의 연결상품정보 조회
@@ -42,5 +42,5 @@ public interface ProdService {
      * @param sessionInfoVO
      * @return
      */
-    List<DefaultMap<String>> unitstProdList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+    List<DefaultMap<String>> getLinkedProdList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
 }

@@ -63,7 +63,7 @@ app.controller('funcKeyCtrl', ['$scope', '$http', 'saveInfo', function ($scope, 
     $scope.$apply();
 
   };
-  // 출력코드구성 그리드 조회
+  // 포스기능키목록 그리드 조회
   $scope.$on("funcKeyCtrl", function(event, data) {
     // 파라미터
     var params = {};
@@ -105,6 +105,67 @@ app.controller('funcKeyCtrl', ['$scope', '$http', 'saveInfo', function ($scope, 
       cf.filterType = $scope.fnkeyUsedFilterType;
     }
   });
+
+  /*********************************************************
+   * 매장환경 탭 변경
+   * *******************************************************/
+  $scope.changeEnvGroup = function(envGroupCd){
+
+    var storeScope    = agrid.getScope('storeManageCtrl');
+    var storeCd       = storeScope.getSelectedStore().storeCd;
+
+    selectedRow = {};
+    selectedRow.storeCd = storeCd;
+    selectedRow.posNo = '1';
+    selectedRow.fnkeyFg = '6020';
+
+    // 탭 변경
+    $("#envGroupTab li a").each(function(index, item){
+      if($(this).attr("envstFg") === envGroupCd) {
+        $(this).attr("class", "on");
+      } else {
+        $(this).removeAttr("class");
+      }
+    });
+
+    if(envGroupCd === "00" || envGroupCd === "01" || envGroupCd === "02") { // 매장환경, 외식환경 유통환경 환경변수
+
+      var cmmEnvScope = agrid.getScope('cmmEnvCtrl');
+      cmmEnvScope.changeEnvGroup(envGroupCd);
+
+    } else if(envGroupCd === "03") { // 포스환경
+
+      var posEnvScope = agrid.getScope('posEnvCtrl');
+      posEnvScope.changeEnvGroup(envGroupCd);
+
+    } else if(envGroupCd === "10") { // 포스기능키
+
+      $("#cmmEnvArea").hide();
+      $("#posEnvArea").hide();
+      $("#posFuncKeyArea").show();
+      $("#kitchenPrintArea").hide();
+      $("#kitchenPrintProductArea").hide();
+
+      // 포스기능 키 목록 조회
+      $scope._broadcast('funcKeyCtrl');
+      $scope.setSaveInfo("storeCd", storeCd);
+      // scope.setSaveInfo("posNo", selectedRow.posNo);
+      // scope.setSaveInfo("fnkeyFg", selectedRow.fnkeyFg);
+
+    } else if(envGroupCd === "98") { // 주방프린터
+
+      var kitchenPrintScope = agrid.getScope('kitchenPrintCtrl');
+      kitchenPrintScope.changeEnvGroup(envGroupCd);
+
+    } else if(envGroupCd === "99") { // 주방프린터 상품연결
+
+      var kitchenPrintProdScope = agrid.getScope('kitchenPrintProductCtrl');
+      kitchenPrintProdScope.changeEnvGroup(envGroupCd);
+
+    }
+  };
+
+
 }]);
 app.factory('saveInfo', function () {
   var saveInfo = [];

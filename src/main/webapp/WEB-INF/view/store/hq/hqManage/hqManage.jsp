@@ -74,7 +74,7 @@
     </tbody>
   </table>
 
-  <div class="mt10 pdb20 oh">
+  <div class="mt10 pdb10 oh bb">
     <%-- 조회 --%>
     <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('hqManageCtrl')"><s:message code="cmm.search" /></button>
   </div>

@@ -9,7 +9,7 @@
     <%-- header --%>
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="hqManage.envSetting" />
-      <span id="storeEnvTitle" class="ml20"></span>
+      <span id="hqEnvTitle" class="ml20"></span>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
 

@@ -61,8 +61,6 @@ app.controller('hqInfoCtrl', ['$scope', '$http', function ($scope, $http) {
    * *******************************************************/
   $scope.$on("hqInfoCtrl", function(event, data) {
 
-    console.log(">>>>>");
-
     var hqScope = agrid.getScope('hqManageCtrl');
 
     if($.isEmptyObject(hqScope.getSelectedHq()) ) {
@@ -102,10 +100,8 @@ app.controller('hqInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     var hqScope = agrid.getScope('hqManageCtrl'); // 선택된 매장
     var params  = hqScope.getSelectedHq();
 
-    // todo 데이터 메세지
-    // 데이터가 있는데 response.data.message 가 '"조회 데이터가 shown.addHandle없습니다."' 라고 나오는 경우
     $scope._postJSONQuery.withOutPopUp( '/store/hq/hqManage/master/getHqDetailInfo.sb', params, function(response){
-      console.log(response.data)
+      // console.log(response.data)
       if($.isEmptyObject(response.data) ) {
         $scope._popMsg(messages["cmm.empty.data"]);
         $scope.hqInfoLayer.hide();
@@ -252,7 +248,6 @@ app.controller('hqInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     var params         = $scope.hq;
     params.sysOpenDate = dateToDaystring($scope.hq.sysOpenDate);
 
-
     var hqScope = agrid.getScope('hqManageCtrl');
 
     // 본사 신규 등록시
@@ -268,11 +263,11 @@ app.controller('hqInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
       $scope._postJSONSave.withPopUp("/store/hq/hqManage/master/saveHqInfo.sb", params, function () {
         $scope._popMsg(messages["cmm.saveSucc"]);
-        
+
         // 본사목록 재조회
         var hqScope = agrid.getScope('hqManageCtrl');
         hqScope.getHqList();
-        
+
         $scope.hqInfoLayer.hide();
       });
     }

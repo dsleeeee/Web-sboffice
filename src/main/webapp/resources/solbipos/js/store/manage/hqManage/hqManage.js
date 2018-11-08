@@ -69,7 +69,6 @@ app.controller('hqManageCtrl', ['$scope', '$http', function ($scope, $http) {
           // 팝업 닫을때
           popup.show(true, function (s) {
           });
-
           event.preventDefault();
         }
       }
@@ -89,32 +88,20 @@ app.controller('hqManageCtrl', ['$scope', '$http', function ($scope, $http) {
     });
   };
 
-  // todo
-  // angular.element(document).ready(function () {
-  //   // 팝업 열린 뒤. 딜레이줘서 열리고 나서 실행되도록 함
-  //   $scope.hqInfoLayer.shown.addHandler(function (s) {
-  //     // setTimeout(function() {
-  //     //   $scope._broadcast('hqInfoCtrl');
-  //     // }, 50)
-  //   });
-  //   // 팝업 닫을때
-  //   // $scope.hqInfoLayer.show(true, function (s) {
-  //   // });
-  // });
-
-  // 본사 신규 등록
-  $scope.regist = function(){
-    $scope.setSelectedHq(null);
-    // $scope.hqInfoLayer.shown();
-
+  // 화면 ready 된 후 설정
+  angular.element(document).ready(function () {
+    // 팝업 핸들러 추가
     $scope.hqInfoLayer.shown.addHandler(function (s) {
       setTimeout(function() {
         $scope._broadcast('hqInfoCtrl');
       }, 50)
     });
-    // 팝업 닫을때
+  });
+
+  // 본사 신규 등록
+  $scope.regist = function(){
+    $scope.setSelectedHq(null);
     $scope.hqInfoLayer.show(true, function (s) {
     });
   };
-
 }]);

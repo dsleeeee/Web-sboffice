@@ -1,16 +1,18 @@
 package kr.co.common.utils.grid;
 
 
-import static org.springframework.util.ObjectUtils.*;
-import java.util.HashMap;
-import java.util.List;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.solbipos.application.common.service.PageVO;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
+
+import java.util.HashMap;
+import java.util.List;
+
+import static org.springframework.util.ObjectUtils.isEmpty;
 
 /**
  * @author 정용길
@@ -96,7 +98,7 @@ public class ReturnUtil {
             List<DefaultMap<Object>> a = (List<DefaultMap<Object>>) data;
             
             if(PageVO.class.isAssignableFrom(page.getClass().getSuperclass())) {
-                PageVO p = PageVO.class.cast(page);
+                PageVO p = (PageVO) page;
                 p.setTotalCount(a.get(0).getInt("totCnt"));
             }
         }
@@ -128,7 +130,7 @@ public class ReturnUtil {
     /**
      * 
      * @param status
-     * @param map
+     * @param obj
      * @return
      */
     private static Result genJsonResult(Status status, Object obj) {

@@ -60,7 +60,7 @@ public class ProdController {
      * @return
      */
 
-    @RequestMapping(value = "/list.sb", method = RequestMethod.GET)
+    @RequestMapping(value = "/view.sb", method = RequestMethod.GET)
     public String view(HttpServletRequest request, HttpServletResponse response, Model model) {
         return "base/prod/prod/prod";
     }
@@ -74,9 +74,9 @@ public class ProdController {
      */
     @RequestMapping(value = "/list.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result list(ProdVO prodVO, HttpServletRequest request) {
+    public Result getProdList(ProdVO prodVO, HttpServletRequest request) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        List<DefaultMap<String>> list = prodService.list(prodVO, sessionInfoVO);
+        List<DefaultMap<String>> list = prodService.getProdList(prodVO, sessionInfoVO);
 
         return returnListJson(Status.OK, list, prodVO);
     }
@@ -87,14 +87,14 @@ public class ProdController {
      * @param request HttpServletRequest
      * @return
      */
-    @RequestMapping(value = "/view.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/detail.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result detail(ProdVO prodVO, HttpServletRequest request) {
+    public Result getProdDetail(ProdVO prodVO, HttpServletRequest request) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        DefaultMap result = prodService.detail(prodVO, sessionInfoVO);
-        List<DefaultMap<String>> list = prodService.unitstProdList(prodVO, sessionInfoVO);
-        result.put("list", list);
+        DefaultMap result = prodService.getProdDetail(prodVO, sessionInfoVO);
+        List<DefaultMap<String>> linkedProdList = prodService.getLinkedProdList(prodVO, sessionInfoVO);
+        result.put("linkedProdList", linkedProdList);
 
-        return returnJson(Status.OK, result);
+        return returnJson(Status.OK, "list", result);
     }
 }

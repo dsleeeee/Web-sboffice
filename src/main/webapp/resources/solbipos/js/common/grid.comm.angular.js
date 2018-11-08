@@ -687,9 +687,9 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
         var page_scale = $scope._getPagingInfo('pageScale');
         var page_end = page_scale === 10 ? 9 : 4;
         // 버튼 태그 동적 생성
-        var prevBtnTag = '<li class=\"btn_previous\"><a href=\"javascript:void(0);\" ng-click=\"_pagePrev($event, \'{ctrlName}\', \'{prev}\');\"></a></li>';
-        var pageBtnTag = '<li><a href=\"javascript:void(0);\" class=\"{cnm}\" ng-click=\"_pageView(\'{ctrlName}\', \'{i}\');\">{i}</a></li>';
-        var nextBtnTag = '<li class=\"btn_next\"><a href=\"javascript:void(0);\" ng-click=\"_pageNext($event, \'{ctrlName}\', \'{next}\');\"></a></li>';
+        var prevBtnTag = '<li class=\"btn_previous\"><a href=\"javascript:void(0);\" onclick="return false;" ng-click=\"_pagePrev($event, \'{ctrlName}\', \'{prev}\');\"></a></li>';
+        var pageBtnTag = '<li><a href=\"javascript:void(0);\" onclick="return false;" class=\"{cnm}\" ng-click=\"_pageView(\'{ctrlName}\', \'{i}\');\">{i}</a></li>';
+        var nextBtnTag = '<li class=\"btn_next\"><a href=\"javascript:void(0);\" onclick="return false;" ng-click=\"_pageNext($event, \'{ctrlName}\', \'{next}\');\"></a></li>';
         var pagerTag = '';
 
         var item = {};

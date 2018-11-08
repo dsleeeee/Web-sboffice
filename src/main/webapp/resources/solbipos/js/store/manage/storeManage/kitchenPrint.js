@@ -46,7 +46,7 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
 
     // 탭 변경
     $("#envGroupTab li a").each(function(index, item){
-      if($(this).attr("envstFg") == envGroupCd) {
+      if($(this).attr("envstFg") === envGroupCd) {
         $(this).attr("class", "on");
       } else {
         $(this).removeAttr("class");
@@ -63,13 +63,26 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
       var posEnvScope = agrid.getScope('posEnvCtrl');
       posEnvScope.changeEnvGroup(envGroupCd);
 
-    } else if(envGroupCd === "98") {
+    } else if(envGroupCd === "10") { // 포스기능키
 
-      $("#posEnvArea").hide();
+      var posFuncKeyScope = agrid.getScope('funcKeyCtrl');
+      posFuncKeyScope.changeEnvGroup(envGroupCd);
+
+    } else if(envGroupCd === "98") { // 주방프린터
+
       $("#cmmEnvArea").hide();
+      $("#posEnvArea").hide();
+      $("#posFuncKeyArea").hide();
       $("#kitchenPrintArea").show();
+      $("#kitchenPrintProductArea").hide();
 
       $scope.setDataMap();
+
+    } else if(envGroupCd === "99") { // 주방프린터 상품연결
+
+      var kitchenPrintProdScope = agrid.getScope('kitchenPrintProductCtrl');
+      kitchenPrintProdScope.changeEnvGroup(envGroupCd);
+
     }
   };
 

@@ -1,13 +1,11 @@
 package kr.co.solbipos.sys.menu.webmenu.web;
 
-import static kr.co.common.utils.grid.ReturnUtil.returnJson;
-import static kr.co.common.utils.grid.ReturnUtil.returnJsonBindingFieldError;
-import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
-import static kr.co.common.utils.spring.StringUtil.convertToJson;
-import java.util.HashMap;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import kr.co.common.data.enums.Status;
+import kr.co.common.data.structure.Result;
+import kr.co.common.service.session.SessionService;
+import kr.co.common.validate.WebMenuSave;
+import kr.co.solbipos.application.common.service.ResrceInfoVO;
+import kr.co.solbipos.sys.menu.webmenu.service.WebMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,12 +15,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import kr.co.common.data.enums.Status;
-import kr.co.common.data.structure.Result;
-import kr.co.common.service.session.SessionService;
-import kr.co.common.validate.WebMenuSave;
-import kr.co.solbipos.application.common.service.ResrceInfoVO;
-import kr.co.solbipos.sys.menu.webmenu.service.WebMenuService;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.List;
+
+import static kr.co.common.utils.grid.ReturnUtil.*;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
  *
@@ -34,11 +34,15 @@ import kr.co.solbipos.sys.menu.webmenu.service.WebMenuService;
 @RequestMapping(value = "sys/menu/webMenu/webMenu/")
 public class WebMenuController {
 
-    @Autowired
-    WebMenuService webMenuService;
+    private final WebMenuService webMenuService;
+    private final SessionService sessionService;
 
+    /** Constructor Injection */
     @Autowired
-    SessionService sessionService;
+    public WebMenuController(WebMenuService webMenuService, SessionService sessionService) {
+        this.webMenuService = webMenuService;
+        this.sessionService = sessionService;
+    }
 
     /**
      * 프로그램 메뉴관리 화면 이동
