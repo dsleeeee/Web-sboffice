@@ -306,7 +306,7 @@ app.controller('hqEnvCtrl', ['$scope', '$http', function ($scope, $http) {
  * 기본값 설정버튼 클릭
  * *******************************************************/
 function setDefault(){
-  alert('setDefault');
+  // alert('setDefault');
 
   var objDefaultCd  = document.getElementsByName("defltYn");
   var objEnvstValCd = document.getElementsByName("envstValCd");
