@@ -62,11 +62,11 @@
     </tbody>
   </table>
   <%-- 조회 --%>
-  <div class="mt10 pdb20 oh">
+  <div class="mt10 pdb10 oh bb">
     <button id="btnSearch" class="btn_blue fr"><s:message code="cmm.search" /></button>
   </div>
 
-  <div class="mt20 oh sb-select dkbr">
+  <div class="mt10 oh sb-select dkbr">
     <%-- 엑셀다운로드 버튼 //TODO --%>
     <%--
     <div class="w150px fl"></div>

@@ -42,7 +42,7 @@
   </table>
 
   <%-- 조회 --%>
-  <div class="mt10 pdb20 oh">
+  <div class="mt10 pdb10 oh bb">
       <button class="btn_blue fr" id="btnSearch"><s:message code="cmm.search" /></button>
   </div>
 

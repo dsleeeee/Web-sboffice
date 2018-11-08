@@ -1,11 +1,11 @@
 /****************************************************************
  *
- * 파일명 : storeManage.js
- * 설  명 : 매장관리 JavaScript
+ * 파일명 : memberInfo.js
+ * 설  명 : 회원정보관리 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
- * 2018.10.23     김지은      1.0
+ * 2018.11.08     김지은      1.0
  *
  * **************************************************************/
 /**
@@ -14,7 +14,7 @@
 var app = agrid.getApp();
 
 /**********************************************************************
- *  매장 목록 그리드
+ *  회원정보 그리드
  **********************************************************************/
 app.controller('storeManageCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
@@ -59,8 +59,18 @@ app.controller('storeManageCtrl', ['$scope', '$http', function ($scope, $http) {
         // var selectedRow = s.rows[ht.row].dataItem;
         if ( col.binding === "storeCd" ||  col.binding === "storeNm") {
           $scope.setSelectedStore(s.rows[ht.row].dataItem);
-          $scope.storeInfoLayer.show(true, function (s) {
+          var popup = $scope.storeInfoLayer;
+          // 팝업 열린 뒤. 딜레이줘서 열리고 나서 실행되도록 함
+          popup.shown.addHandler(function (s) {
+            setTimeout(function() {
+              $scope._broadcast('storeInfoCtrl');
+            }, 50)
           });
+
+          // 팝업 닫을때
+          popup.show(true, function (s) {
+          });
+
           event.preventDefault();
         }
       }
@@ -80,21 +90,5 @@ app.controller('storeManageCtrl', ['$scope', '$http', function ($scope, $http) {
     });
   };
 
-  // 화면 ready 된 후 설정
-  angular.element(document).ready(function () {
-    // 팝업 핸들러 추가
-    $scope.storeInfoLayer.shown.addHandler(function (s) {
-      setTimeout(function() {
-        $scope._broadcast('storeInfoCtrl');
-      }, 50)
-    });
-  });
-
-  // 매장 추가 팝업 오픈
-  $scope.addStore = function(){
-    $scope.setSelectedStore(null);
-    $scope.storeInfoLayer.show(true, function (s) {
-    });
-  };
-
 }]);
+

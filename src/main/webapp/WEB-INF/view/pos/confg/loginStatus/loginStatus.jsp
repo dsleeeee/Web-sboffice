@@ -73,13 +73,13 @@
   </table>
 
   <%-- 조회 --%>
-  <div class="mt5 pdb20 oh">
+  <div class="mt5 pdb10 oh bb">
     <button class="btn_blue fr" id="searchBtn">
       <s:message code="cmm.search" />
     </button>
   </div>
 
-  <div class="mt5 oh sb-select dkbr">
+  <div class="mt10 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
     <div id="listScaleBox" class="w100px fl"></div>
     <%-- 엑셀 다운로드 //TODO --%>
