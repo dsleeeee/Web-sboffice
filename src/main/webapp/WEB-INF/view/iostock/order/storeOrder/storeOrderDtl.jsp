@@ -58,15 +58,15 @@
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.prodNm"/>" binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.orderSplyUprc"/>" binding="orderSplyUprc" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.prevOrderTotQty"/>" binding="prevOrderTotQty" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.orderUnitQty"/>" binding="orderUnitQty" width="70" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.orderEtcQty"/>" binding="orderEtcQty" width="70" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.orderTotQty"/>" binding="orderTotQty" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.prevOrderTotQty"/>" binding="prevOrderTotQty" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.orderUnitQty"/>" binding="orderUnitQty" width="50" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.orderEtcQty"/>" binding="orderEtcQty" width="50" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.orderTotQty"/>" binding="orderTotQty" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.orderAmt"/>" binding="orderAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.orderVat"/>" binding="orderVat" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.orderTot"/>" binding="orderTot" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.poUnitQty"/>" binding="poUnitQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.poUnitQty"/>" binding="poUnitQty" width="50" align="right" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.remark"/>" binding="remark" width="200" align="left" max-length=300></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.poMinQty"/>" binding="poMinQty" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.vatFg"/>" binding="vatFg01" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -141,6 +141,46 @@
       s.columnFooters.rows.push(new wijmo.grid.GroupRow());
       // add a sigma to the header to show that this is a summary row
       s.bottomLeftCells.setCellData(0, 0, '합계');
+
+      // 헤더머지
+      s.allowMerging  = 2;
+      s.itemFormatter = function (panel, r, c, cell) {
+        if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+          //align in center horizontally and vertically
+          panel.rows[r].allowMerging    = true;
+          panel.columns[c].allowMerging = true;
+          wijmo.setCss(cell, {
+            display    : 'table',
+            tableLayout: 'fixed'
+          });
+          cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+          wijmo.setCss(cell.children[0], {
+            display      : 'table-cell',
+            verticalAlign: 'middle',
+            textAlign    : 'center'
+          });
+        }
+        // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+        else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+          // GroupRow 인 경우에는 표시하지 않는다.
+          if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+            cell.textContent = '';
+          } else {
+            if (!isEmpty(panel._rows[r]._data.rnum)) {
+              cell.textContent = (panel._rows[r]._data.rnum).toString();
+            } else {
+              cell.textContent = (r + 1).toString();
+            }
+          }
+        }
+        // readOnly 배경색 표시
+        else if (panel.cellType === wijmo.grid.CellType.Cell) {
+          var col = panel.columns[c];
+          if (col.isReadOnly) {
+            wijmo.addClass(cell, 'wj-custom-readonly');
+          }
+        }
+      }
     };
 
     // 다른 컨트롤러의 broadcast 받기
@@ -309,9 +349,7 @@
         data   : params, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
-        var storeOrderRegistCtrlScope = agrid.getScope('storeOrderRegistCtrl'); // storeOrderRegistCtrl 에 정의해놓은 함수 사용하기위해 scope가져옴.
-
-        if (storeOrderRegistCtrlScope.httpStatusCheck(response)) {
+        if ($scope._httpStatusCheck(response)) {
           $scope._popMsg(messages["cmm.saveSucc"]);
           $scope.flex.collectionView.clearChanges();
 

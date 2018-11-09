@@ -80,17 +80,23 @@
               >
               </wj-combo-box>
             </span>
-            <p id="option2OrdLayer" class="s14 bk lh30 fl ml10" style="display: none;"><s:message code="storeOrder.dtl.reqDate"/></p>
-            <p id="option2OutLayer" class="s14 bk lh30 fl ml10" style="display: none;"><s:message code="storeOrder.dtl.outDate"/></p>
-            <p id="option2SaleLayer" class="s14 bk lh30 fl ml10" style="display: none;"><s:message code="storeOrder.dtl.saleDate"/></p>
+            <p id="option2OrdLayer" class="s14 bk lh30 fl ml10" style="display: none;">
+              <s:message code="storeOrder.dtl.reqDate"/></p>
+            <p id="option2OutLayer" class="s14 bk lh30 fl ml10" style="display: none;">
+              <s:message code="storeOrder.dtl.outDate"/></p>
+            <p id="option2SaleLayer" class="s14 bk lh30 fl ml10" style="display: none;">
+              <s:message code="storeOrder.dtl.saleDate"/></p>
             <div id="option2DateLayer" class="sb-select fl ml10" style="display: none;">
               <span class="txtIn"><input id="srchRegStartDate" class="w120px"></span>
               <span class="rg">~</span>
               <span class="txtIn"><input id="srchRegEndDate" class="w120px"></span>
             </div>
-            <p id="option2OrdLayer2" class="s14 bk lh30 fl ml10" style="display: none;"><s:message code="storeOrder.dtl.txtOption2Ord"/></p>
-            <p id="option2OutLayer2" class="s14 bk lh30 fl ml10" style="display: none;"><s:message code="storeOrder.dtl.txtOption2Out"/></p>
-            <p id="option2SaleLayer2" class="s14 bk lh30 fl ml10" style="display: none;"><s:message code="storeOrder.dtl.txtOption2Sale"/></p>
+            <p id="option2OrdLayer2" class="s14 bk lh30 fl ml10" style="display: none;">
+              <s:message code="storeOrder.dtl.txtOption2Ord"/></p>
+            <p id="option2OutLayer2" class="s14 bk lh30 fl ml10" style="display: none;">
+              <s:message code="storeOrder.dtl.txtOption2Out"/></p>
+            <p id="option2SaleLayer2" class="s14 bk lh30 fl ml10" style="display: none;">
+              <s:message code="storeOrder.dtl.txtOption2Sale"/></p>
           </td>
         </tr>
         <tr>
@@ -113,7 +119,8 @@
 
       <div class="mt10 oh">
         <%-- 조회 --%>
-        <button type="button" class="btn_blue fr" id="btnSearch" ng-click="searchStoreOrderRegistList();"><s:message code="cmm.search"/></button>
+        <button type="button" class="btn_blue fr" id="btnSearch" ng-click="searchStoreOrderRegistList();">
+          <s:message code="cmm.search"/></button>
       </div>
 
       <ul class="txtSty3 mt10">
@@ -128,7 +135,8 @@
         <p id="registStoreLoanInfo" class="fl s14 bk lh30"></p>
         <div class="tr">
           <%-- 저장 --%>
-          <button type="button" class="btn_skyblue ml5" id="btnSave" ng-click="saveStoreOrderRegist()"><s:message code="cmm.save"/></button>
+          <button type="button" class="btn_skyblue ml5" id="btnSave" ng-click="saveStoreOrderRegist()">
+            <s:message code="cmm.save"/></button>
         </div>
       </div>
 
@@ -148,28 +156,28 @@
             <!-- define columns -->
             <%--<wj-flex-grid-column header="<s:message code="cmm.chk"/>"                         binding="gChk"             width="40"  align="center" ></wj-flex-grid-column>--%>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.prodNm"/>" binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.prodNm"/>" binding="prodNm" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.orderSplyUprc"/>" binding="orderSplyUprc" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.prevOrderUnitQty"/>" binding="prevOrderUnitQty" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.prevOrderEtcQty"/>" binding="prevOrderEtcQty" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.prevOrderTotQty"/>" binding="prevOrderTotQty" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.orderUnitQty"/>" binding="orderUnitQty" width="70" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.orderEtcQty"/>" binding="orderEtcQty" width="70" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.orderTotQty"/>" binding="orderTotQty" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.prevOrderUnitQty"/>" binding="prevOrderUnitQty" width="50" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.prevOrderEtcQty"/>" binding="prevOrderEtcQty" width="50" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.prevOrderTotQty"/>" binding="prevOrderTotQty" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.orderUnitQty"/>" binding="orderUnitQty" width="50" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.orderEtcQty"/>" binding="orderEtcQty" width="50" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.orderTotQty"/>" binding="orderTotQty" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.orderAmt"/>" binding="orderAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.orderVat"/>" binding="orderVat" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.orderTot"/>" binding="orderTot" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.saleUprc"/>" binding="saleUprc" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.poUnitQty"/>" binding="poUnitQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.safeStock"/>" binding="safeStockUnitQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.safeStock"/>" binding="safeStockEtcQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.storeCurrQty"/>" binding="storeCurrUnitQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.storeCurrQty"/>" binding="storeCurrEtcQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.poUnitQty"/>" binding="poUnitQty" width="50" align="right" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.safeStock"/>" binding="safeStockUnitQty" width="50" align="right" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.safeStock"/>" binding="safeStockEtcQty" width="50" align="right" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.storeCurrQty"/>" binding="storeCurrUnitQty" width="50" align="right" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.storeCurrQty"/>" binding="storeCurrEtcQty" width="50" align="right" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.remark"/>" binding="remark" width="200" align="left" max-length=300></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.poMinQty"/>" binding="poMinQty" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.vatFg"/>" binding="vatFg01" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.envst0011"/>" binding="envst0011" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.poMinQty"/>" binding="poMinQty" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.vatFg"/>" binding="vatFg01" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.envst0011"/>" binding="envst0011" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
 
           </wj-flex-grid>
         </div>
@@ -248,6 +256,46 @@
       // s.columnFooters.rows.push(new wijmo.grid.GroupRow());
       // add a sigma to the header to show that this is a summary row
       // s.bottomLeftCells.setCellData(0, 0, '합계');
+
+      // 헤더머지
+      s.allowMerging  = 2;
+      s.itemFormatter = function (panel, r, c, cell) {
+        if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+          //align in center horizontally and vertically
+          panel.rows[r].allowMerging    = true;
+          panel.columns[c].allowMerging = true;
+          wijmo.setCss(cell, {
+            display    : 'table',
+            tableLayout: 'fixed'
+          });
+          cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+          wijmo.setCss(cell.children[0], {
+            display      : 'table-cell',
+            verticalAlign: 'middle',
+            textAlign    : 'center'
+          });
+        }
+        // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+        else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+          // GroupRow 인 경우에는 표시하지 않는다.
+          if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+            cell.textContent = '';
+          } else {
+            if (!isEmpty(panel._rows[r]._data.rnum)) {
+              cell.textContent = (panel._rows[r]._data.rnum).toString();
+            } else {
+              cell.textContent = (r + 1).toString();
+            }
+          }
+        }
+        // readOnly 배경색 표시
+        else if (panel.cellType === wijmo.grid.CellType.Cell) {
+          var col = panel.columns[c];
+          if (col.isReadOnly) {
+            wijmo.addClass(cell, 'wj-custom-readonly');
+          }
+        }
+      }
     };
 
     $scope.calcAmt = function (item) {
@@ -477,7 +525,7 @@
         // "complete" code here
         if (popShowFg === "Y") {
           $scope.wjStoreOrderRegistLayer.show(true);
-          $("#registSubTitle").html(' ('+messages["storeOrder.reqDate"]+' : ' + getFormatDate($scope.reqDate, '-') + ')');
+          $("#registSubTitle").html(' (' + messages["storeOrder.reqDate"] + ' : ' + getFormatDate($scope.reqDate, '-') + ')');
         }
       });
     };
@@ -490,7 +538,7 @@
       params.slipFg    = $scope.slipFg;
       params.startDate = wijmo.Globalize.format($scope.srchRegStartDate.value, 'yyyyMMdd');
       params.endDate   = wijmo.Globalize.format($scope.srchRegEndDate.value, 'yyyyMMdd');
-      params.listScale = 500;
+      params.listScale = 50;
 
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
       $scope._inquiryMain("/iostock/order/storeOrder/storeOrderRegist/list.sb", params);
@@ -504,7 +552,12 @@
       for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
         var item = $scope.flex.collectionView.itemsEdited[i];
 
-        if (item.orderTotQty !== null && item.orderTotQty !== "0" && (parseInt(item.orderTotQty) < parseInt(item.poMinQty))) {
+        // 이전 주문수량이 없으면서 주문수량 0인 경우 저장하지 않는다.
+        if (item.prevOrderTotQty === null && item.orderTotQty === 0) {
+          continue;
+        }
+
+        if (item.orderTotQty !== null && item.orderTotQty !== 0 && (parseInt(item.orderTotQty) < parseInt(item.poMinQty))) {
           $scope._popMsg(messages["storeOrder.dtl.not.minOrderQty"]); // 주문수량은 최소주문수량 이상 입력하셔야 합니다.
           return false;
         }
@@ -525,6 +578,7 @@
         orderTot += parseInt(item.orderTot);
         params.push(item);
       }
+
 
       // 주문가능액 체크
       if ($scope.availableOrderAmt != null) {
@@ -566,16 +620,16 @@
     $scope.setSafeToOrder = function () {
       $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]);
       // 데이터 처리중 팝업 띄우기위해 setTimeout 사용.
-      setTimeout(function() {
+      setTimeout(function () {
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
           var item = $scope.flex.collectionView.items[i];
-          if(item.safeStockUnitQty !== null || item.safeStockEtcQty !== null) {
+          if (item.safeStockUnitQty !== null || item.safeStockEtcQty !== null) {
             $scope.flex.collectionView.editItem(item);
 
-            if(nvl(item.safeStockUnitQty, 0) > 0) {
+            if (nvl(item.safeStockUnitQty, 0) > 0) {
               item.orderUnitQty = parseInt(item.safeStockUnitQty) - parseInt(nvl(item.storeCurrUnitQty, 0));
             }
-            if(nvl(item.safeStockEtcQty, 0) > 0) {
+            if (nvl(item.safeStockEtcQty, 0) > 0) {
               item.orderEtcQty = parseInt(item.safeStockEtcQty) - parseInt(nvl(item.storeCurrEtcQty, 0));
             }
             $scope.calcAmt(item);

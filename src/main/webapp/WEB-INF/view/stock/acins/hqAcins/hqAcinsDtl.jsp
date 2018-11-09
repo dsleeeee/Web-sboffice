@@ -15,7 +15,7 @@
     <div class="wj-dialog-body sc2" style="height: 600px;">
       <p id="registSubTitle" class="s14 bk mb5 fl"></p>
 
-      <table class="tblType01">
+      <table class="tblType01" style="position: relative;">
         <colgroup>
           <col class="w15"/>
           <col class="w35"/>
@@ -79,7 +79,7 @@
           </wj-flex-grid>
         </div>
         <%--//위즈모 테이블--%>
-      </div>
+      </div>`
       <%-- 페이지 리스트 --%>
       <div class="pageNum mt20">
         <%-- id --%>
@@ -98,7 +98,6 @@
   app.controller('hqAcinsDtlCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('hqAcinsDtlCtrl', $scope, $http, true));
-
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -145,6 +144,8 @@
       $scope.data     = cv;
 
       if (!$.isEmptyObject(data)) {
+        $scope._setPagingInfo('curr', 1); // 페이징처리시 페이지번호 초기화
+
         $scope.acinsDate = data.acinsDate;
         $scope.seqNo     = data.seqNo;
 
@@ -213,7 +214,7 @@
       var params       = {};
       params.acinsDate = $scope.acinsDate;
       params.seqNo     = $scope.seqNo;
-      params.listScale = 500;
+      params.listScale = 50;
 
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
       $scope._inquiryMain("/stock/acins/hqAcins/hqAcinsDtl/list.sb", params);

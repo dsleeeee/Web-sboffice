@@ -455,6 +455,7 @@
     <typeAlias alias="hqCurrVO" type="kr.co.solbipos.stock.curr.hqCurr.service.HqCurrVO"/>
     <typeAlias alias="storeCurrVO" type="kr.co.solbipos.stock.curr.storeCurr.service.StoreCurrVO"/>
     <typeAlias alias="hqAcinsVO" type="kr.co.solbipos.stock.acins.hqAcins.service.HqAcinsVO"/>
+    <typeAlias alias="hqAdjVO" type="kr.co.solbipos.stock.adj.hqAdj.service.HqAdjVO"/>
 
     <typeAlias alias="excpForwardProductVO" type="kr.co.solbipos.application.pos.exceptForward.service.ExcpForwardProductVO"/>
     <typeAlias alias="productionVO" type="kr.co.solbipos.application.pos.production.service.ProductionVO"/>

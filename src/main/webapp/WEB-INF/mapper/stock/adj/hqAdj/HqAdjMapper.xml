@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.stock.adj.hqAdj.service.impl.HqAdjMapper">
+
+    <!-- 조정관리 - 조정관리 리스트 조회 -->
+    <!--
+        TABLE    : TB_ST_HQ_STOCK_CUR, TB_HQ_PRODUCT, TB_HQ_PRODUCT_BARCD
+        PARAM    : hqAdjVO
+        COMMENTS : 조정관리 - 조정관리 리스트를 조회한다.
+    -->
+    <select id="getHqAdjList" parameterType="hqAdjVO" resultType="DefaultMap">
+        /* USE : HqAdjMapper.getHqAdjList */
+        <![CDATA[
+        SELECT  tsha.ADJ_DATE, tsha.HQ_OFFICE_CD, tsha.SEQ_NO
+        ,       tsha.ADJ_TITLE, tsha.PROC_FG, tsha.DTL_CNT
+        ,       tsha.CONFM_DATE
+        ,       SUBSTR(tsha.REG_DT,0,8) AS REG_DATE
+        FROM    TB_ST_HQ_ADJUST tsha
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     ADJ_DATE  BETWEEN #{startDate} AND #{endDate}
+        ]]>
+        <if test='procFg != null and procFg != ""'>
+            AND tsha.PROC_FG = #{procFg}
+        </if>
+        <![CDATA[
+        ORDER BY tsha.ADJ_DATE DESC, tsha.SEQ_NO DESC
+        ]]>
+    </select>
+
+    <!-- 조정관리 - 조정 진행구분 및 제목 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_ORDER
+        PARAM    : hqAdjVO
+        COMMENTS : 조정관리 - 조정 진행구분 및 제목을 조회한다.
+    -->
+    <select id="getProcFgCheck" parameterType="hqAdjVO" resultType="DefaultMap">
+        /* USE : HqAdjMapper.getProcFgCheck */
+        <![CDATA[
+        SELECT  tsha.PROC_FG, tsha.ADJ_TITLE
+        FROM    TB_ST_HQ_ADJUST tsha
+        WHERE   tsha.HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     tsha.ADJ_DATE      = #{adjDate}
+        AND     tsha.SEQ_NO        = #{seqNo}
+        ]]>
+    </select>
+
+    <!-- 조정관리 - 조정등록 상품 리스트 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_ST_HQ_ADJUST_DTL, TB_ST_HQ_STOCK_CUR, TB_ST_HQ_STOCK_MONTHLY, TB_HQ_PRODUCT_BARCD
+        PARAM    : hqAdjVO
+        COMMENTS : 조정관리 - 조정등록 리스트를 조회한다.
+    -->
+    <select id="getHqAdjRegistList" parameterType="hqAdjVO" resultType="DefaultMap">
+        /* USE : HqAdjMapper.getHqAdjRegistList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        <![CDATA[
+        SELECT  thpb.BARCD_CD, thp.PROD_CD, thp.PROD_NM, thp.PO_UNIT_QTY
+        ,		NVL((SELECT MAX(SALE_UPRC) KEEP(DENSE_RANK FIRST ORDER BY REG_DT DESC)
+                       FROM TB_HQ_PRODUCT_SALE_PRICE
+                      WHERE HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                        AND PROD_CD = thp.PROD_CD
+                        AND #{adjDate} BETWEEN START_DATE AND END_DATE
+                     ), 0) AS SALE_UPRC
+        ,       NVL(tshsc.AVG_COST_UPRC, thp.COST_UPRC) AS COST_UPRC
+        ,       NVL(NVL(tshad.CURR_QTY, tshsc.CURR_QTY), 0) AS CURR_QTY
+        ,       tshad.ADJ_QTY
+        ,       tshad.ADJ_AMT
+        ,       tshad.REMARK
+        ,       DECODE(tshad.PROD_CD, NULL, 'I', 'U') AS ADJ_PROD_STATUS
+        ]]>
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        <![CDATA[
+        FROM    TB_HQ_PRODUCT thp
+        ,       TB_ST_HQ_ADJUST_DTL tshad
+        ,       (	SELECT  tshsc.PROD_CD, tshsc.CURR_QTY, tshsm.AVG_COST_UPRC
+                    FROM    TB_ST_HQ_STOCK_CUR tshsc
+                    ,       TB_ST_HQ_STOCK_MONTHLY tshsm
+                    WHERE   tshsc.HQ_OFFICE_CD    =   #{hqOfficeCd}
+                    AND     tshsm.IOSTOCK_YM  (+) =   SUBSTR(#{adjDate}, 0, 6)
+                    AND     tshsm.HQ_OFFICE_CD(+) =   tshsc.HQ_OFFICE_CD
+                    AND     tshsm.PROD_CD     (+) =   tshsc.PROD_CD
+                )   tshsc
+        ,       TB_HQ_PRODUCT_BARCD thpb
+        WHERE   thp.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     thp.STOCK_PROD_YN       =   'Y'
+        AND     thp.USE_YN              =   'Y'
+        AND     tshad.PROD_CD       (+) =   thp.PROD_CD
+        AND     tshad.HQ_OFFICE_CD  (+) =   #{hqOfficeCd}
+        AND     tshad.ADJ_DATE      (+) =   #{adjDate}
+        AND     tshad.SEQ_NO        (+) =   #{seqNo}
+        AND     tshsc.PROD_CD       (+) =   thp.PROD_CD
+        AND     thpb.HQ_OFFICE_CD   (+) =   thp.HQ_OFFICE_CD
+        AND     thpb.PROD_CD        (+) =   thp.PROD_CD
+        ]]>
+        <if test='prodCd != null and prodCd != ""'>
+            AND thp.PROD_CD = #{prodCd}
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='barcdCd != null and barcdCd != ""'>
+            AND thpb.BARCD_CD = #{barcdCd}
+        </if>
+        <if test='prodBarcdCd != null and prodBarcdCd != ""'>
+            AND (thp.PROD_CD = #{prodBarcdCd} OR thpb.BARCD_CD = #{prodBarcdCd})
+        </if>
+        <if test='adjFg == "Y"'>
+            AND tshad.ADJ_QTY IS NOT NULL
+        </if>
+        <if test='adjFg == "N"'>
+            AND tshad.ADJ_QTY IS NULL
+        </if>
+        <![CDATA[
+        ORDER
+        BY		thp.PROD_CD
+        ]]>
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 조정관리 - 조정등록 신규 SEQ 조회 -->
+    <!--
+        TABLE    : TB_ST_HQ_ADJUST
+        PARAM    : hqAdjVO
+        COMMENTS : 조정관리 - 조정등록 신규 SEQ를 조회한다.
+    -->
+    <select id="getNewSeqNo" parameterType="hqAdjVO" resultType="String">
+        /* USE : HqAdjMapper.getNewSeqNo */
+        <![CDATA[
+        SELECT  NVL(MAX(tsha.SEQ_NO), 0)+1 AS SEQ_NO
+        FROM    TB_ST_HQ_ADJUST tsha
+        WHERE   tsha.HQ_OFFICE_CD  =  #{hqOfficeCd}
+        AND     tsha.ADJ_DATE      =  #{adjDate}
+        ]]>
+    </select>
+
+    <!-- 조정관리 - 조정 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_ST_HQ_ADJUST_DTL, TB_ST_HQ_STOCK_CUR, TB_ST_HQ_STOCK_MONTHLY
+                 , TB_HQ_PRODUCT_BARCD, TB_ST_HQ_STOCK_DAILY
+        PARAM    : hqAdjVO
+        COMMENTS : 조정관리 - 조정 상세 리스트를 조회한다.
+    -->
+    <select id="getHqAdjDtlList" parameterType="hqAdjVO" resultType="DefaultMap">
+        /* USE : HqAdjMapper.getHqAdjDtlList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        <![CDATA[
+        SELECT  thpb.BARCD_CD, thp.PROD_CD, thp.PROD_NM, thp.PO_UNIT_QTY
+        ,		NVL((SELECT MAX(SALE_UPRC) KEEP(DENSE_RANK FIRST ORDER BY REG_DT DESC)
+                       FROM TB_HQ_PRODUCT_SALE_PRICE
+                      WHERE HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                        AND PROD_CD = thp.PROD_CD
+                        AND #{adjDate} BETWEEN START_DATE AND END_DATE
+                     ), 0) AS SALE_UPRC
+        ,       NVL(tshsm.AVG_COST_UPRC, thp.COST_UPRC) AS COST_UPRC
+        ,       tshad.CURR_QTY
+        ,       tshad.ADJ_QTY
+        ,       tshad.ADJ_AMT
+        ,       tshad.REMARK
+        ,       'U' AS ADJ_PROD_STATUS
+        ]]>
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        <![CDATA[
+        FROM    TB_ST_HQ_ADJUST_DTL tshad
+        ,       TB_HQ_PRODUCT thp
+        ,       (	SELECT	tshsm.PROD_CD
+                    ,		tshsm.AVG_COST_UPRC
+                    , 		(tshsm.BASE_QTY + NVL(IOSTOCK_QTY, 0)) AS CMPT_DATE_QTY
+                    FROM	(	SELECT	tshsm.IOSTOCK_YM, tshsm.HQ_OFFICE_CD
+                                ,		tshsm.PROD_CD, tshsm.BASE_QTY, tshsm.AVG_COST_UPRC
+                                FROM	TB_ST_HQ_STOCK_MONTHLY tshsm
+                                WHERE	tshsm.HQ_OFFICE_CD	=	#{hqOfficeCd}
+                                AND		tshsm.IOSTOCK_YM	=	SUBSTR(#{adjDate}, 0, 6)
+                            ) tshsm
+                    ,		(	SELECT	tshsd.IOSTOCK_DATE, tshsd.HQ_OFFICE_CD
+                                ,		tshsd.PROD_CD
+                                , 		SUM(tshsd.IOSTOCK_QTY) AS IOSTOCK_QTY
+                                FROM	TB_ST_HQ_STOCK_DAILY tshsd
+                                WHERE	tshsd.HQ_OFFICE_CD	=	#{hqOfficeCd}
+                                AND		tshsd.IOSTOCK_DATE	=	#{adjDate}
+                                GROUP
+                                BY		tshsd.IOSTOCK_DATE, tshsd.HQ_OFFICE_CD
+                                ,		tshsd.PROD_CD
+                            ) tshsd
+                    WHERE	tshsd.PROD_CD(+)=	tshsm.PROD_CD
+                )   tshsm
+        ,       TB_HQ_PRODUCT_BARCD thpb
+        WHERE   tshad.HQ_OFFICE_CD      =   #{hqOfficeCd}
+        AND     tshad.ADJ_DATE          =   #{adjDate}
+        AND     tshad.SEQ_NO            =   #{seqNo}
+        AND     tshad.HQ_OFFICE_CD      =   thp.HQ_OFFICE_CD
+        AND     tshad.PROD_CD           =   thp.PROD_CD
+        AND     tshsm.PROD_CD       (+) =   tshad.PROD_CD
+        AND     thpb.HQ_OFFICE_CD   (+) =   tshad.HQ_OFFICE_CD
+        AND     thpb.PROD_CD        (+) =   tshad.PROD_CD
+        ORDER
+        BY		tshad.PROD_CD
+        ]]>
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 조정관리 - 조정 DTL 전부 삭제 -->
+    <!--
+        TABLE    : TB_ST_HQ_ADJUST_DTL
+        PARAM    : hqAdjVO
+        COMMENTS : 조정관리 - 조정일자, SEQ_NO 에 해당하는 DTL을 전부 삭제한다.
+    -->
+    <delete id="deleteAllHqAdjDtl" parameterType="hqAdjVO">
+        /* USE : HqAdjMapper.deleteAllHqAdjDtl */
+        DELETE  TB_ST_HQ_ADJUST_DTL
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     ADJ_DATE      = #{adjDate}
+        AND     SEQ_NO        = #{seqNo}
+    </delete>
+
+
+    <!-- 조정관리 - 조정 HD 삭제 -->
+    <!--
+        TABLE    : TB_ST_HQ_ADJUST_DTL
+        PARAM    : hqAdjVO
+        COMMENTS : 조정관리 - 조정일자, SEQ_NO 에 해당하는 HD를 삭제한다.
+    -->
+    <delete id="deleteHqAdjHd" parameterType="hqAdjVO">
+        /* USE : HqAdjMapper.deleteHqAdjHd */
+        DELETE  TB_ST_HQ_ADJUST
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     ADJ_DATE      = #{adjDate}
+        AND     SEQ_NO        = #{seqNo}
+    </delete>
+
+
+    <!-- 조정관리 - 조정 상품 DTL 등록 -->
+    <!--
+        TABLE    : TB_ST_HQ_ADJUST_DTL
+        PARAM    : hqAdjVO
+        COMMENTS : 조정관리 - 조정 상품 DTL을 등록한다.
+    -->
+    <insert id="insertHqAdjDtl" parameterType="hqAdjVO">
+        /* USE : HqAdjMapper.insertHqAdjDtl */
+        INSERT INTO TB_ST_HQ_ADJUST_DTL
+        (
+            HQ_OFFICE_CD,
+            ADJ_DATE,
+            SEQ_NO,
+            HQ_BRAND_CD,
+            PROD_CD,
+            COST_UPRC,
+            PO_UNIT_QTY,
+            CURR_QTY,
+            ADJ_QTY,
+            ADJ_AMT,
+            REMARK,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        VALUES
+        (
+            #{hqOfficeCd},
+            #{adjDate},
+            #{seqNo},
+            #{hqBrandCd},
+            #{prodCd},
+            #{costUprc},
+            #{poUnitQty},
+            #{currQty},
+            #{adjQty},
+            #{adjAmt},
+            #{remark},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 조정관리 - 조정 상품 DTL 수정 -->
+    <!--
+        TABLE    : TB_ST_HQ_ADJUST_DTL
+        PARAM    : hqAdjVO
+        COMMENTS : 조정관리 - 조정 상품 DTL을 수정한다.
+    -->
+    <update id="updateHqAdjDtl" parameterType="hqAdjVO">
+        /* USE : HqAdjMapper.updateHqAdjDtl */
+        UPDATE  TB_ST_HQ_ADJUST_DTL
+        SET     ADJ_QTY   = #{adjQty}
+        ,       ADJ_AMT   = #{adjAmt}
+        ,       REMARK    = #{remark}
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     ADJ_DATE      = #{adjDate}
+        AND     SEQ_NO        = #{seqNo}
+        AND     PROD_CD       = #{prodCd}
+    </update>
+
+    <!-- 조정관리 - 조정 상품 DTL 삭제 -->
+    <!--
+        TABLE    : TB_ST_HQ_ADJUST_DTL
+        PARAM    : hqAdjVO
+        COMMENTS : 조정관리 - 조정 상품 DTL을 삭제한다.
+    -->
+    <delete id="deleteHqAdjDtl" parameterType="hqAdjVO">
+        /* USE : HqAdjMapper.deleteHqAdjDtl */
+        DELETE  TB_ST_HQ_ADJUST_DTL
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     ADJ_DATE      = #{adjDate}
+        AND     SEQ_NO        = #{seqNo}
+        AND     PROD_CD       = #{prodCd}
+    </delete>
+
+    <!-- 조정관리 - 조정 HD 등록 -->
+    <!--
+        TABLE    : TB_ST_HQ_ADJUST, TB_ST_HQ_ADJUST_DTL
+        PARAM    : hqAdjVO
+        COMMENTS : 조정관리 - 조정 HD을 등록한다.
+    -->
+    <insert id="insertHqAdjHd" parameterType="hqAdjVO">
+        /* USE : HqAdjMapper.insertHqAdjHd */
+        INSERT INTO TB_ST_HQ_ADJUST
+        (
+            HQ_OFFICE_CD,
+            STORAGE_CD,
+            ADJ_DATE,
+            SEQ_NO,
+            ADJ_TITLE,
+            PROC_FG,
+            DTL_CNT,
+            TOT_ADJ_AMT,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        SELECT	tshad.HQ_OFFICE_CD
+        ,		#{storageCd}
+        ,		tshad.ADJ_DATE
+        ,		tshad.SEQ_NO
+        ,		#{adjTitle}
+        ,		#{procFg}
+        ,		COUNT(tshad.PROD_CD)
+        ,		SUM(tshad.ADJ_AMT)
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        FROM	TB_ST_HQ_ADJUST_DTL tshad
+        WHERE	tshad.HQ_OFFICE_CD	=	#{hqOfficeCd}
+        AND     tshad.ADJ_DATE	    =	#{adjDate}
+        AND     tshad.SEQ_NO	    =	#{seqNo}
+        GROUP
+        BY		tshad.HQ_OFFICE_CD
+        ,		#{storageCd}
+        ,		tshad.ADJ_DATE
+        ,		tshad.SEQ_NO
+        ,		#{adjTitle}
+        ,		#{procFg}
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+    </insert>
+
+    <!-- 조정관리 - 조정 HD 수정 -->
+    <!--
+        TABLE    : TB_ST_HQ_ADJUST
+        PARAM    : hqAdjVO
+        COMMENTS : 조정관리 - 조정 HD을 수정한다.
+    -->
+    <update id="updateHqAdjHd" parameterType="hqAdjVO">
+        /* USE : HqAdjMapper.updateHqAdjHd */
+        UPDATE  TB_ST_HQ_ADJUST
+        SET     (DTL_CNT, TOT_ADJ_AMT)
+              = (   SELECT  COUNT(tshad.PROD_CD)
+                    ,		SUM(tshad.ADJ_AMT)
+                    FROM    TB_ST_HQ_ADJUST_DTL tshad
+                    WHERE	tshad.HQ_OFFICE_CD	=	#{hqOfficeCd}
+                    AND     tshad.ADJ_DATE	    =	#{adjDate}
+                    AND     tshad.SEQ_NO	    =	#{seqNo}
+                )
+        ,       ADJ_TITLE   = #{adjTitle}
+        ,       PROC_FG     = #{procFg}
+        ,       CONFM_DATE  = DECODE(#{procFg}, '0', NULL, SUBSTR(#{modDt}, 0, 8))
+        ,       CONFM_ID    = DECODE(#{procFg}, '0', NULL, #{modId})
+        ,       MOD_DT      = #{modDt}
+        ,       MOD_ID      = #{modId}
+        WHERE	HQ_OFFICE_CD  =	#{hqOfficeCd}
+        AND     ADJ_DATE	  =	#{adjDate}
+        AND     SEQ_NO	      =	#{seqNo}
+    </update>
+</mapper>
