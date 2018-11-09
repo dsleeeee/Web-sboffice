@@ -87,12 +87,12 @@ public class DstbCloseStoreServiceImpl implements DstbCloseStoreService {
             dstbCloseStoreVO.setModId(sessionInfoVO.getUserId());
             dstbCloseStoreVO.setModDt(currentDt);
 
-            // 분배수량이 0 이나 null 인 경우 삭제
-            if(dstbCloseStoreVO.getMgrTotQty() == 0 || dstbCloseStoreVO.getMgrTotQty() == null) {
-                result = dstbCloseStoreMapper.deleteDstbCloseDtl(dstbCloseStoreVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-            }
-            else {
+//            // 분배수량이 0 이나 null 인 경우 삭제
+//            if(dstbCloseStoreVO.getMgrTotQty() == 0 || dstbCloseStoreVO.getMgrTotQty() == null) {
+//                result = dstbCloseStoreMapper.deleteDstbCloseDtl(dstbCloseStoreVO);
+//                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+//            }
+//            else {
                 result = dstbCloseStoreMapper.updateDstbCloseDtl(dstbCloseStoreVO);
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
@@ -101,7 +101,7 @@ public class DstbCloseStoreServiceImpl implements DstbCloseStoreService {
                     result = dstbCloseStoreMapper.updateDstbCloseDtlConfirm(dstbCloseStoreVO);
                     if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                 }
-            }
+//            }
 
             returnResult += result;
         }
@@ -137,24 +137,27 @@ public class DstbCloseStoreServiceImpl implements DstbCloseStoreService {
             Long mgrVat      = (dstbCloseStoreVO.getMgrVat()     == null ? 0 : dstbCloseStoreVO.getMgrVat())     * slipFg;
             Long mgrTot      = (dstbCloseStoreVO.getMgrTot()     == null ? 0 : dstbCloseStoreVO.getMgrTot())     * slipFg;
 
-            dstbCloseStoreVO.setMgrUnitQty(mgrUnitQty);
-            dstbCloseStoreVO.setMgrEtcQty(mgrEtcQty);
-            dstbCloseStoreVO.setMgrTotQty(mgrTotQty);
-            dstbCloseStoreVO.setMgrAmt(mgrAmt);
-            dstbCloseStoreVO.setMgrVat(mgrVat);
-            dstbCloseStoreVO.setMgrTot(mgrTot);
-            dstbCloseStoreVO.setProcFg("10");
-            dstbCloseStoreVO.setDstbFg("0");
-            dstbCloseStoreVO.setRegId(sessionInfoVO.getUserId());
-            dstbCloseStoreVO.setRegDt(currentDt);
-            dstbCloseStoreVO.setModId(sessionInfoVO.getUserId());
-            dstbCloseStoreVO.setModDt(currentDt);
-            dstbCloseStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            if(mgrTotQty > 0) {
+                dstbCloseStoreVO.setMgrUnitQty(mgrUnitQty);
+                dstbCloseStoreVO.setMgrEtcQty(mgrEtcQty);
+                dstbCloseStoreVO.setMgrTotQty(mgrTotQty);
+                dstbCloseStoreVO.setMgrAmt(mgrAmt);
+                dstbCloseStoreVO.setMgrVat(mgrVat);
+                dstbCloseStoreVO.setMgrTot(mgrTot);
+                dstbCloseStoreVO.setProcFg("10");
+                dstbCloseStoreVO.setDstbFg("0");
+                dstbCloseStoreVO.setRegId(sessionInfoVO.getUserId());
+                dstbCloseStoreVO.setRegDt(currentDt);
+                dstbCloseStoreVO.setModId(sessionInfoVO.getUserId());
+                dstbCloseStoreVO.setModDt(currentDt);
+                dstbCloseStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-            result = dstbCloseStoreMapper.insertDstbAdd(dstbCloseStoreVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                result = dstbCloseStoreMapper.insertDstbAdd(dstbCloseStoreVO);
+                if (result <= 0)
+                    throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-            returnResult += result;
+                returnResult += result;
+            }
         }
 
         return returnResult;

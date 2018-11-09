@@ -89,11 +89,11 @@ public class RtnDstbCloseProdServiceImpl implements RtnDstbCloseProdService {
             rtnDstbCloseProdVO.setModDt(currentDt);
 
             // 분배수량이 0 이나 null 인 경우 삭제
-            if(rtnDstbCloseProdVO.getMgrTotQty() == 0 || rtnDstbCloseProdVO.getMgrTotQty() == null) {
-                result = rtnDstbCloseProdMapper.deleteRtnDstbCloseProdDtl(rtnDstbCloseProdVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-            }
-            else {
+//            if(rtnDstbCloseProdVO.getMgrTotQty() == 0 || rtnDstbCloseProdVO.getMgrTotQty() == null) {
+//                result = rtnDstbCloseProdMapper.deleteRtnDstbCloseProdDtl(rtnDstbCloseProdVO);
+//                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+//            }
+//            else {
                 result = rtnDstbCloseProdMapper.updateRtnDstbCloseProdDtl(rtnDstbCloseProdVO);
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
@@ -102,7 +102,7 @@ public class RtnDstbCloseProdServiceImpl implements RtnDstbCloseProdService {
                     result = rtnDstbCloseProdMapper.updateRtnDstbCloseProdDtlConfirm(rtnDstbCloseProdVO);
                     if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                 }
-            }
+//            }
             returnResult += result;
         }
 
@@ -141,30 +141,34 @@ public class RtnDstbCloseProdServiceImpl implements RtnDstbCloseProdService {
             Long mgrVat      = (rtnDstbCloseProdVO.getMgrVat()     == null ? 0 : rtnDstbCloseProdVO.getMgrVat())     * slipFg;
             Long mgrTot      = (rtnDstbCloseProdVO.getMgrTot()     == null ? 0 : rtnDstbCloseProdVO.getMgrTot())     * slipFg;
 
-            rtnDstbCloseProdVO.setMgrUnitQty(mgrUnitQty);
-            rtnDstbCloseProdVO.setMgrEtcQty(mgrEtcQty);
-            rtnDstbCloseProdVO.setMgrTotQty(mgrTotQty);
-            rtnDstbCloseProdVO.setMgrAmt(mgrAmt);
-            rtnDstbCloseProdVO.setMgrVat(mgrVat);
-            rtnDstbCloseProdVO.setMgrTot(mgrTot);
-            rtnDstbCloseProdVO.setProcFg("10");
-            rtnDstbCloseProdVO.setDstbFg("0");
-            rtnDstbCloseProdVO.setRegId(sessionInfoVO.getUserId());
-            rtnDstbCloseProdVO.setRegDt(currentDt);
-            rtnDstbCloseProdVO.setModId(sessionInfoVO.getUserId());
-            rtnDstbCloseProdVO.setModDt(currentDt);
-            rtnDstbCloseProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            if(mgrTotQty > 0) {
+                rtnDstbCloseProdVO.setMgrUnitQty(mgrUnitQty);
+                rtnDstbCloseProdVO.setMgrEtcQty(mgrEtcQty);
+                rtnDstbCloseProdVO.setMgrTotQty(mgrTotQty);
+                rtnDstbCloseProdVO.setMgrAmt(mgrAmt);
+                rtnDstbCloseProdVO.setMgrVat(mgrVat);
+                rtnDstbCloseProdVO.setMgrTot(mgrTot);
+                rtnDstbCloseProdVO.setProcFg("10");
+                rtnDstbCloseProdVO.setDstbFg("0");
+                rtnDstbCloseProdVO.setRegId(sessionInfoVO.getUserId());
+                rtnDstbCloseProdVO.setRegDt(currentDt);
+                rtnDstbCloseProdVO.setModId(sessionInfoVO.getUserId());
+                rtnDstbCloseProdVO.setModDt(currentDt);
+                rtnDstbCloseProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-            result = rtnDstbCloseProdMapper.insertRtnDstbCloseProdAddRegist(rtnDstbCloseProdVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                result = rtnDstbCloseProdMapper.insertRtnDstbCloseProdAddRegist(rtnDstbCloseProdVO);
+                if (result <= 0)
+                    throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-            if(rtnDstbCloseProdVO.getConfirmYn()) {
-                rtnDstbCloseProdVO.setProcFg("20");
-                result = rtnDstbCloseProdMapper.updateRtnDstbCloseProdDtlConfirm(rtnDstbCloseProdVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                if (rtnDstbCloseProdVO.getConfirmYn()) {
+                    rtnDstbCloseProdVO.setProcFg("20");
+                    result = rtnDstbCloseProdMapper.updateRtnDstbCloseProdDtlConfirm(rtnDstbCloseProdVO);
+                    if (result <= 0)
+                        throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                }
+
+                returnResult += result;
             }
-
-            returnResult += result;
         }
 
         return returnResult;

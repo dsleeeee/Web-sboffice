@@ -1,29 +1,27 @@
-package kr.co.solbipos.stock.acins.hqAcins.service;
+package kr.co.solbipos.stock.adj.hqAdj.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
 
-public class HqAcinsVO extends PageVO {
+public class HqAdjVO extends PageVO {
 
-    private static final long serialVersionUID = 960826277149145237L;
+    private static final long serialVersionUID = 3817553950805620025L;
 
     /** 본사코드 */
     private String hqOfficeCd;
     /** 창고코드 */
     private String storageCd;
-    /** 실사조사 일자 */
-    private String acinsDate;
+    /** 조정조사 일자 */
+    private String adjDate;
     /** 헤드 인덱스(DAY SEQUENCE) */
     private Integer seqNo;
     /** 제목 */
-    private String acinsTitle;
+    private String adjTitle;
     /** 처리구분 (0:입력, 1:확정) */
     private String procFg;
-    /** 실사등록건수 */
+    /** 조정등록건수 */
     private Integer dtlCnt;
-    /** 조정건수 */
-    private Integer adjCnt;
-    /** 총실사금액 */
-    private Integer totAcinsAmt;
+    /** 총조정금액 */
+    private Integer totAdjAmt;
     /** 확정일자 */
     private String confmDate;
     /** 확정자 */
@@ -36,19 +34,15 @@ public class HqAcinsVO extends PageVO {
     private String prodNm;
     /** 원가 */
     private Integer costUprc;
+    /** 조정 재고수량 */
+    private Integer adjQty;
     /** 조정금액 */
     private Integer adjAmt;
     /** 전산 재고수량 */
-    private Integer cmptCurrQty;
-    /** 실사 재고수량 */
-    private Integer acinsQty;
-    /** 조정 재고수량 */
-    private Integer adjQty;
-    /** 실사금액 */
-    private Integer acinsAmt;
+    private Integer currQty;
     /** 주문단위-입수량 */
     private Integer poUnitQty;
-    /** 실사비고 */
+    /** 조정비고 */
     private String remark;
     /** 바코드 */
     private String barcdCd;
@@ -56,14 +50,14 @@ public class HqAcinsVO extends PageVO {
     private String prodClassCd;
     /** 거래처코드 */
     private String vendrCd;
-    /** 실사 상품 STATUS */
-    private String acinsProdStatus;
+    /** 조정 상품 STATUS */
+    private String adjProdStatus;
     /** 확정여부 */
     private String confirmFg;
     /** 상품코드 or 바코드 */
     private String prodBarcdCd;
-    /** 실사구분 */
-    private String acinsFg;
+    /** 조정구분 */
+    private String adjFg;
 
     /**
      * @return the hqOfficeCd
@@ -94,17 +88,17 @@ public class HqAcinsVO extends PageVO {
     }
 
     /**
-     * @return the acinsDate
+     * @return the adjDate
      */
-    public String getAcinsDate() {
-        return acinsDate;
+    public String getAdjDate() {
+        return adjDate;
     }
 
     /**
-     * @param acinsDate the acinsDate to set
+     * @param adjDate the adjDate to set
      */
-    public void setAcinsDate(String acinsDate) {
-        this.acinsDate = acinsDate;
+    public void setAdjDate(String adjDate) {
+        this.adjDate = adjDate;
     }
 
     /**
@@ -122,17 +116,17 @@ public class HqAcinsVO extends PageVO {
     }
 
     /**
-     * @return the acinsTitle
+     * @return the adjTitle
      */
-    public String getAcinsTitle() {
-        return acinsTitle;
+    public String getAdjTitle() {
+        return adjTitle;
     }
 
     /**
-     * @param acinsTitle the acinsTitle to set
+     * @param adjTitle the adjTitle to set
      */
-    public void setAcinsTitle(String acinsTitle) {
-        this.acinsTitle = acinsTitle;
+    public void setAdjTitle(String adjTitle) {
+        this.adjTitle = adjTitle;
     }
 
     /**
@@ -164,31 +158,17 @@ public class HqAcinsVO extends PageVO {
     }
 
     /**
-     * @return the adjCnt
+     * @return the totAdjAmt
      */
-    public Integer getAdjCnt() {
-        return adjCnt;
+    public Integer getTotAdjAmt() {
+        return totAdjAmt;
     }
 
     /**
-     * @param adjCnt the adjCnt to set
+     * @param totAdjAmt the totAdjAmt to set
      */
-    public void setAdjCnt(Integer adjCnt) {
-        this.adjCnt = adjCnt;
-    }
-
-    /**
-     * @return the totAcinsAmt
-     */
-    public Integer getTotAcinsAmt() {
-        return totAcinsAmt;
-    }
-
-    /**
-     * @param totAcinsAmt the totAcinsAmt to set
-     */
-    public void setTotAcinsAmt(Integer totAcinsAmt) {
-        this.totAcinsAmt = totAcinsAmt;
+    public void setTotAdjAmt(Integer totAdjAmt) {
+        this.totAdjAmt = totAdjAmt;
     }
 
     /**
@@ -276,48 +256,6 @@ public class HqAcinsVO extends PageVO {
     }
 
     /**
-     * @return the adjAmt
-     */
-    public Integer getAdjAmt() {
-        return adjAmt;
-    }
-
-    /**
-     * @param adjAmt the adjAmt to set
-     */
-    public void setAdjAmt(Integer adjAmt) {
-        this.adjAmt = adjAmt;
-    }
-
-    /**
-     * @return the cmptCurrQty
-     */
-    public Integer getCmptCurrQty() {
-        return cmptCurrQty;
-    }
-
-    /**
-     * @param cmptCurrQty the cmptCurrQty to set
-     */
-    public void setCmptCurrQty(Integer cmptCurrQty) {
-        this.cmptCurrQty = cmptCurrQty;
-    }
-
-    /**
-     * @return the acinsQty
-     */
-    public Integer getAcinsQty() {
-        return acinsQty;
-    }
-
-    /**
-     * @param acinsQty the acinsQty to set
-     */
-    public void setAcinsQty(Integer acinsQty) {
-        this.acinsQty = acinsQty;
-    }
-
-    /**
      * @return the adjQty
      */
     public Integer getAdjQty() {
@@ -332,17 +270,31 @@ public class HqAcinsVO extends PageVO {
     }
 
     /**
-     * @return the acinsAmt
+     * @return the adjAmt
      */
-    public Integer getAcinsAmt() {
-        return acinsAmt;
+    public Integer getAdjAmt() {
+        return adjAmt;
     }
 
     /**
-     * @param acinsAmt the acinsAmt to set
+     * @param adjAmt the adjAmt to set
      */
-    public void setAcinsAmt(Integer acinsAmt) {
-        this.acinsAmt = acinsAmt;
+    public void setAdjAmt(Integer adjAmt) {
+        this.adjAmt = adjAmt;
+    }
+
+    /**
+     * @return the currQty
+     */
+    public Integer getCurrQty() {
+        return currQty;
+    }
+
+    /**
+     * @param currQty the currQty to set
+     */
+    public void setCurrQty(Integer currQty) {
+        this.currQty = currQty;
     }
 
     /**
@@ -416,17 +368,17 @@ public class HqAcinsVO extends PageVO {
     }
 
     /**
-     * @return the acinsProdStatus
+     * @return the adjProdStatus
      */
-    public String getAcinsProdStatus() {
-        return acinsProdStatus;
+    public String getAdjProdStatus() {
+        return adjProdStatus;
     }
 
     /**
-     * @param acinsProdStatus the acinsProdStatus to set
+     * @param adjProdStatus the adjProdStatus to set
      */
-    public void setAcinsProdStatus(String acinsProdStatus) {
-        this.acinsProdStatus = acinsProdStatus;
+    public void setAdjProdStatus(String adjProdStatus) {
+        this.adjProdStatus = adjProdStatus;
     }
 
     /**
@@ -458,16 +410,16 @@ public class HqAcinsVO extends PageVO {
     }
 
     /**
-     * @return the acinsFg
+     * @return the adjFg
      */
-    public String getAcinsFg() {
-        return acinsFg;
+    public String getAdjFg() {
+        return adjFg;
     }
 
     /**
-     * @param acinsFg the acinsFg to set
+     * @param adjFg the adjFg to set
      */
-    public void setAcinsFg(String acinsFg) {
-        this.acinsFg = acinsFg;
+    public void setAdjFg(String adjFg) {
+        this.adjFg = adjFg;
     }
 }

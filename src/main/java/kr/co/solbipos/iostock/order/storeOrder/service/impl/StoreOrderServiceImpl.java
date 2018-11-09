@@ -106,7 +106,6 @@ public class StoreOrderServiceImpl implements StoreOrderService {
                 Long orderVat    = (storeOrderDtlVO.getOrderVat()      == null ? 0 : storeOrderDtlVO.getOrderVat())    * slipFg;
                 Long orderTot    = (storeOrderDtlVO.getOrderTot()      == null ? 0 : storeOrderDtlVO.getOrderTot())    * slipFg;
 
-                storeOrderDtlVO.setStoreCd(sessionInfoVO.getStoreCd());
                 storeOrderDtlVO.setOrderUnitQty(orderUnitQty);
                 storeOrderDtlVO.setOrderEtcQty(orderEtcQty);
                 storeOrderDtlVO.setOrderTotQty(orderTotQty);
@@ -119,6 +118,7 @@ public class StoreOrderServiceImpl implements StoreOrderService {
                 storeOrderDtlVO.setModDt(currentDt);
             }
             storeOrderDtlVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            storeOrderDtlVO.setStoreCd(sessionInfoVO.getStoreCd());
 
             // 추가
             if(insFg.equals("I")) {

@@ -104,7 +104,7 @@
         control="flex"
         initialized="initGrid(s,e)"
         is-read-only="false"
-        item-formatter="itemFormatter">
+        item-formatter="itemFormatter"> <!-- 체크박스가 있는 헤더머지 때문에 현재 페이지에 재정의 한 itemFormatter 를 사용 -->
 
         <!-- define columns -->
         <wj-flex-grid-column header="" binding="gChk" width="40" align="center"></wj-flex-grid-column>
@@ -252,7 +252,8 @@
 
     };
 
-    // 체크박스가 있는 헤더머지 때문에 itemFormatter 를 재정의함.
+
+    <!-- 체크박스가 있는 헤더머지 때문에 현재 페이지에 재정의 한 itemFormatter 를 사용 -->
     $scope.itemFormatter = function (panel, r, c, cell) {
       if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
         //align in center horizontally and vertically
@@ -299,10 +300,7 @@
             cb.addEventListener('click', function (e) {
               flex.beginUpdate();
               for (var i = 0; i < flex.rows.length; i++) {
-                var cell = flex.cells.getCellElement(i, 0);
-
-                console.log(cell);
-                console.log(cell.children[0]);
+                var cell = flex.cells.getCellElement(i, c);
 
                 // 활성화 및 readOnly 아닌 경우에만 체크되도록
                 if (!cell.children[0].disabled) {
