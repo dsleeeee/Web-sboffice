@@ -419,9 +419,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
     } else {
       // 둘중하나만 있으면 오류
       if (params.data || params.params) {
-        $scope.$apply(function() {
-          $scope._popMsg('파라미터가 올바르지 않습니다.');
-        });
+        $scope._popMsg('파라미터가 올바르지 않습니다.');
         return false;
       // 둘다 없으면 기존대로 설정
       } else {
@@ -454,6 +452,9 @@ function RootController(ctrlName, $scope, $http, isPicker) {
       property.data = data;
       property.params = sParams; /* 파라메터로 보낼 데이터 : request.getParameter */
     }
+
+    console.log(property);
+
     // ajax 통신 설정
     $http(property)
       .then(function successCallback(response) {
@@ -758,7 +759,7 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
       }
       // 메시지 팝업
       $scope._popMsg = function (msg, callback) {
-        $scope.$apply(function() {
+        var popUpMsg = function() {
           $scope.s_alert_msg = $sce.trustAsHtml(msg);
           setTimeout(function () {
             $scope._alertPopup.show(true, function () {
@@ -769,11 +770,18 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
               }
             });
           }, 100);
-        });
+        };
+        if ($scope.$$phase === '$apply' || $scope.$$phase === '$digest' ) {
+          popUpMsg();
+        } else {
+          $scope.$apply(function() {
+            popUpMsg();
+          });
+        }
       };
       // 메시지 컨펌
       $scope._popConfirm = function (msg, callback) {
-        $scope.$apply(function() {
+        var popUpConfirm = function() {
           $scope.s_confirm_msg = $sce.trustAsHtml(msg);
           setTimeout(function () {
             $scope._alertConfirm.show(true, function (e) {
@@ -786,7 +794,14 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
               }
             });
           }, 100);
-        });
+        };
+        if ($scope.$$phase === '$apply' || $scope.$$phase === '$digest' ) {
+          popUpConfirm();
+        } else {
+          $scope.$apply(function() {
+            popUpConfirm();
+          });
+        }
       };
       // 콤보박스 초기화 > ng-model 사용하기 위한 설정 : 20180831 노현수
       $scope._initComboBox = function (s) {
