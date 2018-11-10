@@ -1714,13 +1714,36 @@ p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17p
 .theTreeAll.wj-treeview > .wj-nodelist > .wj-node.on span {color:#fff;}
 .theTreeAll.wj-treeview > .wj-nodelist > .wj-nodelist > .wj-node.on span {color:#fff;}
 
-/* IE10+ */
-@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
-    /* Enter your style code */
-    .templateEdit {
-        /*         width:310px !important; */
-    }
-}
+
+/* **************************************** *
+ * 개발자 추가
+ * **************************************** */
+
+/** input readonly 스타일 */
+
+ol,ul, li {list-style: none;}
+
+input[readonly] {background-color: #F0F0F0 !important; color: #303030 !important;}
+input[disable] {background-color: #F0F0F0 !important; color: #303030 !important;}
+
+/*
+ *  20180821 추가
+ *  wijmo가 아닌 일반 select box의 경우에도 sb-select 클래스 적용
+ */
+select.sb-select {display:block!important; border:1px solid #e8e8e8; height:28px!important; line-height:30px; border-radius:0px; font-size:0.85em;}
+
+/*
+ * 20180823 추가
+ * elseCon 중간 글씨체 추가
+ */
+.elseCon .mdTxt {font-size:1.450em; line-height:1.5em; color:#222; font-weight:bold;}
+
+/**
+ * 20180927 추가
+ * 테이블이 아닌 div 에서도 sb-input 스타일 적용
+ */
+div input.sb-input {border:1px solid #e8e8e8; padding:0 10px; height:30px; line-height:30px; font-size:1em;}
+
 
 .templateEdit textarea {
     width: 100%;
@@ -1760,4 +1783,108 @@ p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17p
 
 .state-invalid div {
     color: red !important;
+}
+
+.tooltip {
+    position: absolute;
+    z-index: 1070;
+    display: block;
+    font-family: 'NotoR', Malgun Gothic, '맑은 고딕', Dotum, '돋움', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: left;
+    text-align: start;
+    text-decoration: none;
+    text-shadow: none;
+    text-transform: none;
+    letter-spacing: normal;
+    word-break: normal;
+    word-spacing: normal;
+    word-wrap: normal;
+    white-space: normal;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    line-break: auto
+}
+
+.tooltip.in {
+    filter: alpha(opacity=90);
+    opacity: .9
+}
+
+.tooltip.top {
+    padding: 5px 0;
+    margin-top: -3px
+}
+
+.tooltip.bottom {
+    padding: 5px 0;
+    margin-top: 3px
+}
+
+.tooltip-inner {
+    font-size: 12px !important;
+    max-width: 200px;
+    padding: 3px 8px;
+    color: #fff;
+    text-align: center;
+    background-color: #000;
+    border-radius: 4px
+}
+
+.tooltip-arrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid
+}
+
+.tooltip.top .tooltip-arrow {
+    bottom: 0;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px 5px 0;
+    border-top-color: #000
+}
+
+.tooltip.top-left .tooltip-arrow {
+    right: 5px;
+    bottom: 0;
+    margin-bottom: -5px;
+    border-width: 5px 5px 0;
+    border-top-color: #000
+}
+
+.tooltip.top-right .tooltip-arrow {
+    bottom: 0;
+    left: 5px;
+    margin-bottom: -5px;
+    border-width: 5px 5px 0;
+    border-top-color: #000
+}
+
+.tooltip.bottom .tooltip-arrow {
+    top: 0;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 0 5px 5px;
+    border-bottom-color: #000
+}
+
+.tooltip.bottom-left .tooltip-arrow {
+    top: 0;
+    right: 5px;
+    margin-top: -5px;
+    border-width: 0 5px 5px;
+    border-bottom-color: #000
+}
+
+.tooltip.bottom-right .tooltip-arrow {
+    top: 0;
+    left: 5px;
+    margin-top: -5px;
+    border-width: 0 5px 5px;
+    border-bottom-color: #000
 }

@@ -20,7 +20,7 @@ import kr.co.solbipos.application.common.service.PageVO;
  */
 public class ProdVO extends PageVO {
 
-    private static final long serialVersionUID = 6100122429987446624L;
+    private static final long serialVersionUID = 2507060678407090632L;
 
     /** 본사코드 */
     private String hqOfficeCd;
@@ -32,12 +32,65 @@ public class ProdVO extends PageVO {
     private String prodNm;
     /** 상품분류코드 */
     private String prodClassCd;
+    /** 코너코드 */
+    private String cornrCd;
     /** 원산지코드 */
     private String orgplceCd;
-    /** 바코드 */
-    private String barCd;
+    /** 사이드속성분류코드 */
+    private String sdattrClassCd;
+    /** 사이드선택그룹코드 */
+    private String sdselGrpCd;
+    /** 포인트적립여부 */
+    private String pointSaveYn;
+    /** 상품할인구분 */
+    private String prodDcFg;
+    /** 부가세구분 */
+    private String vatFg;
+    /** 상품봉사료여부*/
+    private String prodTipYn;
+    /** 상품포장금액 */
+    private Double prodPackAmt;
+    /** 상품배달금액 */
+    private Double prodDlvrAmt;
+    /** 상품유형구분 */
+    private String prodTypeFg;
+    /** 판매상품여부 */
+    private String saleProdYn;
+    /** 재고상품여부 */
+    private String stockProdYn;
+    /** 사이드상품여부 */
+    private String sideProdYn;
+    /** 세트상품구분 */
+    private String setProdFg;
+    /** 원가단가 */
+    private Double costUprc;
+    /** 최종원가단가 */
+    private Double lastCostUprc;
+    /** 공급단가 */
+    private Double splyUprc;
+    /** 공급단가사용여부 */
+    private String splyUprcUseYn;
+    /** 발주상품구분 */
+    private String poProdFg;
+    /** 발주단위구분 */
+    private String poUnitFg;
+    /** 발주단위수량 */
+    private Integer poUnitQty;
+    /** 발주단위허용구분 */
+    private String poUnitAllowFg;
+    /** 발주최소수량 */
+    private Integer poMinQty;
+    /** 안전재고수량 */
+    private Integer safeStockQty;
+    /** 재고단위여부 */
+    private String stockUnitFg;
     /** 사용여부 */
     private String useYn;
+    /** 비고 */
+    private String remark;
+
+    /** 바코드 */
+    private String barCd;
     /**
      * 소속구분<br>
      * M : 시스템<br>
@@ -121,6 +174,20 @@ public class ProdVO extends PageVO {
     }
 
     /**
+     * @return the cornrCd
+     */
+    public String getCornrCd() {
+        return cornrCd;
+    }
+
+    /**
+     * @param cornrCd the cornrCd to set
+     */
+    public void setCornrCd(String cornrCd) {
+        this.cornrCd = cornrCd;
+    }
+
+    /**
      * @return the orgplceCd
      */
     public String getOrgplceCd() {
@@ -130,17 +197,345 @@ public class ProdVO extends PageVO {
     /**
      * @param orgplceCd the orgplceCd to set
      */
-    public void setOrgplceCd(String orgplceCd) { this.orgplceCd = orgplceCd; }
+    public void setOrgplceCd(String orgplceCd) {
+        this.orgplceCd = orgplceCd;
+    }
 
     /**
-     * @return the barCd
+     * @return the sdattrClassCd
      */
-    public String getBarCd() { return barCd; }
+    public String getSdattrClassCd() {
+        return sdattrClassCd;
+    }
 
     /**
-     * @param barCd the barCd to set
+     * @param sdattrClassCd the sdattrClassCd to set
      */
-    public void setBarCd(String barCd) { this.barCd = barCd; }
+    public void setSdattrClassCd(String sdattrClassCd) {
+        this.sdattrClassCd = sdattrClassCd;
+    }
+
+    /**
+     * @return the sdselGrpCd
+     */
+    public String getSdselGrpCd() {
+        return sdselGrpCd;
+    }
+
+    /**
+     * @param sdselGrpCd the sdselGrpCd to set
+     */
+    public void setSdselGrpCd(String sdselGrpCd) {
+        this.sdselGrpCd = sdselGrpCd;
+    }
+
+    /**
+     * @return the pointSaveYn
+     */
+    public String getPointSaveYn() {
+        return pointSaveYn;
+    }
+
+    /**
+     * @param pointSaveYn the pointSaveYn to set
+     */
+    public void setPointSaveYn(String pointSaveYn) {
+        this.pointSaveYn = pointSaveYn;
+    }
+
+    /**
+     * @return the prodDcFg
+     */
+    public String getProdDcFg() {
+        return prodDcFg;
+    }
+
+    /**
+     * @param prodDcFg the prodDcFg to set
+     */
+    public void setProdDcFg(String prodDcFg) {
+        this.prodDcFg = prodDcFg;
+    }
+
+    /**
+     * @return the vatFg
+     */
+    public String getVatFg() {
+        return vatFg;
+    }
+
+    /**
+     * @param vatFg the vatFg to set
+     */
+    public void setVatFg(String vatFg) {
+        this.vatFg = vatFg;
+    }
+
+    /**
+     * @return the prodTipYn
+     */
+    public String getProdTipYn() {
+        return prodTipYn;
+    }
+
+    /**
+     * @param prodTipYn the prodTipYn to set
+     */
+    public void setProdTipYn(String prodTipYn) {
+        this.prodTipYn = prodTipYn;
+    }
+
+    /**
+     * @return the prodPackAmt
+     */
+    public Double getProdPackAmt() {
+        return prodPackAmt;
+    }
+
+    /**
+     * @param prodPackAmt the prodPackAmt to set
+     */
+    public void setProdPackAmt(Double prodPackAmt) {
+        this.prodPackAmt = prodPackAmt;
+    }
+
+    /**
+     * @return the prodDlvrAmt
+     */
+    public Double getProdDlvrAmt() {
+        return prodDlvrAmt;
+    }
+
+    /**
+     * @param prodDlvrAmt the prodDlvrAmt to set
+     */
+    public void setProdDlvrAmt(Double prodDlvrAmt) {
+        this.prodDlvrAmt = prodDlvrAmt;
+    }
+
+    /**
+     * @return the prodTypeFg
+     */
+    public String getProdTypeFg() {
+        return prodTypeFg;
+    }
+
+    /**
+     * @param prodTypeFg the prodTypeFg to set
+     */
+    public void setProdTypeFg(String prodTypeFg) {
+        this.prodTypeFg = prodTypeFg;
+    }
+
+    /**
+     * @return the saleProdYn
+     */
+    public String getSaleProdYn() {
+        return saleProdYn;
+    }
+
+    /**
+     * @param saleProdYn the saleProdYn to set
+     */
+    public void setSaleProdYn(String saleProdYn) {
+        this.saleProdYn = saleProdYn;
+    }
+
+    /**
+     * @return the stockProdYn
+     */
+    public String getStockProdYn() {
+        return stockProdYn;
+    }
+
+    /**
+     * @param stockProdYn the stockProdYn to set
+     */
+    public void setStockProdYn(String stockProdYn) {
+        this.stockProdYn = stockProdYn;
+    }
+
+    /**
+     * @return the sideProdYn
+     */
+    public String getSideProdYn() {
+        return sideProdYn;
+    }
+
+    /**
+     * @param sideProdYn the sideProdYn to set
+     */
+    public void setSideProdYn(String sideProdYn) {
+        this.sideProdYn = sideProdYn;
+    }
+
+    /**
+     * @return the setProdFg
+     */
+    public String getSetProdFg() {
+        return setProdFg;
+    }
+
+    /**
+     * @param setProdFg the setProdFg to set
+     */
+    public void setSetProdFg(String setProdFg) {
+        this.setProdFg = setProdFg;
+    }
+
+    /**
+     * @return the costUprc
+     */
+    public Double getCostUprc() {
+        return costUprc;
+    }
+
+    /**
+     * @param costUprc the costUprc to set
+     */
+    public void setCostUprc(Double costUprc) {
+        this.costUprc = costUprc;
+    }
+
+    /**
+     * @return the lastCostUprc
+     */
+    public Double getLastCostUprc() {
+        return lastCostUprc;
+    }
+
+    /**
+     * @param lastCostUprc the lastCostUprc to set
+     */
+    public void setLastCostUprc(Double lastCostUprc) {
+        this.lastCostUprc = lastCostUprc;
+    }
+
+    /**
+     * @return the splyUprc
+     */
+    public Double getSplyUprc() {
+        return splyUprc;
+    }
+
+    /**
+     * @param splyUprc the splyUprc to set
+     */
+    public void setSplyUprc(Double splyUprc) {
+        this.splyUprc = splyUprc;
+    }
+
+    /**
+     * @return the splyUprcUseYn
+     */
+    public String getSplyUprcUseYn() {
+        return splyUprcUseYn;
+    }
+
+    /**
+     * @param splyUprcUseYn the splyUprcUseYn to set
+     */
+    public void setSplyUprcUseYn(String splyUprcUseYn) {
+        this.splyUprcUseYn = splyUprcUseYn;
+    }
+
+    /**
+     * @return the poProdFg
+     */
+    public String getPoProdFg() {
+        return poProdFg;
+    }
+
+    /**
+     * @param poProdFg the poProdFg to set
+     */
+    public void setPoProdFg(String poProdFg) {
+        this.poProdFg = poProdFg;
+    }
+
+    /**
+     * @return the poUnitFg
+     */
+    public String getPoUnitFg() {
+        return poUnitFg;
+    }
+
+    /**
+     * @param poUnitFg the poUnitFg to set
+     */
+    public void setPoUnitFg(String poUnitFg) {
+        this.poUnitFg = poUnitFg;
+    }
+
+    /**
+     * @return the poUnitQty
+     */
+    public Integer getPoUnitQty() {
+        return poUnitQty;
+    }
+
+    /**
+     * @param poUnitQty the poUnitQty to set
+     */
+    public void setPoUnitQty(Integer poUnitQty) {
+        this.poUnitQty = poUnitQty;
+    }
+
+    /**
+     * @return the poUnitAllowFg
+     */
+    public String getPoUnitAllowFg() {
+        return poUnitAllowFg;
+    }
+
+    /**
+     * @param poUnitAllowFg the poUnitAllowFg to set
+     */
+    public void setPoUnitAllowFg(String poUnitAllowFg) {
+        this.poUnitAllowFg = poUnitAllowFg;
+    }
+
+    /**
+     * @return the poMinQty
+     */
+    public Integer getPoMinQty() {
+        return poMinQty;
+    }
+
+    /**
+     * @param poMinQty the poMinQty to set
+     */
+    public void setPoMinQty(Integer poMinQty) {
+        this.poMinQty = poMinQty;
+    }
+
+    /**
+     * @return the safeStockQty
+     */
+    public Integer getSafeStockQty() {
+        return safeStockQty;
+    }
+
+    /**
+     * @param safeStockQty the safeStockQty to set
+     */
+    public void setSafeStockQty(Integer safeStockQty) {
+        this.safeStockQty = safeStockQty;
+    }
+
+    /**
+     * @return the stockUnitFg
+     */
+    public String getStockUnitFg() {
+        return stockUnitFg;
+    }
+
+    /**
+     * @param stockUnitFg the stockUnitFg to set
+     */
+    public void setStockUnitFg(String stockUnitFg) {
+        this.stockUnitFg = stockUnitFg;
+    }
 
     /**
      * @return the useYn
@@ -154,6 +549,34 @@ public class ProdVO extends PageVO {
      */
     public void setUseYn(String useYn) {
         this.useYn = useYn;
+    }
+
+    /**
+     * @return the remark
+     */
+    public String getRemark() {
+        return remark;
+    }
+
+    /**
+     * @param remark the remark to set
+     */
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    /**
+     * @return the barCd
+     */
+    public String getBarCd() {
+        return barCd;
+    }
+
+    /**
+     * @param barCd the barCd to set
+     */
+    public void setBarCd(String barCd) {
+        this.barCd = barCd;
     }
 
     /**

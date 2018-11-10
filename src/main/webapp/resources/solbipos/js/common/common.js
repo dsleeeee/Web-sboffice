@@ -8,7 +8,7 @@
   //id=1,id2=2,id3=3, ... > { id1:1, id2:2, id3:3, ... }
   function parseObject( str, sep ) {
     if( typeof str !== "string" ) return str;
-    var arr = str.split( sep || "," )
+    var arr = str.split( sep || "," );
     var obj = {};
     for( var li in arr ) {
         var keyValue = arr[ li ].split( "=" )
@@ -301,13 +301,12 @@
     }
   });
 
-
 }( "undefined" !== typeof window ? window : this, jQuery );
 
 function getParam(name){
   var result = "";
   var queryString = window.location.search;
-  var paramMap = {}
+  var paramMap = {};
   if (queryString === "") {
     result = undefined;
   }
@@ -345,4 +344,9 @@ function isEmptyObject(obj) {
 $(document).on('click', 'a[href="#"]', function (e) {
   e.preventDefault();
   return false;
+});
+
+// tooltip 활성화
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip();
 });

@@ -36,4 +36,7 @@ public interface ProdService {
      */
     DefaultMap<String> getProdDetail(ProdVO prodVO, SessionInfoVO sessionInfoVO);
 
+    /** 상품정보 저장 */
+    int saveProductInfo(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+
 }

@@ -19,6 +19,14 @@ var app = agrid.getApp();
 app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('prodCtrl', $scope, $http, true));
+  // 상품 상세 정보
+  $scope.prodInfo = {};
+  $scope.setProdInfo = function(data){
+    $scope.prodInfo = data;
+  };
+  $scope.getProdInfo = function(){
+    return $scope.prodInfo;
+  };
   // 전체기간 체크박스
   $scope.isChecked = true;
   // 콤보박스 데이터 Set
@@ -58,9 +66,7 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
     // 파라미터
     var params = {};
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
-    $scope._inquiryMain("/base/prod/prod/prod/list.sb", params, function() {
-
-    });
+    $scope._inquiryMain("/base/prod/prod/prod/list.sb", params);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
@@ -72,26 +78,47 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 상세정보 팝업
   $scope.searchProdDetail = function(prodCd) {
-    var popup = $scope.prodDetailLayer;
-    popup.show(true, function (s) {
-      // 선택 버튼 눌렀을때만
-      if (popup.dialogResult === "wj-hide-apply") {
-
+    var detailPopUp = $scope.prodDetailLayer;
+    detailPopUp.show(true, function (s) {
+      // 수정 버튼 눌렀을때만
+      if (s.dialogResult === "wj-hide-apply") {
+        // 상품정보 수정 팝업
+        var modifyPopUp = $scope.prodModifyLayer;
+        modifyPopUp.show(true, function (s) {
+          // 상품정보 수정 팝업 - 저장
+          if (s.dialogResult === "wj-hide-apply") {
+            // 팝업 속성에서 상품정보 get
+            var params = s.data;
+            // 저장수행
+            $scope._postJSONSave.withPopUp("/base/prod/prod/prod/save.sb", params, function () {
+              $scope._popMsg(messages["cmm.saveSucc"]);
+            });
+          }
+        });
       }
     });
   };
 
   // 화면 ready 된 후 설정
   angular.element(document).ready(function () {
-    // 팝업 핸들러 추가
+    // 상품상세정보 팝업 핸들러 추가
     $scope.prodDetailLayer.shown.addHandler(function (s) {
       var selectedRow = $scope.flex.selectedRows[0]._data;
-      // 팝업 열린 뒤. 딜레이줘서 열리고 나서 실행되도록 함
       setTimeout(function() {
         var params = {};
         params.prodCd = selectedRow.prodCd;
         $scope._broadcast('prodDetailCtrl', params);
       }, 50);
+    });
+    // 상품상세정보 수정 팝업 핸들러 추가
+    $scope.prodModifyLayer.shown.addHandler(function (s) {
+      setTimeout(function() {
+        $scope.$apply(function() {
+          $scope._broadcast('prodModifyCtrl', $scope.getProdInfo());
+          // 팝업에 속성 추가 : 상품정보
+          s.data = $scope.getProdInfo();
+        });
+      }, 10);
     });
   });
 

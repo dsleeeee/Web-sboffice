@@ -156,28 +156,17 @@
 
 <script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20181027.01" charset="utf-8"></script>
 
-
 <%-- 레이어 팝업 --%>
-<c:import url="/WEB-INF/view/base/prod/prod/popUpProd.jsp">
+<c:import url="/WEB-INF/view/base/prod/prod/popUpProdDetail.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
-<%--//상품상세 정보--%>
-<div id="prodFullDimmed" class="fullDimmed" style="display: none;"></div>
-<div id="prodDetailLayer" class="layer" style="display: none;">
-  <div class="layer_inner">
-    <div class="title w600px">
-      <p class="tit"></p>
-      <a href="#" class="btn_close"></a>
+<%-- 레이어 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/prod/popUpProdModify.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
 
-      <div class="btnSet">
-        <span><a href="#" id="btnClose" class="btn_blue">닫기</a></span>
-      </div>
-    </div>
-    <!--//layerContent-->
-  </div>
-</div>
-<!--//layer:For Center screen-->
 
 
