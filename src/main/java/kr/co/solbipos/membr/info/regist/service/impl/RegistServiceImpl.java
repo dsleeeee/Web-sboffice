@@ -1,25 +1,21 @@
 package kr.co.solbipos.membr.info.regist.service.impl;
 
-import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.utils.DateUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
-import kr.co.common.utils.spring.ObjectUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
-import kr.co.solbipos.membr.info.grade.service.MembrClassVO;
 import kr.co.solbipos.membr.anals.credit.service.CreditStoreVO;
+import kr.co.solbipos.membr.info.grade.service.MembrClassVO;
 import kr.co.solbipos.membr.info.regist.service.RegistService;
 import kr.co.solbipos.membr.info.regist.service.RegistVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -86,11 +82,11 @@ public class RegistServiceImpl implements RegistService {
         return mapper.selectMemberClassList(membrClassVO);
     }
 
-    /** 회원정보 등록 */
-    @Override
-    public int insertRegistMember(RegistVO registVO) {
-        return mapper.insertRegistMember(registVO);
-    }
+//    /** 회원정보 등록 */
+//    @Override
+//    public int insertRegistMember(RegistVO registVO) {
+//        return mapper.insertRegistMember(registVO);
+//    }
 
     /** 리스트에서 선택한 회원 정보 조회 */
     @Override
@@ -123,52 +119,73 @@ public class RegistServiceImpl implements RegistService {
         return mapper.selectMembers(registVO);
     }
 
-    /** 회원정보 수정 */
+//    /** 회원정보 수정 */
+//    @Override
+//    public int updateMember(RegistVO registVO) {
+//
+//    }
+
+
+//    /** 회원 카드 등록 */
+//    @Override
+//    public int insertMembrCard(RegistVO registVO) {
+//        return mapper.insertMembrCard(registVO);
+//    }
+
+//    /** 회원 카드 수정 */
+//    @Override
+//    public int updateMembrCard(RegistVO registVO) {
+//        return mapper.updateMembrCard(registVO);
+//    }
+
+    /** 회원 등록 */
     @Override
-    public int updateMember(RegistVO registVO) {
-        return mapper.updateMember(registVO);
+    public int registMemberInfo(RegistVO registVO, SessionInfoVO sessionInfoVO) {
+
+        String dt = currentDateTimeString();
+
+        registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        registVO.setRegDt(dt);
+        registVO.setRegId(sessionInfoVO.getUserId());
+        registVO.setModDt(dt);
+        registVO.setModId(sessionInfoVO.getUserId());
+
+        int result = mapper.registMemberInfo(registVO);
+        if(result == 1 && (!StringUtil.isEmpties(registVO.getMembrCardNo()))) {
+            // 회원카드 등록
+            mapper.insertMembrCard(registVO);
+        }
+        return result;
+    }
+
+    /** 회원 수정 */
+    @Override
+    public int updateMemberInfo(RegistVO registVO, SessionInfoVO sessionInfoVO) {
+
+        String dt = currentDateTimeString();
+
+        registVO.setRegDt(dt);
+        registVO.setRegId(sessionInfoVO.getUserId());
+        registVO.setModDt(dt);
+        registVO.setModId(sessionInfoVO.getUserId());
+
+        int result = mapper.updateMemberInfo(registVO);
+        if(result == 1) {
+            // 회원카드 수정
+            mapper.updateMembrCard(registVO);
+        }
+        return result;
     }
 
     /** 회원 삭제 */
     @Override
-    public int deleteMember(RegistVO registVO) {
-        return mapper.deleteMember(registVO);
-    }
+    public int deleteMemberInfo(RegistVO registVO, SessionInfoVO sessionInfoVO  ) {
 
-    /** 회원 카드 등록 */
-    @Override
-    public int insertMembrCard(RegistVO registVO) {
-        return mapper.insertMembrCard(registVO);
-    }
 
-    /** 회원 카드 수정 */
-    @Override
-    public int updateMembrCard(RegistVO registVO) {
-        return mapper.updateMembrCard(registVO);
-    }
+        registVO.setModId(sessionInfoVO.getUserId());
+        registVO.setModDt(DateUtil.currentDateTimeString());
 
-    /** 회원등록 */
-    @Override
-    public int saveRegistMember(RegistVO registVO) {
-        RegistVO chkR = selectMember(registVO);
-        int result = 0;
-        // 없는 회원이면 신규 저장
-        if(ObjectUtil.isEmpty(chkR)) {
-            result = insertRegistMember(registVO);
-            if(result == 1 && (!StringUtil.isEmpties(registVO.getMembrCardNo()))) {
-                // 회원카드 등록
-                insertMembrCard(registVO);
-            }
-        }
-        // 있는 회원이면 수정
-        else {
-            result = updateMember(registVO);
-            if(result == 1) {
-                // 회원카드 수정
-                updateMembrCard(registVO);
-            }
-        }
-        return result;
+        return mapper.deleteMemberInfo(registVO);
     }
 
     /***

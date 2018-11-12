@@ -54,27 +54,19 @@
               <%-- 회원명 --%>
               <th><s:message code="regist.membr.nm" /><em class="imp">*</em></th>
               <td>
-                <input type="text" name="rMembrNm"  id="rMembrNm" class="sb-input w100" ng-model="member.membrNm" name="membrNm" >
-                <div
-                        class="error-message"
-                <%--        ng-show="regForm.membrNm.$invalid && !regForm.membrNm.$pristine"--%>
-                >
-                  We need a valid e-mail address.
-                </div>
-
-
+                <input type="text" id="rMembrNm" name="membrNm" class="sb-input w100" ng-model="member.membrNm"  maxlength="15" required>
               </td>
               <%-- 회원명(영문) --%>
               <th><s:message code="regist.membr.nm.eng" /><em class="imp">*</em></th>
               <td>
-                <input type="text" id="rMembrNmEng" class="sb-input w100" ng-model="member.membrNmEng" readonly="readonly"/>
+                <input type="text" id="rMembrNmEng" class="sb-input w100" ng-model="member.membrNmEng" maxlength="15" />
               </td>
             </tr>
             <tr>
-              <%-- 회원카드번호(전화번호) --%>
-              <th><s:message code="regist.membr.card.no" /><em class="imp">*</em></th>
+              <%-- 전화번호 --%>
+              <th><s:message code="regist.tel" /><em class="imp">*</em></th>
               <td>
-                <input type="text" id="rMembrCardNo" class="sb-input w100" ng-model="member.membrCardNo" maxlength="15"/>
+                <input type="text" id="rTelNo" ng-model="member.telNo" class="sb-input w100" maxlength="11" placeholder="<s:message code='storeManage.bizNo.comment' />" required="" />
               </td>
               <%-- 성별 --%>
               <th><s:message code="regist.gender" /><em class="imp">*</em></th>
@@ -107,7 +99,7 @@
                           selected-value-path="value"
                           is-editable="false"
                           initialized="_initComboBox(s)"
-                          selected-index-changed="setSysStatFgVal(s,e)">
+                          selected-index-changed="changeWeddingCombo(s,e)">
                   </wj-combo-box>
                 </div>
               </td>
@@ -128,6 +120,16 @@
               </td>
             </tr>
             <tr>
+              <%-- 음력/양력 구분 --%>
+              <th><s:message code="regist.lunarYn" /></th>
+              <td>
+                <div class="sb-input">
+                  <input type="radio" ng-model="member.lunarYn" value="N" checked="checked">
+                  <label><s:message code="regist.solar" /></label>
+                  <input type="radio" ng-model="member.lunarYn" value="Y">
+                  <label class="mr5"><s:message code="regist.lunar" /></label>
+                </div>
+              </td>
               <%-- 생일 --%>
               <th><s:message code="regist.brthd" /></th>
               <td>
@@ -143,6 +145,24 @@
                   </wj-input-date>
                 </div>
               </td>
+            </tr>
+            <tr>
+              <%-- 회원등급 --%>
+              <th><s:message code="regist.memberClass" /><em class="imp">*</em></th>
+              <td>
+                <div class="sb-select">
+                  <wj-combo-box
+                          id="rMemberClass"
+                          ng-model="member.membrClassCd"
+                          control="memberClassCombo"
+                          items-source="_getComboData('rMemberClass')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false"
+                          initialized="_initComboBox(s)">
+                  </wj-combo-box>
+                </div>
+              </td>
               <%-- 사용여부 --%>
               <th><s:message code="regist.useYn" /><em class="imp">*</em></th>
               <td>
@@ -155,29 +175,21 @@
                           display-member-path="name"
                           selected-value-path="value"
                           is-editable="false"
-                          initialized="_initComboBox(s)"
-                          selected-index-changed="setAreaCdVal(s,e)">
+                          initialized="_initComboBox(s)">
                   </wj-combo-box>
                 </div>
               </td>
             </tr>
             <tr>
-              <%-- 전화번호 --%>
-              <th><s:message code="regist.tel" /><em class="imp">*</em></th>
-              <td colspan="3">
-                <input type="text" id="rTelNo" ng-model="member.telNo" class="sb-input w100" maxlength="11" placeholder="<s:message code='storeManage.bizNo.comment' />" />
-              </td>
-            </tr>
-            <tr>
               <%-- E-mail --%>
-              <th><s:message code="regist.email" /><em class="imp">*</em></th>
+              <th><s:message code="regist.email" /></th>
               <td colspan="3">
                 <input type="text" id="rEmailAddr" ng-model="member.emailAddr" class="sb-input w100" maxlength="50"/>
               </td>
             </tr>
             <tr>
               <%-- 주소 //TODO 주소검색 추가 필요 --%>
-              <th><s:message code="regist.addr" /><em class="imp">*</em></th>
+              <th><s:message code="regist.addr" /></th>
               <td colspan="3">
                 <input type="text" id="rPostNo" ng-model="member.postNo" class="sb-input w30" maxlength="5"/>
                 <a id="btnSrchAddr" href="#" class="btn_grayS ml5" ng-click="searchAddr()">
@@ -217,8 +229,7 @@
                           display-member-path="name"
                           selected-value-path="value"
                           is-editable="false"
-                          initialized="_initComboBox(s)"
-                    <%--selected-index-changed="setClsFgVal(s,e)"--%>>
+                          initialized="_initComboBox(s)">
                   </wj-combo-box>
                 </div>
               </td>
@@ -248,7 +259,6 @@
         <span><a href="#" class="btn_blue pd20" id="btnSave" ng-click="save()"><s:message code="cmm.save" /></a></span>
       </div>
     </div>
-
   </div>
 </wj-popup>
 <script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberRegist.js?ver=20181109.01" charset="utf-8"></script>

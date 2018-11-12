@@ -182,8 +182,8 @@
         TABLE    : TB_MB_MEMBER
         COMMENTS : 회원정보 등록
     -->
-    <insert id="insertRegistMember" parameterType="registVO">
-        /* RegistMapper.insertRegistMember */
+    <insert id="registMemberInfo" parameterType="registVO">
+        /* RegistMapper.registMemberInfo */
         <![CDATA[
         INSERT INTO TB_MB_MEMBER tmm (
             tmm.MEMBR_NO,
@@ -248,8 +248,8 @@
         TABLE    : TB_MB_MEMBER
         COMMENTS : 회원정보 수정
     -->
-    <update id="updateMember" parameterType="registVO">
-        /* RegistMapper.updateMember */
+    <update id="updateMemberInfo" parameterType="registVO">
+        /* RegistMapper.updateMemberInfo */
         UPDATE TB_MB_MEMBER tmm
            SET tmm.MEMBR_NM = #{membrNm},
                tmm.MEMBER_ENG_NM = #{membrNicknm},
@@ -278,8 +278,8 @@
         TABLE    : TB_MB_MEMBER
         COMMENTS : 회원정보 삭제 버튼 처리 USE_YN : N 으로 업데이트 처리
     -->
-    <delete id="deleteMember" parameterType="registVO">
-      /* RegistMapper.deleteMember */
+    <delete id="deleteMemberInfo" parameterType="registVO">
+      /* RegistMapper.deleteMemberInfo */
       UPDATE TB_MB_MEMBER tmm
          SET tmm.USE_YN = 'N',
              tmm.MOD_ID = #{modId},

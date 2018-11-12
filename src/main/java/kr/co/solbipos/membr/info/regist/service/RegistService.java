@@ -56,20 +56,12 @@ public interface RegistService {
     RegistVO selectMember(RegistVO registVO, SessionInfoVO sessionInfoVO);
 
     /**
-     * 일치하는 회원정보가 있으면 수정, 없으면 추가
+     * 회원정보 등록
      *
      * @param registVO
      * @return
      */
-    int saveRegistMember(RegistVO registVO);
-
-    /**
-     * 회원정보 저장
-     *
-     * @param registVO
-     * @return
-     */
-    int insertRegistMember(RegistVO registVO);
+    int registMemberInfo(RegistVO registVO, SessionInfoVO sessionInfoVO);
 
     /**
      * 회원정보 수정
@@ -77,7 +69,7 @@ public interface RegistService {
      * @param registVO
      * @return
      */
-    int updateMember(RegistVO registVO);
+    int updateMemberInfo(RegistVO registVO, SessionInfoVO sessionInfoVO );
 
     /**
      * 회원정보 삭제
@@ -85,23 +77,42 @@ public interface RegistService {
      * @param registVO
      * @return
      */
-    int deleteMember(RegistVO registVO);
+    int deleteMemberInfo(RegistVO registVO , SessionInfoVO sessionInfoVO );
 
-    /**
-     * 회원카드 등록
-     *
-     * @param registVO
-     * @return
-     */
-    int insertMembrCard(RegistVO registVO);
 
-    /**
-     * 회원카드 수정
-     *
-     * @param registVO
-     * @return
-     */
-    int updateMembrCard(RegistVO registVO);
+    //    /**
+//     * 회원정보 저장
+//     *
+//     * @param registVO
+//     * @return
+//     */
+//    int insertRegistMember(RegistVO registVO);
+
+
+//    /**
+//     * 회원정보 수정
+//     *
+//     * @param registVO
+//     * @return
+//     */
+//    int updateMember(RegistVO registVO);
+
+
+//    /**
+//     * 회원카드 등록
+//     *
+//     * @param registVO
+//     * @return
+//     */
+//    int insertMembrCard(RegistVO registVO);
+
+//    /**
+//     * 회원카드 수정
+//     *
+//     * @param registVO
+//     * @return
+//     */
+//    int updateMembrCard(RegistVO registVO);
 
     /**
      * 후불 회원 등록 매장 조회

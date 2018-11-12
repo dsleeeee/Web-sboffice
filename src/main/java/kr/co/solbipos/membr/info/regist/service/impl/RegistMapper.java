@@ -66,7 +66,7 @@ public interface RegistMapper {
      * @param registVO
      * @return
      */
-    int insertRegistMember(RegistVO registVO);
+    int registMemberInfo(RegistVO registVO);
 
     /**
      * 회원정보 수정
@@ -74,7 +74,7 @@ public interface RegistMapper {
      * @param registVO
      * @return
      */
-    int updateMember(RegistVO registVO);
+    int updateMemberInfo(RegistVO registVO);
 
     /**
      * 회원정보 삭제
@@ -82,7 +82,7 @@ public interface RegistMapper {
      * @param registVO
      * @return
      */
-    int deleteMember(RegistVO registVO);
+    int deleteMemberInfo(RegistVO registVO);
 
     /**
      * 회원카드 등록

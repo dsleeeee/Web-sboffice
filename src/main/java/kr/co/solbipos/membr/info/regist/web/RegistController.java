@@ -31,8 +31,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +43,7 @@ import static kr.co.common.utils.grid.ReturnUtil.returnJsonBindingFieldError;
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
+ * @ 2018.05.01  정용길      최초생성
  * @ 2018.05.01  정용길      최초생성
  *
  * @author NHN한국사이버결제 KCP 정용길
@@ -92,6 +91,7 @@ public class RegistController {
 
         // 회원등급 리스트 조회
         List membrClassList = registService.selectMembrClassList(sessionInfoVO);
+
         String membrClassListAll = cmmCodeUtil.assmblObj(membrClassList, "name", "value", UseYn.N);
 
         // 본사일 경우 해당 본사의 기본매장(코드)을 조회 해야 함.
@@ -107,7 +107,7 @@ public class RegistController {
         model.addAttribute("memberClassList", membrClassListAll);
         model.addAttribute("defaultStoreCd", defaultStoreCd);
 
-        return "membr/info/view/view";
+        return "membr/info/view/memberInfo";
     }
 
     /**
@@ -161,27 +161,46 @@ public class RegistController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "base/regist.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "base/registMemberInfo.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result baseRegist(@Validated(Regist.class) @RequestBody RegistVO registVO, BindingResult bindingResult,
+    public Result registMemberInfo(@Validated(Regist.class) @RequestBody RegistVO registVO, BindingResult bindingResult,
         HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         // 입력값 에러 처리
         if (bindingResult.hasErrors()) {
             return returnJsonBindingFieldError(bindingResult);
         }
 
-        SessionInfoVO si = sessionService.getSessionInfo(request);
-        // 기본값 세팅
-        registVO.setMembrClassCd("000");    // TODO 추후 회원등급 개발되면 수정
-        registVO.setLunarYn("N");
-        registVO.setMembrOrgnCd(si.getOrgnCd());
-        registVO.setRegId(si.getUserId());
-        registVO.setRegDt(DateUtil.currentDateTimeString());
-        registVO.setModId(si.getUserId());
-        registVO.setModDt(DateUtil.currentDateTimeString());
+        int result = registService.registMemberInfo(registVO, sessionInfoVO);
 
-        int result = registService.saveRegistMember(registVO);
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+
+    /**
+     * 회원정보 수정
+     *
+     * @param registVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "base/updateMemberInfo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result updateMemberInfo(@Validated(Regist.class) @RequestBody RegistVO registVO, BindingResult bindingResult,
+        HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 입력값 에러 처리
+        if (bindingResult.hasErrors()) {
+            return returnJsonBindingFieldError(bindingResult);
+        }
+
+        int result = registService.updateMemberInfo(registVO, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }
@@ -199,16 +218,16 @@ public class RegistController {
     @ResponseBody
     public Result baseRemove(@Validated(RegistDelete.class) RegistVO registVO, BindingResult bindingResult,
         HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
         // 입력값 에러 처리
         if (bindingResult.hasErrors()) {
             return returnJsonBindingFieldError(bindingResult);
         }
 
-        SessionInfoVO si = sessionService.getSessionInfo(request);
-        registVO.setModId(si.getUserId());
-        registVO.setModDt(DateUtil.currentDateTimeString());
+        int result = registService.deleteMemberInfo(registVO, sessionInfoVO);
 
-        int result = registService.deleteMember(registVO);
         return ReturnUtil.returnJson(Status.OK, result);
     }
 
