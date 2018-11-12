@@ -57,76 +57,76 @@ public class HqManageServiceImpl implements HqManageService{
 
     /** 본사 목록 조회 */
     @Override
-    public List<DefaultMap<String>> list(HqManageVO hqManageVO) {
-        return mapper.getHqOfficeList(hqManageVO);
+    public List<DefaultMap<String>> list(HqManageVO hqManage) {
+        return mapper.getHqOfficeList(hqManage);
     }
 
     /** 본사 상세정보 조회 */
     @Override
-    public DefaultMap<String> getHqDetailInfo(HqManageVO hqManageVO) {
-        return mapper.getHqDetailInfo(hqManageVO);
+    public DefaultMap<String> dtlInfo(HqManageVO hqManage) {
+        return mapper.dtlInfo(hqManage);
     }
 
     /** 사업자번호 중복 체크 */
     @Override
-    public int chkBizNo(HqManageVO hqManageVO) {
-        return mapper.chkBizNo(hqManageVO);
+    public int chkBizNo(HqManageVO hqManage) {
+        return mapper.chkBizNo(hqManage);
     }
 
     /** 사업자번호 사용현황 목록 */
     @Override
-    public List<DefaultMap<String>> getBizUseList(HqManageVO hqManageVO) {
-        return mapper.getBizUseList(hqManageVO);
+    public List<DefaultMap<String>> getBizUseList(HqManageVO hqManage) {
+        return mapper.getBizUseList(hqManage);
     }
 
     /** 사업자번호 사용현황 상세 */
     @Override
-    public DefaultMap<String> getBizInfoDtl(HqManageVO hqManageVO) {
-        return mapper.getBizInfoDtl(hqManageVO);
+    public DefaultMap<String> getBizInfoDtl(HqManageVO hqManage) {
+        return mapper.getBizInfoDtl(hqManage);
     }
 
     /** 본사 신규 등록 */
     @Override
-    public int regist(HqManageVO hqManageVO, SessionInfoVO sessionInfoVO) {
+    public int regist(HqManageVO hqManage, SessionInfoVO sessionInfoVO) {
 
         String dt = currentDateTimeString();
 
-        hqManageVO.setRegDt(dt);
-        hqManageVO.setModDt(dt);
-        hqManageVO.setRegId(sessionInfoVO.getUserId());
-        hqManageVO.setModId(sessionInfoVO.getUserId());
+        hqManage.setRegDt(dt);
+        hqManage.setModDt(dt);
+        hqManage.setRegId(sessionInfoVO.getUserId());
+        hqManage.setModId(sessionInfoVO.getUserId());
 
-        if(SysStatFg.CLOSE == hqManageVO.getSysStatFg() ) {
-            hqManageVO.setSysClosureDate(SYS_CLOSURE_DATE);
-        } else  if(SysStatFg.DEMO == hqManageVO.getSysStatFg() ) {
-            hqManageVO.setSysClosureDate(SYS_CLOSURE_DATE);
+        if(SysStatFg.CLOSE == hqManage.getSysStatFg() ) {
+            hqManage.setSysClosureDate(SYS_CLOSURE_DATE);
+        } else  if(SysStatFg.DEMO == hqManage.getSysStatFg() ) {
+            hqManage.setSysClosureDate(SYS_CLOSURE_DATE);
         } else {
-            hqManageVO.setSysClosureDate(currentDateString());
+            hqManage.setSysClosureDate(currentDateString());
         }
 
         // 본사 코드 조회
-        String hqOfficeCd = mapper.getHqOfficeCd(hqManageVO);
+        String hqOfficeCd = mapper.getHqOfficeCd(hqManage);
 
         String wUuserId = hqOfficeCd.toLowerCase(); // 웹 사용자 아이디
         String wUserPwd = EncUtil.setEncSHA256(wUuserId + DEFAULT_POS_EMPNO);    // 웹 패스워드
         String pEmpNo = DEFAULT_POS_EMPNO; // 포스 기본 사용자 사원번호
         String pUserPwd = EncUtil.setEncSHA256(pEmpNo + DEFAULT_POS_PASSWORD);  // 포스 패스워드
 
-        hqManageVO.setHqOfficeCd(hqOfficeCd);
-        hqManageVO.setUserId(wUuserId);
-        hqManageVO.setUserPwd(wUserPwd);
-        hqManageVO.setPosEmpNo(pEmpNo);
-        hqManageVO.setPosUserPwd(pUserPwd);
+        hqManage.setHqOfficeCd(hqOfficeCd);
+        hqManage.setUserId(wUuserId);
+        hqManage.setUserPwd(wUserPwd);
+        hqManage.setPosEmpNo(pEmpNo);
+        hqManage.setPosUserPwd(pUserPwd);
 
         // 본사 등록
-        int procCnt = mapper.regist(hqManageVO);
+        int procCnt = mapper.regist(hqManage);
 
         if(procCnt > 0) {
 
             // 기본 사원 등록
-            int employeeReg = mapper.registEmployee(hqManageVO);
+            int employeeReg = mapper.registEmployee(hqManage);
             // 웹 사용자 등록
-            int webUserReg = mapper.registWebUser(hqManageVO);
+            int webUserReg = mapper.registWebUser(hqManage);
 
             procCnt += employeeReg + webUserReg;
         }
@@ -219,21 +219,21 @@ public class HqManageServiceImpl implements HqManageService{
 
     /** 본사 수정 */
     @Override
-    public int modify(HqManageVO hqManageVO, SessionInfoVO sessionInfoVO) {
+    public int modify(HqManageVO hqManage, SessionInfoVO sessionInfoVO) {
 
         String dt = currentDateTimeString();
 
-        hqManageVO.setModDt(dt);
-        hqManageVO.setModId(sessionInfoVO.getUserId());
+        hqManage.setModDt(dt);
+        hqManage.setModId(sessionInfoVO.getUserId());
 
         // 상태가 폐점일 경우, 폐점일 추가
-        if(SysStatFg.CLOSE == hqManageVO.getSysStatFg()) {
-            hqManageVO.setSysClosureDate(currentDateString());
+        if(SysStatFg.CLOSE == hqManage.getSysStatFg()) {
+            hqManage.setSysClosureDate(currentDateString());
         } else {
-            hqManageVO.setSysClosureDate("99991231");
+            hqManage.setSysClosureDate("99991231");
         }
 
-        int procCnt = mapper.modify(hqManageVO);
+        int procCnt = mapper.modify(hqManage);
 
         if(procCnt > 0) {
             return procCnt;
@@ -245,20 +245,20 @@ public class HqManageServiceImpl implements HqManageService{
 
     /** 권한그룹 목록 조회 */
     @Override
-    public List<DefaultMap<String>> authHqList(HqManageVO hqManageVO) {
-        return mapper.authHqList(hqManageVO);
+    public List<DefaultMap<String>> authHqList(HqManageVO hqManage) {
+        return mapper.authHqList(hqManage);
     }
 
     /** 사용가능한 메뉴 */
     @Override
-    public List<DefaultMap<String>> avlblMenu(HqManageVO hqManageVO) {
-        return mapper.avlblMenu(hqManageVO);
+    public List<DefaultMap<String>> avlblMenu(HqManageVO hqManage) {
+        return mapper.avlblMenu(hqManage);
     }
 
     /** 사용중인 메뉴 */
     @Override
-    public List<DefaultMap<String>> beUseMenu(HqManageVO hqManageVO) {
-        return mapper.beUseMenu(hqManageVO);
+    public List<DefaultMap<String>> beUseMenu(HqManageVO hqManage) {
+        return mapper.beUseMenu(hqManage);
     }
 
     /** 메뉴권한복사 */
@@ -290,52 +290,52 @@ public class HqManageServiceImpl implements HqManageService{
 
     /** 메뉴 권한 추가 */
     @Override
-    public int addAuth(HqMenuVO[] hqMenuVOs, SessionInfoVO sessionInfoVO) {
+    public int addAuth(HqMenuVO[] hqMenus, SessionInfoVO sessionInfoVO) {
 
         int procCnt = 0;
         String insertDt = currentDateTimeString();
 
-        for(HqMenuVO hqMenuVO : hqMenuVOs){
+        for(HqMenuVO hqMenu : hqMenus){
 
-            hqMenuVO.setIncldExcldFg(IncldExcldFg.INCLUDE);
-            hqMenuVO.setRegDt(insertDt);
-            hqMenuVO.setRegId(sessionInfoVO.getUserId());
-            hqMenuVO.setModDt(insertDt);
-            hqMenuVO.setModId(sessionInfoVO.getUserId());
+            hqMenu.setIncldExcldFg(IncldExcldFg.INCLUDE);
+            hqMenu.setRegDt(insertDt);
+            hqMenu.setRegId(sessionInfoVO.getUserId());
+            hqMenu.setModDt(insertDt);
+            hqMenu.setModId(sessionInfoVO.getUserId());
 
-            procCnt = mapper.addAuth(hqMenuVO);
+            procCnt = mapper.addAuth(hqMenu);
         }
         return procCnt;
     }
 
     /** 메뉴 권한 삭제 */
     @Override
-    public int removeAuth(HqMenuVO[] hqMenuVOs, SessionInfoVO sessionInfoVO) {
+    public int removeAuth(HqMenuVO[] hqMenus, SessionInfoVO sessionInfoVO) {
 
         int procCnt = 0;
         String insertDt = currentDateTimeString();
 
-        for(HqMenuVO hqMenuVO : hqMenuVOs){
-            hqMenuVO.setIncldExcldFg(IncldExcldFg.INCLUDE);
-            hqMenuVO.setRegDt(insertDt);
-            hqMenuVO.setRegId(sessionInfoVO.getUserId());
-            hqMenuVO.setModDt(insertDt);
-            hqMenuVO.setModId(sessionInfoVO.getUserId());
+        for(HqMenuVO hqMenu : hqMenus){
+            hqMenu.setIncldExcldFg(IncldExcldFg.INCLUDE);
+            hqMenu.setRegDt(insertDt);
+            hqMenu.setRegId(sessionInfoVO.getUserId());
+            hqMenu.setModDt(insertDt);
+            hqMenu.setModId(sessionInfoVO.getUserId());
 
             // 권한 예외 테이블에 있는지 조회 후, 예외로 들어간 권한이 있으면 삭제
-            int isAuth = mapper.isAuth(hqMenuVO);
+            int isAuth = mapper.isAuth(hqMenu);
 
             if(isAuth > 0) {
-                procCnt = mapper.removeAuth(hqMenuVO);
+                procCnt = mapper.removeAuth(hqMenu);
             }else {
 
-                hqMenuVO.setIncldExcldFg(IncldExcldFg.EXCLUDE);
-                hqMenuVO.setRegDt(insertDt);
-                hqMenuVO.setRegId(sessionInfoVO.getUserId());
-                hqMenuVO.setModDt(insertDt);
-                hqMenuVO.setModId(sessionInfoVO.getUserId());
+                hqMenu.setIncldExcldFg(IncldExcldFg.EXCLUDE);
+                hqMenu.setRegDt(insertDt);
+                hqMenu.setRegId(sessionInfoVO.getUserId());
+                hqMenu.setModDt(insertDt);
+                hqMenu.setModId(sessionInfoVO.getUserId());
 
-                procCnt = mapper.addAuth(hqMenuVO);
+                procCnt = mapper.addAuth(hqMenu);
             }
         }
         return procCnt;
@@ -349,30 +349,30 @@ public class HqManageServiceImpl implements HqManageService{
 
     /** 환경설정 저장 */
     @Override
-    public int saveConfig(HqEnvstVO[] hqEnvstVOs, SessionInfoVO sessionInfoVO) {
+    public int saveConfig(HqEnvstVO[] hqEnvsts, SessionInfoVO sessionInfoVO) {
 
         int procCnt = 0;
         String dt = currentDateTimeString();
 
-        for(HqEnvstVO hqEnvstVO : hqEnvstVOs) {
+        for(HqEnvstVO hqEnvst: hqEnvsts) {
 
-            hqEnvstVO.setRegDt(dt);
-            hqEnvstVO.setRegId(sessionInfoVO.getUserId());
-            hqEnvstVO.setModDt(dt);
-            hqEnvstVO.setModId(sessionInfoVO.getUserId());
+            hqEnvst.setRegDt(dt);
+            hqEnvst.setRegId(sessionInfoVO.getUserId());
+            hqEnvst.setModDt(dt);
+            hqEnvst.setModId(sessionInfoVO.getUserId());
 
-            if(hqEnvstVO.getStatus() == GridDataFg.INSERT) {
-                hqEnvstVO.setUseYn(UseYn.Y);
-                procCnt += mapper.insertConfig(hqEnvstVO);
+            if(hqEnvst.getStatus() == GridDataFg.INSERT) {
+                hqEnvst.setUseYn(UseYn.Y);
+                procCnt += mapper.insertConfig(hqEnvst);
             }
-            else if(hqEnvstVO.getStatus() == GridDataFg.UPDATE) {
-                procCnt += mapper.updateConfig(hqEnvstVO);
+            else if(hqEnvst.getStatus() == GridDataFg.UPDATE) {
+                procCnt += mapper.updateConfig(hqEnvst);
             }
 
             // 적용 타겟이 본사기준 매장까지인 경우, 매장까지 적용
             // 단독매장 제외(프렌차이즈만 해당)
-            if("00000".equals(hqEnvstVO.getHqOfficeCd()) && hqEnvstVO.getTargtFg() == TargtFg.BOTH ) {
-                procCnt += mapper.updateConfigStore(hqEnvstVO);
+            if("00000".equals(hqEnvst.getHqOfficeCd()) && hqEnvst.getTargtFg() == TargtFg.BOTH ) {
+                procCnt += mapper.updateConfigStore(hqEnvst);
             }
         }
         return procCnt;

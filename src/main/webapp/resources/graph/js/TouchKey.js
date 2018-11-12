@@ -74,26 +74,22 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
   // 필터 적용
   var toFilter = null;
   $scope.updateFilter = function(part, value) {
-    if ( part === "touchKeyUsed" ) {
+    if (value) {
       if (value === "A") {
         value = "";
       } else {
         value = value === "T";
       }
-    } else if ( part === "prodClassCd" ) {
-      if ( value === "" ) {
-        value = false;
-      }
+      // update filter
+      $scope.filter[part] = value;
+      // reschedule update
+      if (toFilter) clearTimeout(toFilter);
+      toFilter = setTimeout(function () {
+        if ($scope.data) {
+          $scope.data.refresh();
+        }
+      }, 100);
     }
-    // update filter
-    $scope.filter[part] = value;
-    // reschedule update
-    if (toFilter) clearTimeout(toFilter);
-    toFilter = setTimeout(function () {
-      if ($scope.data) {
-        $scope.data.refresh();
-      }
-    }, 100);
   };
   // 버튼사용여부 필터 콤보
   $scope._setComboData("touchKeyFilterCombo", touchKeyFilterData);
@@ -124,7 +120,7 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
       // 필터 수행
       $scope.data.filter = function(item) {
         var prodClassCd = $scope.filter.prodClassCd;
-        if (prodClassCd && item.prodClassCd.indexOf(prodClassCd) < 0) {
+        if (prodClassCd && item.prodClassCd.toLowerCase().indexOf(prodClassCd.toLowerCase()) < 0) {
           return false;
         }
         var touchKeyUsed = $scope.filter.touchKeyUsed;
@@ -1793,12 +1789,13 @@ Format.prototype.save = function () {
   }
 
   var node = null;
+  // 상품분류 영역
   var enc = new mxCodec(mxUtils.createXmlDocument());
   node = enc.encode(classArea.getModel());
   var xmlClass = mxUtils.getXml(node);
 
-  var node = null;
-  var enc = new mxCodec(mxUtils.createXmlDocument());
+  // 상품 영역
+  enc = new mxCodec(mxUtils.createXmlDocument());
   node = enc.encode(prodArea.getModel());
   var xmlProd = mxUtils.getXml(node);
 
@@ -1974,9 +1971,10 @@ Graph.prototype.initClassArea = function (prodArea) {
       var layer;
       if (me.state == null) {
         // 클릭 할 때 오브젝트 생성
-        var pt = graph.getPointForEvent(me);
-        // 마우스 포인터 위치를 기준으로 Drop 가능한 위치 찾기
+        var pt = graph.getPointForEvent(me.evt);
+        // 마우스 포인터 위치를 기준으로 생성 가능한 위치 찾기
         var pos = graph.findPosition(pt);
+        // 가능한 위치가 아닌경우...
         if (pos == null) {
           mxEvent.consume(me);
           return false;
@@ -2018,7 +2016,7 @@ Graph.prototype.initClassArea = function (prodArea) {
       var model = prodArea.getModel();
       //그래프가 생성될 때 id=1은 이미 생성되어 있으므로 해당 레이어 삭제 후 재 생성
       prodArea.removeCells([model.getCell(1)]);
-      layer = createLayer(currId);
+      var layer = createLayer(currId);
 
       prodArea.switchLayer(layer);
     }

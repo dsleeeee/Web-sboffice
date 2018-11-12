@@ -35,7 +35,7 @@ public interface HqManageMapper {
     List<DefaultMap<String>> getHqOfficeList(HqManageVO hqManage);
 
     /** 본사 상세정보조회 */
-    DefaultMap<String> getHqDetailInfo(HqManageVO hqManage);
+    DefaultMap<String> dtlInfo(HqManageVO hqManage);
 
     /** 사업자번호 중복체크 */
     int chkBizNo(HqManageVO hqManage);

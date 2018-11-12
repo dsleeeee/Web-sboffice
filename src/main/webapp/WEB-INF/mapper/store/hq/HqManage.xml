@@ -96,8 +96,8 @@
         PARAM    : hqManageVO
         COMMENTS : 등록된 본사 상세정보를 조회한다.
     -->
-    <select id="getHqDetailInfo" parameterType="hqManageVO" resultType="DefaultMap">
-        /* USE : HqManageMapper.getHqDetailInfo */
+    <select id="dtlInfo" parameterType="hqManageVO" resultType="DefaultMap">
+        /* USE : HqManageMapper.dtlInfo */
         <![CDATA[
         SELECT tho.HQ_OFFICE_CD,
                tho.HQ_OFFICE_NM,
@@ -119,8 +119,8 @@
                tho.AREA_CD,
                tho.SYS_STAT_FG,
                tcnm.NMCODE_NM AS SYS_STAT_FG_NM,
-               TO_CHAR(TO_DATE(tho.SYS_OPEN_DATE, 'YYYYMMDD'), 'YYYY/MM/DD') AS SYS_OPEN_DATE,
-               TO_CHAR(TO_DATE(tho.SYS_CLOSURE_DATE, 'YYYYMMDD'), 'YYYY/MM/DD') AS SYS_CLOSURE_DATE,
+               TO_CHAR(TO_DATE(tho.SYS_OPEN_DATE, 'YYYYMMDD'), 'YYYY.MM.DD') AS SYS_OPEN_DATE,
+               TO_CHAR(TO_DATE(tho.SYS_CLOSURE_DATE, 'YYYYMMDD'), 'YYYY.MM.DD') AS SYS_CLOSURE_DATE,
                tho.AGENCY_CD,
                tca.AGENCY_NM,
                tho.REMARK,

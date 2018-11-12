@@ -35,12 +35,6 @@ public class HqManageVO extends PageVO {
     private String ownerNm;
     /** 사업자번호 */
     private String bizNo;
-    /** 사업자번호 (처음3자리) */
-    private String bizNo1;
-    /** 사업자번호 (중간2자리)*/
-    private String bizNo2;
-    /** 사업자번호 (끝5자리)*/
-    private String bizNo3;
     /** 사업자유형코드 */
     private String bizTypeCd;
     /** 사업자항목코드 */
@@ -161,52 +155,6 @@ public class HqManageVO extends PageVO {
     public void setBizNo(String bizNo) {
         this.bizNo = bizNo;
     }
-
-    /**
-     * @return the bizNo1
-     */
-
-    public String getBizNo1() {
-        return bizNo1;
-    }
-
-    /**
-     * @param bizNo1 the bizNo1 to set
-     */
-    public void setBizNo1(String bizNo1) {
-        this.bizNo1 = bizNo1;
-    }
-
-    /**
-     * @return the bizNo2
-     */
-
-    public String getBizNo2() {
-        return bizNo2;
-    }
-
-    /**
-     * @param bizNo2 the bizNo2 to set
-     */
-    public void setBizNo2(String bizNo2) {
-        this.bizNo2 = bizNo2;
-    }
-
-    /**
-     * @return the bizNo3
-     */
-
-    public String getBizNo3() {
-        return bizNo3;
-    }
-
-    /**
-     * @param bizNo3 the bizNo3 to set
-     */
-    public void setBizNo3(String bizNo3) {
-        this.bizNo3 = bizNo3;
-    }
-
     /**
      * @return the bizTypeCd
      */

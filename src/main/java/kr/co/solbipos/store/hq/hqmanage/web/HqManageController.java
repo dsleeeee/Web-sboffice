@@ -9,7 +9,6 @@ import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqManageService;
 import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqMenuVO;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -72,9 +71,12 @@ public class HqManageController {
         return "store/hq/hqManage/hqManage";
     }
 
+    //TB_MS_TABLE_ATTR
+    //    TB_MS_TABLE_GROUP
+
     /**
      * 본사정보관리 리스트 조회
-     * @param   hqManageVO
+     * @param   hqManage
      * @param   request
      * @param   response
      * @param   model
@@ -82,19 +84,19 @@ public class HqManageController {
      * @author  김지은
      * @since   2018. 06. 08.
      */
-    @RequestMapping(value = "hqManage/getHqList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "hqManage/list.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result list(HqManageVO hqManageVO, HttpServletRequest request,
+    public Result list(HqManageVO hqManage, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
-        List<DefaultMap<String>> list = service.list(hqManageVO);
+        List<DefaultMap<String>> list = service.list(hqManage);
 
-        return returnListJson(Status.OK, list, hqManageVO);
+        return returnListJson(Status.OK, list, hqManage);
     }
 
     /**
      * 본사정보 상세조회
-     * @param   hqManageVO
+     * @param   hqManage
      * @param   request
      * @param   response
      * @param   model
@@ -102,19 +104,19 @@ public class HqManageController {
      * @author  김지은
      * @since   2018. 06. 08.
      */
-    @RequestMapping(value = "master/getHqDetailInfo.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "master/dtlInfo.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getHqDetailInfo(HqManageVO hqManageVO, HttpServletRequest request,
+    public Result dtlInfo(HqManageVO hqManage, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
-        DefaultMap<String> result = service.getHqDetailInfo(hqManageVO);
+        DefaultMap<String> result = service.dtlInfo(hqManage);
 
         return returnJson(Status.OK, result);
     }
 
     /**
      * 사업자번호 중복체크
-     * @param   hqManageVO
+     * @param   hqManage
      * @param   request
      * @param   response
      * @param   model
@@ -124,17 +126,17 @@ public class HqManageController {
      */
     @RequestMapping(value = "master/chkBizNo.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result chkBizNo(HqManageVO hqManageVO, HttpServletRequest request,
+    public Result chkBizNo(HqManageVO hqManage, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
-        int cnt = service.chkBizNo(hqManageVO);
+        int cnt = service.chkBizNo(hqManage);
 
         return returnJson(Status.OK, cnt);
     }
 
     /**
      * 사업자번호 사용현황 조회
-     * @param   hqManageVO
+     * @param   hqManage
      * @param   request
      * @param   response
      * @param   model
@@ -144,17 +146,17 @@ public class HqManageController {
      */
     @RequestMapping(value = "master/bizUseList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result bizUseList(HqManageVO hqManageVO, HttpServletRequest request,
+    public Result bizUseList(HqManageVO hqManage, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
-        List<DefaultMap<String>> list = service.getBizUseList(hqManageVO);
+        List<DefaultMap<String>> list = service.getBizUseList(hqManage);
 
         return returnListJson(Status.OK, list);
     }
 
     /**
      * 사업자번호 사용현황 상세
-     * @param   hqManageVO
+     * @param   hqManage
      * @param   request
      * @param   response
      * @param   model
@@ -164,17 +166,17 @@ public class HqManageController {
      */
     @RequestMapping(value = "master/bizInfoDtl.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result bizInfoDtl(HqManageVO hqManageVO, HttpServletRequest request,
+    public Result bizInfoDtl(HqManageVO hqManage, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
-        DefaultMap<String> result = service.getBizInfoDtl(hqManageVO);
+        DefaultMap<String> result = service.getBizInfoDtl(hqManage);
 
         return returnJson(Status.OK, result);
     }
 
     /**
      * 본사 신규등록
-     * @param   hqManageVO
+     * @param   hqManage
      * @param   request
      * @param   response
      * @param   model
@@ -182,33 +184,21 @@ public class HqManageController {
      * @author  김지은
      * @since   2018. 06. 08.
      */
-    @RequestMapping(value = "master/saveHqInfo.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "master/regist.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result saveHqInfo(@RequestBody HqManageVO hqManageVO, HttpServletRequest request,
+    public Result regist(@RequestBody HqManageVO hqManage, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
-        // 사업자번호 정리
-        String bizNo = hqManageVO.getBizNo1() + hqManageVO.getBizNo2() + hqManageVO.getBizNo3();
-        hqManageVO.setBizNo(bizNo);
-
-        // 오픈일자
-        String sysOpenDate = hqManageVO.getSysOpenDate();
-        hqManageVO.setSysOpenDate(StringUtils.remove(sysOpenDate, "-"));
-
-        // 폐점일자
-        String sysClosureDate = hqManageVO.getSysClosureDate();
-        hqManageVO.setSysClosureDate(StringUtils.remove(sysClosureDate, "-"));
-
-        int cnt = service.regist(hqManageVO, sessionInfoVO);
+        int cnt = service.regist(hqManage, sessionInfoVO);
 
         return returnJson(Status.OK, cnt);
     }
 
     /**
      * 본사 수정
-     * @param   hqManageVO
+     * @param   hqManage
      * @param   request
      * @param   response
      * @param   model
@@ -216,33 +206,21 @@ public class HqManageController {
      * @author  김지은
      * @since   2018. 06. 08.
      */
-    @RequestMapping(value = "master/updateHqInfo.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "master/modify.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result updateHqInfo(@RequestBody HqManageVO hqManageVO, HttpServletRequest request,
+    public Result modify(@RequestBody HqManageVO hqManage, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
-        // 사업자번호 정리
-        String bizNo = hqManageVO.getBizNo1() + hqManageVO.getBizNo2() + hqManageVO.getBizNo3();
-        hqManageVO.setBizNo(bizNo);
-
-        // 오픈일자
-        String sysOpenDate = hqManageVO.getSysOpenDate();
-        hqManageVO.setSysOpenDate(StringUtils.remove(sysOpenDate, "-"));
-
-        // 폐점일자
-        String sysClosureDate = hqManageVO.getSysClosureDate();
-        hqManageVO.setSysClosureDate(StringUtils.remove(sysClosureDate, "-"));
-
-        int cnt = service.modify(hqManageVO, sessionInfoVO);
+        int cnt = service.modify(hqManage, sessionInfoVO);
 
         return returnJson(Status.OK, cnt);
     }
 
     /**
-     * 메뉴권한 데이터 조회
-     * @param   hqManageVO
+     * 메뉴권한 데이터 조회config/getConfiglist.sb
+     * @param   hqManage
      * @param   request
      * @param   response
      * @param   model
@@ -252,19 +230,19 @@ public class HqManageController {
      */
     @RequestMapping(value = "authorExcept/getAuthHqList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result authHqList(HqManageVO hqManageVO, HttpServletRequest request,
+    public Result authHqList(HqManageVO hqManage, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
         Map<String, Object> resultMap = new HashMap<String, Object>();
 
         // 복사할 본사 조회
-        List<DefaultMap<String>> authHqList = service.authHqList(hqManageVO);
+        List<DefaultMap<String>> authHqList = service.authHqList(hqManage);
 
         // 사용가능한 메뉴 조회
-        List<DefaultMap<String>> avlblMenu = service.avlblMenu(hqManageVO);
+        List<DefaultMap<String>> avlblMenu = service.avlblMenu(hqManage);
 
         // 사용중인 메뉴 조회
-        List<DefaultMap<String>> beUseMenu = service.beUseMenu(hqManageVO);
+        List<DefaultMap<String>> beUseMenu = service.beUseMenu(hqManage);
 
         resultMap.put("authHqList", authHqList);
         resultMap.put("avlblMenu", avlblMenu);
@@ -275,7 +253,7 @@ public class HqManageController {
 
     /**
      * 메뉴권한복사
-     * @param   hqMenuVO
+     * @param   hqMenu
      * @param   request
      * @param   response
      * @param   model
@@ -285,19 +263,19 @@ public class HqManageController {
      */
     @RequestMapping(value = "authorExcept/copyAuth.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result copyAuth(@RequestBody HqMenuVO hqMenuVO, HttpServletRequest request,
+    public Result copyAuth(@RequestBody HqMenuVO hqMenu, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
-        int cnt = service.copyAuth(hqMenuVO, sessionInfoVO);
+        int cnt = service.copyAuth(hqMenu, sessionInfoVO);
 
         return returnJson(Status.OK, cnt);
     }
 
     /**
      * 사용메뉴 추가
-     * @param   hqMenuVO
+     * @param   hqMenu
      * @param   request
      * @param   response
      * @param   model
@@ -307,19 +285,19 @@ public class HqManageController {
      */
     @RequestMapping(value = "authorExcept/addAuth.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result addAuth(@RequestBody HqMenuVO[] hqMenuVO, HttpServletRequest request,
+    public Result addAuth(@RequestBody HqMenuVO[] hqMenu, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
-        int cnt = service.addAuth(hqMenuVO, sessionInfoVO);
+        int cnt = service.addAuth(hqMenu, sessionInfoVO);
 
         return returnJson(Status.OK, cnt);
     }
 
     /**
      * 사용메뉴 삭제
-     * @param   hqMenuVO
+     * @param   hqMenu
      * @param   request
      * @param   response
      * @param   model
@@ -329,12 +307,12 @@ public class HqManageController {
      */
     @RequestMapping(value = "authorExcept/removeAuth.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result removeAuth(@RequestBody HqMenuVO[] hqMenuVO, HttpServletRequest request,
+    public Result removeAuth(@RequestBody HqMenuVO[] hqMenu, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
-        int cnt = service.removeAuth(hqMenuVO, sessionInfoVO);
+        int cnt = service.removeAuth(hqMenu, sessionInfoVO);
 
         return returnJson(Status.OK, cnt);
     }
@@ -362,7 +340,7 @@ public class HqManageController {
 
     /**
      * 환경설정 저장
-     * @param   hqEnvstsVOs
+     * @param   hqEnvsts
      * @param   request
      * @param   response
      * @param   model
@@ -370,14 +348,14 @@ public class HqManageController {
      * @author  김지은
      * @since   2018. 06. 08.
      */
-    @RequestMapping(value = "config/saveHqEnv.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "config/save.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result saveHqEnv(@RequestBody HqEnvstVO[] hqEnvstsVOs, HttpServletRequest request,
+    public Result saveConfig(@RequestBody HqEnvstVO[] hqEnvsts, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = service.saveConfig(hqEnvstsVOs, sessionInfoVO);
+        int result = service.saveConfig(hqEnvsts, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

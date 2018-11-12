@@ -20,7 +20,7 @@ var app = agrid.getApp();
 app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('terminalCtrl', $scope, $http, false));
+  angular.extend(this, new RootController('terminalCtrl', $scope, $http, true));
 
   // 터미널 환경변수 [2028]
   $scope.terminalEnvVal;
@@ -91,8 +91,6 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
       });
       var data = storeData.getSelectedStore();
 
-      // console.log(data)
-
       $("#storeInfo").val("["+data.storeCd+"] "+data.storeNm);
       $("#storeCd").val(data.storeCd);
     });
@@ -116,12 +114,18 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
     var params = {};
     params.storeCd = $("#storeCd").val();
 
-    $scope._postJSONQuery.withOutPopUp( baseUrl + "terminalManage/getTerminalEnv.sb", params,
-      function(result){
+    $.ajax({ //TODO
+      type: "POST",
+      cache: false,
+      async:false,
+      dataType: "json",
+      url: baseUrl + "terminalManage/getTerminalEnv.sb",
+      data: params,
+      success: function(result) {
 
-        var terminalEnvVal = result.data.data.envstVal;
-        var posList = result.data.data.posList;
-        var cornerList = result.data.data.cornerList;
+        var terminalEnvVal = result.data.envstVal;
+        var posList = result.data.posList;
+        var cornerList = result.data.cornerList;
 
         $scope.setTerminalEnvVal(terminalEnvVal);
         $scope.terminalFg = terminalEnvVal;
@@ -142,7 +146,7 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
 
         // 코너별 승인
         if($scope.terminalFg  === "2") {
-          $scope.showCorner();
+         $scope.showCorner();
         }
         // 포스별 승인
         else if($scope.terminalFg  === "0" || $scope.terminalFg  === "3"){
@@ -155,8 +159,9 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
 
         var cornerScope = agrid.getScope('cornerCtrl');
         cornerScope._gridDataInit();
+
       }
-    );
+    });
   };
 
   // 코너 보여주기
@@ -255,28 +260,8 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('posCtrl', $scope, $http, true));
 
-  // 벤더코드 셋팅을 위함
-  var vanList = [];
-  var paycoList = [];
-  var mpayList = [];
-  var mcoupnList = [];
-
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-
-    for(var i=0; i<vandorList.length; i++) {
-
-      if(vandorList[i].vanFg === "01") {
-        vanList.push(vandorList[i]);
-      } else if(vandorList[i].vanFg === "02") {
-        paycoList.push(vandorList[i]);
-      } else if(vandorList[i].vanFg === "03") {
-        mpayList.push(vandorList[i]);
-      } else if(vandorList[i].vanFg === "04") {
-        mcoupnList.push(vandorList[i]);
-      }
-    }
-
     $scope.vendorFgDataMap = new wijmo.grid.DataMap(vendorFg, 'value', 'name');
     $scope.vanCdDataMap = new wijmo.grid.DataMap(vandorList, 'value', 'name');
     $scope.useYnFgDataMap = new wijmo.grid.DataMap(useYnFg, 'value', 'name');
@@ -298,122 +283,33 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
     });
 
     // 벤더구분, 벤더코드 그리드 에디팅 방지
-    s.beginningEdit.addHandler(function (s, e) {
-      var col = s.columns[e.col];
-      // if (col.binding === "vendorFg" || col.binding === "vendorCd") {
-      //   var dataItem = s.rows[elements.row].dataItem;
-      //   if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
-      //     e.cancel = true;
-      //   }
-      // }
-    });
-  };
-
-  // // 벤더코드 변경 이벤트 시작
-  // $scope.startChangeVendorFg = function(s,e) {
-  //   if (s.columns[e.col].binding == 'vendorCd') {
-  //     var sVendorFg = s.rows[e.row].dataItem.vendorFg;
-  //     var sVendorCd = s.rows[e.row].dataItem.vendorCd;
-  //
-  //     $scope.vanCdDataMap.collectionView.filter = function(item) {
-  //       return item.vanFg == sVendorFg;
-  //     };
-  //
-  //     $scope.vanCdDataMap.collectionView.refresh();
-  //     $scope.$apply(function(){
-  //       s.collectionView.items[e.row].vendorCd = sVendorCd;
-  //       console.log("sVendorCd : "+ sVendorCd)
-  //       $scope.vanCdDataMap.collectionView.refresh();
-  //     });
-  //   }
-  // };
-
-  // // 벤더코드 변경 이벤트 시작
-  // $scope.startChangeVendorFg = function(s,e) {
-  //   if (s.columns[e.col].binding === 'vendorCd') {
-  //     var vendorFgVal = s.rows[e.row].dataItem.vendorFg,
-  //         arr = [];
-  //
-  //     console.log('vendorFgVal : '+ vendorFgVal);
-  //
-  //     for (var i = 0; i < vandorList.length; i++) {
-  //       if (vandorList[i].vanFg === vendorFgVal) {
-  //         // arr.push(vandorList[i]);
-  //         arr.push(vandorList[i].value);
-  //       }
-  //     }
-  //
-  //     console.log(arr)
-  //     // s.columns[e.col].dataMap = new wijmo.grid.DataMap(arr, 'value', 'name');
-  //     s.columns[e.col].dataMap = arr;
-  //   }
-  // };
-
-  // 벤더코드 변경 이벤트 시작
-  $scope.startChangeVendorFg = function(s,e) {
-
-    if (s.columns[e.col].binding === 'vendorCd') {
-      var vendorFgVal = s.rows[e.row].dataItem.vendorFg;
-      var vendorFgNmVal = s.rows[e.row].dataItem.vendorFgNm;
-      var arr = [];
-
-      for (var i = 0; i < vandorList.length; i++) {
-        if (vandorList[i].vanFg === vendorFgVal && vandorList[i].vanFgNm === vendorFgNmVal) {
-
-          var params = {};
-          params.value = vandorList[i].value;
-          params.name = vandorList[i].name;
-          arr.push(params);
-          // arr.push(vandorList[i].value);
+    s.beginningEdit.addHandler(function (sender, elements) {
+      var col = sender.columns[elements.col];
+      if (col.binding === "vendorFg" || col.binding === "vendorCd") {
+        var dataItem = s.rows[elements.row].dataItem;
+        if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
+          // elements.cancel = true;
         }
       }
-      // console.log(arr)
-      s.columns[e.col].dataMap = new wijmo.grid.DataMap(arr, 'value', 'name');
+    });
 
-      console.log($scope.flex)
-
-      // console.log(s.columns[e.col].dataMap);
-      //
-      // for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-      //   console.log("vendorFg : "+ $scope.flex.collectionView.items[i].vendorFg)
-      //   console.log("vendorCd : "+ $scope.flex.collectionView.items[i].vendorCd)
-      // }
-
-
-      // s.columns[e.col].dataMap = arr;
-      // console.log(new wijmo.collections.CollectionView(arr));
-      // s.columns[e.col].dataMap.collectionView = new wijmo.collections.CollectionView(arr);
-      // s.columns[e.col].dataMap = new wijmo.collections.CollectionView(arr);
-      // console.log(s.columns[e.col].dataMap )
-    }
   };
 
+  // 벤더구분 변경시 벤더 dataMap 변경
+  $scope.changeVendorFg = function(s, e){
+    if (e.panel === s.cells) {
+      var col = s.columns[e.col];
+      if (col.binding === "vendorFg") {
 
-  // // 벤터코드 변경 test
-  // $scope.startChangeVendorFg = function(s,e){
-  //   var col = s.columns[e.col];
-  //   if (col.binding == 'vendorCd') {
-  //     switch (s.rows[e.row].dataItem.vendorFg) {
-  //       case '01' :
-  //         console.log("van");
-  //         col.dataMap = new wijmo.grid.DataMap(vanList, 'value', 'name');
-  //         break;
-  //       case '02' :
-  //         console.log("payco");
-  //         col.dataMap = new wijmo.grid.DataMap(paycoList, 'value', 'name');
-  //         break;
-  //       case '03' :
-  //         console.log("mpay");
-  //         col.dataMap = new wijmo.grid.DataMap(mpayList, 'value', 'name');
-  //         break;
-  //       case '04' :
-  //         console.log("mcoupn");
-  //         col.dataMap = new wijmo.grid.DataMap(mcoupnList, 'value', 'name');
-  //         break;
-  //     }
-  //   }
-  //   console.log(col.dataMap) // row단위로 dataMap이 안되네 뭐야 todo
-  // };
+        alert('vendorFg : '+  s.rows[e.row].dataItem.vendorFg)
+        var changeVendorFg = s.rows[e.row].dataItem.vendorFg;
+        $scope.vanCdDataMap.collectionView.filter = function(item) {
+          return item.vanFg == changeVendorFg;
+        };
+        s.rows[e.row].dataItem.vendorCd = ""; // 벤더구분 변경시에는 값 벤더코드 변경하도록 ""으로!
+      }
+    }
+  };
 
   // 포스설정 터미널 데이터 조회
   $scope.$on("posCtrl", function(event, data) {
@@ -436,15 +332,30 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
     params.posNo = terminalScope.getPosFgVal();
 
     $scope._inquirySub(baseUrl + "pos/getPosTerminalList.sb", params, function() {
+
       var rows = $scope.flex.rows;
       if(rows.length > 0) {
+        // todo edit 이벤트가 먹혀야 저거 무ㅓ냐 벤더코드가 수정되는데 이거 뭐냐진짜
         for (var i = 0; i < rows.length; i++) {
-          // 강제로 수정이벤트 줘야 벤더구분에 따른 벤더코드가 바뀜
-          var flex = $scope.flex;
-          flex.startEditing(true, i, 5, true);
+          // $scope.flex.setCellData(i,3, rows[i]._data.vendorFg);
+          // $scope.flex.setCellData(i,3, "2");
+          // console.log($scope.flex.getCellData(i,3));
+          // console.log($scope.flex.getCellData(i,4));
+
+
+          console.log($scope)
+          var changeVendorFg = rows[i]._data.vendorFg;
+          $scope.vanCdDataMap.collectionView.filter = function(item) {
+            return item.vanFg == changeVendorFg;
+          };
+
+
         }
+
       }
+
       $scope.flex.collectionView.commitEdit();
+
     }, false);
   };
 
@@ -526,11 +437,21 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
       params = JSON.stringify(params);
     }
 
-    $scope.$broadcast('loadingPopupActive', messages["cmm.saving"]);
-
-    $scope._save(baseUrl + "pos/savePosTerminalInfo.sb", params, function () {
-      $scope.$broadcast('loadingPopupInactive');
+    // ajax 통신 설정
+    $http({
+      method: 'POST', //방식
+      url: baseUrl + "pos/savePosTerminalInfo.sb", /* 통신할 URL */
+      data: params, /* 파라메터로 보낼 데이터 */
+      headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+    }).then(function successCallback(response) {
       $scope._popMsg(messages["cmm.saveSucc"]);
+    }, function errorCallback(response) {
+      // called asynchronously if an error occurs
+      // or server returns response with an error status.
+      $scope._popMsg(messages["cmm.saveFail"]);
+      return false;
+    }).then(function () {
+      // "complete" code here
     });
   };
 }]);
@@ -576,10 +497,12 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     });
 
+
   };
 
   // 벤더구분 변경시 벤더 dataMap 변경
   $scope.changeVendorFg = function(s, e){
+
     if (e.panel === s.cells) {
       var col = s.columns[e.col];
       if (col.binding === "vendorFg") {
@@ -633,6 +556,7 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
 
     var terminalScope = agrid.getScope('terminalCtrl');
 
+
     // 파라미터 설정
     var params = new Array();
     for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
@@ -647,6 +571,8 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.flex.collectionView.itemsAdded[i].cornrCd = terminalScope.getCornerFgVal();
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
+
+    // console.log(params);
 
     //필수값 체크
     for(var i=0; i<params.length; i++) {
@@ -696,12 +622,21 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
       params = JSON.stringify(params);
     }
 
-    $scope.$broadcast('loadingPopupActive', messages["cmm.saving"]);
-
-    $scope._save(baseUrl + "corner/saveCornerTerminalInfo.sb", params, function () {
-      $scope.$broadcast('loadingPopupInactive');
+    // ajax 통신 설정
+    $http({
+      method: 'POST', //방식
+      url: baseUrl + "corner/saveCornerTerminalInfo.sb", /* 통신할 URL */
+      data: params, /* 파라메터로 보낼 데이터 */
+      headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+    }).then(function successCallback(response) {
       $scope._popMsg(messages["cmm.saveSucc"]);
+    }, function errorCallback(response) {
+      // called asynchronously if an error occurs
+      // or server returns response with an error status.
+      $scope._popMsg(messages["cmm.saveFail"]);
+      return false;
+    }).then(function () {
+      // "complete" code here
     });
-
   };
 }]);

@@ -80,7 +80,7 @@
   </table>
 
   <%-- 조회 --%>
-  <div class="mt10 pdb10 oh bb">
+  <div class="mt10 pdb20 oh">
     <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('storeManageCtrl')"><s:message code="cmm.search" /></button>
   </div>
 
@@ -104,7 +104,7 @@
     </button>
   </div>
 
-  <%-- 매장 그리드 --%>
+ <%-- 매장 그리드 --%>
   <div class="w100 mt10 mb20">
     <div class="wj-gridWrap" style="height:315px; overflow-x: hidden; overflow-y: hidden;">
       <wj-flex-grid

@@ -100,7 +100,8 @@
                     selected-value-path="value"
                     is-editable="false"
                     initialized="_initComboBox(s)"
-                    selected-index-changed="setSysStatFgVal(s,e)">
+                    selected-index-changed="setSysStatFgVal(s,e)"
+                    control="sysStatFgCombo">
                   </wj-combo-box>
                 </div>
               </td>

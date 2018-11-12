@@ -34,18 +34,19 @@
     </table>
 
     <%-- 조회 --%>
-    <div class="mt10 pdb10 oh bb">
+    <div class="mt10 oh">
       <button class="btn_blue fr" id="btnSearch" ng-click="$broadcast('terminalCtrl')">
         <s:message code="cmm.search" />
       </button>
     </div>
 
-      <div class="wj-TblWrap pd10" style="height:470px; overflow-y: hidden;">
+    <div class="wj-TblWrap mt40" >
+      <div class="wj-TblWrapBr pd20" style="height:470px; overflow-y: hidden;">
 
         <%-- 터미널 선택 --%>
         <div class="updownSet oh mb10" ng-controller="terminalCtrl">
           <%-- 터미널 선택 --%>
-          <div class="sb-select w30 fl mr10">
+          <div class="sb-select w30 fl">
             <wj-combo-box
                     id="sTerminalFg"
                     ng-model="terminalFg"
@@ -98,18 +99,16 @@
         </div>
 
         <%-- 포스 설정 --%>
-        <div class="wj-gridWrap" style="height:400px; overflow-y: hidden;" ng-controller="posCtrl" id="posArea">
+        <div class="wj-gridWrap" style="height:430px; overflow-y: hidden;" ng-controller="posCtrl" id="posArea">
           <wj-flex-grid
                   autoGenerateColumns="false"
                   control="flex"
                   initialized="initGrid(s,e)"
                   sticky-headers="true"
-                  <%--selection-mode="Row"--%>
+                  selection-mode="Row"
                   items-source="data"
                   item-formatter="_itemFormatter"
-                  <%--cell-edit-ended="changeVendorFg(s,e)"--%>
-                  beginning-edit="startChangeVendorFg(s,e)">
-
+                  cell-edit-ended="changeVendorFg(s,e)">
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="terminalManage.storeCd"/>" binding="storeCd" width="*" visible="false"></wj-flex-grid-column>
@@ -123,7 +122,7 @@
         </div>
 
         <%-- 코너 설정 --%>
-        <div class="wj-gridWrap" style="height:400px; overflow-y: hidden; display: none;" ng-controller="cornerCtrl" id="cornerArea">
+        <div class="wj-gridWrap" style="height:430px; overflow-y: hidden;" ng-controller="cornerCtrl" id="cornerArea" style="display: none;">
           <wj-flex-grid
                   autoGenerateColumns="false"
                   control="flex"
@@ -144,7 +143,7 @@
           </wj-flex-grid>
         </div>
       </div>
-    <%--</div>--%>
+    </div>
   </div>
 </div>
 
@@ -156,7 +155,7 @@ var vandorList = ${vendorList};
 var terminalFg = ${cnv.getEnvCodeExcpAll("2028")};
 var useYnFg    = ${ccu.getCommCodeExcpAll("067")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/terminal.js?ver=2018110501" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/terminal.js?ver=20181006.01" charset="utf-8"></script>
 
 <%-- 매장선택 레이어 팝업 --%>
 <c:import url="/WEB-INF/view/store/manage/terminalManage/store.jsp">

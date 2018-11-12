@@ -11,6 +11,8 @@
 -->
 <mapper namespace="kr.co.solbipos.store.manage.terminalManage.service.impl.TerminalManageMapper">
 
+
+
     <!-- 벤더 목록 조회 -->
     <!--
         TABLE    : TB_MS_STORE, TB_HQ_OFFICE
@@ -19,15 +21,11 @@
     -->
     <select id="getVendorList" resultType="DefaultMap">
         /* USE : TerminalManageMapper.getVendorList */
-        SELECT tcvc.VAN_FG,
-               tcn.NMCODE_NM AS VAN_FG_NM,
-               tcvc.VAN_CD AS VALUE,
-               tcvc.VAN_NM AS NAME
-          FROM TB_CM_VAN_CMPNY tcvc,
-               TB_CM_NMCODE tcn
-         WHERE tcn.NMCODE_GRP_CD = '078'
-           AND tcn.NMCODE_CD  = tcvc.VAN_FG
-         ORDER BY tcvc.VAN_FG, tcvc.VAN_CD
+        SELECT VAN_FG,
+               VAN_CD AS VALUE,
+               VAN_NM AS NAME
+          FROM TB_CM_VAN_CMPNY
+         ORDER BY VAN_FG, VAN_CD
     </select>
 
 
@@ -39,7 +37,7 @@
     -->
     <select id="getStoreList" parameterType="DefaultMap" resultType="DefaultMap">
         /* USE : TerminalManageMapper.getStoreList */
-        <include refid="CmmSQL.PagingTemplateHeader"/>
+        <!--<include refid="CmmSQL.PagingTemplateHeader"/>-->
         SELECT '[' || tho.HQ_OFFICE_CD || '] ' || tho.HQ_OFFICE_NM AS HQ_OFFICE_CD_NM,
                tho.HQ_OFFICE_CD,
                tho.HQ_OFFICE_NM,
@@ -50,7 +48,7 @@
                tho.SYS_STAT_FG AS HQ_SYS_STAT_FG,
                tms.SYS_OPEN_DATE,
                TO_CHAR(TO_DATE(tms.SYS_OPEN_DATE, 'YYYYMMDD') , 'YYYY/MM/DD')
-        <include refid="CmmSQL.PagingTemplateCount"/>
+        <!--<include refid="CmmSQL.PagingTemplateCount"/>-->
         FROM TB_HQ_OFFICE tho,
              TB_MS_STORE tms
         WHERE tms.HQ_OFFICE_CD (+)= tho.HQ_OFFICE_CD
@@ -74,7 +72,7 @@
           AND tms.SYS_STAT_FG = #{sysStatFg}
         </if>
         ORDER BY tho.HQ_OFFICE_CD, tms.STORE_CD, tms.SYS_OPEN_DATE ASC
-        <include refid="CmmSQL.PagingTemplateBottom"/>
+        <!--<include refid="CmmSQL.PagingTemplateBottom"/>-->
     </select>
 
     <!-- 매장 환경변수 값 조회 -->
@@ -130,17 +128,14 @@
         SELECT tmpt.STORE_CD,
                tmpt.POS_NO,
                tmpt.VENDOR_FG,
-               (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '078' AND NMCODE_CD = tmpt.VENDOR_FG ) AS VENDOR_FG_NM, -- 벤더구분명
+               (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '078' AND NMCODE_CD = tmpt.VENDOR_FG ) AS VENDOR_FG_NM,
                tmpt.VENDOR_CD,
-               tcvc.VAN_NM AS VENDOR_NM, -- 벤더병
+               tmpt.VENDOR_NM,
                tmpt.VENDOR_TERMNL_NO,
                tmpt.VENDOR_SER_NO
-          FROM TB_MS_POS_TERMNL tmpt,
-               TB_CM_VAN_CMPNY tcvc
+          FROM TB_MS_POS_TERMNL tmpt
          WHERE tmpt.STORE_CD = #{storeCd}
            AND tmpt.POS_NO = #{posNo}
-           AND tcvc.VAN_FG = tmpt.VENDOR_FG
-           AND tcvc.VAN_CD = tmpt.VENDOR_CD
     </select>
 
     <!-- 코너 터미널 목록 조회 -->

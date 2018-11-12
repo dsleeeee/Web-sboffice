@@ -66,13 +66,13 @@
       </tbody>
   </table>
 
-  <div class="mt10 pdb10 oh bb">
+  <div class="mt10 pdb20 oh">
     <button id="searchBtn" class="btn_blue fr" >
       <s:message code="cmm.search" />
     </button>
   </div>
 
-  <div class="mt10 oh sb-select dkbr">
+  <div class="mt20 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
     <div id="listScaleBox" class="w100px fl"></div>
     <%-- 엑셀 다운로드 --%>

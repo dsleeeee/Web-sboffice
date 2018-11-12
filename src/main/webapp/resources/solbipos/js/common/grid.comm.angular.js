@@ -255,7 +255,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
         cb.addEventListener('click', function (e) {
           flex.beginUpdate();
           for (var i = 0; i < flex.rows.length; i++) {
-            var cell = flex.cells.getCellElement(i,0);
+            var cell = flex.cells.getCellElement(i, c);
             // 활성화 및 readOnly 아닌 경우에만 체크되도록
             if (!cell.children[0].disabled) {
               flex.setCellData(i, c, cb.checked);
@@ -758,31 +758,35 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
       }
       // 메시지 팝업
       $scope._popMsg = function (msg, callback) {
-        $scope.s_alert_msg = $sce.trustAsHtml(msg);
-        setTimeout(function () {
-          $scope._alertPopup.show(true, function () {
-            if (typeof callback === 'function') {
-              setTimeout(function () {
-                callback();
-              }, 50);
-            }
-          });
-        }, 100);
-      };
-      // 메시지 컨펌
-      $scope._popConfirm = function (msg, callback) {
-        $scope.s_confirm_msg = $sce.trustAsHtml(msg);
-        setTimeout(function () {
-          $scope._alertConfirm.show(true, function (e) {
-            if (e.dialogResult === "wj-hide-apply") {
+        $scope.$apply(function() {
+          $scope.s_alert_msg = $sce.trustAsHtml(msg);
+          setTimeout(function () {
+            $scope._alertPopup.show(true, function () {
               if (typeof callback === 'function') {
                 setTimeout(function () {
                   callback();
                 }, 50);
               }
-            }
-          });
-        }, 100);
+            });
+          }, 100);
+        });
+      };
+      // 메시지 컨펌
+      $scope._popConfirm = function (msg, callback) {
+        $scope.$apply(function() {
+          $scope.s_confirm_msg = $sce.trustAsHtml(msg);
+          setTimeout(function () {
+            $scope._alertConfirm.show(true, function (e) {
+              if (e.dialogResult === "wj-hide-apply") {
+                if (typeof callback === 'function') {
+                  setTimeout(function () {
+                    callback();
+                  }, 50);
+                }
+              }
+            });
+          }, 100);
+        });
       };
       // 콤보박스 초기화 > ng-model 사용하기 위한 설정 : 20180831 노현수
       $scope._initComboBox = function (s) {

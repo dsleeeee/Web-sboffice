@@ -42,13 +42,13 @@
         <li class="red"><s:message code="hqStoreMove.add.txt3"/></li>
       </ul>
 
-      <div class="mt10 pdb10 oh bb">
+      <div class="mt10 pdb20 oh bb">
         <%-- 조회 --%>
         <button type="button" class="btn_blue fr" id="btnSearch" ng-click="searchHqStoreMoveAddProdList();">
           <s:message code="cmm.search"/></button>
       </div>
 
-      <div class="tr mt10 fr">
+      <div class="tr mt20 fr">
         <%-- 저장 --%>
         <button type="button" id="btnRegSave" class="btn_skyblue ml5 fl" ng-click="save()">
           <s:message code="cmm.save"/></button>
