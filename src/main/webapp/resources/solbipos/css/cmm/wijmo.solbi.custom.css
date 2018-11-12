@@ -313,3 +313,8 @@
     background: #0085c7;
     color: #888 !important;
 }
+
+.wj-control input:invalid {
+    border: 1px solid #c00;
+    border-left: 5px solid #c00;
+}

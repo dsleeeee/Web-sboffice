@@ -1714,13 +1714,36 @@ p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17p
 .theTreeAll.wj-treeview > .wj-nodelist > .wj-node.on span {color:#fff;}
 .theTreeAll.wj-treeview > .wj-nodelist > .wj-nodelist > .wj-node.on span {color:#fff;}
 
-/* IE10+ */
-@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
-    /* Enter your style code */
-    .templateEdit {
-        /*         width:310px !important; */
-    }
-}
+
+/* **************************************** *
+ * 개발자 추가
+ * **************************************** */
+
+/** input readonly 스타일 */
+
+ol,ul, li {list-style: none;}
+
+input[readonly] {background-color: #F0F0F0 !important; color: #303030 !important;}
+input[disable] {background-color: #F0F0F0 !important; color: #303030 !important;}
+
+/*
+ *  20180821 추가
+ *  wijmo가 아닌 일반 select box의 경우에도 sb-select 클래스 적용
+ */
+select.sb-select {display:block!important; border:1px solid #e8e8e8; height:28px!important; line-height:30px; border-radius:0px; font-size:0.85em;}
+
+/*
+ * 20180823 추가
+ * elseCon 중간 글씨체 추가
+ */
+.elseCon .mdTxt {font-size:1.450em; line-height:1.5em; color:#222; font-weight:bold;}
+
+/**
+ * 20180927 추가
+ * 테이블이 아닌 div 에서도 sb-input 스타일 적용
+ */
+div input.sb-input {border:1px solid #e8e8e8; padding:0 10px; height:30px; line-height:30px; font-size:1em;}
+
 
 .templateEdit textarea {
     width: 100%;
@@ -1758,6 +1781,14 @@ p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17p
     font-size: 12px;
 }
 
+/**
+ * AngularJS 관련
+ */
+
 .state-invalid div {
-    color: red !important;
+    color: #cc0000 !important;
+}
+
+.popover-content {
+    font-size: 12px;
 }

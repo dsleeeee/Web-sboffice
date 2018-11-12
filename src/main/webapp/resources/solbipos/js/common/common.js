@@ -8,7 +8,7 @@
   //id=1,id2=2,id3=3, ... > { id1:1, id2:2, id3:3, ... }
   function parseObject( str, sep ) {
     if( typeof str !== "string" ) return str;
-    var arr = str.split( sep || "," )
+    var arr = str.split( sep || "," );
     var obj = {};
     for( var li in arr ) {
         var keyValue = arr[ li ].split( "=" )
@@ -301,32 +301,7 @@
     }
   });
 
-
 }( "undefined" !== typeof window ? window : this, jQuery );
-
-function getParam(name){
-  var result = "";
-  var queryString = window.location.search;
-  var paramMap = {}
-  if (queryString === "") {
-    result = undefined;
-  }
-  if (typeof result !== "undefined") {
-    var params = queryString.split("?")[1];
-    if (params === "") {
-      result = undefined;
-    }
-    if (typeof result !== "undefined") {
-      var paramObj = params.split("&");
-      for (var i=0; i<paramObj.length; i++){
-        var datas = paramObj[i].split("=");
-        paramMap[datas[0]] = datas[1];
-      }
-      result = paramMap[name];
-    }
-  }
-  return result;
-}
 
 /**
  * object 가 비었는지 체크
@@ -339,7 +314,6 @@ function isEmptyObject(obj) {
   }
   return true;
 }
-
 
 // 링크 태그 IE 팝업 방지( 이 웹사이트가 컴퓨터에서 앱을 열도록허용하시겠습니까? )
 $(document).on('click', 'a[href="#"]', function (e) {
