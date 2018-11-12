@@ -7,10 +7,10 @@
 <link rel="shortcut icon" href="data:image/x-icon" type="image/x-icon">
 
 <link rel="stylesheet" type="text/css" href="/resource/vendor/bootstrap/css/bootstrap.min.css?ver=3.3.7" />
-<link rel="stylesheet" type="text/css" href="/resource/vendor/wijmo/css/wijmo.css?ver=5.20182.500"/>
-<link rel="stylesheet" type="text/css" href="/resource/vendor/awesome-font/css/font-awesome.min.css?ver=4.7.0" />
 <link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/style.css?ver=20181111.01" media="all"/>
+<link rel="stylesheet" type="text/css" href="/resource/vendor/wijmo/css/wijmo.css?ver=5.20182.500"/>
 <link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/wijmo.solbi.custom.css?ver=20181111.01"/>
+<link rel="stylesheet" type="text/css" href="/resource/vendor/awesome-font/css/font-awesome.min.css?ver=4.7.0" />
 <%-- third-party plug-in --%>
 <script type="text/javascript" src="/resource/vendor/jquery/jquery-2.2.4.min.js"></script>
 <script type="text/javascript" src="/resource/vendor/bootstrap/bootstrap.min.js?ver=3.3.7"></script>

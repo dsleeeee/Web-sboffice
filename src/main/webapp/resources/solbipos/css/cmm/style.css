@@ -41,6 +41,13 @@ button {outline:none; border:0; font-family:'NotoR', Malgun Gothic, '맑은 고�
 ::-moz-placeholder {color:#bbb;} /* firefox 19+ */
 :-ms-input-placeholder {color:#bbb;} /* ie 10+ */
 
+input[type=checkbox], input[type=radio] {
+    margin: inherit;
+    line-height: inherit;
+    box-sizing: inherit;
+    padding: inherit;
+}
+
 
 /* **************************************** *
  * Variable declaration :
