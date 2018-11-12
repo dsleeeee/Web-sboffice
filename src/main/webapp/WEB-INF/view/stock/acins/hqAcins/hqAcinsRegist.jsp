@@ -24,6 +24,13 @@
         </colgroup>
         <tbody>
         <tr>
+          <%-- 실사제목 --%>
+          <th><s:message code="hqAcins.reg.acinsTitle"/><em class="imp">*</em></th>
+          <td colspan="3">
+            <input type="text" id="acinsTitle" name="acinsTitle" ng-model="acinsTitle" class="sb-input w100" maxlength="33"/>
+          </td>
+        </tr>
+        <tr>
           <%-- 상품코드 --%>
           <th><s:message code="hqAcins.reg.prodCd"/></th>
           <td>
@@ -65,13 +72,6 @@
                 </wj-combo-box>
               </span>
             </div>
-          </td>
-        </tr>
-        <tr>
-          <%-- 실사제목 --%>
-          <th><s:message code="hqAcins.reg.acinsTitle"/><em class="imp">*</em></th>
-          <td colspan="3">
-            <input type="text" id="acinsTitle" name="acinsTitle" ng-model="acinsTitle" class="sb-input w100" maxlength="33"/>
           </td>
         </tr>
         <tr>

@@ -45,6 +45,10 @@
       $("#daysView").show();
       $("#specificView").hide();
       $("#reqDateCopyView").hide();
+
+      // angular 그리드 hide 시 깨지므로 refresh()
+      var scope = agrid.getScope("daysCtrl");
+      scope.flex.refresh();
     };
     // 특정일 탭 보이기
     $scope.specificShow    = function () {
@@ -55,6 +59,10 @@
       $("#daysView").hide();
       $("#specificView").show();
       $("#reqDateCopyView").hide();
+
+      // angular 그리드 hide 시 깨지므로 refresh()
+      var scope = agrid.getScope("specificCtrl");
+      scope.flex.refresh();
     };
     // 요청일복사 탭 보이기
     $scope.reqDateCopyShow = function () {
@@ -65,7 +73,16 @@
       $("#daysView").hide();
       $("#specificView").hide();
       $("#reqDateCopyView").show();
+
+      // angular 그리드 hide 시 깨지므로 refresh()
+      var scope = agrid.getScope("reqDateCopyDaysCtrl");
+      scope.flex.refresh();
+
+      // angular 그리드 hide 시 깨지므로 refresh()
+      var scope = agrid.getScope("reqDateCopySpecificCtrl");
+      scope.flex.refresh();
     };
+
   }]);
 </script>
 
