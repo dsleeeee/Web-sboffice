@@ -99,6 +99,23 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
     });
   };
 
+  // 신규상품 등록
+  $scope.addProd = function() {
+    $scope.setProdInfo({});
+    var modifyPopUp = $scope.prodModifyLayer;
+    modifyPopUp.show(true, function (s) {
+      // 상품정보 등록 팝업 - 저장
+      if (s.dialogResult === "wj-hide-apply") {
+        // 팝업 속성에서 상품정보 get
+        var params = s.data;
+        // 저장수행
+        $scope._postJSONSave.withPopUp("/base/prod/prod/prod/save.sb", params, function () {
+          $scope._popMsg(messages["cmm.saveSucc"]);
+        });
+      }
+    });
+  };
+
   // 화면 ready 된 후 설정
   angular.element(document).ready(function () {
     // 상품상세정보 팝업 핸들러 추가
