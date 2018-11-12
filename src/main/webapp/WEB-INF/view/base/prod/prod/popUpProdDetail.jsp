@@ -32,14 +32,16 @@
                     </td>
                     <%--단가구분 //TODO --%>
                     <th>
-                        <div class="impWrap"><s:message code="prod.uprcFg" /></div>
+                        <div class="impWrap"><s:message code="prod.prodTypeFg" /></div>
                     </th>
-                    <td id="_uprcFg"></td>
+                    <td id="_prodTypeFgNm">
+                        {{prodDetail.prodTypeFgNm}}
+                    </td>
                 </tr>
                 <tr>
                     <%--상품코드--%>
                     <th>
-                        <div class="impWrap"><s:message code="prod.prodCd" /><em class="imp">*</em></div>
+                        <div class="impWrap"><s:message code="prod.prodCd" /></div>
                     </th>
                     <td id="_prodCd">
                         {{prodDetail.prodCd}}
@@ -64,13 +66,15 @@
                     <th>
                         <div class="impWrap"><s:message code="prod.vendr" /></div>
                     </th>
-                    <td id="_vendr"></td>
+                    <td id="_vendr">
+
+                    </td>
                 </tr>
                 <tr>
                     <%--판매상품여부--%>
                     <th><s:message code="prod.saleProdYn" /></th>
                     <td id="_saleProdYn">
-                        {{prodDetail.saleProdYn}}
+                        {{prodDetail.saleProdYnNm}}
                     </td>
                     <%--원산지--%>
                     <th>

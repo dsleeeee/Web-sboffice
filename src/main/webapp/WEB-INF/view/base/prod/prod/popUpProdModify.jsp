@@ -33,18 +33,20 @@
             </td>
             <%--단가구분 //TODO --%>
             <th>
-              <div class="impWrap"><s:message code="prod.uprcFg"/></div>
+              <div class="impWrap"><s:message code="prod.prodTypeFg"/></div>
             </th>
             <td>
-              <wj-combo-box
-                id="_uprcFg"
-                ng-model="prodModifyInfo.uprcFg"
-                items-source="_getComboData('uprcFgComboData')"
-                display-member-path="name"
-                selected-value-path="value"
-                is-editable="false"
-                initialized="_initComboBox(s)">
-              </wj-combo-box>
+              <div class="sb-select">
+                <wj-combo-box
+                  id="_prodTypeFg"
+                  ng-model="prodModifyInfo.prodTypeFg"
+                  items-source="_getComboData('prodTypeFgComboData')"
+                  display-member-path="name"
+                  selected-value-path="value"
+                  is-editable="false"
+                  initialized="_initComboBox(s)">
+                </wj-combo-box>
+              </div>
             </td>
           </tr>
           <tr>
@@ -98,15 +100,21 @@
             <%--판매상품여부--%>
             <th><s:message code="prod.saleProdYn"/></th>
             <td>
-              <wj-combo-box
-                id="_saleProdYn"
-                ng-model="prodModifyInfo.saleProdYn"
-                items-source="_getComboData('saleProdYnComboData')"
-                display-member-path="name"
-                selected-value-path="value"
-                is-editable="false"
-                initialized="_initComboBox(s)">
-              </wj-combo-box>
+              <div class="sb-select">
+                <wj-combo-box id="_saleProdYn" name="saleProdYn"
+                  ng-model="prodModifyInfo.saleProdYn"
+                  items-source="_getComboData('saleProdYnComboData')"
+                  display-member-path="name"
+                  selected-value-path="value"
+                  is-editable="false"
+                  initialized="_initComboBox(s)"
+                  required
+                  popover-enable="myForm.saleProdYn.$invalid"
+                  popover-placement="bottom-left"
+                  popover-trigger="'mouseenter'"
+                  uib-popover="<s:message code="prod.saleProdYn" />은(는) 필수 값 입니다.">
+                </wj-combo-box>
+              </div>
             </td>
             <%--원산지--%>
             <th>
@@ -141,30 +149,34 @@
               <div class="impWrap"><s:message code="prod.poProdFg"/></div>
             </th>
             <td>
-              <wj-combo-box
-                id="_poProdFg"
-                ng-model="prodModifyInfo.poProdFg"
-                items-source="_getComboData('poProdFgComboData')"
-                display-member-path="name"
-                selected-value-path="value"
-                is-editable="false"
-                initialized="_initComboBox(s)">
-              </wj-combo-box>
+              <div class="sb-select">
+                <wj-combo-box
+                  id="_poProdFg"
+                  ng-model="prodModifyInfo.poProdFg"
+                  items-source="_getComboData('poProdFgComboData')"
+                  display-member-path="name"
+                  selected-value-path="value"
+                  is-editable="false"
+                  initialized="_initComboBox(s)">
+                </wj-combo-box>
+              </div>
             </td>
             <%--주문단위--%>
             <th>
               <div class="impWrap"><s:message code="prod.poUnitFg"/></div>
             </th>
             <td>
-              <wj-combo-box
-                id="_poUnitFg"
-                ng-model="prodModifyInfo.poUnitFg"
-                items-source="_getComboData('poUnitFgComboData')"
-                display-member-path="name"
-                selected-value-path="value"
-                is-editable="false"
-                initialized="_initComboBox(s)">
-              </wj-combo-box>
+              <div class="sb-select">
+                <wj-combo-box
+                  id="_poUnitFg"
+                  ng-model="prodModifyInfo.poUnitFg"
+                  items-source="_getComboData('poUnitFgComboData')"
+                  display-member-path="name"
+                  selected-value-path="value"
+                  is-editable="false"
+                  initialized="_initComboBox(s)">
+                </wj-combo-box>
+              </div>
             </td>
           </tr>
           <tr>
@@ -197,30 +209,34 @@
             <div class="impWrap"><s:message code="prod.vatFg"/><em class="imp">*</em></div>
           </th>
           <td>
-            <wj-combo-box
-              id="_vatFg"
-              ng-model="prodModifyInfo.vatFg"
-              items-source="_getComboData('vatFgComboData')"
-              display-member-path="name"
-              selected-value-path="value"
-              is-editable="false"
-              initialized="_initComboBox(s)">
-            </wj-combo-box>
+            <div class="sb-select">
+              <wj-combo-box
+                id="_vatFg"
+                ng-model="prodModifyInfo.vatFg"
+                items-source="_getComboData('vatFgComboData')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="_initComboBox(s)">
+              </wj-combo-box>
+            </div>
           </td>
           <%--재고관리여부--%>
           <th>
             <div class="impWrap"><s:message code="prod.stockProdYn"/><em class="imp">*</em></div>
           </th>
           <td>
-            <wj-combo-box
-              id="_stockProdYn"
-              ng-model="prodModifyInfo.stockProdYn"
-              items-source="_getComboData('stockProdYnComboData')"
-              display-member-path="name"
-              selected-value-path="value"
-              is-editable="false"
-              initialized="_initComboBox(s)">
-            </wj-combo-box>
+            <div class="sb-select">
+              <wj-combo-box
+                id="_stockProdYn"
+                ng-model="prodModifyInfo.stockProdYn"
+                items-source="_getComboData('stockProdYnComboData')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="_initComboBox(s)">
+              </wj-combo-box>
+            </div>
           </td>
         </tr>
         <tr>
@@ -229,15 +245,17 @@
             <div class="impWrap"><s:message code="useYn"/><em class="imp">*</em></div>
           </th>
           <td>
-            <wj-combo-box
-              id="_useYn"
-              ng-model="prodModifyInfo.useYn"
-              items-source="_getComboData('useYnComboData')"
-              display-member-path="name"
-              selected-value-path="value"
-              is-editable="false"
-              initialized="_initComboBox(s)">
-            </wj-combo-box>
+            <div class="sb-select">
+              <wj-combo-box
+                id="_useYn"
+                ng-model="prodModifyInfo.useYn"
+                items-source="_getComboData('useYnComboData')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="_initComboBox(s)">
+              </wj-combo-box>
+            </div>
           </td>
           <%--안전재고--%>
           <th>
@@ -254,15 +272,17 @@
             <div class="impWrap"><s:message code="prod.soldOutYn"/><em class="imp">*</em></div>
           </th>
           <td>
-            <wj-combo-box
-              id="_soldOutYn"
-              ng-model="prodModifyInfo.soldOutYn"
-              items-source="_getComboData('soldOutYnComboData')"
-              display-member-path="name"
-              selected-value-path="value"
-              is-editable="false"
-              initialized="_initComboBox(s)">
-            </wj-combo-box>
+            <div class="sb-select">
+              <wj-combo-box
+                id="_soldOutYn"
+                ng-model="prodModifyInfo.soldOutYn"
+                items-source="_getComboData('soldOutYnComboData')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="_initComboBox(s)">
+              </wj-combo-box>
+            </div>
           </td>
           <%--초기재고 //TODO --%>
           <th>
@@ -281,15 +301,17 @@
             <div class="impWrap"><s:message code="prod.setProdFg"/><em class="imp">*</em></div>
           </th>
           <td>
-            <wj-combo-box
-              id="_setProdFg"
-              ng-model="prodModifyInfo.setProdFg"
-              items-source="_getComboData('setProdFgComboData')"
-              display-member-path="name"
-              selected-value-path="value"
-              is-editable="false"
-              initialized="_initComboBox(s)">
-            </wj-combo-box>
+            <div class="sb-select">
+              <wj-combo-box
+                id="_setProdFg"
+                ng-model="prodModifyInfo.setProdFg"
+                items-source="_getComboData('setProdFgComboData')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="_initComboBox(s)">
+              </wj-combo-box>
+            </div>
           </td>
         </tr>
         <tr>
@@ -298,15 +320,17 @@
             <div class="impWrap"><s:message code="prod.refApplyYn"/><em class="imp">*</em></div>
           </th>
           <td>
-            <wj-combo-box
-              id="_refApplyYn"
-              ng-model="prodModifyInfo.refApplyYn"
-              items-source="_getComboData('refApplyYnComboData')"
-              display-member-path="name"
-              selected-value-path="value"
-              is-editable="false"
-              initialized="_initComboBox(s)">
-            </wj-combo-box>
+            <div class="sb-select">
+              <wj-combo-box
+                id="_refApplyYn"
+                ng-model="prodModifyInfo.refApplyYn"
+                items-source="_getComboData('refApplyYnComboData')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="_initComboBox(s)">
+              </wj-combo-box>
+            </div>
           </td>
           <th></th>
           <td></td>

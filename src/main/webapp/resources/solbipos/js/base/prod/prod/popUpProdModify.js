@@ -15,24 +15,26 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('prodModifyCtrl', $scope, $http, true));
   // 단가구분 콤보박스
-  // uprcFgComboData
+  $scope._getComboDataQuery('008', 'prodTypeFgComboData');
   // 판매상품여부 콤보박스
-  // saleProdYnComboData
+  $scope._getComboDataQuery('091', 'saleProdYnComboData');
   // 주문상품구분 콤보박스
-  // poProdFgComboData
+  $scope._getComboDataQuery('092', 'poProdFgComboData');
   // 주문단위 콤보박스
-  // poUnitFgComboData
+  $scope._getComboDataQuery('093', 'poUnitFgComboData');
   // 과세여부 콤보박스
-  // vatFgComboData
+  $scope._getComboDataQuery('039', 'vatFgComboData');
   // 재고관리여부 콤보박스
-  // stockProdYnComboData
+  $scope._getComboDataQuery('067', 'stockProdYnComboData');
   // 사용여부 콤보박스
-  // useYnComboData
+  $scope._getComboDataQuery('067', 'useYnComboData');
   // 품절여부 콤보박스
-  // soldOutYnComboData
+  $scope._getComboDataQuery('094', 'soldOutYnComboData');
   // 세트상품구분 콤보박스
-  // setProdFgComboData
-  
+  $scope._getComboDataQuery('095', 'setProdFgComboData');
+  // 환급적용여부 콤보박스
+  $scope._getComboDataQuery('090', 'refApplyYnComboData');
+
   // 상품정보
   $scope.prodModifyInfo = {};
   $scope.setProdModifyInfo = function(data){

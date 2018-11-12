@@ -192,7 +192,8 @@
                     thp.PROD_TIP_YN,
                     thp.PROD_PACK_AMT,
                     thp.PROD_DLVR_AMT,
-                    thp.PROD_TYPE_FG,
+                    thp.PROD_TYPE_FG,                               -- 상품유형구분
+                    prod_type_fg.NMCODE_NM AS PROD_TYPE_FG_NM,
                     thp.SALE_PROD_YN,                               -- 판매상품여부
                     sale_prod_yn.NMCODE_NM AS SALE_PROD_YN_NM,
                     thp.STOCK_PROD_YN,                              -- 재고관리여부
@@ -205,8 +206,10 @@
                     NVL(thp.LAST_COST_UPRC, 0) AS LAST_COST_UPRC,   -- 최종원가단가
                     NVL(thp.SPLY_UPRC, 0) AS SPLY_UPRC,             -- 판매단가
                     thp.SPLY_UPRC_USE_YN,
-                    thp.PO_PROD_FG,     -- 주문상품구분 --TODO 주문상품구분명 조회 필요
-                    thp.PO_UNIT_FG,     -- 주문단위 --TODO 주문단위명 조회 필요
+                    thp.PO_PROD_FG,                                 -- 주문상품구분
+                    po_prod_fg.NMCODE_NM AS PO_PROD_FG_NM,
+                    thp.PO_UNIT_FG,                                 -- 주문단위
+                    po_unit_fg.NMCODE_NM AS PO_UNIT_FG_NM,
                     thp.PO_UNIT_QTY,
                     thp.PO_UNIT_ALLOW_FG,
                     thp.PO_MIN_QTY,     -- 최소주문
@@ -236,9 +239,18 @@
                     GROUP BY
                         PROD_CD
                     ) thpsp ON thp.PROD_CD = thpsp.PROD_CD
+                LEFT OUTER JOIN TB_CM_NMCODE prod_type_fg ON
+                    prod_type_fg.NMCODE_GRP_CD = '008'
+                    AND thp.PROD_TYPE_FG = prod_type_fg.NMCODE_CD
                 LEFT OUTER JOIN TB_CM_NMCODE sale_prod_yn ON
-                    sale_prod_yn.NMCODE_GRP_CD = '067'
+                    sale_prod_yn.NMCODE_GRP_CD = '091'
                     AND thp.SALE_PROD_YN = sale_prod_yn.NMCODE_CD
+                LEFT OUTER JOIN TB_CM_NMCODE po_prod_fg ON
+                    po_prod_fg.NMCODE_GRP_CD = '092'
+                    AND thp.PO_PROD_FG = po_prod_fg.NMCODE_CD
+                LEFT OUTER JOIN TB_CM_NMCODE po_unit_fg ON
+                    po_unit_fg.NMCODE_GRP_CD = '093'
+                    AND thp.PO_UNIT_FG = po_unit_fg.NMCODE_CD
                 LEFT OUTER JOIN TB_CM_NMCODE vat_fg ON
                     vat_fg.NMCODE_GRP_CD = '039'
                     AND thp.VAT_FG = vat_fg.NMCODE_CD
@@ -249,7 +261,7 @@
                     use_yn.NMCODE_GRP_CD = '067'
                     AND thp.USE_YN = use_yn.NMCODE_CD
                 LEFT OUTER JOIN TB_CM_NMCODE set_prod_fg ON
-                    set_prod_fg.NMCODE_GRP_CD = '009'
+                    set_prod_fg.NMCODE_GRP_CD = '095'
                     AND thp.SET_PROD_FG = set_prod_fg.NMCODE_CD
                 WHERE
                     thp.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -274,7 +286,8 @@
                     tmp.PROD_TIP_YN,
                     tmp.PROD_PACK_AMT,
                     tmp.PROD_DLVR_AMT,
-                    tmp.PROD_TYPE_FG,
+                    tmp.PROD_TYPE_FG,                               -- 상품유형
+                    prod_type_fg.NMCODE_NM AS PROD_TYPE_FG_NM,
                     tmp.SALE_PROD_YN,                               -- 판매상품여부
                     sale_prod_yn.NMCODE_NM AS SALE_PROD_YN_NM,
                     tmp.STOCK_PROD_YN,                              -- 재고관리여부
@@ -287,8 +300,10 @@
                     NVL(tmp.LAST_COST_UPRC, 0) AS LAST_COST_UPRC,   -- 최종원가단가
                     NVL(tmp.SPLY_UPRC, 0) AS SPLY_UPRC,             -- 판매단가
                     tmp.SPLY_UPRC_USE_YN,
-                    tmp.PO_PROD_FG,     -- 주문상품구분 --TODO 주문상품구분명 조회 필요
-                    tmp.PO_UNIT_FG,     -- 주문단위 --TODO 주문단위명 조회 필요
+                    tmp.PO_PROD_FG,                                 -- 주문상품구분
+                    po_prod_fg.NMCODE_NM AS PO_PROD_FG_NM,
+                    tmp.PO_UNIT_FG,                                 -- 주문단위
+                    po_unit_fg.NMCODE_NM AS PO_UNIT_FG_NM,
                     tmp.PO_UNIT_QTY,
                     tmp.PO_UNIT_ALLOW_FG,
                     tmp.PO_MIN_QTY,     -- 최소주문
@@ -318,9 +333,18 @@
                     GROUP BY
                         PROD_CD
                     ) tmpsp ON tmp.PROD_CD = tmpsp.PROD_CD
+                LEFT OUTER JOIN TB_CM_NMCODE prod_type_fg ON
+                    prod_type_fg.NMCODE_GRP_CD = '008'
+                    AND thp.PROD_TYPE_FG = prod_type_fg.NMCODE_CD
                 LEFT OUTER JOIN TB_CM_NMCODE sale_prod_yn ON
-                    sale_prod_yn.NMCODE_GRP_CD = '067'
+                    sale_prod_yn.NMCODE_GRP_CD = '091'
                     AND tmp.SALE_PROD_YN = sale_prod_yn.NMCODE_CD
+                LEFT OUTER JOIN TB_CM_NMCODE po_prod_fg ON
+                    po_prod_fg.NMCODE_GRP_CD = '092'
+                    AND tmp.PO_PROD_FG = po_prod_fg.NMCODE_CD
+                LEFT OUTER JOIN TB_CM_NMCODE po_unit_fg ON
+                    po_unit_fg.NMCODE_GRP_CD = '093'
+                    AND tmp.PO_UNIT_FG = po_unit_fg.NMCODE_CD
                 LEFT OUTER JOIN TB_CM_NMCODE vat_fg ON
                     vat_fg.NMCODE_GRP_CD = '039'
                     AND tmp.VAT_FG = vat_fg.NMCODE_CD
@@ -331,7 +355,7 @@
                     use_yn.NMCODE_GRP_CD = '067'
                     AND tmp.USE_YN = use_yn.NMCODE_CD
                 LEFT OUTER JOIN TB_CM_NMCODE set_prod_fg ON
-                    set_prod_fg.NMCODE_GRP_CD = '009'
+                    set_prod_fg.NMCODE_GRP_CD = '095'
                     AND tmp.SET_PROD_FG = set_prod_fg.NMCODE_CD
                 WHERE
                     tmp.STORE_CD = #{storeCd}
