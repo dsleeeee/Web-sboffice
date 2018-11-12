@@ -138,7 +138,7 @@ public class PageVO extends CmmVO {
     }
 
     public void calc() {
-        totalPage = totCnt < 0 ? 1 : (int) Math.ceil((double) totCnt / listScale);
+        totalPage = totCnt <= 0 ? 1 : (int) Math.ceil((double) totCnt / listScale);
         offset = Math.max(1, curr - 1 - ((curr - 1) % pageScale));
         limit = Math.min(totalPage,
                 curr + 1 + (pageScale - (curr % pageScale > 0 ? curr % pageScale : pageScale)));

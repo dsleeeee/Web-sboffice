@@ -10,6 +10,7 @@ import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -94,4 +95,21 @@ public class ProdController {
 
         return returnJson(Status.OK, "list", prodService.getProdDetail(prodVO, sessionInfoVO));
     }
+
+    /**
+     * 상품정보 저장
+     * @param prodVO ProdVO
+     * @param request HttpServletRequest
+     * @return
+     */
+    @RequestMapping(value = "/save.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveProductInfo(@RequestBody ProdVO prodVO, HttpServletRequest request) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        int result = prodService.saveProductInfo(prodVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+
 }

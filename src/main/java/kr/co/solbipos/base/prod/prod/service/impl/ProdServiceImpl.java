@@ -1,6 +1,9 @@
 package kr.co.solbipos.base.prod.prod.service.impl;
 
+import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.exception.JsonException;
+import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.prod.prod.service.ProdService;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
@@ -10,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
  * @Class Name : ProdServiceImpl.java
@@ -33,11 +38,13 @@ public class ProdServiceImpl implements ProdService {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private final ProdMapper prodMapper;
+    private final MessageService messageService;
 
     /** Constructor Injection */
     @Autowired
-    public ProdServiceImpl(ProdMapper prodMapper) {
+    public ProdServiceImpl(ProdMapper prodMapper, MessageService messageService) {
         this.prodMapper = prodMapper;
+        this.messageService = messageService;
     }
 
     @Override
@@ -69,4 +76,27 @@ public class ProdServiceImpl implements ProdService {
         return result;
     }
 
+    /** 상품정보 저장 */
+    @Override
+    public int saveProductInfo(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        // 소속구분 설정
+        String orgnFg = sessionInfoVO.getOrgnFg().getCode();
+        prodVO.setOrgnFg(orgnFg);
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        prodVO.setModDt(currentDt);
+        prodVO.setModId(sessionInfoVO.getUserId());
+
+        result = prodMapper.saveProductInfo(prodVO);
+
+        if ( result >= 0) {
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+    }
 }

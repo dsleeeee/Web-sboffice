@@ -48,4 +48,7 @@ public interface ProdMapper {
      */
     List<DefaultMap<String>> getLinkedProdList(ProdVO prodVO);
 
+    /** 상품정보 저장 */
+    int saveProductInfo(ProdVO prodVO);
+
 }
