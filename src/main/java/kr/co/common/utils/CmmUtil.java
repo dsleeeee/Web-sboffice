@@ -39,10 +39,7 @@ public class CmmUtil {
       * @return
       */
     public static boolean listIndexOf(List<String> list, String target) {
-        if(list.indexOf(target) > -1) {
-            return true;
-        }
-        return false;
+        return list.indexOf(target) > -1;
     }
 
     /**
@@ -93,12 +90,11 @@ public class CmmUtil {
      *
      * @param value
      * @return String
-     * @throws Exception
      * @comment
      * @author 노현수
      * @since 2018. 06. 08.
      */
-    public static String checkUserId(String value) throws Exception {
+    public static String checkUserId(String value) {
 
         String rs = "";
         int len = value.length();
@@ -166,12 +162,11 @@ public class CmmUtil {
      *  wordcba : true
      * @param value
      * @return boolean
-     * @throws Exception
      * @comment
      * @author 노현수
      * @since 2018. 06. 08.
      */
-    public static boolean checkContinuous3Character(String value) throws Exception {
+    public static boolean checkContinuous3Character(String value) {
 
         byte[] b = value.getBytes();
         int p = value.length();
@@ -234,5 +229,15 @@ public class CmmUtil {
         return false;
     }
 
+
+    /** null 일 경우 대체값 반환 */
+    public static <D extends Object> D nvl(D value, D replacement) {
+        return value == null ? replacement : value;
+    }
+
+    /** object 자체 null 대체값 반환 */
+    public static String checkNull(Object obj) {
+        return obj == null ? "" : (String.valueOf(obj));
+    }
 
 }
