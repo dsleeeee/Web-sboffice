@@ -123,9 +123,12 @@ public class PosTemplateController {
         posTemplateVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         posTemplateVO.setStoreCd(sessionInfoVO.getStoreCd());
 
-        // 실제출력물 없는경우 대비해서 저장처리
-        posTemplateService.insertPosTemplatePrint(posTemplateVO, sessionInfoVO);
-        // 출력물코드 목록 재조회
+        // 매장인경우에는 실제출력물 실시간 생성
+        if ( "S".equals(posTemplateVO.getOrgnFg()) ) {
+            // 실제출력물 없는경우 대비해서 저장처리
+            posTemplateService.insertPosTemplatePrint(posTemplateVO, sessionInfoVO);
+        }
+        // 출력물코드 목록 조회
         list = posTemplateService.getPosTemplateList(posTemplateVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, posTemplateVO);

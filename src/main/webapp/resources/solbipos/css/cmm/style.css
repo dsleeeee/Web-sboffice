@@ -1779,6 +1779,8 @@ div input.sb-input {border:1px solid #e8e8e8; padding:0 10px; height:30px; line-
     white-space: -moz-pre-wrap;
     white-space: -o-pre-wrap;
     word-break: break-all;
+    overflow: initial;
+    background-color: initial;
 }
 
 .templateEdit #preview pre p {

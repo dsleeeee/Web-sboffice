@@ -14,6 +14,25 @@
 app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('prodModifyCtrl', $scope, $http, true));
+  // 단가구분 콤보박스
+  // uprcFgComboData
+  // 판매상품여부 콤보박스
+  // saleProdYnComboData
+  // 주문상품구분 콤보박스
+  // poProdFgComboData
+  // 주문단위 콤보박스
+  // poUnitFgComboData
+  // 과세여부 콤보박스
+  // vatFgComboData
+  // 재고관리여부 콤보박스
+  // stockProdYnComboData
+  // 사용여부 콤보박스
+  // useYnComboData
+  // 품절여부 콤보박스
+  // soldOutYnComboData
+  // 세트상품구분 콤보박스
+  // setProdFgComboData
+  
   // 상품정보
   $scope.prodModifyInfo = {};
   $scope.setProdModifyInfo = function(data){

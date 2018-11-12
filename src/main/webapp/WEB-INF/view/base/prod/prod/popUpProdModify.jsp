@@ -35,11 +35,11 @@
             <th>
               <div class="impWrap"><s:message code="prod.uprcFg"/></div>
             </th>
-            <td id="_uprcFg">
+            <td>
               <wj-combo-box
-                id="option1"
-                ng-model="option1"
-                items-source="_getComboData('option1')"
+                id="_uprcFg"
+                ng-model="prodModifyInfo.uprcFg"
+                items-source="_getComboData('uprcFgComboData')"
                 display-member-path="name"
                 selected-value-path="value"
                 is-editable="false"
@@ -68,7 +68,7 @@
               <input type="text" id="_prodNm" name="prodNm" class="sb-input w100"
                      ng-model="prodModifyInfo.prodNm"
                      required
-                     popover-enable="myForm.prodClassCd.$invalid"
+                     popover-enable="myForm.prodNm.$invalid"
                      popover-placement="bottom-left"
                      popover-trigger="'mouseenter'"
                      uib-popover="<s:message code="prod.prodNm" />은(는) 필수 값 입니다."/>
@@ -84,7 +84,8 @@
                      popover-enable="myForm.prodClassCd.$invalid"
                      popover-placement="bottom-left"
                      popover-trigger="'mouseenter'"
-                     uib-popover="<s:message code="prod.prodNm" />은(는) 필수 값 입니다." />
+                     uib-popover="<s:message code="prod.prodClass" />은(는) 필수 값 입니다."
+                     placeholder="선택" readonly/>
               <%--<input type="text" id="_prodClassNm" name="prodClassNm" class="sb-input w100" ng-model="prodModifyInfo.prodClassNm" />--%>
             </td>
             <%--거래처 //TODO --%>
@@ -97,8 +98,15 @@
             <%--판매상품여부--%>
             <th><s:message code="prod.saleProdYn"/></th>
             <td>
-              <input type="text" id="_saleProdYn" name="saleProdYn" class="sb-input w100"
-                     ng-model="prodModifyInfo.saleProdYn"/>
+              <wj-combo-box
+                id="_saleProdYn"
+                ng-model="prodModifyInfo.saleProdYn"
+                items-source="_getComboData('saleProdYnComboData')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="_initComboBox(s)">
+              </wj-combo-box>
             </td>
             <%--원산지--%>
             <th>
@@ -106,7 +114,7 @@
             </th>
             <td>
               <input type="text" id="_orgplceCd" name="orgplceCd" class="sb-input w100"
-                     ng-model="prodModifyInfo.orgplceCd"/>
+                     ng-model="prodModifyInfo.orgplceCd" placeholder="선택" disabled />
             </td>
           </tr>
           <tr>
@@ -133,16 +141,30 @@
               <div class="impWrap"><s:message code="prod.poProdFg"/></div>
             </th>
             <td>
-              <input type="text" id="_poProdFg" name="poProdFg" class="sb-input w100"
-                     ng-model="prodModifyInfo.poProdFg"/>
+              <wj-combo-box
+                id="_poProdFg"
+                ng-model="prodModifyInfo.poProdFg"
+                items-source="_getComboData('poProdFgComboData')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="_initComboBox(s)">
+              </wj-combo-box>
             </td>
             <%--주문단위--%>
             <th>
               <div class="impWrap"><s:message code="prod.poUnitFg"/></div>
             </th>
             <td>
-              <input type="text" id="_poUnitFg" name="poUnitFg" class="sb-input w100"
-                     ng-model="prodModifyInfo.poUnitFg"/>
+              <wj-combo-box
+                id="_poUnitFg"
+                ng-model="prodModifyInfo.poUnitFg"
+                items-source="_getComboData('poUnitFgComboData')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="_initComboBox(s)">
+              </wj-combo-box>
             </td>
           </tr>
           <tr>
@@ -175,16 +197,30 @@
             <div class="impWrap"><s:message code="prod.vatFg"/><em class="imp">*</em></div>
           </th>
           <td>
-            <input type="text" id="_vatFg" name="vatFg" class="sb-input w100"
-                   ng-model="prodModifyInfo.vatFg"/>
+            <wj-combo-box
+              id="_vatFg"
+              ng-model="prodModifyInfo.vatFg"
+              items-source="_getComboData('vatFgComboData')"
+              display-member-path="name"
+              selected-value-path="value"
+              is-editable="false"
+              initialized="_initComboBox(s)">
+            </wj-combo-box>
           </td>
           <%--재고관리여부--%>
           <th>
             <div class="impWrap"><s:message code="prod.stockProdYn"/><em class="imp">*</em></div>
           </th>
           <td>
-            <input type="text" id="_stockProdYn" name="stockProdYn" class="sb-input w100"
-                   ng-model="prodModifyInfo.stockProdYn"/>
+            <wj-combo-box
+              id="_stockProdYn"
+              ng-model="prodModifyInfo.stockProdYn"
+              items-source="_getComboData('stockProdYnComboData')"
+              display-member-path="name"
+              selected-value-path="value"
+              is-editable="false"
+              initialized="_initComboBox(s)">
+            </wj-combo-box>
           </td>
         </tr>
         <tr>
@@ -193,8 +229,15 @@
             <div class="impWrap"><s:message code="useYn"/><em class="imp">*</em></div>
           </th>
           <td>
-            <input type="text" id="_useYn" name="useYn" class="sb-input w100"
-                   ng-model="prodModifyInfo.useYn"/>
+            <wj-combo-box
+              id="_useYn"
+              ng-model="prodModifyInfo.useYn"
+              items-source="_getComboData('useYnComboData')"
+              display-member-path="name"
+              selected-value-path="value"
+              is-editable="false"
+              initialized="_initComboBox(s)">
+            </wj-combo-box>
           </td>
           <%--안전재고--%>
           <th>
@@ -210,8 +253,16 @@
           <th>
             <div class="impWrap"><s:message code="prod.soldOutYn"/><em class="imp">*</em></div>
           </th>
-          <td id="_soldOutYn">
-
+          <td>
+            <wj-combo-box
+              id="_soldOutYn"
+              ng-model="prodModifyInfo.soldOutYn"
+              items-source="_getComboData('soldOutYnComboData')"
+              display-member-path="name"
+              selected-value-path="value"
+              is-editable="false"
+              initialized="_initComboBox(s)">
+            </wj-combo-box>
           </td>
           <%--초기재고 //TODO --%>
           <th>
@@ -230,8 +281,15 @@
             <div class="impWrap"><s:message code="prod.setProdFg"/><em class="imp">*</em></div>
           </th>
           <td>
-            <input type="text" id="_setProdFg" name="setProdFg" class="sb-input w100"
-                   ng-model="prodModifyInfo.setProdFg"/>
+            <wj-combo-box
+              id="_setProdFg"
+              ng-model="prodModifyInfo.setProdFg"
+              items-source="_getComboData('setProdFgComboData')"
+              display-member-path="name"
+              selected-value-path="value"
+              is-editable="false"
+              initialized="_initComboBox(s)">
+            </wj-combo-box>
           </td>
         </tr>
         <tr>
@@ -239,7 +297,17 @@
           <th>
             <div class="impWrap"><s:message code="prod.refApplyYn"/><em class="imp">*</em></div>
           </th>
-          <td id="_refApplyYn"></td>
+          <td>
+            <wj-combo-box
+              id="_refApplyYn"
+              ng-model="prodModifyInfo.refApplyYn"
+              items-source="_getComboData('refApplyYnComboData')"
+              display-member-path="name"
+              selected-value-path="value"
+              is-editable="false"
+              initialized="_initComboBox(s)">
+            </wj-combo-box>
+          </td>
           <th></th>
           <td></td>
         </tr>

@@ -24,6 +24,12 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.templtEditableTxt = "수정불가";
   // 버튼 show 설정
   $scope.showBtnApplyStore = false;
+  // 매장적용 버튼은 본사만
+  if ( "H" === gvOrgnFg ) {
+    $scope.showBtnApplyStore = true;
+  } else {
+    $scope.showBtnApplyStore = false;
+  }
   $scope.showBtnSaveEdit = false;
   // 조회조건 콤보박스 데이터 Set
   $scope._setComboData("srchPrtClassCdCombo", prtClassComboData);
@@ -94,18 +100,23 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
               $scope.templtRegFgNm = "시스템";
             } else if (selectedRow.templtRegFg === "H") {
               $scope.templtRegFgNm = "본사";
-              // 매장적용 버튼은 본사만
-              $scope.showBtnApplyStore = true;
             } else {
               $scope.templtRegFgNm = "매장";
-              $scope.showBtnApplyStore = false;
             }
             $scope.showTempltRegFgNm = true;
-            // 자신이 등록한것만 수정 가능
+            // 본사는 상위에서 내려준걸 수정 하지 못한다.
             if ( gvOrgnFg === selectedRow.templtRegFg ) {
               $scope.templtEditableTxt = "수정가능";
+              theTarget.disabled = false;
+              if ( "H" === gvOrgnFg ) {
+                $scope.showBtnSaveEdit = true;
+              }
             } else {
               $scope.templtEditableTxt = "수정불가";
+              theTarget.disabled = true;
+              if ( "H" === gvOrgnFg ) {
+                $scope.showBtnSaveEdit = false;
+              }
             }
           });
         }
@@ -151,9 +162,11 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
                 if ( gvOrgnFg === selectedRow.templtRegFg ) {
                   $scope.templtEditableTxt = "수정가능";
                   $scope.showBtnSaveEdit = true;
+                  theTarget.disabled = false;
                 } else {
                   $scope.templtEditableTxt = "수정불가";
                   $scope.showBtnSaveEdit = false;
+                  theTarget.disabled = true;
                 }
                 theTarget.value = nvl($scope.flex.rows[0]._data.prtForm, '');
                 makePreview();
@@ -230,10 +243,10 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
     if ( gvOrgnFg === selectedRow.templtRegFg ) {
       $scope._postJSONSave.withOutPopUp("/base/output/posTemplate/template/save.sb", params,
         function (response) {
-          // 실제출력물인경우 패스
-          if ( selectedRow.templtCd !== "000" ) {
+          // 본사 또는 실제출력물 인 경우 패스
+          if ( "H" !== gvOrgnFg && selectedRow.templtCd !== "000") {
             $scope._popConfirm(messages['cmm.saveSucc'] + "<br><br>해당 템플릿을 실제출력물에 업데이트 하시겠습니까?",
-              function() {
+              function () {
                 var nParams = {};
                 nParams.prtClassCd = params.prtClassCd;
                 nParams.templtRegFg = params.templtRegFg;
@@ -258,7 +271,7 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
     } else {
       // 자신이 등록하지 않은 템플릿은 수정할 수 없으므로 실제출력물에만 적용한다.
       $scope._popConfirm("해당 템플릿을 실제출력물에 업데이트 하시겠습니까?",
-        function() {
+        function () {
           var nParams = {};
           nParams.prtClassCd = params.prtClassCd;
           nParams.templtRegFg = params.templtRegFg;
@@ -338,34 +351,36 @@ theTarget.addEventListener('dragover', function (e) {
 // listBox 아이템 드랍이벤트
 theTarget.addEventListener('drop', function (e) {
 
-  var scope = agrid.getScope("templateCtrl");
-  if (scope.flex.rows.length > 0) {
-    var dragRow = JSON.parse(e.dataTransfer.getData("text"));
-    var prtCd = dragRow.prtCd;
-    var content = dragRow.content;
+  if ( !theTarget.disabled ) {
+    var scope = agrid.getScope("templateCtrl");
+    if (scope.flex.rows.length > 0) {
+      var dragRow = JSON.parse(e.dataTransfer.getData("text"));
+      var prtCd = dragRow.prtCd;
+      var content = dragRow.content;
 
-    // 출력물코드가 있는 경우에만 작동
-    if (prtCd != null) {
-      var strOriginal = theTarget.value;
-      var iStartPos = theTarget.selectionStart;
-      var iEndPos = theTarget.selectionEnd;
-      var strFront = "";
-      var strEnd = "";
-      // textarea 의 커서 위치 구해서 커서위치에 값 넣기
-      if (iStartPos === iEndPos) {
-        strFront = strOriginal.substring(0, iStartPos);
-        strEnd = strOriginal.substring(iStartPos, strOriginal.length);
-      } else {
-        return;
+      // 출력물코드가 있는 경우에만 작동
+      if (prtCd != null) {
+        var strOriginal = theTarget.value;
+        var iStartPos = theTarget.selectionStart;
+        var iEndPos = theTarget.selectionEnd;
+        var strFront = "";
+        var strEnd = "";
+        // textarea 의 커서 위치 구해서 커서위치에 값 넣기
+        if (iStartPos === iEndPos) {
+          strFront = strOriginal.substring(0, iStartPos);
+          strEnd = strOriginal.substring(iStartPos, strOriginal.length);
+        } else {
+          return;
+        }
+        theTarget.value = strFront + prtCd + strEnd;
+        // 미리보기 적용
+        makePreview();
       }
-      theTarget.value = strFront + prtCd + strEnd;
-      // 미리보기 적용
-      makePreview();
+    } else {
+      scope.$apply(function() {
+        scope._popMsg("템플릿을 먼저 등록해주세요.");
+      });
     }
-  } else {
-    scope.$apply(function() {
-      scope._popMsg("템플릿을 먼저 등록해주세요.");
-    });
   }
   e.preventDefault();
 });
