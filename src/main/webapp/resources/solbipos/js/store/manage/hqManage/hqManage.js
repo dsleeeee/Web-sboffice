@@ -58,17 +58,7 @@ app.controller('hqManageCtrl', ['$scope', '$http', function ($scope, $http) {
         var col = ht.panel.columns[ht.col];
         if ( col.binding === "hqOfficeCd" ||  col.binding === "hqOfficeNm") {
           $scope.setSelectedHq(s.rows[ht.row].dataItem);
-          var popup = $scope.hqInfoLayer;
-          // 팝업 열린 뒤. 딜레이줘서 열리고 나서 실행되도록 함
-          popup.shown.addHandler(function (s) {
-            setTimeout(function() {
-              $scope._broadcast('hqInfoCtrl');
-            }, 50)
-          });
-
-          // 팝업 닫을때
-          popup.show(true, function (s) {
-          });
+          $scope.hqInfoLayer.show();
           event.preventDefault();
         }
       }
@@ -101,7 +91,6 @@ app.controller('hqManageCtrl', ['$scope', '$http', function ($scope, $http) {
   // 본사 신규 등록
   $scope.regist = function(){
     $scope.setSelectedHq(null);
-    $scope.hqInfoLayer.show(true, function (s) {
-    });
+    $scope.hqInfoLayer.show(true);
   };
 }]);

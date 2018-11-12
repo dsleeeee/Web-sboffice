@@ -75,17 +75,16 @@ public class RegistController {
     }
 
     /**
-     * 페이지 이동
+     * 회원정보조회 페이지 이동
      *
      * @param request
      * @param response
      * @param model
      */
-    @RequestMapping(value = "view/list.sb", method = RequestMethod.GET) public String registList(
-        HttpServletRequest request, HttpServletResponse response, Model model) {
+    @RequestMapping(value = "view/list.sb", method = RequestMethod.GET)
+    public String registList(HttpServletRequest request, HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
         // 등록 매장 조회
         List regstrStoreList = registService.selectRgstrStore(sessionInfoVO);
         // 등록 매장 전체 포함
@@ -93,7 +92,6 @@ public class RegistController {
 
         // 회원등급 리스트 조회
         List membrClassList = registService.selectMembrClassList(sessionInfoVO);
-
         String membrClassListAll = cmmCodeUtil.assmblObj(membrClassList, "name", "value", UseYn.N);
 
         // 본사일 경우 해당 본사의 기본매장(코드)을 조회 해야 함.
@@ -104,8 +102,9 @@ public class RegistController {
             defaultStoreCd = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0025"));
             defaultStoreCd.replace("*", "");
         }
-        model.addAttribute("regstrStoreListAll", regstrStoreListAll);
-        model.addAttribute("comboData", membrClassListAll);
+
+        model.addAttribute("regstrStoreList", regstrStoreListAll);
+        model.addAttribute("memberClassList", membrClassListAll);
         model.addAttribute("defaultStoreCd", defaultStoreCd);
 
         return "membr/info/view/memberInfo";
@@ -120,8 +119,9 @@ public class RegistController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "view/list.sb", method = RequestMethod.POST) @ResponseBody
-    public Result registListPost(RegistVO registVO, HttpServletRequest request,
+    @RequestMapping(value = "view/getMemberlist.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMemberlist(RegistVO registVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
@@ -140,7 +140,8 @@ public class RegistController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "base/getMemberInfo.sb", method = RequestMethod.POST) @ResponseBody
+    @RequestMapping(value = "base/getMemberInfo.sb", method = RequestMethod.POST)
+    @ResponseBody
     public Result baseListPost(RegistVO registVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
@@ -160,7 +161,8 @@ public class RegistController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "base/regist.sb", method = RequestMethod.POST) @ResponseBody
+    @RequestMapping(value = "base/regist.sb", method = RequestMethod.POST)
+    @ResponseBody
     public Result baseRegist(@Validated(Regist.class) @RequestBody RegistVO registVO, BindingResult bindingResult,
         HttpServletRequest request, HttpServletResponse response, Model model) {
 
@@ -193,7 +195,8 @@ public class RegistController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "base/remove.sb", method = RequestMethod.POST) @ResponseBody
+    @RequestMapping(value = "base/remove.sb", method = RequestMethod.POST)
+    @ResponseBody
     public Result baseRemove(@Validated(RegistDelete.class) RegistVO registVO, BindingResult bindingResult,
         HttpServletRequest request, HttpServletResponse response, Model model) {
         // 입력값 에러 처리

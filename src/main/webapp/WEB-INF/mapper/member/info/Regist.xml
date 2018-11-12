@@ -8,8 +8,10 @@
     No  ||  수정자 ||  수정일자    ||  수정내역
     ======================================================
     1       정용길     2018.05.01     최초작성
+    2       김지은     2018.11.08     회원정보관리 수정
 -->
 <mapper namespace="kr.co.solbipos.membr.info.regist.service.impl.RegistMapper">
+
     <!-- 등록매장 조회 -->
     <!--
         TABLE    : TB_HQ_OFFICE, TB_HQ_BRAND, TB_MS_STORE
@@ -36,7 +38,7 @@
          WHERE USE_YN = 'Y'
            AND MEMBR_ORGN_CD = #{membrOrgnCd}
          ORDER BY DEFLT_YN DESC
-      </select>
+    </select>
 
 
     <!-- 회원정보 조회 -->
@@ -46,68 +48,94 @@
     -->
     <select id="selectMembers" parameterType="registVO" resultType="DefaultMap">
         /* RegistMapper.selectMembers */
-        SELECT
-               tmm.MEMBR_NO,
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT tmm.MEMBR_NO,
                tmm.MEMBR_NM,
                tmm.MEMBR_CLASS_CD,
+               tmmc.MEMBR_CLASS_NM,
+               tmm.MEMBR_CARD_NO,
+               tmm.SHORT_NO,
+               tmm.MEMBR_ORGN_CD,
+               tmm.REG_STORE_CD,
+               tms.STORE_NM AS REG_STORE_NM,
+               tmm.POST_NO,
+               tmm.ADDR,
+               tmm.ADDR_DTL,
+               tmm.TEL_NO,
+               tmm.EMAIL_ADDR,
+               tmm.EMAIL_RECV_YN,
+               tmm.BIRTHDAY,
+               tmm.GENDR_FG,
+               tmm.SMS_RECV_YN,
+               tmm.WEDDING_YN,
+               tmm.WEDDINGDAY,
+               tmm.LUNAR_YN,
+               tmm.USE_YN,
+               tmm.MEMBR_NICKNM,
+               tmm.MEMBER_ENG_NM,
+               tmm.REMARK
+        <include refid="CmmSQL.PagingTemplateCount"/>
+          FROM TB_MB_MEMBER tmm,
+               TB_MB_MEMBER_CLASS tmmc,
+               TB_MS_STORE tms
+         WHERE tmm.MEMBR_ORGN_CD = #{hqOfficeCd}
         <if test='orgnFg != null and orgnFg.toString() == "HQ"'>
-               (SELECT MEMBR_CLASS_NM FROM TB_MB_MEMBER_CLASS WHERE MEMBR_ORGN_CD = #{hqOfficeCd} AND MEMBR_CLASS_CD = tmm.MEMBR_CLASS_CD) AS MEMBR_CLASS_NM,
+           AND tmmc.MEMBR_ORGN_CD (+)= #{hqOfficeCd}
         </if>
         <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
-               (SELECT MEMBR_CLASS_NM FROM TB_MB_MEMBER_CLASS WHERE MEMBR_ORGN_CD = #{storeCd} AND MEMBR_CLASS_CD = tmm.MEMBR_CLASS_CD) AS MEMBR_CLASS_NM,
+           AND tmmc.MEMBR_ORGN_CD (+)= #{storeCd}
         </if>
-        tmm.MEMBR_CARD_NO,
-               tmm.MEMBR_ORGN_CD
-          FROM TB_MB_MEMBER tmm
-         WHERE MEMBR_ORGN_CD = #{hqOfficeCd}
-           AND USE_YN = 'Y'
-          <if test='storeCd != null and storeCd.toString() != ""'>
-           AND REG_STORE_CD = #{storeCd}
-          </if>
-          <if test='membrCardNo != null and membrCardNo.toString() != ""'>
-            AND tmm.MEMBR_CARD_NO = #{membrCardNo}
-          </if>
-          <if test='membrNo != null and membrNo.toString() != ""'>
-            AND tmm.MEMBR_NO = #{membrNo}
-          </if>
-          <if test='membrNm != null and membrNm.toString() != ""'>
-            AND tmm.MEMBR_NM = #{membrNm}
-          </if>
-          <if test='telNo != null and telNo.toString() != ""'>
-            AND tmm.TEL_NO = #{telNo}
-          </if>
-          <if test='emailAddr != null and emailAddr.toString() != ""'>
-            AND tmm.EMAIL_ADDR = #{emailAddr}
-          </if>
-          <if test='regStoreCd != null and regStoreCd.toString() != ""'>
-            AND tmm.REG_STORE_CD = #{regStoreCd}
-          </if>
-          <if test='membrClassCd != null and membrClassCd.toString() != ""'>
-            AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
-          </if>
-          <if test='gendrFg != null and gendrFg.toString() != ""'>
-            AND tmm.GENDR_FG = #{gendrFg}
-          </if>
-          <if test='emailRecvYn != null and emailRecvYn.toString() != ""'>
-            AND tmm.EMAIL_RECV_YN = #{emailRecvYn}
-          </if>
-          <if test='smsRecvYn != null and smsRecvYn.toString() != ""'>
-            AND tmm.SMS_RECV_YN = #{smsRecvYn}
-          </if>
-          <if test='periodType != null and periodType.toString() != ""'>
+           AND tmmc.MEMBR_CLASS_CD (+)= tmm.MEMBR_CLASS_CD
+           AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+           AND tms.STORE_CD = tmm.REG_STORE_CD
+           AND tmm.USE_YN = 'Y'
+        <if test='storeCd != null and storeCd.toString() != ""'>
+           AND tmm.REG_STORE_CD = #{storeCd}
+        </if>
+        <if test='membrCardNo != null and membrCardNo.toString() != ""'>
+           AND tmm.MEMBR_CARD_NO = #{membrCardNo}
+        </if>
+        <if test='membrNo != null and membrNo.toString() != ""'>
+           AND tmm.MEMBR_NO = #{membrNo}
+        </if>
+        <if test='membrNm != null and membrNm.toString() != ""'>
+           AND tmm.MEMBR_NM = #{membrNm}
+        </if>
+        <if test='telNo != null and telNo.toString() != ""'>
+           AND tmm.TEL_NO = #{telNo}
+        </if>
+        <if test='emailAddr != null and emailAddr.toString() != ""'>
+           AND tmm.EMAIL_ADDR = #{emailAddr}
+        </if>
+        <if test='regStoreCd != null and regStoreCd.toString() != ""'>
+           AND tmm.REG_STORE_CD = #{regStoreCd}
+        </if>
+        <if test='membrClassCd != null and membrClassCd.toString() != ""'>
+           AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
+        </if>
+        <if test='gendrFg != null and gendrFg.toString() != ""'>
+           AND tmm.GENDR_FG = #{gendrFg}
+        </if>
+        <if test='emailRecvYn != null and emailRecvYn.toString() != ""'>
+           AND tmm.EMAIL_RECV_YN = #{emailRecvYn}
+        </if>
+        <if test='smsRecvYn != null and smsRecvYn.toString() != ""'>
+           AND tmm.SMS_RECV_YN = #{smsRecvYn}
+        </if>
+        <if test='periodType != null and periodType.toString() != ""'>
             <if test='periodType.getCode() == "reg"'>
-              AND tmm.REG_DT BETWEEN #{periodStartDate}||'000000' AND #{periodEndDate}||'999999'
+           AND tmm.REG_DT BETWEEN #{periodStartDate}||'000000' AND #{periodEndDate}||'999999'
             </if>
             <if test='periodType.getCode() == "last"'>
             </if>
-          </if>
-          <if test='anvType != null and anvType.toString() != ""'>
+        </if>
+        <if test='anvType != null and anvType.toString() != ""'>
             <if test='anvType.getCode() == "1"'>
-              AND tmm.BIRTHDAY BETWEEN #{anvStartDate} AND #{anvEndDate}
+          AND tmm.BIRTHDAY BETWEEN #{anvStartDate} AND #{anvEndDate}
             </if>
-          </if>
-
-        ORDER BY tmm.REG_DT DESC
+        </if>
+         ORDER BY tmm.REG_DT DESC
+        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
     <!-- 회원정보 조회 -->
