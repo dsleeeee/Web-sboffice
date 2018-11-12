@@ -678,7 +678,7 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
 }
 
 !function (win, $) {
-  var app = angular.module('rootApp', ['wj', 'ngSanitize']);
+  var app = angular.module('rootApp', ['wj', 'ngSanitize', 'ui.bootstrap']);
   // main-controller
   app.controller('rootCtrl', ['$scope', '$http', '$compile', '$sce', 'comboData', 'pagingInfo', 'pNode', 'initMenu',
     function ($scope, $http, $compile, $sce, comboData, pagingInfo, pNode, initMenu) {
