@@ -113,7 +113,9 @@ public class ProdServiceImpl implements ProdService {
         prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         prodVO.setStoreCd(sessionInfoVO.getStoreCd());
 
+        prodVO.setRegDt(currentDt);
         prodVO.setModDt(currentDt);
+        prodVO.setRegId(sessionInfoVO.getUserId());
         prodVO.setModId(sessionInfoVO.getUserId());
 
         result = prodMapper.saveProductInfo(prodVO);
