@@ -345,7 +345,7 @@
       params.startDate = wijmo.Globalize.format($scope.srchRegStartDate.value, 'yyyyMMdd');
       params.endDate   = wijmo.Globalize.format($scope.srchRegEndDate.value, 'yyyyMMdd');
       params.storeCd   = $scope.storeCd;
-      params.listScale = 500;
+      params.listScale = 50;
 
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
       $scope._inquiryMain("/iostock/orderReturn/rtnStoreOrder/rtnStoreOrderRegist/list.sb", params);

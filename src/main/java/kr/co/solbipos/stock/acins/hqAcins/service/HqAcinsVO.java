@@ -48,7 +48,7 @@ public class HqAcinsVO extends PageVO {
     private Integer acinsAmt;
     /** 주문단위-입수량 */
     private Integer poUnitQty;
-    /** 조정비고 */
+    /** 실사비고 */
     private String remark;
     /** 바코드 */
     private String barcdCd;
@@ -62,6 +62,8 @@ public class HqAcinsVO extends PageVO {
     private String confirmFg;
     /** 상품코드 or 바코드 */
     private String prodBarcdCd;
+    /** 실사구분 */
+    private String acinsFg;
 
     /**
      * @return the hqOfficeCd
@@ -453,5 +455,19 @@ public class HqAcinsVO extends PageVO {
      */
     public void setProdBarcdCd(String prodBarcdCd) {
         this.prodBarcdCd = prodBarcdCd;
+    }
+
+    /**
+     * @return the acinsFg
+     */
+    public String getAcinsFg() {
+        return acinsFg;
+    }
+
+    /**
+     * @param acinsFg the acinsFg to set
+     */
+    public void setAcinsFg(String acinsFg) {
+        this.acinsFg = acinsFg;
     }
 }

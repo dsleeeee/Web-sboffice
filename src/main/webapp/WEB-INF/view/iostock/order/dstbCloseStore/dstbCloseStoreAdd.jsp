@@ -87,7 +87,8 @@
 
       <div class="mt10 oh">
         <%-- 조회 --%>
-        <button type="button" class="btn_blue fr" id="btnSearch" ng-click="search();"><s:message code="cmm.search"/></button>
+        <button type="button" class="btn_blue fr" id="btnSearch" ng-click="search();">
+          <s:message code="cmm.search"/></button>
       </div>
 
       <ul class="txtSty3 mt10">
@@ -97,7 +98,8 @@
       <div class="mt40 tr">
         <div class="tr">
           <%-- 저장 --%>
-          <button type="button" class="btn_skyblue ml5" id="btnSave" ng-click="saveDstbCloseStoreAdd()"><s:message code="cmm.save"/></button>
+          <button type="button" class="btn_skyblue ml5" id="btnSave" ng-click="saveDstbCloseStoreAdd()">
+            <s:message code="cmm.save"/></button>
         </div>
       </div>
 
@@ -195,23 +197,7 @@
           // 주문수량 수정시 금액,VAT,합계 계산하여 보여준다.
           if (col.binding === "mgrUnitQty" || col.binding === "mgrEtcQty") {
             var item        = s.rows[e.row].dataItem;
-            var mgrSplyUprc = parseInt(item.mgrSplyUprc);
-            var poUnitQty   = parseInt(item.poUnitQty);
-            var vat01       = parseInt(item.vatFg01);
-            var envst0011   = parseInt(item.envst0011);
-
-            var unitQty    = parseInt(nvl(item.mgrUnitQty, 0)) * parseInt(item.poUnitQty);
-            var etcQty     = parseInt(nvl(item.mgrEtcQty, 0));
-            var totQty     = parseInt(unitQty + etcQty);
-            var tempMgrAmt = Math.round(totQty * mgrSplyUprc / poUnitQty);
-            var mgrAmt     = tempMgrAmt - Math.round(tempMgrAmt * vat01 * envst0011 / 11);
-            var mgrVat     = Math.round(tempMgrAmt * vat01 / (10 + envst0011));
-            var mgrTot     = parseInt(mgrAmt + mgrVat);
-
-            item.mgrTotQty = totQty; // 총수량
-            item.mgrAmt    = mgrAmt; // 금액
-            item.mgrVat    = mgrVat; // VAT
-            item.mgrTot    = mgrTot; // 합계
+            $scope.calcAmt(item);
           }
         }
 
@@ -222,7 +208,70 @@
       s.columnFooters.rows.push(new wijmo.grid.GroupRow());
       // add a sigma to the header to show that this is a summary row
       s.bottomLeftCells.setCellData(0, 0, '합계');
+
+      // 헤더머지
+      s.allowMerging  = 2;
+      s.itemFormatter = function (panel, r, c, cell) {
+        if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+          //align in center horizontally and vertically
+          panel.rows[r].allowMerging    = true;
+          panel.columns[c].allowMerging = true;
+          wijmo.setCss(cell, {
+            display    : 'table',
+            tableLayout: 'fixed'
+          });
+          cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+          wijmo.setCss(cell.children[0], {
+            display      : 'table-cell',
+            verticalAlign: 'middle',
+            textAlign    : 'center'
+          });
+        }
+        // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+        else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+          // GroupRow 인 경우에는 표시하지 않는다.
+          if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+            cell.textContent = '';
+          } else {
+            if (!isEmpty(panel._rows[r]._data.rnum)) {
+              cell.textContent = (panel._rows[r]._data.rnum).toString();
+            } else {
+              cell.textContent = (r + 1).toString();
+            }
+          }
+        }
+        // readOnly 배경색 표시
+        else if (panel.cellType === wijmo.grid.CellType.Cell) {
+          var col = panel.columns[c];
+          if (col.isReadOnly) {
+            wijmo.addClass(cell, 'wj-custom-readonly');
+          }
+        }
+      }
     };
+
+
+    // 금액 계산
+    $scope.calcAmt = function (item) {
+      var mgrSplyUprc = parseInt(item.mgrSplyUprc);
+      var poUnitQty   = parseInt(item.poUnitQty);
+      var vat01       = parseInt(item.vatFg01);
+      var envst0011   = parseInt(item.envst0011);
+
+      var unitQty    = parseInt(nvl(item.mgrUnitQty, 0)) * parseInt(item.poUnitQty);
+      var etcQty     = parseInt(nvl(item.mgrEtcQty, 0));
+      var totQty     = parseInt(unitQty + etcQty);
+      var tempMgrAmt = Math.round(totQty * mgrSplyUprc / poUnitQty);
+      var mgrAmt     = tempMgrAmt - Math.round(tempMgrAmt * vat01 * envst0011 / 11);
+      var mgrVat     = Math.round(tempMgrAmt * vat01 / (10 + envst0011));
+      var mgrTot     = parseInt(mgrAmt + mgrVat);
+
+      item.mgrTotQty = totQty; // 총수량
+      item.mgrAmt    = mgrAmt; // 금액
+      item.mgrVat    = mgrVat; // VAT
+      item.mgrTot    = mgrTot; // 합계
+    };
+
 
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("dstbCloseStoreAddCtrl", function (event, data) {
@@ -236,7 +285,7 @@
         $scope.reqDate = data.reqDate;
         $scope.slipFg  = data.slipFg;
         $scope.wjDstbCloseStoreAddLayer.show(true);
-        $("#addProdSubTitle").html(' ('+messages["dstbCloseStore.add.reqDate"]+' : ' + getFormatDate($scope.reqDate, '-') + ')');
+        $("#addProdSubTitle").html(' (' + messages["dstbCloseStore.add.reqDate"] + ' : ' + getFormatDate($scope.reqDate, '-') + ')');
       }
       else { // 페이징처리에서 broadcast 호출시
         $scope.searchDstbCloseStoreAddList();
@@ -272,7 +321,7 @@
         if ($scope.httpStatusCheck(response)) {
           if (!$.isEmptyObject(response.data.data)) {
             $scope.orderFg  = response.data.data.orderFg;
-            var orderFgText = messages["dstbCloseStore.add.orderPossibleFg"]+' : ';
+            var orderFgText = messages["dstbCloseStore.add.orderPossibleFg"] + ' : ';
             if ($scope.orderFg === 0) orderFgText += messages["dstbCloseStore.add.possible"];
             else orderFgText += messages["dstbCloseStore.add.impossible"];
             $("#orderFgSubTitle").html(orderFgText);
@@ -296,7 +345,7 @@
       params.reqDate   = $scope.reqDate;
       params.slipFg    = $scope.slipFg;
       params.storeCd   = $scope.storeCd;
-      params.listScale = 500;
+      params.listScale = 50;
 
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
       $scope._inquiryMain("/iostock/order/dstbCloseStore/dstbCloseStoreAdd/list.sb", params);

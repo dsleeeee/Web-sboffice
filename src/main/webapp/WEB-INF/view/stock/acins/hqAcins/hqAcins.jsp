@@ -52,12 +52,9 @@
       <%-- 실사등록 --%>
       <th><s:message code="hqAcins.acinsRegist"/></th>
       <td colspan="3">
-        <%--<p class="s12 bk fl mr5 lh30"><s:message code="hqAcins.acinsDate"/></p>--%>
         <div class="sb-select fl mr10">
           <span class="txtIn"><input id="acinsDate" class="w120px" ng-model="acinsDate"></span>
         </div>
-        <%--<p class="s12 bk fl mr5 lh30"><s:message code="hqAcins.acinsTitle"/> : </p>--%>
-        <%--<input type="text" class="sb-input w200px mr10" id="acinsTitle" ng-model="acinsTitle"/>--%>
         <a href="#" class="btn_grayS" ng-click="newAcins()"><s:message code="hqAcins.acinsRegist"/></a>
       </td>
     </tr>
@@ -66,7 +63,7 @@
 
   <div class="mt10 pdb20 oh bb">
     <%-- 조회 --%>
-    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('hqAcinsCtrl')">
+    <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('hqAcinsCtrl', 1)">
       <s:message code="cmm.search"/></button>
   </div>
 
@@ -108,6 +105,14 @@
     </div>
     <%--//위즈모 테이블--%>
   </div>
+  <%-- 페이지 리스트 --%>
+  <div class="pageNum mt20">
+    <%-- id --%>
+    <ul id="hqAcinsCtrlPager" data-size="10">
+    </ul>
+  </div>
+  <%--//페이지 리스트--%>
+
 </div>
 
 
@@ -195,6 +200,7 @@
       params.endDate   = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
 
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
+      // $scope._inquirySub("/stock/acins/hqAcins/hqAcins/list.sb", params);
       $scope._inquiryMain("/stock/acins/hqAcins/hqAcins/list.sb", params);
     };
 

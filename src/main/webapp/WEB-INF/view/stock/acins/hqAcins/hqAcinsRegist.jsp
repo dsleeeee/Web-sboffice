@@ -24,6 +24,13 @@
         </colgroup>
         <tbody>
         <tr>
+          <%-- 실사제목 --%>
+          <th><s:message code="hqAcins.reg.acinsTitle"/><em class="imp">*</em></th>
+          <td colspan="3">
+            <input type="text" id="acinsTitle" name="acinsTitle" ng-model="acinsTitle" class="sb-input w100" maxlength="33"/>
+          </td>
+        </tr>
+        <tr>
           <%-- 상품코드 --%>
           <th><s:message code="hqAcins.reg.prodCd"/></th>
           <td>
@@ -36,19 +43,35 @@
           </td>
         </tr>
         <tr>
+          <%-- 바코드 --%>
           <th><s:message code="hqAcins.reg.barcd"/></th>
           <td>
             <input type="text" id="srchBarcdCd" name="srchBarcdCd" ng-model="barcdCd" class="sb-input w100" maxlength="40"/>
           </td>
+          <%-- 상품분류 --%>
           <th><s:message code="hqAcins.reg.prodClass"/></th>
           <td>
             <input type="text" id="srchProdClass" name="prodClass" ng-model="prodClass" class="sb-input w100" maxlength="40"/>
           </td>
         </tr>
         <tr>
-          <th><s:message code="hqAcins.reg.acinsTitle"/><em class="imp">*</em></th>
-          <td colspan="3">
-            <input type="text" id="acinsTitle" name="acinsTitle" ng-model="acinsTitle" class="sb-input w100" maxlength="33"/>
+          <%-- 실사구분 --%>
+          <th><s:message code="hqAcins.reg.acinsFg"/></th>
+          <td>
+            <div class="sb-select">
+              <span class="txtIn w150px">
+                <wj-combo-box
+                  id="srchAcinsFg"
+                  ng-model="acinsFg"
+                  ng-disabled="readAcinsFg"
+                  items-source="_getComboData('srchAcinsFg')"
+                  display-member-path="name"
+                  selected-value-path="value"
+                  is-editable="false"
+                  initialized="_initComboBox(s)">
+                </wj-combo-box>
+              </span>
+            </div>
           </td>
         </tr>
         <tr>
@@ -65,7 +88,7 @@
 
       <div class="mt10 oh">
         <%-- 조회 --%>
-        <button type="button" class="btn_blue fr" id="btnSearch" ng-click="searchHqAcinsRegistList();">
+        <button type="button" class="btn_blue fr" id="btnSearch" ng-click="fnSearch();">
           <s:message code="cmm.search"/></button>
       </div>
 
@@ -90,30 +113,45 @@
         </tr>
         <tr>
           <td>
-            <input type="text" id="srchProdBarcdCd" name="srchProdBarcdCd" ng-model="prodBarcdCd" class="sb-input tc" maxlength="40" style="width: 250px;" ng-keydown="fnKeySearchProd($event)"/>
+            <input type="text" id="prodBarcdCd" name="prodBarcdCd" ng-model="prodBarcdCd" class="sb-input tc" maxlength="40" style="width: 250px;" ng-keydown="searchProdKeyEvt($event)"/>
             <%-- 찾기 --%>
-            <a href="#" class="btn_grayS" ng-click="prodFind()"><s:message code="hqAcins.reg.prodFind"/></a>
+            <a href="#" class="btn_grayS" ng-click="prodFindPop()"><s:message code="hqAcins.reg.prodFind"/></a>
             <span class="chk txtIn lh30 ml5" style="top: -2px;">
-              <input type="checkbox" name="autoAdd" id="autoAdd" ng-model="autoAdd"/>
-              <label for="autoAdd"><s:message code="hqAcins.reg.autoAdd"/></label>
+              <input type="checkbox" name="autoAddChk" id="autoAddChk" ng-model="autoAddChk"/>
+              <label for="autoAddChk"><s:message code="hqAcins.reg.autoAdd"/></label>
             </span>
           </td>
           <td>
-            <input type="text" id="addQty" name="addQty" ng-model="addQty" class="sb-input tc" maxlength="10" style="width: 100px;" ng-keydown="fnKeyAddQty($event)"/>
+            <input type="text" id="addQty" name="addQty" ng-model="addQty" class="sb-input tc" maxlength="10" style="width: 100px;" ng-keydown="addQtyKeyEvt($event)"/>
             <%-- 추가 --%>
-            <a href="#" class="btn_grayS" ng-click="addAcinsQty()"><s:message code="hqAcins.reg.add"/></a>
+            <a href="#" class="btn_grayS" ng-click="fnAddQty()"><s:message code="hqAcins.reg.add"/></a>
           </td>
         </tr>
         </tbody>
       </table>
 
       <div class="mt20 tr">
-        <%-- 현재고적용 --%>
-        <button type="button" class="btn_skyblue ml5" id="btnCurrToAcins" ng-click="setCurrToAcins()">
-          <s:message code="hqAcins.reg.CurrToAcins"/></button>
-        <%-- 저장 --%>
-        <button type="button" class="btn_skyblue ml5" id="btnRegSave" ng-click="saveHqAcinsRegist()">
-          <s:message code="cmm.save"/></button>
+        <div class="oh sb-select">
+          <%-- 페이지 스케일  --%>
+          <wj-combo-box
+            class="w100px fl"
+            id="regListScaleBox"
+            ng-model="listScale"
+            items-source="_getComboData('regListScaleBox')"
+            display-member-path="name"
+            selected-value-path="value"
+            is-editable="false"
+            initialized="_initComboBox(s)">
+          </wj-combo-box>
+          <%--// 페이지 스케일  --%>
+
+          <%-- 현재고적용 --%>
+          <button type="button" class="btn_skyblue ml5" id="btnCurrToAcins" ng-click="setCurrToAcins()">
+            <s:message code="hqAcins.reg.currToAcins"/></button>
+          <%-- 저장 --%>
+          <button type="button" class="btn_skyblue ml5" id="btnRegSave" ng-click="saveHqAcinsRegist()">
+            <s:message code="cmm.save"/></button>
+        </div>
       </div>
 
       <div class="w100 mt10 mb20">
@@ -167,6 +205,14 @@
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('hqAcinsRegistCtrl', $scope, $http, true));
 
+    $scope._setComboData("regListScaleBox", gvListScaleBoxData);
+
+    $scope._setComboData("srchAcinsFg", [
+      {"name": messages["cmm.all"], "value": ""},
+      {"name": messages["hqAcins.reg.acinsFgN"], "value": "N"},
+      {"name": messages["hqAcins.reg.acinsFgY"], "value": "Y"},
+    ]);
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
       s.cellEditEnded.addHandler(function (s, e) {
@@ -212,14 +258,26 @@
       $scope.data     = cv;
 
       if (!$.isEmptyObject(data)) {
+        $scope._setPagingInfo('curr', 1); // 페이지번호 1로 세팅
+
         $scope.acinsDate  = data.acinsDate;
         $scope.seqNo      = data.seqNo;
         $scope.callParent = data.callParent;
 
-        // 변수값들 초기화
+        // 상품찾기 변수값들 초기화
         $scope.addQty      = '';
         $scope.prodBarcdCd = '';
-        $scope.autoAdd     = false;
+        $scope.autoAddChk  = false;
+        $scope.acinsTitle    = '';
+
+        // 신규등록이면 실사구분 disabled 시킨다.
+        if ($scope.callParent === "hqAcins") {
+          $scope.readAcinsFg = true;
+        }
+        else {
+          $scope.readAcinsFg = false;
+        }
+
         $scope.procFgCheck(); // 실사진행구분 체크
       }
       else { // 페이징처리에서 broadcast 호출시
@@ -280,21 +338,59 @@
       params.prodCd    = $scope.prodCd;
       params.prodNm    = $scope.prodNm;
       params.barcdCd   = $scope.barcdCd;
-      params.listScale = 500;
+      params.acinsFg   = $scope.acinsFg;
+      params.listScale = $scope.listScale;
 
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
       $scope._inquirySub("/stock/acins/hqAcins/hqAcinsRegist/list.sb", params);
     };
 
 
+    // 조회버튼으로 조회시
+    $scope.fnSearch = function () {
+      if ($scope.flex.collectionView.itemsEdited.length > 0 || $scope.flex.collectionView.itemsAdded.length > 0) {
+        var msg = messages["hqAcins.reg.searchMsg"]; // 저장되지 않은 자료가 있습니다. 조회하시겠습니까?
+        s_alert.popConf(msg, function () {
+          $scope._setPagingInfo('curr', 1); // 페이지번호 1로 세팅
+          $scope.searchHqAcinsRegistList();
+        });
+      }
+      else {
+        $scope._setPagingInfo('curr', 1); // 페이지번호 1로 세팅
+        $scope.searchHqAcinsRegistList();
+      }
+    };
+
+
     // 실사 상품 저장
     $scope.saveHqAcinsRegist = function () {
       if (nvl($scope.acinsTitle, '') === '') {
-        var msg = messages["hqAcins.reg.acinsTitle"] + messages["cmm.require.text"];
+        var msg = messages["hqAcins.reg.acinsTitle"] + messages["cmm.require.text"]; // 실사제목을 입력하세요.
         $scope._popMsg(msg);
         return false;
       }
       var params = [];
+      // 추가된 상품 가져오기
+      for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+        var item = $scope.flex.collectionView.itemsAdded[i];
+
+        // 체크박스가 체크되어 있으면서 기존에 등록되어 있던 상품은 삭제한다.
+        if (item.gChk === true && item.acinsProdStatus === 'U') {
+          item.status = "D";
+        }
+        else {
+          item.status = "U";
+        }
+        item.acinsDate  = $scope.acinsDate;
+        item.seqNo      = $scope.seqNo;
+        item.acinsTitle = $scope.acinsTitle;
+        item.storageCd  = "001";
+        item.hqBrandCd  = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
+
+        params.push(item);
+      }
+
+      // 수정된 상품 가져오기
       for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
         var item = $scope.flex.collectionView.itemsEdited[i];
 
@@ -322,8 +418,6 @@
 
     // 저장 후 콜백 서치 함수
     $scope.saveRegistCallback = function () {
-      // $scope.searchHqAcinsRegistList();
-
       // 신규 요청등록인 경우
       if ($scope.callParent === "hqAcins") {
         var hqAcinsScope = agrid.getScope('hqAcinsCtrl');
@@ -335,6 +429,7 @@
         hqAcinsScope.searchHqAcinsList();
 
         var hqAcinsDtlScope = agrid.getScope('hqAcinsDtlCtrl');
+        hqAcinsDtlScope._setPagingInfo('curr', 1); // 페이지번호 1로 세팅
         hqAcinsDtlScope.searchHqAcinsDtlList();
       }
 
@@ -368,15 +463,15 @@
 
 
     // 상품코드/바코드 input 박스에서 keyDown시
-    $scope.fnKeySearchProd = function (event) {
-      if (event.keyCode === 13) {
+    $scope.searchProdKeyEvt = function (event) {
+      if (event.keyCode === 13) { // 이벤트가 enter 이면
         var searchFg = true;
 
         // 조회된 상품중에 해당 상품코드/바코드가 있는지 검색
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
           var item = $scope.flex.collectionView.items[i];
           if (item.prodCd === $scope.prodBarcdCd || item.barcdCd === $scope.prodBarcdCd) {
-            searchFg = false;
+            searchFg = false; // 그리드에 이미 해당 상품이 있는 경우 서버 조회 하지않도록 변수값 false 로 변경
           }
         }
 
@@ -386,6 +481,8 @@
           params.acinsDate   = $scope.acinsDate;
           params.seqNo       = $scope.seqNo;
           params.prodBarcdCd = $scope.prodBarcdCd;
+          params.listScale   = 1; // 상품 하나만 조회해야 하므로 listScale 1로 줌.
+          params.curr        = 1;
 
           var url = "/stock/acins/hqAcins/hqAcinsRegist/getProdInfo.sb";
           $scope._postJSONQuery.withOutPopUp(url, params, function (response) {
@@ -394,45 +491,31 @@
             }
             else {
               $scope.addRow(response.data.data);
-              if ($("#autoAdd").prop("checked")) {
-                $scope.addAcinsQty();
+              if ($("#autoAddChk").prop("checked")) {
+                $scope.modifyAcinsQty(1);
               }
               else {
-                // setTimeout(function () {
-                  $scope.addQty = 1;
-                  $("#addQty").select();
-                // }, 50);
+                $scope.addQty = 1;
+                $("#addQty").select();
               }
             }
           });
-
-          // 조회 수행 : 조회URL, 파라미터, 콜백함수
-          // $scope._inquirySub("/stock/acins/hqAcins/hqAcinsRegist/list.sb", params, function () {
-          //   if ($("#autoAdd").prop("checked")) {
-          //     $scope.addAcinsQty();
-          //   }
-          //   else {
-          //     $scope.addQty = 1;
-          //     $("#addQty").select();
-          //   }
-          // });
         }
         else {
-          $scope.addQty = 1;
-          $("#addQty").select();
+          if ($("#autoAddChk").prop("checked")) {
+            $scope.modifyAcinsQty(1);
+          }
+          else {
+            $scope.addQty = 1;
+            $("#addQty").select();
+          }
         }
       }
     };
 
 
     // 그리드의 상품을 찾아서 실사수 수정
-    $scope.addAcinsQty = function () {
-      var addQty = $scope.addQty;
-
-      if ($("#autoAdd").prop("checked")) {
-        addQty = 1;
-      }
-
+    $scope.modifyAcinsQty = function (addQty) {
       for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
         var item = $scope.flex.collectionView.items[i];
         if (item.prodCd === $scope.prodBarcdCd || item.barcdCd === $scope.prodBarcdCd) {
@@ -444,38 +527,46 @@
           $scope.flex.collectionView.commitEdit();
         }
       }
-    };
 
-
-    // 추가수량 input 박스에서 keyDown시
-    $scope.fnKeyAddQty = function (event) {
-      if (event.keyCode === 13) {
-        $scope.addAcinsQty();
+      // 자동추가가 체크되어 있는 경우 focus 를 계속 상품코드/바코드 입력하는곳에 둔다.
+      if ($("#autoAddChk").prop("checked")) {
+        $scope.addQty = '';
+        $("#prodBarcdCd").select();
       }
     };
 
 
+    // 추가버튼 클릭시
+    $scope.fnAddQty = function () {
+      var qty = $scope.addQty;
+      $scope.modifyAcinsQty(qty);
+    };
+
+
+    // 추가수량 input 박스에서 keyDown시
+    $scope.addQtyKeyEvt = function (event) {
+      if (event.keyCode === 13) {
+        $scope.fnAddQty();
+      }
+    };
+
+
+    // grid 의 row 추가
     $scope.addRow = function (params) {
       var flex = $scope.flex;
       if (!flex.collectionView) {
         flex.itemsSource = new wijmo.collections.CollectionView();
       }
-      var newRow = flex.collectionView.addNew();
-      newRow.status = 'I';
-      // newRow.gChk = true;
+      flex.collectionView.trackChanges = true;
+      var newRow                       = flex.collectionView.addNew();
+      newRow.status                    = 'U';
       for (var prop in params) {
         newRow[prop] = params[prop];
       }
-      flex.collectionView.trackChanges = true;
       flex.collectionView.commitNew();
-      // 추가된 Row 선택
-      // setTimeout(function () {
-      //   flex.scrollIntoView(flex.rows.length - 1, 0);
-      //   flex.select(flex.rows.length - 1, 1);
-      //   flex.focus();
-      //   flex.startEditing(true, flex.rows.length - 1, (pos === null ? 0 : pos), true);
-      // }, 50);
-    }
+    };
+
+
   }]);
 
 </script>

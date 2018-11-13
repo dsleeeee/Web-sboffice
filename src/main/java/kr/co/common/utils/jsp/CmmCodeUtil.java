@@ -105,7 +105,7 @@ public class CmmCodeUtil {
             return assmblEmptyCombo();
         }
         // 결과 형태를 만들어서 json 으로 리턴
-        return assmblObj(commonCodeVO.getCodeList(), "nmcodeNm", "nmcodeCd", UseYn.ALL);
+        return assmblObj(commonCodeVO.getCodeList(), "nmcodeNm", "nmcodeCd", UseYn.SELECT);
     }
 
 
@@ -207,6 +207,11 @@ public class CmmCodeUtil {
         if (option == UseYn.ALL) {
             HashMap<String, String> m = new HashMap<>();
             m.put(COMBO_NAME, "전체");
+            m.put(COMBO_VALUE, "");
+            list.add(m);
+        } else if (option == UseYn.SELECT) {
+            HashMap<String, String> m = new HashMap<>();
+            m.put(COMBO_NAME, "선택");
             m.put(COMBO_VALUE, "");
             list.add(m);
         } else if (option == UseYn.Y) {

@@ -7,7 +7,7 @@
     <!-- 실사관리 - 실사관리 리스트 조회 -->
     <!--
         TABLE    : TB_ST_HQ_STOCK_CUR, TB_HQ_PRODUCT, TB_HQ_PRODUCT_BARCD
-        PARAM    : hqCurrVO
+        PARAM    : hqAcinsVO
         COMMENTS : 실사관리 - 실사관리 리스트를 조회한다.
     -->
     <select id="getHqAcinsList" parameterType="hqAcinsVO" resultType="DefaultMap">
@@ -54,6 +54,7 @@
     -->
     <select id="getHqAcinsRegistList" parameterType="hqAcinsVO" resultType="DefaultMap">
         /* USE : HqAcinsMapper.getHqAcinsRegistList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
         <![CDATA[
         SELECT  thpb.BARCD_CD, thp.PROD_CD, thp.PROD_NM, thp.PO_UNIT_QTY
         ,		NVL((SELECT MAX(SALE_UPRC) KEEP(DENSE_RANK FIRST ORDER BY REG_DT DESC)
@@ -70,6 +71,9 @@
         ,       tshaid.ADJ_AMT
         ,       tshaid.REMARK
         ,       DECODE(tshaid.PROD_CD, NULL, 'I', 'U') AS ACINS_PROD_STATUS
+        ]]>
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        <![CDATA[
         FROM    TB_HQ_PRODUCT thp
         ,       TB_ST_HQ_ACTUAL_INSPECTION_DTL tshaid
         ,       (	SELECT  tshsc.PROD_CD, tshsc.CURR_QTY, tshsm.AVG_COST_UPRC
@@ -104,10 +108,17 @@
         <if test='prodBarcdCd != null and prodBarcdCd != ""'>
             AND (thp.PROD_CD = #{prodBarcdCd} OR thpb.BARCD_CD = #{prodBarcdCd})
         </if>
+        <if test='acinsFg == "Y"'>
+            AND tshaid.ACINS_QTY IS NOT NULL
+        </if>
+        <if test='acinsFg == "N"'>
+            AND tshaid.ACINS_QTY IS NULL
+        </if>
         <![CDATA[
         ORDER
         BY		thp.PROD_CD
         ]]>
+        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
     <!-- 실사관리 - 실사등록 신규 SEQ 조회 -->
@@ -128,12 +139,14 @@
 
     <!-- 실사관리 - 실사 상세 리스트 조회 -->
     <!--
-        TABLE    : TB_HQ_PRODUCT, TB_ST_HQ_ACTUAL_INSPECTION_DTL, TB_ST_HQ_STOCK_CUR, TB_ST_HQ_STOCK_MONTHLY, TB_HQ_PRODUCT_BARCD, TB_ST_HQ_STOCK_DAILY
+        TABLE    : TB_HQ_PRODUCT, TB_ST_HQ_ACTUAL_INSPECTION_DTL, TB_ST_HQ_STOCK_CUR, TB_ST_HQ_STOCK_MONTHLY
+                 , TB_HQ_PRODUCT_BARCD, TB_ST_HQ_STOCK_DAILY
         PARAM    : hqAcinsVO
         COMMENTS : 실사관리 - 실사 상세 리스트를 조회한다.
     -->
     <select id="getHqAcinsDtlList" parameterType="hqAcinsVO" resultType="DefaultMap">
         /* USE : HqAcinsMapper.getHqAcinsDtlList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
         <![CDATA[
         SELECT  thpb.BARCD_CD, thp.PROD_CD, thp.PROD_NM, thp.PO_UNIT_QTY
         ,		NVL((SELECT MAX(SALE_UPRC) KEEP(DENSE_RANK FIRST ORDER BY REG_DT DESC)
@@ -150,6 +163,9 @@
         ,       tshaid.ADJ_AMT
         ,       tshaid.REMARK
         ,       'U' AS ACINS_PROD_STATUS
+        ]]>
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        <![CDATA[
         FROM    TB_ST_HQ_ACTUAL_INSPECTION_DTL tshaid
         ,       TB_HQ_PRODUCT thp
         ,       (	SELECT	tshsm.PROD_CD
@@ -185,6 +201,7 @@
         ORDER
         BY		tshaid.PROD_CD
         ]]>
+        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
     <!-- 실사관리 - 실사 DTL 전부 삭제 -->

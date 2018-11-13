@@ -68,7 +68,7 @@ app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
         if ( col.binding === "membrNo" ||  col.binding === "membrNm") {
           var selectedData = s.rows[ht.row].dataItem;
           $scope.setSelectedMember(selectedData);
-          $scope.memberRegistLayer.show(true);
+          $scope.memberInfoDetailLayer.show(true);
           event.preventDefault();
         }
 
@@ -103,12 +103,21 @@ app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 화면 ready 된 후 설정
   angular.element(document).ready(function () {
-    // 회원등록 팝업 핸들러 추가
+
+    // 회원조회 팝업 핸들러 추가
+    $scope.memberInfoDetailLayer.shown.addHandler(function (s) {
+      setTimeout(function() {
+        $scope._broadcast('memberInfoDetailCtrl', $scope.getSelectedMember());
+      }, 50)
+    });
+
+    // 회원 등록 및 수정 팝업 핸들러 추가
     $scope.memberRegistLayer.shown.addHandler(function (s) {
       setTimeout(function() {
         $scope._broadcast('memberRegistCtrl', $scope.getSelectedMember());
       }, 50)
     });
+
     // 후불회원등록 팝업 핸들러 추가
     $scope.creditStoreRegistLayer.shown.addHandler(function (s) {
       setTimeout(function() {

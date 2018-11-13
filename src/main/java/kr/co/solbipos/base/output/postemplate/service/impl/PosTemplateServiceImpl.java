@@ -136,17 +136,14 @@ public class PosTemplateServiceImpl implements PosTemplateService {
         }
     }
 
-    /** 실제출력물 템플릿 생성 */
+    /** 실제출력물 템플릿 생성 : 본사는 실제출력물 사용하지 않는다. */
     @Override
     public int insertPosTemplatePrint(PosTemplateVO posTemplateVO, SessionInfoVO sessionInfoVO) {
         int result = 0;
         String currentDt = currentDateTimeString();
 
         // 소속구분 설정
-        String orgnFg = sessionInfoVO.getOrgnFg().getCode();
-        posTemplateVO.setOrgnFg(orgnFg);
-        posTemplateVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        posTemplateVO.setStoreCd(sessionInfoVO.getStoreCd());
+        posTemplateVO.setTempltRegFg(posTemplateVO.getOrgnFg());
 
         posTemplateVO.setRegDt(currentDt);
         posTemplateVO.setRegId(sessionInfoVO.getUserId());

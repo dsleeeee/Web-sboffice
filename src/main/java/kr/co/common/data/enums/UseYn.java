@@ -1,9 +1,8 @@
 package kr.co.common.data.enums;
 
-import org.apache.ibatis.type.MappedTypes;
 import com.fasterxml.jackson.annotation.JsonValue;
-import kr.co.common.data.enums.CodeEnum;
 import kr.co.common.data.handler.CodeEnumTypeHandler;
+import org.apache.ibatis.type.MappedTypes;
 
 /**
  * 사용 여부 Y:사용, N:미사용 enum type<br>
@@ -16,6 +15,8 @@ public enum UseYn implements CodeEnum {
     
     /** 전체 */
     ALL(""),
+    /** 선택 */
+    SELECT(""),
     /** 사용 */
     Y("Y"),
     /** 미사용 */

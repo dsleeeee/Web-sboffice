@@ -264,7 +264,7 @@
       params.reqDate   = $scope.reqDate;
       params.slipFg    = $scope.slipFg;
       params.storeCd   = $scope.storeCd;
-      params.listScale = 500;
+      params.listScale = 50;
 
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
       $scope._inquiryMain("/iostock/orderReturn/rtnDstbCloseStore/rtnDstbCloseStoreAdd/list.sb", params);

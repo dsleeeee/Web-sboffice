@@ -89,11 +89,11 @@ public class DstbCloseProdServiceImpl implements DstbCloseProdService {
             dstbCloseProdVO.setModDt(currentDt);
 
             // 분배수량이 0 이나 null 인 경우 삭제
-            if(dstbCloseProdVO.getMgrTotQty() == 0 || dstbCloseProdVO.getMgrTotQty() == null) {
-                result = dstbCloseProdMapper.deleteDstbCloseProdDtl(dstbCloseProdVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-            }
-            else {
+//            if(dstbCloseProdVO.getMgrTotQty() == 0 || dstbCloseProdVO.getMgrTotQty() == null) {
+//                result = dstbCloseProdMapper.deleteDstbCloseProdDtl(dstbCloseProdVO);
+//                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+//            }
+//            else {
                 result = dstbCloseProdMapper.updateDstbCloseProdDtl(dstbCloseProdVO);
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
@@ -102,7 +102,7 @@ public class DstbCloseProdServiceImpl implements DstbCloseProdService {
                     result = dstbCloseProdMapper.updateDstbCloseProdDtlConfirm(dstbCloseProdVO);
                     if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                 }
-            }
+//            }
             returnResult += result;
         }
 
@@ -141,30 +141,34 @@ public class DstbCloseProdServiceImpl implements DstbCloseProdService {
             Long mgrVat      = (dstbCloseProdVO.getMgrVat()     == null ? 0 : dstbCloseProdVO.getMgrVat())     * slipFg;
             Long mgrTot      = (dstbCloseProdVO.getMgrTot()     == null ? 0 : dstbCloseProdVO.getMgrTot())     * slipFg;
 
-            dstbCloseProdVO.setMgrUnitQty(mgrUnitQty);
-            dstbCloseProdVO.setMgrEtcQty(mgrEtcQty);
-            dstbCloseProdVO.setMgrTotQty(mgrTotQty);
-            dstbCloseProdVO.setMgrAmt(mgrAmt);
-            dstbCloseProdVO.setMgrVat(mgrVat);
-            dstbCloseProdVO.setMgrTot(mgrTot);
-            dstbCloseProdVO.setProcFg("10");
-            dstbCloseProdVO.setDstbFg("0");
-            dstbCloseProdVO.setRegId(sessionInfoVO.getUserId());
-            dstbCloseProdVO.setRegDt(currentDt);
-            dstbCloseProdVO.setModId(sessionInfoVO.getUserId());
-            dstbCloseProdVO.setModDt(currentDt);
-            dstbCloseProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            if(mgrTotQty > 0) {
+                dstbCloseProdVO.setMgrUnitQty(mgrUnitQty);
+                dstbCloseProdVO.setMgrEtcQty(mgrEtcQty);
+                dstbCloseProdVO.setMgrTotQty(mgrTotQty);
+                dstbCloseProdVO.setMgrAmt(mgrAmt);
+                dstbCloseProdVO.setMgrVat(mgrVat);
+                dstbCloseProdVO.setMgrTot(mgrTot);
+                dstbCloseProdVO.setProcFg("10");
+                dstbCloseProdVO.setDstbFg("0");
+                dstbCloseProdVO.setRegId(sessionInfoVO.getUserId());
+                dstbCloseProdVO.setRegDt(currentDt);
+                dstbCloseProdVO.setModId(sessionInfoVO.getUserId());
+                dstbCloseProdVO.setModDt(currentDt);
+                dstbCloseProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-            result = dstbCloseProdMapper.insertDstbCloseProdAddRegist(dstbCloseProdVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                result = dstbCloseProdMapper.insertDstbCloseProdAddRegist(dstbCloseProdVO);
+                if (result <= 0)
+                    throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-            if(dstbCloseProdVO.getConfirmYn()) {
-                dstbCloseProdVO.setProcFg("20");
-                result = dstbCloseProdMapper.updateDstbCloseProdDtlConfirm(dstbCloseProdVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                if (dstbCloseProdVO.getConfirmYn()) {
+                    dstbCloseProdVO.setProcFg("20");
+                    result = dstbCloseProdMapper.updateDstbCloseProdDtlConfirm(dstbCloseProdVO);
+                    if (result <= 0)
+                        throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                }
+
+                returnResult += result;
             }
-
-            returnResult += result;
         }
 
         return returnResult;

@@ -62,46 +62,20 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT
-                    sub.PRT_CLASS_CD,
-                    sub.TEMPLT_REG_FG,
-                    sub.TEMPLT_CD,
-                    sub.TEMPLT_NM,
-                    sub.PRT_FORM,
-                    sub.APPLY_TEMPLT_CD,
-                    sub.APPLY_TEMPLT_REG_FG
+                    thpt.PRT_CLASS_CD,
+                    thpt.TEMPLT_REG_FG,
+                    thpt.TEMPLT_CD,
+                    thpt.TEMPLT_NM,
+                    thpt.PRT_FORM,
+                    thpt.TEMPLT_CD AS APPLY_TEMPLT_CD,
+                    thpt.TEMPLT_REG_FG AS APPLY_TEMPLT_REG_FG
                 FROM
-                    (
-                    SELECT
-                        thp.PRT_CLASS_CD,
-                        'H' AS TEMPLT_REG_FG,
-                        '000' AS TEMPLT_CD,
-                        '실제출력물' AS TEMPLT_NM,
-                        thp.PRT_FORM,
-                        thp.TEMPLT_CD AS APPLY_TEMPLT_CD,
-                        thp.TEMPLT_REG_FG AS APPLY_TEMPLT_REG_FG
-                    FROM
-                        TB_HQ_PRINT thp
-                    WHERE
-                        thp.HQ_OFFICE_CD = #{hqOfficeCd}
-                        AND thp.PRT_CLASS_CD = #{prtClassCd}
-                    UNION ALL
-                    SELECT
-                        thpt.PRT_CLASS_CD,
-                        thpt.TEMPLT_REG_FG,
-                        thpt.TEMPLT_CD,
-                        thpt.TEMPLT_NM,
-                        thpt.PRT_FORM,
-                        thpt.TEMPLT_CD AS APPLY_TEMPLT_CD,
-                        thpt.TEMPLT_REG_FG AS APPLY_TEMPLT_REG_FG
-                    FROM
-                        TB_HQ_PRINT_TEMPL thpt
-                    WHERE
-                        thpt.HQ_OFFICE_CD = #{hqOfficeCd}
-                        AND thpt.PRT_CLASS_CD = #{prtClassCd}
-                    ) sub
+                    TB_HQ_PRINT_TEMPL thpt
+                WHERE
+                    thpt.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND thpt.PRT_CLASS_CD = #{prtClassCd}
                 ORDER BY
-                    sub.TEMPLT_CD, sub.TEMPLT_REG_FG DESC
-
+                    thpt.TEMPLT_CD, thpt.TEMPLT_REG_FG DESC
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -427,78 +401,41 @@
 
     <!-- 실제출력물 템플릿 생성 -->
     <!--
-        TABLE    : TB_HQ_PRINT, TB_MS_PRINT
+        TABLE    : TB_MS_PRINT
         PARAM    : posTemplateVO
         COMMENTS : 실제출력물 템플릿을 생성한다.
     -->
     <insert id="insertPosTemplatePrint" parameterType="posTemplateVO">
         /* USE : PosServiceMapper.insertPosTemplatePrint */
-        <choose>
-            <!-- 본사 -->
-            <when test='orgnFg != null and orgnFg == "H"'>
-                MERGE INTO TB_HQ_PRINT thp
-                USING DUAL
-                ON (
-                    thp.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND thp.PRT_CLASS_CD = #{prtClassCd}
-                )
-                WHEN NOT MATCHED THEN
-                    INSERT
-                    (
-                        HQ_OFFICE_CD,
-                        PRT_CLASS_CD,
-                        TEMPLT_REG_FG,
-                        TEMPLT_CD,
-                        PRT_FORM,
-                        REG_DT,
-                        REG_ID,
-                        MOD_DT,
-                        MOD_ID
-                    ) VALUES (
-                        #{hqOfficeCd},
-                        #{prtClassCd},
-                        #{templtRegFg},
-                        #{templtCd},
-                        '',
-                        #{regDt},
-                        #{regId},
-                        #{modDt},
-                        #{modId}
-                    )
-            </when>
-            <!-- 매장 -->
-            <when test='orgnFg != null and orgnFg == "S"'>
-                MERGE INTO TB_MS_PRINT tmp
-                USING DUAL
-                ON (
-                    tmp.STORE_CD = #{storeCd}
-                    AND tmp.PRT_CLASS_CD = #{prtClassCd}
-                )
-                WHEN NOT MATCHED THEN
-                    INSERT
-                    (
-                        STORE_CD,
-                        PRT_CLASS_CD,
-                        TEMPLT_REG_FG,
-                        TEMPLT_CD,
-                        PRT_FORM,
-                        REG_DT,
-                        REG_ID,
-                        MOD_DT,
-                        MOD_ID
-                    ) VALUES (
-                        #{storeCd},
-                        #{prtClassCd},
-                        #{templtRegFg},
-                        #{templtCd},
-                        '',
-                        #{regDt},
-                        #{regId},
-                        #{modDt},
-                        #{modId}
-                    )
-            </when>
-        </choose>
+        MERGE INTO TB_MS_PRINT tmp
+        USING DUAL
+        ON (
+            tmp.STORE_CD = #{storeCd}
+            AND tmp.PRT_CLASS_CD = #{prtClassCd}
+        )
+        WHEN NOT MATCHED THEN
+            INSERT
+            (
+                STORE_CD,
+                PRT_CLASS_CD,
+                TEMPLT_REG_FG,
+                TEMPLT_CD,
+                PRT_FORM,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+            ) VALUES (
+                #{storeCd},
+                #{prtClassCd},
+                #{templtRegFg},
+                #{templtCd},
+                '',
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+            )
     </insert>
 
     <!-- 실제출력물 템플릿 수정 -->

@@ -196,4 +196,4 @@
   console.log(envstGrpCdNm)
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sys/cd/envConfg/envConfg.js?ver=20181023.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/cd/envConfg/envConfg.js?ver=20181113.01" charset="utf-8"></script>

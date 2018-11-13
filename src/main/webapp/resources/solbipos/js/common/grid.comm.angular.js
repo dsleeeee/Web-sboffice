@@ -452,9 +452,6 @@ function RootController(ctrlName, $scope, $http, isPicker) {
       property.data = data;
       property.params = sParams; /* 파라메터로 보낼 데이터 : request.getParameter */
     }
-
-    console.log(property);
-
     // ajax 통신 설정
     $http(property)
       .then(function successCallback(response) {
@@ -505,6 +502,18 @@ function RootController(ctrlName, $scope, $http, isPicker) {
       }
     });
   }
+  // 콤보박스 조회 공통로직
+  $scope._getComboDataQuery = function(code, comboNm) {
+    var params = {};
+    params.code = code;
+    params.type = "S";
+
+    $scope._postJSONQuery.withOutPopUp("/common/getComboData.sb", params,
+      function(response) {
+        $scope._setComboData(comboNm, JSON.parse(response.data.data));
+      }
+    );
+  };
 }
 
 // 메뉴 트리뷰 생성
