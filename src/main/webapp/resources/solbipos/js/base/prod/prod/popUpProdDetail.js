@@ -13,7 +13,7 @@
  */
 app.controller('prodDetailCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('prodDetailCtrl', $scope, $http, true));
+  angular.extend(this, new RootController('prodDetailCtrl', $scope, $http, false));
   // 상품상세정보
   $scope.prodDetail = {};
   // 상품정보관리 그리드 조회

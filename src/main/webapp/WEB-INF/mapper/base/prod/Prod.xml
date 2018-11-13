@@ -180,7 +180,7 @@
                     thp.PROD_CD,            -- 상품코드
                     thp.PROD_NM,            -- 상품명
                     thp.PROD_CLASS_CD,      -- 상품분류코드
-                    ( SELECT SF_GET_PROD_CLASSES('H', thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
+                    ( SELECT SF_GET_PROD_CLASSES('H', thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_CD_NM,
                     thp.CORNR_CD,           -- 코너코드
                     thp.ORGPLCE_CD,         -- 원산지 구분 -- TODO 원산지명 조회 필요
                     thp.SDATTR_CLASS_CD,
@@ -274,7 +274,7 @@
                     tmp.PROD_CD,            -- 상품코드
                     tmp.PROD_NM,            -- 상품명
                     tmp.PROD_CLASS_CD,      -- 상품분류코드
-                    ( SELECT SF_GET_PROD_CLASSES('S', tmp.STORE_CD, tmp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
+                    ( SELECT SF_GET_PROD_CLASSES('S', tmp.STORE_CD, tmp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_CD_NM,
                     tmp.CORNR_CD,           -- 코너코드
                     tmp.ORGPLCE_CD,         -- 원산지 구분 -- TODO 원산지명 조회 필요
                     tmp.SDATTR_CLASS_CD,
@@ -410,6 +410,81 @@
         </choose>
     </select>
 
+    <!-- 상품분류 플랫 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_CLASS, TB_MS_PRODUCT_CLASS,
+        PARAM    : prodVO
+        COMMENTS : 상품 분류명을 플랫 형태로 조회한다.
+    -->
+    <select id="getProdClassCdNm" parameterType="prodVO" resultType="java.lang.String">
+        /* USE : ProdMapper.getProdClassCdNm */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                    SF_GET_PROD_CLASSES('H', #{hqOfficeCd}, #{prodClassCd}) AS PROD_CLASS_CD_NM
+                FROM
+                    DUAL
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                    SF_GET_PROD_CLASSES('S', #{storeCd}, #{prodClassCd}) AS PROD_CLASS_CD_NM
+                FROM
+                    DUAL
+            </when>
+        </choose>
+
+    </select>
+
+    <!-- 상품분류 트리 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_CLASS, TB_MS_PRODUCT_CLASS,
+        PARAM    : prodVO
+        COMMENTS : 상품 분류를 트리뷰 목록으로 조회한다.
+    -->
+    <select id="getProdClassTree" parameterType="prodVO" resultType="productClassVO">
+        /* USE : ProdMapper.getProdClassTree */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                    thpc.P_PROD_CLASS_CD,
+                    thpc.PROD_CLASS_CD,
+                    thpc.PROD_CLASS_NM
+                FROM
+                    TB_HQ_PRODUCT_CLASS thpc
+                WHERE
+                    thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+                START WITH
+                    thpc.P_PROD_CLASS_CD = '00000'
+                    AND thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+                CONNECT BY
+                    thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD
+                     AND thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                    tmpc.P_PROD_CLASS_CD,
+                    tmpc.PROD_CLASS_CD,
+                    tmpc.PROD_CLASS_NM
+                FROM
+                    TB_MS_PRODUCT_CLASS tmpc
+                WHERE
+                    tmpc.STORE_CD = #{storeCd}
+                START WITH
+                    tmpc.P_PROD_CLASS_CD = '00000'
+                    AND tmpc.STORE_CD = #{storeCd}
+                CONNECT BY
+                     tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD
+                     AND tmpc.STORE_CD = #{storeCd}
+            </when>
+        </choose>
+
+
+    </select>
+
     <!-- 상품정보 저장 -->
     <!--
         TABLE    : TB_HQ_PRODUCT
@@ -503,7 +578,7 @@
                         MOD_ID
                     ) VALUES (
                         #{hqOfficeCd},
-                        #{prodCd},
+                        ( SELECT LPAD(NVL(MAX(TO_NUMBER(PROD_CD)),0) + 1, 13, '0') FROM TB_HQ_PRODUCT WHERE HQ_OFFICE_CD = #{hqOfficeCd} ),
                         #{prodNm},
                         #{prodClassCd},
                         #{cornrCd},
@@ -625,7 +700,7 @@
                         MOD_ID
                     ) VALUES (
                         #{storeCd},
-                        #{prodCd},
+                        ( SELECT LPAD(NVL(MAX(TO_NUMBER(PROD_CD)),0) + 1, 13, '0') FROM TB_MS_PRODUCT WHERE STORE_CD = #{storeCd} ),
                         #{prodNm},
                         #{prodClassCd},
                         #{cornrCd},

@@ -18,7 +18,7 @@ var app = agrid.getApp();
  */
 app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('prodCtrl', $scope, $http, true));
+  angular.extend(this, new RootController('prodCtrl', $scope, $http, false));
   // 상품 상세 정보
   $scope.prodInfo = {};
   $scope.setProdInfo = function(data){
