@@ -54,19 +54,19 @@
               <%-- 회원명 --%>
               <th><s:message code="regist.membr.nm" /><em class="imp">*</em></th>
               <td>
-                <input type="text" id="rMembrNm" name="membrNm" class="sb-input w100" ng-model="member.membrNm"  maxlength="15" required>
+                <input type="text" id="rMembrNm" name="membrNm" ng-model="member.membrNm"class="sb-input w100"   maxlength="15" required>
               </td>
-              <%-- 회원명(영문) --%>
-              <th><s:message code="regist.membr.nm.eng" /><em class="imp">*</em></th>
+              <%-- 회원닉네임 --%>
+              <th><s:message code="regist.membr.nicknm" /></th>
               <td>
-                <input type="text" id="rMembrNmEng" class="sb-input w100" ng-model="member.membrNmEng" maxlength="15" />
+                <input type="text" id="rMembrNicknm" name="membrNicknm" ng-model="member.membrNicknm" class="sb-input w100" maxlength="15" />
               </td>
             </tr>
             <tr>
               <%-- 전화번호 --%>
               <th><s:message code="regist.tel" /><em class="imp">*</em></th>
               <td>
-                <input type="text" id="rTelNo" ng-model="member.telNo" class="sb-input w100" maxlength="11" placeholder="<s:message code='storeManage.bizNo.comment' />" required="" />
+                <input type="text" id="rTelNo" name="telNo" ng-model="member.telNo" class="sb-input w100" maxlength="11" placeholder="<s:message code='storeManage.bizNo.comment' />" required />
               </td>
               <%-- 성별 --%>
               <th><s:message code="regist.gender" /><em class="imp">*</em></th>
@@ -124,9 +124,9 @@
               <th><s:message code="regist.lunarYn" /></th>
               <td>
                 <div class="sb-input">
-                  <input type="radio" ng-model="member.lunarYn" value="N" checked="checked">
+                  <input type="radio" name="lunarYn" ng-model="member.lunarYn" value="N" checked="checked" >
                   <label><s:message code="regist.solar" /></label>
-                  <input type="radio" ng-model="member.lunarYn" value="Y">
+                  <input type="radio" name="lunarYn" ng-model="member.lunarYn" value="Y" >
                   <label class="mr5"><s:message code="regist.lunar" /></label>
                 </div>
               </td>
@@ -184,20 +184,20 @@
               <%-- E-mail --%>
               <th><s:message code="regist.email" /></th>
               <td colspan="3">
-                <input type="text" id="rEmailAddr" ng-model="member.emailAddr" class="sb-input w100" maxlength="50"/>
+                <input type="text" id="rEmailAddr" name="emailAddr" ng-model="member.emailAddr" class="sb-input w100" maxlength="50"/>
               </td>
             </tr>
             <tr>
               <%-- 주소 //TODO 주소검색 추가 필요 --%>
               <th><s:message code="regist.addr" /></th>
               <td colspan="3">
-                <input type="text" id="rPostNo" ng-model="member.postNo" class="sb-input w30" maxlength="5"/>
+                <input type="text" id="rPostNo" name="postNo" ng-model="member.postNo" class="sb-input w30" maxlength="5"/>
                 <a id="btnSrchAddr" href="#" class="btn_grayS ml5" ng-click="searchAddr()">
                   <s:message code="regist.srchAddr" />
                 </a>
                 <br>
-                <input type="text" id="rAddr" ng-model="member.addr" class="sb-input w100" maxlength="60"/>
-                <input type="text" id="rAddrDtl" ng-model="member.addrDtl" class="sb-input w100" maxlength="60"/>
+                <input type="text" id="rAddr" name="addr" ng-model="member.addr" class="sb-input w100" maxlength="60"/>
+                <input type="text" id="rAddrDtl" name="addrDtl" ng-model="member.addrDtl" class="sb-input w100" maxlength="60"/>
               </td>
             </tr>
             <tr>
@@ -238,14 +238,7 @@
               <%-- 비고 --%>
               <th><s:message code="regist.remark" /></th>
               <td colspan="3">
-                <input id="rRemark" ng-model="member.remark" type="text" class="sb-input w100" maxlength="100"/>
-              </td>
-            </tr>
-            <tr ng-if=""> <%-- //todo 조건추가 --%>
-              <%-- 후불회원 적용매장 (등록매장이 본사일경우에만 (후불회원 적용본사일 경우만 사용)) --%>
-              <th><s:message code="regist.credit.store" /></th>
-              <td colspan="3">
-                <a href="#" id="store" ng-click="regist" class="btn_grayS ml5"><s:message code="cmm.store.select" /></a>
+                <input type="text" id="rRemark" name="remark" ng-model="member.remark" class="sb-input w100" maxlength="100"/>
               </td>
             </tr>
             </tbody>
@@ -253,7 +246,6 @@
 
         </f:form>
       </div>
-
       <div class="btnSet">
         <%-- 저장 --%>
         <span><a href="#" class="btn_blue pd20" id="btnSave" ng-click="save()"><s:message code="cmm.save" /></a></span>

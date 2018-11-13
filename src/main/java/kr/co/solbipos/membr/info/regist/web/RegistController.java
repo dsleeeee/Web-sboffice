@@ -5,7 +5,6 @@ import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
-import kr.co.common.utils.DateUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
@@ -13,6 +12,7 @@ import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.membr.anals.credit.service.CreditStoreVO;
+import kr.co.solbipos.membr.info.regist.enums.WeddingYn;
 import kr.co.solbipos.membr.info.regist.service.RegistService;
 import kr.co.solbipos.membr.info.regist.service.RegistVO;
 import kr.co.solbipos.membr.info.regist.validate.Regist;
@@ -44,7 +44,7 @@ import static kr.co.common.utils.grid.ReturnUtil.returnJsonBindingFieldError;
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2018.05.01  정용길      최초생성
- * @ 2018.05.01  정용길      최초생성
+ * @ 2018.11.08  김지은      회원정보관리 수정
  *
  * @author NHN한국사이버결제 KCP 정용길
  * @since 2018.05.01
@@ -85,12 +85,12 @@ public class RegistController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         // 등록 매장 조회
-        List regstrStoreList = registService.selectRgstrStore(sessionInfoVO);
+        List regstrStoreList = registService.getRegistStore(sessionInfoVO);
         // 등록 매장 전체 포함
         String regstrStoreListAll = cmmCodeUtil.assmblObj(regstrStoreList, "name", "value", UseYn.ALL);
 
         // 회원등급 리스트 조회
-        List membrClassList = registService.selectMembrClassList(sessionInfoVO);
+        List membrClassList = registService.getMembrClassList(sessionInfoVO);
 
         String membrClassListAll = cmmCodeUtil.assmblObj(membrClassList, "name", "value", UseYn.N);
 
@@ -126,7 +126,7 @@ public class RegistController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<Object>> result = registService.selectMembers(registVO, sessionInfoVO);
+        List<DefaultMap<String>> result = registService.getMemberList(registVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, registVO);
     }
@@ -145,11 +145,9 @@ public class RegistController {
     public Result baseListPost(RegistVO registVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        DefaultMap<String> result = registService.getMemberInfo(registVO);
 
-        RegistVO vo = registService.selectMember(registVO, sessionInfoVO);
-
-        return ReturnUtil.returnJson(Status.OK, vo);
+        return ReturnUtil.returnJson(Status.OK, result);
     }
 
     /**
@@ -173,7 +171,18 @@ public class RegistController {
             return returnJsonBindingFieldError(bindingResult);
         }
 
-        int result = registService.registMemberInfo(registVO, sessionInfoVO);
+        // 생일 특문 제거
+        registVO.setBirthday(registVO.getBirthday().replaceAll("-",""));
+
+
+        // 결혼여부 선택값이 미혼이면 결혼기념일 null
+        if(registVO.getWeddingYn() == WeddingYn.N) {
+            registVO.setWeddingday(null);
+        } else {
+            registVO.setWeddingday(registVO.getWeddingday().replaceAll("-",""));
+        }
+
+       int result = registService.registMemberInfo(registVO, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }
@@ -198,6 +207,16 @@ public class RegistController {
         // 입력값 에러 처리
         if (bindingResult.hasErrors()) {
             return returnJsonBindingFieldError(bindingResult);
+        }
+
+        // 생일 특문 제거
+        registVO.setBirthday(registVO.getBirthday().replaceAll("-",""));
+
+        // 결혼여부 선택값이 미혼이면 결혼기념일 null
+        if(registVO.getWeddingYn() == WeddingYn.N) {
+            registVO.setWeddingday(null);
+        } else {
+            registVO.setWeddingday(registVO.getWeddingday().replaceAll("-",""));
         }
 
         int result = registService.updateMemberInfo(registVO, sessionInfoVO);
@@ -246,9 +265,9 @@ public class RegistController {
 
         SessionInfoVO si = sessionService.getSessionInfo(request);
 
-        Map<String, Object> result = registService.getCreditStoreLists(creditStoreVO, si);
+        List<DefaultMap<String>> list = registService.getCreditStoreLists(creditStoreVO, si);
 
-        return ReturnUtil.returnJson(Status.OK, result);
+        return ReturnUtil.returnListJson(Status.OK, list);
     }
 
     /***
@@ -259,14 +278,35 @@ public class RegistController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "credit/saveCreditStore.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "credit/registCreditStore.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result saveCreditStore(@RequestBody CreditStoreVO[] creditStoreVOs, HttpServletRequest request,
+    public Result registCreditStore(@RequestBody CreditStoreVO[] creditStoreVOs, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
         SessionInfoVO si = sessionService.getSessionInfo(request);
 
-        int result = registService.saveCreditStore(creditStoreVOs, si);
+        int result = registService.registCreditStore(creditStoreVOs, si);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+
+    /***
+     * 후불매장 삭제
+     * @param creditStoreVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "credit/deleteCreditStore.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result deleteCreditStore(@RequestBody CreditStoreVO[] creditStoreVOs, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO si = sessionService.getSessionInfo(request);
+
+        int result = registService.deleteCreditStore(creditStoreVOs, si);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }

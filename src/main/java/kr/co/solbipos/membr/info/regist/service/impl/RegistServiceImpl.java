@@ -1,10 +1,10 @@
 package kr.co.solbipos.membr.info.regist.service.impl;
 
+import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.utils.DateUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
-import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.membr.anals.credit.service.CreditStoreVO;
@@ -16,9 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
@@ -53,7 +51,7 @@ public class RegistServiceImpl implements RegistService {
 
     /** 등록매장 리스트 조회 */
     @Override
-    public List<DefaultMap<String>> selectRgstrStore(SessionInfoVO sessionInfoVO) {
+    public List<DefaultMap<String>> getRegistStore(SessionInfoVO sessionInfoVO) {
 
         // 회원정보 등록시 등록매장의 콤보박스 내용 조회
         // 본사 : 해당 본사에 소속된 매장만 조회한다.
@@ -62,12 +60,12 @@ public class RegistServiceImpl implements RegistService {
 
         hqVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        return mapper.selectRgstrStore(hqVO);
+        return mapper.getRegistStore(hqVO);
     }
 
     /** 회원등급 리스트 조회 */
     @Override
-    public List<DefaultMap<String>> selectMembrClassList(SessionInfoVO sessionInfoVO) {
+    public List<DefaultMap<String>> getMembrClassList(SessionInfoVO sessionInfoVO) {
 
         MembrClassVO membrClassVO = new MembrClassVO();
 
@@ -79,35 +77,18 @@ public class RegistServiceImpl implements RegistService {
             membrClassVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
         }
 
-        return mapper.selectMemberClassList(membrClassVO);
+        return mapper.getMemberClassList(membrClassVO);
     }
 
-//    /** 회원정보 등록 */
-//    @Override
-//    public int insertRegistMember(RegistVO registVO) {
-//        return mapper.insertRegistMember(registVO);
-//    }
-
-    /** 리스트에서 선택한 회원 정보 조회 */
+    /** 선택한 회원 정보 조회 */
     @Override
-    public RegistVO selectMember(RegistVO registVO, SessionInfoVO sessionInfoVO) {
-
-        RegistVO resultVO = new RegistVO();
-
-        // 회원 정보 조회
-        resultVO = selectMember(registVO);
-
-        return resultVO;
-    }
-
-    /** 회원정보 조회 */
-    private RegistVO selectMember(RegistVO registVO) {
-        return mapper.selectMember(registVO);
+    public DefaultMap<String> getMemberInfo(RegistVO registVO) {
+        return mapper.getMemberInfo(registVO);
     }
 
     /** 회원 목록 조회 */
     @Override
-    public <E> List<E> selectMembers(RegistVO registVO, SessionInfoVO sessionInfoVO) {
+    public List<DefaultMap<String>> getMemberList(RegistVO registVO, SessionInfoVO sessionInfoVO) {
 
         // 회원정보 조회시 해당 본사나 매장의 회원만 조회
         registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
@@ -116,27 +97,8 @@ public class RegistServiceImpl implements RegistService {
         if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             registVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
-        return mapper.selectMembers(registVO);
+        return mapper.getMemberList(registVO);
     }
-
-//    /** 회원정보 수정 */
-//    @Override
-//    public int updateMember(RegistVO registVO) {
-//
-//    }
-
-
-//    /** 회원 카드 등록 */
-//    @Override
-//    public int insertMembrCard(RegistVO registVO) {
-//        return mapper.insertMembrCard(registVO);
-//    }
-
-//    /** 회원 카드 수정 */
-//    @Override
-//    public int updateMembrCard(RegistVO registVO) {
-//        return mapper.updateMembrCard(registVO);
-//    }
 
     /** 회원 등록 */
     @Override
@@ -194,9 +156,7 @@ public class RegistServiceImpl implements RegistService {
      * @return
      */
     @Override
-    public Map<String,Object> getCreditStoreLists(CreditStoreVO creditStoreVO, SessionInfoVO sessionInfoVO) {
-
-        Map<String,Object> resultMap = new HashMap<String, Object>();
+    public List<DefaultMap<String>> getCreditStoreLists(CreditStoreVO creditStoreVO, SessionInfoVO sessionInfoVO) {
 
         // 기본매장이 있는 경우, 매장 조회시 기본매장은 제외하고 검색한다.
         String defaultStoreCd = "";
@@ -205,27 +165,29 @@ public class RegistServiceImpl implements RegistService {
             defaultStoreCd.replace("*", "");
         }
 
+        creditStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         creditStoreVO.setDefaultStoreCd(defaultStoreCd);
 
+        List<DefaultMap<String>> resultList = null;
+
         // 등록매장 조회
-        List<DefaultMap<String>> regStoreList = mapper.getRegStoreList(creditStoreVO);
-
+        if(creditStoreVO.getRegYn() == UseYn.Y) {
+             resultList = mapper.getRegStoreList(creditStoreVO);
+        }
         // 미등록매장 조회
-        List<DefaultMap<String>> noRegStoreList = mapper.getNoRegStoreList(creditStoreVO);
+        else {
+            resultList = mapper.getNoRegStoreList(creditStoreVO);
+        }
 
-        resultMap.put("regStoreList", regStoreList);
-        resultMap.put("noRegStoreList", noRegStoreList);
-
-        return resultMap;
+        return resultList;
     }
 
     /** 후불회원 매장 등록 */
     @Override
-    public int saveCreditStore(CreditStoreVO[] creditStoreVOs, SessionInfoVO sessionInfoVO) {
+    public int registCreditStore(CreditStoreVO[] creditStoreVOs, SessionInfoVO sessionInfoVO) {
 
         int result = 0;
         String dt = currentDateTimeString();
-
 
         for(CreditStoreVO creditStoreVO : creditStoreVOs) {
 
@@ -234,11 +196,19 @@ public class RegistServiceImpl implements RegistService {
             creditStoreVO.setModDt(dt);
             creditStoreVO.setModId(sessionInfoVO.getUserId());
 
-            if(creditStoreVO.getStatus() == GridDataFg.INSERT) {
-                result += mapper.registCreditStore(creditStoreVO);
-            } else {
-                result += mapper.deleteCreditStore(creditStoreVO);
-            }
+            result += mapper.registCreditStore(creditStoreVO);
+        }
+        return result;
+    }
+
+    /** 후불회원 매장 삭제 */
+    @Override
+    public int deleteCreditStore(CreditStoreVO[] creditStoreVOs, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+
+        for(CreditStoreVO creditStoreVO : creditStoreVOs) {
+            result += mapper.deleteCreditStore(creditStoreVO);
         }
         return result;
     }

@@ -3,14 +3,16 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
 <wj-popup control="couponStoreLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:900px;">
+  <div class="wj-dialog wj-dialog-columns title">
 
-  <div class="wj-dialog wj-dialog-columns">
+    <%-- header --%>
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="coupon.regist.store" />
       <a href="#" class="wj-hide btn_close"></a>
     </div>
-    <div class="wj-dialog-body">
 
+    <%-- body --%>
+    <div class="wj-dialog-body">
       <table class="tblType01 mt20">
         <colgroup>
           <col class="w15" />

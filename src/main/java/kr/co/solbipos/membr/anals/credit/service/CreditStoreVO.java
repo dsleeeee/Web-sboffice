@@ -58,6 +58,8 @@ public class CreditStoreVO extends CmmVO {
     private String[] storeCdList;
     /** 기본매장  */
     private String defaultStoreCd;
+    /** 등록여부  */
+    private UseYn regYn;
 
 
     /**
@@ -328,5 +330,20 @@ public class CreditStoreVO extends CmmVO {
      */
     public void setDefaultStoreCd(String defaultStoreCd) {
         this.defaultStoreCd = defaultStoreCd;
+    }
+
+    /**
+     * @return the regYn
+     */
+
+    public UseYn getRegYn() {
+        return regYn;
+    }
+
+    /**
+     * @param regYn the regYn to set
+     */
+    public void setRegYn(UseYn regYn) {
+        this.regYn = regYn;
     }
 }

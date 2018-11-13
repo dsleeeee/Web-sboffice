@@ -20,8 +20,6 @@ app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('memberCtrl', $scope, $http, true));
 
-  console.log(genderDataMap);
-
   // 조회조건 콤보박스 데이터 Set
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
   $scope._setComboData("emailRecvYn", recvDataMap);
@@ -50,7 +48,12 @@ app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
     s.formatItem.addHandler(function (s, e) {
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
+        // 회원번호, 회원명 클릭시 상세정보 팝업
         if (col.binding === "membrNo" || col.binding === "membrNm") {
+          wijmo.addClass(e.cell, 'wijLink');
+        }
+        // 후불적용매장등록 클릭시 매장선택 팝업
+        if(col.binding === "creditStore") {
           wijmo.addClass(e.cell, 'wijLink');
         }
       }
@@ -61,11 +64,25 @@ app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
       var ht = s.hitTest(e);
       if( ht.cellType === wijmo.grid.CellType.Cell) {
         var col = ht.panel.columns[ht.col];
+        // 회원번호, 회원명 클릭시 상세정보 팝업
         if ( col.binding === "membrNo" ||  col.binding === "membrNm") {
           var selectedData = s.rows[ht.row].dataItem;
           $scope.setSelectedMember(selectedData);
           $scope.memberRegistLayer.show(true);
           event.preventDefault();
+        }
+
+        // 후불적용매장등록 클릭시 매장선택 팝업
+        if (col.binding === "creditStore" ) {
+          var selectedData = s.rows[ht.row].dataItem;
+          // 해당 매장의 등록매장이 본사의 디폴트 매장과 동일할 경우에만 후불적용 매장을 등록할 수 있다.
+          if(selectedData.regStoreCd === defaultStoreCd) {
+            $scope.setSelectedMember(selectedData);
+            $scope.creditStoreRegistLayer.show(true);
+          } else {
+            $scope._popMsg("등록매장이 기본매장과 동일한 회원만\n후불회원으로 등록 가능합니다.");
+            return false;
+          }
         }
       }
     });
@@ -86,10 +103,16 @@ app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 화면 ready 된 후 설정
   angular.element(document).ready(function () {
-    // 팝업 핸들러 추가
+    // 회원등록 팝업 핸들러 추가
     $scope.memberRegistLayer.shown.addHandler(function (s) {
       setTimeout(function() {
         $scope._broadcast('memberRegistCtrl', $scope.getSelectedMember());
+      }, 50)
+    });
+    // 후불회원등록 팝업 핸들러 추가
+    $scope.creditStoreRegistLayer.shown.addHandler(function (s) {
+      setTimeout(function() {
+        $scope._broadcast('regStoreCtrl', $scope.getSelectedMember());
       }, 50)
     });
   });

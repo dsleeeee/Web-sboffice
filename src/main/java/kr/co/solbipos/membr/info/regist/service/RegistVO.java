@@ -1,7 +1,9 @@
 package kr.co.solbipos.membr.info.regist.service;
 
+import kr.co.common.data.enums.UseYn;
 import kr.co.solbipos.application.common.service.PageVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.membr.info.regist.enums.WeddingYn;
 import kr.co.solbipos.membr.info.regist.service.enums.AnvType;
 import kr.co.solbipos.membr.info.regist.service.enums.PeriodType;
 import kr.co.solbipos.membr.info.regist.validate.Regist;
@@ -73,16 +75,16 @@ public class RegistVO extends PageVO {
     @NotBlank(groups = {Regist.class}, message = "{regist.tel}{cmm.require.text}")
     private String telNo;
     /** 결혼여부 기혼:Y 미혼:N */
-    @NotBlank(groups = {Regist.class}, message = "{regist.wedding}{cmm.require.text}")
-    private String weddingYn;
+//    @NotBlank(groups = {Regist.class}, message = "{regist.wedding}{cmm.require.text}")
+    private WeddingYn weddingYn;
     /** 결혼기념일 */
     private String weddingday;
     /** 이메일수신여부 */
-    @NotBlank(groups = {Regist.class}, message = "{regist.email.recv}{cmm.require.text}")
-    private String emailRecvYn;
+//    @NotBlank(groups = {Regist.class}, message = "{regist.email.recv}{cmm.require.text}")
+    private UseYn emailRecvYn;
     /** SMS수신여부 */
-    @NotBlank(groups = {Regist.class}, message = "{regist.sms.recv}{cmm.require.text}")
-    private String smsRecvYn;
+//    @NotBlank(groups = {Regist.class}, message = "{regist.sms.recv}{cmm.require.text}")
+    private UseYn smsRecvYn;
     /** 사용여부 */
     @NotBlank(groups = {Regist.class}, message = "{cmm.useYn}{cmm.require.text}")
     private String useYn;
@@ -404,24 +406,21 @@ public class RegistVO extends PageVO {
         this.telNo = telNo;
     }
 
+
     /**
      * @return the weddingYn
      */
 
-    public String getWeddingYn() {
+    public WeddingYn getWeddingYn() {
         return weddingYn;
     }
 
     /**
      * @param weddingYn the weddingYn to set
      */
-    public void setWeddingYn(String weddingYn) {
+    public void setWeddingYn(WeddingYn weddingYn) {
         this.weddingYn = weddingYn;
     }
-
-    /**
-     * @return the weddingday
-     */
 
     public String getWeddingday() {
         return weddingday;
@@ -434,18 +433,20 @@ public class RegistVO extends PageVO {
         this.weddingday = weddingday;
     }
 
+
+
     /**
      * @return the emailRecvYn
      */
 
-    public String getEmailRecvYn() {
+    public UseYn getEmailRecvYn() {
         return emailRecvYn;
     }
 
     /**
      * @param emailRecvYn the emailRecvYn to set
      */
-    public void setEmailRecvYn(String emailRecvYn) {
+    public void setEmailRecvYn(UseYn emailRecvYn) {
         this.emailRecvYn = emailRecvYn;
     }
 
@@ -453,14 +454,14 @@ public class RegistVO extends PageVO {
      * @return the smsRecvYn
      */
 
-    public String getSmsRecvYn() {
+    public UseYn getSmsRecvYn() {
         return smsRecvYn;
     }
 
     /**
      * @param smsRecvYn the smsRecvYn to set
      */
-    public void setSmsRecvYn(String smsRecvYn) {
+    public void setSmsRecvYn(UseYn smsRecvYn) {
         this.smsRecvYn = smsRecvYn;
     }
 
