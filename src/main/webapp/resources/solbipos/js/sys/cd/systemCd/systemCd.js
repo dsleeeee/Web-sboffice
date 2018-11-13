@@ -12,6 +12,7 @@
  * get application
  */
 var app = agrid.getApp();
+
 // 조회조건 DropBoxDataMap
 var useTargetFg = [
   {"name":"전체","value":""},
@@ -58,11 +59,11 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.useSystemFgDataMap = useSystemFgDataMap;
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
-      if (e.panel == s.cells) {
+      if (e.panel === s.cells) {
         var col = s.columns[e.col];
         if (col.binding === "nmcodeCd") {
           var item = s.rows[e.row].dataItem;
-          if (item.status != "I") {
+          if (item.status !== "I") {
             wijmo.addClass(e.cell, 'wijLink');
             wijmo.addClass(e.cell, 'wj-custom-readonly');
           } else {
@@ -76,7 +77,7 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
       var col = sender.columns[elements.col];
       if (col.binding === "nmcodeCd") {
         var dataItem = s.rows[elements.row].dataItem;
-        if (nvl(dataItem.status, "") == "" && dataItem.status != "I") {
+        if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
           elements.cancel = true;
         }
       }
@@ -84,27 +85,17 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
     // 대표명칭 그리드 선택 이벤트
     s.hostElement.addEventListener('mousedown', function(e) {
       var ht = s.hitTest(e);
-      if( ht.cellType == wijmo.grid.CellType.Cell) {
-        var selectedRow = s.rows[ht.row].dataItem
+      if( ht.cellType === wijmo.grid.CellType.Cell) {
+        var selectedRow = s.rows[ht.row].dataItem;
         var col = ht.panel.columns[ht.col];
-        if( col.binding == "nmcodeCd" && selectedRow.status != "I") {
+        if( col.binding === "nmcodeCd" && selectedRow.status !== "I") {
           $scope._broadcast('detailCtrl', selectedRow.nmcodeCd);
         }
       }
     });
   };
   // 대표명칭 그리드 조회
-  $scope.$on("representCtrl", function(event, data) {
-
-    $scope.searchRepresent();
-
-    // 기능수행 종료 : 반드시 추가
-    event.preventDefault();
-  });
-
-  // 조회
-  $scope.searchRepresent = function(){
-    // 파라미터
+  $scope.$on('representCtrl', function(event, data) {
     var params = {};
     params.nmcodeGrpCd = "000";
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
@@ -114,7 +105,9 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#btnDelRepresent").show();
       $("#btnSaveRepresent").show();
     });
-  };
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
 
   // 대표명칭 그리드 행 추가
   $scope.addRow = function() {
@@ -130,21 +123,19 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
   // 대표명칭 그리드 저장
   $scope.save = function() {
     // 파라미터 설정
-    var params = new Array();
-    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-      $scope.flex.collectionView.itemsEdited[i].status = "U";
-      params.push($scope.flex.collectionView.itemsEdited[i]);
+    var params = [];
+    for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
+      $scope.flex.collectionView.itemsEdited[u].status = "U";
+      params.push($scope.flex.collectionView.itemsEdited[u]);
     }
     for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
       $scope.flex.collectionView.itemsAdded[i].status = "I";
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save("/sys/cd/systemCd/systemCd/save.sb", params, function(){ $scope.refreshRepresent();});
-  }
-  // 화면 리프레시
-  $scope.refreshRepresent = function(){
-    $scope.searchRepresent();
+    $scope._save("/sys/cd/systemCd/systemCd/save.sb", params, function(){
+      $scope._broadcast('representCtrl');
+    });
   };
 
 }]);
@@ -164,11 +155,11 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.useSystemFgDataMap = useSystemFgDataMap;
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
-      if (e.panel == s.cells) {
+      if (e.panel === s.cells) {
         var col = s.columns[e.col];
         if (col.binding === "nmcodeCd") {
           var item = s.rows[e.row].dataItem;
-          if (item.status != "I") {
+          if (item.status !== "I") {
             wijmo.addClass(e.cell, 'wj-custom-readonly');
           } else {
             wijmo.removeClass(e.cell, 'wj-custom-readonly');
@@ -183,16 +174,6 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
   });
   // 세부명칭 그리드 조회
   $scope.$on("detailCtrl", function(event, data) {
-
-    $scope.searchDetail(data);
-
-    // 기능수행 종료 : 반드시 추가
-    event.preventDefault();
-  });
-
-  // 조회
-  $scope.searchDetail = function(data){
-    // 파라미터
     var params = {};
     params.nmcodeGrpCd = data;
     // 조회URL, 파라미터, 콜백함수 형태로 조회함수 호출
@@ -202,7 +183,9 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#btnDelDetail").show();
       $("#btnSaveDetail").show();
     });
-  };
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
 
   // 세부명칭 그리드 행 추가
   $scope.addRow = function() {
@@ -219,22 +202,20 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
   // 세부명칭 그리드 저장
   $scope.save = function() {
     // 파라미터 설정
-    var params = new Array();
-    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-      $scope.flex.collectionView.itemsEdited[i].status = "U";
-      params.push($scope.flex.collectionView.itemsEdited[i]);
+    var params = [];
+    for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
+      $scope.flex.collectionView.itemsEdited[u].status = "U";
+      params.push($scope.flex.collectionView.itemsEdited[u]);
     }
     for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
       $scope.flex.collectionView.itemsAdded[i].status = "I";
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save("/sys/cd/systemCd/systemCd/save.sb", params, function(){ $scope.refreshDetail();});
-  };
-
-  // 세부명칭 리프레시
-  $scope.refreshDetail = function(){
-    $scope.refreshDetail();
+    $scope._save("/sys/cd/systemCd/systemCd/save.sb", params, function() {
+      var scope = agrid.getScope('representCtrl');
+      $scope._broadcast('detailCtrl', scope.flex.selectedRows[0]._data.nmcodeCd);
+    });
   };
 
 }]);
