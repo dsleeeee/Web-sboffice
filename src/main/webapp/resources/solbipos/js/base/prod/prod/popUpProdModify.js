@@ -34,6 +34,9 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._getComboDataQuery('095', 'setProdFgComboData');
   // 환급적용여부 콤보박스
   $scope._getComboDataQuery('090', 'refApplyYnComboData');
+  // 봉사료포함여부 콤보박스
+  $scope._getComboDataQuery('058', 'prodTipYnComboData');
+
 
   // 상품정보
   $scope.prodModifyInfo = {};
