@@ -157,19 +157,16 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20181110.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20181112.01" charset="utf-8"></script>
 
-<%-- 레이어 팝업 --%>
+<%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/popUpProdDetail.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
-<%-- 레이어 팝업 --%>
+<%-- 레이어 팝업 : 상품정보 입력/수정 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/popUpProdModify.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
-
-
-

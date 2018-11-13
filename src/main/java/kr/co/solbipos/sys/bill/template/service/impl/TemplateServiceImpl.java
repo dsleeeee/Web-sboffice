@@ -34,10 +34,15 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Service("templateService")
 public class TemplateServiceImpl implements TemplateService {
     
+    private final TemplateMapper templateMapper;
+    private final MessageService messageService;
+
+    /** Constructor Injection */
     @Autowired
-    TemplateMapper templateMapper;
-    @Autowired
-    MessageService messageService;
+    public TemplateServiceImpl(TemplateMapper templateMapper, MessageService messageService) {
+        this.templateMapper = templateMapper;
+        this.messageService = messageService;
+    }
 
     /** 출력물종류 목록 조회 */
     @Override
@@ -105,11 +110,10 @@ public class TemplateServiceImpl implements TemplateService {
 
         result = templateMapper.saveTemplate(templateVO);
 
+        // 본사/단독매장에 존재하는 템플릿도 동시에 업데이트 처리한다.
         if ( result >= 0 ) {
-            // 본사/단독매장에 존재하는 템플릿도 동시에 업데이트 처리한다.
             templateMapper.updateTemplateForHq(templateVO);
             templateMapper.updateTemplateForStore(templateVO);
-
             return result;
         } else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
@@ -136,8 +140,10 @@ public class TemplateServiceImpl implements TemplateService {
             templateVO.setModId(sessionInfoVO.getUserId());
             // 미적용 본사/단독매장 적용
             result = templateMapper.insertUnUsedList(templateVO);
-            // 실제출력물코드 생성
-            result += templateMapper.insertUnUsedPrintCode(templateVO);
+            // 단독매장의 경우에만 실제출력물코드 생성한다. 본사는 사용하지 않음.
+            if ( !"HQ".equals(templateVO.getStoreFg()) ) {
+                result += templateMapper.insertUnUsedPrintCode(templateVO);
+            }
         }
 
         if ( result >= 0 ) {
@@ -146,7 +152,5 @@ public class TemplateServiceImpl implements TemplateService {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
     }
-
-
 
 }

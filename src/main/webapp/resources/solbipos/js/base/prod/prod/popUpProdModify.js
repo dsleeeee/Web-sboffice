@@ -13,7 +13,28 @@
  */
 app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('prodModifyCtrl', $scope, $http, true));
+  angular.extend(this, new RootController('prodModifyCtrl', $scope, $http, false));
+  // 단가구분 콤보박스
+  $scope._getComboDataQuery('008', 'prodTypeFgComboData');
+  // 판매상품여부 콤보박스
+  $scope._getComboDataQuery('091', 'saleProdYnComboData');
+  // 주문상품구분 콤보박스
+  $scope._getComboDataQuery('092', 'poProdFgComboData');
+  // 주문단위 콤보박스
+  $scope._getComboDataQuery('093', 'poUnitFgComboData');
+  // 과세여부 콤보박스
+  $scope._getComboDataQuery('039', 'vatFgComboData');
+  // 재고관리여부 콤보박스
+  $scope._getComboDataQuery('067', 'stockProdYnComboData');
+  // 사용여부 콤보박스
+  $scope._getComboDataQuery('067', 'useYnComboData');
+  // 품절여부 콤보박스
+  $scope._getComboDataQuery('094', 'soldOutYnComboData');
+  // 세트상품구분 콤보박스
+  $scope._getComboDataQuery('095', 'setProdFgComboData');
+  // 환급적용여부 콤보박스
+  $scope._getComboDataQuery('090', 'refApplyYnComboData');
+
   // 상품정보
   $scope.prodModifyInfo = {};
   $scope.setProdModifyInfo = function(data){
@@ -21,6 +42,14 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
   };
   $scope.getProdModifyInfo = function(){
     return $scope.prodModifyInfo;
+  };
+  // 상품분류 선택 정보
+  $scope.selectedClass = {};
+  $scope.setSelectedClass = function(data){
+    $scope.selectedClass = data;
+  };
+  $scope.getSelectedClass = function(){
+    return $scope.selectedClass;
   };
   // 상품정보 조회
   $scope.$on("prodModifyCtrl", function(event, data) {
@@ -34,6 +63,40 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
     }, 30);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
+  });
+
+  // 상품분류정보 팝업
+  $scope.popUpProdClass = function() {
+    var popUp = $scope.prodClassLayer;
+    popUp.show(true, function (s) {
+      // 선택 버튼 눌렀을때만
+      if (s.dialogResult === "wj-hide-apply") {
+        var params = {};
+        params.prodClassCd = $scope.getSelectedClass();
+        // 조회 수행 : 조회URL, 파라미터, 콜백함수
+        $scope._postJSONQuery.withPopUp("/base/prod/prod/prod/getProdClassCdNm.sb", params,
+          function(response){
+            var prodInfo = $scope.getProdModifyInfo();
+            prodInfo.prodClassCd = $scope.getSelectedClass();
+            prodInfo.prodClassCdNm = response.data.data;
+            $scope.setProdModifyInfo(prodInfo);
+          }
+        );
+      }
+    });
+    event.preventDefault();
+  };
+
+  // 화면 ready 된 후 설정
+  angular.element(document).ready(function () {
+    var popUp = $scope.prodClassLayer;
+    // 상품분류 팝업 핸들러 추가
+    popUp.shown.addHandler(function (s) {
+      setTimeout(function () {
+        // 트리데이터 조회
+        $scope._broadcast('prodClassCtrl');
+      }, 50);
+    });
   });
 
 }]);

@@ -362,80 +362,43 @@
 
     </insert>
 
-    <!-- 미적용 본사/단독매장 실제출력물코드 생성 -->
+    <!-- 미적용 단독매장 실제출력물코드 생성 -->
     <!--
-        TABLE    : TB_HQ_PRINT, TB_MS_PRINT
+        TABLE    : TB_MS_PRINT
         PARAM    : templateVO
-        COMMENTS : 미적용 본사/단독매장을 저장한다.
+        COMMENTS : 미적용 단독매장을 저장한다.
     -->
     <insert id="insertUnUsedPrintCode" parameterType="templateVO">
         /* USE : TemplateMapper.insertUnUsedPrintCode */
-        <choose>
-            <when test="storeFg == 'HQ'">
-                MERGE INTO TB_HQ_PRINT thp
-                USING DUAL
-                ON (
-                    thp.HQ_OFFICE_CD = #{storeCd}
-                    AND thp.PRT_CLASS_CD = #{prtClassCd}
-                )
-                WHEN NOT MATCHED THEN
-                    INSERT
-                    (
-                        HQ_OFFICE_CD,
-                        PRT_CLASS_CD,
-                        TEMPLT_REG_FG,
-                        TEMPLT_CD,
-                        PRT_FORM,
-                        REG_DT,
-                        REG_ID,
-                        MOD_DT,
-                        MOD_ID
-                    ) VALUES (
-                        #{storeCd},
-                        #{prtClassCd},
-                        'C',
-                        #{templtCd},
-                        #{prtForm, jdbcType=VARCHAR},
-                        #{regDt},
-                        #{regId},
-                        #{modDt},
-                        #{modId}
-                    )
-            </when>
-            <otherwise>
-                MERGE INTO TB_MS_PRINT tmp
-                USING DUAL
-                ON (
-                    tmp.STORE_CD = #{storeCd}
-                    AND tmp.PRT_CLASS_CD = #{prtClassCd}
-                )
-                WHEN NOT MATCHED THEN
-                    INSERT
-                    (
-                        STORE_CD,
-                        PRT_CLASS_CD,
-                        TEMPLT_REG_FG,
-                        TEMPLT_CD,
-                        PRT_FORM,
-                        REG_DT,
-                        REG_ID,
-                        MOD_DT,
-                        MOD_ID
-                    ) VALUES (
-                        #{storeCd},
-                        #{prtClassCd},
-                        'C',
-                        #{templtCd},
-                        #{prtForm, jdbcType=VARCHAR},
-                        #{regDt},
-                        #{regId},
-                        #{modDt},
-                        #{modId}
-                    )
-            </otherwise>
-        </choose>
-
+        MERGE INTO TB_MS_PRINT tmp
+        USING DUAL
+        ON (
+            tmp.STORE_CD = #{storeCd}
+            AND tmp.PRT_CLASS_CD = #{prtClassCd}
+        )
+        WHEN NOT MATCHED THEN
+            INSERT
+            (
+                STORE_CD,
+                PRT_CLASS_CD,
+                TEMPLT_REG_FG,
+                TEMPLT_CD,
+                PRT_FORM,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+            ) VALUES (
+                #{storeCd},
+                #{prtClassCd},
+                'C',
+                #{templtCd},
+                #{prtForm, jdbcType=VARCHAR},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+            )
     </insert>
-
 
 </mapper>

@@ -166,7 +166,7 @@
     <typeAlias alias="tableAttrVO" type="kr.co.solbipos.base.store.tableattr.service.TableAttrVO"/>
     <typeAlias alias="tableVO" type="kr.co.solbipos.base.store.tablelayout.service.TableVO"/>
     <typeAlias alias="tableGroupVO" type="kr.co.solbipos.base.store.tablelayout.service.TableGroupVO"/>
-    <typeAlias alias="infoVO" type="kr.co.solbipos.base.prod.info.service.ProductClassVO"/>
+    <typeAlias alias="productClassVO" type="kr.co.solbipos.base.prod.info.service.ProductClassVO"/>
     <typeAlias alias="storePosVO" type="kr.co.solbipos.store.manage.storemanage.service.StorePosVO"/>
     <typeAlias alias="storeTerminalVO" type="kr.co.solbipos.store.manage.terminalManage.service.StoreTerminalVO"/>
     <typeAlias alias="storeCornerVO" type="kr.co.solbipos.store.manage.terminalManage.service.StoreCornerVO"/>

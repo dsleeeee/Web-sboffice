@@ -5,6 +5,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.prod.info.service.ProductClassVO;
 import kr.co.solbipos.base.prod.prod.service.ProdService;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,6 +95,50 @@ public class ProdController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         return returnJson(Status.OK, "list", prodService.getProdDetail(prodVO, sessionInfoVO));
+    }
+
+    /**
+     * 상품정보 분류 플랫 조회
+     *
+     * @param prodVO ProdVO
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param model Model
+     * @return
+     * @author 노현수
+     * @since 2018.11.12
+     */
+    @RequestMapping(value = "/getProdClassCdNm.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdClassCdNm(ProdVO prodVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        String result = prodService.getProdClassCdNm(prodVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 상품정보 분류 트리 조회
+     *
+     * @param prodVO ProdVO
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param model Model
+     * @return
+     * @author 노현수
+     * @since 2018.11.12
+     */
+    @RequestMapping(value = "/getProdClassTree.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdClassTree(ProdVO prodVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        List<ProductClassVO> result = prodService.getProdClassTree(prodVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
     }
 
     /**
