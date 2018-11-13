@@ -27,7 +27,7 @@
           <%-- 폐기제목 --%>
           <th><s:message code="hqDisuse.reg.disuseTitle"/><em class="imp">*</em></th>
           <td colspan="3">
-            <input type="text" id="disuseTitle" name="disuseTitle" ng-model="disuseTitle" class="sb-input w100" maxlength="33"/>
+            <input type="text" id="disuseTitle" name="disuseTitle" ng-model="disuseTitle" class="sb-input w100" maxlength="33" data-check="0,10"/>
           </td>
         </tr>
         <tr>
@@ -61,10 +61,10 @@
             <div class="sb-select">
               <span class="txtIn w150px">
                 <wj-combo-box
-                  id="srchAdjFg"
+                  id="srchDisuseFg"
                   ng-model="disuseFg"
-                  ng-disabled="readAdjFg"
-                  items-source="_getComboData('srchAdjFg')"
+                  ng-disabled="readDisuseFg"
+                  items-source="_getComboData('srchDisuseFg')"
                   display-member-path="name"
                   selected-value-path="value"
                   is-editable="false"
@@ -81,6 +81,7 @@
             <a href="#" class="btn_grayS" ng-click=""><s:message code="hqDisuse.reg.textFormUpload"/></a>
             <a href="#" class="btn_grayS" ng-click=""><s:message code="cmm.excel.down"/></a>
             <a href="#" class="btn_grayS" ng-click=""><s:message code="hqDisuse.reg.excelFormUploadErrorInfo"/></a>
+            <a href="#" class="btn_grayS" ng-click="valueCheck()">valuecheck</a>
           </td>
         </tr>
         </tbody>
@@ -196,13 +197,13 @@
 <script type="text/javascript">
 
   /** 폐기관리 등록 그리드 controller */
-  app.controller('hqDisuseRegistCtrl', ['$scope', '$http', function ($scope, $http) {
+  app.controller('hqDisuseRegistCtrl', ['$scope', '$http', '$compile', function ($scope, $http, $compile) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('hqDisuseRegistCtrl', $scope, $http, true));
 
     $scope._setComboData("regListScaleBox", gvListScaleBoxData);
 
-    $scope._setComboData("srchAdjFg", [
+    $scope._setComboData("srchDisuseFg", [
       {"name": messages["cmm.all"], "value": ""},
       {"name": messages["hqDisuse.reg.disuseFgN"], "value": "N"},
       {"name": messages["hqDisuse.reg.disuseFgY"], "value": "Y"},
@@ -231,9 +232,9 @@
 
 
     $scope.calcAmt = function (item) {
-      var costUprc = parseInt(item.costUprc);
-      var disuseQty   = parseInt(nvl(item.disuseQty, 0));
-      var disuseAmt   = parseInt(disuseQty) * parseInt(costUprc);
+      var costUprc  = parseInt(item.costUprc);
+      var disuseQty = parseInt(nvl(item.disuseQty, 0));
+      var disuseAmt = parseInt(disuseQty) * parseInt(costUprc);
 
       item.disuseQty = disuseQty;   // 폐기수량
       item.disuseAmt = disuseAmt; // 폐기금액
@@ -251,7 +252,7 @@
       if (!$.isEmptyObject(data)) {
         $scope._setPagingInfo('curr', 1); // 페이지번호 1로 세팅
 
-        $scope.disuseDate    = data.disuseDate;
+        $scope.disuseDate = data.disuseDate;
         $scope.seqNo      = data.seqNo;
         $scope.callParent = data.callParent;
 
@@ -259,14 +260,14 @@
         $scope.addQty      = '';
         $scope.prodBarcdCd = '';
         $scope.autoAddChk  = false;
-        $scope.disuseTitle    = '';
+        $scope.disuseTitle = '';
 
         // 신규등록이면 폐기구분 disabled 시킨다.
         if ($scope.callParent === "hqDisuse") {
-          $scope.readAdjFg = true;
+          $scope.readDisuseFg = true;
         }
         else {
-          $scope.readAdjFg = false;
+          $scope.readDisuseFg = false;
         }
 
         $scope.procFgCheck(); // 폐기진행구분 체크
@@ -282,9 +283,9 @@
 
     // 폐기진행구분 체크 및 폐기제목 조회
     $scope.procFgCheck = function () {
-      var params     = {};
+      var params        = {};
       params.disuseDate = $scope.disuseDate;
-      params.seqNo   = $scope.seqNo;
+      params.seqNo      = $scope.seqNo;
 
       // ajax 통신 설정
       $http({
@@ -323,14 +324,14 @@
     // 폐기상품 리스트 조회
     $scope.searchHqDisuseRegistList = function () {
       // 파라미터
-      var params       = {};
-      params.disuseDate   = $scope.disuseDate;
-      params.seqNo     = $scope.seqNo;
-      params.prodCd    = $scope.prodCd;
-      params.prodNm    = $scope.prodNm;
-      params.barcdCd   = $scope.barcdCd;
-      params.disuseFg     = $scope.disuseFg;
-      params.listScale = $scope.listScale;
+      var params        = {};
+      params.disuseDate = $scope.disuseDate;
+      params.seqNo      = $scope.seqNo;
+      params.prodCd     = $scope.prodCd;
+      params.prodNm     = $scope.prodNm;
+      params.barcdCd    = $scope.barcdCd;
+      params.disuseFg   = $scope.disuseFg;
+      params.listScale  = $scope.listScale;
 
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
       $scope._inquirySub("/stock/disuse/hqDisuse/hqDisuseRegist/list.sb", params);
@@ -372,11 +373,11 @@
         else {
           item.status = "U";
         }
-        item.disuseDate   = $scope.disuseDate;
-        item.seqNo     = $scope.seqNo;
-        item.disuseTitle  = $scope.disuseTitle;
-        item.storageCd = "001";
-        item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
+        item.disuseDate  = $scope.disuseDate;
+        item.seqNo       = $scope.seqNo;
+        item.disuseTitle = $scope.disuseTitle;
+        item.storageCd   = "001";
+        item.hqBrandCd   = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
 
         params.push(item);
       }
@@ -392,11 +393,11 @@
         else {
           item.status = "U";
         }
-        item.disuseDate   = $scope.disuseDate;
-        item.seqNo     = $scope.seqNo;
-        item.disuseTitle  = $scope.disuseTitle;
-        item.storageCd = "001";
-        item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
+        item.disuseDate  = $scope.disuseDate;
+        item.seqNo       = $scope.seqNo;
+        item.disuseTitle = $scope.disuseTitle;
+        item.storageCd   = "001";
+        item.hqBrandCd   = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
 
         params.push(item);
       }
@@ -444,7 +445,7 @@
         if (searchFg) {
           // 파라미터
           var params         = {};
-          params.disuseDate     = $scope.disuseDate;
+          params.disuseDate  = $scope.disuseDate;
           params.seqNo       = $scope.seqNo;
           params.prodBarcdCd = $scope.prodBarcdCd;
           params.listScale   = 1; // 상품 하나만 조회해야 하므로 listScale 1로 줌.
@@ -458,7 +459,7 @@
             else {
               $scope.addRow(response.data.data);
               if ($("#autoAddChk").prop("checked")) {
-                $scope.modifyAdjQty(1);
+                $scope.modifyDisuseQty(1);
               }
               else {
                 $scope.addQty = 1;
@@ -469,7 +470,7 @@
         }
         else {
           if ($("#autoAddChk").prop("checked")) {
-            $scope.modifyAdjQty(1);
+            $scope.modifyDisuseQty(1);
           }
           else {
             $scope.addQty = 1;
@@ -481,7 +482,7 @@
 
 
     // 그리드의 상품을 찾아서 폐기수 수정
-    $scope.modifyAdjQty = function (addQty) {
+    $scope.modifyDisuseQty = function (addQty) {
       for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
         var item = $scope.flex.collectionView.items[i];
         if (item.prodCd === $scope.prodBarcdCd || item.barcdCd === $scope.prodBarcdCd) {
@@ -505,7 +506,7 @@
     // 추가버튼 클릭시
     $scope.fnAddQty = function () {
       var qty = $scope.addQty;
-      $scope.modifyAdjQty(qty);
+      $scope.modifyDisuseQty(qty);
     };
 
 
@@ -531,6 +532,58 @@
       }
       flex.collectionView.commitNew();
     };
+
+
+
+    /* 2018-11-13 안동관. input 값 체크 함수.
+       input에 data-check="0,10" 이런식으로 주면 byte 길이 체크하여 0보다 작거나 10보다 크면 해당 input에 팝업 뜨도록 함.
+       앞에 number 나 char 등을 주면 값체크하도록 로직 추가 할 수 있음.
+     */
+    $scope.valueCheck = function () {
+      var rtnFg = true;
+
+      var inputEle = angular.element('input');
+      var value    = '';
+      var checkArr = '';
+      for (var i = 0, l = inputEle.length; i < l; i++) {
+        var el = angular.element(inputEle[i]);
+        if (el.attr('data-check')) {
+          value    = inputEle[i].value;
+          checkArr = el.attr('data-check').split(',');
+
+          if (value.getByteLengthForOracle() < checkArr[0] || value.getByteLengthForOracle() > checkArr[1]) {
+
+            // $scope._popMsg('문자열의 길이를 조정해주세요.(한글은 3Byte로 계산됩니다.)');
+            // alert('문자열의 길이를 조정해주세요.(한글은 3Byte로 계산됩니다.) 최대:' + checkArr[1]);
+            if(!el.attr('uib-popover-html')) {
+              var popMsg = '<p class="s12" style="line-height:14px;">문자열의 길이를 조정해주세요.<br>(한글은 3Byte로 계산됩니다.)<br>최대 : '+checkArr[1]+'</p>';
+              el.attr('uib-popover-html', "'"+popMsg+"'");
+              el.attr('popover-placement', 'bottom-left');
+              el.attr('popover-is-open', true);
+
+              el.on('click', function(event) {
+                if($(this).attr('uib-popover-html')) {
+                  $(this).removeAttr('uib-popover-html');
+                  $(this).removeAttr('popover-placement');
+                  $(this).removeAttr('popover-is-open');
+                  $(this).off('click');
+                }
+              });
+
+              $compile(el)($scope);
+            }
+
+            // el.select();
+            rtnFg = false;
+            break;
+          }
+        }
+      }
+
+      return rtnFg;
+    }
+
+
 
 
   }]);
