@@ -105,6 +105,14 @@ public class VolmErrVO extends PageVO {
     private String nmcodeGrpCd;
     /** 공통코드 아이템1 */
     private String nmcodeItem1;
+    /** 테이블 */
+    private String selectTable;
+    /** 조회할 코드명 */
+    private String selectCd;
+    /** 조회할 명칭명 */
+    private String selectNm;
+    /** 조건문 */
+    private String selectWhere;
 
 
 
@@ -778,5 +786,61 @@ public class VolmErrVO extends PageVO {
      */
     public void setNmcodeItem1(String nmcodeItem1) {
         this.nmcodeItem1 = nmcodeItem1;
+    }
+
+    /**
+     * @return the selectTable
+     */
+    public String getSelectTable() {
+        return selectTable;
+    }
+
+    /**
+     * @param selectTable the selectTable to set
+     */
+    public void setSelectTable(String selectTable) {
+        this.selectTable = selectTable;
+    }
+
+    /**
+     * @return the selectCd
+     */
+    public String getSelectCd() {
+        return selectCd;
+    }
+
+    /**
+     * @param selectCd the selectCd to set
+     */
+    public void setSelectCd(String selectCd) {
+        this.selectCd = selectCd;
+    }
+
+    /**
+     * @return the selectNm
+     */
+    public String getSelectNm() {
+        return selectNm;
+    }
+
+    /**
+     * @param selectNm the selectNm to set
+     */
+    public void setSelectNm(String selectNm) {
+        this.selectNm = selectNm;
+    }
+
+    /**
+     * @return the selectWhere
+     */
+    public String getSelectWhere() {
+        return selectWhere;
+    }
+
+    /**
+     * @param selectWhere the selectWhere to set
+     */
+    public void setSelectWhere(String selectWhere) {
+        this.selectWhere = selectWhere;
     }
 }

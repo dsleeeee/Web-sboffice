@@ -155,4 +155,29 @@ public class VolmErrController {
 
         return ReturnUtil.returnListJson(Status.OK, list, volmErrVO);
     }
+
+    /**
+     * 다이나믹 콤보조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   volmErrVO
+     * @return  String
+     * @author  안동관
+     * @since   2018. 10. 22.
+     */
+    @RequestMapping(value = "/volmErr/getDynamicCombo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDynamicCombo(HttpServletRequest request, HttpServletResponse response,
+        Model model, VolmErrVO volmErrVO) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        volmErrVO.setSelectTable("TB_MS_STORE");
+        volmErrVO.setSelectCd("STORE_CD");
+        volmErrVO.setSelectNm("STORE_NM");
+        volmErrVO.setSelectWhere("HQ_OFFICE_CD='"+sessionInfoVO.getHqOfficeCd()+"'");
+        List<DefaultMap<String>> list = volmErrService.selectDynamicCodeList(volmErrVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, volmErrVO);
+    }
 }

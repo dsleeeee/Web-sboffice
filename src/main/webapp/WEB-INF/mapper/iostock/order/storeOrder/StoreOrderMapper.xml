@@ -180,6 +180,7 @@
         <![CDATA[
         WHERE   tmp.STORE_CD          =   #{storeCd}
         AND     tmp.USE_YN            =   'Y'
+        AND     tmp.PO_PROD_FG        IN  ('1','3')
         AND     tsssc.STORE_CD    (+) =   tmp.STORE_CD
         AND     tsssc.PROD_CD     (+) =   tmp.PROD_CD
         AND     tshsc.PROD_CD     (+) =   tmp.PROD_CD

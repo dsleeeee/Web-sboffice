@@ -158,8 +158,10 @@
 
       var comboParams         = {};
       comboParams.nmcodeGrpCd = "083";
-      $scope._queryCombo("combo", "srchProcFg", null, comboParams, "A");
+      $scope._queryCombo("combo", "srchProcFg", null, comboParams, "A"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+      // $scope._queryCombo("combo", "srchProcFg", "/iostock/volmErr/volmErr/volmErr/getDynamicCombo.sb", comboParams, "A"); // 다이나믹 COMBO 테스트
       $scope._queryCombo("map", "procFgMap", "/iostock/order/storeOrder/storeOrder/getCombo.sb", comboParams);
+      // $scope._getComboDataQuery('083', 'srchProcFg');
 
       // 그리드 링크 효과
       s.formatItem.addHandler(function (s, e) {

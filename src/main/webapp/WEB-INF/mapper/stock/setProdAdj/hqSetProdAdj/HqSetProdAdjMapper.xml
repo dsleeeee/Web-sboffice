@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.stock.setProdAdj.hqSetProdAdj.service.impl.HqSetProdAdjMapper">
+
+    <!-- 세트재고조정 - 세트재고조정 리스트 조회 -->
+    <!--
+        TABLE    : TB_ST_HQ_SETPROD_COMPOSITION, TB_HQ_PRODUCT
+        PARAM    : hqSetProdAdjVO
+        COMMENTS : 세트재고조정 - 세트재고조정 리스트를 조회한다.
+    -->
+    <select id="getHqSetProdAdjList" parameterType="hqSetProdAdjVO" resultType="DefaultMap">
+        /* USE : HqSetProdAdjMapper.getHqSetProdAdjList */
+        <![CDATA[
+        SELECT  tshsc.SET_DATE, tshsc.SEQ_NO
+        ,       tshsc.PROD_CD, thp.PROD_NM
+        ,       tshsc.SET_MAKE_FG
+        ,       tshsc.SET_PROD_QTY
+        ,       tshsc.SET_PROD_AMT
+        ,       ( SELECT SF_GET_PROD_CLASSES('H', thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM
+        FROM    TB_ST_HQ_SETPROD_COMPOSITION tshsc
+        ,       TB_HQ_PRODUCT thp
+        WHERE   tshsc.HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     tshsc.SET_DATE  BETWEEN #{startDate} AND #{endDate}
+        AND     thp.HQ_OFFICE_CD    = tshsc.HQ_OFFICE_CD
+        AND     thp.PROD_CD         = tshsc.PROD_CD
+        ]]>
+        <if test='prodCd != null and prodCd != ""'>
+            AND tshsc.PROD_CD = #{prodCd}
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <![CDATA[
+        ORDER BY tshsc.SET_DATE DESC, tshsc.SEQ_NO DESC
+        ]]>
+    </select>
+
+
+    <!-- 세트재고조정 - 세트재고조정 세트상품 리스트 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_ST_HQ_STOCK_CUR
+        PARAM    : hqSetProdAdjVO
+        COMMENTS : 세트재고조정 - 세트재고조정 세트상품 리스트를 조회한다.
+    -->
+    <select id="getHqSetProdAdjRegistList" parameterType="hqSetProdAdjVO" resultType="DefaultMap">
+        /* USE : HqSetProdAdjMapper.getHqSetProdAdjRegistList */
+        <![CDATA[
+        SELECT  thp.PROD_CD, thp.PROD_NM, tshsc.CURR_QTY
+        ,       thp.COST_UPRC
+        FROM    TB_HQ_PRODUCT thp
+        ,       TB_ST_HQ_STOCK_CUR tshsc
+        WHERE   thp.HQ_OFFICE_CD      =   #{hqOfficeCd}
+        AND     thp.SET_PROD_FG       =   2
+        AND     tshsc.HQ_OFFICE_CD(+) =   thp.HQ_OFFICE_CD
+        AND     tshsc.PROD_CD     (+) =   thp.PROD_CD
+        ]]>
+        <if test='prodCd != null and prodCd != ""'>
+            AND thp.PROD_CD = #{prodCd}
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <![CDATA[
+        ORDER BY thp.PROD_CD
+        ]]>
+    </select>
+
+
+    <!-- 세트재고조정 - 세트재고조정 세트구성상품 리스트 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_UNITST_PROD, TB_HQ_PRODUCT, TB_ST_HQ_STOCK_CUR
+        PARAM    : hqSetProdAdjVO
+        COMMENTS : 세트재고조정 - 세트재고조정 세트구성상품 리스트를 조회한다.
+    -->
+    <select id="getHqSetProdAdjRegistCompstList" parameterType="hqSetProdAdjVO" resultType="DefaultMap">
+        /* USE : HqSetProdAdjMapper.getHqSetProdAdjRegistCompstList */
+        <![CDATA[
+        SELECT  thpup.DISP_SEQ, thpup.UNIT_PROD_CD, thp.PROD_NM AS UNIT_PROD_NM
+        ,       thp.COST_UPRC, tshsc.CURR_QTY
+        ,       thpup.UNIT_PROD_QTY
+        ,       (thpup.UNIT_PROD_QTY * thp.COST_UPRC / thp.PO_UNIT_QTY) AS TOT_COST_UPRC
+        FROM    TB_HQ_PRODUCT_UNITST_PROD thpup
+        ,       TB_HQ_PRODUCT thp
+        ,       TB_ST_HQ_STOCK_CUR tshsc
+        WHERE   thpup.HQ_OFFICE_CD    =   #{hqOfficeCd}
+        AND     thpup.PROD_CD         =   #{prodCd}
+        AND     thpup.SET_PROD_FG     =   2
+        AND     thp.HQ_OFFICE_CD      =   thpup.HQ_OFFICE_CD
+        AND     thp.PROD_CD           =   thpup.UNIT_PROD_CD
+        AND     tshsc.HQ_OFFICE_CD(+) =   thp.HQ_OFFICE_CD
+        AND     tshsc.PROD_CD     (+) =   thp.PROD_CD
+        ORDER BY thpup.DISP_SEQ
+        ]]>
+    </select>
+
+
+    <!-- 세트재고조정 - 세트재고조정 상품 DTL 등록 -->
+    <!--
+        TABLE    : TB_ST_HQ_ADJUST_DTL
+        PARAM    : hqSetProdAdjVO
+        COMMENTS : 세트재고조정 - 세트재고조정 상품 DTL을 등록한다.
+    -->
+    <insert id="insertHqSetProdAdjDtl" parameterType="hqSetProdAdjVO">
+        /* USE : HqSetProdAdjMapper.insertHqSetProdAdjDtl */
+        INSERT INTO TB_ST_HQ_SETPROD_COMPOSITION_DTL
+        (
+            HQ_OFFICE_CD,
+            SET_DATE,
+            SEQ_NO,
+            HQ_BRAND_CD,
+            COMPST_PROD_CD,
+            COMPST_PROD_QTY,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        SELECT  #{hqOfficeCd}
+        ,       #{setDate}
+        ,       #{seqNo}
+        ,       #{hqBrandCd}
+        ,       UNIT_PROD_CD
+        ,       #{setProdQty}
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        FROM    TB_HQ_PRODUCT_UNITST_PROD
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     PROD_CD       = #{prodCd}
+    </insert>
+
+
+    <!-- 세트재고조정 - 세트재고조정 상품 HD 등록 -->
+    <!--
+        TABLE    : TB_ST_HQ_SETPROD_COMPOSITION
+        PARAM    : hqSetProdAdjVO
+        COMMENTS : 세트재고조정 - 세트재고조정 상품 HD 등록한다.
+    -->
+    <insert id="insertHqSetProdAdjHd" parameterType="hqSetProdAdjVO">
+        /* USE : HqSetProdAdjMapper.insertHqSetProdAdjHd */
+        INSERT INTO TB_ST_HQ_SETPROD_COMPOSITION
+        (
+            HQ_OFFICE_CD,
+            SET_DATE,
+            SEQ_NO,
+            SET_MAKE_FG,
+            HQ_BRAND_CD,
+            PROD_CD,
+            SET_PROD_QTY,
+            SET_PROD_AMT,
+            PROC_FG,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        VALUES
+        (
+            #{hqOfficeCd},
+            #{setDate},
+            #{seqNo},
+            #{setMakeFg},
+            #{hqBrandCd},
+            #{prodCd},
+            #{setProdQty},
+            #{setProdAmt},
+            #{procFg},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+
+    <!-- 세트재고조정 - 세트재고조정 DTL 전부 삭제 -->
+    <!--
+        TABLE    : TB_ST_HQ_SETPROD_COMPOSITION_DTL
+        PARAM    : hqSetProdAdjVO
+        COMMENTS : 세트재고조정 - 구성일자, SEQ_NO 에 해당하는 DTL을 전부 삭제한다.
+    -->
+    <delete id="deleteAllHqSetProdAdjDtl" parameterType="hqSetProdAdjVO">
+        /* USE : HqSetProdAdjMapper.deleteAllHqSetProdAdjDtl */
+        DELETE  TB_ST_HQ_SETPROD_COMPOSITION_DTL
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SET_DATE      = #{setDate}
+        AND     SEQ_NO        = #{seqNo}
+    </delete>
+
+
+    <!-- 세트재고조정 - 조정 HD 삭제 -->
+    <!--
+        TABLE    : TB_ST_HQ_SETPROD_COMPOSITION
+        PARAM    : hqSetProdAdjVO
+        COMMENTS : 조정 - 구성일자, SEQ_NO 에 해당하는 HD를 삭제한다.
+    -->
+    <delete id="deleteHqSetProdAdjHd" parameterType="hqSetProdAdjVO">
+        /* USE : HqSetProdAdjMapper.deleteHqSetProdAdjHd */
+        DELETE  TB_ST_HQ_SETPROD_COMPOSITION
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SET_DATE      = #{setDate}
+        AND     SEQ_NO        = #{seqNo}
+    </delete>
+
+</mapper>

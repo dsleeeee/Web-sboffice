@@ -21,4 +21,7 @@ public interface VolmErrService {
     /** 콤보조회 */
     List<DefaultMap<String>> selectCmmCodeList(VolmErrVO volmErrVO);
 
+    /** 다이나믹 콤보조회 */
+    List<DefaultMap<String>> selectDynamicCodeList(VolmErrVO volmErrVO);
+
 }

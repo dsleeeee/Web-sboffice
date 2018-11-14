@@ -552,12 +552,12 @@
           checkArr = el.attr('data-check').split(',');
 
           if (value.getByteLengthForOracle() < checkArr[0] || value.getByteLengthForOracle() > checkArr[1]) {
-
             // $scope._popMsg('문자열의 길이를 조정해주세요.(한글은 3Byte로 계산됩니다.)');
             // alert('문자열의 길이를 조정해주세요.(한글은 3Byte로 계산됩니다.) 최대:' + checkArr[1]);
             if(!el.attr('uib-popover-html')) {
               var popMsg = '<p class="s12" style="line-height:14px;">문자열의 길이를 조정해주세요.<br>(한글은 3Byte로 계산됩니다.)<br>최대 : '+checkArr[1]+'</p>';
               el.attr('uib-popover-html', "'"+popMsg+"'");
+              // el.attr('uib-popover-html', "'문자열의 길이를 조정해주세요.<br>(한글은 3Byte로 계산됩니다.)<br>최대:'");
               el.attr('popover-placement', 'bottom-left');
               el.attr('popover-is-open', true);
 
