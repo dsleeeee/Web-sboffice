@@ -12,7 +12,347 @@
 -->
 <mapper namespace="kr.co.solbipos.base.prod.sidemenu.service.impl.SideMenuMapper">
 
+    <!-- 속성분류 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDATTR_CLASS, TB_MS_PRODUCT_SDATTR_CLASS
+        PARAM    : sideMenuAttrClassVO
+        COMMENTS : 사이드메뉴 속성의 분류목록을 조회한다. ( 본사/매장 )
+    -->
+    <select id="getAttrClassList" parameterType="sideMenuAttrClassVO" resultType="DefaultMap">
+        /* USE : SideMenuMapper.getAttrClassList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                    thpsc.HQ_OFFICE_CD,
+                    thpsc.HQ_BRAND_CD,
+                    thpsc.SDATTR_CLASS_CD,
+                    thpsc.SDATTR_CLASS_NM
+                FROM
+                    TB_HQ_PRODUCT_SDATTR_CLASS thpsc
+                WHERE
+                    thpsc.USE_YN = 'Y'
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                    tmpsc.STORE_CD,
+                    tmpsc.MS_BRAND_CD,
+                    tmpsc.SDATTR_CLASS_CD,
+                    tmpsc.SDATTR_CLASS_NM
+                FROM
+                    TB_MS_PRODUCT_SDATTR_CLASS tmpsc
+                WHERE
+                    tmpsc.USE_YN = 'Y'
+            </when>
+        </choose>
+    </select>
 
+    <!-- 속성분류 생성 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDATTR_CLASS, TB_MS_PRODUCT_SDATTR_CLASS
+        PARAM    : sideMenuAttrClassVO
+        COMMENTS : 속성분류를 생성한다.
+    -->
+    <insert id="insertAttrClassList" parameterType="sideMenuAttrClassVO">
+        /* USE : SideMenuMapper.insertAttrClassList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_HQ_PRODUCT_SDATTR_CLASS
+                (
+                    HQ_OFFICE_CD,
+                    HQ_BRAND_CD,
+                    SDATTR_CLASS_CD,
+                    SDATTR_CLASS_NM,
+                    USE_YN,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                ) VALUES (
+                    #{hqOfficeCd},
+                    #{hqBrandCd, jdbcType=VARCHAR},
+                    #{sdattrClassCd},
+                    #{sdattrClassNm},
+                    'Y',
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_MS_PRODUCT_SDATTR_CLASS
+                (
+                    STORE_CD,
+                    MS_BRAND_CD,
+                    SDATTR_CLASS_CD,
+                    SDATTR_CLASS_NM,
+                    USE_YN,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                ) VALUES (
+                    #{storeCd},
+                    #{msBrandCd, jdbcType=VARCHAR},
+                    #{sdattrClassCd},
+                    #{sdattrClassNm},
+                    'Y',
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
+            </when>
+        </choose>
+    </insert>
+
+    <!-- 속성분류 수정 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDATTR_CLASS, TB_MS_PRODUCT_SDATTR_CLASS
+        PARAM    : sideMenuAttrClassVO
+        COMMENTS : 속성분류를 수정한다.
+    -->
+    <update id="updateAttrClassList" parameterType="sideMenuAttrClassVO">
+        /* USE : SideMenuMapper.updateAttrClassList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE TB_HQ_PRODUCT_SDATTR_CLASS
+                SET
+                    HQ_BRAND_CD = #{hqBrandCd, jdbcType=VARCHAR},
+                    SDATTR_CLASS_NM = #{sdattrClassNm},
+                    MOD_DT = #{modDt},
+                    MOD_ID = #{modId}
+                WHERE
+                    HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND SDATTR_CLASS_CD = #{sdattrClassCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE TB_HQ_PRODUCT_SDATTR_CLASS
+                SET
+                    MS_BRAND_CD = #{msBrandCd, jdbcType=VARCHAR},
+                    SDATTR_CLASS_NM = #{sdattrClassNm},
+                    MOD_DT = #{modDt},
+                    MOD_ID = #{modId}
+                WHERE
+                    STORE_CD = #{storeCd}
+                    AND SDATTR_CLASS_CD = #{sdattrClassCd}
+            </when>
+        </choose>
+    </update>
+
+    <!-- 속성분류 삭제 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDATTR_CLASS, TB_MS_PRODUCT_SDATTR_CLASS
+        PARAM    : sideMenuAttrClassVO
+        COMMENTS : 속성분류를 삭제한다.
+    -->
+    <update id="deleteAttrClassList" parameterType="sideMenuAttrClassVO">
+        /* USE : SideMenuMapper.deleteAttrClassList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE TB_HQ_PRODUCT_SDATTR_CLASS
+                SET
+                    USE_YN = 'N',
+                    MOD_DT = #{modDt},
+                    MOD_ID = #{modId}
+                WHERE
+                    HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND SDATTR_CLASS_CD = #{sdattrClassCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE TB_MS_PRODUCT_SDATTR_CLASS
+                SET
+                    USE_YN = 'N',
+                    MOD_DT = #{modDt},
+                    MOD_ID = #{modId}
+                WHERE
+                    STORE_CD = #{storeCd}
+                    AND SDATTR_CLASS_CD = #{sdattrClassCd}
+            </when>
+        </choose>
+    </update>
+
+    <!-- 속성 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDATTR, TB_MS_PRODUCT_SDATTR
+        PARAM    : sideMenuAttrCdVO
+        COMMENTS : 사이드메뉴 속성목록을 조회한다. ( 본사/매장 )
+    -->
+    <select id="getAttrCdList" parameterType="sideMenuAttrCdVO" resultType="DefaultMap">
+        /* USE : SideMenuMapper.getAttrCdList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                    thps.HQ_OFFICE_CD,
+                    thps.SDATTR_CD,
+                    thps.SDATTR_NM,
+                    thps.SDATTR_CLASS_CD
+                FROM
+                    TB_HQ_PRODUCT_SDATTR thps
+                WHERE
+                    thps.SDATTR_CLASS_CD = #{sdattrClassCd}
+                    AND thps.USE_YN = 'Y'
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                    tmps.STORE_CD,
+                    tmps.SDATTR_CD,
+                    tmps.SDATTR_NM,
+                    tmps.SDATTR_CLASS_CD
+                FROM
+                    TB_MS_PRODUCT_SDATTR tmps
+                WHERE
+                    tmps.SDATTR_CLASS_CD = #{sdattrClassCd}
+                    AND tmps.USE_YN = 'Y'
+            </when>
+        </choose>
+    </select>
+
+    <!-- 속성 생성 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDATTR, TB_MS_PRODUCT_SDATTR
+        PARAM    : sideMenuAttrCdVO
+        COMMENTS : 속성을 생성한다.
+    -->
+    <insert id="insertAttrCdList" parameterType="sideMenuAttrCdVO">
+        /* USE : SideMenuMapper.insertAttrCdList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_HQ_PRODUCT_SDATTR
+                (
+                    HQ_OFFICE_CD,
+                    SDATTR_CD,
+                    SDATTR_NM,
+                    SDATTR_CLASS_CD,
+                    DISP_SEQ,
+                    USE_YN,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                ) VALUES (
+                    #{hqOfficeCd},
+                    #{sdattrCd},
+                    #{sdattrNm},
+                    #{sdattrClassCd},
+                    #{dispSeq},
+                    'Y',
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_MS_PRODUCT_SDATTR
+                (
+                    STORE_CD,
+                    SDATTR_CD,
+                    SDATTR_NM,
+                    SDATTR_CLASS_CD,
+                    DISP_SEQ,
+                    USE_YN,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                ) VALUES (
+                    #{storeCd},
+                    #{sdattrCd},
+                    #{sdattrNm},
+                    #{sdattrClassCd},
+                    #{dispSeq},
+                    'Y',
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
+            </when>
+        </choose>
+    </insert>
+
+    <!-- 속성 수정 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDATTR, TB_MS_PRODUCT_SDATTR
+        PARAM    : sideMenuAttrCdVO
+        COMMENTS : 속성을 수정한다.
+    -->
+    <update id="updateAttrCdList" parameterType="sideMenuAttrCdVO">
+        /* USE : SideMenuMapper.updateAttrCdList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE TB_HQ_PRODUCT_SDATTR
+                SET
+                    SDATTR_NM = #{sdattrNm},
+                    DISP_SEQ = #{dispSeq},
+                    MOD_DT = #{modDt},
+                    MOD_ID = #{modId}
+                WHERE
+                    HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND SDATTR_CD = #{sdattrCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE TB_HQ_PRODUCT_SDATTR
+                SET
+                    SDATTR_NM = #{sdattrNm},
+                    DISP_SEQ = #{dispSeq},
+                    MOD_DT = #{modDt},
+                    MOD_ID = #{modId}
+                WHERE
+                    STORE_CD = #{storeCd}
+                    AND SDATTR_CD = #{sdattrCd}
+            </when>
+        </choose>
+    </update>
+
+    <!-- 속성분류 삭제 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDATTR, TB_MS_PRODUCT_SDATTR
+        PARAM    : sideMenuAttrCdVO
+        COMMENTS : 속성분류를 삭제한다.
+    -->
+    <update id="deleteAttrCdList" parameterType="sideMenuAttrCdVO">
+        /* USE : SideMenuMapper.deleteAttrCdList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE TB_HQ_PRODUCT_SDATTR
+                SET
+                    USE_YN = 'N',
+                    MOD_DT = #{modDt},
+                    MOD_ID = #{modId}
+                WHERE
+                    HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND SDATTR_CD = #{sdattrCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE TB_MS_PRODUCT_SDATTR
+                SET
+                    USE_YN = 'N',
+                    MOD_DT = #{modDt},
+                    MOD_ID = #{modId}
+                WHERE
+                    STORE_CD = #{storeCd}
+                    AND SDATTR_CD = #{sdattrCd}
+            </when>
+        </choose>
+    </update>
 
 </mapper>
 

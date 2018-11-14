@@ -3,7 +3,7 @@ package kr.co.solbipos.base.prod.sidemenu.service;
 import kr.co.solbipos.application.common.service.CmmVO;
 
 /**
- * @Class Name : SideMenuAttrVO.java
+ * @Class Name : SideMenuAttrCdVO.java
  * @Description : 기초관리 > 상품관리 > 사이드메뉴
  * @Modification Information
  * @
@@ -18,9 +18,9 @@ import kr.co.solbipos.application.common.service.CmmVO;
  *
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-public class SideMenuAttrVO extends CmmVO {
+public class SideMenuAttrCdVO extends CmmVO {
 
-    private static final long serialVersionUID = -793640147808284609L;
+    private static final long serialVersionUID = 6603188320312614419L;
 
     /** 본사코드 */
     private String hqOfficeCd;
@@ -32,6 +32,8 @@ public class SideMenuAttrVO extends CmmVO {
     private String sdattrNm;
     /** 사이드속성분류코드 */
     private String sdattrClassCd;
+    /** 표기순번 */
+    private Integer dispSeq;
     /** 사용여부 */
     private String useYn;
 
@@ -113,6 +115,20 @@ public class SideMenuAttrVO extends CmmVO {
      */
     public void setSdattrClassCd(String sdattrClassCd) {
         this.sdattrClassCd = sdattrClassCd;
+    }
+
+    /**
+     * @return the dispSeq
+     */
+    public Integer getDispSeq() {
+        return dispSeq;
+    }
+
+    /**
+     * @param dispSeq the dispSeq to set
+     */
+    public void setDispSeq(Integer dispSeq) {
+        this.dispSeq = dispSeq;
     }
 
     /**

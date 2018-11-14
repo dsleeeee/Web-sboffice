@@ -20,7 +20,7 @@ import kr.co.solbipos.application.common.service.CmmVO;
  */
 public class SideMenuSelProdVO extends CmmVO {
 
-    private static final long serialVersionUID = 3780646034614017669L;
+    private static final long serialVersionUID = 3592381902242275523L;
 
     /** 본사코드 */
     private String hqOfficeCd;
@@ -32,6 +32,8 @@ public class SideMenuSelProdVO extends CmmVO {
     private String prodCd;
     /** 추가상품단가 */
     private Double addProdUprc;
+    /** 표기순번 */
+    private Integer dispSeq;
     /** 사용여부 */
     private String useYn;
 
@@ -113,6 +115,20 @@ public class SideMenuSelProdVO extends CmmVO {
      */
     public void setAddProdUprc(Double addProdUprc) {
         this.addProdUprc = addProdUprc;
+    }
+
+    /**
+     * @return the dispSeq
+     */
+    public Integer getDispSeq() {
+        return dispSeq;
+    }
+
+    /**
+     * @param dispSeq the dispSeq to set
+     */
+    public void setDispSeq(Integer dispSeq) {
+        this.dispSeq = dispSeq;
     }
 
     /**

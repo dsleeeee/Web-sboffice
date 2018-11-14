@@ -314,7 +314,7 @@
     color: #888 !important;
 }
 
-.wj-control input:invalid, .wj-combobox.ng-invalid-required {
+.wj-control input.ng-invalid-required, .wj-combobox.ng-invalid-required {
     border: 1px solid #c00;
     border-left: 5px solid #c00;
 }
