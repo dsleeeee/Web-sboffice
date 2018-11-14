@@ -42,8 +42,7 @@
                         items-source="_getComboData('rRegStoreCd')"
                         display-member-path="name"
                         selected-value-path="value"
-                        is-editable="false"
-                        initialized="_initComboBox(s)">
+                        is-editable="false">
                 </wj-combo-box>
                 {{_regStore}}
               </td>
@@ -70,8 +69,7 @@
                         items-source="_getComboData('rGendrFg')"
                         display-member-path="name"
                         selected-value-path="value"
-                        is-editable="false"
-                        initialized="_initComboBox(s)">
+                        is-editable="false">
                 </wj-combo-box>
                 {{_gendr}}
               </td>
@@ -83,12 +81,11 @@
                 <wj-combo-box
                         ng-model="member.weddingYn"
                         ng-hide="true"
-                        text="_weddingYn"items-source="_getComboData('rWeddingYn')"
+                        text="_weddingYn"
+                        items-source="_getComboData('rWeddingYn')"
                         display-member-path="name"
                         selected-value-path="value"
-                        is-editable="false"
-                        initialized="_initComboBox(s)"
-                        selected-index-changed="changeWeddingCombo(s,e)">
+                        is-editable="false">
                 </wj-combo-box>
                 {{_weddingYn}}
               </td>
@@ -101,8 +98,7 @@
                         text="_weddingday"
                         format="yyyy/MM/dd"
                         min="2000-01-01"
-                        max="2099-12-31"
-                        initialized="_initDateBox(s)">
+                        max="2099-12-31">
                 </wj-input-date>
                 {{_weddingday}}
               </td>
@@ -121,8 +117,7 @@
                         text="_birthday"
                         format="yyyy/MM/dd"
                         min="2000-01-01"
-                        max="2099-12-31"
-                        initialized="_initDateBox(s)">
+                        max="2099-12-31">
                 </wj-input-date>
                 {{_birthday}}
               </td>
@@ -137,8 +132,7 @@
                         text="_membrClass"items-source="_getComboData('rMemberClass')"
                         display-member-path="name"
                         selected-value-path="value"
-                        is-editable="false"
-                        initialized="_initComboBox(s)">
+                        is-editable="false">
                 </wj-combo-box>
                 {{_membrClass}}
               </td>
@@ -152,8 +146,7 @@
                         items-source="_getComboData('rUseYn')"
                         display-member-path="name"
                         selected-value-path="value"
-                        is-editable="false"
-                        initialized="_initComboBox(s)">
+                        is-editable="false">
                 </wj-combo-box>
                 {{_useYn}}
               </td>
@@ -179,8 +172,7 @@
                         items-source="_getComboData('rEmailRecvYn')"
                         display-member-path="name"
                         selected-value-path="value"
-                        is-editable="false"
-                        initialized="_initComboBox(s)">
+                        is-editable="false">
                 </wj-combo-box>
                 {{_emailRecvYn}}
               </td>
@@ -194,8 +186,7 @@
                           items-source="_getComboData('rSmsRecvYn')"
                           display-member-path="name"
                           selected-value-path="value"
-                          is-editable="false"
-                          initialized="_initComboBox(s)">
+                          is-editable="false">
                   </wj-combo-box>
                 {{_smsRecvYn}}
               </td>

@@ -54,6 +54,8 @@ public class RegistVO extends PageVO {
     /** 등록매장코드 */
     @NotBlank(groups = {Regist.class}, message = "{regist.reg.store.cd}{cmm.require.text}")
     private String regStoreCd;
+    /** 등록매장코드(여러건) */
+    private String regStoreCds[];
     /** 우편번호 */
     private String postNo;
     /** 주소 */
@@ -269,6 +271,21 @@ public class RegistVO extends PageVO {
      */
     public void setRegStoreCd(String regStoreCd) {
         this.regStoreCd = regStoreCd;
+    }
+
+    /**
+     * @return the regStoreCds
+     */
+
+    public String[] getRegStoreCds() {
+        return regStoreCds;
+    }
+
+    /**
+     * @param regStoreCds the regStoreCds to set
+     */
+    public void setRegStoreCds(String[] regStoreCds) {
+        this.regStoreCds = regStoreCds;
     }
 
     /**

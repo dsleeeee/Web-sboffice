@@ -68,10 +68,7 @@ app.controller('memberInfoDetailCtrl', ['$scope', '$http', function ($scope, $ht
 
       $scope.member                           = memberDetailInfo;
 
-      if(memberDetailInfo.weddingYn == "Y") {
-        $scope.weddingDayCombo.isReadOnly     = false;
-      } else {
-        $scope.weddingDayCombo.isReadOnly     = true;
+      if(memberDetailInfo.weddingYn == "N") {
         $scope.member.weddingday              = new Date();
       }
     });

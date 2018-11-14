@@ -140,8 +140,15 @@
         <%-- 등록매장 --%>
         <th><s:message code="regist.reg.store.cd"/></th>
         <td>
+          <%--
           <input type="text" id="regStoreNm" class="sb-input w100" readonly="readonly"/>
           <input type="hidden" id="regStoreCd" ng-model="regStoreCd" readonly="readonly"/>
+          --%>
+          <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
+          <jsp:include page="/WEB-INF/view/application/layer/searchStoreM.jsp" flush="true">
+            <jsp:param name="targetId" value="regStore"/>
+          </jsp:include>
+          <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
         </td>
         <%-- 전화번호 --%>
         <th><s:message code="regist.tel"/></th>

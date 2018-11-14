@@ -97,6 +97,11 @@ public class RegistServiceImpl implements RegistService {
         if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             registVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
+
+        if( !StringUtil.isEmpties(registVO.getRegStoreCd())) {
+            registVO.setRegStoreCds(registVO.getRegStoreCd().split(","));
+        }
+
         return mapper.getMemberList(registVO);
     }
 

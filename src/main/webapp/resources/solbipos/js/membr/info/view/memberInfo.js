@@ -28,7 +28,7 @@ app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._setComboData("periodType", periodDataMap);
   $scope._setComboData("gendrFg", genderDataMap);
 
-  // 선택 회원
+  // // 선택 회원
   $scope.selectedMember;
   $scope.setSelectedMember = function(member) {
     $scope.selectedMember = member;
@@ -90,15 +90,30 @@ app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 조회 버튼 클릭
   $scope.$on("memberCtrl", function(event, data) {
-    $scope.getMemberList();
+
+    // 이출, 이입매장 초기화
+    $("#regStoreCd").val("");
+    $("#regStoreNm").val(messages["cmm.select"]);
+
+    // $scope.getMemberList();
     event.preventDefault();
   });
 
   // 회원 목록 조회
   $scope.getMemberList = function(){
     var params = {};
+
+    params.regStoreCd = $("#regStoreCd").val();
+
     $scope._inquiryMain("/membr/info/view/view/getMemberlist.sb", params, function() {
     });
+  };
+
+  // 매장선택 모듈 팝업 사용시 정의
+  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+  $scope.regStoreShow = function () {
+    $scope._broadcast('regStoreCtrl');
   };
 
   // 화면 ready 된 후 설정

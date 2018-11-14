@@ -109,7 +109,10 @@
            AND tmm.EMAIL_ADDR = #{emailAddr}
         </if>
         <if test='regStoreCd != null and regStoreCd.toString() != ""'>
-           AND tmm.REG_STORE_CD = #{regStoreCd}
+           AND tmm.REG_STORE_CD IN
+          <foreach collection="regStoreCds" item="item" open="("  separator="," close=")" >
+            #{item}
+          </foreach>
         </if>
         <if test='membrClassCd != null and membrClassCd.toString() != ""'>
            AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
