@@ -8,15 +8,17 @@
     No  ||  수정자 ||  수정일자    ||  수정내역
     ======================================================
     1       정용길     2018.05.01     최초작성
+    2       김지은     2018.11.08     회원정보관리 수정
 -->
 <mapper namespace="kr.co.solbipos.membr.info.regist.service.impl.RegistMapper">
+
     <!-- 등록매장 조회 -->
     <!--
         TABLE    : TB_HQ_OFFICE, TB_HQ_BRAND, TB_MS_STORE
         COMMENTS : 회원정보 등록시 등록매장 콤보박스 내용 조회
     -->
-    <select id="selectRgstrStore"  parameterType="hqManageVO" resultType="DefaultMap">
-        /* RegistMapper.selectRgstrStore */
+    <select id="getRegistStore"  parameterType="hqManageVO" resultType="DefaultMap">
+        /* RegistMapper.getRegistStore */
         SELECT tms.STORE_CD AS VALUE,
                tms.STORE_NM AS NAME
           FROM TB_MS_STORE tms
@@ -28,15 +30,15 @@
         TABLE    : TB_HQ_OFFICE, TB_HQ_BRAND, TB_MS_STORE
         COMMENTS : 회원정보 등록시 등록매장 콤보박스 내용 조회
     -->
-    <select id="selectMemberClassList"  parameterType="membrClassVO" resultType="DefaultMap">
-        /* RegistMapper.selectMemberClassList */
+    <select id="getMemberClassList"  parameterType="membrClassVO" resultType="DefaultMap">
+        /* RegistMapper.getMemberClassList */
         SELECT MEMBR_CLASS_CD AS VALUE,
                MEMBR_CLASS_NM AS NAME
           FROM TB_MB_MEMBER_CLASS
          WHERE USE_YN = 'Y'
            AND MEMBR_ORGN_CD = #{membrOrgnCd}
          ORDER BY DEFLT_YN DESC
-      </select>
+    </select>
 
 
     <!-- 회원정보 조회 -->
@@ -44,70 +46,97 @@
         TABLE    : TB_MB_MEMBER
         COMMENTS : 회원정보 리스트 조회
     -->
-    <select id="selectMembers" parameterType="registVO" resultType="DefaultMap">
-        /* RegistMapper.selectMembers */
-        SELECT
-               tmm.MEMBR_NO,
+    <select id="getMemberList" parameterType="registVO" resultType="DefaultMap">
+        /* RegistMapper.getMemberList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT tmm.MEMBR_NO,
                tmm.MEMBR_NM,
                tmm.MEMBR_CLASS_CD,
+               tmmc.MEMBR_CLASS_NM,
+               tmm.MEMBR_CARD_NO,
+               tmm.SHORT_NO,
+               tmm.MEMBR_ORGN_CD,
+               tmm.REG_STORE_CD,
+               tms.STORE_NM AS REG_STORE_NM,
+               tmm.POST_NO,
+               tmm.ADDR,
+               tmm.ADDR_DTL,
+               tmm.TEL_NO,
+               tmm.EMAIL_ADDR,
+               tmm.EMAIL_RECV_YN,
+               tmm.BIRTHDAY,
+               tmm.GENDR_FG,
+               tmm.SMS_RECV_YN,
+               tmm.WEDDING_YN,
+               tmm.WEDDINGDAY,
+               tmm.LUNAR_YN,
+               tmm.USE_YN,
+               tmm.MEMBR_NICKNM,
+               tmm.MEMBER_ENG_NM,
+               tmm.REMARK,
+               '후불적용매장등록' AS CREDIT_STORE
+        <include refid="CmmSQL.PagingTemplateCount"/>
+          FROM TB_MB_MEMBER tmm,
+               TB_MB_MEMBER_CLASS tmmc,
+               TB_MS_STORE tms
+         WHERE tmm.MEMBR_ORGN_CD = #{hqOfficeCd}
         <if test='orgnFg != null and orgnFg.toString() == "HQ"'>
-               (SELECT MEMBR_CLASS_NM FROM TB_MB_MEMBER_CLASS WHERE MEMBR_ORGN_CD = #{hqOfficeCd} AND MEMBR_CLASS_CD = tmm.MEMBR_CLASS_CD) AS MEMBR_CLASS_NM,
+           AND tmmc.MEMBR_ORGN_CD (+)= #{hqOfficeCd}
         </if>
         <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
-               (SELECT MEMBR_CLASS_NM FROM TB_MB_MEMBER_CLASS WHERE MEMBR_ORGN_CD = #{storeCd} AND MEMBR_CLASS_CD = tmm.MEMBR_CLASS_CD) AS MEMBR_CLASS_NM,
+           AND tmmc.MEMBR_ORGN_CD (+)= #{storeCd}
         </if>
-        tmm.MEMBR_CARD_NO,
-               tmm.MEMBR_ORGN_CD
-          FROM TB_MB_MEMBER tmm
-         WHERE MEMBR_ORGN_CD = #{hqOfficeCd}
-           AND USE_YN = 'Y'
-          <if test='storeCd != null and storeCd.toString() != ""'>
-           AND REG_STORE_CD = #{storeCd}
-          </if>
-          <if test='membrCardNo != null and membrCardNo.toString() != ""'>
-            AND tmm.MEMBR_CARD_NO = #{membrCardNo}
-          </if>
-          <if test='membrNo != null and membrNo.toString() != ""'>
-            AND tmm.MEMBR_NO = #{membrNo}
-          </if>
-          <if test='membrNm != null and membrNm.toString() != ""'>
-            AND tmm.MEMBR_NM = #{membrNm}
-          </if>
-          <if test='telNo != null and telNo.toString() != ""'>
-            AND tmm.TEL_NO = #{telNo}
-          </if>
-          <if test='emailAddr != null and emailAddr.toString() != ""'>
-            AND tmm.EMAIL_ADDR = #{emailAddr}
-          </if>
-          <if test='regStoreCd != null and regStoreCd.toString() != ""'>
-            AND tmm.REG_STORE_CD = #{regStoreCd}
-          </if>
-          <if test='membrClassCd != null and membrClassCd.toString() != ""'>
-            AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
-          </if>
-          <if test='gendrFg != null and gendrFg.toString() != ""'>
-            AND tmm.GENDR_FG = #{gendrFg}
-          </if>
-          <if test='emailRecvYn != null and emailRecvYn.toString() != ""'>
-            AND tmm.EMAIL_RECV_YN = #{emailRecvYn}
-          </if>
-          <if test='smsRecvYn != null and smsRecvYn.toString() != ""'>
-            AND tmm.SMS_RECV_YN = #{smsRecvYn}
-          </if>
-          <if test='periodType != null and periodType.toString() != ""'>
+           AND tmmc.MEMBR_CLASS_CD (+)= tmm.MEMBR_CLASS_CD
+           AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+           AND tms.STORE_CD = tmm.REG_STORE_CD
+           AND tmm.USE_YN = 'Y'
+        <if test='storeCd != null and storeCd.toString() != ""'>
+           AND tmm.REG_STORE_CD = #{storeCd}
+        </if>
+        <if test='membrCardNo != null and membrCardNo.toString() != ""'>
+           AND tmm.MEMBR_CARD_NO = #{membrCardNo}
+        </if>
+        <if test='membrNo != null and membrNo.toString() != ""'>
+           AND tmm.MEMBR_NO = #{membrNo}
+        </if>
+        <if test='membrNm != null and membrNm.toString() != ""'>
+           AND tmm.MEMBR_NM = #{membrNm}
+        </if>
+        <if test='telNo != null and telNo.toString() != ""'>
+           AND tmm.TEL_NO = #{telNo}
+        </if>
+        <if test='emailAddr != null and emailAddr.toString() != ""'>
+           AND tmm.EMAIL_ADDR = #{emailAddr}
+        </if>
+        <if test='regStoreCd != null and regStoreCd.toString() != ""'>
+           AND tmm.REG_STORE_CD = #{regStoreCd}
+        </if>
+        <if test='membrClassCd != null and membrClassCd.toString() != ""'>
+           AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
+        </if>
+        <if test='gendrFg != null and gendrFg.toString() != ""'>
+           AND tmm.GENDR_FG = #{gendrFg}
+        </if>
+        <if test='emailRecvYn != null and emailRecvYn.toString() != ""'>
+           AND tmm.EMAIL_RECV_YN = #{emailRecvYn}
+        </if>
+        <if test='smsRecvYn != null and smsRecvYn.toString() != ""'>
+           AND tmm.SMS_RECV_YN = #{smsRecvYn}
+        </if>
+        <if test='periodType != null and periodType.toString() != ""'>
             <if test='periodType.getCode() == "reg"'>
-              AND tmm.REG_DT BETWEEN #{periodStartDate}||'000000' AND #{periodEndDate}||'999999'
+           AND tmm.REG_DT BETWEEN #{periodStartDate}||'000000' AND #{periodEndDate}||'999999'
             </if>
             <if test='periodType.getCode() == "last"'>
             </if>
-          </if>
-          <if test='anvType != null and anvType.toString() != ""'>
+        </if>
+        <if test='anvType != null and anvType.toString() != ""'>
             <if test='anvType.getCode() == "1"'>
-              AND tmm.BIRTHDAY BETWEEN #{anvStartDate} AND #{anvEndDate}
+          AND tmm.BIRTHDAY BETWEEN #{anvStartDate} AND #{anvEndDate}
             </if>
-          </if>
-
-        ORDER BY tmm.REG_DT DESC
+        </if>
+         ORDER BY tmm.REG_DT DESC
+        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
     <!-- 회원정보 조회 -->
@@ -115,35 +144,34 @@
         TABLE    : TB_MB_MEMBER
         COMMENTS : 회원정보 조회
     -->
-    <select id="selectMember" parameterType="registVO" resultType="registVO">
-        /* RegistMapper.selectMember */
-        SELECT tmm.ADDR,
+    <select id="getMemberInfo" parameterType="registVO" resultType="DefaultMap">
+        /* RegistMapper.getMemberInfo */
+        SELECT tmm.MEMBR_ORGN_CD,
+               tmm.MEMBR_NO,
+               tmm.MEMBR_NM,
+               tmm.MEMBR_NICKNM,
+               tmm.MEMBR_CLASS_CD,
+               tmm.MEMBR_CARD_NO,
+               tmm.REG_STORE_CD,
+               tmm.POST_NO,
+               tmm.ADDR,
                tmm.ADDR_DTL,
+               tmm.LUNAR_YN,
                tmm.BIRTHDAY,
+               tmm.GENDR_FG,
+               tmm.TEL_NO,
+               tmm.SHORT_NO,
+               tmm.WEDDING_YN,
+               tmm.WEDDINGDAY,
                tmm.EMAIL_ADDR,
                tmm.EMAIL_RECV_YN,
-               tmm.GENDR_FG,
-               tmm.LUNAR_YN,
-               tmm.MEMBER_ENG_NM,
-               tmm.MEMBR_CARD_NO,
-               tmm.MEMBR_CLASS_CD,
-               tmm.MEMBR_NICKNM,
-               tmm.MEMBR_NM,
-               tmm.MEMBR_NO,
-               tmm.MEMBR_ORGN_CD,
-               tmm.MOD_DT,
-               tmm.MOD_ID,
-               tmm.POST_NO,
+               tmm.SMS_RECV_YN,
+               tmm.REMARK,
+               tmm.USE_YN,
                tmm.REG_DT,
                tmm.REG_ID,
-               tmm.REG_STORE_CD,
-               tmm.REMARK,
-               tmm.SHORT_NO,
-               tmm.SMS_RECV_YN,
-               tmm.TEL_NO,
-               tmm.USE_YN,
-               tmm.WEDDINGDAY,
-               tmm.WEDDING_YN
+               tmm.MOD_DT,
+               tmm.MOD_ID
           FROM TB_MB_MEMBER tmm
          WHERE tmm.MEMBR_NO = #{membrNo}
            AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
@@ -154,63 +182,63 @@
         TABLE    : TB_MB_MEMBER
         COMMENTS : 회원정보 등록
     -->
-    <insert id="insertRegistMember" parameterType="registVO">
-        /* RegistMapper.insertRegistMember */
+    <insert id="registMemberInfo" parameterType="registVO">
+        /* RegistMapper.registMemberInfo */
         <![CDATA[
         INSERT INTO TB_MB_MEMBER tmm (
-            tmm.MEMBR_NO,
             tmm.MEMBR_ORGN_CD,
+            tmm.MEMBR_NO,
+            tmm.MEMBR_NM,
+            tmm.MEMBR_NICKNM,
+            tmm.MEMBR_CLASS_CD,
+            tmm.MEMBR_CARD_NO,
+            tmm.REG_STORE_CD,
+            tmm.POST_NO,
             tmm.ADDR,
             tmm.ADDR_DTL,
             tmm.BIRTHDAY,
-            tmm.EMAIL_ADDR,
-            tmm.EMAIL_RECV_YN,
-            tmm.GENDR_FG,
             tmm.LUNAR_YN,
-            tmm.MEMBR_CARD_NO,
-            tmm.MEMBR_CLASS_CD,
-            tmm.MEMBR_NICKNM,
-            tmm.MEMBR_NM,
-            tmm.MOD_DT,
-            tmm.MOD_ID,
-            tmm.POST_NO,
+            tmm.GENDR_FG,
+            tmm.EMAIL_ADDR,
+            tmm.SHORT_NO,
+            tmm.TEL_NO,
+            tmm.WEDDING_YN,
+            tmm.WEDDINGDAY,
+            tmm.EMAIL_RECV_YN,
+            tmm.SMS_RECV_YN,
+            tmm.USE_YN,
+            tmm.REMARK,
             tmm.REG_DT,
             tmm.REG_ID,
-            tmm.REG_STORE_CD,
-            tmm.REMARK,
-            tmm.SHORT_NO,
-            tmm.SMS_RECV_YN,
-            tmm.TEL_NO,
-            tmm.USE_YN,
-            tmm.WEDDINGDAY,
-            tmm.WEDDING_YN
+            tmm.MOD_DT,
+            tmm.MOD_ID
         ) VALUES (
-            (SELECT LPAD( NVL(MAX(MEMBR_NO), 0) + 1, 10, '0') FROM TB_MB_MEMBER WHERE MEMBR_ORGN_CD = #{membrOrgnCd}),
             #{membrOrgnCd},
+            (SELECT LPAD( NVL(MAX(MEMBR_NO), 0) + 1, 10, '0') FROM TB_MB_MEMBER WHERE MEMBR_ORGN_CD = #{membrOrgnCd}),
+            #{membrNm},
+            #{membrNicknm},
+            #{membrClassCd},
+            #{membrCardNo},
+            #{regStoreCd},
+            #{postNo},
             #{addr},
             #{addrDtl},
             #{birthday},
-            #{emailAddr},
-            #{emailRecvYn},
-            #{gendrFg},
             #{lunarYn},
-            #{membrCardNo},
-            #{membrClassCd},
-            #{membrNicknm},
-            #{membrNm},
-            #{modDt},
-            #{modId},
-            #{postNo},
+            #{gendrFg},
+            #{emailAddr},
+            #{shortNo},
+            #{telNo},
+            #{weddingYn},
+            #{weddingday},
+            #{emailRecvYn},
+            #{smsRecvYn},
+            #{useYn},
+            #{remark},
             #{regDt},
             #{regId},
-            #{regStoreCd},
-            #{remark},
-            #{shortNo},
-            #{smsRecvYn},
-            #{telNo},
-            #{useYn},
-            #{weddingday},
-            #{weddingYn}
+            #{modDt},
+            #{modId}
         )
         ]]>
     </insert>
@@ -220,24 +248,28 @@
         TABLE    : TB_MB_MEMBER
         COMMENTS : 회원정보 수정
     -->
-    <update id="updateMember" parameterType="registVO">
-        /* RegistMapper.updateMember */
+    <update id="updateMemberInfo" parameterType="registVO">
+        /* RegistMapper.updateMemberInfo */
         UPDATE TB_MB_MEMBER tmm
            SET tmm.MEMBR_NM = #{membrNm},
-               tmm.MEMBER_ENG_NM = #{membrNicknm},
-               tmm.REG_STORE_CD = #{regStoreCd},
+               tmm.MEMBR_NICKNM = #{membrNicknm},
                tmm.MEMBR_CLASS_CD = #{membrClassCd},
                tmm.MEMBR_CARD_NO = #{membrCardNo},
-               tmm.GENDR_FG = #{gendrFg},
-               tmm.WEDDING_YN = #{weddingYn},
-               tmm.BIRTHDAY = #{birthday},
-               tmm.TEL_NO = #{telNo},
-               tmm.USE_YN = #{useYn},
-               tmm.EMAIL_ADDR = #{emailAddr},
+               tmm.REG_STORE_CD = #{regStoreCd},
                tmm.POST_NO = #{postNo},
                tmm.ADDR = #{addr},
+               tmm.ADDR_DTL = #{addrDtl},
+               tmm.BIRTHDAY = #{birthday},
+               tmm.LUNAR_YN = #{lunarYn},
+               tmm.GENDR_FG = #{gendrFg},
+               tmm.EMAIL_ADDR = #{emailAddr},
+               tmm.SHORT_NO = #{shortNo},
+               tmm.TEL_NO = #{telNo},
+               tmm.WEDDING_YN = #{weddingYn},
+               tmm.WEDDINGDAY = #{weddingday},
                tmm.EMAIL_RECV_YN = #{emailRecvYn},
                tmm.SMS_RECV_YN = #{smsRecvYn},
+               tmm.USE_YN = #{useYn},
                tmm.REMARK = #{remark},
                tmm.MOD_ID = #{modId},
                tmm.MOD_DT = #{modDt}
@@ -250,8 +282,8 @@
         TABLE    : TB_MB_MEMBER
         COMMENTS : 회원정보 삭제 버튼 처리 USE_YN : N 으로 업데이트 처리
     -->
-    <delete id="deleteMember" parameterType="registVO">
-      /* RegistMapper.deleteMember */
+    <delete id="deleteMemberInfo" parameterType="registVO">
+      /* RegistMapper.deleteMemberInfo */
       UPDATE TB_MB_MEMBER tmm
          SET tmm.USE_YN = 'N',
              tmm.MOD_ID = #{modId},

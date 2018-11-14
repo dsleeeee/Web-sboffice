@@ -47,7 +47,7 @@
                   popover-enable="myForm.prodTypeFg.$invalid"
                   popover-placement="bottom-left"
                   popover-trigger="'mouseenter'"
-                  uib-popover="<s:message code="prod.prodTypeFg" />은(는) 필수 값 입니다.">
+                  uib-popover="<s:message code="prod.prodTypeFg" />은(는) 필수 입력항목 입니다.">
                 </wj-combo-box>
               </div>
             </td>
@@ -59,7 +59,7 @@
               <input type="text" name="prodCd" class="sb-input w100" ng-model="prodModifyInfo.prodCd" placeholder="상품코드는 자동생성 됩니다." disabled />
 
               <%-- TODO 코너코드 어떻게 할것인가? --%>
-              <input type="hidden" name="cornrCd" ng-model="prodModifyInfo.cornrCd" value="00">
+              <input type="hidden" name="cornrCd" ng-model="prodModifyInfo.cornrCd"   >
             </td>
           </tr>
           <tr>
@@ -72,7 +72,7 @@
                      popover-enable="myForm.prodNm.$invalid"
                      popover-placement="bottom-left"
                      popover-trigger="'mouseenter'"
-                     uib-popover="<s:message code="prod.prodNm" />은(는) 필수 값 입니다."/>
+                     uib-popover="<s:message code="prod.prodNm" />은(는) 필수 입력항목 입니다."/>
             </td>
           </tr>
           <tr>
@@ -82,10 +82,10 @@
               <input type="text" id="_prodClassCdNm" name="prodClassCdNm" class="sb-input w100"
                      ng-model="prodModifyInfo.prodClassCdNm"
                      required
-                     popover-enable="myForm.prodClassCd.$invalid"
+                     popover-enable="myForm.prodClassCdNm.$invalid"
                      popover-placement="bottom-left"
                      popover-trigger="'mouseenter'"
-                     uib-popover="<s:message code="prod.prodClass" />은(는) 필수 값 입니다."
+                     uib-popover="<s:message code="prod.prodClass" />은(는) 필수 입력항목 입니다."
                      placeholder="선택" readonly
                      ng-click="popUpProdClass()" />
               <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodModifyInfo.prodClassCd" disabled />
@@ -112,7 +112,7 @@
                   popover-enable="myForm.saleProdYn.$invalid"
                   popover-placement="bottom-left"
                   popover-trigger="'mouseenter'"
-                  uib-popover="<s:message code="prod.saleProdYn" />은(는) 필수 값 입니다.">
+                  uib-popover="<s:message code="prod.saleProdYn" />은(는) 필수 입력항목 입니다.">
                 </wj-combo-box>
               </div>
             </td>
@@ -124,8 +124,8 @@
             </td>
           </tr>
           <tr>
-            <%--최초판매단가--%>
-            <th><s:message code="prod.firstSaleUprc"/></th>
+            <%--판매단가--%>
+            <th><s:message code="prod.saleUprc"/></th>
             <td>
               <input type="text" id="_saleUprc" name="saleUprc" class="sb-input w100"
                      ng-model="prodModifyInfo.saleUprc"
@@ -133,8 +133,43 @@
                      popover-enable="myForm.saleUprc.$invalid"
                      popover-placement="bottom-left"
                      popover-trigger="'mouseenter'"
-                     uib-popover="<s:message code="prod.firstSaleUprc" />은(는) 필수 값 입니다."/>
+                     uib-popover="<s:message code="prod.saleUprc" />은(는) 필수 입력항목 입니다."/>
             </td>
+            <th></th>
+            <td></td>
+          </tr>
+          <tr>
+            <%--공급단가--%>
+            <th><s:message code="prod.splyUprc"/></th>
+            <td>
+              <input type="text" id="_splyUprc" name="splyUprc" class="sb-input w100"
+                     ng-model="prodModifyInfo.splyUprc"
+                     required
+                     popover-enable="myForm.splyUprc.$invalid"
+                     popover-placement="bottom-left"
+                     popover-trigger="'mouseenter'"
+                     uib-popover="<s:message code="prod.splyUprc" />은(는) 필수 입력항목 입니다."/>
+            <%--공급단가사용여부--%>
+            <th><s:message code="prod.splyUprc"/><br><s:message code="cmm.useYn"/></th>
+            <td>
+              <div class="sb-select">
+                <wj-combo-box id="_splyUprcUseYn" name="splyUprcUseYn"
+                  ng-model="prodModifyInfo.splyUprcUseYn"
+                  items-source="_getComboData('useYnComboData')"
+                  display-member-path="name"
+                  selected-value-path="value"
+                  is-editable="false"
+                  initialized="_initComboBox(s)"
+                  required
+                  popover-enable="myForm.splyUprcUseYn.$invalid"
+                  popover-placement="bottom-left"
+                  popover-trigger="'mouseenter'"
+                  uib-popover="<s:message code="prod.splyUprcUseYn" />은(는) 필수 입력항목 입니다.">
+                </wj-combo-box>
+              </div>
+            </td>
+          </tr>
+          <tr>
             <%--원가단가--%>
             <th><s:message code="prod.costUprc"/></th>
             <td>
@@ -144,7 +179,18 @@
                      popover-enable="myForm.costUprc.$invalid"
                      popover-placement="bottom-left"
                      popover-trigger="'mouseenter'"
-                     uib-popover="<s:message code="prod.costUprc" />은(는) 필수 값 입니다."/>
+                     uib-popover="<s:message code="prod.costUprc" />은(는) 필수 입력항목 입니다."/>
+            </td>
+            <%--최종판매단가--%>
+            <th><s:message code="prod.lastCostUprc"/></th>
+            <td>
+              <input type="text" id="_lastCostUprc" name="lastCostUprc" class="sb-input w100"
+                     ng-model="prodModifyInfo.lastCostUprc"
+                     required
+                     popover-enable="myForm.lastCostUprc.$invalid"
+                     popover-placement="bottom-left"
+                     popover-trigger="'mouseenter'"
+                     uib-popover="<s:message code="prod.lastCostUprc" />은(는) 필수 입력항목 입니다."/>
             </td>
           </tr>
           <tr>
@@ -163,7 +209,7 @@
                   popover-enable="myForm.poProdFg.$invalid"
                   popover-placement="bottom-left"
                   popover-trigger="'mouseenter'"
-                  uib-popover="<s:message code="prod.poProdFg" />은(는) 필수 값 입니다.">
+                  uib-popover="<s:message code="prod.poProdFg" />은(는) 필수 입력항목 입니다.">
                 </wj-combo-box>
               </div>
             </td>
@@ -182,10 +228,25 @@
                   popover-enable="myForm.poUnitFg.$invalid"
                   popover-placement="bottom-left"
                   popover-trigger="'mouseenter'"
-                  uib-popover="<s:message code="prod.poUnitFg" />은(는) 필수 값 입니다.">
+                  uib-popover="<s:message code="prod.poUnitFg" />은(는) 필수 입력항목 입니다.">
                 </wj-combo-box>
               </div>
             </td>
+          </tr>
+          <tr>
+            <%--발주단위수량--%>
+            <th><s:message code="prod.poUnitQty"/></th>
+            <td>
+              <input type="text" id="_poUnitQty" name="poUnitQty" class="sb-input w100"
+                     ng-model="prodModifyInfo.poUnitQty"
+                     required
+                     popover-enable="myForm.poUnitQty.$invalid"
+                     popover-placement="bottom-left"
+                     popover-trigger="'mouseenter'"
+                     uib-popover="<s:message code="prod.poUnitQty" />은(는) 필수 입력항목 입니다."/>
+            </td>
+            <th></th>
+            <td></td>
           </tr>
           <tr>
             <%--최소주문--%>
@@ -197,10 +258,19 @@
                      popover-enable="myForm.poMinQty.$invalid"
                      popover-placement="bottom-left"
                      popover-trigger="'mouseenter'"
-                     uib-popover="<s:message code="prod.poMinQty" />은(는) 필수 값 입니다."/>
+                     uib-popover="<s:message code="prod.poMinQty" />은(는) 필수 입력항목 입니다."/>
             </td>
-            <th></th>
-            <td></td>
+            <%--안전재고--%>
+            <th><s:message code="prod.safeStockQty"/></th>
+            <td>
+              <input type="text" id="_safeStockQty" name="safeStockQty" class="sb-input w100"
+                     ng-model="prodModifyInfo.safeStockQty"
+                     required
+                     popover-enable="myForm.safeStockQty.$invalid"
+                     popover-placement="bottom-left"
+                     popover-trigger="'mouseenter'"
+                     uib-popover="<s:message code="prod.safeStockQty" />은(는) 필수 입력항목 입니다."/>
+            </td>
           </tr>
           </tbody>
         </table>
@@ -229,7 +299,7 @@
                 popover-enable="myForm.vatFg.$invalid"
                 popover-placement="bottom-left"
                 popover-trigger="'mouseenter'"
-                uib-popover="<s:message code="prod.vatFg" />은(는) 필수 값 입니다.">
+                uib-popover="<s:message code="prod.vatFg" />은(는) 필수 입력항목 입니다.">
               </wj-combo-box>
             </div>
           </td>
@@ -239,7 +309,7 @@
             <div class="sb-select">
               <wj-combo-box id="_stockProdYn" name="stockProdYn"
                 ng-model="prodModifyInfo.stockProdYn"
-                items-source="_getComboData('stockProdYnComboData')"
+                items-source="_getComboData('useYnComboData')"
                 display-member-path="name"
                 selected-value-path="value"
                 is-editable="false"
@@ -248,7 +318,7 @@
                 popover-enable="myForm.stockProdYn.$invalid"
                 popover-placement="bottom-left"
                 popover-trigger="'mouseenter'"
-                uib-popover="<s:message code="prod.stockProdYn" />은(는) 필수 값 입니다.">
+                uib-popover="<s:message code="prod.stockProdYn" />은(는) 필수 입력항목 입니다.">
               </wj-combo-box>
             </div>
           </td>
@@ -269,16 +339,12 @@
                 popover-enable="myForm.useYn.$invalid"
                 popover-placement="bottom-left"
                 popover-trigger="'mouseenter'"
-                uib-popover="<s:message code="cmm.useYn" />은(는) 필수 값 입니다.">
+                uib-popover="<s:message code="cmm.useYn" />은(는) 필수 입력항목 입니다.">
               </wj-combo-box>
             </div>
           </td>
-          <%--안전재고--%>
-          <th><s:message code="prod.safeStockQty"/></th>
-          <td>
-            <input type="text" id="_safeStockQty" name="safeStockQty" class="sb-input w100"
-                   ng-model="prodModifyInfo.safeStockQty"/>
-          </td>
+          <th></th>
+          <td></td>
         </tr>
         <tr>
           <%--품절여부 --%>
@@ -296,7 +362,7 @@
                 popover-enable="myForm.soldOutYn.$invalid"
                 popover-placement="bottom-left"
                 popover-trigger="'mouseenter'"
-                uib-popover="<s:message code="prod.soldOutYn" />은(는) 필수 값 입니다.">
+                uib-popover="<s:message code="prod.soldOutYn" />은(는) 필수 입력항목 입니다.">
               </wj-combo-box>--%>
             </div>
           </td>
@@ -309,7 +375,7 @@
                    popover-enable="myForm.defaultStock.$invalid"
                    popover-placement="bottom-left"
                    popover-trigger="'mouseenter'"
-                   uib-popover="<s:message code="prod.defaultStock" />은(는) 필수 값 입니다."/>
+                   uib-popover="<s:message code="prod.defaultStock" />은(는) 필수 입력항목 입니다."/>
           </td>
         </tr>
         <tr>
@@ -333,29 +399,69 @@
                 popover-enable="myForm.setProdFg.$invalid"
                 popover-placement="bottom-left"
                 popover-trigger="'mouseenter'"
-                uib-popover="<s:message code="prod.setProdFg" />은(는) 필수 값 입니다.">
+                uib-popover="<s:message code="prod.setProdFg" />은(는) 필수 입력항목 입니다.">
               </wj-combo-box>
             </div>
           </td>
         </tr>
         <tr>
-          <%--환급적용여부--%>
-          <th><s:message code="prod.refApplyYn"/></th>
+          <%--포인트적립여부--%>
+          <th><s:message code="prod.pointSaveYn"/></th>
           <td>
             <div class="sb-select">
-              <%--<wj-combo-box id="_refApplyYn" name="refApplyYn"
-                ng-model="prodModifyInfo.refApplyYn"
-                items-source="_getComboData('refApplyYnComboData')"
+              <wj-combo-box id="_pointSaveYn" name="pointSaveYn"
+                ng-model="prodModifyInfo.pointSaveYn"
+                items-source="_getComboData('useYnComboData')"
                 display-member-path="name"
                 selected-value-path="value"
                 is-editable="false"
                 initialized="_initComboBox(s)"
                 required
-                popover-enable="myForm.refApplyYn.$invalid"
+                popover-enable="myForm.pointSaveYn.$invalid"
                 popover-placement="bottom-left"
                 popover-trigger="'mouseenter'"
-                uib-popover="<s:message code="prod.refApplyYn" />은(는) 필수 값 입니다.">
-              </wj-combo-box>--%>
+                uib-popover="<s:message code="prod.pointSaveYn" />은(는) 필수 입력항목 입니다.">
+              </wj-combo-box>
+            </div>
+          </td>
+          <%-- 봉사료 포함 여부 --%>
+          <th><s:message code="prod.prodTipYn"/></th>
+          <td>
+            <div class="sb-select">
+              <wj-combo-box id="_prodTipYn" name="prodTipYn"
+                ng-model="prodModifyInfo.prodTipYn"
+                items-source="_getComboData('prodTipYnComboData')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="_initComboBox(s)"
+                required
+                popover-enable="myForm.prodTipYn.$invalid"
+                popover-placement="bottom-left"
+                popover-trigger="'mouseenter'"
+                uib-popover="<s:message code="prod.prodTipYn" />은(는) 필수 입력항목 입니다.">
+              </wj-combo-box>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <%--사이드상품여부--%>
+          <th><s:message code="prod.sideProdYn"/></th>
+          <td>
+            <div class="sb-select">
+              <wj-combo-box id="_sideProdYn" name="sideProdYn"
+                ng-model="prodModifyInfo.sideProdYn"
+                items-source="_getComboData('useYnComboData')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="_initComboBox(s)"
+                required
+                popover-enable="myForm.sideProdYn.$invalid"
+                popover-placement="bottom-left"
+                popover-trigger="'mouseenter'"
+                uib-popover="<s:message code="prod.sideProdYn" />은(는) 필수 입력항목 입니다.">
+              </wj-combo-box>
             </div>
           </td>
           <th></th>
@@ -416,7 +522,7 @@
   </div>
   </form>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/popUpProdModify.js?ver=20181112.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/popUpProdModify.js?ver=20181113.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/popUpProdClass.jsp">

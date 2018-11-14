@@ -69,11 +69,11 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
       //     });
       //   }
       // }
-      if (e.panel == s.cells) {
+      if (e.panel === s.cells) {
         var col = s.columns[e.col];
         if (col.binding === "envstCd") {
           var item = s.rows[e.row].dataItem;
-          if (item.status != "I") {
+          if (item.status !== "I") {
             wijmo.addClass(e.cell, 'wijLink');
             wijmo.addClass(e.cell, 'wj-custom-readonly');
           } else {
@@ -87,7 +87,7 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
       var col = s.columns[e.col];
       if (col.binding === "envstCd") {
         var dataItem = s.rows[e.row].dataItem;
-        if (nvl(dataItem.status, "") == "" && dataItem.status != "I") {
+        if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
           e.cancel = true;
         }
       }
@@ -95,10 +95,10 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
     // 대표명칭 그리드 선택 이벤트
     s.hostElement.addEventListener('mousedown', function(e) {
       var ht = s.hitTest(e);
-      if( ht.cellType == wijmo.grid.CellType.Cell) {
-        var selectedRow = s.rows[ht.row].dataItem
+      if( ht.cellType === wijmo.grid.CellType.Cell) {
+        var selectedRow = s.rows[ht.row].dataItem;
         var col = ht.panel.columns[ht.col];
-        if( col.binding == "envstCd" && selectedRow.status != "I") {
+        if( col.binding === "envstCd" && selectedRow.status !== "I") {
           $scope._broadcast('detailCtrl', selectedRow.envstCd);
         }
       }
@@ -134,24 +134,22 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
   // 대표명칭 그리드 저장
   $scope.save = function() {
     // 파라미터 설정
-    var params = new Array();
-    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-      $scope.flex.collectionView.itemsEdited[i].status = "U";
-      params.push($scope.flex.collectionView.itemsEdited[i]);
+    var params = [];
+    for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
+      $scope.flex.collectionView.itemsEdited[u].status = "U";
+      params.push($scope.flex.collectionView.itemsEdited[u]);
     }
     for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
       $scope.flex.collectionView.itemsAdded[i].status = "I";
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save("/sys/cd/envConfg/envConfg/envst/save.sb", params, function(){ $scope.allSearch() } );
+    $scope._save("/sys/cd/envConfg/envConfg/envst/save.sb", params, function(){
+      $scope._broadcast('representCtrl', true);
+      $scope._broadcast('detailCtrl', true);
+    });
   };
 
-  // 저장 완료 후처리
-  $scope.allSearch = function(){
-    $scope._broadcast('representCtrl', true);
-    $scope._broadcast('detailCtrl', true);
-  };
 }]);
 
 /**
@@ -175,11 +173,11 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
     }], 'id', 'name');
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
-      if (e.panel == s.cells) {
+      if (e.panel === s.cells) {
         var col = s.columns[e.col];
         if (col.binding === "envstValCd") {
           var item = s.rows[e.row].dataItem;
-          if (item.status != "I") {
+          if (item.status !== "I") {
             wijmo.addClass(e.cell, 'wj-custom-readonly');
           } else {
             wijmo.removeClass(e.cell, 'wj-custom-readonly');
@@ -192,12 +190,12 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
       var col = s.columns[e.col];
       if (col.binding === "envstValCd") {
         var dataItem = s.rows[e.row].dataItem;
-        if (nvl(dataItem.status, "") == "" && dataItem.status != "I") {
+        if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
           e.cancel = true;
         }
       }
     });
-  }
+  };
   // 세부명칭 그리드 조회
   $scope.$on("detailCtrl", function(event, data) {
     // 파라미터
@@ -230,21 +228,19 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
   // 세부명칭 그리드 저장
   $scope.save = function() {
     // 파라미터 설정
-    var params = new Array();
-    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-      $scope.flex.collectionView.itemsEdited[i].status = "U";
-      params.push($scope.flex.collectionView.itemsEdited[i]);
+    var params = [];
+    for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
+      $scope.flex.collectionView.itemsEdited[u].status = "U";
+      params.push($scope.flex.collectionView.itemsEdited[u]);
     }
     for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
       $scope.flex.collectionView.itemsAdded[i].status = "I";
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save("/sys/cd/envConfg/envConfg/envstDtl/save.sb", params, function(){ $scope.allSearch() });
+    $scope._save("/sys/cd/envConfg/envConfg/envstDtl/save.sb", params, function(){
+      $scope._broadcast('detailCtrl', true);
+    });
   };
 
-  // 저장 후 처리
-  $scope.allSearch = function (){
-    $scope._broadcast('detailCtrl', true);
-  };
 }]);

@@ -5,7 +5,6 @@ import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
-import kr.co.common.utils.DateUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
@@ -13,6 +12,7 @@ import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.membr.anals.credit.service.CreditStoreVO;
+import kr.co.solbipos.membr.info.regist.enums.WeddingYn;
 import kr.co.solbipos.membr.info.regist.service.RegistService;
 import kr.co.solbipos.membr.info.regist.service.RegistVO;
 import kr.co.solbipos.membr.info.regist.validate.Regist;
@@ -31,8 +31,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -46,6 +44,7 @@ import static kr.co.common.utils.grid.ReturnUtil.returnJsonBindingFieldError;
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2018.05.01  정용길      최초생성
+ * @ 2018.11.08  김지은      회원정보관리 수정
  *
  * @author NHN한국사이버결제 KCP 정용길
  * @since 2018.05.01
@@ -75,24 +74,23 @@ public class RegistController {
     }
 
     /**
-     * 페이지 이동
+     * 회원정보조회 페이지 이동
      *
      * @param request
      * @param response
      * @param model
      */
-    @RequestMapping(value = "view/list.sb", method = RequestMethod.GET) public String registList(
-        HttpServletRequest request, HttpServletResponse response, Model model) {
+    @RequestMapping(value = "view/list.sb", method = RequestMethod.GET)
+    public String registList(HttpServletRequest request, HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
         // 등록 매장 조회
-        List regstrStoreList = registService.selectRgstrStore(sessionInfoVO);
+        List regstrStoreList = registService.getRegistStore(sessionInfoVO);
         // 등록 매장 전체 포함
         String regstrStoreListAll = cmmCodeUtil.assmblObj(regstrStoreList, "name", "value", UseYn.ALL);
 
         // 회원등급 리스트 조회
-        List membrClassList = registService.selectMembrClassList(sessionInfoVO);
+        List membrClassList = registService.getMembrClassList(sessionInfoVO);
 
         String membrClassListAll = cmmCodeUtil.assmblObj(membrClassList, "name", "value", UseYn.N);
 
@@ -104,11 +102,12 @@ public class RegistController {
             defaultStoreCd = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0025"));
             defaultStoreCd.replace("*", "");
         }
-        model.addAttribute("regstrStoreListAll", regstrStoreListAll);
-        model.addAttribute("comboData", membrClassListAll);
+
+        model.addAttribute("regstrStoreList", regstrStoreListAll);
+        model.addAttribute("memberClassList", membrClassListAll);
         model.addAttribute("defaultStoreCd", defaultStoreCd);
 
-        return "membr/info/view/view";
+        return "membr/info/view/memberInfo";
     }
 
     /**
@@ -120,13 +119,14 @@ public class RegistController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "view/list.sb", method = RequestMethod.POST) @ResponseBody
-    public Result registListPost(RegistVO registVO, HttpServletRequest request,
+    @RequestMapping(value = "view/getMemberlist.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMemberlist(RegistVO registVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<Object>> result = registService.selectMembers(registVO, sessionInfoVO);
+        List<DefaultMap<String>> result = registService.getMemberList(registVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, registVO);
     }
@@ -140,15 +140,14 @@ public class RegistController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "base/getMemberInfo.sb", method = RequestMethod.POST) @ResponseBody
+    @RequestMapping(value = "base/getMemberInfo.sb", method = RequestMethod.POST)
+    @ResponseBody
     public Result baseListPost(RegistVO registVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        DefaultMap<String> result = registService.getMemberInfo(registVO);
 
-        RegistVO vo = registService.selectMember(registVO, sessionInfoVO);
-
-        return ReturnUtil.returnJson(Status.OK, vo);
+        return ReturnUtil.returnJson(Status.OK, result);
     }
 
     /**
@@ -160,26 +159,67 @@ public class RegistController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "base/regist.sb", method = RequestMethod.POST) @ResponseBody
-    public Result baseRegist(@Validated(Regist.class) @RequestBody RegistVO registVO, BindingResult bindingResult,
+    @RequestMapping(value = "base/registMemberInfo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result registMemberInfo(@Validated(Regist.class) @RequestBody RegistVO registVO, BindingResult bindingResult,
         HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         // 입력값 에러 처리
         if (bindingResult.hasErrors()) {
             return returnJsonBindingFieldError(bindingResult);
         }
 
-        SessionInfoVO si = sessionService.getSessionInfo(request);
-        // 기본값 세팅
-        registVO.setMembrClassCd("000");    // TODO 추후 회원등급 개발되면 수정
-        registVO.setLunarYn("N");
-        registVO.setMembrOrgnCd(si.getOrgnCd());
-        registVO.setRegId(si.getUserId());
-        registVO.setRegDt(DateUtil.currentDateTimeString());
-        registVO.setModId(si.getUserId());
-        registVO.setModDt(DateUtil.currentDateTimeString());
+        // 생일 특문 제거
+        registVO.setBirthday(registVO.getBirthday().replaceAll("-",""));
 
-        int result = registService.saveRegistMember(registVO);
+
+        // 결혼여부 선택값이 미혼이면 결혼기념일 null
+        if(registVO.getWeddingYn() == WeddingYn.N) {
+            registVO.setWeddingday(null);
+        } else {
+            registVO.setWeddingday(registVO.getWeddingday().replaceAll("-",""));
+        }
+
+       int result = registService.registMemberInfo(registVO, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+
+    /**
+     * 회원정보 수정
+     *
+     * @param registVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "base/updateMemberInfo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result updateMemberInfo(@Validated(Regist.class) @RequestBody RegistVO registVO, BindingResult bindingResult,
+        HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 입력값 에러 처리
+        if (bindingResult.hasErrors()) {
+            return returnJsonBindingFieldError(bindingResult);
+        }
+
+        // 생일 특문 제거
+        registVO.setBirthday(registVO.getBirthday().replaceAll("-",""));
+
+        // 결혼여부 선택값이 미혼이면 결혼기념일 null
+        if(registVO.getWeddingYn() == WeddingYn.N) {
+            registVO.setWeddingday(null);
+        } else {
+            registVO.setWeddingday(registVO.getWeddingday().replaceAll("-",""));
+        }
+
+        int result = registService.updateMemberInfo(registVO, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }
@@ -193,19 +233,20 @@ public class RegistController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "base/remove.sb", method = RequestMethod.POST) @ResponseBody
+    @RequestMapping(value = "base/remove.sb", method = RequestMethod.POST)
+    @ResponseBody
     public Result baseRemove(@Validated(RegistDelete.class) RegistVO registVO, BindingResult bindingResult,
         HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
         // 입력값 에러 처리
         if (bindingResult.hasErrors()) {
             return returnJsonBindingFieldError(bindingResult);
         }
 
-        SessionInfoVO si = sessionService.getSessionInfo(request);
-        registVO.setModId(si.getUserId());
-        registVO.setModDt(DateUtil.currentDateTimeString());
+        int result = registService.deleteMemberInfo(registVO, sessionInfoVO);
 
-        int result = registService.deleteMember(registVO);
         return ReturnUtil.returnJson(Status.OK, result);
     }
 
@@ -224,9 +265,9 @@ public class RegistController {
 
         SessionInfoVO si = sessionService.getSessionInfo(request);
 
-        Map<String, Object> result = registService.getCreditStoreLists(creditStoreVO, si);
+        List<DefaultMap<String>> list = registService.getCreditStoreLists(creditStoreVO, si);
 
-        return ReturnUtil.returnJson(Status.OK, result);
+        return ReturnUtil.returnListJson(Status.OK, list);
     }
 
     /***
@@ -237,14 +278,35 @@ public class RegistController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "credit/saveCreditStore.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "credit/registCreditStore.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result saveCreditStore(@RequestBody CreditStoreVO[] creditStoreVOs, HttpServletRequest request,
+    public Result registCreditStore(@RequestBody CreditStoreVO[] creditStoreVOs, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
         SessionInfoVO si = sessionService.getSessionInfo(request);
 
-        int result = registService.saveCreditStore(creditStoreVOs, si);
+        int result = registService.registCreditStore(creditStoreVOs, si);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+
+    /***
+     * 후불매장 삭제
+     * @param creditStoreVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "credit/deleteCreditStore.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result deleteCreditStore(@RequestBody CreditStoreVO[] creditStoreVOs, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO si = sessionService.getSessionInfo(request);
+
+        int result = registService.deleteCreditStore(creditStoreVOs, si);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }
