@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SideMenu.xml
+    사이드메뉴 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       노현수     2018.11.14     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.prod.sidemenu.service.impl.SideMenuMapper">
+
+
+
+</mapper>
+
+
+
