@@ -463,7 +463,22 @@ public class StoreManageController {
        return returnJson(Status.OK, result);
    }
 
-   /**
+    /**
+     * 매장권하에서 주방프린터 상품연결 화면 이동
+     * @param request
+     * @param response
+     * @param model
+     * @return String
+     * @author 김지은
+     * @since 2018.06.08
+     */
+    @RequestMapping(value = "storeManage/storeKitchenPrintProductView.sb", method = RequestMethod.GET)
+    public String kitchenPrintProductView(HttpServletRequest request, HttpServletResponse response,
+        Model model) {
+        return "store/manage/storeManage/storeKitchenPrintProductView";
+    }
+
+    /**
     * 주방프린터 연결상품 조회
     * @param storeProductVO
     * @param request
@@ -534,28 +549,6 @@ public class StoreManageController {
 
        return returnListJson(Status.OK, hqList);
    }
-
-   /**
-    * 터치키 복사할 브랜드 목록 조회
-    * @param hqBrandVO
-    * @param request
-    * @param response
-    * @param model
-    * @return
-    * @author 김지은
-    * @since 2018.07.17
-    */
-//   @RequestMapping(value = "storeManage/getHqBrandList.sb", method = RequestMethod.POST)
-//   @ResponseBody
-//   public Result getHqBrandList(HqBrandVO hqBrandVO, HttpServletRequest request,
-//           HttpServletResponse response, Model model) {
-//
-//       // 터치키 복사할 브랜드 조회
-//       List<DefaultMap<String>> hqList = service.getHqBrandList(hqBrandVO);
-//
-//       return returnListJson(Status.OK, hqList);
-//   }
-
 
    /**
     * 터치키 복사할 매장 목록 조회

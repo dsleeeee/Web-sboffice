@@ -9,4 +9,5 @@ var gvListScaleBoxData = ${ccu.getListScale()};
 var gvStartDate = "${sessionScope.sessionInfo.startDate}";
 var gvEndDate = "${sessionScope.sessionInfo.endDate}";
 var gvOrgnFg = "${sessionScope.sessionInfo.orgnFg.getCode()}";
-
+var gvHqOfficeCd = "${sessionScope.sessionInfo.hqOfficeCd}";
+var gvStoreCd = "${sessionScope.sessionInfo.storeCd}";
