@@ -6,9 +6,7 @@ import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.base.prod.sidemenu.service.SideMenuAttrCdVO;
-import kr.co.solbipos.base.prod.sidemenu.service.SideMenuAttrClassVO;
-import kr.co.solbipos.base.prod.sidemenu.service.SideMenuService;
+import kr.co.solbipos.base.prod.sidemenu.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -142,6 +140,162 @@ public class SideMenuServiceImpl implements SideMenuService {
         }
 
         if ( result == sideMenuAttrCdVOS.length) {
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+    }
+
+    /** 사이드메뉴-선택메뉴탭-선택그룹 목록 조회 */
+    @Override
+    public List<DefaultMap<String>> getMenuGrpList(SideMenuSelGroupVO sideMenuSelGroupVO,
+        SessionInfoVO sessionInfoVO) {
+
+        // 소속구분 설정
+        sideMenuSelGroupVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        sideMenuSelGroupVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        sideMenuSelGroupVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        return sideMenuMapper.getMenuGrpList(sideMenuSelGroupVO);
+    }
+
+    /** 사이드메뉴-선택메뉴탭-선택그룹 저장 */
+    @Override
+    public int saveMenuGrpList(SideMenuSelGroupVO[] sideMenuSelGroupVOs,
+        SessionInfoVO sessionInfoVO) {
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        for ( SideMenuSelGroupVO sideMenuSelGroupVO : sideMenuSelGroupVOs) {
+
+            // 소속구분 설정
+            sideMenuSelGroupVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            sideMenuSelGroupVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            sideMenuSelGroupVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+            sideMenuSelGroupVO.setRegDt(currentDt);
+            sideMenuSelGroupVO.setRegId(sessionInfoVO.getUserId());
+            sideMenuSelGroupVO.setModDt(currentDt);
+            sideMenuSelGroupVO.setModId(sessionInfoVO.getUserId());
+
+            // 추가
+            if ( sideMenuSelGroupVO.getStatus() == GridDataFg.INSERT ) {
+                result += sideMenuMapper.insertMenuGrpList(sideMenuSelGroupVO);
+                // 수정
+            } else if ( sideMenuSelGroupVO.getStatus() == GridDataFg.UPDATE ) {
+                result += sideMenuMapper.updateMenuGrpList(sideMenuSelGroupVO);
+                // 삭제
+            } else if ( sideMenuSelGroupVO.getStatus() == GridDataFg.DELETE ) {
+                result += sideMenuMapper.deleteMenuGrpList(sideMenuSelGroupVO);
+            }
+
+        }
+
+        if ( result == sideMenuSelGroupVOs.length) {
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+    }
+
+    /** 사이드메뉴-선택메뉴탭-선택분류 목록 조회 */
+    @Override
+    public List<DefaultMap<String>> getMenuClassList(SideMenuSelClassVO sideMenuSelClassVO,
+        SessionInfoVO sessionInfoVO) {
+
+        // 소속구분 설정
+        sideMenuSelClassVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        sideMenuSelClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        sideMenuSelClassVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        return sideMenuMapper.getMenuClassList(sideMenuSelClassVO);
+    }
+
+    /** 사이드메뉴-선택메뉴탭-선택분류 저장 */
+    @Override
+    public int saveMenuClassList(SideMenuSelClassVO[] sideMenuSelClassVOs,
+        SessionInfoVO sessionInfoVO) {
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        for ( SideMenuSelClassVO sideMenuSelClassVO : sideMenuSelClassVOs) {
+
+            // 소속구분 설정
+            sideMenuSelClassVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            sideMenuSelClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            sideMenuSelClassVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+            sideMenuSelClassVO.setRegDt(currentDt);
+            sideMenuSelClassVO.setRegId(sessionInfoVO.getUserId());
+            sideMenuSelClassVO.setModDt(currentDt);
+            sideMenuSelClassVO.setModId(sessionInfoVO.getUserId());
+
+            // 추가
+            if ( sideMenuSelClassVO.getStatus() == GridDataFg.INSERT ) {
+                result += sideMenuMapper.insertMenuClassList(sideMenuSelClassVO);
+                // 수정
+            } else if ( sideMenuSelClassVO.getStatus() == GridDataFg.UPDATE ) {
+                result += sideMenuMapper.updateMenuClassList(sideMenuSelClassVO);
+                // 삭제
+            } else if ( sideMenuSelClassVO.getStatus() == GridDataFg.DELETE ) {
+                result += sideMenuMapper.deleteMenuClassList(sideMenuSelClassVO);
+            }
+
+        }
+
+        if ( result == sideMenuSelClassVOs.length) {
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+    }
+
+    /** 사이드메뉴-선택메뉴탭-선택상품 목록 조회 */
+    @Override
+    public List<DefaultMap<String>> getMenuProdList(SideMenuSelProdVO sideMenuSelProdVO,
+        SessionInfoVO sessionInfoVO) {
+
+        // 소속구분 설정
+        sideMenuSelProdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        sideMenuSelProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        sideMenuSelProdVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        return sideMenuMapper.getMenuProdList(sideMenuSelProdVO);
+    }
+
+    /** 사이드메뉴-선택메뉴탭-선택상품 저장 */
+    @Override
+    public int saveMenuProdList(SideMenuSelProdVO[] sideMenuSelProdVOs,
+        SessionInfoVO sessionInfoVO) {
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        for ( SideMenuSelProdVO sideMenuSelProdVO : sideMenuSelProdVOs) {
+
+            // 소속구분 설정
+            sideMenuSelProdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            sideMenuSelProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            sideMenuSelProdVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+            sideMenuSelProdVO.setRegDt(currentDt);
+            sideMenuSelProdVO.setRegId(sessionInfoVO.getUserId());
+            sideMenuSelProdVO.setModDt(currentDt);
+            sideMenuSelProdVO.setModId(sessionInfoVO.getUserId());
+
+            // 추가
+            if ( sideMenuSelProdVO.getStatus() == GridDataFg.INSERT ) {
+                result += sideMenuMapper.insertMenuProdList(sideMenuSelProdVO);
+                // 수정
+            } else if ( sideMenuSelProdVO.getStatus() == GridDataFg.UPDATE ) {
+                result += sideMenuMapper.updateMenuProdList(sideMenuSelProdVO);
+                // 삭제
+            } else if ( sideMenuSelProdVO.getStatus() == GridDataFg.DELETE ) {
+                result += sideMenuMapper.deleteMenuProdList(sideMenuSelProdVO);
+            }
+
+        }
+
+        if ( result == sideMenuSelProdVOs.length) {
             return result;
         } else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));

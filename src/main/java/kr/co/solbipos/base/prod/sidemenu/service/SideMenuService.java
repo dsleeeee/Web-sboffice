@@ -35,7 +35,22 @@ public interface SideMenuService {
     /** 사이드메뉴-속성탭-속성 저장 */
     int saveAttrCdList(SideMenuAttrCdVO[] sideMenuAttrCdVOS, SessionInfoVO sessionInfoVO);
 
+    /** 사이드메뉴-선택메뉴탭-선택그룹 목록 조회 */
+    List<DefaultMap<String>> getMenuGrpList(SideMenuSelGroupVO sideMenuSelGroupVO, SessionInfoVO sessionInfoVO);
 
+    /** 사이드메뉴-선택메뉴탭-선택그룹 저장 */
+    int saveMenuGrpList(SideMenuSelGroupVO[] sideMenuSelGroupVOs, SessionInfoVO sessionInfoVO);
 
+    /** 사이드메뉴-선택메뉴탭-선택분류 목록 조회 */
+    List<DefaultMap<String>> getMenuClassList(SideMenuSelClassVO sideMenuSelClassVO, SessionInfoVO sessionInfoVO);
+
+    /** 사이드메뉴-선택메뉴탭-선택분류 저장 */
+    int saveMenuClassList(SideMenuSelClassVO[] sideMenuSelClassVOs, SessionInfoVO sessionInfoVO);
+
+    /** 사이드메뉴-선택메뉴탭-선택상품 목록 조회 */
+    List<DefaultMap<String>> getMenuProdList(SideMenuSelProdVO sideMenuSelProdVO, SessionInfoVO sessionInfoVO);
+
+    /** 사이드메뉴-선택메뉴탭-선택상품 저장 */
+    int saveMenuProdList(SideMenuSelProdVO[] sideMenuSelProdVOs, SessionInfoVO sessionInfoVO);
 
 }
