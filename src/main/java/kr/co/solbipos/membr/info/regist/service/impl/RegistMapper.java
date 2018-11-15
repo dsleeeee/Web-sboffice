@@ -18,6 +18,7 @@ import java.util.List;
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2018.05.01  정용길      최초생성
+ * @ 2018.11.09  김지은      회원정보관리 수정
  *
  * @author NHN한국사이버결제 KCP 정용길
  * @since 2018.05.01
@@ -34,23 +35,22 @@ public interface RegistMapper {
      *
      * @return
      */
-    List<DefaultMap<String>> selectRgstrStore(HqManageVO hqManageVO);
+    List<DefaultMap<String>> getRegistStore(HqManageVO hqManageVO);
 
     /**
      * 회원등급 리스트 조회
      * @param membrClassVO
      * @return
      */
-    List<DefaultMap<String>> selectMemberClassList(MembrClassVO membrClassVO);
+    List<DefaultMap<String>> getMemberClassList(MembrClassVO membrClassVO);
 
     /**
      * 회원정보 리스트 조회
      *
      * @param registVO
-     * @param <E>
      * @return
      */
-    <E> List<E> selectMembers(RegistVO registVO);
+    List<DefaultMap<String>> getMemberList(RegistVO registVO);
 
     /**
      * 회원정보 조회
@@ -58,7 +58,7 @@ public interface RegistMapper {
      * @param registVO
      * @return
      */
-    RegistVO selectMember(RegistVO registVO);
+    DefaultMap<String> getMemberInfo(RegistVO registVO);
 
     /**
      * 회원정보 저장
@@ -66,7 +66,7 @@ public interface RegistMapper {
      * @param registVO
      * @return
      */
-    int insertRegistMember(RegistVO registVO);
+    int registMemberInfo(RegistVO registVO);
 
     /**
      * 회원정보 수정
@@ -74,7 +74,7 @@ public interface RegistMapper {
      * @param registVO
      * @return
      */
-    int updateMember(RegistVO registVO);
+    int updateMemberInfo(RegistVO registVO);
 
     /**
      * 회원정보 삭제
@@ -82,7 +82,7 @@ public interface RegistMapper {
      * @param registVO
      * @return
      */
-    int deleteMember(RegistVO registVO);
+    int deleteMemberInfo(RegistVO registVO);
 
     /**
      * 회원카드 등록

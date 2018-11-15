@@ -1,7 +1,9 @@
 package kr.co.solbipos.membr.info.regist.service;
 
+import kr.co.common.data.enums.UseYn;
 import kr.co.solbipos.application.common.service.PageVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.membr.info.regist.enums.WeddingYn;
 import kr.co.solbipos.membr.info.regist.service.enums.AnvType;
 import kr.co.solbipos.membr.info.regist.service.enums.PeriodType;
 import kr.co.solbipos.membr.info.regist.validate.Regist;
@@ -52,6 +54,8 @@ public class RegistVO extends PageVO {
     /** 등록매장코드 */
     @NotBlank(groups = {Regist.class}, message = "{regist.reg.store.cd}{cmm.require.text}")
     private String regStoreCd;
+    /** 등록매장코드(여러건) */
+    private String regStoreCds[];
     /** 우편번호 */
     private String postNo;
     /** 주소 */
@@ -73,16 +77,16 @@ public class RegistVO extends PageVO {
     @NotBlank(groups = {Regist.class}, message = "{regist.tel}{cmm.require.text}")
     private String telNo;
     /** 결혼여부 기혼:Y 미혼:N */
-    @NotBlank(groups = {Regist.class}, message = "{regist.wedding}{cmm.require.text}")
-    private String weddingYn;
+//    @NotBlank(groups = {Regist.class}, message = "{regist.wedding}{cmm.require.text}")
+    private WeddingYn weddingYn;
     /** 결혼기념일 */
     private String weddingday;
     /** 이메일수신여부 */
-    @NotBlank(groups = {Regist.class}, message = "{regist.email.recv}{cmm.require.text}")
-    private String emailRecvYn;
+//    @NotBlank(groups = {Regist.class}, message = "{regist.email.recv}{cmm.require.text}")
+    private UseYn emailRecvYn;
     /** SMS수신여부 */
-    @NotBlank(groups = {Regist.class}, message = "{regist.sms.recv}{cmm.require.text}")
-    private String smsRecvYn;
+//    @NotBlank(groups = {Regist.class}, message = "{regist.sms.recv}{cmm.require.text}")
+    private UseYn smsRecvYn;
     /** 사용여부 */
     @NotBlank(groups = {Regist.class}, message = "{cmm.useYn}{cmm.require.text}")
     private String useYn;
@@ -102,8 +106,6 @@ public class RegistVO extends PageVO {
     private String periodEndDate;
     /** 후불회원 적용매장코드 */
     private String creditStoreCds;
-//    /** 후불회원 적용매장명 */
-//    private String creditStoreNms;
 
 
     /**
@@ -272,6 +274,21 @@ public class RegistVO extends PageVO {
     }
 
     /**
+     * @return the regStoreCds
+     */
+
+    public String[] getRegStoreCds() {
+        return regStoreCds;
+    }
+
+    /**
+     * @param regStoreCds the regStoreCds to set
+     */
+    public void setRegStoreCds(String[] regStoreCds) {
+        this.regStoreCds = regStoreCds;
+    }
+
+    /**
      * @return the postNo
      */
 
@@ -406,24 +423,21 @@ public class RegistVO extends PageVO {
         this.telNo = telNo;
     }
 
+
     /**
      * @return the weddingYn
      */
 
-    public String getWeddingYn() {
+    public WeddingYn getWeddingYn() {
         return weddingYn;
     }
 
     /**
      * @param weddingYn the weddingYn to set
      */
-    public void setWeddingYn(String weddingYn) {
+    public void setWeddingYn(WeddingYn weddingYn) {
         this.weddingYn = weddingYn;
     }
-
-    /**
-     * @return the weddingday
-     */
 
     public String getWeddingday() {
         return weddingday;
@@ -436,18 +450,20 @@ public class RegistVO extends PageVO {
         this.weddingday = weddingday;
     }
 
+
+
     /**
      * @return the emailRecvYn
      */
 
-    public String getEmailRecvYn() {
+    public UseYn getEmailRecvYn() {
         return emailRecvYn;
     }
 
     /**
      * @param emailRecvYn the emailRecvYn to set
      */
-    public void setEmailRecvYn(String emailRecvYn) {
+    public void setEmailRecvYn(UseYn emailRecvYn) {
         this.emailRecvYn = emailRecvYn;
     }
 
@@ -455,14 +471,14 @@ public class RegistVO extends PageVO {
      * @return the smsRecvYn
      */
 
-    public String getSmsRecvYn() {
+    public UseYn getSmsRecvYn() {
         return smsRecvYn;
     }
 
     /**
      * @param smsRecvYn the smsRecvYn to set
      */
-    public void setSmsRecvYn(String smsRecvYn) {
+    public void setSmsRecvYn(UseYn smsRecvYn) {
         this.smsRecvYn = smsRecvYn;
     }
 
@@ -601,19 +617,4 @@ public class RegistVO extends PageVO {
     public void setCreditStoreCds(String creditStoreCds) {
         this.creditStoreCds = creditStoreCds;
     }
-
-//    /**
-//     * @return the creditStoreNms
-//     */
-//
-//    public String getCreditStoreNms() {
-//        return creditStoreNms;
-//    }
-//
-//    /**
-//     * @param creditStoreNms the creditStoreNms to set
-//     */
-//    public void setCreditStoreNms(String creditStoreNms) {
-//        this.creditStoreNms = creditStoreNms;
-//    }
 }

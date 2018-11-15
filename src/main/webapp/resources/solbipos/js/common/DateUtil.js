@@ -37,6 +37,7 @@ function getFormatDate(date, seperator)
         var year  = date.substr(0,4);
         var month = date.substr(4,2);
         var day   = date.substr(6,2);
+
         return (year + seperator + month + seperator + day );
     }
     catch(e)
@@ -74,7 +75,7 @@ function getFormatDateTime(date, seperator_date, seperator_time)
 }
 
 /**
- *
+ * 날짜를 날짜형태 문자열로 변형 (yyyy-mm-dd)
  * @param date
  * @returns {number}
  */
@@ -90,4 +91,22 @@ function dateToDaystring(date){
   var dayStr = day.leftPad("0",2);
 
   return(year + "-"+ monthStr  + "-"+ dayStr );
+}
+
+
+/**
+ * 문자열을 날짜로 변경
+ * @param date
+ * @returns {number}
+ */
+function stringToDate(str){
+
+  if( isEmptyObject(str) ) {
+    return;
+  }
+
+  var formatString = getFormatDate(str, '-');
+  var date         = formatString.split('-');
+
+  return new Date(date[0], date[1]-1 , date[2]);
 }

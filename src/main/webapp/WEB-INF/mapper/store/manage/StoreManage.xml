@@ -495,10 +495,12 @@
     -->
     <insert id="insertDefaultPrintTemplete" parameterType="storeManageVO" >
         /* USE : StoreManageMapper.insertDefaultPrintTemplete */
-        INSERT INTO TB_MS_PRINT
+        INSERT INTO TB_MS_PRINT_TEMPL
         (
             STORE_CD,
             PRT_CLASS_CD,
+            TEMPLT_REG_FG,
+            TEMPLT_CD,
             PRT_FORM,
             REG_DT,
             REG_ID,
@@ -507,17 +509,14 @@
         )
         SELECT #{storeCd},
                PRT_CLASS_CD,
+               TEMPLT_REG_FG,
+               TEMPLT_CD,
                PRT_FORM,
                #{regDt},
                #{regId},
                #{modDt},
                #{modId}
           FROM TB_CM_PRINT_TEMPL
-         WHERE (PRT_CLASS_CD, TEMPLT_CD) IN (
-         SELECT PRT_CLASS_CD,
-                MIN(TEMPLT_CD)
-           FROM TB_CM_PRINT_TEMPL
-          GROUP BY PRT_CLASS_CD )
     </insert>
 
     <!-- 포스 출력물 마스터 등록 (프랜차이즈) -->
@@ -528,10 +527,12 @@
     -->
     <insert id="insertHqPrintTemplete" parameterType="storeManageVO" >
         /* USE : StoreManageMapper.insertHqPrintTemplete */
-        INSERT INTO TB_MS_PRINT
+        INSERT INTO TB_MS_PRINT_TEMPL
         (
             STORE_CD,
             PRT_CLASS_CD,
+            TEMPLT_REG_FG,
+            TEMPLT_CD,
             PRT_FORM,
             REG_DT,
             REG_ID,
@@ -540,12 +541,14 @@
         )
         SELECT #{storeCd},
                PRT_CLASS_CD,
+               TEMPLT_REG_FG,
+               TEMPLT_CD,
                PRT_FORM,
                #{regDt},
                #{regId},
                #{modDt},
                #{modId}
-          FROM TB_HQ_PRINT
+          FROM TB_HQ_PRINT_TEMPL
          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
     </insert>
 

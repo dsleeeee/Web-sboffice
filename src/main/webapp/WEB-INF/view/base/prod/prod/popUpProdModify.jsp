@@ -82,7 +82,7 @@
               <input type="text" id="_prodClassCdNm" name="prodClassCdNm" class="sb-input w100"
                      ng-model="prodModifyInfo.prodClassCdNm"
                      required
-                     popover-enable="myForm.prodClassCd.$invalid"
+                     popover-enable="myForm.prodClassCdNm.$invalid"
                      popover-placement="bottom-left"
                      popover-trigger="'mouseenter'"
                      uib-popover="<s:message code="prod.prodClass" />은(는) 필수 입력항목 입니다."
