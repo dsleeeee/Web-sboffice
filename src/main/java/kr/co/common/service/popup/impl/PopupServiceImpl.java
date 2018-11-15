@@ -6,7 +6,6 @@ import kr.co.common.data.domain.VanVO;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.popup.PopupService;
-import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreManageVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

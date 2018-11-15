@@ -201,8 +201,13 @@
     <typeAlias alias="touchKeyVO" type="kr.co.solbipos.base.prod.touchkey.service.TouchKeyVO"/>
     <typeAlias alias="touchKeyClassVO" type="kr.co.solbipos.base.prod.touchkey.service.TouchKeyClassVO"/>
     <typeAlias alias="touchKeyStyleVO" type="kr.co.solbipos.base.prod.touchkey.service.TouchKeyStyleVO"/>
+    <typeAlias alias="sideMenuAttrClassVO" type="kr.co.solbipos.base.prod.sidemenu.service.SideMenuAttrClassVO"/>
+    <typeAlias alias="sideMenuAttrCdVO" type="kr.co.solbipos.base.prod.sidemenu.service.SideMenuAttrCdVO"/>
+    <typeAlias alias="sideMenuSelGroupVO" type="kr.co.solbipos.base.prod.sidemenu.service.SideMenuSelGroupVO"/>
+    <typeAlias alias="sideMenuSelClassVO" type="kr.co.solbipos.base.prod.sidemenu.service.SideMenuSelClassVO"/>
+    <typeAlias alias="sideMenuSelProdVO" type="kr.co.solbipos.base.prod.sidemenu.service.SideMenuSelProdVO"/>
+
 <!--
-    <typeAlias alias="sideMenuVO" type="kr.co.solbipos.base.prod.sidemenu.service.SideMenuVO"/>
     <typeAlias alias="chgBatchVO" type="kr.co.solbipos.base.prod.chgbatch.service.ChgBatchVO"/>
     <typeAlias alias="cornerVO" type="kr.co.solbipos.base.prod.corner.service.CornerVO"/>
     <typeAlias alias="salePriceManageVO" type="kr.co.solbipos.base.price.salepricemanage.service.SalePriceManageVO"/>

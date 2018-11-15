@@ -61,7 +61,7 @@ app.controller('creditStoreRegistCtrl', ['$scope', '$http', function ($scope, $h
 
   // 등록 매장 삭제
   $scope.delete = function(){
-    var params = new Array();
+    var params = [];
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
       if($scope.flex.collectionView.items[i].gChk) {
         $scope.flex.collectionView.items[i].memberNo = $scope.selectedMember.membrNo;
@@ -135,7 +135,7 @@ app.controller('creditStoreNoRegistCtrl', ['$scope', '$http', function ($scope, 
 
   // 매장 등록
   $scope.regist = function() {
-    var params = new Array();
+    var params = [];
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
       if($scope.flex.collectionView.items[i].gChk) {
         $scope.flex.collectionView.items[i].memberNo = $scope.selectedMember.membrNo;

@@ -4,7 +4,6 @@ import kr.co.common.data.domain.AgencyVO;
 import kr.co.common.data.domain.HqOfficeVO;
 import kr.co.common.data.domain.VanVO;
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreManageVO;
 
 import java.util.List;

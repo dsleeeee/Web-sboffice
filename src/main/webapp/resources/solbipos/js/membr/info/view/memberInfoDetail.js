@@ -54,7 +54,7 @@ app.controller('memberInfoDetailCtrl', ['$scope', '$http', function ($scope, $ht
 
       // console.log(response);
 
-      if($.isEmptyObject(response.data) ) { ww
+      if($.isEmptyObject(response.data) ) { ww;
         $scope._popMsg(messages["cmm.empty.data"]);
         $scope.memberRegistLayer.hide();
         return false;
