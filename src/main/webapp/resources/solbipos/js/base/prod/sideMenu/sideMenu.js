@@ -16,29 +16,32 @@ app.controller('sideMenuCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('sideMenuCtrl', $scope, $http, false));
   // 속성 탭
-  $scope.isAttrTab = true;
+  $scope.isAttrTab = false;
   // 선택메뉴 탭
-  $scope.isMenuTab = false;
+  $scope.isMenuTab = true;
   // 탭변경
   $scope.changeTab = function(type){
-    // 그리드 refresh
-    $scope._broadcast("selectMenuRefresh");
     // 속성 탭
     if ( type === 'A' ) {
       $("#sideMenuAttr").addClass("on");
       $("#sideMenuSelectMenu").removeClass("on");
-      $scope.isAttrTab = true;
-      $scope.isMenuTab = false;
+      $scope.isAttrTab = false;
+      $scope.isMenuTab = true;
+      // 속성 조회
       $scope._broadcast("sideMenuAttrClassCtrl");
     // 선택메뉴 탭
     } else if ( type === 'M' ) {
       $("#sideMenuAttr").removeClass("on");
       $("#sideMenuSelectMenu").addClass("on");
-      $scope.isAttrTab = false;
-      $scope.isMenuTab = true;
+      $scope.isAttrTab = true;
+      $scope.isMenuTab = false;
+      // 선택그룹 조회
+      $scope._broadcast("sideMenuSelectGroupCtrl");
+      // 그리드 refresh
+      setTimeout(function () {
+        $scope._broadcast("selectMenuRefresh");
+      }, 10);
     }
-
-
   };
 
 }]);

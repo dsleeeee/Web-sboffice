@@ -3,19 +3,19 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-  <div id="selectMenuArea" class="wj-TblWrap mt20" ng-show="isMenuTab">
+  <div id="selectMenuArea" class="wj-TblWrap mt20 ng-cloak" ng-hide="isMenuTab">
     <div class="w30 fl">
       <%--위즈모 테이블--%>
       <div id="gridPrint" class="wj-TblWrapBr mr10 pd20" style="height: 480px;" ng-controller="sideMenuSelectGroupCtrl">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='sideMenu.selectMenu.sdselGrp' /></span>
-          <button class="btn_skyblue" id="btnAddGroup" style="display: none;" ng-click="addRow()">
+          <button class="btn_skyblue" id="btnAddSelGroup" style="display: none;" ng-click="addRow()">
             <s:message code="cmm.add" />
           </button>
-          <button class="btn_skyblue" id="btnDelGroup" style="display: none;" ng-click="delete()">
+          <button class="btn_skyblue" id="btnDelSelGroup" style="display: none;" ng-click="delete()">
             <s:message code="cmm.delete" />
           </button>
-          <button class="btn_skyblue" id="btnSaveGroup" style="display: none;" ng-click="save()">
+          <button class="btn_skyblue" id="btnSaveSelGroup" style="display: none;" ng-click="save()">
             <s:message code="cmm.save" />
           </button>
         </div>
@@ -47,19 +47,19 @@
       <div id="gridMapng" class="wj-TblWrapBr ml10 pd20" style="height: 480px;" ng-controller="sideMenuSelectClassCtrl">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='sideMenu.selectMenu.sdselClass' /></span>
-          <button class="btn_up" id="btnUpClass" style="display: none;" ng-click="rowMoveUp()">
+          <button class="btn_up" id="btnUpSelClass" style="display: none;" ng-click="rowMoveUp()">
             <s:message code="cmm.up" />
           </button>
-          <button class="btn_down" id="btnDownClass" style="display: none;" ng-click="rowMoveDown()">
+          <button class="btn_down" id="btnDownSelClass" style="display: none;" ng-click="rowMoveDown()">
             <s:message code="cmm.down" />
           </button>
-          <button class="btn_skyblue" id="btnAddClass" style="display: none;" ng-click="addRow()">
+          <button class="btn_skyblue" id="btnAddSelClass" style="display: none;" ng-click="addRow()">
             <s:message code="cmm.add" />
           </button>
-          <button class="btn_skyblue" id="btnDelClass" style="display: none;">
+          <button class="btn_skyblue" id="btnDelSelClass" style="display: none;">
             <s:message code="cmm.delete" />
           </button>
-          <button class="btn_skyblue" id="btnSaveClass" style="display: none;" ng-click="save()">
+          <button class="btn_skyblue" id="btnSaveSelClass" style="display: none;" ng-click="save()">
             <s:message code="cmm.save" />
           </button>
         </div>
@@ -92,19 +92,19 @@
       <div id="gridMapng" class="wj-TblWrapBr ml10 pd20" style="height: 480px;" ng-controller="sideMenuSelectProdCtrl">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='sideMenu.selectMenu.sdselProd' /></span>
-          <button class="btn_up" id="btnUpProd" style="display: none;" ng-click="rowMoveUp()">
+          <button class="btn_up" id="btnUpSelProd" style="display: none;" ng-click="rowMoveUp()">
             <s:message code="cmm.up" />
           </button>
-          <button class="btn_down" id="btnDownProd" style="display: none;" ng-click="rowMoveDown()">
+          <button class="btn_down" id="btnDownSelProd" style="display: none;" ng-click="rowMoveDown()">
             <s:message code="cmm.down" />
           </button>
-          <button class="btn_skyblue" id="btnAddProd" style="display: none;" ng-click="addRow()">
+          <button class="btn_skyblue" id="btnAddSelProd" style="display: none;" ng-click="addRow()">
             <s:message code="cmm.add" />
           </button>
-          <button class="btn_skyblue" id="btnDelProd" style="display: none;">
+          <button class="btn_skyblue" id="btnDelSelProd" style="display: none;">
             <s:message code="cmm.delete" />
           </button>
-          <button class="btn_skyblue" id="btnSaveProd" style="display: none;" ng-click="save()">
+          <button class="btn_skyblue" id="btnSaveSelProd" style="display: none;" ng-click="save()">
             <s:message code="cmm.save" />
           </button>
         </div>

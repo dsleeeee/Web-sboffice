@@ -21,9 +21,9 @@ app.controller('sideMenuAttrClassCtrl', ['$scope', '$http', function ($scope, $h
     s.formatItem.addHandler(function (s, e) {
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
-        if (col.binding === "sdattrClassCd") {
+        if (col.binding === 'sdattrClassCd') {
           var item = s.rows[e.row].dataItem;
-          if (item.status !== "I") {
+          if (item.status !== 'I') {
             wijmo.addClass(e.cell, 'wijLink');
             wijmo.addClass(e.cell, 'wj-custom-readonly');
           } else {
@@ -35,9 +35,9 @@ app.controller('sideMenuAttrClassCtrl', ['$scope', '$http', function ($scope, $h
     // 속성분류 그리드 에디팅 방지
     s.beginningEdit.addHandler(function (s, e) {
       var col = s.columns[e.col];
-      if (col.binding === "sdattrClassCd") {
+      if (col.binding === 'sdattrClassCd') {
         var dataItem = s.rows[e.row].dataItem;
-        if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
+        if (nvl(dataItem.status, '') === '' && dataItem.status !== 'I') {
           e.cancel = true;
         }
       }
@@ -48,21 +48,23 @@ app.controller('sideMenuAttrClassCtrl', ['$scope', '$http', function ($scope, $h
       if( ht.cellType === wijmo.grid.CellType.Cell) {
         var col = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
-        if ( col.binding === "sdattrClassCd" && selectedRow.status !== "I") {
+        if ( col.binding === 'sdattrClassCd' && selectedRow.status !== 'I') {
           $scope._broadcast('sideMenuAttrAttrCtrl', selectedRow.sdattrClassCd);
         }
       }
     });
+    // 초기화시 조회
+    $scope._broadcast('sideMenuAttrClassCtrl');
   };
   // 속성분류 그리드 조회
-  $scope.$on("sideMenuAttrClassCtrl", function(event, data) {
+  $scope.$on('sideMenuAttrClassCtrl', function(event, data) {
     // 파라미터
     var params = {};
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
-    $scope._inquiryMain("/base/prod/sideMenu/attrClass/list.sb", params, function() {
-      $("#btnAddClass").show();
-      $("#btnDelClass").show();
-      $("#btnSaveClass").show();
+    $scope._inquiryMain('/base/prod/sideMenu/attrClass/list.sb', params, function() {
+      $('#btnAddClass').show();
+      $('#btnDelClass').show();
+      $('#btnSaveClass').show();
 
     });
     // 기능수행 종료 : 반드시 추가
@@ -72,7 +74,7 @@ app.controller('sideMenuAttrClassCtrl', ['$scope', '$http', function ($scope, $h
   $scope.addRow = function() {
     // 파라미터 설정
     var params = {};
-    params.status = "I";
+    params.status = 'I';
     params.gChk = true;
     // 추가기능 수행 : 파라미터
     $scope._addRow(params);
@@ -82,19 +84,22 @@ app.controller('sideMenuAttrClassCtrl', ['$scope', '$http', function ($scope, $h
     // 파라미터 설정
     var params = [];
     for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
-      $scope.flex.collectionView.itemsEdited[u].status = "U";
+      $scope.flex.collectionView.itemsEdited[u].status = 'U';
       params.push($scope.flex.collectionView.itemsEdited[u]);
     }
     for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
-      $scope.flex.collectionView.itemsAdded[i].status = "I";
+      $scope.flex.collectionView.itemsAdded[i].status = 'I';
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
     for (var d = 0; d < $scope.flex.collectionView.itemsRemoved.length; d++) {
-      $scope.flex.collectionView.itemsRemoved[d].status = "D";
+      $scope.flex.collectionView.itemsRemoved[d].status = 'D';
       params.push($scope.flex.collectionView.itemsRemoved[d]);
     }
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save("/base/prod/sideMenu/attrClass/save.sb", params);
+    $scope._save('/base/prod/sideMenu/attrClass/save.sb', params, function() {
+      // 저장 후 재조회
+      $scope._broadcast('sideMenuAttrClassCtrl');
+    });
   }
 
 }]);
@@ -119,9 +124,9 @@ app.controller('sideMenuAttrAttrCtrl', ['$scope', '$http', 'sdattrClassCd', func
     s.formatItem.addHandler(function (s, e) {
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
-        if (col.binding === "sdattrCd") {
+        if (col.binding === 'sdattrCd') {
           var item = s.rows[e.row].dataItem;
-          if (item.status !== "I") {
+          if (item.status !== 'I') {
             wijmo.addClass(e.cell, 'wijLink');
             wijmo.addClass(e.cell, 'wj-custom-readonly');
           } else {
@@ -133,26 +138,28 @@ app.controller('sideMenuAttrAttrCtrl', ['$scope', '$http', 'sdattrClassCd', func
     // 속성 그리드 에디팅 방지
     s.beginningEdit.addHandler(function (s, e) {
       var col = s.columns[e.col];
-      if (col.binding === "sdattrCd") {
+      if (col.binding === 'sdattrCd') {
         var dataItem = s.rows[e.row].dataItem;
-        if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
+        if (nvl(dataItem.status, '') === '' && dataItem.status !== 'I') {
           e.cancel = true;
         }
       }
     });
   };
   // 속성 그리드 조회
-  $scope.$on("sideMenuAttrAttrCtrl", function(event, data) {
+  $scope.$on('sideMenuAttrAttrCtrl', function(event, data) {
     // scope 영역에 변수 Set
     $scope.setSdattrClassCd(data);
     // 파라미터
     var params = {};
     params.sdattrClassCd = data;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
-    $scope._inquiryMain("/base/prod/sideMenu/attrCd/list.sb", params, function() {
-      $("#btnAddAttr").show();
-      $("#btnDelAttr").show();
-      $("#btnSaveAttr").show();
+    $scope._inquiryMain('/base/prod/sideMenu/attrCd/list.sb', params, function() {
+      $('#btnUpAttr').show();
+      $('#btnDownAttr').show();
+      $('#btnAddAttr').show();
+      $('#btnDelAttr').show();
+      $('#btnSaveAttr').show();
 
     });
     // 기능수행 종료 : 반드시 추가
@@ -162,7 +169,8 @@ app.controller('sideMenuAttrAttrCtrl', ['$scope', '$http', 'sdattrClassCd', func
   $scope.addRow = function() {
     // 파라미터 설정
     var params = {};
-    params.status = "I";
+    params.sdattrClassCd = $scope.getSdattrClassCd();
+    params.status = 'I';
     params.gChk = true;
     // 추가기능 수행 : 파라미터
     $scope._addRow(params);
@@ -181,19 +189,22 @@ app.controller('sideMenuAttrAttrCtrl', ['$scope', '$http', 'sdattrClassCd', func
     // 파라미터 설정
     var params = [];
     for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
-      $scope.flex.collectionView.itemsEdited[u].status = "U";
+      $scope.flex.collectionView.itemsEdited[u].status = 'U';
       params.push($scope.flex.collectionView.itemsEdited[u]);
     }
     for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
-      $scope.flex.collectionView.itemsAdded[i].status = "I";
+      $scope.flex.collectionView.itemsAdded[i].status = 'I';
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
     for (var d = 0; d < $scope.flex.collectionView.itemsRemoved.length; d++) {
-      $scope.flex.collectionView.itemsRemoved[d].status = "D";
+      $scope.flex.collectionView.itemsRemoved[d].status = 'D';
       params.push($scope.flex.collectionView.itemsRemoved[d]);
     }
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save("/base/prod/sideMenu/attrCd/save.sb", params);
+    $scope._save('/base/prod/sideMenu/attrCd/save.sb', params, function() {
+      // 저장 후 재조회
+      $scope._broadcast('sideMenuAttrAttrCtrl', $scope.getSdattrClassCd());
+    });
   };
   // 위로 옮기기 버튼
   $scope.rowMoveUp = function() {
@@ -231,7 +242,6 @@ app.controller('sideMenuAttrAttrCtrl', ['$scope', '$http', 'sdattrClassCd', func
     }
     $scope.flex.select(movedRows, 1);
   };
-
 }]).factory('sdattrClassCd', function () {
   // 사이드메뉴 속성 그리드 의 변수 값 영역
   var sdattrClassCd = {};

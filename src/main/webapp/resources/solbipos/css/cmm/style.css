@@ -1928,3 +1928,7 @@ div input.sb-input {border:1px solid #e8e8e8; padding:0 10px; height:30px; line-
     border-right-width: 0;
     border-left-color: #fff;
 }
+
+.ng-hide.ng-hide-animate {
+    display: none
+}
