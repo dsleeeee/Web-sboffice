@@ -23,12 +23,17 @@
         /* USE : DeliveryChargerManageMapper.getDeliveryChargerList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         <![CDATA[
-        SELECT  tphdc.*
+        SELECT  tphdc.DLVR_CD, tphdc.DLVR_NM
+        ,       tphdc.CAR_NO, tphdc.USE_YN
+        ,       COUNT(tphdcs.STORAGE_CD) AS STORAGE_CNT
         ]]>
         <include refid="CmmSQL.PagingTemplateCount"/>
         <![CDATA[
         FROM    TB_PO_HQ_DELIVERY_CHARGER tphdc
-        WHERE   tphdc.HQ_OFFICE_CD = #{hqOfficeCd}
+        ,       TB_PO_HQ_DELIVERY_CHARGER_STORAGE tphdcs
+        WHERE   tphdc.HQ_OFFICE_CD    = #{hqOfficeCd}
+        AND     tphdcs.HQ_OFFICE_CD(+)= tphdc.HQ_OFFICE_CD
+        AND     tphdcs.DLVR_CD     (+)= tphdc.DLVR_CD
         ]]>
         <if test='dlvrCd != null and dlvrCd != ""'>
             AND tphdc.DLVR_CD = #{dlvrCd}
@@ -39,6 +44,8 @@
         <if test='carNo != null and carNo != ""'>
             AND tphdc.CAR_NO = #{carNo}
         </if>
+        GROUP BY tphdc.DLVR_CD, tphdc.DLVR_NM
+        ,        tphdc.CAR_NO, tphdc.USE_YN
         ORDER BY tphdc.DLVR_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>

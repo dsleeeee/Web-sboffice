@@ -15,22 +15,29 @@
     <div class="wj-dialog-body sc2" style="height: 600px;">
       <p id="registSubTitle" class="s14 bk mb5 fl"></p>
 
-      <table class="tblType01" style="position: relative;">
-        <colgroup>
-          <col class="w15"/>
-          <col class="w35"/>
-          <col class="w15"/>
-          <col class="w35"/>
-        </colgroup>
-        <tbody>
-        <tr>
-          <th><s:message code="hqAdj.dtl.adjTitle"/><em class="imp">*</em></th>
-          <td colspan="3">
-            <input type="text" id="dtlAdjTitle" name="dtlAdjTitle" ng-model="adjTitle" class="sb-input w100" maxlength="33"/>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+      <form name="myForm" novalidate>
+        <table class="tblType01" style="position: relative;">
+          <colgroup>
+            <col class="w15"/>
+            <col class="w35"/>
+            <col class="w15"/>
+            <col class="w35"/>
+          </colgroup>
+          <tbody>
+          <tr>
+            <th><s:message code="hqAdj.dtl.adjTitle"/><em class="imp">*</em></th>
+            <td colspan="3">
+              <input type="text" id="dtlAdjTitle" name="dtlAdjTitle" ng-model="adjTitle" class="sb-input w100" maxlength="33"
+                     required
+                     popover-enable="myForm.dtlAdjTitle.$invalid"
+                     popover-placement="bottom-left"
+                     popover-trigger="'mouseenter'"
+                     uib-popover="<s:message code="hqAdj.dtl.adjTitle"/>은(는) 필수 입력항목 입니다."/>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </form>
 
       <ul class="txtSty3 mt10">
         <li class="red"><s:message code="hqAdj.dtl.txt1"/></li>

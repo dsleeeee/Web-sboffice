@@ -76,7 +76,7 @@
         <wj-flex-grid-column header="<s:message code="hqSetProdAdj.setDate"/>" binding="setDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqSetProdAdj.prodClassNm"/>" binding="prodClassNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqSetProdAdj.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="hqSetProdAdj.prodNm"/>" binding="prodCd" width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="hqSetProdAdj.prodNm"/>" binding="prodNm" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqSetProdAdj.setMakeFg"/>" binding="setMakeFg" width="100" align="center" is-read-only="true" data-map="setMakeFgMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqSetProdAdj.setProdQty"/>" binding="setProdQty" width="60" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqSetProdAdj.setProdAmt"/>" binding="setProdAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
@@ -118,8 +118,8 @@
     $scope.srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.endDate}");
 
     $scope.setMakeFgMap = new wijmo.grid.DataMap([
-      {id: "0", name: messages["hqSetProdAdj.setMakeFg0"]},
-      {id: "1", name: messages["hqSetProdAdj.setMakeFg1"]}
+      {id: "1", name: messages["hqSetProdAdj.setMakeFg1"]},
+      {id: "2", name: messages["hqSetProdAdj.setMakeFg2"]}
     ], 'id', 'name');
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -132,10 +132,6 @@
       s.formatItem.addHandler(function (s, e) {
         if (e.panel === s.cells) {
           var col = s.columns[e.col];
-          // if (col.binding === "setTitle") { // 제목
-          //   wijmo.addClass(e.cell, 'wijLink');
-          //   wijmo.addClass(e.cell, 'wj-custom-readonly');
-          // }
 
           if (col.format === "date") {
             e.cell.innerHTML = getFormatDate(e.cell.innerText);
@@ -146,20 +142,6 @@
         }
       });
 
-      // 그리드 클릭 이벤트
-      s.addEventListener(s.hostElement, 'mousedown', function (e) {
-        var ht = s.hitTest(e);
-        if (ht.cellType === wijmo.grid.CellType.Cell) {
-          var col         = ht.panel.columns[ht.col];
-          var selectedRow = s.rows[ht.row].dataItem;
-          // if (col.binding === "setTitle") { // 제목 클릭
-          //   var params     = {};
-          //   params.setDate = selectedRow.setDate;
-          //   params.seqNo   = selectedRow.seqNo;
-          //   $scope._broadcast('hqSetProdAdjDtlCtrl', params);
-          // }
-        }
-      });
     };
 
 
@@ -197,9 +179,10 @@
 
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
           var item = $scope.flex.collectionView.itemsEdited[i];
-
-          item.status = "U";
-          params.push(item);
+          if (item.gChk === true) {
+            item.status = "U";
+            params.push(item);
+          }
         }
 
         $scope._save("/stock/setProdAdj/hqSetProdAdj/hqSetProdAdj/delete.sb", params, function () {
@@ -211,7 +194,7 @@
 
     // 세트 구성/해체 등록
     $scope.newHqSetProdAdj = function () {
-      var params        = {};
+      var params = {};
       $scope._broadcast('hqSetProdAdjRegistCtrl', params);
     };
 

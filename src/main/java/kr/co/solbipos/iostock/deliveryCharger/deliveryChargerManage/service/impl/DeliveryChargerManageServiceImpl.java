@@ -79,7 +79,8 @@ public class DeliveryChargerManageServiceImpl implements DeliveryChargerManageSe
 
         // 배송기사 관리창고 삭제
         result = deliveryChargerManageMapper.deleteAllDeliveryChargerStorage(deliveryChargerManageVO);
-        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        // 관리 창고가 없을수도 있기때문에 result 가 0 일때 exception 내는것은 주석처리
+//        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
         // 배송기사 삭제
         result = deliveryChargerManageMapper.deleteDeliveryCharger(deliveryChargerManageVO);

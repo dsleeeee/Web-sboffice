@@ -15,7 +15,7 @@
       <a href="#" class="wj-hide btn_close"></a>
     </div>
     <div class="wj-dialog-body">
-      <form id="dlvrForm" ng-submit="submitForm()">
+      <form id="dlvrForm" name="dlvrForm" ng-submit="submitForm()" novalidate>
         <table class="tblType01">
           <colgroup>
             <col class="w15"/>
@@ -27,12 +27,22 @@
           <tr>
             <th><s:message code="deliveryCharger.dlvrCdNm"/><em class="imp">*</em></th>
             <td>
-              <input type="text" id="dlvrCd" class="sb-input" style="width:49%" ng-model="dlvr.dlvrCd" readonly/>
-              <input type="text" id="dlvrNm" class="sb-input" style="width:49%" ng-model="dlvr.dlvrNm" maxlength="18"/>
+              <input type="text" id="dlvrCd" name="dlvrCd" class="sb-input" style="width:49%" ng-model="dlvr.dlvrCd" readonly/>
+              <input type="text" id="dlvrNm" name="dlvrNm" class="sb-input" style="width:49%" ng-model="dlvr.dlvrNm" maxlength="18"
+                     required
+                     popover-enable="dlvrForm.dlvrNm.$invalid"
+                     popover-placement="bottom-left"
+                     popover-trigger="'mouseenter'"
+                     uib-popover="<s:message code="deliveryCharger.dlvrCdNm"/>은(는) 필수 입력항목 입니다."/>
             </td>
             <th><s:message code="deliveryCharger.carNo"/><em class="imp">*</em></th>
             <td>
-              <input type="text" id="carNo" class="sb-input w100" maxlength="14" ng-model="dlvr.carNo"/>
+              <input type="text" id="carNo" name="carNo" class="sb-input w100" maxlength="14" ng-model="dlvr.carNo"
+                     required
+                     popover-enable="dlvrForm.carNo.$invalid"
+                     popover-placement="bottom-left"
+                     popover-trigger="'mouseenter'"
+                     uib-popover="<s:message code="deliveryCharger.carNo"/>은(는) 필수 입력항목 입니다."/>
             </td>
           </tr>
           <tr>
@@ -259,7 +269,7 @@
         // ajax 통신 설정
         $http({
           method : 'POST', //방식
-          url    : '/iostock/deliveryCharger/deliveryChargerManage/deliveryChargerRegist/dlvrDelete.sb', /* 통신할 URL */
+          url    : '/iostock/deliveryCharger/deliveryChargerManage/deliveryChargerRegist/deleteDlvr.sb', /* 통신할 URL */
           params : params, /* 파라메터로 보낼 데이터 */
           headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
         }).then(function successCallback(response) {
@@ -276,23 +286,17 @@
           // "complete" code here
           // 로딩바 hide
           $scope.$broadcast('loadingPopupInactive');
+          // $scope.popupClose();
         });
-
-        // var url       = "/iostock/deliveryCharger/deliveryChargerManage/deliveryChargerRegist/dlvrDelete.sb";
-        // var params    = {};
-        // params.dlvrCd = $scope.dlvrCd;
-        // $scope._postJSONSave.withPopUp(url, params, function (response) {
-        //   $scope.popupClose();
-        // });
       });
     };
 
 
     // 팝업 닫기, 값 초기화, 배송기사 리스트 그리드 조회
     $scope.popupClose = function () {
-      // 초기화
+      // 값 초기화
       $scope.dlvr = angular.copy($scope.default);
-      $scope.wjDlvrRegistLayer.hide();
+      $scope.wjDlvrRegistLayer.hide(true);
       $("#registTitleDlvrNm").html("");
 
       // 배송기사 리스트 그리드 조회
@@ -307,7 +311,7 @@
       var params    = {};
       params.dlvrCd = $scope.dlvrCd;
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
-      $scope._inquirySub("/iostock/deliveryCharger/deliveryChargerManage/deliveryChargerRegist/storageList.sb", params, "", false);
+      $scope._inquirySub("/iostock/deliveryCharger/deliveryChargerManage/deliveryChargerRegist/list.sb", params, "", false);
     };
 
 
@@ -318,7 +322,7 @@
         $scope.flex.collectionView.itemsEdited[i].status = "U";
         params.push($scope.flex.collectionView.itemsEdited[i]);
       }
-      $scope._save("/iostock/deliveryCharger/deliveryChargerManage/deliveryChargerRegist/delStorage.sb", params, function () {
+      $scope._save("/iostock/deliveryCharger/deliveryChargerManage/deliveryChargerRegist/delete.sb", params, function () {
         $scope.searchDlvrChgrStorageList();
       });
     };

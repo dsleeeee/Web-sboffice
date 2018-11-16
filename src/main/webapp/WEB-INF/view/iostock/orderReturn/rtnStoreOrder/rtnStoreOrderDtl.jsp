@@ -185,7 +185,7 @@
 
     // 반품 상세 저장
     $scope.saveRtnStoreOrderDtl = function (saveFg) {
-      var params   = new Array();
+      var params   = [];
       var orderTot = 0;
       for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
         var item       = $scope.flex.collectionView.itemsEdited[i];

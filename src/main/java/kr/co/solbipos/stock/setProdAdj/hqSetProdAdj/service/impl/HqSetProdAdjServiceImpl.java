@@ -83,7 +83,14 @@ public class HqSetProdAdjServiceImpl implements HqSetProdAdjService {
         String currentDt = currentDateTimeString();
 
         for (HqSetProdAdjVO hqSetProdAdjVO : hqSetProdAdjVOs) {
+            // 신규 seq 조회
+            HqSetProdAdjVO newSeqNoVO = new HqSetProdAdjVO();
+            newSeqNoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            newSeqNoVO.setSetDate(hqSetProdAdjVO.getSetDate());
+            String seqNo = hqSetProdAdjMapper.getNewSeqNo(newSeqNoVO);
+
             hqSetProdAdjVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            hqSetProdAdjVO.setSeqNo(Integer.parseInt(seqNo));
             hqSetProdAdjVO.setProcFg("1");
             hqSetProdAdjVO.setRegId(sessionInfoVO.getUserId());
             hqSetProdAdjVO.setRegDt(currentDt);

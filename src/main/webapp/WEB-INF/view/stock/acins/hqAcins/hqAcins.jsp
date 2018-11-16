@@ -224,8 +224,11 @@
             $scope._popMsg(messages["hqAcins.not.delete"]); // 확정 된 자료는 삭제할 수 없습니다.
             return false;
           }
-          item.status = "U";
-          params.push(item);
+
+          if(item.gChk === true) {
+            item.status = "U";
+            params.push(item);
+          }
         }
 
         $scope._save("/stock/acins/hqAcins/hqAcins/delete.sb", params, function () {

@@ -222,8 +222,11 @@
             $scope._popMsg(messages["hqAdj.not.delete"]); // 확정 된 자료는 삭제할 수 없습니다.
             return false;
           }
-          item.status = "U";
-          params.push(item);
+
+          if(item.gChk === true) {
+            item.status = "U";
+            params.push(item);
+          }
         }
 
         $scope._save("/stock/adj/hqAdj/hqAdj/delete.sb", params, function () {

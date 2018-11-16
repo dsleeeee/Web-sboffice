@@ -15,50 +15,56 @@
     <div class="wj-dialog-body sc2" style="height: 600px;">
       <p id="registSubTitle" class="s14 bk mb5 fl"></p>
 
-      <table class="tblType01" style="position: relative;">
-        <colgroup>
-          <col class="w15"/>
-          <col class="w35"/>
-          <col class="w15"/>
-          <col class="w35"/>
-        </colgroup>
-        <tbody>
-        <tr>
-          <%-- 실사제목 --%>
-          <th><s:message code="hqAcins.reg.acinsTitle"/><em class="imp">*</em></th>
-          <td colspan="3">
-            <input type="text" id="acinsTitle" name="acinsTitle" ng-model="acinsTitle" class="sb-input w100" maxlength="33"/>
-          </td>
-        </tr>
-        <tr>
-          <%-- 상품코드 --%>
-          <th><s:message code="hqAcins.reg.prodCd"/></th>
-          <td>
-            <input type="text" id="srchProdCd" name="srchProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13"/>
-          </td>
-          <%-- 상품명 --%>
-          <th><s:message code="hqAcins.reg.prodNm"/></th>
-          <td>
-            <input type="text" id="srchProdNm" name="srchProdNm" ng-model="prodNm" class="sb-input w100" maxlength="50"/>
-          </td>
-        </tr>
-        <tr>
-          <%-- 바코드 --%>
-          <th><s:message code="hqAcins.reg.barcd"/></th>
-          <td>
-            <input type="text" id="srchBarcdCd" name="srchBarcdCd" ng-model="barcdCd" class="sb-input w100" maxlength="40"/>
-          </td>
-          <%-- 상품분류 --%>
-          <th><s:message code="hqAcins.reg.prodClass"/></th>
-          <td>
-            <input type="text" id="srchProdClass" name="prodClass" ng-model="prodClass" class="sb-input w100" maxlength="40"/>
-          </td>
-        </tr>
-        <tr>
-          <%-- 실사구분 --%>
-          <th><s:message code="hqAcins.reg.acinsFg"/></th>
-          <td>
-            <div class="sb-select">
+      <form name="myForm" novalidate>
+        <table class="tblType01" style="position: relative;">
+          <colgroup>
+            <col class="w15"/>
+            <col class="w35"/>
+            <col class="w15"/>
+            <col class="w35"/>
+          </colgroup>
+          <tbody>
+          <tr>
+            <%-- 실사제목 --%>
+            <th><s:message code="hqAcins.reg.acinsTitle"/><em class="imp">*</em></th>
+            <td colspan="3">
+              <input type="text" id="acinsTitle" name="acinsTitle" ng-model="acinsTitle" class="sb-input w100" maxlength="33"
+                     required
+                     popover-enable="myForm.acinsTitle.$invalid"
+                     popover-placement="bottom-left"
+                     popover-trigger="'mouseenter'"
+                     uib-popover="<s:message code="hqAcins.reg.acinsTitle"/>은(는) 필수 입력항목 입니다."/>
+            </td>
+          </tr>
+          <tr>
+            <%-- 상품코드 --%>
+            <th><s:message code="hqAcins.reg.prodCd"/></th>
+            <td>
+              <input type="text" id="srchProdCd" name="srchProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13"/>
+            </td>
+            <%-- 상품명 --%>
+            <th><s:message code="hqAcins.reg.prodNm"/></th>
+            <td>
+              <input type="text" id="srchProdNm" name="srchProdNm" ng-model="prodNm" class="sb-input w100" maxlength="50"/>
+            </td>
+          </tr>
+          <tr>
+            <%-- 바코드 --%>
+            <th><s:message code="hqAcins.reg.barcd"/></th>
+            <td>
+              <input type="text" id="srchBarcdCd" name="srchBarcdCd" ng-model="barcdCd" class="sb-input w100" maxlength="40"/>
+            </td>
+            <%-- 상품분류 --%>
+            <th><s:message code="hqAcins.reg.prodClass"/></th>
+            <td>
+              <input type="text" id="srchProdClass" name="prodClass" ng-model="prodClass" class="sb-input w100" maxlength="40"/>
+            </td>
+          </tr>
+          <tr>
+            <%-- 실사구분 --%>
+            <th><s:message code="hqAcins.reg.acinsFg"/></th>
+            <td>
+              <div class="sb-select">
               <span class="txtIn w150px">
                 <wj-combo-box
                   id="srchAcinsFg"
@@ -71,20 +77,21 @@
                   initialized="_initComboBox(s)">
                 </wj-combo-box>
               </span>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="4">
-            <a href="#" class="btn_grayS" ng-click=""><s:message code="hqAcins.reg.excelFormDownload"/></a>
-            <a href="#" class="btn_grayS" ng-click=""><s:message code="hqAcins.reg.excelFormUpload"/></a>
-            <a href="#" class="btn_grayS" ng-click=""><s:message code="hqAcins.reg.textFormUpload"/></a>
-            <a href="#" class="btn_grayS" ng-click=""><s:message code="cmm.excel.down"/></a>
-            <a href="#" class="btn_grayS" ng-click=""><s:message code="hqAcins.reg.excelFormUploadErrorInfo"/></a>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="4">
+              <a href="#" class="btn_grayS" ng-click=""><s:message code="hqAcins.reg.excelFormDownload"/></a>
+              <a href="#" class="btn_grayS" ng-click=""><s:message code="hqAcins.reg.excelFormUpload"/></a>
+              <a href="#" class="btn_grayS" ng-click=""><s:message code="hqAcins.reg.textFormUpload"/></a>
+              <a href="#" class="btn_grayS" ng-click=""><s:message code="cmm.excel.down"/></a>
+              <a href="#" class="btn_grayS" ng-click=""><s:message code="hqAcins.reg.excelFormUploadErrorInfo"/></a>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </form>
 
       <div class="mt10 oh">
         <%-- 조회 --%>
@@ -268,17 +275,18 @@
         $scope.addQty      = '';
         $scope.prodBarcdCd = '';
         $scope.autoAddChk  = false;
-        $scope.acinsTitle    = '';
+        $scope.acinsTitle  = '';
 
         // 신규등록이면 실사구분 disabled 시킨다.
         if ($scope.callParent === "hqAcins") {
           $scope.readAcinsFg = true;
+          // 신규등록인 경우 진행구분 체크 필요없음으로 바로 팝업을 show 한다.
+          $scope.layerShow();
         }
         else {
           $scope.readAcinsFg = false;
+          $scope.procFgCheck(); // 실사진행구분 체크
         }
-
-        $scope.procFgCheck(); // 실사진행구분 체크
       }
       else { // 페이징처리에서 broadcast 호출시
         $scope.searchHqAcinsRegistList();
@@ -323,9 +331,14 @@
         return false;
       }).then(function () {
         // "complete" code here
-        $scope.wjHqAcinsRegistLayer.show(true);
-        $("#registSubTitle").html(messages["hqAcins.reg.acinsDate"] + ' : ' + getFormatDate($scope.acinsDate, '-'));
+        $scope.layerShow();
       });
+    };
+
+
+    $scope.layerShow = function () {
+      $scope.wjHqAcinsRegistLayer.show(true);
+      $("#registSubTitle").html(messages["hqAcins.reg.acinsDate"] + ' : ' + getFormatDate($scope.acinsDate, '-'));
     };
 
 
@@ -418,12 +431,12 @@
 
     // 저장 후 콜백 서치 함수
     $scope.saveRegistCallback = function () {
-      // 신규 요청등록인 경우
+      // 신규등록인 경우
       if ($scope.callParent === "hqAcins") {
         var hqAcinsScope = agrid.getScope('hqAcinsCtrl');
         hqAcinsScope.searchHqAcinsList();
       }
-      // 주문 상품상세내역 페이지에서 호출한 경우
+      // 실사상세내역 페이지에서 호출한 경우
       else if ($scope.callParent === "hqAcinsDtl") {
         var hqAcinsScope = agrid.getScope('hqAcinsCtrl');
         hqAcinsScope.searchHqAcinsList();

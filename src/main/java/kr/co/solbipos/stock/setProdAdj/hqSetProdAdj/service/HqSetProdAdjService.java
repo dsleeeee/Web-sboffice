@@ -10,7 +10,7 @@ public interface HqSetProdAdjService {
     List<DefaultMap<String>> getHqSetProdAdjList(HqSetProdAdjVO qSetProdAdjVO);
 
     /** 세트재고조정 - 세트재고 삭제 */
-    int deleteHqSetProdAdj(HqSetProdAdjVO[] qSetProdAdjVOs, SessionInfoVO sessionInfoVO);
+    int deleteHqSetProdAdj(HqSetProdAdjVO[] hqSetProdAdjVOs, SessionInfoVO sessionInfoVO);
 
     /** 세트재고조정 - 세트재고조정 세트상품 리스트 조회 */
     List<DefaultMap<String>> getHqSetProdAdjRegistList(HqSetProdAdjVO qSetProdAdjVO);
@@ -19,6 +19,6 @@ public interface HqSetProdAdjService {
     List<DefaultMap<String>> getHqSetProdAdjRegistCompstList(HqSetProdAdjVO qSetProdAdjVO);
 
     /** 세트재고조정 - 세트재고조정 등록 */
-    int saveHqSetProdAdjRegist(HqSetProdAdjVO[] qSetProdAdjVOs, SessionInfoVO sessionInfoVO);
+    int saveHqSetProdAdjRegist(HqSetProdAdjVO[] hqSetProdAdjVOs, SessionInfoVO sessionInfoVO);
 
 }

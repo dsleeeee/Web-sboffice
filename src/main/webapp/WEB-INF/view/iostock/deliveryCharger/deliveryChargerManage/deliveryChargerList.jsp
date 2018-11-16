@@ -72,7 +72,7 @@
     </div>
 
     <%--위즈모 테이블--%>
-    <div class="theGrid mt10" style="height: 350px;">
+    <div class="wj-gridWrap mt10" style="height: 350px;">
       <wj-flex-grid
         autoGenerateColumns="false"
         selection-mode="Row"
@@ -87,6 +87,7 @@
         <wj-flex-grid-column header="<s:message code="deliveryCharger.dlvrNm"/>" binding="dlvrNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="deliveryCharger.carNo"/>" binding="carNo" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="deliveryCharger.useYn"/>" binding="useYn" width="70" align="center" is-read-only="true" data-map="useYnMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="deliveryCharger.storageCnt"/>" binding="storageCnt" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
 
       </wj-flex-grid>
       <%-- ColumnPicker 사용시 include --%>

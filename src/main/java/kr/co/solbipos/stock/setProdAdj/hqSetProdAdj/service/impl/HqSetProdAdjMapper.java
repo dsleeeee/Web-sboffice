@@ -25,6 +25,9 @@ public interface HqSetProdAdjMapper {
     /** 세트재고조정 - 세트재고조정 세트구성상품 리스트 조회 */
     List<DefaultMap<String>> getHqSetProdAdjRegistCompstList(HqSetProdAdjVO hqSetProdAdjVO);
 
+    /** 세트재고조정 - 세트재고조정 등록시 신규 SEQ 조회 */
+    String getNewSeqNo(HqSetProdAdjVO hqSetProdAdjVO);
+
     /** 세트재고조정 - 세트재고조정 DTL 등록 */
     int insertHqSetProdAdjDtl(HqSetProdAdjVO hqSetProdAdjVO);
 

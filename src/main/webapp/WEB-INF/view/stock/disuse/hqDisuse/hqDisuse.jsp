@@ -6,7 +6,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/stock/disuse/hqDisuse/hqDisuse/"/>
 
-<div class="subCon" ng-controller="hqDisuseCtrl">
+<div class="subCon" ng-controller="hqDisuseCtrl" id="hqDisuseCtrl">
   <div class="searchBar flddUnfld">
     <a href="#" class="open">${menuNm}</a>
   </div>
@@ -69,7 +69,7 @@
 
   <div class="mt20 tr">
     <%-- 삭제 --%>
-    <button type="button" class="btn_skyblue ml5" id="btnDelete" ng-click="deleteHqAdj()">
+    <button type="button" class="btn_skyblue ml5" id="btnDelete" ng-click="deleteHqDisuse()">
       <s:message code="cmm.delete"/></button>
   </div>
 
@@ -185,14 +185,14 @@
 
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("hqDisuseCtrl", function (event, data) {
-      $scope.searchHqAdjList();
+      $scope.searchHqDisuseList();
       // 기능수행 종료 : 반드시 추가
       event.preventDefault();
     });
 
 
     // 주문 리스트 조회
-    $scope.searchHqAdjList = function () {
+    $scope.searchHqDisuseList = function () {
       // 파라미터
       var params       = {};
       params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
@@ -204,7 +204,7 @@
 
 
     // 폐기 삭제
-    $scope.deleteHqAdj = function () {
+    $scope.deleteHqDisuse = function () {
       <%-- 선택하신 자료를 삭제하시겠습니까? --%>
       var msg = messages["hqDisuse.delMsg"];
       s_alert.popConf(msg, function () {
@@ -222,12 +222,15 @@
             $scope._popMsg(messages["hqDisuse.not.delete"]); // 확정 된 자료는 삭제할 수 없습니다.
             return false;
           }
-          item.status = "U";
-          params.push(item);
+
+          if(item.gChk === true) {
+            item.status = "U";
+            params.push(item);
+          }
         }
 
         $scope._save("/stock/disuse/hqDisuse/hqDisuse/delete.sb", params, function () {
-          $scope.searchHqAdjList();
+          $scope.searchHqDisuseList();
         });
       });
     };

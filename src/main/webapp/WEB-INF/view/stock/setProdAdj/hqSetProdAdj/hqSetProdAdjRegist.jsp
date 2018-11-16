@@ -115,7 +115,6 @@
                 item-formatter="_itemFormatter">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="hqSetProdAdj.reg.dispSeq"/>" binding="dispSeq" width="40" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="hqSetProdAdj.reg.prodCd"/>" binding="unitProdCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="hqSetProdAdj.reg.prodNm"/>" binding="unitProdNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="hqSetProdAdj.reg.costUprc"/>" binding="costUprc" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
@@ -143,7 +142,6 @@
     $scope.setDate = wcombo.genDate("#setDate");
 
     $scope._setComboData("regListScaleBox", gvListScaleBoxData);
-
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -242,7 +240,7 @@
         // 체크박스가 체크되어 있으면서 기존에 등록되어 있던 상품은 삭제한다.
         if (item.setProdQty !== null && parseInt(item.setProdQty) > 0) {
           item.status    = "U";
-          item.setDate   = $scope.setDate;
+          item.setDate   = wijmo.Globalize.format($scope.setDate.value, 'yyyyMMdd');
           item.setMakeFg = setMakeFg;
           item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
 

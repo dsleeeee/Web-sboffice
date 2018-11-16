@@ -15,6 +15,7 @@
     <div class="wj-dialog-body sc2" style="height: 600px;">
       <p id="registSubTitle" class="s14 bk mb5 fl"></p>
 
+      <form name="myForm" novalidate>
       <table class="tblType01" style="position: relative;">
         <colgroup>
           <col class="w15"/>
@@ -27,7 +28,12 @@
           <%-- 조정제목 --%>
           <th><s:message code="hqAdj.reg.adjTitle"/><em class="imp">*</em></th>
           <td colspan="3">
-            <input type="text" id="adjTitle" name="adjTitle" ng-model="adjTitle" class="sb-input w100" maxlength="33"/>
+            <input type="text" id="adjTitle" name="adjTitle" ng-model="adjTitle" class="sb-input w100" maxlength="33"
+                   required
+                   popover-enable="myForm.adjTitle.$invalid"
+                   popover-placement="bottom-left"
+                   popover-trigger="'mouseenter'"
+                   uib-popover="<s:message code="hqAdj.reg.adjTitle"/>은(는) 필수 입력항목 입니다."/>
           </td>
         </tr>
         <tr>
@@ -85,6 +91,7 @@
         </tr>
         </tbody>
       </table>
+      </form>
 
       <div class="mt10 oh">
         <%-- 조회 --%>
@@ -264,12 +271,13 @@
         // 신규등록이면 조정구분 disabled 시킨다.
         if ($scope.callParent === "hqAdj") {
           $scope.readAdjFg = true;
+          // 신규등록인 경우 진행구분 체크 필요없음으로 바로 팝업을 show 한다.
+          $scope.layerShow();
         }
         else {
           $scope.readAdjFg = false;
+          $scope.procFgCheck(); // 조정진행구분 체크
         }
-
-        $scope.procFgCheck(); // 조정진행구분 체크
       }
       else { // 페이징처리에서 broadcast 호출시
         $scope.searchHqAdjRegistList();
@@ -314,9 +322,14 @@
         return false;
       }).then(function () {
         // "complete" code here
-        $scope.wjHqAdjRegistLayer.show(true);
-        $("#registSubTitle").html(messages["hqAdj.reg.adjDate"] + ' : ' + getFormatDate($scope.adjDate, '-'));
+        $scope.layerShow();
       });
+    };
+
+
+    $scope.layerShow = function () {
+      $scope.wjHqAdjRegistLayer.show(true);
+      $("#registSubTitle").html(messages["hqAdj.reg.adjDate"] + ' : ' + getFormatDate($scope.adjDate, '-'));
     };
 
 
@@ -409,12 +422,12 @@
 
     // 저장 후 콜백 서치 함수
     $scope.saveRegistCallback = function () {
-      // 신규 요청등록인 경우
+      // 신규등록인 경우
       if ($scope.callParent === "hqAdj") {
         var hqAdjScope = agrid.getScope('hqAdjCtrl');
         hqAdjScope.searchHqAdjList();
       }
-      // 주문 상품상세내역 페이지에서 호출한 경우
+      // 조정상세내역 페이지에서 호출한 경우
       else if ($scope.callParent === "hqAdjDtl") {
         var hqAdjScope = agrid.getScope('hqAdjCtrl');
         hqAdjScope.searchHqAdjList();

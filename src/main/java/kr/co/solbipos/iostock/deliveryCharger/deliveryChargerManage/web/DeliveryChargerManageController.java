@@ -143,7 +143,7 @@ public class DeliveryChargerManageController {
      * @author  안동관
      * @since   2018. 11. 01.
      */
-    @RequestMapping(value = "/deliveryChargerRegist/dlvrDelete.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/deliveryChargerRegist/deleteDlvr.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result deleteDeliveryCharger(HttpServletRequest request, HttpServletResponse response,
         Model model, DeliveryChargerManageVO deliveryChargerManageVO) {
@@ -168,7 +168,7 @@ public class DeliveryChargerManageController {
      * @author  안동관
      * @since   2018. 08. 30.
      */
-    @RequestMapping(value = "/deliveryChargerRegist/storageList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/deliveryChargerRegist/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getDeliveryChargerStorageList(HttpServletRequest request, HttpServletResponse response,
         Model model, DeliveryChargerManageVO deliveryChargerManageVO) {
@@ -191,7 +191,7 @@ public class DeliveryChargerManageController {
      * @author  안동관
      * @since   2018. 08. 31.
      */
-    @RequestMapping(value = "/deliveryChargerRegist/storageAllList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/dlvrStorageMgr/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getDeliveryChargerStorageAllList(HttpServletRequest request, HttpServletResponse response,
         Model model, DeliveryChargerManageVO deliveryChargerManageVO) {
@@ -214,7 +214,7 @@ public class DeliveryChargerManageController {
      * @author  안동관
      * @since   2018. 08. 31.
      */
-    @RequestMapping(value = "/deliveryChargerRegist/delStorage.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/deliveryChargerRegist/delete.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result deleteDeliveryChargerStorage(HttpServletRequest request, HttpServletResponse response,
         Model model, @RequestBody DeliveryChargerManageVO[] deliveryChargerManageVOs) {
@@ -236,7 +236,7 @@ public class DeliveryChargerManageController {
      * @author  안동관
      * @since   2018. 08. 31.
      */
-    @RequestMapping(value = "/deliveryChargerRegist/addStorage.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/dlvrStorageMgr/save.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result saveDeliveryChargerStorage(HttpServletRequest request, HttpServletResponse response,
         Model model, @RequestBody DeliveryChargerManageVO[] deliveryChargerManageVOs) {

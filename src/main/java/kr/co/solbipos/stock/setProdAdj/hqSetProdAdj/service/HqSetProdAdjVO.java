@@ -26,10 +26,6 @@ public class HqSetProdAdjVO extends PageVO {
     private Long setProdAmt;
     /** 처리구분 (0:미처리 1:처리완료) */
     private String procFg;
-    /** 세트구성상품코드 */
-    private String compstProdCd;
-    /** 세트구성상품수량 */
-    private Integer compstProdQty;
 
     /**
      * @return the hqOfficeCd
@@ -171,31 +167,4 @@ public class HqSetProdAdjVO extends PageVO {
         this.procFg = procFg;
     }
 
-    /**
-     * @return the compstProdCd
-     */
-    public String getCompstProdCd() {
-        return compstProdCd;
-    }
-
-    /**
-     * @param compstProdCd the compstProdCd to set
-     */
-    public void setCompstProdCd(String compstProdCd) {
-        this.compstProdCd = compstProdCd;
-    }
-
-    /**
-     * @return the compstProdQty
-     */
-    public Integer getCompstProdQty() {
-        return compstProdQty;
-    }
-
-    /**
-     * @param compstProdQty the compstProdQty to set
-     */
-    public void setCompstProdQty(Integer compstProdQty) {
-        this.compstProdQty = compstProdQty;
-    }
 }

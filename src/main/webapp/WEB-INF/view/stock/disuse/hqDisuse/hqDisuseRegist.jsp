@@ -15,50 +15,56 @@
     <div class="wj-dialog-body sc2" style="height: 600px;">
       <p id="registSubTitle" class="s14 bk mb5 fl"></p>
 
-      <table class="tblType01" style="position: relative;">
-        <colgroup>
-          <col class="w15"/>
-          <col class="w35"/>
-          <col class="w15"/>
-          <col class="w35"/>
-        </colgroup>
-        <tbody>
-        <tr>
-          <%-- 폐기제목 --%>
-          <th><s:message code="hqDisuse.reg.disuseTitle"/><em class="imp">*</em></th>
-          <td colspan="3">
-            <input type="text" id="disuseTitle" name="disuseTitle" ng-model="disuseTitle" class="sb-input w100" maxlength="33" data-check="0,10"/>
-          </td>
-        </tr>
-        <tr>
-          <%-- 상품코드 --%>
-          <th><s:message code="hqDisuse.reg.prodCd"/></th>
-          <td>
-            <input type="text" id="srchProdCd" name="srchProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13"/>
-          </td>
-          <%-- 상품명 --%>
-          <th><s:message code="hqDisuse.reg.prodNm"/></th>
-          <td>
-            <input type="text" id="srchProdNm" name="srchProdNm" ng-model="prodNm" class="sb-input w100" maxlength="50"/>
-          </td>
-        </tr>
-        <tr>
-          <%-- 바코드 --%>
-          <th><s:message code="hqDisuse.reg.barcd"/></th>
-          <td>
-            <input type="text" id="srchBarcdCd" name="srchBarcdCd" ng-model="barcdCd" class="sb-input w100" maxlength="40"/>
-          </td>
-          <%-- 상품분류 --%>
-          <th><s:message code="hqDisuse.reg.prodClass"/></th>
-          <td>
-            <input type="text" id="srchProdClass" name="prodClass" ng-model="prodClass" class="sb-input w100" maxlength="40"/>
-          </td>
-        </tr>
-        <tr>
-          <%-- 폐기구분 --%>
-          <th><s:message code="hqDisuse.reg.disuseFg"/></th>
-          <td>
-            <div class="sb-select">
+      <form name="myForm" novalidate>
+        <table class="tblType01" style="position: relative;">
+          <colgroup>
+            <col class="w15"/>
+            <col class="w35"/>
+            <col class="w15"/>
+            <col class="w35"/>
+          </colgroup>
+          <tbody>
+          <tr>
+            <%-- 폐기제목 --%>
+            <th><s:message code="hqDisuse.reg.disuseTitle"/><em class="imp">*</em></th>
+            <td colspan="3">
+              <input type="text" id="disuseTitle" name="disuseTitle" ng-model="disuseTitle" class="sb-input w100" maxlength="33" data-check="0,100"
+                     required
+                     popover-enable="myForm.disuseTitle.$invalid"
+                     popover-placement="bottom-left"
+                     popover-trigger="'mouseenter'"
+                     uib-popover="<s:message code="hqDisuse.reg.disuseTitle"/>은(는) 필수 입력항목 입니다."/>
+            </td>
+          </tr>
+          <tr>
+            <%-- 상품코드 --%>
+            <th><s:message code="hqDisuse.reg.prodCd"/></th>
+            <td>
+              <input type="text" id="srchProdCd" name="srchProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13"/>
+            </td>
+            <%-- 상품명 --%>
+            <th><s:message code="hqDisuse.reg.prodNm"/></th>
+            <td>
+              <input type="text" id="srchProdNm" name="srchProdNm" ng-model="prodNm" class="sb-input w100" maxlength="50"/>
+            </td>
+          </tr>
+          <tr>
+            <%-- 바코드 --%>
+            <th><s:message code="hqDisuse.reg.barcd"/></th>
+            <td>
+              <input type="text" id="srchBarcdCd" name="srchBarcdCd" ng-model="barcdCd" class="sb-input w100" maxlength="40"/>
+            </td>
+            <%-- 상품분류 --%>
+            <th><s:message code="hqDisuse.reg.prodClass"/></th>
+            <td>
+              <input type="text" id="srchProdClass" name="prodClass" ng-model="prodClass" class="sb-input w100" maxlength="40"/>
+            </td>
+          </tr>
+          <tr>
+            <%-- 폐기구분 --%>
+            <th><s:message code="hqDisuse.reg.disuseFg"/></th>
+            <td>
+              <div class="sb-select">
               <span class="txtIn w150px">
                 <wj-combo-box
                   id="srchDisuseFg"
@@ -71,21 +77,22 @@
                   initialized="_initComboBox(s)">
                 </wj-combo-box>
               </span>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="4">
-            <a href="#" class="btn_grayS" ng-click=""><s:message code="hqDisuse.reg.excelFormDownload"/></a>
-            <a href="#" class="btn_grayS" ng-click=""><s:message code="hqDisuse.reg.excelFormUpload"/></a>
-            <a href="#" class="btn_grayS" ng-click=""><s:message code="hqDisuse.reg.textFormUpload"/></a>
-            <a href="#" class="btn_grayS" ng-click=""><s:message code="cmm.excel.down"/></a>
-            <a href="#" class="btn_grayS" ng-click=""><s:message code="hqDisuse.reg.excelFormUploadErrorInfo"/></a>
-            <a href="#" class="btn_grayS" ng-click="valueCheck()">valuecheck</a>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="4">
+              <a href="#" class="btn_grayS" ng-click=""><s:message code="hqDisuse.reg.excelFormDownload"/></a>
+              <a href="#" class="btn_grayS" ng-click=""><s:message code="hqDisuse.reg.excelFormUpload"/></a>
+              <a href="#" class="btn_grayS" ng-click=""><s:message code="hqDisuse.reg.textFormUpload"/></a>
+              <a href="#" class="btn_grayS" ng-click=""><s:message code="cmm.excel.down"/></a>
+              <a href="#" class="btn_grayS" ng-click=""><s:message code="hqDisuse.reg.excelFormUploadErrorInfo"/></a>
+              <a href="#" class="btn_grayS" ng-click="valueCheck()">valuecheck</a>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </form>
 
       <div class="mt10 oh">
         <%-- 조회 --%>
@@ -236,7 +243,7 @@
       var disuseQty = parseInt(nvl(item.disuseQty, 0));
       var disuseAmt = parseInt(disuseQty) * parseInt(costUprc);
 
-      item.disuseQty = disuseQty;   // 폐기수량
+      item.disuseQty = disuseQty; // 폐기수량
       item.disuseAmt = disuseAmt; // 폐기금액
     };
 
@@ -265,12 +272,13 @@
         // 신규등록이면 폐기구분 disabled 시킨다.
         if ($scope.callParent === "hqDisuse") {
           $scope.readDisuseFg = true;
+          // 신규등록인 경우 진행구분 체크 필요없음으로 바로 팝업을 show 한다.
+          $scope.layerShow();
         }
         else {
           $scope.readDisuseFg = false;
+          $scope.procFgCheck(); // 폐기진행구분 체크
         }
-
-        $scope.procFgCheck(); // 폐기진행구분 체크
       }
       else { // 페이징처리에서 broadcast 호출시
         $scope.searchHqDisuseRegistList();
@@ -315,9 +323,14 @@
         return false;
       }).then(function () {
         // "complete" code here
-        $scope.wjHqDisuseRegistLayer.show(true);
-        $("#registSubTitle").html(messages["hqDisuse.reg.disuseDate"] + ' : ' + getFormatDate($scope.disuseDate, '-'));
+        $scope.layerShow();
       });
+    };
+
+
+    $scope.layerShow = function () {
+      $scope.wjHqDisuseRegistLayer.show(true);
+      $("#registSubTitle").html(messages["hqDisuse.reg.disuseDate"] + ' : ' + getFormatDate($scope.disuseDate, '-'));
     };
 
 
@@ -410,12 +423,12 @@
 
     // 저장 후 콜백 서치 함수
     $scope.saveRegistCallback = function () {
-      // 신규 요청등록인 경우
+      // 신규등록인 경우
       if ($scope.callParent === "hqDisuse") {
         var hqDisuseScope = agrid.getScope('hqDisuseCtrl');
         hqDisuseScope.searchHqDisuseList();
       }
-      // 주문 상품상세내역 페이지에서 호출한 경우
+      // 폐기상세내역 페이지에서 호출한 경우
       else if ($scope.callParent === "hqDisuseDtl") {
         var hqDisuseScope = agrid.getScope('hqDisuseCtrl');
         hqDisuseScope.searchHqDisuseList();
@@ -550,19 +563,21 @@
         if (el.attr('data-check')) {
           value    = inputEle[i].value;
           checkArr = el.attr('data-check').split(',');
+          var min = checkArr[0];
+          var max = checkArr[1];
 
-          if (value.getByteLengthForOracle() < checkArr[0] || value.getByteLengthForOracle() > checkArr[1]) {
+          if (value.getByteLengthForOracle() < min || value.getByteLengthForOracle() > max) {
             // $scope._popMsg('문자열의 길이를 조정해주세요.(한글은 3Byte로 계산됩니다.)');
-            // alert('문자열의 길이를 조정해주세요.(한글은 3Byte로 계산됩니다.) 최대:' + checkArr[1]);
-            if(!el.attr('uib-popover-html')) {
-              var popMsg = '<p class="s12" style="line-height:14px;">문자열의 길이를 조정해주세요.<br>(한글은 3Byte로 계산됩니다.)<br>최대 : '+checkArr[1]+'</p>';
-              el.attr('uib-popover-html', "'"+popMsg+"'");
+            // alert('문자열의 길이를 조정해주세요.(한글은 3Byte로 계산됩니다.) 최대:' + max);
+            if (!el.attr('uib-popover-html')) {
+              var popMsg = '<p class="s12" style="line-height:14px;">문자열의 길이를 조정해주세요.<br>(한글은 3Byte로 계산됩니다.)<br>최대 : ' + max + '</p>';
+              el.attr('uib-popover-html', "'" + popMsg + "'");
               // el.attr('uib-popover-html', "'문자열의 길이를 조정해주세요.<br>(한글은 3Byte로 계산됩니다.)<br>최대:'");
               el.attr('popover-placement', 'bottom-left');
               el.attr('popover-is-open', true);
 
-              el.on('click', function(event) {
-                if($(this).attr('uib-popover-html')) {
+              el.on('click', function (event) {
+                if ($(this).attr('uib-popover-html')) {
                   $(this).removeAttr('uib-popover-html');
                   $(this).removeAttr('popover-placement');
                   $(this).removeAttr('popover-is-open');
@@ -581,9 +596,7 @@
       }
 
       return rtnFg;
-    }
-
-
+    };
 
 
   }]);

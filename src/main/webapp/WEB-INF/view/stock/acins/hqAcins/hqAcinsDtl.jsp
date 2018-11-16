@@ -15,22 +15,29 @@
     <div class="wj-dialog-body sc2" style="height: 600px;">
       <p id="registSubTitle" class="s14 bk mb5 fl"></p>
 
-      <table class="tblType01" style="position: relative;">
-        <colgroup>
-          <col class="w15"/>
-          <col class="w35"/>
-          <col class="w15"/>
-          <col class="w35"/>
-        </colgroup>
-        <tbody>
-        <tr>
-          <th><s:message code="hqAcins.dtl.acinsTitle"/><em class="imp">*</em></th>
-          <td colspan="3">
-            <input type="text" id="dtlAcinsTitle" name="dtlAcinsTitle" ng-model="acinsTitle" class="sb-input w100" maxlength="33"/>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+      <form name="myForm" novalidate>
+        <table class="tblType01" style="position: relative;">
+          <colgroup>
+            <col class="w15"/>
+            <col class="w35"/>
+            <col class="w15"/>
+            <col class="w35"/>
+          </colgroup>
+          <tbody>
+          <tr>
+            <th><s:message code="hqAcins.dtl.acinsTitle"/><em class="imp">*</em></th>
+            <td colspan="3">
+              <input type="text" id="dtlAcinsTitle" name="dtlAcinsTitle" ng-model="acinsTitle" class="sb-input w100" maxlength="33"
+                     required
+                     popover-enable="myForm.dtlAcinsTitle.$invalid"
+                     popover-placement="bottom-left"
+                     popover-trigger="'mouseenter'"
+                     uib-popover="<s:message code="hqAcins.dtl.acinsTitle"/>은(는) 필수 입력항목 입니다."/>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </form>
 
       <ul class="txtSty3 mt10">
         <li class="red"><s:message code="hqAcins.dtl.txt1"/></li>
@@ -79,7 +86,8 @@
           </wj-flex-grid>
         </div>
         <%--//위즈모 테이블--%>
-      </div>`
+      </div>
+      `
       <%-- 페이지 리스트 --%>
       <div class="pageNum mt20">
         <%-- id --%>
