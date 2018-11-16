@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    CmmCombo.xml
+    공통 커스텀콤보쿼리 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       노현수     2018.11.15     최초생성
+-->
+<mapper namespace="CmmCombo">
+
+    <!-- 커스텀콤보 데이터 조회  -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDATTR_CLASS
+        PARAM    :
+        COMMENTS : 쿼리 페이징 처리시 내용 From 절 직전에 include 한다.
+    -->
+    <select id="getSideMenuAttrClassCombo" parameterType="customComboVO" resultType="DefaultMap">
+        /* USE : CmmCodeServiceImpl.getSideMenuAttrClassCombo */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                    thpsc.SDATTR_CLASS_CD AS code,
+                    thpsc.SDATTR_CLASS_NM AS codeNm
+                FROM
+                    TB_HQ_PRODUCT_SDATTR_CLASS thpsc
+                WHERE
+                    thpsc.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND thpsc.USE_YN = 'Y'
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                    tmpsc.SDATTR_CLASS_CD AS code,
+                    tmpsc.SDATTR_CLASS_NM AS codeNm
+                FROM
+                    TB_MS_PRODUCT_SDATTR_CLASS tmpsc
+                WHERE
+                    tmpsc.STORE_CD = #{storeCd}
+                    AND tmpsc.USE_YN = 'Y'
+            </when>
+        </choose>
+    </select>
+
+</mapper>
+
+
+

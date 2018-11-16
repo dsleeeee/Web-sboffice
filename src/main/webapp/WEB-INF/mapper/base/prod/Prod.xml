@@ -183,8 +183,8 @@
                     ( SELECT SF_GET_PROD_CLASSES('H', thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_CD_NM,
                     thp.CORNR_CD,           -- 코너코드
                     thp.ORGPLCE_CD,         -- 원산지 구분 -- TODO 원산지명 조회 필요
-                    thp.SDATTR_CLASS_CD,
-                    thp.SDSEL_GRP_CD,
+                    thp.SDATTR_CLASS_CD,    -- 사이드속성분류코드
+                    thp.SDSEL_GRP_CD,       -- 사이드선택그룹코드
                     thp.POINT_SAVE_YN,
                     thp.PROD_DC_FG,
                     thp.VAT_FG,                                     -- 과세여부
@@ -208,7 +208,7 @@
                     thp.PO_MIN_QTY,     -- 최소주문
                     thp.SAFE_STOCK_QTY, -- 안전재고
                     thp.STOCK_UNIT_FG,
-                    thp.USE_YN,             -- 사용여부
+                    thp.USE_YN,         -- 사용여부
                     thp.REMARK,         -- 비고
                     thp.REG_DT
                 FROM
@@ -238,7 +238,7 @@
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 SELECT
-                    tmp.HQ_OFFICE_CD,       -- 본사코드
+                    tmp.STORE_CD,           -- 매장코드
                     tmp.PROD_CD,            -- 상품코드
                     tmp.PROD_NM,            -- 상품명
                     tmp.PROD_CLASS_CD,      -- 상품분류코드
