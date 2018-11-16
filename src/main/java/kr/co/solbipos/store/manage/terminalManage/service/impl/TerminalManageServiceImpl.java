@@ -36,19 +36,23 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Service
 public class TerminalManageServiceImpl implements TerminalManageService{
 
-    private final String POS_ENVST_CD = "2028"; // 코너, VAN 설정 환경변수
+
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private final TerminalManageMapper mapper;
+    private final String POS_ENVST_CD = "2028"; // 코너, VAN 설정 환경변수
 
     /** Constructor Injection */
     @Autowired
     public TerminalManageServiceImpl(TerminalManageMapper mapper) {
+
         this.mapper = mapper;
     }
 
     /** 벤더 조회 */
     @Override
     public List<DefaultMap<String>> getVendorList() {
+
         return mapper.getVendorList();
     }
 
@@ -114,6 +118,8 @@ public class TerminalManageServiceImpl implements TerminalManageService{
         String dt = currentDateTimeString();
 
         for(StoreTerminalVO storeTerminalVO :  storeTerminalVOs) {
+
+            LOGGER.info(">>>>>>>>>>>>>>> vanddddr " + storeTerminalVO.getVendorNm());
 
             storeTerminalVO.setRegDt(dt);
             storeTerminalVO.setRegId(sessionInfoVO.getUserId());

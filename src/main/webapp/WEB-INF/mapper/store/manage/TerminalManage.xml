@@ -226,8 +226,8 @@
             #{storeCd},
             #{posNo},
             #{vendorFg},
-            #{vendorCd},
-            (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '078' AND NMCODE_CD = #{vendorFg}),
+            (SELECT VAN_CD FROM TB_CM_VAN_CMPNY WHERE VAN_FG = #{vendorFg} AND VAN_NM = #{vendorNm}),
+            #{vendorNm},
             #{vendorTermnlNo},
             #{vendorSerNo},
             #{regDt},
@@ -252,7 +252,7 @@
          WHERE STORE_CD = #{storeCd}
            AND POS_NO = #{posNo}
            AND VENDOR_FG = #{vendorFg}
-           AND VENDOR_CD = #{vendorCd}
+           AND VENDOR_CD = (SELECT VAN_CD FROM TB_CM_VAN_CMPNY WHERE VAN_FG = #{vendorFg} AND VAN_NM = #{vendorNm})
     </update>
 
 
@@ -281,8 +281,8 @@
             #{storeCd},
             #{cornrCd},
             #{vendorFg},
-            #{vendorCd},
-            (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '078' AND NMCODE_CD = #{vendorFg}),
+            (SELECT VAN_CD FROM TB_CM_VAN_CMPNY WHERE VAN_FG = #{vendorFg} AND VAN_NM = #{vendorNm}),
+            #{vendorNm},
             #{vendorTermnlNo},
             #{vendorSerNo},
             #{regDt},
@@ -307,7 +307,7 @@
          WHERE STORE_CD = #{storeCd}
            AND CORNR_CD = #{cornrCd}
            AND VENDOR_FG = #{vendorFg}
-           AND VENDOR_CD = #{vendorCd}
+           AND VENDOR_CD = (SELECT VAN_CD FROM TB_CM_VAN_CMPNY WHERE VAN_FG = #{vendorFg} AND VAN_NM = #{vendorNm})
     </update>
 
 </mapper>
