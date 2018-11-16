@@ -40,8 +40,6 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
   // $scope._getComboDataQuery('090', 'refApplyYnComboData');
   // 봉사료포함여부 콤보박스
   $scope._getComboDataQuery('058', 'prodTipYnComboData');
-
-
   // 상품정보
   $scope.prodModifyInfo = {};
   $scope.setProdModifyInfo = function(data){
@@ -60,6 +58,18 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
   };
   // 상품정보 조회
   $scope.$on("prodModifyCtrl", function(event, data) {
+
+    console.log("$scope._getComboDataQuery", $scope._getComboData('poUnitFgComboData'));
+
+    var params = {};
+    params.queryId = 'getSideMenuAttrClassCombo';
+    $scope._postJSONQuery.withOutPopUp("/common/getCustomCombo.sb", params,
+      function(response) {
+        console.log(response);
+        // $scope._setComboData(comboNm, JSON.parse(response.data.data));
+      }
+    );
+
     // data 조회하지 않고 상세정보와 동일하므로 파라미터로 처리
     $scope.$broadcast('loadingPopupActive');
     // 상품정보 set

@@ -1917,7 +1917,12 @@ Graph.prototype.initClassArea = function (prodArea) {
   //터치키분류 영역에 새로운 분류 생성
   var createClassArea = function (x, y) {
     var parent = graph.getDefaultParent();
+    // 터치키분류 ID 중복방지를 위해 체크
     var grpId = graph.classPrefix + graph.nextGrpId;
+    if ( graph.model.getCell(grpId) ) {
+      graph.nextGrpId++;
+      grpId = graph.classPrefix + graph.nextGrpId;
+    }
     // 상품영역과 id 공유를 위해 classCd 커스텀태그로 별도 관리 : 20180920 노현수
     var classCd = "000" + graph.nextGrpId;
     classCd = graph.classPrefix + classCd.slice(-4);
@@ -1990,6 +1995,9 @@ Graph.prototype.initClassArea = function (prodArea) {
         var cell = me.state.cell;
         //터치키분류 터치키 클릭 시 처리
         var model = prodArea.getModel();
+
+        console.log("model ", model);
+
         layer = model.getCell(cell.id);
         prodArea.switchLayer(layer);
         //상품영역 스크롤했던 것 초기화

@@ -88,5 +88,33 @@
       <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
+    <!-- 매장선택 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : storeManageVO
+        COMMENTS : 매장선택 리스트를 조회한다.
+    -->
+    <select id="getStoreList" parameterType="storeManageVO" resultType="DefaultMap">
+      /* USE : outstockReqDateMapper.selectStoreList */
+      <include refid="CmmSQL.PagingTemplateHeader"/>
+      <![CDATA[
+          SELECT  tms.STORE_CD, tms.STORE_NM
+          ]]>
+      <include refid="CmmSQL.PagingTemplateCount"/>
+      <![CDATA[
+          FROM    TB_MS_STORE tms
+          WHERE   tms.HQ_OFFICE_CD =   #{hqOfficeCd}
+          ]]>
+      <if test='storeCd != null and storeCd != ""'>
+        AND tms.STORE_CD = #{storeCd}
+      </if>
+      <if test='storeNm != null and storeNm != ""'>
+        AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+      </if>
+      ORDER BY tms.STORE_CD
+      <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+
 
 </mapper>

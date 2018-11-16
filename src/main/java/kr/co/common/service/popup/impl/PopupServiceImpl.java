@@ -6,6 +6,7 @@ import kr.co.common.data.domain.VanVO;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.popup.PopupService;
+import kr.co.solbipos.store.manage.storemanage.service.StoreManageVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,31 +34,37 @@ public class PopupServiceImpl implements PopupService{
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    private final PopupMapper mapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     /** Constructor Injection */
     @Autowired
-    public PopupServiceImpl(PopupMapper mapper, MessageService messageService) {
-        this.mapper = mapper;
+    public PopupServiceImpl(PopupMapper popupMapper, MessageService messageService) {
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
     /** 벤사 목록 조회 */
     @Override
     public List<DefaultMap<String>> getVanList(VanVO vanVO) {
-        return mapper.getVanList(vanVO);
+        return popupMapper.getVanList(vanVO);
     }
 
     /** 대리점 목록 조회 */
     @Override
     public List<DefaultMap<String>> getAgencyList(AgencyVO agencyVO) {
-        return mapper.getAgencyList(agencyVO);
+        return popupMapper.getAgencyList(agencyVO);
     }
 
     /** 본사 목록 조회 */
     @Override
     public List<DefaultMap<String>> getHqList(HqOfficeVO hqOfficeVO) {
-        return mapper.getHqList(hqOfficeVO);
+        return popupMapper.getHqList(hqOfficeVO);
+    }
+
+    /** 매장 목록 조회 */
+    @Override
+    public List<DefaultMap<String>> getStoreList(StoreManageVO storeManageVO) {
+        return popupMapper.getStoreList(storeManageVO);
     }
 }

@@ -12,10 +12,10 @@
 /**
  *  후불 대상으로 등록된 매장 그리드 생성
  */
-app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('creditStoreRegistCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('regStoreCtrl', $scope, $http, false));
+  angular.extend(this, new RootController('creditStoreRegistCtrl', $scope, $http, false));
 
   // 조회조건 콤보박스 데이터 Set
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
@@ -33,13 +33,13 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.initGrid = function (s, e) {};
 
   // 후불 대상으로 등록된 매장 목록 조회
-  $scope.$on("regStoreCtrl", function(event, data) {
+  $scope.$on("creditStoreRegistCtrl", function(event, data) {
 
     // 등록매장 조회 후, 미등록매장 조회
     $scope.setSelectedMember(data);
     $scope.searchRegStore();
 
-    var noRegStoreGrid = agrid.getScope("noRegStoreCtrl");
+    var noRegStoreGrid = agrid.getScope("creditStoreNoRegistCtrl");
     noRegStoreGrid.setSelectedMember(data);
     noRegStoreGrid.searchNoRegStore();
 
@@ -61,7 +61,7 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 등록 매장 삭제
   $scope.delete = function(){
-    var params = new Array();
+    var params = [];
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
       if($scope.flex.collectionView.items[i].gChk) {
         $scope.flex.collectionView.items[i].memberNo = $scope.selectedMember.membrNo;
@@ -85,7 +85,7 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   // 매장 삭제 완료 후처리
   $scope.allSearch = function () {
     $scope.searchRegStore();
-    var noRegCouponGrid = agrid.getScope("noRegStoreCtrl");
+    var noRegCouponGrid = agrid.getScope("creditStoreNoRegistCtrl");
     noRegCouponGrid.searchNoRegStore();
   };
 
@@ -96,9 +96,9 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
 /**
  *  후불 대상으로 등록된 매장 그리드 생성
  */
-app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('creditStoreNoRegistCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('noRegStoreCtrl', $scope, $http, true));
+  angular.extend(this, new RootController('creditStoreNoRegistCtrl', $scope, $http, true));
 
   // 조회조건 콤보박스 데이터 Set
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
@@ -116,7 +116,7 @@ app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.initGrid = function (s, e) {};
 
   // 후불 대상으로 등록된 매장 그리드 조회
-  $scope.$on("noRegStoreCtrl", function(event, data) {
+  $scope.$on("creditStoreNoRegistCtrl", function(event, data) {
     $scope.searchNoRegStore();
     event.preventDefault();
   });
@@ -135,7 +135,7 @@ app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 매장 등록
   $scope.regist = function() {
-    var params = new Array();
+    var params = [];
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
       if($scope.flex.collectionView.items[i].gChk) {
         $scope.flex.collectionView.items[i].memberNo = $scope.selectedMember.membrNo;
@@ -159,7 +159,7 @@ app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   // 매장 등록 완료 후처리
   $scope.allSearch = function () {
     $scope.searchNoRegStore();
-    var regCouponGrid = agrid.getScope("regStoreCtrl");
+    var regCouponGrid = agrid.getScope("creditStoreRegistCtrl");
     regCouponGrid.searchRegStore();
   };
 

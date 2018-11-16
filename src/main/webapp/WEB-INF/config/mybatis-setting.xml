@@ -54,6 +54,7 @@
     <typeAlias alias="cmAgencyVO" type="kr.co.solbipos.application.common.service.CmAgencyVO"/>
     <typeAlias alias="vanVO" type="kr.co.common.data.domain.VanVO"/>
     <typeAlias alias="agencyVO" type="kr.co.common.data.domain.AgencyVO"/>
+    <typeAlias alias="customComboVO" type="kr.co.common.data.domain.CustomComboVO"/>
 
     <!-- 세션관련 -->
     <typeAlias alias="sessionInfoVO" type="kr.co.solbipos.application.session.auth.service.SessionInfoVO"/>
@@ -201,8 +202,13 @@
     <typeAlias alias="touchKeyVO" type="kr.co.solbipos.base.prod.touchkey.service.TouchKeyVO"/>
     <typeAlias alias="touchKeyClassVO" type="kr.co.solbipos.base.prod.touchkey.service.TouchKeyClassVO"/>
     <typeAlias alias="touchKeyStyleVO" type="kr.co.solbipos.base.prod.touchkey.service.TouchKeyStyleVO"/>
+    <typeAlias alias="sideMenuAttrClassVO" type="kr.co.solbipos.base.prod.sidemenu.service.SideMenuAttrClassVO"/>
+    <typeAlias alias="sideMenuAttrCdVO" type="kr.co.solbipos.base.prod.sidemenu.service.SideMenuAttrCdVO"/>
+    <typeAlias alias="sideMenuSelGroupVO" type="kr.co.solbipos.base.prod.sidemenu.service.SideMenuSelGroupVO"/>
+    <typeAlias alias="sideMenuSelClassVO" type="kr.co.solbipos.base.prod.sidemenu.service.SideMenuSelClassVO"/>
+    <typeAlias alias="sideMenuSelProdVO" type="kr.co.solbipos.base.prod.sidemenu.service.SideMenuSelProdVO"/>
+
 <!--
-    <typeAlias alias="sideMenuVO" type="kr.co.solbipos.base.prod.sidemenu.service.SideMenuVO"/>
     <typeAlias alias="chgBatchVO" type="kr.co.solbipos.base.prod.chgbatch.service.ChgBatchVO"/>
     <typeAlias alias="cornerVO" type="kr.co.solbipos.base.prod.corner.service.CornerVO"/>
     <typeAlias alias="salePriceManageVO" type="kr.co.solbipos.base.price.salepricemanage.service.SalePriceManageVO"/>

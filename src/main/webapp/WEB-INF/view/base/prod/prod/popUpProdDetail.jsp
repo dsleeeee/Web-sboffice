@@ -44,8 +44,7 @@
               items-source="_getComboData('prodTypeFgComboData')"
               display-member-path="name"
               selected-value-path="value"
-              is-editable="false"
-              initialized="_initComboBox(s)">
+              is-editable="false">
             </wj-combo-box>
             {{_prodTypeFg}}
           </td>
@@ -93,8 +92,7 @@
               items-source="_getComboData('saleProdYnComboData')"
               display-member-path="name"
               selected-value-path="value"
-              is-editable="false"
-              initialized="_initComboBox(s)">
+              is-editable="false">
             </wj-combo-box>
             {{_saleProdYn}}
           </td>
@@ -137,8 +135,7 @@
               items-source="_getComboData('splyUprcUseYnComboData')"
               display-member-path="name"
               selected-value-path="value"
-              is-editable="false"
-              initialized="_initComboBox(s)">
+              is-editable="false">
             </wj-combo-box>
             {{_splyUprcUseYn}}
           </td>
@@ -170,8 +167,7 @@
               items-source="_getComboData('poProdFgComboData')"
               display-member-path="name"
               selected-value-path="value"
-              is-editable="false"
-              initialized="_initComboBox(s)">
+              is-editable="false">
             </wj-combo-box>
             {{_poProdFg}}
           </td>
@@ -185,8 +181,7 @@
               items-source="_getComboData('poUnitFgComboData')"
               display-member-path="name"
               selected-value-path="value"
-              is-editable="false"
-              initialized="_initComboBox(s)">
+              is-editable="false">
             </wj-combo-box>
             {{_poUnitFg}}
           </td>
@@ -236,8 +231,7 @@
               items-source="_getComboData('vatFgComboData')"
               display-member-path="name"
               selected-value-path="value"
-              is-editable="false"
-              initialized="_initComboBox(s)">
+              is-editable="false">
             </wj-combo-box>
             {{_vatFg}}
           </td>
@@ -253,8 +247,7 @@
               items-source="_getComboData('useYnComboData')"
               display-member-path="name"
               selected-value-path="value"
-              is-editable="false"
-              initialized="_initComboBox(s)">
+              is-editable="false">
             </wj-combo-box>
             {{_stockProdYn}}
           </td>
@@ -272,8 +265,7 @@
               items-source="_getComboData('useYnComboData')"
               display-member-path="name"
               selected-value-path="value"
-              is-editable="false"
-              initialized="_initComboBox(s)">
+              is-editable="false">
             </wj-combo-box>
             {{_useYn}}
           </td>
@@ -319,8 +311,7 @@
               items-source="_getComboData('setProdFgComboData')"
               display-member-path="name"
               selected-value-path="value"
-              is-editable="false"
-              initialized="_initComboBox(s)">
+              is-editable="false">
             </wj-combo-box>
             {{_setProdFg}}
           </td>
@@ -338,8 +329,7 @@
               items-source="_getComboData('useYnComboData')"
               display-member-path="name"
               selected-value-path="value"
-              is-editable="false"
-              initialized="_initComboBox(s)">
+              is-editable="false">
             </wj-combo-box>
             {{_pointSaveYn}}
           </td>
@@ -353,8 +343,7 @@
               items-source="_getComboData('prodTipYnComboData')"
               display-member-path="name"
               selected-value-path="value"
-              is-editable="false"
-              initialized="_initComboBox(s)">
+              is-editable="false">
             </wj-combo-box>
             {{_prodTipYn}}
           </td>
@@ -370,8 +359,7 @@
               items-source="_getComboData('useYnComboData')"
               display-member-path="name"
               selected-value-path="value"
-              is-editable="false"
-              initialized="_initComboBox(s)">
+              is-editable="false">
             </wj-combo-box>
             {{_sideProdYn}}
           </td>

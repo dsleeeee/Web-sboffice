@@ -1,10 +1,14 @@
 package kr.co.common.service.code.impl;
 
 import kr.co.common.data.domain.CommonCodeVO;
+import kr.co.common.data.domain.CustomComboVO;
+import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.code.CmmCodeService;
 import kr.co.common.service.redis.RedisConnService;
 import kr.co.common.template.RedisCustomTemplate;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sys.etc.vancard.service.VanCmpnyVO;
+import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +29,17 @@ public class CmmCodeServiceImpl implements CmmCodeService {
     private final CmmCodeMapper cmmCodeMapper;
     private final RedisConnService redisConnService;
     private final RedisCustomTemplate<String, CommonCodeVO> redisCustomTemplate;
+    private final SqlSession sqlSession;
 
     /** Constructor Injection */
     @Autowired
-    public CmmCodeServiceImpl(CmmCodeMapper cmmCodeMapper, RedisConnService redisConnService, RedisCustomTemplate<String, CommonCodeVO> redisCustomTemplate) {
+    public CmmCodeServiceImpl(CmmCodeMapper cmmCodeMapper,
+        RedisConnService redisConnService,
+        RedisCustomTemplate<String, CommonCodeVO> redisCustomTemplate, SqlSession sqlSession) {
         this.cmmCodeMapper = cmmCodeMapper;
         this.redisConnService = redisConnService;
         this.redisCustomTemplate = redisCustomTemplate;
+        this.sqlSession = sqlSession;
     }
 
     @Override
@@ -123,7 +131,21 @@ public class CmmCodeServiceImpl implements CmmCodeService {
     }
 
     /** 본사 목록 조회*/
-    @Override public <E> List<E> getHqOfficeList() {
+    @Override
+    public <E> List<E> getHqOfficeList() {
         return cmmCodeMapper.getHqOfficeList();
+    }
+
+    /** 커스텀 콤보박스 데이터 조회 */
+    @Override
+    public List<DefaultMap<String>> getCustomCombo(CustomComboVO customComboVO, SessionInfoVO sessionInfoVO) {
+
+        // 소속구분 설정
+        customComboVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        customComboVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        customComboVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        // 매퍼를 namespace와 ID를 이용하여 직접 호출.
+        return sqlSession.selectList("CmmCombo." + customComboVO.getQueryId(), customComboVO);
     }
 }

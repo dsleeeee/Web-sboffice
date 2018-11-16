@@ -1,12 +1,15 @@
 package kr.co.common.controller;
 
+import kr.co.common.data.domain.AgencyVO;
 import kr.co.common.data.domain.HqOfficeVO;
 import kr.co.common.data.domain.VanVO;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
-import kr.co.common.data.domain.AgencyVO;
 import kr.co.common.service.popup.PopupService;
+import kr.co.common.service.session.SessionService;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.store.manage.storemanage.service.StoreManageVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,12 +44,14 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 public class PopupController {
 
     /** service */
-    private final PopupService service;
+    private final SessionService sessionService;
+    private final PopupService popupService;
 
     /** Constructor Injection */
     @Autowired
-    public PopupController(PopupService service) {
-        this.service = service;
+    public PopupController(SessionService sessionService, PopupService popupService) {
+        this.sessionService = sessionService;
+        this.popupService = popupService;
     }
 
     /**
@@ -64,7 +69,7 @@ public class PopupController {
     public Result getVanList(VanVO vanVO, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
-        List<DefaultMap<String>> list = service.getVanList(vanVO);
+        List<DefaultMap<String>> list = popupService.getVanList(vanVO);
 
         return returnListJson(Status.OK, list, vanVO);
     }
@@ -84,13 +89,13 @@ public class PopupController {
     public Result getAgencyList(AgencyVO agencyVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
-        List<DefaultMap<String>> list = service.getAgencyList(agencyVO);
+        List<DefaultMap<String>> list = popupService.getAgencyList(agencyVO);
 
         return returnListJson(Status.OK, list, agencyVO);
     }
 
     /**
-     * 본사 팝업 목록 조회
+     * [본사 선택 팝업] 본사 목록 조회
      * @param hqOfficeVO
      * @param request
      * @param response
@@ -104,13 +109,32 @@ public class PopupController {
     public Result getHqList(HqOfficeVO hqOfficeVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
-        List<DefaultMap<String>> list = service.getHqList(hqOfficeVO);
+        List<DefaultMap<String>> list = popupService.getHqList(hqOfficeVO);
 
         return returnListJson(Status.OK, list, hqOfficeVO);
     }
 
+    /**
+     * [매장 선택 팝업] 해당 세션의 매장 목록 조회
+     * @param storeManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author 김지은
+     * @since 2018.11.14
+     */
+    @RequestMapping(value = "getStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreList(StoreManageVO storeManageVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
 
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        storeManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
+        List<DefaultMap<String>> list = popupService.getStoreList(storeManageVO);
 
+        return returnListJson(Status.OK, list, storeManageVO);
+    }
 
 }

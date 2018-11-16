@@ -18,7 +18,7 @@
       <div class="oh">
         <%--- 적용매장 그리드 --%>
         <div class="w50 fl">
-          <div class="wj-TblWrap mr10" style="height:350px; overflow-y: hidden;" ng-controller="regStoreCtrl">
+          <div class="wj-TblWrap mr10" style="height:350px; overflow-y: hidden;" ng-controller="creditStoreRegistCtrl">
             <div class="oh mb10">
               <%-- 페이지 스케일  --%>
               <div class="sb-select wj-hide">
@@ -68,7 +68,7 @@
 
         <%--- 미적용매장 그리드 --%>
         <div class="w50 fr">
-          <div class="wj-TblWrap ml10" style="height:350px;overflow-y: hidden;" ng-controller="noRegStoreCtrl">
+          <div class="wj-TblWrap ml10" style="height:350px;overflow-y: hidden;" ng-controller="creditStoreNoRegistCtrl">
             <div class="oh mb10">
               <%-- 페이지 스케일  --%>
               <div class="sb-select">

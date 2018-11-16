@@ -1,11 +1,16 @@
 package kr.co.common.controller;
 
+import kr.co.common.data.domain.CustomComboVO;
 import kr.co.common.data.enums.Status;
+import kr.co.common.data.enums.UseYn;
+import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
+import kr.co.common.service.code.CmmCodeService;
 import kr.co.common.service.message.MessageResolveService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -21,6 +26,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 
@@ -47,14 +53,16 @@ public class CommonController {
     @Qualifier("messageResolveService")
     private final MessageResolveService messageResolveService;
     private final CmmCodeUtil cmmCodeUtil;
+    private final CmmCodeService cmmCodeService;
 
     /** Constructor Injection */
     @Autowired
     public CommonController(SessionService sessionService, MessageResolveService messageResolveService,
-        CmmCodeUtil cmmCodeUtil) {
+        CmmCodeUtil cmmCodeUtil, CmmCodeService cmmCodeService) {
         this.sessionService = sessionService;
         this.messageResolveService = messageResolveService;
         this.cmmCodeUtil = cmmCodeUtil;
+        this.cmmCodeService = cmmCodeService;
     }
 
 
@@ -147,5 +155,30 @@ public class CommonController {
         return returnJson(Status.OK, result);
     }
 
+
+    /**
+     * 커스텀 콤보 데이터 조회
+     * @param   request HttpServletRequest
+     * @param   response HttpServletResponse
+     * @param   model model
+     * @param   customComboVO CustomComboVO
+     * @return  String
+     * @author  노현수
+     * @since   2018. 11. 15.
+     */
+    @RequestMapping(value = "/getCustomCombo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getCustomCombo(HttpServletRequest request, HttpServletResponse response,
+        Model model, CustomComboVO customComboVO) {
+
+        String result = "";
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        List<DefaultMap<String>> list = cmmCodeService.getCustomCombo(customComboVO, sessionInfoVO);
+
+        result = cmmCodeUtil.assmblObj(list, "codeNm", "code", UseYn.SELECT);
+
+        return returnJson(Status.OK, result);
+    }
 
 }
