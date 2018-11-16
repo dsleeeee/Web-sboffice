@@ -54,6 +54,7 @@
     <typeAlias alias="cmAgencyVO" type="kr.co.solbipos.application.common.service.CmAgencyVO"/>
     <typeAlias alias="vanVO" type="kr.co.common.data.domain.VanVO"/>
     <typeAlias alias="agencyVO" type="kr.co.common.data.domain.AgencyVO"/>
+    <typeAlias alias="customComboVO" type="kr.co.common.data.domain.CustomComboVO"/>
 
     <!-- 세션관련 -->
     <typeAlias alias="sessionInfoVO" type="kr.co.solbipos.application.session.auth.service.SessionInfoVO"/>

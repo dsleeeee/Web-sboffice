@@ -467,6 +467,36 @@
           <th></th>
           <td></td>
         </tr>
+        <tr ng-if="prodModifyInfo.sideProdYn === 'Y'">
+          <%--사이드속성분류코드 --%>
+          <th><s:message code="prod.sdattrClassCd"/></th>
+          <td>
+            <div class="sb-select">
+              <wj-combo-box id="_sdattrClassCd" name="sdattrClassCd"
+                ng-model="prodModifyInfo.sdattrClassCd"
+                items-source="_getComboData('sdattrClassCdComboData')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="_initComboBox(s)">
+              </wj-combo-box>
+            </div>
+          </td>
+          <%--사이드선택그룹코드 --%>
+          <th><s:message code="prod.sdselGrpCd"/></th>
+          <td>
+            <div class="sb-select">
+              <wj-combo-box id="_sdselGrpCd" name="sdselGrpCd"
+                ng-model="prodModifyInfo.sdselGrpCd"
+                items-source="_getComboData('sdselGrpCdComboData')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="_initComboBox(s)">
+              </wj-combo-box>
+            </div>
+          </td>
+        </tr>
         </tbody>
       </table>
       <%--비고--%>

@@ -24,26 +24,26 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT
-                    thpsc.HQ_OFFICE_CD,
                     thpsc.HQ_BRAND_CD,
                     thpsc.SDATTR_CLASS_CD,
                     thpsc.SDATTR_CLASS_NM
                 FROM
                     TB_HQ_PRODUCT_SDATTR_CLASS thpsc
                 WHERE
-                    thpsc.USE_YN = 'Y'
+                    thpsc.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND thpsc.USE_YN = 'Y'
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 SELECT
-                    tmpsc.STORE_CD,
                     tmpsc.MS_BRAND_CD,
                     tmpsc.SDATTR_CLASS_CD,
                     tmpsc.SDATTR_CLASS_NM
                 FROM
                     TB_MS_PRODUCT_SDATTR_CLASS tmpsc
                 WHERE
-                    tmpsc.USE_YN = 'Y'
+                    tmpsc.STORE_CD = #{storeCd}
+                    AND tmpsc.USE_YN = 'Y'
             </when>
         </choose>
     </select>
@@ -192,28 +192,32 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT
-                    thps.HQ_OFFICE_CD,
                     thps.SDATTR_CD,
                     thps.SDATTR_NM,
-                    thps.SDATTR_CLASS_CD
+                    thps.SDATTR_CLASS_CD,
+                    thps.DISP_SEQ
                 FROM
                     TB_HQ_PRODUCT_SDATTR thps
                 WHERE
-                    thps.SDATTR_CLASS_CD = #{sdattrClassCd}
+                    thps.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND thps.SDATTR_CLASS_CD = #{sdattrClassCd}
                     AND thps.USE_YN = 'Y'
+                ORDER BY thps.DISP_SEQ
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 SELECT
-                    tmps.STORE_CD,
                     tmps.SDATTR_CD,
                     tmps.SDATTR_NM,
-                    tmps.SDATTR_CLASS_CD
+                    tmps.SDATTR_CLASS_CD,
+                    tmps.DISP_SEQ
                 FROM
                     TB_MS_PRODUCT_SDATTR tmps
                 WHERE
-                    tmps.SDATTR_CLASS_CD = #{sdattrClassCd}
+                    tmps.STORE_CD = #{storeCd}
+                    AND tmps.SDATTR_CLASS_CD = #{sdattrClassCd}
                     AND tmps.USE_YN = 'Y'
+                ORDER BY tmps.DISP_SEQ
             </when>
         </choose>
     </select>
@@ -350,6 +354,552 @@
                 WHERE
                     STORE_CD = #{storeCd}
                     AND SDATTR_CD = #{sdattrCd}
+            </when>
+        </choose>
+    </update>
+
+    <!-- 선택그룹 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDSEL_GROUP, TB_MS_PRODUCT_SDSEL_GROUP
+        PARAM    : sideMenuSelGroupVO
+        COMMENTS : 사이드메뉴 선택그룹 목록을 조회한다. ( 본사/매장 )
+    -->
+    <select id="getMenuGrpList" parameterType="sideMenuSelGroupVO" resultType="DefaultMap">
+        /* USE : SideMenuMapper.getMenuGrpList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                    thpsg.HQ_BRAND_CD,
+                    thpsg.SDSEL_GRP_CD,
+                    thpsg.SDSEL_GRP_NM
+                FROM
+                    TB_HQ_PRODUCT_SDSEL_GROUP thpsg
+                WHERE
+                    thpsg.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND thpsg.USE_YN = 'Y'
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                    tmpsg.MS_BRAND_CD,
+                    tmpsg.SDSEL_GRP_CD,
+                    tmpsg.SDSEL_GRP_NM
+                FROM
+                    TB_MS_PRODUCT_SDSEL_GROUP tmpsg
+                WHERE
+                    tmpsg.STORE_CD = #{storeCd}
+                    AND tmpsg.USE_YN = 'Y'
+            </when>
+        </choose>
+    </select>
+
+    <!-- 선택그룹 생성 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDSEL_GROUP, TB_MS_PRODUCT_SDSEL_GROUP
+        PARAM    : sideMenuSelGroupVO
+        COMMENTS : 선택그룹을 생성한다.
+    -->
+    <insert id="insertMenuGrpList" parameterType="sideMenuSelGroupVO">
+        /* USE : SideMenuMapper.insertMenuGrpList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_HQ_PRODUCT_SDSEL_GROUP
+                (
+                    HQ_OFFICE_CD,
+                    HQ_BRAND_CD,
+                    SDSEL_GRP_CD,
+                    SDSEL_GRP_NM,
+                    USE_YN,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                ) VALUES (
+                    #{hqOfficeCd},
+                    #{hqBrandCd},
+                    #{sdselGrpCd},
+                    #{sdselGrpNm},
+                    'Y',
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_MS_PRODUCT_SDSEL_GROUP
+                (
+                    STORE_CD,
+                    MS_BRAND_CD,
+                    SDSEL_GRP_CD,
+                    SDSEL_GRP_NM,
+                    USE_YN,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                ) VALUES (
+                    #{storeCd},
+                    #{msBrandCd},
+                    #{sdselGrpCd},
+                    #{sdselGrpNm},
+                    'Y',
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
+            </when>
+        </choose>
+    </insert>
+
+    <!-- 선택그룹 수정 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDSEL_GROUP, TB_MS_PRODUCT_SDSEL_GROUP
+        PARAM    : sideMenuSelGroupVO
+        COMMENTS : 선택그룹을 수정한다.
+    -->
+    <update id="updateMenuGrpList" parameterType="sideMenuSelGroupVO">
+        /* USE : SideMenuMapper.updateMenuGrpList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE TB_HQ_PRODUCT_SDSEL_GROUP
+                SET
+                    SDSEL_GRP_NM = #{sdselGrpNm},
+                    HQ_BRAND_CD = #{hqBrandCd},
+                    MOD_DT = #{modDt},
+                    MOD_ID = #{modId}
+                WHERE
+                    HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND SDSEL_GRP_CD = #{sdselGrpCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE TB_MS_PRODUCT_SDSEL_GROUP
+                SET
+                    SDSEL_GRP_NM = #{sdselGrpNm},
+                    MS_BRAND_CD = #{msBrandCd},
+                    MOD_DT = #{modDt},
+                    MOD_ID = #{modId}
+                WHERE
+                    STORE_CD = #{storeCd}
+                    AND SDSEL_GRP_CD = #{sdselGrpCd}
+            </when>
+        </choose>
+    </update>
+
+    <!-- 선택그룹 삭제 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDSEL_GROUP, TB_MS_PRODUCT_SDSEL_GROUP
+        PARAM    : sideMenuSelGroupVO
+        COMMENTS : 선택그룹을 삭제한다.
+    -->
+    <update id="deleteMenuGrpList" parameterType="sideMenuSelGroupVO">
+        /* USE : SideMenuMapper.deleteMenuGrpList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE TB_HQ_PRODUCT_SDSEL_GROUP
+                SET
+                    USE_YN = 'N',
+                    MOD_DT = #{modDt},
+                    MOD_ID = #{modId}
+                WHERE
+                    HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND SDSEL_GRP_CD = #{sdselGrpCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE TB_MS_PRODUCT_SDSEL_GROUP
+                SET
+                    USE_YN = 'N',
+                    MOD_DT = #{modDt},
+                    MOD_ID = #{modId}
+                WHERE
+                    STORE_CD = #{storeCd}
+                    AND SDSEL_GRP_CD = #{sdselGrpCd}
+            </when>
+        </choose>
+    </update>
+
+    <!-- 선택분류 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDSEL_CLASS, TB_MS_PRODUCT_SDSEL_CLASS
+        PARAM    : sideMenuSelClassVO
+        COMMENTS : 사이드메뉴 선택분류 목록을 조회한다. ( 본사/매장 )
+    -->
+    <select id="getMenuClassList" parameterType="sideMenuSelClassVO" resultType="DefaultMap">
+        /* USE : SideMenuMapper.getMenuClassList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                    thpsc.SDSEL_CLASS_CD,
+                    thpsc.SDSEL_CLASS_NM,
+                    thpsc.SDSEL_GRP_CD,
+                    thpsc.DISP_SEQ,
+                    thpsc.SDSEL_QTY
+                FROM
+                    TB_HQ_PRODUCT_SDSEL_CLASS thpsc
+                WHERE
+                    thpsc.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND thpsc.SDSEL_GRP_CD = #{sdselGrpCd}
+                    AND thpsc.USE_YN = 'Y'
+                ORDER BY thpsc.DISP_SEQ
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                    tmpsc.SDSEL_CLASS_CD,
+                    tmpsc.SDSEL_CLASS_NM,
+                    tmpsc.SDSEL_GRP_CD,
+                    tmpsc.DISP_SEQ,
+                    tmpsc.SDSEL_QTY
+                FROM
+                    TB_MS_PRODUCT_SDSEL_CLASS tmpsc
+                WHERE
+                    tmpsc.STORE_CD = #{storeCd}
+                    AND tmpsc.SDSEL_GRP_CD = #{sdselGrpCd}
+                    AND tmpsc.USE_YN = 'Y'
+                ORDER BY tmpsc.DISP_SEQ
+            </when>
+        </choose>
+    </select>
+
+    <!-- 선택분류 생성 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDSEL_CLASS, TB_MS_PRODUCT_SDSEL_CLASS
+        PARAM    : sideMenuSelClassVO
+        COMMENTS : 선택분류를 생성한다.
+    -->
+    <insert id="insertMenuClassList" parameterType="sideMenuSelClassVO">
+        /* USE : SideMenuMapper.insertMenuClassList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_HQ_PRODUCT_SDSEL_CLASS
+                (
+                    HQ_OFFICE_CD,
+                    SDSEL_CLASS_CD,
+                    SDSEL_CLASS_NM,
+                    SDSEL_GRP_CD,
+                    DISP_SEQ,
+                    SDSEL_QTY,
+                    USE_YN,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                ) VALUES (
+                    #{hqOfficeCd},
+                    #{sdselClassCd},
+                    #{sdselClassNm},
+                    #{sdselGrpCd},
+                    #{dispSeq},
+                    #{sdselQty},
+                    'Y',
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_MS_PRODUCT_SDSEL_CLASS
+                (
+                    STORE_CD,
+                    SDSEL_CLASS_CD,
+                    SDSEL_CLASS_NM,
+                    SDSEL_GRP_CD,
+                    DISP_SEQ,
+                    SDSEL_QTY,
+                    USE_YN,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                ) VALUES (
+                    #{storeCd},
+                    #{sdselClassCd},
+                    #{sdselClassNm},
+                    #{sdselGrpCd},
+                    #{dispSeq},
+                    #{sdselQty},
+                    'Y',
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
+            </when>
+        </choose>
+    </insert>
+
+    <!-- 선택분류 수정 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDSEL_CLASS, TB_MS_PRODUCT_SDSEL_CLASS
+        PARAM    : sideMenuSelClassVO
+        COMMENTS : 선택분류를 수정한다.
+    -->
+    <update id="updateMenuClassList" parameterType="sideMenuSelClassVO">
+        /* USE : SideMenuMapper.updateMenuClassList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE TB_HQ_PRODUCT_SDSEL_CLASS
+                SET
+                    SDSEL_CLASS_NM = #{sdselClassNm},
+                    DISP_SEQ = #{dispSeq},
+                    SDSEL_QTY = #{sdselQty},
+                    MOD_DT = #{modDt},
+                    MOD_ID = #{modId}
+                WHERE
+                    HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND SDSEL_CLASS_CD = #{sdselClassCd}
+                    AND SDSEL_GRP_CD = #{sdselGrpCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE TB_MS_PRODUCT_SDSEL_CLASS
+                SET
+                    SDSEL_CLASS_NM = #{sdselClassNm},
+                    DISP_SEQ = #{dispSeq},
+                    SDSEL_QTY = #{sdselQty},
+                    MOD_DT = #{modDt},
+                    MOD_ID = #{modId}
+                WHERE
+                    STORE_CD = #{storeCd}
+                    AND SDSEL_CLASS_CD = #{sdselClassCd}
+                    AND SDSEL_GRP_CD = #{sdselGrpCd}
+            </when>
+        </choose>
+    </update>
+
+    <!-- 선택분류 삭제 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDSEL_CLASS, TB_MS_PRODUCT_SDSEL_CLASS
+        PARAM    : sideMenuSelClassVO
+        COMMENTS : 선택분류를 삭제한다.
+    -->
+    <update id="deleteMenuClassList" parameterType="sideMenuSelClassVO">
+        /* USE : SideMenuMapper.deleteMenuClassList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE TB_HQ_PRODUCT_SDSEL_CLASS
+                SET
+                    USE_YN = 'N',
+                    MOD_DT = #{modDt},
+                    MOD_ID = #{modId}
+                WHERE
+                    HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND SDSEL_CLASS_CD = #{sdselClassCd}
+                    AND SDSEL_GRP_CD = #{sdselGrpCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE TB_MS_PRODUCT_SDSEL_CLASS
+                SET
+                    USE_YN = 'N',
+                    MOD_DT = #{modDt},
+                    MOD_ID = #{modId}
+                WHERE
+                    STORE_CD = #{storeCd}
+                    AND SDSEL_CLASS_CD = #{sdselClassCd}
+                    AND SDSEL_GRP_CD = #{sdselGrpCd}
+            </when>
+        </choose>
+    </update>
+
+    <!-- 선택상품 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDSEL_PROD, TB_MS_PRODUCT_SDSEL_PROD
+        PARAM    : sideMenuSelProdVO
+        COMMENTS : 사이드메뉴 선택상품 목록을 조회한다. ( 본사/매장 )
+    -->
+    <select id="getMenuProdList" parameterType="sideMenuSelProdVO" resultType="DefaultMap">
+        /* USE : SideMenuMapper.getMenuProdList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                    thpsp.SDSEL_CLASS_CD,
+                    thpsp.PROD_CD,
+                    thp.PROD_NM,
+                    thpsp.ADD_PROD_UPRC,
+                    thpsp.DISP_SEQ
+                FROM
+                    TB_HQ_PRODUCT_SDSEL_PROD thpsp
+                LEFT OUTER JOIN TB_HQ_PRODUCT thp ON
+                    thpsp.PROD_CD = thp.PROD_CD
+                WHERE
+                    thpsp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND thpsp.SDSEL_CLASS_CD = #{sdselClassCd}
+                    AND thpsc.USE_YN = 'Y'
+                ORDER BY thpsp.DISP_SEQ
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                    tmpsp.SDSEL_CLASS_CD,
+                    tmpsp.PROD_CD,
+                    tmp.PROD_NM,
+                    tmpsp.ADD_PROD_UPRC,
+                    tmpsp.DISP_SEQ
+                FROM
+                    TB_MS_PRODUCT_SDSEL_PROD tmpsp
+                LEFT OUTER JOIN TB_HQ_PRODUCT tmp ON
+                    tmpsp.PROD_CD = tmp.PROD_CD
+                WHERE
+                    tmpsp.STORE_CD = #{storeCd}
+                    AND tmpsp.SDSEL_CLASS_CD = #{sdselClassCd}
+                    AND tmpsp.USE_YN = 'Y'
+                ORDER BY tmpsp.DISP_SEQ
+            </when>
+        </choose>
+    </select>
+
+    <!-- 선택상품 생성 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDSEL_PROD, TB_MS_PRODUCT_SDSEL_PROD
+        PARAM    : sideMenuSelProdVO
+        COMMENTS : 선택상품을 생성한다.
+    -->
+    <insert id="insertMenuProdList" parameterType="sideMenuSelProdVO">
+        /* USE : SideMenuMapper.insertMenuProdList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_HQ_PRODUCT_SDSEL_PROD
+                (
+                    HQ_OFFICE_CD,
+                    SDSEL_CLASS_CD,
+                    PROD_CD,
+                    ADD_PROD_UPRC,
+                    DISP_SEQ,
+                    USE_YN,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                ) VALUES (
+                    #{hqOfficeCd},
+                    #{sdselClassCd},
+                    #{prodCd},
+                    #{addProdUprc},
+                    #{dispSeq},
+                    'Y',
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_MS_PRODUCT_SDSEL_PROD
+                (
+                    STORE_CD,
+                    SDSEL_CLASS_CD,
+                    PROD_CD,
+                    ADD_PROD_UPRC,
+                    DISP_SEQ,
+                    USE_YN,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                ) VALUES (
+                    #{storeCd},
+                    #{sdselClassCd},
+                    #{prodCd},
+                    #{addProdUprc},
+                    #{dispSeq},
+                    'Y',
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
+            </when>
+        </choose>
+    </insert>
+
+    <!-- 선택상품 수정 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDSEL_PROD, TB_MS_PRODUCT_SDSEL_PROD
+        PARAM    : sideMenuSelProdVO
+        COMMENTS : 선택상품을 수정한다.
+    -->
+    <update id="updateMenuProdList" parameterType="sideMenuSelProdVO">
+        /* USE : SideMenuMapper.updateMenuProdList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE TB_HQ_PRODUCT_SDSEL_PROD
+                SET
+                    SDSEL_CLASS_CD = #{sdselClassCd},
+                    PROD_CD = #{prodCd},
+                    ADD_PROD_UPRC = #{addProdUprc},
+                    DISP_SEQ = #{dispSeq},
+                    MOD_DT = #{modDt},
+                    MOD_ID = #{modId}
+                WHERE
+                    HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND SDSEL_CLASS_CD = #{sdselClassCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE TB_MS_PRODUCT_SDSEL_PROD
+                SET
+                    SDSEL_CLASS_CD = #{sdselClassCd},
+                    PROD_CD = #{prodCd},
+                    ADD_PROD_UPRC = #{addProdUprc},
+                    DISP_SEQ = #{dispSeq},
+                    MOD_DT = #{modDt},
+                    MOD_ID = #{modId}
+                WHERE
+                    STORE_CD = #{storeCd}
+                    AND SDSEL_CLASS_CD = #{sdselClassCd}
+            </when>
+        </choose>
+    </update>
+
+    <!-- 선택분류 삭제 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDSEL_PROD, TB_MS_PRODUCT_SDSEL_PROD
+        PARAM    : sideMenuSelProdVO
+        COMMENTS : 선택분류를 삭제한다.
+    -->
+    <update id="deleteMenuProdList" parameterType="sideMenuSelProdVO">
+        /* USE : SideMenuMapper.deleteMenuProdList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE TB_HQ_PRODUCT_SDSEL_PROD
+                SET
+                    USE_YN = 'N',
+                    MOD_DT = #{modDt},
+                    MOD_ID = #{modId}
+                WHERE
+                    HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND SDSEL_CLASS_CD = #{sdselClassCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE TB_MS_PRODUCT_SDSEL_PROD
+                SET
+                    USE_YN = 'N',
+                    MOD_DT = #{modDt},
+                    MOD_ID = #{modId}
+                WHERE
+                    STORE_CD = #{storeCd}
+                    AND SDSEL_CLASS_CD = #{sdselClassCd}
             </when>
         </choose>
     </update>

@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-  <div id="attrArea" class="wj-TblWrap mt20" ng-show="isAttrTab">
+  <div id="attrArea" class="wj-TblWrap mt20 ng-cloak" ng-hide="isAttrTab">
     <div class="w50 fl">
       <%--위즈모 테이블--%>
       <div id="gridAttrClass" class="wj-TblWrapBr mr10 pd20" style="height: 480px;" ng-controller="sideMenuAttrClassCtrl">

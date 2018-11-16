@@ -1,8 +1,7 @@
 package kr.co.solbipos.base.prod.sidemenu.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.base.prod.sidemenu.service.SideMenuAttrCdVO;
-import kr.co.solbipos.base.prod.sidemenu.service.SideMenuAttrClassVO;
+import kr.co.solbipos.base.prod.sidemenu.service.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -51,5 +50,41 @@ public interface SideMenuMapper {
 
     /** 사이드메뉴-속성탭-속성 삭제 */
     int deleteAttrCdList(SideMenuAttrCdVO sideMenuAttrCdVO);
+
+    /** 사이드메뉴-선택메뉴탭-선택그룹 목록 조회 */
+    List<DefaultMap<String>> getMenuGrpList(SideMenuSelGroupVO sideMenuSelGroupVO);
+
+    /** 사이드메뉴-선택메뉴탭-선택그룹 생성 */
+    int insertMenuGrpList(SideMenuSelGroupVO sideMenuSelGroupVO);
+
+    /** 사이드메뉴-선택메뉴탭-선택그룹 수정 */
+    int updateMenuGrpList(SideMenuSelGroupVO sideMenuSelGroupVO);
+
+    /** 사이드메뉴-선택메뉴탭-선택그룹 삭제 */
+    int deleteMenuGrpList(SideMenuSelGroupVO sideMenuSelGroupVO);
+
+    /** 사이드메뉴-선택메뉴탭-선택분류 목록 조회 */
+    List<DefaultMap<String>> getMenuClassList(SideMenuSelClassVO sideMenuSelClassVO);
+
+    /** 사이드메뉴-선택메뉴탭-선택분류 생성 */
+    int insertMenuClassList(SideMenuSelClassVO sideMenuSelClassVO);
+
+    /** 사이드메뉴-선택메뉴탭-선택분류 수정 */
+    int updateMenuClassList(SideMenuSelClassVO sideMenuSelClassVO);
+
+    /** 사이드메뉴-선택메뉴탭-선택분류 삭제 */
+    int deleteMenuClassList(SideMenuSelClassVO sideMenuSelClassVO);
+
+    /** 사이드메뉴-선택메뉴탭-선택상품 목록 조회 */
+    List<DefaultMap<String>> getMenuProdList(SideMenuSelProdVO sideMenuSelProdVO);
+
+    /** 사이드메뉴-선택메뉴탭-선택상품 생성 */
+    int insertMenuProdList(SideMenuSelProdVO sideMenuSelProdVO);
+
+    /** 사이드메뉴-선택메뉴탭-선택상품 수정 */
+    int updateMenuProdList(SideMenuSelProdVO sideMenuSelProdVO);
+
+    /** 사이드메뉴-선택메뉴탭-선택상품 삭제 */
+    int deleteMenuProdList(SideMenuSelProdVO sideMenuSelProdVO);
 
 }
