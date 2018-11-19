@@ -108,14 +108,14 @@
                   selection-mode="Row"
                   items-source="data"
                   item-formatter="_itemFormatter"
-                  cell-edit-ended="changeVendorFg(s,e)">
+                  beginning-edit="changeVendorFg(s,e)">
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="terminalManage.storeCd"/>" binding="storeCd" width="*" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="terminalManage.posNo"/>" binding="posNo" width="*" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="terminalManage.vendorFg"/>" binding="vendorFg" data-map="vendorFgDataMap" width="*"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="terminalManage.vendorFgNm"/>" binding="vendorFgNm" visible="false" width="*"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="terminalManage.vendorCd"/>" binding="vendorCd" data-map="vanCdDataMap" width="*"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="terminalManage.vendorCd"/>" binding="vendorNm" data-map="vanCdDataMap" width="*"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="terminalManage.vendorTermnlNo"/>" binding="vendorTermnlNo" width="*"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="terminalManage.vendorSerNo"/>" binding="vendorSerNo" width="*"></wj-flex-grid-column>
           </wj-flex-grid>
@@ -124,20 +124,20 @@
         <%-- 코너 설정 --%>
         <div class="wj-gridWrap" style="height:430px; overflow-y: hidden;" ng-controller="cornerCtrl" id="cornerArea" style="display: none;">
           <wj-flex-grid
-                  autoGenerateColumns="false"
+                  autoGbeginning-editenerateColumns="false"
                   control="flex"
                   initialized="initGrid(s,e)"
                   sticky-headers="true"
                   selection-mode="Row"
                   items-source="data"
                   item-formatter="_itemFormatter"
-                  cell-edit-ended="changeVendorFg(s,e)">
+                  beginning-edit="changeVendorFg(s,e)">
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="terminalManage.cornrCd"/>" binding="cornrCd" width="*" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="terminalManage.vendorFg"/>" binding="vendorFg" data-map="vendorFgDataMap" width="*"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="terminalManage.vendorFgNm"/>" binding="vendorFgNm" visible="false" width="*"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="terminalManage.vendorCd"/>" binding="vendorCd" data-map="vanCdDataMap" width="*"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="terminalManage.vendorCd"/>" binding="vendorNm" data-map="vanCdDataMap" width="*"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="terminalManage.vendorTermnlNo"/>" binding="vendorTermnlNo" width="*"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="terminalManage.vendorSerNo"/>" binding="vendorSerNo" width="*"></wj-flex-grid-column>
           </wj-flex-grid>

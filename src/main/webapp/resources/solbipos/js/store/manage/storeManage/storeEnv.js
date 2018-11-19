@@ -68,6 +68,11 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
    * *******************************************************/
   $scope.setEnvContents = function(envType, list){
 
+
+    // console.log(list)
+    console.log(envstGrp)
+
+
     var innerHtml = "";
     // var envCnt    = 0;
     var allCnt    = 0; // 전체 환경값 갯수

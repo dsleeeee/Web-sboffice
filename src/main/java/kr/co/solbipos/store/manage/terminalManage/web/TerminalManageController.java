@@ -199,6 +199,7 @@ public class TerminalManageController {
         int result = 0;
 
         try{
+
 //            StoreEnvVO storeEnvVO = new StoreEnvVO();
 //            storeEnvVO.setStoreCd(request.getParameter("storeCd"));
 //            storeEnvVO.setEnvstVal(request.getParameter("terminalFgVal"));
