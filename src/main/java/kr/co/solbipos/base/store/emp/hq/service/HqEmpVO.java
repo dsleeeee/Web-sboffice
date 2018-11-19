@@ -100,6 +100,8 @@ public class HqEmpVO extends PageVO {
     /** 권한 그룹 코드 */
     String authGrpCd;
 
+    private boolean chkDt;
+
     public String getHqOfficeCd() {
         return hqOfficeCd;
     }
@@ -276,4 +278,18 @@ public class HqEmpVO extends PageVO {
         this.authGrpCd = authGrpCd;
     }
 
+    /**
+     * @return the chkDt
+     */
+
+    public boolean isChkDt() {
+        return chkDt;
+    }
+
+    /**
+     * @param chkDt the chkDt to set
+     */
+    public void setChkDt(boolean chkDt) {
+        this.chkDt = chkDt;
+    }
 }
