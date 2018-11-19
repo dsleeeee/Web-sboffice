@@ -43,7 +43,7 @@
          FROM TB_MB_MEMBER_CREDIT tmmc
            ) tmmc
     <where>
-      <if test='storeCds != null and storeCds != ""'>
+      <if test='storeCds != null and storeCds != "ALL"'>
         AND tmmc.STORE_CD IN
         <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
            #{item}

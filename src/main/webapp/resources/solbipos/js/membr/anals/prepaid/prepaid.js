@@ -19,6 +19,13 @@ var app = agrid.getApp();
 app.controller('prepaidCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('prepaidCtrl', $scope, $http, true));
+
+  $scope.orgnFg = gvOrgnFg;
+
+  if($scope.orgnFg === 'S') {
+    $scope.storeCds = gvStoreCd;
+  }
+
   // comboBox 초기화
   $scope._setComboData("srchArrayCombo", arrayData);
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -35,10 +42,16 @@ app.controller('prepaidCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 선불회원 그리드 조회
   $scope.searchCredit = function(){
+
     // 파라미터
     var params = {};
     params.storeCds = $("#storeCd").val();
     params.array = srchArrayCombo.selectedValue;
+
+    if($scope.orgnFg === 'H' && params.storeCds  === '') {
+      alert("매장을 선택해주세요.");
+      return false;
+    }
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquiryMain(baseUrl + "prepaid/getPrepaidMemberList.sb", params, function() {}, false);

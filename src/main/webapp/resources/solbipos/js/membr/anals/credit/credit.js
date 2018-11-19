@@ -19,6 +19,13 @@ var app = agrid.getApp();
 app.controller('creditCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('creditCtrl', $scope, $http, true));
+
+  $scope.orgnFg = gvOrgnFg;
+
+  if($scope.orgnFg === 'S') {
+    $scope.storeCds = gvStoreCd;
+  }
+
   // comboBox 초기화
   $scope._setComboData("srchArrayCombo", arrayData);
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -39,6 +46,11 @@ app.controller('creditCtrl', ['$scope', '$http', function ($scope, $http) {
     var params = {};
     params.storeCds = $("#storeCd").val();
     params.array = srchArrayCombo.selectedValue;
+
+    if($scope.orgnFg === 'H' && params.storeCds  === '') {
+      alert("매장을 선택해주세요.");
+      return false;
+    }
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquiryMain(baseUrl + "credit/getCreditMemberList.sb", params, function() {}, false);

@@ -21,7 +21,7 @@
       <col class="w30" />
     </colgroup>
     <tbody>
-    <tr>
+    <tr ng-show="orgnFg=='H'">
       <%-- 매장 --%>
       <th><s:message code="prepaid.srchStore" /></th>
       <td>

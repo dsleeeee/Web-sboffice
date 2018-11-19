@@ -5,6 +5,8 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="baseUrl" value="/membr/anals/credit/" />
 
 <div class="subCon" ng-controller="creditCtrl">
@@ -21,7 +23,7 @@
       <col class="w35" />
     </colgroup>
     <tbody>
-    <tr>
+    <tr ng-show="orgnFg=='H'">
       <%-- 매장 --%>
       <div id="storeCd" style="display: none;"></div>
       <th><s:message code="credit.srchStore" /></th>

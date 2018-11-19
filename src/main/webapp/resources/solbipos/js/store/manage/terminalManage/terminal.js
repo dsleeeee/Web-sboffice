@@ -379,7 +379,6 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._inquirySub(baseUrl + "pos/getPosTerminalList.sb", params, function() {
       // var rows = $scope.flex.rows;
       // if(rows.length > 0) {
-      //   // todo edit 이벤트가 먹혀야 저거 무ㅓ냐 벤더코드가 수정되는데 이거 뭐냐진짜
       //   for (var i = 0; i < rows.length; i++) {
       //     // $scope.flex.setCellData(i,3, rows[i]._data.vendorFg);
       //     // $scope.flex.setCellData(i,3, "2");

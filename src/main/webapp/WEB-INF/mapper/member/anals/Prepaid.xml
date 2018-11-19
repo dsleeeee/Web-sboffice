@@ -44,7 +44,7 @@
            FROM TB_MB_MEMBER_PREPAID tmmp
              ) tmmp
       <where>
-          <if test='storeCds != null and storeCds != ""'>
+          <if test='storeCds != null and storeCds != "ALL"'>
             AND tmmp.STORE_CD IN
               <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
                  #{item}
