@@ -1,0 +1,795 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.stock.disuse.disuse.service.impl.DisuseMapper">
+
+    <!-- 폐기관리 - 폐기관리 리스트 조회(본사) -->
+    <!--
+        TABLE    : TB_ST_HQ_STOCK_CUR, TB_HQ_PRODUCT, TB_HQ_PRODUCT_BARCD
+        PARAM    : disuseVO
+        COMMENTS : 폐기관리 - 폐기관리 리스트를 조회한다.
+    -->
+    <select id="getHqDisuseList" parameterType="disuseVO" resultType="DefaultMap">
+        /* USE : DisuseMapper.getHqDisuseList */
+        <![CDATA[
+        SELECT  tshd.DISUSE_DATE, tshd.HQ_OFFICE_CD, tshd.SEQ_NO
+        ,       tshd.DISUSE_TITLE, tshd.PROC_FG, tshd.DTL_CNT
+        ,       tshd.CONFM_DATE
+        ,       SUBSTR(tshd.REG_DT,0,8) AS REG_DATE
+        FROM    TB_ST_HQ_DISUSE tshd
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     DISUSE_DATE  BETWEEN #{startDate} AND #{endDate}
+        ]]>
+        <if test='procFg != null and procFg != ""'>
+            AND tshd.PROC_FG = #{procFg}
+        </if>
+        <![CDATA[
+        ORDER BY tshd.DISUSE_DATE DESC, tshd.SEQ_NO DESC
+        ]]>
+    </select>
+
+
+    <!-- 폐기관리 - 폐기관리 리스트 조회(매장) -->
+    <!--
+        TABLE    : TB_ST_STORE_DISUSE
+        PARAM    : disuseVO
+        COMMENTS : 폐기관리 - 폐기관리 리스트를 조회한다.
+    -->
+    <select id="getStDisuseList" parameterType="disuseVO" resultType="DefaultMap">
+        /* USE : DisuseMapper.getStDisuseList */
+        <![CDATA[
+        SELECT  tssd.DISUSE_DATE, tssd.STORE_CD, tssd.SEQ_NO
+        ,       tssd.DISUSE_TITLE, tssd.PROC_FG, tssd.DTL_CNT
+        ,       tssd.CONFM_DATE
+        ,       SUBSTR(tssd.REG_DT,0,8) AS REG_DATE
+        FROM    TB_ST_STORE_DISUSE tssd
+        WHERE   tssd.STORE_CD     = #{storeCd}
+        AND     tssd.DISUSE_DATE  BETWEEN #{startDate} AND #{endDate}
+        ]]>
+        <if test='procFg != null and procFg != ""'>
+            AND tssd.PROC_FG = #{procFg}
+        </if>
+        <![CDATA[
+        ORDER BY tssd.DISUSE_DATE DESC, tssd.SEQ_NO DESC
+        ]]>
+    </select>
+
+
+    <!-- 폐기관리 - 폐기 진행구분 및 제목 조회(본사) -->
+    <!--
+        TABLE    : TB_ST_HQ_DISUSE
+        PARAM    : disuseVO
+        COMMENTS : 폐기관리 - 폐기 진행구분 및 제목을 조회한다.
+    -->
+    <select id="getHqProcFgCheck" parameterType="disuseVO" resultType="DefaultMap">
+        /* USE : DisuseMapper.getHqProcFgCheck */
+        <![CDATA[
+        SELECT  tshd.PROC_FG, tshd.DISUSE_TITLE
+        FROM    TB_ST_HQ_DISUSE tshd
+        WHERE   tshd.HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     tshd.DISUSE_DATE   = #{disuseDate}
+        AND     tshd.SEQ_NO        = #{seqNo}
+        ]]>
+    </select>
+
+
+    <!-- 폐기관리 - 폐기 진행구분 및 제목 조회(매장) -->
+    <!--
+        TABLE    : TB_ST_STORE_DISUSE
+        PARAM    : disuseVO
+        COMMENTS : 폐기관리 - 폐기 진행구분 및 제목을 조회한다.
+    -->
+    <select id="getStProcFgCheck" parameterType="disuseVO" resultType="DefaultMap">
+        /* USE : DisuseMapper.getStProcFgCheck */
+        <![CDATA[
+        SELECT  tssd.PROC_FG, tssd.DISUSE_TITLE
+        FROM    TB_ST_STORE_DISUSE tssd
+        WHERE   tssd.STORE_CD      = #{storeCd}
+        AND     tssd.DISUSE_DATE   = #{disuseDate}
+        AND     tssd.SEQ_NO        = #{seqNo}
+        ]]>
+    </select>
+
+
+    <!-- 폐기관리 - 폐기등록 상품 리스트 조회(본사) -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_ST_HQ_DISUSE_DTL, TB_ST_HQ_STOCK_CUR, TB_ST_HQ_STOCK_MONTHLY, TB_HQ_PRODUCT_BARCD
+        PARAM    : disuseVO
+        COMMENTS : 폐기관리 - 폐기등록 리스트를 조회한다.
+    -->
+    <select id="getHqDisuseRegistList" parameterType="disuseVO" resultType="DefaultMap">
+        /* USE : DisuseMapper.getHqDisuseRegistList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        <![CDATA[
+        SELECT  thpb.BARCD_CD, thp.PROD_CD, thp.PROD_NM, thp.PO_UNIT_QTY
+        ,       NVL((SELECT MAX(SALE_UPRC) KEEP(DENSE_RANK FIRST ORDER BY REG_DT DESC)
+                       FROM TB_HQ_PRODUCT_SALE_PRICE
+                      WHERE HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                        AND PROD_CD = thp.PROD_CD
+                        AND #{disuseDate} BETWEEN START_DATE AND END_DATE
+                     ), 0) AS SALE_UPRC
+        ,       NVL(tshsc.AVG_COST_UPRC, thp.COST_UPRC) AS COST_UPRC
+        ,       NVL(NVL(tshdd.CURR_QTY, tshsc.CURR_QTY), 0) AS CURR_QTY
+        ,       tshdd.DISUSE_QTY
+        ,       tshdd.DISUSE_AMT
+        ,       tshdd.REMARK
+        ,       DECODE(tshdd.PROD_CD, NULL, 'I', 'U') AS DISUSE_PROD_STATUS
+        ]]>
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        <![CDATA[
+        FROM    TB_HQ_PRODUCT thp
+        ,       TB_ST_HQ_DISUSE_DTL tshdd
+        ,       (   SELECT  tshsc.PROD_CD, tshsc.CURR_QTY, tshsm.AVG_COST_UPRC
+                    FROM    TB_ST_HQ_STOCK_CUR tshsc
+                    ,       TB_ST_HQ_STOCK_MONTHLY tshsm
+                    WHERE   tshsc.HQ_OFFICE_CD    =   #{hqOfficeCd}
+                    AND     tshsm.IOSTOCK_YM  (+) =   SUBSTR(#{disuseDate}, 0, 6)
+                    AND     tshsm.HQ_OFFICE_CD(+) =   tshsc.HQ_OFFICE_CD
+                    AND     tshsm.PROD_CD     (+) =   tshsc.PROD_CD
+                )   tshsc
+        ,       TB_HQ_PRODUCT_BARCD thpb
+        WHERE   thp.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     thp.STOCK_PROD_YN       =   'Y'
+        AND     thp.USE_YN              =   'Y'
+        AND     tshdd.PROD_CD       (+) =   thp.PROD_CD
+        AND     tshdd.HQ_OFFICE_CD  (+) =   #{hqOfficeCd}
+        AND     tshdd.DISUSE_DATE   (+) =   #{disuseDate}
+        AND     tshdd.SEQ_NO        (+) =   #{seqNo}
+        AND     tshsc.PROD_CD       (+) =   thp.PROD_CD
+        AND     thpb.HQ_OFFICE_CD   (+) =   thp.HQ_OFFICE_CD
+        AND     thpb.PROD_CD        (+) =   thp.PROD_CD
+        ]]>
+        <if test='prodCd != null and prodCd != ""'>
+            AND thp.PROD_CD = #{prodCd}
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='barcdCd != null and barcdCd != ""'>
+            AND thpb.BARCD_CD = #{barcdCd}
+        </if>
+        <if test='prodBarcdCd != null and prodBarcdCd != ""'>
+            AND (thp.PROD_CD = #{prodBarcdCd} OR thpb.BARCD_CD = #{prodBarcdCd})
+        </if>
+        <if test='disuseFg == "Y"'>
+            AND tshdd.DISUSE_QTY IS NOT NULL
+        </if>
+        <if test='disuseFg == "N"'>
+            AND tshdd.DISUSE_QTY IS NULL
+        </if>
+        <![CDATA[
+        ORDER
+        BY      thp.PROD_CD
+        ]]>
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+
+    <!-- 폐기관리 - 폐기등록 상품 리스트 조회(매장) -->
+    <!--
+        TABLE    : TB_MS_PRODUCT, TB_ST_STORE_DISUSE_DTL, TB_ST_STORE_STOCK_CUR, TB_ST_STORE_STOCK_MONTHLY, TB_MS_PRODUCT_BARCD
+        PARAM    : disuseVO
+        COMMENTS : 폐기관리 - 폐기등록 리스트를 조회한다.
+    -->
+    <select id="getStDisuseRegistList" parameterType="disuseVO" resultType="DefaultMap">
+        /* USE : DisuseMapper.getStDisuseRegistList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        <![CDATA[
+        SELECT  tmpb.BARCD_CD, tmp.PROD_CD, tmp.PROD_NM, tmp.PO_UNIT_QTY
+        ,       NVL((SELECT MAX(SALE_UPRC) KEEP(DENSE_RANK FIRST ORDER BY REG_DT DESC)
+                       FROM TB_MS_PRODUCT_SALE_PRICE
+                      WHERE STORE_CD = tmp.STORE_CD
+                        AND PROD_CD = tmp.PROD_CD
+                        AND #{disuseDate} BETWEEN START_DATE AND END_DATE
+                     ), 0) AS SALE_UPRC
+        ,       NVL(tsssc.AVG_COST_UPRC, tmp.COST_UPRC) AS COST_UPRC
+        ,       NVL(NVL(tssdd.CURR_QTY, tsssc.CURR_QTY), 0) AS CURR_QTY
+        ,       tssdd.DISUSE_QTY
+        ,       tssdd.DISUSE_AMT
+        ,       tssdd.REMARK
+        ,       DECODE(tssdd.PROD_CD, NULL, 'I', 'U') AS DISUSE_PROD_STATUS
+        ]]>
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        <![CDATA[
+        FROM    TB_MS_PRODUCT tmp
+        ,       TB_ST_STORE_DISUSE_DTL tssdd
+        ,       (   SELECT  tsssc.PROD_CD, tsssc.CURR_QTY, tsssm.AVG_COST_UPRC
+                    FROM    TB_ST_STORE_STOCK_CUR tsssc
+                    ,       TB_ST_STORE_STOCK_MONTHLY tsssm
+                    WHERE   tsssc.STORE_CD        =   #{storeCd}
+                    AND     tsssm.IOSTOCK_YM  (+) =   SUBSTR(#{disuseDate}, 0, 6)
+                    AND     tsssm.STORE_CD    (+) =   tsssc.STORE_CD
+                    AND     tsssm.PROD_CD     (+) =   tsssc.PROD_CD
+                )   tsssc
+        ,       TB_MS_PRODUCT_BARCD tmpb
+        WHERE   tmp.STORE_CD            =   #{storeCd}
+        AND     tmp.STOCK_PROD_YN       =   'Y'
+        AND     tmp.USE_YN              =   'Y'
+        AND     tssdd.PROD_CD       (+) =   tmp.PROD_CD
+        AND     tssdd.STORE_CD      (+) =   #{storeCd}
+        AND     tssdd.DISUSE_DATE   (+) =   #{disuseDate}
+        AND     tssdd.SEQ_NO        (+) =   #{seqNo}
+        AND     tsssc.PROD_CD       (+) =   tmp.PROD_CD
+        AND     tmpb.STORE_CD       (+) =   tmp.STORE_CD
+        AND     tmpb.PROD_CD        (+) =   tmp.PROD_CD
+        ]]>
+        <if test='prodCd != null and prodCd != ""'>
+            AND tmp.PROD_CD = #{prodCd}
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='barcdCd != null and barcdCd != ""'>
+            AND tmpb.BARCD_CD = #{barcdCd}
+        </if>
+        <if test='prodBarcdCd != null and prodBarcdCd != ""'>
+            AND (tmp.PROD_CD = #{prodBarcdCd} OR tmpb.BARCD_CD = #{prodBarcdCd})
+        </if>
+        <if test='disuseFg == "Y"'>
+            AND tssdd.DISUSE_QTY IS NOT NULL
+        </if>
+        <if test='disuseFg == "N"'>
+            AND tssdd.DISUSE_QTY IS NULL
+        </if>
+        <![CDATA[
+        ORDER
+        BY      tmp.PROD_CD
+        ]]>
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+
+    <!-- 폐기관리 - 폐기등록 신규 SEQ 조회(본사) -->
+    <!--
+        TABLE    : TB_ST_HQ_DISUSE
+        PARAM    : disuseVO
+        COMMENTS : 폐기관리 - 폐기등록 신규 SEQ를 조회한다.
+    -->
+    <select id="getHqNewSeqNo" parameterType="disuseVO" resultType="String">
+        /* USE : DisuseMapper.getHqNewSeqNo */
+        <![CDATA[
+        SELECT  NVL(MAX(tshd.SEQ_NO), 0)+1 AS SEQ_NO
+        FROM    TB_ST_HQ_DISUSE tshd
+        WHERE   tshd.HQ_OFFICE_CD  =  #{hqOfficeCd}
+        AND     tshd.DISUSE_DATE   =  #{disuseDate}
+        ]]>
+    </select>
+
+
+    <!-- 폐기관리 - 폐기등록 신규 SEQ 조회(매장) -->
+    <!--
+        TABLE    : TB_ST_STORE_DISUSE
+        PARAM    : disuseVO
+        COMMENTS : 폐기관리 - 폐기등록 신규 SEQ를 조회한다.
+    -->
+    <select id="getStNewSeqNo" parameterType="disuseVO" resultType="String">
+        /* USE : DisuseMapper.getStNewSeqNo */
+        <![CDATA[
+        SELECT  NVL(MAX(tssd.SEQ_NO), 0)+1 AS SEQ_NO
+        FROM    TB_ST_STORE_DISUSE tssd
+        WHERE   tssd.STORE_CD      =  #{storeCd}
+        AND     tssd.DISUSE_DATE   =  #{disuseDate}
+        ]]>
+    </select>
+
+
+    <!-- 폐기관리 - 폐기 상세 리스트 조회(본사) -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_ST_HQ_DISUSE_DTL, TB_ST_HQ_STOCK_CUR, TB_ST_HQ_STOCK_MONTHLY
+                 , TB_HQ_PRODUCT_BARCD, TB_ST_HQ_STOCK_DAILY
+        PARAM    : disuseVO
+        COMMENTS : 폐기관리 - 폐기 상세 리스트를 조회한다.
+    -->
+    <select id="getHqDisuseDtlList" parameterType="disuseVO" resultType="DefaultMap">
+        /* USE : DisuseMapper.getHqDisuseDtlList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        <![CDATA[
+        SELECT  thpb.BARCD_CD, thp.PROD_CD, thp.PROD_NM, thp.PO_UNIT_QTY
+        ,       NVL((SELECT MAX(SALE_UPRC) KEEP(DENSE_RANK FIRST ORDER BY REG_DT DESC)
+                       FROM TB_HQ_PRODUCT_SALE_PRICE
+                      WHERE HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                        AND PROD_CD = thp.PROD_CD
+                        AND #{disuseDate} BETWEEN START_DATE AND END_DATE
+                     ), 0) AS SALE_UPRC
+        ,       NVL(tshsm.AVG_COST_UPRC, thp.COST_UPRC) AS COST_UPRC
+        ,       tshdd.CURR_QTY
+        ,       tshdd.DISUSE_QTY
+        ,       tshdd.DISUSE_AMT
+        ,       tshdd.REMARK
+        ,       'U' AS DISUSE_PROD_STATUS
+        ]]>
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        <![CDATA[
+        FROM    TB_ST_HQ_DISUSE_DTL tshdd
+        ,       TB_HQ_PRODUCT thp
+        ,       (   SELECT  tshsm.PROD_CD
+                    ,       tshsm.AVG_COST_UPRC
+                    ,       (tshsm.BASE_QTY + NVL(IOSTOCK_QTY, 0)) AS CMPT_DATE_QTY
+                    FROM    (   SELECT  tshsm.IOSTOCK_YM, tshsm.HQ_OFFICE_CD
+                                ,       tshsm.PROD_CD, tshsm.BASE_QTY, tshsm.AVG_COST_UPRC
+                                FROM    TB_ST_HQ_STOCK_MONTHLY tshsm
+                                WHERE   tshsm.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                                AND     tshsm.IOSTOCK_YM    =   SUBSTR(#{disuseDate}, 0, 6)
+                            ) tshsm
+                    ,       (   SELECT  tshsd.IOSTOCK_DATE, tshsd.HQ_OFFICE_CD
+                                ,       tshsd.PROD_CD
+                                ,       SUM(tshsd.IOSTOCK_QTY) AS IOSTOCK_QTY
+                                FROM    TB_ST_HQ_STOCK_DAILY tshsd
+                                WHERE   tshsd.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                                AND     tshsd.IOSTOCK_DATE  =   #{disuseDate}
+                                GROUP
+                                BY      tshsd.IOSTOCK_DATE, tshsd.HQ_OFFICE_CD
+                                ,       tshsd.PROD_CD
+                            ) tshsd
+                    WHERE   tshsd.PROD_CD(+)=   tshsm.PROD_CD
+                )   tshsm
+        ,       TB_HQ_PRODUCT_BARCD thpb
+        WHERE   tshdd.HQ_OFFICE_CD      =   #{hqOfficeCd}
+        AND     tshdd.DISUSE_DATE       =   #{disuseDate}
+        AND     tshdd.SEQ_NO            =   #{seqNo}
+        AND     tshdd.HQ_OFFICE_CD      =   thp.HQ_OFFICE_CD
+        AND     tshdd.PROD_CD           =   thp.PROD_CD
+        AND     tshsm.PROD_CD       (+) =   tshdd.PROD_CD
+        AND     thpb.HQ_OFFICE_CD   (+) =   tshdd.HQ_OFFICE_CD
+        AND     thpb.PROD_CD        (+) =   tshdd.PROD_CD
+        ORDER
+        BY      tshdd.PROD_CD
+        ]]>
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+
+    <!-- 폐기관리 - 폐기 상세 리스트 조회(매장) -->
+    <!--
+        TABLE    : TB_MS_PRODUCT, TB_ST_STORE_DISUSE_DTL, TB_ST_HQ_STOCK_CUR, TB_ST_STORE_STOCK_MONTHLY
+                 , TB_MS_PRODUCT_BARCD, TB_ST_STORE_STOCK_DAILY
+        PARAM    : disuseVO
+        COMMENTS : 폐기관리 - 폐기 상세 리스트를 조회한다.
+    -->
+    <select id="getStDisuseDtlList" parameterType="disuseVO" resultType="DefaultMap">
+        /* USE : DisuseMapper.getStDisuseDtlList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        <![CDATA[
+        SELECT  tmpb.BARCD_CD, tmp.PROD_CD, tmp.PROD_NM, tmp.PO_UNIT_QTY
+        ,       NVL((SELECT MAX(SALE_UPRC) KEEP(DENSE_RANK FIRST ORDER BY REG_DT DESC)
+                       FROM TB_MS_PRODUCT_SALE_PRICE
+                      WHERE STORE_CD = tmp.STORE_CD
+                        AND PROD_CD = tmp.PROD_CD
+                        AND #{disuseDate} BETWEEN START_DATE AND END_DATE
+                     ), 0) AS SALE_UPRC
+        ,       NVL(tsssm.AVG_COST_UPRC, tmp.COST_UPRC) AS COST_UPRC
+        ,       tssdd.CURR_QTY
+        ,       tssdd.DISUSE_QTY
+        ,       tssdd.DISUSE_AMT
+        ,       tssdd.REMARK
+        ,       'U' AS DISUSE_PROD_STATUS
+        ]]>
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        <![CDATA[
+        FROM    TB_ST_STORE_DISUSE_DTL tssdd
+        ,       TB_MS_PRODUCT tmp
+        ,       (   SELECT  tsssm.PROD_CD
+                    ,       tsssm.AVG_COST_UPRC
+                    ,       (tsssm.BASE_QTY + NVL(IOSTOCK_QTY, 0)) AS CMPT_DATE_QTY
+                    FROM    (   SELECT  tsssm.IOSTOCK_YM, tsssm.STORE_CD
+                                ,       tsssm.PROD_CD, tsssm.BASE_QTY, tsssm.AVG_COST_UPRC
+                                FROM    TB_ST_STORE_STOCK_MONTHLY tsssm
+                                WHERE   tsssm.STORE_CD      =   #{storeCd}
+                                AND     tsssm.IOSTOCK_YM    =   SUBSTR(#{disuseDate}, 0, 6)
+                            ) tsssm
+                    ,       (   SELECT  tsssd.IOSTOCK_DATE, tsssd.STORE_CD
+                                ,       tsssd.PROD_CD
+                                ,       SUM(tsssd.IOSTOCK_QTY) AS IOSTOCK_QTY
+                                FROM    TB_ST_STORE_STOCK_DAILY tsssd
+                                WHERE   tsssd.STORE_CD      =   #{storeCd}
+                                AND     tsssd.IOSTOCK_DATE  =   #{disuseDate}
+                                GROUP
+                                BY      tsssd.IOSTOCK_DATE, tsssd.STORE_CD
+                                ,       tsssd.PROD_CD
+                            ) tsssd
+                    WHERE   tsssd.PROD_CD(+)=   tsssm.PROD_CD
+                )   tsssm
+        ,       TB_MS_PRODUCT_BARCD tmpb
+        WHERE   tssdd.STORE_CD          =   #{storeCd}
+        AND     tssdd.DISUSE_DATE       =   #{disuseDate}
+        AND     tssdd.SEQ_NO            =   #{seqNo}
+        AND     tssdd.STORE_CD          =   tmp.STORE_CD
+        AND     tssdd.PROD_CD           =   tmp.PROD_CD
+        AND     tsssm.PROD_CD       (+) =   tssdd.PROD_CD
+        AND     tmpb.STORE_CD       (+) =   tssdd.STORE_CD
+        AND     tmpb.PROD_CD        (+) =   tssdd.PROD_CD
+        ORDER
+        BY      tssdd.PROD_CD
+        ]]>
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+
+    <!-- 폐기관리 - 폐기 DTL 전부 삭제(본사) -->
+    <!--
+        TABLE    : TB_ST_HQ_DISUSE_DTL
+        PARAM    : disuseVO
+        COMMENTS : 폐기관리 - 폐기일자, SEQ_NO 에 해당하는 DTL을 전부 삭제한다.
+    -->
+    <delete id="deleteHqAllDisuseDtl" parameterType="disuseVO">
+        /* USE : DisuseMapper.deleteHqAllDisuseDtl */
+        DELETE  TB_ST_HQ_DISUSE_DTL
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     DISUSE_DATE   = #{disuseDate}
+        AND     SEQ_NO        = #{seqNo}
+    </delete>
+
+
+    <!-- 폐기관리 - 폐기 DTL 전부 삭제(매장) -->
+    <!--
+        TABLE    : TB_ST_STORE_DISUSE_DTL
+        PARAM    : disuseVO
+        COMMENTS : 폐기관리 - 폐기일자, SEQ_NO 에 해당하는 DTL을 전부 삭제한다.
+    -->
+    <delete id="deleteStAllDisuseDtl" parameterType="disuseVO">
+        /* USE : DisuseMapper.deleteStAllDisuseDtl */
+        DELETE  TB_ST_STORE_DISUSE_DTL
+        WHERE   STORE_CD      = #{storeCd}
+        AND     DISUSE_DATE   = #{disuseDate}
+        AND     SEQ_NO        = #{seqNo}
+    </delete>
+
+
+    <!-- 폐기관리 - 폐기 HD 삭제(본사) -->
+    <!--
+        TABLE    : TB_ST_HQ_DISUSE
+        PARAM    : disuseVO
+        COMMENTS : 폐기관리 - 폐기일자, SEQ_NO 에 해당하는 HD를 삭제한다.
+    -->
+    <delete id="deleteHqDisuseHd" parameterType="disuseVO">
+        /* USE : DisuseMapper.deleteHqDisuseHd */
+        DELETE  TB_ST_HQ_DISUSE
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     DISUSE_DATE   = #{disuseDate}
+        AND     SEQ_NO        = #{seqNo}
+    </delete>
+
+
+    <!-- 폐기관리 - 폐기 HD 삭제(매장) -->
+    <!--
+        TABLE    : TB_ST_STORE_DISUSE_DTL
+        PARAM    : disuseVO
+        COMMENTS : 폐기관리 - 폐기일자, SEQ_NO 에 해당하는 HD를 삭제한다.
+    -->
+    <delete id="deleteStDisuseHd" parameterType="disuseVO">
+        /* USE : DisuseMapper.deleteStDisuseHd */
+        DELETE  TB_ST_STORE_DISUSE
+        WHERE   STORE_CD      = #{storeCd}
+        AND     DISUSE_DATE   = #{disuseDate}
+        AND     SEQ_NO        = #{seqNo}
+    </delete>
+
+
+    <!-- 폐기관리 - 폐기 상품 DTL 등록(본사) -->
+    <!--
+        TABLE    : TB_ST_HQ_DISUSE_DTL
+        PARAM    : disuseVO
+        COMMENTS : 폐기관리 - 폐기 상품 DTL을 등록한다.
+    -->
+    <insert id="insertHqDisuseDtl" parameterType="disuseVO">
+        /* USE : DisuseMapper.insertHqDisuseDtl */
+        INSERT INTO TB_ST_HQ_DISUSE_DTL
+        (
+            HQ_OFFICE_CD,
+            DISUSE_DATE,
+            SEQ_NO,
+            HQ_BRAND_CD,
+            PROD_CD,
+            COST_UPRC,
+            PO_UNIT_QTY,
+            CURR_QTY,
+            DISUSE_QTY,
+            DISUSE_AMT,
+            REMARK,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        VALUES
+        (
+            #{hqOfficeCd},
+            #{disuseDate},
+            #{seqNo},
+            #{hqBrandCd},
+            #{prodCd},
+            #{costUprc},
+            #{poUnitQty},
+            #{currQty},
+            #{disuseQty},
+            #{disuseAmt},
+            #{remark},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+
+    <!-- 폐기관리 - 폐기 상품 DTL 등록(매장) -->
+    <!--
+        TABLE    : TB_ST_STORE_DISUSE_DTL
+        PARAM    : disuseVO
+        COMMENTS : 폐기관리 - 폐기 상품 DTL을 등록한다.
+    -->
+    <insert id="insertStDisuseDtl" parameterType="disuseVO">
+        /* USE : DisuseMapper.insertStDisuseDtl */
+        INSERT INTO TB_ST_STORE_DISUSE_DTL
+        (
+            STORE_CD,
+            DISUSE_DATE,
+            SEQ_NO,
+            HQ_BRAND_CD,
+            PROD_CD,
+            COST_UPRC,
+            PO_UNIT_QTY,
+            CURR_QTY,
+            DISUSE_QTY,
+            DISUSE_AMT,
+            REMARK,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        VALUES
+        (
+            #{storeCd},
+            #{disuseDate},
+            #{seqNo},
+            #{hqBrandCd},
+            #{prodCd},
+            #{costUprc},
+            #{poUnitQty},
+            #{currQty},
+            #{disuseQty},
+            #{disuseAmt},
+            #{remark},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+
+    <!-- 폐기관리 - 폐기 상품 DTL 수정(본사) -->
+    <!--
+        TABLE    : TB_ST_HQ_DISUSE_DTL
+        PARAM    : disuseVO
+        COMMENTS : 폐기관리 - 폐기 상품 DTL을 수정한다.
+    -->
+    <update id="updateHqDisuseDtl" parameterType="disuseVO">
+        /* USE : DisuseMapper.updateHqDisuseDtl */
+        UPDATE  TB_ST_HQ_DISUSE_DTL
+        SET     DISUSE_QTY = #{disuseQty}
+        ,       DISUSE_AMT = #{disuseAmt}
+        ,       REMARK     = #{remark}
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     DISUSE_DATE   = #{disuseDate}
+        AND     SEQ_NO        = #{seqNo}
+        AND     PROD_CD       = #{prodCd}
+    </update>
+
+
+    <!-- 폐기관리 - 폐기 상품 DTL 수정(매장) -->
+    <!--
+        TABLE    : TB_ST_STORE_DISUSE_DTL
+        PARAM    : disuseVO
+        COMMENTS : 폐기관리 - 폐기 상품 DTL을 수정한다.
+    -->
+    <update id="updateStDisuseDtl" parameterType="disuseVO">
+        /* USE : DisuseMapper.updateStDisuseDtl */
+        UPDATE  TB_ST_STORE_DISUSE_DTL
+        SET     DISUSE_QTY = #{disuseQty}
+        ,       DISUSE_AMT = #{disuseAmt}
+        ,       REMARK     = #{remark}
+        WHERE   STORE_CD      = #{storeCd}
+        AND     DISUSE_DATE   = #{disuseDate}
+        AND     SEQ_NO        = #{seqNo}
+        AND     PROD_CD       = #{prodCd}
+    </update>
+
+
+    <!-- 폐기관리 - 폐기 상품 DTL 삭제(본사) -->
+    <!--
+        TABLE    : TB_ST_HQ_DISUSE_DTL
+        PARAM    : disuseVO
+        COMMENTS : 폐기관리 - 폐기 상품 DTL을 삭제한다.
+    -->
+    <delete id="deleteHqDisuseDtl" parameterType="disuseVO">
+        /* USE : DisuseMapper.deleteHqDisuseDtl */
+        DELETE  TB_ST_HQ_DISUSE_DTL
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     DISUSE_DATE   = #{disuseDate}
+        AND     SEQ_NO        = #{seqNo}
+        AND     PROD_CD       = #{prodCd}
+    </delete>
+
+
+    <!-- 폐기관리 - 폐기 상품 DTL 삭제(매장) -->
+    <!--
+        TABLE    : TB_ST_STORE_DISUSE_DTL
+        PARAM    : disuseVO
+        COMMENTS : 폐기관리 - 폐기 상품 DTL을 삭제한다.
+    -->
+    <delete id="deleteStDisuseDtl" parameterType="disuseVO">
+        /* USE : DisuseMapper.deleteStDisuseDtl */
+        DELETE  TB_ST_STORE_DISUSE_DTL
+        WHERE   STORE_CD      = #{storeCd}
+        AND     DISUSE_DATE   = #{disuseDate}
+        AND     SEQ_NO        = #{seqNo}
+        AND     PROD_CD       = #{prodCd}
+    </delete>
+
+
+    <!-- 폐기관리 - 폐기 HD 등록(본사) -->
+    <!--
+        TABLE    : TB_ST_HQ_DISUSE, TB_ST_HQ_DISUSE_DTL
+        PARAM    : disuseVO
+        COMMENTS : 폐기관리 - 폐기 HD을 등록한다.
+    -->
+    <insert id="insertHqDisuseHd" parameterType="disuseVO">
+        /* USE : DisuseMapper.insertHqDisuseHd */
+        INSERT INTO TB_ST_HQ_DISUSE
+        (
+            HQ_OFFICE_CD,
+            STORAGE_CD,
+            DISUSE_DATE,
+            SEQ_NO,
+            DISUSE_TITLE,
+            PROC_FG,
+            DTL_CNT,
+            TOT_DISUSE_AMT,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        SELECT  tshdd.HQ_OFFICE_CD
+        ,       #{storageCd}
+        ,       tshdd.DISUSE_DATE
+        ,       tshdd.SEQ_NO
+        ,       #{disuseTitle}
+        ,       #{procFg}
+        ,       COUNT(tshdd.PROD_CD)
+        ,       SUM(tshdd.DISUSE_AMT)
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        FROM    TB_ST_HQ_DISUSE_DTL tshdd
+        WHERE   tshdd.HQ_OFFICE_CD  =   #{hqOfficeCd}
+        AND     tshdd.DISUSE_DATE   =   #{disuseDate}
+        AND     tshdd.SEQ_NO        =   #{seqNo}
+        GROUP
+        BY      tshdd.HQ_OFFICE_CD
+        ,       #{storageCd}
+        ,       tshdd.DISUSE_DATE
+        ,       tshdd.SEQ_NO
+        ,       #{disuseTitle}
+        ,       #{procFg}
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+    </insert>
+
+
+    <!-- 폐기관리 - 폐기 HD 등록(매장) -->
+    <!--
+        TABLE    : TB_ST_STORE_DISUSE, TB_ST_STORE_DISUSE_DTL
+        PARAM    : disuseVO
+        COMMENTS : 폐기관리 - 폐기 HD을 등록한다.
+    -->
+    <insert id="insertStDisuseHd" parameterType="disuseVO">
+        /* USE : DisuseMapper.insertStDisuseHd */
+        INSERT INTO TB_ST_STORE_DISUSE
+        (
+            STORE_CD,
+            STORAGE_CD,
+            DISUSE_DATE,
+            SEQ_NO,
+            DISUSE_TITLE,
+            PROC_FG,
+            DTL_CNT,
+            TOT_DISUSE_AMT,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        SELECT  tssdd.STORE_CD
+        ,       #{storageCd}
+        ,       tssdd.DISUSE_DATE
+        ,       tssdd.SEQ_NO
+        ,       #{disuseTitle}
+        ,       #{procFg}
+        ,       COUNT(tssdd.PROD_CD)
+        ,       SUM(tssdd.DISUSE_AMT)
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        FROM    TB_ST_STORE_DISUSE_DTL tssdd
+        WHERE   tssdd.STORE_CD  =   #{storeCd}
+        AND     tssdd.DISUSE_DATE   =   #{disuseDate}
+        AND     tssdd.SEQ_NO        =   #{seqNo}
+        GROUP
+        BY      tssdd.STORE_CD
+        ,       #{storageCd}
+        ,       tssdd.DISUSE_DATE
+        ,       tssdd.SEQ_NO
+        ,       #{disuseTitle}
+        ,       #{procFg}
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+    </insert>
+
+
+    <!-- 폐기관리 - 폐기 HD 수정(본사) -->
+    <!--
+        TABLE    : TB_ST_HQ_DISUSE
+        PARAM    : disuseVO
+        COMMENTS : 폐기관리 - 폐기 HD을 수정한다.
+    -->
+    <update id="updateHqDisuseHd" parameterType="disuseVO">
+        /* USE : DisuseMapper.updateHqDisuseHd */
+        UPDATE  TB_ST_HQ_DISUSE
+        SET     (DTL_CNT, TOT_DISUSE_AMT)
+              = (   SELECT  COUNT(tshdd.PROD_CD)
+                    ,       SUM(tshdd.DISUSE_AMT)
+                    FROM    TB_ST_HQ_DISUSE_DTL tshdd
+                    WHERE   tshdd.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                    AND     tshdd.DISUSE_DATE   =   #{disuseDate}
+                    AND     tshdd.SEQ_NO        =   #{seqNo}
+                )
+        ,       DISUSE_TITLE = #{disuseTitle}
+        ,       PROC_FG      = #{procFg}
+        ,       CONFM_DATE   = DECODE(#{procFg}, '0', NULL, SUBSTR(#{modDt}, 0, 8))
+        ,       CONFM_ID     = DECODE(#{procFg}, '0', NULL, #{modId})
+        ,       MOD_DT       = #{modDt}
+        ,       MOD_ID       = #{modId}
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     DISUSE_DATE   = #{disuseDate}
+        AND     SEQ_NO        = #{seqNo}
+    </update>
+
+
+    <!-- 폐기관리 - 폐기 HD 수정(매장) -->
+    <!--
+        TABLE    : TB_ST_STORE_DISUSE
+        PARAM    : disuseVO
+        COMMENTS : 폐기관리 - 폐기 HD을 수정한다.
+    -->
+    <update id="updateStDisuseHd" parameterType="disuseVO">
+        /* USE : DisuseMapper.updateStDisuseHd */
+        UPDATE  TB_ST_STORE_DISUSE
+        SET     (DTL_CNT, TOT_DISUSE_AMT)
+              = (   SELECT  COUNT(tssdd.PROD_CD)
+                    ,       SUM(tssdd.DISUSE_AMT)
+                    FROM    TB_ST_STORE_DISUSE_DTL tssdd
+                    WHERE   tssdd.STORE_CD      =   #{storeCd}
+                    AND     tssdd.DISUSE_DATE   =   #{disuseDate}
+                    AND     tssdd.SEQ_NO        =   #{seqNo}
+                )
+        ,       DISUSE_TITLE = #{disuseTitle}
+        ,       PROC_FG      = #{procFg}
+        ,       CONFM_DATE   = DECODE(#{procFg}, '0', NULL, SUBSTR(#{modDt}, 0, 8))
+        ,       CONFM_ID     = DECODE(#{procFg}, '0', NULL, #{modId})
+        ,       MOD_DT       = #{modDt}
+        ,       MOD_ID       = #{modId}
+        WHERE   STORE_CD      = #{storeCd}
+        AND     DISUSE_DATE   = #{disuseDate}
+        AND     SEQ_NO        = #{seqNo}
+    </update>
+</mapper>

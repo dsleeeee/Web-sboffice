@@ -108,7 +108,7 @@
     $scope.storeSelected = function () {
       var flex       = agrid.getScope(targetId + 'Ctrl').data.sourceCollection;
       // var flex = $scope.storeGridM;
-      var arrStoreCd = new Array();
+      var arrStoreCd = [];
       var strStoreCd = "";
       var strStoreNm = "";
       var cnt        = 0;
