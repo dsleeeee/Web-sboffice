@@ -48,7 +48,7 @@ app.controller('creditCtrl', ['$scope', '$http', function ($scope, $http) {
     params.array = srchArrayCombo.selectedValue;
 
     if($scope.orgnFg === 'H' && params.storeCds  === '') {
-      alert("매장을 선택해주세요.");
+      $scope._popMsg(messages["credit.require.selectStore"]);
       return false;
     }
 
