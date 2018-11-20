@@ -18,8 +18,17 @@
   -->
   <select id="getPrepaidMemberList"  parameterType="prepaidStoreVO" resultType="DefaultMap">
       /* PrepaidMapper.getPrepaidMemberList */
-
-      SELECT *
+    <include refid="CmmSQL.PagingTemplateHeader"/>
+      SELECT tmmp.STORE_CD,
+             tmmp.STORE_NM,
+             tmmp.SALE_DATE,
+             tmmp.MEMBR_NO,
+             tmmp.MEMBR_NM,
+             tmmp.SALE_AMT,
+             tmmp.PREPAID_AMT,
+             tmmp.PREPAID_IN_FG,
+             tmmp.PREPAID_PAY_FG
+             <include refid="CmmSQL.PagingTemplateCount"/>
         FROM (
          SELECT tsspp.STORE_CD,
                 (SELECT STORE_NM FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_CD = tsspp.STORE_CD) AS STORE_NM,
@@ -75,6 +84,7 @@
       <if test='array != null and array.toString == "6"'>
         ORDER BY tmmp.SALE_DATE, tmmp.MEMBR_NO, tmmp.STORE_CD
       </if>
+    <include refid="CmmSQL.PagingTemplateBottom"/>
   </select>
 
 

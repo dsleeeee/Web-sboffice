@@ -27,7 +27,9 @@ app.controller('prepaidCtrl', ['$scope', '$http', function ($scope, $http) {
   }
 
   // comboBox 초기화
+  $scope._setComboData("listScaleBox", gvListScaleBoxData);
   $scope._setComboData("srchArrayCombo", arrayData);
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // 그리드 DataMap 설정
