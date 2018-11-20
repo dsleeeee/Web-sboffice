@@ -2,6 +2,7 @@ package kr.co.solbipos.membr.anals.credit.service;
 
 import kr.co.common.data.enums.UseYn;
 import kr.co.solbipos.application.common.service.CmmVO;
+import kr.co.solbipos.application.common.service.PageVO;
 import kr.co.solbipos.membr.anals.credit.service.enums.CreditInFg;
 import kr.co.solbipos.membr.anals.credit.service.enums.CreditPayFg;
 
@@ -20,7 +21,7 @@ import kr.co.solbipos.membr.anals.credit.service.enums.CreditPayFg;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-public class CreditStoreVO extends CmmVO {
+public class CreditStoreVO extends PageVO {
 
     /** 본사코드 */
     private String hqOfficeCd;

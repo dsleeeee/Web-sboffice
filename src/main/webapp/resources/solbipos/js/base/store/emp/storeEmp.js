@@ -74,7 +74,7 @@ $(document).ready(function () {
   //<%-- 그리드 조회 --%>
   function srchGrid(index) {
     var param = {};
-    param.startDate = getDate(srchStartDae);
+    param.startDate = getDate(srchStartDate);
     param.endDate = getDate(srchEndDate);
     param.empNo = srchEmpNo.value;
     param.empNm = srchEmpNm.text;

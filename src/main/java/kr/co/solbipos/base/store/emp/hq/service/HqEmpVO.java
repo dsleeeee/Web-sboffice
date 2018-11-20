@@ -100,6 +100,7 @@ public class HqEmpVO extends PageVO {
     /** 권한 그룹 코드 */
     String authGrpCd;
 
+    /** 전체기간 체크 */
     private boolean chkDt;
 
     public String getHqOfficeCd() {

@@ -10,7 +10,13 @@
 
 <div class="subCon">
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+      <button class="btn_blue fr" id="btnSearch" ng-click="getStoreList()">
+        <s:message code="cmm.search" />
+      </button>
+    </div>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -98,11 +104,7 @@
   </table>
   <!--//searchTbl-->
 
-  <div class="mt10 pdb20 oh">
-    <button class="btn_blue fr" id="btnSearch"><s:message code="cmm.search" /></button>
-  </div>
-
-  <div class="mt40 oh sb-select dkbr">
+  <div class="mt20 mb20 oh sb-select dkbr">
     <%--페이지 스케일 --%>
     <div id="listScaleBox" class="w100px fl"></div>
     <div class="tr">
@@ -114,7 +116,9 @@
   </div>
 
   <!--위즈모 테이블-->
-  <div id="storeEmpGrid" class="mt20 "></div>
+  <div class="wj-gridWrap" style="height:350px; overflow-x: hidden; overflow-y: hidden;">
+    <div id="storeEmpGrid" style="overflow-y: auto;"></div>
+  </div>
   <!--//위즈모 테이블-->
 
   <%-- 페이지 리스트 --%>

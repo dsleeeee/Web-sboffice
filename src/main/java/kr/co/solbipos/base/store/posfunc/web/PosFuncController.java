@@ -80,7 +80,7 @@ public class PosFuncController {
 
 
     /**
-     * 포스기능정의 화면 (매장)
+     * 포스기능정의 화면 (매장포스기능정의)
      * @param   request
      * @param   response
      * @param   model

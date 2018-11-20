@@ -2,6 +2,7 @@ package kr.co.solbipos.membr.anals.prepaid.service;
 
 import kr.co.common.data.enums.UseYn;
 import kr.co.solbipos.application.common.service.CmmVO;
+import kr.co.solbipos.application.common.service.PageVO;
 import kr.co.solbipos.membr.anals.prepaid.service.enums.PrepaidInFg;
 import kr.co.solbipos.membr.anals.prepaid.service.enums.PrepaidPayFg;
 
@@ -20,7 +21,7 @@ import kr.co.solbipos.membr.anals.prepaid.service.enums.PrepaidPayFg;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-public class PrepaidStoreVO extends CmmVO {
+public class PrepaidStoreVO extends PageVO {
 
     /** 본사코드 */
     private String hqOfficeCd;
