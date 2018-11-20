@@ -5,6 +5,7 @@ import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.base.store.view.service.VanConfigVO;
 import kr.co.solbipos.base.store.view.service.ViewService;
 import kr.co.solbipos.base.store.view.service.ViewVO;
+import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,8 @@ import java.util.List;
 * @
 * @  수정일      수정자              수정내용
 * @ ----------  ---------   -------------------------------
-* @ 2018.08.14  김영근      최초생성
+ * @ 2018.08.14  김영근      최초생성
+ * @ 2018.11.20  김지은      angular 방식으로 변경
 *
 * @author nhn kcp 개발2팀 김영근
 * @since 2018. 08.14
@@ -30,6 +32,8 @@ import java.util.List;
 public class ViewServiceImpl implements ViewService {
 
     private final ViewMapper viewMapper;
+    private final String CORNER_USE_YN_ENVST_CD = "2028"; // 코너사용여부 환경변수
+
 
     /** Constructor Injection */
     @Autowired
@@ -51,24 +55,28 @@ public class ViewServiceImpl implements ViewService {
         return viewMapper.getViewDetail(viewVO);
     }
 
-
-    /** 밴사설정 정보 조회 */
+    /** 코너 사용여부 조회 */
     @Override
-    public List<DefaultMap<String>> getVanconfgList(VanConfigVO vo) {
-        return viewMapper.getVanconfgList(vo);
-    }
+    public String getCornerUseYnVal(VanConfigVO vanConfgVO) {
 
+        StoreEnvVO storeEnvVO = new StoreEnvVO();
 
-    /**  코너별 승인 목록 조회 */
-    @Override
-    public List<DefaultMap<String>> getCornrApproveList(String storeCd) {
-        return viewMapper.getCornrApproveList(storeCd);
+        storeEnvVO.setStoreCd(vanConfgVO.getStoreCd());
+        storeEnvVO.setEnvstCd(CORNER_USE_YN_ENVST_CD);
+
+        return viewMapper.getCornerUseYnVal(storeEnvVO);
     }
 
     /**  포스별 승인 목록 조회 */
     @Override
-    public List<DefaultMap<String>> getPosApproveList(String storeCd) {
-        return viewMapper.getPosApproveList(storeCd);
+    public List<DefaultMap<String>> getPosTerminalList(VanConfigVO vanConfigVO) {
+        return viewMapper.getPosTerminalList(vanConfigVO);
+    }
+
+    /**  코너별 승인 목록 조회 */
+    @Override
+    public List<DefaultMap<String>> getCornerTerminalList(VanConfigVO vanConfigVO) {
+        return viewMapper.getCornerTerminalList(vanConfigVO);
     }
 
 }
