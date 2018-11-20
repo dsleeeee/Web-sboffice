@@ -8,6 +8,10 @@
  * 2018.11.14     노현수      1.0
  *
  * **************************************************************/
+/**
+ * get application
+ */
+var app = agrid.getApp();
 
 /**
  * 사이드메뉴 그리드 생성
@@ -41,6 +45,16 @@ app.controller('sideMenuCtrl', ['$scope', '$http', function ($scope, $http) {
       setTimeout(function () {
         $scope._broadcast("selectMenuRefresh");
       }, 10);
+    }
+  };
+  // 탭 조회
+  $scope.queryTab = function() {
+    if ( $scope.isMenuTab ) {
+      // 속성 조회
+      $scope._broadcast("sideMenuAttrClassCtrl");
+    } else {
+      // 선택그룹 조회
+      $scope._broadcast("sideMenuSelectGroupCtrl");
     }
   };
 
