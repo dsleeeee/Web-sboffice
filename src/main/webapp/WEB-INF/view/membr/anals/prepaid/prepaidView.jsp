@@ -11,7 +11,13 @@
 
   <%-- 조회조건 --%>
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+      <button class="btn_blue fr" ng-click="_broadcast('prepaidCtrl')">
+        <s:message code="cmm.search" />
+      </button>
+    </div>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -58,11 +64,6 @@
     </tr>
     </tbody>
   </table>
-
-  <%-- 조회 --%>
-  <div class="mt10 pdb20 oh">
-    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('prepaidCtrl')"><s:message code="cmm.search" /></button>
-  </div>
 
   <%--위즈모 테이블--%>
   <div class="updownSet oh mb10 mt40">

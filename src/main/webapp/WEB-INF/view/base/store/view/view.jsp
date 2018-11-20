@@ -109,14 +109,6 @@
     --%>
   </div>
 
-  <%--위즈모 테이블--%>
-  <%--
-  <div class="wj-TblWrapBr mt10" style="height: 400px;">
-    <div id="theGrid"></div>
-  </div>
-  --%>
-  <%--//위즈모 테이블--%>
-
   <%-- 회원목록 그리드 --%>
   <div class="w100 mt10 mb20">
     <div class="wj-gridWrap" style="height:350px; overflow-x: hidden; overflow-y: hidden;">

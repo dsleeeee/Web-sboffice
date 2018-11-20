@@ -9,8 +9,12 @@
 <c:set var="baseUrl" value="/adi/etc/kitchenMemo/kitchenMemo/" />
 
 <div class="subCon" ng-controller="kitchenMemoCtrl">
-  <div class="updownSet oh">
-    <span class="fl bk lh30">${menuNm}</span>
+
+  <div class="searchBar flddUnfld">
+    <a href="#" class="open fl">${menuNm}</a>
+  </div>
+
+  <div class="mt20 updownSet oh">
     <div class="txtIn">
       <button class="btn_skyblue" id="addBtn" style="display: none;" ng-click="addRow()">
         <s:message code="cmm.add" />
