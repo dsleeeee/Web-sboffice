@@ -87,14 +87,14 @@ public class TouchKeyServiceImpl implements TouchKeyService {
 
     /** 상품목록 조회 : 판매터치키에서 사용 */
     @Override
-    public List<DefaultMap<String>> getProductListForTouchKey(TouchKeyVO touchKeyVO) {
-        return keyMapper.getProductListForTouchKey(touchKeyVO);
-    }
+    public List<DefaultMap<String>> getProductListForTouchKey(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO) {
 
-    /** 상품분류 조회 : 판매터치키에서 사용 */
-    @Override
-    public List<DefaultMap<String>> getProductClassListForTouchKey(TouchKeyVO touchKeyVO) {
-        return keyMapper.getProductClassListForTouchKey(touchKeyVO);
+        // 소속구분 설정
+        touchKeyVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        touchKeyVO.setStoreCd(sessionInfoVO.getStoreCd());
+        touchKeyVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return keyMapper.getProductListForTouchKey(touchKeyVO);
     }
 
     /** 터치키 스타일코드 목록 조회 */
@@ -105,13 +105,19 @@ public class TouchKeyServiceImpl implements TouchKeyService {
 
     /** 터치키 스타일 목록 조회 */
     @Override
-    public List<DefaultMap<String>> getTouchKeyStyleList(TouchKeyStyleVO touchKeyStyleVO) {
+    public List<DefaultMap<String>> getTouchKeyStyleList(TouchKeyStyleVO touchKeyStyleVO, SessionInfoVO sessionInfoVO) {
         return keyMapper.getTouchKeyStyleList(touchKeyStyleVO);
     }
 
     /** 터치키 분류 페이지별 스타일 코드 조회 */
     @Override
-    public String getTouchKeyPageStyleCd(TouchKeyClassVO touchKeyClassVO) {
+    public String getTouchKeyPageStyleCd(TouchKeyClassVO touchKeyClassVO, SessionInfoVO sessionInfoVO) {
+
+        touchKeyClassVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        touchKeyClassVO.setStoreCd(sessionInfoVO.getStoreCd());
+        touchKeyClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        touchKeyClassVO.setPageNo(1);
+
         return keyMapper.getTouchKeyPageStyleCd(touchKeyClassVO);
     }
 

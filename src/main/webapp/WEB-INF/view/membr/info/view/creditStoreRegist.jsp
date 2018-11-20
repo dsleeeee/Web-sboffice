@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="creditStoreRegistLayer" show-trigger="Click" hide-trigger="Click" style="width:750px;height:450px;" fade-in="false" fade-out="false">
+<wj-popup control="creditStoreRegistLayer" show-trigger="Click" hide-trigger="Click" style="width:750px;height:450px;">
   <div class="wj-dialog wj-dialog-columns title" >
 
     <%-- header --%>

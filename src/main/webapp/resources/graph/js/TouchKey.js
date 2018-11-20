@@ -6,6 +6,7 @@
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
  * 2018.10.13    노현수      1.0
+ * 2018.11.20    노현수      1.1
  *
  * **************************************************************/
 /**
@@ -20,10 +21,20 @@ var touchKeyFilterData = [
   {"name":"미사용","value":"F"}
 ];
 
+var touchKeyStyleCd, touchKeyStyleCdList, touchKeyStyles;
+
 // angular 그리드 생성
 app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('touchKeyCtrl', $scope, $http, false));
+  // 상품분류정보
+  $scope.prodClassInfo = {};
+  $scope.setProdClassInfo = function(data){
+    $scope.prodClassInfo = data;
+  };
+  $scope.getProdClassInfo = function(){
+    return $scope.prodClassInfo;
+  };
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     $scope.areAllRowsSelected = function(flex) {
@@ -64,52 +75,47 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
     }, true);
 
     $scope.filter.showFilterIcons = false;
-    $scope.touchKeyFilter = 'F'
+    $scope.touchKeyFilter = 'F';
   };
   // 필터선언
   $scope.filter = {
-    touchKeyUsed: '',
-    prodClassCd: ''
+    touchKeyUsed: ''
   };
   // 필터 적용
   var toFilter = null;
   $scope.updateFilter = function(part, value) {
-    if (value) {
+    if ( part === 'touchKeyUsed' ) {
       if (value === "A") {
         value = "";
       } else {
         value = value === "T";
       }
-      // update filter
-      $scope.filter[part] = value;
-      // reschedule update
-      if (toFilter) clearTimeout(toFilter);
-      toFilter = setTimeout(function () {
-        if ($scope.data) {
-          $scope.data.refresh();
-        }
-      }, 100);
     }
+    // update filter
+    $scope.filter[part] = value;
+    // reschedule update
+    if (toFilter) clearTimeout(toFilter);
+    toFilter = setTimeout(function () {
+      if ($scope.data) {
+        $scope.data.refresh();
+      }
+    }, 10);
   };
   // 버튼사용여부 필터 콤보
   $scope._setComboData("touchKeyFilterCombo", touchKeyFilterData);
   $scope.setTouchKeyFilter = function(s) {
     $scope.updateFilter('touchKeyUsed', s.selectedValue);
   };
-  // 터치키분류 필터 콤보박스
-  $scope._setComboData("prodClassCdFilterCombo", PROD_CLASSES);
-  $scope.setProdClassFilter = function(s) {
-    $scope.updateFilter('prodClassCd', s.selectedValue);
-  };
   // 상품목록 그리드 조회
   $scope.$on("touchKeyCtrl", function(event, data) {
     // 파라미터
     var params = {};
+    params.prodClassCd = $scope.getProdClassInfo().prodClassCd;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquirySub("/base/prod/touchKey/touchKey/list.sb", params, function() {
       // 조회내용 없을 경우 팝업메시지 별도 처리
       if ($scope.flex.collectionView.items.length < 1) {
-        $scope._popMsg(messages["posFunc.grid.noFuncKeyData"]);
+        $scope._popMsg(messages["touchKey.noProdData"]);
       } else {
         if (touchKeyGraph) {
           touchKeyGraph.sidebar.initUsed();
@@ -119,10 +125,6 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.flex.select(-1, -1);
       // 필터 수행
       $scope.data.filter = function(item) {
-        var prodClassCd = $scope.filter.prodClassCd;
-        if (prodClassCd && item.prodClassCd.toLowerCase().indexOf(prodClassCd.toLowerCase()) < 0) {
-          return false;
-        }
         var touchKeyUsed = $scope.filter.touchKeyUsed;
         if ( !isEmpty(touchKeyUsed) && item.touchKeyUsed !== touchKeyUsed ) {
           return false;
@@ -136,6 +138,30 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
     event.preventDefault();
   });
 
+  // 상품분류정보 팝업
+  $scope.popUpProdClass = function() {
+    var popUp = $scope.prodClassPopUpLayer;
+    popUp.show(true, function (s) {
+      // 선택 버튼 눌렀을때만
+      if (s.dialogResult === "wj-hide-apply") {
+        var scope = agrid.getScope('prodClassPopUpCtrl');
+        var prodClassCd = scope.getSelectedClass();
+        var params = {};
+        params.prodClassCd = prodClassCd;
+        // 조회 수행 : 조회URL, 파라미터, 콜백함수
+        $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
+          function(response){
+            var prodClassInfo = {};
+            prodClassInfo.prodClassCd = prodClassCd;
+            prodClassInfo.prodClassCdNm = response.data.data;
+            $scope.setProdClassInfo(prodClassInfo);
+            $scope._broadcast('touchKeyCtrl');
+          }
+        );
+      }
+    });
+  };
+
 }]);
 
 
@@ -145,6 +171,47 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
 var touchKeyGraph;
 $(document).ready(function() {
   (function () {
+
+    // 스타일 코드 조회
+    $.ajax({
+      type: 'POST',
+      async: false,
+      cache: false,
+      dataType: 'json',
+      contentType : 'application/json',
+      url: '/base/prod/touchKey/touchKey/getTouchKeyStyleCd.sb',
+      data: {},
+      success: function(data){
+        touchKeyStyleCd = data.data;
+      }
+    });
+    // 스타일 코드목록 조회
+    $.ajax({
+      type: 'POST',
+      async: false,
+      cache: false,
+      dataType: 'json',
+      contentType : 'application/json',
+      url: '/base/prod/touchKey/touchKey/getTouchKeyStyleCdList.sb',
+      data: '',
+      success: function(data){
+        touchKeyStyleCdList = JSON.parse(data.data);
+      }
+    });
+    // 스타일 목록 조회
+    $.ajax({
+      type: 'POST',
+      async: false,
+      cache: false,
+      dataType: 'json',
+      contentType: 'application/json',
+      url: '/base/prod/touchKey/touchKey/getTouchKeyStyleList.sb',
+      data: {},
+      success: function (data) {
+        touchKeyStyles = data.data;
+      }
+    });
+
     var touchkeyInit = Touchkey.prototype.init;
     Touchkey.prototype.init = function () {
       touchkeyInit.apply(this, arguments);
@@ -181,9 +248,6 @@ $(document).ready(function() {
         });
     }
   })();
-
-  var scope = agrid.getScope("touchKeyCtrl");
-  scope._broadcast('touchKeyCtrl');
 
 });
 
@@ -572,7 +636,7 @@ Graph.prototype.pageNo = 1;
 Graph.prototype.buttonStyles = {};
 Graph.prototype.fontStyles = {};
 //스타일코드
-Graph.prototype.styleCd = window.TOUCHKEY_STYLE_CD;
+Graph.prototype.styleCd = touchKeyStyleCd;
 //스타일코드 콤보
 Graph.prototype.selectStyle = null;
 //태그구분 콤보
@@ -1120,28 +1184,27 @@ Graph.prototype.findPosition = function (pt) {
 Graph.prototype.initStyle = function() {
   // 선택된 스타일
   var styleCd = this.selectStyle.selectedValue;
-
-  for (var i = 0; i < TOUCHKEY_STYLES.length; i++) {
-    for (var key in TOUCHKEY_STYLES[i]) {
-      if (key === "styleCd" && styleCd === TOUCHKEY_STYLES[i][key]) {
+  for (var i = 0; i < touchKeyStyles.length; i++) {
+    for (var key in touchKeyStyles[i]) {
+      if (key === "styleCd" && styleCd === touchKeyStyles[i][key]) {
         var buttonStyles = {};
         var fontStyles = {};
-        if (this.isClassArea && TOUCHKEY_STYLES[i].buttonFg === 'G') {
-          buttonStyles.on = TOUCHKEY_STYLES[i].buttonOnColor;
-          buttonStyles.off = TOUCHKEY_STYLES[i].buttonOffColor;
-          fontStyles.on = TOUCHKEY_STYLES[i].fontOnColor;
-          fontStyles.off = TOUCHKEY_STYLES[i].fontOffColor;
-          fontStyles.size = TOUCHKEY_STYLES[i].fontSize;
+        if (this.isClassArea && touchKeyStyles[i].buttonFg === 'G') {
+          buttonStyles.on = touchKeyStyles[i].buttonOnColor;
+          buttonStyles.off = touchKeyStyles[i].buttonOffColor;
+          fontStyles.on = touchKeyStyles[i].fontOnColor;
+          fontStyles.off = touchKeyStyles[i].fontOffColor;
+          fontStyles.size = touchKeyStyles[i].fontSize;
           // 개별 영역의 변수에 할당
           this.buttonStyles = buttonStyles;
           this.fontStyles = fontStyles;
         } else {
-          var buttonTagFg = TOUCHKEY_STYLES[i].buttonTagFg;
-          buttonStyles.on = TOUCHKEY_STYLES[i].buttonOnColor;
-          buttonStyles.off = TOUCHKEY_STYLES[i].buttonOffColor;
-          fontStyles.on = TOUCHKEY_STYLES[i].fontOnColor;
-          fontStyles.off = TOUCHKEY_STYLES[i].fontOffColor;
-          fontStyles.size = TOUCHKEY_STYLES[i].fontSize;
+          var buttonTagFg = touchKeyStyles[i].buttonTagFg;
+          buttonStyles.on = touchKeyStyles[i].buttonOnColor;
+          buttonStyles.off = touchKeyStyles[i].buttonOffColor;
+          fontStyles.on = touchKeyStyles[i].fontOnColor;
+          fontStyles.off = touchKeyStyles[i].fontOffColor;
+          fontStyles.size = touchKeyStyles[i].fontSize;
           // 개별 영역의 변수에 할당
           this.buttonStyles[buttonTagFg] = buttonStyles;
           this.fontStyles[buttonTagFg] = fontStyles;
@@ -1278,8 +1341,8 @@ Format.prototype.initElements = function () {
   var graph = this.graph;
   var format = this;
 
-  // 재조회 버튼
-  addClickHandler(document.getElementById('btnInit'), function () {
+  // 조회 버튼
+  addClickHandler(document.getElementById('btnSearch'), function () {
     format.open(false);
   });
 
@@ -1457,35 +1520,35 @@ Format.prototype.initElements = function () {
   this.selectStyle = new wijmo.input.ComboBox('#selectStyle', {
     displayMemberPath: 'styleNm',
     selectedValuePath: 'styleCd',
-    itemsSource: TOUCHKEY_STYLE_CDS,
+    itemsSource: touchKeyStyleCdList,
     isEditable: false,
-    selectedValue: TOUCHKEY_STYLE_CD,
+    selectedValue: touchKeyStyleCd,
     selectedIndexChanged: function(s, e) {
       var classArea = format.touchkey.classArea;
       var prodArea = format.touchkey.prodArea;
       var styleCd = s.selectedValue;
 
-      for (var i = 0; i < TOUCHKEY_STYLES.length; i++) {
-        for (var key in TOUCHKEY_STYLES[i]) {
-          if (key === "styleCd" && styleCd === TOUCHKEY_STYLES[i][key]) {
+      for (var i = 0; i < touchKeyStyles.length; i++) {
+        for (var key in touchKeyStyles[i]) {
+          if (key === "styleCd" && styleCd === touchKeyStyles[i][key]) {
             var buttonStyles = {};
             var fontStyles = {};
-            if (TOUCHKEY_STYLES[i].buttonFg === 'G') {
-              buttonStyles.on = TOUCHKEY_STYLES[i].buttonOnColor;
-              buttonStyles.off = TOUCHKEY_STYLES[i].buttonOffColor;
-              fontStyles.on = TOUCHKEY_STYLES[i].fontOnColor;
-              fontStyles.off = TOUCHKEY_STYLES[i].fontOffColor;
-              fontStyles.size = TOUCHKEY_STYLES[i].fontSize;
+            if (touchKeyStyles[i].buttonFg === 'G') {
+              buttonStyles.on = touchKeyStyles[i].buttonOnColor;
+              buttonStyles.off = touchKeyStyles[i].buttonOffColor;
+              fontStyles.on = touchKeyStyles[i].fontOnColor;
+              fontStyles.off = touchKeyStyles[i].fontOffColor;
+              fontStyles.size = touchKeyStyles[i].fontSize;
               // 개별 영역의 변수에 할당
               classArea.buttonStyles = buttonStyles;
               classArea.fontStyles = fontStyles;
             } else {
-              var buttonTagFg = TOUCHKEY_STYLES[i].buttonTagFg;
-              buttonStyles.on = TOUCHKEY_STYLES[i].buttonOnColor;
-              buttonStyles.off = TOUCHKEY_STYLES[i].buttonOffColor;
-              fontStyles.on = TOUCHKEY_STYLES[i].fontOnColor;
-              fontStyles.off = TOUCHKEY_STYLES[i].fontOffColor;
-              fontStyles.size = TOUCHKEY_STYLES[i].fontSize;
+              var buttonTagFg = touchKeyStyles[i].buttonTagFg;
+              buttonStyles.on = touchKeyStyles[i].buttonOnColor;
+              buttonStyles.off = touchKeyStyles[i].buttonOffColor;
+              fontStyles.on = touchKeyStyles[i].fontOnColor;
+              fontStyles.off = touchKeyStyles[i].fontOffColor;
+              fontStyles.size = touchKeyStyles[i].fontSize;
               // 개별 영역의 변수에 할당
               prodArea.buttonStyles[buttonTagFg] = buttonStyles;
               prodArea.fontStyles[buttonTagFg] = fontStyles;
@@ -1510,6 +1573,7 @@ Format.prototype.initElements = function () {
  * 페이지 버튼 스타일 테마 적용
  */
 Format.prototype.setBtnStyle = function() {
+
   // 현재 선택된 스타일코드
   var styleCd = this.selectStyle.selectedValue;
   var path = "/resource/solbipos/css/img/touchKey/";
@@ -1671,6 +1735,7 @@ Format.prototype.open = function (isLoad) {
   var scope = this.scope;
 
   scope.$apply(function() {
+    scope.setProdClassInfo({});
     scope.$broadcast('loadingPopupActive');
   });
 
@@ -1714,6 +1779,10 @@ Format.prototype.open = function (isLoad) {
             this.setGraphXml(classArea, null);
             this.setGraphXml(prodArea, null);
           }
+
+          var scope = agrid.getScope("touchKeyCtrl");
+          scope._broadcast('touchKeyCtrl');
+
         }
         catch (e) {
           scope.$apply(function(){

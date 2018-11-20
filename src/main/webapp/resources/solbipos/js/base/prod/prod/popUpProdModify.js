@@ -48,23 +48,13 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.getProdModifyInfo = function(){
     return $scope.prodModifyInfo;
   };
-  // 상품분류 선택 정보
-  $scope.selectedClass = {};
-  $scope.setSelectedClass = function(data){
-    $scope.selectedClass = data;
-  };
-  $scope.getSelectedClass = function(){
-    return $scope.selectedClass;
-  };
   // 상품정보 조회
   $scope.$on("prodModifyCtrl", function(event, data) {
-
-    console.log("$scope._getComboDataQuery", $scope._getComboData('poUnitFgComboData'));
-
     var params = {};
     params.queryId = 'getSideMenuAttrClassCombo';
     $scope._postJSONQuery.withOutPopUp("/common/getCustomCombo.sb", params,
       function(response) {
+        console.log("콤보를 만드세요");
         console.log(response);
         // $scope._setComboData(comboNm, JSON.parse(response.data.data));
       }
@@ -84,36 +74,25 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 상품분류정보 팝업
   $scope.popUpProdClass = function() {
-    var popUp = $scope.prodClassLayer;
+    var popUp = $scope.prodClassPopUpLayer;
     popUp.show(true, function (s) {
       // 선택 버튼 눌렀을때만
       if (s.dialogResult === "wj-hide-apply") {
+        var scope = agrid.getScope('prodClassPopUpCtrl');
+        var prodClassCd = scope.getSelectedClass();
         var params = {};
-        params.prodClassCd = $scope.getSelectedClass();
+        params.prodClassCd = prodClassCd;
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._postJSONQuery.withPopUp("/base/prod/prod/prod/getProdClassCdNm.sb", params,
+        $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
           function(response){
             var prodInfo = $scope.getProdModifyInfo();
-            prodInfo.prodClassCd = $scope.getSelectedClass();
+            prodInfo.prodClassCd = prodClassCd;
             prodInfo.prodClassCdNm = response.data.data;
             $scope.setProdModifyInfo(prodInfo);
           }
         );
       }
     });
-    event.preventDefault();
   };
-
-  // 화면 ready 된 후 설정
-  angular.element(document).ready(function () {
-    var popUp = $scope.prodClassLayer;
-    // 상품분류 팝업 핸들러 추가
-    popUp.shown.addHandler(function (s) {
-      setTimeout(function () {
-        // 트리데이터 조회
-        $scope._broadcast('prodClassCtrl');
-      }, 50);
-    });
-  });
 
 }]);

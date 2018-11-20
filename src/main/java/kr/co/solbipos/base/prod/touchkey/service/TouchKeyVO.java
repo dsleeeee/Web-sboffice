@@ -21,7 +21,7 @@ import kr.co.solbipos.base.common.enums.InFg;
  */
 public class TouchKeyVO extends CmmVO {
 
-    private static final long serialVersionUID = -3103530249114726049L;
+    private static final long serialVersionUID = 5453851450384224044L;
 
     /** 소속구분
      * M : 시스템
@@ -39,10 +39,12 @@ public class TouchKeyVO extends CmmVO {
     private String tukeyCd;
     /** 터치키구분 : 01:버튼, 02:상품명태그, 03:금액태그 */
     private String tukeyFg;
+    /** 상품분류 */
+    private String prodClassCd;
     /** 상품코드 */
     private String prodCd;
     /** 페이지번호 */
-    private Long pageNo = 0L;;
+    private Long pageNo = 0L;
     /** X */
     private Long x = 0L;
     /** Y */
@@ -142,6 +144,20 @@ public class TouchKeyVO extends CmmVO {
      */
     public void setTukeyFg(String tukeyFg) {
         this.tukeyFg = tukeyFg;
+    }
+
+    /**
+     * @return the prodClassCd
+     */
+    public String getProdClassCd() {
+        return prodClassCd;
+    }
+
+    /**
+     * @param prodClassCd the prodClassCd to set
+     */
+    public void setProdClassCd(String prodClassCd) {
+        this.prodClassCd = prodClassCd;
     }
 
     /**

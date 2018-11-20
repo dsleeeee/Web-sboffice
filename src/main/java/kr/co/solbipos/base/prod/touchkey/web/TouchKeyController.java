@@ -2,10 +2,10 @@ package kr.co.solbipos.base.prod.touchkey.web;
 
 import com.nhncorp.lucy.security.xss.XssPreventer;
 import kr.co.common.data.enums.Status;
-import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -29,6 +29,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.List;
 
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
@@ -70,7 +71,6 @@ public class TouchKeyController {
         this.cmmCodeUtil = cmmCodeUtil;
     }
 
-
     /**
      * 판매 터치키 화면 오픈
      *
@@ -98,15 +98,10 @@ public class TouchKeyController {
         TouchKeyStyleVO touchKeyStyleVO = new TouchKeyStyleVO();
         touchKeyStyleVO.setStyleCd("");
 
-        // 상품분류 콤보
-        model.addAttribute("srchClsFgCombo", cmmCodeUtil.assmblObj(touchkeyService.getProductClassListForTouchKey(params), "prodClassNm", "prodClassCd", UseYn.ALL));
-        // 터치키 분류 페이지별 스타일 코드 조회
-        model.addAttribute("touchKeyStyleCd", convertToJson(touchkeyService.getTouchKeyPageStyleCd(touchKeyClassVO)));
         // 터치키 스타일 코드 목록 조회
-        model.addAttribute("touchKeyStyleCdList", convertToJson(touchkeyService.getTouchKeyStyleCdList()));
+//        model.addAttribute("touchKeyStyleCdList", convertToJson(touchkeyService.getTouchKeyStyleCdList()));
         // 터치키 스타일 목록 조회
-        model.addAttribute("touchKeyStyleList", convertToJson(touchkeyService.getTouchKeyStyleList(
-            touchKeyStyleVO)));
+//        model.addAttribute("touchKeyStyleList", convertToJson(touchkeyService.getTouchKeyStyleList(touchKeyStyleVO)));
         // 본사or매장의 터치키 환경 설정 값을 조회해서 셋팅
         if ( "H".equals(sessionInfoVO.getOrgnFg().getCode()) ) {
             model.addAttribute("maxClassRow", cmmEnvUtil.getHqEnvst(sessionInfoVO, "0041"));
@@ -118,8 +113,60 @@ public class TouchKeyController {
     }
 
     /**
+     * 터치키 분류 페이지별 스타일 코드 조회
+     *
+     * @param touchKeyClassVO TouchKeyClassVO
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param model   Model
+     * @return
+     */
+    @RequestMapping(value = "/getTouchKeyStyleCd.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getTouchKeyStyleCd(TouchKeyClassVO touchKeyClassVO, HttpServletRequest request, HttpServletResponse response, Model model) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        return returnJson(Status.OK, convertToJson(touchkeyService.getTouchKeyPageStyleCd(touchKeyClassVO, sessionInfoVO)));
+    }
+
+    /**
+     * 터치키 스타일 코드 목록 조회
+     *
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param model   Model
+     * @return
+     */
+    @RequestMapping(value = "/getTouchKeyStyleCdList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getTouchKeyStyleCdList(HttpServletRequest request, HttpServletResponse response, Model model) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        List<DefaultMap<String>> list = touchkeyService.getTouchKeyStyleCdList();
+
+        return returnJson(Status.OK, convertToJson(list));
+    }
+
+    /**
+     * 터치키 스타일 목록 조회
+     *
+     * @param touchKeyStyleVO TouchKeyStyleVO
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param model   Model
+     * @return
+     */
+    @RequestMapping(value = "/getTouchKeyStyleList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getTouchKeyStyles(TouchKeyStyleVO touchKeyStyleVO, HttpServletRequest request, HttpServletResponse response, Model model) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        List<DefaultMap<String>> list = touchkeyService.getTouchKeyStyleList(touchKeyStyleVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, touchKeyStyleVO);
+    }
+
+    /**
      * 판매 터치키 목록 조회 (상품정보 목록)
      *
+     * @param touchKeyVO TouchKeyVO
      * @param request HttpServletRequest
      * @param response HttpServletResponse
      * @param model   Model
@@ -127,18 +174,11 @@ public class TouchKeyController {
      */
     @RequestMapping(value = "/list.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getProductListForTouchKey(HttpServletRequest request, HttpServletResponse response, Model model) {
+    public Result getProductListForTouchKey(TouchKeyVO touchKeyVO, HttpServletRequest request, HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        TouchKeyVO params = new TouchKeyVO();
-        params.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        params.setStoreCd(sessionInfoVO.getStoreCd());
-        params.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-
-        List<DefaultMap<String>> list = touchkeyService.getProductListForTouchKey(params);
-
-        return returnListJson(Status.OK, list);
+        return returnListJson(Status.OK, touchkeyService.getProductListForTouchKey(touchKeyVO, sessionInfoVO));
     }
 
     /**
