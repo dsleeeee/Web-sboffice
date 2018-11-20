@@ -295,7 +295,7 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
     s.formatItem.addHandler(function (s, e) {
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
-        if (col.binding === 'prodCd') {
+        if (col.binding === 'prodCd' || col.binding === 'prodNm') {
           var item = s.rows[e.row].dataItem;
           if (item.status !== 'I') {
             wijmo.addClass(e.cell, 'wijLink');
@@ -309,10 +309,19 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
     // 선택상품 그리드 에디팅 방지
     s.beginningEdit.addHandler(function (s, e) {
       var col = s.columns[e.col];
-      if (col.binding === 'prodCd') {
-        var dataItem = s.rows[e.row].dataItem;
-        if (nvl(dataItem.status, '') === '' && dataItem.status !== 'I') {
-          e.cancel = true;
+      if (col.binding === 'prodCd' || col.binding === 'prodNm') {
+        e.cancel = true;
+      }
+    });
+    // 그리드 선택 이벤트
+    s.addEventListener(s.hostElement, 'mousedown', function(e) {
+      var ht = s.hitTest(e);
+      if (ht.cellType === wijmo.grid.CellType.Cell) {
+        var col = ht.panel.columns[ht.col];
+        var selectedRow = s.rows[ht.row].dataItem;
+        // 상품코드/상품명 클릭시
+        if (col.binding === 'prodCd' || col.binding === 'prodNm') {
+          $scope.selectProdView(false);
         }
       }
     });
@@ -337,13 +346,7 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
   });
   // 선택상품 그리드 행 추가
   $scope.addRow = function() {
-    // 파라미터 설정
-    var params = {};
-    params.sdselClassCd = $scope.getSdselClassCd();
-    params.status = 'I';
-    params.gChk = true;
-    // 추가기능 수행 : 파라미터
-    $scope._addRow(params);
+    $scope.selectProdView(true);
   };
   // 저장
   $scope.save = function() {
@@ -411,6 +414,51 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
     }
     $scope.flex.select(movedRows, 1);
   };
+  // 상품선택 팝업
+  $scope.selectProdView = function(type) {
+    var popUp = $scope.sideMenuProdLayer;
+    setTimeout(function() {
+      popUp.show(true, function (s) {
+        // 수정 버튼 눌렀을때만
+        if (s.dialogResult === "wj-hide-apply") {
+          var scope = agrid.getScope('sideMenuProdCtrl');
+          for (var i = 0; i < scope.flex.collectionView.items.length; i++) {
+            if (scope.flex.collectionView.items[i].gChk) {
+              var prodCd = scope.flex.collectionView.items[i].prodCd;
+              var prodNm = scope.flex.collectionView.items[i].prodNm;
+              if ( type ) {
+                // 행추가
+                var params = {};
+                params.sdselClassCd = $scope.getSdselClassCd();
+                params.status = 'I';
+                params.prodCd = prodCd;
+                params.prodNm = prodNm;
+                params.addProdUprc = 0;
+                params.gChk = true;
+                // 추가기능 수행 : 파라미터
+                $scope._addRow(params);
+              } else {
+                var selectedRow = $scope.flex.selectedRows[0]._idx;
+                // $scope.flex.setCellData(selectedRow, 'status', 'U');
+                $scope.flex.setCellData(selectedRow, 'prodCd', prodCd);
+                $scope.flex.setCellData(selectedRow, 'prodNm', prodNm);
+              }
+            }
+          }
+        }
+      });
+    }, 50);
+  };
+  // 화면 ready 된 후 설정
+  angular.element(document).ready(function () {
+    // 상품상세정보 팝업 핸들러 추가
+    $scope.sideMenuProdLayer.shown.addHandler(function (s) {
+      setTimeout(function () {
+        $scope._broadcast('sideMenuProdCtrl');
+      }, 50);
+    });
+  });
+
 }]).factory('sdselClassCd', function () {
   // 사이드메뉴 선택상품 그리드 의 변수 값 영역
   var sdselClassCd = {};

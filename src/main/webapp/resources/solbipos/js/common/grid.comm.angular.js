@@ -503,10 +503,19 @@ function RootController(ctrlName, $scope, $http, isPicker) {
     });
   }
   // 콤보박스 조회 공통로직
-  $scope._getComboDataQuery = function(code, comboNm) {
+  $scope._getComboDataQuery = function(code, comboNm, type) {
+    /**
+     * '' : 코드값만
+     * 'S' : "선택" 포함
+     * 'A' : "전체" 포함
+     */
     var params = {};
     params.code = code;
-    params.type = "S";
+    if (type) {
+      params.type = type;
+    } else {
+      params.type = "";
+    }
 
     $scope._postJSONQuery.withOutPopUp("/common/getComboData.sb", params,
       function(response) {
@@ -514,6 +523,54 @@ function RootController(ctrlName, $scope, $http, isPicker) {
       }
     );
   };
+  // 콤보박스 커스텀 조회 공통로직
+  $scope._getComboDataQueryCustom = function() {
+    return _getComboDataQueryCustom(arguments);
+  };
+  // 조회/저장관련 공통로직 : private
+  function _getComboDataQueryCustom(args) {
+    var queryId, comboNm, type, params;
+
+    /**
+     * '' : 코드값만
+     * 'S' : "선택" 포함
+     * 'A' : "전체" 포함
+     */
+
+    switch (args.length) {
+      case 2:
+        queryId = args[0];
+        comboNm = args[1];
+      case 3:
+        queryId = args[0];
+        comboNm = args[1];
+        type = args[2];
+        break;
+      case 4:
+        queryId = args[0];
+        comboNm = args[1];
+        type = args[2];
+        params = args[3];
+        break;
+    }
+
+    if ( !params ) {
+      params = {};
+    }
+    params.queryId = queryId;
+    if (type) {
+      params.type = type;
+    } else {
+      params.type = "";
+    }
+
+    $scope._postJSONQuery.withOutPopUp("/common/getCustomCombo.sb", params,
+      function(response) {
+        $scope._setComboData(comboNm, JSON.parse(JSON.stringify(response.data.data)));
+      }
+    );
+
+  }
 }
 
 // 메뉴 트리뷰 생성

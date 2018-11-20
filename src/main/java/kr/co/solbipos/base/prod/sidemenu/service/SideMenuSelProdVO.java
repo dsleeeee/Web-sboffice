@@ -1,6 +1,6 @@
 package kr.co.solbipos.base.prod.sidemenu.service;
 
-import kr.co.solbipos.application.common.service.CmmVO;
+import kr.co.solbipos.application.common.service.PageVO;
 
 /**
  * @Class Name : SideMenuSelProdVO.java
@@ -18,9 +18,9 @@ import kr.co.solbipos.application.common.service.CmmVO;
  *
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-public class SideMenuSelProdVO extends CmmVO {
+public class SideMenuSelProdVO extends PageVO {
 
-    private static final long serialVersionUID = 3592381902242275523L;
+    private static final long serialVersionUID = -6327701632689076336L;
 
     /** 본사코드 */
     private String hqOfficeCd;
@@ -45,6 +45,8 @@ public class SideMenuSelProdVO extends CmmVO {
      * S : 매장, 가맹점
      */
     private String orgnFg;
+    /** 상품명 */
+    private String prodNm;
 
 
     /**
@@ -157,5 +159,19 @@ public class SideMenuSelProdVO extends CmmVO {
      */
     public void setOrgnFg(String orgnFg) {
         this.orgnFg = orgnFg;
+    }
+
+    /**
+     * @return the prodNm
+     */
+    public String getProdNm() {
+        return prodNm;
+    }
+
+    /**
+     * @param prodNm the prodNm to set
+     */
+    public void setProdNm(String prodNm) {
+        this.prodNm = prodNm;
     }
 }

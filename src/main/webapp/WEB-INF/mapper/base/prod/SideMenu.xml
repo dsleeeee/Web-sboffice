@@ -716,6 +716,67 @@
         </choose>
     </update>
 
+    <!-- 선택할 상품 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDSEL_PROD, TB_MS_PRODUCT_SDSEL_PROD
+        PARAM    : sideMenuSelProdVO
+        COMMENTS : 사이드메뉴 선택상품 목록을 조회한다. ( 본사/매장 )
+    -->
+    <select id="getProdList" parameterType="sideMenuSelProdVO" resultType="DefaultMap">
+        /* USE : SideMenuMapper.getProdList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT
+                    thp.HQ_OFFICE_CD,
+                    thp.PROD_CD,
+                    thp.PROD_NM,
+                    thp.PROD_CLASS_CD,
+                    ( SELECT SF_GET_PROD_CLASSES('H', thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
+                    thp.ORGPLCE_CD, -- TODO 원산지명 조회 필요
+                    thp.PO_UNIT_FG
+                    <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM
+                    TB_HQ_PRODUCT thp
+                WHERE
+                    thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    <if test="prodCd != null and prodCd != ''">
+                    AND thp.PROD_CD = #{prodCd} --상품코드
+                    </if>
+                    <if test="prodNm != null and prodNm != ''">
+                    AND thp.PROD_NM LIKE #{prodNm}||'%' --상품명
+                    </if>
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT
+                    tmp.STORE_CD,
+                    tmp.PROD_CD,
+                    tmp.PROD_NM,
+                    tmp.PROD_CLASS_CD,
+                    ( SELECT SF_GET_PROD_CLASSES('S', tmp.STORE_CD, tmp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
+                    tmp.ORGPLCE_CD, -- TODO 원산지명 조회 필요
+                    tmp.PO_UNIT_FG,
+                    tmp.REG_DT
+                    <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM
+                    TB_MS_PRODUCT tmp
+                WHERE
+                    tmp.STORE_CD = #{storeCd}
+                    <if test="prodCd != null and prodCd != ''">
+                    AND tmp.PROD_CD = #{prodCd} --상품코드
+                    </if>
+                    <if test="prodNm != null and prodNm != ''">
+                    AND tmp.PROD_NM LIKE #{prodNm}||'%' --상품명
+                    </if>
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+        </choose>
+    </select>
+
     <!-- 선택상품 조회 -->
     <!--
         TABLE    : TB_HQ_PRODUCT_SDSEL_PROD, TB_MS_PRODUCT_SDSEL_PROD
@@ -740,7 +801,7 @@
                 WHERE
                     thpsp.HQ_OFFICE_CD = #{hqOfficeCd}
                     AND thpsp.SDSEL_CLASS_CD = #{sdselClassCd}
-                    AND thpsc.USE_YN = 'Y'
+                    AND thpsp.USE_YN = 'Y'
                 ORDER BY thpsp.DISP_SEQ
             </when>
             <!-- 매장 -->
@@ -870,11 +931,11 @@
         </choose>
     </update>
 
-    <!-- 선택분류 삭제 -->
+    <!-- 선택상품 삭제 -->
     <!--
         TABLE    : TB_HQ_PRODUCT_SDSEL_PROD, TB_MS_PRODUCT_SDSEL_PROD
         PARAM    : sideMenuSelProdVO
-        COMMENTS : 선택분류를 삭제한다.
+        COMMENTS : 선택상품을 삭제한다.
     -->
     <update id="deleteMenuProdList" parameterType="sideMenuSelProdVO">
         /* USE : SideMenuMapper.deleteMenuProdList */
