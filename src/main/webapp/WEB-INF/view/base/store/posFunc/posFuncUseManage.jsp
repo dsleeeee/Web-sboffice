@@ -17,9 +17,9 @@
     </ul>
 
     <%-- 왼쪽  --%>
-    <div class="w40 fl mt20">
+    <div class="w40 fl">
       <div class="wj-TblWrapBr oh mr10 pd20" style="height:560px;">
-        <div class="updownSet oh mb10">
+        <div class="updownSet mb10">
           <div class="sb-select w150px fl">
             <div id="posListBox"></div>
           </div>
@@ -33,9 +33,9 @@
       </div>
     </div>
     <%-- 오른쪽 --%>
-    <div class="w60 fr mt20" style="overflow-x: auto;">
+    <div class="w60 fr" style="overflow-x: auto;">
       <div class="wj-TblWrapBr oh ml10 pd20" style="height:560px;">
-        <div class="updownSet oh mb10">
+        <div class="updownSet mb10">
           <%-- up 버튼 --%>
           <button class="btn_up" id="btnUp"><s:message code="cmm.up" /></button>
           <%-- down 버튼 --%>
@@ -251,9 +251,11 @@
       // 선택매장 표시
       $("#posFuncManageTitle").text("[" + selectedStore.storeCd + "] " + selectedStore.storeNm);
       $(".subTab").show();
+      $("#btnCopyFunc").show();
     </c:if>
     <c:if test="${orgnFg == 'STORE'}">
       $(".subTab").hide();
+      $("#btnCopyFunc").hide();
     </c:if>
 
     // angular 그리드 hide 시 깨지므로 refresh()

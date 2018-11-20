@@ -16,30 +16,16 @@
     <a href="#" class="open">${menuNm}</a>
   </div>
 
-  <div class="wj-TblWrap mt40">
-    <%--<div class="w100">--%>
-      <div class="wj-TblWrapBr ml10 pd20" style="height:700px;">
-        <%-- 포스기능 사용관리--%>
-        <c:import url="/WEB-INF/view/base/store/posFunc/posFuncUseManage.jsp">
-          <c:param name="menuCd" value="${menuCd}"/>
-          <c:param name="menuNm" value="${menuNm}"/>
-          <c:param name="baseUrl" value="${baseUrl}"/>
-        </c:import>
-
-        <%-- 포스기능 인증관리--%>
-        <c:import url="/WEB-INF/view/base/store/posFunc/posFuncAuth.jsp">
-          <c:param name="menuCd" value="${menuCd}"/>
-          <c:param name="menuNm" value="${menuNm}"/>
-          <c:param name="baseUrl" value="${baseUrl}"/>
-        </c:import>
-      </div>
-    <%--</div>--%>
-
+  <div class="wj-TblWrap mt20">
+    <c:import url="/WEB-INF/view/base/store/posFunc/posFuncUseManage.jsp">
+      <c:param name="menuCd" value="${menuCd}"/>
+      <c:param name="menuNm" value="${menuNm}"/>
+      <c:param name="baseUrl" value="${baseUrl}"/>
+    </c:import>
   </div>
 </div>
 
 <script>
-
   var posList;
   var selectedStore = {};
 
@@ -50,18 +36,4 @@
   $(document).ready(function(){
     showPosFuncList();
   });
-
 </script>
-
-<%-- 인증허용대상 설정 팝업 --%>
-<c:import url="/WEB-INF/view/base/store/posFunc/posFuncAuthSetting.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
-
-<%-- 기능복사 팝업 --%>
-<c:import url="/WEB-INF/view/base/store/posFunc/posFuncCopy.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
-
