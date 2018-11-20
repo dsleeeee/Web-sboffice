@@ -9,6 +9,8 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.popup.PopupService;
 import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.prod.info.service.ProductClassVO;
+import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreManageVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 
 /**
@@ -40,7 +43,7 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
  */
 
 @Controller
-@RequestMapping(value = "/popup/")
+@RequestMapping(value = "/popup")
 public class PopupController {
 
     /** service */
@@ -64,7 +67,7 @@ public class PopupController {
      * @author 김지은
      * @since 2018.06.08
      */
-    @RequestMapping(value = "getVanList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/getVanList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getVanList(VanVO vanVO, HttpServletRequest request,
             HttpServletResponse response, Model model) {
@@ -84,7 +87,7 @@ public class PopupController {
      * @author 김지은
      * @since 2018.06.08
      */
-    @RequestMapping(value = "getAgencyList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/getAgencyList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getAgencyList(AgencyVO agencyVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
@@ -104,7 +107,7 @@ public class PopupController {
      * @author 김지은
      * @since 2018.11.01
      */
-    @RequestMapping(value = "getHqList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/getHqList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getHqList(HqOfficeVO hqOfficeVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
@@ -124,7 +127,7 @@ public class PopupController {
      * @author 김지은
      * @since 2018.11.14
      */
-    @RequestMapping(value = "getStoreList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/getStoreList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getStoreList(StoreManageVO storeManageVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
@@ -137,4 +140,47 @@ public class PopupController {
         return returnListJson(Status.OK, list, storeManageVO);
     }
 
+    /**
+     * 상품정보 분류 트리 조회
+     *
+     * @param prodVO ProdVO
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param model Model
+     * @return
+     * @author 노현수
+     * @since 2018.11.12
+     */
+    @RequestMapping(value = "/getProdClassTree.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdClassTree(ProdVO prodVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        List<ProductClassVO> result = popupService.getProdClassTree(prodVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 상품정보 분류 플랫 조회
+     *
+     * @param prodVO ProdVO
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param model Model
+     * @return
+     * @author 노현수
+     * @since 2018.11.12
+     */
+    @RequestMapping(value = "/getProdClassCdNm.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdClassCdNm(ProdVO prodVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        String result = popupService.getProdClassCdNm(prodVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }

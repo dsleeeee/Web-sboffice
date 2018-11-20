@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%-- 팝업 부분 설정 - width 는 강제 해주어야함.. 해결방법? 확인 필요 : 20180829 노현수 --%>
-<wj-popup control="prodModifyLayer" show-trigger="Click" hide-trigger="Click" fade-in="false" fade-out="false" style="display: none;width:800px;">
+<wj-popup control="prodModifyLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:800px;">
   <form name="myForm" novalidate>
   <div class="wj-dialog wj-dialog-columns" ng-controller="prodModifyCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
@@ -554,6 +554,6 @@
 </wj-popup>
 <script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/popUpProdModify.js?ver=20181113.01" charset="utf-8"></script>
 
-<%-- 레이어 팝업 --%>
-<c:import url="/WEB-INF/view/base/prod/prod/popUpProdClass.jsp">
+<%-- 상품분류 팝업 --%>
+<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
 </c:import>

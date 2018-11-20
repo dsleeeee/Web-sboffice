@@ -4,8 +4,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%-- 팝업 부분 설정 - width 는 강제 해주어야함.. 해결방법? 확인 필요 : 20180829 노현수 --%>
-<wj-popup control="prodClassLayer" show-trigger="Click" hide-trigger="Click" fade-in="false" fade-out="false" style="display: none;width:400px;">
-  <div class="wj-dialog wj-dialog-columns" ng-controller="prodClassCtrl">
+<wj-popup control="prodClassPopUpLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:400px;">
+  <div class="wj-dialog wj-dialog-columns" ng-controller="prodClassPopUpCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="prod.layer.prodClass"/>
       <a href="#" class="wj-hide btn_close"></a>
@@ -14,6 +14,7 @@
       <%-- 상품분류 --%>
       <wj-tree-view control="prodClassTree"
         items-source="items"
+        initialized="initTreeView(s)"
         display-member-path="'prodClassNm'"
         child-items-path="'children'"
         item-clicked="navTo(prodClassTree)">
@@ -25,4 +26,4 @@
     </div>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/popUpProdClass.js?ver=20181112.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/application/layer/searchProdClassCd.js?ver=20181120.01" charset="utf-8"></script>

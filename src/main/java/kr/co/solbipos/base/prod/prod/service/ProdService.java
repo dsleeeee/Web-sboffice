@@ -2,7 +2,6 @@ package kr.co.solbipos.base.prod.prod.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.base.prod.info.service.ProductClassVO;
 
 import java.util.List;
 
@@ -36,12 +35,6 @@ public interface ProdService {
      * @return XML_String
      */
     DefaultMap<String> getProdDetail(ProdVO prodVO, SessionInfoVO sessionInfoVO);
-
-    /** 상품분류 플랫 조회 */
-    String getProdClassCdNm(ProdVO prodVO, SessionInfoVO sessionInfoVO);
-
-    /** 상품분류 트리 조회 */
-    List<ProductClassVO> getProdClassTree(ProdVO prodVO, SessionInfoVO sessionInfoVO);
 
     /** 상품정보 저장 */
     int saveProductInfo(ProdVO prodVO, SessionInfoVO sessionInfoVO);

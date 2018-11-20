@@ -60,7 +60,10 @@
                     thp.PROD_CD = thpsp.PROD_CD
                 WHERE
                     thp.HQ_OFFICE_CD = #{hqOfficeCd}
-                ORDER BY thp.PROD_CD
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND ( thpc.P_PROD_CLASS_CD = #{prodClassCd} OR thpc.PROD_CLASS_CD = #{prodClassCd} )
+                </if>
+                ORDER BY thpc.PROD_CLASS_CD, thp.PROD_CD
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -95,39 +98,10 @@
                     tmp.PROD_CD = tmpsp.PROD_CD
                 WHERE
                     tmp.STORE_CD = #{storeCd}
-                ORDER BY tmp.PROD_CD
-            </when>
-        </choose>
-    </select>
-
-    <!-- 터치키 페이지 상품분류 조회 -->
-    <!--
-        TABLE    : TB_HQ_PRODUCT_CLASS
-        PARAM    :
-        COMMENTS : 상품분류 콤보박스를 만들기 위한 조회
-    -->
-    <select id="getProductClassListForTouchKey" parameterType="touchKeyClassVO" resultType="DefaultMap">
-        /* USE : TouchKeyMapper.getProductClassListForTouchKey */
-        <choose>
-            <!-- 본사 -->
-            <when test='orgnFg != null and orgnFg == "H"'>
-                SELECT
-                    thpc.PROD_CLASS_CD,
-                    thpc.PROD_CLASS_NM
-                FROM
-                    TB_HQ_PRODUCT_CLASS thpc
-                WHERE
-                    thpc.HQ_OFFICE_CD = #{hqOfficeCd}
-            </when>
-            <!-- 매장 -->
-            <when test='orgnFg != null and orgnFg == "S"'>
-                SELECT
-                    tmpc.PROD_CLASS_CD,
-                    tmpc.PROD_CLASS_NM
-                FROM
-                    TB_MS_PRODUCT_CLASS tmpc
-                WHERE
-                    tmpc.STORE_CD = #{storeCd}
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND ( tmpc.P_PROD_CLASS_CD = #{prodClassCd} OR tmpc.PROD_CLASS_CD = #{prodClassCd} )
+                </if>
+                ORDER BY tmpc.PROD_CLASS_CD, tmp.PROD_CD
             </when>
         </choose>
     </select>
