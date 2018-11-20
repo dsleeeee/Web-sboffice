@@ -19,6 +19,7 @@ import kr.co.solbipos.application.common.service.CmmVO;
  */
 public class CustomComboVO extends CmmVO {
 
+    private static final long serialVersionUID = 7940677414097109441L;
     /**
      * 소속구분<br>
      * M : 시스템<br>
@@ -33,6 +34,20 @@ public class CustomComboVO extends CmmVO {
     private String storeCd;
     /** 조회할 쿼리 ID */
     private String queryId;
+    /** 조회할 쿼리 Type */
+    private String type;
+    /** code */
+    private String value;
+    /** codeNm */
+    private String name;
+    /** 파라미터1 */
+    private String param1;
+    /** 파라미터2 */
+    private String param2;
+    /** 파라미터3 */
+    private String param3;
+    /** 파라미터4 */
+    private String param4;
 
 
     /**
@@ -89,5 +104,103 @@ public class CustomComboVO extends CmmVO {
      */
     public void setQueryId(String queryId) {
         this.queryId = queryId;
+    }
+
+    /**
+     * @return the type
+     */
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * @param type the type to set
+     */
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    /**
+     * @return the value
+     */
+    public String getValue() {
+        return value;
+    }
+
+    /**
+     * @param value the value to set
+     */
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * @return the param1
+     */
+    public String getParam1() {
+        return param1;
+    }
+
+    /**
+     * @param param1 the param1 to set
+     */
+    public void setParam1(String param1) {
+        this.param1 = param1;
+    }
+
+    /**
+     * @return the param2
+     */
+    public String getParam2() {
+        return param2;
+    }
+
+    /**
+     * @param param2 the param2 to set
+     */
+    public void setParam2(String param2) {
+        this.param2 = param2;
+    }
+
+    /**
+     * @return the param3
+     */
+    public String getParam3() {
+        return param3;
+    }
+
+    /**
+     * @param param3 the param3 to set
+     */
+    public void setParam3(String param3) {
+        this.param3 = param3;
+    }
+
+    /**
+     * @return the param4
+     */
+    public String getParam4() {
+        return param4;
+    }
+
+    /**
+     * @param param4 the param4 to set
+     */
+    public void setParam4(String param4) {
+        this.param4 = param4;
     }
 }

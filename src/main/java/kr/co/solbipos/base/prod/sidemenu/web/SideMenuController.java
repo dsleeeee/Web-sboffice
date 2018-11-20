@@ -247,6 +247,29 @@ public class SideMenuController {
     }
 
     /**
+     * 사이드메뉴-선택메뉴 - 선택할 상품 목록 조회
+     *
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param sideMenuSelProdVO SideMenuSelProdVO
+     * @param model
+     * @return Result
+     * @author 노현수
+     * @since 2018. 11. 14.
+     */
+    @RequestMapping(value = "/menuProd/getProdList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdList(HttpServletRequest request, HttpServletResponse response,
+        SideMenuSelProdVO sideMenuSelProdVO, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        // 선택그룹 목록 조회
+        List<DefaultMap<String>> list = sideMenuService.getProdList(sideMenuSelProdVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, sideMenuSelProdVO);
+    }
+
+    /**
      * 사이드메뉴-선택메뉴 - 선택상품 목록 조회
      *
      * @param request HttpServletRequest

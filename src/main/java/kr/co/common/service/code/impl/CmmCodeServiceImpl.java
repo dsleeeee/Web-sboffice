@@ -2,7 +2,6 @@ package kr.co.common.service.code.impl;
 
 import kr.co.common.data.domain.CommonCodeVO;
 import kr.co.common.data.domain.CustomComboVO;
-import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.code.CmmCodeService;
 import kr.co.common.service.redis.RedisConnService;
 import kr.co.common.template.RedisCustomTemplate;
@@ -138,14 +137,15 @@ public class CmmCodeServiceImpl implements CmmCodeService {
 
     /** 커스텀 콤보박스 데이터 조회 */
     @Override
-    public List<DefaultMap<String>> getCustomCombo(CustomComboVO customComboVO, SessionInfoVO sessionInfoVO) {
+    public List<CustomComboVO> getCustomCombo(CustomComboVO customComboVO, SessionInfoVO sessionInfoVO) {
 
         // 소속구분 설정
         customComboVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         customComboVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         customComboVO.setStoreCd(sessionInfoVO.getStoreCd());
-
         // 매퍼를 namespace와 ID를 이용하여 직접 호출.
-        return sqlSession.selectList("CmmCombo." + customComboVO.getQueryId(), customComboVO);
+        List<CustomComboVO> list = sqlSession.selectList("CmmCombo." + customComboVO.getQueryId(), customComboVO);
+
+        return list;
     }
 }

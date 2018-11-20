@@ -2,8 +2,6 @@ package kr.co.common.controller;
 
 import kr.co.common.data.domain.CustomComboVO;
 import kr.co.common.data.enums.Status;
-import kr.co.common.data.enums.UseYn;
-import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.code.CmmCodeService;
 import kr.co.common.service.message.MessageResolveService;
@@ -26,6 +24,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
@@ -158,25 +157,46 @@ public class CommonController {
 
     /**
      * 커스텀 콤보 데이터 조회
+     *
+     * @param   customComboVO CustomComboVO
      * @param   request HttpServletRequest
      * @param   response HttpServletResponse
      * @param   model model
-     * @param   customComboVO CustomComboVO
      * @return  String
      * @author  노현수
      * @since   2018. 11. 15.
      */
     @RequestMapping(value = "/getCustomCombo.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getCustomCombo(HttpServletRequest request, HttpServletResponse response,
-        Model model, CustomComboVO customComboVO) {
+    public Result getCustomCombo(CustomComboVO customComboVO, HttpServletRequest request, HttpServletResponse response,
+        Model model) {
 
-        String result = "";
+        List<CustomComboVO> result = new ArrayList<CustomComboVO>();
+        CustomComboVO value = new CustomComboVO();
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        List<DefaultMap<String>> list = cmmCodeService.getCustomCombo(customComboVO, sessionInfoVO);
-
-        result = cmmCodeUtil.assmblObj(list, "codeNm", "code", UseYn.SELECT);
+        // 콤보 타입에 따른 조회
+        // "선택" 포함
+        if ( "S".equals(customComboVO.getType()) ) {
+            value.setValue("");
+            value.setName("선택");
+            result.add(value);
+        // "전체" 포함
+        } else if ( "A".equals(customComboVO.getType()) ) {
+            value.setValue("");
+            value.setName("전체");
+            result.add(value);
+        }
+        // 코드조회
+        List<CustomComboVO> list = cmmCodeService.getCustomCombo(customComboVO, sessionInfoVO);
+        if ( list.size() < 1 ) {
+            value = new CustomComboVO();
+            value.setValue("");
+            value.setName("데이터가 없습니다.");
+            result.add(value);
+        } else {
+            result.addAll(list);
+        }
 
         return returnJson(Status.OK, result);
     }
