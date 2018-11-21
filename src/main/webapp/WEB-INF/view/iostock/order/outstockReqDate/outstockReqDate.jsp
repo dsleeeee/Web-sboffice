@@ -7,7 +7,7 @@
 <c:set var="baseUrl" value="/iostock/order/outstockReqDate/outstockReqDate/"/>
 
 <div class="con">
-  <%-- 본사정보, 메뉴권한, 코드자리수, 환경설정 탭 --%>
+  <%-- 요일별, 특정일, 요청일복사 탭 --%>
   <div class="tabType1" ng-controller="outstockReqDateTabCtrl" ng-init="init()">
     <ul>
       <%-- 출고요청일관리 요일별 탭 --%>

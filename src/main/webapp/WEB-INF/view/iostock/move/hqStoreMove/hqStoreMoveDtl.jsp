@@ -100,20 +100,20 @@
         </colgroup>
         <tbody>
         <tr>
-          <th><s:message code="hqStoreMove.dtl.regDt"/></th>
-          <td><p id="regDt" class="s12"></p></td>
-          <th><s:message code="hqStoreMove.dtl.outConfmDt"/></th>
-          <td><p id="outConfmDt" class="s12"></p></td>
-          <th><s:message code="hqStoreMove.dtl.inConfmDt"/></th>
-          <td><p id="inConfmDt" class="s12"></p></td>
+          <th class="tc"><s:message code="hqStoreMove.dtl.regDt"/></th>
+          <td class="tc"><p id="regDt" class="s12"></p></td>
+          <th class="tc"><s:message code="hqStoreMove.dtl.outConfmDt"/></th>
+          <td class="tc"><p id="outConfmDt" class="s12"></p></td>
+          <th class="tc"><s:message code="hqStoreMove.dtl.inConfmDt"/></th>
+          <td class="tc"><p id="inConfmDt" class="s12"></p></td>
         </tr>
         <tr>
-          <th><s:message code="hqStoreMove.dtl.hqConfmDt"/></th>
-          <td><p id="hqConfmDt" class="s12"></p></td>
-          <th><s:message code="hqStoreMove.dtl.outSlipNo"/></th>
-          <td><p id="outSlipNo" class="s12"></p></td>
-          <th><s:message code="hqStoreMove.dtl.inSlipNo"/></th>
-          <td><p id="inSlipNo" class="s12"></p></td>
+          <th class="tc"><s:message code="hqStoreMove.dtl.hqConfmDt"/></th>
+          <td class="tc"><p id="hqConfmDt" class="s12"></p></td>
+          <th class="tc"><s:message code="hqStoreMove.dtl.outSlipNo"/></th>
+          <td class="tc"><p id="outSlipNo" class="s12"></p></td>
+          <th class="tc"><s:message code="hqStoreMove.dtl.inSlipNo"/></th>
+          <td class="tc"><p id="inSlipNo" class="s12"></p></td>
         </tr>
         </tbody>
       </table>

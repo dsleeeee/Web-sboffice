@@ -1,13 +1,15 @@
-package kr.co.solbipos.stock.setProdAdj.hqSetProdAdj.service;
+package kr.co.solbipos.stock.setProdAdj.setProdAdj.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
 
-public class HqSetProdAdjVO extends PageVO {
+public class SetProdAdjVO extends PageVO {
 
-    private static final long serialVersionUID = 4619627174595585565L;
+    private static final long serialVersionUID = -6084172854998623991L;
 
     /** 본사코드 */
     private String hqOfficeCd;
+    /** 매장코드 */
+    private String storeCd;
     /** 구성일자 */
     private String setDate;
     /** 헤드인덱스(CCD_COMSQ_S 이용) */
@@ -39,6 +41,20 @@ public class HqSetProdAdjVO extends PageVO {
      */
     public void setHqOfficeCd(String hqOfficeCd) {
         this.hqOfficeCd = hqOfficeCd;
+    }
+
+    /**
+     * @return the storeCd
+     */
+    public String getStoreCd() {
+        return storeCd;
+    }
+
+    /**
+     * @param storeCd the storeCd to set
+     */
+    public void setStoreCd(String storeCd) {
+        this.storeCd = storeCd;
     }
 
     /**
@@ -166,5 +182,4 @@ public class HqSetProdAdjVO extends PageVO {
     public void setProcFg(String procFg) {
         this.procFg = procFg;
     }
-
 }

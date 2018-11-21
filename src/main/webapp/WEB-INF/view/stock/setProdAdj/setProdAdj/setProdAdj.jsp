@@ -4,9 +4,9 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
-<c:set var="baseUrl" value="/stock/setProdAdj/hqSetProdAdj/hqSetProdAdj/"/>
+<c:set var="baseUrl" value="/stock/setProdAdj/setProdAdj/setProdAdj/"/>
 
-<div class="subCon" ng-controller="hqSetProdAdjCtrl">
+<div class="subCon" ng-controller="setProdAdjCtrl">
   <div class="searchBar flddUnfld">
     <a href="#" class="open">${menuNm}</a>
   </div>
@@ -20,7 +20,7 @@
     <tbody>
     <tr>
       <%-- 구성일자 --%>
-      <th><s:message code="hqSetProdAdj.setDate"/></th>
+      <th><s:message code="setProdAdj.setDate"/></th>
       <td colspan="3">
         <div class="sb-select">
           <span class="txtIn"><input id="srchStartDate" class="w150px"></span>
@@ -31,12 +31,12 @@
     </tr>
     <tr>
       <%-- 상품코드 --%>
-      <th><s:message code="hqSetProdAdj.prodCd"/></th>
+      <th><s:message code="setProdAdj.prodCd"/></th>
       <td>
         <input type="text" id="srchProdCd" name="srchProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13"/>
       </td>
       <%-- 상품명 --%>
-      <th><s:message code="hqSetProdAdj.prodNm"/></th>
+      <th><s:message code="setProdAdj.prodNm"/></th>
       <td>
         <input type="text" id="srchProdNm" name="srchProdNm" ng-model="prodNm" class="sb-input w100" maxlength="50"/>
       </td>
@@ -46,16 +46,16 @@
 
   <div class="mt10 pdb20 oh bb">
     <%-- 조회 --%>
-    <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('hqSetProdAdjCtrl', 1)">
+    <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('setProdAdjCtrl', 1)">
       <s:message code="cmm.search"/></button>
   </div>
 
   <div class="mt20 tr">
     <%-- 세트구성/해체 --%>
-    <button type="button" class="btn_skyblue ml5" id="btnNewHqSetProdAdj" ng-click="newHqSetProdAdj()">
-      <s:message code="hqSetProdAdj.newHqSetProdAdj"/></button>
+    <button type="button" class="btn_skyblue ml5" id="btnNewSetProdAdj" ng-click="newSetProdAdj()">
+      <s:message code="setProdAdj.newSetProdAdj"/></button>
     <%-- 삭제 --%>
-    <button type="button" class="btn_skyblue ml5" id="btnDelete" ng-click="deleteHqSetProdAdj()">
+    <button type="button" class="btn_skyblue ml5" id="btnDelete" ng-click="deleteSetProdAdj()">
       <s:message code="cmm.delete"/></button>
   </div>
 
@@ -73,20 +73,20 @@
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center" is-read-only="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="hqSetProdAdj.setDate"/>" binding="setDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="hqSetProdAdj.prodClassNm"/>" binding="prodClassNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="hqSetProdAdj.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="hqSetProdAdj.prodNm"/>" binding="prodNm" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="hqSetProdAdj.setMakeFg"/>" binding="setMakeFg" width="100" align="center" is-read-only="true" data-map="setMakeFgMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="hqSetProdAdj.setProdQty"/>" binding="setProdQty" width="60" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="hqSetProdAdj.setProdAmt"/>" binding="setProdAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="hqSetProdAdj.seqNo"/>" binding="seqNo" width="40" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="hqSetProdAdj.procFg"/>" binding="procFg" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="setProdAdj.setDate"/>" binding="setDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="setProdAdj.prodClassNm"/>" binding="prodClassNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="setProdAdj.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="setProdAdj.prodNm"/>" binding="prodNm" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="setProdAdj.setMakeFg"/>" binding="setMakeFg" width="100" align="center" is-read-only="true" data-map="setMakeFgMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="setProdAdj.setProdQty"/>" binding="setProdQty" width="60" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="setProdAdj.setProdAmt"/>" binding="setProdAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="setProdAdj.seqNo"/>" binding="seqNo" width="40" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="setProdAdj.procFg"/>" binding="procFg" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
 
       </wj-flex-grid>
       <%-- ColumnPicker 사용시 include --%>
       <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-        <jsp:param name="pickerTarget" value="hqSetProdAdjCtrl"/>
+        <jsp:param name="pickerTarget" value="setProdAdjCtrl"/>
       </jsp:include>
       <%--// ColumnPicker 사용시 include --%>
     </div>
@@ -95,7 +95,7 @@
   <%-- 페이지 리스트 --%>
   <div class="pageNum mt20">
     <%-- id --%>
-    <ul id="hqSetProdAdjCtrlPager" data-size="10">
+    <ul id="setProdAdjCtrlPager" data-size="10">
     </ul>
   </div>
   <%--//페이지 리스트--%>
@@ -110,23 +110,23 @@
   var app = agrid.getApp();
 
   /** 세트재고조정 그리드 controller */
-  app.controller('hqSetProdAdjCtrl', ['$scope', '$http', function ($scope, $http) {
+  app.controller('setProdAdjCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('hqSetProdAdjCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('setProdAdjCtrl', $scope, $http, true));
 
     $scope.srchStartDate = wcombo.genDateVal("#srchStartDate", "${sessionScope.sessionInfo.startDate}");
     $scope.srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.endDate}");
 
     $scope.setMakeFgMap = new wijmo.grid.DataMap([
-      {id: "1", name: messages["hqSetProdAdj.setMakeFg1"]},
-      {id: "2", name: messages["hqSetProdAdj.setMakeFg2"]}
+      {id: "1", name: messages["setProdAdj.setMakeFg1"]},
+      {id: "2", name: messages["setProdAdj.setMakeFg2"]}
     ], 'id', 'name');
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
       // picker 사용시 호출 : 미사용시 호출안함
-      $scope._makePickColumns("hqSetProdAdjCtrl");
+      $scope._makePickColumns("setProdAdjCtrl");
 
       // 그리드 링크 효과
       s.formatItem.addHandler(function (s, e) {
@@ -146,29 +146,29 @@
 
 
     // 다른 컨트롤러의 broadcast 받기
-    $scope.$on("hqSetProdAdjCtrl", function (event, data) {
-      $scope.searchHqSetProdAdjList();
+    $scope.$on("setProdAdjCtrl", function (event, data) {
+      $scope.searchSetProdAdjList();
       // 기능수행 종료 : 반드시 추가
       event.preventDefault();
     });
 
 
     // 리스트 조회
-    $scope.searchHqSetProdAdjList = function () {
+    $scope.searchSetProdAdjList = function () {
       // 파라미터
       var params       = {};
       params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
       params.endDate   = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
 
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
-      $scope._inquiryMain("/stock/setProdAdj/hqSetProdAdj/hqSetProdAdj/list.sb", params);
+      $scope._inquiryMain("/stock/setProdAdj/setProdAdj/setProdAdj/list.sb", params);
     };
 
 
     // 세트 삭제
-    $scope.deleteHqSetProdAdj = function () {
+    $scope.deleteSetProdAdj = function () {
       <%-- 선택하신 자료를 삭제하시겠습니까? --%>
-      var msg = messages["hqSetProdAdj.delMsg"];
+      var msg = messages["setProdAdj.delMsg"];
       s_alert.popConf(msg, function () {
         var params = [];
 
@@ -185,17 +185,17 @@
           }
         }
 
-        $scope._save("/stock/setProdAdj/hqSetProdAdj/hqSetProdAdj/delete.sb", params, function () {
-          $scope.searchHqSetProdAdjList();
+        $scope._save("/stock/setProdAdj/setProdAdj/setProdAdj/delete.sb", params, function () {
+          $scope.searchSetProdAdjList();
         });
       });
     };
 
 
     // 세트 구성/해체 등록
-    $scope.newHqSetProdAdj = function () {
+    $scope.newSetProdAdj = function () {
       var params = {};
-      $scope._broadcast('hqSetProdAdjRegistCtrl', params);
+      $scope._broadcast('setProdAdjRegistCtrl', params);
     };
 
 
@@ -203,7 +203,7 @@
 </script>
 
 <%-- 조정 등록 레이어 --%>
-<c:import url="/WEB-INF/view/stock/setProdAdj/hqSetProdAdj/hqSetProdAdjRegist.jsp">
+<c:import url="/WEB-INF/view/stock/setProdAdj/setProdAdj/setProdAdjRegist.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

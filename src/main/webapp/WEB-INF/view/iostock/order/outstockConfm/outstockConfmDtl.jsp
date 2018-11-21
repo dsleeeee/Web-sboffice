@@ -9,38 +9,62 @@
 <wj-popup id="wjOutstockConfmDtlLayer" control="wjOutstockConfmDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
   <div id="outstockConfmDtlLayer" class="wj-dialog wj-dialog-columns" ng-controller="outstockConfmDtlCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
+      <s:message code="outstockConfm.dtl.title"/>
       <span id="spanDtlTitle"></span>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
     <div class="wj-dialog-body sc2" style="height: 600px;">
       <table class="tblType01">
         <colgroup>
-          <col class="w15"/>
-          <col class="w35"/>
-          <col class="w15"/>
-          <col class="w35"/>
+          <col class="w25"/>
+          <col class="w25"/>
+          <col class="w25"/>
+          <col class="w25"/>
+        </colgroup>
+        <thead>
+        <tr>
+          <th><s:message code="outstockConfm.dtl.slipNo"/></th>
+          <th><s:message code="outstockConfm.dtl.store"/></th>
+          <th id="thOutDate"></th>
+          <th><s:message code="outstockConfm.dtl.inDate"/></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td class="tc"><span id="infoSlipNo" class="pd5 txtIn s12"></span></td>
+          <td class="tc"><span id="infoStoreNm" class="pd5 txtIn s12"></span></td>
+          <td class="tc"><span id="infoOutDate" class="pd5 txtIn s12"></span></td>
+          <td class="tc"><span id="infoInDate" class="pd5 txtIn s12"></span></td>
+        </tr>
+        </tbody>
+      </table>
+
+      <table class="tblType01 mt10">
+        <colgroup>
+          <col class="w20"/>
+          <col class="w80"/>
         </colgroup>
         <tbody>
         <tr>
           <th><s:message code="outstockConfm.dtl.hdRemark"/></th>
-          <td colspan="3">
+          <td>
             <input type="text" id="hdRemark" name="hdRemark" ng-model="hdRemark" class="sb-input w100" maxlength="300"/>
           </td>
         </tr>
         <tr>
           <th><s:message code="outstockConfm.dtl.hqRemark"/></th>
-          <td colspan="3">
+          <td>
             <input type="text" id="hqRemark" name="hqRemark" ng-model="hqRemark" class="sb-input w100" maxlength="300"/>
           </td>
         </tr>
         <tr>
           <th><s:message code="outstockConfm.dtl.dlvrNm"/></th>
-          <td colspan="3"></td>
+          <td></td>
         </tr>
         <tr>
           <%-- 거래명세표 --%>
           <th><s:message code="outstockConfm.dtl.stmtAcct"/></th>
-          <td colspan="3">
+          <td>
             <span class="txtIn w150px sb-select fl mr5">
               <wj-combo-box
                 id="stmtAcctFg"
@@ -242,7 +266,13 @@
 
             // 수주확정
             if ($scope.procFg === "10") {
-              $("#spanDtlTitle").html(messages["outstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["outstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["outstockConfm.dtl.reqDate"]+' : ' + getFormatDate($scope.outDate));
+              $("#infoSlipNo").html($scope.slipNo);
+              $("#infoStoreNm").html($scope.storeNm);
+              $("#thOutDate").html(messages["outstockConfm.dtl.reqDate"]);
+              $("#infoOutDate").html($scope.outDate !== null ? getFormatDate($scope.outDate) : '');
+              $("#infoInDate").html('');
+
+              // $("#spanDtlTitle").html(messages["outstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["outstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["outstockConfm.dtl.reqDate"]+' : ' + getFormatDate($scope.outDate));
               $("#outstockBtnLayer").show();
               $scope.spanOutstockConfirmFg = true;
               $scope.btnDtlSave = true;
@@ -259,11 +289,23 @@
 
               // 출고확정
               if ($scope.procFg === "20") {
-                $("#spanDtlTitle").html(messages["outstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["outstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["outstockConfm.dtl.outDate"]+' : ' + getFormatDate($scope.outDate));
+                $("#infoSlipNo").html($scope.slipNo);
+                $("#infoStoreNm").html($scope.storeNm);
+                $("#thOutDate").html(messages["outstockConfm.dtl.outDate"]);
+                $("#infoOutDate").html($scope.outDate !== null ? getFormatDate($scope.outDate) : '');
+                $("#infoInDate").html('');
+
+                // $("#spanDtlTitle").html(messages["outstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["outstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["outstockConfm.dtl.outDate"]+' : ' + getFormatDate($scope.outDate));
               }
               // 입고확정
               else if ($scope.procFg === "30") {
-                $("#spanDtlTitle").html(messages["outstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["outstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["outstockConfm.dtl.outDate"]+' : ' + getFormatDate($scope.outDate) + ', '+messages["outstockConfm.dtl.inDate"]+' : ' + getFormatDate($scope.inDate));
+                $("#infoSlipNo").html($scope.slipNo);
+                $("#infoStoreNm").html($scope.storeNm);
+                $("#thOutDate").html(messages["outstockConfm.dtl.outDate"]);
+                $("#infoOutDate").html($scope.outDate !== null ? getFormatDate($scope.outDate) : '');
+                $("#infoInDate").html($scope.inDate !== null ? getFormatDate($scope.inDate) : '');
+
+                // $("#spanDtlTitle").html(messages["outstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["outstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["outstockConfm.dtl.outDate"]+' : ' + getFormatDate($scope.outDate) + ', '+messages["outstockConfm.dtl.inDate"]+' : ' + getFormatDate($scope.inDate));
               }
             }
 
