@@ -118,9 +118,6 @@ public class TerminalManageServiceImpl implements TerminalManageService{
         String dt = currentDateTimeString();
 
         for(StoreTerminalVO storeTerminalVO :  storeTerminalVOs) {
-
-            LOGGER.info(">>>>>>>>>>>>>>> vanddddr " + storeTerminalVO.getVendorNm());
-
             storeTerminalVO.setRegDt(dt);
             storeTerminalVO.setRegId(sessionInfoVO.getUserId());
             storeTerminalVO.setModDt(dt);
@@ -142,7 +139,6 @@ public class TerminalManageServiceImpl implements TerminalManageService{
     /** 코너 터미널 정보 저장 */
     @Override
     public int saveCornerTerminalInfo(StoreTerminalVO[] storeTerminalVOs, SessionInfoVO sessionInfoVO) {
-
 
         int result = 0;
         String dt = currentDateTimeString();

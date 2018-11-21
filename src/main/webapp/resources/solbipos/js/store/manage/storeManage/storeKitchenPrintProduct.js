@@ -60,7 +60,6 @@ app.controller('storeKitchenPrintProductCtrl', ['$scope', '$http', function ($sc
         var col = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
         if ( col.binding === "prterNo" ) {
-          console.log(selectedRow);
           $scope.setSelectedPrter(selectedRow);
           $scope.getProductList();
         }
@@ -140,6 +139,7 @@ app.controller('storeKitchenPrintProductCtrl', ['$scope', '$http', function ($sc
           $scope._popMsg(messages["cmm.saveSucc"]);
           //재로딩
           $scope.getProductList();
+          $scope.getKitchenPrintList();
         }
     );
   };
@@ -166,8 +166,8 @@ app.controller('storeKitchenPrintProductCtrl', ['$scope', '$http', function ($sc
           $scope._popMsg(messages["cmm.saveSucc"]);
           //재로딩
           $scope.getProductList();
+          $scope.getKitchenPrintList();
         }
     );
   };
-
 }]);

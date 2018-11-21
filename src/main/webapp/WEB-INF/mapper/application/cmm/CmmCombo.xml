@@ -11,20 +11,20 @@
 -->
 <mapper namespace="CmmCombo">
 
-    <!-- 커스텀콤보 데이터 조회  -->
+    <!-- 커스텀콤보 데이터 조회 : 사이드메뉴 > 속성 -->
     <!--
-        TABLE    : TB_HQ_PRODUCT_SDATTR_CLASS
+        TABLE    : TB_HQ_PRODUCT_SDATTR_CLASS, TB_MS_PRODUCT_SDATTR_CLASS
         PARAM    :
-        COMMENTS : 쿼리 페이징 처리시 내용 From 절 직전에 include 한다.
+        COMMENTS : 사이드메뉴-속성 의 코드값/명칭을 커스텀 콤보로 사용하기 위해 조회한다.
     -->
-    <select id="getSideMenuAttrClassCombo" parameterType="customComboVO" resultType="DefaultMap">
+    <select id="getSideMenuAttrClassCombo" parameterType="customComboVO" resultType="customComboVO">
         /* USE : CmmCodeServiceImpl.getSideMenuAttrClassCombo */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT
-                    thpsc.SDATTR_CLASS_CD AS code,
-                    thpsc.SDATTR_CLASS_NM AS codeNm
+                    thpsc.SDATTR_CLASS_CD AS value,
+                    thpsc.SDATTR_CLASS_NM AS name
                 FROM
                     TB_HQ_PRODUCT_SDATTR_CLASS thpsc
                 WHERE
@@ -34,13 +34,47 @@
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 SELECT
-                    tmpsc.SDATTR_CLASS_CD AS code,
-                    tmpsc.SDATTR_CLASS_NM AS codeNm
+                    tmpsc.SDATTR_CLASS_CD AS value,
+                    tmpsc.SDATTR_CLASS_NM AS name
                 FROM
                     TB_MS_PRODUCT_SDATTR_CLASS tmpsc
                 WHERE
                     tmpsc.STORE_CD = #{storeCd}
                     AND tmpsc.USE_YN = 'Y'
+            </when>
+        </choose>
+    </select>
+
+    <!-- 커스텀콤보 데이터 조회 : 사이드메뉴 > 선택메뉴  -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDSEL_GROUP, TB_MS_PRODUCT_SDSEL_GROUP
+        PARAM    :
+        COMMENTS : 사이드메뉴-선택메뉴 의 코드값/명칭을 커스텀 콤보로 사용하기 위해 조회한다.
+    -->
+    <select id="getSideMenuSdselGrpCdCombo" parameterType="customComboVO" resultType="customComboVO">
+        /* USE : CmmCodeServiceImpl.getSideMenuSdselGrpCdCombo */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                    thpsg.SDSEL_GRP_CD AS value,
+                    thpsg.SDSEL_GRP_NM AS name
+                FROM
+                    TB_HQ_PRODUCT_SDSEL_GROUP thpsg
+                WHERE
+                    thpsg.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND thpsg.USE_YN = 'Y'
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                    tmpsg.SDSEL_GRP_CD AS value,
+                    tmpsg.SDSEL_GRP_NM AS name
+                FROM
+                    TB_MS_PRODUCT_SDSEL_GROUP tmpsg
+                WHERE
+                    tmpsg.STORE_CD = #{storeCd}
+                    AND tmpsg.USE_YN = 'Y'
             </when>
         </choose>
     </select>

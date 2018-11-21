@@ -8,6 +8,7 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.store.view.service.VanConfigVO;
 import kr.co.solbipos.base.store.view.service.ViewService;
 import kr.co.solbipos.base.store.view.service.ViewVO;
+import kr.co.solbipos.base.store.view.service.enums.CornerUseYn;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
@@ -31,7 +34,8 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 * @
 * @  수정일      수정자              수정내용
 * @ ----------  ---------   -------------------------------
-* @ 2018.08.13  김영근      최초생성
+ * @ 2018.08.13  김영근      최초생성
+ * @ 2018.11.20  김지은      기능오류 수정 및 angular 변경
 *
 * @author nhn kcp 개발2팀 김영근
 * @since 2018. 08.13
@@ -89,9 +93,7 @@ public class ViewController {
         List<DefaultMap<String>> list = viewService.getViewList(viewVO);
 
         return returnListJson(Status.OK, list, viewVO);
-
     }
-
 
     /**
      * 매장정보 상세조회
@@ -110,47 +112,44 @@ public class ViewController {
         //매장 상세정보
         DefaultMap<String> storeInfo = viewService.getViewDetail(viewVO);
 
-        //VAN사설정정보
-        VanConfigVO vanConfigVO = new VanConfigVO();
-        vanConfigVO.setStoreCd(viewVO.getStoreCd());
-        List<DefaultMap<String>> vanConfigList = viewService.getVanconfgList(vanConfigVO);
-
         DefaultMap<Object> resultMap = new DefaultMap<Object>();
         resultMap.put("storeInfo", storeInfo);
-        resultMap.put("vanConfigList", vanConfigList);
-
-        //매장코너정보
-        //2:코너개별승인
-        if( "2".equals(storeInfo.getStr("cornerUseYn")) ) {
-            List<DefaultMap<String>> cornrApproveList = viewService.getCornrApproveList(storeInfo.getStr("storeCd"));
-            resultMap.put("cornrApproveList", cornrApproveList);
-        }
-        //3:포스별승인
-        else if( "3".equals(storeInfo.getStr("cornerUseYn")) ) {
-            List<DefaultMap<String>> posApproveList = viewService.getPosApproveList(storeInfo.getStr("storeCd"));
-            resultMap.put("posApproveList", posApproveList);
-        }
 
         return returnJson(Status.OK, resultMap);
     }
 
     /**
-     * VAN사설정정보 조회
-     *
+     * VAN사 환경설정 정보 조회
+     * 벤사 목록도 함께 조회 (코너, 포스)
      * @param vanConfgVO
      * @param request
      * @param response
      * @param model
      * @return
      */
-    @RequestMapping(value = "/vanconfg/list.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/vanConfg/vanConfigInfo.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result vanconfgList(VanConfigVO vanConfgVO, HttpServletRequest request,
-            HttpServletResponse response, Model model) {
+    public Result vanConfigInfo(VanConfigVO vanConfgVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
 
-      List<DefaultMap<String>> list = viewService.getVanconfgList(vanConfgVO);
+        Map<String, Object> resultMap = new HashMap<String, Object>();
 
-      return returnListJson(Status.OK, list, vanConfgVO);
+        List<DefaultMap<String>> posTerminalList = null;
+        List<DefaultMap<String>> cornrTerminalList = null;
 
+        CornerUseYn cornerUseYnVal = CornerUseYn.getEnum(viewService.getCornerUseYnVal(vanConfgVO));
+
+        // 포스별승인 목록
+        posTerminalList = viewService.getPosTerminalList(vanConfgVO);
+
+        // 코너개별승인 목록
+        cornrTerminalList = viewService.getCornerTerminalList(vanConfgVO);
+
+
+        resultMap.put("cornerUseYnVal", cornerUseYnVal);
+        resultMap.put("posTerminalList", posTerminalList);
+        resultMap.put("cornrTerminalList", cornrTerminalList);
+
+        return returnJson(Status.OK, resultMap);
     }
 }

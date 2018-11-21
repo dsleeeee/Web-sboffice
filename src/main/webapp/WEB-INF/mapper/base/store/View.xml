@@ -11,180 +11,143 @@
 -->
 <mapper namespace="kr.co.solbipos.base.store.view.service.impl.ViewMapper">
 
-  <!-- 매장정보조회  -->
-  <!--
-      TABLE    : TB_MS_STORE
-      COMMENTS : 매장정보조회한다.
-  -->
-  <select id="getViewList" parameterType="viewVO" resultType="DefaultMap">
-    /* USE : ViewMapper.getViewList */
-    <include refid="CmmSQL.PagingTemplateHeader"/>
-    SELECT TMS.STORE_CD,
-           TMS.STORE_NM,
-           DECODE(TMS.HQ_OFFICE_CD, '00000', '단독', '가맹') AS STORE_TYPE_NM,
-           TMS.CLS_FG,
-           (SELECT TCN.NMCODE_NM FROM TB_CM_NMCODE TCN  WHERE TCN.NMCODE_GRP_CD='003' AND TCN.NMCODE_CD = TMS.CLS_FG) AS CLS_FG_NM,
-           TMS.BIZ_NO,
-           TMS.OWNER_NM,
-           TMS.TEL_NO,
-           TMS.MP_NO,
-           TMS.POST_NO || ') ' || TMS.ADDR || TMS.ADDR_DTL AS ADDRESS,
-           TMS.SYS_STAT_FG,
-           (SELECT TCN.NMCODE_NM FROM TB_CM_NMCODE TCN  WHERE TCN.NMCODE_GRP_CD='009' AND TCN.NMCODE_CD = TMS.SYS_STAT_FG) AS SYS_STAT_FG_NM,
-           (SELECT TMP.POS_VER_NO FROM TB_MS_POS TMP WHERE TMP.STORE_CD = TMS.STORE_CD AND TMP.POS_NO = '01' AND TMP.USE_YN = 'Y') AS POS_VER_NO,
-           TMS.SYS_OPEN_DATE,
-           TMS.SYS_CLOSURE_DATE
-           <include refid="CmmSQL.PagingTemplateCount"/>
-      FROM TB_MS_STORE TMS
-     WHERE TMS.HQ_OFFICE_CD = #{hqOfficeCd}
-       <if test='storeCd != null and storeCd != ""'>
-       AND TMS.STORE_CD = #{storeCd}
-       </if>
-       <if test='storeNm != null and storeNm != ""'>
-       AND TMS.STORE_NM  LIKE '%'||#{storeNm}||'%'
-       </if>
-       <if test='storeType != null and storeType != ""'>
-         <if test='storeType == "1"'>
-         AND TMS.HQ_OFFICE_CD = '00000'
+    <!-- 매장정보조회  -->
+    <!--
+        TABLE    : TB_MS_STORE
+        COMMENTS : 매장정보조회한다.
+    -->
+    <select id="getViewList" parameterType="viewVO" resultType="DefaultMap">
+        /* USE : ViewMapper.getViewList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT tms.STORE_CD,
+               tms.STORE_NM,
+               tms.CLS_FG,
+               tms.BIZ_NO ,
+               tms.OWNER_NM,
+               tms.TEL_NO,
+               tms.POST_NO || ') ' || tms.ADDR || tms.ADDR_DTL  AS ADDRESS,
+               tmp.POS_VER_NO,
+               tms.SYS_STAT_FG,
+               TO_CHAR(TO_DATE(tms.SYS_OPEN_DATE, 'yyyyMMdd'), 'YYYY/MM/DD') AS SYS_OPEN_DATE,
+               TO_CHAR(TO_DATE(tms.SYS_CLOSURE_DATE, 'yyyyMMdd'), 'YYYY/MM/DD') AS SYS_CLOSURE_DATE
+               <include refid="CmmSQL.PagingTemplateCount"/>
+          FROM TB_MS_STORE tms,
+               TB_MS_POS tmp
+         WHERE tms.HQ_OFFICE_CD =  #{hqOfficeCd}
+           AND tmp.STORE_CD = tms.STORE_CD
+           AND tmp.POS_NO = '01' -- 기본포스
+           AND tmp.USE_YN = 'Y'
+        <if test='storeCd != null and storeCd != ""'>
+           AND tms.STORE_CD = #{storeCd}
         </if>
-        <if test='storeType == "2"'>
-        AND TMS.HQ_OFFICE_CD != '00000'
+        <if test='storeNm != null and storeNm != ""'>
+           AND tms.STORE_NM  LIKE '%'||#{storeNm}||'%'
         </if>
-       </if>
-       <if test='clsFg != null and clsFg != ""'>
-       AND TMS.CLS_FG = #{clsFg}
-       </if>
-       <if test='sysStatFg != null and sysStatFg != ""'>
-       AND TMS.SYS_STAT_FG = #{sysStatFg}
-       </if>
-  ORDER BY TMS.REG_DT DESC
-     <include refid="CmmSQL.PagingTemplateBottom"/>
-  </select>
+        <if test='clsFg != null and clsFg != ""'>
+           AND tms.CLS_FG = #{clsFg}
+        </if>
+        <if test='sysStatFg != null and sysStatFg != ""'>
+           AND tms.SYS_STAT_FG = #{sysStatFg}
+        </if>
+         ORDER BY tms.STORE_CD ASC
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
 
 
+    <!-- 매장정보상세조회  -->
+    <!--
+        TABLE    : TB_MS_STORE, TB_MS_STORE_ENVST
+        COMMENTS : 매장정보상세조회한다.
+    -->
+    <select id="getViewDetail" parameterType="viewVO" resultType="DefaultMap">
+        /* USE : ViewMapper.getViewDetail */
+        SELECT  X.*,
+                (SELECT TCED.ENVST_VAL_NM FROM TB_CM_ENVST_DTL TCED WHERE TCED.ENVST_CD = '1028' AND TCED.ENVST_VAL_CD = X.CORNER_USE_YN ) CORNER_USE_YN_NM,
+                (SELECT TCED.ENVST_VAL_NM FROM TB_CM_ENVST_DTL TCED WHERE TCED.ENVST_CD = '0007' AND TCED.ENVST_VAL_CD = X.CASH_BILL_YN ) CASH_BILL_YN_NM
+          FROM
+          (
+            SELECT  TMS.STORE_CD,
+                    TMS.STORE_NM,
+                    DECODE(TMS.HQ_OFFICE_CD, '00000', '단독', '가맹') AS STORE_TYPE_NM,
+                    TMS.CLS_FG,
+                    (SELECT TCN.NMCODE_NM FROM TB_CM_NMCODE TCN  WHERE TCN.NMCODE_GRP_CD='001' AND TCN.NMCODE_CD = TMS.CLS_FG) AS CLS_FG_NM,
+                    TMS.SYS_STAT_FG,
+                    (SELECT TCN.NMCODE_NM FROM TB_CM_NMCODE TCN  WHERE TCN.NMCODE_GRP_CD='005' AND TCN.NMCODE_CD = TMS.SYS_STAT_FG) AS SYS_STAT_FG_NM,
+                    (SELECT COUNT(TMP.STORE_CD) FROM TB_MS_POS TMP WHERE TMP.STORE_CD = TMS.STORE_CD AND TMP.USE_YN = 'Y') AS POS_CNT,
+                    TMS.SYS_OPEN_DATE,
+                    TMS.SYS_CLOSURE_DATE,
+                    TMS.BIZ_STORE_NM,
+                    TMS.OWNER_NM,
+                    TMS.BIZ_NO,
+                    TMS.TEL_NO,
+                    TMS.MP_NO,
+                    TMS.FAX_NO,
+                    TMS.EMAIL_ADDR,
+                    TMS.HMPG_ADDR,
+                    TMS.POST_NO || ') ' || TMS.ADDR || TMS.ADDR_DTL AS ADDRESS,
+                    TMS.AREA_CD,
+                    (SELECT TCN.NMCODE_NM FROM TB_CM_NMCODE TCN  WHERE TCN.NMCODE_GRP_CD='061' AND TCN.NMCODE_CD = TMS.AREA_CD) AS AREA_NM,
+                    TMS.VAN_CD,
+                    (SELECT TCVC.VAN_NM FROM TB_CM_VAN_CMPNY TCVC  WHERE TCVC.VAN_CD = TMS.VAN_CD AND TCVC.VAN_FG = '01') AS VAN_NM,
+                    TMS.AGENCY_CD,
+                    (SELECT AGENCY_NM FROM TB_CM_AGENCY TMA WHERE TMA.AGENCY_CD = TMS.AGENCY_CD) AGENCY_NM,
+                    TMS.SYS_REMARK,
+                    TMS.HD_REMARK,
+                    TMS.REMARK,
+                    NVL((SELECT TMSE.ENVST_VAL FROM TB_MS_STORE_ENVST TMSE WHERE TMSE.STORE_CD   = TMS.STORE_CD AND TMSE.ENVST_CD = '1028' ), 0 ) CORNER_USE_YN,
+                    NVL((SELECT TMSE.ENVST_VAL FROM TB_MS_STORE_ENVST TMSE WHERE TMSE.STORE_CD   = TMS.STORE_CD AND TMSE.ENVST_CD = '0007' ), 0 ) CASH_BILL_YN
+              FROM  TB_MS_STORE TMS
+             WHERE  TMS.STORE_CD = #{storeCd}
+           ) X
+    </select>
 
-  <!-- 매장정보상세조회  -->
-  <!--
-      TABLE    : TB_MS_STORE, TB_MS_STORE_ENVST
-      COMMENTS : 매장정보상세조회한다.
-  -->
-  <select id="getViewDetail" parameterType="viewVO" resultType="DefaultMap">
-    /* USE : ViewMapper.getViewDetail */
-    SELECT  X.*,
-            (SELECT TCED.ENVST_VAL_NM FROM TB_CM_ENVST_DTL TCED WHERE TCED.ENVST_CD = '1028' AND TCED.ENVST_VAL_CD = X.CORNER_USE_YN ) CORNER_USE_YN_NM,
-            (SELECT TCED.ENVST_VAL_NM FROM TB_CM_ENVST_DTL TCED WHERE TCED.ENVST_CD = '0007' AND TCED.ENVST_VAL_CD = X.CASH_BILL_YN ) CASH_BILL_YN_NM
-      FROM
-      (
-        SELECT  TMS.STORE_CD,
-                TMS.STORE_NM,
-                DECODE(TMS.HQ_OFFICE_CD, '00000', '단독', '가맹') AS STORE_TYPE_NM,
-                TMS.CLS_FG,
-                (SELECT TCN.NMCODE_NM FROM TB_CM_NMCODE TCN  WHERE TCN.NMCODE_GRP_CD='001' AND TCN.NMCODE_CD = TMS.CLS_FG) AS CLS_FG_NM,
-                TMS.SYS_STAT_FG,
-                (SELECT TCN.NMCODE_NM FROM TB_CM_NMCODE TCN  WHERE TCN.NMCODE_GRP_CD='005' AND TCN.NMCODE_CD = TMS.SYS_STAT_FG) AS SYS_STAT_FG_NM,
-                (SELECT COUNT(TMP.STORE_CD) FROM TB_MS_POS TMP WHERE TMP.STORE_CD = TMS.STORE_CD AND TMP.USE_YN = 'Y') AS POS_CNT,
-                TMS.SYS_OPEN_DATE,
-                TMS.SYS_CLOSURE_DATE,
-                TMS.BIZ_STORE_NM,
-                TMS.OWNER_NM,
-                TMS.BIZ_NO,
-                TMS.TEL_NO,
-                TMS.MP_NO,
-                TMS.FAX_NO,
-                TMS.EMAIL_ADDR,
-                TMS.HMPG_ADDR,
-                TMS.POST_NO || ') ' || TMS.ADDR || TMS.ADDR_DTL AS ADDRESS,
-                TMS.AREA_CD,
-                (SELECT TCN.NMCODE_NM FROM TB_CM_NMCODE TCN  WHERE TCN.NMCODE_GRP_CD='061' AND TCN.NMCODE_CD = TMS.AREA_CD) AS AREA_NM,
-                TMS.VAN_CD,
-                (SELECT TCVC.VAN_NM FROM TB_CM_VAN_CMPNY TCVC  WHERE TCVC.VAN_CD = TMS.VAN_CD AND TCVC.VAN_FG = '01') AS VAN_NM,
-                TMS.AGENCY_CD,
-                (SELECT AGENCY_NM FROM TB_CM_AGENCY TMA WHERE TMA.AGENCY_CD = TMS.AGENCY_CD) AGENCY_NM,
-                TMS.SYS_REMARK,
-                TMS.HD_REMARK,
-                TMS.REMARK,
-                NVL((SELECT TMSE.ENVST_VAL FROM TB_MS_STORE_ENVST TMSE WHERE TMSE.STORE_CD   = TMS.STORE_CD AND TMSE.ENVST_CD = '1028' ), 0 ) CORNER_USE_YN,
-                NVL((SELECT TMSE.ENVST_VAL FROM TB_MS_STORE_ENVST TMSE WHERE TMSE.STORE_CD   = TMS.STORE_CD AND TMSE.ENVST_CD = '0007' ), 0 ) CASH_BILL_YN
-          FROM  TB_MS_STORE TMS
-         WHERE  TMS.STORE_CD = #{storeCd}
-       ) X
+    <!-- 매장의 코너 사용여부 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE_ENVST
+        COMMENTS : 매장의 코너 사용여부를 조회한다.
+    -->
+    <select id="getCornerUseYnVal" parameterType="storeEnvVO" resultType="String">
+        /* getCornerUseYnVal.getTerminalEnv */
+        SELECT NVL(ENVST_VAL, '0') AS ENVST_VAL
+          FROM TB_MS_STORE_ENVST
+         WHERE STORE_CD = #{storeCd}
+           AND ENVST_CD = #{envstCd}
+           AND USE_YN = 'Y'
+    </select>
 
-  </select>
+     <!-- 코너별 터미널 목록 조회 -->
+    <select id="getCornerTerminalList" parameterType="DefaultMap" resultType="DefaultMap">
+        /* USE : StoreManageMapper.getCornerTerminalList */
+        <![CDATA[
+        SELECT tmct.STORE_CD,
+               tmct.CORNR_CD,
+               tmct.VENDOR_FG,
+               (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '078' AND NMCODE_CD = tmct.VENDOR_FG ) AS VENDOR_FG_NM,
+               tmct.VENDOR_CD,
+               tmct.VENDOR_NM,
+               tmct.VENDOR_TERMNL_NO,
+               tmct.VENDOR_SER_NO
+          FROM TB_MS_CORNER_TERMNL tmct
+         WHERE tmct.STORE_CD = #{storeCd}
+         ORDER BY tmct.CORNR_CD, tmct.VENDOR_FG, tmct.VENDOR_CD
+        ]]>
+    </select>
 
-  <!--
-      TABLE    : TB_MS_STORE, TB_MS_CORNER
-      PARAM    : vanConfigVO
-      COMMENTS : 밴사설정 정보 조회
-  -->
-  <select id="getVanconfgList" parameterType="vanConfigVO" resultType="DefaultMap">
-    /* USE : ViewMapper.getVanconfgList */
-    SELECT  TMS.STORE_CD,
-            TMS.STORE_NM,
-            TMC.CORNR_CD,
-            TMC.CORNR_NM,
-            TMC.OWNER_NM,
-            TMC.BIZ_NO,
-            TMC.TEL_NO,
-            TMC.VAN_CD,
-            (SELECT TCVC.VAN_NM FROM TB_CM_VAN_CMPNY TCVC WHERE TCVC.VAN_CD = TMC.VAN_CD AND TCVC.VAN_FG = '01') VAN_NM,
-            TMC.VAN_TERMNL_NO,
-            TMC.VAN_SER_NO,
-            TMC.USE_YN
-      FROM  TB_MS_STORE TMS,
-            TB_MS_CORNER TMC
-     WHERE  TMS.STORE_CD = TMC.STORE_CD(+)
-       AND  TMS.STORE_CD = #{storeCd}
-       AND  TMC.CORNR_CD (+)= '00'
-  </select>
-
-
-
-   <!-- 코너별 승인 목록 조회 -->
-  <select id="getCornrApproveList" parameterType="DefaultMap" resultType="DefaultMap">
-    /* USE : StoreManageMapper.getCornrApproveList */
-    <![CDATA[
-    SELECT TMC.STORE_CD,
-           TMC.CORNR_CD,
-           TMC.CORNR_NM,
-           TMC.OWNER_NM,
-           TMC.BIZ_NO,
-           TMC.TEL_NO,
-           TMC.VAN_CD,
-           TMC.VAN_TERMNL_NO,
-           TMC.VAN_SER_NO,
-           TMC.USE_YN,
-           DECODE(TMC.USE_YN, 'Y', '사용','N', '미사용', TMC.USE_YN) USE_YN_NM,
-           TMC.REG_DT,
-           TMC.REG_ID,
-           TMC.MOD_DT,
-           TMC.MOD_ID
-      FROM TB_MS_CORNER TMC
-     WHERE TMC.STORE_CD = #{storeCd}
-       AND TMC.CORNR_CD <> '00'
-     ORDER BY TMC.CORNR_CD
-      ]]>
-  </select>
-
-  <!-- 포스별 승인 목록 조회 -->
-  <select id="getPosApproveList" parameterType="DefaultMap" resultType="DefaultMap">
-    /* USE : StoreManageMapper.getPosApproveList */
-    <![CDATA[
-     SELECT TMP.STORE_CD,
-            TMP.POS_NO,
-            TMP.POS_NM,
-            TMP.HW_AUTH_KEY,
-            NVL2(TMP.HW_AUTH_KEY, '인증', '미인증') HW_AUTH_KEY_NM,
-            TMP.POS_VER_NO,
-            TMP.USE_YN,
-            TMP.REMARK,
-            TMP.REG_DT,
-            TMP.REG_ID,
-            TMP.MOD_DT,
-            TMP.MOD_ID
-       FROM TB_MS_POS TMP
-      WHERE TMP.STORE_CD = #{storeCd}
-        AND TMP.USE_YN = 'Y'
-      ORDER BY TMP.POS_NO
-      ]]>
-  </select>
+    <!-- 포스별 터미널목록 조회 -->
+    <select id="getPosTerminalList" parameterType="DefaultMap" resultType="DefaultMap">
+        /* USE : StoreManageMapper.getPosTerminalList */
+        <![CDATA[
+         SELECT tmpt.STORE_CD,
+                tmpt.POS_NO,
+                tmpt.VENDOR_FG,
+                (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '078' AND NMCODE_CD = tmpt.VENDOR_FG ) AS VENDOR_FG_NM,
+                tmpt.VENDOR_CD,
+                tmpt.VENDOR_NM,
+                tmpt.VENDOR_TERMNL_NO,
+                tmpt.VENDOR_SER_NO
+           FROM TB_MS_POS_TERMNL tmpt
+          WHERE tmpt.STORE_CD = #{storeCd}
+          ORDER BY tmpt.POS_NO, tmpt.VENDOR_FG, tmpt.VENDOR_CD
+        ]]>
+    </select>
 </mapper>

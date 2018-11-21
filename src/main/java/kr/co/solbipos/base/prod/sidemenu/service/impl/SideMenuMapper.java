@@ -75,6 +75,9 @@ public interface SideMenuMapper {
     /** 사이드메뉴-선택메뉴탭-선택분류 삭제 */
     int deleteMenuClassList(SideMenuSelClassVO sideMenuSelClassVO);
 
+    /** 사이드메뉴-선택메뉴 - 선택할 상품 목록 조회 */
+    List<DefaultMap<String>> getProdList(SideMenuSelProdVO sideMenuSelProdVO);
+
     /** 사이드메뉴-선택메뉴탭-선택상품 목록 조회 */
     List<DefaultMap<String>> getMenuProdList(SideMenuSelProdVO sideMenuSelProdVO);
 

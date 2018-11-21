@@ -18,11 +18,21 @@
   -->
   <select id="getCreditMemberList"  parameterType="creditStoreVO" resultType="DefaultMap">
     /* CreditMapper.getCreditMemberList */
-    SELECT *
+    <include refid="CmmSQL.PagingTemplateHeader"/>
+    SELECT tmmc.STORE_CD,
+           tmmc.STORE_NM,
+           tmmc.SALE_DATE,
+           tmmc.MEMBR_NO,
+           tmmc.MEMBR_NM,
+           tmmc.SALE_AMT,
+           tmmc.CREDIT_AMT,
+           tmmc.CREDIT_IN_FG,
+           tmmc.CREDIT_PAY_FG
+    <include refid="CmmSQL.PagingTemplateCount"/>
       FROM (
        SELECT tsspc.STORE_CD,
               (SELECT STORE_NM FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_CD = tsspc.STORE_CD) AS STORE_NM,
-              tsspc.SALE_DATE,
+              TO_CHAR(TO_DATE(tsspc.SALE_DATE), 'YYYY-MM-DD') AS SALE_DATE,
               tsspc.MEMBR_NO,
               (SELECT MEMBR_NM FROM TB_MB_MEMBER WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND MEMBR_NO = tsspc.MEMBR_NO) AS MEMBR_NM,
               tsspc.SALE_AMT,
@@ -33,7 +43,7 @@
         UNION
        SELECT tmmc.STORE_CD,
               (SELECT STORE_NM FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_CD = tmmc.STORE_CD) AS STORE_CD,
-              tmmc.SALE_DATE,
+              TO_CHAR(TO_DATE(tmmc.SALE_DATE), 'YYYY-MM-DD') AS SALE_DATE,
               tmmc.MEMBR_NO,
               (SELECT MEMBR_NM FROM TB_MB_MEMBER WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND MEMBR_NO = tmmc.MEMBR_NO) AS MEMBR_NM,
               0 AS SALE_AMT,
@@ -43,7 +53,7 @@
          FROM TB_MB_MEMBER_CREDIT tmmc
            ) tmmc
     <where>
-      <if test='storeCds != null and storeCds != ""'>
+      <if test='storeCds != null and storeCds != "ALL"'>
         AND tmmc.STORE_CD IN
         <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
            #{item}
@@ -74,6 +84,7 @@
     <if test='array != null and array.toString == "6"'>
       ORDER BY tmmc.SALE_DATE, tmmc.MEMBR_NO, tmmc.STORE_CD
     </if>
+    <include refid="CmmSQL.PagingTemplateBottom"/>
   </select>
 
   <!-- 후불 대상 회원 조회 -->

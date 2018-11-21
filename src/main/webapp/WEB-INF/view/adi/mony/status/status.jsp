@@ -10,7 +10,13 @@
 
 <div class="subCon">
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+      <button class="btn_blue fr" id="searchBtn">
+        <s:message code="cmm.search" />
+      </button>
+    </div>
   </div>
 
   <%-- TABLE1 (프렌차이즈 권한 노출내용) --%>
@@ -77,12 +83,6 @@
       </c:if>
     </tbody>
   </table>
-
-  <div class="mt10 pdb20 oh">
-    <%-- 조회 --%>
-    <button class="btn_blue fr" id="searchBtn"><s:message code="cmm.search" /></button>
-  </div>
-
 
   <div class="mt40 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>

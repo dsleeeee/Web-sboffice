@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 
-<wj-popup control="memberInfoDetailLayer" show-trigger="Click" hide-trigger="Click" style="width:750px;height:570px;" fade-in="false" fade-out="false">
+<wj-popup control="memberInfoDetailLayer" show-trigger="Click" hide-trigger="Click" style="width:750px;height:570px;">
   <div class="wj-dialog wj-dialog-columns title" ng-controller="memberInfoDetailCtrl">
 
     <%-- header --%>

@@ -18,15 +18,15 @@
 .font .wj-form-control{font-size:0.75em; color:#222}
 </style>
 <div class="subCon">
-  <%--tab---%>
-  <ul class="subTab mb20">
-    <li><a href="#" class="on"><s:message code="ehgt.tabRegist" /></a></li>
-    <%--<li><a href="#"><s:message code="ehgt.tabGoodsPrice" /></a></li> --%>
-  </ul>
-  <%--//tab---%>
 
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+      <button class="btn_blue fr" id="btnSearch" >
+        <s:message code="cmm.search" />
+      </button>
+    </div>
   </div>
 
   <table class="searchTbl">
@@ -53,23 +53,19 @@
     </tbody>
   </table>
 
-  <div class="mt10 oh pdb20">
-    <button id="btnSearch" class="btn_blue fr"><s:message code="cmm.search" /><%--조회--%></button>
-  </div>
-
 <c:if test="${isManager}">
-  <div class="mt40 tr">
+  <div class="mt20 tr">
     <button id="btnRegist" class="btn_skyblue"><s:message code="ehgt.btnCrncyRegist" /><%--통화구분등록--%></button>
   </div>
 </c:if>
 
 <c:if test="${isManager}">
   <%--2단--%>
-  <div class="wj-TblWrap mt40 oh">
+  <div class="wj-TblWrap mt20 oh">
     <%--left--%>
     <div class="w50 fl">
       <div class="wj-TblWrapBr mr10" style="height:400px;">
-        <h3 class="h3_tbl2 pdt5 lh30 mt20">
+        <h3 class="h3_tbl2 pdt5 lh30">
             <s:message code="ehgt.labelCrncyNew" />
             <span class="fr"><a id="btnSave" href="#" class="btn_grayS"><s:message code="cmm.save"/></a></span>
         </h3>
@@ -109,9 +105,9 @@
 
     <%--right--%>
     <div class="w50 fr">
-      <div class="wj-TblWrapBr ml10 pd20" style="height:400px;">
+      <div class="wj-TblWrapBr ml10" style="height:400px; overflow-x: hidden; overflow-y: hidden;">
         <%--위즈모 테이블--%>
-        <div id="theGrid"></div>
+        <div id="theGrid" style="overflow-y: auto;"></div>
         <%--//위즈모 테이블--%>
       </div>
     </div>

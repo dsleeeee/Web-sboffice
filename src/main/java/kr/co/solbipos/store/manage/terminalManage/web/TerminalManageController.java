@@ -199,15 +199,6 @@ public class TerminalManageController {
         int result = 0;
 
         try{
-
-//            StoreEnvVO storeEnvVO = new StoreEnvVO();
-//            storeEnvVO.setStoreCd(request.getParameter("storeCd"));
-//            storeEnvVO.setEnvstVal(request.getParameter("terminalFgVal"));
-//
-//            // 환경변수 값 저장
-//            result += service.updateTerminalEnvst(storeEnvVO, sessionInfoVO);
-
-            // 터미널정보 저장
             result += service.savePosTerminalInfo(storeTerminalVOs, sessionInfoVO);
 
         }catch(Exception ex){
@@ -252,13 +243,6 @@ public class TerminalManageController {
         int result = 0;
 
         try{
-//            StoreEnvVO storeEnvVO = new StoreEnvVO();
-//            storeEnvVO.setStoreCd(request.getParameter("storeCd"));
-//            storeEnvVO.setEnvstVal(request.getParameter("terminalFgVal"));
-//
-//            // 환경변수 값 저장
-//            result += service.updateTerminalEnvst(storeEnvVO, sessionInfoVO);
-
             // 코너 터미널 정보 저장
             result = service.saveCornerTerminalInfo(storeTerminalVOs, sessionInfoVO);
 

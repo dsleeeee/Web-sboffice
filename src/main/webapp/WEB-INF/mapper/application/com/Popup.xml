@@ -95,7 +95,7 @@
         COMMENTS : 매장선택 리스트를 조회한다.
     -->
     <select id="getStoreList" parameterType="storeManageVO" resultType="DefaultMap">
-      /* USE : outstockReqDateMapper.selectStoreList */
+      /* USE : PopupMapper.selectStoreList */
       <include refid="CmmSQL.PagingTemplateHeader"/>
       <![CDATA[
           SELECT  tms.STORE_CD, tms.STORE_NM
@@ -115,6 +115,77 @@
       <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
+    <!-- 상품분류 트리 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_CLASS, TB_MS_PRODUCT_CLASS,
+        PARAM    : prodVO
+        COMMENTS : 상품 분류를 트리뷰 목록으로 조회한다.
+    -->
+    <select id="getProdClassTree" parameterType="prodVO" resultType="productClassVO">
+        /* USE : PopupMapper.getProdClassTree */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                    thpc.P_PROD_CLASS_CD,
+                    thpc.PROD_CLASS_CD,
+                    thpc.PROD_CLASS_NM
+                FROM
+                    TB_HQ_PRODUCT_CLASS thpc
+                WHERE
+                    thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+                START WITH
+                    thpc.P_PROD_CLASS_CD = '00000'
+                    AND thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+                CONNECT BY
+                    thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD
+                    AND thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                    tmpc.P_PROD_CLASS_CD,
+                    tmpc.PROD_CLASS_CD,
+                    tmpc.PROD_CLASS_NM
+                FROM
+                    TB_MS_PRODUCT_CLASS tmpc
+                WHERE
+                    tmpc.STORE_CD = #{storeCd}
+                START WITH
+                    tmpc.P_PROD_CLASS_CD = '00000'
+                    AND tmpc.STORE_CD = #{storeCd}
+                CONNECT BY
+                    tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD
+                    AND tmpc.STORE_CD = #{storeCd}
+            </when>
+        </choose>
+    </select>
 
+    <!-- 상품분류 플랫 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_CLASS, TB_MS_PRODUCT_CLASS,
+        PARAM    : prodVO
+        COMMENTS : 상품 분류명을 플랫 형태로 조회한다.
+    -->
+    <select id="getProdClassCdNm" parameterType="prodVO" resultType="java.lang.String">
+        /* USE : PopupMapper.getProdClassCdNm */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                    SF_GET_PROD_CLASSES('H', #{hqOfficeCd}, #{prodClassCd}) AS PROD_CLASS_CD_NM
+                FROM
+                    DUAL
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                    SF_GET_PROD_CLASSES('S', #{storeCd}, #{prodClassCd}) AS PROD_CLASS_CD_NM
+                FROM
+                    DUAL
+            </when>
+        </choose>
+
+    </select>
 
 </mapper>

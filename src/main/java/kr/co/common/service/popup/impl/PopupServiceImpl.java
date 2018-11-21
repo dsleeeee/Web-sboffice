@@ -6,6 +6,9 @@ import kr.co.common.data.domain.VanVO;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.popup.PopupService;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.prod.info.service.ProductClassVO;
+import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreManageVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,5 +69,29 @@ public class PopupServiceImpl implements PopupService{
     @Override
     public List<DefaultMap<String>> getStoreList(StoreManageVO storeManageVO) {
         return popupMapper.getStoreList(storeManageVO);
+    }
+
+    /** 상품분류 트리 조회 */
+    @Override
+    public List<ProductClassVO> getProdClassTree(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+        // 소속구분 설정
+        String orgnFg = sessionInfoVO.getOrgnFg().getCode();
+        prodVO.setOrgnFg(orgnFg);
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        return popupMapper.getProdClassTree(prodVO);
+    }
+
+    /** 상품분류 플랫 조회 */
+    @Override
+    public String getProdClassCdNm(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+        // 소속구분 설정
+        String orgnFg = sessionInfoVO.getOrgnFg().getCode();
+        prodVO.setOrgnFg(orgnFg);
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        return popupMapper.getProdClassCdNm(prodVO);
     }
 }

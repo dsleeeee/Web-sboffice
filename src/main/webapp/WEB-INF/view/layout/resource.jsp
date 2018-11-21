@@ -6,9 +6,9 @@
 <%-- favicon 요청시 404 에러를 피하기 위한 설정 : TODO 추후 favicon 등록할것 --%>
 <link rel="shortcut icon" href="data:image/x-icon" type="image/x-icon">
 
-<link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/style.css?ver=20181115.01" media="all"/>
+<link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/style.css?ver=20181120.01" media="all"/>
 <link rel="stylesheet" type="text/css" href="/resource/vendor/wijmo/css/wijmo.css?ver=5.20182.500"/>
-<link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/wijmo.solbi.custom.css?ver=20181115.01"/>
+<link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/wijmo.solbi.custom.css?ver=20181120.01"/>
 <link rel="stylesheet" type="text/css" href="/resource/vendor/awesome-font/css/font-awesome.min.css?ver=4.7.0" />
 <%-- third-party plug-in --%>
 <script type="text/javascript" src="/resource/vendor/jquery/jquery-2.2.4.min.js"></script>
@@ -35,11 +35,11 @@
 <%-- wijmo-angularJS plug-in --%>
 <script type="text/javascript" src="/resource/vendor/wijmo/js/wijmo.angular.min.js?ver=5.20182.500" charset="utf-8"></script>
 <%-- solbi plug-in --%>
-<script type="text/javascript" src="/resource/solbipos/js/common/common.js?ver=20181115.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/common/common.js?ver=20181120.01" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/common/StringUtil.js?ver=20181004.01" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/common/DateUtil.js?ver=20181004.01" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/solbipos/js/common/grid.comm.js?ver=20181115.01" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/solbipos/js/common/grid.comm.angular.js?ver=20181115.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/common/grid.comm.js?ver=20181120.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/common/grid.comm.angular.js?ver=20181120.01" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/common/gen.comm.js?ver=20181027.01" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/common/alert.min.js?ver=20181004.01" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/common/paging.min.js?ver=20181004.01" charset="utf-8"></script>

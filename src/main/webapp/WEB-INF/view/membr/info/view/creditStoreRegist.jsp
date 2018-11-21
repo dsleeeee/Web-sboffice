@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="creditStoreRegistLayer" show-trigger="Click" hide-trigger="Click" style="width:750px;height:450px;" fade-in="false" fade-out="false">
+<wj-popup control="creditStoreRegistLayer" show-trigger="Click" hide-trigger="Click" style="width:750px;height:450px;">
   <div class="wj-dialog wj-dialog-columns title" >
 
     <%-- header --%>
@@ -21,19 +21,16 @@
           <div class="wj-TblWrap mr10" style="height:350px; overflow-y: hidden;" ng-controller="creditStoreRegistCtrl">
             <div class="oh mb10">
               <%-- 페이지 스케일  --%>
-              <div class="sb-select wj-hide">
-                <wj-combo-box
-                        class="w100px fl"
-                        id="listScaleBox"
-                        ng-model="listScale"
-                        items-source="_getComboData('listScaleBox')"
-                        display-member-path="name"
-                        selected-value-path="value"
-                        is-editable="false"
-                        initialized="initComboBox(s)"
-                        ng-hide="true">
-                </wj-combo-box>
-              </div>
+              <wj-combo-box
+                      ng-hide="true"
+                      id="listScaleBox"
+                      ng-model="listScale"
+                      items-source="_getComboData('listScaleBox')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      initialized="initComboBox(s)">
+              </wj-combo-box>
               <span class="fl bk lh20 s14"><s:message code="regist.membr.regStore"/></span>
               <span class="fr"><a href="#" class="btn_grayS2" ng-click="delete()"><s:message code="cmm.del" /></a></span>
             </div>
@@ -71,19 +68,16 @@
           <div class="wj-TblWrap ml10" style="height:350px;overflow-y: hidden;" ng-controller="creditStoreNoRegistCtrl">
             <div class="oh mb10">
               <%-- 페이지 스케일  --%>
-              <div class="sb-select">
-                <wj-combo-box
-                        class="w100px fl"
-                        id="listScaleBox"
-                        ng-model="listScale"
-                        items-source="_getComboData('listScaleBox')"
-                        display-member-path="name"
-                        selected-value-path="value"
-                        is-editable="false"
-                        initialized="initComboBox(s)"
-                        ng-hide="true">
-                </wj-combo-box>
-              </div>
+              <wj-combo-box
+                      ng-hide="true"
+                      id="listScaleBox"
+                      ng-model="listScale"
+                      items-source="_getComboData('listScaleBox')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      initialized="initComboBox(s)">
+              </wj-combo-box>
               <span class="fl bk lh20 s14"><s:message code="regist.membr.noRegStore"/></span>
               <span class="fr"><a href="#" class="btn_grayS2" ng-click="regist()" ><s:message code="func.regist"/></a></span>
             </div>

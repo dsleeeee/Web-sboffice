@@ -3,17 +3,30 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
+<c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
+
 <%--서브컨텐츠--%>
-<div class="subCon2" ng-controller="touchKeyCtrl">
+<div class="subCon" ng-controller="touchKeyCtrl">
+
+  <div class="searchBar flddUnfld">
+    <a href="#" class="open">${menuNm}</a>
+  </div>
+
   <%--테이블속성, 테이블관리, 판매터치키 page에만 쓰임--%>
-  <div class="touchKeyWrap oh">
+  <div class="TblWrapBr touchKeyWrap oh mt10">
     <%--left--%>
     <div class="w30 fl">
-      <%--상품--%>
       <div class="updownSet oh mb10">
-        <span class="fl bk lh30"><s:message code="touchKey.class"/></span>
+        <span class="fl bk lh30"><s:message code="touchKey.prodList"/></span>
         <div class="txtIn">
-          <div class="sb-select dkbr fl w98px">
+          <button class="btn_skyblue fl ml20" id="btnSearch"><s:message code="touchKey.reload"/></button>
+        </div>
+      </div>
+      <div class="b4 mb5 pd5">
+        <div class="updownSet">
+          <span class="fl bk lh30 s14 ml5"><s:message code="touchKey.classUseYn"/> :</span>
+          <div class="sb-select dkbr fl w85px ml5">
             <wj-combo-box
               id="touchKeyFilterCombo"
               ng-model="touchKeyFilter"
@@ -25,20 +38,16 @@
               selected-index-changed="setTouchKeyFilter(s)">
             </wj-combo-box>
           </div>
-          <div class="sb-select dkbr fl w120px ml5">
-            <wj-combo-box
-              id="prodClassCdFilterCombo"
-              ng-model="prodClassCdFilter"
-              items-source="_getComboData('prodClassCdFilterCombo')"
-              display-member-path="name"
-              selected-value-path="value"
-              is-editable="false"
-              initialized="_initComboBox(s)"
-              selected-index-changed="setProdClassFilter(s)">
-            </wj-combo-box>
-          </div>
+        </div>
+        <div class="updownSet mt5">
+          <span class="fl bk lh30 s14 ml5"><s:message code="touchKey.class"/> :</span>
+          <input type="text" id="_prodClassCdNm" name="prodClassCdNm" class="sb-input fl w60 ml5" style="font-size: 13px;"
+                 ng-model="prodClassInfo.prodClassCdNm"
+                 ng-click="popUpProdClass()"
+                 placeholder="상품분류 선택" ng-readonly="true">
         </div>
       </div>
+      <%--위즈모 테이블--%>
       <div class="cfgWrap2">
         <wj-flex-grid
           autoGenerateColumns="false"
@@ -57,23 +66,16 @@
           <wj-flex-grid-column header="<s:message code="touchKey.grid.prodCd"/>" binding="prodCd"
                                width="*" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="touchKey.grid.prodNm"/>" binding="prodNm"
-                               width="*"></wj-flex-grid-column>
+                               width="200"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="touchKey.grid.prodClass"/>"
-                               binding="prodClassCd" width="*"
+                               binding="prodClassCd"
                                visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="touchKey.grid.prodClassNm"/>"
-                               binding="prodClassNm" width="70"></wj-flex-grid-column>
+                               binding="prodClassNm" width="100"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="touchKey.grid.saleUprc"/>"
                                binding="saleUprc" width="*" visible="false"></wj-flex-grid-column>
-
         </wj-flex-grid>
-
-
-        <%--위즈모 테이블--%>
-        <div id="theGrid"></div>
-        <%--//위즈모 테이블--%>
       </div>
-      <%--//상품--%>
     </div>
     <%--//left--%>
     <%--right--%>
@@ -81,7 +83,6 @@
       <%--미리보기 영역 시작--%>
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code="touchKey.preview"/></span>
-        <button class="btn_skyblue fl ml5" id="btnInit"><s:message code="touchKey.reload"/></button>
         <div class="txtIn">
           <div class="sb-select dkbr fl w120px">
             <div id="selectStyle"></div>
@@ -210,11 +211,6 @@
   window.TOUCHKEY_OPEN_URL = window.TOUCHKEY_OPEN_URL || '/base/prod/touchKey/touchKey/touchKeyList.sb';
   window.TOUCHKEY_SAVE_URL = window.TOUCHKEY_SAVE_URL || '/base/prod/touchKey/touchKey/save.sb';
 
-  window.PROD_CLASSES = ${srchClsFgCombo};
-  window.TOUCHKEY_STYLE_CD = ${touchKeyStyleCd};
-  window.TOUCHKEY_STYLE_CDS = ${touchKeyStyleCdList};
-  window.TOUCHKEY_STYLES = ${touchKeyStyleList};
-
   window.mxBasePath = window.mxBasePath || '/resource/vendor/mxgraph/src';
   window.mxLanguage = window.mxLanguage || urlParams['lang'];
   window.mxLanguages = window.mxLanguages || ['ko'];
@@ -229,5 +225,9 @@
 <script type="text/javascript"
         src="/resource/vendor/wijmo/js/grid/wijmo.grid.filter.min.js?ver=5.20182.500"
         charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20181116.01"
+<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20181120.01"
         charset="utf-8"></script>
+
+<%-- 상품분류 팝업 --%>
+<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
+</c:import>

@@ -5,13 +5,21 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="baseUrl" value="/membr/anals/credit/" />
 
 <div class="subCon" ng-controller="creditCtrl">
 
   <%-- 조회조건 --%>
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+      <button class="btn_blue fr" ng-click="_broadcast('creditCtrl')">
+        <s:message code="cmm.search" />
+      </button>
+    </div>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -21,7 +29,7 @@
       <col class="w35" />
     </colgroup>
     <tbody>
-    <tr>
+    <tr ng-show="orgnFg=='H'">
       <%-- 매장 --%>
       <div id="storeCd" style="display: none;"></div>
       <th><s:message code="credit.srchStore" /></th>
@@ -59,13 +67,8 @@
     </tbody>
   </table>
 
-  <%-- 조회 --%>
-  <div class="mt10 pdb20 oh">
-    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('creditCtrl')"><s:message code="cmm.search" /></button>
-  </div>
-
   <%--위즈모 테이블--%>
-  <div class="updownSet oh mb10 mt40">
+  <div class="updownSet oh mb10 mt20">
     <button class="btn_skyblue" id="btnDeposit" style=";" ng-click="deposit()">
       <s:message code="credit.deposit" />
     </button>
@@ -76,8 +79,21 @@
       <s:message code="cmm.save" />
     </button>
   </div>
-  <%-- 개발시 높이 조절해서 사용--%>
-  <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
+
+  <%-- 페이지 스케일  --%>
+  <wj-combo-box
+          class="w100px fl"
+          id="listScaleBox"
+          ng-model="listScale"
+          items-source="_getComboData('listScaleBox')"
+          display-member-path="name"
+          selected-value-path="value"
+          is-editable="false"
+          initialized="initComboBox(s)"
+          ng-hide="true">
+  </wj-combo-box>
+
+  <%-- 그리드 --%>
   <div class="wj-gridWrap" style="height:315px; overflow-y: hidden;">
     <div class="row">
       <wj-flex-grid
@@ -91,25 +107,34 @@
               is-read-only="true">
 
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="credit.storeCd"/>" binding="storeCd" width="70"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="credit.storeNm"/>" binding="storeNm" width="100" ></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="credit.saleDate"/>" binding="saleDate" width="100"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="credit.membrNo"/>" binding="membrNo" width="70"  ></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="credit.membrNm"/>" binding="membrNm" width="100" ></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="credit.creditNo"/>" binding="creditNo" width="70"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="credit.creditDt"/>" binding="creditDt" ></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="credit.creditInFg"/>" binding="creditInFg" data-map="creditInFgDataMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="credit.saleAmt"/>" binding="saleAmt" ></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="credit.creditAmt"/>" binding="creditAmt" ></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="credit.creditPayFg"/>" binding="creditPayFg" data-map="creditPayFgDataMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="credit.nonsaleBillNo"/>" binding="nonsaleBillNo" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="credit.storeCd"/>" binding="storeCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="credit.storeNm"/>" binding="storeNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="credit.saleDate"/>" binding="saleDate" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="credit.membrNo"/>" binding="membrNo" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="credit.membrNm"/>" binding="membrNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="credit.creditNo"/>" binding="creditNo" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="credit.creditDt"/>" binding="creditDt" is-read-only="true" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="credit.creditInFg"/>" binding="creditInFg" data-map="creditInFgDataMap" is-read-only="true" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="credit.saleAmt"/>" binding="saleAmt" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="credit.creditAmt"/>" binding="creditAmt" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="credit.creditPayFg"/>" binding="creditPayFg" data-map="creditPayFgDataMap" is-read-only="true" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="credit.nonsaleBillNo"/>" binding="nonsaleBillNo" visible="false" ></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="credit.orgPrepaidNo"/>" binding="orgPrepaidNo" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="credit.sendYn"/>" binding="sendYn" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="credit.sendDt"/>" binding="sendDt" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="credit.sendDt"/>" binding="sendDt" visible="false" ></wj-flex-grid-column>
 
       </wj-flex-grid>
     </div>
   </div>
+
+  <%-- 페이지 리스트 --%>
+  <div class="pageNum mt20">
+    <%-- id --%>
+    <ul id="creditCtrlPager" data-size="10">
+    </ul>
+  </div>
+  <%--//페이지 리스트--%>
+
 </div>
 
 <script type="text/javascript">

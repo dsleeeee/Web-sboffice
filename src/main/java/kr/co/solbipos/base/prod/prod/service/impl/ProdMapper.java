@@ -1,7 +1,6 @@
 package kr.co.solbipos.base.prod.prod.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.base.prod.info.service.ProductClassVO;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -48,12 +47,6 @@ public interface ProdMapper {
      * @return List
      */
     List<DefaultMap<String>> getLinkedProdList(ProdVO prodVO);
-
-    /** 상품분류 플랫 조회 */
-    String getProdClassCdNm(ProdVO prodVO);
-
-    /** 상품분류 트리 조회 */
-    List<ProductClassVO> getProdClassTree(ProdVO prodVO);
 
     /** 상품정보 저장 */
     int saveProductInfo(ProdVO prodVO);

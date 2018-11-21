@@ -5,10 +5,18 @@
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
 
-<div class="subCon">
+<div class="subCon" ng-controller="storeListCtrl">
+
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+      <button class="btn_blue fr" id="btnSearch" ng-click="getStoreList()">
+        <s:message code="cmm.search" />
+      </button>
+    </div>
   </div>
+
   <table class="searchTbl">
     <colgroup>
       <col class="w15" />
@@ -21,193 +29,137 @@
         <%-- 매장코드 --%>
         <th><s:message code="storeView.storeCd" /></th>
         <td>
+          <input type="text" id="srchStoreCd" class="sb-input w100" ng-model="storeCd" maxlength="10"/>
+          <%--
           <div class="sb-select">
             <div id="sStoreCd"></div>
           </div>
+          --%>
         </td>
         <%-- 매장명 --%>
         <th><s:message code="storeView.storeNm" /></th>
         <td>
+          <input type="text" id="srchStoreNm" class="sb-input w100" ng-model="storeNm" maxlength="10"/>
+          <%--
           <div class="sb-select">
             <div id="sStoreNm"></div>
           </div>
+          --%>
         </td>
       </tr>
       <tr>
-        <%-- 매장형태 --%>
+        <%-- 매장형태 (직영/가맹) //todo  --%>
+<%--
         <th><s:message code="storeView.storeTypeNm" /></th>
         <td>
-          <div class="sb-select">
-            <div id="sStoreType"></div>
-          </div>
         </td>
-        <%-- 매장그룹 --%>
+--%>
+        <%-- 용도 --%>
         <th><s:message code="storeView.clsFgNmG" /></th>
         <td>
           <div class="sb-select">
-            <div id="sClsFg"></div>
+            <wj-combo-box
+                    id="srchClsFg"
+                    ng-model="clsFg"
+                    items-source="_getComboData('clsFg')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="_initComboBox(s)">
+            </wj-combo-box>
           </div>
         </td>
-      </tr>
-      <tr>
         <%-- 매장상태 --%>
         <th><s:message code="storeView.sysStatFg" /></th>
         <td>
           <div class="sb-select">
-            <div id="sSysStatFg"></div>
-          </div>
-        </td>
-        <th></th>
-        <td>
-          <div>
+            <wj-combo-box
+                    id="srchSysStatFg"
+                    ng-model="sysStatFg"
+                    items-source="_getComboData('sysStatFg')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="_initComboBox(s)">
+            </wj-combo-box>
           </div>
         </td>
       </tr>
       </tbody>
   </table>
 
-  <div class="mt10 pdb20 oh">
-    <button id="searchBtn" class="btn_blue fr" >
-      <s:message code="cmm.search" />
-    </button>
-  </div>
-
   <div class="mt20 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
-    <div id="listScaleBox" class="w100px fl"></div>
-    <%-- 엑셀 다운로드 --%>
+    <wj-combo-box
+            class="w100px fl"
+            id="listScaleBox"
+            ng-model="listScale"
+            items-source="_getComboData('listScaleBox')"
+            display-member-path="name"
+            selected-value-path="value"
+            is-editable="false"
+            initialized="initComboBox(s)">
+    </wj-combo-box>
+
+    <%-- 엑셀 다운로드 //todo --%>
+    <%--
     <button class="btn_skyblue fr" id="excelBtn">
       <s:message code="cmm.excel.down" />
     </button>
+    --%>
   </div>
 
-  <%--위즈모 테이블--%>
-  <div class="wj-TblWrapBr mt10" style="height: 400px;">
-    <div id="theGrid"></div>
+  <%-- 회원목록 그리드 --%>
+  <div class="w100 mt10 mb20">
+    <div class="wj-gridWrap" style="height:350px; overflow-x: hidden; overflow-y: hidden;">
+      <wj-flex-grid
+              control="flex"
+              autoGenerateColumns="false"
+              selection-mode="Row"
+              initialized="initGrid(s,e)"
+              items-source="data"
+              item-formatter="_itemFormatter">
+
+        <!-- define columns -->
+        <wj-flex-grid-column header="<s:message code="storeView.storeCd"/>" binding="storeCd" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeView.storeNm"/>" binding="storeNm" width="120" align="center" width="*" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeView.storeTypeNm"/>" binding="storeTypeNm" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeView.clsFgNmG"/>" binding="clsFg" width="90" data-map="clsFgDataMap" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeView.bizNo"/>" binding="bizNo" width="140" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeView.ownerNm"/>" binding="ownerNm" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeView.telNo"/>" binding="telNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeView.address"/>" binding="address" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeView.posVerNo"/>" binding="posVerNo" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeView.sysStatFgNm"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeView.sysOpenDate"/>" binding="sysOpenDate" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeView.sysClosureDate"/>" binding="sysClosureDate"  width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeView.sms"/>" binding="gChk"  width="40" align="center"></wj-flex-grid-column>
+      </wj-flex-grid>
+    </div>
   </div>
-  <%--//위즈모 테이블--%>
 
   <%-- 페이지 리스트 --%>
   <div class="pageNum mt20">
     <%-- id --%>
-    <ul id="page" data-size="10">
+    <ul id="storeListCtrlPager" data-size="10">
     </ul>
   </div>
   <%--//페이지 리스트--%>
 
 </div>
-
 <script>
-
-  $(document).ready(function() {
-      <%-- 조회조건 --%>
-    var storeCd         = wcombo.genInput("#sStoreCd");
-    var storeNm         = wcombo.genInput("#sStoreNm");
-    //var storeType       = wcombo.genCommonBox("#sStoreType", ${ccu.getCommCode("100")});
-    var storeType        = wcombo.genCommonBox("#sStoreType",  [{"name":"전체","value":""},{"name":"단독","value":"1"},{"name":"가맹","value":"2"}]);
-    var clsFg                   = wcombo.genCommonBox("#sClsFg", ${ccu.getCommCode("001")});
-    var sysStatFg       = wcombo.genCommonBox("#sSysStatFg", ${ccu.getCommCode("005")});
-    var listScaleBox    = wcombo.genCommonBox("#listScaleBox", ${ccu.getListScale()});
-
-    <%-- 조회결과 --%>
-    var svData =
-      [
-        {binding:"storeCd", header:"<s:message code='storeView.storeCd' />",width:"*"},
-        {binding:"storeNm", header:"<s:message code='storeView.storeNm' />",width:"*"},
-        {binding:"storeTypeNm", header:"<s:message code='storeView.storeTypeNm' />",width:"*"},
-        {binding:"clsFgNm", header:"<s:message code='storeView.clsFgNmG' />",width:"*"},
-        {binding:"bizNo", header:"<s:message code='storeView.bizNo' />",width:"*"},
-        {binding:"ownerNm", header:"<s:message code='storeView.ownerNm' />",width:"*"},
-        {binding:"telNo", header:"<s:message code='storeView.telNo' />",width:"*"},
-        {binding:"mpNo", header:"<s:message code='storeView.mpNo' />",width:"*"},
-        {binding:"sms", header:"<s:message code='storeView.sms' />",width:"*"},
-        {binding:"address", header:"<s:message code='storeView.busiAdress' />",width:"*"},
-        {binding:"sysStatFgNm", header:"<s:message code='storeView.sysStatFgNm' />",width:"*"},
-        {binding:"", header:"<s:message code='storeView.touckKey' />",width:"*"},
-        {binding:"posVerNo", header:"<s:message code='storeView.posVerNo' />",width:"*"},
-        {binding:"sysOpenDate", header:"<s:message code='storeView.sysOpenDate' />",width:"*"},
-        {binding:"sysClosureDate", header:"<s:message code='storeView.sysClosureDate' />",width:"*"}
-      ];
-
-    var grid  = wgrid.genGrid("#theGrid", svData, "${menuCd}", 1, ${clo.getColumnLayout(1)});
-
-    <%-- 그리드 링크 --%>
-    grid.formatItem.addHandler(function(s, e) {
-      if (e.panel == s.cells) {
-        var col = s.columns[e.col];
-        if( col.binding == "storeNm" ) {
-          wijmo.addClass(e.cell, 'wijLink');
-        }
-        else if( col.binding == "ownerNm" ) {
-          wijmo.addClass(e.cell, 'wijLink');
-        }
-      }
-    });
-
-    <%-- 그리드 선택 이벤트 --%>
-    grid.addEventListener(grid.hostElement, 'click', function(e) {
-      var ht = grid.hitTest(e);
-      if( ht.cellType == wijmo.grid.CellType.Cell) {
-        var col = ht.panel.columns[ht.col];
-        if( col.binding == "storeNm") {
-          var param = {};
-          param.storeCd = grid.rows[ht.row].dataItem.storeCd;
-          param.storeNm = grid.rows[ht.row].dataItem.storeNm;
-          getStoreDetail(param);
-        }
-        else if( col.binding == "ownerNm") {
-          var param = {};
-          param.storeCd = grid.rows[ht.row].dataItem.storeCd;
-          param.storeNm = grid.rows[ht.row].dataItem.storeNm;
-          getVanConfigDetail(param);
-        }
-      }
-    });
-
-    <%-- 리스트 조회 --%>
-    $("#searchBtn").click(function(e){
-      search(1);
-    });
-
-    <%-- 페이징 --%>
-    $(document).on("click", ".page", function() {
-      search($(this).data("value"));
-    });
-
-    <%-- 엑셀 다운로드 --%>
-    $("#excelBtn").click(function( e ){
-      var name = "${menuNm}";
-      wexcel.down(grid, name, name + ".xlsx");
-    });
-
-    <%-- 리스트 조회 --%>
-    function search(index) {
-
-      var param = {};
-
-      param.storeCd = storeCd.text;
-      param.storeNm = storeNm.text;
-      param.storeType = storeType.selectedValue;
-      param.clsFg = clsFg.selectedValue;
-      param.sysStatFg = sysStatFg.selectedValue;
-      param.listScale = listScaleBox.selectedValue;
-      param.curr = index;
-
-      wgrid.getGridData("/base/store/view/view/list.sb", param, grid,
-        function(result){
-          page.make("#page", result.data.page.curr, result.data.page.totalPage);
-        },
-        function(){
-          s_alert.pop("Ajax Fail");
-        }
-      );
-    }
-  });
+var clsFg = ${ccu.getCommCodeSelect("001")};
+var sysStatFg = ${ccu.getCommCodeSelect("005")};
+var areaCd = ${ccu.getCommCodeSelect("061")};
 </script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/view/view.js?ver=20181120.01" charset="utf-8"></script>
+
 
 <%-- 매장 상세정보 --%>
 <c:import url="/WEB-INF/view/base/store/view/dtl.jsp">
 </c:import>
+
 <%-- 밴사 설정정보 --%>
 <c:import url="/WEB-INF/view/base/store/view/vanConfg.jsp">
 </c:import>
+

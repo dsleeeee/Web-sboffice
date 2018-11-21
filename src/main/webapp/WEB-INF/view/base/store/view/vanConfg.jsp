@@ -2,61 +2,83 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<c:set var="layerName" value="_vanConfig" />
 
-<div id="${layerName}Mask" class="fullDimmed" style="display: none;"></div>
-<div id="${layerName}Layer" class="layer" style="display: none;">
-  <div class="layer_inner">
-    <div class="title w700px">
-      <p class="tit" id="vstoreTitle"></p>
-      <a href="#" class="btn_close ${layerName}Close"></a>
-      <div class="con" style="height:300px;">
-          <p class="s14 bk mb5"><s:message code="storeView.vanConfig.title" /></p>
-        <div id="vcGrid" class="mt10" style="height:270px;"></div>
+<wj-popup control="vanConfigLayer" show-trigger="Click" hide-trigger="Click" style="width:650px;height:450px;" fade-in="false" fade-out="false">
+  <div class="wj-dialog wj-dialog-columns title">
+
+    <%-- header --%>
+    <div class="wj-dialog-header wj-dialog-header-font">
+      <s:message code="storeView.vanConfig.title" />
+      <span id="storeViewInfoTitle" class="ml20"></span>
+      <a href="#" class="wj-hide btn_close"></a>
+    </div>
+
+    <%-- body --%>
+    <div class="wj-dialog-body">
+
+      <%-- 코너사용여부 선택 --%>
+      <wj-combo-box
+              ng-model="cornerUseYnFg"
+              id="storeCornerUserYnFg"
+              items-source="_getComboData('cornerUseYnFg')"
+              control="cornerUseYnCombo"
+              display-member-path="name"
+              selected-value-path="value"
+              is-editable="false"
+              initialized="_initComboBox(s)"
+              ng-hide="true">
+      </wj-combo-box>
+
+      <div class="mt10" style="height:270px; overflow-y: auto;"   ng-controller="posTerminalCtrl" ng-if="cornerUseYnVal !== '2'">
+        <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden;" >
+          <wj-flex-grid
+                  control="flex"
+                  autoGenerateColumns="false"
+                  selection-mode="Row"
+                  initialized="initGrid(s,e)"
+                  items-source="data"
+                  item-formatter="_itemFormatter">
+
+            <!-- define columns -->
+            <wj-flex-grid-column header="<s:message code="storeView.posNo"/>" binding="posNo" align="center" width="60" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeView.vendorFgNm"/>" binding="vendorFgNm" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeView.vendorNm"/>" binding="vendorNm" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeView.vendorTermnlNo"/>" binding="vendorTermnlNo" align="center" width="*" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeView.vendorSerNo"/>" binding="vendorSerNo" align="center" width="*" is-read-only="true"></wj-flex-grid-column>
+          </wj-flex-grid>
+        </div>
       </div>
+
+      <div class="mt10" style="height:270px; overflow-y: auto;" ng-controller="cornerTerminalCtrl" ng-if="cornerUseYnVal == '2'">
+        <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden;" >
+          <wj-flex-grid
+                  control="flex"
+                  autoGenerateColumns="false"
+                  selection-mode="Row"
+                  initialized="initGrid(s,e)"
+                  items-source="data"
+                  item-formatter="_itemFormatter">
+
+            <!-- define columns -->
+            <wj-flex-grid-column header="<s:message code="storeView.cornrCd"/>" binding="cornrCd" width="*" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeView.vendorFgNm"/>" binding="vendorFgNm" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeView.vendorNm"/>" binding="vendorNm" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeView.vendorTermnlNo"/>" binding="vendorTermnlNo" align="center" width="*" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeView.vendorSerNo"/>" binding="vendorSerNo" align="center" width="*" is-read-only="true"></wj-flex-grid-column>
+          </wj-flex-grid>
+        </div>
+      </div>
+
+
       <div class="btnSet">
-        <span>
-          <a href="#" class="btn_gray  ${layerName}Close">
-            <s:message code="cmm.close" />
-          </a>
-        </span>
+        <%-- 닫기 --%>
+        <span><a href="#" class="btn_blue pd20" id="btnClose" ng-click="close()"><s:message code="cmm.close" /></a></span>
       </div>
     </div>
   </div>
-</div>
+</wj-popup>
 <script>
-    <%-- 밴사 설정정보 조회 결과 --%>
-    var vcData =
-      [
-        {binding:"storeNm", header:"<s:message code='storeView.vanConfig.storeNm' />"},
-        {binding:"cornrNm", header:"<s:message code='storeView.vanConfig.cornrNm' />"},
-        {binding:"vanTermnlNo", header:"<s:message code='storeView.vanConfig.vanTermnlNo' />"},
-        {binding:"ownerNm", header:"<s:message code='storeView.vanConfig.ownerNm' />"},
-        {binding:"bizNo", header:"<s:message code='storeView.vanConfig.bizNo' />"}
-      ];
-
-    <%-- 그리드 생성 --%>
-    var vcGrid = wgrid.genGrid("#vcGrid", vcData, false);
-
-    <%--  밴사 설정정보 조회 --%>
-    function getVanConfigDetail(obj) {
-      var param = obj;
-      wgrid.getGridData("/base/store/view/vanconfg/list.sb",    param, vcGrid,
-            function(result){
-        console.log(result);
-
-                $("#${layerName}Mask, #${layerName}Layer").show();
-              var storeTitle = param.storeCd+ " " + param.storeNm;
-              $("#vstoreTitle").text(storeTitle);
-            },
-            function(){
-              s_alert.pop("Ajax Fail");
-          }
-      );
-    }
-
-    <%-- 레이어 닫기 버튼 클릭--%>
-    $(".${layerName}Close").click(function(e) {
-      $("#${layerName}Mask, #${layerName}Layer").hide();
-    });
+var cornerUseFg = ${cnv.getEnvCodeExcpAll("2028")};
 </script>
+
+<script type="text/javascript" src="/resource/solbipos/js/base/store/view/vanConfig.js?ver=20181120.01" charset="utf-8"></script>

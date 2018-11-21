@@ -1,7 +1,7 @@
 /****************************************************************
  *
- * 파일명 : coupon.js
- * 설  명 : 쿠폰등록 JavaScript
+ * 파일명 : kitchenMemo.js
+ * 설  명 : 주방메모 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
@@ -72,7 +72,7 @@ app.controller('kitchenMemoCtrl', ['$scope', '$http', function ($scope, $http) {
 
   };
 
-  $scope.$on("couponCtrl", function(event, data) {
+  $scope.$on("kitchenMemoCtrl", function(event, data) {
     $scope.getKitchenMemoList();
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
@@ -117,7 +117,8 @@ app.controller('kitchenMemoCtrl', ['$scope', '$http', function ($scope, $http) {
       if(item.gChk){
         // 매장통제시, 본사에서 등록한 것 삭제 불가능
         if(orgnFg === 'STORE' && envstVal === '2' && item.regFg === "H"){
-          s_alert.pop(messages['kitchenMemo.disable.delete']);
+          // s_alert.pop();
+          $scope._popMsg(messages['kitchenMemo.disable.delete']);
         } else {
           $scope.flex.collectionView.removeAt(i);
         }
@@ -143,7 +144,7 @@ app.controller('kitchenMemoCtrl', ['$scope', '$http', function ($scope, $http) {
       params.push($scope.flex.collectionView.itemsRemoved[i]);
     }
 
-    console.log(params);
+    // console.log(params);
 
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._save(baseUrl + "saveKitchenMemo.sb", params, function(){ $scope.getKitchenMemoList() });

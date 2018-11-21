@@ -4,6 +4,9 @@ import kr.co.common.data.domain.AgencyVO;
 import kr.co.common.data.domain.HqOfficeVO;
 import kr.co.common.data.domain.VanVO;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.prod.info.service.ProductClassVO;
+import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreManageVO;
 
 import java.util.List;
@@ -36,4 +39,11 @@ public interface PopupService {
 
     /** 매장 목록 조회 */
     List<DefaultMap<String>> getStoreList(StoreManageVO storeManageVO);
+
+    /** 상품분류 트리 조회 */
+    List<ProductClassVO> getProdClassTree(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+
+    /** 상품분류 플랫 조회 */
+    String getProdClassCdNm(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+
 }

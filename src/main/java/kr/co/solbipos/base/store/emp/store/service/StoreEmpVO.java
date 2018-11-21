@@ -62,6 +62,8 @@ public class StoreEmpVO extends PageVO {
     private Boolean empRegist = false;
     /** 웹 사용자 등록 여부 */
     private Boolean webUserRegist;
+    /** 전체기간 체크 */
+    private boolean chkDt;
 
     /**
      * @return the storeCd
@@ -257,5 +259,20 @@ public class StoreEmpVO extends PageVO {
      */
     public void setWebUserRegist(Boolean webUserRegist) {
         this.webUserRegist = webUserRegist;
+    }
+
+    /**
+     * @return the chkDt
+     */
+
+    public boolean isChkDt() {
+        return chkDt;
+    }
+
+    /**
+     * @param chkDt the chkDt to set
+     */
+    public void setChkDt(boolean chkDt) {
+        this.chkDt = chkDt;
     }
 }

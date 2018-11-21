@@ -47,6 +47,8 @@ public class VanConfigVO extends PageVO {
     private String vanSerNo;
     /** 사용여부 */
     private String useYn;
+    /** 코너 사용여부*/
+    private String cornerUseYn;
 
     /**
      * @return the hqOfficeCd
@@ -241,5 +243,20 @@ public class VanConfigVO extends PageVO {
      */
     public void setUseYn(String useYn) {
         this.useYn = useYn;
+    }
+
+    /**
+     * @return the cornerUseYn
+     */
+
+    public String getCornerUseYn() {
+        return cornerUseYn;
+    }
+
+    /**
+     * @param cornerUseYn the cornerUseYn to set
+     */
+    public void setCornerUseYn(String cornerUseYn) {
+        this.cornerUseYn = cornerUseYn;
     }
 }

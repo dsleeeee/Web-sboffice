@@ -53,8 +53,6 @@ app.controller('sideMenuAttrClassCtrl', ['$scope', '$http', function ($scope, $h
         }
       }
     });
-    // 초기화시 조회
-    $scope._broadcast('sideMenuAttrClassCtrl');
   };
   // 속성분류 그리드 조회
   $scope.$on('sideMenuAttrClassCtrl', function(event, data) {
