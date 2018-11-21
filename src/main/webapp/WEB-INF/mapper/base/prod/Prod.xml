@@ -65,7 +65,7 @@
                     <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
                         <![CDATA[
                         AND thp.REG_DT >= #{startDate}
-                        AND tho.REG_DT <= #{endDate} --조회일자
+                        AND thp.REG_DT <= #{endDate} --조회일자
                         ]]>
                     </if>
                 </if>
@@ -205,11 +205,11 @@
                     thp.PO_UNIT_FG,                                 -- 주문단위
                     thp.PO_UNIT_QTY,
                     thp.PO_UNIT_ALLOW_FG,
-                    thp.PO_MIN_QTY,     -- 최소주문
-                    thp.SAFE_STOCK_QTY, -- 안전재고
+                    thp.PO_MIN_QTY,                 -- 최소주문
+                    thp.SAFE_STOCK_QTY,             -- 안전재고
                     thp.STOCK_UNIT_FG,
-                    thp.USE_YN,         -- 사용여부
-                    thp.REMARK,         -- 비고
+                    thp.USE_YN,                     -- 사용여부
+                    NVL(thp.REMARK, '') AS REMARK,  -- 비고
                     thp.REG_DT
                 FROM
                     TB_HQ_PRODUCT thp
@@ -267,11 +267,11 @@
                     tmp.PO_UNIT_FG,                                 -- 주문단위
                     tmp.PO_UNIT_QTY,
                     tmp.PO_UNIT_ALLOW_FG,
-                    tmp.PO_MIN_QTY,     -- 최소주문
-                    tmp.SAFE_STOCK_QTY, -- 안전재고
+                    tmp.PO_MIN_QTY,                 -- 최소주문
+                    tmp.SAFE_STOCK_QTY,             -- 안전재고
                     tmp.STOCK_UNIT_FG,
-                    tmp.USE_YN,             -- 사용여부
-                    tmp.REMARK,         -- 비고
+                    tmp.USE_YN,                     -- 사용여부
+                    NVL(tmp.REMARK, '') AS REMARK,  -- 비고
                     tmp.REG_DT
                 FROM
                     TB_MS_PRODUCT tmp

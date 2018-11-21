@@ -89,17 +89,25 @@ button {outline:none; border:0; font-family:'NotoR', Malgun Gothic, '맑은 고�
 
 .w105px {width:105px;} .w110px {width:110px;} .w115px {width:115px;} .w120px {width:120px;} .w130px {width:130px;} .w150px {width:150px;} .w180px {width:180px;} .w200px {width:200px;} .w210px {width:210px;} .w300px {width:300px;} w400px {width:400px;} .w500px {width:500px;} .w600px {width:600px;} .w700px {width:700px;} .w800px {width:800px;} .w870px {width:870px;}
 
+.h100 {height:100px;} .h200 {height:200px;} .h300 {height:300px;} .h365 {height:365px;} .h400 {height:400px;} .h500 {height:500px;} .h600 {height:600px;} .h700 {height:700px;} .h800 {height:800px;} .h900 {height:900px;}
+
 .b4 {border:1px solid #dbdbdb;} .br {border-right:1px solid #dbdbdb;} .bl {border-left:1px solid #dbdbdb;} .bb {border-bottom:1px solid #dbdbdb;} .bt {border-top:1px solid #dbdbdb;}
 
 .fl {float:left;} .fr {float:right;} .oh {overflow:hidden;}
 
-.s12 {font-size:12px;} .s14 {font-size:14px;} .s16 {font-size:16px;} .s18 {font-size:18px;}
+.s12 {font-size:13px;} .s13 {font-size:13px;} .s14 {font-size:14px;} .s16 {font-size:16px;} .s18 {font-size:18px;}
 
 .lh15 {line-height:15px;} .lh20 {line-height:20px;} .lh25 {line-height:25px;} .lh30 {line-height:30px;}
 
 .bk {color:#222!important;} .gr {color:#888!important;} .red {color:#f11f09!important;} .blue {color:#2c59ff!important;}
 
 .bgGray {background:#f6f6f6;}
+
+.tblBr {border:1px solid #ccc; border-top:0px;}
+.tblBr > .tblType01 {border-top:0px;}
+.tblBr > .tblType01 tbody tr:last-child {border-bottom:0px;}
+
+.brt {border-top: 1px solid #ccc !important;}
 
 .sc {overflow:auto; border:1px solid #e8e8e8;}
 .sc .tblType01 {border-top:0px;}
@@ -136,8 +144,14 @@ button.btn_gray:hover {background:#777; transition:all 0.2s;}
 a.btn_grayS {background:#888; color:#fff; display:inline-block; line-height:30px; padding:0 15px; font-size:1em; transition:all 0.2s;}
 a.btn_grayS:hover {background:#777; transition:all 0.2s;}
 
-a.btn_grayS2 {background:#222; color:#fff; border-radius:4px; display:inline-block; line-height:25px; padding:0 15px; font-size:0.75em; transition:all 0.2s;}
+a.btn_grayS2 {background:#222; color:#fff; border-radius:4px; display:inline-block; line-height:25px; padding:0 15px; font-size:0.8125em; transition:all 0.2s;}
 a.btn_grayS2:hover {background:#444; transition:all 0.2s;}
+
+a.btn_yellow {background:#e0a128; color:#fff; display:inline-block; line-height:30px; padding:0 15px; font-size:1em; transition:all 0.2s;}
+a.btn_yellow:hover {background:#ca8925; transition:all 0.2s;}
+
+a.btn_green {background:#08b238; color:#fff; display:inline-block; line-height:30px; padding:0 15px; font-size:1em; transition:all 0.2s;}
+a.btn_green:hover {background:#289643; transition:all 0.2s;}
 
 
 .updownSet {display:block; height:30px; text-align:right; position:relative;}
@@ -178,7 +192,6 @@ nav.menuOpen .menuTree .theTreeAll.wj-treeview {
 }
 
 /*크롬용 스크롤 숨기기*/
-
 /*nav.menuOpen .menuTree .theTreeAll.wj-treeview::-webkit-scrollbar {width:12px; height:12px; }*/
 nav.menuOpen .menuTree .theTreeAll.wj-treeview::-webkit-scrollbar {width:0px; height:12px; }
 
@@ -745,6 +758,13 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .searchBar a.open:before {transform:rotate(-90deg);}
 .searchBar a.close:before {transform:rotate(90deg);}
 
+.searchBar_s {position:relative; border:1px solid #93cbfc; height:30px; background:#ebf5ff;}
+.searchBar_s a {display:block; width:100%; height:100%; line-height:30px; color:#337dde;  padding:0 15px; font-size:0.875em; position:relative;}
+.searchBar_s a.open:before, .searchBar_s a.close:before {content:''; position:absolute; right:15px; top:10px; background:url(../img/menu_bullet_blue.png) no-repeat; width:6px; height:10px;}
+.searchBar_s a.open:before {transform:rotate(-90deg);}
+.searchBar_s a.close:before {transform:rotate(90deg);}
+.searchBar_s p.noFolding {line-height:30px; color:#337dde; padding:0 15px; font-size:0.875em;}
+
 .searchTbl {position:relative; border-collapse:collapse; width:100%;}
 .searchTbl tr > th:first-child {border-left:1px solid #ccc;}
 .searchTbl tr {border-bottom:1px solid #e8e8e8; border-right:1px solid #ccc;}
@@ -1031,7 +1051,6 @@ div.commtWrap .btn_skyblue {width:140px; position:absolute; top:0px; right:0px; 
 
 /*포스화면 관련된 페이지 : 1024*768안에 스크롤없이 사이즈 고정*/
 .posWrap {width:760px; height:635px; position:relative;}
-
 .touchKeyWrap {width:100%; height:635px; position:relative;}
 
 .prev1 {width:510px; height:510px; border:1px solid #dbdbdb;}

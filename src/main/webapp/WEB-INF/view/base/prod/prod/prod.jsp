@@ -70,7 +70,9 @@
         <%-- 분류조회 --%>
         <th><s:message code="prod.prodClass" /></th>
         <td>
-          <input type="text" class="sb-input w100" id="srchProdClassCd" ng-model="prodClassCd" />
+          <input type="text" class="sb-input w100" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()"
+                 placeholder="<s:message code="prod.prodClass" /> 선택" readonly/>
+          <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCd" disabled />
         </td>
         <%-- 바코드 --%>
         <th><s:message code="prod.barCd" /></th>
@@ -109,7 +111,7 @@
     </button>
     --%>
     <button class="btn_skyblue fr" id="btnAddProd" ng-click="addProd()">
-      <s:message code="prod.addProd" />
+      <s:message code="prod.title.addProd" />
     </button>
   </div>
 
@@ -129,14 +131,14 @@
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" ></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prod.prodClass"/>" binding="prodClassNm" width="150" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prod.prodCd"/>" binding="prodCd" width="100" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prod.prodNm"/>" binding="prodNm" width="*" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prod.costUprc"/>" binding="costUprc" width="80" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prod.splyUprc"/>" binding="splyUprc" width="80" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prod.saleUprc"/>" binding="saleUprc" width="80" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prod.orgplceCd"/>" binding="orgplceCd" width="80" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prod.poUnitFg"/>" binding="poUnitFg" width="80" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.prodClass"/>" binding="prodClassNm" width="300" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.prodCd"/>" binding="prodCd" width="150" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.prodNm"/>" binding="prodNm" width="610" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.costUprc"/>" binding="costUprc" width="100" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.splyUprc"/>" binding="splyUprc" width="100" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.saleUprc"/>" binding="saleUprc" width="100" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.orgplceCd"/>" binding="orgplceCd" width="100" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.poUnitFg"/>" binding="poUnitFg" width="100" is-read-only="true"></wj-flex-grid-column>
 
       </wj-flex-grid>
       <%-- ColumnPicker 사용시 include --%>
@@ -157,16 +159,16 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20181112.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20181120.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
-<c:import url="/WEB-INF/view/base/prod/prod/popUpProdDetail.jsp">
+<c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
 <%-- 레이어 팝업 : 상품정보 입력/수정 --%>
-<c:import url="/WEB-INF/view/base/prod/prod/popUpProdModify.jsp">
+<c:import url="/WEB-INF/view/base/prod/prod/prodModifyView.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

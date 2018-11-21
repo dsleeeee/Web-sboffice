@@ -250,6 +250,20 @@ public class SideMenuServiceImpl implements SideMenuService {
         }
     }
 
+    /** 사이드메뉴-선택메뉴 - 선택할 상품 목록 조회 */
+    @Override
+    public List<DefaultMap<String>> getProdList(SideMenuSelProdVO sideMenuSelProdVO,
+        SessionInfoVO sessionInfoVO) {
+
+        // 소속구분 설정
+        sideMenuSelProdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        sideMenuSelProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        sideMenuSelProdVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        return sideMenuMapper.getProdList(sideMenuSelProdVO);
+
+    }
+
     /** 사이드메뉴-선택메뉴탭-선택상품 목록 조회 */
     @Override
     public List<DefaultMap<String>> getMenuProdList(SideMenuSelProdVO sideMenuSelProdVO,
