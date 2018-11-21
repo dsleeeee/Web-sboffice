@@ -439,7 +439,6 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
                 $scope._addRow(params);
               } else {
                 var selectedRow = $scope.flex.selectedRows[0]._idx;
-                // $scope.flex.setCellData(selectedRow, 'status', 'U');
                 $scope.flex.setCellData(selectedRow, 'prodCd', prodCd);
                 $scope.flex.setCellData(selectedRow, 'prodNm', prodNm);
               }
