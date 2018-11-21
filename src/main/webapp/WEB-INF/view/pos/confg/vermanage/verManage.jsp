@@ -8,7 +8,13 @@
 
 <div class="subCon">
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+      <button class="btn_blue fr" id="btnSearch">
+        <s:message code="cmm.search" />
+      </button>
+    </div>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -37,12 +43,7 @@
     </tbody>
   </table>
 
-  <%-- 조회 --%>
-  <div class="mt10 pdb20 oh">
-    <button class="btn_blue fr" id="btnSearch"><s:message code="cmm.search" /></button>
-  </div>
-
-  <div class="mt10 oh sb-select dkbr">
+  <div class="mt20 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
     <div id="listScaleBox" class="w100px fl"></div>
     <div class="fr">
@@ -54,8 +55,8 @@
   </div>
 
   <%-- 위즈모 테이블 --%>
-  <div class="wj-TblWrap mt10" style="overflow-y: hidden">
-    <div id="theGrid1" style="height:320px;"></div>
+  <div class="wj-TblWrap mt10" style="height:395px; overflow-y: hidden;">
+    <div id="theGrid1" style="overflow-y: auto;"></div>
   </div>
 
   <%-- 페이지 리스트 --%>

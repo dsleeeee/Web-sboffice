@@ -16,7 +16,13 @@
   </ul>
 
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+      <button class="btn_blue fr" id="btnSearch" ng-click="getStoreList()">
+        <s:message code="cmm.search" />
+      </button>
+    </div>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -61,10 +67,6 @@
       </tr>
     </tbody>
   </table>
-  <%-- 조회 --%>
-  <div class="mt10 pdb20 oh">
-    <button id="btnSearch" class="btn_blue fr"><s:message code="cmm.search" /></button>
-  </div>
 
   <div class="mt20 oh sb-select dkbr">
     <%-- 엑셀다운로드 버튼 //TODO --%>
@@ -75,8 +77,8 @@
   </div>
 
   <%-- 위즈모 테이블 --%>
-  <div class="wj-TblWrapBr mt10" style="height:400px;">
-    <div id="theGrid1" class="pd20" style="height:390px;"></div>
+  <div class="wj-TblWrapBr mt20" style="height:400px; overflow-y: hidden;">
+    <div id="theGrid1" style="overflow-y: auto;"></div>
   </div>
 
   <%-- 페이지 리스트 --%>

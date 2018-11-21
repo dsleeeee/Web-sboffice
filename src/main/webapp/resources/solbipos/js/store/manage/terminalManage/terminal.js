@@ -164,12 +164,15 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.showPos();
       }
 
+      $scope._popMsg(messages["terminalManage.require.select.pos"]);
+
       // 그리드 초기화
       var posScope = agrid.getScope('posCtrl');
       posScope._gridDataInit();
 
       var cornerScope = agrid.getScope('cornerCtrl');
       cornerScope._gridDataInit();
+
     });
   };
 

@@ -11,7 +11,13 @@
 
 <div class="subCon" ng-controller="storeManageCtrl">
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+      <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('storeManageCtrl')">
+        <s:message code="cmm.search" />
+      </button>
+    </div>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -79,12 +85,7 @@
     </tbody>
   </table>
 
-  <%-- 조회 --%>
-  <div class="mt10 pdb20 oh">
-    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('storeManageCtrl')"><s:message code="cmm.search" /></button>
-  </div>
-
-  <div class="mt10 oh sb-select dkbr">
+  <div class="mt40 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
     <wj-combo-box
             class="w100px fl"

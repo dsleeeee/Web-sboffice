@@ -10,7 +10,13 @@
 
 <div class="subCon">
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+      <button class="btn_blue fr" id="btnSearch" >
+        <s:message code="cmm.search" />
+      </button>
+    </div>
   </div>
 
   <table class="searchTbl">
@@ -57,18 +63,12 @@
     </tbody>
   </table>
 
-  <div class="mt10 pdb20 oh bb">
-    <button id="btnSearch" class="btn_blue fr" >
-      <s:message code="cmm.search" />
-    </button>
-  </div>
-
   <%--2단--%>
-  <div class="wj-TblWrap mt20">
+  <div class="wj-TblWrap mt40">
 
     <%--left--%>
     <div class="w60 fl">
-      <div class="wj-TblWrapBr mr10 pd20" style="height:500px;">
+      <div class="wj-TblWrapBr mr10 pd20" style="height:500px; overflow-y: hidden;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code="authGroup.authGroup"/></span>
           <button id="btnAdd" class="btn_skyblue"><s:message code="cmm.add"/></button>
@@ -76,7 +76,7 @@
           <button id="btnSave" class="btn_skyblue"><s:message code="cmm.save"/></button>
         </div>
         <%--위즈모 테이블--%>
-        <div id="theGrid"></div>
+        <div id="theGrid" style="height:450px; overflow-y: auto;"></div>
         <%--//위즈모 테이블--%>
       </div>
     </div>
@@ -84,13 +84,13 @@
 
     <%--right--%>
     <div class="w40 fr">
-      <div class="wj-TblWrapBr ml10 pd20" style="height:800px;">
+      <div class="wj-TblWrapBr ml10 pd20" style="height:500px; overflow-y: auto;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code="authGroup.resrcInfo"/></span>
           <button id="btnResrceSave" class="btn_skyblue"><s:message code="cmm.save"/></button>
         </div>
-        <%--위즈모 트리--%>
-        <div id="treeResrce" style="height:800px;"></div>
+        <%--위즈모 트리  // todo height 조정--%>
+        <div id="treeResrce" style="height:430px; "></div>
         <%--//위즈모 트리--%>
       </div>
     </div>

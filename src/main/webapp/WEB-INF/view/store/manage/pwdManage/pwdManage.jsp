@@ -10,7 +10,13 @@
 <div class="subCon">
 
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+      <button class="btn_blue fr" id="btnSearch" >
+        <s:message code="cmm.search" />
+      </button>
+    </div>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -71,10 +77,6 @@
     </tbody>
   </table>
 
-  <%-- 조회 --%>
-  <div class="mt10 pdb20 oh">
-      <button class="btn_blue fr" id="btnSearch"><s:message code="cmm.search" /></button>
-  </div>
 
   <div class="mt20 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
@@ -84,7 +86,7 @@
   </div>
 
   <%--위즈모 테이블--%>
-  <div class="wj-TblWrapBr mt10" style="height: 400px;">
+  <div class="wj-TblWrapBr mt10" style="height: 380px;">
     <%-- 개발시 높이 조절해서 사용--%>
     <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
     <div id="theGrid" style="width:100%;height:393px;"></div>
