@@ -14,9 +14,9 @@
     </ul>
 
     <%-- 왼쪽  --%>
-    <div class="w30 fl mt20">
+    <div class="w30 fl ">
       <div class="wj-TblWrapBr oh mr10 pd20" style="height:560px;">
-        <div class="updownSet oh mb10">
+        <div class="updownSet mb10">
           <span class="fl bk lh30"><s:message code="posFunc.fnkeyFg" /></span>
         </div>
         <%-- 그리드 --%>
@@ -25,9 +25,9 @@
     </div>
 
     <%-- 오른쪽 --%>
-    <div class="w70 fr mt20">
+    <div class="w70 fr">
       <div class="wj-TblWrapBr oh ml20 pd20" style="height:560px;">
-        <div class="updownSet oh mb10">
+        <div class="updownSet mb10">
           <%-- up 버튼 --%>
           <button class="btn_up" id="btnUp"><s:message code="cmm.up" /></button>
           <%-- down 버튼 --%>

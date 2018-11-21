@@ -76,13 +76,15 @@ app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
         if (col.binding === "creditStore" ) {
           var selectedData = s.rows[ht.row].dataItem;
           // 해당 매장의 등록매장이 본사의 디폴트 매장과 동일할 경우에만 후불적용 매장을 등록할 수 있다.
-          if(selectedData.regStoreCd === defaultStoreCd) {
+          // if(selectedData.regStoreCd === defaultStoreCd) {
             $scope.setSelectedMember(selectedData);
             $scope.creditStoreRegistLayer.show(true);
-          } else {
-            $scope._popMsg("등록매장이 기본매장과 동일한 회원만\n후불회원으로 등록 가능합니다.");
-            return false;
-          }
+            event.preventDefault();
+
+          // } else {
+          //   $scope._popMsg("등록매장이 기본매장과 동일한 회원만\n후불회원으로 등록 가능합니다.");
+          //   return false;
+          // }
         }
       }
     });
@@ -136,7 +138,7 @@ app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
     // 후불회원등록 팝업 핸들러 추가
     $scope.creditStoreRegistLayer.shown.addHandler(function (s) {
       setTimeout(function() {
-        $scope._broadcast('regStoreCtrl', $scope.getSelectedMember());
+        $scope._broadcast('creditStoreRegistCtrl', $scope.getSelectedMember());
       }, 50)
     });
   });

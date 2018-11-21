@@ -446,6 +446,8 @@
 
         s_alert.pop("<s:message code='cmm.saveSucc'/>");
 
+        // sendUrl = "/pos/confg/verManage/verInfo/regist.sb";
+
         $("#verInfoViewArea").hide();
         $("#viewBtnArea").hide();
         $("#verInfoEditArea").show();
