@@ -109,7 +109,7 @@
                         WHERE
                             twui.USER_ID = #{0}
                     )
-                    AND twagr.RESRCE_CD = '000102'
+                    AND twagr.RESRCE_CD = '000085'
                     AND twagr.USE_YN = 'Y'
                 UNION ALL
                 SELECT
@@ -118,7 +118,7 @@
                     TB_WB_AUTHOR_EXCEPT twae
                 WHERE
                     twae.USER_ID = #{0}
-                    AND twae.RESRCE_CD = '000102'
+                    AND twae.RESRCE_CD = '000085'
                     AND twae.INCLD_EXCLD_FG = 'I'
                     AND twae.USE_YN = 'Y'
                 )
