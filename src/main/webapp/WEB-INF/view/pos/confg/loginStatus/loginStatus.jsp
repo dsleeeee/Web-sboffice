@@ -10,8 +10,15 @@
 <div class="subCon">
   <%-- 조회조건 --%>
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+      <button class="btn_blue fr" id="searchBtn" >
+        <s:message code="cmm.search" />
+      </button>
+    </div>
   </div>
+
   <table class="searchTbl">
     <colgroup>
       <col class="w15" />
@@ -72,14 +79,7 @@
     </tbody>
   </table>
 
-  <%-- 조회 --%>
-  <div class="mt5 pdb20 oh">
-    <button class="btn_blue fr" id="searchBtn">
-      <s:message code="cmm.search" />
-    </button>
-  </div>
-
-  <div class="mt5 oh sb-select dkbr">
+  <div class="mt20 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
     <div id="listScaleBox" class="w100px fl"></div>
     <%-- 엑셀 다운로드 //TODO --%>

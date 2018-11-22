@@ -445,7 +445,7 @@
     }
 
     var msg = "<s:message code='hqEmp.empNoRegexp.msg'/>";
-    if(param.empNo.length != 4) {
+    if(param.empNo.length > 4) {
       s_alert.pop(msg);
       return;
     }
@@ -496,15 +496,32 @@
 
     var msg = "<s:message code='hqEmp.webUseYn'/> <s:message code='cmm.require.check'/>";
     if( param.webUseYn != "Y"){
-        s_alert.pop(msg);
-        return;
+      s_alert.pop(msg);
+      return;
     }
 
     msg = "<s:message code='hqEmp.userId'/> <s:message code='cmm.require.text'/>";
     if( param.userId == ""){
-        s_alert.pop(msg);
-        return;
-        }
+      s_alert.pop(msg);
+      return;
+    }
+
+    msg = "<s:message code='hqEmp.passwordRegexp.msg'/>";
+    if( param.userId.length <= 6 ||  param.userId.length >= 20){
+      s_alert.pop(msg);
+      return;
+    }
+
+    // 해당 패턴 사용 불가
+    var userIdStr = param.userId;
+    msg = "<s:message code='hqEmp.userId.duplicate.msg'/>";
+    if( (userIdStr.length === 5 && userIdStr.startsWith("ds"))
+      || (userIdStr.length === 5 && userIdStr.startsWith("s"))
+      || (userIdStr.length === 7 && userIdStr.startsWith("ds"))
+      || (userIdStr.length === 7 && userIdStr.startsWith("s"))) {
+      s_alert.pop(msg);
+      return false;
+    }
 
     $.postJSON("/base/store/emp/hq/chkHqUserId.sb", param, function(result) {
 

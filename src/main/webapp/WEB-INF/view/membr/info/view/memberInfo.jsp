@@ -5,8 +5,9 @@
 
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
-<c:set var="orgnCd">${sessionScope.sessionInfo.orgnCd}</c:set>
-<c:set var="defaultStoreCd">${defaultStoreCd}</c:set>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
+
 
 <div class="subCon" ng-controller="memberCtrl">
 
@@ -259,7 +260,7 @@
 
   <%-- 회원목록 그리드 --%>
   <div class="w100 mt10 mb20">
-    <div class="wj-gridWrap" style="height:350px; overflow-x: hidden; overflow-y: hidden;">
+    <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
       <wj-flex-grid
               control="flex"
               autoGenerateColumns="false"
@@ -276,13 +277,12 @@
         <wj-flex-grid-column header="<s:message code="regist.class.nm"/>" binding="membrClassNm" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="regist.tel"/>" binding="telNo" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="regist.membr.stortNo"/>" binding="shortNo" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="regist.membr.regStore"/>" binding="regStoreNCd" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="regist.membr.regStore"/>" binding="regStoreCd" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="regist.membr.regStore"/>" binding="regStoreNm" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="regist.email.recv"/>" binding="emailRecvYn" data-map="emailRecvDataMap" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="regist.sms.recv"/>" binding="smsRecvYn" data-map="smsRecvDataMap" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="regist.useYn"/>" binding="useYn" data-map="useYnDataMap" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-
-      <c:if test="${defaultStoreCd != null or defaultStoreCd != ''}">
+        <wj-flex-grid-column header="<s:message code="regist.email.recv"/>" binding="emailRecvYn" data-map="emailRecvDataMap" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="regist.sms.recv"/>" binding="smsRecvYn" data-map="smsRecvDataMap" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="regist.useYn"/>" binding="useYn" data-map="useYnDataMap" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
+      <c:if test="${orgnFg == 'HQ'}">
         <wj-flex-grid-column header="<s:message code="regist.membr.store"/>" binding="creditStore" is-read-only="true" align="center" ></wj-flex-grid-column>
       </c:if>
       </wj-flex-grid>
@@ -309,7 +309,6 @@ var weddingDataMap  = ${ccu.getCommCodeExcpAll("076")}; <%--결혼유무--%>
 var anvrsDataMap    = ${ccu.getCommCode("032")};
 var regstrStoreList = ${regstrStoreList};
 var memberClassList = "${memberClassList}";
-var defaultStoreCd  = "${defaultStoreCd}"; <%-- 기본매장코드 --%>
 
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20181109.01" charset="utf-8"></script>

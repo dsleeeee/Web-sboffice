@@ -79,10 +79,10 @@
     <%--//페이지 리스트--%>
 
     <div class="wj-dialog-footer">
-      <button class="btn wj-hide-apply btn_blue"><s:message code="sideMenu.selectMenu.selProd"/></button>
+      <button class="btn {{itemChecked ? 'wj-hide-apply' : ''}} btn_blue" ng-click="selProdConfirm();"><s:message code="sideMenu.selectMenu.selProd"/></button>
       <button class="btn wj-hide btn_gray"><s:message code="cmm.close"/></button>
     </div>
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuProdView.js?ver=20181120.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuProdView.js?ver=20181121.01" charset="utf-8"></script>

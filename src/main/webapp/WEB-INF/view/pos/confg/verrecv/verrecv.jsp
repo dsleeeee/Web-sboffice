@@ -16,7 +16,13 @@
   </ul>
 
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+      <button class="btn_blue fr" id="btnSearch">
+        <s:message code="cmm.search" />
+      </button>
+    </div>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -41,13 +47,8 @@
     </tbody>
   </table>
 
-  <%-- 조회 --%>
-  <div class="mt5 pdb20 oh">
-      <button class="btn_blue fr" id="btnSearch"><s:message code="cmm.search" /></button>
-  </div>
-
   <!--2단-->
-  <div class="wj-TblWrap mt50" style="overflow-y: hidden;">
+  <div class="wj-TblWrap mt20" style="overflow-y: hidden;">
    <!--left-->
     <div class="w35 fl">
       <div class="wj-TblWrapBr mr10 pd20" style="height:460px;">

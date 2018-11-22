@@ -18,79 +18,79 @@
       <col class="w35" />
     </colgroup>
     <tbody>
-      <tr>
-        <%--등록일자 --%>
-        <th><s:message code="hqEmp.regDt" /></th>
-        <td colspan="3">
-          <div class="sb-select">
-            <span class="txtIn"><input id="startDate" name="startDate" class="w200px" /></span>
-            <span class="rg">~</span>
-            <span class="txtIn"><input id="endDate" name="endDate" class="w200px" /></span>
-            <span class="chk ml10"><input type="checkbox" id="chkDt" checked/>
+    <tr>
+      <%--등록일자 --%>
+      <th><s:message code="hqEmp.regDt" /></th>
+      <td colspan="3">
+        <div class="sb-select">
+          <span class="txtIn"><input id="startDate" name="startDate" class="w200px" /></span>
+          <span class="rg">~</span>
+          <span class="txtIn"><input id="endDate" name="endDate" class="w200px" /></span>
+          <span class="chk ml10"><input type="checkbox" id="chkDt" checked/>
             <label for="chkDt"><s:message code="cmm.all.day" /></label>
             </span>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <%--사원번호 --%>
-        <th><s:message code="hqEmp.empNo" /></th>
-        <td>
-          <div class="sb-select">
-            <div id="empNo"></div>
-          </div>
-        </td>
-        <%-- 사원명 --%>
-        <th><s:message code="hqEmp.empNm" /></th>
-        <td>
-          <div class="sb-select">
-            <div id="empNm"></div>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <%--사원ID --%>
-        <th><s:message code="hqEmp.userId" /></th>
-        <td>
-          <div class="sb-select">
-            <div id="userId"></div>
-          </div>
-        </td>
-        <%-- 재직여부 --%>
-        <th><s:message code="hqEmp.serviceFg" /></th>
-        <td>
-          <div class="sb-select">
-            <div id="serviceFg"></div>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <%--휴대폰번호 --%>
-        <th><s:message code="hqEmp.mpNo" /></th>
-        <td>
-          <div class="sb-select">
-            <div id="mpNo"></div>
-          </div>
-        </td>
-        <%-- 웹사용여부 --%>
-        <th><s:message code="hqEmp.webUseYn" /></th>
-        <td>
-          <div class="sb-select">
-            <div id="webUseYn"></div>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <%--SMS 수신여부 --%>
-        <th><s:message code="hqEmp.smsRecvYn" /></th>
-        <td>
-          <div class="sb-select">
-            <div id="smsRecvYn"></div>
-          </div>
-        </td>
-        <th></th>
-        <td></td>
-      </tr>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <%--사원번호 --%>
+      <th><s:message code="hqEmp.empNo" /></th>
+      <td>
+        <div class="sb-select">
+          <div id="empNo"></div>
+        </div>
+      </td>
+      <%-- 사원명 --%>
+      <th><s:message code="hqEmp.empNm" /></th>
+      <td>
+        <div class="sb-select">
+          <div id="empNm"></div>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <%--사원ID --%>
+      <th><s:message code="hqEmp.userId" /></th>
+      <td>
+        <div class="sb-select">
+          <div id="userId"></div>
+        </div>
+      </td>
+      <%-- 재직여부 --%>
+      <th><s:message code="hqEmp.serviceFg" /></th>
+      <td>
+        <div class="sb-select">
+          <div id="serviceFg"></div>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <%--휴대폰번호 --%>
+      <th><s:message code="hqEmp.mpNo" /></th>
+      <td>
+        <div class="sb-select">
+          <div id="mpNo"></div>
+        </div>
+      </td>
+      <%-- 웹사용여부 --%>
+      <th><s:message code="hqEmp.webUseYn" /></th>
+      <td>
+        <div class="sb-select">
+          <div id="webUseYn"></div>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <%--SMS 수신여부 --%>
+      <th><s:message code="hqEmp.smsRecvYn" /></th>
+      <td>
+        <div class="sb-select">
+          <div id="smsRecvYn"></div>
+        </div>
+      </td>
+      <th></th>
+      <td></td>
+    </tr>
     </tbody>
   </table>
 
@@ -104,11 +104,11 @@
     <div id="listScaleBox" class="w100px fl"></div>
     <div class="tr">
       <%-- 본사신규등록 --%>
-<c:if test="${orgnFg == 'HQ'}">
+      <%--<c:if test="${orgnFg == 'HQ'}">--%>
       <button class="btn_skyblue" id="btnRegist"><s:message code="hqEmp.hqEmpReg" /></button>
-</c:if>
+      <%--</c:if>--%>
       <%-- sms 전송 //TODO --%>
-      <button class="btn_skyblue" id="btnSMS"><s:message code="hqEmp.sendSMS" /></button>
+      <%--<button class="btn_skyblue" id="btnSMS"><s:message code="hqEmp.sendSMS" /></button>--%>
       <%-- 엑셀다운로드 //TODO --%>
       <%--<button class="btn_skyblue" id="btnExcel"><s:message code="cmm.excel.down" /></button>--%>
     </div>
@@ -135,16 +135,16 @@
 <script>
 
   var hdata =
-    [
-      {"binding":"rnum","header":"No"},
-      {"binding":"empNo","header":"<s:message code='hqEmp.empNo' />", width: '*'},
-      {"binding":"empNm","header":"<s:message code='hqEmp.empNm' />", width: '*'},
-      {"binding":"userId","header":"<s:message code='hqEmp.userId' />", width: '*'},
-      {"binding":"serviceFgNm","header":"<s:message code='hqEmp.serviceFg' />", width: '*'},
-      {"binding":"mpNo","header":"<s:message code='hqEmp.mpNo' />", width: '*'},
-      {"binding":"smsRecvYn","header":"<s:message code='hqEmp.smsChk' />", dataType:wijmo.DataType.Boolean, width: '*', visible:false}
+      [
+        {"binding":"rnum","header":"No"},
+        {"binding":"empNo","header":"<s:message code='hqEmp.empNo' />", width: '*'},
+        {"binding":"empNm","header":"<s:message code='hqEmp.empNm' />", width: '*'},
+        {"binding":"userId","header":"<s:message code='hqEmp.userId' />", width: '*'},
+        {"binding":"serviceFgNm","header":"<s:message code='hqEmp.serviceFg' />", width: '*'},
+        {"binding":"mpNo","header":"<s:message code='hqEmp.mpNo' />", width: '*'},
+        {"binding":"smsRecvYn","header":"<s:message code='hqEmp.smsChk' />", dataType:wijmo.DataType.Boolean, width: '*', visible:false}
 
-    ];
+      ];
 
   var grid           = wgrid.genGrid("#theGrid", hdata,"${menuCd}", 1, ${clo.getColumnLayout(1)});
   var ldata          = ${ccu.getListScale()};
@@ -202,27 +202,27 @@
     param.curr = index;
 
     $.postJSON("/base/store/emp/hq/list.sb", param, function(result) {
-      var list = result.data.list;
+          var list = result.data.list;
 
-      if(list.length == 0) {
-        s_alert.pop(result.message);
-      }
+          if(list.length == 0) {
+            s_alert.pop(result.message);
+          }
 
-      grid.itemsSource = list;
-      page.make("#page1", result.data.page.curr, result.data.page.totalPage);
-      },
-      function(result){
-        var resultKey;
-        for(var k in result.data) {
-          resultKey = k;
+          grid.itemsSource = list;
+          page.make("#page1", result.data.page.curr, result.data.page.totalPage);
+        },
+        function(result){
+          var resultKey;
+          for(var k in result.data) {
+            resultKey = k;
+          }
+
+          s_alert.pop(result.data[resultKey]);
         }
+        ,function(){
 
-        s_alert.pop(result.data[resultKey]);
-      }
-      ,function(){
-
-        s_alert.pop("Ajax Fail");
-    });
+          s_alert.pop("Ajax Fail");
+        });
   }
 
   <%-- 리스트 조회 --%>
@@ -266,11 +266,11 @@
 
 </script>
 
- <%-- 사원신규등록 레이어 팝업 --%>
- <c:import url="/WEB-INF/view/base/store/emp/hqEmpSave.jsp">
- </c:import>
+<%-- 사원신규등록 레이어 팝업 --%>
+<c:import url="/WEB-INF/view/base/store/emp/hqEmpSave.jsp">
+</c:import>
 
- <%-- 사원상세/수정 팝업 --%>
- <c:import url="/WEB-INF/view/base/store/emp/hqEmpDetail.jsp">
- </c:import>
+<%-- 사원상세/수정 팝업 --%>
+<c:import url="/WEB-INF/view/base/store/emp/hqEmpDetail.jsp">
+</c:import>
 

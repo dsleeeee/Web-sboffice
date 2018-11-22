@@ -9,7 +9,13 @@
 
 <div class="subCon">
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+      <button class="btn_blue fr" id="btnSearch" >
+        <s:message code="cmm.search" />
+      </button>
+    </div>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -37,11 +43,6 @@
     </tr>
     </tbody>
   </table>
-
-  <%-- 조회 --%>
-  <div class="mt10 oh">
-    <button class="btn_blue fr" id="btnSearch"><s:message code="cmm.search" /></button>
-  </div>
 
   <div class="wj-TblWrap mt40">
     <div class="w30 fl">

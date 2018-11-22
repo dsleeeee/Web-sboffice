@@ -22,13 +22,14 @@ app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 조회조건 콤보박스 데이터 Set
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
-  $scope._setComboData("emailRecvYn", recvDataMap);
-  $scope._setComboData("smsRecvYn", recvDataMap);
-  $scope._setComboData("anvType", anvrsDataMap);
-  $scope._setComboData("periodType", periodDataMap);
-  $scope._setComboData("gendrFg", genderDataMap);
 
-  // // 선택 회원
+  $scope._getComboDataQuery('072', 'emailRecvYn', 'A');
+  $scope._getComboDataQuery('072', 'smsRecvYn', 'A');
+  $scope._getComboDataQuery('032', 'anvType', 'A');
+  $scope._getComboDataQuery('077', 'periodType', 'A');
+  $scope._getComboDataQuery('055', 'gendrFg', 'A');
+
+  // 선택 회원
   $scope.selectedMember;
   $scope.setSelectedMember = function(member) {
     $scope.selectedMember = member;
@@ -76,13 +77,9 @@ app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
         if (col.binding === "creditStore" ) {
           var selectedData = s.rows[ht.row].dataItem;
           // 해당 매장의 등록매장이 본사의 디폴트 매장과 동일할 경우에만 후불적용 매장을 등록할 수 있다.
-          if(selectedData.regStoreCd === defaultStoreCd) {
-            $scope.setSelectedMember(selectedData);
-            $scope.creditStoreRegistLayer.show(true);
-          } else {
-            $scope._popMsg("등록매장이 기본매장과 동일한 회원만\n후불회원으로 등록 가능합니다.");
-            return false;
-          }
+          $scope.setSelectedMember(selectedData);
+          $scope.creditStoreRegistLayer.show(true);
+          event.preventDefault();
         }
       }
     });
@@ -136,7 +133,7 @@ app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
     // 후불회원등록 팝업 핸들러 추가
     $scope.creditStoreRegistLayer.shown.addHandler(function (s) {
       setTimeout(function() {
-        $scope._broadcast('regStoreCtrl', $scope.getSelectedMember());
+        $scope._broadcast('creditStoreRegistCtrl', $scope.getSelectedMember());
       }, 50)
     });
   });

@@ -1,46 +1,62 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    HqEmp.xml
+    본사 사원관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김지은     2018.11.21     최초작성
+-->
+
 <mapper namespace="kr.co.solbipos.base.store.emp.hq.service.impl.HqEmpMapper">
 
+    <!-- 본사 사원정보 조회 -->
+    <!--
+        TABLE    : TB_HQ_EMPLOYEE
+        PARAM    : hqEmpVO
+        COMMENTS : 본사 사원정보를 조회한다.
+    -->
     <select id="getHqEmpList" parameterType="hqEmpVO" resultType="DefaultMap">
         /* HqEmpMapper.getHqEmpList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT THE.EMP_NO,
-               THE.EMP_NM,
-               THE.USER_ID,
-               (SELECT TCN.NMCODE_NM FROM TB_CM_NMCODE TCN WHERE TCN.NMCODE_GRP_CD ='008' AND TCN.NMCODE_CD = THE.SERVICE_FG ) AS SERVICE_FG_NM,
-               THE.MP_NO,
-               THE.SMS_RECV_YN
+        SELECT the.EMP_NO,
+               the.EMP_NM,
+               the.USER_ID,
+               the.WEB_USE_YN,
+               the.SERVICE_FG,
+               the.MP_NO,
+               the.SMS_RECV_YN
                <include refid="CmmSQL.PagingTemplateCount"/>
-          FROM TB_HQ_EMPLOYEE THE
+          FROM TB_HQ_EMPLOYEE the
          WHERE USE_YN = 'Y'
          <if test="chkDt == false">
            <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
-           AND THE.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+           AND the.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
            </if>
          </if>
          <if test="empNo != null and empNo != ''">
-           AND THE.EMP_NO = #{empNo}
+           AND the.EMP_NO = #{empNo}
          </if>
          <if test="empNm != null and empNm != ''">
-           AND THE.EMP_NM = #{empNm}
+           AND the.EMP_NM = #{empNm}
          </if>
          <if test="userId != null and userId != ''">
-           AND THE.USER_ID = #{userId}
+           AND the.USER_ID = #{userId}
          </if>
          <if test="serviceFg != null and serviceFg != ''">
-           AND THE.SERVICE_FG = #{serviceFg}
+           AND the.SERVICE_FG = #{serviceFg}
          </if>
          <if test="mpNo != null and mpNo != ''">
-           AND THE.MP_NO = #{mpNo}
+           AND the.MP_NO = #{mpNo}
          </if>
          <if test="webUseYn != null and webUseYn != ''">
-           AND THE.WEB_USE_YN = #{webUseYn}
+           AND the.WEB_USE_YN = #{webUseYn}
          </if>
          <if test="smsRecvYn != null and smsRecvYn != ''">
-           AND THE.SMS_RECV_YN = #{smsRecvYn}
+           AND the.SMS_RECV_YN = #{smsRecvYn}
          </if>
-         ORDER BY THE.REG_DT DESC
+         ORDER BY the.REG_DT DESC
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 

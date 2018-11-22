@@ -10,15 +10,16 @@
 <div class="subCon">
 
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+      <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('vanCtrl');_broadcast('cardCtrl');" >
+        <s:message code="cmm.search" />
+      </button>
+    </div>
   </div>
-  
-  <%-- 조회 --%>
-  <div class="mt10 pdb20 oh">
-      <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('vanCtrl');_broadcast('cardCtrl');"><s:message code="cmm.search" /></button>
-  </div>
-    
-  <div id="gridVan" class="w70 fl" style="width: 60%" ng-controller="vanCtrl">
+
+  <div id="gridVan" class="w70 fl mt40" style="width: 60%" ng-controller="vanCtrl">
     <%--위즈모 테이블--%>
     <div class="wj-TblWrapBr pd20" style="height: 300px;">
       <div class="updownSet oh mb10">
@@ -62,8 +63,8 @@
     </div>
     <%--//위즈모 테이블--%>
   </div>
-  
-  <div id="gridVanCard" class="w30 fr" style="width: 40%" ng-controller="vanCardCtrl">
+
+  <div id="gridVanCard" class="w30 fr mt40" style="width: 40%" ng-controller="vanCardCtrl">
     <%--위즈모 테이블--%>
     <div class="wj-TblWrapBr ml10 pd20" style="height: 610px;">
       <div class="updownSet oh mb10">
@@ -102,7 +103,7 @@
     </div>
     <%--//위즈모 테이블--%>
   </div>
-  
+
   <div id="gridCard" class="w70 fl" style="width: 60%" ng-controller="cardCtrl">
     <%--위즈모 테이블--%>
     <div class="wj-TblWrapBr mt10 pd20 mb10" style="height: 300px;">
@@ -144,8 +145,8 @@
     </div>
     <%--//위즈모 테이블--%>
   </div>
-  
-  
+
+
 </div>
 
 <script>

@@ -10,7 +10,13 @@
 <div class="subCon">
 
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+      <button class="btn_blue fr"  ng-click="_broadcast('representCtrl')">
+        <s:message code="cmm.search" />
+      </button>
+    </div>
   </div>
   <div>
     <table class="searchTbl" >
@@ -78,9 +84,7 @@
       <div class="mt10"><span><s:message code="systemCd.prefix.0"/></span></div>
       <div class="mt5"><span><s:message code="systemCd.prefix.1"/></span></div>
       <div class="mt5"><span><s:message code="systemCd.prefix.2"/></span></div>
-      <div class="mt5"><span><s:message code="systemCd.prefix.3"/></span>
-        <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('representCtrl')"><s:message code="cmm.search" /></button>
-      </div>
+      <div class="mt5"><span><s:message code="systemCd.prefix.3"/></span></div>
     </div>
 
     <div id="gridRepresent" class="w60 fl mt10" style="width: 60%" ng-controller="representCtrl">
