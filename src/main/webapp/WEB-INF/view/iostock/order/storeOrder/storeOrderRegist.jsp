@@ -299,6 +299,9 @@
     };
 
     $scope.calcAmt = function (item) {
+      <%-- 수량이 없는 경우 계산하지 않음. null 또는 undefined 가 나올수 있으므로 확실하게 확인하기 위해 nvl 처리로 null 로 바꿔서 비교 --%>
+      if (nvl(item.orderUnitQty, null) === null || (item.poUnitQty !== 1 && nvl(item.orderEtcQty, null) === null)) return false;
+
       var orderSplyUprc = parseInt(item.orderSplyUprc);
       var poUnitQty     = parseInt(item.poUnitQty);
       var vat01         = parseInt(item.vatFg01);

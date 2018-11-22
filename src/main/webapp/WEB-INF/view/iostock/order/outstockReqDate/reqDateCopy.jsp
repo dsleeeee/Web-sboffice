@@ -140,7 +140,7 @@
     $scope.search      = function () {
       // 매장을 선택해주세요.
       if ($("#targetSelectStoreCd").val() == "") {
-        s_alert.pop(messages["outstockReqDate.require.selectStore"]);
+        $scope._popMsg(messages["outstockReqDate.require.selectStore"]);
         return false;
       }
       // 요일별 그리드 조회
@@ -152,12 +152,12 @@
     $scope.reqDateCopy = function () {
       // 매장을 선택해주세요.
       if ($("#targetSelectStoreCd").val() == "") {
-        s_alert.pop(messages["outstockReqDate.require.selectStore"]);
+        $scope._popMsg(messages["outstockReqDate.require.selectStore"]);
         return false;
       }
       // 복사할 매장을 선택해주세요.
       if ($("#copySelectStoreCd").val() == "") {
-        s_alert.pop(messages["outstockReqDate.require.selectCopyStore"]);
+        $scope._popMsg(messages["outstockReqDate.require.selectCopyStore"]);
         return false;
       }
 
@@ -469,7 +469,7 @@
         if (flex.getCellData(i, 0)) {
           // 타겟매장과 복사할 매장이 동일합니다.
           if (flex.rows[i]._data.storeCd == $("#copySelectStoreCd").val()) {
-            s_alert.pop(messages["outstockReqDate.duplicate.targetSelectStore"]);
+            $scope._popMsg(messages["outstockReqDate.duplicate.targetSelectStore"]);
             return false;
           }
           flex.rows[i]._data.copyStoreCd = $("#copySelectStoreCd").val();

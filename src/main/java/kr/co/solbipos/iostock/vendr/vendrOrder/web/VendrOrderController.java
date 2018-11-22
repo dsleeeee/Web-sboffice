@@ -13,6 +13,7 @@ import kr.co.solbipos.iostock.volmErr.volmErr.service.VolmErrVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -136,6 +137,126 @@ public class VendrOrderController {
     }
 
 
+    /**
+     * 거래처 발주등록 - 발주정보 삭제
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   vendrOrderVO
+     * @return  String
+     * @author  안동관
+     * @since   2018. 11. 22.
+     */
+    @RequestMapping(value = "/vendrOrderDtl/delete.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result deleteVendrOrderDtl(HttpServletRequest request, HttpServletResponse response,
+        Model model, VendrOrderVO vendrOrderVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = vendrOrderService.deleteVendrOrderDtl(vendrOrderVO, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+
+    /**
+     * 거래처 발주등록 - 발주상품 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   vendrOrderVO
+     * @return  String
+     * @author  안동관
+     * @since   2018. 11. 21.
+     */
+    @RequestMapping(value = "/vendrOrderProd/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getVendrOrderProdList(HttpServletRequest request, HttpServletResponse response,
+        Model model, VendrOrderVO vendrOrderVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = vendrOrderService.getVendrOrderProdList(vendrOrderVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, vendrOrderVO);
+    }
+
+
+    /**
+     * 거래처 발주등록 - 진행구분 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   vendrOrderVO
+     * @return  String
+     * @author  안동관
+     * @since   2018. 11. 21.
+     */
+    @RequestMapping(value = "/vendrOrderProd/procFgCheck.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProcFgCheck(HttpServletRequest request, HttpServletResponse response,
+        Model model, VendrOrderVO vendrOrderVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        DefaultMap<String> result = vendrOrderService.getProcFgCheck(vendrOrderVO, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+
+    /**
+     * 거래처 발주등록 - 발주상품 등록 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   vendrOrderVO
+     * @return  String
+     * @author  안동관
+     * @since   2018. 11. 21.
+     */
+    @RequestMapping(value = "/vendrOrderProdReg/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getVendrOrderProdRegList(HttpServletRequest request, HttpServletResponse response,
+        Model model, VendrOrderVO vendrOrderVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = vendrOrderService.getVendrOrderProdRegList(vendrOrderVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, vendrOrderVO);
+    }
+
+
+    /**
+     * 거래처 발주등록 - 발주상품 등록 리스트 저장
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   vendrOrderVOs
+     * @return  String
+     * @author  안동관
+     * @since   2018. 11. 22.
+     */
+    @RequestMapping(value = "/vendrOrderProdReg/save.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveVendrOrderProdReg(HttpServletRequest request, HttpServletResponse response,
+        Model model, @RequestBody VendrOrderVO[] vendrOrderVOs) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = vendrOrderService.saveVendrOrderProdReg(vendrOrderVOs, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+
+
+
+
+
+
 
 
     /**
@@ -161,5 +282,28 @@ public class VendrOrderController {
         List<DefaultMap<String>> list = volmErrService.selectDynamicCodeList(volmErrVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, volmErrVO);
+    }
+
+
+    /**
+     * 거래처 발주등록 - 거래처 선택모듈 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   vendrOrderVO
+     * @return  String
+     * @author  안동관
+     * @since   2018. 11. 21.
+     */
+    @RequestMapping(value = "/vendrOrder/selectVendrList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getVendrList(HttpServletRequest request, HttpServletResponse response,
+        Model model, VendrOrderVO vendrOrderVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = vendrOrderService.getVendrList(vendrOrderVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, vendrOrderVO);
     }
 }

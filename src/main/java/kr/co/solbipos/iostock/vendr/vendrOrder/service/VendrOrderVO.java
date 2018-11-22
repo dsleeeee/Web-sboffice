@@ -31,19 +31,19 @@ public class VendrOrderVO extends PageVO {
     /** 발주/반출수량합계 낱개 */
     private Integer orderQty;
     /** 발주/반출금액 */
-    private Integer orderAmt;
+    private Long orderAmt;
     /** 발주/반출VAT */
-    private Integer orderVat;
+    private Long orderVat;
     /** 발주/반출합계금액 */
-    private Integer orderTot;
+    private Long orderTot;
     /** 입고/출고수량합계 낱개 */
     private Integer inTotQty;
     /** 입고/출고금액 */
-    private Integer inAmt;
+    private Long inAmt;
     /** 입고/출고VAT */
-    private Integer inVat;
+    private Long inVat;
     /** 입고/출고합계금액 */
-    private Integer inTot;
+    private Long inTot;
     /** 입고/출고최초일자 */
     private String inFirstDate;
     /** 입고/출고최종일자 */
@@ -72,8 +72,14 @@ public class VendrOrderVO extends PageVO {
     private String hqBrandCd;
     /** 상품코드 */
     private String prodCd;
+    /** 상품명 */
+    private String prodNm;
+    /** 바코드 */
+    private String barcdCd;
+    /** 상품분류코드 */
+    private String prodClassCd;
     /** 원가단가 */
-    private Integer costUprc;
+    private Float costUprc;
     /** 발주단위구분 */
     private String poUnitFg;
     /** 발주단위수량 */
@@ -84,12 +90,20 @@ public class VendrOrderVO extends PageVO {
     private Integer orderEtcQty;
     /** 발주/반출수량합계 낱개 */
     private Integer orderTotQty;
+    /** 발주/반출수량 주문단위 */
+    private Integer prevOrderUnitQty;
+    /** 발주/반출수량 나머지 */
+    private Integer prevOrderEtcQty;
+    /** 발주/반출수량합계 낱개 */
+    private Integer prevOrderTotQty;
     /** 입고/출고수량 주문단위 */
     private Integer inUnitQty;
     /** 입고/출고수량 나머지 */
     private Integer inEtcQty;
     /** 년월 */
     private String yymm;
+    /** 안전재고이하구분 */
+    private String safeStockFg;
 
     /**
      * @return the hqOfficeCd
@@ -262,42 +276,42 @@ public class VendrOrderVO extends PageVO {
     /**
      * @return the orderAmt
      */
-    public Integer getOrderAmt() {
+    public Long getOrderAmt() {
         return orderAmt;
     }
 
     /**
      * @param orderAmt the orderAmt to set
      */
-    public void setOrderAmt(Integer orderAmt) {
+    public void setOrderAmt(Long orderAmt) {
         this.orderAmt = orderAmt;
     }
 
     /**
      * @return the orderVat
      */
-    public Integer getOrderVat() {
+    public Long getOrderVat() {
         return orderVat;
     }
 
     /**
      * @param orderVat the orderVat to set
      */
-    public void setOrderVat(Integer orderVat) {
+    public void setOrderVat(Long orderVat) {
         this.orderVat = orderVat;
     }
 
     /**
      * @return the orderTot
      */
-    public Integer getOrderTot() {
+    public Long getOrderTot() {
         return orderTot;
     }
 
     /**
      * @param orderTot the orderTot to set
      */
-    public void setOrderTot(Integer orderTot) {
+    public void setOrderTot(Long orderTot) {
         this.orderTot = orderTot;
     }
 
@@ -318,42 +332,42 @@ public class VendrOrderVO extends PageVO {
     /**
      * @return the inAmt
      */
-    public Integer getInAmt() {
+    public Long getInAmt() {
         return inAmt;
     }
 
     /**
      * @param inAmt the inAmt to set
      */
-    public void setInAmt(Integer inAmt) {
+    public void setInAmt(Long inAmt) {
         this.inAmt = inAmt;
     }
 
     /**
      * @return the inVat
      */
-    public Integer getInVat() {
+    public Long getInVat() {
         return inVat;
     }
 
     /**
      * @param inVat the inVat to set
      */
-    public void setInVat(Integer inVat) {
+    public void setInVat(Long inVat) {
         this.inVat = inVat;
     }
 
     /**
      * @return the inTot
      */
-    public Integer getInTot() {
+    public Long getInTot() {
         return inTot;
     }
 
     /**
      * @param inTot the inTot to set
      */
-    public void setInTot(Integer inTot) {
+    public void setInTot(Long inTot) {
         this.inTot = inTot;
     }
 
@@ -554,16 +568,58 @@ public class VendrOrderVO extends PageVO {
     }
 
     /**
+     * @return the prodNm
+     */
+    public String getProdNm() {
+        return prodNm;
+    }
+
+    /**
+     * @param prodNm the prodNm to set
+     */
+    public void setProdNm(String prodNm) {
+        this.prodNm = prodNm;
+    }
+
+    /**
+     * @return the barcdCd
+     */
+    public String getBarcdCd() {
+        return barcdCd;
+    }
+
+    /**
+     * @param barcdCd the barcdCd to set
+     */
+    public void setBarcdCd(String barcdCd) {
+        this.barcdCd = barcdCd;
+    }
+
+    /**
+     * @return the prodClassCd
+     */
+    public String getProdClassCd() {
+        return prodClassCd;
+    }
+
+    /**
+     * @param prodClassCd the prodClassCd to set
+     */
+    public void setProdClassCd(String prodClassCd) {
+        this.prodClassCd = prodClassCd;
+    }
+
+    /**
      * @return the costUprc
      */
-    public Integer getCostUprc() {
+    public Float getCostUprc() {
         return costUprc;
     }
 
     /**
      * @param costUprc the costUprc to set
      */
-    public void setCostUprc(Integer costUprc) {
+    public void setCostUprc(Float costUprc) {
         this.costUprc = costUprc;
     }
 
@@ -638,6 +694,48 @@ public class VendrOrderVO extends PageVO {
     }
 
     /**
+     * @return the prevOrderUnitQty
+     */
+    public Integer getPrevOrderUnitQty() {
+        return prevOrderUnitQty;
+    }
+
+    /**
+     * @param prevOrderUnitQty the prevOrderUnitQty to set
+     */
+    public void setPrevOrderUnitQty(Integer prevOrderUnitQty) {
+        this.prevOrderUnitQty = prevOrderUnitQty;
+    }
+
+    /**
+     * @return the prevOrderEtcQty
+     */
+    public Integer getPrevOrderEtcQty() {
+        return prevOrderEtcQty;
+    }
+
+    /**
+     * @param prevOrderEtcQty the prevOrderEtcQty to set
+     */
+    public void setPrevOrderEtcQty(Integer prevOrderEtcQty) {
+        this.prevOrderEtcQty = prevOrderEtcQty;
+    }
+
+    /**
+     * @return the prevOrderTotQty
+     */
+    public Integer getPrevOrderTotQty() {
+        return prevOrderTotQty;
+    }
+
+    /**
+     * @param prevOrderTotQty the prevOrderTotQty to set
+     */
+    public void setPrevOrderTotQty(Integer prevOrderTotQty) {
+        this.prevOrderTotQty = prevOrderTotQty;
+    }
+
+    /**
      * @return the inUnitQty
      */
     public Integer getInUnitQty() {
@@ -677,5 +775,19 @@ public class VendrOrderVO extends PageVO {
      */
     public void setYymm(String yymm) {
         this.yymm = yymm;
+    }
+
+    /**
+     * @return the safeStockFg
+     */
+    public String getSafeStockFg() {
+        return safeStockFg;
+    }
+
+    /**
+     * @param safeStockFg the safeStockFg to set
+     */
+    public void setSafeStockFg(String safeStockFg) {
+        this.safeStockFg = safeStockFg;
     }
 }

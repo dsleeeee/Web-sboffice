@@ -23,9 +23,9 @@
       <th><s:message code="vendrOrder.orderDate"/></th>
       <td colspan="3">
         <div class="sb-select">
-          <span class="txtIn"><input id="srchStartDate" class="w150px"></span>
+          <span class="txtIn"><input id="srchStartDate" class="w120px"></span>
           <span class="rg">~</span>
-          <span class="txtIn"><input id="srchEndDate" class="w150px"></span>
+          <span class="txtIn"><input id="srchEndDate" class="w120px"></span>
         </div>
       </td>
     </tr>
@@ -89,10 +89,10 @@
         item-formatter="_itemFormatter">
 
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="vendrOrder.slipNo"/>" binding="slipNo" width="80" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="vendrOrder.slipNo"/>" binding="slipNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="vendrOrder.vendr"/>" binding="vendrNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="vendrOrder.procFg"/>" binding="procFg" width="60" align="center" is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="vendrOrder.orderType"/>" binding="orderType" width="80" align="left" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="vendrOrder.orderType"/>" binding="orderType" width="80" align="center" is-read-only="true" data-map="orderTypeMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="vendrOrder.orderDate"/>" binding="orderDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="vendrOrder.orderReqDate"/>" binding="orderReqDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
 
@@ -129,14 +129,20 @@
 
     $scope.srchStartDate = wcombo.genDateVal("#srchStartDate", "${sessionScope.sessionInfo.startDate}");
     $scope.srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.endDate}");
+    $scope.slipFg        = 1;
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
       var comboParams         = {};
       comboParams.nmcodeGrpCd = "096";
-      $scope._queryCombo("combo", "srchProcFg", null, comboParams, "A"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
-      $scope._queryCombo("map", "procFgMap", null, comboParams, "A"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+      // 파라미터 (comboFg, comboId, gridMapId, url, params, option)
+      $scope._queryCombo("combo,map", "srchProcFg", "procFgMap", null, comboParams, "A"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+      // $scope._queryCombo("map", "procFgMap", null, comboParams, "A"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+
+      var url = '/iostock/vendr/vendrOrder/vendrOrderDtl/getDynamicCombo.sb';
+      // 파라미터 (comboFg, comboId, gridMapId, url, params, option)
+      $scope._queryCombo("map", null, "orderTypeMap", url, comboParams, "A");
 
       // picker 사용시 호출 : 미사용시 호출안함
       $scope._makePickColumns("vendrOrderCtrl");
@@ -166,10 +172,10 @@
           var col         = ht.panel.columns[ht.col];
           var selectedRow = s.rows[ht.row].dataItem;
           if (col.binding === "slipNo") { // 전표번호 클릭
-            var params       = {};
-            params.orderDate = selectedRow.orderDate;
-            params.slipNo    = selectedRow.slipNo;
-            $scope._broadcast('vendrOrderDtlCtrl', params);
+            var params    = {};
+            params.slipNo = selectedRow.slipNo;
+            params.slipFg = $scope.slipFg;
+            $scope._broadcast('vendrOrderPopCtrl', params);
           }
         }
       });
@@ -200,13 +206,19 @@
     $scope.newVendrOrder = function () {
       var params    = {};
       params.slipNo = '';
+      params.slipFg = $scope.slipFg;
       $scope._broadcast('vendrOrderPopCtrl', params);
     };
 
 
     // DB 데이터를 조회해와서 그리드에서 사용할 Combo를 생성한다.
-    // comboFg : map - 그리드에 사용할 Combo, combo - ComboBox 생성
-    $scope._queryCombo = function (comboFg, id, url, params, option) {
+    // comboFg : map - 그리드에 사용할 Combo, combo - ComboBox 생성. 두가지 다 사용할경우 combo,map 으로 하면 둘 다 생성.
+    // comboId : combo 생성할 ID
+    // gridMapId : grid 에서 사용할 Map ID
+    // url : 데이터 조회할 url 정보. 명칭관리 조회시에는 url 필요없음.
+    // params : 데이터 조회할 url에 보낼 파라미터
+    // option : A - 전체를 붙여준다. S - 선택을 붙여준다. A 또는 S 가 아닌 경우는 데이터값만으로 생성
+    $scope._queryCombo = function (comboFg, comboId, gridMapId, url, params, option) {
       var comboUrl = "/iostock/volmErr/volmErr/volmErr/getCombo.sb";
       if (url) {
         comboUrl = url;
@@ -227,7 +239,7 @@
             var comboArray = [];
             var comboData  = {};
 
-            if (comboFg === "combo") {
+            if (comboFg.indexOf("combo") >= 0 && nvl(comboId,'') !== '') {
               if (option === "A") {
                 comboData.name  = messages["cmm.all"];
                 comboData.value = "";
@@ -245,16 +257,17 @@
                 comboData.value = list[i].nmcodeCd;
                 comboArray.push(comboData);
               }
-              $scope._setComboData(id, comboArray);
+              $scope._setComboData(comboId, comboArray);
             }
-            else if (comboFg === "map") {
+
+            if (comboFg.indexOf("map") >= 0 && nvl(gridMapId,'') !== '') {
               for (var i = 0; i < list.length; i++) {
                 comboData      = {};
                 comboData.id   = list[i].nmcodeCd;
                 comboData.name = list[i].nmcodeNm;
                 comboArray.push(comboData);
               }
-              $scope[id] = new wijmo.grid.DataMap(comboArray, 'id', 'name');
+              $scope[gridMapId] = new wijmo.grid.DataMap(comboArray, 'id', 'name');
             }
           }
         }

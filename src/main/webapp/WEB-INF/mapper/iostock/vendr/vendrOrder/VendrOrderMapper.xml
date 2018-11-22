@@ -4,6 +4,26 @@
 
 <mapper namespace="kr.co.solbipos.iostock.vendr.vendrOrder.service.impl.VendrOrderMapper">
 
+    <!-- 거래처 발주등록 - 거래처 선택모듈 리스트 조회(본사) -->
+    <!--
+        TABLE    : TB_ST_HQ_SETPROD_COMPOSITION, TB_HQ_PRODUCT
+        PARAM    : vendrOrderVO
+        COMMENTS : 거래처 발주등록 - 거래처 선택모듈 리스트를 조회한다.
+    -->
+    <select id="getHqVendrList" parameterType="vendrOrderVO" resultType="DefaultMap">
+        /* USE : VendrOrderMapper.getHqVendrList */
+        <![CDATA[
+        SELECT  thv.VENDR_CD, thv.VENDR_NM
+        ,       thv.SHIP_FG, thv.VAT_INCLD_YN
+        FROM    TB_HQ_BRAND thb
+        ,       TB_HQ_VENDOR thv
+        WHERE   thb.HQ_OFFICE_CD    =   #{hqOfficeCd}
+        AND     thv.HQ_BRAND_CD     =   thb.HQ_BRAND_CD
+        ]]>
+    </select>
+
+
+
     <!-- 거래처 발주등록 - 거래처 발주등록 리스트 조회(본사) -->
     <!--
         TABLE    : TB_PO_HQ_VENDR_ORDER, TB_HQ_BRAND, TB_HQ_VENDOR
@@ -51,8 +71,8 @@
         /* USE : VendrOrderMapper.getHqSlipInfo */
         <![CDATA[
         SELECT  tphvo.SLIP_NO, tphvo.PROC_FG, tphvo.VENDR_CD, thv.VENDR_NM
-        ,       tphvo.ORDER_TYPE, tphvo.ORDER_DATE, tphvo.ORDER_REQ_DATE
-        ,       tphvo.ORDER_REG_DT, thereg.EMP_NM AS REG_NM
+        ,       tphvo.ORDER_TYPE, tphvo.ORDER_DATE, tphvo.ORDER_REQ_DATE, tphvo.REMARK
+        ,       tphvo.ORDER_REG_DT, thereg.EMP_NM AS ORDER_REG_NM
         ,       tphvo.CONFM_DT, theconfm.EMP_NM AS CONFM_NM
         ,       tphvo.END_DT, theend.EMP_NM AS END_NM
         ,       tphvo.ORDER_QTY * tphvo.SLIP_FG AS ORDER_QTY
@@ -96,6 +116,145 @@
         FROM    TB_PO_HQ_VENDR_ORDER tphvo
         WHERE   tphvo.HQ_OFFICE_CD  =     #{hqOfficeCd}
         AND     tphvo.SLIP_NO       LIKE  #{yymm}||'%'
+        ]]>
+    </select>
+
+
+    <!-- 거래처 발주등록 - 발주상품 리스트 조회(본사) -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_ORDER_DTL, TB_HQ_PRODUCT, TB_HQ_ENVST
+        PARAM    : vendrOrderVO
+        COMMENTS : 거래처 발주등록 - 발주상품 리스트를 조회한다.
+    -->
+    <select id="getHqVendrOrderProdList" parameterType="vendrOrderVO" resultType="DefaultMap">
+        /* USE : VendrOrderMapper.getHqVendrOrderProdList */
+        <![CDATA[
+        SELECT  tphvod.PROD_CD, thp.PROD_NM, tphvod.PO_UNIT_FG, tphvod.PO_UNIT_QTY, thp.PO_UNIT_ALLOW_FG
+        ,       tphvod.SLIP_FG, tphvod.COST_UPRC, thp.PO_MIN_QTY
+        ,       TO_NUMBER(DECODE(tphvod.ORDER_TOT_QTY , 0, NULL, tphvod.ORDER_TOT_QTY *tphvod.SLIP_FG)) AS PREV_ORDER_TOT_QTY
+        ,       TO_NUMBER(DECODE(tphvod.ORDER_UNIT_QTY, 0, NULL, tphvod.ORDER_UNIT_QTY*tphvod.SLIP_FG)) AS ORDER_UNIT_QTY
+        ,       TO_NUMBER(DECODE(tphvod.ORDER_ETC_QTY , 0, NULL, tphvod.ORDER_ETC_QTY *tphvod.SLIP_FG)) AS ORDER_ETC_QTY
+        ,       TO_NUMBER(DECODE(tphvod.ORDER_TOT_QTY , 0, NULL, tphvod.ORDER_TOT_QTY *tphvod.SLIP_FG)) AS ORDER_TOT_QTY
+        ,       tphvod.ORDER_AMT*tphvod.SLIP_FG AS ORDER_AMT
+        ,       tphvod.ORDER_VAT*tphvod.SLIP_FG AS ORDER_VAT
+        ,       tphvod.ORDER_TOT*tphvod.SLIP_FG AS ORDER_TOT
+        ,       DECODE(thp.VAT_FG, 'Y', 1, 0) AS VAT_FG01
+        ,       the.ENVST_VAL AS ENVST0011
+        FROM    TB_PO_HQ_VENDR_ORDER_DTL tphvod
+        ,       TB_HQ_PRODUCT thp
+        ,       TB_HQ_ENVST the
+        WHERE   tphvod.HQ_OFFICE_CD =   #{hqOfficeCd}
+        AND     tphvod.SLIP_NO      =   #{slipNo}
+        AND     tphvod.SLIP_FG      =   #{slipFg}
+        AND     thp.HQ_OFFICE_CD    =   tphvod.HQ_OFFICE_CD
+        AND     thp.PROD_CD         =   tphvod.PROD_CD
+        AND     the.HQ_OFFICE_CD    =   tphvod.HQ_OFFICE_CD
+        AND     the.ENVST_CD        =   '0011'
+        ORDER
+        BY      tphvod.PROD_CD
+        ]]>
+    </select>
+
+
+    <!-- 거래처 발주등록 - 진행구분 조회(본사) -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_ORDER
+        PARAM    : vendrOrderVO
+        COMMENTS : 거래처 발주등록 - 진행구분을 조회한다.
+    -->
+    <select id="getHqProcFgCheck" parameterType="vendrOrderVO" resultType="DefaultMap">
+        /* USE : VendrOrderMapper.getHqProcFgCheck */
+        <![CDATA[
+        SELECT  tshvo.PROC_FG
+        FROM    TB_PO_HQ_VENDR_ORDER tshvo
+        WHERE   tshvo.HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     tshvo.SLIP_NO       = #{slipNo}
+        ]]>
+    </select>
+
+
+    <!-- 거래처 발주등록 - 발주상품 등록 리스트 조회(본사) -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_ORDER_DTL, TB_HQ_PRODUCT, TB_HQ_ENVST
+        PARAM    : vendrOrderVO
+        COMMENTS : 거래처 발주등록 - 발주상품 등록 리스트를 조회한다.
+    -->
+    <select id="getHqVendrOrderProdRegList" parameterType="vendrOrderVO" resultType="DefaultMap">
+        /* USE : VendrOrderMapper.getHqVendrOrderProdRegList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        <![CDATA[
+        SELECT  thvp.PROD_CD
+        ,       thp.PROD_NM
+        ,       thp.ORGPLCE_CD
+        ,       DECODE(thp.VAT_FG,'Y',1,0) AS VAT_FG01
+        ,       TRUNC(DECODE(SIGN(tshsc.CURR_QTY),-1,0,tshsc.CURR_QTY) / thp.PO_UNIT_QTY) AS CURR_UNIT_QTY
+        ,       MOD  (DECODE(SIGN(tshsc.CURR_QTY),-1,0,tshsc.CURR_QTY) , thp.PO_UNIT_QTY) AS CURR_ETC_QTY
+        , 		thp.COST_UPRC
+        , 		thp.LAST_COST_UPRC
+        ,       thp.PO_UNIT_ALLOW_FG
+        ,       thp.PO_UNIT_FG
+        ,       thp.PO_UNIT_QTY
+        ,       the.ENVST_VAL AS ENVST0011
+        ,       TRUNC(DECODE(SIGN(thp.SAFE_STOCK_QTY),-1,0,thp.SAFE_STOCK_QTY) / thp.PO_UNIT_QTY) AS SAFE_STOCK_UNIT_QTY
+        ,       MOD  (DECODE(SIGN(thp.SAFE_STOCK_QTY),-1,0,thp.SAFE_STOCK_QTY) , thp.PO_UNIT_QTY) AS SAFE_STOCK_ETC_QTY
+        ,       TO_NUMBER(DECODE(tphvod.ORDER_UNIT_QTY, 0, NULL, tphvod.ORDER_UNIT_QTY*tphvod.SLIP_FG)) AS PREV_ORDER_UNIT_QTY
+        ,       TO_NUMBER(DECODE(tphvod.ORDER_ETC_QTY,  0, NULL, tphvod.ORDER_ETC_QTY*tphvod.SLIP_FG )) AS PREV_ORDER_ETC_QTY
+        ,       TO_NUMBER(DECODE(tphvod.ORDER_TOT_QTY,  0, NULL, tphvod.ORDER_TOT_QTY*tphvod.SLIP_FG )) AS PREV_ORDER_TOT_QTY
+        ,       TO_NUMBER(DECODE(tphvod.ORDER_AMT    ,  0, NULL, tphvod.ORDER_AMT*tphvod.SLIP_FG     )) AS ORDER_AMT
+        ,       TO_NUMBER(DECODE(tphvod.ORDER_VAT    ,  0, NULL, tphvod.ORDER_VAT*tphvod.SLIP_FG     )) AS ORDER_VAT
+        ,       TO_NUMBER(DECODE(tphvod.ORDER_TOT    ,  0, NULL, tphvod.ORDER_TOT*tphvod.SLIP_FG     )) AS ORDER_TOT
+        ]]>
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        <![CDATA[
+        FROM    TB_HQ_BRAND thb
+        ,       TB_HQ_VENDOR_PROD thvp
+        ,       TB_HQ_PRODUCT thp
+        ,       TB_ST_HQ_STOCK_CUR tshsc
+        ,       TB_PO_HQ_VENDR_ORDER_DTL tphvod
+        ,       TB_HQ_ENVST the
+        WHERE   thb.HQ_OFFICE_CD      =   #{hqOfficeCd}
+        AND     thvp.HQ_BRAND_CD      =   thb.HQ_BRAND_CD
+        AND     thp.HQ_OFFICE_CD      =   #{hqOfficeCd}
+        AND     thp.PROD_CD           =   thvp.PROD_CD
+        AND     thp.USE_YN            =   'Y'
+        AND     tshsc.HQ_OFFICE_CD(+) =   thp.HQ_OFFICE_CD
+        AND     tshsc.PROD_CD     (+) =   thp.PROD_CD
+        AND     tphvod.HQ_OFFICE_CD(+)=   thp.HQ_OFFICE_CD
+        AND     tphvod.SLIP_NO    (+) =   #{slipNo}
+        AND     tphvod.PROD_CD    (+) =   thp.PROD_CD
+        AND     the.HQ_OFFICE_CD      =   #{hqOfficeCd}
+        AND     the.ENVST_CD          =   '0011'
+        ]]>
+        <if test='prodCd != null and prodCd != ""'>
+            AND thp.PROD_CD = #{prodCd}
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='safeStockFg == "Y"'>
+            <![CDATA[
+            AND NVL(tshsc.CURR_QTY, 0) < NVL(thp.SAFE_STOCK_QTY, 0)
+            ]]>
+        </if>
+        ORDER BY thp.PROD_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+
+    <!-- 거래처 발주등록 - 발주 삭제시 상품이 있는지 여부 조회(본사) -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_ORDER
+        PARAM    : vendrOrderVO
+        COMMENTS : 거래처 발주등록 - 발주 삭제시 상품이 있는지 여부를 조회한다.
+    -->
+    <select id="getHqDtlProdExist" parameterType="vendrOrderVO" resultType="String">
+        /* USE : VendrOrderMapper.getHqDtlProdExist */
+        <![CDATA[
+        SELECT  DECODE(COUNT(tshvod.PROD_CD), 0, 'N', 'Y') AS IS_EXIST
+        FROM    TB_PO_HQ_VENDR_ORDER_DTL tshvod
+        WHERE   tshvod.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tshvod.SLIP_NO      = #{slipNo}
+        AND     ROWNUM              = 1
         ]]>
     </select>
 
@@ -188,4 +347,122 @@
         AND     SLIP_NO       = #{slipNo}
     </update>
 
+
+    <!-- 거래처 발주등록 - 발주정보 HD 삭제(본사) -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_ORDER
+        PARAM    : vendrOrderVO
+        COMMENTS : 거래처 발주정보를 삭제한다.
+    -->
+    <delete id="deleteHqVendrOrderHd" parameterType="vendrOrderVO">
+        /* USE : VendrOrderMapper.deleteHqVendrOrderHd */
+        DELETE  TB_PO_HQ_VENDR_ORDER
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+    </delete>
+
+
+    <!-- 거래처 발주등록 - 발주정보 DTL 등록(본사) -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_ORDER_DTL
+        PARAM    : vendrOrderVO
+        COMMENTS : 거래처 발주정보 DTL을 등록한다.
+    -->
+    <insert id="insertHqVendrOrderDtl" parameterType="vendrOrderVO">
+        /* USE : VendrOrderMapper.insertHqVendrOrderDtl */
+        INSERT INTO TB_PO_HQ_VENDR_ORDER_DTL (
+            HQ_OFFICE_CD,
+            SLIP_NO,
+            STORAGE_CD,
+            HQ_BRAND_CD,
+            PROD_CD,
+            SLIP_FG,
+            COST_UPRC,
+            PO_UNIT_FG,
+            PO_UNIT_QTY,
+            ORDER_UNIT_QTY,
+            ORDER_ETC_QTY,
+            ORDER_TOT_QTY,
+            ORDER_AMT,
+            ORDER_VAT,
+            ORDER_TOT,
+            IN_UNIT_QTY,
+            IN_ETC_QTY,
+            IN_TOT_QTY,
+            IN_AMT,
+            IN_VAT,
+            IN_TOT,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        VALUES
+        (
+            #{hqOfficeCd},
+            #{slipNo},
+            #{storageCd},
+            #{hqBrandCd},
+            #{prodCd},
+            #{slipFg},
+            #{costUprc},
+            #{poUnitFg},
+            #{poUnitQty},
+            #{orderUnitQty},
+            #{orderEtcQty},
+            #{orderTotQty},
+            #{orderAmt},
+            #{orderVat},
+            #{orderTot},
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+
+    <!-- 거래처 발주등록 - 발주정보 DTL 수정(본사) -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_ORDER_DTL
+        PARAM    : vendrOrderVO
+        COMMENTS : 거래처 발주정보 DTL을 수정한다.
+    -->
+    <update id="updateHqVendrOrderDtl" parameterType="vendrOrderVO">
+        /* USE : VendrOrderMapper.updateHqVendrOrderDtl */
+        UPDATE  TB_PO_HQ_VENDR_ORDER_DTL
+        SET     COST_UPRC       = #{costUprc}
+        ,       ORDER_UNIT_QTY  = #{orderUnitQty}
+        ,       ORDER_ETC_QTY   = #{orderEtcQty}
+        ,       ORDER_TOT_QTY   = #{orderTotQty}
+        ,       ORDER_AMT       = #{orderAmt}
+        ,       ORDER_VAT       = #{orderVat}
+        ,       ORDER_TOT       = #{orderTot}
+        ,       MOD_DT          = #{modDt}
+        ,       MOD_ID          = #{modId}
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+        AND     PROD_CD       = #{prodCd}
+    </update>
+
+
+    <!-- 거래처 발주등록 - 발주정보 DTL 삭제(본사) -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_ORDER_DTL
+        PARAM    : vendrOrderVO
+        COMMENTS : 거래처 발주정보 DTL을 삭제한다.
+    -->
+    <delete id="deleteHqVendrOrderDtl" parameterType="vendrOrderVO">
+        /* USE : VendrOrderMapper.deleteHqVendrOrderDtl */
+        DELETE  TB_PO_HQ_VENDR_ORDER_DTL
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+        AND     PROD_CD       = #{prodCd}
+    </delete>
 </mapper>
