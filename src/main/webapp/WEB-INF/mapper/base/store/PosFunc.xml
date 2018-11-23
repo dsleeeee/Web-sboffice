@@ -39,6 +39,7 @@
         WHERE
             tmp.STORE_CD = #{storeCd}
             AND tmp.USE_YN = 'Y'
+        ORDER BY tmp.POS_NO ASC
     </select>
 
     <!-- 포스기능목록 조회 -->
