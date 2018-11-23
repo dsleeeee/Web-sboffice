@@ -7,7 +7,7 @@ import org.apache.ibatis.type.MappedTypes;
 
 /**
  * 본사사원정보 등록 결과
- * 
+ *
  * @author sanghwaj
  */
 public enum HqEmpResult implements CodeEnum  {
@@ -39,14 +39,14 @@ public enum HqEmpResult implements CodeEnum  {
     HqEmpResult(String code) {
         this.code = code;
     }
-   
+
     @MappedTypes(HqEmpResult.class)
     public static class TypeHandler extends CodeEnumTypeHandler<HqEmpResult> {
         public TypeHandler() {
         super(HqEmpResult.class);
         }
     }
-     
+
     @Override
     @JsonValue
     public String getCode() {

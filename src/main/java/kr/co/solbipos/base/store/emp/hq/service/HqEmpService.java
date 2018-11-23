@@ -30,6 +30,9 @@ public interface HqEmpService {
     /** 본사 사원번호 조회*/
     HqEmpResult getHqEmpNoCnt(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO);
 
+    /** 본사 사원정보 상세*/
+    DefaultMap<String> getHqEmpDtlInfo(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO);
+
     /** 본사 웹유저아이디 조회*/
     HqEmpResult getHqUserIdCnt(HqEmpVO hqEmpVO);
 
@@ -42,7 +45,5 @@ public interface HqEmpService {
     /** 본사 사원번호 패스워드변경*/
     HqEmpResult modifyPassword(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO);
 
-    /** 본사 사원정보 상세*/
-    DefaultMap<String> getHqEmpDtlInfo(HqEmpVO hqEmpVO);
 
 }
