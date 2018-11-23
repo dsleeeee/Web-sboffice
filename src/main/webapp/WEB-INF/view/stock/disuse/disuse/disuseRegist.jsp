@@ -15,7 +15,6 @@
     <div class="wj-dialog-body sc2" style="height: 600px;">
       <p id="registSubTitle" class="s14 bk mb5 fl"></p>
 
-      <form name="myForm" novalidate>
         <table class="tblType01" style="position: relative;">
           <colgroup>
             <col class="w15"/>
@@ -28,12 +27,7 @@
             <%-- 폐기제목 --%>
             <th><s:message code="disuse.reg.disuseTitle"/><em class="imp">*</em></th>
             <td colspan="3">
-              <input type="text" id="disuseTitle" name="disuseTitle" ng-model="disuseTitle" class="sb-input w100" maxlength="33" data-check="0,100"
-                     required
-                     popover-enable="myForm.disuseTitle.$invalid"
-                     popover-placement="bottom-left"
-                     popover-trigger="'mouseenter'"
-                     uib-popover="<s:message code="disuse.reg.disuseTitle"/>은(는) 필수 입력항목 입니다."/>
+              <input type="text" id="disuseTitle" name="disuseTitle" ng-model="disuseTitle" class="sb-input w100" maxlength="33" data-check="0,100" ng-required="true"/>
             </td>
           </tr>
           <tr>
@@ -92,7 +86,6 @@
           </tr>
           </tbody>
         </table>
-      </form>
 
       <div class="mt10 oh">
         <%-- 조회 --%>

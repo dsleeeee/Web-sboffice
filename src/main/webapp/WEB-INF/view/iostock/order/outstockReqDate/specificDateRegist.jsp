@@ -117,7 +117,7 @@
         }
         // 성공한 경우
         else {
-          s_alert.pop(messages["cmm.saveSucc"]);
+          $scope._popMsg(messages["cmm.saveSucc"]);
           // 특정일 그리드 새로고침
           $scope._broadcast('specificCtrl');
         }
@@ -127,7 +127,7 @@
       }, function errorCallback(response) {
         // called asynchronously if an error occurs
         // or server returns response with an error status.
-        s_alert.pop(response.data.message);
+        $scope._popMsg(response.data.message);
         return false;
       });
     };

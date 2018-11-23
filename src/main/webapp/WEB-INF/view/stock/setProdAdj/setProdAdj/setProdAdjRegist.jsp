@@ -4,16 +4,16 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
-<c:set var="baseUrl" value="/stock/setProdAdj/hqSetProdAdj/hqSetProdAdjRegist/"/>
+<c:set var="baseUrl" value="/stock/setProdAdj/setProdAdj/setProdAdjRegist/"/>
 
-<wj-popup id="wjHqSetProdAdjRegistLayer" control="wjHqSetProdAdjRegistLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
-  <div id="hqSetProdAdjRegistLayer" class="wj-dialog wj-dialog-columns">
+<wj-popup id="wjSetProdAdjRegistLayer" control="wjSetProdAdjRegistLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
+  <div id="setProdAdjRegistLayer" class="wj-dialog wj-dialog-columns">
     <div class="wj-dialog-header wj-dialog-header-font">
-      <s:message code="hqSetProdAdj.reg.registTitle"/>
+      <s:message code="setProdAdj.reg.registTitle"/>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
     <div class="wj-dialog-body sc2" style="height: 600px;">
-      <div ng-controller="hqSetProdAdjRegistCtrl">
+      <div ng-controller="setProdAdjRegistCtrl">
         <table class="tblType01">
           <colgroup>
             <col class="w15"/>
@@ -24,12 +24,12 @@
           <tbody>
           <tr>
             <%-- 상품코드 --%>
-            <th><s:message code="hqSetProdAdj.reg.prodCd"/></th>
+            <th><s:message code="setProdAdj.reg.prodCd"/></th>
             <td>
               <input type="text" id="srchRegProdCd" name="srchRegProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13"/>
             </td>
             <%-- 상품명 --%>
-            <th><s:message code="hqSetProdAdj.reg.prodNm"/></th>
+            <th><s:message code="setProdAdj.reg.prodNm"/></th>
             <td>
               <input type="text" id="srchRegProdNm" name="srchRegProdNm" ng-model="prodNm" class="sb-input w100" maxlength="50"/>
             </td>
@@ -39,31 +39,31 @@
 
         <div class="mt10 oh">
           <%-- 조회 --%>
-          <button type="button" class="btn_blue fr" id="btnSearch" ng-click="searchHqSetProdAdjRegistList();">
+          <button type="button" class="btn_blue fr" id="btnSearch" ng-click="searchSetProdAdjRegistList();">
             <s:message code="cmm.search"/></button>
         </div>
 
         <ul class="txtSty3 mt10">
-          <li class="red"><s:message code="hqSetProdAdj.reg.txt1"/></li>
-          <li class="red"><s:message code="hqSetProdAdj.reg.txt2"/></li>
+          <li class="red"><s:message code="setProdAdj.reg.txt1"/></li>
+          <li class="red"><s:message code="setProdAdj.reg.txt2"/></li>
         </ul>
 
         <%-- 세트상품 --%>
         <div class="mt10">
           <div class="wj-TblWrapBr pd20">
             <div class="updownSet oh mb10">
-              <span class="fl bk lh30"><s:message code='hqSetProdAdj.reg.setProdTitle'/></span>
+              <span class="fl bk lh30"><s:message code='setProdAdj.reg.setProdTitle'/></span>
               <div class="fr">
-                <p class="s12 lh30 fl mr5"><s:message code='hqSetProdAdj.reg.setDate'/> : </p>
+                <p class="s12 lh30 fl mr5"><s:message code='setProdAdj.reg.setDate'/> : </p>
                 <div class="sb-select mr5 fl">
                   <span class="txtIn"><input id="setDate" class="w120px"></span>
                 </div>
                 <%-- 구성등록 --%>
-                <button type="button" class="btn_skyblue ml5 fl" id="btnCompstSave" ng-click="saveHqSetProdAdjRegist('1')">
-                  <s:message code="hqSetProdAdj.reg.compstReg"/></button>
+                <button type="button" class="btn_skyblue ml5 fl" id="btnCompstSave" ng-click="saveSetProdAdjRegist('1')">
+                  <s:message code="setProdAdj.reg.compstReg"/></button>
                 <%-- 해체등록 --%>
-                <button type="button" class="btn_skyblue ml5 fl" id="btnDsmntSave" ng-click="saveHqSetProdAdjRegist('2')">
-                  <s:message code="hqSetProdAdj.reg.dsmntReg"/></button>
+                <button type="button" class="btn_skyblue ml5 fl" id="btnDsmntSave" ng-click="saveSetProdAdjRegist('2')">
+                  <s:message code="setProdAdj.reg.dsmntReg"/></button>
               </div>
             </div>
 
@@ -80,12 +80,12 @@
                   item-formatter="_itemFormatter">
 
                   <!-- define columns -->
-                  <wj-flex-grid-column header="<s:message code="hqSetProdAdj.reg.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                  <wj-flex-grid-column header="<s:message code="hqSetProdAdj.reg.prodNm"/>" binding="prodNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
-                  <wj-flex-grid-column header="<s:message code="hqSetProdAdj.reg.costUprc"/>" binding="costUprc" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-                  <wj-flex-grid-column header="<s:message code="hqSetProdAdj.reg.currQty"/>" binding="currQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-                  <wj-flex-grid-column header="<s:message code="hqSetProdAdj.reg.setProdQty"/>" binding="setProdQty" width="70" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-                  <wj-flex-grid-column header="<s:message code="hqSetProdAdj.reg.setProdAmt"/>" binding="setProdAmt" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="setProdAdj.reg.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="setProdAdj.reg.prodNm"/>" binding="prodNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="setProdAdj.reg.costUprc"/>" binding="costUprc" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="setProdAdj.reg.currQty"/>" binding="currQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="setProdAdj.reg.setProdQty"/>" binding="setProdQty" width="70" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="setProdAdj.reg.setProdAmt"/>" binding="setProdAmt" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
 
                 </wj-flex-grid>
               </div>
@@ -96,10 +96,10 @@
       </div>
 
       <%-- 세트구성상품  --%>
-      <div class="mt20" ng-controller="hqSetProdAdjRegistCompstCtrl">
+      <div class="mt20" ng-controller="setProdAdjRegistCompstCtrl">
         <div class="wj-TblWrapBr pd20">
           <div class="updownSet oh mb10">
-            <span class="fl bk lh30"><s:message code='hqSetProdAdj.reg.compstTitle'/></span>
+            <span class="fl bk lh30"><s:message code='setProdAdj.reg.compstTitle'/></span>
           </div>
 
           <div class="w100 mt10">
@@ -115,12 +115,12 @@
                 item-formatter="_itemFormatter">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="hqSetProdAdj.reg.prodCd"/>" binding="unitProdCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="hqSetProdAdj.reg.prodNm"/>" binding="unitProdNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="hqSetProdAdj.reg.costUprc"/>" binding="costUprc" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="hqSetProdAdj.reg.currQty"/>" binding="currQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="hqSetProdAdj.reg.unitProdQty"/>" binding="unitProdQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="hqSetProdAdj.reg.totCostUprc"/>" binding="totCostUprc" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="setProdAdj.reg.prodCd"/>" binding="unitProdCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="setProdAdj.reg.prodNm"/>" binding="unitProdNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="setProdAdj.reg.costUprc"/>" binding="costUprc" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="setProdAdj.reg.currQty"/>" binding="currQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="setProdAdj.reg.unitProdQty"/>" binding="unitProdQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="setProdAdj.reg.totCostUprc"/>" binding="totCostUprc" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 
               </wj-flex-grid>
 
@@ -135,9 +135,9 @@
 
 <script type="text/javascript">
   /** 세트상품 그리드 controller */
-  app.controller('hqSetProdAdjRegistCtrl', ['$scope', '$http', function ($scope, $http) {
+  app.controller('setProdAdjRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('hqSetProdAdjRegistCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('setProdAdjRegistCtrl', $scope, $http, true));
 
     $scope.setDate = wcombo.genDate("#setDate");
 
@@ -172,7 +172,7 @@
           if (col.binding === "prodCd") { // 상품코드 클릭
             var params    = {};
             params.prodCd = selectedRow.prodCd;
-            $scope._broadcast('hqSetProdAdjRegistCompstCtrl', params);
+            $scope._broadcast('setProdAdjRegistCompstCtrl', params);
           }
         }
       });
@@ -204,15 +204,15 @@
 
 
     // 다른 컨트롤러의 broadcast 받기
-    $scope.$on("hqSetProdAdjRegistCtrl", function (event, data) {
+    $scope.$on("setProdAdjRegistCtrl", function (event, data) {
 
       // 그리드 초기화
       var cv          = new wijmo.collections.CollectionView([]);
       cv.trackChanges = true;
       $scope.data     = cv;
 
-      $scope.wjHqSetProdAdjRegistLayer.show(true);
-      $scope.searchHqSetProdAdjRegistList();
+      $scope.wjSetProdAdjRegistLayer.show(true);
+      $scope.searchSetProdAdjRegistList();
 
       // 기능수행 종료 : 반드시 추가
       event.preventDefault();
@@ -220,17 +220,17 @@
 
 
     // 세트상품 리스트 조회
-    $scope.searchHqSetProdAdjRegistList = function () {
+    $scope.searchSetProdAdjRegistList = function () {
       // 파라미터
       var params = {};
 
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
-      $scope._inquiryMain("/stock/setProdAdj/hqSetProdAdj/hqSetProdAdjRegist/list.sb", params);
+      $scope._inquiryMain("/stock/setProdAdj/setProdAdj/setProdAdjRegist/list.sb", params);
     };
 
 
     // 세트 구성/해체 저장
-    $scope.saveHqSetProdAdjRegist = function (setMakeFg) {
+    $scope.saveSetProdAdjRegist = function (setMakeFg) {
       var params = [];
 
       // 수정된 상품 가져오기
@@ -248,7 +248,7 @@
         }
       }
 
-      $scope._save("/stock/setProdAdj/hqSetProdAdj/hqSetProdAdjRegist/save.sb", params, function () {
+      $scope._save("/stock/setProdAdj/setProdAdj/setProdAdjRegist/save.sb", params, function () {
         $scope.saveRegistCallback()
       });
     };
@@ -256,19 +256,19 @@
 
     // 저장 후 콜백 서치 함수
     $scope.saveRegistCallback = function () {
-      var hqSetProdAdjScope = agrid.getScope('hqSetProdAdjCtrl');
-      hqSetProdAdjScope.searchHqSetProdAdjList();
+      var setProdAdjScope = agrid.getScope('setProdAdjCtrl');
+      setProdAdjScope.searchSetProdAdjList();
 
-      $scope.wjHqSetProdAdjRegistLayer.hide(true);
+      $scope.wjSetProdAdjRegistLayer.hide(true);
     };
 
   }]);
 
 
   /** 세트구성상품 그리드 controller */
-  app.controller('hqSetProdAdjRegistCompstCtrl', ['$scope', '$http', function ($scope, $http) {
+  app.controller('setProdAdjRegistCompstCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('hqSetProdAdjRegistCompstCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('setProdAdjRegistCompstCtrl', $scope, $http, true));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -280,7 +280,7 @@
 
 
     // 다른 컨트롤러의 broadcast 받기
-    $scope.$on("hqSetProdAdjRegistCompstCtrl", function (event, data) {
+    $scope.$on("setProdAdjRegistCompstCtrl", function (event, data) {
 
       // 그리드 초기화
       var cv          = new wijmo.collections.CollectionView([]);
@@ -288,7 +288,7 @@
       $scope.data     = cv;
 
       $scope.prodCd = data.prodCd;
-      $scope.searchHqSetProdAdjRegistCompstList();
+      $scope.searchSetProdAdjRegistCompstList();
 
       // 기능수행 종료 : 반드시 추가
       event.preventDefault();
@@ -296,13 +296,13 @@
 
 
     // 세트구성상품 리스트 조회
-    $scope.searchHqSetProdAdjRegistCompstList = function () {
+    $scope.searchSetProdAdjRegistCompstList = function () {
       // 파라미터
       var params    = {};
       params.prodCd = $scope.prodCd;
 
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
-      $scope._inquirySub("/stock/setProdAdj/hqSetProdAdj/hqSetProdAdjRegistCompst/list.sb", params);
+      $scope._inquirySub("/stock/setProdAdj/setProdAdj/setProdAdjRegistCompst/list.sb", params);
     };
 
   }]);
