@@ -49,16 +49,18 @@
             <td>{{hqEmp.empNm}}</td>
           </tr>
           <tr>
-            <%-- 웹사용자ID --%>
-            <th>
-              <div class="impWrap"><s:message code="hqEmp.userId" /></div>
-            </th>
-            <td>{{hqEmp.userId}}</td>
             <%-- 웹사용여부 --%>
             <th>
               <div class="impWrap"><s:message code="hqEmp.webUseYn" /></div>
             </th>
             <td>{{hqEmp.webUseYnNm}}</td>
+            <%-- 웹사용자ID --%>
+            <th ng-if="hqEmp.webUseYn == 'Y'">
+              <div class="impWrap"><s:message code="hqEmp.userId" /></div>
+            </th>
+            <td ng-if="hqEmp.webUseYn == 'Y'">{{hqEmp.userId}}</td>
+            <th ng-if="hqEmp.webUseYn != 'Y'"></th>
+            <td ng-if="hqEmp.webUseYn != 'Y'"></td>
           </tr>
           <tr>
             <%-- 휴대폰번호 --%>

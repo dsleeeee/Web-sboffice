@@ -17,6 +17,7 @@ import javax.validation.constraints.Size;
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2018.08.16  hblee      최초생성
+ * @ 2018.11.26  김지은     UseYn 수정
  *
  * @author NHN한국사이버결제 이한빈
  * @since 2018.08.16
@@ -26,54 +27,94 @@ import javax.validation.constraints.Size;
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 public class StoreEmpVO extends PageVO {
+
+    /** 본사코드 */
+    private String hqOfficeCd;
+
     /** 매장코드 */
     private String storeCd;
+
     /** 사원번호 */
-    @NotBlank(message = "{storeEmp.empNo}{cmm.require.text}")
-    @Size(min = 4, max = 4, message = "{storeEmp.empNo.size}")
-    @Pattern(regexp = "^\\d+$", message = "{storeEmp.empNo}{cmm.require.number}")
     private String empNo;
+
     /** 사원명 */
-    @NotBlank(message = "{storeEmp.empNm}{cmm.require.text}")
     private String empNm;
-    /** 사원ID */
-    private String userId;
-    /** 사원비밀번호 */
+
+    /** 사원비밀번호 (포스에서 사용) */
     private String empPwd;
-    /** 변경비밀번호 */
-    @NotBlank(groups = UserPwChange.class, message = "{storeEmp.pwd}{cmm.require.text}")
-    private String newPwd;
-    /** 변경비밀번호확인 */
-    @NotBlank(groups = UserPwChange.class, message = "{storeEmp.pwdConfirm}{cmm.require.text}")
-    private String newPwdConfirm;
-    /** 재직여부 */
-    private ServiceFg serviceFg;
-    /** 휴대폰번호 */
-    @NotBlank(message = "{storeEmp.mpNo}{cmm.require.text}")
-    @Pattern(regexp = "^\\d+$", message = "{storeEmp.mpNo}{cmm.require.number}")
-    private String mpNo;
+
+//    /** 변경비밀번호 */
+//    private String newPwd;
+
+//    /** 변경비밀번호확인 */
+//    @NotBlank(groups = UserPwChange.class, message = "{storeEmp.pwdConfirm}{cmm.require.text}")
+//    private String userPwdCfm;
+
+    /** 사용자 비밀번호(웹에서 사용) */
+    private String userPwd;
+
+    /** 사용자 비밀번호 확인*/
+    private String userPwdCfm;
+
+    /** 사용자 비밀번호 변경여부 */
+    private Boolean pwdChgFg;
+
+    /** 변경전 사용자 비밀번호 */
+    private String priorPwd;
+
     /** 웹사용여부 */
     private UseYn webUseYn;
+
+    /** 사용자아이디 */
+    private String userId;
+
+    /** 휴대폰번호 */
+    private String mpNo;
+
+    /** 재직여부 */
+    private ServiceFg serviceFg;
+
     /** SMS수신여부 */
-    private UseYn smsRecvYn;
+    private String smsRecvYn;
+
     /** 사용여부 */
     private UseYn useYn;
-    /** 매장사원 등록 여부 */
-    private Boolean empRegist = false;
-    /** 웹 사용자 등록 여부 */
-    private Boolean webUserRegist;
+
+    /** 등록아이피 */
+    private String regIp;
+
+    /** 권한 그룹 코드 */
+    private String authGrpCd;
+
     /** 전체기간 체크 */
     private boolean chkDt;
+
+
+    /**
+     * @return the hqOfficeCd
+     */
+
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
+
+    /**
+     * @param hqOfficeCd the hqOfficeCd to set
+     */
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
+    }
 
     /**
      * @return the storeCd
      */
+
     public String getStoreCd() {
         return storeCd;
     }
 
     /**
-     * @param storeCd
+     * @param storeCd the storeCd to set
      */
     public void setStoreCd(String storeCd) {
         this.storeCd = storeCd;
@@ -82,12 +123,13 @@ public class StoreEmpVO extends PageVO {
     /**
      * @return the empNo
      */
+
     public String getEmpNo() {
         return empNo;
     }
 
     /**
-     * @param empNo
+     * @param empNo the empNo to set
      */
     public void setEmpNo(String empNo) {
         this.empNo = empNo;
@@ -96,169 +138,211 @@ public class StoreEmpVO extends PageVO {
     /**
      * @return the empNm
      */
+
     public String getEmpNm() {
         return empNm;
     }
 
     /**
-     * @param empNm
+     * @param empNm the empNm to set
      */
     public void setEmpNm(String empNm) {
         this.empNm = empNm;
     }
 
     /**
-     * @return the userId
-     */
-    public String getUserId() {
-        return userId;
-    }
-
-    /**
-     * @param userId
-     */
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    /**
      * @return the empPwd
      */
+
     public String getEmpPwd() {
         return empPwd;
     }
 
     /**
-     * @param empPwd
+     * @param empPwd the empPwd to set
      */
     public void setEmpPwd(String empPwd) {
         this.empPwd = empPwd;
     }
 
     /**
-     * @return the newPwd
+     * @return the userPwd
      */
-    public String getNewPwd() {
-        return newPwd;
+
+    public String getUserPwd() {
+        return userPwd;
     }
 
     /**
-     * @param newPwd
+     * @param userPwd the userPwd to set
      */
-    public void setNewPwd(String newPwd) {
-        this.newPwd = newPwd;
+    public void setUserPwd(String userPwd) {
+        this.userPwd = userPwd;
     }
 
     /**
-     * @return the newPwdConfirm
+     * @return the userPwdCfm
      */
-    public String getNewPwdConfirm() {
-        return newPwdConfirm;
+
+    public String getUserPwdCfm() {
+        return userPwdCfm;
     }
 
     /**
-     * @param newPwdConfirm
+     * @param userPwdCfm the userPwdCfm to set
      */
-    public void setNewPwdConfirm(String newPwdConfirm) {
-        this.newPwdConfirm = newPwdConfirm;
+    public void setUserPwdCfm(String userPwdCfm) {
+        this.userPwdCfm = userPwdCfm;
     }
 
     /**
-     * @return the ServiceFg
+     * @return the pwdChgFg
      */
-    public ServiceFg getServiceFg() {
-        return serviceFg;
+
+    public Boolean getPwdChgFg() {
+        return pwdChgFg;
     }
 
     /**
-     * @param serviceFg
+     * @param pwdChgFg the pwdChgFg to set
      */
-    public void setServiceFg(ServiceFg serviceFg) {
-        this.serviceFg = serviceFg;
+    public void setPwdChgFg(Boolean pwdChgFg) {
+        this.pwdChgFg = pwdChgFg;
     }
 
     /**
-     * @return the mpNo
+     * @return the priorPwd
      */
-    public String getMpNo() {
-        return mpNo;
+
+    public String getPriorPwd() {
+        return priorPwd;
     }
 
     /**
-     * @param mpNo
+     * @param priorPwd the priorPwd to set
      */
-    public void setMpNo(String mpNo) {
-        this.mpNo = mpNo;
+    public void setPriorPwd(String priorPwd) {
+        this.priorPwd = priorPwd;
     }
 
     /**
      * @return the webUseYn
      */
+
     public UseYn getWebUseYn() {
         return webUseYn;
     }
 
     /**
-     * @param webUseYn
+     * @param webUseYn the webUseYn to set
      */
     public void setWebUseYn(UseYn webUseYn) {
         this.webUseYn = webUseYn;
     }
 
     /**
+     * @return the userId
+     */
+
+    public String getUserId() {
+        return userId;
+    }
+
+    /**
+     * @param userId the userId to set
+     */
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    /**
+     * @return the mpNo
+     */
+
+    public String getMpNo() {
+        return mpNo;
+    }
+
+    /**
+     * @param mpNo the mpNo to set
+     */
+    public void setMpNo(String mpNo) {
+        this.mpNo = mpNo;
+    }
+
+    /**
+     * @return the serviceFg
+     */
+
+    public ServiceFg getServiceFg() {
+        return serviceFg;
+    }
+
+    /**
+     * @param serviceFg the serviceFg to set
+     */
+    public void setServiceFg(ServiceFg serviceFg) {
+        this.serviceFg = serviceFg;
+    }
+
+    /**
      * @return the smsRecvYn
      */
-    public UseYn getSmsRecvYn() {
+
+    public String getSmsRecvYn() {
         return smsRecvYn;
     }
 
     /**
-     * @param smsRecvYn
+     * @param smsRecvYn the smsRecvYn to set
      */
-    public void setSmsRecvYn(UseYn smsRecvYn) {
+    public void setSmsRecvYn(String smsRecvYn) {
         this.smsRecvYn = smsRecvYn;
     }
 
     /**
      * @return the useYn
      */
+
     public UseYn getUseYn() {
         return useYn;
     }
 
     /**
-     * @param useYn
+     * @param useYn the useYn to set
      */
     public void setUseYn(UseYn useYn) {
         this.useYn = useYn;
     }
 
     /**
-     * @return the empRegist
+     * @return the regIp
      */
-    public Boolean getEmpRegist() {
-        return empRegist;
+
+    public String getRegIp() {
+        return regIp;
     }
 
     /**
-     * @param empRegist
+     * @param regIp the regIp to set
      */
-    public void setEmpRegist(Boolean empRegist) {
-        this.empRegist = empRegist;
+    public void setRegIp(String regIp) {
+        this.regIp = regIp;
     }
 
     /**
-     * @return webUserRegist
+     * @return the authGrpCd
      */
-    public Boolean getWebUserRegist() {
-        return webUserRegist;
+
+    public String getAuthGrpCd() {
+        return authGrpCd;
     }
 
     /**
-     * @param webUserRegist
+     * @param authGrpCd the authGrpCd to set
      */
-    public void setWebUserRegist(Boolean webUserRegist) {
-        this.webUserRegist = webUserRegist;
+    public void setAuthGrpCd(String authGrpCd) {
+        this.authGrpCd = authGrpCd;
     }
 
     /**
