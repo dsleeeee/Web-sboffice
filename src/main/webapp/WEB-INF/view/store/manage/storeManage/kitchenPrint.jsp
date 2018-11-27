@@ -1,6 +1,7 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <div id="kitchenPrintArea" style="display:none;" ng-controller="kitchenPrintCtrl">
 
@@ -8,7 +9,7 @@
   <c:import url="/WEB-INF/view/store/manage/storeManage/storeInfoTab.jsp">
   </c:import>
 
-  <div class="wj-TblWrap mt40 mr10">
+  <div class="wj-TblWrap mt20 mr10">
     <div class="oh mb10">
       <%-- 삭제 --%>
       <span class="fr ml5"><a id="btnkitchenPrintDel" href="#" class="btn_grayS2" ng-click="delete()"><s:message code="cmm.delete" /></a></span>
@@ -39,7 +40,7 @@
       <wj-flex-grid-column header="<s:message code="storeManage.prterOutputQty"/>" binding="prterOutputQty" is-read-only="true" width="80" align="center"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="storeManage.prterNetIp"/>" binding="prterNetIp" is-read-only="true" width="80"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="storeManage.prterNetPort"/>" binding="prterNetPort" is-read-only="true" width="80" align="center"></wj-flex-grid-column>
-      <wj-flex-grid-column header="<s:message code="storeManage.printCheckYn"/>" binding="printCheckYn" data-map="prterCheckDataMap" width="80" align="center"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="storeManage.prterCheckYn"/>" binding="prterCheckYn" data-map="useYnFgDataMap" width="80" align="center"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="storeManage.useYn"/>" binding="useYn" data-map="useYnFgDataMap" width="80" align="center"></wj-flex-grid-column>
     </wj-flex-grid>
   </div>

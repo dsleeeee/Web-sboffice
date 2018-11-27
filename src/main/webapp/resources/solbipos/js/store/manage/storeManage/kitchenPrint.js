@@ -18,7 +18,6 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
   $scope.prterKindDataMap;
   $scope.prterPortDataMap;
   $scope.prterSpeedDataMap;
-  $scope.prterCheckDataMap;
   $scope.useYnFgDataMap;
   $scope.posDataMap;
 
@@ -110,11 +109,11 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
         $scope.prterKindDataMap = new wijmo.grid.DataMap(prterKind, 'value', 'name');
         $scope.prterPortDataMap = new wijmo.grid.DataMap(prterPort, 'value', 'name');
         $scope.prterSpeedDataMap = new wijmo.grid.DataMap(prterSpeed, 'value', 'name');
-        $scope.prterCheckDataMap = new wijmo.grid.DataMap(useYn, 'value', 'name');
         $scope.useYnFgDataMap = new wijmo.grid.DataMap(useYn, 'value', 'name');
         $scope.posDataMap = new wijmo.grid.DataMap($scope.getPosList(), 'posNo', 'posCdNm');
 
         $scope.getKitchenPrintList();
+
       }
     });
   };
