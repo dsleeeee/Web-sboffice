@@ -8,7 +8,7 @@
   <c:import url="/WEB-INF/view/store/manage/storeManage/storeInfoTab.jsp">
   </c:import>
 
-  <div class="wj-TblWrap mr10">
+  <div class="wj-TblWrap mt40 mr10">
     <div class="oh mb10">
       <%-- 삭제 --%>
       <span class="fr ml5"><a id="btnkitchenPrintDel" href="#" class="btn_grayS2" ng-click="delete()"><s:message code="cmm.delete" /></a></span>
@@ -33,13 +33,14 @@
       <wj-flex-grid-column header="<s:message code="storeManage.kitchenPrint.posNo"/>" binding="posNo" data-map="posDataMap" width="80" align="center"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="storeManage.prterNo"/>" binding="prterNo" width="40" align="center"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="storeManage.prterNm"/>" binding="prterNm" ></wj-flex-grid-column>
-      <wj-flex-grid-column header="<s:message code="storeManage.prterKind"/>" binding="prterKindFg" data-map="prterKindDataMap" width="90" align="center"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="storeManage.prterKind"/>" binding="prterKindFg" data-map="prterKindDataMap" width="110" align="center"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="storeManage.prterPort"/>" binding="prterPortFg" data-map="prterPortDataMap" width="90" align="center"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="storeManage.prterSpeed"/>" binding="prterSpeedFg" data-map="prterSpeedDataMap" is-read-only="true" width="90" align="center"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="storeManage.prterOutputQty"/>" binding="prterOutputQty" is-read-only="true" width="80" align="center"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="storeManage.prterNetIp"/>" binding="prterNetIp" is-read-only="true" width="80"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="storeManage.prterNetPort"/>" binding="prterNetPort" is-read-only="true" width="80" align="center"></wj-flex-grid-column>
-      <wj-flex-grid-column header="<s:message code="storeManage.useYn"/>" binding="useYn" is-read-only="true" data-map="useYnFgDataMap" width="80" align="center"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="storeManage.printCheckYn"/>" binding="printCheckYn" data-map="prterCheckDataMap" width="80" align="center"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="storeManage.useYn"/>" binding="useYn" data-map="useYnFgDataMap" width="80" align="center"></wj-flex-grid-column>
     </wj-flex-grid>
   </div>
 
@@ -54,4 +55,4 @@ var prterPort   = ${cnv.getEnvCodeExcpAll("4031")};
 var prterSpeed  = ${cnv.getEnvCodeExcpAll("4032")};
 var useYn       = ${ccu.getCommCodeExcpAll("067")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/kitchenPrint.js?ver=20181107.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/kitchenPrint.js?ver=20181127.01" charset="utf-8"></script>

@@ -18,6 +18,7 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
   $scope.prterKindDataMap;
   $scope.prterPortDataMap;
   $scope.prterSpeedDataMap;
+  $scope.prterCheckDataMap;
   $scope.useYnFgDataMap;
   $scope.posDataMap;
 
@@ -109,6 +110,7 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
         $scope.prterKindDataMap = new wijmo.grid.DataMap(prterKind, 'value', 'name');
         $scope.prterPortDataMap = new wijmo.grid.DataMap(prterPort, 'value', 'name');
         $scope.prterSpeedDataMap = new wijmo.grid.DataMap(prterSpeed, 'value', 'name');
+        $scope.prterCheckDataMap = new wijmo.grid.DataMap(useYn, 'value', 'name');
         $scope.useYnFgDataMap = new wijmo.grid.DataMap(useYn, 'value', 'name');
         $scope.posDataMap = new wijmo.grid.DataMap($scope.getPosList(), 'posNo', 'posCdNm');
 
@@ -144,6 +146,8 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
     params.prterKind  ="0";
     params.prterPort  = "0";
     params.prterSpeed = "0";
+    params.prterCheckYn = "N";
+    params.useYn        = "Y";
 
     // 추가기능 수행 : 파라미터
     $scope._addRow(params);
