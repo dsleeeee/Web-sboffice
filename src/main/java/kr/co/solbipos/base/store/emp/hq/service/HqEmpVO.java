@@ -1,13 +1,7 @@
 package kr.co.solbipos.base.store.emp.hq.service;
 
+import kr.co.common.data.enums.UseYn;
 import kr.co.solbipos.application.common.service.PageVO;
-import kr.co.solbipos.base.store.emp.hq.validate.Dtl;
-import kr.co.solbipos.base.store.emp.hq.validate.Mod;
-import kr.co.solbipos.base.store.emp.hq.validate.Reg;
-import org.hibernate.validator.constraints.NotBlank;
-
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 
 /**
@@ -18,6 +12,7 @@ import javax.validation.constraints.Size;
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2018.08.14  정상화      최초생성
+ * @ 2018.11.21  김지은      UseYn 수정
  *
  * @author NHN한국사이버결제 KCP 정상화
  * @since 2018. 08.14
@@ -29,252 +24,309 @@ import javax.validation.constraints.Size;
 public class HqEmpVO extends PageVO {
 
     /** 본사사업장코드 */
-    String hqOfficeCd;
+    private String hqOfficeCd;
 
     /** 사원번호 */
-    @Size(groups = {Reg.class,Mod.class,Dtl.class}, max=4, message = "{hqEmp.size.fix}")
-    @NotBlank(groups = {Reg.class,Mod.class,Dtl.class},message = "{hqEmp.empNo}{cmm.require.text}")
-    @Pattern(groups = {Reg.class,Mod.class,Dtl.class}, regexp = "^[0-9]*$",
-            message = "{hqEmp.empNo}{cmm.require.number}")
-    String empNo;
+    private String empNo;
 
     /** 사원명 */
-    @Size(groups = {Reg.class}, max=10, message = "{cmm.size.max}")
-    @NotBlank(groups = {Reg.class},message = "{hqEmp.empNm}{cmm.require.text}")
-    String empNm;
+    private String empNm;
 
-    /** 사원비밀번호 */
-    String empPwd;
+    /** 사원비밀번호(포스에서 사용) */
+    private String empPwd;
 
-    /** 사용자 비밀번호 */
-    String userPwd;
+    /** 사용자 비밀번호(웹에서 사용) */
+    private String userPwd;
 
     /** 사용자 비밀번호 확인*/
-    String userPwdCfm;
+    private String userPwdCfm;
 
-    /** 신규 사용자 비밀번호 */
-    String newUserPwd;
+    /** 사용자 비밀번호 변경여부 */
+    private Boolean pwdChgFg;
 
-    /** 이전 사용자 비밀번호 */
-    String priorPwd;
+    /** 변경전 사용자 비밀번호 */
+    private String priorPwd;
 
     /** 웹사용여부 */
-    String webUseYn;
+    private UseYn webUseYn;
 
     /** 사용자아이디 */
-    @Size(groups = {Reg.class,Dtl.class}, max = 12, message = "{cmm.size.max}")
-    String userId;
+    private String userId;
 
     /** 휴대폰번호 */
-    @Size(groups = {Reg.class}, max=15, message = "{cmm.size.max}")
-    @NotBlank(groups = {Reg.class}, message = "{hqEmp.mpNo}{cmm.require.text}")
-    String mpNo;
+    private String mpNo;
 
     /** 재직구분 */
-    String serviceFg;
+    private String serviceFg;
 
     /** 재직구분 */
-    String serviceFgNm;
+    private String serviceFgNm;
 
     /** SMS수신여부 */
-    String smsRecvYn;
+    private String smsRecvYn;
 
     /** 사용여부 */
-    String useYn;
-
-    /** 등록일시 */
-    String regDt;
-
-    /** 등록아이디 */
-    String regId;
+    private UseYn useYn;
 
     /** 등록아이피 */
-    String regIp;
-
-    /** 수정일시 */
-    String modDt;
-
-    /** 수정아이디 */
-    String modId;
+    private String regIp;
 
     /** 권한 그룹 코드 */
-    String authGrpCd;
+    private String authGrpCd;
 
     /** 전체기간 체크 */
     private boolean chkDt;
+
+    /**
+     * @return the hqOfficeCd
+     */
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
     }
 
+    /**
+     * @param hqOfficeCd the hqOfficeCd to set
+     */
     public void setHqOfficeCd(String hqOfficeCd) {
         this.hqOfficeCd = hqOfficeCd;
     }
+
+    /**
+     * @return the empNo
+     */
 
     public String getEmpNo() {
         return empNo;
     }
 
+    /**
+     * @param empNo the empNo to set
+     */
     public void setEmpNo(String empNo) {
         this.empNo = empNo;
     }
+
+    /**
+     * @return the empNm
+     */
 
     public String getEmpNm() {
         return empNm;
     }
 
+    /**
+     * @param empNm the empNm to set
+     */
     public void setEmpNm(String empNm) {
         this.empNm = empNm;
     }
+
+    /**
+     * @return the empPwd
+     */
 
     public String getEmpPwd() {
         return empPwd;
     }
 
+    /**
+     * @param empPwd the empPwd to set
+     */
     public void setEmpPwd(String empPwd) {
         this.empPwd = empPwd;
     }
+
+    /**
+     * @return the userPwd
+     */
 
     public String getUserPwd() {
         return userPwd;
     }
 
+    /**
+     * @param userPwd the userPwd to set
+     */
     public void setUserPwd(String userPwd) {
         this.userPwd = userPwd;
     }
+
+    /**
+     * @return the userPwdCfm
+     */
 
     public String getUserPwdCfm() {
         return userPwdCfm;
     }
 
+    /**
+     * @param userPwdCfm the userPwdCfm to set
+     */
     public void setUserPwdCfm(String userPwdCfm) {
         this.userPwdCfm = userPwdCfm;
     }
 
-    public String getNewUserPwd() {
-        return newUserPwd;
+    /**
+     * @return the pwdChgFg
+     */
+
+    public Boolean getPwdChgFg() {
+        return pwdChgFg;
     }
 
-    public void setNewUserPwd(String newUserPwd) {
-        this.newUserPwd = newUserPwd;
+    /**
+     * @param pwdChgFg the pwdChgFg to set
+     */
+    public void setPwdChgFg(Boolean pwdChgFg) {
+        this.pwdChgFg = pwdChgFg;
     }
+
+    /**
+     * @return the priorPwd
+     */
 
     public String getPriorPwd() {
         return priorPwd;
     }
 
+    /**
+     * @param priorPwd the priorPwd to set
+     */
     public void setPriorPwd(String priorPwd) {
         this.priorPwd = priorPwd;
     }
 
-    public String getWebUseYn() {
+    /**
+     * @return the webUseYn
+     */
+
+    public UseYn getWebUseYn() {
         return webUseYn;
     }
 
-    public void setWebUseYn(String webUseYn) {
+    /**
+     * @param webUseYn the webUseYn to set
+     */
+    public void setWebUseYn(UseYn webUseYn) {
         this.webUseYn = webUseYn;
     }
+
+    /**
+     * @return the userId
+     */
 
     public String getUserId() {
         return userId;
     }
 
+    /**
+     * @param userId the userId to set
+     */
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
+    /**
+     * @return the mpNo
+     */
 
     public String getMpNo() {
         return mpNo;
     }
 
+    /**
+     * @param mpNo the mpNo to set
+     */
     public void setMpNo(String mpNo) {
         this.mpNo = mpNo;
     }
+
+    /**
+     * @return the serviceFg
+     */
 
     public String getServiceFg() {
         return serviceFg;
     }
 
+    /**
+     * @param serviceFg the serviceFg to set
+     */
     public void setServiceFg(String serviceFg) {
         this.serviceFg = serviceFg;
     }
+
+    /**
+     * @return the serviceFgNm
+     */
 
     public String getServiceFgNm() {
         return serviceFgNm;
     }
 
+    /**
+     * @param serviceFgNm the serviceFgNm to set
+     */
     public void setServiceFgNm(String serviceFgNm) {
         this.serviceFgNm = serviceFgNm;
     }
+
+    /**
+     * @return the smsRecvYn
+     */
 
     public String getSmsRecvYn() {
         return smsRecvYn;
     }
 
+    /**
+     * @param smsRecvYn the smsRecvYn to set
+     */
     public void setSmsRecvYn(String smsRecvYn) {
         this.smsRecvYn = smsRecvYn;
     }
 
-    public String getUseYn() {
+
+    /**
+     * @return the useYn
+     */
+
+    public UseYn getUseYn() {
         return useYn;
     }
 
-    public void setUseYn(String useYn) {
+    /**
+     * @param useYn the useYn to set
+     */
+    public void setUseYn(UseYn useYn) {
         this.useYn = useYn;
     }
-
-    @Override
-    public String getRegDt() {
-        return regDt;
-    }
-
-    @Override
-    public void setRegDt(String regDt) {
-        this.regDt = regDt;
-    }
-
-    @Override
-    public String getRegId() {
-        return regId;
-    }
-
-    @Override
-    public void setRegId(String regId) {
-        this.regId = regId;
-    }
+    /**
+     * @return the regIp
+     */
 
     public String getRegIp() {
         return regIp;
     }
 
+    /**
+     * @param regIp the regIp to set
+     */
     public void setRegIp(String regIp) {
         this.regIp = regIp;
     }
-
-    @Override
-    public String getModDt() {
-        return modDt;
-    }
-
-    @Override
-    public void setModDt(String modDt) {
-        this.modDt = modDt;
-    }
-
-    @Override
-    public String getModId() {
-        return modId;
-    }
-
-    @Override
-    public void setModId(String modId) {
-        this.modId = modId;
-    }
+    /**
+     * @return the authGrpCd
+     */
 
     public String getAuthGrpCd() {
         return authGrpCd;
     }
 
+    /**
+     * @param authGrpCd the authGrpCd to set
+     */
     public void setAuthGrpCd(String authGrpCd) {
         this.authGrpCd = authGrpCd;
     }

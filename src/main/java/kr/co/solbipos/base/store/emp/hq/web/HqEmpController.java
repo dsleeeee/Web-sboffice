@@ -8,20 +8,19 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.store.emp.hq.service.HqEmpService;
 import kr.co.solbipos.base.store.emp.hq.service.HqEmpVO;
 import kr.co.solbipos.base.store.emp.hq.service.enums.HqEmpResult;
-import kr.co.solbipos.base.store.emp.hq.validate.Dtl;
-import kr.co.solbipos.base.store.emp.hq.validate.Mod;
-import kr.co.solbipos.base.store.emp.hq.validate.Reg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.*;
@@ -61,69 +60,77 @@ public class HqEmpController {
 
     /**
      * 본사사원 리스트 화면
+     * @param model
      * @return the string
      */
     @RequestMapping(value = "/list.sb", method = RequestMethod.GET)
-    public String view() {
+    public String view(Model model) {
         return "base/store/emp/hqEmp";
     }
 
 
     /**
-     * 본사사원 리스트 조회
+     * 본사 사원 목록 조회
      * @param hqEmpVO
-     * @param bindingResult
+     * @param   request
+     * @param   response
+     * @param   model
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "/list.sb", method = RequestMethod.POST)
-    public Result view(HqEmpVO hqEmpVO, BindingResult bindingResult) {
+    public Result view(HttpServletRequest request, HqEmpVO hqEmpVO,
+        HttpServletResponse response, Model model) {
 
-        if (bindingResult.hasErrors()) {
-            return returnJsonBindingFieldError(bindingResult);
-        }
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<String>> list = hqEmpService.getHqEmpList(hqEmpVO);
+        List<DefaultMap<String>> list = hqEmpService.getHqEmpList(hqEmpVO, sessionInfoVO);
 
         return returnListJson(Status.OK, list,hqEmpVO);
     }
 
     /**
+     * 본사사원정보 상세 조회
+     * @param hqEmpVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/detail.sb", method = RequestMethod.POST)
+    public Result getDtlInfo(HqEmpVO hqEmpVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        DefaultMap<String> result = hqEmpService.getHqEmpDtlInfo(hqEmpVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
      * 본사사원정보 등록
      * @param hqEmpVO
-     * @param bindingResult
+     * @param   request
+     * @param   response
+     * @param   model
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "/regist.sb", method = RequestMethod.POST)
-    public Result regist(@RequestBody @Validated(Reg.class) HqEmpVO hqEmpVO, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return returnJsonBindingFieldError(bindingResult);
-        }
+    public Result regist(@RequestBody HqEmpVO hqEmpVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
         HqEmpResult hqEmpResult = hqEmpService.insertHqEmpInfo(hqEmpVO,sessionInfoVO);
 
         return returnJson(Status.OK, hqEmpResult);
     }
 
     /**
-     * 본사사원정보 사원번호조회
-     * @param hqEmpVO
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping(value = "/chkHqEmpNo.sb", method = RequestMethod.POST)
-    public Result chkHqEmpNo(HqEmpVO hqEmpVO) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
-        HqEmpResult hqEmpResult = hqEmpService.getHqEmpNoCnt(hqEmpVO, sessionInfoVO);
-
-        return returnJson(Status.OK, hqEmpResult);
-    }
-
-    /**
-     * 본사사원정보 웹유저아이디조회
+     * 본사사원정보 웹 사용자 ID 조회 (중복체크)
      * @param hqEmpVO
      * @return
      */
@@ -137,40 +144,17 @@ public class HqEmpController {
     }
 
     /**
-     * 본사사원정보 상세
-     * @param hqEmpVO
-     * @param bindingResult
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping(value = "/detail.sb", method = RequestMethod.POST)
-    public Result getDtlInfo(@Validated(Dtl.class)HqEmpVO hqEmpVO, BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()) {
-            return returnJsonBindingFieldError(bindingResult);
-        }
-
-        DefaultMap<String> result = hqEmpService.getHqEmpDtlInfo(hqEmpVO);
-
-        return returnJson(Status.OK, result);
-    }
-
-    /**
      * 본사사원정보 수정
      * @param hqEmpVO
-     * @param bindingResult
+     * @param   request
+     * @param   response
+     * @param   model
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "/save.sb", method = RequestMethod.POST)
-    public Result save(@RequestBody @Validated(Reg.class) HqEmpVO hqEmpVO, BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()) {
-
-            LOGGER.info( "bindingResult : " + bindingResult.hasErrors() );
-
-            return returnJsonBindingFieldError(bindingResult);
-        }
+    public Result save(@RequestBody HqEmpVO hqEmpVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
         HqEmpResult hqEmpResult = hqEmpService.saveHqEmpInfo(hqEmpVO,sessionInfoVO);
@@ -178,25 +162,24 @@ public class HqEmpController {
         return returnJson(Status.OK, hqEmpResult);
     }
 
-    /**
-     * 비밀번호 변경
-     * @param hqEmpVO
-     * @param bindingResult
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping(value = "/modifyPassword.sb", method = RequestMethod.POST)
-    public Result modifyPassword(@Validated(Mod.class) HqEmpVO hqEmpVO, BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()) {
-            return returnJsonBindingFieldError(bindingResult);
-        }
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
-        HqEmpResult hqEmpResult = hqEmpService.modifyPassword(hqEmpVO,sessionInfoVO);
-
-        return returnJson(Status.OK, hqEmpResult);
-    }
+//    /**
+//     * 비밀번호 변경
+//     * @param hqEmpVO
+//     * @param   request
+//     * @param   response
+//     * @param   model
+//     * @return
+//     */
+//    @ResponseBody
+//    @RequestMapping(value = "/modifyPassword.sb", method = RequestMethod.POST)
+//    public Result modifyPassword(HqEmpVO hqEmpVO, HttpServletRequest request,
+//        HttpServletResponse response, Model model) {
+//
+//        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+//        HqEmpResult hqEmpResult = hqEmpService.modifyPassword(hqEmpVO,sessionInfoVO);
+//
+//        return returnJson(Status.OK, hqEmpResult);
+//    }
 
 
 }

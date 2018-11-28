@@ -17,7 +17,7 @@
     <!--
         TABLE    : TB_MS_STORE, TB_HQ_OFFICE
         PARAM    : storeManageVO
-        COMMENTS : 매장목록을 조회한다.
+        COMMENTS : 벤더 목록을 조회한다.
     -->
     <select id="getVendorList" resultType="DefaultMap">
         /* USE : TerminalManageMapper.getVendorList */

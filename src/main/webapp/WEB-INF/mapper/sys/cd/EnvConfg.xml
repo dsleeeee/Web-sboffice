@@ -11,6 +11,32 @@
 -->
 <mapper namespace="kr.co.solbipos.sys.cd.envconfg.service.impl.EnvConfgMapper">
 
+
+    <!-- 환경그룹 목록 조회 -->
+    <!--
+      TABLE    : TB_CM_NMCODE
+      COMMENTS : 환경그룹 목록을 조회한다.
+    -->
+    <select id="getEnvstGrpList" parameterType="String" resultType="DefaultMap">
+        /* USE : EnvConfgMapper.getEnvstGrpList */
+        SELECT
+            NMCODE_GRP_CD,
+            NMCODE_CD,
+            NMCODE_NM,
+            NMCODE_ITEM_1,
+            NMCODE_ITEM_2,
+            USE_COL_NM,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        FROM
+            TB_CM_NMCODE
+        WHERE
+            NMCODE_GRP_CD = #{nmcodeGrpCd}
+        ORDER BY NMCODE_CD ASC
+    </select>
+
     <!-- 대표명칭 코드목록 조회 -->
     <!--
         TABLE    : TB_CM_ENVST
@@ -76,7 +102,7 @@
         SET
             ENVST_NM = #{envstNm,jdbcType=VARCHAR},
             ENVST_FG = #{envstFg},
-            ENVST_GRP_CD = #{envstGrpCd},
+            ENVST_GRP_CD = (SELECT NMCODE_CD FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD  = '004' AND NMCODE_NM = #{envstGrpCdNm} AND NMCODE_ITEM_1 = #{envstFg}),
             DIRCT_IN_YN = #{dirctInYn},
             USE_YN = #{useYn},
             REMARK = #{remark},
@@ -112,7 +138,7 @@
             #{envstCd},
             #{envstNm,jdbcType=VARCHAR},
             #{envstFg},
-            #{envstGrpCd},
+            (SELECT NMCODE_CD FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD  = '004' AND NMCODE_NM = #{envstGrpCdNm} AND NMCODE_ITEM_1 = #{envstFg}),
             #{dirctInYn},
             #{targtFg},
             #{useYn},

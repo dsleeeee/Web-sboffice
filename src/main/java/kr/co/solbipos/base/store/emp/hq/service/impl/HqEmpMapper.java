@@ -27,10 +27,7 @@ import java.util.List;
 public interface HqEmpMapper {
 
     /** 본사 사원정보 리스트 조회*/
-    <E>List<E> getHqEmpList(HqEmpVO hqEmpVO);
-
-    /** 본사 사원번호 조회*/
-    int getHqEmpNoCnt(HqEmpVO hqEmpVO);
+    List<DefaultMap<String>> getHqEmpList(HqEmpVO hqEmpVO);
 
     /** 본사 웹유저아이디 조회*/
     int getHqUserIdCnt(HqEmpVO hqEmpVO);

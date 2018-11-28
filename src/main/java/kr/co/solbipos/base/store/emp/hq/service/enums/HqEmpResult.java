@@ -5,10 +5,23 @@ import kr.co.common.data.enums.CodeEnum;
 import kr.co.common.data.handler.CodeEnumTypeHandler;
 import org.apache.ibatis.type.MappedTypes;
 
+
 /**
- * 본사사원정보 등록 결과
- * 
- * @author sanghwaj
+ * @Class Name : HqEmpResult.java
+ * @Description : 기초관리 > 매장관리 > 본사사원정보 등록 결과
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2018.08.14  정상화      최초생성
+ * @ 2018.11.20  김지은      angular 방식으로 수정
+ *
+ * @author NHN한국사이버결제 KCP 정상화
+ * @since 2018. 08.14
+ * @version 1.0
+ * @see
+ *
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 public enum HqEmpResult implements CodeEnum  {
 
@@ -30,7 +43,6 @@ public enum HqEmpResult implements CodeEnum  {
     USER_ID_REGEXP("USER_ID_REGEXP"),
     /** 사원번호 정책이 맞지 않음 */
     EMP_NO_REGEXP("EMP_NO_REGEXP")
-
     ;
 
 
@@ -39,14 +51,14 @@ public enum HqEmpResult implements CodeEnum  {
     HqEmpResult(String code) {
         this.code = code;
     }
-   
+
     @MappedTypes(HqEmpResult.class)
     public static class TypeHandler extends CodeEnumTypeHandler<HqEmpResult> {
         public TypeHandler() {
         super(HqEmpResult.class);
         }
     }
-     
+
     @Override
     @JsonValue
     public String getCode() {

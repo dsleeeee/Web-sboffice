@@ -13,6 +13,31 @@
  */
 var app = agrid.getApp();
 
+var allEnvstGrp  = new Array();
+var cmmEnvstGrp  = new Array();
+var foodEnvstGrp = new Array();
+var posEnvstGrp  = new Array();
+
+// dataMap 에서 name 만을 dataMap으로 사용. (name과 value 동시 사용시 오류) // todo 추후 수정 필요
+for(var i in envstGrpCdNm) {
+  // allEnvstGrp.push(envstGrpCdNm[i].name);
+  if(envstGrpCdNm[i].nmcodeItem1 === '00'){
+    cmmEnvstGrp.push(envstGrpCdNm[i].nmcodeNm);
+  } else if(envstGrpCdNm[i].nmcodeItem1 === '01'){
+    foodEnvstGrp.push(envstGrpCdNm[i].nmcodeNm);
+  } else if(envstGrpCdNm[i].nmcodeItem1 === '03') {
+    posEnvstGrp.push(envstGrpCdNm[i].nmcodeNm);
+  }
+}
+
+// console.log('envstGrpCdNm', envstGrpCdNm)
+// console.log('allEnvstGrp',allEnvstGrp);
+// console.log('cmmEnvstGrp',cmmEnvstGrp);
+// console.log('foodEnvstGrp',foodEnvstGrp);
+// console.log('posEnvstGrp',posEnvstGrp);
+
+
+
 /**
  * 대표명칭 그리드 생성
  */
@@ -25,11 +50,13 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
   angular.extend(this, new RootController('representCtrl', $scope, $http, true));
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
+
     // picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("representCtrl");
     // 그리드 DataMap 설정
     $scope.envstFgNmDataMap = new wijmo.grid.DataMap(envstFgNm, 'value', 'name');
-    $scope.envstGrpCdNmDataMap = new wijmo.grid.DataMap(envstGrpCdNm, 'value', 'name');
+    // $scope.envstGrpCdNmDataMap = new wijmo.grid.DataMap(envstGrpCdNm, 'value', 'name');
+    $scope.envstGrpCdNmDataMap = allEnvstGrp;
     $scope.targtFgDataMap = new wijmo.grid.DataMap(targtFg, 'value', 'name');
     $scope.dirctInYnDataMap = new wijmo.grid.DataMap([{id: "Y", name: "직접"}, {
       id: "N",
@@ -116,10 +143,35 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#btnAddRepresent").show();
       $("#btnDelRepresent").show();
       $("#btnSaveRepresent").show();
+
+      $scope.flex.collectionView.commitEdit();
+
     });
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
+
+  // 설정그룹 변경시 환경그룹 dataMap 변경 ( //todo 추후 유통 추가)
+  $scope.changeEnvstFg = function(s, e){
+    if (e.panel === s.cells) {
+      var col = s.columns[e.col];
+      if (col.binding === "envstGrpCdNm") {
+        var changeEnvstFg = s.rows[e.row].dataItem.envstFg;
+        switch (changeEnvstFg) {
+          case '00':
+            col.dataMap = cmmEnvstGrp;
+            break;
+          case '01':
+            col.dataMap = foodEnvstGrp;
+            break;
+          case '03':
+            col.dataMap = posEnvstGrp;
+            break;
+        }
+      }
+    }
+  };
+
   // 대표명칭 그리드 행 추가
   $scope.addRow = function() {
     // 파라미터 설정

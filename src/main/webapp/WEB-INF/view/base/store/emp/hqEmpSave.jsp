@@ -2,582 +2,221 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
-<div id="hqRegDim" class="fullDimmed" style="display:none;"></div>
-<div id="hqRegLayer" class="layer" style="display:none;">
-  <div class="layer_inner">
-    <div class="title w800px">
-      <p id="popTitle" class="tit"></p>
-      <a href="#" class="btn_close"></a>
-      <div class="con">
-        <%-- 사원기초정보 탭 --%>
-        <div class="tabType1">
-          <ul>
-            <%-- 사원기초정보 탭 --%>
-            <li><a id="hqEmpInfoTab" href="#" class="on"><s:message code="hqEmp.hqEmpInfo" /></a></li>
-            <%-- 메뉴권한 탭 --%>
-            <%-- --%>
-          </ul>
-        </div>
-        <%-- 등록/수정 --%>
-        <div id="regArea" class="mt20 sc" style="display:none;">
-          <form id="regForm">
-            <table class="tblType01">
-              <colgroup>
-                <col class="w15" />
-                <col class="w35" />
-                <col class="w15" />
-                <col class="w35" />
-              </colgroup>
-              <tbody>
-                <tr>
-                  <%-- 사원번호 --%>
-                  <th>
-                    <div class="impWrap"><s:message code="hqEmp.empNo" /><em class="imp">*</em></div>
-                  </th>
-                  <td>
-                    <span class="w50 txtIn">
-                      <div class="sb-select">
-                        <div id="rEmpNo"></div>
-                      </div>
-                    </span>
-                    <%-- 중복체크 --%>
-                    <span>
-                      <a href="#" class="btn_grayS" id="btnChkHqEmpNo"><s:message code="hqEmp.chk.duplicate" /></a>
-                    </span>
-                  </td>
-                  <%-- 사원명 --%>
-                  <th>
-                    <div class="impWrap"><s:message code="hqEmp.empNm" /><em class="imp">*</em></div>
-                  </th>
-                  <td>
-                    <div class="sb-select">
-                      <div id="rEmpNm" class="sb-input"></div>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <%-- SMS수신여부 --%>
-                  <th>
-                    <div class="impWrap"><s:message code="hqEmp.smsRecvYn" /><em class="imp">*</em></div>
-                  </th>
-                  <td>
-                    <div class="sb-select">
-                      <div id="rSmsRecvYn"></div>
-                    </div>
-                  </td>
-                  <%-- 웹사용자ID --%>
-                  <th>
-                    <div class="impWrap"><s:message code="hqEmp.userId" /><em class="imp">*</em></div>
-                  </th>
-                  <td>
-                    <span class="w50 txtIn">
-                      <div class="sb-select">
-                        <div id="rUserId"></div>
-                      </div>
-                    </span>
-                    <%-- 중복체크 --%>
-                    <span class="txtIn">
-                      <a href="#" class="btn_grayS" id="btnChkHqUserId"><s:message code="hqEmp.chk.duplicate" /></a>
-                    </span>
-                  </td>
-                </tr>
-                <tr>
-                  <%-- 비밀번호 --%>
-                  <th>
-                    <div class="impWrap"><s:message code="hqEmp.pwd" /><em class="imp">*</em></div>
-                  </th>
-                  <td>
-                    <span class="w45 txtIn" >
-                      <div class="sb-select">
-                        <input class="pw" type="password" id="rUserPwd" name="rUserPwd" maxlength="25">
-                      </div>
-                    </span>
-                    <span class="w45 txtIn">
-                      <div class="sb-select">
-                        <input class="pw" type="password" id="rUserPwdCfm" name="rUserPwdCfm"
-                        placeholder="<s:message code='hqEmp.pwdChk'/>" maxlength="25">
-                      </div>
-                    </span>
-                  </td>
-                  <%-- 웹사용여부 --%>
-                  <th>
-                    <div class="impWrap"><s:message code="hqEmp.webUseYn" /><em class="imp">*</em></div>
-                  </th>
-                  <td>
-                    <div class="sb-select">
-                      <div id="rWebUseYn"></div>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <%-- 재직여부 --%>
-                  <th>
-                    <div class="impWrap"><s:message code="hqEmp.serviceFg" /><em class="imp">*</em></div>
-                  </th>
-                  <td>
-                    <div class="sb-select">
-                      <div id="rServiceFg"></div>
-                    </div>
-                  </td>
-                  <%-- 휴대폰번호 --%>
-                  <th>
-                    <div class="impWrap"><s:message code="hqEmp.mpNo" /><em class="imp">*</em></div>
-                  </th>
-                  <td>
-                    <div class="sb-select">
-                      <div id="rMpNo"></div>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </form>
-        </div>
-      </div>
+<%-- 본사 사원 신규등록 & 수정 팝업 --%>
+<wj-popup control="hqEmpRegistLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:700px;">
+  <div class="wj-dialog wj-dialog-columns" ng-controller="hqEmpRegistCtrl">
+  <form name="empForm">
+    <div class="wj-dialog-header wj-dialog-header-font">
+      <s:message code="hqEmp.hqEmpInfo"/><span>{{hqEmpRegistInfo.empInfo}}</span>
+      <a href="#" class="wj-hide btn_close"></a>
+    </div>
 
-      <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
-      <%--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX--%>
+    <div class="wj-dialog-body sc2" style="overflow-y: hidden;">
+      <h3 class="h3_tbl brt"><s:message code="hqEmp.hqEmpInfo"/></h3>
 
-      <%-- 공통 버튼 영역 --%>
+      <%-- 상세 --%>
+      <div id="dtlArea" style="height: 266px; overflow-y: auto;">
 
-      <div class="btnSet">
-        <%-- 등록 --%>
-        <span><a href="#" class="btn_blue" id="btnReg" style="display:none;"><s:message code="cmm.new.add" /></a></span>
-        <%-- 수정 --%>
-        <span><a href="#" class="btn_blue" id="btnSave" style="display:none;"><s:message code="cmm.save" /></a></span>
-        <%-- 닫기 --%>
-        <span><a href="#" class="btn_gray" id="btnClose"><s:message code="cmm.close" /></a></span>
+        <table class="tblType01">
+          <colgroup>
+            <col class="w20" />
+            <col class="w30" />
+            <col class="w20" />
+            <col class="w30" />
+          </colgroup>
+          <tbody>
+          <tr>
+            <%-- 사원번호 --%>
+            <th>
+              <div class="impWrap"><s:message code="hqEmp.empNo" /></div>
+            </th>
+            <td>
+              <input type="text" name="empNo" class="sb-input w100" ng-model="hqEmpRegistInfo.empNo" placeholder="사원번호는 자동생성 됩니다." disabled />
+            </td>
+            <%-- 사원명 --%>
+            <th>
+              <div class="impWrap"><s:message code="hqEmp.empNm" /></div>
+            </th>
+            <td>
+              <input type="text" id="_empNm" name="empNm" class="sb-input w100"
+                     ng-model="hqEmpRegistInfo.empNm"
+                     required
+                     popover-enable="empForm.empNm.$invalid"
+                     popover-placement="bottom-left"
+                     popover-trigger="'mouseenter'"
+                     uib-popover="<s:message code="hqEmp.empNm" />은(는) 필수 입력항목 입니다."/>
+            </td>
+          </tr>
+          <tr>
+            <%-- 웹사용여부 --%>
+            <th>
+              <div class="impWrap"><s:message code="hqEmp.webUseYn" /></div>
+            </th>
+            <td>
+              <div class="sb-select">
+                <wj-combo-box id="_webUseYn" name="webUseYn"
+                              control="hqEmpWebUseYnCombo"
+                              ng-model="hqEmpRegistInfo.webUseYn"
+                              items-source="_getComboData('hqEmpWebUseYnComboData')"
+                              display-member-path="name"
+                              selected-value-path="value"
+                              is-editable="false"
+                              initialized="_initComboBox(s)"
+                              required
+                              popover-enable="empForm.webUseYn.$invalid"
+                              popover-placement="bottom-left"
+                              popover-trigger="'mouseenter'"
+                              uib-popover="<s:message code="hqEmp.webUseYn" />은(는) 필수 입력항목 입니다.">
+                </wj-combo-box>
+              </div>
+            </td>
+            <th></th>
+            <td></td>
+          </tr>
+          <tr ng-if="hqEmpRegistInfo.webUseYn == 'Y'">
+            <%-- 웹사용자ID --%>
+            <th>
+              <div class="impWrap"><s:message code="hqEmp.userId" /></div>
+            </th>
+            <td colspan="3">
+              <input type="text" id="_userId" name="userId" class="w100 sb-input" style="width:30%"
+                     maxlength="20"
+                     ng-model="hqEmpRegistInfo.userId"
+                     required
+                     ng-readonly="newEmpYn == false"
+                     popover-enable="empForm.userId.$invalid"
+                     popover-placement="bottom-left"
+                     popover-trigger="'mouseenter'"
+                     uib-popover="<s:message code="hqEmp.userId" />은(는) 필수 입력항목 입니다."/>
+              <input type="hidden" ng-model="hqEmpRegistInfo.originalWebUserId"/>
+              <%-- 중복체크 --%>
+              <span class="txtIn" ng-show="hqEmpRegistInfo.originalWebUserId == '' || hqEmpRegistInfo.originalWebUserId == undefined">
+                <a href="#" class="btn_grayS" ng-click="checkDuplicate()"><s:message code="hqEmp.chk.duplicate" /></a>
+              </span>
+            </td>
+          </tr>
+          <tr ng-if="hqEmpRegistInfo.webUseYn == 'Y'">
+            <%-- 웹 사용 비밀번호 --%>
+            <th>
+              <div class="impWrap"><s:message code="hqEmp.pwd" /></div>
+            </th>
+            <td colspan="3">
+              <input type="password" id="_userPwd" name="userPwd" class="sb-input w30" style="width: 30%"
+                     ng-model="hqEmpRegistInfo.userPwd"
+                     ng-required="newEmpYn == true || (pwdChgFg == true) || hqEmpRegistInfo.originalWebUserId == '' || hqEmpRegistInfo.originalWebUserId == undefined"
+                     ng-change="pwdChgFg == true"
+                     popover-enable="empForm.userPwd.$invalid"
+                     popover-placement="bottom-left"
+                     popover-trigger="'mouseenter'"
+                     placeholder="<s:message code="hqEmp.pwd" />"
+                     uib-popover="<s:message code="hqEmp.pwd" />은(는) 필수 입력항목 입니다."/>
+              <input type="password" id="_userPwdCfm" name="userPwdCfm" class="sb-input ml10 w30" style="width: 30%"
+                     ng-model="hqEmpRegistInfo.userPwdCfm"
+                     ng-required="newEmpYn == true || (pwdChgFg == true) || hqEmpRegistInfo.originalWebUserId == '' || hqEmpRegistInfo.originalWebUserId == undefined"
+                     ng-change="pwdChgFg == true"
+                     popover-enable="empForm.userPwd.$invalid"
+                     popover-placement="bottom-left"
+                     popover-trigger="'mouseenter'"
+                     placeholder="<s:message code="hqEmp.pwd.confirm" />"
+                     uib-popover="<s:message code="hqEmp.pwd.confirm" />은(는) 필수 입력항목 입니다."/>
+            </td>
+          </tr>
+          <tr>
+            <%-- 휴대폰번호 --%>
+            <th>
+              <div class="impWrap"><s:message code="hqEmp.mpNo" /></div>
+            </th>
+            <td>
+              <input type="text" id="_mpNo" name="mpNo" class="sb-input w100"
+                     ng-model="hqEmpRegistInfo.mpNo"
+                     required
+                     popover-enable="empForm.mpNo.$invalid"
+                     popover-placement="bottom-left"
+                     popover-trigger="'mouseenter'"
+                     uib-popover="<s:message code="hqEmp.mpNo" />은(는) 필수 입력항목 입니다."/>
+            </td>
+            <%-- SMS수신여부 --%>
+            <th>
+              <div class="impWrap"><s:message code="hqEmp.smsRecvYn" /></div>
+            </th>
+            <td>
+              <div class="sb-select">
+              <wj-combo-box id="_smsRecvYn" name="smsRecvYn"
+                            ng-model="hqEmpRegistInfo.smsRecvYn"
+                            items-source="_getComboData('hqEmpSmsRecvYnComboData')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)"
+                            required
+                            popover-enable="empForm.smsRecvYn.$invalid"
+                            popover-placement="bottom-left"
+                            popover-trigger="'mouseenter'"
+                            uib-popover="<s:message code="hqEmp.smsRecvYn" />은(는) 필수 입력항목 입니다.">
+              </wj-combo-box>
+            </div>
+            </td>
+          </tr>
+          <tr>
+            <%-- 재직여부 --%>
+            <th>
+              <div class="impWrap"><s:message code="hqEmp.serviceFg" /></div>
+            </th>
+            <td>
+              <div class="sb-select">
+                <wj-combo-box id="_serviceFg" name="serviceFg"
+                              ng-model="hqEmpRegistInfo.serviceFg"
+                              items-source="_getComboData('hqEmpServiceFgComboData')"
+                              display-member-path="name"
+                              selected-value-path="value"
+                              is-editable="false"
+                              initialized="_initComboBox(s)"
+                              required
+                              popover-enable="empForm.serviceFg.$invalid"
+                              popover-placement="bottom-left"
+                              popover-trigger="'mouseenter'"
+                              uib-popover="<s:message code="hqEmp.serviceFg" />은(는) 필수 입력항목 입니다.">
+                </wj-combo-box>
+              </div>
+            </td>
+            <%-- 사용여부 --%>
+            <th>
+              <div class="impWrap"><s:message code="hqEmp.useYn" /></div>
+            </th>
+            <td>
+              <div class="sb-select">
+                <wj-combo-box id="_useYnFg" name="useYnFg"
+                              ng-model="hqEmpRegistInfo.useYn"
+                              items-source="_getComboData('hqEmpUseYnFgComboData')"
+                              display-member-path="name"
+                              selected-value-path="value"
+                              is-editable="false"
+                              initialized="_initComboBox(s)"
+                              required
+                              popover-enable="empForm.useYnFg.$invalid"
+                              popover-placement="bottom-left"
+                              popover-trigger="'mouseenter'"
+                              uib-popover="<s:message code="hqEmp.useYn" />은(는) 필수 입력항목 입니다.">
+                </wj-combo-box>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
       </div>
     </div>
+
+    <div class="wj-dialog-footer">
+      <%-- 등록 regist() --%>
+      <button class="btn btn_blue" ng-click="empForm.$valid && regist()" ng-show="newEmpYn == true"><s:message code="cmm.new.add"/></button>
+      <%-- 저장 --%>
+      <button class="btn btn_blue" ng-click="empForm.$valid && save()" ng-show="newEmpYn == false"><s:message code="cmm.save"/></button>
+      <%-- 닫기 --%>
+      <button class="btn btn_gray" ng-click="close()"><s:message code="cmm.close"/></button>
+    </div>
+  </form>
   </div>
-</div>
+</wj-popup>
 
-<script>
-
-  var smsRecvYnData  = ${ccu.getCommCodeExcpAll("072")};
-  <%--var webUseYnData   = ${ccu.getCommCodeExcpAll("067")};--%>
-  var fireFgData     = ${ccu.getCommCodeExcpAll("007")};
-
-  var rEmpNo     = wcombo.genInputText("#rEmpNo",4,"",null);
-  var rEmpNm     = wcombo.genInput("#rEmpNm");
-  var rSmsRecvYn = wcombo.genCommonBox("#rSmsRecvYn",smsRecvYnData);
-  var rUserId    = wcombo.genInput("#rUserId");
-  var rWebUseYn  = wcombo.genCommonBox("#rWebUseYn",webUseYnData);
-  var rServiceFg = wcombo.genCommonBox("#rServiceFg",fireFgData);
-  var rMpNo      = wcombo.genInput("#rMpNo");
-
-
-
-<%-- ============================================= 신규등록폼 관련 =========================================== --%>
-
-  <%-- 등록 팝업 열기 --%>
-  function openRegistLayer() {
-    $("#hqRegLayer #popTitle").text("<s:message code='hqEmp.hqEmpReg' />");
-    $("#hqRegLayer").show();
-    $("#hqRegDim").show();
-    $("#regArea").show();
-    $("#btnReg").show();
-    $("#btnSave").hide();
-
-    rUserId.isReadOnly = false;
-    rEmpNo.isReadOnly = false;
-    $("#btnChkHqEmpNo").show();
-    $("#btnChkHqUserId").show();
-
-  }
-
-  function openModLayer(items) {
-    $("#hqRegLayer #popTitle").text("<s:message code='hqEmp.hqEmpMod' />");
-    $("#hqRegLayer").show();
-    $("#hqRegDim").show();
-    $("#regArea").show();
-
-    $("#btnReg").hide();
-    $("#btnSave").show();
-
-  }
-
-  function getModData(items) {
-    var param = items;
-
-    $.postJSON("/base/store/emp/hq/detail.sb", param, function(result) {
-      var data = result.data;
-
-      rEmpNo.value              = data.empNo;
-      rEmpNm.text              = data.empNm;
-      rSmsRecvYn.selectedValue = data.smsRecvYn;
-      rUserId.text             = data.userId;
-      rWebUseYn.selectedValue  = data.webUseYn;
-      rServiceFg.selectedValue = data.serviceFg;
-      rMpNo.text               = data.mpNo;
-
-      if(data.webUseYn == "Y" || data.userId != null) {
-        $("#btnChkHqUserId").hide();
-        rUserId.isReadOnly = true;
-      } else {
-        $("#btnChkHqUserId").show();
-        rUserId.isReadOnly = false;
-      }
-      rEmpNo.isReadOnly = true;
-      $("#btnChkHqEmpNo").hide();
-
-
-    },
-      function (result) {
-        s_alert.pop(result.message);
-
-      }
-    );
-  }
-
-  <%-- 폼 리셋 --%>
-  function resetForm() {
-    $("#regForm")[0].reset();
-    rSmsRecvYn.selectedIndex  = 0;
-    rWebUseYn.selectedIndex    = 0;
-    rServiceFg.selectedIndex   = 0;
-  }
-
-<%-- ============================================= 데이터 저장 관련 =========================================== --%>
-
-  <%-- validation --%>
-  function chkVal(sendUrl, chkType) {
-
-    if(chkType == "btnReg") {
-      <%-- 사원번호 입력해주세요. --%>
-      var msg = "<s:message code='hqEmp.empNo'/> <s:message code='cmm.require.text'/>";
-      if(rEmpNo.value == "") {
-        s_alert.pop(msg);
-        return;
-      }
-
-      <%-- 사원번호를 중복체크 해주세요. --%>
-      var msg = "<s:message code='hqEmp.empNo'/> <s:message code='cmm.require.duplicate'/>";
-      if(!isHqEmpNoChk || ( rEmpNo.value != tmpHqEmpNo )) {
-        s_alert.pop(msg);
-        return;
-      }
-
-      <%-- 웹사용자아이디를 입력해주세요. --%>
-      var msg = "<s:message code='hqEmp.userId'/> <s:message code='cmm.require.text'/>";
-      if(rWebUseYn.selectedValue == "Y" && rUserId.text == "") {
-        s_alert.pop(msg);
-        return;
-      }
-
-      <%-- 웹사용자아이디를 중복체크 해주세요. --%>
-      var msg = "<s:message code='hqEmp.userId'/> <s:message code='cmm.require.duplicate'/>";
-      if(rWebUseYn.selectedValue == "Y" && (!isHqUserIdChk || ( rUserId.text != tmpHqUserId ))) {
-        s_alert.pop(msg);
-        return;
-      }
-
-     <%-- 비밀번호를 입력해주세요. --%>
-      var msg = "<s:message code='hqEmp.pwd'/> <s:message code='cmm.require.text'/>";
-      if(rWebUseYn.selectedValue == "Y" && $("#rUserPwd").val() == "") {
-        s_alert.pop(msg);
-        return;
-      }
-
-      <%-- 비밀번호를 확인해주세요. --%>
-      var msg = "<s:message code='hqEmp.pwd'/> <s:message code='cmm.require.check'/>";
-      if( $("#rUserPwd").val() != $("#rUserPwdCfm").val() ) {
-        s_alert.pop(msg);
-        return;
-      }
-    }
-
-    if(chkType == "btnSave") {
-      <%-- 비밀번호를 확인해주세요. --%>
-      var msg = "<s:message code='hqEmp.pwd'/> <s:message code='cmm.require.check'/>";
-      if(rWebUseYn.selectedValue == "Y" && $("#rUserPwd").val() != $("#rUserPwdCfm").val()) {
-        s_alert.pop(msg);
-        return;
-      }
-
-      if(rUserId.isReadOnly == false)
-      {
-        <%-- 웹사용자아이디를 입력해주세요. --%>
-        var msg = "<s:message code='hqEmp.userId'/> <s:message code='cmm.require.text'/>";
-        if(rWebUseYn.selectedValue == "Y" && rUserId.text == "") {
-          s_alert.pop(msg);
-          return;
-        }
-
-        <%-- 웹사용자아이디를 중복체크 해주세요. --%>
-        var msg = "<s:message code='hqEmp.userId'/> <s:message code='cmm.require.duplicate'/>";
-        if(rWebUseYn.selectedValue == "Y" && (!isHqUserIdChk || ( rUserId.text != tmpHqUserId ))) {
-          s_alert.pop(msg);
-          return;
-        }
-
-        <%-- 비밀번호를 입력해주세요. --%>
-        var msg = "<s:message code='hqEmp.pwd'/> <s:message code='cmm.require.text'/>";
-        if(rWebUseYn.selectedValue == "Y" && $("#rUserPwd").val() == "") {
-          s_alert.pop(msg);
-          return;
-        }
-
-        <%-- 비밀번호를 확인해주세요. --%>
-        var msg = "<s:message code='hqEmp.pwd'/> <s:message code='cmm.require.check'/>";
-        if( $("#rUserPwd").val() != $("#rUserPwdCfm").val() ) {
-          s_alert.pop(msg);
-          return;
-        }
-      }
-
-    }
-
-    <%-- 사원명 입력해주세요. --%>
-    var msg = "<s:message code='hqEmp.empNm'/> <s:message code='cmm.require.text'/>";
-    if(rEmpNm.text == "") {
-      s_alert.pop(msg);
-      return;
-    }
-
-    <%-- SMS수신여부를 선택해주세요. --%>
-    var msg = "<s:message code='hqEmp.smsRecvYn'/> <s:message code='cmm.require.select'/>";
-    if(rSmsRecvYn.selectedValue == "" || rSmsRecvYn.selectedValue == null) {
-      s_alert.pop(msg);
-      return;
-    }
-
-    <%-- 웹사용여부를 선택해주세요. --%>
-    var msg = "<s:message code='hqEmp.webUseYn'/> <s:message code='cmm.require.select'/>";
-    if(rWebUseYn.selectedValue == "" || rWebUseYn.selectedValue == null) {
-      s_alert.pop(msg);
-      return;
-    }
-
-    <%-- 재직여부를 선택해주세요. --%>
-    var msg = "<s:message code='hqEmp.serviceFg'/> <s:message code='cmm.require.select'/>";
-    if(rServiceFg.selectedValue == "" || rServiceFg.selectedValue == null) {
-      s_alert.pop(msg);
-      return;
-    }
-
-    <%-- 휴대폰번호를 입력해주세요. --%>
-    var msg = "<s:message code='hqEmp.mpNo'/> <s:message code='cmm.require.text'/>";
-    if(rMpNo.text == "") {
-      s_alert.pop(msg);
-      return;
-    }
-
-    registHqEmp(sendUrl);
-  }
-
-
-  <%-- 저장 --%>
-  function registHqEmp(sendUrl) {
-
-    var param = {};
-    param.empNo      = rEmpNo.value;
-    param.empNm      = rEmpNm.text;
-    param.smsRecvYn  = rSmsRecvYn.selectedValue;
-    param.userPwd    = $("#rUserPwd").val();
-    param.userPwdCfm = $("#rUserPwdCfm").val();
-    param.newUserPwd = $("#rUserPwd").val();
-    param.userId     = rUserId.text;
-    param.webUseYn   = rWebUseYn.selectedValue;
-    param.serviceFg  = rServiceFg.selectedValue;
-    param.mpNo       = rMpNo.text;
-
-    $.postJSONSave(sendUrl, param, function(result) {
-
-      if(result.status == "FAIL") {
-        s_alert.pop(result);
-
-      }else{
-        if(result.data == "SUCCESS") {
-            s_alert.pop("<s:message code='cmm.registSucc'/>");
-            $(".btn_close").click();
-            search(1);
-        }
-        else if(result.data == "EMP_NO_DUPLICATE") {
-            s_alert.pop("<s:message code='hqEmp.empNo.duplicate.msg'/>");
-        }
-        else if(result.data == "USER_ID_DUPLICATE") {
-            s_alert.pop("<s:message code='hqEmp.userId.duplicate.msg'/>");
-        }
-        else if(result.data == "PASSWORD_NOT_MATCH") {
-            s_alert.pop("<s:message code='hqEmp.passwordNotMatch.msg'/>");
-        }
-        else if(result.data == "PASSWORD_NOT_CHANGED") {
-            s_alert.pop("<s:message code='hqEmp.passwordNotChanged.msg'/>");
-        }
-        else if(result.data == "PASSWORD_REGEXP") {
-            s_alert.pop("<s:message code='hqEmp.passwordRegexp.msg'/>");
-        }
-        else if(result.data == "USER_ID_REGEXP") {
-            s_alert.pop("<s:message code='hqEmp.userIdRegexp.msg'/>");
-        }
-        else {
-            s_alert.pop("<s:message code='cmm.registFail'/>");
-        }
-      }
-    }
-    ,function(result) {
-      var resultKey;
-      for(var k in result.data) {
-        resultKey = k;
-      }
-      s_alert.pop(result.data[resultKey]);
-    }
-    ,function(){
-      s_alert.pop("Ajax Fail");
-    });
-  }
-
-<%-- ============================================= 버튼 이벤트 관련 =========================================== --%>
-
-  <%-- 사원번호 중복체크 버튼 클릭 --%>
-  var isHqEmpNoChk = false;
-  var tmpHqEmpNo = "";
-  $("#btnChkHqEmpNo").click(function(e){
-
-    var param = {};
-    param.empNo = rEmpNo.value;
-
-    var msg = "<s:message code='hqEmp.empNo'/> <s:message code='cmm.require.text'/>";
-    if( param.empNo == "" ) {
-        s_alert.pop(msg);
-        return;
-    }
-
-    var msg = "<s:message code='hqEmp.empNoRegexp.msg'/>";
-    if(param.empNo.length > 4) {
-      s_alert.pop(msg);
-      return;
-    }
-
-    $.postJSON("/base/store/emp/hq/chkHqEmpNo.sb", param, function(result) {
-      if(result.status === "FAIL") {
-        s_alert.pop(result.message);
-        return;
-      }
-
-      isHqEmpNoChk = false;
-      tmpHqEmpNo = "";
-      if(result.data == "SUCCESS") {
-        isHqEmpNoChk = true;
-        tmpHqEmpNo = param.empNo;
-        s_alert.pop("<s:message code='hqEmp.notDuplicate.msg'/>");
-      }
-      else if(result.data == "EMP_NO_REGEXP") {
-        s_alert.pop("<s:message code='hqEmp.empNoRegexp.msg'/>");
-      }
-      else if(result.data == "FAIL") {
-        s_alert.pop("<s:message code='cmm.error'/>");
-      }
-      else {
-        s_alert.pop("<s:message code='hqEmp.empNo.duplicate.msg'/>");
-      }
-    }
-    ,function(result) {
-      var resultKey;
-      for(var k in result.data) {
-        resultKey = k;
-      }
-      s_alert.pop(result.data[resultKey]);
-    }
-    ,function(){
-      s_alert.pop("Ajax Fail");
-    });
-  });
-
-  <%-- 사용자아이디 중복체크 버튼 클릭 --%>
-  var isHqUserIdChk = false;
-  var tmpHqUserId = "";
-  $("#btnChkHqUserId").click(function(e){
-
-    var param = {};
-    param.userId = rUserId.text;
-    param.webUseYn  = rWebUseYn.selectedValue;
-
-    var msg = "<s:message code='hqEmp.webUseYn'/> <s:message code='cmm.require.check'/>";
-    if( param.webUseYn != "Y"){
-      s_alert.pop(msg);
-      return;
-    }
-
-    msg = "<s:message code='hqEmp.userId'/> <s:message code='cmm.require.text'/>";
-    if( param.userId == ""){
-      s_alert.pop(msg);
-      return;
-    }
-
-    msg = "<s:message code='hqEmp.passwordRegexp.msg'/>";
-    if( param.userId.length <= 6 ||  param.userId.length >= 20){
-      s_alert.pop(msg);
-      return;
-    }
-
-    // 해당 패턴 사용 불가
-    var userIdStr = param.userId;
-    msg = "<s:message code='hqEmp.userId.duplicate.msg'/>";
-    if( (userIdStr.length === 5 && userIdStr.startsWith("ds"))
-      || (userIdStr.length === 5 && userIdStr.startsWith("s"))
-      || (userIdStr.length === 7 && userIdStr.startsWith("ds"))
-      || (userIdStr.length === 7 && userIdStr.startsWith("s"))) {
-      s_alert.pop(msg);
-      return false;
-    }
-
-    $.postJSON("/base/store/emp/hq/chkHqUserId.sb", param, function(result) {
-
-      if(result.status === "FAIL") {
-        s_alert.pop(result.message);
-        return;
-      }
-
-      isHqUserIdChk = false;
-      tmpHqUserId = "";
-      if(result.data == "SUCCESS"){
-        isHqUserIdChk = true;
-        tmpHqUserId = param.userId;
-        s_alert.pop("<s:message code='hqEmp.notDuplicate.msg'/>");
-      } else if(result.data == "USER_ID_REGEXP"){
-        s_alert.pop("<s:message code='hqEmp.userIdRegexp.msg'/>");
-      } else {
-        s_alert.pop("<s:message code='hqEmp.userId.notDuplicate.msg'/>");
-      }
-    }
-    ,function(result) {
-      var resultKey;
-      for(var k in result.data) {
-        resultKey = k;
-      }
-      s_alert.pop(result.data[resultKey]);
-    }
-    ,function(){
-      s_alert.pop("Ajax Fail");
-    });
-  });
-
-  <%-- 신규등록 버튼 클릭 --%>
-   $("#btnReg").click(function(e){
-     chkVal("/base/store/emp/hq/regist.sb",$("#btnReg").attr('id'));
-   });
-
-  <%-- 저장 버튼 클릭 (수정) --%>
-  $("#btnSave").click(function(e){
-    chkVal("/base/store/emp/hq/save.sb",$("#btnSave").attr('id'));
-  });
-
-  <%-- 닫기 버튼 클릭 --%>
-  $("#hqRegLayer .btn_close, #hqRegLayer #btnClose").click(function(e){
-    resetForm();
-    $("#regArea").hide();
-    $("#hqRegLayer").hide();
-    $("#hqRegDim").hide();
-
-    $("#btnChkHqEmpNo").show();
-    $("#btnChkHqUserId").show();
-
-    rUserId.isReadOnly = false;
-    rEmpNo.isReadOnly = false;
-
-  });
-
-</script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpSave.js?ver=20181121.01" charset="utf-8"></script>
 

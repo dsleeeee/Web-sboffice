@@ -56,7 +56,6 @@
           SELECT HQ_OFFICE_CD,
                  COUNT(HQ_OFFICE_CD) AS CNT
             FROM TB_MS_STORE
-           WHERE SYS_STAT_FG = '1'
            GROUP BY HQ_OFFICE_CD
                 ) tms,
                 (
@@ -117,6 +116,7 @@
                tho.ADDR,
                tho.ADDR_DTL,
                tho.AREA_CD,
+               tcna.NMCODE_NM AS AREA_NM,
                tho.SYS_STAT_FG,
                tcnm.NMCODE_NM AS SYS_STAT_FG_NM,
                TO_CHAR(TO_DATE(tho.SYS_OPEN_DATE, 'YYYYMMDD'), 'YYYY.MM.DD') AS SYS_OPEN_DATE,
@@ -133,13 +133,16 @@
           FROM TB_HQ_OFFICE tho,
                TB_CM_AGENCY tca,
                TB_CM_NMCODE tcn,
-               TB_CM_NMCODE tcnm
+               TB_CM_NMCODE tcnm,
+               TB_CM_NMCODE tcna
          WHERE tho.HQ_OFFICE_CD = #{hqOfficeCd}
            AND tca.AGENCY_CD (+)= tho.AGENCY_CD
            AND tcn.NMCODE_GRP_CD = '001'
            AND tcn.NMCODE_CD = tho.CLS_FG
            AND tcnm.NMCODE_GRP_CD = '005'
            AND tcnm.NMCODE_CD = tho.SYS_STAT_FG
+           AND tcna.NMCODE_GRP_CD = '061'
+           AND tcna.NMCODE_CD = tho.AREA_CD
         ]]>
     </select>
 
@@ -449,6 +452,7 @@
         PARAM    : hqNmcodeVO
         COMMENTS : 시스템 공통코드 테이블에서 본사용 공통코드를 복사함
     -->
+    <!--
     <select id="copyCmmNameCode" statementType="CALLABLE"  parameterType="hqNmcodeVO" resultType="String">
         /* USE : HqManageMapper.copyCmmNameCode */
         {
@@ -459,6 +463,7 @@
             )
         }
     </select>
+    -->
 
     <!-- TID 복사  -->
     <!--

@@ -14,6 +14,7 @@ import java.util.List;
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2018.08.14  정상화      최초생성
+ * @ 2018.11.20  김지은      angular 방식으로 수정
  *
  * @author NHN한국사이버결제 KCP 정상화
  * @since 2018. 08.14
@@ -25,10 +26,10 @@ import java.util.List;
 public interface HqEmpService {
 
     /** 본사 사원정보 리스트 조회*/
-    <E> List<E> getHqEmpList(HqEmpVO hqEmpVO);
+    List<DefaultMap<String>> getHqEmpList(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO);
 
-    /** 본사 사원번호 조회*/
-    HqEmpResult getHqEmpNoCnt(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO);
+    /** 본사 사원정보 상세*/
+    DefaultMap<String> getHqEmpDtlInfo(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO);
 
     /** 본사 웹유저아이디 조회*/
     HqEmpResult getHqUserIdCnt(HqEmpVO hqEmpVO);
@@ -42,7 +43,5 @@ public interface HqEmpService {
     /** 본사 사원번호 패스워드변경*/
     HqEmpResult modifyPassword(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO);
 
-    /** 본사 사원정보 상세*/
-    DefaultMap<String> getHqEmpDtlInfo(HqEmpVO hqEmpVO);
 
 }

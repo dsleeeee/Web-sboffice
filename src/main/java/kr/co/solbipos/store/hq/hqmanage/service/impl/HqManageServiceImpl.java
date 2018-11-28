@@ -197,10 +197,10 @@ public class HqManageServiceImpl implements HqManageService{
 
         procCnt += cmmCodeReg;
 
-        // 공통코드 복사
-        HqNmcodeVO hqNmcodeVO = new HqNmcodeVO();
-        hqNmcodeVO.setHqOfficeCd(hqOfficeCd);
-        String copyNmcodeResult = mapper.copyCmmNameCode(nmcodeVO);
+        // 공통코드 복사 //todo
+//        HqNmcodeVO hqNmcodeVO = new HqNmcodeVO();
+//        hqNmcodeVO.setHqOfficeCd(hqOfficeCd);
+//        String copyNmcodeResult = mapper.copyCmmNameCode(nmcodeVO);
 
         // 포스 출력물 등록 TODO
 //        HqPrintTemplVO printTempVO = new HqPrintTemplVO();
