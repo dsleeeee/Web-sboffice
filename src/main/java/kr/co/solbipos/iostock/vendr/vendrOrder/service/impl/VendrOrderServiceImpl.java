@@ -116,6 +116,7 @@ public class VendrOrderServiceImpl implements VendrOrderService {
 
         DefaultMap<String> resultMap = new DefaultMap<String>();
         resultMap.put("slipNo", slipNo);
+        resultMap.put("slipFg", String.valueOf(vendrOrderVO.getSlipFg()));
         return resultMap;
     }
 
@@ -157,6 +158,44 @@ public class VendrOrderServiceImpl implements VendrOrderService {
     }
 
 
+    /** 거래처 발주등록 - 발주정보 진행상태 변경 */
+    @Override
+    public int saveProcFg(VendrOrderVO vendrOrderVO, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+
+        String currentDt = currentDateTimeString();
+        vendrOrderVO.setRegId(sessionInfoVO.getUserId());
+        vendrOrderVO.setRegDt(currentDt);
+        vendrOrderVO.setModId(sessionInfoVO.getUserId());
+        vendrOrderVO.setModDt(currentDt);
+
+        String vendrInstockExist = "N";
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+            vendrOrderVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            vendrInstockExist = vendrOrderMapper.getHqVendrInstockExist(vendrOrderVO);
+            if(vendrInstockExist.equals("Y")) {
+                String errMsg = (vendrOrderVO.getProcFg().equals("5") ? messageService.get("vendrOrder.dtl.noConfmExist") : messageService.get("vendrOrder.dtl.regExist"));
+                throw new JsonException(Status.FAIL, errMsg);
+            }
+
+            result = vendrOrderMapper.updateHqProcFg(vendrOrderVO);
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+        else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+            // vendrOrderVO.setStoreCd(sessionInfoVO.getStoreCd());
+//            vendrInstockExist = vendrOrderMapper.getStVendrInstockExist(vendrOrderVO);
+//            if(vendrInstockExist.equals("Y")) {
+//            String errMsg = (vendrOrderVO.getProcFg().equals("5") ? messageService.get("vendrOrder.dtl.noConfmExist") : messageService.get("vendrOrder.dtl.regExist"));
+//                throw new JsonException(Status.FAIL, messageService.get("vendrOrder.dtl.prodExist"));
+//            }
+//            result = vendrOrderMapper.updateStProcFg(vendrOrderVO);
+//            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+
+        return result;
+    }
+
+
     /** 거래처 발주등록 - 발주상품 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getVendrOrderProdList(VendrOrderVO vendrOrderVO, SessionInfoVO sessionInfoVO) {
@@ -189,7 +228,7 @@ public class VendrOrderServiceImpl implements VendrOrderService {
     }
 
 
-    /** 거래처 발주등록 - 발주상품 등록 리스트 조회 */
+    /** 거래처 발주등록 - 발주상품 추가/변경 등록 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getVendrOrderProdRegList(VendrOrderVO vendrOrderVO, SessionInfoVO sessionInfoVO) {
         List<DefaultMap<String>> result = new ArrayList<DefaultMap<String>>();
@@ -205,7 +244,7 @@ public class VendrOrderServiceImpl implements VendrOrderService {
     }
 
 
-    /** 거래처 발주등록 - 발주상품 등록 리스트 저장 */
+    /** 거래처 발주등록 - 발주상품 추가/변경 등록 리스트 저장 */
     @Override
     public int saveVendrOrderProdReg(VendrOrderVO[] vendrOrderVOs, SessionInfoVO sessionInfoVO) {
         int returnResult = 0;
@@ -271,27 +310,33 @@ public class VendrOrderServiceImpl implements VendrOrderService {
             if(insFg.equals("I")) {
                 if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
                     result = vendrOrderMapper.insertHqVendrOrderDtl(vendrOrderVO);
+                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                 }
                 else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
 //                    result = vendrOrderMapper.insertStVendrOrderDtl(vendrOrderVO);
+//                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                 }
             }
             // 수정
             else if(insFg.equals("U")) {
                 if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
                     result = vendrOrderMapper.updateHqVendrOrderDtl(vendrOrderVO);
+                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                 }
                 else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
 //                    result = vendrOrderMapper.updateStVendrOrderDtl(vendrOrderVO);
+//                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                 }
             }
             // 삭제
             else if(insFg.equals("D")) {
                 if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
                     result = vendrOrderMapper.deleteHqVendrOrderDtl(vendrOrderVO);
+                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                 }
                 else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
 //                    result = vendrOrderMapper.deleteStVendrOrderDtl(vendrOrderVO);
+//                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                 }
             }
 
@@ -299,8 +344,15 @@ public class VendrOrderServiceImpl implements VendrOrderService {
             i++;
         }
 
-
-
+        // 발주정보 DTL의 집계정보 HD에 수정
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+            result = vendrOrderMapper.updateHqVendrOrderDtlSumHd(vendrOrderHdVO);
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+//            result = vendrOrderMapper.updateStVendrOrderDtlSumHd(vendrOrderVO);
+//            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
 
         return returnResult;
     }

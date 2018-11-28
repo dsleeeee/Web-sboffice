@@ -46,13 +46,22 @@ public interface VendrOrderMapper {
     /** 거래처 발주등록 - 발주정보 HD 삭제(매장) */
 //    int deleteStVendrOrderHd(VendrOrderVO vendrOrderVO);
 
+    /** 거래처 발주등록 - 발주정보 삭제시 상품이 있는지 여부 조회(본사) */
+    String getHqDtlProdExist(VendrOrderVO vendrOrderVO);
+
+    /** 거래처 발주등록 - 발주 진행상태 변경시 입고/반출 전표가 있는지 여부 조회(본사) */
+    String getHqVendrInstockExist(VendrOrderVO vendrOrderVO);
+
+    /** 거래처 발주등록 - 발주정보 진행상태 변경(본사) */
+    int updateHqProcFg(VendrOrderVO vendrOrderVO);
+
     /** 거래처 발주등록 - 발주상품 리스트 조회(본사) */
     List<DefaultMap<String>> getHqVendrOrderProdList(VendrOrderVO vendrOrderVO);
 
     /** 거래처 발주등록 - 진행구분 조회(본사) */
     DefaultMap<String> getHqProcFgCheck(VendrOrderVO vendrOrderVO);
 
-    /** 거래처 발주등록 - 발주상품 등록 리스트 조회(본사) */
+    /** 거래처 발주등록 - 발주상품 추가/변경 등록 리스트 조회(본사) */
     List<DefaultMap<String>> getHqVendrOrderProdRegList(VendrOrderVO vendrOrderVO);
 
     /** 거래처 발주등록 - 발주정보 DTL 등록(본사) */
@@ -73,8 +82,16 @@ public interface VendrOrderMapper {
     /** 거래처 발주등록 - 발주정보 DTL 삭제(매장) */
     //    int deleteStVendrOrderDtl(VendrOrderVO vendrOrderVO);
 
-    /** 거래처 발주등록 - 발주 삭제시 상품이 있는지 여부 조회(본사) */
-    String getHqDtlProdExist(VendrOrderVO vendrOrderVO);
+    /** 거래처 발주등록 - 발주정보 DTL의 집계정보 HD에 수정(본사) */
+    int updateHqVendrOrderDtlSumHd(VendrOrderVO vendrOrderVO);
+
+
+
+
+
+
+
+
 
 
 

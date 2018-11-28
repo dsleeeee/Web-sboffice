@@ -4,15 +4,11 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
-<c:set var="baseUrl" value="/iostock/vendr/vendrOrder/vendrOrder/"/>
+<c:set var="baseUrl" value="/iostock/vendr/vendrInstock/vendrInstock/"/>
 
-<div class="subCon" ng-controller="vendrOrderCtrl">
+<div class="subCon" ng-controller="vendrInstockCtrl">
   <div class="searchBar flddUnfld">
-    <%--<a href="#" class="open">${menuNm}</a>--%>
-    <a href="#" class="open">상세검색</a>
-    <%-- 조회 --%>
-    <button class="btn_blue fr" style="position: absolute; top:5px; right:5px;" id="btnSearch" ng-click="_pageView('vendrOrderCtrl', 1)">
-      <s:message code="cmm.search"/></button>
+    <a href="#" class="open">${menuNm}</a>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -23,10 +19,21 @@
     </colgroup>
     <tbody>
     <tr>
-      <%-- 발주일자 --%>
-      <th><s:message code="vendrOrder.orderDate"/></th>
+      <%-- 조회일자 --%>
+      <th><s:message code="cmm.search.date"/></th>
       <td colspan="3">
         <div class="sb-select">
+          <span class="txtIn w100px">
+            <wj-combo-box
+              id="srchDateFg"
+              ng-model="dateFg"
+              items-source="_getComboData('srchDateFg')"
+              display-member-path="name"
+              selected-value-path="value"
+              is-editable="false"
+              initialized="_initComboBox(s)">
+            </wj-combo-box>
+          </span>
           <span class="txtIn"><input id="srchStartDate" class="w120px"></span>
           <span class="rg">~</span>
           <span class="txtIn"><input id="srchEndDate" class="w120px"></span>
@@ -35,15 +42,39 @@
     </tr>
     <tr>
       <%-- 전표번호 --%>
-      <th><s:message code="vendrOrder.slipNo"/></th>
+      <th><s:message code="vendrInstock.slipNo"/></th>
       <td>
         <input type="text" id="srchSlipNo" name="srchSlipNo" ng-model="slipNo" class="sb-input w100" maxlength="8"/>
       </td>
-      <%-- 진행 --%>
-      <th><s:message code="vendrOrder.procFg"/></th>
+        <%-- 발주전표번호 --%>
+        <th><s:message code="vendrInstock.orderSlipNo"/></th>
+        <td>
+          <input type="text" id="srchOrderSlipNo" name="srchOrderSlipNo" ng-model="orderSlipNo" class="sb-input w100" maxlength="8"/>
+        </td>
+    </tr>
+    <tr>
+      <%-- 전표구분 --%>
+      <th><s:message code="vendrInstock.slipFg"/></th>
       <td>
         <div class="sb-select">
-          <span class="txtIn w150px">
+          <span class="txtIn w120px">
+            <wj-combo-box
+              id="srchSlipFg"
+              ng-model="slipFg"
+              items-source="_getComboData('srchSlipFg')"
+              display-member-path="name"
+              selected-value-path="value"
+              is-editable="false"
+              initialized="_initComboBox(s)">
+            </wj-combo-box>
+          </span>
+        </div>
+      </td>
+      <%-- 진행구분 --%>
+      <th><s:message code="vendrInstock.procFg"/></th>
+      <td>
+        <div class="sb-select">
+          <span class="txtIn w120px">
             <wj-combo-box
               id="srchProcFg"
               ng-model="procFg"
@@ -57,36 +88,22 @@
         </div>
       </td>
     </tr>
-    <tr>
-      <%-- 거래처 --%>
-      <th><s:message code="vendrOrder.vendr"/></th>
-      <td colspan="3">
-        <%-- 거래처선택 모듈 싱글 선택 사용시 include
-             param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
-                          displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
-                          modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
-                          closeFunc - 팝업 닫기시 호출할 함수
-        --%>
-        <jsp:include page="/WEB-INF/view/iostock/vendr/vendrOrder/selectVendrS.jsp" flush="true">
-          <jsp:param name="targetId" value="vendrOrderSelectVendr"/>
-          <jsp:param name="displayNm" value="전체"/>
-        </jsp:include>
-        <%--// 거래처선택 모듈 싱글 선택 사용시 include --%>
-      </td>
-    </tr>
     </tbody>
   </table>
 
-  <%--<div class="mt10 pdb20 oh bb">--%>
-    <%--&lt;%&ndash; 조회 &ndash;%&gt;--%>
-    <%--<button class="btn_blue fr" id="btnSearch" ng-click="_pageView('vendrOrderCtrl', 1)">--%>
-      <%--<s:message code="cmm.search"/></button>--%>
-  <%--</div>--%>
+  <div class="mt10 pdb20 oh bb">
+    <%-- 조회 --%>
+    <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('vendrInstockCtrl', 1)">
+      <s:message code="cmm.search"/></button>
+  </div>
 
   <div class="mt20 tr">
-    <%-- 발주신규등록 --%>
-    <button type="button" class="btn_skyblue ml5" id="btnRegist" ng-click="newVendrOrder()">
-      <s:message code="vendrOrder.orderRegist"/></button>
+    <%-- 입고신규등록 --%>
+    <button type="button" class="btn_skyblue ml5" id="btnInRegist" ng-click="newVendrInstock(1)">
+      <s:message code="vendrInstock.inRegist"/></button>
+    <%-- 반출신규등록 --%>
+    <button type="button" class="btn_skyblue ml5" id="btnOutRegist" ng-click="newVendrInstock(-1)">
+      <s:message code="vendrInstock.rtnRegist"/></button>
   </div>
 
   <div class="w100 mt10">
@@ -102,17 +119,17 @@
         item-formatter="_itemFormatter">
 
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="vendrOrder.slipNo"/>" binding="slipNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="vendrOrder.vendr"/>" binding="vendrNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="vendrOrder.procFg"/>" binding="procFg" width="60" align="center" is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="vendrOrder.orderType"/>" binding="orderType" width="80" align="center" is-read-only="true" data-map="orderTypeMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="vendrOrder.orderDate"/>" binding="orderDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="vendrOrder.orderReqDate"/>" binding="orderReqDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="vendrInstock.slipNo"/>" binding="slipNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="vendrInstock.slipFg"/>" binding="slipFg" width="60" align="center" is-read-only="true" data-map="slipFgMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="vendrInstock.vendr"/>" binding="vendrNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="vendrInstock.procFg"/>" binding="procFg" width="60" align="center" is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="vendrInstock.instockType"/>" binding="instockType" width="80" align="center" is-read-only="true" data-map="instockTypeMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="vendrInstock.instockDate"/>" binding="instockDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
 
       </wj-flex-grid>
       <%-- ColumnPicker 사용시 include --%>
       <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-        <jsp:param name="pickerTarget" value="vendrOrderCtrl"/>
+        <jsp:param name="pickerTarget" value="vendrInstockCtrl"/>
       </jsp:include>
       <%--// ColumnPicker 사용시 include --%>
     </div>
@@ -127,30 +144,57 @@
    */
   var app = agrid.getApp();
 
-  /** 발주 그리드 controller */
-  app.controller('vendrOrderCtrl', ['$scope', '$http', function ($scope, $http) {
+  /** 입고/반출 그리드 controller */
+  app.controller('vendrInstockCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('vendrOrderCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('vendrInstockCtrl', $scope, $http, true));
 
     $scope.srchStartDate = wcombo.genDateVal("#srchStartDate", "${sessionScope.sessionInfo.startDate}");
     $scope.srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.endDate}");
-    $scope.slipFg        = 1;
+
+    $scope._setComboData("srchDateFg", [
+      {"name": messages["vendrInstock.regDate"], "value": "reg"},
+      {"name": messages["vendrInstock.instockDate"], "value": "in"}
+    ]);
+
+    // 조회조건 전표구분
+    $scope._setComboData("srchSlipFg", [
+      {"name": messages["cmm.all"], "value": ""},
+      {"name": messages["vendrInstock.slipFgIn"], "value": "1"},
+      {"name": messages["vendrInstock.slipFgRtn"], "value": "-1"}
+    ]);
+
+    // 조회조건 진행구분
+    $scope._setComboData("srchProcFg", [
+      {"name": messages["cmm.all"], "value": ""},
+      {"name": messages["vendrInstock.procFg0"], "value": "0"},
+      {"name": messages["vendrInstock.procFg1"], "value": "1"}
+    ]);
+
+    // 그리드 전표구분
+    $scope.slipFgMap = new wijmo.grid.DataMap([
+      {id: "1", name: "<s:message code='vendrInstock.slipFgIn'/>"},
+      {id: "-1", name: "<s:message code='vendrInstock.slipFgRtn'/>"}
+    ], 'id', 'name');
+
+    // 그리드 진행구분
+    $scope.procFgMap = new wijmo.grid.DataMap([
+      {id: "0", name: "<s:message code='vendrInstock.procFg0'/>"},
+      {id: "1", name: "<s:message code='vendrInstock.procFg1'/>"}
+    ], 'id', 'name');
+
+    // 그리드 발주/무발주 구분
+    $scope.instockTypeMap = new wijmo.grid.DataMap([
+      {id: "Y", name: "<s:message code='vendrInstock.orderInstock'/>"},
+      {id: "N", name: "<s:message code='vendrInstock.notOrderInstock'/>"}
+    ], 'id', 'name');
+
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
-      var comboParams         = {};
-      comboParams.nmcodeGrpCd = "096";
-      // 파라미터 (comboFg, comboId, gridMapId, url, params, option)
-      $scope._queryCombo("combo,map", "srchProcFg", "procFgMap", null, comboParams, "A"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
-      // $scope._queryCombo("map", "procFgMap", null, comboParams, "A"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
-
-      var url = '/iostock/vendr/vendrOrder/vendrOrderDtl/getOrderTypeCombo.sb';
-      // 파라미터 (comboFg, comboId, gridMapId, url, params, option)
-      $scope._queryCombo("map", null, "orderTypeMap", url, comboParams, "A");
-
       // picker 사용시 호출 : 미사용시 호출안함
-      $scope._makePickColumns("vendrOrderCtrl");
+      $scope._makePickColumns("vendrInstockCtrl");
 
       // 그리드 링크 효과
       s.formatItem.addHandler(function (s, e) {
@@ -161,6 +205,13 @@
             wijmo.addClass(e.cell, 'wj-custom-readonly');
           }
 
+          // 전표구분이 반출이면 글씨색을 red 로 변경한다.
+          if (col.binding === "slipFg") {
+            var item = s.rows[e.row].dataItem;
+            if(item.slipFg === -1) {
+              wijmo.addClass(e.cell, 'red');
+            }
+          }
           if (col.format === "date") {
             e.cell.innerHTML = getFormatDate(e.cell.innerText);
           }
@@ -179,8 +230,8 @@
           if (col.binding === "slipNo") { // 전표번호 클릭
             var params    = {};
             params.slipNo = selectedRow.slipNo;
-            params.slipFg = $scope.slipFg;
-            $scope._broadcast('vendrOrderPopCtrl', params);
+            params.slipFg = selectedRow.slipFg;
+            $scope._broadcast('vendrInstockPopCtrl', params);
           }
         }
       });
@@ -188,32 +239,31 @@
 
 
     // 다른 컨트롤러의 broadcast 받기
-    $scope.$on("vendrOrderCtrl", function (event, data) {
-      $scope.searchVendrOrderList();
+    $scope.$on("vendrInstockCtrl", function (event, data) {
+      $scope.searchVendrInstockList();
       // 기능수행 종료 : 반드시 추가
       event.preventDefault();
     });
 
 
-    // 발주 리스트 조회
-    $scope.searchVendrOrderList = function () {
+    // 입고/반출 리스트 조회
+    $scope.searchVendrInstockList = function () {
       // 파라미터
       var params       = {};
       params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
       params.endDate   = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
-      params.vendrCd   = $("#vendrOrderSelectVendrCd").val();
 
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
-      $scope._inquiryMain("/iostock/vendr/vendrOrder/vendrOrder/list.sb", params);
+      $scope._inquiryMain("/iostock/vendr/vendrInstock/vendrInstock/list.sb", params);
     };
 
 
-    // 발주 신규등록
-    $scope.newVendrOrder = function () {
+    // 입고/반출 신규등록 (입고 - slipFg : 1, 반출 - slipFg : -1)
+    $scope.newVendrInstock = function (slipFg) {
       var params    = {};
       params.slipNo = '';
-      params.slipFg = $scope.slipFg;
-      $scope._broadcast('vendrOrderPopCtrl', params);
+      params.slipFg = slipFg;
+      $scope._broadcast('vendrInstockPopCtrl', params);
     };
 
 
@@ -246,7 +296,6 @@
             var comboData  = {};
 
             if (comboFg.indexOf("combo") >= 0 && nvl(comboId,'') !== '') {
-              comboArray = [];
               if (option === "A") {
                 comboData.name  = messages["cmm.all"];
                 comboData.value = "";
@@ -268,7 +317,6 @@
             }
 
             if (comboFg.indexOf("map") >= 0 && nvl(gridMapId,'') !== '') {
-              comboArray = [];
               for (var i = 0; i < list.length; i++) {
                 comboData      = {};
                 comboData.id   = list[i].nmcodeCd;
@@ -304,19 +352,11 @@
     };
 
 
-    // 거래처선택 모듈 팝업 사용시 정의
-    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.vendrOrderSelectVendrShow = function () {
-      $scope._broadcast('vendrOrderSelectVendrCtrl');
-    };
-
-
   }]);
 </script>
 
-<%-- 발주 상세 팝업전용 레이어 --%>
-<c:import url="/WEB-INF/view/iostock/vendr/vendrOrder/vendrOrderPop.jsp">
+<%-- 입고/반출 상세 팝업전용 레이어 --%>
+<c:import url="/WEB-INF/view/iostock/vendr/vendrInstock/vendrInstockPop.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

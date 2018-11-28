@@ -14,10 +14,10 @@
       <s:message code="vendrOrder.dtl.slipRegInfo"/>
       <div class="fr">
         <%-- 저장 --%>
-        <button type="submit" class="btn_skyblue mr5" id="btnSave" ng-if="btnSaveFg">
+        <button type="submit" class="btn_skyblue mr5" id="btnSave" ng-if="btnSaveShowFg">
           <s:message code="cmm.save"/></button>
         <%-- 삭제 --%>
-        <button type="button" class="btn_skyblue " id="btnDel" ng-click="delete()" ng-if="btnDelFg">
+        <button type="button" class="btn_skyblue " id="btnDel" ng-click="delete()" ng-if="btnDelShowFg">
           <s:message code="cmm.delete"/></button>
       </div>
     </h3>
@@ -49,17 +49,17 @@
         <th><s:message code="vendrOrder.dtl.orderType"/></th>
         <td>
           <div class="sb-select">
-          <span class="txtIn w150px">
-            <wj-combo-box
-              id="orderType"
-              ng-model="slipInfo.orderType"
-              items-source="_getComboData('orderType')"
-              display-member-path="name"
-              selected-value-path="value"
-              is-editable="false"
-              initialized="_initComboBox(s)">
-            </wj-combo-box>
-          </span>
+            <span class="txtIn w150px">
+              <wj-combo-box
+                id="orderType"
+                ng-model="slipInfo.orderType"
+                items-source="_getComboData('orderType')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="_initComboBox(s)">
+              </wj-combo-box>
+            </span>
           </div>
         </td>
       </tr>
@@ -105,14 +105,42 @@
         <%-- 비고 --%>
         <th><s:message code="vendrOrder.dtl.remark"/></th>
         <td>
-          <textarea id="remark" class="w100 tArea1" style="height:100px;" ng-model="slipInfo.remark"></textarea>
+          <div>
+            <textarea id="remark" class="w100 tArea1" style="height:100px;" ng-model="slipInfo.remark"></textarea>
+          </div>
         </td>
       </tr>
       </tbody>
     </table>
   </form>
 
-  <h3 class="h3_tbl pdt5 lh30 mt10"><s:message code="vendrOrder.dtl.slipDtlInfo"/></h3>
+  <h3 class="h3_tbl pdt5 lh30 mt10">
+    <s:message code="vendrOrder.dtl.slipDtlInfo"/>
+    <div class="fr" ng-if="procLayerIfFg">
+      <p class="s12 bk lh30 fl"><s:message code="vendrOrder.dtl.procFg"/>: [</p>
+      <p class="s12 bk lh30 fl red" ng-bind="slipInfo.procNm"></p>
+      <p class="s12 bk lh30 fl">]</p>
+      <p class="s12 bk lh30 fl ml10"><s:message code="vendrOrder.dtl.dtlCnt"/>: [</p>
+      <p class="s12 bk lh30 fl red" ng-bind="slipInfo.dtlCnt"></p>
+      <p class="s12 bk lh30 fl">]</p>
+      <%--<div class="sb-select">--%>
+      <span class="txtIn w100px ml10">
+          <wj-combo-box
+            id="procFg"
+            ng-model="slipInfo.procFg"
+            items-source="_getComboData('procFg')"
+            display-member-path="name"
+            selected-value-path="value"
+            is-editable="false"
+            initialized="_initComboBox(s)">
+          </wj-combo-box>
+        </span>
+      <%--</div>--%>
+      <%--<a href="#" class="btn_grayS2" ng-click=""><s:message code="vendrOrder.dtl.procFgUpdate"/></a>--%>
+      <button type="button" id="btnDtlProcFgUpdate" class="btn_skyblue ml5" ng-click="procFgUpdate()">
+        <s:message code="vendrOrder.dtl.procFgUpdate"/></button>
+    </div>
+  </h3>
   <table class="tblType01">
     <colgroup>
       <col class="w15"/>
@@ -160,11 +188,11 @@
     <tr>
       <%-- 입고총수량 --%>
       <th><s:message code="vendrOrder.dtl.inTotQty"/></th>
-      <td><span id="slipDtlInTotQty" class="pd5 txtIn s12" ng-bind="slipInfo.confmDt"></span>
+      <td><span id="slipDtlInTotQty" class="pd5 txtIn s12" ng-bind="slipInfo.inTotQty"></span>
       </td>
       <%-- 입고총금액 --%>
       <th><s:message code="vendrOrder.dtl.inTotAmt"/></th>
-      <td><span id="slipDtlInTotAmt" class="pd5 txtIn s12" ng-bind="slipInfo.confmNm"></span>
+      <td><span id="slipDtlInTotAmt" class="pd5 txtIn s12" ng-bind="slipInfo.inTotAmt"></span>
       </td>
     </tr>
     <tr>
@@ -193,9 +221,10 @@
 
     // 발주타입 dynamic combo 조회
     var vendrOrderCtrlScope = agrid.getScope("vendrOrderCtrl");
-    var url                 = '/iostock/vendr/vendrOrder/vendrOrderDtl/getDynamicCombo.sb';
+    var url                 = '/iostock/vendr/vendrOrder/vendrOrderDtl/getOrderTypeCombo.sb';
     var comboParams         = {};
     comboParams.nmcodeGrpCd = "AA1";
+    // 파라미터 (comboFg, comboId, gridMapId, url, params, option)
     vendrOrderCtrlScope._queryCombo("combo", "orderType", null, url, comboParams, "S"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
 
     // 다른 컨트롤러의 broadcast 받기
@@ -212,8 +241,9 @@
       }
       // 신규등록인 경우 저장버튼만 활성화
       else {
-        $scope.btnSaveFg = true;
-        $scope.btnDelFg  = false;
+        $scope.btnSaveShowFg = true;
+        $scope.btnDelShowFg  = false;
+        $scope.procLayerIfFg = false;
       }
 
       // 기능수행 종료 : 반드시 추가
@@ -258,14 +288,25 @@
             console.log(data);
 
             if (data.procFg != "" && data.procFg == "0") {
-              $scope.btnSaveFg = true;
-              $scope.btnDelFg  = true;
-            }
-            else {
-              $scope.btnSaveFg = false;
-              $scope.btnDelFg  = false;
+              $scope.btnSaveShowFg = true;
+              $scope.btnDelShowFg  = true;
+            } else {
+              $scope.btnSaveShowFg = false;
+              $scope.btnDelShowFg  = false;
             }
 
+            // 진행상태 관련 레이어 show 여부
+            $scope.procLayerIfFg = true;
+
+            // 발주타입 dynamic combo 조회
+            var vendrOrderCtrlScope = agrid.getScope("vendrOrderCtrl");
+            var url                 = '/iostock/vendr/vendrOrder/vendrOrderDtl/getProcFgCombo.sb';
+            var comboParams         = {};
+            comboParams.procFg      = data.procFg;
+            // 파라미터 (comboFg, comboId, gridMapId, url, params, option)
+            vendrOrderCtrlScope._queryCombo("combo", "procFg", null, url, comboParams, "S");
+
+            // 거래처 선택 모듈값 세팅
             $("#vendrOrderDtlSelectVendrCd").val(data.vendrCd);
             $("#vendrOrderDtlSelectVendrNm").val('[' + data.vendrCd + '] ' + data.vendrNm);
             data.orderDate    = new Date(getFormatDate(data.orderDate, "-"));
@@ -276,10 +317,22 @@
             data.endDt       = (nvl(data.endDt, '') !== '' ? getFormatDateTime(data.endDt) : '');
             data.inFirstDate = (nvl(data.inFirstDate, '') !== '' ? getFormatDate(data.inFirstDate) : '');
             data.inLastDate  = (nvl(data.inLastDate, '') !== '' ? getFormatDate(data.inLastDate) : '');
+            data.orderQty    = (nvl(data.orderQty, '') !== '' ? addComma(data.orderQty) : '');
+            data.orderTot    = (nvl(data.orderTot, '') !== '' ? addComma(data.orderTot) : '');
+            data.inTotQty    = (nvl(data.inTotQty, '') !== '' ? addComma(data.inTotQty) : '');
+            data.inTot       = (nvl(data.inTot, '') !== '' ? addComma(data.inTot) : '');
+
+            // 상품이 등록되어 있는 경우에는 거래처 선택 불가
+            if (data.dtlCnt > 0) {
+              $scope.vendrOrderDtlSelectVendrNmDisabled  = true;
+              $scope.vendrOrderDtlSelectVendrBtnDisabled = true;
+            } else {
+              $scope.vendrOrderDtlSelectVendrNmDisabled  = false;
+              $scope.vendrOrderDtlSelectVendrBtnDisabled = false;
+            }
 
             $scope.slipInfo = data;
-          }
-          else {
+          } else {
             // 팝업 닫기 및 값 초기화
             $scope.popupClose();
             $scope._popMsg(response.data.message);
@@ -300,18 +353,7 @@
     // 발주 저장
     $scope.submitForm = function () {
       //값체크
-      // if (!valueCheck()) return false;
-
-      // 거래처를 선택해주세요.
-      if ($("#vendrOrderDtlSelectVendrCd").val() === "") {
-        $scope._popMsg(messages["vendrOrder.dtl.require.selectVendr"]);
-        return false;
-      }
-      // 발주타입을 선택해주세요.
-      if ($scope.slipInfo.orderType === "") {
-        $scope._popMsg(messages["vendrOrder.dtl.require.orderType"]);
-        return false;
-      }
+      if (!$scope.valueCheck()) return false;
 
       var params = {};
       // 저장시 저장은 잘 되지만 Assertion failed in Wijmo: Date expected. 라고 debug에서 에러가 발생해 따로따로 넣도록 수정.
@@ -351,9 +393,9 @@
 
             var params    = {};
             params.slipNo = data.slipNo;
+            params.slipFg = data.slipFg;
             $scope._broadcast('vendrOrderPopCtrl', params);
-          }
-          else {
+          } else {
             $scope.popupClose();
           }
         }
@@ -363,6 +405,23 @@
         $scope._popMsg(response.data.message);
         return false;
       });
+    };
+
+
+    // 값 체크
+    $scope.valueCheck = function () {
+      // 거래처를 선택해주세요.
+      if ($("#vendrOrderDtlSelectVendrCd").val() === "") {
+        $scope._popMsg(messages["vendrOrder.dtl.require.selectVendr"]);
+        return false;
+      }
+      // 발주타입을 선택해주세요.
+      if ($scope.slipInfo.orderType === "") {
+        $scope._popMsg(messages["vendrOrder.dtl.require.orderType"]);
+        return false;
+      }
+
+      return true;
     };
 
 
@@ -384,11 +443,9 @@
           if (response.data.status === 'OK') {
             $scope._popMsg(messages['cmm.delSucc']);
             $scope.popupClose();
-          }
-          else if (response.data.status === 'FAIL') {
+          } else if (response.data.status === 'FAIL') {
             $scope._popMsg(response.data.message);
-          }
-          else {
+          } else {
             var msg = response.data.status + ' : ' + response.data.message;
             $scope._popMsg(msg);
             return false;
@@ -402,6 +459,56 @@
       });
     };
 
+
+    $scope.procFgUpdate = function () {
+      <%-- 진행상태를 선택해 주세요. --%>
+      if ($scope.slipInfo.procFg === '') {
+        $scope._popMsg(messages['vendrOrder.dtl.require.procFg']);
+        return false;
+      }
+
+      <%-- 진행상태를 변경하시겠습니까? --%>
+      var msg = messages["vendrOrder.dtl.procFgUpdateMsg"];
+      s_alert.popConf(msg, function () {
+        var params    = {};
+        params.slipNo = $scope.slipNo;
+        params.procFg = $scope.slipInfo.procFg;
+
+        console.log('procFgUpdate params');
+        console.log(params);
+
+        $http({
+          method : 'POST', //방식
+          url    : "/iostock/vendr/vendrOrder/vendrOrderDtl/saveProcFg.sb", /* 통신할 URL */
+          params : params, /* 파라메터로 보낼 데이터 */
+          headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+        }).then(function successCallback(response) {
+          if (response.data.status === 'OK') {
+            $scope._popMsg(messages['cmm.saveSucc']);
+
+            // 발주 리스트 그리드 조회
+            var vendrOrderScope = agrid.getScope('vendrOrderCtrl');
+            vendrOrderScope.searchVendrOrderList();
+
+            var params    = {};
+            params.slipNo = $scope.slipNo;
+            params.slipFg = $scope.slipFg;
+            $scope._broadcast('vendrOrderPopCtrl', params);
+          } else if (response.data.status === 'FAIL') {
+            $scope._popMsg(response.data.message);
+          } else {
+            var msg = response.data.status + ' : ' + response.data.message;
+            $scope._popMsg(msg);
+            return false;
+          }
+        }, function errorCallback(response) {
+          // called asynchronously if an error occurs
+          // or server returns response with an error status.
+          $scope._popMsg(response.data.message);
+          return false;
+        });
+      });
+    };
 
     // 팝업 닫기, 값 초기화, 발주 리스트 그리드 조회
     $scope.popupClose = function () {

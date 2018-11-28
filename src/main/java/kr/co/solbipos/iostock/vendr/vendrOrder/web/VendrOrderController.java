@@ -69,7 +69,7 @@ public class VendrOrderController {
 
 
     /**
-     * 거래처 발주등록 - 거래처 발주등록 리스트 조회
+     * 거래처 발주등록 - 거래처 발주 리스트 조회
      * @param   request
      * @param   response
      * @param   model
@@ -161,6 +161,29 @@ public class VendrOrderController {
 
 
     /**
+     * 거래처 발주등록 - 발주정보 진행상태 변경
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   vendrOrderVO
+     * @return  String
+     * @author  안동관
+     * @since   2018. 11. 23.
+     */
+    @RequestMapping(value = "/vendrOrderDtl/saveProcFg.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveProcFg(HttpServletRequest request, HttpServletResponse response,
+        Model model, VendrOrderVO vendrOrderVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = vendrOrderService.saveProcFg(vendrOrderVO, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+
+    /**
      * 거래처 발주등록 - 발주상품 리스트 조회
      * @param   request
      * @param   response
@@ -207,7 +230,7 @@ public class VendrOrderController {
 
 
     /**
-     * 거래처 발주등록 - 발주상품 등록 리스트 조회
+     * 거래처 발주등록 - 발주상품 추가/변경 등록 리스트 조회
      * @param   request
      * @param   response
      * @param   model
@@ -230,7 +253,7 @@ public class VendrOrderController {
 
 
     /**
-     * 거래처 발주등록 - 발주상품 등록 리스트 저장
+     * 거래처 발주등록 - 발주상품 추가/변경 등록 리스트 저장
      * @param   request
      * @param   response
      * @param   model
@@ -260,18 +283,18 @@ public class VendrOrderController {
 
 
     /**
-     * 다이나믹 콤보조회
+     * 다이나믹 콤보조회 - 발주타입 조회
      * @param   request
      * @param   response
      * @param   model
      * @param   volmErrVO
      * @return  String
      * @author  안동관
-     * @since   2018. 10. 22.
+     * @since   2018. 11. 21.
      */
-    @RequestMapping(value = "/vendrOrderDtl/getDynamicCombo.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/vendrOrderDtl/getOrderTypeCombo.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getDynamicCombo(HttpServletRequest request, HttpServletResponse response,
+    public Result getOrderTypeCombo(HttpServletRequest request, HttpServletResponse response,
         Model model, VolmErrVO volmErrVO) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
@@ -279,6 +302,32 @@ public class VendrOrderController {
         volmErrVO.setSelectCd("NMCODE_CD");
         volmErrVO.setSelectNm("NMCODE_NM");
         volmErrVO.setSelectWhere("HQ_OFFICE_CD='"+sessionInfoVO.getHqOfficeCd()+"' AND NMCODE_GRP_CD = 'AA1'");
+        List<DefaultMap<String>> list = volmErrService.selectDynamicCodeList(volmErrVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, volmErrVO);
+    }
+
+
+    /**
+     * 다이나믹 콤보조회 - 발주타입 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   volmErrVO
+     * @return  String
+     * @author  안동관
+     * @since   2018. 11. 21.
+     */
+    @RequestMapping(value = "/vendrOrderDtl/getProcFgCombo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProcFgCombo(HttpServletRequest request, HttpServletResponse response,
+        Model model, VolmErrVO volmErrVO) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        volmErrVO.setSelectTable("TB_CM_NMCODE");
+        volmErrVO.setSelectCd("NMCODE_CD");
+        volmErrVO.setSelectNm("NMCODE_NM");
+        volmErrVO.setSelectWhere("NMCODE_GRP_CD='096' AND NMCODE_ITEM_1 LIKE '%"+volmErrVO.getProcFg()+"%'");
         List<DefaultMap<String>> list = volmErrService.selectDynamicCodeList(volmErrVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, volmErrVO);

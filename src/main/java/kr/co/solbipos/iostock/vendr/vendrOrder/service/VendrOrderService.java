@@ -18,16 +18,19 @@ public interface VendrOrderService {
     /** 거래처 발주등록 - 발주정보 삭제 */
     int deleteVendrOrderDtl(VendrOrderVO vendrOrderVO, SessionInfoVO sessionInfoVO);
 
+    /** 거래처 발주등록 - 발주정보 진행상태 변경 */
+    int saveProcFg(VendrOrderVO vendrOrderVO, SessionInfoVO sessionInfoVO);
+
     /** 거래처 발주등록 - 발주상품 리스트 조회 */
     List<DefaultMap<String>> getVendrOrderProdList(VendrOrderVO vendrOrderVO, SessionInfoVO sessionInfoVO);
 
     /** 거래처 발주등록 - 진행구분 조회 */
     DefaultMap<String> getProcFgCheck(VendrOrderVO vendrOrderVO, SessionInfoVO sessionInfoVO);
 
-    /** 거래처 발주등록 - 발주상품 등록 리스트 조회 */
+    /** 거래처 발주등록 - 발주상품 추가/변경 등록 리스트 조회 */
     List<DefaultMap<String>> getVendrOrderProdRegList(VendrOrderVO vendrOrderVO, SessionInfoVO sessionInfoVO);
 
-    /** 거래처 발주등록 - 발주상품 등록 리스트 저장 */
+    /** 거래처 발주등록 - 발주상품 추가/변경 등록 리스트 저장 */
     int saveVendrOrderProdReg(VendrOrderVO[] vendrOrderVOs, SessionInfoVO sessionInfoVO);
 
 
