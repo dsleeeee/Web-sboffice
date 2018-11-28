@@ -22,17 +22,21 @@ import java.util.List;
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 public interface EnvConfgService {
-    
+
+    /** 환경그룹 목록 조회 */
+    List<DefaultMap<String>> getEnvstGrpList();
+
     /** 대표명칭 코드목록 조회 */
     List<DefaultMap<String>> getEnvstList(EnvstVO envstVO);
-    
+
     /** 세부명칭 코드목록 조회 */
     List<DefaultMap<String>> getEnvstDtlList(EnvstDtlVO envstDtlVO);
-    
+
     /** 대표명칭 코드 저장 */
     int saveEnvstList(EnvstVO[] envstVOs, SessionInfoVO sessionInfoVO);
-    
+
     /** 세부명칭 코드 저장 */
     int saveEnvstDtlList(EnvstDtlVO[] envstDtlVO, SessionInfoVO sessionInfoVO);
-    
+
+
 }
