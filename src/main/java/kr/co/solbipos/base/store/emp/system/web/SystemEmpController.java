@@ -1,4 +1,4 @@
-package kr.co.solbipos.base.store.emp.hq.web;
+package kr.co.solbipos.base.store.emp.system.web;
 
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
@@ -6,8 +6,8 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.store.emp.enums.EmpResult;
-import kr.co.solbipos.base.store.emp.hq.service.HqEmpService;
-import kr.co.solbipos.base.store.emp.hq.service.HqEmpVO;
+import kr.co.solbipos.base.store.emp.system.service.SystemEmpService;
+import kr.co.solbipos.base.store.emp.system.service.SystemEmpVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,51 +27,50 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 
 
 /**
- * @Class Name : HqEmpController.java
- * @Description : 기초관리 > 매장관리 > 본사사원정보관리
+ * @Class Name : SystemEmpController.java
+ * @Description : 기초관리 > 사원정보관리 > 사원정보관리
  * @Modification Information
  * @
  * @  수정일      수정자      수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2018.08.14  정상화      최초생성
- * @ 2018.11.20  김지은      angular 방식으로 수정
+ * @ 2018.11.26  김지은      최초생성
  *
- * @author NHN한국사이버결제 KCP 정상화
- * @since 2018. 08.14
+ * @author 솔비포스 김지은
+ * @since 2018. 11.26
  * @version 1.0
  *
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Controller
-@RequestMapping(value = "/base/store/emp/hq")
-public class HqEmpController {
+@RequestMapping(value = "/base/store/emp/system")
+public class SystemEmpController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private final SessionService sessionService;
-    private final HqEmpService hqEmpService;
+    private final SystemEmpService systemEmpService;
 
     /** Constructor Injection */
     @Autowired
-    public HqEmpController(SessionService sessionService, HqEmpService hqEmpService) {
+    public SystemEmpController(SessionService sessionService, SystemEmpService systemEmpService) {
         this.sessionService = sessionService;
-        this.hqEmpService = hqEmpService;
+        this.systemEmpService = systemEmpService;
     }
 
     /**
-     * 본사사원 리스트 화면
+     * 사원 리스트 화면
      * @param model
      * @return the string
      */
     @RequestMapping(value = "/list.sb", method = RequestMethod.GET)
     public String view(Model model) {
-        return "base/store/emp/hqEmp";
+        return "base/store/emp/systemEmp";
     }
 
 
     /**
-     * 본사 사원 목록 조회
-     * @param hqEmpVO
+     * 사원 목록 조회
+     * @param systemEmpVO
      * @param   request
      * @param   response
      * @param   model
@@ -79,19 +78,19 @@ public class HqEmpController {
      */
     @ResponseBody
     @RequestMapping(value = "/list.sb", method = RequestMethod.POST)
-    public Result view(HttpServletRequest request, HqEmpVO hqEmpVO,
+    public Result view(HttpServletRequest request, SystemEmpVO systemEmpVO,
         HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<String>> list = hqEmpService.getHqEmpList(hqEmpVO, sessionInfoVO);
+        List<DefaultMap<String>> list = systemEmpService.getSystemEmpList(systemEmpVO, sessionInfoVO);
 
-        return returnListJson(Status.OK, list,hqEmpVO);
+        return returnListJson(Status.OK, list,systemEmpVO);
     }
 
     /**
-     * 본사사원정보 상세 조회
-     * @param hqEmpVO
+     * 사원정보 상세 조회
+     * @param systemEmpVO
      * @param   request
      * @param   response
      * @param   model
@@ -99,19 +98,19 @@ public class HqEmpController {
      */
     @ResponseBody
     @RequestMapping(value = "/detail.sb", method = RequestMethod.POST)
-    public Result getDtlInfo(HqEmpVO hqEmpVO, HttpServletRequest request,
+    public Result getDtlInfo(SystemEmpVO systemEmpVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
-        DefaultMap<String> result = hqEmpService.getHqEmpDtlInfo(hqEmpVO, sessionInfoVO);
+        DefaultMap<String> result = systemEmpService.getSystemEmpDtlInfo(systemEmpVO, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }
 
     /**
-     * 본사사원정보 등록
-     * @param hqEmpVO
+     * 사원정보 등록
+     * @param systemEmpVO
      * @param   request
      * @param   response
      * @param   model
@@ -119,33 +118,33 @@ public class HqEmpController {
      */
     @ResponseBody
     @RequestMapping(value = "/regist.sb", method = RequestMethod.POST)
-    public Result regist(@RequestBody HqEmpVO hqEmpVO, HttpServletRequest request,
+    public Result regist(@RequestBody SystemEmpVO systemEmpVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
-        EmpResult empResult = hqEmpService.insertHqEmpInfo(hqEmpVO,sessionInfoVO);
+        EmpResult empResult = systemEmpService.insertSystemEmpInfo(systemEmpVO,sessionInfoVO);
 
         return returnJson(Status.OK, empResult);
     }
 
     /**
-     * 본사사원정보 웹 사용자 ID 조회 (중복체크)
-     * @param hqEmpVO
+     * 사원정보 웹 사용자 ID 조회 (중복체크)
+     * @param systemEmpVO
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/chkHqUserId.sb", method = RequestMethod.POST)
-    public Result chkHqUserId(HqEmpVO hqEmpVO) {
+    @RequestMapping(value = "/chkSystemUserId.sb", method = RequestMethod.POST)
+    public Result chkSystemUserId(SystemEmpVO systemEmpVO) {
 
-        EmpResult empResult= hqEmpService.getHqUserIdCnt(hqEmpVO);
+        EmpResult empResult= systemEmpService.getSystemUserIdCnt(systemEmpVO);
 
         return returnJson(Status.OK, empResult);
     }
 
     /**
-     * 본사사원정보 수정
-     * @param hqEmpVO
+     * 사원정보 수정
+     * @param systemEmpVO
      * @param   request
      * @param   response
      * @param   model
@@ -153,32 +152,37 @@ public class HqEmpController {
      */
     @ResponseBody
     @RequestMapping(value = "/save.sb", method = RequestMethod.POST)
-    public Result save(@RequestBody HqEmpVO hqEmpVO, HttpServletRequest request,
+    public Result save(@RequestBody SystemEmpVO systemEmpVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
-        EmpResult empResult = hqEmpService.saveHqEmpInfo(hqEmpVO,sessionInfoVO);
+        EmpResult empResult = systemEmpService.saveSystemEmpInfo(systemEmpVO,sessionInfoVO);
 
         return returnJson(Status.OK, empResult);
     }
 
-//    /**
-//     * 비밀번호 변경
-//     * @param hqEmpVO
-//     * @param   request
-//     * @param   response
-//     * @param   model
-//     * @return
-//     */
-//    @ResponseBody
-//    @RequestMapping(value = "/modifyPassword.sb", method = RequestMethod.POST)
-//    public Result modifyPassword(HqEmpVO hqEmpVO, HttpServletRequest request,
-//        HttpServletResponse response, Model model) {
-//
-//        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
-//        EmpResult empResult = hqEmpService.modifyPassword(hqEmpVO,sessionInfoVO);
-//
-//        return returnJson(Status.OK, empResult);
-//    }
+    /**
+     * 비밀번호 변경
+     * @param systemEmpVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/modifyPassword.sb", method = RequestMethod.POST)
+    public Result modifyPassword(@RequestBody SystemEmpVO systemEmpVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+
+        LOGGER.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> getUserId : " + systemEmpVO.getUserId());
+        LOGGER.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> getEmpNo : " + systemEmpVO.getEmpNo());
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+        EmpResult empResult = systemEmpService.modifyPassword(systemEmpVO,sessionInfoVO);
+
+        return returnJson(Status.OK, empResult);
+    }
+
 
 }

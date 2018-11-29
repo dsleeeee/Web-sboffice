@@ -107,11 +107,23 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
 
       var result = response.data.data;
 
+      console.log('chk duplicate result', result);
+
       if(result == "SUCCESS"){
         $scope.duplicationChkFg = true;
         $scope._popMsg(messages["hqEmp.notDuplicate.msg"]);
-      } else if(result == "USER_ID_REGEXP"){
+      } else if(result === "USER_ID_REGEXP"){
         $scope._popMsg(messages["hqEmp.userIdRegexp.msg"]);
+      } else if(result === "USER_ID_LENGHTH_REGEXP"){
+        $scope._popMsg(messages["hqEmp.userIdLengthRegexp.msg"]);
+      } else if(result === "USER_ID_CANNOT_USE_HANGEUL"){
+        $scope._popMsg(messages["hqEmp.userIdNotUseHangeul.msg"]);
+      } else if(result === "USER_ID_MUST_CONTAIN_ENG_CAHR"){
+        $scope._popMsg(messages["hqEmp.userIdContainEngChar.msg"]);
+      } else if(result === "USER_ID_ONLY_ENG_NUM_CHAR"){
+        $scope._popMsg(messages["hqEmp.userIdOnlyEnvNumChar.msg"]);
+      } else if(result === "USER_ID_DUPLICATE"){
+        $scope._popMsg(messages["hqEmp.userId.duplicate.msg"]);
       } else {
         $scope._popMsg(messages["hqEmp.userId.notDuplicate.msg"]);
       }

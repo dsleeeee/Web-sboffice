@@ -6,9 +6,9 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.store.emp.enums.EmpResult;
 import kr.co.solbipos.base.store.emp.store.service.StoreEmpService;
 import kr.co.solbipos.base.store.emp.store.service.StoreEmpVO;
-import kr.co.solbipos.base.store.emp.store.service.enums.StoreEmpResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -129,7 +129,7 @@ public class StoreEmpController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
-        StoreEmpResult storeEmpResult = storeEmpService.insertStoreEmpInfo(storeEmpVO,sessionInfoVO);
+        EmpResult storeEmpResult = storeEmpService.insertStoreEmpInfo(storeEmpVO,sessionInfoVO);
 
         return returnJson(Status.OK, storeEmpResult);
     }
@@ -144,7 +144,7 @@ public class StoreEmpController {
     @RequestMapping(value = "/chkStoreUserId.sb", method = RequestMethod.POST)
     public Result chkStoreUserId(StoreEmpVO storeEmpVO) {
 
-        StoreEmpResult storeEmpResult= storeEmpService.getStoreUserIdCnt(storeEmpVO);
+        EmpResult storeEmpResult= storeEmpService.getStoreUserIdCnt(storeEmpVO);
 
         return returnJson(Status.OK, storeEmpResult);
     }
@@ -163,7 +163,7 @@ public class StoreEmpController {
         HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
-        StoreEmpResult storeEmpResult = storeEmpService.saveStoreEmpInfo(storeEmpVO, sessionInfoVO);
+        EmpResult storeEmpResult = storeEmpService.saveStoreEmpInfo(storeEmpVO, sessionInfoVO);
 
         return returnJson(Status.OK, storeEmpResult);
     }

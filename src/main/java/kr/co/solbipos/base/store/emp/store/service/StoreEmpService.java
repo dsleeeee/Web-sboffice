@@ -2,7 +2,7 @@ package kr.co.solbipos.base.store.emp.store.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.base.store.emp.store.service.enums.StoreEmpResult;
+import kr.co.solbipos.base.store.emp.enums.EmpResult;
 
 import java.util.List;
 
@@ -32,15 +32,15 @@ public interface StoreEmpService
     DefaultMap<String> getStoreEmpDtlInfo(StoreEmpVO storeEmpVO, SessionInfoVO sessionInfoVO);
 
     /** 본사 웹유저아이디 조회*/
-    StoreEmpResult getStoreUserIdCnt(StoreEmpVO storeEmpVO);
+    EmpResult getStoreUserIdCnt(StoreEmpVO storeEmpVO);
 
     /** 본사 사원정보 등록*/
-    StoreEmpResult insertStoreEmpInfo(StoreEmpVO storeEmpVO, SessionInfoVO sessionInfoVO);
+    EmpResult insertStoreEmpInfo(StoreEmpVO storeEmpVO, SessionInfoVO sessionInfoVO);
 
     /** 본사 사원정보 수정*/
-    StoreEmpResult saveStoreEmpInfo(StoreEmpVO storeEmpVO, SessionInfoVO sessionInfoVO);
+    EmpResult saveStoreEmpInfo(StoreEmpVO storeEmpVO, SessionInfoVO sessionInfoVO);
 
 //    /** 본사 사원번호 패스워드변경*/
-//    StoreEmpResult modifyPassword(StoreEmpVO storeEmpVO, SessionInfoVO sessionInfoVO);
+//    EmpResult modifyPassword(StoreEmpVO storeEmpVO, SessionInfoVO sessionInfoVO);
 
 }
