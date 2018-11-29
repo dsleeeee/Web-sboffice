@@ -4,7 +4,7 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
-<c:set var="baseUrl" value="/iostock/vendr/verdrOrder/vendrOrderProdReg/"/>
+<c:set var="baseUrl" value="/iostock/vendr/vendrOrder/vendrOrderProdReg/"/>
 
 <wj-popup id="wjVendrOrderProdRegLayer" control="wjVendrOrderProdRegLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
   <div id="vendrOrderProdRegLayer" class="wj-dialog wj-dialog-columns" ng-controller="vendrOrderProdRegCtrl">
@@ -13,7 +13,7 @@
       <a href="#" class="wj-hide btn_close"></a>
     </div>
     <div class="wj-dialog-body sc2" style="height: 600px;">
-      <table class="tblType01" style="position: relative;">
+      <table class="tblType01">
         <colgroup>
           <col class="w15"/>
           <col class="w35"/>
@@ -78,9 +78,13 @@
 
       <div class="mt10 oh">
         <%-- 조회 --%>
-        <button type="button" class="btn_blue fr" id="btnSearch" ng-click="searchVendrOrderRegList();">
+        <button type="button" class="btn_blue fr" id="btnSearch" ng-click="fnSearch();">
           <s:message code="cmm.search"/></button>
       </div>
+
+      <ul class="txtSty3 mt10">
+        <li class="red"><s:message code="vendrOrder.reg.txt1"/></li>
+      </ul>
 
       <div class="mt20 tr">
         <%-- 최종원가를 발주원가로 세팅 --%>
@@ -105,10 +109,10 @@
 
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="vendrOrder.reg.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrOrder.reg.prodNm"/>" binding="prodNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrOrder.reg.prodNm"/>" binding="prodNm" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrOrder.reg.orgplceCd"/>" binding="orgplceCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrOrder.reg.lastCostUprc"/>" binding="lastCostUprc" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrOrder.reg.poUnitFg"/>" binding="poUnitFg" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrOrder.reg.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrOrder.reg.poUnitQty"/>" binding="poUnitQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrOrder.reg.safeStock"/>" binding="safeStockUnitQty" width="50" align="right" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrOrder.reg.safeStock"/>" binding="safeStockEtcQty" width="50" align="right" is-read-only="true"></wj-flex-grid-column>
@@ -121,9 +125,11 @@
             <wj-flex-grid-column header="<s:message code="vendrOrder.reg.orderEtcQty"/>" binding="orderEtcQty" width="50" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrOrder.reg.prevOrderTotQty"/>" binding="prevOrderTotQty" width="0" align="left" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrOrder.reg.orderTotQty"/>" binding="orderTotQty" width="0" align="left" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrOrder.reg.orderAmt"/>" binding="orderAmt" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrOrder.reg.orderVat"/>" binding="orderVat" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrOrder.reg.orderTot"/>" binding="orderTot" width="90" align="right" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrOrder.reg.vatFg"/>" binding="vatFg01" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrOrder.reg.envst0011"/>" binding="envst0011" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrOrder.reg.vendrVatFg01"/>" binding="vendrVatFg01" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
 
           </wj-flex-grid>
         </div>
@@ -176,8 +182,8 @@
       s.cellEditEnded.addHandler(function (s, e) {
         if (e.panel === s.cells) {
           var col = s.columns[e.col];
-          // 폐기수량 수정시 금액,VAT,합계 계산하여 보여준다.
-          if (col.binding === "orderUnitQty" || col.binding === "orderEtcQty") {
+          // 원가 및 수량 수정시 합계 계산하여 보여준다.
+          if (col.binding === "costUprc" || col.binding === "orderUnitQty" || col.binding === "orderEtcQty") {
             var item = s.rows[e.row].dataItem;
             $scope.calcAmt(item);
           }
@@ -240,36 +246,55 @@
       var costUprc  = parseFloat(item.costUprc);
       var poUnitQty = parseInt(item.poUnitQty);
       var vat01     = parseInt(item.vatFg01);
-      var envst0011 = parseInt(item.envst0011);
+      var vendrVatFg01 = parseInt(item.vendrVatFg01);
 
       var unitQty  = (parseInt(nvl(item.prevOrderUnitQty, 0)) + parseInt(nvl(item.orderUnitQty, 0))) * parseInt(item.poUnitQty);
       var etcQty   = parseInt(nvl(item.prevOrderEtcQty, 0)) + parseInt(nvl(item.orderEtcQty, 0));
       var totQty   = parseInt(unitQty + etcQty);
       var tempAmt  = Math.round(totQty * costUprc / poUnitQty);
-      var orderAmt = tempAmt - Math.round(tempAmt * vat01 * envst0011 / 11);
-      var orderVat = Math.round(tempAmt * vat01 / (10 + envst0011));
+      var orderAmt = tempAmt - Math.round(tempAmt * vat01 * vendrVatFg01 / 11);
+      var orderVat = Math.round(tempAmt * vat01 / (10 + vendrVatFg01));
       var orderTot = parseInt(orderAmt + orderVat);
 
       item.orderTotQty = totQty;   // 총주문수량
+      item.orderAmt    = orderAmt; // 금액
+      item.orderVat    = orderVat; // VAT
       item.orderTot    = orderTot; // 합계
     };
 
 
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("vendrOrderProdRegCtrl", function (event, data) {
-      // 그리드 초기화
-      var cv          = new wijmo.collections.CollectionView([]);
-      cv.trackChanges = true;
-      $scope.data     = cv;
+      if (!$.isEmptyObject(data)) {
+        // 그리드 초기화
+        var cv          = new wijmo.collections.CollectionView([]);
+        cv.trackChanges = true;
+        $scope.data     = cv;
 
-      $scope.slipNo = data.slipNo;
-      $scope.slipFg = data.slipFg;
+        $scope.slipNo = data.slipNo;
+        $scope.slipFg = data.slipFg;
 
-      $scope.wjVendrOrderProdRegLayer.show(true);
+        // 거래처코드 가져오기.
+        var vendrOrderDtlScope = agrid.getScope('vendrOrderDtlCtrl');
+        $scope.vendrCd         = vendrOrderDtlScope.slipInfo.vendrCd;
+
+        $scope.wjVendrOrderProdRegLayer.show(true);
+      }
+      // 페이징처리에서 broadcast 호출시
+      else {
+        $scope.searchVendrOrderRegList();
+      }
 
       // 기능수행 종료 : 반드시 추가
       event.preventDefault();
     });
+
+
+    // 조회버튼 클릭으로 조회시
+    $scope.fnSearch = function () {
+      $scope._setPagingInfo('curr', 1); // 페이지번호 1로 세팅
+      $scope.searchVendrOrderRegList();
+    };
 
 
     // 상품 리스트 조회
@@ -278,6 +303,7 @@
       var params       = {};
       params.slipNo    = $scope.slipNo;
       params.slipFg    = $scope.slipFg;
+      params.vendrCd   = $scope.vendrCd;
       params.listScale = 50;
 
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
@@ -330,7 +356,7 @@
 
     $scope.setLastCostToOrderCost = function () {
       $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]);
-      // 데이터 처리중 팝업 띄우기위해 setTimeout 사용.
+      // 데이터 처리중 팝업 띄우기위해 $timeout 사용.
       $timeout(function () {
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
           var item = $scope.flex.collectionView.items[i];
