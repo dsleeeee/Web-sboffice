@@ -59,7 +59,7 @@
       <div class="mt20 tr">
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
         <span class="chk pdb5 txtIn" style="top: 0px;">
-          <input type="checkbox" name="storeSplyChk" id="storeSplyChk" ng-model="storeSplyChk" value="Y"/>
+          <input type="checkbox" name="storeSplyChk" id="storeSplyChk" ng-model="storeSplyChk"/>
           <label for="storeSplyChk"><s:message code="vendrInstock.reg.storeSplyUprcCheck"/></label>
         </span>
         </c:if>
@@ -85,23 +85,23 @@
 
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="vendrInstock.reg.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.prodNm"/>" binding="prodNm" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.lastCostUprc"/>" binding="lastCostUprc" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.poUnitQty"/>" binding="poUnitQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.prevInUnitQty"/>" binding="prevInUnitQty" width="50" align="right" is-read-only="true" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.prevInEtcQty"/>" binding="prevInEtcQty" width="50" align="right" is-read-only="true" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.costUprc"/>" binding="costUprc" width="110" align="right" is-read-only="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.inUnitQty"/>" binding="inUnitQty" width="50" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.inEtcQty"/>" binding="inEtcQty" width="50" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.prodNm"/>" binding="prodNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.lastCostUprc"/>" binding="lastCostUprc" width="60" align="right" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.poUnitFg"/>" binding="poUnitFg" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.poUnitQty"/>" binding="poUnitQty" width="50" align="right" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.prevInUnitQty"/>" binding="prevInUnitQty" width="40" align="right" is-read-only="true" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.prevInEtcQty"/>" binding="prevInEtcQty" width="40" align="right" is-read-only="true" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.costUprc"/>" binding="costUprc" width="110" align="right" is-read-only="false" max-length=8></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.inUnitQty"/>" binding="inUnitQty" width="40" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.inEtcQty"/>" binding="inEtcQty" width="40" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrInstock.reg.prevInTotQty"/>" binding="prevInTotQty" width="0" align="left" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.inTotQty"/>" binding="inTotQty" width="0" align="left" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.inTotQty"/>" binding="inTotQty" width="0" align="left" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrInstock.reg.inAmt"/>" binding="inAmt" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrInstock.reg.inVat"/>" binding="inVat" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.inTot"/>" binding="inTot" width="90" align="right" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.inTot"/>" binding="inTot" width="85" align="right" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrInstock.reg.vatFg"/>" binding="vatFg01" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.envst0011"/>" binding="envst0011" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.storeSplyUprc"/>" binding="storeSplyUprc" width="90" align="right" is-read-only="false" visible="{{storeSplyChk}}"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.vendrVatFg01"/>" binding="vendrVatFg01" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.storeSplyUprc"/>" binding="splyUprc" width="70" align="right" is-read-only="false" visible="{{storeSplyChk}}" max-length=8></wj-flex-grid-column>
 
           </wj-flex-grid>
         </div>
@@ -218,14 +218,14 @@
       var costUprc  = parseFloat(item.costUprc);
       var poUnitQty = parseInt(item.poUnitQty);
       var vat01     = parseInt(item.vatFg01);
-      var envst0011 = parseInt(item.envst0011);
+      var vendrVatFg01 = parseInt(item.vendrVatFg01);
 
       var unitQty = (parseInt(nvl(item.prevOrderUnitQty, 0)) + parseInt(nvl(item.inUnitQty, 0))) * parseInt(item.poUnitQty);
       var etcQty  = parseInt(nvl(item.prevOrderEtcQty, 0)) + parseInt(nvl(item.inEtcQty, 0));
       var totQty  = parseInt(unitQty + etcQty);
       var tempAmt = Math.round(totQty * costUprc / poUnitQty);
-      var inAmt   = tempAmt - Math.round(tempAmt * vat01 * envst0011 / 11);
-      var inVat   = Math.round(tempAmt * vat01 / (10 + envst0011));
+      var inAmt   = tempAmt - Math.round(tempAmt * vat01 * vendrVatFg01 / 11);
+      var inVat   = Math.round(tempAmt * vat01 / (10 + vendrVatFg01));
       var inTot   = parseInt(inAmt + inVat);
 
       item.inTotQty = totQty;   // 총주문수량
@@ -246,10 +246,11 @@
 
         $scope.slipNo = data.slipNo;
         $scope.slipFg = data.slipFg;
+        $scope.vendrCd = data.vendrCd;
 
         // 거래처코드 가져오기.
-        var vendrInstockDtlScope = agrid.getScope('vendrInstockDtlCtrl');
-        $scope.vendrCd           = vendrInstockDtlScope.slipInfo.vendrCd;
+        // var vendrInstockDtlScope = agrid.getScope('vendrInstockDtlCtrl');
+        // $scope.vendrCd           = vendrInstockDtlScope.slipInfo.vendrCd;
 
         $scope.wjVendrInstockProdRegLayer.show(true);
       }
@@ -302,11 +303,12 @@
           return false;
         }
 
-        item.status    = "U";
-        item.slipNo    = $scope.slipNo;
-        item.slipFg    = $scope.slipFg;
-        item.storageCd = "001";
-        item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
+        item.status      = "U";
+        item.slipNo      = $scope.slipNo;
+        item.slipFg      = $scope.slipFg;
+        item.storageCd   = "001";
+        item.hqBrandCd   = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
+        item.storeSplyFg = ($scope.storeSplyChk === true ? 'Y' : 'N');
 
         params.push(item);
       }

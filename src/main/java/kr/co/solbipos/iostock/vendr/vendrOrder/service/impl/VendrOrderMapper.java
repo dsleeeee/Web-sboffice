@@ -10,96 +10,60 @@ import java.util.List;
 @Mapper
 @Repository
 public interface VendrOrderMapper {
-    /** 거래처 발주등록 - 거래처 발주등록 리스트 조회(본사) */
-    List<DefaultMap<String>> getHqVendrOrderList(VendrOrderVO vendrOrderVO);
+    /** 거래처 발주등록 - 거래처 발주등록 리스트 조회 */
+    List<DefaultMap<String>> getVendrOrderList(VendrOrderVO vendrOrderVO);
 
-    /** 거래처 발주등록 - 거래처 발주등록 리스트 조회(매장) */
-//    List<DefaultMap<String>> getStVendrOrderList(VendrOrderVO vendrOrderVO);
+    /** 거래처 발주등록 - 발주정보 상세 조회 */
+    DefaultMap<String> getSlipInfo(VendrOrderVO vendrOrderVO);
 
-    /** 거래처 발주등록 - 발주정보 상세 조회(본사) */
-    DefaultMap<String> getHqSlipInfo(VendrOrderVO vendrOrderVO);
+    /** 거래처 발주등록 - 신규전표 조회 */
+    String getNewSlipNo(VendrOrderVO vendrOrderVO);
 
-    /** 거래처 발주등록 - 발주정보 상세 조회(매장) */
-//    DefaultMap<String> getStSlipInfo(VendrOrderVO vendrOrderVO);
+    /** 거래처 발주등록 - 발주정보 HD 등록 */
+    int insertVendrOrderHd(VendrOrderVO vendrOrderVO);
 
-    /** 거래처 발주등록 - 신규전표 조회(본사) */
-    String getHqNewSlipNo(VendrOrderVO vendrOrderVO);
+    /** 거래처 발주등록 - 발주정보 HD 수정 */
+    int updateVendrOrderHd(VendrOrderVO vendrOrderVO);
 
-    /** 거래처 발주등록 - 신규전표 조회(매장) */
-//    String getStNewSlipNo(VendrOrderVO vendrOrderVO);
+    /** 거래처 발주등록 - 발주정보 HD 삭제 */
+    int deleteVendrOrderHd(VendrOrderVO vendrOrderVO);
 
-    /** 거래처 발주등록 - 발주정보 HD 등록(본사) */
-    int insertHqVendrOrderHd(VendrOrderVO vendrOrderVO);
+    /** 거래처 발주등록 - 발주정보 삭제시 상품이 있는지 여부 조회 */
+    String getDtlProdExist(VendrOrderVO vendrOrderVO);
 
-    /** 거래처 발주등록 - 발주정보 HD 등록(매장) */
-//    int insertStVendrOrderHd(VendrOrderVO vendrOrderVO);
+    /** 거래처 발주등록 - 발주 진행상태 변경시 입고/반출 전표가 있는지 여부 조회 */
+    String getVendrInstockExist(VendrOrderVO vendrOrderVO);
 
-    /** 거래처 발주등록 - 발주정보 HD 수정(본사) */
-    int updateHqVendrOrderHd(VendrOrderVO vendrOrderVO);
+    /** 거래처 발주등록 - 발주정보 진행상태 변경 */
+    int updateProcFg(VendrOrderVO vendrOrderVO);
 
-    /** 거래처 발주등록 - 발주정보 HD 수정(매장) */
-//    int updateStVendrOrderHd(VendrOrderVO vendrOrderVO);
+    /** 거래처 발주등록 - 발주상품 리스트 조회 */
+    List<DefaultMap<String>> getVendrOrderProdList(VendrOrderVO vendrOrderVO);
 
-    /** 거래처 발주등록 - 발주정보 HD 삭제(본사) */
-    int deleteHqVendrOrderHd(VendrOrderVO vendrOrderVO);
+    /** 거래처 발주등록 - 진행구분 조회 */
+    DefaultMap<String> getProcFgCheck(VendrOrderVO vendrOrderVO);
 
-    /** 거래처 발주등록 - 발주정보 HD 삭제(매장) */
-//    int deleteStVendrOrderHd(VendrOrderVO vendrOrderVO);
+    /** 거래처 발주등록 - 발주상품 추가/변경 등록 리스트 조회 */
+    List<DefaultMap<String>> getVendrOrderProdRegList(VendrOrderVO vendrOrderVO);
 
-    /** 거래처 발주등록 - 발주정보 삭제시 상품이 있는지 여부 조회(본사) */
-    String getHqDtlProdExist(VendrOrderVO vendrOrderVO);
+    /** 거래처 발주등록 - 발주정보 DTL 등록 */
+    int insertVendrOrderDtl(VendrOrderVO vendrOrderVO);
 
-    /** 거래처 발주등록 - 발주 진행상태 변경시 입고/반출 전표가 있는지 여부 조회(본사) */
-    String getHqVendrInstockExist(VendrOrderVO vendrOrderVO);
+    /** 거래처 발주등록 - 발주정보 DTL 수정 */
+    int updateVendrOrderDtl(VendrOrderVO vendrOrderVO);
 
-    /** 거래처 발주등록 - 발주정보 진행상태 변경(본사) */
-    int updateHqProcFg(VendrOrderVO vendrOrderVO);
+    /** 거래처 발주등록 - 발주정보 DTL 삭제 */
+    int deleteVendrOrderDtl(VendrOrderVO vendrOrderVO);
 
-    /** 거래처 발주등록 - 발주상품 리스트 조회(본사) */
-    List<DefaultMap<String>> getHqVendrOrderProdList(VendrOrderVO vendrOrderVO);
-
-    /** 거래처 발주등록 - 진행구분 조회(본사) */
-    DefaultMap<String> getHqProcFgCheck(VendrOrderVO vendrOrderVO);
-
-    /** 거래처 발주등록 - 발주상품 추가/변경 등록 리스트 조회(본사) */
-    List<DefaultMap<String>> getHqVendrOrderProdRegList(VendrOrderVO vendrOrderVO);
-
-    /** 거래처 발주등록 - 발주정보 DTL 등록(본사) */
-    int insertHqVendrOrderDtl(VendrOrderVO vendrOrderVO);
-
-    /** 거래처 발주등록 - 발주정보 DTL 등록(매장) */
-    //    int insertStVendrOrderDtl(VendrOrderVO vendrOrderVO);
-
-    /** 거래처 발주등록 - 발주정보 DTL 수정(본사) */
-    int updateHqVendrOrderDtl(VendrOrderVO vendrOrderVO);
-
-    /** 거래처 발주등록 - 발주정보 DTL 수정(매장) */
-    //    int updateStVendrOrderHd(VendrOrderVO vendrOrderVO);
-
-    /** 거래처 발주등록 - 발주정보 DTL 삭제(본사) */
-    int deleteHqVendrOrderDtl(VendrOrderVO vendrOrderVO);
-
-    /** 거래처 발주등록 - 발주정보 DTL 삭제(매장) */
-    //    int deleteStVendrOrderDtl(VendrOrderVO vendrOrderVO);
-
-    /** 거래처 발주등록 - 발주정보 DTL의 집계정보 HD에 수정(본사) */
-    int updateHqVendrOrderDtlSumHd(VendrOrderVO vendrOrderVO);
+    /** 거래처 발주등록 - 발주정보 DTL의 집계정보 HD에 수정 */
+    int updateVendrOrderDtlSumHd(VendrOrderVO vendrOrderVO);
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-    /** 거래처 발주등록 - 거래처 선택모듈 리스트 조회(본사) */
-    List<DefaultMap<String>> getHqVendrList(VendrOrderVO vendrOrderVO);
+    /** 거래처 발주등록 - 거래처 선택모듈 리스트 조회 */
+    List<DefaultMap<String>> getVendrList(VendrOrderVO vendrOrderVO);
 
 
 

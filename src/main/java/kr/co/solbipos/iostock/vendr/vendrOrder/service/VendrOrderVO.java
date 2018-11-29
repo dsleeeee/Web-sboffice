@@ -104,6 +104,14 @@ public class VendrOrderVO extends PageVO {
     private String yymm;
     /** 안전재고이하구분 */
     private String safeStockFg;
+    /**
+     * 소속구분<br>
+     * M : 시스템<br>
+     * A : 대리점<br>
+     * H : 본사<br>
+     * S : 매장, 가맹점
+     */
+    private String orgnFg;
 
     /**
      * @return the hqOfficeCd
@@ -789,5 +797,19 @@ public class VendrOrderVO extends PageVO {
      */
     public void setSafeStockFg(String safeStockFg) {
         this.safeStockFg = safeStockFg;
+    }
+
+    /**
+     * @return the orgnFg
+     */
+    public String getOrgnFg() {
+        return orgnFg;
+    }
+
+    /**
+     * @param orgnFg the orgnFg to set
+     */
+    public void setOrgnFg(String orgnFg) {
+        this.orgnFg = orgnFg;
     }
 }

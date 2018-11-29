@@ -43,6 +43,7 @@
     $scope.$on("vendrInstockPopCtrl", function (event, data) {
       $scope.slipNo = data.slipNo;
       $scope.slipFg = data.slipFg;
+      $scope.vendrCd = (nvl(data.vendrCd, '') === '' ? '' : data.vendrCd);
 
       // 신규등록인 경우 입고/반출정보 탭만 활성화
       if($scope.slipNo === '') {
@@ -122,6 +123,7 @@
       var params = {};
       params.slipNo = $scope.slipNo;
       params.slipFg = $scope.slipFg;
+      params.vendrCd = $scope.vendrCd;
       $scope._broadcast('vendrInstockProdCtrl', params);
     };
 

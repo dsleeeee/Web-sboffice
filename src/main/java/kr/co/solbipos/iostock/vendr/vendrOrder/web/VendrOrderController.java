@@ -6,6 +6,7 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.iostock.vendr.vendrOrder.service.VendrOrderService;
 import kr.co.solbipos.iostock.vendr.vendrOrder.service.VendrOrderVO;
 import kr.co.solbipos.iostock.volmErr.volmErr.service.VolmErrService;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -298,11 +300,23 @@ public class VendrOrderController {
         Model model, VolmErrVO volmErrVO) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        volmErrVO.setSelectTable("TB_HQ_NMCODE");
-        volmErrVO.setSelectCd("NMCODE_CD");
-        volmErrVO.setSelectNm("NMCODE_NM");
-        volmErrVO.setSelectWhere("HQ_OFFICE_CD='"+sessionInfoVO.getHqOfficeCd()+"' AND NMCODE_GRP_CD = 'AA1'");
-        List<DefaultMap<String>> list = volmErrService.selectDynamicCodeList(volmErrVO);
+        List<DefaultMap<String>> list = new ArrayList<DefaultMap<String>>();
+
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+            volmErrVO.setSelectTable("TB_HQ_NMCODE");
+            volmErrVO.setSelectCd("NMCODE_CD");
+            volmErrVO.setSelectNm("NMCODE_NM");
+            volmErrVO.setSelectWhere("HQ_OFFICE_CD='"+sessionInfoVO.getHqOfficeCd()+"' AND NMCODE_GRP_CD = 'AA1'");
+            list = volmErrService.selectDynamicCodeList(volmErrVO);
+        }
+        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+            volmErrVO.setSelectTable("TB_MS_STORE_NMCODE");
+            volmErrVO.setSelectCd("NMCODE_CD");
+            volmErrVO.setSelectNm("NMCODE_NM");
+            volmErrVO.setSelectWhere("STORE_CD='"+sessionInfoVO.getStoreCd()+"' AND NMCODE_GRP_CD = 'AA1'");
+            list = volmErrService.selectDynamicCodeList(volmErrVO);
+        }
+
 
         return ReturnUtil.returnListJson(Status.OK, list, volmErrVO);
     }

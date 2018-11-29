@@ -129,7 +129,7 @@
             <wj-flex-grid-column header="<s:message code="vendrOrder.reg.orderVat"/>" binding="orderVat" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrOrder.reg.orderTot"/>" binding="orderTot" width="90" align="right" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrOrder.reg.vatFg"/>" binding="vatFg01" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrOrder.reg.envst0011"/>" binding="envst0011" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrOrder.reg.vendrVatFg01"/>" binding="vendrVatFg01" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
 
           </wj-flex-grid>
         </div>
@@ -246,14 +246,14 @@
       var costUprc  = parseFloat(item.costUprc);
       var poUnitQty = parseInt(item.poUnitQty);
       var vat01     = parseInt(item.vatFg01);
-      var envst0011 = parseInt(item.envst0011);
+      var vendrVatFg01 = parseInt(item.vendrVatFg01);
 
       var unitQty  = (parseInt(nvl(item.prevOrderUnitQty, 0)) + parseInt(nvl(item.orderUnitQty, 0))) * parseInt(item.poUnitQty);
       var etcQty   = parseInt(nvl(item.prevOrderEtcQty, 0)) + parseInt(nvl(item.orderEtcQty, 0));
       var totQty   = parseInt(unitQty + etcQty);
       var tempAmt  = Math.round(totQty * costUprc / poUnitQty);
-      var orderAmt = tempAmt - Math.round(tempAmt * vat01 * envst0011 / 11);
-      var orderVat = Math.round(tempAmt * vat01 / (10 + envst0011));
+      var orderAmt = tempAmt - Math.round(tempAmt * vat01 * vendrVatFg01 / 11);
+      var orderVat = Math.round(tempAmt * vat01 / (10 + vendrVatFg01));
       var orderTot = parseInt(orderAmt + orderVat);
 
       item.orderTotQty = totQty;   // 총주문수량

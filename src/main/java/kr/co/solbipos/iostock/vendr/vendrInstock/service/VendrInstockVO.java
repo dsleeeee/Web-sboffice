@@ -76,6 +76,10 @@ public class VendrInstockVO extends PageVO {
     private String dateFg;
     /** 발주/무발주 구분 */
     private String instockType;
+    /** 매장공급가 동시저장 구분 */
+    private String storeSplyFg;
+    /** 공급가 */
+    private Long splyUprc;
 
     /**
      * @return the hqOfficeCd
@@ -565,5 +569,33 @@ public class VendrInstockVO extends PageVO {
      */
     public void setInstockType(String instockType) {
         this.instockType = instockType;
+    }
+
+    /**
+     * @return the storeSplyFg
+     */
+    public String getStoreSplyFg() {
+        return storeSplyFg;
+    }
+
+    /**
+     * @param storeSplyFg the storeSplyFg to set
+     */
+    public void setStoreSplyFg(String storeSplyFg) {
+        this.storeSplyFg = storeSplyFg;
+    }
+
+    /**
+     * @return the splyUprc
+     */
+    public Long getSplyUprc() {
+        return splyUprc;
+    }
+
+    /**
+     * @param splyUprc the splyUprc to set
+     */
+    public void setSplyUprc(Long splyUprc) {
+        this.splyUprc = splyUprc;
     }
 }

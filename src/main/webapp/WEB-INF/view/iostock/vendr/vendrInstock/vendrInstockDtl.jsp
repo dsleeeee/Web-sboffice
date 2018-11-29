@@ -436,6 +436,7 @@
             var params    = {};
             params.slipNo = data.slipNo;
             params.slipFg = parseInt(data.slipFg);
+            params.vendrCd = parseInt(data.vendrCd);
             $scope._broadcast('vendrInstockPopCtrl', params);
           } else {
             $scope.popupClose();

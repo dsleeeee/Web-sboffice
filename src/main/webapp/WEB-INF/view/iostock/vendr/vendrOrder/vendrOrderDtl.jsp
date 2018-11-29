@@ -178,7 +178,7 @@
     <tr>
       <%-- 발주총수량 --%>
       <th><s:message code="vendrOrder.dtl.orderTotQty"/></th>
-      <td><span id="slipDtlOrderTotQty" class="pd5 txtIn s12" ng-bind="slipInfo.orderQty"></span>
+      <td><span id="slipDtlOrderTotQty" class="pd5 txtIn s12" ng-bind="slipInfo.orderTotQty"></span>
       </td>
       <%-- 발주총금액 --%>
       <th><s:message code="vendrOrder.dtl.orderTotAmt"/></th>
@@ -255,6 +255,9 @@
       $("#vendrOrderDtlSelectVendrCd").val('');
       $("#vendrOrderDtlSelectVendrNm").val('선택');
 
+      $scope.vendrOrderDtlSelectVendrNmDisabled  = false; // 거래처선택 모듈 input
+      $scope.vendrOrderDtlSelectVendrBtnDisabled = false; // 선택취소
+
       // 기본값 설정
       $scope.default = {
         orderType   : '',
@@ -317,7 +320,7 @@
             data.endDt       = (nvl(data.endDt, '') !== '' ? getFormatDateTime(data.endDt) : '');
             data.inFirstDate = (nvl(data.inFirstDate, '') !== '' ? getFormatDate(data.inFirstDate) : '');
             data.inLastDate  = (nvl(data.inLastDate, '') !== '' ? getFormatDate(data.inLastDate) : '');
-            data.orderQty    = (nvl(data.orderQty, '') !== '' ? addComma(data.orderQty) : '');
+            data.orderTotQty = (nvl(data.orderTotQty, '') !== '' ? addComma(data.orderTotQty) : '');
             data.orderTot    = (nvl(data.orderTot, '') !== '' ? addComma(data.orderTot) : '');
             data.inTotQty    = (nvl(data.inTotQty, '') !== '' ? addComma(data.inTotQty) : '');
             data.inTot       = (nvl(data.inTot, '') !== '' ? addComma(data.inTot) : '');
@@ -394,6 +397,7 @@
             var params    = {};
             params.slipNo = data.slipNo;
             params.slipFg = data.slipFg;
+            params.vendrCd = data.vendrCd;
             $scope._broadcast('vendrOrderPopCtrl', params);
           } else {
             $scope.popupClose();

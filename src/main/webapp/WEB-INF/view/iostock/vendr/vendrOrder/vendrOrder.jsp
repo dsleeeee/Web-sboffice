@@ -103,6 +103,7 @@
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="vendrOrder.slipNo"/>" binding="slipNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="vendrOrder.vendr"/>" binding="vendrCd" width="0" align="left" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="vendrOrder.vendr"/>" binding="vendrNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="vendrOrder.procFg"/>" binding="procFg" width="60" align="center" is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="vendrOrder.orderType"/>" binding="orderType" width="80" align="center" is-read-only="true" data-map="orderTypeMap"></wj-flex-grid-column>
@@ -180,6 +181,7 @@
             var params    = {};
             params.slipNo = selectedRow.slipNo;
             params.slipFg = $scope.slipFg;
+            params.vendrCd = selectedRow.vendrCd;
             $scope._broadcast('vendrOrderPopCtrl', params);
           }
         }
@@ -213,6 +215,7 @@
       var params    = {};
       params.slipNo = '';
       params.slipFg = $scope.slipFg;
+      params.vendrCd = '';
       $scope._broadcast('vendrOrderPopCtrl', params);
     };
 

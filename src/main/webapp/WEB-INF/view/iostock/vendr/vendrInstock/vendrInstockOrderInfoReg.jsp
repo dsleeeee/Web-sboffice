@@ -59,7 +59,7 @@
             <wj-flex-grid-column header="<s:message code="vendrInstock.ord.inVat"/>" binding="inVat" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrInstock.ord.inTot"/>" binding="inTot" width="90" align="right" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrInstock.ord.vatFg"/>" binding="vatFg01" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.ord.envst0011"/>" binding="envst0011" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.ord.vendrVatFg01"/>" binding="vendrVatFg01" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
 
           </wj-flex-grid>
         </div>
@@ -163,14 +163,14 @@
       var costUprc  = parseFloat(item.costUprc);
       var poUnitQty = parseInt(item.poUnitQty);
       var vat01     = parseInt(item.vatFg01);
-      var envst0011 = parseInt(item.envst0011);
+      var vendrVatFg01 = parseInt(item.vendrVatFg01);
 
       var unitQty = (parseInt(nvl(item.prevOrderUnitQty, 0)) + parseInt(nvl(item.inUnitQty, 0))) * parseInt(item.poUnitQty);
       var etcQty  = parseInt(nvl(item.prevOrderEtcQty, 0)) + parseInt(nvl(item.inEtcQty, 0));
       var totQty  = parseInt(unitQty + etcQty);
       var tempAmt = Math.round(totQty * costUprc / poUnitQty);
-      var inAmt   = tempAmt - Math.round(tempAmt * vat01 * envst0011 / 11);
-      var inVat   = Math.round(tempAmt * vat01 / (10 + envst0011));
+      var inAmt   = tempAmt - Math.round(tempAmt * vat01 * vendrVatFg01 / 11);
+      var inVat   = Math.round(tempAmt * vat01 / (10 + vendrVatFg01));
       var inTot   = parseInt(inAmt + inVat);
 
       item.inTotQty = totQty;   // 총주문수량
@@ -189,6 +189,7 @@
 
       $scope.slipNo = data.slipNo;
       $scope.slipFg = data.slipFg;
+      $scope.vendrCd = data.vendrCd;
 
       // 발주번호 가져오기.
       var vendrInstockDtlScope = agrid.getScope('vendrInstockDtlCtrl');

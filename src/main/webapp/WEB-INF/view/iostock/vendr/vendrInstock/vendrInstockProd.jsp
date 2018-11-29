@@ -49,7 +49,7 @@
         <wj-flex-grid-column header="<s:message code="vendrInstock.prod.inVat"/>" binding="inVat" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="vendrInstock.prod.inTot"/>" binding="inTot" width="90" align="right" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="vendrInstock.prod.vatFg"/>" binding="vatFg01" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="vendrInstock.prod.envst0011"/>" binding="envst0011" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="vendrInstock.prod.vendrVatFg01"/>" binding="vendrVatFg01" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
 
       </wj-flex-grid>
     </div>
@@ -149,14 +149,14 @@
       var costUprc  = parseFloat(item.costUprc);
       var poUnitQty = parseInt(item.poUnitQty);
       var vat01     = parseInt(item.vatFg01);
-      var envst0011 = parseInt(item.envst0011);
+      var vendrVatFg01 = parseInt(item.vendrVatFg01);
 
       var unitQty = parseInt(nvl(item.inUnitQty, 0)) * parseInt(item.poUnitQty);
       var etcQty  = parseInt(nvl(item.inEtcQty, 0));
       var totQty  = parseInt(unitQty + etcQty);
       var tempAmt = Math.round(totQty * costUprc / poUnitQty);
-      var inAmt   = tempAmt - Math.round(tempAmt * vat01 * envst0011 / 11);
-      var inVat   = Math.round(tempAmt * vat01 / (10 + envst0011));
+      var inAmt   = tempAmt - Math.round(tempAmt * vat01 * vendrVatFg01 / 11);
+      var inVat   = Math.round(tempAmt * vat01 / (10 + vendrVatFg01));
       var inTot   = parseInt(inAmt + inVat);
 
       item.inTotQty = totQty;   // 총주문수량
@@ -175,6 +175,7 @@
 
       $scope.slipNo = data.slipNo;
       $scope.slipFg = data.slipFg;
+      $scope.vendrCd = data.vendrCd;
 
       $scope.procFgCheck();
 
@@ -237,6 +238,7 @@
       var params    = {};
       params.slipNo = $scope.slipNo;
       params.slipFg = $scope.slipFg;
+      params.vendrCd = $scope.vendrCd;
 
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
       $scope._inquiryMain("/iostock/vendr/vendrInstock/vendrInstockProd/list.sb", params);
@@ -278,6 +280,7 @@
       var params    = {};
       params.slipNo = $scope.slipNo;
       params.slipFg = $scope.slipFg;
+      params.vendrCd = $scope.vendrCd;
       $scope._broadcast('vendrInstockOrderInfoRegCtrl', params);
     };
 
@@ -287,6 +290,7 @@
       var params    = {};
       params.slipNo = $scope.slipNo;
       params.slipFg = $scope.slipFg;
+      params.vendrCd = $scope.vendrCd;
       $scope._broadcast('vendrInstockProdRegCtrl', params);
     };
 
