@@ -12,7 +12,7 @@
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
       <button class="btn_blue fr" id="btnSearch" ng-click="getSystemEmpList()">
-        <s:message code="cmm.search" />시스템
+        <s:message code="cmm.search" />
       </button>
     </div>
   </div>
