@@ -101,6 +101,11 @@ public class StoreEmpServiceImpl implements StoreEmpService {
 
         storeEmpVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         storeEmpVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        // 신규 사원번호 조회
+        String empNo = storeEmpMapper.getStoreEmpNo(storeEmpVO);
+
+        storeEmpVO.setEmpNo(empNo);
         storeEmpVO.setEmpPwd(EncUtil.setEncSHA256(storeEmpVO.getEmpNo() + DEFAULT_POS_PASSWORD)); // 포스비밀번호 (초기 비밀번호)
         storeEmpVO.setUseYn(UseYn.Y);
         storeEmpVO.setRegId(sessionInfoVO.getUserId());
@@ -123,7 +128,7 @@ public class StoreEmpServiceImpl implements StoreEmpService {
         if( storeEmpMapper.insertStoreEmpInfo(storeEmpVO) != 1 ) {
             return EmpResult.FAIL;
         } else {
-            if( "Y".equals(storeEmpVO.getWebUseYn()) ) {
+            if( storeEmpVO.getWebUseYn() == UseYn.Y ) {
                 if( storeEmpMapper.insertWbUserInfo(storeEmpVO) != 1 ) {
                     return EmpResult.FAIL;
                 }
@@ -137,10 +142,23 @@ public class StoreEmpServiceImpl implements StoreEmpService {
 
         String newUserPassword = EncUtil.setEncSHA256(storeEmpVO.getUserId() + storeEmpVO.getUserPwd());
 
+        // 비밀번호 변경시
+        if(storeEmpVO.getPwdChgFg()) {
+
+            // 현재 비밀번호 불일치
+            String currentPassword = EncUtil.setEncSHA256(storeEmpVO.getUserId() + storeEmpVO.getCurrentPwd());
+
+            if(!storeEmpVO.getPriorPwd().equals(currentPassword)) {
+                return EmpResult.PASSWORD_NOT_MATCH;
+            }
+        }
+
+        // 기존 비밀번호와 동일
         if( newUserPassword.equals(storeEmpVO.getPriorPwd()) ) {
             return EmpResult.PASSWORD_NOT_CHANGED;
         }
 
+        // 비밀번호 정책과 맞지 않음
         if ( !CmmUtil.passwordPolicyCheck(storeEmpVO.getUserPwd()) ) {
             return EmpResult.PASSWORD_REGEXP;
         }
@@ -158,7 +176,6 @@ public class StoreEmpServiceImpl implements StoreEmpService {
         String dt = currentDateTimeString();
 
         storeEmpVO.setPriorPwd(storeEmpMapper.getStoreEmpPassword(storeEmpVO));
-        storeEmpVO.setAuthGrpCd(STORE_AUTH_GRP_CD);
         storeEmpVO.setRegId(sessionInfoVO.getUserId());
         storeEmpVO.setRegDt(dt);
         storeEmpVO.setModId(sessionInfoVO.getUserId());
@@ -167,13 +184,6 @@ public class StoreEmpServiceImpl implements StoreEmpService {
 
         if( storeEmpVO.getWebUseYn() == UseYn.Y) {
             storeEmpVO.setAuthGrpCd(STORE_AUTH_GRP_CD);
-
-            if(storeEmpVO.getPwdChgFg() && !isEmpty(storeEmpVO.getUserPwd())) { // 비밀번호 유효성체크
-                EmpResult pwdChgResult = passwordPolicy(storeEmpVO);
-                if(EmpResult.SUCCESS != pwdChgResult) {
-                    return pwdChgResult;
-                }
-            }
         }
 
         if( storeEmpMapper.updateStoreEmpInfo(storeEmpVO) != 1 ) {
@@ -184,56 +194,40 @@ public class StoreEmpServiceImpl implements StoreEmpService {
                 if( storeEmpMapper.saveWbUserInfo(storeEmpVO) != 1 ) {
                     return EmpResult.FAIL;
                 }
-                else {
-                    // 비밀번호 변경여부로 체크
-                    if(storeEmpVO.getPwdChgFg()) {
-                        if (storeEmpMapper.insertPasswordHistory(storeEmpVO) != 1) {
-                            return EmpResult.FAIL;
-                        }
-                    }
-
-                }
             }
         }
         return EmpResult.SUCCESS;
     }
 
 
-    //    /** 비밀번호 변경 */
-    //    @Override
-    //    public StoreEmpResult modifyPassword(StoreEmpVO storeEmpVO, SessionInfoVO sessionInfoVO) {
-    //
-    //        DefaultMap<String> storeEmpDtlInfo = getStoreEmpDtlInfo(storeEmpVO, sessionInfoVO);
-    //        String dt = currentDateTimeString();
-    //
-    //        storeEmpVO.setRegId(sessionInfoVO.getUserId());
-    //        storeEmpVO.setRegDt(dt);
-    //        storeEmpVO.setModId(sessionInfoVO.getUserId());
-    //        storeEmpVO.setModDt(dt);
-    //        storeEmpVO.setPriorPwd(storeEmpMapper.getStoreEmpPassword(storeEmpVO));
-    //        storeEmpVO.setRegIp(sessionInfoVO.getLoginIp());
-    //        storeEmpVO.setWebUseYn(UseYn.valueOf(storeEmpDtlInfo.get("webUseYn")));
-    //
-    //        //webUseYn이 Y인 경우만 변경 가능
-    //        if( !"Y".equals(storeEmpVO.getWebUseYn()) ) {
-    //            return StoreEmpResult.FAIL;
-    //        }
-    //
-    //        StoreEmpResult pwdChgResult = passwordPolicy(storeEmpVO);
-    //        if(StoreEmpResult.SUCCESS != pwdChgResult) {
-    //            return pwdChgResult;
-    //        }
-    //
-    //        if( storeEmpMapper.updateUserPassword(storeEmpVO) != 1 ) {
-    //            return StoreEmpResult.FAIL;
-    //        }
-    //        else {
-    //            if (storeEmpMapper.insertPasswordHistory(storeEmpVO) != 1) {
-    //                return StoreEmpResult.FAIL;
-    //            }
-    //        }
-    //        return StoreEmpResult.SUCCESS;
-    //    }
+    /** 비밀번호 변경 */
+    @Override
+    public EmpResult modifyPassword(StoreEmpVO storeEmpVO, SessionInfoVO sessionInfoVO) {
+
+        String dt = currentDateTimeString();
+
+        storeEmpVO.setRegId(sessionInfoVO.getUserId());
+        storeEmpVO.setRegDt(dt);
+        storeEmpVO.setModId(sessionInfoVO.getUserId());
+        storeEmpVO.setModDt(dt);
+        storeEmpVO.setPriorPwd(storeEmpMapper.getStoreEmpPassword(storeEmpVO));
+        storeEmpVO.setRegIp(sessionInfoVO.getLoginIp());
+
+        EmpResult pwdChgResult = passwordPolicy(storeEmpVO);
+        if(EmpResult.SUCCESS != pwdChgResult) {
+            return pwdChgResult;
+        }
+
+        if( storeEmpMapper.updateUserPassword(storeEmpVO) != 1 ) {
+            return EmpResult.FAIL;
+        }
+        else {
+            if (storeEmpMapper.insertPasswordHistory(storeEmpVO) != 1) {
+                return EmpResult.FAIL;
+            }
+        }
+        return EmpResult.SUCCESS;
+    }
 
 
 }

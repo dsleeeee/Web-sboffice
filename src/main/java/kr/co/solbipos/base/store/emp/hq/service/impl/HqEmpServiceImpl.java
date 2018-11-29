@@ -76,6 +76,11 @@ public class HqEmpServiceImpl implements HqEmpService {
         String dt = currentDateTimeString();
 
         hqEmpVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        // 신규 사원번호 조회
+        String empNo = hqEmpMapper.getHqEmpNo(hqEmpVO);
+
+        hqEmpVO.setEmpNo(empNo);
         hqEmpVO.setEmpPwd(EncUtil.setEncSHA256(hqEmpVO.getEmpNo() + DEFAULT_POS_PASSWORD)); // 포스비밀번호 (초기 비밀번호)
         hqEmpVO.setUseYn(UseYn.Y);
         hqEmpVO.setRegId(sessionInfoVO.getUserId());
@@ -98,7 +103,7 @@ public class HqEmpServiceImpl implements HqEmpService {
         if( hqEmpMapper.insertHqEmpInfo(hqEmpVO) != 1 ) {
             return EmpResult.FAIL;
         } else {
-            if( "Y".equals(hqEmpVO.getWebUseYn()) ) {
+            if( hqEmpVO.getWebUseYn() == UseYn.Y) {
                 if( hqEmpMapper.insertWbUserInfo(hqEmpVO) != 1 ) {
                     return EmpResult.FAIL;
                 }
@@ -123,13 +128,6 @@ public class HqEmpServiceImpl implements HqEmpService {
 
         if( hqEmpVO.getWebUseYn() == UseYn.Y) {
             hqEmpVO.setAuthGrpCd(HQ_AUTH_GRP_CD);
-
-            if(hqEmpVO.getPwdChgFg() && !isEmpty(hqEmpVO.getUserPwd())) { // 비밀번호 유효성체크
-                EmpResult pwdChgResult = passwordPolicy(hqEmpVO);
-                if(EmpResult.SUCCESS != pwdChgResult) {
-                    return pwdChgResult;
-                }
-            }
         }
 
         if( hqEmpMapper.updateHqEmpInfo(hqEmpVO) != 1 ) {
@@ -139,15 +137,6 @@ public class HqEmpServiceImpl implements HqEmpService {
             if( "Y".equals(hqEmpDtlInfo.getStr("webUseYn")) || "Y".equals(hqEmpVO.getWebUseYn())) {
                 if( hqEmpMapper.saveWbUserInfo(hqEmpVO) != 1 ) {
                     return EmpResult.FAIL;
-                }
-                else {
-                    // 비밀번호 변경여부로 체크
-                    if(hqEmpVO.getPwdChgFg()) {
-                        if (hqEmpMapper.insertPasswordHistory(hqEmpVO) != 1) {
-                            return EmpResult.FAIL;
-                        }
-                    }
-
                 }
             }
         }
@@ -177,6 +166,17 @@ public class HqEmpServiceImpl implements HqEmpService {
 
         String newUserPassword = EncUtil.setEncSHA256(hqEmpVO.getUserId() + hqEmpVO.getUserPwd());
 
+        // 비밀번호 변경시
+        if(hqEmpVO.getPwdChgFg()) {
+
+            // 현재 비밀번호 불일치
+            String currentPassword = EncUtil.setEncSHA256(hqEmpVO.getUserId() + hqEmpVO.getCurrentPwd());
+
+            if(!hqEmpVO.getPriorPwd().equals(currentPassword)) {
+                return EmpResult.PASSWORD_NOT_MATCH;
+            }
+        }
+
         if( newUserPassword.equals(hqEmpVO.getPriorPwd()) ) {
             return EmpResult.PASSWORD_NOT_CHANGED;
         }
@@ -191,40 +191,33 @@ public class HqEmpServiceImpl implements HqEmpService {
     }
 
 
-    //    /** 비밀번호 변경 */
-    //    @Override
-    //    public HqEmpResult modifyPassword(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO) {
-    //
-    //        DefaultMap<String> hqEmpDtlInfo = getHqEmpDtlInfo(hqEmpVO, sessionInfoVO);
-    //        String dt = currentDateTimeString();
-    //
-    //        hqEmpVO.setRegId(sessionInfoVO.getUserId());
-    //        hqEmpVO.setRegDt(dt);
-    //        hqEmpVO.setModId(sessionInfoVO.getUserId());
-    //        hqEmpVO.setModDt(dt);
-    //        hqEmpVO.setPriorPwd(hqEmpMapper.getHqEmpPassword(hqEmpVO));
-    //        hqEmpVO.setRegIp(sessionInfoVO.getLoginIp());
-    //        hqEmpVO.setWebUseYn(UseYn.valueOf(hqEmpDtlInfo.get("webUseYn")));
-    //
-    //        //webUseYn이 Y인 경우만 변경 가능
-    //        if( !"Y".equals(hqEmpVO.getWebUseYn()) ) {
-    //            return HqEmpResult.FAIL;
-    //        }
-    //
-    //        HqEmpResult pwdChgResult = passwordPolicy(hqEmpVO);
-    //        if(HqEmpResult.SUCCESS != pwdChgResult) {
-    //            return pwdChgResult;
-    //        }
-    //
-    //        if( hqEmpMapper.updateUserPassword(hqEmpVO) != 1 ) {
-    //            return HqEmpResult.FAIL;
-    //        }
-    //        else {
-    //            if (hqEmpMapper.insertPasswordHistory(hqEmpVO) != 1) {
-    //                return HqEmpResult.FAIL;
-    //            }
-    //        }
-    //        return HqEmpResult.SUCCESS;
-    //    }
+    /** 비밀번호 변경 */
+    @Override
+    public EmpResult modifyPassword(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO) {
+
+        String dt = currentDateTimeString();
+
+        hqEmpVO.setRegId(sessionInfoVO.getUserId());
+        hqEmpVO.setRegDt(dt);
+        hqEmpVO.setModId(sessionInfoVO.getUserId());
+        hqEmpVO.setModDt(dt);
+        hqEmpVO.setPriorPwd(hqEmpMapper.getHqEmpPassword(hqEmpVO));
+        hqEmpVO.setRegIp(sessionInfoVO.getLoginIp());
+
+        EmpResult pwdChgResult = passwordPolicy(hqEmpVO);
+        if(EmpResult.SUCCESS != pwdChgResult) {
+            return pwdChgResult;
+        }
+
+        if( hqEmpMapper.updateUserPassword(hqEmpVO) != 1 ) {
+            return EmpResult.FAIL;
+        }
+        else {
+            if (hqEmpMapper.insertPasswordHistory(hqEmpVO) != 1) {
+                return EmpResult.FAIL;
+            }
+        }
+        return EmpResult.SUCCESS;
+    }
 
 }

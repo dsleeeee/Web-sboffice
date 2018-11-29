@@ -127,6 +127,20 @@
     </select>
 
 
+    <!-- 신규사원번호 조회 -->
+    <!--
+          TABLE    : TB_MS_EMPLOYEE
+          PARAM    : storeEmpVO
+          COMMENTS : 신규 등록할 사원번호를 조회한다
+    -->
+    <select id="getStoreEmpNo" parameterType="storeEmpVO" resultType="String">
+          /* USE : StoreEmpMapper.getStoreEmpNo */
+        SELECT LPAD(NVL(MAX(EMP_NO)+ 1, 0), 4, '0') AS EMP_NO
+          FROM TB_MS_EMPLOYEE
+         WHERE STORE_CD = #{storeCd}
+    </select>
+
+
     <!-- 매장사원 등록 -->
     <!--
         TABLE    : TB_MS_EMPLOYEE
@@ -154,7 +168,7 @@
         VALUES
         (
             #{storeCd},
-            (SELECT LPAD(NVL(MAX(EMP_NO)+ 1, 0), 4, '0') AS EMP_NO FROM TB_MS_EMPLOYEE WHERE STORE_CD = #{storeCd}),
+            #{empNo},
             #{empNm},
             #{empPwd},
             #{webUseYn},
@@ -259,9 +273,6 @@
          WHEN MATCHED THEN
        UPDATE
           SET twui.USE_YN = #{webUseYn},
-            <if test="chkDt == true">
-              twui.USER_PWD = #{userPwd},
-            </if>
               twui.MOD_DT = #{modDt},
               twui.MOD_ID = #{modId}
          WHEN NOT MATCHED THEN

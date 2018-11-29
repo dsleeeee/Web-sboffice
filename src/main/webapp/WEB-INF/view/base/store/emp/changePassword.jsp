@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
 <%-- 사원 상세 팝업 --%>
-<wj-popup control="changePwdLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:500px;">
+<wj-popup control="changePwdLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:400px;">
   <div class="wj-dialog wj-dialog-columns" ng-controller="changePwdCtrl">
   <form name="changePwdForm">
     <div class="wj-dialog-header wj-dialog-header-font">
@@ -13,7 +13,7 @@
 
     <div class="wj-dialog-body sc2" style="overflow-y: hidden;">
       <%-- 상세 --%>
-      <div style="height: 205px; overflow-y: auto;">
+      <div style="height: 175px; overflow-y: auto;">
         <table class="tblType01">
           <colgroup>
             <col class="w30" />
@@ -47,7 +47,8 @@
                        popover-placement="bottom-left"
                        popover-trigger="'mouseenter'"
                        placeholder="<s:message code="emp.changePwd" />"
-                       uib-popover="<s:message code="emp.changePwd" />은(는) 필수 입력항목 입니다."/></td>
+                       uib-popover="<s:message code="emp.changePwd" />은(는) 필수 입력항목 입니다."/>
+            </td>
           </tr>
           <tr>
             <%-- 변경비밀번호 확인 --%>

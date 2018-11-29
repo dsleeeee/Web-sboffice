@@ -35,7 +35,7 @@ app.controller('changePwdCtrl', ['$scope', '$http', function ($scope, $http) {
   // 해당 scope 호출
   $scope.$on("changePwdCtrl", function(event, data) {
 
-    console.log('data',data);
+    console.log('>> data',data);
     $scope.emp = data;
 
     event.preventDefault();
@@ -55,17 +55,20 @@ app.controller('changePwdCtrl', ['$scope', '$http', function ($scope, $http) {
       return false;
     }
 
-    var params = $scope.emp;
+    var params      = $scope.emp;
+    params.pwdChgFg = true; // 비밀번호 변경여부
 
     var saveUrl = "";
 
     console.log('$scope.emp.empFg', $scope.emp.empFg);
 
-    if($scope.emp.empFg === 'S') {
+    if($scope.emp.empFg === 'S') { // 시스템
       saveUrl = "/base/store/emp/system/modifyPassword.sb";
+    } else if($scope.emp.empFg === 'H') { // 본사
+      saveUrl = "/base/store/emp/hq/modifyPassword.sb";
+    } else if($scope.emp.empFg === 'S') { // 매장
+      saveUrl = "/base/store/emp/store/modifyPassword.sb";
     }
-
-    // console.log(params);
 
     $scope._postJSONSave.withOutPopUp( saveUrl , params, function(response){
 
@@ -91,5 +94,4 @@ app.controller('changePwdCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.close = function(){
     $scope.changePwdLayer.hide();
   };
-
 }]);

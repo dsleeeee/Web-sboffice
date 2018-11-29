@@ -174,10 +174,6 @@ public class SystemEmpController {
     public Result modifyPassword(@RequestBody SystemEmpVO systemEmpVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
-
-        LOGGER.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> getUserId : " + systemEmpVO.getUserId());
-        LOGGER.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> getEmpNo : " + systemEmpVO.getEmpNo());
-
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
         EmpResult empResult = systemEmpService.modifyPassword(systemEmpVO,sessionInfoVO);
 

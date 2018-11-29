@@ -40,8 +40,7 @@ public interface HqEmpService {
     /** 본사 사원정보 수정*/
     EmpResult saveHqEmpInfo(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO);
 
-//    /** 본사 사원번호 패스워드변경*/
-//    EmpResult modifyPassword(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO);
-
+    /** 본사 사원번호 패스워드변경*/
+    EmpResult modifyPassword(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO);
 
 }

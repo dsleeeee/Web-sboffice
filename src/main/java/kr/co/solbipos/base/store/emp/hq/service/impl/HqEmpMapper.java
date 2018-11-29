@@ -32,6 +32,9 @@ public interface HqEmpMapper {
     /** 본사 웹유저아이디 조회*/
     int getHqUserIdCnt(HqEmpVO hqEmpVO);
 
+    /** 신규 사원번호 조회 */
+    String getHqEmpNo(HqEmpVO hqEmpVO);
+
     /** 본사 사원정보 등록*/
     int insertHqEmpInfo(HqEmpVO hqEmpVO);
 
@@ -55,4 +58,6 @@ public interface HqEmpMapper {
 
     /** 현재 패스워드 조회 */
     String getHqEmpPassword(HqEmpVO hqEmpVO);
+
+
 }

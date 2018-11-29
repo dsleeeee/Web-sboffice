@@ -28,19 +28,19 @@ public interface StoreEmpService
     /** 매장 사원 목록 조회 */
     List<DefaultMap<String>> getStoreEmpList(StoreEmpVO storeEmpVO, SessionInfoVO sessionInfoVO);
 
-    /** 본사 사원정보 상세*/
+    /** 매장 사원정보 상세*/
     DefaultMap<String> getStoreEmpDtlInfo(StoreEmpVO storeEmpVO, SessionInfoVO sessionInfoVO);
 
-    /** 본사 웹유저아이디 조회*/
+    /** 매장 웹유저아이디 조회*/
     EmpResult getStoreUserIdCnt(StoreEmpVO storeEmpVO);
 
-    /** 본사 사원정보 등록*/
+    /** 매장 사원정보 등록*/
     EmpResult insertStoreEmpInfo(StoreEmpVO storeEmpVO, SessionInfoVO sessionInfoVO);
 
-    /** 본사 사원정보 수정*/
+    /** 매장 사원정보 수정*/
     EmpResult saveStoreEmpInfo(StoreEmpVO storeEmpVO, SessionInfoVO sessionInfoVO);
 
-//    /** 본사 사원번호 패스워드변경*/
-//    EmpResult modifyPassword(StoreEmpVO storeEmpVO, SessionInfoVO sessionInfoVO);
+    /** 매장 사원번호 패스워드변경*/
+    EmpResult modifyPassword(StoreEmpVO storeEmpVO, SessionInfoVO sessionInfoVO);
 
 }

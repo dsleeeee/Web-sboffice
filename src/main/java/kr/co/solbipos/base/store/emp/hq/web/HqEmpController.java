@@ -162,23 +162,23 @@ public class HqEmpController {
         return returnJson(Status.OK, empResult);
     }
 
-//    /**
-//     * 비밀번호 변경
-//     * @param hqEmpVO
-//     * @param   request
-//     * @param   response
-//     * @param   model
-//     * @return
-//     */
-//    @ResponseBody
-//    @RequestMapping(value = "/modifyPassword.sb", method = RequestMethod.POST)
-//    public Result modifyPassword(HqEmpVO hqEmpVO, HttpServletRequest request,
-//        HttpServletResponse response, Model model) {
-//
-//        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
-//        EmpResult empResult = hqEmpService.modifyPassword(hqEmpVO,sessionInfoVO);
-//
-//        return returnJson(Status.OK, empResult);
-//    }
+    /**
+     * 비밀번호 변경
+     * @param hqEmpVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/modifyPassword.sb", method = RequestMethod.POST)
+    public Result modifyPassword(@RequestBody HqEmpVO hqEmpVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+        EmpResult empResult = hqEmpService.modifyPassword(hqEmpVO,sessionInfoVO);
+
+        return returnJson(Status.OK, empResult);
+    }
 
 }

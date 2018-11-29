@@ -116,14 +116,18 @@ public class CmmUtil {
             return EmpResult.USER_ID_MUST_CONTAIN_ENG_CAHR;
         } else if( flag3 == false ) {
             return EmpResult.USER_ID_ONLY_ENG_NUM_CHAR;
-        } else if(value.startsWith("ds")) {
+        } else if(value.startsWith("ds")) { // 데모 본사, 매장 사원
             if(Pattern.matches("[0-9]*", value.substring(2, len))){
                 return EmpResult.USER_ID_DUPLICATE;
             }
-        } else if(value.startsWith("s")) {
+        } else if(value.startsWith("s")) { // 운영 매장 사원
             if(Pattern.matches("[0-9]*", value.substring(1, len))){
                 return EmpResult.USER_ID_DUPLICATE;
-            } 
+            }
+        } else if(value.startsWith("h")) { // 운영 본사 사원
+            if(Pattern.matches("[0-9]*", value.substring(1, len))){
+                return EmpResult.USER_ID_DUPLICATE;
+            }
         }
 
         return EmpResult.SUCCESS;

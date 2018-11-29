@@ -28,33 +28,37 @@ import java.util.List;
 @Repository
 public interface StoreEmpMapper {
 
-    /** 본사 사원정보 리스트 조회*/
+    /** 매장 사원정보 리스트 조회*/
     List<DefaultMap<String>> getStoreEmpList(StoreEmpVO storeEmpVO);
 
-    /** 본사 웹유저아이디 조회*/
+    /** 매장 웹유저아이디 조회*/
     int getStoreUserIdCnt(StoreEmpVO storeEmpVO);
 
-    /** 본사 사원정보 등록*/
+    /** 매장 신규사원번호 조회 */
+    String getStoreEmpNo(StoreEmpVO storeEmpVO);
+
+    /** 매장 사원정보 등록*/
     int insertStoreEmpInfo(StoreEmpVO storeEmpVO);
 
     /** 웹 로그인 정보 등록*/
     int insertWbUserInfo(StoreEmpVO storeEmpVO);
 
-    /** 본사 사원정보 수정*/
+    /** 매장 사원정보 수정*/
     int updateStoreEmpInfo(StoreEmpVO storeEmpVO);
 
     /** 웹 로그인 정보 수정*/
     int saveWbUserInfo(StoreEmpVO storeEmpVO);
 
-    /** 패스워드 변경 히스토리 등록*/
-    int insertPasswordHistory(StoreEmpVO storeEmpVO);
-
-    /** 패스워드 변경 */
-    int updateUserPassword(StoreEmpVO storeEmpVO);
-
-    /** 본사 사원정보 상세 */
+    /** 매장 사원정보 상세 */
     DefaultMap<String> getStoreEmpDtlInfo(StoreEmpVO storeEmpVO);
 
     /** 현재 패스워드 조회 */
     String getStoreEmpPassword(StoreEmpVO storeEmpVO);
+
+    /** 패스워드 변경 */
+    int updateUserPassword(StoreEmpVO storeEmpVO);
+
+    /** 패스워드 변경 히스토리 등록*/
+    int insertPasswordHistory(StoreEmpVO storeEmpVO);
+
 }

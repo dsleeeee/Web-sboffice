@@ -211,4 +211,7 @@
 <c:import url="/WEB-INF/view/base/store/emp/hqEmpSave.jsp">
 </c:import>
 
+<%-- 패스워드 변경 레이어 --%>
+<c:import url="/WEB-INF/view/base/store/emp/changePassword.jsp">
+</c:import>
 

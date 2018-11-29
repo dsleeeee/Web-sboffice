@@ -104,8 +104,8 @@
               <td colspan="3">
                 <input type="password" id="_userPwd" name="userPwd" class="sb-input w30" style="width: 30%"
                        ng-model="storeEmpRegistInfo.userPwd"
-                       ng-required="newEmpYn == true || (pwdChgFg == true) || storeEmpRegistInfo.originalWebUserId == '' || storeEmpRegistInfo.originalWebUserId == undefined"
-                       ng-change="pwdChgFg == true"
+                       ng-show="newEmpYn == true"
+                       ng-required="newEmpYn == true"
                        maxlength="12"
                        popover-enable="empForm.userPwd.$invalid"
                        popover-placement="bottom-left"
@@ -114,14 +114,15 @@
                        uib-popover="<s:message code="storeEmp.pwd" />은(는) 필수 입력항목 입니다."/>
                 <input type="password" id="_userPwdCfm" name="userPwdCfm" class="sb-input ml10 w30" style="width: 30%"
                        ng-model="storeEmpRegistInfo.userPwdCfm"
-                       ng-required="newEmpYn == true || (pwdChgFg == true) || storeEmpRegistInfo.originalWebUserId == '' || storeEmpRegistInfo.originalWebUserId == undefined"
-                       ng-change="pwdChgFg == true"
+                       ng-show="newEmpYn == true"
+                       ng-required="newEmpYn == true"
                        maxlength="12"
                        popover-enable="empForm.userPwd.$invalid"
                        popover-placement="bottom-left"
                        popover-trigger="'mouseenter'"
                        placeholder="<s:message code="storeEmp.pwd.confirm" />"
                        uib-popover="<s:message code="storeEmp.pwd.confirm" />은(는) 필수 입력항목 입니다."/>
+                <a href="#" class="btn_grayS" ng-show="newEmpYn == false" ng-click="changePassword()"><s:message code="storeEmp.change.pwd" /></a>
               </td>
             </tr>
             <tr>

@@ -9,6 +9,7 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.store.emp.enums.EmpResult;
 import kr.co.solbipos.base.store.emp.store.service.StoreEmpService;
 import kr.co.solbipos.base.store.emp.store.service.StoreEmpVO;
+import kr.co.solbipos.base.store.emp.system.service.SystemEmpVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -166,5 +167,24 @@ public class StoreEmpController {
         EmpResult storeEmpResult = storeEmpService.saveStoreEmpInfo(storeEmpVO, sessionInfoVO);
 
         return returnJson(Status.OK, storeEmpResult);
+    }
+
+    /**
+     * 비밀번호 변경
+     * @param storeEmpVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/modifyPassword.sb", method = RequestMethod.POST)
+    public Result modifyPassword(@RequestBody StoreEmpVO storeEmpVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+        EmpResult empResult = storeEmpService.modifyPassword(storeEmpVO,sessionInfoVO);
+
+        return returnJson(Status.OK, empResult);
     }
 }

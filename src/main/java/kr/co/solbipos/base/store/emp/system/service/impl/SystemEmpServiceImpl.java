@@ -128,13 +128,6 @@ public class SystemEmpServiceImpl implements SystemEmpService {
 
         if( systemEmpVO.getWebUseYn() == UseYn.Y) {
             systemEmpVO.setAuthGrpCd(AUTH_GRP_CD);
-
-            if(systemEmpVO.getPwdChgFg() && !isEmpty(systemEmpVO.getUserPwd())) { // 비밀번호 유효성체크
-                EmpResult pwdChgResult = passwordPolicy(systemEmpVO);
-                if(EmpResult.SUCCESS != pwdChgResult) {
-                    return pwdChgResult;
-                }
-            }
         }
 
         if( systemEmpMapper.updateSystemEmpInfo(systemEmpVO) != 1 ) {
@@ -144,15 +137,6 @@ public class SystemEmpServiceImpl implements SystemEmpService {
             if( "Y".equals(systemEmpDtlInfo.getStr("webUseYn")) || "Y".equals(systemEmpVO.getWebUseYn())) {
                 if( systemEmpMapper.saveWbUserInfo(systemEmpVO) != 1 ) {
                     return EmpResult.FAIL;
-                }
-                else {
-                    // 비밀번호 변경여부로 체크
-                    if(systemEmpVO.getPwdChgFg()) {
-                        if (systemEmpMapper.insertPasswordHistory(systemEmpVO) != 1) {
-                            return EmpResult.FAIL;
-                        }
-                    }
-
                 }
             }
         }
@@ -206,7 +190,6 @@ public class SystemEmpServiceImpl implements SystemEmpService {
     @Override
     public EmpResult modifyPassword(SystemEmpVO systemEmpVO, SessionInfoVO sessionInfoVO) {
 
-//        DefaultMap<String> systemEmpDtlInfo = getSystemEmpDtlInfo(systemEmpVO, sessionInfoVO);
         String dt = currentDateTimeString();
 
         systemEmpVO.setRegId(sessionInfoVO.getUserId());

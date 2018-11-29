@@ -142,7 +142,6 @@
     <!-- 신규사원번호 조회 -->
     <!--
           TABLE    : TB_CM_EMPLOYEE
-          PARAM    : systemEmpVO
           COMMENTS : 신규 등록할 사원번호를 조회한다
     -->
     <select id="getSystemEmpNo" resultType="String">
@@ -290,9 +289,6 @@
          WHEN MATCHED THEN
        UPDATE
           SET twui.USE_YN = #{webUseYn},
-            <if test="chkDt == true">
-              twui.USER_PWD = #{userPwd},
-            </if>
               twui.MOD_DT = #{modDt},
               twui.MOD_ID = #{modId}
          WHEN NOT MATCHED THEN
