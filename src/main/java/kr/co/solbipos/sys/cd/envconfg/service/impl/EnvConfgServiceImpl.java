@@ -34,7 +34,7 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
  */
 @Service("envConfigService")
 public class EnvConfgServiceImpl implements EnvConfgService {
-    
+
     private final EnvConfgMapper envConfgMapper;
     private final MessageService messageService;
 
@@ -45,90 +45,96 @@ public class EnvConfgServiceImpl implements EnvConfgService {
         this.messageService = messageService;
     }
 
+    /** 환경그룹 목록 조회 */
+    @Override
+    public List<DefaultMap<String>> getEnvstGrpList() {
+        return envConfgMapper.getEnvstGrpList("004");
+    }
+
     /** 대표명칭 코드목록 조회 */
     @Override
     public List<DefaultMap<String>> getEnvstList(EnvstVO envstVO) {
         return envConfgMapper.getEnvstList(envstVO);
     }
-    
+
     /** 대표명칭 코드 저장 */
     @Override
     public int saveEnvstList(EnvstVO[] envstVOs, SessionInfoVO sessionInfoVO) {
-        
+
         int result = 0;
         String currentDt = currentDateTimeString();
-        
+
         for ( EnvstVO envstVO : envstVOs ) {
-            
+
             envstVO.setRegDt(currentDt);
             envstVO.setRegId(sessionInfoVO.getUserId());
             envstVO.setModDt(currentDt);
             envstVO.setModId(sessionInfoVO.getUserId());
-            
+
             // 추가
             if ( envstVO.getStatus() == GridDataFg.INSERT ) {
-                
+
                 result += envConfgMapper.insertEnvst(envstVO);
             // 수정
             } else if ( envstVO.getStatus() == GridDataFg.UPDATE ) {
-                
+
                 result += envConfgMapper.updateEnvst(envstVO);
             // 삭제
             } else if ( envstVO.getStatus() == GridDataFg.DELETE ) {
-                
+
             }
-            
+
         }
-        
+
         if ( result == envstVOs.length) {
             return result;
         } else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
-        
+
     }
-    
+
     /** 세부명칭 코드목록 조회 */
     @Override
     public List<DefaultMap<String>> getEnvstDtlList(EnvstDtlVO envstDtlVO) {
         return envConfgMapper.getEnvstDtlList(envstDtlVO);
     }
-    
+
     /** 세부명칭 코드 저장 */
     @Override
     public int saveEnvstDtlList(EnvstDtlVO[] envstDtlVOs, SessionInfoVO sessionInfoVO) {
-        
+
         int result = 0;
         String currentDt = currentDateTimeString();
-        
+
         for ( EnvstDtlVO envstDtlVO : envstDtlVOs ) {
-            
+
             envstDtlVO.setRegDt(currentDt);
             envstDtlVO.setRegId(sessionInfoVO.getUserId());
             envstDtlVO.setModDt(currentDt);
             envstDtlVO.setModId(sessionInfoVO.getUserId());
-            
+
             // 추가
             if ( envstDtlVO.getStatus() == GridDataFg.INSERT ) {
-                
+
                 result += envConfgMapper.insertEnvstDtl(envstDtlVO);
             // 수정
             } else if ( envstDtlVO.getStatus() == GridDataFg.UPDATE ) {
-                
+
                 result += envConfgMapper.updateEnvstDtl(envstDtlVO);
             // 삭제
             } else if ( envstDtlVO.getStatus() == GridDataFg.DELETE ) {
-                
+
             }
-            
+
         }
-        
+
         if ( result == envstDtlVOs.length) {
             return result;
         } else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
-        
+
     }
-    
+
 }

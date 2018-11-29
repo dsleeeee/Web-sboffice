@@ -60,31 +60,53 @@ public class HqEmpController {
 
     /**
      * 본사사원 리스트 화면
+     * @param model
      * @return the string
      */
     @RequestMapping(value = "/list.sb", method = RequestMethod.GET)
-    public String view() {
+    public String view(Model model) {
         return "base/store/emp/hqEmp";
     }
 
 
     /**
-     * 본사사원 리스트 조회
+     * 본사 사원 목록 조회
      * @param hqEmpVO
-     * @param bindingResult
+     * @param   request
+     * @param   response
+     * @param   model
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "/list.sb", method = RequestMethod.POST)
-    public Result view(HqEmpVO hqEmpVO, BindingResult bindingResult) {
+    public Result view(HttpServletRequest request, HqEmpVO hqEmpVO,
+        HttpServletResponse response, Model model) {
 
-        if (bindingResult.hasErrors()) {
-            return returnJsonBindingFieldError(bindingResult);
-        }
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<String>> list = hqEmpService.getHqEmpList(hqEmpVO);
+        List<DefaultMap<String>> list = hqEmpService.getHqEmpList(hqEmpVO, sessionInfoVO);
 
         return returnListJson(Status.OK, list,hqEmpVO);
+    }
+
+    /**
+     * 본사사원정보 상세 조회
+     * @param hqEmpVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/detail.sb", method = RequestMethod.POST)
+    public Result getDtlInfo(HqEmpVO hqEmpVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        DefaultMap<String> result = hqEmpService.getHqEmpDtlInfo(hqEmpVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
     }
 
     /**
@@ -107,21 +129,6 @@ public class HqEmpController {
         return returnJson(Status.OK, hqEmpResult);
     }
 
-//    /**
-//     * 본사사원정보 사원번호조회
-//     * @param hqEmpVO
-//     * @return
-//     */
-//    @ResponseBody
-//    @RequestMapping(value = "/chkHqEmpNo.sb", method = RequestMethod.POST)
-//    public Result chkHqEmpNo(HqEmpVO hqEmpVO) {
-//
-//        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
-//        HqEmpResult hqEmpResult = hqEmpService.getHqEmpNoCnt(hqEmpVO, sessionInfoVO);
-//
-//        return returnJson(Status.OK, hqEmpResult);
-//    }
-
     /**
      * 본사사원정보 웹 사용자 ID 조회 (중복체크)
      * @param hqEmpVO
@@ -134,26 +141,6 @@ public class HqEmpController {
         HqEmpResult hqEmpResult= hqEmpService.getHqUserIdCnt(hqEmpVO);
 
         return returnJson(Status.OK, hqEmpResult);
-    }
-
-    /**
-     * 본사사원정보 상세
-     * @param hqEmpVO
-     * @param   request
-     * @param   response
-     * @param   model
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping(value = "/detail.sb", method = RequestMethod.POST)
-    public Result getDtlInfo(HqEmpVO hqEmpVO, HttpServletRequest request,
-        HttpServletResponse response, Model model) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
-
-        DefaultMap<String> result = hqEmpService.getHqEmpDtlInfo(hqEmpVO, sessionInfoVO);
-
-        return returnJson(Status.OK, result);
     }
 
     /**

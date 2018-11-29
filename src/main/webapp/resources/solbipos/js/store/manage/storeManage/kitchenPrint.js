@@ -113,6 +113,7 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
         $scope.posDataMap = new wijmo.grid.DataMap($scope.getPosList(), 'posNo', 'posCdNm');
 
         $scope.getKitchenPrintList();
+
       }
     });
   };
@@ -144,6 +145,8 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
     params.prterKind  ="0";
     params.prterPort  = "0";
     params.prterSpeed = "0";
+    params.prterCheckYn = "N";
+    params.useYn        = "Y";
 
     // 추가기능 수행 : 파라미터
     $scope._addRow(params);

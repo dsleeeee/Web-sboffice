@@ -20,9 +20,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
  * @Class Name : EnvConfgController.java
@@ -66,6 +69,11 @@ public class EnvConfgController {
     @RequestMapping(value = "/envConfg/view.sb", method = RequestMethod.GET)
     public String envConfigView(HttpServletRequest request, HttpServletResponse response,
             Model model) {
+
+        List<DefaultMap<String>> envstGrpList = envConfgService.getEnvstGrpList();
+
+        model.addAttribute("envstGrpList", convertToJson(envstGrpList)  );
+
         return "sys/cd/envConfg/envConfg";
     }
 

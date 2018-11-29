@@ -28,6 +28,7 @@ import static org.springframework.util.StringUtils.isEmpty;
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2018.08.14  정상화      최초생성
+ * @ 2018.11.20  김지은      angular 방식으로 수정
  *
  * @author NHN한국사이버결제 KCP 정상화
  * @since 2018. 08.14
@@ -40,7 +41,7 @@ import static org.springframework.util.StringUtils.isEmpty;
 public class HqEmpServiceImpl implements HqEmpService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    private final String HQ_AUTH_GRP_CD = "000005"; // TODO 보나비용 사용자 그룹코드 (화면에서 사용자 그룹 선택 필요)
+    private final String HQ_AUTH_GRP_CD = "000007"; // TODO 보나비용 사용자 그룹코드 (화면에서 사용자 그룹 선택 필요)
     private final String DEFAULT_POS_PASSWORD = "1234";
     private final String EMP_NO_REGEX = "^[\\d]{4}$";
 //    private final String PASSWORD_REGEX = "^(?=.*[a-z]+)(?=.*[A-Z]+)(?=.*\\d+)(?=.*[^\\w\\sㄱ-ㅎㅏ-ㅣ가-힣]).{6,20}$";
@@ -55,8 +56,20 @@ public class HqEmpServiceImpl implements HqEmpService {
     }
 
     /** 본사 사원 리스트 조회 */
-    public <E> List<E> getHqEmpList(HqEmpVO hqEmpVO){
+    public List<DefaultMap<String>> getHqEmpList(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO){
+
+        hqEmpVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
         return hqEmpMapper.getHqEmpList(hqEmpVO);
+    }
+
+
+    /** 본사 사원 상세정보 조회  */
+    public DefaultMap<String> getHqEmpDtlInfo(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO) {
+
+        hqEmpVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return hqEmpMapper.getHqEmpDtlInfo(hqEmpVO);
     }
 
     /** 본사 사원정보 등록 */
@@ -67,7 +80,6 @@ public class HqEmpServiceImpl implements HqEmpService {
 
         hqEmpVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         hqEmpVO.setEmpPwd(EncUtil.setEncSHA256(hqEmpVO.getEmpNo() + DEFAULT_POS_PASSWORD)); // 포스비밀번호 (초기 비밀번호)
-        hqEmpVO.setPriorPwd(hqEmpMapper.getHqEmpPassword(hqEmpVO));
         hqEmpVO.setUseYn(UseYn.Y);
         hqEmpVO.setRegId(sessionInfoVO.getUserId());
         hqEmpVO.setRegDt(dt);
@@ -182,26 +194,26 @@ public class HqEmpServiceImpl implements HqEmpService {
         return HqEmpResult.SUCCESS;
     }
 
-    /** 사원번호 사용여부 체크 (중복체크) */
-    public HqEmpResult getHqEmpNoCnt(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO){
-
-        hqEmpVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-
-        if(!empNoPolicyCheck(hqEmpVO.getEmpNo())) {
-            return HqEmpResult.EMP_NO_REGEXP;
-        }
-
-        if(isEmpty(hqEmpVO.getHqOfficeCd())) {
-            return HqEmpResult.FAIL;
-        }
-
-        if( hqEmpMapper.getHqEmpNoCnt(hqEmpVO) == 0 ) {
-            return HqEmpResult.SUCCESS;
-        }
-        else {
-            return HqEmpResult.EMP_NO_DUPLICATE;
-        }
-    }
+//    /** 사원번호 사용여부 체크 (중복체크) */
+//    public HqEmpResult getHqEmpNoCnt(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO){
+//
+//        hqEmpVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+//
+//        if(!empNoPolicyCheck(hqEmpVO.getEmpNo())) {
+//            return HqEmpResult.EMP_NO_REGEXP;
+//        }
+//
+//        if(isEmpty(hqEmpVO.getHqOfficeCd())) {
+//            return HqEmpResult.FAIL;
+//        }
+//
+//        if( hqEmpMapper.getHqEmpNoCnt(hqEmpVO) == 0 ) {
+//            return HqEmpResult.SUCCESS;
+//        }
+//        else {
+//            return HqEmpResult.EMP_NO_DUPLICATE;
+//        }
+//    }
 
     /** 사용자 ID 사용여부 체크 (중복체크) */
     public HqEmpResult getHqUserIdCnt(HqEmpVO hqEmpVO){
@@ -218,14 +230,6 @@ public class HqEmpServiceImpl implements HqEmpService {
         }
     }
 
-
-    /** 본사 사원 상세정보 조회  */
-    public DefaultMap<String> getHqEmpDtlInfo(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO) {
-
-        hqEmpVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-
-        return hqEmpMapper.getHqEmpDtlInfo(hqEmpVO);
-    }
 
     /** 비밀번호 정책 */
     private HqEmpResult passwordPolicy(HqEmpVO hqEmpVO) {
@@ -265,24 +269,24 @@ public class HqEmpServiceImpl implements HqEmpService {
         return false;
     }
 
-    /** 사원번호 정책체크 */
-    public  boolean empNoPolicyCheck(String value) {
-        if ( isEmpty(value) ) {
-            LOGGER.warn("emp_no policy check emp_no null. value:{}", value);
-            return false;
-        }
-        // 숫자 4자리 사용.
-        Pattern pattern = Pattern.compile(EMP_NO_REGEX);
-
-        Matcher m = pattern.matcher(value);
-
-        if ( m.find() ) {
-            return true;
-        }
-
-        LOGGER.info("emp_no policy check false");
-        return false;
-    }
+//    /** 사원번호 정책체크 */
+//    public  boolean empNoPolicyCheck(String value) {
+//        if ( isEmpty(value) ) {
+//            LOGGER.warn("emp_no policy check emp_no null. value:{}", value);
+//            return false;
+//        }
+//        // 숫자 4자리 사용.
+//        Pattern pattern = Pattern.compile(EMP_NO_REGEX);
+//
+//        Matcher m = pattern.matcher(value);
+//
+//        if ( m.find() ) {
+//            return true;
+//        }
+//
+//        LOGGER.info("emp_no policy check false");
+//        return false;
+//    }
 
     /** 사용자 ID 정책 체크 */
     public boolean userIdPolicyCheck(String value) {

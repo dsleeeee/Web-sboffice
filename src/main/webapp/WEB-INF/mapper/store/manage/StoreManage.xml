@@ -1853,6 +1853,7 @@
                tmp.PRTER_NET_IP,
                tmp.PRTER_NET_PORT,
                tmp.PRTER_OUTPUT_QTY,
+               tmp.PRTER_CHECK_YN,
                tmp.USE_YN,
                NVL(tmpr.CNT, 0) AS CNT
           FROM TB_MS_PRINTER tmp,
@@ -1887,6 +1888,7 @@
             PRTER_NET_IP,
             PRTER_NET_PORT,
             PRTER_OUTPUT_QTY,
+            PRTER_CHECK_YN,
             USE_YN,
             REG_DT,
             REG_ID,
@@ -1905,6 +1907,7 @@
             #{prterNetIp},
             #{prterNetPort},
             #{prterOutputQty},
+            #{printCheckYn},
             #{useYn},
             #{regDt},
             #{regId},
@@ -1930,6 +1933,7 @@
                PRTER_NET_IP = #{prterNetIp},
                PRTER_NET_PORT = #{prterNetPort},
                PRTER_OUTPUT_QTY = #{prterOutputQty},
+               PRTER_CHECK_YN = #{printCheckYn},
                USE_YN = #{useYn}
          WHERE STORE_CD = #{storeCd}
            AND PRTER_NO = LPAD(#{prterNo}, 2, '0')

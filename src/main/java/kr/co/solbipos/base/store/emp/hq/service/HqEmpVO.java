@@ -44,7 +44,7 @@ public class HqEmpVO extends PageVO {
     /** 사용자 비밀번호 변경여부 */
     private Boolean pwdChgFg;
 
-    /** 이전 사용자 비밀번호 */
+    /** 변경전 사용자 비밀번호 */
     private String priorPwd;
 
     /** 웹사용여부 */
@@ -68,20 +68,8 @@ public class HqEmpVO extends PageVO {
     /** 사용여부 */
     private UseYn useYn;
 
-    /** 등록일시 */
-    private String regDt;
-
-    /** 등록아이디 */
-    private String regId;
-
     /** 등록아이피 */
     private String regIp;
-
-    /** 수정일시 */
-    private String modDt;
-
-    /** 수정아이디 */
-    private String modId;
 
     /** 권한 그룹 코드 */
     private String authGrpCd;
@@ -314,37 +302,6 @@ public class HqEmpVO extends PageVO {
     public void setUseYn(UseYn useYn) {
         this.useYn = useYn;
     }
-
-    /**
-     * @return the regDt
-     */
-
-    @Override public String getRegDt() {
-        return regDt;
-    }
-
-    /**
-     * @param regDt the regDt to set
-     */
-    @Override public void setRegDt(String regDt) {
-        this.regDt = regDt;
-    }
-
-    /**
-     * @return the regId
-     */
-
-    @Override public String getRegId() {
-        return regId;
-    }
-
-    /**
-     * @param regId the regId to set
-     */
-    @Override public void setRegId(String regId) {
-        this.regId = regId;
-    }
-
     /**
      * @return the regIp
      */
@@ -359,37 +316,6 @@ public class HqEmpVO extends PageVO {
     public void setRegIp(String regIp) {
         this.regIp = regIp;
     }
-
-    /**
-     * @return the modDt
-     */
-
-    @Override public String getModDt() {
-        return modDt;
-    }
-
-    /**
-     * @param modDt the modDt to set
-     */
-    @Override public void setModDt(String modDt) {
-        this.modDt = modDt;
-    }
-
-    /**
-     * @return the modId
-     */
-
-    @Override public String getModId() {
-        return modId;
-    }
-
-    /**
-     * @param modId the modId to set
-     */
-    @Override public void setModId(String modId) {
-        this.modId = modId;
-    }
-
     /**
      * @return the authGrpCd
      */

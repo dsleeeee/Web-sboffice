@@ -368,7 +368,7 @@
       $("#vOwnerNm").text(data.ownerNm);
       $("#vBizNo").text(data.bizNo1 + "-" + data.bizNo2 + "-" + data.bizNo3);
       $("#vBizStoreNm").text(data.bizStoreNm);
-      $("#vWeatherArea").text(data.areaCd);
+      $("#vWeatherArea").text(data.areaNm);
       $("#vTelNo").text(data.telNo);
       $("#vFaxNo").text(data.faxNo);
       $("#vSysStatFg").text(data.sysStatFgNm);

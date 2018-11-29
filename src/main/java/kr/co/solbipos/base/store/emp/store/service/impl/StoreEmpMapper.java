@@ -2,7 +2,6 @@ package kr.co.solbipos.base.store.emp.store.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.base.store.emp.store.service.StoreEmpVO;
-import kr.co.solbipos.base.store.emp.store.service.WebUserVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -16,6 +15,7 @@ import java.util.List;
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2018.08.16  hblee      최초생성
+ * @ 2018.11.23  김지은     angular 방식으로 변경 및 로직 수정(타 페이지와 통일성 맞춤)
  *
  * @author NHN한국사이버결제 이한빈
  * @since 2018.08.16
@@ -28,30 +28,33 @@ import java.util.List;
 @Repository
 public interface StoreEmpMapper {
 
-    /** 매장사원목록 조회 */
+    /** 본사 사원정보 리스트 조회*/
     List<DefaultMap<String>> getStoreEmpList(StoreEmpVO storeEmpVO);
 
-    /** 매장사원 조회 */
-    DefaultMap<String> getStoreEmp(StoreEmpVO storeEmpVO);
+    /** 본사 웹유저아이디 조회*/
+    int getStoreUserIdCnt(StoreEmpVO storeEmpVO);
 
-    /** 매장사원 등록 */
-    int insertStoreEmp(StoreEmpVO storeEmpVO);
+    /** 본사 사원정보 등록*/
+    int insertStoreEmpInfo(StoreEmpVO storeEmpVO);
 
-    /** 매장사원 수정 */
-    int updateStoreEmp(StoreEmpVO storeEmpVO);
+    /** 웹 로그인 정보 등록*/
+    int insertWbUserInfo(StoreEmpVO storeEmpVO);
 
-    /** 기존 패스워드 조회 */
-    String getCurrentPwd(StoreEmpVO storeEmpVO);
+    /** 본사 사원정보 수정*/
+    int updateStoreEmpInfo(StoreEmpVO storeEmpVO);
 
-    /** 존재하는 웹 사용자 ID 조회 (중복체크) */
-    String getExistUserId(String userId);
+    /** 웹 로그인 정보 수정*/
+    int saveWbUserInfo(StoreEmpVO storeEmpVO);
 
-    /** 웹 사용자 패스워드 이력 등록 */
-    int insertWebPwdChangeHistory(WebUserVO webUserVO);
+    /** 패스워드 변경 히스토리 등록*/
+    int insertPasswordHistory(StoreEmpVO storeEmpVO);
 
-    /** 웹 사용자 정보 등록/수정 */
-    int saveWebUser(WebUserVO webUserVO);
+    /** 패스워드 변경 */
+    int updateUserPassword(StoreEmpVO storeEmpVO);
 
-    /** 웹 사용자 사용여부 수정 */
-    int updateWebUserUseYn(WebUserVO webUserVO);
+    /** 본사 사원정보 상세 */
+    DefaultMap<String> getStoreEmpDtlInfo(StoreEmpVO storeEmpVO);
+
+    /** 현재 패스워드 조회 */
+    String getStoreEmpPassword(StoreEmpVO storeEmpVO);
 }

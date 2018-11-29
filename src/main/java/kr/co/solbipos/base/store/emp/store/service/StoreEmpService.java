@@ -1,6 +1,7 @@
 package kr.co.solbipos.base.store.emp.store.service;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.store.emp.store.service.enums.StoreEmpResult;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2018.08.16  hblee      최초생성
+ * @ 2018.11.23  김지은     angular 방식으로 변경 및 로직 수정(타 페이지와 통일성 맞춤)
  *
  * @author NHN한국사이버결제 이한빈
  * @since 2018.08.16
@@ -23,24 +25,22 @@ import java.util.List;
  */
 public interface StoreEmpService
 {
-    /** 매장사원 목록 조회 */
-    List<DefaultMap<String>> getStoreEmpList(StoreEmpVO storeEmpVO);
+    /** 매장 사원 목록 조회 */
+    List<DefaultMap<String>> getStoreEmpList(StoreEmpVO storeEmpVO, SessionInfoVO sessionInfoVO);
 
-    /** 매장사원 조회 */
-    DefaultMap<String> getStoreEmp(StoreEmpVO storeEmpVO);
+    /** 본사 사원정보 상세*/
+    DefaultMap<String> getStoreEmpDtlInfo(StoreEmpVO storeEmpVO, SessionInfoVO sessionInfoVO);
 
-    /** 매장사원 저장 */
-    StoreEmpResult saveStoreEmp(StoreEmpVO storeEmpVO);
+    /** 본사 웹유저아이디 조회*/
+    StoreEmpResult getStoreUserIdCnt(StoreEmpVO storeEmpVO);
 
-    /** 웹 사용자 정보 수정 */
-    StoreEmpResult updateWebUser(StoreEmpVO storeEmpVO);
+    /** 본사 사원정보 등록*/
+    StoreEmpResult insertStoreEmpInfo(StoreEmpVO storeEmpVO, SessionInfoVO sessionInfoVO);
 
-    /** 웹 사용자 정보 저장 */
-    StoreEmpResult saveWebUser(StoreEmpVO storeEmpVO);
+    /** 본사 사원정보 수정*/
+    StoreEmpResult saveStoreEmpInfo(StoreEmpVO storeEmpVO, SessionInfoVO sessionInfoVO);
 
-    /** 존재하는 웹 사용자 ID 조회 (중복체크) */
-    boolean checkDuplicateUserId(String userId);
+//    /** 본사 사원번호 패스워드변경*/
+//    StoreEmpResult modifyPassword(StoreEmpVO storeEmpVO, SessionInfoVO sessionInfoVO);
 
-    /** 유효한 패스워드 암호화하여 리턴 */
-    String getValidPwd(StoreEmpVO storeEmpVO);
 }

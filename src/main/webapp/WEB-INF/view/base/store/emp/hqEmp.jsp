@@ -75,7 +75,7 @@
         <%--사원ID --%>
         <th><s:message code="hqEmp.userId" /></th>
         <td>
-          <input type="text" id="srchUserId" name="srchUserId" ng-model="hqEmp.userId" class="sb-input w100" maxlength="16" />
+          <input type="text" id="srchUserId" name="srchUserId" ng-model="userId" class="sb-input w100" maxlength="16" />
         </td>
         <%-- 재직여부 --%>
         <th><s:message code="hqEmp.serviceFg" /></th>

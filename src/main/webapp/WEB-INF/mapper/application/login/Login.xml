@@ -90,7 +90,7 @@
             UNION ALL
                 SELECT
                     A.USER_ID,
-                    DECODE( A.ADMIN_YN, 'Y', 'M', 'A' ) AS ORGN_FG,
+                    DECODE( A.ADMIN_FG, 'A', 'M', 'A' ) AS ORGN_FG,
                     A.AGENCY_CD AS ORGN_CD,
                     B.AGENCY_NM AS ORGN_NM,
                     A.EMP_NM AS USER_NM,
