@@ -24,7 +24,7 @@ import java.util.List;
 public interface PrepaidService {
 
     /** 선불 회원 입금, 사용 내역 */
-    List<DefaultMap<Object>> getPrepaidMemberList(PrepaidStoreVO creditStoreVO,
+    List<DefaultMap<Object>> getPrepaidMemberList(PrepaidStoreVO postpaidStoreVO,
         SessionInfoVO sessionInfoVO);
 
     /** 후불 대상 회원 조회 */

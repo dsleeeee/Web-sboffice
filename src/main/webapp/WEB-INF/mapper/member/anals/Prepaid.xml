@@ -26,7 +26,7 @@
              tmmp.MEMBR_NM,
              tmmp.SALE_AMT,
              tmmp.PREPAID_AMT,
-             tmmp.PREPAID_IN_FG,
+             tmmp.PREPAID_FG,
              tmmp.PREPAID_PAY_FG
              <include refid="CmmSQL.PagingTemplateCount"/>
         FROM (
@@ -37,7 +37,7 @@
                 (SELECT MEMBR_NM FROM TB_MB_MEMBER WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND MEMBR_NO = tsspp.MEMBR_NO) AS MEMBR_NM,
                 tsspp.SALE_AMT,
                 0 AS PREPAID_AMT,
-                '' AS PREPAID_IN_FG,
+                '' AS PREPAID_FG,
                 '' AS PREPAID_PAY_FG
            FROM TB_SL_SALE_PAY_PREPAID tsspp
           UNION
@@ -48,7 +48,7 @@
                 (SELECT MEMBR_NM FROM TB_MB_MEMBER WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND MEMBR_NO = tmmp.MEMBR_NO) AS MEMBR_NM,
                 0 AS SALE_AMT,
                 tmmp.PREPAID_AMT,
-                tmmp.PREPAID_IN_FG,
+                tmmp.PREPAID_FG,
                 tmmp.PREPAID_PAY_FG
            FROM TB_MB_MEMBER_PREPAID tmmp
              ) tmmp
@@ -100,7 +100,7 @@
              tmm.MEMBR_NO,
              tmm.MEMBR_NM
       FROM TB_MB_MEMBER tmm
-      WHERE MEMBR_ORGN_CD = 'DS001'
+      WHERE MEMBR_ORGN_CD = 'DS001' --todo
       <if test='defaultStoreCd != null and defaultStoreCd != ""'>
         AND tmm.REG_STORE_CD != #{defaultStoreCd}
       </if>
@@ -121,13 +121,11 @@
       MEMBR_NO,
       PREPAID_NO,
       PREPAID_DT,
-      PREPAID_IN_FG,
+      PREPAID_FG,
       PREPAID_PAY_FG,
       PREPAID_AMT,
       NONSALE_BILL_NO,
       ORG_PREPAID_NO,
-      SEND_YN,
-      SEND_DT,
       REG_DT,
       REG_ID,
       MOD_DT,
@@ -145,13 +143,11 @@
           AND STORE_CD = #{prepaidStoreCd}
           AND SALE_DATE = #{saleDate} ),
       #{prepaidDt},
-      #{prepaidInFg, jdbcType=VARCHAR},
+      #{prepaidFg, jdbcType=VARCHAR},
       #{prepaidPayFg, jdbcType=VARCHAR},
       #{prepaidAmt},
       #{nonsaleBillNo},
       #{orgPrepaidNo},
-      #{sendYn, jdbcType=VARCHAR},
-      #{sendDt},
       #{regDt},
       #{regId},
       #{modDt},

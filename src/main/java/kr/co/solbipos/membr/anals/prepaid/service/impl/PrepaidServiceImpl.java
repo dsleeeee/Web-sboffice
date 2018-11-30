@@ -1,6 +1,5 @@
 package kr.co.solbipos.membr.anals.prepaid.service.impl;
 
-import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
@@ -8,7 +7,7 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.membr.anals.prepaid.service.PrepaidService;
 import kr.co.solbipos.membr.anals.prepaid.service.PrepaidStoreVO;
-import kr.co.solbipos.membr.anals.prepaid.service.enums.PrepaidInFg;
+import kr.co.solbipos.membr.anals.prepaid.service.enums.PrepaidFg;
 import kr.co.solbipos.membr.anals.prepaid.service.enums.PrepaidPayFg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,12 +93,10 @@ LOGGER.info(">>>>>>>>>>>>>>>>>> defaultStoreCd : "+ defaultStoreCd);
         prepaidStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         prepaidStoreVO.setSaleDate(currentDateString());
         prepaidStoreVO.setPrepaidDt(dt);
-        prepaidStoreVO.setPrepaidInFg(PrepaidInFg.CHARGE); // 입금
+        prepaidStoreVO.setPrepaidFg(PrepaidFg.CHARGE); // 입금
         prepaidStoreVO.setPrepaidPayFg(PrepaidPayFg.CASH); // 현금
         prepaidStoreVO.setNonsaleBillNo(" ");// 비매출 영수증번호
         prepaidStoreVO.setOrgPrepaidNo(" "); // 원거래 충전번호
-        prepaidStoreVO.setSendYn(UseYn.Y);  // TODO 전송여부 YN갑 체크 필요
-        prepaidStoreVO.setSendDt(dt);
 
         prepaidStoreVO.setRegId(sessionInfoVO.getUserId());
         prepaidStoreVO.setRegDt(dt);

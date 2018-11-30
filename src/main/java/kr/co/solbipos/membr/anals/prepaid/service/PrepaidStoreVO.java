@@ -1,9 +1,7 @@
 package kr.co.solbipos.membr.anals.prepaid.service;
 
-import kr.co.common.data.enums.UseYn;
-import kr.co.solbipos.application.common.service.CmmVO;
 import kr.co.solbipos.application.common.service.PageVO;
-import kr.co.solbipos.membr.anals.prepaid.service.enums.PrepaidInFg;
+import kr.co.solbipos.membr.anals.prepaid.service.enums.PrepaidFg;
 import kr.co.solbipos.membr.anals.prepaid.service.enums.PrepaidPayFg;
 
 /**
@@ -38,7 +36,7 @@ public class PrepaidStoreVO extends PageVO {
     /** 외상 입금 일시 */
     private String prepaidDt;
     /** 외상 입금 구분 */
-    private PrepaidInFg prepaidInFg;
+    private PrepaidFg prepaidFg;
     /** 외상 입금 구분 */
     private PrepaidPayFg prepaidPayFg;
     /** 외상 입금 금액 */
@@ -47,10 +45,6 @@ public class PrepaidStoreVO extends PageVO {
     private String nonsaleBillNo;
     /** 원거래 충전번호 */
     private String orgPrepaidNo;
-    /** 전송여부 */
-    private UseYn sendYn;
-    /** 전송일시 */
-    private String sendDt;
     /** 정렬방법 */
     private String array;
     /** 조회매장 */
@@ -169,15 +163,15 @@ public class PrepaidStoreVO extends PageVO {
      * @return the prepaidInFg
      */
 
-    public PrepaidInFg getPrepaidInFg() {
-        return prepaidInFg;
+    public PrepaidFg getPrepaidFg() {
+        return prepaidFg;
     }
 
     /**
      * @param prepaidInFg the prepaidInFg to set
      */
-    public void setPrepaidInFg(PrepaidInFg prepaidInFg) {
-        this.prepaidInFg = prepaidInFg;
+    public void setPrepaidFg(PrepaidFg prepaidInFg) {
+        this.prepaidFg = prepaidInFg;
     }
 
     /**
@@ -240,35 +234,6 @@ public class PrepaidStoreVO extends PageVO {
         this.orgPrepaidNo = orgPrepaidNo;
     }
 
-    /**
-     * @return the sendYn
-     */
-
-    public UseYn getSendYn() {
-        return sendYn;
-    }
-
-    /**
-     * @param sendYn the sendYn to set
-     */
-    public void setSendYn(UseYn sendYn) {
-        this.sendYn = sendYn;
-    }
-
-    /**
-     * @return the sendDt
-     */
-
-    public String getSendDt() {
-        return sendDt;
-    }
-
-    /**
-     * @param sendDt the sendDt to set
-     */
-    public void setSendDt(String sendDt) {
-        this.sendDt = sendDt;
-    }
 
     /**
      * @return the array

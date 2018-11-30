@@ -11,7 +11,7 @@ import org.apache.ibatis.type.MappedTypes;
  * @author ygjeong
  *
  */
-public enum PrepaidInFg implements CodeEnum {
+public enum PrepaidFg implements CodeEnum {
 
     /** 충전 */
     CHARGE("1"),
@@ -20,14 +20,14 @@ public enum PrepaidInFg implements CodeEnum {
 
     private String code;
 
-    PrepaidInFg(String code) {
+    PrepaidFg(String code) {
         this.code = code;
     }
 
-    @MappedTypes(PrepaidInFg.class)
-    public static class TypeHandler extends CodeEnumTypeHandler<PrepaidInFg> {
+    @MappedTypes(PrepaidFg.class)
+    public static class TypeHandler extends CodeEnumTypeHandler<PrepaidFg> {
         public TypeHandler() {
-            super(PrepaidInFg.class);
+            super(PrepaidFg.class);
         }
     }
 
