@@ -1,4 +1,4 @@
-package kr.co.solbipos.membr.anals.credit.service;
+package kr.co.solbipos.membr.anals.postpaid.service;
 
 
 import kr.co.common.data.structure.DefaultMap;
@@ -7,7 +7,7 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import java.util.List;
 
 /**
- * @Class Name : CreditService.java
+ * @Class Name : PostpaidService.java
  * @Description : 회원관리 > 회원분석 > 후불회원
  * @Modification Information
  * @
@@ -21,15 +21,17 @@ import java.util.List;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-public interface CreditService {
+public interface PostpaidService {
 
     /** 후불 회원 외상, 입금 내역 */
-    List<DefaultMap<Object>> getCreditMemberList(CreditStoreVO creditStoreVO, SessionInfoVO sessionInfoVO);
+    List<DefaultMap<Object>> getPostpaidMemberList(
+        kr.co.solbipos.membr.anals.postpaid.service.PostpaidStoreVO postpaidStoreVO, SessionInfoVO sessionInfoVO);
 
     /** 후불 대상 회원 조회 */
-    List<DefaultMap<Object>> getDepositMemberList(CreditStoreVO creditStoreVO, SessionInfoVO sessionInfoVO);
+    List<DefaultMap<Object>> getDepositMemberList(
+        kr.co.solbipos.membr.anals.postpaid.service.PostpaidStoreVO postpaidStoreVO, SessionInfoVO sessionInfoVO);
 
     /** 외상 입금 */
-    int saveDeposit(CreditStoreVO creditStoreVO, SessionInfoVO sessionInfoVO);
+    int saveDeposit(kr.co.solbipos.membr.anals.postpaid.service.PostpaidStoreVO postpaidStoreVO, SessionInfoVO sessionInfoVO);
 
 }

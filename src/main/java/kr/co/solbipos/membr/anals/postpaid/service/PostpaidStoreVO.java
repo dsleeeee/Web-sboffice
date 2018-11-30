@@ -1,13 +1,12 @@
-package kr.co.solbipos.membr.anals.credit.service;
+package kr.co.solbipos.membr.anals.postpaid.service;
 
 import kr.co.common.data.enums.UseYn;
-import kr.co.solbipos.application.common.service.CmmVO;
 import kr.co.solbipos.application.common.service.PageVO;
-import kr.co.solbipos.membr.anals.credit.service.enums.CreditInFg;
-import kr.co.solbipos.membr.anals.credit.service.enums.CreditPayFg;
+import kr.co.solbipos.membr.anals.postpaid.service.enums.PostpaidFg;
+import kr.co.solbipos.membr.anals.postpaid.service.enums.PostpaidPayFg;
 
 /**
- * @Class Name : CreditStoreVO.java
+ * @Class Name : PostpaidStoreVO.java
  * @Description : 기초관리 > 결제수단 > 후불회원등록매장, 후불등록 공통 사용
  * @Modification Information
  * @
@@ -21,36 +20,34 @@ import kr.co.solbipos.membr.anals.credit.service.enums.CreditPayFg;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-public class CreditStoreVO extends PageVO {
+public class PostpaidStoreVO extends PageVO {
 
-    /** 본사코드 */
-    private String hqOfficeCd;
+    /** 회원소속코드 */
+    private String membrOrgnCd;
     /** 회원번호 */
-    private String memberNo;
+    private String membrNo;
     /** 회원명 */
-    private String memberNm;
+    private String membrNm;
     /** 후불회원 등록 매장 코드 */
-    private String creditStoreCd;
+    private String storeCd;
     /** 후불회원 등록 매장 명 */
-    private String creditStoreNm;
-    /** 외상 입금 날짜 */
+    private String storeNm;
+    /** 사용여부 */
+    private UseYn useYn;
+    /** 후불 입금 날짜 */
     private String saleDate;
-    /** 외상 입금 일시 */
-    private String creditDt;
-    /** 외상 입금 구분 */
-    private CreditInFg creditInFg;
-    /** 외상 입금 구분 */
-    private CreditPayFg creditPayFg;
-    /** 외상 입금 금액 */
-    private String creditAmt;
+    /** 후불 입금 일시 */
+    private String postpaidDt;
+    /** 후불 구분 */
+    private PostpaidFg postpaidFg;
+    /** 후불 입금 구분 */
+    private PostpaidPayFg postpaidPayFg;
+    /** 후불 입금 금액 */
+    private String postpaidAmt;
     /** 비매출 영수증번호 */
     private String nonsaleBillNo;
     /** 원거래 충전번호 */
     private String orgPrepaidNo;
-    /** 전송여부 */
-    private UseYn sendYn;
-    /** 전송일시 */
-    private String sendDt;
     /** 정렬방법 */
     private String array;
     /** 조회매장 */
@@ -64,78 +61,93 @@ public class CreditStoreVO extends PageVO {
 
 
     /**
-     * @return the hqOfficeCd
+     * @return the membrOrgnCd
      */
 
-    public String getHqOfficeCd() {
-        return hqOfficeCd;
+    public String getMembrOrgnCd() {
+        return membrOrgnCd;
     }
 
     /**
-     * @param hqOfficeCd the hqOfficeCd to set
+     * @param membrOrgnCd the membrOrgnCd to set
      */
-    public void setHqOfficeCd(String hqOfficeCd) {
-        this.hqOfficeCd = hqOfficeCd;
+    public void setMembrOrgnCd(String membrOrgnCd) {
+        this.membrOrgnCd = membrOrgnCd;
     }
 
     /**
-     * @return the memberNo
+     * @return the membrNo
      */
 
-    public String getMemberNo() {
-        return memberNo;
+    public String getMembrNo() {
+        return membrNo;
     }
 
     /**
-     * @param memberNo the memberNo to set
+     * @param membrNo the membrNo to set
      */
-    public void setMemberNo(String memberNo) {
-        this.memberNo = memberNo;
+    public void setMembrNo(String membrNo) {
+        this.membrNo = membrNo;
     }
 
     /**
-     * @return the memberNm
+     * @return the membrNm
      */
 
-    public String getMemberNm() {
-        return memberNm;
+    public String getMembrNm() {
+        return membrNm;
     }
 
     /**
-     * @param memberNm the memberNm to set
+     * @param membrNm the membrNm to set
      */
-    public void setMemberNm(String memberNm) {
-        this.memberNm = memberNm;
+    public void setMembrNm(String membrNm) {
+        this.membrNm = membrNm;
     }
 
     /**
-     * @return the creditStoreCd
+     * @return the storeCd
      */
 
-    public String getCreditStoreCd() {
-        return creditStoreCd;
+    public String getStoreCd() {
+        return storeCd;
     }
 
     /**
-     * @param creditStoreCd the creditStoreCd to set
+     * @param storeCd the storeCd to set
      */
-    public void setCreditStoreCd(String creditStoreCd) {
-        this.creditStoreCd = creditStoreCd;
+    public void setStoreCd(String storeCd) {
+        this.storeCd = storeCd;
     }
 
     /**
-     * @return the creditStoreNm
+     * @return the storeNm
      */
 
-    public String getCreditStoreNm() {
-        return creditStoreNm;
+    public String getStoreNm() {
+        return storeNm;
     }
 
     /**
-     * @param creditStoreNm the creditStoreNm to set
+     * @param storeNm the storeNm to set
      */
-    public void setCreditStoreNm(String creditStoreNm) {
-        this.creditStoreNm = creditStoreNm;
+    public void setStoreNm(String storeNm) {
+        this.storeNm = storeNm;
+    }
+
+    /**
+     * @return the useYn
+     */
+
+    public UseYn getUseYn() {
+        return useYn;
+    }
+
+    /**
+     * @param useYn the useYn to set
+     */
+    public void setUseYn(UseYn useYn) {
+        this.useYn = useYn;
     }
 
     /**
@@ -154,63 +166,63 @@ public class CreditStoreVO extends PageVO {
     }
 
     /**
-     * @return the creditDt
+     * @return the postpaidDt
      */
 
-    public String getCreditDt() {
-        return creditDt;
+    public String getPostpaidDt() {
+        return postpaidDt;
     }
 
     /**
-     * @param creditDt the creditDt to set
+     * @param postpaidDt the postpaidDt to set
      */
-    public void setCreditDt(String creditDt) {
-        this.creditDt = creditDt;
+    public void setPostpaidDt(String postpaidDt) {
+        this.postpaidDt = postpaidDt;
     }
 
     /**
-     * @return the creditInFg
+     * @return the postpaidFg
      */
 
-    public CreditInFg getCreditInFg() {
-        return creditInFg;
+    public PostpaidFg getPostpaidFg() {
+        return postpaidFg;
     }
 
     /**
-     * @param creditInFg the creditInFg to set
+     * @param postpaidFg the postpaidFg to set
      */
-    public void setCreditInFg(CreditInFg creditInFg) {
-        this.creditInFg = creditInFg;
+    public void setPostpaidFg(PostpaidFg postpaidFg) {
+        this.postpaidFg = postpaidFg;
     }
 
     /**
-     * @return the creditPayFg
+     * @return the postpaidPayFg
      */
 
-    public CreditPayFg getCreditPayFg() {
-        return creditPayFg;
+    public PostpaidPayFg getPostpaidPayFg() {
+        return postpaidPayFg;
     }
 
     /**
-     * @param creditPayFg the creditPayFg to set
+     * @param postpaidPayFg the postpaidPayFg to set
      */
-    public void setCreditPayFg(CreditPayFg creditPayFg) {
-        this.creditPayFg = creditPayFg;
+    public void setPostpaidPayFg(PostpaidPayFg postpaidPayFg) {
+        this.postpaidPayFg = postpaidPayFg;
     }
 
     /**
-     * @return the creditAmt
+     * @return the postpaidAmt
      */
 
-    public String getCreditAmt() {
-        return creditAmt;
+    public String getPostpaidAmt() {
+        return postpaidAmt;
     }
 
     /**
-     * @param creditAmt the creditAmt to set
+     * @param postpaidAmt the postpaidAmt to set
      */
-    public void setCreditAmt(String creditAmt) {
-        this.creditAmt = creditAmt;
+    public void setPostpaidAmt(String postpaidAmt) {
+        this.postpaidAmt = postpaidAmt;
     }
 
     /**
@@ -241,36 +253,6 @@ public class CreditStoreVO extends PageVO {
      */
     public void setOrgPrepaidNo(String orgPrepaidNo) {
         this.orgPrepaidNo = orgPrepaidNo;
-    }
-
-    /**
-     * @return the sendYn
-     */
-
-    public UseYn getSendYn() {
-        return sendYn;
-    }
-
-    /**
-     * @param sendYn the sendYn to set
-     */
-    public void setSendYn(UseYn sendYn) {
-        this.sendYn = sendYn;
-    }
-
-    /**
-     * @return the sendDt
-     */
-
-    public String getSendDt() {
-        return sendDt;
-    }
-
-    /**
-     * @param sendDt the sendDt to set
-     */
-    public void setSendDt(String sendDt) {
-        this.sendDt = sendDt;
     }
 
     /**

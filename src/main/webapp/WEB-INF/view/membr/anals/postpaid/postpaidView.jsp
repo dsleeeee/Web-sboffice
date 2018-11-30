@@ -7,16 +7,16 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
-<c:set var="baseUrl" value="/membr/anals/credit/" />
+<c:set var="baseUrl" value="/membr/anals/postpaid/" />
 
-<div class="subCon" ng-controller="creditCtrl">
+<div class="subCon" ng-controller="postpaidCtrl">
 
   <%-- 조회조건 --%>
   <div class="searchBar flddUnfld">
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" ng-click="_broadcast('creditCtrl')">
+      <button class="btn_blue fr" ng-click="_broadcast('postpaidCtrl')">
         <s:message code="cmm.search" />
       </button>
     </div>
@@ -32,24 +32,24 @@
     <tr ng-show="orgnFg=='H'">
       <%-- 매장 --%>
       <div id="storeCd" style="display: none;"></div>
-      <th><s:message code="credit.srchStore" /></th>
+      <th><s:message code="postpaid.srchStore" /></th>
       <td>
         <input type="text" class="sb-input w100" id="storeCdText" ng-model="storeCds" readonly="readonly" ng-click="searchStore()" />
       </td>
       <%-- 회원번호 --%>
-      <th><s:message code="credit.membrNo" /></th>
+      <th><s:message code="postpaid.membrNo" /></th>
       <td>
-        <input type="text" class="sb-input w100" id="srcgMembrNo" ng-model="memberNo" />
+        <input type="text" class="sb-input w100" id="srcgMembrNo" ng-model="membrNo" />
       </td>
     </tr>
     <tr>
       <%-- 회원명 --%>
-      <th><s:message code="credit.membrNm" /></th>
+      <th><s:message code="postpaid.membrNm" /></th>
       <td>
-        <input type="text" class="sb-input w100" id="srchMembrNm" ng-model="memberNm" />
+        <input type="text" class="sb-input w100" id="srchMembrNm" ng-model="membrNm" />
       </td>
       <%-- 정렬 --%>
-      <th><s:message code="credit.array" /></th>
+      <th><s:message code="postpaid.array" /></th>
       <td>
         <div class="sb-select w100">
           <wj-combo-box
@@ -70,7 +70,7 @@
   <%--위즈모 테이블--%>
   <div class="updownSet oh mb10 mt20">
     <button class="btn_skyblue" id="btnDeposit" style=";" ng-click="deposit()">
-      <s:message code="credit.deposit" />
+      <s:message code="postpaid.deposit" />
     </button>
     <button class="btn_skyblue" id="btnDelRepresent" style="display: none;" ng-click="del()">
       <s:message code="cmm.delete" />
@@ -107,21 +107,21 @@
               is-read-only="true">
 
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="credit.storeCd"/>" binding="storeCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="credit.storeNm"/>" binding="storeNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="credit.saleDate"/>" binding="saleDate" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="credit.membrNo"/>" binding="membrNo" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="credit.membrNm"/>" binding="membrNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="credit.creditNo"/>" binding="creditNo" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="credit.creditDt"/>" binding="creditDt" is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="credit.creditInFg"/>" binding="creditInFg" data-map="creditInFgDataMap" is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="credit.saleAmt"/>" binding="saleAmt" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="credit.creditAmt"/>" binding="creditAmt" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="credit.creditPayFg"/>" binding="creditPayFg" data-map="creditPayFgDataMap" is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="credit.nonsaleBillNo"/>" binding="nonsaleBillNo" visible="false" ></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="credit.orgPrepaidNo"/>" binding="orgPrepaidNo" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="credit.sendYn"/>" binding="sendYn" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="credit.sendDt"/>" binding="sendDt" visible="false" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="postpaid.storeCd"/>" binding="storeCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="postpaid.storeNm"/>" binding="storeNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="postpaid.saleDate"/>" binding="saleDate" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="postpaid.membrNo"/>" binding="membrNo" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="postpaid.membrNm"/>" binding="membrNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="postpaid.postpaidNo"/>" binding="postpaidNo" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="postpaid.postpaidDt"/>" binding="postpaidDt" is-read-only="true" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="postpaid.postpaidFg"/>" binding="postpaidFg" data-map="postpaidFgDataMap" is-read-only="true" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="postpaid.saleAmt"/>" binding="saleAmt" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="postpaid.postpaidAmt"/>" binding="postpaidAmt" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="postpaid.postpaidPayFg"/>" binding="postpaidPayFg" data-map="postpaidPayFgDataMap" is-read-only="true" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="postpaid.nonsaleBillNo"/>" binding="nonsaleBillNo" visible="false" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="postpaid.orgPrepaidNo"/>" binding="orgPrepaidNo" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="postpaid.sendYn"/>" binding="sendYn" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="postpaid.sendDt"/>" binding="sendDt" visible="false" ></wj-flex-grid-column>
 
       </wj-flex-grid>
     </div>
@@ -130,7 +130,7 @@
   <%-- 페이지 리스트 --%>
   <div class="pageNum mt20">
     <%-- id --%>
-    <ul id="creditCtrlPager" data-size="10">
+    <ul id="postpaidCtrlPager" data-size="10">
     </ul>
   </div>
   <%--//페이지 리스트--%>
@@ -139,14 +139,14 @@
 
 <script type="text/javascript">
   var arrayData = ${ccu.getCommCodeExcpAll("075")};
-  var creditInFgData = ${ccu.getCommCodeExcpAll("073")};
-  var creditPayFgData = ${ccu.getCommCodeExcpAll("074")};
+  var postpaidFgData = ${ccu.getCommCodeExcpAll("073")};
+  var postpaidPayFgData = ${ccu.getCommCodeExcpAll("074")};
   var baseUrl = "${baseUrl}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/membr/anals/credit/credit.js?ver=20180903.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/anals/postpaid/postpaid.js?ver=20180903.01" charset="utf-8"></script>
 
 <%-- 외상입금 팝업 --%>
-<c:import url="/WEB-INF/view/membr/anals/credit/deposit.jsp">
+<c:import url="/WEB-INF/view/membr/anals/postpaid/deposit.jsp">
 </c:import>
 
 <%-- 매장 선택 --%>

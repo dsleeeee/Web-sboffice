@@ -248,8 +248,8 @@ $(document).ready(function(){
       vEmailRecv.selectedValue = data.emailRecvYn;
       vSmsRecv.selectedValue = data.smsRecvYn;
 
-      // $("#storeCd").val(data.creditStoreCds)
-      // $("#storeCdText").val(data.creditStoreNms);
+      // $("#storeCd").val(data.postpaidStoreCds)
+      // $("#storeCdText").val(data.postpaidStoreNms);
       $("#vMembrOrgnCd").val(data.membrOrgnCd);
       $("#membrNoNm").text("<s:message code='regist.membr.info'/>" + " [" + data.membrNo + "/" + data.membrNm + "]");
       vMembrNo.isReadOnly = true;
@@ -258,7 +258,7 @@ $(document).ready(function(){
       $("#basicInfrm").show();
 
       // 회원의 등록매장이 본사의 기본매장코드와 같으면 후불회원 적용매장 가능
-      editCreditStore();
+      editPostpaidStore();
     },
     function(result){
       s_alert.pop(result.message);
@@ -341,16 +341,16 @@ $(document).ready(function(){
   vMembrNo.isReadOnly = true;
 
   vRegStore.selectedIndexChanged.addHandler(function(s, e){
-    editCreditStore();
+    editPostpaidStore();
   });
 
   // 후불회원 적용매장
-  function editCreditStore(){
+  function editPostpaidStore(){
     // 회원의 등록매장이 본사의 기본매장코드와 같으면 후불회원 적용매장 가능
     if(vRegStore.selectedValue === defaultStoreCd ) {
-      $("#creditStore").show();
+      $("#postpaidStore").show();
     } else {
-      $("#creditStore").hide();
+      $("#postpaidStore").hide();
     }
   }
 
@@ -425,7 +425,7 @@ $(document).ready(function(){
       param.emailRecvYn = vEmailRecv.selectedValue;
       param.smsRecvYn = vSmsRecv.selectedValue;
       param.remark = vRemark.value;
-      // param.creditStoreCds = $("#storeCd").val(); // 후불회원 적용매장
+      // param.postpaidStoreCds = $("#storeCd").val(); // 후불회원 적용매장
 
       $.postJSONSave("/membr/info/view/base/regist.sb", param, function(result) {
         var msg = "<s:message code='cmm.registSucc'/>";

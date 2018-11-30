@@ -1,6 +1,6 @@
 /****************************************************************
  *
- * 파일명 : credit.js
+ * 파일명 : postpaid.js
  * 설  명 : 외상입금/후불 JavaScript
  *
  *    수정일      수정자      Version        Function 명
@@ -16,9 +16,9 @@ var app = agrid.getApp();
 /**
  *  후불회원 그리드 생성
  */
-app.controller('creditCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('postpaidCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('creditCtrl', $scope, $http, true));
+  angular.extend(this, new RootController('postpaidCtrl', $scope, $http, true));
 
   $scope.orgnFg = gvOrgnFg;
 
@@ -33,29 +33,29 @@ app.controller('creditCtrl', ['$scope', '$http', function ($scope, $http) {
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // 그리드 DataMap 설정
-    $scope.creditInFgDataMap = new wijmo.grid.DataMap(creditInFgData, 'value', 'name');
-    $scope.creditPayFgDataMap = new wijmo.grid.DataMap(creditPayFgData, 'value', 'name');
+    $scope.postpaidFgDataMap = new wijmo.grid.DataMap(postpaidFgData, 'value', 'name');
+    $scope.postpaidPayFgDataMap = new wijmo.grid.DataMap(postpaidPayFgData, 'value', 'name');
   };
 
-  $scope.$on("creditCtrl", function(event, data) {
-    $scope.searchCredit();
+  $scope.$on("postpaidCtrl", function(event, data) {
+    $scope.searchPostpaid();
     event.preventDefault();
   });
 
   // 후불회원 그리드 조회
-  $scope.searchCredit = function(){
+  $scope.searchPostpaid = function(){
     // 파라미터
     var params = {};
     params.storeCds = $("#storeCd").val();
     params.array    = srchArrayCombo.selectedValue;
 
     if($scope.orgnFg === 'H' && params.storeCds  === '') {
-      $scope._popMsg(messages["credit.require.selectStore"]);
+      $scope._popMsg(messages["postpaid.require.selectStore"]);
       return false;
     }
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
-    $scope._inquiryMain(baseUrl + "credit/getCreditMemberList.sb", params, function() {}, false);
+    $scope._inquiryMain(baseUrl + "postpaid/getPostpaidMemberList.sb", params, function() {}, false);
   };
 
   // 외상입금 팝업

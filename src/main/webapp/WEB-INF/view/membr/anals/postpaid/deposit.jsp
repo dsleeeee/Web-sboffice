@@ -7,7 +7,7 @@
 
   <div class="wj-dialog wj-dialog-columns">
     <div class="wj-dialog-header wj-dialog-header-font">
-      <s:message code="credit.regist.deposit" />
+      <s:message code="postpaid.regist.deposit" />
       <a href="#" class="wj-hide btn_close"></a>
     </div>
     <div class="wj-dialog-body">
@@ -21,16 +21,16 @@
         </colgroup>
         <tbody>
         <tr>
-          <th><s:message code="credit.storeCd"/></th>
+          <th><s:message code="postpaid.storeCd"/></th>
           <td><input type="text" ng-model="storeCd" id="searchDepositStoreCd"/></td>
-          <th><s:message code="credit.storeNm"/></th>
+          <th><s:message code="postpaid.storeNm"/></th>
           <td><input type="text" ng-model="storeNm" id="searchDepositStoreNm"/></td>
         </tr>
         <tr>
-          <th><s:message code="credit.membrNo"/></th>
-          <td><input type="text" ng-model="memberNo" id="searchDepositMemberNo"/></td>
-          <th><s:message code="credit.membrNm"/></th>
-          <td><input type="text" ng-model="memberNm" id="searchDepositMemberNm" /></td>
+          <th><s:message code="postpaid.membrNo"/></th>
+          <td><input type="text" ng-model="membrNo" id="searchDepositMemberNo"/></td>
+          <th><s:message code="postpaid.membrNm"/></th>
+          <td><input type="text" ng-model="membrNm" id="searchDepositMemberNm" /></td>
         </tr>
         </tbody>
       </table>
@@ -44,10 +44,10 @@
         <%--- 적용매장 그리드 --%>
         <div class="wj-TblWrap mr10" style="height:350px;" ng-controller="depositCtrl">
           <div class="updownSet oh mb10">
-            <span class="fl"><s:message code='credit.deposit.member' /></span>
+            <span class="fl"><s:message code='postpaid.deposit.member' /></span>
             <span class="fr">
-              <s:message code='credit.creditAmt' /> :
-              <input type="text" class="sb-input w40 pdl20" id="creditAmt"/>
+              <s:message code='postpaid.postpaidAmt' /> :
+              <input type="text" class="sb-input w40 pdl20" id="postpaidAmt"/>
             </span>
           </div>
           <div id="regStoreGrid" style="height: 270px;">
@@ -62,10 +62,10 @@
                     is-read-only="true">
 
               <!-- define columns -->
-              <wj-flex-grid-column header="<s:message code="credit.deposit.storeCd"/>" binding="creditStoreCd" width="*" ></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="credit.deposit.storeNm"/>" binding="creditStoreNm" width="*" ></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="credit.membrNo"/>" binding="membrNo" width="*" ></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="credit.membrNm"/>" binding="membrNm" width="*" ></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="postpaid.deposit.storeCd"/>" binding="storeCd" width="*" ></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="postpaid.deposit.storeNm"/>" binding="storeNm" width="*" ></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="postpaid.membrNo"/>" binding="membrNo" width="*" ></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="postpaid.membrNm"/>" binding="membrNm" width="*" ></wj-flex-grid-column>
             </wj-flex-grid>
           </div>
           <!--페이지 리스트-->
@@ -76,4 +76,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/anals/credit/deposit.js?ver=20180817.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/anals/postpaid/deposit.js?ver=20180817.01" charset="utf-8"></script>

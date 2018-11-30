@@ -286,7 +286,7 @@
 -->
     <typeAlias alias="registVO" type="kr.co.solbipos.membr.info.regist.service.RegistVO"/>
     <typeAlias alias="membrClassVO" type="kr.co.solbipos.membr.info.grade.service.MembrClassVO"/>
-    <typeAlias alias="creditStoreVO" type="kr.co.solbipos.membr.anals.credit.service.CreditStoreVO"/>
+    <typeAlias alias="postpaidStoreVO" type="kr.co.solbipos.membr.anals.postpaid.service.PostpaidStoreVO"/>
     <typeAlias alias="prepaidStoreVO" type="kr.co.solbipos.membr.anals.prepaid.service.PrepaidStoreVO"/>
     <typeAlias alias="hqStoreMoveVO" type="kr.co.solbipos.iostock.move.hqStoreMove.service.HqStoreMoveVO"/>
 
@@ -297,7 +297,7 @@
         <typeAlias alias="stampVO" type="kr.co.solbipos.membr.info.stamp.service.StampVO"/>
         <typeAlias alias="dlvrVO" type="kr.co.solbipos.membr.info.dlvr.service.DlvrVO"/>
         <typeAlias alias="chgBatchVO" type="kr.co.solbipos.membr.info.chgbatch.service.ChgBatchVO"/>
-        <typeAlias alias="creditVO" type="kr.co.solbipos.membr.anals.credit.service.CreditVO"/>
+        <typeAlias alias="postpaidVO" type="kr.co.solbipos.membr.anals.postpaid.service.PostpaidVO"/>
         <typeAlias alias="dayPurchsVO" type="kr.co.solbipos.membr.anals.daypurchs.service.DayPurchsVO"/>
         <typeAlias alias="periodVO" type="kr.co.solbipos.membr.anals.period.service.PeriodVO"/>
         <typeAlias alias="prodVO" type="kr.co.solbipos.membr.anals.prod.service.ProdVO"/>

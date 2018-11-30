@@ -74,7 +74,7 @@
                tmm.MEMBR_NICKNM,
                tmm.MEMBER_ENG_NM,
                tmm.REMARK,
-               '후불적용매장등록' AS CREDIT_STORE
+               '후불적용매장등록' AS POSTPAID_STORE
         <include refid="CmmSQL.PagingTemplateCount"/>
           FROM TB_MB_MEMBER tmm,
                TB_MB_MEMBER_CLASS tmmc,
@@ -337,39 +337,41 @@
 
     <!-- 후불회원 등록매장 조회 -->
     <!--
-        TABLE    : TB_MB_MEMBER_CREDIT_STORE
+        TABLE    : TB_MB_MEMBER_POSTPAID_STORE
         COMMENTS : 후불회원 적용매장 조회
     -->
-    <select id="getRegStoreList" parameterType="creditStoreVO" resultType="DefaultMap">
+    <select id="getRegStoreList" parameterType="postpaidStoreVO" resultType="DefaultMap">
         /* RegistMapper.getRegStoreList */
-        SELECT tmbcs.HQ_OFFICE_CD,
-               tmbcs.MEMBER_NO,
-               tmbcs.CREDIT_STORE_CD,
-               (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = tmbcs.CREDIT_STORE_CD) CREDIT_STORE_NM
-          FROM TB_MB_MEMBER_CREDIT_STORE tmbcs
-         WHERE tmbcs.HQ_OFFICE_CD = #{hqOfficeCd}
-           AND tmbcs.MEMBER_NO = #{memberNo}
+        SELECT tmbcs.MEMBR_ORGN_CD,
+               tmbcs.MEMBR_NO,
+               tmbcs.STORE_CD,
+               (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = tmbcs.STORE_CD) AS STORE_NM
+          FROM TB_MB_MEMBER_POSTPAID_STORE tmbcs
+         WHERE tmbcs.MEMBR_ORGN_CD = #{membrOrgnCd}
+           AND tmbcs.MEMBR_NO = #{membrNo}
+           AND tmbcs.USE_YN = 'Y'
         <if test='defaultStoreCd != null and defaultStoreCd.toString() != ""'>
-           AND tmbcs.CREDIT_STORE_CD != #{defaultStoreCd}
+           AND tmbcs.STORE_CD != #{defaultStoreCd}
         </if>
     </select>
 
     <!-- 후불회원 미등록매장 조회 -->
     <!--
-        TABLE    : TB_MB_MEMBER_CREDIT_STORE
+        TABLE    : TB_MB_MEMBER_POSTPAID_STORE
         COMMENTS : 후불회원 적용매장 조회
     -->
-    <select id="getNoRegStoreList" parameterType="creditStoreVO" resultType="DefaultMap">
+    <select id="getNoRegStoreList" parameterType="postpaidStoreVO" resultType="DefaultMap">
         /* RegistMapper.getNoRegStoreList */
-        SELECT HQ_OFFICE_CD,
-               STORE_CD AS CREDIT_STORE_CD,
-               STORE_NM AS CREDIT_STORE_NM
+        SELECT HQ_OFFICE_CD AS MEMBR_ORGN_CD,
+               STORE_CD,
+               STORE_NM
           FROM TB_MS_STORE
-         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-           AND STORE_CD NOT IN (SELECT CREDIT_STORE_CD
-                                  FROM TB_MB_MEMBER_CREDIT_STORE
-                                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                                   AND MEMBER_NO =  #{memberNo})
+         WHERE HQ_OFFICE_CD = #{membrOrgnCd}
+           AND STORE_CD NOT IN (SELECT STORE_CD
+                                  FROM TB_MB_MEMBER_POSTPAID_STORE
+                                 WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+                                   AND MEMBR_NO =  #{membrNo}
+                                   AND USE_YN = 'Y')
         <if test='defaultStoreCd != null and defaultStoreCd.toString() != ""'>
            AND STORE_CD != #{defaultStoreCd}
         </if>
@@ -377,40 +379,59 @@
 
     <!-- 후불회원 적용매장 삭제 -->
     <!--
-        TABLE    : TB_MB_MEMBER_CREDIT_STORE
+        TABLE    : TB_MB_MEMBER_POSTPAID_STORE
         COMMENTS : 후불회원 적용매장 삭제
     -->
-    <delete id="deleteCreditStore" parameterType="creditStoreVO">
-        /* RegistMapper.deleteCreditStore */
-        DELETE TB_MB_MEMBER_CREDIT_STORE
-         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-           AND MEMBER_NO = #{memberNo}
-           AND CREDIT_STORE_CD = #{creditStoreCd}
-    </delete>
+    <update id="deletePostpaidStore" parameterType="postpaidStoreVO">
+        /* RegistMapper.deletePostpaidStore */
+        UPDATE TB_MB_MEMBER_POSTPAID_STORE
+           SET USE_YN = 'N',
+               MOD_DT = #{modDt},
+               MOD_ID = #{modId}
+         WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+           AND MEMBR_NO = #{membrNo}
+           AND STORE_CD = #{storeCd}
+    </update>
 
     <!-- 후불회원 적용매장 등록 및 수정 -->
     <!--
-        TABLE    : TB_MB_MEMBER_CREDIT_STORE
+        TABLE    : TB_MB_MEMBER_POSTPAID_STORE
         COMMENTS : 후불회원 적용매장 등록 및 수정
     -->
-    <insert id="registCreditStore" parameterType="creditStoreVO">
-        /* RegistMapper.registCreditStore */
-        INSERT INTO TB_MB_MEMBER_CREDIT_STORE(
-            HQ_OFFICE_CD,
-            MEMBER_NO,
-            CREDIT_STORE_CD,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID
-        ) VALUES (
-            #{hqOfficeCd},
-            #{memberNo},
-            #{creditStoreCd},
-            #{regDt},
-            #{regId},
-            #{modDt},
-            #{modId}
+    <insert id="registPostpaidStore" parameterType="postpaidStoreVO">
+        /* RegistMapper.registPostpaidStore */
+        MERGE INTO TB_MB_MEMBER_POSTPAID_STORE tmmps
+        USING DUAL
+        ON (
+            tmmps.MEMBR_ORGN_CD = #{membrOrgnCd}
+            AND tmmps.MEMBR_NO = #{membrNo}
+            AND tmmps.STORE_CD = #{storeCd}
         )
+        WHEN MATCHED THEN
+       UPDATE
+          SET tmmps.USE_YN = #{useYn},
+              tmmps.MOD_DT = #{modDt},
+              tmmps.MOD_ID = #{modId}
+         WHEN NOT MATCHED THEN
+            INSERT
+            (
+                MEMBR_ORGN_CD,
+                MEMBR_NO,
+                STORE_CD,
+                USE_YN,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+            ) VALUES (
+                #{membrOrgnCd},
+                #{membrNo},
+                #{storeCd},
+                #{useYn},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+            )
     </insert>
 </mapper>

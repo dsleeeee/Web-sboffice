@@ -25,6 +25,7 @@ var prod;
 app.controller('productCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('productCtrl', $scope, $http, true));
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     $scope.searchProduct();
@@ -62,6 +63,7 @@ app.controller('productCtrl', ['$scope', '$http', function ($scope, $http) {
   // 예외출고 대상상품 그리드 조회
   $scope.searchProduct = function(){
     var params = {};
+    params.listScale = 30;
     $scope._inquiryMain("/application/pos/excpForward/excpForward/getExcpForwardProduct.sb", params, function() {}, false);
   };
 }]);

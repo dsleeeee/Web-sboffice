@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="creditStoreRegistLayer" show-trigger="Click" hide-trigger="Click" style="width:750px;height:450px;">
+<wj-popup control="postpaidStoreRegistLayer" show-trigger="Click" hide-trigger="Click" style="width:750px;height:450px;">
   <div class="wj-dialog wj-dialog-columns title" >
 
     <%-- header --%>
@@ -18,7 +18,7 @@
       <div class="oh">
         <%--- 적용매장 그리드 --%>
         <div class="w50 fl">
-          <div class="wj-TblWrap mr10" style="height:350px; overflow-y: hidden;" ng-controller="creditStoreRegistCtrl">
+          <div class="wj-TblWrap mr10" style="height:350px; overflow-y: hidden;" ng-controller="postpaidStoreRegistCtrl">
             <div class="oh mb10">
               <%-- 페이지 스케일  --%>
               <wj-combo-box
@@ -47,9 +47,9 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.membr.hqOfficeCd"/>" binding="hqOfficeCd" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.membr.storeCd"/>" binding="creditStoreCd" width="*" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.membr.storeNm"/>" binding="creditStoreNm" width="*" is-read-only="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.membr.membrOrgnCd"/>" binding="membrOrgnCd" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.membr.storeCd"/>" binding="storeCd" width="*" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.membr.storeNm"/>" binding="storeNm" width="*" is-read-only="true" ></wj-flex-grid-column>
               </wj-flex-grid>
             </div>
 
@@ -65,7 +65,7 @@
 
         <%--- 미적용매장 그리드 --%>
         <div class="w50 fr">
-          <div class="wj-TblWrap ml10" style="height:350px;overflow-y: hidden;" ng-controller="creditStoreNoRegistCtrl">
+          <div class="wj-TblWrap ml10" style="height:350px;overflow-y: hidden;" ng-controller="postpaidStoreNoRegistCtrl">
             <div class="oh mb10">
               <%-- 페이지 스케일  --%>
               <wj-combo-box
@@ -93,9 +93,9 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.membr.hqOfficeCd"/>" binding="hqOfficeCd" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.membr.storeCd"/>" binding="creditStoreCd" width="*" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.membr.storeNm"/>" binding="creditStoreNm" width="*" is-read-only="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.membr.membrOrgnCd"/>" binding="membrOrgnCd" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.membr.storeCd"/>" binding="storeCd" width="*" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.membr.storeNm"/>" binding="storeNm" width="*" is-read-only="true" ></wj-flex-grid-column>
               </wj-flex-grid>
             </div>
 
@@ -115,4 +115,4 @@
     </div>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/creditStoreRegist.js?ver=20181109.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/postpaidStoreRegist.js?ver=20181109.01" charset="utf-8"></script>

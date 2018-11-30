@@ -54,35 +54,34 @@ app.controller('depositCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.getMemberList = function(){
     var params = {};
 
-    params.creditStoreCd = $("#searchDepositStoreCd").val();
-    params.creditStoreNm = $("#searchDepositStoreNm").val();
-    params.memberNo = $("#searchDepositMemberNo").val();
-    params.memberNm = $("#searchDepositMemberNm").val();
+    params.storeCd = $("#searchDepositStoreCd").val();
+    params.storeNm = $("#searchDepositStoreNm").val();
+    params.membrNo = $("#searchDepositMemberNo").val();
+    params.membrNm = $("#searchDepositMemberNm").val();
 
     $scope._inquirySub(baseUrl + "deposit/getDepositMemberList.sb", params, function() {}, false);
   };
 
   // 외상입금 처리
   $scope.save = function(data){
-    if( $("#creditAmt").val() === null || $("#creditAmt").val() === "" || $("#creditAmt").val() === "0") {
-      s_alert.pop(messages["credit.request.creditAmt"]);
+    if( $("#postpaidAmt").val() === null || $("#postpaidAmt").val() === "" || $("#postpaidAmt").val() === "0") {
+      s_alert.pop(messages["postpaid.request.postpaidAmt"]);
       return false;
     }
 
     var params = {};
 
-    params.creditStoreCd = data.creditStoreCd;
-    params.memberNo = data.membrNo;
-    params.creditAmt = $("#creditAmt").val();
+    params.storeCd = data.storeCd;
+    params.membrNo = data.membrNo;
+    params.postpaidAmt = $("#postpaidAmt").val();
 
     $scope._save(baseUrl + "deposit/saveDeposit.sb", params, function(){ $scope.saveResult() });
   };
 
   // 외상입금 후처리
   $scope.saveResult = function (){
-
-
-    var creditGrid = agrid.getScope('creditCtrl');
-    creditGrid.searchCredit();
+    var postpaidGrid = agrid.getScope('postpaidCtrl');
+    postpaidGrid.searchPostpaid();
+    $("#postpaidAmt").val("");
   };
 }]);

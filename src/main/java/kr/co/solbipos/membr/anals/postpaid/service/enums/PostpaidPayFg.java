@@ -1,4 +1,4 @@
-package kr.co.solbipos.membr.anals.credit.service.enums;
+package kr.co.solbipos.membr.anals.postpaid.service.enums;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import kr.co.common.data.enums.CodeEnum;
@@ -11,7 +11,7 @@ import org.apache.ibatis.type.MappedTypes;
  * @author ygjeong
  *
  */
-public enum CreditPayFg implements CodeEnum {
+public enum PostpaidPayFg implements CodeEnum {
 
     /** 신용카드 */
     CREDITCARD("1"),
@@ -22,14 +22,14 @@ public enum CreditPayFg implements CodeEnum {
 
     private String code;
 
-    CreditPayFg(String code) {
+    PostpaidPayFg(String code) {
         this.code = code;
     }
 
-    @MappedTypes(CreditPayFg.class)
-    public static class TypeHandler extends CodeEnumTypeHandler<CreditPayFg> {
+    @MappedTypes(PostpaidPayFg.class)
+    public static class TypeHandler extends CodeEnumTypeHandler<PostpaidPayFg> {
         public TypeHandler() {
-            super(CreditPayFg.class);
+            super(PostpaidPayFg.class);
         }
     }
 

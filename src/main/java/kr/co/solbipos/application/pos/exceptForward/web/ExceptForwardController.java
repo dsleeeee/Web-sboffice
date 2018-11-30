@@ -44,7 +44,7 @@ import static org.springframework.util.ObjectUtils.isEmpty;
  * @since 2018. 09.14
  * @version 1.0
  *
- * @Copyright (C) by SOLBIPOS CORP. All right reserved.
+ * @Copyright (C) by SOLBIPOS CORP. All right reserAved.
  */
 @Controller
 @RequestMapping(value = "/application/pos/excpForward/")
@@ -155,7 +155,7 @@ public class ExceptForwardController {
 
         List<DefaultMap<String>> list = exceptForwardService.getExcpForwardProduct(productVO, sessionInfoVO);
 
-        return returnListJson(Status.OK, list);
+        return returnListJson(Status.OK, list, productVO);
     }
 
 
