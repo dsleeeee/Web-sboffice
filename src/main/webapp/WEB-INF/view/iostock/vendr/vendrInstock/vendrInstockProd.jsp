@@ -4,19 +4,22 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
-<c:set var="baseUrl" value="/iostock/vendr/vendrOrder/vendrOrderProd/"/>
+<c:set var="baseUrl" value="/iostock/vendr/vendrInstock/vendrInstockProd/"/>
 
-<div id="prodView" style="display: none;" ng-controller="vendrOrderProdCtrl">
+<div id="prodView" style="display: none;" ng-controller="vendrInstockProdCtrl">
   <ul class="txtSty3 mt10">
-    <li class="red"><s:message code="vendrOrder.prod.txt1"/></li>
+    <li class="red"><s:message code="vendrInstock.prod.txt1"/></li>
   </ul>
 
   <div class="mt20 tr">
+    <%-- 발주내역으로 등록 --%>
+    <button type="button" class="btn_skyblue ml5" id="btnOrderInfoRegist" ng-click="orderInfoRegist()" ng-if="btnOrderInfoRegistIfFg">
+      <s:message code="vendrInstock.prod.orderInfoRegist"/></button>
     <%-- 추가/변경 --%>
-    <button type="button" class="btn_skyblue ml5" id="btnAddProd" ng-click="addProd()" ng-if="btnAddProdFg">
-      <s:message code="vendrOrder.prod.addProd"/></button>
+    <button type="button" class="btn_skyblue ml5" id="btnAddProd" ng-click="addProd()" ng-if="btnAddProdIfFg">
+      <s:message code="vendrInstock.prod.addProd"/></button>
     <%-- 저장 --%>
-    <button type="button" class="btn_skyblue ml5" id="btnProdSave" ng-click="save()" ng-if="btnProdSaveFg">
+    <button type="button" class="btn_skyblue ml5" id="btnProdSave" ng-click="save()" ng-if="btnProdSaveIfFg">
       <s:message code="cmm.save"/></button>
   </div>
 
@@ -33,20 +36,20 @@
         item-formatter="_itemFormatter">
 
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="vendrOrder.prod.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="vendrOrder.prod.prodNm"/>" binding="prodNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="vendrOrder.prod.costUprc"/>" binding="costUprc" width="70" align="right" is-read-only="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="vendrOrder.prod.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="vendrOrder.prod.poUnitQty"/>" binding="poUnitQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="vendrOrder.prod.orderUnitQty"/>" binding="orderUnitQty" width="50" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="vendrOrder.prod.orderEtcQty"/>" binding="orderEtcQty" width="50" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="vendrOrder.prod.orderTotQty"/>" binding="orderTotQty" width="0" align="left" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="vendrOrder.prod.prevOrderTotQty"/>" binding="prevOrderTotQty" width="0" align="left" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="vendrOrder.prod.orderAmt"/>" binding="orderAmt" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="vendrOrder.prod.orderVat"/>" binding="orderVat" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="vendrOrder.prod.orderTot"/>" binding="orderTot" width="90" align="right" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="vendrOrder.prod.vatFg"/>" binding="vatFg01" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="vendrOrder.prod.vendrVatFg01"/>" binding="vendrVatFg01" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="vendrInstock.prod.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="vendrInstock.prod.prodNm"/>" binding="prodNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="vendrInstock.prod.costUprc"/>" binding="costUprc" width="70" align="right" is-read-only="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="vendrInstock.prod.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="vendrInstock.prod.poUnitQty"/>" binding="poUnitQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="vendrInstock.prod.inUnitQty"/>" binding="inUnitQty" width="50" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="vendrInstock.prod.inEtcQty"/>" binding="inEtcQty" width="50" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="vendrInstock.prod.inTotQty"/>" binding="inTotQty" width="0" align="left" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="vendrInstock.prod.prevInTotQty"/>" binding="prevInTotQty" width="0" align="left" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="vendrInstock.prod.inAmt"/>" binding="inAmt" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="vendrInstock.prod.inVat"/>" binding="inVat" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="vendrInstock.prod.inTot"/>" binding="inTot" width="90" align="right" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="vendrInstock.prod.vatFg"/>" binding="vatFg01" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="vendrInstock.prod.vendrVatFg01"/>" binding="vendrVatFg01" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
 
       </wj-flex-grid>
     </div>
@@ -57,10 +60,10 @@
 
 <script type="text/javascript">
 
-  /** 발주상품 그리드 controller */
-  app.controller('vendrOrderProdCtrl', ['$scope', '$http', function ($scope, $http) {
+  /** 입고/반출 상품 그리드 controller */
+  app.controller('vendrInstockProdCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('vendrOrderProdCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('vendrInstockProdCtrl', $scope, $http, true));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -69,7 +72,7 @@
         if (e.panel === s.cells) {
           var col  = s.columns[e.col];
           var item = s.rows[e.row].dataItem;
-          if (col.binding === "orderEtcQty") { // 입수에 따라 주문수량 컬럼 readonly 컨트롤
+          if (col.binding === "inEtcQty") { // 입수에 따라 주문수량 컬럼 readonly 컨트롤
             // console.log(item);
             if (item.poUnitQty === 1) {
               wijmo.addClass(e.cell, 'wj-custom-readonly');
@@ -86,7 +89,7 @@
         if (e.panel === s.cells) {
           var col = s.columns[e.col];
           // 원가 및 수량 수정시 합계 계산하여 보여준다.
-          if (col.binding === "costUprc" || col.binding === "orderUnitQty" || col.binding === "orderEtcQty") {
+          if (col.binding === "costUprc" || col.binding === "inUnitQty" || col.binding === "inEtcQty") {
             var item = s.rows[e.row].dataItem;
             $scope.calcAmt(item);
           }
@@ -148,23 +151,23 @@
       var vat01     = parseInt(item.vatFg01);
       var vendrVatFg01 = parseInt(item.vendrVatFg01);
 
-      var unitQty  = parseInt(nvl(item.orderUnitQty, 0)) * parseInt(item.poUnitQty);
-      var etcQty   = parseInt(nvl(item.orderEtcQty, 0));
-      var totQty   = parseInt(unitQty + etcQty);
-      var tempAmt  = Math.round(totQty * costUprc / poUnitQty);
-      var orderAmt = tempAmt - Math.round(tempAmt * vat01 * vendrVatFg01 / 11);
-      var orderVat = Math.round(tempAmt * vat01 / (10 + vendrVatFg01));
-      var orderTot = parseInt(orderAmt + orderVat);
+      var unitQty = parseInt(nvl(item.inUnitQty, 0)) * parseInt(item.poUnitQty);
+      var etcQty  = parseInt(nvl(item.inEtcQty, 0));
+      var totQty  = parseInt(unitQty + etcQty);
+      var tempAmt = Math.round(totQty * costUprc / poUnitQty);
+      var inAmt   = tempAmt - Math.round(tempAmt * vat01 * vendrVatFg01 / 11);
+      var inVat   = Math.round(tempAmt * vat01 / (10 + vendrVatFg01));
+      var inTot   = parseInt(inAmt + inVat);
 
-      item.orderTotQty = totQty;   // 총주문수량
-      item.orderAmt    = orderAmt; // 금액
-      item.orderVat    = orderVat; // VAT
-      item.orderTot    = orderTot; // 합계
+      item.inTotQty = totQty;   // 총주문수량
+      item.inAmt    = inAmt; // 금액
+      item.inVat    = inVat; // VAT
+      item.inTot    = inTot; // 합계
     };
 
 
     // 다른 컨트롤러의 broadcast 받기
-    $scope.$on("vendrOrderProdCtrl", function (event, data) {
+    $scope.$on("vendrInstockProdCtrl", function (event, data) {
       // 그리드 초기화
       var cv          = new wijmo.collections.CollectionView([]);
       cv.trackChanges = true;
@@ -181,7 +184,7 @@
     });
 
 
-    // 발주 진행구분 체크
+    // 입고/반출 진행구분 체크
     $scope.procFgCheck = function () {
       var params    = {};
       params.slipNo = $scope.slipNo;
@@ -190,21 +193,26 @@
       // ajax 통신 설정
       $http({
         method : 'POST', //방식
-        url    : '/iostock/vendr/vendrOrder/vendrOrderProd/procFgCheck.sb', /* 통신할 URL */
+        url    : '/iostock/vendr/vendrInstock/vendrInstockProd/procFgCheck.sb', /* 통신할 URL */
         params : params, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
         if ($scope._httpStatusCheck(response)) {
-          // 진행구분이 등록이 아니면 상품추가/변경 불가
+          // 진행구분이 등록이 아니면 상품추가/변경, 저장 불가
           if (!$.isEmptyObject(response.data.data)) {
+            var data = response.data.data;
             // 등록 상태이면 버튼 show
-            if (response.data.data.procFg != "" && response.data.data.procFg == "0") {
-              $scope.btnAddProdFg  = true;
-              $scope.btnProdSaveFg = true;
-            }
-            else {
-              $scope.btnAddProdFg  = false;
-              $scope.btnProdSaveFg = false;
+            if (data.procFg != "" && data.procFg == "0") {
+              // 발주입고인 경우에만 발주내역으로 등록 버튼 활성화
+              if(data.instockType === 'Y') {
+                $scope.btnOrderInfoRegistIfFg = true;
+              }
+              $scope.btnAddProdIfFg         = true;
+              $scope.btnProdSaveIfFg        = true;
+            } else {
+              $scope.btnOrderInfoRegistIfFg = false;
+              $scope.btnAddProdIfFg         = false;
+              $scope.btnProdSaveIfFg        = false;
             }
           }
         }
@@ -219,13 +227,13 @@
         return false;
       }).then(function () {
         // "complete" code here
-        $scope.searchVendrOrderProdList();
+        $scope.searchVendrInstockProdList();
       });
     };
 
 
     // 상품 리스트 조회
-    $scope.searchVendrOrderProdList = function () {
+    $scope.searchVendrInstockProdList = function () {
       // 파라미터
       var params    = {};
       params.slipNo = $scope.slipNo;
@@ -233,7 +241,7 @@
       params.vendrCd = $scope.vendrCd;
 
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
-      $scope._inquiryMain("/iostock/vendr/vendrOrder/vendrOrderProd/list.sb", params);
+      $scope._inquiryMain("/iostock/vendr/vendrInstock/vendrInstockProd/list.sb", params);
     };
 
 
@@ -252,7 +260,7 @@
         params.push(item);
       }
 
-      $scope._save("/iostock/vendr/vendrOrder/vendrOrderProdReg/save.sb", params, function () {
+      $scope._save("/iostock/vendr/vendrInstock/vendrInstockProdReg/save.sb", params, function () {
         $scope.saveRegistCallback()
       });
     };
@@ -260,10 +268,20 @@
 
     // 저장 후 콜백 서치 함수
     $scope.saveRegistCallback = function () {
-      $scope.searchVendrOrderProdList();
+      $scope.searchVendrInstockProdList();
 
       // var disuseScope = agrid.getScope('disuseCtrl');
       // disuseScope.searchDisuseList();
+    };
+
+
+    // 발주내역으로 등록
+    $scope.orderInfoRegist = function () {
+      var params    = {};
+      params.slipNo = $scope.slipNo;
+      params.slipFg = $scope.slipFg;
+      params.vendrCd = $scope.vendrCd;
+      $scope._broadcast('vendrInstockOrderInfoRegCtrl', params);
     };
 
 
@@ -272,7 +290,8 @@
       var params    = {};
       params.slipNo = $scope.slipNo;
       params.slipFg = $scope.slipFg;
-      $scope._broadcast('vendrOrderProdRegCtrl', params);
+      params.vendrCd = $scope.vendrCd;
+      $scope._broadcast('vendrInstockProdRegCtrl', params);
     };
 
 
@@ -280,8 +299,14 @@
 
 </script>
 
-<%-- 상품 등록 레이어 --%>
-<c:import url="/WEB-INF/view/iostock/vendr/vendrOrder/vendrOrderProdReg.jsp">
+<%-- 상품 추가/변경 레이어 --%>
+<c:import url="/WEB-INF/view/iostock/vendr/vendrInstock/vendrInstockProdReg.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 상품 발주내역으로 세팅 레이어 --%>
+<c:import url="/WEB-INF/view/iostock/vendr/vendrInstock/vendrInstockOrderInfoReg.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

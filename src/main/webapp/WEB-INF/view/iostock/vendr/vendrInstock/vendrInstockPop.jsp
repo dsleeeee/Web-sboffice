@@ -4,29 +4,29 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
-<c:set var="baseUrl" value="/iostock/order/vendrOrder/vendrOrderPop/"/>
-<wj-popup id="wjVendrOrderPopLayer" control="wjVendrOrderPopLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
-  <div id="vendrOrderPopLayer" class="wj-dialog wj-dialog-columns">
+<c:set var="baseUrl" value="/iostock/order/vendrInstock/vendrInstockPop/"/>
+<wj-popup id="wjVendrInstockPopLayer" control="wjVendrInstockPopLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
+  <div id="vendrInstockPopLayer" class="wj-dialog wj-dialog-columns">
     <div class="wj-dialog-header wj-dialog-header-font">
-      <s:message code="vendrOrder.pop.title"/>
+      <span id="popTitle" class="s16 txtIn"></span>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
     <div class="wj-dialog-body sc2" style="height: 600px;">
-      <div ng-controller="vendrOrderPopCtrl">
-        <%-- 발주정보, 발주상품, 발주서 탭 --%>
+      <div ng-controller="vendrInstockPopCtrl">
+        <%-- 입고/반출정보, 입고/반출상품, 반출서 탭 --%>
         <div class="tabType1">
           <ul>
-            <%-- 발주정보 탭 --%>
+            <%-- 입고/반출정보 탭 --%>
             <li>
-              <a id="dtlTab" href="#" class="on" ng-click="dtlShow()" ng-if="dtlShowFg"><s:message code="vendrOrder.pop.vendrOrderDtl"/></a>
+              <a id="dtlTab" href="#" class="on" ng-click="dtlShow()" ng-if="dtlShowFg" ng-bind-html="dtlTab"></a>
             </li>
-            <%-- 발주상품 탭 --%>
+            <%-- 입고/반출상품 탭 --%>
             <li>
-              <a id="prodTab" href="#" ng-click="prodShow()" ng-if="prodShowFg"><s:message code="vendrOrder.pop.vendrOrderProd"/></a>
+              <a id="prodTab" href="#" ng-click="prodShow()" ng-if="prodShowFg" ng-bind-html="prodTab"></a>
             </li>
-            <%-- 발주서 탭 --%>
+            <%-- 반출서 탭 --%>
             <li>
-              <a id="reportTab" href="#" ng-click="reportShow()" ng-if="reportShowFg"><s:message code="vendrOrder.pop.vendrOrderReport"/></a>
+              <a id="reportTab" href="#" ng-click="reportShow()" ng-if="reportShowFg" ng-bind-html="reportTab"></a>
             </li>
           </ul>
         </div>
@@ -34,18 +34,18 @@
 
 
 <script type="text/javascript">
-  /** 발주 팝업 controller */
-  app.controller('vendrOrderPopCtrl', ['$scope', '$http', function ($scope, $http) {
+  /** 입고/반출 팝업 controller */
+  app.controller('vendrInstockPopCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('vendrOrderPopCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('vendrInstockPopCtrl', $scope, $http, true));
 
     // 다른 컨트롤러의 broadcast 받기
-    $scope.$on("vendrOrderPopCtrl", function (event, data) {
+    $scope.$on("vendrInstockPopCtrl", function (event, data) {
       $scope.slipNo = data.slipNo;
       $scope.slipFg = data.slipFg;
       $scope.vendrCd = (nvl(data.vendrCd, '') === '' ? '' : data.vendrCd);
 
-      // 신규등록인 경우 발주정보 탭만 활성화
+      // 신규등록인 경우 입고/반출정보 탭만 활성화
       if($scope.slipNo === '') {
         $scope.dtlShowFg = true;
         $scope.prodShowFg = false;
@@ -55,12 +55,28 @@
       else {
         $scope.dtlShowFg = true;
         $scope.prodShowFg = true;
-        $scope.reportShowFg = true;
+        if($scope.slipFg === -1) {
+          $scope.reportShowFg = true;
+        }
       }
 
-      $scope.wjVendrOrderPopLayer.show(true);
+      $scope.wjVendrInstockPopLayer.show(true);
 
-      // 발주정보 탭 show
+      // 입고
+      if($scope.slipFg === 1) {
+        $("#popTitle").html(messages["vendrInstock.pop.inTitle"]); // 현재 팝업이 같은 scope 가 아니라서 jquery 형태로 text 부여
+        $scope.dtlTab = messages["vendrInstock.pop.vendrInstockDtl"];
+        $scope.prodTab = messages["vendrInstock.pop.vendrInstockProd"];
+      }
+      //반출
+      else if($scope.slipFg === -1) {
+        $("#popTitle").html(messages["vendrInstock.pop.rtnTitle"]); // 현재 팝업이 같은 scope 가 아니라서 jquery 형태로 text 부여
+        $scope.dtlTab = messages["vendrInstock.pop.vendrRtnDtl"];
+        $scope.prodTab = messages["vendrInstock.pop.vendrRtnProd"];
+        $scope.reportTab = messages["vendrInstock.pop.vendrRtnReport"];
+      }
+
+      // 입고/반출정보 탭 show
       $scope.dtlShow();
 
       // 기능수행 종료 : 반드시 추가
@@ -68,7 +84,7 @@
     });
 
 
-    // 발주정보 탭 보이기
+    // 입고/반출정보 탭 보이기
     $scope.dtlShow        = function () {
       $("#dtlTab").addClass("on");
       $("#prodTab").removeClass("on");
@@ -81,14 +97,14 @@
       var params = {};
       params.slipNo = $scope.slipNo;
       params.slipFg = $scope.slipFg;
-      $scope._broadcast('vendrOrderDtlCtrl', params);
+      $scope._broadcast('vendrInstockDtlCtrl', params);
     };
 
 
-    // 발주상품 탭 보이기
+    // 입고/반출상품 탭 보이기
     $scope.prodShow    = function () {
       if($scope.slipNo === null) {
-        $scope._popMsg(messages["vendrOrder.pop.not.slip"]);
+        $scope._popMsg(messages["vendrInstock.pop.not.slip"]);
         return false;
       }
 
@@ -101,21 +117,21 @@
       $("#reportView").hide();
 
       // angular 그리드 hide 시 깨지므로 refresh()
-      var scope = agrid.getScope("vendrOrderProdCtrl");
+      var scope = agrid.getScope("vendrInstockProdCtrl");
       scope.flex.refresh();
 
       var params = {};
       params.slipNo = $scope.slipNo;
       params.slipFg = $scope.slipFg;
       params.vendrCd = $scope.vendrCd;
-      $scope._broadcast('vendrOrderProdCtrl', params);
+      $scope._broadcast('vendrInstockProdCtrl', params);
     };
 
 
-    // 발주서 탭 보이기
+    // 반출서 탭 보이기
     $scope.reportShow = function () {
       if($scope.slipNo === null) {
-        $scope._popMsg(messages["vendrOrder.pop.not.slip"]);
+        $scope._popMsg(messages["vendrInstock.pop.not.slip"]);
         return false;
       }
 
@@ -131,20 +147,20 @@
   }]);
 </script>
 
-<%-- 발주정보 레이어 --%>
-<c:import url="/WEB-INF/view/iostock/vendr/vendrOrder/vendrOrderDtl.jsp">
+<%-- 입고/반출정보 레이어 --%>
+<c:import url="/WEB-INF/view/iostock/vendr/vendrInstock/vendrInstockDtl.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
-<%-- 발주상품 레이어 --%>
-<c:import url="/WEB-INF/view/iostock/vendr/vendrOrder/vendrOrderProd.jsp">
+<%-- 상품 레이어 --%>
+<c:import url="/WEB-INF/view/iostock/vendr/vendrInstock/vendrInstockProd.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
-<%-- 발주서 레이어 --%>
-<%--<c:import url="/WEB-INF/view/iostock/vendr/vendrOrder/vendrOrderReport.jsp">--%>
+<%-- 반출서 레이어 --%>
+<%--<c:import url="/WEB-INF/view/iostock/vendr/vendrInstock/vendrInstockReport.jsp">--%>
   <%--<c:param name="menuCd" value="${menuCd}"/>--%>
   <%--<c:param name="menuNm" value="${menuNm}"/>--%>
 <%--</c:import>--%>

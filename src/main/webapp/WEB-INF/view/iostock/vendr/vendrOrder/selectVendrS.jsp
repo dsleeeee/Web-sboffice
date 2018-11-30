@@ -2,10 +2,10 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <input type="hidden" id="<c:out value="${param.targetId}Cd"/>" />
-<input type="text" id="<c:out value="${param.targetId}Nm"/>" class="sb-input fl mr5 w100" style="cursor:pointer; width:200px;" <c:if test="${empty param.modiFg}"> ng-click="<c:out value="${param.targetId}"/>Show()" </c:if> readonly />
+<input type="text" id="<c:out value="${param.targetId}Nm"/>" class="sb-input fl mr5 w100" style="cursor:pointer; width:200px;" <c:if test="${empty param.modiFg}"> ng-click="<c:out value="${param.targetId}"/>Show()" </c:if> ng-disabled="<c:out value="${param.targetId}"/>NmDisabled" readonly />
 <c:if test="${empty param.modiFg}">
-<button type="button" class="btn_skyblue fl mr5" id="<c:out value="${param.targetId}SelectCancelBtn"/>">
-  <s:message code="outstockReqDate.selectCancel"/></button>
+<button type="button" class="btn_skyblue fl mr5" id="<c:out value="${param.targetId}SelectCancelBtn"/>" ng-disabled="<c:out value="${param.targetId}"/>BtnDisabled">
+  <s:message code="cmm.selectCancel"/></button>
 </c:if>
 
 <wj-popup id="wj<c:out value="${param.targetId}"/>LayerS" control="wj<c:out value="${param.targetId}"/>LayerS" show-trigger="Click" hide-trigger="Click" style="display:none;width:500px;">
@@ -16,23 +16,8 @@
     </div>
     <div class="wj-dialog-body">
       <div class="w100">
-        <div class="mt20 oh sb-select dkbr">
-          <%-- 페이지 스케일  --%>
-          <wj-combo-box
-            class="w100px fl"
-            id="listScaleBox"
-            ng-model="listScale"
-            items-source="_getComboData('listScaleBox')"
-            display-member-path="name"
-            selected-value-path="value"
-            is-editable="false"
-            initialized="_initComboBox(s)">
-          </wj-combo-box>
-          <%--// 페이지 스케일  --%>
-        </div>
-
         <%--위즈모 테이블--%>
-        <div class="theGrid mt10" style="height: 400px;">
+        <div class="wj-gridWrap" style="height: 400px;">
           <wj-flex-grid
             autoGenerateColumns="false"
             selection-mode="Row"
@@ -44,23 +29,14 @@
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="vendrOrder.vendrCd"/>" binding="vendrCd" width="80" align="center"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrOrder.vendrNm"/>" binding="vendrNm" width="*" align="left"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrOrder.shipFg"/>" binding="shipFg" width="60" align="center" data-map="shipFgMap"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrOrder.vatIncldYn"/>" binding="vatIncldYn" width="100" align="center" data-map="vatIncldYnMap"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="selectVendr.vendrCd"/>" binding="vendrCd" width="80" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="selectVendr.vendrNm"/>" binding="vendrNm" width="*" align="left"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="selectVendr.vatIncldYn"/>" binding="vatIncldYn" width="100" align="center" data-map="vatIncldYnMap"></wj-flex-grid-column>
 
           </wj-flex-grid>
         </div>
         <%--//위즈모 테이블--%>
       </div>
-
-      <%-- 페이지 리스트 --%>
-      <div class="pageNum mt20">
-        <%-- id --%>
-        <ul id="<c:out value="${param.targetId}"/>CtrlPager" data-size="10">
-        </ul>
-      </div>
-      <%--//페이지 리스트--%>
     </div>
   </div>
 </wj-popup>
@@ -81,8 +57,11 @@
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController($scope.targetId + 'Ctrl', $scope, $http, true));
 
-    //페이지 스케일 콤보박스 데이터 Set
-    $scope._setComboData("listScaleBox", gvListScaleBoxData);
+    // 부가세포함여부
+    $scope.vatIncldYnMap = new wijmo.grid.DataMap([
+      {id: "Y", name: "<s:message code='selectVendr.vatIncldY'/>"},
+      {id: "N", name: "<s:message code='selectVendr.vatIncldN'/>"}
+    ], 'id', 'name');
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
