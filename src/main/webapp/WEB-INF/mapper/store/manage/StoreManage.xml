@@ -42,7 +42,6 @@
                    TB_CM_VAN_CMPNY tcvc,
                    TB_CM_AGENCY tca
              WHERE tms.HQ_OFFICE_CD (+)= tho.HQ_OFFICE_CD
-               AND tho.HQ_OFFICE_CD != '00000'
                AND tms.STORE_CD is not null
                AND tcvc.VAN_CD = tms.VAN_CD
                AND tcvc.VAN_FG = '01'
