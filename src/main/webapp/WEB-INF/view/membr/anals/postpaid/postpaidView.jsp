@@ -48,7 +48,10 @@
       <td>
         <input type="text" class="sb-input w100" id="srchMembrNm" ng-model="membrNm" />
       </td>
+      <th></th>
+      <td></td>
       <%-- 정렬 --%>
+      <%--
       <th><s:message code="postpaid.array" /></th>
       <td>
         <div class="sb-select w100">
@@ -63,6 +66,7 @@
           </wj-combo-box>
         </div>
       </td>
+      --%>
     </tr>
     </tbody>
   </table>
@@ -109,21 +113,14 @@
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="postpaid.hqOfficeCd"/>" binding="hqOfficeCd" width="70" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="postpaid.storeCd"/>" binding="storeCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="postpaid.storeNm"/>" binding="storeNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="postpaid.saleDate"/>" binding="saleDate" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="postpaid.membrNo"/>" binding="membrNo" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="postpaid.membrNm"/>" binding="membrNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="postpaid.postpaidNo"/>" binding="postpaidNo" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="postpaid.postpaidDt"/>" binding="postpaidDt" is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="postpaid.postpaidFg"/>" binding="postpaidFg" data-map="postpaidFgDataMap" is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="postpaid.saleAmt"/>" binding="saleAmt" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="postpaid.postpaidAmt"/>" binding="postpaidAmt" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="postpaid.postpaidPayFg"/>" binding="postpaidPayFg" data-map="postpaidPayFgDataMap" is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="postpaid.nonsaleBillNo"/>" binding="nonsaleBillNo" visible="false" ></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="postpaid.orgPrepaidNo"/>" binding="orgPrepaidNo" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="postpaid.sendYn"/>" binding="sendYn" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="postpaid.sendDt"/>" binding="sendDt" visible="false" ></wj-flex-grid-column>
-
+        <wj-flex-grid-column header="<s:message code="postpaid.storeNm"/>" binding="storeNm" width="140" is-read-only="true" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="postpaid.membrNo"/>" binding="membrNo" width="140" is-read-only="true" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="postpaid.membrNm"/>" binding="membrNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="postpaid.postpaidAmt"/>" binding="postpaidAmt" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="postpaid.postpaidInAmt"/>" binding="postpaidInAmt" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="postpaid.postpaidBalAmt"/>" binding="postpaidBalAmt" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="postpaid.regDt"/>" binding="regDt" is-read-only="true" width="170" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="postpaid.regId"/>" binding="regId" is-read-only="true" align="center"></wj-flex-grid-column>
       </wj-flex-grid>
     </div>
   </div>
@@ -139,7 +136,6 @@
 </div>
 
 <script type="text/javascript">
-  var arrayData = ${ccu.getCommCodeExcpAll("075")};
   var postpaidFgData = ${ccu.getCommCodeExcpAll("073")};
   var postpaidPayFgData = ${ccu.getCommCodeExcpAll("074")};
   var baseUrl = "${baseUrl}";

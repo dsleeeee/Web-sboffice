@@ -470,6 +470,7 @@
 
     <typeAlias alias="excpForwardProductVO" type="kr.co.solbipos.application.pos.exceptForward.service.ExcpForwardProductVO"/>
     <typeAlias alias="productionVO" type="kr.co.solbipos.application.pos.production.service.ProductionVO"/>
+    <typeAlias alias="posPostpaidVO" type="kr.co.solbipos.application.pos.posPostpaid.service.PosPostpaidStoreVO"/>
 
     <typeAlias type="kr.co.common.data.handler.CustomBooleanTypeHandler" alias="CustomBooleanTypeHandler" />
     <typeAlias type="kr.co.common.data.handler.CustomDateTypeHandler" alias="CustomDateTypeHandler" />

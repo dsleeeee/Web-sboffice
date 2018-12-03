@@ -19,77 +19,37 @@
     <select id="getPostpaidMemberList"  parameterType="postpaidStoreVO" resultType="DefaultMap">
         /* PostpaidMapper.getPostpaidMemberList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT tmmc.HQ_OFFICE_CD,
-               tmmc.STORE_CD,
-               tmmc.STORE_NM,
-               tmmc.SALE_DATE,
-               tmmc.POSTPAID_NO,
-               tmmc.MEMBR_NO,
-               tmmc.MEMBR_NM,
-               tmmc.SALE_AMT,
-               tmmc.POSTPAID_AMT,
-               tmmc.POSTPAID_FG,
-               tmmc.POSTPAID_PAY_FG
+        SELECT tmmpb.HQ_OFFICE_CD,
+               tmmpb.STORE_CD,
+               tms.STORE_NM,
+               tmmpb.MEMBR_NO,
+               tmm.MEMBR_NM,
+               tmmpb.POSTPAID_AMT,
+               tmmpb.POSTPAID_IN_AMT,
+               tmmpb.POSTPAID_BAL_AMT,
+               TO_CHAR(to_date(tmmpb.REG_DT, 'yyyyMMddhh24miss'), 'yyyy-MM-dd hh24:mi:ss') AS REG_DT ,
+               tmmpb.REG_ID
         <include refid="CmmSQL.PagingTemplateCount"/>
-          FROM (
-           SELECT tsspc.HQ_OFFICE_CD,
-                  tsspc.STORE_CD,
-                  (SELECT STORE_NM FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{membrOrgnCd} AND STORE_CD = tsspc.STORE_CD) AS STORE_NM,
-                  TO_CHAR(TO_DATE(tsspc.SALE_DATE), 'YYYY-MM-DD') AS SALE_DATE,
-                  '' AS POSTPAID_NO,
-                  tsspc.MEMBR_NO,
-                  (SELECT MEMBR_NM FROM TB_MB_MEMBER WHERE MEMBR_ORGN_CD = #{membrOrgnCd} AND MEMBR_NO = tsspc.MEMBR_NO) AS MEMBR_NM,
-                  tsspc.SALE_AMT,
-                  0 AS POSTPAID_AMT,
-                  '' AS POSTPAID_FG,
-                  '' AS POSTPAID_PAY_FG
-             FROM TB_SL_SALE_PAY_CREDIT tsspc
-            UNION
-           SELECT tmmc.HQ_OFFICE_CD,
-                  tmmc.STORE_CD,
-                  (SELECT STORE_NM FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{membrOrgnCd} AND STORE_CD = tmmc.STORE_CD) AS STORE_CD,
-                  TO_CHAR(TO_DATE(tmmc.SALE_DATE), 'YYYY-MM-DD') AS SALE_DATE,
-                  tmmc.POSTPAID_NO,
-                  tmmc.MEMBR_NO,
-                  (SELECT MEMBR_NM FROM TB_MB_MEMBER WHERE MEMBR_ORGN_CD = #{membrOrgnCd} AND MEMBR_NO = tmmc.MEMBR_NO) AS MEMBR_NM,
-                  0 AS SALE_AMT,
-                  tmmc.POSTPAID_AMT,
-                  tmmc.POSTPAID_FG,
-                  tmmc.POSTPAID_PAY_FG
-             FROM TB_MB_MEMBER_POSTPAID tmmc
-               ) tmmc
-        <where>
-          <if test='storeCds != null and storeCds != "ALL"'>
-            AND tmmc.STORE_CD IN
-            <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
-               #{item}
-            </foreach>
-          </if>
-          <if test='membrNo != null and membrNo != ""'>
-            AND tmmc.MEMBR_NO = #{membrNo}
-          </if>
-          <if test='membrNm != null and membrNm != ""'>
-            AND tmmc.MEMBR_NM = #{membrNm}
-          </if>
-        </where>
-        <if test='array != null and array.toString == "1"'>
-          ORDER BY tmmc.STORE_CD, tmmc.SALE_DATE DESC, tmmc.MEMBR_NO
+          FROM TB_MB_MEMBER_PAID_BALANCE tmmpb,
+               TB_MB_MEMBER tmm,
+               TB_MS_STORE tms
+         WHERE tmm.MEMBR_ORGN_CD = tmmpb.HQ_OFFICE_CD
+           AND tmm.MEMBR_NO = tmmpb.MEMBR_NO
+           AND tms.HQ_OFFICE_CD = tmmpb.HQ_OFFICE_CD
+           AND tms.STORE_CD = tmmpb.STORE_CD
+      <if test='storeCds != null and storeCds != "ALL"'>
+           AND tmmpb.STORE_CD IN
+          <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
+             #{item}
+          </foreach>
         </if>
-        <if test='array != null and array.toString == "2"'>
-          ORDER BY tmmc.STORE_CD, tmmc.MEMBR_NO, tmmc.SALE_DATE DESC
+        <if test='membrNo != null and membrNo != ""'>
+           AND tmmpb.MEMBR_NO = #{membrNo}
         </if>
-        <if test='array != null and array.toString == "3"'>
-          ORDER BY tmmc.MEMBR_NO, tmmc.SALE_DATE DESC, tmmc.STORE_CD
+        <if test='membrNm != null and membrNm != ""'>
+           AND tmm.MEMBR_NM = #{membrNm}
         </if>
-        <if test='array != null and array.toString == "4"'>
-          ORDER BY tmmc.MEMBR_NO, tmmc.STORE_CD, tmmc.SALE_DATE DESC
-        </if>
-        <if test='array != null and array.toString == "5"'>
-          ORDER BY tmmc.SALE_DATE DESC, tmmc.STORE_CD, tmmc.MEMBR_NO
-        </if>
-        <if test='array != null and array.toString == "6"'>
-          ORDER BY tmmc.SALE_DATE DESC, tmmc.MEMBR_NO, tmmc.STORE_CD
-        </if>
+         ORDER BY tmmpb.MOD_DT DESC, tmmpb.STORE_CD, tmmpb.MEMBR_NO
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 

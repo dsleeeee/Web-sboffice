@@ -52,8 +52,7 @@
 
     </div>
   </div>
-  <script type="text/javascript" src="/resource/solbipos/js/application/pos/excpForward/excpForward.js?ver=20180914.01" charset="utf-8"></script>
-</div>
+  <script type="text/javascript" src="/resource/solbipos/js/application/pos/excpForward/excpForward.js?ver=20180914.01" charset="utf-8"></script></div>
 </body>
 
 <%-- 예외출고 수량 등록 팝업 --%>

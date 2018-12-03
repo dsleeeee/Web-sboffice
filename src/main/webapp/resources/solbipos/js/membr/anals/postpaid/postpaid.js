@@ -28,7 +28,6 @@ app.controller('postpaidCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // comboBox 초기화
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
-  $scope._setComboData("srchArrayCombo", arrayData);
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -44,17 +43,15 @@ app.controller('postpaidCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 후불회원 그리드 조회
   $scope.searchPostpaid = function(){
-    // 파라미터
-    var params = {};
+
+    var params      = {};
     params.storeCds = $("#storeCd").val();
-    params.array    = srchArrayCombo.selectedValue;
 
     if($scope.orgnFg === 'H' && params.storeCds  === '') {
       $scope._popMsg(messages["postpaid.require.selectStore"]);
       return false;
     }
 
-    // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquiryMain(baseUrl + "postpaid/getPostpaidMemberList.sb", params, function() {}, false);
   };
 
@@ -65,7 +62,7 @@ app.controller('postpaidCtrl', ['$scope', '$http', function ($scope, $http) {
     });
   };
 
-  // 매장찾기
+  // 매장찾기 팝업
   $scope.searchStore = function(){
     var storeTxt = "";
     var checked = "";
