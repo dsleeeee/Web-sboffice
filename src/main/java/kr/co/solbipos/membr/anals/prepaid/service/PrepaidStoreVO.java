@@ -40,11 +40,12 @@ public class PrepaidStoreVO extends PageVO {
     /** 외상 입금 구분 */
     private PrepaidPayFg prepaidPayFg;
     /** 외상 입금 금액 */
-    private String prepaidAmt;
-    /** 비매출 영수증번호 */
+    private String prepaidAmt;/** 비매출 승인번호 */
+    private String nonsaleTypeApprNo;
+    /** 원거래비매출승인번호 */
+    private String orgNonsaleTypeApprNo;
+    /** 비매출 영수증 번호 */
     private String nonsaleBillNo;
-    /** 원거래 충전번호 */
-    private String orgPrepaidNo;
     /** 정렬방법 */
     private String array;
     /** 조회매장 */
@@ -204,6 +205,37 @@ public class PrepaidStoreVO extends PageVO {
         this.prepaidAmt = prepaidAmt;
     }
 
+
+    /**
+     * @return the nonsaleTypeApprNo
+     */
+
+    public String getNonsaleTypeApprNo() {
+        return nonsaleTypeApprNo;
+    }
+
+    /**
+     * @param nonsaleTypeApprNo the nonsaleTypeApprNo to set
+     */
+    public void setNonsaleTypeApprNo(String nonsaleTypeApprNo) {
+        this.nonsaleTypeApprNo = nonsaleTypeApprNo;
+    }
+
+    /**
+     * @return the orgNonsaleTypeApprNo
+     */
+
+    public String getOrgNonsaleTypeApprNo() {
+        return orgNonsaleTypeApprNo;
+    }
+
+    /**
+     * @param orgNonsaleTypeApprNo the orgNonsaleTypeApprNo to set
+     */
+    public void setOrgNonsaleTypeApprNo(String orgNonsaleTypeApprNo) {
+        this.orgNonsaleTypeApprNo = orgNonsaleTypeApprNo;
+    }
+
     /**
      * @return the nonsaleBillNo
      */
@@ -218,22 +250,6 @@ public class PrepaidStoreVO extends PageVO {
     public void setNonsaleBillNo(String nonsaleBillNo) {
         this.nonsaleBillNo = nonsaleBillNo;
     }
-
-    /**
-     * @return the orgPrepaidNo
-     */
-
-    public String getOrgPrepaidNo() {
-        return orgPrepaidNo;
-    }
-
-    /**
-     * @param orgPrepaidNo the orgPrepaidNo to set
-     */
-    public void setOrgPrepaidNo(String orgPrepaidNo) {
-        this.orgPrepaidNo = orgPrepaidNo;
-    }
-
 
     /**
      * @return the array

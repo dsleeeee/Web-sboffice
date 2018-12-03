@@ -1,6 +1,9 @@
 package kr.co.solbipos.membr.anals.postpaid.service.impl;
 
+import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.exception.JsonException;
+import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -39,13 +42,15 @@ public class PostpaidServiceImpl implements PostpaidService {
 
     private final kr.co.solbipos.membr.anals.postpaid.service.impl.PostpaidMapper mapper;
     private final CmmEnvUtil cmmEnvUtil;
+    private final MessageService messageService;
 
     /** Constructor Injection */
     @Autowired
     public PostpaidServiceImpl(
-        kr.co.solbipos.membr.anals.postpaid.service.impl.PostpaidMapper mapper, CmmEnvUtil cmmEnvUtil) {
+        kr.co.solbipos.membr.anals.postpaid.service.impl.PostpaidMapper mapper, CmmEnvUtil cmmEnvUtil, MessageService messageService) {
         this.mapper = mapper;
         this.cmmEnvUtil = cmmEnvUtil;
+        this.messageService = messageService;
     }
 
     /** 후불 회원 외상, 입금 내역 */
@@ -89,13 +94,16 @@ public class PostpaidServiceImpl implements PostpaidService {
         postpaidStoreVO.setPostpaidDt(dt);
         postpaidStoreVO.setPostpaidFg(PostpaidFg.DEPOSIT); // 입금
         postpaidStoreVO.setPostpaidPayFg(PostpaidPayFg.CASH); // 현금
-        postpaidStoreVO.setNonsaleBillNo("  ");// 비매출 영수증번호
+        postpaidStoreVO.setNonsaleTypeApprNo("  ");// 비매출 승인번호
 
         postpaidStoreVO.setRegId(sessionInfoVO.getUserId());
         postpaidStoreVO.setRegDt(dt);
         postpaidStoreVO.setModId(sessionInfoVO.getUserId());
         postpaidStoreVO.setModDt(dt);
 
-        return mapper.saveDeposit(postpaidStoreVO);
+        int result = mapper.saveDeposit(postpaidStoreVO);
+        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+        return result;
     }
 }

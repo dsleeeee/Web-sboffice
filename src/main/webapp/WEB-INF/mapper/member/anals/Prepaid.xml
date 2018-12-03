@@ -67,22 +67,22 @@
           </if>
       </where>
       <if test='array != null and array.toString == "1"'>
-        ORDER BY tmmp.STORE_CD, tmmp.SALE_DATE, tmmp.MEMBR_NO
+        ORDER BY tmmp.STORE_CD, tmmp.SALE_DATE  DESC, tmmp.MEMBR_NO
       </if>
       <if test='array != null and array.toString == "2"'>
-        ORDER BY tmmp.STORE_CD, tmmp.MEMBR_NO, tmmp.SALE_DATE
+        ORDER BY tmmp.STORE_CD, tmmp.MEMBR_NO, tmmp.SALE_DATE DESC
       </if>
       <if test='array != null and array.toString == "3"'>
-        ORDER BY tmmp.MEMBR_NO, tmmp.SALE_DATE, tmmp.STORE_CD
+        ORDER BY tmmp.MEMBR_NO, tmmp.SALE_DATE DESC, tmmp.STORE_CD
       </if>
       <if test='array != null and array.toString == "4"'>
-        ORDER BY tmmp.MEMBR_NO, tmmp.STORE_CD, tmmp.SALE_DATE
+        ORDER BY tmmp.MEMBR_NO, tmmp.STORE_CD, tmmp.SALE_DATE DESC
       </if>
       <if test='array != null and array.toString == "5"'>
-        ORDER BY tmmp.SALE_DATE, tmmp.STORE_CD, tmmp.MEMBR_NO
+        ORDER BY tmmp.SALE_DATE DESC, tmmp.STORE_CD, tmmp.MEMBR_NO
       </if>
       <if test='array != null and array.toString == "6"'>
-        ORDER BY tmmp.SALE_DATE, tmmp.MEMBR_NO, tmmp.STORE_CD
+        ORDER BY tmmp.SALE_DATE DESC, tmmp.MEMBR_NO, tmmp.STORE_CD
       </if>
     <include refid="CmmSQL.PagingTemplateBottom"/>
   </select>
@@ -124,8 +124,9 @@
       PREPAID_FG,
       PREPAID_PAY_FG,
       PREPAID_AMT,
+      NONSALE_TYPE_APPR_NO,
+      ORG_NONSALE_TYPE_APPR_NO,
       NONSALE_BILL_NO,
-      ORG_PREPAID_NO,
       REG_DT,
       REG_ID,
       MOD_DT,
@@ -146,8 +147,9 @@
       #{prepaidFg, jdbcType=VARCHAR},
       #{prepaidPayFg, jdbcType=VARCHAR},
       #{prepaidAmt},
+      #{nonsaleTypeApprNo},
+      #{orgNonsaleTypeApprNo},
       #{nonsaleBillNo},
-      #{orgPrepaidNo},
       #{regDt},
       #{regId},
       #{modDt},

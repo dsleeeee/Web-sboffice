@@ -65,7 +65,8 @@ app.controller('depositCtrl', ['$scope', '$http', function ($scope, $http) {
   // 외상입금 처리
   $scope.save = function(data){
     if( $("#postpaidAmt").val() === null || $("#postpaidAmt").val() === "" || $("#postpaidAmt").val() === "0") {
-      s_alert.pop(messages["postpaid.request.postpaidAmt"]);
+      $scope._popMsg(messages["postpaid.request.postpaidAmt"]);
+
       return false;
     }
 
@@ -75,13 +76,16 @@ app.controller('depositCtrl', ['$scope', '$http', function ($scope, $http) {
     params.membrNo = data.membrNo;
     params.postpaidAmt = $("#postpaidAmt").val();
 
-    $scope._save(baseUrl + "deposit/saveDeposit.sb", params, function(){ $scope.saveResult() });
+    $scope._postJSONSave.withPopUp( baseUrl + "deposit/saveDeposit.sb", params, function(response){
+    } );
+
   };
 
   // 외상입금 후처리
   $scope.saveResult = function (){
+    $("#postpaidAmt").val("");
     var postpaidGrid = agrid.getScope('postpaidCtrl');
     postpaidGrid.searchPostpaid();
-    $("#postpaidAmt").val("");
+
   };
 }]);

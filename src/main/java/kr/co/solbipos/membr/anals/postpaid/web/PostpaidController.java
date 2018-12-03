@@ -128,13 +128,7 @@ public class PostpaidController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = 0;
-
-        try{
-            result = service.saveDeposit(postpaidStoreVO, sessionInfoVO);
-        }catch (Exception ex){
-            ex.printStackTrace();
-        }
+        int result = service.saveDeposit(postpaidStoreVO, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

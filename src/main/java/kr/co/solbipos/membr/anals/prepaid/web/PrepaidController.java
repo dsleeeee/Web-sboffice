@@ -125,13 +125,7 @@ public class PrepaidController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = 0;
-
-        try{
-            result = service.saveChargeAmt(prepaidStoreVO, sessionInfoVO);
-        }catch (Exception ex){
-            ex.printStackTrace();
-        }
+        int result = service.saveChargeAmt(prepaidStoreVO, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

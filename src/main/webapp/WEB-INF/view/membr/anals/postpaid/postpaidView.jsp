@@ -107,6 +107,7 @@
               is-read-only="true">
 
         <!-- define columns -->
+        <wj-flex-grid-column header="<s:message code="postpaid.hqOfficeCd"/>" binding="hqOfficeCd" width="70" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="postpaid.storeCd"/>" binding="storeCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="postpaid.storeNm"/>" binding="storeNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="postpaid.saleDate"/>" binding="saleDate" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
