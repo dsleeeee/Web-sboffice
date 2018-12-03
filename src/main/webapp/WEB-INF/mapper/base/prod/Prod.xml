@@ -196,7 +196,7 @@
                     thp.STOCK_PROD_YN,                              -- 재고관리여부
                     thp.SIDE_PROD_YN,
                     thp.SET_PROD_FG,                                -- 세트상품구분
-                    NVL(thpsp.SALE_UPRC, 0) AS SALE_URC,            -- 최초판매단가
+                    NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC,           -- 최초판매단가
                     NVL(thp.COST_UPRC, 0) AS COST_UPRC,             -- 원가단가
                     NVL(thp.LAST_COST_UPRC, 0) AS LAST_COST_UPRC,   -- 최종원가단가
                     NVL(thp.SPLY_UPRC, 0) AS SPLY_UPRC,             -- 판매단가
@@ -207,6 +207,7 @@
                     thp.PO_UNIT_ALLOW_FG,
                     thp.PO_MIN_QTY,                 -- 최소주문
                     thp.SAFE_STOCK_QTY,             -- 안전재고
+                    0 AS DEFAULT_STOCK,             -- todo 초기재고
                     thp.STOCK_UNIT_FG,
                     thp.USE_YN,                     -- 사용여부
                     NVL(thp.REMARK, '') AS REMARK,  -- 비고
