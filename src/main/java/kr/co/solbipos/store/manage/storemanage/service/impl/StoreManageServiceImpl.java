@@ -674,15 +674,33 @@ public class StoreManageServiceImpl implements StoreManageService{
             kitchenPrintVO.setModDt(dt);
             kitchenPrintVO.setModId(sessionInfoVO.getUserId());
 
+            int result = 0;
+
             if(kitchenPrintVO.getStatus() == GridDataFg.INSERT) {
-                procCnt += mapper.insertKitchenPrint(kitchenPrintVO);
+                result = mapper.insertKitchenPrint(kitchenPrintVO);
+                if(result <= 0){
+                    throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                } else {
+                    procCnt ++;
+                }
             }
             else if(kitchenPrintVO.getStatus() == GridDataFg.UPDATE) {
-                procCnt += mapper.updateKitchenPrint(kitchenPrintVO);
+                result = mapper.updateKitchenPrint(kitchenPrintVO);
+                if(result <= 0){
+                    throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                } else {
+                    procCnt ++;
+                }
             }
             else if(kitchenPrintVO.getStatus() == GridDataFg.DELETE) {
-                procCnt += mapper.deleteKitchenPrint(kitchenPrintVO);
+                result = mapper.deleteKitchenPrint(kitchenPrintVO);
+                if(result <= 0){
+                    throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                } else {
+                    procCnt ++;
+                }
             }
+
         }
 
         return procCnt;

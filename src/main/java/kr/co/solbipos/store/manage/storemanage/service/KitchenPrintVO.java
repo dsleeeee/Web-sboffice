@@ -43,7 +43,7 @@ public class KitchenPrintVO extends CmmVO {
     /** 프린터출력수량 */
     private String prterOutputQty;
     /** 프린터 상태 체크 */
-    private UseYn printCheckYn;
+    private UseYn prterCheckYn;
     /** 사용여부  (Y:사용, N:미사용) */
     private UseYn useYn;
 
@@ -170,18 +170,18 @@ public class KitchenPrintVO extends CmmVO {
     }
 
     /**
-     * @return the printCheckYn
+     * @return the prterCheckYn
      */
 
-    public UseYn getPrintCheckYn() {
-        return printCheckYn;
+    public UseYn getPrterCheckYn() {
+        return prterCheckYn;
     }
 
     /**
-     * @param printCheckYn the printCheckYn to set
+     * @param prterCheckYn the prterCheckYn to set
      */
-    public void setPrintCheckYn(UseYn printCheckYn) {
-        this.printCheckYn = printCheckYn;
+    public void setPrterCheckYn(UseYn prterCheckYn) {
+        this.prterCheckYn = prterCheckYn;
     }
 
     /**

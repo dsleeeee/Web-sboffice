@@ -1933,10 +1933,12 @@
                PRTER_NET_IP = #{prterNetIp},
                PRTER_NET_PORT = #{prterNetPort},
                PRTER_OUTPUT_QTY = #{prterOutputQty},
-               PRTER_CHECK_YN = #{printCheckYn},
-               USE_YN = #{useYn}
+               PRTER_CHECK_YN = #{prterCheckYn},
+               USE_YN = #{useYn},
+               MOD_DT = #{modDt},
+               MOD_ID = #{modId}
          WHERE STORE_CD = #{storeCd}
-           AND PRTER_NO = LPAD(#{prterNo}, 2, '0')
+           AND PRTER_NO = #{prterNo}
     </update>
 
 

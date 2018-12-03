@@ -35,5 +35,4 @@
          ORDER BY tmp.PROD_CLASS_CD, PROD_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
   </select>
-
 </mapper>
