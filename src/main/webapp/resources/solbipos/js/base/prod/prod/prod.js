@@ -38,7 +38,7 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
   // 커스텀콤보 : 사이드메뉴-속성
   $scope._getComboDataQueryCustom('getSideMenuAttrClassCombo', 'sdattrClassCdComboData', 'S');
   // 커스텀콤보 : 사이드메뉴-선택메뉴
-  $scope._getComboDataQueryCustom('getSideMenuSdselGrpCdCombo', 'sdselGrpCdComboData');
+  $scope._getComboDataQueryCustom('getSideMenuSdselGrpCdCombo', 'sdselGrpCdComboData', 'S');
 
   // 콤보박스 데이터 Set
   $scope._setComboData('listScaleBox', gvListScaleBoxData);
