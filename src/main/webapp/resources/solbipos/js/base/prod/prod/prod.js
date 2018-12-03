@@ -36,9 +36,10 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
   // 전체기간 체크박스
   $scope.isChecked = true;
   // 커스텀콤보 : 사이드메뉴-속성
-  $scope._getComboDataQueryCustom('getSideMenuAttrClassCombo', 'sdattrClassCdComboData');
+  $scope._getComboDataQueryCustom('getSideMenuAttrClassCombo', 'sdattrClassCdComboData', 'S');
   // 커스텀콤보 : 사이드메뉴-선택메뉴
   $scope._getComboDataQueryCustom('getSideMenuSdselGrpCdCombo', 'sdselGrpCdComboData');
+
   // 콤보박스 데이터 Set
   $scope._setComboData('listScaleBox', gvListScaleBoxData);
   // 사용여부를 쓰는 콤보박스의 데이터
@@ -126,22 +127,22 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
     }, 50);
   };
 
-  // 신규상품 등록
-  $scope.addProd = function() {
-    $scope.setProdInfo({});
-    var modifyPopUp = $scope.prodModifyLayer;
-    setTimeout(function() {
-      modifyPopUp.show(true, function (s) {
-        // 상품정보 등록 팝업 - 저장
-        if (s.dialogResult === "wj-hide-apply") {
-          // 팝업 속성에서 상품정보 get
-          var params = s.data;
-          // 저장수행
-          $scope._postJSONSave.withPopUp("/base/prod/prod/prod/save.sb", params, function () {
-            $scope._popMsg(messages["cmm.saveSucc"]);
+      // 신규상품 등록
+      $scope.addProd = function() {
+        $scope.setProdInfo({});
+        var modifyPopUp = $scope.prodModifyLayer;
+        setTimeout(function() {
+          modifyPopUp.show(true, function (s) {
+            // 상품정보 등록 팝업 - 저장
+            if (s.dialogResult === "wj-hide-apply") {
+              // 팝업 속성에서 상품정보 get
+              var params = s.data;
+              // 저장수행
+              $scope._postJSONSave.withPopUp("/base/prod/prod/prod/save.sb", params, function () {
+                $scope._popMsg(messages["cmm.saveSucc"]);
+              });
+            }
           });
-        }
-      });
     }, 50);
   };
 
