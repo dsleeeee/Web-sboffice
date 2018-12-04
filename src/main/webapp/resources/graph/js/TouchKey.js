@@ -1742,6 +1742,7 @@ Format.prototype.open = function (isLoad) {
   //open
   var reqArea = mxUtils.post(TOUCHKEY_OPEN_URL, '',
     mxUtils.bind(this, function (req) {
+      var scope = agrid.getScope("touchKeyCtrl");
       //var enabled = req.getStatus() != 404;
       if (req.getStatus() === 200) {
         try {
@@ -1780,7 +1781,6 @@ Format.prototype.open = function (isLoad) {
             this.setGraphXml(prodArea, null);
           }
 
-          var scope = agrid.getScope("touchKeyCtrl");
           scope._broadcast('touchKeyCtrl');
 
         }
