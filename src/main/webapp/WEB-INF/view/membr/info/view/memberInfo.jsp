@@ -283,7 +283,7 @@
         <wj-flex-grid-column header="<s:message code="regist.sms.recv"/>" binding="smsRecvYn" data-map="smsRecvDataMap" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="regist.useYn"/>" binding="useYn" data-map="useYnDataMap" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
       <c:if test="${orgnFg == 'HQ'}">
-        <wj-flex-grid-column header="<s:message code="regist.membr.store"/>" binding="creditStore" is-read-only="true" align="center" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="regist.membr.store"/>" binding="postpaidStore" is-read-only="true" align="center" ></wj-flex-grid-column>
       </c:if>
       </wj-flex-grid>
     </div>
@@ -308,7 +308,7 @@ var periodDataMap   = ${ccu.getCommCodeExcpAll("077")}; <%--조회기간--%>
 var weddingDataMap  = ${ccu.getCommCodeExcpAll("076")}; <%--결혼유무--%>
 var anvrsDataMap    = ${ccu.getCommCode("032")};
 var regstrStoreList = ${regstrStoreList};
-var memberClassList = "${memberClassList}";
+var memberClassList = ${memberClassList};
 
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20181109.01" charset="utf-8"></script>
@@ -326,7 +326,7 @@ var memberClassList = "${memberClassList}";
 </c:import>
 
 <%-- 후불적용매장등록 --%>
-<c:import url="/WEB-INF/view/membr/info/view/creditStoreRegist.jsp">
+<c:import url="/WEB-INF/view/membr/info/view/postpaidStoreRegist.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

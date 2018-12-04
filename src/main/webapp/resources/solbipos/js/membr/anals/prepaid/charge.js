@@ -84,6 +84,6 @@ app.controller('chargeCtrl', ['$scope', '$http', function ($scope, $http) {
 
 
     var prepaidGrid = agrid.getScope('prepaidCtrl');
-    prepaidGrid.searchCredit();
+    prepaidGrid.searchPostpaid();
   };
 }]);

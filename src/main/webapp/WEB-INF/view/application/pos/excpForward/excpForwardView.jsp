@@ -11,44 +11,49 @@
 
 <body ng-app="rootApp" ng-controller="rootCtrl">
 <div class="cusWrap">
-    <div class="content-middle">
-        <div class="subCon">
-            <div class="searchBar flddUnfld">
-                <span class="cusTitle"><s:message code="application.pos.excpForward"/></span>
-            </div>
-            <%-- 예외출고 상품 목록 --%>
-            <div class="mb40" ng-controller="productCtrl">
-                <div class="wj-TblWrapBr mr10 pd20" style="height:350px;">
-                    <%-- 예외출고 상품 그리드 --%>
-                    <div id="productGrid" class="wj-gridWrap" style="height:310px; overflow-y: hidden">
-                        <wj-flex-grid
-                                autoGenerateColumns="false"
-                                control="flex"
-                                initialized="initGrid(s,e)"
-                                sticky-headers="true"
-                                selection-mode="Row"
-                                items-source="data"
-                                item-formatter="_itemFormatter">
+  <div class="content-middle">
+    <div class="subCon" ng-controller="productCtrl">
+      <div class="searchBar flddUnfld">
+        <a href="#" class="open fl"><s:message code="application.pos.excpForward"/></a>
+      </div>
 
-                            <!-- define columns -->
-                            <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="application.pos.excpForward.storeCd"/>" binding="storeCd" width="*" is-read-only="true" visible="false"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="application.pos.excpForward.prodClassCd"/>" binding="prodClassCd" width="*" is-read-only="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="application.pos.excpForward.prodClassNm"/>" binding="prodClassNm" width="*" is-read-only="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="application.pos.excpForward.prodCd"/>" binding="prodCd" width="*" is-read-only="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="application.pos.excpForward.prodNm"/>" binding="prodNm" width="*" is-read-only="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="application.pos.excpForward.regProd"/>" binding="regProd" width="100" is-read-only="true"></wj-flex-grid-column>
-                        </wj-flex-grid>
+      <%-- 예외출고 상품 목록 --%>
+      <div class="mb40" >
+        <%-- 예외출고 상품 그리드 --%>
+        <div id="productGrid" class="wj-gridWrap" style="height:310px; overflow-y: hidden; overflow-x: hidden;">
+          <wj-flex-grid
+                  autoGenerateColumns="false"
+                  control="flex"
+                  initialized="initGrid(s,e)"
+                  sticky-headers="true"
+                  selection-mode="Row"
+                  items-source="data"
+                  item-formatter="_itemFormatter">
 
-                    </div>
-                </div>
-            </div>
+              <!-- define columns -->
+              <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="application.pos.excpForward.storeCd"/>" binding="storeCd" align="center" width="*" is-read-only="true" visible="false"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="application.pos.excpForward.prodClassCd"/>" binding="prodClassCd" align="center" width="*" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="application.pos.excpForward.prodClassNm"/>" binding="prodClassNm" align="center" width="*" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="application.pos.excpForward.prodCd"/>" binding="prodCd" align="center" width="*" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="application.pos.excpForward.prodNm"/>" binding="prodNm" align="center" width="*" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="application.pos.excpForward.regProd"/>" binding="regProd" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+          </wj-flex-grid>
         </div>
-    </div>
-</div>
-</body>
+      </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/application/pos/excpForward/excpForward.js?ver=20180914.01" charset="utf-8"></script>
+      <%-- 페이지 리스트 --%>
+      <div class="pageNum mt20">
+        <%-- id --%>
+        <ul id="productCtrlPager" data-size="10">
+        </ul>
+      </div>
+      <%--//페이지 리스트--%>
+
+    </div>
+  </div>
+  <script type="text/javascript" src="/resource/solbipos/js/application/pos/excpForward/excpForward.js?ver=20180914.01" charset="utf-8"></script></div>
+</body>
 
 <%-- 예외출고 수량 등록 팝업 --%>
 <c:import url="/WEB-INF/view/application/pos/excpForward/excpForwradRegist.jsp">

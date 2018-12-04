@@ -6,9 +6,10 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.store.emp.enums.EmpResult;
 import kr.co.solbipos.base.store.emp.store.service.StoreEmpService;
 import kr.co.solbipos.base.store.emp.store.service.StoreEmpVO;
-import kr.co.solbipos.base.store.emp.store.service.enums.StoreEmpResult;
+import kr.co.solbipos.base.store.emp.system.service.SystemEmpVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -129,7 +130,7 @@ public class StoreEmpController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
-        StoreEmpResult storeEmpResult = storeEmpService.insertStoreEmpInfo(storeEmpVO,sessionInfoVO);
+        EmpResult storeEmpResult = storeEmpService.insertStoreEmpInfo(storeEmpVO,sessionInfoVO);
 
         return returnJson(Status.OK, storeEmpResult);
     }
@@ -144,7 +145,7 @@ public class StoreEmpController {
     @RequestMapping(value = "/chkStoreUserId.sb", method = RequestMethod.POST)
     public Result chkStoreUserId(StoreEmpVO storeEmpVO) {
 
-        StoreEmpResult storeEmpResult= storeEmpService.getStoreUserIdCnt(storeEmpVO);
+        EmpResult storeEmpResult= storeEmpService.getStoreUserIdCnt(storeEmpVO);
 
         return returnJson(Status.OK, storeEmpResult);
     }
@@ -163,8 +164,27 @@ public class StoreEmpController {
         HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
-        StoreEmpResult storeEmpResult = storeEmpService.saveStoreEmpInfo(storeEmpVO, sessionInfoVO);
+        EmpResult storeEmpResult = storeEmpService.saveStoreEmpInfo(storeEmpVO, sessionInfoVO);
 
         return returnJson(Status.OK, storeEmpResult);
+    }
+
+    /**
+     * 비밀번호 변경
+     * @param storeEmpVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/modifyPassword.sb", method = RequestMethod.POST)
+    public Result modifyPassword(@RequestBody StoreEmpVO storeEmpVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+        EmpResult empResult = storeEmpService.modifyPassword(storeEmpVO,sessionInfoVO);
+
+        return returnJson(Status.OK, empResult);
     }
 }

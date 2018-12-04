@@ -39,4 +39,12 @@ public interface ProdService {
     /** 상품정보 저장 */
     int saveProductInfo(ProdVO prodVO, SessionInfoVO sessionInfoVO);
 
+    /** 상품 적용/미적용 매장 조회 */
+    List<DefaultMap<String>> getStoreList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+
+    /** 상품 적용매장 등록 */
+    int insertProdStore(ProdVO[] prodVOs, SessionInfoVO sessionInfoVO);
+
+    /** 상품 적용매장 삭제 */
+    int deleteProdStore(ProdVO[] prodVOs, SessionInfoVO sessionInfoVO);
 }

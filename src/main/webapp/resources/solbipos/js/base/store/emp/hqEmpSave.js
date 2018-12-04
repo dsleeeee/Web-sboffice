@@ -44,9 +44,6 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
   // 웹사용자 아이디 중복체크 여부
   $scope.duplicationChkFg = false;
 
-  // 비밀번호 변경여부
-  $scope.pwdChgFg = false;
-
   // 사원정보
   $scope.hqEmpRegistInfo;
   $scope.setHqEmpRegistInfo = function(emp){
@@ -87,7 +84,6 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._postJSONQuery.withOutPopUp( "/base/store/emp/hq/detail.sb", params, function(response){
       $scope.hqEmpRegistInfo                    = response.data.data;
       $scope.hqEmpRegistInfo.empInfo            = ' [' + response.data.data.empNo + ']' + response.data.data.empNm;
-      $scope.pwdChgFg                           = false;
       $scope.hqEmpRegistInfo.originalWebUserId  = response.data.data.userId;
     });
   };
@@ -107,15 +103,32 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
 
       var result = response.data.data;
 
+      console.log('chk duplicate result', result);
+
       if(result == "SUCCESS"){
         $scope.duplicationChkFg = true;
         $scope._popMsg(messages["hqEmp.notDuplicate.msg"]);
-      } else if(result == "USER_ID_REGEXP"){
+      } else if(result === "USER_ID_REGEXP"){
         $scope._popMsg(messages["hqEmp.userIdRegexp.msg"]);
+      } else if(result === "USER_ID_LENGHTH_REGEXP"){
+        $scope._popMsg(messages["hqEmp.userIdLengthRegexp.msg"]);
+      } else if(result === "USER_ID_CANNOT_USE_HANGEUL"){
+        $scope._popMsg(messages["hqEmp.userIdNotUseHangeul.msg"]);
+      } else if(result === "USER_ID_MUST_CONTAIN_ENG_CAHR"){
+        $scope._popMsg(messages["hqEmp.userIdContainEngChar.msg"]);
+      } else if(result === "USER_ID_ONLY_ENG_NUM_CHAR"){
+        $scope._popMsg(messages["hqEmp.userIdOnlyEnvNumChar.msg"]);
+      } else if(result === "USER_ID_DUPLICATE"){
+        $scope._popMsg(messages["hqEmp.userId.duplicate.msg"]);
       } else {
         $scope._popMsg(messages["hqEmp.userId.notDuplicate.msg"]);
       }
     });
+  };
+
+  // 비밀번호 변경
+  $scope.changePassword = function(){
+    $scope.changePwdLayer.show(true);
   };
 
   // 신규등록
@@ -134,7 +147,8 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     }
 
-    var params = $scope.hqEmpRegistInfo;
+    var params      = $scope.hqEmpRegistInfo;
+    params.pwdChgFg = false; // 비밀번호 변경여부
 
     $scope._postJSONSave.withOutPopUp( "/base/store/emp/hq/regist.sb", params, function(response){
 
@@ -167,23 +181,9 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     }
 
-    // 웹사용여부 'Y'면서 비밀번호 변경시
-    if($scope.hqEmpRegistInfo.webUseYn === 'Y' &&  !isEmptyObject($scope.hqEmpRegistInfo.userPwd)) {
-
-      $scope.pwdChgFg = true;
-      if($scope.hqEmpRegistInfo.userPwd !== $scope.hqEmpRegistInfo.userPwdCfm) { // 비밀번호, 비밀번호 확인 체크
-        $scope._popMsg(messages["hqEmp.passwordNotMatch.msg"] );
-        return false;
-      }
-    } else {
-      $scope.pwdChgFg = false;
-    }
-
-    var params      = $scope.hqEmpRegistInfo;
-    params.pwdChgFg = $scope.pwdChgFg;
+    var params = $scope.hqEmpRegistInfo;
 
     $scope._postJSONSave.withOutPopUp( "/base/store/emp/hq/save.sb", params, function(response){
-      // console.log('save result', response);
 
       if(response.data.data == 'SUCCESS') {
         $scope._popMsg(messages["cmm.saveSucc"]);
@@ -205,5 +205,18 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.close = function(){
     $scope.hqEmpRegistLayer.hide();
   };
+
+  // 화면 ready 된 후 설정
+  angular.element(document).ready(function () {
+    // 비밀번호 변경 팝업 핸들러 추가
+    $scope.changePwdLayer.shown.addHandler(function (s) {
+      setTimeout(function() {
+        var params = $scope.hqEmpRegistInfo;
+        params.empFg = 'H'; // 본사 사원
+        $scope._broadcast('changePwdCtrl', params);
+      }, 50);
+    });
+  });
+
 
 }]);

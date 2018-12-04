@@ -5,6 +5,7 @@
 
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 
 <div class="subCon" ng-controller="prodCtrl">
   <%--searchTbl--%>
@@ -132,13 +133,18 @@
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" ></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="prod.prodClass"/>" binding="prodClassNm" width="300" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prod.prodCd"/>" binding="prodCd" width="150" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prod.prodNm"/>" binding="prodNm" width="610" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.prodCd"/>" binding="prodCd" width="150" is-read-only="true" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.prodNm"/>" binding="prodNm" width="410" is-read-only="true"></wj-flex-grid-column>
+
+        <c:if test="${orgnFg == 'HQ'}">
+          <wj-flex-grid-column header="<s:message code="prod.storeCnt"/>" binding="storeCnt" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+        </c:if>
+
         <wj-flex-grid-column header="<s:message code="prod.costUprc"/>" binding="costUprc" width="100" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="prod.splyUprc"/>" binding="splyUprc" width="100" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="prod.saleUprc"/>" binding="saleUprc" width="100" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prod.orgplceCd"/>" binding="orgplceCd" width="100" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prod.poUnitFg"/>" binding="poUnitFg" width="100" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.orgplceCd"/>" binding="orgplceCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column><!--// todo 원산지명 조회 필요-->
+        <wj-flex-grid-column header="<s:message code="prod.poUnitFg"/>" binding="poUnitFg" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
 
       </wj-flex-grid>
       <%-- ColumnPicker 사용시 include --%>
@@ -159,7 +165,7 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20181120.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20181203.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">
@@ -169,6 +175,12 @@
 
 <%-- 레이어 팝업 : 상품정보 입력/수정 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodModifyView.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 레이어 팝업 : 상품별 적용매장 선택 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/prod/prodStoreRegistView.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

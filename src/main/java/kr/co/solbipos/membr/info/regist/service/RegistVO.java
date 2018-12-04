@@ -105,7 +105,7 @@ public class RegistVO extends PageVO {
     /** 조회기간 타입 date end */
     private String periodEndDate;
     /** 후불회원 적용매장코드 */
-    private String creditStoreCds;
+    private String postpaidStoreCds;
 
 
     /**
@@ -604,17 +604,17 @@ public class RegistVO extends PageVO {
 
 
     /**
-     * @return the creditStoreCds
+     * @return the postpaidStoreCds
      */
 
-    public String getCreditStoreCds() {
-        return creditStoreCds;
+    public String getPostpaidStoreCds() {
+        return postpaidStoreCds;
     }
 
     /**
-     * @param creditStoreCds the creditStoreCds to set
+     * @param postpaidStoreCds the postpaidStoreCds to set
      */
-    public void setCreditStoreCds(String creditStoreCds) {
-        this.creditStoreCds = creditStoreCds;
+    public void setPostpaidStoreCds(String postpaidStoreCds) {
+        this.postpaidStoreCds = postpaidStoreCds;
     }
 }

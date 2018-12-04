@@ -43,6 +43,10 @@ app.controller('storeEmpCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.webUseYnDataMap  = new wijmo.grid.DataMap(webUseYn, 'value', 'name');
     $scope.smsRecvYnDataMap = new wijmo.grid.DataMap(smsRecvYn, 'value', 'name');
 
+    console.log('smsRecvYn', smsRecvYn);
+    console.log('$scope.smsRecvYnDataMap', $scope.smsRecvYnDataMap);
+
+
     // 그리드 포맷
     s.formatItem.addHandler(function (s, e) {
       if (e.panel === s.cells) {

@@ -206,23 +206,15 @@
 
 <%-- 매장사원 상세정보 레이어 --%>
 <c:import url="/WEB-INF/view/base/store/emp/storeEmpDetail.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
 <%-- 매장사원 등록/수정 레이어 --%>
 <c:import url="/WEB-INF/view/base/store/emp/storeEmpSave.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
 <%-- 패스워드 변경 레이어 --%>
-<%--
-<c:import url="/WEB-INF/view/base/store/emp/storeEmpModifyPwd.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
+<c:import url="/WEB-INF/view/base/store/emp/changePassword.jsp">
 </c:import>
---%>
 
 
 

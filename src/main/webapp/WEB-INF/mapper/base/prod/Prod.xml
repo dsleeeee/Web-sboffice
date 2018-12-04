@@ -36,7 +36,8 @@
                     NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC, -- 판매단가
                     thp.ORGPLCE_CD, -- TODO 원산지명 조회 필요
                     thp.PO_UNIT_FG,
-                    thp.REG_DT
+                    thp.REG_DT,
+                   (SELECT COUNT(thps.STORE_CD) FROM TB_HQ_PRODUCT_STORE thps WHERE thps.HQ_OFFICE_CD = thp.HQ_OFFICE_CD AND thps.PROD_CD = thp.PROD_CD ) AS STORE_CNT
                     <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM
                     TB_HQ_PRODUCT thp
@@ -196,7 +197,7 @@
                     thp.STOCK_PROD_YN,                              -- 재고관리여부
                     thp.SIDE_PROD_YN,
                     thp.SET_PROD_FG,                                -- 세트상품구분
-                    NVL(thpsp.SALE_UPRC, 0) AS SALE_URC,            -- 최초판매단가
+                    NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC,           -- 최초판매단가
                     NVL(thp.COST_UPRC, 0) AS COST_UPRC,             -- 원가단가
                     NVL(thp.LAST_COST_UPRC, 0) AS LAST_COST_UPRC,   -- 최종원가단가
                     NVL(thp.SPLY_UPRC, 0) AS SPLY_UPRC,             -- 판매단가
@@ -207,6 +208,7 @@
                     thp.PO_UNIT_ALLOW_FG,
                     thp.PO_MIN_QTY,                 -- 최소주문
                     thp.SAFE_STOCK_QTY,             -- 안전재고
+                    0 AS DEFAULT_STOCK,             -- todo 초기재고
                     thp.STOCK_UNIT_FG,
                     thp.USE_YN,                     -- 사용여부
                     NVL(thp.REMARK, '') AS REMARK,  -- 비고
@@ -258,7 +260,7 @@
                     tmp.STOCK_PROD_YN,                              -- 재고관리여부
                     tmp.SIDE_PROD_YN,
                     tmp.SET_PROD_FG,                                -- 세트상품구분
-                    NVL(tmpsp.SALE_UPRC, 0) AS SALE_URC,            -- 최초판매단가
+                    NVL(tmpsp.SALE_UPRC, 0) AS SALE_UPRC,           -- 최초판매단가
                     NVL(tmp.COST_UPRC, 0) AS COST_UPRC,             -- 원가단가
                     NVL(tmp.LAST_COST_UPRC, 0) AS LAST_COST_UPRC,   -- 최종원가단가
                     NVL(tmp.SPLY_UPRC, 0) AS SPLY_UPRC,             -- 판매단가
@@ -269,6 +271,7 @@
                     tmp.PO_UNIT_ALLOW_FG,
                     tmp.PO_MIN_QTY,                 -- 최소주문
                     tmp.SAFE_STOCK_QTY,             -- 안전재고
+                    0 AS DEFAULT_STOCK,             -- todo 초기재고
                     tmp.STOCK_UNIT_FG,
                     tmp.USE_YN,                     -- 사용여부
                     NVL(tmp.REMARK, '') AS REMARK,  -- 비고
@@ -601,7 +604,288 @@
         </choose>
     </update>
 
+    <!-- 상품존재여부 확인 (본사) -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT
+        PARAM    : prodVO
+        COMMENTS : 상품의 존재여부를 확인하기 위해 COUNT 를 리턴한다.
+    -->
+    <select id="getProdExistInfo" parameterType="prodVO" resultType="Integer" >
+        /* USE : ProdMapper.getProdExistInfo */
+        SELECT COUNT(*) AS PROD_COUNT
+          FROM TB_HQ_PRODUCT thp
+         WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+           AND thp.PROD_CD = #{prodCd}
+    </select>
+
+
+    <!-- 본사 상품 등록시, 매장 상품 등록 프로시져 호출 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT
+        PARAM    : prodVO
+        COMMENTS : 본사 쿠폰분류를 매장 쿠폰분류에 적용시킨다.
+    -->
+    <select id="insertHqProdToStoreProd" statementType="CALLABLE"  parameterType="prodVO" resultType="String">
+        /* USE : ProdMapper.insertHqProdToStoreProd */
+        {
+          CALL PKG_HQ_PRODUCT.SP_HQ_PRODUCT_I
+          (
+            #{hqOfficeCd},
+            #{storeCd},
+            #{prodCd},
+            #{regId},
+            #{result, mode=OUT, jdbcType=VARCHAR}
+          )
+        }
+    </select>
+
+    <!-- 본사 상품 수정시, 매장 상품 수정 프로시져 호출 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT
+        PARAM    : prodVO
+        COMMENTS : 본사 쿠폰분류를 매장 쿠폰분류에 적용시킨다.
+    -->
+    <select id="updateHqProdToStoreProd" statementType="CALLABLE"  parameterType="prodVO" resultType="String">
+        /* USE : ProdMapper.updateHqProdToStoreProd */
+        {
+          CALL PKG_HQ_PRODUCT.SP_HQ_PRODUCT_U
+          (
+            #{hqOfficeCd},
+            #{prodCd},
+            #{regId},
+            #{result, mode=OUT, jdbcType=VARCHAR}
+          )
+        }
+    </select>
+
+
+    <!-- 상품 적용/미적용 매장 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE, TB_HQ_PRODUCT_STORE
+        PARAM    : prodVO
+        COMMENTS : 상품 적용 대상인 매장을 조회한다.
+    -->
+    <select id="getStoreList" parameterType="prodVO" resultType="DefaultMap">
+        /* USE : ProdMapper.getStoreList */
+        SELECT tms.HQ_OFFICE_CD,
+               tho.HQ_OFFICE_NM,
+               tms.STORE_CD,
+               tms.STORE_NM,
+               NVL2(thps.STORE_CD, 'Y', 'N') AS REG_YN
+          FROM TB_MS_STORE tms,
+               TB_HQ_OFFICE tho,
+               TB_HQ_PRODUCT_STORE thps
+         WHERE tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+           AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+           AND thps.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
+           AND thps.STORE_CD (+)= tms.STORE_CD
+           AND thps.PROD_CD (+)= #{prodCd}
+        <if test='storeCd != null and storeCd.toString() != "null"'>
+           AND tms.STORE_CD = #{storeCd}
+        </if>
+        <if test='storeNm != null and storeNm.toString() != "null"'>
+           AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        <if test='storeRegFg != null and storeRegFg.toString() == "Y"'>
+           AND thps.STORE_CD IS NOT NULL
+        </if>
+        <if test='storeRegFg != null and storeRegFg.toString() == "N"'>
+           AND thps.STORE_CD IS NULL
+        </if>
+    </select>
+
+
+       <!-- 상품 적용 매장 등록 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_STORE
+        PARAM    : prodVO
+        COMMENTS : 본사 상품을 적용할 매장을 등록한다.
+    -->
+    <insert id="insertProdStore" parameterType="prodVO">
+        /* USE : ProdMapper.insertProdStore */
+        INSERT  INTO TB_HQ_PRODUCT_STORE
+        (
+          HQ_OFFICE_CD,
+          PROD_CD,
+          STORE_CD,
+          REG_DT,
+          REG_ID,
+          MOD_DT,
+          MOD_ID
+        )
+        VALUES
+        (
+          #{hqOfficeCd},
+          #{prodCd},
+          #{storeCd},
+          #{regDt},
+          #{regId},
+          #{modDt},
+          #{modId}
+        )
+    </insert>
+
+
+    <!-- 상품 적용 매장 등록시, 본사의 상품 매장으로 등록 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT
+        PARAM    : prodVO
+        COMMENTS : 상품 적용 매장 등록시, 본사의 상품 매장으로 등록
+    -->
+    <insert id="insertProdStoreDetail" parameterType="prodVO">
+        /* USE : ProdMapper.insertProdStoreDetail */
+        MERGE INTO TB_MS_PRODUCT tmp
+        USING ( SELECT #{storeCd} AS STORE_CD,
+                      thp.*
+                 FROM TB_HQ_PRODUCT thp
+                WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                  AND thp.PROD_CD = #{prodCd} ) thp
+           ON ( tmp.STORE_CD = thp.STORE_CD
+            AND tmp.PROD_CD  = thp.PROD_CD )
+        WHEN MATCHED THEN
+        UPDATE
+           SET tmp.PROD_NM             = thp.PROD_NM,
+               tmp.PROD_CLASS_CD       = thp.PROD_CLASS_CD,
+               tmp.CORNR_CD            = thp.CORNR_CD,
+               tmp.ORGPLCE_CD          = thp.ORGPLCE_CD,
+               tmp.SDATTR_CLASS_CD     = thp.SDATTR_CLASS_CD,
+               tmp.SDSEL_GRP_CD        = thp.SDSEL_GRP_CD,
+               tmp.POINT_SAVE_YN       = thp.POINT_SAVE_YN,
+               tmp.PROD_DC_FG          = thp.PROD_DC_FG,
+               tmp.VAT_FG              = thp.VAT_FG,
+               tmp.PROD_TIP_YN         = thp.PROD_TIP_YN,
+               tmp.PROD_PACK_AMT       = thp.PROD_PACK_AMT,
+               tmp.PROD_DLVR_AMT       = thp.PROD_DLVR_AMT,
+               tmp.PROD_TYPE_FG        = thp.PROD_TYPE_FG,
+               tmp.SALE_PROD_YN        = thp.SALE_PROD_YN,
+               tmp.STOCK_PROD_YN       = thp.STOCK_PROD_YN,
+               tmp.SIDE_PROD_YN        = thp.SIDE_PROD_YN,
+               tmp.SET_PROD_FG         = thp.SET_PROD_FG,
+               tmp.PRC_CTRL_FG         = '1',           -- todo 가격관리구분
+               tmp.COST_UPRC           = thp.COST_UPRC,
+               tmp.LAST_COST_UPRC      = thp.LAST_COST_UPRC,
+               tmp.SPLY_UPRC           = thp.SPLY_UPRC,
+               tmp.SPLY_UPRC_USE_YN    = thp.SPLY_UPRC_USE_YN,
+               tmp.PO_PROD_FG          = thp.PO_PROD_FG,
+               tmp.PO_UNIT_FG          = thp.PO_UNIT_FG,
+               tmp.PO_UNIT_QTY         = thp.PO_UNIT_QTY,
+               tmp.PO_UNIT_ALLOW_FG    = thp.PO_UNIT_ALLOW_FG,
+               tmp.PO_MIN_QTY          = thp.PO_MIN_QTY,
+               tmp.SAFE_STOCK_QTY      = thp.SAFE_STOCK_QTY,
+               tmp.STOCK_UNIT_FG       = thp.STOCK_UNIT_FG,
+               tmp.USE_YN              = thp.USE_YN,
+               tmp.REMARK              = thp.REMARK,
+               tmp.MOD_DT              = #{modDt},
+               tmp.MOD_ID              = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+            tmp.STORE_CD,
+            tmp.PROD_CD,
+            tmp.PROD_NM,
+            tmp.PROD_CLASS_CD,
+            tmp.CORNR_CD,
+            tmp.ORGPLCE_CD,
+            tmp.SDATTR_CLASS_CD,
+            tmp.SDSEL_GRP_CD,
+            tmp.POINT_SAVE_YN,
+            tmp.PROD_DC_FG,
+            tmp.VAT_FG,
+            tmp.PROD_TIP_YN,
+            tmp.PROD_PACK_AMT,
+            tmp.PROD_DLVR_AMT,
+            tmp.PROD_TYPE_FG,
+            tmp.SALE_PROD_YN,
+            tmp.STOCK_PROD_YN,
+            tmp.SIDE_PROD_YN,
+            tmp.SET_PROD_FG,
+            tmp.PRC_CTRL_FG,
+            tmp.COST_UPRC,
+            tmp.LAST_COST_UPRC,
+            tmp.SPLY_UPRC,
+            tmp.SPLY_UPRC_USE_YN,
+            tmp.PO_PROD_FG,
+            tmp.PO_UNIT_FG,
+            tmp.PO_UNIT_QTY,
+            tmp.PO_UNIT_ALLOW_FG,
+            tmp.PO_MIN_QTY,
+            tmp.SAFE_STOCK_QTY,
+            tmp.STOCK_UNIT_FG,
+            tmp.USE_YN,
+            tmp.REMARK,
+            tmp.REG_DT,
+            tmp.REG_ID,
+            tmp.MOD_DT,
+            tmp.MOD_ID
+        )
+        VALUES
+        (
+            thp.STORE_CD,
+            thp.PROD_CD,
+            thp.PROD_NM,
+            thp.PROD_CLASS_CD,
+            thp.CORNR_CD,
+            thp.ORGPLCE_CD,
+            thp.SDATTR_CLASS_CD,
+            thp.SDSEL_GRP_CD,
+            thp.POINT_SAVE_YN,
+            thp.PROD_DC_FG,
+            thp.VAT_FG,
+            thp.PROD_TIP_YN,
+            thp.PROD_PACK_AMT,
+            thp.PROD_DLVR_AMT,
+            thp.PROD_TYPE_FG,
+            thp.SALE_PROD_YN,
+            thp.STOCK_PROD_YN,
+            thp.SIDE_PROD_YN,
+            thp.SET_PROD_FG,
+            '1',                -- todo 가격관리구분
+            thp.COST_UPRC,
+            thp.LAST_COST_UPRC,
+            thp.SPLY_UPRC,
+            thp.SPLY_UPRC_USE_YN,
+            thp.PO_PROD_FG,
+            thp.PO_UNIT_FG,
+            thp.PO_UNIT_QTY,
+            thp.PO_UNIT_ALLOW_FG,
+            thp.PO_MIN_QTY,
+            thp.SAFE_STOCK_QTY,
+            thp.STOCK_UNIT_FG,
+            thp.USE_YN,
+            thp.REMARK,
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 상품 적용 매장 삭제 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_STORE
+        PARAM    : prodVO
+        COMMENTS : 본사 쿠폰을 적용한 매장을 삭제한다.
+    -->
+    <delete id="deleteProdStore" parameterType="prodVO">
+        /* USE : ProdMapper.deleteProdStore */
+        DELETE TB_HQ_PRODUCT_STORE
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND PROD_CD = #{prodCd}
+           AND STORE_CD = #{storeCd}
+    </delete>
+
+    <!-- 상품 매장 적용 삭제시, 해당 상품의 USE_YN 값 변경 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT
+        PARAM    : prodVO
+        COMMENTS : 상품 매장 적용 삭제시, 해당 상품의 USE_YN 값 변경
+    -->
+    <update id="deleteProdStoreDetail" parameterType="prodVO">
+        /* USE : ProdMapper.deleteProdStoreDetail */
+        UPDATE TB_MS_PRODUCT
+           SET USE_YN = 'N'
+         WHERE STORE_CD = #{storeCd}
+           AND PROD_CD = #{prodCd}
+    </update>
+
 </mapper>
-
-
-

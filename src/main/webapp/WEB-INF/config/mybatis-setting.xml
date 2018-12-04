@@ -117,6 +117,7 @@
     <!-- 기초관리 -->
     <typeAlias alias="posFuncVO" type="kr.co.solbipos.base.store.posfunc.service.PosFuncVO"/>
     <typeAlias alias="hqEmpVO" type="kr.co.solbipos.base.store.emp.hq.service.HqEmpVO"/>
+    <typeAlias alias="systemEmpVO" type="kr.co.solbipos.base.store.emp.system.service.SystemEmpVO"/>
     <typeAlias alias="viewVO" type="kr.co.solbipos.base.store.view.service.ViewVO"/>
     <typeAlias alias="vanConfigVO" type="kr.co.solbipos.base.store.view.service.VanConfigVO"/>
 <!--
@@ -285,7 +286,7 @@
 -->
     <typeAlias alias="registVO" type="kr.co.solbipos.membr.info.regist.service.RegistVO"/>
     <typeAlias alias="membrClassVO" type="kr.co.solbipos.membr.info.grade.service.MembrClassVO"/>
-    <typeAlias alias="creditStoreVO" type="kr.co.solbipos.membr.anals.credit.service.CreditStoreVO"/>
+    <typeAlias alias="postpaidStoreVO" type="kr.co.solbipos.membr.anals.postpaid.service.PostpaidStoreVO"/>
     <typeAlias alias="prepaidStoreVO" type="kr.co.solbipos.membr.anals.prepaid.service.PrepaidStoreVO"/>
     <typeAlias alias="hqStoreMoveVO" type="kr.co.solbipos.iostock.move.hqStoreMove.service.HqStoreMoveVO"/>
 
@@ -296,7 +297,7 @@
         <typeAlias alias="stampVO" type="kr.co.solbipos.membr.info.stamp.service.StampVO"/>
         <typeAlias alias="dlvrVO" type="kr.co.solbipos.membr.info.dlvr.service.DlvrVO"/>
         <typeAlias alias="chgBatchVO" type="kr.co.solbipos.membr.info.chgbatch.service.ChgBatchVO"/>
-        <typeAlias alias="creditVO" type="kr.co.solbipos.membr.anals.credit.service.CreditVO"/>
+        <typeAlias alias="postpaidVO" type="kr.co.solbipos.membr.anals.postpaid.service.PostpaidVO"/>
         <typeAlias alias="dayPurchsVO" type="kr.co.solbipos.membr.anals.daypurchs.service.DayPurchsVO"/>
         <typeAlias alias="periodVO" type="kr.co.solbipos.membr.anals.period.service.PeriodVO"/>
         <typeAlias alias="prodVO" type="kr.co.solbipos.membr.anals.prod.service.ProdVO"/>
@@ -469,6 +470,7 @@
 
     <typeAlias alias="excpForwardProductVO" type="kr.co.solbipos.application.pos.exceptForward.service.ExcpForwardProductVO"/>
     <typeAlias alias="productionVO" type="kr.co.solbipos.application.pos.production.service.ProductionVO"/>
+    <typeAlias alias="posPostpaidVO" type="kr.co.solbipos.application.pos.posPostpaid.service.PosPostpaidStoreVO"/>
 
     <typeAlias type="kr.co.common.data.handler.CustomBooleanTypeHandler" alias="CustomBooleanTypeHandler" />
     <typeAlias type="kr.co.common.data.handler.CustomDateTypeHandler" alias="CustomDateTypeHandler" />

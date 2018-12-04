@@ -24,9 +24,9 @@
         <tbody>
         <tr>
           <th><s:message code="application.agency.search.agencyCd"/></th>
-          <td><input type="text" id="srchAgencyCd" ng-model="agencyCd" maxlength="5" /></td>
+          <td><input type="text" ng-model="agencyCd" maxlength="5" /></td>
           <th><s:message code="application.agency.search.agencyCd"/></th>
-          <td><input type="text" id="srchAgencyNm" ng-model="agencyNm" maxlength="16" /></td>
+          <td><input type="text" ng-model="agencyNm" maxlength="16" /></td>
         </tr>
         </tbody>
       </table>

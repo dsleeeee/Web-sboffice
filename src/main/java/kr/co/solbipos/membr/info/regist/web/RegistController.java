@@ -11,7 +11,7 @@ import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
-import kr.co.solbipos.membr.anals.credit.service.CreditStoreVO;
+import kr.co.solbipos.membr.anals.postpaid.service.PostpaidStoreVO;
 import kr.co.solbipos.membr.info.regist.enums.WeddingYn;
 import kr.co.solbipos.membr.info.regist.service.RegistService;
 import kr.co.solbipos.membr.info.regist.service.RegistVO;
@@ -251,40 +251,40 @@ public class RegistController {
 
     /**
      * 후불 회원 등록 매장 조회
-     * @param creditStoreVO
+     * @param postpaidStoreVO
      * @param request
      * @param response
      * @param model
      * @return
      */
-    @RequestMapping(value = "credit/getCreditStoreList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "postpaid/getPostpaidStoreList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getCreditStoreList(CreditStoreVO creditStoreVO, HttpServletRequest request,
+    public Result getPostpaidStoreList(PostpaidStoreVO postpaidStoreVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
         SessionInfoVO si = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<String>> list = registService.getCreditStoreLists(creditStoreVO, si);
+        List<DefaultMap<String>> list = registService.getPostpaidStoreLists(postpaidStoreVO, si);
 
         return ReturnUtil.returnListJson(Status.OK, list);
     }
 
     /***
      * 후불매장 등록
-     * @param creditStoreVOs
+     * @param postpaidStoreVOs
      * @param request
      * @param response
      * @param model
      * @return
      */
-    @RequestMapping(value = "credit/registCreditStore.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "postpaid/registPostpaidStore.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result registCreditStore(@RequestBody CreditStoreVO[] creditStoreVOs, HttpServletRequest request,
+    public Result registPostpaidStore(@RequestBody PostpaidStoreVO[] postpaidStoreVOs, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
         SessionInfoVO si = sessionService.getSessionInfo(request);
 
-        int result = registService.registCreditStore(creditStoreVOs, si);
+        int result = registService.registPostpaidStore(postpaidStoreVOs, si);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }
@@ -292,20 +292,20 @@ public class RegistController {
 
     /***
      * 후불매장 삭제
-     * @param creditStoreVOs
+     * @param postpaidStoreVOs
      * @param request
      * @param response
      * @param model
      * @return
      */
-    @RequestMapping(value = "credit/deleteCreditStore.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "postpaid/deletePostpaidStore.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result deleteCreditStore(@RequestBody CreditStoreVO[] creditStoreVOs, HttpServletRequest request,
+    public Result deletePostpaidStore(@RequestBody PostpaidStoreVO[] postpaidStoreVOs, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
         SessionInfoVO si = sessionService.getSessionInfo(request);
 
-        int result = registService.deleteCreditStore(creditStoreVOs, si);
+        int result = registService.deletePostpaidStore(postpaidStoreVOs, si);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }

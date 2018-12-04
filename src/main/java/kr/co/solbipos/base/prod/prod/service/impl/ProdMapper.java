@@ -51,4 +51,29 @@ public interface ProdMapper {
     /** 상품정보 저장 */
     int saveProductInfo(ProdVO prodVO);
 
+    /** 본사에서는 프로시저 호출에 사용할 상품의 존재여부를 미리 체크함 */
+    int getProdExistInfo(ProdVO prodVO);
+
+    /** 본사 상품정보 등록시 매장 상품정보에 등록 */
+    String insertHqProdToStoreProd(ProdVO prodVO);
+
+    /** 본사 상품정보 수정시 매장 상품정보 수정 */
+    String updateHqProdToStoreProd(ProdVO prodVO);
+
+    /** 상품 적용/미적용 매장 조회 */
+    List<DefaultMap<String>> getStoreList(ProdVO prodVO);
+
+    /** 상품 적용 매장 등록 */
+    int insertProdStore(ProdVO prodVO);
+
+    /** 상품 적용 매장 등록시, 본사의 상품 매장으로 등록 */
+    int insertProdStoreDetail(ProdVO prodVO);
+
+    /** 상품 적용 매장 삭제 */
+    int deleteProdStore(ProdVO prodVO);
+
+    /** 상품 매장 적용 삭제시, 해당 상품의 USE_YN 값 변경 */
+    int deleteProdStoreDetail(ProdVO prodVO);
 }
+
+

@@ -38,12 +38,12 @@ app.controller('prepaidCtrl', ['$scope', '$http', function ($scope, $http) {
   };
 
   $scope.$on("prepaidCtrl", function(event, data) {
-    $scope.searchCredit();
+    $scope.searchPostpaid();
     event.preventDefault();
   });
 
   // 선불회원 그리드 조회
-  $scope.searchCredit = function(){
+  $scope.searchPostpaid = function(){
 
     // 파라미터
     var params = {};

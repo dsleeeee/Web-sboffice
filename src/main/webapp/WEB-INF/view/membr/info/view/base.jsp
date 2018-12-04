@@ -191,9 +191,9 @@
             </div>
           </td>
         </tr>
-        <tr id="creditStore" style="display: none;">
+        <tr id="postpaidStore" style="display: none;">
           <%-- 후불회원 적용매장 --%>
-          <th><s:message code="regist.credit.store"/></th>
+          <th><s:message code="regist.postpaid.store"/></th>
           <td colspan="3">
             <a href="#" id="store" class="btn_grayS ml5"><s:message code="cmm.store.select" /></a>
           </td>

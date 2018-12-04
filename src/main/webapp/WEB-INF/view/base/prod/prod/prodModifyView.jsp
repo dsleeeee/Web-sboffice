@@ -276,7 +276,7 @@
               </td>
             </tr>
             <tr>
-              <%--사이드상품여부--%>
+              <%--사이드사용여부--%>
               <th><s:message code="prod.sideProdYn"/></th>
               <td>
                 <div class="sb-select">
@@ -316,7 +316,7 @@
               </td>
             </tr>
             <tr ng-if="prodModifyInfo.sideProdYn === 'Y'">
-              <%--사이드속성분류코드 --%>
+              <%--사이드속성분류코드(속성) --%>
               <th><s:message code="prod.sdattrClassCd"/></th>
               <td>
                 <div class="sb-select">
@@ -330,7 +330,7 @@
                   </wj-combo-box>
                 </div>
               </td>
-              <%--사이드선택그룹코드 --%>
+              <%--사이드선택그룹코드(선택메뉴) --%>
               <th><s:message code="prod.sdselGrpCd"/></th>
               <td>
                 <div class="sb-select">

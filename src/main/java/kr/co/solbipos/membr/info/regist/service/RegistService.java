@@ -2,7 +2,7 @@ package kr.co.solbipos.membr.info.regist.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.membr.anals.credit.service.CreditStoreVO;
+import kr.co.solbipos.membr.anals.postpaid.service.PostpaidStoreVO;
 
 import java.util.List;
 
@@ -82,23 +82,23 @@ public interface RegistService {
 
     /**
      * 후불 회원 등록 매장 조회
-     * @param creditStoreVO
+     * @param postpaidStoreVO
      * @return
      */
-    List<DefaultMap<String>> getCreditStoreLists(CreditStoreVO creditStoreVO, SessionInfoVO sessionInfoVO);
+    List<DefaultMap<String>> getPostpaidStoreLists(PostpaidStoreVO postpaidStoreVO, SessionInfoVO sessionInfoVO);
 
     /**
      * 후불회원 매장등록
-     * @param creditStoreVOs
+     * @param postpaidStoreVOs
      * @return
      */
-    int registCreditStore(CreditStoreVO[] creditStoreVOs, SessionInfoVO sessionInfoVO);
+    int registPostpaidStore(PostpaidStoreVO[] postpaidStoreVOs, SessionInfoVO sessionInfoVO);
 
     /**
      * 후불회원 매장삭제
-     * @param creditStoreVOs
+     * @param postpaidStoreVOs
      * @return
      */
-    int deleteCreditStore(CreditStoreVO[] creditStoreVOs, SessionInfoVO sessionInfoVO);
+    int deletePostpaidStore(PostpaidStoreVO[] postpaidStoreVOs, SessionInfoVO sessionInfoVO);
 
 }
