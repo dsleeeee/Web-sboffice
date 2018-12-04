@@ -159,12 +159,18 @@ public class ProdServiceImpl implements ProdService {
             prodVO.setModDt(currentDate);
             prodVO.setModId(sessionInfoVO.getUserId());
 
+            // 적용 매장 등록
             int result = prodMapper.insertProdStore(prodVO);
             if(result <= 0){
                 throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
             } else {
                 procCnt += result;
             }
+
+            // 해당 매장에 본사 상품 등록
+            int hqProdResult = prodMapper.insertProdStoreDetail(prodVO);
+            if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
         }
         return procCnt;
     }
@@ -188,6 +194,10 @@ public class ProdServiceImpl implements ProdService {
             } else {
                 procCnt += result;
             }
+
+            // 해당 상품 삭제
+            int hqProdResult = prodMapper.deleteProdStoreDetail(prodVO);
+            if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
         return procCnt;
     }
