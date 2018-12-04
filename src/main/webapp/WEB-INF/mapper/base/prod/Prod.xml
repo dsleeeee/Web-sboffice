@@ -36,7 +36,8 @@
                     NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC, -- 판매단가
                     thp.ORGPLCE_CD, -- TODO 원산지명 조회 필요
                     thp.PO_UNIT_FG,
-                    thp.REG_DT
+                    thp.REG_DT,
+                   (SELECT COUNT(thps.STORE_CD) FROM TB_HQ_PRODUCT_STORE thps WHERE thps.HQ_OFFICE_CD = thp.HQ_OFFICE_CD AND thps.PROD_CD = thp.PROD_CD ) AS STORE_CNT
                     <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM
                     TB_HQ_PRODUCT thp
@@ -259,7 +260,7 @@
                     tmp.STOCK_PROD_YN,                              -- 재고관리여부
                     tmp.SIDE_PROD_YN,
                     tmp.SET_PROD_FG,                                -- 세트상품구분
-                    NVL(tmpsp.SALE_UPRC, 0) AS SALE_URC,            -- 최초판매단가
+                    NVL(tmpsp.SALE_UPRC, 0) AS SALE_UPRC,           -- 최초판매단가
                     NVL(tmp.COST_UPRC, 0) AS COST_UPRC,             -- 원가단가
                     NVL(tmp.LAST_COST_UPRC, 0) AS LAST_COST_UPRC,   -- 최종원가단가
                     NVL(tmp.SPLY_UPRC, 0) AS SPLY_UPRC,             -- 판매단가
@@ -270,6 +271,7 @@
                     tmp.PO_UNIT_ALLOW_FG,
                     tmp.PO_MIN_QTY,                 -- 최소주문
                     tmp.SAFE_STOCK_QTY,             -- 안전재고
+                    0 AS DEFAULT_STOCK,             -- todo 초기재고
                     tmp.STOCK_UNIT_FG,
                     tmp.USE_YN,                     -- 사용여부
                     NVL(tmp.REMARK, '') AS REMARK,  -- 비고
@@ -602,7 +604,141 @@
         </choose>
     </update>
 
+    <!-- 상품존재여부 확인 (본사) -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT
+        PARAM    : prodVO
+        COMMENTS : 상품의 존재여부를 확인하기 위해 COUNT 를 리턴한다.
+    -->
+    <select id="getProdExistInfo" parameterType="prodVO" resultType="Integer" >
+        /* USE : ProdMapper.getProdExistInfo */
+        SELECT COUNT(*) AS PROD_COUNT
+          FROM TB_HQ_PRODUCT thp
+         WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+           AND thp.PROD_CD = #{prodCd}
+    </select>
+
+
+    <!-- 본사 상품 등록시, 매장 상품 등록 프로시져 호출 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT
+        PARAM    : prodVO
+        COMMENTS : 본사 쿠폰분류를 매장 쿠폰분류에 적용시킨다.
+    -->
+    <select id="insertHqProdToStoreProd" statementType="CALLABLE"  parameterType="prodVO" resultType="String">
+        /* USE : ProdMapper.insertHqProdToStoreProd */
+        {
+          CALL PKG_HQ_PRODUCT.SP_HQ_PRODUCT_I
+          (
+            #{hqOfficeCd},
+            #{storeCd},
+            #{prodCd},
+            #{regId},
+            #{result, mode=OUT, jdbcType=VARCHAR}
+          )
+        }
+    </select>
+
+    <!-- 본사 상품 수정시, 매장 상품 수정 프로시져 호출 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT
+        PARAM    : prodVO
+        COMMENTS : 본사 쿠폰분류를 매장 쿠폰분류에 적용시킨다.
+    -->
+    <select id="updateHqProdToStoreProd" statementType="CALLABLE"  parameterType="prodVO" resultType="String">
+        /* USE : ProdMapper.updateHqProdToStoreProd */
+        {
+          CALL PKG_HQ_PRODUCT.SP_HQ_PRODUCT_U
+          (
+            #{hqOfficeCd},
+            #{prodCd},
+            #{regId},
+            #{result, mode=OUT, jdbcType=VARCHAR}
+          )
+        }
+    </select>
+
+
+    <!-- 상품 적용/미적용 매장 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE, TB_HQ_PRODUCT_STORE
+        PARAM    : prodVO
+        COMMENTS : 상품 적용 대상인 매장을 조회한다.
+    -->
+    <select id="getStoreList" parameterType="prodVO" resultType="DefaultMap">
+        /* USE : ProdMapper.getStoreList */
+        SELECT tms.HQ_OFFICE_CD,
+               tho.HQ_OFFICE_NM,
+               tms.STORE_CD,
+               tms.STORE_NM,
+               NVL2(thps.STORE_CD, 'Y', 'N') AS REG_YN
+          FROM TB_MS_STORE tms,
+               TB_HQ_OFFICE tho,
+               TB_HQ_PRODUCT_STORE thps
+         WHERE tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+           AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+           AND thps.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
+           AND thps.STORE_CD (+)= tms.STORE_CD
+           AND thps.PROD_CD (+)= #{prodCd}
+        <if test='storeCd != null and storeCd.toString() != "null"'>
+           AND tms.STORE_CD = #{storeCd}
+        </if>
+        <if test='storeNm != null and storeNm.toString() != "null"'>
+           AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        <if test='storeRegFg != null and storeRegFg.toString() == "Y"'>
+           AND thps.STORE_CD IS NOT NULL
+        </if>
+        <if test='storeRegFg != null and storeRegFg.toString() == "N"'>
+           AND thps.STORE_CD IS NULL
+        </if>
+    </select>
+
+
+    <!-- 상품 적용 매장 등록 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_STORE
+        PARAM    : prodVO
+        COMMENTS : 본사 상품을 적용할 매장을 등록한다.
+    -->
+    <insert id="insertProdStore" parameterType="prodVO">
+        /* USE : ProdMapper.insertProdStore */
+        INSERT  INTO TB_HQ_PRODUCT_STORE
+        (
+          HQ_OFFICE_CD,
+          PROD_CD,
+          STORE_CD,
+          REG_DT,
+          REG_ID,
+          MOD_DT,
+          MOD_ID
+        )
+        VALUES
+        (
+          #{hqOfficeCd},
+          #{prodCd},
+          #{storeCd},
+          #{regDt},
+          #{regId},
+          #{modDt},
+          #{modId}
+        )
+    </insert>
+
+
+    <!-- 상품 적용 매장 삭제 -->
+    <!--
+        TABLE    : TB_HQ_COUPON_STORE
+        PARAM    : prodVO
+        COMMENTS : 본사 쿠폰을 적용한 매장을 삭제한다.
+    -->
+    <delete id="deleteProdStore" parameterType="prodVO">
+        /* USE : ProdMapper.deleteProdStore */
+        DELETE TB_HQ_PRODUCT_STORE
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND PROD_CD = #{prodCd}
+           AND STORE_CD = #{storeCd}
+  </delete>
+
+
 </mapper>
-
-
-
