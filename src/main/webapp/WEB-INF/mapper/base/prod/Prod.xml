@@ -352,6 +352,7 @@
     <!-- 상품정보 저장 -->
     <!--
         TABLE    : TB_HQ_PRODUCT
+        PARAM    : prodVO
         COMMENTS : 본사/매장의 상품정보를 생성/수정 한다.
     -->
     <update id="saveProductInfo" parameterType="prodVO">
@@ -604,6 +605,173 @@
         </choose>
     </update>
 
+    <!-- 상품 판매가 저장 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SALE_PRICE
+        PARAM    : prodVO
+        COMMENTS : 본사/매장의 상품 최종 판매가를 저장한다.
+    -->
+    <update id="saveSalePrice" parameterType="prodVO">
+        /* ProdMapper.saveSalePrice */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <![CDATA[
+                MERGE INTO TB_HQ_PRODUCT_SALE_PRICE thpsp
+                USING DUAL ON
+                (
+                    thpsp.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND thpsp.PROD_CD = #{prodCd}
+                AND thpsp.SALE_PRC_FG = #{salePrcFg}
+                AND thpsp.START_DATE <= SYSDATE
+                AND thpsp.end_date >= SYSDATE
+                )
+                WHEN MATCHED THEN
+                UPDATE
+                   SET SALE_UPRC = #{lastCostUprc},
+                       MOD_DT = #{modDt},
+                       MOD_ID = #{modId}
+                WHEN NOT MATCHED THEN
+                INSERT
+                (
+                    HQ_OFFICE_CD,
+                    PROD_CD,
+                    SALE_PRC_FG,
+                    START_DATE,
+                    END_DATE,
+                    SALE_UPRC,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                ) VALUES (
+                    #{hqOfficeCd},
+                    #{prodCd},
+                    #{salePrcFg},
+                    #{startDate},
+                    #{endDate},
+                    #{lastCostUprc},
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
+                ]]>
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <![CDATA[
+                MERGE INTO TB_MS_PRODUCT_SALE_PRICE thpsp
+                USING DUAL ON
+                (
+                    thpsp.STORE_CD = #{storeCd}
+                AND thpsp.PROD_CD = #{prodCd}
+                AND thpsp.SALE_PRC_FG = #{salePrcFg}
+                AND thpsp.START_DATE <= SYSDATE
+                AND thpsp.end_date >= SYSDATE
+                )
+                WHEN MATCHED THEN
+                UPDATE
+                   SET SALE_UPRC = #{lastCostUprc},
+                       MOD_DT = #{modDt},
+                       MOD_ID = #{modId}
+                WHEN NOT MATCHED THEN
+                INSERT
+                (
+                    STORE_CD,
+                    PROD_CD,
+                    SALE_PRC_FG,
+                    START_DATE,
+                    END_DATE,
+                    SALE_UPRC,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                ) VALUES (
+                    #{storeCd},
+                    #{prodCd},
+                    #{salePrcFg},
+                    #{startDate},
+                    #{endDate},
+                    #{lastCostUprc},
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
+                ]]>
+            </when>
+        </choose>
+    </update>
+
+
+    <!-- 상품 판매가 변경 히스토리 저장 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SALE_PRICE_HISTORY
+        COMMENTS : 상품 판매가 변경 히스토리 저장한다.
+    -->
+    <insert id="saveSalePriceHistory" parameterType="prodVO">
+        /* ProdMapper.saveSalePriceHistory */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <![CDATA[
+                INSERT INTO TB_HQ_PRODUCT_SALE_PRICE_HISTORY
+                (
+                    HIS_SEQ,
+                    HQ_OFFICE_CD,
+                    PROD_CD,
+                    SALE_PRC_FG,
+                    START_DATE,
+                    END_DATE,
+                    SALE_UPRC,
+                    REG_DT,
+                    REG_ID
+                ) VALUES (
+                    SQ_HQ_PRODUCT_SALE_PRICE_HISTORY.NEXTVAL,
+                    #{hqOfficeCd},
+                    #{prodCd},
+                    #{salePrcFg},
+                    #{startDate},
+                    #{endDate},
+                    #{lastCostUprc},
+                    #{regDt},
+                    #{regId}
+                )
+                ]]>
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <![CDATA[
+                INSERT INTO TB_MS_PRODUCT_SALE_PRICE_HISTORY
+                (
+                    HIS_SEQ,
+                    STORE_CD,
+                    PROD_CD,
+                    SALE_PRC_FG,
+                    START_DATE,
+                    END_DATE,
+                    SALE_UPRC,
+                    REG_DT,
+                    REG_ID
+                ) VALUES (
+                    SQ_MS_PRODUCT_SALE_PRICE_HISTORY.NEXTVAL,
+                    #{storeCd},
+                    #{prodCd},
+                    #{salePrcFg},
+                    #{startDate},
+                    #{endDate},
+                    #{lastCostUprc},지퍼 베이스워터
+                    #{regDt},
+                    #{regId}
+                )
+                ]]>
+            </when>
+        </choose>
+    </insert>
+
+
     <!-- 상품존재여부 확인 (본사) -->
     <!--
         TABLE    : TB_HQ_PRODUCT
@@ -694,8 +862,7 @@
         </if>
     </select>
 
-
-       <!-- 상품 적용 매장 등록 -->
+    <!-- 상품 적용 매장 등록 -->
     <!--
         TABLE    : TB_HQ_PRODUCT_STORE
         PARAM    : prodVO
@@ -724,7 +891,6 @@
           #{modId}
         )
     </insert>
-
 
     <!-- 상품 적용 매장 등록시, 본사의 상품 매장으로 등록 -->
     <!--
@@ -859,6 +1025,24 @@
             #{modId}
         )
     </insert>
+
+    <!-- 상품판매가 본사통제여부가 본사인 경우, 본사 판매가 등록시 매장 판매가 등록 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SALE_PRICE, TB_MS_PRODUCT_SALE_PRICE_HISTORY
+        PARAM    : prodVO
+        COMMENTS : 상품판매가 본사통제여부가 본사인 경우, 본사 판매가 등록시 매장 판매가 등록
+    -->
+    <select id="saveStoreSalePrice" statementType="CALLABLE"  parameterType="prodVO">
+        /* USE : ProdMapper.saveStoreSalePrice */
+        {
+          CALL PKG_HQ_PRODUCT_SALE_PRICE.SP_HQ_PRODUCT_SALE_PRICE_I
+          (
+            #{hqOfficeCd},
+            #{prodCd},
+            #{result, mode=OUT, jdbcType=VARCHAR}
+          )
+        }
+    </select>
 
     <!-- 상품 적용 매장 삭제 -->
     <!--

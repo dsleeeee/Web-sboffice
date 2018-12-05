@@ -9,7 +9,9 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.prod.service.ProdService;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
+import kr.co.solbipos.base.prod.prod.service.enums.PriceEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdEnvFg;
+import kr.co.solbipos.base.prod.sidemenu.service.impl.SideMenuMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
+import static kr.co.common.utils.DateUtil.currentDateString;
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
@@ -87,7 +90,7 @@ public class ProdServiceImpl implements ProdService {
     /** 상품정보 저장 */
     @Override
     public int saveProductInfo(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
-        int result = 0;
+
         String currentDt = currentDateTimeString();
 
         // 소속구분 설정
@@ -102,21 +105,22 @@ public class ProdServiceImpl implements ProdService {
         prodVO.setModId(sessionInfoVO.getUserId());
 
         // 상품등록 본사 통제여부
-        ProdEnvFg prodEnvstVal = ProdEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0022"));
+        ProdEnvFg prodEnvstVal = ProdEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0020"));
+        // 판매가 본사 통제여부
+        PriceEnvFg priceEnvstVal = PriceEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0022"));
 
         int prodExist = 0;
 
         // 본사일경우, 상품정보 존재여부를 체크하여 프로시져 호출에 사용
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ  && prodEnvstVal == ProdEnvFg.HQ) {
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
             prodExist = prodMapper.getProdExistInfo(prodVO);
         }
 
         // 상품정보 저장
-        result = prodMapper.saveProductInfo(prodVO);
-
+        int result = prodMapper.saveProductInfo(prodVO);
         if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-        // 본사에서 상품정보 수정시 매장에 수정정보 내려줌
+        // [상품등록 - 본사통제시] 본사에서 상품정보 수정시 매장에 수정정보 내려줌
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ  && prodEnvstVal == ProdEnvFg.HQ) {
 
             String procResult;
@@ -126,10 +130,25 @@ public class ProdServiceImpl implements ProdService {
             } else {
                 procResult = prodMapper.updateHqProdToStoreProd(prodVO);
             }
+        }
 
-//            if(!"0000".equals(procResult)) {
-//                throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-//            }
+        // 상품 판매가 저장
+        if(priceEnvstVal == PriceEnvFg.HQ)  prodVO.setSalePrcFg("1");
+        else                                prodVO.setSalePrcFg("2");
+
+        prodVO.setStartDate(currentDateString());
+        prodVO.setEndDate("99991231");
+
+        int salePriceReeulst = prodMapper.saveSalePrice(prodVO);
+        if(salePriceReeulst <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+        // 상품 판매가 변경 히스토리 저장
+        int hqSalePriceHistResult = prodMapper.saveSalePriceHistory(prodVO);
+        if(hqSalePriceHistResult <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+        // [판매가 - 본사통제시] 본사에서 상품정보 수정시 매장에 수정정보 내려줌
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ  && priceEnvstVal == PriceEnvFg.HQ) {
+            String storeSalePriceReeulst = prodMapper.saveStoreSalePrice(prodVO);
         }
 
         return result;

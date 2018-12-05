@@ -66,14 +66,24 @@ public interface ProdMapper {
     /** 상품 적용 매장 등록 */
     int insertProdStore(ProdVO prodVO);
 
-    /** 상품 적용 매장 등록시, 본사의 상품 매장으로 등록 */
+    /** 상품 판매가 저장 */
+    int saveSalePrice(ProdVO prodVO);
+
+    /** 상품 판매가 변경 히스토리 등록 */
+    int saveSalePriceHistory(ProdVO prodVO);
+
+    /** 상품등록 본사통제여부가 본사인 경우, 본사 상품 등록시 매장 상품 등록 */
     int insertProdStoreDetail(ProdVO prodVO);
+
+    /** 상품판매가 본사통제여부가 본사인 경우, 본사 판매가 등록시 매장 판매가 등록 */
+    String saveStoreSalePrice(ProdVO prodVO);
 
     /** 상품 적용 매장 삭제 */
     int deleteProdStore(ProdVO prodVO);
 
     /** 상품 매장 적용 삭제시, 해당 상품의 USE_YN 값 변경 */
     int deleteProdStoreDetail(ProdVO prodVO);
+
+
+
 }
-
-

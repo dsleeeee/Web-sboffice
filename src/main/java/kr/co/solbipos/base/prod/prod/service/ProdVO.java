@@ -102,6 +102,7 @@ public class ProdVO extends PageVO {
      * S : 매장, 가맹점
      */
     private String orgnFg;
+
     /** 전체기간 여부 */
     private boolean chkDt;
 
@@ -110,6 +111,9 @@ public class ProdVO extends PageVO {
 
     /** 매장적용여부 */
     private UseYn storeRegFg;
+
+    /** 판매가격구분 (본사판매가 :1, 매장판매가:2) */
+    private String salePrcFg;
 
     /**
      * @return the hqOfficeCd
@@ -658,5 +662,20 @@ public class ProdVO extends PageVO {
      */
     public void setStoreRegFg(UseYn storeRegFg) {
         this.storeRegFg = storeRegFg;
+    }
+
+    /**
+     * @return the salePrcFg
+     */
+
+    public String getSalePrcFg() {
+        return salePrcFg;
+    }
+
+    /**
+     * @param salePrcFg the salePrcFg to set
+     */
+    public void setSalePrcFg(String salePrcFg) {
+        this.salePrcFg = salePrcFg;
     }
 }
