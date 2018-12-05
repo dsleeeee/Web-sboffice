@@ -10,8 +10,8 @@
   <property name="FILE_EXT" value="log"/>
 
   <!-- log.path 는 구분자를 '/' 로 해야 로그 생성이 된다. -->
-  <property name="FILE_PATH_NAME" value="/etc/usr/local/logs/solbipos/solbipos.${FILE_EXT}"/>
-  <property name="FILE_ROLLING_PATTERN" value="/etc/usr/local/logs/solbipos/solbipos_%d{yyyy-MM-dd}_%i.${FILE_EXT}.zip"/>
+  <property name="FILE_PATH_NAME" value="../logs/solbipos.${FILE_EXT}"/>
+  <property name="FILE_ROLLING_PATTERN" value="../logs/%d{yyyyMMdd}/solbipos_%d{yyyy-MM-dd}_%i.${FILE_EXT}.zip"/>
 
   <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
