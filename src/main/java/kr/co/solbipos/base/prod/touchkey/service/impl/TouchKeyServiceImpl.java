@@ -44,6 +44,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -303,6 +304,8 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         // 매장/본사의 현재 터치키 정보 삭제
         keyMapper.deleteTouchKey(tParams);
 
+        List<TouchKeyClassVO> touchKeyClassVOList = new ArrayList<TouchKeyClassVO>();
+        List<TouchKeyVO> touchKeyVOList = new ArrayList<TouchKeyVO>();
         // 리스트의 아이템을 DB에 Merge
         for(TouchKeyClassVO touchKeyClassVO : touchKeyClassVOS) {
 
@@ -311,10 +314,7 @@ public class TouchKeyServiceImpl implements TouchKeyService {
             touchKeyClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             touchKeyClassVO.setStoreCd(sessionInfoVO.getOrgnCd());
             touchKeyClassVO.setRegId(sessionInfoVO.getUserId());
-            // 터치 분류(그룹) 저장
-            if( keyMapper.insertTouchKeyClass(touchKeyClassVO) != 1 ) {
-                throw new BizException( messageService.get("label.modifyFail") );
-            }
+            touchKeyClassVOList.add(touchKeyClassVO);
 
             for(TouchKeyVO touchKeyVO : touchKeyClassVO.getTouchs()) {
                 // 터치키 저장 파라미터 설정
@@ -322,12 +322,22 @@ public class TouchKeyServiceImpl implements TouchKeyService {
                 touchKeyVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
                 touchKeyVO.setStoreCd(sessionInfoVO.getOrgnCd());
                 touchKeyVO.setRegId(sessionInfoVO.getUserId());
-                // 터치키 저장
-                if( keyMapper.insertTouchKey(touchKeyVO) != 1 ) {
-                    throw new BizException( messageService.get("label.modifyFail") );
-                }
+                touchKeyVOList.add(touchKeyVO);
             }
         }
+
+        // Oracle INSERT ALL 을 이용한 터치키분류/터치키 저장
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("orgnFg", sessionInfoVO.getOrgnFg().getCode());
+        paramMap.put("list", touchKeyClassVOList);
+        // 터치 분류(그룹) 저장
+        keyMapper.insertTouchKeyClass(paramMap);
+
+        paramMap = new HashMap<String, Object>();
+        paramMap.put("orgnFg", sessionInfoVO.getOrgnFg().getCode());
+        paramMap.put("list", touchKeyVOList);
+        // 터치키 저장
+        keyMapper.insertTouchKey(paramMap);
 
         return new Result(Status.OK);
     }
@@ -349,7 +359,7 @@ public class TouchKeyServiceImpl implements TouchKeyService {
 
             //터치키분류 파싱
             mxGraph graphClass = new mxGraph();
-            Document docClass = mxXmlUtils.parseXml(XssPreventer.unescape(xmls[0]));
+            Document docClass = mxXmlUtils.parseXml(xmls[0]);
             mxCodec codecClass = new mxCodec(docClass);
             mxIGraphModel modelClass = graphClass.getModel();
             Element eltClass = docClass.getDocumentElement();
@@ -357,7 +367,7 @@ public class TouchKeyServiceImpl implements TouchKeyService {
 
             //터치키 파싱
             mxGraph graphTouch = new mxGraph();
-            Document docTouch = mxXmlUtils.parseXml(XssPreventer.unescape(xmls[1]));
+            Document docTouch = mxXmlUtils.parseXml(xmls[1]);
             mxCodec codecTouch = new mxCodec(docTouch);
             mxIGraphModel modelTouch = graphTouch.getModel();
             Element eltTouch = docTouch.getDocumentElement();

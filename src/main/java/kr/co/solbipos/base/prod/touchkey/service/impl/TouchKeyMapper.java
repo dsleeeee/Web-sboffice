@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Class Name : TouchkeyMapper.java
@@ -58,13 +59,13 @@ public interface TouchKeyMapper {
     int updateTouchKeyConfgXml(DefaultMap<String> param);
 
     /** 판매터치키 그룹 생성 */
-    int insertTouchKeyClass(TouchKeyClassVO touchKeyClassVO);
+    int insertTouchKeyClass(Map<String, Object> map);
 
     /** 판매터치키 그룹 삭제 */
     int deleteTouchKeyClass(TouchKeyClassVO touchKeyClassVO);
 
     /** 판매터치키 생성 */
-    int insertTouchKey(TouchKeyVO touchKeyVO);
+    int insertTouchKey(Map<String, Object> map);
 
     /** 판매터치키 삭제 */
     int deleteTouchKey(TouchKeyVO touchKeyVO);
