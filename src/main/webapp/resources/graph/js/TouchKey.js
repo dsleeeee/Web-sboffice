@@ -208,7 +208,7 @@ $(document).ready(function() {
       url: '/base/prod/touchKey/touchKey/getTouchKeyStyleList.sb',
       data: {},
       success: function (data) {
-        touchKeyStyles = data.data;
+        touchKeyStyles = data.data.list;
       }
     });
 
@@ -1185,6 +1185,7 @@ Graph.prototype.initStyle = function() {
   // 선택된 스타일
   var styleCd = this.selectStyle.selectedValue;
   for (var i = 0; i < touchKeyStyles.length; i++) {
+    console.log("touchKeyStyles : ", touchKeyStyles[i]);
     for (var key in touchKeyStyles[i]) {
       if (key === "styleCd" && styleCd === touchKeyStyles[i][key]) {
         var buttonStyles = {};
@@ -2064,9 +2065,6 @@ Graph.prototype.initClassArea = function (prodArea) {
         var cell = me.state.cell;
         //터치키분류 터치키 클릭 시 처리
         var model = prodArea.getModel();
-
-        console.log("model ", model);
-
         layer = model.getCell(cell.id);
         prodArea.switchLayer(layer);
         //상품영역 스크롤했던 것 초기화
