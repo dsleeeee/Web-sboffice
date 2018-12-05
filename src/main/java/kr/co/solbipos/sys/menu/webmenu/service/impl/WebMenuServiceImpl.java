@@ -34,9 +34,9 @@ import static kr.co.common.utils.spring.StringUtil.isEmpty;
 @Service("webMenuService")
 @Transactional
 public class WebMenuServiceImpl implements WebMenuService {
-    
+
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    
+
     private final WebMenuMapper webMenuMapper;
     private final SessionService sessionService;
     private final MessageService messageService;
@@ -85,9 +85,9 @@ public class WebMenuServiceImpl implements WebMenuService {
     @Override
     public List<HashMap<String, Object>> makeupTree() {
 
-        List<ResrceInfoVO> level_1 = selectWebMenuLevel(0);
-        List<ResrceInfoVO> level_2 = selectWebMenuLevel(1);
-        List<ResrceInfoVO> level_3 = selectWebMenuLevel(2);
+        List<ResrceInfoVO> level_1 = selectWebMenuLevel(1);
+        List<ResrceInfoVO> level_2 = selectWebMenuLevel(2);
+        List<ResrceInfoVO> level_3 = selectWebMenuLevel(3);
         List<HashMap<String, Object>> rList = new ArrayList<HashMap<String, Object>>();
         int l1 = level_1.size();
 
@@ -96,7 +96,7 @@ public class WebMenuServiceImpl implements WebMenuService {
             ResrceInfoVO resrceInfoVO1 = level_1.get(i);
             String resrceCd1 = resrceInfoVO1.getResrceCd();
             HashMap<String, Object> m1Header = new HashMap<>();
-            m1Header.put("level", 0);
+            m1Header.put("level", 1);
             m1Header.put("header", resrceInfoVO1.getResrceNm());
             m1Header.put("resrceCd", resrceInfoVO1.getResrceCd());
             m1Header.put("url", "");
@@ -111,7 +111,7 @@ public class WebMenuServiceImpl implements WebMenuService {
                 HashMap<String, Object> m2Header = new HashMap<>();
 
                 if (resrceInfoVO2.getpResrce().equals(resrceCd1)) {
-                    m2Header.put("level", 1);
+                    m2Header.put("level", 2);
                     m2Header.put("header", resrceInfoVO2.getResrceNm());
                     m2Header.put("resrceCd", resrceInfoVO2.getResrceCd());
                     m2Header.put("url", "");
@@ -126,7 +126,7 @@ public class WebMenuServiceImpl implements WebMenuService {
                         if (resrceInfoVO3.getpResrce().equals(m2ResrceCd)) {
 
                             HashMap<String, Object> m3Header = new HashMap<>();
-                            m3Header.put("level", 2);
+                            m3Header.put("level", 3);
                             m3Header.put("header", resrceInfoVO3.getResrceNm());
                             m3Header.put("resrceCd", resrceInfoVO3.getResrceCd());
                             m3Header.put("url",
@@ -144,7 +144,7 @@ public class WebMenuServiceImpl implements WebMenuService {
                 ResrceInfoVO resrceInfoVO3 = level_3.get(m);
                 HashMap<String, Object> m3Header = new HashMap<>();
                 if (resrceInfoVO3.getpResrce().equals(resrceCd1)) {
-                    m3Header.put("level", 1);
+                    m3Header.put("level", 2);
                     m3Header.put("header", resrceInfoVO3.getResrceNm());
                     m3Header.put("resrceCd", resrceInfoVO3.getResrceCd());
                     m3Header.put("url", isEmpty(resrceInfoVO3.getUrl()) ? "" : resrceInfoVO3.getUrl());
