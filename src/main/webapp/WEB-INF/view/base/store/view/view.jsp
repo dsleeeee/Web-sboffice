@@ -122,18 +122,18 @@
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="storeView.storeCd"/>" binding="storeCd" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeView.storeNm"/>" binding="storeNm" width="120" align="center" width="*" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeView.storeNm"/>" binding="storeNm" width="120" width="*" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeView.storeTypeNm"/>" binding="storeTypeNm" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeView.clsFgNmG"/>" binding="clsFg" width="90" data-map="clsFgDataMap" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeView.bizNo"/>" binding="bizNo" width="140" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeView.ownerNm"/>" binding="ownerNm" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeView.telNo"/>" binding="telNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeView.address"/>" binding="address" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeView.telNo"/>" binding="telNo" width="80"  is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeView.address"/>" binding="address" width="*" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeView.posVerNo"/>" binding="posVerNo" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeView.sysStatFgNm"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeView.sysOpenDate"/>" binding="sysOpenDate" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeView.sysClosureDate"/>" binding="sysClosureDate"  width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeView.sms"/>" binding="gChk"  width="40" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeView.sms"/>" binding="gChk" visible="false" width="40" align="center"></wj-flex-grid-column>
       </wj-flex-grid>
     </div>
   </div>

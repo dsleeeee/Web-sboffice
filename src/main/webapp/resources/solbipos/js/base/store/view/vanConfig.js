@@ -62,6 +62,12 @@ app.controller('posTerminalCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.cornerUseYnVal                 = cornerUseYnVal;
       $scope.cornerUseYnCombo.selectedValue = cornerUseYnVal;
 
+      if(cornerUseYnVal == null || (posVanInfo.length == 0 || cornerVanInfo.length == 0)) {
+        $scope._popMsg("매장의 벤사 터미널이 설정되지 않았습니다. \n관리자에게 문의해주세요.");
+        $scope.close();
+        return false;
+      }
+
       // 그리드 데이터 셋팅
       if(cornerUseYnVal === '0' || cornerUseYnVal === '3' ){ // 포스별
 
@@ -72,10 +78,16 @@ app.controller('posTerminalCtrl', ['$scope', '$http', function ($scope, $http) {
         var cornerGrid = agrid.getScope("cornerTerminalCtrl");
         cornerGrid.setCornerList(cornerVanInfo);
         cornerGrid.setCornerUseYnVal(cornerVanInfo);
-
       }
     });
   };
+
+  // 닫기
+  $scope.close = function(){
+    console.log('close1')
+    $scope.vanConfigLayer.hide();
+  };
+
 }]);
 
 
@@ -104,6 +116,12 @@ app.controller('cornerTerminalCtrl', ['$scope', '$http', function ($scope, $http
   // 코너 그리드 셋팅
   $scope.setCornerList = function(list){
     $scope.flex.itemsSource = list;
+  };
+
+  // 닫기
+  $scope.close = function(){
+    console.log('close2')
+    $scope.vanConfigLayer.hide();
   };
 
 }]);
