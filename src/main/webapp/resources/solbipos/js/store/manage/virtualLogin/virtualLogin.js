@@ -41,19 +41,19 @@ app.controller('gridCtrl',  ['$scope', '$http', function ($scope, $http) {
 
         // 본사
         if (col.binding === "hqOfficeCd" && item.hqOfficeCd !== "00000") {
-          if ( item.orgnFg === "M" ) {
+          if ( gvOrgnFg === "M" ) {
             wijmo.addClass(e.cell, 'wijLink wj-custom-readonly');
           }
         }
         // 매장
         if (col.binding === "storeCd" && item.storeCd !== "00000") {
-          if ( item.orgnFg !== "S" ) {
+          if ( gvOrgnFg !== "S" ) {
             wijmo.addClass(e.cell, 'wijLink wj-custom-readonly');
           }
         }
         // 대리점
         if (col.binding === "agencyNm") {
-          if ( item.orgnFg === "M" ) {
+          if ( gvOrgnFg === "M" ) {
             wijmo.addClass(e.cell, 'wijLink wj-custom-readonly');
           }
         }
