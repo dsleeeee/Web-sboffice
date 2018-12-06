@@ -38,19 +38,24 @@
           </td>
         </tr>
         <tr>
+          <%-- 바코드 --%>
           <th><s:message code="storeOrder.dtl.barcd"/></th>
           <td>
             <input type="text" id="srchBarcdCd" name="srchBarcdCd" ng-model="barcdCd" class="sb-input w100" maxlength="40"/>
           </td>
+          <%-- 상품분류 --%>
           <th><s:message code="storeOrder.dtl.prodClass"/></th>
           <td>
-            <input type="text" id="srchProdClass" name="prodClass" ng-model="prodClass" class="sb-input w100" maxlength="40"/>
+            <input type="text" class="sb-input w100" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()"
+                   placeholder="<s:message code="cmm.all" />" readonly/>
+            <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCd" disabled/>
           </td>
         </tr>
         <tr>
+          <%-- 옵션1 --%>
           <th><s:message code="storeOrder.dtl.option1"/></th>
           <td colspan="3">
-            <span class="txtIn w150 sb-select fl mr5">
+            <span class="txtIn w200px sb-select fl mr5">
               <wj-combo-box
                 id="option1"
                 ng-model="option1"
@@ -67,7 +72,7 @@
         <tr>
           <th><s:message code="storeOrder.dtl.option2"/></th>
           <td colspan="3">
-            <span class="txtIn w150 sb-select fl mr5">
+            <span class="txtIn w120px sb-select fl mr5">
               <wj-combo-box
                 id="option2"
                 ng-model="option2"
@@ -198,7 +203,7 @@
 <script type="text/javascript">
 
   /** 주문등록 상세 그리드 controller */
-  app.controller('storeOrderRegistCtrl', ['$scope', '$http', function ($scope, $http) {
+  app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('storeOrderRegistCtrl', $scope, $http, true));
 
@@ -225,15 +230,19 @@
         if (e.panel === s.cells) {
           var col  = s.columns[e.col];
           var item = s.rows[e.row].dataItem;
-          if (col.binding === "orderEtcQty") { // 입수에 따라 주문수량 컬럼 readonly 컨트롤
-            // console.log(item);
+          if (col.binding === "orderUnitQty") {
+            $scope.calcAmt(item);
+          }
+          else if (col.binding === "orderEtcQty") { // 입수에 따라 주문수량 컬럼 readonly 컨트롤
             if (item.poUnitQty === 1) {
               wijmo.addClass(e.cell, 'wj-custom-readonly');
               wijmo.setAttribute(e.cell, 'aria-readonly', true);
 
               // Attribute 의 변경사항을 적용.
-              var html         = e.cell.outerHTML;
-              e.cell.outerHTML = html;
+              e.cell.outerHTML = e.cell.outerHTML;
+            }
+            else {
+              $scope.calcAmt(item);
             }
           }
         }
@@ -291,7 +300,7 @@
         // readOnly 배경색 표시
         else if (panel.cellType === wijmo.grid.CellType.Cell) {
           var col = panel.columns[c];
-          if (col.isReadOnly) {
+          if (col.isReadOnly || panel.grid.isReadOnly) {
             wijmo.addClass(cell, 'wj-custom-readonly');
           }
         }
@@ -300,7 +309,7 @@
 
     $scope.calcAmt = function (item) {
       <%-- 수량이 없는 경우 계산하지 않음. null 또는 undefined 가 나올수 있으므로 확실하게 확인하기 위해 nvl 처리로 null 로 바꿔서 비교 --%>
-      if (nvl(item.orderUnitQty, null) === null || (item.poUnitQty !== 1 && nvl(item.orderEtcQty, null) === null)) return false;
+      if (nvl(item.orderUnitQty, null) === null && (item.poUnitQty !== 1 && nvl(item.orderEtcQty, null) === null)) return false;
 
       var orderSplyUprc = parseInt(item.orderSplyUprc);
       var poUnitQty     = parseInt(item.poUnitQty);
@@ -335,6 +344,10 @@
         $scope.slipFg      = data.slipFg;
         $scope.callParent  = data.callParent;
         $scope.regHdRemark = data.hdRemark;
+
+        // 값 초기화
+        $scope.prodClassCdNm = messages["cmm.all"];
+        $scope.prodClassCd   = '';
 
         // 신규 요청등록인 경우
         if ($scope.callParent === "storeOrder") {
@@ -585,7 +598,6 @@
 
       // 주문가능액 체크
       if ($scope.availableOrderAmt != null) {
-        // console.log("orderTot = "+orderTot);
         if (parseInt($scope.availableOrderAmt) < parseInt(orderTot)) {
           $scope._popMsg(messages["storeOrder.dtl.orderTotOver"]);
           return false;
@@ -622,8 +634,8 @@
     // 안전재고 수량적용.
     $scope.setSafeToOrder = function () {
       $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]);
-      // 데이터 처리중 팝업 띄우기위해 setTimeout 사용.
-      setTimeout(function () {
+      // 데이터 처리중 팝업 띄우기위해 $timeout 사용.
+      $timeout(function () {
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
           var item = $scope.flex.collectionView.items[i];
           if (item.safeStockUnitQty !== null || item.safeStockEtcQty !== null) {
@@ -703,6 +715,33 @@
         return false;
       }
     };
+
+
+    // 상품분류정보 팝업
+    $scope.popUpProdClass = function () {
+      var popUp = $scope.prodClassPopUpLayer;
+      popUp.show(true, function (s) {
+        // 선택 버튼 눌렀을때만
+        if (s.dialogResult === "wj-hide-apply") {
+          var scope          = agrid.getScope('prodClassPopUpCtrl');
+          var prodClassCd    = scope.getSelectedClass();
+          var params         = {};
+          params.prodClassCd = prodClassCd;
+          // 조회 수행 : 조회URL, 파라미터, 콜백함수
+          $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
+            function (response) {
+              $scope.prodClassCd   = prodClassCd;
+              $scope.prodClassCdNm = response.data.data;
+            }
+          );
+        }
+      });
+    };
+
   }]);
 
 </script>
+
+<%-- 상품분류 팝업 --%>
+<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
+</c:import>

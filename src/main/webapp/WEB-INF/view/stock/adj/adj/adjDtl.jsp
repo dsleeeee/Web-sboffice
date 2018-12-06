@@ -175,7 +175,7 @@
         params : params, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
-        if ($scope._httpStatusCheck(response)) {
+        if ($scope._httpStatusCheck(response, true)) {
           // 진행구분이 조정등록이 아니면 상품추가/변경 불가
           if (!$.isEmptyObject(response.data.data)) {
             // 조정 등록 상태이면 버튼 show

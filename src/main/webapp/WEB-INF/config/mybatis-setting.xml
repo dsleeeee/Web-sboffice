@@ -466,6 +466,10 @@
     <typeAlias alias="setProdAdjVO" type="kr.co.solbipos.stock.setProdAdj.setProdAdj.service.SetProdAdjVO"/>
     <typeAlias alias="vendrOrderVO" type="kr.co.solbipos.iostock.vendr.vendrOrder.service.VendrOrderVO"/>
     <typeAlias alias="vendrInstockVO" type="kr.co.solbipos.iostock.vendr.vendrInstock.service.VendrInstockVO"/>
+    <typeAlias alias="vendrExactVO" type="kr.co.solbipos.iostock.vendr.vendrExact.service.VendrExactVO"/>
+    <typeAlias alias="orderStockInfoVO" type="kr.co.solbipos.iostock.vendr.orderStockInfo.service.OrderStockInfoVO"/>
+    <typeAlias alias="slipStockInfoVO" type="kr.co.solbipos.iostock.vendr.slipStockInfo.service.SlipStockInfoVO"/>
+    <typeAlias alias="prodStockInfoVO" type="kr.co.solbipos.iostock.vendr.prodStockInfo.service.ProdStockInfoVO"/>
 
     <typeAlias alias="excpForwardProductVO" type="kr.co.solbipos.application.pos.exceptForward.service.ExcpForwardProductVO"/>
     <typeAlias alias="productionVO" type="kr.co.solbipos.application.pos.production.service.ProductionVO"/>

@@ -152,7 +152,7 @@
         AND     tphvid.SLIP_NO      =   #{slipNo}
         AND     thp.HQ_OFFICE_CD    =   tphvid.HQ_OFFICE_CD
         AND     thp.PROD_CD         =   tphvid.PROD_CD
-        AND     thv.HQ_OFFICE_CD    =   tphvod.HQ_OFFICE_CD
+        AND     thv.HQ_OFFICE_CD    =   tphvid.HQ_OFFICE_CD
         AND     thv.VENDR_CD        =   #{vendrCd}
         ORDER
         BY      tphvid.PROD_CD
@@ -218,14 +218,32 @@
         AND     tphvid.HQ_OFFICE_CD(+)=   thvp.HQ_OFFICE_CD
         AND     tphvid.SLIP_NO    (+) =   #{slipNo}
         AND     tphvid.PROD_CD    (+) =   thp.PROD_CD
-        AND     thv.HQ_OFFICE_CD    =   tphvod.HQ_OFFICE_CD
-        AND     thv.VENDR_CD        =   #{vendrCd}
+        AND     thv.HQ_OFFICE_CD      =   thvp.HQ_OFFICE_CD
+        AND     thv.VENDR_CD          =   #{vendrCd}
         ]]>
         <if test='prodCd != null and prodCd != ""'>
             AND thp.PROD_CD = #{prodCd}
         </if>
         <if test='prodNm != null and prodNm != ""'>
             AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test="barcdCd != null and barcdCd != ''">
+            AND thp.PROD_CD IN  ( SELECT  thpb.PROD_CD
+                                  FROM    TB_HQ_PRODUCT_BARCD thpb
+                                  WHERE   thpb.HQ_OFFICE_CD = #{hqOfficeCd}
+                                  AND     thpb.BARCD_CD     = #{barcdCd}
+                                )
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND thp.PROD_CLASS_CD IN  ( SELECT	#{prodClassCd} AS PROD_CLASS_CD
+                                        FROM	DUAL
+                                        UNION
+                                        SELECT  thpc.PROD_CLASS_CD
+                                        FROM    TB_HQ_PRODUCT_CLASS thpc
+                                        WHERE   thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+                                        START WITH  thpc.P_PROD_CLASS_CD = #{prodClassCd}
+                                        CONNECT BY  thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD
+                                      )
         </if>
         ORDER BY thp.PROD_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -287,8 +305,8 @@
         AND     tphvid.PROD_CD     (+)=   tphvod.PROD_CD
         AND     thp.HQ_OFFICE_CD      =   tphvod.HQ_OFFICE_CD
         AND     thp.PROD_CD           =   tphvod.PROD_CD
-        AND     thv.HQ_OFFICE_CD    =   tphvod.HQ_OFFICE_CD
-        AND     thv.VENDR_CD        =   #{vendrCd}
+        AND     thv.HQ_OFFICE_CD      =   tphvod.HQ_OFFICE_CD
+        AND     thv.VENDR_CD          =   #{vendrCd}
         ORDER
         BY      tphvid.PROD_CD
         ]]>
@@ -490,7 +508,8 @@
     <insert id="insertVendrInstockToOrderDtl" parameterType="vendrInstockVO">
         /* USE : VendrInstockMapper.insertVendrInstockToOrderDtl */
         INSERT INTO TB_PO_HQ_VENDR_ORDER_DTL
-        (        HQ_OFFICE_CD           ,   SLIP_NO                 ,   PROD_CD         ,   SLIP_FG
+        (        HQ_OFFICE_CD           ,   SLIP_NO                 ,   STORAGE_CD          ,   HQ_BRAND_CD
+        ,        PROD_CD                ,   SLIP_FG
         ,        COST_UPRC
         ,        PO_UNIT_FG             ,   PO_UNIT_QTY
         ,        ORDER_UNIT_QTY         ,   ORDER_ETC_QTY           ,   ORDER_TOT_QTY
@@ -501,7 +520,8 @@
         ,        REG_DT                 ,   REG_ID
         ,        MOD_DT                 ,   MOD_ID
         )
-        SELECT   tphvid.HQ_OFFICE_CD    ,   #{orderSlipNo}          ,   tphvid.PROD_CD       ,   tphvid.SLIP_FG
+        SELECT   tphvid.HQ_OFFICE_CD    ,   #{orderSlipNo}          ,   tphvid.STORAGE_CD   ,   tphvid.HQ_BRAND_CD
+        ,        tphvid.PROD_CD         ,   tphvid.SLIP_FG
         ,        SUM(tphvid.COST_UPRC)
         ,        SUM(tphvid.PO_UNIT_FG) ,   SUM(tphvid.PO_UNIT_QTY)
         ,        0                      ,   0                       ,   0
@@ -528,7 +548,8 @@
         AND      tphvi.HQ_OFFICE_CD =   tphvid.HQ_OFFICE_CD
         AND      tphvi.SLIP_NO      =   tphvid.SLIP_NO
         GROUP
-        BY       tphvid.HQ_OFFICE_CD    ,   #{orderSlipNo}          ,   tphvid.PROD_CD       ,   tphvid.SLIP_FG
+        BY       tphvid.HQ_OFFICE_CD    ,   #{orderSlipNo}      ,   tphvid.STORAGE_CD   ,   tphvid.HQ_BRAND_CD
+        ,        tphvid.PROD_CD         ,   tphvid.SLIP_FG
     </insert>
 
 
@@ -542,12 +563,14 @@
         /* USE : VendrOrderMapper.updateVendrOrderDtlSumHd */
         UPDATE  TB_PO_HQ_VENDR_ORDER
         SET     ( DTL_CNT
-                , ORDER_QTY, ORDER_AMT, ORDER_VAT, ORDER_TOT
+                , ORDER_TOT_QTY, ORDER_AMT, ORDER_VAT, ORDER_TOT
                 , IN_TOT_QTY, IN_AMT, IN_VAT, IN_TOT
+                , IN_FIRST_DATE, IN_LAST_DATE
             )
             =   ( SELECT  COUNT(tphvod.PROD_CD)
                   ,       NVL(SUM(tphvod.ORDER_TOT_QTY),0), NVL(SUM(tphvod.ORDER_AMT),0), NVL(SUM(tphvod.ORDER_VAT),0), NVL(SUM(tphvod.ORDER_TOT),0)
                   ,       NVL(SUM(tphvod.IN_TOT_QTY),0), NVL(SUM(tphvod.IN_AMT),0), NVL(SUM(tphvod.IN_VAT),0), NVL(SUM(tphvod.IN_TOT),0)
+                  ,       MIN(tphvod.IN_FIRST_DATE), MAX(tphvod.IN_LAST_DATE)
                   FROM    TB_PO_HQ_VENDR_ORDER_DTL tphvod
                   WHERE   tphvod.HQ_OFFICE_CD  = #{hqOfficeCd}
                   AND     tphvod.SLIP_NO       = #{orderSlipNo}
@@ -745,4 +768,63 @@
         AND     SPLY_UPRC <> #{splyUprc}
         ]]>
     </update>
+
+
+    <!-- 거래처 입고/반출등록 - 입고/반출정보 진행상태 변경시 거래처정산 데이터 등록 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_EXACT_CALC, TB_PO_HQ_VENDR_INSTOCK
+        PARAM    : vendrInstockVO
+        COMMENTS : 거래처 입고/반출정보 진행상태 변경시 거래처정산 데이터를 등록한다.
+    -->
+    <insert id="insertVendrExact" parameterType="vendrInstockVO">
+        /* USE : VendrInstockMapper.insertVendrExact */
+        INSERT INTO TB_PO_HQ_VENDR_EXACT_CALC
+        (
+            HQ_OFFICE_CD,
+            VENDR_CD,
+            EXCCLC_DATE,
+            SEQ_NO,
+            EXCCLC_FG,
+            EXCCLC_AMT,
+            EXCCLC_VAT,
+            EXCCLC_TOT,
+            SLIP_NO,
+            REMARK,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        SELECT  tphvi.HQ_OFFICE_CD
+        ,       tphvi.VENDR_CD
+        ,       tphvi.INSTOCK_DATE
+        ,       (SELECT TO_NUMBER(NVL(MAX(SEQ_NO), 0)+1) FROM TB_PO_HQ_VENDR_EXACT_CALC WHERE HQ_OFFICE_CD = tphvi.HQ_OFFICE_CD AND VENDR_CD = tphvi.VENDR_CD AND EXCCLC_DATE = tphvi.INSTOCK_DATE)
+        ,       tphvi.SLIP_FG
+        ,       tphvi.IN_AMT
+        ,       tphvi.IN_VAT
+        ,       tphvi.IN_TOT
+        ,       tphvi.SLIP_NO
+        ,       tphvi.REMARK
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        FROM    TB_PO_HQ_VENDR_INSTOCK tphvi
+        WHERE   tphvi.HQ_OFFICE_CD  =   #{hqOfficeCd}
+        AND     tphvi.SLIP_NO       =   #{slipNo}
+    </insert>
+
+
+    <!-- 거래처 입고/반출등록 - 입고/반출정보 진행상태 변경시 거래처정산 데이터 삭제 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_EXACT_CALC
+        PARAM    : vendrInstockVO
+        COMMENTS : 거래처 입고/반출정보 진행상태 변경시 거래처정산 데이터를 삭제한다.
+    -->
+    <delete id="deleteVendrExact" parameterType="vendrInstockVO">
+        /* USE : VendrInstockMapper.deleteVendrExact */
+        DELETE  TB_PO_HQ_VENDR_EXACT_CALC
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+    </delete>
 </mapper>

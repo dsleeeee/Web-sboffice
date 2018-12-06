@@ -1,8 +1,16 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <input type="hidden" id="<c:out value="${param.targetId}Cd"/>" />
-<input type="text" id="<c:out value="${param.targetId}Nm"/>" class="sb-input fl mr5 w100" style="cursor:pointer; width:200px;" <c:if test="${empty param.modiFg}"> ng-click="<c:out value="${param.targetId}"/>Show()" </c:if> readonly/>
+<input type="text"
+       id="<c:out value="${param.targetId}Nm"/>"
+       class="sb-input fl mr5 w100"
+       style="cursor:pointer; width:200px;"
+       <c:if test="${empty param.modiFg}">
+         ng-click="<c:out value="${param.targetId}"/>Show()"
+       </c:if>
+       readonly/>
 <c:if test="${empty param.modiFg}">
 <button type="button" class="btn_skyblue fl mr5" id="<c:out value="${param.targetId}SelectCancelBtn"/>">
   <s:message code="cmm.selectCancel"/></button>
@@ -22,15 +30,14 @@
             autoGenerateColumns="false"
             selection-mode="Row"
             items-source="data"
-          <%--control="storeGridS"--%>
             control="flex"
             initialized="initGrid(s,e)"
             is-read-only="true"
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="outstockReqDate.storeCd"/>" binding="storeCd" width="70" align="center"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="outstockReqDate.storeNm"/>" binding="storeNm" width="*" align="left"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="outstockReqDate.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="outstockReqDate.storeNm"/>" binding="storeNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
 
           </wj-flex-grid>
         </div>

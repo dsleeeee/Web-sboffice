@@ -8,6 +8,8 @@ import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.iostock.order.outstockConfm.service.OutstockConfmService;
 import kr.co.solbipos.iostock.order.outstockConfm.service.OutstockConfmVO;
+import kr.co.solbipos.iostock.volmErr.volmErr.service.VolmErrService;
+import kr.co.solbipos.iostock.volmErr.volmErr.service.VolmErrVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,11 +45,13 @@ import java.util.List;
 public class OutstockConfmController {
     private final SessionService sessionService;
     private final OutstockConfmService outstockConfmService;
+    private final VolmErrService volmErrService;
 
     @Autowired
-    public OutstockConfmController(SessionService sessionService, OutstockConfmService outstockConfmService) {
+    public OutstockConfmController(SessionService sessionService, OutstockConfmService outstockConfmService, VolmErrService volmErrService) {
         this.sessionService = sessionService;
         this.outstockConfmService = outstockConfmService;
+        this.volmErrService = volmErrService;
     }
 
     /**
@@ -219,5 +224,46 @@ public class OutstockConfmController {
         int result = outstockConfmService.saveOutstockAfter(outstockConfmVO, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+
+
+
+
+    /**
+     * 다이나믹 콤보조회 - 배송기사 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   volmErrVO
+     * @return  String
+     * @author  안동관
+     * @since   2018. 11. 30.
+     */
+    @RequestMapping(value = "/outstockConfm/getDlvrCombo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDlvrCombo(HttpServletRequest request, HttpServletResponse response,
+        Model model, VolmErrVO volmErrVO) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = new ArrayList<DefaultMap<String>>();
+
+//        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+            volmErrVO.setSelectTable("TB_PO_HQ_DELIVERY_CHARGER");
+            volmErrVO.setSelectCd("DLVR_CD");
+            volmErrVO.setSelectNm("DLVR_NM");
+            volmErrVO.setSelectWhere("HQ_OFFICE_CD='"+sessionInfoVO.getHqOfficeCd()+"'");
+            list = volmErrService.selectDynamicCodeList(volmErrVO);
+//        }
+//        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+//            volmErrVO.setSelectTable("TB_MS_STORE_NMCODE");
+//            volmErrVO.setSelectCd("NMCODE_CD");
+//            volmErrVO.setSelectNm("NMCODE_NM");
+//            volmErrVO.setSelectWhere("STORE_CD='"+sessionInfoVO.getStoreCd()+"' AND NMCODE_GRP_CD = 'AA1'");
+//            list = volmErrService.selectDynamicCodeList(volmErrVO);
+//        }
+
+
+        return ReturnUtil.returnListJson(Status.OK, list, volmErrVO);
     }
 }

@@ -23,7 +23,7 @@ public class StoreOrderDtlVO extends PageVO {
     /** 상품바코드 */
     private String barcdCd;
     /** 상품분류 */
-    private String prodClass;
+    private String prodClassCd;
     /** 발주단위구분 */
     private String poUnitFg;
     /** 발주단위수량 */
@@ -194,17 +194,17 @@ public class StoreOrderDtlVO extends PageVO {
     }
 
     /**
-     * @return the prodClass
+     * @return the prodClassCd
      */
-    public String getProdClass() {
-        return prodClass;
+    public String getProdClassCd() {
+        return prodClassCd;
     }
 
     /**
-     * @param prodClass the prodClass to set
+     * @param prodClassCd the prodClassCd to set
      */
-    public void setProdClass(String prodClass) {
-        this.prodClass = prodClass;
+    public void setProdClassCd(String prodClassCd) {
+        this.prodClassCd = prodClassCd;
     }
 
     /**
@@ -598,5 +598,4 @@ public class StoreOrderDtlVO extends PageVO {
     public void setSaleUprc(String saleUprc) {
         this.saleUprc = saleUprc;
     }
-
 }

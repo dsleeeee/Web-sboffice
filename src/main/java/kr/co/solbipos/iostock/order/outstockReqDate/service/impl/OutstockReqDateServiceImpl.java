@@ -15,7 +15,7 @@ import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
-@Service("OutstockReqDateService")
+@Service("outstockReqDateService")
 public class OutstockReqDateServiceImpl implements OutstockReqDateService {
     @Autowired
     OutstockReqDateMapper outstockReqDateMapper;

@@ -233,7 +233,7 @@
         params : $scope.dlvr, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
-        if ($scope._httpStatusCheck(response)) {
+        if ($scope._httpStatusCheck(response, true)) {
           s_alert.pop(messages["cmm.saveSucc"]);
 
           // 신규등록인 경우
@@ -273,7 +273,7 @@
           params : params, /* 파라메터로 보낼 데이터 */
           headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
         }).then(function successCallback(response) {
-          if ($scope._httpStatusCheck(response)) {
+          if ($scope._httpStatusCheck(response, true)) {
             s_alert.pop(messages["cmm.saveSucc"]);
             $scope.popupClose();
           }

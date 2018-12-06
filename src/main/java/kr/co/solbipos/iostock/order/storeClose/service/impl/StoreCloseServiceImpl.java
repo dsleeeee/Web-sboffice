@@ -14,7 +14,7 @@ import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
-@Service("StoreCloseService")
+@Service("storeCloseService")
 public class StoreCloseServiceImpl implements StoreCloseService {
 
     private final StoreCloseMapper storeCloseMapper;

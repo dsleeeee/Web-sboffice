@@ -16,7 +16,7 @@ import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
-@Service("HqStoreMoveService")
+@Service("hqStoreMoveService")
 public class HqStoreMoveServiceImpl implements HqStoreMoveService {
     private final HqStoreMoveMapper hqStoreMoveMapper;
     private final MessageService messageService;

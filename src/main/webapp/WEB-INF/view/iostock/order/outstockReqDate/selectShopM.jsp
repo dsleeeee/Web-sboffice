@@ -3,7 +3,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <input type="hidden" id="<c:out value="${param.targetId}Cd"/>"/>
-<input type="text" id="<c:out value="${param.targetId}Nm"/>" class="sb-input fl mr5" style="cursor:pointer; width:200px;" value="전체" ng-click="<c:out value="${param.targetId}"/>Show()" readonly/>
+<input type="text"
+       id="<c:out value="${param.targetId}Nm"/>"
+       class="sb-input fl mr5"
+       style="cursor:pointer; width:200px;"
+       value=<s:message code="cmm.all"/>
+       ng-click="<c:out value="${param.targetId}"/>Show()"
+       readonly/>
 
 <wj-popup id="wj<c:out value="${param.targetId}"/>LayerM" control="wj<c:out value="${param.targetId}"/>LayerM" show-trigger="Click" hide-trigger="Click" style="display:none;width:500px;">
   <div class="wj-dialog wj-dialog-columns">
@@ -13,18 +19,18 @@
     </div>
     <div class="wj-dialog-body" ng-controller="<c:out value="${param.targetId}"/>Ctrl">
       <div class="w100">
-        <div class="mt20 oh sb-select dkbr">
+        <div class="oh sb-select dkbr">
           <%-- 페이지 스케일  --%>
-          <wj-combo-box
-            class="w100px fl"
-            id="listScaleBox"
-            ng-model="listScale"
-            items-source="_getComboData('listScaleBox')"
-            display-member-path="name"
-            selected-value-path="value"
-            is-editable="false"
-            initialized="_initComboBox(s)">
-          </wj-combo-box>
+          <%--<wj-combo-box--%>
+            <%--class="w100px fl"--%>
+            <%--id="listScaleBox"--%>
+            <%--ng-model="listScale"--%>
+            <%--items-source="_getComboData('listScaleBox')"--%>
+            <%--display-member-path="name"--%>
+            <%--selected-value-path="value"--%>
+            <%--is-editable="false"--%>
+            <%--initialized="_initComboBox(s)">--%>
+          <%--</wj-combo-box>--%>
           <%--// 페이지 스케일  --%>
           <%-- 선택 --%>
           <button class="btn_skyblue fr" ng-click="storeSelected()">
@@ -44,7 +50,7 @@
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center" is-read-only="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="outstockReqDate.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="outstockReqDate.storeNm"/>" binding="storeNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
 
@@ -54,11 +60,11 @@
       </div>
 
       <%-- 페이지 리스트 --%>
-      <div class="pageNum mt20">
-        <%-- id --%>
-        <ul id="<c:out value="${param.targetId}"/>CtrlPager" data-size="10">
-        </ul>
-      </div>
+      <%--<div class="pageNum mt20">--%>
+        <%--&lt;%&ndash; id &ndash;%&gt;--%>
+        <%--<ul id="<c:out value="${param.targetId}"/>CtrlPager" data-size="10">--%>
+        <%--</ul>--%>
+      <%--</div>--%>
       <%--//페이지 리스트--%>
     </div>
   </div>
@@ -78,7 +84,7 @@
     angular.extend(this, new RootController(targetId + 'Ctrl', $scope, $http, true));
 
     //페이지 스케일 콤보박스 데이터 Set
-    $scope._setComboData("listScaleBox", gvListScaleBoxData);
+    // $scope._setComboData("listScaleBox", gvListScaleBoxData);
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {

@@ -15,7 +15,7 @@ import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
-@Service("DeliveryChargerManageService")
+@Service("deliveryChargerManageService")
 public class DeliveryChargerManageServiceImpl implements DeliveryChargerManageService {
 
     private final DeliveryChargerManageMapper deliveryChargerManageMapper;

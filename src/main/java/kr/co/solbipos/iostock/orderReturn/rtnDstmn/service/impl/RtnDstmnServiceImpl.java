@@ -14,7 +14,7 @@ import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
-@Service("RtnDstmnService")
+@Service("rtnDstmnService")
 public class RtnDstmnServiceImpl implements RtnDstmnService {
     private final RtnDstmnMapper rtnDstmnMapper;
     private final MessageService messageService;

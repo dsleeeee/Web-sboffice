@@ -282,13 +282,10 @@
         params : params, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
-        if ($scope._httpStatusCheck(response)) {
+        if ($scope._httpStatusCheck(response, true)) {
           // 진행구분이 조정등록이 아니면 상품추가/변경 불가
           if (!$.isEmptyObject(response.data.data)) {
             var data = response.data.data;
-
-            console.log('getSlipInfo data');
-            console.log(data);
 
             if (data.procFg != "" && data.procFg == "0") {
               $scope.btnSaveShowFg = true;
@@ -369,34 +366,25 @@
       params.orderReqDate = wijmo.Globalize.format($scope.slipInfo.orderReqDate, 'yyyyMMdd');
       params.remark       = $scope.slipInfo.remark;
 
-      console.log('submitForm params');
-      console.log(params);
-
       $http({
         method : 'POST', //방식
         url    : "/iostock/vendr/vendrOrder/vendrOrderDtl/save.sb", /* 통신할 URL */
         params : params, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
-        if ($scope._httpStatusCheck(response)) {
+        if ($scope._httpStatusCheck(response, true)) {
           $scope._popMsg(messages['cmm.saveSucc']);
-
-          console.log('submitForm response');
-          console.log(response);
 
           if (!$.isEmptyObject(response.data.data)) {
             var data = response.data.data;
-
-            console.log('submitForm data');
-            console.log(data);
 
             // 발주 리스트 그리드 조회
             var vendrOrderScope = agrid.getScope('vendrOrderCtrl');
             vendrOrderScope.searchVendrOrderList();
 
-            var params    = {};
-            params.slipNo = data.slipNo;
-            params.slipFg = data.slipFg;
+            var params     = {};
+            params.slipNo  = data.slipNo;
+            params.slipFg  = data.slipFg;
             params.vendrCd = data.vendrCd;
             $scope._broadcast('vendrOrderPopCtrl', params);
           } else {
@@ -442,8 +430,6 @@
           params : params, /* 파라메터로 보낼 데이터 */
           headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
         }).then(function successCallback(response) {
-          console.log('delete response');
-          console.log(response);
           if (response.data.status === 'OK') {
             $scope._popMsg(messages['cmm.delSucc']);
             $scope.popupClose();
@@ -478,9 +464,6 @@
         params.slipNo = $scope.slipNo;
         params.procFg = $scope.slipInfo.procFg;
 
-        console.log('procFgUpdate params');
-        console.log(params);
-
         $http({
           method : 'POST', //방식
           url    : "/iostock/vendr/vendrOrder/vendrOrderDtl/saveProcFg.sb", /* 통신할 URL */
@@ -494,9 +477,10 @@
             var vendrOrderScope = agrid.getScope('vendrOrderCtrl');
             vendrOrderScope.searchVendrOrderList();
 
-            var params    = {};
-            params.slipNo = $scope.slipNo;
-            params.slipFg = $scope.slipFg;
+            var params     = {};
+            params.slipNo  = $scope.slipNo;
+            params.slipFg  = $scope.slipFg;
+            params.vendrCd = $("#vendrOrderDtlSelectVendrCd").val();
             $scope._broadcast('vendrOrderPopCtrl', params);
           } else if (response.data.status === 'FAIL') {
             $scope._popMsg(response.data.message);

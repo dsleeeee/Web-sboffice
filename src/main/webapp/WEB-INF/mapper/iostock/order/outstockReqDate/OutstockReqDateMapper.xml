@@ -327,12 +327,8 @@
     -->
     <select id="selectStoreList" parameterType="outstockReqDateVO" resultType="DefaultMap">
         /* USE : outstockReqDateMapper.selectStoreList */
-        <include refid="CmmSQL.PagingTemplateHeader"/>
         <![CDATA[
         SELECT  tms.STORE_CD, tms.STORE_NM
-        ]]>
-        <include refid="CmmSQL.PagingTemplateCount"/>
-        <![CDATA[
         FROM    TB_MS_STORE tms
         WHERE   tms.HQ_OFFICE_CD =   #{hqOfficeCd}
         ]]>
@@ -343,7 +339,6 @@
             AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
         </if>
         ORDER BY tms.STORE_CD
-        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
 

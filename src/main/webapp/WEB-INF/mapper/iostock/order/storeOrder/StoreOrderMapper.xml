@@ -122,7 +122,9 @@
         ,       TO_NUMBER(DECODE(tphso.ORDER_TOT    ,  0, NULL, tphso.ORDER_TOT*tphso.SLIP_FG     )) AS ORDER_TOT
         ]]>
         <if test='option2 != null and option2 != ""'>
-            , optionTb.ORDER_UNIT_QTY, optionTb.ORDER_ETC_QTY, optionTb.ORDER_TOT_QTY
+            , SF_ZERO_TO_NULL(optionTb.ORDER_UNIT_QTY) AS ORDER_UNIT_QTY
+            , SF_ZERO_TO_NULL(optionTb.ORDER_ETC_QTY) AS ORDER_ETC_QTY
+            , SF_ZERO_TO_NULL(optionTb.ORDER_TOT_QTY) AS ORDER_TOT_QTY
         </if>
         <include refid="CmmSQL.PagingTemplateCount"/>
         <![CDATA[
@@ -196,6 +198,24 @@
         </if>
         <if test='prodNm != null and prodNm != ""'>
             AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test="barcdCd != null and barcdCd != ''">
+            AND tmp.PROD_CD IN  ( SELECT  tmpb.PROD_CD
+                                  FROM    TB_MS_PRODUCT_BARCD tmpb
+                                  WHERE   tmpb.STORE_CD  = #{storeCd}
+                                  AND     tmpb.BARCD_CD  = #{barcdCd}
+                                )
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND tmp.PROD_CLASS_CD IN  ( SELECT  #{prodClassCd} AS PROD_CLASS_CD
+                                        FROM    DUAL
+                                        UNION
+                                        SELECT  tmpc.PROD_CLASS_CD
+                                        FROM    TB_MS_PRODUCT_CLASS tmpc
+                                        WHERE   tmpc.STORE_CD = #{storeCd}
+                                        START WITH  tmpc.P_PROD_CLASS_CD = #{prodClassCd}
+                                        CONNECT BY  tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD
+                                      )
         </if>
         <if test='option1 == "S"'>
             <![CDATA[

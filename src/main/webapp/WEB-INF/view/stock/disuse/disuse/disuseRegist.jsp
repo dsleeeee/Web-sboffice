@@ -51,10 +51,23 @@
             <%-- 상품분류 --%>
             <th><s:message code="disuse.reg.prodClass"/></th>
             <td>
-              <input type="text" id="srchProdClass" name="prodClass" ng-model="prodClass" class="sb-input w100" maxlength="40"/>
+              <input type="text" class="sb-input w100" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()"
+                     placeholder="<s:message code="cmm.all" />" readonly/>
+              <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCd" disabled/>
             </td>
           </tr>
           <tr>
+            <%-- 거래처 --%>
+            <th><s:message code="disuse.reg.vendr"/></th>
+            <td>
+              <%-- 거래처선택 모듈 멀티 선택 사용시 include
+                   param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
+              --%>
+              <jsp:include page="/WEB-INF/view/iostock/vendr/vendrOrder/selectVendrM.jsp" flush="true">
+                <jsp:param name="targetId" value="disuseRegistSelectVendr"/>
+              </jsp:include>
+              <%--// 거래처선택 모듈 싱글 선택 사용시 include --%>
+            </td>
             <%-- 폐기구분 --%>
             <th><s:message code="disuse.reg.disuseFg"/></th>
             <td>
@@ -256,6 +269,10 @@
         $scope.seqNo      = data.seqNo;
         $scope.callParent = data.callParent;
 
+        // 상품분류 값 초기화
+        $scope.prodClassCdNm = messages["cmm.all"];
+        $scope.prodClassCd   = '';
+
         // 상품찾기 변수값들 초기화
         $scope.addQty      = '';
         $scope.prodBarcdCd = '';
@@ -295,7 +312,7 @@
         params : params, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
-        if ($scope._httpStatusCheck(response)) {
+        if ($scope._httpStatusCheck(response, true)) {
           // 진행구분이 폐기등록이 아니면 상품추가/변경 불가
           if (!$.isEmptyObject(response.data.data)) {
             if (response.data.data.procFg != "" && response.data.data.procFg != "0") {
@@ -335,8 +352,10 @@
       params.seqNo      = $scope.seqNo;
       params.prodCd     = $scope.prodCd;
       params.prodNm     = $scope.prodNm;
+      params.prodClassCd = $scope.prodClassCd;
       params.barcdCd    = $scope.barcdCd;
       params.disuseFg   = $scope.disuseFg;
+      params.vendrCd     = $("#disuseRegistSelectVendrCd").val();
       params.listScale  = $scope.listScale;
 
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
@@ -540,6 +559,51 @@
     };
 
 
+    // 상품분류정보 팝업
+    $scope.popUpProdClass = function () {
+      var popUp = $scope.prodClassPopUpLayer;
+      popUp.show(true, function (s) {
+        // 선택 버튼 눌렀을때만
+        if (s.dialogResult === "wj-hide-apply") {
+          var scope          = agrid.getScope('prodClassPopUpCtrl');
+          var prodClassCd    = scope.getSelectedClass();
+          var params         = {};
+          params.prodClassCd = prodClassCd;
+          // 조회 수행 : 조회URL, 파라미터, 콜백함수
+          $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
+            function (response) {
+              $scope.prodClassCd   = prodClassCd;
+              $scope.prodClassCdNm = response.data.data;
+            }
+          );
+        }
+      });
+    };
+
+
+    // 거래처선택 모듈 팝업 사용시 정의
+    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+    $scope.disuseRegistSelectVendrShow = function () {
+      $scope._broadcast('disuseRegistSelectVendrCtrl');
+    };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /* 2018-11-13 안동관. input 값 체크 함수.
        input에 data-check="0,10" 이런식으로 주면 byte 길이 체크하여 0보다 작거나 10보다 크면 해당 input에 팝업 뜨도록 함.
@@ -595,3 +659,7 @@
   }]);
 
 </script>
+
+<%-- 상품분류 팝업 --%>
+<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
+</c:import>

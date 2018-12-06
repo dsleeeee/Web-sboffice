@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.iostock.vendr.orderStockInfo.service.impl.OrderStockInfoMapper">
+    <!-- 거래처 발주대비 입고현황 - 발주대비 입고현황 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_ORDER, TB_HQ_VENDOR
+                   TB_PO_STORE_VENDR_ORDER, TB_MS_VENDOR
+        PARAM    : orderStockInfoVO
+        COMMENTS : 거래처 발주대비 입고현황 - 발주대비 입고현황 리스트를 조회한다.
+    -->
+    <select id="getOrderStockInfoList" parameterType="orderStockInfoVO" resultType="DefaultMap">
+        /* USE : OrderStockInfoMapper.getOrderStockInfoList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <![CDATA[
+                SELECT  NVL(tphvo.SLIP_NO,'무발주') AS SLIP_NO, tphvo.ORDER_DATE, tphvo.VENDR_CD, thv.VENDR_NM
+                ,       tphvo.PROC_FG, tphvo.SLIP_FG, tphvo.DTL_CNT
+                ,       '' AS IN_SLIP_NO
+                ,       COUNT(tphvi.SLIP_NO) AS IN_CNT
+                ,       DECODE(tphvi.SLIP_NO, NULL, NULL, tphvo.IN_LAST_DATE) AS IN_LAST_DATE
+                ,       tphvo.ORDER_AMT, tphvo.ORDER_VAT, tphvo.ORDER_TOT
+                ,       DECODE(tphvi.PROC_FG, '1', tphvi.IN_AMT) AS IN_AMT
+                ,       DECODE(tphvi.PROC_FG, '1', tphvi.IN_VAT) AS IN_VAT
+                ,       DECODE(tphvi.PROC_FG, '1', tphvi.IN_TOT) AS IN_TOT
+                ,       tphvo.ORDER_DATE AS ORDERBY_DATE
+                FROM    TB_PO_HQ_VENDR_ORDER tphvo
+                ,       TB_PO_HQ_VENDR_INSTOCK tphvi
+                ,       TB_HQ_VENDOR thv
+                WHERE   tphvo.HQ_OFFICE_CD    = #{hqOfficeCd}
+                AND     tphvo.ORDER_DATE      BETWEEN #{startDate} AND #{endDate}
+                AND     tphvo.PROC_FG         IN ('1', '4', '5')
+                AND     tphvo.SLIP_FG         = '1'
+                AND     tphvi.HQ_OFFICE_CD (+)= tphvo.HQ_OFFICE_CD
+                AND     tphvi.ORDER_SLIP_NO(+)= tphvo.SLIP_NO
+                AND     tphvi.PROC_FG      (+)= '1'
+                AND     thv.HQ_OFFICE_CD   (+)= tphvo.HQ_OFFICE_CD
+                AND     thv.VENDR_CD       (+)= tphvo.VENDR_CD
+                ]]>
+                <if test='slipNo != null and slipNo != ""'>
+                    AND tphvo.SLIP_NO = #{slipNo}
+                </if>
+                <if test='arrVendrCd != null and arrVendrCd != ""'>
+                    AND tphvo.VENDR_CD IN
+                    <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
+                        #{item}
+                    </foreach>
+                </if>
+                <![CDATA[
+                GROUP BY NVL(tphvo.SLIP_NO,'무발주'), tphvo.ORDER_DATE, tphvo.VENDR_CD, thv.VENDR_NM
+                ,       tphvo.PROC_FG, tphvo.SLIP_FG, tphvo.DTL_CNT
+                ,       ''
+                ,       DECODE(tphvi.SLIP_NO, NULL, NULL, tphvo.IN_LAST_DATE)
+                ,       tphvo.ORDER_AMT, tphvo.ORDER_VAT, tphvo.ORDER_TOT
+                ,       DECODE(tphvi.PROC_FG, '1', tphvi.IN_AMT)
+                ,       DECODE(tphvi.PROC_FG, '1', tphvi.IN_VAT)
+                ,       DECODE(tphvi.PROC_FG, '1', tphvi.IN_TOT)
+                UNION ALL
+                SELECT  '무발주' AS SLIP_NO, '' AS ORDER_DATE, tphvi.VENDR_CD, thv.VENDR_NM
+                ,       '5' AS PROC_FG, tphvi.SLIP_FG, tphvi.DTL_CNT
+                ,       SLIP_NO AS IN_SLIP_NO
+                ,       1 AS IN_CNT
+                ,       tphvi.INSTOCK_DATE AS IN_LAST_DATE
+                ,       NULL AS ORDER_AMT, NULL AS ORDER_VAT, NULL AS ORDER_TOT
+                ,       tphvi.IN_AMT
+                ,       tphvi.IN_VAT
+                ,       tphvi.IN_TOT
+                ,       tphvi.INSTOCK_DATE AS ORDERBY_DATE
+                FROM    TB_PO_HQ_VENDR_INSTOCK tphvi
+                ,       TB_HQ_VENDOR thv
+                WHERE   tphvi.HQ_OFFICE_CD    = #{hqOfficeCd}
+                AND     tphvi.PROC_FG         = '1'
+                AND     tphvi.ORDER_SLIP_NO   IS NULL
+                AND     thv.HQ_OFFICE_CD   (+)= tphvi.HQ_OFFICE_CD
+                AND     thv.VENDR_CD       (+)= tphvi.VENDR_CD
+                ]]>
+                <if test='slipNo != null and slipNo != ""'>
+                    AND tphvi.ORDER_SLIP_NO = #{slipNo}
+                </if>
+                <if test='arrVendrCd != null and arrVendrCd != ""'>
+                    AND tphvi.VENDR_CD IN
+                    <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
+                        #{item}
+                    </foreach>
+                </if>
+                <![CDATA[
+                ORDER BY ORDERBY_DATE, ORDER_DATE
+                ]]>
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <![CDATA[
+                SELECT  NVL(tpsvo.SLIP_NO,'무발주') AS SLIP_NO, tpsvo.ORDER_DATE, tpsvo.VENDR_CD, thv.VENDR_NM
+                ,       tpsvo.PROC_FG, tpsvo.SLIP_FG, tpsvo.DTL_CNT
+                ,       '' AS IN_SLIP_NO
+                ,       COUNT(tpsvi.SLIP_NO) AS IN_CNT
+                ,       DECODE(tpsvi.SLIP_NO, NULL, NULL, tpsvo.IN_LAST_DATE) AS IN_LAST_DATE
+                ,       tpsvo.ORDER_AMT, tpsvo.ORDER_VAT, tpsvo.ORDER_TOT
+                ,       DECODE(tpsvi.PROC_FG, '1', tpsvi.IN_AMT) AS IN_AMT
+                ,       DECODE(tpsvi.PROC_FG, '1', tpsvi.IN_VAT) AS IN_VAT
+                ,       DECODE(tpsvi.PROC_FG, '1', tpsvi.IN_TOT) AS IN_TOT
+                ,       tpsvo.ORDER_DATE AS ORDERBY_DATE
+                FROM    TB_PO_STORE_VENDR_ORDER tpsvo
+                ,       TB_PO_STORE_VENDR_INSTOCK tpsvi
+                ,       TB_HQ_VENDOR thv
+                WHERE   tpsvo.STORE_CD        = #{storeCd}
+                AND     tpsvo.ORDER_DATE      BETWEEN #{startDate} AND #{endDate}
+                AND     tpsvo.PROC_FG         IN ('1', '4', '5')
+                AND     tpsvo.SLIP_FG         = '1'
+                AND     tpsvi.STORE_CD     (+)= tpsvo.STORE_CD
+                AND     tpsvi.ORDER_SLIP_NO(+)= tpsvo.SLIP_NO
+                AND     tpsvi.PROC_FG      (+)= '1'
+                AND     thv.STORE_CD       (+)= tpsvo.STORE_CD
+                AND     thv.VENDR_CD       (+)= tpsvo.VENDR_CD
+                ]]>
+                <if test='slipNo != null and slipNo != ""'>
+                    AND tpsvo.SLIP_NO = #{slipNo}
+                </if>
+                <if test='arrVendrCd != null and arrVendrCd != ""'>
+                    AND tpsvo.VENDR_CD IN
+                    <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
+                        #{item}
+                    </foreach>
+                </if>
+                <![CDATA[
+                GROUP BY NVL(tpsvo.SLIP_NO,'무발주'), tpsvo.ORDER_DATE, tpsvo.VENDR_CD, thv.VENDR_NM
+                ,       tpsvo.PROC_FG, tpsvo.SLIP_FG, tpsvo.DTL_CNT
+                ,       ''
+                ,       DECODE(tpsvi.SLIP_NO, NULL, NULL, tpsvo.IN_LAST_DATE)
+                ,       tpsvo.ORDER_AMT, tpsvo.ORDER_VAT, tpsvo.ORDER_TOT
+                ,       DECODE(tpsvi.PROC_FG, '1', tpsvi.IN_AMT)
+                ,       DECODE(tpsvi.PROC_FG, '1', tpsvi.IN_VAT)
+                ,       DECODE(tpsvi.PROC_FG, '1', tpsvi.IN_TOT)
+                UNION ALL
+                SELECT  '무발주' AS SLIP_NO, '' AS ORDER_DATE, tpsvi.VENDR_CD, thv.VENDR_NM
+                ,       '5' AS PROC_FG, tpsvi.SLIP_FG, tpsvi.DTL_CNT
+                ,       SLIP_NO AS IN_SLIP_NO
+                ,       1 AS IN_CNT
+                ,       tpsvi.INSTOCK_DATE AS IN_LAST_DATE
+                ,       NULL AS ORDER_AMT, NULL AS ORDER_VAT, NULL AS ORDER_TOT
+                ,       tpsvi.IN_AMT
+                ,       tpsvi.IN_VAT
+                ,       tpsvi.IN_TOT
+                ,       tpsvi.INSTOCK_DATE AS ORDERBY_DATE
+                FROM    TB_PO_STORE_VENDR_INSTOCK tpsvi
+                ,       TB_HQ_VENDOR thv
+                WHERE   tpsvi.STORE_CD      = #{storeCd}
+                AND     tpsvi.PROC_FG       = '1'
+                AND     tpsvi.ORDER_SLIP_NO IS NULL
+                AND     thv.STORE_CD    (+) = tpsvi.STORE_CD
+                AND     thv.VENDR_CD    (+) = tpsvi.VENDR_CD
+                ]]>
+                <if test='slipNo != null and slipNo != ""'>
+                    AND tpsvi.ORDER_SLIP_NO = #{slipNo}
+                </if>
+                <if test='arrVendrCd != null and arrVendrCd != ""'>
+                    AND tpsvi.VENDR_CD IN
+                    <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
+                        #{item}
+                    </foreach>
+                </if>
+                <![CDATA[
+                ORDER BY ORDERBY_DATE, ORDER_DATE
+                ]]>
+            </when>
+        </choose>
+    </select>
+
+
+    <!-- 거래처 발주대비 입고현황 - 발주대비 입고현황 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_ORDER, TB_HQ_VENDOR
+                   TB_PO_STORE_VENDR_ORDER, TB_MS_VENDOR
+        PARAM    : orderStockInfoVO
+        COMMENTS : 거래처 발주대비 입고현황 - 발주대비 입고현황 상세 리스트를 조회한다.
+    -->
+    <select id="getOrderStockInfoDtlList" parameterType="orderStockInfoVO" resultType="DefaultMap">
+        /* USE : OrderStockInfoMapper.getOrderStockInfoDtlList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <![CDATA[
+                SELECT  tphvod.PROD_CD, thp.PROD_NM
+                ,       COUNT(DECODE(tphvid.PROD_CD, tphvod.PROD_CD, tphvi.SLIP_NO)) AS IN_CNT
+                ,       DECODE(tphvi.PROC_FG, '1', tphvo.IN_LAST_DATE) AS IN_LAST_DATE
+                ,       tphvod.ORDER_TOT_QTY, tphvod.ORDER_AMT, tphvod.ORDER_VAT, tphvod.ORDER_TOT
+                ,       DECODE(tphvi.PROC_FG, '1', tphvod.IN_TOT_QTY) AS IN_TOT_QTY
+                ,       DECODE(tphvi.PROC_FG, '1', tphvod.IN_AMT) AS IN_AMT
+                ,       DECODE(tphvi.PROC_FG, '1', tphvod.IN_VAT) AS IN_VAT
+                ,       DECODE(tphvi.PROC_FG, '1', tphvod.IN_TOT) AS IN_TOT
+                FROM    TB_PO_HQ_VENDR_ORDER tphvo
+                ,       TB_PO_HQ_VENDR_ORDER_DTL tphvod
+                ,       TB_PO_HQ_VENDR_INSTOCK tphvi
+                ,       TB_PO_HQ_VENDR_INSTOCK_DTL tphvid
+                ,       TB_HQ_PRODUCT thp
+                WHERE   tphvo.HQ_OFFICE_CD    = #{hqOfficeCd}
+                AND     tphvo.SLIP_NO         = #{slipNo}
+                AND     tphvod.HQ_OFFICE_CD   = tphvo.HQ_OFFICE_CD
+                AND     tphvod.SLIP_NO        = tphvo.SLIP_NO
+                AND     tphvi.HQ_OFFICE_CD (+)= tphvo.HQ_OFFICE_CD
+                AND     tphvi.ORDER_SLIP_NO(+)= tphvo.SLIP_NO
+                AND     tphvi.PROC_FG      (+)= '1'
+                AND     thp.HQ_OFFICE_CD      = tphvod.HQ_OFFICE_CD
+                AND     thp.PROD_CD           = tphvod.PROD_CD
+                GROUP BY tphvod.PROD_CD, thp.PROD_NM
+                ,       DECODE(tphvi.PROC_FG, '1', tphvo.IN_LAST_DATE)
+                ,       tphvod.ORDER_TOT_QTY, tphvod.ORDER_AMT, tphvod.ORDER_VAT, tphvod.ORDER_TOT
+                ,       DECODE(tphvi.PROC_FG, '1', tphvod.IN_TOT_QTY)
+                ,       DECODE(tphvi.PROC_FG, '1', tphvod.IN_AMT)
+                ,       DECODE(tphvi.PROC_FG, '1', tphvod.IN_VAT)
+                ,       DECODE(tphvi.PROC_FG, '1', tphvod.IN_TOT)
+                ORDER BY tphvod.PROD_CD
+                ]]>
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <![CDATA[
+                SELECT  tpsvod.PROD_CD, tmp.PROD_NM
+                ,       COUNT(DECODE(tpsvid.PROD_CD, tpsvod.PROD_CD, tpsvi.SLIP_NO)) AS IN_CNT
+                ,       DECODE(tpsvi.PROC_FG, '1', tpsvo.IN_LAST_DATE) AS IN_LAST_DATE
+                ,       tpsvod.ORDER_TOT_QTY, tpsvod.ORDER_AMT, tpsvod.ORDER_VAT, tpsvod.ORDER_TOT
+                ,       DECODE(tpsvi.PROC_FG, '1', tpsvod.IN_TOT_QTY) AS IN_TOT_QTY
+                ,       DECODE(tpsvi.PROC_FG, '1', tpsvod.IN_AMT) AS IN_AMT
+                ,       DECODE(tpsvi.PROC_FG, '1', tpsvod.IN_VAT) AS IN_VAT
+                ,       DECODE(tpsvi.PROC_FG, '1', tpsvod.IN_TOT) AS IN_TOT
+                FROM    TB_PO_STORE_VENDR_ORDER tpsvo
+                ,       TB_PO_STORE_VENDR_ORDER_DTL tpsvod
+                ,       TB_PO_STORE_VENDR_INSTOCK tpsvi
+                ,       TB_PO_STORE_VENDR_INSTOCK_DTL tpsvid
+                ,       TB_MS_PRODUCT tmp
+                WHERE   tpsvo.STORE_CD        = #{storeCd}
+                AND     tpsvo.SLIP_NO         = #{slipNo}
+                AND     tpsvod.STORE_CD       = tpsvo.STORE_CD
+                AND     tpsvod.SLIP_NO        = tpsvo.SLIP_NO
+                AND     tpsvi.STORE_CD     (+)= tpsvo.STORE_CD
+                AND     tpsvi.ORDER_SLIP_NO(+)= tpsvo.SLIP_NO
+                AND     tpsvi.PROC_FG      (+)= '1'
+                AND     tmp.STORE_CD          = tpsvod.STORE_CD
+                AND     tmp.PROD_CD           = tpsvod.PROD_CD
+                GROUP BY tpsvod.PROD_CD, tmp.PROD_NM
+                ,       DECODE(tpsvi.PROC_FG, '1', tpsvo.IN_LAST_DATE)
+                ,       tpsvod.ORDER_TOT_QTY, tpsvod.ORDER_AMT, tpsvod.ORDER_VAT, tpsvod.ORDER_TOT
+                ,       DECODE(tpsvi.PROC_FG, '1', tpsvod.IN_TOT_QTY)
+                ,       DECODE(tpsvi.PROC_FG, '1', tpsvod.IN_AMT)
+                ,       DECODE(tpsvi.PROC_FG, '1', tpsvod.IN_VAT)
+                ,       DECODE(tpsvi.PROC_FG, '1', tpsvod.IN_TOT)
+                ORDER BY tpsvod.PROD_CD
+                ]]>
+            </when>
+        </choose>
+    </select>
+
+
+    <!-- 거래처 발주대비 입고현황 - 발주대비 입고현황 무발주 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_ORDER, TB_HQ_VENDOR
+                   TB_PO_STORE_VENDR_ORDER, TB_MS_VENDOR
+        PARAM    : orderStockInfoVO
+        COMMENTS : 거래처 발주대비 입고현황 - 발주대비 입고현황 무발주 상세 리스트를 조회한다.
+    -->
+    <select id="getNoSlipOrderStockInfoDtlList" parameterType="orderStockInfoVO" resultType="DefaultMap">
+        /* USE : OrderStockInfoMapper.getNoSlipOrderStockInfoDtlList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <![CDATA[
+                SELECT  tphvid.PROD_CD, thp.PROD_NM
+                ,       COUNT(DECODE(tphvi.PROC_FG, '1', tphvi.SLIP_NO)) AS IN_CNT
+                ,       DECODE(tphvi.PROC_FG, '1', tphvi.INSTOCK_DATE) AS IN_LAST_DATE
+                ,       NULL AS ORDER_TOT_QTY, NULL AS ORDER_AMT, NULL AS ORDER_VAT, NULL AS ORDER_TOT
+                ,       tphvid.IN_TOT_QTY
+                ,       tphvid.IN_AMT
+                ,       tphvid.IN_VAT
+                ,       tphvid.IN_TOT
+                FROM    TB_PO_HQ_VENDR_INSTOCK tphvi
+                ,       TB_PO_HQ_VENDR_INSTOCK_DTL tphvid
+                ,       TB_HQ_PRODUCT thp
+                WHERE   tphvi.HQ_OFFICE_CD    = #{hqOfficeCd}
+                AND     tphvi.SLIP_NO         = #{inSlipNo}
+                AND     tphvid.HQ_OFFICE_CD   = tphvi.HQ_OFFICE_CD
+                AND     tphvid.SLIP_NO        = tphvi.SLIP_NO
+                AND     thp.HQ_OFFICE_CD      = tphvid.HQ_OFFICE_CD
+                AND     thp.PROD_CD           = tphvid.PROD_CD
+                GROUP BY tphvid.PROD_CD, thp.PROD_NM
+                ,       DECODE(tphvi.PROC_FG, '1', tphvi.INSTOCK_DATE)
+                ,       tphvid.IN_TOT_QTY
+                ,       tphvid.IN_AMT
+                ,       tphvid.IN_VAT
+                ,       tphvid.IN_TOT
+                ORDER BY tphvid.PROD_CD
+                ]]>
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <![CDATA[
+                SELECT  tpsvid.PROD_CD, tmp.PROD_NM
+                ,       COUNT(DECODE(tphvi.PROC_FG, '1', tphvi.SLIP_NO)) AS IN_CNT
+                ,       DECODE(tphvi.PROC_FG, '1', tphvi.INSTOCK_DATE) AS IN_LAST_DATE
+                ,       NULL AS ORDER_TOT_QTY, NULL AS ORDER_AMT, NULL AS ORDER_VAT, NULL AS ORDER_TOT
+                ,       tpsvid.IN_TOT_QTY
+                ,       tpsvid.IN_AMT
+                ,       tpsvid.IN_VAT
+                ,       tpsvid.IN_TOT
+                FROM    TB_PO_STORE_VENDR_INSTOCK tphvi
+                ,       TB_PO_STORE_VENDR_INSTOCK_DTL tpsvid
+                ,       TB_MS_PRODUCT tmp
+                WHERE   tphvi.STORE_CD    = #{storeCd}
+                AND     tphvi.SLIP_NO     = #{inSlipNo}
+                AND     tpsvid.STORE_CD   = tphvi.STORE_CD
+                AND     tpsvid.SLIP_NO    = tphvi.SLIP_NO
+                AND     tmp.STORE_CD      = tpsvid.STORE_CD
+                AND     tmp.PROD_CD       = tpsvid.PROD_CD
+                GROUP BY tpsvid.PROD_CD, tmp.PROD_NM
+                ,       DECODE(tphvi.PROC_FG, '1', tphvi.INSTOCK_DATE)
+                ,       tpsvid.IN_TOT_QTY
+                ,       tpsvid.IN_AMT
+                ,       tpsvid.IN_VAT
+                ,       tpsvid.IN_TOT
+                ORDER BY tpsvid.PROD_CD
+                ]]>
+            </when>
+        </choose>
+    </select>
+
+
+    <!-- 거래처 발주대비 입고현황 - 상품 입고현황 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_ORDER, TB_HQ_VENDOR
+                   TB_PO_STORE_VENDR_ORDER, TB_MS_VENDOR
+        PARAM    : orderStockInfoVO
+        COMMENTS : 거래처 발주대비 입고현황 - 상품 입고현황 리스트를 조회한다.
+    -->
+    <select id="getProdInstockInfoList" parameterType="orderStockInfoVO" resultType="DefaultMap">
+        /* USE : OrderStockInfoMapper.getProdInstockInfoList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <![CDATA[
+                SELECT  tphvi.INSTOCK_DATE, tphvi.SLIP_FG
+                ,       tphvid.COST_UPRC
+                ,       tphvid.IN_TOT_QTY, tphvid.IN_AMT, tphvid.IN_VAT, tphvid.IN_TOT
+                FROM    TB_PO_HQ_VENDR_INSTOCK tphvi
+                ,       TB_PO_HQ_VENDR_INSTOCK_DTL tphvid
+                WHERE   tphvi.HQ_OFFICE_CD    = #{hqOfficeCd}
+                AND     tphvi.PROC_FG         = '1'
+                AND     tphvid.PROD_CD        = #{prodCd}
+                AND     tphvid.HQ_OFFICE_CD   = tphvi.HQ_OFFICE_CD
+                AND     tphvid.SLIP_NO        = tphvi.SLIP_NO
+                ]]>
+                <if test='slipNo != null and slipNo != ""'>
+                  AND tphvi.ORDER_SLIP_NO = #{slipNo}
+                </if>
+                <if test='startDate != null and startDate != "" and endDate != null and endDate != ""'>
+                    AND tphvi.INSTOCK_DATE BETWEEN #{startDate} AND #{endDate}
+                </if>
+                <![CDATA[
+                ORDER BY tphvi.INSTOCK_DATE, tphvi.SLIP_NO
+                ]]>
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <![CDATA[
+                SELECT  tpsvi.INSTOCK_DATE, tpsvi.SLIP_FG
+                ,       tpsvid.COST_UPRC
+                ,       tpsvid.IN_TOT_QTY, tpsvid.IN_AMT, tpsvid.IN_VAT, tpsvid.IN_TOT
+                FROM    TB_PO_STORE_VENDR_INSTOCK tpsvi
+                ,       TB_PO_STORE_VENDR_INSTOCK_DTL tpsvid
+                WHERE   tpsvi.STORE_CD        = #{storeCd}
+                AND     tpsvi.PROC_FG         = '1'
+                AND     tpsvid.PROD_CD        = #{prodCd}
+                AND     tpsvid.HQ_OFFICE_CD   = tpsvi.HQ_OFFICE_CD
+                AND     tpsvid.SLIP_NO        = tpsvi.SLIP_NO
+                ]]>
+                <if test='slipNo != null and slipNo != ""'>
+                    AND tpsvi.ORDER_SLIP_NO = #{slipNo}
+                </if>
+                <![CDATA[
+                ORDER BY tpsvi.INSTOCK_DATE, tpsvi.SLIP_NO
+                ]]>
+            </when>
+        </choose>
+    </select>
+</mapper>

@@ -57,10 +57,23 @@
             <%-- 상품분류 --%>
             <th><s:message code="acins.reg.prodClass"/></th>
             <td>
-              <input type="text" id="srchProdClass" name="prodClass" ng-model="prodClass" class="sb-input w100" maxlength="40"/>
+              <input type="text" class="sb-input w100" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()"
+                     placeholder="<s:message code="cmm.all" />" readonly/>
+              <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCd" disabled/>
             </td>
           </tr>
           <tr>
+            <%-- 거래처 --%>
+            <th><s:message code="acins.reg.vendr"/></th>
+            <td>
+              <%-- 거래처선택 모듈 멀티 선택 사용시 include
+                   param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
+              --%>
+              <jsp:include page="/WEB-INF/view/iostock/vendr/vendrOrder/selectVendrM.jsp" flush="true">
+                <jsp:param name="targetId" value="acinsRegistSelectVendr"/>
+              </jsp:include>
+              <%--// 거래처선택 모듈 싱글 선택 사용시 include --%>
+            </td>
             <%-- 실사구분 --%>
             <th><s:message code="acins.reg.acinsFg"/></th>
             <td>
@@ -208,7 +221,7 @@
 <script type="text/javascript">
 
   /** 실사관리 등록 그리드 controller */
-  app.controller('acinsRegistCtrl', ['$scope', '$http', function ($scope, $http) {
+  app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('acinsRegistCtrl', $scope, $http, true));
 
@@ -271,6 +284,10 @@
         $scope.seqNo      = data.seqNo;
         $scope.callParent = data.callParent;
 
+        // 상품분류 값 초기화
+        $scope.prodClassCdNm = messages["cmm.all"];
+        $scope.prodClassCd   = '';
+
         // 상품찾기 변수값들 초기화
         $scope.addQty      = '';
         $scope.prodBarcdCd = '';
@@ -282,13 +299,11 @@
           $scope.readAcinsFg = true;
           // 신규등록인 경우 진행구분 체크 필요없음으로 바로 팝업을 show 한다.
           $scope.layerShow();
-        }
-        else {
+        } else {
           $scope.readAcinsFg = false;
           $scope.procFgCheck(); // 실사진행구분 체크
         }
-      }
-      else { // 페이징처리에서 broadcast 호출시
+      } else { // 페이징처리에서 broadcast 호출시
         $scope.searchAcinsRegistList();
       }
 
@@ -310,7 +325,7 @@
         params : params, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
-        if ($scope._httpStatusCheck(response)) {
+        if ($scope._httpStatusCheck(response, true)) {
           // 진행구분이 실사등록이 아니면 상품추가/변경 불가
           if (!$.isEmptyObject(response.data.data)) {
             if (response.data.data.procFg != "" && response.data.data.procFg != "0") {
@@ -345,14 +360,16 @@
     // 실사상품 리스트 조회
     $scope.searchAcinsRegistList = function () {
       // 파라미터
-      var params       = {};
-      params.acinsDate = $scope.acinsDate;
-      params.seqNo     = $scope.seqNo;
-      params.prodCd    = $scope.prodCd;
-      params.prodNm    = $scope.prodNm;
-      params.barcdCd   = $scope.barcdCd;
-      params.acinsFg   = $scope.acinsFg;
-      params.listScale = $scope.listScale;
+      var params         = {};
+      params.acinsDate   = $scope.acinsDate;
+      params.seqNo       = $scope.seqNo;
+      params.prodCd      = $scope.prodCd;
+      params.prodNm      = $scope.prodNm;
+      params.barcdCd     = $scope.barcdCd;
+      params.prodClassCd = $scope.prodClassCd;
+      params.acinsFg     = $scope.acinsFg;
+      params.vendrCd     = $("#acinsRegistSelectVendrCd").val();
+      params.listScale   = $scope.listScale;
 
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
       $scope._inquirySub("/stock/acins/acins/acinsRegist/list.sb", params);
@@ -367,8 +384,7 @@
           $scope._setPagingInfo('curr', 1); // 페이지번호 1로 세팅
           $scope.searchAcinsRegistList();
         });
-      }
-      else {
+      } else {
         $scope._setPagingInfo('curr', 1); // 페이지번호 1로 세팅
         $scope.searchAcinsRegistList();
       }
@@ -390,8 +406,7 @@
         // 체크박스가 체크되어 있으면서 기존에 등록되어 있던 상품은 삭제한다.
         if (item.gChk === true && item.acinsProdStatus === 'U') {
           item.status = "D";
-        }
-        else {
+        } else {
           item.status = "U";
         }
         item.acinsDate  = $scope.acinsDate;
@@ -410,8 +425,7 @@
         // 체크박스가 체크되어 있으면서 기존에 등록되어 있던 상품은 삭제한다.
         if (item.gChk === true && item.acinsProdStatus === 'U') {
           item.status = "D";
-        }
-        else {
+        } else {
           item.status = "U";
         }
         item.acinsDate  = $scope.acinsDate;
@@ -453,8 +467,8 @@
     // 현재고 수량적용.
     $scope.setCurrToAcins = function () {
       $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]);
-      // 데이터 처리중 팝업 띄우기위해 setTimeout 사용.
-      setTimeout(function () {
+      // 데이터 처리중 팝업 띄우기위해 $timeout 사용.
+      $timeout(function () {
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
           var item = $scope.flex.collectionView.items[i];
           if (item.cmptCurrQty !== null) {
@@ -462,8 +476,7 @@
 
             if (nvl(item.cmptCurrQty, 0) > 0) {
               item.acinsQty = parseInt(item.cmptCurrQty);
-            }
-            else {
+            } else {
               item.acinsQty = 0;
             }
             $scope.calcAmt(item);
@@ -501,24 +514,20 @@
           $scope._postJSONQuery.withOutPopUp(url, params, function (response) {
             if ($.isEmptyObject(response.data.data)) {
               $scope._popMsg(messages["cmm.empty.data"]);
-            }
-            else {
+            } else {
               $scope.addRow(response.data.data);
               if ($("#autoAddChk").prop("checked")) {
                 $scope.modifyAcinsQty(1);
-              }
-              else {
+              } else {
                 $scope.addQty = 1;
                 $("#addQty").select();
               }
             }
           });
-        }
-        else {
+        } else {
           if ($("#autoAddChk").prop("checked")) {
             $scope.modifyAcinsQty(1);
-          }
-          else {
+          } else {
             $scope.addQty = 1;
             $("#addQty").select();
           }
@@ -580,6 +589,39 @@
     };
 
 
+    // 상품분류정보 팝업
+    $scope.popUpProdClass = function () {
+      var popUp = $scope.prodClassPopUpLayer;
+      popUp.show(true, function (s) {
+        // 선택 버튼 눌렀을때만
+        if (s.dialogResult === "wj-hide-apply") {
+          var scope          = agrid.getScope('prodClassPopUpCtrl');
+          var prodClassCd    = scope.getSelectedClass();
+          var params         = {};
+          params.prodClassCd = prodClassCd;
+          // 조회 수행 : 조회URL, 파라미터, 콜백함수
+          $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
+            function (response) {
+              $scope.prodClassCd   = prodClassCd;
+              $scope.prodClassCdNm = response.data.data;
+            }
+          );
+        }
+      });
+    };
+
+
+    // 거래처선택 모듈 팝업 사용시 정의
+    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+    $scope.acinsRegistSelectVendrShow = function () {
+      $scope._broadcast('acinsRegistSelectVendrCtrl');
+    };
+
   }]);
 
 </script>
+
+<%-- 상품분류 팝업 --%>
+<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
+</c:import>

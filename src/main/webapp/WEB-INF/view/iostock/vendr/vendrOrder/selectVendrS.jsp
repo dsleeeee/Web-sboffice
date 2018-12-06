@@ -2,7 +2,15 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <input type="hidden" id="<c:out value="${param.targetId}Cd"/>" />
-<input type="text" id="<c:out value="${param.targetId}Nm"/>" class="sb-input fl mr5 w100" style="cursor:pointer; width:200px;" <c:if test="${empty param.modiFg}"> ng-click="<c:out value="${param.targetId}"/>Show()" </c:if> ng-disabled="<c:out value="${param.targetId}"/>NmDisabled" readonly />
+<input type="text"
+       id="<c:out value="${param.targetId}Nm"/>"
+       class="sb-input fl mr5"
+       style="cursor:pointer; <c:if test="${empty param.displayWidth}">width:200px;</c:if><c:if test="${!empty param.displayWidth}">width:${param.displayWidth};</c:if>"
+       ng-disabled="<c:out value="${param.targetId}"/>NmDisabled"
+      <c:if test="${empty param.modiFg}">
+        ng-click="<c:out value="${param.targetId}"/>Show()"
+      </c:if>
+       readonly/>
 <c:if test="${empty param.modiFg}">
 <button type="button" class="btn_skyblue fl mr5" id="<c:out value="${param.targetId}SelectCancelBtn"/>" ng-disabled="<c:out value="${param.targetId}"/>BtnDisabled">
   <s:message code="cmm.selectCancel"/></button>
@@ -22,7 +30,6 @@
             autoGenerateColumns="false"
             selection-mode="Row"
             items-source="data"
-          <%--control="storeGridS"--%>
             control="flex"
             initialized="initGrid(s,e)"
             is-read-only="true"
@@ -105,13 +112,13 @@
       });
 
       if ($scope.searchFg == "N") {
-        $scope.searchStore();
+        $scope.searchVendr();
       }
       // 기능수행 종료 : 반드시 추가
       event.preventDefault();
     });
 
-    $scope.searchStore = function () {
+    $scope.searchVendr = function () {
       // 파라미터
       var params = {};
       $scope._inquirySub("/iostock/vendr/vendrOrder/vendrOrder/selectVendrList.sb", params, function () {

@@ -22,7 +22,7 @@ import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
-@Service("RtnStoreOrderService")
+@Service("rtnStoreOrderService")
 public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
     private final RtnStoreOrderMapper rtnStoreOrderMapper;
     private final DstbCloseStoreMapper dstbCloseStoreMapper;

@@ -15,32 +15,45 @@
     <div class="wj-dialog-body sc2" style="height: 600px;">
       <table class="tblType01">
         <colgroup>
-          <col class="w15"/>
-          <col class="w35"/>
-          <col class="w15"/>
-          <col class="w35"/>
+          <col class="w20"/>
+          <col class="w80"/>
         </colgroup>
         <tbody>
         <tr>
+          <%-- 비고 --%>
           <th><s:message code="rtnOutstockConfm.dtl.hdRemark"/></th>
-          <td colspan="3">
+          <td>
             <input type="text" id="hdRemark" name="hdRemark" ng-model="hdRemark" class="sb-input w100" maxlength="300"/>
           </td>
         </tr>
         <tr>
+          <%-- 본사비고(매장열람불가) --%>
           <th><s:message code="rtnOutstockConfm.dtl.hqRemark"/></th>
-          <td colspan="3">
+          <td>
             <input type="text" id="hqRemark" name="hqRemark" ng-model="hqRemark" class="sb-input w100" maxlength="300"/>
           </td>
         </tr>
         <tr>
+          <%-- 배송기사 --%>
           <th><s:message code="rtnOutstockConfm.dtl.dlvrNm"/></th>
-          <td colspan="3"></td>
+          <td>
+            <span class="txtIn w150px sb-select fl mr5">
+              <wj-combo-box
+                id="srchDtlDlvrCd"
+                ng-model="dlvrCd"
+                items-source="_getComboData('srchDtlDlvrCd')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="_initComboBox(s)">
+              </wj-combo-box>
+            </span>
+          </td>
         </tr>
         <tr>
           <%-- 거래명세표 --%>
           <th><s:message code="rtnOutstockConfm.dtl.stmtAcct"/></th>
-          <td colspan="3">
+          <td>
             <span class="txtIn w150px sb-select fl mr5">
               <wj-combo-box
                 id="stmtAcctFg"
@@ -146,13 +159,19 @@
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+      var rtnOutstockConfmScope = agrid.getScope('rtnOutstockConfmCtrl');
+      // 배송기사
+      var comboParams             = {};
+      var url = '/iostock/order/outstockConfm/outstockConfm/getDlvrCombo.sb';
+      // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
+      rtnOutstockConfmScope._queryCombo("combo", "srchDtlDlvrCd", null, url, comboParams, "S"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+
       // 그리드 포맷 핸들러
       s.formatItem.addHandler(function (s, e) {
         if (e.panel === s.cells) {
           var col  = s.columns[e.col];
           var item = s.rows[e.row].dataItem;
           if (col.binding === "outEtcQty") { // 입수에 따라 출고수량 컬럼 readonly 컨트롤
-            // console.log(item);
             if (item.poUnitQty === 1) {
               wijmo.addClass(e.cell, 'wj-custom-readonly');
               wijmo.setAttribute(e.cell, 'aria-readonly', true);
@@ -239,7 +258,7 @@
             $scope.storeNm          = response.data.data.storeNm;
             $scope.hdRemark         = response.data.data.remark;
             $scope.hqRemark         = response.data.data.hqRemark;
-            $scope.dlvrCd           = response.data.data.dlvrCd;
+            $scope.dlvrCd           = nvl(response.data.data.dlvrCd, '');
             $scope.dlvrNm           = response.data.data.dlvrNm;
 
             // 수주확정

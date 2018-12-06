@@ -196,6 +196,24 @@
         <if test='prodNm != null and prodNm != ""'>
             AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
         </if>
+        <if test="barcdCd != null and barcdCd != ''">
+            AND tmp.PROD_CD IN  ( SELECT  tmpb.PROD_CD
+                                  FROM    TB_MS_PRODUCT_BARCD tmpb
+                                  WHERE   tmpb.STORE_CD  = #{storeCd}
+                                  AND     tmpb.BARCD_CD  = #{barcdCd}
+                                )
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND tmp.PROD_CLASS_CD IN  ( SELECT  #{prodClassCd} AS PROD_CLASS_CD
+                                        FROM    DUAL
+                                        UNION
+                                        SELECT  tmpc.PROD_CLASS_CD
+                                        FROM    TB_MS_PRODUCT_CLASS tmpc
+                                        WHERE   tmpc.STORE_CD = #{storeCd}
+                                        START WITH  tmpc.P_PROD_CLASS_CD = #{prodClassCd}
+                                        CONNECT BY  tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD
+                                      )
+        </if>
         <if test='option1 == "S"'>
             <![CDATA[
             AND NVL(tsssc.CURR_QTY, 0) < NVL(tmp.SAFE_STOCK_QTY, 0)

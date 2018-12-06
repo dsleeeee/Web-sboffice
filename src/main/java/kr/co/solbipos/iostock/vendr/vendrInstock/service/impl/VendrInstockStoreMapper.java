@@ -70,16 +70,16 @@ public interface VendrInstockStoreMapper {
     /** 거래처 입고/반출등록 - 입고/반출상품 DTL 삭제 */
     int deleteVendrInstockDtl(VendrInstockVO vendrInstockVO);
 
-    /** 거래처 입고/반출등록 - 입고/반출 상품 공급가 수정 */
-    int updateProdSplyUprc(VendrInstockVO vendrInstockVO);
-
-    /** 거래처 입고/반출등록 - 입고/반출 상품 공급가 수정(매장) */
-    int updateStProdSplyUprc(VendrInstockVO vendrInstockVO);
-
     /** 거래처 입고/반출등록 - 입고/반출정보 DTL의 집계정보 HD에 수정 */
     int updateVendrInstockDtlSumHd(VendrInstockVO vendrInstockVO);
 
     /** 거래처 입고/반출등록 - 입고/반출상품 발주내역으로 세팅 리스트 조회 */
     List<DefaultMap<String>> getVendrInstockOrderInfoRegList(VendrInstockVO vendrInstockVO);
+
+    /** 거래처 입고/반출등록 - 입고/반출정보 진행상태 변경시 거래처정산 데이터 입력 */
+    int insertVendrExact(VendrInstockVO vendrInstockVO);
+
+    /** 거래처 입고/반출등록 - 입고/반출정보 진행상태 변경시 거래처정산 데이터 삭제 */
+    int deleteVendrExact(VendrInstockVO vendrInstockVO);
 
 }

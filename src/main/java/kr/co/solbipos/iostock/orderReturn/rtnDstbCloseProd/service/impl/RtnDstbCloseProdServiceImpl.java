@@ -14,7 +14,7 @@ import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
-@Service("RtnDstbCloseProdService")
+@Service("rtnDstbCloseProdService")
 public class RtnDstbCloseProdServiceImpl implements RtnDstbCloseProdService {
     private final RtnDstbCloseProdMapper rtnDstbCloseProdMapper;
     private final MessageService messageService;

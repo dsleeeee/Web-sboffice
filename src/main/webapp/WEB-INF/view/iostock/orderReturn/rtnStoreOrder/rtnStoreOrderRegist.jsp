@@ -37,13 +37,17 @@
           </td>
         </tr>
         <tr>
+          <%-- 바코드 --%>
           <th><s:message code="rtnStoreOrder.dtl.barcd"/></th>
           <td>
             <input type="text" id="srchBarcdCd" name="srchBarcdCd" ng-model="barcdCd" class="sb-input w100" maxlength="40"/>
           </td>
+            <%-- 상품분류 --%>
           <th><s:message code="rtnStoreOrder.dtl.prodClass"/></th>
           <td>
-            <input type="text" id="srchProdClass" name="prodClass" ng-model="prodClass" class="sb-input w100" maxlength="40"/>
+            <input type="text" class="sb-input w100" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()"
+                   placeholder="<s:message code="cmm.all" />" readonly/>
+            <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCd" disabled/>
           </td>
         </tr>
         <tr>
@@ -218,7 +222,6 @@
           var col  = s.columns[e.col];
           var item = s.rows[e.row].dataItem;
           if (col.binding === "orderEtcQty") { // 입수에 따라 반품수량 컬럼 readonly 컨트롤
-            // console.log(item);
             if (item.poUnitQty === 1) {
               wijmo.addClass(e.cell, 'wj-custom-readonly');
               wijmo.setAttribute(e.cell, 'aria-readonly', true);
@@ -236,24 +239,8 @@
           var col = s.columns[e.col];
           // 반품수량 수정시 금액,VAT,합계 계산하여 보여준다.
           if (col.binding === "orderUnitQty" || col.binding === "orderEtcQty") {
-            var item          = s.rows[e.row].dataItem;
-            var orderSplyUprc = parseInt(item.orderSplyUprc);
-            var poUnitQty     = parseInt(item.poUnitQty);
-            var vat01         = parseInt(item.vatFg01);
-            var envst0011     = parseInt(item.envst0011);
-
-            var unitQty  = (parseInt(nvl(item.prevOrderUnitQty, 0)) + parseInt(nvl(item.orderUnitQty, 0))) * parseInt(item.poUnitQty);
-            var etcQty   = parseInt(nvl(item.prevOrderEtcQty, 0)) + parseInt(nvl(item.orderEtcQty, 0));
-            var totQty   = parseInt(unitQty + etcQty);
-            var tempAmt  = Math.round(totQty * orderSplyUprc / poUnitQty);
-            var orderAmt = tempAmt - Math.round(tempAmt * vat01 * envst0011 / 11);
-            var orderVat = Math.round(tempAmt * vat01 / (10 + envst0011));
-            var orderTot = parseInt(orderAmt + orderVat);
-
-            item.orderTotQty = totQty;   // 총수량
-            item.orderAmt    = orderAmt; // 금액
-            item.orderVat    = orderVat; // VAT
-            item.orderTot    = orderTot; // 합계
+            var item = s.rows[e.row].dataItem;
+            $scope.calcAmt(item);
           }
         }
 
@@ -264,7 +251,72 @@
       // s.columnFooters.rows.push(new wijmo.grid.GroupRow());
       // add a sigma to the header to show that this is a summary row
       // s.bottomLeftCells.setCellData(0, 0, '합계');
+
+      // 헤더머지
+      s.allowMerging  = 2;
+      s.itemFormatter = function (panel, r, c, cell) {
+        if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+          //align in center horizontally and vertically
+          panel.rows[r].allowMerging    = true;
+          panel.columns[c].allowMerging = true;
+          wijmo.setCss(cell, {
+            display    : 'table',
+            tableLayout: 'fixed'
+          });
+          cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+          wijmo.setCss(cell.children[0], {
+            display      : 'table-cell',
+            verticalAlign: 'middle',
+            textAlign    : 'center'
+          });
+        }
+        // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+        else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+          // GroupRow 인 경우에는 표시하지 않는다.
+          if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+            cell.textContent = '';
+          } else {
+            if (!isEmpty(panel._rows[r]._data.rnum)) {
+              cell.textContent = (panel._rows[r]._data.rnum).toString();
+            } else {
+              cell.textContent = (r + 1).toString();
+            }
+          }
+        }
+        // readOnly 배경색 표시
+        else if (panel.cellType === wijmo.grid.CellType.Cell) {
+          var col = panel.columns[c];
+          if (col.isReadOnly || panel.grid.isReadOnly) {
+            wijmo.addClass(cell, 'wj-custom-readonly');
+          }
+        }
+      }
     };
+
+
+    $scope.calcAmt = function () {
+      <%-- 수량이 없는 경우 계산하지 않음. null 또는 undefined 가 나올수 있으므로 확실하게 확인하기 위해 nvl 처리로 null 로 바꿔서 비교 --%>
+      if (nvl(item.orderUnitQty, null) === null && (item.poUnitQty !== 1 && nvl(item.orderEtcQty, null) === null)) return false;
+
+      var orderSplyUprc = parseInt(item.orderSplyUprc);
+      var poUnitQty     = parseInt(item.poUnitQty);
+      var vat01         = parseInt(item.vatFg01);
+      var envst0011     = parseInt(item.envst0011);
+
+      var unitQty  = (parseInt(nvl(item.prevOrderUnitQty, 0)) + parseInt(nvl(item.orderUnitQty, 0))) * parseInt(item.poUnitQty);
+      var etcQty   = parseInt(nvl(item.prevOrderEtcQty, 0)) + parseInt(nvl(item.orderEtcQty, 0));
+      var totQty   = parseInt(unitQty + etcQty);
+      var tempAmt  = Math.round(totQty * orderSplyUprc / poUnitQty);
+      var orderAmt = tempAmt - Math.round(tempAmt * vat01 * envst0011 / 11);
+      var orderVat = Math.round(tempAmt * vat01 / (10 + envst0011));
+      var orderTot = parseInt(orderAmt + orderVat);
+
+      item.orderTotQty = totQty;   // 총수량
+      item.orderAmt    = orderAmt; // 금액
+      item.orderVat    = orderVat; // VAT
+      item.orderTot    = orderTot; // 합계
+    };
+
 
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("rtnStoreOrderRegistCtrl", function (event, data) {
@@ -280,6 +332,10 @@
         $scope.callParent  = data.callParent;
         $scope.regHdRemark = data.hdRemark;
         $scope.storeCd     = data.storeCd;
+
+        // 값 초기화
+        $scope.prodClassCdNm = messages["cmm.all"];
+        $scope.prodClassCd   = '';
 
         // 신규 요청등록인 경우
         if ($scope.callParent === "rtnStoreOrder") {
@@ -464,6 +520,33 @@
         return false;
       }
     };
+
+
+    // 상품분류정보 팝업
+    $scope.popUpProdClass = function () {
+      var popUp = $scope.prodClassPopUpLayer;
+      popUp.show(true, function (s) {
+        // 선택 버튼 눌렀을때만
+        if (s.dialogResult === "wj-hide-apply") {
+          var scope          = agrid.getScope('prodClassPopUpCtrl');
+          var prodClassCd    = scope.getSelectedClass();
+          var params         = {};
+          params.prodClassCd = prodClassCd;
+          // 조회 수행 : 조회URL, 파라미터, 콜백함수
+          $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
+            function (response) {
+              $scope.prodClassCd   = prodClassCd;
+              $scope.prodClassCdNm = response.data.data;
+            }
+          );
+        }
+      });
+    };
+
   }]);
 
 </script>
+
+<%-- 상품분류 팝업 --%>
+<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
+</c:import>

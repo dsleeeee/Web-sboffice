@@ -42,7 +42,7 @@
           <td>
             <input type="text" id="srchProdCd" name="srchProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13"/>
           </td>
-          <%-- 상품코드 --%>
+          <%-- 상품명 --%>
           <th><s:message code="dstbCloseProd.add.prodNm"/></th>
           <td>
             <input type="text" id="srchProdNm" name="srchProdNm" ng-model="prodNm" class="sb-input w100" maxlength="50"/>
@@ -57,7 +57,9 @@
           <%-- 분류 --%>
           <th><s:message code="dstbCloseProd.add.prodClassNm"/></th>
           <td>
-            <input type="text" id="srchProdClass" name="prodClass" ng-model="prodClass" class="sb-input w100" maxlength="40"/>
+            <input type="text" class="sb-input w100" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()"
+                   placeholder="<s:message code="cmm.all" />" readonly/>
+            <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCd" disabled/>
           </td>
         </tr>
         </tbody>
@@ -184,6 +186,11 @@
 
         $scope.reqDate = data.reqDate;
         $scope.slipFg  = data.slipFg;
+
+        // 값 초기화
+        $scope.prodClassCdNm = messages["cmm.all"];
+        $scope.prodClassCd   = '';
+
         $scope.wjDstbCloseProdAddProdLayer.show(true);
         $("#addProdSubTitle").html(' ('+messages["dstbCloseProd.add.reqDate"]+' : ' + getFormatDate($scope.reqDate, '-') + ')');
       }
@@ -194,11 +201,6 @@
       // 기능수행 종료 : 반드시 추가
       event.preventDefault();
     });
-
-    // 조회
-    // $scope.search = function () {
-    //   $scope.searchDstbCloseProdAddProdList();
-    // };
 
     // 분배가능상품 리스트 조회
     $scope.searchDstbCloseProdAddProdList = function () {
@@ -217,6 +219,33 @@
     $scope.dstbCloseProdAddProdSelectStoreShow = function () {
       $scope._broadcast('dstbCloseProdAddProdSelectStoreCtrl');
     };
+
+
+    // 상품분류정보 팝업
+    $scope.popUpProdClass = function () {
+      var popUp = $scope.prodClassPopUpLayer;
+      popUp.show(true, function (s) {
+        // 선택 버튼 눌렀을때만
+        if (s.dialogResult === "wj-hide-apply") {
+          var scope          = agrid.getScope('prodClassPopUpCtrl');
+          var prodClassCd    = scope.getSelectedClass();
+          var params         = {};
+          params.prodClassCd = prodClassCd;
+          // 조회 수행 : 조회URL, 파라미터, 콜백함수
+          $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
+            function (response) {
+              $scope.prodClassCd   = prodClassCd;
+              $scope.prodClassCdNm = response.data.data;
+            }
+          );
+        }
+      });
+    };
+
   }]);
 
 </script>
+
+<%-- 상품분류 팝업 --%>
+<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
+</c:import>

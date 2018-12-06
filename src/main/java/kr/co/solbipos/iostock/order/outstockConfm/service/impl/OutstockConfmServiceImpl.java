@@ -16,7 +16,7 @@ import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
-@Service("OutstockConfmService")
+@Service("outstockConfmService")
 public class OutstockConfmServiceImpl implements OutstockConfmService {
     private final OutstockConfmMapper outstockConfmMapper;
     private final CmmEnvMapper cmmEnvMapper;

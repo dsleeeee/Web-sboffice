@@ -82,4 +82,10 @@ public interface VendrInstockHqMapper {
     /** 거래처 입고/반출등록 - 입고/반출상품 발주내역으로 세팅 리스트 조회 */
     List<DefaultMap<String>> getVendrInstockOrderInfoRegList(VendrInstockVO vendrInstockVO);
 
+    /** 거래처 입고/반출등록 - 입고/반출정보 진행상태 변경시 거래처정산 데이터 등록 */
+    int insertVendrExact(VendrInstockVO vendrInstockVO);
+
+    /** 거래처 입고/반출등록 - 입고/반출정보 진행상태 변경시 거래처정산 데이터 삭제 */
+    int deleteVendrExact(VendrInstockVO vendrInstockVO);
+
 }

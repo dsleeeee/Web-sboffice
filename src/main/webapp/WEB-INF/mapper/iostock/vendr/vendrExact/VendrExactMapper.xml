@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.iostock.vendr.vendrExact.service.impl.VendrExactMapper">
+    <!-- 거래처 정산관리 - 거래처별 정산 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_ORDER, TB_HQ_VENDOR
+                   TB_PO_STORE_VENDR_ORDER, TB_MS_VENDOR
+        PARAM    : vendrExactVO
+        COMMENTS : 거래처 정산관리 - 거래처별 정산 리스트를 조회한다.
+    -->
+    <select id="getVendrExactList" parameterType="vendrExactVO" resultType="DefaultMap">
+        /* USE : VendrExactMapper.getVendrExactList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <![CDATA[
+                SELECT  tphvec.HQ_OFFICE_CD, tphvec.VENDR_CD, MAX(tphvec.VENDR_NM) VENDR_NM
+                ,       SUM(tphvec.PREV_UN_EXCCLC_TOT) AS PREV_UN_EXCCLC_TOT
+                ,       SUM(tphvec.IN_EXCCLC_TOT)      AS IN_EXCCLC_TOT
+                ,       SUM(tphvec.PAY_EXCCLC_TOT)     AS PAY_EXCCLC_TOT
+                ,       SUM(tphvec.TOT_EXCCLC_TOT)     AS TOT_EXCCLC_TOT
+                ,       SUM(tphvec.AFTER_EXCCLC_TOT)   AS AFTER_EXCCLC_TOT
+                ,       (SUM(tphvec.PREV_UN_EXCCLC_TOT)+SUM(tphvec.TOT_EXCCLC_TOT)+SUM(tphvec.AFTER_EXCCLC_TOT)) AS NOW_UN_EXCCLC_TOT
+                FROM    (
+                             SELECT  tphvec.HQ_OFFICE_CD, tphvec.VENDR_CD, thv.VENDR_NM
+                             ,       SUM(DECODE(tphvec.EXCCLC_FG, '2', -1*tphvec.EXCCLC_TOT, tphvec.EXCCLC_TOT)) AS PREV_UN_EXCCLC_TOT
+                             ,       0 AS IN_EXCCLC_TOT
+                             ,       0 AS PAY_EXCCLC_TOT
+                             ,       0 AS TOT_EXCCLC_TOT
+                             ,       0 AS AFTER_EXCCLC_TOT
+                             FROM    TB_PO_HQ_VENDR_EXACT_CALC tphvec
+                             ,       TB_HQ_VENDOR thv
+                             WHERE   tphvec.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                             AND     tphvec.EXCCLC_DATE   <   #{startDate}
+                             AND     thv.HQ_OFFICE_CD (+) =   tphvec.HQ_OFFICE_CD
+                             AND     thv.VENDR_CD     (+) =   tphvec.VENDR_CD
+                             ]]>
+                            <if test='arrVendrCd != null and arrVendrCd != ""'>
+                            AND tphvec.VENDR_CD IN
+                            <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
+                              #{item}
+                            </foreach>
+                            </if>
+                            <![CDATA[
+                             GROUP
+                             BY      tphvec.HQ_OFFICE_CD, tphvec.VENDR_CD, thv.VENDR_NM
+                             UNION ALL
+                             SELECT  tphvec.HQ_OFFICE_CD, tphvec.VENDR_CD, thv.VENDR_NM
+                             ,       0 AS PREV_UN_EXCCLC_TOT
+                             ,       SUM(DECODE(tphvec.EXCCLC_FG, '2', 0, tphvec.EXCCLC_TOT)) AS IN_EXCCLC_TOT
+                             ,       SUM(DECODE(tphvec.EXCCLC_FG, '2', tphvec.EXCCLC_TOT, 0)) AS PAY_EXCCLC_TOT
+                             ,       SUM(DECODE(tphvec.EXCCLC_FG, '2', -1*tphvec.EXCCLC_TOT, tphvec.EXCCLC_TOT)) AS TOT_EXCCLC_TOT
+                             ,       0 AS AFTER_EXCCLC_TOT
+                             FROM    TB_PO_HQ_VENDR_EXACT_CALC tphvec
+                             ,       TB_HQ_VENDOR thv
+                             WHERE   tphvec.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                             AND     tphvec.EXCCLC_DATE   BETWEEN #{startDate}  AND #{endDate}
+                             AND     thv.HQ_OFFICE_CD (+) =   tphvec.HQ_OFFICE_CD
+                             AND     thv.VENDR_CD     (+) =   tphvec.VENDR_CD
+                             ]]>
+                            <if test='arrVendrCd != null and arrVendrCd != ""'>
+                                AND tphvec.VENDR_CD IN
+                                <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
+                                    #{item}
+                                </foreach>
+                            </if>
+                            <![CDATA[
+                             GROUP
+                             BY      tphvec.HQ_OFFICE_CD, tphvec.VENDR_CD, thv.VENDR_NM
+                             UNION ALL
+                             SELECT  tphvec.HQ_OFFICE_CD, tphvec.VENDR_CD, thv.VENDR_NM
+                             ,       0 AS PREV_UN_EXCCLC_TOT
+                             ,       0 AS IN_EXCCLC_TOT
+                             ,       0 AS PAY_EXCCLC_TOT
+                             ,       0 AS TOT_EXCCLC_TOT
+                             ,       SUM(DECODE(tphvec.EXCCLC_FG, '2', -1*tphvec.EXCCLC_TOT, tphvec.EXCCLC_TOT)) AS AFTER_EXCCLC_TOT
+                             FROM    TB_PO_HQ_VENDR_EXACT_CALC tphvec
+                             ,       TB_HQ_VENDOR thv
+                             WHERE   tphvec.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                             AND     tphvec.EXCCLC_DATE   >   #{endDate}
+                             AND     thv.HQ_OFFICE_CD (+) =   tphvec.HQ_OFFICE_CD
+                             AND     thv.VENDR_CD     (+) =   tphvec.VENDR_CD
+                             ]]>
+                            <if test='arrVendrCd != null and arrVendrCd != ""'>
+                                AND tphvec.VENDR_CD IN
+                                <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
+                                    #{item}
+                                </foreach>
+                            </if>
+                            <![CDATA[
+                             GROUP
+                             BY      tphvec.HQ_OFFICE_CD, tphvec.VENDR_CD, thv.VENDR_NM
+                        ) tphvec
+                GROUP
+                BY      tphvec.HQ_OFFICE_CD, tphvec.VENDR_CD
+                ORDER
+                BY      tphvec.VENDR_CD
+                ]]>
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <![CDATA[
+                SELECT  tpsvec.STORE_CD, tpsvec.VENDR_CD, MAX(tpsvec.VENDR_NM) VENDR_NM
+                ,       SUM(tpsvec.PREV_UN_EXCCLC_TOT) AS PREV_UN_EXCCLC_TOT
+                ,       SUM(tpsvec.IN_EXCCLC_TOT)      AS IN_EXCCLC_TOT
+                ,       SUM(tpsvec.PAY_EXCCLC_TOT)     AS PAY_EXCCLC_TOT
+                ,       SUM(tpsvec.TOT_EXCCLC_TOT)     AS TOT_EXCCLC_TOT
+                ,       SUM(tpsvec.AFTER_EXCCLC_TOT)   AS AFTER_EXCCLC_TOT
+                ,       (SUM(tpsvec.PREV_UN_EXCCLC_TOT)+SUM(tpsvec.TOT_EXCCLC_TOT)+SUM(tpsvec.AFTER_EXCCLC_TOT)) AS NOW_UN_EXCCLC_TOT
+                FROM    (
+                             SELECT  tpsvec.STORE_CD, tpsvec.VENDR_CD, tmv.VENDR_NM
+                             ,       SUM(DECODE(tpsvec.EXCCLC_FG, '2', -1*tpsvec.EXCCLC_TOT, tpsvec.EXCCLC_TOT)) AS PREV_UN_EXCCLC_TOT
+                             ,       0 AS IN_EXCCLC_TOT
+                             ,       0 AS PAY_EXCCLC_TOT
+                             ,       0 AS TOT_EXCCLC_TOT
+                             ,       0 AS AFTER_EXCCLC_TOT
+                             FROM    TB_PO_STORE_VENDR_EXACT_CALC tpsvec
+                             ,       TB_MS_VENDOR tmv
+                             WHERE   tpsvec.STORE_CD      =   #{storeCd}
+                             AND     tpsvec.EXCCLC_DATE   <   #{startDate}
+                             AND     tmv.STORE_CD     (+) =   tpsvec.STORE_CD
+                             AND     tmv.VENDR_CD     (+) =   tpsvec.VENDR_CD
+                             ]]>
+                            <if test='arrVendrCd != null and arrVendrCd != ""'>
+                                AND tpsvec.VENDR_CD IN
+                                <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
+                                    #{item}
+                                </foreach>
+                            </if>
+                            <![CDATA[
+                             GROUP
+                             BY      tpsvec.STORE_CD, tpsvec.VENDR_CD, tmv.VENDR_NM
+                             UNION ALL
+                             SELECT  tpsvec.STORE_CD, tpsvec.VENDR_CD, tmv.VENDR_NM
+                             ,       0 AS PREV_UN_EXCCLC_TOT
+                             ,       SUM(DECODE(tpsvec.EXCCLC_FG, '2', 0, tpsvec.EXCCLC_TOT)) AS IN_EXCCLC_TOT
+                             ,       SUM(DECODE(tpsvec.EXCCLC_FG, '2', tpsvec.EXCCLC_TOT, 0)) AS PAY_EXCCLC_TOT
+                             ,       SUM(DECODE(tpsvec.EXCCLC_FG, '2', -1*tpsvec.EXCCLC_TOT, tpsvec.EXCCLC_TOT)) AS TOT_EXCCLC_TOT
+                             ,       0 AS AFTER_EXCCLC_TOT
+                             FROM    TB_PO_STORE_VENDR_EXACT_CALC tpsvec
+                             ,       TB_MS_VENDOR tmv
+                             WHERE   tpsvec.STORE_CD    =   #{storeCd}
+                             AND     tpsvec.EXCCLC_DATE BETWEEN #{startDate}  AND #{endDate}
+                             AND     tmv.STORE_CD   (+) =   tpsvec.STORE_CD
+                             AND     tmv.VENDR_CD   (+) =   tpsvec.VENDR_CD
+                             ]]>
+                            <if test='arrVendrCd != null and arrVendrCd != ""'>
+                                AND tpsvec.VENDR_CD IN
+                                <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
+                                    #{item}
+                                </foreach>
+                            </if>
+                            <![CDATA[
+                             GROUP
+                             BY      tpsvec.STORE_CD, tpsvec.VENDR_CD, tmv.VENDR_NM
+                             UNION ALL
+                             SELECT  tpsvec.STORE_CD, tpsvec.VENDR_CD, tmv.VENDR_NM
+                             ,       0 AS PREV_UN_EXCCLC_TOT
+                             ,       0 AS IN_EXCCLC_TOT
+                             ,       0 AS PAY_EXCCLC_TOT
+                             ,       0 AS TOT_EXCCLC_TOT
+                             ,       SUM(DECODE(tpsvec.EXCCLC_FG, '2', -1*tpsvec.EXCCLC_TOT, tpsvec.EXCCLC_TOT)) AS AFTER_EXCCLC_TOT
+                             FROM    TB_PO_STORE_VENDR_EXACT_CALC tpsvec
+                             ,       TB_MS_VENDOR tmv
+                             WHERE   tpsvec.STORE_CD    =   #{storeCd}
+                             AND     tpsvec.EXCCLC_DATE >   #{endDate}
+                             AND     tmv.STORE_CD   (+) =   tpsvec.STORE_CD
+                             AND     tmv.VENDR_CD   (+) =   tpsvec.VENDR_CD
+                             ]]>
+                            <if test='arrVendrCd != null and arrVendrCd != ""'>
+                                AND tpsvec.VENDR_CD IN
+                                <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
+                                    #{item}
+                                </foreach>
+                            </if>
+                            <![CDATA[
+                             GROUP
+                             BY      tpsvec.STORE_CD, tpsvec.VENDR_CD, tmv.VENDR_NM
+                        ) tpsvec
+                GROUP
+                BY      tpsvec.STORE_CD, tpsvec.VENDR_CD
+                ORDER
+                BY      tpsvec.VENDR_CD
+                ]]>
+            </when>
+        </choose>
+    </select>
+
+
+    <!-- 거래처 정산관리 - 거래처 정산 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_EXACT_CALC, TB_HQ_EMPLOYEE
+                   TB_PO_STORE_VENDR_ORDER, TB_MS_VENDOR
+        PARAM    : vendrExactVO
+        COMMENTS : 거래처 정산관리 - 거래처별 정산 리스트를 조회한다.
+    -->
+    <select id="getVendrExactDtlList" parameterType="vendrExactVO" resultType="DefaultMap">
+        /* USE : VendrExactMapper.getVendrExactDtlList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <![CDATA[
+                SELECT  tphvec.EXCCLC_DATE, tphvec.VENDR_CD, tphvec.SEQ_NO, tphvec.EXCCLC_FG
+                ,       DECODE(tphvec.EXCCLC_FG, '2', 0, tphvec.EXCCLC_TOT) AS IN_EXCCLC_TOT
+                ,       DECODE(tphvec.EXCCLC_FG, '2', tphvec.EXCCLC_TOT, 0) AS PAY_EXCCLC_TOT
+                ,       tphvec.EXCCLC_FG, tphvec.SLIP_NO
+                ,       tphvec.REMARK, tphvec.REG_DT, the.EMP_NM AS REG_NM
+                FROM    TB_PO_HQ_VENDR_EXACT_CALC tphvec
+                ,       TB_HQ_EMPLOYEE the
+                WHERE   tphvec.HQ_OFFICE_CD    =   #{hqOfficeCd}
+                AND     tphvec.VENDR_CD        =   #{vendrCd}
+                AND     the.HQ_OFFICE_CD (+)   =   tphvec.HQ_OFFICE_CD
+                AND     the.USER_ID      (+)   =   tphvec.REG_ID
+                ]]>
+                <if test='colbindFg == "prevUnExcclcTot"'>
+                <![CDATA[
+                  AND     tphvec.EXCCLC_DATE < #{startDate}
+                ]]>
+                </if>
+                <if test='colbindFg == "totExcclcTot"'>
+                    <![CDATA[
+                  AND     tphvec.EXCCLC_DATE BETWEEN #{startDate}  AND #{endDate}
+                ]]>
+                </if>
+                <if test='colbindFg == "afterExcclcTot"'>
+                    <![CDATA[
+                  AND     tphvec.EXCCLC_DATE > #{endDate}
+                ]]>
+                </if>
+                <![CDATA[
+                ORDER
+                BY      tphvec.EXCCLC_DATE DESC, tphvec.SEQ_NO
+                ]]>
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <![CDATA[
+                SELECT  tpsvec.EXCCLC_DATE, tpsvec.VENDR_CD, tpsvec.SEQ_NO, tpsvec.EXCCLC_FG
+                ,       DECODE(tpsvec.EXCCLC_FG, '2', 0, tpsvec.EXCCLC_TOT) AS IN_EXCCLC_TOT
+                ,       DECODE(tpsvec.EXCCLC_FG, '2', tpsvec.EXCCLC_TOT, 0) AS PAY_EXCCLC_TOT
+                ,       tpsvec.EXCCLC_FG, tpsvec.SLIP_NO
+                ,       tpsvec.REMARK, tpsvec.REG_DT, tme.EMP_NM AS REG_NM
+                FROM    TB_PO_STORE_VENDR_EXACT_CALC tpsvec
+                ,       TB_MS_EMPLOYEE tme
+                WHERE   tpsvec.STORE_CD        =   #{storeCd}
+                AND     tpsvec.VENDR_CD        =   #{vendrCd}
+                AND     tme.STORE_CD     (+)   =   tpsvec.STORE_CD
+                AND     tme.USER_ID      (+)   =   tpsvec.REG_ID
+                ]]>
+                <if test='colbindFg == "prevUnExcclcTot"'>
+                    <![CDATA[
+                  AND     tpsvec.EXCCLC_DATE < #{startDate}
+                ]]>
+                </if>
+                <if test='colbindFg == "totExcclcTot"'>
+                    <![CDATA[
+                  AND     tpsvec.EXCCLC_DATE BETWEEN #{startDate}  AND #{endDate}
+                ]]>
+                </if>
+                <if test='colbindFg == "afterExcclcTot"'>
+                    <![CDATA[
+                  AND     tpsvec.EXCCLC_DATE > #{endDate}
+                ]]>
+                </if>
+                <![CDATA[
+                ORDER
+                BY      tpsvec.EXCCLC_DATE DESC, tpsvec.SEQ_NO
+                ]]>
+            </when>
+        </choose>
+    </select>
+
+
+    <!-- 거래처 정산관리 - 지급액 상세 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_ORDER, TB_HQ_VENDOR
+                   TB_PO_STORE_VENDR_ORDER, TB_MS_VENDOR
+        PARAM    : vendrExactVO
+        COMMENTS : 거래처 정산관리 - 지급액 상세를 조회한다.
+    -->
+    <select id="getExactInfo" parameterType="vendrExactVO" resultType="DefaultMap">
+        /* USE : VendrExactMapper.getExactInfo */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <![CDATA[
+                SELECT  tphvec.EXCCLC_DATE, tphvec.VENDR_CD, thv.VENDR_NM
+                ,       tphvec.SEQ_NO
+                ,       tphvec.EXCCLC_TOT
+                ,       tphvec.EXCCLC_FG
+                ,       tphvec.REMARK
+                FROM    TB_PO_HQ_VENDR_EXACT_CALC tphvec
+                ,       TB_HQ_VENDOR thv
+                WHERE   tphvec.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                AND     tphvec.VENDR_CD      =   #{vendrCd}
+                AND     tphvec.EXCCLC_DATE   =   #{excclcDate}
+                AND     tphvec.SEQ_NO        =   #{seqNo}
+                AND     thv.HQ_OFFICE_CD (+) =   tphvec.HQ_OFFICE_CD
+                AND     thv.VENDR_CD     (+) =   tphvec.VENDR_CD
+                ]]>
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <![CDATA[
+                SELECT  tpsvec.EXCCLC_DATE, tpsvec.VENDR_CD, tmv.VENDR_NM
+                ,       tpsvec.SEQ_NO
+                ,       tpsvec.EXCCLC_TOT
+                ,       tpsvec.EXCCLC_FG
+                ,       tpsvec.REMARK
+                FROM    TB_PO_STORE_VENDR_EXACT_CALC tpsvec
+                ,       TB_MS_VENDOR tmv
+                WHERE   tpsvec.STORE_CD     =   #{storeCd}
+                AND     tpsvec.VENDR_CD     =   #{vendrCd}
+                AND     tpsvec.EXCCLC_DATE  =   #{excclcDate}
+                AND     tpsvec.SEQ_NO       =   #{seqNo}
+                AND     tmv.STORE_CD    (+) =   tpsvec.STORE_CD
+                AND     tmv.VENDR_CD    (+) =   tpsvec.VENDR_CD
+                ]]>
+            </when>
+        </choose>
+    </select>
+
+
+    <!-- 거래처 정산관리 - 지급액 등록 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_EXACT_CALC
+                   TB_PO_STORE_VENDR_EXACT_CALC
+        PARAM    : vendrExactVO
+        COMMENTS : 거래처 지급액을 등록한다.
+    -->
+    <insert id="insertVendrExact" parameterType="vendrExactVO">
+        /* USE : VendrExactMapper.insertVendrExact */
+        <selectKey resultType="int" keyProperty="seqNo" order="BEFORE">
+            <!-- 본사 -->
+            <if test='orgnFg != null and orgnFg.toString == "H"'>
+                SELECT  TO_NUMBER(NVL(MAX(SEQ_NO), 0)+1) AS SEQ_NO
+                FROM    TB_PO_HQ_VENDR_EXACT_CALC
+                WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+                AND     VENDR_CD      = #{vendrCd}
+                AND     EXCCLC_DATE   = #{excclcDate}
+            </if>
+            <!-- 가맹점 -->
+            <if test='orgnFg != null and orgnFg.toString == "S"'>
+                SELECT  TO_NUMBER(NVL(MAX(SEQ_NO), 0)+1) AS SEQ_NO
+                FROM    TB_PO_STORE_VENDR_EXACT_CALC
+                WHERE   STORE_CD      = #{storeCd}
+                AND     VENDR_CD      = #{vendrCd}
+                AND     EXCCLC_DATE   = #{excclcDate}
+            </if>
+        </selectKey>
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_PO_HQ_VENDR_EXACT_CALC
+                (
+                    HQ_OFFICE_CD,
+                    VENDR_CD,
+                    EXCCLC_DATE,
+                    SEQ_NO,
+                    EXCCLC_FG,
+                    EXCCLC_AMT,
+                    EXCCLC_VAT,
+                    EXCCLC_TOT,
+                    SLIP_NO,
+                    REMARK,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                )
+                VALUES
+                (
+                    #{hqOfficeCd},
+                    #{vendrCd},
+                    #{excclcDate},
+                    #{seqNo},
+                    #{excclcFg},
+                    0,
+                    0,
+                    #{excclcTot},
+                    #{slipNo},
+                    #{remark},
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_PO_STORE_VENDR_EXACT_CALC
+                (
+                    STORE_CD,
+                    VENDR_CD,
+                    EXCCLC_DATE,
+                    SEQ_NO,
+                    EXCCLC_FG,
+                    EXCCLC_AMT,
+                    EXCCLC_VAT,
+                    EXCCLC_TOT,
+                    SLIP_NO,
+                    REMARK,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                )
+                VALUES
+                (
+                    #{storeCd},
+                    #{vendrCd},
+                    #{excclcDate},
+                    #{seqNo},
+                    #{excclcFg},
+                    0,
+                    0,
+                    #{excclcTot},
+                    #{slipNo},
+                    #{remark},
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
+            </when>
+        </choose>
+    </insert>
+
+
+    <!-- 거래처 정산관리 - 지급액 수정 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_EXACT_CALC
+                   TB_PO_STORE_VENDR_EXACT_CALC
+        PARAM    : vendrExactVO
+        COMMENTS : 거래처 지급액을 수정한다.
+    -->
+    <update id="updateVendrExact" parameterType="vendrExactVO">
+        /* USE : VendrExactMapper.updateVendrExact */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE  TB_PO_HQ_VENDR_EXACT_CALC
+                SET     EXCCLC_TOT  = #{excclcTot}
+                ,       REMARK      = #{remark}
+                ,       MOD_DT      = #{modDt}
+                ,       MOD_ID      = #{modId}
+                WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+                AND     VENDR_CD      = #{vendrCd}
+                AND     EXCCLC_DATE   = #{excclcDate}
+                AND     SEQ_NO        = #{seqNo}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE  TB_PO_STORE_VENDR_EXACT_CALC
+                SET     EXCCLC_TOT  = #{excclcTot}
+                ,       REMARK      = #{remark}
+                ,       MOD_DT      = #{modDt}
+                ,       MOD_ID      = #{modId}
+                WHERE   STORE_CD      = #{storeCd}
+                AND     VENDR_CD      = #{vendrCd}
+                AND     EXCCLC_DATE   = #{excclcDate}
+                AND     SEQ_NO        = #{seqNo}
+            </when>
+        </choose>
+    </update>
+
+
+    <!-- 거래처 정산관리 - 지급액 삭제 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_EXACT_CALC
+                   TB_PO_STORE_VENDR_EXACT_CALC
+        PARAM    : vendrExactVO
+        COMMENTS : 거래처 지급액을 삭제한다.
+    -->
+    <delete id="deleteVendrExact" parameterType="vendrExactVO">
+        /* USE : VendrExactMapper.deleteVendrExact */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE  TB_PO_HQ_VENDR_EXACT_CALC
+                WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+                AND     VENDR_CD      = #{vendrCd}
+                AND     EXCCLC_DATE   = #{excclcDate}
+                AND     SEQ_NO        = #{seqNo}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE  TB_PO_STORE_VENDR_EXACT_CALC
+                WHERE   STORE_CD      = #{storeCd}
+                AND     VENDR_CD      = #{vendrCd}
+                AND     EXCCLC_DATE   = #{excclcDate}
+                AND     SEQ_NO        = #{seqNo}
+            </when>
+        </choose>
+    </delete>
+</mapper>

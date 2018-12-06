@@ -255,6 +255,17 @@
         <if test='barcdCd != null and barcdCd != ""'>
             AND thpb.BARCD_CD = #{barcdCd}
         </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND thp.PROD_CLASS_CD IN  ( SELECT  #{prodClassCd} AS PROD_CLASS_CD
+                                        FROM    DUAL
+                                        UNION
+                                        SELECT  thpc.PROD_CLASS_CD
+                                        FROM    TB_HQ_PRODUCT_CLASS thpc
+                                        WHERE   thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+                                        START WITH  thpc.P_PROD_CLASS_CD = #{prodClassCd}
+                                        CONNECT BY  thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD
+                                      )
+        </if>
         <![CDATA[
         ORDER BY thp.PROD_CD
         ]]>

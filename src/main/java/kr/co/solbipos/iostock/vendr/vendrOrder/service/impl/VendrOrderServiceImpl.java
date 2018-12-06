@@ -260,7 +260,7 @@ public class VendrOrderServiceImpl implements VendrOrderService {
     }
 
 
-    /** regId, regDt, modId, modDt, hqOfficd, storeCd, orgnCd 세팅  */
+    /** regId, regDt, modId, modDt, hqOfficd, storeCd, orgnFg 세팅  */
     public VendrOrderVO setSessionValue(VendrOrderVO vendrOrderVO, SessionInfoVO sessionInfoVO, String currentDt) {
         if(StringUtil.getOrBlank(currentDt).equals("")) {
             currentDt = currentDateTimeString();
