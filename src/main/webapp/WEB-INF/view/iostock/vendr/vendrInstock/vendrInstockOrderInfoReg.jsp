@@ -148,7 +148,7 @@
         // readOnly 배경색 표시
         else if (panel.cellType === wijmo.grid.CellType.Cell) {
           var col = panel.columns[c];
-          if (col.isReadOnly) {
+          if (col.isReadOnly || panel.grid.isReadOnly) {
             wijmo.addClass(cell, 'wj-custom-readonly');
           }
         }
@@ -158,11 +158,11 @@
 
     $scope.calcAmt = function (item) {
       <%-- 수량이 없는 경우 계산하지 않음. null 또는 undefined 가 나올수 있으므로 확실하게 확인하기 위해 nvl 처리로 null 로 바꿔서 비교 --%>
-      if (nvl(item.inUnitQty, null) === null || (item.poUnitQty !== 1 && nvl(item.inEtcQty, null) === null)) return false;
+      if (nvl(item.inUnitQty, null) === null && (item.poUnitQty !== 1 && nvl(item.inEtcQty, null) === null)) return false;
 
-      var costUprc  = parseFloat(item.costUprc);
-      var poUnitQty = parseInt(item.poUnitQty);
-      var vat01     = parseInt(item.vatFg01);
+      var costUprc     = parseFloat(item.costUprc);
+      var poUnitQty    = parseInt(item.poUnitQty);
+      var vat01        = parseInt(item.vatFg01);
       var vendrVatFg01 = parseInt(item.vendrVatFg01);
 
       var unitQty = (parseInt(nvl(item.prevOrderUnitQty, 0)) + parseInt(nvl(item.inUnitQty, 0))) * parseInt(item.poUnitQty);
@@ -187,8 +187,8 @@
       cv.trackChanges = true;
       $scope.data     = cv;
 
-      $scope.slipNo = data.slipNo;
-      $scope.slipFg = data.slipFg;
+      $scope.slipNo  = data.slipNo;
+      $scope.slipFg  = data.slipFg;
       $scope.vendrCd = data.vendrCd;
 
       // 발주번호 가져오기.
@@ -211,6 +211,7 @@
       params.slipNo      = $scope.slipNo;
       params.slipFg      = $scope.slipFg;
       params.orderSlipNo = $scope.orderSlipNo;
+      params.vendrCd     = $scope.vendrCd;
       params.listScale   = 50;
 
       // 조회 수행 : 조회URL, 파라미터, 콜백함수

@@ -62,16 +62,63 @@
           <%-- 분류 --%>
           <th><s:message code="rtnDstbCloseStore.add.prodClassNm"/></th>
           <td>
-            <input type="text" id="srchProdClass" name="prodClass" ng-model="prodClass" class="sb-input w100" maxlength="40"/>
+            <input type="text" class="sb-input w100" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()"
+                   placeholder="<s:message code="cmm.all" />" readonly/>
+            <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCd" disabled/>
           </td>
         </tr>
         <tr>
           <%-- 옵션1 --%>
           <th><s:message code="rtnDstbCloseStore.add.option1"/></th>
-          <td></td>
+          <td colspan="3">
+          <span class="txtIn w200px sb-select fl mr5">
+            <wj-combo-box
+              id="option1"
+              ng-model="option1"
+              items-source="_getComboData('option1')"
+              display-member-path="name"
+              selected-value-path="value"
+              is-editable="false"
+              initialized="_initComboBox(s)">
+            </wj-combo-box>
+          </span>
+          </td>
+        </tr>
+        <tr>
           <%-- 옵션2 --%>
           <th><s:message code="rtnDstbCloseStore.add.option2"/></th>
-          <td></td>
+          <td colspan="3">
+          <span class="txtIn w120px sb-select fl mr5">
+            <wj-combo-box
+              id="option2"
+              ng-model="option2"
+              items-source="_getComboData('option2')"
+              display-member-path="name"
+              selected-value-path="value"
+              is-editable="false"
+              initialized="_initComboBox(s)"
+              selected-index-changed="selectedIndexChanged(s, e)"
+            >
+            </wj-combo-box>
+          </span>
+            <p id="option2OrdLayer" class="s14 bk lh30 fl ml10" style="display: none;">
+              <s:message code="rtnDstbCloseStore.add.reqDate"/></p>
+            <p id="option2OutLayer" class="s14 bk lh30 fl ml10" style="display: none;">
+              <s:message code="rtnDstbCloseStore.add.outDate"/></p>
+            <p id="option2SaleLayer" class="s14 bk lh30 fl ml10" style="display: none;">
+              <s:message code="rtnDstbCloseStore.add.saleDate"/></p>
+            <div id="option2DateLayer" class="sb-select fl ml10" style="display: none;">
+              <span class="txtIn"><input id="srchRegStartDate" class="w120px"></span>
+              <span class="rg">~</span>
+              <span class="txtIn"><input id="srchRegEndDate" class="w120px"></span>
+            </div>
+            <p id="option2OrdLayer2" class="s14 bk lh30 fl ml10" style="display: none;">
+              <s:message code="rtnDstbCloseStore.add.txtOption2Ord"/></p>
+            <p id="option2OutLayer2" class="s14 bk lh30 fl ml10" style="display: none;">
+              <s:message code="rtnDstbCloseStore.add.txtOption2Out"/></p>
+            <p id="option2SaleLayer2" class="s14 bk lh30 fl ml10" style="display: none;">
+              <s:message code="rtnDstbCloseStore.add.txtOption2Sale"/></p>
+          </td>
         </tr>
         <tr>
           <td colspan="4">
@@ -169,6 +216,21 @@
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('rtnDstbCloseStoreAddCtrl', $scope, $http, true));
 
+    $scope._setComboData("option1", [
+      {"name": messages["rtnDstbCloseStore.add.option1All"], "value": ""},
+      {"name": messages["rtnDstbCloseStore.add.option1SafeStock"], "value": "S"}
+    ]);
+
+    $scope._setComboData("option2", [
+      {"name": messages["rtnDstbCloseStore.add.option2All"], "value": ""},
+      {"name": messages["rtnDstbCloseStore.add.option2Order"], "value": "ORD"},
+      {"name": messages["rtnDstbCloseStore.add.option2Outstock"], "value": "OUT"},
+      {"name": messages["rtnDstbCloseStore.add.option2Sale"], "value": "SALE"}
+    ]);
+
+    $scope.srchRegStartDate = wcombo.genDate("#srchRegStartDate");
+    $scope.srchRegEndDate   = wcombo.genDate("#srchRegEndDate");
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
       // s.allowMerging = wijmo.grid.AllowMerging.AllHeaders;
@@ -177,14 +239,19 @@
         if (e.panel === s.cells) {
           var col  = s.columns[e.col];
           var item = s.rows[e.row].dataItem;
-          if (col.binding === "mgrEtcQty") { // 입수에 따라 주문수량 컬럼 readonly 컨트롤
-            // console.log(item);
+          if (col.binding === "mgrUnitQty") {
+            $scope.calcAmt(item);
+          }
+          else if (col.binding === "mgrEtcQty") { // 입수에 따라 주문수량 컬럼 readonly 컨트롤
             if (item.poUnitQty === 1) {
               wijmo.addClass(e.cell, 'wj-custom-readonly');
               wijmo.setAttribute(e.cell, 'aria-readonly', true);
 
               // Attribute 의 변경사항을 적용.
               e.cell.outerHTML = e.cell.outerHTML;
+            }
+            else {
+              $scope.calcAmt(item);
             }
           }
         }
@@ -196,23 +263,7 @@
           // 주문수량 수정시 금액,VAT,합계 계산하여 보여준다.
           if (col.binding === "mgrUnitQty" || col.binding === "mgrEtcQty") {
             var item        = s.rows[e.row].dataItem;
-            var mgrSplyUprc = parseInt(item.mgrSplyUprc);
-            var poUnitQty   = parseInt(item.poUnitQty);
-            var vat01       = parseInt(item.vatFg01);
-            var envst0011   = parseInt(item.envst0011);
-
-            var unitQty    = parseInt(nvl(item.mgrUnitQty, 0)) * parseInt(item.poUnitQty);
-            var etcQty     = parseInt(nvl(item.mgrEtcQty, 0));
-            var totQty     = parseInt(unitQty + etcQty);
-            var tempMgrAmt = Math.round(totQty * mgrSplyUprc / poUnitQty);
-            var mgrAmt     = tempMgrAmt - Math.round(tempMgrAmt * vat01 * envst0011 / 11);
-            var mgrVat     = Math.round(tempMgrAmt * vat01 / (10 + envst0011));
-            var mgrTot     = parseInt(mgrAmt + mgrVat);
-
-            item.mgrTotQty = totQty; // 총수량
-            item.mgrAmt    = mgrAmt; // 금액
-            item.mgrVat    = mgrVat; // VAT
-            item.mgrTot    = mgrTot; // 합계
+            $scope.calcAmt(item);
           }
         }
 
@@ -223,7 +274,73 @@
       s.columnFooters.rows.push(new wijmo.grid.GroupRow());
       // add a sigma to the header to show that this is a summary row
       s.bottomLeftCells.setCellData(0, 0, '합계');
+
+      // 헤더머지
+      s.allowMerging  = 2;
+      s.itemFormatter = function (panel, r, c, cell) {
+        if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+          //align in center horizontally and vertically
+          panel.rows[r].allowMerging    = true;
+          panel.columns[c].allowMerging = true;
+          wijmo.setCss(cell, {
+            display    : 'table',
+            tableLayout: 'fixed'
+          });
+          cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+          wijmo.setCss(cell.children[0], {
+            display      : 'table-cell',
+            verticalAlign: 'middle',
+            textAlign    : 'center'
+          });
+        }
+        // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+        else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+          // GroupRow 인 경우에는 표시하지 않는다.
+          if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+            cell.textContent = '';
+          } else {
+            if (!isEmpty(panel._rows[r]._data.rnum)) {
+              cell.textContent = (panel._rows[r]._data.rnum).toString();
+            } else {
+              cell.textContent = (r + 1).toString();
+            }
+          }
+        }
+        // readOnly 배경색 표시
+        else if (panel.cellType === wijmo.grid.CellType.Cell) {
+          var col = panel.columns[c];
+          if (col.isReadOnly) {
+            wijmo.addClass(cell, 'wj-custom-readonly');
+          }
+        }
+      }
     };
+
+
+    // 금액 계산
+    $scope.calcAmt = function (item) {
+      <%-- 수량이 없는 경우 계산하지 않음. null 또는 undefined 가 나올수 있으므로 확실하게 확인하기 위해 nvl 처리로 null 로 바꿔서 비교 --%>
+      if (nvl(item.mgrUnitQty, null) === null && (item.poUnitQty !== 1 && nvl(item.mgrEtcQty, null) === null)) return false;
+
+      var mgrSplyUprc = parseInt(item.mgrSplyUprc);
+      var poUnitQty   = parseInt(item.poUnitQty);
+      var vat01       = parseInt(item.vatFg01);
+      var envst0011   = parseInt(item.envst0011);
+
+      var unitQty    = parseInt(nvl(item.mgrUnitQty, 0)) * parseInt(item.poUnitQty);
+      var etcQty     = parseInt(nvl(item.mgrEtcQty, 0));
+      var totQty     = parseInt(unitQty + etcQty);
+      var tempMgrAmt = Math.round(totQty * mgrSplyUprc / poUnitQty);
+      var mgrAmt     = tempMgrAmt - Math.round(tempMgrAmt * vat01 * envst0011 / 11);
+      var mgrVat     = Math.round(tempMgrAmt * vat01 / (10 + envst0011));
+      var mgrTot     = parseInt(mgrAmt + mgrVat);
+
+      item.mgrTotQty = totQty; // 총수량
+      item.mgrAmt    = mgrAmt; // 금액
+      item.mgrVat    = mgrVat; // VAT
+      item.mgrTot    = mgrTot; // 합계
+    };
+
 
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("rtnDstbCloseStoreAddCtrl", function (event, data) {
@@ -236,6 +353,11 @@
       if (!$.isEmptyObject(data)) {
         $scope.reqDate = data.reqDate;
         $scope.slipFg  = data.slipFg;
+
+        // 값 초기화
+        $scope.prodClassCdNm = messages["cmm.all"];
+        $scope.prodClassCd   = '';
+
         $scope.wjRtnDstbCloseStoreAddLayer.show(true);
         $("#addProdSubTitle").html(' ('+messages["rtnDstbCloseStore.add.reqDate"]+' : ' + getFormatDate($scope.reqDate, '-') + ')');
       }
@@ -264,6 +386,8 @@
       params.reqDate   = $scope.reqDate;
       params.slipFg    = $scope.slipFg;
       params.storeCd   = $scope.storeCd;
+      params.startDate = wijmo.Globalize.format($scope.srchRegStartDate.value, 'yyyyMMdd');
+      params.endDate   = wijmo.Globalize.format($scope.srchRegEndDate.value, 'yyyyMMdd');
       params.listScale = 50;
 
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
@@ -327,31 +451,68 @@
       cv.refresh();
     };
 
-    // http 조회 후 status 체크
-    $scope.httpStatusCheck = function (res) {
-      if (res.data.status === "OK") {
-        return true;
-      }
-      else if (res.data.status === "FAIL") {
-        $scope._popMsg("Ajax Fail By HTTP Request");
-        return false;
-      }
-      else if (res.data.status === "SESSION_EXFIRE") {
-        $scope._popMsg(res.data.message, function () {
-          location.href = res.data.url;
-        });
-        return false;
-      }
-      else if (res.data.status === "SERVER_ERROR") {
-        $scope._popMsg(res.data.message);
-        return false;
+
+    // 옵션2 값 변경 이벤트 함수
+    $scope.selectedIndexChanged = function (s, e) {
+      if (s.selectedValue === "") {
+        $scope.option2LayerHide();
       }
       else {
-        var msg = res.data.status + " : " + res.data.message;
-        $scope._popMsg(msg);
-        return false;
+        $scope.option2LayerHide();
+        $("#option2DateLayer").show();
+
+        if (s.selectedValue === "ORD") {
+          $("#option2OrdLayer").show();
+          $("#option2OrdLayer2").show();
+        }
+        else if (s.selectedValue === "OUT") {
+          $("#option2OutLayer").show();
+          $("#option2OutLayer2").show();
+        }
+        else if (s.selectedValue === "SALE") {
+          $("#option2SaleLayer").show();
+          $("#option2SaleLayer2").show();
+        }
       }
     };
+
+
+    $scope.option2LayerHide = function () {
+      $("#option2DateLayer").hide();
+      $("#option2OrdLayer").hide();
+      $("#option2OrdLayer2").hide();
+      $("#option2OutLayer").hide();
+      $("#option2OutLayer2").hide();
+      $("#option2SaleLayer").hide();
+      $("#option2SaleLayer2").hide();
+    };
+
+
+    // 상품분류정보 팝업
+    $scope.popUpProdClass = function () {
+      var popUp = $scope.prodClassPopUpLayer;
+      popUp.show(true, function (s) {
+        // 선택 버튼 눌렀을때만
+        if (s.dialogResult === "wj-hide-apply") {
+          var scope          = agrid.getScope('prodClassPopUpCtrl');
+          var prodClassCd    = scope.getSelectedClass();
+          var params         = {};
+          params.prodClassCd = prodClassCd;
+          // 조회 수행 : 조회URL, 파라미터, 콜백함수
+          $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
+            function (response) {
+              $scope.prodClassCd   = prodClassCd;
+              $scope.prodClassCdNm = response.data.data;
+            }
+          );
+        }
+      });
+    };
+
   }]);
 
 </script>
+
+<%-- 상품분류 팝업 --%>
+<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
+</c:import>

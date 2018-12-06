@@ -143,7 +143,7 @@
   var app = agrid.getApp();
 
   /** 분배마감 그리드 controller */
-  app.controller('dstbCloseStoreCtrl', ['$scope', '$http', function ($scope, $http) {
+  app.controller('dstbCloseStoreCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('dstbCloseStoreCtrl', $scope, $http, true));
 
@@ -158,24 +158,30 @@
       {"name": messages["dstbCloseStore.modDate"], "value": "mod"}
     ]);
 
-    $scope._setComboData("srchProcFg", [
-      {"name": "<s:message code='dstbCloseStore.procFgAll'/>", "value": ""},
-      {"name": "<s:message code='dstbCloseStore.procFgReg'/>", "value": "00"},
-      {"name": "<s:message code='dstbCloseStore.procFgMd'/>", "value": "10"},
-      {"name": "<s:message code='dstbCloseStore.procFgDstbClose'/>", "value": "20"},
-      {"name": "<s:message code='dstbCloseStore.procFgSlip'/>", "value": "30"}
-    ]);
-    $scope.procFg = "10"; // 진행구분 기본값 세팅
+    <%--$scope._setComboData("srchProcFg", [--%>
+      <%--{"name": "<s:message code='dstbCloseStore.procFgAll'/>", "value": ""},--%>
+      <%--{"name": "<s:message code='dstbCloseStore.procFgReg'/>", "value": "00"},--%>
+      <%--{"name": "<s:message code='dstbCloseStore.procFgMd'/>", "value": "10"},--%>
+      <%--{"name": "<s:message code='dstbCloseStore.procFgDstbClose'/>", "value": "20"},--%>
+      <%--{"name": "<s:message code='dstbCloseStore.procFgSlip'/>", "value": "30"}--%>
+    <%--]);--%>
+    <%--$scope.procFg = "10"; // 진행구분 기본값 세팅--%>
 
-    $scope.procFgMap = new wijmo.grid.DataMap([
-      {id: "00", name: "<s:message code='dstbCloseStore.procFgReg'/>"},
-      {id: "10", name: "<s:message code='dstbCloseStore.procFgMd'/>"},
-      {id: "20", name: "<s:message code='dstbCloseStore.procFgDstbClose'/>"},
-      {id: "30", name: "<s:message code='dstbCloseStore.procFgSlip'/>"}
-    ], 'id', 'name');
+    <%--$scope.procFgMap = new wijmo.grid.DataMap([--%>
+      <%--{id: "00", name: "<s:message code='dstbCloseStore.procFgReg'/>"},--%>
+      <%--{id: "10", name: "<s:message code='dstbCloseStore.procFgMd'/>"},--%>
+      <%--{id: "20", name: "<s:message code='dstbCloseStore.procFgDstbClose'/>"},--%>
+      <%--{id: "30", name: "<s:message code='dstbCloseStore.procFgSlip'/>"}--%>
+    <%--], 'id', 'name');--%>
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+      var comboParams         = {};
+      comboParams.nmcodeGrpCd = "084";
+      // 파라미터 (comboFg, comboId, gridMapId, url, params, option)
+      $scope._queryCombo("combo,map", "srchProcFg", "procFgMap", null, comboParams, "A", function () {
+        $scope.procFg = "10"; // 진행구분 기본값 세팅
+      }); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
 
       // picker 사용시 호출 : 미사용시 호출안함
       $scope._makePickColumns("dstbCloseStoreCtrl");
@@ -385,6 +391,100 @@
       params.slipFg  = $scope.slipFg;
       $scope._broadcast('dstbCloseStoreAddCtrl', params);
     };
+
+
+    // DB 데이터를 조회해와서 그리드에서 사용할 Combo를 생성한다.
+    // comboFg : map - 그리드에 사용할 Combo, combo - ComboBox 생성. 두가지 다 사용할경우 combo,map 으로 하면 둘 다 생성.
+    // comboId : combo 생성할 ID
+    // gridMapId : grid 에서 사용할 Map ID
+    // url : 데이터 조회할 url 정보. 명칭관리 조회시에는 url 필요없음.
+    // params : 데이터 조회할 url에 보낼 파라미터
+    // option : A - combo 최상위에 전체라는 텍스트를 붙여준다. S - combo 최상위에 선택이라는 텍스트를 붙여준다. A 또는 S 가 아닌 경우는 데이터값만으로 생성
+    // callback : queryCombo 후 callback 할 함수
+    $scope._queryCombo = function (comboFg, comboId, gridMapId, url, params, option, callback) {
+      var comboUrl = "/iostock/volmErr/volmErr/volmErr/getCombo.sb";
+      if (url) {
+        comboUrl = url;
+      }
+
+      // ajax 통신 설정
+      $http({
+        method : 'POST', //방식
+        url    : comboUrl, /* 통신할 URL */
+        params : params, /* 파라메터로 보낼 데이터 */
+        headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+      }).then(function successCallback(response) {
+        if (response.data.status === "OK") {
+          // this callback will be called asynchronously
+          // when the response is available
+          if (!$.isEmptyObject(response.data.data.list)) {
+            var list       = response.data.data.list;
+            var comboArray = [];
+            var comboData  = {};
+
+            if (comboFg.indexOf("combo") >= 0 && nvl(comboId,'') !== '') {
+              comboArray = [];
+              if (option === "A") {
+                comboData.name  = messages["cmm.all"];
+                comboData.value = "";
+                comboArray.push(comboData);
+              }
+              else if (option === "S") {
+                comboData.name  = messages["cmm.select"];
+                comboData.value = "";
+                comboArray.push(comboData);
+              }
+
+              for (var i = 0; i < list.length; i++) {
+                comboData       = {};
+                comboData.name  = list[i].nmcodeNm;
+                comboData.value = list[i].nmcodeCd;
+                comboArray.push(comboData);
+              }
+              $scope._setComboData(comboId, comboArray);
+            }
+
+            if (comboFg.indexOf("map") >= 0 && nvl(gridMapId,'') !== '') {
+              comboArray = [];
+              for (var i = 0; i < list.length; i++) {
+                comboData      = {};
+                comboData.id   = list[i].nmcodeCd;
+                comboData.name = list[i].nmcodeNm;
+                comboArray.push(comboData);
+              }
+              $scope[gridMapId] = new wijmo.grid.DataMap(comboArray, 'id', 'name');
+            }
+          }
+        }
+        else if (response.data.status === "FAIL") {
+          $scope._popMsg("Ajax Fail By HTTP Request");
+        }
+        else if (response.data.status === "SESSION_EXFIRE") {
+          $scope._popMsg(response.data.message, function () {
+            location.href = response.data.url;
+          });
+        }
+        else if (response.data.status === "SERVER_ERROR") {
+          $scope._popMsg(response.data.message);
+        }
+        else {
+          var msg = response.data.status + " : " + response.data.message;
+          $scope._popMsg(msg);
+        }
+      }, function errorCallback(response) {
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+        $scope._popMsg(messages["cmm.error"]);
+        return false;
+      }).then(function () {
+        if (typeof callback === 'function') {
+          $timeout(function () {
+            callback();
+          }, 10);
+        }
+      });
+    };
+
   }]);
 </script>
 

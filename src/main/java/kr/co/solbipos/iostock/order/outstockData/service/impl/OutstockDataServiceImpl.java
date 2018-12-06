@@ -15,7 +15,7 @@ import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
-@Service("OutstockDataService")
+@Service("outstockDataService")
 public class OutstockDataServiceImpl implements OutstockDataService {
     private final OutstockDataMapper outstockDataMapper;
     private final MessageService messageService;

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service("StoreLoanInfoService")
+@Service("storeLoanInfoService")
 public class StoreLoanInfoServiceImpl implements StoreLoanInfoService {
 
     private final StoreLoanInfoMapper storeLoanInfoMapper;

@@ -16,7 +16,7 @@ import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
-@Service("RtnOutstockData")
+@Service("rtnOutstockData")
 public class RtnOutstockDataServiceImpl implements RtnOutstockDataService {
     private final RtnOutstockDataMapper rtnOutstockDataMapper;
     private final MessageService messageService;

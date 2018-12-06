@@ -33,11 +33,14 @@
       <div class="tr mt10">
         <p id="dtlStoreLoanInfo" class="fl s14 bk lh30"></p>
         <%-- 상품추가/변경 --%>
-        <button type="button" id="btnAddProd" class="btn_skyblue ml5" ng-click="addProd()" ng-if="btnAddProd"><s:message code="storeOrder.addProd"/></button>
+        <button type="button" id="btnAddProd" class="btn_skyblue ml5" ng-click="addProd()" ng-if="btnAddProd">
+          <s:message code="storeOrder.addProd"/></button>
         <%-- 저장 --%>
-        <button type="button" id="btnDtlSave" class="btn_skyblue ml5" ng-click="saveStoreOrderDtl('save')" ng-if="btnDtlSave"><s:message code="cmm.save"/></button>
+        <button type="button" id="btnDtlSave" class="btn_skyblue ml5" ng-click="saveStoreOrderDtl('save')" ng-if="btnDtlSave">
+          <s:message code="cmm.save"/></button>
         <%-- 확정 --%>
-        <button type="button" id="btnConfirm" class="btn_skyblue ml5" ng-click="saveStoreOrderDtl('confirm')" ng-if="btnConfirm"><s:message code="storeOrder.dtl.confirm"/></button>
+        <button type="button" id="btnConfirm" class="btn_skyblue ml5" ng-click="saveStoreOrderDtl('confirm')" ng-if="btnConfirm">
+          <s:message code="storeOrder.dtl.confirm"/></button>
       </div>
       <div style="clear: both;"></div>
 
@@ -68,9 +71,9 @@
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.poUnitQty"/>" binding="poUnitQty" width="50" align="right" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.remark"/>" binding="remark" width="200" align="left" max-length=300></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.poMinQty"/>" binding="poMinQty" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.vatFg"/>" binding="vatFg01" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.envst0011"/>" binding="envst0011" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.poMinQty"/>" binding="poMinQty" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.vatFg"/>" binding="vatFg01" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.envst0011"/>" binding="envst0011" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
 
           </wj-flex-grid>
         </div>
@@ -97,7 +100,6 @@
           var col  = s.columns[e.col];
           var item = s.rows[e.row].dataItem;
           if (col.binding === "orderEtcQty") { // 입수에 따라 주문수량 컬럼 readonly 컨트롤
-            // console.log(item);
             if (item.poUnitQty === 1) {
               wijmo.addClass(e.cell, 'wj-custom-readonly');
               wijmo.setAttribute(e.cell, 'aria-readonly', true);
@@ -113,24 +115,8 @@
         if (e.panel === s.cells) {
           var col = s.columns[e.col];
           if (col.binding === "orderUnitQty" || col.binding === "orderEtcQty") { // 주문수량 수정시
-            var item          = s.rows[e.row].dataItem;
-            var orderSplyUprc = parseInt(item.orderSplyUprc);
-            var poUnitQty     = parseInt(item.poUnitQty);
-            var vat01         = parseInt(item.vatFg01);
-            var envst0011     = parseInt(item.envst0011);
-
-            var unitQty  = parseInt(nvl(item.orderUnitQty, 0)) * parseInt(item.poUnitQty);
-            var etcQty   = parseInt(nvl(item.orderEtcQty, 0));
-            var totQty   = parseInt(unitQty + etcQty);
-            var tempAmt  = Math.round(totQty * orderSplyUprc / poUnitQty);
-            var orderAmt = tempAmt - Math.round(tempAmt * vat01 * envst0011 / 11);
-            var orderVat = Math.round(tempAmt * vat01 / (10 + envst0011));
-            var orderTot = parseInt(orderAmt + orderVat);
-
-            item.orderTotQty = totQty;   // 총주문수량
-            item.orderAmt    = orderAmt; // 금액
-            item.orderVat    = orderVat; // VAT
-            item.orderTot    = orderTot; // 합계
+            var item = s.rows[e.row].dataItem;
+            $scope.calcAmt(item);
           }
         }
 
@@ -183,6 +169,31 @@
       }
     };
 
+
+    $scope.calcAmt = function (item) {
+      <%-- 수량이 없는 경우 계산하지 않음. null 또는 undefined 가 나올수 있으므로 확실하게 확인하기 위해 nvl 처리로 null 로 바꿔서 비교 --%>
+      if (nvl(item.orderUnitQty, null) === null && (item.poUnitQty !== 1 && nvl(item.orderEtcQty, null) === null)) return false;
+
+      var orderSplyUprc = parseInt(item.orderSplyUprc);
+      var poUnitQty     = parseInt(item.poUnitQty);
+      var vat01         = parseInt(item.vatFg01);
+      var envst0011     = parseInt(item.envst0011);
+
+      var unitQty  = parseInt(nvl(item.orderUnitQty, 0)) * parseInt(item.poUnitQty);
+      var etcQty   = parseInt(nvl(item.orderEtcQty, 0));
+      var totQty   = parseInt(unitQty + etcQty);
+      var tempAmt  = Math.round(totQty * orderSplyUprc / poUnitQty);
+      var orderAmt = tempAmt - Math.round(tempAmt * vat01 * envst0011 / 11);
+      var orderVat = Math.round(tempAmt * vat01 / (10 + envst0011));
+      var orderTot = parseInt(orderAmt + orderVat);
+
+      item.orderTotQty = totQty;   // 총주문수량
+      item.orderAmt    = orderAmt; // 금액
+      item.orderVat    = orderVat; // VAT
+      item.orderTot    = orderTot; // 합계
+    };
+
+
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("storeOrderDtlCtrl", function (event, data) {
       $scope.reqDate     = data.reqDate;
@@ -192,25 +203,23 @@
 
       $scope.wjStoreOrderDtlLayer.show(true);
       if ($scope.procFg === "00") {
-        $scope.btnAddProd = true;
-        $scope.btnDtlSave = true;
+        $scope.btnAddProd      = true;
+        $scope.btnDtlSave      = true;
         $scope.flex.isReadOnly = false;
 
         if ("${envst1042}" === "1" || "${envst1042}" === "2") {
           $scope.btnConfirm = true;
-        }
-        else {
+        } else {
           $scope.btnConfirm = false;
         }
-      }
-      else {
-        $scope.btnAddProd = false;
-        $scope.btnDtlSave = false;
-        $scope.btnConfirm = false;
+      } else {
+        $scope.btnAddProd      = false;
+        $scope.btnDtlSave      = false;
+        $scope.btnConfirm      = false;
         $scope.flex.isReadOnly = true;
       }
 
-      $("#spanDtlTitle").html(messages["storeOrder.reqDate"]+' : ' + getFormatDate($scope.reqDate, '-'));
+      $("#spanDtlTitle").html(messages["storeOrder.reqDate"] + ' : ' + getFormatDate($scope.reqDate, '-'));
       $scope.searchStoreLoan("Y");
       // 기능수행 종료 : 반드시 추가
       event.preventDefault();
@@ -234,8 +243,7 @@
             if (response.data.data.orderCloseYn === "Y") {
               $scope.flex.isReadOnly = true;
               $scope._popMsg(messages["storeOrder.dtl.orderClose"]);
-            }
-            else {
+            } else {
               $scope.flex.isReadOnly = false;
             }
 
@@ -250,33 +258,27 @@
             if ($scope.noOutstockAmtFg === "Y") {
               if ($scope.availableOrderAmt <= ($scope.currLoanAmt - $scope.prevOrderTot)) {
                 // 해당 조건에는 조회해 온 주문가능액 그대로 사용
-              }
-              else if ($scope.availableOrderAmt >= ($scope.currLoanAmt - $scope.prevOrderTot) && $scope.maxOrderAmt != 0) {
+              } else if ($scope.availableOrderAmt >= ($scope.currLoanAmt - $scope.prevOrderTot) && $scope.maxOrderAmt != 0) {
                 $scope.availableOrderAmt = $scope.currLoanAmt - $scope.prevOrderTot;
-              }
-              else {
+              } else {
                 $scope.availableOrderAmt = $scope.availableOrderAmt - $scope.prevOrderTot;
               }
             }
 
             $("#dtlStoreLoanInfo").html("1회주문한도액 : " + addComma($scope.maxOrderAmt) + " 여신잔액 : " + addComma($scope.currLoanAmt) + " 미출고액 : " + addComma($scope.prevOrderTot) + " 주문가능액 : " + addComma($scope.availableOrderAmt));
           }
-        }
-        else if (response.data.status === "FAIL") {
+        } else if (response.data.status === "FAIL") {
           $scope._popMsg("Ajax Fail By HTTP Request");
           return false;
-        }
-        else if (response.data.status === "SESSION_EXFIRE") {
+        } else if (response.data.status === "SESSION_EXFIRE") {
           $scope._popMsg(response.data.message, function () {
             location.href = response.data.url;
           });
           return false;
-        }
-        else if (response.data.status === "SERVER_ERROR") {
+        } else if (response.data.status === "SERVER_ERROR") {
           $scope._popMsg(response.data.message);
           return false;
-        }
-        else {
+        } else {
           var msg = response.data.status + " : " + response.data.message;
           $scope._popMsg(msg);
           return false;
@@ -325,8 +327,7 @@
         // 수정된 파라미터가 없더라도 확정은 진행되어야함.
         if (saveFg === "confirm") {
           $scope.confirm();
-        }
-        else {
+        } else {
           $scope._popMsg(messages["cmm.not.modify"]);
         }
         return false;
@@ -335,7 +336,6 @@
       }
 
       if ($scope.availableOrderAmt != null) {
-        // console.log("orderTot = "+orderTot);
         if (parseInt($scope.availableOrderAmt) < parseInt(orderTot)) {
           $scope._popMsg(messages["storeOrder.dtl.orderTotOver"]);
           return false;
@@ -349,15 +349,14 @@
         data   : params, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
-        if ($scope._httpStatusCheck(response)) {
+        if ($scope._httpStatusCheck(response, true)) {
           $scope._popMsg(messages["cmm.saveSucc"]);
           $scope.flex.collectionView.clearChanges();
 
           // 확정버튼 클릭시에도 변경사항 저장 후에 확정 로직을 진행해야하므로 저장 후에 확정로직 다시 실행.
           if (saveFg === "confirm") {
             $scope.confirm();
-          }
-          else if (saveFg === "save") {
+          } else if (saveFg === "save") {
             $scope.saveOrderDtlCallback();
           }
         }

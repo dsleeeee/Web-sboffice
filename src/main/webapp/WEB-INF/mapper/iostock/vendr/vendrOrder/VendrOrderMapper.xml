@@ -393,6 +393,24 @@
                 <if test='prodNm != null and prodNm != ""'>
                     AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
                 </if>
+                <if test="barcdCd != null and barcdCd != ''">
+                    AND thp.PROD_CD IN  ( SELECT  thpb.PROD_CD
+                                          FROM    TB_HQ_PRODUCT_BARCD thpb
+                                          WHERE   thpb.HQ_OFFICE_CD = #{hqOfficeCd}
+                                          AND     thpb.BARCD_CD     = #{barcdCd}
+                                        )
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND thp.PROD_CLASS_CD IN  ( SELECT	#{prodClassCd} AS PROD_CLASS_CD
+                                                FROM	DUAL
+                                                UNION
+                                                SELECT  thpc.PROD_CLASS_CD
+                                                FROM    TB_HQ_PRODUCT_CLASS thpc
+                                                WHERE   thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+                                                START WITH  thpc.P_PROD_CLASS_CD = #{prodClassCd}
+                                                CONNECT BY  thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD
+                                              )
+                </if>
                 <if test='safeStockFg == "Y"'>
                     <![CDATA[
                     AND NVL(tshsc.CURR_QTY, 0) < NVL(thp.SAFE_STOCK_QTY, 0)
@@ -451,6 +469,24 @@
                 </if>
                 <if test='prodNm != null and prodNm != ""'>
                     AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+                </if>
+                <if test="barcdCd != null and barcdCd != ''">
+                  AND tmp.PROD_CD IN  ( SELECT  tmpb.PROD_CD
+                                        FROM    TB_MS_PRODUCT_BARCD tmpb
+                                        WHERE   tmpb.STORE_CD  = #{storeCd}
+                                        AND     tmpb.BARCD_CD  = #{barcdCd}
+                                      )
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND tmp.PROD_CLASS_CD IN  ( SELECT	#{prodClassCd} AS PROD_CLASS_CD
+                                                FROM	DUAL
+                                                UNION
+                                                SELECT  tmpc.PROD_CLASS_CD
+                                                FROM    TB_MS_PRODUCT_CLASS tmpc
+                                                WHERE   tmpc.STORE_CD = #{storeCd}
+                                                START WITH  tmpc.P_PROD_CLASS_CD = #{prodClassCd}
+                                                CONNECT BY  tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD
+                                              )
                 </if>
                 <if test='safeStockFg == "Y"'>
                     <![CDATA[

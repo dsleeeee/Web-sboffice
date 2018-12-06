@@ -105,6 +105,12 @@ public class DisuseServiceImpl implements DisuseService {
     @Override
     public List<DefaultMap<String>> getDisuseRegistList(DisuseVO disuseVO, SessionInfoVO sessionInfoVO) {
         List<DefaultMap<String>> result = new ArrayList<DefaultMap<String>>();
+
+        // 거래처 멀티 선택
+        if(!StringUtil.getOrBlank(disuseVO.getVendrCd()).equals("")) {
+            disuseVO.setArrVendrCd(disuseVO.getVendrCd().split(","));
+        }
+
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
             disuseVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             result = disuseMapper.getHqDisuseRegistList(disuseVO);

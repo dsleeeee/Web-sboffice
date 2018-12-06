@@ -14,7 +14,7 @@ import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
-@Service("InstockConfmService")
+@Service("instockConfmService")
 public class InstockConfmServiceImpl implements InstockConfmService {
     private final InstockConfmMapper instockConfmMapper;
     private final MessageService messageService;

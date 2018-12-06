@@ -46,20 +46,35 @@
         </colgroup>
         <tbody>
         <tr>
+          <%-- 비고 --%>
           <th><s:message code="outstockConfm.dtl.hdRemark"/></th>
           <td>
             <input type="text" id="hdRemark" name="hdRemark" ng-model="hdRemark" class="sb-input w100" maxlength="300"/>
           </td>
         </tr>
         <tr>
+          <%-- 본사비고(매장열람불가) --%>
           <th><s:message code="outstockConfm.dtl.hqRemark"/></th>
           <td>
             <input type="text" id="hqRemark" name="hqRemark" ng-model="hqRemark" class="sb-input w100" maxlength="300"/>
           </td>
         </tr>
         <tr>
+          <%-- 배송기사 --%>
           <th><s:message code="outstockConfm.dtl.dlvrNm"/></th>
-          <td></td>
+          <td>
+            <span class="txtIn w150px sb-select fl mr5">
+              <wj-combo-box
+                id="srchDtlDlvrCd"
+                ng-model="dlvrCd"
+                items-source="_getComboData('srchDtlDlvrCd')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="_initComboBox(s)">
+              </wj-combo-box>
+            </span>
+          </td>
         </tr>
         <tr>
           <%-- 거래명세표 --%>
@@ -101,10 +116,12 @@
             <span class="txtIn"><input id="dtlOutDate" class="w120px"></span>
           </div>
           <%-- 저장 --%>
-          <button type="button" id="btnDtlSave" class="btn_skyblue ml5 fl" ng-click="save()" ng-if="btnDtlSave"><s:message code="cmm.save"/></button>
+          <button type="button" id="btnDtlSave" class="btn_skyblue ml5 fl" ng-click="save()" ng-if="btnDtlSave">
+            <s:message code="cmm.save"/></button>
         </div>
         <%-- 출고 후 저장 --%>
-        <button type="button" id="btnOutstockAfterDtlSave" class="btn_skyblue ml5 fl" ng-click="saveOutstockAfter()" ng-if="btnOutstockAfterDtlSave"><s:message code="cmm.save"/></button>
+        <button type="button" id="btnOutstockAfterDtlSave" class="btn_skyblue ml5 fl" ng-click="saveOutstockAfter()" ng-if="btnOutstockAfterDtlSave">
+          <s:message code="cmm.save"/></button>
       </div>
       <div style="clear: both;"></div>
 
@@ -168,13 +185,19 @@
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+      var outstockConfmScope = agrid.getScope('outstockConfmCtrl');
+      // 배송기사
+      var comboParams             = {};
+      var url = '/iostock/order/outstockConfm/outstockConfm/getDlvrCombo.sb';
+      // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
+      outstockConfmScope._queryCombo("combo", "srchDtlDlvrCd", null, url, comboParams, "S"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+
       // 그리드 포맷 핸들러
       s.formatItem.addHandler(function (s, e) {
         if (e.panel === s.cells) {
           var col  = s.columns[e.col];
           var item = s.rows[e.row].dataItem;
           if (col.binding === "outEtcQty") { // 입수에 따라 출고수량 컬럼 readonly 컨트롤
-            // console.log(item);
             if (item.poUnitQty === 1) {
               wijmo.addClass(e.cell, 'wj-custom-readonly');
               wijmo.setAttribute(e.cell, 'aria-readonly', true);
@@ -230,6 +253,7 @@
       $scope.slipNo = data.slipNo;
       $scope.wjOutstockConfmDtlLayer.show(true);
 
+
       $scope.getSlipNoInfo();
       // 기능수행 종료 : 반드시 추가
       event.preventDefault();
@@ -247,7 +271,7 @@
         params : params, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
-        if ($scope.httpStatusCheck(response)) {
+        if ($scope._httpStatusCheck(response, true)) {
           if (!$.isEmptyObject(response.data.data)) {
 
             $scope.dtlOutDate.value = new Date(getFormatDate(response.data.data.outDate, "-"));
@@ -261,7 +285,7 @@
             $scope.storeNm          = response.data.data.storeNm;
             $scope.hdRemark         = response.data.data.remark;
             $scope.hqRemark         = response.data.data.hqRemark;
-            $scope.dlvrCd           = response.data.data.dlvrCd;
+            $scope.dlvrCd           = nvl(response.data.data.dlvrCd, ''); // 값이 null 인 경우 선택이 select 될수 있도록 nvl 처리함.
             $scope.dlvrNm           = response.data.data.dlvrNm;
 
             // 수주확정
@@ -274,18 +298,18 @@
 
               // $("#spanDtlTitle").html(messages["outstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["outstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["outstockConfm.dtl.reqDate"]+' : ' + getFormatDate($scope.outDate));
               $("#outstockBtnLayer").show();
-              $scope.spanOutstockConfirmFg = true;
-              $scope.btnDtlSave = true;
+              $scope.spanOutstockConfirmFg   = true;
+              $scope.btnDtlSave              = true;
               $scope.btnOutstockAfterDtlSave = false;
-              $scope.flex.isReadOnly = false;
+              $scope.flex.isReadOnly         = false;
             }
             // 출고확정 또는 입고확정
             else if ($scope.procFg === "20" || $scope.procFg === "30") {
               $("#outstockBtnLayer").hide();
-              $scope.spanOutstockConfirmFg = false;
-              $scope.btnDtlSave = false;
+              $scope.spanOutstockConfirmFg   = false;
+              $scope.btnDtlSave              = false;
               $scope.btnOutstockAfterDtlSave = true;
-              $scope.flex.isReadOnly = true;
+              $scope.flex.isReadOnly         = true;
 
               // 출고확정
               if ($scope.procFg === "20") {
@@ -401,7 +425,7 @@
         params : params, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
-        if ($scope.httpStatusCheck(response)) {
+        if ($scope._httpStatusCheck(response, true)) {
           $scope._popMsg(messages["cmm.saveSucc"]);
           $scope.flex.collectionView.clearChanges();
           $scope.saveOutstockConfmDtlCallback();
@@ -416,39 +440,15 @@
       });
     };
 
+
     $scope.fnConfirmChk = function () {
       if ($("#outstockConfirmFg").prop("checked")) {
         $("#divDtlOutDate").show();
-      }
-      else {
+      } else {
         $("#divDtlOutDate").hide();
       }
     };
 
-    // http 조회 후 status 체크
-    $scope.httpStatusCheck = function (res) {
-      if (res.data.status === "OK") {
-        return true;
-      }
-      else if (res.data.status === "FAIL") {
-        $scope._popMsg("Ajax Fail By HTTP Request");
-        return false;
-      }
-      else if (res.data.status === "SESSION_EXFIRE") {
-        $scope._popMsg(res.data.message, function () {
-          location.href = res.data.url;
-        });
-        return false;
-      }
-      else if (res.data.status === "SERVER_ERROR") {
-        $scope._popMsg(res.data.message);
-        return false;
-      }
-      else {
-        var msg = res.data.status + " : " + res.data.message;
-        $scope._popMsg(msg);
-        return false;
-      }
-    };
+
   }]);
 </script>

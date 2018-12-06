@@ -126,9 +126,9 @@
       <p class="s12 bk lh30 fl ml10"><s:message code="vendrInstock.dtl.dtlCnt"/>: [</p>
       <p class="s12 bk lh30 fl red" ng-bind="slipInfo.dtlCnt"></p>
       <p class="s12 bk lh30 fl mr10">]</p>
-      <button type="button" id="btnDtlConfirm" class="btn_skyblue ml5" ng-click="confirm('0')" ng-if="btnDtlConfirmShowFg">
+      <button type="button" id="btnDtlConfirm" class="btn_skyblue ml5" ng-click="confirm('1')" ng-if="btnDtlConfirmShowFg">
         <s:message code="vendrInstock.dtl.confirm"/></button>
-      <button type="button" id="btnDtlConfirmCancel" class="btn_skyblue ml5" ng-click="confirm('1')" ng-if="btnDtlConfirmCancelShowFg">
+      <button type="button" id="btnDtlConfirmCancel" class="btn_skyblue ml5" ng-click="confirm('0')" ng-if="btnDtlConfirmCancelShowFg">
         <s:message code="vendrInstock.dtl.confirmCancel"/></button>
     </div>
   </h3>
@@ -269,14 +269,11 @@
         params : params, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
-        if ($scope._httpStatusCheck(response)) {
+        if ($scope._httpStatusCheck(response, true)) {
           // 진행구분이 조정등록이 아니면 상품추가/변경 불가
           if (!$.isEmptyObject(response.data.data)) {
             var data            = response.data.data;
             $scope.slipSearchYn = 'Y';
-
-            console.log('getSlipInfo data');
-            console.log(data);
 
             // 전표상태가 등록인 경우 버튼 컨트롤
             if (data.procFg != "" && data.procFg == "0") {
@@ -399,7 +396,7 @@
 
       // 입고
       if ($scope.slipFg === 1) {
-        params.vendrCd = ($scope.slipInfo.instockType === 'Y' ? $scope.slipInfo.vendrCd : $("#vendrInstockDtlSelectVendrCd").val());
+        params.vendrCd     = ($scope.slipInfo.instockType === 'Y' ? $scope.slipInfo.vendrCd : $("#vendrInstockDtlSelectVendrCd").val());
         params.orderSlipNo = $scope.slipInfo.orderSlipNo;
         params.instockType = $scope.slipInfo.instockType;
       }
@@ -408,35 +405,26 @@
         params.vendrCd = $("#vendrInstockDtlRtnSelectVendrCd").val();
       }
 
-      console.log('submitForm params');
-      console.log(params);
-
       $http({
         method : 'POST', //방식
         url    : "/iostock/vendr/vendrInstock/vendrInstockDtl/save.sb", /* 통신할 URL */
         params : params, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
-        if ($scope._httpStatusCheck(response)) {
+        if ($scope._httpStatusCheck(response, true)) {
           $scope._popMsg(messages['cmm.saveSucc']);
-
-          console.log('submitForm response');
-          console.log(response);
 
           if (!$.isEmptyObject(response.data.data)) {
             var data = response.data.data;
-
-            console.log('submitForm data');
-            console.log(data);
 
             // 입고/반출 리스트 그리드 조회
             var vendrInstockScope = agrid.getScope('vendrInstockCtrl');
             vendrInstockScope.searchVendrInstockList();
 
-            var params    = {};
-            params.slipNo = data.slipNo;
-            params.slipFg = parseInt(data.slipFg);
-            params.vendrCd = parseInt(data.vendrCd);
+            var params     = {};
+            params.slipNo  = data.slipNo;
+            params.slipFg  = parseInt(data.slipFg);
+            params.vendrCd = data.vendrCd;
             $scope._broadcast('vendrInstockPopCtrl', params);
           } else {
             $scope.popupClose();
@@ -495,8 +483,6 @@
           params : params, /* 파라메터로 보낼 데이터 */
           headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
         }).then(function successCallback(response) {
-          console.log('delete response');
-          console.log(response);
           if (response.data.status === 'OK') {
             $scope._popMsg(messages['cmm.delSucc']);
             $scope.popupClose();
@@ -529,12 +515,14 @@
       }
 
       s_alert.popConf(msg, function () {
-        var params    = {};
-        params.slipNo = $scope.slipNo;
-        params.procFg = procFg;
+        var params         = {};
+        params.slipNo      = $scope.slipNo;
+        params.procFg      = procFg;
 
-        console.log('confirm params');
-        console.log(params);
+        // 입고이면서 발주입고인 경우만 발주번호를 파라미터에 세팅
+        if ($scope.slipFg === 1) {
+          params.orderSlipNo = ($scope.slipInfo.instockType === 'Y' ? $scope.slipInfo.orderSlipNo : '');
+        }
 
         $http({
           method : 'POST', //방식
@@ -552,6 +540,16 @@
             var params    = {};
             params.slipNo = $scope.slipNo;
             params.slipFg = $scope.slipFg;
+
+            // 입고
+            if ($scope.slipFg === 1) {
+              params.vendrCd = ($scope.slipInfo.instockType === 'Y' ? $scope.slipInfo.vendrCd : $("#vendrInstockDtlSelectVendrCd").val());
+            }
+            // 반출
+            else if ($scope.slipFg === -1) {
+              params.vendrCd = $("#vendrInstockDtlRtnSelectVendrCd").val();
+            }
+
             $scope._broadcast('vendrInstockPopCtrl', params);
           } else if (response.data.status === 'FAIL') {
             $scope._popMsg(response.data.message);
@@ -572,7 +570,6 @@
 
     // 발주번호선택 팝업 호출
     $scope.selectOrderSlip = function () {
-      console.log('selectOrderSlip');
       var params = {};
       $scope._broadcast('vendrInstockOrderSlipCtrl', params);
     };
@@ -596,13 +593,11 @@
       $scope.selectedIndexChanged = function (s, e) {
         // 발주 입고
         if (s.selectedValue === "Y") {
-          console.log('selectedIndexChanged Y');
           $scope.orderLayerShowFg    = true;
           $scope.notOrderLayerShowFg = false;
         }
         //무발주 입고
         else {
-          console.log('selectedIndexChanged N');
           $scope.orderLayerShowFg    = false;
           $scope.notOrderLayerShowFg = true;
         }

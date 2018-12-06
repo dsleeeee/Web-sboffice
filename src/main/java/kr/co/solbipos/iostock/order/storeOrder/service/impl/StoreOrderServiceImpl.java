@@ -22,7 +22,7 @@ import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
-@Service("StoreOrderService")
+@Service("storeOrderService")
 public class StoreOrderServiceImpl implements StoreOrderService {
     private final StoreOrderMapper storeOrderMapper;
     private final DstbCloseStoreMapper dstbCloseStoreMapper;

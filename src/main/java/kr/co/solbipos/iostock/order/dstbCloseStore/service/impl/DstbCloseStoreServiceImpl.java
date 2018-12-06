@@ -13,7 +13,7 @@ import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
-@Service("DstbCloseStoreService")
+@Service("dstbCloseStoreService")
 public class DstbCloseStoreServiceImpl implements DstbCloseStoreService {
     private final DstbCloseStoreMapper dstbCloseStoreMapper;
     private final MessageService messageService;

@@ -268,6 +268,11 @@
         ,       TRUNC(DECODE(SIGN(thp.SAFE_STOCK_QTY),-1,0,thp.SAFE_STOCK_QTY) / thp.PO_UNIT_QTY) AS HQ_SAFE_STOCK_UNIT_QTY
         ,       MOD  (DECODE(SIGN(thp.SAFE_STOCK_QTY),-1,0,thp.SAFE_STOCK_QTY) , thp.PO_UNIT_QTY) AS HQ_SAFE_STOCK_ETC_QTY
         ]]>
+        <if test='option2 != null and option2 != ""'>
+            , SF_ZERO_TO_NULL(optionTb.ORDER_UNIT_QTY) AS MGR_UNIT_QTY
+            , SF_ZERO_TO_NULL(optionTb.ORDER_ETC_QTY) AS MGR_ETC_QTY
+            , SF_ZERO_TO_NULL(optionTb.ORDER_TOT_QTY) AS MGR_TOT_QTY
+        </if>
         <include refid="CmmSQL.PagingTemplateCount"/>
         <![CDATA[
         FROM    TB_MS_PRODUCT tmp
@@ -289,6 +294,50 @@
         ,       TB_HQ_PRODUCT thp
         ,       TB_MS_PRODUCT_BARCD tmpb
         ,       TB_HQ_ENVST the
+        ]]>
+        <if test='option2 == "ORD"'>
+            ,   (   SELECT  tphsod.PROD_CD
+                    ,       TRUNC(SUM(tphsod.ORDER_TOT_QTY) / tphsod.PO_UNIT_QTY) AS ORDER_UNIT_QTY
+                    ,       MOD  (SUM(tphsod.ORDER_TOT_QTY) , tphsod.PO_UNIT_QTY) AS ORDER_ETC_QTY
+                    ,       SUM(tphsod.ORDER_TOT_QTY) AS ORDER_TOT_QTY
+                    FROM    TB_PO_HQ_STORE_ORDER_DTL tphsod
+                    WHERE   tphsod.STORE_CD = #{storeCd}
+                    AND     tphsod.REQ_DATE BETWEEN #{startDate} AND #{endDate}
+                    GROUP
+                    BY      tphsod.PROD_CD, tphsod.PO_UNIT_QTY
+                ) optionTb
+        </if>
+        <if test='option2 == "OUT"'>
+            ,   (   SELECT  tphsod.PROD_CD
+                    ,       TRUNC(SUM(tphsod.ORDER_TOT_QTY) / tphsod.PO_UNIT_QTY) AS ORDER_UNIT_QTY
+                    ,       MOD  (SUM(tphsod.ORDER_TOT_QTY) , tphsod.PO_UNIT_QTY) AS ORDER_ETC_QTY
+                    ,       SUM(tphsod.ORDER_TOT_QTY) AS ORDER_TOT_QTY
+                    FROM    TB_PO_HQ_STORE_OUTSTOCK tphso
+                    ,       TB_PO_HQ_STORE_OUTSTOCK_DTL tphsod
+                    WHERE   tphso.STORE_CD = #{storeCd}
+                    AND     tphso.OUT_DATE      BETWEEN #{startDate} AND #{endDate}
+                    AND     tphso.PROC_FG       IN ('20', '30')
+                    AND     tphsod.HQ_OFFICE_CD = tphso.HQ_OFFICE_CD
+                    AND     tphsod.SLIP_NO      = tphso.SLIP_NO
+                    GROUP
+                    BY      tphsod.PROD_CD, tphsod.PO_UNIT_QTY
+                ) optionTb
+        </if>
+        <if test='option2 == "SALE"'>
+            ,   (   SELECT  tsdp.PROD_CD
+                    ,       TRUNC(SUM(tsdp.TOT_SALE_QTY) / tmp.PO_UNIT_QTY) AS ORDER_UNIT_QTY
+                    ,       MOD  (SUM(tsdp.TOT_SALE_QTY) , tmp.PO_UNIT_QTY) AS ORDER_ETC_QTY
+                    ,       SUM(tsdp.TOT_SALE_QTY) AS ORDER_TOT_QTY
+                    FROM    TB_SL_DAILY_PROD tsdp
+                    ,       TB_MS_PRODUCT tmp
+                    WHERE   tsdp.STORE_CD   = #{storeCd}
+                    AND     tsdp.SALE_DATE  BETWEEN #{startDate} AND #{endDate}
+                    AND     tmp.PROD_CD  = tsdp.PROD_CD
+                    GROUP
+                    BY      tsdp.PROD_CD, tmp.PO_UNIT_QTY
+                ) optionTb
+        </if>
+        <![CDATA[
         WHERE   tmp.STORE_CD          =   #{storeCd}
         AND     tmp.USE_YN            =   'Y'
         AND     tsssc.STORE_CD    (+) =   tmp.STORE_CD
@@ -311,6 +360,26 @@
         </if>
         <if test='barcdCd != null and barcdCd != ""'>
             AND tmpb.BARCD_CD = #{barcdCd}
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND tmp.PROD_CLASS_CD IN  ( SELECT  #{prodClassCd} AS PROD_CLASS_CD
+                                        FROM    DUAL
+                                        UNION
+                                        SELECT  tmpc.PROD_CLASS_CD
+                                        FROM    TB_MS_PRODUCT_CLASS tmpc
+                                        WHERE   tmpc.STORE_CD = #{storeCd}
+                                        START WITH  tmpc.P_PROD_CLASS_CD = #{prodClassCd}
+                                        CONNECT BY  tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD
+                                      )
+        </if>
+        <if test='option1 == "S"'>
+            <![CDATA[
+            AND NVL(tsssc.CURR_QTY, 0) < NVL(tmp.SAFE_STOCK_QTY, 0)
+            AND NVL(tmp.SAFE_STOCK_QTY,0) > 0
+            ]]>
+        </if>
+        <if test='option2 != null and option2 != ""'>
+            AND optionTb.PROD_CD  = tmp.PROD_CD
         </if>
         ORDER BY tmp.PROD_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>

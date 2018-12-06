@@ -106,6 +106,12 @@ public class AcinsServiceImpl implements AcinsService {
     @Override
     public List<DefaultMap<String>> getAcinsRegistList(AcinsVO acinsVO, SessionInfoVO sessionInfoVO) {
         List<DefaultMap<String>> result = new ArrayList<DefaultMap<String>>();
+
+        // 거래처 멀티 선택
+        if(!StringUtil.getOrBlank(acinsVO.getVendrCd()).equals("")) {
+            acinsVO.setArrVendrCd(acinsVO.getVendrCd().split(","));
+        }
+
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
             acinsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             result = acinsMapper.getHqAcinsRegistList(acinsVO);

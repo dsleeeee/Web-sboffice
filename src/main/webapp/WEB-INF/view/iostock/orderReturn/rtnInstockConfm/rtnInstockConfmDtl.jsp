@@ -29,7 +29,19 @@
         </tr>
         <tr>
           <th><s:message code="rtnInstockConfm.dtl.dlvrNm"/></th>
-          <td colspan="3"></td>
+          <td colspan="3">
+            <span class="txtIn w150px sb-select fl mr5">
+              <wj-combo-box
+                id="srchDtlDlvrCd"
+                ng-model="dlvrCd"
+                items-source="_getComboData('srchDtlDlvrCd')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="_initComboBox(s)">
+              </wj-combo-box>
+            </span>
+          </td>
         </tr>
         <tr>
           <%-- 거래명세표 --%>
@@ -141,13 +153,19 @@
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+      var rtnInstockConfmScope = agrid.getScope('rtnInstockConfmCtrl');
+      // 배송기사
+      var comboParams             = {};
+      var url = '/iostock/order/outstockConfm/outstockConfm/getDlvrCombo.sb';
+      // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
+      rtnInstockConfmScope._queryCombo("combo", "srchDtlDlvrCd", null, url, comboParams, "S"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+
       // 그리드 포맷 핸들러
       s.formatItem.addHandler(function (s, e) {
         if (e.panel === s.cells) {
           var col  = s.columns[e.col];
           var item = s.rows[e.row].dataItem;
           if (col.binding === "inEtcQty") { // 입수에 따라 출고수량 컬럼 readonly 컨트롤
-            // console.log(item);
             if (item.poUnitQty === 1) {
               wijmo.addClass(e.cell, 'wj-custom-readonly');
               wijmo.setAttribute(e.cell, 'aria-readonly', true);
@@ -233,7 +251,7 @@
             $scope.storeCd         = response.data.data.storeCd;
             $scope.storeNm         = response.data.data.storeNm;
             $scope.hdRemark        = response.data.data.remark;
-            $scope.dlvrCd          = response.data.data.dlvrCd;
+            $scope.dlvrCd          = nvl(response.data.data.dlvrCd, '');
             $scope.dlvrNm          = response.data.data.dlvrNm;
 
             // 출고확정

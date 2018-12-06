@@ -64,7 +64,7 @@
         ,        (CASE WHEN tphso.PROC_FG >= '30' THEN tphso.IN_TOT *tphso.SLIP_FG     ELSE NULL END) AS IN_TOT
         ,        (CASE WHEN tphso.PROC_FG >= '20' THEN tphso.OUT_DT                    ELSE NULL END) AS OUT_DT
         ,        (CASE WHEN tphso.PROC_FG >= '20' THEN userInfo.EMP_NM                 ELSE NULL END) AS OUT_NM
-        ,        tphso.REMARK, tphso.HQ_REMARK, tphso.DLVR_CD
+        ,        tphso.REMARK, tphso.HQ_REMARK, tphso.DLVR_CD, tphdc.DLVR_NM
         FROM     TB_PO_HQ_STORE_OUTSTOCK tphso
         ,        TB_MS_STORE tms
         ,        (  SELECT  tme.USER_ID, tme.EMP_NM
@@ -77,10 +77,13 @@
                     FROM    TB_HQ_EMPLOYEE the
                     WHERE   the.HQ_OFFICE_CD    =   #{hqOfficeCd}
                  ) userInfo
+        ,        TB_PO_HQ_DELIVERY_CHARGER tphdc
         WHERE    tphso.HQ_OFFICE_CD     =       #{hqOfficeCd}
         AND      tphso.OUT_DATE         BETWEEN #{startDate} AND #{endDate}
         AND      tms.STORE_CD           =   tphso.STORE_CD
         AND      userInfo.USER_ID   (+) =   tphso.MOD_ID
+        AND      tphdc.HQ_OFFICE_CD (+) =   tphso.HQ_OFFICE_CD
+        AND      tphdc.DLVR_CD      (+) =   tphso.DLVR_CD
         ]]>
         <if test='slipFg != null and slipFg != ""'>
             AND tphso.SLIP_FG = #{slipFg}

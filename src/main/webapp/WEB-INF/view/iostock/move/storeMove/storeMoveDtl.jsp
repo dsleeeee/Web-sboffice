@@ -182,7 +182,7 @@
 <script type="text/javascript">
 
   /** 물량오류 상세 그리드 controller */
-  app.controller('storeMoveDtlCtrl', ['$scope', '$http', function ($scope, $http) {
+  app.controller('storeMoveDtlCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('storeMoveDtlCtrl', $scope, $http, true));
 
@@ -233,19 +233,13 @@
       s.columnFooters.rows.push(new wijmo.grid.GroupRow());
       // add a sigma to the header to show that this is a summary row
       s.bottomLeftCells.setCellData(0, 0, '합계');
-
-      //s.allowMerging = wijmo.grid.AllowMerging.headers;
-
-
-
-
     };
 
 
     $scope.calcAmt = function (item) {
       <%-- 수량이 없는 경우 계산하지 않음.
       null 또는 undefined 가 나올수 있으므로 확실하게 확인하기 위해 nvl 처리로 null 로 바꿔서 비교 --%>
-      if (nvl(item.outUnitQty, null) === null || (item.poUnitQty !== 1 && nvl(item.outEtcQty, null) === null)) return false;
+      if (nvl(item.outUnitQty, null) === null && (item.poUnitQty !== 1 && nvl(item.outEtcQty, null) === null)) return false;
 
       var outSplyUprc  = parseInt(nvl(item.splyUprc, 0));
       var poUnitQty    = parseInt(item.poUnitQty);
@@ -328,7 +322,7 @@
             if ($scope.procFg === '0') {
               if ($scope.sessionStoreCd == $scope.outStoreCd) {
                 $scope.fnBtnLayerDisplay(true);
-                setTimeout(function () {
+                $timeout(function () {
                   $("#btnDtlConfirm").html(messages["storeMove.dtl.outConfirmBtn"]);
                 }, 100);
                 $scope.flex.isReadOnly = false;
@@ -339,7 +333,7 @@
 
               if ($scope.procFg === '1' && $scope.sessionStoreCd == $scope.inStoreCd) {
                 $scope.btnDtlConfirm = true;
-                setTimeout(function () {
+                $timeout(function () {
                   $("#btnDtlConfirm").html(messages["storeMove.dtl.inConfirmBtn"]);
                 }, 100);
               }

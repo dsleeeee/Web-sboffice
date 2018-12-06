@@ -59,7 +59,7 @@
           </tbody>
         </table>
         <div class="mt10 pdb20 oh bb">
-          <button type="submit" id="btnSave" class="btn_blue fr">저장</button>
+          <button type="submit" id="btnSave" class="btn_blue fr"><s:message code="cmm.save"/></button>
         </div>
       </form>
     </div>

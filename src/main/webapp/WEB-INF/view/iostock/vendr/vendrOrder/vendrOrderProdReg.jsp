@@ -42,7 +42,9 @@
           <%-- 상품분류 --%>
           <th><s:message code="vendrOrder.reg.prodClass"/></th>
           <td>
-            <input type="text" id="srchProdClass" name="prodClass" ng-model="prodClass" class="sb-input w100" maxlength="40"/>
+            <input type="text" class="sb-input w100" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()"
+                   placeholder="<s:message code="cmm.all" />" readonly/>
+            <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCd" disabled/>
           </td>
         </tr>
         <tr>
@@ -167,7 +169,6 @@
           var col  = s.columns[e.col];
           var item = s.rows[e.row].dataItem;
           if (col.binding === "orderEtcQty") { // 입수에 따라 주문수량 컬럼 readonly 컨트롤
-            // console.log(item);
             if (item.poUnitQty === 1) {
               wijmo.addClass(e.cell, 'wj-custom-readonly');
               wijmo.setAttribute(e.cell, 'aria-readonly', true);
@@ -231,7 +232,7 @@
         // readOnly 배경색 표시
         else if (panel.cellType === wijmo.grid.CellType.Cell) {
           var col = panel.columns[c];
-          if (col.isReadOnly) {
+          if (col.isReadOnly || panel.grid.isReadOnly) {
             wijmo.addClass(cell, 'wj-custom-readonly');
           }
         }
@@ -241,11 +242,11 @@
 
     $scope.calcAmt = function (item) {
       <%-- 수량이 없는 경우 계산하지 않음. null 또는 undefined 가 나올수 있으므로 확실하게 확인하기 위해 nvl 처리로 null 로 바꿔서 비교 --%>
-      if (nvl(item.orderUnitQty, null) === null || (item.poUnitQty !== 1 && nvl(item.orderEtcQty, null) === null)) return false;
+      if (nvl(item.orderUnitQty, null) === null && (item.poUnitQty !== 1 && nvl(item.orderEtcQty, null) === null)) return false;
 
-      var costUprc  = parseFloat(item.costUprc);
-      var poUnitQty = parseInt(item.poUnitQty);
-      var vat01     = parseInt(item.vatFg01);
+      var costUprc     = parseFloat(item.costUprc);
+      var poUnitQty    = parseInt(item.poUnitQty);
+      var vat01        = parseInt(item.vatFg01);
       var vendrVatFg01 = parseInt(item.vendrVatFg01);
 
       var unitQty  = (parseInt(nvl(item.prevOrderUnitQty, 0)) + parseInt(nvl(item.orderUnitQty, 0))) * parseInt(item.poUnitQty);
@@ -271,12 +272,13 @@
         cv.trackChanges = true;
         $scope.data     = cv;
 
-        $scope.slipNo = data.slipNo;
-        $scope.slipFg = data.slipFg;
+        $scope.slipNo  = data.slipNo;
+        $scope.slipFg  = data.slipFg;
+        $scope.vendrCd = data.vendrCd;
 
-        // 거래처코드 가져오기.
-        var vendrOrderDtlScope = agrid.getScope('vendrOrderDtlCtrl');
-        $scope.vendrCd         = vendrOrderDtlScope.slipInfo.vendrCd;
+        // 값 초기화
+        $scope.prodClassCdNm = messages["cmm.all"];
+        $scope.prodClassCd   = '';
 
         $scope.wjVendrOrderProdRegLayer.show(true);
       }
@@ -354,6 +356,7 @@
     };
 
 
+    // 최종원가를 발주원가로 세팅
     $scope.setLastCostToOrderCost = function () {
       $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]);
       // 데이터 처리중 팝업 띄우기위해 $timeout 사용.
@@ -372,11 +375,34 @@
         }
         $scope.$broadcast('loadingPopupInactive');
       }, 100);
-
     };
 
+
+    // 상품분류정보 팝업
+    $scope.popUpProdClass = function () {
+      var popUp = $scope.prodClassPopUpLayer;
+      popUp.show(true, function (s) {
+        // 선택 버튼 눌렀을때만
+        if (s.dialogResult === "wj-hide-apply") {
+          var scope          = agrid.getScope('prodClassPopUpCtrl');
+          var prodClassCd    = scope.getSelectedClass();
+          var params         = {};
+          params.prodClassCd = prodClassCd;
+          // 조회 수행 : 조회URL, 파라미터, 콜백함수
+          $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
+            function (response) {
+              $scope.prodClassCd   = prodClassCd;
+              $scope.prodClassCdNm = response.data.data;
+            }
+          );
+        }
+      });
+    };
 
   }]);
 
 </script>
 
+<%-- 상품분류 팝업 --%>
+<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
+</c:import>

@@ -32,19 +32,68 @@
     <tr>
       <%-- 진행 --%>
       <th><s:message code="outstockConfm.procFg"/></th>
-      <td></td>
+      <td>
+        <span class="txtIn w150px sb-select fl mr5">
+          <wj-combo-box
+            id="srchProcFg"
+            ng-model="procFg"
+            items-source="_getComboData('srchProcFg')"
+            display-member-path="name"
+            selected-value-path="value"
+            is-editable="false"
+            initialized="_initComboBox(s)">
+          </wj-combo-box>
+        </span>
+      </td>
       <%-- 종류 --%>
       <th><s:message code="outstockConfm.slipKind"/></th>
-      <td></td>
+      <td>
+        <span class="txtIn w150px sb-select fl mr5">
+          <wj-combo-box
+            id="srchSlipKind"
+            ng-model="slipKind"
+            items-source="_getComboData('srchSlipKind')"
+            display-member-path="name"
+            selected-value-path="value"
+            is-editable="false"
+            initialized="_initComboBox(s)">
+          </wj-combo-box>
+        </span>
+      </td>
     </tr>
     <tr>
       <%-- 기사 --%>
       <th><s:message code="outstockConfm.dlvrNm"/></th>
-      <td></td>
+        <td>
+          <span class="txtIn w150px sb-select fl mr5">
+            <wj-combo-box
+              id="srchDlvrCd"
+              ng-model="dlvrCd"
+              items-source="_getComboData('srchDlvrCd')"
+              display-member-path="name"
+              selected-value-path="value"
+              is-editable="false"
+              initialized="_initComboBox(s)">
+            </wj-combo-box>
+          </span>
+        </td>
       <%--TODO 거래처 로그인시 처리로직 필요 --%>
       <%-- 거래처 --%>
       <th><s:message code="outstockConfm.vendrNm"/></th>
-      <td></td>
+      <td>
+        <%-- 거래처선택 모듈 싱글 선택 사용시 include
+             param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
+                          displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
+                          modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
+                          closeFunc - 팝업 닫기시 호출할 함수
+        --%>
+        <jsp:include page="/WEB-INF/view/iostock/vendr/vendrOrder/selectVendrS.jsp" flush="true">
+          <jsp:param name="targetId" value="outstockConfmSelectVendr"/>
+          <jsp:param name="displayNm" value="전체"/>
+          <jsp:param name="displayWidth" value="170px"/>
+        </jsp:include>
+        <%--// 거래처선택 모듈 싱글 선택 사용시 include --%>
+      </td>
     </tr>
     <tr>
       <%-- 매장코드 --%>
@@ -63,7 +112,8 @@
 
   <div class="mt10 pdb20 oh bb">
     <%-- 조회 --%>
-    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('outstockConfmCtrl')"><s:message code="cmm.search"/></button>
+    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('outstockConfmCtrl')">
+      <s:message code="cmm.search"/></button>
   </div>
 
   <div class="tr mt10 fr">
@@ -99,8 +149,8 @@
         <wj-flex-grid-column header="<s:message code="outstockConfm.slipNo"/>" binding="slipNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="outstockConfm.slipFg"/>" binding="slipFg" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="outstockConfm.vendrNm"/>" binding="vendrNm" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="outstockConfm.slipKind"/>" binding="slipKind" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="outstockConfm.procFg"/>" binding="procFg" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockConfm.slipKind"/>" binding="slipKind" width="70" align="center" is-read-only="true" data-map="slipKindMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockConfm.procFg"/>" binding="procFg" width="70" align="center" is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="outstockConfm.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="outstockConfm.storeNm"/>" binding="storeNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="outstockConfm.dlvrNm"/>" binding="dlvrNm" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -134,7 +184,7 @@
   var app = agrid.getApp();
 
   /** 출고확정 그리드 controller */
-  app.controller('outstockConfmCtrl', ['$scope', '$http', function ($scope, $http) {
+  app.controller('outstockConfmCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('outstockConfmCtrl', $scope, $http, true));
     $scope.slipFg = 1;
@@ -148,6 +198,8 @@
       $("#reqNoConfirmCnt").html("0");
       $("#outstockNoCreateCnt").html("0");
 
+      $scope.setCombo();
+
       // picker 사용시 호출 : 미사용시 호출안함
       $scope._makePickColumns("outstockConfmCtrl");
 
@@ -158,8 +210,7 @@
           if (col.binding === "slipNo") { // 전표번호
             wijmo.addClass(e.cell, 'wijLink');
             wijmo.addClass(e.cell, 'wj-custom-readonly');
-          }
-          else if (col.binding === "gChk") { // 진행구분 따라 체크박스 컬럼 readonly 컨트롤
+          } else if (col.binding === "gChk") { // 진행구분 따라 체크박스 컬럼 readonly 컨트롤
             var item = s.rows[e.row].dataItem;
             if (item.procFg !== "10") {
               wijmo.addClass(e.cell, 'wj-custom-readonly');
@@ -169,8 +220,7 @@
 
           if (col.format === "date") {
             e.cell.innerHTML = getFormatDate(e.cell.innerText);
-          }
-          else if (col.format === "dateTime") {
+          } else if (col.format === "dateTime") {
             e.cell.innerHTML = getFormatDateTime(e.cell.innerText);
           }
         }
@@ -196,6 +246,31 @@
       s.bottomLeftCells.setCellData(0, 0, '합계');
     };
 
+
+    // combo 세팅
+    $scope.setCombo = function () {
+      // 진행구분
+      var comboParams         = {};
+      comboParams.nmcodeGrpCd = "086";
+      // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
+      $scope._queryCombo("combo,map", "srchProcFg", "procFgMap", null, comboParams, "A", function () {
+        $scope.procFg = "10"; // 진행구분 기본값 세팅
+      }); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+
+      // 전표종류
+      comboParams             = {}; // 여러번 조회시 초기화를 해줘야함...
+      comboParams.nmcodeGrpCd = "087";
+      // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
+      $scope._queryCombo("combo,map", "srchSlipKind", "slipKindMap", null, comboParams, "A"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+
+      // 배송기사
+      comboParams             = {}; // 여러번 조회시 초기화를 해줘야함...
+      var url = '/iostock/order/outstockConfm/outstockConfm/getDlvrCombo.sb';
+      // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
+      $scope._queryCombo("combo", "srchDlvrCd", null, url, comboParams, "A"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+    };
+
+
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("outstockConfmCtrl", function (event, data) {
       $scope.getReqNoConfirmCnt();
@@ -218,7 +293,7 @@
         params : params, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
-        if ($scope.httpStatusCheck(response)) {
+        if ($scope._httpStatusCheck(response, true)) {
           if (!$.isEmptyObject(response.data.data)) {
             $("#reqNoConfirmCnt").html(response.data.data.reqNoConfirmCnt); //매장요청 미확정건
             $("#outstockNoCreateCnt").html(response.data.data.outstockNoCreateCnt); //출고자료 미생성건
@@ -243,6 +318,7 @@
       // params.procFg    = "10";
       params.startDate = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
       params.endDate   = wijmo.Globalize.format(srchEndDate.value, 'yyyyMMdd');
+      params.vendrCd   = $("#outstockConfmSelectVendrCd").val();
 
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
       $scope._inquiryMain("/iostock/order/outstockConfm/outstockConfm/list.sb", params);
@@ -274,31 +350,102 @@
       });
     };
 
-    // http 조회 후 status 체크
-    $scope.httpStatusCheck = function (res) {
-      if (res.data.status === "OK") {
-        return true;
+
+    // DB 데이터를 조회해와서 그리드에서 사용할 Combo를 생성한다.
+    // comboFg : map - 그리드에 사용할 Combo, combo - ComboBox 생성. 두가지 다 사용할경우 combo,map 으로 하면 둘 다 생성.
+    // comboId : combo 생성할 ID
+    // gridMapId : grid 에서 사용할 Map ID
+    // url : 데이터 조회할 url 정보. 명칭관리 조회시에는 url 필요없음.
+    // params : 데이터 조회할 url에 보낼 파라미터
+    // option : A - combo 최상위에 전체라는 텍스트를 붙여준다. S - combo 최상위에 선택이라는 텍스트를 붙여준다. A 또는 S 가 아닌 경우는 데이터값만으로 생성
+    // callback : queryCombo 후 callback 할 함수
+    $scope._queryCombo = function (comboFg, comboId, gridMapId, url, params, option, callback) {
+      var comboUrl = "/iostock/volmErr/volmErr/volmErr/getCombo.sb";
+      if (url) {
+        comboUrl = url;
       }
-      else if (res.data.status === "FAIL") {
-        $scope._popMsg("Ajax Fail By HTTP Request");
+
+      // ajax 통신 설정
+      $http({
+        method : 'POST', //방식
+        url    : comboUrl, /* 통신할 URL */
+        params : params, /* 파라메터로 보낼 데이터 */
+        headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+      }).then(function successCallback(response) {
+        if (response.data.status === "OK") {
+          // this callback will be called asynchronously
+          // when the response is available
+          if (!$.isEmptyObject(response.data.data.list)) {
+            var list       = response.data.data.list;
+            var comboArray = [];
+            var comboData  = {};
+
+            if (comboFg.indexOf("combo") >= 0 && nvl(comboId, '') !== '') {
+              comboArray = [];
+              if (option === "A") {
+                comboData.name  = messages["cmm.all"];
+                comboData.value = "";
+                comboArray.push(comboData);
+              } else if (option === "S") {
+                comboData.name  = messages["cmm.select"];
+                comboData.value = "";
+                comboArray.push(comboData);
+              }
+
+              for (var i = 0; i < list.length; i++) {
+                comboData       = {};
+                comboData.name  = list[i].nmcodeNm;
+                comboData.value = list[i].nmcodeCd;
+                comboArray.push(comboData);
+              }
+              $scope._setComboData(comboId, comboArray);
+            }
+
+            if (comboFg.indexOf("map") >= 0 && nvl(gridMapId, '') !== '') {
+              comboArray = [];
+              for (var i = 0; i < list.length; i++) {
+                comboData      = {};
+                comboData.id   = list[i].nmcodeCd;
+                comboData.name = list[i].nmcodeNm;
+                comboArray.push(comboData);
+              }
+              $scope[gridMapId] = new wijmo.grid.DataMap(comboArray, 'id', 'name');
+            }
+          }
+        } else if (response.data.status === "FAIL") {
+          $scope._popMsg("Ajax Fail By HTTP Request");
+        } else if (response.data.status === "SESSION_EXFIRE") {
+          $scope._popMsg(response.data.message, function () {
+            location.href = response.data.url;
+          });
+        } else if (response.data.status === "SERVER_ERROR") {
+          $scope._popMsg(response.data.message);
+        } else {
+          var msg = response.data.status + " : " + response.data.message;
+          $scope._popMsg(msg);
+        }
+      }, function errorCallback(response) {
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+        $scope._popMsg(messages["cmm.error"]);
         return false;
-      }
-      else if (res.data.status === "SESSION_EXFIRE") {
-        $scope._popMsg(res.data.message, function () {
-          location.href = res.data.url;
-        });
-        return false;
-      }
-      else if (res.data.status === "SERVER_ERROR") {
-        $scope._popMsg(res.data.message);
-        return false;
-      }
-      else {
-        var msg = res.data.status + " : " + res.data.message;
-        $scope._popMsg(msg);
-        return false;
-      }
+      }).then(function () {
+        if (typeof callback === 'function') {
+          $timeout(function () {
+            callback();
+          }, 10);
+        }
+      });
     };
+
+
+    // 거래처선택 모듈 팝업 사용시 정의
+    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+    $scope.outstockConfmSelectVendrShow = function () {
+      $scope._broadcast('outstockConfmSelectVendrCtrl');
+    };
+
   }]);
 </script>
 

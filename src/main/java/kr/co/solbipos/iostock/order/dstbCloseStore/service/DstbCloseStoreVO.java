@@ -108,6 +108,12 @@ public class DstbCloseStoreVO extends PageVO {
     private Boolean confirmYn;
     /** 바코드 */
     private String barcdCd;
+    /** 상품분류코드 */
+    private String prodClassCd;
+    /** 옵션1 */
+    private String option1;
+    /** 옵션2 */
+    private String option2;
 
     /**
      * @return the hqOfficeCd
@@ -821,5 +827,47 @@ public class DstbCloseStoreVO extends PageVO {
      */
     public void setBarcdCd(String barcdCd) {
         this.barcdCd = barcdCd;
+    }
+
+    /**
+     * @return the prodClassCd
+     */
+    public String getProdClassCd() {
+        return prodClassCd;
+    }
+
+    /**
+     * @param prodClassCd the prodClassCd to set
+     */
+    public void setProdClassCd(String prodClassCd) {
+        this.prodClassCd = prodClassCd;
+    }
+
+    /**
+     * @return the option1
+     */
+    public String getOption1() {
+        return option1;
+    }
+
+    /**
+     * @param option1 the option1 to set
+     */
+    public void setOption1(String option1) {
+        this.option1 = option1;
+    }
+
+    /**
+     * @return the option2
+     */
+    public String getOption2() {
+        return option2;
+    }
+
+    /**
+     * @param option2 the option2 to set
+     */
+    public void setOption2(String option2) {
+        this.option2 = option2;
     }
 }

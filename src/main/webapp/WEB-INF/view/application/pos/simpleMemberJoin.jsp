@@ -156,7 +156,6 @@ function save(sendUrl) {
         resetVal();
     }
     , function (result) {
-        console.log(result);
         s_alert.pop(result.message);
     });
 }

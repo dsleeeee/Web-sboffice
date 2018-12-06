@@ -57,7 +57,9 @@
           <%-- 분류 --%>
           <th><s:message code="rtnDstbCloseProd.add.prodClassNm"/></th>
           <td>
-            <input type="text" id="srchProdClass" name="prodClass" ng-model="prodClass" class="sb-input w100" maxlength="40"/>
+            <input type="text" class="sb-input w100" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()"
+                   placeholder="<s:message code="cmm.all" />" readonly/>
+            <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCd" disabled/>
           </td>
         </tr>
         </tbody>
@@ -65,7 +67,7 @@
 
       <div class="mt10 oh">
         <%-- 조회 --%>
-        <button type="button" class="btn_blue fr" id="btnSearch" ng-click="search();"><s:message code="cmm.search"/></button>
+        <button type="button" class="btn_blue fr" id="btnSearch" ng-click="_pageView('rtnDstbCloseProdAddProdCtrl',1);"><s:message code="cmm.search"/></button>
       </div>
 
       <div class="mt40 oh sb-select dkbr">
@@ -174,14 +176,19 @@
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("rtnDstbCloseProdAddProdCtrl", function (event, data) {
 
-      // 그리드 초기화
-      var cv          = new wijmo.collections.CollectionView([]);
-      cv.trackChanges = true;
-      $scope.data     = cv;
-
       if (!$.isEmptyObject(data)) {
+        // 그리드 초기화
+        var cv          = new wijmo.collections.CollectionView([]);
+        cv.trackChanges = true;
+        $scope.data     = cv;
+
         $scope.reqDate = data.reqDate;
         $scope.slipFg  = data.slipFg;
+
+        // 값 초기화
+        $scope.prodClassCdNm = messages["cmm.all"];
+        $scope.prodClassCd   = '';
+
         $scope.wjRtnDstbCloseProdAddProdLayer.show(true);
         $("#addProdSubTitle").html(' ('+messages["rtnDstbCloseProd.add.reqDate"]+' : ' + getFormatDate($scope.reqDate, '-') + ')');
       }
@@ -192,11 +199,6 @@
       // 기능수행 종료 : 반드시 추가
       event.preventDefault();
     });
-
-    // 조회
-    $scope.search = function () {
-      $scope.searchRtnDstbCloseProdAddProdList();
-    };
 
     // 분배가능상품 리스트 조회
     $scope.searchRtnDstbCloseProdAddProdList = function () {
@@ -215,6 +217,33 @@
     $scope.rtnDstbCloseProdAddProdSelectStoreShow = function () {
       $scope._broadcast('rtnDstbCloseProdAddProdSelectStoreCtrl');
     };
+
+
+    // 상품분류정보 팝업
+    $scope.popUpProdClass = function () {
+      var popUp = $scope.prodClassPopUpLayer;
+      popUp.show(true, function (s) {
+        // 선택 버튼 눌렀을때만
+        if (s.dialogResult === "wj-hide-apply") {
+          var scope          = agrid.getScope('prodClassPopUpCtrl');
+          var prodClassCd    = scope.getSelectedClass();
+          var params         = {};
+          params.prodClassCd = prodClassCd;
+          // 조회 수행 : 조회URL, 파라미터, 콜백함수
+          $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
+            function (response) {
+              $scope.prodClassCd   = prodClassCd;
+              $scope.prodClassCdNm = response.data.data;
+            }
+          );
+        }
+      });
+    };
+
   }]);
 
 </script>
+
+<%-- 상품분류 팝업 --%>
+<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
+</c:import>

@@ -58,6 +58,8 @@ public class AcinsVO extends PageVO {
     private String prodClassCd;
     /** 거래처코드 */
     private String vendrCd;
+    /** 거래처코드 array */
+    private String arrVendrCd[];
     /** 실사 상품 STATUS */
     private String acinsProdStatus;
     /** 확정여부 */
@@ -429,6 +431,20 @@ public class AcinsVO extends PageVO {
      */
     public void setVendrCd(String vendrCd) {
         this.vendrCd = vendrCd;
+    }
+
+    /**
+     * @return the arrVendrCd
+     */
+    public String[] getArrVendrCd() {
+        return arrVendrCd;
+    }
+
+    /**
+     * @param arrVendrCd the arrVendrCd to set
+     */
+    public void setArrVendrCd(String[] arrVendrCd) {
+        this.arrVendrCd = arrVendrCd;
     }
 
     /**

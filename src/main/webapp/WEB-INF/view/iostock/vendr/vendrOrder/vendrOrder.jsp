@@ -78,9 +78,9 @@
   </table>
 
   <%--<div class="mt10 pdb20 oh bb">--%>
-    <%--&lt;%&ndash; 조회 &ndash;%&gt;--%>
-    <%--<button class="btn_blue fr" id="btnSearch" ng-click="_pageView('vendrOrderCtrl', 1)">--%>
-      <%--<s:message code="cmm.search"/></button>--%>
+  <%--&lt;%&ndash; 조회 &ndash;%&gt;--%>
+  <%--<button class="btn_blue fr" id="btnSearch" ng-click="_pageView('vendrOrderCtrl', 1)">--%>
+  <%--<s:message code="cmm.search"/></button>--%>
   <%--</div>--%>
 
   <div class="mt20 tr">
@@ -164,8 +164,7 @@
 
           if (col.format === "date") {
             e.cell.innerHTML = getFormatDate(e.cell.innerText);
-          }
-          else if (col.format === "dateTime") {
+          } else if (col.format === "dateTime") {
             e.cell.innerHTML = getFormatDateTime(e.cell.innerText);
           }
         }
@@ -178,9 +177,9 @@
           var col         = ht.panel.columns[ht.col];
           var selectedRow = s.rows[ht.row].dataItem;
           if (col.binding === "slipNo") { // 전표번호 클릭
-            var params    = {};
-            params.slipNo = selectedRow.slipNo;
-            params.slipFg = $scope.slipFg;
+            var params     = {};
+            params.slipNo  = selectedRow.slipNo;
+            params.slipFg  = $scope.slipFg;
             params.vendrCd = selectedRow.vendrCd;
             $scope._broadcast('vendrOrderPopCtrl', params);
           }
@@ -212,9 +211,9 @@
 
     // 발주 신규등록
     $scope.newVendrOrder = function () {
-      var params    = {};
-      params.slipNo = '';
-      params.slipFg = $scope.slipFg;
+      var params     = {};
+      params.slipNo  = '';
+      params.slipFg  = $scope.slipFg;
       params.vendrCd = '';
       $scope._broadcast('vendrOrderPopCtrl', params);
     };
@@ -226,7 +225,7 @@
     // gridMapId : grid 에서 사용할 Map ID
     // url : 데이터 조회할 url 정보. 명칭관리 조회시에는 url 필요없음.
     // params : 데이터 조회할 url에 보낼 파라미터
-    // option : A - 전체를 붙여준다. S - 선택을 붙여준다. A 또는 S 가 아닌 경우는 데이터값만으로 생성
+    // option : A - combo 최상위에 전체라는 텍스트를 붙여준다. S - combo 최상위에 선택이라는 텍스트를 붙여준다. A 또는 S 가 아닌 경우는 데이터값만으로 생성
     $scope._queryCombo = function (comboFg, comboId, gridMapId, url, params, option) {
       var comboUrl = "/iostock/volmErr/volmErr/volmErr/getCombo.sb";
       if (url) {
@@ -248,14 +247,13 @@
             var comboArray = [];
             var comboData  = {};
 
-            if (comboFg.indexOf("combo") >= 0 && nvl(comboId,'') !== '') {
+            if (comboFg.indexOf("combo") >= 0 && nvl(comboId, '') !== '') {
               comboArray = [];
               if (option === "A") {
                 comboData.name  = messages["cmm.all"];
                 comboData.value = "";
                 comboArray.push(comboData);
-              }
-              else if (option === "S") {
+              } else if (option === "S") {
                 comboData.name  = messages["cmm.select"];
                 comboData.value = "";
                 comboArray.push(comboData);
@@ -270,7 +268,7 @@
               $scope._setComboData(comboId, comboArray);
             }
 
-            if (comboFg.indexOf("map") >= 0 && nvl(gridMapId,'') !== '') {
+            if (comboFg.indexOf("map") >= 0 && nvl(gridMapId, '') !== '') {
               comboArray = [];
               for (var i = 0; i < list.length; i++) {
                 comboData      = {};
@@ -281,19 +279,15 @@
               $scope[gridMapId] = new wijmo.grid.DataMap(comboArray, 'id', 'name');
             }
           }
-        }
-        else if (response.data.status === "FAIL") {
+        } else if (response.data.status === "FAIL") {
           $scope._popMsg("Ajax Fail By HTTP Request");
-        }
-        else if (response.data.status === "SESSION_EXFIRE") {
+        } else if (response.data.status === "SESSION_EXFIRE") {
           $scope._popMsg(response.data.message, function () {
             location.href = response.data.url;
           });
-        }
-        else if (response.data.status === "SERVER_ERROR") {
+        } else if (response.data.status === "SERVER_ERROR") {
           $scope._popMsg(response.data.message);
-        }
-        else {
+        } else {
           var msg = response.data.status + " : " + response.data.message;
           $scope._popMsg(msg);
         }

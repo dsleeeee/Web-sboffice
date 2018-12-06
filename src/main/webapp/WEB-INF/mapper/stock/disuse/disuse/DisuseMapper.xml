@@ -149,6 +149,27 @@
         <if test='barcdCd != null and barcdCd != ""'>
             AND thpb.BARCD_CD = #{barcdCd}
         </if>
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND thp.PROD_CLASS_CD IN  ( SELECT  #{prodClassCd} AS PROD_CLASS_CD
+                                        FROM    DUAL
+                                        UNION
+                                        SELECT  thpc.PROD_CLASS_CD
+                                        FROM    TB_HQ_PRODUCT_CLASS thpc
+                                        WHERE   thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+                                        START WITH  thpc.P_PROD_CLASS_CD = #{prodClassCd}
+                                        CONNECT BY  thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD
+                                      )
+        </if>
+        <if test='arrVendrCd != null and arrVendrCd != ""'>
+            AND thp.PROD_CD IN  ( SELECT  PROD_CD
+                                  FROM    TB_HQ_VENDOR_PROD
+                                  WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                                  AND     VENDR_CD IN
+                                  <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
+                                    #{item}
+                                  </foreach>
+                                )
+        </if>
         <if test='prodBarcdCd != null and prodBarcdCd != ""'>
             AND (thp.PROD_CD = #{prodBarcdCd} OR thpb.BARCD_CD = #{prodBarcdCd})
         </if>
@@ -222,6 +243,27 @@
         </if>
         <if test='barcdCd != null and barcdCd != ""'>
             AND tmpb.BARCD_CD = #{barcdCd}
+        </if>
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND tmp.PROD_CLASS_CD IN  ( SELECT  #{prodClassCd} AS PROD_CLASS_CD
+                                        FROM    DUAL
+                                        UNION
+                                        SELECT  tmpc.PROD_CLASS_CD
+                                        FROM    TB_MS_PRODUCT_CLASS tmpc
+                                        WHERE   tmpc.STORE_CD = #{storeCd}
+                                        START WITH  tmpc.P_PROD_CLASS_CD = #{prodClassCd}
+                                        CONNECT BY  tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD
+                                      )
+        </if>
+        <if test='arrVendrCd != null and arrVendrCd != ""'>
+            AND tmp.PROD_CD IN  ( SELECT  PROD_CD
+                                  FROM    TB_MS_VENDOR_PROD
+                                  WHERE   STORE_CD  = #{storeCd}
+                                  AND     VENDR_CD IN
+                                  <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
+                                    #{item}
+                                  </foreach>
+                                )
         </if>
         <if test='prodBarcdCd != null and prodBarcdCd != ""'>
             AND (tmp.PROD_CD = #{prodBarcdCd} OR tmpb.BARCD_CD = #{prodBarcdCd})

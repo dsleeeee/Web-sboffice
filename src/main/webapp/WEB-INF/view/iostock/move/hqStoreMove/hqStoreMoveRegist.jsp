@@ -186,7 +186,6 @@
           var col  = s.columns[e.col];
           var item = s.rows[e.row].dataItem;
           if (col.binding === "outEtcQty") { // 입수에 따라 주문수량 컬럼 readonly 컨트롤
-            // console.log(item);
             if (item.poUnitQty === 1) {
               wijmo.addClass(e.cell, 'wj-custom-readonly');
               wijmo.setAttribute(e.cell, 'aria-readonly', true);
@@ -283,7 +282,7 @@
     $scope.calcAmt = function (item) {
       <%-- 수량이 없는 경우 계산하지 않음.
       null 또는 undefined 가 나올수 있으므로 확실하게 확인하기 위해 nvl 처리로 null 로 바꿔서 비교 --%>
-      if (nvl(item.outUnitQty, null) === null || (item.poUnitQty !== 1 && nvl(item.outEtcQty, null) === null)) return false;
+      if (nvl(item.outUnitQty, null) === null && (item.poUnitQty !== 1 && nvl(item.outEtcQty, null) === null)) return false;
 
       var outSplyUprc  = parseInt(nvl(item.outSplyUprc, 0));
       var inSplyUprc   = parseInt(nvl(item.inSplyUprc, 0));

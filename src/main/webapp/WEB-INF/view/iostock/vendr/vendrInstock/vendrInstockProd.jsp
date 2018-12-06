@@ -137,7 +137,7 @@
         // readOnly 배경색 표시
         else if (panel.cellType === wijmo.grid.CellType.Cell) {
           var col = panel.columns[c];
-          if (col.isReadOnly) {
+          if (col.isReadOnly || panel.grid.isReadOnly) {
             wijmo.addClass(cell, 'wj-custom-readonly');
           }
         }
@@ -146,9 +146,9 @@
 
 
     $scope.calcAmt = function (item) {
-      var costUprc  = parseFloat(item.costUprc);
-      var poUnitQty = parseInt(item.poUnitQty);
-      var vat01     = parseInt(item.vatFg01);
+      var costUprc     = parseFloat(item.costUprc);
+      var poUnitQty    = parseInt(item.poUnitQty);
+      var vat01        = parseInt(item.vatFg01);
       var vendrVatFg01 = parseInt(item.vendrVatFg01);
 
       var unitQty = parseInt(nvl(item.inUnitQty, 0)) * parseInt(item.poUnitQty);
@@ -173,8 +173,8 @@
       cv.trackChanges = true;
       $scope.data     = cv;
 
-      $scope.slipNo = data.slipNo;
-      $scope.slipFg = data.slipFg;
+      $scope.slipNo  = data.slipNo;
+      $scope.slipFg  = data.slipFg;
       $scope.vendrCd = data.vendrCd;
 
       $scope.procFgCheck();
@@ -197,18 +197,18 @@
         params : params, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
-        if ($scope._httpStatusCheck(response)) {
+        if ($scope._httpStatusCheck(response, true)) {
           // 진행구분이 등록이 아니면 상품추가/변경, 저장 불가
           if (!$.isEmptyObject(response.data.data)) {
             var data = response.data.data;
             // 등록 상태이면 버튼 show
             if (data.procFg != "" && data.procFg == "0") {
               // 발주입고인 경우에만 발주내역으로 등록 버튼 활성화
-              if(data.instockType === 'Y') {
+              if (data.instockType === 'Y') {
                 $scope.btnOrderInfoRegistIfFg = true;
               }
-              $scope.btnAddProdIfFg         = true;
-              $scope.btnProdSaveIfFg        = true;
+              $scope.btnAddProdIfFg  = true;
+              $scope.btnProdSaveIfFg = true;
             } else {
               $scope.btnOrderInfoRegistIfFg = false;
               $scope.btnAddProdIfFg         = false;
@@ -235,9 +235,9 @@
     // 상품 리스트 조회
     $scope.searchVendrInstockProdList = function () {
       // 파라미터
-      var params    = {};
-      params.slipNo = $scope.slipNo;
-      params.slipFg = $scope.slipFg;
+      var params     = {};
+      params.slipNo  = $scope.slipNo;
+      params.slipFg  = $scope.slipFg;
       params.vendrCd = $scope.vendrCd;
 
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
@@ -277,9 +277,9 @@
 
     // 발주내역으로 등록
     $scope.orderInfoRegist = function () {
-      var params    = {};
-      params.slipNo = $scope.slipNo;
-      params.slipFg = $scope.slipFg;
+      var params     = {};
+      params.slipNo  = $scope.slipNo;
+      params.slipFg  = $scope.slipFg;
       params.vendrCd = $scope.vendrCd;
       $scope._broadcast('vendrInstockOrderInfoRegCtrl', params);
     };
@@ -287,9 +287,9 @@
 
     // 상품추가
     $scope.addProd = function () {
-      var params    = {};
-      params.slipNo = $scope.slipNo;
-      params.slipFg = $scope.slipFg;
+      var params     = {};
+      params.slipNo  = $scope.slipNo;
+      params.slipFg  = $scope.slipFg;
       params.vendrCd = $scope.vendrCd;
       $scope._broadcast('vendrInstockProdRegCtrl', params);
     };

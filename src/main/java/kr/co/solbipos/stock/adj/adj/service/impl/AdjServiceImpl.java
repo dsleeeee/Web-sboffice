@@ -106,6 +106,12 @@ public class AdjServiceImpl implements AdjService {
     @Override
     public List<DefaultMap<String>> getAdjRegistList(AdjVO adjVO, SessionInfoVO sessionInfoVO) {
         List<DefaultMap<String>> result = new ArrayList<DefaultMap<String>>();
+
+        // 거래처 멀티 선택
+        if(!StringUtil.getOrBlank(adjVO.getVendrCd()).equals("")) {
+            adjVO.setArrVendrCd(adjVO.getVendrCd().split(","));
+        }
+
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
             adjVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             result = adjMapper.getHqAdjRegistList(adjVO);

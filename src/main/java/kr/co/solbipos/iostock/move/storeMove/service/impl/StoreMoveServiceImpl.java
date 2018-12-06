@@ -16,7 +16,7 @@ import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
-@Service("StoreMoveService")
+@Service("storeMoveService")
 public class StoreMoveServiceImpl implements StoreMoveService {
     private final StoreMoveMapper storeMoveMapper;
     private final MessageService messageService;

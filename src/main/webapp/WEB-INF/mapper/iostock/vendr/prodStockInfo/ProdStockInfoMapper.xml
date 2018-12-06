@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.iostock.vendr.prodStockInfo.service.impl.ProdStockInfoMapper">
+    <!-- 거래처 상품별 입출고내역 - 상품별 입출고내역 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_ORDER, TB_HQ_VENDOR
+                   TB_PO_STORE_VENDR_ORDER, TB_MS_VENDOR
+        PARAM    : prodStockInfoVO
+        COMMENTS : 거래처 상품별 입출고내역 - 상품별 입출고내역 리스트를 조회한다.
+    -->
+    <select id="getProdStockInfoList" parameterType="prodStockInfoVO" resultType="DefaultMap">
+        /* USE : ProdStockInfoMapper.getProdStockInfoList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <![CDATA[
+                SELECT  tphvid.PROD_CD, thp.PROD_NM, tphvid.PO_UNIT_FG, tphvid.PO_UNIT_QTY
+                ,       COUNT(tphvi.SLIP_NO) AS IN_CNT
+                ,       SUM(tphvid.IN_TOT_QTY) AS IN_TOT_QTY
+                ,       SUM(tphvid.IN_AMT) AS IN_AMT
+                ,       SUM(tphvid.IN_VAT) AS IN_VAT
+                ,       SUM(tphvid.IN_TOT) AS IN_TOT
+                FROM    TB_PO_HQ_VENDR_INSTOCK tphvi
+                ,       TB_PO_HQ_VENDR_INSTOCK_DTL tphvid
+                ,       TB_HQ_PRODUCT thp
+                WHERE   tphvi.HQ_OFFICE_CD    = #{hqOfficeCd}
+                AND     tphvi.PROC_FG         = '1'
+                AND     tphvi.INSTOCK_DATE    BETWEEN #{startDate} AND #{endDate}
+                AND     tphvid.HQ_OFFICE_CD   = tphvi.HQ_OFFICE_CD
+                AND     tphvid.SLIP_NO        = tphvi.SLIP_NO
+                AND     thp.HQ_OFFICE_CD      = tphvid.HQ_OFFICE_CD
+                AND     thp.PROD_CD           = tphvid.PROD_CD
+                ]]>
+                <if test='arrVendrCd != null and arrVendrCd != ""'>
+                    AND tphvi.VENDR_CD IN
+                    <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
+                        #{item}
+                    </foreach>
+                </if>
+                <if test='prodCd != null and prodCd != ""'>
+                    AND tphvid.PROD_CD = #{prodCd}
+                </if>
+                <if test='prodNm != null and prodNm != ""'>
+                    AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND thp.PROD_CLASS_CD IN  ( SELECT  #{prodClassCd} AS PROD_CLASS_CD
+                                                FROM    DUAL
+                                                UNION
+                                                SELECT  thpc.PROD_CLASS_CD
+                                                FROM    TB_HQ_PRODUCT_CLASS thpc
+                                                WHERE   thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+                                                START WITH  thpc.P_PROD_CLASS_CD = #{prodClassCd}
+                                                CONNECT BY  thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD
+                                              )
+                </if>
+                <![CDATA[
+                GROUP BY tphvid.PROD_CD, thp.PROD_NM, tphvid.PO_UNIT_FG, tphvid.PO_UNIT_QTY
+                ORDER BY tphvid.PROD_CD
+                ]]>
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <![CDATA[
+                SELECT  tpsvid.PROD_CD, tmp.PROD_NM, tpsvid.PO_UNIT_FG, tpsvid.PO_UNIT_QTY
+                ,       COUNT(tpsvi.SLIP_NO) AS IN_CNT
+                ,       SUM(tpsvid.IN_TOT_QTY) AS IN_TOT_QTY
+                ,       SUM(tpsvid.IN_AMT) AS IN_AMT
+                ,       SUM(tpsvid.IN_VAT) AS IN_VAT
+                ,       SUM(tpsvid.IN_TOT) AS IN_TOT
+                FROM    TB_PO_STORE_VENDR_INSTOCK tpsvi
+                ,       TB_PO_STORE_VENDR_INSTOCK_DTL tpsvid
+                ,       TB_MS_PRODUCT tmp
+                WHERE   tpsvi.STORE_CD      = #{storeCd}
+                AND     tpsvi.PROC_FG       = '1'
+                AND     tpsvi.INSTOCK_DATE  BETWEEN #{startDate} AND #{endDate}
+                AND     tpsvid.STORE_CD     = tpsvi.STORE_CD
+                AND     tpsvid.SLIP_NO      = tpsvi.SLIP_NO
+                AND     tmp.STORE_CD        = tpsvid.STORE_CD
+                AND     tmp.PROD_CD         = tpsvid.PROD_CD
+                ]]>
+                <if test='arrVendrCd != null and arrVendrCd != ""'>
+                    AND tpsvi.VENDR_CD IN
+                    <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
+                        #{item}
+                    </foreach>
+                </if>
+                <if test='prodCd != null and prodCd != ""'>
+                    AND tpsvid.PROD_CD = #{prodCd}
+                </if>
+                <if test='prodNm != null and prodNm != ""'>
+                    AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND tmp.PROD_CLASS_CD IN  ( SELECT  #{prodClassCd} AS PROD_CLASS_CD
+                                                FROM    DUAL
+                                                UNION
+                                                SELECT  tmpc.PROD_CLASS_CD
+                                                FROM    TB_MS_PRODUCT_CLASS tmpc
+                                                WHERE   tmpc.STORE_CD = #{storeCd}
+                                                START WITH  tmpc.P_PROD_CLASS_CD = #{prodClassCd}
+                                                CONNECT BY  tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD
+                                              )
+                </if>
+                <![CDATA[
+                GROUP BY tpsvid.PROD_CD, tmp.PROD_NM, tpsvid.PO_UNIT_FG, tpsvid.PO_UNIT_QTY
+                ORDER BY tpsvid.PROD_CD
+                ]]>
+            </when>
+        </choose>
+    </select>
+
+
+</mapper>
