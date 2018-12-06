@@ -37,8 +37,8 @@
             tca.AGENCY_CD,
             tca.AGENCY_NM,
             tce.USER_ID AS CM_USER_ID,
-            tms.SYS_OPEN_DATE,
-            tms.SYS_CLOSURE_DATE,
+            TO_CHAR(TO_DATE(tms.SYS_OPEN_DATE, 'YYYYMMDD') , 'YYYY/MM/DD') AS SYS_OPEN_DATE,
+            TO_CHAR(TO_DATE(tms.SYS_CLOSURE_DATE, 'YYYYMMDD') , 'YYYY/MM/DD') AS SYS_CLOSURE_DATE,
             #{orgnFg} AS ORGN_FG
             <include refid="CmmSQL.PagingTemplateCount"/>
         FROM
@@ -58,12 +58,11 @@
             AND tce.EMP_NO = '0000'
         LEFT OUTER JOIN TB_CM_NMCODE tcm_cls_fg ON
             tms.CLS_FG = tcm_cls_fg.NMCODE_CD
-            AND tcm_cls_fg.NMCODE_GRP_CD = '003'
+            AND tcm_cls_fg.NMCODE_GRP_CD = '001'
         LEFT OUTER JOIN TB_CM_NMCODE tcm_sys_stat_fg ON
             tms.CLS_FG = tcm_sys_stat_fg.NMCODE_CD
-            AND tcm_sys_stat_fg.NMCODE_GRP_CD = '009'
-        WHERE
-            tho.HQ_OFFICE_CD != '00000'
+            AND tcm_sys_stat_fg.NMCODE_GRP_CD = '005'
+      WHERE 1=1
         <if test='orgnFg != null and orgnFg == "H"'> -- 본사권한 접근시
             AND tho.HQ_OFFICE_CD = #{hqOfficeCd}
         </if>
@@ -72,10 +71,18 @@
                 AND tho.HQ_OFFICE_CD = #{hqOfficeCd}
             </if>
             <if test='hqOfficeNm != null and hqOfficeNm != ""'>
-                <![CDATA[
-            AND tho.HQ_OFFICE_NM LIKE #{hqOfficeNm} || '%'
+            <![CDATA[
+            AND tho.HQ_OFFICE_NM LIKE '%' ||#{hqOfficeNm} || '%'
             ]]>
             </if>
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+            AND tms.STORE_CD = #{storeCd}
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            <![CDATA[
+            AND tms.STORE_NM LIKE '%' ||#{storeNm} || '%'
+            ]]>
         </if>
         <if test='clsFg != null and clsFg != ""'>
             AND tho.CLS_FG = #{clsFg}

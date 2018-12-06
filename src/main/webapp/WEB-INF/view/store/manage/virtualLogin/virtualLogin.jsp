@@ -118,22 +118,23 @@
           item-formatter="_itemFormatter">
 
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="virtualLogin.hqOfficeCd"/>" binding="hqOfficeCd" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="virtualLogin.hqOfficeNm"/>" binding="hqOfficeNm" ></wj-flex-grid-column>
+
+          <wj-flex-grid-column header="<s:message code="virtualLogin.hqOfficeCd"/>" binding="hqOfficeCd" align="center" ng-if="userOrgnFg == 'M'"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.hqOfficeNm"/>" binding="hqOfficeNm" align="center" ng-if="userOrgnFg == 'M'"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="virtualLogin.hqUserId"/>" binding="hqUserId" visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="virtualLogin.storeCd"/>" binding="storeCd" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="virtualLogin.storeNm"/>" binding="storeNm" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.storeCd"/>" binding="storeCd" width="100" align="center" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.storeNm"/>" binding="storeNm" width="200"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="virtualLogin.msUserId"/>" binding="msUserId" visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="virtualLogin.clsFgNm"/>" binding="clsFgNm" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="virtualLogin.sysStatFgNm"/>" binding="sysStatFgNm" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="virtualLogin.ownerNm"/>" binding="ownerNm" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="virtualLogin.telNo"/>" binding="telNo" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="virtualLogin.mpNo"/>" binding="mpNo" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="virtualLogin.agencyNm"/>" binding="agencyNm" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.clsFgNm"/>" binding="clsFgNm" width="80" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.sysStatFgNm"/>" binding="sysStatFgNm" width="80" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.ownerNm"/>" binding="ownerNm" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.telNo"/>" binding="telNo" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.mpNo"/>" binding="mpNo" align="center" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.agencyNm"/>" binding="agencyNm" align="center" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="virtualLogin.cmUserId"/>" binding="cmUserId" visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="virtualLogin.sysOpenDate"/>" binding="sysOpenDate" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="virtualLogin.sysClosureDate"/>" binding="sysClosureDate" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="virtualLogin.orgnFg"/>" binding="orgnFg" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.sysOpenDate"/>" binding="sysOpenDate" width="110" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.sysClosureDate"/>" binding="sysClosureDate" width="110" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.orgnFg"/>" binding="orgnFg" visible="false"></wj-flex-grid-column>
 
         </wj-flex-grid>
         <%-- ColumnPicker 사용시 include --%>

@@ -29,51 +29,59 @@
               ng-hide="true">
       </wj-combo-box>
 
-      <div class="mt10" style="height:270px; overflow-y: auto;"   ng-controller="posTerminalCtrl" ng-if="cornerUseYnVal !== '2'">
-        <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden;" >
-          <wj-flex-grid
-                  control="flex"
-                  autoGenerateColumns="false"
-                  selection-mode="Row"
-                  initialized="initGrid(s,e)"
-                  items-source="data"
-                  item-formatter="_itemFormatter">
+      <div  ng-controller="posTerminalCtrl" ng-if="cornerUseYnVal !== '2'">
+        <div class="mt10" style="height:270px; overflow-y: auto;"  >
+          <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden;" >
+            <wj-flex-grid
+                    control="flex"
+                    autoGenerateColumns="false"
+                    selection-mode="Row"
+                    initialized="initGrid(s,e)"
+                    items-source="data"
+                    item-formatter="_itemFormatter">
 
-            <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="storeView.posNo"/>" binding="posNo" align="center" width="60" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeView.vendorFgNm"/>" binding="vendorFgNm" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeView.vendorNm"/>" binding="vendorNm" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeView.vendorTermnlNo"/>" binding="vendorTermnlNo" align="center" width="*" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeView.vendorSerNo"/>" binding="vendorSerNo" align="center" width="*" is-read-only="true"></wj-flex-grid-column>
-          </wj-flex-grid>
+              <!-- define columns -->
+              <wj-flex-grid-column header="<s:message code="storeView.posNo"/>" binding="posNo" align="center" width="60" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="storeView.vendorFgNm"/>" binding="vendorFgNm" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="storeView.vendorNm"/>" binding="vendorNm" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="storeView.vendorTermnlNo"/>" binding="vendorTermnlNo" align="center" width="*" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="storeView.vendorSerNo"/>" binding="vendorSerNo" align="center" width="*" is-read-only="true"></wj-flex-grid-column>
+            </wj-flex-grid>
+          </div>
+        </div>
+
+        <div class="btnSet">
+          <%-- 닫기 --%>
+          <span><a href="#" class="btn_blue pd20" ng-click="close()"><s:message code="cmm.close" /></a></span>
         </div>
       </div>
 
-      <div class="mt10" style="height:270px; overflow-y: auto;" ng-controller="cornerTerminalCtrl" ng-if="cornerUseYnVal == '2'">
-        <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden;" >
-          <wj-flex-grid
-                  control="flex"
-                  autoGenerateColumns="false"
-                  selection-mode="Row"
-                  initialized="initGrid(s,e)"
-                  items-source="data"
-                  item-formatter="_itemFormatter">
+      <div ng-controller="cornerTerminalCtrl" ng-if="cornerUseYnVal == '2'">
+        <div class="mt10" style="height:270px; overflow-y: auto;" >
+          <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden;" >
+            <wj-flex-grid
+                    control="flex"
+                    autoGenerateColumns="false"
+                    selection-mode="Row"
+                    initialized="initGrid(s,e)"
+                    items-source="data"
+                    item-formatter="_itemFormatter">
 
-            <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="storeView.cornrCd"/>" binding="cornrCd" width="*" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeView.vendorFgNm"/>" binding="vendorFgNm" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeView.vendorNm"/>" binding="vendorNm" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeView.vendorTermnlNo"/>" binding="vendorTermnlNo" align="center" width="*" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeView.vendorSerNo"/>" binding="vendorSerNo" align="center" width="*" is-read-only="true"></wj-flex-grid-column>
-          </wj-flex-grid>
+              <!-- define columns -->
+              <wj-flex-grid-column header="<s:message code="storeView.cornrCd"/>" binding="cornrCd" width="*" visible="false"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="storeView.vendorFgNm"/>" binding="vendorFgNm" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="storeView.vendorNm"/>" binding="vendorNm" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="storeView.vendorTermnlNo"/>" binding="vendorTermnlNo" align="center" width="*" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="storeView.vendorSerNo"/>" binding="vendorSerNo" align="center" width="*" is-read-only="true"></wj-flex-grid-column>
+            </wj-flex-grid>
+          </div>
+        </div>
+        <div class="btnSet">
+          <%-- 닫기 --%>
+          <span><a href="#" class="btn_blue pd20" ng-click="close()"><s:message code="cmm.close" /></a></span>
         </div>
       </div>
 
-
-      <div class="btnSet">
-        <%-- 닫기 --%>
-        <span><a href="#" class="btn_blue pd20" id="btnClose" ng-click="close()"><s:message code="cmm.close" /></a></span>
-      </div>
     </div>
   </div>
 </wj-popup>
