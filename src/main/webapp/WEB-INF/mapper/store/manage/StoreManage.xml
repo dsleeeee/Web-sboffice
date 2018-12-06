@@ -1908,7 +1908,7 @@
             #{prterNetIp},
             #{prterNetPort},
             #{prterOutputQty},
-            #{printCheckYn},
+            #{prterCheckYn},
             #{useYn},
             #{regDt},
             #{regId},
