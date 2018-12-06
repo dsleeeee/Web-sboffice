@@ -171,18 +171,19 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
     var params      = [];
     var storeScope  = agrid.getScope('storeManageCtrl');
 
+
     for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
       $scope.flex.collectionView.itemsEdited[i].storeCd = storeScope.selectedStore.storeCd;
       $scope.flex.collectionView.itemsEdited[i].status = "U";
       params.push($scope.flex.collectionView.itemsEdited[i]);
     }
     for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
-      $scope.flex.collectionView.itemsEdited[i].storeCd = storeScope.selectedStore.storeCd;
+      $scope.flex.collectionView.itemsAdded[i].storeCd = storeScope.selectedStore.storeCd;
       $scope.flex.collectionView.itemsAdded[i].status = "I";
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
     for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
-      $scope.flex.collectionView.itemsEdited[i].storeCd = storeScope.selectedStore.storeCd;
+      $scope.flex.collectionView.itemsRemoved[i].storeCd = storeScope.selectedStore.storeCd;
       $scope.flex.collectionView.itemsRemoved[i].status = "D";
       params.push($scope.flex.collectionView.itemsRemoved[i]);
     }

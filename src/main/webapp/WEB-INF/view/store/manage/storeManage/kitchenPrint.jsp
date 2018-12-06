@@ -36,10 +36,10 @@
       <wj-flex-grid-column header="<s:message code="storeManage.prterNm"/>" binding="prterNm" ></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="storeManage.prterKind"/>" binding="prterKindFg" data-map="prterKindDataMap" width="110" align="center"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="storeManage.prterPort"/>" binding="prterPortFg" data-map="prterPortDataMap" width="90" align="center"></wj-flex-grid-column>
-      <wj-flex-grid-column header="<s:message code="storeManage.prterSpeed"/>" binding="prterSpeedFg" data-map="prterSpeedDataMap" is-read-only="true" width="90" align="center"></wj-flex-grid-column>
-      <wj-flex-grid-column header="<s:message code="storeManage.prterOutputQty"/>" binding="prterOutputQty" is-read-only="true" width="80" align="center"></wj-flex-grid-column>
-      <wj-flex-grid-column header="<s:message code="storeManage.prterNetIp"/>" binding="prterNetIp" is-read-only="true" width="80"></wj-flex-grid-column>
-      <wj-flex-grid-column header="<s:message code="storeManage.prterNetPort"/>" binding="prterNetPort" is-read-only="true" width="80" align="center"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="storeManage.prterSpeed"/>" binding="prterSpeedFg" data-map="prterSpeedDataMap" width="90" align="center"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="storeManage.prterOutputQty"/>" binding="prterOutputQty"  width="80" align="center"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="storeManage.prterNetIp"/>" binding="prterNetIp" width="80"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="storeManage.prterNetPort"/>" binding="prterNetPort" width="80" align="center"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="storeManage.prterCheckYn"/>" binding="prterCheckYn" data-map="useYnFgDataMap" width="80" align="center"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="storeManage.useYn"/>" binding="useYn" data-map="useYnFgDataMap" width="80" align="center"></wj-flex-grid-column>
     </wj-flex-grid>
