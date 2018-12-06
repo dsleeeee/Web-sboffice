@@ -814,7 +814,7 @@
                     tmpsp.DISP_SEQ
                 FROM
                     TB_MS_PRODUCT_SDSEL_PROD tmpsp
-                LEFT OUTER JOIN TB_HQ_PRODUCT tmp ON
+                LEFT OUTER JOIN TB_MS_PRODUCT tmp ON
                     tmpsp.PROD_CD = tmp.PROD_CD
                 WHERE
                     tmpsp.STORE_CD = #{storeCd}

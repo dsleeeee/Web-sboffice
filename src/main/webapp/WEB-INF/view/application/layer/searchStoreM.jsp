@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <input type="hidden" id="<c:out value="${param.targetId}Cd"/>"/>
-<input type="text" id="<c:out value="${param.targetId}Nm"/>" class="sb-input fl mr5" style="cursor:pointer; width:300px;" value="전체" ng-click="<c:out value="${param.targetId}"/>Show()" readonly/>
+<input type="text" id="<c:out value="${param.targetId}Nm"/>" class="sb-input fl mr5" style="cursor:pointer; width:100%;" value="전체" ng-click="<c:out value="${param.targetId}"/>Show()" readonly/>
 
 <wj-popup id="wj<c:out value="${param.targetId}"/>LayerM" control="wj<c:out value="${param.targetId}"/>LayerM" show-trigger="Click" hide-trigger="Click" style="display:none;width:500px;">
   <div class="wj-dialog wj-dialog-columns">
@@ -45,8 +45,8 @@
 
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="outstockReqDate.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="outstockReqDate.storeNm"/>" binding="storeNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="cmm.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="cmm.storeNm"/>" binding="storeNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
 
           </wj-flex-grid>
         </div>
@@ -84,17 +84,13 @@
     $scope.initGrid = function (s, e) {
     };
 
-    $scope.searchFg = "N";
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on(targetId + 'Ctrl', function (event, paramObj) {
 
       // 매장선택 팝업 오픈
       eval('$scope.wj' + targetId + 'LayerM.show(true)');
 
-      if ($scope.searchFg == "N") {
-        $scope.searchStore();
-      }
-      // 기능수행 종료 : 반드시 추가
+      $scope.searchStore();
       event.preventDefault();
     });
 
@@ -102,13 +98,12 @@
       // 파라미터
       var params = {};
       $scope._inquirySub("/popup/getStoreList.sb", params, function () {
-        $scope.searchFg = "Y";
       });
     };
 
     $scope.storeSelected = function () {
       var flex       = agrid.getScope(targetId + 'Ctrl').data.sourceCollection;
-      // var flex = $scope.storeGridM;
+
       var arrStoreCd = new Array();
       var strStoreCd = "";
       var strStoreNm = "";
@@ -118,7 +113,7 @@
         if (flex[i].gChk) {
           if (cnt == 0) {
             strStoreCd = flex[i].storeCd;
-            // strStoreNm = "["+flex[i].storeCd+"] "+flex[i].storeNm;
+
             strStoreNm = flex[i].storeNm;
           }
           arrStoreCd.push(flex[i].storeCd);
@@ -134,7 +129,7 @@
         $("#" + targetId + "Nm").val("[" + strStoreCd + "] " + strStoreNm);
       }
       else if (cnt > 1) {
-        $("#" + targetId + "Nm").val(strStoreNm + " "+messages["outstockReqDate.except"]+" " + (cnt - 1) + messages["outstockReqDate.cntStore"]);
+        $("#" + targetId + "Nm").val(strStoreNm + " "+messages["cmm.except"]+" " + (cnt - 1) + messages["cmm.cntStore"]);
       }
       eval('$scope.wj' + targetId + 'LayerM.hide(true)');
     };

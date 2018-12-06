@@ -444,7 +444,6 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         }
       });
     });
-    event.preventDefault();
   };
 
 
@@ -466,7 +465,6 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         }
       });
     });
-    event.preventDefault();
   };
 
   /*********************************************************

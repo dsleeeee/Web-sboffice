@@ -12,27 +12,27 @@
 
 <mapper namespace="kr.co.solbipos.application.pos.exceptForward.service.impl.ExceptForwardMapper">
 
-  <!-- 예외출고 대상상품 목록 조회 -->
-  <!--
-      TABLE    : TB_MS_PRODUCT
-      PARAM    : productVO
-      COMMENTS : 포스에서 예외출고를 등록할 상품 목록을 조회한다.
-  -->
-  <select id="getExcpForwardProduct" parameterType="excpForwardProductVO" resultType="DefaultMap">
-    /* USE : ExceptForwardMapper.getExcpForwardProduct */
-    <![CDATA[
-    SELECT tmp.STORE_CD,
-           tmp.PROD_CD,
-           tmp.PROD_NM,
-           tmp.PROD_CLASS_CD,
-           tmpc.PROD_CLASS_NM,
-           '등록' AS REG_PROD
-      FROM TB_MS_PRODUCT tmp,
-           TB_MS_PRODUCT_CLASS tmpc
-     WHERE tmp.STORE_CD = #{storeCd}
-       AND tmpc.PROD_CLASS_CD = tmp.PROD_CLASS_CD
-     ORDER BY tmp.PROD_CLASS_CD, PROD_CD
-    ]]>
+    <!-- 예외출고 대상상품 목록 조회 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT
+        PARAM    : productVO
+        COMMENTS : 포스에서 예외출고를 등록할 상품 목록을 조회한다.
+    -->
+    <select id="getExcpForwardProduct" parameterType="excpForwardProductVO" resultType="DefaultMap">
+        /* USE : ExceptForwardMapper.getExcpForwardProduct */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT tmp.STORE_CD,
+               tmp.PROD_CD,
+               tmp.PROD_NM,
+               tmp.PROD_CLASS_CD,
+               tmpc.PROD_CLASS_NM,
+               '등록' AS REG_PROD
+            <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_MS_PRODUCT tmp,
+               TB_MS_PRODUCT_CLASS tmpc
+         WHERE tmp.STORE_CD = #{storeCd}
+           AND tmpc.PROD_CLASS_CD = tmp.PROD_CLASS_CD
+         ORDER BY tmp.PROD_CLASS_CD, PROD_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
   </select>
-
 </mapper>

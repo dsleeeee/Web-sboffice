@@ -44,9 +44,6 @@ app.controller('storeEmpRegistCtrl', ['$scope', '$http', function ($scope, $http
   // 웹사용자 아이디 중복체크 여부
   $scope.duplicationChkFg = false;
 
-  // 비밀번호 변경여부
-  $scope.pwdChgFg = false;
-
   // 사원정보
   $scope.storeEmpRegistInfo;
   $scope.setStoreEmpRegistInfo = function(emp){
@@ -87,7 +84,6 @@ app.controller('storeEmpRegistCtrl', ['$scope', '$http', function ($scope, $http
     $scope._postJSONQuery.withOutPopUp( "/base/store/emp/store/detail.sb", params, function(response){
       $scope.storeEmpRegistInfo                    = response.data.data;
       $scope.storeEmpRegistInfo.empInfo            = ' [' + response.data.data.empNo + ']' + response.data.data.empNm;
-      $scope.pwdChgFg                           = false;
       $scope.storeEmpRegistInfo.originalWebUserId  = response.data.data.userId;
     });
   };
@@ -103,23 +99,34 @@ app.controller('storeEmpRegistCtrl', ['$scope', '$http', function ($scope, $http
     var params    = {};
     params.userId = $scope.storeEmpRegistInfo.userId;
 
-    console.log('params ', params);
-
     $scope._postJSONQuery.withPopUp( "/base/store/emp/store/chkStoreUserId.sb", params, function(response){
-
-      console.log('result ', response);
 
       var result = response.data.data;
 
       if(result == "SUCCESS"){
         $scope.duplicationChkFg = true;
         $scope._popMsg(messages["storeEmp.notDuplicate.msg"]);
-      } else if(result == "USER_ID_REGEXP"){
+      } else if(result === "USER_ID_REGEXP"){
         $scope._popMsg(messages["storeEmp.userIdRegexp.msg"]);
+      } else if(result === "USER_ID_LENGHTH_REGEXP"){
+        $scope._popMsg(messages["storeEmp.userIdLengthRegexp.msg"]);
+      } else if(result === "USER_ID_CANNOT_USE_HANGEUL"){
+        $scope._popMsg(messages["storeEmp.userIdNotUseHangeul.msg"]);
+      } else if(result === "USER_ID_MUST_CONTAIN_ENG_CAHR"){
+        $scope._popMsg(messages["storeEmp.userIdContainEngChar.msg"]);
+      } else if(result === "USER_ID_ONLY_ENG_NUM_CHAR"){
+        $scope._popMsg(messages["storeEmp.userIdOnlyEnvNumChar.msg"]);
+      } else if(result === "USER_ID_DUPLICATE"){
+        $scope._popMsg(messages["storeEmp.userId.duplicate.msg"]);
       } else {
         $scope._popMsg(messages["storeEmp.userId.notDuplicate.msg"]);
       }
     });
+  };
+
+  // 비밀번호 변경
+  $scope.changePassword = function(){
+    $scope.changePwdLayer.show(true);
   };
 
   // 신규등록
@@ -139,6 +146,7 @@ app.controller('storeEmpRegistCtrl', ['$scope', '$http', function ($scope, $http
     }
 
     var params = $scope.storeEmpRegistInfo;
+    params.pwdChgFg = false; // 비밀번호 변경여부
 
     $scope._postJSONSave.withOutPopUp( "/base/store/emp/store/regist.sb", params, function(response){
 
@@ -171,23 +179,9 @@ app.controller('storeEmpRegistCtrl', ['$scope', '$http', function ($scope, $http
       }
     }
 
-    // 웹사용여부 'Y'면서 비밀번호 변경시
-    if($scope.storeEmpRegistInfo.webUseYn === 'Y' &&  !isEmptyObject($scope.storeEmpRegistInfo.userPwd)) {
-
-      $scope.pwdChgFg = true;
-      if($scope.storeEmpRegistInfo.userPwd !== $scope.storeEmpRegistInfo.userPwdCfm) { // 비밀번호, 비밀번호 확인 체크
-        $scope._popMsg(messages["storeEmp.passwordNotMatch.msg"] );
-        return false;
-      }
-    } else {
-      $scope.pwdChgFg = false;
-    }
-
-    var params      = $scope.storeEmpRegistInfo;
-    params.pwdChgFg = $scope.pwdChgFg;
+    var params = $scope.storeEmpRegistInfo;
 
     $scope._postJSONSave.withOutPopUp( "/base/store/emp/store/save.sb", params, function(response){
-      // console.log('save result', response);
 
       if(response.data.data == 'SUCCESS') {
         $scope._popMsg(messages["cmm.saveSucc"]);
@@ -209,5 +203,18 @@ app.controller('storeEmpRegistCtrl', ['$scope', '$http', function ($scope, $http
   $scope.close = function(){
     $scope.storeEmpRegistLayer.hide();
   };
+
+  // 화면 ready 된 후 설정
+  angular.element(document).ready(function () {
+    // 비밀번호 변경 팝업 핸들러 추가
+    $scope.changePwdLayer.shown.addHandler(function (s) {
+      setTimeout(function() {
+        var params = $scope.storeEmpRegistInfo;
+        params.empFg = 'S'; // 매장 사원
+        $scope._broadcast('changePwdCtrl', params);
+      }, 50);
+    });
+  });
+
 
 }]);

@@ -7,7 +7,7 @@ import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
-import kr.co.solbipos.membr.anals.credit.service.CreditStoreVO;
+import kr.co.solbipos.membr.anals.postpaid.service.PostpaidStoreVO;
 import kr.co.solbipos.membr.info.grade.service.MembrClassVO;
 import kr.co.solbipos.membr.info.regist.service.RegistService;
 import kr.co.solbipos.membr.info.regist.service.RegistVO;
@@ -157,11 +157,11 @@ public class RegistServiceImpl implements RegistService {
 
     /***
      * 후불 회원 등록 매장 조회
-     * @param creditStoreVO
+     * @param postpaidStoreVO
      * @return
      */
     @Override
-    public List<DefaultMap<String>> getCreditStoreLists(CreditStoreVO creditStoreVO, SessionInfoVO sessionInfoVO) {
+    public List<DefaultMap<String>> getPostpaidStoreLists(PostpaidStoreVO postpaidStoreVO, SessionInfoVO sessionInfoVO) {
 
         // 기본매장이 있는 경우, 매장 조회시 기본매장은 제외하고 검색한다.
         String defaultStoreCd = "";
@@ -170,18 +170,18 @@ public class RegistServiceImpl implements RegistService {
             defaultStoreCd.replace("*", "");
         }
 
-        creditStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        creditStoreVO.setDefaultStoreCd(defaultStoreCd);
+        postpaidStoreVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd()); // 본사에서 조회하는 메뉴
+        postpaidStoreVO.setDefaultStoreCd(defaultStoreCd);
 
         List<DefaultMap<String>> resultList = null;
 
         // 등록매장 조회
-        if(creditStoreVO.getRegYn() == UseYn.Y) {
-             resultList = mapper.getRegStoreList(creditStoreVO);
+        if(postpaidStoreVO.getRegYn() == UseYn.Y) {
+             resultList = mapper.getRegStoreList(postpaidStoreVO);
         }
         // 미등록매장 조회
         else {
-            resultList = mapper.getNoRegStoreList(creditStoreVO);
+            resultList = mapper.getNoRegStoreList(postpaidStoreVO);
         }
 
         return resultList;
@@ -189,31 +189,36 @@ public class RegistServiceImpl implements RegistService {
 
     /** 후불회원 매장 등록 */
     @Override
-    public int registCreditStore(CreditStoreVO[] creditStoreVOs, SessionInfoVO sessionInfoVO) {
+    public int registPostpaidStore(PostpaidStoreVO[] postpaidStoreVOs, SessionInfoVO sessionInfoVO) {
 
         int result = 0;
         String dt = currentDateTimeString();
 
-        for(CreditStoreVO creditStoreVO : creditStoreVOs) {
+        for(PostpaidStoreVO postpaidStoreVO : postpaidStoreVOs) {
 
-            creditStoreVO.setRegDt(dt);
-            creditStoreVO.setRegId(sessionInfoVO.getUserId());
-            creditStoreVO.setModDt(dt);
-            creditStoreVO.setModId(sessionInfoVO.getUserId());
+            postpaidStoreVO.setUseYn(UseYn.Y);
+            postpaidStoreVO.setRegDt(dt);
+            postpaidStoreVO.setRegId(sessionInfoVO.getUserId());
+            postpaidStoreVO.setModDt(dt);
+            postpaidStoreVO.setModId(sessionInfoVO.getUserId());
 
-            result += mapper.registCreditStore(creditStoreVO);
+            result += mapper.registPostpaidStore(postpaidStoreVO);
         }
         return result;
     }
 
     /** 후불회원 매장 삭제 */
     @Override
-    public int deleteCreditStore(CreditStoreVO[] creditStoreVOs, SessionInfoVO sessionInfoVO) {
+    public int deletePostpaidStore(PostpaidStoreVO[] postpaidStoreVOs, SessionInfoVO sessionInfoVO) {
 
         int result = 0;
+        String dt = currentDateTimeString();
 
-        for(CreditStoreVO creditStoreVO : creditStoreVOs) {
-            result += mapper.deleteCreditStore(creditStoreVO);
+        for(PostpaidStoreVO postpaidStoreVO : postpaidStoreVOs) {
+
+            postpaidStoreVO.setModDt(dt);
+            postpaidStoreVO.setModId(sessionInfoVO.getUserId());
+            result += mapper.deletePostpaidStore(postpaidStoreVO);
         }
         return result;
     }

@@ -103,8 +103,9 @@
             <td colspan="3">
               <input type="password" id="_userPwd" name="userPwd" class="sb-input w30" style="width: 30%"
                      ng-model="hqEmpRegistInfo.userPwd"
-                     ng-required="newEmpYn == true || (pwdChgFg == true) || hqEmpRegistInfo.originalWebUserId == '' || hqEmpRegistInfo.originalWebUserId == undefined"
-                     ng-change="pwdChgFg == true"
+                     ng-show="newEmpYn == true"
+                     ng-required="newEmpYn == true"
+                     maxlength="12"
                      popover-enable="empForm.userPwd.$invalid"
                      popover-placement="bottom-left"
                      popover-trigger="'mouseenter'"
@@ -112,13 +113,15 @@
                      uib-popover="<s:message code="hqEmp.pwd" />은(는) 필수 입력항목 입니다."/>
               <input type="password" id="_userPwdCfm" name="userPwdCfm" class="sb-input ml10 w30" style="width: 30%"
                      ng-model="hqEmpRegistInfo.userPwdCfm"
-                     ng-required="newEmpYn == true || (pwdChgFg == true) || hqEmpRegistInfo.originalWebUserId == '' || hqEmpRegistInfo.originalWebUserId == undefined"
-                     ng-change="pwdChgFg == true"
+                     ng-show="newEmpYn == true"
+                     ng-required="newEmpYn == true"
+                     maxlength="12"
                      popover-enable="empForm.userPwd.$invalid"
                      popover-placement="bottom-left"
                      popover-trigger="'mouseenter'"
                      placeholder="<s:message code="hqEmp.pwd.confirm" />"
                      uib-popover="<s:message code="hqEmp.pwd.confirm" />은(는) 필수 입력항목 입니다."/>
+              <a href="#" class="btn_grayS" ng-show="newEmpYn == false" ng-click="changePassword()"><s:message code="hqEmp.change.pwd" /></a>
             </td>
           </tr>
           <tr>

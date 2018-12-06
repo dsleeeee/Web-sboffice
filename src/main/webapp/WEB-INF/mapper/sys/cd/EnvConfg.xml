@@ -104,6 +104,7 @@
             ENVST_FG = #{envstFg},
             ENVST_GRP_CD = (SELECT NMCODE_CD FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD  = '004' AND NMCODE_NM = #{envstGrpCdNm} AND NMCODE_ITEM_1 = #{envstFg}),
             DIRCT_IN_YN = #{dirctInYn},
+            TARGT_FG = #{targtFg},
             USE_YN = #{useYn},
             REMARK = #{remark},
             MOD_DT = #{modDt},

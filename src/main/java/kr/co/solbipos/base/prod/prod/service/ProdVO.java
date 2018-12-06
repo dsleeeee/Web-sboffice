@@ -1,5 +1,6 @@
 package kr.co.solbipos.base.prod.prod.service;
 
+import kr.co.common.data.enums.UseYn;
 import kr.co.solbipos.application.common.service.PageVO;
 
 /**
@@ -26,6 +27,8 @@ public class ProdVO extends PageVO {
     private String hqOfficeCd;
     /** 매장코드 */
     private String storeCd;
+    /** 매장명 */
+    private String storeNm;
     /** 상품코드 */
     private String prodCd;
     /** 상품명 */
@@ -99,9 +102,18 @@ public class ProdVO extends PageVO {
      * S : 매장, 가맹점
      */
     private String orgnFg;
+
     /** 전체기간 여부 */
     private boolean chkDt;
 
+    /** 프로시져 실행 결과 */
+    private String result;
+
+    /** 매장적용여부 */
+    private UseYn storeRegFg;
+
+    /** 판매가격구분 (본사판매가 :1, 매장판매가:2) */
+    private String salePrcFg;
 
     /**
      * @return the hqOfficeCd
@@ -129,6 +141,21 @@ public class ProdVO extends PageVO {
      */
     public void setStoreCd(String storeCd) {
         this.storeCd = storeCd;
+    }
+
+    /**
+     * @return the storeNm
+     */
+
+    public String getStoreNm() {
+        return storeNm;
+    }
+
+    /**
+     * @param storeNm the storeNm to set
+     */
+    public void setStoreNm(String storeNm) {
+        this.storeNm = storeNm;
     }
 
     /**
@@ -605,5 +632,50 @@ public class ProdVO extends PageVO {
      */
     public void setChkDt(boolean chkDt) {
         this.chkDt = chkDt;
+    }
+
+    /**
+     * @return the result
+     */
+
+    public String getResult() {
+        return result;
+    }
+
+    /**
+     * @param result the result to set
+     */
+    public void setResult(String result) {
+        this.result = result;
+    }
+
+    /**
+     * @return the storeRegFg
+     */
+
+    public UseYn getStoreRegFg() {
+        return storeRegFg;
+    }
+
+    /**
+     * @param storeRegFg the storeRegFg to set
+     */
+    public void setStoreRegFg(UseYn storeRegFg) {
+        this.storeRegFg = storeRegFg;
+    }
+
+    /**
+     * @return the salePrcFg
+     */
+
+    public String getSalePrcFg() {
+        return salePrcFg;
+    }
+
+    /**
+     * @param salePrcFg the salePrcFg to set
+     */
+    public void setSalePrcFg(String salePrcFg) {
+        this.salePrcFg = salePrcFg;
     }
 }

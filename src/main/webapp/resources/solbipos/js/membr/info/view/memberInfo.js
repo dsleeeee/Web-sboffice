@@ -54,7 +54,7 @@ app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
           wijmo.addClass(e.cell, 'wijLink');
         }
         // 후불적용매장등록 클릭시 매장선택 팝업
-        if(col.binding === "creditStore") {
+        if(col.binding === "postpaidStore") {
           wijmo.addClass(e.cell, 'wijLink');
         }
       }
@@ -74,11 +74,11 @@ app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
         }
 
         // 후불적용매장등록 클릭시 매장선택 팝업
-        if (col.binding === "creditStore" ) {
+        if (col.binding === "postpaidStore" ) {
           var selectedData = s.rows[ht.row].dataItem;
           // 해당 매장의 등록매장이 본사의 디폴트 매장과 동일할 경우에만 후불적용 매장을 등록할 수 있다.
           $scope.setSelectedMember(selectedData);
-          $scope.creditStoreRegistLayer.show(true);
+          $scope.postpaidStoreRegistLayer.show(true);
           event.preventDefault();
         }
       }
@@ -131,9 +131,9 @@ app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
     });
 
     // 후불회원등록 팝업 핸들러 추가
-    $scope.creditStoreRegistLayer.shown.addHandler(function (s) {
+    $scope.postpaidStoreRegistLayer.shown.addHandler(function (s) {
       setTimeout(function() {
-        $scope._broadcast('creditStoreRegistCtrl', $scope.getSelectedMember());
+        $scope._broadcast('postpaidStoreRegistCtrl', $scope.getSelectedMember());
       }, 50)
     });
   });

@@ -1,6 +1,8 @@
 package kr.co.solbipos.application.pos.exceptForward.service;
 
 import kr.co.solbipos.application.common.service.CmmVO;
+import kr.co.solbipos.application.common.service.PageVO;
+import org.springframework.data.domain.Page;
 
 /**
  * @Class Name : MsProductVO.java
@@ -17,7 +19,7 @@ import kr.co.solbipos.application.common.service.CmmVO;
  *
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-public class ExcpForwardProductVO extends CmmVO {
+public class ExcpForwardProductVO extends PageVO {
 
     /** [매장코드] */
     private String storeCd;

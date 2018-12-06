@@ -15,16 +15,16 @@ $(document).ready(function(){
       [
         {binding:"gChk", header:messages["cmm.chk"], dataType:wijmo.DataType.Boolean, width:40},
         {binding:"hqOfficeCd", header:messages["regist.membr.hqOfficeCd"], width:"*", isReadOnly:true, visible:false},
-        {binding:"creditStoreCd", header:messages["regist.membr.storeCd"], maxLength:3, width:"*", isReadOnly:true},
-        {binding:"creditStoreNm", header:messages["regist.membr.storeNm"], maxLength:20, width:"*", isReadOnly:true}
+        {binding:"postpaidStoreCd", header:messages["regist.membr.storeCd"], maxLength:3, width:"*", isReadOnly:true},
+        {binding:"postpaidStoreNm", header:messages["regist.membr.storeNm"], maxLength:20, width:"*", isReadOnly:true}
       ];
 
   var noRegStoreGridHeader =
       [
         {binding:"gChk", header:messages["cmm.chk"], dataType:wijmo.DataType.Boolean, width:40},
         {binding:"hqOfficeCd", header:messages["regist.membr.hqOfficeCd"], width:"*", isReadOnly:true, visible:false},
-        {binding:"creditStoreCd", header:messages["regist.membr.storeCd"], maxLength:3, width:"*", isReadOnly:true},
-        {binding:"creditStoreNm", header:messages["regist.membr.storeNm"], maxLength:20, width:"*", isReadOnly:true}
+        {binding:"postpaidStoreCd", header:messages["regist.membr.storeCd"], maxLength:3, width:"*", isReadOnly:true},
+        {binding:"postpaidStoreNm", header:messages["regist.membr.storeNm"], maxLength:20, width:"*", isReadOnly:true}
       ];
 
   var regStoreGrid = wgrid.genGrid("#regStoreGrid", regStoreGridHeader);
@@ -47,7 +47,7 @@ $(document).ready(function(){
     params.storeCd = $("#srchStoreCd").val();
     params.storeNm = $("#srchStoreNm").val();
 
-    $.postJSON("/membr/info/view/credit/getCreditStoreList.sb", params,
+    $.postJSON("/membr/info/view/postpaid/getPostpaidStoreList.sb", params,
         function(result) {
 
           if(result.status === "FAIL") {
@@ -91,7 +91,7 @@ $(document).ready(function(){
       return;
     }
 
-    $.postJSONArray("/membr/info/view/credit/saveCreditStore.sb", paramArr,
+    $.postJSONArray("/membr/info/view/postpaid/savePostpaidStore.sb", paramArr,
         function(result) {
           s_alert.pop(messages["cmm.saveSucc"]);
           $("#btnStoreSearch").click();
@@ -121,7 +121,7 @@ $(document).ready(function(){
       return;
     }
 
-    $.postJSONArray("/membr/info/view/credit/saveCreditStore.sb", paramArr,
+    $.postJSONArray("/membr/info/view/postpaid/savePostpaidStore.sb", paramArr,
         function(result) {
           s_alert.pop(messages["cmm.saveSucc"]);
           $("#btnStoreSearch").click();

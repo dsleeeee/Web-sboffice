@@ -254,6 +254,35 @@
               {{_pointSaveYn}}
             </td>
           </tr>
+          <tr ng-if="prodDetail.sideProdYn === 'Y'">
+            <%--사이드속성분류코드(속성) --%>
+            <th><s:message code="prod.sdattrClassCd"/></th>
+            <td>
+              <wj-combo-box
+                       ng-model="prodDetail.sdattrClassCd"
+                       ng-hide="true"
+                       text="_sdattrClassCd"
+                       items-source="_getComboData('sdattrClassCdComboData')"
+                       display-member-path="name"
+                       selected-value-path="value"
+                       is-editable="false">
+              </wj-combo-box>
+              {{_sdattrClassCd}}
+            </td>
+            <%--사이드선택그룹코드(선택메뉴) --%>
+            <th><s:message code="prod.sdselGrpCd"/></th>
+            <td>
+              <wj-combo-box ng-model="prodDetail.sdselGrpCd"
+                            ng-hide="true"
+                            text="_sdselGrpCd"
+                            items-source="_getComboData('sdselGrpCdComboData')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false">
+              </wj-combo-box>
+              {{_sdselGrpCd}}
+            </td>
+          </tr>
           </tbody>
         </table>
       </div>

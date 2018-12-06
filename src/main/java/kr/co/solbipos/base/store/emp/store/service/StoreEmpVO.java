@@ -43,12 +43,8 @@ public class StoreEmpVO extends PageVO {
     /** 사원비밀번호 (포스에서 사용) */
     private String empPwd;
 
-//    /** 변경비밀번호 */
-//    private String newPwd;
-
-//    /** 변경비밀번호확인 */
-//    @NotBlank(groups = UserPwChange.class, message = "{storeEmp.pwdConfirm}{cmm.require.text}")
-//    private String userPwdCfm;
+    /** 현재 비밀번호 (비밀번호 변경시 사용) */
+    private String currentPwd;
 
     /** 사용자 비밀번호(웹에서 사용) */
     private String userPwd;
@@ -163,6 +159,21 @@ public class StoreEmpVO extends PageVO {
      */
     public void setEmpPwd(String empPwd) {
         this.empPwd = empPwd;
+    }
+
+    /**
+     * @return the currentPwd
+     */
+
+    public String getCurrentPwd() {
+        return currentPwd;
+    }
+
+    /**
+     * @param currentPwd the currentPwd to set
+     */
+    public void setCurrentPwd(String currentPwd) {
+        this.currentPwd = currentPwd;
     }
 
     /**

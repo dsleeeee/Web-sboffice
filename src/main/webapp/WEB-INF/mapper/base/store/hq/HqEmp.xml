@@ -86,22 +86,6 @@
            AND the.EMP_NO = #{empNo}
     </select>
 
-  <!-- 본사 사원 조회 -->
-    <!--
-          TABLE    : TB_HQ_EMPLOYEE
-          PARAM    : hqEmpVO
-          COMMENTS : 해당 사원번호의 본사 사원이 있는지 조회한다.
-    -->
-    <!--
-    <select id="getHqEmpNoCnt" parameterType="hqEmpVO" resultType="Integer">
-        /* HqEmpMapper.getHqEmpNoCnt */
-        SELECT COUNT(1) AS CNT
-          FROM TB_HQ_EMPLOYEE
-         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-           AND EMP_NO = #{empNo}
-    </select>
-    -->
-
     <!-- 본사 사원 웹 사용자 조회 -->
     <!--
           TABLE    : TB_WB_USER_INFO
@@ -113,6 +97,19 @@
         SELECT COUNT(1) AS CNT
           FROM TB_WB_USER_INFO
          WHERE USER_ID = #{userId}
+    </select>
+
+    <!-- 신규사원번호 조회 -->
+    <!--
+          TABLE    : TB_HQ_EMPLOYEE
+          PARAM    : hqEmpVO
+          COMMENTS : 신규 등록할 사원번호를 조회한다
+    -->
+    <select id="getHqEmpNo" parameterType="hqEmpVO" resultType="String">
+        /* USE : HqEmpMapper.getHqEmpNo */
+        SELECT LPAD(NVL(MAX(EMP_NO)+ 1, 0), 4, '0') AS EMP_NO
+          FROM TB_HQ_EMPLOYEE
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
     </select>
 
     <!-- 본사 사원 등록 -->
@@ -143,7 +140,7 @@
         VALUES
         (
             #{hqOfficeCd},
-            (SELECT LPAD(NVL(MAX(EMP_NO)+ 1, 0), 4, '0') AS EMP_NO FROM TB_HQ_EMPLOYEE WHERE HQ_OFFICE_CD = #{hqOfficeCd}),
+            #{empNo},
             #{empNm},
             #{empPwd},
             #{webUseYn},
@@ -245,9 +242,6 @@
          WHEN MATCHED THEN
        UPDATE
           SET twui.USE_YN = #{webUseYn},
-            <if test="chkDt == true">
-              twui.USER_PWD = #{userPwd},
-            </if>
               twui.MOD_DT = #{modDt},
               twui.MOD_ID = #{modId}
          WHEN NOT MATCHED THEN

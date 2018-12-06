@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    Production.xml
+    POS 화면에서 생산량 등록
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김지은     2018.12.03     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.application.pos.posPostpaid.service.impl.PosPostpaidMapper">
+
+    <!-- 회원의 후불결제 예정금액 조회 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_PAID_BALANCE, TB_MB_MEMBER
+        PARAM    : posPostpaidVO
+        COMMENTS : 세금계산서를 발행할 후불 결제 예정금액을 조회한다.
+    -->
+    <select id="getMemberList" parameterType="posPostpaidVO" resultType="DefaultMap">
+        /* USE : PosPostpaidMapper.getMemberList */
+        SELECT tmmpb.HQ_OFFICE_CD,
+               tmmpb.STORE_CD,
+               tms.STORE_NM,
+               tmmpb.MEMBR_NO,
+               tmm.MEMBR_NM,
+               tmmpb.POSTPAID_AMT,
+               tmmpb.POSTPAID_IN_AMT,
+               tmmpb.POSTPAID_BAL_AMT,
+               TO_CHAR(to_date(tmmpb.REG_DT, 'yyyyMMddhh24miss'), 'yyyy-MM-dd hh24:mi:ss') AS REG_DT ,
+               tmmpb.REG_ID,
+               CASE WHEN tmmpb.POSTPAID_BAL_AMT > 0  THEN '세금계산서 발행요청'
+                    ELSE ''
+               END AS DEPOSIT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+          FROM TB_MB_MEMBER_PAID_BALANCE tmmpb,
+               TB_MB_MEMBER tmm,
+               TB_MS_STORE tms
+         WHERE tmmpb.STORE_CD = #{storeCd}
+           AND tmm.MEMBR_ORGN_CD = tmmpb.HQ_OFFICE_CD
+           AND tmm.MEMBR_NO = tmmpb.MEMBR_NO
+           AND tms.HQ_OFFICE_CD = tmmpb.HQ_OFFICE_CD
+           AND tms.STORE_CD = tmmpb.STORE_CD
+         ORDER BY tmmpb.MOD_DT DESC, tmmpb.MEMBR_NO ASC
+    </select>
+
+
+    <!-- 세금계산서 발행 요청 등록 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_TAX_BILL
+        PARAM    : posPostpaidVO
+        COMMENTS : 회원의 세금계산서 발행 요청건을 등록한다.
+    -->
+    <insert id="saveTaxBillRequet" parameterType="posPostpaidVO" >
+        /* USE : PosPostpaidMapper.saveTaxBillRequet */
+        INSERT INTO TB_MB_MEMBER_TAX_BILL
+        (
+            HQ_OFFICE_CD,
+            STORE_CD,
+            MEMBR_NO,
+            REQUEST_DT,
+            REQUEST_AMT,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        VALUES
+        (
+            #{hqOfficeCd},
+            #{storeCd},
+            #{membrNo},
+            #{requestDt},
+            #{requestAmt},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+</mapper>

@@ -5,15 +5,14 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.store.emp.enums.EmpResult;
 import kr.co.solbipos.base.store.emp.hq.service.HqEmpService;
 import kr.co.solbipos.base.store.emp.hq.service.HqEmpVO;
-import kr.co.solbipos.base.store.emp.hq.service.enums.HqEmpResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,7 +22,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-import static kr.co.common.utils.grid.ReturnUtil.*;
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
+import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 
 
 /**
@@ -124,9 +124,9 @@ public class HqEmpController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
-        HqEmpResult hqEmpResult = hqEmpService.insertHqEmpInfo(hqEmpVO,sessionInfoVO);
+        EmpResult empResult = hqEmpService.insertHqEmpInfo(hqEmpVO,sessionInfoVO);
 
-        return returnJson(Status.OK, hqEmpResult);
+        return returnJson(Status.OK, empResult);
     }
 
     /**
@@ -138,9 +138,9 @@ public class HqEmpController {
     @RequestMapping(value = "/chkHqUserId.sb", method = RequestMethod.POST)
     public Result chkHqUserId(HqEmpVO hqEmpVO) {
 
-        HqEmpResult hqEmpResult= hqEmpService.getHqUserIdCnt(hqEmpVO);
+        EmpResult empResult= hqEmpService.getHqUserIdCnt(hqEmpVO);
 
-        return returnJson(Status.OK, hqEmpResult);
+        return returnJson(Status.OK, empResult);
     }
 
     /**
@@ -157,29 +157,28 @@ public class HqEmpController {
         HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
-        HqEmpResult hqEmpResult = hqEmpService.saveHqEmpInfo(hqEmpVO,sessionInfoVO);
+        EmpResult empResult = hqEmpService.saveHqEmpInfo(hqEmpVO,sessionInfoVO);
 
-        return returnJson(Status.OK, hqEmpResult);
+        return returnJson(Status.OK, empResult);
     }
 
-//    /**
-//     * 비밀번호 변경
-//     * @param hqEmpVO
-//     * @param   request
-//     * @param   response
-//     * @param   model
-//     * @return
-//     */
-//    @ResponseBody
-//    @RequestMapping(value = "/modifyPassword.sb", method = RequestMethod.POST)
-//    public Result modifyPassword(HqEmpVO hqEmpVO, HttpServletRequest request,
-//        HttpServletResponse response, Model model) {
-//
-//        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
-//        HqEmpResult hqEmpResult = hqEmpService.modifyPassword(hqEmpVO,sessionInfoVO);
-//
-//        return returnJson(Status.OK, hqEmpResult);
-//    }
+    /**
+     * 비밀번호 변경
+     * @param hqEmpVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/modifyPassword.sb", method = RequestMethod.POST)
+    public Result modifyPassword(@RequestBody HqEmpVO hqEmpVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
 
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+        EmpResult empResult = hqEmpService.modifyPassword(hqEmpVO,sessionInfoVO);
+
+        return returnJson(Status.OK, empResult);
+    }
 
 }

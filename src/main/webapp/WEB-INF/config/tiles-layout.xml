@@ -20,19 +20,27 @@
 
     <definition name="application/pos/*" extends="posEmptyLayout">
         <put-attribute name="body" value="/WEB-INF/view/application/pos/{1}.jsp"/>
-        <!--<put-attribute name="excpForward" value="/WEB-INF/view/application/pos/excpForward/{1}.jsp"/>-->
         <put-attribute name="resource" value="/WEB-INF/view/layout/resource.jsp"/>
     </definition>
 
+    <!-- 포스용 예외출고 -->
     <definition name="application/pos/excpForward/*" extends="posEmptyLayout">
         <put-attribute name="body" value="/WEB-INF/view/application/pos/excpForward/{1}.jsp"/>
         <put-attribute name="resource" value="/WEB-INF/view/layout/resource.jsp"/>
     </definition>
 
+    <!-- 포스용 생산량 -->
     <definition name="application/pos/production/*" extends="posEmptyLayout">
         <put-attribute name="body" value="/WEB-INF/view/application/pos/production/{1}.jsp"/>
         <put-attribute name="resource" value="/WEB-INF/view/layout/resource.jsp"/>
     </definition>
+
+    <!-- 포스용 후불 세금계산서 발행 -->
+    <definition name="application/pos/posPostpaid/*" extends="posEmptyLayout">
+        <put-attribute name="body" value="/WEB-INF/view/application/pos/posPostpaid/{1}.jsp"/>
+        <put-attribute name="resource" value="/WEB-INF/view/layout/resource.jsp"/>
+    </definition>
+
     <!-- POS 화면용 웹 설정 끝 -->
 
     <!-- 에러화면 -->

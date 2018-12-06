@@ -1,14 +1,16 @@
 package kr.co.solbipos.membr.anals.prepaid.service.impl;
 
-import kr.co.common.data.enums.UseYn;
+import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.exception.JsonException;
+import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.membr.anals.prepaid.service.PrepaidService;
 import kr.co.solbipos.membr.anals.prepaid.service.PrepaidStoreVO;
-import kr.co.solbipos.membr.anals.prepaid.service.enums.PrepaidInFg;
+import kr.co.solbipos.membr.anals.prepaid.service.enums.PrepaidFg;
 import kr.co.solbipos.membr.anals.prepaid.service.enums.PrepaidPayFg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,12 +46,14 @@ public class PrepaidServiceImpl implements PrepaidService {
 
     private final PrepaidMapper mapper;
     private final CmmEnvUtil cmmEnvUtil;
+    private final MessageService messageService;
 
     /** Constructor Injection */
     @Autowired
-    public PrepaidServiceImpl(PrepaidMapper mapper, CmmEnvUtil cmmEnvUtil) {
+    public PrepaidServiceImpl(PrepaidMapper mapper, CmmEnvUtil cmmEnvUtil, MessageService messageService) {
         this.mapper = mapper;
         this.cmmEnvUtil = cmmEnvUtil;
+        this.messageService = messageService;
     }
 
     /** 선불 회원 충전, 사용 내역 */
@@ -77,7 +81,6 @@ public class PrepaidServiceImpl implements PrepaidService {
             defaultStoreCd = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0025"));
             defaultStoreCd.replace("*", "");
         }
-LOGGER.info(">>>>>>>>>>>>>>>>>> defaultStoreCd : "+ defaultStoreCd);
 
         prepaidStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         prepaidStoreVO.setDefaultStoreCd(defaultStoreCd);
@@ -94,18 +97,19 @@ LOGGER.info(">>>>>>>>>>>>>>>>>> defaultStoreCd : "+ defaultStoreCd);
         prepaidStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         prepaidStoreVO.setSaleDate(currentDateString());
         prepaidStoreVO.setPrepaidDt(dt);
-        prepaidStoreVO.setPrepaidInFg(PrepaidInFg.CHARGE); // 입금
+        prepaidStoreVO.setPrepaidFg(PrepaidFg.CHARGE); // 입금
         prepaidStoreVO.setPrepaidPayFg(PrepaidPayFg.CASH); // 현금
-        prepaidStoreVO.setNonsaleBillNo(" ");// 비매출 영수증번호
-        prepaidStoreVO.setOrgPrepaidNo(" "); // 원거래 충전번호
-        prepaidStoreVO.setSendYn(UseYn.Y);  // TODO 전송여부 YN갑 체크 필요
-        prepaidStoreVO.setSendDt(dt);
+        prepaidStoreVO.setNonsaleTypeApprNo(" ");// 비매출 영수증번호
 
         prepaidStoreVO.setRegId(sessionInfoVO.getUserId());
         prepaidStoreVO.setRegDt(dt);
         prepaidStoreVO.setModId(sessionInfoVO.getUserId());
         prepaidStoreVO.setModDt(dt);
 
-        return mapper.saveChargeAmt(prepaidStoreVO);
+        int result = mapper.saveChargeAmt(prepaidStoreVO);
+        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+        return result;
+
     }
 }

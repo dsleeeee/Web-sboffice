@@ -111,5 +111,59 @@ public class ProdController {
         return returnJson(Status.OK, result);
     }
 
+    /***
+     * 상품 적용매장/미적용 매장 조회
+     * @param prodVO
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/getRegStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getRegStoreList(ProdVO prodVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> storeList = prodService.getStoreList(prodVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, storeList, prodVO);
+    }
+
+    /***
+     * 상품적용매장 등록
+     * @param prodVOs
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/insertProdStore.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result insertProdStore(@RequestBody ProdVO[] prodVOs, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = prodService.insertProdStore(prodVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /***
+     * 상품적용매장 t삭제
+     * @param prodVOs
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/deleteProdStore.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result deleteProdStore(@RequestBody ProdVO[] prodVOs, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = prodService.deleteProdStore(prodVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
 
 }

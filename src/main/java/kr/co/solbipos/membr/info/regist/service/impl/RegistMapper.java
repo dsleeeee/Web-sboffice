@@ -1,7 +1,7 @@
 package kr.co.solbipos.membr.info.regist.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.membr.anals.credit.service.CreditStoreVO;
+import kr.co.solbipos.membr.anals.postpaid.service.PostpaidStoreVO;
 import kr.co.solbipos.membr.info.grade.service.MembrClassVO;
 import kr.co.solbipos.membr.info.regist.service.RegistVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;
@@ -102,31 +102,31 @@ public interface RegistMapper {
 
     /**
      * 후불 회원 등록 매장 조회
-     * @param creditStoreVO
+     * @param postpaidStoreVO
      * @return
      */
-    List<DefaultMap<String>> getRegStoreList(CreditStoreVO creditStoreVO);
+    List<DefaultMap<String>> getRegStoreList(PostpaidStoreVO postpaidStoreVO);
 
     /**
      * 후불 회원 미등록 매장 조회
-     * @param creditStoreVO
+     * @param postpaidStoreVO
      * @return
      */
-    List<DefaultMap<String>> getNoRegStoreList(CreditStoreVO creditStoreVO);
+    List<DefaultMap<String>> getNoRegStoreList(PostpaidStoreVO postpaidStoreVO);
 
 
     /**
      * 후불회원 적용매장 삭제
-     * @param creditStoreVO
+     * @param postpaidStoreVO
      * @return
      */
-    int deleteCreditStore(CreditStoreVO creditStoreVO);
+    int deletePostpaidStore(PostpaidStoreVO postpaidStoreVO);
 
     /**
      * 후불회원 적용매장 등록
-     * @param creditStoreVO
+     * @param postpaidStoreVO
      * @return
      */
-    int registCreditStore(CreditStoreVO creditStoreVO);
+    int registPostpaidStore(PostpaidStoreVO postpaidStoreVO);
 
 }

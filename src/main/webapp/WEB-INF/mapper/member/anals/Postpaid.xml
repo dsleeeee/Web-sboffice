@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    Postpaid.xml
+    외상발생/입금내역
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김지은     2018.05.01     최초작성
+-->
+<mapper namespace="kr.co.solbipos.membr.anals.postpaid.service.impl.PostpaidMapper">
+
+    <!-- 후불 회원 외상, 입금 내역 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_CREDIT, TB_MB_MEMBER_POSTPAID
+        COMMENTS : 후불 외상내역과 입금내역을 조회
+    -->
+    <select id="getPostpaidMemberList"  parameterType="postpaidStoreVO" resultType="DefaultMap">
+        /* PostpaidMapper.getPostpaidMemberList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT tmmpb.HQ_OFFICE_CD,
+               tmmpb.STORE_CD,
+               tms.STORE_NM,
+               tmmpb.MEMBR_NO,
+               tmm.MEMBR_NM,
+               tmmpb.POSTPAID_AMT,
+               tmmpb.POSTPAID_IN_AMT,
+               tmmpb.POSTPAID_BAL_AMT,
+               TO_CHAR(to_date(tmmpb.REG_DT, 'yyyyMMddhh24miss'), 'yyyy-MM-dd hh24:mi:ss') AS REG_DT ,
+               tmmpb.REG_ID
+        <include refid="CmmSQL.PagingTemplateCount"/>
+          FROM TB_MB_MEMBER_PAID_BALANCE tmmpb,
+               TB_MB_MEMBER tmm,
+               TB_MS_STORE tms
+         WHERE tmm.MEMBR_ORGN_CD = tmmpb.HQ_OFFICE_CD
+           AND tmm.MEMBR_NO = tmmpb.MEMBR_NO
+           AND tms.HQ_OFFICE_CD = tmmpb.HQ_OFFICE_CD
+           AND tms.STORE_CD = tmmpb.STORE_CD
+      <if test='storeCds != null and storeCds != "ALL"'>
+           AND tmmpb.STORE_CD IN
+          <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
+             #{item}
+          </foreach>
+        </if>
+        <if test='membrNo != null and membrNo != ""'>
+           AND tmmpb.MEMBR_NO = #{membrNo}
+        </if>
+        <if test='membrNm != null and membrNm != ""'>
+           AND tmm.MEMBR_NM = #{membrNm}
+        </if>
+         ORDER BY tmmpb.MOD_DT DESC, tmmpb.STORE_CD, tmmpb.MEMBR_NO
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+  <!-- 후불 대상 회원 조회 -->
+  <!--
+      TABLE    : TB_MB_MEMBER_POSTPAID_STORE
+      COMMENTS : 후불(외상) 대상인 회원을 조회한다.
+  -->
+  <select id="getDepositMemberList" parameterType="postpaidStoreVO" resultType="DefaultMap">
+    /* PostpaidMapper.getDepositMemberList */
+    SELECT *
+      FROM (
+      SELECT tmmcs.MEMBR_ORGN_CD,
+             tmmcs.MEMBR_NO AS MEMBR_NO,
+             (SELECT MEMBR_NM FROM TB_MB_MEMBER WHERE MEMBR_ORGN_CD = tmmcs.MEMBR_ORGN_CD AND MEMBR_NO = tmmcs.MEMBR_NO) AS MEMBR_NM,
+             tmmcs.STORE_CD,
+             (SELECT STORE_NM FROM TB_MS_STORE WHERE HQ_OFFICE_CD = tmmcs.MEMBR_ORGN_CD AND STORE_CD = tmmcs.STORE_CD) AS STORE_NM
+        FROM TB_MB_MEMBER_POSTPAID_STORE tmmcs
+       WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+           ) tmmcs
+    <where>
+      <if test='storeCd != null and storeCd != ""'>
+        AND tmmcs.STORE_CD = #{storeCd}
+      </if>
+      <if test='storeNm != null and storeNm != ""'>
+        AND tmmcs.STORE_NM = #{storeNm}
+      </if>
+      <if test='membrNo != null and membrNo != ""'>
+        AND tmmcs.MEMBR_NO = #{membrNo}
+      </if>
+      <if test='membrNm != null and membrNm != ""'>
+        AND tmmcs.MEMBR_NM = #{membrNm}
+      </if>
+      <if test='defaultStoreCd != null and defaultStoreCd.toString() != ""'>
+        AND tmmcs.STORE_CD != #{defaultStoreCd}
+      </if>
+    </where>
+  </select>
+
+  <!-- 외상입금 -->
+  <!--
+      TABLE    :
+      COMMENTS : 외상금액을 입금처리한다.
+  -->
+  <insert id="saveDeposit" parameterType="postpaidStoreVO">
+    /* PostpaidMapper.saveDeposit */
+    INSERT INTO TB_MB_MEMBER_POSTPAID
+    (
+      HQ_OFFICE_CD,
+      STORE_CD,
+      SALE_DATE,
+      POSTPAID_NO,
+      MEMBR_NO,
+      POSTPAID_DT,
+      POSTPAID_FG,
+      POSTPAID_PAY_FG,
+      POSTPAID_AMT,
+      NONSALE_TYPE_APPR_NO,
+      ORG_NONSALE_TYPE_APPR_NO,
+      NONSALE_BILL_NO,
+      REG_DT,
+      REG_ID,
+      MOD_DT,
+      MOD_ID
+    )
+    VALUES
+    (
+      #{membrOrgnCd},
+      #{storeCd},
+      #{saleDate},
+      (SELECT LPAD(NVL(MAX(POSTPAID_NO), '0')+1, 4, '0')
+         FROM TB_MB_MEMBER_POSTPAID
+        WHERE HQ_OFFICE_CD = #{membrOrgnCd}
+          AND STORE_CD = #{storeCd}
+          AND SALE_DATE = #{saleDate} ),
+      #{membrNo},
+      #{postpaidDt},
+      #{postpaidFg, jdbcType=VARCHAR},
+      #{postpaidPayFg, jdbcType=VARCHAR},
+      #{postpaidAmt},
+      #{nonsaleTypeApprNo},
+      #{orgNonsaleTypeApprNo},
+      #{nonsaleBillNo},
+      #{regDt},
+      #{regId},
+      #{modDt},
+      #{modId}
+    )
+  </insert>
+
+</mapper>

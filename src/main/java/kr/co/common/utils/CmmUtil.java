@@ -1,6 +1,7 @@
 package kr.co.common.utils;
 
 import kr.co.solbipos.application.session.user.enums.PwChgResult;
+import kr.co.solbipos.base.store.emp.enums.EmpResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,8 +30,10 @@ import static org.springframework.util.StringUtils.isEmpty;
 public class CmmUtil {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CmmUtil.class);
-    private static String PASSWORD_REGEX =
-        "^(?=.*[a-z]+)(?=.*[A-Z]+)(?=.*\\d+)(?=.*[^\\w\\sㄱ-ㅎㅏ-ㅣ가-힣]).{8,}$";
+//    private static String PASSWORD_REGEX =
+//        "^(?=.*[a-z]+)(?=.*[A-Z]+)(?=.*\\d+)(?=.*[^\\w\\sㄱ-ㅎㅏ-ㅣ가-힣]).{8,}$";
+    private static String PASSWORD_REGEX = "^[A-Za-z0-9]{6,20}$";
+
 
     /**
       *
@@ -94,27 +97,40 @@ public class CmmUtil {
      * @author 노현수
      * @since 2018. 06. 08.
      */
-    public static String checkUserId(String value) {
+    public static EmpResult checkUserId(String value) {
 
-        String rs = "";
         int len = value.length();
 
         boolean flag = Pattern.matches(".*[ㄱ-ㅎ|ㅏ-ㅣ|가-힝]+.*$", value);
         boolean flag2 = Pattern.matches(".*[a-zA-Z]+.*", value);
         boolean flag3 = Pattern.matches("[a-zA-Z0-9]*", value);
 
-        if( len > 20 || len < 6 ) {
-            rs = "아이디는 4자 이상 20자 이하로 입력해주세요.";
+        // ds 와 s로 시작하는 id는 본사 관리자 또는 매장 관리자의 id가 될 수 있어서
+        // 해당 아이디로는 등록이 불가능하도록 함.
+
+        if( len > 12 || len < 6 ) {
+            return EmpResult.USER_ID_LENGHTH_REGEXP;
         } else if( flag == true ) {
-            rs = "한글은 입력 할 수 없습니다.";
+            return EmpResult.USER_ID_CANNOT_USE_HANGEUL;
         } else if( flag2 == false ) {
-            rs = "아이디는 영문자가 반드시 포함되어야 합니다.";
+            return EmpResult.USER_ID_MUST_CONTAIN_ENG_CAHR;
         } else if( flag3 == false ) {
-            rs = "아이디는 숫자와 영문만 가능합니다.";
-        } else {
-            rs = "";
+            return EmpResult.USER_ID_ONLY_ENG_NUM_CHAR;
+        } else if(value.startsWith("ds")) { // 데모 본사, 매장 사원
+            if(Pattern.matches("[0-9]*", value.substring(2, len))){
+                return EmpResult.USER_ID_DUPLICATE;
+            }
+        } else if(value.startsWith("s")) { // 운영 매장 사원
+            if(Pattern.matches("[0-9]*", value.substring(1, len))){
+                return EmpResult.USER_ID_DUPLICATE;
+            }
+        } else if(value.startsWith("h")) { // 운영 본사 사원
+            if(Pattern.matches("[0-9]*", value.substring(1, len))){
+                return EmpResult.USER_ID_DUPLICATE;
+            }
         }
-        return rs;
+
+        return EmpResult.SUCCESS;
     }
 
     /**
