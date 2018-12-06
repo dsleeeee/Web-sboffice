@@ -23,12 +23,12 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 public interface VirtualLoginService {
 
     /** 가상로그인 목록 조회 */
-    List<DefaultMap<String>> getVirtualLoginList(VirtualLoginVO virtualLoginVO);
+    List<DefaultMap<String>> getVirtualLoginList(VirtualLoginVO virtualLoginVO, SessionInfoVO sessionInfoVO);
 
     /** 가상로그인 권한 조회 */
     int checkVirtualLoginAuth(String userId);
-    
+
     /** 가상로그인 이력 생성 */
     int insertLoginHistory(SessionInfoVO sessionInfoVO);
-    
+
 }

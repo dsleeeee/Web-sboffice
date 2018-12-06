@@ -26,7 +26,7 @@
         <col class="w35" />
     </colgroup>
     <tbody>
-      <tr>
+      <tr ng-show="userOrgnFg == 'M'">
         <%-- 본사코드 --%>
         <th><s:message code="virtualLogin.hqOfficeCd" /></th>
         <td>

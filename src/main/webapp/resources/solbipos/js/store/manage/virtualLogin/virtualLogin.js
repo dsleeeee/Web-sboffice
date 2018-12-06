@@ -21,6 +21,10 @@ app.controller('gridCtrl',  ['$scope', '$http', function ($scope, $http) {
   angular.extend(this, new RootController('gridCtrl', $scope, $http, true));
   // 가상로그인 개수
   $scope.popupCnt = 0;
+
+  // 접속 사용자의 권한
+  $scope.userOrgnFg = gvOrgnFg;
+
   // 콤보박스 데이터 Set
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
   $scope._setComboData("srchClsFg", clsFg);
@@ -34,6 +38,7 @@ app.controller('gridCtrl',  ['$scope', '$http', function ($scope, $http) {
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
         var item = s.rows[e.row].dataItem;
+
         // 본사
         if (col.binding === "hqOfficeCd" && item.hqOfficeCd !== "00000") {
           if ( item.orgnFg === "M" ) {
@@ -61,15 +66,15 @@ app.controller('gridCtrl',  ['$scope', '$http', function ($scope, $http) {
         var col = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
         if (col.binding === "hqOfficeCd" && selectedRow.hqOfficeCd !== "00000") {
-          if ( selectedRow.orgnfg === "M" ) {
+          if ( selectedRow.orgnFg === "M" ) {
             $scope.vLoginProcess(selectedRow.hqUserId);
           }
         } else if (col.binding === "storeCd" && selectedRow.storeCd !== "00000") {
-          if ( selectedRow.orgnfg !== "S" ) {
+          if ( selectedRow.orgnFg !== "S" ) {
             $scope.vLoginProcess(selectedRow.msUserId);
           }
         } else if (col.binding === "agencyNm") {
-          if ( selectedRow.orgnfg === "M" ) {
+          if ( selectedRow.orgnFg === "M" ) {
             $scope.vLoginProcess(selectedRow.cmUserId);
           }
         }

@@ -44,7 +44,14 @@ public class VirtualLoginServiceImpl implements VirtualLoginService {
 
     /** 가상로그인 목록 조회 */
     @Override
-    public List<DefaultMap<String>> getVirtualLoginList(VirtualLoginVO virtualLoginVO) {
+    public List<DefaultMap<String>> getVirtualLoginList(VirtualLoginVO virtualLoginVO, SessionInfoVO sessionInfoVO) {
+
+        virtualLoginVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+
+        if("H".equals(virtualLoginVO.getOrgnFg())) { // 본사권한으로 해당 본사코드로만 조회
+            virtualLoginVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        }
+
         return virtualLoginMapper.getVirtualLoginList(virtualLoginVO);
     }
 
@@ -57,7 +64,7 @@ public class VirtualLoginServiceImpl implements VirtualLoginService {
     /** 가상로그인 이력 생성 */
     @Override
     public int insertLoginHistory(SessionInfoVO sessionInfoVO) {
-        
+
         // 로그인 히스토리 생성
         LoginHistVO loginHistVO = new LoginHistVO();
         // 로그인 결과
@@ -71,7 +78,7 @@ public class VirtualLoginServiceImpl implements VirtualLoginService {
 
         return authMapper.insertLoginHist(loginHistVO);
     }
-    
-    
-    
+
+
+
 }

@@ -53,9 +53,9 @@ import static kr.co.common.utils.spring.StringUtil.generateUUID;
 @Controller
 @RequestMapping(value = "/store/manage/virtualLogin")
 public class VirtualLoginController {
-    
+
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    
+
     /** service */
     private final VirtualLoginService virtualLoginService;
     private final SessionService sessionService;
@@ -97,7 +97,7 @@ public class VirtualLoginController {
      * @author  노현수
      * @since   2018. 06. 08.
      */
-    
+
     @RequestMapping(value = "/virtualLogin/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getVirtualLoginList(HttpServletRequest request, HttpServletResponse response,
@@ -105,11 +105,7 @@ public class VirtualLoginController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
-
-        LOGGER.error(sessionInfoVO.getOrgnFg().getCode());
-        virtualLoginVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-
-        List<DefaultMap<String>> list = virtualLoginService.getVirtualLoginList(virtualLoginVO);
+        List<DefaultMap<String>> list = virtualLoginService.getVirtualLoginList(virtualLoginVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, virtualLoginVO);
 
@@ -127,7 +123,7 @@ public class VirtualLoginController {
     @RequestMapping(value = "/virtualLogin/vLogin.sb", method = RequestMethod.POST)
     public String vLogin(HttpServletRequest request, HttpServletResponse response, VirtualLoginVO virtualLoginVO, RedirectAttributes redirectAttributes
             ) {
-        
+
         String returnUrl = "/main.sb";
         // 기존 세션 조회
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
@@ -137,7 +133,7 @@ public class VirtualLoginController {
         if ( authResult > 0 ) {
 
             BaseEnv.VIRTUAL_LOGIN_ID = virtualLoginVO.getvUserId();
-            
+
             StopWatch sw = new StopWatch();
             sw.start();
             LOGGER.info("가상로그인 시작 : {} ", sessionInfoVO.getUserId());
@@ -178,7 +174,7 @@ public class VirtualLoginController {
 
             redirectAttributes.addAttribute("sid", sessionInfoVO.getSessionId());
             return "redirect:" + returnUrl;
-            
+
         } else {
             try {
                 response.setContentType("text/html; charset=UTF-8");
@@ -189,11 +185,11 @@ public class VirtualLoginController {
                 e.printStackTrace();
             }
         }
-        
+
         return null;
-        
+
     }
-    
+
     /**
      * 가상로그인 - 로그인 종료
      *
