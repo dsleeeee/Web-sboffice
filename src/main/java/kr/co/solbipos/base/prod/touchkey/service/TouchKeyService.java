@@ -35,13 +35,13 @@ public interface TouchKeyService {
     List<DefaultMap<String>> getTouchKeyStyleList(TouchKeyStyleVO touchKeyStyleVO, SessionInfoVO sessionInfoVO);
 
     /** 터치키 분류 페이지별 스타일 코드 조회 */
-    String getTouchKeyPageStyleCd(TouchKeyClassVO touchKeyClassVO, SessionInfoVO sessionInfoVO);
+    String getTouchKeyPageStyleCd(SessionInfoVO sessionInfoVO);
 
     /** 판매터치키 XML 정보 조회 */
     String getTouchKeyXml(SessionInfoVO sessionInfoVO);
 
     /** 판매터치키 저장 상품정보 조회 */
-    List<DefaultMap<String>> getTouchKeyProdInfoList(TouchKeyVO touchKeyVO);
+    List<DefaultMap<String>> getTouchKeyProdInfoList(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO);
 
     /** 판매터치키 저장 */
     Result saveTouchkey(SessionInfoVO sessionInfoVO, String xml);

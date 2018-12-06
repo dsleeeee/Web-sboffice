@@ -171,6 +171,10 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
 var touchKeyGraph;
 $(document).ready(function() {
   (function () {
+    var params = {};
+    if (document.getElementsByName('sessionId')[0]) {
+      params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
 
     // 스타일 코드 조회
     $.ajax({
@@ -178,9 +182,8 @@ $(document).ready(function() {
       async: false,
       cache: false,
       dataType: 'json',
-      contentType : 'application/json',
       url: '/base/prod/touchKey/touchKey/getTouchKeyStyleCd.sb',
-      data: {},
+      data: params,
       success: function(data){
         touchKeyStyleCd = data.data;
       }
@@ -191,9 +194,8 @@ $(document).ready(function() {
       async: false,
       cache: false,
       dataType: 'json',
-      contentType : 'application/json',
       url: '/base/prod/touchKey/touchKey/getTouchKeyStyleCdList.sb',
-      data: '',
+      data: params,
       success: function(data){
         touchKeyStyleCdList = JSON.parse(data.data);
       }
@@ -204,9 +206,8 @@ $(document).ready(function() {
       async: false,
       cache: false,
       dataType: 'json',
-      contentType: 'application/json',
       url: '/base/prod/touchKey/touchKey/getTouchKeyStyleList.sb',
-      data: {},
+      data: params,
       success: function (data) {
         touchKeyStyles = data.data.list;
       }
@@ -1185,7 +1186,6 @@ Graph.prototype.initStyle = function() {
   // 선택된 스타일
   var styleCd = this.selectStyle.selectedValue;
   for (var i = 0; i < touchKeyStyles.length; i++) {
-    console.log("touchKeyStyles : ", touchKeyStyles[i]);
     for (var key in touchKeyStyles[i]) {
       if (key === "styleCd" && styleCd === touchKeyStyles[i][key]) {
         var buttonStyles = {};
@@ -1740,6 +1740,10 @@ Format.prototype.open = function (isLoad) {
     scope.$broadcast('loadingPopupActive');
   });
 
+  if (document.getElementsByName('sessionId')[0]) {
+    TOUCHKEY_OPEN_URL = TOUCHKEY_OPEN_URL + "?sid=" + document.getElementsByName('sessionId')[0].value;
+  }
+
   //open
   var reqArea = mxUtils.post(TOUCHKEY_OPEN_URL, '',
     mxUtils.bind(this, function (req) {
@@ -1781,7 +1785,6 @@ Format.prototype.open = function (isLoad) {
             this.setGraphXml(classArea, null);
             this.setGraphXml(prodArea, null);
           }
-
           scope._broadcast('touchKeyCtrl');
 
         }
