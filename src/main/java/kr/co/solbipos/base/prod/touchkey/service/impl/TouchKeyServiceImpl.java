@@ -107,13 +107,15 @@ public class TouchKeyServiceImpl implements TouchKeyService {
     /** 터치키 스타일 목록 조회 */
     @Override
     public List<DefaultMap<String>> getTouchKeyStyleList(TouchKeyStyleVO touchKeyStyleVO, SessionInfoVO sessionInfoVO) {
+
         return keyMapper.getTouchKeyStyleList(touchKeyStyleVO);
     }
 
     /** 터치키 분류 페이지별 스타일 코드 조회 */
     @Override
-    public String getTouchKeyPageStyleCd(TouchKeyClassVO touchKeyClassVO, SessionInfoVO sessionInfoVO) {
+    public String getTouchKeyPageStyleCd(SessionInfoVO sessionInfoVO) {
 
+        TouchKeyClassVO touchKeyClassVO = new TouchKeyClassVO();
         touchKeyClassVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         touchKeyClassVO.setStoreCd(sessionInfoVO.getStoreCd());
         touchKeyClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
@@ -157,59 +159,62 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         param.put("confgFg", ConfgFg.TOUCH_KEY.getCode());
         // 터치키 구성정보가 저장되어있는 XML
         String xml = keyMapper.getTouchKeyXml(param);
-        // | 를 기준으로 분류와 터치키 영역으로 나뉘어져있다.
-        String[] xmls = xml.split("\\|");
-        // XML 역 파싱 - 상품정보 변경 반영을 위해 DOM 파서로 파싱한다
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        // 공백 무시
-        factory.setIgnoringElementContentWhitespace(true);
+        if ( xml != null ) {
+            // | 를 기준으로 분류와 터치키 영역으로 나뉘어져있다.
+            String[] xmls = xml.split("\\|");
+            // XML 역 파싱 - 상품정보 변경 반영을 위해 DOM 파서로 파싱한다
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            // 공백 무시
+            factory.setIgnoringElementContentWhitespace(true);
 
-        try {
+            try {
 
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            //XML 문서 파싱
-            Document document = builder.parse(new InputSource(new StringReader(xmls[1])));
-            document.getDocumentElement().normalize();
-            //루트 엘리먼트 객체 얻어오기
-            NodeList mxCellList = document.getElementsByTagName("mxCell");
-            String tukeyFg = "", styleStr= "", prodCd = "", prodNm= "", saleUprc;
-            String[] styleKeyValue, styles;
-            DefaultMap<String> prodInfo = new DefaultMap();
-            //정규식 패턴 설정
-            Pattern prodCdPattern = Pattern.compile("prodCd=([^=]*.(?=;))", Pattern.MULTILINE);
-            Pattern tukeyFgPattern = Pattern.compile("tukeyFg=([^=]*.(?=;))", Pattern.MULTILINE);
-            // 셀수만큼 처리 : 상품태그, 금액태그도 각각 1개의 셀로 본다
-            for (int i = 0; i < mxCellList.getLength(); i++) {
-                Node mxCellNode = mxCellList.item(i);
-                Element cellElement = (Element)mxCellNode;
-                styleStr = cellElement.getAttribute("style");
-                Matcher tukeyFgMatcher = tukeyFgPattern.matcher(styleStr);
-                // 정규식으로 상품코드, 터치키구분 추출
-                if (tukeyFgMatcher.find()) {
-                    Matcher prodCdMatcher = prodCdPattern.matcher(styleStr);
-                    if (prodCdMatcher.find()) {
-                        prodCd = prodCdMatcher.group(1);
-                        // 상품코드로 해당 상품정보를 가져온다
-                        prodInfo = getTouchKeyProdInfo(prodCd, prodList);
-                    }
-                    // 태그에서 상품코드 이용하여 상품정보 재설정
-                    tukeyFg = tukeyFgMatcher.group(1);
-                    if ( "02".equals(tukeyFg) ) {
-                        // 상품명 설정
-                        cellElement.setAttribute("value", prodInfo.get("prodNm"));
-                    } else if ( "03".equals(tukeyFg) ) {
-                        // 상품금액 설정
-                        cellElement.setAttribute("value", String.valueOf(prodInfo.get("saleUprc")));
+                DocumentBuilder builder = factory.newDocumentBuilder();
+                //XML 문서 파싱
+                Document document = builder.parse(new InputSource(new StringReader(xmls[1])));
+                document.getDocumentElement().normalize();
+                //루트 엘리먼트 객체 얻어오기
+                NodeList mxCellList = document.getElementsByTagName("mxCell");
+                String tukeyFg = "", styleStr= "", prodCd = "", prodNm= "", saleUprc;
+                String[] styleKeyValue, styles;
+                DefaultMap<String> prodInfo = new DefaultMap();
+                //정규식 패턴 설정
+                Pattern prodCdPattern = Pattern.compile("prodCd=([^=]*.(?=;))", Pattern.MULTILINE);
+                Pattern tukeyFgPattern = Pattern.compile("tukeyFg=([^=]*.(?=;))", Pattern.MULTILINE);
+                // 셀수만큼 처리 : 상품태그, 금액태그도 각각 1개의 셀로 본다
+                for (int i = 0; i < mxCellList.getLength(); i++) {
+                    Node mxCellNode = mxCellList.item(i);
+                    Element cellElement = (Element)mxCellNode;
+                    styleStr = cellElement.getAttribute("style");
+                    Matcher tukeyFgMatcher = tukeyFgPattern.matcher(styleStr);
+                    // 정규식으로 상품코드, 터치키구분 추출
+                    if (tukeyFgMatcher.find()) {
+                        Matcher prodCdMatcher = prodCdPattern.matcher(styleStr);
+                        if (prodCdMatcher.find()) {
+                            prodCd = prodCdMatcher.group(1);
+                            // 상품코드로 해당 상품정보를 가져온다
+                            prodInfo = getTouchKeyProdInfo(prodCd, prodList);
+                        }
+                        // 태그에서 상품코드 이용하여 상품정보 재설정
+                        tukeyFg = tukeyFgMatcher.group(1);
+                        if ( "02".equals(tukeyFg) ) {
+                            // 상품명 설정
+                            cellElement.setAttribute("value", prodInfo.get("prodNm"));
+                        } else if ( "03".equals(tukeyFg) ) {
+                            // 상품금액 설정
+                            cellElement.setAttribute("value", String.valueOf(prodInfo.get("saleUprc")));
+                        }
                     }
                 }
+
+                result = xmls[0] + "|";
+                // XML Document 문자열로 반환
+                result += convertXMLDocumentToString(document);
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
 
-            result = xmls[0] + "|";
-            // XML Document 문자열로 반환
-            result += convertXMLDocumentToString(document);
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
 
         return result;
@@ -218,7 +223,12 @@ public class TouchKeyServiceImpl implements TouchKeyService {
 
     /** 판매터치키 저장 상품정보 조회 */
     @Override
-    public List<DefaultMap<String>> getTouchKeyProdInfoList(TouchKeyVO touchKeyVO) {
+    public List<DefaultMap<String>> getTouchKeyProdInfoList(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO) {
+        // 소속구분 설정
+        touchKeyVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        touchKeyVO.setStoreCd(sessionInfoVO.getStoreCd());
+        touchKeyVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
         return keyMapper.getTouchKeyProdInfoList(touchKeyVO);
     }
 

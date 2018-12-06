@@ -75,14 +75,7 @@ public class ContentController {
 
         model.addAttribute("noticeList", noticeList);
 
-
-
-
-
         String pUserPwd = EncUtil.setEncSHA256("ckp" + "0000");  // 포스 패스워드
-
-        System.out.println(">>>>>>>>>>>>>>>>> pUserPwd : "+ pUserPwd);
-
 
         return "application/main/systemMain";
     }

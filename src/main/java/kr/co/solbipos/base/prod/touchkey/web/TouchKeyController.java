@@ -98,10 +98,6 @@ public class TouchKeyController {
         TouchKeyStyleVO touchKeyStyleVO = new TouchKeyStyleVO();
         touchKeyStyleVO.setStyleCd("");
 
-        // 터치키 스타일 코드 목록 조회
-//        model.addAttribute("touchKeyStyleCdList", convertToJson(touchkeyService.getTouchKeyStyleCdList()));
-        // 터치키 스타일 목록 조회
-//        model.addAttribute("touchKeyStyleList", convertToJson(touchkeyService.getTouchKeyStyleList(touchKeyStyleVO)));
         // 본사or매장의 터치키 환경 설정 값을 조회해서 셋팅
         if ( "H".equals(sessionInfoVO.getOrgnFg().getCode()) ) {
             model.addAttribute("maxClassRow", cmmEnvUtil.getHqEnvst(sessionInfoVO, "0041"));
@@ -115,7 +111,6 @@ public class TouchKeyController {
     /**
      * 터치키 분류 페이지별 스타일 코드 조회
      *
-     * @param touchKeyClassVO TouchKeyClassVO
      * @param request HttpServletRequest
      * @param response HttpServletResponse
      * @param model   Model
@@ -123,9 +118,9 @@ public class TouchKeyController {
      */
     @RequestMapping(value = "/getTouchKeyStyleCd.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getTouchKeyStyleCd(TouchKeyClassVO touchKeyClassVO, HttpServletRequest request, HttpServletResponse response, Model model) {
+    public Result getTouchKeyStyleCd(HttpServletRequest request, HttpServletResponse response, Model model) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        return returnJson(Status.OK, convertToJson(touchkeyService.getTouchKeyPageStyleCd(touchKeyClassVO, sessionInfoVO)));
+        return returnJson(Status.OK, convertToJson(touchkeyService.getTouchKeyPageStyleCd(sessionInfoVO)));
     }
 
     /**
@@ -175,7 +170,6 @@ public class TouchKeyController {
     @RequestMapping(value = "/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getProductListForTouchKey(TouchKeyVO touchKeyVO, HttpServletRequest request, HttpServletResponse response, Model model) {
-
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         return returnListJson(Status.OK, touchkeyService.getProductListForTouchKey(touchKeyVO, sessionInfoVO));
