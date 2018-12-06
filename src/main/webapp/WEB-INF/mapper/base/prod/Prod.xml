@@ -349,9 +349,33 @@
         </choose>
     </select>
 
+    <!-- 상품코드 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT
+        PARAM    : prodVO
+        COMMENTS : 본사/매장의 상품정보를 생성/수정 한다.
+    -->
+    <select id="getProdCd" parameterType="prodVO" resultType="String">
+        /* ProdMapper.getProdCd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT LPAD(NVL(MAX(TO_NUMBER(PROD_CD)),0) + 1, 13, '0') AS PROD_CD
+                  FROM TB_HQ_PRODUCT
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT LPAD(NVL(MAX(TO_NUMBER(PROD_CD)),0) + 1, 13, '0') AS PROD_CD
+                  FROM TB_MS_PRODUCT
+                 WHERE STORE_CD = #{storeCd}
+            </when>
+        </choose>
+    </select>
+
     <!-- 상품정보 저장 -->
     <!--
-        TABLE    : TB_HQ_PRODUCT
+        TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT
         PARAM    : prodVO
         COMMENTS : 본사/매장의 상품정보를 생성/수정 한다.
     -->
@@ -443,7 +467,7 @@
                         MOD_ID
                     ) VALUES (
                         #{hqOfficeCd},
-                        ( SELECT LPAD(NVL(MAX(TO_NUMBER(PROD_CD)),0) + 1, 13, '0') FROM TB_HQ_PRODUCT WHERE HQ_OFFICE_CD = #{hqOfficeCd} ),
+                        #{prodCd},
                         #{prodNm},
                         #{prodClassCd},
                         '00',
@@ -565,7 +589,7 @@
                         MOD_ID
                     ) VALUES (
                         #{storeCd},
-                        ( SELECT LPAD(NVL(MAX(TO_NUMBER(PROD_CD)),0) + 1, 13, '0') FROM TB_MS_PRODUCT WHERE STORE_CD = #{storeCd} ),
+                        #{prodCd},
                         #{prodNm},
                         #{prodClassCd},
                         '00',
@@ -860,6 +884,7 @@
         <if test='storeRegFg != null and storeRegFg.toString() == "N"'>
            AND thps.STORE_CD IS NULL
         </if>
+        ORDER BY tms.STORE_NM ASC
     </select>
 
     <!-- 상품 적용 매장 등록 -->

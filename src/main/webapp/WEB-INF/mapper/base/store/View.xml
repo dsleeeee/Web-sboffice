@@ -34,8 +34,8 @@
           FROM TB_MS_STORE tms,
                TB_MS_POS tmp
          WHERE tms.HQ_OFFICE_CD =  #{hqOfficeCd}
-           AND tmp.STORE_CD = tms.STORE_CD
-           AND tmp.POS_NO = '01' -- 기본포스
+           AND tmp.STORE_CD (+)= tms.STORE_CD
+           AND tmp.POS_NO (+)= '01' -- 기본포스(포스 최신버전 가져오기 위함)
            AND tmp.USE_YN = 'Y'
         <if test='storeCd != null and storeCd != ""'>
            AND tms.STORE_CD = #{storeCd}

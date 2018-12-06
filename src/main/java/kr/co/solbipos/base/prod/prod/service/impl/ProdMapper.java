@@ -54,6 +54,9 @@ public interface ProdMapper {
     /** 본사에서는 프로시저 호출에 사용할 상품의 존재여부를 미리 체크함 */
     int getProdExistInfo(ProdVO prodVO);
 
+    /** 상품코드 조회 */
+    String getProdCd(ProdVO prodVO);
+
     /** 본사 상품정보 등록시 매장 상품정보에 등록 */
     String insertHqProdToStoreProd(ProdVO prodVO);
 
@@ -83,6 +86,7 @@ public interface ProdMapper {
 
     /** 상품 매장 적용 삭제시, 해당 상품의 USE_YN 값 변경 */
     int deleteProdStoreDetail(ProdVO prodVO);
+
 
 
 

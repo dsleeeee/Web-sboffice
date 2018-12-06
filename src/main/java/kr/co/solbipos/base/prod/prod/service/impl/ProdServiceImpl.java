@@ -116,6 +116,10 @@ public class ProdServiceImpl implements ProdService {
             prodExist = prodMapper.getProdExistInfo(prodVO);
         }
 
+        // 상품코드 조회
+        String prodCd = prodMapper.getProdCd(prodVO);
+        prodVO.setProdCd(prodCd);
+
         // 상품정보 저장
         int result = prodMapper.saveProductInfo(prodVO);
         if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
