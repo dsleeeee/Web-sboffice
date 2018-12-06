@@ -67,37 +67,10 @@ app.controller('prepaidCtrl', ['$scope', '$http', function ($scope, $http) {
     });
   };
 
-  // 매장찾기
-  $scope.searchStore = function(){
-    var storeTxt = "";
-    var checked = "";
-    c_store.init(checked, function(arr){
-
-      $("#storeCdText").val("");
-      $("#storeCd").val("");
-
-      if(arr[0].cd === "") {
-        $("#storeCdText").val("전체");
-        arr.splice(0, 1);
-      }
-
-      if(arr.length > 1) {
-        var a = arr.length -1;
-        $("#storeCdText").val(arr[0].nm + "외 " + a.toString() + " 선택");
-      }
-      else if(arr.length == 1){
-        $("#storeCdText").val(arr[0].nm);
-      }
-      for(var i=0; i<arr.length; i++) {
-        if(i == arr.length - 1) {
-          storeTxt += arr[i].cd.toString();
-          $("#storeCd").val(storeTxt);
-        }
-        else {
-          storeTxt += arr[i].cd.toString() + ",";
-          $("#storeCd").val(storeTxt);
-        }
-      }
-    });
+  // 매장선택 모듈 팝업 사용시 정의 (매장찾기)
+  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+  $scope.storeShow = function () {
+    $scope._broadcast('storeCtrl');
   };
 }]);

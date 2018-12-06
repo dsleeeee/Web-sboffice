@@ -31,10 +31,14 @@
     <tbody>
     <tr ng-show="orgnFg=='H'">
       <%-- 매장 --%>
-      <div id="storeCd" style="display: none;"></div>
       <th><s:message code="postpaid.srchStore" /></th>
       <td>
-        <input type="text" class="sb-input w100" id="storeCdText" ng-model="storeCds" readonly="readonly" ng-click="searchStore()" />
+        <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
+        <jsp:include page="/WEB-INF/view/application/layer/searchStoreM.jsp" flush="true">
+          <jsp:param name="targetId" value="store"/>
+        </jsp:include>
+        <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+      </td>
       </td>
       <%-- 회원번호 --%>
       <th><s:message code="postpaid.membrNo" /></th>
@@ -147,5 +151,5 @@
 </c:import>
 
 <%-- 매장 선택 --%>
-<c:import url="/WEB-INF/view/application/layer/store.jsp">
+<c:import url="/WEB-INF/view/application/layer/searchStoreS.jsp">
 </c:import>
