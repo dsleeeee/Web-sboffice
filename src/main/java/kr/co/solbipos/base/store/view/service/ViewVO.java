@@ -16,14 +16,13 @@ import java.util.Date;
 * @author nhn kcp 김영근
 * @since 2018. 08.09
 * @version 1.0
-* @see
 *
 *  Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
 public class ViewVO extends PageVO {
 
     private static final long serialVersionUID = -1652554561773776441L;
-    
+
     /** 본사코드 */
     private String hqOfficeCd;
     /** 매장코드 */
@@ -58,7 +57,7 @@ public class ViewVO extends PageVO {
     private Date sysOpenDate;
     /** 시스템폐점일자 */
     private String sysClosureDate;
-    
+
     /**
      * @return the hqOfficeCd
      */

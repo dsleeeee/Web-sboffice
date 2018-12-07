@@ -2,6 +2,7 @@ package kr.co.solbipos.base.store.view.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.store.view.service.VanConfigVO;
 import kr.co.solbipos.base.store.view.service.ViewService;
 import kr.co.solbipos.base.store.view.service.ViewVO;
@@ -43,8 +44,10 @@ public class ViewServiceImpl implements ViewService {
 
     /** 매장정보 리스트조회 */
     @Override
-    public List<DefaultMap<String>> getViewList(ViewVO viewVO)
-    {
+    public List<DefaultMap<String>> getViewList(ViewVO viewVO, SessionInfoVO sessionInfoVO){
+
+        viewVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
         return viewMapper.getViewList(viewVO);
     }
 

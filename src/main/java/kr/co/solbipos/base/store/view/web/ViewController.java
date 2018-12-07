@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -87,10 +88,9 @@ public class ViewController {
     public Result list(ViewVO viewVO, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
-        //기본정보
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
-        viewVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
-        List<DefaultMap<String>> list = viewService.getViewList(viewVO);
+
+        List<DefaultMap<String>> list = viewService.getViewList(viewVO, sessionInfoVO);
 
         return returnListJson(Status.OK, list, viewVO);
     }
