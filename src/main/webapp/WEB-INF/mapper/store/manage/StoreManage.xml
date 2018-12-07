@@ -1997,6 +1997,7 @@
              START WITH tmpc.P_PROD_CLASS_CD = '00000'
            CONNECT BY PRIOR tmpc.P_PROD_CLASS_CD = tmpc.PROD_CLASS_CD
              GROUP BY tmpc.P_PROD_CLASS_CD, tmpc.PROD_CLASS_CD, tmpc.PROD_CLASS_NM
+             HAVING tmpc.PROD_CLASS_CD != '00000'
              ORDER BY P_PROD_CLASS_CD, PROD_CLASS_CD
     </select>
 
