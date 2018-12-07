@@ -77,7 +77,19 @@ public class RegistServiceImpl implements RegistService {
             membrClassVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
         }
 
-        return mapper.getMemberClassList(membrClassVO);
+        List<DefaultMap<String>> resultList = mapper.getMemberClassList(membrClassVO);
+
+        // 등록된 회원등급이 없을때는 기본등급을 리스트에 넣어줌.
+        if(resultList.size() == 0){
+
+            DefaultMap<String> tmpList = new DefaultMap<String>();
+            tmpList.put("value", "0000");
+            tmpList.put("name", "기본등급");
+
+            resultList.add(tmpList);
+        }
+
+        return resultList;
     }
 
     /** 선택한 회원 정보 조회 */
