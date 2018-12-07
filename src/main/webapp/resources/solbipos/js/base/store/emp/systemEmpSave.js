@@ -113,17 +113,25 @@ app.controller('systemEmpRegistCtrl', ['$scope', '$http', function ($scope, $htt
 
     $scope._postJSONQuery.withPopUp( "/base/store/emp/system/chkSystemUserId.sb", params, function(response){
 
-      // console.log('result ', response);
-
       var result = response.data.data;
 
       if(result == "SUCCESS"){
         $scope.duplicationChkFg = true;
-        $scope._popMsg(messages["systemEmp.notDuplicate.msg"]);
-      } else if(result == "USER_ID_REGEXP"){
-        $scope._popMsg(messages["systemEmp.userIdRegexp.msg"]);
+        $scope._popMsg(messages["storeEmp.notDuplicate.msg"]);
+      } else if(result === "USER_ID_REGEXP"){
+        $scope._popMsg(messages["storeEmp.userIdRegexp.msg"]);
+      } else if(result === "USER_ID_LENGHTH_REGEXP"){
+        $scope._popMsg(messages["storeEmp.userIdLengthRegexp.msg"]);
+      } else if(result === "USER_ID_CANNOT_USE_HANGEUL"){
+        $scope._popMsg(messages["storeEmp.userIdNotUseHangeul.msg"]);
+      } else if(result === "USER_ID_MUST_CONTAIN_ENG_CAHR"){
+        $scope._popMsg(messages["storeEmp.userIdContainEngChar.msg"]);
+      } else if(result === "USER_ID_ONLY_ENG_NUM_CHAR"){
+        $scope._popMsg(messages["storeEmp.userIdOnlyEnvNumChar.msg"]);
+      } else if(result === "USER_ID_DUPLICATE"){
+        $scope._popMsg(messages["storeEmp.userId.duplicate.msg"]);
       } else {
-        $scope._popMsg(messages["systemEmp.userId.notDuplicate.msg"]);
+        $scope._popMsg(messages["storeEmp.userId.notDuplicate.msg"]);
       }
     });
   };
@@ -173,6 +181,7 @@ app.controller('systemEmpRegistCtrl', ['$scope', '$http', function ($scope, $htt
     }
 
     var params = $scope.systemEmpRegistInfo;
+    params.pwdChgFg = false;
 
     $scope._postJSONSave.withOutPopUp( "/base/store/emp/system/regist.sb", params, function(response){
 
@@ -227,6 +236,8 @@ app.controller('systemEmpRegistCtrl', ['$scope', '$http', function ($scope, $htt
 
     var params      = $scope.systemEmpRegistInfo;
     params.pwdChgFg = $scope.pwdChgFg;
+
+    // console.log('save params' , params);
 
     $scope._postJSONSave.withOutPopUp( "/base/store/emp/system/save.sb", params, function(response){
       // console.log('save result', response);
