@@ -1965,7 +1965,6 @@
     -->
     <select id="getProdClass" parameterType="storeProductVO" resultType="DefaultMap">
         /* USE : StoreManageMapper.getProdClass */
-
             SELECT tmpc.P_PROD_CLASS_CD ,
                    tmpc.PROD_CLASS_CD ,
                    tmpc.PROD_CLASS_NM
@@ -1995,7 +1994,7 @@
       </if>
                    ) tmp
              WHERE tmpc.store_cd = #{storeCd}
-             START WITH tmpc.PROD_CLASS_CD = tmp.PROD_CLASS_CD
+             START WITH tmpc.P_PROD_CLASS_CD = '00000'
            CONNECT BY PRIOR tmpc.P_PROD_CLASS_CD = tmpc.PROD_CLASS_CD
              GROUP BY tmpc.P_PROD_CLASS_CD, tmpc.PROD_CLASS_CD, tmpc.PROD_CLASS_NM
              ORDER BY P_PROD_CLASS_CD, PROD_CLASS_CD
