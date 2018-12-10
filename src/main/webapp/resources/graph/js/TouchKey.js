@@ -1223,21 +1223,36 @@ function deleteClassCell(format) {
   var graph = format.graph;
   var cells = graph.getSelectionCells();
   var gModel = graph.getModel();
-  var parent = graph.getDefaultParent();
-  // 상품영역
-  var prodArea = format.touchkey.prodArea;
-  var pModel = prodArea.getModel();
   // 터치키분류영역에 버튼없을때 삭제버튼을 누르는 경우 오류 방지
   if (cells.length > 0) {
+    // 상품영역
+    var prodArea = format.touchkey.prodArea;
+    var pModel = prodArea.getModel();
     // 상품영역 셀 삭제
     prodArea.removeCells([pModel.getCell(cells[0].id)]);
     // 터치키분류영역 셀 삭제
     graph.removeCells([cells[0]]);
+    var parent = graph.getDefaultParent();
     // 삭제후 터치키분류영역의 첫번째 셀 선택
     var firstCell = gModel.getChildAt(parent, 0);
-    graph.selectCellForEvent(firstCell);
-    var layer = prodArea.model.getCell(firstCell.getId());
-    prodArea.switchLayer(layer);
+    // 첫번째 셀 존재시에만 선택
+    if ( firstCell != null ) {
+      // 해당 셀의 위치로 스크롤링효과주기
+      document.getElementById('classWrap').scrollLeft = 0;
+      // 페이지번호 계산
+      var scrollWidth = graph.touchKeyInfo.x * graph.COL_PER_PAGE;
+      var pageNo = Math.ceil(firstCell.geometry.x/scrollWidth);
+      // 페이지번호 설정
+      graph.pageNo = pageNo;
+      // 스크롤
+      document.getElementById('classWrap').scrollLeft = scrollWidth * ( pageNo - 1 );
+      document.getElementById('classPageNoText').textContent = "PAGE : " + pageNo;
+      // 분류영역의 첫번째 셀 선택
+      graph.selectCellForEvent(firstCell);
+      var layer = prodArea.model.getCell(firstCell.getId());
+      // 상품영역 레이어 변경
+      prodArea.switchLayer(layer);
+    }
     // 셀 속성지정 감추기
     document.getElementById('keyStyle').classList.add("hideNav");
   }
@@ -1689,18 +1704,6 @@ Format.prototype.setElementsValue = function () {
       this.setBtnStyle();
 
     } else {
-      // 자식속성은 상품영역에만 존재한다.
-      if ( cellType === "02" ) {
-        style = graph.getCellStyle(cell.children[0]);
-        initFontSize = style['fontSize'];
-        initFontColor = style['fontColor'];
-        initFillColor = style['fillColor'];
-      } else if ( cellType === "03" ) {
-        style = graph.getCellStyle(cell.children[1]);
-        initFontSize = style['fontSize'];
-        initFontColor = style['fontColor'];
-        initFillColor = style['fillColor'];
-      }
       // 자식속성
       if (cell.children) {
         // 다른버튼 선택시에만 변경되도록
@@ -1770,16 +1773,19 @@ Format.prototype.open = function (isLoad) {
 
             // 터치키분류 영역에서 첫번째(무엇이될지는모름) 셀을 선택하고 상품영역에서도 해당 레이어 활성화
             var firstCell = model.getChildAt(parent, 0);
-            classArea.selectCellForEvent(firstCell);
-            var layer = prodArea.model.getCell(firstCell.getId());
+            // 셀이 존재하는 경우에만 선택 후 이동처리
+            if ( firstCell != null ) {
+              classArea.selectCellForEvent(firstCell);
+              var layer = prodArea.model.getCell(firstCell.getId());
+              // 상품영역 레이어 변경
+              prodArea.switchLayer(layer);
+            }
 
             // 터치키분류 영역 스크롤 초기화
             document.getElementById('classWrap').scrollLeft = 0;
             // 터치키분류 영역 페이지번호 초기화
             document.getElementById('classPageNoText').textContent = "PAGE : 1";
-            // 상품영역 레이어 변경
-            prodArea.switchLayer(layer);
-            
+
           } else {
             // xml이 없는경우 초기화
             this.setGraphXml(classArea, null);
@@ -1891,7 +1897,13 @@ Format.prototype.save = function () {
       scope.$apply(function() {
         scope.$broadcast('loadingPopupActive', messages["cmm.saving"]);
       });
-      new mxXmlRequest(TOUCHKEY_SAVE_URL, 'xml=' + xml).send(onload, onerror);
+
+      var params = 'xml=' + xml;
+      // 가상로그인 대응
+      if (document.getElementsByName('sessionId')[0]) {
+        params += "&sid=" + document.getElementsByName('sessionId')[0].value;
+      }
+      new mxXmlRequest(TOUCHKEY_SAVE_URL, params).send(onload, onerror);
     }
     else {
       scope.$apply(function(){

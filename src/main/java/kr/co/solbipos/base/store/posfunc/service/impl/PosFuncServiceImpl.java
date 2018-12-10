@@ -165,7 +165,7 @@ public class PosFuncServiceImpl implements PosFuncService{
 
         if( mapper.getFuncKeyXml(param) != null ) {
             if( mapper.updateFuncKeyConfgXml(param) != 1 ) {
-                throw new BizException( messageService.get("label.modifyFail") );
+                throw new BizException( messageService.get("cmm.saveFail") );
             }
         } else {
             if( mapper.insertFuncKeyConfgXml(param) != 1 ) {
@@ -195,7 +195,7 @@ public class PosFuncServiceImpl implements PosFuncService{
             posfuncKeyVO.setModDt(regDt);
             // 포스기능키 저장
             if( mapper.insertPosFuncKey(posfuncKeyVO) != 1 ) {
-                throw new BizException( messageService.get("label.modifyFail") );
+                throw new BizException( messageService.get("cmm.saveFail") );
             }
         }
 

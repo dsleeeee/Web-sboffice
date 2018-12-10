@@ -395,32 +395,32 @@
     <update id="updateTouchKeyConfgXml" parameterType="DefaultMap">
         /* USE : TouchkeyMapper.updateTouchKeyConfgXml */
         <choose>
-        <!-- 본사 -->
-        <when test='orgnFg != null and orgnFg == "H"'>
-            UPDATE
-                TB_WB_HQ_CONFG_XML twhcx
-            SET
-                twhcx.XML = #{xml:CLOB},
-                twhcx.USE_YN = #{useYn},
-                twhcx.MOD_DT = #{regDt},
-                twhcx.MOD_ID = #{regId}
-            WHERE
-                twhcx.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND twhcx.CONFG_FG = #{confgFg}
-        </when>
-        <!-- 매장 -->
-        <when test='orgnFg != null and orgnFg == "S"'>
-            UPDATE
-                TB_WB_STORE_CONFG_XML twscx
-            SET
-                twscx.XML = #{xml:CLOB},
-                twscx.USE_YN = #{useYn},
-                twscx.MOD_DT = #{regDt},
-                twscx.MOD_ID = #{regId}
-            WHERE
-                twscx.STORE_CD = #{storeCd}
-                AND twscx.CONFG_FG = #{confgFg}
-        </when>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE
+                    TB_WB_HQ_CONFG_XML twhcx
+                SET
+                    twhcx.XML = #{xml:CLOB},
+                    twhcx.USE_YN = #{useYn},
+                    twhcx.MOD_DT = #{regDt},
+                    twhcx.MOD_ID = #{regId}
+                WHERE
+                    twhcx.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND twhcx.CONFG_FG = #{confgFg}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE
+                    TB_WB_STORE_CONFG_XML twscx
+                SET
+                    twscx.XML = #{xml:CLOB},
+                    twscx.USE_YN = #{useYn},
+                    twscx.MOD_DT = #{regDt},
+                    twscx.MOD_ID = #{regId}
+                WHERE
+                    twscx.STORE_CD = #{storeCd}
+                    AND twscx.CONFG_FG = #{confgFg}
+            </when>
         </choose>
     </update>
 
