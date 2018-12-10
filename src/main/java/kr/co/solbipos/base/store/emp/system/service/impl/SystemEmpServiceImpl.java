@@ -76,9 +76,9 @@ public class SystemEmpServiceImpl implements SystemEmpService {
             String dt = currentDateTimeString();
 
             String empNo = systemEmpMapper.getSystemEmpNo();
-            if( systemEmpVO.getAdminFg() ==  AdminFg.ADMIN ) {
-                systemEmpVO.setAgencyCd("00000"); // 시스템 관리자인 경우 '00000'
-            }
+//            if( systemEmpVO.getAdminFg() ==  AdminFg.ADMIN ) {
+//                systemEmpVO.setAgencyCd("00001"); // 시스템 관리자인 경우 '00000'
+//            }
 
             systemEmpVO.setEmpNo(empNo);
             systemEmpVO.setEmpPwd(EncUtil.setEncSHA256(systemEmpVO.getEmpNo() + DEFAULT_POS_PASSWORD)); // 포스비밀번호 (초기 비밀번호)
@@ -142,12 +142,12 @@ public class SystemEmpServiceImpl implements SystemEmpService {
                 systemEmpVO.setAuthGrpCd(AUTH_GRP_CD);
             }
 
-            if( systemEmpMapper.updateSystemEmpInfo(systemEmpVO) != 1 ) {
+            if( systemEmpMapper.updateSystemEmpInfo(systemEmpVO) <= 0 ) {
                 return EmpResult.FAIL;
             }
             else{
                 if( "Y".equals(systemEmpDtlInfo.getStr("webUseYn")) || "Y".equals(systemEmpVO.getWebUseYn())) {
-                    if( systemEmpMapper.saveWbUserInfo(systemEmpVO) != 1 ) {
+                    if( systemEmpMapper.saveWbUserInfo(systemEmpVO) <= 0 ) {
                         return EmpResult.FAIL;
                     }
                 }

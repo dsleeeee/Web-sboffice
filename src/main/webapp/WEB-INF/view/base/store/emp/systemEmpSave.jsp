@@ -198,7 +198,7 @@
               </div>
             </td>
           </tr>
-          <tr ng-if=" systemEmpRegistInfo.adminFg != '' && systemEmpRegistInfo.adminFg != 'A'">
+          <tr>
             <%-- 총판/대리점(관리업체) --%>
             <th>
               <div class="impWrap"><s:message code="systemEmp.agency" /></div>
@@ -206,7 +206,7 @@
             <td>
               <input type="text" id="_agencyNm" name="agencyNm" class="sb-input w100"
                      ng-model="systemEmpRegistInfo.agencyNm"
-                     ng-click="newEmpYn == true? searchAgency() : ''"
+                     ng-click="searchAgency()"
                      readonly="readonly"/>
               <input type="hidden" id="_agencyCd" name="agencyCd" ng-model="systemEmpRegistInfo.agencyCd">
             </td>

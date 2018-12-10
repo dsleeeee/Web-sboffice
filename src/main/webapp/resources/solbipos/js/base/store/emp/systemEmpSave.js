@@ -175,10 +175,14 @@ app.controller('systemEmpRegistCtrl', ['$scope', '$http', function ($scope, $htt
     }
 
     // 관리자구분이 관리자가 아니면 대리점(관리업체) 선택 필수 todo
-    if($scope.systemEmpRegistInfo.adminFg !== 'A' && isEmptyObject($scope.systemEmpRegistInfo.agencyNm) ) {
+    // if($scope.systemEmpRegistInfo.adminFg !== 'A' && isEmptyObject($scope.systemEmpRegistInfo.agencyNm) ) {
+    if(isEmptyObject($scope.systemEmpRegistInfo.agencyNm)){
       $scope._popMsg(messages["systemEmp.require.agencyCd"] );
       return false;
     }
+    // }
+
+return false;
 
     var params = $scope.systemEmpRegistInfo;
     params.pwdChgFg = false;
@@ -227,11 +231,9 @@ app.controller('systemEmpRegistCtrl', ['$scope', '$http', function ($scope, $htt
     }
 
     // 관리자구분이 관리자가 아니면 대리점(관리업체) 선택 필수 todo
-    if($scope.systemEmpRegistInfo.adminFg !== 'A') {
-      if($scope.systemEmpRegistInfo.agencyNm === ''  ){
-        $scope._popMsg(messages["systemEmp.require.agencyCd"] );
-        return false;
-      }
+    if(isEmptyObject($scope.systemEmpRegistInfo.agencyNm)){
+      $scope._popMsg(messages["systemEmp.require.agencyCd"] );
+      return false;
     }
 
     var params      = $scope.systemEmpRegistInfo;
