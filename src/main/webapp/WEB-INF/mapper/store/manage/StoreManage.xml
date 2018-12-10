@@ -465,6 +465,7 @@
             USER_PWD,
             AUTH_GRP_CD,
             LOGIN_FAIL_CNT,
+            LAST_PWD_CHG_DT
             USER_STAT_FG,
             USE_YN,
             REG_DT,
@@ -478,6 +479,7 @@
             #{userPwd},
             '000008', --TODO 보나비 임시 (사용자 권한 화면에서 입력 필요)
             0,
+            #{regDt},
             '99',
             'Y',
             #{regDt},
