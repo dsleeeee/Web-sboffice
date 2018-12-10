@@ -1235,9 +1235,12 @@ function deleteClassCell(format) {
     graph.removeCells([cells[0]]);
     // 삭제후 터치키분류영역의 첫번째 셀 선택
     var firstCell = gModel.getChildAt(parent, 0);
-    graph.selectCellForEvent(firstCell);
-    var layer = prodArea.model.getCell(firstCell.getId());
-    prodArea.switchLayer(layer);
+    // 첫번째 셀 존재시에만 선택
+    if ( firstCell != null ) {
+      graph.selectCellForEvent(firstCell);
+      var layer = prodArea.model.getCell(firstCell.getId());
+      prodArea.switchLayer(layer);
+    }
     // 셀 속성지정 감추기
     document.getElementById('keyStyle').classList.add("hideNav");
   }
@@ -1770,16 +1773,19 @@ Format.prototype.open = function (isLoad) {
 
             // 터치키분류 영역에서 첫번째(무엇이될지는모름) 셀을 선택하고 상품영역에서도 해당 레이어 활성화
             var firstCell = model.getChildAt(parent, 0);
-            classArea.selectCellForEvent(firstCell);
-            var layer = prodArea.model.getCell(firstCell.getId());
+            // 셀이 존재하는 경우에만 선택 후 이동처리
+            if ( firstCell != null ) {
+              classArea.selectCellForEvent(firstCell);
+              var layer = prodArea.model.getCell(firstCell.getId());
+              // 상품영역 레이어 변경
+              prodArea.switchLayer(layer);
+            }
 
             // 터치키분류 영역 스크롤 초기화
             document.getElementById('classWrap').scrollLeft = 0;
             // 터치키분류 영역 페이지번호 초기화
             document.getElementById('classPageNoText').textContent = "PAGE : 1";
-            // 상품영역 레이어 변경
-            prodArea.switchLayer(layer);
-            
+
           } else {
             // xml이 없는경우 초기화
             this.setGraphXml(classArea, null);

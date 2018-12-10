@@ -7,7 +7,6 @@ import com.mxgraph.model.mxGraphModel;
 import com.mxgraph.model.mxIGraphModel;
 import com.mxgraph.util.mxXmlUtils;
 import com.mxgraph.view.mxGraph;
-import com.nhncorp.lucy.security.xss.XssPreventer;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
@@ -284,19 +283,13 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         param.put("regDt", currentDateTimeString());
         param.put("regId", sessionInfoVO.getUserId());
 
-        if( keyMapper.getTouchKeyXml(param) != null ) {
-            if( keyMapper.updateTouchKeyConfgXml(param) != 1 ) {
-                throw new BizException( messageService.get("label.modifyFail") );
-            }
-        }
-        else {
-            if( keyMapper.insertTouchKeyConfgXml(param) != 1 ) {
-                throw new BizException( messageService.get("label.insertFail") );
-            }
+        // XML 저장 처리 ( MERGE INTO )
+        if ( keyMapper.saveTouchKeyConfgXml(param) != 1 ) {
+            throw new BizException( messageService.get("cmm.saveFail") );
         }
 
-        //XML 분석, TouchClass, Touch Domain 생성
-        //터치키 분류 TABLE(TB_MS_TOUCH_CLASS)
+        // XML 분석, TouchClass, Touch Domain 생성
+        // 터치키 분류 TABLE(TB_MS_TOUCH_CLASS)
         List<TouchKeyClassVO> touchKeyClassVOS = parseXML(sessionInfoVO, xml);
 
         // 매장/본사의 현재 설정정보 삭제
@@ -316,38 +309,51 @@ public class TouchKeyServiceImpl implements TouchKeyService {
 
         List<TouchKeyClassVO> touchKeyClassVOList = new ArrayList<TouchKeyClassVO>();
         List<TouchKeyVO> touchKeyVOList = new ArrayList<TouchKeyVO>();
-        // 리스트의 아이템을 DB에 Merge
-        for(TouchKeyClassVO touchKeyClassVO : touchKeyClassVOS) {
+        // XML 정보가 있는 경우만 처리
+        if ( touchKeyClassVOS.size() > 0 ) {
+            // 리스트의 아이템을 DB에 Merge
+            for(TouchKeyClassVO touchKeyClassVO : touchKeyClassVOS) {
 
-            // 터치 분류(그룹) 저장 파라미터 설정
-            touchKeyClassVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-            touchKeyClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            touchKeyClassVO.setStoreCd(sessionInfoVO.getOrgnCd());
-            touchKeyClassVO.setRegId(sessionInfoVO.getUserId());
-            touchKeyClassVOList.add(touchKeyClassVO);
+                // 터치 분류(그룹) 저장 파라미터 설정
+                touchKeyClassVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+                touchKeyClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+                touchKeyClassVO.setStoreCd(sessionInfoVO.getOrgnCd());
+                touchKeyClassVO.setRegId(sessionInfoVO.getUserId());
+                touchKeyClassVOList.add(touchKeyClassVO);
 
-            for(TouchKeyVO touchKeyVO : touchKeyClassVO.getTouchs()) {
-                // 터치키 저장 파라미터 설정
-                touchKeyVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-                touchKeyVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-                touchKeyVO.setStoreCd(sessionInfoVO.getOrgnCd());
-                touchKeyVO.setRegId(sessionInfoVO.getUserId());
-                touchKeyVOList.add(touchKeyVO);
+                // 터치키 존재시에만 저장처리
+                if ( touchKeyClassVO.getTouchs().size() > 0 ) {
+                    for(TouchKeyVO touchKeyVO : touchKeyClassVO.getTouchs()) {
+                        // 터치키 저장 파라미터 설정
+                        touchKeyVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+                        touchKeyVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+                        touchKeyVO.setStoreCd(sessionInfoVO.getOrgnCd());
+                        touchKeyVO.setRegId(sessionInfoVO.getUserId());
+                        touchKeyVOList.add(touchKeyVO);
+                    }
+                }
+            }
+
+            // Oracle INSERT ALL 을 이용한 터치키분류/터치키 저장
+            Map<String, Object> paramMap = new HashMap<String, Object>();
+            // 분류 존재시에만 저장처리
+            if ( touchKeyClassVOList.size() > 0 ) {
+                paramMap = new HashMap<String, Object>();
+                paramMap.put("orgnFg", sessionInfoVO.getOrgnFg().getCode());
+                paramMap.put("list", touchKeyClassVOList);
+                // 터치 분류(그룹) 저장
+                keyMapper.insertTouchKeyClass(paramMap);
+            }
+
+            // 터치키 존재시에만 저장처리
+            if ( touchKeyVOList.size() > 0 ) {
+                paramMap = new HashMap<String, Object>();
+                paramMap.put("orgnFg", sessionInfoVO.getOrgnFg().getCode());
+                paramMap.put("list", touchKeyVOList);
+                // 터치키 저장
+                keyMapper.insertTouchKey(paramMap);
             }
         }
-
-        // Oracle INSERT ALL 을 이용한 터치키분류/터치키 저장
-        Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("orgnFg", sessionInfoVO.getOrgnFg().getCode());
-        paramMap.put("list", touchKeyClassVOList);
-        // 터치 분류(그룹) 저장
-        keyMapper.insertTouchKeyClass(paramMap);
-
-        paramMap = new HashMap<String, Object>();
-        paramMap.put("orgnFg", sessionInfoVO.getOrgnFg().getCode());
-        paramMap.put("list", touchKeyVOList);
-        // 터치키 저장
-        keyMapper.insertTouchKey(paramMap);
 
         return new Result(Status.OK);
     }
