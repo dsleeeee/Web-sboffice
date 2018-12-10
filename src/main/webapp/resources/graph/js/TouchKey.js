@@ -1223,22 +1223,34 @@ function deleteClassCell(format) {
   var graph = format.graph;
   var cells = graph.getSelectionCells();
   var gModel = graph.getModel();
-  var parent = graph.getDefaultParent();
-  // 상품영역
-  var prodArea = format.touchkey.prodArea;
-  var pModel = prodArea.getModel();
   // 터치키분류영역에 버튼없을때 삭제버튼을 누르는 경우 오류 방지
   if (cells.length > 0) {
+    // 상품영역
+    var prodArea = format.touchkey.prodArea;
+    var pModel = prodArea.getModel();
     // 상품영역 셀 삭제
     prodArea.removeCells([pModel.getCell(cells[0].id)]);
     // 터치키분류영역 셀 삭제
     graph.removeCells([cells[0]]);
+    var parent = graph.getDefaultParent();
     // 삭제후 터치키분류영역의 첫번째 셀 선택
     var firstCell = gModel.getChildAt(parent, 0);
     // 첫번째 셀 존재시에만 선택
     if ( firstCell != null ) {
+      // 해당 셀의 위치로 스크롤링효과주기
+      document.getElementById('classWrap').scrollLeft = 0;
+      // 페이지번호 계산
+      var scrollWidth = graph.touchKeyInfo.x * graph.COL_PER_PAGE;
+      var pageNo = Math.ceil(firstCell.geometry.x/scrollWidth);
+      // 페이지번호 설정
+      graph.pageNo = pageNo;
+      // 스크롤
+      document.getElementById('classWrap').scrollLeft = scrollWidth * ( pageNo - 1 );
+      document.getElementById('classPageNoText').textContent = "PAGE : " + pageNo;
+      // 분류영역의 첫번째 셀 선택
       graph.selectCellForEvent(firstCell);
       var layer = prodArea.model.getCell(firstCell.getId());
+      // 상품영역 레이어 변경
       prodArea.switchLayer(layer);
     }
     // 셀 속성지정 감추기
