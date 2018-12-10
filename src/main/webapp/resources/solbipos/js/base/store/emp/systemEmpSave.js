@@ -80,7 +80,7 @@ app.controller('systemEmpRegistCtrl', ['$scope', '$http', function ($scope, $htt
       $scope.newEmpYn = false;
     }
 
-    $scope.adminFgCombo.isReadOnly= !$scope.newEmpYn;
+    // $scope.adminFgCombo.isReadOnly= !$scope.newEmpYn;
 
     event.preventDefault();
   });
