@@ -1704,18 +1704,6 @@ Format.prototype.setElementsValue = function () {
       this.setBtnStyle();
 
     } else {
-      // 자식속성은 상품영역에만 존재한다.
-      if ( cellType === "02" ) {
-        style = graph.getCellStyle(cell.children[0]);
-        initFontSize = style['fontSize'];
-        initFontColor = style['fontColor'];
-        initFillColor = style['fillColor'];
-      } else if ( cellType === "03" ) {
-        style = graph.getCellStyle(cell.children[1]);
-        initFontSize = style['fontSize'];
-        initFontColor = style['fontColor'];
-        initFillColor = style['fillColor'];
-      }
       // 자식속성
       if (cell.children) {
         // 다른버튼 선택시에만 변경되도록
@@ -1909,7 +1897,13 @@ Format.prototype.save = function () {
       scope.$apply(function() {
         scope.$broadcast('loadingPopupActive', messages["cmm.saving"]);
       });
-      new mxXmlRequest(TOUCHKEY_SAVE_URL, 'xml=' + xml).send(onload, onerror);
+
+      var params = 'xml=' + xml;
+      // 가상로그인 대응
+      if (document.getElementsByName('sessionId')[0]) {
+        params += "&sid=" + document.getElementsByName('sessionId')[0].value;
+      }
+      new mxXmlRequest(TOUCHKEY_SAVE_URL, params).send(onload, onerror);
     }
     else {
       scope.$apply(function(){

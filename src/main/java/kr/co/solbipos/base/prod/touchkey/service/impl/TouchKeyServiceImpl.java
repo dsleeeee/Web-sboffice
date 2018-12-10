@@ -284,8 +284,14 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         param.put("regId", sessionInfoVO.getUserId());
 
         // XML 저장 처리 ( MERGE INTO )
-        if ( keyMapper.saveTouchKeyConfgXml(param) != 1 ) {
-            throw new BizException( messageService.get("cmm.saveFail") );
+        if ( keyMapper.getTouchKeyXml(param) != null ) {
+            if( keyMapper.updateTouchKeyConfgXml(param) != 1 ) {
+                throw new BizException( messageService.get("cmm.modifyFail") );
+            }
+        } else {
+            if( keyMapper.insertTouchKeyConfgXml(param) != 1 ) {
+                throw new BizException( messageService.get("cmm.registFail") );
+            }
         }
 
         // XML 분석, TouchClass, Touch Domain 생성

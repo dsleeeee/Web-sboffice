@@ -225,7 +225,7 @@
 <script type="text/javascript"
         src="/resource/vendor/wijmo/js/grid/wijmo.grid.filter.min.js?ver=5.20182.500"
         charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20181210.02"
+<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20181210.03"
         charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
