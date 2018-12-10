@@ -62,7 +62,8 @@ app.controller('posTerminalCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.cornerUseYnVal                 = cornerUseYnVal;
       $scope.cornerUseYnCombo.selectedValue = cornerUseYnVal;
 
-      if(cornerUseYnVal == null || (posVanInfo.length == 0 || cornerVanInfo.length == 0)) {
+      // if(cornerUseYnVal == null || (posVanInfo.length == 0 && cornerVanInfo.length == 0)) {
+      if(cornerUseYnVal == null ) {
         $scope._popMsg("매장의 벤사 터미널이 설정되지 않았습니다. \n관리자에게 문의해주세요.");
         $scope.close();
         return false;
@@ -84,7 +85,6 @@ app.controller('posTerminalCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 닫기
   $scope.close = function(){
-    console.log('close1')
     $scope.vanConfigLayer.hide();
   };
 
