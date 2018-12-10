@@ -174,11 +174,35 @@
                tmm.REG_DT,
                tmm.REG_ID,
                tmm.MOD_DT,
-               tmm.MOD_ID
-          FROM TB_MB_MEMBER tmm
+               tmm.MOD_ID,
+               tmmp.CD_COMPANY,
+			         tmmp.CD_PARTNER,
+			         tnsp.LN_PARTNER,
+			         tnsp.NO_COMPANY,
+			         tnsp.NM_CEO
+          FROM TB_MB_MEMBER tmm,
+               TB_MB_MEMBER_PTN tmmp,
+               TB_NEOE_SPOS_PTN tnsp
          WHERE tmm.MEMBR_NO = #{membrNo}
            AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
+           AND tmmp.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
+           AND tmmp.MEMBR_NO (+)= tmm.MEMBR_NO
+           AND tnsp.CD_COMPANY (+)= tmmp.CD_COMPANY
+           AND tnsp.CD_PARTNER (+)= tmmp.CD_PARTNER
     </select>
+
+    <!-- 회원정보 조회 -->
+    <!--
+        TABLE    : TB_MB_MEMBER
+        COMMENTS : 회원정보 조회
+    -->
+    <select id="getNewMemberNo" parameterType="registVO" resultType="String">
+        /* RegistMapper.getMemberInfo */
+        SELECT LPAD( NVL(MAX(MEMBR_NO), 0) + 1, 10, '0') AS MEMBR_NO
+          FROM TB_MB_MEMBER
+         WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+    </select>
+
 
     <!-- 회원정보 등록 -->
     <!--
@@ -217,7 +241,7 @@
             tmm.MOD_ID
         ) VALUES (
             #{membrOrgnCd},
-            (SELECT LPAD( NVL(MAX(MEMBR_NO), 0) + 1, 10, '0') FROM TB_MB_MEMBER WHERE MEMBR_ORGN_CD = #{membrOrgnCd}),
+            #{membrNo},
             #{membrNm},
             #{membrNicknm},
             #{membrClassCd},
@@ -434,4 +458,78 @@
                 #{modId}
             )
     </insert>
+
+    <!-- 회원 거래처 매핑코드 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS : 회원정보 등록시 등록매장 콤보박스 내용 조회
+    -->
+    <select id="getMappingCompany" parameterType="memberMappingVO" resultType="DefaultMap">
+        /* RegistMapper.getMappingCompany */
+        SELECT CD_COMPANY,
+               CD_PARTNER,
+               LN_PARTNER,
+               NO_COMPANY,
+               NM_CEO
+          FROM TB_NEOE_SPOS_PTN tnsp
+         WHERE USE_YN = 'Y'
+      <if test='cdCompany != null and cdCompany.toString() != ""'>
+        AND tnsp.CD_COMPANY = #{cdCompany}
+      </if>
+      <if test='cdPartner != null and cdPartner.toString() != ""'>
+        AND tnsp.CD_PARTNER = #{cdPartner}
+      </if>
+      <if test='lnPartner != null and lnPartner.toString() != ""'>
+        AND tnsp.LN_PARTNER LIKE #{lnPartner}||'%'
+      </if>
+      <if test='noCompany != null and noCompany.toString() != ""'>
+        AND tnsp.NO_COMPANY = #{noCompany}
+      </if>
+      <if test='nmCeo != null and nmCeo.toString() != ""'>
+        AND tnsp.NM_CEO LIKE #{nmCeo}||'%'
+      </if>
+    </select>
+
+    <!-- 회원 거래처 매핑코드 등록 및 저장  -->
+    <!--
+        TABLE    : TB_MB_MEMBER_PTN
+        COMMENTS : 회원 거래처 매핑코드 등록 및 저장
+    -->
+    <insert id="registMemberMappingCode" parameterType="postpaidStoreVO">
+        /* RegistMapper.registMemberMappingCode */
+        MERGE INTO TB_MB_MEMBER_PTN tmmp
+        USING DUAL
+        ON (
+            tmmp.MEMBR_ORGN_CD = #{membrOrgnCd}
+            AND tmmp.MEMBR_NO = #{membrNo}
+        )
+        WHEN MATCHED THEN
+       UPDATE
+          SET tmmp.CD_COMPANY = #{cdCompany},
+              tmmp.CD_PARTNER = #{cdPartner},
+              tmmp.MOD_DT = #{modDt},
+              tmmp.MOD_ID = #{modId}
+         WHEN NOT MATCHED THEN
+            INSERT
+            (
+                MEMBR_ORGN_CD,
+                MEMBR_NO,
+                CD_COMPANY,
+                CD_PARTNER,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+            ) VALUES (
+                #{membrOrgnCd},
+                #{membrNo},
+                #{cdCompany},
+                #{cdPartner},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+            )
+    </insert>
+
 </mapper>

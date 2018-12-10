@@ -169,7 +169,7 @@ app.controller('memberRegistCtrl', ['$scope', '$http', function ($scope, $http) 
     params.birthday    = dateToDaystring(params.birthday);
     params.lunarYn     = $(":input:radio[name=lunarYn]:checked").val();
 
-    console.log(params);
+    // console.log(params);
 
     var memberInfoScope = agrid.getScope('memberCtrl');
 
@@ -186,6 +186,7 @@ app.controller('memberRegistCtrl', ['$scope', '$http', function ($scope, $http) 
       $scope._postJSONSave.withPopUp("/membr/info/view/base/updateMemberInfo.sb", params, function () {
         $scope._popMsg(messages["cmm.saveSucc"]);
         $scope.memberRegistLayer.hide();
+        $scope.memberInfoDetailLayer.hide();
         memberInfoScope.getMemberList();
       });
     }
@@ -193,8 +194,42 @@ app.controller('memberRegistCtrl', ['$scope', '$http', function ($scope, $http) 
 
 
   /*********************************************************
+   * 회원 거래처 매핑코드 조회(보나비)
+   * *******************************************************/
+  $scope.searchMemberMappingCd = function(){
+    $scope.memberMappingLayer.show(true, function(s) {
+
+      var memberMappingScope = agrid.getScope('memberMappingCtrl');
+      console.log('getCompany', memberMappingScope.getCompany());
+
+      $scope.$apply(function(){
+
+        if( !$.isEmptyObject(memberMappingScope.getCompany())) {
+          console.log('memberMappingScope.getCompany.lnPartner :'+ memberMappingScope.getCompany().lnPartner);
+
+          $scope.member.lnPartner = memberMappingScope.getCompany().lnPartner;
+          $scope.member.cdCompany = memberMappingScope.getCompany().cdCompany;
+          $scope.member.cdPartner = memberMappingScope.getCompany().cdPartner;
+        }
+      });
+    });
+  };
+
+  /*********************************************************
    * 주소검색 TODO
    * *******************************************************/
   $scope.searchAddr = function(){
   };
+
+  // 화면 ready 된 후 설정
+  angular.element(document).ready(function () {
+    // 회원조회 팝업 핸들러 추가
+    $scope.memberMappingLayer.shown.addHandler(function (s) {
+      setTimeout(function() {
+        $scope._broadcast('memberMappingCtrl');
+      }, 50)
+    });
+  });
+
+
 }]);

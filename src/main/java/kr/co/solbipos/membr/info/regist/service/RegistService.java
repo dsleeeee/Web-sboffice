@@ -101,4 +101,10 @@ public interface RegistService {
      */
     int deletePostpaidStore(PostpaidStoreVO[] postpaidStoreVOs, SessionInfoVO sessionInfoVO);
 
+    /**
+     * 회원 거래처 매핑코드
+     * @param memberMappingVO
+     * @return
+     */
+    List<DefaultMap<String>> getMappingCompany(MemberMappingVO memberMappingVO);
 }

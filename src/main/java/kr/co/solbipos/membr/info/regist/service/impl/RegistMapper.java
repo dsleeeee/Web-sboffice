@@ -3,6 +3,7 @@ package kr.co.solbipos.membr.info.regist.service.impl;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.membr.anals.postpaid.service.PostpaidStoreVO;
 import kr.co.solbipos.membr.info.grade.service.MembrClassVO;
+import kr.co.solbipos.membr.info.regist.service.MemberMappingVO;
 import kr.co.solbipos.membr.info.regist.service.RegistVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -59,6 +60,10 @@ public interface RegistMapper {
      * @return
      */
     DefaultMap<String> getMemberInfo(RegistVO registVO);
+
+
+    /** 회원번호 채번 */
+    String getNewMemberNo(RegistVO registVO);
 
     /**
      * 회원정보 저장
@@ -128,5 +133,12 @@ public interface RegistMapper {
      * @return
      */
     int registPostpaidStore(PostpaidStoreVO postpaidStoreVO);
+
+    /** 회원 거래처 매핑 코드 조회 */
+    List<DefaultMap<String>> getMappingCompany(MemberMappingVO memberMappingVO);
+
+    /** 회원 거래처 매핑코드 등록 및 저장 */
+    int registMemberMappingCode(RegistVO registVO);
+
 
 }
