@@ -17,30 +17,32 @@ $(document).ready(function () {
   var srchUserId = wcombo.genInputText("#srchUserId", 20, "");
   var srchUserNm = wcombo.genInputText("#srchUserNm", 50, "");
 
-  //  dataMap 
+  //  dataMap
   var serviceFgDataMap = new wijmo.grid.DataMap(serviceFg, 'value', 'name');
   var webUseYnDataMap = new wijmo.grid.DataMap(webUseYn, 'value', 'name');
 
   var gridData =
     [
-      {binding: "hqOfficeCd", header: messages["pwdManage.hqOfficeCd"], width: "*"},
+      {binding: "hqOfficeCd", header: messages["pwdManage.hqOfficeCd"], width: "*", align:"center"},
       {binding: "hqOfficeNm", header: messages["pwdManage.hqOfficeNm"], width: "*"},
-      {binding: "storeCd", header: messages["pwdManage.storeCd"], width: "*"},
+      {binding: "storeCd", header: messages["pwdManage.storeCd"], width: "*", align:"center"},
       {binding: "storeNm", header: messages["pwdManage.storeNm"], width: "*"},
-      {binding: "empNo", header: messages["pwdManage.empNo"], visible: false, width: "*"},
-      {binding: "userId", header: messages["pwdManage.userId"], width: "*"},
-      {binding: "userNm", header: messages["pwdManage.userNm"], width: "*"},
+      {binding: "empNo", header: messages["pwdManage.empNo"], visible: false, width: "*", align:"center"},
+      {binding: "userId", header: messages["pwdManage.userId"], width: "*", align:"center"},
+      {binding: "userNm", header: messages["pwdManage.userNm"], width: "*", align:"center"},
       {
         binding: "serviceFg",
         header: messages["pwdManage.serviceFg"],
         dataMap: serviceFgDataMap,
-        width: "*"
+        width: "*",
+        align:"center"
       },
       {
         binding: "webUseYn",
         header: messages["pwdManage.webUseYn"],
         dataMap: webUseYnDataMap,
-        width: "*"
+        width: "*",
+        align:"center"
       },
       {binding: "emailAddr", header: messages["pwdManage.emailAddr"], width: "*"},
       {binding: "mpNo", header: messages["pwdManage.mpNo"], width: "*"},
@@ -50,7 +52,7 @@ $(document).ready(function () {
   var grid = wgrid.genGrid("#theGrid", gridData, "Y");
   var listScaleBox = wcombo.genCommonBox("#listScaleBox", gvListScaleBoxData);
 
-  //  그리드 포맷 
+  //  그리드 포맷
   grid.formatItem.addHandler(function (s, e) {
     if (e.panel == s.cells) {
       var col = s.columns[e.col];
@@ -78,7 +80,7 @@ $(document).ready(function () {
     search(1);
   });
 
-  //  페이징 
+  //  페이징
   $(document).on("click", ".page", function () {
     search($(this).data("value"));
   });
@@ -154,7 +156,7 @@ $(document).ready(function () {
     $("#pwdModifyLayer").hide();
   }
 
-  //  비밀번호 변경 
+  //  비밀번호 변경
   $("#btnModify").click(function (e) {
 
     var param = {};
@@ -176,7 +178,7 @@ $(document).ready(function () {
     );
 
   });
-  
+
   // 비밀번호 변경 오류 실패처리
   function processError(data) {
 

@@ -106,8 +106,8 @@
                 <if test='userNm != null and userNm != ""'>
                     AND the.USER_NM LIKE #{userNm}||'%'
                 </if>
-        )
-        ORDER BY emp.HQ_OFFICE_CD DESC, emp.STORE_CD DESC, emp.EMP_NM
+        ) emp
+        ORDER BY emp.HQ_OFFICE_CD DESC, emp.STORE_CD DESC, emp.USER_NM
        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
