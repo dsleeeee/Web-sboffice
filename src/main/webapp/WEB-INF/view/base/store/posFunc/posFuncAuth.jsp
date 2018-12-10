@@ -26,19 +26,13 @@
 
     <%-- 오른쪽 --%>
     <div class="w70 fr">
-      <div class="wj-TblWrapBr oh ml20 pd20" style="height:560px;">
+      <div class="wj-TblWrapBr oh ml20 pd20" style="height:560px; ">
         <div class="updownSet mb10">
-          <%-- up 버튼 --%>
-          <button class="btn_up" id="btnUp"><s:message code="cmm.up" /></button>
-          <%-- down 버튼 --%>
-          <button class="btn_down" id="btnDown"><s:message code="cmm.down" /></button>
-          <%-- 좌표자동세팅 버튼 --%>
-          <button class="btn_skyblue" id="btnAutoPosition" style="display:none"><s:message code="posFunc.autoSet.position" /></button>
           <%-- 저장버튼 --%>
           <button class="btn_skyblue" id="btnSave"><s:message code="cmm.save" /></button>
         </div>
         <%-- 그리드 --%>
-        <div id="funcAuthGrid"></div>
+        <div id="funcAuthGrid" style="height:481px; overflow-x: hidden;"></div>
         <div id="funcKeyDiv" style="display:none"></div>
       </div>
     </div>
@@ -68,10 +62,10 @@
         {binding:"fnkeyNo", header:"<s:message code='posFunc.fnkeyNo' />", isReadOnly:true, width:"*"},
         {binding:"fnkeyNm", header:"<s:message code='posFunc.fnkeyNm' />", isReadOnly:true, width:"*"},
         {binding:"dispSeq", header:"<s:message code='posFunc.dispSeq' />", visible:false, width:"*"},
-        {binding:"useYn", header:"<s:message code='posFunc.useYn' />", dataType:wijmo.DataType.Boolean, width:"*"},
-        {binding:"authYn", header:"<s:message code='posFunc.authYn' />", dataType:wijmo.DataType.Boolean, width:"*"},
-        {binding:"buttons", header:"<s:message code='posFunc.setting.auth' />", width:"*"},
-        {binding:"gChk", header:"<s:message code='cmm.chk' />", dataType:wijmo.DataType.Boolean, width:"*"}
+        {binding:"useYn", header:"<s:message code='posFunc.useYn' />", dataType:wijmo.DataType.Boolean, width:"*", visible:false},
+        {binding:"authYn", header:"<s:message code='posFunc.authYn' />", dataType:wijmo.DataType.Boolean, width:70},
+        {binding:"buttons", header:"<s:message code='posFunc.setting.auth' />", width:"*", align:"center"},
+        {binding:"gChk", header:"<s:message code='cmm.chk' />", dataType:wijmo.DataType.Boolean, width:"*", visible:false}
       ];
 
   <%-- 그리드 생성 --%>
@@ -205,7 +199,7 @@
       paramArr.push(funcAuthGrid.collectionView.items[i]);
     }
 
-    $.postJSONArray("/base/store/posfunc/use/savePosConf.sb", paramArr,
+    $.postJSONArray("/base/store/posfunc/auth/savePosAuthConf.sb", paramArr,
         function(result) {
           s_alert.pop("<s:message code='cmm.saveSucc' />");
           funcAuthGrid.collectionView.clearChanges();
@@ -217,36 +211,6 @@
     );
   });
 
-
-  <%-- up 버튼 클릭 --%>
-  $("#posFuncAuthArea #btnUp").click(function(e){
-    for(var i = 0; i < funcAuthGrid.collectionView.itemCount; i++ ){
-      if(i > 0 && (funcAuthGrid.collectionView.items[i].gChk === true)){
-        if(funcAuthGrid.collectionView.items[i-1].gChk !== true){
-          var tmpItem = funcAuthGrid.collectionView.items[i-1];
-          funcAuthGrid.collectionView.items[i-1] = funcAuthGrid.collectionView.items[i];
-          funcAuthGrid.collectionView.items[i] = tmpItem;
-          funcAuthGrid.collectionView.commitEdit();
-          funcAuthGrid.collectionView.refresh();
-        }
-      }
-    }
-  });
-
-  <%-- down 버튼 클릭 --%>
-  $("#posFuncAuthArea #btnDown").click(function(e){
-    for(var i = funcAuthGrid.itemsSource.itemCount-1; i >= 0; i-- ){
-      if((i < funcAuthGrid.itemsSource.itemCount-1) && (funcAuthGrid.collectionView.items[i].gChk === true)){
-        if(funcAuthGrid.collectionView.items[i+1].gChk !== true){
-          var tmpItem = funcAuthGrid.collectionView.items[i+1];
-          funcAuthGrid.collectionView.items[i+1] = funcAuthGrid.collectionView.items[i];
-          funcAuthGrid.collectionView.items[i] = tmpItem;
-          funcAuthGrid.collectionView.commitEdit();
-          funcAuthGrid.collectionView.refresh();
-        }
-      }
-    }
-  });
 
   function hidePosFuncAuth(){
     $("#posFuncAuthArea").hide();
