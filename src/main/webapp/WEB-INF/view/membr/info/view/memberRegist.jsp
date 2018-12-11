@@ -139,7 +139,7 @@
                     ng-model="member.birthday"
                     control="birthdayCombo"
                     format="yyyy/MM/dd"
-                    min="2000-01-01"
+                    min="1930-01-01"
                     max="2099-12-31"
                     initialized="_initDateBox(s)">
                   </wj-input-date>
