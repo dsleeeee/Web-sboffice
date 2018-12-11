@@ -73,6 +73,9 @@ public interface RegistMapper {
      */
     int registMemberInfo(RegistVO registVO);
 
+    /** 선불회원 등록 */
+    int registMemberPrepaid(RegistVO registVO);
+
     /**
      * 회원정보 수정
      *
@@ -119,7 +122,6 @@ public interface RegistMapper {
      */
     List<DefaultMap<String>> getNoRegStoreList(PostpaidStoreVO postpaidStoreVO);
 
-
     /**
      * 후불회원 적용매장 삭제
      * @param postpaidStoreVO
@@ -139,6 +141,5 @@ public interface RegistMapper {
 
     /** 회원 거래처 매핑코드 등록 및 저장 */
     int registMemberMappingCode(RegistVO registVO);
-
 
 }

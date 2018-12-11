@@ -141,6 +141,7 @@ public class RegistServiceImpl implements RegistService {
         registVO.setModDt(dt);
         registVO.setModId(sessionInfoVO.getUserId());
 
+        // 회원등록
         int result = mapper.registMemberInfo(registVO);
         if(result == 1 && (!StringUtil.isEmpties(registVO.getMembrCardNo()))) {
             // 회원카드 등록
@@ -148,6 +149,10 @@ public class RegistServiceImpl implements RegistService {
                 throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
             }
         }
+
+        // 선불회원 등록 (자점회원)
+        result = mapper.registMemberPrepaid(registVO);
+        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
         // 회원-거래처 매핑코드 등록 (보나비)
         if( registVO.getCdCompany() != null && registVO.getCdPartner() != null ){
@@ -169,11 +174,18 @@ public class RegistServiceImpl implements RegistService {
         registVO.setModDt(dt);
         registVO.setModId(sessionInfoVO.getUserId());
 
+        // 회원 등록
         int result = mapper.updateMemberInfo(registVO);
         if(result == 1) {
             // 회원카드 수정
             mapper.updateMembrCard(registVO);
         }
+
+
+        // 선불회원 등록 (자점회원)
+        result = mapper.registMemberPrepaid(registVO);
+        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
 
         // 회원-거래처 매핑코드 등록 (보나비)
         if( registVO.getCdCompany() != null && registVO.getCdPartner() != null ){

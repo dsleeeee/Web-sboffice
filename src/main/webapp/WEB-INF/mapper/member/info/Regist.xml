@@ -270,7 +270,48 @@
         ]]>
     </insert>
 
-    <!-- 회원정보 수정 -->
+    <!-- 선불회원 등록 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_PREPAID_STORE
+        COMMENTS : 선불회원 등록
+    -->
+    <insert id="registMemberPrepaid" parameterType="registVO">
+        /* RegistMapper.registMemberPrepaid */
+        MERGE INTO TB_MB_MEMBER_PREPAID_STORE tmmps
+        USING DUAL
+           ON (tmmps.MEMBR_ORGN_CD = #{membrOrgnCd} AND tmmps.MEMBR_NO = #{membrNo})
+         WHEN MATCHED THEN
+       UPDATE
+          SET tmmps.STORE_CD = #{regStoreCd},
+              tmmps.USE_YN = #{useYn},
+              tmmps.MOD_DT = #{modDt},
+              tmmps.MOD_ID = #{modId}
+         WHEN NOT MATCHED THEN
+         INSERT
+         (
+             tmmps.MEMBR_ORGN_CD,
+             tmmps.MEMBR_NO,
+             tmmps.STORE_CD,
+             tmmps.USE_YN,
+             tmmps.REG_DT,
+             tmmps.REG_ID,
+             tmmps.MOD_DT,
+             tmmps.MOD_ID
+         )
+         VALUES
+         (
+             #{membrOrgnCd},
+             #{membrNo},
+             #{regStoreCd},
+             #{useYn},
+             #{regDt},
+             #{regId},
+             #{modDt},
+             #{modId}
+         )
+  </insert>
+
+  <!-- 회원정보 수정 -->
     <!--
         TABLE    : TB_MB_MEMBER
         COMMENTS : 회원정보 수정

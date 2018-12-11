@@ -4,6 +4,8 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
+import kr.co.common.exception.JsonException;
+import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
@@ -60,15 +62,18 @@ public class RegistController {
 
     private final RegistService registService;
     private final SessionService sessionService;
+    private final MessageService messageService;
+
     private final CmmCodeUtil cmmCodeUtil;
     private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
-    public RegistController(RegistService registService, SessionService sessionService,
+    public RegistController(RegistService registService, SessionService sessionService,MessageService messageService,
         CmmCodeUtil cmmCodeUtil, CmmEnvUtil cmmEnvUtil) {
         this.registService = registService;
         this.sessionService = sessionService;
+        this.messageService = messageService;
         this.cmmCodeUtil = cmmCodeUtil;
         this.cmmEnvUtil = cmmEnvUtil;
     }
@@ -182,7 +187,8 @@ public class RegistController {
             registVO.setWeddingday(registVO.getWeddingday().replaceAll("-",""));
         }
 
-       int result = registService.registMemberInfo(registVO, sessionInfoVO);
+        // 회원 등록
+        int result = registService.registMemberInfo(registVO, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }
