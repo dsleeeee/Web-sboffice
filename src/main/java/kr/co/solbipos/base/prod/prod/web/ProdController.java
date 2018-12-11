@@ -148,7 +148,7 @@ public class ProdController {
     }
 
     /***
-     * 상품적용매장 t삭제
+     * 상품적용매장 삭제
      * @param prodVOs
      * @param request
      * @return

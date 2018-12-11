@@ -5,6 +5,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.jsp.CmmEnvUtil;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.prod.service.ProdService;
@@ -116,9 +117,11 @@ public class ProdServiceImpl implements ProdService {
             prodExist = prodMapper.getProdExistInfo(prodVO);
         }
 
-        // 상품코드 조회
-        String prodCd = prodMapper.getProdCd(prodVO);
-        prodVO.setProdCd(prodCd);
+        // 상품 신규등록일때 상품코드 조회
+        if( StringUtil.isEmpties( prodVO.getProdCd())) {
+            String prodCd = prodMapper.getProdCd(prodVO);
+            prodVO.setProdCd(prodCd);
+        }
 
         // 상품정보 저장
         int result = prodMapper.saveProductInfo(prodVO);
@@ -153,6 +156,7 @@ public class ProdServiceImpl implements ProdService {
         // [판매가 - 본사통제시] 본사에서 상품정보 수정시 매장에 수정정보 내려줌
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ  && priceEnvstVal == PriceEnvFg.HQ) {
             String storeSalePriceReeulst = prodMapper.saveStoreSalePrice(prodVO);
+            LOGGER.info("storeSalePrice : " + storeSalePriceReeulst);
         }
 
         return result;
@@ -193,6 +197,9 @@ public class ProdServiceImpl implements ProdService {
             // 해당 매장에 본사 상품 등록
             int hqProdResult = prodMapper.insertProdStoreDetail(prodVO);
             if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+            // [판매가 - 본사통제시] 본사에서 상품정보 수정시 매장에 수정정보 내려줌
+            String storeSalePriceReeulst = prodMapper.saveStoreSalePrice(prodVO);
 
         }
         return procCnt;
