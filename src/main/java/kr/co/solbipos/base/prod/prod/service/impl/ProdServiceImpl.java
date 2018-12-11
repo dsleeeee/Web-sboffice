@@ -45,9 +45,9 @@ public class ProdServiceImpl implements ProdService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
+    private final MessageService messageService;
     private final ProdMapper prodMapper;
     private final CmmEnvUtil cmmEnvUtil;
-    private final MessageService messageService;
 
     /** Constructor Injection */
     @Autowired
@@ -122,6 +122,11 @@ public class ProdServiceImpl implements ProdService {
             String prodCd = prodMapper.getProdCd(prodVO);
             prodVO.setProdCd(prodCd);
         }
+
+        // 매장에서 매장상품 등록시에 가격관리 구분 등록
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ)  prodVO.setPrcCtrlFg("H"); //본사
+        else                                        prodVO.setPrcCtrlFg("S"); //매장
+
 
         // 상품정보 저장
         int result = prodMapper.saveProductInfo(prodVO);

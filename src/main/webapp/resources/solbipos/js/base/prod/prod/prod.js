@@ -14,9 +14,14 @@
 var app = agrid.getApp();
 
 // 사용여부 콤보는 별도 조회하지 않고 고정적으로 사용
+var useYnAllComboData = [
+  {"name": "전체", "value": ""},
+  {"name": "사용", "value": "Y"},
+  {"name": "미사용", "value": "N"}
+];
 var useYnComboData = [
-  {"name": "미사용", "value": "N"},
-  {"name": "사용", "value": "Y"}
+  {"name": "사용", "value": "Y"},
+  {"name": "미사용", "value": "N"}
 ];
 
 /**
@@ -25,6 +30,10 @@ var useYnComboData = [
 app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('prodCtrl', $scope, $http, false));
+
+  // 상품 본사통제구분 (H : 본사, S: 매장)
+  $scope.prodEnvstVal = prodEnvstVal;
+
   // 상품 상세 정보
   $scope.prodInfo = {};
   $scope.setProdInfo = function(data){
@@ -42,6 +51,9 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 콤보박스 데이터 Set
   $scope._setComboData('listScaleBox', gvListScaleBoxData);
+  // 사용여부를 쓰는 콤보박스의 데이터 (조회용)
+  $scope._setComboData('useYnAllComboData', useYnAllComboData);
+
   // 사용여부를 쓰는 콤보박스의 데이터
   $scope._setComboData('useYnComboData', useYnComboData);
   // 상품유형 콤보박스
@@ -60,8 +72,14 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._getComboDataQuery('095', 'setProdFgComboData');
   // 봉사료포함여부 콤보박스
   $scope._getComboDataQuery('058', 'prodTipYnComboData');
+
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
+
+    // 그리드에서 사용하는 dataMap 초기화
+    $scope.useYnComboDataMap = new wijmo.grid.DataMap(useYnComboData, 'value', 'name');
+
     // 그리드 포맷
     s.formatItem.addHandler(function (s, e) {
       if (e.panel === s.cells) {

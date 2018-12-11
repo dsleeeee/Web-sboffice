@@ -4,9 +4,12 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.prod.prod.service.ProdService;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
+import kr.co.solbipos.base.prod.prod.service.enums.PriceEnvFg;
+import kr.co.solbipos.base.prod.prod.service.enums.ProdEnvFg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,12 +47,14 @@ public class ProdController {
 
     private final SessionService sessionService;
     private final ProdService prodService;
+    private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
-    public ProdController(SessionService sessionService, ProdService prodService) {
+    public ProdController(SessionService sessionService, ProdService prodService, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
         this.prodService = prodService;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /**
@@ -63,6 +68,17 @@ public class ProdController {
 
     @RequestMapping(value = "/view.sb", method = RequestMethod.GET)
     public String view(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 상품등록 본사 통제여부
+        ProdEnvFg prodEnvstVal = ProdEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0020"));
+        // 판매가 본사 통제여부
+        PriceEnvFg priceEnvstVal = PriceEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0022"));
+
+        model.addAttribute("prodEnvstVal", prodEnvstVal);
+        model.addAttribute("priceEnvstVal", priceEnvstVal);
+
         return "base/prod/prod/prod";
     }
 
@@ -76,7 +92,9 @@ public class ProdController {
     @RequestMapping(value = "/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getProdList(ProdVO prodVO, HttpServletRequest request) {
+
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
         List<DefaultMap<String>> list = prodService.getProdList(prodVO, sessionInfoVO);
 
         return returnListJson(Status.OK, list, prodVO);

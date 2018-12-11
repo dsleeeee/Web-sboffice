@@ -6,11 +6,19 @@
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="prodEnvstVal" value="${prodEnvstVal}" />
+<c:set var="priceEnvstVal" value="${priceEnvstVal}" />
 
 <div class="subCon" ng-controller="prodCtrl">
   <%--searchTbl--%>
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+      <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('prodCtrl', 1)">
+        <s:message code="cmm.search" />
+      </button>
+    </div>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -81,15 +89,30 @@
           <input type="text" class="sb-input w100" id="srchBarCd" ng-model="barCd" />
         </td>
       </tr>
+      <tr>
+        <%-- 사용여부 --%>
+        <th><s:message code="prod.useYn" /></th>
+        <td>
+          <div class="sb-select">
+            <wj-combo-box
+                    id="srchUseYn"
+                    ng-model="useYn"
+                    control="useYnAllCombo"
+                    items-source="_getComboData('useYnAllComboData')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="_initComboBox(s)">
+            </wj-combo-box>
+          </div>
+        </td>
+        <th></th>
+        <td></td>
+      </tr>
     </tbody>
   </table>
   <%--//searchTbl--%>
 
-  <div class="mt10 oh">
-    <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('prodCtrl', 1)" >
-      <s:message code="cmm.search" />
-    </button>
-  </div>
 
   <div class="mt40 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
@@ -131,7 +154,7 @@
         item-formatter="_itemFormatter">
 
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="prod.prodClass"/>" binding="prodClassNm" width="300" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="prod.prodCd"/>" binding="prodCd" width="150" is-read-only="true" ></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="prod.prodNm"/>" binding="prodNm" width="410" is-read-only="true"></wj-flex-grid-column>
@@ -145,6 +168,7 @@
         <wj-flex-grid-column header="<s:message code="prod.saleUprc"/>" binding="saleUprc" width="100" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="prod.orgplceCd"/>" binding="orgplceCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column><!--// todo 원산지명 조회 필요-->
         <wj-flex-grid-column header="<s:message code="prod.poUnitFg"/>" binding="poUnitFg" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.useYn"/>" binding="useYn" width="100" data-map="useYnComboDataMap" is-read-only="true" align="center"></wj-flex-grid-column>
 
       </wj-flex-grid>
       <%-- ColumnPicker 사용시 include --%>
@@ -164,6 +188,14 @@
   <%--//페이지 리스트--%>
 
 </div>
+<script>
+  var prodEnvstVal = "${prodEnvstVal}";
+  var priceEnvstVal = "${priceEnvstVal}";
+
+  console.log('prodEnvstVal',prodEnvstVal);
+  console.log('priceEnvstVal',priceEnvstVal);
+
+</script>
 
 <script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20181203.01" charset="utf-8"></script>
 
