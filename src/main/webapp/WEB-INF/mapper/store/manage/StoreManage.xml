@@ -466,7 +466,7 @@
             USER_PWD,
             AUTH_GRP_CD,
             LOGIN_FAIL_CNT,
-            LAST_PWD_CHG_DT
+            LAST_PWD_CHG_DT,
             USER_STAT_FG,
             USE_YN,
             REG_DT,
