@@ -1,6 +1,8 @@
 package kr.co.solbipos.store.manage.pwdmanage.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.store.manage.pwdmanage.enums.EmpOrgnFg;
 import kr.co.solbipos.store.manage.pwdmanage.enums.PwdChgFg;
 
 /**
@@ -20,8 +22,10 @@ import kr.co.solbipos.store.manage.pwdmanage.enums.PwdChgFg;
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 public class PwdManageVO extends PageVO {
-    
+
     private static final long serialVersionUID = 6990091657881306739L;
+    /** 대리점코드 */
+    private String agencyCd;
     /** 본사코드 */
     private String hqOfficeCd;
     /** 본사명 */
@@ -58,8 +62,27 @@ public class PwdManageVO extends PageVO {
     private String lastPwdChgDt;
     /** 비밀번호 변경구분 */
     private PwdChgFg pwdChgFg;
-    
-    
+    /** 소속구분 */
+    private OrgnFg orgnFg;
+    /** 조회 사원 구분 */
+    private EmpOrgnFg empOrgnFg;
+
+
+    /**
+     * @return the agencyCd
+     */
+
+    public String getAgencyCd() {
+        return agencyCd;
+    }
+
+    /**
+     * @param agencyCd the agencyCd to set
+     */
+    public void setAgencyCd(String agencyCd) {
+        this.agencyCd = agencyCd;
+    }
+
     /**
      * @return the hqOfficeCd
      */
@@ -275,5 +298,35 @@ public class PwdManageVO extends PageVO {
      */
     public void setPwdChgFg(PwdChgFg pwdChgFg) {
         this.pwdChgFg = pwdChgFg;
+    }
+
+    /**
+     * @return the orgnFg
+     */
+
+    public OrgnFg getOrgnFg() {
+        return orgnFg;
+    }
+
+    /**
+     * @param orgnFg the orgnFg to set
+     */
+    public void setOrgnFg(OrgnFg orgnFg) {
+        this.orgnFg = orgnFg;
+    }
+
+    /**
+     * @return the empOrgnFg
+     */
+
+    public EmpOrgnFg getEmpOrgnFg() {
+        return empOrgnFg;
+    }
+
+    /**
+     * @param empOrgnFg the empOrgnFg to set
+     */
+    public void setEmpOrgnFg(EmpOrgnFg empOrgnFg) {
+        this.empOrgnFg = empOrgnFg;
     }
 }

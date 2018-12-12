@@ -22,9 +22,50 @@
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT emp.*
         <include refid="CmmSQL.PagingTemplateCount"/>
-        FROM (
+          FROM (
+            <if test='orgnFg != null and orgnFg.toString() != "STORE"'>
                 SELECT
-                    'S' AS EMP_FG,
+                    'H' AS EMP_ORGN_FG,
+                    tho.HQ_OFFICE_CD,
+                    tho.HQ_OFFICE_NM,
+                    '' AS STORE_CD,
+                    '' AS STORE_NM,
+                    the.EMP_NO,
+                    the.EMP_NM AS USER_NM,
+                    the.USER_ID,
+                    the.SERVICE_FG,
+                    the.WEB_USE_YN,
+                    the.MP_NO,
+                    '' AS EMAIL_ADDR,
+                    '' AS ADDR
+                FROM
+                    TB_HQ_EMPLOYEE the
+                INNER JOIN TB_HQ_OFFICE tho ON
+                    the.HQ_OFFICE_CD = tho.HQ_OFFICE_CD
+
+                LEFT OUTER JOIN TB_CM_NMCODE tcn ON
+                    the.SERVICE_FG = tcn.NMCODE_CD
+                AND tcn.NMCODE_GRP_CD = '008'
+                <where>
+                    <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+                        AND the.HQ_OFFICE_CD = #{hqOfficeCd}
+                    </if>
+                    <if test='hqOfficeNm != null and hqOfficeNm != ""'>
+                     <![CDATA[
+                        AND tho.HQ_OFFICE_NM LIKE #{hqOfficeNm} || '%'
+                     ]]>
+                    </if>
+                    <if test='userId != null and userId != ""'>
+                        AND the.USER_ID LIKE #{userId}||'%'
+                    </if>
+                    <if test='userNm != null and userNm != ""'>
+                        AND the.EMP_NM LIKE #{userNm}||'%'
+                    </if>
+                </where>
+                UNION ALL
+            </if>
+                SELECT
+                    'S' AS EMP_ORGN_FG,
                     tho.HQ_OFFICE_CD,
                     tho.HQ_OFFICE_NM,
                     tms.STORE_CD,
@@ -39,7 +80,7 @@
                     tme.ADDR || tme.ADDR_DTL AS ADDR
                 FROM
                   TB_MS_EMPLOYEE tme
-                LEFT OUTER JOIN TB_MS_STORE tms ON
+                INNER JOIN TB_MS_STORE tms ON
                   tme.STORE_CD = tms.STORE_CD
                 LEFT OUTER JOIN TB_HQ_OFFICE tho ON
                   tms.HQ_OFFICE_CD = tho.HQ_OFFICE_CD
@@ -47,7 +88,7 @@
                     tme.SERVICE_FG = tcn.NMCODE_CD
                     AND tcn.NMCODE_GRP_CD = '008'
                 WHERE
-                  tho.HQ_OFFICE_CD != '00000'
+                  1=1
                 <if test='hqOfficeCd != null and hqOfficeCd != ""'>
                     AND tho.HQ_OFFICE_CD = #{hqOfficeCd}
                 </if>
@@ -68,46 +109,13 @@
                     AND tme.USER_ID LIKE #{userId}||'%'
                 </if>
                 <if test='userNm != null and userNm != ""'>
-                    AND tme.USER_NM LIKE #{userNm}||'%'
+                    AND tme.EMP_NM LIKE #{userNm}||'%'
                 </if>
-                UNION
-                SELECT
-                    'H' AS EMP_FG,
-                    tho.HQ_OFFICE_CD,
-                    tho.HQ_OFFICE_NM,
-                    '' AS STORE_CD,
-                    '' AS STORE_NM,
-                    the.EMP_NO,
-                    the.EMP_NM AS USER_NM,
-                    the.USER_ID,
-                    the.SERVICE_FG,
-                    the.WEB_USE_YN,
-                    the.MP_NO,
-                    '' AS EMAIL_ADDR,
-                    '' AS ADDR
-                FROM
-                  TB_HQ_EMPLOYEE the
-                LEFT OUTER JOIN TB_HQ_OFFICE tho ON
-                  the.HQ_OFFICE_CD = tho.HQ_OFFICE_CD
-                LEFT OUTER JOIN TB_CM_NMCODE tcn ON
-                    the.SERVICE_FG = tcn.NMCODE_CD
-                    AND tcn.NMCODE_GRP_CD = '008'
-                <if test='hqOfficeCd != null and hqOfficeCd != ""'>
-                    AND the.HQ_OFFICE_CD = #{hqOfficeCd}
-                </if>
-                <if test='hqOfficeNm != null and hqOfficeNm != ""'>
-                    <![CDATA[
-                    AND tho.HQ_OFFICE_NM LIKE #{hqOfficeNm} || '%'
-                    ]]>
-                </if>
-                <if test='userId != null and userId != ""'>
-                    AND the.USER_ID LIKE #{userId}||'%'
-                </if>
-                <if test='userNm != null and userNm != ""'>
-                    AND the.USER_NM LIKE #{userNm}||'%'
-                </if>
-        ) emp
-        ORDER BY emp.HQ_OFFICE_CD DESC, emp.STORE_CD DESC, emp.USER_NM
+          ) emp
+        <if test='empOrgnFg != null and empOrgnFg.toString() != ""'>
+            WHERE emp.EMP_ORGN_FG = #{empOrgnFg}
+        </if>
+        ORDER BY emp.EMP_ORGN_FG ASC, emp.HQ_OFFICE_CD ASC, emp.STORE_CD ASC, emp.USER_NM
        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
@@ -129,12 +137,14 @@
                     USER_ID = #{userId}
             </when>
             <otherwise>
-                SELECT
-                    EMP_PWD
-                FROM
-                    TB_MS_EMPLOYEE
-                WHERE
-                    EMP_NO = #{empNo}
+                  SELECT
+                      EMP_PWD
+                  FROM
+                      TB_MS_EMPLOYEE
+                  WHERE
+                      STORE_CD = #{storeCd}
+                    AND
+                      EMP_NO = #{empNo}
             </otherwise>
         </choose>
     </select>
