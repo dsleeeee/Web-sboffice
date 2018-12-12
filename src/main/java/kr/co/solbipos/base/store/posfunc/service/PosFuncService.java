@@ -53,7 +53,11 @@ public interface PosFuncService {
     /** 포스기능 인증허용대상 조회 */
     List<DefaultMap<String>> getAuthEmpList(PosFuncVO posFuncVO);
 
+    /** 포스기능 인증관리 인증여부 저장 */
+    int savePosAuthConf(PosFuncVO[] posFuncVOs, SessionInfoVO sessionInfoVO);
+
     /** 포스기능 인증허용대상 저장 */
     int saveAuthEmp(PosFuncVO[] posFuncVOs, SessionInfoVO sessionInfoVO);
+
 
 }

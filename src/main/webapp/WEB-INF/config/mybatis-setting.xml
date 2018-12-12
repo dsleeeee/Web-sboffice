@@ -286,6 +286,7 @@
 -->
     <typeAlias alias="registVO" type="kr.co.solbipos.membr.info.regist.service.RegistVO"/>
     <typeAlias alias="membrClassVO" type="kr.co.solbipos.membr.info.grade.service.MembrClassVO"/>
+    <typeAlias alias="memberMappingVO" type="kr.co.solbipos.membr.info.regist.service.MemberMappingVO"/>
     <typeAlias alias="postpaidStoreVO" type="kr.co.solbipos.membr.anals.postpaid.service.PostpaidStoreVO"/>
     <typeAlias alias="prepaidStoreVO" type="kr.co.solbipos.membr.anals.prepaid.service.PrepaidStoreVO"/>
     <typeAlias alias="hqStoreMoveVO" type="kr.co.solbipos.iostock.move.hqStoreMove.service.HqStoreMoveVO"/>

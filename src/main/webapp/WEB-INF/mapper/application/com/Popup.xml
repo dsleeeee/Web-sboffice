@@ -49,14 +49,13 @@
       SELECT AGENCY_CD,
              AGENCY_NM
         FROM TB_CM_AGENCY
-      <where>
+       WHERE P_AGENCY_CD IS NOT NULL
         <if test='agencyCd != null and agencyCd != ""'>
-             AGENCY_CD = #{agencyCd}
+         AND AGENCY_CD = #{agencyCd}
         </if>
         <if test='agencyNm != null and agencyNm != ""'>
          AND AGENCY_NM LIKE '%'||#{agencyNm}||'%'
         </if>
-      </where>
        ORDER BY AGENCY_CD ASC
     </select>
 

@@ -65,6 +65,8 @@ public class ProdVO extends PageVO {
     private String sideProdYn;
     /** 세트상품구분 */
     private String setProdFg;
+    /** 가격관리구분 */
+    private String prcCtrlFg;
     /** 원가단가 */
     private Double costUprc;
     /** 최종원가단가 */
@@ -408,6 +410,22 @@ public class ProdVO extends PageVO {
      */
     public void setSetProdFg(String setProdFg) {
         this.setProdFg = setProdFg;
+    }
+
+
+    /**
+     * @return the prcCtrlFg
+     */
+
+    public String getPrcCtrlFg() {
+        return prcCtrlFg;
+    }
+
+    /**
+     * @param prcCtrlFg the prcCtrlFg to set
+     */
+    public void setPrcCtrlFg(String prcCtrlFg) {
+        this.prcCtrlFg = prcCtrlFg;
     }
 
     /**

@@ -264,6 +264,7 @@
                tce.MP_NO = #{mpNo},
                tce.SERVICE_FG = #{serviceFg},
                tce.SMS_RECV_YN = #{smsRecvYn},
+               tce.ADMIN_FG = #{adminFg},
                tce.MAP_EMP_NO = #{mapEmpNo},
                tce.USE_YN = #{useYn},
                tce.REMARK = #{remark},

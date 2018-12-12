@@ -433,6 +433,27 @@
             tme.STORE_CD = #{storeCd}
     </select>
 
+    <!-- 포스기능 인증관리 인증여부 저장 -->
+    <!--
+        TABLE    : TB_MS_STORE_FNKEY
+        PARAM    : DefaultMap
+        COMMENTS : 포스기능 인증관리 인증여부 저장.
+    -->
+    <update id="savePosAuthConf" parameterType="posFuncVO">
+        /* USE : PosFuncMapper.savePosAuthConf */
+        UPDATE
+            TB_MS_STORE_FNKEY tmsf
+        SET
+            tmsf.AUTH_YN = #{authYn},
+            tmsf.MOD_DT = #{modDt},
+            tmsf.MOD_ID = #{modId}
+        WHERE
+            tmsf.STORE_CD = #{storeCd}
+          AND
+            tmsf.FNKEY_NO = #{fnkeyNo}
+    </update>
+
+
     <!-- 포스기능 인증허용대상 저장 -->
     <!--
       TABLE    : TB_MS_POS_FNKEY

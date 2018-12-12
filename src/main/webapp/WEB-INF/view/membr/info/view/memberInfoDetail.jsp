@@ -152,6 +152,15 @@
               </td>
             </tr>
             <tr>
+              <%-- 거래처 매핑코드 --%>
+              <th><s:message code="regist.membr.mappingCd" /></th>
+              <td>
+                {{member.lnPartner}}
+              </td>
+              <th></th>
+              <td></td>
+            </tr>
+            <tr>
                 <%-- E-mail --%>
               <th><s:message code="regist.email" /></th>
               <td colspan="3">{{member.emailAddr}}</td>

@@ -106,8 +106,10 @@ public class RegistVO extends PageVO {
     private String periodEndDate;
     /** 후불회원 적용매장코드 */
     private String postpaidStoreCds;
-
-
+    /** 회원 거래처 매핑코드 (회사코드)*/
+    private String cdCompany;
+    /** 회원 거래처 매핑코드 (거래처코드)*/
+    private String cdPartner;
     /**
      * @return the orgnFg
      */
@@ -616,5 +618,35 @@ public class RegistVO extends PageVO {
      */
     public void setPostpaidStoreCds(String postpaidStoreCds) {
         this.postpaidStoreCds = postpaidStoreCds;
+    }
+
+    /**
+     * @return the cdCompany
+     */
+
+    public String getCdCompany() {
+        return cdCompany;
+    }
+
+    /**
+     * @param cdCompany the cdCompany to set
+     */
+    public void setCdCompany(String cdCompany) {
+        this.cdCompany = cdCompany;
+    }
+
+    /**
+     * @return the cdPartner
+     */
+
+    public String getCdPartner() {
+        return cdPartner;
+    }
+
+    /**
+     * @param cdPartner the cdPartner to set
+     */
+    public void setCdPartner(String cdPartner) {
+        this.cdPartner = cdPartner;
     }
 }

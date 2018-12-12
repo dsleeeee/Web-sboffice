@@ -456,6 +456,7 @@
         TABLE    : TB_WB_USER_INFO
         PARAM    : storeManageVO
         COMMENTS : 웹 사용자를 등록한다.
+                   현재 권한은 보나비 임시로 '000008'이 들어간다.
     -->
     <insert id="insertStoreWebUser" parameterType="storeManageVO">
         /* USE : StoreManageMapper.insertStoreWebUser */
@@ -465,7 +466,7 @@
             USER_PWD,
             AUTH_GRP_CD,
             LOGIN_FAIL_CNT,
-            LAST_PWD_CHG_DT
+            LAST_PWD_CHG_DT,
             USER_STAT_FG,
             USE_YN,
             REG_DT,
@@ -477,7 +478,7 @@
         (
             #{userId},
             #{userPwd},
-            '000008', --TODO 보나비 임시 (사용자 권한 화면에서 입력 필요)
+            '000008',
             0,
             #{regDt},
             '99',
