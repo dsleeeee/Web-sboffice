@@ -44,6 +44,7 @@
                     TB_HQ_PRODUCT thp
                 LEFT OUTER JOIN (
                     SELECT
+                        HQ_OFFICE_CD,
                         PROD_CD,
                         MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
                             ORDER BY
@@ -58,9 +59,10 @@
                         ]]>
                         AND SALE_PRC_FG = '1' -- 본사, 매장 구분이 필요한지 확인. 무시면 조건 제거
                     GROUP BY
-                        PROD_CD
+                        HQ_OFFICE_CD, PROD_CD
                     ) thpsp ON
-                    thp.PROD_CD = thpsp.PROD_CD
+                    thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
+                    AND thp.PROD_CD = thpsp.PROD_CD
                 WHERE
                     thp.HQ_OFFICE_CD = #{hqOfficeCd}
                 <if test="chkDt == false">
@@ -117,6 +119,7 @@
                     TB_MS_PRODUCT tmp
                 LEFT OUTER JOIN (
                     SELECT
+                        STORE_CD,
                         PROD_CD,
                         MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
                             ORDER BY
@@ -131,9 +134,10 @@
                         ]]>
                         AND SALE_PRC_FG = '1' -- 본사, 매장 구분이 필요한지 확인. 무시면 조건 제거
                     GROUP BY
-                        PROD_CD
+                        STORE_CD, PROD_CD
                     ) thpsp ON
-                    tmp.PROD_CD = thpsp.PROD_CD
+                    tmp.STORE_CD = thpsp.STORE_CD
+                    AND tmp.PROD_CD = thpsp.PROD_CD
                 WHERE
                     tmp.STORE_CD = #{storeCd}
                 <if test="chkDt == false">
@@ -225,6 +229,7 @@
                     TB_HQ_PRODUCT thp
                 LEFT OUTER JOIN (
                     SELECT
+                        HQ_OFFICE_CD,
                         PROD_CD,
                         MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
                             ORDER BY
@@ -239,8 +244,10 @@
                         ]]>
                         AND SALE_PRC_FG = '1' -- 본사, 매장 구분이 필요한지 확인. 무시면 조건 제거
                     GROUP BY
-                        PROD_CD
-                    ) thpsp ON thp.PROD_CD = thpsp.PROD_CD
+                        HQ_OFFICE_CD, PROD_CD
+                    ) thpsp ON
+                    thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
+                    AND thp.PROD_CD = thpsp.PROD_CD
                 WHERE
                     thp.HQ_OFFICE_CD = #{hqOfficeCd}
                     AND thp.PROD_CD = #{prodCd}
@@ -288,6 +295,7 @@
                     TB_MS_PRODUCT tmp
                 LEFT OUTER JOIN (
                     SELECT
+                        STORE_CD,
                         PROD_CD,
                         MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
                             ORDER BY
@@ -302,8 +310,10 @@
                         ]]>
                         AND SALE_PRC_FG = '2' -- 본사, 매장 구분이 필요한지 확인. 무시면 조건 제거
                     GROUP BY
-                        PROD_CD
-                    ) tmpsp ON tmp.PROD_CD = tmpsp.PROD_CD
+                        STORE_CD, PROD_CD
+                    ) tmpsp ON
+                    tmp.STORE_CD = tmpsp.STORE_CD
+                    AND tmp.PROD_CD = tmpsp.PROD_CD
                 WHERE
                     tmp.STORE_CD = #{storeCd}
                     AND tmp.PROD_CD = #{prodCd}
@@ -828,10 +838,13 @@
     -->
     <select id="getProdExistInfo" parameterType="prodVO" resultType="Integer" >
         /* USE : ProdMapper.getProdExistInfo */
-        SELECT COUNT(*) AS PROD_COUNT
-          FROM TB_HQ_PRODUCT thp
-         WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
-           AND thp.PROD_CD = #{prodCd}
+        SELECT
+            COUNT(*) AS PROD_COUNT
+          FROM
+            TB_HQ_PRODUCT thp
+         WHERE
+            thp.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND thp.PROD_CD = #{prodCd}
     </select>
 
 
@@ -883,30 +896,33 @@
     -->
     <select id="getStoreList" parameterType="prodVO" resultType="DefaultMap">
         /* USE : ProdMapper.getStoreList */
-        SELECT tms.HQ_OFFICE_CD,
-               tho.HQ_OFFICE_NM,
-               tms.STORE_CD,
-               tms.STORE_NM,
-               NVL2(thps.STORE_CD, 'Y', 'N') AS REG_YN
-          FROM TB_MS_STORE tms,
-               TB_HQ_OFFICE tho,
-               TB_HQ_PRODUCT_STORE thps
-         WHERE tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
-           AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
-           AND thps.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
-           AND thps.STORE_CD (+)= tms.STORE_CD
-           AND thps.PROD_CD (+)= #{prodCd}
+        SELECT
+            tms.HQ_OFFICE_CD,
+            tho.HQ_OFFICE_NM,
+            tms.STORE_CD,
+            tms.STORE_NM,
+            NVL2(thps.STORE_CD, 'Y', 'N') AS REG_YN
+        FROM
+            TB_MS_STORE tms,
+            TB_HQ_OFFICE tho,
+            TB_HQ_PRODUCT_STORE thps
+        WHERE
+            tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+            AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND thps.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
+            AND thps.STORE_CD (+)= tms.STORE_CD
+            AND thps.PROD_CD (+)= #{prodCd}
         <if test='storeCd != null and storeCd.toString() != "null"'>
-           AND tms.STORE_CD = #{storeCd}
+            AND tms.STORE_CD = #{storeCd}
         </if>
         <if test='storeNm != null and storeNm.toString() != "null"'>
-           AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
         </if>
         <if test='storeRegFg != null and storeRegFg.toString() == "Y"'>
-           AND thps.STORE_CD IS NOT NULL
+            AND thps.STORE_CD IS NOT NULL
         </if>
         <if test='storeRegFg != null and storeRegFg.toString() == "N"'>
-           AND thps.STORE_CD IS NULL
+            AND thps.STORE_CD IS NULL
         </if>
         ORDER BY tms.STORE_CD ASC
     </select>
@@ -919,7 +935,7 @@
     -->
     <insert id="insertProdStore" parameterType="prodVO">
         /* USE : ProdMapper.insertProdStore */
-        INSERT  INTO TB_HQ_PRODUCT_STORE
+        INSERT INTO TB_HQ_PRODUCT_STORE
         (
           HQ_OFFICE_CD,
           PROD_CD,
@@ -950,11 +966,49 @@
     <insert id="insertProdStoreDetail" parameterType="prodVO">
         /* USE : ProdMapper.insertProdStoreDetail */
         MERGE INTO TB_MS_PRODUCT tmp
-        USING ( SELECT #{storeCd} AS STORE_CD,
-                      thp.*
-                 FROM TB_HQ_PRODUCT thp
-                WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
-                  AND thp.PROD_CD = #{prodCd} ) thp
+        USING ( SELECT
+                    #{storeCd} AS STORE_CD,
+                    thp.HQ_OFFICE_CD,
+                    thp.PROD_CD,
+                    thp.PROD_NM,
+                    thp.PROD_CLASS_CD,
+                    thp.CORNR_CD,
+                    thp.ORGPLCE_CD,
+                    thp.SDATTR_CLASS_CD,
+                    thp.SDSEL_GRP_CD,
+                    thp.POINT_SAVE_YN,
+                    thp.PROD_DC_FG,
+                    thp.VAT_FG,
+                    thp.PROD_TIP_YN,
+                    thp.PROD_PACK_AMT,
+                    thp.PROD_DLVR_AMT,
+                    thp.PROD_TYPE_FG,
+                    thp.SALE_PROD_YN,
+                    thp.STOCK_PROD_YN,
+                    thp.SIDE_PROD_YN,
+                    thp.SET_PROD_FG,
+                    thp.COST_UPRC,
+                    thp.LAST_COST_UPRC,
+                    thp.SPLY_UPRC,
+                    thp.SPLY_UPRC_USE_YN,
+                    thp.PO_PROD_FG,
+                    thp.PO_UNIT_FG,
+                    thp.PO_UNIT_QTY,
+                    thp.PO_UNIT_ALLOW_FG,
+                    thp.PO_MIN_QTY,
+                    thp.SAFE_STOCK_QTY,
+                    thp.STOCK_UNIT_FG,
+                    thp.USE_YN,
+                    thp.REMARK,
+                    thp.REG_DT,
+                    thp.REG_ID,
+                    thp.MOD_DT,
+                    thp.MOD_ID
+               FROM
+                   TB_HQ_PRODUCT thp
+               WHERE
+                   thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND thp.PROD_CD = #{prodCd} ) thp
            ON ( tmp.STORE_CD = thp.STORE_CD
             AND tmp.PROD_CD  = thp.PROD_CD )
         WHEN MATCHED THEN

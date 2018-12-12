@@ -25,9 +25,6 @@ app.controller('sideMenuAttrClassCtrl', ['$scope', '$http', function ($scope, $h
           var item = s.rows[e.row].dataItem;
           if (item.status !== 'I') {
             wijmo.addClass(e.cell, 'wijLink');
-            wijmo.addClass(e.cell, 'wj-custom-readonly');
-          } else {
-            wijmo.removeClass(e.cell, 'wj-custom-readonly');
           }
         }
       }
@@ -74,8 +71,9 @@ app.controller('sideMenuAttrClassCtrl', ['$scope', '$http', function ($scope, $h
     var params = {};
     params.status = 'I';
     params.gChk = true;
+    params.sdattrClassCd = '자동채번';
     // 추가기능 수행 : 파라미터
-    $scope._addRow(params);
+    $scope._addRow(params, 2);
   };
   // 저장
   $scope.save = function() {
@@ -126,9 +124,6 @@ app.controller('sideMenuAttrAttrCtrl', ['$scope', '$http', 'sdattrClassCd', func
           var item = s.rows[e.row].dataItem;
           if (item.status !== 'I') {
             wijmo.addClass(e.cell, 'wijLink');
-            wijmo.addClass(e.cell, 'wj-custom-readonly');
-          } else {
-            wijmo.removeClass(e.cell, 'wj-custom-readonly');
           }
         }
       }
@@ -170,8 +165,9 @@ app.controller('sideMenuAttrAttrCtrl', ['$scope', '$http', 'sdattrClassCd', func
     params.sdattrClassCd = $scope.getSdattrClassCd();
     params.status = 'I';
     params.gChk = true;
+    params.sdattrCd = '자동채번';
     // 추가기능 수행 : 파라미터
-    $scope._addRow(params);
+    $scope._addRow(params, 2);
   };
   // 저장
   $scope.save = function() {

@@ -40,15 +40,19 @@ app.controller('gridCtrl',  ['$scope', '$http', function ($scope, $http) {
         var item = s.rows[e.row].dataItem;
 
         // 본사
-        if (col.binding === "hqOfficeCd" && item.hqOfficeCd !== "00000") {
-          if ( gvOrgnFg === "M" ) {
+        if (col.binding === "hqOfficeCd" && gvOrgnFg === "M") {
+          if (item.hqOfficeCd !== "00000") {
             wijmo.addClass(e.cell, 'wijLink wj-custom-readonly');
+          } else {
+            wijmo.addClass(e.cell, 'wj-custom-readonly');
           }
         }
         // 매장
-        if (col.binding === "storeCd" && item.storeCd !== "00000") {
-          if ( gvOrgnFg !== "S" ) {
+        if (col.binding === "storeCd" && gvOrgnFg !== "S") {
+          if (item.storeCd !== "00000") {
             wijmo.addClass(e.cell, 'wijLink wj-custom-readonly');
+          } else {
+            wijmo.addClass(e.cell, 'wj-custom-readonly');
           }
         }
         // 대리점
@@ -118,7 +122,7 @@ app.controller('gridCtrl',  ['$scope', '$http', function ($scope, $http) {
       form.appendChild(formField);
       document.body.appendChild(form);
 
-      var popup = window.open("", value, "width=1024, height=768");
+      var popup = window.open("", value, "width=1024,height=768,resizable=yes,scrollbars=yes");
       var crono = window.setInterval(function () {
         if (popup.closed !== false) { // !== opera compatibility reasons
           window.clearInterval(crono);

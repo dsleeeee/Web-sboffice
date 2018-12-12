@@ -32,6 +32,8 @@
                 WHERE
                     thpsc.HQ_OFFICE_CD = #{hqOfficeCd}
                     AND thpsc.USE_YN = 'Y'
+                ORDER BY
+                    thpsc.SDATTR_CLASS_CD
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -44,6 +46,8 @@
                 WHERE
                     tmpsc.STORE_CD = #{storeCd}
                     AND tmpsc.USE_YN = 'Y'
+                ORDER BY
+                    tmpsc.SDATTR_CLASS_CD
             </when>
         </choose>
     </select>
@@ -73,7 +77,14 @@
                 ) VALUES (
                     #{hqOfficeCd},
                     #{hqBrandCd, jdbcType=VARCHAR},
-                    #{sdattrClassCd},
+                    (
+                        SELECT
+                            LPAD(NVL(MAX(SDATTR_CLASS_CD), '0') + 1, 5, '0')
+                        FROM
+                            TB_HQ_PRODUCT_SDATTR_CLASS
+                        WHERE
+                            HQ_OFFICE_CD = #{hqOfficeCd}
+                    ),
                     #{sdattrClassNm},
                     'Y',
                     #{regDt},
@@ -98,7 +109,14 @@
                 ) VALUES (
                     #{storeCd},
                     #{msBrandCd, jdbcType=VARCHAR},
-                    #{sdattrClassCd},
+                    (
+                        SELECT
+                            LPAD(NVL(MAX(SDATTR_CLASS_CD), '0') + 1, 5, '0')
+                        FROM
+                            TB_MS_PRODUCT_SDATTR_CLASS
+                        WHERE
+                            STORE_CD = #{storeCd}
+                    ),
                     #{sdattrClassNm},
                     'Y',
                     #{regDt},
@@ -202,7 +220,8 @@
                     thps.HQ_OFFICE_CD = #{hqOfficeCd}
                     AND thps.SDATTR_CLASS_CD = #{sdattrClassCd}
                     AND thps.USE_YN = 'Y'
-                ORDER BY thps.DISP_SEQ
+                ORDER BY
+                    thps.DISP_SEQ
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -217,7 +236,8 @@
                     tmps.STORE_CD = #{storeCd}
                     AND tmps.SDATTR_CLASS_CD = #{sdattrClassCd}
                     AND tmps.USE_YN = 'Y'
-                ORDER BY tmps.DISP_SEQ
+                ORDER BY
+                    tmps.DISP_SEQ
             </when>
         </choose>
     </select>
@@ -247,7 +267,14 @@
                     MOD_ID
                 ) VALUES (
                     #{hqOfficeCd},
-                    #{sdattrCd},
+                    (
+                        SELECT
+                            LPAD(NVL(MAX(SDATTR_CD), '0') + 1, 10, '0')
+                        FROM
+                            TB_HQ_PRODUCT_SDATTR
+                        WHERE
+                        HQ_OFFICE_CD = #{hqOfficeCd}
+                    ),
                     #{sdattrNm},
                     #{sdattrClassCd},
                     #{dispSeq},
@@ -274,7 +301,14 @@
                     MOD_ID
                 ) VALUES (
                     #{storeCd},
-                    #{sdattrCd},
+                    (
+                        SELECT
+                            LPAD(NVL(MAX(SDATTR_CD), '0') + 1, 10, '0')
+                        FROM
+                            TB_MS_PRODUCT_SDATTR
+                        WHERE
+                            STORE_CD = #{storeCd}
+                    ),
                     #{sdattrNm},
                     #{sdattrClassCd},
                     #{dispSeq},
@@ -378,6 +412,8 @@
                 WHERE
                     thpsg.HQ_OFFICE_CD = #{hqOfficeCd}
                     AND thpsg.USE_YN = 'Y'
+                ORDER BY
+                    thpsg.SDSEL_GRP_CD
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -390,6 +426,8 @@
                 WHERE
                     tmpsg.STORE_CD = #{storeCd}
                     AND tmpsg.USE_YN = 'Y'
+                ORDER BY
+                    tmpsg.SDSEL_GRP_CD
             </when>
         </choose>
     </select>
@@ -419,7 +457,14 @@
                 ) VALUES (
                     #{hqOfficeCd},
                     #{hqBrandCd},
-                    #{sdselGrpCd},
+                    (
+                        SELECT
+                            LPAD(NVL(MAX(SDSEL_GRP_CD), '0') + 1, 6, '0')
+                        FROM
+                            TB_HQ_PRODUCT_SDSEL_GROUP
+                        WHERE
+                            HQ_OFFICE_CD = #{hqOfficeCd}
+                    ),
                     #{sdselGrpNm},
                     'Y',
                     #{regDt},
@@ -444,7 +489,14 @@
                 ) VALUES (
                     #{storeCd},
                     #{msBrandCd},
-                    #{sdselGrpCd},
+                    (
+                        SELECT
+                            LPAD(NVL(MAX(SDSEL_GRP_CD), '0') + 1, 6, '0')
+                        FROM
+                            TB_MS_PRODUCT_SDSEL_GROUP
+                        WHERE
+                            STORE_CD = #{storeCd}
+                    ),
                     #{sdselGrpNm},
                     'Y',
                     #{regDt},
@@ -549,7 +601,8 @@
                     thpsc.HQ_OFFICE_CD = #{hqOfficeCd}
                     AND thpsc.SDSEL_GRP_CD = #{sdselGrpCd}
                     AND thpsc.USE_YN = 'Y'
-                ORDER BY thpsc.DISP_SEQ
+                ORDER BY
+                    thpsc.DISP_SEQ
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -565,7 +618,8 @@
                     tmpsc.STORE_CD = #{storeCd}
                     AND tmpsc.SDSEL_GRP_CD = #{sdselGrpCd}
                     AND tmpsc.USE_YN = 'Y'
-                ORDER BY tmpsc.DISP_SEQ
+                ORDER BY
+                    tmpsc.DISP_SEQ
             </when>
         </choose>
     </select>
@@ -596,7 +650,14 @@
                     MOD_ID
                 ) VALUES (
                     #{hqOfficeCd},
-                    #{sdselClassCd},
+                    (
+                        SELECT
+                            LPAD(NVL(MAX(SDSEL_CLASS_CD), '0') + 1, 6, '0')
+                        FROM
+                            TB_HQ_PRODUCT_SDSEL_CLASS
+                        WHERE
+                            HQ_OFFICE_CD = #{hqOfficeCd}
+                    ),
                     #{sdselClassNm},
                     #{sdselGrpCd},
                     #{dispSeq},
@@ -625,7 +686,14 @@
                     MOD_ID
                 ) VALUES (
                     #{storeCd},
-                    #{sdselClassCd},
+                    (
+                        SELECT
+                            LPAD(NVL(MAX(SDSEL_CLASS_CD), '0') + 1, 6, '0')
+                        FROM
+                            TB_MS_PRODUCT_SDSEL_CLASS
+                        WHERE
+                            STORE_CD = #{storeCd}
+                    ),
                     #{sdselClassNm},
                     #{sdselGrpCd},
                     #{dispSeq},
@@ -745,8 +813,10 @@
                     AND thp.PROD_CD = #{prodCd} --상품코드
                     </if>
                     <if test="prodNm != null and prodNm != ''">
-                    AND thp.PROD_NM LIKE #{prodNm}||'%' --상품명
+                    AND thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
                     </if>
+                ORDER BY
+                    thp.PROD_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
             <!-- 가맹점 -->
@@ -770,7 +840,9 @@
                     AND tmp.PROD_CD = #{prodCd} --상품코드
                     </if>
                     <if test="prodNm != null and prodNm != ''">
-                    AND tmp.PROD_NM LIKE #{prodNm}||'%' --상품명
+                    AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+                ORDER BY
+                    tmp.PROD_CD
                     </if>
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
@@ -793,16 +865,19 @@
                     thpsp.PROD_CD,
                     thp.PROD_NM,
                     thpsp.ADD_PROD_UPRC,
+                    thpsp.ADD_PROD_QTY,
                     thpsp.DISP_SEQ
                 FROM
                     TB_HQ_PRODUCT_SDSEL_PROD thpsp
                 LEFT OUTER JOIN TB_HQ_PRODUCT thp ON
-                    thpsp.PROD_CD = thp.PROD_CD
+                    thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                    AND thpsp.PROD_CD = thp.PROD_CD
                 WHERE
                     thpsp.HQ_OFFICE_CD = #{hqOfficeCd}
                     AND thpsp.SDSEL_CLASS_CD = #{sdselClassCd}
                     AND thpsp.USE_YN = 'Y'
-                ORDER BY thpsp.DISP_SEQ
+                ORDER BY
+                    thpsp.DISP_SEQ
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -811,16 +886,19 @@
                     tmpsp.PROD_CD,
                     tmp.PROD_NM,
                     tmpsp.ADD_PROD_UPRC,
+                    tmpsp.ADD_PROD_QTY,
                     tmpsp.DISP_SEQ
                 FROM
                     TB_MS_PRODUCT_SDSEL_PROD tmpsp
                 LEFT OUTER JOIN TB_MS_PRODUCT tmp ON
-                    tmpsp.PROD_CD = tmp.PROD_CD
+                    tmpsp.STORE_CD = tmp.STORE_CD
+                    AND tmpsp.PROD_CD = tmp.PROD_CD
                 WHERE
                     tmpsp.STORE_CD = #{storeCd}
                     AND tmpsp.SDSEL_CLASS_CD = #{sdselClassCd}
                     AND tmpsp.USE_YN = 'Y'
-                ORDER BY tmpsp.DISP_SEQ
+                ORDER BY
+                    tmpsp.DISP_SEQ
             </when>
         </choose>
     </select>
@@ -842,6 +920,7 @@
                     SDSEL_CLASS_CD,
                     PROD_CD,
                     ADD_PROD_UPRC,
+                    ADD_PROD_QTY,
                     DISP_SEQ,
                     USE_YN,
                     REG_DT,
@@ -853,6 +932,7 @@
                     #{sdselClassCd},
                     #{prodCd},
                     #{addProdUprc},
+                    #{addProdQty},
                     #{dispSeq},
                     'Y',
                     #{regDt},
@@ -869,6 +949,7 @@
                     SDSEL_CLASS_CD,
                     PROD_CD,
                     ADD_PROD_UPRC,
+                    ADD_PROD_QTY,
                     DISP_SEQ,
                     USE_YN,
                     REG_DT,
@@ -880,6 +961,7 @@
                     #{sdselClassCd},
                     #{prodCd},
                     #{addProdUprc},
+                    #{addProdQty},
                     #{dispSeq},
                     'Y',
                     #{regDt},
@@ -907,6 +989,7 @@
                     SDSEL_CLASS_CD = #{sdselClassCd},
                     PROD_CD = #{prodCd},
                     ADD_PROD_UPRC = #{addProdUprc},
+                    ADD_PROD_QTY = #{addProdQty},
                     DISP_SEQ = #{dispSeq},
                     MOD_DT = #{modDt},
                     MOD_ID = #{modId}
@@ -921,6 +1004,7 @@
                     SDSEL_CLASS_CD = #{sdselClassCd},
                     PROD_CD = #{prodCd},
                     ADD_PROD_UPRC = #{addProdUprc},
+                    ADD_PROD_QTY = #{addProdQty},
                     DISP_SEQ = #{dispSeq},
                     MOD_DT = #{modDt},
                     MOD_ID = #{modId}
