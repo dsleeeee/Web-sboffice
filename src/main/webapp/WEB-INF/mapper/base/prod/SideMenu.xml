@@ -869,7 +869,7 @@
                     tmpsp.PROD_CD,
                     tmp.PROD_NM,
                     tmpsp.ADD_PROD_UPRC,
-                    thpsp.ADD_PROD_QTY,
+                    tmpsp.ADD_PROD_QTY,
                     tmpsp.DISP_SEQ
                 FROM
                     TB_MS_PRODUCT_SDSEL_PROD tmpsp
