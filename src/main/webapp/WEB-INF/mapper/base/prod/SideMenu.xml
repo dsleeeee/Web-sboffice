@@ -32,6 +32,8 @@
                 WHERE
                     thpsc.HQ_OFFICE_CD = #{hqOfficeCd}
                     AND thpsc.USE_YN = 'Y'
+                ORDER BY
+                    thpsc.SDATTR_CLASS_CD
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -44,6 +46,8 @@
                 WHERE
                     tmpsc.STORE_CD = #{storeCd}
                     AND tmpsc.USE_YN = 'Y'
+                ORDER BY
+                    tmpsc.SDATTR_CLASS_CD
             </when>
         </choose>
     </select>
@@ -216,7 +220,8 @@
                     thps.HQ_OFFICE_CD = #{hqOfficeCd}
                     AND thps.SDATTR_CLASS_CD = #{sdattrClassCd}
                     AND thps.USE_YN = 'Y'
-                ORDER BY thps.DISP_SEQ
+                ORDER BY
+                    thps.DISP_SEQ
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -231,7 +236,8 @@
                     tmps.STORE_CD = #{storeCd}
                     AND tmps.SDATTR_CLASS_CD = #{sdattrClassCd}
                     AND tmps.USE_YN = 'Y'
-                ORDER BY tmps.DISP_SEQ
+                ORDER BY
+                    tmps.DISP_SEQ
             </when>
         </choose>
     </select>
@@ -406,6 +412,8 @@
                 WHERE
                     thpsg.HQ_OFFICE_CD = #{hqOfficeCd}
                     AND thpsg.USE_YN = 'Y'
+                ORDER BY
+                    thpsg.SDSEL_GRP_CD
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -418,6 +426,8 @@
                 WHERE
                     tmpsg.STORE_CD = #{storeCd}
                     AND tmpsg.USE_YN = 'Y'
+                ORDER BY
+                    tmpsg.SDSEL_GRP_CD
             </when>
         </choose>
     </select>
@@ -591,7 +601,8 @@
                     thpsc.HQ_OFFICE_CD = #{hqOfficeCd}
                     AND thpsc.SDSEL_GRP_CD = #{sdselGrpCd}
                     AND thpsc.USE_YN = 'Y'
-                ORDER BY thpsc.DISP_SEQ
+                ORDER BY
+                    thpsc.DISP_SEQ
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -607,7 +618,8 @@
                     tmpsc.STORE_CD = #{storeCd}
                     AND tmpsc.SDSEL_GRP_CD = #{sdselGrpCd}
                     AND tmpsc.USE_YN = 'Y'
-                ORDER BY tmpsc.DISP_SEQ
+                ORDER BY
+                    tmpsc.DISP_SEQ
             </when>
         </choose>
     </select>
@@ -801,8 +813,10 @@
                     AND thp.PROD_CD = #{prodCd} --상품코드
                     </if>
                     <if test="prodNm != null and prodNm != ''">
-                    AND thp.PROD_NM LIKE #{prodNm}||'%' --상품명
+                    AND thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
                     </if>
+                ORDER BY
+                    thp.PROD_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
             <!-- 가맹점 -->
@@ -826,7 +840,9 @@
                     AND tmp.PROD_CD = #{prodCd} --상품코드
                     </if>
                     <if test="prodNm != null and prodNm != ''">
-                    AND tmp.PROD_NM LIKE #{prodNm}||'%' --상품명
+                    AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+                ORDER BY
+                    tmp.PROD_CD
                     </if>
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
@@ -860,7 +876,8 @@
                     thpsp.HQ_OFFICE_CD = #{hqOfficeCd}
                     AND thpsp.SDSEL_CLASS_CD = #{sdselClassCd}
                     AND thpsp.USE_YN = 'Y'
-                ORDER BY thpsp.DISP_SEQ
+                ORDER BY
+                    thpsp.DISP_SEQ
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -880,7 +897,8 @@
                     tmpsp.STORE_CD = #{storeCd}
                     AND tmpsp.SDSEL_CLASS_CD = #{sdselClassCd}
                     AND tmpsp.USE_YN = 'Y'
-                ORDER BY tmpsp.DISP_SEQ
+                ORDER BY
+                    tmpsp.DISP_SEQ
             </when>
         </choose>
     </select>
