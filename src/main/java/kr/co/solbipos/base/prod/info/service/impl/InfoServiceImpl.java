@@ -9,6 +9,8 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.info.service.InfoService;
 import kr.co.solbipos.base.prod.info.service.ProductClassVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +38,10 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
  */
 @Service("infoService")
 public class InfoServiceImpl implements InfoService {
+
+
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
 
     private final InfoMapper mapper;
     private final MessageService messageService;
@@ -133,6 +139,7 @@ public class InfoServiceImpl implements InfoService {
             else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {    // 매장
                 productClassVO.setStoreCd(sessionInfoVO.getOrgnCd());
             }
+
             productClassVO.setRegDt(dt);
             productClassVO.setRegId(sessionInfoVO.getUserId());
             productClassVO.setModDt(dt);

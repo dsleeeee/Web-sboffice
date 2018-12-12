@@ -200,13 +200,9 @@ app.controller('memberRegistCtrl', ['$scope', '$http', function ($scope, $http) 
     $scope.memberMappingLayer.show(true, function(s) {
 
       var memberMappingScope = agrid.getScope('memberMappingCtrl');
-      console.log('getCompany', memberMappingScope.getCompany());
-
+      // console.log('getCompany', memberMappingScope.getCompany());
       $scope.$apply(function(){
-
         if( !$.isEmptyObject(memberMappingScope.getCompany())) {
-          console.log('memberMappingScope.getCompany.lnPartner :'+ memberMappingScope.getCompany().lnPartner);
-
           $scope.member.lnPartner = memberMappingScope.getCompany().lnPartner;
           $scope.member.cdCompany = memberMappingScope.getCompany().cdCompany;
           $scope.member.cdPartner = memberMappingScope.getCompany().cdPartner;

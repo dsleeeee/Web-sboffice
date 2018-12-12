@@ -458,9 +458,9 @@
       </div>
     </div>
     <div class="wj-dialog-footer">
-      <button class="btn wj-hide-apply btn_blue" ng-if="prodEnvstVal == 'STORE'"><s:message code="cmm.edit"/></button>
+      <button class="btn wj-hide-apply btn_blue" ng-show="btnShowFg"><s:message code="cmm.edit"/></button>
       <button class="btn wj-hide-cancel btn_blue"><s:message code="cmm.close"/></button>
     </div>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodDetailView.js?ver=20181120.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodDetailView.js?ver=20181212.01" charset="utf-8"></script>

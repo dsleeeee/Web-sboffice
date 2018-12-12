@@ -24,6 +24,14 @@ var useYnComboData = [
   {"name": "미사용", "value": "N"}
 ];
 
+// 상품등록주체 (본사/매장)
+var regOrgnFgComboData = [
+  {"name": "전체", "value": ""},
+  {"name": "본사", "value": "H"},
+  {"name": "매장", "value": "S"}
+];
+
+
 /**
  * 상품정보관리 그리드 생성
  */
@@ -33,6 +41,7 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 상품 본사통제구분 (H : 본사, S: 매장)
   $scope.prodEnvstVal = prodEnvstVal;
+  $scope.userOrgnFg = gvOrgnFg;
 
   // 상품 상세 정보
   $scope.prodInfo = {};
@@ -53,7 +62,8 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._setComboData('listScaleBox', gvListScaleBoxData);
   // 사용여부를 쓰는 콤보박스의 데이터 (조회용)
   $scope._setComboData('useYnAllComboData', useYnAllComboData);
-
+  // 상품등록주체 (본사/매장구분)
+  $scope._setComboData('regOrgnFgComboData', regOrgnFgComboData);
   // 사용여부를 쓰는 콤보박스의 데이터
   $scope._setComboData('useYnComboData', useYnComboData);
   // 상품유형 콤보박스
