@@ -136,10 +136,10 @@ app.controller('systemEmpRegistCtrl', ['$scope', '$http', function ($scope, $htt
     });
   };
 
-  // 비밀번호 변경
-  $scope.changePassword = function(){
-    $scope.changePwdLayer.show(true);
-  };
+  // // 비밀번호 변경
+  // $scope.changePassword = function(){
+  //   $scope.changePwdLayer.show(true);
+  // };
 
   // 대리점 조회
   $scope.searchAgency = function(){
@@ -174,15 +174,11 @@ app.controller('systemEmpRegistCtrl', ['$scope', '$http', function ($scope, $htt
       }
     }
 
-    // 관리자구분이 관리자가 아니면 대리점(관리업체) 선택 필수 todo
-    // if($scope.systemEmpRegistInfo.adminFg !== 'A' && isEmptyObject($scope.systemEmpRegistInfo.agencyNm) ) {
+    // 대리점(관리업체) 선택 필수
     if(isEmptyObject($scope.systemEmpRegistInfo.agencyNm)){
       $scope._popMsg(messages["systemEmp.require.agencyCd"] );
       return false;
     }
-    // }
-
-return false;
 
     var params = $scope.systemEmpRegistInfo;
     params.pwdChgFg = false;
@@ -230,7 +226,7 @@ return false;
       $scope.pwdChgFg = false;
     }
 
-    // 관리자구분이 관리자가 아니면 대리점(관리업체) 선택 필수 todo
+    // 대리점(관리업체) 선택 필수
     if(isEmptyObject($scope.systemEmpRegistInfo.agencyNm)){
       $scope._popMsg(messages["systemEmp.require.agencyCd"] );
       return false;
@@ -270,14 +266,14 @@ return false;
     // 대리점 팝업 핸들러 추가
     $scope.agencyLayer.shown.addHandler(function (s) {
     });
-    // 비밀번호 변경 팝업 핸들러 추가
-    $scope.changePwdLayer.shown.addHandler(function (s) {
-      setTimeout(function() {
-        var params = $scope.systemEmpRegistInfo;
-        params.empFg = 'S'; // 시스템 사원
-        $scope._broadcast('changePwdCtrl', params);
-      }, 50);
-    });
+    // // 비밀번호 변경 팝업 핸들러 추가
+    // $scope.changePwdLayer.shown.addHandler(function (s) {
+    //   setTimeout(function() {
+    //     var params = $scope.systemEmpRegistInfo;
+    //     params.empFg = 'S'; // 시스템 사원
+    //     $scope._broadcast('changePwdCtrl', params);
+    //   }, 50);
+    // });
   });
 
 
