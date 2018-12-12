@@ -75,7 +75,7 @@
                     AND thp.PROD_CD = #{prodCd} --상품코드
                 </if>
                 <if test="prodNm != null and prodNm != ''">
-                    AND thp.PROD_NM LIKE #{prodNm}||'%' --상품명
+                    AND thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
                 </if>
                 <if test="barCd != null and barCd != ''">
                     AND EXISTS (
@@ -148,7 +148,7 @@
                     AND tmp.PROD_CD = #{prodCd} --상품코드
                 </if>
                 <if test="prodNm != null and prodNm != ''">
-                    AND tmp.PROD_NM LIKE #{prodNm}||'%' --상품명
+                    AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
                 </if>
                 <if test="barCd != null and barCd != ''">
                     AND EXISTS (
