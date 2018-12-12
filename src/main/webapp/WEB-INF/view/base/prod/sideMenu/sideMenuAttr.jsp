@@ -33,7 +33,7 @@
 
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="sideMenu.attr.sdattrClassCd"/>" binding="sdattrClassCd" width="100"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="sideMenu.attr.sdattrClassCd"/>" binding="sdattrClassCd" width="100" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="sideMenu.attr.sdattrClassNm"/>" binding="sdattrClassNm" width="*"></wj-flex-grid-column>
 
           </wj-flex-grid>
@@ -77,7 +77,7 @@
 
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="sideMenu.attr.sdattrCd"/>" binding="sdattrCd" width="100"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="sideMenu.attr.sdattrCd"/>" binding="sdattrCd" width="100"is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="sideMenu.attr.sdattrNm"/>" binding="sdattrNm" width="*"></wj-flex-grid-column>
 
           </wj-flex-grid>

@@ -73,7 +73,14 @@
                 ) VALUES (
                     #{hqOfficeCd},
                     #{hqBrandCd, jdbcType=VARCHAR},
-                    #{sdattrClassCd},
+                    (
+                        SELECT
+                            LPAD(NVL(MAX(SDATTR_CLASS_CD), '0') + 1, 5, '0')
+                        FROM
+                            TB_HQ_PRODUCT_SDATTR_CLASS
+                        WHERE
+                            HQ_OFFICE_CD = #{hqOfficeCd}
+                    ),
                     #{sdattrClassNm},
                     'Y',
                     #{regDt},
@@ -98,7 +105,14 @@
                 ) VALUES (
                     #{storeCd},
                     #{msBrandCd, jdbcType=VARCHAR},
-                    #{sdattrClassCd},
+                    (
+                        SELECT
+                            LPAD(NVL(MAX(SDATTR_CLASS_CD), '0') + 1, 5, '0')
+                        FROM
+                            TB_MS_PRODUCT_SDATTR_CLASS
+                        WHERE
+                            STORE_CD = #{storeCd}
+                    ),
                     #{sdattrClassNm},
                     'Y',
                     #{regDt},
@@ -247,7 +261,14 @@
                     MOD_ID
                 ) VALUES (
                     #{hqOfficeCd},
-                    #{sdattrCd},
+                    (
+                        SELECT
+                            LPAD(NVL(MAX(SDATTR_CD), '0') + 1, 10, '0')
+                        FROM
+                            TB_HQ_PRODUCT_SDATTR
+                        WHERE
+                        HQ_OFFICE_CD = #{hqOfficeCd}
+                    ),
                     #{sdattrNm},
                     #{sdattrClassCd},
                     #{dispSeq},
@@ -274,7 +295,14 @@
                     MOD_ID
                 ) VALUES (
                     #{storeCd},
-                    #{sdattrCd},
+                    (
+                        SELECT
+                            LPAD(NVL(MAX(SDATTR_CD), '0') + 1, 10, '0')
+                        FROM
+                            TB_MS_PRODUCT_SDATTR
+                        WHERE
+                            STORE_CD = #{storeCd}
+                    ),
                     #{sdattrNm},
                     #{sdattrClassCd},
                     #{dispSeq},
@@ -419,7 +447,14 @@
                 ) VALUES (
                     #{hqOfficeCd},
                     #{hqBrandCd},
-                    #{sdselGrpCd},
+                    (
+                        SELECT
+                            LPAD(NVL(MAX(SDSEL_GRP_CD), '0') + 1, 6, '0')
+                        FROM
+                            TB_HQ_PRODUCT_SDSEL_GROUP
+                        WHERE
+                            HQ_OFFICE_CD = #{hqOfficeCd}
+                    ),
                     #{sdselGrpNm},
                     'Y',
                     #{regDt},
@@ -444,7 +479,14 @@
                 ) VALUES (
                     #{storeCd},
                     #{msBrandCd},
-                    #{sdselGrpCd},
+                    (
+                        SELECT
+                            LPAD(NVL(MAX(SDSEL_GRP_CD), '0') + 1, 6, '0')
+                        FROM
+                            TB_MS_PRODUCT_SDSEL_GROUP
+                        WHERE
+                            STORE_CD = #{storeCd}
+                    ),
                     #{sdselGrpNm},
                     'Y',
                     #{regDt},
@@ -596,7 +638,14 @@
                     MOD_ID
                 ) VALUES (
                     #{hqOfficeCd},
-                    #{sdselClassCd},
+                    (
+                        SELECT
+                            LPAD(NVL(MAX(SDSEL_CLASS_CD), '0') + 1, 6, '0')
+                        FROM
+                            TB_HQ_PRODUCT_SDSEL_CLASS
+                        WHERE
+                            HQ_OFFICE_CD = #{hqOfficeCd}
+                    ),
                     #{sdselClassNm},
                     #{sdselGrpCd},
                     #{dispSeq},
@@ -625,7 +674,14 @@
                     MOD_ID
                 ) VALUES (
                     #{storeCd},
-                    #{sdselClassCd},
+                    (
+                        SELECT
+                            LPAD(NVL(MAX(SDSEL_CLASS_CD), '0') + 1, 6, '0')
+                        FROM
+                            TB_MS_PRODUCT_SDSEL_CLASS
+                        WHERE
+                            STORE_CD = #{storeCd}
+                    ),
                     #{sdselClassNm},
                     #{sdselGrpCd},
                     #{dispSeq},
@@ -793,11 +849,13 @@
                     thpsp.PROD_CD,
                     thp.PROD_NM,
                     thpsp.ADD_PROD_UPRC,
+                    thpsp.ADD_PROD_QTY,
                     thpsp.DISP_SEQ
                 FROM
                     TB_HQ_PRODUCT_SDSEL_PROD thpsp
                 LEFT OUTER JOIN TB_HQ_PRODUCT thp ON
-                    thpsp.PROD_CD = thp.PROD_CD
+                    thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                    AND thpsp.PROD_CD = thp.PROD_CD
                 WHERE
                     thpsp.HQ_OFFICE_CD = #{hqOfficeCd}
                     AND thpsp.SDSEL_CLASS_CD = #{sdselClassCd}
@@ -811,11 +869,13 @@
                     tmpsp.PROD_CD,
                     tmp.PROD_NM,
                     tmpsp.ADD_PROD_UPRC,
+                    thpsp.ADD_PROD_QTY,
                     tmpsp.DISP_SEQ
                 FROM
                     TB_MS_PRODUCT_SDSEL_PROD tmpsp
                 LEFT OUTER JOIN TB_MS_PRODUCT tmp ON
-                    tmpsp.PROD_CD = tmp.PROD_CD
+                    tmpsp.STORE_CD = tmp.STORE_CD
+                    AND tmpsp.PROD_CD = tmp.PROD_CD
                 WHERE
                     tmpsp.STORE_CD = #{storeCd}
                     AND tmpsp.SDSEL_CLASS_CD = #{sdselClassCd}
@@ -842,6 +902,7 @@
                     SDSEL_CLASS_CD,
                     PROD_CD,
                     ADD_PROD_UPRC,
+                    ADD_PROD_QTY,
                     DISP_SEQ,
                     USE_YN,
                     REG_DT,
@@ -853,6 +914,7 @@
                     #{sdselClassCd},
                     #{prodCd},
                     #{addProdUprc},
+                    #{addProdQty},
                     #{dispSeq},
                     'Y',
                     #{regDt},
@@ -869,6 +931,7 @@
                     SDSEL_CLASS_CD,
                     PROD_CD,
                     ADD_PROD_UPRC,
+                    ADD_PROD_QTY,
                     DISP_SEQ,
                     USE_YN,
                     REG_DT,
@@ -880,6 +943,7 @@
                     #{sdselClassCd},
                     #{prodCd},
                     #{addProdUprc},
+                    #{addProdQty},
                     #{dispSeq},
                     'Y',
                     #{regDt},
@@ -907,6 +971,7 @@
                     SDSEL_CLASS_CD = #{sdselClassCd},
                     PROD_CD = #{prodCd},
                     ADD_PROD_UPRC = #{addProdUprc},
+                    ADD_PROD_QTY = #{addProdQty},
                     DISP_SEQ = #{dispSeq},
                     MOD_DT = #{modDt},
                     MOD_ID = #{modId}
@@ -921,6 +986,7 @@
                     SDSEL_CLASS_CD = #{sdselClassCd},
                     PROD_CD = #{prodCd},
                     ADD_PROD_UPRC = #{addProdUprc},
+                    ADD_PROD_QTY = #{addProdQty},
                     DISP_SEQ = #{dispSeq},
                     MOD_DT = #{modDt},
                     MOD_ID = #{modId}
