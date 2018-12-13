@@ -390,6 +390,7 @@
             USER_PWD,
             AUTH_GRP_CD,
             LOGIN_FAIL_CNT,
+            LAST_PWD_CHG_DT,
             USER_STAT_FG,
             USE_YN,
             REG_DT,
@@ -403,6 +404,7 @@
             #{userPwd},
             '000007', -- TODO 보나비용 임시 권한(화면에서 사용자 권한 선택 추가 필요)
             0,
+            #{regDt},
             '99',
             'Y',
             #{regDt},

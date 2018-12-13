@@ -456,6 +456,7 @@
         TABLE    : TB_WB_USER_INFO
         PARAM    : storeManageVO
         COMMENTS : 웹 사용자를 등록한다.
+                   현재 권한은 보나비 임시로 '000008'이 들어간다.
     -->
     <insert id="insertStoreWebUser" parameterType="storeManageVO">
         /* USE : StoreManageMapper.insertStoreWebUser */
@@ -465,6 +466,7 @@
             USER_PWD,
             AUTH_GRP_CD,
             LOGIN_FAIL_CNT,
+            LAST_PWD_CHG_DT,
             USER_STAT_FG,
             USE_YN,
             REG_DT,
@@ -476,8 +478,9 @@
         (
             #{userId},
             #{userPwd},
-            '000008', --TODO 보나비 임시 (사용자 권한 화면에서 입력 필요)
+            '000008',
             0,
+            #{regDt},
             '99',
             'Y',
             #{regDt},
@@ -1965,7 +1968,6 @@
     -->
     <select id="getProdClass" parameterType="storeProductVO" resultType="DefaultMap">
         /* USE : StoreManageMapper.getProdClass */
-
             SELECT tmpc.P_PROD_CLASS_CD ,
                    tmpc.PROD_CLASS_CD ,
                    tmpc.PROD_CLASS_NM
@@ -1995,9 +1997,10 @@
       </if>
                    ) tmp
              WHERE tmpc.store_cd = #{storeCd}
-             START WITH tmpc.PROD_CLASS_CD = tmp.PROD_CLASS_CD
+             START WITH tmpc.P_PROD_CLASS_CD = '00000'
            CONNECT BY PRIOR tmpc.P_PROD_CLASS_CD = tmpc.PROD_CLASS_CD
              GROUP BY tmpc.P_PROD_CLASS_CD, tmpc.PROD_CLASS_CD, tmpc.PROD_CLASS_NM
+             HAVING tmpc.PROD_CLASS_CD != '00000'
              ORDER BY P_PROD_CLASS_CD, PROD_CLASS_CD
     </select>
 

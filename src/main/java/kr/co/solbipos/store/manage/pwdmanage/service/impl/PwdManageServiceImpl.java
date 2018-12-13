@@ -7,10 +7,14 @@ import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.HttpUtils;
 import kr.co.common.utils.security.EncUtil;
 import kr.co.common.utils.spring.WebUtil;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.application.session.user.enums.PwChgResult;
 import kr.co.solbipos.store.manage.pwdmanage.enums.PwdChgFg;
 import kr.co.solbipos.store.manage.pwdmanage.service.PwdManageService;
 import kr.co.solbipos.store.manage.pwdmanage.service.PwdManageVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +41,9 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Service("pwdManageService")
 public class PwdManageServiceImpl implements PwdManageService {
 
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
+
     private final MessageService messageService;
     private final PwdManageMapper pwdManageMapper;
 
@@ -49,7 +56,22 @@ public class PwdManageServiceImpl implements PwdManageService {
 
     /** 비밀번호 임의변경 대상 조회 */
     @Override
-    public List<DefaultMap<String>> getPwdManageList(PwdManageVO pwdManageVO) {
+    public List<DefaultMap<String>> getPwdManageList(PwdManageVO pwdManageVO, SessionInfoVO sessionInfoVO) {
+
+        // 접속한 사용자의 소속구분
+        OrgnFg orgnFg = sessionInfoVO.getOrgnFg();
+        pwdManageVO.setOrgnFg(orgnFg);
+
+        // 소속 코드
+        if(orgnFg == OrgnFg.AGENCY) {
+            pwdManageVO.setAgencyCd(sessionInfoVO.getOrgnCd());
+        } else if(orgnFg == OrgnFg.HQ) {
+            pwdManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        } else if(orgnFg == OrgnFg.STORE){
+            pwdManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            pwdManageVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
         return pwdManageMapper.getPwdManageList(pwdManageVO);
     }
 

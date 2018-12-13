@@ -2,6 +2,7 @@ package kr.co.solbipos.base.prod.prod.service;
 
 import kr.co.common.data.enums.UseYn;
 import kr.co.solbipos.application.common.service.PageVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 
 /**
  * @Class Name : ProdVO.java
@@ -65,6 +66,8 @@ public class ProdVO extends PageVO {
     private String sideProdYn;
     /** 세트상품구분 */
     private String setProdFg;
+    /** 가격관리구분 */
+    private String prcCtrlFg;
     /** 원가단가 */
     private Double costUprc;
     /** 최종원가단가 */
@@ -114,6 +117,9 @@ public class ProdVO extends PageVO {
 
     /** 판매가격구분 (본사판매가 :1, 매장판매가:2) */
     private String salePrcFg;
+
+    /** 상품 등록 주체 구분 */
+    private OrgnFg regOrgnFg;
 
     /**
      * @return the hqOfficeCd
@@ -410,6 +416,22 @@ public class ProdVO extends PageVO {
         this.setProdFg = setProdFg;
     }
 
+
+    /**
+     * @return the prcCtrlFg
+     */
+
+    public String getPrcCtrlFg() {
+        return prcCtrlFg;
+    }
+
+    /**
+     * @param prcCtrlFg the prcCtrlFg to set
+     */
+    public void setPrcCtrlFg(String prcCtrlFg) {
+        this.prcCtrlFg = prcCtrlFg;
+    }
+
     /**
      * @return the costUprc
      */
@@ -677,5 +699,20 @@ public class ProdVO extends PageVO {
      */
     public void setSalePrcFg(String salePrcFg) {
         this.salePrcFg = salePrcFg;
+    }
+
+    /**
+     * @return the regOrgnFg
+     */
+
+    public OrgnFg getRegOrgnFg() {
+        return regOrgnFg;
+    }
+
+    /**
+     * @param regOrgnFg the regOrgnFg to set
+     */
+    public void setRegOrgnFg(OrgnFg regOrgnFg) {
+        this.regOrgnFg = regOrgnFg;
     }
 }

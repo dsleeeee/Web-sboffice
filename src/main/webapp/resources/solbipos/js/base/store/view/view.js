@@ -82,6 +82,7 @@ app.controller('storeListCtrl', ['$scope', '$http', function ($scope, $http) {
   // 매장목록 조회
   $scope.getStoreList = function(){
     var params = {};
+    params.listScale = $scope.listScale;
     $scope._inquiryMain("/base/store/view/view/list.sb", params, function() {});
   };
 

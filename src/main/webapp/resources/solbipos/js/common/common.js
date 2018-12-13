@@ -92,7 +92,7 @@
     , postJSON: function( url, data, succ, fail ){
       // 가상로그인시 세션활용
       if (document.getElementsByName("sessionId")[0]) {
-        data['sid'] = document.getElementsByName("sessionId")[0].value;
+        url += '?sid=' + document.getElementsByName("sessionId")[0].value;
       }
       return $.ajax({
         type: "POST",
@@ -139,7 +139,7 @@
     , postJSONSave: function( url, data, succ, fail ){
       // 가상로그인시 세션활용
       if (document.getElementsByName("sessionId")[0]) {
-        data['sid'] = document.getElementsByName("sessionId")[0].value;
+        url += '?sid=' + document.getElementsByName("sessionId")[0].value;
       }
       return $.ajax({
         type: "POST",
@@ -186,12 +186,17 @@
     , postJSONArray: function( url, data, succ, fail ){
       // 가상로그인시 세션활용
       if (document.getElementsByName("sessionId")[0]) {
-        data['sid'] = document.getElementsByName("sessionId")[0].value;
+        url += '?sid=' + document.getElementsByName("sessionId")[0].value;
       }
       return $.ajax({
         type: "POST",
         url: url,
         data: JSON.stringify(data),
+        cache: false,
+        async:true,
+        dataType: "json",
+        contentType : 'application/json',
+        processData: false,
         success: function(result) {
           if(result.status === "OK") {
             return succ(result);
@@ -212,11 +217,6 @@
             alert(msg);
           }
         },
-        cache: false,
-        async:true,
-        dataType: "json",
-        contentType : 'application/json',
-        processData: false,
         beforeSend: function() {
           $("#_loadTent, #_loading").show();
         },

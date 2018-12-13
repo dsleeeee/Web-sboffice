@@ -18,7 +18,7 @@
     -->
     <select id="getViewList" parameterType="viewVO" resultType="DefaultMap">
         /* USE : ViewMapper.getViewList */
-        <include refid="CmmSQL.PagingTemplateHeader"/>
+      <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT tms.STORE_CD,
                tms.STORE_NM,
                tms.CLS_FG,
@@ -30,7 +30,7 @@
                tms.SYS_STAT_FG,
                TO_CHAR(TO_DATE(tms.SYS_OPEN_DATE, 'yyyyMMdd'), 'YYYY/MM/DD') AS SYS_OPEN_DATE,
                TO_CHAR(TO_DATE(tms.SYS_CLOSURE_DATE, 'yyyyMMdd'), 'YYYY/MM/DD') AS SYS_CLOSURE_DATE
-               <include refid="CmmSQL.PagingTemplateCount"/>
+      <include refid="CmmSQL.PagingTemplateCount"/>
           FROM TB_MS_STORE tms,
                TB_MS_POS tmp
          WHERE tms.HQ_OFFICE_CD =  #{hqOfficeCd}
@@ -50,7 +50,7 @@
            AND tms.SYS_STAT_FG = #{sysStatFg}
         </if>
          ORDER BY tms.STORE_CD ASC
-        <include refid="CmmSQL.PagingTemplateBottom"/>
+      <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
 

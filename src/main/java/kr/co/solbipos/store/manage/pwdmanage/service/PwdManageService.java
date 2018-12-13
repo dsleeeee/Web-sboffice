@@ -2,6 +2,7 @@ package kr.co.solbipos.store.manage.pwdmanage.service;
 
 import java.util.List;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.PwChgResult;
 
 /**
@@ -21,11 +22,11 @@ import kr.co.solbipos.application.session.user.enums.PwChgResult;
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 public interface PwdManageService {
-    
+
     /** 비밀번호 임의변경 대상 조회 */
-    List<DefaultMap<String>> getPwdManageList(PwdManageVO pwdManageVO);
-    
+    List<DefaultMap<String>> getPwdManageList(PwdManageVO pwdManageVO, SessionInfoVO sessionInfoVO);
+
     /** 비밀번호 변경 */
     PwChgResult modifyPwd(PwdManageVO pwdManageVO);
-    
+
 }

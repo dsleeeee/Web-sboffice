@@ -139,7 +139,7 @@
                     ng-model="member.birthday"
                     control="birthdayCombo"
                     format="yyyy/MM/dd"
-                    min="2000-01-01"
+                    min="1930-01-01"
                     max="2099-12-31"
                     initialized="_initDateBox(s)">
                   </wj-input-date>
@@ -179,6 +179,17 @@
                   </wj-combo-box>
                 </div>
               </td>
+            </tr>
+            <tr>
+              <%-- 거래처 매핑코드 --%>
+              <th><s:message code="regist.membr.mappingCd" /></th>
+              <td>
+                <input type="text" id="rCdNmPartner" class="sb-input w100" ng-model="member.lnPartner" readonly="readonly" ng-click="searchMemberMappingCd()"/>
+                <input type="hidden" id="rCdCompany" ng-model="member.cdCompany" />
+                <input type="hidden" id="rCdPartner" ng-model="member.cdPartner" />
+              </td>
+              <th></th>
+              <td></td>
             </tr>
             <tr>
               <%-- E-mail --%>

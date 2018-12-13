@@ -391,6 +391,30 @@ public class PosFuncController {
         return returnListJson(Status.OK, list);
     }
 
+
+    /**
+     * 포스기능 인증관리 인증여부 저장
+     * @param   posFuncVOs
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  김지은
+     * @since   2018. 12. 10.
+     */
+    @RequestMapping(value = "/auth/savePosAuthConf.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result savePosAuthConf(@RequestBody PosFuncVO[] posFuncVOs, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = service.savePosAuthConf(posFuncVOs, sessionInfoVO);
+
+        return returnListJson(Status.OK, result);
+    }
+
+
     /**
      * 포스기능 인증허용대상 저장
      * @param   posFuncVOs

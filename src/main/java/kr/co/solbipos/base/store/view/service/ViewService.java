@@ -1,6 +1,7 @@
 package kr.co.solbipos.base.store.view.service;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ import java.util.List;
 public interface ViewService {
 
     /** 매장정보 리스트조회 */
-    List<DefaultMap<String>> getViewList(ViewVO viewVO);
+    List<DefaultMap<String>> getViewList(ViewVO viewVO, SessionInfoVO sessionInfoVO);
 
     /** 매장정보 상세조회 */
     DefaultMap<String> getViewDetail(ViewVO viewVO);

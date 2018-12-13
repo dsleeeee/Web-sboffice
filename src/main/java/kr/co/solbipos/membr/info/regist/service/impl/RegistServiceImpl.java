@@ -1,7 +1,10 @@
 package kr.co.solbipos.membr.info.regist.service.impl;
 
+import kr.co.common.data.enums.Status;
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.exception.JsonException;
+import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.DateUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
@@ -9,9 +12,12 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.membr.anals.postpaid.service.PostpaidStoreVO;
 import kr.co.solbipos.membr.info.grade.service.MembrClassVO;
+import kr.co.solbipos.membr.info.regist.service.MemberMappingVO;
 import kr.co.solbipos.membr.info.regist.service.RegistService;
 import kr.co.solbipos.membr.info.regist.service.RegistVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,13 +45,18 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Transactional
 public class RegistServiceImpl implements RegistService {
 
+
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
     private final RegistMapper mapper;
+    private final MessageService messageService;
     private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
-    public RegistServiceImpl(RegistMapper mapper, CmmEnvUtil cmmEnvUtil) {
+    public RegistServiceImpl(RegistMapper mapper, CmmEnvUtil cmmEnvUtil, MessageService messageService) {
         this.mapper = mapper;
+        this.messageService = messageService;
         this.cmmEnvUtil = cmmEnvUtil;
     }
 
@@ -83,7 +94,7 @@ public class RegistServiceImpl implements RegistService {
         if(resultList.size() == 0){
 
             DefaultMap<String> tmpList = new DefaultMap<String>();
-            tmpList.put("value", "0000");
+            tmpList.put("value", "000");
             tmpList.put("name", "기본등급");
 
             resultList.add(tmpList);
@@ -124,16 +135,31 @@ public class RegistServiceImpl implements RegistService {
         String dt = currentDateTimeString();
 
         registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        registVO.setMembrNo(mapper.getNewMemberNo(registVO));
         registVO.setRegDt(dt);
         registVO.setRegId(sessionInfoVO.getUserId());
         registVO.setModDt(dt);
         registVO.setModId(sessionInfoVO.getUserId());
 
+        // 회원등록
         int result = mapper.registMemberInfo(registVO);
         if(result == 1 && (!StringUtil.isEmpties(registVO.getMembrCardNo()))) {
             // 회원카드 등록
-            mapper.insertMembrCard(registVO);
+            if(mapper.insertMembrCard(registVO) <=0 ){
+                throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            }
         }
+
+        // 선불회원 등록 (자점회원)
+        result = mapper.registMemberPrepaid(registVO);
+        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+        // 회원-거래처 매핑코드 등록 (보나비)
+        if( registVO.getCdCompany() != null && registVO.getCdPartner() != null ){
+            result = mapper.registMemberMappingCode(registVO);
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+
         return result;
     }
 
@@ -148,11 +174,25 @@ public class RegistServiceImpl implements RegistService {
         registVO.setModDt(dt);
         registVO.setModId(sessionInfoVO.getUserId());
 
+        // 회원 등록
         int result = mapper.updateMemberInfo(registVO);
         if(result == 1) {
             // 회원카드 수정
             mapper.updateMembrCard(registVO);
         }
+
+
+        // 선불회원 등록 (자점회원)
+        result = mapper.registMemberPrepaid(registVO);
+        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+
+        // 회원-거래처 매핑코드 등록 (보나비)
+        if( registVO.getCdCompany() != null && registVO.getCdPartner() != null ){
+            result = mapper.registMemberMappingCode(registVO);
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+
         return result;
     }
 
@@ -234,4 +274,11 @@ public class RegistServiceImpl implements RegistService {
         }
         return result;
     }
+
+    /** 회원 거래처 매핑코드 (보나비 전용) */
+    @Override
+    public List<DefaultMap<String>> getMappingCompany(MemberMappingVO memberMappingVO) {
+        return mapper.getMappingCompany(memberMappingVO);
+    }
 }
+

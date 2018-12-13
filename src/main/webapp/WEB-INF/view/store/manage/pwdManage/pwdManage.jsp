@@ -5,19 +5,20 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
-<c:set var="baseUrl" value="/store/manage/pwdManage/pwdManage/"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
-<div class="subCon">
-
+<div class="subCon" ng-controller="pwdManageCtrl">
   <div class="searchBar flddUnfld">
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" id="btnSearch" >
+      <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('pwdManageCtrl');">
         <s:message code="cmm.search" />
       </button>
     </div>
   </div>
+
   <table class="searchTbl">
     <colgroup>
         <col class="w15" />
@@ -26,52 +27,60 @@
         <col class="w35" />
     </colgroup>
     <tbody>
+      <tr  ng-show="userOrgnFg != 'S'">
+        <%-- 사원구분 --%>
+        <th><s:message code="pwdManage.empOrgnFg" /></th>
+        <td>
+          <div class="sb-select">
+            <wj-combo-box
+                    id="srchEmpOrgnFg"
+                    ng-model="empOrgnFg"
+                    control="empOrgnFgCombo"
+                    items-source="_getComboData('empOrgnFg')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="_initComboBox(s)">
+            </wj-combo-box>
+          </div>
+        </td>
+        <th></th>
+        <td></td>
+      </tr>
       <tr>
         <%-- 본사코드 --%>
         <th><s:message code="pwdManage.hqOfficeCd" /></th>
         <td>
-          <div class="sb-select">
-            <div id="srchHqOfficeCd"></div>
-          </div>
+          <input type="text" id="srchHqOfficeCd" class="sb-input w100" ng-model="hqOfficeCd" maxlength="5"/>
         </td>
         <%-- 본사명 --%>
         <th><s:message code="pwdManage.hqOfficeNm" /></th>
         <td>
-          <div class="sb-select">
-            <div id="srchHqOfficeNm"></div>
-          </div>
+          <input type="text" id="srchHqOfficeNm" class="sb-input w100" ng-model="hqOfficeNm" maxlength="50"/>
         </td>
       </tr>
       <tr>
         <%-- 매장코드 --%>
         <th><s:message code="pwdManage.storeCd" /></th>
         <td>
-          <div class="sb-select">
-            <div id="srchStoreCd"></div>
-          </div>
+          <input type="text" id="srchStoreCd" class="sb-input w100" ng-model="storeCd" maxlength="7"/>
         </td>
         <%-- 매장명 --%>
         <th><s:message code="pwdManage.storeNm" /></th>
         <td>
-          <div class="sb-select">
-            <div id="srchStoreNm"></div>
-          </div>
+          <input type="text" id="srchStoreNm" class="sb-input w100" ng-model="storeNm" maxlength="50"/>
         </td>
       </tr>
       <tr>
         <%-- 사용자ID --%>
         <th><s:message code="pwdManage.userId" /></th>
         <td>
-          <div class="sb-select">
-            <div id="srchUserId"></div>
-          </div>
+          <input type="text" id="srchUserId" class="sb-input w100" ng-model="userId" maxlength="20"/>
         </td>
         <%-- 사용자명 --%>
         <th><s:message code="pwdManage.userNm" /></th>
         <td>
-          <div class="sb-select">
-            <div id="srchUserNm"></div>
-          </div>
+          <input type="text" id="srchUserNm" class="sb-input w100" ng-model="userNm" maxlength="50"/>
         </td>
       </tr>
     </tbody>
@@ -80,101 +89,67 @@
 
   <div class="mt20 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
-    <div id="listScaleBox" class="w100px fl"></div>
-    <%-- 엑셀 다운로드 --%>
-    <%--<button id="btnExcel" class="btn_skyblue fr"><s:message code="cmm.excel.down" /></button>--%>
+    <wj-combo-box
+            class="w100px fl"
+            id="listScaleBox"
+            ng-model="listScale"
+            items-source="_getComboData('listScaleBox')"
+            display-member-path="name"
+            selected-value-path="value"
+            is-editable="false"
+            initialized="initComboBox(s)">
+    </wj-combo-box>
   </div>
 
-  <%--위즈모 테이블--%>
-  <div class="wj-TblWrapBr mt10" style="height: 380px;">
-    <%-- 개발시 높이 조절해서 사용--%>
-    <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
-    <div id="theGrid" style="width:100%;height:393px;"></div>
+  <%-- 회원목록 그리드 --%>
+  <div class="w100 mt10 mb20">
+    <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
+      <wj-flex-grid
+              control="flex"
+              autoGenerateColumns="false"
+              selection-mode="Row"
+              initialized="initGrid(s,e)"
+              items-source="data"
+              item-formatter="_itemFormatter">
+
+        <!-- define columns -->
+        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="pwdManage.empOrgnFg"/>" binding="empOrgnFg" data-map="empOrgnFgDataMap" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+      <c:if test="${orgnFg != 'STORE'}">
+        <wj-flex-grid-column header="<s:message code="pwdManage.hqOfficeCd"/>" binding="hqOfficeCd" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="pwdManage.hqOfficeNm"/>" binding="hqOfficeNm" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+      </c:if>
+        <wj-flex-grid-column header="<s:message code="pwdManage.storeCd"/>" binding="storeCd" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="pwdManage.storeNm"/>" binding="storeNm" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="pwdManage.empNo"/>" binding="empNo" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="pwdManage.userId"/>" binding="userId" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="pwdManage.userNm"/>" binding="userNm" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="pwdManage.serviceFg"/>" binding="serviceFg" data-map="serviceFgDataMap"  width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="pwdManage.webUseYn"/>" binding="webUseYn" data-map="webUseYnDataMap"  width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="pwdManage.mpNo"/>" binding="mpNo" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+
+        <!--  //todo 재직구분, 웹사용여부, 이메일주소, 휴대폰번호 추가 -->
+
+      </wj-flex-grid>
+    </div>
   </div>
-  <%--//위즈모 테이블--%>
 
   <%-- 페이지 리스트 --%>
   <div class="pageNum mt20">
     <%-- id --%>
-    <ul id="page" data-size="10">
+    <ul id="pwdManageCtrlPager" data-size="10">
     </ul>
   </div>
   <%--//페이지 리스트--%>
-
 </div>
-
-<%-- 비밀번호 변경 레이어 --%>
-<div id="pwdModifyTent" class="fullDimmed" style="display: none;"></div>
-<div id="pwdModifyLayer" class="layer" style="display: none;">
-  <div class="layer_inner">
-    <div class="title w350">
-      <%-- 비밀번호 변경 --%>
-      <p class="tit"><s:message code="pwdManage.layer.modify" /></p>
-      <a href="#" class="btn_close pwdModifyClose"></a>
-      <input id="pwdModifyUserId" style="display: none;" />
-      <input id="pwdModifyEmpNo" style="display: none;" />
-      <div class="con">
-        <div>
-          <table class="tblType01">
-            <colgroup>
-              <col class="w40" />
-              <col class="w60" />
-            </colgroup>
-            <tbody>
-              <%-- 비밀번호 구분 --%>
-              <tr>
-                <th><s:message code="pwdManage.layer.pwdChgFg" /></th>
-                <td>
-                  <div class="sb-select">
-                    <div id="layerPwdChgFg"></div>
-                  </div>
-              </tr>
-              <%-- 사용자ID --%>
-              <tr>
-                <th><s:message code="pwdManage.layer.userId" /></th>
-                <td id="layerUserId"></td>
-              </tr>
-              <%-- 사용자명 --%>
-              <tr>
-                <th><s:message code="pwdManage.layer.userNm" /></th>
-                <td id="layerUserNm"></td>
-              </tr>
-              <%-- 새비밀번호 --%>
-              <tr>
-                <th><s:message code="pwdManage.layer.newPassword" /></th>
-                <td>
-                    <input id="layerNewPassword" type="password" maxlength="16"/>
-                    <span id="newPasswordError" class="errorMsg" style="display: none"></span>
-                </td>
-              </tr>
-              <%-- 새비밀번호확인 --%>
-              <tr>
-                <th><s:message code="pwdManage.layer.confirmPassword" /></th>
-                <td>
-                    <input id="layerConfirmPassword" type="password" maxlength="16" />
-                    <span id="confirmPasswordError" class="errorMsg" style="display: none"></span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <p class="mt20 s12">
-            <s:message code="login.layer.pwchg.policy" arguments="6,20" />
-            <br>
-            <br>
-            <s:message code="pwdManage.layer.msg" />
-          </p>
-        </div>
-      </div>
-      <div id="viewBtnArea" class="mt30 tc">
-        <%-- 변경하기 --%>
-        <button class="btn_skyblue" id="btnModify"><s:message code="pwdManage.layer.modifyBtn" /></button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script type="text/javascript">
-  var serviceFg = ${ccu.getCommCodeExcpAll("007")};
-  var webUseYn = ${ccu.getCommCodeExcpAll("067")};
+<script>
+  var serviceFg    = ${ccu.getCommCode("007")};
+  var webUseYn     = ${ccu.getCommCode("067")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/pwdManage/pwdManage.js?ver=20180813.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/pwdManage/pwdManage.js?ver=20181211.01" charset="utf-8"></script>
+
+<%-- 레이어 팝업 : 비밀번호 변경 --%>
+<c:import url="/WEB-INF/view/store/manage/pwdManage/pwdChange.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>

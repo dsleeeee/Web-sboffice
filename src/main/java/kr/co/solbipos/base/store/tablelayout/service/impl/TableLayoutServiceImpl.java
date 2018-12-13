@@ -87,7 +87,7 @@ public class TableLayoutServiceImpl implements TableLayoutService {
 
         if( attrMapper.selectXmlByStore(param) != null ) {
             if( attrMapper.updateStoreConfgXml(param) != 1 ) {
-                throw new BizException( messageService.get("label.modifyFail") );
+                throw new BizException( messageService.get("cmm.saveFail") );
             }
         }
         else {
@@ -111,14 +111,14 @@ public class TableLayoutServiceImpl implements TableLayoutService {
             tableGroupVO.setRegId(sessionInfoVO.getUserId());
 
             if( mapper.mergeTableGroupByStore(tableGroupVO) != 1 ) {
-                throw new BizException( messageService.get("label.modifyFail") );
+                throw new BizException( messageService.get("cmm.saveFail") );
             }
             //테이블 저장
             for(TableVO tableVO : tableGroupVO.getTables()) {
                 tableVO.setStoreCd(sessionInfoVO.getOrgnCd());
                 tableVO.setRegId(sessionInfoVO.getUserId());
                 if( mapper.mergeTableByStore(tableVO) != 1 ) {
-                    throw new BizException( messageService.get("label.modifyFail") );
+                    throw new BizException( messageService.get("cmm.saveFail") );
                 }
             }
         }

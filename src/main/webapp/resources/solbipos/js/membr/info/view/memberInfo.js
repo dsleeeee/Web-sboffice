@@ -143,6 +143,5 @@ app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.setSelectedMember(null);
     $scope.memberRegistLayer.show(true);
   };
-
 }]);
 

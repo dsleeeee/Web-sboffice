@@ -92,7 +92,7 @@ public class TableAttrServiceImpl implements TableAttrService {
 
         if( mapper.selectXmlByStore(param) != null ) {
             if( mapper.updateStoreConfgXml(param) != 1 ) {
-                throw new BizException( messageService.get("label.modifyFail") );
+                throw new BizException( messageService.get("cmm.saveFail") );
             }
         }
         else {
@@ -110,7 +110,7 @@ public class TableAttrServiceImpl implements TableAttrService {
             tableAttrVO.setStoreCd(sessionInfoVO.getOrgnCd());
             tableAttrVO.setRegId(sessionInfoVO.getUserId());
             if( mapper.mergeStoreTableAttr(tableAttrVO) != 1 ) {
-                throw new BizException( messageService.get("label.modifyFail") );
+                throw new BizException( messageService.get("cmm.saveFail") );
             }
         }
         return new Result(Status.OK);

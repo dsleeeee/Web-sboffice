@@ -95,7 +95,7 @@
               </span>
             </td>
           </tr>
-          <tr ng-if="systemEmpRegistInfo.webUseYn == 'Y'">
+          <tr ng-if="systemEmpRegistInfo.webUseYn == 'Y' && newEmpYn == true">
             <%-- 웹 사용 비밀번호 --%>
             <th>
               <div class="impWrap"><s:message code="systemEmp.pwd" /></div>
@@ -119,7 +119,7 @@
                      popover-trigger="'mouseenter'"
                      placeholder="<s:message code="systemEmp.pwd.confirm" />"
                      uib-popover="<s:message code="systemEmp.pwd.confirm" />은(는) 필수 입력항목 입니다."/>
-              <a href="#" class="btn_grayS" ng-show="newEmpYn == false" ng-click="changePassword()"><s:message code="systemEmp.change.pwd" /></a>
+              <%--<a href="#" class="btn_grayS" ng-show="newEmpYn == false" ng-click="changePassword()"><s:message code="systemEmp.change.pwd" /></a>--%>
             </td>
           </tr>
           <tr>
@@ -198,7 +198,7 @@
               </div>
             </td>
           </tr>
-          <tr ng-if=" systemEmpRegistInfo.adminFg != '' && systemEmpRegistInfo.adminFg != 'A'">
+          <tr>
             <%-- 총판/대리점(관리업체) --%>
             <th>
               <div class="impWrap"><s:message code="systemEmp.agency" /></div>
@@ -206,7 +206,7 @@
             <td>
               <input type="text" id="_agencyNm" name="agencyNm" class="sb-input w100"
                      ng-model="systemEmpRegistInfo.agencyNm"
-                     ng-click="newEmpYn == true? searchAgency() : ''"
+                     ng-click="searchAgency()"
                      readonly="readonly"/>
               <input type="hidden" id="_agencyCd" name="agencyCd" ng-model="systemEmpRegistInfo.agencyCd">
             </td>

@@ -6,198 +6,107 @@
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
  * 2018.08.13     노현수      1.0
+ * 2018.12.22     김지은      1.0           Angular 로 변경
  *
  * **************************************************************/
-$(document).ready(function () {
+/**
+ * get application
+ */
+var app = agrid.getApp();
 
-  var srchHqOfficeCd = wcombo.genInputText("#srchHqOfficeCd", 5, "");
-  var srchHqOfficeNm = wcombo.genInputText("#srchHqOfficeNm", 50, "");
-  var srchStoreCd = wcombo.genInputText("#srchStoreCd", 7, "");
-  var srchStoreNm = wcombo.genInputText("#srchStoreNm", 50, "");
-  var srchUserId = wcombo.genInputText("#srchUserId", 20, "");
-  var srchUserNm = wcombo.genInputText("#srchUserNm", 50, "");
+// 조회조건 DropBoxDataMap
+var empOrgnFgData = [
+  {"name":"전체","value":""},
+  {"name":"본사","value":"H"},
+  {"name":"매장","value":"S"}
+];
 
-  //  dataMap 
-  var serviceFgDataMap = new wijmo.grid.DataMap(serviceFg, 'value', 'name');
-  var webUseYnDataMap = new wijmo.grid.DataMap(webUseYn, 'value', 'name');
 
-  var gridData =
-    [
-      {binding: "hqOfficeCd", header: messages["pwdManage.hqOfficeCd"], width: "*"},
-      {binding: "hqOfficeNm", header: messages["pwdManage.hqOfficeNm"], width: "*"},
-      {binding: "storeCd", header: messages["pwdManage.storeCd"], width: "*"},
-      {binding: "storeNm", header: messages["pwdManage.storeNm"], width: "*"},
-      {binding: "empNo", header: messages["pwdManage.empNo"], visible: false, width: "*"},
-      {binding: "userId", header: messages["pwdManage.userId"], width: "*"},
-      {binding: "userNm", header: messages["pwdManage.userNm"], width: "*"},
-      {
-        binding: "serviceFg",
-        header: messages["pwdManage.serviceFg"],
-        dataMap: serviceFgDataMap,
-        width: "*"
-      },
-      {
-        binding: "webUseYn",
-        header: messages["pwdManage.webUseYn"],
-        dataMap: webUseYnDataMap,
-        width: "*"
-      },
-      {binding: "emailAddr", header: messages["pwdManage.emailAddr"], width: "*"},
-      {binding: "mpNo", header: messages["pwdManage.mpNo"], width: "*"},
-      {binding: "addr", header: messages["pwdManage.addr"], width: "*"}
-    ];
 
-  var grid = wgrid.genGrid("#theGrid", gridData, "Y");
-  var listScaleBox = wcombo.genCommonBox("#listScaleBox", gvListScaleBoxData);
 
-  //  그리드 포맷 
-  grid.formatItem.addHandler(function (s, e) {
-    if (e.panel == s.cells) {
-      var col = s.columns[e.col];
-      var item = s.rows[e.row].dataItem;
-      if (col.binding == "userId") {
-        wijmo.addClass(e.cell, 'wijLink wj-custom-readonly');
-      }
-    }
-  });
+/**********************************************************************
+ *  사원목록 그리드
+ **********************************************************************/
+app.controller('pwdManageCtrl', ['$scope', '$http', function ($scope, $http) {
+  // 상위 객체 상속 : T/F 는 picker
+  angular.extend(this, new RootController('pwdManageCtrl', $scope, $http, true));
 
-  // 그리드 선택 이벤트
-  grid.addEventListener(grid.hostElement, 'click', function(e) {
-    var ht = grid.hitTest(e);
-    if ( ht.cellType == wijmo.grid.CellType.Cell ) {
-      var col = ht.panel.columns[ht.col];
-      var selectedRow = grid.rows[ht.row].dataItem;
-      if( col.binding == "userId" ) {
-        showPwdManageLayer(selectedRow);
-      }
-    }
-  });
+  // 조회조건 콤보박스 데이터 Set
+  $scope._setComboData("empOrgnFg", empOrgnFgData);
+  $scope._setComboData("listScaleBox", gvListScaleBoxData);
 
-  //  조회버튼 클릭
-  $("#btnSearch").click(function (e) {
-    search(1);
-  });
+  // 사용자의 권한구분
+  $scope.userOrgnFg = gvOrgnFg;
 
-  //  페이징 
-  $(document).on("click", ".page", function () {
-    search($(this).data("value"));
-  });
-
-  //  비밀번호 임의변경 대상 목록 조회
-  function search(index) {
-    var param = {};
-    param.hqOfficeCd = srchHqOfficeCd.value;
-    param.hqOfficeNm = srchHqOfficeNm.value;
-    param.hqStoreCd = srchStoreCd.value;
-    param.hqStoreNm = srchStoreNm.value;
-    param.userId = srchUserId.value;
-    param.userNm = srchUserNm.value;
-    param.listScale = listScaleBox.selectedValue;
-    param.curr = index;
-
-    $.postJSON("/store/manage/pwdManage/pwdManage/list.sb", param,
-      function (result) {
-        var list = result.data.list;
-        grid.itemsSource = new wijmo.collections.CollectionView(list);
-
-        page.make("#page", result.data.page.curr, result.data.page.totalPage);
-        if (list.length === undefined || list.length == 0) {
-          grid.itemsSource = new wijmo.collections.CollectionView([]);
-          s_alert.pop(result.message);
-          return;
-        }
-
-      }
-      , function (result) {
-        s_alert.pop(result.message);
-        return;
-      }
-    );
+  // 선택 사원
+  $scope.emp;
+  $scope.setEmp = function(emp) {
+    $scope.emp = emp;
+  };
+  $scope.getEmp = function(){
+    return $scope.emp;
   };
 
-  var layerPwdChgFgDataMap = [{"name":"웹(WEB) 비밀번호","value":"WEB"},{"name":"포스(POS) 비밀번호","value":"POS"}];
-  var layerPwdChgFgCombo = wcombo.genCommonBoxFun("#layerPwdChgFg", layerPwdChgFgDataMap, function(s,e) {
-      $("#layerNewPassword, #layerConfirmPassword").val("");
-      if ( s.selectedValue === "WEB" ) {
-        $("#layerNewPassword, #layerConfirmPassword").attr('maxlength','16');
-        $("#layerNewPassword, #layerConfirmPassword").removeAttr("keyup");
-      } else {
-        $("#layerNewPassword, #layerConfirmPassword").attr('maxlength','4');
-        $("#layerNewPassword, #layerConfirmPassword").on("keyup", function() {
-          $(this).val($(this).val().replace(/[^0-9]/g,""));
-        });
+  // grid 초기화 : 생성되기전 초기화되면서 생성된다
+  $scope.initGrid = function (s, e) {
+
+    // 그리드 내 콤보박스 데이터 set
+    $scope.empOrgnFgDataMap = new wijmo.grid.DataMap(empOrgnFgData, 'value', 'name');
+    $scope.serviceFgDataMap = new wijmo.grid.DataMap(serviceFg, 'value', 'name');
+    $scope.webUseYnDataMap = new wijmo.grid.DataMap(webUseYn, 'value', 'name');
+
+    // ReadOnly 효과설정
+    s.formatItem.addHandler(function (s, e) {
+      if (e.panel === s.cells) {
+        var col = s.columns[e.col];
+        // 사원 선택 가능
+        if (col.binding === "userId") {
+          wijmo.addClass(e.cell, 'wijLink');
+        }
       }
-  });
+    });
 
-  // 레이어영역 시작
-  $(".pwdModifyClose").click(function (e) {
-    closePwdManageLayer();
-  });
-
-  function showPwdManageLayer(data) {
-    $("#pwdModifyTent").show();
-    $("#pwdModifyLayer").show();
-
-    $("#pwdModifyUserId").val(data.userId);
-    $("#pwdModifyEmpNo").val(data.empNo);
-    $("#layerUserId").text(data.userId);
-    $("#layerUserNm").text(data.userNm);
-
-  }
-
-  function closePwdManageLayer() {
-    // 비밀번호 값 초기화
-    $("#layerNewPassword").val("");
-    $("#layerConfirmPassword").val("");
-    // 창닫기
-    $("#pwdModifyTent").hide();
-    $("#pwdModifyLayer").hide();
-  }
-
-  //  비밀번호 변경 
-  $("#btnModify").click(function (e) {
-
-    var param = {};
-    param.pwdChgFg = layerPwdChgFgCombo.selectedValue;
-    param.empNo = $("#pwdModifyEmpNo").val();
-    param.userId = $("#pwdModifyUserId").val();
-    param.newPassword = $("#layerNewPassword").val();
-    param.confirmPassword = $("#layerConfirmPassword").val();
-
-    $.postJSON("/store/manage/pwdManage/pwdManage/modify.sb", param,
-      function (result) {
-        s_alert.popOk(messages["pwdManage.modifySucc"], function () {
-          closePwdManageLayer();
-        });
-      },
-      function (result) {
-        processError(result.data);
+    // 사원선택
+    s.addEventListener(s.hostElement, 'mousedown', function(e) {
+      var ht = s.hitTest(e);
+      if( ht.cellType === wijmo.grid.CellType.Cell) {
+        var col = ht.panel.columns[ht.col];
+        // 선택 사원 비밀번호 변경 팝업
+        if ( col.binding === "userId" ) {
+          var selectedData = s.rows[ht.row].dataItem;
+          $scope.setEmp(selectedData);
+          $scope.pwdChangePopupLayer.show(true, function(){
+            var changeScope = agrid.getScope('pwdChangeCtrl');
+            $scope.$apply(function() {
+              changeScope.pwdChange = null;
+            });
+          });
+          event.preventDefault();
+        }
       }
-    );
+    });
+  };
 
+  // 조회 버튼 클릭
+  $scope.$on("pwdManageCtrl", function(event, data) {
+    $scope.getEmpList();
+    event.preventDefault();
   });
-  
-  // 비밀번호 변경 오류 실패처리
-  function processError(data) {
 
-    if (data.newPassword != undefined) {
-      $("#newPasswordError").text(data.newPassword != undefined ? data.newPassword : "");
-      $("#newPasswordError").show();
-    } else {
-      $("#newPasswordError").hide();
-    }
+  // 회원 목록 조회
+  $scope.getEmpList = function(){
+    var params = {};
+    $scope._inquiryMain("/store/manage/pwdManage/pwdManage/list.sb", params, function() {
+    });
+  };
 
-    if (data.confirmPassword != undefined) {
-      $("#confirmPasswordError").text(
-        data.confirmPassword != undefined ? data.confirmPassword : "");
-      $("#confirmPasswordError").show();
-    } else {
-      $("#confirmPasswordError").hide();
-    }
-
-    if (data.msg != undefined) {
-      s_alert.pop(data.msg);
-    }
-  }
-
-});
+  // 화면 ready 된 후 설정
+  angular.element(document).ready(function () {
+    // 비밀번호 변경 팝업 핸들러 추가
+    $scope.pwdChangePopupLayer.shown.addHandler(function (s) {
+      setTimeout(function() {
+        $scope._broadcast('pwdChangeCtrl', $scope.getEmp());
+      }, 50)
+    });
+  });
+}]);

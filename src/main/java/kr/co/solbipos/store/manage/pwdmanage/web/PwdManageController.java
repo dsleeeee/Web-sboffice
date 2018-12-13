@@ -10,9 +10,12 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.PwChgResult;
 import kr.co.solbipos.store.manage.pwdmanage.service.PwdManageService;
 import kr.co.solbipos.store.manage.pwdmanage.service.PwdManageVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -43,6 +46,8 @@ import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 @RequestMapping(value = "/store/manage/pwdManage")
 public class PwdManageController {
 
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
     private final PwdManageService pwdManageService;
     private final MessageService messageService;
     private final SessionService sessionService;
@@ -67,7 +72,6 @@ public class PwdManageController {
     @RequestMapping(value = "/pwdManage/view.sb", method = RequestMethod.GET)
     public String pwdManageView(HttpServletRequest request, HttpServletResponse response,
             Model model) {
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         return "store/manage/pwdManage/pwdManage";
     }
 
@@ -86,7 +90,9 @@ public class PwdManageController {
     public Result getPwdManageList(HttpServletRequest request, HttpServletResponse response,
             PwdManageVO pwdManageVO, Model model) {
 
-        List<DefaultMap<String>> list = pwdManageService.getPwdManageList(pwdManageVO);
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = pwdManageService.getPwdManageList(pwdManageVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, pwdManageVO);
 
@@ -104,8 +110,8 @@ public class PwdManageController {
      */
     @RequestMapping(value = "/pwdManage/modify.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result updatePassword(HttpServletRequest request,
-            HttpServletResponse response, PwdManageVO pwdManageVO, Model model) {
+    public Result updatePassword(@RequestBody PwdManageVO pwdManageVO, HttpServletRequest request,
+            HttpServletResponse response,  Model model) {
 
         pwdManageVO.setRegId(sessionService.getSessionInfo().getUserId());
         pwdManageVO.setModId(sessionService.getSessionInfo().getUserId());
@@ -113,47 +119,7 @@ public class PwdManageController {
         // 패스워드 변경
         PwChgResult result = pwdManageService.modifyPwd(pwdManageVO);
 
-        if (result == PwChgResult.NEW_PASSWORD_NOT_MATCH) {
-            /** 새 비밀번호와 새 비밀번호 확인이 일치하는지 확인 */
-            return returnJson(Status.FAIL, "msg", messageService.get("login.pw.find.not.match"));
-        } else if (result == PwChgResult.PASSWORD_NEW_OLD_MATH) {
-            /** 변경 패스워드가 기존 비밀번호가 같은지 체크 */
-            return returnJson(Status.FAIL, "msg", messageService.get("login.layer.pwchg.current"));
-        }else if (result == PwChgResult.PASSWORD_NOT_MATCH_LENGTH) {
-            /**
-             * 비밀번호는 최소 6자 이상 20자 이하만 가능
-             */
-            return returnJson(Status.FAIL, messageService.get("login.pw.not.match.length"));
-        } else if (result == PwChgResult.PASSWORD_NOT_MATCH_CHAR) {
-            /**
-             * 비밀번호는 숫자와 영문, 특수문자(!,@,$,~)만 사용 가능
-             */
-            return returnJson(Status.FAIL, messageService.get("login.pw.not.match.char"));
-        } else if (result == PwChgResult.PASSWORD_NOT_CONTAIN_NUMBER) {
-            /**
-             * 비밀번호는 반드시 숫자가 포함
-             */
-            return returnJson(Status.FAIL, messageService.get("login.pw.not.contain.number"));
-        } else if (result == PwChgResult.PASSWORD_NOT_CONTAIN_ENG_CHAR) {
-            /**
-             * 비밀번호는 영문자가 반드시 포함
-             */
-            return returnJson(Status.FAIL, messageService.get("login.pw.not.contain.char"));
-        } else if (result == PwChgResult.PASSWORD_CONTINUED_CHAR) {
-            /**
-             * 숫자 또는 알파벳 순서대로 3자이상 사용하는 비밀번호는 사용할 수 없습니다.
-             */
-            return returnJson(Status.FAIL, messageService.get("login.pw.cannot.be.used.continued.char"));
-        } else if (result == PwChgResult.PASSWORD_SAME_CHAR) {
-            /**
-             * 동일한 문자 또는 숫자를 3자 이상 사용할 수 없습니다.
-             */
-            return returnJson(Status.FAIL, messageService.get("login.pw.cannot.be.used.same.char"));
-        }
-
-
         return returnJson(Status.OK, result);
-
     }
 
 }

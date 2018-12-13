@@ -43,6 +43,7 @@
                     AND thp.PROD_CLASS_CD = thpc.PROD_CLASS_CD
                 LEFT OUTER JOIN (
                     SELECT
+                        HQ_OFFICE_CD,
                         PROD_CD,
                         MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
                         ORDER BY
@@ -56,8 +57,9 @@
                         AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         ]]>
                     GROUP BY
-                    PROD_CD ) thpsp ON
-                    thp.PROD_CD = thpsp.PROD_CD
+                        HQ_OFFICE_CD, PROD_CD ) thpsp ON
+                    thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
+                    AND thp.PROD_CD = thpsp.PROD_CD
                 WHERE
                     thp.HQ_OFFICE_CD = #{hqOfficeCd}
                 <if test="prodClassCd != null and prodClassCd != ''">
@@ -81,6 +83,7 @@
                     AND tmp.PROD_CLASS_CD = tmpc.PROD_CLASS_CD
                 LEFT OUTER JOIN (
                     SELECT
+                        STORE_CD,
                         PROD_CD,
                         MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
                         ORDER BY
@@ -94,8 +97,9 @@
                         AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         ]]>
                     GROUP BY
-                        PROD_CD ) tmpsp ON
-                    tmp.PROD_CD = tmpsp.PROD_CD
+                        STORE_CD, PROD_CD ) tmpsp ON
+                    tmp.STORE_CD = tmpsp.STORE_CD
+                    AND tmp.PROD_CD = tmpsp.PROD_CD
                 WHERE
                     tmp.STORE_CD = #{storeCd}
                 <if test="prodClassCd != null and prodClassCd != ''">
@@ -215,8 +219,10 @@
             FONT_SIZE,
             FONT_OFF_COLOR,
             BUTTON_OFF_COLOR
-        FROM TB_CM_TOUCH_KEY_STYLE_DTL
-        WHERE STYLE_CD = #{styleCd}
+        FROM
+            TB_CM_TOUCH_KEY_STYLE_DTL
+        WHERE
+            STYLE_CD = #{styleCd}
             AND BUTTON_FG = #{buttonFg}
             AND BUTTON_TAG_FG = #{buttonTagFg}
 
@@ -274,9 +280,11 @@
                 FROM
                     TB_HQ_TOUCH_KEY thtk
                 LEFT OUTER JOIN TB_HQ_PRODUCT thp ON
-                    thtk.PROD_CD = thp.PROD_CD
+                    thtk.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                    AND thtk.PROD_CD = thp.PROD_CD
                 LEFT OUTER JOIN (
                     SELECT
+                        HQ_OFFICE_CD,
                         PROD_CD,
                         MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
                             ORDER BY
@@ -290,8 +298,9 @@
                         AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         ]]>
                     GROUP BY
-                        PROD_CD ) thpsp ON
-                    thtk.PROD_CD = thpsp.PROD_CD
+                    HQ_OFFICE_CD, PROD_CD ) thpsp ON
+                    thtk.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
+                    AND thtk.PROD_CD = thpsp.PROD_CD
                 WHERE
                     thtk.HQ_OFFICE_CD = #{hqOfficeCd}
                 GROUP BY
@@ -308,9 +317,11 @@
                 FROM
                     TB_MS_TOUCH_KEY tmtk
                 LEFT OUTER JOIN TB_MS_PRODUCT tmp ON
-                    tmtk.PROD_CD = tmp.PROD_CD
+                    tmtk.STORE_CD = tmp.STORE_CD
+                    AND tmtk.PROD_CD = tmp.PROD_CD
                 LEFT OUTER JOIN (
                     SELECT
+                        STORE_CD,
                         PROD_CD,
                         MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
                             ORDER BY
@@ -324,8 +335,9 @@
                         AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         ]]>
                     GROUP BY
-                        PROD_CD ) tmpsp ON
-                    tmtk.PROD_CD = tmpsp.PROD_CD
+                        STORE_CD, PROD_CD ) tmpsp ON
+                    tmtk.STORE_CD = tmpsp.STORE_CD
+                    AND tmtk.PROD_CD = tmpsp.PROD_CD
                 WHERE
                     tmtk.STORE_CD = #{storeCd}
                 GROUP BY
@@ -395,32 +407,32 @@
     <update id="updateTouchKeyConfgXml" parameterType="DefaultMap">
         /* USE : TouchkeyMapper.updateTouchKeyConfgXml */
         <choose>
-        <!-- 본사 -->
-        <when test='orgnFg != null and orgnFg == "H"'>
-            UPDATE
-                TB_WB_HQ_CONFG_XML twhcx
-            SET
-                twhcx.XML = #{xml:CLOB},
-                twhcx.USE_YN = #{useYn},
-                twhcx.MOD_DT = #{regDt},
-                twhcx.MOD_ID = #{regId}
-            WHERE
-                twhcx.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND twhcx.CONFG_FG = #{confgFg}
-        </when>
-        <!-- 매장 -->
-        <when test='orgnFg != null and orgnFg == "S"'>
-            UPDATE
-                TB_WB_STORE_CONFG_XML twscx
-            SET
-                twscx.XML = #{xml:CLOB},
-                twscx.USE_YN = #{useYn},
-                twscx.MOD_DT = #{regDt},
-                twscx.MOD_ID = #{regId}
-            WHERE
-                twscx.STORE_CD = #{storeCd}
-                AND twscx.CONFG_FG = #{confgFg}
-        </when>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE
+                    TB_WB_HQ_CONFG_XML twhcx
+                SET
+                    twhcx.XML = #{xml:CLOB},
+                    twhcx.USE_YN = #{useYn},
+                    twhcx.MOD_DT = #{regDt},
+                    twhcx.MOD_ID = #{regId}
+                WHERE
+                    twhcx.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND twhcx.CONFG_FG = #{confgFg}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE
+                    TB_WB_STORE_CONFG_XML twscx
+                SET
+                    twscx.XML = #{xml:CLOB},
+                    twscx.USE_YN = #{useYn},
+                    twscx.MOD_DT = #{regDt},
+                    twscx.MOD_ID = #{regId}
+                WHERE
+                    twscx.STORE_CD = #{storeCd}
+                    AND twscx.CONFG_FG = #{confgFg}
+            </when>
         </choose>
     </update>
 

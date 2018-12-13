@@ -11,6 +11,7 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.exception.BizException;
+import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -164,7 +165,7 @@ public class PosFuncServiceImpl implements PosFuncService{
 
         if( mapper.getFuncKeyXml(param) != null ) {
             if( mapper.updateFuncKeyConfgXml(param) != 1 ) {
-                throw new BizException( messageService.get("label.modifyFail") );
+                throw new BizException( messageService.get("cmm.saveFail") );
             }
         } else {
             if( mapper.insertFuncKeyConfgXml(param) != 1 ) {
@@ -194,7 +195,7 @@ public class PosFuncServiceImpl implements PosFuncService{
             posfuncKeyVO.setModDt(regDt);
             // 포스기능키 저장
             if( mapper.insertPosFuncKey(posfuncKeyVO) != 1 ) {
-                throw new BizException( messageService.get("label.modifyFail") );
+                throw new BizException( messageService.get("cmm.saveFail") );
             }
         }
 
@@ -283,6 +284,25 @@ public class PosFuncServiceImpl implements PosFuncService{
         return mapper.getAuthEmpList(posFuncVO);
     }
 
+    /** 포스기능 인증관리 인증여부 저장 */
+    @Override
+    public int savePosAuthConf(PosFuncVO[] posFuncVOs, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+        String dt = currentDateTimeString();
+
+        for(PosFuncVO posFuncVO : posFuncVOs) {
+            posFuncVO.setModDt(dt);
+            posFuncVO.setModId(sessionInfoVO.getUserId());
+
+            if(posFuncVO.getStatus() == GridDataFg.UPDATE){
+                result = mapper.savePosAuthConf(posFuncVO);
+            }
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+        return result;
+    }
+
     /** 포스기능 인증허용대상 저장 */
     @Override public int saveAuthEmp(PosFuncVO[] posFuncVOs, SessionInfoVO sessionInfoVO) {
         int procCnt = 0;
@@ -295,7 +315,9 @@ public class PosFuncServiceImpl implements PosFuncService{
             posFuncVO.setModDt(dt);
             posFuncVO.setModId(sessionInfoVO.getUserId());
 
-            procCnt += mapper.saveAuthEmp(posFuncVO);
+            procCnt = mapper.saveAuthEmp(posFuncVO);
+            if(procCnt <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
         }
         return procCnt;
     }

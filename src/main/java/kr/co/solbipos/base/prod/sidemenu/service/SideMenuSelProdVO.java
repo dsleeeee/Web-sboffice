@@ -32,6 +32,8 @@ public class SideMenuSelProdVO extends PageVO {
     private String prodCd;
     /** 추가상품단가 */
     private Double addProdUprc;
+    /** 추가상품수량 */
+    private Double addProdQty;
     /** 표기순번 */
     private Integer dispSeq;
     /** 사용여부 */
@@ -117,6 +119,20 @@ public class SideMenuSelProdVO extends PageVO {
      */
     public void setAddProdUprc(Double addProdUprc) {
         this.addProdUprc = addProdUprc;
+    }
+
+    /**
+     * @return the addProdQty
+     */
+    public Double getAddProdQty() {
+        return addProdQty;
+    }
+
+    /**
+     * @param addProdQty the addProdQty to set
+     */
+    public void setAddProdQty(Double addProdQty) {
+        this.addProdQty = addProdQty;
     }
 
     /**

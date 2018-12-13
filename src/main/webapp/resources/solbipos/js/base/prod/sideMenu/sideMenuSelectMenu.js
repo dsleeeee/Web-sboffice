@@ -29,9 +29,6 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
           var item = s.rows[e.row].dataItem;
           if (item.status !== 'I') {
             wijmo.addClass(e.cell, 'wijLink');
-            wijmo.addClass(e.cell, 'wj-custom-readonly');
-          } else {
-            wijmo.removeClass(e.cell, 'wj-custom-readonly');
           }
         }
       }
@@ -54,6 +51,10 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
         var selectedRow = s.rows[ht.row].dataItem;
         if ( col.binding === 'sdselGrpCd' && selectedRow.status !== 'I') {
           $scope._broadcast('sideMenuSelectClassCtrl', selectedRow.sdselGrpCd);
+          var prodGrid = agrid.getScope('sideMenuSelectProdCtrl');
+          prodGrid.$apply(function(){
+            prodGrid._gridDataInit();
+          });
         }
       }
     });
@@ -78,8 +79,9 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
     var params = {};
     params.status = 'I';
     params.gChk = true;
+    params.sdselGrpCd = '자동채번';
     // 추가기능 수행 : 파라미터
-    $scope._addRow(params);
+    $scope._addRow(params, 2);
   };
   // 저장
   $scope.save = function() {
@@ -134,9 +136,6 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
           var item = s.rows[e.row].dataItem;
           if (item.status !== 'I') {
             wijmo.addClass(e.cell, 'wijLink');
-            wijmo.addClass(e.cell, 'wj-custom-readonly');
-          } else {
-            wijmo.removeClass(e.cell, 'wj-custom-readonly');
           }
         }
       }
@@ -190,8 +189,9 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
     params.sdselQty = '0';
     params.status = 'I';
     params.gChk = true;
+    params.sdselClassCd = '자동채번';
     // 추가기능 수행 : 파라미터
-    $scope._addRow(params);
+    $scope._addRow(params, 2);
   };
   // 저장
   $scope.save = function() {
@@ -299,9 +299,6 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
           var item = s.rows[e.row].dataItem;
           if (item.status !== 'I') {
             wijmo.addClass(e.cell, 'wijLink');
-            wijmo.addClass(e.cell, 'wj-custom-readonly');
-          } else {
-            wijmo.removeClass(e.cell, 'wj-custom-readonly');
           }
         }
       }

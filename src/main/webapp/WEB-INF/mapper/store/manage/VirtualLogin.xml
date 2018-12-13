@@ -90,7 +90,7 @@
         <if test='sysStatFg != null and sysStatFg != ""'>
             AND tho.SYS_STAT_FG = #{sysStatFg}
         </if>
-        ORDER BY tho.HQ_OFFICE_CD DESC, tms.STORE_CD DESC, tca.AGENCY_CD DESC
+        ORDER BY tho.HQ_OFFICE_CD ASC, tms.STORE_CD ASC, tca.AGENCY_CD ASC
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 

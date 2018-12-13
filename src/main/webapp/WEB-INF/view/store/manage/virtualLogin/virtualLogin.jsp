@@ -115,22 +115,23 @@
           sticky-headers="true"
           selection-mode="Row"
           items-source="data"
-          item-formatter="_itemFormatter">
+          item-formatter="_itemFormatter"
+          is-read-only="true">
 
           <!-- define columns -->
 
-          <wj-flex-grid-column header="<s:message code="virtualLogin.hqOfficeCd"/>" binding="hqOfficeCd" align="center" ng-if="userOrgnFg == 'M'"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="virtualLogin.hqOfficeNm"/>" binding="hqOfficeNm" align="center" ng-if="userOrgnFg == 'M'"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.hqOfficeCd"/>" binding="hqOfficeCd" width="100" align="center" ng-if="userOrgnFg == 'M'"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.hqOfficeNm"/>" binding="hqOfficeNm" ng-if="userOrgnFg == 'M'"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="virtualLogin.hqUserId"/>" binding="hqUserId" visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="virtualLogin.storeCd"/>" binding="storeCd" width="100" align="center" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.storeCd"/>" binding="storeCd" width="100" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="virtualLogin.storeNm"/>" binding="storeNm" width="200"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="virtualLogin.msUserId"/>" binding="msUserId" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="virtualLogin.clsFgNm"/>" binding="clsFgNm" width="80" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="virtualLogin.sysStatFgNm"/>" binding="sysStatFgNm" width="80" align="center"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="virtualLogin.ownerNm"/>" binding="ownerNm" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.ownerNm"/>" binding="ownerNm" width="90" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="virtualLogin.telNo"/>" binding="telNo" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="virtualLogin.mpNo"/>" binding="mpNo" align="center" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="virtualLogin.agencyNm"/>" binding="agencyNm" align="center" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.agencyNm"/>" binding="agencyNm" width="100" align="center" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="virtualLogin.cmUserId"/>" binding="cmUserId" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="virtualLogin.sysOpenDate"/>" binding="sysOpenDate" width="110" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="virtualLogin.sysClosureDate"/>" binding="sysClosureDate" width="110" align="center"></wj-flex-grid-column>

@@ -2,6 +2,7 @@ package kr.co.solbipos.base.store.emp.system.service.impl;
 
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.security.EncUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -18,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
-import static org.springframework.util.StringUtils.isEmpty;
 
 /**
  * @Class Name : SystemEmpServiceImpl.java
@@ -44,13 +44,16 @@ public class SystemEmpServiceImpl implements SystemEmpService {
     private final String DEFAULT_POS_PASSWORD = "1234";
     private final String PASSWORD_REGEX = "^[A-Za-z0-9]{6,20}$";
 
-    private final kr.co.solbipos.base.store.emp.system.service.impl.SystemEmpMapper systemEmpMapper;
+    private final SystemEmpMapper systemEmpMapper;
+    private final MessageService messageService;
+
 
     /** Constructor Injection */
     @Autowired
     public SystemEmpServiceImpl(
-        kr.co.solbipos.base.store.emp.system.service.impl.SystemEmpMapper systemEmpMapper) {
+        kr.co.solbipos.base.store.emp.system.service.impl.SystemEmpMapper systemEmpMapper, MessageService messageService) {
         this.systemEmpMapper = systemEmpMapper;
+        this.messageService = messageService;
     }
 
     /** 사원 리스트 조회 */
@@ -68,47 +71,53 @@ public class SystemEmpServiceImpl implements SystemEmpService {
     @Override
     public EmpResult insertSystemEmpInfo(SystemEmpVO systemEmpVO, SessionInfoVO sessionInfoVO) {
 
-        String dt = currentDateTimeString();
+        try{
 
-        String empNo = systemEmpMapper.getSystemEmpNo();
-        if( systemEmpVO.getAdminFg() ==  AdminFg.ADMIN ) {
-            systemEmpVO.setAgencyCd("00000"); // 시스템 관리자인 경우 '00000'
-        }
+            String dt = currentDateTimeString();
 
-        systemEmpVO.setEmpNo(empNo);
-        systemEmpVO.setEmpPwd(EncUtil.setEncSHA256(systemEmpVO.getEmpNo() + DEFAULT_POS_PASSWORD)); // 포스비밀번호 (초기 비밀번호)
-        systemEmpVO.setUseYn(UseYn.Y);
-        systemEmpVO.setRegId(sessionInfoVO.getUserId());
-        systemEmpVO.setRegDt(dt);
-        systemEmpVO.setModId(sessionInfoVO.getUserId());
-        systemEmpVO.setModDt(dt);
+            String empNo = systemEmpMapper.getSystemEmpNo();
+//            if( systemEmpVO.getAdminFg() ==  AdminFg.ADMIN ) {
+//                systemEmpVO.setAgencyCd("00001"); // 시스템 관리자인 경우 '00000'
+//            }
 
-        if(systemEmpVO.getWebUseYn() == UseYn.Y ) {
-            // 비밀번호 정책 체크
-            EmpResult pwdChgResult = passwordPolicy(systemEmpVO);
-            if( EmpResult.SUCCESS != pwdChgResult ) {
-                return pwdChgResult;
-            }
-        }
+            systemEmpVO.setEmpNo(empNo);
+            systemEmpVO.setEmpPwd(EncUtil.setEncSHA256(systemEmpVO.getEmpNo() + DEFAULT_POS_PASSWORD)); // 포스비밀번호 (초기 비밀번호)
+            systemEmpVO.setUseYn(UseYn.Y);
+            systemEmpVO.setRegId(sessionInfoVO.getUserId());
+            systemEmpVO.setRegDt(dt);
+            systemEmpVO.setModId(sessionInfoVO.getUserId());
+            systemEmpVO.setModDt(dt);
 
-        // 등록
-        if( systemEmpMapper.insertSystemEmpInfo(systemEmpVO) != 1 ) {
-            return EmpResult.FAIL;
-        } else {
             if(systemEmpVO.getWebUseYn() == UseYn.Y ) {
-
-                // todo 현재는 보나비용으로 시스템, 대리점 권한을 넣음 (추후 변경 필요)
-                if(systemEmpVO.getAdminFg() == AdminFg.ADMIN) {
-                    systemEmpVO.setAuthGrpCd("000005");
-                } else {
-                    systemEmpVO.setAuthGrpCd("000006");
-                }
-
-                if( systemEmpMapper.insertWbUserInfo(systemEmpVO) != 1 ) {
-                    return EmpResult.FAIL;
+                // 비밀번호 정책 체크
+                EmpResult pwdChgResult = passwordPolicy(systemEmpVO);
+                if( EmpResult.SUCCESS != pwdChgResult ) {
+                    return pwdChgResult;
                 }
             }
+
+            // 등록
+            if( systemEmpMapper.insertSystemEmpInfo(systemEmpVO) != 1 ) {
+                return EmpResult.FAIL;
+            } else {
+                if(systemEmpVO.getWebUseYn() == UseYn.Y ) {
+
+                    // todo 현재는 보나비용으로 시스템, 대리점 권한을 넣음 (추후 변경 필요)
+                    if(systemEmpVO.getAdminFg() == AdminFg.ADMIN) {
+                        systemEmpVO.setAuthGrpCd("000005");
+                    } else {
+                        systemEmpVO.setAuthGrpCd("000006");
+                    }
+
+                    if( systemEmpMapper.insertWbUserInfo(systemEmpVO) != 1 ) {
+                        return EmpResult.FAIL;
+                    }
+                }
+            }
+        }catch(Exception ex){
+            return EmpResult.FAIL;
         }
+
         return EmpResult.SUCCESS;
     }
 
@@ -116,29 +125,36 @@ public class SystemEmpServiceImpl implements SystemEmpService {
     @Override
     public EmpResult saveSystemEmpInfo(SystemEmpVO systemEmpVO, SessionInfoVO sessionInfoVO) {
 
-        DefaultMap<String> systemEmpDtlInfo = getSystemEmpDtlInfo(systemEmpVO, sessionInfoVO);
-        String dt = currentDateTimeString();
 
-        systemEmpVO.setPriorPwd(systemEmpMapper.getSystemEmpPassword(systemEmpVO));
-        systemEmpVO.setRegId(sessionInfoVO.getUserId());
-        systemEmpVO.setRegDt(dt);
-        systemEmpVO.setModId(sessionInfoVO.getUserId());
-        systemEmpVO.setModDt(dt);
-        systemEmpVO.setRegIp(sessionInfoVO.getLoginIp());
+        try{
 
-        if( systemEmpVO.getWebUseYn() == UseYn.Y) {
-            systemEmpVO.setAuthGrpCd(AUTH_GRP_CD);
-        }
+            DefaultMap<String> systemEmpDtlInfo = getSystemEmpDtlInfo(systemEmpVO, sessionInfoVO);
+            String dt = currentDateTimeString();
 
-        if( systemEmpMapper.updateSystemEmpInfo(systemEmpVO) != 1 ) {
-            return EmpResult.FAIL;
-        }
-        else{
-            if( "Y".equals(systemEmpDtlInfo.getStr("webUseYn")) || "Y".equals(systemEmpVO.getWebUseYn())) {
-                if( systemEmpMapper.saveWbUserInfo(systemEmpVO) != 1 ) {
-                    return EmpResult.FAIL;
+            systemEmpVO.setPriorPwd(systemEmpMapper.getSystemEmpPassword(systemEmpVO));
+            systemEmpVO.setRegId(sessionInfoVO.getUserId());
+            systemEmpVO.setRegDt(dt);
+            systemEmpVO.setModId(sessionInfoVO.getUserId());
+            systemEmpVO.setModDt(dt);
+            systemEmpVO.setRegIp(sessionInfoVO.getLoginIp());
+
+            if( systemEmpVO.getWebUseYn() == UseYn.Y) {
+                systemEmpVO.setAuthGrpCd(AUTH_GRP_CD);
+            }
+
+            if( systemEmpMapper.updateSystemEmpInfo(systemEmpVO) <= 0 ) {
+                return EmpResult.FAIL;
+            }
+            else{
+                if( "Y".equals(systemEmpDtlInfo.getStr("webUseYn")) || "Y".equals(systemEmpVO.getWebUseYn())) {
+                    if( systemEmpMapper.saveWbUserInfo(systemEmpVO) <= 0 ) {
+                        return EmpResult.FAIL;
+                    }
                 }
             }
+
+        }catch(Exception ex){
+            return EmpResult.FAIL;
         }
 
         return EmpResult.SUCCESS;
@@ -163,12 +179,17 @@ public class SystemEmpServiceImpl implements SystemEmpService {
     /** 비밀번호 정책 */
     private EmpResult passwordPolicy(SystemEmpVO systemEmpVO) {
 
-        String currentPassword = EncUtil.setEncSHA256(systemEmpVO.getUserId() + systemEmpVO.getCurrentPwd());
         String newUserPassword = EncUtil.setEncSHA256(systemEmpVO.getUserId() + systemEmpVO.getUserPwd());
 
-        // 현재 비밀번호 불일치
-        if(!systemEmpVO.getPriorPwd().equals(currentPassword)) {
-            return EmpResult.PASSWORD_NOT_MATCH;
+        // 비밀번호 변경시
+        if(systemEmpVO.getPwdChgFg()) {
+
+            String currentPassword = EncUtil.setEncSHA256(systemEmpVO.getUserId() + systemEmpVO.getCurrentPwd());
+
+            // 현재 비밀번호 불일치
+            if(!systemEmpVO.getPriorPwd().equals(currentPassword)) {
+                return EmpResult.PASSWORD_NOT_MATCH;
+            }
         }
 
         // 기존 비밀번호와 동일

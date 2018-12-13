@@ -331,3 +331,9 @@ var memberClassList = ${memberClassList};
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
+<%-- 회원 매핑코드 조회 --%>
+<c:import url="/WEB-INF/view/membr/info/view/memberMapping.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
