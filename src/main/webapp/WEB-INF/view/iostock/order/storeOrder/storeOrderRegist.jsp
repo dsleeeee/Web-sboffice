@@ -112,11 +112,22 @@
         </tr>
         <tr>
           <td colspan="4">
-            <a href="#" class="btn_grayS" ng-click=""><s:message code="storeOrder.dtl.excelFormDownload"/></a>
-            <a href="#" class="btn_grayS" ng-click=""><s:message code="storeOrder.dtl.excelFormUpload"/></a>
-            <a href="#" class="btn_grayS" ng-click=""><s:message code="storeOrder.dtl.textFormUpload"/></a>
+            <a href="#" class="btn_grayS" ng-click="excelUp('down')"><s:message code="storeOrder.dtl.excelFormDownload"/></a>
+            <span class="txtIn w120px" style="border:1px solid #e8e8e8;">
+                <wj-combo-box
+                  id="addQtyFg"
+                  ng-model="addQtyFg"
+                  items-source="_getComboData('addQtyFg')"
+                  display-member-path="name"
+                  selected-value-path="value"
+                  is-editable="false"
+                  initialized="_initComboBox(s)">
+                </wj-combo-box>
+            </span>
+            <a href="#" class="btn_grayS" ng-click="excelUp('up')"><s:message code="storeOrder.dtl.excelFormUpload"/></a>
+            <a href="#" class="btn_grayS" ng-click="textUp()"><s:message code="storeOrder.dtl.textFormUpload"/></a>
             <a href="#" class="btn_grayS" ng-click=""><s:message code="cmm.excel.down"/></a>
-            <a href="#" class="btn_grayS" ng-click=""><s:message code="storeOrder.dtl.excelFormUploadErrorInfo"/></a>
+            <a href="#" class="btn_grayS" ng-click="excelUploadErrInfo()"><s:message code="storeOrder.dtl.excelFormUploadErrorInfo"/></a>
           </td>
         </tr>
         </tbody>
@@ -219,6 +230,11 @@
       {"name": messages["storeOrder.dtl.option2Sale"], "value": "SALE"}
     ]);
 
+    $scope._setComboData("addQtyFg", [
+      {"name": messages["storeOrder.dtl.addQtyFgApply"], "value": "apply"},
+      {"name": messages["storeOrder.dtl.addQtyFgAdd"], "value": "add"}
+    ]);
+
     $scope.srchRegStartDate = wcombo.genDate("#srchRegStartDate");
     $scope.srchRegEndDate   = wcombo.genDate("#srchRegEndDate");
 
@@ -232,16 +248,14 @@
           var item = s.rows[e.row].dataItem;
           if (col.binding === "orderUnitQty") {
             $scope.calcAmt(item);
-          }
-          else if (col.binding === "orderEtcQty") { // 입수에 따라 주문수량 컬럼 readonly 컨트롤
+          } else if (col.binding === "orderEtcQty") { // 입수에 따라 주문수량 컬럼 readonly 컨트롤
             if (item.poUnitQty === 1) {
               wijmo.addClass(e.cell, 'wj-custom-readonly');
               wijmo.setAttribute(e.cell, 'aria-readonly', true);
 
               // Attribute 의 변경사항을 적용.
               e.cell.outerHTML = e.cell.outerHTML;
-            }
-            else {
+            } else {
               $scope.calcAmt(item);
             }
           }
@@ -363,8 +377,7 @@
         else if ($scope.callParent === "storeOrderDtl") {
           $scope.storeCloseCheck(); // 주문진행구분 체크
         }
-      }
-      else { // 페이징처리에서 broadcast 호출시
+      } else { // 페이징처리에서 broadcast 호출시
         $scope.searchStoreOrderRegistList();
       }
 
@@ -385,7 +398,7 @@
         params : params, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
-        if ($scope.httpStatusCheck(response)) {
+        if ($scope._httpStatusCheck(response, true)) {
           if (!$.isEmptyObject(response.data.data)) {
             if (response.data.data.orderFg > 0) {
               $scope._popMsg(messages["storeOrder.dtl.not.orderDate"]);
@@ -421,7 +434,7 @@
         params : params, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
-        if ($scope.httpStatusCheck(response)) {
+        if ($scope._httpStatusCheck(response, true)) {
           if (!$.isEmptyObject(response.data.data)) {
             if (response.data.data.orderCloseFg === "Y") {
               $scope._popMsg(messages["storeOrder.dtl.orderClose"]);
@@ -457,7 +470,7 @@
         params : params, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
-        if ($scope.httpStatusCheck(response)) {
+        if ($scope._httpStatusCheck(response, true)) {
           // 진행구분이 주문등록이 아니면 상품추가/변경 불가
           if (!$.isEmptyObject(response.data.data)) {
             if (response.data.data.procFg != "00") {
@@ -496,14 +509,13 @@
         params : params, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
-        if ($scope.httpStatusCheck(response)) {
+        if ($scope._httpStatusCheck(response, true)) {
           if (!$.isEmptyObject(response.data.data)) {
             // 발주중지 상태이면 상품추가/변경 불가
             if (response.data.data.orderCloseYn === "Y") {
               $scope._popMsg(messages["storeOrder.dtl.orderClose"]);
               return false;
-            }
-            else {
+            } else {
               $scope.prevOrderTot      = response.data.data.prevOrderTot;      //이전 주문금액
               $scope.limitLoanAmt      = response.data.data.limitLoanAmt;      //여신 한도액
               $scope.currLoanAmt       = response.data.data.currLoanAmt;       //여신잔액
@@ -515,11 +527,9 @@
               if ($scope.noOutstockAmtFg === "Y") {
                 if ($scope.availableOrderAmt <= ($scope.currLoanAmt - $scope.prevOrderTot)) {
                   // 해당 조건에는 조회해 온 주문가능액 그대로 사용
-                }
-                else if ($scope.availableOrderAmt >= ($scope.currLoanAmt - $scope.prevOrderTot) && $scope.maxOrderAmt != 0) {
+                } else if ($scope.availableOrderAmt >= ($scope.currLoanAmt - $scope.prevOrderTot) && $scope.maxOrderAmt != 0) {
                   $scope.availableOrderAmt = $scope.currLoanAmt - $scope.prevOrderTot;
-                }
-                else {
+                } else {
                   $scope.availableOrderAmt = $scope.availableOrderAmt - $scope.prevOrderTot;
                 }
               }
@@ -659,20 +669,17 @@
     $scope.selectedIndexChanged = function (s, e) {
       if (s.selectedValue === "") {
         $scope.option2LayerHide();
-      }
-      else {
+      } else {
         $scope.option2LayerHide();
         $("#option2DateLayer").show();
 
         if (s.selectedValue === "ORD") {
           $("#option2OrdLayer").show();
           $("#option2OrdLayer2").show();
-        }
-        else if (s.selectedValue === "OUT") {
+        } else if (s.selectedValue === "OUT") {
           $("#option2OutLayer").show();
           $("#option2OutLayer2").show();
-        }
-        else if (s.selectedValue === "SALE") {
+        } else if (s.selectedValue === "SALE") {
           $("#option2SaleLayer").show();
           $("#option2SaleLayer2").show();
         }
@@ -688,32 +695,6 @@
       $("#option2OutLayer2").hide();
       $("#option2SaleLayer").hide();
       $("#option2SaleLayer2").hide();
-    };
-
-    // http 조회 후 status 체크
-    $scope.httpStatusCheck = function (res) {
-      if (res.data.status === "OK") {
-        return true;
-      }
-      else if (res.data.status === "FAIL") {
-        $scope._popMsg("Ajax Fail By HTTP Request");
-        return false;
-      }
-      else if (res.data.status === "SESSION_EXFIRE") {
-        $scope._popMsg(res.data.message, function () {
-          location.href = res.data.url;
-        });
-        return false;
-      }
-      else if (res.data.status === "SERVER_ERROR") {
-        $scope._popMsg(res.data.message);
-        return false;
-      }
-      else {
-        var msg = res.data.status + " : " + res.data.message;
-        $scope._popMsg(msg);
-        return false;
-      }
     };
 
 
@@ -738,10 +719,104 @@
       });
     };
 
+
+    <%-- 엑셀업로드 관련 공통 함수 --%>
+    $scope.excelUp = function (excelFg) {
+      var excelUploadScope = agrid.getScope('excelUploadCtrl');
+      <%-- 업로드 구분. 해당값에 따라 엑셀 양식이 달라짐. --%>
+      var uploadFg = 'order';
+
+      // 엑셀 양식다운로드
+      if (excelFg === 'down') {
+        excelUploadScope.excelDownload(uploadFg);
+      }
+      // 엑셀 업로드
+      else if (excelFg === 'up') {
+        var msg = messages["excelUpload.confmMsg"]; // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?
+        s_alert.popConf(msg, function () {
+          excelUploadScope.uploadFg   = uploadFg;
+          excelUploadScope.parentCtrl = 'storeOrderRegistCtrl';
+          <%-- 부모컨트롤러 값을 넣으면 업로드가 완료된 후 uploadCallBack 이라는 함수를 호출해준다. --%>
+          $("#excelUpFile").val('');
+          $("#excelUpFile").trigger('click');
+        });
+      }
+    };
+
+
+    <%-- 텍스트업로드 관련 공통 함수 --%>
+    $scope.textUp = function () {
+      var excelUploadScope = agrid.getScope('excelUploadCtrl');
+      <%-- 업로드 구분. 해당값에 따라 양식이 달라짐. --%>
+      var uploadFg = 'order';
+
+      // 업로드
+      var msg = messages["excelUpload.confmMsg"]; // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?
+      s_alert.popConf(msg, function () {
+        excelUploadScope.uploadFg   = uploadFg;
+        excelUploadScope.parentCtrl = 'storeOrderRegistCtrl';
+        <%-- 부모컨트롤러 값을 넣으면 업로드가 완료된 후 uploadCallBack 이라는 함수를 호출해준다. --%>
+        $("#textUpFile").val('');
+        $("#textUpFile").trigger('click');
+      });
+    };
+
+
+
+    <%-- 엑셀업로드 완료 후 callback 함수. 엑셀업로드 이후 로직 작성. --%>
+    $scope.uploadCallBack = function () {
+      console.log('excelUpCallBack');
+
+      var params      = {};
+      params.date     = $scope.reqDate;
+      params.slipFg   = $scope.slipFg;
+      params.hdRemark = $scope.regHdRemark;
+      params.addQtyFg = $scope.addQtyFg;
+
+      var excelUploadScope = agrid.getScope('excelUploadCtrl');
+
+      $http({
+        method : 'POST', //방식
+        url    : '/iostock/order/storeOrder/storeOrderRegist/excelUpload.sb', /* 통신할 URL */
+        params : params, /* 파라메터로 보낼 데이터 */
+        headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+      }).then(function successCallback(response) {
+        if ($scope._httpStatusCheck(response, true)) {
+          // excelUploadScope.excelUploadingPopup(false); // 업로딩 팝업 닫기
+
+          // 엑셀 에러내역 팝업 호출
+          $scope.excelUploadErrInfo();
+
+          // 등록 그리드 및 여신, 부모 그리드 조회
+          $scope.saveRegistCallback();
+        }
+      }, function errorCallback(response) {
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+        $scope._popMsg(response.data.message);
+        // excelUploadScope.excelUploadingPopup(false); // 업로딩 팝업 닫기
+        return false;
+      }).then(function () {
+        excelUploadScope.excelUploadingPopup(false); // 업로딩 팝업 닫기
+      });
+    };
+
+
+    $scope.excelUploadErrInfo = function () {
+      // 엑셀 에러내역 팝업 호출
+      var params      = {};
+      params.uploadFg = 'order';
+      $scope._broadcast('excelUploadErrInfoCtrl', params);
+    };
+
   }]);
 
 </script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
+</c:import>
+
+<%-- 수불 엑셀업로드 공통 팝업 --%>
+<c:import url="/WEB-INF/view/iostock/cmmExcelUpload/excelUpload/excelUpload.jsp">
 </c:import>

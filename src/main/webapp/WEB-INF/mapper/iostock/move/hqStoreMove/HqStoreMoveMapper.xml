@@ -85,7 +85,7 @@
         /* USE : HqStoreMoveMapper.getHqStoreMoveDtlList */
         <![CDATA[
         SELECT   tpsmd.PROD_CD, thp.PROD_NM
-        ,        DECODE(thp.VAT_FG,'Y',1,0) AS VAT_FG01
+        ,        thp.VAT_FG AS VAT_FG01
         ,        thp.PO_UNIT_FG, thp.PO_UNIT_QTY
         ,        thp.PO_PROD_FG
         ,        tpsmd.OUT_SPLY_UPRC
@@ -131,7 +131,7 @@
         /* USE : HqStoreMoveMapper.getHqStoreMoveRegistList */
         <![CDATA[
         SELECT   tmpout.PROD_CD, tmpout.PROD_NM
-        ,        DECODE(tmpout.VAT_FG,'Y',1,0) AS VAT_FG01
+        ,        tmpout.VAT_FG AS VAT_FG01
         ,        tmpout.PO_UNIT_FG, tmpout.PO_UNIT_QTY
         ,        tmpout.PO_PROD_FG
         ,        tmpout.SPLY_UPRC AS OUT_SPLY_UPRC, tmseout.ENVST_VAL AS OUT_ENVST0011

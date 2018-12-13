@@ -36,9 +36,9 @@
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="selectVendr.vendrCd"/>" binding="vendrCd" width="80" align="center"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="selectVendr.vendrNm"/>" binding="vendrNm" width="*" align="left"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="selectVendr.vatIncldYn"/>" binding="vatIncldYn" width="100" align="center" data-map="vatIncldYnMap"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="selectVendr.vendrCd"/>" binding="vendrCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="selectVendr.vendrNm"/>" binding="vendrNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="selectVendr.vatIncldYn"/>" binding="vatIncldYn" width="100" align="center" is-read-only="true" data-map="vatIncldYnMap"></wj-flex-grid-column>
 
           </wj-flex-grid>
         </div>

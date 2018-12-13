@@ -2,6 +2,7 @@ package kr.co.solbipos.iostock.order.storeOrder.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
 
 import java.util.List;
 
@@ -36,5 +37,8 @@ public interface StoreOrderService {
 
     /** 주문등록 확정 */
     int saveStoreOrderConfirm(StoreOrderVO storeOrderVO, SessionInfoVO sessionInfoVO);
+
+    /** 엑셀업로드 자료 검증 */
+    int excelUpload(ExcelUploadVO excelUploadVO, SessionInfoVO sessionInfoVO);
 
 }

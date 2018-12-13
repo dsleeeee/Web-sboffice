@@ -143,7 +143,7 @@
         ,       tpsvid.IN_AMT*tpsvid.SLIP_FG AS IN_AMT
         ,       tpsvid.IN_VAT*tpsvid.SLIP_FG AS IN_VAT
         ,       tpsvid.IN_TOT*tpsvid.SLIP_FG AS IN_TOT
-        ,       DECODE(tmp.VAT_FG, 'Y', 1, 0) AS VAT_FG01
+        ,       tmp.VAT_FG AS VAT_FG01
         ,       DECODE(tmv.VAT_INCLD_YN, 'Y', 1, 0) AS VENDR_VAT_FG01
         FROM    TB_PO_STORE_VENDR_INSTOCK_DTL tpsvid
         ,       TB_MS_PRODUCT tmp
@@ -190,7 +190,7 @@
         <![CDATA[
         SELECT  tmvp.PROD_CD
         ,       tmp.PROD_NM
-        ,       DECODE(tmp.VAT_FG,'Y',1,0) AS VAT_FG01
+        ,       tmp.VAT_FG AS VAT_FG01
         , 		NVL(tpsvid.COST_UPRC, tmp.COST_UPRC) AS COST_UPRC
         , 		tmp.LAST_COST_UPRC
         ,       tmp.PO_UNIT_ALLOW_FG
@@ -292,7 +292,7 @@
         ,       tpsvid.IN_AMT*tpsvid.SLIP_FG AS IN_AMT
         ,       tpsvid.IN_VAT*tpsvid.SLIP_FG AS IN_VAT
         ,       tpsvid.IN_TOT*tpsvid.SLIP_FG AS IN_TOT
-        ,       DECODE(tmp.VAT_FG, 'Y', 1, 0) AS VAT_FG01
+        ,       tmp.VAT_FG AS VAT_FG01
         ,       DECODE(tmv.VAT_INCLD_YN, 'Y', 1, 0) AS VENDR_VAT_FG01
         FROM    TB_PO_STORE_VENDR_ORDER_DTL tpsvod
         ,       TB_PO_STORE_VENDR_INSTOCK_DTL tpsvid

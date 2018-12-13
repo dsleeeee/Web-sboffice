@@ -99,7 +99,7 @@ public class VendrOrderServiceImpl implements VendrOrderService {
         String dtlProdExist = "N";
         dtlProdExist = vendrOrderMapper.getDtlProdExist(vendrOrderVO);
         if(dtlProdExist.equals("Y")) {
-            throw new JsonException(Status.FAIL, messageService.get("vendrOrder.dtl.prodExist"));
+            throw new JsonException(Status.SERVER_ERROR, messageService.get("vendrOrder.dtl.prodExist"));
         }
 
         result = vendrOrderMapper.deleteVendrOrderHd(vendrOrderVO);
@@ -121,7 +121,7 @@ public class VendrOrderServiceImpl implements VendrOrderService {
         vendrInstockExist = vendrOrderMapper.getVendrInstockExist(vendrOrderVO);
         if(vendrInstockExist.equals("Y")) {
             String errMsg = (vendrOrderVO.getProcFg().equals("5") ? messageService.get("vendrOrder.dtl.noConfmExist") : messageService.get("vendrOrder.dtl.regExist"));
-            throw new JsonException(Status.FAIL, errMsg);
+            throw new JsonException(Status.SERVER_ERROR, errMsg);
         }
 
         result = vendrOrderMapper.updateProcFg(vendrOrderVO);
