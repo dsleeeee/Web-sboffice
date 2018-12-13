@@ -13,6 +13,10 @@
  */
 var app = agrid.getApp();
 
+var adminFg = [
+  {"name":"전체","value":""}
+];
+
 /**********************************************************************
  *  사원목록 그리드
  **********************************************************************/
@@ -20,8 +24,17 @@ app.controller('pwdManageCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('pwdManageCtrl', $scope, $http, true));
 
-  // 조회조건 콤보박스 데이터 Set
-  $scope._setComboData("adminFg", adminFg); // todo 총판이나 대리점으로 접속하면 콤보박스가 달라져야 함.
+  // 총판이나 대리점으로 접속하면 콤보박스가 달라져야 함.
+  if(gvOrgnFg == "M") {
+    adminFg.push({"name":"관리자","value":"A"});
+    adminFg.push({"name":"총판","value":"P"});
+    adminFg.push({"name":"대리점","value":"C"});
+  } else{ // todo 총판과 대리점 구분 필요
+    adminFg.push({"name":"총판","value":"P"});
+    adminFg.push({"name":"대리점","value":"C"});
+  }
+
+  $scope._setComboData("adminFg", adminFg);
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
 
   // 선택 사원

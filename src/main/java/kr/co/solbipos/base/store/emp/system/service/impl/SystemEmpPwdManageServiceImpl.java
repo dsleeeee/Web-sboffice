@@ -6,8 +6,10 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.HttpUtils;
 import kr.co.common.utils.security.EncUtil;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.common.utils.spring.WebUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.application.session.user.enums.PwChgResult;
 import kr.co.solbipos.base.store.emp.system.service.SystemEmpPwdManageService;
 import kr.co.solbipos.base.store.emp.system.service.SystemEmpPwdManageVO;
@@ -56,7 +58,14 @@ public class SystemEmpPwdManageServiceImpl implements SystemEmpPwdManageService 
     /** 비밀번호 임의변경 대상 조회 */
     @Override
     public List<DefaultMap<String>> getPwdManageList(SystemEmpPwdManageVO systemEmpPwdManageVO, SessionInfoVO sessionInfoVO) {
+
         // todo 총판이나 대리점으로 접속하면, 조회 목록이 달라져야 함
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY && StringUtil.isEmpty(systemEmpPwdManageVO.getAdminFg())) {
+            // AGENCY_CD 셋팅
+            systemEmpPwdManageVO.setAgencyCd(sessionInfoVO.getOrgnCd());
+        }
+
+
         return systemEmpPwdManageMapper.getPwdManageList(systemEmpPwdManageVO);
     }
 
@@ -87,7 +96,7 @@ public class SystemEmpPwdManageServiceImpl implements SystemEmpPwdManageService 
 
         } else {
             systemEmpPwdManageVO.setModDt(currentDateTimeString());
-            newPassword = EncUtil.setEncSHA256(systemEmpPwdManageVO.getEmpNo() + systemEmpPwdManageVO.getNewPassword());
+            newPassword = EncUtil.setEncSHA256(systemEmpPwdManageVO.getUserId() + systemEmpPwdManageVO.getNewPassword());
         }
 
         /** 변경 패스워드가 기존 비밀번호가 같은지 체크 */

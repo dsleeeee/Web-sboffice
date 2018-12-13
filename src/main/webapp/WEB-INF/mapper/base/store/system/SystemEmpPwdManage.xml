@@ -31,7 +31,8 @@
                 tce.SERVICE_FG,
                 tce.WEB_USE_YN,
                 tce.MP_NO,
-                tce.SMS_RECV_YN
+                tce.SMS_RECV_YN,
+                tce.AGENCY_CD
               FROM
                 TB_CM_EMPLOYEE tce
                 LEFT OUTER JOIN TB_CM_NMCODE tcn ON
@@ -45,7 +46,7 @@
             <if test='userNm != null and userNm != ""'>
                 AND tce.EMP_NM LIKE #{userNm}||'%'
             </if>
-        ) emp
+      ) emp
         <if test='adminFg != null and adminFg.toString() != ""'>
             WHERE emp.ADMIN_FG = #{adminFg}
         </if>
@@ -78,13 +79,13 @@
     <update id="updatePassword" parameterType="systemEmpPwdManageVO">
         /* USE : SystemEmpPwdManageMapper.updatePassword */
         UPDATE
-            TB_CM_EMPLOYEE
+            TB_WB_USER_INFO
         SET
-            EMP_PWD = #{newPassword},
+            USER_PWD = #{newPassword},
             MOD_DT = #{modDt},
             MOD_ID = #{modId}
         WHERE
-            EMP_NO = #{empNo}
+            USER_ID = #{userId}
     </update>
 
     <!-- 비밀번호 변경이력 저장 -->

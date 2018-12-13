@@ -4,6 +4,7 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.store.emp.enums.EmpResult;
 import kr.co.solbipos.base.store.emp.system.service.SystemEmpService;
@@ -49,12 +50,15 @@ public class SystemEmpController {
 
     private final SessionService sessionService;
     private final SystemEmpService systemEmpService;
+    private final CmmCodeUtil cmmCodeUtil;
 
     /** Constructor Injection */
     @Autowired
-    public SystemEmpController(SessionService sessionService, SystemEmpService systemEmpService) {
+    public SystemEmpController(SessionService sessionService, SystemEmpService systemEmpService,
+        CmmCodeUtil cmmCodeUtil) {
         this.sessionService = sessionService;
         this.systemEmpService = systemEmpService;
+        this.cmmCodeUtil = cmmCodeUtil;
     }
 
     /**
@@ -63,7 +67,7 @@ public class SystemEmpController {
      * @return the string
      */
     @RequestMapping(value = "/list.sb", method = RequestMethod.GET)
-    public String view(Model model) {
+    public String view(HttpServletRequest request, HttpServletResponse response, Model model) {
         return "base/store/emp/systemEmp";
     }
 

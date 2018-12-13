@@ -8,6 +8,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
+
 <div class="subCon" ng-controller="pwdManageCtrl">
   <div class="searchBar flddUnfld">
     <a href="#" class="open fl">${menuNm}</a>
@@ -110,7 +111,6 @@
   <%--//페이지 리스트--%>
 </div>
 <script>
-  var adminFg     = ${ccu.getCommCode("097")};
   var serviceFg   = ${ccu.getCommCode("007")};
   var webUseYn    = ${ccu.getCommCode("067")};
 </script>
