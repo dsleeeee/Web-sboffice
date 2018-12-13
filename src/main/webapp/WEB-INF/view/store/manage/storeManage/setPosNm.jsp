@@ -15,7 +15,7 @@
     <%-- body --%>
     <div class="wj-dialog-body">
 
-      <div>
+      <div style="height:150px; overflow-y: auto;">
         <table class="tblType01 moreDark">
           <colgroup>
             <col class="w15" />
@@ -35,7 +35,7 @@
       </div>
 
       <%-- 저장 --%>
-      <div class="btnSet">
+      <div class="btnSet" class="mt10 mb10">
         <span><a id="btnSavePosNm" href="#" class="btn_blue" ng-click="savePosNm()"><s:message code="cmm.save" /></a></span>
       </div>
     </div>
