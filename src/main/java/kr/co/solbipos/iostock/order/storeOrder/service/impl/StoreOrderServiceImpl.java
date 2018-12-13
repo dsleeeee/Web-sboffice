@@ -7,6 +7,7 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.DateUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
 import kr.co.solbipos.iostock.order.dstbCloseStore.service.DstbCloseStoreVO;
 import kr.co.solbipos.iostock.order.dstbCloseStore.service.impl.DstbCloseStoreMapper;
 import kr.co.solbipos.iostock.order.dstbReq.service.DstbReqVO;
@@ -213,13 +214,13 @@ public class StoreOrderServiceImpl implements StoreOrderService {
         orderCloseFg = storeOrderMapper.getOrderCloseCheck(storeOrderVO);
 
         if(orderCloseFg.equals("Y")) {
-            throw new JsonException(Status.FAIL, messageService.get("storeOrder.dtl.orderClose")); //주문등록이 마감 되었습니다.
+            throw new JsonException(Status.SERVER_ERROR, messageService.get("storeOrder.dtl.orderClose")); //주문등록이 마감 되었습니다.
         }
 
         // 주문진행구분 체크
         DefaultMap<String> orderProcFg = getOrderProcFgCheck(storeOrderVO);
         if(orderProcFg != null && !StringUtil.getOrBlank(orderProcFg.get("procFg")).equals("00")) {
-            throw new JsonException(Status.FAIL, messageService.get("storeOrder.dtl.not.orderProcEnd")); //요청내역이 처리중입니다.
+            throw new JsonException(Status.SERVER_ERROR, messageService.get("storeOrder.dtl.not.orderProcEnd")); //요청내역이 처리중입니다.
         }
 
         // 주문수량을 MD 수량으로 수정
@@ -313,4 +314,87 @@ public class StoreOrderServiceImpl implements StoreOrderService {
         return result;
     }
 
+
+    /** 주문등록 - 엑셀업로드 자료 검증 */
+    @Override
+    public int excelUpload(ExcelUploadVO excelUploadVO, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+
+        String currentDt = currentDateTimeString();
+
+        excelUploadVO.setSessionId(sessionInfoVO.getSessionId());
+        excelUploadVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        excelUploadVO.setStoreCd(sessionInfoVO.getStoreCd());
+        excelUploadVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        excelUploadVO.setRegId(sessionInfoVO.getUserId());
+        excelUploadVO.setRegDt(currentDt);
+        excelUploadVO.setModId(sessionInfoVO.getUserId());
+        excelUploadVO.setModDt(currentDt);
+
+        // 수량추가인 경우
+        if(StringUtil.getOrBlank(excelUploadVO.getAddQtyFg()).equals("add")) {
+            result = storeOrderMapper.insertExcelUploadAddQty(excelUploadVO);
+//            if(result > 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+
+        // 기존 주문데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제
+        result = storeOrderMapper.deleteStoreOrderToExcelUploadData(excelUploadVO);
+//        if(result > 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+        // 여신 체크
+        DefaultMap<String> storeLoan = storeOrderMapper.storeLoanCheck(excelUploadVO);
+
+        System.out.println("orderTot = "+storeLoan.getLong("orderTot"));
+        System.out.println("currLoanAmt = "+storeLoan.getLong("currLoanAmt"));
+
+        if(storeLoan.getLong("orderTot") > storeLoan.getLong("currLoanAmt")) {
+            throw new JsonException(Status.SERVER_ERROR, messageService.get("storeOrder.dtl.excelLoanOver")); // 주문총금액이 여신잔여 금액을 초과하였습니다. 업로드 된 자료는 처리되지 않았습니다.
+        }
+
+        // 엑셀업로드 한 수량을 주문수량으로 입력
+        result = storeOrderMapper.insertStoreOrderToExcelUploadData(excelUploadVO);
+//        if(result > 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+        // 주문수량으로 정상 입력된 데이터 TEMP 테이블에서 삭제
+        result = storeOrderMapper.deleteExcelUploadCompleteData(excelUploadVO);
+//        if(result > 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+        // 엑셀업로드 한 내용이 있으면 DTL 자료를 기반으로 주문 HD 생성, 업데이트, 삭제
+        int dtlCnt = 0;
+        String hdExist = "N";
+
+        StoreOrderVO storeOrderVO = new StoreOrderVO();
+        storeOrderVO.setStoreCd(sessionInfoVO.getStoreCd());
+        storeOrderVO.setRegId(sessionInfoVO.getUserId());
+        storeOrderVO.setRegDt(currentDt);
+        storeOrderVO.setModId(sessionInfoVO.getUserId());
+        storeOrderVO.setModDt(currentDt);
+        storeOrderVO.setReqDate(excelUploadVO.getDate());
+        storeOrderVO.setSlipFg(excelUploadVO.getSlipFg());
+        storeOrderVO.setEmpNo("0000");
+        storeOrderVO.setProcFg("00");
+        storeOrderVO.setRemark(excelUploadVO.getHdRemark());
+
+        // 주문요청일의 상품건수 조회
+        dtlCnt = storeOrderMapper.getDtlCnt(storeOrderVO);
+
+        // 상품건수가 없으면 HD 삭제
+        if(dtlCnt == 0) {
+            result = storeOrderMapper.deleteStoreOrder(storeOrderVO);
+        }
+        // 상품건수가 있는경우 HD 내용이 존재하는지 여부 조회
+        else {
+            hdExist = storeOrderMapper.getHdExist(storeOrderVO);
+            // HD 내용이 존재하는 경우 update
+            if(hdExist.equals("Y")) {
+                result = storeOrderMapper.updateStoreOrder(storeOrderVO);
+            }
+            // HD 내용이 없는 경우 insert
+            else if(hdExist.equals("N")) {
+                result = storeOrderMapper.insertStoreOrder(storeOrderVO);
+            }
+        }
+
+        return result;
+    }
 }

@@ -471,6 +471,7 @@
     <typeAlias alias="orderStockInfoVO" type="kr.co.solbipos.iostock.vendr.orderStockInfo.service.OrderStockInfoVO"/>
     <typeAlias alias="slipStockInfoVO" type="kr.co.solbipos.iostock.vendr.slipStockInfo.service.SlipStockInfoVO"/>
     <typeAlias alias="prodStockInfoVO" type="kr.co.solbipos.iostock.vendr.prodStockInfo.service.ProdStockInfoVO"/>
+    <typeAlias alias="excelUploadVO" type="kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO"/>
 
     <typeAlias alias="excpForwardProductVO" type="kr.co.solbipos.application.pos.exceptForward.service.ExcpForwardProductVO"/>
     <typeAlias alias="productionVO" type="kr.co.solbipos.application.pos.production.service.ProductionVO"/>

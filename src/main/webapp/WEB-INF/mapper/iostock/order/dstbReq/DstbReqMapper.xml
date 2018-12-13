@@ -60,7 +60,7 @@
         /* USE : DstbReqMapper.getDstbReqDtlList */
         <![CDATA[
         SELECT  tphsod.STORE_CD, tmp.PROD_CD, tmp.PROD_NM
-        ,       DECODE(tmp.VAT_FG,'Y',1,0) AS VAT_FG01
+        ,       tmp.VAT_FG AS VAT_FG01
         ,       TRUNC(DECODE(SIGN(tshsc.CURR_QTY),-1,0,tshsc.CURR_QTY) / tmp.PO_UNIT_QTY) AS HD_CUR_UNIT_QTY
         ,       MOD  (DECODE(SIGN(tshsc.CURR_QTY),-1,0,tshsc.CURR_QTY) , tmp.PO_UNIT_QTY) AS HD_CUR_ETC_QTY
         ,		NVL((SELECT MAX(SALE_UPRC) KEEP(DENSE_RANK FIRST ORDER BY REG_DT DESC)

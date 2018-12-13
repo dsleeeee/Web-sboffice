@@ -72,7 +72,8 @@
 
   <div class="mt10 pdb20 oh bb">
     <%-- 조회 --%>
-    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('storeOrderCtrl')"><s:message code="cmm.search"/></button>
+    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('storeOrderCtrl')">
+      <s:message code="cmm.search"/></button>
   </div>
 
   <div class="w100 mt10">
@@ -132,16 +133,16 @@
     ]);
 
     <%--$scope._setComboData("srchProcFg", [--%>
-      <%--{"name": "<s:message code='storeOrder.procFgAll'/>", "value": ""},--%>
-      <%--{"name": "<s:message code='storeOrder.procFgReg'/>", "value": "10"},--%>
-      <%--{"name": "<s:message code='storeOrder.procFgDstb'/>", "value": "20"},--%>
-      <%--{"name": "<s:message code='storeOrder.procFgDstbCompt'/>", "value": "30"}--%>
+    <%--{"name": "<s:message code='storeOrder.procFgAll'/>", "value": ""},--%>
+    <%--{"name": "<s:message code='storeOrder.procFgReg'/>", "value": "10"},--%>
+    <%--{"name": "<s:message code='storeOrder.procFgDstb'/>", "value": "20"},--%>
+    <%--{"name": "<s:message code='storeOrder.procFgDstbCompt'/>", "value": "30"}--%>
     <%--]);--%>
 
     <%--$scope.procFgMap = new wijmo.grid.DataMap([--%>
-      <%--{id: "10", name: "<s:message code='storeOrder.procFgReg'/>"},--%>
-      <%--{id: "20", name: "<s:message code='storeOrder.procFgDstb'/>"},--%>
-      <%--{id: "30", name: "<s:message code='storeOrder.procFgDstbCompt'/>"}--%>
+    <%--{id: "10", name: "<s:message code='storeOrder.procFgReg'/>"},--%>
+    <%--{id: "20", name: "<s:message code='storeOrder.procFgDstb'/>"},--%>
+    <%--{id: "30", name: "<s:message code='storeOrder.procFgDstbCompt'/>"}--%>
     <%--], 'id', 'name');--%>
 
     // 출고가능일자 세팅
@@ -263,14 +264,13 @@
             var comboArray = [];
             var comboData  = {};
 
-            if (comboFg.indexOf("combo") >= 0 && nvl(comboId,'') !== '') {
+            if (comboFg.indexOf("combo") >= 0 && nvl(comboId, '') !== '') {
               comboArray = [];
               if (option === "A") {
                 comboData.name  = messages["cmm.all"];
                 comboData.value = "";
                 comboArray.push(comboData);
-              }
-              else if (option === "S") {
+              } else if (option === "S") {
                 comboData.name  = messages["cmm.select"];
                 comboData.value = "";
                 comboArray.push(comboData);
@@ -285,7 +285,7 @@
               $scope._setComboData(comboId, comboArray);
             }
 
-            if (comboFg.indexOf("map") >= 0 && nvl(gridMapId,'') !== '') {
+            if (comboFg.indexOf("map") >= 0 && nvl(gridMapId, '') !== '') {
               comboArray = [];
               for (var i = 0; i < list.length; i++) {
                 comboData      = {};
@@ -296,19 +296,15 @@
               $scope[gridMapId] = new wijmo.grid.DataMap(comboArray, 'id', 'name');
             }
           }
-        }
-        else if (response.data.status === "FAIL") {
+        } else if (response.data.status === "FAIL") {
           $scope._popMsg("Ajax Fail By HTTP Request");
-        }
-        else if (response.data.status === "SESSION_EXFIRE") {
+        } else if (response.data.status === "SESSION_EXFIRE") {
           $scope._popMsg(response.data.message, function () {
             location.href = response.data.url;
           });
-        }
-        else if (response.data.status === "SERVER_ERROR") {
+        } else if (response.data.status === "SERVER_ERROR") {
           $scope._popMsg(response.data.message);
-        }
-        else {
+        } else {
           var msg = response.data.status + " : " + response.data.message;
           $scope._popMsg(msg);
         }

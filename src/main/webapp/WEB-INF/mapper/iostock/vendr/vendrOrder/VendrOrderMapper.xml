@@ -248,7 +248,7 @@
                 ,       tphvod.ORDER_AMT*tphvod.SLIP_FG AS ORDER_AMT
                 ,       tphvod.ORDER_VAT*tphvod.SLIP_FG AS ORDER_VAT
                 ,       tphvod.ORDER_TOT*tphvod.SLIP_FG AS ORDER_TOT
-                ,       DECODE(thp.VAT_FG, 'Y', 1, 0) AS VAT_FG01
+                ,       thp.VAT_FG AS VAT_FG01
                 ,       DECODE(thv.VAT_INCLD_YN, 'Y', 1, 0) AS VENDR_VAT_FG01
                 FROM    TB_PO_HQ_VENDR_ORDER_DTL tphvod
                 ,       TB_HQ_PRODUCT thp
@@ -275,7 +275,7 @@
                 ,       tpsvod.ORDER_AMT*tpsvod.SLIP_FG AS ORDER_AMT
                 ,       tpsvod.ORDER_VAT*tpsvod.SLIP_FG AS ORDER_VAT
                 ,       tpsvod.ORDER_TOT*tpsvod.SLIP_FG AS ORDER_TOT
-                ,       DECODE(tmp.VAT_FG, 'Y', 1, 0) AS VAT_FG01
+                ,       tmp.VAT_FG AS VAT_FG01
                 ,       DECODE(tmv.VAT_INCLD_YN, 'Y', 1, 0) AS VENDR_VAT_FG01
                 FROM    TB_PO_STORE_VENDR_ORDER_DTL tpsvod
                 ,       TB_MS_PRODUCT tmp
@@ -349,7 +349,7 @@
                 SELECT  thvp.PROD_CD
                 ,       thp.PROD_NM
                 ,       thp.ORGPLCE_CD
-                ,       DECODE(thp.VAT_FG,'Y',1,0) AS VAT_FG01
+                ,       thp.VAT_FG AS VAT_FG01
                 ,       TRUNC(DECODE(SIGN(tshsc.CURR_QTY),-1,0,tshsc.CURR_QTY) / thp.PO_UNIT_QTY) AS CURR_UNIT_QTY
                 ,       MOD  (DECODE(SIGN(tshsc.CURR_QTY),-1,0,tshsc.CURR_QTY) , thp.PO_UNIT_QTY) AS CURR_ETC_QTY
                 , 		NVL(tphvod.COST_UPRC, thp.COST_UPRC) AS COST_UPRC
@@ -426,7 +426,7 @@
                 SELECT  tmvp.PROD_CD
                 ,       tmp.PROD_NM
                 ,       tmp.ORGPLCE_CD
-                ,       DECODE(tmp.VAT_FG,'Y',1,0) AS VAT_FG01
+                ,       tmp.VAT_FG AS VAT_FG01
                 ,       TRUNC(DECODE(SIGN(tsssc.CURR_QTY),-1,0,tsssc.CURR_QTY) / tmp.PO_UNIT_QTY) AS CURR_UNIT_QTY
                 ,       MOD  (DECODE(SIGN(tsssc.CURR_QTY),-1,0,tsssc.CURR_QTY) , tmp.PO_UNIT_QTY) AS CURR_ETC_QTY
                 , 		NVL(tpsvod.COST_UPRC, tmp.COST_UPRC) AS COST_UPRC
