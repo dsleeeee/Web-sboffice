@@ -185,7 +185,7 @@ app.controller('systemEmpRegistCtrl', ['$scope', '$http', function ($scope, $htt
 
     $scope._postJSONSave.withOutPopUp( "/base/store/emp/system/regist.sb", params, function(response){
 
-      if(response.data.data == 'SUCCESS') {
+      if(response.data.data === 'SUCCESS') {
         $scope._popMsg(messages["cmm.registSucc"]);
         $scope.systemEmpRegistLayer.hide();
       } else if(response.data.data === 'USER_ID_REGEXP') {

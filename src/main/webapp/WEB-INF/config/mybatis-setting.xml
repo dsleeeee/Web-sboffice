@@ -118,6 +118,7 @@
     <typeAlias alias="posFuncVO" type="kr.co.solbipos.base.store.posfunc.service.PosFuncVO"/>
     <typeAlias alias="hqEmpVO" type="kr.co.solbipos.base.store.emp.hq.service.HqEmpVO"/>
     <typeAlias alias="systemEmpVO" type="kr.co.solbipos.base.store.emp.system.service.SystemEmpVO"/>
+    <typeAlias alias="systemEmpPwdManageVO" type="kr.co.solbipos.base.store.emp.system.service.SystemEmpPwdManageVO"/>
     <typeAlias alias="viewVO" type="kr.co.solbipos.base.store.view.service.ViewVO"/>
     <typeAlias alias="vanConfigVO" type="kr.co.solbipos.base.store.view.service.VanConfigVO"/>
 <!--

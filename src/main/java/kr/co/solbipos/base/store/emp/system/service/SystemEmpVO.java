@@ -7,16 +7,15 @@ import kr.co.solbipos.base.store.emp.system.service.enums.AdminFg;
 
 /**
  * @Class Name : HqEmpVO.java
- * @Description : 기초관리 > 매장관리 > 본사사원정보관리
+ * @Description : 시스템관리 > 사원관리 > 사원정보관리
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2018.08.14  정상화      최초생성
- * @ 2018.11.21  김지은      UseYn 수정
+ * @ 2018.11.21  김지은      최초생성 수정
  *
- * @author NHN한국사이버결제 KCP 정상화
- * @since 2018. 08.14
+ * @author 솔비포스 김지은
+ * @since 2018. 11.21
  * @version 1.0
  * @see
  *

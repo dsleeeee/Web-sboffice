@@ -127,9 +127,6 @@
         <wj-flex-grid-column header="<s:message code="pwdManage.serviceFg"/>" binding="serviceFg" data-map="serviceFgDataMap"  width="*" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="pwdManage.webUseYn"/>" binding="webUseYn" data-map="webUseYnDataMap"  width="*" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="pwdManage.mpNo"/>" binding="mpNo" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-
-        <!--  //todo 재직구분, 웹사용여부, 이메일주소, 휴대폰번호 추가 -->
-
       </wj-flex-grid>
     </div>
   </div>
