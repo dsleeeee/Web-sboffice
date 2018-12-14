@@ -34,6 +34,8 @@ app.controller('requestTaxBillCtrl', ['$scope', '$http', function ($scope, $http
       $scope.requestMember     = data;
       $scope.memberInfo = '[' + $scope.requestMember.membrNo + '] '+$scope.requestMember.membrNm;
       $scope.balance    = addComma($scope.requestMember.postpaidBalAmt) + ' 원';
+      $scope.requestAmt = "";
+
     });
 
     event.preventDefault();

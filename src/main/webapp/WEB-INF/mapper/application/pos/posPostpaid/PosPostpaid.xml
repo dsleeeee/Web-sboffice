@@ -28,6 +28,11 @@
                tmmpb.POSTPAID_AMT,
                tmmpb.POSTPAID_IN_AMT,
                tmmpb.POSTPAID_BAL_AMT,
+               (SELECT SUM(tmmtb.REQUEST_AMT) AS REQUEST_AMT
+                  FROM TB_MB_MEMBER_TAX_BILL tmmtb
+                 WHERE tmmtb.MEMBR_ORGN_CD = tmmpb.HQ_OFFICE_CD
+                   AND tmmtb.MEMBR_NO = tmmpb.MEMBR_NO
+                   AND tmmtb.STATUS_FG = '1') AS REQUEST_AMT,
                TO_CHAR(to_date(tmmpb.REG_DT, 'yyyyMMddhh24miss'), 'yyyy-MM-dd hh24:mi:ss') AS REG_DT ,
                tmmpb.REG_ID,
                CASE WHEN tmmpb.POSTPAID_BAL_AMT > 0  THEN '세금계산서 발행요청'
