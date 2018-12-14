@@ -1998,7 +1998,7 @@
                    ) tmp
              WHERE tmpc.store_cd = #{storeCd}
              START WITH tmpc.P_PROD_CLASS_CD = '00000'
-           CONNECT BY PRIOR tmpc.P_PROD_CLASS_CD = tmpc.PROD_CLASS_CD
+           CONNECT BY  tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD
              GROUP BY tmpc.P_PROD_CLASS_CD, tmpc.PROD_CLASS_CD, tmpc.PROD_CLASS_NM
              HAVING tmpc.PROD_CLASS_CD != '00000'
              ORDER BY P_PROD_CLASS_CD, PROD_CLASS_CD
