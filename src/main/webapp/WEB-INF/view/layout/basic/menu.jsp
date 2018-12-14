@@ -67,4 +67,4 @@
     <%--//접혔을때--%>
   </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/layout/basic/menu.js?ver=20181024.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/layout/basic/menu.js?ver=2018102401" charset="utf-8"></script>

@@ -83,5 +83,5 @@
     </div>
   </div>
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/store.js?ver=20180817.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/store.js?ver=2018081701" charset="utf-8"></script>
 

@@ -85,4 +85,4 @@
   var clsFg        = ${ccu.getCommCodeExcpAll("001")};
   var sysStatFg    = ${ccu.getCommCodeExcpAll("005")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/store.js?ver=20181006.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/store.js?ver=2018100601" charset="utf-8"></script>

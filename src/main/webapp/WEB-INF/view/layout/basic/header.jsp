@@ -87,5 +87,5 @@
 </div>
 <%--//고정메뉴--%>
 
-<script type="text/javascript" src="/resource/solbipos/js/layout/basic/header.js?ver=20181004.01" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/solbipos/js/variables/commonVariables.js?ver=20181004.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/layout/basic/header.js?ver=2018100401" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/variables/commonVariables.js?ver=2018100401" charset="utf-8"></script>
