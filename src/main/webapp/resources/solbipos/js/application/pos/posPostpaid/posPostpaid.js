@@ -27,7 +27,7 @@ app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-    $scope.searchProduct();
+    $scope.searchPostPaidList();
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
       if (e.panel == s.cells) {
@@ -54,19 +54,21 @@ app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
           }
 
           // 세금계산서 발행요청 팝업 오픈
-          $scope.requestTaxBillLayer.show(true);
+          $scope.requestTaxBillLayer.show(true, function(){
+            $scope.searchPostPaidList();
+          });
         }
       }
     });
   };
 
   $scope.$on("memberCtrl", function(event, data) {
-    $scope.searchProduct();
+    $scope.searchPostPaidList();
     event.preventDefault();
   });
 
   // 대상회원 목록 조회
-  $scope.searchProduct = function(){
+  $scope.searchPostPaidList = function(){
     var params = {};
     params.listScale = 30;
     $scope._inquiryMain("/application/pos/posPostpaid/posPostpaid/getMemberList.sb", params, function() {}, false);

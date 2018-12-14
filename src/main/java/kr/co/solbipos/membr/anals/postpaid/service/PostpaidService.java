@@ -3,6 +3,8 @@ package kr.co.solbipos.membr.anals.postpaid.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.membr.anals.taxBill.service.TaxBillVO;
+import kr.co.solbipos.membr.anals.postpaid.service.PostpaidStoreVO;
 
 import java.util.List;
 
@@ -24,14 +26,17 @@ import java.util.List;
 public interface PostpaidService {
 
     /** 후불 회원 외상, 입금 내역 */
-    List<DefaultMap<Object>> getPostpaidMemberList(
-        kr.co.solbipos.membr.anals.postpaid.service.PostpaidStoreVO postpaidStoreVO, SessionInfoVO sessionInfoVO);
+    List<DefaultMap<Object>> getPostpaidMemberList(PostpaidStoreVO postpaidStoreVO, SessionInfoVO sessionInfoVO);
 
     /** 후불 대상 회원 조회 */
-    List<DefaultMap<Object>> getDepositMemberList(
-        kr.co.solbipos.membr.anals.postpaid.service.PostpaidStoreVO postpaidStoreVO, SessionInfoVO sessionInfoVO);
+    List<DefaultMap<Object>> getDepositMemberList(PostpaidStoreVO postpaidStoreVO, SessionInfoVO sessionInfoVO);
 
     /** 외상 입금 */
-    int saveDeposit(kr.co.solbipos.membr.anals.postpaid.service.PostpaidStoreVO postpaidStoreVO, SessionInfoVO sessionInfoVO);
+    int saveDeposit(PostpaidStoreVO postpaidStoreVO, SessionInfoVO sessionInfoVO);
 
+    /** 세금계산서 요청목록 조회 */
+    List<DefaultMap<Object>> getTaxBillList(TaxBillVO taxBillVO, SessionInfoVO sessionInfoVO);
+
+    /** 세금계산서 발행 입금 */
+    int saveTaxBillComplete(TaxBillVO taxBillVO, SessionInfoVO sessionInfoVO);
 }

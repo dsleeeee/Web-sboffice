@@ -1,46 +1,57 @@
-package kr.co.solbipos.application.pos.posPostpaid.service;
+package kr.co.solbipos.membr.anals.taxBill.service;
 
-import kr.co.solbipos.application.common.service.CmmVO;
+import kr.co.solbipos.application.common.service.PageVO;
 import kr.co.solbipos.membr.anals.enums.StatusFg;
 
 /**
- * @Class Name : PosPostpaidStoreVO.java
- * @Description : 포스 > 세금계산서 발행 요청
+ * @Class Name : TaxBillVO.java
+ * @Description : 회원관리 > 회원분석 > 세금계산서 발행 목록
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2018.12.03  김지은      최초생성
+ * @ 2018.12.13  김지은      최초생성
  *
  * @author 솔비포스 차세대개발실 김지은
- * @since 2018.12.03
+ * @since 2018.12.13
  * @version 1.0
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-public class PosPostpaidStoreVO extends CmmVO {
+public class TaxBillVO extends PageVO {
 
     /** 세금계산서 발행일자 */
     private String billDate;
+
     /** 세금계산서 일련번호 */
     private String billSeq;
+
     /** 회원소속코드 */
-    private String hqOfficeCd;
-    /** 후불회원 등록 매장 코드 */
-    private String storeCd;
-    /** 후불회원 등록 매장 명 */
-    private String storeNm;
+    private String membrOrgnCd;
+
     /** 회원번호 */
     private String membrNo;
+
     /** 회원명 */
     private String membrNm;
-    /** 세금계산서 발행 요청 일시 */
+
+    /** 매장 코드 */
+    private String storeCd;
+
+    /** 등록 매장 명 */
+    private String storeNm;
+
+    /** 발행 요청 날짜 */
     private String requestDt;
-    /** 세금계산서 발행 요청 금액 */
-    private String requestAmt;
-    /** 세금계산서 발행 요청 상태 */
+
+    /** 발행 요청 금액 */
+    private Double requestAmt;
+
+    /** 발행 상태 */
     private StatusFg statusFg;
 
+    /** 전체기간 체크 */
+    private boolean chkDt;
 
     /**
      * @return the billDate
@@ -73,48 +84,18 @@ public class PosPostpaidStoreVO extends CmmVO {
     }
 
     /**
-     * @return the hqOfficeCd
+     * @return the membrOrgnCd
      */
 
-    public String getHqOfficeCd() {
-        return hqOfficeCd;
+    public String getMembrOrgnCd() {
+        return membrOrgnCd;
     }
 
     /**
-     * @param hqOfficeCd the hqOfficeCd to set
+     * @param membrOrgnCd the membrOrgnCd to set
      */
-    public void setHqOfficeCd(String hqOfficeCd) {
-        this.hqOfficeCd = hqOfficeCd;
-    }
-
-    /**
-     * @return the storeCd
-     */
-
-    public String getStoreCd() {
-        return storeCd;
-    }
-
-    /**
-     * @param storeCd the storeCd to set
-     */
-    public void setStoreCd(String storeCd) {
-        this.storeCd = storeCd;
-    }
-
-    /**
-     * @return the storeNm
-     */
-
-    public String getStoreNm() {
-        return storeNm;
-    }
-
-    /**
-     * @param storeNm the storeNm to set
-     */
-    public void setStoreNm(String storeNm) {
-        this.storeNm = storeNm;
+    public void setMembrOrgnCd(String membrOrgnCd) {
+        this.membrOrgnCd = membrOrgnCd;
     }
 
     /**
@@ -148,6 +129,36 @@ public class PosPostpaidStoreVO extends CmmVO {
     }
 
     /**
+     * @return the storeCd
+     */
+
+    public String getStoreCd() {
+        return storeCd;
+    }
+
+    /**
+     * @param storeCd the storeCd to set
+     */
+    public void setStoreCd(String storeCd) {
+        this.storeCd = storeCd;
+    }
+
+    /**
+     * @return the storeNm
+     */
+
+    public String getStoreNm() {
+        return storeNm;
+    }
+
+    /**
+     * @param storeNm the storeNm to set
+     */
+    public void setStoreNm(String storeNm) {
+        this.storeNm = storeNm;
+    }
+
+    /**
      * @return the requestDt
      */
 
@@ -166,14 +177,14 @@ public class PosPostpaidStoreVO extends CmmVO {
      * @return the requestAmt
      */
 
-    public String getRequestAmt() {
+    public Double getRequestAmt() {
         return requestAmt;
     }
 
     /**
      * @param requestAmt the requestAmt to set
      */
-    public void setRequestAmt(String requestAmt) {
+    public void setRequestAmt(Double requestAmt) {
         this.requestAmt = requestAmt;
     }
 
@@ -190,5 +201,20 @@ public class PosPostpaidStoreVO extends CmmVO {
      */
     public void setStatusFg(StatusFg statusFg) {
         this.statusFg = statusFg;
+    }
+
+    /**
+     * @return the chkDt
+     */
+
+    public boolean isChkDt() {
+        return chkDt;
+    }
+
+    /**
+     * @param chkDt the chkDt to set
+     */
+    public void setChkDt(boolean chkDt) {
+        this.chkDt = chkDt;
     }
 }

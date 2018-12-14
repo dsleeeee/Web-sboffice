@@ -1,4 +1,4 @@
-package kr.co.solbipos.membr.anals.prepaid.service.enums;
+package kr.co.solbipos.membr.anals.enums;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import kr.co.common.data.enums.CodeEnum;
@@ -6,28 +6,28 @@ import kr.co.common.data.handler.CodeEnumTypeHandler;
 import org.apache.ibatis.type.MappedTypes;
 
 /**
- * 충전구분 enum type<br>
+ * 세금계산서 발행구분 enum type<br>
  *
  * @author ygjeong
  *
  */
-public enum PrepaidFg implements CodeEnum {
+public enum StatusFg implements CodeEnum {
 
-    /** 충전 */
-    CHARGE("1"),
-    /** 취소 */
-    CANCEL("2");
+    /** 발행요청 */
+    REQEUST("1"),
+    /** 완료 */
+    COMPLETE("2");
 
     private String code;
 
-    PrepaidFg(String code) {
+    StatusFg(String code) {
         this.code = code;
     }
 
-    @MappedTypes(PrepaidFg.class)
-    public static class TypeHandler extends CodeEnumTypeHandler<PrepaidFg> {
+    @MappedTypes(StatusFg.class)
+    public static class TypeHandler extends CodeEnumTypeHandler<StatusFg> {
         public TypeHandler() {
-            super(PrepaidFg.class);
+            super(StatusFg.class);
         }
     }
 

@@ -54,13 +54,22 @@
     -->
     <insert id="saveTaxBillRequet" parameterType="posPostpaidVO" >
         /* USE : PosPostpaidMapper.saveTaxBillRequet */
+        <selectKey resultType="String" keyProperty="billSeq" order="BEFORE">
+          SELECT LPAD( NVL(MAX(BILL_SEQ), 0) + 1, 5, '0') AS BILL_SEQ
+            FROM TB_MB_MEMBER_TAX_BILL
+           WHERE BILL_DATE = #{billDate}
+        </selectKey>
+
         INSERT INTO TB_MB_MEMBER_TAX_BILL
         (
-            HQ_OFFICE_CD,
+            BILL_DATE,
+            BILL_SEQ,
+            MEMBR_ORGN_CD,
             STORE_CD,
             MEMBR_NO,
             REQUEST_DT,
             REQUEST_AMT,
+            STATUS_FG,
             REG_DT,
             REG_ID,
             MOD_DT,
@@ -68,11 +77,14 @@
         )
         VALUES
         (
+            #{billDate},
+            #{billSeq},
             #{hqOfficeCd},
             #{storeCd},
             #{membrNo},
             #{requestDt},
             #{requestAmt},
+            #{statusFg},
             #{regDt},
             #{regId},
             #{modDt},

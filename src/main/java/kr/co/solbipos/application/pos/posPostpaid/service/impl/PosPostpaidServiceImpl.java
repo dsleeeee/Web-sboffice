@@ -7,6 +7,7 @@ import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.pos.posPostpaid.service.PosPostpaidService;
 import kr.co.solbipos.application.pos.posPostpaid.service.PosPostpaidStoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.membr.anals.enums.StatusFg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static kr.co.common.utils.DateUtil.currentDateString;
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
@@ -67,25 +69,25 @@ public class PosPostpaidServiceImpl implements PosPostpaidService {
 
         String currentDt = currentDateTimeString();
 
+        posPostpaidStoreVO.setBillDate(currentDateString());
         posPostpaidStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         posPostpaidStoreVO.setStoreCd(sessionInfoVO.getStoreCd());
         posPostpaidStoreVO.setRequestDt(currentDt);
+        posPostpaidStoreVO.setStatusFg(StatusFg.REQEUST);   //요청
         posPostpaidStoreVO.setRegDt(currentDt);
         posPostpaidStoreVO.setRegId(sessionInfoVO.getUserId());
         posPostpaidStoreVO.setModDt(currentDt);
         posPostpaidStoreVO.setModId(sessionInfoVO.getUserId());
 
+        int result = 0;
+
         // 세금계산서 발행요청건 등록
-        int result = posPostpaidMapper.saveTaxBillRequet(posPostpaidStoreVO);
+        result = posPostpaidMapper.saveTaxBillRequet(posPostpaidStoreVO);
+        if ( result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-        if ( result >= 0) {
-            return result;
-        } else {
-            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-        }
-
-        // todo 후불 데이터 update
-
-        // todo 잔액 테이블에서 잔액 차감
+        return result;
     }
+
+
+
 }

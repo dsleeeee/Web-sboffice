@@ -33,20 +33,14 @@
         </tr>
         </tbody>
       </table>
-      <%-- 요청 --%>
-      <%--
-      <div class="mt5 mb20 tr">
-        <button class="btn_skyblue" id="btnSearch" ng-click="_broadcast('requestTaxBillCtrl')" ><s:message code="application.pos.production.regProd" /></button>
-      </div>
-      --%>
+      <%-- 버튼 --%>
       <div class="wj-dialog-footer">
         <button class="btn btn_blue" ng-click="request()"><s:message code="postpaid.request"/></button>
         <button class="btn btn_gray" ng-click="close()"><s:message code="cmm.close"/></button>
       </div>
     </div>
   </div>
-
 </wj-popup>
 
 
-<script type="text/javascript" src="/resource/solbipos/js/application/pos/posPostpaid/taxBillRequest.js?ver=20180914.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/application/pos/posPostpaid/taxBillRequest.js?ver=20181203.01" charset="utf-8"></script>
