@@ -55,7 +55,6 @@ app.controller('taxBillDepositCtrl', ['$scope', '$http', function ($scope, $http
       }, 50)
     });
   });
-
 }]);
 
 
