@@ -1968,13 +1968,43 @@
     -->
     <select id="getProdClass" parameterType="storeProductVO" resultType="DefaultMap">
         /* USE : StoreManageMapper.getProdClass */
-        <!--//todo 수정진행중-->
-        SELECT STORE_CD,
-              PROD_CLASS_CD,
-              PROD_CLASS_NM,
-              P_PROD_CLASS_CD
-        FROM TB_MS_PRODUCT_CLASS
-        WHERE STORE_CD =#{storeCd}
+            SELECT tmpc.P_PROD_CLASS_CD ,
+                   tmpc.PROD_CLASS_CD ,
+                   tmpc.PROD_CLASS_NM
+              FROM TB_MS_PRODUCT_CLASS tmpc,
+                   (
+              SELECT tmp.STORE_CD,
+                     tmp.PROD_CLASS_CD,
+                     COUNT(tmp.PROD_CD) AS PROD_CD_CNT
+                FROM TB_MS_PRODUCT_CLASS tmpc,
+                     TB_MS_PRODUCT tmp
+               WHERE tmp.STORE_CD = #{storeCd}
+                 AND tmp.STORE_CD = tmpc.STORE_CD
+      <if test='printYn != null and printYn.toString() == "Y"'>
+                 AND tmp.PROD_CD IN (SELECT PROD_CD
+                                       FROM TB_MS_PRINTER_PROD
+                                      WHERE STORE_CD = #{storeCd}
+                                        AND PRTER_NO = #{prterNo})
+                 AND tmp.PROD_CLASS_CD = tmpc.PROD_CLASS_CD
+               GROUP BY tmp.STORE_CD , tmp.PROD_CLASS_CD
+      </if>
+      <if test='printYn != null and printYn.toString() != "Y"'>
+                 AND tmp.PROD_CD NOT IN (SELECT PROD_CD
+                                           FROM TB_MS_PRINTER_PROD
+                                          WHERE STORE_CD = #{storeCd}
+                                            AND PRTER_NO = #{prterNo})
+                 AND tmp.PROD_CLASS_CD = tmpc.PROD_CLASS_CD
+               GROUP BY tmp.STORE_CD , tmp.PROD_CLASS_CD
+      </if>
+                   ) tmp
+             WHERE tmpc.store_cd = #{storeCd}
+             START WITH tmpc.PROD_CLASS_CD = '00000'
+           CONNECT BY PRIOR tmpc.PROD_CLASS_CD = tmpc.P_PROD_CLASS_CD
+               AND tmpc.STORE_CD = #{storeCd}
+               AND tmpc.P_PROD_CLASS_CD IS NOT NULL
+             GROUP BY tmpc.P_PROD_CLASS_CD, tmpc.PROD_CLASS_CD, tmpc.PROD_CLASS_NM
+             HAVING tmpc.PROD_CLASS_CD != '00000'
+             ORDER BY P_PROD_CLASS_CD, PROD_CLASS_CD
     </select>
 
 
