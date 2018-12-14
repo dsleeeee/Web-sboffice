@@ -89,4 +89,4 @@
 var cornerUseFg = ${cnv.getEnvCodeExcpAll("2028")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/view/vanConfig.js?ver=20181210.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/view/vanConfig.js?ver=2018121001" charset="utf-8"></script>
