@@ -36,7 +36,7 @@
       <div class="oh mt20">
         <%--- 적용매장 그리드 --%>
         <div class="w50 fl">
-          <div class="wj-TblWrap mr10" style="height:378px;" ng-controller="regStoreCtrl">
+          <div class="wj-TblWrap mr10" style="height:381px;" ng-controller="regStoreCtrl">
             <div class="oh">
               <span class="fl bk lh20 s14"><s:message code="prod.regStore"/></span>
               <span class="fr"><a href="#" class="btn_grayS2" ng-click="delete()"><s:message code="cmm.del" /></a></span>
@@ -72,7 +72,7 @@
 
         <%--- 미적용매장 그리드 --%>
         <div class="w50 fr">
-          <div class="wj-TblWrap ml10" style="height:378px;" ng-controller="noRegStoreCtrl">
+          <div class="wj-TblWrap ml10" style="height:381px;" ng-controller="noRegStoreCtrl">
             <div class="oh">
               <span class="fl bk lh20 s14"><s:message code="prod.noRegStore"/></span>
               <span class="fr"><a href="#" class="btn_grayS2" ng-click="regist()" ><s:message code="prod.regist"/></a></span>
