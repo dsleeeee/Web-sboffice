@@ -20,6 +20,8 @@ app.controller('taxBillCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('taxBillCtrl', $scope, $http, true));
 
+  console.log(" >>>> statusFg", statusFg);
+
   // comboBox 초기화
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
   $scope._setComboData("srchStatusFgCombo", statusFg);

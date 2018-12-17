@@ -148,4 +148,4 @@
   var statusFg = ${ccu.getCommCode("100")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/anals/taxBill/taxBill.js?ver=20181213.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/anals/taxBill/taxBill.js?ver=20181217.01" charset="utf-8"></script>
