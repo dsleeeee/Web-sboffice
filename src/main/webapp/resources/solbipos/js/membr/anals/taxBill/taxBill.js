@@ -20,11 +20,11 @@ app.controller('taxBillCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('taxBillCtrl', $scope, $http, true));
 
-  console.log(" >>>> statusFg", statusFg);
+  console.log(" >>>> statusFg", statusDataFg);
 
   // comboBox 초기화
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
-  $scope._setComboData("srchStatusFgCombo", statusFg);
+  $scope._setComboData("srchStatusFgCombo", statusDataFg);
 
   // 전체기간 체크박스
   $scope.isChecked = true;
@@ -38,7 +38,7 @@ app.controller('taxBillCtrl', ['$scope', '$http', function ($scope, $http) {
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // 그리드 DataMap 설정
-    $scope.statusFgDataMap = new wijmo.grid.DataMap(statusFg, 'value', 'name');
+    $scope.statusFgDataMap = new wijmo.grid.DataMap(statusDataFg, 'value', 'name');
   };
 
   $scope.$on("taxBillCtrl", function(event, data) {
