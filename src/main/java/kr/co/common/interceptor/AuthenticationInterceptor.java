@@ -219,10 +219,6 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                 if ( authUrl.equals(url) ) {
                     // 메뉴 일때만 사용 등록과 메뉴 히스토리에 추가함
                     if ( RequestMethod.GET.toString().equals(request.getMethod()) ) {
-                        // 가상로그인 경우 사용메뉴 url에 파라미터 Set
-                        if (request.getParameter("sid") != null && request.getParameter("sid").length() > 0) {
-                            resrceInfoBaseVO.setUrl(authUrl + "?sid=" + request.getParameter("sid"));
-                        }
                         // 세션에 사용 메뉴 넣기
                         cmmMenuService.addHistMenu(resrceInfoBaseVO, sessionInfoVO);
                         // 사용 히스토리 등록
