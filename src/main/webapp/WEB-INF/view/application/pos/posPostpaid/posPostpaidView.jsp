@@ -38,7 +38,7 @@
                         <wj-flex-grid-column header="<s:message code="postpaid.membrNo"/>" binding="membrNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="postpaid.membrNm"/>" binding="membrNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="postpaid.postpaidAmt"/>" binding="postpaidAmt" width="100" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="postpaid.balAmt"/>" binding="postpaidInAmt" width="100" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="postpaid.postpaidInAmt"/>" binding="postpaidInAmt" width="100" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="postpaid.postpaidBalAmt"/>" binding="postpaidBalAmt" width="100" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="postpaid.taxBillAmt"/>" binding="requestAmt" width="160" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="postpaid.request.taxBill"/>" binding="deposit" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
