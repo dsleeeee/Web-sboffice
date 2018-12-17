@@ -7,7 +7,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
-<c:set var="baseUrl" value="/membr/anals/postpaid/" />
+<%--<c:set var="baseUrl" value="/membr/anals/postpaid/" />--%>
 
 <div class="subCon" ng-controller="postpaidCtrl">
 
@@ -54,78 +54,64 @@
       </td>
       <th></th>
       <td></td>
-      <%-- 정렬 --%>
-      <%--
-      <th><s:message code="postpaid.array" /></th>
-      <td>
-        <div class="sb-select w100">
-          <wj-combo-box
-                  id="srchArrayCombo"
-                  ng-model="array"
-                  items-source="_getComboData('srchArrayCombo')"
-                  display-member-path="name"
-                  selected-value-path="value"
-                  is-editable="false"
-                  initialized="_initComboBox(s)">
-          </wj-combo-box>
-        </div>
-      </td>
-      --%>
     </tr>
     </tbody>
   </table>
 
-  <%--위즈모 테이블--%>
-  <div class="updownSet oh mb10 mt20">
-    <button class="btn_skyblue" id="btnDeposit" style=";" ng-click="deposit()">
+
+  <div class="mt40 oh sb-select dkbr">
+    <%-- 페이지 스케일  --%>
+    <wj-combo-box
+            class="w100px fl"
+            id="listScaleBox"
+            ng-model="listScale"
+            items-source="_getComboData('listScaleBox')"
+            display-member-path="name"
+            selected-value-path="value"
+            is-editable="false"
+            initialized="initComboBox(s)">
+    </wj-combo-box>
+    <%--// 페이지 스케일  --%>
+
+    <%-- 외상입금 --%>
+    <button class="btn_skyblue ml5 fr" id="btnDeposit" ng-click="deposit()">
       <s:message code="postpaid.deposit" />
     </button>
-    <button class="btn_skyblue" id="btnDelRepresent" style="display: none;" ng-click="del()">
-      <s:message code="cmm.delete" />
-    </button>
-    <button class="btn_skyblue" id="btnSaveRepresent" style="display: none;" ng-click="save()">
-      <s:message code="cmm.save" />
+    <%-- 세금계산서 발행입금 --%>
+    <button class="btn_skyblue ml5 fr" id="btnDeposit" ng-click="taxBillDeposit()">
+      <s:message code="postpaid.taxBill.deposit" />
     </button>
   </div>
 
-  <%-- 페이지 스케일  --%>
-  <wj-combo-box
-          class="w100px fl"
-          id="listScaleBox"
-          ng-model="listScale"
-          items-source="_getComboData('listScaleBox')"
-          display-member-path="name"
-          selected-value-path="value"
-          is-editable="false"
-          initialized="initComboBox(s)"
-          ng-hide="true">
-  </wj-combo-box>
-
   <%-- 그리드 --%>
-  <div class="wj-gridWrap" style="height:315px; overflow-y: hidden;">
-    <div class="row">
-      <wj-flex-grid
-              autoGenerateColumns="false"
-              control="flex"
-              initialized="initGrid(s,e)"
-              sticky-headers="true"
-              selection-mode="Row"
-              items-source="data"
-              item-formatter="_itemFormatter"
-              is-read-only="true">
+  <div class="w100 mt10 mb20">
+    <div class="wj-gridWrap" style="height:315px; overflow-y: hidden;">
+      <div class="row">
+        <wj-flex-grid
+                autoGenerateColumns="false"
+                control="flex"
+                initialized="initGrid(s,e)"
+                sticky-headers="true"
+                selection-mode="Row"
+                items-source="data"
+                item-formatter="_itemFormatter"
+                is-read-only="true">
 
-        <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="postpaid.hqOfficeCd"/>" binding="hqOfficeCd" width="70" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="postpaid.storeCd"/>" binding="storeCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="postpaid.storeNm"/>" binding="storeNm" width="140" is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="postpaid.membrNo"/>" binding="membrNo" width="140" is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="postpaid.membrNm"/>" binding="membrNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="postpaid.postpaidAmt"/>" binding="postpaidAmt" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="postpaid.postpaidInAmt"/>" binding="postpaidInAmt" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="postpaid.postpaidBalAmt"/>" binding="postpaidBalAmt" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="postpaid.regDt"/>" binding="regDt" is-read-only="true" width="170" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="postpaid.regId"/>" binding="regId" is-read-only="true" align="center"></wj-flex-grid-column>
-      </wj-flex-grid>
+          <!-- define columns -->
+          <wj-flex-grid-column header="<s:message code="postpaid.hqOfficeCd"/>" binding="hqOfficeCd" width="70" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="postpaid.storeCd"/>" binding="storeCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="postpaid.storeNm"/>" binding="storeNm" width="140" is-read-only="true" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="postpaid.postpaidNo"/>" binding="postpaidNo" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="postpaid.membrNo"/>" binding="membrNo" width="140" is-read-only="true" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="postpaid.membrNm"/>" binding="membrNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="postpaid.postpaidFg"/>" binding="postpaidFg" data-map="postpaidFgDataMap" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="postpaid.postpaidPayFg"/>" binding="postpaidPayFg" data-map="postpaidPayFgDataMap" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="postpaid.postpaidAmt"/>" binding="postpaidAmt" width="*" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="postpaid.depositAmt"/>" binding="depositAmt" width="*" is-read-only="true" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="postpaid.regDt"/>" binding="regDt" is-read-only="true" width="170" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="postpaid.regId"/>" binding="regId" is-read-only="true" align="center"></wj-flex-grid-column>
+        </wj-flex-grid>
+      </div>
     </div>
   </div>
 
@@ -150,6 +136,14 @@
 <c:import url="/WEB-INF/view/membr/anals/postpaid/deposit.jsp">
 </c:import>
 
-<%-- 매장 선택 --%>
-<c:import url="/WEB-INF/view/application/layer/searchStoreS.jsp">
+<%-- 입금 등록 팝업 --%>
+<c:import url="/WEB-INF/view/membr/anals/postpaid/depositRegist.jsp">
+</c:import>
+
+<%-- 세금계산서 발행 입금 팝업 --%>
+<c:import url="/WEB-INF/view/membr/anals/postpaid/taxBillDeposit.jsp">
+</c:import>
+
+<%-- 세금계산서 선택 팝업 --%>
+<c:import url="/WEB-INF/view/membr/anals/postpaid/searchTaxBill.jsp">
 </c:import>

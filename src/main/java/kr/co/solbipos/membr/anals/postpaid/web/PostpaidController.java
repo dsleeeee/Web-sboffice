@@ -7,6 +7,8 @@ import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.membr.anals.postpaid.service.PostpaidService;
+import kr.co.solbipos.membr.anals.taxBill.service.TaxBillVO;
+import kr.co.solbipos.membr.anals.postpaid.service.PostpaidStoreVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,7 +82,7 @@ public class PostpaidController {
      */
     @RequestMapping(value = "postpaid/getPostpaidMemberList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getPostpaidMemberList( kr.co.solbipos.membr.anals.postpaid.service.PostpaidStoreVO postpaidStoreVO, HttpServletRequest request,
+    public Result getPostpaidMemberList( PostpaidStoreVO postpaidStoreVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
@@ -101,8 +103,7 @@ public class PostpaidController {
      */
     @RequestMapping(value = "deposit/getDepositMemberList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getDepositMemberList(
-        kr.co.solbipos.membr.anals.postpaid.service.PostpaidStoreVO postpaidStoreVO, HttpServletRequest request,
+    public Result getDepositMemberList(PostpaidStoreVO postpaidStoreVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
@@ -122,13 +123,53 @@ public class PostpaidController {
      */
     @RequestMapping(value = "deposit/saveDeposit.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result saveDeposit(@RequestBody
-        kr.co.solbipos.membr.anals.postpaid.service.PostpaidStoreVO postpaidStoreVO, HttpServletRequest request,
+    public Result saveDeposit(@RequestBody PostpaidStoreVO postpaidStoreVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = service.saveDeposit(postpaidStoreVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 세금계산서 요청목록 조회
+     *
+     * @param taxBillVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "deposit/getTaxBillList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getTaxBillList(TaxBillVO taxBillVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = service.getTaxBillList(taxBillVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, taxBillVO);
+    }
+
+    /**
+     * 세금계산서 발행 입금
+     * @param taxBillVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "deposit/saveTaxBillComplete.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveTaxBillComplete(@RequestBody TaxBillVO taxBillVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = service.saveTaxBillComplete(taxBillVO, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

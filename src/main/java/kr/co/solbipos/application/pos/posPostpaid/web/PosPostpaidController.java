@@ -177,7 +177,4 @@ public class PosPostpaidController {
 
         return returnListJson(Status.OK, result);
     }
-
-
-
 }

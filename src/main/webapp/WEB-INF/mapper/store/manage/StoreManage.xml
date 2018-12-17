@@ -1979,6 +1979,7 @@
                 FROM TB_MS_PRODUCT_CLASS tmpc,
                      TB_MS_PRODUCT tmp
                WHERE tmp.STORE_CD = #{storeCd}
+                 AND tmp.STORE_CD = tmpc.STORE_CD
       <if test='printYn != null and printYn.toString() == "Y"'>
                  AND tmp.PROD_CD IN (SELECT PROD_CD
                                        FROM TB_MS_PRINTER_PROD
@@ -1997,8 +1998,11 @@
       </if>
                    ) tmp
              WHERE tmpc.store_cd = #{storeCd}
-             START WITH tmpc.P_PROD_CLASS_CD = '00000'
-           CONNECT BY PRIOR tmpc.P_PROD_CLASS_CD = tmpc.PROD_CLASS_CD
+               AND tmp.STORE_CD = tmpc.STORE_CD
+             START WITH tmpc.PROD_CLASS_CD = tmp.PROD_CLASS_CD
+           CONNECT BY tmpc.PROD_CLASS_CD = PRIOR tmpc.P_PROD_CLASS_CD
+               AND tmpc.STORE_CD = #{storeCd}
+               AND tmpc.P_PROD_CLASS_CD IS NOT NULL
              GROUP BY tmpc.P_PROD_CLASS_CD, tmpc.PROD_CLASS_CD, tmpc.PROD_CLASS_NM
              HAVING tmpc.PROD_CLASS_CD != '00000'
              ORDER BY P_PROD_CLASS_CD, PROD_CLASS_CD

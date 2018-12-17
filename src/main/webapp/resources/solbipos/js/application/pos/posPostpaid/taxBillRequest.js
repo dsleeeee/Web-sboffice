@@ -34,6 +34,8 @@ app.controller('requestTaxBillCtrl', ['$scope', '$http', function ($scope, $http
       $scope.requestMember     = data;
       $scope.memberInfo = '[' + $scope.requestMember.membrNo + '] '+$scope.requestMember.membrNm;
       $scope.balance    = addComma($scope.requestMember.postpaidBalAmt) + ' 원';
+      $scope.requestAmt = "";
+
     });
 
     event.preventDefault();
@@ -55,8 +57,12 @@ app.controller('requestTaxBillCtrl', ['$scope', '$http', function ($scope, $http
     var params = $scope.requestMember;
     params.requestAmt = $scope.requestAmt;
 
-    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수 // todo
-    // $scope._postJSONSave.withPopUp( url, params, success );
+    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+    $scope._postJSONSave.withPopUp( "/application/pos/posPostpaid/posPostpaid/saveTaxBillRequet.sb", params, function(response){
+      $scope._popMsg(messages["cmm.saveSucc"]);
+      $scope.requestMember = null;
+      $scope.close();
+    });
   };
 
   // 팝업 닫기

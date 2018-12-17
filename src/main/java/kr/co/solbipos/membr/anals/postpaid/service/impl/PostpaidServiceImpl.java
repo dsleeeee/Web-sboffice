@@ -8,10 +8,13 @@ import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.membr.anals.enums.StatusFg;
 import kr.co.solbipos.membr.anals.postpaid.service.PostpaidService;
-import kr.co.solbipos.membr.anals.postpaid.service.enums.PostpaidFg;
-import kr.co.solbipos.membr.anals.postpaid.service.enums.PostpaidPayFg;
+import kr.co.solbipos.membr.anals.postpaid.enums.PostpaidFg;
+import kr.co.solbipos.membr.anals.postpaid.enums.PostpaidPayFg;
 import kr.co.solbipos.membr.anals.postpaid.service.PostpaidStoreVO;
+import kr.co.solbipos.membr.anals.taxBill.service.TaxBillVO;
+import kr.co.solbipos.membr.anals.postpaid.service.impl.PostpaidMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,14 +43,13 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Transactional
 public class PostpaidServiceImpl implements PostpaidService {
 
-    private final kr.co.solbipos.membr.anals.postpaid.service.impl.PostpaidMapper mapper;
+    private final PostpaidMapper mapper;
     private final CmmEnvUtil cmmEnvUtil;
     private final MessageService messageService;
 
     /** Constructor Injection */
     @Autowired
-    public PostpaidServiceImpl(
-        kr.co.solbipos.membr.anals.postpaid.service.impl.PostpaidMapper mapper, CmmEnvUtil cmmEnvUtil, MessageService messageService) {
+    public PostpaidServiceImpl(PostpaidMapper mapper, CmmEnvUtil cmmEnvUtil, MessageService messageService) {
         this.mapper = mapper;
         this.cmmEnvUtil = cmmEnvUtil;
         this.messageService = messageService;
@@ -102,6 +104,56 @@ public class PostpaidServiceImpl implements PostpaidService {
         postpaidStoreVO.setModDt(dt);
 
         int result = mapper.saveDeposit(postpaidStoreVO);
+        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+        return result;
+    }
+
+    /** 세금계산서 요청목록 조회 */
+    @Override
+    public List<DefaultMap<Object>> getTaxBillList(TaxBillVO taxBillVO, SessionInfoVO sessionInfoVO) {
+
+        taxBillVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        taxBillVO.setStatusFg(StatusFg.REQEUST); // 요청목록만 조회
+
+        return mapper.getTaxBillList(taxBillVO);
+    }
+
+    /** 세금계산서 발행 입금 */
+    @Override
+    public int saveTaxBillComplete(TaxBillVO taxBillVO, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+        String dt = currentDateTimeString();
+
+        // 세금계산서 발행 및 입금 완료 처리
+        taxBillVO.setStatusFg(StatusFg.COMPLETE); // 입금 완료
+        taxBillVO.setModDt(dt);
+        taxBillVO.setModId(sessionInfoVO.getUserId());
+
+
+        result = mapper.saveTaxBillComplete(taxBillVO);
+        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+
+        // 외상입금 처리 // todo 이거 완료하고 나서 목록에서 매핑되는 세금계산서도 보여줘야 함.
+        PostpaidStoreVO postpaidStoreVO = new PostpaidStoreVO();
+
+        postpaidStoreVO.setMembrOrgnCd(taxBillVO.getMembrOrgnCd());
+        postpaidStoreVO.setMembrNo(taxBillVO.getMembrNo());
+        postpaidStoreVO.setSaleDate(currentDateString());
+        postpaidStoreVO.setPostpaidDt(dt);
+        postpaidStoreVO.setPostpaidFg(PostpaidFg.DEPOSIT); // 입금
+        postpaidStoreVO.setPostpaidPayFg(PostpaidPayFg.CASH); // 현금
+        postpaidStoreVO.setPostpaidAmt(taxBillVO.getRequestAmt()); // 입금액
+        postpaidStoreVO.setNonsaleTypeApprNo("  ");// 비매출 승인번호
+
+        postpaidStoreVO.setRegId(sessionInfoVO.getUserId());
+        postpaidStoreVO.setRegDt(dt);
+        postpaidStoreVO.setModId(sessionInfoVO.getUserId());
+        postpaidStoreVO.setModDt(dt);
+
+        result = mapper.saveDeposit(postpaidStoreVO);
         if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
         return result;

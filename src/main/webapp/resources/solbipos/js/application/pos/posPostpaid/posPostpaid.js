@@ -27,14 +27,17 @@ app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-    $scope.searchProduct();
+    $scope.searchPostPaidList();
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
       if (e.panel == s.cells) {
         var col = s.columns[e.col];
         var item = s.rows[e.row].dataItem;
+
         if (col.binding === "deposit") {
-          wijmo.addClass(e.cell, 'wijLink');
+          if(item.deposit === '발행요청') {
+            wijmo.addClass(e.cell, 'wijLink');
+          }
         }
       }
     });
@@ -46,27 +49,25 @@ app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
         var col = ht.panel.columns[ht.col];
         $scope.member = s.rows[ht.row].dataItem;
         if ( col.binding === "deposit" ) {
-          // 후불입금 잔액 존재시에만 세금계산서 발행이 가능
-          if($scope.member.postpaidBalAmt <= 0 ){
-            $scope.member = null;
-            $scope._popMsg(messages["postpaid.postpaidBalAmt.not.enough"]);
-            return false;
+          console.log('$scope.member.deposit', $scope.member.deposit);
+          if( $scope.member.deposit === '발행요청' ) {
+            // 세금계산서 발행요청 팝업 오픈
+            $scope.requestTaxBillLayer.show(true, function () {
+              $scope.searchPostPaidList();
+            });
           }
-
-          // 세금계산서 발행요청 팝업 오픈
-          $scope.requestTaxBillLayer.show(true);
         }
       }
     });
   };
 
   $scope.$on("memberCtrl", function(event, data) {
-    $scope.searchProduct();
+    $scope.searchPostPaidList();
     event.preventDefault();
   });
 
   // 대상회원 목록 조회
-  $scope.searchProduct = function(){
+  $scope.searchPostPaidList = function(){
     var params = {};
     params.listScale = 30;
     $scope._inquiryMain("/application/pos/posPostpaid/posPostpaid/getMemberList.sb", params, function() {}, false);
@@ -83,7 +84,6 @@ app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
       }, 50);
     });
   });
-
 }]);
 
 

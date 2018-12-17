@@ -19,6 +19,16 @@ var app = agrid.getApp();
 app.controller('depositCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('depositCtrl', $scope, $http, true));
+
+  // 선택 회원
+  $scope.selectedMember;
+  $scope.setSelectedMember = function (member) {
+    $scope.selectedMember = member;
+  };
+  $scope.getSelectedMember = function(){
+    return $scope.selectedMember;
+  };
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 
@@ -39,7 +49,8 @@ app.controller('depositCtrl', ['$scope', '$http', function ($scope, $http) {
         var col = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
         if ( col.binding === "membrNo" ||  col.binding === "membrNm") {
-          $scope.save(selectedRow);
+          $scope.selectedMember = selectedRow;
+          $scope.depositRegistLayer.show(true);
         }
       }
     });
@@ -59,33 +70,17 @@ app.controller('depositCtrl', ['$scope', '$http', function ($scope, $http) {
     params.membrNo = $("#searchDepositMemberNo").val();
     params.membrNm = $("#searchDepositMemberNm").val();
 
-    $scope._inquirySub(baseUrl + "deposit/getDepositMemberList.sb", params, function() {}, false);
+    $scope._inquirySub("/membr/anals/postpaid/deposit/getDepositMemberList.sb", params, function() {}, false);
   };
 
-  // 외상입금 처리
-  $scope.save = function(data){
-    if( $("#postpaidAmt").val() === null || $("#postpaidAmt").val() === "" || $("#postpaidAmt").val() === "0") {
-      $scope._popMsg(messages["postpaid.request.postpaidAmt"]);
+  // 화면 ready 된 후 설정
+  angular.element(document).ready(function () {
+    // 비밀번호 변경 팝업 핸들러 추가
+    $scope.depositRegistLayer.shown.addHandler(function (s) {
+      setTimeout(function() {
+        $scope._broadcast('depositRegistCtrl', $scope.getSelectedMember());
+      }, 50)
+    });
+  });
 
-      return false;
-    }
-
-    var params = {};
-
-    params.storeCd = data.storeCd;
-    params.membrNo = data.membrNo;
-    params.postpaidAmt = $("#postpaidAmt").val();
-
-    $scope._postJSONSave.withPopUp( baseUrl + "deposit/saveDeposit.sb", params, function(response){
-    } );
-
-  };
-
-  // 외상입금 후처리
-  $scope.saveResult = function (){
-    $("#postpaidAmt").val("");
-    var postpaidGrid = agrid.getScope('postpaidCtrl');
-    postpaidGrid.searchPostpaid();
-
-  };
 }]);

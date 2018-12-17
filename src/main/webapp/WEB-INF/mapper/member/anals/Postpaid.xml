@@ -19,125 +19,203 @@
     <select id="getPostpaidMemberList"  parameterType="postpaidStoreVO" resultType="DefaultMap">
         /* PostpaidMapper.getPostpaidMemberList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT tmmpb.HQ_OFFICE_CD,
-               tmmpb.STORE_CD,
+        SELECT tmmp.HQ_OFFICE_CD,
+               tmmp.SALE_DATE,
+               tmmp.STORE_CD,
                tms.STORE_NM,
-               tmmpb.MEMBR_NO,
+               tmmp.POSTPAID_NO,
+               tmmp.MEMBR_NO,
                tmm.MEMBR_NM,
-               tmmpb.POSTPAID_AMT,
-               tmmpb.POSTPAID_IN_AMT,
-               tmmpb.POSTPAID_BAL_AMT,
-               TO_CHAR(to_date(tmmpb.REG_DT, 'yyyyMMddhh24miss'), 'yyyy-MM-dd hh24:mi:ss') AS REG_DT ,
-               tmmpb.REG_ID
+               tmmp.POSTPAID_FG,
+               tmmp.POSTPAID_PAY_FG,
+               tmmp.POSTPAID_AMT,
+               tmmp.DEPOSIT_AMT,
+               TO_CHAR(to_date(tmmp.REG_DT, 'yyyyMMddhh24miss'), 'yyyy-MM-dd hh24:mi:ss') AS REG_DT,
+               tmmp.REG_ID
         <include refid="CmmSQL.PagingTemplateCount"/>
-          FROM TB_MB_MEMBER_PAID_BALANCE tmmpb,
+          FROM TB_MB_MEMBER_POSTPAID tmmp,
                TB_MB_MEMBER tmm,
                TB_MS_STORE tms
-         WHERE tmm.MEMBR_ORGN_CD = tmmpb.HQ_OFFICE_CD
-           AND tmm.MEMBR_NO = tmmpb.MEMBR_NO
-           AND tms.HQ_OFFICE_CD = tmmpb.HQ_OFFICE_CD
-           AND tms.STORE_CD = tmmpb.STORE_CD
-      <if test='storeCds != null and storeCds != "ALL"'>
-           AND tmmpb.STORE_CD IN
+         WHERE tmm.MEMBR_ORGN_CD = tmmp.HQ_OFFICE_CD
+           AND tmm.MEMBR_NO = tmmp.MEMBR_NO
+           AND tms.HQ_OFFICE_CD = tmmp.HQ_OFFICE_CD
+           AND tms.STORE_CD = tmmp.STORE_CD
+      <if test='storeCds != null and storeCds != ""'>
+           AND tmmp.STORE_CD IN
           <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
              #{item}
           </foreach>
         </if>
         <if test='membrNo != null and membrNo != ""'>
-           AND tmmpb.MEMBR_NO = #{membrNo}
+          <![CDATA[
+           AND tmmp.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
+           ]]>
         </if>
         <if test='membrNm != null and membrNm != ""'>
-           AND tmm.MEMBR_NM = #{membrNm}
+          <![CDATA[
+           AND tmm.MEMBR_NM LIKE '%'|| #{membrNm} ||'%'
+           ]]>
         </if>
-         ORDER BY tmmpb.MOD_DT DESC, tmmpb.STORE_CD, tmmpb.MEMBR_NO
+         ORDER BY tmmp.MOD_DT DESC, tmmp.STORE_CD, tmmp.MEMBR_NO
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
-  <!-- 후불 대상 회원 조회 -->
-  <!--
-      TABLE    : TB_MB_MEMBER_POSTPAID_STORE
-      COMMENTS : 후불(외상) 대상인 회원을 조회한다.
-  -->
-  <select id="getDepositMemberList" parameterType="postpaidStoreVO" resultType="DefaultMap">
-    /* PostpaidMapper.getDepositMemberList */
-    SELECT *
-      FROM (
-      SELECT tmmcs.MEMBR_ORGN_CD,
-             tmmcs.MEMBR_NO AS MEMBR_NO,
-             (SELECT MEMBR_NM FROM TB_MB_MEMBER WHERE MEMBR_ORGN_CD = tmmcs.MEMBR_ORGN_CD AND MEMBR_NO = tmmcs.MEMBR_NO) AS MEMBR_NM,
-             tmmcs.STORE_CD,
-             (SELECT STORE_NM FROM TB_MS_STORE WHERE HQ_OFFICE_CD = tmmcs.MEMBR_ORGN_CD AND STORE_CD = tmmcs.STORE_CD) AS STORE_NM
-        FROM TB_MB_MEMBER_POSTPAID_STORE tmmcs
-       WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
-           ) tmmcs
-    <where>
-      <if test='storeCd != null and storeCd != ""'>
-        AND tmmcs.STORE_CD = #{storeCd}
-      </if>
-      <if test='storeNm != null and storeNm != ""'>
-        AND tmmcs.STORE_NM = #{storeNm}
-      </if>
-      <if test='membrNo != null and membrNo != ""'>
-        AND tmmcs.MEMBR_NO = #{membrNo}
-      </if>
-      <if test='membrNm != null and membrNm != ""'>
-        AND tmmcs.MEMBR_NM = #{membrNm}
-      </if>
-      <if test='defaultStoreCd != null and defaultStoreCd.toString() != ""'>
-        AND tmmcs.STORE_CD != #{defaultStoreCd}
-      </if>
-    </where>
-  </select>
+    <!-- 후불 대상 회원 조회 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_POSTPAID_STORE
+        COMMENTS : 후불(외상) 대상인 회원을 조회한다.
+    -->
+    <select id="getDepositMemberList" parameterType="postpaidStoreVO" resultType="DefaultMap">
+        /* PostpaidMapper.getDepositMemberList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT tmmcs.MEMBR_ORGN_CD,
+               tmmcs.MEMBR_NO,
+               tmmcs.MEMBR_NM,
+               tmmcs.STORE_CD,
+               tmmcs.STORE_NM
+          <include refid="CmmSQL.PagingTemplateCount"/>
+          FROM (
+          SELECT tmmcs.MEMBR_ORGN_CD,
+                 tmmcs.MEMBR_NO AS MEMBR_NO,
+                 (SELECT MEMBR_NM FROM TB_MB_MEMBER WHERE MEMBR_ORGN_CD = tmmcs.MEMBR_ORGN_CD AND MEMBR_NO = tmmcs.MEMBR_NO) AS MEMBR_NM,
+                 tmmcs.STORE_CD,
+                 (SELECT STORE_NM FROM TB_MS_STORE WHERE HQ_OFFICE_CD = tmmcs.MEMBR_ORGN_CD AND STORE_CD = tmmcs.STORE_CD) AS STORE_NM
+            FROM TB_MB_MEMBER_POSTPAID_STORE tmmcs
+           WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+               ) tmmcs
+        <where>
+          <if test='storeCd != null and storeCd != ""'>
+            AND tmmcs.STORE_CD LIKE '%'|| #{storeCd} ||'%'
+          </if>
+          <if test='storeNm != null and storeNm != ""'>
+            AND tmmcs.STORE_NM LIKE '%'|| #{storeNm} ||'%'
+          </if>
+          <if test='membrNo != null and membrNo != ""'>
+            AND tmmcs.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
+          </if>
+          <if test='membrNm != null and membrNm != ""'>
+            AND tmmcs.MEMBR_NM LIKE '%'|| #{membrNm} ||'%'
+          </if>
+          <if test='defaultStoreCd != null and defaultStoreCd.toString() != ""'>
+            AND tmmcs.STORE_CD != #{defaultStoreCd}
+          </if>
+        </where>
+        ORDER BY tmmcs.STORE_CD, tmmcs.MEMBR_NO
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
 
-  <!-- 외상입금 -->
-  <!--
-      TABLE    :
-      COMMENTS : 외상금액을 입금처리한다.
-  -->
-  <insert id="saveDeposit" parameterType="postpaidStoreVO">
-    /* PostpaidMapper.saveDeposit */
-    INSERT INTO TB_MB_MEMBER_POSTPAID
-    (
-      HQ_OFFICE_CD,
-      STORE_CD,
-      SALE_DATE,
-      POSTPAID_NO,
-      MEMBR_NO,
-      POSTPAID_DT,
-      POSTPAID_FG,
-      POSTPAID_PAY_FG,
-      POSTPAID_AMT,
-      NONSALE_TYPE_APPR_NO,
-      ORG_NONSALE_TYPE_APPR_NO,
-      NONSALE_BILL_NO,
-      REG_DT,
-      REG_ID,
-      MOD_DT,
-      MOD_ID
-    )
-    VALUES
-    (
-      #{membrOrgnCd},
-      #{storeCd},
-      #{saleDate},
-      (SELECT LPAD(NVL(MAX(POSTPAID_NO), '0')+1, 4, '0')
-         FROM TB_MB_MEMBER_POSTPAID
-        WHERE HQ_OFFICE_CD = #{membrOrgnCd}
-          AND STORE_CD = #{storeCd}
-          AND SALE_DATE = #{saleDate} ),
-      #{membrNo},
-      #{postpaidDt},
-      #{postpaidFg, jdbcType=VARCHAR},
-      #{postpaidPayFg, jdbcType=VARCHAR},
-      #{postpaidAmt},
-      #{nonsaleTypeApprNo},
-      #{orgNonsaleTypeApprNo},
-      #{nonsaleBillNo},
-      #{regDt},
-      #{regId},
-      #{modDt},
-      #{modId}
-    )
-  </insert>
+    <!-- 외상입금 -->
+    <!--
+        TABLE    :
+        COMMENTS : 외상금액을 입금처리한다.
+    -->
+    <insert id="saveDeposit" parameterType="postpaidStoreVO">
+        /* PostpaidMapper.saveDeposit */
+        <selectKey resultType="String" keyProperty="storeCd" order="BEFORE">
+          <if test='storeCd != null and storeCd != ""'>
+            SELECT #{storeCd} AS STORE_CD
+              FROM DUAL
+          </if>
+          <if test='storeCd == null or storeCd == ""'>
+            SELECT REG_STORE_CD AS STORE_CD
+              FROM TB_MB_MEMBER
+             WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+               AND MEMBR_NO = #{membrNo}
+          </if>
+        </selectKey>
+
+        INSERT INTO TB_MB_MEMBER_POSTPAID
+        (
+            HQ_OFFICE_CD,
+            STORE_CD,
+            SALE_DATE,
+            POSTPAID_NO,
+            MEMBR_NO,
+            POSTPAID_DT,
+            POSTPAID_FG,
+            POSTPAID_PAY_FG,
+            POSTPAID_AMT,
+            NONSALE_TYPE_APPR_NO,
+            ORG_NONSALE_TYPE_APPR_NO,
+            NONSALE_BILL_NO,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        VALUES
+        (
+            #{membrOrgnCd},
+            #{storeCd},
+            #{saleDate},
+            (SELECT LPAD(NVL(MAX(POSTPAID_NO), '0')+1, 4, '0')
+               FROM TB_MB_MEMBER_POSTPAID
+              WHERE HQ_OFFICE_CD = #{membrOrgnCd}
+                AND STORE_CD = #{storeCd}
+                AND SALE_DATE = #{saleDate} ),
+            #{membrNo},
+            #{postpaidDt},
+            #{postpaidFg, jdbcType=VARCHAR},
+            #{postpaidPayFg, jdbcType=VARCHAR},
+            #{postpaidAmt},
+            #{nonsaleTypeApprNo},
+            #{orgNonsaleTypeApprNo},
+            #{nonsaleBillNo},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+
+    <!-- 세금계산서 요청목록 조회 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_TAX_BILL, TB_MB_MEMBER
+        COMMENTS : 세금계산서 요청목록을 조회한다.
+    -->
+    <select id="getTaxBillList" parameterType="taxBillVO" resultType="DefaultMap">
+      /* PostpaidMapper.getTaxBillList */
+      <include refid="CmmSQL.PagingTemplateHeader"/>
+      SELECT tmmtb.BILL_DATE,
+             tmmtb.BILL_SEQ,
+             tmmtb.BILL_DATE || BILL_SEQ AS BILL_NO,
+             tmmtb.MEMBR_ORGN_CD,
+             tmmtb.MEMBR_NO,
+             tmm.MEMBR_NM,
+             TO_CHAR(to_date(tmmtb.REQUEST_DT, 'yyyyMMddhh24miss'), 'yyyy-MM-dd hh24:mi:ss') AS REQUEST_DT,
+             tmmtb.REQUEST_AMT,
+             tmmtb.STATUS_FG,
+             tmmtb.REG_DT,
+             tmmtb.REG_ID,
+             tmmtb.MOD_DT,
+             tmmtb.MOD_ID
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_MB_MEMBER_TAX_BILL tmmtb,
+             TB_MB_MEMBER tmm
+       WHERE tmmtb.MEMBR_ORGN_CD = #{membrOrgnCd}
+         AND tmmtb.STATUS_FG  = #{statusFg}
+         AND tmm.MEMBR_ORGN_CD  = tmmtb.MEMBR_ORGN_CD
+         AND tmm.MEMBR_NO  = tmmtb.MEMBR_NO
+       ORDER BY tmmtb.BILL_DATE ASC, tmmtb.BILL_SEQ, tmmtb.MEMBR_NO
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 세금계산서 발행 입금 완료 처리 -->
+    <!--
+        TABLE    :
+        COMMENTS : 외상금액을 입금처리한다.
+    -->
+    <update id="saveTaxBillComplete" parameterType="taxBillVO">
+        /* PostpaidMapper.saveTaxBillComplete */
+        UPDATE TB_MB_MEMBER_TAX_BILL tmmtb
+           SET tmmtb.STATUS_FG = #{statusFg},
+               tmmtb.MOD_DT = #{modDt},
+               tmmtb.MOD_ID = #{modId}
+         WHERE tmmtb.BILL_DATE = #{billDate}
+           AND tmmtb.BILL_SEQ = #{billSeq}
+           AND tmmtb.MEMBR_ORGN_CD = #{membrOrgnCd}
+    </update>
+
 
 </mapper>
