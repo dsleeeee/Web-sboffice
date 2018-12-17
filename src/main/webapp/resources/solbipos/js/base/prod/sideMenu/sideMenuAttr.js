@@ -80,7 +80,12 @@ app.controller('sideMenuAttrClassCtrl', ['$scope', '$http', function ($scope, $h
   $scope.deleteRow = function() {
     for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
       var item = $scope.flex.collectionView.items[i];
+
       if(item.gChk){
+        if(item.cnt > 0){
+          $scope._popMsg("속성이 등록된 분류는 삭제할 수 없습니다. ");
+          return false;
+        }
         $scope.flex.collectionView.removeAt(i);
       }
     }

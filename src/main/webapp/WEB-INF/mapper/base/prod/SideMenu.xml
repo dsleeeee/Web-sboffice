@@ -26,7 +26,8 @@
                 SELECT
                     thpsc.HQ_BRAND_CD,
                     thpsc.SDATTR_CLASS_CD,
-                    thpsc.SDATTR_CLASS_NM
+                    thpsc.SDATTR_CLASS_NM,
+                    (SELECT COUNT(*) FROM TB_HQ_PRODUCT_SDATTR WHERE HQ_OFFICE_CD = thpsc.HQ_OFFICE_CD AND SDATTR_CLASS_CD = thpsc.SDATTR_CLASS_CD AND thpsc.USE_YN = 'Y' ) AS CNT
                 FROM
                     TB_HQ_PRODUCT_SDATTR_CLASS thpsc
                 WHERE
@@ -40,7 +41,8 @@
                 SELECT
                     tmpsc.MS_BRAND_CD,
                     tmpsc.SDATTR_CLASS_CD,
-                    tmpsc.SDATTR_CLASS_NM
+                    tmpsc.SDATTR_CLASS_NM,
+                    (SELECT COUNT(*) FROM TB_MS_PRODUCT_SDATTR WHERE STORE_CD = tmpsc.STORE_CD AND SDATTR_CLASS_CD = tmpsc.SDATTR_CLASS_CD AND tmpsc.USE_YN = 'Y') AS CNT
                 FROM
                     TB_MS_PRODUCT_SDATTR_CLASS tmpsc
                 WHERE
@@ -406,7 +408,8 @@
                 SELECT
                     thpsg.HQ_BRAND_CD,
                     thpsg.SDSEL_GRP_CD,
-                    thpsg.SDSEL_GRP_NM
+                    thpsg.SDSEL_GRP_NM,
+                    (SELECT COUNT(*) FROM TB_HQ_PRODUCT_SDSEL_CLASS WHERE HQ_OFFICE_CD = thpsg.HQ_OFFICE_CD  AND SDSEL_GRP_CD = thpsg.SDSEL_GRP_CD AND thpsg.USE_YN  = 'Y') AS CNT
                 FROM
                     TB_HQ_PRODUCT_SDSEL_GROUP thpsg
                 WHERE
@@ -420,7 +423,8 @@
                 SELECT
                     tmpsg.MS_BRAND_CD,
                     tmpsg.SDSEL_GRP_CD,
-                    tmpsg.SDSEL_GRP_NM
+                    tmpsg.SDSEL_GRP_NM,
+                    (SELECT COUNT(*) FROM TB_MS_PRODUCT_SDSEL_CLASS WHERE STORE_CD = tmpsg.STORE_CD  AND SDSEL_GRP_CD = tmpsg.SDSEL_GRP_CD AND tmpsg.USE_YN  = 'Y') AS CNT
                 FROM
                     TB_MS_PRODUCT_SDSEL_GROUP tmpsg
                 WHERE
@@ -594,7 +598,7 @@
                     thpsc.SDSEL_CLASS_NM,
                     thpsc.SDSEL_GRP_CD,
                     thpsc.DISP_SEQ,
-                    thpsc.SDSEL_QTY
+                    (SELECT COUNT(*) FROM TB_HQ_PRODUCT_SDSEL_PROD WHERE HQ_OFFICE_CD  = thpsc.HQ_OFFICE_CD AND SDSEL_CLASS_CD = thpsc.SDSEL_CLASS_CD AND USE_YN = 'Y') AS SDSEL_QTY
                 FROM
                     TB_HQ_PRODUCT_SDSEL_CLASS thpsc
                 WHERE
@@ -611,7 +615,7 @@
                     tmpsc.SDSEL_CLASS_NM,
                     tmpsc.SDSEL_GRP_CD,
                     tmpsc.DISP_SEQ,
-                    tmpsc.SDSEL_QTY
+                    (SELECT COUNT(*) FROM TB_HQ_PRODUCT_SDSEL_PROD WHERE STORE_CD  = tmpsc.STORE_CD AND SDSEL_CLASS_CD = tmpsc.SDSEL_CLASS_CD AND USE_YN = 'Y') AS SDSEL_QTY
                 FROM
                     TB_MS_PRODUCT_SDSEL_CLASS tmpsc
                 WHERE
