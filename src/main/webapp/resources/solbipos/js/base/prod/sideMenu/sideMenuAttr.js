@@ -75,6 +75,17 @@ app.controller('sideMenuAttrClassCtrl', ['$scope', '$http', function ($scope, $h
     // 추가기능 수행 : 파라미터
     $scope._addRow(params, 2);
   };
+
+  // 속성분류 그리드 행 삭제
+  $scope.deleteRow = function() {
+    for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
+      var item = $scope.flex.collectionView.items[i];
+      if(item.gChk){
+        $scope.flex.collectionView.removeAt(i);
+      }
+    }
+  };
+
   // 저장
   $scope.save = function() {
     // 파라미터 설정
@@ -169,6 +180,17 @@ app.controller('sideMenuAttrAttrCtrl', ['$scope', '$http', 'sdattrClassCd', func
     // 추가기능 수행 : 파라미터
     $scope._addRow(params, 2);
   };
+
+  // 속성 그리드 행 삭제
+  $scope.deleteRow = function() {
+    for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
+      var item = $scope.flex.collectionView.items[i];
+      if(item.gChk){
+        $scope.flex.collectionView.removeAt(i);
+      }
+    }
+  };
+
   // 저장
   $scope.save = function() {
 

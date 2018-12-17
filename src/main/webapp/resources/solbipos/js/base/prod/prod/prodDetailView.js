@@ -19,10 +19,13 @@ app.controller('prodDetailCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.prodEnvstVal = prodEnvstVal;
   $scope.userOrgnFg = gvOrgnFg;
 
+  // 본사에서 들어왔을때는 매장코드가 없다. (가상로그인 후, 세로고침 몇번 하면 gvOrgnFg가 바뀌는 것 예방)
+  $scope.userStoreCd = gvStoreCd;
+
   $scope.btnShowFg = false;
 
-  if(($scope.prodEnvstVal === 'HQ' && $scope.userOrgnFg === 'H')
-  || ($scope.prodEnvstVal === 'STORE' && $scope.userOrgnFg === 'S')) {
+  if(($scope.prodEnvstVal === 'HQ' && isEmptyObject($scope.userStoreCd))
+  || ($scope.prodEnvstVal === 'STORE' &&  !isEmptyObject($scope.userStoreCd))) {
     $scope.btnShowFg = true;
   }
 

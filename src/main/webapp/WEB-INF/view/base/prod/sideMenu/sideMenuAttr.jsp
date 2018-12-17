@@ -12,7 +12,7 @@
           <button class="btn_skyblue" id="btnAddClass" style="display: none;" ng-click="addRow()">
             <s:message code="cmm.add" />
           </button>
-          <button class="btn_skyblue" id="btnDelClass" style="display: none;" ng-click="delete()">
+          <button class="btn_skyblue" id="btnDelClass" style="display: none;" ng-click="deleteRow()">
             <s:message code="cmm.delete" />
           </button>
           <button class="btn_skyblue" id="btnSaveClass" style="display: none;" ng-click="save()">
@@ -56,7 +56,7 @@
           <button class="btn_skyblue" id="btnAddAttr" style="display: none;" ng-click="addRow()">
             <s:message code="cmm.add" />
           </button>
-          <button class="btn_skyblue" id="btnDelAttr" style="display: none;">
+          <button class="btn_skyblue" id="btnDelAttr" style="display: none;" ng-click="deleteRow()">
             <s:message code="cmm.delete" />
           </button>
           <button class="btn_skyblue" id="btnSaveAttr" style="display: none;" ng-click="save()">

@@ -83,6 +83,17 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
     // 추가기능 수행 : 파라미터
     $scope._addRow(params, 2);
   };
+
+  // 선택그룹 그리드 행 삭제
+  $scope.deleteRow = function() {
+    for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
+      var item = $scope.flex.collectionView.items[i];
+      if(item.gChk){
+        $scope.flex.collectionView.removeAt(i);
+      }
+    }
+  };
+
   // 저장
   $scope.save = function() {
     // 파라미터 설정
@@ -193,6 +204,17 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
     // 추가기능 수행 : 파라미터
     $scope._addRow(params, 2);
   };
+
+  // 선택분류 그리드 행 삭제
+  $scope.deleteRow = function() {
+    for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
+      var item = $scope.flex.collectionView.items[i];
+      if(item.gChk){
+        $scope.flex.collectionView.removeAt(i);
+      }
+    }
+  };
+
   // 저장
   $scope.save = function() {
 
