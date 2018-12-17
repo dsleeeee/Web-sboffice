@@ -41,7 +41,7 @@
               <span class="fl bk lh20 s14"><s:message code="prod.regStore"/></span>
               <span class="fr"><a href="#" class="btn_grayS2" ng-click="delete()"><s:message code="cmm.del" /></a></span>
             </div>
-            <div id="regStoreGrid" class="mt10" style="height: 355px; overflow-y: hidden;">
+            <div id="regStoreGrid" class="mt10" style="height: 370px; overflow-y: hidden;">
               <wj-flex-grid
                       autoGenerateColumns="false"
                       control="flex"
@@ -53,14 +53,14 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.storeCd"/>" binding="storeCd" width="*" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.storeCd"/>" binding="storeCd" width="90" is-read-only="true"  align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.storeNm"/>" binding="storeNm" width="*" is-read-only="true" ></wj-flex-grid-column>
               </wj-flex-grid>
             </div>
           </div>
 
           <%-- 페이지 리스트 --%>
-          <div class="pageNum mt10">
+          <div class="pageNum mt20">
             <%-- id --%>
             <ul id="regStoreCtrlPager" data-size="10">
             </ul>
@@ -78,7 +78,7 @@
               <span class="fr"><a href="#" class="btn_grayS2" ng-click="regist()" ><s:message code="prod.regist"/></a></span>
             </div>
 
-            <div id="noRegStoreGrid" class="mt10" style="height: 355px; overflow-y: hidden;">
+            <div id="noRegStoreGrid" class="mt10" style="height: 370px; overflow-y: hidden;">
               <wj-flex-grid
                       autoGenerateColumns="false"
                       control="flex"
@@ -90,14 +90,14 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.storeCd"/>" binding="storeCd" width="*" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.storeCd"/>" binding="storeCd" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.storeNm"/>" binding="storeNm" width="*" is-read-only="true" ></wj-flex-grid-column>
               </wj-flex-grid>
             </div>
           </div>
 
           <%-- 페이지 리스트 --%>
-          <div class="pageNum mt10">
+          <div class="pageNum mt20">
             <%-- id --%>
             <ul id="noRegStoreCtrlPager" data-size="10">
             </ul>
