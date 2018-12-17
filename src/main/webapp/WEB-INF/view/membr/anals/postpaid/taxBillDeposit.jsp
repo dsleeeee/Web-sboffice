@@ -12,7 +12,10 @@
     </div>
 
     <div class="wj-dialog-body">
-      <table class="tblType01">
+      <div><span>* 아래 [세금계산서 선택] 우측을 클릭하여, </span></div>
+      <div class="ml10 mt10"><span>세금계산서 발행 요청건을 선택해주세요.</span></div>
+
+      <table class="tblType01 mt20">
         <colgroup>
           <col class="w30" />
           <col class="w70" />

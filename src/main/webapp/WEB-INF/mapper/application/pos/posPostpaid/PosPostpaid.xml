@@ -29,8 +29,8 @@
                NVL(tmmpb.POSTPAID_IN_AMT, 0) AS POSTPAID_IN_AMT,
                NVL(tmmpb.POSTPAID_BAL_AMT, 0) AS POSTPAID_BAL_AMT,
                NVL(tmmtb.REQUEST_AMT, 0) AS REQUEST_AMT,
-               CASE WHEN tmmpb.POSTPAID_AMT - (tmmpb.POSTPAID_IN_AMT + tmmpb.POSTPAID_BAL_AMT + tmmtb.REQUEST_AMT) = 0 THEN '세금계산서 발행요청'
-               ELSE ''
+               CASE WHEN tmmpb.POSTPAID_AMT - (tmmpb.POSTPAID_IN_AMT + tmmpb.POSTPAID_BAL_AMT + tmmtb.REQUEST_AMT) = 0 THEN '발행요청'
+               ELSE '요청 불가능'
                END AS DEPOSIT,
                TO_CHAR(to_date(tmmpb.REG_DT, 'yyyyMMddhh24miss'), 'yyyy-MM-dd hh24:mi:ss') AS REG_DT ,
                tmmpb.REG_ID
