@@ -153,6 +153,7 @@ app.controller('vanCardCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.$on("vanCardCtrl", function(event, data) {
     // 파라미터
     var params = {};
+    params.vanCd = data;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquiryMain("/sys/etc/vanCard/vanCard/mapng/list.sb", params, function() {
       // 버튼 Show
