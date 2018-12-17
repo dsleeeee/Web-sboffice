@@ -32,6 +32,8 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.searchRegStore = function(){
     var prodScope     = agrid.getScope("prodCtrl");
     var params        = {};
+
+    params.listScale  = 10;
     params.prodCd     = prodScope.getProdInfo().prodCd;
     params.storeRegFg = "Y";
 
@@ -82,6 +84,8 @@ app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
 
     var prodScope     = agrid.getScope("prodCtrl");
     var params        = {};
+    
+    params.listScale  = 10;
     params.prodCd     = prodScope.getProdInfo().prodCd;
     params.storeRegFg = "N";
 

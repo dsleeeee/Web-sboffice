@@ -896,12 +896,14 @@
     -->
     <select id="getStoreList" parameterType="prodVO" resultType="DefaultMap">
         /* USE : ProdMapper.getStoreList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
             tms.HQ_OFFICE_CD,
             tho.HQ_OFFICE_NM,
             tms.STORE_CD,
             tms.STORE_NM,
             NVL2(thps.STORE_CD, 'Y', 'N') AS REG_YN
+           <include refid="CmmSQL.PagingTemplateCount"/>
         FROM
             TB_MS_STORE tms,
             TB_HQ_OFFICE tho,
@@ -925,6 +927,7 @@
             AND thps.STORE_CD IS NULL
         </if>
         ORDER BY tms.STORE_CD ASC
+        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
     <!-- 상품 적용 매장 등록 -->
