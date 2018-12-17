@@ -6,6 +6,7 @@
 <c:set var="historyMenuData" value="${sessionScope.sessionInfo.historyMenuData}" />
 <c:set var="fixedMenuData" value="${sessionScope.sessionInfo.fixedMenuData}" />
 <c:set var="historyMenuSize" value="${fn:length(historyMenuData)}" />
+<c:set var="sessionId" value="${param.sid}" />
 
 <%-- 사용자정보영역 --%>
 <div class="topBar">
@@ -57,7 +58,12 @@
       <%-- 즐겨찾기 메뉴 --%>
       <c:forEach var="item" items="${fixedMenuData}" varStatus="status">
         <li id="${item.resrceCd}">
-          <a href="${item.url}" class="${item.activation == true ? 'on' : ''}">${item.resrceNm}</a> 
+          <c:if test="${sessionId ne null}">
+            <a href="${item.url}?sid=${sessionId}" class="${item.activation == true ? 'on' : ''}">${item.resrceNm}</a>
+          </c:if>
+          <c:if test="${sessionId eq null}">
+            <a href="${item.url}" class="${item.activation == true ? 'on' : ''}">${item.resrceNm}</a>
+          </c:if>
           <a href="#" class="btn_close favClose" data-value="${item.resrceCd}" ></a>
         </li>
       </c:forEach>
@@ -65,7 +71,12 @@
       <%-- 히스토리 메뉴 --%>
       <c:forEach var="item" items="${historyMenuData}" varStatus="status">
         <li id="${item.resrceCd}">
-          <a href="${item.url}" class="${item.activation == true ? 'on' : ''}">${item.resrceNm}</a>
+          <c:if test="${sessionId ne null}">
+            <a href="${item.url}?sid=${sessionId}" class="${item.activation == true ? 'on' : ''}">${item.resrceNm}</a>
+          </c:if>
+          <c:if test="${sessionId eq null}">
+            <a href="${item.url}" class="${item.activation == true ? 'on' : ''}">${item.resrceNm}</a>
+          </c:if>
           <a href="#" class="btn_close histClose" data-value="${item.resrceCd}"></a>
         </li>
       </c:forEach>
