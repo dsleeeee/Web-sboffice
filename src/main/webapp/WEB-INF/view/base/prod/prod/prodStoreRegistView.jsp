@@ -2,7 +2,7 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
-<wj-popup control="prodStoreRegistLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:900px;">
+<wj-popup control="prodStoreRegistLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:920px;">
   <div class="wj-dialog wj-dialog-columns title">
 
     <%-- header --%>
@@ -36,12 +36,12 @@
       <div class="oh mt20">
         <%--- 적용매장 그리드 --%>
         <div class="w50 fl">
-          <div class="wj-TblWrap mr10" style="height:381px;" ng-controller="regStoreCtrl">
+          <div class="wj-TblWrap mr10" style="height:395px; overflow-y:hidden;" ng-controller="regStoreCtrl">
             <div class="oh">
               <span class="fl bk lh20 s14"><s:message code="prod.regStore"/></span>
               <span class="fr"><a href="#" class="btn_grayS2" ng-click="delete()"><s:message code="cmm.del" /></a></span>
             </div>
-            <div id="regStoreGrid" style="height: 349px;">
+            <div id="regStoreGrid" class="mt10" style="height: 355px; overflow-y: hidden;">
               <wj-flex-grid
                       autoGenerateColumns="false"
                       control="flex"
@@ -72,13 +72,13 @@
 
         <%--- 미적용매장 그리드 --%>
         <div class="w50 fr">
-          <div class="wj-TblWrap ml10" style="height:381px;" ng-controller="noRegStoreCtrl">
+          <div class="wj-TblWrap ml10" style="height:395px; overflow-y: hidden;" ng-controller="noRegStoreCtrl">
             <div class="oh">
               <span class="fl bk lh20 s14"><s:message code="prod.noRegStore"/></span>
               <span class="fr"><a href="#" class="btn_grayS2" ng-click="regist()" ><s:message code="prod.regist"/></a></span>
             </div>
 
-            <div id="noRegStoreGrid" style="height: 349px;">
+            <div id="noRegStoreGrid" class="mt10" style="height: 355px; overflow-y: hidden;">
               <wj-flex-grid
                       autoGenerateColumns="false"
                       control="flex"
