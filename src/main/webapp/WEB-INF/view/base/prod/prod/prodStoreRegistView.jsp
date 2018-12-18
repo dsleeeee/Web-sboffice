@@ -60,7 +60,7 @@
           </div>
 
           <%-- 페이지 리스트 --%>
-          <div class="pageNum mt20">
+          <div class="pageNum2 mt20">
             <%-- id --%>
             <ul id="regStoreCtrlPager" data-size="10">
             </ul>
@@ -97,7 +97,7 @@
           </div>
 
           <%-- 페이지 리스트 --%>
-          <div class="pageNum mt20">
+          <div class="pageNum2 mt20">
             <%-- id --%>
             <ul id="noRegStoreCtrlPager" data-size="10">
             </ul>
