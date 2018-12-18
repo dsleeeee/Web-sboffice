@@ -125,12 +125,8 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
         // 메뉴 권한 체크
         if (!checkUrl(request, requestURL, sessionInfoVO)) {
-            LOGGER.error(
-                "\n■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n"
-                    + "not auth : id : {},  url : {}, accept : {}", sessionInfoVO.getUserId(),
-                requestURL, request.getHeader("accept")
-                    + "\n■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
-
+            LOGGER.error("not auth : id : {},  url : {}, accept : {}", sessionInfoVO.getUserId(),
+                requestURL, request.getHeader("accept"));
             @SuppressWarnings("unused")
             String exceptionMsg = messageService.get("cmm.access.denied");
 

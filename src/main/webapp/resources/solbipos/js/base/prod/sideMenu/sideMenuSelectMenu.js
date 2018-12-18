@@ -83,6 +83,21 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
     // 추가기능 수행 : 파라미터
     $scope._addRow(params, 2);
   };
+
+  // 선택그룹 그리드 행 삭제
+  $scope.deleteRow = function() {
+    for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
+      var item = $scope.flex.collectionView.items[i];
+      if(item.gChk){
+        if(item.cnt > 0){
+          $scope._popMsg("선택분류가 등록된 선택그룹은 삭제할 수 없습니다. ");
+          return false;
+        }
+        $scope.flex.collectionView.removeAt(i);
+      }
+    }
+  };
+
   // 저장
   $scope.save = function() {
     // 파라미터 설정
@@ -193,6 +208,21 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
     // 추가기능 수행 : 파라미터
     $scope._addRow(params, 2);
   };
+
+  // 선택분류 그리드 행 삭제
+  $scope.deleteRow = function() {
+    for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
+      var item = $scope.flex.collectionView.items[i];
+      if(item.gChk){
+        if(item.cnt > 0){
+          $scope._popMsg("선택분류가 등록된 선택그룹은 삭제할 수 없습니다. ");
+          return false;
+        }
+        $scope.flex.collectionView.removeAt(i);
+      }
+    }
+  };
+
   // 저장
   $scope.save = function() {
 
@@ -348,6 +378,8 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
   // 저장
   $scope.save = function() {
 
+    $scope.flex.collectionView.commitEdit();
+
     // dispSeq 재설정
     for (var s = 0; s < $scope.flex.collectionView.itemCount; s++) {
       $scope.flex.collectionView.editItem($scope.flex.collectionView.items[s]);
@@ -369,6 +401,16 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
       $scope.flex.collectionView.itemsRemoved[d].status = 'D';
       params.push($scope.flex.collectionView.itemsRemoved[d]);
     }
+
+    for (var m = 0; m < params.length; m++) {
+      if(  params[m].addProdQty === null  || params[m].addProdQty === '' || params[m].addProdQty === 0 ) {
+        $scope._popMsg("상품 수량을 한 개 이상 입력해주세요.");
+        return false;
+      }
+    }
+
+    // console.log('params', params)
+
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._save('/base/prod/sideMenu/menuProd/save.sb', params, function() {
       // 그리드 저장 후 재조회
@@ -431,6 +473,7 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
                 params.prodCd = prodCd;
                 params.prodNm = prodNm;
                 params.addProdUprc = 0;
+                params.addProdQty = 1; // 기본으로 하나씩 들어가도록 // todo 추후 수정
                 params.gChk = true;
                 // 추가기능 수행 : 파라미터
                 $scope._addRow(params);

@@ -19,11 +19,14 @@ var app = agrid.getApp();
 app.controller('depositCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('depositCtrl', $scope, $http, true));
+
+  // comboBox 초기화
+  $scope._setComboData("listScaleBox", gvListScaleBoxData);
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // 그리드 DataMap 설정
     $scope.useYnDataMap = new wijmo.grid.DataMap(useYnFg, 'value', 'name');
-
     $scope.searchDepositAccntList();
   };
 
@@ -175,7 +178,6 @@ app.controller('withdrawCtrl', ['$scope', '$http', function ($scope, $http) {
         }
     );
   };
-
 }]);
 
 

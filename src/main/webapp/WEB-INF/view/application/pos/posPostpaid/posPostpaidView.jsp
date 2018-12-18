@@ -19,9 +19,8 @@
 
             <%-- 세금계산서 발행 대상 목록 --%>
             <div class="mb40" >
-                <%--<div class="wj-TblWrapBr mr10 pd20" style="height:350px;">--%>
                 <%-- 예외출고 상품 그리드 --%>
-                <div id="productGrid" class="wj-gridWrap" style="height:310px; overflow-y: hidden;">
+                <div id="productGrid" class="wj-gridWrap" style="height:310px; overflow-y: hidden; overflow-x: hidden;">
                     <wj-flex-grid
                             autoGenerateColumns="false"
                             control="flex"
@@ -36,12 +35,13 @@
                         <wj-flex-grid-column header="<s:message code="postpaid.hqOfficeCd"/>" binding="hqOfficeCd" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="postpaid.storeCd"/>" binding="storeCd" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="postpaid.storeNm"/>" binding="storeNm" visible="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="postpaid.membrNo"/>" binding="membrNo" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="postpaid.membrNo"/>" binding="membrNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="postpaid.membrNm"/>" binding="membrNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="postpaid.postpaidAmt"/>" binding="postpaidAmt" width="*" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="postpaid.postpaidInAmt"/>" binding="postpaidInAmt" width="*" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="postpaid.postpaidBalAmt"/>" binding="postpaidBalAmt" width="*" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="postpaid.request.taxBill"/>" binding="deposit" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="postpaid.postpaidAmt"/>" binding="postpaidAmt" width="100" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="postpaid.postpaidInAmt"/>" binding="postpaidInAmt" width="100" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="postpaid.postpaidBalAmt"/>" binding="postpaidBalAmt" width="100" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="postpaid.taxBillAmt"/>" binding="requestAmt" width="160" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="postpaid.request.taxBill"/>" binding="deposit" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>
@@ -53,12 +53,10 @@
                 </ul>
             </div>
             <%--//페이지 리스트--%>
-
         </div>
     </div>
 </div>
 </body>
-
 <script type="text/javascript" src="/resource/solbipos/js/application/pos/posPostpaid/posPostpaid.js?ver=20181203.01" charset="utf-8"></script>
 
 <%-- 예외출고 수량 등록 팝업 --%>

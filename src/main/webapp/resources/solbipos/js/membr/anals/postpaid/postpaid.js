@@ -26,6 +26,8 @@ app.controller('postpaidCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.storeCds = gvStoreCd;
   }
 
+ // todo 검색조건에 입금구분넣고 회원번호, 회원명 like검색
+
   // comboBox 초기화
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
 
@@ -43,22 +45,22 @@ app.controller('postpaidCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 후불회원 그리드 조회
   $scope.searchPostpaid = function(){
-
     var params      = {};
     params.storeCds = $("#storeCd").val();
-
-    if($scope.orgnFg === 'H' && params.storeCds  === '') {
-      $scope._popMsg(messages["postpaid.require.selectStore"]);
-      return false;
-    }
-
-    $scope._inquiryMain(baseUrl + "postpaid/getPostpaidMemberList.sb", params, function() {}, false);
+    $scope._inquiryMain("/membr/anals/postpaid/postpaid/getPostpaidMemberList.sb", params, function() {}, false);
   };
 
   // 외상입금 팝업
   $scope.deposit = function(){
-    var popup = $scope.depositLayer;
-    popup.show(true, function (s) {
+    $scope.depositLayer.show(true, function(){
+      $scope._broadcast("postpaidCtrl");
+    });
+  };
+
+  // 세금계산서 발행완료처리 팝업
+  $scope.taxBillDeposit = function(){
+    $scope.taxBillDepositLayer.show(true, function(){
+      $scope._broadcast("postpaidCtrl");
     });
   };
 
@@ -68,4 +70,21 @@ app.controller('postpaidCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.storeShow = function () {
     $scope._broadcast('storeCtrl');
   };
+
+  // 화면 ready 된 후 설정
+  angular.element(document).ready(function () {
+    // 외상입금 팝업 핸들러 추가
+    $scope.depositLayer.shown.addHandler(function (s) {
+      setTimeout(function() {
+        $scope._broadcast('depositCtrl');
+      }, 50)
+    });
+    // 세금계산서 발행완료처리 팝업 핸들러 추가
+    $scope.depositLayer.shown.addHandler(function (s) {
+      setTimeout(function() {
+        $scope._broadcast('taxBillDepositCtrl');
+      }, 50)
+    });
+  });
+
 }]);

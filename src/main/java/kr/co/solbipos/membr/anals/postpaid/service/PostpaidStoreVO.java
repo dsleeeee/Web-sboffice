@@ -2,8 +2,8 @@ package kr.co.solbipos.membr.anals.postpaid.service;
 
 import kr.co.common.data.enums.UseYn;
 import kr.co.solbipos.application.common.service.PageVO;
-import kr.co.solbipos.membr.anals.postpaid.service.enums.PostpaidFg;
-import kr.co.solbipos.membr.anals.postpaid.service.enums.PostpaidPayFg;
+import kr.co.solbipos.membr.anals.postpaid.enums.PostpaidFg;
+import kr.co.solbipos.membr.anals.postpaid.enums.PostpaidPayFg;
 
 /**
  * @Class Name : PostpaidStoreVO.java
@@ -43,7 +43,7 @@ public class PostpaidStoreVO extends PageVO {
     /** 후불 입금 구분 */
     private PostpaidPayFg postpaidPayFg;
     /** 후불 입금 금액 */
-    private String postpaidAmt;
+    private Double postpaidAmt;
     /** 비매출 승인번호 */
     private String nonsaleTypeApprNo;
     /** 원거래비매출승인번호 */
@@ -212,18 +212,19 @@ public class PostpaidStoreVO extends PageVO {
         this.postpaidPayFg = postpaidPayFg;
     }
 
+
     /**
      * @return the postpaidAmt
      */
 
-    public String getPostpaidAmt() {
+    public Double getPostpaidAmt() {
         return postpaidAmt;
     }
 
     /**
      * @param postpaidAmt the postpaidAmt to set
      */
-    public void setPostpaidAmt(String postpaidAmt) {
+    public void setPostpaidAmt(Double postpaidAmt) {
         this.postpaidAmt = postpaidAmt;
     }
 

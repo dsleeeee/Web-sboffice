@@ -2,6 +2,7 @@ package kr.co.solbipos.membr.anals.postpaid.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.membr.anals.postpaid.service.PostpaidStoreVO;
+import kr.co.solbipos.membr.anals.taxBill.service.TaxBillVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -35,4 +36,10 @@ public interface PostpaidMapper {
 
     /** 외상 입금 */
     int saveDeposit(PostpaidStoreVO postpaidStoreVO);
+
+    /** 세금계산서 요청목록 조회 */
+    List<DefaultMap<Object>> getTaxBillList(TaxBillVO taxBillVO);
+
+    /** 세금계산서 발행 입금 */
+    int saveTaxBillComplete(TaxBillVO taxBillVO);
 }

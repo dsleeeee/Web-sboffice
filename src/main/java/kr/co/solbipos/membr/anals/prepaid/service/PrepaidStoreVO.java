@@ -1,8 +1,8 @@
 package kr.co.solbipos.membr.anals.prepaid.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
-import kr.co.solbipos.membr.anals.prepaid.service.enums.PrepaidFg;
-import kr.co.solbipos.membr.anals.prepaid.service.enums.PrepaidPayFg;
+import kr.co.solbipos.membr.anals.prepaid.enums.PrepaidFg;
+import kr.co.solbipos.membr.anals.prepaid.enums.PrepaidPayFg;
 
 /**
  * @Class Name : PrepaidStoreVO.java

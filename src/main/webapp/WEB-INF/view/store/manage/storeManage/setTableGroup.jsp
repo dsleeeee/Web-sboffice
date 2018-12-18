@@ -15,7 +15,7 @@
     <%-- body --%>
     <div class="wj-dialog-body">
 
-      <div>
+      <div style="height:150px; overflow-y: auto;">
         <table class="tblType01 moreDark">
           <colgroup>
             <col class="w15" />
@@ -29,16 +29,16 @@
             <th><s:message code="storeManage.tableGroup" /></th>
           </tr>
           </thead>
-          <tbody id="tabGrpContent" style="height:300px; overflow-y: auto;">
+          <tbody id="tabGrpContent" >
           </tbody>
         </table>
       </div>
 
       <%-- 저장 --%>
-      <div class="btnSet">
+      <div class="btnSet" class="mt10 mb10">
         <span><a id="btnSaveTabGrp" href="#" class="btn_blue" ng-click="save()"><s:message code="cmm.save" /></a></span>
       </div>
     </div>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/setTableGroup.js?ver=20181106.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/setTableGroup.js?ver=2018110601" charset="utf-8"></script>

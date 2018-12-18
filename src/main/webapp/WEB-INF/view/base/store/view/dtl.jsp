@@ -123,4 +123,4 @@
 
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/base/store/view/dtl.js?ver=20181120.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/view/dtl.js?ver=2018112001" charset="utf-8"></script>

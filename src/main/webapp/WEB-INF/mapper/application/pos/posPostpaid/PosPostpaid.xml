@@ -25,23 +25,30 @@
                tms.STORE_NM,
                tmmpb.MEMBR_NO,
                tmm.MEMBR_NM,
-               tmmpb.POSTPAID_AMT,
-               tmmpb.POSTPAID_IN_AMT,
-               tmmpb.POSTPAID_BAL_AMT,
+               NVL(tmmpb.POSTPAID_AMT, 0) AS POSTPAID_AMT,
+               NVL(tmmpb.POSTPAID_IN_AMT, 0) AS POSTPAID_IN_AMT,
+               NVL(tmmpb.POSTPAID_BAL_AMT, 0) AS POSTPAID_BAL_AMT,
+               NVL(tmmtb.REQUEST_AMT, 0) AS REQUEST_AMT,
+               CASE WHEN tmmpb.POSTPAID_AMT - (tmmpb.POSTPAID_IN_AMT + tmmpb.POSTPAID_BAL_AMT + tmmtb.REQUEST_AMT) = 0 THEN '발행요청'
+               ELSE '요청 불가능'
+               END AS DEPOSIT,
                TO_CHAR(to_date(tmmpb.REG_DT, 'yyyyMMddhh24miss'), 'yyyy-MM-dd hh24:mi:ss') AS REG_DT ,
-               tmmpb.REG_ID,
-               CASE WHEN tmmpb.POSTPAID_BAL_AMT > 0  THEN '세금계산서 발행요청'
-                    ELSE ''
-               END AS DEPOSIT
+               tmmpb.REG_ID
         <include refid="CmmSQL.PagingTemplateCount"/>
           FROM TB_MB_MEMBER_PAID_BALANCE tmmpb,
                TB_MB_MEMBER tmm,
-               TB_MS_STORE tms
+               TB_MS_STORE tms,
+               (SELECT MEMBR_ORGN_CD, MEMBR_NO, SUM(REQUEST_AMT) AS REQUEST_AMT
+                  FROM TB_MB_MEMBER_TAX_BILL
+                 WHERE STATUS_FG = '1'
+                 GROUP BY MEMBR_ORGN_CD, MEMBR_NO) tmmtb
          WHERE tmmpb.STORE_CD = #{storeCd}
            AND tmm.MEMBR_ORGN_CD = tmmpb.HQ_OFFICE_CD
            AND tmm.MEMBR_NO = tmmpb.MEMBR_NO
            AND tms.HQ_OFFICE_CD = tmmpb.HQ_OFFICE_CD
            AND tms.STORE_CD = tmmpb.STORE_CD
+           AND tmmtb.MEMBR_ORGN_CD (+)= tmmpb.HQ_OFFICE_CD
+           AND tmmtb.MEMBR_NO (+)= tmmpb.MEMBR_NO
          ORDER BY tmmpb.MOD_DT DESC, tmmpb.MEMBR_NO ASC
     </select>
 
@@ -54,13 +61,22 @@
     -->
     <insert id="saveTaxBillRequet" parameterType="posPostpaidVO" >
         /* USE : PosPostpaidMapper.saveTaxBillRequet */
+        <selectKey resultType="String" keyProperty="billSeq" order="BEFORE">
+          SELECT LPAD( NVL(MAX(BILL_SEQ), 0) + 1, 5, '0') AS BILL_SEQ
+            FROM TB_MB_MEMBER_TAX_BILL
+           WHERE BILL_DATE = #{billDate}
+        </selectKey>
+
         INSERT INTO TB_MB_MEMBER_TAX_BILL
         (
-            HQ_OFFICE_CD,
+            BILL_DATE,
+            BILL_SEQ,
+            MEMBR_ORGN_CD,
             STORE_CD,
             MEMBR_NO,
             REQUEST_DT,
             REQUEST_AMT,
+            STATUS_FG,
             REG_DT,
             REG_ID,
             MOD_DT,
@@ -68,11 +84,14 @@
         )
         VALUES
         (
+            #{billDate},
+            #{billSeq},
             #{hqOfficeCd},
             #{storeCd},
             #{membrNo},
             #{requestDt},
             #{requestAmt},
+            #{statusFg},
             #{regDt},
             #{regId},
             #{modDt},

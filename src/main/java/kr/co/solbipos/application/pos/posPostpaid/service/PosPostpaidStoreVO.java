@@ -1,10 +1,7 @@
 package kr.co.solbipos.application.pos.posPostpaid.service;
 
-import kr.co.common.data.enums.UseYn;
 import kr.co.solbipos.application.common.service.CmmVO;
-import kr.co.solbipos.application.common.service.PageVO;
-import kr.co.solbipos.membr.anals.postpaid.service.enums.PostpaidFg;
-import kr.co.solbipos.membr.anals.postpaid.service.enums.PostpaidPayFg;
+import kr.co.solbipos.membr.anals.enums.StatusFg;
 
 /**
  * @Class Name : PosPostpaidStoreVO.java
@@ -23,6 +20,10 @@ import kr.co.solbipos.membr.anals.postpaid.service.enums.PostpaidPayFg;
  */
 public class PosPostpaidStoreVO extends CmmVO {
 
+    /** 세금계산서 발행일자 */
+    private String billDate;
+    /** 세금계산서 일련번호 */
+    private String billSeq;
     /** 회원소속코드 */
     private String hqOfficeCd;
     /** 후불회원 등록 매장 코드 */
@@ -37,7 +38,39 @@ public class PosPostpaidStoreVO extends CmmVO {
     private String requestDt;
     /** 세금계산서 발행 요청 금액 */
     private String requestAmt;
+    /** 세금계산서 발행 요청 상태 */
+    private StatusFg statusFg;
 
+
+    /**
+     * @return the billDate
+     */
+
+    public String getBillDate() {
+        return billDate;
+    }
+
+    /**
+     * @param billDate the billDate to set
+     */
+    public void setBillDate(String billDate) {
+        this.billDate = billDate;
+    }
+
+    /**
+     * @return the billSeq
+     */
+
+    public String getBillSeq() {
+        return billSeq;
+    }
+
+    /**
+     * @param billSeq the billSeq to set
+     */
+    public void setBillSeq(String billSeq) {
+        this.billSeq = billSeq;
+    }
 
     /**
      * @return the hqOfficeCd
@@ -142,5 +175,20 @@ public class PosPostpaidStoreVO extends CmmVO {
      */
     public void setRequestAmt(String requestAmt) {
         this.requestAmt = requestAmt;
+    }
+
+    /**
+     * @return the statusFg
+     */
+
+    public StatusFg getStatusFg() {
+        return statusFg;
+    }
+
+    /**
+     * @param statusFg the statusFg to set
+     */
+    public void setStatusFg(StatusFg statusFg) {
+        this.statusFg = statusFg;
     }
 }

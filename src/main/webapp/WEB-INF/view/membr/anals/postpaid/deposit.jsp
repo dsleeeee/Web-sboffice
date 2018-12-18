@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
 <!-- 외상발생/입금내역 (후불) 입금 등록 -->
-<wj-popup control="depositLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:900px;">
+<wj-popup control="depositLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:700px;">
 
   <div class="wj-dialog wj-dialog-columns">
     <div class="wj-dialog-header wj-dialog-header-font">
@@ -40,17 +40,25 @@
         <button class="btn_skyblue" id="btnSearch" ng-click="_broadcast('depositCtrl')" ><s:message code="cmm.search" /></button>
       </div>
 
-      <div class="oh mt40">
+      <div class="mt40 oh sb-select dkbr">
+        <%-- 페이지 스케일  --%>
+        <wj-combo-box
+                class="w100px fl"
+                id="listScaleBox"
+                ng-model="listScale"
+                items-source="_getComboData('listScaleBox')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="initComboBox(s)">
+        </wj-combo-box>
+        <%--// 페이지 스케일  --%>
+      </div>
+
+      <div class="oh mt10">
         <%--- 적용매장 그리드 --%>
-        <div class="wj-TblWrap mr10" style="height:350px;" ng-controller="depositCtrl">
-          <div class="updownSet oh mb10">
-            <span class="fl"><s:message code='postpaid.deposit.member' /></span>
-            <span class="fr">
-              <s:message code='postpaid.postpaidAmt' /> :
-              <input type="text" class="sb-input w40 pdl20" id="postpaidAmt"/>
-            </span>
-          </div>
-          <div id="regStoreGrid" style="height: 270px;">
+        <div class="wj-TblWrap mr10" style="height:250px;" ng-controller="depositCtrl">
+          <div class="wj-gridWrap" id="regStoreGrid" style="height: 200px;overflow-y: hidden;">
             <wj-flex-grid
                     autoGenerateColumns="false"
                     control="flex"
@@ -68,12 +76,17 @@
               <wj-flex-grid-column header="<s:message code="postpaid.membrNm"/>" binding="membrNm" width="*" ></wj-flex-grid-column>
             </wj-flex-grid>
           </div>
-          <!--페이지 리스트-->
-          <!--//페이지 리스트-->
         </div>
       </div>
+
+      <%-- 페이지 리스트 --%>
+      <div class="pageNum mt10">
+        <%-- id --%>
+        <ul id="depositCtrlPager" data-size="10">
+        </ul>
+      </div>
+      <%--//페이지 리스트--%>
     </div>
   </div>
 </wj-popup>
-
 <script type="text/javascript" src="/resource/solbipos/js/membr/anals/postpaid/deposit.js?ver=20180817.01" charset="utf-8"></script>

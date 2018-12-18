@@ -118,6 +118,7 @@
     <typeAlias alias="posFuncVO" type="kr.co.solbipos.base.store.posfunc.service.PosFuncVO"/>
     <typeAlias alias="hqEmpVO" type="kr.co.solbipos.base.store.emp.hq.service.HqEmpVO"/>
     <typeAlias alias="systemEmpVO" type="kr.co.solbipos.base.store.emp.system.service.SystemEmpVO"/>
+    <typeAlias alias="systemEmpPwdManageVO" type="kr.co.solbipos.base.store.emp.system.service.SystemEmpPwdManageVO"/>
     <typeAlias alias="viewVO" type="kr.co.solbipos.base.store.view.service.ViewVO"/>
     <typeAlias alias="vanConfigVO" type="kr.co.solbipos.base.store.view.service.VanConfigVO"/>
 <!--
@@ -287,6 +288,7 @@
     <typeAlias alias="registVO" type="kr.co.solbipos.membr.info.regist.service.RegistVO"/>
     <typeAlias alias="membrClassVO" type="kr.co.solbipos.membr.info.grade.service.MembrClassVO"/>
     <typeAlias alias="memberMappingVO" type="kr.co.solbipos.membr.info.regist.service.MemberMappingVO"/>
+    <typeAlias alias="taxBillVO" type="kr.co.solbipos.membr.anals.taxBill.service.TaxBillVO"/>
     <typeAlias alias="postpaidStoreVO" type="kr.co.solbipos.membr.anals.postpaid.service.PostpaidStoreVO"/>
     <typeAlias alias="prepaidStoreVO" type="kr.co.solbipos.membr.anals.prepaid.service.PrepaidStoreVO"/>
     <typeAlias alias="hqStoreMoveVO" type="kr.co.solbipos.iostock.move.hqStoreMove.service.HqStoreMoveVO"/>

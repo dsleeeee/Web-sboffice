@@ -15,7 +15,7 @@
     <%-- body --%>
     <div class="wj-dialog-body">
 
-      <div>
+      <div style="height:150px; overflow-y: auto;">
         <table class="tblType01 moreDark">
           <colgroup>
             <col class="w15" />
@@ -35,10 +35,10 @@
       </div>
 
       <%-- 저장 --%>
-      <div class="btnSet">
+      <div class="btnSet" class="mt10 mb10">
         <span><a id="btnSavePosNm" href="#" class="btn_blue" ng-click="savePosNm()"><s:message code="cmm.save" /></a></span>
       </div>
     </div>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/setPosNm.js?ver=20181106.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/setPosNm.js?ver=2018110601" charset="utf-8"></script>

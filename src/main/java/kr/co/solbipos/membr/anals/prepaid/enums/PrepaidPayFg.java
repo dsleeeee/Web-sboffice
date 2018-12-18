@@ -1,4 +1,4 @@
-package kr.co.solbipos.membr.anals.prepaid.service.enums;
+package kr.co.solbipos.membr.anals.prepaid.enums;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import kr.co.common.data.enums.CodeEnum;

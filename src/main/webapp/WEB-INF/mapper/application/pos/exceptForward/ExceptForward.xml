@@ -31,6 +31,7 @@
         FROM TB_MS_PRODUCT tmp,
                TB_MS_PRODUCT_CLASS tmpc
          WHERE tmp.STORE_CD = #{storeCd}
+           AND tmpc.STORE_CD = tmp.STORE_CD
            AND tmpc.PROD_CLASS_CD = tmp.PROD_CLASS_CD
          ORDER BY tmp.PROD_CLASS_CD, PROD_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>

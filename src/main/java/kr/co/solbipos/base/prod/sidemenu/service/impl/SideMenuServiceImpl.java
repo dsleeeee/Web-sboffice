@@ -298,21 +298,24 @@ public class SideMenuServiceImpl implements SideMenuService {
 
             // 추가
             if ( sideMenuSelProdVO.getStatus() == GridDataFg.INSERT ) {
-                result += sideMenuMapper.insertMenuProdList(sideMenuSelProdVO);
+                result = sideMenuMapper.insertMenuProdList(sideMenuSelProdVO);
+                if(result == 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+
                 // 수정
             } else if ( sideMenuSelProdVO.getStatus() == GridDataFg.UPDATE ) {
-                result += sideMenuMapper.updateMenuProdList(sideMenuSelProdVO);
+                result = sideMenuMapper.updateMenuProdList(sideMenuSelProdVO);
+                if(result == 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
                 // 삭제
             } else if ( sideMenuSelProdVO.getStatus() == GridDataFg.DELETE ) {
-                result += sideMenuMapper.deleteMenuProdList(sideMenuSelProdVO);
+                result = sideMenuMapper.deleteMenuProdList(sideMenuSelProdVO);
+                if(result == 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
             }
 
         }
 
-        if ( result == sideMenuSelProdVOs.length) {
-            return result;
-        } else {
-            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-        }
+        return result;
     }
 }

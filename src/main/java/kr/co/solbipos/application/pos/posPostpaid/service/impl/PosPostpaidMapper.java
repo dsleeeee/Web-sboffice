@@ -31,4 +31,5 @@ public interface PosPostpaidMapper {
 
     /** 세금계산서 발행 요청 등록 */
     int saveTaxBillRequet(PosPostpaidStoreVO posPostpaidStoreVO);
+
 }
