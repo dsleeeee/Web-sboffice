@@ -616,7 +616,7 @@
                     tmpsc.SDSEL_CLASS_NM,
                     tmpsc.SDSEL_GRP_CD,
                     tmpsc.DISP_SEQ,
-                    tmpsc.SDSEL_QTY
+                    tmpsc.SDSEL_QTY,
                     (SELECT COUNT(*) FROM TB_MS_PRODUCT_SDSEL_PROD WHERE STORE_CD  = tmpsc.STORE_CD AND SDSEL_CLASS_CD = tmpsc.SDSEL_CLASS_CD AND USE_YN = 'Y') AS CNT
                 FROM
                     TB_MS_PRODUCT_SDSEL_CLASS tmpsc
