@@ -7,6 +7,7 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
 import kr.co.solbipos.stock.adj.adj.service.AdjService;
 import kr.co.solbipos.stock.adj.adj.service.AdjVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -387,4 +388,94 @@ public class AdjServiceImpl implements AdjService {
         return returnResult;
     }
 
+
+    /** 조정관리 - 엑셀업로드 */
+    @Override
+    public int excelUpload(ExcelUploadVO excelUploadVO, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+
+        String currentDt = currentDateTimeString();
+
+        excelUploadVO.setSessionId(sessionInfoVO.getSessionId());
+        excelUploadVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        excelUploadVO.setStoreCd(sessionInfoVO.getStoreCd());
+        excelUploadVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        excelUploadVO.setRegId(sessionInfoVO.getUserId());
+        excelUploadVO.setRegDt(currentDt);
+        excelUploadVO.setModId(sessionInfoVO.getUserId());
+        excelUploadVO.setModDt(currentDt);
+
+        String seqNo = StringUtil.getOrBlank(excelUploadVO.getSeqNo());
+        String insFg = (seqNo.equals("") ? "I" : "U");
+        if(!seqNo.equals("")) {
+            // 수량추가인 경우
+            if(StringUtil.getOrBlank(excelUploadVO.getAddQtyFg()).equals("add")) {
+                result = adjMapper.insertExcelUploadAddQty(excelUploadVO);
+            }
+
+            // 기존 데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제
+            result = adjMapper.deleteAdjToExcelUploadData(excelUploadVO);
+        }
+
+        // 신규등록인 경우
+        if(seqNo.equals("")) {
+            // 신규 seq 조회
+            AdjVO newSeqNoVO = new AdjVO();
+            newSeqNoVO.setHqOfficeCd(excelUploadVO.getHqOfficeCd());
+            newSeqNoVO.setStoreCd(excelUploadVO.getStoreCd());
+            newSeqNoVO.setAdjDate(excelUploadVO.getDate());
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+                seqNo = adjMapper.getHqNewSeqNo(newSeqNoVO);
+            }
+            else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+                seqNo = adjMapper.getStNewSeqNo(newSeqNoVO);
+            }
+        }
+
+        excelUploadVO.setSeqNo(Integer.parseInt(seqNo));
+        // 엑셀업로드 한 수량을 조정수량으로 입력
+        result = adjMapper.insertAdjToExcelUploadData(excelUploadVO);
+
+        // 정상 입력된 데이터 TEMP 테이블에서 삭제
+        result = adjMapper.deleteExcelUploadCompleteData(excelUploadVO);
+
+        AdjVO adjHdVO = new AdjVO();
+        adjHdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        adjHdVO.setStoreCd(sessionInfoVO.getStoreCd());
+        adjHdVO.setAdjDate(excelUploadVO.getDate());
+        adjHdVO.setAdjTitle(excelUploadVO.getTitle());
+        adjHdVO.setSeqNo(Integer.parseInt(seqNo));
+        adjHdVO.setProcFg("0");
+        adjHdVO.setStorageCd("000");
+        adjHdVO.setRegId(sessionInfoVO.getUserId());
+        adjHdVO.setRegDt(currentDt);
+        adjHdVO.setModId(sessionInfoVO.getUserId());
+        adjHdVO.setModDt(currentDt);
+
+        // 조정 신규등록인 경우
+        if(StringUtil.getOrBlank(insFg).equals("I")) {
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+                // HD 등록
+                result = adjMapper.insertHqAdjHd(adjHdVO);
+            }
+            else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+                // HD 등록
+                result = adjMapper.insertStAdjHd(adjHdVO);
+            }
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+        else {
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+                // HD 수정
+                result = adjMapper.updateHqAdjHd(adjHdVO);
+            }
+            else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+                // HD 수정
+                result = adjMapper.updateStAdjHd(adjHdVO);
+            }
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+
+        return result;
+    }
 }

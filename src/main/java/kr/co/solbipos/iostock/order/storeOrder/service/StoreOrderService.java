@@ -38,7 +38,7 @@ public interface StoreOrderService {
     /** 주문등록 확정 */
     int saveStoreOrderConfirm(StoreOrderVO storeOrderVO, SessionInfoVO sessionInfoVO);
 
-    /** 엑셀업로드 자료 검증 */
+    /** 엑셀업로드 */
     int excelUpload(ExcelUploadVO excelUploadVO, SessionInfoVO sessionInfoVO);
 
 }

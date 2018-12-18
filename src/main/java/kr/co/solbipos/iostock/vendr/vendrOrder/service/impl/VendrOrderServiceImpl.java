@@ -7,6 +7,7 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.DateUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
 import kr.co.solbipos.iostock.vendr.vendrOrder.service.VendrOrderService;
 import kr.co.solbipos.iostock.vendr.vendrOrder.service.VendrOrderVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -245,6 +246,47 @@ public class VendrOrderServiceImpl implements VendrOrderService {
     }
 
 
+    /** 거래처 발주등록 - 엑셀업로드 */
+    @Override
+    public int excelUpload(ExcelUploadVO excelUploadVO, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+
+        String currentDt = currentDateTimeString();
+
+        excelUploadVO.setSessionId(sessionInfoVO.getSessionId());
+        excelUploadVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        excelUploadVO.setStoreCd(sessionInfoVO.getStoreCd());
+        excelUploadVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        excelUploadVO.setRegId(sessionInfoVO.getUserId());
+        excelUploadVO.setRegDt(currentDt);
+        excelUploadVO.setModId(sessionInfoVO.getUserId());
+        excelUploadVO.setModDt(currentDt);
+
+        // 수량추가인 경우
+        if(StringUtil.getOrBlank(excelUploadVO.getAddQtyFg()).equals("add")) {
+            result = vendrOrderMapper.insertExcelUploadAddQty(excelUploadVO);
+        }
+
+        // 기존 데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제
+        result = vendrOrderMapper.deleteVendrOrderToExcelUploadData(excelUploadVO);
+
+        // 엑셀업로드 한 수량을 발주수량으로 입력
+        result = vendrOrderMapper.insertVendrOrderToExcelUploadData(excelUploadVO);
+
+        // 정상 입력된 데이터 TEMP 테이블에서 삭제
+        result = vendrOrderMapper.deleteExcelUploadCompleteData(excelUploadVO);
+
+        VendrOrderVO vendrOrderHdVO = new VendrOrderVO();
+        vendrOrderHdVO.setSlipNo(excelUploadVO.getSlipNo());
+
+        /** regId, regDt, modId, modDt, hqOfficd, storeCd, orgnFg 세팅  */
+        vendrOrderHdVO = setSessionValue(vendrOrderHdVO, sessionInfoVO, currentDt);
+
+        // 발주정보 DTL의 집계정보 HD에 수정
+        result = vendrOrderMapper.updateVendrOrderDtlSumHd(vendrOrderHdVO);
+
+        return result;
+    }
 
 
 

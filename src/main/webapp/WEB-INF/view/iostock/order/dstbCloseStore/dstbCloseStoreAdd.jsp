@@ -122,11 +122,11 @@
         </tr>
         <tr>
           <td colspan="4">
-            <a href="#" class="btn_grayS" ng-click=""><s:message code="dstbCloseStore.add.excelFormDownload"/></a>
-            <a href="#" class="btn_grayS" ng-click=""><s:message code="dstbCloseStore.add.excelFormUpload"/></a>
-            <a href="#" class="btn_grayS" ng-click=""><s:message code="dstbCloseStore.add.textFormUpload"/></a>
-            <a href="#" class="btn_grayS" ng-click=""><s:message code="cmm.excel.down"/></a>
-            <a href="#" class="btn_grayS" ng-click=""><s:message code="dstbCloseStore.add.excelFormUploadErrorInfo"/></a>
+            <a href="#" class="btn_grayS" ng-click="excelTextUpload('excelFormDown')"><s:message code="dstbCloseStore.add.excelFormDownload"/></a>
+            <a href="#" class="btn_grayS" ng-click="excelTextUpload('excelUp')"><s:message code="dstbCloseStore.add.excelFormUpload"/></a>
+            <a href="#" class="btn_grayS" ng-click="excelTextUpload('textUp')"><s:message code="dstbCloseStore.add.textFormUpload"/></a>
+            <a href="#" class="btn_grayS" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></a>
+            <a href="#" class="btn_grayS" ng-click="excelUploadErrInfo()"><s:message code="dstbCloseStore.add.excelFormUploadErrorInfo"/></a>
           </td>
         </tr>
         </tbody>
@@ -242,16 +242,14 @@
           var item = s.rows[e.row].dataItem;
           if (col.binding === "mgrUnitQty") {
             $scope.calcAmt(item);
-          }
-          else if (col.binding === "mgrEtcQty") { // 입수에 따라 주문수량 컬럼 readonly 컨트롤
+          } else if (col.binding === "mgrEtcQty") { // 입수에 따라 주문수량 컬럼 readonly 컨트롤
             if (item.poUnitQty === 1) {
               wijmo.addClass(e.cell, 'wj-custom-readonly');
               wijmo.setAttribute(e.cell, 'aria-readonly', true);
 
               // Attribute 의 변경사항을 적용.
               e.cell.outerHTML = e.cell.outerHTML;
-            }
-            else {
+            } else {
               $scope.calcAmt(item);
             }
           }
@@ -263,7 +261,7 @@
           var col = s.columns[e.col];
           // 주문수량 수정시 금액,VAT,합계 계산하여 보여준다.
           if (col.binding === "mgrUnitQty" || col.binding === "mgrEtcQty") {
-            var item        = s.rows[e.row].dataItem;
+            var item = s.rows[e.row].dataItem;
             $scope.calcAmt(item);
           }
         }
@@ -361,8 +359,7 @@
 
         $scope.wjDstbCloseStoreAddLayer.show(true);
         $("#addProdSubTitle").html(' (' + messages["dstbCloseStore.add.reqDate"] + ' : ' + getFormatDate($scope.reqDate, '-') + ')');
-      }
-      else { // 페이징처리에서 broadcast 호출시
+      } else { // 페이징처리에서 broadcast 호출시
         $scope.searchDstbCloseStoreAddList();
       }
 
@@ -464,7 +461,7 @@
 
     // 저장 후 콜백 서치 함수
     $scope.saveAddProdCallback = function () {
-      $scope.searchDstbCloseStoreAddList();
+      $scope.dstbCloseStoreDateCheck();
 
       var dstbCloseStoreScope = agrid.getScope('dstbCloseStoreCtrl');
       dstbCloseStoreScope.searchDstbCloseStoreList();
@@ -490,20 +487,17 @@
     $scope.selectedIndexChanged = function (s, e) {
       if (s.selectedValue === "") {
         $scope.option2LayerHide();
-      }
-      else {
+      } else {
         $scope.option2LayerHide();
         $("#option2DateLayer").show();
 
         if (s.selectedValue === "ORD") {
           $("#option2OrdLayer").show();
           $("#option2OrdLayer2").show();
-        }
-        else if (s.selectedValue === "OUT") {
+        } else if (s.selectedValue === "OUT") {
           $("#option2OutLayer").show();
           $("#option2OutLayer2").show();
-        }
-        else if (s.selectedValue === "SALE") {
+        } else if (s.selectedValue === "SALE") {
           $("#option2SaleLayer").show();
           $("#option2SaleLayer2").show();
         }
@@ -543,10 +537,114 @@
       });
     };
 
+
+    // 엑셀 다운로드
+    $scope.excelDownload = function () {
+      if ($scope.flex.rows.length <= 0) {
+        $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+        return false;
+      }
+
+      $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+      $timeout(function () {
+        wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+          includeColumnHeaders: true,
+          includeCellStyles   : false,
+          includeColumns      : function (column) {
+            return column.visible;
+          }
+        }, 'excel.xlsx', function () {
+          $timeout(function () {
+            $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+          }, 10);
+        });
+      }, 10);
+    };
+
+
+    <%-- 엑셀업로드 관련 공통 함수 --%>
+    $scope.excelTextUpload = function (prcsFg) {
+      if ($("#dstbCloseStoreAddSelectStoreCd").val() === '' && prcsFg !== 'excelFormDown') {
+        $scope._popMsg(messages["dstbCloseStore.add.require.selectStore"]); // 매장을 선택해 주세요.
+        return false;
+      }
+
+      var excelUploadScope = agrid.getScope('excelUploadCtrl');
+      <%-- 업로드 구분. 해당값에 따라 엑셀 양식이 달라짐. --%>
+      var uploadFg = 'dstbCloseStore';
+
+      // 엑셀 양식다운로드
+      if (prcsFg === 'excelFormDown') {
+        excelUploadScope.excelFormDownload(uploadFg);
+      }
+      else{
+        var msg = messages["excelUpload.confmMsg"]; // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?
+        s_alert.popConf(msg, function () {
+          excelUploadScope.uploadFg   = uploadFg;
+          excelUploadScope.storeCd    = $("#dstbCloseStoreAddSelectStoreCd").val();
+          <%-- 부모컨트롤러 값을 넣으면 업로드가 완료된 후 uploadCallBack 이라는 함수를 호출해준다. --%>
+          excelUploadScope.parentCtrl = 'dstbCloseStoreAddCtrl';
+          // 엑셀 업로드
+          if (prcsFg === 'excelUp') {
+            $("#excelUpFile").val('');
+            $("#excelUpFile").trigger('click');
+          }
+          // 텍스트 업로드
+          else if (prcsFg === 'textUp') {
+            $("#textUpFile").val('');
+            $("#textUpFile").trigger('click');
+          }
+        });
+      }
+    };
+
+
+    <%-- 업로드 완료 후 callback 함수. 업로드 이후 로직 작성. --%>
+    $scope.uploadCallBack = function () {
+      var params     = {};
+      params.storeCd = $("#dstbCloseStoreAddSelectStoreCd").val();
+      params.slipFg  = $scope.slipFg;
+      params.date    = $scope.reqDate;
+
+      var excelUploadScope = agrid.getScope('excelUploadCtrl');
+
+      $http({
+        method : 'POST', //방식
+        url    : '/iostock/order/dstbCloseStore/dstbCloseStoreAdd/excelUpload.sb', /* 통신할 URL */
+        params : params, /* 파라메터로 보낼 데이터 */
+        headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+      }).then(function successCallback(response) {
+        if ($scope._httpStatusCheck(response, true)) {
+          // 엑셀 에러내역 팝업 호출
+          $scope.excelUploadErrInfo();
+
+          // 엑셀업로드 후 그리드 조회
+          $scope.saveAddProdCallback();
+        }
+      }, function errorCallback(response) {
+        $scope._popMsg(response.data.message);
+        return false;
+      }).then(function () {
+        excelUploadScope.excelUploadingPopup(false); // 업로딩 팝업 닫기
+      });
+    };
+
+
+    // 에러내역 팝업 호출
+    $scope.excelUploadErrInfo = function () {
+      var params      = {};
+      params.uploadFg = 'dstbCloseStore';
+      $scope._broadcast('excelUploadErrInfoCtrl', params);
+    };
+
   }]);
 
 </script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
+</c:import>
+
+<%-- 수불 엑셀업로드 공통 팝업 --%>
+<c:import url="/WEB-INF/view/iostock/cmmExcelUpload/excelUpload/excelUpload.jsp">
 </c:import>

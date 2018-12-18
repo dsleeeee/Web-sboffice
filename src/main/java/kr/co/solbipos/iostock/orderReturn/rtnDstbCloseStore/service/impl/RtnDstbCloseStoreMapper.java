@@ -1,6 +1,7 @@
 package kr.co.solbipos.iostock.orderReturn.rtnDstbCloseStore.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
 import kr.co.solbipos.iostock.orderReturn.rtnDstbCloseStore.service.RtnDstbCloseStoreVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -39,4 +40,11 @@ public interface RtnDstbCloseStoreMapper {
 
     /** 반품마감 - 추가분배 삭제 */
     int deleteDstbAdd(RtnDstbCloseStoreVO rtnDstbCloseStoreVO);
+
+    /** 반품마감 엑셀업로드 - 엑셀업로드 한 수량을 분배수량으로 입력 */
+    int insertRtnDstbToExcelUploadData(ExcelUploadVO excelUploadVO);
+
+    /** 반품마감 엑셀업로드 - 분배수량으로 정상 입력된 데이터 TEMP 테이블에서 삭제 */
+    int deleteExcelUploadCompleteData(ExcelUploadVO excelUploadVO);
+
 }

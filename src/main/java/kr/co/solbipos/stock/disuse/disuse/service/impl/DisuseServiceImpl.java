@@ -7,6 +7,7 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
 import kr.co.solbipos.stock.disuse.disuse.service.DisuseService;
 import kr.co.solbipos.stock.disuse.disuse.service.DisuseVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -384,5 +385,96 @@ public class DisuseServiceImpl implements DisuseService {
         if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
         return returnResult;
+    }
+
+
+    /** 폐기관리 - 엑셀업로드 */
+    @Override
+    public int excelUpload(ExcelUploadVO excelUploadVO, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+
+        String currentDt = currentDateTimeString();
+
+        excelUploadVO.setSessionId(sessionInfoVO.getSessionId());
+        excelUploadVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        excelUploadVO.setStoreCd(sessionInfoVO.getStoreCd());
+        excelUploadVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        excelUploadVO.setRegId(sessionInfoVO.getUserId());
+        excelUploadVO.setRegDt(currentDt);
+        excelUploadVO.setModId(sessionInfoVO.getUserId());
+        excelUploadVO.setModDt(currentDt);
+
+        String seqNo = StringUtil.getOrBlank(excelUploadVO.getSeqNo());
+        String insFg = (seqNo.equals("") ? "I" : "U");
+        if(!seqNo.equals("")) {
+            // 수량추가인 경우
+            if(StringUtil.getOrBlank(excelUploadVO.getAddQtyFg()).equals("add")) {
+                result = disuseMapper.insertExcelUploadAddQty(excelUploadVO);
+            }
+
+            // 기존 데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제
+            result = disuseMapper.deleteDisuseToExcelUploadData(excelUploadVO);
+        }
+
+        // 신규등록인 경우
+        if(seqNo.equals("")) {
+            // 신규 seq 조회
+            DisuseVO newSeqNoVO = new DisuseVO();
+            newSeqNoVO.setHqOfficeCd(excelUploadVO.getHqOfficeCd());
+            newSeqNoVO.setStoreCd(excelUploadVO.getStoreCd());
+            newSeqNoVO.setDisuseDate(excelUploadVO.getDate());
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+                seqNo = disuseMapper.getHqNewSeqNo(newSeqNoVO);
+            }
+            else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+                seqNo = disuseMapper.getStNewSeqNo(newSeqNoVO);
+            }
+        }
+
+        excelUploadVO.setSeqNo(Integer.parseInt(seqNo));
+        // 엑셀업로드 한 수량을 폐기수량으로 입력
+        result = disuseMapper.insertDisuseToExcelUploadData(excelUploadVO);
+
+        // 정상 입력된 데이터 TEMP 테이블에서 삭제
+        result = disuseMapper.deleteExcelUploadCompleteData(excelUploadVO);
+
+        DisuseVO disuseHdVO = new DisuseVO();
+        disuseHdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        disuseHdVO.setStoreCd(sessionInfoVO.getStoreCd());
+        disuseHdVO.setDisuseDate(excelUploadVO.getDate());
+        disuseHdVO.setDisuseTitle(excelUploadVO.getTitle());
+        disuseHdVO.setSeqNo(Integer.parseInt(seqNo));
+        disuseHdVO.setProcFg("0");
+        disuseHdVO.setStorageCd("000");
+        disuseHdVO.setRegId(sessionInfoVO.getUserId());
+        disuseHdVO.setRegDt(currentDt);
+        disuseHdVO.setModId(sessionInfoVO.getUserId());
+        disuseHdVO.setModDt(currentDt);
+
+        // 폐기 신규등록인 경우
+        if(StringUtil.getOrBlank(insFg).equals("I")) {
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+                // HD 등록
+                result = disuseMapper.insertHqDisuseHd(disuseHdVO);
+            }
+            else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+                // HD 등록
+                result = disuseMapper.insertStDisuseHd(disuseHdVO);
+            }
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+        else {
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+                // HD 수정
+                result = disuseMapper.updateHqDisuseHd(disuseHdVO);
+            }
+            else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+                // HD 수정
+                result = disuseMapper.updateStDisuseHd(disuseHdVO);
+            }
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+
+        return result;
     }
 }

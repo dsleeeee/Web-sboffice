@@ -7,6 +7,7 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.DateUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
 import kr.co.solbipos.iostock.order.dstbCloseStore.service.DstbCloseStoreVO;
 import kr.co.solbipos.iostock.order.dstbCloseStore.service.impl.DstbCloseStoreMapper;
 import kr.co.solbipos.iostock.order.dstbReq.service.DstbReqVO;
@@ -281,6 +282,85 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
             }
 
+        }
+
+        return result;
+    }
+
+
+    /** 반품등록 - 엑셀업로드 */
+    @Override
+    public int excelUpload(ExcelUploadVO excelUploadVO, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+
+        String currentDt = currentDateTimeString();
+
+        excelUploadVO.setSessionId(sessionInfoVO.getSessionId());
+        excelUploadVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        excelUploadVO.setStoreCd(sessionInfoVO.getStoreCd());
+        excelUploadVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        excelUploadVO.setRegId(sessionInfoVO.getUserId());
+        excelUploadVO.setRegDt(currentDt);
+        excelUploadVO.setModId(sessionInfoVO.getUserId());
+        excelUploadVO.setModDt(currentDt);
+
+        // 수량추가인 경우
+        if(StringUtil.getOrBlank(excelUploadVO.getAddQtyFg()).equals("add")) {
+            result = rtnStoreOrderMapper.insertExcelUploadAddQty(excelUploadVO);
+        }
+
+        // 기존 주문데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제
+        result = rtnStoreOrderMapper.deleteStoreOrderToExcelUploadData(excelUploadVO);
+
+        // 여신 체크
+//        DefaultMap<String> storeLoan = rtnStoreOrderMapper.storeLoanCheck(excelUploadVO);
+//        if(storeLoan.getStr("isExist").equals("Y")) {
+//            if (storeLoan.getLong("orderTot") > storeLoan.getLong("currLoanAmt")) {
+//                throw new JsonException(Status.SERVER_ERROR, messageService.get(
+//                    "storeOrder.dtl.excelLoanOver")); // 주문총금액이 여신잔여 금액을 초과하였습니다. 업로드 된 자료는 처리되지 않았습니다.
+//            }
+//        }
+
+        // 엑셀업로드 한 수량을 주문수량으로 입력
+        result = rtnStoreOrderMapper.insertRtnStoreOrderToExcelUploadData(excelUploadVO);
+
+        // 주문수량으로 정상 입력된 데이터 TEMP 테이블에서 삭제
+        result = rtnStoreOrderMapper.deleteExcelUploadCompleteData(excelUploadVO);
+
+        // 엑셀업로드 한 내용이 있으면 DTL 자료를 기반으로 주문 HD 생성, 업데이트, 삭제
+        int dtlCnt = 0;
+        String hdExist = "N";
+
+        RtnStoreOrderVO rtnStoreOrderVO = new RtnStoreOrderVO();
+        rtnStoreOrderVO.setStoreCd(sessionInfoVO.getStoreCd());
+        rtnStoreOrderVO.setRegId(sessionInfoVO.getUserId());
+        rtnStoreOrderVO.setRegDt(currentDt);
+        rtnStoreOrderVO.setModId(sessionInfoVO.getUserId());
+        rtnStoreOrderVO.setModDt(currentDt);
+        rtnStoreOrderVO.setReqDate(excelUploadVO.getDate());
+        rtnStoreOrderVO.setSlipFg(excelUploadVO.getSlipFg());
+        rtnStoreOrderVO.setEmpNo("0000");
+        rtnStoreOrderVO.setProcFg("00");
+        rtnStoreOrderVO.setRemark(excelUploadVO.getHdRemark());
+
+        // 주문요청일의 상품건수 조회
+        dtlCnt = rtnStoreOrderMapper.getDtlCnt(rtnStoreOrderVO);
+
+        // 상품건수가 없으면 HD 삭제
+        if(dtlCnt == 0) {
+            result = rtnStoreOrderMapper.deleteRtnStoreOrder(rtnStoreOrderVO);
+        }
+        // 상품건수가 있는경우 HD 내용이 존재하는지 여부 조회
+        else {
+            hdExist = rtnStoreOrderMapper.getHdExist(rtnStoreOrderVO);
+            // HD 내용이 존재하는 경우 update
+            if(hdExist.equals("Y")) {
+                result = rtnStoreOrderMapper.updateRtnStoreOrder(rtnStoreOrderVO);
+            }
+            // HD 내용이 없는 경우 insert
+            else if(hdExist.equals("N")) {
+                result = rtnStoreOrderMapper.insertRtnStoreOrder(rtnStoreOrderVO);
+            }
         }
 
         return result;

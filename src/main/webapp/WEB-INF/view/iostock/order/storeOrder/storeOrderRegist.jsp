@@ -112,7 +112,7 @@
         </tr>
         <tr>
           <td colspan="4">
-            <a href="#" class="btn_grayS" ng-click="excelUp('down')"><s:message code="storeOrder.dtl.excelFormDownload"/></a>
+            <a href="#" class="btn_grayS" ng-click="excelTextUpload('excelFormDown')"><s:message code="storeOrder.dtl.excelFormDownload"/></a>
             <span class="txtIn w120px" style="border:1px solid #e8e8e8;">
                 <wj-combo-box
                   id="addQtyFg"
@@ -124,9 +124,9 @@
                   initialized="_initComboBox(s)">
                 </wj-combo-box>
             </span>
-            <a href="#" class="btn_grayS" ng-click="excelUp('up')"><s:message code="storeOrder.dtl.excelFormUpload"/></a>
-            <a href="#" class="btn_grayS" ng-click="textUp()"><s:message code="storeOrder.dtl.textFormUpload"/></a>
-            <a href="#" class="btn_grayS" ng-click=""><s:message code="cmm.excel.down"/></a>
+            <a href="#" class="btn_grayS" ng-click="excelTextUpload('excelUp')"><s:message code="storeOrder.dtl.excelFormUpload"/></a>
+            <a href="#" class="btn_grayS" ng-click="excelTextUpload('textUp')"><s:message code="storeOrder.dtl.textFormUpload"/></a>
+            <a href="#" class="btn_grayS" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></a>
             <a href="#" class="btn_grayS" ng-click="excelUploadErrInfo()"><s:message code="storeOrder.dtl.excelFormUploadErrorInfo"/></a>
           </td>
         </tr>
@@ -720,53 +720,63 @@
     };
 
 
+    // 엑셀 다운로드
+    $scope.excelDownload = function () {
+      if($scope.flex.rows.length <= 0) {
+        $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+        return false;
+      }
+
+      $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+      $timeout(function () {
+        wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+          includeColumnHeaders: true,
+          includeCellStyles   : false,
+          includeColumns      : function (column) {
+            return column.visible;
+          }
+        }, 'excel.xlsx', function () {
+          $timeout(function () {
+            $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+          }, 10);
+        });
+      }, 10);
+    };
+
+
     <%-- 엑셀업로드 관련 공통 함수 --%>
-    $scope.excelUp = function (excelFg) {
+    $scope.excelTextUpload = function (prcsFg) {
       var excelUploadScope = agrid.getScope('excelUploadCtrl');
       <%-- 업로드 구분. 해당값에 따라 엑셀 양식이 달라짐. --%>
       var uploadFg = 'order';
 
       // 엑셀 양식다운로드
-      if (excelFg === 'down') {
-        excelUploadScope.excelDownload(uploadFg);
+      if (prcsFg === 'excelFormDown') {
+        excelUploadScope.excelFormDownload(uploadFg);
       }
-      // 엑셀 업로드
-      else if (excelFg === 'up') {
+      else{
         var msg = messages["excelUpload.confmMsg"]; // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?
         s_alert.popConf(msg, function () {
           excelUploadScope.uploadFg   = uploadFg;
-          excelUploadScope.parentCtrl = 'storeOrderRegistCtrl';
           <%-- 부모컨트롤러 값을 넣으면 업로드가 완료된 후 uploadCallBack 이라는 함수를 호출해준다. --%>
-          $("#excelUpFile").val('');
-          $("#excelUpFile").trigger('click');
+          excelUploadScope.parentCtrl = 'storeOrderRegistCtrl';
+          // 엑셀 업로드
+          if (prcsFg === 'excelUp') {
+            $("#excelUpFile").val('');
+            $("#excelUpFile").trigger('click');
+          }
+          // 텍스트 업로드
+          else if (prcsFg === 'textUp') {
+            $("#textUpFile").val('');
+            $("#textUpFile").trigger('click');
+          }
         });
       }
     };
 
 
-    <%-- 텍스트업로드 관련 공통 함수 --%>
-    $scope.textUp = function () {
-      var excelUploadScope = agrid.getScope('excelUploadCtrl');
-      <%-- 업로드 구분. 해당값에 따라 양식이 달라짐. --%>
-      var uploadFg = 'order';
-
-      // 업로드
-      var msg = messages["excelUpload.confmMsg"]; // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?
-      s_alert.popConf(msg, function () {
-        excelUploadScope.uploadFg   = uploadFg;
-        excelUploadScope.parentCtrl = 'storeOrderRegistCtrl';
-        <%-- 부모컨트롤러 값을 넣으면 업로드가 완료된 후 uploadCallBack 이라는 함수를 호출해준다. --%>
-        $("#textUpFile").val('');
-        $("#textUpFile").trigger('click');
-      });
-    };
-
-
-
-    <%-- 엑셀업로드 완료 후 callback 함수. 엑셀업로드 이후 로직 작성. --%>
+    <%-- 업로드 완료 후 callback 함수. 업로드 이후 로직 작성. --%>
     $scope.uploadCallBack = function () {
-      console.log('excelUpCallBack');
-
       var params      = {};
       params.date     = $scope.reqDate;
       params.slipFg   = $scope.slipFg;
@@ -782,8 +792,6 @@
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
         if ($scope._httpStatusCheck(response, true)) {
-          // excelUploadScope.excelUploadingPopup(false); // 업로딩 팝업 닫기
-
           // 엑셀 에러내역 팝업 호출
           $scope.excelUploadErrInfo();
 
@@ -791,10 +799,7 @@
           $scope.saveRegistCallback();
         }
       }, function errorCallback(response) {
-        // called asynchronously if an error occurs
-        // or server returns response with an error status.
         $scope._popMsg(response.data.message);
-        // excelUploadScope.excelUploadingPopup(false); // 업로딩 팝업 닫기
         return false;
       }).then(function () {
         excelUploadScope.excelUploadingPopup(false); // 업로딩 팝업 닫기
@@ -802,8 +807,8 @@
     };
 
 
+    // 에러내역 팝업 호출
     $scope.excelUploadErrInfo = function () {
-      // 엑셀 에러내역 팝업 호출
       var params      = {};
       params.uploadFg = 'order';
       $scope._broadcast('excelUploadErrInfoCtrl', params);

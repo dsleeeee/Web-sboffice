@@ -7,6 +7,7 @@ import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
 import kr.co.solbipos.iostock.vendr.vendrOrder.service.VendrOrderService;
 import kr.co.solbipos.iostock.vendr.vendrOrder.service.VendrOrderVO;
 import kr.co.solbipos.iostock.volmErr.volmErr.service.VolmErrService;
@@ -368,5 +369,28 @@ public class VendrOrderController {
         List<DefaultMap<String>> list = vendrOrderService.getVendrList(vendrOrderVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, vendrOrderVO);
+    }
+
+
+    /**
+     * 거래처 발주등록 - 엑셀업로드
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   excelUploadVO
+     * @return  String
+     * @author  안동관
+     * @since   2018. 12. 18.
+     */
+    @RequestMapping(value = "/vendrOrderProdReg/excelUpload.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result excelUpload(HttpServletRequest request, HttpServletResponse response,
+        Model model, ExcelUploadVO excelUploadVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = vendrOrderService.excelUpload(excelUploadVO, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
     }
 }

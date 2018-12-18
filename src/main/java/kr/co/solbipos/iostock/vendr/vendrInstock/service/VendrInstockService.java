@@ -2,6 +2,7 @@ package kr.co.solbipos.iostock.vendr.vendrInstock.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
 
 import java.util.List;
 
@@ -38,5 +39,8 @@ public interface VendrInstockService {
 
     /** 거래처 입고/반출등록 - 입고/반출상품 발주내역으로 세팅 리스트 조회 */
     List<DefaultMap<String>> getVendrInstockOrderInfoRegList(VendrInstockVO vendrInstockVO, SessionInfoVO sessionInfoVO);
+
+    /** 엑셀업로드 */
+    int excelUpload(ExcelUploadVO excelUploadVO, SessionInfoVO sessionInfoVO);
 
 }

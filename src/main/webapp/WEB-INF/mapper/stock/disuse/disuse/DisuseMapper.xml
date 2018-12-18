@@ -834,4 +834,308 @@
         AND     DISUSE_DATE   = #{disuseDate}
         AND     SEQ_NO        = #{seqNo}
     </update>
+
+
+    <!--                엑셀업로드 시작                 -->
+    <!--  폐기관리 엑셀업로드 - 엑셀업로드 수량추가 -->
+    <!--
+        TABLE    : TB_PO_TEMP_EXCEL, TB_ST_STORE_DISUSE_DTL
+        PARAM    : excelUploadVO
+        COMMENTS : 폐기관리 엑셀업로드 - 엑셀업로드 수량추가인 경우 기존에 등록된 내역을 TEMP 테이블에 입력한다.
+    -->
+    <insert id="insertExcelUploadAddQty" parameterType="excelUploadVO">
+        /* USE : DisuseMapper.insertExcelUploadAddQty */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_PO_TEMP_EXCEL
+                (   SESSION_ID
+                ,   HQ_OFFICE_CD
+                ,   PROD_CD
+                ,   QTY
+                ,   REG_DT
+                ,   REG_ID
+                ,   MOD_DT
+                ,   MOD_ID
+                )
+                SELECT  #{sessionId}
+                ,       #{hqOfficeCd}
+                ,       PROD_CD
+                ,       DISUSE_QTY
+                ,       #{regDt}
+                ,       #{regId}
+                ,       #{modDt}
+                ,       #{modId}
+                FROM    TB_ST_HQ_DISUSE_DTL
+                WHERE   HQ_OFFICE_CD=  #{hqOfficeCd}
+                AND     DISUSE_DATE =  #{date}
+                AND     SEQ_NO      =  #{seqNo}
+                AND     PROD_CD     IN (  SELECT  PROD_CD
+                                          FROM    TB_PO_TEMP_EXCEL
+                                          WHERE   SESSION_ID  = #{sessionId}
+                                          AND     PROD_CD     IS NOT  NULL
+                                          AND     PROD_CD     IN (  SELECT  PROD_CD
+                                                                    FROM    TB_HQ_PRODUCT
+                                                                    WHERE   HQ_OFFICE_CD  =  #{hqOfficeCd}
+                                                                    AND     STOCK_PROD_YN = 'Y'
+                                                                    AND     USE_YN        = 'Y'
+                                                                  )
+                                        )
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_PO_TEMP_EXCEL
+                (   SESSION_ID
+                ,   STORE_CD
+                ,   PROD_CD
+                ,   QTY
+                ,   REG_DT
+                ,   REG_ID
+                ,   MOD_DT
+                ,   MOD_ID
+                )
+                SELECT  #{sessionId}
+                ,       #{storeCd}
+                ,       PROD_CD
+                ,       DISUSE_QTY
+                ,       #{regDt}
+                ,       #{regId}
+                ,       #{modDt}
+                ,       #{modId}
+                FROM    TB_ST_STORE_DISUSE_DTL
+                WHERE   STORE_CD    =  #{storeCd}
+                AND     DISUSE_DATE =  #{date}
+                AND     SEQ_NO      =  #{seqNo}
+                AND     PROD_CD     IN (  SELECT  PROD_CD
+                                          FROM    TB_PO_TEMP_EXCEL
+                                          WHERE   SESSION_ID  = #{sessionId}
+                                          AND     PROD_CD     IS NOT  NULL
+                                          AND     PROD_CD     IN (  SELECT  PROD_CD
+                                                                    FROM    TB_MS_PRODUCT
+                                                                    WHERE   STORE_CD  =  #{storeCd}
+                                                                    AND     STOCK_PROD_YN = 'Y'
+                                                                    AND     USE_YN        = 'Y'
+                                                                  )
+                                        )
+            </when>
+        </choose>
+    </insert>
+
+
+    <!--  폐기관리 엑셀업로드 - 기존 데이터중 엑셀업로드 한 데이터와 같은 상품 삭제 -->
+    <!--
+        TABLE    : TB_ST_HQ_DISUSE_DTL, TB_PO_TEMP_EXCEL
+        PARAM    : excelUploadVO
+        COMMENTS : 폐기관리 엑셀업로드 - 기존 데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제한다.
+    -->
+    <delete id="deleteDisuseToExcelUploadData" parameterType="excelUploadVO">
+        /* USE : DisuseMapper.deleteDisuseToExcelUploadData */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE  TB_ST_HQ_DISUSE_DTL
+                WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+                AND     DISUSE_DATE   = #{date}
+                AND     SEQ_NO        = #{seqNo}
+                AND     PROD_CD       IN  ( SELECT  PROD_CD
+                                            FROM    TB_PO_TEMP_EXCEL
+                                            WHERE   SESSION_ID  = #{sessionId}
+                                            AND     PROD_CD     IS NOT NULL
+                                          )
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE  TB_ST_STORE_DISUSE_DTL
+                WHERE   STORE_CD      = #{storeCd}
+                AND     DISUSE_DATE   = #{date}
+                AND     SEQ_NO        = #{seqNo}
+                AND     PROD_CD       IN  ( SELECT  PROD_CD
+                                            FROM    TB_PO_TEMP_EXCEL
+                                            WHERE   SESSION_ID  = #{sessionId}
+                                            AND     PROD_CD     IS NOT NULL
+                                          )
+            </when>
+        </choose>
+    </delete>
+
+
+    <!--  폐기관리 엑셀업로드 - 엑셀업로드 한 수량을 폐기수량으로 입력 -->
+    <!--
+        TABLE    : TB_ST_HQ_DISUSE_DTL, TB_PO_TEMP_EXCEL, TB_HQ_PRODUCT, TB_ST_HQ_STOCK_CUR, TB_ST_HQ_STOCK_MONTHLY
+                   TB_ST_STORE_DISUSE_DTL, TB_PO_TEMP_EXCEL, TB_MS_PRODUCT, TB_ST_STORE_STOCK_CUR, TB_ST_STORE_STOCK_MONTHLY
+        PARAM    : excelUploadVO
+        COMMENTS : 폐기관리 엑셀업로드 - 엑셀업로드 한 수량을 폐기수량으로 입력한다.
+    -->
+    <insert id="insertDisuseToExcelUploadData" parameterType="excelUploadVO">
+        /* USE : DisuseMapper.insertDisuseToExcelUploadData */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_ST_HQ_DISUSE_DTL
+                (   HQ_OFFICE_CD
+                ,   DISUSE_DATE
+                ,   SEQ_NO
+                ,   HQ_BRAND_CD
+                ,   PROD_CD
+                ,   COST_UPRC
+                ,   PO_UNIT_QTY
+                ,   CURR_QTY
+                ,   DISUSE_QTY
+                ,   DISUSE_AMT
+                ,   REMARK
+                ,   REG_DT
+                ,   REG_ID
+                ,   MOD_DT
+                ,   MOD_ID
+                )
+                SELECT  #{hqOfficeCd}
+                ,       #{date}
+                ,       #{seqNo}
+                ,       '00'
+                ,       tpte.PROD_CD
+                ,       NVL(tshsc.AVG_COST_UPRC, tpte.COST_UPRC) AS COST_UPRC
+                ,       tpte.PO_UNIT_QTY
+                ,       NVL(tshsc.CURR_QTY,0) AS CURR_QTY
+                ,       tpte.QTY AS DISUSE_QTY
+                ,       NVL(tshsc.AVG_COST_UPRC, tpte.COST_UPRC) * tpte.QTY AS DISUSE_AMT
+                ,       tpte.REMARK
+                ,       #{regDt}
+                ,       #{regId}
+                ,       #{modDt}
+                ,       #{modId}
+                FROM    (   SELECT  tpte.HQ_OFFICE_CD
+                            ,       tpte.PROD_CD
+                            ,       thp.PO_UNIT_QTY
+                            ,       NVL(MAX(thp.COST_UPRC), 0) AS COST_UPRC
+                            ,       SUM(tpte.QTY)    AS QTY
+                            ,       MAX(tpte.REMARK) AS REMARK
+                            FROM    TB_PO_TEMP_EXCEL tpte
+                            ,       TB_HQ_PRODUCT thp
+                            WHERE   tpte.SESSION_ID     =   #{sessionId}
+                            AND     tpte.PROD_CD        IS NOT  NULL
+                            AND     thp.HQ_OFFICE_CD    =   #{hqOfficeCd}
+                            AND     thp.PROD_CD         =   tpte.PROD_CD
+                            AND     thp.STOCK_PROD_YN   =   'Y'
+                            AND     thp.USE_YN          =   'Y'
+                            GROUP
+                            BY      tpte.HQ_OFFICE_CD
+                            ,       tpte.PROD_CD
+                            ,       thp.PO_UNIT_QTY
+                        ) tpte
+                ,       (   SELECT  tshsc.HQ_OFFICE_CD, tshsc.PROD_CD, tshsc.CURR_QTY, tshsm.AVG_COST_UPRC
+                            FROM    TB_ST_HQ_STOCK_CUR tshsc
+                            ,       TB_ST_HQ_STOCK_MONTHLY tshsm
+                            WHERE   tshsc.HQ_OFFICE_CD    =   #{hqOfficeCd}
+                            AND     tshsm.IOSTOCK_YM  (+) =   SUBSTR(#{date}, 0, 6)
+                            AND     tshsm.HQ_OFFICE_CD(+) =   tshsc.HQ_OFFICE_CD
+                            AND     tshsm.PROD_CD     (+) =   tshsc.PROD_CD
+                        ) tshsc
+                WHERE   tshsc.HQ_OFFICE_CD  (+) =   tpte.HQ_OFFICE_CD
+                AND     tshsc.PROD_CD       (+) =   tpte.PROD_CD
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_ST_STORE_DISUSE_DTL
+                (   STORE_CD
+                ,   DISUSE_DATE
+                ,   SEQ_NO
+                ,   HQ_BRAND_CD
+                ,   PROD_CD
+                ,   COST_UPRC
+                ,   PO_UNIT_QTY
+                ,   CURR_QTY
+                ,   DISUSE_QTY
+                ,   DISUSE_AMT
+                ,   REMARK
+                ,   REG_DT
+                ,   REG_ID
+                ,   MOD_DT
+                ,   MOD_ID
+                )
+                SELECT  #{storeCd}
+                ,       #{date}
+                ,       #{seqNo}
+                ,       '00'
+                ,       tpte.PROD_CD
+                ,       NVL(tsssc.AVG_COST_UPRC, tpte.COST_UPRC) AS COST_UPRC
+                ,       tpte.PO_UNIT_QTY
+                ,       NVL(tsssc.CURR_QTY,0) AS CURR_QTY
+                ,       tpte.QTY AS DISUSE_QTY
+                ,       NVL(tsssc.AVG_COST_UPRC, tpte.COST_UPRC) * tpte.QTY AS DISUSE_AMT
+                ,       tpte.REMARK
+                ,       #{regDt}
+                ,       #{regId}
+                ,       #{modDt}
+                ,       #{modId}
+                FROM    (   SELECT  tpte.STORE_CD
+                            ,       tpte.PROD_CD
+                            ,       tmp.PO_UNIT_QTY
+                            ,       NVL(MAX(tmp.COST_UPRC), 0) AS COST_UPRC
+                            ,       SUM(tpte.QTY)    AS QTY
+                            ,       MAX(tpte.REMARK) AS REMARK
+                            FROM    TB_PO_TEMP_EXCEL tpte
+                            ,       TB_MS_PRODUCT tmp
+                            WHERE   tpte.SESSION_ID     =   #{sessionId}
+                            AND     tpte.PROD_CD        IS NOT  NULL
+                            AND     tmp.STORE_CD        =   #{storeCd}
+                            AND     tmp.PROD_CD         =   tpte.PROD_CD
+                            AND     tmp.STOCK_PROD_YN   =   'Y'
+                            AND     tmp.USE_YN          =   'Y'
+                            GROUP
+                            BY      tpte.STORE_CD
+                            ,       tpte.PROD_CD
+                            ,       tmp.PO_UNIT_QTY
+                        ) tpte
+                ,       (   SELECT  tsssc.STORE_CD, tsssc.PROD_CD, tsssc.CURR_QTY, tsssm.AVG_COST_UPRC
+                            FROM    TB_ST_STORE_STOCK_CUR tsssc
+                            ,       TB_ST_STORE_STOCK_MONTHLY tsssm
+                            WHERE   tsssc.STORE_CD      =   #{storeCd}
+                            AND     tsssm.IOSTOCK_YM(+) =   SUBSTR(#{date}, 0, 6)
+                            AND     tsssm.STORE_CD  (+) =   tsssc.STORE_CD
+                            AND     tsssm.PROD_CD   (+) =   tsssc.PROD_CD
+                        ) tsssc
+                WHERE   tsssc.STORE_CD  (+) =   tpte.STORE_CD
+                AND     tsssc.PROD_CD   (+) =   tpte.PROD_CD
+            </when>
+        </choose>
+    </insert>
+
+
+    <!--  폐기관리 엑셀업로드 - 정상 입력된 데이터 TEMP 테이블에서 삭제 -->
+    <!--
+        TABLE    : TB_PO_TEMP_EXCEL, TB_HQ_PRODUCT
+                   TB_PO_TEMP_EXCEL, TB_MS_PRODUCT
+        PARAM    : excelUploadVO
+        COMMENTS : 폐기관리 엑셀업로드 - 정상 입력된 데이터 TEMP 테이블에서 삭제한다.
+    -->
+    <delete id="deleteExcelUploadCompleteData" parameterType="excelUploadVO">
+        /* USE : DisuseMapper.deleteExcelUploadCompleteData */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE  TB_PO_TEMP_EXCEL
+                WHERE   SESSION_ID  = #{sessionId}
+                AND     PROD_CD     IS NOT NULL
+                AND     PROD_CD     IN  ( SELECT  PROD_CD
+                                          FROM    TB_HQ_PRODUCT
+                                          WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
+                                          AND     STOCK_PROD_YN =   'Y'
+                                          AND     USE_YN        =   'Y'
+                                        )
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE  TB_PO_TEMP_EXCEL
+                WHERE   SESSION_ID  = #{sessionId}
+                AND     PROD_CD     IS NOT NULL
+                AND     PROD_CD     IN  ( SELECT  PROD_CD
+                                          FROM    TB_MS_PRODUCT
+                                          WHERE   STORE_CD      =   #{storeCd}
+                                          AND     STOCK_PROD_YN =   'Y'
+                                          AND     USE_YN        =   'Y'
+                                        )
+            </when>
+        </choose>
+    </delete>
+    <!--                엑셀업로드 끝                 -->
 </mapper>

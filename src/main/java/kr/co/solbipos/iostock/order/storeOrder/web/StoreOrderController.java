@@ -318,8 +318,9 @@ public class StoreOrderController {
         return ReturnUtil.returnJson(Status.OK, result);
     }
 
+
     /**
-     * 주문등록 - 엑셀업로드 자료 검증
+     * 주문등록 - 엑셀업로드
      * @param   request
      * @param   response
      * @param   model

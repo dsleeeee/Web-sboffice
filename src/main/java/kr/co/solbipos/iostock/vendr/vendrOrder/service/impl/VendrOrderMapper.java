@@ -1,6 +1,7 @@
 package kr.co.solbipos.iostock.vendr.vendrOrder.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
 import kr.co.solbipos.iostock.vendr.vendrOrder.service.VendrOrderVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -58,6 +59,17 @@ public interface VendrOrderMapper {
     /** 거래처 발주등록 - 발주정보 DTL의 집계정보 HD에 수정 */
     int updateVendrOrderDtlSumHd(VendrOrderVO vendrOrderVO);
 
+    /** 거래처 발주등록 엑셀업로드 - 엑셀업로드 수량추가 */
+    int insertExcelUploadAddQty(ExcelUploadVO excelUploadVO);
+
+    /** 거래처 발주등록 엑셀업로드 - 기존 데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제 */
+    int deleteVendrOrderToExcelUploadData(ExcelUploadVO excelUploadVO);
+
+    /** 거래처 발주등록 엑셀업로드 - 엑셀업로드 한 수량을 발주수량으로 입력 */
+    int insertVendrOrderToExcelUploadData(ExcelUploadVO excelUploadVO);
+
+    /** 거래처 발주등록 엑셀업로드 - 정상 입력된 데이터 TEMP 테이블에서 삭제 */
+    int deleteExcelUploadCompleteData(ExcelUploadVO excelUploadVO);
 
 
 

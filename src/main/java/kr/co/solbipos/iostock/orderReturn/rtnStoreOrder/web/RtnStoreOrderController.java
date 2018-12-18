@@ -7,6 +7,7 @@ import kr.co.common.service.code.CmmEnvService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
 import kr.co.solbipos.iostock.orderReturn.rtnStoreOrder.service.RtnStoreOrderDtlVO;
 import kr.co.solbipos.iostock.orderReturn.rtnStoreOrder.service.RtnStoreOrderService;
 import kr.co.solbipos.iostock.orderReturn.rtnStoreOrder.service.RtnStoreOrderVO;
@@ -231,6 +232,29 @@ public class RtnStoreOrderController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = rtnStoreOrderService.saveRtnStoreOrderConfirm(rtnStoreOrderVO, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+
+    /**
+     * 주문등록 - 엑셀업로드
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   excelUploadVO
+     * @return  String
+     * @author  안동관
+     * @since   2018. 12. 10.
+     */
+    @RequestMapping(value = "/rtnStoreOrderRegist/excelUpload.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result excelUpload(HttpServletRequest request, HttpServletResponse response,
+        Model model, ExcelUploadVO excelUploadVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = rtnStoreOrderService.excelUpload(excelUploadVO, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }

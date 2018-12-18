@@ -315,7 +315,7 @@ public class StoreOrderServiceImpl implements StoreOrderService {
     }
 
 
-    /** 주문등록 - 엑셀업로드 자료 검증 */
+    /** 주문등록 - 엑셀업로드 */
     @Override
     public int excelUpload(ExcelUploadVO excelUploadVO, SessionInfoVO sessionInfoVO) {
         int result = 0;
@@ -334,30 +334,24 @@ public class StoreOrderServiceImpl implements StoreOrderService {
         // 수량추가인 경우
         if(StringUtil.getOrBlank(excelUploadVO.getAddQtyFg()).equals("add")) {
             result = storeOrderMapper.insertExcelUploadAddQty(excelUploadVO);
-//            if(result > 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
 
         // 기존 주문데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제
         result = storeOrderMapper.deleteStoreOrderToExcelUploadData(excelUploadVO);
-//        if(result > 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
         // 여신 체크
         DefaultMap<String> storeLoan = storeOrderMapper.storeLoanCheck(excelUploadVO);
-
-        System.out.println("orderTot = "+storeLoan.getLong("orderTot"));
-        System.out.println("currLoanAmt = "+storeLoan.getLong("currLoanAmt"));
-
-        if(storeLoan.getLong("orderTot") > storeLoan.getLong("currLoanAmt")) {
-            throw new JsonException(Status.SERVER_ERROR, messageService.get("storeOrder.dtl.excelLoanOver")); // 주문총금액이 여신잔여 금액을 초과하였습니다. 업로드 된 자료는 처리되지 않았습니다.
+        if(storeLoan.getStr("isExist").equals("Y")) {
+            if(storeLoan.getLong("orderTot") > storeLoan.getLong("currLoanAmt")) {
+                throw new JsonException(Status.SERVER_ERROR, messageService.get("storeOrder.dtl.excelLoanOver")); // 주문총금액이 여신잔여 금액을 초과하였습니다. 업로드 된 자료는 처리되지 않았습니다.
+            }
         }
 
         // 엑셀업로드 한 수량을 주문수량으로 입력
         result = storeOrderMapper.insertStoreOrderToExcelUploadData(excelUploadVO);
-//        if(result > 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
         // 주문수량으로 정상 입력된 데이터 TEMP 테이블에서 삭제
         result = storeOrderMapper.deleteExcelUploadCompleteData(excelUploadVO);
-//        if(result > 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
         // 엑셀업로드 한 내용이 있으면 DTL 자료를 기반으로 주문 HD 생성, 업데이트, 삭제
         int dtlCnt = 0;

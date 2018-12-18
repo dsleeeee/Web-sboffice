@@ -1,6 +1,7 @@
 package kr.co.solbipos.stock.acins.acins.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
 import kr.co.solbipos.stock.acins.acins.service.AcinsVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -81,5 +82,17 @@ public interface AcinsMapper {
 
     /** 실사관리 - 실사상세 상품 리스트 조회(매장) */
     List<DefaultMap<String>> getStAcinsDtlList(AcinsVO acinsVO);
+
+    /** 실사관리 엑셀업로드 - 엑셀업로드 수량추가 */
+    int insertExcelUploadAddQty(ExcelUploadVO excelUploadVO);
+
+    /** 실사관리 엑셀업로드 - 기존 데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제 */
+    int deleteAcinsToExcelUploadData(ExcelUploadVO excelUploadVO);
+
+    /** 실사관리 엑셀업로드 - 엑셀업로드 한 수량을 실사수량으로 입력 */
+    int insertAcinsToExcelUploadData(ExcelUploadVO excelUploadVO);
+
+    /** 실사관리 엑셀업로드 - 정상 입력된 데이터 TEMP 테이블에서 삭제 */
+    int deleteExcelUploadCompleteData(ExcelUploadVO excelUploadVO);
 
 }

@@ -6,6 +6,7 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
 import kr.co.solbipos.stock.disuse.disuse.service.DisuseService;
 import kr.co.solbipos.stock.disuse.disuse.service.DisuseVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -243,6 +244,29 @@ public class DisuseController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = disuseService.saveDisuseDtl(disuseVOs, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+
+    /**
+     * 폐기관리 - 엑셀업로드
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   excelUploadVO
+     * @return  String
+     * @author  안동관
+     * @since   2018. 12. 17.
+     */
+    @RequestMapping(value = "/disuseRegist/excelUpload.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result excelUpload(HttpServletRequest request, HttpServletResponse response,
+        Model model, ExcelUploadVO excelUploadVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = disuseService.excelUpload(excelUploadVO, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }

@@ -2,6 +2,7 @@ package kr.co.solbipos.stock.adj.adj.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
 
 import java.util.List;
 
@@ -29,4 +30,8 @@ public interface AdjService {
 
     /** 조정관리 - 조정 상세 상품 저장 */
     int saveAdjDtl(AdjVO[] adjVOs, SessionInfoVO sessionInfoVO);
+
+    /** 엑셀업로드 */
+    int excelUpload(ExcelUploadVO excelUploadVO, SessionInfoVO sessionInfoVO);
+
 }

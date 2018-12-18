@@ -495,4 +495,130 @@
         AND     REQ_DATE      = #{reqDate}
         AND     SEQ           = #{seq}
     </delete>
+
+
+    <!--  분배마감 - 엑셀업로드 한 수량을 분배수량으로 입력 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_DISTRIBUTE
+        PARAM    : excelUploadVO
+        COMMENTS : 분배마감 - 엑셀업로드 한 수량을 분배수량으로 입력한다.
+    -->
+    <insert id="insertRtnDstbToExcelUploadData" parameterType="excelUploadVO">
+        /* USE : RtnDstbCloseStoreMapper.insertRtnDstbToExcelUploadData */
+        <selectKey resultType="int" keyProperty="seq" order="BEFORE">
+            SELECT  NVL(MAX(tphsd.SEQ), 0)+1 AS SEQ
+            FROM    TB_PO_HQ_STORE_DISTRIBUTE tphsd
+            WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+            AND     REQ_DATE      = #{date}
+        </selectKey>
+        INSERT INTO TB_PO_HQ_STORE_DISTRIBUTE
+        (
+            HQ_OFFICE_CD    ,   REQ_DATE    ,   SEQ,
+            STORE_CD        ,   EMP_NO      ,   SLIP_FG,
+            DSTB_FG         ,   STORAGE_CD  ,   HQ_BRAND_CD,
+            PROD_CD         ,   PO_UNIT_FG  ,   PO_UNIT_QTY,
+            MGR_SPLY_UPRC,
+            MGR_UNIT_QTY,
+            MGR_ETC_QTY,
+            MGR_TOT_QTY,
+            MGR_AMT,
+            MGR_VAT,
+            MGR_TOT,
+            PROC_FG,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        SELECT  #{hqOfficeCd}   ,   #{date}         ,   ${seq}+(ROWNUM-1)
+        ,       #{storeCd}      ,   '0000'          ,   #{slipFg}
+        ,       '0'             ,   '001'           ,   '00'
+        ,       tmp.PROD_CD     ,   tmp.PO_UNIT_FG  ,   tmp.PO_UNIT_QTY
+        ,       tmp.SPLY_UPRC
+        ,       tpte.UNIT_QTY * ${slipFg} AS MGR_UNIT_QTY
+        ,       tpte.ETC_QTY * ${slipFg} AS MGR_ETC_QTY
+        ,       tpte.QTY * ${slipFg} AS MGR_TOT_QTY
+        ,       (ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)
+                - ROUND(ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*tmp.VAT_FG*NVL(tmse.ENVST_VAL,0)/11)) * ${slipFg} AS MGR_AMT
+        ,       (ROUND(ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*tmp.VAT_FG/(10+NVL(tmse.ENVST_VAL,0)))) * ${slipFg} AS MGR_VAT
+        ,       (ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)
+                - ROUND(ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*tmp.VAT_FG*NVL(tmse.ENVST_VAL,0)/11)
+                + ROUND(ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*tmp.VAT_FG/(10+NVL(tmse.ENVST_VAL,0)))) * ${slipFg} AS MGR_TOT
+        ,       '10'
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        FROM    (   SELECT  tpte.STORE_CD
+                    ,       tpte.PROD_CD
+                    ,       TRUNC(SUM(NVL(tpte.UNIT_QTY, 0)*tmp.PO_UNIT_QTY+NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0))/tmp.PO_UNIT_QTY) AS UNIT_QTY
+                    ,       ( MOD   (SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),tmp.PO_UNIT_QTY)
+                            * DECODE(${slipFg}, 1, DECODE(SUBSTR(tmp.PO_UNIT_ALLOW_FG, 1, 1), 'B', 0, 1), DECODE(SUBSTR(tmp.PO_UNIT_ALLOW_FG, 2, 1), 'B', 0, 1))
+                            ) AS ETC_QTY
+                    ,       (SUM (NVL(tpte.UNIT_QTY, 0)*tmp.PO_UNIT_QTY+NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0))
+                                - DECODE(${slipFg}, 1, DECODE(SUBSTR(tmp.PO_UNIT_ALLOW_FG, 1, 1), 'B', MOD(SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),tmp.PO_UNIT_QTY), 0)
+                                        , DECODE(SUBSTR(tmp.PO_UNIT_ALLOW_FG, 2, 1), 'B', MOD(SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),tmp.PO_UNIT_QTY), 0)
+                                        )
+                            ) AS QTY
+                    FROM    TB_PO_TEMP_EXCEL tpte
+                    ,       TB_MS_PRODUCT tmp
+                    WHERE   tpte.SESSION_ID =   #{sessionId}
+                    AND     tpte.PROD_CD    IS  NOT NULL
+                    AND     tmp.STORE_CD    =   tpte.STORE_CD
+                    AND     tmp.PROD_CD     =   tpte.PROD_CD
+                    AND     tmp.STORE_CD    =   #{storeCd}
+                    AND     tmp.PO_PROD_FG  IN  ('1','3')
+                    AND     tmp.USE_YN      =   'Y'
+                    GROUP
+                    BY      tpte.STORE_CD
+                    ,       tpte.PROD_CD
+                    ,       tmp.PO_UNIT_QTY
+                    ,       tmp.PO_UNIT_ALLOW_FG
+                ) tpte
+        ,       TB_MS_PRODUCT tmp
+        ,       TB_MS_STORE_ENVST tmse
+        WHERE   tmp.STORE_CD       =   #{storeCd}
+        AND     tmp.STORE_CD       =   tpte.STORE_CD
+        AND     tmp.PROD_CD        =   tpte.PROD_CD
+        AND     tmse.STORE_CD      =   tmp.STORE_CD
+        AND     tmse.ENVST_CD      =   '0011'
+        AND     NVL(tpte.QTY,0)    >   0
+    </insert>
+
+
+    <!--  분배마감 엑셀업로드 - 분배수량으로 정상 입력된 데이터 TEMP 테이블에서 삭제 -->
+    <!--
+        TABLE    : TB_PO_TEMP_EXCEL
+        PARAM    : excelUploadVO
+        COMMENTS : 분배마감 엑셀업로드 - 분배수량으로 정상 입력된 데이터 TEMP 테이블에서 삭제한다.
+    -->
+    <delete id="deleteExcelUploadCompleteData" parameterType="excelUploadVO">
+        /* USE : RtnDstbCloseStoreMapper.deleteExcelUploadCompleteData */
+        DELETE  TB_PO_TEMP_EXCEL
+        WHERE   SESSION_ID  = #{sessionId}
+        AND     PROD_CD     IS NOT NULL
+        AND     PROD_CD     IN  ( SELECT  PROD_CD
+                                  FROM    ( SELECT  tpte.PROD_CD
+                                            ,       (SUM (NVL(tpte.UNIT_QTY, 0)*tmp.PO_UNIT_QTY+NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0))
+                                                      - DECODE(${slipFg}, 1, DECODE(SUBSTR(tmp.PO_UNIT_ALLOW_FG, 1, 1), 'B', MOD(SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),tmp.PO_UNIT_QTY), 0)
+                                                              , DECODE(SUBSTR(tmp.PO_UNIT_ALLOW_FG, 2, 1), 'B', MOD(SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),tmp.PO_UNIT_QTY), 0)
+                                                              )
+                                                    ) AS QTY
+                                            FROM    TB_PO_TEMP_EXCEL tpte
+                                            ,       TB_MS_PRODUCT tmp
+                                            WHERE   tpte.SESSION_ID =   #{sessionId}
+                                            AND     tpte.PROD_CD    IS  NOT NULL
+                                            AND     tmp.STORE_CD    =   tpte.STORE_CD
+                                            AND     tmp.PROD_CD     =   tpte.PROD_CD
+                                            AND     tmp.STORE_CD    =   #{storeCd}
+                                            AND     tmp.PO_PROD_FG  IN  ('1','3')
+                                            AND     tmp.USE_YN      =   'Y'
+                                            GROUP
+                                            BY      tpte.PROD_CD
+                                            ,       tmp.PO_UNIT_QTY
+                                            ,       tmp.PO_UNIT_ALLOW_FG
+                                          ) tpte
+                                  WHERE   NVL(tpte.QTY,0) > 0
+                                )
+    </delete>
 </mapper>

@@ -6,7 +6,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/iostock/cmmExcelUpload/excelUpload/excelUpload/"/>
 
-<div style="display: inline;" ng-controller="excelUploadCtrl">
+<div style="display: none;" ng-controller="excelUploadCtrl">
   <input type="file" class="form-control" id="excelUpFile"
          ng-model="excelUpFile"
          onchange="angular.element(this).scope().excelFileChanged()"
@@ -17,8 +17,8 @@
          onchange="angular.element(this).scope().textFileChanged()"
          accept=".txt"/>
 
-  <a href="#" class="btn_grayS" ng-click="excelUploadingPopup(true)">팝업열기</a>
-  <a href="#" class="btn_grayS" ng-click="excelUploadingPopup(false)">팝업닫기</a>
+  <%--<a href="#" class="btn_grayS" ng-click="excelUploadingPopup(true)">팝업열기</a>--%>
+  <%--<a href="#" class="btn_grayS" ng-click="excelUploadingPopup(false)">팝업닫기</a>--%>
 
   <%--위즈모 테이블--%>
   <div class="wj-gridWrap" style="height: 350px;">
@@ -117,8 +117,8 @@
 
 
     // 엑셀양식 다운로드
-    $scope.excelDownload = function (uploadFg) {
-      console.log('excelDownload');
+    $scope.excelFormDownload = function (uploadFg) {
+      console.log('excelFormDownload');
       $scope.uploadFg = uploadFg;
 
       $scope.addRow();
@@ -132,11 +132,10 @@
           }
         }, 'excelForm.xlsx');
       }, 10);
-
     };
 
 
-    // 엑셀 양식 다운로드시 1줄 생성하여 어떤값 넣어야할지 적어줌.
+    // 엑셀 양식 다운로드시 1줄 생성하여 어떤값 넣어야할지 양식생성.
     $scope.addRow = function () {
       console.log('addRow');
       // 그리드 초기화
@@ -145,9 +144,8 @@
       flex.collectionView.trackChanges = true;
 
       var params = {};
-      // 주문등록
+      // 주문등록, 반품등록
       if ($scope.uploadFg === 'order') {
-        console.log('order');
         $scope.prodBarcdCdVisibleFg = true;  // 상품코드/바코드
         $scope.prodCdVisibleFg      = false; // 상품코드
         $scope.barcdCdVisibleFg     = false; // 바코드
@@ -160,6 +158,52 @@
         params.prodBarcdCd = '상품코드입력';
         params.unitQty     = 0;
         params.etcQty      = 0;
+      }
+      // 분배마감, 반품마감
+      else if ($scope.uploadFg === 'dstbCloseStore') {
+        $scope.prodBarcdCdVisibleFg = true;  // 상품코드/바코드
+        $scope.prodCdVisibleFg      = false; // 상품코드
+        $scope.barcdCdVisibleFg     = false; // 바코드
+        $scope.unitQtyVisibleFg     = true;  // 단위수량
+        $scope.etcQtyVisibleFg      = true;  // 낱개수량
+        $scope.qtyVisibleFg         = false; // 수량
+        $scope.uprcVisibleFg        = true;  // 단가
+        $scope.remarkVisibleFg      = false; // 비고
+
+        params.prodBarcdCd = '상품코드입력';
+        params.unitQty     = 0;
+        params.etcQty      = 0;
+        params.uprc        = 0;
+      }
+      // 실사,조정,폐기
+      else if ($scope.uploadFg === 'acins' || $scope.uploadFg === 'adj' || $scope.uploadFg === 'disuse') {
+        $scope.prodBarcdCdVisibleFg = true;  // 상품코드/바코드
+        $scope.prodCdVisibleFg      = false; // 상품코드
+        $scope.barcdCdVisibleFg     = false; // 바코드
+        $scope.unitQtyVisibleFg     = false; // 단위수량
+        $scope.etcQtyVisibleFg      = false; // 낱개수량
+        $scope.qtyVisibleFg         = true;  // 수량
+        $scope.uprcVisibleFg        = false; // 단가
+        $scope.remarkVisibleFg      = true;  // 비고
+
+        params.prodBarcdCd = '상품코드입력';
+        params.qty         = 0;
+      }
+      // 거래처 발주, 거래처 입고
+      else if ($scope.uploadFg === 'vendr') {
+        $scope.prodBarcdCdVisibleFg = true;  // 상품코드/바코드
+        $scope.prodCdVisibleFg      = false; // 상품코드
+        $scope.barcdCdVisibleFg     = false; // 바코드
+        $scope.unitQtyVisibleFg     = true;  // 단위수량
+        $scope.etcQtyVisibleFg      = true;  // 낱개수량
+        $scope.qtyVisibleFg         = false; // 수량
+        $scope.uprcVisibleFg        = true;  // 단가
+        $scope.remarkVisibleFg      = false; // 비고
+
+        params.prodBarcdCd = '상품코드입력';
+        params.unitQty     = 0;
+        params.etcQty      = 0;
+        params.uprc        = 0;
       }
 
       var newRow = flex.collectionView.addNew();
@@ -213,7 +257,7 @@
           console.log('delete excel');
           $scope.excelUpload(); // 삭제 완료 된 후 엑셀업로드 호출
         } else if (upFg === 'text') {
-          $scope.textUpload();
+          $scope.textUpload(); // 삭제 완료 된 후 텍스트업로드 호출
         }
       });
     };
@@ -225,6 +269,7 @@
       $scope.stepCnt     = 100; // 한번에 DB에 저장할 숫자 세팅
       $scope.progressCnt = 0;   // 처리된 숫자
 
+      // 선택한 파일이 있을 경우
       if ($('#textUpFile')[0].files[0]) {
         var file          = $('#textUpFile')[0].files[0];
         var fileName      = file.name;
@@ -233,7 +278,7 @@
         // 확장자 체크. 확장자가 txt가 아닌 경우 오류메시지
         if (fileExtension.toLowerCase() !== '.txt') {
           $("#textUpFile").val('');
-          $scope._popMsg(messages['excelUpload.not.textFile']);
+          $scope._popMsg(messages['excelUpload.not.textFile']); // 텍스트 파일만 업로드 됩니다.(*.txt)
           return false;
         }
 
@@ -249,6 +294,11 @@
             for (var i = 0; i < length; i++) {
               // console.log(bytes[i]);
               // console.log(String.fromCharCode(bytes[i]));
+
+              // 값이 스페이스인 경우 건너뜀.
+              if (bytes[i] === 32) {
+                continue;
+              }
 
               // 마지막 데이터인 경우
               if (i === (length - 1)) {
@@ -269,9 +319,6 @@
             if (nvl(uploadData, '') !== '') {
               var jsonData = $scope.textUploadToJsonConvert(uploadData);
 
-              // console.log('----------textUploadToJsonConvert-----------');
-              // console.log(jsonData);
-
               if (jsonData.length > 0) {
                 $timeout(function () {
                   $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
@@ -282,8 +329,14 @@
                   $scope.save(jsonData);
                 }, 10);
               } else {
-                $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                $scope._popMsg(messages['excelUpload.noData'], function () {
+                  $scope.$broadcast('loadingPopupInactive'); // 업로드 할 데이터가 없습니다.
+                }); // 텍스트 파일만 업로드 됩니다.(*.txt)
               }
+            } else {
+              $scope._popMsg(messages['excelUpload.noData'], function () {
+                $scope.$broadcast('loadingPopupInactive'); // 업로드 할 데이터가 없습니다.
+              }); // 텍스트 파일만 업로드 됩니다.(*.txt)
             }
           }, 10);
         }
@@ -301,7 +354,7 @@
       var uploadDataArrLength = uploadDataArr.length;
       var jsonData            = [];
       var item                = {};
-      var columnNum           = 2; // 텍스트 업로드시 1줄 JSON 데이터 컬럼 수 설정
+      var columnNum           = 2; // 텍스트 업로드시 1줄의 JSON 데이터 컬럼 수 설정
 
       for (var i = 0; i < uploadDataArrLength; i++) {
         // console.log('i = ' + i + '  ,  ' + uploadDataArr[i]);
@@ -310,33 +363,43 @@
         if (nvl(uploadDataArr[i].replace(/\n/gi, ''), '') !== '') {
           // if (nvl(uploadDataArr[i].replace(/String.fromCharCode(13)/gi, ''), '') !== '') {
           // var data          = uploadDataArr[i].replace(/String.fromCharCode(13)/gi, '');
-          var data          = uploadDataArr[i].replace(/\n/gi, '');
+          var data          = uploadDataArr[i].replace(/\n/gi, '').trim();
           var dataArr       = data.split(',');
           var dataArrLength = dataArr.length;
           item              = {};
 
           // console.log('i = ' + i + '  ,  ' + uploadDataArr[i] + '  ,  dataArrLength = '+dataArrLength);
 
-          if ($scope.uploadFg === 'order') {
-            // 1줄의 데이터를 , 로 split 한 자료의 길이가 columnNum 보다 작은 경우 수량 없음 오류 메시지
-            if (dataArrLength < columnNum) {
-              $scope._popMsg(messages['excelUpload.not.qty']); // 업로드 데이터 중 수량이 없는 데이터가 존재합니다.
-              jsonData = [];
-              break;
-            }
-
-            for (var j = 0; j < dataArrLength; j++) {
-              var value = nvl(dataArr[j], '').trim();
-              if (value !== '') {
-                if (j % columnNum === 0) {
-                  item.prodBarcdCd = value;
-                } else if (j % columnNum === 1) {
-                  item.qty = value;
-                }
-              }
-              // console.log(JSON.stringify(item));
-            }
+          // 1줄의 데이터를 , 로 split 한 자료의 길이가 columnNum 보다 작은 경우 수량 없음 오류 메시지
+          if (dataArrLength < columnNum) {
+            console.log('---------text ----------' + data);
+            $scope._popMsg(messages['excelUpload.not.qty']); // 업로드 데이터 중 수량이 없는 데이터가 존재합니다.
+            jsonData = [];
+            break;
           }
+
+          for (var j = 0; j < dataArrLength; j++) {
+            var value = nvl(dataArr[j], '').trim();
+            if (value !== '') {
+              //1줄의 데이터가 columnNum 보다 많은 경우 양식이 이상한 것이므로 for문 종료
+              if (j >= columnNum) break;
+
+              if (j % columnNum === 0) {
+                item.prodBarcdCd = value;
+              } else if (j % columnNum === 1) {
+                // 주문, 반품
+                // if ($scope.uploadFg === 'order' || $scope.uploadFg === 'adj' || $scope.uploadFg === 'disuse') {
+                //   item.unitQty = value;
+                // }
+                // // 실사,조정,폐기
+                // else if ($scope.uploadFg === 'acinc' || $scope.uploadFg === 'adj' || $scope.uploadFg === 'disuse') {
+                  item.qty = value;
+                // }
+              }
+            }
+            // console.log(JSON.stringify(item));
+          }
+
           jsonData.push(item);
         }
         // console.log('--------------jsonData---------------');
@@ -380,7 +443,7 @@
           }, 10);
         } else {
           $("#excelUpFile").val('');
-          $scope._popMsg(messages['excelUpload.not.excelFile']);
+          $scope._popMsg(messages['excelUpload.not.excelFile']); // 엑셀 파일만 업로드 됩니다.(*.xlsx, *.xlsm)
           return false;
         }
       }
@@ -394,8 +457,7 @@
       var rowLength = $scope.flex.rows.length;
 
       if (rowLength === 0) {
-        // 엑셀업로드 된 데이터가 없습니다.
-        $scope._popMsg(messages['excelUpload.not.excelUploadData']);
+        $scope._popMsg(messages['excelUpload.not.excelUploadData']); // 엑셀업로드 된 데이터가 없습니다.
         return false;
       }
 
@@ -406,38 +468,6 @@
           if ($scope.flex.columns[c].header !== null && $scope.flex.getCellData(r, c, false) !== null) {
             var colBinding = $scope.colHeaderBind[$scope.flex.columns[c].header];
             var cellValue  = $scope.flex.getCellData(r, c, false) + '';
-
-            /*
-            // 상품코드/바코드 최대길이 체크
-            if (colBinding === 'prodBarcdCd' && cellValue.getByteLengthForOracle() > 50) {
-              $scope._popMsg(messages["excelUpload.prodBarcdCd"] + messages["excelUpload.overLength"] + " 50 " + messages["excelUpload.bateLengthInfo"]); // 의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 :
-              $scope.excelUploadingPopup(false); // 업로딩 팝업 닫기
-              return false;
-            }
-
-            // 단위수량, 낱개수량, 수량 최대크기 체크
-            if (colBinding === 'unitQty' || colBinding === 'etcQty' || colBinding === 'qty') {
-              if (parseInt(cellValue) > 99999999) {
-                $scope._popMsg(messages["excelUpload." + colBinding] + messages["excelUpload.overSize"] + " 99999999"); // 의 데이터 중 크기가 너무 큰 데이터가 있습니다. 최대 :
-                $scope.excelUploadingPopup(false); // 업로딩 팝업 닫기
-                return false;
-              }
-            }
-
-            // 단가 최대크기 체크
-            if (colBinding === 'uprc' && parseInt(cellValue) > 9999999999) {
-              $scope._popMsg(messages["excelUpload.uprc"] + messages["excelUpload.overSize"] + " 9999999999"); // 의 데이터 중 크기가 너무 큰 데이터가 있습니다. 최대 :
-              $scope.excelUploadingPopup(false); // 업로딩 팝업 닫기
-              return false;
-            }
-
-            // 비고 최대길이 체크
-            if (colBinding === 'remark' && cellValue.getByteLengthForOracle() > 1000) {
-              $scope._popMsg(messages["excelUpload.prodBarcdCd"] + messages["excelUpload.overLength"] + " 1000 " + messages["excelUpload.bateLengthInfo"]); // 의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 :
-              $scope.excelUploadingPopup(false); // 업로딩 팝업 닫기
-              return false;
-            }
-            */
 
             item[colBinding] = cellValue;
           }
@@ -460,6 +490,7 @@
       console.log('$scope.uploadFg = ' + $scope.uploadFg);
       $scope.totalRows = jsonData.length;
       var params       = [];
+      var msg          = '';
 
       // 저장 시작이면 업로드 중 팝업 오픈
       if ($scope.progressCnt === 0) {
@@ -475,49 +506,80 @@
       for (var i = $scope.progressCnt; i < loopCnt; i++) {
         var item = jsonData[i];
 
+        // 엑셀업로드시 업로드 구분에 따른 필수값 및 길이 체크
+        // 상품코드/바코드
+        if (nvl(item.prodBarcdCd, '') === '') {
+          msg = messages["excelUpload.prodBarcdCd"] + messages["excelUpload.require.data"]; // 상품코드/바코드(이)가 없는 데이터가 존재합니다.
+          $scope.valueCheckErrPopup(msg);
+          return false;
+        }
+
+        // 주문등록, 반품등록, 분배마감, 반품마감, 거래처 발주등록, 거래처 입고등록
+        if ($scope.uploadFg === 'order' || $scope.uploadFg === 'dstbCloseStore' || $scope.uploadFg === 'vendr') {
+          // 단위수량
+          if (nvl(item.unitQty, '') === '') {
+            msg = messages["excelUpload.unitQty"] + messages["excelUpload.require.data"]; // 단위수량(이)가 없는 데이터가 존재합니다.
+            $scope.valueCheckErrPopup(msg);
+            return false;
+          }
+        }
+        // 실사,조정,폐기
+        else if ($scope.uploadFg === 'acins' || $scope.uploadFg === 'adj' || $scope.uploadFg === 'disuse') {
+          // 수량
+          if (nvl(item.qty, '') === '') {
+            msg = messages["excelUpload.qty"] + messages["excelUpload.require.data"]; // 수량(이)가 없는 데이터가 존재합니다.
+            $scope.valueCheckErrPopup(msg);
+            return false;
+          }
+        }
+
         // 상품코드/바코드 최대길이 체크
         if (nvl(item.prodBarcdCd, '') !== '' && nvl(item.prodBarcdCd + '', '').getByteLengthForOracle() > 50) {
-          $scope._popMsg(messages["excelUpload.prodBarcdCd"] + messages["excelUpload.overLength"] + " 50 " + messages["excelUpload.bateLengthInfo"]); // 의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 :
-          $scope.excelUploadingPopup(false); // 업로딩 팝업 닫기
+          msg = messages["excelUpload.prodBarcdCd"] + messages["excelUpload.overLength"] + " 50 " + messages["excelUpload.bateLengthInfo"]; // 상품코드/바코드의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 50
+          $scope.valueCheckErrPopup(msg);
           return false;
         }
 
         // 단위수량 최대크기 체크
         if (nvl(item.unitQty, '') !== '' && parseInt(nvl(item.unitQty, 0)) > 99999999) {
-          $scope._popMsg(messages["excelUpload.unitQty"] + messages["excelUpload.overSize"] + " 99999999"); // 의 데이터 중 크기가 너무 큰 데이터가 있습니다. 최대 :
-          $scope.excelUploadingPopup(false); // 업로딩 팝업 닫기
+          msg = messages["excelUpload.unitQty"] + messages["excelUpload.overSize"] + " 99999999"; // 단위수량의 데이터 중 크기가 너무 큰 데이터가 있습니다. 최대 : 99999999
+          $scope.valueCheckErrPopup(msg);
           return false;
         }
 
         // 낱개수량 최대크기 체크
         if (nvl(item.etcQty, '') !== '' && parseInt(nvl(item.etcQty, 0)) > 99999999) {
-          $scope._popMsg(messages["excelUpload.etcQty"] + messages["excelUpload.overSize"] + " 99999999"); // 의 데이터 중 크기가 너무 큰 데이터가 있습니다. 최대 :
-          $scope.excelUploadingPopup(false); // 업로딩 팝업 닫기
+          msg = messages["excelUpload.etcQty"] + messages["excelUpload.overSize"] + " 99999999"; // 낱개수량의 데이터 중 크기가 너무 큰 데이터가 있습니다. 최대 : 99999999
+          $scope.valueCheckErrPopup(msg);
           return false;
         }
 
         // 수량 최대크기 체크
         if (nvl(item.qty, '') !== '' && parseInt(nvl(item.qty, 0)) > 99999999) {
-          $scope._popMsg(messages["excelUpload.qty"] + messages["excelUpload.overSize"] + " 99999999"); // 의 데이터 중 크기가 너무 큰 데이터가 있습니다. 최대 :
-          $scope.excelUploadingPopup(false); // 업로딩 팝업 닫기
+          msg = messages["excelUpload.qty"] + messages["excelUpload.overSize"] + " 99999999"; // 수량의 데이터 중 크기가 너무 큰 데이터가 있습니다. 최대 : 99999999
+          $scope.valueCheckErrPopup(msg);
           return false;
         }
 
         // 단가 최대크기 체크
         if (nvl(item.uprc, '') !== '' && parseInt(nvl(item.uprc, 0)) > 9999999999) {
-          $scope._popMsg(messages["excelUpload.uprc"] + messages["excelUpload.overSize"] + " 9999999999"); // 의 데이터 중 크기가 너무 큰 데이터가 있습니다. 최대 :
-          $scope.excelUploadingPopup(false); // 업로딩 팝업 닫기
+          msg = messages["excelUpload.uprc"] + messages["excelUpload.overSize"] + " 9999999999"; // 단가의 데이터 중 크기가 너무 큰 데이터가 있습니다. 최대 : 9999999999
+          $scope.valueCheckErrPopup(msg);
           return false;
         }
 
         // 비고 최대길이 체크
         if (nvl(item.remark, '') !== '' && nvl(item.remark + '', '').getByteLengthForOracle() > 1000) {
-          $scope._popMsg(messages["excelUpload.remark"] + messages["excelUpload.overLength"] + " 1000 " + messages["excelUpload.bateLengthInfo"]); // 의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 :
-          $scope.excelUploadingPopup(false); // 업로딩 팝업 닫기
+          msg = messages["excelUpload.remark"] + messages["excelUpload.overLength"] + " 1000 " + messages["excelUpload.bateLengthInfo"]; // 비고의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 1000
+          $scope.valueCheckErrPopup(msg);
           return false;
         }
 
         item.uploadFg = $scope.uploadFg;
+        if (nvl($scope.storeCd, '') !== '') {
+          item.storeCd = $scope.storeCd;
+        }
+
         params.push(item);
       }
 
@@ -540,6 +602,7 @@
         return false;
       }).then(function () {
         // 'complete' code here
+        // 처리 된 숫자가 총 업로드할 수보다 작은 경우 다시 save 함수 호출
         if (parseInt($scope.progressCnt) < parseInt($scope.totalRows)) {
           console.log($scope.progressCnt + ' / ' + $scope.totalRows);
 
@@ -556,6 +619,7 @@
 
 
     // 엑셀업로드 된 데이터를 기반으로 상품코드 업데이트
+    // 업데이트 완료 후 callback 호출 함.
     $scope.saveUpdateProdCd = function () {
       var params      = {};
       params.uploadFg = $scope.uploadFg;
@@ -568,6 +632,10 @@
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
         if ($scope._httpStatusCheck(response, true)) {
+          if (nvl($scope.parentCtrl, '') !== '') {
+            var parentScope = agrid.getScope($scope.parentCtrl);
+            parentScope.uploadCallBack();
+          }
         }
       }, function errorCallback(response) {
         $scope.excelUploadingPopup(false); // 업로딩 팝업 닫기
@@ -578,11 +646,6 @@
         }
         return false;
       }).then(function () {
-        // 'complete' code here
-        if (nvl($scope.parentCtrl, '') !== '') {
-          var parentScope = agrid.getScope($scope.parentCtrl);
-          parentScope.uploadCallBack();
-        }
       });
     };
 
@@ -601,6 +664,14 @@
       } else {
         $scope._loadingPopup.hide(true);
       }
+    };
+
+
+    // 업로드 한 데이터 값체크 중 에러시 에러팝업 띄우기 및 엑셀업로딩 팝업 닫기
+    $scope.valueCheckErrPopup = function (msg) {
+      $scope._popMsg(msg, function () {
+        $scope.excelUploadingPopup(false); // 업로딩 팝업 닫기
+      });
     };
 
   }]);

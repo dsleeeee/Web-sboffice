@@ -2,6 +2,7 @@ package kr.co.solbipos.iostock.orderReturn.rtnStoreOrder.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
 
 import java.util.List;
 
@@ -26,4 +27,8 @@ public interface RtnStoreOrderService {
 
     /** 반품등록 확정 */
     int saveRtnStoreOrderConfirm(RtnStoreOrderVO rtnStoreOrderVO, SessionInfoVO sessionInfoVO);
+
+    /** 엑셀업로드 */
+    int excelUpload(ExcelUploadVO excelUploadVO, SessionInfoVO sessionInfoVO);
+
 }

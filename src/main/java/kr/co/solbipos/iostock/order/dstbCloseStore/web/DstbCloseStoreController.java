@@ -6,6 +6,7 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
 import kr.co.solbipos.iostock.order.dstbCloseStore.service.DstbCloseStoreService;
 import kr.co.solbipos.iostock.order.dstbCloseStore.service.DstbCloseStoreVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -216,6 +217,29 @@ public class DstbCloseStoreController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = dstbCloseStoreService.saveDstbAdd(dstbCloseStoreVOs, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+
+    /**
+     * 분배마감 - 엑셀업로드
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   excelUploadVO
+     * @return  String
+     * @author  안동관
+     * @since   2018. 12. 14.
+     */
+    @RequestMapping(value = "/dstbCloseStoreAdd/excelUpload.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result excelUpload(HttpServletRequest request, HttpServletResponse response,
+        Model model, ExcelUploadVO excelUploadVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = dstbCloseStoreService.excelUpload(excelUploadVO, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }
