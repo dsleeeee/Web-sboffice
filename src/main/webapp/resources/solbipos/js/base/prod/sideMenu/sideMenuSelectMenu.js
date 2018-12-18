@@ -214,7 +214,7 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
     for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
       var item = $scope.flex.collectionView.items[i];
       if(item.gChk){
-        if(item.sdselQty > 0){
+        if(item.cnt > 0){
           $scope._popMsg("선택분류가 등록된 선택그룹은 삭제할 수 없습니다. ");
           return false;
         }
