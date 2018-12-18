@@ -411,8 +411,6 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
 
     // console.log('params', params)
 
-    return false;
-
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._save('/base/prod/sideMenu/menuProd/save.sb', params, function() {
       // 그리드 저장 후 재조회
