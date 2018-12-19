@@ -70,6 +70,8 @@ public class TouchKeyVO extends CmmVO {
     /** 복사할 매장 코드 */
     private String copyStoreCd;
 
+    /** 판매가격구분 (본사판매가 :1, 매장판매가:2) */
+    private String salePrcFg;
 
     /**
      * @return the orgnFg
@@ -323,5 +325,20 @@ public class TouchKeyVO extends CmmVO {
      */
     public void setCopyStoreCd(String copyStoreCd) {
         this.copyStoreCd = copyStoreCd;
+    }
+
+    /**
+     * @return the salePrcFg
+     */
+
+    public String getSalePrcFg() {
+        return salePrcFg;
+    }
+
+    /**
+     * @param salePrcFg the salePrcFg to set
+     */
+    public void setSalePrcFg(String salePrcFg) {
+        this.salePrcFg = salePrcFg;
     }
 }
