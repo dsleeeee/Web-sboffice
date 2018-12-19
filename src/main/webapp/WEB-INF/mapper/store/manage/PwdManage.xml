@@ -52,14 +52,14 @@
                     </if>
                     <if test='hqOfficeNm != null and hqOfficeNm != ""'>
                      <![CDATA[
-                        AND tho.HQ_OFFICE_NM LIKE #{hqOfficeNm} || '%'
+                        AND tho.HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm} || '%'
                      ]]>
                     </if>
                     <if test='userId != null and userId != ""'>
-                        AND the.USER_ID LIKE #{userId}||'%'
+                        AND the.USER_ID LIKE '%'||#{userId}||'%'
                     </if>
                     <if test='userNm != null and userNm != ""'>
-                        AND the.EMP_NM LIKE #{userNm}||'%'
+                        AND the.EMP_NM LIKE '%'||#{userNm}||'%'
                     </if>
                 </where>
                 UNION ALL
@@ -94,22 +94,22 @@
                 </if>
                 <if test='hqOfficeNm != null and hqOfficeNm != ""'>
                     <![CDATA[
-                    AND tho.HQ_OFFICE_NM LIKE #{hqOfficeNm} || '%'
+                    AND tho.HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm} || '%'
                     ]]>
                 </if>
                 <if test='storeCd != null and storeCd != ""'>
-                    AND tme.STORE_CD = #{storeCd}
+                    AND tms.STORE_CD LIKE '%'||#{storeCd}||'%'
                 </if>
                 <if test='storeNm != null and storeNm != ""'>
                     <![CDATA[
-                    AND tme.STORE_NM LIKE #{storeNm} || '%'
+                    AND tms.STORE_NM LIKE '%'||#{storeNm} || '%'
                     ]]>
                 </if>
                 <if test='userId != null and userId != ""'>
-                    AND tme.USER_ID LIKE #{userId}||'%'
+                    AND tme.USER_ID LIKE '%'||#{userId}||'%'
                 </if>
                 <if test='userNm != null and userNm != ""'>
-                    AND tme.EMP_NM LIKE #{userNm}||'%'
+                    AND tme.EMP_NM LIKE '%'||#{userNm}||'%'
                 </if>
           ) emp
         <if test='empOrgnFg != null and empOrgnFg.toString() != ""'>

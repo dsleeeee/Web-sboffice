@@ -60,11 +60,35 @@ public class ProdServiceImpl implements ProdService {
     /** 상품목록 조회 */
     @Override
     public List<DefaultMap<String>> getProdList(@RequestBody ProdVO prodVO, SessionInfoVO sessionInfoVO) {
-        // 소속구분 설정
-        prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        prodVO.setStoreCd(sessionInfoVO.getStoreCd());
 
+        String orgnFg = sessionInfoVO.getOrgnFg().getCode();
+        String hqOfficeCd = sessionInfoVO.getHqOfficeCd();
+        String storeCd = sessionInfoVO.getStoreCd();
+
+        // 소속구분 설정
+        prodVO.setOrgnFg(orgnFg);
+        prodVO.setHqOfficeCd(hqOfficeCd);
+        prodVO.setStoreCd(storeCd);
+
+        /*
+          단독매장의 경우 SALE_PRC_FG = '2'
+          프랜차이즈의 경우, 상품 판매가 본사통제여부 조회하여
+          본사통제구분이 '본사'일때, SALE_PRC_FG = '1'
+          본사통제구분이 '매장'일때, SALE_PRC_FG = '2'
+        */
+        if("00000".equals(hqOfficeCd)) { // 단독매장
+            prodVO.setSalePrcFg("2");
+        } else {
+
+            String envstVal = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0022"));
+
+            if( StringUtil.isEmpties(storeCd)) { // 본사일때
+                prodVO.setSalePrcFg("1");
+            } else {                             // 매장일때
+                if("1".equals(envstVal)) prodVO.setSalePrcFg("1");
+                else                     prodVO.setSalePrcFg("2");
+            }
+        }
         return prodMapper.getProdList(prodVO);
     }
 
@@ -74,10 +98,35 @@ public class ProdServiceImpl implements ProdService {
 
         DefaultMap result = new DefaultMap<>();
 
+        String orgnFg = sessionInfoVO.getOrgnFg().getCode();
+        String hqOfficeCd = sessionInfoVO.getHqOfficeCd();
+        String storeCd = sessionInfoVO.getStoreCd();
+
         // 소속구분 설정
-        prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+        prodVO.setOrgnFg(orgnFg);
+        prodVO.setHqOfficeCd(hqOfficeCd);
+        prodVO.setStoreCd(storeCd);
+
+        /*
+          단독매장의 경우 SALE_PRC_FG = '2'
+          프랜차이즈의 경우, 상품 판매가 본사통제여부 조회하여
+          본사통제구분이 '본사'일때, SALE_PRC_FG = '1'
+          본사통제구분이 '매장'일때, SALE_PRC_FG = '2'
+        */
+        if("00000".equals(hqOfficeCd)) { // 단독매장
+            prodVO.setSalePrcFg("2");
+        } else {
+
+            String envstVal = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0022"));
+
+            if( StringUtil.isEmpties(storeCd)) { // 본사일때
+                prodVO.setSalePrcFg("1");
+            } else {                             // 매장일때
+                if("1".equals(envstVal)) prodVO.setSalePrcFg("1");
+                else                     prodVO.setSalePrcFg("2");
+            }
+        }
+
         // 상품상세정보 조회
         result = prodMapper.getProdDetail(prodVO);
 

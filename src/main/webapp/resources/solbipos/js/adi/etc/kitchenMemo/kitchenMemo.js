@@ -101,7 +101,7 @@ app.controller('kitchenMemoCtrl', ['$scope', '$http', function ($scope, $http) {
     var params = {};
     params.status = "I";
     params.gChk = true;
-    params.kitchnMemoCd="자동채번"
+    params.kitchnMemoCd="자동채번";
     params.memoFg = "2";
     params.useYn = "Y";
     if(orgnFg === "STORE") {
