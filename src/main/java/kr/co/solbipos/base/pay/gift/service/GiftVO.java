@@ -37,14 +37,8 @@ public class GiftVO extends CmmVO {
     private Integer giftUprc = 0;
     /** [사용여부] Y:사용 N:사용안함 */
     private String useYn;
-    /** [등록일시] */
-    private String regDt;
-    /** [등록아이디] */
-    private String regId;
-    /** [수정일시] */
-    private String modDt;
-    /** [수정아이디] */
-    private String modId;
+    /** 프로시져 실행 결과 */
+    private String result;
 
     /**
      * @return the orgnFg
@@ -166,63 +160,19 @@ public class GiftVO extends CmmVO {
         this.useYn = useYn;
     }
 
+
     /**
-     * @return the regDt
+     * @return the result
      */
 
-    @Override public String getRegDt() {
-        return regDt;
+    public String getResult() {
+        return result;
     }
 
     /**
-     * @param regDt the regDt to set
+     * @param result the result to set
      */
-    @Override public void setRegDt(String regDt) {
-        this.regDt = regDt;
-    }
-
-    /**
-     * @return the regId
-     */
-
-    @Override public String getRegId() {
-        return regId;
-    }
-
-    /**
-     * @param regId the regId to set
-     */
-    @Override public void setRegId(String regId) {
-        this.regId = regId;
-    }
-
-    /**
-     * @return the modDt
-     */
-
-    @Override public String getModDt() {
-        return modDt;
-    }
-
-    /**
-     * @param modDt the modDt to set
-     */
-    @Override public void setModDt(String modDt) {
-        this.modDt = modDt;
-    }
-
-    /**
-     * @return the modId
-     */
-
-    @Override public String getModId() {
-        return modId;
-    }
-
-    /**
-     * @param modId the modId to set
-     */
-    @Override public void setModId(String modId) {
-        this.modId = modId;
+    public void setResult(String result) {
+        this.result = result;
     }
 }

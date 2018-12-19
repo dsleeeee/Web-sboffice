@@ -34,10 +34,9 @@
         <button class="btn_skyblue" id="btnSearch" ng-click="_pageView('regStoreCtrl', 1)" ><s:message code="cmm.search" /></button>
       </div>
 
+      <%--- 적용매장 그리드 --%>
       <div class="oh mt20">
-        <%--- 적용매장 그리드 --%>
         <div class="w50 fl" ng-controller="regStoreCtrl">
-
           <div class="wj-TblWrap mr10" style="height:395px; overflow-y:hidden;">
             <div class="oh">
               <span class="fl bk lh20 s14"><s:message code="prod.regStore"/></span>

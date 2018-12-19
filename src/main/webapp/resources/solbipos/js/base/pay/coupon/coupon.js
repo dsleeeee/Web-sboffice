@@ -54,7 +54,6 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
             couponGrid.$apply(function(){
               couponGrid._gridDataInit();
             });
-
             return false;
           } else {
             $("#couponSubTitle").text(" [" + selectedRow.payClassNm+ "]");
@@ -240,8 +239,7 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
 
         if (col.binding === "prodCnt" && selectedRow.status !== "I") {
           // 상품 등록 팝업
-          var popup = $scope.couponProdLayer;
-          popup.show(true, function (s) {
+          $scope.couponProdLayer.show(true, function (s) {
             var regProdGrid = agrid.getScope('regProdCtrl');
             regProdGrid.$apply(function(){
               regProdGrid._gridDataInit();
@@ -250,13 +248,12 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
             noRegProdGrid.$apply(function(){
               noRegProdGrid._gridDataInit();
             });
-            $scope.searchCoupon(selectedCouponClass);
+            $scope._pageView('couponCtrl', 1);
           });
         }
         else if ( col.binding === "storeCnt" && selectedRow.status !== "I") {
           // 매장 등록 팝업
-          var popup = $scope.couponStoreLayer;
-          popup.show(true, function (s) {
+          $scope.couponStoreLayer.show(true, function (s) {
             var regStoreGrid = agrid.getScope('regStoreCtrl');
             regStoreGrid.$apply(function(){
               regStoreGrid._gridDataInit();
@@ -265,26 +262,25 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
             noRegStoreGrid.$apply(function(){
               noRegStoreGrid._gridDataInit();
             });
-            $scope.searchCoupon(selectedCouponClass);
+            $scope._pageView('couponCtrl', 1);
           });
-
         }
       }
     });
   };
 
   $scope.$on("couponCtrl", function(event, data) {
-    selectedCouponClass = data;
-    $scope.searchCoupon(data);
+    if( !isEmptyObject(data) )  selectedCouponClass = data;
+    $scope.searchCoupon();
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
 
   // 쿠폰 그리드 조회
-  $scope.searchCoupon = function(data){
+  $scope.searchCoupon = function(){
     var params = {};
     params.coupnEnvstVal = coupnEnvstVal;
-    params.payClassCd = data.payClassCd;
+    params.payClassCd = selectedCouponClass.payClassCd;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquirySub(baseUrl + "class/getCouponList.sb", params, function(){
       selectedCoupon = null;
@@ -362,8 +358,35 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.allSearch = function () {
     var couponClassGrid = agrid.getScope("couponClassCtrl");
     couponClassGrid.searchCouponClass();
-    $scope.searchCoupon(selectedCouponClass);
+    $scope.searchCoupon();
   };
+
+
+
+  // 화면 ready 된 후 설정
+  angular.element(document).ready(function () {
+    // 적용 상품 팝업 핸들러 추가
+    $scope.couponProdLayer.shown.addHandler(function (s) {
+      // setTimeout(function() {
+      //   $scope.$apply(function() {
+      //     $scope._broadcast('prodModifyCtrl', $scope.getProdInfo());
+      //     // 팝업에 속성 추가 : 상품정보
+      //     s.data = $scope.getProdInfo();
+      //   });
+      // }, 50);
+    });
+    // 적용 매장 팝업 핸들러 추가
+    $scope.couponStoreLayer.shown.addHandler(function (s) {
+      // setTimeout(function() {
+      //   $scope.$apply(function() {
+      //     $scope._broadcast('regStoreCtrl');
+      //   });
+      // }, 50);
+    });
+  });
+
+
+
 
 }]);
 

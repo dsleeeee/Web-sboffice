@@ -30,8 +30,8 @@ app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.searchRegProd();
     // 등록상품 조회 후, 미등록상품 조회
     var noRegCouponGrid = agrid.getScope("noRegProdCtrl");
-    noRegCouponGrid.searchNoRegProd();
-    // 기능수행 종료 : 반드시 추가
+    noRegCouponGrid._pageView('noRegProdCtrl', 1);
+
     event.preventDefault();
   });
 
@@ -39,6 +39,8 @@ app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.searchRegProd = function(){
     if(selectedCoupon != null && selectedCoupon != ""){
       var params = {};
+
+      params.listScale = "10";
       params.prodCd = $("#srchProdCd").val();
       params.prodNm = $("#srchProdNm").val();
 
@@ -54,16 +56,13 @@ app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 등록 상품 삭제
   $scope.delete = function(){
-    var couponClassGrid = agrid.getScope("couponClassCtrl");
-    var couponGrid = agrid.getScope("couponCtrl");
-    var selectedRow = couponGrid.flex.selectedRows[0]._data;
 
     var params = new Array();
 
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
       if($scope.flex.collectionView.items[i].gChk) {
-        $scope.flex.collectionView.items[i].payClassCd = couponClassGrid.flex.selectedItems[0].payClassCd;
-        $scope.flex.collectionView.items[i].coupnCd = selectedRow.coupnCd;
+        $scope.flex.collectionView.items[i].payClassCd = selectedCouponClass.payClassCd;
+        $scope.flex.collectionView.items[i].coupnCd = selectedCoupon.coupnCd;
         $scope.flex.collectionView.items[i].coupnEnvstVal = coupnEnvstVal;
         params.push($scope.flex.collectionView.items[i]);
       }
@@ -76,7 +75,7 @@ app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.allSearch = function () {
     $scope.searchRegProd();
     var noRegProdGrid = agrid.getScope("noRegProdCtrl");
-    noRegProdGrid.searchNoRegProd();
+    noRegProdGrid._pageView('noRegProdCtrl', 1);
   };
 }]);
 
@@ -93,6 +92,7 @@ app.controller('noRegProdCtrl', ['$scope', '$http', function ($scope, $http) {
   // 미등록 상품 그리드 조회
   $scope.$on("noRegProdCtrl", function(event, data) {
     $scope.searchNoRegProd();
+
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
@@ -103,6 +103,7 @@ app.controller('noRegProdCtrl', ['$scope', '$http', function ($scope, $http) {
         // 파라미터
       var params = {};
 
+      params.listScale = "10";
       params.prodCd = $("#srchProdCd").val();
       params.prodNm = $("#srchProdNm").val();
       params.payClassCd = selectedCouponClass.payClassCd;
@@ -139,7 +140,7 @@ app.controller('noRegProdCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.allSearch = function () {
     $scope.searchNoRegProd();
     var regProdGrid = agrid.getScope("regProdCtrl");
-    regProdGrid.searchRegProd();
+    regProdGrid._pageView('regProdCtrl',1);
   };
 }]);
 

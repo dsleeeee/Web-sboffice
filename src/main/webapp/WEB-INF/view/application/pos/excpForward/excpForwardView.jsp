@@ -16,7 +16,37 @@
     <div class="subCon" ng-controller="productCtrl">
       <div class="searchBar flddUnfld">
         <a href="#" class="open fl"><s:message code="application.pos.excpForward"/></a>
+        <%-- 조회 --%>
+        <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+          <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('productCtrl')">
+            <s:message code="cmm.search" />
+          </button>
+        </div>
       </div>
+
+      <table class="searchTbl">
+        <colgroup>
+          <col class="w15" />
+          <col class="w35" />
+          <col class="w15" />
+          <col class="w35" />
+        </colgroup>
+        <tbody>
+        <tr>
+          <%-- 상품코드 --%>
+          <th><s:message code="application.pos.excpForward.prodCd" /></th>
+          <td>
+            <input type="text" id="srchProdCd" class="sb-input w100" ng-model="prodCd" maxlength="10"/>
+          </td>
+          <%-- 상품명 --%>
+          <th><s:message code="application.pos.excpForward.prodNm" /></th>
+          <td>
+            <input type="text" id="srchProdNm" class="sb-input w100" ng-model="prodNm" maxlength="10"/>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
 
       <%-- 예외출고 상품 목록 --%>
       <div class="mb40" >
@@ -41,7 +71,7 @@
               <wj-flex-grid-column header="<s:message code="application.pos.excpForward.prodNm"/>" binding="prodNm" width="*" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="application.pos.excpForward.inQty"/>" binding="inQty" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="application.pos.excpForward.totSaleQty"/>" binding="totSaleQty" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="application.pos.excpForward.qtIo"/>" binding="qtIo" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="application.pos.excpForward.qtIo"/>" binding="qtIo" align="center" width="80" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="application.pos.excpForward.stockQty"/>" binding="stockQty" align="center" width="70" is-read-only="true" visible="false" ></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="application.pos.excpForward.regist"/>" binding="regist" align="center" width="90" is-read-only="true"></wj-flex-grid-column>
           </wj-flex-grid>
