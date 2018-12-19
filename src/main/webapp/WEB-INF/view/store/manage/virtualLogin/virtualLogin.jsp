@@ -106,7 +106,7 @@
       <%--<button id="btnExcel" class="btn_skyblue fr"><s:message code="cmm.excel.down" /></button>--%>
     </div>
 
-    <div class="wj-gridWrap mt10" style="height:381px; overflow-y: hidden;">
+    <div class="wj-gridWrap mt10" style="height:370px; overflow-y: hidden;">
       <div class="row">
         <wj-flex-grid
           autoGenerateColumns="false"
