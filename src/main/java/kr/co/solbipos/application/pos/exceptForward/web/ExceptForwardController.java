@@ -6,6 +6,7 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.exception.AuthenticationException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.validate.Login;
 import kr.co.solbipos.application.pos.exceptForward.service.ExceptForwardService;
 import kr.co.solbipos.application.pos.exceptForward.service.ExcpForwardProductVO;
@@ -18,13 +19,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.util.List;
 
 import static kr.co.common.utils.HttpUtils.getClientIp;
@@ -158,5 +159,25 @@ public class ExceptForwardController {
         return returnListJson(Status.OK, list, productVO);
     }
 
+    /**
+     * 예외출고 저장
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   productVO
+     * @return  String
+     * @author  김지은
+     * @since   2018. 12. 17.
+     */
+    @RequestMapping(value = "excpForward/saveExcpForwardProduct.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveExcpForwardProduct(@RequestBody ExcpForwardProductVO productVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
 
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = exceptForwardService.saveExcpForwardProduct(productVO, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
 }

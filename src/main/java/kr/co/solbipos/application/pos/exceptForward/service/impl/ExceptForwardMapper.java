@@ -30,4 +30,12 @@ public interface ExceptForwardMapper {
 
     /** 예외출고 대상상품 목록 조회 */
     List<DefaultMap<String>> getExcpForwardProduct(ExcpForwardProductVO productVO);
+
+    /** 예외출고 삭제 */
+    int deleteExcpForwardProduct(ExcpForwardProductVO productVO);
+
+    /** 예외출고 저장 */
+    int saveExcpForwardProduct(ExcpForwardProductVO productVO);
+
+
 }

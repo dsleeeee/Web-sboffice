@@ -25,4 +25,6 @@ public interface ExceptForwardService {
     /** 예외출고 대상 상품목록 조회 */
     List<DefaultMap<String>> getExcpForwardProduct(ExcpForwardProductVO excpForwardProductVO, SessionInfoVO sessionInfoVO);
 
+    /** 예외출고 수량 저장 */
+    int saveExcpForwardProduct(ExcpForwardProductVO productVO, SessionInfoVO sessionInfoVO);
 }
