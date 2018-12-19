@@ -31,7 +31,7 @@ app.controller('productCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-    $scope.searchProduct();
+
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
       if (e.panel == s.cells) {
@@ -62,7 +62,6 @@ app.controller('productCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     });
   };
-
 
   $scope.$on("productCtrl", function(event, data) {
     $scope.searchProduct();

@@ -88,6 +88,9 @@ public class ExcpForwardProductVO extends PageVO {
     /** 상품코드 */
     private String prodCd;
 
+    /** 상품명 */
+    private String prodNm;
+
     /** 입고수량 */
     private String otIo;
 
@@ -456,6 +459,21 @@ public class ExcpForwardProductVO extends PageVO {
      */
     public void setProdCd(String prodCd) {
         this.prodCd = prodCd;
+    }
+
+    /**
+     * @return the prodNm
+     */
+
+    public String getProdNm() {
+        return prodNm;
+    }
+
+    /**
+     * @param prodNm the prodNm to set
+     */
+    public void setProdNm(String prodNm) {
+        this.prodNm = prodNm;
     }
 
     /**
