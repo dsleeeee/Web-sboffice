@@ -12,43 +12,41 @@
 
 <div class="subCon">
 
-  <div class="wj-dialog-body">
+
+  <div class="wj-dialog-body" ng-controller="mCouponClassCtrl">
     <div class="searchBar flddUnfld">
-     <a href="#" class="open">${menuNm}</a>
+     <a href="#" class="open fl">${menuNm}</a>
+      <%-- 조회 --%>
+      <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+        <button class="btn_blue fr" id="btnSearch" ng-click="searchMobileCouponClass()">
+          <s:message code="cmm.search" />
+        </button>
+      </div>
     </div>
 
-    <%-- 조회 --%>
-    <div class="mt10 oh">
-      <button class="btn_blue fr" id="btnSearch" ng-click="$broadcast('terminalCtrl')">
-        <s:message code="cmm.search" />
-      </button>
+    <div class="mt40 oh dkbr">
+      <%-- 페이지 스케일  --%>
+        <wj-combo-box
+                class="w100px fl"
+                id="listScaleBox"
+                ng-model="listScale"
+                items-source="_getComboData('listScaleBox')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="initComboBox(s)"
+                ng-hide="true">
+        </wj-combo-box>
+
+
+      <div class="updownSet oh mb10">
+        <button class="btn_skyblue" id="btnClassAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
+        <button class="btn_skyblue" id="btnClassSave" ng-click="save()"><s:message code='cmm.save' /></button>
+      </div>
     </div>
 
     <%-- 상품권분류등록 --%>
-    <div class="mb20 mt20" ng-controller="mCouponClassCtrl">
-      <div class="wj-TblWrapBr mr10 pd20" style="height:500px;">
-        <div class="updownSet oh mb10">
-          <span class="fl bk lh30"><s:message code='mobileCoupon.regist.coupon' /></span>
-
-          <%-- 페이지 스케일  --%>
-          <wj-combo-box
-                  class="w100px fl"
-                  id="listScaleBox"
-                  ng-model="listScale"
-                  items-source="_getComboData('listScaleBox')"
-                  display-member-path="name"
-                  selected-value-path="value"
-                  is-editable="false"
-                  initialized="initComboBox(s)"
-                  visible="false">
-          </wj-combo-box>
-          <%--// 페이지 스케일  --%>
-
-          <button class="btn_skyblue" id="btnClassAdd" ng-click="searchMobileCouponClass()"><s:message code='cmm.search' /></button>
-          <button class="btn_skyblue" id="btnClassAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
-          <%--<button class="btn_skyblue" id="btnClassDel" ng-click="del()"><s:message code='cmm.del' /></button>--%>
-          <button class="btn_skyblue" id="btnClassSave" ng-click="save()"><s:message code='cmm.save' /></button>
-        </div>
+      <div class="wj-TblWrapBr mt10" style="height:500px;">
         <%-- 상품권분류등록 그리드 --%>
         <div id="mCouponClassGrid" class="wj-gridWrap" style="height:380px; overflow-y: hidden;">
           <wj-flex-grid
@@ -81,7 +79,7 @@
         <%--//페이지 리스트--%>
 
       </div>
-    </div>
+    <%--</div>--%>
   </div>
 </div>
 

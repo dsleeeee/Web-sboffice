@@ -42,7 +42,7 @@ public class PayMethodClassVO extends PageVO {
     private UseYn useYn;
     /** 쿠폰등록 본사 통제여부 */
     private CoupnEnvFg coupnEnvstVal;
-    /** 기능키 관련 프로시져 실행 결과 */
+    /** 프로시져 실행 결과 */
     private String result;
 
     /**

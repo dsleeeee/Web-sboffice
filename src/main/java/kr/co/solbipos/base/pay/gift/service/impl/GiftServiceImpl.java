@@ -4,6 +4,7 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
@@ -52,20 +53,24 @@ public class GiftServiceImpl implements GiftService {
 
     /** 쿠폰분류 조회 */
     @Override
-    public List<DefaultMap<String>> getGiftClassList(PayMethodClassVO payMethodClassVO,
-        SessionInfoVO sessionInfoVO) {
+    public List<DefaultMap<String>> getGiftClassList(PayMethodClassVO payMethodClassVO, SessionInfoVO sessionInfoVO) {
 
         List<DefaultMap<String>> returnList = null;
 
-        payMethodClassVO.setPayTypeFg(PayTypeFg.GIFT);
-        payMethodClassVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+        OrgnFg orgnFg = sessionInfoVO.getOrgnFg();
+        String hqOfficeCd = sessionInfoVO.getHqOfficeCd();
+        String storeCd = sessionInfoVO.getStoreCd();
 
-        // 본사
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+        payMethodClassVO.setPayTypeFg(PayTypeFg.GIFT);
+        payMethodClassVO.setOrgnFg(orgnFg);
+
+        // 본사에서 접속시
+        if( StringUtil.isEmpties(storeCd)) {
+
             payMethodClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             returnList = giftMapper.getHqGiftClassList(payMethodClassVO);
         }
-        // 매장
+        // 매장에서 접속시
         else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             payMethodClassVO.setStoreCd(sessionInfoVO.getStoreCd());
             returnList = giftMapper.getStoreGiftClassList(payMethodClassVO);
@@ -82,8 +87,19 @@ public class GiftServiceImpl implements GiftService {
     @Override
     public int saveGiftClassList(PayMethodClassVO[] payMethodClassVOs, SessionInfoVO sessionInfoVO) {
 
-        int procCnt = 0;
+        int result = 0;
+        String procResult = "";
+
+        OrgnFg orgnFg = sessionInfoVO.getOrgnFg();
+        String hqOfficeCd = sessionInfoVO.getHqOfficeCd();
+        String storeCd = sessionInfoVO.getStoreCd();
         String dt = currentDateTimeString();
+
+
+        /*
+         * 상품권은 프랜차이즈의 경우 무조건 본사에서 등록
+         *          단독매장의 경우 무조건 매장에서 등록
+         */
 
         for(PayMethodClassVO payMethodClassVO : payMethodClassVOs) {
 
@@ -94,50 +110,65 @@ public class GiftServiceImpl implements GiftService {
             payMethodClassVO.setPayTypeFg(PayTypeFg.GIFT);
             payMethodClassVO.setOrgnFg(sessionInfoVO.getOrgnFg());
 
-            // 본사
+            // 본사에서 접속시
             if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
 
                 payMethodClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
                 if(payMethodClassVO.getStatus() == GridDataFg.INSERT) {
-                    String payMethodClassCd = giftMapper.getPayMethodClassCd(payMethodClassVO);
-                    payMethodClassVO.setPayClassCd(payMethodClassCd);
-                    procCnt += giftMapper.insertHqGiftClass(payMethodClassVO);
+                    payMethodClassVO.setPayClassCd(giftMapper.getPayMethodClassCd(payMethodClassVO));
+
+                    // 본사 분류 등록
+                    result = giftMapper.insertHqGiftClass(payMethodClassVO);
+                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                    // 본사 분류 등록시 매장 분류에도 적용
+                    procResult = giftMapper.insertHqGiftClassToStoreGiftClass(payMethodClassVO);
+
                 }
                 else if(payMethodClassVO.getStatus() == GridDataFg.UPDATE) {
-                    procCnt += giftMapper.updateHqGiftClass(payMethodClassVO);
+
+                    // 본사 분류 수정
+                    result = giftMapper.updateHqGiftClass(payMethodClassVO);
+                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                    // 본사 분류 수정시 매장 분류에도 적용
+                    procResult = giftMapper.updateHqGiftClassToStoreGiftClass(payMethodClassVO);
                 }
                 else if(payMethodClassVO.getStatus() == GridDataFg.DELETE) {
-                    procCnt += giftMapper.deleteHqGiftClass(payMethodClassVO);
+
+                    // 본사 분류 삭제
+                    result = giftMapper.deleteHqGiftClass(payMethodClassVO);
+                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                    // 본사 분류 삭제시 매장 분류에도 적용
+                    procResult = giftMapper.deleteHqGiftClassToStoreGiftClass(payMethodClassVO);
                 }
             }
-            // 매장
-            else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            // 매장에서 접속시
+            else {
                 payMethodClassVO.setStoreCd(sessionInfoVO.getStoreCd());
 
                 if(payMethodClassVO.getStatus() == GridDataFg.INSERT) {
-                    String payMethodClassCd = giftMapper.getPayMethodClassCd(payMethodClassVO);
-                    payMethodClassVO.setPayClassCd(payMethodClassCd);
-                    procCnt += giftMapper.insertStoreGiftClass(payMethodClassVO);
+                    payMethodClassVO.setPayClassCd(giftMapper.getPayMethodClassCd(payMethodClassVO));
+                    result = giftMapper.insertStoreGiftClass(payMethodClassVO);
+                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
                 }
                 else if(payMethodClassVO.getStatus() == GridDataFg.UPDATE) {
-                    procCnt += giftMapper.updateStoreGiftClass(payMethodClassVO);
+                    result = giftMapper.updateStoreGiftClass(payMethodClassVO);
+                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
                 }
                 else if(payMethodClassVO.getStatus() == GridDataFg.DELETE) {
-                    procCnt += giftMapper.deleteStoreGiftClass(payMethodClassVO);
+                    result = giftMapper.deleteStoreGiftClass(payMethodClassVO);
+                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
                 }
-            }
-            // 권한 확인 필요
-            else {
-                throw new JsonException(Status.FAIL, messageService.get("cmm.access.denied"));
             }
         }
 
-        if(procCnt == payMethodClassVOs.length) {
-            return procCnt;
-        } else {
-            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-        }
+        return result;
     }
 
     /** 상품권 조회*/
@@ -169,7 +200,11 @@ public class GiftServiceImpl implements GiftService {
     @Override
     public int saveGiftList(GiftVO[] giftVOs, SessionInfoVO sessionInfoVO) {
 
-        int procCnt = 0;
+        int result = 0;
+        String procResult = "";
+
+        String hqOfficeCd = sessionInfoVO.getHqOfficeCd();
+        String storeCd = sessionInfoVO.getStoreCd();
         String dt = currentDateTimeString();
 
         for(GiftVO giftVO : giftVOs) {
@@ -180,56 +215,68 @@ public class GiftServiceImpl implements GiftService {
             giftVO.setModId(sessionInfoVO.getUserId());
             giftVO.setOrgnFg(sessionInfoVO.getOrgnFg());
 
-            LOGGER.debug(giftVO.getProperties());
+            /*
+             * 상품권은 프랜차이즈의 경우 무조건 본사에서 등록
+             *          단독매장의 경우 무조건 매장에서 등록
+             */
 
-            // 본사
-            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 본사에서 접속시
+            if(StringUtil.isEmpties(storeCd)) {
 
                 giftVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
                 if(giftVO.getStatus() == GridDataFg.INSERT) {
 
-                    String coupnCd = giftMapper.getGiftCd(giftVO);
-                    giftVO.setGiftCd(coupnCd);
+                    giftVO.setGiftCd(giftMapper.getGiftCd(giftVO));
 
-                    procCnt += giftMapper.insertHqGift(giftVO);
+                    // 본사 상품권 테이블 저장
+                    result = giftMapper.insertHqGift(giftVO);
+                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                    // 매장 상품권 테이블에도 적용
+                    procResult = giftMapper.insertHqGiftToStoreGift(giftVO);
                 }
                 else if(giftVO.getStatus() == GridDataFg.UPDATE) {
-                    procCnt += giftMapper.updateHqGift(giftVO);
+
+                    // 본사 상품권 테이블 저장
+                    result = giftMapper.updateHqGift(giftVO);
+                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                    // 매장 상품권 테이블에도 적용
+                    procResult = giftMapper.updateHqGiftToStoreGift(giftVO);
                 }
                 else if(giftVO.getStatus() == GridDataFg.DELETE) {
-                    procCnt += giftMapper.deleteHqGift(giftVO);
+
+                    // 본사 상품권 테이블 저장
+                    result = giftMapper.deleteHqGift(giftVO);
+                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                    // 매장 상품권 테이블에도 적용
+                    procResult = giftMapper.deleteHqGiftToStoreGift(giftVO);
                 }
             }
-            // 매장 통제
-            else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            // 매장에서 접속시
+            else {
 
                 giftVO.setStoreCd(sessionInfoVO.getStoreCd());
 
                 if(giftVO.getStatus() == GridDataFg.INSERT) {
 
-                    String coupnCd = giftMapper.getGiftCd(giftVO);
-                    giftVO.setGiftCd(coupnCd);
+                    giftVO.setGiftCd(giftMapper.getGiftCd(giftVO));
 
-                    procCnt += giftMapper.insertStoreGift(giftVO);
+                    result = giftMapper.insertStoreGift(giftVO);
+                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                 }
                 else if(giftVO.getStatus() == GridDataFg.UPDATE) {
-                    procCnt += giftMapper.updateStoreGift(giftVO);
+                    result = giftMapper.updateStoreGift(giftVO);
+                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                 }
                 else if(giftVO.getStatus() == GridDataFg.DELETE) {
-                    procCnt += giftMapper.deleteStoreGift(giftVO);
+                    result = giftMapper.deleteStoreGift(giftVO);
+                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                 }
             }
-            // 권한 확인 필요
-            else {
-                throw new JsonException(Status.FAIL, messageService.get("cmm.access.denied"));
-            }
         }
-
-        if(procCnt == giftVOs.length) {
-            return procCnt;
-        } else {
-            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-        }
+        return result;
     }
 }
