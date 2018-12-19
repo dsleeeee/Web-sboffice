@@ -169,7 +169,7 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.registProdStore = function(prodInfo) {
     $scope.setProdInfo(prodInfo);
     $scope.prodStoreRegistLayer.show(true, function (s) {
-      $scope.searchProdList();
+      $scope._pageView('prodCtrl', 1);
     });
   };
 

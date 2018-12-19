@@ -23,7 +23,7 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.searchRegStore();
     // 등록상품 조회 후, 미등록상품 조회
     var noRegStoreGrid = agrid.getScope("noRegStoreCtrl");
-    noRegStoreGrid.searchNoRegStore();
+    noRegStoreGrid._pageView('noRegStoreCtrl', 1);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
@@ -84,7 +84,7 @@ app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
 
     var prodScope     = agrid.getScope("prodCtrl");
     var params        = {};
-    
+
     params.listScale  = 10;
     params.prodCd     = prodScope.getProdInfo().prodCd;
     params.storeRegFg = "N";
