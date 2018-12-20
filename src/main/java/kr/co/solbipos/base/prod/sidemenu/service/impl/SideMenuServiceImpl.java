@@ -301,7 +301,6 @@ public class SideMenuServiceImpl implements SideMenuService {
                 result = sideMenuMapper.insertMenuProdList(sideMenuSelProdVO);
                 if(result == 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-
                 // 수정
             } else if ( sideMenuSelProdVO.getStatus() == GridDataFg.UPDATE ) {
                 result = sideMenuMapper.updateMenuProdList(sideMenuSelProdVO);

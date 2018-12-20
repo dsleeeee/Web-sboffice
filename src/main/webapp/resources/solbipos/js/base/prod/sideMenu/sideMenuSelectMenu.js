@@ -375,20 +375,48 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
   $scope.addRow = function() {
     $scope.selectProdView(true);
   };
+
+  // 선택상품 그리드 행 삭제
+  $scope.deleteRow = function() {
+    for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
+      var item = $scope.flex.collectionView.items[i];
+      if(item.gChk){
+        $scope.flex.collectionView.removeAt(i);
+      }
+    }
+  };
+
   // 저장
   $scope.save = function() {
 
     $scope.flex.collectionView.commitEdit();
 
+    // 파라미터 설정
+    var params = [];
+
+    for (var d = 0; d < $scope.flex.collectionView.itemsRemoved.length; d++) {
+      $scope.flex.collectionView.itemsRemoved[d].status = 'D';
+      params.push($scope.flex.collectionView.itemsRemoved[d]);
+    }
+
     // dispSeq 재설정
+    var editItems = [];
     for (var s = 0; s < $scope.flex.collectionView.itemCount; s++) {
-      $scope.flex.collectionView.editItem($scope.flex.collectionView.items[s]);
-      $scope.flex.collectionView.items[s].dispSeq = (s + 1);
+      if( isEmptyObject($scope.flex.collectionView.items[s].status)) {
+        editItems.push($scope.flex.collectionView.items[s]);
+      }
+    }
+
+    console.log('editItems',editItems)
+
+    for (var s = 0; s < editItems.length; s++) {
+      editItems[s].dispSeq = (s + 1);
+      $scope.flex.collectionView.editItem(editItems[s]);
       $scope.flex.collectionView.commitEdit();
     }
 
-    // 파라미터 설정
-    var params = [];
+    console.log('$scope.flex.collectionView.itemsEdited',$scope.flex.collectionView.itemsEdited);
+
     for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
       $scope.flex.collectionView.itemsEdited[u].status = 'U';
       params.push($scope.flex.collectionView.itemsEdited[u]);
@@ -397,19 +425,17 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
       $scope.flex.collectionView.itemsAdded[i].status = 'I';
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
-    for (var d = 0; d < $scope.flex.collectionView.itemsRemoved.length; d++) {
-      $scope.flex.collectionView.itemsRemoved[d].status = 'D';
-      params.push($scope.flex.collectionView.itemsRemoved[d]);
-    }
 
     for (var m = 0; m < params.length; m++) {
-      if(  params[m].addProdQty === null  || params[m].addProdQty === '' || params[m].addProdQty === 0 ) {
-        $scope._popMsg("상품 수량을 한 개 이상 입력해주세요.");
-        return false;
+      if(params[m].status !== 'D') {
+        if(  params[m].addProdQty === null  || params[m].addProdQty === '' || params[m].addProdQty === 0 ) {
+          $scope._popMsg("상품 수량을 한 개 이상 입력해주세요.");
+          return false;
+        }
       }
     }
 
-    // console.log('params', params)
+    console.log('params',params);
 
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._save('/base/prod/sideMenu/menuProd/save.sb', params, function() {

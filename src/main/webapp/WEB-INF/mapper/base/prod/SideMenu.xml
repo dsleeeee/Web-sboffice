@@ -920,61 +920,87 @@
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                INSERT INTO TB_HQ_PRODUCT_SDSEL_PROD
-                (
-                    HQ_OFFICE_CD,
-                    SDSEL_CLASS_CD,
-                    PROD_CD,
-                    ADD_PROD_UPRC,
-                    ADD_PROD_QTY,
-                    DISP_SEQ,
-                    USE_YN,
-                    REG_DT,
-                    REG_ID,
-                    MOD_DT,
-                    MOD_ID
-                ) VALUES (
-                    #{hqOfficeCd},
-                    #{sdselClassCd},
-                    #{prodCd},
-                    #{addProdUprc},
-                    #{addProdQty},
-                    #{dispSeq},
-                    'Y',
-                    #{regDt},
-                    #{regId},
-                    #{modDt},
-                    #{modId}
-                )
+                MERGE INTO TB_HQ_PRODUCT_SDSEL_PROD thpsp
+                USING DUAL
+                   ON (
+                thpsp.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND thpsp.SDSEL_CLASS_CD = #{sdselClassCd}
+                AND thpsp.PROD_CD = #{prodCd}
+                      )
+                WHEN MATCHED THEN
+                     UPDATE
+                        SET thpsp.USE_YN = 'Y',
+                            thpsp.MOD_DT = #{modDt},
+                            thpsp.MOD_ID = #{modId}
+                WHEN NOT MATCHED THEN
+                     INSERT
+                     (
+                         HQ_OFFICE_CD,
+                         SDSEL_CLASS_CD,
+                         PROD_CD,
+                         ADD_PROD_UPRC,
+                         ADD_PROD_QTY,
+                         DISP_SEQ,
+                         USE_YN,
+                         REG_DT,
+                         REG_ID,
+                         MOD_DT,
+                         MOD_ID
+                     ) VALUES (
+                         #{hqOfficeCd},
+                         #{sdselClassCd},
+                         #{prodCd},
+                         #{addProdUprc},
+                         #{addProdQty},
+                         (SELECT NVL(MAX(DISP_SEQ), 0) +1 FROM TB_HQ_PRODUCT_SDSEL_PROD WHERE HQ_OFFICE_CD =  #{hqOfficeCd} AND SDSEL_CLASS_CD = #{sdselClassCd} AND USE_YN='Y'), -- 임시수정
+                         'Y',
+                         #{regDt},
+                         #{regId},
+                         #{modDt},
+                         #{modId}
+                     )
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                INSERT INTO TB_MS_PRODUCT_SDSEL_PROD
-                (
-                    STORE_CD,
-                    SDSEL_CLASS_CD,
-                    PROD_CD,
-                    ADD_PROD_UPRC,
-                    ADD_PROD_QTY,
-                    DISP_SEQ,
-                    USE_YN,
-                    REG_DT,
-                    REG_ID,
-                    MOD_DT,
-                    MOD_ID
-                ) VALUES (
-                    #{storeCd},
-                    #{sdselClassCd},
-                    #{prodCd},
-                    #{addProdUprc},
-                    #{addProdQty},
-                    #{dispSeq},
-                    'Y',
-                    #{regDt},
-                    #{regId},
-                    #{modDt},
-                    #{modId}
-                )
+                MERGE INTO TB_MS_PRODUCT_SDSEL_PROD tmpsp
+                USING DUAL
+                  ON (
+                      tmpsp.STORE_CD = #{storeCd}
+                      AND tmpsp.SDSEL_CLASS_CD = #{sdselClassCd}
+                      AND tmpsp.PROD_CD = #{prodCd}
+                  )
+                WHEN MATCHED THEN
+                     UPDATE
+                     SET tmpsp.USE_YN = 'Y',
+                         tmpsp.MOD_DT = #{modDt},
+                         tmpsp.MOD_ID = #{modId}
+                WHEN NOT MATCHED THEN
+                     INSERT
+                     (
+                         STORE_CD,
+                         SDSEL_CLASS_CD,
+                         PROD_CD,
+                         ADD_PROD_UPRC,
+                         ADD_PROD_QTY,
+                         DISP_SEQ,
+                         USE_YN,
+                         REG_DT,
+                         REG_ID,
+                         MOD_DT,
+                         MOD_ID
+                     ) VALUES (
+                         #{storeCd},
+                         #{sdselClassCd},
+                         #{prodCd},
+                         #{addProdUprc},
+                         #{addProdQty},
+                         (SELECT NVL(MAX(DISP_SEQ), 0) +1 FROM TB_MS_PRODUCT_SDSEL_PROD WHERE STORE_CD =  #{storeCd} AND SDSEL_CLASS_CD = #{sdselClassCd} AND USE_YN='Y'), -- 임시수정
+                         'Y',
+                         #{regDt},
+                         #{regId},
+                         #{modDt},
+                         #{modId}
+                     )
             </when>
         </choose>
     </insert>
@@ -992,8 +1018,6 @@
             <when test='orgnFg != null and orgnFg == "H"'>
                 UPDATE TB_HQ_PRODUCT_SDSEL_PROD
                 SET
-                    SDSEL_CLASS_CD = #{sdselClassCd},
-                    PROD_CD = #{prodCd},
                     ADD_PROD_UPRC = #{addProdUprc},
                     ADD_PROD_QTY = #{addProdQty},
                     DISP_SEQ = #{dispSeq},
@@ -1007,8 +1031,6 @@
             <when test='orgnFg != null and orgnFg == "S"'>
                 UPDATE TB_MS_PRODUCT_SDSEL_PROD
                 SET
-                    SDSEL_CLASS_CD = #{sdselClassCd},
-                    PROD_CD = #{prodCd},
                     ADD_PROD_UPRC = #{addProdUprc},
                     ADD_PROD_QTY = #{addProdQty},
                     DISP_SEQ = #{dispSeq},
@@ -1040,6 +1062,7 @@
                 WHERE
                     HQ_OFFICE_CD = #{hqOfficeCd}
                     AND SDSEL_CLASS_CD = #{sdselClassCd}
+                    AND PROD_CD = #{prodCd}
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -1051,6 +1074,7 @@
                 WHERE
                     STORE_CD = #{storeCd}
                     AND SDSEL_CLASS_CD = #{sdselClassCd}
+                    AND PROD_CD = #{prodCd}
             </when>
         </choose>
     </update>

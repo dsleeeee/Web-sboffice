@@ -102,7 +102,7 @@
           <button class="btn_skyblue" id="btnAddSelProd" style="display: none;" ng-click="addRow()">
             <s:message code="cmm.add" />
           </button>
-          <button class="btn_skyblue" id="btnDelSelProd" style="display: none;">
+          <button class="btn_skyblue" id="btnDelSelProd" style="display: none;" ng-click="deleteRow()">
             <s:message code="cmm.delete" />
           </button>
           <button class="btn_skyblue" id="btnSaveSelProd" style="display: none;" ng-click="save()">
