@@ -441,12 +441,9 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
 
     // 파라미터 설정
     var params = [];
-
     var totalCnt = $scope.flex.collectionView.itemCount;
-    var delCnt = 0;
 
     for (var d = 0; d < $scope.flex.collectionView.itemsRemoved.length; d++) {
-      delCnt ++;
       $scope.flex.collectionView.itemsRemoved[d].status = 'D';
       params.push($scope.flex.collectionView.itemsRemoved[d]);
     }
