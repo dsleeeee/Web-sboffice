@@ -2,8 +2,8 @@ package kr.co.solbipos.application.pos.exceptForward.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.pos.exceptForward.service.ExcpForwardProductVO;
-import kr.co.solbipos.application.pos.service.MemberVO;
-import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.prod.info.service.ProductClassVO;
+import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -28,6 +28,9 @@ import java.util.List;
 @Repository
 public interface ExceptForwardMapper {
 
+    /** 예외출고용 상품 분류 조회 */
+    List<ProductClassVO> getProdClassTree(ProdVO prodVO);
+
     /** 예외출고 대상상품 목록 조회 */
     List<DefaultMap<String>> getExcpForwardProduct(ExcpForwardProductVO productVO);
 
@@ -36,6 +39,7 @@ public interface ExceptForwardMapper {
 
     /** 예외출고 저장 */
     int saveExcpForwardProduct(ExcpForwardProductVO productVO);
+
 
 
 }

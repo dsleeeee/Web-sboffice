@@ -29,19 +29,18 @@ app.controller('registCtrl', ['$scope', '$http', function ($scope, $http) {
 
   $scope.$on("registCtrl", function(event, data) {
     $scope.$apply(function() {
-      console.log('data', data);
       $scope.prod = data;
-      $scope.prod.qtIo = (data.inQty - data.totSaleQty ); // 입고량 - 판매수량
-      $scope.prod.prevQtIo = data.qtIo; // 이전 예외출고 수량
+      if(!isEmptyObject($scope.prod) ) {
+        $scope.prod.qtIo = (data.inQty - data.totSaleQty ); // 입고량 - 판매수량
+        $scope.prod.prevQtIo = data.qtIo; // 이전 예외출고 수량
+      }
     });
     event.preventDefault();
   });
 
   // 예외출고 수량 저장
   $scope.save = function(){
-
-    console.log('PARAM', $scope.prod);
-
+    // console.log('prod', $scope.prod);
     if($scope.prod.prevQtIo > 0) {
       $scope._popConfirm("이미 등록된 예외출고가 있습니다.<br>지금 등록하시면 먼저 등록한 예외출고가 삭제됩니다. <br>진행하시겠습니까? ", function(){
         $scope.excpForward();

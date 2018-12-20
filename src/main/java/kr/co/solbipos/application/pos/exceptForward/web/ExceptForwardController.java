@@ -12,6 +12,8 @@ import kr.co.solbipos.application.pos.exceptForward.service.ExceptForwardService
 import kr.co.solbipos.application.pos.exceptForward.service.ExcpForwardProductVO;
 import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.prod.info.service.ProductClassVO;
+import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 import static kr.co.common.utils.HttpUtils.getClientIp;
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
@@ -135,6 +138,29 @@ public class ExceptForwardController {
         }
 
         return returnUrl;
+    }
+
+    /**
+     * 예외출고용 상품 분류 트리 조회
+     *
+     * @param prodVO ProdVO
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param model Model
+     * @return
+     * @author 노현수
+     * @since 2018.11.12
+     */
+    @RequestMapping(value = "excpForward/getProdClassTree.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdClassTree(ProdVO prodVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<ProductClassVO> result = exceptForwardService.getProdClassTree(prodVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
     }
 
     /**

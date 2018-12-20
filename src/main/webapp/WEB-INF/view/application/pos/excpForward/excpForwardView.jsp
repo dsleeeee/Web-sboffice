@@ -26,27 +26,21 @@
 
       <table class="searchTbl">
         <colgroup>
-          <col class="w15" />
-          <col class="w35" />
-          <col class="w15" />
-          <col class="w35" />
+          <col class="w45" />
+          <col class="w55" />
         </colgroup>
         <tbody>
         <tr>
-          <%-- 상품코드 --%>
-          <th><s:message code="application.pos.excpForward.prodCd" /></th>
+          <%-- 분류 --%>
+          <th><s:message code="application.pos.excpForward.prodClass" /></th>
           <td>
-            <input type="text" id="srchProdCd" class="sb-input w100" ng-model="prodCd" maxlength="10"/>
-          </td>
-          <%-- 상품명 --%>
-          <th><s:message code="application.pos.excpForward.prodNm" /></th>
-          <td>
-            <input type="text" id="srchProdNm" class="sb-input w100" ng-model="prodNm" maxlength="10"/>
+            <input type="text" id="srchProdClassNm" class="sb-input w100"  ng-model="prodClassNm" ng-click="popUpProdClass()"
+                   placeholder="<s:message code="application.pos.excpForward.prodClass" /> 선택" readonly/>
+            <input type="hidden" id="srchProdClasscd" class="sb-input w100"  ng-model="prodClassCd" disabled/>
           </td>
         </tr>
         </tbody>
       </table>
-
 
       <%-- 예외출고 상품 목록 --%>
       <div class="mb40" >
@@ -66,13 +60,13 @@
               <wj-flex-grid-column header="<s:message code="application.pos.excpForward.saleDate"/>" binding="saleDate" align="center" width="*" is-read-only="true" visible="false"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="application.pos.excpForward.storeCd"/>" binding="storeCd" align="center" width="*" is-read-only="true" visible="false"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="application.pos.excpForward.prodClassCd"/>" binding="prodClassCd" align="center" width="100" is-read-only="true" visible="false"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="application.pos.excpForward.prodClassNm"/>" binding="prodClassNm" width="200" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="application.pos.excpForward.prodClassNm"/>" binding="prodClassNm" width="200" is-read-only="true" visible="false"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="application.pos.excpForward.prodCd"/>" binding="prodCd" align="center" width="120" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="application.pos.excpForward.prodNm"/>" binding="prodNm" width="*" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="application.pos.excpForward.inQty"/>" binding="inQty" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="application.pos.excpForward.totSaleQty"/>" binding="totSaleQty" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="application.pos.excpForward.qtIo"/>" binding="qtIo" align="center" width="80" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="application.pos.excpForward.stockQty"/>" binding="stockQty" align="center" width="70" is-read-only="true" visible="false" ></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="application.pos.excpForward.stockQty"/>" binding="stockQty" align="center" width="90" is-read-only="true" visible="false" ></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="application.pos.excpForward.regist"/>" binding="regist" align="center" width="90" is-read-only="true"></wj-flex-grid-column>
           </wj-flex-grid>
         </div>
@@ -90,6 +84,11 @@
   </div>
   <script type="text/javascript" src="/resource/solbipos/js/application/pos/excpForward/excpForward.js?ver=20181218.01" charset="utf-8"></script></div>
 </body>
+
+<%-- 상품분류 조회 팝업 --%>
+<c:import url="/WEB-INF/view/application/pos/excpForward/searchExcpProdClassCd.jsp">
+</c:import>
+
 
 <%-- 예외출고 수량 등록 팝업 --%>
 <c:import url="/WEB-INF/view/application/pos/excpForward/excpForwradRegist.jsp">

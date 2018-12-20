@@ -12,6 +12,37 @@
 
 <mapper namespace="kr.co.solbipos.application.pos.exceptForward.service.impl.ExceptForwardMapper">
 
+    <!-- 상품 분류 조회  -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_CLASS, TB_NEOE_SPOS_CLS
+        PARAM    : prodVO
+        COMMENTS : 조회용 상품분류 조회
+    -->
+    <select id="getProdClassTree" parameterType="prodVO" resultType="DefaultMap">
+        /* USE : ExceptForwardMapper.getProdClassTree */
+        SELECT tmpc.P_PROD_CLASS_CD,
+               tmpc.PROD_CLASS_CD,
+               tmpc.PROD_CLASS_NM
+          FROM TB_MS_PRODUCT_CLASS tmpc,
+               (
+               SELECT tmpc.STORE_CD,
+                      tmpc.PROD_CLASS_CD
+                 FROM TB_MS_PRODUCT_CLASS tmpc,
+                      TB_NEOE_SPOS_CLS tnsc
+                WHERE tnsc.PROD_CLASS_CD = tmpc.PROD_CLASS_CD
+                  AND tmpc.STORE_CD = #{storeCd}
+               ) tmp
+         WHERE tmpc.STORE_CD = #{storeCd}
+           AND tmp.STORE_CD = tmpc.STORE_CD
+         START WITH tmpc.PROD_CLASS_CD = tmp.PROD_CLASS_CD
+       CONNECT BY tmpc.PROD_CLASS_CD = PRIOR tmpc.P_PROD_CLASS_CD
+           AND tmpc.STORE_CD = #{storeCd}
+           AND tmpc.P_PROD_CLASS_CD IS NOT NULL
+         GROUP BY tmpc.P_PROD_CLASS_CD, tmpc.PROD_CLASS_CD, tmpc.PROD_CLASS_NM
+        HAVING tmpc.PROD_CLASS_CD != '00000'
+         ORDER BY P_PROD_CLASS_CD, PROD_CLASS_CD
+    </select>
+
     <!-- 예외출고 대상상품 목록 조회 -->
     <!--
         TABLE    : TB_NEOE_STOCK_PROD, TB_NEOE_SPOS_GR, TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS
@@ -59,12 +90,17 @@
            AND tnsp.STORE_CD = #{storeCd}
            AND tnsp.SALE_DATE = #{saleDate}
            AND tnsp.SOLD_OUT_YN = 'N'
-         <if test="prodCd != null and prodCd != ''">
-           AND tnsp.PROD_CD = #{prodCd}
-         </if>
-         <if test="prodNm != null and prodNm != ''">
-           AND tmp.PROD_NM = #{prodNm}
-         </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+           AND tmp.PROD_CLASS_CD IN  ( SELECT #{prodClassCd} AS PROD_CLASS_CD
+                                         FROM DUAL
+                                        UNION
+                                       SELECT tmpc.PROD_CLASS_CD
+                                         FROM TB_MS_PRODUCT_CLASS tmpc
+                                        WHERE tmpc.STORE_CD = #{storeCd}
+                                        START WITH tmpc.P_PROD_CLASS_CD = #{prodClassCd}
+                                      CONNECT BY  tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD
+                                      )
+        </if>
            AND tsdp.STORE_CD (+)= tnsp.STORE_CD
            AND tsdp.PROD_CD (+)= tnsp.PROD_CD
            AND tnse.CD_COMPANY (+)= tnsp.CD_COMPANY

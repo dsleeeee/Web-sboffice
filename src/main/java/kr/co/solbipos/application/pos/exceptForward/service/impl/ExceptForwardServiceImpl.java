@@ -10,6 +10,8 @@ import kr.co.solbipos.application.pos.exceptForward.service.ExcpForwardProductVO
 import kr.co.solbipos.application.pos.exceptForward.service.enums.StatusFg;
 import kr.co.solbipos.application.pos.exceptForward.service.enums.TpioFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.prod.info.service.ProductClassVO;
+import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +54,20 @@ public class ExceptForwardServiceImpl implements ExceptForwardService{
     public ExceptForwardServiceImpl(MessageService messageService, ExceptForwardMapper exceptForwardMapper) {
         this.messageService = messageService;
         this.exceptForwardMapper = exceptForwardMapper;
+    }
+
+    /** 예외출고용 상품 분류 */
+    @Override
+    public List<ProductClassVO> getProdClassTree(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+
+        // 소속구분 설정
+        String orgnFg = sessionInfoVO.getOrgnFg().getCode();
+
+        prodVO.setOrgnFg(orgnFg);
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        return exceptForwardMapper.getProdClassTree(prodVO);
     }
 
     /** 예외출고 대상상품 목록 조회*/

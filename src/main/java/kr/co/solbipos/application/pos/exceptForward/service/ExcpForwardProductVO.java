@@ -85,6 +85,12 @@ public class ExcpForwardProductVO extends PageVO {
     /** POS메뉴명 */
     private String nmItem;
 
+    /** 상품분류코드 */
+    private String prodClassCd;
+
+    /** 상품분류코드 */
+    private String prodClassNm;
+
     /** 상품코드 */
     private String prodCd;
 
@@ -444,6 +450,37 @@ public class ExcpForwardProductVO extends PageVO {
      */
     public void setNmItem(String nmItem) {
         this.nmItem = nmItem;
+    }
+
+
+    /**
+     * @return the prodClassCd
+     */
+
+    public String getProdClassCd() {
+        return prodClassCd;
+    }
+
+    /**
+     * @param prodClassCd the prodClassCd to set
+     */
+    public void setProdClassCd(String prodClassCd) {
+        this.prodClassCd = prodClassCd;
+    }
+
+    /**
+     * @return the prodClassNm
+     */
+
+    public String getProdClassNm() {
+        return prodClassNm;
+    }
+
+    /**
+     * @param prodClassNm the prodClassNm to set
+     */
+    public void setProdClassNm(String prodClassNm) {
+        this.prodClassNm = prodClassNm;
     }
 
     /**

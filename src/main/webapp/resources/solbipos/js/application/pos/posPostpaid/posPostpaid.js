@@ -27,7 +27,7 @@ app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-    $scope.searchPostPaidList();
+    // $scope.searchPostPaidList();
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
       if (e.panel == s.cells) {

@@ -29,7 +29,7 @@
                NVL(tmmpb.POSTPAID_IN_AMT, 0) AS POSTPAID_IN_AMT,
                NVL(tmmpb.POSTPAID_BAL_AMT, 0) AS POSTPAID_BAL_AMT,
                NVL(tmmtb.REQUEST_AMT, 0) AS REQUEST_AMT,
-               CASE WHEN tmmpb.POSTPAID_AMT - (tmmpb.POSTPAID_IN_AMT + tmmpb.POSTPAID_BAL_AMT + tmmtb.REQUEST_AMT) = 0 THEN '발행요청'
+               CASE WHEN NVL(tmmpb.POSTPAID_AMT, 0)- (NVL(tmmpb.POSTPAID_IN_AMT, 0)+ NVL(tmmpb.POSTPAID_BAL_AMT, 0)+ NVL(tmmtb.REQUEST_AMT, 0) ) > 0 THEN '발행요청'
                ELSE '요청 불가능'
                END AS DEPOSIT,
                TO_CHAR(to_date(tmmpb.REG_DT, 'yyyyMMddhh24miss'), 'yyyy-MM-dd hh24:mi:ss') AS REG_DT ,
@@ -47,6 +47,12 @@
            AND tmm.MEMBR_NO = tmmpb.MEMBR_NO
            AND tms.HQ_OFFICE_CD = tmmpb.HQ_OFFICE_CD
            AND tms.STORE_CD = tmmpb.STORE_CD
+      <if test='membrNo != null and membrNo.toString() != ""'>
+           AND tmm.MEMBR_NO = #{membrNo}
+      </if>
+      <if test='membrNm != null and membrNm.toString() != ""'>
+           AND tmm.MEMBR_NM = #{membrNm}
+      </if>
            AND tmmtb.MEMBR_ORGN_CD (+)= tmmpb.HQ_OFFICE_CD
            AND tmmtb.MEMBR_NO (+)= tmmpb.MEMBR_NO
          ORDER BY tmmpb.MOD_DT DESC, tmmpb.MEMBR_NO ASC

@@ -53,7 +53,6 @@ app.controller('productCtrl', ['$scope', '$http', function ($scope, $http) {
         var item = s.rows[ht.row].dataItem;
         $scope.setProd(s.rows[ht.row].dataItem);
         if ( col.binding === "regist" && item.stockQty > 0) {
-
           var popup = $scope.excpForwardRegistLayer;
           popup.show(true, function (s) {
             $scope.searchProduct();
@@ -75,9 +74,29 @@ app.controller('productCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._inquiryMain("/application/pos/excpForward/excpForward/getExcpForwardProduct.sb", params, function() {}, false);
   };
 
+  // 상품분류정보 팝업
+  $scope.popUpProdClass = function() {
+    $scope.excpProdClassPopUpLayer.show(true, function(s){
+      // 선택 버튼 눌렀을때만
+      if (s.dialogResult === "wj-hide-apply") {
+        var scope = agrid.getScope('excpProdClassPopUpCtrl');
+        $scope.$apply(function() {
+          $scope.prodClassCd = scope.getSelectedClass().prodClassCd;
+          $scope.prodClassNm = scope.getSelectedClass().prodClassNm;
+        });
+      }
+    });
+  };
 
   // 화면 ready 된 후 설정
   angular.element(document).ready(function () {
+    // 분류 조회 팝업 핸들러 추가
+    $scope.excpProdClassPopUpLayer.shown.addHandler(function (s) {
+      setTimeout(function() {
+        $scope._broadcast('registCtrl', $scope.getProd());
+      }, 50)
+    });
+
     // 세금계산서 목록 팝업 핸들러 추가
     $scope.excpForwardRegistLayer.shown.addHandler(function (s) {
       setTimeout(function() {
