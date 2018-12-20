@@ -90,4 +90,9 @@ public interface SideMenuMapper {
     /** 사이드메뉴-선택메뉴탭-선택상품 삭제 */
     int deleteMenuProdList(SideMenuSelProdVO sideMenuSelProdVO);
 
+    /** 사이드메뉴-선택메뉴탭- 선택상품 삭제시 선택분류에 해당하는 상품 개수 체크 */
+    int getSideMenuSelClassProdCnt(SideMenuSelClassVO sideMenuSelClassVO);
+
+    /** 사이드메뉴-선택메뉴탭- 선택분류 삭제시 선택그룹에 해당하는 분류 개수 체크 */
+    int getSideMenuSelGrpClassCnt(SideMenuSelGroupVO sideMenuSelGroupVO);
 }
