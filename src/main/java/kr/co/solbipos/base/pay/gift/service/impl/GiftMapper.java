@@ -42,11 +42,20 @@ public interface GiftMapper {
     /** 본사 상품권 분류 등록 */
     int insertHqGiftClass(PayMethodClassVO payMethodClassVO);
 
+    /** 본사 분류 등록시 매장 분류에도 적용 */
+    String insertHqGiftClassToStoreGiftClass(PayMethodClassVO payMethodClassVO);
+
     /** 본사 상품권 분류 수정 */
     int updateHqGiftClass(PayMethodClassVO payMethodClassVO);
 
+    /** 본사 분류 수정시 매장 분류에도 적용 */
+    String updateHqGiftClassToStoreGiftClass(PayMethodClassVO payMethodClassVO);
+
     /** 본사 상품권 분류 삭제 */
     int deleteHqGiftClass(PayMethodClassVO payMethodClassVO);
+
+    /** 본사 분류 삭제시 매장 분류에도 적용 */
+    String deleteHqGiftClassToStoreGiftClass(PayMethodClassVO payMethodClassVO);
 
     /** 매장 상품권 분류 등록 */
     int insertStoreGiftClass(PayMethodClassVO payMethodClassVO);
@@ -69,11 +78,20 @@ public interface GiftMapper {
     /** 본사 상품권 등록 */
     int insertHqGift(GiftVO GiftVO);
 
+    /** 본사 상품권 등록시 매장에도 등록 */
+    String insertHqGiftToStoreGift(GiftVO giftVO);
+
     /** 본사 상품권 수정 */
     int updateHqGift(GiftVO GiftVO);
 
+    /** 본사 상품권 수정시 매장에도 수정 */
+    String updateHqGiftToStoreGift(GiftVO giftVO);
+
     /** 본사 상품권 삭제 */
     int deleteHqGift(GiftVO GiftVO);
+
+    /** 본사 상품권 삭제시 매장에도 삭제 */
+    String deleteHqGiftToStoreGift(GiftVO giftVO);
 
     /** 매장 상품권 등록 */
     int insertStoreGift(GiftVO GiftVO);

@@ -31,12 +31,13 @@
       </table>
       <%-- 조회 --%>
       <div class="mt10 tr">
-        <button class="btn_skyblue" id="btnSearch" ng-click="_broadcast('regStoreCtrl')" ><s:message code="cmm.search" /></button>
+        <button class="btn_skyblue" id="btnSearch" ng-click="_pageView('regStoreCtrl', 1)" ><s:message code="cmm.search" /></button>
       </div>
+
+      <%--- 적용매장 그리드 --%>
       <div class="oh mt20">
-        <%--- 적용매장 그리드 --%>
-        <div class="w50 fl">
-          <div class="wj-TblWrap mr10" style="height:395px; overflow-y:hidden;" ng-controller="regStoreCtrl">
+        <div class="w50 fl" ng-controller="regStoreCtrl">
+          <div class="wj-TblWrap mr10" style="height:395px; overflow-y:hidden;">
             <div class="oh">
               <span class="fl bk lh20 s14"><s:message code="prod.regStore"/></span>
               <span class="fr"><a href="#" class="btn_grayS2" ng-click="delete()"><s:message code="cmm.del" /></a></span>
@@ -60,19 +61,19 @@
           </div>
 
           <%-- 페이지 리스트 --%>
-          <div class="pageNum mt20">
+          <div class="pageNum2 mt20">
             <%-- id --%>
             <ul id="regStoreCtrlPager" data-size="10">
             </ul>
           </div>
           <%--//페이지 리스트--%>
 
-
         </div>
 
         <%--- 미적용매장 그리드 --%>
-        <div class="w50 fr">
-          <div class="wj-TblWrap ml10" style="height:395px; overflow-y: hidden;" ng-controller="noRegStoreCtrl">
+        <div class="w50 fr" ng-controller="noRegStoreCtrl">
+
+          <div class="wj-TblWrap ml10" style="height:395px; overflow-y: hidden;" >
             <div class="oh">
               <span class="fl bk lh20 s14"><s:message code="prod.noRegStore"/></span>
               <span class="fr"><a href="#" class="btn_grayS2" ng-click="regist()" ><s:message code="prod.regist"/></a></span>
@@ -97,7 +98,7 @@
           </div>
 
           <%-- 페이지 리스트 --%>
-          <div class="pageNum mt20">
+          <div class="pageNum2 mt20">
             <%-- id --%>
             <ul id="noRegStoreCtrlPager" data-size="10">
             </ul>

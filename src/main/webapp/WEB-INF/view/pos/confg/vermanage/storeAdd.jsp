@@ -126,7 +126,7 @@
   var vanCd       = wcombo.genInput("#s_vanCd");  //TODO combobox로 바꿔야함
 
   var clsFg       = ${ccu.getCommCode("001")};
-  var sysStatFgCb = wcombo.genCommonBox("#s_sysStatFg", ${ccu.getCommCode("009")});
+  var sysStatFgCb = wcombo.genCommonBox("#s_sysStatFg", ${ccu.getCommCode("005")});
   var clsFgCb     = wcombo.genCommonBox("#s_clsFg", clsFg);
   var clsFgDataMap= new wijmo.grid.DataMap(clsFg, 'value', 'name');
 

@@ -232,22 +232,41 @@ public class SideMenuServiceImpl implements SideMenuService {
 
             // 추가
             if ( sideMenuSelClassVO.getStatus() == GridDataFg.INSERT ) {
-                result += sideMenuMapper.insertMenuClassList(sideMenuSelClassVO);
+                result = sideMenuMapper.insertMenuClassList(sideMenuSelClassVO);
+                if(result == 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
                 // 수정
             } else if ( sideMenuSelClassVO.getStatus() == GridDataFg.UPDATE ) {
-                result += sideMenuMapper.updateMenuClassList(sideMenuSelClassVO);
+                result = sideMenuMapper.updateMenuClassList(sideMenuSelClassVO);
+                if(result == 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
                 // 삭제
             } else if ( sideMenuSelClassVO.getStatus() == GridDataFg.DELETE ) {
-                result += sideMenuMapper.deleteMenuClassList(sideMenuSelClassVO);
+                result = sideMenuMapper.deleteMenuClassList(sideMenuSelClassVO);
+                if(result == 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
             }
-
         }
 
-        if ( result == sideMenuSelClassVOs.length) {
-            return result;
-        } else {
-            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-        }
+//        // 선택븐류 삭제 완료 후, 해당 선택그룹에 선택된 분류가 있는지 확인 후, 없으면 선택그룹 사용안함 처리.
+//        SideMenuSelGroupVO sideMenuSelGroupVO = new SideMenuSelGroupVO();
+//
+//        sideMenuSelGroupVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+//        sideMenuSelGroupVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+//        sideMenuSelGroupVO.setStoreCd(sessionInfoVO.getStoreCd());
+//        sideMenuSelGroupVO.setSdselGrpCd(sideMenuSelClassVOs[0].getSdselGrpCd());
+//
+//        sideMenuSelGroupVO.setRegDt(currentDt);
+//        sideMenuSelGroupVO.setRegId(sessionInfoVO.getUserId());
+//        sideMenuSelGroupVO.setModDt(currentDt);
+//        sideMenuSelGroupVO.setModId(sessionInfoVO.getUserId());
+//
+//        int isChk = sideMenuMapper.getSideMenuSelGrpClassCnt(sideMenuSelGroupVO);
+//
+//        if(isChk == 0) {
+//            result = sideMenuMapper.deleteMenuGrpList(sideMenuSelGroupVO);
+//            if(result == 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+//        }
+        return result;
     }
 
     /** 사이드메뉴-선택메뉴 - 선택할 상품 목록 조회 */
@@ -301,7 +320,6 @@ public class SideMenuServiceImpl implements SideMenuService {
                 result = sideMenuMapper.insertMenuProdList(sideMenuSelProdVO);
                 if(result == 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-
                 // 수정
             } else if ( sideMenuSelProdVO.getStatus() == GridDataFg.UPDATE ) {
                 result = sideMenuMapper.updateMenuProdList(sideMenuSelProdVO);
@@ -313,8 +331,28 @@ public class SideMenuServiceImpl implements SideMenuService {
                 if(result == 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
             }
-
         }
+
+//        // 선택상품 삭제 완료 후, 해당 선택분류에 선택된 상품 있는지 확인 후, 없으면 선택분류 사용안함 처리.
+//        SideMenuSelClassVO sideMenuSelClassVO = new SideMenuSelClassVO();
+//
+//        sideMenuSelClassVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+//        sideMenuSelClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+//        sideMenuSelClassVO.setStoreCd(sessionInfoVO.getStoreCd());
+//        sideMenuSelClassVO.setSdselGrpCd(sideMenuSelProdVOs[0].getSdselGrpCd());
+//        sideMenuSelClassVO.setSdselClassCd(sideMenuSelProdVOs[0].getSdselClassCd());
+//
+//        sideMenuSelClassVO.setRegDt(currentDt);
+//        sideMenuSelClassVO.setRegId(sessionInfoVO.getUserId());
+//        sideMenuSelClassVO.setModDt(currentDt);
+//        sideMenuSelClassVO.setModId(sessionInfoVO.getUserId());
+//
+//        int isChk = sideMenuMapper.getSideMenuSelClassProdCnt(sideMenuSelClassVO);
+//
+//        if(isChk == 0) {
+//            result = sideMenuMapper.deleteMenuClassList(sideMenuSelClassVO);
+//            if(result == 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+//        }
 
         return result;
     }

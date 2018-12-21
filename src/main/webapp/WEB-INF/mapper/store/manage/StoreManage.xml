@@ -103,8 +103,8 @@
                tms.VAN_CD,
                tcvc.VAN_NM,
                tms.SYS_STAT_FG,
-               TO_CHAR(TO_DATE(tms.SYS_OPEN_DATE, 'YYYYMMDD'), 'YYYY.MM.DD') AS SYS_OPEN_DATE,
-               TO_CHAR(TO_DATE(tms.SYS_CLOSURE_DATE, 'YYYYMMDD'), 'YYYY.MM.DD') AS SYS_CLOSURE_DATE,
+               TO_CHAR(TO_DATE(tms.SYS_OPEN_DATE, 'YYYYMMDD'), 'YYYY/MM/DD') AS SYS_OPEN_DATE,
+               TO_CHAR(TO_DATE(tms.SYS_CLOSURE_DATE, 'YYYYMMDD'), 'YYYY/MM/DD') AS SYS_CLOSURE_DATE,
                tms.CLS_FG,
                tms.REMARK,
                tms.SYS_REMARK,
@@ -1425,34 +1425,46 @@
     -->
     <insert id="insertPosConfig" parameterType="storePosEnvVO" >
         /* USE : StoreManageMapper.insertPosConfig */
-        INSERT INTO TB_MS_POS_ENVST
-        (
-            STORE_CD,
-            POS_NO,
-            ENVST_CD,
-            ENVST_VAL,
-            DIRCT_IN_YN,
-            POS_FG,
-            USE_YN,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID
-        )
-        VALUES
-        (
-            #{storeCd},
-            #{posNo},
-            #{envstCd},
-            #{envstVal},
-            #{dirctInYn},
-            #{posFg},
-            #{useYn},
-            #{regDt},
-            #{regId},
-            #{modDt},
-            #{modId}
-        )
+        MERGE INTO TB_MS_POS_ENVST tmpe
+                USING DUAL
+                ON (
+                    tmpe.STORE_CD = #{storeCd}
+                    AND tmpe.POS_NO = #{posNo}
+                    AND tmpe.ENVST_CD = #{envstCd}
+                )
+                WHEN MATCHED THEN
+                    UPDATE
+                    SET
+                        tmpe.ENVST_VAL = #{envstVal},
+                        tmpe.MOD_DT = #{modDt},
+                        tmpe.MOD_ID = #{modId}
+                WHEN NOT MATCHED THEN
+                    INSERT
+                    (
+                        STORE_CD,
+                        POS_NO,
+                        ENVST_CD,
+                        ENVST_VAL,
+                        DIRCT_IN_YN,
+                        POS_FG,
+                        USE_YN,
+                        REG_DT,
+                        REG_ID,
+                        MOD_DT,
+                        MOD_ID
+                    ) VALUES (
+                        #{storeCd},
+                        #{posNo},
+                        #{envstCd},
+                        #{envstVal},
+                        #{dirctInYn},
+                        #{posFg},
+                        #{useYn},
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId}
+                    )
     </insert>
 
     <!-- 매장 포스 환경 정보 수정 -->

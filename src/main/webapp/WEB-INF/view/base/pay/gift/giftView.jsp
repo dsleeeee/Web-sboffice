@@ -12,54 +12,60 @@
 
 <div class="subCon">
 
-  <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
-  </div>
-
-  <%-- 상품권분류등록 --%>
-  <div class="mb20 mt20" ng-controller="giftClassCtrl">
-    <div class="wj-TblWrapBr mr10 pd20" style="height:260px;">
-      <div class="updownSet oh mb10">
-        <span class="fl bk lh30"><s:message code='gift.regist.class' /></span>
-        <button class="btn_skyblue" id="btnClassAdd" ng-click="searchGiftClass()"><s:message code='cmm.search' /></button>
-        <button class="btn_skyblue" id="btnClassAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
-        <%--<button class="btn_skyblue" id="btnClassDel" ng-click="del()"><s:message code='cmm.del' /></button>--%>
-        <button class="btn_skyblue" id="btnClassSave" ng-click="save()"><s:message code='cmm.save' /></button>
+  <div ng-controller="giftClassCtrl">
+    <div class="searchBar flddUnfld">
+      <a href="#" class="open fl">${menuNm}</a>
+      <%-- 조회 --%>
+      <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+        <button class="btn_blue fr" id="btnSearch" ng-click="searchGiftClass()">
+          <s:message code="cmm.search" />
+        </button>
       </div>
-      <%-- 상품권분류등록 그리드 --%>
-      <div id="giftClassGrid" class="wj-gridWrap" style="height:190px; overflow-y: hidden;">
-        <wj-flex-grid
-                autoGenerateColumns="false"
-                control="flex"
-                initialized="initGrid(s,e)"
-                sticky-headers="true"
-                selection-mode="Row"
-                items-source="data"
-                item-formatter="_itemFormatter">
+    </div>
 
-          <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="gift.hqOfficeCd"/>" binding="hqOfficeCd" visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="gift.payTypeFg"/>" binding="payTypeFg" visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="gift.payClassCd"/>" binding="payClassCd" width="100" maxLength="3" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="gift.payClassNm"/>" binding="payClassNm" width="*" maxLength="20"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="gift.serNoYn"/>" binding="serNoYn" data-map="useYnDataMap" visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="cmm.useYn"/>" binding="useYn" width="100" data-map="useYnDataMap"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="cmm.regId"/>" binding="regId" visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="gift.giftCnt"/>" binding="giftCnt" visible="false"></wj-flex-grid-column>
-        </wj-flex-grid>
+    <%-- 상품권분류등록 --%>
+    <div class="mb20 mt20" >
+      <div class="wj-TblWrapBr mr10 pd20" style="height:260px;">
+        <div class="updownSet oh mb10">
+          <span class="fl bk lh30"><s:message code='gift.regist.class' /></span>
+          <button class="btn_skyblue" id="btnClassAdd"    ng-click="addRow()" ng-if="userUseYn"><s:message code='cmm.add' /></button>
+          <%--<button class="btn_skyblue" id="btnClassDel" ng-click="del()"><s:message code='cmm.del' /></button>--%>
+          <button class="btn_skyblue" id="btnClassSave"   ng-click="save()" ng-if="userUseYn"><s:message code='cmm.save' /></button>
+        </div>
+        <%-- 상품권분류등록 그리드 --%>
+        <div id="giftClassGrid" class="wj-gridWrap" style="height:190px; overflow-y: hidden;">
+          <wj-flex-grid
+                  autoGenerateColumns="false"
+                  control="flex"
+                  initialized="initGrid(s,e)"
+                  sticky-headers="true"
+                  selection-mode="Row"
+                  items-source="data"
+                  item-formatter="_itemFormatter">
+
+            <!-- define columns -->
+            <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="gift.hqOfficeCd"/>" binding="hqOfficeCd" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="gift.payTypeFg"/>" binding="payTypeFg" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="gift.payClassCd"/>" binding="payClassCd" width="100" maxLength="3" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="gift.payClassNm"/>" binding="payClassNm" width="*" maxLength="20"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="gift.serNoYn"/>" binding="serNoYn" data-map="useYnDataMap" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="cmm.useYn"/>" binding="useYn" width="100" data-map="useYnDataMap"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="cmm.regId"/>" binding="regId" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="gift.giftCnt"/>" binding="giftCnt" visible="false"></wj-flex-grid-column>
+          </wj-flex-grid>
+        </div>
       </div>
     </div>
   </div>
-
   <%-- 상품권등록  --%>
   <div class="mb40" ng-controller="giftCtrl">
     <div class="wj-TblWrapBr mr10 pd20" style="height:260px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='gift.regist.gift' /> <span id="giftSubTitle"></span> </span>
-        <button class="btn_skyblue" id="btnGiftAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
-        <button class="btn_skyblue" id="btnGiftDel" ng-click="del()"><s:message code='cmm.del' /></button>
-        <button class="btn_skyblue" id="btnGiftSave" ng-click="save()"><s:message code='cmm.save' /></button>
+        <button class="btn_skyblue" id="btnGiftAdd" ng-click="addRow()" ng-if="userUseYn"><s:message code='cmm.add' /></button>
+        <button class="btn_skyblue" id="btnGiftDel" ng-click="del()" ng-if="userUseYn"><s:message code='cmm.del' /></button>
+        <button class="btn_skyblue" id="btnGiftSave" ng-click="save()" ng-if="userUseYn"><s:message code='cmm.save' /></button>
       </div>
       <%-- 상품권등록 그리드 --%>
       <div id="giftGrid" class="wj-gridWrap" style="height:190px;overflow-y: hidden;">

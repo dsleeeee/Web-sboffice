@@ -4,28 +4,28 @@
 
   <comment>Solbipos Office Local Config Properties</comment>
 
-  <!-- =====================================--> 
-  <!--  MAIN Properties--> 
+  <!-- =====================================-->
+  <!--  MAIN Properties-->
   <!-- =====================================-->
   <entry key="profile">local</entry>
   <entry key="domain">http://neo.solbipos.com</entry>
   <entry key="encoding">UTF-8</entry>
   <entry key="welcome.url">/auth/login.sb</entry>
-  
-  <!-- =====================================--> 
-  <!--  JDBC Properties--> 
+
   <!-- =====================================-->
-  <entry key="jndi.main.jdbc.name">jdbc/oracle/sb</entry> 
+  <!--  JDBC Properties-->
+  <!-- =====================================-->
+  <entry key="jndi.main.jdbc.name">jdbc/oracle/sb</entry>
 
 
-  <!-- =====================================--> 
-  <!--  tiles Properties--> 
+  <!-- =====================================-->
+  <!--  tiles Properties-->
   <!-- =====================================-->
   <entry key="tiles.path">/WEB-INF/config/tiles-layout.xml</entry>
-  
-  
-  <!-- ====================================--> 
-  <!--  Redis Properties--> 
+
+
+  <!-- ====================================-->
+  <!--  Redis Properties-->
   <!-- ====================================-->
   <entry key="redis.hostName">192.168.0.160</entry>
   <entry key="redis.port">6379</entry>
@@ -39,10 +39,10 @@
   <entry key="redis.pool.maxTotal">30</entry>
   <entry key="redis.pool.minIdle">30</entry>
   <entry key="redis.pool.maxIdle">30</entry>
-  
-  
-  <!-- ====================================--> 
-  <!--  login Properties--> 
+
+
+  <!-- ====================================-->
+  <!--  login Properties-->
   <!-- ====================================-->
 <!--   패스워드 변경 유효기간 -->
   <entry key="login.pwd.chg.days">90</entry>
@@ -51,24 +51,35 @@
   <entry key="login.otp.size">4</entry>
   <entry key="login.fail.check.cnt">3</entry>
 
-  <!-- ====================================--> 
-  <!--  session Properties--> 
+  <!-- ====================================-->
+  <!--  session Properties-->
   <!-- ====================================-->
 <!--   세션 타임 타웃 분단위 -->
   <entry key="session.timeout.min">300</entry>
   <entry key="session.hist.menu.size">10</entry>
-  
-  
+
+
   <!-- 아래는 기존에 treepay 에서 쓰던것 -->
   <entry key="excel.font">돋움</entry>
   <entry key="excel.tempDir">/temp_excel</entry>
   <entry key="email.host">192.168.0.1</entry>
   <entry key="email.port">31901</entry>
-  
+
   <!-- 파일업로드 관련 -->
   <entry key="file.upload.dir">/FileRoot/</entry>
-  
+
   <!-- 공통 변수 저장소 명칭 관련 -->
   <entry key ="baseEnv.prop.env">env</entry>
-  
+
+  <!-- ====================================-->
+  <!--  NEOE Properties-->
+  <!-- ====================================-->
+  <!-- 회사정보 -->
+  <entry key="neoe.cdCompany">TEST01</entry>
+  <!-- 공장코드 -->
+  <entry key="neoe.cdPlant">1100</entry>
+  <!-- 수불유형 -->
+  <entry key="neoe.cdQtiotp">400</entry>
+
+
 </properties>

@@ -85,7 +85,7 @@
             <th><s:message code="prod.saleProdYn"/></th>
             <td>
               <wj-combo-box
-                ng-model="prodDetail.saleProdYnNm"
+                ng-model="prodDetail.saleProdYn"
                 ng-hide="true"
                 text="_saleProdYn"
                 items-source="_getComboData('saleProdYnComboData')"

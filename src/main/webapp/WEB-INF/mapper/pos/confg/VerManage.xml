@@ -253,10 +253,13 @@
        AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
     </if>
     <if test='hqOfficeNm != null and hqOfficeNm != ""'>
-       AND tho.HQ_OFFICE_NM = #{hqOfficeNm}
+       AND tho.HQ_OFFICE_NM LIKE '%'|| #{hqOfficeNm} ||'%'
+    </if>
+    <if test='storeCd != null and storeCd != ""'>
+      AND tms.STORE_CD LIKE '%'||  #{storeCd}||'%'
     </if>
     <if test='storeNm != null and storeNm != ""'>
-       AND tms.STORE_NM = #{storeNm}
+       AND tms.STORE_NM LIKE '%'|| #{storeNm} ||'%'
     </if>
     <if test='clsFg != null and clsFg != "" and clsFg.toString() != ""'>
        AND tms.CLS_FG = #{clsFg}

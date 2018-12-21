@@ -29,7 +29,7 @@
   </div>
 
   <div id="grid" class="w100">
-    <div class="wj-gridWrap mt10" style="height:315px; overflow-y: hidden;">
+    <div class="wj-gridWrap mt10" style="height:370px; overflow-y: hidden;">
       <div class="row">
         <wj-flex-grid
           autoGenerateColumns="false"
@@ -54,7 +54,7 @@
       </div>
     </div>
   </div>
-
+  <%-- todo 페이징 --%>
   <%--<div class="wj-TblWrapBr mt10" style="height: 400px;">--%>
     <%--<div class="wj-gridWrap" style="height:310px">--%>
       <%--<div id="theGrid" class="mt10">--%>

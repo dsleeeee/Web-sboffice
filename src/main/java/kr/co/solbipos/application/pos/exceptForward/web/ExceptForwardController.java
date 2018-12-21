@@ -6,11 +6,14 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.exception.AuthenticationException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.validate.Login;
 import kr.co.solbipos.application.pos.exceptForward.service.ExceptForwardService;
 import kr.co.solbipos.application.pos.exceptForward.service.ExcpForwardProductVO;
 import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.prod.info.service.ProductClassVO;
+import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,16 +21,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.util.List;
 
 import static kr.co.common.utils.HttpUtils.getClientIp;
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
@@ -137,6 +141,29 @@ public class ExceptForwardController {
     }
 
     /**
+     * 예외출고용 상품 분류 트리 조회
+     *
+     * @param prodVO ProdVO
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param model Model
+     * @return
+     * @author 노현수
+     * @since 2018.11.12
+     */
+    @RequestMapping(value = "excpForward/getProdClassTree.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdClassTree(ProdVO prodVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<ProductClassVO> result = exceptForwardService.getProdClassTree(prodVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
      * 예외출고 목록 조회
      * @param   productVO
      * @param   request
@@ -158,5 +185,25 @@ public class ExceptForwardController {
         return returnListJson(Status.OK, list, productVO);
     }
 
+    /**
+     * 예외출고 저장
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   productVO
+     * @return  String
+     * @author  김지은
+     * @since   2018. 12. 17.
+     */
+    @RequestMapping(value = "excpForward/saveExcpForwardProduct.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveExcpForwardProduct(@RequestBody ExcpForwardProductVO productVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
 
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = exceptForwardService.saveExcpForwardProduct(productVO, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
 }

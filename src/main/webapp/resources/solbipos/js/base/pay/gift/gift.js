@@ -20,6 +20,17 @@ var selectedGiftClass;
 app.controller('giftClassCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('giftClassCtrl', $scope, $http, true));
+
+  //상품권은 프랜차이즈의 경우 무조건 본사에서 등록, 매장은 조회만 가능
+  //         단독매장의 경우 무조건 매장에서 등록, 조회 가능
+  $scope.userUseYn = false;
+
+  if(gvHqOfficeCd === '00000') { // 단독매장
+    $scope.userUseYn = true;
+  } else { // 프랜차이즈는 본사만 추가 가능
+    if(gvStoreCd === '' ) $scope.userUseYn = true;
+  }
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // 그리드 DataMap 설정
@@ -48,7 +59,8 @@ app.controller('giftClassCtrl', ['$scope', '$http', function ($scope, $http) {
           if(selectedRow.status === "I") {
             e.cancel = false;
           } else if(selectedRow.useYn === "N") {
-            s_alert.pop(messages["gift.not.use.payClassCd"]);
+            $scope._popMsg(messages["gift.not.use.payClassCd"]);
+            // s_alert.pop(messages["gift.not.use.payClassCd"]);
             var giftGrid = agrid.getScope('giftCtrl');
             giftGrid.$apply(function(){
               giftGrid._gridDataInit();
@@ -153,6 +165,17 @@ app.controller('giftClassCtrl', ['$scope', '$http', function ($scope, $http) {
 app.controller('giftCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('giftCtrl', $scope, $http, false));
+
+  //상품권은 프랜차이즈의 경우 무조건 본사에서 등록, 매장은 조회만 가능
+  //         단독매장의 경우 무조건 매장에서 등록, 조회 가능
+  $scope.userUseYn = false;
+
+  if(gvHqOfficeCd === '00000') { // 단독매장
+    $scope.userUseYn = true;
+  } else { // 프랜차이즈는 본사만 추가 가능
+    if(gvStoreCd === '' ) $scope.userUseYn = true;
+  }
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // 그리드 DataMap 설정

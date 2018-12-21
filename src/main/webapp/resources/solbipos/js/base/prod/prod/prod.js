@@ -169,7 +169,15 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.registProdStore = function(prodInfo) {
     $scope.setProdInfo(prodInfo);
     $scope.prodStoreRegistLayer.show(true, function (s) {
-      $scope.searchProdList();
+      var regStoreGrid = agrid.getScope('regStoreCtrl');
+      regStoreGrid.$apply(function(){
+        regStoreGrid._gridDataInit();
+      });
+      var noRegStoreGrid = agrid.getScope('noRegStoreCtrl');
+      noRegStoreGrid.$apply(function(){
+        noRegStoreGrid._gridDataInit();
+      });
+      $scope._pageView('prodCtrl', 1);
     });
   };
 
@@ -236,11 +244,11 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
     });
     // 상품적용매장 등록 팝업 핸들러 추가
     $scope.prodStoreRegistLayer.shown.addHandler(function (s) {
-      setTimeout(function() {
-        $scope.$apply(function() {
-          $scope._broadcast('regStoreCtrl');
-        });
-      }, 50);
+      // setTimeout(function() {
+      //   $scope.$apply(function() {
+      //     $scope._broadcast('regStoreCtrl');
+      //   });
+      // }, 50);
     });
   });
 

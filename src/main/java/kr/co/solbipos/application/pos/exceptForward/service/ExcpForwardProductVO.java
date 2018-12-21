@@ -1,8 +1,9 @@
 package kr.co.solbipos.application.pos.exceptForward.service;
 
-import kr.co.solbipos.application.common.service.CmmVO;
+import kr.co.common.data.enums.UseYn;
 import kr.co.solbipos.application.common.service.PageVO;
-import org.springframework.data.domain.Page;
+import kr.co.solbipos.application.pos.exceptForward.service.enums.StatusFg;
+import kr.co.solbipos.application.pos.exceptForward.service.enums.TpioFg;
 
 /**
  * @Class Name : MsProductVO.java
@@ -21,72 +22,135 @@ import org.springframework.data.domain.Page;
  */
 public class ExcpForwardProductVO extends PageVO {
 
-    /** [매장코드] */
+    /** 영업일자 */
+    private String saleDate;
+
+    /** 매장코드 */
     private String storeCd;
-    /** [상품코드] */
-    private String prodCd;
-    /** [상품명] */
-    private String prodNm;
-    /** [상품분류코드] */
+
+    /** 입고수량 */
+    private Integer inQty;
+
+    /** 출고수량 (판매+기타출고_ */
+    private Integer outQty;
+
+    /** 현재수량 */
+    private Integer stockQty;
+
+    /** 예외출고 수량 */
+    private Integer forwardQty;
+
+    /** 품절여부 */
+    private UseYn soldOutYn;
+
+    /** 회사코드 */
+    private String cdCompany;
+
+    /** 출고번호 */
+    private String noEgr;
+
+    /** 출고항번 */
+    private String noErgline;
+
+    /** 입고번호 */
+    private String noIo;
+
+    /** 입고항번 */
+    private String noIoline;
+
+    /** 입고일자 */
+    private String dtIo;
+
+    /** 점포코드 */
+    private String cdPjt;
+
+    /** 거래처코드 */
+    private String cdPartner;
+
+    /** 공장코드 */
+    private String cdPlant;
+
+    /** 대분류 */
+    private String clsL;
+
+    /** 중분류 */
+    private String clsM;
+
+    /** 소분류 */
+    private String clsS;
+
+    /** 품목코드 */
+    private String cdItem;
+
+    /** POS메뉴명 */
+    private String nmItem;
+
+    /** 상품분류코드 */
     private String prodClassCd;
-    /** [코너코드] */
-    private String cornrCd;
-    /** [원산지코드] */
-    private String orgplceCd;
-    /** [사이드속성분류코드] */
-    private String sdattrClassCd;
-    /** [사이드선택그룹코드] */
-    private String sdselGrpCd;
-    /** [포인트적립여부] */
-    private String pointSaveYn;
-    /** [상품할인구분] 첫번째:일반, 두번째:쿠폰, 세번째:회원, 네번째:제휴, 다섯:현장 */
-    private String prodDcFg;
-    /** [부가세구분] TB_CM_NMCODE(NMCODE_GRP_CD='039') */
-    private String vatFg;
-    /** [상품봉사료여부] Y:봉사료포함 N:봉사료미포함 */
-    private String prodTipYn;
-    /** [상품포장금액] */
-    private Integer prodPackAmt;
-    /** [상품배달금액] */
-    private Integer prodDlvrAmt;
-    /** [상품유형구분] TB_CM_NMCODE(NMCODE_GRP_CD='008') */
-    private String prodTypeFg;
-    /** [판매상품여부] */
-    private String saleProdYn;
-    /** [재고상품여부] */
-    private String stockProdYn;
-    /** [사이드상품여부] */
-    private String sideProdYn;
-    /** [세트상품구분] TB_CM_NMCODE(NMCODE_GRP_CD='009') */
-    private String setProdFg;
-    /** [가격관리구분] TB_CM_NMCODE(NMCODE_GRP_CD='045') */
-    private String prcCtrlFg;
-    /** [원가단가] */
-    private Integer costUprc;
-    /** [최종원가단가] */
-    private Integer lastCostUprc;
-    /** [공급단가] */
-    private Integer splyUprc;
-    /** [공급단가사용여부] */
-    private String splyUprcUseYn;
-    /** [발주상품구분] TB_CM_NMCODE(NMCODE_GRP_CD=') */
-    private String poProdFg;
-    /** [발주단위구분] */
-    private String poUnitFg;
-    /** [발주단위수량] */
-    private Integer poUnitQty;
-    /** [발주단위허용구분] */
-    private String poUnitAllowFg;
-    /** [발주최소수량] */
-    private Integer poMinQty;
-    /** [안전재고수량] */
-    private Integer safeStockQty;
-    /** [재고단위구분] */
-    private String stockUnitFg;
-    /** [사용여부] */
-    private String useYn;
-    /** [비고] */
-    private String remark;
+
+    /** 상품분류코드 */
+    private String prodClassNm;
+
+    /** 상품코드 */
+    private String prodCd;
+
+    /** 상품명 */
+    private String prodNm;
+
+    /** 입고수량 */
+    private String otIo;
+
+    /** 출고수량 */
+    private Integer qtIo;
+
+    /** 기존 예외출고 수량 */
+    private Integer prevQtIo;
+
+    /** 단가 */
+    private String um;
+
+    /** 금액 */
+    private String am;
+
+    /** 부가세액 */
+    private String vat;
+
+    /** 대체유형 */
+    private TpioFg fgTpio;
+
+    /** 수불유형 */
+    private String cdQtiotp;
+
+    /** 상태 */
+    private StatusFg fgStatus;
+
+    /** 입력일자 */
+    private String dtsInsert;
+
+    /** 입력자 */
+    private String idInsert;
+
+    /** 수정일자 */
+    private String dtsUpdate;
+
+    /** 수정자 */
+    private String idUpdate;
+
+
+    /**
+     * @return the saleDate
+     */
+
+    public String getSaleDate() {
+        return saleDate;
+    }
+
+    /**
+     * @param saleDate the saleDate to set
+     */
+    public void setSaleDate(String saleDate) {
+        this.saleDate = saleDate;
+    }
 
     /**
      * @return the storeCd
@@ -101,6 +165,322 @@ public class ExcpForwardProductVO extends PageVO {
      */
     public void setStoreCd(String storeCd) {
         this.storeCd = storeCd;
+    }
+
+    /**
+     * @return the inQty
+     */
+
+    public Integer getInQty() {
+        return inQty;
+    }
+
+    /**
+     * @param inQty the inQty to set
+     */
+    public void setInQty(Integer inQty) {
+        this.inQty = inQty;
+    }
+
+    /**
+     * @return the outQty
+     */
+
+    public Integer getOutQty() {
+        return outQty;
+    }
+
+    /**
+     * @param outQty the outQty to set
+     */
+    public void setOutQty(Integer outQty) {
+        this.outQty = outQty;
+    }
+
+    /**
+     * @return the stockQty
+     */
+
+    public Integer getStockQty() {
+        return stockQty;
+    }
+
+    /**
+     * @param stockQty the stockQty to set
+     */
+    public void setStockQty(Integer stockQty) {
+        this.stockQty = stockQty;
+    }
+
+    /**
+     * @return the forwardQty
+     */
+
+    public Integer getForwardQty() {
+        return forwardQty;
+    }
+
+    /**
+     * @param forwardQty the forwardQty to set
+     */
+    public void setForwardQty(Integer forwardQty) {
+        this.forwardQty = forwardQty;
+    }
+
+    /**
+     * @return the soldOutYn
+     */
+
+    public UseYn getSoldOutYn() {
+        return soldOutYn;
+    }
+
+    /**
+     * @param soldOutYn the soldOutYn to set
+     */
+    public void setSoldOutYn(UseYn soldOutYn) {
+        this.soldOutYn = soldOutYn;
+    }
+
+    /**
+     * @return the cdCompany
+     */
+
+    public String getCdCompany() {
+        return cdCompany;
+    }
+
+    /**
+     * @param cdCompany the cdCompany to set
+     */
+    public void setCdCompany(String cdCompany) {
+        this.cdCompany = cdCompany;
+    }
+
+    /**
+     * @return the noEgr
+     */
+
+    public String getNoEgr() {
+        return noEgr;
+    }
+
+    /**
+     * @param noEgr the noEgr to set
+     */
+    public void setNoEgr(String noEgr) {
+        this.noEgr = noEgr;
+    }
+
+    /**
+     * @return the noErgline
+     */
+
+    public String getNoErgline() {
+        return noErgline;
+    }
+
+    /**
+     * @param noErgline the noErgline to set
+     */
+    public void setNoErgline(String noErgline) {
+        this.noErgline = noErgline;
+    }
+
+    /**
+     * @return the noIo
+     */
+
+    public String getNoIo() {
+        return noIo;
+    }
+
+    /**
+     * @param noIo the noIo to set
+     */
+    public void setNoIo(String noIo) {
+        this.noIo = noIo;
+    }
+
+    /**
+     * @return the noIoline
+     */
+
+    public String getNoIoline() {
+        return noIoline;
+    }
+
+    /**
+     * @param noIoline the noIoline to set
+     */
+    public void setNoIoline(String noIoline) {
+        this.noIoline = noIoline;
+    }
+
+    /**
+     * @return the dtIo
+     */
+
+    public String getDtIo() {
+        return dtIo;
+    }
+
+    /**
+     * @param dtIo the dtIo to set
+     */
+    public void setDtIo(String dtIo) {
+        this.dtIo = dtIo;
+    }
+
+    /**
+     * @return the cdPjt
+     */
+
+    public String getCdPjt() {
+        return cdPjt;
+    }
+
+    /**
+     * @param cdPjt the cdPjt to set
+     */
+    public void setCdPjt(String cdPjt) {
+        this.cdPjt = cdPjt;
+    }
+
+    /**
+     * @return the cdPartner
+     */
+
+    public String getCdPartner() {
+        return cdPartner;
+    }
+
+    /**
+     * @param cdPartner the cdPartner to set
+     */
+    public void setCdPartner(String cdPartner) {
+        this.cdPartner = cdPartner;
+    }
+
+    /**
+     * @return the cdPlant
+     */
+
+    public String getCdPlant() {
+        return cdPlant;
+    }
+
+    /**
+     * @param cdPlant the cdPlant to set
+     */
+    public void setCdPlant(String cdPlant) {
+        this.cdPlant = cdPlant;
+    }
+
+    /**
+     * @return the clsL
+     */
+
+    public String getClsL() {
+        return clsL;
+    }
+
+    /**
+     * @param clsL the clsL to set
+     */
+    public void setClsL(String clsL) {
+        this.clsL = clsL;
+    }
+
+    /**
+     * @return the clsM
+     */
+
+    public String getClsM() {
+        return clsM;
+    }
+
+    /**
+     * @param clsM the clsM to set
+     */
+    public void setClsM(String clsM) {
+        this.clsM = clsM;
+    }
+
+    /**
+     * @return the clsS
+     */
+
+    public String getClsS() {
+        return clsS;
+    }
+
+    /**
+     * @param clsS the clsS to set
+     */
+    public void setClsS(String clsS) {
+        this.clsS = clsS;
+    }
+
+    /**
+     * @return the cdItem
+     */
+
+    public String getCdItem() {
+        return cdItem;
+    }
+
+    /**
+     * @param cdItem the cdItem to set
+     */
+    public void setCdItem(String cdItem) {
+        this.cdItem = cdItem;
+    }
+
+    /**
+     * @return the nmItem
+     */
+
+    public String getNmItem() {
+        return nmItem;
+    }
+
+    /**
+     * @param nmItem the nmItem to set
+     */
+    public void setNmItem(String nmItem) {
+        this.nmItem = nmItem;
+    }
+
+
+    /**
+     * @return the prodClassCd
+     */
+
+    public String getProdClassCd() {
+        return prodClassCd;
+    }
+
+    /**
+     * @param prodClassCd the prodClassCd to set
+     */
+    public void setProdClassCd(String prodClassCd) {
+        this.prodClassCd = prodClassCd;
+    }
+
+    /**
+     * @return the prodClassNm
+     */
+
+    public String getProdClassNm() {
+        return prodClassNm;
+    }
+
+    /**
+     * @param prodClassNm the prodClassNm to set
+     */
+    public void setProdClassNm(String prodClassNm) {
+        this.prodClassNm = prodClassNm;
     }
 
     /**
@@ -134,452 +514,197 @@ public class ExcpForwardProductVO extends PageVO {
     }
 
     /**
-     * @return the prodClassCd
+     * @return the otIo
      */
 
-    public String getProdClassCd() {
-        return prodClassCd;
+    public String getOtIo() {
+        return otIo;
     }
 
     /**
-     * @param prodClassCd the prodClassCd to set
+     * @param otIo the otIo to set
      */
-    public void setProdClassCd(String prodClassCd) {
-        this.prodClassCd = prodClassCd;
+    public void setOtIo(String otIo) {
+        this.otIo = otIo;
     }
 
     /**
-     * @return the cornrCd
+     * @return the qtIo
      */
 
-    public String getCornrCd() {
-        return cornrCd;
+    public Integer getQtIo() {
+        return qtIo;
     }
 
     /**
-     * @param cornrCd the cornrCd to set
+     * @param qtIo the qtIo to set
      */
-    public void setCornrCd(String cornrCd) {
-        this.cornrCd = cornrCd;
+    public void setQtIo(Integer qtIo) {
+        this.qtIo = qtIo;
     }
 
     /**
-     * @return the orgplceCd
+     * @return the prevQtIo
      */
 
-    public String getOrgplceCd() {
-        return orgplceCd;
+    public Integer getPrevQtIo() {
+        return prevQtIo;
     }
 
     /**
-     * @param orgplceCd the orgplceCd to set
+     * @param prevQtIo the prevQtIo to set
      */
-    public void setOrgplceCd(String orgplceCd) {
-        this.orgplceCd = orgplceCd;
+    public void setPrevQtIo(Integer prevQtIo) {
+        this.prevQtIo = prevQtIo;
     }
 
     /**
-     * @return the sdattrClassCd
+     * @return the um
      */
 
-    public String getSdattrClassCd() {
-        return sdattrClassCd;
+    public String getUm() {
+        return um;
     }
 
     /**
-     * @param sdattrClassCd the sdattrClassCd to set
+     * @param um the um to set
      */
-    public void setSdattrClassCd(String sdattrClassCd) {
-        this.sdattrClassCd = sdattrClassCd;
+    public void setUm(String um) {
+        this.um = um;
     }
 
     /**
-     * @return the sdselGrpCd
+     * @return the am
      */
 
-    public String getSdselGrpCd() {
-        return sdselGrpCd;
+    public String getAm() {
+        return am;
     }
 
     /**
-     * @param sdselGrpCd the sdselGrpCd to set
+     * @param am the am to set
      */
-    public void setSdselGrpCd(String sdselGrpCd) {
-        this.sdselGrpCd = sdselGrpCd;
+    public void setAm(String am) {
+        this.am = am;
     }
 
     /**
-     * @return the pointSaveYn
+     * @return the vat
      */
 
-    public String getPointSaveYn() {
-        return pointSaveYn;
+    public String getVat() {
+        return vat;
     }
 
     /**
-     * @param pointSaveYn the pointSaveYn to set
+     * @param vat the vat to set
      */
-    public void setPointSaveYn(String pointSaveYn) {
-        this.pointSaveYn = pointSaveYn;
+    public void setVat(String vat) {
+        this.vat = vat;
     }
 
     /**
-     * @return the prodDcFg
+     * @return the fgTpio
      */
 
-    public String getProdDcFg() {
-        return prodDcFg;
+    public TpioFg getFgTpio() {
+        return fgTpio;
     }
 
     /**
-     * @param prodDcFg the prodDcFg to set
+     * @param fgTpio the fgTpio to set
      */
-    public void setProdDcFg(String prodDcFg) {
-        this.prodDcFg = prodDcFg;
+    public void setFgTpio(TpioFg fgTpio) {
+        this.fgTpio = fgTpio;
     }
 
     /**
-     * @return the vatFg
+     * @return the cdQtiotp
      */
 
-    public String getVatFg() {
-        return vatFg;
+    public String getCdQtiotp() {
+        return cdQtiotp;
     }
 
     /**
-     * @param vatFg the vatFg to set
+     * @param cdQtiotp the cdQtiotp to set
      */
-    public void setVatFg(String vatFg) {
-        this.vatFg = vatFg;
+    public void setCdQtiotp(String cdQtiotp) {
+        this.cdQtiotp = cdQtiotp;
     }
 
     /**
-     * @return the prodTipYn
+     * @return the fgStatus
      */
 
-    public String getProdTipYn() {
-        return prodTipYn;
+    public StatusFg getFgStatus() {
+        return fgStatus;
     }
 
     /**
-     * @param prodTipYn the prodTipYn to set
+     * @param fgStatus the fgStatus to set
      */
-    public void setProdTipYn(String prodTipYn) {
-        this.prodTipYn = prodTipYn;
+    public void setFgStatus(StatusFg fgStatus) {
+        this.fgStatus = fgStatus;
     }
 
     /**
-     * @return the prodPackAmt
+     * @return the dtsInsert
      */
 
-    public Integer getProdPackAmt() {
-        return prodPackAmt;
+    public String getDtsInsert() {
+        return dtsInsert;
     }
 
     /**
-     * @param prodPackAmt the prodPackAmt to set
+     * @param dtsInsert the dtsInsert to set
      */
-    public void setProdPackAmt(Integer prodPackAmt) {
-        this.prodPackAmt = prodPackAmt;
+    public void setDtsInsert(String dtsInsert) {
+        this.dtsInsert = dtsInsert;
     }
 
     /**
-     * @return the prodDlvrAmt
+     * @return the idInsert
      */
 
-    public Integer getProdDlvrAmt() {
-        return prodDlvrAmt;
+    public String getIdInsert() {
+        return idInsert;
     }
 
     /**
-     * @param prodDlvrAmt the prodDlvrAmt to set
+     * @param idInsert the idInsert to set
      */
-    public void setProdDlvrAmt(Integer prodDlvrAmt) {
-        this.prodDlvrAmt = prodDlvrAmt;
+    public void setIdInsert(String idInsert) {
+        this.idInsert = idInsert;
     }
 
     /**
-     * @return the prodTypeFg
+     * @return the dtsUpdate
      */
 
-    public String getProdTypeFg() {
-        return prodTypeFg;
+    public String getDtsUpdate() {
+        return dtsUpdate;
     }
 
     /**
-     * @param prodTypeFg the prodTypeFg to set
+     * @param dtsUpdate the dtsUpdate to set
      */
-    public void setProdTypeFg(String prodTypeFg) {
-        this.prodTypeFg = prodTypeFg;
+    public void setDtsUpdate(String dtsUpdate) {
+        this.dtsUpdate = dtsUpdate;
     }
 
     /**
-     * @return the saleProdYn
+     * @return the idUpdate
      */
 
-    public String getSaleProdYn() {
-        return saleProdYn;
+    public String getIdUpdate() {
+        return idUpdate;
     }
 
     /**
-     * @param saleProdYn the saleProdYn to set
+     * @param idUpdate the idUpdate to set
      */
-    public void setSaleProdYn(String saleProdYn) {
-        this.saleProdYn = saleProdYn;
-    }
-
-    /**
-     * @return the stockProdYn
-     */
-
-    public String getStockProdYn() {
-        return stockProdYn;
-    }
-
-    /**
-     * @param stockProdYn the stockProdYn to set
-     */
-    public void setStockProdYn(String stockProdYn) {
-        this.stockProdYn = stockProdYn;
-    }
-
-    /**
-     * @return the sideProdYn
-     */
-
-    public String getSideProdYn() {
-        return sideProdYn;
-    }
-
-    /**
-     * @param sideProdYn the sideProdYn to set
-     */
-    public void setSideProdYn(String sideProdYn) {
-        this.sideProdYn = sideProdYn;
-    }
-
-    /**
-     * @return the setProdFg
-     */
-
-    public String getSetProdFg() {
-        return setProdFg;
-    }
-
-    /**
-     * @param setProdFg the setProdFg to set
-     */
-    public void setSetProdFg(String setProdFg) {
-        this.setProdFg = setProdFg;
-    }
-
-    /**
-     * @return the prcCtrlFg
-     */
-
-    public String getPrcCtrlFg() {
-        return prcCtrlFg;
-    }
-
-    /**
-     * @param prcCtrlFg the prcCtrlFg to set
-     */
-    public void setPrcCtrlFg(String prcCtrlFg) {
-        this.prcCtrlFg = prcCtrlFg;
-    }
-
-    /**
-     * @return the costUprc
-     */
-
-    public Integer getCostUprc() {
-        return costUprc;
-    }
-
-    /**
-     * @param costUprc the costUprc to set
-     */
-    public void setCostUprc(Integer costUprc) {
-        this.costUprc = costUprc;
-    }
-
-    /**
-     * @return the lastCostUprc
-     */
-
-    public Integer getLastCostUprc() {
-        return lastCostUprc;
-    }
-
-    /**
-     * @param lastCostUprc the lastCostUprc to set
-     */
-    public void setLastCostUprc(Integer lastCostUprc) {
-        this.lastCostUprc = lastCostUprc;
-    }
-
-    /**
-     * @return the splyUprc
-     */
-
-    public Integer getSplyUprc() {
-        return splyUprc;
-    }
-
-    /**
-     * @param splyUprc the splyUprc to set
-     */
-    public void setSplyUprc(Integer splyUprc) {
-        this.splyUprc = splyUprc;
-    }
-
-    /**
-     * @return the splyUprcUseYn
-     */
-
-    public String getSplyUprcUseYn() {
-        return splyUprcUseYn;
-    }
-
-    /**
-     * @param splyUprcUseYn the splyUprcUseYn to set
-     */
-    public void setSplyUprcUseYn(String splyUprcUseYn) {
-        this.splyUprcUseYn = splyUprcUseYn;
-    }
-
-    /**
-     * @return the poProdFg
-     */
-
-    public String getPoProdFg() {
-        return poProdFg;
-    }
-
-    /**
-     * @param poProdFg the poProdFg to set
-     */
-    public void setPoProdFg(String poProdFg) {
-        this.poProdFg = poProdFg;
-    }
-
-    /**
-     * @return the poUnitFg
-     */
-
-    public String getPoUnitFg() {
-        return poUnitFg;
-    }
-
-    /**
-     * @param poUnitFg the poUnitFg to set
-     */
-    public void setPoUnitFg(String poUnitFg) {
-        this.poUnitFg = poUnitFg;
-    }
-
-    /**
-     * @return the poUnitQty
-     */
-
-    public Integer getPoUnitQty() {
-        return poUnitQty;
-    }
-
-    /**
-     * @param poUnitQty the poUnitQty to set
-     */
-    public void setPoUnitQty(Integer poUnitQty) {
-        this.poUnitQty = poUnitQty;
-    }
-
-    /**
-     * @return the poUnitAllowFg
-     */
-
-    public String getPoUnitAllowFg() {
-        return poUnitAllowFg;
-    }
-
-    /**
-     * @param poUnitAllowFg the poUnitAllowFg to set
-     */
-    public void setPoUnitAllowFg(String poUnitAllowFg) {
-        this.poUnitAllowFg = poUnitAllowFg;
-    }
-
-    /**
-     * @return the poMinQty
-     */
-
-    public Integer getPoMinQty() {
-        return poMinQty;
-    }
-
-    /**
-     * @param poMinQty the poMinQty to set
-     */
-    public void setPoMinQty(Integer poMinQty) {
-        this.poMinQty = poMinQty;
-    }
-
-    /**
-     * @return the safeStockQty
-     */
-
-    public Integer getSafeStockQty() {
-        return safeStockQty;
-    }
-
-    /**
-     * @param safeStockQty the safeStockQty to set
-     */
-    public void setSafeStockQty(Integer safeStockQty) {
-        this.safeStockQty = safeStockQty;
-    }
-
-    /**
-     * @return the stockUnitFg
-     */
-
-    public String getStockUnitFg() {
-        return stockUnitFg;
-    }
-
-    /**
-     * @param stockUnitFg the stockUnitFg to set
-     */
-    public void setStockUnitFg(String stockUnitFg) {
-        this.stockUnitFg = stockUnitFg;
-    }
-
-    /**
-     * @return the useYn
-     */
-
-    public String getUseYn() {
-        return useYn;
-    }
-
-    /**
-     * @param useYn the useYn to set
-     */
-    public void setUseYn(String useYn) {
-        this.useYn = useYn;
-    }
-
-    /**
-     * @return the remark
-     */
-
-    public String getRemark() {
-        return remark;
-    }
-
-    /**
-     * @param remark the remark to set
-     */
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setIdUpdate(String idUpdate) {
+        this.idUpdate = idUpdate;
     }
 }

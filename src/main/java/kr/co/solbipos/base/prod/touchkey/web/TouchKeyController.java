@@ -5,6 +5,7 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
@@ -25,8 +26,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
@@ -206,13 +205,11 @@ public class TouchKeyController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         Result result = new Result(Status.FAIL);
-        try {
-            String xml =
-                URLDecoder.decode(request.getParameter("xml"), "UTF-8").replace("\n", "&#xa;");
-            result = touchkeyService.saveTouchkey(sessionInfoVO, XssPreventer.unescape(xml));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        String xml = CmmUtil.decoder(request.getParameter("xml"));
+        xml.replace("\n", "&#xa;");
+
+        result = touchkeyService.saveTouchkey(sessionInfoVO, XssPreventer.unescape(xml));
+
         return result;
     }
 

@@ -245,14 +245,16 @@
     <update id="updatePosTerminalInfo" parameterType="storeTerminalVO">
         /* TerminalManageMapper.updatePosTerminalInfo */
         UPDATE TB_MS_POS_TERMNL
-           SET VENDOR_TERMNL_NO = #{vendorTermnlNo},
+           SET VENDOR_CD = (SELECT VAN_CD FROM TB_CM_VAN_CMPNY WHERE VAN_FG = #{vendorFg} AND VAN_NM = #{vendorNm}),
+               VENDOR_NM =  #{vendorNm},
+               VENDOR_TERMNL_NO = #{vendorTermnlNo},
                VENDOR_SER_NO = #{vendorSerNo},
                MOD_DT = #{modDt},
                MOD_ID = #{modId}
          WHERE STORE_CD = #{storeCd}
            AND POS_NO = #{posNo}
            AND VENDOR_FG = #{vendorFg}
-           AND VENDOR_CD = (SELECT VAN_CD FROM TB_CM_VAN_CMPNY WHERE VAN_FG = #{vendorFg} AND VAN_NM = #{vendorNm})
+           AND VENDOR_CD = #{vendorCd}
     </update>
 
 
@@ -300,14 +302,16 @@
     <update id="updateCornerTerminalInfo" parameterType="storeTerminalVO">
         /* TerminalManageMapper.updateCornerTerminalInfo */
         UPDATE TB_MS_CORNER_TERMNL
-           SET VENDOR_TERMNL_NO = #{vendorTermnlNo},
+           SET VENDOR_CD = (SELECT VAN_CD FROM TB_CM_VAN_CMPNY WHERE VAN_FG = #{vendorFg} AND VAN_NM = #{vendorNm}),
+               VENDOR_NM =  #{vendorNm},
+               VENDOR_TERMNL_NO = #{vendorTermnlNo},
                VENDOR_SER_NO = #{vendorSerNo},
                MOD_DT = #{modDt},
                MOD_ID = #{modId}
          WHERE STORE_CD = #{storeCd}
            AND CORNR_CD = #{cornrCd}
            AND VENDOR_FG = #{vendorFg}
-           AND VENDOR_CD = (SELECT VAN_CD FROM TB_CM_VAN_CMPNY WHERE VAN_FG = #{vendorFg} AND VAN_NM = #{vendorNm})
+           AND VENDOR_CD = #{vendorCd}
     </update>
 
 </mapper>

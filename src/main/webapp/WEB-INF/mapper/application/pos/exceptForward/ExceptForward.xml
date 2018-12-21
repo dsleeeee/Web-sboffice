@@ -12,28 +12,236 @@
 
 <mapper namespace="kr.co.solbipos.application.pos.exceptForward.service.impl.ExceptForwardMapper">
 
+    <!-- 상품 분류 조회  -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_CLASS, TB_NEOE_SPOS_CLS
+        PARAM    : prodVO
+        COMMENTS : 조회용 상품분류 조회
+    -->
+    <select id="getProdClassTree" parameterType="prodVO" resultType="DefaultMap">
+        /* USE : ExceptForwardMapper.getProdClassTree */
+        SELECT tmpc.P_PROD_CLASS_CD,
+               tmpc.PROD_CLASS_CD,
+               tmpc.PROD_CLASS_NM
+          FROM TB_MS_PRODUCT_CLASS tmpc,
+               (
+               SELECT tmpc.STORE_CD,
+                      tmpc.PROD_CLASS_CD
+                 FROM TB_MS_PRODUCT_CLASS tmpc,
+                      TB_NEOE_SPOS_CLS tnsc
+                WHERE tnsc.PROD_CLASS_CD = tmpc.PROD_CLASS_CD
+                  AND tnsc.CD_FLAG2 = 'Y'
+                  AND tmpc.STORE_CD = #{storeCd}
+               ) tmp
+         WHERE tmpc.STORE_CD = #{storeCd}
+           AND tmp.STORE_CD = tmpc.STORE_CD
+         START WITH tmpc.PROD_CLASS_CD = tmp.PROD_CLASS_CD
+       CONNECT BY tmpc.PROD_CLASS_CD = PRIOR tmpc.P_PROD_CLASS_CD
+           AND tmpc.STORE_CD = #{storeCd}
+           AND tmpc.P_PROD_CLASS_CD IS NOT NULL
+         GROUP BY tmpc.P_PROD_CLASS_CD, tmpc.PROD_CLASS_CD, tmpc.PROD_CLASS_NM
+        HAVING tmpc.PROD_CLASS_CD != '00000'
+         ORDER BY P_PROD_CLASS_CD, PROD_CLASS_CD
+    </select>
+
     <!-- 예외출고 대상상품 목록 조회 -->
     <!--
-        TABLE    : TB_MS_PRODUCT
-        PARAM    : productVO
-        COMMENTS : 포스에서 예외출고를 등록할 상품 목록을 조회한다.
+        TABLE    : TB_NEOE_STOCK_PROD, TB_NEOE_SPOS_GR, TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS
+        PARAM    : excpForwardProductVO
+        COMMENTS : 입고 목록을 조회한다.
     -->
     <select id="getExcpForwardProduct" parameterType="excpForwardProductVO" resultType="DefaultMap">
         /* USE : ExceptForwardMapper.getExcpForwardProduct */
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT tmp.STORE_CD,
-               tmp.PROD_CD,
-               tmp.PROD_NM,
-               tmp.PROD_CLASS_CD,
-               tmpc.PROD_CLASS_NM,
-               '등록' AS REG_PROD
-            <include refid="CmmSQL.PagingTemplateCount"/>
-        FROM TB_MS_PRODUCT tmp,
-               TB_MS_PRODUCT_CLASS tmpc
-         WHERE tmp.STORE_CD = #{storeCd}
-           AND tmpc.STORE_CD = tmp.STORE_CD
-           AND tmpc.PROD_CLASS_CD = tmp.PROD_CLASS_CD
-         ORDER BY tmp.PROD_CLASS_CD, PROD_CD
-        <include refid="CmmSQL.PagingTemplateBottom"/>
-  </select>
+        SELECT tnsp.SALE_DATE,    -- 영업일자
+               tnsp.STORE_CD,      -- 매장코드
+               tnsp.PROD_CD,       -- 상품코드
+               tmp.PROD_NM,        -- 상품명
+               tmp.PROD_CLASS_CD ,   -- 상품분류코드
+               ( SELECT SF_GET_PROD_CLASSES('S', tmp.STORE_CD, tmp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM, -- 상품분류명
+               NVL(tnsp.IN_QTY, 0) AS IN_QTY,        -- 입고수량
+               NVL(tnsp.OUT_QTY, 0) AS OUT_QTY,       -- 출고수량(판매+기타출고)
+               NVL(tsdp.TOT_SALE_QTY, 0) AS TOT_SALE_QTY,  -- 판매수량
+               NVL(tnsp.STOCK_QTY, 0) AS STOCK_QTY,     -- 현재고
+               tnsp.SOLD_OUT_YN,   -- 품절여부
+               tnsp.CD_COMPANY,    -- ERP 회사코드
+               tnsp.CD_PARTNER,              -- ERP 점포코드 (확인필요)
+               tnsp.CD_PARTNER AS CD_PJT,    -- ERP 점포코드 (확인필요)
+               tnsp.CD_ITEM,        -- ERP 품목코드
+               NVL(tnse.QT_IO, 0) AS QT_IO,         -- 예외출고 수량
+               tnse.NO_EGR,          -- 기타출고 고유번호
+               tnsg.NO_IO,           -- 입고번호
+               tnsg.NO_IOLINE,        -- 입고항번
+               '예외출고'AS REGIST
+      <include refid="CmmSQL.PagingTemplateCount"/>
+          FROM TB_NEOE_STOCK_PROD tnsp,    -- POS 현재수량 테이블
+               TB_SL_DAILY_PROD tsdp,      -- 일별, 상품별 판매수량 테이블
+               (SELECT tnse.CD_COMPANY,
+                       tnse.NO_EGR,
+                       tnse.DT_IO,
+                       tnse.CD_PJT,
+                       tnse.CD_ITEM ,
+                       max(tnse.QT_IO) keep(DENSE_RANK LAST ORDER BY tnse.NO_EGRLINE) AS QT_IO
+                  FROM TB_NEOE_SPOS_EGR tnse
+                 GROUP BY tnse.CD_COMPANY, tnse.NO_EGR, tnse.DT_IO, tnse.CD_PJT, tnse.CD_ITEM
+               ) tnse,                      -- 기타출고(예외출고)테이블
+               TB_NEOE_SPOS_GR tnsg,        -- 입고정보 테이블
+               TB_MS_PRODUCT tmp             -- 상품 테이블(분류정보)
+         WHERE 1=1
+           AND tnsp.STORE_CD = #{storeCd}
+           AND tnsp.SALE_DATE = #{saleDate}
+           AND tnsp.SOLD_OUT_YN = 'N'
+        <if test="prodClassCd != null and prodClassCd != ''">
+           AND tmp.PROD_CLASS_CD IN  ( SELECT #{prodClassCd} AS PROD_CLASS_CD
+                                         FROM DUAL
+                                        UNION
+                                       SELECT tmpc.PROD_CLASS_CD
+                                         FROM TB_MS_PRODUCT_CLASS tmpc
+                                        WHERE tmpc.STORE_CD = #{storeCd}
+                                        START WITH tmpc.P_PROD_CLASS_CD = #{prodClassCd}
+                                      CONNECT BY  tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD
+                                      )
+        </if>
+        <if test="prodCd != null and prodCd != ''">
+           AND tsdp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test="prodNm != null and prodNm != ''">
+           AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+           AND tsdp.STORE_CD (+)= tnsp.STORE_CD
+           AND tsdp.PROD_CD (+)= tnsp.PROD_CD
+           AND tnse.CD_COMPANY (+)= tnsp.CD_COMPANY
+           AND tnse.DT_IO (+)= tnsp.SALE_DATE
+           AND tnse.CD_PJT (+)= tnsp.CD_PARTNER
+           AND tnse.CD_ITEM (+)= tnsp.CD_ITEM
+           AND tnsg.CD_COMPANY = tnsp.CD_COMPANY
+           AND tnsg.CD_PJT = tnsp.CD_PARTNER      -- 점포코드
+           AND tnsg.CD_ITEM = tnsp.CD_ITEM
+           AND tnsg.DT_IO = tnsp.SALE_DATE
+           AND tmp.STORE_CD  (+)= tnsp.STORE_CD
+           AND tmp.PROD_CD (+)= tnsp.PROD_CD
+      <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+
+    <!-- 예외출고 삭제 -->
+    <!--
+        TABLE    : TB_NEOE_SPOS_EGR
+        PARAM    : excpForwardProductVO
+        COMMENTS : 예외출고 내용 저장
+    -->
+    <insert id="deleteExcpForwardProduct" parameterType="excpForwardProductVO" >
+        /* USE : ExceptForwardMapper.deleteExcpForwardProduct */
+        INSERT INTO TB_NEOE_SPOS_EGR
+        (
+            CD_COMPANY,
+            CD_PLANT,
+            NO_EGR,
+            NO_EGRLINE,
+            DT_IO,
+            CD_PJT,
+            CD_PARTNER,
+            CD_ITEM,
+            QT_IO,
+            NO_IO,
+            NO_IOLINE,
+            FG_TPIO,
+            CD_QTIOTP,
+            FG_STATUS,
+            DTS_INSERT,
+            ID_INSERT,
+            DTS_UPDATE,
+            ID_UPDATE
+        )
+        VALUES
+        (
+            #{cdCompany},
+            #{cdPlant},
+            #{noEgr},
+            (
+            SELECT NVL(MAX(NO_EGRLINE ), 0) + 1 AS NO_EGRLINE
+              FROM TB_NEOE_SPOS_EGR tnse
+             WHERE tnse.CD_COMPANY = #{cdCompany}
+               AND tnse.CD_PLANT = #{cdPlant}
+               AND tnse.NO_EGR = #{noEgr}
+               AND tnse.DT_IO = #{dtIo}
+               AND tnse.CD_ITEM = #{cdItem}
+            ),
+            #{dtIo},
+            #{cdPjt},
+            #{cdPartner},
+            #{cdItem},
+            #{prevQtIo}, -- 이전 등록한 개수를 넣어줌
+            #{noIo},
+            #{noIoline},
+            #{fgTpio},
+            #{cdQtiotp},
+            #{fgStatus},
+            #{dtsInsert},
+            #{idInsert},
+            #{dtsUpdate},
+            #{idUpdate}
+        )
+    </insert>
+
+
+    <!-- 예외출고 저장 -->
+    <!--
+        TABLE    : TB_NEOE_SPOS_EGR
+        PARAM    : excpForwardProductVO
+        COMMENTS : 예외출고 내용 저장
+    -->
+    <insert id="saveExcpForwardProduct" parameterType="excpForwardProductVO" >
+        /* USE : ExceptForwardMapper.saveExcpForwardProduct */
+        INSERT INTO TB_NEOE_SPOS_EGR
+        (
+            CD_COMPANY,
+            CD_PLANT,
+            NO_EGR,
+            NO_EGRLINE,
+            DT_IO,
+            CD_PJT,
+            CD_PARTNER,
+            CD_ITEM,
+            QT_IO,
+            NO_IO,
+            NO_IOLINE,
+            FG_TPIO,
+            CD_QTIOTP,
+            FG_STATUS,
+            DTS_INSERT,
+            ID_INSERT,
+            DTS_UPDATE,
+            ID_UPDATE
+        )
+        VALUES
+        (
+            #{cdCompany},
+            #{cdPlant},
+            #{noEgr},
+            (
+            SELECT NVL(MAX(NO_EGRLINE ), 0) + 1 AS NO_EGRLINE
+              FROM TB_NEOE_SPOS_EGR tnse
+             WHERE tnse.CD_COMPANY = #{cdCompany}
+               AND tnse.CD_PLANT = #{cdPlant}
+               AND tnse.NO_EGR = #{noEgr}
+               AND tnse.DT_IO = #{dtIo}
+               AND tnse.CD_ITEM = #{cdItem}
+            ),
+            #{dtIo},
+            #{cdPjt},
+            #{cdPartner},
+            #{cdItem},
+            #{qtIo},
+            #{noIo},
+            #{noIoline},
+            #{fgTpio},
+            #{cdQtiotp},
+            #{fgStatus},
+            #{dtsInsert},
+            #{idInsert},
+            #{dtsUpdate},
+            #{idUpdate}
+        )
+    </insert>
 </mapper>

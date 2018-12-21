@@ -5,6 +5,7 @@ import kr.co.solbipos.base.store.emp.enums.EmpResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URLDecoder;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -254,6 +255,44 @@ public class CmmUtil {
     /** object 자체 null 대체값 반환 */
     public static String checkNull(Object obj) {
         return obj == null ? "" : (String.valueOf(obj));
+    }
+
+    /**
+     * 스트링 Decoder
+     * URLDecode 시 특문에 대한 예외처리
+     *
+     * @param str String
+     * @return String
+     * @comment
+     * @author 노현수
+     * @since 2018. 12. 20.
+     */
+    public static String decoder(String str) {
+
+        String result = "";
+        try {
+            StringBuffer tempBuffer = new StringBuffer();
+            int incrementor = 0;
+            int dataLength = str.length();
+            while (incrementor < dataLength) {
+                char charecterAt = str.charAt(incrementor);
+                if (charecterAt == '%') {
+                    tempBuffer.append("<percentage>");
+                } else if (charecterAt == '+') {
+                    tempBuffer.append("<plus>");
+                } else {
+                    tempBuffer.append(charecterAt);
+                }
+                incrementor++;
+            }
+            result = tempBuffer.toString();
+            result = URLDecoder.decode(result, "UTF-8");
+            result = result.replaceAll("<percentage>", "%");
+            result = result.replaceAll("<plus>", "+");
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
 }

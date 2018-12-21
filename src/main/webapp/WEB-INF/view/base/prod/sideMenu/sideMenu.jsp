@@ -9,18 +9,19 @@
 <div class="subCon" ng-controller="sideMenuCtrl">
 
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+      <button class="btn_blue fr" id="btnSearch" ng-click="queryTab();" >
+        <s:message code="cmm.search" />
+      </button>
+    </div>
   </div>
 
-  <div class="mt10 oh">
-    <button class="btn_blue fr" id="btnSearch" ng-click="queryTab();" >
-      <s:message code="cmm.search" />
-    </button>
-  </div>
 
   <%-- 탭 --%>
   <div>
-    <ul class="subTab">
+    <ul class="subTab mt20">
       <%-- 속성 --%>
       <li><a id="sideMenuAttr" href="#" class="on" ng-click="changeTab('A');"><s:message code="sideMenu.tab.attr" /></a></li>
       <%-- 선택메뉴 --%>

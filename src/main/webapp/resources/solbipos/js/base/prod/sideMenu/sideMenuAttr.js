@@ -93,8 +93,32 @@ app.controller('sideMenuAttrClassCtrl', ['$scope', '$http', function ($scope, $h
 
   // 저장
   $scope.save = function() {
+
+    $scope.flex.collectionView.commitEdit();
+
     // 파라미터 설정
     var params = [];
+
+    for (var d = 0; d < $scope.flex.collectionView.itemsRemoved.length; d++) {
+      $scope.flex.collectionView.itemsRemoved[d].status = 'D';
+      params.push($scope.flex.collectionView.itemsRemoved[d]);
+    }
+
+    // dispSeq 재설정
+    var editItems = [];
+    for (var s = 0; s < $scope.flex.collectionView.itemCount; s++) {
+      if( isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
+        editItems.push($scope.flex.collectionView.items[s]);
+      }
+    }
+
+    for (var s = 0; s < editItems.length; s++) {
+      editItems[s].dispSeq = (s + 1);
+      console.log(editItems);
+      $scope.flex.collectionView.editItem(editItems[s]);
+      $scope.flex.collectionView.commitEdit();
+    }
+
     for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
       $scope.flex.collectionView.itemsEdited[u].status = 'U';
       params.push($scope.flex.collectionView.itemsEdited[u]);
@@ -103,10 +127,7 @@ app.controller('sideMenuAttrClassCtrl', ['$scope', '$http', function ($scope, $h
       $scope.flex.collectionView.itemsAdded[i].status = 'I';
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
-    for (var d = 0; d < $scope.flex.collectionView.itemsRemoved.length; d++) {
-      $scope.flex.collectionView.itemsRemoved[d].status = 'D';
-      params.push($scope.flex.collectionView.itemsRemoved[d]);
-    }
+
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._save('/base/prod/sideMenu/attrClass/save.sb', params, function() {
       // 저장 후 재조회
@@ -199,16 +220,32 @@ app.controller('sideMenuAttrAttrCtrl', ['$scope', '$http', 'sdattrClassCd', func
   // 저장
   $scope.save = function() {
 
-    // dispSeq 재설정
-    for (var s = 0; s < $scope.flex.collectionView.itemCount; s++) {
-      $scope.flex.collectionView.editItem($scope.flex.collectionView.items[s]);
-      $scope.flex.collectionView.items[s].sdattrClassCd = $scope.getSdattrClassCd();
-      $scope.flex.collectionView.items[s].dispSeq = (s + 1);
-      $scope.flex.collectionView.commitEdit();
-    }
+    $scope.flex.collectionView.commitEdit();
 
     // 파라미터 설정
     var params = [];
+
+    for (var d = 0; d < $scope.flex.collectionView.itemsRemoved.length; d++) {
+      $scope.flex.collectionView.itemsRemoved[d].status = 'D';
+      params.push($scope.flex.collectionView.itemsRemoved[d]);
+    }
+
+    // dispSeq 재설정
+    var editItems = [];
+    for (var s = 0; s < $scope.flex.collectionView.itemCount; s++) {
+      if( isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
+        editItems.push($scope.flex.collectionView.items[s]);
+      }
+    }
+
+    for (var s = 0; s < editItems.length; s++) {
+      editItems[s].dispSeq = (s + 1);
+      console.log(editItems);
+      $scope.flex.collectionView.editItem(editItems[s]);
+      $scope.flex.collectionView.commitEdit();
+    }
+
+
     for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
       $scope.flex.collectionView.itemsEdited[u].status = 'U';
       params.push($scope.flex.collectionView.itemsEdited[u]);
@@ -217,10 +254,7 @@ app.controller('sideMenuAttrAttrCtrl', ['$scope', '$http', 'sdattrClassCd', func
       $scope.flex.collectionView.itemsAdded[i].status = 'I';
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
-    for (var d = 0; d < $scope.flex.collectionView.itemsRemoved.length; d++) {
-      $scope.flex.collectionView.itemsRemoved[d].status = 'D';
-      params.push($scope.flex.collectionView.itemsRemoved[d]);
-    }
+
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._save('/base/prod/sideMenu/attrCd/save.sb', params, function() {
       // 저장 후 재조회

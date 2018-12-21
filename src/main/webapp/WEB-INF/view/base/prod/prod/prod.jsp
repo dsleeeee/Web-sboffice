@@ -161,7 +161,7 @@
   <div class="wj-TblWrapBr mt10">
     <%-- 개발시 높이 조절해서 사용--%>
     <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
-    <div id="theGrid" style="height: 365px;">
+    <div id="theGrid" style="height: 370px;">
       <wj-flex-grid
         autoGenerateColumns="false"
         control="flex"

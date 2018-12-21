@@ -57,7 +57,7 @@
 
       <div class="oh mt10">
         <%--- 적용매장 그리드 --%>
-        <div class="wj-TblWrap mr10" style="height:250px;" ng-controller="depositCtrl">
+        <div class="wj-TblWrap mr10" style="height:370px;" ng-controller="depositCtrl">
           <div class="wj-gridWrap" id="regStoreGrid" style="height: 200px;overflow-y: hidden;">
             <wj-flex-grid
                     autoGenerateColumns="false"

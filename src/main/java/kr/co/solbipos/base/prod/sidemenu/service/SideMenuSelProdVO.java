@@ -27,6 +27,8 @@ public class SideMenuSelProdVO extends PageVO {
     /** 매장코드 */
     private String storeCd;
     /** 사이드선택분류코드 */
+    private String sdselGrpCd;
+    /** 사이드선택그룹코드 */
     private String sdselClassCd;
     /** 상품코드 */
     private String prodCd;
@@ -77,6 +79,21 @@ public class SideMenuSelProdVO extends PageVO {
      */
     public void setStoreCd(String storeCd) {
         this.storeCd = storeCd;
+    }
+
+    /**
+     * @return the sdselGrpCd
+     */
+
+    public String getSdselGrpCd() {
+        return sdselGrpCd;
+    }
+
+    /**
+     * @param sdselGrpCd the sdselGrpCd to set
+     */
+    public void setSdselGrpCd(String sdselGrpCd) {
+        this.sdselGrpCd = sdselGrpCd;
     }
 
     /**
