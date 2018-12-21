@@ -87,7 +87,7 @@
                             modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
                             closeFunc - 팝업 닫기시 호출할 함수
           --%>
-          <jsp:include page="/WEB-INF/view/iostock/vendr/vendrOrder/selectVendrS.jsp" flush="true">
+          <jsp:include page="/WEB-INF/view/iostock/cmm/selectVendrS.jsp" flush="true">
             <jsp:param name="targetId" value="rtnInstockConfmSelectVendr"/>
             <jsp:param name="displayNm" value="전체"/>
             <jsp:param name="displayWidth" value="170px"/>
@@ -158,20 +158,6 @@
 
     var srchStartDate = wcombo.genDateVal("#srchStartDate", "${sessionScope.sessionInfo.startDate}");
     var srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.endDate}");
-
-    <%--$scope._setComboData("srchProcFg", [--%>
-      <%--{"name": "<s:message code='instockConfm.procFgAll'/>", "value": ""},--%>
-      <%--{"name": "<s:message code='instockConfm.procFgDstbConfm'/>", "value": "10"},--%>
-      <%--{"name": "<s:message code='instockConfm.procFgOutConfm'/>", "value": "20"},--%>
-      <%--{"name": "<s:message code='instockConfm.procFgInConfm'/>", "value": "30"}--%>
-    <%--]);--%>
-    <%--$scope.procFg = "20"; // 진행구분 기본값 세팅--%>
-
-    <%--$scope.procFgMap = new wijmo.grid.DataMap([--%>
-      <%--{id: "10", name: "<s:message code='instockConfm.procFgDstbConfm'/>"},--%>
-      <%--{id: "20", name: "<s:message code='instockConfm.procFgOutConfm'/>"},--%>
-      <%--{id: "30", name: "<s:message code='instockConfm.procFgInConfm'/>"}--%>
-    <%--], 'id', 'name');--%>
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -265,7 +251,7 @@
     // option : A - combo 최상위에 전체라는 텍스트를 붙여준다. S - combo 최상위에 선택이라는 텍스트를 붙여준다. A 또는 S 가 아닌 경우는 데이터값만으로 생성
     // callback : queryCombo 후 callback 할 함수
     $scope._queryCombo = function (comboFg, comboId, gridMapId, url, params, option, callback) {
-      var comboUrl = "/iostock/volmErr/volmErr/volmErr/getCombo.sb";
+      var comboUrl = "/iostock/cmm/iostockCmm/getCombo.sb";
       if (url) {
         comboUrl = url;
       }
@@ -277,9 +263,7 @@
         params : params, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
-        if (response.data.status === "OK") {
-          // this callback will be called asynchronously
-          // when the response is available
+        if ($scope._httpStatusCheck(response, true)) {
           if (!$.isEmptyObject(response.data.data.list)) {
             var list       = response.data.data.list;
             var comboArray = [];
@@ -317,21 +301,8 @@
               $scope[gridMapId] = new wijmo.grid.DataMap(comboArray, 'id', 'name');
             }
           }
-        } else if (response.data.status === "FAIL") {
-          $scope._popMsg("Ajax Fail By HTTP Request");
-        } else if (response.data.status === "SESSION_EXFIRE") {
-          $scope._popMsg(response.data.message, function () {
-            location.href = response.data.url;
-          });
-        } else if (response.data.status === "SERVER_ERROR") {
-          $scope._popMsg(response.data.message);
-        } else {
-          var msg = response.data.status + " : " + response.data.message;
-          $scope._popMsg(msg);
         }
       }, function errorCallback(response) {
-        // called asynchronously if an error occurs
-        // or server returns response with an error status.
         $scope._popMsg(messages["cmm.error"]);
         return false;
       }).then(function () {

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.iostock.cmm.service.impl.IostockCmmMapper">
+    <!-- 매장선택 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : iostockCmmVO
+        COMMENTS : 매장선택 리스트를 조회한다.
+    -->
+    <select id="selectStoreList" parameterType="iostockCmmVO" resultType="DefaultMap">
+        /* USE : IostockCmmMapper.selectStoreList */
+        <![CDATA[
+        SELECT  tms.STORE_CD, tms.STORE_NM
+        FROM    TB_MS_STORE tms
+        WHERE   tms.HQ_OFFICE_CD =   #{hqOfficeCd}
+        ]]>
+        <if test='storeCd != null and storeCd != ""'>
+            AND tms.STORE_CD = #{storeCd}
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        ORDER BY tms.STORE_CD
+    </select>
+
+
+    <!-- 거래처 선택모듈 리스트 조회 -->
+    <!--
+        TABLE    : TB_HQ_VENDOR
+                   TB_MS_VENDOR
+        PARAM    : iostockCmmVO
+        COMMENTS : 거래처 발주등록 - 거래처 선택모듈 리스트를 조회한다.
+    -->
+    <select id="getVendrList" parameterType="iostockCmmVO" resultType="DefaultMap">
+        /* USE : VendrOrderMapper.getVendrList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <![CDATA[
+                SELECT  thv.VENDR_CD, thv.VENDR_NM
+                ,       thv.SHIP_FG, thv.VAT_INCLD_YN
+                FROM    TB_HQ_VENDOR thv
+                WHERE   thv.HQ_OFFICE_CD    =   #{hqOfficeCd}
+                ]]>
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <![CDATA[
+                SELECT  tmv.VENDR_CD, tmv.VENDR_NM
+                ,       tmv.SHIP_FG, tmv.VAT_INCLD_YN
+                FROM    TB_MS_VENDOR tmv
+                WHERE   tmv.STORE_CD  = #{storeCd}
+                ]]>
+            </when>
+        </choose>
+    </select>
+
+
+    <!-- 공통 명칭 콤보조회 -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        PARAM    : iostockCmmVO
+        COMMENTS : 공통 명칭 콤보조회
+    -->
+    <select id="selectCmmCodeList" parameterType="iostockCmmVO" resultType="DefaultMap">
+        /* USE : VolmErrMapper.selectCmmCodeList */
+        <![CDATA[
+        SELECT  tcn.NMCODE_GRP_CD
+        ,       tcn.NMCODE_CD
+        ,       tcn.PARENT_CD
+        ,       tcn.NMCODE_NM
+        ,       tcn.NMCODE_ITEM_1
+        ,       tcn.NMCODE_ITEM_2
+        ,       tcn.USE_COL_NM
+        ,       tcn.USE_TARGET_FG
+        ,       tcn.USE_SYSTEM_FG
+        FROM    TB_CM_NMCODE tcn
+        WHERE   tcn.NMCODE_GRP_CD = #{nmcodeGrpCd}
+        ]]>
+        <if test='nmcodeItem1 != null and nmcodeItem1 != ""'>
+            AND tcn.NMCODE_ITEM_1 = #{nmcodeItem1}
+        </if>
+        ORDER BY tcn.NMCODE_CD
+    </select>
+
+
+    <!-- 본사 명칭 콤보조회 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE
+        PARAM    : iostockCmmVO
+        COMMENTS : 본사 명칭 콤보조회
+    -->
+    <select id="selectHqCodeList" parameterType="iostockCmmVO" resultType="DefaultMap">
+        /* USE : VolmErrMapper.selectHqCodeList */
+        <![CDATA[
+        SELECT  thn.HQ_OFFICE_CD
+        ,       thn.NMCODE_GRP_CD
+        ,       thn.NMCODE_CD
+        ,       thn.PARENT_CD
+        ,       thn.NMCODE_NM
+        ,       thn.NMCODE_ITEM_1
+        ,       thn.NMCODE_ITEM_2
+        ,       thn.USE_YN
+        FROM    TB_HQ_NMCODE thn
+        WHERE   thn.HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     thn.NMCODE_GRP_CD = #{nmcodeGrpCd}
+        ]]>
+        <if test='nmcodeItem1 != null and nmcodeItem1 != ""'>
+            AND thn.NMCODE_ITEM_1 = #{nmcodeItem1}
+        </if>
+        ORDER BY thn.NMCODE_CD
+    </select>
+
+
+    <!-- 매장 명칭 콤보조회 -->
+    <!--
+        TABLE    : TB_MS_STORE_NMCODE
+        PARAM    : iostockCmmVO
+        COMMENTS : 매장 명칭 콤보조회
+    -->
+    <select id="selectStoreCodeList" parameterType="iostockCmmVO" resultType="DefaultMap">
+        /* USE : VolmErrMapper.selectStoreCodeList */
+        <![CDATA[
+        SELECT  tmsn.STORE_CD
+        ,       tmsn.NMCODE_GRP_CD
+        ,       tmsn.NMCODE_CD
+        ,       tmsn.PARENT_CD
+        ,       tmsn.NMCODE_NM
+        ,       tmsn.NMCODE_ITEM_1
+        ,       tmsn.NMCODE_ITEM_2
+        ,       tmsn.USE_YN
+        FROM    TB_MS_STORE_NMCODE tmsn
+        WHERE   tmsn.STORE_CD       = #{storeCd}
+        AND     tmsn.NMCODE_GRP_CD  = #{nmcodeGrpCd}
+        ]]>
+        <if test='nmcodeItem1 != null and nmcodeItem1 != ""'>
+            AND tmsn.NMCODE_ITEM_1 = #{nmcodeItem1}
+        </if>
+        ORDER BY tmsn.NMCODE_CD
+    </select>
+
+
+    <!-- 다이나믹 콤보조회 -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        PARAM    : iostockCmmVO
+        COMMENTS : 다이나믹 콤보조회
+    -->
+    <select id="selectDynamicCodeList" parameterType="iostockCmmVO" resultType="DefaultMap">
+        /* USE : VolmErrMapper.selectDynamicCodeList */
+        <![CDATA[
+        SELECT  ${selectCd} AS NMCODE_CD
+        ,       ${selectNm} AS NMCODE_NM
+        FROM    ${selectTable}
+        WHERE   1 = 1
+        ]]>
+        <if test='selectWhere != null and selectWhere != ""'>
+            AND ${selectWhere}
+        </if>
+        <![CDATA[
+        ORDER BY ${selectCd}
+        ]]>
+    </select>
+
+</mapper>

@@ -39,6 +39,29 @@
     <button class="btn_blue fr" id="btnSearch" ng-click="searchStoreLoanManage()"><s:message code="cmm.search"/></button>
   </div>
 
+  <ul class="txtSty2 mt10 pdb20 bb">
+    <li class="red">
+      <s:message code="loan.info1"/><br>
+      <p>
+        <span><s:message code="loan.info1.txt1"/></span>
+        <s:message code="loan.info1.txt1.1"/><br>
+        <span><s:message code="loan.info1.txt2"/></span>
+        <s:message code="loan.info1.txt2.1"/><br>
+        <span><s:message code="loan.info1.txt3"/></span>
+        <s:message code="loan.info1.txt3.1"/>
+      </p>
+    </li>
+    <li class="red mt10">
+      <s:message code="loan.info2"/><br>
+      <p>
+        <span><s:message code="loan.info2.txt1"/></span>
+        <s:message code="loan.info2.txt1.1"/><br>
+        <span><s:message code="loan.info2.txt2"/></span>
+        <s:message code="loan.info2.txt2.1"/>
+      </p>
+    </li>
+  </ul>
+
   <div class="mt20 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
     <wj-combo-box
@@ -188,7 +211,7 @@
       for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
         var item = $scope.flex.collectionView.itemsEdited[i];
 
-        if (item.limitLoanAmt !== null && item.maxOrderAmt == null) {
+        if (item.limitLoanAmt !== null && item.maxOrderAmt === null) {
           $scope._popMsg(messages["loan.maxOrderAmt"]+" "+messages["cmm.require.text"]); // 1회주문한도액을 입력해주세요.
           return false;
         }

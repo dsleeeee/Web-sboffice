@@ -73,7 +73,7 @@
         /* USE : RtnDstbCloseStoreMapper.getRtnDstbCloseStoreDtlList */
         <![CDATA[
         SELECT  tphsd.STORE_CD, tmp.PROD_CD, tmp.PROD_NM
-        ,       tmp.VAT_FG AS VAT_FG01
+        ,       DECODE(tmp.VAT_FG, '1', 1, 0) AS VAT_FG01
         ,       tphsd.SEQ
         ,       TRUNC(DECODE(SIGN(tshsc.CURR_QTY),-1,0,tshsc.CURR_QTY) / tmp.PO_UNIT_QTY) AS HD_CUR_UNIT_QTY
         ,       MOD  (DECODE(SIGN(tshsc.CURR_QTY),-1,0,tshsc.CURR_QTY) , tmp.PO_UNIT_QTY) AS HD_CUR_ETC_QTY
@@ -242,7 +242,7 @@
         SELECT  ( SELECT SF_GET_PROD_CLASSES('S', tmp.STORE_CD, tmp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM
         ,       tmp.PROD_CD
         ,       tmp.PROD_NM
-        ,       tmp.VAT_FG AS VAT_FG01
+        ,       DECODE(tmp.VAT_FG, '1', 1, 0) AS VAT_FG01
         ,       TRUNC(DECODE(SIGN(tshsc.CURR_QTY),-1,0,tshsc.CURR_QTY) / tmp.PO_UNIT_QTY) AS HD_CUR_UNIT_QTY
         ,       MOD  (DECODE(SIGN(tshsc.CURR_QTY),-1,0,tshsc.CURR_QTY) , tmp.PO_UNIT_QTY) AS HD_CUR_ETC_QTY
         ,       TRUNC(NVL(tsssc.CURR_QTY,0)                            / tmp.PO_UNIT_QTY) AS STORE_CUR_UNIT_QTY
@@ -539,11 +539,11 @@
         ,       tpte.ETC_QTY * ${slipFg} AS MGR_ETC_QTY
         ,       tpte.QTY * ${slipFg} AS MGR_TOT_QTY
         ,       (ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)
-                - ROUND(ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*tmp.VAT_FG*NVL(tmse.ENVST_VAL,0)/11)) * ${slipFg} AS MGR_AMT
-        ,       (ROUND(ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*tmp.VAT_FG/(10+NVL(tmse.ENVST_VAL,0)))) * ${slipFg} AS MGR_VAT
+                - ROUND(ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*DECODE(tmp.VAT_FG, '1', 1, 0)*NVL(tmse.ENVST_VAL,0)/11)) * ${slipFg} AS MGR_AMT
+        ,       (ROUND(ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*DECODE(tmp.VAT_FG, '1', 1, 0)/(10+NVL(tmse.ENVST_VAL,0)))) * ${slipFg} AS MGR_VAT
         ,       (ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)
-                - ROUND(ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*tmp.VAT_FG*NVL(tmse.ENVST_VAL,0)/11)
-                + ROUND(ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*tmp.VAT_FG/(10+NVL(tmse.ENVST_VAL,0)))) * ${slipFg} AS MGR_TOT
+                - ROUND(ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*DECODE(tmp.VAT_FG, '1', 1, 0)*NVL(tmse.ENVST_VAL,0)/11)
+                + ROUND(ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*DECODE(tmp.VAT_FG, '1', 1, 0)/(10+NVL(tmse.ENVST_VAL,0)))) * ${slipFg} AS MGR_TOT
         ,       '10'
         ,       #{regDt}
         ,       #{regId}

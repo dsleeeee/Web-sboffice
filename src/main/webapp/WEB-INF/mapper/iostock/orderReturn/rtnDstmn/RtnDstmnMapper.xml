@@ -180,7 +180,7 @@
         <![CDATA[
         SELECT   tphsod.SLIP_NO, tphsod.SLIP_FG, tphsod.PROD_CD, thp.PROD_NM, tphsod.SEQ
         ,        tphsod.PO_UNIT_FG, tphsod.PO_UNIT_QTY, thp.PO_UNIT_ALLOW_FG
-        ,        thp.VAT_FG AS VAT_FG01
+        ,        DECODE(thp.VAT_FG, '1', 1, 0) AS VAT_FG01
         ,        tphsod.ORDER_SPLY_UPRC                                                               AS ORDER_SPLY_UPRC
         ,        TO_NUMBER(DECODE(tphsod.ORDER_UNIT_QTY,0,NULL,tphsod.ORDER_UNIT_QTY*tphsod.SLIP_FG)) AS ORDER_UNIT_QTY
         ,        TO_NUMBER(DECODE(tphsod.ORDER_ETC_QTY ,0,NULL,tphsod.ORDER_ETC_QTY *tphsod.SLIP_FG)) AS ORDER_ETC_QTY

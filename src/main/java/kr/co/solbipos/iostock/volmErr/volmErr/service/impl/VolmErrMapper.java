@@ -55,13 +55,4 @@ public interface VolmErrMapper {
     /** 물량오류관리 - 매장 조정 HD 등록 */
     int insertVolmErrStoreAdjustHd(VolmErrVO volmErrVO);
 
-
-
-
-
-    /** 콤보조회 */
-    List<DefaultMap<String>> selectCmmCodeList(VolmErrVO volmErrVO);
-    /** 다이나믹 콤보조회 */
-    List<DefaultMap<String>> selectDynamicCodeList(VolmErrVO volmErrVO);
-
 }

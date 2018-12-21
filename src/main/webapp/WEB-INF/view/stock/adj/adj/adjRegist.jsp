@@ -69,7 +69,7 @@
               <%-- 거래처선택 모듈 멀티 선택 사용시 include
                    param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
               --%>
-              <jsp:include page="/WEB-INF/view/iostock/vendr/vendrOrder/selectVendrM.jsp" flush="true">
+              <jsp:include page="/WEB-INF/view/iostock/cmm/selectVendrM.jsp" flush="true">
                 <jsp:param name="targetId" value="adjRegistSelectVendr"/>
               </jsp:include>
               <%--// 거래처선택 모듈 싱글 선택 사용시 include --%>

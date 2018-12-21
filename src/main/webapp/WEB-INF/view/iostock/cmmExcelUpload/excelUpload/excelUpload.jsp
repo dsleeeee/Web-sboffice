@@ -118,7 +118,6 @@
 
     // 엑셀양식 다운로드
     $scope.excelFormDownload = function (uploadFg) {
-      console.log('excelFormDownload');
       $scope.uploadFg = uploadFg;
 
       $scope.addRow();
@@ -137,7 +136,6 @@
 
     // 엑셀 양식 다운로드시 1줄 생성하여 어떤값 넣어야할지 양식생성.
     $scope.addRow = function () {
-      console.log('addRow');
       // 그리드 초기화
       var flex                         = $scope.flex;
       flex.itemsSource                 = new wijmo.collections.CollectionView();
@@ -218,7 +216,6 @@
     // 엑셀파일이 변경된 경우
     $scope.excelFileChanged = function () {
       if ($('#excelUpFile')[0].files[0]) {
-        console.log('excelFileChanged');
         // 엑셀업로드 전 현재 세션ID 와 동일한 자료를 삭제한다.
         $scope.delete('excel');
       }
@@ -228,7 +225,6 @@
     // 텍스트파일이 변경된 경우
     $scope.textFileChanged = function () {
       if ($('#textUpFile')[0].files[0]) {
-        console.log('textFileChanged');
         // 업로드 전 현재 세션ID 와 동일한 자료를 삭제한다.
         $scope.delete('text');
       }
@@ -254,7 +250,6 @@
       }).then(function () {
         // 'complete' code here
         if (upFg === 'excel') {
-          console.log('delete excel');
           $scope.excelUpload(); // 삭제 완료 된 후 엑셀업로드 호출
         } else if (upFg === 'text') {
           $scope.textUpload(); // 삭제 완료 된 후 텍스트업로드 호출
@@ -265,6 +260,7 @@
 
     // 텍스트 업로드
     $scope.textUpload = function () {
+      $scope.excelTextFg = 'text';
       // 업로드 progress 관련 기본값 세팅
       $scope.stepCnt     = 100; // 한번에 DB에 저장할 숫자 세팅
       $scope.progressCnt = 0;   // 처리된 숫자
@@ -292,9 +288,6 @@
             var bytes      = new Uint8Array(e.target.result);
             var length     = bytes.byteLength;
             for (var i = 0; i < length; i++) {
-              // console.log(bytes[i]);
-              // console.log(String.fromCharCode(bytes[i]));
-
               // 값이 스페이스인 경우 건너뜀.
               if (bytes[i] === 32) {
                 continue;
@@ -313,9 +306,6 @@
               }
             }
 
-            console.log('--------uploadData--------');
-            console.log(uploadData);
-
             if (nvl(uploadData, '') !== '') {
               var jsonData = $scope.textUploadToJsonConvert(uploadData);
 
@@ -323,20 +313,17 @@
                 $timeout(function () {
                   $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
 
-                  console.log('-------save 함수 호출 전--------------');
-                  console.log(jsonData);
-
                   $scope.save(jsonData);
                 }, 10);
               } else {
                 $scope._popMsg(messages['excelUpload.noData'], function () {
-                  $scope.$broadcast('loadingPopupInactive'); // 업로드 할 데이터가 없습니다.
-                }); // 텍스트 파일만 업로드 됩니다.(*.txt)
+                  $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                }); // 업로드 할 데이터가 없습니다.
               }
             } else {
               $scope._popMsg(messages['excelUpload.noData'], function () {
-                $scope.$broadcast('loadingPopupInactive'); // 업로드 할 데이터가 없습니다.
-              }); // 텍스트 파일만 업로드 됩니다.(*.txt)
+                $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+              }); // 업로드 할 데이터가 없습니다.
             }
           }, 10);
         }
@@ -357,8 +344,6 @@
       var columnNum           = 2; // 텍스트 업로드시 1줄의 JSON 데이터 컬럼 수 설정
 
       for (var i = 0; i < uploadDataArrLength; i++) {
-        // console.log('i = ' + i + '  ,  ' + uploadDataArr[i]);
-
         // String.fromCharCode(13) 으로 replace 를 하면 제대로 되지 않음..그래서 \n으로 replace 함..
         if (nvl(uploadDataArr[i].replace(/\n/gi, ''), '') !== '') {
           // if (nvl(uploadDataArr[i].replace(/String.fromCharCode(13)/gi, ''), '') !== '') {
@@ -368,11 +353,8 @@
           var dataArrLength = dataArr.length;
           item              = {};
 
-          // console.log('i = ' + i + '  ,  ' + uploadDataArr[i] + '  ,  dataArrLength = '+dataArrLength);
-
           // 1줄의 데이터를 , 로 split 한 자료의 길이가 columnNum 보다 작은 경우 수량 없음 오류 메시지
           if (dataArrLength < columnNum) {
-            console.log('---------text ----------' + data);
             $scope._popMsg(messages['excelUpload.not.qty']); // 업로드 데이터 중 수량이 없는 데이터가 존재합니다.
             jsonData = [];
             break;
@@ -387,23 +369,13 @@
               if (j % columnNum === 0) {
                 item.prodBarcdCd = value;
               } else if (j % columnNum === 1) {
-                // 주문, 반품
-                // if ($scope.uploadFg === 'order' || $scope.uploadFg === 'adj' || $scope.uploadFg === 'disuse') {
-                //   item.unitQty = value;
-                // }
-                // // 실사,조정,폐기
-                // else if ($scope.uploadFg === 'acinc' || $scope.uploadFg === 'adj' || $scope.uploadFg === 'disuse') {
-                  item.qty = value;
-                // }
+                item.qty = value;
               }
             }
-            // console.log(JSON.stringify(item));
           }
 
           jsonData.push(item);
         }
-        // console.log('--------------jsonData---------------');
-        // console.log(jsonData);
       }
 
       return jsonData;
@@ -412,20 +384,16 @@
 
     // 엑셀 업로드
     $scope.excelUpload = function () {
+      $scope.excelTextFg = 'excel';
       // 업로드 progress 관련 기본값 세팅
       $scope.stepCnt     = 100; // 한번에 DB에 저장할 숫자 세팅
       $scope.progressCnt = 0;   // 처리된 숫자
-
-      console.log('excelUpload');
 
       // 선택한 파일이 있으면
       if ($('#excelUpFile')[0].files[0]) {
         var file          = $('#excelUpFile')[0].files[0];
         var fileName      = file.name;
         var fileExtension = fileName.substring(fileName.lastIndexOf('.'));
-
-        console.log('fileName = ' + fileName);
-        console.log('fileExtension = ' + fileExtension);
 
         // 확장자가 xlsx, xlsm 인 경우에만 업로드 실행
         if (fileExtension.toLowerCase() === '.xlsx' || fileExtension.toLowerCase() === '.xlsm') {
@@ -486,8 +454,6 @@
 
     // DB에 저장
     $scope.save = function (jsonData) {
-      console.log('save start');
-      console.log('$scope.uploadFg = ' + $scope.uploadFg);
       $scope.totalRows = jsonData.length;
       var params       = [];
       var msg          = '';
@@ -506,7 +472,7 @@
       for (var i = $scope.progressCnt; i < loopCnt; i++) {
         var item = jsonData[i];
 
-        // 엑셀업로드시 업로드 구분에 따른 필수값 및 길이 체크
+        // 필수값 및 길이 체크
         // 상품코드/바코드
         if (nvl(item.prodBarcdCd, '') === '') {
           msg = messages["excelUpload.prodBarcdCd"] + messages["excelUpload.require.data"]; // 상품코드/바코드(이)가 없는 데이터가 존재합니다.
@@ -514,22 +480,25 @@
           return false;
         }
 
-        // 주문등록, 반품등록, 분배마감, 반품마감, 거래처 발주등록, 거래처 입고등록
-        if ($scope.uploadFg === 'order' || $scope.uploadFg === 'dstbCloseStore' || $scope.uploadFg === 'vendr') {
-          // 단위수량
-          if (nvl(item.unitQty, '') === '') {
-            msg = messages["excelUpload.unitQty"] + messages["excelUpload.require.data"]; // 단위수량(이)가 없는 데이터가 존재합니다.
-            $scope.valueCheckErrPopup(msg);
-            return false;
+        // 엑셀업로드시 업로드구분에 따른 필수값 체크
+        if ($scope.excelTextFg === 'excel') {
+          // 주문등록, 반품등록, 분배마감, 반품마감, 거래처 발주등록, 거래처 입고등록
+          if ($scope.uploadFg === 'order' || $scope.uploadFg === 'dstbCloseStore' || $scope.uploadFg === 'vendr') {
+            // 단위수량
+            if (nvl(item.unitQty, '') === '') {
+              msg = messages["excelUpload.unitQty"] + messages["excelUpload.require.data"]; // 단위수량(이)가 없는 데이터가 존재합니다.
+              $scope.valueCheckErrPopup(msg);
+              return false;
+            }
           }
-        }
-        // 실사,조정,폐기
-        else if ($scope.uploadFg === 'acins' || $scope.uploadFg === 'adj' || $scope.uploadFg === 'disuse') {
-          // 수량
-          if (nvl(item.qty, '') === '') {
-            msg = messages["excelUpload.qty"] + messages["excelUpload.require.data"]; // 수량(이)가 없는 데이터가 존재합니다.
-            $scope.valueCheckErrPopup(msg);
-            return false;
+          // 실사,조정,폐기
+          else if ($scope.uploadFg === 'acins' || $scope.uploadFg === 'adj' || $scope.uploadFg === 'disuse') {
+            // 수량
+            if (nvl(item.qty, '') === '') {
+              msg = messages["excelUpload.qty"] + messages["excelUpload.require.data"]; // 수량(이)가 없는 데이터가 존재합니다.
+              $scope.valueCheckErrPopup(msg);
+              return false;
+            }
           }
         }
 
@@ -540,32 +509,72 @@
           return false;
         }
 
-        // 단위수량 최대크기 체크
-        if (nvl(item.unitQty, '') !== '' && parseInt(nvl(item.unitQty, 0)) > 99999999) {
-          msg = messages["excelUpload.unitQty"] + messages["excelUpload.overSize"] + " 99999999"; // 단위수량의 데이터 중 크기가 너무 큰 데이터가 있습니다. 최대 : 99999999
-          $scope.valueCheckErrPopup(msg);
-          return false;
+        // 단위수량 값 체크
+        if (nvl(item.unitQty, '') !== '') {
+          // 최대크기
+          if (parseInt(nvl(item.unitQty, 0)) > 99999999) {
+            msg = messages["excelUpload.unitQty"] + messages["excelUpload.overSize"] + " 99999999"; // 단위수량의 데이터 중 크기가 너무 큰 데이터가 있습니다. 최대 : 99999999
+            $scope.valueCheckErrPopup(msg);
+            return false;
+          }
+          // 숫자가 아닌 값
+          var numChkexp = /[^0-9]/g;
+          if (numChkexp.test(nvl(item.unitQty, 0))) {
+            msg = messages["excelUpload.unitQty"] + messages["excelUpload.not.numberData"]; // 단위수량의 값에 숫자가 아닌 값이 존재합니다. 데이터 및 양식을 확인해주세요.
+            $scope.valueCheckErrPopup(msg);
+            return false;
+          }
         }
 
-        // 낱개수량 최대크기 체크
-        if (nvl(item.etcQty, '') !== '' && parseInt(nvl(item.etcQty, 0)) > 99999999) {
-          msg = messages["excelUpload.etcQty"] + messages["excelUpload.overSize"] + " 99999999"; // 낱개수량의 데이터 중 크기가 너무 큰 데이터가 있습니다. 최대 : 99999999
-          $scope.valueCheckErrPopup(msg);
-          return false;
+        // 낱개수량 값 체크
+        if (nvl(item.etcQty, '') !== '') {
+          // 최대크기
+          if(parseInt(nvl(item.etcQty, 0)) > 99999999) {
+            msg = messages["excelUpload.etcQty"] + messages["excelUpload.overSize"] + " 99999999"; // 낱개수량의 데이터 중 크기가 너무 큰 데이터가 있습니다. 최대 : 99999999
+            $scope.valueCheckErrPopup(msg);
+            return false;
+          }
+          // 숫자가 아닌 값
+          var numChkexp = /[^0-9]/g;
+          if (numChkexp.test(nvl(item.etcQty, 0))) {
+            msg = messages["excelUpload.etcQty"] + messages["excelUpload.not.numberData"]; // 낱개수량의 값에 숫자가 아닌 값이 존재합니다. 데이터 및 양식을 확인해주세요.
+            $scope.valueCheckErrPopup(msg);
+            return false;
+          }
         }
 
-        // 수량 최대크기 체크
-        if (nvl(item.qty, '') !== '' && parseInt(nvl(item.qty, 0)) > 99999999) {
-          msg = messages["excelUpload.qty"] + messages["excelUpload.overSize"] + " 99999999"; // 수량의 데이터 중 크기가 너무 큰 데이터가 있습니다. 최대 : 99999999
-          $scope.valueCheckErrPopup(msg);
-          return false;
+        // 수량 값 체크
+        if (nvl(item.qty, '') !== '') {
+          // 최대크기
+          if(parseInt(nvl(item.qty, 0)) > 99999999) {
+            msg = messages["excelUpload.qty"] + messages["excelUpload.overSize"] + " 99999999"; // 수량의 데이터 중 크기가 너무 큰 데이터가 있습니다. 최대 : 99999999
+            $scope.valueCheckErrPopup(msg);
+            return false;
+          }
+          // 숫자가 아닌 값
+          var numChkexp = /[^0-9]/g;
+          if (numChkexp.test(nvl(item.qty, 0))) {
+            msg = messages["excelUpload.qty"] + messages["excelUpload.not.numberData"]; // 수량의 값에 숫자가 아닌 값이 존재합니다. 데이터 및 양식을 확인해주세요.
+            $scope.valueCheckErrPopup(msg);
+            return false;
+          }
         }
 
-        // 단가 최대크기 체크
-        if (nvl(item.uprc, '') !== '' && parseInt(nvl(item.uprc, 0)) > 9999999999) {
-          msg = messages["excelUpload.uprc"] + messages["excelUpload.overSize"] + " 9999999999"; // 단가의 데이터 중 크기가 너무 큰 데이터가 있습니다. 최대 : 9999999999
-          $scope.valueCheckErrPopup(msg);
-          return false;
+        // 단가 값 체크
+        if (nvl(item.uprc, '') !== '') {
+          // 최대크기
+          if(parseInt(nvl(item.uprc, 0)) > 9999999999) {
+            msg = messages["excelUpload.uprc"] + messages["excelUpload.overSize"] + " 9999999999"; // 단가의 데이터 중 크기가 너무 큰 데이터가 있습니다. 최대 : 9999999999
+            $scope.valueCheckErrPopup(msg);
+            return false;
+          }
+          // 숫자가 아닌 값
+          var numChkexp = /[^0-9]/g;
+          if (numChkexp.test(nvl(item.uprc, 0))) {
+            msg = messages["excelUpload.uprc"] + messages["excelUpload.not.numberData"]; // 단가의 값에 숫자가 아닌 값이 존재합니다. 데이터 및 양식을 확인해주세요.
+            $scope.valueCheckErrPopup(msg);
+            return false;
+          }
         }
 
         // 비고 최대길이 체크
@@ -576,6 +585,7 @@
         }
 
         item.uploadFg = $scope.uploadFg;
+        // 매장코드를 직접 파라미터로 넘겨주는 경우에만 storeCd를 받아서 temp 테이블에 넣음.
         if (nvl($scope.storeCd, '') !== '') {
           item.storeCd = $scope.storeCd;
         }
@@ -604,8 +614,6 @@
         // 'complete' code here
         // 처리 된 숫자가 총 업로드할 수보다 작은 경우 다시 save 함수 호출
         if (parseInt($scope.progressCnt) < parseInt($scope.totalRows)) {
-          console.log($scope.progressCnt + ' / ' + $scope.totalRows);
-
           // 처리된 숫자 변경
           $scope.progressCnt = loopCnt;
           // 팝업의 progressCnt 값 변경
@@ -654,7 +662,7 @@
     $scope.excelUploadingPopup = function (showFg) {
       if (showFg) {
         // 팝업내용 동적 생성
-        var innerHtml                          = '<div class=\"wj-popup-loading\"><p class=\"bk\">' + messages['excelUpload.excelUploading'] + '</p>';
+        var innerHtml = '<div class=\"wj-popup-loading\"><p class=\"bk\">' + messages['excelUpload.excelUploading'] + '</p>';
         innerHtml += '<div class="mt5 txtIn"><span class="bk" id="progressCnt">0</span> / <span class="bk" id="totalRows">0</span></div>';
         innerHtml += '<p><img src=\"/resource/solbipos/css/img/loading.gif\" alt=\"\" /></p></div>';
         // html 적용
@@ -676,7 +684,6 @@
 
   }]);
 </script>
-
 
 <%-- 수불 엑셀업로드 에러내역 공통 팝업 --%>
 <c:import url="/WEB-INF/view/iostock/cmmExcelUpload/excelUpload/excelUploadErrInfo.jsp">

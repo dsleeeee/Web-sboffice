@@ -179,7 +179,7 @@
           // 진행구분이 조정등록이 아니면 상품추가/변경 불가
           if (!$.isEmptyObject(response.data.data)) {
             // 조정 등록 상태이면 버튼 show
-            if (response.data.data.procFg != "" && response.data.data.procFg == "0") {
+            if (response.data.data.procFg !== "" && response.data.data.procFg === "0") {
               $scope.btnDtlAddProd = true;
               $scope.btnDtlSave    = true;
               $scope.btnDtlConfirm = true;

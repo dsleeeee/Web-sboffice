@@ -340,12 +340,35 @@ public class StoreOrderServiceImpl implements StoreOrderService {
         result = storeOrderMapper.deleteStoreOrderToExcelUploadData(excelUploadVO);
 
         // 여신 체크
-        DefaultMap<String> storeLoan = storeOrderMapper.storeLoanCheck(excelUploadVO);
-        if(storeLoan.getStr("isExist").equals("Y")) {
-            if(storeLoan.getLong("orderTot") > storeLoan.getLong("currLoanAmt")) {
+        StoreOrderVO storeOrderLoanVO = new StoreOrderVO();
+        storeOrderLoanVO.setReqDate(excelUploadVO.getDate());
+        storeOrderLoanVO.setSlipFg(excelUploadVO.getSlipFg());
+        DefaultMap<String> storeLoan = storeOrderMapper.getStoreLoan(storeOrderLoanVO);
+        if(storeLoan.getStr("availableOrderAmt") != null) {
+            Long availableOrderAmt = 0L;
+            Long orderAmt = 0L;
+            if(storeLoan.getStr("noOutstockAmtFg").equals("Y")) {
+                if (storeLoan.getLong("availableOrderAmt") <= (storeLoan.getLong("currLoanAmt") - storeLoan.getLong("prevOrderTot"))) {
+                    availableOrderAmt = storeLoan.getLong("availableOrderAmt");
+                } else if (storeLoan.getLong("availableOrderAmt") >= (storeLoan.getLong("currLoanAmt") - storeLoan.getLong("prevOrderTot")) && storeLoan.getLong("maxOrderAmt") != 0) {
+                    availableOrderAmt = storeLoan.getLong("currLoanAmt") - storeLoan.getLong("prevOrderTot");
+                } else {
+                    availableOrderAmt = storeLoan.getLong("availableOrderAmt") - storeLoan.getLong("prevOrderTot");
+                }
+            }
+            DefaultMap<String> storeOrder = storeOrderMapper.storeLoanCheck(excelUploadVO);
+            orderAmt = storeOrder.getLong("orderTot");
+            if(orderAmt > availableOrderAmt) {
                 throw new JsonException(Status.SERVER_ERROR, messageService.get("storeOrder.dtl.excelLoanOver")); // 주문총금액이 여신잔여 금액을 초과하였습니다. 업로드 된 자료는 처리되지 않았습니다.
             }
         }
+
+//        DefaultMap<String> storeLoan = storeOrderMapper.storeLoanCheck(excelUploadVO);
+//        if(storeLoan.getStr("isExist").equals("Y")) {
+//            if(storeLoan.getLong("orderTot") > storeLoan.getLong("currLoanAmt")) {
+//                throw new JsonException(Status.SERVER_ERROR, messageService.get("storeOrder.dtl.excelLoanOver")); // 주문총금액이 여신잔여 금액을 초과하였습니다. 업로드 된 자료는 처리되지 않았습니다.
+//            }
+//        }
 
         // 엑셀업로드 한 수량을 주문수량으로 입력
         result = storeOrderMapper.insertStoreOrderToExcelUploadData(excelUploadVO);

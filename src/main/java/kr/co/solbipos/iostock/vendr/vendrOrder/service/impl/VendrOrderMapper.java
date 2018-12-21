@@ -71,12 +71,4 @@ public interface VendrOrderMapper {
     /** 거래처 발주등록 엑셀업로드 - 정상 입력된 데이터 TEMP 테이블에서 삭제 */
     int deleteExcelUploadCompleteData(ExcelUploadVO excelUploadVO);
 
-
-
-
-    /** 거래처 발주등록 - 거래처 선택모듈 리스트 조회 */
-    List<DefaultMap<String>> getVendrList(VendrOrderVO vendrOrderVO);
-
-
-
 }

@@ -66,7 +66,7 @@
         /* USE : DstbCloseProdMapper.getDstbCloseProdDtlList */
         <![CDATA[
         SELECT  tphsd.STORE_CD, tms.STORE_NM, tmp.PROD_CD, tmp.PROD_NM
-        ,       tmp.VAT_FG AS VAT_FG01
+        ,       DECODE(tmp.VAT_FG, '1', 1, 0) AS VAT_FG01
         ,       tphsd.SEQ
         ,       TRUNC(DECODE(SIGN(tshsc.CURR_QTY),-1,0,tshsc.CURR_QTY) / tmp.PO_UNIT_QTY) AS HD_CUR_UNIT_QTY
         ,       MOD  (DECODE(SIGN(tshsc.CURR_QTY),-1,0,tshsc.CURR_QTY) , tmp.PO_UNIT_QTY) AS HD_CUR_ETC_QTY
@@ -284,7 +284,7 @@
         <![CDATA[
         SELECT  tms.STORE_CD, tms.STORE_NM
         ,       tmp.PROD_CD, tmp.PROD_NM
-        ,       tmp.VAT_FG AS VAT_FG01
+        ,       DECODE(tmp.VAT_FG, '1', 1, 0) AS VAT_FG01
         ,       tmp.SPLY_UPRC
         ,       tmp.PO_UNIT_ALLOW_FG
         ,       tmp.PO_PROD_FG

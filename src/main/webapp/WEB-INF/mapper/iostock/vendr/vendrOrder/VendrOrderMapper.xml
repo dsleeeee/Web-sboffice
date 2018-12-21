@@ -4,45 +4,6 @@
 
 <mapper namespace="kr.co.solbipos.iostock.vendr.vendrOrder.service.impl.VendrOrderMapper">
 
-    <!-- 거래처 발주등록 - 거래처 선택모듈 리스트 조회 -->
-    <!--
-        TABLE    : TB_HQ_VENDOR
-                   TB_MS_VENDOR
-        PARAM    : vendrOrderVO
-        COMMENTS : 거래처 발주등록 - 거래처 선택모듈 리스트를 조회한다.
-    -->
-    <select id="getVendrList" parameterType="vendrOrderVO" resultType="DefaultMap">
-        /* USE : VendrOrderMapper.getVendrList */
-        <choose>
-        <!-- 본사 -->
-        <when test='orgnFg != null and orgnFg == "H"'>
-            <![CDATA[
-            SELECT  thv.VENDR_CD, thv.VENDR_NM
-            ,       thv.SHIP_FG, thv.VAT_INCLD_YN
-            FROM    TB_HQ_VENDOR thv
-            WHERE   thv.HQ_OFFICE_CD    =   #{hqOfficeCd}
-            ]]>
-        </when>
-        <!-- 가맹점 -->
-        <when test='orgnFg != null and orgnFg == "S"'>
-            <![CDATA[
-            SELECT  tmv.VENDR_CD, tmv.VENDR_NM
-            ,       tmv.SHIP_FG, tmv.VAT_INCLD_YN
-            FROM    TB_MS_VENDOR tmv
-            WHERE   tmv.STORE_CD  = #{storeCd}
-            ]]>
-        </when>
-        </choose>
-    </select>
-
-
-
-
-
-
-
-
-
     <!-- 거래처 발주등록 - 거래처 발주등록 리스트 조회 -->
     <!--
         TABLE    : TB_PO_HQ_VENDR_ORDER, TB_HQ_VENDOR
@@ -248,7 +209,7 @@
                 ,       tphvod.ORDER_AMT*tphvod.SLIP_FG AS ORDER_AMT
                 ,       tphvod.ORDER_VAT*tphvod.SLIP_FG AS ORDER_VAT
                 ,       tphvod.ORDER_TOT*tphvod.SLIP_FG AS ORDER_TOT
-                ,       thp.VAT_FG AS VAT_FG01
+                ,       DECODE(thp.VAT_FG, '1', 1, 0) AS VAT_FG01
                 ,       DECODE(thv.VAT_INCLD_YN, 'Y', 1, 0) AS VENDR_VAT_FG01
                 FROM    TB_PO_HQ_VENDR_ORDER_DTL tphvod
                 ,       TB_HQ_PRODUCT thp
@@ -275,7 +236,7 @@
                 ,       tpsvod.ORDER_AMT*tpsvod.SLIP_FG AS ORDER_AMT
                 ,       tpsvod.ORDER_VAT*tpsvod.SLIP_FG AS ORDER_VAT
                 ,       tpsvod.ORDER_TOT*tpsvod.SLIP_FG AS ORDER_TOT
-                ,       tmp.VAT_FG AS VAT_FG01
+                ,       DECODE(tmp.VAT_FG, '1', 1, 0) AS VAT_FG01
                 ,       DECODE(tmv.VAT_INCLD_YN, 'Y', 1, 0) AS VENDR_VAT_FG01
                 FROM    TB_PO_STORE_VENDR_ORDER_DTL tpsvod
                 ,       TB_MS_PRODUCT tmp
@@ -349,7 +310,7 @@
                 SELECT  thvp.PROD_CD
                 ,       thp.PROD_NM
                 ,       thp.ORGPLCE_CD
-                ,       thp.VAT_FG AS VAT_FG01
+                ,       DECODE(thp.VAT_FG, '1', 1, 0) AS VAT_FG01
                 ,       TRUNC(DECODE(SIGN(tshsc.CURR_QTY),-1,0,tshsc.CURR_QTY) / thp.PO_UNIT_QTY) AS CURR_UNIT_QTY
                 ,       MOD  (DECODE(SIGN(tshsc.CURR_QTY),-1,0,tshsc.CURR_QTY) , thp.PO_UNIT_QTY) AS CURR_ETC_QTY
                 , 		NVL(tphvod.COST_UPRC, thp.COST_UPRC) AS COST_UPRC
@@ -426,7 +387,7 @@
                 SELECT  tmvp.PROD_CD
                 ,       tmp.PROD_NM
                 ,       tmp.ORGPLCE_CD
-                ,       tmp.VAT_FG AS VAT_FG01
+                ,       DECODE(tmp.VAT_FG, '1', 1, 0) AS VAT_FG01
                 ,       TRUNC(DECODE(SIGN(tsssc.CURR_QTY),-1,0,tsssc.CURR_QTY) / tmp.PO_UNIT_QTY) AS CURR_UNIT_QTY
                 ,       MOD  (DECODE(SIGN(tsssc.CURR_QTY),-1,0,tsssc.CURR_QTY) , tmp.PO_UNIT_QTY) AS CURR_ETC_QTY
                 , 		NVL(tpsvod.COST_UPRC, tmp.COST_UPRC) AS COST_UPRC
@@ -1127,7 +1088,7 @@
                                             AND     PROD_CD     IN (    SELECT  PROD_CD
                                                                         FROM    TB_HQ_PRODUCT
                                                                         WHERE   HQ_OFFICE_CD  =  #{hqOfficeCd}
-                                                                        AND     PO_PROD_FG    IN ('1','3')
+                                                                        AND     PO_PROD_FG    IN ('1','2')
                                                                         AND     USE_YN        =  'Y'
                                                                     )
                                         )
@@ -1168,7 +1129,7 @@
                                             AND     PROD_CD     IN (    SELECT  PROD_CD
                                                                         FROM    TB_MS_PRODUCT
                                                                         WHERE   STORE_CD    =  #{storeCd}
-                                                                        AND     PO_PROD_FG  IN ('1','3')
+                                                                        AND     PO_PROD_FG  =  '4'
                                                                         AND     USE_YN      =  'Y'
                                                                     )
                                         )
@@ -1281,11 +1242,11 @@
                 ,       tpte.ETC_QTY * ${slipFg} AS ORDER_ETC_QTY
                 ,       tpte.QTY * ${slipFg} AS ORDER_TOT_QTY
                 ,       (ROUND(tpte.UPRC*(tpte.UNIT_QTY*thp.PO_UNIT_QTY + tpte.ETC_QTY)/thp.PO_UNIT_QTY)
-                        - ROUND(ROUND(tpte.UPRC*(tpte.UNIT_QTY*thp.PO_UNIT_QTY + tpte.ETC_QTY)/thp.PO_UNIT_QTY)*thp.VAT_FG*NVL(${vatFg},0)/11)) * ${slipFg} AS ORDER_AMT
-                ,       (ROUND(ROUND(tpte.UPRC*(tpte.UNIT_QTY*thp.PO_UNIT_QTY + tpte.ETC_QTY)/thp.PO_UNIT_QTY)*thp.VAT_FG/(10+NVL(${vatFg},0)))) * ${slipFg} AS ORDER_VAT
+                        - ROUND(ROUND(tpte.UPRC*(tpte.UNIT_QTY*thp.PO_UNIT_QTY + tpte.ETC_QTY)/thp.PO_UNIT_QTY)*DECODE(thp.VAT_FG, '1', 1, 0)*NVL(${vatFg},0)/11)) * ${slipFg} AS ORDER_AMT
+                ,       (ROUND(ROUND(tpte.UPRC*(tpte.UNIT_QTY*thp.PO_UNIT_QTY + tpte.ETC_QTY)/thp.PO_UNIT_QTY)*DECODE(thp.VAT_FG, '1', 1, 0)/(10+NVL(${vatFg},0)))) * ${slipFg} AS ORDER_VAT
                 ,       (ROUND(tpte.UPRC*(tpte.UNIT_QTY*thp.PO_UNIT_QTY + tpte.ETC_QTY)/thp.PO_UNIT_QTY)
-                        - ROUND(ROUND(tpte.UPRC*(tpte.UNIT_QTY*thp.PO_UNIT_QTY + tpte.ETC_QTY)/thp.PO_UNIT_QTY)*thp.VAT_FG*NVL(${vatFg},0)/11)
-                        + ROUND(ROUND(tpte.UPRC*(tpte.UNIT_QTY*thp.PO_UNIT_QTY + tpte.ETC_QTY)/thp.PO_UNIT_QTY)*thp.VAT_FG/(10+NVL(${vatFg},0)))) * ${slipFg} AS ORDER_TOT
+                        - ROUND(ROUND(tpte.UPRC*(tpte.UNIT_QTY*thp.PO_UNIT_QTY + tpte.ETC_QTY)/thp.PO_UNIT_QTY)*DECODE(thp.VAT_FG, '1', 1, 0)*NVL(${vatFg},0)/11)
+                        + ROUND(ROUND(tpte.UPRC*(tpte.UNIT_QTY*thp.PO_UNIT_QTY + tpte.ETC_QTY)/thp.PO_UNIT_QTY)*DECODE(thp.VAT_FG, '1', 1, 0)/(10+NVL(${vatFg},0)))) * ${slipFg} AS ORDER_TOT
                 ,       0 AS IN_UNIT_QTY
                 ,       0 AS IN_ETC_QTY
                 ,       0 AS IN_TOT_QTY
@@ -1315,7 +1276,7 @@
                             AND     thp.HQ_OFFICE_CD  =   tpte.HQ_OFFICE_CD
                             AND     thp.PROD_CD       =   tpte.PROD_CD
                             AND     thp.HQ_OFFICE_CD  =   #{hqOfficeCd}
-                            AND     thp.PO_PROD_FG    IN  ('1','3')
+                            AND     thp.PO_PROD_FG    IN  ('1','2')
                             AND     thp.USE_YN        =   'Y'
                             AND     tpte.PROD_CD      IN  ( SELECT  PROD_CD
                                                             FROM    TB_HQ_VENDOR_PROD
@@ -1376,11 +1337,11 @@
                 ,       tpte.ETC_QTY * ${slipFg} AS ORDER_ETC_QTY
                 ,       tpte.QTY * ${slipFg} AS ORDER_TOT_QTY
                 ,       (ROUND(tpte.UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)
-                        - ROUND(ROUND(tpte.UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*tmp.VAT_FG*NVL(${vatFg},0)/11)) * ${slipFg} AS ORDER_AMT
-                ,       (ROUND(ROUND(tpte.UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*tmp.VAT_FG/(10+NVL(${vatFg},0)))) * ${slipFg} AS ORDER_VAT
+                        - ROUND(ROUND(tpte.UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*DECODE(tmp.VAT_FG, '1', 1, 0)*NVL(${vatFg},0)/11)) * ${slipFg} AS ORDER_AMT
+                ,       (ROUND(ROUND(tpte.UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*DECODE(tmp.VAT_FG, '1', 1, 0)/(10+NVL(${vatFg},0)))) * ${slipFg} AS ORDER_VAT
                 ,       (ROUND(tpte.UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)
-                        - ROUND(ROUND(tpte.UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*tmp.VAT_FG*NVL(${vatFg},0)/11)
-                        + ROUND(ROUND(tpte.UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*tmp.VAT_FG/(10+NVL(${vatFg},0)))) * ${slipFg} AS ORDER_TOT
+                        - ROUND(ROUND(tpte.UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*DECODE(tmp.VAT_FG, '1', 1, 0)*NVL(${vatFg},0)/11)
+                        + ROUND(ROUND(tpte.UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*DECODE(tmp.VAT_FG, '1', 1, 0)/(10+NVL(${vatFg},0)))) * ${slipFg} AS ORDER_TOT
                 ,       0 AS IN_UNIT_QTY
                 ,       0 AS IN_ETC_QTY
                 ,       0 AS IN_TOT_QTY
@@ -1410,7 +1371,7 @@
                             AND     tmp.STORE_CD    =   tpte.STORE_CD
                             AND     tmp.PROD_CD     =   tpte.PROD_CD
                             AND     tmp.STORE_CD    =   #{storeCd}
-                            AND     tmp.PO_PROD_FG  IN  ('1','3')
+                            AND     tmp.PO_PROD_FG  =   '4'
                             AND     tmp.USE_YN      =   'Y'
                             AND     tpte.PROD_CD      IN  ( SELECT  PROD_CD
                                                             FROM    TB_MS_VENDOR_PROD
@@ -1462,7 +1423,7 @@
                                                         AND     thp.HQ_OFFICE_CD  =   tpte.HQ_OFFICE_CD
                                                         AND     thp.PROD_CD       =   tpte.PROD_CD
                                                         AND     thp.HQ_OFFICE_CD  =   #{hqOfficeCd}
-                                                        AND     thp.PO_PROD_FG    IN  ('1','3')
+                                                        AND     thp.PO_PROD_FG    IN  ('1','2')
                                                         AND     thp.USE_YN        =   'Y'
                                                         AND     tpte.PROD_CD      IN  ( SELECT  PROD_CD
                                                                                         FROM    TB_HQ_VENDOR_PROD
@@ -1496,7 +1457,7 @@
                                                     AND     tmp.STORE_CD    =   tpte.STORE_CD
                                                     AND     tmp.PROD_CD     =   tpte.PROD_CD
                                                     AND     tmp.STORE_CD    =   #{storeCd}
-                                                    AND     tmp.PO_PROD_FG  IN  ('1','3')
+                                                    AND     tmp.PO_PROD_FG  =   '4'
                                                     AND     tmp.USE_YN      =   'Y'
                                                     AND     tpte.PROD_CD    IN  (   SELECT  PROD_CD
                                                                                     FROM    TB_MS_VENDOR_PROD

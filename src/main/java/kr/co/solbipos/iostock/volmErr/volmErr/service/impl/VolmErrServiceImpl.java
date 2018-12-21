@@ -186,21 +186,4 @@ public class VolmErrServiceImpl implements VolmErrService {
         return returnResult;
     }
 
-
-
-
-
-
-    /** 콤보조회 */
-    @Override
-    public List<DefaultMap<String>> selectCmmCodeList(VolmErrVO volmErrVO) {
-        return volmErrMapper.selectCmmCodeList(volmErrVO);
-    }
-
-
-    /** 콤보조회 */
-    @Override
-    public List<DefaultMap<String>> selectDynamicCodeList(VolmErrVO volmErrVO) {
-        return volmErrMapper.selectDynamicCodeList(volmErrVO);
-    }
 }

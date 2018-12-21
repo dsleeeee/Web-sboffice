@@ -72,12 +72,14 @@
 
   <div class="mt10 pdb20 oh bb">
     <%-- 조회 --%>
-    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('rtnDstbCloseProdCtrl')"><s:message code="cmm.search"/></button>
+    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('rtnDstbCloseProdCtrl')">
+      <s:message code="cmm.search"/></button>
   </div>
 
   <div class="tr mt10">
     <%-- 확정 --%>
-    <button type="button" id="btnConfirm" class="btn_skyblue ml5" ng-click="saveConfirm()"><s:message code="rtnDstbCloseProd.confirm"/></button>
+    <button type="button" id="btnConfirm" class="btn_skyblue ml5" ng-click="saveConfirm()">
+      <s:message code="rtnDstbCloseProd.confirm"/></button>
   </div>
 
 
@@ -99,7 +101,7 @@
         <wj-flex-grid-column header="<s:message code="rtnDstbCloseProd.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnDstbCloseProd.prodNm"/>" binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnDstbCloseProd.procFg"/>" binding="procFg" width="70" align="center" is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnDstbCloseProd.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnDstbCloseProd.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnDstbCloseProd.poUnitQty"/>" binding="poUnitQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnDstbCloseProd.mgrUnitQty"/>" binding="mgrUnitQty" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnDstbCloseProd.mgrEtcQty"/>" binding="mgrEtcQty" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
@@ -144,22 +146,6 @@
       {"name": messages["rtnDstbCloseProd.modDate"], "value": "mod"}
     ]);
 
-    <%--$scope._setComboData("srchProcFg", [--%>
-      <%--{"name": "<s:message code='rtnDstbCloseProd.procFgAll'/>", "value": ""},--%>
-      <%--{"name": "<s:message code='rtnDstbCloseProd.procFgReg'/>", "value": "00"},--%>
-      <%--{"name": "<s:message code='rtnDstbCloseProd.procFgMd'/>", "value": "10"},--%>
-      <%--{"name": "<s:message code='rtnDstbCloseProd.procFgDstbClose'/>", "value": "20"},--%>
-      <%--{"name": "<s:message code='rtnDstbCloseProd.procFgSlip'/>", "value": "30"}--%>
-    <%--]);--%>
-    <%--$scope.procFg = "10"; // 진행구분 기본값 세팅--%>
-
-    <%--$scope.procFgMap = new wijmo.grid.DataMap([--%>
-      <%--{id: "00", name: "<s:message code='rtnDstbCloseProd.procFgReg'/>"},--%>
-      <%--{id: "10", name: "<s:message code='rtnDstbCloseProd.procFgMd'/>"},--%>
-      <%--{id: "20", name: "<s:message code='rtnDstbCloseProd.procFgDstbClose'/>"},--%>
-      <%--{id: "30", name: "<s:message code='rtnDstbCloseProd.procFgSlip'/>"}--%>
-    <%--], 'id', 'name');--%>
-
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
       var comboParams         = {};
@@ -168,6 +154,12 @@
       $scope._queryCombo("combo,map", "srchProcFg", "procFgMap", null, comboParams, "A", function () {
         $scope.procFg = "10"; // 진행구분 기본값 세팅
       }); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+
+      comboParams             = {};
+      comboParams.nmcodeGrpCd = "097";
+      var url                 = '/iostock/cmm/iostockCmm/getOrgnCombo.sb';
+      // 파라미터 (comboFg, comboId, gridMapId, url, params, option)
+      $scope._queryCombo("map", null, 'poUnitFgMap', url, comboParams, "A"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
 
       // picker 사용시 호출 : 미사용시 호출안함
       $scope._makePickColumns("rtnDstbCloseProdCtrl");
@@ -179,8 +171,7 @@
           if (col.binding === "prodCd") { // 상품코드
             wijmo.addClass(e.cell, 'wijLink');
             wijmo.addClass(e.cell, 'wj-custom-readonly');
-          }
-          else if (col.binding === "gChk") { // 진행구분 따라 체크박스 컬럼 readonly 컨트롤
+          } else if (col.binding === "gChk") { // 진행구분 따라 체크박스 컬럼 readonly 컨트롤
             var item = s.rows[e.row].dataItem;
             if (item.procFg !== "10") {
               wijmo.addClass(e.cell, 'wj-custom-readonly');
@@ -190,8 +181,7 @@
 
           if (col.format === "date") {
             e.cell.innerHTML = getFormatDate(e.cell.innerText);
-          }
-          else if (col.format === "dateTime") {
+          } else if (col.format === "dateTime") {
             e.cell.innerHTML = getFormatDateTime(e.cell.innerText);
           }
         }
@@ -281,7 +271,7 @@
     // option : A - combo 최상위에 전체라는 텍스트를 붙여준다. S - combo 최상위에 선택이라는 텍스트를 붙여준다. A 또는 S 가 아닌 경우는 데이터값만으로 생성
     // callback : queryCombo 후 callback 할 함수
     $scope._queryCombo = function (comboFg, comboId, gridMapId, url, params, option, callback) {
-      var comboUrl = "/iostock/volmErr/volmErr/volmErr/getCombo.sb";
+      var comboUrl = "/iostock/cmm/iostockCmm/getCombo.sb";
       if (url) {
         comboUrl = url;
       }
@@ -293,22 +283,19 @@
         params : params, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
-        if (response.data.status === "OK") {
-          // this callback will be called asynchronously
-          // when the response is available
+        if ($scope._httpStatusCheck(response, true)) {
           if (!$.isEmptyObject(response.data.data.list)) {
             var list       = response.data.data.list;
             var comboArray = [];
             var comboData  = {};
 
-            if (comboFg.indexOf("combo") >= 0 && nvl(comboId,'') !== '') {
+            if (comboFg.indexOf("combo") >= 0 && nvl(comboId, '') !== '') {
               comboArray = [];
               if (option === "A") {
                 comboData.name  = messages["cmm.all"];
                 comboData.value = "";
                 comboArray.push(comboData);
-              }
-              else if (option === "S") {
+              } else if (option === "S") {
                 comboData.name  = messages["cmm.select"];
                 comboData.value = "";
                 comboArray.push(comboData);
@@ -323,7 +310,7 @@
               $scope._setComboData(comboId, comboArray);
             }
 
-            if (comboFg.indexOf("map") >= 0 && nvl(gridMapId,'') !== '') {
+            if (comboFg.indexOf("map") >= 0 && nvl(gridMapId, '') !== '') {
               comboArray = [];
               for (var i = 0; i < list.length; i++) {
                 comboData      = {};
@@ -335,24 +322,7 @@
             }
           }
         }
-        else if (response.data.status === "FAIL") {
-          $scope._popMsg("Ajax Fail By HTTP Request");
-        }
-        else if (response.data.status === "SESSION_EXFIRE") {
-          $scope._popMsg(response.data.message, function () {
-            location.href = response.data.url;
-          });
-        }
-        else if (response.data.status === "SERVER_ERROR") {
-          $scope._popMsg(response.data.message);
-        }
-        else {
-          var msg = response.data.status + " : " + response.data.message;
-          $scope._popMsg(msg);
-        }
       }, function errorCallback(response) {
-        // called asynchronously if an error occurs
-        // or server returns response with an error status.
         $scope._popMsg(messages["cmm.error"]);
         return false;
       }).then(function () {

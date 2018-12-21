@@ -7,11 +7,11 @@ import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.iostock.cmm.service.IostockCmmService;
+import kr.co.solbipos.iostock.cmm.service.IostockCmmVO;
 import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
 import kr.co.solbipos.iostock.vendr.vendrOrder.service.VendrOrderService;
 import kr.co.solbipos.iostock.vendr.vendrOrder.service.VendrOrderVO;
-import kr.co.solbipos.iostock.volmErr.volmErr.service.VolmErrService;
-import kr.co.solbipos.iostock.volmErr.volmErr.service.VolmErrVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,13 +47,13 @@ import java.util.List;
 public class VendrOrderController {
     private final SessionService sessionService;
     private final VendrOrderService vendrOrderService;
-    private final VolmErrService volmErrService;
+    private final IostockCmmService iostockCmmService;
 
     @Autowired
-    public VendrOrderController(SessionService sessionService, VendrOrderService vendrOrderService, VolmErrService volmErrService) {
+    public VendrOrderController(SessionService sessionService, VendrOrderService vendrOrderService, IostockCmmService iostockCmmService) {
         this.sessionService = sessionService;
         this.vendrOrderService = vendrOrderService;
-        this.volmErrService = volmErrService;
+        this.iostockCmmService = iostockCmmService;
     }
 
     /**
@@ -278,19 +278,12 @@ public class VendrOrderController {
     }
 
 
-
-
-
-
-
-
-
     /**
      * 다이나믹 콤보조회 - 발주타입 조회
      * @param   request
      * @param   response
      * @param   model
-     * @param   volmErrVO
+     * @param   iostockCmmVO
      * @return  String
      * @author  안동관
      * @since   2018. 11. 21.
@@ -298,28 +291,27 @@ public class VendrOrderController {
     @RequestMapping(value = "/vendrOrderDtl/getOrderTypeCombo.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getOrderTypeCombo(HttpServletRequest request, HttpServletResponse response,
-        Model model, VolmErrVO volmErrVO) {
+        Model model, IostockCmmVO iostockCmmVO) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<String>> list = new ArrayList<DefaultMap<String>>();
 
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-            volmErrVO.setSelectTable("TB_HQ_NMCODE");
-            volmErrVO.setSelectCd("NMCODE_CD");
-            volmErrVO.setSelectNm("NMCODE_NM");
-            volmErrVO.setSelectWhere("HQ_OFFICE_CD='"+sessionInfoVO.getHqOfficeCd()+"' AND NMCODE_GRP_CD = 'AA1'");
-            list = volmErrService.selectDynamicCodeList(volmErrVO);
+            iostockCmmVO.setSelectTable("TB_HQ_NMCODE");
+            iostockCmmVO.setSelectCd("NMCODE_CD");
+            iostockCmmVO.setSelectNm("NMCODE_NM");
+            iostockCmmVO.setSelectWhere("HQ_OFFICE_CD='"+sessionInfoVO.getHqOfficeCd()+"' AND NMCODE_GRP_CD = 'AA1'");
+            list = iostockCmmService.selectDynamicCodeList(iostockCmmVO, sessionInfoVO);
         }
         else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-            volmErrVO.setSelectTable("TB_MS_STORE_NMCODE");
-            volmErrVO.setSelectCd("NMCODE_CD");
-            volmErrVO.setSelectNm("NMCODE_NM");
-            volmErrVO.setSelectWhere("STORE_CD='"+sessionInfoVO.getStoreCd()+"' AND NMCODE_GRP_CD = 'AA1'");
-            list = volmErrService.selectDynamicCodeList(volmErrVO);
+            iostockCmmVO.setSelectTable("TB_MS_STORE_NMCODE");
+            iostockCmmVO.setSelectCd("NMCODE_CD");
+            iostockCmmVO.setSelectNm("NMCODE_NM");
+            iostockCmmVO.setSelectWhere("STORE_CD='"+sessionInfoVO.getStoreCd()+"' AND NMCODE_GRP_CD = 'AA1'");
+            list = iostockCmmService.selectDynamicCodeList(iostockCmmVO, sessionInfoVO);
         }
 
-
-        return ReturnUtil.returnListJson(Status.OK, list, volmErrVO);
+        return ReturnUtil.returnListJson(Status.OK, list, iostockCmmVO);
     }
 
 
@@ -328,7 +320,7 @@ public class VendrOrderController {
      * @param   request
      * @param   response
      * @param   model
-     * @param   volmErrVO
+     * @param   iostockCmmVO
      * @return  String
      * @author  안동관
      * @since   2018. 11. 21.
@@ -336,39 +328,16 @@ public class VendrOrderController {
     @RequestMapping(value = "/vendrOrderDtl/getProcFgCombo.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getProcFgCombo(HttpServletRequest request, HttpServletResponse response,
-        Model model, VolmErrVO volmErrVO) {
+        Model model, IostockCmmVO iostockCmmVO) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        volmErrVO.setSelectTable("TB_CM_NMCODE");
-        volmErrVO.setSelectCd("NMCODE_CD");
-        volmErrVO.setSelectNm("NMCODE_NM");
-        volmErrVO.setSelectWhere("NMCODE_GRP_CD='096' AND NMCODE_ITEM_1 LIKE '%"+volmErrVO.getProcFg()+"%'");
-        List<DefaultMap<String>> list = volmErrService.selectDynamicCodeList(volmErrVO);
+        iostockCmmVO.setSelectTable("TB_CM_NMCODE");
+        iostockCmmVO.setSelectCd("NMCODE_CD");
+        iostockCmmVO.setSelectNm("NMCODE_NM");
+        iostockCmmVO.setSelectWhere("NMCODE_GRP_CD='096' AND NMCODE_ITEM_1 LIKE '%"+iostockCmmVO.getProcFg()+"%'");
+        List<DefaultMap<String>> list = iostockCmmService.selectDynamicCodeList(iostockCmmVO, sessionInfoVO);
 
-        return ReturnUtil.returnListJson(Status.OK, list, volmErrVO);
-    }
-
-
-    /**
-     * 거래처 발주등록 - 거래처 선택모듈 리스트 조회
-     * @param   request
-     * @param   response
-     * @param   model
-     * @param   vendrOrderVO
-     * @return  String
-     * @author  안동관
-     * @since   2018. 11. 21.
-     */
-    @RequestMapping(value = "/vendrOrder/selectVendrList.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result getVendrList(HttpServletRequest request, HttpServletResponse response,
-        Model model, VendrOrderVO vendrOrderVO) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        List<DefaultMap<String>> list = vendrOrderService.getVendrList(vendrOrderVO, sessionInfoVO);
-
-        return ReturnUtil.returnListJson(Status.OK, list, vendrOrderVO);
+        return ReturnUtil.returnListJson(Status.OK, list, iostockCmmVO);
     }
 
 

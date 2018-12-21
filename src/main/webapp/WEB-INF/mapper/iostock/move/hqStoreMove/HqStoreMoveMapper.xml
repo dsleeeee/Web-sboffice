@@ -85,7 +85,7 @@
         /* USE : HqStoreMoveMapper.getHqStoreMoveDtlList */
         <![CDATA[
         SELECT   tpsmd.PROD_CD, thp.PROD_NM
-        ,        thp.VAT_FG AS VAT_FG01
+        ,        DECODE(thp.VAT_FG, '1', 1, 0) AS VAT_FG01
         ,        thp.PO_UNIT_FG, thp.PO_UNIT_QTY
         ,        thp.PO_PROD_FG
         ,        tpsmd.OUT_SPLY_UPRC

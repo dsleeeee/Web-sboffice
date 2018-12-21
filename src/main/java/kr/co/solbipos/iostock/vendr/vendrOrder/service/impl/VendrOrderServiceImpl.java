@@ -289,19 +289,6 @@ public class VendrOrderServiceImpl implements VendrOrderService {
     }
 
 
-
-
-
-    /** 거래처 발주등록 - 거래처 선택모듈 리스트 조회 */
-    @Override
-    public List<DefaultMap<String>> getVendrList(VendrOrderVO vendrOrderVO, SessionInfoVO sessionInfoVO) {
-        // regId, regDt, modId, modDt, hqOfficd, storeCd, orgnCd 세팅
-        vendrOrderVO = setSessionValue(vendrOrderVO, sessionInfoVO, null);
-
-        return vendrOrderMapper.getVendrList(vendrOrderVO);
-    }
-
-
     /** regId, regDt, modId, modDt, hqOfficd, storeCd, orgnFg 세팅  */
     public VendrOrderVO setSessionValue(VendrOrderVO vendrOrderVO, SessionInfoVO sessionInfoVO, String currentDt) {
         if(StringUtil.getOrBlank(currentDt).equals("")) {

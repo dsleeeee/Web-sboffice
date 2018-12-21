@@ -33,7 +33,7 @@
                                 modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
                                 closeFunc - 팝업 닫기시 호출할 함수
               --%>
-              <jsp:include page="/WEB-INF/view/iostock/vendr/vendrOrder/selectVendrS.jsp" flush="true">
+              <jsp:include page="/WEB-INF/view/iostock/cmm/selectVendrS.jsp" flush="true">
                 <jsp:param name="targetId" value="vendrExactRegistSelectVendr"/>
               </jsp:include>
               <%--// 거래처선택 모듈 싱글 선택 사용시 include --%>

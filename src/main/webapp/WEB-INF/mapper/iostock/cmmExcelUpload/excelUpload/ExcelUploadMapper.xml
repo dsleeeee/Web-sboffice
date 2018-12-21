@@ -184,6 +184,7 @@
             <when test='orgnFg != null and orgnFg == "H"'>
                 <![CDATA[
                 SELECT  DECODE(tpte.PROD_CD, NULL, '0', '1') AS PROD_STATUS
+                ,       DECODE(thvp.PROD_CD, NULL, '0', '1') AS VENDR_PROD_STATUS
                 ,       tpte.PROD_BARCD_CD
                 ,       tpte.PROD_CD
                 ,       tpte.BARCD_CD
@@ -197,11 +198,15 @@
                 ,       thp.USE_YN
                 FROM    TB_PO_TEMP_EXCEL tpte
                 ,       TB_HQ_PRODUCT thp
-                WHERE   tpte.SESSION_ID    = #{sessionId}
-                AND     tpte.HQ_OFFICE_CD  = #{hqOfficeCd}
-                AND     tpte.PROD_BARCD_CD IS NOT NULL
-                AND     thp.HQ_OFFICE_CD(+)= tpte.HQ_OFFICE_CD
-                AND     thp.PROD_CD     (+)= tpte.PROD_CD
+                ,       TB_HQ_VENDOR_PROD thvp
+                WHERE   tpte.SESSION_ID     = #{sessionId}
+                AND     tpte.HQ_OFFICE_CD   = #{hqOfficeCd}
+                AND     tpte.PROD_BARCD_CD  IS NOT NULL
+                AND     thp.HQ_OFFICE_CD (+)= tpte.HQ_OFFICE_CD
+                AND     thp.PROD_CD      (+)= tpte.PROD_CD
+                AND     thvp.HQ_OFFICE_CD(+)= tpte.HQ_OFFICE_CD
+                AND     thvp.VENDR_CD    (+)= #{vendrCd}
+                AND     thvp.PROD_CD     (+)= tpte.PROD_CD
                 ORDER BY tpte.PROD_BARCD_CD, tpte.PROD_CD
                 ]]>
             </when>
@@ -209,6 +214,7 @@
             <when test='orgnFg != null and orgnFg == "S"'>
                 <![CDATA[
                 SELECT  DECODE(tpte.PROD_CD, NULL, '0', '1') AS PROD_STATUS
+                ,       DECODE(tmvp.PROD_CD, NULL, '0', '1') AS VENDR_PROD_STATUS
                 ,       tpte.PROD_BARCD_CD
                 ,       tpte.PROD_CD
                 ,       tpte.BARCD_CD
@@ -222,11 +228,15 @@
                 ,       tmp.USE_YN
                 FROM    TB_PO_TEMP_EXCEL tpte
                 ,       TB_MS_PRODUCT tmp
+                ,       TB_MS_VENDOR_PROD tmvp
                 WHERE   tpte.SESSION_ID    = #{sessionId}
                 AND     tpte.STORE_CD      = #{storeCd}
                 AND     tpte.PROD_BARCD_CD IS NOT NULL
                 AND     tmp.STORE_CD    (+)= tpte.STORE_CD
                 AND     tmp.PROD_CD     (+)= tpte.PROD_CD
+                AND     tmvp.STORE_CD   (+)= tpte.STORE_CD
+                AND     tmvp.VENDR_CD   (+)= #{vendrCd}
+                AND     tmvp.PROD_CD    (+)= tpte.PROD_CD
                 ORDER BY tpte.PROD_BARCD_CD, tpte.PROD_CD
                 ]]>
             </when>

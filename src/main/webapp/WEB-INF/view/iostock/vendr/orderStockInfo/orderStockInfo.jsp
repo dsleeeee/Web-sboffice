@@ -42,7 +42,7 @@
           <%-- 거래처선택 모듈 멀티 선택 사용시 include
                param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
           --%>
-          <jsp:include page="/WEB-INF/view/iostock/vendr/vendrOrder/selectVendrM.jsp" flush="true">
+          <jsp:include page="/WEB-INF/view/iostock/cmm/selectVendrM.jsp" flush="true">
             <jsp:param name="targetId" value="orderStockInfoSelectVendr"/>
           </jsp:include>
           <%--// 거래처선택 모듈 싱글 선택 사용시 include --%>
@@ -151,7 +151,7 @@
   var app = agrid.getApp();
 
   /** 발주대비 입고현황 그리드 controller */
-  app.controller('orderStockInfoCtrl', ['$scope', '$http', function ($scope, $http) {
+  app.controller('orderStockInfoCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('orderStockInfoCtrl', $scope, $http, true));
 
@@ -170,7 +170,7 @@
       var comboParams         = {};
       comboParams.nmcodeGrpCd = "096";
       // 파라미터 (comboFg, comboId, gridMapId, url, params, option)
-      $scope._queryCombo("map", "", "procFgMap", null, comboParams, "A"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+      $scope._queryCombo("map", null, "procFgMap", null, comboParams, "A"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
 
       // picker 사용시 호출 : 미사용시 호출안함
       $scope._makePickColumns("orderStockInfoCtrl");
@@ -325,8 +325,9 @@
     // url : 데이터 조회할 url 정보. 명칭관리 조회시에는 url 필요없음.
     // params : 데이터 조회할 url에 보낼 파라미터
     // option : A - combo 최상위에 전체라는 텍스트를 붙여준다. S - combo 최상위에 선택이라는 텍스트를 붙여준다. A 또는 S 가 아닌 경우는 데이터값만으로 생성
-    $scope._queryCombo = function (comboFg, comboId, gridMapId, url, params, option) {
-      var comboUrl = "/iostock/volmErr/volmErr/volmErr/getCombo.sb";
+    // callback : queryCombo 후 callback 할 함수
+    $scope._queryCombo = function (comboFg, comboId, gridMapId, url, params, option, callback) {
+      var comboUrl = "/iostock/cmm/iostockCmm/getCombo.sb";
       if (url) {
         comboUrl = url;
       }
@@ -338,15 +339,14 @@
         params : params, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
-        if (response.data.status === "OK") {
-          // this callback will be called asynchronously
-          // when the response is available
+        if ($scope._httpStatusCheck(response, true)) {
           if (!$.isEmptyObject(response.data.data.list)) {
             var list       = response.data.data.list;
             var comboArray = [];
             var comboData  = {};
 
             if (comboFg.indexOf("combo") >= 0 && nvl(comboId, '') !== '') {
+              comboArray = [];
               if (option === "A") {
                 comboData.name  = messages["cmm.all"];
                 comboData.value = "";
@@ -367,6 +367,7 @@
             }
 
             if (comboFg.indexOf("map") >= 0 && nvl(gridMapId, '') !== '') {
+              comboArray = [];
               for (var i = 0; i < list.length; i++) {
                 comboData      = {};
                 comboData.id   = list[i].nmcodeCd;
@@ -376,24 +377,16 @@
               $scope[gridMapId] = new wijmo.grid.DataMap(comboArray, 'id', 'name');
             }
           }
-        } else if (response.data.status === "FAIL") {
-          $scope._popMsg("Ajax Fail By HTTP Request");
-        } else if (response.data.status === "SESSION_EXFIRE") {
-          $scope._popMsg(response.data.message, function () {
-            location.href = response.data.url;
-          });
-        } else if (response.data.status === "SERVER_ERROR") {
-          $scope._popMsg(response.data.message);
-        } else {
-          var msg = response.data.status + " : " + response.data.message;
-          $scope._popMsg(msg);
         }
       }, function errorCallback(response) {
-        // called asynchronously if an error occurs
-        // or server returns response with an error status.
         $scope._popMsg(messages["cmm.error"]);
         return false;
       }).then(function () {
+        if (typeof callback === 'function') {
+          $timeout(function () {
+            callback();
+          }, 10);
+        }
       });
     };
 

@@ -106,7 +106,7 @@
     $scope.searchStore = function () {
       // 파라미터
       var params = {};
-      $scope._inquirySub("/iostock/order/outstockReqDate/days/selectStoreList.sb", params, function () {
+      $scope._inquirySub("/iostock/cmm/iostockCmm/selectStoreList.sb", params, function () {
         $scope.searchFg = "Y";
       });
     };

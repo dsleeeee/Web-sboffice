@@ -37,11 +37,4 @@ public interface VendrOrderService {
     /** 엑셀업로드 */
     int excelUpload(ExcelUploadVO excelUploadVO, SessionInfoVO sessionInfoVO);
 
-
-
-
-
-    /** 거래처 발주등록 - 거래처 선택모듈 리스트 조회 */
-    List<DefaultMap<String>> getVendrList(VendrOrderVO vendrOrderVO, SessionInfoVO sessionInfoVO);
-
 }

@@ -63,7 +63,7 @@
         ,       tphso.ORDER_AMT*tphso.SLIP_FG AS ORDER_AMT
         ,       tphso.ORDER_VAT*tphso.SLIP_FG AS ORDER_VAT
         ,       tphso.ORDER_TOT*tphso.SLIP_FG AS ORDER_TOT
-        ,       tmp.VAT_FG AS VAT_FG01
+        ,       DECODE(tmp.VAT_FG, '1', 1, 0) AS VAT_FG01
         ,       the.ENVST_VAL AS ENVST0011
         FROM    TB_PO_HQ_STORE_ORDER_DTL tphso
         ,       TB_MS_PRODUCT tmp
@@ -92,7 +92,7 @@
         <![CDATA[
         SELECT  tmp.PROD_CD
         ,       tmp.PROD_NM
-        ,       tmp.VAT_FG AS VAT_FG01
+        ,       DECODE(tmp.VAT_FG, '1', 1, 0) AS VAT_FG01
         ,       TRUNC(DECODE(SIGN(tshsc.CURR_QTY),-1,0,tshsc.CURR_QTY) / tmp.PO_UNIT_QTY) AS HD_CUR_UNIT_QTY
         ,       MOD  (DECODE(SIGN(tshsc.CURR_QTY),-1,0,tshsc.CURR_QTY) , tmp.PO_UNIT_QTY) AS HD_CUR_ETC_QTY
         ,       TRUNC(NVL(tsssc.CURR_QTY,0)                            / tmp.PO_UNIT_QTY) AS STORE_CUR_UNIT_QTY
@@ -792,11 +792,11 @@
         ,       tpte.ETC_QTY * ${slipFg} AS ORDER_ETC_QTY
         ,       tpte.QTY * ${slipFg} AS ORDER_TOT_QTY
         ,       (ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)
-              - ROUND(ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*tmp.VAT_FG*NVL(tmse.ENVST_VAL,0)/11)) * ${slipFg} AS ORDER_AMT
-        ,       (ROUND(ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*tmp.VAT_FG/(10+NVL(tmse.ENVST_VAL,0)))) * ${slipFg} AS ORDER_VAT
+              - ROUND(ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*DECODE(tmp.VAT_FG, '1', 1, 0)*NVL(tmse.ENVST_VAL,0)/11)) * ${slipFg} AS ORDER_AMT
+        ,       (ROUND(ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*DECODE(tmp.VAT_FG, '1', 1, 0)/(10+NVL(tmse.ENVST_VAL,0)))) * ${slipFg} AS ORDER_VAT
         ,       (ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)
-              - ROUND(ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*tmp.VAT_FG*NVL(tmse.ENVST_VAL,0)/11)
-              + ROUND(ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*tmp.VAT_FG/(10+NVL(tmse.ENVST_VAL,0)))) * ${slipFg} AS ORDER_TOT
+              - ROUND(ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*DECODE(tmp.VAT_FG, '1', 1, 0)*NVL(tmse.ENVST_VAL,0)/11)
+              + ROUND(ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*DECODE(tmp.VAT_FG, '1', 1, 0)/(10+NVL(tmse.ENVST_VAL,0)))) * ${slipFg} AS ORDER_TOT
         ,       tpte.REMARK
         ,       #{regDt}
         ,       #{regId}
