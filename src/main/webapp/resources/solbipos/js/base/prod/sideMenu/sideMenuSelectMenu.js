@@ -263,7 +263,7 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
     // dispSeq 재설정
     var editItems = [];
     for (var s = 0; s < $scope.flex.collectionView.itemCount; s++) {
-      if( isEmptyObject($scope.flex.collectionView.items[s].status)) {
+      if( isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
         editItems.push($scope.flex.collectionView.items[s]);
       }
     }
@@ -282,6 +282,8 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
       $scope.flex.collectionView.itemsAdded[i].status = 'I';
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
+
+    // console.log('params',params);
 
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._save('/base/prod/sideMenu/menuClass/save.sb', params, function() {
@@ -464,7 +466,7 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
     // dispSeq 재설정
     var editItems = [];
     for (var s = 0; s < $scope.flex.collectionView.itemCount; s++) {
-      if( isEmptyObject($scope.flex.collectionView.items[s].status)) {
+      if( isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
         editItems.push($scope.flex.collectionView.items[s]);
       }
     }
