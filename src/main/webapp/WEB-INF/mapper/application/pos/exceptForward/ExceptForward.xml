@@ -30,6 +30,7 @@
                  FROM TB_MS_PRODUCT_CLASS tmpc,
                       TB_NEOE_SPOS_CLS tnsc
                 WHERE tnsc.PROD_CLASS_CD = tmpc.PROD_CLASS_CD
+                  AND tnsc.CD_FLAG2 = 'Y'
                   AND tmpc.STORE_CD = #{storeCd}
                ) tmp
          WHERE tmpc.STORE_CD = #{storeCd}
