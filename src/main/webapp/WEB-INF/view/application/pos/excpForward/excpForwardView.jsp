@@ -26,17 +26,31 @@
 
       <table class="searchTbl">
         <colgroup>
-          <col class="w45" />
-          <col class="w55" />
+          <col class="w15" />
+          <col class="w35" />
+          <col class="w15" />
+          <col class="w35" />
         </colgroup>
         <tbody>
         <tr>
           <%-- 분류 --%>
           <th><s:message code="application.pos.excpForward.prodClass" /></th>
-          <td>
+          <td colspan="3">
             <input type="text" id="srchProdClassNm" class="sb-input w100"  ng-model="prodClassNm" ng-click="popUpProdClass()"
                    placeholder="<s:message code="application.pos.excpForward.prodClass" /> 선택" readonly/>
             <input type="hidden" id="srchProdClasscd" class="sb-input w100"  ng-model="prodClassCd" disabled/>
+          </td>
+        </tr>
+        <tr>
+          <%-- 상품코드 --%>
+          <th><s:message code="slipStockInfo.prodCd"/></th>
+          <td>
+            <input type="text" id="srchProdCd" name="srchProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13"/>
+          </td>
+          <%-- 상품명 --%>
+          <th><s:message code="slipStockInfo.prodNm"/></th>
+          <td>
+            <input type="text" id="srchProdNm" name="srchProdNm" ng-model="prodNm" class="sb-input w100" maxlength="16"/>
           </td>
         </tr>
         </tbody>

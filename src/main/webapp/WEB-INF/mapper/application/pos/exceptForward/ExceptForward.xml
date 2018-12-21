@@ -102,6 +102,12 @@
                                       CONNECT BY  tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD
                                       )
         </if>
+        <if test="prodCd != null and prodCd != ''">
+           AND tsdp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test="prodNm != null and prodNm != ''">
+           AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
            AND tsdp.STORE_CD (+)= tnsp.STORE_CD
            AND tsdp.PROD_CD (+)= tnsp.PROD_CD
            AND tnse.CD_COMPANY (+)= tnsp.CD_COMPANY
