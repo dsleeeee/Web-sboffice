@@ -52,7 +52,7 @@
             <%-- 세금계산서 발행 대상 목록 --%>
             <div class="mb40" >
                 <%-- 예외출고 상품 그리드 --%>
-                <div id="productGrid" class="wj-gridWrap" style="height:310px; overflow-y: hidden; overflow-x: hidden;">
+                <div id="productGrid" class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
                     <wj-flex-grid
                             autoGenerateColumns="false"
                             control="flex"
