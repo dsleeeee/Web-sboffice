@@ -210,7 +210,7 @@ public class ProdServiceImpl implements ProdService {
         // [판매가 - 본사통제시] 본사에서 상품정보 수정시 매장에 수정정보 내려줌
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ  && priceEnvstVal == PriceEnvFg.HQ) {
             String storeSalePriceReeulst = prodMapper.saveStoreSalePrice(prodVO);
-            LOGGER.info("storeSalePrice : " + storeSalePriceReeulst);
+            LOGGER.info("salePrice : " + storeSalePriceReeulst);
         }
 
         return result;

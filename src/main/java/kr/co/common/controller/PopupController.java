@@ -183,4 +183,32 @@ public class PopupController {
 
         return returnJson(Status.OK, result);
     }
+
+
+    /**
+     * 상품 찾기 팝업에서 상품 목록 조회
+     *
+     * @param prodVO ProdVO
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param model Model
+     * @return
+     * @author 김지은
+     * @since 2018.12.21
+     */
+    @RequestMapping(value = "/getProductList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProductList(ProdVO prodVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = popupService.getProductList(prodVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, result, prodVO);
+    }
+
+
+
+
 }

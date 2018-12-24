@@ -191,16 +191,10 @@
     <typeAlias alias="vendrVO" type="kr.co.solbipos.base.prod.vendr.service.VendrVO"/>
     <typeAlias alias="mfbizVO" type="kr.co.solbipos.base.prod.mfbiz.service.MfbizVO"/>
 -->
-    <typeAlias alias="prodVO" type="kr.co.solbipos.base.prod.prod.service.ProdVO"/>
-<!--
-    <typeAlias alias="prodBarcdVO" type="kr.co.solbipos.base.prod.prodbarcd.service.ProdBarcdVO"/>
-    <typeAlias alias="supplyVO" type="kr.co.solbipos.base.prod.supply.service.SupplyVO"/>
-    <typeAlias alias="excelUploadVO" type="kr.co.solbipos.base.prod.excelupload.service.ExcelUploadVO"/>
-    <typeAlias alias="kitchenPrtProdVO" type="kr.co.solbipos.base.prod.kitchenprtprod.service.KitchenPrtProdVO"/>
-    <typeAlias alias="kitchenPrtTimeVO" type="kr.co.solbipos.base.prod.kitchenprttime.service.KitchenPrtTimeVO"/>
--->
-    <typeAlias alias="vendrVO" type="kr.co.solbipos.base.prod.vendr.service.VendrVO"/>
 
+    <!-- 상품관리 -->
+    <typeAlias alias="prodVO" type="kr.co.solbipos.base.prod.prod.service.ProdVO"/>
+    <typeAlias alias="vendrVO" type="kr.co.solbipos.base.prod.vendr.service.VendrVO"/>
     <typeAlias alias="touchKeyVO" type="kr.co.solbipos.base.prod.touchkey.service.TouchKeyVO"/>
     <typeAlias alias="touchKeyClassVO" type="kr.co.solbipos.base.prod.touchkey.service.TouchKeyClassVO"/>
     <typeAlias alias="touchKeyStyleVO" type="kr.co.solbipos.base.prod.touchkey.service.TouchKeyStyleVO"/>
@@ -210,28 +204,41 @@
     <typeAlias alias="sideMenuSelClassVO" type="kr.co.solbipos.base.prod.sidemenu.service.SideMenuSelClassVO"/>
     <typeAlias alias="sideMenuSelProdVO" type="kr.co.solbipos.base.prod.sidemenu.service.SideMenuSelProdVO"/>
 
-<!--
-    <typeAlias alias="chgBatchVO" type="kr.co.solbipos.base.prod.chgbatch.service.ChgBatchVO"/>
-    <typeAlias alias="cornerVO" type="kr.co.solbipos.base.prod.corner.service.CornerVO"/>
-    <typeAlias alias="salePriceManageVO" type="kr.co.solbipos.base.price.salepricemanage.service.SalePriceManageVO"/>
-    <typeAlias alias="salePriceVO" type="kr.co.solbipos.base.price.saleprice.service.SalePriceVO"/>
-    <typeAlias alias="storePriceVO" type="kr.co.solbipos.base.price.storeprice.service.StorePriceVO"/>
-    <typeAlias alias="storePriceHistVO" type="kr.co.solbipos.base.price.storepricehist.service.StorePriceHistVO"/>
-    <typeAlias alias="ItemUnitPriceVO" type="kr.co.solbipos.base.price.itemunitprice.service.ItemUnitPriceVO"/>
-    <typeAlias alias="vendrUnitPriceVO" type="kr.co.solbipos.base.price.vendrunitprice.service.VendrUnitPriceVO"/>
-    <typeAlias alias="salePriceStatusVO" type="kr.co.solbipos.base.price.salepricestatus.service.SalePriceStatusVO"/>
-    <typeAlias alias="splyPriceVO" type="kr.co.solbipos.base.price.splyprice.service.SplyPriceVO"/>
-    <typeAlias alias="splyPriceHistVO" type="kr.co.solbipos.base.price.splypricehist.service.SplyPriceHistVO"/>
-    <typeAlias alias="storeSplyVO" type="kr.co.solbipos.base.price.storesply.service.StoreSplyVO"/>
-    <typeAlias alias="storeSplyHistVO" type="kr.co.solbipos.base.price.storesplyhist.service.StoreSplyHistVO"/>
-    <typeAlias alias="chgCostVO" type="kr.co.solbipos.base.price.chgcost.service.ChgCostVO"/>
-    <typeAlias alias="chgCostHistVO" type="kr.co.solbipos.base.price.chgcosthist.service.ChgCostHistVO"/>
-    <typeAlias alias="chgStoreCostVO" type="kr.co.solbipos.base.price.chgstorecost.service.ChgStoreCostVO"/>
-    <typeAlias alias="chgStoreCostHistVO" type="kr.co.solbipos.base.price.chgstorecosthist.service.ChgStoreCostHistVO"/>
-    <typeAlias alias="timesalePriceVO" type="kr.co.solbipos.base.price.timesaleprice.service.TimesalePriceVO"/>
-    <typeAlias alias="prmVO" type="kr.co.solbipos.base.price.prm.service.PrmVO"/>
-    <typeAlias alias="giftVO" type="kr.co.solbipos.base.pay.gift.service.GiftVO"/>
+    <!--
+    <typeAlias alias="prodBarcdVO" type="kr.co.solbipos.base.prod.prodbarcd.service.ProdBarcdVO"/>
+    <typeAlias alias="supplyVO" type="kr.co.solbipos.base.prod.supply.service.SupplyVO"/>
+    <typeAlias alias="excelUploadVO" type="kr.co.solbipos.base.prod.excelupload.service.ExcelUploadVO"/>
+    <typeAlias alias="kitchenPrtProdVO" type="kr.co.solbipos.base.prod.kitchenprtprod.service.KitchenPrtProdVO"/>
+    <typeAlias alias="kitchenPrtTimeVO" type="kr.co.solbipos.base.prod.kitchenprttime.service.KitchenPrtTimeVO"/>
     -->
+
+    <!-- 가격관리 -->
+    <typeAlias alias="salePriceVO" type="kr.co.solbipos.base.price.salePrice.service.SalePriceVO"/>
+
+    <!--
+        <typeAlias alias="chgBatchVO" type="kr.co.solbipos.base.prod.chgbatch.service.ChgBatchVO"/>
+        <typeAlias alias="cornerVO" type="kr.co.solbipos.base.prod.corner.service.CornerVO"/>
+        <typeAlias alias="salePriceManageVO" type="kr.co.solbipos.base.price.salepricemanage.service.SalePriceManageVO"/>
+        <typeAlias alias="salePriceVO" type="kr.co.solbipos.base.price.saleprice.service.SalePriceVO"/>
+        <typeAlias alias="storePriceVO" type="kr.co.solbipos.base.price.storeprice.service.StorePriceVO"/>
+        <typeAlias alias="storePriceHistVO" type="kr.co.solbipos.base.price.storepricehist.service.StorePriceHistVO"/>
+        <typeAlias alias="ItemUnitPriceVO" type="kr.co.solbipos.base.price.itemunitprice.service.ItemUnitPriceVO"/>
+        <typeAlias alias="vendrUnitPriceVO" type="kr.co.solbipos.base.price.vendrunitprice.service.VendrUnitPriceVO"/>
+        <typeAlias alias="salePriceStatusVO" type="kr.co.solbipos.base.price.salepricestatus.service.SalePriceStatusVO"/>
+        <typeAlias alias="splyPriceVO" type="kr.co.solbipos.base.price.splyprice.service.SplyPriceVO"/>
+        <typeAlias alias="splyPriceHistVO" type="kr.co.solbipos.base.price.splypricehist.service.SplyPriceHistVO"/>
+        <typeAlias alias="storeSplyVO" type="kr.co.solbipos.base.price.storesply.service.StoreSplyVO"/>
+        <typeAlias alias="storeSplyHistVO" type="kr.co.solbipos.base.price.storesplyhist.service.StoreSplyHistVO"/>
+        <typeAlias alias="chgCostVO" type="kr.co.solbipos.base.price.chgcost.service.ChgCostVO"/>
+        <typeAlias alias="chgCostHistVO" type="kr.co.solbipos.base.price.chgcosthist.service.ChgCostHistVO"/>
+        <typeAlias alias="chgStoreCostVO" type="kr.co.solbipos.base.price.chgstorecost.service.ChgStoreCostVO"/>
+        <typeAlias alias="chgStoreCostHistVO" type="kr.co.solbipos.base.price.chgstorecosthist.service.ChgStoreCostHistVO"/>
+        <typeAlias alias="timesalePriceVO" type="kr.co.solbipos.base.price.timesaleprice.service.TimesalePriceVO"/>
+        <typeAlias alias="prmVO" type="kr.co.solbipos.base.price.prm.service.PrmVO"/>
+        <typeAlias alias="giftVO" type="kr.co.solbipos.base.pay.gift.service.GiftVO"/>
+        -->
+
+    <!-- 쿠폰관리 -->
     <typeAlias alias="payMethodClassVO" type="kr.co.solbipos.base.pay.coupon.service.PayMethodClassVO"/>
     <typeAlias alias="couponVO" type="kr.co.solbipos.base.pay.coupon.service.CouponVO"/>
     <typeAlias alias="couponProdVO" type="kr.co.solbipos.base.pay.coupon.service.CouponProdVO"/>
@@ -285,6 +292,7 @@
     <typeAlias alias="prtVO" type="kr.co.solbipos.sale.dtstmn.prt.service.PrtVO"/>
     <typeAlias alias="viewVO" type="kr.co.solbipos.membr.info.view.service.ViewVO"/>
 -->
+    <!-- 회원관리 -->
     <typeAlias alias="registVO" type="kr.co.solbipos.membr.info.regist.service.RegistVO"/>
     <typeAlias alias="membrClassVO" type="kr.co.solbipos.membr.info.grade.service.MembrClassVO"/>
     <typeAlias alias="memberMappingVO" type="kr.co.solbipos.membr.info.regist.service.MemberMappingVO"/>
@@ -394,6 +402,8 @@
         <typeAlias alias="bilclctVO" type="kr.co.solbipos.excclc.bilclct.bilclct.service.BilclctVO"/>
         <typeAlias alias="accntManageVO" type="kr.co.solbipos.adi.mony.accntmanage.service.AccntManageVO"/>
     -->
+
+    <!-- 계정관리 / 입금관리 -->
     <typeAlias alias="accntVO" type="kr.co.solbipos.adi.mony.accntManage.service.impl.AccntVO"/>
     <typeAlias alias="statusVO" type="kr.co.solbipos.adi.mony.status.service.StatusVO"/>
     <typeAlias alias="drawHistVO" type="kr.co.solbipos.adi.mony.drawhist.service.DrawHistVO"/>
@@ -408,7 +418,10 @@
 <!--
     <typeAlias alias="resveVO" type="kr.co.solbipos.adi.etc.resve.service.ResveVO"/>
 -->
+
+    <!-- 주방메모 -->
     <typeAlias alias="kitchenMemoVO" type="kr.co.solbipos.adi.etc.kitchenmemo.service.KitchenMemoVO"/>
+    <!-- 환율관리 -->
     <typeAlias alias="ehgtVO" type="kr.co.solbipos.adi.etc.ehgt.service.EhgtVO"/>
     <typeAlias alias="crncyCdVO" type="kr.co.solbipos.adi.etc.ehgt.service.CrncyCdVO"/>
 <!--

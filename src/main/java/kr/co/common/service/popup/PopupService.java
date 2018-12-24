@@ -46,4 +46,6 @@ public interface PopupService {
     /** 상품분류 플랫 조회 */
     String getProdClassCdNm(ProdVO prodVO, SessionInfoVO sessionInfoVO);
 
+    /** 상품 목록 조회 */
+    List<DefaultMap<String>> getProductList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
 }
