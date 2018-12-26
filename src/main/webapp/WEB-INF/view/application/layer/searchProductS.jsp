@@ -186,6 +186,7 @@
     // 상품 분류 조회
     $scope.searchProdClass = function(){
       var params = {};
+
       $scope._postJSONQuery.withOutPopUp('/popup/getProdClassTree.sb', params, function (response) {
         // console.log('tree response', response);
         if (response.data.status === 'OK') {
@@ -237,8 +238,8 @@
 
     $scope.searchProd = function(){
 
-      if( (isEmptyObject($("#"+$scope.targetId+"Cd").val()) && isEmptyObject($("#"+$scope.targetId+"Nm").val() ))
-       || $("#"+$scope.targetId+"Nm").val() === '선택'){
+      if( (isEmptyObject($("#"+$scope.targetId+"ProdCd").val()) && isEmptyObject($("#"+$scope.targetId+"ProdNm").val() ))
+       || $("#"+$scope.targetId+"ProdNm").val() === '선택'){
         $scope._popMsg("검색조건을 입력해주세요");
         return false;
       }
@@ -251,6 +252,8 @@
       params.prodClassCd = $scope.getSelectedClass();
       params.prodCd = $("#"+$scope.targetId+"ProdCd").val();
       params.prodNm = $("#"+$scope.targetId+"ProdNm").val();
+
+      console.log(params);
 
       // console.log('params', params);
       // 조회 수행 : 조회URL, 파라미터, 콜백함수

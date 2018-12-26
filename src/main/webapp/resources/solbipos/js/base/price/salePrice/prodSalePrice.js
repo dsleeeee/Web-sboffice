@@ -13,7 +13,7 @@
  */
 var app = agrid.getApp();
 
-// 조회조건 DropBoxDataMap
+// 판매가 선택 DropBoxDataMap
 var saleAmtOptionFg = [
   {"name":"매장판매가","value":"S"},
   {"name":"본사판매가","value":"H"}
@@ -72,7 +72,9 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
 
     var params = {};
     params.prodCd = $("#prodCd").val();
-    params.storeCds = $("#storeCd").val();
+    params.storeCd = $("#storeCd").val();
+
+    // console.log('params',params);
 
     // 상품 정보 조회
     $scope._postJSONQuery.withOutPopUp('/base/price/salePrice/prodSalePrice/getProdInfo.sb', params,
@@ -107,6 +109,8 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
 
   // 판매가 그리드 조회
   $scope.searchSalePriceList = function(params){
+
+    console.log(params);
 
     $scope._inquirySub('/base/price/salePrice/prodSalePrice/getProdSalePriceList.sb', params, function() {
 

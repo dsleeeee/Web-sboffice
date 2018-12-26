@@ -76,8 +76,8 @@
            AND tmp.SALE_PROD_YN = 'Y'             -- 판매상품 여부
            AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
            AND tms.STORE_CD = tmp.STORE_CD
-           AND tmpsp.STORE_CD = tmp.STORE_CD
-           AND tmpsp.PROD_CD = tmp.PROD_CD
+           AND tmpsp.STORE_CD (+)= tmp.STORE_CD
+           AND tmpsp.PROD_CD (+)= tmp.PROD_CD
       <if test='arrStoreCd != null and arrStoreCd != ""'>
            AND tms.STORE_CD IN
         <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
