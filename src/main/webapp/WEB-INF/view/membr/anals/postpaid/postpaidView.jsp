@@ -109,7 +109,7 @@
           <wj-flex-grid-column header="<s:message code="postpaid.postpaidAmt"/>" binding="postpaidAmt" width="*" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="postpaid.depositAmt"/>" binding="depositAmt" width="*" is-read-only="true" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="postpaid.regDt"/>" binding="regDt" is-read-only="true" width="170" align="center"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="postpaid.regId"/>" binding="regId" is-read-only="true" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="postpaid.regId"/>" binding="regId" is-read-only="true" visible="false"></wj-flex-grid-column>
         </wj-flex-grid>
       </div>
     </div>

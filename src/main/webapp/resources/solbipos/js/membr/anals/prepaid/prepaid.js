@@ -28,7 +28,7 @@ app.controller('prepaidCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // comboBox 초기화
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
-  $scope._setComboData("srchArrayCombo", arrayData);
+  // $scope._setComboData("srchArrayCombo", arrayData);
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -48,7 +48,7 @@ app.controller('prepaidCtrl', ['$scope', '$http', function ($scope, $http) {
     // 파라미터
     var params = {};
     params.storeCds = $("#storeCd").val();
-    params.array = srchArrayCombo.selectedValue;
+    // params.array = srchArrayCombo.selectedValue;
 
     if($scope.orgnFg === 'H' && params.storeCds  === '') {
       $scope._popMsg(messages["prepaid.require.selectStore"]);
