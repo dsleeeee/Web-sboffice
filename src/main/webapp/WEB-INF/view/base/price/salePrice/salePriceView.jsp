@@ -23,9 +23,10 @@
   </c:import>
 
   <%-- 매장별 판매가 관리 --%>
+    <%--
   <c:import url="/WEB-INF/view/base/price/salePrice/storeSalePriceView.jsp">
   </c:import>
-
+--%>
 </div>
 <script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/salePrice.js?ver=20181220.01" charset="utf-8"></script>
 
