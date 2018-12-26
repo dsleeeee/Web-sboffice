@@ -30,7 +30,7 @@
                             modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
                             closeFunc - 팝업 닫기시 호출할 함수
           --%>
-          <jsp:include page="/WEB-INF/view/iostock/order/outstockReqDate/selectShopS.jsp" flush="true">
+          <jsp:include page="/WEB-INF/view/iostock/cmm/selectShopS.jsp" flush="true">
             <jsp:param name="targetId" value="targetSelectStore"/>
           </jsp:include>
           <%--// 매장선택 모듈 싱글 선택 사용시 include --%>
@@ -41,7 +41,7 @@
         <th><s:message code="outstockReqDate.copyStore"/></th>
         <td colspan="3">
           <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-          <jsp:include page="/WEB-INF/view/iostock/order/outstockReqDate/selectShopM.jsp" flush="true">
+          <jsp:include page="/WEB-INF/view/iostock/cmm/selectShopM.jsp" flush="true">
             <jsp:param name="targetId" value="copySelectStore"/>
           </jsp:include>
           <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
@@ -360,29 +360,10 @@
         params : params, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
-        if (response.data.status === "OK") {
-          // this callback will be called asynchronously
-          // when the response is available
+        if ($scope._httpStatusCheck(response, true)) {
           $scope._popMsg(messages["cmm.saveSucc"]);
         }
-        else if (response.data.status === "FAIL") {
-          $scope._popMsg("Ajax Fail By HTTP Request");
-        }
-        else if (response.data.status === "SESSION_EXFIRE") {
-          $scope._popMsg(response.data.message, function () {
-            location.href = response.data.url;
-          });
-        }
-        else if (response.data.status === "SERVER_ERROR") {
-          $scope._popMsg(response.data.message);
-        }
-        else {
-          var msg = response.data.status + " : " + response.data.message;
-          $scope._popMsg(msg);
-        }
       }, function errorCallback(response) {
-        // called asynchronously if an error occurs
-        // or server returns response with an error status.
         $scope._popMsg(messages["cmm.saveFail"]);
         return false;
       }).then(function () {
@@ -497,23 +478,8 @@
         data   : params, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
-        if (response.data.status === "OK") {
+        if ($scope._httpStatusCheck(response, true)) {
           $scope._broadcast('reqDateCopyDaysCtrl', {proc: "copy"});
-        }
-        else if (response.data.status === "FAIL") {
-          $scope._popMsg("Ajax Fail By HTTP Request");
-        }
-        else if (response.data.status === "SESSION_EXFIRE") {
-          $scope._popMsg(response.data.message, function () {
-            location.href = response.data.url;
-          });
-        }
-        else if (response.data.status === "SERVER_ERROR") {
-          $scope._popMsg(response.data.message);
-        }
-        else {
-          var msg = response.data.status + " : " + response.data.message;
-          $scope._popMsg(msg);
         }
       }, function errorCallback(response) {
         // called asynchronously if an error occurs

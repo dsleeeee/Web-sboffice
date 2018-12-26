@@ -6,10 +6,10 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.iostock.cmm.service.IostockCmmService;
+import kr.co.solbipos.iostock.cmm.service.IostockCmmVO;
 import kr.co.solbipos.iostock.order.outstockConfm.service.OutstockConfmService;
 import kr.co.solbipos.iostock.order.outstockConfm.service.OutstockConfmVO;
-import kr.co.solbipos.iostock.volmErr.volmErr.service.VolmErrService;
-import kr.co.solbipos.iostock.volmErr.volmErr.service.VolmErrVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,13 +45,13 @@ import java.util.List;
 public class OutstockConfmController {
     private final SessionService sessionService;
     private final OutstockConfmService outstockConfmService;
-    private final VolmErrService volmErrService;
+    private final IostockCmmService iostockCmmService;
 
     @Autowired
-    public OutstockConfmController(SessionService sessionService, OutstockConfmService outstockConfmService, VolmErrService volmErrService) {
+    public OutstockConfmController(SessionService sessionService, OutstockConfmService outstockConfmService, IostockCmmService iostockCmmService) {
         this.sessionService = sessionService;
         this.outstockConfmService = outstockConfmService;
-        this.volmErrService = volmErrService;
+        this.iostockCmmService = iostockCmmService;
     }
 
     /**
@@ -235,7 +235,7 @@ public class OutstockConfmController {
      * @param   request
      * @param   response
      * @param   model
-     * @param   volmErrVO
+     * @param   iostockCmmVO
      * @return  String
      * @author  안동관
      * @since   2018. 11. 30.
@@ -243,27 +243,27 @@ public class OutstockConfmController {
     @RequestMapping(value = "/outstockConfm/getDlvrCombo.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getDlvrCombo(HttpServletRequest request, HttpServletResponse response,
-        Model model, VolmErrVO volmErrVO) {
+        Model model, IostockCmmVO iostockCmmVO) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<String>> list = new ArrayList<DefaultMap<String>>();
 
 //        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-            volmErrVO.setSelectTable("TB_PO_HQ_DELIVERY_CHARGER");
-            volmErrVO.setSelectCd("DLVR_CD");
-            volmErrVO.setSelectNm("DLVR_NM");
-            volmErrVO.setSelectWhere("HQ_OFFICE_CD='"+sessionInfoVO.getHqOfficeCd()+"'");
-            list = volmErrService.selectDynamicCodeList(volmErrVO);
+        iostockCmmVO.setSelectTable("TB_PO_HQ_DELIVERY_CHARGER");
+        iostockCmmVO.setSelectCd("DLVR_CD");
+        iostockCmmVO.setSelectNm("DLVR_NM");
+        iostockCmmVO.setSelectWhere("HQ_OFFICE_CD='"+sessionInfoVO.getHqOfficeCd()+"'");
+            list = iostockCmmService.selectDynamicCodeList(iostockCmmVO, sessionInfoVO);
 //        }
 //        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-//            volmErrVO.setSelectTable("TB_MS_STORE_NMCODE");
-//            volmErrVO.setSelectCd("NMCODE_CD");
-//            volmErrVO.setSelectNm("NMCODE_NM");
-//            volmErrVO.setSelectWhere("STORE_CD='"+sessionInfoVO.getStoreCd()+"' AND NMCODE_GRP_CD = 'AA1'");
-//            list = volmErrService.selectDynamicCodeList(volmErrVO);
+//            iostockCmmVO.setSelectTable("TB_MS_STORE_NMCODE");
+//            iostockCmmVO.setSelectCd("NMCODE_CD");
+//            iostockCmmVO.setSelectNm("NMCODE_NM");
+//            iostockCmmVO.setSelectWhere("STORE_CD='"+sessionInfoVO.getStoreCd()+"' AND NMCODE_GRP_CD = 'AA1'");
+//            list = volmErrService.selectDynamicCodeList(iostockCmmVO);
 //        }
 
 
-        return ReturnUtil.returnListJson(Status.OK, list, volmErrVO);
+        return ReturnUtil.returnListJson(Status.OK, list, iostockCmmVO);
     }
 }

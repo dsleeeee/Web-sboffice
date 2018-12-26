@@ -1,6 +1,7 @@
 package kr.co.solbipos.iostock.vendr.vendrInstock.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
 import kr.co.solbipos.iostock.vendr.vendrInstock.service.VendrInstockVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -87,5 +88,17 @@ public interface VendrInstockHqMapper {
 
     /** 거래처 입고/반출등록 - 입고/반출정보 진행상태 변경시 거래처정산 데이터 삭제 */
     int deleteVendrExact(VendrInstockVO vendrInstockVO);
+
+    /** 거래처 입고/반출등록 엑셀업로드 - 엑셀업로드 수량추가 */
+    int insertExcelUploadAddQty(ExcelUploadVO excelUploadVO);
+
+    /** 거래처 입고/반출등록 엑셀업로드 - 기존 데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제 */
+    int deleteVendrInstockToExcelUploadData(ExcelUploadVO excelUploadVO);
+
+    /** 거래처 입고/반출등록 엑셀업로드 - 엑셀업로드 한 수량을 입고수량으로 입력 */
+    int insertVendrInstockToExcelUploadData(ExcelUploadVO excelUploadVO);
+
+    /** 거래처 입고/반출등록 엑셀업로드 - 정상 입력된 데이터 TEMP 테이블에서 삭제 */
+    int deleteExcelUploadCompleteData(ExcelUploadVO excelUploadVO);
 
 }

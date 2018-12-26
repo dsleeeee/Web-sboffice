@@ -110,7 +110,7 @@
             <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.prodNm"/>" binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.barcdCd"/>" binding="barcdCd" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.poUnitQty"/>" binding="poUnitQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.outSplyUprc"/>" binding="outSplyUprc" width="70" align="right" is-read-only="true" max-length=10 data-type="Number" format="n0"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.outUnitQty"/>" binding="outUnitQty" width="70" align="right" is-read-only="true" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
@@ -139,7 +139,7 @@
 <script type="text/javascript">
 
   /** 입고확정 상세 그리드 controller */
-  app.controller('rtnInstockConfmDtlCtrl', ['$scope', '$http', function ($scope, $http) {
+  app.controller('rtnInstockConfmDtlCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('rtnInstockConfmDtlCtrl', $scope, $http, true));
 
@@ -153,12 +153,17 @@
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
-      var rtnInstockConfmScope = agrid.getScope('rtnInstockConfmCtrl');
       // 배송기사
       var comboParams             = {};
       var url = '/iostock/order/outstockConfm/outstockConfm/getDlvrCombo.sb';
       // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
-      rtnInstockConfmScope._queryCombo("combo", "srchDtlDlvrCd", null, url, comboParams, "S"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+      $scope._queryCombo("combo", "srchDtlDlvrCd", null, url, comboParams, "S"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+
+      comboParams         = {};
+      comboParams.nmcodeGrpCd = "097";
+      url = '/iostock/cmm/iostockCmm/getOrgnCombo.sb';
+      // 파라미터 (comboFg, comboId, gridMapId, url, params, option)
+      $scope._queryCombo("map", null, 'poUnitFgMap', url, comboParams, "A"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
 
       // 그리드 포맷 핸들러
       s.formatItem.addHandler(function (s, e) {
@@ -238,7 +243,7 @@
         params : params, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
-        if ($scope.httpStatusCheck(response)) {
+        if ($scope._httpStatusCheck(response, true)) {
           if (!$.isEmptyObject(response.data.data)) {
 
             $scope.dtlInDate.value = new Date(getFormatDate(response.data.data.outDate, "-"));
@@ -391,30 +396,77 @@
     };
 
 
-    // http 조회 후 status 체크
-    $scope.httpStatusCheck = function (res) {
-      if (res.data.status === "OK") {
-        return true;
+    // DB 데이터를 조회해와서 그리드에서 사용할 Combo를 생성한다.
+    // comboFg : map - 그리드에 사용할 Combo, combo - ComboBox 생성. 두가지 다 사용할경우 combo,map 으로 하면 둘 다 생성.
+    // comboId : combo 생성할 ID
+    // gridMapId : grid 에서 사용할 Map ID
+    // url : 데이터 조회할 url 정보. 명칭관리 조회시에는 url 필요없음.
+    // params : 데이터 조회할 url에 보낼 파라미터
+    // option : A - combo 최상위에 전체라는 텍스트를 붙여준다. S - combo 최상위에 선택이라는 텍스트를 붙여준다. A 또는 S 가 아닌 경우는 데이터값만으로 생성
+    // callback : queryCombo 후 callback 할 함수
+    $scope._queryCombo = function (comboFg, comboId, gridMapId, url, params, option, callback) {
+      var comboUrl = "/iostock/cmm/iostockCmm/getCombo.sb";
+      if (url) {
+        comboUrl = url;
       }
-      else if (res.data.status === "FAIL") {
-        $scope._popMsg("Ajax Fail By HTTP Request");
+
+      // ajax 통신 설정
+      $http({
+        method : 'POST', //방식
+        url    : comboUrl, /* 통신할 URL */
+        params : params, /* 파라메터로 보낼 데이터 */
+        headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+      }).then(function successCallback(response) {
+        if ($scope._httpStatusCheck(response, true)) {
+          if (!$.isEmptyObject(response.data.data.list)) {
+            var list       = response.data.data.list;
+            var comboArray = [];
+            var comboData  = {};
+
+            if (comboFg.indexOf("combo") >= 0 && nvl(comboId, '') !== '') {
+              comboArray = [];
+              if (option === "A") {
+                comboData.name  = messages["cmm.all"];
+                comboData.value = "";
+                comboArray.push(comboData);
+              } else if (option === "S") {
+                comboData.name  = messages["cmm.select"];
+                comboData.value = "";
+                comboArray.push(comboData);
+              }
+
+              for (var i = 0; i < list.length; i++) {
+                comboData       = {};
+                comboData.name  = list[i].nmcodeNm;
+                comboData.value = list[i].nmcodeCd;
+                comboArray.push(comboData);
+              }
+              $scope._setComboData(comboId, comboArray);
+            }
+
+            if (comboFg.indexOf("map") >= 0 && nvl(gridMapId, '') !== '') {
+              comboArray = [];
+              for (var i = 0; i < list.length; i++) {
+                comboData      = {};
+                comboData.id   = list[i].nmcodeCd;
+                comboData.name = list[i].nmcodeNm;
+                comboArray.push(comboData);
+              }
+              $scope[gridMapId] = new wijmo.grid.DataMap(comboArray, 'id', 'name');
+            }
+          }
+        }
+      }, function errorCallback(response) {
+        $scope._popMsg(messages["cmm.error"]);
         return false;
-      }
-      else if (res.data.status === "SESSION_EXFIRE") {
-        $scope._popMsg(res.data.message, function () {
-          location.href = res.data.url;
-        });
-        return false;
-      }
-      else if (res.data.status === "SERVER_ERROR") {
-        $scope._popMsg(res.data.message);
-        return false;
-      }
-      else {
-        var msg = res.data.status + " : " + res.data.message;
-        $scope._popMsg(msg);
-        return false;
-      }
+      }).then(function () {
+        if (typeof callback === 'function') {
+          $timeout(function () {
+            callback();
+          }, 10);
+        }
+      });
     };
+
   }]);
 </script>

@@ -6,6 +6,14 @@ public class ExcelUploadVO extends PageVO {
 
     private static final long serialVersionUID = -1275206354878077873L;
 
+    /**
+     * 소속구분<br>
+     * M : 시스템<br>
+     * A : 대리점<br>
+     * H : 본사<br>
+     * S : 매장, 가맹점
+     */
+    private String orgnFg;
     /** 세션ID */
     private String sessionId;
     /** 본사코드 */
@@ -38,16 +46,32 @@ public class ExcelUploadVO extends PageVO {
     private Integer slipFg;
     /** 수량적용/추가여부 */
     private String addQtyFg;
+    /** 시퀀스 */
+    private Integer seq;
+    /** 시퀀스 인덱스 */
+    private Integer seqNo;
+    /** 제목 */
+    private String title;
+    /** 전표번호 */
+    private String slipNo;
+    /** 거래처코드 */
+    private String vendrCd;
+    /** 부가세여부 */
+    private Integer vatFg;
+
     /**
-     * 소속구분<br>
-     * M : 시스템<br>
-     * A : 대리점<br>
-     * H : 본사<br>
-     * S : 매장, 가맹점
+     * @return the orgnFg
      */
-    private String orgnFg;
-    /** 출고가-부가세포함여부 */
-    private String envst0011;
+    public String getOrgnFg() {
+        return orgnFg;
+    }
+
+    /**
+     * @param orgnFg the orgnFg to set
+     */
+    public void setOrgnFg(String orgnFg) {
+        this.orgnFg = orgnFg;
+    }
 
     /**
      * @return the sessionId
@@ -274,30 +298,86 @@ public class ExcelUploadVO extends PageVO {
     }
 
     /**
-     * @return the orgnFg
+     * @return the seq
      */
-    public String getOrgnFg() {
-        return orgnFg;
+    public Integer getSeq() {
+        return seq;
     }
 
     /**
-     * @param orgnFg the orgnFg to set
+     * @param seq the seq to set
      */
-    public void setOrgnFg(String orgnFg) {
-        this.orgnFg = orgnFg;
+    public void setSeq(Integer seq) {
+        this.seq = seq;
     }
 
     /**
-     * @return the envst0011
+     * @return the seqNo
      */
-    public String getEnvst0011() {
-        return envst0011;
+    public Integer getSeqNo() {
+        return seqNo;
     }
 
     /**
-     * @param envst0011 the envst0011 to set
+     * @param seqNo the seqNo to set
      */
-    public void setEnvst0011(String envst0011) {
-        this.envst0011 = envst0011;
+    public void setSeqNo(Integer seqNo) {
+        this.seqNo = seqNo;
+    }
+
+    /**
+     * @return the title
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * @param title the title to set
+     */
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    /**
+     * @return the slipNo
+     */
+    public String getSlipNo() {
+        return slipNo;
+    }
+
+    /**
+     * @param slipNo the slipNo to set
+     */
+    public void setSlipNo(String slipNo) {
+        this.slipNo = slipNo;
+    }
+
+    /**
+     * @return the vendrCd
+     */
+    public String getVendrCd() {
+        return vendrCd;
+    }
+
+    /**
+     * @param vendrCd the vendrCd to set
+     */
+    public void setVendrCd(String vendrCd) {
+        this.vendrCd = vendrCd;
+    }
+
+    /**
+     * @return the vatFg
+     */
+    public Integer getVatFg() {
+        return vatFg;
+    }
+
+    /**
+     * @param vatFg the vatFg to set
+     */
+    public void setVatFg(Integer vatFg) {
+        this.vatFg = vatFg;
     }
 }

@@ -106,7 +106,7 @@
         is-read-only="false"
         item-formatter="itemFormatter"> <!-- 체크박스가 있는 헤더머지 때문에 현재 페이지에 재정의 한 itemFormatter 를 사용 -->
 
-        <!-- define columns -->
+                                        <!-- define columns -->
         <wj-flex-grid-column header="" binding="gChk" width="40" align="center"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="dstbCloseStore.reqDate"/>" binding="reqDate" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="dstbCloseStore.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -159,26 +159,26 @@
     ]);
 
     <%--$scope._setComboData("srchProcFg", [--%>
-      <%--{"name": "<s:message code='dstbCloseStore.procFgAll'/>", "value": ""},--%>
-      <%--{"name": "<s:message code='dstbCloseStore.procFgReg'/>", "value": "00"},--%>
-      <%--{"name": "<s:message code='dstbCloseStore.procFgMd'/>", "value": "10"},--%>
-      <%--{"name": "<s:message code='dstbCloseStore.procFgDstbClose'/>", "value": "20"},--%>
-      <%--{"name": "<s:message code='dstbCloseStore.procFgSlip'/>", "value": "30"}--%>
+    <%--{"name": "<s:message code='dstbCloseStore.procFgAll'/>", "value": ""},--%>
+    <%--{"name": "<s:message code='dstbCloseStore.procFgReg'/>", "value": "00"},--%>
+    <%--{"name": "<s:message code='dstbCloseStore.procFgMd'/>", "value": "10"},--%>
+    <%--{"name": "<s:message code='dstbCloseStore.procFgDstbClose'/>", "value": "20"},--%>
+    <%--{"name": "<s:message code='dstbCloseStore.procFgSlip'/>", "value": "30"}--%>
     <%--]);--%>
     <%--$scope.procFg = "10"; // 진행구분 기본값 세팅--%>
 
     <%--$scope.procFgMap = new wijmo.grid.DataMap([--%>
-      <%--{id: "00", name: "<s:message code='dstbCloseStore.procFgReg'/>"},--%>
-      <%--{id: "10", name: "<s:message code='dstbCloseStore.procFgMd'/>"},--%>
-      <%--{id: "20", name: "<s:message code='dstbCloseStore.procFgDstbClose'/>"},--%>
-      <%--{id: "30", name: "<s:message code='dstbCloseStore.procFgSlip'/>"}--%>
+    <%--{id: "00", name: "<s:message code='dstbCloseStore.procFgReg'/>"},--%>
+    <%--{id: "10", name: "<s:message code='dstbCloseStore.procFgMd'/>"},--%>
+    <%--{id: "20", name: "<s:message code='dstbCloseStore.procFgDstbClose'/>"},--%>
+    <%--{id: "30", name: "<s:message code='dstbCloseStore.procFgSlip'/>"}--%>
     <%--], 'id', 'name');--%>
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
       var comboParams         = {};
       comboParams.nmcodeGrpCd = "084";
-      // 파라미터 (comboFg, comboId, gridMapId, url, params, option)
+      // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
       $scope._queryCombo("combo,map", "srchProcFg", "procFgMap", null, comboParams, "A", function () {
         $scope.procFg = "10"; // 진행구분 기본값 세팅
       }); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
@@ -193,8 +193,7 @@
           if (col.binding === "storeCd") { // 매장코드
             wijmo.addClass(e.cell, 'wijLink');
             wijmo.addClass(e.cell, 'wj-custom-readonly');
-          }
-          else if (col.binding === "gChk") { // 진행구분 따라 체크박스 컬럼 readonly 컨트롤
+          } else if (col.binding === "gChk") { // 진행구분 따라 체크박스 컬럼 readonly 컨트롤
             var item = s.rows[e.row].dataItem;
             if (item.procFg !== "10") {
               wijmo.addClass(e.cell, 'wj-custom-readonly');
@@ -204,8 +203,7 @@
 
           if (col.format === "date") {
             e.cell.innerHTML = getFormatDate(e.cell.innerText);
-          }
-          else if (col.format === "dateTime") {
+          } else if (col.format === "dateTime") {
             e.cell.innerHTML = getFormatDateTime(e.cell.innerText);
           }
         }
@@ -402,7 +400,7 @@
     // option : A - combo 최상위에 전체라는 텍스트를 붙여준다. S - combo 최상위에 선택이라는 텍스트를 붙여준다. A 또는 S 가 아닌 경우는 데이터값만으로 생성
     // callback : queryCombo 후 callback 할 함수
     $scope._queryCombo = function (comboFg, comboId, gridMapId, url, params, option, callback) {
-      var comboUrl = "/iostock/volmErr/volmErr/volmErr/getCombo.sb";
+      var comboUrl = "/iostock/cmm/iostockCmm/getCombo.sb";
       if (url) {
         comboUrl = url;
       }
@@ -414,22 +412,19 @@
         params : params, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
-        if (response.data.status === "OK") {
-          // this callback will be called asynchronously
-          // when the response is available
+        if ($scope._httpStatusCheck(response, true)) {
           if (!$.isEmptyObject(response.data.data.list)) {
             var list       = response.data.data.list;
             var comboArray = [];
             var comboData  = {};
 
-            if (comboFg.indexOf("combo") >= 0 && nvl(comboId,'') !== '') {
+            if (comboFg.indexOf("combo") >= 0 && nvl(comboId, '') !== '') {
               comboArray = [];
               if (option === "A") {
                 comboData.name  = messages["cmm.all"];
                 comboData.value = "";
                 comboArray.push(comboData);
-              }
-              else if (option === "S") {
+              } else if (option === "S") {
                 comboData.name  = messages["cmm.select"];
                 comboData.value = "";
                 comboArray.push(comboData);
@@ -444,7 +439,7 @@
               $scope._setComboData(comboId, comboArray);
             }
 
-            if (comboFg.indexOf("map") >= 0 && nvl(gridMapId,'') !== '') {
+            if (comboFg.indexOf("map") >= 0 && nvl(gridMapId, '') !== '') {
               comboArray = [];
               for (var i = 0; i < list.length; i++) {
                 comboData      = {};
@@ -456,24 +451,7 @@
             }
           }
         }
-        else if (response.data.status === "FAIL") {
-          $scope._popMsg("Ajax Fail By HTTP Request");
-        }
-        else if (response.data.status === "SESSION_EXFIRE") {
-          $scope._popMsg(response.data.message, function () {
-            location.href = response.data.url;
-          });
-        }
-        else if (response.data.status === "SERVER_ERROR") {
-          $scope._popMsg(response.data.message);
-        }
-        else {
-          var msg = response.data.status + " : " + response.data.message;
-          $scope._popMsg(msg);
-        }
       }, function errorCallback(response) {
-        // called asynchronously if an error occurs
-        // or server returns response with an error status.
         $scope._popMsg(messages["cmm.error"]);
         return false;
       }).then(function () {

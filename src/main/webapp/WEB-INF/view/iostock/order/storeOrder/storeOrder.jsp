@@ -89,14 +89,14 @@
         item-formatter="_itemFormatter">
 
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="storeOrder.reqDate"/>" binding="reqDate" width="100" align="center" format="date"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeOrder.slipFg"/>" binding="slipFg" width="70" align="center" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeOrder.procFg"/>" binding="procFg" width="70" align="center" data-map="procFgMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeOrder.dtlCnt"/>" binding="dtlCnt" width="70" align="right" data-type="Number" format="n0"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeOrder.orderAmt"/>" binding="orderAmt" width="70" align="right" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeOrder.orderVat"/>" binding="orderVat" width="70" align="right" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeOrder.orderTot"/>" binding="orderTot" width="70" align="right" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeOrder.remark"/>" binding="remark" width="*" align="left"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeOrder.reqDate"/>" binding="reqDate" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeOrder.slipFg"/>" binding="slipFg" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeOrder.procFg"/>" binding="procFg" width="70" align="center" is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeOrder.dtlCnt"/>" binding="dtlCnt" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeOrder.orderAmt"/>" binding="orderAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeOrder.orderVat"/>" binding="orderVat" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeOrder.orderTot"/>" binding="orderTot" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeOrder.remark"/>" binding="remark" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
 
       </wj-flex-grid>
       <%-- ColumnPicker 사용시 include --%>
@@ -126,24 +126,12 @@
     $scope.srchEndDate   = wcombo.genDateVal("#srchEndDate", "${sessionScope.sessionInfo.endDate}");
     $scope.reqDate       = wcombo.genDate("#reqDate");
 
+    // 조회일자 조회옵션
     $scope._setComboData("srchDateFg", [
       {"name": messages["storeOrder.reqDate"], "value": "req"},
       {"name": messages["storeOrder.regDate"], "value": "reg"},
       {"name": messages["storeOrder.modDate"], "value": "mod"}
     ]);
-
-    <%--$scope._setComboData("srchProcFg", [--%>
-    <%--{"name": "<s:message code='storeOrder.procFgAll'/>", "value": ""},--%>
-    <%--{"name": "<s:message code='storeOrder.procFgReg'/>", "value": "10"},--%>
-    <%--{"name": "<s:message code='storeOrder.procFgDstb'/>", "value": "20"},--%>
-    <%--{"name": "<s:message code='storeOrder.procFgDstbCompt'/>", "value": "30"}--%>
-    <%--]);--%>
-
-    <%--$scope.procFgMap = new wijmo.grid.DataMap([--%>
-    <%--{id: "10", name: "<s:message code='storeOrder.procFgReg'/>"},--%>
-    <%--{id: "20", name: "<s:message code='storeOrder.procFgDstb'/>"},--%>
-    <%--{id: "30", name: "<s:message code='storeOrder.procFgDstbCompt'/>"}--%>
-    <%--], 'id', 'name');--%>
 
     // 출고가능일자 세팅
     $scope.reqDate.value = new Date(getFormatDate("${reqDate}", "-"));
@@ -161,9 +149,6 @@
       comboParams.nmcodeGrpCd = "083";
       // 파라미터 (comboFg, comboId, gridMapId, url, params, option)
       $scope._queryCombo("combo,map", "srchProcFg", 'procFgMap', null, comboParams, "A"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
-      // $scope._queryCombo("map", "procFgMap", "/iostock/order/storeOrder/storeOrder/getCombo.sb", comboParams);
-
-      // $scope._queryCombo("combo", "srchProcFg", "/iostock/volmErr/volmErr/volmErr/getDynamicCombo.sb", comboParams, "A"); // 다이나믹 COMBO 테스트
       // $scope._getComboDataQuery('083', 'srchProcFg');
 
       // 그리드 링크 효과
@@ -244,7 +229,7 @@
     // option : A - combo 최상위에 전체라는 텍스트를 붙여준다. S - combo 최상위에 선택이라는 텍스트를 붙여준다. A 또는 S 가 아닌 경우는 데이터값만으로 생성
     // callback : queryCombo 후 callback 할 함수
     $scope._queryCombo = function (comboFg, comboId, gridMapId, url, params, option, callback) {
-      var comboUrl = "/iostock/volmErr/volmErr/volmErr/getCombo.sb";
+      var comboUrl = "/iostock/cmm/iostockCmm/getCombo.sb";
       if (url) {
         comboUrl = url;
       }
@@ -256,9 +241,7 @@
         params : params, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
-        if (response.data.status === "OK") {
-          // this callback will be called asynchronously
-          // when the response is available
+        if ($scope._httpStatusCheck(response, true)) {
           if (!$.isEmptyObject(response.data.data.list)) {
             var list       = response.data.data.list;
             var comboArray = [];
@@ -296,21 +279,8 @@
               $scope[gridMapId] = new wijmo.grid.DataMap(comboArray, 'id', 'name');
             }
           }
-        } else if (response.data.status === "FAIL") {
-          $scope._popMsg("Ajax Fail By HTTP Request");
-        } else if (response.data.status === "SESSION_EXFIRE") {
-          $scope._popMsg(response.data.message, function () {
-            location.href = response.data.url;
-          });
-        } else if (response.data.status === "SERVER_ERROR") {
-          $scope._popMsg(response.data.message);
-        } else {
-          var msg = response.data.status + " : " + response.data.message;
-          $scope._popMsg(msg);
         }
       }, function errorCallback(response) {
-        // called asynchronously if an error occurs
-        // or server returns response with an error status.
         $scope._popMsg(messages["cmm.error"]);
         return false;
       }).then(function () {

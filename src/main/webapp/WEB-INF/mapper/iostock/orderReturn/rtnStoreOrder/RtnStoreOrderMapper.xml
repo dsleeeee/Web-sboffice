@@ -63,7 +63,7 @@
         ,       tphso.ORDER_AMT*tphso.SLIP_FG AS ORDER_AMT
         ,       tphso.ORDER_VAT*tphso.SLIP_FG AS ORDER_VAT
         ,       tphso.ORDER_TOT*tphso.SLIP_FG AS ORDER_TOT
-        ,       tmp.VAT_FG AS VAT_FG01
+        ,       DECODE(tmp.VAT_FG, '1', 1, 0) AS VAT_FG01
         ,       the.ENVST_VAL AS ENVST0011
         FROM    TB_PO_HQ_STORE_ORDER_DTL tphso
         ,       TB_MS_PRODUCT tmp
@@ -92,7 +92,7 @@
         <![CDATA[
         SELECT  tmp.PROD_CD
         ,       tmp.PROD_NM
-        ,       tmp.VAT_FG AS VAT_FG01
+        ,       DECODE(tmp.VAT_FG, '1', 1, 0) AS VAT_FG01
         ,       TRUNC(DECODE(SIGN(tshsc.CURR_QTY),-1,0,tshsc.CURR_QTY) / tmp.PO_UNIT_QTY) AS HD_CUR_UNIT_QTY
         ,       MOD  (DECODE(SIGN(tshsc.CURR_QTY),-1,0,tshsc.CURR_QTY) , tmp.PO_UNIT_QTY) AS HD_CUR_ETC_QTY
         ,       TRUNC(NVL(tsssc.CURR_QTY,0)                            / tmp.PO_UNIT_QTY) AS STORE_CUR_UNIT_QTY
@@ -686,4 +686,194 @@
         AND     STORE_CD      = #{storeCd}
         AND     PROC_FG       = #{procFg}
     </update>
+
+
+    <!--                엑셀업로드 시작                 -->
+    <!--  반품등록 엑셀업로드 - 엑셀업로드 수량추가 -->
+    <!--
+        TABLE    : TB_PO_TEMP_EXCEL, TB_PO_HQ_STORE_ORDER_DTL
+        PARAM    : excelUploadVO
+        COMMENTS : 반품등록 엑셀업로드 - 엑셀업로드 수량추가인 경우 기존에 주문된 내역을 TEMP 테이블에 입력한다.
+    -->
+    <insert id="insertExcelUploadAddQty" parameterType="excelUploadVO">
+        /* USE : storeOrderMapper.insertExcelUploadAddQty */
+        INSERT INTO TB_PO_TEMP_EXCEL
+        (
+            SESSION_ID,
+            HQ_OFFICE_CD,
+            STORE_CD,
+            PROD_CD,
+            UNIT_QTY,
+            ETC_QTY,
+            QTY,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        SELECT  #{sessionId}
+        ,       #{hqOfficeCd}
+        ,       #{storeCd}
+        ,       PROD_CD
+        ,       ORDER_UNIT_QTY
+        ,       ORDER_ETC_QTY
+        ,       0
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        FROM    TB_PO_HQ_STORE_ORDER_DTL
+        WHERE   REQ_DATE    =  #{date}
+        AND     STORE_CD    =  #{storeCd}
+        AND     SLIP_FG     =  #{slipFg}
+        AND     PROD_CD     IN (  SELECT  PROD_CD
+                                  FROM    TB_PO_TEMP_EXCEL
+                                  WHERE   SESSION_ID  = #{sessionId}
+                                  AND     PROD_CD     IS NOT  NULL
+                                  AND     PROD_CD     IN (  SELECT  PROD_CD
+                                                            FROM    TB_MS_PRODUCT
+                                                            WHERE   STORE_CD  = #{storeCd}
+                                                            AND     PO_PROD_FG  IN ('1','3')
+                                                            AND     USE_YN    = 'Y'
+                                                         )
+
+                                )
+    </insert>
+
+
+    <!--  반품등록 엑셀업로드 - 기존 주문데이터중 엑셀업로드 한 데이터와 같은 상품 삭제 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_ORDER_DTL, TB_PO_TEMP_EXCEL
+        PARAM    : excelUploadVO
+        COMMENTS : 반품등록 엑셀업로드 - 기존 주문데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제한다.
+    -->
+    <delete id="deleteStoreOrderToExcelUploadData" parameterType="excelUploadVO">
+        /* USE : storeOrderMapper.deleteStoreOrderToExcelUploadData */
+        DELETE  TB_PO_HQ_STORE_ORDER_DTL
+        WHERE   REQ_DATE      = #{date}
+        AND     STORE_CD      = #{storeCd}
+        AND     SLIP_FG       = #{slipFg}
+        AND     PROD_CD       IN  ( SELECT  PROD_CD
+                                    FROM    TB_PO_TEMP_EXCEL
+                                    WHERE   SESSION_ID  = #{sessionId}
+                                    AND     PROD_CD     IS NOT NULL
+                                  )
+    </delete>
+
+
+    <!--  반품등록 엑셀업로드 - 엑셀업로드 한 수량을 주문수량으로 입력 -->
+    <!--
+        TABLE    : TB_PO_TEMP_EXCEL, TB_PO_HQ_STORE_ORDER_DTL
+        PARAM    : excelUploadVO
+        COMMENTS : 반품등록 엑셀업로드 - 엑셀업로드 한 수량을 주문수량으로 입력한다.
+    -->
+    <insert id="insertRtnStoreOrderToExcelUploadData" parameterType="excelUploadVO">
+        /* USE : storeOrderMapper.insertRtnStoreOrderToExcelUploadData */
+        INSERT INTO TB_PO_HQ_STORE_ORDER_DTL
+        (   REQ_DATE            ,   STORE_CD        ,   SLIP_FG
+        ,   HQ_BRAND_CD         ,   PROD_CD         ,   PO_UNIT_FG     ,   PO_UNIT_QTY
+        ,   ORDER_SPLY_UPRC
+        ,   ORDER_UNIT_QTY
+        ,   ORDER_ETC_QTY
+        ,   ORDER_TOT_QTY
+        ,   ORDER_AMT
+        ,   ORDER_VAT
+        ,   ORDER_TOT
+        ,   REMARK
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        )
+        SELECT  #{date}         ,   #{storeCd}      ,   #{slipFg}
+        ,       '00'            ,   tmp.PROD_CD     ,   tmp.PO_UNIT_FG  ,   tmp.PO_UNIT_QTY
+        ,       tmp.SPLY_UPRC
+        ,       tpte.UNIT_QTY * ${slipFg} AS ORDER_UNIT_QTY
+        ,       tpte.ETC_QTY * ${slipFg} AS ORDER_ETC_QTY
+        ,       tpte.QTY * ${slipFg} AS ORDER_TOT_QTY
+        ,       (ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)
+              - ROUND(ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*DECODE(tmp.VAT_FG, '1', 1, 0)*NVL(tmse.ENVST_VAL,0)/11)) * ${slipFg} AS ORDER_AMT
+        ,       (ROUND(ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*DECODE(tmp.VAT_FG, '1', 1, 0)/(10+NVL(tmse.ENVST_VAL,0)))) * ${slipFg} AS ORDER_VAT
+        ,       (ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)
+              - ROUND(ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*DECODE(tmp.VAT_FG, '1', 1, 0)*NVL(tmse.ENVST_VAL,0)/11)
+              + ROUND(ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*DECODE(tmp.VAT_FG, '1', 1, 0)/(10+NVL(tmse.ENVST_VAL,0)))) * ${slipFg} AS ORDER_TOT
+        ,       tpte.REMARK
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        FROM    (   SELECT  tpte.STORE_CD
+                    ,       tpte.PROD_CD
+                    ,       TRUNC(SUM(NVL(tpte.UNIT_QTY, 0)*tmp.PO_UNIT_QTY+NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0))/tmp.PO_UNIT_QTY) AS UNIT_QTY
+                    ,       ( MOD   (SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),tmp.PO_UNIT_QTY)
+                            * DECODE(${slipFg}, 1, DECODE(SUBSTR(tmp.PO_UNIT_ALLOW_FG, 1, 1), 'B', 0, 1), DECODE(SUBSTR(tmp.PO_UNIT_ALLOW_FG, 2, 1), 'B', 0, 1))
+                            ) AS ETC_QTY
+                    ,       (SUM (NVL(tpte.UNIT_QTY, 0)*tmp.PO_UNIT_QTY+NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0))
+                                - DECODE(${slipFg}, 1, DECODE(SUBSTR(tmp.PO_UNIT_ALLOW_FG, 1, 1), 'B', MOD(SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),tmp.PO_UNIT_QTY), 0)
+                                , DECODE(SUBSTR(tmp.PO_UNIT_ALLOW_FG, 2, 1), 'B', MOD(SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),tmp.PO_UNIT_QTY), 0)
+                              )
+                            ) AS QTY
+                    ,       MAX(tpte.REMARK) AS REMARK
+                    FROM    TB_PO_TEMP_EXCEL tpte
+                    ,       TB_MS_PRODUCT tmp
+                    WHERE   tpte.SESSION_ID =   #{sessionId}
+                    AND     tpte.PROD_CD    IS  NOT NULL
+                    AND     tmp.STORE_CD    =   tpte.STORE_CD
+                    AND     tmp.PROD_CD     =   tpte.PROD_CD
+                    AND     tmp.STORE_CD    =   #{storeCd}
+                    AND     tmp.PO_PROD_FG  IN  ('1','3')
+                    AND     tmp.USE_YN      =   'Y'
+                    GROUP
+                    BY      tpte.STORE_CD
+                    ,       tpte.PROD_CD
+                    ,       tmp.PO_UNIT_QTY
+                    ,       tmp.PO_UNIT_ALLOW_FG
+                ) tpte
+        ,       TB_MS_PRODUCT tmp
+        ,       TB_MS_STORE_ENVST tmse
+        WHERE   tmp.STORE_CD       =   #{storeCd}
+        AND     tmp.STORE_CD       =   tpte.STORE_CD
+        AND     tmp.PROD_CD        =   tpte.PROD_CD
+        AND     tmse.STORE_CD      =   tmp.STORE_CD
+        AND     tmse.ENVST_CD      =   '0011'
+        AND     NVL(tpte.QTY,0)    >   0
+    </insert>
+
+
+    <!--  반품등록 엑셀업로드 - 주문수량으로 정상 입력된 데이터 TEMP 테이블에서 삭제 -->
+    <!--
+        TABLE    : TB_PO_TEMP_EXCEL
+        PARAM    : excelUploadVO
+        COMMENTS : 반품등록 엑셀업로드 - 주문수량으로 정상 입력된 데이터 TEMP 테이블에서 삭제한다.
+    -->
+    <delete id="deleteExcelUploadCompleteData" parameterType="excelUploadVO">
+        /* USE : storeOrderMapper.deleteExcelUploadCompleteData */
+        DELETE  TB_PO_TEMP_EXCEL
+        WHERE   SESSION_ID  = #{sessionId}
+        AND     PROD_CD     IS NOT NULL
+        AND     PROD_CD     IN  ( SELECT  PROD_CD
+                                  FROM    ( SELECT  tpte.PROD_CD
+                                            ,       (SUM (NVL(tpte.UNIT_QTY, 0)*tmp.PO_UNIT_QTY+NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0))
+                                                      - DECODE(${slipFg}, 1, DECODE(SUBSTR(tmp.PO_UNIT_ALLOW_FG, 1, 1), 'B', MOD(SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),tmp.PO_UNIT_QTY), 0)
+                                                              , DECODE(SUBSTR(tmp.PO_UNIT_ALLOW_FG, 2, 1), 'B', MOD(SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),tmp.PO_UNIT_QTY), 0)
+                                                              )
+                                                    ) AS QTY
+                                            FROM    TB_PO_TEMP_EXCEL tpte
+                                            ,       TB_MS_PRODUCT tmp
+                                            WHERE   tpte.SESSION_ID =   #{sessionId}
+                                            AND     tpte.PROD_CD    IS  NOT NULL
+                                            AND     tmp.STORE_CD    =   tpte.STORE_CD
+                                            AND     tmp.PROD_CD     =   tpte.PROD_CD
+                                            AND     tmp.STORE_CD    =   #{storeCd}
+                                            AND     tmp.PO_PROD_FG  IN  ('1','3')
+                                            AND     tmp.USE_YN      =   'Y'
+                                            GROUP
+                                            BY      tpte.PROD_CD
+                                            ,       tmp.PO_UNIT_QTY
+                                            ,       tmp.PO_UNIT_ALLOW_FG
+                                          ) tpte
+                                  WHERE   NVL(tpte.QTY,0) > 0
+                                )
+    </delete>
+    <!--                엑셀업로드 끝                 -->
 </mapper>

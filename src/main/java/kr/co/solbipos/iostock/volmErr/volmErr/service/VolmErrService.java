@@ -15,13 +15,4 @@ public interface VolmErrService {
     /** 물량오류관리 - 물량오류관리 상세 저장 */
     int saveVolmErrDtl(VolmErrVO[] volmErrVOs, SessionInfoVO sessionInfoVO);
 
-
-
-
-    /** 콤보조회 */
-    List<DefaultMap<String>> selectCmmCodeList(VolmErrVO volmErrVO);
-
-    /** 다이나믹 콤보조회 */
-    List<DefaultMap<String>> selectDynamicCodeList(VolmErrVO volmErrVO);
-
 }

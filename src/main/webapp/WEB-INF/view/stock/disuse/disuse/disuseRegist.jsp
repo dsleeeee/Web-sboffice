@@ -27,7 +27,12 @@
             <%-- 폐기제목 --%>
             <th><s:message code="disuse.reg.disuseTitle"/><em class="imp">*</em></th>
             <td colspan="3">
-              <input type="text" id="disuseTitle" name="disuseTitle" ng-model="disuseTitle" class="sb-input w100" maxlength="33" data-check="0,100" ng-required="true"/>
+              <input type="text" id="disuseTitle" name="disuseTitle" ng-model="disuseTitle" class="sb-input w100" maxlength="33"
+                     required
+                     popover-enable="myForm.disuseTitle.$invalid"
+                     popover-placement="bottom-left"
+                     popover-trigger="'mouseenter'"
+                     uib-popover="<s:message code="disuse.reg.disuseTitle"/>은(는) 필수 입력항목 입니다."/>
             </td>
           </tr>
           <tr>
@@ -63,7 +68,7 @@
               <%-- 거래처선택 모듈 멀티 선택 사용시 include
                    param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
               --%>
-              <jsp:include page="/WEB-INF/view/iostock/vendr/vendrOrder/selectVendrM.jsp" flush="true">
+              <jsp:include page="/WEB-INF/view/iostock/cmm/selectVendrM.jsp" flush="true">
                 <jsp:param name="targetId" value="disuseRegistSelectVendr"/>
               </jsp:include>
               <%--// 거래처선택 모듈 싱글 선택 사용시 include --%>
@@ -89,12 +94,22 @@
           </tr>
           <tr>
             <td colspan="4">
-              <a href="#" class="btn_grayS" ng-click=""><s:message code="disuse.reg.excelFormDownload"/></a>
-              <a href="#" class="btn_grayS" ng-click=""><s:message code="disuse.reg.excelFormUpload"/></a>
-              <a href="#" class="btn_grayS" ng-click=""><s:message code="disuse.reg.textFormUpload"/></a>
-              <a href="#" class="btn_grayS" ng-click=""><s:message code="cmm.excel.down"/></a>
-              <a href="#" class="btn_grayS" ng-click=""><s:message code="disuse.reg.excelFormUploadErrorInfo"/></a>
-              <a href="#" class="btn_grayS" ng-click="valueCheck()">valuecheck</a>
+              <a href="#" class="btn_grayS" ng-click="excelTextUpload('excelFormDown')"><s:message code="disuse.reg.excelFormDownload"/></a>
+              <span class="txtIn w120px" style="border:1px solid #e8e8e8;">
+                <wj-combo-box
+                  id="addQtyFg"
+                  ng-model="addQtyFg"
+                  items-source="_getComboData('addQtyFg')"
+                  display-member-path="name"
+                  selected-value-path="value"
+                  is-editable="false"
+                  initialized="_initComboBox(s)">
+                </wj-combo-box>
+              </span>
+              <a href="#" class="btn_grayS" ng-click="excelTextUpload('excelUp')"><s:message code="disuse.reg.excelFormUpload"/></a>
+              <a href="#" class="btn_grayS" ng-click="excelTextUpload('textUp')"><s:message code="disuse.reg.textFormUpload"/></a>
+              <a href="#" class="btn_grayS" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></a>
+              <a href="#" class="btn_grayS" ng-click="excelUploadErrInfo()"><s:message code="disuse.reg.excelFormUploadErrorInfo"/></a>
             </td>
           </tr>
           </tbody>
@@ -220,6 +235,11 @@
       {"name": messages["cmm.all"], "value": ""},
       {"name": messages["disuse.reg.disuseFgN"], "value": "N"},
       {"name": messages["disuse.reg.disuseFgY"], "value": "Y"},
+    ]);
+
+    $scope._setComboData("addQtyFg", [
+      {"name": messages["disuse.reg.addQtyFgApply"], "value": "apply"},
+      {"name": messages["disuse.reg.addQtyFgAdd"], "value": "add"}
     ]);
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -581,6 +601,106 @@
     };
 
 
+    // 엑셀 다운로드
+    $scope.excelDownload = function () {
+      if ($scope.flex.rows.length <= 0) {
+        $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+        return false;
+      }
+
+      $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+      $timeout(function () {
+        wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+          includeColumnHeaders: true,
+          includeCellStyles   : false,
+          includeColumns      : function (column) {
+            return column.visible;
+          }
+        }, 'excel.xlsx', function () {
+          $timeout(function () {
+            $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+          }, 10);
+        });
+      }, 10);
+    };
+
+
+    <%-- 엑셀업로드 관련 공통 함수 --%>
+    $scope.excelTextUpload = function (prcsFg) {
+      if (nvl($scope.disuseTitle,'') === '' && prcsFg !== 'excelFormDown') {
+        var msg = messages["disuse.reg.disuseTitle"] + messages["cmm.require.text"]; // 폐기제목을 입력하세요.
+        $scope._popMsg(msg);
+        return false;
+      }
+
+      var excelUploadScope = agrid.getScope('excelUploadCtrl');
+      <%-- 업로드 구분. 해당값에 따라 엑셀 양식이 달라짐. --%>
+      var uploadFg = 'disuse';
+
+      // 엑셀 양식다운로드
+      if (prcsFg === 'excelFormDown') {
+        excelUploadScope.excelFormDownload(uploadFg);
+      } else {
+        var msg = messages["excelUpload.confmMsg"]; // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?
+        s_alert.popConf(msg, function () {
+          excelUploadScope.uploadFg = uploadFg;
+          <%-- 부모컨트롤러 값을 넣으면 업로드가 완료된 후 uploadCallBack 이라는 함수를 호출해준다. --%>
+          excelUploadScope.parentCtrl = 'disuseRegistCtrl';
+          // 엑셀 업로드
+          if (prcsFg === 'excelUp') {
+            $("#excelUpFile").val('');
+            $("#excelUpFile").trigger('click');
+          }
+          // 텍스트 업로드
+          else if (prcsFg === 'textUp') {
+            $("#textUpFile").val('');
+            $("#textUpFile").trigger('click');
+          }
+        });
+      }
+    };
+
+
+    <%-- 업로드 완료 후 callback 함수. 업로드 이후 로직 작성. --%>
+    $scope.uploadCallBack = function () {
+      var params      = {};
+      params.date     = $scope.disuseDate;
+      params.seqNo    = $scope.seqNo;
+      params.title    = $scope.disuseTitle;
+      params.addQtyFg = $scope.addQtyFg;
+
+      var excelUploadScope = agrid.getScope('excelUploadCtrl');
+
+      $http({
+        method : 'POST', //방식
+        url    : '/stock/disuse/disuse/disuseRegist/excelUpload.sb', /* 통신할 URL */
+        params : params, /* 파라메터로 보낼 데이터 */
+        headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+      }).then(function successCallback(response) {
+        if ($scope._httpStatusCheck(response, true)) {
+          // 엑셀 에러내역 팝업 호출
+          $scope.excelUploadErrInfo();
+
+          // 등록 그리드, 부모 그리드 조회
+          $scope.saveRegistCallback();
+        }
+      }, function errorCallback(response) {
+        $scope._popMsg(response.data.message);
+        return false;
+      }).then(function () {
+        excelUploadScope.excelUploadingPopup(false); // 업로딩 팝업 닫기
+      });
+    };
+
+
+    // 에러내역 팝업 호출
+    $scope.excelUploadErrInfo = function () {
+      var params      = {};
+      params.uploadFg = 'disuse';
+      $scope._broadcast('excelUploadErrInfoCtrl', params);
+    };
+
+
     // 거래처선택 모듈 팝업 사용시 정의
     // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
     // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
@@ -588,78 +708,14 @@
       $scope._broadcast('disuseRegistSelectVendrCtrl');
     };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /* 2018-11-13 안동관. input 값 체크 함수.
-       input에 data-check="0,10" 이런식으로 주면 byte 길이 체크하여 0보다 작거나 10보다 크면 해당 input에 팝업 뜨도록 함.
-       앞에 number 나 char 등을 주면 값체크하도록 로직 추가 할 수 있음.
-     */
-    $scope.valueCheck = function () {
-      var rtnFg = true;
-
-      var inputEle = angular.element('input');
-      var value    = '';
-      var checkArr = '';
-      for (var i = 0, l = inputEle.length; i < l; i++) {
-        var el = angular.element(inputEle[i]);
-        if (el.attr('data-check')) {
-          value    = inputEle[i].value;
-          checkArr = el.attr('data-check').split(',');
-          var min  = checkArr[0];
-          var max  = checkArr[1];
-
-          if (value.getByteLengthForOracle() < min || value.getByteLengthForOracle() > max) {
-            // $scope._popMsg('문자열의 길이를 조정해주세요.(한글은 3Byte로 계산됩니다.)');
-            // alert('문자열의 길이를 조정해주세요.(한글은 3Byte로 계산됩니다.) 최대:' + max);
-            if (!el.attr('uib-popover-html')) {
-              var popMsg = '<p class="s12" style="line-height:14px;">문자열의 길이를 조정해주세요.<br>(한글은 3Byte로 계산됩니다.)<br>최대 : ' + max + '</p>';
-              el.attr('uib-popover-html', "'" + popMsg + "'");
-              // el.attr('uib-popover-html', "'문자열의 길이를 조정해주세요.<br>(한글은 3Byte로 계산됩니다.)<br>최대:'");
-              el.attr('popover-placement', 'bottom-left');
-              el.attr('popover-is-open', true);
-
-              el.on('click', function (event) {
-                if ($(this).attr('uib-popover-html')) {
-                  $(this).removeAttr('uib-popover-html');
-                  $(this).removeAttr('popover-placement');
-                  $(this).removeAttr('popover-is-open');
-                  $(this).off('click');
-                }
-              });
-
-              $compile(el)($scope);
-            }
-
-            // el.select();
-            rtnFg = false;
-            break;
-          }
-        }
-      }
-
-      return rtnFg;
-    };
-
-
   }]);
 
 </script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
+</c:import>
+
+<%-- 수불 엑셀업로드 공통 팝업 --%>
+<c:import url="/WEB-INF/view/iostock/cmmExcelUpload/excelUpload/excelUpload.jsp">
 </c:import>

@@ -94,7 +94,7 @@
         /* USE : StoreMoveMapper.getStoreMoveDtlList */
         <![CDATA[
         SELECT  tpsmd.PROD_CD, thp.PROD_NM, thp.PO_UNIT_FG, thp.PO_UNIT_QTY
-        ,       thp.VAT_FG AS VAT_FG01
+        ,       DECODE(thp.VAT_FG, '1', 1, 0) AS VAT_FG01
         ,       TO_NUMBER(SF_ZERO_TO_NULL(tpsmd.OUT_UNIT_QTY)) AS OUT_UNIT_QTY
         ,       TO_NUMBER(SF_ZERO_TO_NULL(tpsmd.OUT_ETC_QTY))  AS OUT_ETC_QTY
         ,       tpsmd.OUT_TOT_QTY

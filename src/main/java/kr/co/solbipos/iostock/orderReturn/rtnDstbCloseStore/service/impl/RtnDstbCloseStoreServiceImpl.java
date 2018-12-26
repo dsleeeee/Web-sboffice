@@ -5,6 +5,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
 import kr.co.solbipos.iostock.orderReturn.rtnDstbCloseStore.service.RtnDstbCloseStoreService;
 import kr.co.solbipos.iostock.orderReturn.rtnDstbCloseStore.service.RtnDstbCloseStoreVO;
 import org.springframework.stereotype.Service;
@@ -155,5 +156,30 @@ public class RtnDstbCloseStoreServiceImpl implements RtnDstbCloseStoreService {
         }
 
         return returnResult;
+    }
+
+
+    /** 반품마감 - 엑셀업로드 */
+    @Override
+    public int excelUpload(ExcelUploadVO excelUploadVO, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+
+        String currentDt = currentDateTimeString();
+
+        excelUploadVO.setSessionId(sessionInfoVO.getSessionId());
+        excelUploadVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        excelUploadVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        excelUploadVO.setRegId(sessionInfoVO.getUserId());
+        excelUploadVO.setRegDt(currentDt);
+        excelUploadVO.setModId(sessionInfoVO.getUserId());
+        excelUploadVO.setModDt(currentDt);
+
+        // 엑셀업로드 한 수량을 분배수량으로 입력
+        result = rtnDstbCloseStoreMapper.insertRtnDstbToExcelUploadData(excelUploadVO);
+
+        // 분배수량으로 정상 입력된 데이터 TEMP 테이블에서 삭제
+        result = rtnDstbCloseStoreMapper.deleteExcelUploadCompleteData(excelUploadVO);
+
+        return result;
     }
 }

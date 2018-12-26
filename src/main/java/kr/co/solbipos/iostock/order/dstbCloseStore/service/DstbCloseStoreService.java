@@ -2,6 +2,7 @@ package kr.co.solbipos.iostock.order.dstbCloseStore.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
 
 import java.util.List;
 
@@ -27,5 +28,8 @@ public interface DstbCloseStoreService {
 
     /** 분배마감 - 추가분배 상세 리스트 저장 */
     int saveDstbAdd(DstbCloseStoreVO[] dstbCloseStoreVOs, SessionInfoVO sessionInfoVO);
+
+    /** 엑셀업로드 */
+    int excelUpload(ExcelUploadVO excelUploadVO, SessionInfoVO sessionInfoVO);
 
 }

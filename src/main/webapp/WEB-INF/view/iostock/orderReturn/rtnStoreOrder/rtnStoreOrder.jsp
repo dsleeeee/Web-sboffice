@@ -68,7 +68,7 @@
                             modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
                             closeFunc - 팝업 닫기시 호출할 함수
           --%>
-          <jsp:include page="/WEB-INF/view/iostock/order/outstockReqDate/selectShopS.jsp" flush="true">
+          <jsp:include page="/WEB-INF/view/iostock/cmm/selectShopS.jsp" flush="true">
             <jsp:param name="targetId" value="rtnStoreOrderSelectStore"/>
           </jsp:include>
           <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
@@ -104,14 +104,14 @@
         item-formatter="_itemFormatter">
 
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.reqDate"/>" binding="reqDate" width="100" align="center" format="date"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.slipFg"/>" binding="slipFg" width="70" align="center" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.procFg"/>" binding="procFg" width="70" align="center" data-map="procFgMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.dtlCnt"/>" binding="dtlCnt" width="70" align="right" data-type="Number" format="n0"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.orderAmt"/>" binding="orderAmt" width="70" align="right" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.orderVat"/>" binding="orderVat" width="70" align="right" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.orderTot"/>" binding="orderTot" width="70" align="right" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.remark"/>" binding="remark" width="*" align="left"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.reqDate"/>" binding="reqDate" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.slipFg"/>" binding="slipFg" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.procFg"/>" binding="procFg" width="70" align="center" is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.dtlCnt"/>" binding="dtlCnt" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.orderAmt"/>" binding="orderAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.orderVat"/>" binding="orderVat" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.orderTot"/>" binding="orderTot" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.remark"/>" binding="remark" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
 
       </wj-flex-grid>
       <%-- ColumnPicker 사용시 include --%>
@@ -146,19 +146,6 @@
       {"name": messages["rtnStoreOrder.regDate"], "value": "reg"},
       {"name": messages["rtnStoreOrder.modDate"], "value": "mod"}
     ]);
-
-    <%--$scope._setComboData("srchProcFg", [--%>
-      <%--{"name": "<s:message code='rtnStoreOrder.procFgAll'/>", "value": ""},--%>
-      <%--{"name": "<s:message code='rtnStoreOrder.procFgReg'/>", "value": "10"},--%>
-      <%--{"name": "<s:message code='rtnStoreOrder.procFgDstb'/>", "value": "20"},--%>
-      <%--{"name": "<s:message code='rtnStoreOrder.procFgDstbCompt'/>", "value": "30"}--%>
-    <%--]);--%>
-
-    <%--$scope.procFgMap = new wijmo.grid.DataMap([--%>
-      <%--{id: "10", name: "<s:message code='rtnStoreOrder.procFgReg'/>"},--%>
-      <%--{id: "20", name: "<s:message code='rtnStoreOrder.procFgDstb'/>"},--%>
-      <%--{id: "30", name: "<s:message code='rtnStoreOrder.procFgDstbCompt'/>"}--%>
-    <%--], 'id', 'name');--%>
 
     // 출고가능일자 세팅
     $scope.reqDate.value = new Date(getFormatDate("${reqDate}", "-"));
@@ -275,7 +262,7 @@
     // option : A - combo 최상위에 전체라는 텍스트를 붙여준다. S - combo 최상위에 선택이라는 텍스트를 붙여준다. A 또는 S 가 아닌 경우는 데이터값만으로 생성
     // callback : queryCombo 후 callback 할 함수
     $scope._queryCombo = function (comboFg, comboId, gridMapId, url, params, option, callback) {
-      var comboUrl = "/iostock/volmErr/volmErr/volmErr/getCombo.sb";
+      var comboUrl = "/iostock/cmm/iostockCmm/getCombo.sb";
       if (url) {
         comboUrl = url;
       }
@@ -287,22 +274,19 @@
         params : params, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
-        if (response.data.status === "OK") {
-          // this callback will be called asynchronously
-          // when the response is available
+        if ($scope._httpStatusCheck(response, true)) {
           if (!$.isEmptyObject(response.data.data.list)) {
             var list       = response.data.data.list;
             var comboArray = [];
             var comboData  = {};
 
-            if (comboFg.indexOf("combo") >= 0 && nvl(comboId,'') !== '') {
+            if (comboFg.indexOf("combo") >= 0 && nvl(comboId, '') !== '') {
               comboArray = [];
               if (option === "A") {
                 comboData.name  = messages["cmm.all"];
                 comboData.value = "";
                 comboArray.push(comboData);
-              }
-              else if (option === "S") {
+              } else if (option === "S") {
                 comboData.name  = messages["cmm.select"];
                 comboData.value = "";
                 comboArray.push(comboData);
@@ -317,7 +301,7 @@
               $scope._setComboData(comboId, comboArray);
             }
 
-            if (comboFg.indexOf("map") >= 0 && nvl(gridMapId,'') !== '') {
+            if (comboFg.indexOf("map") >= 0 && nvl(gridMapId, '') !== '') {
               comboArray = [];
               for (var i = 0; i < list.length; i++) {
                 comboData      = {};
@@ -329,24 +313,7 @@
             }
           }
         }
-        else if (response.data.status === "FAIL") {
-          $scope._popMsg("Ajax Fail By HTTP Request");
-        }
-        else if (response.data.status === "SESSION_EXFIRE") {
-          $scope._popMsg(response.data.message, function () {
-            location.href = response.data.url;
-          });
-        }
-        else if (response.data.status === "SERVER_ERROR") {
-          $scope._popMsg(response.data.message);
-        }
-        else {
-          var msg = response.data.status + " : " + response.data.message;
-          $scope._popMsg(msg);
-        }
       }, function errorCallback(response) {
-        // called asynchronously if an error occurs
-        // or server returns response with an error status.
         $scope._popMsg(messages["cmm.error"]);
         return false;
       }).then(function () {

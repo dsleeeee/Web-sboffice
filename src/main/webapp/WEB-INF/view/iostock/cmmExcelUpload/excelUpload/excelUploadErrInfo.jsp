@@ -27,6 +27,7 @@
 
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="excelUploadErrInfo.prodStatus"/>" binding="prodStatus" width="90" align="center" data-map="prodStatusMap"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="excelUploadErrInfo.vendrProdStatus"/>" binding="vendrProdStatus" width="90" align="center" data-map="vendrProdStatusMap" visible="{{vendrProdStatusVisibleFg}}"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="excelUploadErrInfo.stockProdYn"/>" binding="stockProdYn" width="90" align="center" data-map="stockProdYnMap"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="excelUploadErrInfo.poProdFg"/>" binding="poProdFg" width="90" align="center" data-map="poProdFgMap"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="excelUploadErrInfo.useYn"/>" binding="useYn" width="60" align="center" data-map="useYnMap"></wj-flex-grid-column>
@@ -49,7 +50,7 @@
 <script type="text/javascript">
 
   /** 상품 입고현황 그리드 controller */
-  app.controller('excelUploadErrInfoCtrl', ['$scope', '$http', function ($scope, $http) {
+  app.controller('excelUploadErrInfoCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('excelUploadErrInfoCtrl', $scope, $http, true));
 
@@ -57,6 +58,12 @@
     $scope.prodStatusMap = new wijmo.grid.DataMap([
       {id: "0", name: "<s:message code='excelUploadErrInfo.prodStatusNoReg'/>"},
       {id: "1", name: "<s:message code='excelUploadErrInfo.prodStatusReg'/>"}
+    ], 'id', 'name');
+
+    // 그리드 상품거래처취급여부
+    $scope.vendrProdStatusMap = new wijmo.grid.DataMap([
+      {id: "0", name: "<s:message code='excelUploadErrInfo.vendrProdStatusNoReg'/>"},
+      {id: "1", name: "<s:message code='excelUploadErrInfo.vendrProdStatusReg'/>"}
     ], 'id', 'name');
 
     // 그리드 재고상품여부
@@ -116,24 +123,53 @@
 
     // 그리드 컬럼 visible 초기화
     $scope.gridVisibleDefault = function () {
-      $scope.unitQtyVisibleFg = true; // 단위수량
-      $scope.etcQtyVisibleFg  = true; // 낱개수량
-      $scope.qtyVisibleFg     = true; // 수량
-      $scope.uprcVisibleFg    = true; // 단가
-      $scope.remarkVisibleFg  = true; // 비고
+      $scope.vendrProdStatusVisibleFg = true; // 상품거래처취급여부
+      $scope.unitQtyVisibleFg         = true; // 단위수량
+      $scope.etcQtyVisibleFg          = true; // 낱개수량
+      $scope.qtyVisibleFg             = true; // 수량
+      $scope.uprcVisibleFg            = true; // 단가
+      $scope.remarkVisibleFg          = true; // 비고
     };
 
 
     // 그리드 컬럼 visible 컨트롤
     $scope.gridVisible = function () {
       $scope.gridVisibleDefault();
+      // 주문등록, 반품등록
       if ($scope.uploadFg === 'order') {
-        console.log('order');
-        $scope.unitQtyVisibleFg = true;  // 단위수량
-        $scope.etcQtyVisibleFg  = true;  // 낱개수량
-        $scope.qtyVisibleFg     = false; // 수량
-        $scope.uprcVisibleFg    = false; // 단가
-        $scope.remarkVisibleFg  = false; // 비고
+        $scope.vendrProdStatusVisibleFg = false; // 상품거래처취급여부
+        $scope.unitQtyVisibleFg         = true;  // 단위수량
+        $scope.etcQtyVisibleFg          = true;  // 낱개수량
+        $scope.qtyVisibleFg             = false; // 수량
+        $scope.uprcVisibleFg            = false; // 단가
+        $scope.remarkVisibleFg          = false; // 비고
+      }
+      // 분배마감, 반품마감
+      else if ($scope.uploadFg === 'dstbCloseStore') {
+        $scope.vendrProdStatusVisibleFg = false; // 상품거래처취급여부
+        $scope.unitQtyVisibleFg         = true;  // 단위수량
+        $scope.etcQtyVisibleFg          = true;  // 낱개수량
+        $scope.qtyVisibleFg             = false; // 수량
+        $scope.uprcVisibleFg            = true;  // 단가
+        $scope.remarkVisibleFg          = false; // 비고
+      }
+      // 실사,조정,폐기
+      else if ($scope.uploadFg === 'acins' || $scope.uploadFg === 'adj' || $scope.uploadFg === 'disuse') {
+        $scope.vendrProdStatusVisibleFg = false; // 상품거래처취급여부
+        $scope.unitQtyVisibleFg         = false; // 단위수량
+        $scope.etcQtyVisibleFg          = false; // 낱개수량
+        $scope.qtyVisibleFg             = true;  // 수량
+        $scope.uprcVisibleFg            = true;  // 단가
+        $scope.remarkVisibleFg          = true;  // 비고
+      }
+      // 거래처 발주, 거래처 입고
+      else if ($scope.uploadFg === 'vendr') {
+        $scope.vendrProdStatusVisibleFg = true;  // 상품거래처취급여부
+        $scope.unitQtyVisibleFg         = true;  // 단위수량
+        $scope.etcQtyVisibleFg          = true;  // 낱개수량
+        $scope.qtyVisibleFg             = false; // 수량
+        $scope.uprcVisibleFg            = true;  // 단가
+        $scope.remarkVisibleFg          = false; // 비고
       }
     };
 
@@ -157,7 +193,7 @@
     // option : A - combo 최상위에 전체라는 텍스트를 붙여준다. S - combo 최상위에 선택이라는 텍스트를 붙여준다. A 또는 S 가 아닌 경우는 데이터값만으로 생성
     // callback : queryCombo 후 callback 할 함수
     $scope._queryCombo = function (comboFg, comboId, gridMapId, url, params, option, callback) {
-      var comboUrl = "/iostock/volmErr/volmErr/volmErr/getCombo.sb";
+      var comboUrl = "/iostock/cmm/iostockCmm/getCombo.sb";
       if (url) {
         comboUrl = url;
       }
@@ -169,9 +205,7 @@
         params : params, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
-        if (response.data.status === "OK") {
-          // this callback will be called asynchronously
-          // when the response is available
+        if ($scope._httpStatusCheck(response, true)) {
           if (!$.isEmptyObject(response.data.data.list)) {
             var list       = response.data.data.list;
             var comboArray = [];
@@ -209,21 +243,8 @@
               $scope[gridMapId] = new wijmo.grid.DataMap(comboArray, 'id', 'name');
             }
           }
-        } else if (response.data.status === "FAIL") {
-          $scope._popMsg("Ajax Fail By HTTP Request");
-        } else if (response.data.status === "SESSION_EXFIRE") {
-          $scope._popMsg(response.data.message, function () {
-            location.href = response.data.url;
-          });
-        } else if (response.data.status === "SERVER_ERROR") {
-          $scope._popMsg(response.data.message);
-        } else {
-          var msg = response.data.status + " : " + response.data.message;
-          $scope._popMsg(msg);
         }
       }, function errorCallback(response) {
-        // called asynchronously if an error occurs
-        // or server returns response with an error status.
         $scope._popMsg(messages["cmm.error"]);
         return false;
       }).then(function () {

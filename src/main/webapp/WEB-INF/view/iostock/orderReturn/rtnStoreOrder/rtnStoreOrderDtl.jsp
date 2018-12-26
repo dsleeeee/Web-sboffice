@@ -65,7 +65,7 @@
             <wj-flex-grid-column header="<s:message code="rtnStoreOrder.dtl.orderAmt"/>" binding="orderAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnStoreOrder.dtl.orderVat"/>" binding="orderVat" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnStoreOrder.dtl.orderTot"/>" binding="orderTot" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnStoreOrder.dtl.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnStoreOrder.dtl.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnStoreOrder.dtl.poUnitQty"/>" binding="poUnitQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnStoreOrder.dtl.remark"/>" binding="remark" width="200" align="left" max-length=300></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnStoreOrder.dtl.poMinQty"/>" binding="poMinQty" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -85,12 +85,18 @@
 <script type="text/javascript">
 
   /** 반품등록 상세 그리드 controller */
-  app.controller('rtnStoreOrderDtlCtrl', ['$scope', '$http', function ($scope, $http) {
+  app.controller('rtnStoreOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('rtnStoreOrderDtlCtrl', $scope, $http, true));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+      var comboParams         = {};
+      comboParams.nmcodeGrpCd = "097";
+      var url = '/iostock/cmm/iostockCmm/getOrgnCombo.sb';
+      // 파라미터 (comboFg, comboId, gridMapId, url, params, option)
+      $scope._queryCombo("map", null, 'poUnitFgMap', url, comboParams, "A"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+
       // 그리드 포맷 핸들러
       s.formatItem.addHandler(function (s, e) {
         if (e.panel === s.cells) {
@@ -182,6 +188,7 @@
       }
     };
 
+
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("rtnStoreOrderDtlCtrl", function (event, data) {
       $scope.reqDate     = data.reqDate;
@@ -211,6 +218,7 @@
       event.preventDefault();
     });
 
+
     // 반품등록 상세내역 리스트 조회
     $scope.searchRtnStoreOrderDtlList = function () {
       // 파라미터
@@ -221,6 +229,7 @@
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
       $scope._inquirySub("/iostock/orderReturn/rtnStoreOrder/rtnStoreOrderDtl/list.sb", params);
     };
+
 
     // 반품 상세 저장
     $scope.saveRtnStoreOrderDtl = function (saveFg) {
@@ -259,7 +268,7 @@
         data   : params, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
-        if ($scope.httpStatusCheck(response)) {
+        if ($scope._httpStatusCheck(response, true)) {
           $scope._popMsg(messages["cmm.saveSucc"]);
           $scope.flex.collectionView.clearChanges();
 
@@ -281,6 +290,7 @@
       });
     };
 
+
     // 반품확정
     $scope.confirm = function () {
       var params     = {};
@@ -294,6 +304,7 @@
       });
     };
 
+
     // 저장 후 콜백 함수
     $scope.saveOrderDtlCallback = function () {
       $scope.searchRtnStoreOrderDtlList();
@@ -301,6 +312,7 @@
       var rtnStoreOrderScope = agrid.getScope('rtnStoreOrderCtrl');
       rtnStoreOrderScope.searchRtnStoreOrderList();
     };
+
 
     // 상품추가/변경
     $scope.addProd = function () {
@@ -313,30 +325,77 @@
       $scope._broadcast("rtnStoreOrderRegistCtrl", params);
     };
 
-    // http 조회 후 status 체크
-    $scope.httpStatusCheck = function (res) {
-      if (res.data.status === "OK") {
-        return true;
+
+    // DB 데이터를 조회해와서 그리드에서 사용할 Combo를 생성한다.
+    // comboFg : map - 그리드에 사용할 Combo, combo - ComboBox 생성. 두가지 다 사용할경우 combo,map 으로 하면 둘 다 생성.
+    // comboId : combo 생성할 ID
+    // gridMapId : grid 에서 사용할 Map ID
+    // url : 데이터 조회할 url 정보. 명칭관리 조회시에는 url 필요없음.
+    // params : 데이터 조회할 url에 보낼 파라미터
+    // option : A - combo 최상위에 전체라는 텍스트를 붙여준다. S - combo 최상위에 선택이라는 텍스트를 붙여준다. A 또는 S 가 아닌 경우는 데이터값만으로 생성
+    // callback : queryCombo 후 callback 할 함수
+    $scope._queryCombo = function (comboFg, comboId, gridMapId, url, params, option, callback) {
+      var comboUrl = "/iostock/cmm/iostockCmm/getCombo.sb";
+      if (url) {
+        comboUrl = url;
       }
-      else if (res.data.status === "FAIL") {
-        $scope._popMsg("Ajax Fail By HTTP Request");
+
+      // ajax 통신 설정
+      $http({
+        method : 'POST', //방식
+        url    : comboUrl, /* 통신할 URL */
+        params : params, /* 파라메터로 보낼 데이터 */
+        headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+      }).then(function successCallback(response) {
+        if ($scope._httpStatusCheck(response, true)) {
+          if (!$.isEmptyObject(response.data.data.list)) {
+            var list       = response.data.data.list;
+            var comboArray = [];
+            var comboData  = {};
+
+            if (comboFg.indexOf("combo") >= 0 && nvl(comboId, '') !== '') {
+              comboArray = [];
+              if (option === "A") {
+                comboData.name  = messages["cmm.all"];
+                comboData.value = "";
+                comboArray.push(comboData);
+              } else if (option === "S") {
+                comboData.name  = messages["cmm.select"];
+                comboData.value = "";
+                comboArray.push(comboData);
+              }
+
+              for (var i = 0; i < list.length; i++) {
+                comboData       = {};
+                comboData.name  = list[i].nmcodeNm;
+                comboData.value = list[i].nmcodeCd;
+                comboArray.push(comboData);
+              }
+              $scope._setComboData(comboId, comboArray);
+            }
+
+            if (comboFg.indexOf("map") >= 0 && nvl(gridMapId, '') !== '') {
+              comboArray = [];
+              for (var i = 0; i < list.length; i++) {
+                comboData      = {};
+                comboData.id   = list[i].nmcodeCd;
+                comboData.name = list[i].nmcodeNm;
+                comboArray.push(comboData);
+              }
+              $scope[gridMapId] = new wijmo.grid.DataMap(comboArray, 'id', 'name');
+            }
+          }
+        }
+      }, function errorCallback(response) {
+        $scope._popMsg(messages["cmm.error"]);
         return false;
-      }
-      else if (res.data.status === "SESSION_EXFIRE") {
-        $scope._popMsg(res.data.message, function () {
-          location.href = res.data.url;
-        });
-        return false;
-      }
-      else if (res.data.status === "SERVER_ERROR") {
-        $scope._popMsg(res.data.message);
-        return false;
-      }
-      else {
-        var msg = res.data.status + " : " + res.data.message;
-        $scope._popMsg(msg);
-        return false;
-      }
+      }).then(function () {
+        if (typeof callback === 'function') {
+          $timeout(function () {
+            callback();
+          }, 10);
+        }
+      });
     };
 
   }]);

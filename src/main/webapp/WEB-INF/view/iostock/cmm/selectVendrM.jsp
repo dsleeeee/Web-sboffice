@@ -94,7 +94,7 @@
     $scope.searchVendr = function () {
       // 파라미터
       var params = {};
-      $scope._inquirySub("/iostock/vendr/vendrOrder/vendrOrder/selectVendrList.sb", params, function () {
+      $scope._inquirySub("/iostock/cmm/iostockCmm/selectVendrList.sb", params, function () {
         $scope.searchFg = "Y";
       });
     };

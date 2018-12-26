@@ -8,6 +8,7 @@ import kr.co.common.utils.DateUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
 import kr.co.solbipos.iostock.vendr.vendrInstock.service.VendrInstockService;
 import kr.co.solbipos.iostock.vendr.vendrInstock.service.VendrInstockVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -456,6 +457,76 @@ public class VendrInstockServiceImpl implements VendrInstockService {
         else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
             result = vendrInstockStoreMapper.getVendrInstockOrderInfoRegList(vendrInstockVO);
         }
+        return result;
+    }
+
+
+    /** 거래처 발주등록 - 엑셀업로드 */
+    @Override
+    public int excelUpload(ExcelUploadVO excelUploadVO, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+
+        String currentDt = currentDateTimeString();
+
+        excelUploadVO.setSessionId(sessionInfoVO.getSessionId());
+        excelUploadVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        excelUploadVO.setStoreCd(sessionInfoVO.getStoreCd());
+        excelUploadVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        excelUploadVO.setRegId(sessionInfoVO.getUserId());
+        excelUploadVO.setRegDt(currentDt);
+        excelUploadVO.setModId(sessionInfoVO.getUserId());
+        excelUploadVO.setModDt(currentDt);
+
+        // 수량추가인 경우
+        if(StringUtil.getOrBlank(excelUploadVO.getAddQtyFg()).equals("add")) {
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+                result = vendrInstockHqMapper.insertExcelUploadAddQty(excelUploadVO);
+            }
+            else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+                result = vendrInstockStoreMapper.insertExcelUploadAddQty(excelUploadVO);
+            }
+        }
+
+        // 기존 데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+            result = vendrInstockHqMapper.deleteVendrInstockToExcelUploadData(excelUploadVO);
+        }
+        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+            result = vendrInstockStoreMapper.deleteVendrInstockToExcelUploadData(excelUploadVO);
+        }
+
+        // 엑셀업로드 한 수량을 입고수량으로 입력
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+            result = vendrInstockHqMapper.insertVendrInstockToExcelUploadData(excelUploadVO);
+        }
+        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+            result = vendrInstockStoreMapper.insertVendrInstockToExcelUploadData(excelUploadVO);
+        }
+
+        // 정상 입력된 데이터 TEMP 테이블에서 삭제
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+            result = vendrInstockHqMapper.deleteExcelUploadCompleteData(excelUploadVO);
+        }
+        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+            result = vendrInstockStoreMapper.deleteExcelUploadCompleteData(excelUploadVO);
+        }
+
+        VendrInstockVO vendrInstockHdVO = new VendrInstockVO();
+        vendrInstockHdVO.setSlipNo(excelUploadVO.getSlipNo());
+
+        /** regId, regDt, modId, modDt, hqOfficd, storeCd, orgnFg 세팅  */
+        vendrInstockHdVO = setSessionValue(vendrInstockHdVO, sessionInfoVO, currentDt);
+
+        // 입고/반출정보 DTL의 집계정보 HD에 수정
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+            result = vendrInstockHqMapper.updateVendrInstockDtlSumHd(vendrInstockHdVO);
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+            result = vendrInstockStoreMapper.updateVendrInstockDtlSumHd(vendrInstockHdVO);
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+
         return result;
     }
 

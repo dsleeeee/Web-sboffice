@@ -2,6 +2,7 @@ package kr.co.solbipos.iostock.vendr.vendrOrder.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
 
 import java.util.List;
 
@@ -33,12 +34,7 @@ public interface VendrOrderService {
     /** 거래처 발주등록 - 발주상품 추가/변경 등록 리스트 저장 */
     int saveVendrOrderProdReg(VendrOrderVO[] vendrOrderVOs, SessionInfoVO sessionInfoVO);
 
-
-
-
-
-
-    /** 거래처 발주등록 - 거래처 선택모듈 리스트 조회 */
-    List<DefaultMap<String>> getVendrList(VendrOrderVO vendrOrderVO, SessionInfoVO sessionInfoVO);
+    /** 엑셀업로드 */
+    int excelUpload(ExcelUploadVO excelUploadVO, SessionInfoVO sessionInfoVO);
 
 }

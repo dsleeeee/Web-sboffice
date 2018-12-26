@@ -11,7 +11,7 @@
         COMMENTS : 거래처 입고/반출등록 - 거래처 입고/반출 리스트 조회를 조회한다.
     -->
     <select id="getVendrInstockList" parameterType="vendrInstockVO" resultType="DefaultMap">
-        /* USE : VendrInstockMapper.getVendrInstockList */
+        /* USE : VendrInstockStoreMapper.getVendrInstockList */
         <![CDATA[
         SELECT  tpsvi.SLIP_NO, tpsvi.SLIP_FG, tpsvi.PROC_FG, tpsvi.VENDR_CD, tmv.VENDR_NM
         ,       DECODE(tpsvi.ORDER_SLIP_NO, NULL, 'N', 'Y') AS INSTOCK_TYPE
@@ -53,7 +53,7 @@
         COMMENTS : 거래처 입고/반출등록 - 거래처 입고/반출 등록시 발주번호 리스트를 조회한다.
     -->
     <select id="getVendrInstockOrderSlipList" parameterType="vendrInstockVO" resultType="DefaultMap">
-        /* USE : VendrInstockMapper.getVendrInstockOrderSlipList */
+        /* USE : VendrInstockStoreMapper.getVendrInstockOrderSlipList */
         <![CDATA[
         SELECT  tpsvo.SLIP_NO, tpsvo.ORDER_DATE, tpsvo.VENDR_CD, tmv.VENDR_NM
         FROM    TB_PO_STORE_VENDR_ORDER tpsvo
@@ -80,7 +80,7 @@
         COMMENTS : 거래처 입고/반출등록 - 입고/반출 상세 내역을 조회한다.
     -->
     <select id="getSlipInfo" parameterType="vendrInstockVO" resultType="DefaultMap">
-        /* USE : VendrInstockMapper.getSlipInfo */
+        /* USE : VendrInstockStoreMapper.getSlipInfo */
         <![CDATA[
         SELECT  tpsvi.SLIP_NO, tpsvi.PROC_FG, tpsvi.VENDR_CD, tmv.VENDR_NM
         ,       DECODE(tpsvi.ORDER_SLIP_NO, NULL, 'N', 'Y') AS INSTOCK_TYPE
@@ -115,7 +115,7 @@
         COMMENTS : 거래처 입고/반출등록 신규전표번호를 조회한다.
     -->
     <select id="getNewSlipNo" parameterType="vendrInstockVO" resultType="String">
-        /* USE : VendrInstockMapper.getNewSlipNo */
+        /* USE : VendrInstockStoreMapper.getNewSlipNo */
         <![CDATA[
         SELECT  NVL(MAX(tpsvi.SLIP_NO), #{yymm}||'0000')+1 AS SLIP_NO
         FROM    TB_PO_STORE_VENDR_INSTOCK tpsvi
@@ -132,7 +132,7 @@
         COMMENTS : 거래처 입고/반출등록 - 입고/반출상품 리스트를 조회한다.
     -->
     <select id="getVendrInstockProdList" parameterType="vendrInstockVO" resultType="DefaultMap">
-        /* USE : VendrInstockMapper.getVendrInstockProdList */
+        /* USE : VendrInstockStoreMapper.getVendrInstockProdList */
         <![CDATA[
         SELECT  tpsvid.PROD_CD, tmp.PROD_NM, tpsvid.PO_UNIT_FG, tpsvid.PO_UNIT_QTY, tmp.PO_UNIT_ALLOW_FG
         ,       tpsvid.SLIP_FG, tpsvid.COST_UPRC, tmp.PO_MIN_QTY
@@ -143,7 +143,7 @@
         ,       tpsvid.IN_AMT*tpsvid.SLIP_FG AS IN_AMT
         ,       tpsvid.IN_VAT*tpsvid.SLIP_FG AS IN_VAT
         ,       tpsvid.IN_TOT*tpsvid.SLIP_FG AS IN_TOT
-        ,       tmp.VAT_FG AS VAT_FG01
+        ,       DECODE(tmp.VAT_FG, '1', 1, 0) AS VAT_FG01
         ,       DECODE(tmv.VAT_INCLD_YN, 'Y', 1, 0) AS VENDR_VAT_FG01
         FROM    TB_PO_STORE_VENDR_INSTOCK_DTL tpsvid
         ,       TB_MS_PRODUCT tmp
@@ -167,12 +167,12 @@
         COMMENTS : 거래처 입고/반출등록 - 진행구분을 조회한다.
     -->
     <select id="getProcFgCheck" parameterType="vendrInstockVO" resultType="DefaultMap">
-        /* USE : VendrInstockMapper.getProcFgCheck */
+        /* USE : VendrInstockStoreMapper.getProcFgCheck */
         <![CDATA[
         SELECT  tpsvi.PROC_FG, tpsvi.DTL_CNT
         ,       DECODE(tpsvi.ORDER_SLIP_NO, NULL, 'N', 'Y') AS INSTOCK_TYPE
         FROM    TB_PO_STORE_VENDR_INSTOCK tpsvi
-        WHERE   tpsvi.STOREcD  = #{storeCd}
+        WHERE   tpsvi.STORE_CD = #{storeCd}
         AND     tpsvi.SLIP_NO  = #{slipNo}
         ]]>
     </select>
@@ -185,12 +185,12 @@
         COMMENTS : 거래처 입고/반출등록 - 입고/반출상품 추가/변경 등록 리스트를 조회한다.
     -->
     <select id="getVendrInstockProdRegList" parameterType="vendrInstockVO" resultType="DefaultMap">
-        /* USE : VendrInstockMapper.getVendrInstockProdRegList */
+        /* USE : VendrInstockStoreMapper.getVendrInstockProdRegList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         <![CDATA[
         SELECT  tmvp.PROD_CD
         ,       tmp.PROD_NM
-        ,       tmp.VAT_FG AS VAT_FG01
+        ,       DECODE(tmp.VAT_FG, '1', 1, 0) AS VAT_FG01
         , 		NVL(tpsvid.COST_UPRC, tmp.COST_UPRC) AS COST_UPRC
         , 		tmp.LAST_COST_UPRC
         ,       tmp.PO_UNIT_ALLOW_FG
@@ -257,7 +257,7 @@
         COMMENTS : 거래처 입고/반출등록 - 입고/반출 삭제시 상품이 있는지 여부를 조회한다.
     -->
     <select id="getDtlProdExist" parameterType="vendrInstockVO" resultType="String">
-        /* USE : VendrInstockMapper.getDtlProdExist */
+        /* USE : VendrInstockStoreMapper.getDtlProdExist */
         <![CDATA[
         SELECT  DECODE(COUNT(tssvid.PROD_CD), 0, 'N', 'Y') AS IS_EXIST
         FROM    TB_PO_STORE_VENDR_INSTOCK_DTL tssvid
@@ -275,7 +275,7 @@
         COMMENTS : 거래처 입고/반출등록 - 입고/반출상품 발주내역으로 세팅 리스트를 조회한다.
     -->
     <select id="getVendrInstockOrderInfoRegList" parameterType="vendrInstockVO" resultType="DefaultMap">
-        /* USE : VendrInstockMapper.getVendrInstockOrderInfoRegList */
+        /* USE : VendrInstockStoreMapper.getVendrInstockOrderInfoRegList */
         <![CDATA[
         SELECT  tpsvod.PROD_CD, tmp.PROD_NM, tpsvod.PO_UNIT_FG, tpsvod.PO_UNIT_QTY, tmp.PO_UNIT_ALLOW_FG
         ,       tpsvod.SLIP_FG, tmp.PO_MIN_QTY
@@ -292,7 +292,7 @@
         ,       tpsvid.IN_AMT*tpsvid.SLIP_FG AS IN_AMT
         ,       tpsvid.IN_VAT*tpsvid.SLIP_FG AS IN_VAT
         ,       tpsvid.IN_TOT*tpsvid.SLIP_FG AS IN_TOT
-        ,       tmp.VAT_FG AS VAT_FG01
+        ,       DECODE(tmp.VAT_FG, '1', 1, 0) AS VAT_FG01
         ,       DECODE(tmv.VAT_INCLD_YN, 'Y', 1, 0) AS VENDR_VAT_FG01
         FROM    TB_PO_STORE_VENDR_ORDER_DTL tpsvod
         ,       TB_PO_STORE_VENDR_INSTOCK_DTL tpsvid
@@ -320,7 +320,7 @@
         COMMENTS : 거래처 입고/반출정보를 등록한다.
     -->
     <insert id="insertVendrInstockHd" parameterType="vendrInstockVO">
-        /* USE : VendrInstockMapper.insertVendrInstockHd */
+        /* USE : VendrInstockStoreMapper.insertVendrInstockHd */
         INSERT INTO TB_PO_STORE_VENDR_INSTOCK
         (
             STORE_CD,
@@ -375,7 +375,7 @@
         COMMENTS : 거래처 입고/반출정보를 수정한다.
     -->
     <update id="updateVendrInstockHd" parameterType="vendrInstockVO">
-        /* USE : VendrInstockMapper.updateVendrInstockHd */
+        /* USE : VendrInstockStoreMapper.updateVendrInstockHd */
         UPDATE  TB_PO_STORE_VENDR_INSTOCK
         SET     VENDR_CD        = #{vendrCd}
         ,       ORDER_SLIP_NO   = #{orderSlipNo}
@@ -395,7 +395,7 @@
         COMMENTS : 거래처 입고/반출정보 DTL의 집계정보를 HD에 수정한다.
     -->
     <update id="updateVendrInstockDtlSumHd" parameterType="vendrInstockVO">
-        /* USE : VendrInstockMapper.updateVendrInstockDtlSumHd */
+        /* USE : VendrInstockStoreMapper.updateVendrInstockDtlSumHd */
         UPDATE  TB_PO_STORE_VENDR_INSTOCK
         SET     ( DTL_CNT, IN_TOT_QTY
                 , IN_AMT, IN_VAT, IN_TOT)
@@ -419,7 +419,7 @@
         COMMENTS : 거래처 입고/반출정보를 삭제한다.
     -->
     <delete id="deleteVendrInstockHd" parameterType="vendrInstockVO">
-        /* USE : VendrInstockMapper.deleteVendrInstockHd */
+        /* USE : VendrInstockStoreMapper.deleteVendrInstockHd */
         DELETE  TB_PO_STORE_VENDR_INSTOCK
         WHERE   STORE_CD  = #{storeCd}
         AND     SLIP_NO   = #{slipNo}
@@ -433,7 +433,7 @@
         COMMENTS : 거래처 입고/반출정보 진행상태 변경시 발주 DT 내역의 입고관련 정보를 초기화한다.
     -->
     <update id="updateDefaultVendrOrderDtl" parameterType="vendrInstockVO">
-        /* USE : VendrInstockMapper.updateDefaultVendrOrderDtl */
+        /* USE : VendrInstockStoreMapper.updateDefaultVendrOrderDtl */
         UPDATE  TB_PO_STORE_VENDR_ORDER_DTL
         SET     IN_UNIT_QTY   = 0
         ,       IN_ETC_QTY    = 0
@@ -457,7 +457,7 @@
         COMMENTS : 거래처 입고/반출정보 진행상태 변경시 발주 DT 내역의 입고관련 정보를 갱신한다.
     -->
     <update id="updateVendrInstockToOrderDtl" parameterType="vendrInstockVO">
-        /* USE : VendrInstockMapper.updateVendrInstockToOrderDtl */
+        /* USE : VendrInstockStoreMapper.updateVendrInstockToOrderDtl */
         UPDATE  TB_PO_STORE_VENDR_ORDER_DTL tpsvod
         SET     (   IN_UNIT_QTY, IN_ETC_QTY, IN_TOT_QTY
                 ,   IN_AMT , IN_VAT , IN_TOT
@@ -506,7 +506,7 @@
         COMMENTS : 거래처 입고/반출정보 진행상태 변경시 입고DT에 있으면서 발주 DT 내역에 없는 내역은 신규로 생성한다.
     -->
     <insert id="insertVendrInstockToOrderDtl" parameterType="vendrInstockVO">
-        /* USE : VendrInstockMapper.insertVendrInstockToOrderDtl */
+        /* USE : VendrInstockStoreMapper.insertVendrInstockToOrderDtl */
         INSERT INTO TB_PO_STORE_VENDR_ORDER_DTL
         (        STORE_CD               ,   SLIP_NO                 ,   STORAGE_CD          ,   HQ_BRAND_CD
         ,        PROD_CD                ,   SLIP_FG
@@ -618,7 +618,7 @@
         COMMENTS : 거래처 입고/반출정보 진행상태를 변경한다.
     -->
     <update id="updateProcFg" parameterType="vendrInstockVO">
-        /* USE : VendrInstockMapper.updateProcFg */
+        /* USE : VendrInstockStoreMapper.updateProcFg */
         UPDATE  TB_PO_STORE_VENDR_INSTOCK
         SET     PROC_FG   = #{procFg}
         <if test='procFg == "0"'>
@@ -643,7 +643,7 @@
         COMMENTS : 거래처 입고/반출정보 DTL을 등록한다.
     -->
     <insert id="insertVendrInstockDtl" parameterType="vendrInstockVO">
-        /* USE : VendrInstockMapper.insertVendrInstockDtl */
+        /* USE : VendrInstockStoreMapper.insertVendrInstockDtl */
         INSERT INTO TB_PO_STORE_VENDR_INSTOCK_DTL
         (
             STORE_CD,
@@ -698,7 +698,7 @@
         COMMENTS : 거래처 입고/반출정보 DTL을 수정한다.
     -->
     <update id="updateVendrInstockDtl" parameterType="vendrInstockVO">
-        /* USE : VendrInstockMapper.updateVendrInstockDtl */
+        /* USE : VendrInstockStoreMapper.updateVendrInstockDtl */
         UPDATE  TB_PO_STORE_VENDR_INSTOCK_DTL
         SET     COST_UPRC   = #{costUprc}
         ,       IN_UNIT_QTY = #{inUnitQty}
@@ -722,7 +722,7 @@
         COMMENTS : 거래처 입고/반출정보 DTL을 삭제한다.
     -->
     <delete id="deleteVendrInstockDtl" parameterType="vendrInstockVO">
-        /* USE : VendrInstockMapper.deleteVendrInstockDtl */
+        /* USE : VendrInstockStoreMapper.deleteVendrInstockDtl */
         DELETE  TB_PO_STORE_VENDR_INSTOCK_DTL
         WHERE   STORE_CD  = #{storeCd}
         AND     SLIP_NO   = #{slipNo}
@@ -737,7 +737,7 @@
         COMMENTS : 거래처 입고/반출정보 진행상태 변경시 거래처정산 데이터를 등록한다.
     -->
     <insert id="insertVendrExact" parameterType="vendrInstockVO">
-        /* USE : VendrInstockMapper.insertVendrExact */
+        /* USE : VendrInstockStoreMapper.insertVendrExact */
         INSERT INTO TB_PO_STORE_VENDR_EXACT_CALC
         (
             STORE_CD,
@@ -782,9 +782,219 @@
         COMMENTS : 거래처 입고/반출정보 진행상태 변경시 거래처정산 데이터를 삭제한다.
     -->
     <delete id="deleteVendrExact" parameterType="vendrInstockVO">
-        /* USE : VendrInstockMapper.deleteVendrExact */
+        /* USE : VendrInstockStoreMapper.deleteVendrExact */
         DELETE  TB_PO_STORE_VENDR_EXACT_CALC
         WHERE   STORE_CD  = #{storeCd}
         AND     SLIP_NO   = #{slipNo}
     </delete>
+
+
+    <!--                엑셀업로드 시작                 -->
+    <!--  거래처 입고/반출등록 엑셀업로드 - 엑셀업로드 수량추가 -->
+    <!--
+        TABLE    : TB_PO_TEMP_EXCEL, TB_PO_STORE_VENDR_INSTOCK_DTL
+        PARAM    : excelUploadVO
+        COMMENTS : 거래처 입고/반출등록 엑셀업로드 - 엑셀업로드 수량추가인 경우 기존에 등록된 내역을 TEMP 테이블에 입력한다.
+    -->
+    <insert id="insertExcelUploadAddQty" parameterType="excelUploadVO">
+        /* USE : VendrInstockStoreMapper.insertExcelUploadAddQty */
+        INSERT INTO TB_PO_TEMP_EXCEL
+        (   SESSION_ID
+        ,   STORE_CD
+        ,   PROD_CD
+        ,   UPRC
+        ,   UNIT_QTY
+        ,   ETC_QTY
+        ,   QTY
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        )
+        SELECT  #{sessionId}
+        ,       #{storeCd}
+        ,       PROD_CD
+        ,       COST_UPRC
+        ,       ORDER_UNIT_QTY
+        ,       ORDER_ETC_QTY
+        ,       0
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        FROM    TB_PO_STORE_VENDR_INSTOCK_DTL
+        WHERE   STORE_CD    =  #{storeCd}
+        AND     SLIP_NO     =  #{slipNo}
+        AND     PROD_CD     IN (    SELECT  PROD_CD
+                                    FROM    TB_PO_TEMP_EXCEL
+                                    WHERE   SESSION_ID  = #{sessionId}
+                                    AND     PROD_CD     IS NOT  NULL
+                                    AND     PROD_CD     IN (    SELECT  PROD_CD
+                                                                FROM    TB_MS_PRODUCT
+                                                                WHERE   STORE_CD      =  #{storeCd}
+                                                                AND     PO_PROD_FG    =  '4'
+                                                                AND     USE_YN        =  'Y'
+                                                            )
+                                )
+    </insert>
+
+
+    <!--  거래처 입고/반출등록 엑셀업로드 - 기존 데이터중 엑셀업로드 한 데이터와 같은 상품 삭제 -->
+    <!--
+        TABLE    : TB_PO_STORE_VENDR_INSTOCK_DTL, TB_PO_TEMP_EXCEL
+        PARAM    : excelUploadVO
+        COMMENTS : 거래처 입고/반출등록 엑셀업로드 - 기존 데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제한다.
+    -->
+    <delete id="deleteVendrInstockToExcelUploadData" parameterType="excelUploadVO">
+        /* USE : VendrInstockStoreMapper.deleteVendrInstockToExcelUploadData */
+        DELETE  TB_PO_STORE_VENDR_INSTOCK_DTL
+        WHERE   STORE_CD      = #{storeCd}
+        AND     SLIP_NO       = #{slipNo}
+        AND     PROD_CD       IN  ( SELECT  PROD_CD
+                                    FROM    TB_PO_TEMP_EXCEL
+                                    WHERE   SESSION_ID  = #{sessionId}
+                                    AND     PROD_CD     IS NOT NULL
+                                  )
+    </delete>
+
+
+    <!--  거래처 입고/반출등록 엑셀업로드 - 엑셀업로드 한 수량을 입고수량으로 입력 -->
+    <!--
+        TABLE    : TB_PO_STORE_VENDR_INSTOCK_DTL, TB_PO_TEMP_EXCEL, TB_MS_PRODUCT
+        PARAM    : excelUploadVO
+        COMMENTS : 거래처 입고/반출등록 엑셀업로드 - 엑셀업로드 한 수량을 입고수량으로 입력한다.
+    -->
+    <insert id="insertVendrInstockToExcelUploadData" parameterType="excelUploadVO">
+        /* USE : VendrInstockStoreMapper.insertVendrInstockToExcelUploadData */
+        <selectKey resultType="int" keyProperty="vatFg" order="BEFORE">
+            SELECT  DECODE(VAT_INCLD_YN,'Y',1,0) AS VAT_FG
+            FROM    TB_MS_VENDOR
+            WHERE   STORE_CD  = #{storeCd}
+            AND     VENDR_CD  = #{vendrCd}
+        </selectKey>
+
+        INSERT INTO TB_PO_STORE_VENDR_INSTOCK_DTL
+        (   STORE_CD
+        ,   SLIP_NO
+        ,   STORAGE_CD
+        ,   HQ_BRAND_CD
+        ,   PROD_CD
+        ,   SLIP_FG
+        ,   COST_UPRC
+        ,   PO_UNIT_FG
+        ,   PO_UNIT_QTY
+        ,   IN_UNIT_QTY
+        ,   IN_ETC_QTY
+        ,   IN_TOT_QTY
+        ,   IN_AMT
+        ,   IN_VAT
+        ,   IN_TOT
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        )
+        SELECT  #{storeCd}
+        ,       #{slipNo}
+        ,       '000' AS STORAGE_CD
+        ,       '00' AS HQ_BRAND_CD
+        ,       tpte.PROD_CD
+        ,       #{slipFg}
+        ,       tpte.UPRC
+        ,       tmp.PO_UNIT_FG
+        ,       tmp.PO_UNIT_QTY
+        ,       tpte.UNIT_QTY * ${slipFg} AS IN_UNIT_QTY
+        ,       tpte.ETC_QTY * ${slipFg} AS IN_ETC_QTY
+        ,       tpte.QTY * ${slipFg} AS IN_TOT_QTY
+        ,       (ROUND(tpte.UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)
+                - ROUND(ROUND(tpte.UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*DECODE(tmp.VAT_FG, '1', 1, 0)*NVL(${vatFg},0)/11)) * ${slipFg} AS IN_AMT
+        ,       (ROUND(ROUND(tpte.UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*DECODE(tmp.VAT_FG, '1', 1, 0)/(10+NVL(${vatFg},0)))) * ${slipFg} AS IN_VAT
+        ,       (ROUND(tpte.UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)
+                - ROUND(ROUND(tpte.UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*DECODE(tmp.VAT_FG, '1', 1, 0)*NVL(${vatFg},0)/11)
+                + ROUND(ROUND(tpte.UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*DECODE(tmp.VAT_FG, '1', 1, 0)/(10+NVL(${vatFg},0)))) * ${slipFg} AS IN_TOT
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        FROM    (   SELECT  tpte.STORE_CD
+                    ,       tpte.PROD_CD
+                    ,       MAX(NVL(tpte.UPRC, 0)) UPRC
+                    ,       TRUNC(SUM(NVL(tpte.UNIT_QTY, 0)*tmp.PO_UNIT_QTY+NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0))/tmp.PO_UNIT_QTY) AS UNIT_QTY
+                    ,       ( MOD   (SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),tmp.PO_UNIT_QTY)
+                            * DECODE(${slipFg}, 1, DECODE(SUBSTR(tmp.PO_UNIT_ALLOW_FG, 1, 1), 'B', 0, 1), DECODE(SUBSTR(tmp.PO_UNIT_ALLOW_FG, 2, 1), 'B', 0, 1))
+                            ) AS ETC_QTY
+                    ,       (SUM (NVL(tpte.UNIT_QTY, 0)*tmp.PO_UNIT_QTY+NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0))
+                                - DECODE(${slipFg}, 1, DECODE(SUBSTR(tmp.PO_UNIT_ALLOW_FG, 1, 1), 'B', MOD(SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),tmp.PO_UNIT_QTY), 0)
+                                        , DECODE(SUBSTR(tmp.PO_UNIT_ALLOW_FG, 2, 1), 'B', MOD(SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),tmp.PO_UNIT_QTY), 0)
+                                        )
+                            ) AS QTY
+                    FROM    TB_PO_TEMP_EXCEL tpte
+                    ,       TB_MS_PRODUCT tmp
+                    WHERE   tpte.SESSION_ID   =   #{sessionId}
+                    AND     tpte.PROD_CD      IS  NOT NULL
+                    AND     tmp.STORE_CD      =   tpte.STORE_CD
+                    AND     tmp.PROD_CD       =   tpte.PROD_CD
+                    AND     tmp.STORE_CD      =   #{storeCd}
+                    AND     tmp.PO_PROD_FG    =   '4'
+                    AND     tmp.USE_YN        =   'Y'
+                    AND     tpte.PROD_CD      IN  ( SELECT  PROD_CD
+                                                    FROM    TB_MS_VENDOR_PROD
+                                                    WHERE   STORE_CD  = #{storeCd}
+                                                    AND     VENDR_CD  = #{vendrCd}
+                                                  )
+                    GROUP
+                    BY      tpte.STORE_CD
+                    ,       tpte.PROD_CD
+                    ,       tmp.PO_UNIT_QTY
+                    ,       tmp.PO_UNIT_ALLOW_FG
+                ) tpte
+        ,       TB_MS_PRODUCT tmp
+        WHERE   tmp.STORE_CD    =   #{storeCd}
+        AND     tmp.STORE_CD    =   tpte.STORE_CD
+        AND     tmp.PROD_CD     =   tpte.PROD_CD
+        AND     NVL(tpte.QTY,0) >   0
+    </insert>
+
+
+    <!--  거래처 입고/반출등록 엑셀업로드 - 정상 입력된 데이터 TEMP 테이블에서 삭제 -->
+    <!--
+        TABLE    : TB_PO_TEMP_EXCEL, TB_MS_PRODUCT
+        PARAM    : excelUploadVO
+        COMMENTS : 거래처 입고/반출등록 엑셀업로드 - 정상 입력된 데이터 TEMP 테이블에서 삭제한다.
+    -->
+    <delete id="deleteExcelUploadCompleteData" parameterType="excelUploadVO">
+        /* USE : VendrInstockStoreMapper.deleteExcelUploadCompleteData */
+        DELETE  TB_PO_TEMP_EXCEL
+        WHERE   SESSION_ID  = #{sessionId}
+        AND     PROD_CD     IS NOT NULL
+        AND     PROD_CD     IN  (   SELECT  PROD_CD
+                                    FROM    (   SELECT  tpte.PROD_CD
+                                                ,       (SUM (NVL(tpte.UNIT_QTY, 0)*tmp.PO_UNIT_QTY+NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0))
+                                                        - DECODE(${slipFg}, 1, DECODE(SUBSTR(tmp.PO_UNIT_ALLOW_FG, 1, 1), 'B', MOD(SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),tmp.PO_UNIT_QTY), 0)
+                                                                , DECODE(SUBSTR(tmp.PO_UNIT_ALLOW_FG, 2, 1), 'B', MOD(SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),tmp.PO_UNIT_QTY), 0)
+                                                                )
+                                                        ) AS QTY
+                                                FROM    TB_PO_TEMP_EXCEL tpte
+                                                ,       TB_MS_PRODUCT tmp
+                                                WHERE   tpte.SESSION_ID   =   #{sessionId}
+                                                AND     tpte.PROD_CD      IS  NOT NULL
+                                                AND     tmp.STORE_CD      =   tpte.STORE_CD
+                                                AND     tmp.PROD_CD       =   tpte.PROD_CD
+                                                AND     tmp.STORE_CD      =   #{storeCd}
+                                                AND     tmp.PO_PROD_FG    =   '4'
+                                                AND     tmp.USE_YN        =   'Y'
+                                                AND     tpte.PROD_CD      IN  ( SELECT  PROD_CD
+                                                                                FROM    TB_MS_VENDOR_PROD
+                                                                                WHERE   STORE_CD  = #{storeCd}
+                                                                                AND     VENDR_CD  = #{vendrCd}
+                                                                              )
+                                                GROUP
+                                                BY      tpte.PROD_CD
+                                                ,       tmp.PO_UNIT_QTY
+                                                ,       tmp.PO_UNIT_ALLOW_FG
+                                            ) tpte
+                                    WHERE   NVL(tpte.QTY,0) > 0
+                                )
+    </delete>
+    <!--                엑셀업로드 끝                 -->
 </mapper>

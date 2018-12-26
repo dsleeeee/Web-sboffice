@@ -50,7 +50,8 @@
 
   <div class="mt10 pdb20 oh bb">
     <%-- 조회 --%>
-    <button class="btn_blue fr" id="btnSearch" ng-click="searchLoanInfo()"><s:message code="cmm.search"/></button>
+    <button class="btn_blue fr" id="btnSearch" ng-click="searchLoanInfo()">
+      <s:message code="cmm.search"/></button>
   </div>
 
   <div class="mt20 oh sb-select dkbr">
@@ -139,8 +140,7 @@
     $scope.selectedIndexChanged = function (s, e) {
       if (s.selectedValue === "") {
         $scope.dateLayer = false;
-      }
-      else {
+      } else {
         $scope.dateLayer = true;
       }
     };

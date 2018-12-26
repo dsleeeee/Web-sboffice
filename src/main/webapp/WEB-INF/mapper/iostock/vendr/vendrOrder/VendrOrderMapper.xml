@@ -4,45 +4,6 @@
 
 <mapper namespace="kr.co.solbipos.iostock.vendr.vendrOrder.service.impl.VendrOrderMapper">
 
-    <!-- 거래처 발주등록 - 거래처 선택모듈 리스트 조회 -->
-    <!--
-        TABLE    : TB_HQ_VENDOR
-                   TB_MS_VENDOR
-        PARAM    : vendrOrderVO
-        COMMENTS : 거래처 발주등록 - 거래처 선택모듈 리스트를 조회한다.
-    -->
-    <select id="getVendrList" parameterType="vendrOrderVO" resultType="DefaultMap">
-        /* USE : VendrOrderMapper.getVendrList */
-        <choose>
-        <!-- 본사 -->
-        <when test='orgnFg != null and orgnFg == "H"'>
-            <![CDATA[
-            SELECT  thv.VENDR_CD, thv.VENDR_NM
-            ,       thv.SHIP_FG, thv.VAT_INCLD_YN
-            FROM    TB_HQ_VENDOR thv
-            WHERE   thv.HQ_OFFICE_CD    =   #{hqOfficeCd}
-            ]]>
-        </when>
-        <!-- 가맹점 -->
-        <when test='orgnFg != null and orgnFg == "S"'>
-            <![CDATA[
-            SELECT  tmv.VENDR_CD, tmv.VENDR_NM
-            ,       tmv.SHIP_FG, tmv.VAT_INCLD_YN
-            FROM    TB_MS_VENDOR tmv
-            WHERE   tmv.STORE_CD  = #{storeCd}
-            ]]>
-        </when>
-        </choose>
-    </select>
-
-
-
-
-
-
-
-
-
     <!-- 거래처 발주등록 - 거래처 발주등록 리스트 조회 -->
     <!--
         TABLE    : TB_PO_HQ_VENDR_ORDER, TB_HQ_VENDOR
@@ -248,7 +209,7 @@
                 ,       tphvod.ORDER_AMT*tphvod.SLIP_FG AS ORDER_AMT
                 ,       tphvod.ORDER_VAT*tphvod.SLIP_FG AS ORDER_VAT
                 ,       tphvod.ORDER_TOT*tphvod.SLIP_FG AS ORDER_TOT
-                ,       thp.VAT_FG AS VAT_FG01
+                ,       DECODE(thp.VAT_FG, '1', 1, 0) AS VAT_FG01
                 ,       DECODE(thv.VAT_INCLD_YN, 'Y', 1, 0) AS VENDR_VAT_FG01
                 FROM    TB_PO_HQ_VENDR_ORDER_DTL tphvod
                 ,       TB_HQ_PRODUCT thp
@@ -275,7 +236,7 @@
                 ,       tpsvod.ORDER_AMT*tpsvod.SLIP_FG AS ORDER_AMT
                 ,       tpsvod.ORDER_VAT*tpsvod.SLIP_FG AS ORDER_VAT
                 ,       tpsvod.ORDER_TOT*tpsvod.SLIP_FG AS ORDER_TOT
-                ,       tmp.VAT_FG AS VAT_FG01
+                ,       DECODE(tmp.VAT_FG, '1', 1, 0) AS VAT_FG01
                 ,       DECODE(tmv.VAT_INCLD_YN, 'Y', 1, 0) AS VENDR_VAT_FG01
                 FROM    TB_PO_STORE_VENDR_ORDER_DTL tpsvod
                 ,       TB_MS_PRODUCT tmp
@@ -349,7 +310,7 @@
                 SELECT  thvp.PROD_CD
                 ,       thp.PROD_NM
                 ,       thp.ORGPLCE_CD
-                ,       thp.VAT_FG AS VAT_FG01
+                ,       DECODE(thp.VAT_FG, '1', 1, 0) AS VAT_FG01
                 ,       TRUNC(DECODE(SIGN(tshsc.CURR_QTY),-1,0,tshsc.CURR_QTY) / thp.PO_UNIT_QTY) AS CURR_UNIT_QTY
                 ,       MOD  (DECODE(SIGN(tshsc.CURR_QTY),-1,0,tshsc.CURR_QTY) , thp.PO_UNIT_QTY) AS CURR_ETC_QTY
                 , 		NVL(tphvod.COST_UPRC, thp.COST_UPRC) AS COST_UPRC
@@ -426,7 +387,7 @@
                 SELECT  tmvp.PROD_CD
                 ,       tmp.PROD_NM
                 ,       tmp.ORGPLCE_CD
-                ,       tmp.VAT_FG AS VAT_FG01
+                ,       DECODE(tmp.VAT_FG, '1', 1, 0) AS VAT_FG01
                 ,       TRUNC(DECODE(SIGN(tsssc.CURR_QTY),-1,0,tsssc.CURR_QTY) / tmp.PO_UNIT_QTY) AS CURR_UNIT_QTY
                 ,       MOD  (DECODE(SIGN(tsssc.CURR_QTY),-1,0,tsssc.CURR_QTY) , tmp.PO_UNIT_QTY) AS CURR_ETC_QTY
                 , 		NVL(tpsvod.COST_UPRC, tmp.COST_UPRC) AS COST_UPRC
@@ -1079,4 +1040,439 @@
             </when>
         </choose>
     </delete>
+
+
+    <!--                엑셀업로드 시작                 -->
+    <!--  거래처 발주등록 엑셀업로드 - 엑셀업로드 수량추가 -->
+    <!--
+        TABLE    : TB_PO_TEMP_EXCEL, TB_PO_STORE_VENDR_ORDER_DTL
+        PARAM    : excelUploadVO
+        COMMENTS : 거래처 발주등록 엑셀업로드 - 엑셀업로드 수량추가인 경우 기존에 등록된 내역을 TEMP 테이블에 입력한다.
+    -->
+    <insert id="insertExcelUploadAddQty" parameterType="excelUploadVO">
+        /* USE : VendrOrderMapper.insertExcelUploadAddQty */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_PO_TEMP_EXCEL
+                (   SESSION_ID
+                ,   HQ_OFFICE_CD
+                ,   PROD_CD
+                ,   UPRC
+                ,   UNIT_QTY
+                ,   ETC_QTY
+                ,   QTY
+                ,   REG_DT
+                ,   REG_ID
+                ,   MOD_DT
+                ,   MOD_ID
+                )
+                SELECT  #{sessionId}
+                ,       #{hqOfficeCd}
+                ,       PROD_CD
+                ,       COST_UPRC
+                ,       ORDER_UNIT_QTY
+                ,       ORDER_ETC_QTY
+                ,       0
+                ,       #{regDt}
+                ,       #{regId}
+                ,       #{modDt}
+                ,       #{modId}
+                FROM    TB_PO_HQ_VENDR_ORDER_DTL
+                WHERE   HQ_OFFICE_CD=  #{hqOfficeCd}
+                AND     SLIP_NO     =  #{slipNo}
+                AND     PROD_CD     IN (    SELECT  PROD_CD
+                                            FROM    TB_PO_TEMP_EXCEL
+                                            WHERE   SESSION_ID  = #{sessionId}
+                                            AND     PROD_CD     IS NOT  NULL
+                                            AND     PROD_CD     IN (    SELECT  PROD_CD
+                                                                        FROM    TB_HQ_PRODUCT
+                                                                        WHERE   HQ_OFFICE_CD  =  #{hqOfficeCd}
+                                                                        AND     PO_PROD_FG    IN ('1','2')
+                                                                        AND     USE_YN        =  'Y'
+                                                                    )
+                                        )
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_PO_TEMP_EXCEL
+                (   SESSION_ID
+                ,   STORE_CD
+                ,   PROD_CD
+                ,   UPRC
+                ,   UNIT_QTY
+                ,   ETC_QTY
+                ,   QTY
+                ,   REG_DT
+                ,   REG_ID
+                ,   MOD_DT
+                ,   MOD_ID
+                )
+                SELECT  #{sessionId}
+                ,       #{storeCd}
+                ,       PROD_CD
+                ,       COST_UPRC
+                ,       ORDER_UNIT_QTY
+                ,       ORDER_ETC_QTY
+                ,       0
+                ,       #{regDt}
+                ,       #{regId}
+                ,       #{modDt}
+                ,       #{modId}
+                FROM    TB_PO_STORE_VENDR_ORDER_DTL
+                WHERE   STORE_CD    =  #{storeCd}
+                AND     SLIP_NO     =  #{slipNo}
+                AND     PROD_CD     IN (    SELECT  PROD_CD
+                                            FROM    TB_PO_TEMP_EXCEL
+                                            WHERE   SESSION_ID  = #{sessionId}
+                                            AND     PROD_CD     IS NOT  NULL
+                                            AND     PROD_CD     IN (    SELECT  PROD_CD
+                                                                        FROM    TB_MS_PRODUCT
+                                                                        WHERE   STORE_CD    =  #{storeCd}
+                                                                        AND     PO_PROD_FG  =  '4'
+                                                                        AND     USE_YN      =  'Y'
+                                                                    )
+                                        )
+            </when>
+        </choose>
+    </insert>
+
+
+    <!--  거래처 발주등록 엑셀업로드 - 기존 데이터중 엑셀업로드 한 데이터와 같은 상품 삭제 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_ORDER_DTL, TB_PO_TEMP_EXCEL
+        PARAM    : excelUploadVO
+        COMMENTS : 거래처 발주등록 엑셀업로드 - 기존 데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제한다.
+    -->
+    <delete id="deleteVendrOrderToExcelUploadData" parameterType="excelUploadVO">
+        /* USE : VendrOrderMapper.deleteVendrOrderToExcelUploadData */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE  TB_PO_HQ_VENDR_ORDER_DTL
+                WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+                AND     SLIP_NO       = #{slipNo}
+                AND     PROD_CD       IN  ( SELECT  PROD_CD
+                                            FROM    TB_PO_TEMP_EXCEL
+                                            WHERE   SESSION_ID  = #{sessionId}
+                                            AND     PROD_CD     IS NOT NULL
+                                          )
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE  TB_PO_STORE_VENDR_ORDER_DTL
+                WHERE   STORE_CD      = #{storeCd}
+                AND     SLIP_NO       = #{slipNo}
+                AND     PROD_CD       IN  ( SELECT  PROD_CD
+                                            FROM    TB_PO_TEMP_EXCEL
+                                            WHERE   SESSION_ID  = #{sessionId}
+                                            AND     PROD_CD     IS NOT NULL
+                                          )
+            </when>
+        </choose>
+    </delete>
+
+
+    <!--  거래처 발주등록 엑셀업로드 - 엑셀업로드 한 수량을 발주수량으로 입력 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_ORDER_DTL, TB_PO_TEMP_EXCEL, TB_HQ_PRODUCT, TB_ST_HQ_STOCK_CUR, TB_ST_HQ_STOCK_MONTHLY
+                   TB_PO_STORE_VENDR_ORDER_DTL, TB_PO_TEMP_EXCEL, TB_MS_PRODUCT, TB_ST_STORE_STOCK_CUR, TB_ST_STORE_STOCK_MONTHLY
+        PARAM    : excelUploadVO
+        COMMENTS : 거래처 발주등록 엑셀업로드 - 엑셀업로드 한 수량을 발주수량으로 입력한다.
+    -->
+    <insert id="insertVendrOrderToExcelUploadData" parameterType="excelUploadVO">
+        /* USE : VendrOrderMapper.insertVendrOrderToExcelUploadData */
+        <selectKey resultType="int" keyProperty="vatFg" order="BEFORE">
+            <!-- 본사 -->
+            <if test='orgnFg != null and orgnFg.toString == "H"'>
+                SELECT  DECODE(VAT_INCLD_YN,'Y',1,0) AS VAT_FG
+                FROM    TB_HQ_VENDOR
+                WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+                AND     VENDR_CD      = #{vendrCd}
+            </if>
+            <!-- 가맹점 -->
+            <if test='orgnFg != null and orgnFg.toString == "S"'>
+                SELECT  DECODE(VAT_INCLD_YN,'Y',1,0) AS VAT_FG
+                FROM    TB_MS_VENDOR
+                WHERE   STORE_CD      = #{storeCd}
+                AND     VENDR_CD      = #{vendrCd}
+            </if>
+        </selectKey>
+
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_PO_HQ_VENDR_ORDER_DTL
+                (   HQ_OFFICE_CD
+                ,   SLIP_NO
+                ,   STORAGE_CD
+                ,   HQ_BRAND_CD
+                ,   PROD_CD
+                ,   SLIP_FG
+                ,   COST_UPRC
+                ,   PO_UNIT_FG
+                ,   PO_UNIT_QTY
+                ,   ORDER_UNIT_QTY
+                ,   ORDER_ETC_QTY
+                ,   ORDER_TOT_QTY
+                ,   ORDER_AMT
+                ,   ORDER_VAT
+                ,   ORDER_TOT
+                ,   IN_UNIT_QTY
+                ,   IN_ETC_QTY
+                ,   IN_TOT_QTY
+                ,   IN_AMT
+                ,   IN_VAT
+                ,   IN_TOT
+                ,   REG_DT
+                ,   REG_ID
+                ,   MOD_DT
+                ,   MOD_ID
+                )
+                SELECT  #{hqOfficeCd}
+                ,       #{slipNo}
+                ,       '000' AS STORAGE_CD
+                ,       '00' AS HQ_BRAND_CD
+                ,       tpte.PROD_CD
+                ,       #{slipFg}
+                ,       tpte.UPRC
+                ,       thp.PO_UNIT_FG
+                ,       thp.PO_UNIT_QTY
+                ,       tpte.UNIT_QTY * ${slipFg} AS ORDER_UNIT_QTY
+                ,       tpte.ETC_QTY * ${slipFg} AS ORDER_ETC_QTY
+                ,       tpte.QTY * ${slipFg} AS ORDER_TOT_QTY
+                ,       (ROUND(tpte.UPRC*(tpte.UNIT_QTY*thp.PO_UNIT_QTY + tpte.ETC_QTY)/thp.PO_UNIT_QTY)
+                        - ROUND(ROUND(tpte.UPRC*(tpte.UNIT_QTY*thp.PO_UNIT_QTY + tpte.ETC_QTY)/thp.PO_UNIT_QTY)*DECODE(thp.VAT_FG, '1', 1, 0)*NVL(${vatFg},0)/11)) * ${slipFg} AS ORDER_AMT
+                ,       (ROUND(ROUND(tpte.UPRC*(tpte.UNIT_QTY*thp.PO_UNIT_QTY + tpte.ETC_QTY)/thp.PO_UNIT_QTY)*DECODE(thp.VAT_FG, '1', 1, 0)/(10+NVL(${vatFg},0)))) * ${slipFg} AS ORDER_VAT
+                ,       (ROUND(tpte.UPRC*(tpte.UNIT_QTY*thp.PO_UNIT_QTY + tpte.ETC_QTY)/thp.PO_UNIT_QTY)
+                        - ROUND(ROUND(tpte.UPRC*(tpte.UNIT_QTY*thp.PO_UNIT_QTY + tpte.ETC_QTY)/thp.PO_UNIT_QTY)*DECODE(thp.VAT_FG, '1', 1, 0)*NVL(${vatFg},0)/11)
+                        + ROUND(ROUND(tpte.UPRC*(tpte.UNIT_QTY*thp.PO_UNIT_QTY + tpte.ETC_QTY)/thp.PO_UNIT_QTY)*DECODE(thp.VAT_FG, '1', 1, 0)/(10+NVL(${vatFg},0)))) * ${slipFg} AS ORDER_TOT
+                ,       0 AS IN_UNIT_QTY
+                ,       0 AS IN_ETC_QTY
+                ,       0 AS IN_TOT_QTY
+                ,       0 AS IN_AMT
+                ,       0 AS IN_VAT
+                ,       0 AS IN_TOT
+                ,       #{regDt}
+                ,       #{regId}
+                ,       #{modDt}
+                ,       #{modId}
+                FROM    (   SELECT  tpte.HQ_OFFICE_CD
+                            ,       tpte.PROD_CD
+                            ,       MAX(NVL(tpte.UPRC, 0)) UPRC
+                            ,       TRUNC(SUM(NVL(tpte.UNIT_QTY, 0)*thp.PO_UNIT_QTY+NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0))/thp.PO_UNIT_QTY) AS UNIT_QTY
+                            ,       ( MOD   (SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),thp.PO_UNIT_QTY)
+                                      * DECODE(${slipFg}, 1, DECODE(SUBSTR(thp.PO_UNIT_ALLOW_FG, 1, 1), 'B', 0, 1), DECODE(SUBSTR(thp.PO_UNIT_ALLOW_FG, 2, 1), 'B', 0, 1))
+                                    ) AS ETC_QTY
+                            ,       (SUM (NVL(tpte.UNIT_QTY, 0)*thp.PO_UNIT_QTY+NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0))
+                                    - DECODE(${slipFg}, 1, DECODE(SUBSTR(thp.PO_UNIT_ALLOW_FG, 1, 1), 'B', MOD(SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),thp.PO_UNIT_QTY), 0)
+                                            , DECODE(SUBSTR(thp.PO_UNIT_ALLOW_FG, 2, 1), 'B', MOD(SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),thp.PO_UNIT_QTY), 0)
+                                            )
+                                    ) AS QTY
+                            FROM    TB_PO_TEMP_EXCEL tpte
+                            ,       TB_HQ_PRODUCT thp
+                            WHERE   tpte.SESSION_ID   =   #{sessionId}
+                            AND     tpte.PROD_CD      IS  NOT NULL
+                            AND     thp.HQ_OFFICE_CD  =   tpte.HQ_OFFICE_CD
+                            AND     thp.PROD_CD       =   tpte.PROD_CD
+                            AND     thp.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                            AND     thp.PO_PROD_FG    IN  ('1','2')
+                            AND     thp.USE_YN        =   'Y'
+                            AND     tpte.PROD_CD      IN  ( SELECT  PROD_CD
+                                                            FROM    TB_HQ_VENDOR_PROD
+                                                            WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+                                                            AND     VENDR_CD      = #{vendrCd}
+                                                          )
+                            GROUP
+                            BY      tpte.HQ_OFFICE_CD
+                            ,       tpte.PROD_CD
+                            ,       thp.PO_UNIT_QTY
+                            ,       thp.PO_UNIT_ALLOW_FG
+                        ) tpte
+                ,       TB_HQ_PRODUCT thp
+                WHERE   thp.HQ_OFFICE_CD   =   #{hqOfficeCd}
+                AND     thp.HQ_OFFICE_CD   =   tpte.HQ_OFFICE_CD
+                AND     thp.PROD_CD        =   tpte.PROD_CD
+                AND     NVL(tpte.QTY,0)    >   0
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_PO_STORE_VENDR_ORDER_DTL
+                (   STORE_CD
+                ,   SLIP_NO
+                ,   STORAGE_CD
+                ,   HQ_BRAND_CD
+                ,   PROD_CD
+                ,   SLIP_FG
+                ,   COST_UPRC
+                ,   PO_UNIT_FG
+                ,   PO_UNIT_QTY
+                ,   ORDER_UNIT_QTY
+                ,   ORDER_ETC_QTY
+                ,   ORDER_TOT_QTY
+                ,   ORDER_AMT
+                ,   ORDER_VAT
+                ,   ORDER_TOT
+                ,   IN_UNIT_QTY
+                ,   IN_ETC_QTY
+                ,   IN_TOT_QTY
+                ,   IN_AMT
+                ,   IN_VAT
+                ,   IN_TOT
+                ,   REG_DT
+                ,   REG_ID
+                ,   MOD_DT
+                ,   MOD_ID
+                )
+                SELECT  #{storeCd}
+                ,       #{slipNo}
+                ,       '000' AS STORAGE_CD
+                ,       '00' AS HQ_BRAND_CD
+                ,       tpte.PROD_CD
+                ,       #{slipFg}
+                ,       tpte.UPRC
+                ,       tmp.PO_UNIT_FG
+                ,       tmp.PO_UNIT_QTY
+                ,       tpte.UNIT_QTY * ${slipFg} AS ORDER_UNIT_QTY
+                ,       tpte.ETC_QTY * ${slipFg} AS ORDER_ETC_QTY
+                ,       tpte.QTY * ${slipFg} AS ORDER_TOT_QTY
+                ,       (ROUND(tpte.UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)
+                        - ROUND(ROUND(tpte.UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*DECODE(tmp.VAT_FG, '1', 1, 0)*NVL(${vatFg},0)/11)) * ${slipFg} AS ORDER_AMT
+                ,       (ROUND(ROUND(tpte.UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*DECODE(tmp.VAT_FG, '1', 1, 0)/(10+NVL(${vatFg},0)))) * ${slipFg} AS ORDER_VAT
+                ,       (ROUND(tpte.UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)
+                        - ROUND(ROUND(tpte.UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*DECODE(tmp.VAT_FG, '1', 1, 0)*NVL(${vatFg},0)/11)
+                        + ROUND(ROUND(tpte.UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*DECODE(tmp.VAT_FG, '1', 1, 0)/(10+NVL(${vatFg},0)))) * ${slipFg} AS ORDER_TOT
+                ,       0 AS IN_UNIT_QTY
+                ,       0 AS IN_ETC_QTY
+                ,       0 AS IN_TOT_QTY
+                ,       0 AS IN_AMT
+                ,       0 AS IN_VAT
+                ,       0 AS IN_TOT
+                ,       #{regDt}
+                ,       #{regId}
+                ,       #{modDt}
+                ,       #{modId}
+                FROM    (   SELECT  tpte.STORE_CD
+                            ,       tpte.PROD_CD
+                            ,       MAX(NVL(tpte.UPRC, 0)) UPRC
+                            ,       TRUNC(SUM(NVL(tpte.UNIT_QTY, 0)*tmp.PO_UNIT_QTY+NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0))/tmp.PO_UNIT_QTY) AS UNIT_QTY
+                            ,       ( MOD   (SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),tmp.PO_UNIT_QTY)
+                                    * DECODE(${slipFg}, 1, DECODE(SUBSTR(tmp.PO_UNIT_ALLOW_FG, 1, 1), 'B', 0, 1), DECODE(SUBSTR(tmp.PO_UNIT_ALLOW_FG, 2, 1), 'B', 0, 1))
+                                    ) AS ETC_QTY
+                            ,       (SUM (NVL(tpte.UNIT_QTY, 0)*tmp.PO_UNIT_QTY+NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0))
+                                    - DECODE(${slipFg}, 1, DECODE(SUBSTR(tmp.PO_UNIT_ALLOW_FG, 1, 1), 'B', MOD(SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),tmp.PO_UNIT_QTY), 0)
+                                            , DECODE(SUBSTR(tmp.PO_UNIT_ALLOW_FG, 2, 1), 'B', MOD(SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),tmp.PO_UNIT_QTY), 0)
+                                            )
+                                    ) AS QTY
+                            FROM    TB_PO_TEMP_EXCEL tpte
+                            ,       TB_MS_PRODUCT tmp
+                            WHERE   tpte.SESSION_ID =   #{sessionId}
+                            AND     tpte.PROD_CD    IS  NOT NULL
+                            AND     tmp.STORE_CD    =   tpte.STORE_CD
+                            AND     tmp.PROD_CD     =   tpte.PROD_CD
+                            AND     tmp.STORE_CD    =   #{storeCd}
+                            AND     tmp.PO_PROD_FG  =   '4'
+                            AND     tmp.USE_YN      =   'Y'
+                            AND     tpte.PROD_CD      IN  ( SELECT  PROD_CD
+                                                            FROM    TB_MS_VENDOR_PROD
+                                                            WHERE   STORE_CD  = #{storeCd}
+                                                            AND     VENDR_CD  = #{vendrCd}
+                                                          )
+                            GROUP
+                            BY      tpte.STORE_CD
+                            ,       tpte.PROD_CD
+                            ,       tmp.PO_UNIT_QTY
+                            ,       tmp.PO_UNIT_ALLOW_FG
+                        ) tpte
+                ,       TB_MS_PRODUCT tmp
+                WHERE   tmp.STORE_CD       =   #{storeCd}
+                AND     tmp.STORE_CD       =   tpte.STORE_CD
+                AND     tmp.PROD_CD        =   tpte.PROD_CD
+                AND     NVL(tpte.QTY,0)    >   0
+            </when>
+        </choose>
+    </insert>
+
+
+    <!--  거래처 발주등록 엑셀업로드 - 정상 입력된 데이터 TEMP 테이블에서 삭제 -->
+    <!--
+        TABLE    : TB_PO_TEMP_EXCEL, TB_HQ_PRODUCT
+                   TB_PO_TEMP_EXCEL, TB_MS_PRODUCT
+        PARAM    : excelUploadVO
+        COMMENTS : 거래처 발주등록 엑셀업로드 - 정상 입력된 데이터 TEMP 테이블에서 삭제한다.
+    -->
+    <delete id="deleteExcelUploadCompleteData" parameterType="excelUploadVO">
+        /* USE : VendrOrderMapper.deleteExcelUploadCompleteData */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE  TB_PO_TEMP_EXCEL
+                WHERE   SESSION_ID  = #{sessionId}
+                AND     PROD_CD     IS NOT NULL
+                AND     PROD_CD     IN  (   SELECT  PROD_CD
+                                            FROM    (   SELECT  tpte.PROD_CD
+                                                        ,       (SUM (NVL(tpte.UNIT_QTY, 0)*thp.PO_UNIT_QTY+NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0))
+                                                                - DECODE(${slipFg}, 1, DECODE(SUBSTR(thp.PO_UNIT_ALLOW_FG, 1, 1), 'B', MOD(SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),thp.PO_UNIT_QTY), 0)
+                                                                        , DECODE(SUBSTR(thp.PO_UNIT_ALLOW_FG, 2, 1), 'B', MOD(SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),thp.PO_UNIT_QTY), 0)
+                                                                        )
+                                                                ) AS QTY
+                                                        FROM    TB_PO_TEMP_EXCEL tpte
+                                                        ,       TB_HQ_PRODUCT thp
+                                                        WHERE   tpte.SESSION_ID   =   #{sessionId}
+                                                        AND     tpte.PROD_CD      IS  NOT NULL
+                                                        AND     thp.HQ_OFFICE_CD  =   tpte.HQ_OFFICE_CD
+                                                        AND     thp.PROD_CD       =   tpte.PROD_CD
+                                                        AND     thp.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                                                        AND     thp.PO_PROD_FG    IN  ('1','2')
+                                                        AND     thp.USE_YN        =   'Y'
+                                                        AND     tpte.PROD_CD      IN  ( SELECT  PROD_CD
+                                                                                        FROM    TB_HQ_VENDOR_PROD
+                                                                                        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+                                                                                        AND     VENDR_CD      = #{vendrCd}
+                                                                                      )
+                                                        GROUP
+                                                        BY      tpte.PROD_CD
+                                                        ,       thp.PO_UNIT_QTY
+                                                        ,       thp.PO_UNIT_ALLOW_FG
+                                                    ) tpte
+                                            WHERE   NVL(tpte.QTY,0) > 0
+                                        )
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE  TB_PO_TEMP_EXCEL
+                WHERE   SESSION_ID  = #{sessionId}
+                AND     PROD_CD     IS NOT NULL
+                AND     PROD_CD     IN  ( SELECT  PROD_CD
+                                          FROM    ( SELECT  tpte.PROD_CD
+                                                    ,       (SUM (NVL(tpte.UNIT_QTY, 0)*tmp.PO_UNIT_QTY+NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0))
+                                                            - DECODE(${slipFg}, 1, DECODE(SUBSTR(tmp.PO_UNIT_ALLOW_FG, 1, 1), 'B', MOD(SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),tmp.PO_UNIT_QTY), 0)
+                                                                    , DECODE(SUBSTR(tmp.PO_UNIT_ALLOW_FG, 2, 1), 'B', MOD(SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),tmp.PO_UNIT_QTY), 0)
+                                                                    )
+                                                            ) AS QTY
+                                                    FROM    TB_PO_TEMP_EXCEL tpte
+                                                    ,       TB_MS_PRODUCT tmp
+                                                    WHERE   tpte.SESSION_ID =   #{sessionId}
+                                                    AND     tpte.PROD_CD    IS  NOT NULL
+                                                    AND     tmp.STORE_CD    =   tpte.STORE_CD
+                                                    AND     tmp.PROD_CD     =   tpte.PROD_CD
+                                                    AND     tmp.STORE_CD    =   #{storeCd}
+                                                    AND     tmp.PO_PROD_FG  =   '4'
+                                                    AND     tmp.USE_YN      =   'Y'
+                                                    AND     tpte.PROD_CD    IN  (   SELECT  PROD_CD
+                                                                                    FROM    TB_MS_VENDOR_PROD
+                                                                                    WHERE   STORE_CD  = #{storeCd}
+                                                                                    AND     VENDR_CD  = #{vendrCd}
+                                                                                )
+                                                    GROUP
+                                                    BY      tpte.PROD_CD
+                                                    ,       tmp.PO_UNIT_QTY
+                                                    ,       tmp.PO_UNIT_ALLOW_FG
+                                                  ) tpte
+                                          WHERE   NVL(tpte.QTY,0) > 0
+                                        )
+            </when>
+        </choose>
+    </delete>
+    <!--                엑셀업로드 끝                 -->
 </mapper>

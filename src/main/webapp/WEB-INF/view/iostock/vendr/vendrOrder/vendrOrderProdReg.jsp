@@ -68,11 +68,22 @@
         </tr>
         <tr>
           <td colspan="4">
-            <a href="#" class="btn_grayS" ng-click=""><s:message code="vendrOrder.reg.excelFormDownload"/></a>
-            <a href="#" class="btn_grayS" ng-click=""><s:message code="vendrOrder.reg.excelFormUpload"/></a>
-            <a href="#" class="btn_grayS" ng-click=""><s:message code="vendrOrder.reg.textFormUpload"/></a>
-            <a href="#" class="btn_grayS" ng-click=""><s:message code="cmm.excel.down"/></a>
-            <a href="#" class="btn_grayS" ng-click=""><s:message code="vendrOrder.reg.excelFormUploadErrorInfo"/></a>
+            <a href="#" class="btn_grayS" ng-click="excelTextUpload('excelFormDown')"><s:message code="vendrOrder.reg.excelFormDownload"/></a>
+            <span class="txtIn w120px" style="border:1px solid #e8e8e8;">
+              <wj-combo-box
+                id="addQtyFg"
+                ng-model="addQtyFg"
+                items-source="_getComboData('addQtyFg')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="_initComboBox(s)">
+              </wj-combo-box>
+            </span>
+            <a href="#" class="btn_grayS" ng-click="excelTextUpload('excelUp')"><s:message code="vendrOrder.reg.excelFormUpload"/></a>
+            <a href="#" class="btn_grayS" ng-click="excelTextUpload('textUp')"><s:message code="vendrOrder.reg.textFormUpload"/></a>
+            <a href="#" class="btn_grayS" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></a>
+            <a href="#" class="btn_grayS" ng-click="excelUploadErrInfo()"><s:message code="vendrOrder.reg.excelFormUploadErrorInfo"/></a>
           </td>
         </tr>
         </tbody>
@@ -114,7 +125,7 @@
             <wj-flex-grid-column header="<s:message code="vendrOrder.reg.prodNm"/>" binding="prodNm" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrOrder.reg.orgplceCd"/>" binding="orgplceCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrOrder.reg.lastCostUprc"/>" binding="lastCostUprc" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrOrder.reg.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrOrder.reg.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrOrder.reg.poUnitQty"/>" binding="poUnitQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrOrder.reg.safeStock"/>" binding="safeStockUnitQty" width="50" align="right" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrOrder.reg.safeStock"/>" binding="safeStockEtcQty" width="50" align="right" is-read-only="true"></wj-flex-grid-column>
@@ -160,9 +171,19 @@
       {"name": messages["vendrOrder.reg.safeStockY"], "value": "Y"}
     ]);
 
+    $scope._setComboData("addQtyFg", [
+      {"name": messages["vendrOrder.reg.addQtyFgApply"], "value": "apply"},
+      {"name": messages["vendrOrder.reg.addQtyFgAdd"], "value": "add"}
+    ]);
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+      var comboParams         = {};
+      comboParams.nmcodeGrpCd = "097";
+      var url = '/iostock/cmm/iostockCmm/getOrgnCombo.sb';
+      // 파라미터 (comboFg, comboId, gridMapId, url, params, option)
+      $scope._queryCombo("map", null, 'poUnitFgMap', url, comboParams, "A"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+
       // 그리드 포맷 핸들러
       s.formatItem.addHandler(function (s, e) {
         if (e.panel === s.cells) {
@@ -399,10 +420,183 @@
       });
     };
 
+
+    // 엑셀 다운로드
+    $scope.excelDownload = function () {
+      if($scope.flex.rows.length <= 0) {
+        $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+        return false;
+      }
+
+      $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+      $timeout(function () {
+        wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+          includeColumnHeaders: true,
+          includeCellStyles   : false,
+          includeColumns      : function (column) {
+            return column.visible;
+          }
+        }, 'excel.xlsx', function () {
+          $timeout(function () {
+            $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+          }, 10);
+        });
+      }, 10);
+    };
+
+
+    <%-- 엑셀업로드 관련 공통 함수 --%>
+    $scope.excelTextUpload = function (prcsFg) {
+      var excelUploadScope = agrid.getScope('excelUploadCtrl');
+      <%-- 업로드 구분. 해당값에 따라 엑셀 양식이 달라짐. --%>
+      var uploadFg = 'vendr';
+
+      // 엑셀 양식다운로드
+      if (prcsFg === 'excelFormDown') {
+        excelUploadScope.excelFormDownload(uploadFg);
+      }
+      else{
+        var msg = messages["excelUpload.confmMsg"]; // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?
+        s_alert.popConf(msg, function () {
+          excelUploadScope.uploadFg   = uploadFg;
+          <%-- 부모컨트롤러 값을 넣으면 업로드가 완료된 후 uploadCallBack 이라는 함수를 호출해준다. --%>
+          excelUploadScope.parentCtrl = 'vendrOrderProdRegCtrl';
+          // 엑셀 업로드
+          if (prcsFg === 'excelUp') {
+            $("#excelUpFile").val('');
+            $("#excelUpFile").trigger('click');
+          }
+          // 텍스트 업로드
+          else if (prcsFg === 'textUp') {
+            $("#textUpFile").val('');
+            $("#textUpFile").trigger('click');
+          }
+        });
+      }
+    };
+
+
+    <%-- 업로드 완료 후 callback 함수. 업로드 이후 로직 작성. --%>
+    $scope.uploadCallBack = function () {
+      var params      = {};
+      params.slipNo   = $scope.slipNo;
+      params.slipFg   = $scope.slipFg;
+      params.vendrCd  = $scope.vendrCd;
+      params.addQtyFg = $scope.addQtyFg;
+
+      var excelUploadScope = agrid.getScope('excelUploadCtrl');
+
+      $http({
+        method : 'POST', //방식
+        url    : '/iostock/vendr/vendrOrder/vendrOrderProdReg/excelUpload.sb', /* 통신할 URL */
+        params : params, /* 파라메터로 보낼 데이터 */
+        headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+      }).then(function successCallback(response) {
+        if ($scope._httpStatusCheck(response, true)) {
+          // 엑셀 에러내역 팝업 호출
+          $scope.excelUploadErrInfo();
+
+          // 등록 그리드, 부모 그리드 조회
+          $scope.saveRegistCallback();
+        }
+      }, function errorCallback(response) {
+        $scope._popMsg(response.data.message);
+        return false;
+      }).then(function () {
+        excelUploadScope.excelUploadingPopup(false); // 업로딩 팝업 닫기
+      });
+    };
+
+
+    // 에러내역 팝업 호출
+    $scope.excelUploadErrInfo = function () {
+      var params      = {};
+      params.uploadFg = 'vendr';
+      params.vendrCd  = $scope.vendrCd;
+      $scope._broadcast('excelUploadErrInfoCtrl', params);
+    };
+
+
+    // DB 데이터를 조회해와서 그리드에서 사용할 Combo를 생성한다.
+    // comboFg : map - 그리드에 사용할 Combo, combo - ComboBox 생성. 두가지 다 사용할경우 combo,map 으로 하면 둘 다 생성.
+    // comboId : combo 생성할 ID
+    // gridMapId : grid 에서 사용할 Map ID
+    // url : 데이터 조회할 url 정보. 명칭관리 조회시에는 url 필요없음.
+    // params : 데이터 조회할 url에 보낼 파라미터
+    // option : A - combo 최상위에 전체라는 텍스트를 붙여준다. S - combo 최상위에 선택이라는 텍스트를 붙여준다. A 또는 S 가 아닌 경우는 데이터값만으로 생성
+    // callback : queryCombo 후 callback 할 함수
+    $scope._queryCombo = function (comboFg, comboId, gridMapId, url, params, option, callback) {
+      var comboUrl = "/iostock/cmm/iostockCmm/getCombo.sb";
+      if (url) {
+        comboUrl = url;
+      }
+
+      // ajax 통신 설정
+      $http({
+        method : 'POST', //방식
+        url    : comboUrl, /* 통신할 URL */
+        params : params, /* 파라메터로 보낼 데이터 */
+        headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+      }).then(function successCallback(response) {
+        if ($scope._httpStatusCheck(response, true)) {
+          if (!$.isEmptyObject(response.data.data.list)) {
+            var list       = response.data.data.list;
+            var comboArray = [];
+            var comboData  = {};
+
+            if (comboFg.indexOf("combo") >= 0 && nvl(comboId, '') !== '') {
+              comboArray = [];
+              if (option === "A") {
+                comboData.name  = messages["cmm.all"];
+                comboData.value = "";
+                comboArray.push(comboData);
+              } else if (option === "S") {
+                comboData.name  = messages["cmm.select"];
+                comboData.value = "";
+                comboArray.push(comboData);
+              }
+
+              for (var i = 0; i < list.length; i++) {
+                comboData       = {};
+                comboData.name  = list[i].nmcodeNm;
+                comboData.value = list[i].nmcodeCd;
+                comboArray.push(comboData);
+              }
+              $scope._setComboData(comboId, comboArray);
+            }
+
+            if (comboFg.indexOf("map") >= 0 && nvl(gridMapId, '') !== '') {
+              comboArray = [];
+              for (var i = 0; i < list.length; i++) {
+                comboData      = {};
+                comboData.id   = list[i].nmcodeCd;
+                comboData.name = list[i].nmcodeNm;
+                comboArray.push(comboData);
+              }
+              $scope[gridMapId] = new wijmo.grid.DataMap(comboArray, 'id', 'name');
+            }
+          }
+        }
+      }, function errorCallback(response) {
+        $scope._popMsg(messages["cmm.error"]);
+        return false;
+      }).then(function () {
+        if (typeof callback === 'function') {
+          $timeout(function () {
+            callback();
+          }, 10);
+        }
+      });
+    };
+
   }]);
 
 </script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
+</c:import>
+
+<%-- 수불 엑셀업로드 공통 팝업 --%>
+<c:import url="/WEB-INF/view/iostock/cmmExcelUpload/excelUpload/excelUpload.jsp">
 </c:import>

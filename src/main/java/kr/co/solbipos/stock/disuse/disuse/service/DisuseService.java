@@ -2,6 +2,7 @@ package kr.co.solbipos.stock.disuse.disuse.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
 
 import java.util.List;
 
@@ -29,4 +30,8 @@ public interface DisuseService {
 
     /** 폐기관리 - 폐기 상세 상품 저장 */
     int saveDisuseDtl(DisuseVO[] disuseVOs, SessionInfoVO sessionInfoVO);
+
+    /** 엑셀업로드 */
+    int excelUpload(ExcelUploadVO excelUploadVO, SessionInfoVO sessionInfoVO);
+
 }

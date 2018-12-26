@@ -70,24 +70,19 @@ public interface StoreOrderMapper {
     /** 주문등록 확정 - 분배자료 생성 */
     int insertDstbRegist(DstbReqVO dstbReqVO);
 
-
-    /** 엑셀업로드 시작 */
-
-    /** 주문등록 - 엑셀업로드 수량추가 */
+    /** 주문등록 엑셀업로드 - 엑셀업로드 수량추가 */
     int insertExcelUploadAddQty(ExcelUploadVO excelUploadVO);
 
-    /** 주문등록 - 기존 주문데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제 */
+    /** 주문등록 엑셀업로드 - 기존 주문데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제 */
     int deleteStoreOrderToExcelUploadData(ExcelUploadVO excelUploadVO);
 
-    /** 주문등록 - 엑셀업로드시 여신 체크 */
+    /** 주문등록 엑셀업로드 - 엑셀업로드시 여신 체크 */
     DefaultMap<String> storeLoanCheck(ExcelUploadVO excelUploadVO);
 
-    /** 주문등록 - 엑셀업로드 한 수량을 주문수량으로 입력 */
+    /** 주문등록 엑셀업로드 - 엑셀업로드 한 수량을 주문수량으로 입력 */
     int insertStoreOrderToExcelUploadData(ExcelUploadVO excelUploadVO);
 
-    /** 주문등록 - 주문수량으로 정상 입력된 데이터 TEMP 테이블에서 삭제 */
+    /** 주문등록 엑셀업로드 - 주문수량으로 정상 입력된 데이터 TEMP 테이블에서 삭제 */
     int deleteExcelUploadCompleteData(ExcelUploadVO excelUploadVO);
-
-    /** 엑셀업로드 끝 */
 
 }

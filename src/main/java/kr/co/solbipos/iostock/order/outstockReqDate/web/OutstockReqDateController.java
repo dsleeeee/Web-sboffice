@@ -247,36 +247,4 @@ public class OutstockReqDateController {
         return ReturnUtil.returnJson(Status.OK, result);
     }
 
-
-
-
-
-
-
-
-
-
-
-    /**
-     * 출고요청일관리 - 매장선택 리스트 조회
-     * @param   request
-     * @param   response
-     * @param   model
-     * @param   outstockReqDateVO
-     * @return  String
-     * @author  안동관
-     * @since   2018. 09. 06.
-     */
-    @RequestMapping(value = "/days/selectStoreList.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result selectStoreList(HttpServletRequest request, HttpServletResponse response,
-        Model model, OutstockReqDateVO outstockReqDateVO) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        outstockReqDateVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-
-        List<DefaultMap<String>> list = outstockReqDateService.selectStoreList(outstockReqDateVO);
-
-        return ReturnUtil.returnListJson(Status.OK, list, outstockReqDateVO);
-    }
 }

@@ -75,7 +75,7 @@
                           modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
                           closeFunc - 팝업 닫기시 호출할 함수
         --%>
-        <jsp:include page="/WEB-INF/view/iostock/order/outstockReqDate/selectShopS.jsp" flush="true">
+        <jsp:include page="/WEB-INF/view/iostock/cmm/selectShopS.jsp" flush="true">
           <jsp:param name="targetId" value="hqStoreMoveOutSelectStore"/>
           <jsp:param name="displayNm" value="${selectStoreDisplayNmAll}"/>
         </jsp:include>
@@ -92,7 +92,7 @@
                           modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
                           closeFunc - 팝업 닫기시 호출할 함수
         --%>
-        <jsp:include page="/WEB-INF/view/iostock/order/outstockReqDate/selectShopS.jsp" flush="true">
+        <jsp:include page="/WEB-INF/view/iostock/cmm/selectShopS.jsp" flush="true">
           <jsp:param name="targetId" value="hqStoreMoveInSelectStore"/>
           <jsp:param name="displayNm" value="${selectStoreDisplayNmAll}"/>
         </jsp:include>
