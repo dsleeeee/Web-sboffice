@@ -911,10 +911,10 @@
             AND thps.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
             AND thps.STORE_CD (+)= tms.STORE_CD
             AND thps.PROD_CD (+)= #{prodCd}
-        <if test='storeCd != null and storeCd.toString() != "null"'>
+        <if test='storeCd != null and storeCd.toString() != ""'>
             AND tms.STORE_CD = #{storeCd}
         </if>
-        <if test='storeNm != null and storeNm.toString() != "null"'>
+        <if test='storeNm != null and storeNm.toString() != ""'>
             AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
         </if>
         <if test='storeRegFg != null and storeRegFg.toString() == "Y"'>
