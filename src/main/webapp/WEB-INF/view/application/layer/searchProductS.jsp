@@ -187,7 +187,7 @@
     $scope.searchProdClass = function(){
       var params = {};
       $scope._postJSONQuery.withOutPopUp('/popup/getProdClassTree.sb', params, function (response) {
-        console.log('tree response', response);
+        // console.log('tree response', response);
         if (response.data.status === 'OK') {
           if (response.data.data.length > 0) {
             // 트리형 데이터로 변환
@@ -249,10 +249,9 @@
     $scope.searchProdList = function(){
       var params = {};
       params.prodClassCd = $scope.getSelectedClass();
-      params.prodCd = $("#"+$scope.targetId+"Cd").val();
-      params.prodNm = $("#"+$scope.targetId+"Nm").val();
+      params.prodCd = $("#"+$scope.targetId+"ProdCd").val();
+      params.prodNm = $("#"+$scope.targetId+"ProdNm").val();
 
-      console.log('params',params);
       // console.log('params', params);
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
       $scope._inquirySub("/popup/getProductList.sb", params);

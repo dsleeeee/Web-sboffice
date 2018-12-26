@@ -55,8 +55,21 @@ public class SalePriceVO extends PageVO {
     /** 주문단위수량 */
     private String poUnitQty;
 
+    /** 주문단위수량 */
+    private String prcCtrlFg;
+
     /** 조회 매장 */
     private String arrStoreCd[];
+
+    /** 변경 판매가 선택 옵션 (H:본사 , S:매장) */
+    private String saleAmtOption;
+
+    /** 판매가 적용 시작일 */
+    private String startDate;
+
+    /** 판매가 적용 마지막일 */
+    private String endDate;
+
 
     /**
      * @return the hqOfficeCd
@@ -239,6 +252,21 @@ public class SalePriceVO extends PageVO {
     }
 
     /**
+     * @return the prcCtrlFg
+     */
+
+    public String getPrcCtrlFg() {
+        return prcCtrlFg;
+    }
+
+    /**
+     * @param prcCtrlFg the prcCtrlFg to set
+     */
+    public void setPrcCtrlFg(String prcCtrlFg) {
+        this.prcCtrlFg = prcCtrlFg;
+    }
+
+    /**
      * @return the arrStoreCd
      */
 
@@ -251,5 +279,50 @@ public class SalePriceVO extends PageVO {
      */
     public void setArrStoreCd(String[] arrStoreCd) {
         this.arrStoreCd = arrStoreCd;
+    }
+
+    /**
+     * @return the saleAmtOption
+     */
+
+    public String getSaleAmtOption() {
+        return saleAmtOption;
+    }
+
+    /**
+     * @param saleAmtOption the saleAmtOption to set
+     */
+    public void setSaleAmtOption(String saleAmtOption) {
+        this.saleAmtOption = saleAmtOption;
+    }
+
+    /**
+     * @return the startDate
+     */
+
+    @Override public String getStartDate() {
+        return startDate;
+    }
+
+    /**
+     * @param startDate the startDate to set
+     */
+    @Override public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    /**
+     * @return the endDate
+     */
+
+    @Override public String getEndDate() {
+        return endDate;
+    }
+
+    /**
+     * @param endDate the endDate to set
+     */
+    @Override public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 }

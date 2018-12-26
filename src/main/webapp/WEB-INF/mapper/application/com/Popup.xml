@@ -205,7 +205,15 @@
                 FROM TB_HQ_PRODUCT thp
                WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
             <if test='prodClassCd != null and prodClassCd != ""'>
-                 AND thp.PROD_CLASS_CD = #{prodClassCd}
+                 AND thp.PROD_CLASS_CD IN  ( SELECT  #{prodClassCd} AS PROD_CLASS_CD
+                                               FROM    DUAL
+                                              UNION
+                                             SELECT  thpc.PROD_CLASS_CD
+                                               FROM    TB_HQ_PRODUCT_CLASS thpc
+                                              WHERE   thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+                                              START WITH  thpc.P_PROD_CLASS_CD = #{prodClassCd}
+                                            CONNECT BY  thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD
+                 )
             </if>
             <if test='prodCd != null and prodCd != "" '>
                  AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
@@ -223,7 +231,15 @@
                 FROM TB_MS_PRODUCT tmp
                WHERE tmp.STORE_CD = #{storeCd}
               <if test='prodClassCd != null and prodClassCd != "" '>
-                 AND tmp.PROD_CLASS_CD = #{prodClassCd}
+                 AND tmp.PROD_CLASS_CD IN  ( SELECT  #{prodClassCd} AS PROD_CLASS_CD
+                                               FROM    DUAL
+                                              UNION
+                                             SELECT  tmpc.PROD_CLASS_CD
+                                               FROM    TB_MS_PRODUCT_CLASS tmpc
+                                              WHERE   tmpc.STORE_CD = #{storeCd}
+                                              START WITH  tmpc.P_PROD_CLASS_CD = #{prodClassCd}
+                                            CONNECT BY  tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD
+                  )
               </if>
               <if test='prodCd != null and prodCd != ""'>
                  AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'

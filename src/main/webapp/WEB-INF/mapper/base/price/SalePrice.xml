@@ -58,7 +58,8 @@
                tmpsp.SALE_UPRC,                   -- 판매금액(변경가능)
                tmpsp.START_DATE,                  -- 판매가 적용 시작일
                tmpsp.END_DATE,                    -- 판매가 적용 종료일
-               tmp.PO_UNIT_QTY                    -- 주문(발주)단위수량
+               tmp.PO_UNIT_QTY,                   -- 주문(발주)단위수량
+               tmp.PRC_CTRL_FG
       <include refid="CmmSQL.PagingTemplateCount"/>
           FROM TB_MS_PRODUCT tmp,
                TB_MS_STORE tms,
@@ -84,5 +85,81 @@
          ORDER BY tms.STORE_CD, tmp.PROD_CD
       <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
+
+    <!-- 매장 판매가관리 > 판매가 변경 히스토리 등록 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SALE_PRICE_HISTORY
+        COMMENTS : 판매가 변경 히스토리를 등록한다.
+    -->
+    <insert id="insertStoreProdSalePriceHistory"  parameterType="salePriceVO" >
+        /* USE : SalePriceMapper.insertStoreProdSalePriceHistory */
+      <![CDATA[
+        INSERT INTO TB_MS_PRODUCT_SALE_PRICE_HISTORY
+        SELECT SQ_MS_PRODUCT_SALE_PRICE_HISTORY.NEXTVAL,
+               STORE_CD,
+               PROD_CD,
+               SALE_PRC_FG,
+               START_DATE,
+               END_DATE,
+               SALE_UPRC,
+               #{regDt},
+               #{regId}
+          FROM TB_MS_PRODUCT_SALE_PRICE
+         WHERE STORE_CD = #{storeCd}
+           AND PROD_CD = #{prodCd}
+           AND SALE_PRC_FG = #{prcCtrlFg}
+           AND START_DATE <= sysdate
+           AND END_DATE >= sysdate
+      ]]>
+    </insert>
+
+    <!-- 매장 판매가관리 > 상품기준 매장 판매가 변경 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SALE_PRICE
+        COMMENTS : 매장 판매가를 일괄 변경한다.
+    -->
+    <insert id="modifyStoreProdSalePrice"  parameterType="salePriceVO" >
+        /* USE : SalePriceMapper.modifyStoreProdSalePrice */
+        MERGE INTO TB_MS_PRODUCT_SALE_PRICE tmpsp
+        USING DUAL
+        ON (
+            tmpsp.STORE_CD = #{storeCd}
+            AND tmpsp.PROD_CD = #{prodCd}
+            AND tmpsp.SALE_PRC_FG = #{prcCtrlFg}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+            tmpsp.SALE_PRC_FG = #{prcCtrlFg}, -- 본사 등록
+            tmpsp.SALE_UPRC = ${saleUprc}, -- 판매가
+            tmpsp.START_DATE = #{startDate},
+            tmpsp.MOD_DT = #{modDt},
+            tmpsp.MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+            STORE_CD,
+            PROD_CD,
+            SALE_PRC_FG,
+            START_DATE,
+            END_DATE,
+            SALE_UPRC,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{storeCd},
+            #{prodCd},
+            #{prcCtrlFg},
+            #{startDate},
+            #{endDate},
+            #{saleUprc},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
 
 </mapper>

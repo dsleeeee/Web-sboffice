@@ -1,18 +1,24 @@
 package kr.co.solbipos.base.price.salePrice.service.impl;
 
+import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.price.salePrice.service.SalePriceService;
 import kr.co.solbipos.base.price.salePrice.service.SalePriceVO;
+import kr.co.solbipos.base.prod.prod.service.enums.PriceEnvFg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static kr.co.common.utils.DateUtil.currentDateString;
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
  * @Class Name : SalePriceServiceImpl.java
@@ -68,4 +74,41 @@ public class SalePriceServiceImpl implements SalePriceService {
         return salePriceMapper.getProdSalePriceList(salePriceVO);
     }
 
+    /** 상품별 매장 판매가 저장 */
+    @Override
+    public int saveProdSalePrice(SalePriceVO[] salePriceVOs, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+        String currentDate = currentDateString();
+        String currentDt = currentDateTimeString();
+
+        // 판매가 본사 통제여부 체크 - 본사통제 여부가 '매장'일 경우 저장로직 수행하지 않음.
+        PriceEnvFg priceEnvstVal = PriceEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0022"));
+
+        if(priceEnvstVal == PriceEnvFg.STORE){
+            return result;
+        }
+
+        for(SalePriceVO salePriceVO : salePriceVOs) {
+
+            salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            salePriceVO.setPrcCtrlFg("1"); // 본사에서 등록
+            salePriceVO.setStartDate(currentDate);
+            salePriceVO.setEndDate("99991231");
+            salePriceVO.setRegDt(currentDt);
+            salePriceVO.setRegId(sessionInfoVO.getUserId());
+            salePriceVO.setModDt(currentDt);
+            salePriceVO.setModId(sessionInfoVO.getUserId());
+
+            // 판매가 변경 히스토리 등록
+            result = salePriceMapper.insertStoreProdSalePriceHistory(salePriceVO);
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+            // 매장 판매가 변경
+            result = salePriceMapper.modifyStoreProdSalePrice(salePriceVO);
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+        }
+        return result;
+    }
 }

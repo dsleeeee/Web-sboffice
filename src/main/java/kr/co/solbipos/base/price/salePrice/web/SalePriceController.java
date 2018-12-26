@@ -8,11 +8,11 @@ import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.price.salePrice.service.SalePriceService;
 import kr.co.solbipos.base.price.salePrice.service.SalePriceVO;
-import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.base.prod.prod.service.enums.PriceEnvFg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -62,6 +62,8 @@ public class SalePriceController {
      * @param response
      * @param model
      * @return
+     * @author  김지은
+     * @since   2018. 12. 24.
      */
     @RequestMapping(value = "/salePrice/salePriceView.sb", method = RequestMethod.GET)
     public String view(HttpServletRequest request, HttpServletResponse response, Model model) {
@@ -84,6 +86,8 @@ public class SalePriceController {
      * @param salePriceVO
      * @param request
      * @return
+     * @author  김지은
+     * @since   2018. 12. 24.
      */
     @RequestMapping(value = "/prodSalePrice/getProdInfo.sb", method = RequestMethod.POST)
     @ResponseBody
@@ -101,6 +105,8 @@ public class SalePriceController {
      * @param salePriceVO
      * @param request
      * @return
+     * @author  김지은
+     * @since   2018. 12. 24.
      */
     @RequestMapping(value = "/prodSalePrice/getProdSalePriceList.sb", method = RequestMethod.POST)
     @ResponseBody
@@ -111,6 +117,27 @@ public class SalePriceController {
         List<DefaultMap<String>> list = salePriceService.getProdSalePriceList(salePriceVO, sessionInfoVO);
 
         return returnListJson(Status.OK, list, salePriceVO);
+    }
+    /**
+     * 상품별 매장 판매가 저장
+     * @param   salePriceVOs
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  김지은
+     * @since   2018. 12. 24.
+     */
+    @RequestMapping(value = "/prodSalePrice/saveProdSalePrice.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveProdSalePrice(@RequestBody SalePriceVO[] salePriceVOs, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = salePriceService.saveProdSalePrice(salePriceVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
     }
 
 

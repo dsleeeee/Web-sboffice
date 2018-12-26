@@ -35,6 +35,10 @@ app.controller('sideMenuCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope._broadcast("prodSalePriceCtrl");
 
     } else if ( type === 'S' ) {  // 매장별 판매가관리 탭
+
+      $scope._popMsg("서비스 준비중입니다.");
+      return false;
+
       $("#prodSalePrice").removeClass("on");
       $("#storeSalePrice").addClass("on");
       $scope.isProdTab = true;

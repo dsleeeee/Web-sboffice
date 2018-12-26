@@ -48,7 +48,6 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
         // 판매가 변경시 다른 컬럼값도 변경
         if (col.binding === "saleUprc") {
           var item = s.rows[e.row].dataItem;
-          // console.log('cellEditEnded',item)
           $scope.calcAmt(item);
         }
       }
@@ -73,10 +72,10 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
 
     var params = {};
     params.prodCd = $("#prodCd").val();
-    params.storeCds = $("#arrStoreCd").val();
+    params.storeCds = $("#storeCd").val();
 
     // 상품 정보 조회
-    $scope._postJSONQuery.withPopUp('/base/price/salePrice/prodSalePrice/getProdInfo.sb', params,
+    $scope._postJSONQuery.withOutPopUp('/base/price/salePrice/prodSalePrice/getProdInfo.sb', params,
       function(response){
         // console.log('response.data.data', response.data.data);
         $scope.setProdInfo(response.data.data);
@@ -94,7 +93,6 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
   $scope.calcAmt = function(item){
 
     // console.log('calcAmt',item);
-
     var costUprc = item.costUprc;
     var saleUprc = item.saleUprc;
     var splyUprc = item.storeSplyUprc;
@@ -119,31 +117,59 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
 
         $scope.flex.collectionView.commitEdit();
       }
-    });
+    }, false);
   };
 
-  // 일괄적용 클릭 이벤트
-  // 체크박스 선택된 매장에 판매가 일괄 적용
+  // 판매가 콤보박스 선택 이벤트
+  $scope.inputSaleAmtReadOnly = false;
+  $scope.setSelectedSaleAmtOption = function(s){
+    if(s.selectedValue === 'S') {
+      $scope.inputSaleAmtReadOnly = false;
+    } else {
+      $scope.inputSaleAmtReadOnly = true;
+    }
+  };
+
+  // 일괄적용 버튼 클릭
+  // 매장판매가 일괄적용시, 입력한 매장판매가를 적용시킴.
+  // 본사판매가 일괄적용시, 조회된 본사판매가를 적용시킴.
   $scope.changeAmt = function() {
 
     var saleAmtOption = $scope.prodInfo.saleAmtOption;
-    var newSaleAmt = Number( $scope.prodInfo.inputSaleAmt);
 
-    // console.log('saleAmtOption',saleAmtOption);
-    // console.log('newSaleAmt',newSaleAmt);
-
-    if(newSaleAmt === 0){
-      if(saleAmtOption === 'S') $scope._popMsg("매장판매가를 입력해주세요.");
-      else                      $scope._popMsg("본사판매가를 입력해주세요.");
+    if( isEmptyObject( $("#prodCd").val()) ) {
+      $scope._popMsg("상품을 선택해주세요.");
       return false;
     }
 
-    $scope.prodInfo.saleUprc = newSaleAmt;
+    if( $scope.prodInfo.saleUprc === undefined) {
+      $scope._popMsg("판매가를 일괄적용할 상품을 조회해주세요.");
+      return false;
+    }
+
+    if(saleAmtOption === 'S') {
+      if($scope.prodInfo.inputSaleAmt === undefined || $scope.prodInfo.inputSaleAmt === '') {
+        $scope._popMsg("매장판매가 일괄 적용시, 매장판매가를 입력해주세요.");
+        return false;
+      }
+    }
+
+    var newSaleAmt = 0;
+
+    if(saleAmtOption === 'S') newSaleAmt = Number($scope.prodInfo.inputSaleAmt);
+    else                      newSaleAmt = $scope.prodInfo.saleUprc;
+
+    // console.log('saleAmtOption',saleAmtOption);
+    // console.log('newSaleAmt',newSaleAmt);
+    // console.log('$scope.prodInfo.inputSaleAmt',$scope.prodInfo.inputSaleAmt);
+
+    var chkCount = 0;
 
     // 변경 판매가 적용
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
       if($scope.flex.collectionView.items[i].gChk) {
         $scope.flex.collectionView.items[i].saleUprc = newSaleAmt;
+        chkCount++;
       }
     }
 
@@ -153,6 +179,12 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
         $scope.calcAmt($scope.flex.collectionView.items[i]);
       }
     }
+
+    if(chkCount == 0){
+      $scope._popMsg("선택된 매장이 없습니다. 적용 매장을 선택해주세요.");
+      return false;
+    }
+
     $scope.flex.collectionView.commitEdit();
     $scope.flex.collectionView.refresh();
   };
@@ -160,6 +192,26 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
   // 저장
   $scope.saveProdPrice = function(){
 
+    if(priceEnvstVal === 'STORE'){
+      $scope._popMsg("판매가 본사통제여부가 '본사'로 설정되었습니다.");
+      return false;
+    }
+
+    // 파라미터 설정
+    var params = new Array();
+    var saleAmtOption = $scope.prodInfo.saleAmtOption;
+
+    for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+      if($scope.flex.collectionView.items[i].saleUprcP !== $scope.flex.collectionView.items[i].saleUprc) {
+        $scope.flex.collectionView.items.saleAmtOption = saleAmtOption;
+        params.push($scope.flex.collectionView.items[i]);
+      }
+    }
+
+    // console.log('params',params)
+
+    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+    $scope._save('/base/price/salePrice/prodSalePrice/saveProdSalePrice.sb', params);
   };
 
   // 상품선택 모듈 팝업 사용시 정의 (상품찾기)

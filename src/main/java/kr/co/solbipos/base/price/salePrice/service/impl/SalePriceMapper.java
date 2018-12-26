@@ -32,4 +32,9 @@ public interface SalePriceMapper {
     /** 상품별 매장 판매가 조회 */
     List<DefaultMap<String>> getProdSalePriceList(SalePriceVO salePriceVO);
 
+    /** 상품별 매장 판매가 저장 */
+    int modifyStoreProdSalePrice(SalePriceVO salePriceVO);
+
+    /** 상품별 매장 판매가 변경 히스토리 저장 */
+    int insertStoreProdSalePriceHistory(SalePriceVO salePriceVO);
 }

@@ -29,4 +29,6 @@ public interface SalePriceService {
     /** 상품별 매장 판매가 조회 */
     List<DefaultMap<String>> getProdSalePriceList(SalePriceVO salePriceVO, SessionInfoVO sessionInfoVO);
 
+    /** 상품별 매장 판매가 저장 */
+    int saveProdSalePrice(SalePriceVO[] salePriceVOs, SessionInfoVO sessionInfoVO);
 }

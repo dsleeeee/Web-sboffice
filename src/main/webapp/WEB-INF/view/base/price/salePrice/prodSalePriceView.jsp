@@ -41,7 +41,7 @@
       <td>
         <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
         <jsp:include page="/WEB-INF/view/application/layer/searchStoreM.jsp" flush="true">
-          <jsp:param name="targetId" value="arrStore"/>
+          <jsp:param name="targetId" value="store"/>
         </jsp:include>
         <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
       </td>
@@ -72,16 +72,13 @@
                   display-member-path="name"
                   selected-value-path="value"
                   is-editable="false"
-                  initialized="_initComboBox(s)">
+                  initialized="_initComboBox(s)"
+                  selected-index-changed="setSelectedSaleAmtOption(s)"
+          >
           </wj-combo-box>
         </div>
         <span>
-          <input type="text" class="inSty2 w130" id="inputSaleAmt"
-                 ng-model="prodInfo.inputSaleAmt"
-                 <%--onfocus="removeComma(this)"--%>
-                 <%--onblur="addComma(this)"--%>
-                 <%--ng-change="setAmt()"--%>
-          />
+          <input type="text" class="inSty2 w130" id="inputSaleAmt"ng-model="prodInfo.inputSaleAmt" ng-readonly="inputSaleAmtReadOnly" />
         </span> 원
         <a href="#" class="btn_grayS ml10" ng-click="changeAmt()">일괄적용</a>
         <a href="#" class="btn_grayS" style="display:none;" ng-click="changeExcelAmt()">엑셀판매가 일괄적용</a> <!-- // todo -->
@@ -194,5 +191,6 @@
 </div>
 <script>
   var priceEnvstVal = "${priceEnvstVal}";
+  // console.log('priceEnvstVal >> ', priceEnvstVal);
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/prodSalePrice.js?ver=2018121201" charset="utf-8"></script>
