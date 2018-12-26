@@ -51,7 +51,6 @@ app.controller('prepaidCtrl', ['$scope', '$http', function ($scope, $http) {
     params.array = srchArrayCombo.selectedValue;
 
     if($scope.orgnFg === 'H' && params.storeCds  === '') {
-      alert("매장을 선택해주세요.");
       $scope._popMsg(messages["prepaid.require.selectStore"]);
       return false;
     }
