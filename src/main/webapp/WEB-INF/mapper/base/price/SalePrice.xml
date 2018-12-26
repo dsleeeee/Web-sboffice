@@ -130,7 +130,6 @@
         WHEN MATCHED THEN
         UPDATE
         SET
-            tmpsp.SALE_PRC_FG = #{prcCtrlFg}, -- 본사 등록
             tmpsp.SALE_UPRC = ${saleUprc}, -- 판매가
             tmpsp.START_DATE = #{startDate},
             tmpsp.MOD_DT = #{modDt},
