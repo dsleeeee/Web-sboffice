@@ -8,10 +8,10 @@
 <c:set var="prodEnvstVal" value="${prodEnvstVal}" />
 <c:set var="priceEnvstVal" value="${priceEnvstVal}" />
 
-<div class="subCon" ng-controller="prodSalePriceCtrl">
+<div class="subCon" id="prodSalePriceArea" ng-controller="prodSalePriceCtrl">
   <%--searchTbl--%>
   <div class="searchBar flddUnfld">
-    <a href="#" class="open fl">${menuNm}</a>
+    <a href="#" class="open fl"><s:message code="salePrice.prodSalePrice" /></a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
       <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('prodSalePriceCtrl', 1)">
@@ -58,11 +58,6 @@
     <tbody>
     <tr class="brt">
       <th class="oh gr">
-        <%--
-        <div class="sb-select fl w130 mr5">
-          <div id="theComboBox6"></div>
-        </div>
-        --%>
         <div class="sb-select fl w130 mr5">
           <wj-combo-box
                   id="saleAmtOption"
@@ -73,8 +68,7 @@
                   selected-value-path="value"
                   is-editable="false"
                   initialized="_initComboBox(s)"
-                  selected-index-changed="setSelectedSaleAmtOption(s)"
-          >
+                  selected-index-changed="setSelectedSaleAmtOption(s)">
           </wj-combo-box>
         </div>
         <span>
@@ -145,7 +139,7 @@
 
   <%--위즈모 테이블--%>
   <div class="wj-TblWrapBr mt10">
-    <div id="theGrid" style="height: 370px;">
+    <div id="theGridProd" style="height: 370px;">
       <wj-flex-grid
               autoGenerateColumns="false"
               control="flex"
@@ -183,7 +177,7 @@
   <%-- 페이지 리스트 --%>
   <div class="pageNum mt20">
     <%-- id --%>
-    <ul id="prodCtrlPager" data-size="10">
+    <ul id="prodSalePriceCtrlPager" data-size="10">
     </ul>
   </div>
   <%--//페이지 리스트--%>
@@ -193,4 +187,4 @@
   var priceEnvstVal = "${priceEnvstVal}";
   // console.log('priceEnvstVal >> ', priceEnvstVal);
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/prodSalePrice.js?ver=2018121201" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/prodSalePrice.js?ver=20181226.01" charset="utf-8"></script>

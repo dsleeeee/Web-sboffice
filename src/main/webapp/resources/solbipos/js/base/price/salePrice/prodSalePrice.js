@@ -74,8 +74,6 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
     params.prodCd = $("#prodCd").val();
     params.storeCd = $("#storeCd").val();
 
-    // console.log('params',params);
-
     // 상품 정보 조회
     $scope._postJSONQuery.withOutPopUp('/base/price/salePrice/prodSalePrice/getProdInfo.sb', params,
       function(response){
@@ -86,7 +84,7 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
           $scope._popMsg(messages["cmm.error"]);
           return false;
         }
-        $scope.searchSalePriceList(params);
+        $scope.searchSalePriceList();
       }
     );
   };
@@ -108,9 +106,13 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
   };
 
   // 판매가 그리드 조회
-  $scope.searchSalePriceList = function(params){
+  $scope.searchSalePriceList = function(){
 
-    console.log(params);
+    var params = {};
+    params.prodCd = $("#prodCd").val();
+    params.storeCd = $("#storeCd").val();
+
+    // console.log(params);
 
     $scope._inquirySub('/base/price/salePrice/prodSalePrice/getProdSalePriceList.sb', params, function() {
 
@@ -163,10 +165,6 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
     if(saleAmtOption === 'S') newSaleAmt = Number($scope.prodInfo.inputSaleAmt);
     else                      newSaleAmt = $scope.prodInfo.saleUprc;
 
-    // console.log('saleAmtOption',saleAmtOption);
-    // console.log('newSaleAmt',newSaleAmt);
-    // console.log('$scope.prodInfo.inputSaleAmt',$scope.prodInfo.inputSaleAmt);
-
     var chkCount = 0;
 
     // 변경 판매가 적용
@@ -215,7 +213,9 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
     // console.log('params',params)
 
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save('/base/price/salePrice/prodSalePrice/saveProdSalePrice.sb', params);
+    $scope._save('/base/price/salePrice/prodSalePrice/saveProdSalePrice.sb', params, function(){
+      $scope.searchSalePriceList();
+    });
   };
 
   // 상품선택 모듈 팝업 사용시 정의 (상품찾기)
