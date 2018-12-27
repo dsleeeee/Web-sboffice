@@ -59,7 +59,7 @@
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.storeCd"/>" binding="storeCd" width="80" is-read-only="true"  align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.storeNm"/>" binding="storeNm" width="*" is-read-only="true" ></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.saleUprc"/>" binding="saleUprc" width="130" align="right" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.saleUprc"/>" binding="saleUprc" width="90" align="right" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.saleUprcB"/>" binding="saleUprcB" visible="false" ></wj-flex-grid-column>
               </wj-flex-grid>
             </div>
@@ -87,9 +87,9 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.storeCd"/>" binding="storeCd" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.storeCd"/>" binding="storeCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.storeNm"/>" binding="storeNm" width="*" is-read-only="true" ></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.saleUprc"/>" binding="saleUprc" width="130" align="right" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.saleUprc"/>" binding="saleUprc" width="90" align="right" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.saleUprcB"/>" binding="saleUprcB" visible="false" ></wj-flex-grid-column>
               </wj-flex-grid>
             </div>

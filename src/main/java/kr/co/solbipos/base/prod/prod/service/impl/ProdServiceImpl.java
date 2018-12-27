@@ -209,7 +209,6 @@ public class ProdServiceImpl implements ProdService {
         // [판매가 - 본사통제시] 본사에서 상품정보 수정시 매장에 수정정보 내려줌
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ  && priceEnvstVal == PriceEnvFg.HQ) {
             String storeSalePriceReeulst = prodMapper.saveStoreSalePrice(prodVO);
-            LOGGER.info("salePrice : " + storeSalePriceReeulst);
         }
 
         return result;
@@ -253,6 +252,27 @@ public class ProdServiceImpl implements ProdService {
 
             // [판매가 - 본사통제시] 본사에서 상품정보 수정시 매장에 수정정보 내려줌
             String storeSalePriceReeulst = prodMapper.saveStoreSalePrice(prodVO);
+
+            // 판매가가 기존 판매가와 다른 경우
+            if(!prodVO.getSaleUprc().equals(prodVO.getSaleUprcB())) {
+
+                prodVO.setSalePrcFg("1"); // 본사에서 변경
+                prodVO.setStartDate(currentDateString());
+                prodVO.setEndDate("99991231");
+
+                // 판매가 변경 히스토리 등록 count 조회
+                int prodCnt = prodMapper.getRegistProdCount(prodVO);
+
+                if(prodCnt > 0) {
+                    // 매장 상품 판매가 변경 히스토리 등록
+                    result = prodMapper.updateStoreSaleUprcHistory(prodVO);
+                    if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                }
+
+                // 매장 상품 판매가 변경
+                result = prodMapper.updateStoreSaleUprc(prodVO);
+                if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            }
 
         }
         return procCnt;

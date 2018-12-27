@@ -121,6 +121,9 @@ public class ProdVO extends PageVO {
     /** 판매가 */
     private String saleUprc;
 
+    /** 변경전 판매가 */
+    private String saleUprcB;
+
     /** 상품 등록 주체 구분 */
     private OrgnFg regOrgnFg;
 
@@ -718,6 +721,21 @@ public class ProdVO extends PageVO {
      */
     public void setSaleUprc(String saleUprc) {
         this.saleUprc = saleUprc;
+    }
+
+    /**
+     * @return the saleUprcB
+     */
+
+    public String getSaleUprcB() {
+        return saleUprcB;
+    }
+
+    /**
+     * @param saleUprcB the saleUprcB to set
+     */
+    public void setSaleUprcB(String saleUprcB) {
+        this.saleUprcB = saleUprcB;
     }
 
     /**
