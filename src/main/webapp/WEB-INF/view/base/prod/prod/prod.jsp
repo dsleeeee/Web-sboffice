@@ -15,7 +15,7 @@
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('prodCtrl', 1)">
+      <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('prodCtrl')">
         <s:message code="cmm.search" />
       </button>
     </div>
@@ -81,7 +81,7 @@
         <td>
           <input type="text" class="sb-input w100" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()"
                  placeholder="<s:message code="prod.prodClass" /> 선택" readonly/>
-          <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCd" disabled />
+          <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
         </td>
         <%-- 바코드 --%>
         <th><s:message code="prod.barCd" /></th>
@@ -107,8 +107,8 @@
           </div>
         </td>
         <%-- 상품등록주체 (본사/매장) => 단독매장 제외해야함  // todo --%>
-          <th></th>
-          <td></td>
+          <th><s:message code="prod.brandNm" /></th>
+          <td><input type="text" class="sb-input w100" id="srchBrandNm" ng-model="brandNm" /></td>
         <%--
         <th><s:message code="prod.useYn" /></th>
         <td>
@@ -211,7 +211,7 @@
   var priceEnvstVal = "${priceEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=2018121201" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20181228.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">

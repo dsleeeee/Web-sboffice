@@ -63,6 +63,7 @@
                     AND thp.PROD_CD = thpsp.PROD_CD
                 WHERE
                     thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND thp.USE_YN = 'Y'
                 <if test="prodClassCd != null and prodClassCd != ''">
                     AND ( thpc.P_PROD_CLASS_CD = #{prodClassCd} OR thpc.PROD_CLASS_CD = #{prodClassCd} )
                 </if>
@@ -104,6 +105,7 @@
                     AND tmp.PROD_CD = tmpsp.PROD_CD
                 WHERE
                     tmp.STORE_CD = #{storeCd}
+                    AND tmp.USE_YN = 'Y'
                 <if test="prodClassCd != null and prodClassCd != ''">
                     AND ( tmpc.P_PROD_CLASS_CD = #{prodClassCd} OR tmpc.PROD_CLASS_CD = #{prodClassCd} )
                 </if>
