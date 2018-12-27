@@ -65,13 +65,14 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     var prodScope = agrid.getScope("prodCtrl");
     var params = new Array();
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+      if($scope.flex.collectionView.items[i].gChk) {
+        var saleUprcB = $scope.flex.collectionView.items[i].saleUprcB; // 기존 판매가
+        var saleUprc = $scope.flex.collectionView.items[i].saleUprc; // 현재 판매가
 
-      var saleUprcB = $scope.flex.collectionView.items[i].saleUprcB; // 기존 판매가
-      var saleUprc = $scope.flex.collectionView.items[i].saleUprc; // 현재 판매가
-
-      if(saleUprc !== saleUprcB){
-        $scope.flex.collectionView.items[i].prodCd = prodScope.getProdInfo().prodCd;
-        params.push($scope.flex.collectionView.items[i]);
+        if(saleUprc !== saleUprcB){
+          $scope.flex.collectionView.items[i].prodCd = prodScope.getProdInfo().prodCd;
+          params.push($scope.flex.collectionView.items[i]);
+        }
       }
     }
     $scope._save("/base/prod/prod/prod/updateStoreSaleUprc.sb", params, function(){ $scope.allSearch() });
