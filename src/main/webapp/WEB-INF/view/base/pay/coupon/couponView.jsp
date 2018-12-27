@@ -28,7 +28,7 @@
 
     <%-- 쿠폰분류등록 --%>
     <div class="mb20 mt20" >
-      <div class="wj-TblWrapBr mr10 pd20" style="height:300px;">
+      <div class="wj-TblWrapBr mr10 pd20" style="height:450px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='coupon.regist.class' /></span>
           <%-- 페이지 스케일  --%>
@@ -50,7 +50,7 @@
        </c:if>
         </div>
         <%-- 쿠폰분류등록 그리드 --%>
-        <div id="couponClassGrid" class="wj-gridWrap" style="height:180px;overflow-y: hidden;">
+        <div id="couponClassGrid" class="wj-gridWrap" style="height:370px;overflow-y: hidden;">
           <wj-flex-grid
                   autoGenerateColumns="false"
                   control="flex"
@@ -87,7 +87,7 @@
 
   <%-- 쿠폰등록  --%>
   <div class="mb40" ng-controller="couponCtrl">
-    <div class="wj-TblWrapBr mr10 pd20" style="height:305px;">
+    <div class="wj-TblWrapBr mr10 pd20" style="height:450px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='coupon.regist.coupon' /> <span id="couponSubTitle"></span> </span>
         <%-- 페이지 스케일  --%>
@@ -110,7 +110,7 @@
       </c:if>
       </div>
       <%-- 쿠폰등록 그리드 --%>
-      <div id="couponGrid" class="wj-gridWrap" style="height:190px;overflow-y: hidden;">
+      <div id="couponGrid" class="wj-gridWrap" style="height:370px;overflow-y: hidden;">
         <wj-flex-grid
                 autoGenerateColumns="false"
                 control="flex"

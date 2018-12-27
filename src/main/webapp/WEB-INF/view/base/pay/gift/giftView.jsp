@@ -25,7 +25,7 @@
 
     <%-- 상품권분류등록 --%>
     <div class="mb20 mt20" >
-      <div class="wj-TblWrapBr mr10 pd20" style="height:260px;">
+      <div class="wj-TblWrapBr mr10 pd20" style="height:450px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='gift.regist.class' /></span>
           <button class="btn_skyblue" id="btnClassAdd"    ng-click="addRow()" ng-if="userUseYn"><s:message code='cmm.add' /></button>
@@ -33,7 +33,7 @@
           <button class="btn_skyblue" id="btnClassSave"   ng-click="save()" ng-if="userUseYn"><s:message code='cmm.save' /></button>
         </div>
         <%-- 상품권분류등록 그리드 --%>
-        <div id="giftClassGrid" class="wj-gridWrap" style="height:190px; overflow-y: hidden;">
+        <div id="giftClassGrid" class="wj-gridWrap" style="height:370px; overflow-y: hidden;">
           <wj-flex-grid
                   autoGenerateColumns="false"
                   control="flex"
@@ -60,7 +60,7 @@
   </div>
   <%-- 상품권등록  --%>
   <div class="mb40" ng-controller="giftCtrl">
-    <div class="wj-TblWrapBr mr10 pd20" style="height:260px;">
+    <div class="wj-TblWrapBr mr10 pd20" style="height:450px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='gift.regist.gift' /> <span id="giftSubTitle"></span> </span>
         <button class="btn_skyblue" id="btnGiftAdd" ng-click="addRow()" ng-if="userUseYn"><s:message code='cmm.add' /></button>
@@ -68,7 +68,7 @@
         <button class="btn_skyblue" id="btnGiftSave" ng-click="save()" ng-if="userUseYn"><s:message code='cmm.save' /></button>
       </div>
       <%-- 상품권등록 그리드 --%>
-      <div id="giftGrid" class="wj-gridWrap" style="height:190px;overflow-y: hidden;">
+      <div id="giftGrid" class="wj-gridWrap" style="height:370px;overflow-y: hidden;">
         <wj-flex-grid
                 autoGenerateColumns="false"
                 control="flex"

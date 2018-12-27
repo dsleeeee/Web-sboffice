@@ -154,7 +154,6 @@
     </wj-combo-box>
     <%--// 페이지 스케일  --%>
 
-
     <div class="tr">
       <%-- 사원신규등록 --%>
       <button class="btn_skyblue" ng-click="registStoreEmp()"><s:message code="storeEmp.empRegist" /></button>
@@ -165,7 +164,7 @@
 
   <%-- 매장 사원 그리드 --%>
   <div class="w100 mt10 mb20">
-    <div class="wj-gridWrap" style="height:315px; overflow-x: hidden; overflow-y: hidden;">
+    <div class="wj-gridWrap" style="height:380px; overflow-x: hidden; overflow-y: hidden;">
       <wj-flex-grid
               control="flex"
               autoGenerateColumns="false"

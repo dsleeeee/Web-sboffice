@@ -74,7 +74,7 @@
 
   <div id="gridRepresent" class="w50 fl mt40" style="width: 60%" ng-controller="representCtrl">
     <%--위즈모 테이블--%>
-    <div class="wj-TblWrapBr mr10 pd20" style="height: 400px;">
+    <div class="wj-TblWrapBr mr10 pd20" style="height: 480px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='systemCd.grpGridNm' /></span>
         <button class="btn_skyblue" id="btnAddRepresent" style="display: none;" ng-click="addRow()">
@@ -89,7 +89,7 @@
       </div>
       <%-- 개발시 높이 조절해서 사용--%>
       <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
-      <div class="wj-gridWrap" style="height:315px">
+      <div class="wj-gridWrap" style="height:370px">
         <div class="row">
           <wj-flex-grid
               autoGenerateColumns="false"
@@ -124,9 +124,9 @@
     <%--//위즈모 테이블--%>
   </div>
 
-  <div id="gridDetail" class="w50 fr mt40" style="width: 40%" ng-controller="detailCtrl">
+  <div id="gridDetail" class="w50 fr mt40 mb20" style="width: 40%" ng-controller="detailCtrl">
     <%--위즈모 테이블--%>
-    <div class="wj-TblWrapBr ml10 pd20" style="height: 400px;">
+    <div class="wj-TblWrapBr ml10 pd20" style="height: 480px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='systemCd.gridNm' /></span>
         <button class="btn_skyblue" id="btnAddDetail" style="display: none;" ng-click="addRow()">
@@ -141,7 +141,7 @@
       </div>
       <%-- 개발시 높이 조절해서 사용--%>
       <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
-      <div class="wj-gridWrap" style="height:310px">
+      <div class="wj-gridWrap" style="height:370px">
         <wj-flex-grid
                 autoGenerateColumns="false"
                 control="flex"
