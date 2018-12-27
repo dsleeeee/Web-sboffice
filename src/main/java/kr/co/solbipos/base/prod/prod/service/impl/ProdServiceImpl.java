@@ -12,7 +12,6 @@ import kr.co.solbipos.base.prod.prod.service.ProdService;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.base.prod.prod.service.enums.PriceEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdEnvFg;
-import kr.co.solbipos.base.prod.sidemenu.service.impl.SideMenuMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -284,5 +283,39 @@ public class ProdServiceImpl implements ProdService {
             if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
         return procCnt;
+    }
+
+    /** 상품 등록매장의 판매가 변경 */
+    @Override
+    public int updateStoreSaleUprc(ProdVO[] prodVOs, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+        String currentDate = currentDateTimeString();
+
+        for(ProdVO prodVO : prodVOs) {
+            prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            prodVO.setSalePrcFg("1"); // 본사에서 변경
+            prodVO.setStartDate(currentDateString());
+            prodVO.setEndDate("99991231");
+            prodVO.setRegDt(currentDate);
+            prodVO.setRegId(sessionInfoVO.getUserId());
+            prodVO.setModDt(currentDate);
+            prodVO.setModId(sessionInfoVO.getUserId());
+
+            // 판매가 변경 히스토리 등록 count 조회
+            int prodCnt = prodMapper.getRegistProdCount(prodVO);
+
+            if(prodCnt > 0) {
+                // 매장 상품 판매가 변경 히스토리 등록
+                result = prodMapper.updateStoreSaleUprcHistory(prodVO);
+                if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            }
+
+            // 매장 상품 판매가 변경
+            result = prodMapper.updateStoreSaleUprc(prodVO);
+            if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+
+        return result;
     }
 }

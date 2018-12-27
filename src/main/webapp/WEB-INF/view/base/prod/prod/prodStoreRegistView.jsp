@@ -40,7 +40,10 @@
           <div class="wj-TblWrap mr10" style="height:395px; overflow-y:hidden;">
             <div class="oh">
               <span class="fl bk lh20 s14"><s:message code="prod.regStore"/></span>
-              <span class="fr"><a href="#" class="btn_grayS2" ng-click="delete()"><s:message code="cmm.del" /></a></span>
+              <span class="fr">
+                <a href="#" class="btn_grayS2" ng-click="changeSaleUprc()"><s:message code="prod.change.saleUprc" /></a>
+                <a href="#" class="btn_grayS2" ng-click="delete()"><s:message code="cmm.del" /></a>
+              </span>
             </div>
             <div id="regStoreGrid" class="mt10" style="height: 370px; overflow-y: hidden;">
               <wj-flex-grid
@@ -54,20 +57,13 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.storeCd"/>" binding="storeCd" width="90" is-read-only="true"  align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.storeCd"/>" binding="storeCd" width="80" is-read-only="true"  align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.storeNm"/>" binding="storeNm" width="*" is-read-only="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.saleUprc"/>" binding="saleUprc" width="130" align="right" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.saleUprcB"/>" binding="saleUprcB" visible="false" ></wj-flex-grid-column>
               </wj-flex-grid>
             </div>
           </div>
-
-          <%-- 페이지 리스트 --%>
-          <div class="pageNum2 mt20">
-            <%-- id --%>
-            <ul id="regStoreCtrlPager" data-size="10">
-            </ul>
-          </div>
-          <%--//페이지 리스트--%>
-
         </div>
 
         <%--- 미적용매장 그리드 --%>
@@ -93,18 +89,11 @@
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.storeCd"/>" binding="storeCd" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.storeNm"/>" binding="storeNm" width="*" is-read-only="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.saleUprc"/>" binding="saleUprc" width="130" align="right" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.saleUprcB"/>" binding="saleUprcB" visible="false" ></wj-flex-grid-column>
               </wj-flex-grid>
             </div>
           </div>
-
-          <%-- 페이지 리스트 --%>
-          <div class="pageNum2 mt20">
-            <%-- id --%>
-            <ul id="noRegStoreCtrlPager" data-size="10">
-            </ul>
-          </div>
-          <%--//페이지 리스트--%>
-
         </div>
       </div>
     </div>

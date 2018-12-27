@@ -33,11 +33,10 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     var prodScope     = agrid.getScope("prodCtrl");
     var params        = {};
 
-    params.storeCd    = $("#srchStoreCd").val();
-    params.storeNm    = $("#srchStoreNm").val();
-    params.listScale  = 10;
+    params.storeCd    = '';
+    params.storeNm    = '';
     params.prodCd     = prodScope.getProdInfo().prodCd;
-    params.storeRegFg = "Y";
+    params.storeRegFg = 'Y';
 
     $scope._inquirySub("/base/prod/prod/prod/getRegStoreList.sb", params, function() {}, false);
   };
@@ -55,6 +54,27 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._save("/base/prod/prod/prod/deleteProdStore.sb", params, function(){ $scope.allSearch() });
+  };
+
+  // 판매가 변경
+  $scope.changeSaleUprc = function(){
+
+    // 그리드 변경된 건 커밋
+    $scope.flex.collectionView.commitEdit();
+
+    var prodScope = agrid.getScope("prodCtrl");
+    var params = new Array();
+    for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+
+      var saleUprcB = $scope.flex.collectionView.items[i].saleUprcB; // 기존 판매가
+      var saleUprc = $scope.flex.collectionView.items[i].saleUprc; // 현재 판매가
+
+      if(saleUprc !== saleUprcB){
+        $scope.flex.collectionView.items[i].prodCd = prodScope.getProdInfo().prodCd;
+        params.push($scope.flex.collectionView.items[i]);
+      }
+    }
+    $scope._save("/base/prod/prod/prod/updateStoreSaleUprc.sb", params, function(){ $scope.allSearch() });
   };
 
   // 매장 삭제 완료 후처리
@@ -89,9 +109,8 @@ app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
 
     params.storeCd    = $("#srchStoreCd").val();
     params.storeNm    = $("#srchStoreNm").val();
-    params.listScale  = 10;
     params.prodCd     = prodScope.getProdInfo().prodCd;
-    params.storeRegFg = "N";
+    params.storeRegFg = 'N';
 
     $scope._inquirySub("/base/prod/prod/prod/getRegStoreList.sb", params, function() {}, false);
   };

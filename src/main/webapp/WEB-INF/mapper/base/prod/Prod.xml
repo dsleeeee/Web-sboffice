@@ -893,38 +893,94 @@
     -->
     <select id="getStoreList" parameterType="prodVO" resultType="DefaultMap">
         /* USE : ProdMapper.getStoreList */
-        <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT
-            tms.HQ_OFFICE_CD,
-            tho.HQ_OFFICE_NM,
-            tms.STORE_CD,
-            tms.STORE_NM,
-            NVL2(thps.STORE_CD, 'Y', 'N') AS REG_YN
-           <include refid="CmmSQL.PagingTemplateCount"/>
-        FROM
-            TB_MS_STORE tms,
-            TB_HQ_OFFICE tho,
-            TB_HQ_PRODUCT_STORE thps
-        WHERE
-            tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
-            AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND thps.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
-            AND thps.STORE_CD (+)= tms.STORE_CD
-            AND thps.PROD_CD (+)= #{prodCd}
+        SELECT tms.HQ_OFFICE_CD,
+               tho.HQ_OFFICE_NM,
+               tms.STORE_CD,
+               tms.STORE_NM,
+               NVL2(thps.STORE_CD, 'Y', 'N') AS REG_YN,
+               thpsp.SALE_UPRC AS HQ_SALE_UPRC,
+               tmpsp.SALE_UPRC AS STORE_SALE_UPRC,
+           <if test='storeRegFg != null and storeRegFg.toString() == "Y"'>
+               tmpsp.SALE_UPRC AS SALE_UPRC, -- 등록매장은 매장판매가
+               tmpsp.SALE_UPRC AS SALE_UPRC_B,
+           </if>
+           <if test='storeRegFg != null and storeRegFg.toString() == "N"'>
+               CASE WHEN tmpsp.SALE_UPRC IS NULL THEN thpsp.SALE_UPRC
+                    ELSE tmpsp.SALE_UPRC END AS SALE_UPRC, -- 미등록매장은 매장판매가 우선, 없으면 본사판매가
+               CASE WHEN tmpsp.SALE_UPRC IS NULL THEN thpsp.SALE_UPRC
+                    ELSE tmpsp.SALE_UPRC END AS SALE_UPRC_B,
+           </if>
+               thps.STORE_CD
+          FROM TB_MS_STORE tms,
+               TB_HQ_OFFICE tho,
+               TB_HQ_PRODUCT_STORE thps,
+               (
+               SELECT thp.HQ_OFFICE_CD ,
+                      thp.PROD_CD,
+                      thpsp.SALE_UPRC
+                 FROM TB_HQ_PRODUCT thp,
+                      (
+                       SELECT HQ_OFFICE_CD , PROD_CD,
+                              MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                         FROM TB_HQ_PRODUCT_SALE_PRICE
+                        WHERE 1 = 1
+                         <![CDATA[
+                          AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                          AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                          ]]>
+                          AND SALE_PRC_FG = '1'
+                        GROUP BY HQ_OFFICE_CD, PROD_CD
+                      ) thpsp
+                WHERE 1=1
+                  AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                  AND thpsp.PROD_CD = thp.PROD_CD
+               ) thpsp, -- 본사 판매가
+               (
+               SELECT thp.HQ_OFFICE_CD ,
+                      tmpsp.STORE_CD,
+                      thp.PROD_CD,
+                      tmpsp.SALE_UPRC
+                 FROM TB_HQ_PRODUCT thp,
+                      (
+                      SELECT STORE_CD , PROD_CD,
+                             MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                        FROM TB_MS_PRODUCT_SALE_PRICE
+                       WHERE 1 = 1
+                        <![CDATA[
+                         AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                         AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                         ]]>
+                         AND SALE_PRC_FG = '1'
+                       GROUP BY STORE_CD, PROD_CD
+                      ) tmpsp
+                WHERE 1=1
+                  AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                  AND tmpsp.STORE_CD IN (SELECT store_cd FROM TB_MS_STORE  WHERE HQ_OFFICE_CD = thp.HQ_OFFICE_CD)
+                  AND tmpsp.PROD_CD = thp.PROD_CD
+               ) tmpsp
+         WHERE tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+           AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+           AND thps.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
+           AND thps.STORE_CD (+)= tms.STORE_CD
+           AND thps.PROD_CD (+)= #{prodCd}
+           AND thpsp.HQ_OFFICE_CD (+)= tho.HQ_OFFICE_CD
+           AND thpsp.PROD_CD (+)= #{prodCd}
+           AND tmpsp.HQ_OFFICE_CD (+)= #{hqOfficeCd}
+           AND tmpsp.STORE_CD (+)= tms.STORE_CD
+           AND tmpsp.PROD_CD (+)= #{prodCd}
         <if test='storeCd != null and storeCd.toString() != ""'>
-            AND tms.STORE_CD = #{storeCd}
+           AND tms.STORE_CD = #{storeCd}
         </if>
         <if test='storeNm != null and storeNm.toString() != ""'>
-            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+           AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
         </if>
         <if test='storeRegFg != null and storeRegFg.toString() == "Y"'>
-            AND thps.STORE_CD IS NOT NULL
+           AND thps.STORE_CD IS NOT NULL
         </if>
         <if test='storeRegFg != null and storeRegFg.toString() == "N"'>
-            AND thps.STORE_CD IS NULL
+           AND thps.STORE_CD IS NULL
         </if>
-        ORDER BY tms.STORE_CD ASC
-        <include refid="CmmSQL.PagingTemplateBottom"/>
+         ORDER BY tms.STORE_CD ASC
     </select>
 
     <!-- 상품 적용 매장 등록 -->
@@ -1174,5 +1230,96 @@
          WHERE STORE_CD = #{storeCd}
            AND PROD_CD = #{prodCd}
     </update>
+
+    <!-- 판매가 히스토리 등록을 위한 COUNT 조회 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SALE_PRICE
+        COMMENTS : 판매가 히스토리 등록을 위한 COUNT 조회한다.
+    -->
+    <select id="getRegistProdCount" parameterType="salePriceVO" resultType="Integer">
+        /* USE : ProdMapper.getRegistProdCount */
+        SELECT COUNT(SALE_UPRC) AS CNT
+          FROM TB_MS_PRODUCT_SALE_PRICE
+         WHERE STORE_CD = #{storeCd}
+           AND PROD_CD = #{prodCd}
+           AND SALE_PRC_FG = #{salePrcFg}
+           AND START_DATE = #{startDate}
+    </select>
+
+
+    <!-- 매장 상품 판매가 변경 히스토리 등록 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SALE_PRICE_HISTORY
+        COMMENTS : 판매가 변경 히스토리를 등록한다.
+    -->
+    <insert id="updateStoreSaleUprcHistory"  parameterType="prodVO" >
+        /* USE : ProdMapper.updateStoreSaleUprcHistory */
+        <![CDATA[
+        INSERT INTO TB_MS_PRODUCT_SALE_PRICE_HISTORY
+        SELECT SQ_MS_PRODUCT_SALE_PRICE_HISTORY.NEXTVAL,
+               STORE_CD,
+               PROD_CD,
+               SALE_PRC_FG,
+               START_DATE,
+               END_DATE,
+               SALE_UPRC,
+               #{regDt},
+               #{regId}
+          FROM TB_MS_PRODUCT_SALE_PRICE
+         WHERE STORE_CD = #{storeCd}
+           AND PROD_CD = #{prodCd}
+           AND SALE_PRC_FG = #{salePrcFg}
+           AND START_DATE = #{startDate}
+          ]]>
+    </insert>
+
+    <!-- 매장 판매가 변경 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SALE_PRICE
+        COMMENTS : 매장 판매가를 일괄 변경한다.
+    -->
+    <insert id="updateStoreSaleUprc"  parameterType="prodVO" >
+        /* USE : ProdMapper.updateStoreSaleUprc */
+        MERGE INTO TB_MS_PRODUCT_SALE_PRICE tmpsp
+        USING DUAL
+        ON (
+            tmpsp.STORE_CD = #{storeCd}
+            AND tmpsp.PROD_CD = #{prodCd}
+            AND tmpsp.SALE_PRC_FG = #{salePrcFg}
+            AND tmpsp.START_DATE = #{startDate}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+            tmpsp.SALE_UPRC = ${saleUprc}, -- 판매가
+            tmpsp.MOD_DT = #{modDt},
+            tmpsp.MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+            STORE_CD,
+            PROD_CD,
+            SALE_PRC_FG,
+            START_DATE,
+            END_DATE,
+            SALE_UPRC,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{storeCd},
+            #{prodCd},
+            #{salePrcFg},
+            #{startDate},
+            #{endDate},
+            #{saleUprc},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
 
 </mapper>
