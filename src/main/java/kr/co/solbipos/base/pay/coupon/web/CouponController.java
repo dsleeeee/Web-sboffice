@@ -118,15 +118,8 @@ public class CouponController {
     public Result getCouponClassList(PayMethodClassVO payMethodClassVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
-        LOGGER.debug(payMethodClassVO.getProperties());
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
-        LOGGER.debug(sessionInfoVO.getProperties());
-
         List<DefaultMap<String>> list = service.getCouponClassList(payMethodClassVO, sessionInfoVO);
-
-        for( DefaultMap<String> f : list) {
-            System.out.println(f);
-        }
 
         return returnListJson(Status.OK, list, payMethodClassVO);
     }

@@ -5,7 +5,6 @@ import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
-import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.pay.coupon.service.*;
@@ -17,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
@@ -41,13 +41,13 @@ public class CouponServiceImpl implements CouponService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    private final CouponMapper mapper;
+    private final CouponMapper couponMapper;
     private final MessageService messageService;
 
     /** Constructor Injection */
     @Autowired
-    public CouponServiceImpl(CouponMapper mapper, MessageService messageService) {
-        this.mapper = mapper;
+    public CouponServiceImpl(CouponMapper couponMapper, MessageService messageService) {
+        this.couponMapper = couponMapper;
         this.messageService = messageService;
     }
 
@@ -56,31 +56,17 @@ public class CouponServiceImpl implements CouponService {
     public List<DefaultMap<String>> getCouponClassList(PayMethodClassVO payMethodClassVO,
         SessionInfoVO sessionInfoVO) {
 
-        List<DefaultMap<String>> returnList = null;
+        String hqOfficeCd = sessionInfoVO.getHqOfficeCd();
+        String storeCd = sessionInfoVO.getStoreCd();
 
-        CoupnEnvFg  coupnEnvFg = payMethodClassVO.getCoupnEnvstVal();
+        // 소속구분 설정
+        payMethodClassVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+        payMethodClassVO.setHqOfficeCd(hqOfficeCd);
+        payMethodClassVO.setStoreCd(storeCd);
 
+        List<DefaultMap<String>> returnList = new ArrayList<DefaultMap<String>>();
         payMethodClassVO.setPayTypeFg(PayTypeFg.COUPON);
-
-        // 본사 통제
-        if(payMethodClassVO.getCoupnEnvstVal() == CoupnEnvFg.HQ) {
-
-            payMethodClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-
-            returnList = mapper.getHqCouponClassList(payMethodClassVO);
-
-        }
-        // 매장 통제
-        else if(payMethodClassVO.getCoupnEnvstVal() == CoupnEnvFg.STORE) {
-
-            payMethodClassVO.setStoreCd(sessionInfoVO.getStoreCd());
-
-            returnList = mapper.getStoreCouponClassList(payMethodClassVO);
-        }
-        // 권한 확인 필요
-        else {
-            throw new JsonException(Status.FAIL, messageService.get("cmm.access.denied"));
-        }
+        returnList = couponMapper.getCouponClassList(payMethodClassVO);
 
         return returnList;
     }
@@ -109,28 +95,28 @@ public class CouponServiceImpl implements CouponService {
 
                 if(payMethodClassVO.getStatus() == GridDataFg.INSERT) {
 
-                    String payMethodClassCd = mapper.getPayMethodClassCd(payMethodClassVO);
+                    String payMethodClassCd = couponMapper.getPayMethodClassCd(payMethodClassVO);
                     payMethodClassVO.setPayClassCd(payMethodClassCd);
 
-                    procCnt += mapper.insertHqCouponClass(payMethodClassVO);
+                    procCnt += couponMapper.insertHqCouponClass(payMethodClassVO);
 
                     // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분류에도 본사의 쿠폰분류 적용.
-                    String payMethodClassResult = mapper.insertHqCouponClassToStore(payMethodClassVO);
+                    String payMethodClassResult = couponMapper.insertHqCouponClassToStore(payMethodClassVO);
                     resultVO.setResult(payMethodClassResult);
                 }
                 else if(payMethodClassVO.getStatus() == GridDataFg.UPDATE) {
-                    procCnt += mapper.updateHqCouponClass(payMethodClassVO);
+                    procCnt += couponMapper.updateHqCouponClass(payMethodClassVO);
 
                     // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분류에도 본사의 쿠폰분류 적용.
-                    String payMethodClassResult = mapper.updateHqCouponClassToStore(payMethodClassVO);
+                    String payMethodClassResult = couponMapper.updateHqCouponClassToStore(payMethodClassVO);
                     resultVO.setResult(payMethodClassResult);
                 }
                 else if(payMethodClassVO.getStatus() == GridDataFg.DELETE) {
 
-                    procCnt += mapper.deleteHqCouponClass(payMethodClassVO);
+                    procCnt += couponMapper.deleteHqCouponClass(payMethodClassVO);
 
                     // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분류에도 본사의 쿠폰분류 적용. (매장 분류 먼저 삭제)
-                    String payMethodClassResult = mapper.deleteHqCouponClassToStore(payMethodClassVO);
+                    String payMethodClassResult = couponMapper.deleteHqCouponClassToStore(payMethodClassVO);
                     resultVO.setResult(payMethodClassResult);
                 }
             }
@@ -140,16 +126,16 @@ public class CouponServiceImpl implements CouponService {
 
                 if(payMethodClassVO.getStatus() == GridDataFg.INSERT) {
 
-                    String payMethodClassCd = mapper.getPayMethodClassCd(payMethodClassVO);
+                    String payMethodClassCd = couponMapper.getPayMethodClassCd(payMethodClassVO);
                     payMethodClassVO.setPayClassCd(payMethodClassCd);
 
-                    procCnt += mapper.insertStoreCouponClass(payMethodClassVO);
+                    procCnt += couponMapper.insertStoreCouponClass(payMethodClassVO);
                 }
                 else if(payMethodClassVO.getStatus() == GridDataFg.UPDATE) {
-                    procCnt += mapper.updateStoreCouponClass(payMethodClassVO);
+                    procCnt += couponMapper.updateStoreCouponClass(payMethodClassVO);
                 }
                 else if(payMethodClassVO.getStatus() == GridDataFg.DELETE) {
-                    procCnt += mapper.deleteStoreCouponClass(payMethodClassVO);
+                    procCnt += couponMapper.deleteStoreCouponClass(payMethodClassVO);
                 }
             }
             // 권한 확인 필요
@@ -174,12 +160,12 @@ public class CouponServiceImpl implements CouponService {
         // 본사 통제
         if(couponVO.getCoupnEnvstVal() == CoupnEnvFg.HQ) {
             couponVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            returnList = mapper.getHqCouponList(couponVO);
+            returnList = couponMapper.getHqCouponList(couponVO);
         }
         // 매장 통제
         else if(couponVO.getCoupnEnvstVal() == CoupnEnvFg.STORE) {
             couponVO.setStoreCd(sessionInfoVO.getStoreCd());
-            returnList = mapper.getStoreCouponList(couponVO);
+            returnList = couponMapper.getStoreCouponList(couponVO);
         }
         // 권한 확인 필요
         else {
@@ -211,20 +197,20 @@ public class CouponServiceImpl implements CouponService {
 
                 if(couponVO.getStatus() == GridDataFg.INSERT) {
 
-                    String coupnCd = mapper.getCouponCd(couponVO);
+                    String coupnCd = couponMapper.getCouponCd(couponVO);
                     couponVO.setCoupnCd(coupnCd);
 
-                    procCnt += mapper.insertHqCoupon(couponVO);
+                    procCnt += couponMapper.insertHqCoupon(couponVO);
                 }
                 else if(couponVO.getStatus() == GridDataFg.UPDATE) {
-                    procCnt += mapper.updateHqCoupon(couponVO);
+                    procCnt += couponMapper.updateHqCoupon(couponVO);
                     // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분에도 본사의 쿠폰 적용.
-                    String couponResult = mapper.updateHqCouponToStore(couponVO);
+                    String couponResult = couponMapper.updateHqCouponToStore(couponVO);
                 }
                 else if(couponVO.getStatus() == GridDataFg.DELETE) {
-                    procCnt += mapper.deleteHqCoupon(couponVO);
+                    procCnt += couponMapper.deleteHqCoupon(couponVO);
                     // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분에도 본사의 쿠폰 적용.
-                    String couponResult = mapper.deleteHqCouponToStore(couponVO);
+                    String couponResult = couponMapper.deleteHqCouponToStore(couponVO);
                 }
             }
             // 매장 통제
@@ -235,16 +221,16 @@ public class CouponServiceImpl implements CouponService {
 
                 if(couponVO.getStatus() == GridDataFg.INSERT) {
 
-                    String coupnCd = mapper.getCouponCd(couponVO);
+                    String coupnCd = couponMapper.getCouponCd(couponVO);
                     couponVO.setCoupnCd(coupnCd);
 
-                    procCnt += mapper.insertStoreCoupon(couponVO);
+                    procCnt += couponMapper.insertStoreCoupon(couponVO);
                 }
                 else if(couponVO.getStatus() == GridDataFg.UPDATE) {
-                    procCnt += mapper.updateStoreCoupon(couponVO);
+                    procCnt += couponMapper.updateStoreCoupon(couponVO);
                 }
                 else if(couponVO.getStatus() == GridDataFg.DELETE) {
-                    procCnt += mapper.deleteStoreCoupon(couponVO);
+                    procCnt += couponMapper.deleteStoreCoupon(couponVO);
                 }
             }
             // 권한 확인 필요
@@ -269,12 +255,12 @@ public class CouponServiceImpl implements CouponService {
         // 본사권한
         if(couponProdVO.getCoupnEnvstVal() == CoupnEnvFg.HQ) {
             couponProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            resultProdList = mapper.getHqProdList(couponProdVO);
+            resultProdList = couponMapper.getHqProdList(couponProdVO);
         }
         // 매장권한
         else if(couponProdVO.getCoupnEnvstVal() == CoupnEnvFg.STORE) {
             couponProdVO.setStoreCd(sessionInfoVO.getStoreCd());
-            resultProdList = mapper.getStoreProdList(couponProdVO);
+            resultProdList = couponMapper.getStoreProdList(couponProdVO);
         }
 
         return resultProdList;
@@ -294,15 +280,15 @@ public class CouponServiceImpl implements CouponService {
             couponProdVO.setModId(sessionInfoVO.getUserId());
 
             if(couponProdVO.getCoupnEnvstVal() == CoupnEnvFg.HQ ) {
-                procCnt += mapper.insertHqCouponProd(couponProdVO);
+                procCnt += couponMapper.insertHqCouponProd(couponProdVO);
 
                 // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분에도 본사의 쿠폰 적용. // TODO
                 CouponProdVO resultVO = new CouponProdVO();
-                String couponResult = mapper.insertHqCouponProdToStore(couponProdVO);
+                String couponResult = couponMapper.insertHqCouponProdToStore(couponProdVO);
                 resultVO.setResult(couponResult);
 
             } else if(couponProdVO.getCoupnEnvstVal() == CoupnEnvFg.STORE ) {
-                procCnt += mapper.insertStoreCouponProd(couponProdVO);
+                procCnt += couponMapper.insertStoreCouponProd(couponProdVO);
             }
         }
         return procCnt;
@@ -318,15 +304,15 @@ public class CouponServiceImpl implements CouponService {
         for(CouponProdVO couponProdVO : couponProdVOs) {
             if(couponProdVO.getCoupnEnvstVal() == CoupnEnvFg.HQ ) {
 
-                procCnt += mapper.deleteHqCouponProd(couponProdVO);
+                procCnt += couponMapper.deleteHqCouponProd(couponProdVO);
 
                 // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분에도 본사의 쿠폰 적용.
                 CouponProdVO resultVO = new CouponProdVO();
-                String couponResult = mapper.deleteHqCouponProdToStore(couponProdVO);
+                String couponResult = couponMapper.deleteHqCouponProdToStore(couponProdVO);
                 resultVO.setResult(couponResult);
 
             } else if(couponProdVO.getCoupnEnvstVal() == CoupnEnvFg.STORE ) {
-                procCnt += mapper.deleteStoreCouponProd(couponProdVO);
+                procCnt += couponMapper.deleteStoreCouponProd(couponProdVO);
             }
         }
 
@@ -339,7 +325,7 @@ public class CouponServiceImpl implements CouponService {
 
         couponStoreVO.setOrgnCd(sessionInfoVO.getHqOfficeCd());
 
-        return mapper.getStoreList(couponStoreVO);
+        return couponMapper.getStoreList(couponStoreVO);
     }
 
     /** 쿠폰 적용 매장 등록 */
@@ -357,12 +343,12 @@ public class CouponServiceImpl implements CouponService {
             couponStoreVO.setModDt(dt);
             couponStoreVO.setModId(sessionInfoVO.getUserId());
 
-            procCnt += mapper.insertCouponStore(couponStoreVO);
+            procCnt += couponMapper.insertCouponStore(couponStoreVO);
         }
 
         // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분에도 본사의 쿠폰 적용.
         // 적용매장 등록 완료된 후, 첫번째 매장의 등록정보로 등록
-        String couponResult = mapper.insertHqCouponToStore(couponStoreVOs[0]);
+        String couponResult = couponMapper.insertHqCouponToStore(couponStoreVOs[0]);
 
         // 상품정보도 함께 등록
         CouponVO resultVO = new CouponVO();
@@ -374,7 +360,7 @@ public class CouponServiceImpl implements CouponService {
         resultVO.setModDt(dt);
         resultVO.setModId(sessionInfoVO.getUserId());
 
-        String storeResult = mapper.insertHqCouponProdToStoreProd(resultVO);
+        String storeResult = couponMapper.insertHqCouponProdToStoreProd(resultVO);
 
         return procCnt;
     }
@@ -392,7 +378,7 @@ public class CouponServiceImpl implements CouponService {
             couponStoreVO.setOrgnCd(sessionInfoVO.getHqOfficeCd());
             couponStoreVO.setUseYn(UseYn.N);
 
-            procCnt += mapper.deleteCouponStore(couponStoreVO);
+            procCnt += couponMapper.deleteCouponStore(couponStoreVO);
 
         }
 
@@ -402,10 +388,10 @@ public class CouponServiceImpl implements CouponService {
         resultVO.setCoupnCd(couponStoreVOs[0].getCoupnCd());
 
         // 본사통제여부가 'Y'일 경우, 매장의 쿠폰도 삭제
-        String couponResult = mapper.deleteHqCouponToStore(resultVO);
+        String couponResult = couponMapper.deleteHqCouponToStore(resultVO);
 
         // 상품정보도 함께 삭제
-        String prodResult = mapper.deleteHqCouponToStoreProd(resultVO);
+        String prodResult = couponMapper.deleteHqCouponToStoreProd(resultVO);
 
         return procCnt;
     }
