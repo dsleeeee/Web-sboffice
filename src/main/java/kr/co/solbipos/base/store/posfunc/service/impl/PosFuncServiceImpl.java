@@ -70,10 +70,7 @@ public class PosFuncServiceImpl implements PosFuncService{
     /** 포스기능목록 조회 */
     @Override
     public List<DefaultMap<String>> getPosFuncList(PosFuncVO posFuncVO) {
-
-        List<DefaultMap<String>> list = mapper.getPosFuncList(posFuncVO);
-
-        return list;
+        return mapper.getPosFuncList(posFuncVO);
     }
 
     /** 포스기능상세 조회 */
@@ -96,7 +93,8 @@ public class PosFuncServiceImpl implements PosFuncService{
             posFuncVO.setModId(sessionInfoVO.getUserId());
 
             if(posFuncVO.getStatus() == GridDataFg.UPDATE){
-                procCnt += mapper.savePosConf(posFuncVO);
+                procCnt = mapper.savePosConf(posFuncVO);
+                if(procCnt <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
             }
         }
         return procCnt;
@@ -114,8 +112,48 @@ public class PosFuncServiceImpl implements PosFuncService{
         posFuncVO.setModDt(dt);
         posFuncVO.setModId(sessionInfoVO.getUserId());
 
-        procCnt += mapper.deletePosFunc(posFuncVO);
-        procCnt += mapper.copyPosFunc(posFuncVO);
+        // 기존 포스 기능 삭제
+        procCnt = mapper.deletePosFunc(posFuncVO);
+        if(procCnt <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+        // 포스 기능 복사
+        procCnt = mapper.copyPosFunc(posFuncVO);
+        if(procCnt <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+        // 1. 포스기능키 XML 정보 복사 (6020)
+        DefaultMap<String> param = new DefaultMap<String>();
+
+        param.put("storeCd", posFuncVO.getStoreCd());
+        param.put("posNo", posFuncVO.getCopyPos());
+
+        param.put("useYn", "Y");
+        param.put("regDt", currentDateTimeString());
+        param.put("regId", sessionInfoVO.getUserId());
+        param.put("modDt", currentDateTimeString());
+        param.put("modId", sessionInfoVO.getUserId());
+
+        // 포스기능키 XML 조회
+        param.put("confgFg", ConfgFg.FUNC_KEY_LEFT.getCode());
+        String leftConfXML = mapper.getFuncKeyXml(param);
+
+        param.replace("confgFg", ConfgFg.FUNC_KEY_RIGHT.getCode());
+        String rightConfXML = mapper.getFuncKeyXml(param);
+
+        // 포스기능키 XML 저장 (왼쪽)
+        param.put("xml", leftConfXML);
+        param.replace("confgFg", ConfgFg.FUNC_KEY_LEFT.getCode());
+        param.replace("posNo", posFuncVO.getTargetPos());
+
+        procCnt = mapper.insertFuncKeyConfgXml(param);
+        if(procCnt <= 0) throw new JsonException(Status.FAIL, messageService.get("label.insertFail"));
+
+        // 포스기능키 XML 조회 (오른쪽)
+        param.replace("xml", rightConfXML);
+        param.replace("confgFg", ConfgFg.FUNC_KEY_RIGHT.getCode());
+        param.replace("posNo", posFuncVO.getTargetPos());
+
+        procCnt = mapper.insertFuncKeyConfgXml(param);
+        if(procCnt <= 0) throw new JsonException(Status.FAIL, messageService.get("label.insertFail"));
 
         return procCnt;
     }

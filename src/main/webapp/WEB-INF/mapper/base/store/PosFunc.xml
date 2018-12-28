@@ -287,24 +287,41 @@
     -->
     <insert id="insertFuncKeyConfgXml" parameterType="DefaultMap">
         /* USE : PosFuncMapper.insertFuncKeyConfgXml */
-        INSERT INTO TB_WB_POS_CONFG_XML twpcx
-        (
-            twpcx.STORE_CD,
-            twpcx.POS_NO,
-            twpcx.CONFG_FG,
-            twpcx.XML,
-            twpcx.USE_YN,
-            twpcx.REG_DT,
-            twpcx.REG_ID
-        ) VALUES (
-            #{storeCd},
-            #{posNo},
-            #{confgFg},
-            #{xml:CLOB},
-            #{useYn},
-            #{regDt},
-            #{regId}
-        )
+        MERGE INTO TB_WB_POS_CONFG_XML twpcx
+        USING (SELECT #{storeCd} AS STORE_CD,
+                      #{posNo} AS POS_NO,
+                      #{confgFg} AS CONFG_FG
+                 FROM DUAL
+              ) tmp
+           ON ( twpcx.STORE_CD = tmp.STORE_CD
+                AND twpcx.POS_NO = tmp.POS_NO
+                AND twpcx.CONFG_FG = tmp.CONFG_FG
+              )
+         WHEN MATCHED THEN
+              UPDATE
+                 SET twpcx.XML = #{xml:CLOB},
+                     twpcx.USE_YN = #{useYn},
+                     twpcx.MOD_DT = #{modDt},
+                     twpcx.MOD_ID = #{modId}
+         WHEN NOT MATCHED THEN
+              INSERT
+              (
+                  twpcx.STORE_CD,
+                  twpcx.POS_NO,
+                  twpcx.CONFG_FG,
+                  twpcx.XML,
+                  twpcx.USE_YN,
+                  twpcx.REG_DT,
+                  twpcx.REG_ID
+              ) VALUES (
+                  #{storeCd},
+                  #{posNo},
+                  #{confgFg},
+                  #{xml:CLOB},
+                  #{useYn},
+                  #{regDt},
+                  #{regId}
+              )
     </insert>
 
     <!-- 포스기능키 XML 수정 -->
@@ -496,5 +513,8 @@
                 #{modId}
          )
     </update>
+
+
+
 
 </mapper>
