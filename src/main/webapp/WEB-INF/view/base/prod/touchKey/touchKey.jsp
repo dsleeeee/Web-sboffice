@@ -258,6 +258,6 @@
 <script type="text/javascript"
         src="/resource/vendor/wijmo/js/grid/wijmo.grid.filter.min.js?ver=520182500"
         charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=2018122801"
+<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=2018122802"
         charset="utf-8"></script>
 
