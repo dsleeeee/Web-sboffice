@@ -244,8 +244,10 @@ public class PosFuncController {
     public Result getPosFuncKeyList(PosFuncVO posFuncVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
         // 포스 기능키 목록 조회
-        List<DefaultMap<String>> list = service.getPosFuncKeyList(posFuncVO);
+        List<DefaultMap<String>> list = service.getPosFuncKeyList(posFuncVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, posFuncVO);
     }
