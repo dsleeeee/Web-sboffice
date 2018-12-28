@@ -36,7 +36,7 @@
 
         <%--- 등록상품 그리드 --%>
         <div class="w50 fl">
-          <div class="wj-TblWrap mr10" style="height:395px;" ng-controller="regProdCtrl">
+          <div class="wj-TblWrap mr10" style="height:395px; overflow-y: hidden;" ng-controller="regProdCtrl">
             <div class="oh mb10">
               <span class="fl bk lh20 s14"><s:message code="coupon.regProd"/></span>
             <%--<c:if test="${coupnEnvstVal == 1}">--%>
@@ -66,18 +66,11 @@
             </div>
           </div>
 
-          <%-- 페이지 리스트 --%>
-          <div class="pageNum2 mt20">
-            <%-- id --%>
-            <ul id="regProdCtrlPager" data-size="10">
-            </ul>
-          </div>
-          <%--//페이지 리스트--%>
         </div>
 
         <%--- 미등록상품 그리드 --%>
         <div class="w50 fr">
-          <div class="wj-TblWrap ml10" style="height:395px;" ng-controller="noRegProdCtrl">
+          <div class="wj-TblWrap ml10" style="height:395px; overflow-y: hidden;" ng-controller="noRegProdCtrl">
             <div class="oh mb10">
               <span class="fl bk lh20 s14"><s:message code="coupon.noRegProd" /></span>
               <span class="fr"><a href="#" class="btn_grayS2" ng-click="regist()" ><s:message code="coupon.regist" /></a></span>
@@ -104,13 +97,6 @@
               </wj-flex-grid>
             </div>
           </div>
-          <%-- 페이지 리스트 --%>
-          <div class="pageNum2 mt20">
-            <%-- id --%>
-            <ul id="noRegProdCtrlPager" data-size="10">
-            </ul>
-          </div>
-          <%--//페이지 리스트--%>
 
         </div>
       </div>
@@ -122,4 +108,4 @@
 <script type="text/javascript">
   var coupnEnvstVal = "${coupnEnvstVal}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/couponProd.js?ver=2018081701" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/couponProd.js?ver=20181228.01" charset="utf-8"></script>

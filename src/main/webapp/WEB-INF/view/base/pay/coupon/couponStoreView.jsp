@@ -66,11 +66,13 @@
           </div>
 
           <%-- 페이지 리스트 --%>
+          <%--
           <div class="pageNum2 mt20">
-            <%-- id --%>
+            &lt;%&ndash; id &ndash;%&gt;
             <ul id="regStoreCtrlPager" data-size="10">
             </ul>
           </div>
+          --%>
           <%--//페이지 리스트--%>
 
         </div>
@@ -101,11 +103,13 @@
           </div>
 
           <%-- 페이지 리스트 --%>
+          <%--
           <div class="pageNum2 mt20">
-            <%-- id --%>
+            &lt;%&ndash; id &ndash;%&gt;
             <ul id="noRegStoreCtrlPager" data-size="10">
             </ul>
           </div>
+          --%>
           <%--//페이지 리스트--%>
 
         </div>
@@ -114,4 +118,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/couponStore.js?ver=20180817.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/couponStore.js?ver=20181228.01" charset="utf-8"></script>
