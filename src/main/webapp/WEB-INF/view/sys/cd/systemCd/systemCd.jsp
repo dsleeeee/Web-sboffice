@@ -89,8 +89,8 @@
       </div>
       <%-- 개발시 높이 조절해서 사용--%>
       <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
-      <div class="wj-gridWrap" style="height:370px">
-        <div class="row">
+      <div class="wj-gridWrap" style="height:370px; overflow-y: hidden;">
+        <div class="row" >
           <wj-flex-grid
               autoGenerateColumns="false"
               control="flex"
@@ -141,7 +141,7 @@
       </div>
       <%-- 개발시 높이 조절해서 사용--%>
       <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
-      <div class="wj-gridWrap" style="height:370px">
+      <div class="wj-gridWrap" style="height:370px; overflow-y: hidden;">
         <wj-flex-grid
                 autoGenerateColumns="false"
                 control="flex"
