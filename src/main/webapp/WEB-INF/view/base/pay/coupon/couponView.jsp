@@ -20,7 +20,7 @@
       <a href="#" class="open fl">${menuNm}</a>
       <%-- 조회 --%>
       <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-        <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('couponClassCtrl')">
+        <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('couponClassCtrl', 1)">
           <s:message code="cmm.search" />
         </button>
       </div>
@@ -28,7 +28,7 @@
 
     <%-- 쿠폰분류등록 --%>
     <div class="mb20 mt20" >
-      <div class="wj-TblWrapBr mr10 pd20" style="height:450px;">
+      <div class="wj-TblWrapBr mr10 pd20" style="height:495px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='coupon.regist.class' /></span>
           <%-- 페이지 스케일  --%>
@@ -45,6 +45,7 @@
           </wj-combo-box>
           <%--// 페이지 스케일  --%>
        <c:if test="${orgnFg == 'HQ'}">
+          <button class="btn_skyblue" id="btnClassApply" ng-click="applyStore()"><s:message code='coupon.apply.class' /></button>
           <button class="btn_skyblue" id="btnClassAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
           <button class="btn_skyblue" id="btnClassSave" ng-click="save()"><s:message code='cmm.save' /></button>
        </c:if>
@@ -86,8 +87,8 @@
   </div>
 
   <%-- 쿠폰등록  --%>
-  <div class="mb40" ng-controller="couponCtrl">
-    <div class="wj-TblWrapBr mr10 pd20" style="height:450px;">
+  <div class="mt20 mb40" ng-controller="couponCtrl">
+    <div class="wj-TblWrapBr mr10 pd20" style="height:495px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='coupon.regist.coupon' /> <span id="couponSubTitle"></span> </span>
         <%-- 페이지 스케일  --%>

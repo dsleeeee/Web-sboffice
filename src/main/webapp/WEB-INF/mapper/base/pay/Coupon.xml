@@ -263,6 +263,8 @@
                 #{hqOfficeCd},
                 #{payTypeFg, jdbcType=VARCHAR},
                 #{payClassCd},
+                #{regDt},
+                #{regId},
                 #{result, mode=OUT, jdbcType=VARCHAR}
             )
         }
@@ -464,28 +466,28 @@
            AND COUPN_CD = #{coupnCd}
     </update>
 
-   <!-- 본사 쿠폰 등록시 프로시져 호출 -->
-   <!--
-       TABLE    : TB_HQ_COUPON, TB_MS_COUPON
-       PARAM    :
-       COMMENTS : 본사 쿠폰를 매장 쿠폰에 적용시킨다.
-   -->
-   <select id="insertHqCouponToStore" statementType="CALLABLE"  parameterType="couponStoreVO" resultType="String">
-       /* USE : CouponMapper.insertHqCouponToStore */
-       {
-           CALL PKG_HQ_COUPON.SP_HQ_COUPON_I
-           (
-               #{hqOfficeCd},
-               #{payClassCd},
-               #{coupnCd},
-               #{regDt},
-               #{regId},
-               #{modDt},
-               #{modId},
-               #{result, mode=OUT, jdbcType=VARCHAR}
-           )
-       }
-   </select>
+    <!-- 본사 쿠폰 등록시 프로시져 호출 -->
+    <!--
+        TABLE    : TB_HQ_COUPON, TB_MS_COUPON
+        PARAM    :
+        COMMENTS : 본사 쿠폰를 매장 쿠폰에 적용시킨다.
+    -->
+    <select id="insertHqCouponToStore" statementType="CALLABLE"  parameterType="couponStoreVO" resultType="String">
+        /* USE : CouponMapper.insertHqCouponToStore */
+        {
+            CALL PKG_HQ_COUPON.SP_HQ_COUPON_I
+            (
+                #{hqOfficeCd},
+                #{payClassCd},
+                #{coupnCd},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
 
     <!-- 본사 쿠폰 수정시 프로시져 호출 -->
     <!--
