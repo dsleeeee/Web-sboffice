@@ -434,19 +434,22 @@ Sidebar.prototype.initUsed = function (layer) {
 
   //각 상품의 상품코드로 그리드에서 체크 표시
   var model = graph.getModel();
-  var childCount = model.getChildCount(layer);
-  var cell, match, regex, prodCd;
-  for (var i = 0; i < childCount; i++) {
-    cell = model.getChildAt(layer, i);
-    // 정규식 이용하여 prodCd 추출 : 상품코드 길이 가변 대응
-    regex = /prodCd=([^=]*.(?=;))/gm;
-    match = regex.exec(cell.getStyle());
-    if (match) {
-      prodCd = match[1];
-    }
-    var id = getIdByProdCd(prodCd);
-    if (id >= 0) {
-      theGrid.setCellData(id, 'touchKeyUsed', true);
+  var match, regex, prodCd, id;
+  for ( var i in model.cells) {
+    regex = /tukeyFg=([^=]*.(?=;))/gm;
+    match = regex.exec(model.cells[i].getStyle());
+    // 버튼일때만 수행하도록
+    if (match && match[1] === "01") {
+      // 정규식 이용하여 prodCd 추출 : 상품코드 길이 가변 대응
+      regex = /prodCd=([^=]*.(?=;))/gm;
+      match = regex.exec(model.cells[i].getStyle());
+      if (match) {
+        prodCd = match[1];
+      }
+      id = getIdByProdCd(prodCd);
+      if (id >= 0) {
+        theGrid.setCellData(id, 'touchKeyUsed', true);
+      }
     }
   }
 
