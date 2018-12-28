@@ -10,8 +10,34 @@
 <div class="subCon" ng-controller="touchKeyCtrl">
 
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+      <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('gridCtrl');">
+        <s:message code="cmm.search" />
+      </button>
+    </div>
   </div>
+
+  <table class="searchTbl" ng-show="userOrgnFg != 'S'">
+    <colgroup>
+      <col class="w10" />
+      <col class="w20" />
+      <col class="w70" />
+    </colgroup>
+    <tbody>
+    <tr>
+      <th><s:message code="touchKey.applyStore" /></th>
+      <td colspan="2" class="oh">
+        <button class="btn_blk fl" id="btnApplyStore" ng-click="$broadcast('showPopUp')">
+          <s:message code="touchKey.applyStore" />
+        </button>
+      </td>
+      <td>
+      </td>
+    </tr>
+    </tbody>
+  </table>
 
   <%--테이블속성, 테이블관리, 판매터치키 page에만 쓰임--%>
   <div class="TblWrapBr touchKeyWrap oh mt10">
@@ -19,9 +45,6 @@
     <div class="w30 fl">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code="touchKey.prodList"/></span>
-        <div class="txtIn">
-          <button class="btn_skyblue fl ml20" id="btnSearch"><s:message code="touchKey.reload"/></button>
-        </div>
       </div>
       <div class="b4 mb5 pd5">
         <div class="updownSet">
@@ -89,7 +112,7 @@
           </div>
           <button class="btn_skyblue fl ml5" id="btnApplyStyle"><s:message
             code="touchKey.applyStyle"/></button>
-          <button class="btn_skyblue fl ml20" id="btnSave"><s:message code="cmm.save"/></button>
+          <button class="btn_skyblue fl ml20" id="btnSave"><s:message code="touchKey.saveBtn"/></button>
         </div>
       </div>
       <div id="touchArea" class="prev2 fl">
@@ -171,6 +194,16 @@
     </div>
   </div>
 
+  <%-- 상품분류 팝업 --%>
+  <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
+  </c:import>
+
+  <%-- 레이어 팝업 --%>
+  <c:import url="/WEB-INF/view/base/prod/touchKey/popUpTouchKeyApplyStore.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+  </c:import>
+
 </div>
 <%--//서브컨텐츠--%>
 
@@ -228,6 +261,3 @@
 <script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=2018122801"
         charset="utf-8"></script>
 
-<%-- 상품분류 팝업 --%>
-<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
-</c:import>

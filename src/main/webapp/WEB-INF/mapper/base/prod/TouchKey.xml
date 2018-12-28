@@ -737,4 +737,193 @@
 
     </delete>
 
+    <!-- 매장목록 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : touchKeyVO
+        COMMENTS : 매장목록을 조회한다.
+    -->
+    <select id="getStoreList" parameterType="touchKeyVO" resultType="DefaultMap">
+        /* USE : TouchkeyMapper.getStoreList */
+        SELECT
+            tms.STORE_CD,
+            tms.STORE_NM,
+            tcm_sys_stat_fg.NMCODE_NM AS sys_stat_fg_nm,
+            tcm_cls_stat_fg.NMCODE_NM AS cls_fg_nm
+        FROM
+            TB_MS_STORE tms
+        LEFT OUTER JOIN TB_CM_NMCODE tcm_sys_stat_fg ON
+            tms.SYS_STAT_FG = tcm_sys_stat_fg.NMCODE_CD
+            AND tcm_sys_stat_fg.NMCODE_GRP_CD = '005'
+        LEFT OUTER JOIN TB_CM_NMCODE tcm_cls_stat_fg ON
+            tms.CLS_FG = tcm_cls_stat_fg.NMCODE_CD
+            AND tcm_cls_stat_fg.NMCODE_GRP_CD = '001'
+        WHERE
+            tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='storeNm != null and storeNm != ""'>
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+    </select>
+
+    <!-- 판매터치키 분류 매장삭제 -->
+    <!--
+        TABLE    : TB_MS_TOUCH_KEY_CLASS
+        PARAM    : touchKeyVO
+        COMMENTS : 매장에 적용되어 있는 판매터치키 분류 정보를 삭제한다.
+    -->
+    <delete id="deleteTouchKeyClassToStore" parameterType="touchKeyVO">
+        /* USE : TouchkeyMapper.deleteTouchKeyClassToStore */
+        DELETE
+        FROM
+            TB_MS_TOUCH_KEY_CLASS
+        WHERE
+            STORE_CD = #{storeCd}
+    </delete>
+
+    <!-- 판매터치키 매장삭제 -->
+    <!--
+        TABLE    : TB_MS_TOUCH_KEY
+        PARAM    : touchKeyVO
+        COMMENTS : 매장에 적용되어 있는 판매터치키 정보를 삭제한다.
+    -->
+    <delete id="deleteTouchKeyToStore" parameterType="touchKeyVO">
+        /* USE : TouchkeyMapper.deleteTouchKeyToStore */
+        DELETE
+        FROM
+            TB_MS_TOUCH_KEY
+        WHERE
+            STORE_CD = #{storeCd}
+    </delete>
+
+    <!-- 판매터치키 분류 생성 -->
+    <!--
+        TABLE    : TB_MS_TOUCH_KEY_CLASS
+        PARAM    : touchKeyVO
+        COMMENTS : 매장에 판매터치키 분류 정보를 생성한다.
+    -->
+    <insert id="insertTouchKeyClassToStore" parameterType="touchKeyVO">
+
+        /* USE : TouchkeyMapper.insertTouchKey */
+        INSERT INTO TB_MS_TOUCH_KEY_CLASS
+        SELECT
+            #{storeCd} AS STORE_CD,
+            TUKEY_GRP_CD,
+            TUKEY_CLASS_CD,
+            TUKEY_CLASS_NM,
+            PAGE_NO,
+            PAGE_ROWS,
+            X,
+            Y,
+            WIDTH,
+            HEIGHT,
+            STYLE_CD,
+            FONT_SIZE,
+            FONT_COLOR,
+            FILL_COLOR,
+            IMG_NM,
+            'H',
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        FROM
+            TB_HQ_TOUCH_KEY_CLASS
+        WHERE
+            HQ_OFFICE_CD = #{hqOfficeCd}
+
+    </insert>
+
+    <!-- 판매터치키 생성 -->
+    <!--
+        TABLE    : TB_MS_TOUCH_KEY
+        PARAM    : touchKeyVO
+        COMMENTS : 매장에 판매터치키 정보를 생성한다.
+    -->
+    <insert id="insertTouchKeyToStore" parameterType="touchKeyVO">
+
+        /* USE : TouchkeyMapper.insertTouchKeyToStore */
+        INSERT INTO TB_MS_TOUCH_KEY
+        SELECT
+            #{storeCd} AS STORE_CD,
+            TUKEY_CLASS_CD,
+            TUKEY_CD,
+            TUKEY_FG,
+            PROD_CD,
+            PAGE_NO,
+            X,
+            Y,
+            WIDTH,
+            HEIGHT,
+            STYLE_CD,
+            FONT_SIZE,
+            FONT_COLOR,
+            FILL_COLOR,
+            IMG_NM,
+            'H',
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        FROM
+            TB_HQ_TOUCH_KEY
+        WHERE
+            HQ_OFFICE_CD = #{hqOfficeCd}
+
+    </insert>
+
+    <!-- 판매터치키 XML 정보생성 -->
+    <!--
+        TABLE    : TB_WB_STORE_CONFG_XML
+        PARAM    : touchKeyVO
+        COMMENTS : 매장에 판매터치키 XML 정보를 생성한다.
+    -->
+    <update id="saveStoreConfgXml" parameterType="touchKeyVO">
+        /* TouchkeyMapper.saveStoreConfgXml */
+        MERGE INTO TB_WB_STORE_CONFG_XML twscx
+        USING
+        (
+            SELECT
+                #{storeCd} AS STORE_CD,
+                CONFG_FG,
+                XML,
+                USE_YN
+            FROM
+                TB_WB_HQ_CONFG_XML
+            WHERE
+                HQ_OFFICE_CD = #{hqOfficeCd}
+                AND CONFG_FG = '10'
+        ) ORG
+        ON
+        (
+            twscx.STORE_CD = ORG.STORE_CD
+            AND twscx.CONFG_FG = ORG.CONFG_FG
+        )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+                twscx.XML = ORG.XML,
+                twscx.USE_YN = 'Y',
+                twscx.MOD_DT = #{regDt},
+                twscx.MOD_ID = #{regId}
+        WHEN NOT MATCHED THEN
+            INSERT
+            (
+                twscx.STORE_CD,
+                twscx.CONFG_FG,
+                twscx.XML,
+                twscx.USE_YN,
+                twscx.REG_DT,
+                twscx.REG_ID
+            )
+            VALUES
+            (
+                #{storeCd},
+                ORG.CONFG_FG,
+                ORG.XML,
+                'Y',
+                #{regDt},
+                #{regId}
+            )
+  </update>
+
 </mapper>

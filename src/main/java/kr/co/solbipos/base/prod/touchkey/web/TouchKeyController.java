@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
@@ -213,4 +215,52 @@ public class TouchKeyController {
         return result;
     }
 
+    /**
+     * 판매 터치키 매장적용 - 매장조회
+     *
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param touchKeyVO TouchKeyVO
+     * @param model Model
+     * @return Result
+     * @author 노현수
+     * @since 2018. 12. 28.
+     */
+    @RequestMapping(value = "/storeList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreList(HttpServletRequest request, HttpServletResponse response,
+        TouchKeyVO touchKeyVO, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = new ArrayList<DefaultMap<String>>();
+        // 매장 목록 조회
+        list = touchkeyService.getStoreList(touchKeyVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, touchKeyVO);
+
+    }
+
+    /**
+     * 판매 터치키 매장적용 - 매장적용
+     *
+     * @param touchKeyVOs TouchKeyVO[]
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param model Model
+     * @return Result
+     * @author 노현수
+     * @since 2018. 12. 28.
+     */
+    @RequestMapping(value = "/applyStore.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveTouchKeyToStore(@RequestBody TouchKeyVO[] touchKeyVOs, HttpServletRequest request, HttpServletResponse response,
+        Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        int result = touchkeyService.saveTouchKeyToStore(touchKeyVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+
+    }
 }

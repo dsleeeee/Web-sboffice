@@ -11,6 +11,7 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.exception.BizException;
+import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
@@ -389,6 +390,51 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         }
 
         return new Result(Status.OK);
+    }
+
+    /** 매장목록 조회 */
+    @Override
+    public List<DefaultMap<String>> getStoreList(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO) {
+
+        // 소속구분 설정
+        touchKeyVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        touchKeyVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return keyMapper.getStoreList(touchKeyVO);
+    }
+
+    /** 터치키 매장적용 */
+    @Override
+    public int saveTouchKeyToStore(TouchKeyVO[] TouchKeyVOs, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        for ( TouchKeyVO touchKeyVO : TouchKeyVOs ) {
+
+            // 소속구분 설정
+            touchKeyVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            // 기본입력정보 설정
+            touchKeyVO.setRegDt(currentDt);
+            touchKeyVO.setRegId(sessionInfoVO.getUserId());
+            touchKeyVO.setModDt(currentDt);
+            touchKeyVO.setModId(sessionInfoVO.getUserId());
+
+            // 매장에 터치키 XML 정보 업데이트
+            keyMapper.saveStoreConfgXml(touchKeyVO);
+            // 기적용된 터치키 정보 삭제
+            keyMapper.deleteTouchKeyClassToStore(touchKeyVO);
+            keyMapper.deleteTouchKeyToStore(touchKeyVO);
+            // 터치키 매장적용
+            result = keyMapper.insertTouchKeyClassToStore(touchKeyVO);
+            result += keyMapper.insertTouchKeyToStore(touchKeyVO);
+
+        }
+
+        if ( result >= 0 ) {
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
     }
 
     /**

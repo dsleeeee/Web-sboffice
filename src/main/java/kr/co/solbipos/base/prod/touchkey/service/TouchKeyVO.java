@@ -73,6 +73,9 @@ public class TouchKeyVO extends CmmVO {
     /** 판매가격구분 (본사판매가 :1, 매장판매가:2) */
     private String salePrcFg;
 
+    /** 조회용 가맹점명 */
+    private String storeNm;
+
     /**
      * @return the orgnFg
      */
@@ -340,5 +343,19 @@ public class TouchKeyVO extends CmmVO {
      */
     public void setSalePrcFg(String salePrcFg) {
         this.salePrcFg = salePrcFg;
+    }
+
+    /**
+     * @return the storeNm
+     */
+    public String getStoreNm() {
+        return storeNm;
+    }
+
+    /**
+     * @param storeNm the storeNm to set
+     */
+    public void setStoreNm(String storeNm) {
+        this.storeNm = storeNm;
     }
 }
