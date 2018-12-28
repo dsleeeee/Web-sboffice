@@ -45,7 +45,6 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -322,8 +321,8 @@ public class TouchKeyServiceImpl implements TouchKeyService {
             }
         }
 
-        // XML 분석, TouchClass, Touch Domain 생성
-        // 터치키 분류 TABLE(TB_MS_TOUCH_CLASS)
+        //XML 분석, TouchClass, Touch Domain 생성
+        //터치키 분류 TABLE(TB_MS_TOUCH_CLASS)
         List<TouchKeyClassVO> touchKeyClassVOS = parseXML(sessionInfoVO, xml);
 
         // 매장/본사의 현재 설정정보 삭제
@@ -341,51 +340,29 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         // 매장/본사의 현재 터치키 정보 삭제
         keyMapper.deleteTouchKey(tParams);
 
-        List<TouchKeyClassVO> touchKeyClassVOList = new ArrayList<TouchKeyClassVO>();
-        List<TouchKeyVO> touchKeyVOList = new ArrayList<TouchKeyVO>();
-        // XML 정보가 있는 경우만 처리
-        if ( touchKeyClassVOS.size() > 0 ) {
-            // 리스트의 아이템을 DB에 Merge
-            for(TouchKeyClassVO touchKeyClassVO : touchKeyClassVOS) {
+        // 리스트의 아이템을 DB에 Merge
+        for(TouchKeyClassVO touchKeyClassVO : touchKeyClassVOS) {
 
-                // 터치 분류(그룹) 저장 파라미터 설정
-                touchKeyClassVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-                touchKeyClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-                touchKeyClassVO.setStoreCd(sessionInfoVO.getOrgnCd());
-                touchKeyClassVO.setRegId(sessionInfoVO.getUserId());
-                touchKeyClassVOList.add(touchKeyClassVO);
-
-                // 터치키 존재시에만 저장처리
-                if ( touchKeyClassVO.getTouchs().size() > 0 ) {
-                    for(TouchKeyVO touchKeyVO : touchKeyClassVO.getTouchs()) {
-                        // 터치키 저장 파라미터 설정
-                        touchKeyVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-                        touchKeyVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-                        touchKeyVO.setStoreCd(sessionInfoVO.getOrgnCd());
-                        touchKeyVO.setRegId(sessionInfoVO.getUserId());
-                        touchKeyVOList.add(touchKeyVO);
-                    }
-                }
+            // 터치 분류(그룹) 저장 파라미터 설정
+            touchKeyClassVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            touchKeyClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            touchKeyClassVO.setStoreCd(sessionInfoVO.getOrgnCd());
+            touchKeyClassVO.setRegId(sessionInfoVO.getUserId());
+            // 터치 분류(그룹) 저장
+            if( keyMapper.insertTouchKeyClass(touchKeyClassVO) != 1 ) {
+                throw new BizException( messageService.get("label.modifyFail") );
             }
 
-            // Oracle INSERT ALL 을 이용한 터치키분류/터치키 저장
-            Map<String, Object> paramMap = new HashMap<String, Object>();
-            // 분류 존재시에만 저장처리
-            if ( touchKeyClassVOList.size() > 0 ) {
-                paramMap = new HashMap<String, Object>();
-                paramMap.put("orgnFg", sessionInfoVO.getOrgnFg().getCode());
-                paramMap.put("list", touchKeyClassVOList);
-                // 터치 분류(그룹) 저장
-                keyMapper.insertTouchKeyClass(paramMap);
-            }
-
-            // 터치키 존재시에만 저장처리
-            if ( touchKeyVOList.size() > 0 ) {
-                paramMap = new HashMap<String, Object>();
-                paramMap.put("orgnFg", sessionInfoVO.getOrgnFg().getCode());
-                paramMap.put("list", touchKeyVOList);
+            for(TouchKeyVO touchKeyVO : touchKeyClassVO.getTouchs()) {
+                // 터치키 저장 파라미터 설정
+                touchKeyVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+                touchKeyVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+                touchKeyVO.setStoreCd(sessionInfoVO.getOrgnCd());
+                touchKeyVO.setRegId(sessionInfoVO.getUserId());
                 // 터치키 저장
-                keyMapper.insertTouchKey(paramMap);
+                if( keyMapper.insertTouchKey(touchKeyVO) != 1 ) {
+                    throw new BizException( messageService.get("label.modifyFail") );
+                }
             }
         }
 
