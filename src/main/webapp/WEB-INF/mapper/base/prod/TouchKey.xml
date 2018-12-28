@@ -65,7 +65,20 @@
                     thp.HQ_OFFICE_CD = #{hqOfficeCd}
                     AND thp.USE_YN = 'Y'
                 <if test="prodClassCd != null and prodClassCd != ''">
-                    AND ( thpc.P_PROD_CLASS_CD = #{prodClassCd} OR thpc.PROD_CLASS_CD = #{prodClassCd} )
+                    AND thp.PROD_CLASS_CD IN (
+                                                SELECT
+                                                    PROD_CLASS_CD
+                                                FROM
+                                                    TB_HQ_PRODUCT_CLASS
+                                                WHERE
+                                                    HQ_OFFICE_CD = #{hqOfficeCd}
+                                                START WITH
+                                                    PROD_CLASS_CD = #{prodClassCd}
+                                                    AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                                CONNECT BY
+                                                    PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD
+                                                    AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                             )
                 </if>
                 ORDER BY thpc.PROD_CLASS_CD, thp.PROD_CD
             </when>
@@ -107,7 +120,20 @@
                     tmp.STORE_CD = #{storeCd}
                     AND tmp.USE_YN = 'Y'
                 <if test="prodClassCd != null and prodClassCd != ''">
-                    AND ( tmpc.P_PROD_CLASS_CD = #{prodClassCd} OR tmpc.PROD_CLASS_CD = #{prodClassCd} )
+                    AND tmp.PROD_CLASS_CD IN (
+                                                SELECT
+                                                    PROD_CLASS_CD
+                                                FROM
+                                                    TB_MS_PRODUCT_CLASS
+                                                WHERE
+                                                    STORE_CD = #{storeCd}
+                                                START WITH
+                                                    PROD_CLASS_CD = #{prodClassCd}
+                                                    AND STORE_CD = #{storeCd}
+                                                CONNECT BY
+                                                    PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD
+                                                    AND STORE_CD = #{storeCd}
+                                             )
                 </if>
                 ORDER BY tmpc.PROD_CLASS_CD, tmp.PROD_CD
             </when>
