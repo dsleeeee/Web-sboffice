@@ -248,11 +248,31 @@
         SELECT
             'N' AS FNKEY_USED,
             tmsf.FNKEY_NO,
-            tmsf.FNKEY_NM,
+            CASE WHEN #{hqOfficeCd} = 'A0001' AND tmsf.FNKEY_NO = '0083' THEN
+                CASE WHEN tmse.ENVST_VAL1 = '1' THEN ENVST_VAL2
+                ELSE tmsf.FNKEY_NM END
+            ELSE
+                tmsf.FNKEY_NM
+            END FNKEY_NM,
             tmsf.DISP_SEQ,
             tmsf.IMG_FILE_NM
         FROM
             TB_MS_STORE_FNKEY tmsf
+        LEFT OUTER JOIN
+            (
+                SELECT
+                    STORE_CD,
+                    MAX(CASE ENVST_CD WHEN '1045' THEN ENVST_VAL ELSE '' END) AS ENVST_VAL1,
+                    MAX(CASE ENVST_CD WHEN '1048' THEN ENVST_VAL ELSE '' END) AS ENVST_VAL2
+                FROM
+                    TB_MS_STORE_ENVST
+                WHERE
+                    ENVST_CD IN ( '1045', '1048' )
+                    AND STORE_CD = #{storeCd}
+                GROUP BY
+                    STORE_CD
+            ) tmse ON
+            tmsf.STORE_CD = tmse.STORE_CD
         WHERE
             tmsf.STORE_CD = #{storeCd}
             AND tmsf.FNKEY_FG = #{fnkeyFg}

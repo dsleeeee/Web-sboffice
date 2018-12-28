@@ -160,7 +160,12 @@ public class PosFuncServiceImpl implements PosFuncService{
 
     /** 포스기능키 목록 조회 */
     @Override
-    public List<DefaultMap<String>> getPosFuncKeyList(PosFuncVO posFuncVO) {
+    public List<DefaultMap<String>> getPosFuncKeyList(PosFuncVO posFuncVO, SessionInfoVO sessionInfoVO) {
+
+        String hqOfficeCd = sessionInfoVO.getHqOfficeCd();
+        // 소속구분 설정
+        posFuncVO.setHqOfficeCd(hqOfficeCd);
+
         return mapper.getPosFuncKeyList(posFuncVO);
     }
 

@@ -67,6 +67,9 @@ public class PosFuncVO extends CmmVO {
     private String xml;
 
 
+    /** 본사코드 */
+    private String hqOfficeCd;
+
     /**
      * @return the storeCd
      */
@@ -316,5 +319,19 @@ public class PosFuncVO extends CmmVO {
      */
     public void setXml(String xml) {
         this.xml = xml;
+    }
+
+    /**
+     * @return the hqOfficeCd
+     */
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
+
+    /**
+     * @param hqOfficeCd the hqOfficeCd to set
+     */
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
     }
 }

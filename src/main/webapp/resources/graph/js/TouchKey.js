@@ -27,6 +27,10 @@ var touchKeyStyleCd, touchKeyStyleCdList, touchKeyStyles;
 app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('touchKeyCtrl', $scope, $http, false));
+
+  // 접속 사용자의 권한
+  $scope.userOrgnFg = gvOrgnFg;
+
   // 상품분류정보
   $scope.prodClassInfo = {};
   $scope.setProdClassInfo = function(data){
@@ -161,6 +165,49 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     });
   };
+
+  // 터치키 적용매장 목록 팝업
+  $scope.$on("showPopUp", function(event, data) {
+    var popup = $scope.popUpApplyStoreLayer;
+    popup.shown.addHandler(function (s) {
+      // 팝업 열린 뒤. 딜레이줘서 열리고 나서 실행되도록 함
+      setTimeout(function() {
+        $scope._broadcast('popUpApplyStoreCtrl');
+      }, 50)
+    });
+    // 팝업 닫을때
+    popup.show(true, function (s) {
+      // 적용 버튼 눌렀을때만
+      if (popup.dialogResult === "wj-hide-apply") {
+        // 팝업 컨트롤러 Get
+        var scopeLayer = agrid.getScope("popUpApplyStoreCtrl");
+        // 저장 파라미터 설정
+        var paramArr = [];
+
+        for (var i = 0; i < scopeLayer.flexLayer.collectionView.itemsEdited.length; i++) {
+          scopeLayer.flexLayer.collectionView.itemsEdited[i].status = "U";
+          paramArr.push(scopeLayer.flexLayer.collectionView.itemsEdited[i]);
+        }
+
+        console.log("paramArr ", paramArr);
+
+        if (paramArr.length <= 0) {
+          s_alert.pop(messages["touchKey.msg.select"]);
+          return;
+        }
+        // 터치키 매장 적용
+        $.postJSONArray("/base/prod/touchKey/touchKey/applyStore.sb", paramArr, function (result) {
+            $scope._popMsg(messages["cmm.saveSucc"]);
+            scopeLayer.flexLayer.collectionView.clearChanges();
+          },
+          function (result) {
+            $scope._popMsg(result.message);
+          }
+        );
+      }
+
+    });
+  });
 
 }]);
 
@@ -1363,6 +1410,8 @@ Format.prototype.initElements = function () {
   // 조회 버튼
   addClickHandler(document.getElementById('btnSearch'), function () {
     format.open(false);
+    var scope = agrid.getScope("touchKeyCtrl");
+    scope._broadcast('touchKeyCtrl');
   });
 
   // 스타일적용 버튼

@@ -58,10 +58,10 @@ public interface TouchKeyMapper {
     /** 판매터치키 XML 정보 수정 */
     int updateTouchKeyConfgXml(DefaultMap<String> param);
 
-    /** 판매터치키 그룹 생성 */
+    /** 판매터치키 분류 생성 */
     int insertTouchKeyClass(Map<String, Object> map);
 
-    /** 판매터치키 그룹 삭제 */
+    /** 판매터치키 분류 삭제 */
     int deleteTouchKeyClass(TouchKeyClassVO touchKeyClassVO);
 
     /** 판매터치키 생성 */
@@ -70,5 +70,22 @@ public interface TouchKeyMapper {
     /** 판매터치키 삭제 */
     int deleteTouchKey(TouchKeyVO touchKeyVO);
 
+    /** 매장목록 조회 */
+    List<DefaultMap<String>> getStoreList(TouchKeyVO touchKeyVO);
+
+    /** 매장 터치키분류 업데이트 */
+    int saveStoreConfgXml(TouchKeyVO touchKeyVO);
+
+    /** 터치키 분류 매장삭제 */
+    int deleteTouchKeyClassToStore(TouchKeyVO touchKeyVO);
+
+    /** 터치키 매장삭제 */
+    int deleteTouchKeyToStore(TouchKeyVO touchKeyVO);
+
+    /** 터치키 분류 매장생성 */
+    int insertTouchKeyClassToStore(TouchKeyVO touchKeyVO);
+
+    /** 터치키 매장생성 */
+    int insertTouchKeyToStore(TouchKeyVO touchKeyVO);
 
 }
