@@ -35,7 +35,7 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     // var couponGrid = agrid.getScope("couponCtrl");
     // if(couponGrid.flex.selectedItems.length > 0 ){
       var params = {};
-      params.listScale = "10";
+      // params.listScale = "10";
       params.hqOfficeCd = $("#srchHqOfficeCd").val();
       params.hqOfficeNm = $("#srchHqOfficeNm").val();
       params.storeCd = $("#srchStoreCd").val();
@@ -98,7 +98,7 @@ app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     // var couponGrid = agrid.getScope("couponCtrl");
     // if(couponGrid.flex.selectedItems.length > 0) {
       var params = {};
-      params.listScale = "10";
+      // params.listScale = "10";
       params.hqOfficeCd = $("#srchHqOfficeCd").val();
       params.hqOfficeNm = $("#srchHqOfficeNm").val();
       params.storeCd = $("#srchStoreCd").val();

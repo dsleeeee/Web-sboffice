@@ -46,7 +46,7 @@
     </div>
 
     <%-- 상품권분류등록 --%>
-      <div class="wj-TblWrapBr mt10" style="height:500px;">
+      <div class="wj-TblWrap mt10" style="overflow-y: hidden;" >
         <%-- 상품권분류등록 그리드 --%>
         <div id="mCouponClassGrid" class="wj-gridWrap" style="height:380px; overflow-y: hidden;">
           <wj-flex-grid
