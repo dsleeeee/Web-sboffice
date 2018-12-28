@@ -76,7 +76,7 @@ app.controller('copyPosEnvCtrl', ['$scope', '$http', function ($scope, $http) {
       return false;
     }
 
-    var params          = new Array();
+    var params          = {};
     var storeScope      = agrid.getScope('storeManageCtrl');
 
     params.hqOfficeCd   = storeScope.getSelectedStore().hqOfficeCd;
@@ -84,12 +84,10 @@ app.controller('copyPosEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     params.posNo        = originalPos;
     params.targetPosNo  = targetPos;
 
-    // console.log(params);
+    // console.log('params', params);
 
-    $scope.$broadcast('loadingPopupActive');
-    $scope._postJSONSave.withOutPopUp( "/store/manage/storeManage/storeManage/copyPosSetting.sb", params, function(response){
-      // 로딩바 hide
-      $scope.$broadcast('loadingPopupInactive');
+    $scope._postJSONSave.withPopUp("/store/manage/storeManage/storeManage/copyPosSetting.sb", params, function(response){
+      console.log('response',response);
       $scope._popMsg(messages["cmm.saveSucc"]);
       $scope.copyPosEnvLayer.hide();
     });

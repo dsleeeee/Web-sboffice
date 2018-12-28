@@ -74,5 +74,4 @@ public interface PosFuncMapper {
     /** 포스기능 인증허용대상 저장 */
     int saveAuthEmp(PosFuncVO posFuncVO);
 
-
 }
