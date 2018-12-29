@@ -4,6 +4,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.base.store.view.service.VanConfigVO;
 import kr.co.solbipos.base.store.view.service.ViewVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;
+import kr.co.solbipos.store.manage.storemanage.service.StorePosEnvVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -42,4 +43,7 @@ public interface ViewMapper {
 
     /** 코너별 승인 목록 조회 */
     List<DefaultMap<String>> getCornerTerminalList(VanConfigVO vanConfigVO);
+
+    /** 포스목록 조회 */
+    List<DefaultMap<String>> getPosList(StorePosEnvVO storePosEnvVO);
 }

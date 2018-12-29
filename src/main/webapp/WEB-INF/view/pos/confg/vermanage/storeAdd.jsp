@@ -206,6 +206,8 @@
     param.curr        = index;
     param.listScale   = listScaleBox2.selectedValue;
 
+    console.log('param' , param);
+
     $.postJSON("/pos/confg/verManage/applcStore/srchStoreList.sb", param, function(result) {
       var list = result.data.list;
 

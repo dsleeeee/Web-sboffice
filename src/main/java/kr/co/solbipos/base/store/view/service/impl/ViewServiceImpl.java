@@ -7,6 +7,7 @@ import kr.co.solbipos.base.store.view.service.VanConfigVO;
 import kr.co.solbipos.base.store.view.service.ViewService;
 import kr.co.solbipos.base.store.view.service.ViewVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;
+import kr.co.solbipos.store.manage.storemanage.service.StorePosEnvVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -82,4 +83,9 @@ public class ViewServiceImpl implements ViewService {
         return viewMapper.getCornerTerminalList(vanConfigVO);
     }
 
+    /** 포스목록 조회 */
+    @Override
+    public List<DefaultMap<String>> getPosList(StorePosEnvVO storePosEnvVO) {
+        return viewMapper.getPosList(storePosEnvVO);
+    }
 }

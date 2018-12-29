@@ -44,8 +44,8 @@
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="outstockReqDate.storeCd"/>" binding="storeCd" width="70" align="center"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="outstockReqDate.storeNm"/>" binding="storeNm" width="*" align="left"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="cmm.storeCd"/>" binding="storeCd" width="70" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="cmm.storeNm"/>" binding="storeNm" width="*" align="left"></wj-flex-grid-column>
 
           </wj-flex-grid>
         </div>
@@ -114,6 +114,9 @@
     $scope.searchFg = "N"; // 조회 했는지 여부
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on($scope.targetId + 'Ctrl', function (event, paramObj) {
+
+      console.log('broadCast');
+
       // 매장선택 팝업 오픈
       eval('$scope.wj' + $scope.targetId + 'LayerS.show(true)');
       // 팝업 닫힐시 이벤트
@@ -123,9 +126,9 @@
         }
       });
 
-      if ($scope.searchFg == "N") {
+      // if ($scope.searchFg == "N") {
         $scope.searchStore();
-      }
+      // }
       // 기능수행 종료 : 반드시 추가
       event.preventDefault();
     });
@@ -133,7 +136,7 @@
     $scope.searchStore = function () {
       // 파라미터
       var params = {};
-      $scope._inquirySub("/iostock/order/outstockReqDate/days/selectStoreList.sb", params, function () {
+      $scope._inquirySub("/popup/getStoreList.sb", params, function () {
         $scope.searchFg = "Y";
       });
     };

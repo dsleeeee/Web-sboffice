@@ -86,6 +86,10 @@ app.controller('storeListCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._inquiryMain("/base/store/view/view/list.sb", params, function() {});
   };
 
+  // 매장환경복사 팝업
+  $scope.copyStoreEnv = function(){
+    $scope.copyStoreEnvLayer.show(true);
+  };
 
   // 화면 ready 된 후 설정
   angular.element(document).ready(function () {
@@ -104,5 +108,11 @@ app.controller('storeListCtrl', ['$scope', '$http', function ($scope, $http) {
       }, 50)
     });
 
+    // 매장환경복사 팝업 핸들러 추가
+    $scope.copyStoreEnvLayer.shown.addHandler(function (s) {
+      setTimeout(function() {
+        $scope._broadcast('copyStoreEnvCtrl', $scope.getSelectedStore());
+      }, 50)
+    });
   });
 }]);

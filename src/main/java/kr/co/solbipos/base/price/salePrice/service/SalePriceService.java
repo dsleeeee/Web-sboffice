@@ -22,13 +22,17 @@ import java.util.List;
  */
 public interface SalePriceService {
 
-    /** 상품 정보 조회 */
+    /** 상품별 가격정보 조회 */
     DefaultMap<String> getProdInfo(SalePriceVO salePriceVO, SessionInfoVO sessionInfoVO);
-
 
     /** 상품별 매장 판매가 조회 */
     List<DefaultMap<String>> getProdSalePriceList(SalePriceVO salePriceVO, SessionInfoVO sessionInfoVO);
 
     /** 상품별 매장 판매가 저장 */
     int saveProdSalePrice(SalePriceVO[] salePriceVOs, SessionInfoVO sessionInfoVO);
+
+    /** 매장별 가격정보 조회 */
+    List<DefaultMap<String>> getStoreSalePriceList(SalePriceVO salePriceVO, SessionInfoVO sessionInfoVO);
+
+
 }

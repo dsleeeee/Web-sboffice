@@ -52,7 +52,7 @@ public class SalePriceServiceImpl implements SalePriceService {
         this.messageService = messageService;
     }
 
-    /** 상품정보 조회 */
+    /** 상품별 가격정보 조회 */
     @Override
     public DefaultMap<String> getProdInfo(SalePriceVO salePriceVO, SessionInfoVO sessionInfoVO) {
 
@@ -101,8 +101,17 @@ public class SalePriceServiceImpl implements SalePriceService {
             salePriceVO.setModId(sessionInfoVO.getUserId());
 
             // 판매가 변경 히스토리 등록
-            result = salePriceMapper.insertStoreProdSalePriceHistory(salePriceVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            int prodCnt = salePriceMapper.getRegistProdCount(salePriceVO);
+
+            if(prodCnt > 0){
+                result = salePriceMapper.updateStoreProdSalePriceHistory(salePriceVO);
+                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            }
+            // todo 추후 최초 판매가도 히스토리 등록할 경우에 이 주석 해제하여 사용
+//            else {
+//                result = salePriceMapper.insertStoreProdSalePriceHistory(salePriceVO);
+//                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+//            }
 
             // 매장 판매가 변경
             result = salePriceMapper.modifyStoreProdSalePrice(salePriceVO);
@@ -110,5 +119,14 @@ public class SalePriceServiceImpl implements SalePriceService {
 
         }
         return result;
+    }
+
+    /** 매장별 판매가 목록 조회 */
+    @Override
+    public List<DefaultMap<String>> getStoreSalePriceList(SalePriceVO salePriceVO, SessionInfoVO sessionInfoVO) {
+
+        salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return salePriceMapper.getStoreSalePriceList(salePriceVO);
     }
 }

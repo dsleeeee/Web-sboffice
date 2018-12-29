@@ -19,7 +19,7 @@
         COMMENTS : 벤사 목록을 조회한다.
     -->
     <select id="getVanList" parameterType="vanVO" resultType="DefaultMap">
-        /* USE : PopupMapper.getStoreList */
+        /* USE : PopupMapper.getVanList */
         SELECT VAN_FG,
                VAN_CD,
                VAN_NM

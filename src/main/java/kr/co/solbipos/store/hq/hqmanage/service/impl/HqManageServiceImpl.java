@@ -118,26 +118,23 @@ public class HqManageServiceImpl implements HqManageService{
         hqManage.setPosEmpNo(pEmpNo);
         hqManage.setPosUserPwd(pUserPwd);
 
+        int result = 0;
+
         // 본사 등록
-        int procCnt = mapper.regist(hqManage);
+        result = mapper.regist(hqManage);
+        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-        if(procCnt > 0) {
+        // 기본 사원 등록
+        result = mapper.registEmployee(hqManage);
+        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-            // 기본 사원 등록
-            int employeeReg = mapper.registEmployee(hqManage);
-            // 웹 사용자 등록
-            int webUserReg = mapper.registWebUser(hqManage);
-
-            procCnt += employeeReg + webUserReg;
-        }
-        else {
-            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-        }
+        // 웹 사용자 등록
+        result = mapper.registWebUser(hqManage);
+        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
         // 코드 등록 (본사 코드 마스터 - TB_HQ_NMCODE)
         // TB_CM_NMCODE와 별개로 본사에서 사용하는 본사전용코드
-        int cmmCodeReg = 0;
-
+        // todo TB_CM_NMCODE 에서 CMM 본사용으로 복사해야함.
         HqNmcodeVO nmcodeVO = new HqNmcodeVO();
 
         nmcodeVO.setHqOfficeCd(hqOfficeCd);
@@ -173,7 +170,8 @@ public class HqManageServiceImpl implements HqManageService{
             nmcodeVO.setNmcodeCd(cmmCode[1]);
             nmcodeVO.setNmcodeNm(cmmCode[2]);
 
-            cmmCodeReg += mapper.cmmCodeReg(nmcodeVO);
+            result = mapper.cmmCodeReg(nmcodeVO);
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
 
         // 기본 매출 시간대
@@ -190,12 +188,10 @@ public class HqManageServiceImpl implements HqManageService{
             nmcodeVO.setNmcodeCd(StringUtil.lpad(String.valueOf(i), 2));
             nmcodeVO.setNmcodeNm(nmcodeNm);
 
-            int saleTimeReg = mapper.cmmCodeReg(nmcodeVO);
-
-            cmmCodeReg += saleTimeReg;
+            result = mapper.cmmCodeReg(nmcodeVO);
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
 
-        procCnt += cmmCodeReg;
 
         // 공통코드 복사 //todo
 //        HqNmcodeVO hqNmcodeVO = new HqNmcodeVO();
@@ -214,7 +210,7 @@ public class HqManageServiceImpl implements HqManageService{
 //        int printTempReg = mapper.hqPrintTempReg(printTempVO);
 //        procCnt += printTempReg;
 
-        return procCnt;
+        return result;
     }
 
     /** 본사 수정 */

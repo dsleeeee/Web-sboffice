@@ -30,6 +30,7 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 등록된 매장 조회
   $scope.searchRegStore = function(){
+
     var prodScope     = agrid.getScope("prodCtrl");
     var params        = {};
 

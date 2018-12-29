@@ -254,7 +254,6 @@ function RootController(ctrlName, $scope, $http, isPicker) {
         // apply checkbox value to cells
         cb.addEventListener('click', function (e) {
           flex.beginUpdate();
-          console.log("flex ", flex);
           for (var i = 0; i < flex.rows.length; i++) {
             var cell = flex.cells.getCellElement(i, c);
             // TODO : 활성화 및 readOnly 아닌 경우에만 체크되도록

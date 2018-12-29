@@ -29,37 +29,41 @@ app.controller('sideMenuCtrl', ['$scope', '$http', function ($scope, $http) {
     if ( type === 'P' ) {  // 상품별 판매가관리 탭
       $("#prodSalePrice").addClass("on");
       $("#storeSalePrice").removeClass("on");
+      $("#prodSalePriceArea").show();
+      $("#storeSalePriceArea").hide();
       $scope.isProdTab = false;
       $scope.isStoreTab = true;
       // 속성 조회
-      $scope._broadcast("prodSalePriceCtrl");
+      // $scope._broadcast("prodSalePriceCtrl");
 
     } else if ( type === 'S' ) {  // 매장별 판매가관리 탭
 
-      $scope._popMsg("서비스 준비중입니다.");
-      return false;
+      // $scope._popMsg("서비스 준비중입니다.");
+      // return false;
 
       $("#prodSalePrice").removeClass("on");
       $("#storeSalePrice").addClass("on");
+      $("#prodSalePriceArea").hide();
+      $("#storeSalePriceArea").show();
       $scope.isProdTab = true;
       $scope.isStoreTab = false;
       // 선택그룹 조회
-      $scope._broadcast("storeSalePriceCtrl");
+      // $scope._broadcast("storeSalePriceCtrl");
       // // 그리드 refresh
       // setTimeout(function () {
       //   $scope._broadcast("selectMenuRefresh");
       // }, 10);
     }
   };
-  // 탭 조회
-  $scope.queryTab = function() {
-    if ( $scope.isProdTab ) {
-      // 상품 조회
-      $scope._broadcast("prodSalePriceCtrl");
-    } else {
-      // 매장 조회
-      $scope._broadcast("storeSalePriceCtrl");
-    }
-  };
+  // // 탭 조회
+  // $scope.queryTab = function() {
+  //   if ( $scope.isProdTab ) {
+  //     // 상품 조회
+  //     $scope._broadcast("prodSalePriceCtrl");
+  //   } else {
+  //     // 매장 조회
+  //     $scope._broadcast("storeSalePriceCtrl");
+  //   }
+  // };
 }]);
 
