@@ -91,7 +91,20 @@
                                 ) --바코드
                 </if>
                 <if test="prodClassCd != null and prodClassCd != ''">
-                    AND thp.PROD_CLASS_CD = #{prodClassCd} --상품분류코드
+                    AND thp.PROD_CLASS_CD IN (
+                                                SELECT
+                                                    PROD_CLASS_CD
+                                                FROM
+                                                    TB_HQ_PRODUCT_CLASS
+                                                WHERE
+                                                    HQ_OFFICE_CD = #{hqOfficeCd}
+                                                START WITH
+                                                    PROD_CLASS_CD = #{prodClassCd}
+                                                    AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                                CONNECT BY
+                                                    PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD
+                                                    AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                            )
                 </if>
                 <if test="useYn != null and useYn != ''">
                     AND thp.USE_YN = #{useYn} --사용여부
@@ -166,7 +179,20 @@
                                 ) --바코드
                 </if>
                 <if test="prodClassCd != null and prodClassCd != ''">
-                    AND tmp.PROD_CLASS_CD = #{prodClassCd} --상품분류코드
+                    AND tmp.PROD_CLASS_CD IN (
+                                                SELECT
+                                                    PROD_CLASS_CD
+                                                FROM
+                                                    TB_MS_PRODUCT_CLASS
+                                                WHERE
+                                                    STORE_CD = #{storeCd}
+                                                START WITH
+                                                    PROD_CLASS_CD = #{prodClassCd}
+                                                    AND STORE_CD = #{storeCd}
+                                                CONNECT BY
+                                                    PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD
+                                                    AND STORE_CD = #{storeCd}
+                                            )
                 </if>
                 <if test="useYn != null and useYn != ''">
                     AND tmp.USE_YN = #{useYn} --사용여부
