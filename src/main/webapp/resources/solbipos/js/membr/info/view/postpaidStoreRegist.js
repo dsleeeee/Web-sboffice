@@ -18,7 +18,7 @@ app.controller('postpaidStoreRegistCtrl', ['$scope', '$http', function ($scope, 
   angular.extend(this, new RootController('postpaidStoreRegistCtrl', $scope, $http, false));
 
   // 조회조건 콤보박스 데이터 Set
-  $scope._setComboData("listScaleBox", gvListScaleBoxData);
+  // $scope._setComboData("listScaleBox", gvListScaleBoxData);
 
   // 선택 회원
   $scope.selectedMembr;
@@ -101,7 +101,7 @@ app.controller('postpaidStoreNoRegistCtrl', ['$scope', '$http', function ($scope
   angular.extend(this, new RootController('postpaidStoreNoRegistCtrl', $scope, $http, true));
 
   // 조회조건 콤보박스 데이터 Set
-  $scope._setComboData("listScaleBox", gvListScaleBoxData);
+  // $scope._setComboData("listScaleBox", gvListScaleBoxData);
 
   // 선택 회원
   $scope.selectedMembr;

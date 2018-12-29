@@ -10,7 +10,6 @@
 
 
 <div class="subCon" ng-controller="memberCtrl">
-
   <div class="searchBar flddUnfld">
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>

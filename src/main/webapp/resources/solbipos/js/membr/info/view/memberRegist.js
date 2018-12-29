@@ -222,7 +222,7 @@ app.controller('memberRegistCtrl', ['$scope', '$http', function ($scope, $http) 
     // 회원조회 팝업 핸들러 추가
     $scope.memberMappingLayer.shown.addHandler(function (s) {
       setTimeout(function() {
-        $scope._broadcast('memberMappingCtrl');
+        // $scope._broadcast('memberMappingCtrl');
       }, 50)
     });
   });

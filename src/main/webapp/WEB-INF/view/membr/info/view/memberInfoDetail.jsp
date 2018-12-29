@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 
-<wj-popup control="memberInfoDetailLayer" show-trigger="Click" hide-trigger="Click" style="width:750px;height:570px;">
+<wj-popup control="memberInfoDetailLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:750px;height:670px;">
   <div class="wj-dialog wj-dialog-columns title" ng-controller="memberInfoDetailCtrl">
 
     <%-- header --%>
@@ -17,7 +17,7 @@
     <%-- body --%>
     <div class="wj-dialog-body">
 
-      <div style="height:400px; overflow-y: auto;">
+      <div style="height:500px; overflow-y: auto;">
         <f:form id="viewForm" name="viewForm" >
           <h3 class="h3_tbl"><s:message code="storeManage.basicInfo" /></h3>
           <table class="searchTbl">
@@ -207,10 +207,9 @@
             </tr>
             </tbody>
           </table>
-
         </f:form>
       </div>
-      <div class="btnSet">
+      <div class="btnSet mb10">
         <%-- 수정 --%>
         <span><a href="#" class="btn_blue pd20" ng-click="modify()"><s:message code="regist.modify" /></a></span>
         <%-- 닫기 --%>
