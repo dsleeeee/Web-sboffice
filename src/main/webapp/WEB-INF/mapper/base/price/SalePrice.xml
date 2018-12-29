@@ -217,54 +217,61 @@
         TABLE    : TB_MS_PRODUCT, TB_MS_STORE, TB_MS_PRODUCT_SALE_PRICE
         COMMENTS : 판매가 관리 대상 목록을 조회한다.
     -->
-  <!--
     <select id="getStoreSalePriceList"  parameterType="salePriceVO" resultType="DefaultMap">
-      /* SalePriceMapper.getStoreSalePriceList */
-      <include refid="CmmSQL.PagingTemplateHeader"/>
-      SELECT tms.STORE_CD,
-      tms.STORE_NM,
-      tmp.PROD_CD,
-      tmp.PROD_NM,
-      tmp.COST_UPRC,                     &#45;&#45; 원가단가
-      tmp.LAST_COST_UPRC,                &#45;&#45; 최종원가단가
-      tmp.SPLY_UPRC,                     &#45;&#45; 공급가
-      tmp.SPLY_UPRC AS STORE_SPLY_UPRC,  &#45;&#45; 매장공급가
-      tmpsp.SALE_UPRC AS SALE_UPRC_P,    &#45;&#45; 변경전 판매금액
-      tmpsp.SALE_UPRC,                   &#45;&#45; 판매금액(변경가능)
-      tmp.PO_UNIT_QTY,                   &#45;&#45; 주문(발주)단위수량
-      tmp.PRC_CTRL_FG
-      <include refid="CmmSQL.PagingTemplateCount"/>
-      FROM TB_MS_PRODUCT tmp,
-      TB_MS_STORE tms,
-      (
-      SELECT STORE_CD, PROD_CD,
-      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-      FROM TB_MS_PRODUCT_SALE_PRICE
-      WHERE 1 = 1
-      <![CDATA[
-                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                     ]]>
-      AND SALE_PRC_FG = '1'
-      GROUP BY STORE_CD, PROD_CD
-      ) tmpsp
-      WHERE tmp.PROD_CD = #{prodCd}
-      AND tmp.SALE_PROD_YN = 'Y'             &#45;&#45; 판매상품 여부
-      AND tmp.PRC_CTRL_FG = '1'              &#45;&#45; 가격관리구분 : 본사
-      AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
-      AND tms.STORE_CD = tmp.STORE_CD
-      AND tmpsp.STORE_CD = tmp.STORE_CD
-      AND tmpsp.PROD_CD = tmp.PROD_CD
-      <if test='arrStoreCd != null and arrStoreCd != ""'>
-        AND tms.STORE_CD IN
-        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-          #{item}
-        </foreach>
-      </if>
-      ORDER BY tms.STORE_CD, tmp.PROD_CD
-      <include refid="CmmSQL.PagingTemplateBottom"/>
+        /* SalePriceMapper.getStoreSalePriceList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT tmp.PROD_CD,
+               tmp.PROD_NM,
+               tmp.PO_UNIT_QTY, -- 입수
+               thp.COST_UPRC AS HQ_COST_UPRC,   -- 본사원가
+               thp.SPLY_UPRC AS HQ_SPLY_UPRC,   -- 대표공급가
+               tmp.SPLY_UPRC AS STORE_SPLY_UPRC,   -- 매장공급가
+               thpsp.SALE_UPRC AS HQ_SALE_UPRC, -- 본사판매가
+               tmpsp.SALE_UPRC AS STORE_SALE_UPRC, -- 매장판매가
+               tmpsp.SALE_UPRC AS SALE_UPRC, -- 매장변경판매가
+               tmp.PRC_CTRL_FG
+        <include refid="CmmSQL.PagingTemplateCount"/>
+          FROM TB_MS_PRODUCT tmp,
+               TB_HQ_PRODUCT thp,
+              (
+                SELECT HQ_OFFICE_CD, PROD_CD,
+                      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                  FROM TB_HQ_PRODUCT_SALE_PRICE
+                 WHERE 1 = 1
+                <![CDATA[
+                   AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                   AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                 ]]>
+                   AND SALE_PRC_FG = '1'
+                 GROUP BY HQ_OFFICE_CD, PROD_CD
+              ) thpsp,
+             (
+                SELECT STORE_CD, PROD_CD,
+                       MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                  FROM TB_MS_PRODUCT_SALE_PRICE
+                 WHERE 1 = 1
+                <![CDATA[
+               AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+               AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+               ]]>
+            AND SALE_PRC_FG = '1'
+            GROUP BY STORE_CD, PROD_CD
+             ) tmpsp
+        WHERE tmp.STORE_CD = 'DS00001'
+        AND thp.HQ_OFFICE_CD = 'DS001'
+        AND thp.PROD_CD = tmp.PROD_CD
+        AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+        AND thpsp.PROD_CD = thp.PROD_CD
+        AND tmpsp.STORE_CD = tmp.STORE_CD
+        AND tmpsp.PROD_CD = tmp.PROD_CD
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+          AND tms.STORE_CD IN
+          <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+            #{item}
+          </foreach>
+        </if>
+        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
--->
 
 
 </mapper>

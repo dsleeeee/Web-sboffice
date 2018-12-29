@@ -821,6 +821,7 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
       };
       // 페이지 이동
       function _pageView(ctrlName, curr) {
+        console.log('pageView ctrlName', ctrlName);
         $scope._setPagingInfo('curr', curr);
         $scope.$broadcast(ctrlName);
       }

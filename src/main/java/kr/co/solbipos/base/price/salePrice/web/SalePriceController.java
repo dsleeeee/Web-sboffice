@@ -140,5 +140,23 @@ public class SalePriceController {
         return returnJson(Status.OK, result);
     }
 
+    /***
+     * 매장별 정보 조회
+     * @param salePriceVO
+     * @param request
+     * @return
+     * @author  김지은
+     * @since   2018. 12. 26.
+     */
+    @RequestMapping(value = "/storeSalePrice/getStoreSalePriceList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreSalePriceList(SalePriceVO salePriceVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = salePriceService.getStoreSalePriceList(salePriceVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, result, salePriceVO);
+    }
 
 }

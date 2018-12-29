@@ -37,6 +37,7 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 * @ ----------  ---------   -------------------------------
  * @ 2018.08.13  김영근      최초생성
  * @ 2018.11.20  김지은      기능오류 수정 및 angular 변경
+ * @ 2018.12.28  김지은      매장환경 복사 팝업 생성
 *
 * @author nhn kcp 개발2팀 김영근
 * @since 2018. 08.13
