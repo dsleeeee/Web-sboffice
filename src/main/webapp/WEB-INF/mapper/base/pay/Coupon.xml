@@ -332,9 +332,12 @@
           FROM TB_HQ_COUPON thc
          WHERE thc.HQ_OFFICE_CD = #{hqOfficeCd}
            AND thc.PAY_CLASS_CD = #{payClassCd}
+           AND thc.USE_YN = 'Y'
+        <!--
         <if test='useYn != null and useYn.toString() == "Y"'>
            AND thc.USE_YN = #{useYn}
         </if>
+        -->
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
@@ -361,9 +364,12 @@
           FROM TB_MS_COUPON tmc
          WHERE tmc.STORE_CD = #{storeCd}
            AND tmc.PAY_CLASS_CD = #{payClassCd}
+           AND tmc.USE_YN = 'Y'
+        <!--
         <if test='useYn != null and useYn.toString() == "Y"'>
            AND tmc.USE_YN = #{useYn}
         </if>
+        -->
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 

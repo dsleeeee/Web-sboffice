@@ -137,7 +137,7 @@
             <wj-flex-grid-column header="<s:message code="coupon.storeCnt"/>" binding="storeCnt" is-read-only="true" width="*" align="center"></wj-flex-grid-column>
           </c:if>
 
-          <wj-flex-grid-column header="<s:message code="cmm.useYn"/>" binding="useYn" width="*" data-map="useYnDataMap" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="cmm.useYn"/>" binding="useYn" width="*" data-map="useYnDataMap" align="center" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="cmm.regId"/>" binding="regId" visible="false"></wj-flex-grid-column>
 
         </wj-flex-grid>
