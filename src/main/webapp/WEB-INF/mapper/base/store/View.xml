@@ -107,7 +107,7 @@
         COMMENTS : 매장의 코너 사용여부를 조회한다.
     -->
     <select id="getCornerUseYnVal" parameterType="storeEnvVO" resultType="String">
-        /* getCornerUseYnVal.getTerminalEnv */
+        /* ViewMapper.getTerminalEnv */
         SELECT NVL(ENVST_VAL, '0') AS ENVST_VAL
           FROM TB_MS_STORE_ENVST
          WHERE STORE_CD = #{storeCd}
@@ -117,7 +117,7 @@
 
      <!-- 코너별 터미널 목록 조회 -->
     <select id="getCornerTerminalList" parameterType="DefaultMap" resultType="DefaultMap">
-        /* USE : StoreManageMapper.getCornerTerminalList */
+        /* USE : ViewMapper.getCornerTerminalList */
         <![CDATA[
         SELECT tmct.STORE_CD,
                tmct.CORNR_CD,
@@ -135,7 +135,7 @@
 
     <!-- 포스별 터미널목록 조회 -->
     <select id="getPosTerminalList" parameterType="DefaultMap" resultType="DefaultMap">
-        /* USE : StoreManageMapper.getPosTerminalList */
+        /* USE : ViewMapper.getPosTerminalList */
         <![CDATA[
          SELECT tmpt.STORE_CD,
                 tmpt.POS_NO,
@@ -150,4 +150,24 @@
           ORDER BY tmpt.POS_NO, tmpt.VENDOR_FG, tmpt.VENDOR_CD
         ]]>
     </select>
+
+    <!-- 포스 목록 조회 -->
+    <!--
+        TABLE    : TB_MS_POS
+        PARAM    : storePosEnvVO
+        COMMENTS : 포스환경정보에서 보여줄 매장의 포스 목록을 조회한다.
+    -->
+    <select id="getPosList" parameterType="storePosEnvVO" resultType="DefaultMap">
+          /* USE : ViewMapper.getPosList */
+          <![CDATA[
+          SELECT ROWNUM,
+                 POS_NO,
+                 '['||POS_NO||']'||DECODE(POS_NM, NULL, 'POS'||POS_NO, POS_NM) AS POS_CD_NM,
+                 POS_NM
+            FROM TB_MS_POS
+           WHERE STORE_CD = #{storeCd}
+          ]]>
+    </select>
+
+
 </mapper>

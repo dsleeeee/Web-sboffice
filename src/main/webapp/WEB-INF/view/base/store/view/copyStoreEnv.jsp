@@ -15,11 +15,16 @@
     <%-- body --%>
     <div class="wj-dialog-body">
 
-      <div style="height:150px; overflow-y: auto;">
+      <%-- 매장검색영역 --%>
+      <div class="searchBar_s">
+        <a href="#" class="open">환경복사 매장 선택</a><!--하단 검색테이블 열기 .open, 하단 검색테이블 닫기 .close-->
+        <p class="noFolding" style="display:none;">환경복사 매장 선택</p><!-- 접기기능 사용하지 않을경우 -->
+      </div>
+      <div class="tblBr mb40" >
         <table class="tblType01">
           <colgroup>
-            <col class="w35" />
-            <col class="w65" />
+            <col class="w30" />
+            <col class="w70" />
           </colgroup>
           <tbody>
           <tr>
@@ -49,31 +54,78 @@
         </div>
       </div>
 
+      <%-- 포스선택영역 --%>
+      <table class="tblType01">
+        <colgroup>
+          <col class="w20" />
+          <col class="w30" />
+          <col class="w20" />
+          <col class="w30" />
+        </colgroup>
+        <tbody>
+        <tr>
+          <th><s:message code="storeView.original.pos" /></th>
+          <td>
+            <div class="sb-select">
+              <wj-combo-box
+                      id="originalPosNo"
+                      ng-model="originalPosNo"
+                      items-source="originalPosArr"
+                      display-member-path="posCdNm"
+                      selected-value-path="posNo"
+                      is-editable="false"
+                      control="comboDt.originalPosCombo"
+                      initialized="_initComboBox(s)"
+                      ng-readonly="isPosReadonly">
+              </wj-combo-box>
+            </div>
+          </td>
+          <th><s:message code="storeView.target.pos" /></th>
+          <td>
+            <div class="sb-select">
+              <wj-combo-box
+                      id="targetPos"
+                      ng-model="targetPos"
+                      items-source="targetPosArr"
+                      display-member-path="posCdNm"
+                      selected-value-path="posNo"
+                      is-editable="false"
+                      ng-readonly="isPosChk"
+                      control="comboDt.targetPosCombo"
+                      initialized="_initComboBox(s)">
+              </wj-combo-box>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
 
-<%--
-      <div style="height:150px; overflow-y: auto;">
-        <table class="tblType01 moreDark">
-          <colgroup>
-            <col class="w15" />
-            <col class="w15" />
-            <col class="w45" />
-          </colgroup>
-          <thead>
-          <tr>
-            <th><s:message code="cmm.no" /></th>
-            <th><s:message code="storeManage.posNo" /></th>
-            <th><s:message code="storeManage.posNm" /></th>
-          </tr>
-          </thead>
-          <tbody id="posNmContent">
-          </tbody>
-        </table>
+
+      <%--위즈모 테이블--%>
+      <div class="theGrid mt10" style="height: 200px;">
+        <wj-flex-grid
+                autoGenerateColumns="false"
+                selection-mode="Row"
+                items-source="data"
+                control="flex"
+                initialized="initGrid(s,e)"
+                item-formatter="_itemFormatter">
+
+          <!-- define columns -->
+          <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="storeView.copy.env"/>" binding="nmcodeNm" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="storeView.copy.env"/>" binding="nmcodeCd" visible="false"></wj-flex-grid-column>
+        </wj-flex-grid>
       </div>
---%>
+      <input type="hidden" ng-model="originalPosNo" id="originalPosNo" />
+      <input type="hidden" ng-model="targetPosNo" id="targetPosNo" />
 
-      <%-- 복사 --%>
-      <div class="btnSet" class="mt10 mb10">
+
+      <div class="btnSet">
+        <%-- 복사 --%>
         <span><a href="#" class="btn_blue" ng-click="copy()"><s:message code="cmm.copy" /></a></span>
+        <%-- 닫기 --%>
+        <span><a href="#" class="btn_gray" ng-click="close()"><s:message code="cmm.close" /></a></span>
       </div>
     </div>
   </div>

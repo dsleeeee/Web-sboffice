@@ -1,14 +1,18 @@
 package kr.co.solbipos.base.store.view.web;
 
+import kr.co.common.data.domain.CommonCodeVO;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.store.view.service.CopyStoreEnvVO;
 import kr.co.solbipos.base.store.view.service.VanConfigVO;
 import kr.co.solbipos.base.store.view.service.ViewService;
 import kr.co.solbipos.base.store.view.service.ViewVO;
 import kr.co.solbipos.base.store.view.service.enums.CornerUseYn;
+import kr.co.solbipos.store.manage.storemanage.service.StorePosEnvVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,12 +57,14 @@ public class ViewController {
 
     private final ViewService viewService;
     private final SessionService sessionService;
+    private final CmmCodeUtil cmmCodeUtil;
 
     /** Constructor Injection */
     @Autowired
-    public ViewController(ViewService viewService, SessionService sessionService) {
+    public ViewController(ViewService viewService, SessionService sessionService, CmmCodeUtil cmmCodeUtil) {
         this.viewService = viewService;
         this.sessionService = sessionService;
+        this.cmmCodeUtil = cmmCodeUtil;
     }
 
     /**
@@ -150,6 +156,45 @@ public class ViewController {
         resultMap.put("cornerUseYnVal", cornerUseYnVal);
         resultMap.put("posTerminalList", posTerminalList);
         resultMap.put("cornrTerminalList", cornrTerminalList);
+
+        return returnJson(Status.OK, resultMap);
+    }
+
+
+    /**
+     * 매장환경 복사를 위한 정보 조회
+     * @param copyStoreEnvVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/copyStoreEnv/getStoreEnvInfo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreEnvInfo( CopyStoreEnvVO copyStoreEnvVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        LOGGER.info(copyStoreEnvVO.getProperties());
+
+        // 복사할 매장환경 목록 조회
+        CommonCodeVO envVO = cmmCodeUtil.getCommCodeData("101");
+
+        StorePosEnvVO storePosEnvVO = new StorePosEnvVO();
+
+        // 원매장 포스목록 조회
+        storePosEnvVO.setStoreCd(copyStoreEnvVO.getOriginalStoreCd());
+        List<DefaultMap<String>> originalPosList = viewService.getPosList(storePosEnvVO);
+
+        // 복사대상 매장 포스 목록 조회
+        storePosEnvVO.setStoreCd(copyStoreEnvVO.getTargetStoreCd());
+        List<DefaultMap<String>> targetPosList = viewService.getPosList(storePosEnvVO);
+
+
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+
+        resultMap.put("envList", envVO.getCodeList());
+        resultMap.put("originalPosList", originalPosList);
+        resultMap.put("targetPosList", targetPosList);
 
         return returnJson(Status.OK, resultMap);
     }

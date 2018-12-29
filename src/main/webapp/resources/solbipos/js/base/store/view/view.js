@@ -111,9 +111,8 @@ app.controller('storeListCtrl', ['$scope', '$http', function ($scope, $http) {
     // 매장환경복사 팝업 핸들러 추가
     $scope.copyStoreEnvLayer.shown.addHandler(function (s) {
       setTimeout(function() {
-        // $scope._broadcast('copyStoreEnvCtrl', $scope.getSelectedStore());
+        $scope._broadcast('copyStoreEnvCtrl', $scope.getSelectedStore());
       }, 50)
     });
-
   });
 }]);

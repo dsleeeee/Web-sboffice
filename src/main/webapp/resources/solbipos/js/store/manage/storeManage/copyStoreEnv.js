@@ -13,9 +13,84 @@ app.controller('copyStoreEnvCtrl', ['$scope', '$http', function ($scope, $http) 
 
   angular.extend(this, new RootController('copyStoreEnvCtrl', $scope, $http, false));
 
+  $scope.isPosReadonly = false;
+
+  // 콤보박스 생성 및 데이터 초기화
+  $scope.comboDt = { originalPosCombo:null, targetPosCombo:null };
+
+  $scope.originalPosArr = [];
+  $scope.targetPosArr = [];
+
+  $scope.originalPosArr.push({posNo:"", posCdNm:"선택"});
+  $scope.targetPosArr.push({posNo:"", posCdNm:"선택"})
+
+  $scope.resetCombobox = function(){
+
+    $scope.originalPosArr = [];
+    $scope.targetPosArr = [];
+
+    $scope.originalPosArr.push({posNo:"", posCdNm:"선택"});
+    $scope.targetPosArr.push({posNo:"", posCdNm:"선택"})
+    $scope.isPosReadonly = true;
+
+    $scope.setComboReadonly();
+  };
+
+  $scope.setComboReadonly = function(){
+    console.log('setComboReadonly');
+    $scope.comboDt.originalPosCombo.isReadOnly = $scope.isPosReadonly;
+    $scope.comboDt.targetPosCombo.isReadOnly = $scope.isPosReadonly;
+  };
+
+
+  // grid 초기화 : 생성되기전 초기화되면서 생성된다
+  $scope.initGrid = function (s, e) {
+
+    // 그리드 클릭 이벤트
+    s.addEventListener(s.hostElement, 'mousedown', function (e) {
+      var ht = s.hitTest(e);
+      if (ht.cellType === wijmo.grid.CellType.Cell) {
+        var col         = ht.panel.columns[ht.col];
+        var selectedRow = s.rows[ht.row].dataItem;
+        // if(selectedRow.nmcodeCd === '03') {
+        //   if (col.binding === 'gChk' ) { //포스환경 선택시
+        //     $scope.isPosReadonly = false;
+        //   } else {
+        //     $scope.isPosReadonly = true;
+        //   }
+        // }
+        // $scope.setComboReadonly();
+        $scope.posEnvCheck();
+      }
+    });
+  };
+
+  $scope.posEnvCheck = function(){
+
+    $scope.flex.collectionView.commitEdit();
+
+    console.log('$scope.flex.collectionView.items',$scope.flex.collectionView.items);
+
+    for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+      if($scope.flex.collectionView.items[i].nmcodeCd === '03') {
+        if($scope.flex.collectionView.items[i].gChk) {
+          $scope.isPosReadonly = false;
+        } else {
+          $scope.isPosReadonly = true;
+        }
+        $scope.setComboReadonly();
+      }
+    }
+
+
+  };
+
+
+
   // 팝업 오픈시 테이블 그룹정보 조회
   $scope.$on("copyStoreEnvCtrl", function(event, data) {
     // $scope.getPosNmList();
+    $scope.resetCombobox();
     event.preventDefault();
   });
 
@@ -31,6 +106,61 @@ app.controller('copyStoreEnvCtrl', ['$scope', '$http', function ($scope, $http) 
     console.log('targetStoreShow...')
     $scope._pageView('targetStoreCtrl', 1);
   };
+
+  $scope.searchEnvList = function(){
+
+
+    if( isEmptyObject($("#originalStoreCd").val()) ) {
+      $scope._popMsg("원매장을 선택해주세요.");
+      return false;
+    }
+
+    if( isEmptyObject($("#targetStoreCd").val()) ) {
+      $scope._popMsg("복사대상매장을 선택해주세요.");
+      return false;
+    }
+
+    var params             = {};
+    params.originalStoreCd = $("#originalStoreCd").val();
+    params.targetStoreCd   = $("#targetStoreCd").val();
+
+    console.log('params', params);
+
+    $scope._postJSONQuery.withPopUp( "/base/store/view/copyStoreEnv/getStoreEnvInfo.sb", params,
+      function(response){
+
+        console.log('response',response);
+
+        var data            = response.data.data;
+        var envList         = data.envList;
+        var originalPosList = data.originalPosList;
+        var targetPosList   = data.targetPosList;
+
+
+        // $scope.setOriginalPosList(data.originalPosList);
+        // $scope.setTargetPosList(data.targetPosList);
+        //
+        // console.log('getOriginalPosList : ' + $scope.getOriginalPosList());
+        // console.log('getTargetPosList : ' + $scope.getTargetPosList());
+
+        $scope.data = new wijmo.collections.CollectionView(envList);
+
+        if(originalPosList.length > 0) {
+          for(var i=0; i<=originalPosList.length; i++){
+            $scope.originalPosArr.push(originalPosList[i]);
+          }
+        }
+        if(targetPosList.length > 0) {
+          for(var i=0; i<=targetPosList.length; i++){
+            $scope.targetPosArr.push(targetPosList[i]);
+          }
+        }
+        $scope.comboDt.originalPosCombo.itemsSource = new wijmo.collections.CollectionView( $scope.originalPosArr);
+        $scope.comboDt.targetPosCombo.itemsSource = new wijmo.collections.CollectionView( $scope.targetPosArr);
+
+      });
+  };
+
 
   //
   // // 포스명칭 목록 조회
@@ -105,4 +235,8 @@ app.controller('copyStoreEnvCtrl', ['$scope', '$http', function ($scope, $http) 
   //   });
   // };
 
+  // 팝업 닫기
+  $scope.close = function(){
+    $scope.copyStoreEnvLayer.hide();
+  };
 }]);

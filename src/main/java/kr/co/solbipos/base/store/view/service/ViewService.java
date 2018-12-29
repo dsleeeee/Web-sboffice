@@ -2,6 +2,7 @@ package kr.co.solbipos.base.store.view.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.store.manage.storemanage.service.StorePosEnvVO;
 
 import java.util.List;
 
@@ -38,4 +39,6 @@ public interface ViewService {
     /** 코너별 승인 목록 조회 */
     List<DefaultMap<String>> getCornerTerminalList(VanConfigVO vanConfigVO);
 
+    /** 포스목록 조회 */
+    List<DefaultMap<String>> getPosList(StorePosEnvVO storePosEnvVO);
 }
