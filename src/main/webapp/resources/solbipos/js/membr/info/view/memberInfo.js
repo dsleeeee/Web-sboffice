@@ -92,7 +92,8 @@ app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
     $("#regStoreCd").val("");
     $("#regStoreNm").val(messages["cmm.select"]);
 
-    // $scope.getMemberList();
+    $scope.getMemberList();
+
     event.preventDefault();
   });
 
