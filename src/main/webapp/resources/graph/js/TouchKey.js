@@ -192,17 +192,16 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
 
         if (paramArr.length <= 0) {
           s_alert.pop(messages["touchKey.msg.select"]);
-
         }
         // 터치키 매장 적용
-        // $.postJSONArray("/base/prod/touchKey/touchKey/applyStore.sb", paramArr, function (result) {
-        //     $scope._popMsg(messages["cmm.saveSucc"]);
-        //     scopeLayer.flexLayer.collectionView.clearChanges();
-        //   },
-        //   function (result) {
-        //     $scope._popMsg(result.message);
-        //   }
-        // );
+        $.postJSONArray("/base/prod/touchKey/touchKey/applyStore.sb", paramArr, function (result) {
+            $scope._popMsg(messages["cmm.saveSucc"]);
+            scopeLayer.flexLayer.collectionView.clearChanges();
+          },
+          function (result) {
+            $scope._popMsg(result.message);
+          }
+        );
       }
 
     });
