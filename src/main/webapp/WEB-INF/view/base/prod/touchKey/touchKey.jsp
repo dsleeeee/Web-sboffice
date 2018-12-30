@@ -192,6 +192,16 @@
     </div>
   </div>
 
+  <%-- 상품분류 팝업 --%>
+  <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
+  </c:import>
+
+  <%-- 레이어 팝업 --%>
+  <c:import url="/WEB-INF/view/base/prod/touchKey/popUpTouchKeyApplyStore.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+  </c:import>
+
 </div>
 <%--//서브컨텐츠--%>
 
@@ -246,9 +256,5 @@
 <script type="text/javascript"
         src="/resource/vendor/wijmo/js/grid/wijmo.grid.filter.min.js?ver=520182500"
         charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=2018122802"
+<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=2018122901"
         charset="utf-8"></script>
-
-<%-- 상품분류 팝업 --%>
-<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
-</c:import>
