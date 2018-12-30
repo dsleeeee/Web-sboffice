@@ -271,7 +271,7 @@
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="regist.membr.no"/>" binding="membrNo" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="regist.membr.nm"/>" binding="membrNm" align="center" width="*" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="regist.membr.nm"/>" binding="membrNm" align="left" width="*" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="regist.class.cd"/>" binding="membrClassCd" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="regist.class.nm"/>" binding="membrClassNm" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="regist.tel"/>" binding="telNo" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
