@@ -1,7 +1,9 @@
 package kr.co.solbipos.base.pay.gift.service;
 
 import kr.co.solbipos.application.common.service.CmmVO;
+import kr.co.solbipos.application.common.service.PageVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import org.springframework.data.domain.Page;
 
 /**
  * @Class Name : GiftVO.java
@@ -19,7 +21,7 @@ import kr.co.solbipos.application.session.user.enums.OrgnFg;
  *
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-public class GiftVO extends CmmVO {
+public class GiftVO extends PageVO {
 
     /** [소속구분] */
     private OrgnFg orgnFg;

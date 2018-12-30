@@ -138,7 +138,7 @@
           AND tmm.BIRTHDAY BETWEEN #{anvStartDate} AND #{anvEndDate}
             </if>
         </if>
-         ORDER BY tmm.REG_DT DESC
+         ORDER BY tmm.MEMBR_NO ASC
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
