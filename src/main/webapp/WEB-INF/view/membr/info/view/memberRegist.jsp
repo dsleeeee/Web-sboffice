@@ -54,12 +54,12 @@
               <%-- 회원명 --%>
               <th><s:message code="regist.membr.nm" /><em class="imp">*</em></th>
               <td>
-                <input type="text" id="rMembrNm" name="membrNm" ng-model="member.membrNm"class="sb-input w100"   maxlength="15" required>
+                <input type="text" id="rMembrNm" name="membrNm" ng-model="member.membrNm"class="sb-input w100" maxlength="30" required>
               </td>
               <%-- 회원닉네임 --%>
               <th><s:message code="regist.membr.nicknm" /></th>
               <td>
-                <input type="text" id="rMembrNicknm" name="membrNicknm" ng-model="member.membrNicknm" class="sb-input w100" maxlength="15" />
+                <input type="text" id="rMembrNicknm" name="membrNicknm" ng-model="member.membrNicknm" class="sb-input w100" maxlength="30" />
               </td>
             </tr>
             <tr>
