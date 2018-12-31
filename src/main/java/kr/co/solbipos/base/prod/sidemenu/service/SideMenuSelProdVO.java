@@ -20,7 +20,7 @@ import kr.co.solbipos.application.common.service.PageVO;
  */
 public class SideMenuSelProdVO extends PageVO {
 
-    private static final long serialVersionUID = -6327701632689076336L;
+    private static final long serialVersionUID = -1314708357337155299L;
 
     /** 본사코드 */
     private String hqOfficeCd;
@@ -52,6 +52,8 @@ public class SideMenuSelProdVO extends PageVO {
     /** 상품명 */
     private String prodNm;
 
+    /** 프로시져 결과 */
+    private String result;
 
     /**
      * @return the hqOfficeCd
@@ -206,5 +208,19 @@ public class SideMenuSelProdVO extends PageVO {
      */
     public void setProdNm(String prodNm) {
         this.prodNm = prodNm;
+    }
+
+    /**
+     * @return the result
+     */
+    public String getResult() {
+        return result;
+    }
+
+    /**
+     * @param result the result to set
+     */
+    public void setResult(String result) {
+        this.result = result;
     }
 }
