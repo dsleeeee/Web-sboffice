@@ -95,4 +95,31 @@ public interface SideMenuMapper {
 
     /** 사이드메뉴-선택메뉴탭- 선택분류 삭제시 선택그룹에 해당하는 분류 개수 체크 */
     int getSideMenuSelGrpClassCnt(SideMenuSelGroupVO sideMenuSelGroupVO);
+
+//    /** 사이드메뉴-속성탭-속성분류 생성시 매장 적용 */
+//    String insertHqAttrClassListToStore(SideMenuAttrClassVO sideMenuAttrClassVO);
+//
+//    /** 사이드메뉴-속성탭-속성분류 수정시 매장 적용 */
+//    String updateHqAttrClassListToStore(SideMenuAttrClassVO sideMenuAttrClassVO);
+//
+//    /** 사이드메뉴-속성탭-속성분류 삭제시 매장 적용 */
+//    String deleteHqAttrClassListToStore(SideMenuAttrClassVO sideMenuAttrClassVO);
+//
+//    /** 사이드메뉴-속성탭-선택그룹 생성시 매장 적용 */
+//    String insertHqMenuGrpListToStore(SideMenuSelGroupVO sideMenuSelGroupVO);
+//
+//    /** 사이드메뉴-속성탭-선택그룹 수정시 매장 적용 */
+//    String updateHqMenuGrpListToStore(SideMenuSelGroupVO sideMenuSelGroupVO);
+//
+//    /** 사이드메뉴-속성탭-선택그룹 삭제시 매장 적용 */
+//    String deleteHqMenuGrpListToStore(SideMenuSelGroupVO sideMenuSelGroupVO);
+
+//    /** 사이드메뉴-선택메뉴탭-선택분류 생성시 매장 적용 */
+//    String insertHqMenuClassListToStore(SideMenuSelClassVO sideMenuSelClassVO);
+
+    /** 사이드메뉴-선택메뉴탭-선택분류 수정시 매장 적용 */
+    String updateHqMenuClassListToStore(SideMenuSelClassVO sideMenuSelClassVO);
+
+//    /** 사이드메뉴-선택메뉴탭-선택분류 삭제시 매장 적용 */
+//    String deleteHqMenuClassListToStore(SideMenuSelClassVO sideMenuSelClassVO);
 }
