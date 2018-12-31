@@ -1032,6 +1032,7 @@
         COMMENTS : 본사 상품을 적용할 매장을 등록한다.
     -->
     <insert id="insertProdStore" parameterType="prodVO">
+
         /* USE : ProdMapper.insertProdStore */
         INSERT INTO TB_HQ_PRODUCT_STORE
         (
