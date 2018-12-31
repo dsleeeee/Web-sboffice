@@ -106,26 +106,15 @@
             </wj-combo-box>
           </div>
         </td>
-        <%-- 상품등록주체 (본사/매장) => 단독매장 제외해야함  // todo --%>
+        <%-- 브랜드 --%>
+        <c:if test="${orgnFg == 'HQ'}">
           <th><s:message code="prod.brandNm" /></th>
-          <td><input type="text" class="sb-input w100" id="srchBrandNm" ng-model="brandNm" /></td>
-        <%--
-        <th><s:message code="prod.useYn" /></th>
-        <td>
-          <div class="sb-select">
-            <wj-combo-box
-                    id="srchRegOrgnFg"
-                    ng-model="regOrgnFg"
-                    control="regOrgnFgCombo"
-                    items-source="_getComboData('regOrgnFg')"
-                    display-member-path="name"
-                    selected-value-path="value"
-                    is-editable="false"
-                    initialized="_initComboBox(s)">
-            </wj-combo-box>
-          </div>
-        </td>
-        --%>
+          <td><input type="text" class="sb-input w100" id="srchBrandNm" ng-model="hqBrandNm" /></td>
+        </c:if>
+        <c:if test="${orgnFg != 'HQ'}">
+          <th></th>
+          <td></td>
+        </c:if>
       </tr>
     </tbody>
   </table>
@@ -173,9 +162,12 @@
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prod.prodClass"/>" binding="prodClassNm" width="300" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.prodClassCd"/>" binding="prodClassCd" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.prodClassNm"/>" binding="prodClassNm" width="300" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="prod.prodCd"/>" binding="prodCd" width="150" is-read-only="true" ></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="prod.prodNm"/>" binding="prodNm" width="410" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.brandCd"/>" binding="hqBrandCd" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.brandNm"/>" binding="hqBrandN" visible="false"></wj-flex-grid-column>
 
         <c:if test="${orgnFg == 'HQ'}">
           <wj-flex-grid-column header="<s:message code="prod.storeCnt"/>" binding="storeCnt" width="100" is-read-only="true" align="center"></wj-flex-grid-column>

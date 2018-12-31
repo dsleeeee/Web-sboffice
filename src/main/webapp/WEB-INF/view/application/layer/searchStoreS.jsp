@@ -114,9 +114,6 @@
     $scope.searchFg = "N"; // 조회 했는지 여부
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on($scope.targetId + 'Ctrl', function (event, paramObj) {
-
-      console.log('broadCast');
-
       // 매장선택 팝업 오픈
       eval('$scope.wj' + $scope.targetId + 'LayerS.show(true)');
       // 팝업 닫힐시 이벤트
