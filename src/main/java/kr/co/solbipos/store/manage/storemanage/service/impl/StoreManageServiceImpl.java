@@ -605,8 +605,6 @@ public class StoreManageServiceImpl implements StoreManageService{
         storePosEnvVO.setEnvstVal(MAIN_POS_YN_DEFAULT);
         procCnt += mapper.updatePosEnv(storePosEnvVO);
 
-        // 2) TB_MS_POS 타겟 포스 데이터 삭제
-        procCnt += mapper.deletePosTarget(storePosEnvVO);
 
         // 기능키 복사 //TODO
         // 3-1) TB_MS_POS_FNKEY 기존 데이터 삭제

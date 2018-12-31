@@ -1664,18 +1664,6 @@
            AND ENVST_CD = #{envstCd}
     </update>
 
-    <!-- 타켓 포스 데이터 삭제 -->
-    <!--
-        TABLE    : TB_MS_POS
-        PARAM    : storePosEnvVO
-        COMMENTS : 포스 셋팅 복사 기능 중, 타켓 포스의 데이터 삭제
-    -->
-    <delete id="deletePosTarget" parameterType="storePosEnvVO">
-        /* USE : StoreManageMapper.deletePosTarget */
-        DELETE TB_MS_POS
-         WHERE STORE_CD = #{storeCd}
-           AND POS_NO  = LPAD(#{targetPosNo}, 2, '0')
-    </delete>
 
     <!-- 포스마스터 복사 -->
     <!--
